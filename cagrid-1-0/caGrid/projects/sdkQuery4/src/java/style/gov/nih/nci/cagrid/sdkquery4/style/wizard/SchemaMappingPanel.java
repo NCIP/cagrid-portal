@@ -1,7 +1,7 @@
 package gov.nih.nci.cagrid.sdkquery4.style.wizard;
 
-import gov.nih.nci.cagrid.common.portal.DocumentChangeAdapter;
-import gov.nih.nci.cagrid.common.portal.validation.IconFeedbackPanel;
+import gov.nih.nci.cagrid.common.JarUtilities;
+import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.data.ExtensionDataUtils;
 import gov.nih.nci.cagrid.data.extension.CadsrInformation;
@@ -9,38 +9,58 @@ import gov.nih.nci.cagrid.data.extension.CadsrPackage;
 import gov.nih.nci.cagrid.data.extension.Data;
 import gov.nih.nci.cagrid.data.style.sdkstyle.wizard.PackageSchemasTable;
 import gov.nih.nci.cagrid.data.ui.wizard.AbstractWizardPanel;
+import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
+import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
+import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
+import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.ResourceManager;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
+import gov.nih.nci.cagrid.sdkquery4.encoding.SDK40DeserializerFactory;
+import gov.nih.nci.cagrid.sdkquery4.encoding.SDK40SerializerFactory;
+import gov.nih.nci.cagrid.sdkquery4.processor.SDK4QueryProcessor;
 
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
-import java.net.URL;
+import java.io.File;
+import java.util.Enumeration;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.border.TitledBorder;
-import javax.swing.event.DocumentEvent;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableCellRenderer;
 
 import org.cagrid.grape.LookAndFeel;
 import org.cagrid.grape.utils.CompositeErrorDialog;
+import org.projectmobius.client.gme.ImportInfo;
+import org.projectmobius.common.GridServiceFactory;
+import org.projectmobius.common.GridServiceResolver;
+import org.projectmobius.common.MobiusException;
+import org.projectmobius.common.Namespace;
+import org.projectmobius.gme.XMLDataModelService;
+import org.projectmobius.gme.client.GlobusGMEXMLDataModelServiceFactory;
 
-import com.jgoodies.validation.Severity;
-import com.jgoodies.validation.ValidationResult;
-import com.jgoodies.validation.ValidationResultModel;
-import com.jgoodies.validation.message.SimpleValidationMessage;
-import com.jgoodies.validation.util.DefaultValidationResultModel;
-import com.jgoodies.validation.util.ValidationUtils;
 import com.jgoodies.validation.view.ValidationComponentUtils;
 
 /** 
@@ -50,14 +70,11 @@ import com.jgoodies.validation.view.ValidationComponentUtils;
  * @author David Ervin
  * 
  * @created Jan 9, 2008 11:09:22 AM
- * @version $Id: SchemaMappingPanel.java,v 1.1 2008-01-09 16:59:03 dervin Exp $ 
+ * @version $Id: SchemaMappingPanel.java,v 1.2 2008-01-11 20:34:03 dervin Exp $ 
  */
 public class SchemaMappingPanel extends AbstractWizardPanel {
-    // validation keys
-    public static final String KEY_GME_URL = "GME URL";
     
     private PackageSchemasTable packageNamespaceTable = null;
-    private JPanel mainPanel = null;
     private JScrollPane packageNamespaceScrollPane = null;
     private JLabel gmeUrlLabel = null;
     private JTextField gmeUrlTextField = null;
@@ -67,19 +84,9 @@ public class SchemaMappingPanel extends AbstractWizardPanel {
     private JButton configMapButton = null;
     private JPanel automapPanel = null;
     private JPanel mappingPanel = null;
-    
-    private IconFeedbackPanel validationPanel = null;
-    private ValidationResultModel validationModel = null;
-    private DocumentChangeAdapter documentChangeListener = null;
 
     public SchemaMappingPanel(ServiceExtensionDescriptionType extensionDescription, ServiceInformation info) {
         super(extensionDescription, info);
-        this.validationModel = new DefaultValidationResultModel();
-        this.documentChangeListener = new DocumentChangeAdapter() {
-            public void documentEdited(DocumentEvent e) {
-                validateInput();
-            }
-        };
         initialize();
     }
 
@@ -95,23 +102,57 @@ public class SchemaMappingPanel extends AbstractWizardPanel {
 
 
     public void update() {
-        // TODO Auto-generated method stub
+        // populate the package to namespace table from the extension data
+        try {
+            Data data = ExtensionDataUtils.getExtensionData(getExtensionData());
+            CadsrInformation info = data.getCadsrInformation();
+            Set<String> currentPackageNames = new HashSet<String>();
+            for (int i = 0; i < getPackageNamespaceTable().getRowCount(); i++) {
+                currentPackageNames.add((String) getPackageNamespaceTable().getValueAt(i, 0));
+            }
+            if (info != null && info.getPackages() != null) {
+                CadsrPackage[] packs = info.getPackages();
+                if (packs != null && packs.length != 0) {
+                    // add any new packages to the table
+                    for (int i = 0; i < packs.length; i++) {
+                        if (!getPackageNamespaceTable().isPackageInTable(packs[i])) {
+                            getPackageNamespaceTable().addNewCadsrPackage(getServiceInformation(), packs[i]);
+                        }
+                        currentPackageNames.remove(packs[i].getName());
+                    }
+                }
+            }
+            Iterator invalidPackageNameIter = currentPackageNames.iterator();
+            while (invalidPackageNameIter.hasNext()) {
+                String invalidName = (String) invalidPackageNameIter.next();
+                getPackageNamespaceTable().removeCadsrPackage(invalidName);
+            }
+            setWizardComplete(allSchemasResolved());
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            CompositeErrorDialog.showErrorDialog("Error populating the packages table", ex);
+        }
     }
     
     
     private void initialize() {
         this.setLayout(new GridLayout());
-        this.add(getValidationPanel());
-        // set up for validation
-        configureValidation();
-    }
-    
-    
-    private IconFeedbackPanel getValidationPanel() {
-        if (validationPanel == null) {
-            validationPanel = new IconFeedbackPanel(validationModel, getMainPanel());
-        }
-        return validationPanel;
+        GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
+        gridBagConstraints6.fill = GridBagConstraints.BOTH;
+        gridBagConstraints6.gridy = 1;
+        gridBagConstraints6.weightx = 1.0;
+        gridBagConstraints6.weighty = 1.0;
+        gridBagConstraints6.insets = new Insets(2, 2, 2, 2);
+        gridBagConstraints6.gridx = 0;
+        GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
+        gridBagConstraints5.gridx = 0;
+        gridBagConstraints5.insets = new Insets(2, 2, 2, 2);
+        gridBagConstraints5.fill = GridBagConstraints.BOTH;
+        gridBagConstraints5.gridy = 0;
+        this.setLayout(new GridBagLayout());
+        this.setSize(new Dimension(385, 200));
+        this.add(getMappingPanel(), gridBagConstraints5);
+        this.add(getPackageNamespaceScrollPane(), gridBagConstraints6);
     }
     
     
@@ -131,37 +172,10 @@ public class SchemaMappingPanel extends AbstractWizardPanel {
                     }
                 }
             });
+            DefaultTableCellRenderer baseRenderer = (DefaultTableCellRenderer) this.packageNamespaceTable.getDefaultRenderer(Object.class);
+            this.packageNamespaceTable.setDefaultRenderer(Object.class, new ValidatingTableCellRenderer(baseRenderer));
         }
         return this.packageNamespaceTable;
-    }
-    
-    
-    /**
-     * This method initializes mainPanel    
-     *  
-     * @return javax.swing.JPanel   
-     */
-    private JPanel getMainPanel() {
-        if (mainPanel == null) {
-            GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
-            gridBagConstraints6.fill = GridBagConstraints.BOTH;
-            gridBagConstraints6.gridy = 1;
-            gridBagConstraints6.weightx = 1.0;
-            gridBagConstraints6.weighty = 1.0;
-            gridBagConstraints6.insets = new Insets(2, 2, 2, 2);
-            gridBagConstraints6.gridx = 0;
-            GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
-            gridBagConstraints5.gridx = 0;
-            gridBagConstraints5.insets = new Insets(2, 2, 2, 2);
-            gridBagConstraints5.fill = GridBagConstraints.BOTH;
-            gridBagConstraints5.gridy = 0;
-            mainPanel = new JPanel();
-            mainPanel.setLayout(new GridBagLayout());
-            mainPanel.setSize(new Dimension(385, 200));
-            mainPanel.add(getMappingPanel(), gridBagConstraints5);
-            mainPanel.add(getPackageNamespaceScrollPane(), gridBagConstraints6);
-        }
-        return mainPanel;
     }
 
 
@@ -208,7 +222,8 @@ public class SchemaMappingPanel extends AbstractWizardPanel {
     private JTextField getGmeUrlTextField() {
         if (gmeUrlTextField == null) {
             gmeUrlTextField = new JTextField();
-            String url = ResourceManager.getServiceURLProperty(DataServiceConstants.GME_SERVICE_URL);
+            String url = ResourceManager.getServiceURLProperty(
+                DataServiceConstants.GME_SERVICE_URL);
             gmeUrlTextField.setText(url);
         }
         return gmeUrlTextField;
@@ -254,7 +269,7 @@ public class SchemaMappingPanel extends AbstractWizardPanel {
             gmeMapButton.setText("Map From GME");
             gmeMapButton.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
-                    System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
+                    mapFromGme();
                 }
             });
         }
@@ -273,7 +288,7 @@ public class SchemaMappingPanel extends AbstractWizardPanel {
             configMapButton.setText("Map From Config");
             configMapButton.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
-                    System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
+                    mapFromConfig();
                 }
             });
         }
@@ -389,55 +404,182 @@ public class SchemaMappingPanel extends AbstractWizardPanel {
         ExtensionDataUtils.storeExtensionData(getExtensionData(), data);
     }
     
-
-    // -----------
-    // validation
-    // -----------
     
-    
-    private void configureValidation() {
-        ValidationComponentUtils.setMessageKey(getGmeUrlTextField(), KEY_GME_URL);
+    private void mapFromConfig() {
+        File schemaDir = new File(getServiceInformation().getBaseDirectory(),
+            "schema" + File.separator + getServiceInformation().getIntroduceServiceProperties()
+                .getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME));
         
-        // TODO: iterate namespaces in table and add message keys for each row
-        
-        validateInput();
-        updateComponentTreeSeverity();
-    }
-    
-    
-    private void validateInput() {
-        ValidationResult result = new ValidationResult();
-        
-        String gmeUrl = getGmeUrlTextField().getText();
-        if (ValidationUtils.isBlank(gmeUrl)) {
-            // warning, not error, since it doesn't prevent the page from being valid
-            result.add(new SimpleValidationMessage(
-                KEY_GME_URL + " cannot be blank for GME schema resolution", Severity.WARNING, KEY_GME_URL));
-        } else {
-            try {
-                new URL(gmeUrl);
-            } catch (Exception ex) {
-                result.add(new SimpleValidationMessage(
-                    KEY_GME_URL + " does not appear to be a valid URL", Severity.WARNING, KEY_GME_URL));
+        // the config dir jar will have the xsds in it
+        try {
+            String applicationName = CommonTools.getServicePropertyValue(
+                getServiceInformation().getServiceDescriptor(), 
+                DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX 
+                    + SDK4QueryProcessor.PROPERTY_APPLICATION_NAME);
+            String configJarFilename = getServiceInformation().getBaseDirectory().getAbsolutePath()
+                + File.separator + "lib" + File.separator + applicationName + "-config.jar";
+            JarFile configJar = new JarFile(configJarFilename);
+            Enumeration<JarEntry> entries = configJar.entries();
+            while (entries.hasMoreElements()) {
+                JarEntry entry = entries.nextElement();
+                if (entry.getName().endsWith(".xsd")) {
+                    // found a schema, what package does it go with?
+                    String schemaPackageName = new File(entry.getName()).getName();
+                    schemaPackageName = schemaPackageName.substring(0, schemaPackageName.length() - 4);
+                    for (int i = 0; i < getPackageNamespaceTable().getRowCount(); i++) {
+                        String packageName = (String) getPackageNamespaceTable().getValueAt(i, 0);
+                        if (packageName.equals(schemaPackageName)) {
+                            // create a schema file and namespace type
+                            StringBuffer schemaText = JarUtilities.getFileContents(configJar, entry.getName());
+                            File schemaFile = new File(schemaDir, new File(entry.getName()).getName());
+                            Utils.stringBufferToFile(schemaText, schemaFile.getAbsolutePath());
+                            NamespaceType nsType = CommonTools.createNamespaceType(schemaFile.getAbsolutePath(), schemaDir);
+                            
+                            // add the namespace to the service
+                            addNamespaceToService(nsType);
+                            
+                            // set the namespace in the table
+                            getPackageNamespaceTable().setValueAt(nsType.getNamespace(), i, 1);
+                            // set the status to found in the table
+                            getPackageNamespaceTable().setValueAt(PackageSchemasTable.STATUS_SCHEMA_FOUND, i, 2);
+                            break;
+                        }
+                    }
+                }
             }
-        }
-        
-        // TODO: iterate namespaces in table and validate the state of each
-        
-        validationModel.setResult(result);
-        
-        updateComponentTreeSeverity();
-        // update next button enabled
-        setNextEnabled(!validationModel.hasErrors());
-        // store the configuration changes
-        if (!validationModel.hasErrors()) {
-            // TODO: storeConfigurationProperties();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            CompositeErrorDialog.showErrorDialog(
+                "Error loading application configuration files", ex.getMessage(), ex);
         }
     }
     
     
-    private void updateComponentTreeSeverity() {
-        ValidationComponentUtils.updateComponentTreeMandatoryAndBlankBackground(this);
-        ValidationComponentUtils.updateComponentTreeSeverityBackground(this, validationModel.getResult());
+    private void mapFromGme() {
+        // get the service's schema dir
+        File schemaDir = new File(getServiceInformation().getBaseDirectory(),
+            "schema" + File.separator + getServiceInformation().getIntroduceServiceProperties()
+                .getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME));
+        try {
+            XMLDataModelService gmeHandle = getGmeHandle();
+            // get the domains administered by the GME
+            List domains = gmeHandle.getNamespaceDomainList();
+            // get the selected packages
+            Data data = ExtensionDataUtils.getExtensionData(getExtensionData());
+            CadsrInformation info = data.getCadsrInformation();
+            if (info != null && info.getPackages() != null) {
+                CadsrPackage[] packs = info.getPackages();
+                for (int i = 0; i < packs.length; i++) {
+                    Namespace ns = new Namespace(packs[i].getMappedNamespace());
+                    // see if the GME has the domain in question
+                    if (domains.contains(ns.getDomain())) {
+                        // domain found, get the namespaces within it
+                        List<Namespace> namespaces = gmeHandle.getSchemaListForNamespaceDomain(ns.getDomain());
+                        if (namespaces.contains(ns)) {
+                            // found the namespace as well, download the schema locally
+                            // have the GME cache the schema and its imports locally
+                            List<Namespace> cachedNamespaces = gmeHandle.cacheSchema(ns, schemaDir);
+                            
+                            // create namespace types and add them to the service
+                            for (Namespace storedNs : cachedNamespaces) {
+                                ImportInfo storedSchemaInfo = new ImportInfo(storedNs);
+                                File location = new File(schemaDir.getAbsolutePath() + File.separator + storedSchemaInfo.getFileName());
+                                NamespaceType nsType = CommonTools.createNamespaceType(location.getAbsolutePath(), schemaDir);
+                                addNamespaceToService(nsType);
+                            }
+                            // change the package namespace table to reflect the
+                            // found schema
+                            int row = 0;
+                            while (!getPackageNamespaceTable().getValueAt(row, 0).equals(packs[i].getName())) {
+                                row++;
+                            }
+                            getPackageNamespaceTable().setValueAt(PackageSchemasTable.STATUS_SCHEMA_FOUND, row, 2);
+                        }
+                        break;
+                    }
+                }
+            } else {
+                JOptionPane.showMessageDialog(SchemaMappingPanel.this, "No packages to find schemas for");
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            CompositeErrorDialog.showErrorDialog("Error retrieving schemas from the GME", ex);
+        }
+    }
+    
+    
+    private void addNamespaceToService(NamespaceType nsType) {
+        // if the namespace already exists in the service, ignore it
+        if (CommonTools.getNamespaceType(getServiceInformation().getNamespaces(), nsType.getNamespace()) == null) {
+            // set the package name
+            String packName = CommonTools.getPackageName(nsType.getNamespace());
+            nsType.setPackageName(packName);
+            // fix the serialization / deserialization on the namespace types
+            setSdkSerialization(nsType);
+            CommonTools.addNamespace(getServiceInformation().getServiceDescriptor(), nsType);
+            // add the namespace to the introduce namespace excludes list so
+            // that beans will not be built for these data types
+            String excludes = getServiceInformation().getIntroduceServiceProperties().getProperty(
+                IntroduceConstants.INTRODUCE_NS_EXCLUDES);
+            excludes += " -x " + nsType.getNamespace();
+            getServiceInformation().getIntroduceServiceProperties().setProperty(
+                IntroduceConstants.INTRODUCE_NS_EXCLUDES, excludes);
+        }
+    }
+    
+    
+    private void setSdkSerialization(NamespaceType namespace) {
+        for (SchemaElementType type : namespace.getSchemaElement()) {
+            type.setClassName(type.getType());
+            type.setSerializer(SDK40SerializerFactory.class.getName());
+            type.setDeserializer(SDK40DeserializerFactory.class.getName());
+        }
+    }
+    
+    
+    private XMLDataModelService getGmeHandle() throws MobiusException {
+        XMLDataModelService service = null;
+        GridServiceFactory oldFactory = GridServiceResolver.getInstance().getDefaultFactory();
+        GridServiceResolver.getInstance().setDefaultFactory(new GlobusGMEXMLDataModelServiceFactory());
+        try {
+            service = (XMLDataModelService) GridServiceResolver.getInstance().getGridService(
+                getGmeUrlTextField().getText());
+        } catch (MobiusException ex) {
+            throw ex;
+        } finally {
+            GridServiceResolver.getInstance().setDefaultFactory(oldFactory);
+        }
+        return service;
+    }
+    
+    
+    private static class ValidatingTableCellRenderer implements TableCellRenderer {
+        private DefaultTableCellRenderer baseRenderer;
+        private Color defaultBackground;
+        
+        public ValidatingTableCellRenderer(DefaultTableCellRenderer baseRenderer) {
+            this.baseRenderer = baseRenderer;
+            this.defaultBackground = baseRenderer.getBackground();
+        }
+        
+        
+        public Component getTableCellRendererComponent(JTable table, Object value,
+            boolean isSelected, boolean hasFocus, int row, int column) {
+            // restore the default background
+            baseRenderer.setBackground(defaultBackground);
+            
+            // render the cell with default settings
+            Component cell = baseRenderer.getTableCellRendererComponent(
+                table, value, isSelected, hasFocus, row, column);
+            
+            if (column == 2) { // status column
+                if (value.equals(PackageSchemasTable.STATUS_NEVER_TRIED)) {
+                    baseRenderer.setBackground(ValidationComponentUtils.getErrorBackground());
+                } else if (value.equals(PackageSchemasTable.STATUS_MAPPING_ERROR)) {
+                    baseRenderer.setBackground(ValidationComponentUtils.getWarningBackground());
+                }
+            }
+            return cell;
+        }
     }
 }
