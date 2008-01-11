@@ -939,19 +939,20 @@
 		<resolveDependencies extdir="${projects.dir}/sdkQuery4/ext">
 			<artifact refid="cagrid.properties" />
 			<artifact refid="core.jars" />
-			<artifact refid="data.jars" />
-			<artifact refid="cql.1.0.schemas" />
-			<artifact refid="cql.1.0.beans.jar" />
-			<artifact refid="grape.jars" />
 			<artifact refid="core.test.jars" />
 			<artifact refid="common.test.jars" />
-			<artifact refid="test.coverage.jars" />
-			<artifact refid="introduce.jars" />
-			<artifact refid="validation.jars" />
-			<artifact refid="data.extensions.jars" />
+			<artifact refid="cql.1.0.beans.jar" />
+			<artifact refid="cql.1.0.schemas" />
 			<artifact refid="data.cql.testing.docs" />
+			<artifact refid="data.extensions.jars" />
+			<artifact refid="data.jars" />
+			<artifact refid="gme.globus.client.jars" />
+			<artifact refid="grape.jars" />
+			<artifact refid="introduce.jars" />
+			<artifact refid="test.coverage.jars" />
 			<artifact refid="testing.system.jars" />
-		</resolveDependencies>
+			<artifact refid="validation.jars" />
+			</resolveDependencies>
 		<resolveDependencies targetdir="${projects.dir}/sdkQuery4/ext/lib/sdk/remote-client">
 			<artifact refid="caCORE.4.0.remote-client.package" />
 		</resolveDependencies>
