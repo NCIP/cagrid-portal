@@ -80,6 +80,6 @@
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-cds-client.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-cds-common.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-cds-stubs.jar"/>
-	<classpathentry kind="lib" path="lib/jcalendar.jar" sourcepath="/jcalendar"/>
+	<classpathentry kind="lib" path="lib/jcalendar.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
