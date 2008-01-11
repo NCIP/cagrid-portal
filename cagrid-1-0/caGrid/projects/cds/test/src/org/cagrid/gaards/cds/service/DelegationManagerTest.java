@@ -330,6 +330,79 @@ public class DelegationManagerTest extends TestCase {
 			}
 		}
 	}
+	
+	public void testDeleteDelegatedCredential() {
+		DelegationManager cds = null;
+		try {
+			cds = Utils.getCDS();
+			GlobusCredential admin = addInitialAdmin();
+			String leonardoAlias = "leonardo";
+			String donatelloAlias = "donatello";
+
+			GlobusCredential leonardoCred = ca.createCredential(leonardoAlias);
+			GlobusCredential donatelloCred = ca
+					.createCredential(donatelloAlias);
+
+			DelegationPolicy policy = getSimplePolicy(donatelloCred
+					.getIdentity());
+
+			DelegationSigningRequest leonardoReq = cds.initiateDelegation(
+					leonardoCred.getIdentity(),
+					getSimpleDelegationRequest(policy));
+			DelegationSigningResponse leonardoRes = new DelegationSigningResponse();
+			leonardoRes.setDelegationIdentifier(leonardoReq
+					.getDelegationIdentifier());
+			leonardoRes.setCertificateChain(org.cagrid.gaards.cds.common.Utils
+					.toCertificateChain(ca.createProxyCertifcates(
+							leonardoAlias, KeyUtil.loadPublicKey(leonardoReq
+									.getPublicKey().getKeyAsString()), 2)));
+			cds.approveDelegation(leonardoCred.getIdentity(), leonardoRes);
+			DelegationIdentifier id = leonardoReq.getDelegationIdentifier();
+			DelegationRecordFilter f = new DelegationRecordFilter();
+			f.setDelegationIdentifier(id);
+			assertEquals(1, cds.findDelegatedCredentials(admin.getIdentity(), f).length);
+
+
+			try {
+				cds.deleteDelegatedCredential(leonardoCred
+						.getIdentity(), id);
+				fail("Should not be able to delete the delegate credentail.");
+			} catch (PermissionDeniedFault e) {
+				if (!e
+						.getFaultString()
+						.equals(
+								Errors.ADMIN_REQUIRED)) {
+					fail("Should not be able to delete the delegate credentail.");
+				}
+			}
+			
+			try {
+				cds.deleteDelegatedCredential(donatelloCred
+						.getIdentity(), id);
+				fail("Should not be able to delete the delegate credentail.");
+			} catch (PermissionDeniedFault e) {
+				if (!e
+						.getFaultString()
+						.equals(
+								Errors.ADMIN_REQUIRED)) {
+					fail("Should not be able to delete the delegate credentail.");
+				}
+			}
+			cds.deleteDelegatedCredential(admin.getIdentity(), id);
+			assertEquals(0, cds.findDelegatedCredentials(admin.getIdentity(), f).length);
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			fail(e.getMessage());
+		} finally {
+			if (cds != null) {
+				try {
+					cds.clear();
+				} catch (Exception e) {
+				}
+			}
+		}
+	}
+
 
 	public void testAuditAdminUser() {
 		DelegationManager cds = null;

@@ -200,6 +200,14 @@ public class DelegationManager {
 		}
 	}
 
+	public void deleteDelegatedCredential(String callerIdentity,
+			DelegationIdentifier id) throws CDSInternalFault,
+			PermissionDeniedFault {
+		verifyAuthenticated(callerIdentity);
+		verifyAdmin(callerIdentity);
+		this.dcm.delete(id);
+	}
+
 	private void verifyAdmin(String gridIdentity) throws CDSInternalFault,
 			PermissionDeniedFault {
 		if (!isAdmin(gridIdentity)) {

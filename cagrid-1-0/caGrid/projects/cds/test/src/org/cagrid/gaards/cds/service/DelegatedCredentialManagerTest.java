@@ -307,6 +307,9 @@ public class DelegatedCredentialManagerTest extends TestCase {
 				assertTrue(dcm.delegationExists(id));
 				dcm.delete(id);
 				assertFalse(dcm.delegationExists(id));
+				DelegatedCredentialAuditFilter f = new DelegatedCredentialAuditFilter();
+				f.setDelegationIdentifier(id);
+				assertEquals(0, dcm.searchAuditLog(f).length);
 			}
 		} catch (Exception e) {
 			FaultUtil.printFault(e);

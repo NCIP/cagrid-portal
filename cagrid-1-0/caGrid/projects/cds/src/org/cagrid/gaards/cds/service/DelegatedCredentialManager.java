@@ -874,6 +874,18 @@ public class DelegatedCredentialManager {
 		} finally {
 			db.releaseConnection(c);
 		}
+		try {
+			List<Event> list = this.delegationAuditor.findEvents(String
+					.valueOf(delegationId), null, null, null, null);
+			for (int i = 0; i < list.size(); i++) {
+				this.delegationAuditor.deleteEvent(list.get(i).getEventId());
+			}
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			throw Errors.getInternalFault(
+					"An inexpected error occurred in deleting the audit log.",
+					e);
+		}
 	}
 
 	public void clearDatabase() throws CDSInternalFault {
