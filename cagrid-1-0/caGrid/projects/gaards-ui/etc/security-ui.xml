@@ -168,6 +168,24 @@
                 </component>
             </components>
             </menu>
+             <menu>
+            <title>Delegation Management</title>
+            <description>tools</description>
+            <showIcons>true</showIcons>
+            <components>
+                 <component>
+                    <title>Find Delegated Credentials</title>
+                    <description>Allows one to view delegated credentials.</description>
+                    <classname>org.cagrid.gaards.ui.cds.FindDelegatedCredentialsWindow</classname>
+                    <icon>/delegate-credentials.png</icon>
+                    <showOnToolBar>false</showOnToolBar>
+                    <dimensions>
+                        <width>800</width>
+                        <height>500</height>
+                    </dimensions>
+                </component>
+            </components>
+            </menu>
               <menu>
             <title>Local Accounts</title>
             <description>Tools for registering and managing local Dorian accounts.</description>

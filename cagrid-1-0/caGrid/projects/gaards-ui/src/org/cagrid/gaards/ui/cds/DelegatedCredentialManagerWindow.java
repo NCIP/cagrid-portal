@@ -8,7 +8,6 @@ import gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -21,10 +20,12 @@ import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.border.TitledBorder;
 
+import org.cagrid.gaards.cds.client.DelegationAdminClient;
 import org.cagrid.gaards.cds.client.DelegationUserClient;
 import org.cagrid.gaards.cds.common.DelegationIdentifier;
 import org.cagrid.gaards.cds.common.DelegationRecord;
 import org.cagrid.gaards.cds.common.DelegationRecordFilter;
+import org.cagrid.gaards.ui.dorian.ifs.FindUserDialog;
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.LookAndFeel;
@@ -84,6 +85,10 @@ public class DelegatedCredentialManagerWindow extends ApplicationComponent {
 	private JLabel jLabel2 = null;
 
 	private DelegationStatusComboBox delegationStatus = null;
+
+	private JPanel gridIdentityPanel = null;
+
+	private JButton findUserButton = null;
 
 	/**
 	 * This is the default constructor
@@ -375,8 +380,11 @@ public class DelegatedCredentialManagerWindow extends ApplicationComponent {
 			List<DelegationRecord> records;
 
 			if (adminMode) {
-				// TODO: ADD ADMIN CALL
-				records = new ArrayList<DelegationRecord>();
+				DelegationAdminClient client = new DelegationAdminClient(
+						getSession().getServiceURI(), getSession()
+								.getCredential());
+
+				records = client.findDelegatedCredentials(f);
 			} else {
 				DelegationUserClient client = new DelegationUserClient(
 						getSession().getServiceURI(), getSession()
@@ -455,6 +463,13 @@ public class DelegatedCredentialManagerWindow extends ApplicationComponent {
 	 */
 	private JPanel getFilterPanel() {
 		if (filterPanel == null) {
+			GridBagConstraints gridBagConstraints13 = new GridBagConstraints();
+			gridBagConstraints13.anchor = GridBagConstraints.WEST;
+			gridBagConstraints13.gridx = 1;
+			gridBagConstraints13.gridy = 0;
+			gridBagConstraints13.weightx = 1.0D;
+			gridBagConstraints13.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints13.insets = new Insets(0, 0, 0, 0);
 			GridBagConstraints gridBagConstraints12 = new GridBagConstraints();
 			gridBagConstraints12.fill = GridBagConstraints.HORIZONTAL;
 			gridBagConstraints12.gridy = 3;
@@ -504,13 +519,6 @@ public class DelegatedCredentialManagerWindow extends ApplicationComponent {
 			gridBagConstraints11.gridy = 7;
 			gridBagConstraints11.weightx = 1.0;
 			gridBagConstraints11.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			GridBagConstraints gridBagConstraints7 = new GridBagConstraints();
-			gridBagConstraints7.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints7.gridy = 0;
-			gridBagConstraints7.weightx = 1.0;
-			gridBagConstraints7.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints7.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints7.gridx = 1;
 			GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
 			gridBagConstraints6.gridx = 0;
 			gridBagConstraints6.anchor = java.awt.GridBagConstraints.WEST;
@@ -532,13 +540,13 @@ public class DelegatedCredentialManagerWindow extends ApplicationComponent {
 					TitledBorder.DEFAULT_POSITION, null, LookAndFeel
 							.getPanelLabelColor()));
 			filterPanel.add(gridLabel, gridBagConstraints6);
-			filterPanel.add(getGridIdentity(), gridBagConstraints7);
 			filterPanel.add(jLabel, gridBagConstraints3);
 			filterPanel.add(getDelegationId(), gridBagConstraints5);
 			filterPanel.add(jLabel1, gridBagConstraints8);
 			filterPanel.add(getExpirationStatus(), gridBagConstraints9);
 			filterPanel.add(jLabel2, gridBagConstraints10);
 			filterPanel.add(getDelegationStatus(), gridBagConstraints12);
+			filterPanel.add(getGridIdentityPanel(), gridBagConstraints13);
 		}
 		return filterPanel;
 	}
@@ -614,6 +622,71 @@ public class DelegatedCredentialManagerWindow extends ApplicationComponent {
 			delegationStatus = new DelegationStatusComboBox(true);
 		}
 		return delegationStatus;
+	}
+
+	/**
+	 * This method initializes gridIdentityPanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	private JPanel getGridIdentityPanel() {
+		if (gridIdentityPanel == null) {
+			GridBagConstraints gridBagConstraints14 = new GridBagConstraints();
+			gridBagConstraints14.gridx = 1;
+			gridBagConstraints14.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints14.anchor = GridBagConstraints.WEST;
+			gridBagConstraints14.gridy = 0;
+			GridBagConstraints gridBagConstraints7 = new GridBagConstraints();
+			gridBagConstraints7.anchor = GridBagConstraints.WEST;
+			gridBagConstraints7.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints7.gridx = 0;
+			gridBagConstraints7.gridy = 0;
+			gridBagConstraints7.weightx = 1.0;
+			gridBagConstraints7.fill = GridBagConstraints.HORIZONTAL;
+			gridIdentityPanel = new JPanel();
+			gridIdentityPanel.setLayout(new GridBagLayout());
+			gridIdentityPanel.add(getGridIdentity(), gridBagConstraints7);
+			if (adminMode) {
+				gridIdentityPanel.setVisible(true);
+				gridIdentityPanel.setEnabled(true);
+				gridIdentityPanel.add(getFindUserButton(), gridBagConstraints14);
+			} else {
+				gridIdentityPanel.setVisible(false);
+				gridIdentityPanel.setEnabled(false);
+			}
+		}
+		return gridIdentityPanel;
+	}
+
+	/**
+	 * This method initializes findUserButton
+	 * 
+	 * @return javax.swing.JButton
+	 */
+	private JButton getFindUserButton() {
+		if (findUserButton == null) {
+			findUserButton = new JButton();
+			findUserButton.setIcon(CDSLookAndFeel.getQueryIcon());
+			findUserButton.setText("Find...");
+			findUserButton.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					FindUserDialog dialog = new FindUserDialog();
+					dialog.setModal(true);
+					GridApplication.getContext().showDialog(dialog);
+					if (dialog.getSelectedUser() != null) {
+						getGridIdentity().setText(dialog.getSelectedUser());
+					}
+				}
+			});
+			if (adminMode) {
+				findUserButton.setVisible(true);
+				findUserButton.setEnabled(true);
+			} else {
+				findUserButton.setVisible(false);
+				findUserButton.setEnabled(false);
+			}
+		}
+		return findUserButton;
 	}
 
 }
