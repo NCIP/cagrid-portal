@@ -134,6 +134,7 @@
  </ns3:Services>
  <ns17:Extensions xsi:type="ns17:ExtensionsType" xmlns:ns17="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
  <ns18:ServiceProperties xmlns:ns18="gme://gov.nih.nci.cagrid.introduce/1/Property">
-  <ns18:Property description="URL to the TransferServlet" isFromETC="false" key="transferServletBaseURL" value="http://localhost/transfer/TransferServlet"/>
+  <ns18:Property description="The webapp and servlet name of the deployed transfer servlet" isFromETC="false" key="transferServletPathName" value="/caGridTransfer/TransferServlet"/>
+  <ns18:Property description="The directory to store the transfer files" isFromETC="true" key="storageDirectory" value="transferCache"/>
  </ns18:ServiceProperties>
 </ns1:ServiceDescription>

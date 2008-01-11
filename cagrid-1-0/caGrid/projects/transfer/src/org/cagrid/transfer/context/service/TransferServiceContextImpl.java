@@ -31,7 +31,13 @@ public class TransferServiceContextImpl extends TransferServiceContextImplBase {
     }
     org.cagrid.transfer.descriptor.DataTransferDescriptor dataDesc = new org.cagrid.transfer.descriptor.DataTransferDescriptor();
     try {
-        dataDesc.setUrl(getConfiguration().getTransferServletBaseURL() + "?id=" + resource.getID());
+        org.apache.axis.MessageContext ctx = org.apache.axis.MessageContext.getCurrentContext();
+        String transportURL = (String) ctx.getProperty(org.apache.axis.MessageContext.TRANS_URL);
+        transportURL = transportURL.substring(0, transportURL.lastIndexOf('/'));//cut service name
+        transportURL = transportURL.substring(0, transportURL.lastIndexOf('/'));//cut cagrid etc.
+        transportURL = transportURL.substring(0, transportURL.lastIndexOf('/'));//cut services
+        transportURL = transportURL.substring(0, transportURL.lastIndexOf('/'));//cut wsrf
+        dataDesc.setUrl(transportURL + getConfiguration().getTransferServletPathName() + "?id=" + resource.getID());
     } catch (Exception e) {
         e.printStackTrace();
         throw new RemoteException("Cannot load ServiceConfiguration",e);

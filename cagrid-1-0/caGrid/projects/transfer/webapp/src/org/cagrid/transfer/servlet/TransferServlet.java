@@ -30,8 +30,10 @@ public class TransferServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         props = new Properties();
         System.out.println("Calling Transfer Servlet: " + getServletContext().getServerInfo() + getServletInfo());
+        System.out.println("Calling Transfer Servlet at: " + getServletContext().getRealPath("/"));
 
-        // reload everytime now so that it ca be changed.....
+        
+        // reload everytime now so that it can be changed while container is running.....
         try {
             props.load(this.getClass().getClassLoader().getResourceAsStream("server.properties"));
         } catch (FileNotFoundException e) {
@@ -41,7 +43,13 @@ public class TransferServlet extends HttpServlet {
             e.printStackTrace();
             throw new ServletException(e.getMessage());
         }
-        persistenceDir = props.getProperty("transfer.service.persistence.location");
+        
+        String myLocation =  getServletContext().getRealPath("/").replace("\\", "/");
+        String rootWebappLocation = myLocation.substring(0,myLocation.lastIndexOf("/"));
+        rootWebappLocation = rootWebappLocation.substring(0,rootWebappLocation.lastIndexOf("/") + 1);
+        String persistenceDir = rootWebappLocation + props.getProperty("transfer.service.persistence.relative.location");
+        System.out.println("Storage data is stored in: " + persistenceDir);
+        
         String configBlockSizeS = props.getProperty("transfer.service.block.size");
         if (configBlockSizeS != null) {
 
@@ -52,8 +60,6 @@ public class TransferServlet extends HttpServlet {
                 e.printStackTrace();
             }
         }
-
-        System.out.println("Storage data is stored in: " + persistenceDir);
 
         // 1 get the GSI attributes
         String userDN = (String) req.getAttribute(GSIConstants.GSI_USER_DN);
@@ -77,8 +83,8 @@ public class TransferServlet extends HttpServlet {
 
         DataDescriptor desc = props.getDataDescriptor();
         // verify that the user calling is the owner or there is no owner
-        if (desc.getUserDN() == null || userDN.equals(desc.getUserDN())) {
-
+        if (desc.getUserDN() == null || desc.getUserDN().equals(userDN)) {
+            System.out.println("Transfering data using block size of: " + blockSize );
             // 4 write data to the response
             FileInputStream fis = new FileInputStream(desc.getLocation());
             byte[] bytes = new byte[blockSize];

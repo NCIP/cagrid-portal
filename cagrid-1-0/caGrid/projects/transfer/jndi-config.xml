@@ -72,8 +72,12 @@
           <value>ETC-PATH</value>
         </parameter>
         <parameter>
-          <name>transferServletBaseURL</name>
-          <value>@transferServletBaseURL@</value>
+          <name>transferServletPathName</name>
+          <value>@transferServletPathName@</value>
+        </parameter>
+        <parameter>
+          <name>storageDirectory</name>
+          <value>ETC-PATH/@storageDirectory@</value>
         </parameter>
       </resourceParams>
     </resource>

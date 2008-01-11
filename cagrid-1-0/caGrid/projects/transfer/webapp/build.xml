@@ -136,9 +136,10 @@
 	<target name="all" depends="jars" description="Builds the entire service." />
 
 	<target name="deployTomcat" depends="checkTomcat,checkGlobus" description="Deploys this webapp to tomcat">
-		<delete dir="${ext.tomcat.dir}/webapps/transfer"></delete>
-		<mkdir dir="${ext.tomcat.dir}/webapps/transfer"/>
-		<copy todir="${ext.tomcat.dir}/webapps/transfer"> 
+		<!-- please do not change the webapp dir or service mapping as this is in the code -->
+		<delete dir="${ext.tomcat.dir}/webapps/caGridTransfer"></delete>
+		<mkdir dir="${ext.tomcat.dir}/webapps/caGridTransfer"/>
+		<copy todir="${ext.tomcat.dir}/webapps/caGridTransfer"> 
 			<fileset dir=".">
 				<include name="**/*"/>
 				<exclude name="build*"/>
@@ -149,18 +150,23 @@
 				<exclude name="src/**/*"/>
 			</fileset>
 		</copy>
-		<copy todir="${ext.tomcat.dir}/webapps/transfer/WEB-INF/lib"> 
+		<copy todir="${ext.tomcat.dir}/webapps/caGridTransfer/WEB-INF/lib"> 
 			<fileset dir="${build.lib.dir}">
 				<include name="**/*"/>
 			</fileset>
 		</copy>
-		<copy todir="${ext.tomcat.dir}/webapps/transfer/WEB-INF/lib"> 
+		<copy todir="${ext.tomcat.dir}/webapps/caGridTransfer/WEB-INF/lib"> 
 			<fileset dir="../build/lib">
 				<include name="*Transfer-stubs*"/>
 				<include name="caGrid*core*"/>
 			</fileset>
 		</copy>
-		<copy todir="${ext.tomcat.dir}/webapps/transfer/WEB-INF/lib"> 
+		<copy todir="${ext.tomcat.dir}/webapps/caGridTransfer/WEB-INF/lib"> 
+			<fileset dir="../ext/lib">
+				<include name="caGrid*core*"/>
+			</fileset>
+		</copy>
+		<copy todir="${ext.tomcat.dir}/webapps/caGridTransfer/WEB-INF/lib"> 
 			<fileset dir="${ext.globus.dir}/lib">
 				<include name="addressing-1.0.jar" />
 								<include name="axis-url.jar" />

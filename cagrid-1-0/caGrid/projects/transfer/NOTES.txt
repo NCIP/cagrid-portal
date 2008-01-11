@@ -2,3 +2,6 @@ Development Thoughts and Modifications
 -You have to make a JNDI resource link in the service that is going to use Transfer so that it cant find the TransferContextResourceHome
 -Took the ant all and clean calls out of the build.xml and modified them and put them in the dev-build.xml
 
+To Do:
+- should look into to upload as well, should be easy with this style
+- need to add deploy JBoss.....

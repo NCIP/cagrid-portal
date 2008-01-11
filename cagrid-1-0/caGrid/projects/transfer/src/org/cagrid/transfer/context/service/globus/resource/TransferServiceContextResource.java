@@ -87,8 +87,8 @@ public class TransferServiceContextResource extends TransferServiceContextResour
 
 
     private File getStorageDirectory() throws Exception {
-        String etcPath = TransferServiceConfiguration.getConfiguration().getEtcDirectoryPath();
-        File storageDir = new File(etcPath + File.separator + "transferCache");
+        String storageDirS = TransferServiceConfiguration.getConfiguration().getStorageDirectory();
+        File storageDir = new File(storageDirS);
         if (!storageDir.exists()) {
             storageDir.mkdirs();
         }

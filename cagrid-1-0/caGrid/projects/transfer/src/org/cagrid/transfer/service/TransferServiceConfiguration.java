@@ -45,7 +45,9 @@ public class TransferServiceConfiguration implements ServiceConfiguration {
 	private String etcDirectoryPath;
 	
 	
-	private String transferServletBaseURL;
+	private String transferServletPathName;
+	
+	private String storageDirectory;
 	
 	
 	public String getEtcDirectoryPath() {
@@ -57,13 +59,23 @@ public class TransferServiceConfiguration implements ServiceConfiguration {
 	}
 
 	
-	public String getTransferServletBaseURL() {
-		return transferServletBaseURL;
+	public String getTransferServletPathName() {
+		return transferServletPathName;
 	}
 	
 	
-	public void setTransferServletBaseURL(String transferServletBaseURL) {
-		this.transferServletBaseURL = transferServletBaseURL;
+	public void setTransferServletPathName(String transferServletPathName) {
+		this.transferServletPathName = transferServletPathName;
+	}
+
+	
+	public String getStorageDirectory() {
+		return ContainerConfig.getBaseDirectory() + File.separator + storageDirectory;
+	}
+	
+	
+	public void setStorageDirectory(String storageDirectory) {
+		this.storageDirectory = storageDirectory;
 	}
 
 	
