@@ -62,4 +62,28 @@ public class CredentialDelegationServiceProviderImpl{
     return boxedResult;
   }
 
+    public org.cagrid.gaards.cds.stubs.DeleteDelegatedCredentialResponse deleteDelegatedCredential(org.cagrid.gaards.cds.stubs.DeleteDelegatedCredentialRequest params) throws RemoteException, org.cagrid.gaards.cds.stubs.types.CDSInternalFault, org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault {
+    org.cagrid.gaards.cds.stubs.DeleteDelegatedCredentialResponse boxedResult = new org.cagrid.gaards.cds.stubs.DeleteDelegatedCredentialResponse();
+    impl.deleteDelegatedCredential(params.getId().getDelegationIdentifier());
+    return boxedResult;
+  }
+
+    public org.cagrid.gaards.cds.stubs.AddAdminResponse addAdmin(org.cagrid.gaards.cds.stubs.AddAdminRequest params) throws RemoteException, org.cagrid.gaards.cds.stubs.types.CDSInternalFault, org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault {
+    org.cagrid.gaards.cds.stubs.AddAdminResponse boxedResult = new org.cagrid.gaards.cds.stubs.AddAdminResponse();
+    impl.addAdmin(params.getGridIdentity());
+    return boxedResult;
+  }
+
+    public org.cagrid.gaards.cds.stubs.RemoveAdminResponse removeAdmin(org.cagrid.gaards.cds.stubs.RemoveAdminRequest params) throws RemoteException, org.cagrid.gaards.cds.stubs.types.CDSInternalFault, org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault {
+    org.cagrid.gaards.cds.stubs.RemoveAdminResponse boxedResult = new org.cagrid.gaards.cds.stubs.RemoveAdminResponse();
+    impl.removeAdmin(params.getGridIdentity());
+    return boxedResult;
+  }
+
+    public org.cagrid.gaards.cds.stubs.GetAdminsResponse getAdmins(org.cagrid.gaards.cds.stubs.GetAdminsRequest params) throws RemoteException, org.cagrid.gaards.cds.stubs.types.CDSInternalFault, org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault {
+    org.cagrid.gaards.cds.stubs.GetAdminsResponse boxedResult = new org.cagrid.gaards.cds.stubs.GetAdminsResponse();
+    boxedResult.setResponse(impl.getAdmins());
+    return boxedResult;
+  }
+
 }

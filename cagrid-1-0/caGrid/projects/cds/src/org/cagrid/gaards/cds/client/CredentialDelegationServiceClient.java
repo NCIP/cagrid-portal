@@ -171,4 +171,42 @@ public class CredentialDelegationServiceClient extends ServiceSecurityClient
     }
   }
 
+  public void deleteDelegatedCredential(org.cagrid.gaards.cds.common.DelegationIdentifier id) throws RemoteException, org.cagrid.gaards.cds.stubs.types.CDSInternalFault, org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"deleteDelegatedCredential");
+    org.cagrid.gaards.cds.stubs.DeleteDelegatedCredentialRequest params = new org.cagrid.gaards.cds.stubs.DeleteDelegatedCredentialRequest();
+    org.cagrid.gaards.cds.stubs.DeleteDelegatedCredentialRequestId idContainer = new org.cagrid.gaards.cds.stubs.DeleteDelegatedCredentialRequestId();
+    idContainer.setDelegationIdentifier(id);
+    params.setId(idContainer);
+    org.cagrid.gaards.cds.stubs.DeleteDelegatedCredentialResponse boxedResult = portType.deleteDelegatedCredential(params);
+    }
+  }
+
+  public void addAdmin(java.lang.String gridIdentity) throws RemoteException, org.cagrid.gaards.cds.stubs.types.CDSInternalFault, org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"addAdmin");
+    org.cagrid.gaards.cds.stubs.AddAdminRequest params = new org.cagrid.gaards.cds.stubs.AddAdminRequest();
+    params.setGridIdentity(gridIdentity);
+    org.cagrid.gaards.cds.stubs.AddAdminResponse boxedResult = portType.addAdmin(params);
+    }
+  }
+
+  public void removeAdmin(java.lang.String gridIdentity) throws RemoteException, org.cagrid.gaards.cds.stubs.types.CDSInternalFault, org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"removeAdmin");
+    org.cagrid.gaards.cds.stubs.RemoveAdminRequest params = new org.cagrid.gaards.cds.stubs.RemoveAdminRequest();
+    params.setGridIdentity(gridIdentity);
+    org.cagrid.gaards.cds.stubs.RemoveAdminResponse boxedResult = portType.removeAdmin(params);
+    }
+  }
+
+  public java.lang.String[] getAdmins() throws RemoteException, org.cagrid.gaards.cds.stubs.types.CDSInternalFault, org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"getAdmins");
+    org.cagrid.gaards.cds.stubs.GetAdminsRequest params = new org.cagrid.gaards.cds.stubs.GetAdminsRequest();
+    org.cagrid.gaards.cds.stubs.GetAdminsResponse boxedResult = portType.getAdmins(params);
+    return boxedResult.getResponse();
+    }
+  }
+
 }

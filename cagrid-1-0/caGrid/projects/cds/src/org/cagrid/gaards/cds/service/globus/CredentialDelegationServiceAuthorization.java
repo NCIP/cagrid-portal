@@ -82,6 +82,26 @@ public class CredentialDelegationServiceAuthorization implements PDP {
 		
 		
 	}
+					
+	public static void authorizeDeleteDelegatedCredential() throws RemoteException {
+		
+		
+	}
+					
+	public static void authorizeAddAdmin() throws RemoteException {
+		
+		
+	}
+					
+	public static void authorizeRemoveAdmin() throws RemoteException {
+		
+		
+	}
+					
+	public static void authorizeGetAdmins() throws RemoteException {
+		
+		
+	}
 	
 	
 	public boolean isPermitted(Subject peerSubject, MessageContext context, QName operation)
@@ -141,6 +161,38 @@ public class CredentialDelegationServiceAuthorization implements PDP {
 		} else if(operation.getLocalPart().equals("searchDelegatedCredentialAuditLog")){
 			try{
 				authorizeSearchDelegatedCredentialAuditLog();
+				return true;
+			} catch (Exception e){
+				e.printStackTrace();
+				return false;
+			}
+		} else if(operation.getLocalPart().equals("deleteDelegatedCredential")){
+			try{
+				authorizeDeleteDelegatedCredential();
+				return true;
+			} catch (Exception e){
+				e.printStackTrace();
+				return false;
+			}
+		} else if(operation.getLocalPart().equals("addAdmin")){
+			try{
+				authorizeAddAdmin();
+				return true;
+			} catch (Exception e){
+				e.printStackTrace();
+				return false;
+			}
+		} else if(operation.getLocalPart().equals("removeAdmin")){
+			try{
+				authorizeRemoveAdmin();
+				return true;
+			} catch (Exception e){
+				e.printStackTrace();
+				return false;
+			}
+		} else if(operation.getLocalPart().equals("getAdmins")){
+			try{
+				authorizeGetAdmins();
 				return true;
 			} catch (Exception e){
 				e.printStackTrace();

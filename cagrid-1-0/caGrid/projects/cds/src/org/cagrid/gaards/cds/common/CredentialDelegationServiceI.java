@@ -94,5 +94,48 @@ public interface CredentialDelegationServiceI {
    */
   public org.cagrid.gaards.cds.common.DelegatedCredentialAuditRecord[] searchDelegatedCredentialAuditLog(org.cagrid.gaards.cds.common.DelegatedCredentialAuditFilter f) throws RemoteException, org.cagrid.gaards.cds.stubs.types.CDSInternalFault, org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault, org.cagrid.gaards.cds.stubs.types.DelegationFault ;
 
+  /**
+   * This method allows and administrator to delete a delegated credential.
+   *
+   * @param id
+   * @throws CDSInternalFault
+   *	
+   * @throws PermissionDeniedFault
+   *	
+   */
+  public void deleteDelegatedCredential(org.cagrid.gaards.cds.common.DelegationIdentifier id) throws RemoteException, org.cagrid.gaards.cds.stubs.types.CDSInternalFault, org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault ;
+
+  /**
+   * This method allows one to add and administrator.
+   *
+   * @param gridIdentity
+   * @throws CDSInternalFault
+   *	
+   * @throws PermissionDeniedFault
+   *	
+   */
+  public void addAdmin(java.lang.String gridIdentity) throws RemoteException, org.cagrid.gaards.cds.stubs.types.CDSInternalFault, org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault ;
+
+  /**
+   * This method allows one to remove an administrator.
+   *
+   * @param gridIdentity
+   * @throws CDSInternalFault
+   *	
+   * @throws PermissionDeniedFault
+   *	
+   */
+  public void removeAdmin(java.lang.String gridIdentity) throws RemoteException, org.cagrid.gaards.cds.stubs.types.CDSInternalFault, org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault ;
+
+  /**
+   * This method obtains the list of administrators for the CDS.
+   *
+   * @throws CDSInternalFault
+   *	
+   * @throws PermissionDeniedFault
+   *	
+   */
+  public java.lang.String[] getAdmins() throws RemoteException, org.cagrid.gaards.cds.stubs.types.CDSInternalFault, org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault ;
+
 }
 
