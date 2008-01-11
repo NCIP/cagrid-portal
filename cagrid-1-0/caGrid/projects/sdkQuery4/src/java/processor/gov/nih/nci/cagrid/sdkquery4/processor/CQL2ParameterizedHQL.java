@@ -29,7 +29,7 @@ import org.apache.log4j.Logger;
  * @author David Ervin
  * 
  * @created Mar 2, 2007 10:26:47 AM
- * @version $Id: CQL2ParameterizedHQL.java,v 1.1 2007-12-21 20:09:54 dervin Exp $ 
+ * @version $Id: CQL2ParameterizedHQL.java,v 1.2 2008-01-11 17:45:40 dervin Exp $ 
  */
 public class CQL2ParameterizedHQL {
     private static Logger LOG = Logger.getLogger(CQL2ParameterizedHQL.class);
@@ -87,7 +87,7 @@ public class CQL2ParameterizedHQL {
             throw new QueryProcessingException("Error finding subclasses of " 
                 + query.getTarget().getName() + ": " + ex.getMessage(), ex);
         }
-        boolean hasSubclasses = (subclasses == null || subclasses.size() == 0);
+        boolean hasSubclasses = !(subclasses == null || subclasses.size() == 0);
         LOG.debug(query.getTarget().getName() 
             + (hasSubclasses ? " has " + subclasses.size() + " subclasses" : " has no subclasse"));
 		processTarget(query.getTarget(), rawHql, parameters, hasSubclasses);
