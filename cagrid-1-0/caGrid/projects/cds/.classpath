@@ -74,7 +74,7 @@
 	<classpathentry kind="lib" path="lib/spring-beans.jar"/>
 	<classpathentry kind="lib" path="lib/spring-core.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-db.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-events.jar" sourcepath="/caGrid-service-tools"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-events.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-groups.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
