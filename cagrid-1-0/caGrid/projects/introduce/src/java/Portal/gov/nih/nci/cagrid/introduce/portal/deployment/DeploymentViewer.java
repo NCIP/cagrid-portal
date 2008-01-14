@@ -617,8 +617,7 @@ public class DeploymentViewer extends ApplicationComponent {
 									IntroduceConstants.INTRODUCE_DEPLOYMENT_PREFIX_PROPERTY)
 							+ "/" + info.getServices().getService(0).getName());
 			serviceDeploymentNameTextField
-					.setFont(serviceDeploymentNameTextField.getFont()
-							.deriveFont(Font.ITALIC));
+					.setForeground(IntroduceLookAndFeel.getPanelLabelColor());
 		}
 		return serviceDeploymentNameTextField;
 	}
@@ -645,8 +644,7 @@ public class DeploymentViewer extends ApplicationComponent {
 	private JLabel getServiceNamespaceTextField() {
 		if (serviceNamespaceTextField == null) {
 			serviceNamespaceTextField = new JLabel();
-			serviceNamespaceTextField.setFont(serviceNamespaceTextField
-					.getFont().deriveFont(Font.ITALIC));
+			serviceNamespaceTextField.setForeground(IntroduceLookAndFeel.getPanelLabelColor());
 			serviceNamespaceTextField.setText(info.getServices().getService(0)
 					.getNamespace());
 		}
@@ -661,8 +659,7 @@ public class DeploymentViewer extends ApplicationComponent {
 	private JLabel getServiceLocationTextField() {
 		if (serviceLocationTextField == null) {
 			serviceLocationTextField = new JLabel();
-			serviceLocationTextField.setFont(serviceLocationTextField.getFont()
-					.deriveFont(Font.ITALIC));
+			serviceLocationTextField.setForeground(IntroduceLookAndFeel.getPanelLabelColor());
 			serviceLocationTextField.setText(info.getBaseDirectory()
 					.getAbsolutePath());
 		}
