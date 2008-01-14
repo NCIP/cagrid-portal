@@ -38,7 +38,6 @@ import javax.swing.JTabbedPane;
 
 import org.cagrid.gaards.ui.gridgrouper.expressioneditor.GridGrouperExpressionEditor;
 
-
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
@@ -135,8 +134,8 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 
 	private ServiceDescription description;
 
-
-	public MethodSecurityPanel(ServiceDescription description, ServiceType service, MethodType method) {
+	public MethodSecurityPanel(ServiceDescription description,
+			ServiceType service, MethodType method) {
 		super();
 		this.description = description;
 		this.service = service;
@@ -147,7 +146,6 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 			setMethodSecurity(this.method.getMethodSecurity());
 		}
 	}
-
 
 	private void initialize() {
 		GridBagConstraints gridBagConstraints17 = new GridBagConstraints();
@@ -162,16 +160,17 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 		gridBagConstraints71.weightx = 1.0D;
 		this.setLayout(new GridBagLayout());
 		this.add(getSecureCommunicationPanel(), gridBagConstraints71);
-		setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Security Configuration",
-			javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION,
-			null, PortalLookAndFeel.getPanelLabelColor()));
+		setBorder(javax.swing.BorderFactory.createTitledBorder(null,
+				"Security Configuration",
+				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
+				PortalLookAndFeel.getPanelLabelColor()));
 		this.add(getTransportPanel(), gridBagConstraints17);
 		applyServiceSettings();
 
 		synchronize();
 		isInited = true;
 	}
-
 
 	/**
 	 * This method initializes secureCommunicationPanel
@@ -185,7 +184,6 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 		}
 		return secureCommunicationPanel;
 	}
-
 
 	/**
 	 * This method initializes noneButton
@@ -206,7 +204,6 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 		return noneButton;
 	}
 
-
 	/**
 	 * This method initializes customButton
 	 * 
@@ -225,49 +222,48 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 		return customButton;
 	}
 
-
 	private boolean isSecure() {
-		if (usesTransportSecurity() || usesSecureConversation() || usesSecureMessage()) {
+		if (usesTransportSecurity() || usesSecureConversation()
+				|| usesSecureMessage()) {
 			return true;
 		} else {
 			return false;
 		}
 
 	}
-
 
 	private boolean usesTransportSecurity() {
 		if (tlsButton.isSelected()) {
 			return true;
-		} else if ((serviceSecurity != null) && (serviceSecurity.getTransportLevelSecurity() != null)) {
+		} else if ((serviceSecurity != null)
+				&& (serviceSecurity.getTransportLevelSecurity() != null)) {
 			return true;
 		} else {
 			return false;
 		}
 	}
-
 
 	private boolean usesSecureConversation() {
 		if (secureConversationButton.isSelected()) {
 			return true;
-		} else if ((serviceSecurity != null) && (serviceSecurity.getSecureConversation() != null)) {
+		} else if ((serviceSecurity != null)
+				&& (serviceSecurity.getSecureConversation() != null)) {
 			return true;
 		} else {
 			return false;
 		}
 	}
-
 
 	private boolean usesSecureMessage() {
 		if (secureMessageButton.isSelected()) {
 			return true;
-		} else if ((serviceSecurity != null) && (serviceSecurity.getSecureMessage() != null)) {
+		} else if ((serviceSecurity != null)
+				&& (serviceSecurity.getSecureMessage() != null)) {
 			return true;
 		} else {
 			return false;
 		}
 	}
-
 
 	public MethodSecurity getMethodSecurity(String methodName) throws Exception {
 		MethodSecurity ms = new MethodSecurity();
@@ -280,15 +276,18 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 		} else if (customButton.isSelected()) {
 			ms.setSecuritySetting(SecuritySetting.Custom);
 			if (!isSecure()) {
-				throw new Exception("You must select at least one transport mechanism!!!");
+				throw new Exception(
+						"You must select at least one transport mechanism!!!");
 			}
 
 			if (tlsButton.isSelected()) {
-				ms.setTransportLevelSecurity(tlsPanel.getTransportLevelSecurity());
+				ms.setTransportLevelSecurity(tlsPanel
+						.getTransportLevelSecurity());
 
 			}
 			if (secureConversationButton.isSelected()) {
-				ms.setSecureConversation(secureConversationPanel.getSecureConversation());
+				ms.setSecureConversation(secureConversationPanel
+						.getSecureConversation());
 
 			}
 			if (secureMessageButton.isSelected()) {
@@ -300,7 +299,9 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 			}
 
 			if (anonymousCommunication.isEnabled()) {
-				ms.setAnonymousClients((AnonymousCommunication) anonymousCommunication.getSelectedItem());
+				ms
+						.setAnonymousClients((AnonymousCommunication) anonymousCommunication
+								.getSelectedItem());
 			} else {
 				ms.setAnonymousClients(AnonymousCommunication.No);
 			}
@@ -308,10 +309,12 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 			MethodAuthorization ma = new MethodAuthorization();
 			if (authType.equals(GRID_GROUPER_AUTHORIZATION)) {
 				// TODO: Validate the expression
-				MembershipExpression exp = getGridGrouper().getMembershipExpression();
+				MembershipExpression exp = getGridGrouper()
+						.getMembershipExpression();
 				ma.setGridGrouperAuthorization(exp);
 			} else if (authType.equals(CSM_AUTHORIZATION)) {
-				CommonTools.setServiceProperty(description, CSMPanel.CSM_CONFIGURATION_FILE, "", false);
+				CommonTools.setServiceProperty(description,
+						CSMPanel.CSM_CONFIGURATION_FILE, "", false);
 				ma.setCSMAuthorization(getCsmPanel().getAuthorization());
 			} else {
 				ma.setNoAuthorization(new NoAuthorization());
@@ -323,7 +326,6 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 		}
 		return ms;
 	}
-
 
 	public void setMethodSecurity(MethodSecurity ms) {
 		if (ms != null) {
@@ -361,13 +363,18 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 				MethodAuthorization ma = ms.getMethodAuthorization();
 				if (ma != null) {
 					if (ma.getGridGrouperAuthorization() != null) {
-						this.getGridGrouper().setExpression(ma.getGridGrouperAuthorization());
-						authorizationMechanism.setSelectedItem(GRID_GROUPER_AUTHORIZATION);
+						this.getGridGrouper().setExpression(
+								ma.getGridGrouperAuthorization());
+						authorizationMechanism
+								.setSelectedItem(GRID_GROUPER_AUTHORIZATION);
 					} else if (ma.getCSMAuthorization() != null) {
-						this.getCsmPanel().setAuthorization(ma.getCSMAuthorization());
-						authorizationMechanism.setSelectedItem(CSM_AUTHORIZATION);
+						this.getCsmPanel().setAuthorization(
+								ma.getCSMAuthorization());
+						authorizationMechanism
+								.setSelectedItem(CSM_AUTHORIZATION);
 					} else {
-						authorizationMechanism.setSelectedItem(NO_AUTHORIZATION);
+						authorizationMechanism
+								.setSelectedItem(NO_AUTHORIZATION);
 					}
 				}
 
@@ -375,7 +382,6 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 		}
 		synchronize();
 	}
-
 
 	public void synchronize() {
 		disableAll();
@@ -400,9 +406,35 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 		}
 	}
 
-
 	private void syncAuthorization() {
-		if (isSecure() && this.serviceSecurity!=null && this.serviceSecurity.getServiceAuthorization()!=null && this.serviceSecurity.getServiceAuthorization().getCustomPDPChainAuthorization() == null) {
+
+		if (isSecure()) {
+			if ((this.serviceSecurity != null)
+					&& (this.serviceSecurity.getServiceAuthorization() != null)
+					&& this.serviceSecurity.getServiceAuthorization()
+							.getCustomPDPChainAuthorization() != null) {
+				authorizationMechanism.setEnabled(false);
+				authLayout.show(authPanel, NO_AUTHORIZATION);
+			}else if ((this.serviceSecurity != null)
+					&& (this.serviceSecurity.getServiceAuthorization() != null)
+					&& this.serviceSecurity.getServiceAuthorization().getGridMapAuthorization() != null) {
+				authorizationMechanism.setEnabled(false);
+				authLayout.show(authPanel, NO_AUTHORIZATION);
+			}else {
+				authorizationMechanism.setEnabled(true);
+				String mech = (String) authorizationMechanism.getSelectedItem();
+				authLayout.show(authPanel, mech);
+			}
+		} else {
+			authorizationMechanism.setEnabled(false);
+			authLayout.show(authPanel, NO_AUTHORIZATION);
+		}
+/*
+		if (isSecure()
+				&& this.serviceSecurity != null
+				&& this.serviceSecurity.getServiceAuthorization() != null
+				&& this.serviceSecurity.getServiceAuthorization()
+						.getCustomPDPChainAuthorization() == null) {
 			authorizationMechanism.setEnabled(true);
 			String mech = (String) authorizationMechanism.getSelectedItem();
 			authLayout.show(authPanel, mech);
@@ -410,8 +442,8 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 			authorizationMechanism.setEnabled(false);
 			authLayout.show(authPanel, NO_AUTHORIZATION);
 		}
+		*/
 	}
-
 
 	private void syncAnonymousCommunication() {
 		if (usesTransportSecurity() || usesSecureConversation()) {
@@ -419,7 +451,8 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 				anonymousCommunication.setEnabled(true);
 			} else if (serviceSecurity.getServiceAuthorization() == null) {
 				anonymousCommunication.setEnabled(true);
-			} else if (serviceSecurity.getServiceAuthorization().getNoAuthorization() != null) {
+			} else if (serviceSecurity.getServiceAuthorization()
+					.getNoAuthorization() != null) {
 				anonymousCommunication.setEnabled(true);
 			} else {
 				anonymousCommunication.setEnabled(false);
@@ -428,7 +461,6 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 			anonymousCommunication.setEnabled(false);
 		}
 	}
-
 
 	private synchronized void synchRunAsMode() {
 		if (!isSyncingRunAs) {
@@ -443,7 +475,8 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 
 				if (!getAnonymousCommunication().isEnabled()) {
 					runAsMode.addItem(RunAsMode.Caller);
-				} else if (getAnonymousCommunication().getSelectedItem().equals(AnonymousCommunication.No)) {
+				} else if (getAnonymousCommunication().getSelectedItem()
+						.equals(AnonymousCommunication.No)) {
 					runAsMode.addItem(RunAsMode.Caller);
 				}
 
@@ -453,14 +486,15 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 
 	}
 
-
 	private boolean hasServiceCredentials() {
 		if (serviceSecurity != null) {
 			if (serviceSecurity.getServiceCredentials() != null) {
-				ServiceCredential cred = serviceSecurity.getServiceCredentials();
+				ServiceCredential cred = serviceSecurity
+						.getServiceCredentials();
 				if (cred.getX509Credential() != null) {
 					X509Credential x509 = cred.getX509Credential();
-					if ((x509.getCertificateLocation() != null) && (x509.getPrivateKeyLocation() != null)) {
+					if ((x509.getCertificateLocation() != null)
+							&& (x509.getPrivateKeyLocation() != null)) {
 						return true;
 					}
 				} else if (cred.getProxyCredential() != null) {
@@ -475,19 +509,20 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 		return false;
 	}
 
-
 	public void applyServiceSettings() {
 		if (serviceSecurity != null) {
 			if (this.isSecure()) {
 				customButton.setSelected(true);
 				if (serviceSecurity.getTransportLevelSecurity() != null) {
-					TransportLevelSecurity s = serviceSecurity.getTransportLevelSecurity();
+					TransportLevelSecurity s = serviceSecurity
+							.getTransportLevelSecurity();
 					tlsButton.setSelected(true);
 					tlsPanel.setTransportLevelSecurity(s);
 				}
 
 				if (serviceSecurity.getSecureConversation() != null) {
-					SecureConversation s = serviceSecurity.getSecureConversation();
+					SecureConversation s = serviceSecurity
+							.getSecureConversation();
 					secureConversationButton.setSelected(true);
 					secureConversationPanel.setSecureConversation(s);
 				}
@@ -502,7 +537,8 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 				}
 
 				if (serviceSecurity.getAnonymousClients() != null) {
-					anonymousCommunication.setSelectedItem(serviceSecurity.getAnonymousClients());
+					anonymousCommunication.setSelectedItem(serviceSecurity
+							.getAnonymousClients());
 				}
 
 			} else {
@@ -510,7 +546,6 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 			}
 		}
 	}
-
 
 	public void disableAll() {
 		tlsPanel.disablePanel();
@@ -525,7 +560,6 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 		authLayout.show(authPanel, NO_AUTHORIZATION);
 	}
 
-
 	/**
 	 * This method initializes tlsPanel
 	 * 
@@ -537,7 +571,6 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 		}
 		return tlsPanel;
 	}
-
 
 	/**
 	 * This method initializes tlsButton
@@ -556,7 +589,6 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 		return tlsButton;
 	}
 
-
 	/**
 	 * This method initializes secureConversationButton
 	 * 
@@ -565,16 +597,16 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 	private JCheckBox getSecureConversationButton() {
 		if (secureConversationButton == null) {
 			secureConversationButton = new JCheckBox();
-			secureConversationButton.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					synchronize();
-				}
-			});
+			secureConversationButton
+					.addActionListener(new java.awt.event.ActionListener() {
+						public void actionPerformed(java.awt.event.ActionEvent e) {
+							synchronize();
+						}
+					});
 
 		}
 		return secureConversationButton;
 	}
-
 
 	/**
 	 * This method initializes choicePanel
@@ -596,7 +628,6 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 		}
 		return choicePanel;
 	}
-
 
 	/**
 	 * This method initializes commPanel
@@ -622,7 +653,6 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 		return commPanel;
 	}
 
-
 	/**
 	 * This method initializes secureMessageButton
 	 * 
@@ -631,15 +661,15 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 	private JCheckBox getSecureMessageButton() {
 		if (secureMessageButton == null) {
 			secureMessageButton = new JCheckBox();
-			secureMessageButton.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					synchronize();
-				}
-			});
+			secureMessageButton
+					.addActionListener(new java.awt.event.ActionListener() {
+						public void actionPerformed(java.awt.event.ActionEvent e) {
+							synchronize();
+						}
+					});
 		}
 		return secureMessageButton;
 	}
-
 
 	/**
 	 * This method initializes secureConversationPanel
@@ -653,7 +683,6 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 		return secureConversationPanel;
 	}
 
-
 	/**
 	 * This method initializes secureMessagePanel
 	 * 
@@ -665,7 +694,6 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 		}
 		return secureMessagePanel;
 	}
-
 
 	/**
 	 * This method initializes runAsMode
@@ -683,7 +711,6 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 		return runAsMode;
 	}
 
-
 	/**
 	 * This method initializes anonymousCommunication
 	 * 
@@ -692,19 +719,19 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 	private JComboBox getAnonymousCommunication() {
 		if (anonymousCommunication == null) {
 			anonymousCommunication = new JComboBox();
-			anonymousCommunication.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					if (isInited) {
-						synchronize();
-					}
-				}
-			});
+			anonymousCommunication
+					.addActionListener(new java.awt.event.ActionListener() {
+						public void actionPerformed(java.awt.event.ActionEvent e) {
+							if (isInited) {
+								synchronize();
+							}
+						}
+					});
 			anonymousCommunication.addItem(AnonymousCommunication.No);
 			anonymousCommunication.addItem(AnonymousCommunication.Yes);
 		}
 		return anonymousCommunication;
 	}
-
 
 	/**
 	 * This method initializes transportPanel
@@ -714,13 +741,14 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 	private JTabbedPane getTransportPanel() {
 		if (transportPanel == null) {
 			transportPanel = new JTabbedPane();
-			transportPanel.addTab("Secure Communication", null, getCommunicationPanel(), null);
-			transportPanel.addTab("Authorization", null, getAuthorizationPanel(), null);
+			transportPanel.addTab("Secure Communication", null,
+					getCommunicationPanel(), null);
+			transportPanel.addTab("Authorization", null,
+					getAuthorizationPanel(), null);
 			transportPanel.addTab("Other", null, getGeneralSecurity(), null);
 		}
 		return transportPanel;
 	}
-
 
 	/**
 	 * This method initializes communicationPanel
@@ -760,12 +788,13 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 			communicationPanel.setLayout(new GridBagLayout());
 			communicationPanel.add(getCommPanel(), gridBagConstraints4);
 			communicationPanel.add(getTlsPanel(), gridBagConstraints6);
-			communicationPanel.add(getSecureConversationPanel(), gridBagConstraints7);
-			communicationPanel.add(getSecureMessagePanel(), gridBagConstraints11);
+			communicationPanel.add(getSecureConversationPanel(),
+					gridBagConstraints7);
+			communicationPanel.add(getSecureMessagePanel(),
+					gridBagConstraints11);
 		}
 		return communicationPanel;
 	}
-
 
 	/**
 	 * This method initializes generalSecurity
@@ -808,11 +837,11 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 			generalSecurity.add(runAsLabel, gridBagConstraints21);
 			generalSecurity.add(getRunAsMode(), gridBagConstraints12);
 			generalSecurity.add(anonClientsLabel, gridBagConstraints);
-			generalSecurity.add(getAnonymousCommunication(), gridBagConstraints1);
+			generalSecurity.add(getAnonymousCommunication(),
+					gridBagConstraints1);
 		}
 		return generalSecurity;
 	}
-
 
 	/**
 	 * This method initializes authorizationPanel
@@ -823,12 +852,13 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 		if (authorizationPanel == null) {
 			authorizationPanel = new JPanel();
 			authorizationPanel.setLayout(new BorderLayout());
-			authorizationPanel.add(getAuthorizationTypePanel(), java.awt.BorderLayout.NORTH);
-			authorizationPanel.add(getAuthPanel(), java.awt.BorderLayout.CENTER);
+			authorizationPanel.add(getAuthorizationTypePanel(),
+					java.awt.BorderLayout.NORTH);
+			authorizationPanel
+					.add(getAuthPanel(), java.awt.BorderLayout.CENTER);
 		}
 		return authorizationPanel;
 	}
-
 
 	/**
 	 * This method initializes authorizationTypePanel
@@ -843,7 +873,6 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 		}
 		return authorizationTypePanel;
 	}
-
 
 	/**
 	 * This method initializes jPanel1
@@ -874,7 +903,6 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 		return jPanel1;
 	}
 
-
 	/**
 	 * This method initializes authorizationMechanism
 	 * 
@@ -883,20 +911,20 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 	private JComboBox getAuthorizationMechanism() {
 		if (authorizationMechanism == null) {
 			authorizationMechanism = new JComboBox();
-			authorizationMechanism.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					if (isInited) {
-						synchronize();
-					}
-				}
-			});
+			authorizationMechanism
+					.addActionListener(new java.awt.event.ActionListener() {
+						public void actionPerformed(java.awt.event.ActionEvent e) {
+							if (isInited) {
+								synchronize();
+							}
+						}
+					});
 			authorizationMechanism.addItem(NO_AUTHORIZATION);
 			authorizationMechanism.addItem(GRID_GROUPER_AUTHORIZATION);
 			authorizationMechanism.addItem(CSM_AUTHORIZATION);
 		}
 		return authorizationMechanism;
 	}
-
 
 	/**
 	 * This method initializes authPanel
@@ -915,7 +943,6 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 		return authPanel;
 	}
 
-
 	/**
 	 * This method initializes noAuthorizationPanel
 	 * 
@@ -929,7 +956,6 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 		return noAuthorizationPanel;
 	}
 
-
 	/**
 	 * This method initializes gridGrouper
 	 * 
@@ -937,13 +963,13 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 	 */
 	private GridGrouperExpressionEditor getGridGrouper() {
 		if (gridGrouper == null) {
-			gridGrouper = new GridGrouperExpressionEditor(GridGrouperURLManager.getGridGroupers(),
-				GridGrouperURLManager.getLoadOnStartup());
+			gridGrouper = new GridGrouperExpressionEditor(GridGrouperURLManager
+					.getGridGroupers(), GridGrouperURLManager
+					.getLoadOnStartup());
 			gridGrouper.setName(GRID_GROUPER_AUTHORIZATION);
 		}
 		return gridGrouper;
 	}
-
 
 	/**
 	 * This method initializes csmPanel
