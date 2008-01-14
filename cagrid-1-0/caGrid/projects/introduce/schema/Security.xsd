@@ -38,11 +38,13 @@
 	
 	<xs:complexType name="MethodAuthorization">
 		<xs:choice>
+			<xs:element name="InheritServiceAuthorization" minOccurs="1" maxOccurs="1" type="InheritServiceAuthorization"/>
 			<xs:element name="NoAuthorization" minOccurs="1" maxOccurs="1" type="NoAuthorization"/>
 			<xs:element name="GridGrouperAuthorization" minOccurs="1" maxOccurs="1" type="grouper:MembershipExpression"/>
 			<xs:element name="CSMAuthorization" minOccurs="1" maxOccurs="1" type="CSMAuthorization"/>
 		</xs:choice>
 	</xs:complexType>
+	<xs:complexType name="InheritServiceAuthorization"/>
 	<xs:complexType name="NoAuthorization"/>
 	<xs:complexType name="GridMapAuthorization">
 		<xs:sequence>

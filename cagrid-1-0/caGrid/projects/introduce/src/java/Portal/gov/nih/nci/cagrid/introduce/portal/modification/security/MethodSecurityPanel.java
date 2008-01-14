@@ -5,6 +5,7 @@ import gov.nih.nci.cagrid.gridgrouper.bean.MembershipExpression;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.security.AnonymousCommunication;
+import gov.nih.nci.cagrid.introduce.beans.security.InheritServiceAuthorization;
 import gov.nih.nci.cagrid.introduce.beans.security.MethodAuthorization;
 import gov.nih.nci.cagrid.introduce.beans.security.MethodSecurity;
 import gov.nih.nci.cagrid.introduce.beans.security.NoAuthorization;
@@ -47,6 +48,8 @@ import org.cagrid.gaards.ui.gridgrouper.expressioneditor.GridGrouperExpressionEd
  *          Exp $
  */
 public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
+
+	private final static String INHERIT_SERVICE_AUTHORIZATION = "Inherit Service Authorization";
 
 	private final static String NO_AUTHORIZATION = "No Authorization";
 
@@ -316,8 +319,11 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 				CommonTools.setServiceProperty(description,
 						CSMPanel.CSM_CONFIGURATION_FILE, "", false);
 				ma.setCSMAuthorization(getCsmPanel().getAuthorization());
-			} else {
+			} else if (authType.equals(NO_AUTHORIZATION)) {
 				ma.setNoAuthorization(new NoAuthorization());
+			} else {
+				ma
+						.setInheritServiceAuthorization(new InheritServiceAuthorization());
 			}
 			ms.setMethodAuthorization(ma);
 		}
@@ -372,9 +378,12 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 								ma.getCSMAuthorization());
 						authorizationMechanism
 								.setSelectedItem(CSM_AUTHORIZATION);
-					} else {
+					} else if (ma.getNoAuthorization() != null) {
 						authorizationMechanism
 								.setSelectedItem(NO_AUTHORIZATION);
+					} else {
+						authorizationMechanism
+								.setSelectedItem(INHERIT_SERVICE_AUTHORIZATION);
 					}
 				}
 
@@ -414,46 +423,41 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 					&& this.serviceSecurity.getServiceAuthorization()
 							.getCustomPDPChainAuthorization() != null) {
 				authorizationMechanism.setEnabled(false);
-				authLayout.show(authPanel, NO_AUTHORIZATION);
-			}else if ((this.serviceSecurity != null)
+				authLayout.show(authPanel, INHERIT_SERVICE_AUTHORIZATION);
+			} else if ((this.serviceSecurity != null)
 					&& (this.serviceSecurity.getServiceAuthorization() != null)
-					&& this.serviceSecurity.getServiceAuthorization().getGridMapAuthorization() != null) {
+					&& this.serviceSecurity.getServiceAuthorization()
+							.getGridMapAuthorization() != null) {
 				authorizationMechanism.setEnabled(false);
-				authLayout.show(authPanel, NO_AUTHORIZATION);
-			}else {
+				authLayout.show(authPanel, INHERIT_SERVICE_AUTHORIZATION);
+			} else {
 				authorizationMechanism.setEnabled(true);
 				String mech = (String) authorizationMechanism.getSelectedItem();
 				authLayout.show(authPanel, mech);
 			}
 		} else {
 			authorizationMechanism.setEnabled(false);
-			authLayout.show(authPanel, NO_AUTHORIZATION);
+			authLayout.show(authPanel, INHERIT_SERVICE_AUTHORIZATION);
 		}
-/*
-		if (isSecure()
-				&& this.serviceSecurity != null
-				&& this.serviceSecurity.getServiceAuthorization() != null
-				&& this.serviceSecurity.getServiceAuthorization()
-						.getCustomPDPChainAuthorization() == null) {
-			authorizationMechanism.setEnabled(true);
-			String mech = (String) authorizationMechanism.getSelectedItem();
-			authLayout.show(authPanel, mech);
-		} else {
-			authorizationMechanism.setEnabled(false);
-			authLayout.show(authPanel, NO_AUTHORIZATION);
-		}
-		*/
 	}
 
 	private void syncAnonymousCommunication() {
 		if (usesTransportSecurity() || usesSecureConversation()) {
-			if (serviceSecurity == null) {
+			String authz = (String) this.getAuthorizationMechanism()
+					.getSelectedItem();
+			if (authz.equals(NO_AUTHORIZATION)) {
 				anonymousCommunication.setEnabled(true);
-			} else if (serviceSecurity.getServiceAuthorization() == null) {
-				anonymousCommunication.setEnabled(true);
-			} else if (serviceSecurity.getServiceAuthorization()
-					.getNoAuthorization() != null) {
-				anonymousCommunication.setEnabled(true);
+			} else if (authz.equals(INHERIT_SERVICE_AUTHORIZATION)) {
+				if (serviceSecurity == null) {
+					anonymousCommunication.setEnabled(true);
+				} else if (serviceSecurity.getServiceAuthorization() == null) {
+					anonymousCommunication.setEnabled(true);
+				} else if (serviceSecurity.getServiceAuthorization()
+						.getNoAuthorization() != null) {
+					anonymousCommunication.setEnabled(true);
+				} else {
+					anonymousCommunication.setEnabled(false);
+				}
 			} else {
 				anonymousCommunication.setEnabled(false);
 			}
@@ -919,6 +923,7 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 							}
 						}
 					});
+			authorizationMechanism.addItem(INHERIT_SERVICE_AUTHORIZATION);
 			authorizationMechanism.addItem(NO_AUTHORIZATION);
 			authorizationMechanism.addItem(GRID_GROUPER_AUTHORIZATION);
 			authorizationMechanism.addItem(CSM_AUTHORIZATION);
