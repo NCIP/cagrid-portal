@@ -955,10 +955,11 @@ public class SyncTools {
         List children = doc.getRootElement().getChildren();
         for (int i = 0; i < children.size(); i++) {
             org.jdom.Element el = (org.jdom.Element) children.get(i);
-            if (el.getAttributeValue("name").equals(exceptionName)) {
+            if (el.getAttributeValue("name") != null && el.getAttributeValue("name").equals(exceptionName)) {
                 exceptionExists = true;
                 break;
             }
+
         }
         if (!exceptionExists) {
             doc.getRootElement().addContent(faultEl.detach());
