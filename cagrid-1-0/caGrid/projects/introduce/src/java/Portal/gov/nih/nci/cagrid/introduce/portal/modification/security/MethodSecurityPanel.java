@@ -311,7 +311,6 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 			String authType = (String) authorizationMechanism.getSelectedItem();
 			MethodAuthorization ma = new MethodAuthorization();
 			if (authType.equals(GRID_GROUPER_AUTHORIZATION)) {
-				// TODO: Validate the expression
 				MembershipExpression exp = getGridGrouper()
 						.getMembershipExpression();
 				ma.setGridGrouperAuthorization(exp);
