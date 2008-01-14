@@ -55,7 +55,7 @@ public class AuthorizationGenerator {
 			sb.append(lineStart + "boolean authorized = false;\n");
 			sb.append(lineStart + "try{\n");
 			sb.append(lineStart + "String csmConfig = " + service.getPackageName()
-				+ ".service.ServiceConfiguration.getConfiguration().getCsmConfiguration();\n");
+				+ ".service." + service.getName() + "Configuration.getConfiguration().getCsmConfiguration();\n");
 			sb.append(lineStart + "if((csmConfig == null)||(csmConfig.trim().length()<=0)){\n");
 			sb.append(lineStart + "\t"
 				+ "throw new java.rmi.RemoteException(\"No CSM Configuration file could be found\");\n");
