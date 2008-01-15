@@ -218,6 +218,7 @@
 			<classpath>
 				<pathelement location="${build.processor.dest}"/>
 				<pathelement location="${build.style.dest}"/>
+				<pathelement location="${build.beans.dest}"/>
 				<fileset dir="${lib.dir}">
 					<include name="*.jar"/>
 				</fileset>
