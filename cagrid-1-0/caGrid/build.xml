@@ -447,7 +447,7 @@
 		</resolveDependencies>
 		<ant dir="${projects.dir}/cds" inheritAll="false" antfile="build.xml" target="configure" />
 	</target>
-	<target name="build-cds" depends="prepare" description="Builds the Grid Delegation Service project">
+	<target name="build-cds" depends="prepare,configure-cds" description="Builds the Grid Delegation Service project">
 		<resolveDependencies extdir="${projects.dir}/cds/ext">
 			<artifact refid="cagrid.properties" />
 			<artifact refid="db.tools.jars" />
