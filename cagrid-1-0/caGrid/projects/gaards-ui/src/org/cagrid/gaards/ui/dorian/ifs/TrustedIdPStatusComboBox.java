@@ -1,8 +1,8 @@
 package org.cagrid.gaards.ui.dorian.ifs;
 
-import org.cagrid.gaards.ui.common.AxisTypeComboBox;
-
 import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdPStatus;
+
+import org.cagrid.gaards.ui.common.AxisTypeComboBox;
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>

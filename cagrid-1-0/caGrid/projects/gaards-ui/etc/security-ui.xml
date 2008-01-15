@@ -160,7 +160,7 @@
                     <showOnToolBar>false</showOnToolBar>
                 </component>
                   <component>
-                    <title>Administrators</title>
+                    <title>Account Administrators</title>
                     <description>Account Administrators</description>
                     <classname>org.cagrid.gaards.ui.dorian.ifs.AdministratorsWindow</classname>
                     <icon>/preferences-desktop-theme.png</icon>

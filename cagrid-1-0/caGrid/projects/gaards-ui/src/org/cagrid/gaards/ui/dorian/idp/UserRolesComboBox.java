@@ -1,8 +1,8 @@
 package org.cagrid.gaards.ui.dorian.idp;
 
-import org.cagrid.gaards.ui.common.AxisTypeComboBox;
-
 import gov.nih.nci.cagrid.dorian.idp.bean.IdPUserRole;
+
+import org.cagrid.gaards.ui.common.AxisTypeComboBox;
 
 
 /**

@@ -17,12 +17,7 @@ public class DorianLookAndFeel extends GAARDSLookAndFeel {
 	public final static ImageIcon getIdpIcon() {
 		return IconUtils.loadIcon("/users.png");
 	}
-
 	
-	public final static ImageIcon getAdminIcon() {
-		return IconUtils.loadIcon("/preferences-desktop-theme.png");
-	}
-
 	public final static ImageIcon getRenewIcon() {
 		return IconUtils.loadIcon("/view-refresh.png");
 	}

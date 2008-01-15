@@ -25,5 +25,9 @@ public class GAARDSLookAndFeel extends LookAndFeel {
 	public final static ImageIcon getRefreshIcon() {
 		return IconUtils.loadIcon("/view-refresh.png");
 	}
+	
+	public final static ImageIcon getAdminIcon() {
+		return IconUtils.loadIcon("/preferences-desktop-theme.png");
+	}
 
 }

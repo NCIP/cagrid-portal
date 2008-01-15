@@ -16,6 +16,7 @@ import org.cagrid.grape.utils.IconUtils;
 public class CDSLookAndFeel extends GAARDSLookAndFeel {
 	
 	
+	
 	public final static ImageIcon getDelegateCredentialIcon() {
 		return IconUtils.loadIcon("/delegate-credential.png");
 	}

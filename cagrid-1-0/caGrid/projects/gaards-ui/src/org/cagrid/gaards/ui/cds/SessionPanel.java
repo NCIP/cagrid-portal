@@ -1,9 +1,5 @@
 package org.cagrid.gaards.ui.cds;
 
-import gov.nih.nci.cagrid.dorian.client.IFSAdministrationClient;
-import gov.nih.nci.cagrid.dorian.client.IFSUserClient;
-import gov.nih.nci.cagrid.dorian.client.IdPAdministrationClient;
-
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -13,6 +9,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
 
+import org.cagrid.gaards.cds.client.DelegationAdminClient;
+import org.cagrid.gaards.cds.client.DelegationUserClient;
 import org.cagrid.gaards.ui.common.ProxyComboBox;
 import org.cagrid.grape.LookAndFeel;
 import org.globus.gsi.GlobusCredential;
@@ -106,26 +104,19 @@ public class SessionPanel extends JPanel {
 		return cred;
 	}
 
-	public IFSAdministrationClient getAdminClient() throws Exception {
+	public DelegationAdminClient getAdminClient() throws Exception {
 		String serviceUrl = getService().getSelectedService();
 		GlobusCredential proxyCred = getCred().getSelectedProxy();
-		IFSAdministrationClient client = new IFSAdministrationClient(
-				serviceUrl, proxyCred);
+		DelegationAdminClient client = new DelegationAdminClient(serviceUrl,
+				proxyCred);
 		return client;
 	}
 
-	public IFSUserClient getUserClientWithCredentials() throws Exception {
+	public DelegationUserClient getUserClient() throws Exception {
 		String serviceUrl = getService().getSelectedService();
 		GlobusCredential proxyCred = getCred().getSelectedProxy();
-		IFSUserClient client = new IFSUserClient(serviceUrl, proxyCred);
-		return client;
-	}
-
-	public IdPAdministrationClient getLocalAdminClient() throws Exception {
-		String serviceUrl = getService().getSelectedService();
-		GlobusCredential proxyCred = getCred().getSelectedProxy();
-		IdPAdministrationClient client = new IdPAdministrationClient(
-				serviceUrl, proxyCred);
+		DelegationUserClient client = new DelegationUserClient(serviceUrl,
+				proxyCred);
 		return client;
 	}
 
