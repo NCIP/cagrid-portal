@@ -4,9 +4,12 @@ import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.common.security.ProxyUtil;
 import gov.nih.nci.cagrid.gridca.common.CertUtil;
 import gov.nih.nci.cagrid.gridgrouper.bean.MembershipExpression;
+import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
+import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.security.AnonymousCommunication;
 import gov.nih.nci.cagrid.introduce.beans.security.GridMapAuthorization;
+import gov.nih.nci.cagrid.introduce.beans.security.MethodSecurity;
 import gov.nih.nci.cagrid.introduce.beans.security.NoAuthorization;
 import gov.nih.nci.cagrid.introduce.beans.security.ProxyCredential;
 import gov.nih.nci.cagrid.introduce.beans.security.RunAsMode;
@@ -35,6 +38,7 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTabbedPane;
@@ -183,6 +187,8 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
     private ServiceDescription description;
 
     private CustomPDPPanel pdpPanel = null;
+
+    private String previousAuthSelection;
 
 
     public ServiceSecurityPanel(ServiceDescription description, ServiceType service) {
@@ -446,6 +452,7 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
                     } else {
                         authorizationMechanism.setSelectedItem(NO_AUTHORIZATION);
                     }
+                    previousAuthSelection = (String) authorizationMechanism.getSelectedItem();
                 }
                 synchronize();
             }
@@ -1090,7 +1097,44 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
             authorizationMechanism.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
                     if (isInited) {
-                        synchronize();
+                        if (authorizationMechanism.getSelectedItem().equals(GRID_MAP_AUTHORIZATION)
+                            || authorizationMechanism.getSelectedItem().equals(CUSTOM_AUTHORIZATION)) {
+                            int result = JOptionPane
+                                .showConfirmDialog(
+                                    ServiceSecurityPanel.this,
+                                    "Are you sure you want to change to "
+                                        + (String) authorizationMechanism.getSelectedItem()
+                                        + ".\nThis will remove all authorization and anonymous settings on all operations in the service and service contexts.");
+                            if (result == JOptionPane.OK_OPTION) {
+                                // need to look through the introduce
+                                // model for the methods and
+                                // reset the security for anon and auth
+                                // to null
+
+                                if (service.getMethods() != null && service.getMethods().getMethod() != null) {
+                                    for (int methodI = 0; methodI < service.getMethods().getMethod().length; methodI++) {
+                                        MethodType method = service.getMethods().getMethod(methodI);
+                                        if (!method.getName()
+                                            .equals(IntroduceConstants.SERVICE_SECURITY_METADATA_METHOD)) {
+                                            MethodSecurity methodSec = method.getMethodSecurity();
+                                            if (methodSec != null) {
+                                                methodSec.setAnonymousClients(null);
+                                                methodSec.setMethodAuthorization(null);
+                                            }
+                                        }
+
+                                    }
+                                }
+
+                                synchronize();
+                                previousAuthSelection = (String) authorizationMechanism.getSelectedItem();
+                            } else {
+                                authorizationMechanism.setSelectedItem(previousAuthSelection);
+                            }
+                        } else {
+                            synchronize();
+                            previousAuthSelection = (String) authorizationMechanism.getSelectedItem();
+                        }
                     }
                 }
             });

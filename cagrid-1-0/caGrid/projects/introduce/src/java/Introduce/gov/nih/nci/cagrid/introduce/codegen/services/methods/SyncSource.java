@@ -122,6 +122,7 @@ public class SyncSource {
         for (int i = 0; i < modifiedMethods.size(); i++) {
             // add it to the interface
             Modification mod = (Modification) modifiedMethods.get(i);
+  
             MethodType method = mod.getMethodType();
             if (!method.getName().equals(IntroduceConstants.SERVICE_SECURITY_METADATA_METHOD)) {
                 StringBuffer fileContent = null;

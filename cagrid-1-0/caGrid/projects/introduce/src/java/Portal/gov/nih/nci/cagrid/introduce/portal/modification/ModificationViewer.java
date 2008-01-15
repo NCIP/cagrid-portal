@@ -326,7 +326,7 @@ public class ModificationViewer extends ApplicationComponent {
         getMethodsTable().setMethods(this.info.getServices().getService(0));
         getRpHolderPanel().reInitialize(this.info.getServices().getService(0), this.info.getNamespaces());
         getServicePropertiesTable().setServiceInformation(this.info);
-        this.resetMethodSecurityIfServiceSecurityChanged();
+
         for (int i = 0; i < this.extensionPanels.size(); i++) {
             ServiceModificationUIPanel panel = (ServiceModificationUIPanel) this.extensionPanels.get(i);
             panel.setServiceInfo(this.info);
@@ -827,58 +827,9 @@ public class ModificationViewer extends ApplicationComponent {
     }
 
 
-    private void resetMethodSecurityIfServiceSecurityChanged() throws Exception {
-        boolean update = false;
-        ServiceSecurity service = this.info.getServices().getService(0).getServiceSecurity();
-        ServiceSecurity curr = this.securityPanel.getServiceSecurity(false);
-        // This should be cleaned up some
-        if ((service == null) && (curr == null)) {
-            update = false;
-        } else if ((service != null) && (curr == null)) {
-            update = true;
-        } else if ((service == null) && (curr != null)) {
-            update = true;
-        } else if (!service.equals(curr)) {
-            update = true;
-        }
-        if (update) {
-            MethodsType mt = this.info.getServices().getService(0).getMethods();
-            List changes = new ArrayList();
-            if (mt != null) {
-                this.info.getServices().getService(0).setServiceSecurity(curr);
-                MethodType[] methods = mt.getMethod();
-                if (methods != null) {
-                    for (int i = 0; i < methods.length; i++) {
-                        if ((methods[i].getMethodSecurity() != null)
-                            && (!CommonTools.equals(curr, methods[i].getMethodSecurity()))) {
-                            methods[i].setMethodSecurity(null);
-                            changes.add(methods[i].getName());
-                        }
-                    }
-                }
-                if (changes.size() > 0) {
-                    StringBuffer sb = new StringBuffer();
-                    sb.append("Service security configuration changed, "
-                        + "the security configurations for the following methods were reset:\n");
-                    for (int i = 0; i < changes.size(); i++) {
-                        String method = (String) changes.get(i);
-                        sb.append("    " + (i + 1) + ") " + method);
-                    }
-                    GridApplication.getContext().showMessage(sb.toString());
-                }
-            }
-        }
-    }
-
 
     private void performMethodModify() {
-        try {
-            this.resetMethodSecurityIfServiceSecurityChanged();
-        } catch (Exception e) {
-            e.printStackTrace();
-            CompositeErrorDialog.showErrorDialog(e);
-            return;
-        }
+        
         MethodType method = getMethodsTable().getSelectedMethodType();
         if (method == null) {
             ErrorDialog.showError("Please select a method to modify.");
@@ -1036,7 +987,7 @@ public class ModificationViewer extends ApplicationComponent {
                 public void stateChanged(ChangeEvent e) {
 
                     try {
-                        ModificationViewer.this.resetMethodSecurityIfServiceSecurityChanged();
+                       
                         switch (contentTabbedPane.getSelectedIndex()) {
                             case 0 :
                                 getNamespaceJTree().setNamespaces(info.getNamespaces());

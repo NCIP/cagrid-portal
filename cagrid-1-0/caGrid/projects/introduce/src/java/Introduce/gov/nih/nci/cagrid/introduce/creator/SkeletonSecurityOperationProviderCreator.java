@@ -7,6 +7,10 @@ import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeImportInformation;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeProviderInformation;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
+import gov.nih.nci.cagrid.introduce.beans.security.MethodAuthorization;
+import gov.nih.nci.cagrid.introduce.beans.security.MethodSecurity;
+import gov.nih.nci.cagrid.introduce.beans.security.NoAuthorization;
+import gov.nih.nci.cagrid.introduce.beans.security.SecuritySetting;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.SpecificServiceInformation;
 
@@ -79,6 +83,13 @@ public class SkeletonSecurityOperationProviderCreator {
 			pi.setProviderClass("gov.nih.nci.cagrid.introduce.security.service.globus.ServiceSecurityProviderImpl");
 			method.setIsProvided(true);
 			method.setProviderInformation(pi);
+			MethodSecurity ms = new MethodSecurity();
+			ms.setSecuritySetting(SecuritySetting.None);
+			MethodAuthorization ma = new MethodAuthorization();
+			ms.setMethodAuthorization(ma);
+			ma.setNoAuthorization(new NoAuthorization());
+			method.setMethodSecurity(ms);
+			
 
 			CommonTools.addMethod(info.getService(), method);
 

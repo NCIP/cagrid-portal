@@ -16,16 +16,19 @@ public class AuthorizationGenerator {
 
 	public static String addAuthorizationToProviderImpl(ServiceType service, MethodType method, String lineStart)
 		throws Exception {
+        
 		// First we filter by method name
 		if (method.getMethodSecurity() != null) {
 			if (method.getMethodSecurity().getMethodAuthorization() != null) {
-				if (method.getMethodSecurity().getMethodAuthorization().getGridGrouperAuthorization() != null) {
+			    if (method.getMethodSecurity().getMethodAuthorization().getGridGrouperAuthorization() != null) {
 					return generateGridGrouper(method, method.getMethodSecurity().getMethodAuthorization()
 						.getGridGrouperAuthorization(), lineStart);
 				} else if (method.getMethodSecurity().getMethodAuthorization().getCSMAuthorization() != null) {
 					return generateCSM(service, method, method.getMethodSecurity().getMethodAuthorization()
 						.getCSMAuthorization(), true, lineStart);
-				}
+				} else if(method.getMethodSecurity().getMethodAuthorization().getNoAuthorization()!=null){
+                    return "";
+                }
 			}
 		}
 
