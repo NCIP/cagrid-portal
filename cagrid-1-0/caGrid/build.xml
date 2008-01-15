@@ -908,7 +908,6 @@
 			<artifact refid="cagrid.properties" />
 			<artifact refid="grape.jars" />
 			<artifact refid="core.jars" />
-			<artifact refid="mds.jars" />
 			<artifact refid="core.test.jars" />
 			<artifact refid="data.jars" />
 			<artifact refid="cql.1.0.schemas" />
