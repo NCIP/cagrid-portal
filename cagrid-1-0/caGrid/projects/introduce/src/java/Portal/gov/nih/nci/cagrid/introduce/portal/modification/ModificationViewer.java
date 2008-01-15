@@ -262,7 +262,7 @@ public class ModificationViewer extends ApplicationComponent {
 
     private static final String SERVICE_PROPERTY_DESCRIPTION = "Service property description";
 
-	private JLabel descriptionInfoLabel = null;
+    private JLabel descriptionInfoLabel = null;
 
 
     public ModificationViewer(File methodsDirectory, BusyDialogRunnable br) {
@@ -326,7 +326,7 @@ public class ModificationViewer extends ApplicationComponent {
         getMethodsTable().setMethods(this.info.getServices().getService(0));
         getRpHolderPanel().reInitialize(this.info.getServices().getService(0), this.info.getNamespaces());
         getServicePropertiesTable().setServiceInformation(this.info);
-
+        this.updateServiceSecurity();
         for (int i = 0; i < this.extensionPanels.size(); i++) {
             ServiceModificationUIPanel panel = (ServiceModificationUIPanel) this.extensionPanels.get(i);
             panel.setServiceInfo(this.info);
@@ -722,7 +722,9 @@ public class ModificationViewer extends ApplicationComponent {
     private JScrollPane getMethodsScrollPane() {
         if (this.methodsScrollPane == null) {
             this.methodsScrollPane = new JScrollPane();
-            methodsScrollPane.setBorder(BorderFactory.createTitledBorder(null, "Operations", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), IntroduceLookAndFeel.getPanelLabelColor()));
+            methodsScrollPane.setBorder(BorderFactory.createTitledBorder(null, "Operations",
+                TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12),
+                IntroduceLookAndFeel.getPanelLabelColor()));
             this.methodsScrollPane.setViewportView(getMethodsTable());
         }
         return this.methodsScrollPane;
@@ -827,9 +829,24 @@ public class ModificationViewer extends ApplicationComponent {
     }
 
 
+    private void updateServiceSecurity() throws Exception {
+        boolean update = false;
+        ServiceSecurity service = this.info.getServices().getService(0).getServiceSecurity();
+        ServiceSecurity curr = this.securityPanel.getServiceSecurity(false);
+
+        this.info.getServices().getService(0).setServiceSecurity(curr);
+
+    }
+
 
     private void performMethodModify() {
-        
+        try {
+            this.updateServiceSecurity();
+        } catch (Exception e) {
+            e.printStackTrace();
+            CompositeErrorDialog.showErrorDialog(e);
+            return;
+        }
         MethodType method = getMethodsTable().getSelectedMethodType();
         if (method == null) {
             ErrorDialog.showError("Please select a method to modify.");
@@ -952,7 +969,7 @@ public class ModificationViewer extends ApplicationComponent {
     private JTabbedPane getContentTabbedPane() {
         if (this.contentTabbedPane == null) {
             this.contentTabbedPane = new JTabbedPane();
-            //this.contentTabbedPane.setTabPlacement(SwingConstants.LEFT);
+            // this.contentTabbedPane.setTabPlacement(SwingConstants.LEFT);
             this.contentTabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
             this.contentTabbedPane.addTab("Types", null, getTypesSplitPane(), null);
             this.contentTabbedPane.addTab("Operations", null, getMethodsPanel(), null);
@@ -987,7 +1004,7 @@ public class ModificationViewer extends ApplicationComponent {
                 public void stateChanged(ChangeEvent e) {
 
                     try {
-                       
+                        ModificationViewer.this.updateServiceSecurity();
                         switch (contentTabbedPane.getSelectedIndex()) {
                             case 0 :
                                 getNamespaceJTree().setNamespaces(info.getNamespaces());
@@ -1054,7 +1071,8 @@ public class ModificationViewer extends ApplicationComponent {
     private JLabel getServiceName() {
         if (this.serviceName == null) {
             this.serviceName = new JLabel();
-            //this.serviceName.setFont(new java.awt.Font("Dialog", java.awt.Font.ITALIC, 12));
+            // this.serviceName.setFont(new java.awt.Font("Dialog",
+            // java.awt.Font.ITALIC, 12));
             this.serviceName.setForeground(IntroduceLookAndFeel.getPanelLabelColor());
             this.serviceName.setText(this.info.getIntroduceServiceProperties().getProperty(
                 IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME));
@@ -1073,7 +1091,8 @@ public class ModificationViewer extends ApplicationComponent {
             this.namespace = new JLabel();
             this.namespace.setText(this.info.getIntroduceServiceProperties().getProperty(
                 IntroduceConstants.INTRODUCE_SKELETON_NAMESPACE_DOMAIN));
-            //this.namespace.setFont(new java.awt.Font("Dialog", java.awt.Font.ITALIC, 12));
+            // this.namespace.setFont(new java.awt.Font("Dialog",
+            // java.awt.Font.ITALIC, 12));
             this.namespace.setForeground(IntroduceLookAndFeel.getPanelLabelColor());
         }
         return this.namespace;
@@ -1088,7 +1107,8 @@ public class ModificationViewer extends ApplicationComponent {
     private JLabel getLastSaved() {
         if (this.lastSaved == null) {
             this.lastSaved = new JLabel();
-            //this.lastSaved.setFont(new java.awt.Font("Dialog", java.awt.Font.ITALIC, 12));
+            // this.lastSaved.setFont(new java.awt.Font("Dialog",
+            // java.awt.Font.ITALIC, 12));
             this.lastSaved.setForeground(IntroduceLookAndFeel.getPanelLabelColor());
             setLastSaved(this.info.getIntroduceServiceProperties().getProperty(
                 IntroduceConstants.INTRODUCE_SKELETON_TIMESTAMP));
@@ -1119,7 +1139,8 @@ public class ModificationViewer extends ApplicationComponent {
             this.saveLocation = new JLabel();
             this.saveLocation.setText(this.methodsDirectory.getAbsolutePath());
             this.saveLocation.setForeground(IntroduceLookAndFeel.getPanelLabelColor());
-            //this.saveLocation.setFont(new java.awt.Font("Dialog", java.awt.Font.ITALIC, 12));
+            // this.saveLocation.setFont(new java.awt.Font("Dialog",
+            // java.awt.Font.ITALIC, 12));
         }
         return this.saveLocation;
     }
@@ -1248,8 +1269,10 @@ public class ModificationViewer extends ApplicationComponent {
     private JScrollPane getNamespaceTableScrollPane() {
         if (this.namespaceTableScrollPane == null) {
             this.namespaceTableScrollPane = new JScrollPane();
-            namespaceTableScrollPane.setBorder(BorderFactory.createTitledBorder(null, "Imported Data Types", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), IntroduceLookAndFeel.getPanelLabelColor()));
-            
+            namespaceTableScrollPane.setBorder(BorderFactory.createTitledBorder(null, "Imported Data Types",
+                TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12),
+                IntroduceLookAndFeel.getPanelLabelColor()));
+
             // this.namespaceTableScrollPane.setPreferredSize(new Dimension(300,
             // 400));
             // this.namespaceTableScrollPane.setSize(new Dimension(300,
@@ -1653,7 +1676,9 @@ public class ModificationViewer extends ApplicationComponent {
             gridBagConstraints28.insets = new java.awt.Insets(5, 5, 5, 5);
             this.servicePropertiesTableContainerPanel = new JPanel();
             this.servicePropertiesTableContainerPanel.setLayout(new GridBagLayout());
-            servicePropertiesTableContainerPanel.setBorder(BorderFactory.createTitledBorder(null, "Service Properties", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), IntroduceLookAndFeel.getPanelLabelColor()));
+            servicePropertiesTableContainerPanel.setBorder(BorderFactory.createTitledBorder(null, "Service Properties",
+                TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12),
+                IntroduceLookAndFeel.getPanelLabelColor()));
             this.servicePropertiesTableContainerPanel.add(getServicePropertiesTableScrollPane(), gridBagConstraints28);
         }
         return this.servicePropertiesTableContainerPanel;
@@ -1747,7 +1772,9 @@ public class ModificationViewer extends ApplicationComponent {
             gridBagConstraints43.gridx = 0;
             this.servicePropertiesControlPanel = new JPanel();
             this.servicePropertiesControlPanel.setLayout(new GridBagLayout());
-            servicePropertiesControlPanel.setBorder(BorderFactory.createTitledBorder(null, "Add New Service Property", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), IntroduceLookAndFeel.getPanelLabelColor()));
+            servicePropertiesControlPanel.setBorder(BorderFactory.createTitledBorder(null, "Add New Service Property",
+                TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12),
+                IntroduceLookAndFeel.getPanelLabelColor()));
             this.servicePropertiesControlPanel.add(getServicePropertyKeyTextField(), gridBagConstraints38);
             this.servicePropertiesControlPanel.add(getServicePropertyValueTextField(), gridBagConstraints39);
             this.servicePropertiesControlPanel.add(this.servicePropertiesKeyLabel, gridBagConstraints40);
@@ -1982,7 +2009,9 @@ public class ModificationViewer extends ApplicationComponent {
             gridBagConstraints46.insets = new java.awt.Insets(2, 2, 2, 2);
             this.resourcesPanel = new JPanel();
             this.resourcesPanel.setLayout(new GridBagLayout());
-            resourcesPanel.setBorder(BorderFactory.createTitledBorder(null, "Service Contexts", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), IntroduceLookAndFeel.getPanelLabelColor()));
+            resourcesPanel.setBorder(BorderFactory.createTitledBorder(null, "Service Contexts",
+                TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12),
+                IntroduceLookAndFeel.getPanelLabelColor()));
             this.resourcesPanel.add(getResourcesScrollPane(), gridBagConstraints46);
         }
         return this.resourcesPanel;
@@ -2121,7 +2150,8 @@ public class ModificationViewer extends ApplicationComponent {
             this.resourcesOptionsPanel = new JPanel(new CardLayout());
             this.resourcesOptionsPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null,
                 "Information and Options", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-                javax.swing.border.TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), PortalLookAndFeel.getPanelLabelColor()));
+                javax.swing.border.TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), PortalLookAndFeel
+                    .getPanelLabelColor()));
         }
         return this.resourcesOptionsPanel;
     }
@@ -2146,7 +2176,9 @@ public class ModificationViewer extends ApplicationComponent {
             gridBagConstraints12.weightx = 1.0;
             this.descriptionPanel = new JPanel();
             this.descriptionPanel.setLayout(new GridBagLayout());
-            descriptionPanel.setBorder(BorderFactory.createTitledBorder(null, "Service Description", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), IntroduceLookAndFeel.getPanelLabelColor()));
+            descriptionPanel.setBorder(BorderFactory.createTitledBorder(null, "Service Description",
+                TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12),
+                IntroduceLookAndFeel.getPanelLabelColor()));
             descriptionPanel.add(getDescriptionScrollPane(), gridBagConstraints12);
             descriptionPanel.add(descriptionInfoLabel, gridBagConstraints10);
         }
@@ -2264,7 +2296,8 @@ public class ModificationViewer extends ApplicationComponent {
         } else {
             String[] errorMessages = discoveryComponent.getErrorMessage();
             if (errorMessages != null && errorMessages.length > 0) {
-                CompositeErrorDialog.showErrorDialog("Problem adding types, see details for more information.", errorMessages, discoveryComponent.getErrorCauseThrowable());
+                CompositeErrorDialog.showErrorDialog("Problem adding types, see details for more information.",
+                    errorMessages, discoveryComponent.getErrorCauseThrowable());
             } else {
                 CompositeErrorDialog.showErrorDialog("Unspecified problem adding types.", discoveryComponent
                     .getErrorCauseThrowable());
