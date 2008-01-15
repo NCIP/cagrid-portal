@@ -161,10 +161,14 @@
                 </component>
                   <component>
                     <title>Administrators</title>
-                    <description>Administrators</description>
+                    <description>Account Administrators</description>
                     <classname>org.cagrid.gaards.ui.dorian.ifs.AdministratorsWindow</classname>
                     <icon>/preferences-desktop-theme.png</icon>
                     <showOnToolBar>false</showOnToolBar>
+                     <dimensions>
+                        <width>600</width>
+                        <height>400</height>
+                    </dimensions>
                 </component>
             </components>
             </menu>
@@ -182,6 +186,17 @@
                     <dimensions>
                         <width>800</width>
                         <height>500</height>
+                    </dimensions>
+                </component>
+                <component>
+                    <title>Delegation Administrators</title>
+                    <description>Administrators</description>
+                    <classname>org.cagrid.gaards.ui.cds.AdministratorsWindow</classname>
+                    <icon>/preferences-desktop-theme.png</icon>
+                    <showOnToolBar>false</showOnToolBar>
+                    <dimensions>
+                        <width>600</width>
+                        <height>400</height>
                     </dimensions>
                 </component>
             </components>
