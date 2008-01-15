@@ -52,7 +52,7 @@ import com.jgoodies.validation.view.ValidationComponentUtils;
  * @author David Ervin
  * 
  * @created Nov 27, 2007 4:50:32 PM
- * @version $Id: QueryProcessorConfigurationPanel.java,v 1.6 2008-01-11 20:33:20 dervin Exp $ 
+ * @version $Id: QueryProcessorConfigurationPanel.java,v 1.7 2008-01-15 16:19:36 dervin Exp $ 
  */
 public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
     // keys for validation
@@ -516,6 +516,12 @@ public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
                         String filename = ResourceManager.promptFile(null, FileFilters.JAR_FILTER);
                         if (getOrmJarTextField().getText().length() != 0) {
                             // TODO: remove old orm jar text field from service lib dir
+                            File oldJar = new File(getOrmJarTextField().getText());
+                            File copiedOldJar = new File(getServiceInformation().getBaseDirectory(),
+                                "lib" + File.separator + oldJar.getName());
+                            if (copiedOldJar.exists()) {
+                                copiedOldJar.delete();
+                            }
                         }
                         getOrmJarTextField().setText(filename);
                         validateInput();
