@@ -17,10 +17,6 @@ public class GAARDSLookAndFeel extends LookAndFeel {
 	public final static ImageIcon getCertificateIcon() {
 		return IconUtils.loadIcon("/certificate.png");
 	}
-
-	public final static ImageIcon getCertificateActionIcon() {
-		return IconUtils.loadIcon("/contact-new.png");
-	}
 	
 	public final static ImageIcon getRefreshIcon() {
 		return IconUtils.loadIcon("/view-refresh.png");
@@ -28,6 +24,14 @@ public class GAARDSLookAndFeel extends LookAndFeel {
 	
 	public final static ImageIcon getAdminIcon() {
 		return IconUtils.loadIcon("/preferences-desktop-theme.png");
+	}
+	
+	public final static ImageIcon getProxyManagerIcon() {
+		return IconUtils.loadIcon("/contact-new.png");
+	}
+
+	public final static ImageIcon getDefaultIcon() {
+		return IconUtils.loadIcon("/go-home.png");
 	}
 
 }

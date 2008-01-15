@@ -42,7 +42,7 @@ public class CertificateInformationComponent extends ApplicationComponent {
 	 */
 	private void initialize() {
 		this.setContentPane(getJContentPane());
-		this.setFrameIcon(LookAndFeel.getCertificateIcon());
+		this.setFrameIcon(GAARDSLookAndFeel.getCertificateIcon());
 		this.setTitle("Certificate Viewer");
 	}
 

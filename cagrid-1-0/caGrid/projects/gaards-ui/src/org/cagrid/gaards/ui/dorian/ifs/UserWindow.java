@@ -36,7 +36,7 @@ import org.globus.gsi.GlobusCredential;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: UserWindow.java,v 1.1 2007-09-24 19:09:38 langella Exp $
+ * @version $Id: UserWindow.java,v 1.2 2008-01-15 20:57:39 langella Exp $
  */
 public class UserWindow extends ApplicationComponent {
 
@@ -642,7 +642,7 @@ public class UserWindow extends ApplicationComponent {
 						}
 					});
 			renewCredentials.setIcon(DorianLookAndFeel
-					.getCertificateActionIcon());
+					.getCertificateIcon());
 		}
 		return renewCredentials;
 	}

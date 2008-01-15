@@ -79,7 +79,7 @@ public class ProxyManagerComponent extends ApplicationComponent {
      */
     private void initialize() {
         this.setContentPane(getJContentPane());
-        this.setFrameIcon(LookAndFeel.getProxyManagerIcon());
+        this.setFrameIcon(GAARDSLookAndFeel.getProxyManagerIcon());
         this.setTitle("Proxy Manager");
     }
 
@@ -245,7 +245,7 @@ public class ProxyManagerComponent extends ApplicationComponent {
         if (viewCertificateButton == null) {
             viewCertificateButton = new JButton();
             viewCertificateButton.setText("View Certificate");
-            viewCertificateButton.setIcon(LookAndFeel.getCertificateIcon());
+            viewCertificateButton.setIcon(GAARDSLookAndFeel.getCertificateIcon());
             viewCertificateButton.addActionListener(new java.awt.event.ActionListener() {
 
                 public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -318,7 +318,7 @@ public class ProxyManagerComponent extends ApplicationComponent {
                     }
                 }
             });
-            setDefaultProxyButton.setIcon(LookAndFeel.getDefaultIcon());
+            setDefaultProxyButton.setIcon(GAARDSLookAndFeel.getDefaultIcon());
         }
         return setDefaultProxyButton;
     }
