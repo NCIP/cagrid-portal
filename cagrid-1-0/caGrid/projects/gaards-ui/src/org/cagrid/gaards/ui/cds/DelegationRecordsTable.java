@@ -8,6 +8,7 @@ import java.util.Vector;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
+import org.cagrid.gaards.cds.common.DelegationIdentifier;
 import org.cagrid.gaards.cds.common.DelegationRecord;
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.table.GrapeBaseTable;
@@ -88,6 +89,23 @@ public class DelegationRecordsTable extends GrapeBaseTable {
 			return (DelegationRecord) getValueAt(row, 0);
 		} else {
 			throw new Exception("Please select a delegated credential!!!");
+		}
+	}
+	
+	public synchronized DelegationRecord getRecord(int row) throws Exception {
+		if ((row >= 0) && (row < getRowCount())) {
+			return (DelegationRecord) getValueAt(row, 0);
+		} else {
+			return null;
+		}
+	}
+
+	public void removeRecord(DelegationIdentifier id) {
+		for (int i = 0; i < getRowCount(); i++) {
+			DelegationRecord r = (DelegationRecord) getValueAt(i, 0);
+			if (r.getDelegationIdentifier().equals(id)) {
+				removeRow(i);
+			}
 		}
 	}
 
