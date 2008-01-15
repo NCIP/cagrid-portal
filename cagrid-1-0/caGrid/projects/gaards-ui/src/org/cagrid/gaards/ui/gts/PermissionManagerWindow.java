@@ -85,7 +85,7 @@ public class PermissionManagerWindow extends ApplicationComponent implements Per
 	public PermissionManagerWindow() {
 		super();
 		initialize();
-		this.setFrameIcon(GTSLookAndFeel.getPermissionIcon());
+		this.setFrameIcon(GTSLookAndFeel.getAdminIcon());
 		syncServices();
 	}
 
@@ -245,7 +245,7 @@ public class PermissionManagerWindow extends ApplicationComponent implements Per
 		if (addPermission == null) {
 			addPermission = new JButton();
 			addPermission.setText("Add Permission");
-			addPermission.setIcon(GTSLookAndFeel.getAddPermissionIcon());
+			addPermission.setIcon(GTSLookAndFeel.getAddIcon());
 			addPermission.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					Runner runner = new Runner() {
@@ -541,7 +541,7 @@ public class PermissionManagerWindow extends ApplicationComponent implements Per
 					}
 				}
 			});
-			removePermissionButton.setIcon(GTSLookAndFeel.getRevokePermissionIcon());
+			removePermissionButton.setIcon(GTSLookAndFeel.getRemoveIcon());
 		}
 		return removePermissionButton;
 	}

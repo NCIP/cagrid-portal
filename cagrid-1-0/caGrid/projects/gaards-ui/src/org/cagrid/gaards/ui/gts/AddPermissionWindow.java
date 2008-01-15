@@ -75,7 +75,7 @@ public class AddPermissionWindow extends ApplicationComponent {
 		this.setSize(600, 400);
 		this.setContentPane(getJContentPane());
 		this.setTitle("Add Permission");
-		this.setFrameIcon(GTSLookAndFeel.getAddPermissionIcon());
+		this.setFrameIcon(GTSLookAndFeel.getAdminIcon());
 	}
 
 
@@ -228,7 +228,7 @@ public class AddPermissionWindow extends ApplicationComponent {
 		if (addButton == null) {
 			addButton = new JButton();
 			addButton.setText("Add Permission");
-			addButton.setIcon(GTSLookAndFeel.getAddPermissionIcon());
+			addButton.setIcon(GTSLookAndFeel.getAddIcon());
 			addButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					Runner runner = new Runner() {

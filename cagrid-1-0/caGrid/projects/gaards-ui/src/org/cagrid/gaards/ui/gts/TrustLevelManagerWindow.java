@@ -94,7 +94,7 @@ public class TrustLevelManagerWindow extends ApplicationComponent implements Tru
 	private void initialize() {
 		this.setSize(700, 500);
 		this.setContentPane(getJContentPane());
-		this.setTitle("GTS Trust Level Management");
+		this.setTitle("Levels of Assurance");
 	}
 
 
@@ -170,7 +170,7 @@ public class TrustLevelManagerWindow extends ApplicationComponent implements Tru
 			GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
 			contentPanel = new JPanel();
 			contentPanel.setLayout(new GridBagLayout());
-			contentPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Trust Level(s)",
+			contentPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Level(s) of Assurance",
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
 				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, LookAndFeel.getPanelLabelColor()));
 			gridBagConstraints4.weightx = 1.0;
@@ -192,8 +192,8 @@ public class TrustLevelManagerWindow extends ApplicationComponent implements Tru
 	private JPanel getButtonPanel() {
 		if (buttonPanel == null) {
 			buttonPanel = new JPanel();
-			buttonPanel.add(getAddTrustLevel(), null);
 			buttonPanel.add(getViewModifyButton(), null);
+			buttonPanel.add(getAddTrustLevel(), null);
 			buttonPanel.add(getRemoveTrustLevelButton(), null);
 		}
 		return buttonPanel;
@@ -235,8 +235,8 @@ public class TrustLevelManagerWindow extends ApplicationComponent implements Tru
 	private JButton getAddTrustLevel() {
 		if (addTrustLevel == null) {
 			addTrustLevel = new JButton();
-			addTrustLevel.setText("Add Trust Level");
-			addTrustLevel.setIcon(GTSLookAndFeel.getAddTrustLevelIcon());
+			addTrustLevel.setText("Add Level of Assurance");
+			addTrustLevel.setIcon(GTSLookAndFeel.getAddIcon());
 			addTrustLevel.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					Runner runner = new Runner() {
@@ -375,7 +375,7 @@ public class TrustLevelManagerWindow extends ApplicationComponent implements Tru
 	private JButton getQuery() {
 		if (query == null) {
 			query = new JButton();
-			query.setText("List Trust Levels");
+			query.setText("List Level(s) of Assurance");
 			query.setIcon(LookAndFeel.getQueryIcon());
 			query.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -401,7 +401,7 @@ public class TrustLevelManagerWindow extends ApplicationComponent implements Tru
 
 	private void getTrustLevels() {
 		this.getTrustLevelTable().clearTable();
-		this.updateProgress(true, "Finding Trust Levels...");
+		this.updateProgress(true, "Finding Level(s) of Assurance...");
 
 		try {
 			String selectedService = ((GTSServiceListComboBox) getService()).getSelectedService();
@@ -415,7 +415,7 @@ public class TrustLevelManagerWindow extends ApplicationComponent implements Tru
 				}
 			}
 			searchDone = true;
-			this.updateProgress(false, "Completed [Found " + length + " Trust Level(s)]");
+			this.updateProgress(false, "Completed [Found " + length + " Level(s) of Assurance]");
 
 		} catch (Exception e) {
 			ErrorDialog.showError(e);
@@ -506,7 +506,7 @@ public class TrustLevelManagerWindow extends ApplicationComponent implements Tru
 	private JButton getRemoveTrustLevelButton() {
 		if (removeTrustLevelButton == null) {
 			removeTrustLevelButton = new JButton();
-			removeTrustLevelButton.setText("Remove Trust Level");
+			removeTrustLevelButton.setText("Remove Level of Assurance");
 			removeTrustLevelButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					Runner runner = new Runner() {
@@ -523,7 +523,7 @@ public class TrustLevelManagerWindow extends ApplicationComponent implements Tru
 					}
 				}
 			});
-			removeTrustLevelButton.setIcon(GTSLookAndFeel.getRemoveTrustLevelIcon());
+			removeTrustLevelButton.setIcon(GTSLookAndFeel.getRemoveIcon());
 		}
 		return removeTrustLevelButton;
 	}
@@ -552,7 +552,7 @@ public class TrustLevelManagerWindow extends ApplicationComponent implements Tru
 	private JButton getViewModifyButton() {
 		if (viewModifyButton == null) {
 			viewModifyButton = new JButton();
-			viewModifyButton.setText("View / Modify Trust Level");
+			viewModifyButton.setText("View / Modify Level of Assurance");
 			viewModifyButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					try {
@@ -564,7 +564,7 @@ public class TrustLevelManagerWindow extends ApplicationComponent implements Tru
 					}
 				}
 			});
-			viewModifyButton.setIcon(GTSLookAndFeel.getTrustLevelIcon());
+			viewModifyButton.setIcon(GTSLookAndFeel.getQueryIcon());
 		}
 		return viewModifyButton;
 	}

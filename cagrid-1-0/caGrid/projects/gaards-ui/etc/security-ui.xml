@@ -256,7 +256,7 @@
                     <description>Administrate the ceritficate authorites that are trusted in the
                         trust fabric.</description>
                     <classname>org.cagrid.gaards.ui.gts.TrustedAuthoritiesWindow</classname>
-                    <icon>/key.png</icon>
+                    <icon>/certificate-authority.png</icon>
                     <showOnToolBar>false</showOnToolBar>
                 </component>
                 <component>
@@ -270,7 +270,7 @@
                     <title>Trust Federation</title>
                     <description>Administrate the GTS federation.</description>
                     <classname>org.cagrid.gaards.ui.gts.AuthorityManagerWindow</classname>
-                    <icon>/plugin.png</icon>
+                    <icon>/trust-fabric.png</icon>
                     <showOnToolBar>false</showOnToolBar>
                 </component>
                 <component>
@@ -278,7 +278,7 @@
                     <description>Grant and Revoke rights to users for administrating the trust
                         fabric.</description>
                     <classname>org.cagrid.gaards.ui.gts.PermissionManagerWindow</classname>
-                    <icon>/shield.png</icon>
+                    <icon>/preferences-desktop-theme.png</icon>
                     <showOnToolBar>false</showOnToolBar>
                 </component>
             </components>

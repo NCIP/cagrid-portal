@@ -147,14 +147,14 @@ public class TrustLevelWindow extends ApplicationComponent {
 		this.setSize(600, 400);
 		this.setContentPane(getJContentPane());
 		if (state == UPDATE) {
-			this.setTitle("View/Modify Trust Level");
+			this.setTitle("View/Modify Level of Assurance");
 			this.setFrameIcon(GTSLookAndFeel.getTrustLevelIcon());
 		} else if (state == VIEW) {
-			this.setTitle("View Trust Level");
+			this.setTitle("View Level of Assurance");
 			this.setFrameIcon(GTSLookAndFeel.getTrustLevelIcon());
 		} else {
-			this.setTitle("Add Trust Level");
-			this.setFrameIcon(GTSLookAndFeel.getAddTrustLevelIcon());
+			this.setTitle("Add Level of Assurance");
+			this.setFrameIcon(GTSLookAndFeel.getTrustLevelIcon());
 		}
 	}
 
@@ -296,11 +296,11 @@ public class TrustLevelWindow extends ApplicationComponent {
 		if (addButton == null) {
 			addButton = new JButton();
 			if (state == UPDATE) {
-				addButton.setText("Update Trust Level");
-				addButton.setIcon(GTSLookAndFeel.getTrustLevelIcon());
+				addButton.setText("Update Level of Assurance");
+				addButton.setIcon(GTSLookAndFeel.getRefreshIcon());
 			} else if (state == ADD) {
-				addButton.setText("Add Trust Level");
-				addButton.setIcon(GTSLookAndFeel.getAddTrustLevelIcon());
+				addButton.setText("Add Level of Assurance");
+				addButton.setIcon(GTSLookAndFeel.getAddIcon());
 			}
 			addButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -361,10 +361,10 @@ public class TrustLevelWindow extends ApplicationComponent {
 			dispose();
 			if (state == UPDATE) {
 				GridApplication.getContext().showMessage(
-					"Successfully added the trust level " + level.getName() + "!!!");
+					"Successfully added the level of assurance, " + level.getName() + "!!!");
 			} else if (state == ADD) {
 				GridApplication.getContext().showMessage(
-					"Successfully updated the trust level " + level.getName() + "!!!");
+					"Successfully updated the level of assurance, " + level.getName() + "!!!");
 			}
 		} catch (Exception e) {
 			getAddButton().setEnabled(true);
@@ -468,7 +468,7 @@ public class TrustLevelWindow extends ApplicationComponent {
 			jLabel2.setText("Name");
 			trustLevelPanel = new JPanel();
 			trustLevelPanel.setLayout(new GridBagLayout());
-			trustLevelPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Trust Level",
+			trustLevelPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Level of Assurance",
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
 				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, 
                 LookAndFeel.getPanelLabelColor()));

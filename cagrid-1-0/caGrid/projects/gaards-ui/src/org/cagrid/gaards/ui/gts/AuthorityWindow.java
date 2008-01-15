@@ -158,10 +158,10 @@ public class AuthorityWindow extends ApplicationComponent {
 		this.setContentPane(getJContentPane());
 		if (update) {
 			this.setTitle("View/Modify Authority");
-			this.setFrameIcon(GTSLookAndFeel.getAuthorityEditIcon());
+			this.setFrameIcon(GTSLookAndFeel.getQueryIcon());
 		} else {
 			this.setTitle("Add Authority");
-			this.setFrameIcon(GTSLookAndFeel.getAuthorityAddIcon());
+			this.setFrameIcon(GTSLookAndFeel.getAddIcon());
 		}
 	}
 
@@ -301,10 +301,10 @@ public class AuthorityWindow extends ApplicationComponent {
 			addButton = new JButton();
 			if (update) {
 				addButton.setText("Update Authority");
-				addButton.setIcon(GTSLookAndFeel.getAuthorityUpdateIcon());
+				addButton.setIcon(GTSLookAndFeel.getRefreshIcon());
 			} else {
 				addButton.setText("Add Authority");
-				addButton.setIcon(GTSLookAndFeel.getAuthorityAddIcon());
+				addButton.setIcon(GTSLookAndFeel.getAddIcon());
 			}
 			addButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {

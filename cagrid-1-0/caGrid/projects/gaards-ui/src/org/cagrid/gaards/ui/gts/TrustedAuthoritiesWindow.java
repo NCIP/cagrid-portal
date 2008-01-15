@@ -306,7 +306,7 @@ public class TrustedAuthoritiesWindow extends ApplicationComponent implements Tr
 		if (viewTrustedAuthority == null) {
 			viewTrustedAuthority = new JButton();
 			viewTrustedAuthority.setText("View/Edit Trusted Authority");
-			viewTrustedAuthority.setIcon(GTSLookAndFeel.getModifyTrustedAuthorityIcon());
+			viewTrustedAuthority.setIcon(GTSLookAndFeel.getQueryIcon());
 			viewTrustedAuthority.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					Runner runner = new Runner() {
@@ -606,7 +606,7 @@ public class TrustedAuthoritiesWindow extends ApplicationComponent implements Tr
 					}
 				}
 			});
-			removeTrustedAuthorityButton.setIcon(GTSLookAndFeel.getRemoveTrustedAuthorityIcon());
+			removeTrustedAuthorityButton.setIcon(GTSLookAndFeel.getRemoveIcon());
 		}
 		return removeTrustedAuthorityButton;
 	}
@@ -721,7 +721,7 @@ public class TrustedAuthoritiesWindow extends ApplicationComponent implements Tr
 			gridBagConstraints5.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints5.gridx = 0;
 			jLabel1 = new JLabel();
-			jLabel1.setText("Trust Level");
+			jLabel1.setText("Level of Assurance");
 			GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
 			gridBagConstraints3.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints3.gridy = 0;
@@ -810,7 +810,7 @@ public class TrustedAuthoritiesWindow extends ApplicationComponent implements Tr
 					enableAllActions();
 				}
 			});
-			addButton.setIcon(GTSLookAndFeel.getAddTrustedAuthorityIcon());
+			addButton.setIcon(GTSLookAndFeel.getAddIcon());
 		}
 		return addButton;
 	}

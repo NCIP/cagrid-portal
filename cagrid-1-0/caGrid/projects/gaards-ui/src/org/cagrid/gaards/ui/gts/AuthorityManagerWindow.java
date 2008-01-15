@@ -251,7 +251,7 @@ public class AuthorityManagerWindow extends ApplicationComponent implements Auth
 		if (addAuthority == null) {
 			addAuthority = new JButton();
 			addAuthority.setText("Add Authority");
-			addAuthority.setIcon(GTSLookAndFeel.getAuthorityAddIcon());
+			addAuthority.setIcon(GTSLookAndFeel.getAddIcon());
 			addAuthority.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					Runner runner = new Runner() {
@@ -542,7 +542,7 @@ public class AuthorityManagerWindow extends ApplicationComponent implements Auth
 					}
 				}
 			});
-			removeAuthority.setIcon(GTSLookAndFeel.getAuthorityDeleteIcon());
+			removeAuthority.setIcon(GTSLookAndFeel.getRemoveIcon());
 		}
 		return removeAuthority;
 	}
@@ -632,7 +632,7 @@ public class AuthorityManagerWindow extends ApplicationComponent implements Auth
 
 				}
 			});
-			viewModifyButton.setIcon(GTSLookAndFeel.getAuthorityEditIcon());
+			viewModifyButton.setIcon(GTSLookAndFeel.getQueryIcon());
 		}
 		return viewModifyButton;
 	}
@@ -726,7 +726,7 @@ public class AuthorityManagerWindow extends ApplicationComponent implements Auth
 					}
 				}
 			});
-			updatePriorities.setIcon(GTSLookAndFeel.getAuthorityUpdateIcon());
+			updatePriorities.setIcon(GTSLookAndFeel.getRefreshIcon());
 		}
 		return updatePriorities;
 	}

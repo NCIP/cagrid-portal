@@ -207,7 +207,7 @@ public class TrustedAuthorityWindow extends ApplicationComponent {
 		this.setContentPane(getJContentPane());
 		if (state == ADD) {
 			this.setTitle("Add Trusted Authority");
-			this.setFrameIcon(GTSLookAndFeel.getAddTrustedAuthorityIcon());
+			this.setFrameIcon(GTSLookAndFeel.getTrustedAuthorityIcon());
 		} else if (state == UPDATE) {
 			this.setTitle("View/Modify Trusted Authority");
 			this.setFrameIcon(GTSLookAndFeel.getTrustedAuthorityIcon());
@@ -235,7 +235,7 @@ public class TrustedAuthorityWindow extends ApplicationComponent {
 				}
 
 			} catch (Exception e) {
-				ErrorDialog.showError("Error obtaining the trust levels from " + service + ":\n" + e.getMessage());
+				ErrorDialog.showError("Error obtaining the levels of assurance from " + service + ":\n" + e.getMessage());
 			}
 		}
 		invalidate();
@@ -340,7 +340,7 @@ public class TrustedAuthorityWindow extends ApplicationComponent {
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
 				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, LookAndFeel.getPanelLabelColor()));
 			taPanel.addTab("Properties", GTSLookAndFeel.getTrustedAuthorityIcon(), getPropertiesNorthPanel(), null);
-			taPanel.addTab("Trust Levels", GTSLookAndFeel.getTrustLevelIcon(), getTrustLevels(), null);
+			taPanel.addTab("Level of Assurance", GTSLookAndFeel.getTrustLevelIcon(), getTrustLevels(), null);
 			taPanel.addTab("Certificate", GTSLookAndFeel.getCertificateIcon(), getCertificatePanel(), null);
 			taPanel.addTab("Certificate Revocation List", GTSLookAndFeel.getCRLIcon(), getCrlPanel(), null);
 		}
@@ -592,7 +592,7 @@ public class TrustedAuthorityWindow extends ApplicationComponent {
 			addButton = new JButton();
 			if (state == ADD) {
 				addButton.setText("Add Trusted Authority");
-				addButton.setIcon(GTSLookAndFeel.getAddTrustedAuthorityIcon());
+				addButton.setIcon(GTSLookAndFeel.getAddIcon());
 				addButton.addActionListener(new java.awt.event.ActionListener() {
 					public void actionPerformed(java.awt.event.ActionEvent e) {
 						addTrustedAuthority();
@@ -600,7 +600,7 @@ public class TrustedAuthorityWindow extends ApplicationComponent {
 				});
 			} else {
 				addButton.setText("Update Trusted Authority");
-				addButton.setIcon(GTSLookAndFeel.getModifyTrustedAuthorityIcon());
+				addButton.setIcon(GTSLookAndFeel.getRefreshIcon());
 				addButton.addActionListener(new java.awt.event.ActionListener() {
 					public void actionPerformed(java.awt.event.ActionEvent e) {
 						updateTrustedAuthority();
@@ -920,7 +920,7 @@ public class TrustedAuthorityWindow extends ApplicationComponent {
 		if (levels == null) {
 			levels = new JPanel();
 			levels.setLayout(new GridBagLayout());
-			levels.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Trust Levels",
+			levels.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Level of Assurance",
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
 				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, LookAndFeel.getPanelLabelColor()));
 		}
