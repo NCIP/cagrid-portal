@@ -326,7 +326,7 @@ public class ModificationViewer extends ApplicationComponent {
         getMethodsTable().setMethods(this.info.getServices().getService(0));
         getRpHolderPanel().reInitialize(this.info.getServices().getService(0), this.info.getNamespaces());
         getServicePropertiesTable().setServiceInformation(this.info);
-        this.updateServiceSecurity();
+        this.updateServiceSecurityObject();
         for (int i = 0; i < this.extensionPanels.size(); i++) {
             ServiceModificationUIPanel panel = (ServiceModificationUIPanel) this.extensionPanels.get(i);
             panel.setServiceInfo(this.info);
@@ -829,19 +829,31 @@ public class ModificationViewer extends ApplicationComponent {
     }
 
 
-    private void updateServiceSecurity() throws Exception {
+    private void updateServiceSecurityObject() throws Exception {
         boolean update = false;
         ServiceSecurity service = this.info.getServices().getService(0).getServiceSecurity();
         ServiceSecurity curr = this.securityPanel.getServiceSecurity(false);
+        // This should be cleaned up some
+        if ((service == null) && (curr == null)) {
+            update = false;
+        } else if ((service != null) && (curr == null)) {
+            update = true;
+        } else if ((service == null) && (curr != null)) {
+            update = true;
+        } else if (!service.equals(curr)) {
+            update = true;
+        }
+        if (update) {
 
-        this.info.getServices().getService(0).setServiceSecurity(curr);
+            this.info.getServices().getService(0).setServiceSecurity(curr);
 
+        }
     }
 
 
     private void performMethodModify() {
         try {
-            this.updateServiceSecurity();
+            this.updateServiceSecurityObject();
         } catch (Exception e) {
             e.printStackTrace();
             CompositeErrorDialog.showErrorDialog(e);
@@ -1004,7 +1016,7 @@ public class ModificationViewer extends ApplicationComponent {
                 public void stateChanged(ChangeEvent e) {
 
                     try {
-                        ModificationViewer.this.updateServiceSecurity();
+                        ModificationViewer.this.updateServiceSecurityObject();
                         switch (contentTabbedPane.getSelectedIndex()) {
                             case 0 :
                                 getNamespaceJTree().setNamespaces(info.getNamespaces());
