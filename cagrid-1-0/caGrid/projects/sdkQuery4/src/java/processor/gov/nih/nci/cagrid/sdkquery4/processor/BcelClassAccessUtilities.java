@@ -3,9 +3,9 @@ package gov.nih.nci.cagrid.sdkquery4.processor;
 import gov.nih.nci.cacoresdk.domain.inheritance.multiplechild.Student;
 import gov.nih.nci.cagrid.cqlquery.Association;
 import gov.nih.nci.cagrid.data.QueryProcessingException;
-import gov.nih.nci.cagrid.introduce.common.FileFilters;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -33,7 +33,7 @@ import org.apache.log4j.Logger;
  * @author David Ervin
  * 
  * @created Dec 20, 2007 11:40:22 AM
- * @version $Id: BcelClassAccessUtilities.java,v 1.2 2007-12-21 20:09:53 dervin Exp $ 
+ * @version $Id: BcelClassAccessUtilities.java,v 1.3 2008-01-15 16:20:06 dervin Exp $ 
  */
 public class BcelClassAccessUtilities {
     private static Logger LOG = Logger.getLogger(BcelClassAccessUtilities.class);
@@ -193,7 +193,12 @@ public class BcelClassAccessUtilities {
     private static List<File> getJavaLibs() {
         String javaHome = System.getProperty("java.home");
         File javaLib = new File(javaHome, "lib");
-        File[] libs = javaLib.listFiles(new FileFilters.JarFileFilter());
+        File[] libs = javaLib.listFiles(new FileFilter() {
+            public boolean accept(File path) {
+                return path.isDirectory() || path.getName().endsWith(".jar");
+            }
+        });
+        // filter returns dirs and libs in subdirs, so remove the dirs
         List<File> justTheLibs = new ArrayList<File>();
         for (File f : libs) {
             if (f.isFile()) {
