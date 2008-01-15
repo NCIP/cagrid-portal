@@ -185,6 +185,10 @@ public class DelegatedCredentialWindow extends ApplicationComponent {
 
 	private MultiEventProgressBar progress = null;
 
+	private JPanel auditingButtonPanel = null;
+
+	private JButton viewAudtingRecord = null;
+
 	/**
 	 * This is the default constructor
 	 */
@@ -914,6 +918,12 @@ public class DelegatedCredentialWindow extends ApplicationComponent {
 	 */
 	private JPanel getAuditPanel() {
 		if (auditPanel == null) {
+			GridBagConstraints gridBagConstraints50 = new GridBagConstraints();
+			gridBagConstraints50.gridx = 0;
+			gridBagConstraints50.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints50.weightx = 1.0D;
+			gridBagConstraints50.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints50.gridy = 4;
 			GridBagConstraints gridBagConstraints48 = new GridBagConstraints();
 			gridBagConstraints48.gridx = 0;
 			gridBagConstraints48.insets = new Insets(2, 2, 2, 2);
@@ -945,6 +955,7 @@ public class DelegatedCredentialWindow extends ApplicationComponent {
 			auditPanel.add(getSearchPanel(), gridBagConstraints32);
 			auditPanel.add(getSearchButtonPanel(), gridBagConstraints47);
 			auditPanel.add(getProgressPanel(), gridBagConstraints48);
+			auditPanel.add(getAuditingButtonPanel(), gridBagConstraints50);
 		}
 		return auditPanel;
 	}
@@ -1335,27 +1346,30 @@ public class DelegatedCredentialWindow extends ApplicationComponent {
 		getAuditRecords().clearTable();
 		int eventId = getProgress().startEvent("Peforming Audit.....");
 		try {
-			if((searchStartDate!=null)&&(searchEndDate!=null)){
-				if(searchStartDate.after(searchEndDate)){
-					ErrorDialog.showError("The start date cannot be after the end date.");
+			if ((searchStartDate != null) && (searchEndDate != null)) {
+				if (searchStartDate.after(searchEndDate)) {
+					ErrorDialog
+							.showError("The start date cannot be after the end date.");
 					return;
 				}
 			}
-				DelegatedCredentialAuditFilter f = new DelegatedCredentialAuditFilter();
-				f.setDelegationIdentifier(this.record.getDelegationIdentifier());
-				f.setSourceGridIdentity(Utils.clean(getSourceIdentity().getText()));
-				f.setEvent(getEventType().getEvent());
-				if(searchStartDate!=null){
-					f.setStartDate(new Long(searchStartDate.getTimeInMillis()));
-				}
-				
-				if(searchEndDate!=null){
-					f.setEndDate(new Long(searchEndDate.getTimeInMillis()));
-				}
-				
-				DelegationUserClient client = new DelegationUserClient(this.serviceId,this.cred);
-				this.getAuditRecords().addRecords(client.searchDelegatedCredentialAuditLog(f));
-				
+			DelegatedCredentialAuditFilter f = new DelegatedCredentialAuditFilter();
+			f.setDelegationIdentifier(this.record.getDelegationIdentifier());
+			f.setSourceGridIdentity(Utils.clean(getSourceIdentity().getText()));
+			f.setEvent(getEventType().getEvent());
+			if (searchStartDate != null) {
+				f.setStartDate(new Long(searchStartDate.getTimeInMillis()));
+			}
+
+			if (searchEndDate != null) {
+				f.setEndDate(new Long(searchEndDate.getTimeInMillis()));
+			}
+
+			DelegationUserClient client = new DelegationUserClient(
+					this.serviceId, this.cred);
+			this.getAuditRecords().addRecords(
+					client.searchDelegatedCredentialAuditLog(f));
+
 		} catch (Exception f) {
 			ErrorDialog.showError(f);
 			return;
@@ -1449,6 +1463,45 @@ public class DelegatedCredentialWindow extends ApplicationComponent {
 			progress = new MultiEventProgressBar(true);
 		}
 		return progress;
+	}
+
+	/**
+	 * This method initializes auditingButtonPanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	private JPanel getAuditingButtonPanel() {
+		if (auditingButtonPanel == null) {
+			auditingButtonPanel = new JPanel();
+			auditingButtonPanel.setLayout(new GridBagLayout());
+			auditingButtonPanel.add(getViewAudtingRecord(),
+					new GridBagConstraints());
+		}
+		return auditingButtonPanel;
+	}
+
+	/**
+	 * This method initializes viewAudtingRecord
+	 * 
+	 * @return javax.swing.JButton
+	 */
+	private JButton getViewAudtingRecord() {
+		if (viewAudtingRecord == null) {
+			viewAudtingRecord = new JButton();
+			viewAudtingRecord.setText("View Audit Record");
+			viewAudtingRecord.setIcon(CDSLookAndFeel.getAudtingIcon());
+			viewAudtingRecord
+					.addActionListener(new java.awt.event.ActionListener() {
+						public void actionPerformed(java.awt.event.ActionEvent e) {
+							try {
+								getAuditRecords().doubleClick();
+							} catch (Exception ex) {
+								ErrorDialog.showError(ex.getMessage(), ex);
+							}
+						}
+					});
+		}
+		return viewAudtingRecord;
 	}
 
 }

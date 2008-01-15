@@ -6,17 +6,24 @@ import java.util.List;
 import java.util.Vector;
 
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 
 import org.cagrid.gaards.cds.common.DelegatedCredentialAuditRecord;
+import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.table.GrapeBaseTable;
+import org.cagrid.grape.utils.ErrorDialog;
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: DelegatedCredentialAuditRecordTable.java,v 1.1 2008-01-07 20:21:57 langella Exp $
+ * @version $Id: DelegatedCredentialAuditRecordTable.java,v 1.1 2008/01/07
+ *          20:21:57 langella Exp $
  */
 public class DelegatedCredentialAuditRecordTable extends GrapeBaseTable {
+
+	public final static String RECORD = "Record";
+
 	public final static String GRID_IDENTITY = "Source";
 
 	public final static String EVENT_TYPE = "Event Type";
@@ -27,11 +34,17 @@ public class DelegatedCredentialAuditRecordTable extends GrapeBaseTable {
 
 	public DelegatedCredentialAuditRecordTable() {
 		super(createTableModel());
+		TableColumn c = getColumn(RECORD);
+		c.setMaxWidth(0);
+		c.setMinWidth(0);
+		c.setPreferredWidth(0);
+		c.setResizable(false);
 		this.clearTable();
 	}
 
 	public static DefaultTableModel createTableModel() {
-		DefaultTableModel model = new DefaultTableModel();
+		DefaultTableModel model = new DefaultTableModel();	
+		model.addColumn(RECORD);
 		model.addColumn(GRID_IDENTITY);
 		model.addColumn(EVENT_TYPE);
 		model.addColumn(OCCURRED_AT);
@@ -57,7 +70,8 @@ public class DelegatedCredentialAuditRecordTable extends GrapeBaseTable {
 		}
 		for (int i = 0; i < sorted.size(); i++) {
 			DelegatedCredentialAuditRecord r = sorted.get(i);
-			Vector<String> v = new Vector<String>();
+			Vector v = new Vector();
+			v.add(r);
 			v.add(r.getSourceGridIdentity());
 			v.add(r.getEvent().getValue());
 			v.add((new Date(r.getOccurredAt())).toString());
@@ -86,6 +100,13 @@ public class DelegatedCredentialAuditRecordTable extends GrapeBaseTable {
 	}
 
 	public void doubleClick() throws Exception {
+		try {
+			GridApplication.getContext().addApplicationComponent(
+					new DelegatedCredentialAuditRecordWindow(
+							getSelectedRecord()), 500, 300);
+		} catch (Exception ex) {
+			ErrorDialog.showError(ex.getMessage(), ex);
+		}
 	}
 
 	public void singleClick() throws Exception {
