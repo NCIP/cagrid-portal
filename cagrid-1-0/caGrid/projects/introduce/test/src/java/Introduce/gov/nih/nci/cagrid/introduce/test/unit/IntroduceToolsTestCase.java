@@ -40,7 +40,7 @@ public class IntroduceToolsTestCase extends TestCase {
 		assertTrue(CommonTools.isValidPackageName("i"));
 		assertTrue(CommonTools.isValidPackageName("is"));
 		assertTrue(CommonTools
-			.isValidPackageName("is.a.really.name.just.to.be.sure.is.ok.with.my.parser.i.will.even.put.in.some.stupid.characters.like.a0193.and.sdjr23lkj23lk456jl.test.org"));
+			.isValidPackageName("is.a.Really.name.just.to.be.sure.is.ok.with.my.parser.i.will.even.put.in.some.stupid.characters.like.a0193.and.sdjr23lkj23lk456jl.test.org"));
 		assertTrue(CommonTools.isValidPackageName("_test.org"));
 	}
 
