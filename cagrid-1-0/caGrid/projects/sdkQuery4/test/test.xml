@@ -8,14 +8,41 @@
 	<property name="cobertura.data.file"
 		location="${instrumented.classes.dir}/${project.name}-cobertura.ser"/>	
 	
+	
+	<!-- =============================================================== -->
+	<!-- The Cobertura Run Classpath                                     -->
+	<!-- =============================================================== -->
+	<path id="cobertura.run.classpath">
+		<fileset dir="${lib.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+		<!-- no recursion to ommit the sdk libs, including a conflicting asm jar -->
+		<fileset dir="${ext.lib.dir}">
+			<include name="*.jar" />
+		</fileset>
+		<fileset dir="${test.lib.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${ext.test.lib.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${globus.dir}/lib">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+	
+
 	<target name="instrument">
-		<taskdef classpathref="test.classpath" resource="tasks.properties"/>
+		<taskdef classpathref="cobertura.run.classpath" resource="tasks.properties"/>
 		<mkdir dir="${instrumented.classes.dir}"/>
 		<cobertura-instrument todir="${instrumented.classes.dir}" datafile="${cobertura.data.file}">
-			<fileset dir="${build.style.dest}">
+			<fileset dir="${build.beans.dest}">
 				<include name="**/*.class"/>
 			</fileset>
 			<fileset dir="${build.processor.dest}">
+				<include name="**/*.class"/>
+			</fileset>
+			<fileset dir="${build.style.dest}">
 				<include name="**/*.class"/>
 			</fileset>
 		</cobertura-instrument>

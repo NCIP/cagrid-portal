@@ -108,6 +108,7 @@
 		<fileset dir="${lib.dir}">
 			<include name="**/*.jar" />
 		</fileset>
+		<!-- recursion here picks up SDK jars too -->
 		<fileset dir="${ext.lib.dir}">
 			<include name="**/*.jar" />
 		</fileset>
@@ -120,8 +121,10 @@
 		<fileset dir="${globus.dir}/lib">
 			<include name="**/*.jar" />
 		</fileset>
-		<pathelement location="${build.dest}"/>
-	</path>
+		<pathelement location="${build.beans.dest}"/>
+		<pathelement location="${build.processor.dest}"/>
+		<pathelement location="${build.style.dest}"/>
+	</path>		
 	
 	
 	<!-- sets up GT4 related variables -->
