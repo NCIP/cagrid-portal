@@ -27,7 +27,7 @@ import org.apache.ws.jaxme.js.Parameter;
  * 
  * @author David Ervin
  * @created Apr 4, 2007 1:32:03 PM
- * @version $Id: SyncHelper.java,v 1.5 2007-10-26 13:29:37 hastings Exp $
+ * @version $Id: SyncHelper.java,v 1.6 2008-01-16 20:03:21 hastings Exp $
  */
 public class SyncHelper {
     private static final Logger logger = Logger.getLogger(SyncHelper.class);
@@ -369,8 +369,10 @@ public class SyncHelper {
         //    returnType += method.getType().getPackageName() + ".";
         //}
         returnType += method.getType().getClassName();
-        if (method.getType().isArray()) {
+        org.apache.ws.jaxme.js.JavaQName qName = method.getType();
+        while(qName.isArray()) {
             returnType += "[]";
+            qName = qName.getInstanceClass();
         }
         methodString.append("public ").append(returnType).append(" ").append(methodName).append("(");
         Parameter[] inputs = method.getParams();
