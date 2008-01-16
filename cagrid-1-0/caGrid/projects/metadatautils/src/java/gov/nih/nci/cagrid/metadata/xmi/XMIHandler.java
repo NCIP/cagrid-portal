@@ -34,7 +34,7 @@ import org.xml.sax.helpers.DefaultHandler;
   * @author David Ervin
   * 
   * @created Oct 22, 2007 10:26:25 AM
-  * @version $Id: XMIHandler.java,v 1.8 2007-11-07 18:32:35 dervin Exp $
+  * @version $Id: XMIHandler.java,v 1.9 2008-01-16 21:13:37 dervin Exp $
  */
 class XMIHandler extends DefaultHandler {
     private static final Logger LOG = Logger.getLogger(XMIHandler.class);   
@@ -203,10 +203,16 @@ class XMIHandler extends DefaultHandler {
     
     private void handleGeneralization(Attributes atts) {
         UMLGeneralization gen = new UMLGeneralization();
-        gen.setSubClassReference(new UMLClassReference(
-            atts.getValue(XMIConstants.XMI_UML_GENERALIZATION_CHILD)));
-        gen.setSuperClassReference(new UMLClassReference(
-            atts.getValue(XMIConstants.XMI_UML_GENERALIZATION_PARENT)));
+        String subId = atts.getValue(XMIConstants.XMI_UML_GENERALIZATION_CHILD);
+        String superId = atts.getValue(XMIConstants.XMI_UML_GENERALIZATION_PARENT);
+        if (subId == null) {
+            subId = atts.getValue(XMIConstants.XMI_UML_GENERALIZATION_SUBTYPE);
+        }
+        if (superId == null) {
+            superId = atts.getValue(XMIConstants.XMI_UML_GENERALIZATION_SUPERTYPE);
+        }
+        gen.setSubClassReference(new UMLClassReference(subId));
+        gen.setSuperClassReference(new UMLClassReference(superId));
         genList.add(gen);
     }
     

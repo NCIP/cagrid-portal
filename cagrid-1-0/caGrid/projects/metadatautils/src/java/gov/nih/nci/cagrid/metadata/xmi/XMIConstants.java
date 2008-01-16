@@ -7,7 +7,7 @@ package gov.nih.nci.cagrid.metadata.xmi;
  * @author David Ervin
  * 
  * @created Oct 22, 2007 10:28:52 AM
- * @version $Id: XMIConstants.java,v 1.4 2007-10-23 14:14:41 dervin Exp $ 
+ * @version $Id: XMIConstants.java,v 1.5 2008-01-16 21:13:37 dervin Exp $ 
  */
 public class XMIConstants {
     // common? constants
@@ -42,6 +42,9 @@ public class XMIConstants {
     public static final String XMI_UML_GENERALIZATION = "UML:Generalization";
     public static final String XMI_UML_GENERALIZATION_CHILD = "child";
     public static final String XMI_UML_GENERALIZATION_PARENT = "parent";
+    // fallbacks for 'newer' versions of XMI
+    public static final String XMI_UML_GENERALIZATION_SUBTYPE = "subtype";
+    public static final String XMI_UML_GENERALIZATION_SUPERTYPE = "supertype";
     
     // tagged value constants
     public static final String XMI_UML_TAGGED_VALUE = "UML:TaggedValue";
