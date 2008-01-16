@@ -96,12 +96,8 @@
 		<copy todir="build/installer" file="${build.jars}/${project.jar.prefix}.jar" overwrite="true"/>
 		
 		<copy todir="build/installer/lib">
-			
-			<fileset dir="../dorian/lib">
-				<include name="mysql-connector*.jar"/>
-			</fileset>
-
 			<fileset dir="lib">
+				<include name="mysql-connector*.jar"/>
 				<include name="commons-logging*.jar"/>
 				<include name="log4j*.jar"/>
 				<include name="xmltask*.jar"/>
