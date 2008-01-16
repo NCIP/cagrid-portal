@@ -77,6 +77,8 @@ public class MDIDesktopPane extends JDesktopPane {
     public Component add(JInternalFrame frame, Dimensions dim, RenderOptions options) {
         JInternalFrame[] array = getAllFrames();
         Point p;
+        int w;
+        int h;
         Component retval = super.add(frame);
         checkDesktopSize();
         if (array.length > 0) {
@@ -87,10 +89,19 @@ public class MDIDesktopPane extends JDesktopPane {
             p = new Point(0, 0);
         }
         frame.setLocation(p.x, p.y);
+        if (frame.isResizable()) {
+            w = getWidth() - (getWidth() / 8);
+            h = getHeight() - (getHeight() / 8);
+            if (w < frame.getMinimumSize().getWidth())
+                w = (int) frame.getMinimumSize().getWidth();
+            if (h < frame.getMinimumSize().getHeight())
+                h = (int) frame.getMinimumSize().getHeight();
+            frame.setSize(w, h);
+        }
         if (dim != null) {
             frame.setSize(dim.getWidth(), dim.getHeight());
         }
-        setRenderOptions(frame, options);
+        setRenderOptions(frame, options);;
         frame.show();
         return retval;
     }
