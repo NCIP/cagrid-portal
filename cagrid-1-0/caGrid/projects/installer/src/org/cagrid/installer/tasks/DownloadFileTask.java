@@ -6,14 +6,10 @@ package org.cagrid.installer.tasks;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.Map;
-
-import javax.swing.SwingUtilities;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -86,7 +82,7 @@ public class DownloadFileTask extends BasicTask {
 		for (int i = 0; i < NUM_ATTEMPTS; i++) {
 			try {
 				download(url, new File(toFile));
-				if (enforceChecksum) {
+				if (!enforceChecksum) {
 					break;
 				} else {
 					checksum = MD5Checksum.getChecksum(toFile);

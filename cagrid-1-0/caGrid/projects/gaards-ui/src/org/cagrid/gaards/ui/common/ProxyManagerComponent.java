@@ -79,8 +79,8 @@ public class ProxyManagerComponent extends ApplicationComponent {
      */
     private void initialize() {
         this.setContentPane(getJContentPane());
-        this.setFrameIcon(GAARDSLookAndFeel.getProxyManagerIcon());
-        this.setTitle("Proxy Manager");
+        this.setFrameIcon(GAARDSLookAndFeel.getCertificateIcon());
+        this.setTitle("Credential Manager");
     }
 
 
