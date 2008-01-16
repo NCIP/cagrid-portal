@@ -57,7 +57,9 @@ public final class CommonTools {
 
     public static final String ALLOWED_JAVA_OP_NAME = "[a-zA-Z\\_]++[A-Za-z0-9\\_]*";
 
-    public static final String ALLOWED_JAVA_PACKAGE_REGEX = "[a-z\\_]++[A-Za-z0-9\\_\\$]*";
+    public static final String ALLOWED_JAVA_PACKAGE_REGEX = "[a-zA-Z\\_]++[A-Za-z0-9\\_\\$]*";
+    
+    public static final String SUGGESTED_JAVA_PACKAGE_REGEX = "[a-z\\_]++[A-Za-z0-9\\_\\$]*";
 
     public static final String ALLOWED_EXISTING_JAVA_PACKAGE_REGEX = "[a-zA-Z\\_]++[A-Za-z0-9\\_\\$]*";
 
@@ -177,6 +179,22 @@ public final class CommonTools {
             while (strtok.hasMoreElements()) {
                 String packageItem = strtok.nextToken();
                 if (!packageItem.matches(ALLOWED_JAVA_PACKAGE_REGEX) || JAVA_KEYWORDS.contains(packageItem)) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    
+    public static boolean isSuggestedPackageName(String packageName) {
+        if (packageName.length() > 0) {
+            if (packageName.endsWith(".")) {
+                return false;
+            }
+            StringTokenizer strtok = new StringTokenizer(packageName, ".", false);
+            while (strtok.hasMoreElements()) {
+                String packageItem = strtok.nextToken();
+                if (!packageItem.matches(SUGGESTED_JAVA_PACKAGE_REGEX) || JAVA_KEYWORDS.contains(packageItem)) {
                     return false;
                 }
             }

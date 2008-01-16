@@ -127,6 +127,15 @@ public class NamespaceTypeConfigurePanel extends JPanel {
 									+ " is not valid",
 							Severity.ERROR, PACKAGE_NAME));
 
+		} else if (!CommonTools.isSuggestedPackageName(this.getPackageNameText()
+				.getText())) {
+
+			result
+					.add(new SimpleValidationMessage(
+							PACKAGE_NAME
+									+ " does not look like a java best practice",
+							Severity.WARNING, PACKAGE_NAME));
+
 		}
 
 		this.validationModel.setResult(result);
