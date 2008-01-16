@@ -1,7 +1,10 @@
 package gov.nih.nci.cagrid.sdkquery4.test;
 
 import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.data.utilities.DomainModelUtils;
+import gov.nih.nci.cagrid.metadata.common.UMLClass;
 import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
+import gov.nih.nci.cagrid.metadata.dataservice.UMLGeneralization;
 import gov.nih.nci.cagrid.sdkquery4.beans.domaininfo.DomainTypesInformation;
 import gov.nih.nci.cagrid.sdkquery4.style.beanmap.BeanTypeDiscoveryEvent;
 import gov.nih.nci.cagrid.sdkquery4.style.beanmap.BeanTypeDiscoveryEventListener;
@@ -14,6 +17,8 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.ArrayList;
+import java.util.List;
 
 import junit.framework.TestCase;
 import junit.framework.TestResult;
@@ -29,7 +34,7 @@ import org.apache.log4j.Logger;
  * @author David Ervin
  * 
  * @created Jan 15, 2008 1:33:01 PM
- * @version $Id: BeanTypeDiscoveryTestCase.java,v 1.2 2008-01-16 18:18:10 dervin Exp $ 
+ * @version $Id: BeanTypeDiscoveryTestCase.java,v 1.3 2008-01-16 20:08:48 dervin Exp $ 
  */
 public class BeanTypeDiscoveryTestCase extends TestCase {
 
@@ -41,6 +46,7 @@ public class BeanTypeDiscoveryTestCase extends TestCase {
     
     private File beansJar = null;
     private DomainModel model = null;
+    private DomainTypesInformation goldTypesInfo = null;
 
     public BeanTypeDiscoveryTestCase() {
         super();
@@ -48,10 +54,12 @@ public class BeanTypeDiscoveryTestCase extends TestCase {
     
     
     public void setUp() {
+        // inits the beans jar, domain model, and gold type info
         beansJar = new File(BEANS_JAR_FILENAME);
         assertTrue("Beans jar (" + beansJar.getAbsolutePath() + ") did not exist", beansJar.exists());
         assertTrue("Beans jar (" + beansJar.getAbsolutePath() + ") could not be read", beansJar.canRead());
         LOG.debug("Using beans jar " + beansJar.getAbsolutePath());
+        
         try {
             File modelFile = new File(DOMAIN_MODEL_FILENAME);
             LOG.debug("Using domain model from " + modelFile.getAbsolutePath());
@@ -60,6 +68,17 @@ public class BeanTypeDiscoveryTestCase extends TestCase {
         } catch (Exception ex) {
             ex.printStackTrace();
             fail("Error loading domain model: " + ex.getMessage());
+        }
+        
+        try {
+            File goldTypesFile = new File(GOLD_DOMAIN_TYPES_FILENAME);
+            LOG.debug("Using gold domain types from " + goldTypesFile.getAbsolutePath());
+            FileReader reader = new FileReader(goldTypesFile);
+            goldTypesInfo = DomainTypesInformationUtil.deserializeDomainTypesInformation(reader);
+            reader.close();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            fail("Error deserializing gold domain types information document: " + ex.getMessage());
         }
     }
     
@@ -81,19 +100,7 @@ public class BeanTypeDiscoveryTestCase extends TestCase {
         }        
         assertNotNull("Types information document was null", typesInformation);
         
-        DomainTypesInformation goldTypes = null;
-        try {
-            File goldTypesFile = new File(GOLD_DOMAIN_TYPES_FILENAME);
-            LOG.debug("Using gold domain types from " + goldTypesFile.getAbsolutePath());
-            FileReader reader = new FileReader(goldTypesFile);
-            goldTypes = DomainTypesInformationUtil.deserializeDomainTypesInformation(reader);
-            reader.close();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            fail("Error deserializing gold domain types information document: " + ex.getMessage());
-        }
-        
-        assertEquals("Processed types information did not match expected", goldTypes, typesInformation);
+        assertEquals("Processed types information did not match expected", goldTypesInfo, typesInformation);
     }
     
     
@@ -101,25 +108,13 @@ public class BeanTypeDiscoveryTestCase extends TestCase {
         // create a URL classloader for the beans jar
         URLClassLoader beansLoader = null;
         try {
-            beansLoader = new URLClassLoader(new URL[] {new File(BEANS_JAR_FILENAME).toURL()});
+            beansLoader = new URLClassLoader(new URL[] {beansJar.toURL()});
         } catch (Exception ex) {
             ex.printStackTrace();
             fail("Error creating beans classloader: " + ex.getMessage());
         }
-        // load the gold domain types document
-        DomainTypesInformation goldInfo = null;
-        try {
-            File goldTypesFile = new File(GOLD_DOMAIN_TYPES_FILENAME);
-            LOG.debug("Using gold domain types from " + goldTypesFile.getAbsolutePath());
-            FileReader reader = new FileReader(goldTypesFile);
-            goldInfo = DomainTypesInformationUtil.deserializeDomainTypesInformation(reader);
-            reader.close();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            fail("Error deserializing gold domain types information document: " + ex.getMessage());
-        }
         
-        DomainTypesInformationUtil infoUtil = new DomainTypesInformationUtil(goldInfo);
+        DomainTypesInformationUtil infoUtil = new DomainTypesInformationUtil(goldTypesInfo);
         String testClassname = "gov.nih.nci.cacoresdk.domain.manytomany.unidirectional.Book";
         
         // load a class from the beans class loader
@@ -145,6 +140,42 @@ public class BeanTypeDiscoveryTestCase extends TestCase {
                     fieldJavaType, infoJavaType);
             }
         }
+    }
+    
+    
+    public void testGetSubclassesFromTypeInfo() {        
+        DomainTypesInformationUtil infoUtil = new DomainTypesInformationUtil(goldTypesInfo);
+        String testClassname = "gov.nih.nci.cacoresdk.domain.inheritance.childwithassociation.Payment";
+        
+        List<String> modelSubclasses = getSubclasses(testClassname);
+        List<String> infoSubclasses = infoUtil.getSubclasses(testClassname);
+        assertEquals("Unexpected number of subclasses from info utility", modelSubclasses.size(), infoSubclasses.size());
+        
+        for (String expected : modelSubclasses) {
+            assertTrue("Subclasses from info util did not contain expected class " + expected, infoSubclasses.contains(expected));
+        }
+    }
+    
+    
+    private List<String> getSubclasses(String className) {
+        List<String> subclasses = new ArrayList<String>();
+        UMLGeneralization[] generalizations = model.getUmlGeneralizationCollection().getUMLGeneralization();
+        for (UMLGeneralization gen : generalizations) {
+            UMLClass superclass = DomainModelUtils.getReferencedUMLClass(model, gen.getSuperClassReference());
+            if (getClassName(superclass).equals(className)) {
+                UMLClass subClass = DomainModelUtils.getReferencedUMLClass(model, gen.getSubClassReference());
+                String subName = getClassName(subClass);
+                subclasses.add(subName);
+                List<String> subsubclasses = getSubclasses(subName);
+                subclasses.addAll(subsubclasses);
+            }
+        }
+        return subclasses;
+    }
+    
+    
+    private String getClassName(UMLClass clazz) {
+        return clazz.getPackageName() + "." + clazz.getClassName();
     }
     
     

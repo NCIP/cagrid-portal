@@ -7,7 +7,10 @@ import gov.nih.nci.cagrid.sdkquery4.beans.domaininfo.TypeAttribute;
 
 import java.io.Reader;
 import java.io.Writer;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.xml.namespace.QName;
@@ -19,7 +22,7 @@ import javax.xml.namespace.QName;
  * @author David Ervin
  * 
  * @created Jan 16, 2008 11:30:36 AM
- * @version $Id: DomainTypesInformationUtil.java,v 1.2 2008-01-16 18:18:10 dervin Exp $ 
+ * @version $Id: DomainTypesInformationUtil.java,v 1.3 2008-01-16 20:08:48 dervin Exp $ 
  */
 public class DomainTypesInformationUtil {
     
@@ -67,6 +70,28 @@ public class DomainTypesInformationUtil {
             attributeJavaTypes.put(qualifiedName, javaType);
         }
         return attributeJavaTypes.get(qualifiedName);
+    }
+    
+    
+    public List<String> getSubclasses(String classname) {
+        List<String> subclasses = new ArrayList<String>();
+        internalGetSubclasses(classname, subclasses);
+        return subclasses;
+    }
+    
+    
+    private void internalGetSubclasses(String classname, List<String> subclasses) {
+        for (DomainType type : info.getDomainType()) {
+            if (type.getJavaClassName().equals(classname)) {
+                String[] subs = type.getSubclassName();
+                if (subs != null) {
+                    Collections.addAll(subclasses, subs);
+                    for (String sub : subs) {
+                        internalGetSubclasses(sub, subclasses);
+                    }
+                }
+            }
+        }
     }
     
     
