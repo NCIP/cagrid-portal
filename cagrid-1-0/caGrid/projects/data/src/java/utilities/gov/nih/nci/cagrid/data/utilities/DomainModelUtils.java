@@ -87,6 +87,35 @@ public class DomainModelUtils {
 		supers.toArray(classes);
 		return classes;
 	}
+    
+    
+    /**
+     * Gets the UMLClassReference for a class in a domain model
+     * 
+     * @param model
+     *      The domain model
+     * @param className
+     *      The fully qualified name of the class
+     * @return
+     *      The UMLClassReference, or null if no class was found
+     */
+    public static UMLClassReference getClassReference(DomainModel model, String className) {
+        UMLClass[] classes = model.getExposedUMLClassCollection().getUMLClass();
+        for (UMLClass c : classes) {
+            if (getQualifiedClassname(c).equals(className)) {
+                return new UMLClassReference(c.getId());
+            }
+        }
+        return null;
+    }
+    
+    
+    public static String getQualifiedClassname(UMLClass clazz) {
+        if (clazz.getPackageName() != null) {
+            return clazz.getPackageName() + "." + clazz.getClassName();
+        }
+        return clazz.getClassName();
+    }
 	
 	
 	private static Set<UMLClass> getSuperclasses(DomainModel model, String className) {
