@@ -13,6 +13,7 @@ public class TransferServiceImpl extends TransferServiceImplBase {
 	
 	public TransferServiceImpl() throws RemoteException {
 		super();
+		System.err.println("PRE LOADING CONFIGURATION");
 		try {
             TransferServiceConfiguration.getConfiguration();
         } catch (Exception e) {

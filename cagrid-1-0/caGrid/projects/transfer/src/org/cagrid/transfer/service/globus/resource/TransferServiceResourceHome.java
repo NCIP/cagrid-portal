@@ -1,6 +1,7 @@
 package org.cagrid.transfer.service.globus.resource;
 
 import org.cagrid.transfer.common.TransferServiceConstants;
+import org.cagrid.transfer.service.TransferServiceConfiguration;
 import org.cagrid.transfer.stubs.TransferServiceResourceProperties;
 
 import org.apache.axis.components.uuid.UUIDGen;
