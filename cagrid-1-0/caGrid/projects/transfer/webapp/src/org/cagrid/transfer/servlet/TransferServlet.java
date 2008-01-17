@@ -57,7 +57,9 @@ public class TransferServlet extends HttpServlet {
                 int configBlockSize = Integer.parseInt(configBlockSizeS);
                 blockSize = configBlockSize;
             } catch (NumberFormatException e) {
-                e.printStackTrace();
+                System.out.println("Service attribute block size not configured properly");
+                resp.sendError(400);
+                return;
             }
         }
 
@@ -68,7 +70,8 @@ public class TransferServlet extends HttpServlet {
         String requestedID = (String) req.getParameter("id");
         if (requestedID == null || requestedID.length() <= 0) {
             System.out.println("Not ID");
-            throw new IOException("No ID provided");
+            resp.sendError(400);
+            return;
         }
 
         // 3 authorize
@@ -78,7 +81,8 @@ public class TransferServlet extends HttpServlet {
                 + File.separator + requestedID + ".xml"), TransferServiceContextResourceProperties.class);
         } catch (Exception e) {
             e.printStackTrace();
-            throw new IOException("Cannot locate resource for id: " + requestedID);
+            resp.sendError(404);
+            return;
         }
 
         DataDescriptor desc = props.getDataDescriptor();
@@ -94,6 +98,8 @@ public class TransferServlet extends HttpServlet {
                 length = fis.read(bytes);
             }
             resp.getOutputStream().write(bytes,0,length);
+        } else {
+            resp.sendError(403);
         }
 
     }
