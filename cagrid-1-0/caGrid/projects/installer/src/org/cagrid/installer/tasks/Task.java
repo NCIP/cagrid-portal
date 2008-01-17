@@ -4,7 +4,6 @@
 package org.cagrid.installer.tasks;
 
 import java.beans.PropertyChangeListener;
-import java.util.Map;
 
 import org.cagrid.installer.model.CaGridInstallerModel;
 

@@ -5,8 +5,6 @@ package org.cagrid.installer.steps;
 
 import javax.swing.Icon;
 
-import org.cagrid.installer.util.InstallerUtils;
-
 /**
  * @author <a href="joshua.phillips@semanticbits.com">Joshua Phillips</a>
  * 

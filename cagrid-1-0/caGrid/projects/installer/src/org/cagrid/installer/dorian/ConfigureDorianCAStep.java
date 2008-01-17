@@ -5,8 +5,6 @@ package org.cagrid.installer.dorian;
 
 import javax.swing.Icon;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.cagrid.installer.steps.ConfigureIdPServiceCAStep;
 import org.cagrid.installer.steps.Constants;
 import org.pietschy.wizard.InvalidStateException;
@@ -17,7 +15,6 @@ import org.pietschy.wizard.InvalidStateException;
  */
 public class ConfigureDorianCAStep extends ConfigureIdPServiceCAStep {
 	
-	private static final Log logger = LogFactory.getLog(ConfigureDorianCAStep.class);
 
 	/**
 	 * 

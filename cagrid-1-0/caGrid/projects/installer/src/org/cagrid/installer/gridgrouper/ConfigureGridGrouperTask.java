@@ -10,7 +10,6 @@ import org.cagrid.installer.model.CaGridInstallerModel;
 import org.cagrid.installer.steps.Constants;
 import org.cagrid.installer.tasks.AntTask;
 import org.cagrid.installer.tasks.CaGridInstallerAntTask;
-import org.cagrid.installer.util.InstallerUtils;
 
 /**
  * @author <a href="joshua.phillips@semanticbits.com">Joshua Phillips</a>

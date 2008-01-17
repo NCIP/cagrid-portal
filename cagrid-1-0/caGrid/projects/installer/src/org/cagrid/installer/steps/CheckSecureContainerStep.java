@@ -6,8 +6,6 @@ package org.cagrid.installer.steps;
 import javax.swing.Icon;
 import javax.swing.JCheckBox;
 
-import org.cagrid.installer.util.InstallerUtils;
-
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
  * 

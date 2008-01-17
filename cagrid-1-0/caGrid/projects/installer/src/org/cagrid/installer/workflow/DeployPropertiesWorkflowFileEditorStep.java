@@ -6,7 +6,6 @@ package org.cagrid.installer.workflow;
 import javax.swing.Icon;
 
 import org.cagrid.installer.steps.DeployPropertiesFileEditorStep;
-import org.cagrid.installer.util.InstallerUtils;
 
 
 /**

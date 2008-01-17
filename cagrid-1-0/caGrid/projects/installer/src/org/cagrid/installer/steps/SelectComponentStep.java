@@ -7,7 +7,6 @@ import javax.swing.Icon;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.cagrid.installer.util.InstallerUtils;
 import org.pietschy.wizard.InvalidStateException;
 
 /**
