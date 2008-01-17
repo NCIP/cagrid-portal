@@ -44,7 +44,7 @@ import org.jdom.Namespace;
 public class Introduce_1_0__1_2_Upgrader extends IntroduceUpgraderBase {
 
     public Introduce_1_0__1_2_Upgrader(IntroduceUpgradeStatus status, ServiceInformation serviceInformation,
-        String servicePath) {
+        String servicePath) throws Exception {
         super(status, serviceInformation, servicePath, "1.0", "1.2");
     }
 
@@ -282,10 +282,10 @@ public class Introduce_1_0__1_2_Upgrader extends IntroduceUpgraderBase {
 
         // need to add the service tasks .jar to the tools lib directory
         File serviceTasksJar = new File("." + File.separator + "skeleton" + File.separator + "tools" + File.separator
-            + "lib" + File.separator + "caGrid-1.1-Introduce-1.2-serviceTasks.jar");
+            + "lib" + File.separator + "caGrid-" + getCaGridVersion() +  "-Introduce-1.2-serviceTasks.jar");
         if (serviceTasksJar.exists() && serviceTasksJar.canRead()) {
             Utils.copyFile(serviceTasksJar, new File(getServicePath() + File.separator + "tools" + File.separator
-                + "lib" + File.separator + "caGrid-1.1-Introduce-1.2-serviceTasks.jar"));
+                + "lib" + File.separator + "caGrid-" + getCaGridVersion() + "-Introduce-1.2-serviceTasks.jar"));
             getStatus().addDescriptionLine(
                 "added service tasks jar to enable patching the soap bindings that get generated for custom beans");
         } else {

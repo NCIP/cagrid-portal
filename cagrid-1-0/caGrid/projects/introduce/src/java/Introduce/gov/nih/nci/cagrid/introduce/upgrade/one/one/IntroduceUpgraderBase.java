@@ -1,5 +1,11 @@
 package gov.nih.nci.cagrid.introduce.upgrade.one.one;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Properties;
+
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.upgrade.common.IntroduceUpgradeStatus;
 import gov.nih.nci.cagrid.introduce.upgrade.common.IntroduceUpgraderI;
@@ -12,10 +18,11 @@ public abstract class IntroduceUpgraderBase implements  IntroduceUpgraderI{
     String fromVersion;
     String toVersion;
     String servicePath;
+    String caGridVersion;
 
 
     public IntroduceUpgraderBase(IntroduceUpgradeStatus status, ServiceInformation serviceInformation, String servicePath, String fromVersion,
-        String toVersion) {
+        String toVersion)  throws Exception {
         this.status = status;
         this.serviceInformation = serviceInformation;
         this.fromVersion = fromVersion;
@@ -25,6 +32,10 @@ public abstract class IntroduceUpgraderBase implements  IntroduceUpgraderI{
         status.setToVersion(toVersion);
         status.setType(StatusBase.UPGRADE_TYPE_INTRODUCE);
         status.setName("IntroduceUpgrader " + fromVersion + " - " + toVersion);
+        Properties caGridProperties = new Properties();
+            caGridProperties.load(new FileInputStream(new File("ext" + File.separator + "resources" + File.separator + "cagrid.properties")));
+        this.caGridVersion = caGridProperties.getProperty("cagrid.master.project.version");
+        
     }
 
 
@@ -38,6 +49,10 @@ public abstract class IntroduceUpgraderBase implements  IntroduceUpgraderI{
 
     public String getFromVersion() {
         return fromVersion;
+    }
+    
+    public String getCaGridVersion() {
+        return caGridVersion;
     }
 
 

@@ -40,7 +40,7 @@ import org.jdom.Namespace;
 public class Introduce_1_1__1_2_Upgrader extends IntroduceUpgraderBase {
 
     public Introduce_1_1__1_2_Upgrader(IntroduceUpgradeStatus status, ServiceInformation serviceInformation,
-        String servicePath) {
+        String servicePath) throws Exception {
         super(status, serviceInformation, servicePath, "1.1", "1.2");
     }
 
@@ -251,7 +251,7 @@ public class Introduce_1_1__1_2_Upgrader extends IntroduceUpgraderBase {
         
         //replacing the soap fix jar with the new service tasks jar
         File oldSoapJar = new File(getServicePath() + File.separator + "tools" + File.separator
-            + "lib" + File.separator + "caGrid-1.1-Introduce-1.1-soapBindingFix.jar");
+            + "lib" + File.separator + "caGrid-" + getCaGridVersion() + "-Introduce-1.1-soapBindingFix.jar");
         if(oldSoapJar.exists() && oldSoapJar.canRead()){
             oldSoapJar.delete();
         } else{
@@ -259,10 +259,10 @@ public class Introduce_1_1__1_2_Upgrader extends IntroduceUpgraderBase {
         }
         // need to add the service tasks .jar to the tools lib directory
         File serviceTasksJar = new File("." + File.separator + "skeleton" + File.separator + "tools" + File.separator
-            + "lib" + File.separator + "caGrid-1.1-Introduce-1.2-serviceTasks.jar");
+            + "lib" + File.separator + "caGrid-" + getCaGridVersion() + "-Introduce-1.2-serviceTasks.jar");
         if (serviceTasksJar.exists() && serviceTasksJar.canRead()) {
             Utils.copyFile(serviceTasksJar, new File(getServicePath() + File.separator + "tools" + File.separator
-                + "lib" + File.separator + "caGrid-1.1-Introduce-1.2-serviceTasks.jar"));
+                + "lib" + File.separator + "caGrid-" + getCaGridVersion() + "-Introduce-1.2-serviceTasks.jar"));
             getStatus().addDescriptionLine(
                 "added service tasks jar to enable patching the soap bindings that get generated for custom beans");
         } else {
@@ -282,20 +282,20 @@ public class Introduce_1_1__1_2_Upgrader extends IntroduceUpgraderBase {
 
         public boolean accept(File name) {
             String filename = name.getName();
-            boolean core = filename.startsWith("caGrid-1.0-core") && filename.endsWith(".jar");
-            boolean security = (filename.startsWith("caGrid-1.0-ServiceSecurityProvider") || filename
-                .startsWith("caGrid-1.0-metadata-security"))
+            boolean core = filename.startsWith("caGrid-1.1-core") && filename.endsWith(".jar");
+            boolean security = (filename.startsWith("caGrid-1.1-ServiceSecurityProvider") || filename
+                .startsWith("caGrid-1.1-metadata-security"))
                 && filename.endsWith(".jar");
-            boolean gridGrouper = (filename.startsWith("caGrid-1.0-gridgrouper")) && filename.endsWith(".jar");
+            boolean gridGrouper = (filename.startsWith("caGrid-1.1-gridgrouper")) && filename.endsWith(".jar");
             if (gridGrouper) {
                 hadGridGrouperJars = true;
             }
-            boolean csm = (filename.startsWith("caGrid-1.0-authz-common")) && filename.endsWith(".jar");
+            boolean csm = (filename.startsWith("caGrid-1.1-authz-common")) && filename.endsWith(".jar");
             if (csm) {
                 hadCSMJars = true;
             }
 
-            boolean otherSecurityJarsNotNeeded = (filename.startsWith("caGrid-1.0-gridca"))
+            boolean otherSecurityJarsNotNeeded = (filename.startsWith("caGrid-1.1-gridca"))
                 && filename.endsWith(".jar");
 
             boolean wsrf = (filename.startsWith("globus_wsrf_mds") || filename.startsWith("globus_wsrf_servicegroup"))

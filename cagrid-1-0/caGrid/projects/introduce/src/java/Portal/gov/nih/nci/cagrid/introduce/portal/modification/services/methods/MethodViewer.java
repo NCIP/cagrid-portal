@@ -402,7 +402,6 @@ public class MethodViewer extends javax.swing.JDialog {
 
         this.setContentPane(getMainPanel());
         this.setTitle("Build/Modify Operation");
-        this.setSize(new Dimension(683, 539));
         this.setContentPane(getMainPanel());
         // this.setFrameIcon(IntroduceLookAndFeel.getModifyIcon());
 
@@ -411,6 +410,8 @@ public class MethodViewer extends javax.swing.JDialog {
         initNewFaultValidation();
         initProviderValidation();
         initImportValidation();
+        
+        this.setSize(new Dimension(900,700));
         GridApplication.getContext().centerDialog(this);
 
     }
