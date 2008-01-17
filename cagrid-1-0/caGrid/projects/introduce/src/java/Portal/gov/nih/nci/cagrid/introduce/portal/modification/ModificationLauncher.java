@@ -25,9 +25,7 @@ public class ModificationLauncher {
             try {
                 ModificationViewer viewer = new ModificationViewer(this.methodsDirectory);
                 RenderOptions ro = new RenderOptions();
-                Dimensions dim = new Dimensions(700,900);
-                ro.setMaximized(true);
-                GridApplication.getContext().addApplicationComponent(viewer, dim, ro);
+                GridApplication.getContext().addApplicationComponent(viewer, null, ro);
             } catch (Exception e) {
                 e.printStackTrace();
             }

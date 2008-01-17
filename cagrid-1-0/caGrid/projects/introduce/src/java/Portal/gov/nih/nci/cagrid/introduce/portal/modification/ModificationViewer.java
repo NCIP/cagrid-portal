@@ -620,11 +620,10 @@ public class ModificationViewer extends ApplicationComponent {
                                 setProgressText("Reloading service");
                                 dispose();
                                 RenderOptions ro = new RenderOptions();
-                                Dimensions dim = new Dimensions(700,900);
                                 ro.setMaximized(true);
                                 try {
                                     GridApplication.getContext().getApplication().addApplicationComponent(
-                                        new ModificationViewer(ModificationViewer.this.methodsDirectory),dim,ro);
+                                        new ModificationViewer(ModificationViewer.this.methodsDirectory),null,ro);
                                 } catch (Exception e) {
                                     // TODO Auto-generated catch block
                                     beenDisposed = true;
