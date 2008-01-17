@@ -154,12 +154,12 @@ public class SchemaElementTypeConfigurePanel extends JPanel {
 							+ " must not be blank.", Severity.ERROR,
 							DESERIALIZER));
 				}
-				if (!CommonTools.isValidPackageAndClassName(this
+				if (!CommonTools.isValidClassName(this
 						.getClassNameText().getText())) {
 					result
 							.add(new SimpleValidationMessage(
 									CLASSNAME
-											+ " might not be a valid fully qualified class name.",
+											+ " might not be a valid class name.",
 									Severity.WARNING, CLASSNAME));
 				}
 			}
