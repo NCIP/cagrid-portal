@@ -1,6 +1,6 @@
 <ns1:ServiceMetadata xmlns:ns1="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata">
  <ns1:serviceDescription>
-  <ns2:Service description="The Grid Trust Service (GTS) is a grid-wide mechanism for maintaining and provisioning a federated trust fabric consisting of trusted certificate authorities, such that grid services may make authentication decisions against the most up to date information." name="GTS" version="1.0" xmlns:ns2="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.service">
+  <ns2:Service description="The Grid Trust Service (GTS) is a grid-wide mechanism for maintaining and provisioning a federated trust fabric consisting of trusted certificate authorities, such that grid services may make authentication decisions against the most up to date information." name="GTS" version="1.2" xmlns:ns2="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.service">
    <ns2:pointOfContactCollection>
     <ns3:PointOfContact affiliation="Ohio State University" email="langella@bmi.osu.edu" firstName="Stephen" lastName="Langella" role="Architect" xmlns:ns3="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
    </ns2:pointOfContactCollection>
@@ -202,11 +202,11 @@
   </ns2:Service>
  </ns1:serviceDescription>
  <ns1:hostingResearchCenter>
-  <ns26:ResearchCenter displayName="Ohio State University" shortName="OSU" xmlns:ns26="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
-   <ns26:Address country="US" postalCode="43210" stateProvince="OH" street1="333 W. 10th Ave"/>
-   <ns26:pointOfContactCollection>
-    <ns26:PointOfContact affiliation="Ohio State University" email="langella@bmi.osu.edu" firstName="Stephen" lastName="Langella" role="Administrator"/>
-   </ns26:pointOfContactCollection>
-  </ns26:ResearchCenter>
+  <ns23:ResearchCenter displayName="" shortName="" xmlns:ns23="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+   <ns23:Address country="" locality="" postalCode="" stateProvince="" street1="" street2=""/>
+   <ns23:pointOfContactCollection>
+    <ns23:PointOfContact affiliation="" email="" firstName="" lastName="" phoneNumber="" role=""/>
+   </ns23:pointOfContactCollection>
+  </ns23:ResearchCenter>
  </ns1:hostingResearchCenter>
 </ns1:ServiceMetadata>
