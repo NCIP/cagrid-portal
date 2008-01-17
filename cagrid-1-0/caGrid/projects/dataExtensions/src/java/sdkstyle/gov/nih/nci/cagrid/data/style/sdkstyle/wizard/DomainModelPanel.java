@@ -71,7 +71,7 @@ import org.cagrid.grape.utils.CompositeErrorDialog;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created Sep 25, 2006 
- * @version $Id: DomainModelPanel.java,v 1.5 2007-12-18 21:57:31 dervin Exp $ 
+ * @version $Id: DomainModelPanel.java,v 1.6 2008-01-17 21:29:31 dervin Exp $ 
  */
 public class DomainModelPanel extends AbstractWizardPanel {
 	
@@ -143,6 +143,7 @@ public class DomainModelPanel extends AbstractWizardPanel {
 	public String getPanelTitle() {
 		return "Domain Model Selection";
 	}
+    
 
 	public String getPanelShortName() {
 		return "Model";
@@ -832,6 +833,7 @@ public class DomainModelPanel extends AbstractWizardPanel {
 				}
 				// create cadsr packages
 				CadsrPackage[] packages = new CadsrPackage[packageClasses.keySet().size()];
+                String[] packageNames = new String[packages.length];
 				int packIndex = 0;
 				Iterator packageNameIter = packageClasses.keySet().iterator();
 				while (packageNameIter.hasNext()) {
@@ -855,9 +857,11 @@ public class DomainModelPanel extends AbstractWizardPanel {
 					}
 					pack.setCadsrClass(mappings);
 					packages[packIndex] = pack;
+                    packageNames[packIndex] = pack.getName();
 					packIndex++;
 				}
 				info.setPackages(packages);
+                getSelectedPackagesList().setListData(packageNames);
 				storeCadsrInformation(info);
 			} catch (Exception ex) {
 				ex.printStackTrace();
