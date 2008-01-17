@@ -38,6 +38,9 @@ public class CopySelectedServicesToTempDirTask extends CaGridInstallerAntTask {
 		if(model.isTrue(Constants.INSTALL_GTS)){
 			selectedServices.add("gts");
 		}
+		if(model.isTrue(Constants.INSTALL_CDS)){
+			selectedServices.add("cds");
+		}
 		if(model.isTrue(Constants.INSTALL_AUTHN_SVC)){
 			selectedServices.add("authentication-service");
 		}

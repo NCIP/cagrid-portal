@@ -272,6 +272,7 @@ CaGridInstallerModel {
 	public boolean isSecureContainerRequired() {
 		return isTrue(Constants.INSTALL_DORIAN)
 				|| isTrue(Constants.INSTALL_GTS)
+				|| isTrue(Constants.INSTALL_CDS)
 				|| isTrue(Constants.INSTALL_AUTHN_SVC)
 				|| isTrue(Constants.INSTALL_GRID_GROUPER)
 				|| isTrue(Constants.INSTALL_BROWSER);

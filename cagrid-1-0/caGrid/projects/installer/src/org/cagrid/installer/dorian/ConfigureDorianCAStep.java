@@ -3,10 +3,7 @@
  */
 package org.cagrid.installer.dorian;
 
-import java.io.File;
-
 import javax.swing.Icon;
-import javax.swing.JTextField;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

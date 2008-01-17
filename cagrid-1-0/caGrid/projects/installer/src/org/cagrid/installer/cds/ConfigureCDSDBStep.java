@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.cagrid.installer.gts;
+package org.cagrid.installer.cds;
 
 import javax.swing.Icon;
 
@@ -11,14 +11,14 @@ import org.pietschy.wizard.InvalidStateException;
 
 /**
  * @author <a href="joshua.phillips@semanticbits.com">Joshua Phillips</a>
- * 
+ *
  */
-public class ConfigureGTSDBStep extends PropertyConfigurationStep {
+public class ConfigureCDSDBStep extends PropertyConfigurationStep {
 
 	/**
 	 * 
 	 */
-	public ConfigureGTSDBStep() {
+	public ConfigureCDSDBStep() {
 
 	}
 
@@ -26,7 +26,7 @@ public class ConfigureGTSDBStep extends PropertyConfigurationStep {
 	 * @param name
 	 * @param description
 	 */
-	public ConfigureGTSDBStep(String name, String description) {
+	public ConfigureCDSDBStep(String name, String description) {
 		super(name, description);
 
 	}
@@ -36,19 +36,18 @@ public class ConfigureGTSDBStep extends PropertyConfigurationStep {
 	 * @param description
 	 * @param icon
 	 */
-	public ConfigureGTSDBStep(String name, String description, Icon icon) {
+	public ConfigureCDSDBStep(String name, String description, Icon icon) {
 		super(name, description, icon);
 
 	}
-
+	
 	public void applyState() throws InvalidStateException {
 		super.applyState();
-
-		if (this.model.isTrue(Constants.INSTALL_CDS)) {
-			this.model.setProperty(Constants.USE_SECURE_CONTAINER,
-					Constants.TRUE);
+		
+		if(this.model.isTrue(Constants.INSTALL_CDS)){
+			this.model.setProperty(Constants.USE_SECURE_CONTAINER, Constants.TRUE);
 		}
-
+		
 	}
 
 }

@@ -25,6 +25,7 @@ import org.apache.commons.logging.LogFactory;
 import org.cagrid.installer.authnsvc.AuthenticationServiceComponentInstaller;
 import org.cagrid.installer.browser.BrowserComponentInstaller;
 import org.cagrid.installer.cadsr.CaDSRComponentInstaller;
+import org.cagrid.installer.cds.CDSComponentInstaller;
 import org.cagrid.installer.dorian.DorianComponentInstaller;
 import org.cagrid.installer.evs.EVSComponentInstaller;
 import org.cagrid.installer.fqp.FQPComponentInstaller;
@@ -99,6 +100,7 @@ public class Installer {
 		componentInstallers.add(new MyServiceComponentInstaller());
 		componentInstallers.add(new SyncGTSComponentInstaller());
 		componentInstallers.add(new DorianComponentInstaller());
+		componentInstallers.add(new CDSComponentInstaller());
 		componentInstallers.add(new GMEComponentInstaller());
 		componentInstallers.add(new EVSComponentInstaller());
 		componentInstallers.add(new CaDSRComponentInstaller());
@@ -419,6 +421,9 @@ public class Installer {
 		selectServicesStep.getOptions().add(
 				new BooleanPropertyConfigurationOption(
 						Constants.INSTALL_DORIAN, "Dorian", false, true));
+		selectServicesStep.getOptions().add(
+				new BooleanPropertyConfigurationOption(
+						Constants.INSTALL_CDS, "Credential Delegation Service (CDS)", false, true));
 		selectServicesStep.getOptions().add(
 				new BooleanPropertyConfigurationOption(Constants.INSTALL_GTS,
 						"GTS", false, true));
@@ -870,6 +875,7 @@ public class Installer {
 		this.model.unsetProperty(Constants.INSTALL_BROWSER);
 		this.model.unsetProperty(Constants.INSTALL_CADSR);
 		this.model.unsetProperty(Constants.INSTALL_DORIAN);
+		this.model.unsetProperty(Constants.INSTALL_CDS);
 		this.model.unsetProperty(Constants.INSTALL_EVS);
 		this.model.unsetProperty(Constants.INSTALL_FQP);
 		this.model.unsetProperty(Constants.INSTALL_GME);

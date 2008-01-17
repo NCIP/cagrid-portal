@@ -116,6 +116,8 @@ public abstract class Constants {
 	public static final String USE_SECURE_CONTAINER = "use.secure.container";
 
 	public static final String INSTALL_DORIAN = "install.dorian";
+	
+	public static final String INSTALL_CDS = "install.cds";
 
 	public static final String INSTALL_GTS = "install.gts";
 
@@ -252,6 +254,12 @@ public abstract class Constants {
 	public static final String SERVICE_DEST_DIR = "service.dest.dir";
 
 	public static final String GTS_ADMIN_IDENT = "gts.admin.ident";
+	
+	public static final String CDS_ADMIN_IDENT = "cds.admin.ident";
+	
+	public static final String CDS_MAX_DELEGATION_PATH_LENGTH = "gaards.cds.max.delegation.path.length";
+	
+	public static final String CDS_DB_KEY_MANAGER_PASSWORD = "gaards.cds.dbkeymanager.key.encyption.password";
 
 	public static final String TOMCAT_SHUTDOWN_PORT = "tomcat.shutdown.port";
 
