@@ -174,7 +174,7 @@
 	</target>
 
 	<!-- make deployment configured gar -->
-	<target name="createDeploymentGar" depends="all,setDeploymentProperties">
+	<target name="createDeploymentGar" depends="all,setDeploymentProperties" description="creates a gar file that can be deployed or moved around">
 
 		<!-- prepare the server-config file -->
 		<mkdir dir="tmp" />
