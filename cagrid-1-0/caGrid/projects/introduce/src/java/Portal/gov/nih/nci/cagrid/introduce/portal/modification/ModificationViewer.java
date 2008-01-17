@@ -66,6 +66,9 @@ import java.awt.event.FocusEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -73,7 +76,9 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Properties;
 import java.util.Set;
+import java.util.StringTokenizer;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -101,6 +106,8 @@ import javax.xml.namespace.QName;
 import org.apache.log4j.Logger;
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
+import org.cagrid.grape.model.Dimensions;
+import org.cagrid.grape.model.RenderOptions;
 import org.cagrid.grape.utils.BusyDialog;
 import org.cagrid.grape.utils.BusyDialogRunnable;
 import org.cagrid.grape.utils.CompositeErrorDialog;
@@ -265,21 +272,18 @@ public class ModificationViewer extends ApplicationComponent {
     private JLabel descriptionInfoLabel = null;
 
 
-    public ModificationViewer(File methodsDirectory, BusyDialogRunnable br) {
+    public ModificationViewer(File methodsDirectory, BusyDialogRunnable br) throws Exception {
         super();
         this.extensionPanels = new ArrayList();
         this.methodsDirectory = methodsDirectory;
-        try {
-            initialize(br);
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+        initialize(br);
+        if (beenDisposed) {
+            throw new Exception("Unable to modify service at " + this.methodsDirectory.getAbsolutePath());
         }
-
     }
 
 
-    public ModificationViewer(File methodsDirectory) {
+    public ModificationViewer(File methodsDirectory) throws Exception {
         super();
         this.extensionPanels = new ArrayList();
         this.methodsDirectory = methodsDirectory;
@@ -306,6 +310,9 @@ public class ModificationViewer extends ApplicationComponent {
         } catch (Exception e) {
             // should never get here but in case.....
             e.printStackTrace();
+        }
+        if (beenDisposed) {
+            throw new Exception("Unable to modify service at " + this.methodsDirectory.getAbsolutePath());
         }
     }
 
@@ -341,96 +348,131 @@ public class ModificationViewer extends ApplicationComponent {
      */
     private void initialize(BusyDialogRunnable dialog) throws Exception {
         if (this.methodsDirectory != null) {
+            try {
+                // validate the extensions exist
+                File servicePropertiesFile = new File(this.methodsDirectory.getAbsolutePath() + File.separator
+                    + IntroduceConstants.INTRODUCE_PROPERTIES_FILE);
+                Properties introduceServiceProperties = new Properties();
 
-            if (dialog != null) {
-                dialog.setProgressText("Checking introduce version of service");
-            }
+                introduceServiceProperties.load(new FileInputStream(servicePropertiesFile));
 
-            UpgradeManager upgrader = new UpgradeManager(this.methodsDirectory.getAbsolutePath());
+                String extensionsProp = introduceServiceProperties
+                    .getProperty(IntroduceConstants.INTRODUCE_SKELETON_EXTENSIONS);
+                StringTokenizer strtok = new StringTokenizer(extensionsProp, ",", false);
 
-            if (upgrader.canIntroduceBeUpgraded() || upgrader.extensionsNeedUpgraded()) {
-                String result = PromptButtonDialog
-                    .prompt(
-                        GridApplication.getContext().getApplication(),
-                        "Upgrade?",
-                        new String[]{
-                                "",
-                                "This service is from an older of version of Introduce or uses an older version of an extension.",
-                                "Would you like to try to upgrade this service to work with the current version of Introduce and installed extensions?\n",
-                                "",
-                                "Upgrade: Yes I would like to upgrade my service to be able to work with the currently installed tools.",
-                                "Open: Introduce will attempt to open and work with this service.  This is very dangerous.",
-                                "Close: Do nothing and close the modification viewer.", ""}, new String[]{"Upgrade",
-                                "Open", "Close"}, "Close");
-                System.out.println(result);
-                if (result != null && result.equals("Upgrade")) {
-                    try {
-                        if (dialog != null) {
-                            dialog.setProgressText("Upgrading service");
-                        }
-                        UpgradeStatus status = upgrader.upgrade();
-                        logger.info("SERVICE UPGRADE STATUS:\n" + status);
-                        int answer = UpgradeStatusView.showUpgradeStatusView(status);
-                        if (answer == UpgradeStatusView.PROCEED) {
-
-                        } else if (answer == UpgradeStatusView.ROLL_BACK) {
-                            upgrader.recover();
-                            ModificationViewer.this.dispose();
-
-                            this.beenDisposed = true;
-                        } else if (answer == UpgradeStatusView.CANCEL) {
-                            ModificationViewer.this.dispose();
-                            this.beenDisposed = true;
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        int answer = JOptionPane.showConfirmDialog(GridApplication.getContext().getApplication(),
-                            "The service had the following fatal error during the upgrade process:\n" + e.getMessage()
-                                + "If you select OK, Introduce will roll your service back to its previous\n"
-                                + "state before the upgrade attempt", "Error upgrading service",
-                            JOptionPane.OK_CANCEL_OPTION);
-                        if (answer == JOptionPane.OK_OPTION) {
-                            try {
-                                if (dialog != null) {
-                                    dialog.setProgressText("Rolling back upgrade changes");
-                                }
-                                upgrader.recover();
-                            } catch (Exception ex) {
-                                ErrorDialog.showError(e);
-                            }
-                            ModificationViewer.this.dispose();
-                            this.beenDisposed = true;
-                        } else {
-                            ModificationViewer.this.dispose();
-                            this.beenDisposed = true;
-                        }
+                while (strtok.hasMoreElements()) {
+                    String extensionName = strtok.nextToken();
+                    ServiceExtensionDescriptionType extDtype = ExtensionsLoader.getInstance().getServiceExtension(
+                        extensionName);
+                    if (extDtype == null) {
+                        JOptionPane.showMessageDialog(GridApplication.getContext().getApplication(),
+                            "ERROR: This service requires the " + extensionName + " extension to be installed.");
+                        ModificationViewer.this.dispose();
+                        this.beenDisposed = true;
                     }
-                } else if (result == null || result.equals("Close")) {
-                    ModificationViewer.this.dispose();
-                    this.beenDisposed = true;
+
                 }
+
+            } catch (Exception e1) {
+                e1.printStackTrace();
+                ModificationViewer.this.dispose();
+                this.beenDisposed = true;
             }
 
             if (!beenDisposed) {
-                // reload the info incase it has changed during
-                // upgrading.....
-                try {
-                    if (dialog != null) {
-                        dialog.setProgressText("loading service description");
-                    }
-                    this.info = new ServiceInformation(this.methodsDirectory);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    CompositeErrorDialog.showErrorDialog(e);
-                    ModificationViewer.this.dispose();
-                    this.beenDisposed = true;
+
+                // check the service for upgrades
+                if (dialog != null) {
+                    dialog.setProgressText("Checking introduce version of service");
                 }
 
-                setContentPane(getMainPanel());
-                setTitle("Modify Service Interface");
-                setFrameIcon(IntroduceLookAndFeel.getModifyIcon());
+                UpgradeManager upgrader = new UpgradeManager(this.methodsDirectory.getAbsolutePath());
 
-                initServicePropertyValidation();
+                if (upgrader.canIntroduceBeUpgraded() || upgrader.extensionsNeedUpgraded()) {
+                    String result = PromptButtonDialog
+                        .prompt(
+                            GridApplication.getContext().getApplication(),
+                            "Upgrade?",
+                            new String[]{
+                                    "",
+                                    "This service is from an older of version of Introduce or uses an older version of an extension.",
+                                    "Would you like to try to upgrade this service to work with the current version of Introduce and installed extensions?\n",
+                                    "",
+                                    "Upgrade: Yes I would like to upgrade my service to be able to work with the currently installed tools.",
+                                    "Open: Introduce will attempt to open and work with this service.  This is very dangerous.",
+                                    "Close: Do nothing and close the modification viewer.", ""}, new String[]{
+                                    "Upgrade", "Open", "Close"}, "Close");
+                    System.out.println(result);
+                    if (result != null && result.equals("Upgrade")) {
+                        try {
+                            if (dialog != null) {
+                                dialog.setProgressText("Upgrading service");
+                            }
+                            UpgradeStatus status = upgrader.upgrade();
+                            logger.info("SERVICE UPGRADE STATUS:\n" + status);
+                            int answer = UpgradeStatusView.showUpgradeStatusView(status);
+                            if (answer == UpgradeStatusView.PROCEED) {
+
+                            } else if (answer == UpgradeStatusView.ROLL_BACK) {
+                                upgrader.recover();
+                                ModificationViewer.this.dispose();
+                                this.beenDisposed = true;
+                            } else if (answer == UpgradeStatusView.CANCEL) {
+                                ModificationViewer.this.dispose();
+                                this.beenDisposed = true;
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            int answer = JOptionPane.showConfirmDialog(GridApplication.getContext().getApplication(),
+                                "The service had the following fatal error during the upgrade process:\n"
+                                    + e.getMessage()
+                                    + "If you select OK, Introduce will roll your service back to its previous\n"
+                                    + "state before the upgrade attempt", "Error upgrading service",
+                                JOptionPane.OK_CANCEL_OPTION);
+                            if (answer == JOptionPane.OK_OPTION) {
+                                try {
+                                    if (dialog != null) {
+                                        dialog.setProgressText("Rolling back upgrade changes");
+                                    }
+                                    upgrader.recover();
+                                } catch (Exception ex) {
+                                    ErrorDialog.showError(e);
+                                }
+                                ModificationViewer.this.dispose();
+                                this.beenDisposed = true;
+                            } else {
+                                ModificationViewer.this.dispose();
+                                this.beenDisposed = true;
+                            }
+                        }
+                    } else if (result == null || result.equals("Close")) {
+                        ModificationViewer.this.dispose();
+                        this.beenDisposed = true;
+                    }
+                }
+
+                if (!beenDisposed) {
+                    // reload the info incase it has changed during
+                    // upgrading.....
+                    try {
+                        if (dialog != null) {
+                            dialog.setProgressText("loading service description");
+                        }
+                        this.info = new ServiceInformation(this.methodsDirectory);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        CompositeErrorDialog.showErrorDialog(e);
+                        ModificationViewer.this.dispose();
+                        this.beenDisposed = true;
+                    }
+
+                    setContentPane(getMainPanel());
+                    setTitle("Modify Service Interface");
+                    setFrameIcon(IntroduceLookAndFeel.getModifyIcon());
+
+                    initServicePropertyValidation();
+
+                }
 
             }
 
@@ -577,8 +619,17 @@ public class ModificationViewer extends ApplicationComponent {
                                 logger.info("Reloading service");
                                 setProgressText("Reloading service");
                                 dispose();
-                                GridApplication.getContext().getApplication().addApplicationComponent(
-                                    new ModificationViewer(ModificationViewer.this.methodsDirectory));
+                                RenderOptions ro = new RenderOptions();
+                                Dimensions dim = new Dimensions(700,900);
+                                ro.setMaximized(true);
+                                try {
+                                    GridApplication.getContext().getApplication().addApplicationComponent(
+                                        new ModificationViewer(ModificationViewer.this.methodsDirectory),dim,ro);
+                                } catch (Exception e) {
+                                    // TODO Auto-generated catch block
+                                    beenDisposed = true;
+                                    e.printStackTrace();
+                                }
                             }
                         };
                         Thread th = new Thread(r);

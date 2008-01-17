@@ -6,6 +6,7 @@ import java.io.File;
 
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
+import org.cagrid.grape.model.Dimensions;
 import org.cagrid.grape.model.RenderOptions;
 
 
@@ -21,10 +22,15 @@ public class ModificationLauncher {
             e.printStackTrace();
         }
         if (this.methodsDirectory != null) {
-            ModificationViewer viewer = new ModificationViewer(this.methodsDirectory);
-            RenderOptions ro = new RenderOptions();
-            ro.setMaximized(true);
-            GridApplication.getContext().addApplicationComponent(viewer, null, ro);
+            try {
+                ModificationViewer viewer = new ModificationViewer(this.methodsDirectory);
+                RenderOptions ro = new RenderOptions();
+                Dimensions dim = new Dimensions(700,900);
+                ro.setMaximized(true);
+                GridApplication.getContext().addApplicationComponent(viewer, dim, ro);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
