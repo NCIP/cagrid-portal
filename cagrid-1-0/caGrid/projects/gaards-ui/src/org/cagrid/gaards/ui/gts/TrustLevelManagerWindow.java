@@ -558,9 +558,10 @@ public class TrustLevelManagerWindow extends ApplicationComponent implements Tru
 					try {
 						disableAllActions();
 						getTrustLevelTable().doubleClick();
-						enableAllActions();
 					} catch (Exception ex) {
 						ErrorDialog.showError(ex);
+					}finally{
+						enableAllActions();
 					}
 				}
 			});

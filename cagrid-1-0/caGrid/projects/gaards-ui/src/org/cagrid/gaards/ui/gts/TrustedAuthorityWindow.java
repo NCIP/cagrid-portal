@@ -43,7 +43,6 @@ import org.cagrid.grape.LookAndFeel;
 import org.cagrid.grape.utils.ErrorDialog;
 import org.globus.gsi.GlobusCredential;
 
-
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
@@ -131,7 +130,6 @@ public class TrustedAuthorityWindow extends ApplicationComponent {
 
 	private Map levelsMap = new HashMap(); // @jve:decl-index=0:
 
-
 	/**
 	 * This is the default constructor
 	 */
@@ -143,9 +141,9 @@ public class TrustedAuthorityWindow extends ApplicationComponent {
 		this.updateTrustLevels();
 	}
 
-
-	public TrustedAuthorityWindow(String service, GlobusCredential cred, TrustedAuthority ta,
-		TrustedAuthorityRefresher refresher) throws Exception {
+	public TrustedAuthorityWindow(String service, GlobusCredential cred,
+			TrustedAuthority ta, TrustedAuthorityRefresher refresher)
+			throws Exception {
 		super();
 		this.refresher = refresher;
 		if (ta.getIsAuthority().equals(Boolean.FALSE)) {
@@ -188,15 +186,16 @@ public class TrustedAuthorityWindow extends ApplicationComponent {
 			getLastUpdated().setText(c.getTime().toString());
 		}
 		this.getCertificatePanel().setCertificate(
-			CertUtil.loadCertificate(ta.getCertificate().getCertificateEncodedString()));
+				CertUtil.loadCertificate(ta.getCertificate()
+						.getCertificateEncodedString()));
 		if (ta.getCRL() != null) {
 			if (ta.getCRL().getCrlEncodedString() != null) {
-				crlPanel.setCRL(CertUtil.loadCRL(ta.getCRL().getCrlEncodedString()));
+				crlPanel.setCRL(CertUtil.loadCRL(ta.getCRL()
+						.getCrlEncodedString()));
 			}
 		}
 
 	}
-
 
 	/**
 	 * This method initializes this
@@ -217,7 +216,6 @@ public class TrustedAuthorityWindow extends ApplicationComponent {
 		}
 	}
 
-
 	private void updateTrustLevels() {
 		levelsMap.clear();
 		getLevels().removeAll();
@@ -235,13 +233,14 @@ public class TrustedAuthorityWindow extends ApplicationComponent {
 				}
 
 			} catch (Exception e) {
-				ErrorDialog.showError("Error obtaining the levels of assurance from " + service + ":\n" + e.getMessage());
+				ErrorDialog
+						.showError("Error obtaining the levels of assurance from "
+								+ service + ":\n" + e.getMessage());
 			}
 		}
 		invalidate();
 		repaint();
 	}
-
 
 	/**
 	 * This method initializes jContentPane
@@ -277,7 +276,6 @@ public class TrustedAuthorityWindow extends ApplicationComponent {
 		}
 		return jContentPane;
 	}
-
 
 	/**
 	 * This method initializes topPanel
@@ -315,9 +313,11 @@ public class TrustedAuthorityWindow extends ApplicationComponent {
 			jLabel = new JLabel();
 			jLabel.setText("Grid Trust Service (GTS)");
 			topPanel = new JPanel();
-			topPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Service/Login Information",
-				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, LookAndFeel.getPanelLabelColor()));
+			topPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(
+					null, "Service/Login Information",
+					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+					javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
+					LookAndFeel.getPanelLabelColor()));
 			topPanel.setLayout(new GridBagLayout());
 			topPanel.add(jLabel, gridBagConstraints2);
 			topPanel.add(getGts(), gridBagConstraints3);
@@ -327,7 +327,6 @@ public class TrustedAuthorityWindow extends ApplicationComponent {
 		return topPanel;
 	}
 
-
 	/**
 	 * This method initializes taPanel
 	 * 
@@ -336,17 +335,24 @@ public class TrustedAuthorityWindow extends ApplicationComponent {
 	private JTabbedPane getTaPanel() {
 		if (taPanel == null) {
 			taPanel = new JTabbedPane();
-			taPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Trusted Authority",
-				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, LookAndFeel.getPanelLabelColor()));
-			taPanel.addTab("Properties", GTSLookAndFeel.getTrustedAuthorityIcon(), getPropertiesNorthPanel(), null);
-			taPanel.addTab("Level of Assurance", GTSLookAndFeel.getTrustLevelIcon(), getTrustLevels(), null);
-			taPanel.addTab("Certificate", GTSLookAndFeel.getCertificateIcon(), getCertificatePanel(), null);
-			taPanel.addTab("Certificate Revocation List", GTSLookAndFeel.getCRLIcon(), getCrlPanel(), null);
+			taPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(
+					null, "Trusted Authority",
+					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+					javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
+					LookAndFeel.getPanelLabelColor()));
+			taPanel
+					.addTab("Properties", GTSLookAndFeel
+							.getTrustedAuthorityIcon(),
+							getPropertiesNorthPanel(), null);
+			taPanel.addTab("Level of Assurance", GTSLookAndFeel
+					.getTrustLevelIcon(), getTrustLevels(), null);
+			taPanel.addTab("Certificate", GTSLookAndFeel.getCertificateIcon(),
+					getCertificatePanel(), null);
+			taPanel.addTab("Certificate Revocation List", GTSLookAndFeel
+					.getCRLIcon(), getCrlPanel(), null);
 		}
 		return taPanel;
 	}
-
 
 	/**
 	 * This method initializes gts
@@ -368,7 +374,6 @@ public class TrustedAuthorityWindow extends ApplicationComponent {
 		return gts;
 	}
 
-
 	/**
 	 * This method initializes proxy
 	 * 
@@ -383,7 +388,6 @@ public class TrustedAuthorityWindow extends ApplicationComponent {
 		}
 		return proxy;
 	}
-
 
 	/**
 	 * This method initializes propertiesPanel
@@ -515,7 +519,6 @@ public class TrustedAuthorityWindow extends ApplicationComponent {
 		return propertiesPanel;
 	}
 
-
 	/**
 	 * This method initializes trustedAuthorityName
 	 * 
@@ -528,7 +531,6 @@ public class TrustedAuthorityWindow extends ApplicationComponent {
 		}
 		return trustedAuthorityName;
 	}
-
 
 	/**
 	 * This method initializes status
@@ -545,7 +547,6 @@ public class TrustedAuthorityWindow extends ApplicationComponent {
 		return status;
 	}
 
-
 	/**
 	 * This method initializes propertiesNorthPanel
 	 * 
@@ -555,11 +556,11 @@ public class TrustedAuthorityWindow extends ApplicationComponent {
 		if (propertiesNorthPanel == null) {
 			propertiesNorthPanel = new JPanel();
 			propertiesNorthPanel.setLayout(new BorderLayout());
-			propertiesNorthPanel.add(getPropertiesPanel(), java.awt.BorderLayout.NORTH);
+			propertiesNorthPanel.add(getPropertiesPanel(),
+					java.awt.BorderLayout.NORTH);
 		}
 		return propertiesNorthPanel;
 	}
-
 
 	/**
 	 * This method initializes buttonPanel
@@ -570,17 +571,21 @@ public class TrustedAuthorityWindow extends ApplicationComponent {
 		if (buttonPanel == null) {
 			buttonPanel = new JPanel();
 			if (state == ADD) {
+				buttonPanel.add(getAddButton(), null);
 				buttonPanel.add(getImportCertificate(), null);
 			}
+
+			if (state == UPDATE) {
+				buttonPanel.add(getAddButton(), null);
+			}
+
 			if (state != VIEW) {
 				buttonPanel.add(getImportCRL(), null);
-				buttonPanel.add(getAddButton(), null);
 			}
 			buttonPanel.add(getCancelButton(), null);
 		}
 		return buttonPanel;
 	}
-
 
 	/**
 	 * This method initializes addButton
@@ -593,25 +598,28 @@ public class TrustedAuthorityWindow extends ApplicationComponent {
 			if (state == ADD) {
 				addButton.setText("Add Trusted Authority");
 				addButton.setIcon(GTSLookAndFeel.getAddIcon());
-				addButton.addActionListener(new java.awt.event.ActionListener() {
-					public void actionPerformed(java.awt.event.ActionEvent e) {
-						addTrustedAuthority();
-					}
-				});
+				addButton
+						.addActionListener(new java.awt.event.ActionListener() {
+							public void actionPerformed(
+									java.awt.event.ActionEvent e) {
+								addTrustedAuthority();
+							}
+						});
 			} else {
 				addButton.setText("Update Trusted Authority");
 				addButton.setIcon(GTSLookAndFeel.getRefreshIcon());
-				addButton.addActionListener(new java.awt.event.ActionListener() {
-					public void actionPerformed(java.awt.event.ActionEvent e) {
-						updateTrustedAuthority();
-					}
-				});
+				addButton
+						.addActionListener(new java.awt.event.ActionListener() {
+							public void actionPerformed(
+									java.awt.event.ActionEvent e) {
+								updateTrustedAuthority();
+							}
+						});
 			}
 
 		}
 		return addButton;
 	}
-
 
 	/**
 	 * This method initializes cancelButton
@@ -632,7 +640,6 @@ public class TrustedAuthorityWindow extends ApplicationComponent {
 		return cancelButton;
 	}
 
-
 	/**
 	 * This method initializes certificatePanel
 	 * 
@@ -647,7 +654,6 @@ public class TrustedAuthorityWindow extends ApplicationComponent {
 		return certificatePanel;
 	}
 
-
 	/**
 	 * This method initializes importCertificate
 	 * 
@@ -657,17 +663,17 @@ public class TrustedAuthorityWindow extends ApplicationComponent {
 		if (importCertificate == null) {
 			importCertificate = new JButton();
 			importCertificate.setText("Import Certificate");
-			importCertificate.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					importCertificate();
-				}
-			});
+			importCertificate
+					.addActionListener(new java.awt.event.ActionListener() {
+						public void actionPerformed(java.awt.event.ActionEvent e) {
+							importCertificate();
+						}
+					});
 			importCertificate.setIcon(GTSLookAndFeel.getCertificateIcon());
 
 		}
 		return importCertificate;
 	}
-
 
 	private void importCertificate() {
 
@@ -677,11 +683,13 @@ public class TrustedAuthorityWindow extends ApplicationComponent {
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			try {
 				X509Certificate certificate = CertUtil
-					.loadCertificate(new File(fc.getSelectedFile().getAbsolutePath()));
+						.loadCertificate(new File(fc.getSelectedFile()
+								.getAbsolutePath()));
 				certificatePanel.clearCertificate();
 				crlPanel.clearCRL();
 				certificatePanel.setCertificate(certificate);
-				this.getTrustedAuthorityName().setText(certificate.getSubjectDN().getName());
+				this.getTrustedAuthorityName().setText(
+						certificate.getSubjectDN().getName());
 			} catch (Exception ex) {
 				ErrorDialog.showError(ex);
 			}
@@ -689,12 +697,12 @@ public class TrustedAuthorityWindow extends ApplicationComponent {
 
 	}
 
-
 	private void importCRL() {
 		crlPanel.clearCRL();
 		X509Certificate cert = certificatePanel.getCertificate();
 		if (cert == null) {
-			ErrorDialog.showError("You must import a certificate before importing a CRL");
+			ErrorDialog
+					.showError("You must import a certificate before importing a CRL");
 
 		}
 		JFileChooser fc = new JFileChooser();
@@ -702,12 +710,13 @@ public class TrustedAuthorityWindow extends ApplicationComponent {
 		int returnVal = fc.showOpenDialog(this);
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			try {
-				X509CRL crl = CertUtil.loadCRL(new File(fc.getSelectedFile().getAbsolutePath()));
+				X509CRL crl = CertUtil.loadCRL(new File(fc.getSelectedFile()
+						.getAbsolutePath()));
 				try {
 					crl.verify(cert.getPublicKey());
 				} catch (Exception crle) {
 					ErrorDialog
-						.showError("Error verifying CRL, the CRL must be issued and signed by same key is the Trusted Authority's Certificate");
+							.showError("Error verifying CRL, the CRL must be issued and signed by same key is the Trusted Authority's Certificate");
 				}
 				crlPanel.setCRL(crl);
 			} catch (Exception ex) {
@@ -716,7 +725,6 @@ public class TrustedAuthorityWindow extends ApplicationComponent {
 		}
 
 	}
-
 
 	/**
 	 * This method initializes crlPanel
@@ -729,7 +737,6 @@ public class TrustedAuthorityWindow extends ApplicationComponent {
 		}
 		return crlPanel;
 	}
-
 
 	/**
 	 * This method initializes importCRL
@@ -750,14 +757,13 @@ public class TrustedAuthorityWindow extends ApplicationComponent {
 		return importCRL;
 	}
 
-
 	private void addTrustedAuthority() {
 		try {
 			getAddButton().setEnabled(false);
 			X509Certificate cert = this.certificatePanel.getCertificate();
 			if (cert == null) {
 				ErrorDialog
-					.showError("No certificate specified, you must specify a certificate to add a Trusted Authority!!!");
+						.showError("No certificate specified, you must specify a certificate to add a Trusted Authority!!!");
 				getAddButton().setEnabled(true);
 				return;
 
@@ -766,16 +772,21 @@ public class TrustedAuthorityWindow extends ApplicationComponent {
 			ta.setName(this.trustedAuthorityName.getText());
 			ta.setStatus(((StatusComboBox) getStatus()).getStatus());
 			ta.setTrustLevels(getSelectedTrustLevels());
-			ta.setCertificate(new gov.nih.nci.cagrid.gts.bean.X509Certificate(CertUtil.writeCertificate(cert)));
+			ta.setCertificate(new gov.nih.nci.cagrid.gts.bean.X509Certificate(
+					CertUtil.writeCertificate(cert)));
 			if (crlPanel.getCRL() != null) {
-				ta.setCRL(new gov.nih.nci.cagrid.gts.bean.X509CRL(CertUtil.writeCRL(crlPanel.getCRL())));
+				ta.setCRL(new gov.nih.nci.cagrid.gts.bean.X509CRL(CertUtil
+						.writeCRL(crlPanel.getCRL())));
 			}
-			GlobusCredential selectedProxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
-			String service = ((GTSServiceListComboBox) getGts()).getSelectedService();
+			GlobusCredential selectedProxy = ((ProxyComboBox) getProxy())
+					.getSelectedProxy();
+			String service = ((GTSServiceListComboBox) getGts())
+					.getSelectedService();
 			GTSAdminClient client = new GTSAdminClient(service, selectedProxy);
 			client.addTrustedAuthority(ta);
 			GridApplication.getContext().showMessage(
-				"The Trusted Authority, " + ta.getName() + " was succesfully added!!!");
+					"The Trusted Authority, " + ta.getName()
+							+ " was succesfully added!!!");
 			refresher.refreshTrustedAuthorities();
 			dispose();
 		} catch (Exception e) {
@@ -785,7 +796,6 @@ public class TrustedAuthorityWindow extends ApplicationComponent {
 
 	}
 
-
 	private void updateTrustedAuthority() {
 		try {
 			getAddButton().setEnabled(false);
@@ -794,14 +804,18 @@ public class TrustedAuthorityWindow extends ApplicationComponent {
 			ta.setStatus(((StatusComboBox) getStatus()).getStatus());
 			ta.setTrustLevels(getSelectedTrustLevels());
 			if (crlPanel.getCRL() != null) {
-				ta.setCRL(new gov.nih.nci.cagrid.gts.bean.X509CRL(CertUtil.writeCRL(crlPanel.getCRL())));
+				ta.setCRL(new gov.nih.nci.cagrid.gts.bean.X509CRL(CertUtil
+						.writeCRL(crlPanel.getCRL())));
 			}
-			GlobusCredential selectedProxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
-			String service = ((GTSServiceListComboBox) getGts()).getSelectedService();
+			GlobusCredential selectedProxy = ((ProxyComboBox) getProxy())
+					.getSelectedProxy();
+			String service = ((GTSServiceListComboBox) getGts())
+					.getSelectedService();
 			GTSAdminClient client = new GTSAdminClient(service, selectedProxy);
 			client.updateTrustedAuthority(ta);
 			GridApplication.getContext().showMessage(
-				"The Trusted Authority, " + ta.getName() + " was succesfully updated!!!");
+					"The Trusted Authority, " + ta.getName()
+							+ " was succesfully updated!!!");
 			refresher.refreshTrustedAuthorities();
 			getAddButton().setEnabled(true);
 		} catch (Exception e) {
@@ -810,7 +824,6 @@ public class TrustedAuthorityWindow extends ApplicationComponent {
 		}
 
 	}
-
 
 	/**
 	 * This method initializes isAuthority
@@ -825,7 +838,6 @@ public class TrustedAuthorityWindow extends ApplicationComponent {
 		return isAuthority;
 	}
 
-
 	/**
 	 * This method initializes authorityGTS
 	 * 
@@ -838,7 +850,6 @@ public class TrustedAuthorityWindow extends ApplicationComponent {
 		}
 		return authorityGTS;
 	}
-
 
 	/**
 	 * This method initializes sourceGTS
@@ -853,7 +864,6 @@ public class TrustedAuthorityWindow extends ApplicationComponent {
 		return sourceGTS;
 	}
 
-
 	/**
 	 * This method initializes expires
 	 * 
@@ -867,7 +877,6 @@ public class TrustedAuthorityWindow extends ApplicationComponent {
 		return expires;
 	}
 
-
 	/**
 	 * This method initializes lastUpdated
 	 * 
@@ -880,7 +889,6 @@ public class TrustedAuthorityWindow extends ApplicationComponent {
 		}
 		return lastUpdated;
 	}
-
 
 	/**
 	 * This method initializes trustLevels
@@ -896,7 +904,6 @@ public class TrustedAuthorityWindow extends ApplicationComponent {
 		return trustLevels;
 	}
 
-
 	/**
 	 * This method initializes jScrollPane
 	 * 
@@ -910,7 +917,6 @@ public class TrustedAuthorityWindow extends ApplicationComponent {
 		return jScrollPane;
 	}
 
-
 	/**
 	 * This method initializes levels
 	 * 
@@ -920,13 +926,14 @@ public class TrustedAuthorityWindow extends ApplicationComponent {
 		if (levels == null) {
 			levels = new JPanel();
 			levels.setLayout(new GridBagLayout());
-			levels.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Level of Assurance",
-				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, LookAndFeel.getPanelLabelColor()));
+			levels.setBorder(javax.swing.BorderFactory.createTitledBorder(null,
+					"Level of Assurance",
+					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+					javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
+					LookAndFeel.getPanelLabelColor()));
 		}
 		return levels;
 	}
-
 
 	private void addLevel(String level) {
 		int size = levelsMap.size();
@@ -956,7 +963,6 @@ public class TrustedAuthorityWindow extends ApplicationComponent {
 		getLevels().add(levelLabel, gbc2);
 		this.levelsMap.put(level, checkbox);
 	}
-
 
 	private TrustLevels getSelectedTrustLevels() {
 		List list = new ArrayList();
