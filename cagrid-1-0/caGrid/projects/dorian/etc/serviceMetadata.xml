@@ -293,11 +293,11 @@
   </ns2:Service>
  </ns1:serviceDescription>
  <ns1:hostingResearchCenter>
-  <ns42:ResearchCenter displayName="Ohio State University" shortName="OSU" xmlns:ns42="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
-   <ns42:Address country="US" postalCode="43210" stateProvince="OH" street1="333 W. 10th Ave"/>
-   <ns42:pointOfContactCollection>
-    <ns42:PointOfContact affiliation="Ohio State University" email="langella@bmi.osu.edu" firstName="Stephen" lastName="Langella" role="Administrator"/>
-   </ns42:pointOfContactCollection>
-  </ns42:ResearchCenter>
+  <ns23:ResearchCenter displayName="" shortName="" xmlns:ns23="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+   <ns23:Address country="" locality="" postalCode="" stateProvince="" street1="" street2=""/>
+   <ns23:pointOfContactCollection>
+    <ns23:PointOfContact affiliation="" email="" firstName="" lastName="" phoneNumber="" role=""/>
+   </ns23:pointOfContactCollection>
+  </ns23:ResearchCenter>
  </ns1:hostingResearchCenter>
 </ns1:ServiceMetadata>
