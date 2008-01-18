@@ -16,6 +16,7 @@ import gov.nih.nci.cagrid.introduce.common.FileFilters;
 import gov.nih.nci.cagrid.introduce.common.ResourceManager;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.sdkquery4.processor.SDK4QueryProcessor;
+import gov.nih.nci.cagrid.sdkquery4.style.common.SDK4StyleConstants;
 
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -52,7 +53,7 @@ import com.jgoodies.validation.view.ValidationComponentUtils;
  * @author David Ervin
  * 
  * @created Nov 27, 2007 4:50:32 PM
- * @version $Id: QueryProcessorConfigurationPanel.java,v 1.7 2008-01-15 16:19:36 dervin Exp $ 
+ * @version $Id: QueryProcessorConfigurationPanel.java,v 1.8 2008-01-18 15:11:29 dervin Exp $ 
  */
 public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
     // keys for validation
@@ -62,6 +63,9 @@ public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
     public static final String KEY_ORM_JAR = "ORM Jar file";
     public static final String KEY_HOST_NAME = "Application service host name";
     public static final String KEY_PORT_NUMBER = "Application port number";
+    
+    // bit bucket key for the beans jar filename
+    public static final String KEY_BEANS_JAR_FILENAME = "SDK 4.0 Beans Jar";
     
     // the config dir as a jar file
     private static File CONFIG_DIR_JAR = null;
@@ -850,14 +854,15 @@ public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
 
     
     private void storeConfigurationProperties() {
+        // store configuration properties for the query processor
         ServiceDescription desc = getServiceInformation().getServiceDescriptor();
+        // store the beans jar filename
+        File beansJarFile = new File(getBeansJarTextField().getText());
+        CommonTools.setServiceProperty(desc,
+            SDK4StyleConstants.BEANS_JAR_FILENAME, beansJarFile.getName(), false);
         CommonTools.setServiceProperty(desc, 
             DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX + SDK4QueryProcessor.PROPERTY_APPLICATION_NAME, 
             getApplicationNameTextField().getText(), false);
-        File beansJarFile = new File(getBeansJarTextField().getText());
-        CommonTools.setServiceProperty(desc, 
-            DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX + SDK4QueryProcessor.PROPERTY_BEANS_JAR_NAME,
-            beansJarFile.getName(), false);
         CommonTools.setServiceProperty(desc, 
             DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX + SDK4QueryProcessor.PROPERTY_CASE_INSENSITIVE_QUERYING,
             String.valueOf(getCaseInsensitiveCheckBox().isSelected()), false);
