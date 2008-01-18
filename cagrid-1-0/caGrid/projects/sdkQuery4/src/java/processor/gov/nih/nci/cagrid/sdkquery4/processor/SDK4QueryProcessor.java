@@ -39,7 +39,7 @@ import org.globus.wsrf.security.SecurityManager;
  * @author David Ervin
  * 
  * @created Oct 3, 2007 10:34:55 AM
- * @version $Id: SDK4QueryProcessor.java,v 1.11 2008-01-18 17:26:30 dervin Exp $ 
+ * @version $Id: SDK4QueryProcessor.java,v 1.12 2008-01-18 18:18:56 dervin Exp $ 
  */
 public class SDK4QueryProcessor extends CQLQueryProcessor {
     // configuration property keys
@@ -82,13 +82,16 @@ public class SDK4QueryProcessor extends CQLQueryProcessor {
 
     public CQLQueryResults processQuery(CQLQuery cqlQuery) throws MalformedQueryException, QueryProcessingException {
         List rawResults = queryCoreService(cqlQuery);
-        for (Object o : rawResults) {
-            System.out.println(o.getClass().getName());
-            caCOREMarshaller m = new caCOREMarshaller("unmarshaller-xml-mapping.xml", false);
-            try {
-                System.out.println(m.toXML(o));
-            } catch (Exception ex) {
-                ex.printStackTrace();
+        if (LOG.isDebugEnabled()) {
+            // print the SDK's output if debug is enabled
+            for (Object o : rawResults) {
+                System.out.println(o.getClass().getName());
+                caCOREMarshaller m = new caCOREMarshaller("unmarshaller-xml-mapping.xml", false);
+                try {
+                    System.out.println(m.toXML(o));
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
             }
         }
         CQLQueryResults cqlResults = null;
