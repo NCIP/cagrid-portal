@@ -53,7 +53,7 @@ import com.jgoodies.validation.view.ValidationComponentUtils;
  * @author David Ervin
  * 
  * @created Nov 27, 2007 4:50:32 PM
- * @version $Id: QueryProcessorConfigurationPanel.java,v 1.8 2008-01-18 15:11:29 dervin Exp $ 
+ * @version $Id: QueryProcessorConfigurationPanel.java,v 1.9 2008-01-18 15:36:05 dervin Exp $ 
  */
 public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
     // keys for validation
@@ -809,11 +809,16 @@ public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
                 result.add(new SimpleValidationMessage(
                     KEY_HOST_NAME + " cannot be blank", Severity.ERROR, KEY_HOST_NAME));
             } else {
+                URL remoteUrl = null;
                 try {
-                    new URL(getHostNameTextField().getText());
+                    remoteUrl = new URL(getHostNameTextField().getText());
                 } catch (Exception ex) {
                     result.add(new SimpleValidationMessage(
-                        KEY_HOST_NAME + " is not a valid URL", Severity.ERROR, KEY_HOST_NAME));
+                        KEY_HOST_NAME + " does not parse as a URL", Severity.ERROR, KEY_HOST_NAME));
+                }
+                if (remoteUrl != null && ValidationUtils.isBlank(remoteUrl.getHost())) {
+                    result.add(new SimpleValidationMessage(
+                        KEY_HOST_NAME + " does not contain a host name", Severity.ERROR, KEY_HOST_NAME));
                 }
             }
             
