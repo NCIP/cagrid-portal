@@ -25,7 +25,7 @@ public class TransferServlet extends HttpServlet {
 
     private Properties props = null;
     String persistenceDir = null;
-    int blockSize = 1024;
+    int blockSize = 1024;   //default block size for transfer and recieve
 
 
     @Override
