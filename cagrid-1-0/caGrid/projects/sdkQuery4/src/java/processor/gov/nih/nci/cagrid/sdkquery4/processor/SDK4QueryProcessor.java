@@ -9,6 +9,7 @@ import gov.nih.nci.cagrid.data.MalformedQueryException;
 import gov.nih.nci.cagrid.data.QueryProcessingException;
 import gov.nih.nci.cagrid.data.cql.CQLQueryProcessor;
 import gov.nih.nci.cagrid.data.mapping.Mappings;
+import gov.nih.nci.cagrid.data.service.ServiceConfigUtil;
 import gov.nih.nci.cagrid.data.utilities.CQLResultsCreationUtil;
 import gov.nih.nci.cagrid.data.utilities.ResultsCreationException;
 import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
@@ -38,7 +39,7 @@ import org.globus.wsrf.security.SecurityManager;
  * @author David Ervin
  * 
  * @created Oct 3, 2007 10:34:55 AM
- * @version $Id: SDK4QueryProcessor.java,v 1.10 2008-01-18 15:13:29 dervin Exp $ 
+ * @version $Id: SDK4QueryProcessor.java,v 1.11 2008-01-18 17:26:30 dervin Exp $ 
  */
 public class SDK4QueryProcessor extends CQLQueryProcessor {
     // configuration property keys
@@ -208,9 +209,11 @@ public class SDK4QueryProcessor extends CQLQueryProcessor {
     
     private String getRemoteApplicationUrl() {
         String hostname = getConfiguredParameters().getProperty(PROPERTY_HOST_NAME);
+        /*
         if (!hostname.startsWith("http://") || !hostname.startsWith("https://")) {
             hostname = "http://" + hostname;
         }
+        */
         String port = getConfiguredParameters().getProperty(PROPERTY_HOST_PORT);
         while (hostname.endsWith("/")) {
             hostname = hostname.substring(0, hostname.length() - 1);
@@ -264,8 +267,8 @@ public class SDK4QueryProcessor extends CQLQueryProcessor {
     
     private Mappings getClassToQnameMappings() throws Exception {
         // get the mapping file name
-        // String filename = ServiceConfigUtil.getClassToQnameMappingsFile();
-        String filename = "mapping.xml";
+        String filename = ServiceConfigUtil.getClassToQnameMappingsFile();
+        // String filename = "mapping.xml";
         Mappings mappings = (Mappings) Utils.deserializeDocument(filename, Mappings.class);
         return mappings;
     }
