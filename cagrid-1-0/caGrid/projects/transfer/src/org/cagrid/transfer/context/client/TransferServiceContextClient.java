@@ -76,12 +76,11 @@ public class TransferServiceContextClient extends TransferServiceContextClientBa
 		}
 	}
 
-  public void put(java.lang.Object anyType) throws RemoteException {
+  public void staged() throws RemoteException {
     synchronized(portTypeMutex){
-      configureStubSecurity((Stub)portType,"put");
-    org.cagrid.transfer.context.stubs.PutRequest params = new org.cagrid.transfer.context.stubs.PutRequest();
-    params.setAnyType(anyType);
-    org.cagrid.transfer.context.stubs.PutResponse boxedResult = portType.put(params);
+      configureStubSecurity((Stub)portType,"staged");
+    org.cagrid.transfer.context.stubs.StagedRequest params = new org.cagrid.transfer.context.stubs.StagedRequest();
+    org.cagrid.transfer.context.stubs.StagedResponse boxedResult = portType.staged(params);
     }
   }
 
@@ -112,6 +111,15 @@ public class TransferServiceContextClient extends TransferServiceContextClientBa
     org.cagrid.transfer.context.stubs.GetDataTransferDescriptorRequest params = new org.cagrid.transfer.context.stubs.GetDataTransferDescriptorRequest();
     org.cagrid.transfer.context.stubs.GetDataTransferDescriptorResponse boxedResult = portType.getDataTransferDescriptor(params);
     return boxedResult.getDataTransferDescriptor();
+    }
+  }
+
+  public void put(java.lang.Object anyType) throws RemoteException {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"put");
+    org.cagrid.transfer.context.stubs.PutRequest params = new org.cagrid.transfer.context.stubs.PutRequest();
+    params.setAnyType(anyType);
+    org.cagrid.transfer.context.stubs.PutResponse boxedResult = portType.put(params);
     }
   }
 

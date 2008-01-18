@@ -113,7 +113,7 @@
      <ns7:Output qName="void" description="" isArray="false"/>
      <ns7:ImportInformation fromIntroduce="false" inputMessage="ns11:EmptyMessage" namespace="http://www.globus.org/transfer" outputMessage="ns11:AnyXmlMessage" packageName="org.cagrid.transfer" portTypeName="Resource" wsdlFile="transfer_port_type.wsdl" xmlns:ns11="http://www.globus.org/transfer"/>
     </ns7:Method>
-    <ns7:Method description="" isImported="false" isProvided="false" name="getDataTransferDescriptor" xsi:type="ns7:MethodType">
+    <ns7:Method description="Returns the descriptor which can be used by the TransferClientHelper to download or upload the data." isImported="false" isProvided="false" name="getDataTransferDescriptor" xsi:type="ns7:MethodType">
      <ns7:Inputs/>
      <ns7:Output qName="ns12:DataTransferDescriptor" description="" isArray="false" xmlns:ns12="http://transfer.cagrid.org/Transfer"/>
      <ns7:Exceptions/>
@@ -122,6 +122,11 @@
      <ns7:Inputs>
       <ns7:Input qName="xsd:anyType" description="" isArray="false" name="anyType" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
      </ns7:Inputs>
+     <ns7:Output qName="void" description="" isArray="false"/>
+     <ns7:Exceptions/>
+    </ns7:Method>
+    <ns7:Method description="Indicates to the service that the data has been uploaded if uploading is the desired action." isImported="false" isProvided="false" name="Staged" xsi:type="ns7:MethodType">
+     <ns7:Inputs/>
      <ns7:Output qName="void" description="" isArray="false"/>
      <ns7:Exceptions/>
     </ns7:Method>

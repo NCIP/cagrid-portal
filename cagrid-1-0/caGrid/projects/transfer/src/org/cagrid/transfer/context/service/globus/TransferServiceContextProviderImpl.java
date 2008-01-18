@@ -26,9 +26,9 @@ public class TransferServiceContextProviderImpl{
 	}
 	
 
-    public org.cagrid.transfer.context.stubs.PutResponse put(org.cagrid.transfer.context.stubs.PutRequest params) throws RemoteException {
-    org.cagrid.transfer.context.stubs.PutResponse boxedResult = new org.cagrid.transfer.context.stubs.PutResponse();
-    impl.put(params.getAnyType());
+    public org.cagrid.transfer.context.stubs.StagedResponse staged(org.cagrid.transfer.context.stubs.StagedRequest params) throws RemoteException {
+    org.cagrid.transfer.context.stubs.StagedResponse boxedResult = new org.cagrid.transfer.context.stubs.StagedResponse();
+    impl.staged();
     return boxedResult;
   }
 
@@ -39,6 +39,12 @@ public class TransferServiceContextProviderImpl{
     public org.cagrid.transfer.context.stubs.GetDataTransferDescriptorResponse getDataTransferDescriptor(org.cagrid.transfer.context.stubs.GetDataTransferDescriptorRequest params) throws RemoteException {
     org.cagrid.transfer.context.stubs.GetDataTransferDescriptorResponse boxedResult = new org.cagrid.transfer.context.stubs.GetDataTransferDescriptorResponse();
     boxedResult.setDataTransferDescriptor(impl.getDataTransferDescriptor());
+    return boxedResult;
+  }
+
+    public org.cagrid.transfer.context.stubs.PutResponse put(org.cagrid.transfer.context.stubs.PutRequest params) throws RemoteException {
+    org.cagrid.transfer.context.stubs.PutResponse boxedResult = new org.cagrid.transfer.context.stubs.PutResponse();
+    impl.put(params.getAnyType());
     return boxedResult;
   }
 

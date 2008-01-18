@@ -43,6 +43,16 @@
           <sequence />
         </complexType>
       </element>
+      <element name="StagedRequest">
+        <complexType>
+          <sequence />
+        </complexType>
+      </element>
+      <element name="StagedResponse">
+        <complexType>
+          <sequence />
+        </complexType>
+      </element>
       <element name="TransferServiceContextResourceProperties">
         <complexType>
           <sequence>
@@ -67,6 +77,12 @@
   <message name="PutResponse">
     <part name="parameters" element="tns:PutResponse" />
   </message>
+  <message name="StagedRequest">
+    <part name="parameters" element="tns:StagedRequest" />
+  </message>
+  <message name="StagedResponse">
+    <part name="parameters" element="tns:StagedResponse" />
+  </message>
   <!--============================================================
 
                        P O R T T Y P E
@@ -80,6 +96,10 @@
     <operation name="Put">
       <input message="tns:PutRequest" wsa:Action="http://transfer.cagrid.org/TransferService/Context/PutRequest" />
       <output message="tns:PutResponse" wsa:Action="http://transfer.cagrid.org/TransferService/Context/PutResponse" />
+    </operation>
+    <operation name="Staged">
+      <input message="tns:StagedRequest" wsa:Action="http://transfer.cagrid.org/TransferService/Context/StagedRequest" />
+      <output message="tns:StagedResponse" wsa:Action="http://transfer.cagrid.org/TransferService/Context/StagedResponse" />
     </operation>
     <operation name="getServiceSecurityMetadata">
       <input message="wns0:GetServiceSecurityMetadataRequest" wsa:Action="http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity/GetServiceSecurityMetadataRequest" />

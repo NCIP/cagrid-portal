@@ -12,7 +12,11 @@ import java.rmi.RemoteException;
  */
 public interface TransferServiceContextI {
 
-  public void put(java.lang.Object anyType) throws RemoteException ;
+  /**
+   * Indicates to the service that the data has been uploaded if uploading is the desired action.
+   *
+   */
+  public void staged() throws RemoteException ;
 
   public org.oasis.wsrf.lifetime.DestroyResponse destroy(org.oasis.wsrf.lifetime.Destroy params) throws RemoteException ;
 
@@ -20,7 +24,13 @@ public interface TransferServiceContextI {
 
   public org.cagrid.transfer.AnyXmlType get(org.cagrid.transfer.EmptyType params) throws RemoteException ;
 
+  /**
+   * Returns the descriptor which can be used by the TransferClientHelper to download or upload the data.
+   *
+   */
   public org.cagrid.transfer.descriptor.DataTransferDescriptor getDataTransferDescriptor() throws RemoteException ;
+
+  public void put(java.lang.Object anyType) throws RemoteException ;
 
 }
 
