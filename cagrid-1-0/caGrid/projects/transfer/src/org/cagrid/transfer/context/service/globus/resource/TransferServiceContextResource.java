@@ -11,6 +11,7 @@ import java.util.GregorianCalendar;
 import javax.xml.namespace.QName;
 
 import org.cagrid.transfer.descriptor.DataDescriptor;
+import org.cagrid.transfer.descriptor.DataStorageDescriptor;
 import org.cagrid.transfer.service.TransferServiceConfiguration;
 import org.globus.wsrf.ResourceException;
 
@@ -31,22 +32,23 @@ public class TransferServiceContextResource extends TransferServiceContextResour
     }
 
 
-    public void stage(byte[] data) throws Exception {
+    public void stage(byte[] data, DataDescriptor dd) throws Exception {
         File storageFile = new File(getStorageDirectory().getAbsolutePath() + File.separator + (String) getID()
             + ".cache");
         FileOutputStream fw = new FileOutputStream(storageFile);
         fw.write(data);
         fw.close();
-        DataDescriptor desc = new DataDescriptor();
+        DataStorageDescriptor desc = new DataStorageDescriptor();
         desc.setLocation(storageFile.getAbsolutePath());
         if (SecurityUtils.getCallerIdentity() != null) {
             desc.setUserDN(SecurityUtils.getCallerIdentity());
         }
-        setDataDescriptor(desc);
+        desc.setDescriptor(dd);
+        setDataStorageDescriptor(desc);
     }
 
 
-    public void stage(InputStream is) throws Exception {
+    public void stage(InputStream is, DataDescriptor dd) throws Exception {
         File storageFile = new File(getStorageDirectory().getAbsolutePath() + File.separator + (String) getID()
             + ".cache");
         FileOutputStream fw = new FileOutputStream(storageFile);
@@ -56,28 +58,30 @@ public class TransferServiceContextResource extends TransferServiceContextResour
             data = is.read();
         }
         fw.close();
-        DataDescriptor desc = new DataDescriptor();
+        DataStorageDescriptor desc = new DataStorageDescriptor();
         desc.setLocation(storageFile.getAbsolutePath());
         if (SecurityUtils.getCallerIdentity() != null) {
             desc.setUserDN(SecurityUtils.getCallerIdentity());
         }
-        setDataDescriptor(desc);
+        desc.setDescriptor(dd);
+        setDataStorageDescriptor(desc);
     }
 
 
-    public void stage(File file) throws Exception {
-        DataDescriptor desc = new DataDescriptor();
+    public void stage(File file, DataDescriptor dd) throws Exception {
+        DataStorageDescriptor desc = new DataStorageDescriptor();
         desc.setLocation(file.getAbsolutePath());
         if (SecurityUtils.getCallerIdentity() != null) {
             desc.setUserDN(SecurityUtils.getCallerIdentity());
         }
-        setDataDescriptor(desc);
+        desc.setDescriptor(dd);
+        setDataStorageDescriptor(desc);
     }
 
 
     private void removeDataFile() throws Exception {
-        if (getDataDescriptor() != null && getDataDescriptor().getLocation() != null) {
-            String location = getDataDescriptor().getLocation();
+        if (getDataStorageDescriptor() != null && getDataStorageDescriptor().getLocation() != null) {
+            String location = getDataStorageDescriptor().getLocation();
             if (location.startsWith(getStorageDirectory().getAbsolutePath())) {
                 File dataFile = new File(location);
                 dataFile.delete();

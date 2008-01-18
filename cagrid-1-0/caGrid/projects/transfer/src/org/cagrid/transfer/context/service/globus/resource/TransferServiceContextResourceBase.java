@@ -161,13 +161,13 @@ public abstract class TransferServiceContextResourceBase extends ReflectionResou
 	    //Getters/Setters for ResourceProperties
 	
 	
-	public org.cagrid.transfer.descriptor.DataDescriptor getDataDescriptor(){
-		return ((TransferServiceContextResourceProperties) getResourceBean()).getDataDescriptor();
+	public org.cagrid.transfer.descriptor.DataStorageDescriptor getDataStorageDescriptor(){
+		return ((TransferServiceContextResourceProperties) getResourceBean()).getDataStorageDescriptor();
 	}
 	
-	public void setDataDescriptor(org.cagrid.transfer.descriptor.DataDescriptor dataDescriptor ) throws ResourceException {
-        ResourceProperty prop = getResourcePropertySet().get(TransferServiceContextConstants.DATADESCRIPTOR);
-		prop.set(0, dataDescriptor);
+	public void setDataStorageDescriptor(org.cagrid.transfer.descriptor.DataStorageDescriptor dataStorageDescriptor ) throws ResourceException {
+        ResourceProperty prop = getResourcePropertySet().get(TransferServiceContextConstants.DATASTORAGEDESCRIPTOR);
+		prop.set(0, dataStorageDescriptor);
         //call the first store to persist the resource
         store();
 	}

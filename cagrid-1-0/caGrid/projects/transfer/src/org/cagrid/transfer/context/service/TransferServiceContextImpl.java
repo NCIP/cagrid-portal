@@ -38,10 +38,13 @@ public class TransferServiceContextImpl extends TransferServiceContextImplBase {
         transportURL = transportURL.substring(0, transportURL.lastIndexOf('/'));//cut services
         transportURL = transportURL.substring(0, transportURL.lastIndexOf('/'));//cut wsrf
         dataDesc.setUrl(transportURL + getConfiguration().getTransferServletPathName() + "?id=" + resource.getID());
+    
     } catch (Exception e) {
         e.printStackTrace();
-        throw new RemoteException("Cannot load ServiceConfiguration",e);
+        throw new RemoteException("Cannot create retrieve URL for transferResource.",e);
     }
+    
+    dataDesc.setDescriptor(resource.getDataStorageDescriptor().getDescriptor());
     
     return dataDesc;
   }

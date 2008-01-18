@@ -9,6 +9,7 @@
 	<xs:complexType name="DataTransferDescriptor">
 		<xs:sequence>
 			<xs:element type="string" name="url"></xs:element>
+			<xs:element type="tns:DataDescriptor" name="descriptor"></xs:element>
 		</xs:sequence>
 	</xs:complexType>
 
@@ -18,13 +19,25 @@
 
 	<xs:complexType name="DataDescriptor">
 		<xs:sequence>
-			<xs:element type="string" name="location"></xs:element>
-			<xs:element type="string" name="userDN"></xs:element>
+			<xs:element type="string" name="name"></xs:element>
+			<xs:element type="QName" name="type"></xs:element>
 		</xs:sequence>
 	</xs:complexType>
 
 	<xs:element name="DataDescriptor"
 		type="tns:DataDescriptor">
+	</xs:element>
+	
+	<xs:complexType name="DataStorageDescriptor">
+		<xs:sequence>
+			<xs:element type="string" name="location"></xs:element>
+			<xs:element type="string" name="userDN"></xs:element>
+			<xs:element type="tns:DataDescriptor" name="descriptor"></xs:element>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:element name="DataStorageDescriptor"
+		type="tns:DataStorageDescriptor">
 	</xs:element>
 
 </xs:schema>

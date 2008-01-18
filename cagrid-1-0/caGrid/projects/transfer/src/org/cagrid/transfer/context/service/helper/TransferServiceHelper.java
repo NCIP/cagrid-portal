@@ -4,11 +4,13 @@ import java.io.File;
 import java.io.InputStream;
 import java.rmi.RemoteException;
 
+import org.cagrid.transfer.descriptor.DataDescriptor;
+
 
 public class TransferServiceHelper {
 
     public static org.cagrid.transfer.context.stubs.types.TransferServiceContextReference createTransferContext(
-        File file) throws RemoteException {
+        File file, DataDescriptor dd) throws RemoteException {
         org.apache.axis.message.addressing.EndpointReferenceType epr = new org.apache.axis.message.addressing.EndpointReferenceType();
         org.cagrid.transfer.context.service.globus.resource.TransferServiceContextResourceHome home = null;
         org.globus.wsrf.ResourceKey resourceKey = null;
@@ -29,7 +31,7 @@ public class TransferServiceHelper {
 
             thisResource.setSecurityDescriptor(gov.nih.nci.cagrid.introduce.servicetools.security.SecurityUtils
                 .createCreatorOnlyResourceSecurityDescriptor());
-            thisResource.stage(file);
+            thisResource.stage(file,dd);
 
             String transportURL = (String) ctx.getProperty(org.apache.axis.MessageContext.TRANS_URL);
             transportURL = transportURL.substring(0, transportURL.lastIndexOf('/') + 1);
@@ -48,7 +50,7 @@ public class TransferServiceHelper {
 
 
     public static org.cagrid.transfer.context.stubs.types.TransferServiceContextReference createTransferContext(
-        byte[] data) throws RemoteException {
+        byte[] data, DataDescriptor dd) throws RemoteException {
         org.apache.axis.message.addressing.EndpointReferenceType epr = new org.apache.axis.message.addressing.EndpointReferenceType();
         org.cagrid.transfer.context.service.globus.resource.TransferServiceContextResourceHome home = null;
         org.globus.wsrf.ResourceKey resourceKey = null;
@@ -68,7 +70,7 @@ public class TransferServiceHelper {
 
             thisResource.setSecurityDescriptor(gov.nih.nci.cagrid.introduce.servicetools.security.SecurityUtils
                 .createCreatorOnlyResourceSecurityDescriptor());
-            thisResource.stage(data);
+            thisResource.stage(data,dd);
 
             String transportURL = (String) ctx.getProperty(org.apache.axis.MessageContext.TRANS_URL);
             transportURL = transportURL.substring(0, transportURL.lastIndexOf('/') + 1);
@@ -87,7 +89,7 @@ public class TransferServiceHelper {
 
 
     public static org.cagrid.transfer.context.stubs.types.TransferServiceContextReference createTransferContext(
-        InputStream is) throws RemoteException {
+        InputStream is, DataDescriptor dd) throws RemoteException {
         org.apache.axis.message.addressing.EndpointReferenceType epr = new org.apache.axis.message.addressing.EndpointReferenceType();
         org.cagrid.transfer.context.service.globus.resource.TransferServiceContextResourceHome home = null;
         org.globus.wsrf.ResourceKey resourceKey = null;
@@ -107,7 +109,7 @@ public class TransferServiceHelper {
 
             thisResource.setSecurityDescriptor(gov.nih.nci.cagrid.introduce.servicetools.security.SecurityUtils
                 .createCreatorOnlyResourceSecurityDescriptor());
-            thisResource.stage(is);
+            thisResource.stage(is,dd);
 
             String transportURL = (String) ctx.getProperty(org.apache.axis.MessageContext.TRANS_URL);
             transportURL = transportURL.substring(0, transportURL.lastIndexOf('/') + 1);

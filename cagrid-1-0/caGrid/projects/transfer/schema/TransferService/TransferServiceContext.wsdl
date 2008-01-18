@@ -36,7 +36,7 @@
           <sequence>
             <element ref="ns4:CurrentTime" />
             <element ref="ns4:TerminationTime" />
-            <element ref="ns0:DataDescriptor" />
+            <element ref="ns0:DataStorageDescriptor" />
           </sequence>
         </complexType>
       </element>

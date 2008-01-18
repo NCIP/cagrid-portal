@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.cagrid.transfer.context.stubs.TransferServiceContextResourceProperties;
-import org.cagrid.transfer.descriptor.DataDescriptor;
+import org.cagrid.transfer.descriptor.DataStorageDescriptor;
 import org.globus.axis.gsi.GSIConstants;
 
 
@@ -86,7 +86,7 @@ public class TransferServlet extends HttpServlet {
             return;
         }
 
-        DataDescriptor desc = props.getDataDescriptor();
+        DataStorageDescriptor desc = props.getDataStorageDescriptor();
         // verify that the user calling is the owner or there is no owner
         if (desc.getUserDN() == null || desc.getUserDN().equals(userDN)) {
             System.out.println("Transfering data using block size of: " + blockSize );
