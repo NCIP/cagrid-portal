@@ -9,22 +9,26 @@ import gov.nih.nci.cagrid.data.MalformedQueryException;
 import gov.nih.nci.cagrid.data.QueryProcessingException;
 import gov.nih.nci.cagrid.data.cql.CQLQueryProcessor;
 import gov.nih.nci.cagrid.data.mapping.Mappings;
-import gov.nih.nci.cagrid.data.service.ServiceConfigUtil;
 import gov.nih.nci.cagrid.data.utilities.CQLResultsCreationUtil;
 import gov.nih.nci.cagrid.data.utilities.ResultsCreationException;
+import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
+import gov.nih.nci.cagrid.sdkquery4.beans.domaininfo.DomainTypesInformation;
 import gov.nih.nci.system.applicationservice.ApplicationService;
 import gov.nih.nci.system.client.ApplicationServiceProvider;
+import gov.nih.nci.system.client.util.xml.caCOREMarshaller;
 import gov.nih.nci.system.query.hibernate.HQLCriteria;
 
-import java.io.File;
+import java.io.FileReader;
 import java.io.InputStream;
+import java.lang.reflect.Method;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
-import java.util.StringTokenizer;
 
 import org.apache.log4j.Logger;
+import org.globus.wsrf.Resource;
+import org.globus.wsrf.ResourceContext;
 import org.globus.wsrf.security.SecurityManager;
 
 /** 
@@ -34,18 +38,17 @@ import org.globus.wsrf.security.SecurityManager;
  * @author David Ervin
  * 
  * @created Oct 3, 2007 10:34:55 AM
- * @version $Id: SDK4QueryProcessor.java,v 1.9 2008-01-04 17:51:45 dervin Exp $ 
+ * @version $Id: SDK4QueryProcessor.java,v 1.10 2008-01-18 15:13:29 dervin Exp $ 
  */
 public class SDK4QueryProcessor extends CQLQueryProcessor {
     // configuration property keys
     public static final String PROPERTY_APPLICATION_NAME = "applicationName";
-    public static final String PROPERTY_BEANS_JAR_NAME = "beansJarName";
     public static final String PROPERTY_USE_LOCAL_API = "useLocalApiFlag";
     public static final String PROPERTY_ORM_JAR_NAME = "ormJarName"; // only for local
     public static final String PROPERTY_HOST_NAME = "applicationHostName"; // only for remote
     public static final String PROPERTY_HOST_PORT = "applicationHostPort"; // only for remote
     public static final String PROPERTY_CASE_INSENSITIVE_QUERYING = "queryCaseInsensitive";
-    
+    public static final String PROPERTY_DOMAIN_TYPES_INFO_FILENAME = "domainTypesInfoFilename";
     public static final String PROPERTY_USE_LOGIN = "useServiceLogin";
     public static final String PROPERTY_USE_GRID_IDENTITY_LOGIN = "useGridIdentityLogin";
     public static final String PROPERTY_STATIC_LOGIN_USERNAME = "staticLoginUsername";
@@ -78,6 +81,15 @@ public class SDK4QueryProcessor extends CQLQueryProcessor {
 
     public CQLQueryResults processQuery(CQLQuery cqlQuery) throws MalformedQueryException, QueryProcessingException {
         List rawResults = queryCoreService(cqlQuery);
+        for (Object o : rawResults) {
+            System.out.println(o.getClass().getName());
+            caCOREMarshaller m = new caCOREMarshaller("unmarshaller-xml-mapping.xml", false);
+            try {
+                System.out.println(m.toXML(o));
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
         CQLQueryResults cqlResults = null;
         // determine which type of results to package up
         if (cqlQuery.getQueryModifier() != null) {
@@ -125,8 +137,8 @@ public class SDK4QueryProcessor extends CQLQueryProcessor {
     public Properties getRequiredParameters() {
         Properties props = new Properties();
         props.setProperty(PROPERTY_APPLICATION_NAME, "");
-        props.setProperty(PROPERTY_BEANS_JAR_NAME, "");
         props.setProperty(PROPERTY_CASE_INSENSITIVE_QUERYING, DEFAULT_CASE_INSENSITIVE_QUERYING);
+        props.setProperty(PROPERTY_DOMAIN_TYPES_INFO_FILENAME , "");
         props.setProperty(PROPERTY_HOST_NAME, "");
         props.setProperty(PROPERTY_HOST_PORT, "");
         props.setProperty(PROPERTY_ORM_JAR_NAME, "");
@@ -140,7 +152,9 @@ public class SDK4QueryProcessor extends CQLQueryProcessor {
     
     
     public Set<String> getPropertiesFromEtc() {
-        return super.getPropertiesFromEtc();
+        Set<String> required = super.getPropertiesFromEtc();
+        required.add(PROPERTY_DOMAIN_TYPES_INFO_FILENAME);
+        return required;
     }
     
     
@@ -250,9 +264,25 @@ public class SDK4QueryProcessor extends CQLQueryProcessor {
     
     private Mappings getClassToQnameMappings() throws Exception {
         // get the mapping file name
-        String filename = ServiceConfigUtil.getClassToQnameMappingsFile();
+        // String filename = ServiceConfigUtil.getClassToQnameMappingsFile();
+        String filename = "mapping.xml";
         Mappings mappings = (Mappings) Utils.deserializeDocument(filename, Mappings.class);
         return mappings;
+    }
+    
+    
+    private DomainModel getDomainModel() throws Exception {
+        DomainModel domainModel = null;
+        Resource serviceBaseResource = ResourceContext.getResourceContext().getResource();
+        Method[] resourceMethods = serviceBaseResource.getClass().getMethods();
+        for (int i = 0; i < resourceMethods.length; i++) {
+            if (resourceMethods[i].getReturnType() != null 
+                && resourceMethods[i].getReturnType().equals(DomainModel.class)) {
+                domainModel = (DomainModel) resourceMethods[i].invoke(serviceBaseResource, new Object[] {});
+                break;
+            }
+        }
+        return domainModel;
     }
     
     
@@ -280,26 +310,29 @@ public class SDK4QueryProcessor extends CQLQueryProcessor {
     
     
     private void initializeCqlToHqlTranslator() throws InitializationException {
-        // no inheritance manager yet
-        String beansJarName = getConfiguredParameters().getProperty(PROPERTY_BEANS_JAR_NAME);
-        // examine the classpath for the jar
-        String classPath = System.getProperty("java.class.path");
-        String beansJarFilename = null;
-        StringTokenizer tokenizer = new StringTokenizer(classPath, File.pathSeparator);
-        while (beansJarFilename == null && tokenizer.hasMoreElements()) {
-            String pathElement = tokenizer.nextToken();
-            if (pathElement.endsWith(beansJarName)) {
-                beansJarFilename = pathElement;
-            }
-        }
-        if (beansJarFilename == null) {
-            throw new InitializationException("Unable to locate beans jar (" 
-                + beansJarName + ") in the classpath!");
-        }
-        File beansJar = new File(beansJarFilename);
-        LOG.debug("Beans jar found: " + beansJar.getAbsolutePath());
+        // get the domain types information document
+        String domainTypesFilename = 
+            getConfiguredParameters().getProperty(PROPERTY_DOMAIN_TYPES_INFO_FILENAME);
+        DomainTypesInformation typesInfo = null;
         try {
-            cqlTranslator = new CQL2ParameterizedHQL(beansJar, useCaseInsensitiveQueries());
+            FileReader reader = new FileReader(domainTypesFilename);
+            typesInfo = DomainTypesInformationUtil.deserializeDomainTypesInformation(reader);
+            reader.close();
+        } catch (Exception ex) {
+            throw new InitializationException("Error deserializing domain types information from " 
+                + domainTypesFilename + ": " + ex.getMessage(), ex);
+        }
+        // get the domain model
+        DomainModel domainModel = null;
+        try {
+            domainModel = getDomainModel();
+        } catch (Exception ex) {
+            throw new InitializationException("Error obtaining domain model: " + ex.getMessage(), ex);
+        }
+        RoleNameResolver resolver = new RoleNameResolver(domainModel);
+        // create the query translator instance
+        try {
+            cqlTranslator = new CQL2ParameterizedHQL(typesInfo, resolver, useCaseInsensitiveQueries());
         } catch (Exception ex) {
             throw new InitializationException("Error instantiating CQL to HQL translator: " 
                 + ex.getMessage(), ex);

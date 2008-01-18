@@ -9,8 +9,8 @@ import gov.nih.nci.cagrid.cqlquery.Object;
 import gov.nih.nci.cagrid.cqlquery.Predicate;
 import gov.nih.nci.cagrid.cqlquery.QueryModifier;
 import gov.nih.nci.cagrid.data.QueryProcessingException;
+import gov.nih.nci.cagrid.sdkquery4.beans.domaininfo.DomainTypesInformation;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -18,7 +18,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.bcel.classfile.JavaClass;
 import org.apache.log4j.Logger;
 
 /** 
@@ -29,7 +28,7 @@ import org.apache.log4j.Logger;
  * @author David Ervin
  * 
  * @created Mar 2, 2007 10:26:47 AM
- * @version $Id: CQL2ParameterizedHQL.java,v 1.2 2008-01-11 17:45:40 dervin Exp $ 
+ * @version $Id: CQL2ParameterizedHQL.java,v 1.3 2008-01-18 15:13:29 dervin Exp $ 
  */
 public class CQL2ParameterizedHQL {
     private static Logger LOG = Logger.getLogger(CQL2ParameterizedHQL.class);
@@ -37,14 +36,15 @@ public class CQL2ParameterizedHQL {
     // maps a CQL predicate to its HQL string representation 
 	private Map<Predicate, String> predicateValues = null;
     
-    private BcelClassAccessUtilities classAccessUtil = null;
-    private InheritanceManager inheritanceManager = null;
+    private DomainTypesInformationUtil typesInfoUtil = null;
+    private RoleNameResolver roleNameResolver = null;
     private boolean caseInsensitive;
     
     
-    public CQL2ParameterizedHQL(File clientBeansJar, boolean caseInsensitive) throws IOException, ClassNotFoundException {
-        this.classAccessUtil = new BcelClassAccessUtilities(clientBeansJar);
-        this.inheritanceManager = InheritanceManager.getManager(clientBeansJar, false);
+    public CQL2ParameterizedHQL(DomainTypesInformation typesInfo, 
+        RoleNameResolver roleNameResolver, boolean caseInsensitive) throws IOException, ClassNotFoundException {
+        this.typesInfoUtil = new DomainTypesInformationUtil(typesInfo);
+        this.roleNameResolver = roleNameResolver;
         this.caseInsensitive = caseInsensitive;
         initPredicateValues();
     }
@@ -80,13 +80,7 @@ public class CQL2ParameterizedHQL {
         // create the list in which parameters will be placed
         List<java.lang.Object> parameters = new LinkedList<java.lang.Object>();
         // determine if the target has subclasses
-        List<JavaClass> subclasses = null;
-        try {
-            subclasses = inheritanceManager.getSubclasses(query.getTarget().getName());
-        } catch (ClassNotFoundException ex) {
-            throw new QueryProcessingException("Error finding subclasses of " 
-                + query.getTarget().getName() + ": " + ex.getMessage(), ex);
-        }
+        List<String> subclasses = typesInfoUtil.getSubclasses(query.getTarget().getName());
         boolean hasSubclasses = !(subclasses == null || subclasses.size() == 0);
         LOG.debug(query.getTarget().getName() 
             + (hasSubclasses ? " has " + subclasses.size() + " subclasses" : " has no subclasse"));
@@ -208,21 +202,15 @@ public class CQL2ParameterizedHQL {
         LOG.debug("Processing attribute " + objectClassName + "." + attribute.getName());
         
         // determine the Java type of the field being processed
-        JavaClass attributeFieldType = null;
-        try {
-            attributeFieldType = classAccessUtil.getFieldType(objectClassName, attribute.getName());
-        } catch (ClassNotFoundException ex) {
-            throw new QueryProcessingException("Error determining type of field " 
-                + objectClassName + "." + attribute.getName() + ": " + ex.getMessage(), ex);
-        }
+        String attributeFieldType = typesInfoUtil.getAttributeJavaType(objectClassName, attribute.getName());
         if (attributeFieldType == null) {
             throw new QueryProcessingException("Field type of " 
                 + objectClassName + "." + attribute.getName() + " could not be determined");
         }
-        LOG.debug("Attribute found to be of type " + attributeFieldType.getClassName());
+        LOG.debug("Attribute found to be of type " + attributeFieldType);
         
         // determine some flags needed for proper query construction
-		boolean isBoolAttribute = attributeFieldType.getClassName().equals(Boolean.class.getName()); 
+		boolean isBoolAttribute = attributeFieldType.equals(Boolean.class.getName()); 
 		boolean unaryPredicate = attribute.getPredicate().equals(Predicate.IS_NOT_NULL)
 			|| attribute.getPredicate().equals(Predicate.IS_NULL);
 		
@@ -285,7 +273,7 @@ public class CQL2ParameterizedHQL {
         List<String> associationTrace, String sourceClassName) throws QueryProcessingException {
         LOG.debug("Processing association " + sourceClassName + " to " + association.getName());
         
-		String roleName = classAccessUtil.getRoleName(sourceClassName, association);
+		String roleName = roleNameResolver.getRoleName(sourceClassName, association);
 		if (roleName == null) {
 			// still null?? no association to the object!
 			throw new QueryProcessingException("Association from type " + sourceClassName + 
@@ -414,8 +402,7 @@ public class CQL2ParameterizedHQL {
     
     
     // uses the class type to convert the value to a typed object
-    private java.lang.Object valueToObject(JavaClass clazz, String value) throws QueryProcessingException {
-        String className = clazz.getClassName();
+    private java.lang.Object valueToObject(String className, String value) throws QueryProcessingException {
         LOG.debug("Converting \"" + value + "\" to object of type " + className);
         if (className.equals(String.class.getName())) {
             return value;

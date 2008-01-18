@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.sdkquery4.style.beanmap;
+package gov.nih.nci.cagrid.sdkquery4.processor;
 
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.sdkquery4.beans.domaininfo.DomainType;
@@ -22,7 +22,7 @@ import javax.xml.namespace.QName;
  * @author David Ervin
  * 
  * @created Jan 16, 2008 11:30:36 AM
- * @version $Id: DomainTypesInformationUtil.java,v 1.3 2008-01-16 20:08:48 dervin Exp $ 
+ * @version $Id: DomainTypesInformationUtil.java,v 1.1 2008-01-18 15:13:29 dervin Exp $ 
  */
 public class DomainTypesInformationUtil {
     

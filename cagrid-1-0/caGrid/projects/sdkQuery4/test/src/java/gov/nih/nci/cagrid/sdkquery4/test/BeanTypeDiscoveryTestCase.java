@@ -6,10 +6,10 @@ import gov.nih.nci.cagrid.metadata.common.UMLClass;
 import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
 import gov.nih.nci.cagrid.metadata.dataservice.UMLGeneralization;
 import gov.nih.nci.cagrid.sdkquery4.beans.domaininfo.DomainTypesInformation;
+import gov.nih.nci.cagrid.sdkquery4.processor.DomainTypesInformationUtil;
 import gov.nih.nci.cagrid.sdkquery4.style.beanmap.BeanTypeDiscoveryEvent;
 import gov.nih.nci.cagrid.sdkquery4.style.beanmap.BeanTypeDiscoveryEventListener;
 import gov.nih.nci.cagrid.sdkquery4.style.beanmap.BeanTypeDiscoveryMapper;
-import gov.nih.nci.cagrid.sdkquery4.style.beanmap.DomainTypesInformationUtil;
 
 import java.io.File;
 import java.io.FileReader;
@@ -34,7 +34,7 @@ import org.apache.log4j.Logger;
  * @author David Ervin
  * 
  * @created Jan 15, 2008 1:33:01 PM
- * @version $Id: BeanTypeDiscoveryTestCase.java,v 1.3 2008-01-16 20:08:48 dervin Exp $ 
+ * @version $Id: BeanTypeDiscoveryTestCase.java,v 1.4 2008-01-18 15:13:29 dervin Exp $ 
  */
 public class BeanTypeDiscoveryTestCase extends TestCase {
 
