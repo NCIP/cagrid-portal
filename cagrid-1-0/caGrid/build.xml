@@ -940,6 +940,7 @@
 	<!-- =============================================================== -->
 	<target name="build-sdkQuery4" depends="prepare" description="Builds caGrid SDK 4.0 Query Processor and Data Service Style">
 		<resolveDependencies extdir="${projects.dir}/sdkQuery4/ext">
+			<artifact refid="ant-contrib.jars" />
 			<artifact refid="cagrid.properties" />
 			<artifact refid="core.jars" />
 			<artifact refid="core.test.jars" />
