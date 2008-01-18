@@ -1,22 +1,15 @@
 package gov.nih.nci.cagrid.sdkquery4.style.wizard;
 
-import gov.nih.nci.cagrid.common.JarUtilities;
-import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.common.portal.DocumentChangeAdapter;
 import gov.nih.nci.cagrid.common.portal.validation.IconFeedbackPanel;
-import gov.nih.nci.cagrid.data.DataServiceConstants;
-import gov.nih.nci.cagrid.data.common.CastorMappingUtil;
 import gov.nih.nci.cagrid.data.ui.GroupSelectionListener;
 import gov.nih.nci.cagrid.data.ui.NotifyingButtonGroup;
 import gov.nih.nci.cagrid.data.ui.wizard.AbstractWizardPanel;
-import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
-import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.FileFilters;
 import gov.nih.nci.cagrid.introduce.common.ResourceManager;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
-import gov.nih.nci.cagrid.sdkquery4.processor.SDK4QueryProcessor;
-import gov.nih.nci.cagrid.sdkquery4.style.common.SDK4StyleConstants;
+import gov.nih.nci.cagrid.sdkquery4.style.wizard.config.QueryProcessorBaseConfigurationStep;
 
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -26,6 +19,7 @@ import java.awt.Insets;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 
 import javax.swing.ButtonModel;
 import javax.swing.JButton;
@@ -39,6 +33,7 @@ import javax.swing.event.DocumentEvent;
 import org.cagrid.grape.utils.CompositeErrorDialog;
 
 import com.jgoodies.validation.Severity;
+import com.jgoodies.validation.ValidationMessage;
 import com.jgoodies.validation.ValidationResult;
 import com.jgoodies.validation.ValidationResultModel;
 import com.jgoodies.validation.message.SimpleValidationMessage;
@@ -53,7 +48,7 @@ import com.jgoodies.validation.view.ValidationComponentUtils;
  * @author David Ervin
  * 
  * @created Nov 27, 2007 4:50:32 PM
- * @version $Id: QueryProcessorConfigurationPanel.java,v 1.10 2008-01-18 20:18:36 dervin Exp $ 
+ * @version $Id: QueryProcessorConfigurationPanel.java,v 1.11 2008-01-18 21:18:57 dervin Exp $ 
  */
 public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
     // keys for validation
@@ -66,9 +61,6 @@ public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
     
     // bit bucket key for the beans jar filename
     public static final String KEY_BEANS_JAR_FILENAME = "SDK 4.0 Beans Jar";
-    
-    // the config dir as a jar file
-    private static File CONFIG_DIR_JAR = null;
 
     private JLabel applicationNameLabel = null;
     private JTextField applicationNameTextField = null;
@@ -97,16 +89,18 @@ public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
     private IconFeedbackPanel validationPanel = null;
     private ValidationResultModel validationModel = null;
     private DocumentChangeAdapter documentChangeListener = null;
+    private QueryProcessorBaseConfigurationStep configurationStep = null;
     
 
     /**
      * @param extensionDescription
      * @param info
      */
-    public QueryProcessorConfigurationPanel(ServiceExtensionDescriptionType extensionDescription,
-        ServiceInformation info) {
+    public QueryProcessorConfigurationPanel(
+        ServiceExtensionDescriptionType extensionDescription, ServiceInformation info) {
         super(extensionDescription, info);
         this.validationModel = new DefaultValidationResultModel();
+        this.configurationStep = new QueryProcessorBaseConfigurationStep(info);
         this.documentChangeListener = new DocumentChangeAdapter() {
             public void documentEdited(DocumentEvent e) {
                 validateInput();
@@ -136,54 +130,11 @@ public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
     public void movingNext() {
         // called when the 'next' button is clicked
         // copy the beans jar in to the service
-        File beansJar = new File(getBeansJarTextField().getText());
-        File beansDest = new File(getServiceInformation().getBaseDirectory(), 
-            "lib" + File.separator + beansJar.getName());
         try {
-            Utils.copyFile(beansJar, beansDest);
-        } catch (IOException ex) {
+            configurationStep.applyConfiguration();
+        } catch (Exception ex) {
             ex.printStackTrace();
-            CompositeErrorDialog.showErrorDialog("Error copying beans jar", ex.getMessage(), ex);
-        }
-        // jar up the config dir, then copy it in too
-        File configDir = new File(getConfigDirTextField().getText());
-        File configJar = new File(getServiceInformation().getBaseDirectory(), 
-            "lib" + File.separator + getApplicationNameTextField().getText() + "-config.jar");
-        try {
-            JarUtilities.jarDirectory(configDir, configJar);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-            CompositeErrorDialog.showErrorDialog("Error packaging configuration directory", ex.getMessage(), ex);
-        }
-        CONFIG_DIR_JAR = configJar;
-        // grab the castor marshalling and unmarshalling xml mapping files
-        // from the config dir and copy them into the service's package structure
-        try {
-            StringBuffer marshallingMappingFile = Utils.fileToStringBuffer(
-                new File(configDir, CastorMappingUtil.CASTOR_MARSHALLING_MAPPING_FILE));
-            StringBuffer unmarshallingMappingFile = Utils.fileToStringBuffer(
-                new File(configDir, CastorMappingUtil.CASTOR_UNMARSHALLING_MAPPING_FILE));
-            // copy the mapping files to the service's source dir + base package name
-            String marshallOut = CastorMappingUtil.getMarshallingCastorMappingFileName(getServiceInformation());
-            String unmarshallOut = CastorMappingUtil.getUnmarshallingCastorMappingFileName(getServiceInformation());
-            Utils.stringBufferToFile(marshallingMappingFile, marshallOut);
-            Utils.stringBufferToFile(unmarshallingMappingFile, unmarshallOut);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-            CompositeErrorDialog.showErrorDialog("Error extracting castor mapping files", ex.getMessage(), ex);
-        }
-        
-        // if local API, copy in the orm jar
-        if (getLocalApiRadioButton().isSelected()) {
-            File ormFile = new File(getOrmJarTextField().getText());
-            File ormDest = new File(getServiceInformation().getBaseDirectory(), 
-                "lib" + File.separator + ormFile.getName());
-            try {
-                Utils.copyFile(ormFile, ormDest);
-            } catch (IOException ex) {
-                ex.printStackTrace();
-                CompositeErrorDialog.showErrorDialog("Error copying orm jar", ex.getMessage(), ex);
-            }
+            CompositeErrorDialog.showErrorDialog("Error applying configuration", ex.getMessage(), ex);
         }
     }
     
@@ -242,6 +193,13 @@ public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
         if (applicationNameTextField == null) {
             applicationNameTextField = new JTextField();
             applicationNameTextField.getDocument().addDocumentListener(documentChangeListener);
+            applicationNameTextField.getDocument().addDocumentListener(new DocumentChangeAdapter() {
+                public void documentEdited(DocumentEvent e) {
+                    if (componentIsValid(KEY_APPLICATION_NAME)) {
+                        configurationStep.setApplicationName(getApplicationNameTextField().getText());
+                    }
+                }
+            });
         }
         return applicationNameTextField;
     }
@@ -298,6 +256,7 @@ public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
                             }
                         }
                         getBeansJarTextField().setText(fullFilename);
+                        configurationStep.setBeansJarLocation(fullFilename);
                         validateInput();
                     } catch (IOException ex) {
                         ex.printStackTrace();
@@ -352,11 +311,7 @@ public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
                     try {
                         String filename = ResourceManager.promptDir(null);
                         getConfigDirTextField().setText(filename);
-                        // if the old config dir as jar exists, delete it
-                        if (CONFIG_DIR_JAR != null && CONFIG_DIR_JAR.exists()) {
-                            CONFIG_DIR_JAR.delete();
-                            CONFIG_DIR_JAR = null;
-                        }
+                        configurationStep.setConfigurationDir(filename);
                         validateInput();
                     } catch (IOException ex) {
                         ex.printStackTrace();
@@ -529,6 +484,7 @@ public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
                             }
                         }
                         getOrmJarTextField().setText(filename);
+                        configurationStep.setOrmJarLocation(filename);
                         validateInput();
                     } catch (IOException ex) {
                         ex.printStackTrace();
@@ -551,6 +507,8 @@ public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
             caseInsensitiveCheckBox.setText("Case Insensitive Querying");
             caseInsensitiveCheckBox.addItemListener(new java.awt.event.ItemListener() {
                 public void itemStateChanged(java.awt.event.ItemEvent e) {
+                    configurationStep.setCaseInsensitiveQueries(
+                        getCaseInsensitiveCheckBox().isSelected());
                     validateInput();
                 }
             });
@@ -582,6 +540,13 @@ public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
         if (hostNameTextField == null) {
             hostNameTextField = new JTextField();
             hostNameTextField.getDocument().addDocumentListener(documentChangeListener);
+            hostNameTextField.getDocument().addDocumentListener(new DocumentChangeAdapter() {
+                public void documentEdited(DocumentEvent e) {
+                    if (componentIsValid(KEY_HOST_NAME)) {
+                        configurationStep.setHostName(getHostNameTextField().getText());
+                    }
+                }
+            });
         }
         return hostNameTextField;
     }
@@ -610,6 +575,13 @@ public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
         if (portTextField == null) {
             portTextField = new JTextField();
             portTextField.getDocument().addDocumentListener(documentChangeListener);
+            portTextField.getDocument().addDocumentListener(new DocumentChangeAdapter() {
+                public void documentEdited(DocumentEvent e) {
+                    if (componentIsValid(KEY_PORT_NUMBER)) {
+                        configurationStep.setHostPort(Integer.valueOf(portTextField.getText()));
+                    }
+                }
+            });
         }
         return portTextField;
     }
@@ -841,10 +813,6 @@ public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
         updateComponentTreeSeverity();
         // update next button enabled
         setNextEnabled(!validationModel.hasErrors());
-        // store the configuration changes
-        if (!validationModel.hasErrors()) {
-            storeConfigurationProperties();
-        }
     }
     
     
@@ -854,42 +822,32 @@ public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
     }
     
     
+    private boolean componentIsValid(String componentKey) {
+        boolean valid = true;
+        if (validationModel.getResult() != null
+            && validationModel.getResult().getMessages() != null) {
+            List<ValidationMessage> messages = validationModel.getResult().getMessages();
+            for (ValidationMessage message : messages) {
+                if (message.key().equals(componentKey)) {
+                    if (!Severity.OK.equals(message.severity())) {
+                        valid = false;
+                        break;
+                    }
+                }
+            }
+        }
+        return valid;
+    }
+    
+    
     // ------------
     // helpers
     // ------------
-
-    
-    private void storeConfigurationProperties() {
-        // store configuration properties for the query processor
-        ServiceDescription desc = getServiceInformation().getServiceDescriptor();
-        // store the beans jar filename
-        File beansJarFile = new File(getBeansJarTextField().getText());
-        CommonTools.setServiceProperty(desc,
-            SDK4StyleConstants.BEANS_JAR_FILENAME, beansJarFile.getName(), false);
-        CommonTools.setServiceProperty(desc, 
-            DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX + SDK4QueryProcessor.PROPERTY_APPLICATION_NAME, 
-            getApplicationNameTextField().getText(), false);
-        CommonTools.setServiceProperty(desc, 
-            DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX + SDK4QueryProcessor.PROPERTY_CASE_INSENSITIVE_QUERYING,
-            String.valueOf(getCaseInsensitiveCheckBox().isSelected()), false);
-        boolean isLocal = getLocalApiRadioButton().isSelected();
-        CommonTools.setServiceProperty(desc, 
-            DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX + SDK4QueryProcessor.PROPERTY_USE_LOCAL_API,
-            String.valueOf(isLocal), false);
-        CommonTools.setServiceProperty(desc, 
-            DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX + SDK4QueryProcessor.PROPERTY_ORM_JAR_NAME,
-            isLocal ? new File(getOrmJarTextField().getText()).getName() : "", false);
-        CommonTools.setServiceProperty(desc, 
-            DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX + SDK4QueryProcessor.PROPERTY_HOST_NAME,
-            isLocal ? "" : getHostNameTextField().getText(), false);
-        CommonTools.setServiceProperty(desc, 
-            DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX + SDK4QueryProcessor.PROPERTY_HOST_PORT,
-            isLocal ? "" : getPortTextField().getText(), false);
-    }
     
     
     private void setLocalRemoteComponentsEnabled() {
         boolean local = localApiRadioButton.isSelected();
+        
         getOrmJarLabel().setEnabled(local);
         getOrmJarTextField().setEnabled(local);
         getOrmJarBrowseButton().setEnabled(local);
@@ -897,5 +855,7 @@ public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
         getHostNameTextField().setEnabled(!local);
         getPortLabel().setEnabled(!local);
         getPortTextField().setEnabled(!local);
+        
+        configurationStep.setUseLocalApi(local);
     }
 }
