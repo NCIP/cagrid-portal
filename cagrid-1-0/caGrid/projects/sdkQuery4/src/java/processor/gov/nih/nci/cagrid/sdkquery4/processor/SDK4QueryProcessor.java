@@ -39,7 +39,7 @@ import org.globus.wsrf.security.SecurityManager;
  * @author David Ervin
  * 
  * @created Oct 3, 2007 10:34:55 AM
- * @version $Id: SDK4QueryProcessor.java,v 1.13 2008-01-18 18:19:32 dervin Exp $ 
+ * @version $Id: SDK4QueryProcessor.java,v 1.14 2008-01-18 18:20:22 dervin Exp $ 
  */
 public class SDK4QueryProcessor extends CQLQueryProcessor {
     // configuration property keys
@@ -300,7 +300,6 @@ public class SDK4QueryProcessor extends CQLQueryProcessor {
         // generate the HQL to perform the query
         // new CQL2HQL process handles query modifiers at HQL level
         ParameterizedHqlQuery parameterizedHql = cqlTranslator.convertToHql(query);
-        System.out.println("Executing HQL:\n" + parameterizedHql);
         LOG.debug("Executing HQL:\n" + parameterizedHql);
 
         // process the query
