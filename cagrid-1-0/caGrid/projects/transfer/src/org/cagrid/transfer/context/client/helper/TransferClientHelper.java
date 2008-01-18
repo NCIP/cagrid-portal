@@ -46,36 +46,5 @@ public class TransferClientHelper {
         }
         throw new Exception("Protocol " + url.getProtocol() + " not supported.");
     }
-    
-    
-    public static void main(String [] args) throws IOException{
-        GlobusGSSCredentialImpl cred = null;
-        try {
-            cred = new GlobusGSSCredentialImpl(GlobusCredential.getDefaultCredential(),
-                GSSCredential.INITIATE_AND_ACCEPT);
-        } catch (GlobusCredentialException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-        } catch (GSSException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-        }
-        GSIHttpURLConnection connection = null;
-        try {
-            connection = new GSIHttpURLConnection(new URL("https://localhost:8443/caGridTransfer/TransferServlet"));
-            connection.setGSSMode(GSIConstants.MODE_SSL);
-        } catch (MalformedURLException e) {
-     
-            e.printStackTrace();
-        }
-        connection.setCredentials(cred);
-        InputStream stream = connection.getInputStream();
-        
-        int letter = stream.read();
-        while(letter!=-1){
-            System.out.println(String.valueOf(letter));
-            letter = stream.read();
-        }
-        System.out.println(String.valueOf(letter));
-    }
+ 
 }

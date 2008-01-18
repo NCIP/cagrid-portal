@@ -80,6 +80,7 @@ public class TransferServlet extends HttpServlet {
             props = (TransferServiceContextResourceProperties) Utils.deserializeObject(new FileReader(persistenceDir
                 + File.separator + requestedID + ".xml"), TransferServiceContextResourceProperties.class);
         } catch (Exception e) {
+            System.out.println("Cannot find or deserialize the resource properties describing this transfer object: " + requestedID);
             e.printStackTrace();
             resp.sendError(404);
             return;
@@ -99,6 +100,7 @@ public class TransferServlet extends HttpServlet {
             }
             resp.getOutputStream().write(bytes,0,length);
         } else {
+            System.out.println("Trouble retrieving data for requested object: " + requestedID + " at file: " + desc.getLocation());
             resp.sendError(403);
         }
 

@@ -13,11 +13,9 @@ public class TransferServiceImpl extends TransferServiceImplBase {
 	
 	public TransferServiceImpl() throws RemoteException {
 		super();
-		System.err.println("PRE LOADING CONFIGURATION");
 		try {
             TransferServiceConfiguration.getConfiguration();
         } catch (Exception e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 	}
