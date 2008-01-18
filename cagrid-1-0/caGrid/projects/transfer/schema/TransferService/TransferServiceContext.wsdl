@@ -31,6 +31,18 @@
           </sequence>
         </complexType>
       </element>
+      <element name="PutRequest">
+        <complexType>
+          <sequence>
+            <element name="anyType" type="xs:anyType" minOccurs="1" maxOccurs="1" />
+          </sequence>
+        </complexType>
+      </element>
+      <element name="PutResponse">
+        <complexType>
+          <sequence />
+        </complexType>
+      </element>
       <element name="TransferServiceContextResourceProperties">
         <complexType>
           <sequence>
@@ -49,6 +61,12 @@
   <message name="GetDataTransferDescriptorResponse">
     <part name="parameters" element="tns:GetDataTransferDescriptorResponse" />
   </message>
+  <message name="PutRequest">
+    <part name="parameters" element="tns:PutRequest" />
+  </message>
+  <message name="PutResponse">
+    <part name="parameters" element="tns:PutResponse" />
+  </message>
   <!--============================================================
 
                        P O R T T Y P E
@@ -58,6 +76,10 @@
     <operation name="getDataTransferDescriptor">
       <input message="tns:GetDataTransferDescriptorRequest" wsa:Action="http://transfer.cagrid.org/TransferService/Context/GetDataTransferDescriptorRequest" />
       <output message="tns:GetDataTransferDescriptorResponse" wsa:Action="http://transfer.cagrid.org/TransferService/Context/GetDataTransferDescriptorResponse" />
+    </operation>
+    <operation name="Put">
+      <input message="tns:PutRequest" wsa:Action="http://transfer.cagrid.org/TransferService/Context/PutRequest" />
+      <output message="tns:PutResponse" wsa:Action="http://transfer.cagrid.org/TransferService/Context/PutResponse" />
     </operation>
     <operation name="getServiceSecurityMetadata">
       <input message="wns0:GetServiceSecurityMetadataRequest" wsa:Action="http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity/GetServiceSecurityMetadataRequest" />

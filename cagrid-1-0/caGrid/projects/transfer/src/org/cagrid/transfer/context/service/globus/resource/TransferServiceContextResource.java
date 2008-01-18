@@ -30,6 +30,19 @@ public class TransferServiceContextResource extends TransferServiceContextResour
         cal.roll(Calendar.MINUTE, 30);
         this.setTerminationTime(cal);
     }
+    
+    public void stage(DataDescriptor dd) throws Exception {
+        File storageFile = new File(getStorageDirectory().getAbsolutePath() + File.separator + (String) getID()
+            + ".cache");
+        DataStorageDescriptor desc = new DataStorageDescriptor();
+        desc.setLocation(storageFile.getAbsolutePath());
+        if (SecurityUtils.getCallerIdentity() != null) {
+            desc.setUserDN(SecurityUtils.getCallerIdentity());
+        }
+        desc.setDescriptor(dd);
+        desc.setStaged(false);
+        setDataStorageDescriptor(desc);
+    }
 
 
     public void stage(byte[] data, DataDescriptor dd) throws Exception {
@@ -44,6 +57,7 @@ public class TransferServiceContextResource extends TransferServiceContextResour
             desc.setUserDN(SecurityUtils.getCallerIdentity());
         }
         desc.setDescriptor(dd);
+        desc.setStaged(true);
         setDataStorageDescriptor(desc);
     }
 
@@ -64,6 +78,7 @@ public class TransferServiceContextResource extends TransferServiceContextResour
             desc.setUserDN(SecurityUtils.getCallerIdentity());
         }
         desc.setDescriptor(dd);
+        desc.setStaged(true);
         setDataStorageDescriptor(desc);
     }
 
@@ -75,6 +90,7 @@ public class TransferServiceContextResource extends TransferServiceContextResour
             desc.setUserDN(SecurityUtils.getCallerIdentity());
         }
         desc.setDescriptor(dd);
+        desc.setStaged(true);
         setDataStorageDescriptor(desc);
     }
 

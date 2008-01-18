@@ -72,6 +72,11 @@ public class TransferServiceContextAuthorization implements PDP {
 		
 		
 	}
+					
+	public static void authorizePut() throws RemoteException {
+		
+		
+	}
 	
 	
 	public boolean isPermitted(Subject peerSubject, MessageContext context, QName operation)
@@ -115,6 +120,14 @@ public class TransferServiceContextAuthorization implements PDP {
 		} else if(operation.getLocalPart().equals("getDataTransferDescriptor")){
 			try{
 				authorizeGetDataTransferDescriptor();
+				return true;
+			} catch (Exception e){
+				e.printStackTrace();
+				return false;
+			}
+		} else if(operation.getLocalPart().equals("put")){
+			try{
+				authorizePut();
 				return true;
 			} catch (Exception e){
 				e.printStackTrace();

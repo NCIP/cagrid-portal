@@ -118,6 +118,13 @@
      <ns7:Output qName="ns12:DataTransferDescriptor" description="" isArray="false" xmlns:ns12="http://transfer.cagrid.org/Transfer"/>
      <ns7:Exceptions/>
     </ns7:Method>
+    <ns7:Method description="" isImported="false" isProvided="false" name="Put" xsi:type="ns7:MethodType">
+     <ns7:Inputs>
+      <ns7:Input qName="xsd:anyType" description="" isArray="false" name="anyType" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+     </ns7:Inputs>
+     <ns7:Output qName="void" description="" isArray="false"/>
+     <ns7:Exceptions/>
+    </ns7:Method>
    </ns7:Methods>
    <ns13:ResourcePropertiesList xsi:type="ns13:ResourcePropertiesListType" xmlns:ns13="gme://gov.nih.nci.cagrid.introduce/1/Resources">
     <ns13:ResourceProperty qName="ns14:CurrentTime" description="" populateFromFile="false" register="false" xsi:type="ns13:ResourcePropertyType" xmlns:ns14="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.xsd"/>

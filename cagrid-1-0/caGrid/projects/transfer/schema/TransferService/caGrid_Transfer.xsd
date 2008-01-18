@@ -32,6 +32,7 @@
 		<xs:sequence>
 			<xs:element type="string" name="location"></xs:element>
 			<xs:element type="string" name="userDN"></xs:element>
+			<xs:element type="boolean" name="staged"></xs:element>
 			<xs:element type="tns:DataDescriptor" name="descriptor"></xs:element>
 		</xs:sequence>
 	</xs:complexType>

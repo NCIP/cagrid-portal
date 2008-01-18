@@ -76,6 +76,15 @@ public class TransferServiceContextClient extends TransferServiceContextClientBa
 		}
 	}
 
+  public void put(java.lang.Object anyType) throws RemoteException {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"put");
+    org.cagrid.transfer.context.stubs.PutRequest params = new org.cagrid.transfer.context.stubs.PutRequest();
+    params.setAnyType(anyType);
+    org.cagrid.transfer.context.stubs.PutResponse boxedResult = portType.put(params);
+    }
+  }
+
   public org.oasis.wsrf.lifetime.DestroyResponse destroy(org.oasis.wsrf.lifetime.Destroy params) throws RemoteException {
     synchronized(portTypeMutex){
       configureStubSecurity((Stub)portType,"destroy");
