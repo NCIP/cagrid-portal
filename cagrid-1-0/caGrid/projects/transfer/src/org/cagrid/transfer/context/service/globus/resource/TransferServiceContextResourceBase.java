@@ -90,6 +90,7 @@ import org.oasis.wsrf.lifetime.TerminationNotification;
  */
 public abstract class TransferServiceContextResourceBase extends ReflectionResource implements Resource
                                                   ,PersistenceCallback
+                                                  ,TopicListAccessor
                                                   ,SecureResource
                                                   ,RemoveCallback
                                                   {
@@ -108,6 +109,7 @@ public abstract class TransferServiceContextResourceBase extends ReflectionResou
     private PersistenceHelper resourcePropertyPersistenceHelper = null;
     //used to persist notifications
     private FilePersistenceHelper resourcePersistenceHelper = null;
+    private TopicList topicList;
     private boolean beingLoaded = false;
     
     public TransferServiceContextResourceBase() {
@@ -130,6 +132,26 @@ public abstract class TransferServiceContextResourceBase extends ReflectionResou
         // Call the super initialize on the ReflectionResource                  
 	    super.initialize(resourceBean,resourceElementQName,id);
 		this.desc = null;
+		this.topicList = new SimpleTopicList(this);
+
+        // create the topics for each resource property
+        Iterator it = getResourcePropertySet().iterator();
+        List newTopicProps = new ArrayList();
+        while(it.hasNext()){
+            ResourceProperty prop = (ResourceProperty)it.next();
+            prop.getMetaData().getName();
+            prop = new ResourcePropertyTopic(prop);
+            this.topicList.addTopic((Topic)prop);
+            newTopicProps.add(prop);
+        }
+        // replace the non topic properties with the topic properties
+        Iterator newTopicIt = newTopicProps.iterator();
+        while(newTopicIt.hasNext()){
+            ResourceProperty prop = (ResourceProperty)newTopicIt.next();
+            getResourcePropertySet().remove(prop.getMetaData().getName());
+            getResourcePropertySet().add(prop);
+        }
+        
 
 
 		// register the service to the index service
@@ -146,6 +168,17 @@ public abstract class TransferServiceContextResourceBase extends ReflectionResou
 	 * @see org.globus.wsrf.ResourceLifetime#setTerminationTime(java.util.Calendar)
 	 */
 	public void setTerminationTime(Calendar time) {	
+		Topic terminationTopic = ((Topic)getResourcePropertySet().get(TransferServiceContextConstants.TERMINATIONTIME));
+        if (terminationTopic != null) {
+            TerminationNotification terminationNotification =
+                new TerminationNotification();
+            terminationNotification.setTerminationTime(time);
+            try {
+                terminationTopic.notify(terminationNotification);
+            } catch(Exception e) {
+                logger.error("Unable to send terminationTime notification", e);
+            }
+        }	
         
 		super.setTerminationTime(time);
         //call the first store to persist the resource
@@ -387,6 +420,9 @@ public abstract class TransferServiceContextResourceBase extends ReflectionResou
 	}
 	
 
+    public TopicList getTopicList() {
+        return this.topicList;
+    }
 
     public void remove() throws ResourceException {     
 		resourcePropertyPersistenceHelper.remove(this);
@@ -410,6 +446,8 @@ public abstract class TransferServiceContextResourceBase extends ReflectionResou
         try {
             fis = new FileInputStream(file);
             ObjectInputStream ois = new ObjectInputStream(fis);
+            SubscriptionPersistenceUtils.loadSubscriptionListeners(
+                this.getTopicList(), ois);
         } catch (Exception e) {
             beingLoaded = false;
             throw new ResourceException("Failed to load resource", e);
@@ -437,6 +475,8 @@ public abstract class TransferServiceContextResourceBase extends ReflectionResou
                 resourcePersistenceHelper.getStorageDirectory());
             fos = new FileOutputStream(tmpFile);
             ObjectOutputStream oos = new ObjectOutputStream(fos);
+            SubscriptionPersistenceUtils.storeSubscriptionListeners(
+                this.getTopicList(), oos);
         } catch (Exception e) {
             if (tmpFile != null) {
                 tmpFile.delete();

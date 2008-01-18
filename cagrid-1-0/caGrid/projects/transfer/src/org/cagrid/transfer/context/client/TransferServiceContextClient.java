@@ -76,11 +76,10 @@ public class TransferServiceContextClient extends TransferServiceContextClientBa
 		}
 	}
 
-  public void staged() throws RemoteException {
+  public org.oasis.wsn.SubscribeResponse subscribe(org.oasis.wsn.Subscribe params) throws RemoteException {
     synchronized(portTypeMutex){
-      configureStubSecurity((Stub)portType,"staged");
-    org.cagrid.transfer.context.stubs.StagedRequest params = new org.cagrid.transfer.context.stubs.StagedRequest();
-    org.cagrid.transfer.context.stubs.StagedResponse boxedResult = portType.staged(params);
+      configureStubSecurity((Stub)portType,"subscribe");
+    return portType.subscribe(params);
     }
   }
 
@@ -120,6 +119,14 @@ public class TransferServiceContextClient extends TransferServiceContextClientBa
     org.cagrid.transfer.context.stubs.PutRequest params = new org.cagrid.transfer.context.stubs.PutRequest();
     params.setAnyType(anyType);
     org.cagrid.transfer.context.stubs.PutResponse boxedResult = portType.put(params);
+    }
+  }
+
+  public void staged() throws RemoteException {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"staged");
+    org.cagrid.transfer.context.stubs.StagedRequest params = new org.cagrid.transfer.context.stubs.StagedRequest();
+    org.cagrid.transfer.context.stubs.StagedResponse boxedResult = portType.staged(params);
     }
   }
 

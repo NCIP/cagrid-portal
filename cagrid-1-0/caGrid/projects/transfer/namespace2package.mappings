@@ -9,6 +9,7 @@ http\://security.introduce.cagrid.nci.nih.gov/ServiceSecurity=gov.nih.nci.cagrid
 http\://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl=org.oasis.wsrf.lifetime
 http\://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl=org.oasis.wsrf.lifetime
 http\://www.globus.org/transfer=org.cagrid.transfer
+http\://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.wsdl=org.oasis.wsn
 
 http\://transfer.cagrid.org/TransferService/Context/types=org.cagrid.transfer.context.stubs.types
 http\://transfer.cagrid.org/Transfer=org.cagrid.transfer.descriptor
