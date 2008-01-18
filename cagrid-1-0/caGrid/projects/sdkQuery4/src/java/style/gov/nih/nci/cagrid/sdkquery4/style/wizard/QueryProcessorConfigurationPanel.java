@@ -53,7 +53,7 @@ import com.jgoodies.validation.view.ValidationComponentUtils;
  * @author David Ervin
  * 
  * @created Nov 27, 2007 4:50:32 PM
- * @version $Id: QueryProcessorConfigurationPanel.java,v 1.9 2008-01-18 15:36:05 dervin Exp $ 
+ * @version $Id: QueryProcessorConfigurationPanel.java,v 1.10 2008-01-18 20:18:36 dervin Exp $ 
  */
 public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
     // keys for validation
@@ -127,8 +127,9 @@ public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
 
 
     public void update() {
-        // TODO Auto-generated method stub
-
+        // This method is (mostly) blank, since it's the first panel to run, 
+        // and no other panel changes the values used by this panel
+        validateInput();
     }
     
     

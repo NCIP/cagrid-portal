@@ -26,7 +26,7 @@ import org.cagrid.grape.utils.CompositeErrorDialog;
  * @author David Ervin
  * 
  * @created Oct 5, 2007 2:08:34 PM
- * @version $Id: SDK4InitializationPanel.java,v 1.4 2007-12-07 15:37:52 dervin Exp $ 
+ * @version $Id: SDK4InitializationPanel.java,v 1.5 2008-01-18 20:18:36 dervin Exp $ 
  */
 public class SDK4InitializationPanel extends CoreDsIntroPanel {
     
@@ -74,12 +74,5 @@ public class SDK4InitializationPanel extends CoreDsIntroPanel {
         // add the query processor class name as a service property
         CommonTools.setServiceProperty(getServiceInformation().getServiceDescriptor(),
             DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY, SDK4_QUERY_PROCESSOR_CLASSNAME, false);
-        /* fix this for sdk 4 serializer
-        // set the serializer and deserializer properties
-        getBitBucket().put(SchemaTypesPanel.TYPE_SERIALIZER_CLASS_PROPERTY, 
-            SDK32SerializerFactory.class.getName());
-        getBitBucket().put(SchemaTypesPanel.TYPE_DESERIALIZER_CLASS_PROPERTY,
-            SDK32DeserializerFactory.class.getName());
-        */
     }
 }
