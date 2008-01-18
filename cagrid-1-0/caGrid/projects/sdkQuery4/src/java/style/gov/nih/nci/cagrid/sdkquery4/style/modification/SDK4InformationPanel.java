@@ -31,7 +31,7 @@ import javax.swing.border.TitledBorder;
  * @author David Ervin
  * 
  * @created Jul 27, 2007 10:38:51 AM
- * @version $Id: SDK4InformationPanel.java,v 1.1 2007-11-30 19:57:59 dervin Exp $ 
+ * @version $Id: SDK4InformationPanel.java,v 1.2 2008-01-18 21:13:57 dervin Exp $ 
  */
 public class SDK4InformationPanel extends DataServiceModificationSubPanel {
     
@@ -96,9 +96,6 @@ public class SDK4InformationPanel extends DataServiceModificationSubPanel {
         if (!useLocal) {
             String hostname = getQueryProcessorProperty(SDK4QueryProcessor.PROPERTY_HOST_NAME);
             String port = getQueryProcessorProperty(SDK4QueryProcessor.PROPERTY_HOST_PORT);
-            if (!hostname.startsWith("http://") || !hostname.startsWith("https://")) {
-                hostname = "http://" + hostname;
-            }
             if (hostname.endsWith("/")) {
                 hostname = hostname.substring(0, hostname.length() - 1);
             }
