@@ -103,7 +103,7 @@
 
 
 	<!-- creates output directories -->
-    <target name="init" depends="configure">
+    <target name="init" depends="defineJetcTask, defineContribTasks, configure">
 		<mkdir dir="${build.dir}" />
     	<mkdir dir="${build.jars.dir}"/>
 		<mkdir dir="${build.core.dest}" />
@@ -111,7 +111,10 @@
 		<mkdir dir="${build.upgrades.dest}" />
     	<mkdir dir="${build.sdkstyle.dest}" />
 		<mkdir dir="${test.core.classes.dir}" />
+    </target>
 	
+	
+	<target name="defineJetcTask">
 		<!-- using jet for templates -->
 		<taskdef name="jetc" classname="ch.paranor.epla.structure.JETCTask">
 			<classpath>
@@ -126,16 +129,19 @@
 				</fileset>
 			</classpath>
 		</taskdef>
+	</target>
 	
+	
+	<target name="defineContribTasks">
 		<!-- using ant contrib for contidionals, looping, and runtarget -->
-	    <taskdef resource="net/sf/antcontrib/antlib.xml">
+    	<taskdef resource="net/sf/antcontrib/antlib.xml">
 			<classpath>
 				<fileset dir="${ext.lib.dir}">
 				    <include name="ant-contrib*.jar"/>
 				</fileset>
 			</classpath>
 		</taskdef>
-    </target>
+	</target>
 
 	
 	<!-- =================================================================== -->
