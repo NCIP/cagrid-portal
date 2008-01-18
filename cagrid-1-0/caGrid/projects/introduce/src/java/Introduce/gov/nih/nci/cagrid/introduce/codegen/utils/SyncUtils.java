@@ -229,11 +229,11 @@ public class SyncUtils {
 							walkSchemasGetNamespaces(importedSchema.getCanonicalPath(), namespaces, excludedNamespaces,
 								visitedSchemas);
 						} else {
-							System.err.println("WARNING: Schema is importing itself. " + schemaFile);
+							logger.debug("WARNING: Schema is importing itself. " + schemaFile);
 						}
 					}
 				} else {
-					System.err.println("WARNING: Schema imports contain circular references. " + schemaFile);
+					logger.debug("WARNING: Schema imports contain circular references. " + schemaFile);
 				}
 			}
 		}
