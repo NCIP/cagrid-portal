@@ -40,7 +40,7 @@ public class TransferServlet extends HttpServlet {
             props.load(this.getClass().getClassLoader().getResourceAsStream("server.properties"));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
-            resp.sendError(400);
+            resp.sendError(500);
             return;
         }
         
@@ -58,7 +58,7 @@ public class TransferServlet extends HttpServlet {
                 blockSize = configBlockSize;
             } catch (NumberFormatException e) {
                 System.out.println("Service attribute block size not configured properly");
-                resp.sendError(400);
+                resp.sendError(500);
                 return;
             }
         }
@@ -82,7 +82,7 @@ public class TransferServlet extends HttpServlet {
         } catch (Exception e) {
             System.out.println("Cannot find or deserialize the resource properties describing this transfer object: " + requestedID);
             e.printStackTrace();
-            resp.sendError(404);
+            resp.sendError(500);
             return;
         }
 
@@ -91,6 +91,13 @@ public class TransferServlet extends HttpServlet {
         if (desc.getUserDN() == null || desc.getUserDN().equals(userDN)) {
             System.out.println("Storing data using block size of: " + blockSize );
             // 4 write data to the response
+            File outFile = new File(desc.getLocation());
+            if(outFile.exists()){
+                System.out.println("File is already staged for resource: " + requestedID + " at file: " + desc.getLocation());
+                resp.sendError(500);
+                return;
+            }
+            
             FileOutputStream fos = new FileOutputStream(desc.getLocation());
             byte[] data = new byte[blockSize];
             int length = req.getInputStream().read(data);
@@ -103,13 +110,14 @@ public class TransferServlet extends HttpServlet {
         } else {
             System.out.println("Trouble storing data for requested object: " + requestedID + " at file: " + desc.getLocation());
             resp.sendError(403);
+            return;
         }
         props.getDataStorageDescriptor().setStaged(true);
         try {
             Utils.serializeDocument(persistenceDir
                     + File.separator + requestedID + ".xml", props, TransferServiceContextConstants.RESOURCE_PROPERTY_SET);
         } catch (Exception e) {
-            resp.sendError(400);
+            resp.sendError(500);
             return;
         }
         
@@ -128,7 +136,7 @@ public class TransferServlet extends HttpServlet {
             props.load(this.getClass().getClassLoader().getResourceAsStream("server.properties"));
         } catch (Exception e) {
             e.printStackTrace();
-            resp.sendError(400);
+            resp.sendError(500);
             return;
             
         }
@@ -147,7 +155,7 @@ public class TransferServlet extends HttpServlet {
                 blockSize = configBlockSize;
             } catch (NumberFormatException e) {
                 System.out.println("Service attribute block size not configured properly");
-                resp.sendError(400);
+                resp.sendError(500);
                 return;
             }
         }
@@ -171,7 +179,7 @@ public class TransferServlet extends HttpServlet {
         } catch (Exception e) {
             System.out.println("Cannot find or deserialize the resource properties describing this transfer object: " + requestedID);
             e.printStackTrace();
-            resp.sendError(404);
+            resp.sendError(500);
             return;
         }
 
@@ -191,6 +199,7 @@ public class TransferServlet extends HttpServlet {
         } else {
             System.out.println("Trouble retrieving data for requested object: " + requestedID + " at file: " + desc.getLocation());
             resp.sendError(403);
+            return;
         }
 
     }
