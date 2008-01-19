@@ -5,6 +5,4 @@ Development Thoughts and Modifications
 
 To Do:
 - use new version of transfer wsdl
-- use a status var instead of staged
-- need to add deploy JBoss.....
 - need to add method in service helper that takes the ref and returns the resource so that the creator can set term time, destroy,  etc.
