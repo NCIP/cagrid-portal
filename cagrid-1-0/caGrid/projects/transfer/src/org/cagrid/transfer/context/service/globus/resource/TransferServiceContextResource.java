@@ -3,15 +3,19 @@ package org.cagrid.transfer.context.service.globus.resource;
 import gov.nih.nci.cagrid.introduce.servicetools.security.SecurityUtils;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import javax.xml.namespace.QName;
 
+import org.cagrid.transfer.context.service.helper.DataStagedCallback;
 import org.cagrid.transfer.descriptor.DataDescriptor;
 import org.cagrid.transfer.descriptor.DataStorageDescriptor;
+import org.cagrid.transfer.descriptor.Status;
 import org.cagrid.transfer.service.TransferServiceConfiguration;
 import org.globus.wsrf.ResourceException;
 
@@ -23,6 +27,9 @@ import org.globus.wsrf.ResourceException;
  */
 public class TransferServiceContextResource extends TransferServiceContextResourceBase {
 
+    private DataStagedCallback callback = null;
+    
+    
     @Override
     public void initialize(Object resourceBean, QName resourceElementQName, Object id) throws ResourceException {
         super.initialize(resourceBean, resourceElementQName, id);
@@ -31,7 +38,16 @@ public class TransferServiceContextResource extends TransferServiceContextResour
         this.setTerminationTime(cal);
     }
     
-    public void stage(DataDescriptor dd) throws Exception {
+    
+    public DataStagedCallback getDataStagedCallback(){
+        return this.callback;
+    }
+    
+    
+    
+    public void stage(DataDescriptor dd, DataStagedCallback callback) throws Exception {
+        this.callback = callback;
+        
         File storageFile = new File(getStorageDirectory().getAbsolutePath() + File.separator + (String) getID()
             + ".cache");
         DataStorageDescriptor desc = new DataStorageDescriptor();
@@ -39,47 +55,110 @@ public class TransferServiceContextResource extends TransferServiceContextResour
         if (SecurityUtils.getCallerIdentity() != null) {
             desc.setUserDN(SecurityUtils.getCallerIdentity());
         }
-        desc.setDescriptor(dd);
-        desc.setStaged(false);
+        desc.setDataDescriptor(dd);
+        desc.setStatus(Status.Staging);
         setDataStorageDescriptor(desc);
     }
 
 
-    public void stage(byte[] data, DataDescriptor dd) throws Exception {
-        File storageFile = new File(getStorageDirectory().getAbsolutePath() + File.separator + (String) getID()
-            + ".cache");
-        FileOutputStream fw = new FileOutputStream(storageFile);
-        fw.write(data);
-        fw.close();
-        DataStorageDescriptor desc = new DataStorageDescriptor();
-        desc.setLocation(storageFile.getAbsolutePath());
-        if (SecurityUtils.getCallerIdentity() != null) {
-            desc.setUserDN(SecurityUtils.getCallerIdentity());
-        }
-        desc.setDescriptor(dd);
-        desc.setStaged(true);
-        setDataStorageDescriptor(desc);
+    public void stage(final byte[] data, final DataDescriptor dd) throws Exception {
+        Thread th = new Thread(new Runnable() {
+        
+            public void run() {
+                try {
+                    DataStorageDescriptor desc = new DataStorageDescriptor();
+                    File storageFile = new File(getStorageDirectory().getAbsolutePath() + File.separator + (String) getID()
+                        + ".cache");
+                    desc.setLocation(storageFile.getAbsolutePath());
+                    if (SecurityUtils.getCallerIdentity() != null) {
+                        desc.setUserDN(SecurityUtils.getCallerIdentity());
+                    }
+                    desc.setDataDescriptor(dd);
+                    desc.setStatus(Status.Staging);
+                    setDataStorageDescriptor(desc);
+                    
+                    
+                    FileOutputStream fw = new FileOutputStream(storageFile);
+                    fw.write(data);
+                    fw.close();
+                    
+                    
+                    desc.setStatus(Status.Staged);
+                    setDataStorageDescriptor(desc);
+                    
+                } catch (ResourceException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                } catch (FileNotFoundException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                } catch (Exception e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
+        
+        });
+        
+        th.start();
+        
     }
 
 
-    public void stage(InputStream is, DataDescriptor dd) throws Exception {
-        File storageFile = new File(getStorageDirectory().getAbsolutePath() + File.separator + (String) getID()
-            + ".cache");
-        FileOutputStream fw = new FileOutputStream(storageFile);
-        int data = is.read();
-        while (data > 0) {
-            fw.write(data);
-            data = is.read();
-        }
-        fw.close();
-        DataStorageDescriptor desc = new DataStorageDescriptor();
-        desc.setLocation(storageFile.getAbsolutePath());
-        if (SecurityUtils.getCallerIdentity() != null) {
-            desc.setUserDN(SecurityUtils.getCallerIdentity());
-        }
-        desc.setDescriptor(dd);
-        desc.setStaged(true);
-        setDataStorageDescriptor(desc);
+    public void stage(final InputStream is, final DataDescriptor dd) throws Exception {
+        Thread th = new Thread(new Runnable() {
+        
+            public void run() {
+                try {
+                    
+                    DataStorageDescriptor desc = new DataStorageDescriptor();
+                    File storageFile = new File(getStorageDirectory().getAbsolutePath() + File.separator + (String) getID()
+                        + ".cache");
+                    desc.setLocation(storageFile.getAbsolutePath());
+                    if (SecurityUtils.getCallerIdentity() != null) {
+                        desc.setUserDN(SecurityUtils.getCallerIdentity());
+                    }
+                    desc.setDataDescriptor(dd);
+                    desc.setStatus(Status.Staging);
+                    setDataStorageDescriptor(desc);
+                    
+            
+                    FileOutputStream fw = new FileOutputStream(storageFile);
+                    byte[] data = new byte[1024];
+                    int length = is.read(data);
+                    while (length >= 0) {
+                        fw.write(data);
+                        length = is.read(data);
+                    }
+                    fw.write(data,0,length);
+                    fw.close();
+                    
+                    desc.setStatus(Status.Staged);
+                    setDataStorageDescriptor(desc);
+                    
+                } catch (ResourceException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                } catch (FileNotFoundException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                } catch (Exception e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+        
+            }
+        
+        });
+        
+        th.start();
+
     }
 
 
@@ -89,8 +168,8 @@ public class TransferServiceContextResource extends TransferServiceContextResour
         if (SecurityUtils.getCallerIdentity() != null) {
             desc.setUserDN(SecurityUtils.getCallerIdentity());
         }
-        desc.setDescriptor(dd);
-        desc.setStaged(true);
+        desc.setDataDescriptor(dd);
+        desc.setStatus(Status.Staged);
         setDataStorageDescriptor(desc);
     }
 

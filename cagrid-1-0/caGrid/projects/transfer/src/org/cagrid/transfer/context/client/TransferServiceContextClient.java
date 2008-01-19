@@ -76,10 +76,14 @@ public class TransferServiceContextClient extends TransferServiceContextClientBa
 		}
 	}
 
-  public org.oasis.wsn.SubscribeResponse subscribe(org.oasis.wsn.Subscribe params) throws RemoteException {
+  public void setStatus(org.cagrid.transfer.descriptor.Status status) throws RemoteException {
     synchronized(portTypeMutex){
-      configureStubSecurity((Stub)portType,"subscribe");
-    return portType.subscribe(params);
+      configureStubSecurity((Stub)portType,"setStatus");
+    org.cagrid.transfer.context.stubs.SetStatusRequest params = new org.cagrid.transfer.context.stubs.SetStatusRequest();
+    org.cagrid.transfer.context.stubs.SetStatusRequestStatus statusContainer = new org.cagrid.transfer.context.stubs.SetStatusRequestStatus();
+    statusContainer.setStatus(status);
+    params.setStatus(statusContainer);
+    org.cagrid.transfer.context.stubs.SetStatusResponse boxedResult = portType.setStatus(params);
     }
   }
 
@@ -122,11 +126,19 @@ public class TransferServiceContextClient extends TransferServiceContextClientBa
     }
   }
 
-  public void staged() throws RemoteException {
+  public org.oasis.wsn.SubscribeResponse subscribe(org.oasis.wsn.Subscribe params) throws RemoteException {
     synchronized(portTypeMutex){
-      configureStubSecurity((Stub)portType,"staged");
-    org.cagrid.transfer.context.stubs.StagedRequest params = new org.cagrid.transfer.context.stubs.StagedRequest();
-    org.cagrid.transfer.context.stubs.StagedResponse boxedResult = portType.staged(params);
+      configureStubSecurity((Stub)portType,"subscribe");
+    return portType.subscribe(params);
+    }
+  }
+
+  public org.cagrid.transfer.descriptor.Status getStatus() throws RemoteException {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"getStatus");
+    org.cagrid.transfer.context.stubs.GetStatusRequest params = new org.cagrid.transfer.context.stubs.GetStatusRequest();
+    org.cagrid.transfer.context.stubs.GetStatusResponse boxedResult = portType.getStatus(params);
+    return boxedResult.getStatus();
     }
   }
 

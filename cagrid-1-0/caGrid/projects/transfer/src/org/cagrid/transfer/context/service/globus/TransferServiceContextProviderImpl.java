@@ -26,6 +26,12 @@ public class TransferServiceContextProviderImpl{
 	}
 	
 
+    public org.cagrid.transfer.context.stubs.SetStatusResponse setStatus(org.cagrid.transfer.context.stubs.SetStatusRequest params) throws RemoteException {
+    org.cagrid.transfer.context.stubs.SetStatusResponse boxedResult = new org.cagrid.transfer.context.stubs.SetStatusResponse();
+    impl.setStatus(params.getStatus().getStatus());
+    return boxedResult;
+  }
+
   public org.cagrid.transfer.AnyXmlType get(org.cagrid.transfer.EmptyType params) throws RemoteException {
     return impl.get(params);
   }
@@ -42,9 +48,9 @@ public class TransferServiceContextProviderImpl{
     return boxedResult;
   }
 
-    public org.cagrid.transfer.context.stubs.StagedResponse staged(org.cagrid.transfer.context.stubs.StagedRequest params) throws RemoteException {
-    org.cagrid.transfer.context.stubs.StagedResponse boxedResult = new org.cagrid.transfer.context.stubs.StagedResponse();
-    impl.staged();
+    public org.cagrid.transfer.context.stubs.GetStatusResponse getStatus(org.cagrid.transfer.context.stubs.GetStatusRequest params) throws RemoteException {
+    org.cagrid.transfer.context.stubs.GetStatusResponse boxedResult = new org.cagrid.transfer.context.stubs.GetStatusResponse();
+    boxedResult.setStatus(impl.getStatus());
     return boxedResult;
   }
 

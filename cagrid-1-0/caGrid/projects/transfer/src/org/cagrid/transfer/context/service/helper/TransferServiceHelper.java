@@ -4,9 +4,19 @@ import java.io.File;
 import java.io.InputStream;
 import java.rmi.RemoteException;
 
+import org.cagrid.transfer.context.stubs.types.TransferServiceContextReference;
 import org.cagrid.transfer.descriptor.DataDescriptor;
+import org.globus.wsrf.utils.AddressingUtils;
 
-
+/**
+ * This class is the access mechanism for creating transfer resources which 
+ * are used to represent a data that is inbound or outbound.  This class contains
+ * a series of helper methods that will enable the user to stage data to be 
+ * transfered or create a resource where data can be uploaded.
+ * 
+ * @author hastings
+ *
+ */
 public class TransferServiceHelper {
 
     /**
@@ -17,7 +27,7 @@ public class TransferServiceHelper {
      * @return
      * @throws RemoteException
      */
-    public static org.cagrid.transfer.context.stubs.types.TransferServiceContextReference createTransferContext(DataDescriptor dd) throws RemoteException {
+    public static org.cagrid.transfer.context.stubs.types.TransferServiceContextReference createTransferContext(DataDescriptor dd, DataStagedCallback callback) throws RemoteException {
         org.apache.axis.message.addressing.EndpointReferenceType epr = new org.apache.axis.message.addressing.EndpointReferenceType();
         org.cagrid.transfer.context.service.globus.resource.TransferServiceContextResourceHome home = null;
         org.globus.wsrf.ResourceKey resourceKey = null;
@@ -38,7 +48,7 @@ public class TransferServiceHelper {
 
             thisResource.setSecurityDescriptor(gov.nih.nci.cagrid.introduce.servicetools.security.SecurityUtils
                 .createCreatorOnlyResourceSecurityDescriptor());
-            thisResource.stage(dd);
+            thisResource.stage(dd,callback);
 
             String transportURL = (String) ctx.getProperty(org.apache.axis.MessageContext.TRANS_URL);
             transportURL = transportURL.substring(0, transportURL.lastIndexOf('/') + 1);
@@ -172,4 +182,6 @@ public class TransferServiceHelper {
 
         return ref;
     }
+    
+    
 }

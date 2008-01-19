@@ -112,14 +112,6 @@ public class TransferServlet extends HttpServlet {
             resp.sendError(403);
             return;
         }
-        props.getDataStorageDescriptor().setStaged(true);
-        try {
-            Utils.serializeDocument(persistenceDir
-                    + File.separator + requestedID + ".xml", props, TransferServiceContextConstants.RESOURCE_PROPERTY_SET);
-        } catch (Exception e) {
-            resp.sendError(500);
-            return;
-        }
         
     }
 

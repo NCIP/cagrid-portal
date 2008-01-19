@@ -9,7 +9,7 @@
 	<xs:complexType name="DataTransferDescriptor">
 		<xs:sequence>
 			<xs:element type="string" name="url"></xs:element>
-			<xs:element type="tns:DataDescriptor" name="descriptor"></xs:element>
+			<xs:element ref="tns:DataDescriptor"></xs:element>
 		</xs:sequence>
 	</xs:complexType>
 
@@ -24,18 +24,26 @@
 		</xs:sequence>
 	</xs:complexType>
 
-	<xs:element name="DataDescriptor"
-		type="tns:DataDescriptor">
+	<xs:element name="DataDescriptor" type="tns:DataDescriptor">
 	</xs:element>
-	
+
 	<xs:complexType name="DataStorageDescriptor">
 		<xs:sequence>
 			<xs:element type="string" name="location"></xs:element>
 			<xs:element type="string" name="userDN"></xs:element>
-			<xs:element type="boolean" name="staged"></xs:element>
-			<xs:element type="tns:DataDescriptor" name="descriptor"></xs:element>
+			<xs:element ref="tns:Status"></xs:element>
+			<xs:element ref="tns:DataDescriptor"></xs:element>
 		</xs:sequence>
 	</xs:complexType>
+
+	<xs:simpleType name="Status">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Staging" />
+			<xs:enumeration value="Staged" />
+		</xs:restriction>
+	</xs:simpleType>
+	
+	<xs:element name="Status" type="tns:Status"></xs:element>
 
 	<xs:element name="DataStorageDescriptor"
 		type="tns:DataStorageDescriptor">

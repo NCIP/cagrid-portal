@@ -78,12 +78,17 @@ public class TransferServiceContextAuthorization implements PDP {
 		
 	}
 					
-	public static void authorizeStaged() throws RemoteException {
+	public static void authorizeSubscribe() throws RemoteException {
 		
 		
 	}
 					
-	public static void authorizeSubscribe() throws RemoteException {
+	public static void authorizeGetStatus() throws RemoteException {
+		
+		
+	}
+					
+	public static void authorizeSetStatus() throws RemoteException {
 		
 		
 	}
@@ -143,17 +148,25 @@ public class TransferServiceContextAuthorization implements PDP {
 				e.printStackTrace();
 				return false;
 			}
-		} else if(operation.getLocalPart().equals("staged")){
+		} else if(operation.getLocalPart().equals("subscribe")){
 			try{
-				authorizeStaged();
+				authorizeSubscribe();
 				return true;
 			} catch (Exception e){
 				e.printStackTrace();
 				return false;
 			}
-		} else if(operation.getLocalPart().equals("subscribe")){
+		} else if(operation.getLocalPart().equals("getStatus")){
 			try{
-				authorizeSubscribe();
+				authorizeGetStatus();
+				return true;
+			} catch (Exception e){
+				e.printStackTrace();
+				return false;
+			}
+		} else if(operation.getLocalPart().equals("setStatus")){
+			try{
+				authorizeSetStatus();
 				return true;
 			} catch (Exception e){
 				e.printStackTrace();

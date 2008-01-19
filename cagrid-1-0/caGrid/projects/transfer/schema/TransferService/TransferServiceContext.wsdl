@@ -44,12 +44,32 @@
           <sequence />
         </complexType>
       </element>
-      <element name="StagedRequest">
+      <element name="GetStatusRequest">
         <complexType>
           <sequence />
         </complexType>
       </element>
-      <element name="StagedResponse">
+      <element name="GetStatusResponse">
+        <complexType>
+          <sequence>
+            <element ref="ns0:Status" minOccurs="1" maxOccurs="1" />
+          </sequence>
+        </complexType>
+      </element>
+      <element name="SetStatusRequest">
+        <complexType>
+          <sequence>
+            <element name="status">
+              <complexType>
+                <sequence>
+                  <element ref="ns0:Status" minOccurs="1" maxOccurs="1" />
+                </sequence>
+              </complexType>
+            </element>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="SetStatusResponse">
         <complexType>
           <sequence />
         </complexType>
@@ -78,11 +98,17 @@
   <message name="PutResponse">
     <part name="parameters" element="tns:PutResponse" />
   </message>
-  <message name="StagedRequest">
-    <part name="parameters" element="tns:StagedRequest" />
+  <message name="GetStatusRequest">
+    <part name="parameters" element="tns:GetStatusRequest" />
   </message>
-  <message name="StagedResponse">
-    <part name="parameters" element="tns:StagedResponse" />
+  <message name="GetStatusResponse">
+    <part name="parameters" element="tns:GetStatusResponse" />
+  </message>
+  <message name="SetStatusRequest">
+    <part name="parameters" element="tns:SetStatusRequest" />
+  </message>
+  <message name="SetStatusResponse">
+    <part name="parameters" element="tns:SetStatusResponse" />
   </message>
   <!--============================================================
 
@@ -98,9 +124,13 @@
       <input message="tns:PutRequest" wsa:Action="http://transfer.cagrid.org/TransferService/Context/PutRequest" />
       <output message="tns:PutResponse" wsa:Action="http://transfer.cagrid.org/TransferService/Context/PutResponse" />
     </operation>
-    <operation name="Staged">
-      <input message="tns:StagedRequest" wsa:Action="http://transfer.cagrid.org/TransferService/Context/StagedRequest" />
-      <output message="tns:StagedResponse" wsa:Action="http://transfer.cagrid.org/TransferService/Context/StagedResponse" />
+    <operation name="getStatus">
+      <input message="tns:GetStatusRequest" wsa:Action="http://transfer.cagrid.org/TransferService/Context/GetStatusRequest" />
+      <output message="tns:GetStatusResponse" wsa:Action="http://transfer.cagrid.org/TransferService/Context/GetStatusResponse" />
+    </operation>
+    <operation name="setStatus">
+      <input message="tns:SetStatusRequest" wsa:Action="http://transfer.cagrid.org/TransferService/Context/SetStatusRequest" />
+      <output message="tns:SetStatusResponse" wsa:Action="http://transfer.cagrid.org/TransferService/Context/SetStatusResponse" />
     </operation>
     <operation name="getServiceSecurityMetadata">
       <input message="wns0:GetServiceSecurityMetadataRequest" wsa:Action="http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity/GetServiceSecurityMetadataRequest" />

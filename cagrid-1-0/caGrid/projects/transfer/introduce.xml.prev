@@ -3,6 +3,7 @@
   <ns2:Namespace location="./caGrid_Transfer.xsd" namespace="http://transfer.cagrid.org/Transfer" packageName="org.cagrid.transfer.descriptor" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="DataTransferDescriptor" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="DataDescriptor" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Status" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="DataStorageDescriptor" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
   <ns2:Namespace namespace="http://www.w3.org/2001/XMLSchema" xsi:type="ns2:NamespaceType">
@@ -125,22 +126,29 @@
      <ns7:Output qName="void" description="" isArray="false"/>
      <ns7:Exceptions/>
     </ns7:Method>
-    <ns7:Method description="Indicates to the service that the data has been uploaded if uploading is the desired action." isImported="false" isProvided="false" name="Staged" xsi:type="ns7:MethodType">
-     <ns7:Inputs/>
-     <ns7:Output qName="void" description="" isArray="false"/>
-     <ns7:Exceptions/>
-    </ns7:Method>
     <ns7:Method isImported="true" isProvided="true" name="Subscribe" xsi:type="ns7:MethodType">
      <ns7:Output qName="void" isArray="false"/>
      <ns7:ImportInformation fromIntroduce="false" inputMessage="ns13:SubscribeRequest" namespace="http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.wsdl" outputMessage="ns13:SubscribeResponse" packageName="org.oasis.wsn" portTypeName="NotificationProducer" wsdlFile="../wsrf/notification/WS-BaseN.wsdl" xmlns:ns13="http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.wsdl"/>
      <ns7:ProviderInformation providerClass="SubscribeProvider"/>
     </ns7:Method>
+    <ns7:Method description="Get the status of the data." isImported="false" isProvided="false" name="getStatus" xsi:type="ns7:MethodType">
+     <ns7:Inputs/>
+     <ns7:Output qName="ns14:Status" description="" isArray="false" xmlns:ns14="http://transfer.cagrid.org/Transfer"/>
+     <ns7:Exceptions/>
+    </ns7:Method>
+    <ns7:Method description="Set the status of the transfer data." isImported="false" isProvided="false" name="setStatus" xsi:type="ns7:MethodType">
+     <ns7:Inputs>
+      <ns7:Input qName="ns15:Status" description="" isArray="false" name="status" xmlns:ns15="http://transfer.cagrid.org/Transfer"/>
+     </ns7:Inputs>
+     <ns7:Output qName="void" description="" isArray="false"/>
+     <ns7:Exceptions/>
+    </ns7:Method>
    </ns7:Methods>
-   <ns14:ResourcePropertiesList xsi:type="ns14:ResourcePropertiesListType" xmlns:ns14="gme://gov.nih.nci.cagrid.introduce/1/Resources">
-    <ns14:ResourceProperty qName="ns15:CurrentTime" description="" populateFromFile="false" register="false" xsi:type="ns14:ResourcePropertyType" xmlns:ns15="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.xsd"/>
-    <ns14:ResourceProperty qName="ns16:TerminationTime" description="" populateFromFile="false" register="false" xsi:type="ns14:ResourcePropertyType" xmlns:ns16="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.xsd"/>
-    <ns14:ResourceProperty qName="ns17:DataStorageDescriptor" description="" fileLocation="TransferServiceContext_dataStorageDescriptor.xml" populateFromFile="false" register="false" xsi:type="ns14:ResourcePropertyType" xmlns:ns17="http://transfer.cagrid.org/Transfer"/>
-   </ns14:ResourcePropertiesList>
+   <ns16:ResourcePropertiesList xsi:type="ns16:ResourcePropertiesListType" xmlns:ns16="gme://gov.nih.nci.cagrid.introduce/1/Resources">
+    <ns16:ResourceProperty qName="ns17:CurrentTime" description="" populateFromFile="false" register="false" xsi:type="ns16:ResourcePropertyType" xmlns:ns17="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.xsd"/>
+    <ns16:ResourceProperty qName="ns18:TerminationTime" description="" populateFromFile="false" register="false" xsi:type="ns16:ResourcePropertyType" xmlns:ns18="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.xsd"/>
+    <ns16:ResourceProperty qName="ns19:DataStorageDescriptor" description="" fileLocation="TransferServiceContext_dataStorageDescriptor.xml" populateFromFile="false" register="false" xsi:type="ns16:ResourcePropertyType" xmlns:ns19="http://transfer.cagrid.org/Transfer"/>
+   </ns16:ResourcePropertiesList>
    <ns3:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema"></ns3:description>
    <ns3:ResourceFrameworkOptions xsi:type="ns3:ResourceFrameworkOptions">
     <ns3:Lifetime xsi:type="ns3:Lifetime"/>
@@ -151,9 +159,9 @@
    </ns3:ResourceFrameworkOptions>
   </ns3:Service>
  </ns3:Services>
- <ns18:Extensions xsi:type="ns18:ExtensionsType" xmlns:ns18="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
- <ns19:ServiceProperties xmlns:ns19="gme://gov.nih.nci.cagrid.introduce/1/Property">
-  <ns19:Property description="The webapp and servlet name of the deployed transfer servlet" isFromETC="false" key="transferServletPathName" value="/caGridTransfer/TransferServlet"/>
-  <ns19:Property description="The directory to store the transfer files" isFromETC="true" key="storageDirectory" value="transferCache"/>
- </ns19:ServiceProperties>
+ <ns20:Extensions xsi:type="ns20:ExtensionsType" xmlns:ns20="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+ <ns21:ServiceProperties xmlns:ns21="gme://gov.nih.nci.cagrid.introduce/1/Property">
+  <ns21:Property description="The webapp and servlet name of the deployed transfer servlet" isFromETC="false" key="transferServletPathName" value="/caGridTransfer/TransferServlet"/>
+  <ns21:Property description="The directory to store the transfer files" isFromETC="true" key="storageDirectory" value="transferCache"/>
+ </ns21:ServiceProperties>
 </ns1:ServiceDescription>
