@@ -90,7 +90,7 @@ public class TransferServlet extends HttpServlet {
         // verify that the user calling is the owner or there is no owner
         if (desc.getUserDN() == null || desc.getUserDN().equals(userDN)) {
             System.out.println("Storing data using block size of: " + blockSize );
-            // 4 write data to the response
+            // 4 read the data from the request and write it
             File outFile = new File(desc.getLocation());
             if(outFile.exists()){
                 System.out.println("File is already staged for resource: " + requestedID + " at file: " + desc.getLocation());
