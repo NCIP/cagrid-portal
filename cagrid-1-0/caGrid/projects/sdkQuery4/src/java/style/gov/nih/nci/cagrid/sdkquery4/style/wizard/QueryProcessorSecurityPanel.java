@@ -12,6 +12,7 @@ import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionT
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.sdkquery4.processor.SDK4QueryProcessor;
+import gov.nih.nci.cagrid.sdkquery4.style.wizard.config.QueryProcessorSecurityConfigurationStep;
 
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -44,7 +45,7 @@ import com.jgoodies.validation.view.ValidationComponentUtils;
  * @author David Ervin
  * 
  * @created Dec 11, 2007 9:56:51 AM
- * @version $Id: QueryProcessorSecurityPanel.java,v 1.3 2007-12-12 17:35:02 dervin Exp $ 
+ * @version $Id: QueryProcessorSecurityPanel.java,v 1.4 2008-01-22 14:44:39 dervin Exp $ 
  */
 public class QueryProcessorSecurityPanel extends AbstractWizardPanel {
     // validation keys
@@ -65,6 +66,7 @@ public class QueryProcessorSecurityPanel extends AbstractWizardPanel {
     private ValidationResultModel validationModel = null;
     private DocumentChangeAdapter documentChangeListener = null;
     private NotifyingButtonGroup radioButtonGroup = null;
+    private QueryProcessorSecurityConfigurationStep configuration;
 
     public QueryProcessorSecurityPanel(
         ServiceExtensionDescriptionType extensionDescription, ServiceInformation info) {
@@ -75,6 +77,7 @@ public class QueryProcessorSecurityPanel extends AbstractWizardPanel {
                 validateInput();
             }
         };
+        this.configuration = new QueryProcessorSecurityConfigurationStep(info);
         getRadioButtonGroup();
         initialize();
     }
@@ -110,6 +113,16 @@ public class QueryProcessorSecurityPanel extends AbstractWizardPanel {
     }
     
     
+    public void movingNext() {
+        try {
+            configuration.applyConfiguration();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            CompositeErrorDialog.showErrorDialog("Error storing security configuration", ex.getMessage(), ex);
+        }
+    }
+    
+    
     private void initialize() {
         this.setLayout(new GridLayout());
         this.add(getValidationPanel());
@@ -123,6 +136,8 @@ public class QueryProcessorSecurityPanel extends AbstractWizardPanel {
             radioButtonGroup = new NotifyingButtonGroup();
             radioButtonGroup.addGroupSelectionListener(new GroupSelectionListener() {
                 public void selectionChanged(ButtonModel previousSelection, ButtonModel currentSelection) {
+                    boolean useGridIdent = currentSelection == getGridIdentityRadioButton().getModel();
+                    configuration.setUseGridIdentLogin(useGridIdent);
                     validateInput();
                 }
             });
@@ -179,6 +194,7 @@ public class QueryProcessorSecurityPanel extends AbstractWizardPanel {
                 public void itemStateChanged(java.awt.event.ItemEvent e) {
                     PortalUtils.setContainerEnabled(getSecurityOptionsPanel(), useSecurityCheckBox.isSelected());
                     setLoginComponentsEnabled();
+                    configuration.setUseGridIdentLogin(getUseSecurityCheckBox().isSelected());
                 }
             });
         }
@@ -251,6 +267,11 @@ public class QueryProcessorSecurityPanel extends AbstractWizardPanel {
         if (usernameTextField == null) {
             usernameTextField = new JTextField();
             usernameTextField.getDocument().addDocumentListener(documentChangeListener);
+            usernameTextField.getDocument().addDocumentListener(new DocumentChangeAdapter() {
+                public void documentEdited(DocumentEvent e) {
+                    configuration.setStaticLoginUsername(getUsernameTextField().getText());
+                }
+            });
         }
         return usernameTextField;
     }
@@ -265,6 +286,11 @@ public class QueryProcessorSecurityPanel extends AbstractWizardPanel {
         if (passwordTextField == null) {
             passwordTextField = new JTextField();
             passwordTextField.getDocument().addDocumentListener(documentChangeListener);
+            passwordTextField.getDocument().addDocumentListener(new DocumentChangeAdapter() {
+                public void documentEdited(DocumentEvent e) {
+                    configuration.setStaticLoginPassword(getPasswordTextField().getText());
+                }
+            });
         }
         return passwordTextField;
     }
@@ -361,10 +387,6 @@ public class QueryProcessorSecurityPanel extends AbstractWizardPanel {
         updateComponentTreeSeverity();
         // update next button enabled
         setNextEnabled(!validationModel.hasErrors());
-        // store the configuration changes
-        if (!validationModel.hasErrors()) {
-            storeConfigurationProperties();
-        }
     }
     
     
@@ -377,31 +399,6 @@ public class QueryProcessorSecurityPanel extends AbstractWizardPanel {
     // ------------
     // helpers
     // ------------
-
-    
-    private void storeConfigurationProperties() {
-        boolean useLogin = getUseSecurityCheckBox().isSelected();
-        boolean gridIdentLogin = getGridIdentityRadioButton().isSelected();
-        
-        setConfigurationProperty(
-            SDK4QueryProcessor.PROPERTY_USE_LOGIN, String.valueOf(useLogin));
-        setConfigurationProperty(
-            SDK4QueryProcessor.PROPERTY_USE_GRID_IDENTITY_LOGIN, 
-            useLogin? String.valueOf(gridIdentLogin) : "");
-        setConfigurationProperty(
-            SDK4QueryProcessor.PROPERTY_STATIC_LOGIN_USERNAME,
-            useLogin && !gridIdentLogin ? getUsernameTextField().getText() : "");
-        setConfigurationProperty(
-            SDK4QueryProcessor.PROPERTY_STATIC_LOGIN_PASSWORD,
-            useLogin && !gridIdentLogin ? getPasswordTextField().getText() : "");
-    }
-    
-    
-    private void setConfigurationProperty(String rawKey, String value) {
-        ServiceDescription desc = getServiceInformation().getServiceDescriptor();
-        String paddedKey = DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX + rawKey;
-        CommonTools.setServiceProperty(desc, paddedKey, value, false);
-    }
     
     
     private String getConfigurationProperty(String rawKey) throws Exception {
