@@ -1,6 +1,3 @@
-/**
- * 
- */
 package gov.nih.nci.cagrid.introduce.extensions.metadata.editors.domainmodel;
 
 import gov.nih.nci.cagrid.graph.uml.UMLDiagram;
@@ -92,7 +89,8 @@ public class DomainModelViewer extends ResourcePropertyEditorPanel {
             gridBagConstraints4.weighty = 1;
             this.infoPanel = new JPanel();
             this.infoPanel.setLayout(new GridBagLayout());
-            this.infoPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Data Service Domain Model",
+            this.infoPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(
+                null, "Data Service Domain Model",
                 javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
                 javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
             this.infoPanel.add(getDomainLabel(), gridBagConstraints3);
@@ -124,27 +122,6 @@ public class DomainModelViewer extends ResourcePropertyEditorPanel {
     }
 
 
-    public static void main(String[] args) {
-        JFrame f = new JFrame();
-        DomainModelViewer viewer = new DomainModelViewer(null, null, null);
-
-        try {
-            JFileChooser fc = new JFileChooser(".");
-            fc.showOpenDialog(f);
-
-            DomainModel model = MetadataUtils.deserializeDomainModel(new FileReader(fc.getSelectedFile()));
-            viewer.setDomainModel(model);
-
-            f.getContentPane().add(viewer);
-            f.pack();
-            f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            f.setVisible(true);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-
     /**
      * @return the domainModel
      */
@@ -173,13 +150,14 @@ public class DomainModelViewer extends ResourcePropertyEditorPanel {
             getDomainDescLabel().setText(this.domainModel.getProjectDescription());
 
             // class ID->UMLClass
-            Map classMap = new HashMap();
+            Map<String, gov.nih.nci.cagrid.graph.uml.UMLClass> classMap = 
+                new HashMap<String, gov.nih.nci.cagrid.graph.uml.UMLClass>();
             if (this.domainModel.getExposedUMLClassCollection() != null
                 && this.domainModel.getExposedUMLClassCollection().getUMLClass() != null) {
                 UMLClass[] classArr = this.domainModel.getExposedUMLClassCollection().getUMLClass();
                 for (UMLClass c : classArr) {
-                    gov.nih.nci.cagrid.graph.uml.UMLClass diagramClass = new gov.nih.nci.cagrid.graph.uml.UMLClass(
-                        trimClassName(c.getClassName()));
+                    gov.nih.nci.cagrid.graph.uml.UMLClass diagramClass = 
+                        new gov.nih.nci.cagrid.graph.uml.UMLClass(trimClassName(c.getClassName()));
                     if (c.getUmlAttributeCollection() != null) {
                         if (c.getUmlAttributeCollection().getUMLAttribute() != null) {
                             for (int j = 0; j < c.getUmlAttributeCollection().getUMLAttribute().length; j++) {
@@ -202,14 +180,14 @@ public class DomainModelViewer extends ResourcePropertyEditorPanel {
                         UMLAssociationEdge sourceEdge = assoc.getSourceUMLAssociationEdge().getUMLAssociationEdge();
                         UMLAssociationEdge targetEdge = assoc.getTargetUMLAssociationEdge().getUMLAssociationEdge();
 
-                        gov.nih.nci.cagrid.graph.uml.UMLClass source = (gov.nih.nci.cagrid.graph.uml.UMLClass) classMap
-                            .get(sourceEdge.getUMLClassReference().getRefid());
-                        gov.nih.nci.cagrid.graph.uml.UMLClass target = (gov.nih.nci.cagrid.graph.uml.UMLClass) classMap
-                            .get(targetEdge.getUMLClassReference().getRefid());
+                        gov.nih.nci.cagrid.graph.uml.UMLClass source = classMap.get(
+                            sourceEdge.getUMLClassReference().getRefid());
+                        gov.nih.nci.cagrid.graph.uml.UMLClass target = classMap.get(
+                            targetEdge.getUMLClassReference().getRefid());
 
                         if (source == null || target == null) {
-                            System.err
-                                .println("ERROR: can't process the association, as it references an unexposed class... ignoring!");
+                            System.err.println("ERROR: can't process the association, as it " +
+                                    "references an unexposed class... ignoring!");
                             System.err.println("Source ID:" + sourceEdge.getUMLClassReference().getRefid());
                             System.err.println("Target ID:" + targetEdge.getUMLClassReference().getRefid());
                         } else {
@@ -227,11 +205,9 @@ public class DomainModelViewer extends ResourcePropertyEditorPanel {
                                     + (targetEdge.getMaxCardinality() == -1 ? "*" : String.valueOf(targetEdge
                                         .getMaxCardinality())));
                         }
-
                     }
                 }
             }
-
         }
         getUMLDiagram().refresh();
     }
@@ -287,5 +263,26 @@ public class DomainModelViewer extends ResourcePropertyEditorPanel {
     @Override
     public String getResultRPString() {
         return getRPString();
+    }
+    
+    
+    public static void main(String[] args) {
+        JFrame f = new JFrame();
+        DomainModelViewer viewer = new DomainModelViewer(null, null, null);
+
+        try {
+            JFileChooser fc = new JFileChooser(".");
+            fc.showOpenDialog(f);
+
+            DomainModel model = MetadataUtils.deserializeDomainModel(new FileReader(fc.getSelectedFile()));
+            viewer.setDomainModel(model);
+
+            f.getContentPane().add(viewer);
+            f.pack();
+            f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            f.setVisible(true);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

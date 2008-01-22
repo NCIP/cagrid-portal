@@ -82,7 +82,7 @@ public class ServiceMetadataCreationPostProcessor implements CreationExtensionPo
 		}
 
 		// add some namespaces to the service
-		List newNamespaces = new ArrayList(Arrays.asList(namespaces.getNamespace()));
+		List<NamespaceType> newNamespaces = new ArrayList<NamespaceType>(Arrays.asList(namespaces.getNamespace()));
 		// caGrid metadata namespace
 		NamespaceType cagridMdNamespace = CommonTools.createNamespaceType(schemaDir + File.separator
 			+ MetadataConstants.CAGRID_METADATA_SCHEMA, new File(schemaDir));

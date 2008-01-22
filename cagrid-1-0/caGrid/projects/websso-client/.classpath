@@ -42,7 +42,6 @@
 	<classpathentry kind="var" path="GT4_LOCATION/lib/wsrf_core.jar" sourcepath="/globussource"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/wss4j.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xercesImpl.jar" sourcepath="/GT4_LOCATION/Xerces-J-src.2.6.2.zip"/>
-	<classpathentry kind="src" path="/caGrid-1.0-gts"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/servlet.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

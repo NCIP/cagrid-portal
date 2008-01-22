@@ -7,7 +7,6 @@
 	<classpathentry kind="src" path="src/java/client"/>
 	<classpathentry kind="src" path="src/java/common"/>
 	<classpathentry kind="src" path="src/java/utils"/>
-	<classpathentry kind="lib" path="lib/wsrf_core_enum.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/addressing-1.0.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/axis.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/axis-url.jar"/>
@@ -58,7 +57,6 @@
 	<classpathentry kind="lib" path="ext/lib/mobius_gme_client-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius_mako_client-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius_tools-1.1.jar"/>
-	<classpathentry kind="lib" path="lib/wsrf_core_stubs_enum.jar"/>
 	<classpathentry kind="lib" path="ext/test/lib/junit.jar"/>
 	<classpathentry kind="src" path="test/resources"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-core.jar"/>
@@ -69,5 +67,6 @@
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-ServiceSecurityProvider-stubs.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-metadata-security.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-Introduce-1.2-core.jar"/>
+	<classpathentry kind="var" path="GT4_LOCATION/lib/wsrf_core.jar" sourcepath="/GT4_LOCATION"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
