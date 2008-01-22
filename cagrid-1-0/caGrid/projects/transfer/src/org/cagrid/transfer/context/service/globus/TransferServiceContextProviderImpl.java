@@ -26,31 +26,21 @@ public class TransferServiceContextProviderImpl{
 	}
 	
 
-    public org.cagrid.transfer.context.stubs.SetStatusResponse setStatus(org.cagrid.transfer.context.stubs.SetStatusRequest params) throws RemoteException {
-    org.cagrid.transfer.context.stubs.SetStatusResponse boxedResult = new org.cagrid.transfer.context.stubs.SetStatusResponse();
-    impl.setStatus(params.getStatus().getStatus());
-    return boxedResult;
-  }
-
-  public org.cagrid.transfer.AnyXmlType get(org.cagrid.transfer.EmptyType params) throws RemoteException {
-    return impl.get(params);
-  }
-
     public org.cagrid.transfer.context.stubs.GetDataTransferDescriptorResponse getDataTransferDescriptor(org.cagrid.transfer.context.stubs.GetDataTransferDescriptorRequest params) throws RemoteException {
     org.cagrid.transfer.context.stubs.GetDataTransferDescriptorResponse boxedResult = new org.cagrid.transfer.context.stubs.GetDataTransferDescriptorResponse();
     boxedResult.setDataTransferDescriptor(impl.getDataTransferDescriptor());
     return boxedResult;
   }
 
-    public org.cagrid.transfer.context.stubs.PutResponse put(org.cagrid.transfer.context.stubs.PutRequest params) throws RemoteException {
-    org.cagrid.transfer.context.stubs.PutResponse boxedResult = new org.cagrid.transfer.context.stubs.PutResponse();
-    impl.put(params.getAnyType());
-    return boxedResult;
-  }
-
     public org.cagrid.transfer.context.stubs.GetStatusResponse getStatus(org.cagrid.transfer.context.stubs.GetStatusRequest params) throws RemoteException {
     org.cagrid.transfer.context.stubs.GetStatusResponse boxedResult = new org.cagrid.transfer.context.stubs.GetStatusResponse();
     boxedResult.setStatus(impl.getStatus());
+    return boxedResult;
+  }
+
+    public org.cagrid.transfer.context.stubs.SetStatusResponse setStatus(org.cagrid.transfer.context.stubs.SetStatusRequest params) throws RemoteException {
+    org.cagrid.transfer.context.stubs.SetStatusResponse boxedResult = new org.cagrid.transfer.context.stubs.SetStatusResponse();
+    impl.setStatus(params.getStatus().getStatus());
     return boxedResult;
   }
 

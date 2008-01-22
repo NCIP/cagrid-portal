@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://transfer.cagrid.org/TransferService/Context" xmlns:wsrp="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.xsd" xmlns:wsrlw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl" xmlns:wsdlpp="http://www.globus.org/namespaces/2004/10/WSDLPreprocessor" xmlns:gtwsdl1="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ServiceGroup-1.2-draft-01.wsdl" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/03/addressing" xmlns:wsntw="http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.wsdl" xmlns:wsrbfw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.wsdl" xmlns:wsrpw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" xmlns:wns1="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl" xmlns:wns0="http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity" xmlns:wns3="http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.wsdl" xmlns:wns2="http://www.globus.org/transfer" xmlns:ns3="http://transfer.cagrid.org/TransferService/Context/types" xmlns:ns0="http://transfer.cagrid.org/Transfer" xmlns:ns2="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security" xmlns:ns1="http://transfer.cagrid.org/TransferService/types" xmlns:ns4="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.xsd" name="TransferServiceContext" targetNamespace="http://transfer.cagrid.org/TransferService/Context">
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://transfer.cagrid.org/TransferService/Context" xmlns:wsrp="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.xsd" xmlns:wsrlw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl" xmlns:wsdlpp="http://www.globus.org/namespaces/2004/10/WSDLPreprocessor" xmlns:gtwsdl1="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ServiceGroup-1.2-draft-01.wsdl" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/03/addressing" xmlns:wsntw="http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.wsdl" xmlns:wsrbfw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.wsdl" xmlns:wsrpw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" xmlns:wns1="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl" xmlns:wns0="http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity" xmlns:wns2="http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.wsdl" xmlns:ns3="http://transfer.cagrid.org/TransferService/Context/types" xmlns:ns0="http://transfer.cagrid.org/Transfer" xmlns:ns2="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security" xmlns:ns1="http://transfer.cagrid.org/TransferService/types" xmlns:ns4="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.xsd" name="TransferServiceContext" targetNamespace="http://transfer.cagrid.org/TransferService/Context">
   <import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" location="../wsrf/properties/WS-ResourceProperties.wsdl" />
   <import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.wsdl" location="../wsrf/faults/WS-BaseFaults.wsdl" />
   <import namespace="http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.wsdl" location="../wsrf/notification/WS-BaseN.wsdl" />
   <import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl" location="./../wsrf/lifetime/WS-ResourceLifetime.wsdl" />
   <import namespace="http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity" location="./ServiceSecurity.wsdl" />
   <import namespace="http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.wsdl" location="./../wsrf/notification/WS-BaseN.wsdl" />
-  <import namespace="http://www.globus.org/transfer" location="./transfer_port_type.wsdl" />
   <!--============================================================
 
                       T Y P E S
@@ -30,18 +29,6 @@
           <sequence>
             <element ref="ns0:DataTransferDescriptor" minOccurs="1" maxOccurs="1" />
           </sequence>
-        </complexType>
-      </element>
-      <element name="PutRequest">
-        <complexType>
-          <sequence>
-            <element name="anyType" type="xs:anyType" minOccurs="1" maxOccurs="1" />
-          </sequence>
-        </complexType>
-      </element>
-      <element name="PutResponse">
-        <complexType>
-          <sequence />
         </complexType>
       </element>
       <element name="GetStatusRequest">
@@ -92,12 +79,6 @@
   <message name="GetDataTransferDescriptorResponse">
     <part name="parameters" element="tns:GetDataTransferDescriptorResponse" />
   </message>
-  <message name="PutRequest">
-    <part name="parameters" element="tns:PutRequest" />
-  </message>
-  <message name="PutResponse">
-    <part name="parameters" element="tns:PutResponse" />
-  </message>
   <message name="GetStatusRequest">
     <part name="parameters" element="tns:GetStatusRequest" />
   </message>
@@ -119,10 +100,6 @@
     <operation name="getDataTransferDescriptor">
       <input message="tns:GetDataTransferDescriptorRequest" wsa:Action="http://transfer.cagrid.org/TransferService/Context/GetDataTransferDescriptorRequest" />
       <output message="tns:GetDataTransferDescriptorResponse" wsa:Action="http://transfer.cagrid.org/TransferService/Context/GetDataTransferDescriptorResponse" />
-    </operation>
-    <operation name="Put">
-      <input message="tns:PutRequest" wsa:Action="http://transfer.cagrid.org/TransferService/Context/PutRequest" />
-      <output message="tns:PutResponse" wsa:Action="http://transfer.cagrid.org/TransferService/Context/PutResponse" />
     </operation>
     <operation name="getStatus">
       <input message="tns:GetStatusRequest" wsa:Action="http://transfer.cagrid.org/TransferService/Context/GetStatusRequest" />
@@ -148,10 +125,6 @@
       <wsdl:fault message="wsrlw:UnableToSetTerminationTimeFault" name="UnableToSetTerminationTimeFault" />
       <wsdl:fault message="wsrlw:ResourceUnknownFault" name="ResourceUnknownFault" />
       <wsdl:fault message="wsrlw:TerminationTimeChangeRejectedFault" name="TerminationTimeChangeRejectedFault" />
-    </wsdl:operation>
-    <wsdl:operation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="Get">
-      <wsdl:input xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" message="wns2:EmptyMessage" wsa:Action="http://schemas.xmlsoap.org/ws/2004/09/transfer/Get" />
-      <wsdl:output xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" message="wns2:AnyXmlMessage" wsa:Action="http://schemas.xmlsoap.org/ws/2004/09/transfer/GetResponse" />
     </wsdl:operation>
     <wsdl:operation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="Subscribe">
       <wsdl:input message="wsntw:SubscribeRequest" wsa:Action="http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification/Subscribe" />

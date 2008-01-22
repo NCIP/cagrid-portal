@@ -12,26 +12,15 @@ import java.rmi.RemoteException;
  */
 public interface TransferServiceContextI {
 
-  /**
-   * Set the status of the transfer data.
-   *
-   * @param status
-   */
-  public void setStatus(org.cagrid.transfer.descriptor.Status status) throws RemoteException ;
-
   public org.oasis.wsrf.lifetime.DestroyResponse destroy(org.oasis.wsrf.lifetime.Destroy params) throws RemoteException ;
 
   public org.oasis.wsrf.lifetime.SetTerminationTimeResponse setTerminationTime(org.oasis.wsrf.lifetime.SetTerminationTime params) throws RemoteException ;
-
-  public org.cagrid.transfer.AnyXmlType get(org.cagrid.transfer.EmptyType params) throws RemoteException ;
 
   /**
    * Returns the descriptor which can be used by the TransferClientHelper to download or upload the data.
    *
    */
   public org.cagrid.transfer.descriptor.DataTransferDescriptor getDataTransferDescriptor() throws RemoteException ;
-
-  public void put(java.lang.Object anyType) throws RemoteException ;
 
   public org.oasis.wsn.SubscribeResponse subscribe(org.oasis.wsn.Subscribe params) throws RemoteException ;
 
@@ -40,6 +29,13 @@ public interface TransferServiceContextI {
    *
    */
   public org.cagrid.transfer.descriptor.Status getStatus() throws RemoteException ;
+
+  /**
+   * Set the status of the transfer data.
+   *
+   * @param status
+   */
+  public void setStatus(org.cagrid.transfer.descriptor.Status status) throws RemoteException ;
 
 }
 

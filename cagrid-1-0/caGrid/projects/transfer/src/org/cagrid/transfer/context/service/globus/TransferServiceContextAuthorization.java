@@ -63,17 +63,7 @@ public class TransferServiceContextAuthorization implements PDP {
 		
 	}
 					
-	public static void authorizeGet() throws RemoteException {
-		
-		
-	}
-					
 	public static void authorizeGetDataTransferDescriptor() throws RemoteException {
-		
-		
-	}
-					
-	public static void authorizePut() throws RemoteException {
 		
 		
 	}
@@ -124,25 +114,9 @@ public class TransferServiceContextAuthorization implements PDP {
 				e.printStackTrace();
 				return false;
 			}
-		} else if(operation.getLocalPart().equals("get")){
-			try{
-				authorizeGet();
-				return true;
-			} catch (Exception e){
-				e.printStackTrace();
-				return false;
-			}
 		} else if(operation.getLocalPart().equals("getDataTransferDescriptor")){
 			try{
 				authorizeGetDataTransferDescriptor();
-				return true;
-			} catch (Exception e){
-				e.printStackTrace();
-				return false;
-			}
-		} else if(operation.getLocalPart().equals("put")){
-			try{
-				authorizePut();
 				return true;
 			} catch (Exception e){
 				e.printStackTrace();
