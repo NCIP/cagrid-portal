@@ -3,6 +3,7 @@ package gov.nih.nci.cagrid.introduce.codegen;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.common.XMLUtilities;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
+import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
@@ -252,6 +253,8 @@ public class SyncTools {
         // required for any new services which were added.....
 
         createNewServices(info);
+        
+        updateServiceProviders(info);
 
         // add in the new exceptions types to the service and to it's
         // naemspacetypes list
@@ -605,6 +608,41 @@ public class SyncTools {
                 }
             }
         }
+    }
+    
+    private void updateServiceProviders(ServiceInformation info){
+        try {
+            ServiceDescription sd = (ServiceDescription)Utils.deserializeDocument(new File(baseDirectory.getAbsolutePath() + File.separator
+                + IntroduceConstants.INTRODUCE_XML_FILE + ".prev").getAbsolutePath(), ServiceDescription.class);
+            if ((sd.getServices() != null) && (sd.getServices().getService() != null)) {
+                for (int serviceI = 0; serviceI < sd.getServices().getService().length; serviceI++) {
+                    ServiceType oldService = sd.getServices().getService(serviceI);
+                    ServiceType newService = CommonTools.getService(info.getServices(), oldService.getName());
+                    if(oldService.getResourceFrameworkOptions().getNotification()==null && newService.getResourceFrameworkOptions().getNotification()!=null){
+                        ProviderTools.addSubscribeResourceProvider(newService, info);
+                    }
+                    if(oldService.getResourceFrameworkOptions().getResourcePropertyManagement()==null && newService.getResourceFrameworkOptions().getResourcePropertyManagement()!=null){
+                        ProviderTools.addResourcePropertiesManagementResourceFrameworkOption(newService, info);
+                    }
+                    if(oldService.getResourceFrameworkOptions().getLifetime()==null && newService.getResourceFrameworkOptions().getLifetime()!=null){
+                        ProviderTools.addLifetimeResourceProvider(newService, info);
+                    }
+                    
+                }
+            }
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        if ((info.getServices() != null) && (info.getServices().getService() != null)) {
+            for (int serviceI = 0; serviceI < info.getServices().getService().length; serviceI++) {
+                ServiceType service = info.getServices().getService(serviceI);
+                if(service.getResourceFrameworkOptions().getNotification()!=null){
+                    
+                }
+            }
+        }
+
     }
 
 
