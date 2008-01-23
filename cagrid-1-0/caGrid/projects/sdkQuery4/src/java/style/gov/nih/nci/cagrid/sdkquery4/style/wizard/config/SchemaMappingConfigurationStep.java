@@ -28,7 +28,7 @@ import java.util.Map;
  * @author David Ervin
  * 
  * @created Jan 22, 2008 11:25:57 AM
- * @version $Id: SchemaMappingConfigurationStep.java,v 1.1 2008-01-23 19:58:34 dervin Exp $ 
+ * @version $Id: SchemaMappingConfigurationStep.java,v 1.2 2008-01-23 20:10:35 dervin Exp $ 
  */
 public class SchemaMappingConfigurationStep extends AbstractStyleConfigurationStep {
     private Map<String, File> packageToSourceSchemaFile;
@@ -42,7 +42,6 @@ public class SchemaMappingConfigurationStep extends AbstractStyleConfigurationSt
 
 
     public void applyConfiguration() throws Exception {
-        System.out.println(getClass().getName() + " applying configuration");
         // set the mapped namespace information for each package in the extension data
         Data extensionData = getExtensionData();
         CadsrInformation cadsrInfo = extensionData.getCadsrInformation();
@@ -59,7 +58,6 @@ public class SchemaMappingConfigurationStep extends AbstractStyleConfigurationSt
         
         // copy all source schemas in to the service, adding namespace types as well
         for (String packageName : packageToSourceSchemaFile.keySet()) {
-            System.out.println("Processing package " + packageName);
             File sourceSchema = packageToSourceSchemaFile.get(packageName);
             NamespaceType nsType = packageToNamespace.get(packageName);
             File destinationSchema = new File(getServiceSchemaDir(), sourceSchema.getName());
