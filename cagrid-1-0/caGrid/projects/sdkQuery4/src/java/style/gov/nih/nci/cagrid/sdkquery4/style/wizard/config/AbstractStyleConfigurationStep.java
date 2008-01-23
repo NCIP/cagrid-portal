@@ -1,7 +1,5 @@
 package gov.nih.nci.cagrid.sdkquery4.style.wizard.config;
 
-import java.io.File;
-
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.data.ExtensionDataUtils;
 import gov.nih.nci.cagrid.data.extension.Data;
@@ -11,6 +9,8 @@ import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 
+import java.io.File;
+
 /** 
  *  AbstractStyleConfigurationStep
  *  Base step for style configuration actions
@@ -18,7 +18,7 @@ import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
  * @author David Ervin
  * 
  * @created Jan 18, 2008 3:21:28 PM
- * @version $Id: AbstractStyleConfigurationStep.java,v 1.1 2008-01-18 21:18:57 dervin Exp $ 
+ * @version $Id: AbstractStyleConfigurationStep.java,v 1.2 2008-01-23 19:58:20 dervin Exp $ 
  */
 public abstract class AbstractStyleConfigurationStep {
 
@@ -37,7 +37,7 @@ public abstract class AbstractStyleConfigurationStep {
     }
     
     
-    protected Data getExtensionData() throws Throwable {
+    protected Data getExtensionData() throws Exception {
         ServiceDescription serviceDesc = serviceInfo.getServiceDescriptor();
         ExtensionType[] extensions = serviceDesc.getExtensions().getExtension();
         ExtensionType dataExtension = null;
@@ -55,7 +55,7 @@ public abstract class AbstractStyleConfigurationStep {
     }
     
     
-    protected void storeExtensionData(Data data) throws Throwable {
+    protected void storeExtensionData(Data data) throws Exception {
         File serviceModelFile = new File(serviceInfo.getBaseDirectory(), IntroduceConstants.INTRODUCE_XML_FILE);
         ServiceDescription serviceDesc = serviceInfo.getServiceDescriptor();
         
