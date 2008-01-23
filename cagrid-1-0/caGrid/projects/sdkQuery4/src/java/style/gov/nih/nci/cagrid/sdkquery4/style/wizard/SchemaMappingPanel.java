@@ -6,8 +6,10 @@ import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.data.ExtensionDataUtils;
 import gov.nih.nci.cagrid.data.extension.CadsrInformation;
 import gov.nih.nci.cagrid.data.extension.CadsrPackage;
+import gov.nih.nci.cagrid.data.extension.ClassMapping;
 import gov.nih.nci.cagrid.data.extension.Data;
-import gov.nih.nci.cagrid.data.style.sdkstyle.wizard.PackageSchemasTable;
+import gov.nih.nci.cagrid.data.style.sdkstyle.wizard.PackageSchemaMappingErrorDialog;
+import gov.nih.nci.cagrid.data.ui.SchemaResolutionDialog;
 import gov.nih.nci.cagrid.data.ui.wizard.AbstractWizardPanel;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
@@ -16,12 +18,9 @@ import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.ResourceManager;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
-import gov.nih.nci.cagrid.sdkquery4.encoding.SDK40DeserializerFactory;
-import gov.nih.nci.cagrid.sdkquery4.encoding.SDK40SerializerFactory;
 import gov.nih.nci.cagrid.sdkquery4.processor.SDK4QueryProcessor;
+import gov.nih.nci.cagrid.sdkquery4.style.wizard.config.SchemaMappingConfigurationStep;
 
-import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -39,17 +38,13 @@ import java.util.jar.JarFile;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.TableCellRenderer;
 
 import org.cagrid.grape.LookAndFeel;
 import org.cagrid.grape.utils.CompositeErrorDialog;
@@ -61,8 +56,6 @@ import org.projectmobius.common.Namespace;
 import org.projectmobius.gme.XMLDataModelService;
 import org.projectmobius.gme.client.GlobusGMEXMLDataModelServiceFactory;
 
-import com.jgoodies.validation.view.ValidationComponentUtils;
-
 /** 
  *  SchemaMappingPanel
  *  Panel to configure mapping of packages to schemas
@@ -70,11 +63,11 @@ import com.jgoodies.validation.view.ValidationComponentUtils;
  * @author David Ervin
  * 
  * @created Jan 9, 2008 11:09:22 AM
- * @version $Id: SchemaMappingPanel.java,v 1.2 2008-01-11 20:34:03 dervin Exp $ 
+ * @version $Id: SchemaMappingPanel.java,v 1.3 2008-01-23 19:59:19 dervin Exp $ 
  */
 public class SchemaMappingPanel extends AbstractWizardPanel {
     
-    private PackageSchemasTable packageNamespaceTable = null;
+    private PackageToNamespaceTable packageNamespaceTable = null;
     private JScrollPane packageNamespaceScrollPane = null;
     private JLabel gmeUrlLabel = null;
     private JTextField gmeUrlTextField = null;
@@ -84,9 +77,12 @@ public class SchemaMappingPanel extends AbstractWizardPanel {
     private JButton configMapButton = null;
     private JPanel automapPanel = null;
     private JPanel mappingPanel = null;
+    
+    private SchemaMappingConfigurationStep configuration = null;
 
     public SchemaMappingPanel(ServiceExtensionDescriptionType extensionDescription, ServiceInformation info) {
         super(extensionDescription, info);
+        configuration = new SchemaMappingConfigurationStep(info);
         initialize();
     }
 
@@ -135,6 +131,16 @@ public class SchemaMappingPanel extends AbstractWizardPanel {
     }
     
     
+    public void movingNext() {
+        try {
+            configuration.applyConfiguration();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            CompositeErrorDialog.showErrorDialog("Error applying configuration", ex.getMessage(), ex);
+        }
+    }
+    
+    
     private void initialize() {
         this.setLayout(new GridLayout());
         GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
@@ -156,24 +162,30 @@ public class SchemaMappingPanel extends AbstractWizardPanel {
     }
     
     
-    private PackageSchemasTable getPackageNamespaceTable() {
+    private PackageToNamespaceTable getPackageNamespaceTable() {
         if (this.packageNamespaceTable == null) {
-            this.packageNamespaceTable = new PackageSchemasTable(getBitBucket());
+            this.packageNamespaceTable = new PackageToNamespaceTable();
             this.packageNamespaceTable.getModel().addTableModelListener(new TableModelListener() {
                 public void tableChanged(TableModelEvent e) {
                     if (e.getType() == TableModelEvent.UPDATE) {
                         setWizardComplete(allSchemasResolved());
-                        try {
-                            storePackageMappings();
-                        } catch (Exception ex) {
-                            ex.printStackTrace();
-                            CompositeErrorDialog.showErrorDialog("Error storing namespace mappings", ex);
-                        }
                     }
                 }
             });
-            DefaultTableCellRenderer baseRenderer = (DefaultTableCellRenderer) this.packageNamespaceTable.getDefaultRenderer(Object.class);
-            this.packageNamespaceTable.setDefaultRenderer(Object.class, new ValidatingTableCellRenderer(baseRenderer));
+            // handler for resolving individual packages
+            this.packageNamespaceTable.setSchemaResolutionHandler(new SchemaResolutionHandler() {
+                public SchemaResolutionStatus resolveSchemaForPackage(ServiceInformation serviceInfo, String packageName) {
+                    SchemaResolutionStatus status = null;
+                    try {
+                        status = resolveSingleSchema(packageName);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        CompositeErrorDialog.showErrorDialog("Error resolving schema", ex.getMessage(), ex);
+                        status = SchemaResolutionStatus.MAPPING_ERROR;
+                    }
+                    return status;
+                }
+            });
         }
         return this.packageNamespaceTable;
     }
@@ -373,42 +385,17 @@ public class SchemaMappingPanel extends AbstractWizardPanel {
     
     private boolean allSchemasResolved() {
         for (int i = 0; i < getPackageNamespaceTable().getRowCount(); i++) {
-            String status = (String) getPackageNamespaceTable().getValueAt(i, 2);
-            if (!status.equals(PackageSchemasTable.STATUS_SCHEMA_FOUND)) {
+            SchemaResolutionStatus status = (SchemaResolutionStatus) getPackageNamespaceTable().getValueAt(i, 2);
+            if (status != SchemaResolutionStatus.SCHEMA_FOUND) {
                 return false;
             }
         }
         return true;
     }
-
-
-    private void storePackageMappings() throws Exception {
-        Data data = ExtensionDataUtils.getExtensionData(getExtensionData());
-        CadsrInformation info = data.getCadsrInformation();
-        if (info == null) {
-            info = new CadsrInformation();
-            info.setNoDomainModel(true);
-            data.setCadsrInformation(info);
-        }
-        for (int i = 0; info.getPackages() != null && i < info.getPackages().length; i++) {
-            CadsrPackage currentPackage = info.getPackages(i);
-            // find the package's row in the table
-            for (int row = 0; row < getPackageNamespaceTable().getRowCount(); row++) {
-                if (currentPackage.getName().equals(getPackageNamespaceTable().getValueAt(row, 0))) {
-                    // set the mapped namespace
-                    currentPackage.setMappedNamespace((String) getPackageNamespaceTable().getValueAt(row, 1));
-                    break;
-                }
-            }
-        }
-        ExtensionDataUtils.storeExtensionData(getExtensionData(), data);
-    }
     
     
     private void mapFromConfig() {
-        File schemaDir = new File(getServiceInformation().getBaseDirectory(),
-            "schema" + File.separator + getServiceInformation().getIntroduceServiceProperties()
-                .getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME));
+        File schemaDir = getServiceSchemaDirectory();
         
         // the config dir jar will have the xsds in it
         try {
@@ -433,15 +420,15 @@ public class SchemaMappingPanel extends AbstractWizardPanel {
                             StringBuffer schemaText = JarUtilities.getFileContents(configJar, entry.getName());
                             File schemaFile = new File(schemaDir, new File(entry.getName()).getName());
                             Utils.stringBufferToFile(schemaText, schemaFile.getAbsolutePath());
-                            NamespaceType nsType = CommonTools.createNamespaceType(schemaFile.getAbsolutePath(), schemaDir);
                             
-                            // add the namespace to the service
-                            addNamespaceToService(nsType);
+                            // add the namespace to the configuration for later
+                            // incorperation in the service
+                            String schemaNamespace = configuration.mapPackageToSchema(packageName, schemaFile);                            
                             
                             // set the namespace in the table
-                            getPackageNamespaceTable().setValueAt(nsType.getNamespace(), i, 1);
+                            getPackageNamespaceTable().setValueAt(schemaNamespace, i, 1);
                             // set the status to found in the table
-                            getPackageNamespaceTable().setValueAt(PackageSchemasTable.STATUS_SCHEMA_FOUND, i, 2);
+                            getPackageNamespaceTable().setValueAt(SchemaResolutionStatus.SCHEMA_FOUND, i, 2);
                             break;
                         }
                     }
@@ -456,83 +443,52 @@ public class SchemaMappingPanel extends AbstractWizardPanel {
     
     
     private void mapFromGme() {
-        // get the service's schema dir
-        File schemaDir = new File(getServiceInformation().getBaseDirectory(),
-            "schema" + File.separator + getServiceInformation().getIntroduceServiceProperties()
-                .getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME));
+        File schemaDir = getServiceSchemaDirectory();
+        
         try {
             XMLDataModelService gmeHandle = getGmeHandle();
             // get the domains administered by the GME
             List domains = gmeHandle.getNamespaceDomainList();
-            // get the selected packages
-            Data data = ExtensionDataUtils.getExtensionData(getExtensionData());
-            CadsrInformation info = data.getCadsrInformation();
-            if (info != null && info.getPackages() != null) {
-                CadsrPackage[] packs = info.getPackages();
-                for (int i = 0; i < packs.length; i++) {
-                    Namespace ns = new Namespace(packs[i].getMappedNamespace());
-                    // see if the GME has the domain in question
-                    if (domains.contains(ns.getDomain())) {
-                        // domain found, get the namespaces within it
-                        List<Namespace> namespaces = gmeHandle.getSchemaListForNamespaceDomain(ns.getDomain());
-                        if (namespaces.contains(ns)) {
-                            // found the namespace as well, download the schema locally
-                            // have the GME cache the schema and its imports locally
-                            List<Namespace> cachedNamespaces = gmeHandle.cacheSchema(ns, schemaDir);
-                            
-                            // create namespace types and add them to the service
-                            for (Namespace storedNs : cachedNamespaces) {
-                                ImportInfo storedSchemaInfo = new ImportInfo(storedNs);
-                                File location = new File(schemaDir.getAbsolutePath() + File.separator + storedSchemaInfo.getFileName());
-                                NamespaceType nsType = CommonTools.createNamespaceType(location.getAbsolutePath(), schemaDir);
-                                addNamespaceToService(nsType);
-                            }
-                            // change the package namespace table to reflect the
-                            // found schema
-                            int row = 0;
-                            while (!getPackageNamespaceTable().getValueAt(row, 0).equals(packs[i].getName())) {
-                                row++;
-                            }
-                            getPackageNamespaceTable().setValueAt(PackageSchemasTable.STATUS_SCHEMA_FOUND, row, 2);
+            // get the selected packages from the schema table
+            for (int row = 0; row < getPackageNamespaceTable().getRowCount(); row++) {
+                String packageName = (String) getPackageNamespaceTable().getValueAt(row, 0);
+                String proposedNamespace = (String) getPackageNamespaceTable().getValueAt(row, 1);
+                // extract the domain portion of the namespace
+                Namespace gmeNamespace = new Namespace(proposedNamespace);
+                String domain = gmeNamespace.getDomain();
+                // see if the GME contains this domain
+                if (domains.contains(domain)) {
+                    // pull the schema (and it's imports) down for local use
+                    List<Namespace> cachedNamespaces = gmeHandle.cacheSchema(gmeNamespace, schemaDir);
+                    // each namespace corresponds to a schema file stored in the schema directory
+                    boolean namespaceFound = false;
+                    for (Namespace ns : cachedNamespaces) {
+                        ImportInfo info = new ImportInfo(ns);
+                        File schemaFile = new File(schemaDir, info.getFileName());
+                        if (ns.getRaw().equals(proposedNamespace)) {
+                            configuration.mapPackageToSchema(packageName, schemaFile);
+                            namespaceFound = true;
+                            break;
                         }
-                        break;
                     }
+                    if (namespaceFound) {
+                        // change the status in the table to found
+                        getPackageNamespaceTable().setValueAt(
+                            SchemaResolutionStatus.SCHEMA_FOUND, row, 2);
+                    } else {
+                        // namespace not found, but domain exists
+                        getPackageNamespaceTable().setValueAt(
+                            SchemaResolutionStatus.GME_NAMESPACE_NOT_FOUND, row, 2);
+                    }
+                } else {
+                    // domain not found in the GME
+                    getPackageNamespaceTable().setValueAt(
+                        SchemaResolutionStatus.GME_DOMAIN_NOT_FOUND, row, 2);
                 }
-            } else {
-                JOptionPane.showMessageDialog(SchemaMappingPanel.this, "No packages to find schemas for");
             }
         } catch (Exception ex) {
             ex.printStackTrace();
             CompositeErrorDialog.showErrorDialog("Error retrieving schemas from the GME", ex);
-        }
-    }
-    
-    
-    private void addNamespaceToService(NamespaceType nsType) {
-        // if the namespace already exists in the service, ignore it
-        if (CommonTools.getNamespaceType(getServiceInformation().getNamespaces(), nsType.getNamespace()) == null) {
-            // set the package name
-            String packName = CommonTools.getPackageName(nsType.getNamespace());
-            nsType.setPackageName(packName);
-            // fix the serialization / deserialization on the namespace types
-            setSdkSerialization(nsType);
-            CommonTools.addNamespace(getServiceInformation().getServiceDescriptor(), nsType);
-            // add the namespace to the introduce namespace excludes list so
-            // that beans will not be built for these data types
-            String excludes = getServiceInformation().getIntroduceServiceProperties().getProperty(
-                IntroduceConstants.INTRODUCE_NS_EXCLUDES);
-            excludes += " -x " + nsType.getNamespace();
-            getServiceInformation().getIntroduceServiceProperties().setProperty(
-                IntroduceConstants.INTRODUCE_NS_EXCLUDES, excludes);
-        }
-    }
-    
-    
-    private void setSdkSerialization(NamespaceType namespace) {
-        for (SchemaElementType type : namespace.getSchemaElement()) {
-            type.setClassName(type.getType());
-            type.setSerializer(SDK40SerializerFactory.class.getName());
-            type.setDeserializer(SDK40DeserializerFactory.class.getName());
         }
     }
     
@@ -553,33 +509,87 @@ public class SchemaMappingPanel extends AbstractWizardPanel {
     }
     
     
-    private static class ValidatingTableCellRenderer implements TableCellRenderer {
-        private DefaultTableCellRenderer baseRenderer;
-        private Color defaultBackground;
-        
-        public ValidatingTableCellRenderer(DefaultTableCellRenderer baseRenderer) {
-            this.baseRenderer = baseRenderer;
-            this.defaultBackground = baseRenderer.getBackground();
+    private SchemaResolutionStatus resolveSingleSchema(String packageName) throws Exception {
+        // determine the row of this package in the table
+        int dataRow = 0;
+        while (!packageName.equals(getPackageNamespaceTable().getValueAt(dataRow, 0))
+            && dataRow <= getPackageNamespaceTable().getRowCount()) {
+            dataRow++;
+        }
+        if (dataRow == getPackageNamespaceTable().getRowCount()) {
+            CompositeErrorDialog.showErrorDialog("Error locating table row for package " + packageName);
+            return SchemaResolutionStatus.MAPPING_ERROR; // bail out
         }
         
-        
-        public Component getTableCellRendererComponent(JTable table, Object value,
-            boolean isSelected, boolean hasFocus, int row, int column) {
-            // restore the default background
-            baseRenderer.setBackground(defaultBackground);
-            
-            // render the cell with default settings
-            Component cell = baseRenderer.getTableCellRendererComponent(
-                table, value, isSelected, hasFocus, row, column);
-            
-            if (column == 2) { // status column
-                if (value.equals(PackageSchemasTable.STATUS_NEVER_TRIED)) {
-                    baseRenderer.setBackground(ValidationComponentUtils.getErrorBackground());
-                } else if (value.equals(PackageSchemasTable.STATUS_MAPPING_ERROR)) {
-                    baseRenderer.setBackground(ValidationComponentUtils.getWarningBackground());
-                }
+        SchemaResolutionStatus status = SchemaResolutionStatus.NEVER_TRIED;
+        File schemaDir = getServiceSchemaDirectory();
+        // use the schema resolution dialog to create namespace types 
+        // and copy schemas to the service's schema directory
+        NamespaceType[] resolved = SchemaResolutionDialog.resolveSchemas(getServiceInformation());
+        if (resolved != null) {
+            CadsrPackage pack = getNamedCadsrPackage(packageName);
+            if (resolved.length != 0 && packageResolvedByNamespace(pack, resolved[0])) {
+                File primarySchemaFile = new File(schemaDir, resolved[0].getLocation());
+                configuration.mapPackageToSchema(packageName, primarySchemaFile);
+                
+                // set the namespace of the resolved schema on the table
+                getPackageNamespaceTable().setValueAt(
+                    pack.getMappedNamespace(), dataRow, 1);
+                
+                status = SchemaResolutionStatus.SCHEMA_FOUND;
+            } else {
+                // some schema was resolved, but it does not map to the package
+                status = SchemaResolutionStatus.MAPPING_ERROR;
             }
-            return cell;
+        } else {
+            CompositeErrorDialog.showErrorDialog("Error retrieving schemas!");
         }
+        return status;
+    }
+    
+    
+    private boolean packageResolvedByNamespace(CadsrPackage pack, NamespaceType namespace) {
+        Set<String> classNames = new HashSet<String>();
+        for (ClassMapping mapping : pack.getCadsrClass()) {
+            classNames.add(mapping.getClassName());
+        }
+        Set<String> elementNames = new HashSet<String>();
+        for (SchemaElementType element : namespace.getSchemaElement()) {
+            elementNames.add(element.getType());
+        }
+        
+        boolean status = elementNames.containsAll(classNames);
+        if (!status) {
+            // sort out the resolution errors
+            Set<String> nonResolvedClasses = new HashSet<String>();
+            nonResolvedClasses.addAll(classNames);
+            nonResolvedClasses.removeAll(elementNames);
+
+            // display the errors
+            new PackageSchemaMappingErrorDialog(nonResolvedClasses);
+        }
+        
+        // return status
+        return status;
+    }
+    
+    
+    private CadsrPackage getNamedCadsrPackage(String packageName) throws Exception {
+        Data extensionData = ExtensionDataUtils.getExtensionData(getExtensionData());
+        CadsrPackage[] cadsrPackages = extensionData.getCadsrInformation().getPackages();
+        for (CadsrPackage pack : cadsrPackages) {
+            if (pack.getName().equals(packageName)) {
+                return pack;
+            }
+        }
+        return null;
+    }
+    
+    
+    private File getServiceSchemaDirectory() {
+        File schemaDir = new File(getServiceInformation().getBaseDirectory(),
+            "schema" + File.separator + getServiceInformation().getIntroduceServiceProperties()
+                .getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME));
+        return schemaDir;
     }
 }
