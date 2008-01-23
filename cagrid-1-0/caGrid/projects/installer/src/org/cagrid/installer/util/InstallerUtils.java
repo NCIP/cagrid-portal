@@ -5,26 +5,20 @@ package org.cagrid.installer.util;
 
 import java.awt.Component;
 import java.awt.GridBagConstraints;
-import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.StringWriter;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.util.Enumeration;
 import java.util.Properties;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
 
 import javax.swing.BorderFactory;
 import javax.swing.JOptionPane;
@@ -74,36 +68,7 @@ public class InstallerUtils {
 				JOptionPane.ERROR_MESSAGE);
 	}
 
-	public static void unzipFile(File toFile, File toDir) throws Exception {
-		String baseOut = toDir.getAbsolutePath() + "/";
-		ZipFile zipFile = new ZipFile(toFile);
-		Enumeration entries = zipFile.entries();
-		while (entries.hasMoreElements()) {
-			ZipEntry entry = (ZipEntry) entries.nextElement();
-			if (entry.isDirectory()) {
-				File dir = new File(baseOut + entry.getName());
-				if (!dir.exists()) {
-					dir.mkdirs();
-				}
-				continue;
-			}
-
-			InputStream in = zipFile.getInputStream(entry);
-			BufferedOutputStream out = new BufferedOutputStream(
-					new FileOutputStream(baseOut + entry.getName()));
-			byte[] buffer = new byte[1024];
-			int len = -1;
-			while ((len = in.read(buffer)) > 0) {
-				out.write(buffer, 0, len);
-				buffer = new byte[1024];
-			}
-			out.flush();
-			out.close();
-			in.close();
-		}
-		zipFile.close();
-	}
-
+	
 	public static void addToClassPath(String s) throws IOException {
 		File f = new File(s);
 		addToClassPath(f);

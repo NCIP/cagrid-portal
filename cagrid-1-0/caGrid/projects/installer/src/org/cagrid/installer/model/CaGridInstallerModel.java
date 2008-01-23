@@ -40,6 +40,8 @@ public interface CaGridInstallerModel extends WizardModel {
 	boolean isTrue(String propName);
 
 	boolean isTomcatContainer();
+	
+	boolean isGlobusContainer();
 
 	boolean isSet(String propName);
 

@@ -128,6 +128,8 @@ public abstract class Constants {
 	public static final String INSTALL_GME = "install.gme";
 
 	public static final String INSTALL_EVS = "install.evs";
+	
+	public static final String INSTALL_TRANSFER = "install.transfer";
 
 	public static final String INSTALL_CADSR = "install.cadsr";
 

@@ -61,6 +61,7 @@ import org.cagrid.installer.tasks.DeployGlobusToTomcatTask;
 import org.cagrid.installer.tasks.GenerateCATask;
 import org.cagrid.installer.tasks.GenerateServiceCredsTask;
 import org.cagrid.installer.tasks.SaveSettingsTask;
+import org.cagrid.installer.transfer.TransferComponentInstaller;
 import org.cagrid.installer.util.InstallerUtils;
 import org.cagrid.installer.workflow.WorkflowComponentInstaller;
 import org.pietschy.wizard.Wizard;
@@ -106,6 +107,7 @@ public class Installer {
 		componentInstallers.add(new CaDSRComponentInstaller());
 		componentInstallers.add(new FQPComponentInstaller());
 		componentInstallers.add(new WorkflowComponentInstaller());
+		componentInstallers.add(new TransferComponentInstaller());
 		componentInstallers.add(new GTSComponentInstaller());
 		componentInstallers.add(new AuthenticationServiceComponentInstaller());
 		componentInstallers.add(new GridGrouperComponentInstaller());
@@ -454,6 +456,9 @@ public class Installer {
 		selectServicesStep.getOptions().add(
 				new BooleanPropertyConfigurationOption(Constants.INSTALL_FQP,
 						"FQP", false, true));
+		selectServicesStep.getOptions().add(
+            new BooleanPropertyConfigurationOption(
+                    Constants.INSTALL_TRANSFER, "Transfer Service (Tomcat Only)", false, true));
 		selectServicesStep.getOptions().add(
 				new BooleanPropertyConfigurationOption(
 						Constants.INSTALL_WORKFLOW, "Workflow", false, true));
@@ -884,6 +889,7 @@ public class Installer {
 		this.model.unsetProperty(Constants.INSTALL_INDEX_SVC);
 		this.model.unsetProperty(Constants.INSTALL_MY_SERVICE);
 		this.model.unsetProperty(Constants.INSTALL_PORTAL);
+		this.model.unsetProperty(Constants.INSTALL_TRANSFER);
 		this.model.unsetProperty(Constants.INSTALL_SYNC_GTS);
 		this.model.unsetProperty(Constants.INSTALL_SERVICES);
 		this.model.unsetProperty(Constants.INSTALL_WORKFLOW);
