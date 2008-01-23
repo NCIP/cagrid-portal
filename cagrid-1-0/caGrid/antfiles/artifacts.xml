@@ -725,6 +725,9 @@
 			<fileset dir="${projects.dir}/gme/lib">
 				<include name="GlobalModelExchange.jar" />
 				<include name="jdom-1.0.jar" />
+				<include name="mobius_factories-1.1.jar" />
+				<include name="mobius_gme_client-1.1.jar" />
+				<include name="mobius_tools-1.1.jar" />
 				<include name="mobius-castor-0.9.4.3-xml.jar" />
 			</fileset>
 			<fileset dir="${projects.dir}/gme/build/lib">

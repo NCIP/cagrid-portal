@@ -65,7 +65,6 @@
 			<artifact refid="common.test.jars" />
 			<artifact refid="test.coverage.jars" />
 			<artifact refid="validation.jars" />
-
 		</resolveDependencies>
 		<ant dir="${projects.dir}/core" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
@@ -361,7 +360,6 @@
 			<artifact refid="core.test.jars" />
 			<artifact refid="core.resources" />
 			<artifact refid="gridca.jars" />
-			<artifact refid="mobius.jars" />
 			<artifact refid="mds.jars" />
 			<artifact refid="opensaml.jars" />
 			<artifact refid="opensaml.endorsed" />
@@ -621,7 +619,6 @@
 			<artifact refid="grape.jars" />
 			<artifact refid="core.resources" />
 			<artifact refid="testing.system.jars" />
-			<artifact refid="mobius.jars" />
 			<artifact refid="jdom.jars" />
 			<artifact refid="jet.jars" />
 			<artifact refid="gme.globus.client.jars" />
