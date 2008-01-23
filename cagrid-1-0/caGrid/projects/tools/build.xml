@@ -272,11 +272,6 @@
 			<classpath refid="build.classpath"/>
 			<classpath refid="test.classpath"/>
 			<classpath>
-				<fileset dir="${jar.dir}">
-			    	<include name="**/*.jar"/>
-				</fileset>
-			</classpath>
-			<classpath>
 				<fileset dir="${build.lib.dir}">
 					<include name="**/*.jar"/>
 				</fileset>
