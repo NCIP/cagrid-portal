@@ -31,7 +31,7 @@ import javax.swing.border.TitledBorder;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created Sep 25, 2006 
- * @version $Id: ServiceWizard.java,v 1.2 2007-12-05 17:30:54 dervin Exp $ 
+ * @version $Id: ServiceWizard.java,v 1.3 2008-01-23 19:56:37 dervin Exp $ 
  */
 public class ServiceWizard extends JDialog {
 
@@ -465,6 +465,8 @@ public class ServiceWizard extends JDialog {
 		if (doneButtonListener == null) {
 			doneButtonListener = new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+                    // make the last panel save its state
+                    panelSequence.get(currentPanelIndex).movingNext();
 					setVisible(false);
 					dispose();
 				}
