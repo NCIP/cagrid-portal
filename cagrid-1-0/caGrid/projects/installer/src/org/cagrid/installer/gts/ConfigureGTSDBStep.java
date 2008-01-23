@@ -44,7 +44,7 @@ public class ConfigureGTSDBStep extends PropertyConfigurationStep {
 	public void applyState() throws InvalidStateException {
 		super.applyState();
 
-		if (this.model.isTrue(Constants.INSTALL_CDS)) {
+		if (this.model.isTrue(Constants.INSTALL_GTS)) {
 			this.model.setProperty(Constants.USE_SECURE_CONTAINER,
 					Constants.TRUE);
 		}
