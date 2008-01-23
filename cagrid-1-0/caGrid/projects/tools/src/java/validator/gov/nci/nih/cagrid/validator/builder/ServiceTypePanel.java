@@ -51,6 +51,7 @@ import javax.swing.border.TitledBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import org.cagrid.grape.LookAndFeel;
 import org.cagrid.grape.utils.BusyDialogRunnable;
 
 /** 
@@ -60,7 +61,7 @@ import org.cagrid.grape.utils.BusyDialogRunnable;
  * @author David Ervin
  * 
  * @created Sep 5, 2007 12:25:19 PM
- * @version $Id: ServiceTypePanel.java,v 1.1 2007-11-26 17:09:10 dervin Exp $ 
+ * @version $Id: ServiceTypePanel.java,v 1.2 2008-01-23 16:22:08 dervin Exp $ 
  */
 public class ServiceTypePanel extends JPanel {
     public static final String JAVA_CLASS_PATH = "java.class.path";
@@ -903,16 +904,16 @@ public class ServiceTypePanel extends JPanel {
     
     
     public Icon getUpIcon() {
-        return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/go-up.png"));
+        return IntroduceLookAndFeel.getUpIcon();
     }
 
 
     public Icon getDownIcon() {
-        return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/go-down.png"));
+        return IntroduceLookAndFeel.getDownIcon();
     }
     
     
     public Icon getEditIcon() {
-        return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/modify.png"));
+        return LookAndFeel.getPreferencesIcon();
     }
 }
