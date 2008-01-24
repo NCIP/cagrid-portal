@@ -28,7 +28,7 @@ import java.util.Map;
  * @author David Ervin
  * 
  * @created Jan 22, 2008 11:25:57 AM
- * @version $Id: SchemaMappingConfigurationStep.java,v 1.2 2008-01-23 20:10:35 dervin Exp $ 
+ * @version $Id: SchemaMappingConfigurationStep.java,v 1.3 2008-01-24 15:53:54 dervin Exp $ 
  */
 public class SchemaMappingConfigurationStep extends AbstractStyleConfigurationStep {
     private Map<String, File> packageToSourceSchemaFile;
@@ -124,6 +124,8 @@ public class SchemaMappingConfigurationStep extends AbstractStyleConfigurationSt
             nsType.setPackageName(packName);
             // fix the serialization / deserialization on the namespace types
             setSdkSerialization(nsType);
+            // set the namespace to not generate beans
+            nsType.setGenerateStubs(Boolean.FALSE);
             CommonTools.addNamespace(getServiceInformation().getServiceDescriptor(), nsType);
             // add the namespace to the introduce namespace excludes list so
             // that beans will not be built for these data types
