@@ -50,9 +50,9 @@ public class TestCertificateAuthority extends TestCase {
 
 	private Database db;
 
-	private int MAX_COUNT = 6;
+	private int MAX_COUNT = 8;
 	
-	private int TIME_MULTIPLIER = 5;
+	private int TIME_MULTIPLIER = 2;
 
 	public void testWrappingCertificateAuthority() {
 		DorianCAConfiguration conf = this
@@ -433,12 +433,12 @@ public class TestCertificateAuthority extends TestCase {
 
 			boolean completed = false;
 			int count = 0;
-			int seconds = 1000;
+			int seconds = 5000;
 			while ((!completed) && (count < MAX_COUNT)) {
 				try {
 					origRoot = createAndStoreCAShort(ca, seconds);
 					completed = true;
-				} catch (NoCACredentialsFault f) {
+				} catch (Exception f) {
 					count = count + 1;
 					seconds = seconds * TIME_MULTIPLIER;
 				}
@@ -476,12 +476,12 @@ public class TestCertificateAuthority extends TestCase {
 			Thread.currentThread().yield();
 			boolean completed = false;
 			int count = 0;
-			int seconds = 1000;
+			int seconds = 5000;
 			while ((!completed) && (count < MAX_COUNT)) {
 				try {
 					createAndStoreCAShort(ca, seconds);
 					completed = true;
-				} catch (NoCACredentialsFault f) {
+				} catch (Exception f) {
 					count = count + 1;
 					seconds = seconds * TIME_MULTIPLIER;
 				}
@@ -589,7 +589,9 @@ public class TestCertificateAuthority extends TestCase {
 		ca.setCACredentials(root, rootPair.getPrivate());
 		X509Certificate r = ca.getCACertificate();
 		assertNotNull(r);
-		assertEquals(r, root);
+		if(!r.equals(root)){
+			throw new Exception("The CA certificate obtained was not expected");
+		}
 		return r;
 	}
 
