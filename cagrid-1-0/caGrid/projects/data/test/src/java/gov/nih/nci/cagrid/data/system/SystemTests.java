@@ -26,7 +26,7 @@ import junit.textui.TestRunner;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A> *
  * @created Nov 7, 2006
- * @version $Id: SystemTests.java,v 1.27 2008-01-24 15:01:12 dervin Exp $
+ * @version $Id: SystemTests.java,v 1.28 2008-01-24 17:04:16 dervin Exp $
  */
 public class SystemTests extends BaseSystemTest {
     
@@ -54,7 +54,7 @@ public class SystemTests extends BaseSystemTest {
     protected boolean storySetUp() {
         // initialize the service container instance
         try {
-            container = ServiceContainerFactory.createContainer(ServiceContainerType.getTypeOfTheDay());
+            container = ServiceContainerFactory.createContainer(ServiceContainerType.GLOBUS_CONTAINER);
         } catch (Exception ex) {
             ex.printStackTrace();
             fail("Failed to create container: " + ex.getMessage());
