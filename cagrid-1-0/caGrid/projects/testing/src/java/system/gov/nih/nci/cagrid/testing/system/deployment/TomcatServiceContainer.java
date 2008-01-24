@@ -230,7 +230,7 @@ public class TomcatServiceContainer extends ServiceContainer {
 
         // edit the environment
         List<String> edits = new ArrayList<String>();
-        edits.add(ENV_ANT_HOME + "=" + getProperties().getContainerDirectory().getAbsolutePath());
+        edits.add(ENV_CATALINA_HOME + "=" + getProperties().getContainerDirectory().getAbsolutePath());
         if (getProperties().getHeapSizeInMegabytes() != null) {
             String currentCatalinaOpts = System.getenv(ENV_CATALINA_OPTS);
             if (currentCatalinaOpts != null) {
