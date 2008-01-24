@@ -110,37 +110,16 @@ public class TomcatServiceContainer extends ServiceContainer {
             deployProcess = Runtime.getRuntime().exec(commandArray, editedEnvironment, serviceDir);
             new StreamGobbler(deployProcess.getInputStream(), StreamGobbler.TYPE_OUT, LOG, Level.DEBUG).start();
             new StreamGobbler(deployProcess.getErrorStream(), StreamGobbler.TYPE_OUT, LOG, Level.ERROR).start();
+            deployProcess.waitFor();
         } catch (Exception ex) {
             throw new ContainerException("Error invoking deploy process: " + ex.getMessage(), ex);
         }
 
-        final Process finalDeploy = deployProcess;
-        FutureTask<Boolean> future = new FutureTask<Boolean>(new Callable<Boolean>() {
-            public Boolean call() throws Exception {
-                LOG.debug("Waiting for deploy process");
-                return Boolean.valueOf(finalDeploy.exitValue() == 0);
-            }
-        });
-
-        ExecutorService executor = Executors.newSingleThreadExecutor();
-        executor.execute(future);
-
-        boolean success = false;
-        try {
-            success = future.get().booleanValue();
-        } catch (Exception ex) {
-            throw new ContainerException("Error deploying service: " + ex.getMessage(), ex);
-        } finally {
-            // clean up deploy process and futures
-            future.cancel(true);
-            deployProcess.destroy();
-            executor.shutdownNow();
-            deployProcess = null;
+        if (deployProcess.exitValue() != 0) {
+            throw new ContainerException("deployService ant command failed: " + deployProcess.exitValue());
         }
 
-        if (!success) {
-            throw new ContainerException("Deployment ant command failed: " + deployProcess.exitValue());
-        }
+
     }
 
 
