@@ -42,6 +42,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -66,7 +67,7 @@ import org.cagrid.grape.utils.ErrorDialog;
  * @author David Ervin
  * 
  * @created Apr 11, 2007 9:59:24 AM
- * @version $Id: DomainModelConfigPanel.java,v 1.9 2008-01-02 19:32:08 dervin Exp $
+ * @version $Id: DomainModelConfigPanel.java,v 1.10 2008-01-24 18:03:14 dervin Exp $
  */
 public class DomainModelConfigPanel extends DataServiceModificationSubPanel {
 
@@ -74,6 +75,7 @@ public class DomainModelConfigPanel extends DataServiceModificationSubPanel {
     private transient Project mostRecentProject;
     private transient DomainModel installedDomainModel = null;
     private transient boolean currentlyFromCadsr;
+    private transient Set<String> warnedMissingNamespaces = null;
 
     private JButton visualizeDomainModelButton = null;
     private JPanel cadsrDomainModelPanel = null;
@@ -91,6 +93,7 @@ public class DomainModelConfigPanel extends DataServiceModificationSubPanel {
     public DomainModelConfigPanel(ServiceInformation info, ExtensionDataManager dataManager) {
         super(info, dataManager);
         this.classSelectionListeners = new LinkedList<DomainModelClassSelectionListener>();
+        this.warnedMissingNamespaces = new HashSet<String>();
         initialize();
     }
 
@@ -283,23 +286,6 @@ public class DomainModelConfigPanel extends DataServiceModificationSubPanel {
                     }
                 }
             });
-            
-            /*
-            boolean noDomainModel = false;
-            boolean suppliedDomainModel = false;
-            try {
-                noDomainModel = getExtensionDataManager().isNoDomainModel();
-                suppliedDomainModel = getExtensionDataManager().isSuppliedDomainModel();
-            } catch (Exception ex) {
-                ex.printStackTrace();
-                CompositeErrorDialog.showErrorDialog("Error loading domain model source", 
-                    ex.getMessage(), ex);
-            }
-            
-            if (!noDomainModel && !suppliedDomainModel) {
-                firstCadsrBrowserInit();
-            }
-            */
         }
         return cadsrBrowserPanel;
     }
@@ -454,8 +440,25 @@ public class DomainModelConfigPanel extends DataServiceModificationSubPanel {
                                 .getMappedNamespaceForPackage(packName);
                             NamespaceType packageNamespace = CommonTools.getNamespaceType(
                                 getServiceInfo().getNamespaces(), namespace);
-                            // inform interested parties of the selection
-                            fireClassSelected(packName, mapping, packageNamespace);
+                            // if the namespace type has been removed from the service,
+                            // there's no way the domain type can be used in the data service
+                            if (packageNamespace == null) {
+                                if (!warnedMissingNamespaces.contains(namespace)) {
+                                    String[] message = new String[] {
+                                        "The selected class maps to the XML namespace",
+                                        namespace,
+                                        "which could not be found in the service."
+                                    };
+                                    JOptionPane.showMessageDialog(DomainModelConfigPanel.this, message,
+                                        "Missing Namespace", JOptionPane.ERROR_MESSAGE);
+                                }
+                                // cannot check this node
+                                classNode.getCheckBox().setSelected(false);
+                                warnedMissingNamespaces.add(namespace);
+                            } else {
+                                // inform interested parties of the selection
+                                fireClassSelected(packName, mapping, packageNamespace);
+                            }
                         } catch (Exception ex) {
                             ex.printStackTrace();
                             CompositeErrorDialog.showErrorDialog("Error selecting class: " + ex.getMessage(), ex);
