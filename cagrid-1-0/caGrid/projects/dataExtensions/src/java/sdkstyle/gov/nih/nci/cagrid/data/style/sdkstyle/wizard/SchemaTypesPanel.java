@@ -50,7 +50,7 @@ import org.projectmobius.gme.client.GlobusGMEXMLDataModelServiceFactory;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * @created Sep 26, 2006
- * @version $Id: SchemaTypesPanel.java,v 1.4 2007-12-18 21:57:41 dervin Exp $
+ * @version $Id: SchemaTypesPanel.java,v 1.5 2008-01-24 18:02:56 dervin Exp $
  */
 public class SchemaTypesPanel extends AbstractWizardPanel {
     
@@ -362,6 +362,7 @@ public class SchemaTypesPanel extends AbstractWizardPanel {
                     type.setDeserializer(deserializerClass);
                     type.setClassName(type.getType());
                 }
+                nsType.setGenerateStubs(Boolean.FALSE);
                 CommonTools.addNamespace(getServiceInformation().getServiceDescriptor(), nsType);
                 // add the namespace to the introduce namespace excludes list so
                 // that beans will not be built for these data types
