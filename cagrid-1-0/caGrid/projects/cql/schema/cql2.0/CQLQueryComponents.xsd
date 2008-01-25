@@ -3,10 +3,12 @@
 	xmlns:com="http://CQL.caBIG/2/gov.nih.nci.cagrid.cql.Components" 
 	xmlns:att="http://CQL.caBIG/2/gov.nih.nci.cagrid.cql.Attribute" 
 	xmlns:mods="http://CQL.caBIG/2/gov.nih.nci.cagrid.cql.Modifiers" 
+	xmlns:assoc="http://CQL.caBIG/2/gov.nih.nci.cagrid.cql.AssociationPopulationSpec" 
 	targetNamespace="http://CQL.caBIG/2/gov.nih.nci.cagrid.cql.Components" 
 	elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<xsd:import namespace="http://CQL.caBIG/2/gov.nih.nci.cagrid.cql.Attribute" schemaLocation="CQLAttribute.xsd"/>
 	<xsd:import namespace="http://CQL.caBIG/2/gov.nih.nci.cagrid.cql.Modifiers" schemaLocation="CQLQueryModifier.xsd"/>
+	<xsd:import namespace="http://CQL.caBIG/2/gov.nih.nci.cagrid.cql.AssociationPopulationSpec" schemaLocation="AssociationPopulationSpec.xsd"/>
 	
 	<xsd:complexType name="CQLObject" abstract="true">
 		<xsd:choice>
@@ -57,6 +59,7 @@
 		<xsd:sequence>
 			<xsd:element ref="com:CQLTargetObject" minOccurs="1" maxOccurs="1"/>
 			<xsd:element ref="mods:CQLQueryModifier" minOccurs="0" maxOccurs="1"/>
+			<xsd:element ref="assoc:AssociationPopulationSpecification" minOccurs="0" maxOccurs="1"/>
 		</xsd:sequence>
 	</xsd:complexType>
 </xsd:schema>

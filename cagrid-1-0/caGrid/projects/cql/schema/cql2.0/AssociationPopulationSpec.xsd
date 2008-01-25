@@ -3,6 +3,7 @@
 	xmlns:assoc="http://CQL.caBIG/2/gov.nih.nci.cagrid.cql.AssociationPopulationSpec" 
 	targetNamespace="http://CQL.caBIG/2/gov.nih.nci.cagrid.cql.AssociationPopulationSpec" 
 	elementFormDefault="qualified" attributeFormDefault="unqualified">
+	
 	<xsd:element name="AssociationPopulationSpecification" type="assoc:AssociationPopulationSpecification"/>
 	<xsd:complexType name="AssociationPopulationSpecification">
 		<xsd:choice>
