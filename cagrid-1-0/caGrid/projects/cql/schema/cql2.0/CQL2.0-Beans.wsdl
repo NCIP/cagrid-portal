@@ -5,4 +5,5 @@
 	<import location="Predicates.xsd"/>
 	<import location="CQLAttribute.xsd"/>
 	<import location="CQLQueryModifier.xsd"/>
+	<import location="CQLQueryComponents.xsd"/>
 </definitions>
