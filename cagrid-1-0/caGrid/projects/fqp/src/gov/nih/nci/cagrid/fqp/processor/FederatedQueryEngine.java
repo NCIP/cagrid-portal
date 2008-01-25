@@ -15,6 +15,7 @@ import java.io.StringWriter;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.globus.gsi.GlobusCredential;
 
 
 /**
@@ -22,105 +23,111 @@ import org.apache.commons.logging.LogFactory;
  * @author Scott Oster
  */
 public class FederatedQueryEngine {
-	protected static Log LOG = LogFactory.getLog(FederatedQueryEngine.class.getName());
+    protected static Log LOG = LogFactory.getLog(FederatedQueryEngine.class.getName());
+    protected GlobusCredential cred;
 
 
-	public FederatedQueryEngine() {
-	}
+    public FederatedQueryEngine() {
+    }
 
 
-	/**
-	 * Call Federated Query Processor, and send the generated CQLQuery to each
-	 * targeted service, placing each results into a single DCQLQueryResults
-	 * object.
-	 * 
-	 * @param dcqlQuery
-	 * @return
-     *      The results of executing the DCQL query
-	 * @throws FederatedQueryProcessingException
-	 */
-	public DCQLQueryResultsCollection execute(DCQLQuery dcqlQuery) throws FederatedQueryProcessingException {
-		FederatedQueryProcessor processor = new FederatedQueryProcessor();
-		debugDCQLQuery("Beginning processing of DCQL", dcqlQuery);
-
-		CQLQuery cqlQuery = processor.processDCQLQuery(dcqlQuery.getTargetObject());
-
-		String[] targetServiceURLs = dcqlQuery.getTargetServiceURL();
-		DCQLQueryResultsCollection result = new DCQLQueryResultsCollection();
-		DCQLResult results[] = new DCQLResult[targetServiceURLs.length];
-		for (int i = 0; i < targetServiceURLs.length; i++) {
-			DCQLResult r = new DCQLResult();
-			r.setTargetServiceURL(targetServiceURLs[i]);
-			// aggregate results
-			CQLQueryResults currResults = DataServiceQueryExecutor.queryDataService(cqlQuery, targetServiceURLs[i]);
-			r.setCQLQueryResultCollection(currResults);
-			if (currResults.getTargetClassname() == null
-				|| !currResults.getTargetClassname().equals(dcqlQuery.getTargetObject().getName())) {
-				throw new RemoteDataServiceException("Data service (" + targetServiceURLs[i]
-					+ ") returned results of type (" + currResults.getTargetClassname() + ") when type ("
-					+ dcqlQuery.getTargetObject().getName() + ") was requested!");
-			}
-			results[i] = r;
-		}
-		result.setDCQLResult(results);
-		return result;
-	}
+    public FederatedQueryEngine(GlobusCredential cred) {
+        this.cred = cred;
+    }
 
 
-	/**
-	 * Call Federated Query Processor, and send the generated CQLQuery to each
-	 * targeted service, aggregating the results into a single CQLQueryResults
-	 * object.
-	 * 
-	 * @param dcqlQuery
-	 * @return
-     *      Aggregated results of the DCQL query
-	 * @throws FederatedQueryProcessingException
-	 */
-	public CQLQueryResults executeAndAggregateResults(DCQLQuery dcqlQuery) throws FederatedQueryProcessingException {
-		FederatedQueryProcessor processor = new FederatedQueryProcessor();
-		debugDCQLQuery("Beginning processing of DCQL", dcqlQuery);
+    /**
+     * Call Federated Query Processor, and send the generated CQLQuery to each
+     * targeted service, placing each results into a single DCQLQueryResults
+     * object.
+     * 
+     * @param dcqlQuery
+     * @return The results of executing the DCQL query
+     * @throws FederatedQueryProcessingException
+     */
+    public DCQLQueryResultsCollection execute(DCQLQuery dcqlQuery) throws FederatedQueryProcessingException {
+        FederatedQueryProcessor processor = new FederatedQueryProcessor(this.cred);
+        debugDCQLQuery("Beginning processing of DCQL", dcqlQuery);
 
-		CQLQuery cqlQuery = processor.processDCQLQuery(dcqlQuery.getTargetObject());
+        CQLQuery cqlQuery = processor.processDCQLQuery(dcqlQuery.getTargetObject());
 
-		CQLQueryResults aggregateResults = null;
-		String[] targetServiceURLs = dcqlQuery.getTargetServiceURL();
-		for (int i = 0; i < targetServiceURLs.length; i++) {
-			// aggregate results
-			CQLQueryResults currResults = DataServiceQueryExecutor.queryDataService(cqlQuery, targetServiceURLs[i]);
-			if (currResults != null ) {
-				if (!currResults.getTargetClassname().equals(dcqlQuery.getTargetObject().getName())) {
-					throw new RemoteDataServiceException("Data service (" + targetServiceURLs[i]
-						+ ") returned results of type (" + currResults.getTargetClassname() + ") when type ("
-						+ dcqlQuery.getTargetObject().getName() + ") was requested!");
-				}
-				if (aggregateResults == null) {
-					// initialize our return to current result if first time we
-					// got something
-					aggregateResults = currResults;
-				} else {
-					CQLObjectResult[] tmpArr = (CQLObjectResult[]) Utils.concatenateArrays(CQLObjectResult.class,
-						aggregateResults.getObjectResult(), currResults.getObjectResult());
-
-					aggregateResults.setObjectResult(tmpArr);
-				}
-			}
-		}
-
-		return aggregateResults;
-	}
+        String[] targetServiceURLs = dcqlQuery.getTargetServiceURL();
+        DCQLQueryResultsCollection result = new DCQLQueryResultsCollection();
+        DCQLResult results[] = new DCQLResult[targetServiceURLs.length];
+        for (int i = 0; i < targetServiceURLs.length; i++) {
+            DCQLResult r = new DCQLResult();
+            r.setTargetServiceURL(targetServiceURLs[i]);
+            // aggregate results
+            CQLQueryResults currResults = DataServiceQueryExecutor.queryDataService(cqlQuery, targetServiceURLs[i],
+                this.cred);
+            r.setCQLQueryResultCollection(currResults);
+            if (currResults.getTargetClassname() == null
+                || !currResults.getTargetClassname().equals(dcqlQuery.getTargetObject().getName())) {
+                throw new RemoteDataServiceException("Data service (" + targetServiceURLs[i]
+                    + ") returned results of type (" + currResults.getTargetClassname() + ") when type ("
+                    + dcqlQuery.getTargetObject().getName() + ") was requested!");
+            }
+            results[i] = r;
+        }
+        result.setDCQLResult(results);
+        return result;
+    }
 
 
-	private void debugDCQLQuery(String logMessage, DCQLQuery dcqlQuery) {
-		if (LOG.isDebugEnabled()) {
-			try {
-				StringWriter s = new StringWriter();
-				SerializationUtils.serializeDCQLQuery(dcqlQuery, s);
-				LOG.debug(logMessage + ":\n" + s.toString());
-				s.close();
-			} catch (Exception e) {
-				LOG.error("Problem in debug printout of DCQL query:" + e.getMessage(), e);
-			}
-		}
-	}
+    /**
+     * Call Federated Query Processor, and send the generated CQLQuery to each
+     * targeted service, aggregating the results into a single CQLQueryResults
+     * object.
+     * 
+     * @param dcqlQuery
+     * @return Aggregated results of the DCQL query
+     * @throws FederatedQueryProcessingException
+     */
+    public CQLQueryResults executeAndAggregateResults(DCQLQuery dcqlQuery) throws FederatedQueryProcessingException {
+        FederatedQueryProcessor processor = new FederatedQueryProcessor(this.cred);
+        debugDCQLQuery("Beginning processing of DCQL", dcqlQuery);
+
+        CQLQuery cqlQuery = processor.processDCQLQuery(dcqlQuery.getTargetObject());
+
+        CQLQueryResults aggregateResults = null;
+        String[] targetServiceURLs = dcqlQuery.getTargetServiceURL();
+        for (int i = 0; i < targetServiceURLs.length; i++) {
+            // aggregate results
+            CQLQueryResults currResults = DataServiceQueryExecutor.queryDataService(cqlQuery, targetServiceURLs[i],
+                this.cred);
+            if (currResults != null) {
+                if (!currResults.getTargetClassname().equals(dcqlQuery.getTargetObject().getName())) {
+                    throw new RemoteDataServiceException("Data service (" + targetServiceURLs[i]
+                        + ") returned results of type (" + currResults.getTargetClassname() + ") when type ("
+                        + dcqlQuery.getTargetObject().getName() + ") was requested!");
+                }
+                if (aggregateResults == null) {
+                    // initialize our return to current result if first time we
+                    // got something
+                    aggregateResults = currResults;
+                } else {
+                    CQLObjectResult[] tmpArr = (CQLObjectResult[]) Utils.concatenateArrays(CQLObjectResult.class,
+                        aggregateResults.getObjectResult(), currResults.getObjectResult());
+
+                    aggregateResults.setObjectResult(tmpArr);
+                }
+            }
+        }
+
+        return aggregateResults;
+    }
+
+
+    private void debugDCQLQuery(String logMessage, DCQLQuery dcqlQuery) {
+        if (LOG.isDebugEnabled()) {
+            try {
+                StringWriter s = new StringWriter();
+                SerializationUtils.serializeDCQLQuery(dcqlQuery, s);
+                LOG.debug(logMessage + ":\n" + s.toString());
+                s.close();
+            } catch (Exception e) {
+                LOG.error("Problem in debug printout of DCQL query:" + e.getMessage(), e);
+            }
+        }
+    }
 }
