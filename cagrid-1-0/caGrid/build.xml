@@ -1092,6 +1092,8 @@
 			<artifact refid="common.test.jars" />
 			<artifact refid="security.metadata.schemas" />
 			<artifact refid="testing.system.jars" />
+			<artifact refid="introduce.jars" />
+			<artifact refid="introduce.core.test.jars" />
 		</resolveDependencies>
 		<delete dir="${projects.dir}/transfer/extension/ext" />
 		<resolveDependencies extdir="${projects.dir}/transfer/extension/ext">

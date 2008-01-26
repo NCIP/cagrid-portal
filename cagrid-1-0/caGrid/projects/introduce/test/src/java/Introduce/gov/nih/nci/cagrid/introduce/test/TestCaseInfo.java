@@ -17,5 +17,9 @@ public abstract class TestCaseInfo {
 	public abstract String getPackageDir();
 	
 	public abstract String getResourceFrameworkType();
+	
+	public String getExtensions(){
+	    return "";
+	}
 
 }

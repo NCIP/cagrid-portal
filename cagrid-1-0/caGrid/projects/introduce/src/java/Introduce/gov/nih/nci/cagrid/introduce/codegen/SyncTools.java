@@ -612,9 +612,14 @@ public class SyncTools {
     
     private void updateServiceProviders(ServiceInformation info){
         try {
-            ServiceDescription sd = (ServiceDescription)Utils.deserializeDocument(new File(baseDirectory.getAbsolutePath() + File.separator
-                + IntroduceConstants.INTRODUCE_XML_FILE + ".prev").getAbsolutePath(), ServiceDescription.class);
-            if ((sd.getServices() != null) && (sd.getServices().getService() != null)) {
+            ServiceDescription sd = null;
+            try {
+                sd = (ServiceDescription)Utils.deserializeDocument(new File(baseDirectory.getAbsolutePath() + File.separator
+                    + IntroduceConstants.INTRODUCE_XML_FILE + ".prev").getAbsolutePath(), ServiceDescription.class);
+            } catch (RuntimeException e) {
+                //do nothing this might be right after creation, therefore no prev file exists
+            }
+            if (sd!=null && (sd.getServices() != null) && (sd.getServices().getService() != null)) {
                 for (int serviceI = 0; serviceI < sd.getServices().getService().length; serviceI++) {
                     ServiceType oldService = sd.getServices().getService(serviceI);
                     ServiceType newService = CommonTools.getService(info.getServices(), oldService.getName());
@@ -631,7 +636,6 @@ public class SyncTools {
                 }
             }
         } catch (Exception e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         if ((info.getServices() != null) && (info.getServices().getService() != null)) {

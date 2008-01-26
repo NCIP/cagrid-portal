@@ -4,3 +4,4 @@ cagrid_TransferService.gar
 ext
 log
 tmp
+junit*.properties

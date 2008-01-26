@@ -18,7 +18,7 @@ public class CreateSkeletonStep extends BaseStep {
 
 		String cmd = AntTools.getAntSkeletonCreationCommand(getBaseDir(),
 				tci.getName(), tci.getDir(), tci.getPackageName(), tci
-						.getNamespace(), tci.getResourceFrameworkType(),"" );
+						.getNamespace(), tci.getResourceFrameworkType(), tci.getExtensions() );
 
 		Process p = CommonTools.createAndOutputProcess(cmd);
 		p.waitFor();

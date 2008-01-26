@@ -223,7 +223,7 @@ public class XmlPersistenceHelper extends FilePersistenceHelper implements Persi
         }
         if (!tmpFile.renameTo(file)) {
             file.delete();
-            throw new ResourceException("resourceStoreFailed");
+            throw new ResourceException("resourceStoreFailed: unable to write to " + file.getAbsolutePath());
         }
     }
 }

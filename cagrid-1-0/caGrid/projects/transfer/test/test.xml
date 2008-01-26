@@ -6,7 +6,7 @@
     <property name="junit.results.dir" value="${test.log.dir}/junit" />
     <property name="force.config.replace" value="false" />
 
-    <property name="instrumented.classes.dir" value="${build.dir}/instrumented-classes" />
+    <property name="instrumented.classes.dir" value="build/instrumented-classes" />
     <property name="cobertura.report.dir" value="${build.dir}/coverage" />
     <property name="cobertura.data.file" location="${instrumented.classes.dir}/${project.name}-cobertura.ser" />
 
