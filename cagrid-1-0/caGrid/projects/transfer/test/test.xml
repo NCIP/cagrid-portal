@@ -47,7 +47,7 @@
         <fail message="Tests failed! Check test reports." if="test.failed" />
     </target>
 
-
+<!--
     <target name="coverageReport" depends="test" description="Runs the tests and generates a test
 		coverage report.">
         <cobertura-report format="html" datafile="${cobertura.data.file}" destdir="${cobertura.report.dir}">
@@ -59,6 +59,8 @@
             </fileset>
         </cobertura-report>
     </target>
+    
+ -->
 
 
 </project>
