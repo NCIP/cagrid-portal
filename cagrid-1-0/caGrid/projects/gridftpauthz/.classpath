@@ -8,10 +8,6 @@
 	<classpathentry kind="lib" path="ext/lib/castor-0.9.9.jar"/>
 	<classpathentry kind="lib" path="ext/lib/grouper.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius_common_client-1.1.jar"/>
-	<classpathentry kind="lib" path="ext/lib/mobius_factories-1.1.jar"/>
-	<classpathentry kind="lib" path="ext/lib/mobius_gme_client-1.1.jar"/>
-	<classpathentry kind="lib" path="ext/lib/mobius_mako_client-1.1.jar"/>
-	<classpathentry kind="lib" path="ext/lib/mobius_tools-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/lib/subject-0.2.1.jar"/>
 	<classpathentry kind="lib" path="ext/test/lib/asm-2.2.1.jar"/>
 	<classpathentry kind="lib" path="ext/test/lib/cobertura.jar"/>
@@ -23,10 +19,10 @@
 	<classpathentry kind="lib" path="ext/test/lib/xmlunit1.0.jar"/>
 	<classpathentry kind="lib" path="lib/gridftpauthz-1.0.jar"/>
 	<classpathentry kind="lib" path="build/stubs/classes"/>
-	<classpathentry kind="var" path="GT4_LOCATION/lib/axis.jar" sourcepath="/AXIS_HOME"/>
+	<classpathentry kind="var" path="GT4_LOCATION/lib/axis.jar" />
 	<classpathentry kind="var" path="GT4_LOCATION/lib/addressing-1.0.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/cog-axis.jar"/>
-	<classpathentry kind="var" path="GT4_LOCATION/lib/cog-jglobus.jar" sourcepath="/GT4_LOCATION/cog-1.2-src.zip"/>
+	<classpathentry kind="var" path="GT4_LOCATION/lib/cog-jglobus.jar" />
 	<classpathentry kind="var" path="GT4_LOCATION/lib/commons-discovery.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/commons-logging.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/cryptix32.jar"/>
@@ -36,7 +32,7 @@
 	<classpathentry kind="var" path="GT4_LOCATION/lib/saaj.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/wsdl4j.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/wsrf_core_stubs.jar"/>
-	<classpathentry kind="var" path="GT4_LOCATION/lib/wsrf_core.jar" sourcepath="/globussource"/>
+	<classpathentry kind="var" path="GT4_LOCATION/lib/wsrf_core.jar" />
 	<classpathentry kind="var" path="GT4_LOCATION/lib/wss4j.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/jce-jdk13-125.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-core.jar"/>

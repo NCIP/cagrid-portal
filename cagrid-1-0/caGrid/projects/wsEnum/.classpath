@@ -53,10 +53,6 @@
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xmlsec.jar"/>
 	<classpathentry kind="lib" path="ext/lib/castor-0.9.9.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius_common_client-1.1.jar"/>
-	<classpathentry kind="lib" path="ext/lib/mobius_factories-1.1.jar"/>
-	<classpathentry kind="lib" path="ext/lib/mobius_gme_client-1.1.jar"/>
-	<classpathentry kind="lib" path="ext/lib/mobius_mako_client-1.1.jar"/>
-	<classpathentry kind="lib" path="ext/lib/mobius_tools-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/test/lib/junit.jar"/>
 	<classpathentry kind="src" path="test/resources"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-core.jar"/>
@@ -67,6 +63,6 @@
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-ServiceSecurityProvider-stubs.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-metadata-security.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-Introduce-1.2-core.jar"/>
-	<classpathentry kind="var" path="GT4_LOCATION/lib/wsrf_core.jar" sourcepath="/GT4_LOCATION"/>
+	<classpathentry kind="var" path="GT4_LOCATION/lib/wsrf_core.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

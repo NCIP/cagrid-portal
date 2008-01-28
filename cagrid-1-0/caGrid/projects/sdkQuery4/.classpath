@@ -80,10 +80,6 @@
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-data-utils.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-data-validation.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius_common_client-1.1.jar"/>
-	<classpathentry kind="lib" path="ext/lib/mobius_factories-1.1.jar"/>
-	<classpathentry kind="lib" path="ext/lib/mobius_gme_client-1.1.jar"/>
-	<classpathentry kind="lib" path="ext/lib/mobius_mako_client-1.1.jar"/>
-	<classpathentry kind="lib" path="ext/lib/mobius_tools-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/test/lib/caGrid-1.1-core-tests.jar"/>
 	<classpathentry kind="lib" path="ext/test/lib/cobertura.jar"/>
 	<classpathentry kind="lib" path="ext/test/lib/jakarta-oro-2.0.8.jar"/>
@@ -124,5 +120,6 @@
 	<classpathentry kind="lib" path="ext/lib/GlobalModelExchange.jar"/>
 	<classpathentry kind="lib" path="lib/bcel.jar"/>
 	<classpathentry kind="lib" path="ext/lib/jdom-1.0.jar"/>
+	<classpathentry kind="lib" path="ext/lib/mobius_gme_client-1.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
