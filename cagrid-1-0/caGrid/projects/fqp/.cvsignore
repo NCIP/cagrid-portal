@@ -3,3 +3,4 @@ ext
 bin
 deploy.properties
 *.gar
+resultEPR.xml
