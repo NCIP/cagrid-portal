@@ -140,7 +140,7 @@ public class TomcatServiceContainer extends ServiceContainer {
             command.add("/c");
             command.add(shutdown + ".bat stop");
         } else {
-            command.add(shutdown + " stop");
+            command.add(shutdown + ".sh stop");
         }
 
         String[] locationEnvironment = new String[]{ENV_CATALINA_HOME + "="

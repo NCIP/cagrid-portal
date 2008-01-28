@@ -616,7 +616,7 @@ public class SyncTools {
             try {
                 sd = (ServiceDescription)Utils.deserializeDocument(new File(baseDirectory.getAbsolutePath() + File.separator
                     + IntroduceConstants.INTRODUCE_XML_FILE + ".prev").getAbsolutePath(), ServiceDescription.class);
-            } catch (RuntimeException e) {
+            } catch (Exception e) {
                 //do nothing this might be right after creation, therefore no prev file exists
             }
             if (sd!=null && (sd.getServices() != null) && (sd.getServices().getService() != null)) {
