@@ -468,6 +468,37 @@
 		</resolveDependencies>
 		<ant dir="${projects.dir}/cds" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
+	
+	<!-- =============================================================== -->
+		<!-- Metrics                                 -->
+		<!-- =============================================================== -->
+
+		<target name="configure-metrics" depends="prepare">
+			<resolveDependencies extdir="${projects.dir}/metrics/ext">
+				<artifact refid="service_urls.properties" />
+			</resolveDependencies>
+			<ant dir="${projects.dir}/metrics" inheritAll="false" antfile="build.xml" target="configure" />
+		</target>
+		<target name="build-metrics" depends="prepare,configure-metrics" description="Builds the Metrics project">
+			<resolveDependencies extdir="${projects.dir}/metrics/ext">
+				<artifact refid="cagrid.properties" />
+				<artifact refid="db.tools.jars" />
+				<artifact refid="mds.jars" />
+				<artifact refid="common.test.jars" />
+				<artifact refid="test.coverage.jars" />
+				<artifact refid="core.test.jars" />
+				<artifact refid="servicesecurity.jars" />
+				<artifact refid="security.metadata.jars" />
+				<artifact refid="common.metadata.jars" />
+				<artifact refid="advertisement.jars" />
+				<artifact refid="jdom.jars" />
+			</resolveDependencies>
+			<delete dir="${projects.dir}/metrics/schema/Metrics/xsd" />
+			<resolveDependencies extdir="${projects.dir}/metrics/schema/Metrics">
+				<artifact refid="metadata.schemas" />
+			</resolveDependencies>
+			<ant dir="${projects.dir}/metrics" inheritAll="false" antfile="build.xml" target="all" />
+		</target>
 
 	<!-- =============================================================== -->
 	<!-- Build Grid Grouper:                                             -->
