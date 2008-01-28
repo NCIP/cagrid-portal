@@ -225,7 +225,7 @@ public class TomcatServiceContainer extends ServiceContainer {
             command.add("/c");
             command.add(startup + ".bat run");
         } else {
-            command.add(startup + " run");
+            command.add(startup + ".sh run");
         }
 
         // edit the environment
