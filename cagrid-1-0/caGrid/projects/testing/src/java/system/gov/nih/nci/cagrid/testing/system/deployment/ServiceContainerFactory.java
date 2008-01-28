@@ -12,7 +12,7 @@ import java.io.IOException;
  * @author David Ervin
  * 
  * @created Oct 16, 2007 12:09:02 PM
- * @version $Id: ServiceContainerFactory.java,v 1.5 2007-12-18 16:28:36 dervin Exp $ 
+ * @version $Id: ServiceContainerFactory.java,v 1.6 2008-01-28 20:15:39 hastings Exp $ 
  */
 public class ServiceContainerFactory {
     
@@ -30,54 +30,11 @@ public class ServiceContainerFactory {
      * @throws IOException
      */
     public static ServiceContainer createContainer(ServiceContainerType type) throws IOException {
-        return createContainer(type, false);
+        ContainerPorts ports = PortFactory.getContainerPorts();
+        return createContainer(type , ports);
     }
     
-    
-    /**
-     * Creates a new service container of the specified type.
-     * The service will start on a port determined automatically by the PortFactory.
-     * 
-     * @param type
-     *      The container type
-     * @param secure
-     *      If set to true, the default security options for the container
-     *      will be enabled
-     * @return
-     *      The service container instance 
-     * @throws IOException
-     */
-    public static ServiceContainer createContainer(ServiceContainerType type, boolean secure) throws IOException {
-        PortPreference ports = PortFactory.getPort();
-        return createContainer(type, secure, null, ports);
-    }
-    
-    
-    /**
-     * Creates a new, secured service container of the specified type.
-     * The service will start on a port determined automatically by the PortFactory.
-     * 
-     * @param type
-     *      The type of container
-     * @param securityDescriptor
-     *      The security descriptor which the container will use
-     * @return
-     *      The service container instance
-     * @throws IOException
-     */
-    public static ServiceContainer createContainer(ServiceContainerType type, File securityDescriptor) throws IOException {
-        PortPreference ports = PortFactory.getPort();
-        return createContainer(type, true, securityDescriptor, ports);
-    }
-    
-    
-    @Deprecated
-    public static ServiceContainer createContainer(
-        ServiceContainerType type, File securityDescriptor, PortPreference ports) throws IOException {
-        return createContainer(type, true, securityDescriptor, ports);
-    }
-    
-    
+
     /**
      * Creates a new service container, with all options configured by the caller.
      * 
@@ -95,7 +52,7 @@ public class ServiceContainerFactory {
      * @throws IOException
      */
     public static ServiceContainer createContainer(
-        ServiceContainerType type, boolean secure, File securityDescriptor, PortPreference ports) throws IOException {
+        ServiceContainerType type, ContainerPorts ports) throws IOException {
         File containerTempDir = getTempDirectory(type);
         String zipLocation = type.getZip();
         String introduceLocation = getIntroduceBaseDir();
@@ -104,7 +61,7 @@ public class ServiceContainerFactory {
         }
         File containerZip = new File(zipLocation);
         ContainerProperties props = new ContainerProperties(containerTempDir,
-        	containerZip, ports, secure, securityDescriptor,
+        	containerZip, ports, false,
         	null, null, null);
         
         ServiceContainer container = null;
@@ -115,49 +72,9 @@ public class ServiceContainerFactory {
             case TOMCAT_CONTAINER:
                 container = new TomcatServiceContainer(props);
                 break;
-            case JBOSS_CONTAINER:
-                
-                break;
-            default:
-                throw new AssertionError("Service container type: " + type + " is not valid");
-        }
-        return container;
-    }
-    
-    
-    /**
-     * 
-     * @param type
-     * @param securityDescriptor
-     * @param ports
-     * @param maxStartupTime units are seconds
-     * @param maxShutdownTime units are seconds
-     * @param heapSizeInMegabytes whole value between 32 and probably 1024. This is passed to the command line. E.g,. -Xmx128m. Pass null here for default
-     * @return
-     *      The service container instance
-     * @throws IOException
-     */
-    public static ServiceContainer createContainer(
-        ServiceContainerType type, File securityDescriptor, PortPreference ports,
-        Integer maxStartupTime, Integer maxShutdownTime, Integer heapSizeInMegabytes) throws IOException {
-        File containerTempDir = getTempDirectory(type);
-        String zipLocation = type.getZip();
-        String introduceLocation = getIntroduceBaseDir();
-        if (introduceLocation != null) {
-            zipLocation = introduceLocation + File.separator + zipLocation;
-        }
-        File containerZip = new File(zipLocation);
-        ContainerProperties props = new ContainerProperties(containerTempDir,
-        	containerZip, ports, securityDescriptor != null, securityDescriptor, 
-        	maxStartupTime, maxShutdownTime, heapSizeInMegabytes);
-        
-        ServiceContainer container = null;
-        switch (type) {
-            case GLOBUS_CONTAINER:
-                container = new GlobusServiceContainer(props);
-                break;
-            case TOMCAT_CONTAINER:
-                container = new TomcatServiceContainer(props);
+            case SECURE_TOMCAT_CONTAINER:
+                props.setSecure(true);
+                container = new TomcatSecureServiceContainer(props);
                 break;
             case JBOSS_CONTAINER:
                 
@@ -167,6 +84,7 @@ public class ServiceContainerFactory {
         }
         return container;
     }
+
     
     
     private static File getTempDirectory(ServiceContainerType type) throws IOException {

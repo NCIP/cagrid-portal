@@ -157,13 +157,6 @@ public class GlobusServiceContainer extends ServiceContainer {
         }
 
         final ArrayList<String> opts = new ArrayList<String>();
-        if (getProperties().isSecure() && getProperties().getSecurityDescriptor() != null) {
-            opts.add("-f");
-            opts.add(getProperties().getSecurityDescriptor().getAbsolutePath());
-        } else {
-            // anonymous
-            opts.add("-a");
-        }
 
         // no auth (is the default)
         opts.add("-z");
@@ -252,17 +245,8 @@ public class GlobusServiceContainer extends ServiceContainer {
             LOG.debug("Starting Globus on port: " + port);
         }
         
-        // security specialization
-        // if secure, but no descriptor, uses default
-        if (getProperties().isSecure() && getProperties().getSecurityDescriptor() != null) {
-            // secure, with container descriptor
-            opts.add("-containerDesc");
-            opts.add(getProperties().getSecurityDescriptor().getAbsolutePath());
-        } else if (!getProperties().isSecure()) {
-            // insecure
             opts.add("-nosec");
-        }
-
+    
         // start the container
         try {
             globusProcess = runGlobusCommand(GLOBUS_CONTAINER_CLASSNAME, opts);

@@ -10,15 +10,14 @@ import java.io.File;
  * @author David Ervin
  * 
  * @created Oct 12, 2007 12:10:03 PM
- * @version $Id: ContainerProperties.java,v 1.4 2007-12-03 18:20:22 dervin Exp $ 
+ * @version $Id: ContainerProperties.java,v 1.5 2008-01-28 20:15:39 hastings Exp $ 
  */
 public class ContainerProperties {
 
 	private File containerDirectory = null;
 	private File containerZip = null;
-	private PortPreference portPreference = null;
+	private ContainerPorts portPreference = null;
 	private boolean secure;
-	private File securityDescriptor = null;
 
 	private Integer maxStartupWaitTime;
 	private Integer maxShutdownWaitTime;
@@ -29,14 +28,13 @@ public class ContainerProperties {
         
 	}
 
-	public ContainerProperties(File containerDirectory, File containerZip, PortPreference portPreference,
-		boolean secure, File securityDescriptor, Integer maxStartupWaitTime, Integer maxShutdownWaitTime,
+	public ContainerProperties(File containerDirectory, File containerZip, ContainerPorts portPreference,
+		boolean secure, Integer maxStartupWaitTime, Integer maxShutdownWaitTime,
 		Integer heapSizeInMegabytes) {
 		this.containerDirectory = containerDirectory;
 		this.containerZip = containerZip;
 		this.portPreference = portPreference;
 		this.secure = secure;
-		this.securityDescriptor = securityDescriptor;
 		this.maxStartupWaitTime = maxStartupWaitTime;
 		this.maxShutdownWaitTime = maxShutdownWaitTime;
 		this.heapSizeInMegabytes = heapSizeInMegabytes;
@@ -63,12 +61,12 @@ public class ContainerProperties {
 	}
 
 
-	public PortPreference getPortPreference() {
+	public ContainerPorts getPortPreference() {
 		return portPreference;
 	}
 
 
-	public void setPortPreference(PortPreference portPreference) {
+	public void setPortPreference(ContainerPorts portPreference) {
 		this.portPreference = portPreference;
 	}
 
@@ -80,16 +78,6 @@ public class ContainerProperties {
 
 	public void setSecure(boolean secure) {
 		this.secure = secure;
-	}
-
-
-	public File getSecurityDescriptor() {
-		return securityDescriptor;
-	}
-
-
-	public void setSecurityDescriptor(File securityDescriptor) {
-		this.securityDescriptor = securityDescriptor;
 	}
 
 

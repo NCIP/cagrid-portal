@@ -367,7 +367,7 @@ public class TomcatServiceContainer extends ServiceContainer {
                     boolean connectorFound = false;
                     if (getProperties().isSecure()) {
                         if (connectorElement.getAttributeValue("port").equals("8443")
-                            && connectorElement.getAttributeValue("sslProtocol").equals("TLS")) {
+                            && connectorElement.getAttributeValue("className").equals("org.globus.tomcat.coyote.net.HTTPSConnector")) {
                             connectorFound = true;
                         }
                     } else {

@@ -10,10 +10,10 @@ import java.util.GregorianCalendar;
  * @author David Ervin
  * 
  * @created Oct 16, 2007 12:01:50 PM
- * @version $Id: ServiceContainerType.java,v 1.4 2007-11-15 00:37:13 dervin Exp $ 
+ * @version $Id: ServiceContainerType.java,v 1.5 2008-01-28 20:15:37 hastings Exp $ 
  */
 public enum ServiceContainerType {
-    GLOBUS_CONTAINER, TOMCAT_CONTAINER, JBOSS_CONTAINER;
+    GLOBUS_CONTAINER, TOMCAT_CONTAINER, JBOSS_CONTAINER, SECURE_TOMCAT_CONTAINER;
     
     public static final String CONTAINER_DIR_PROPERTY = "testing.containers.dir";
     public static final String DEFAULT_CONTAINER_DIR = "../testing/resources/containers";
@@ -27,6 +27,8 @@ public enum ServiceContainerType {
                 return base + "/minimal-tomcat-5.0.28-with-globus-4.0.3.zip";
             case JBOSS_CONTAINER:
                 throw new AssertionError("Container type " + this + " is not yet supported");
+            case SECURE_TOMCAT_CONTAINER:
+                return base + "/minimal-training-secure-tomcat-5.0.28-with-globus-4.0.3.zip";
         }
         throw new AssertionError("Unknown service container type: " + this);
     }
@@ -40,6 +42,8 @@ public enum ServiceContainerType {
                 return "Tomcat";
             case JBOSS_CONTAINER:
                 return "JBoss";
+            case SECURE_TOMCAT_CONTAINER:
+                return "Secure Tomcat";
         }
         throw new AssertionError("Unknown service container type: " + this);
     }
