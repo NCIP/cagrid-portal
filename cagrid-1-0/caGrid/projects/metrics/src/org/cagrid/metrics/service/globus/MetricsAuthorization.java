@@ -52,6 +52,11 @@ public class MetricsAuthorization implements PDP {
 		
 		
 	}
+					
+	public static void authorizeReportEvent() throws RemoteException {
+		
+		
+	}
 	
 	
 	public boolean isPermitted(Subject peerSubject, MessageContext context, QName operation)
@@ -63,6 +68,14 @@ public class MetricsAuthorization implements PDP {
 		if(operation.getLocalPart().equals("getServiceSecurityMetadata")){
 			try{
 				authorizeGetServiceSecurityMetadata();
+				return true;
+			} catch (Exception e){
+				e.printStackTrace();
+				return false;
+			}
+		} else if(operation.getLocalPart().equals("reportEvent")){
+			try{
+				authorizeReportEvent();
 				return true;
 			} catch (Exception e){
 				e.printStackTrace();
