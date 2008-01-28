@@ -11,6 +11,7 @@
 	<!-- Place any other properties you will need here                  -->
 	<!-- ============================================================== -->
 
+	<property file="${basedir}/ext/resources/cagrid.properties"/>
 	<property name="jar.prefix" value="${cagrid.master.jar.prefix}metrics" />
 	<property name="ext.lib.dir" value="ext/lib" />
 	<property name="ext.test.lib" value="ext/test/lib" />
