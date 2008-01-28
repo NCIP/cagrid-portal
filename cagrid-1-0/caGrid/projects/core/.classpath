@@ -49,7 +49,6 @@
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xml-apis.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xmlsec.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius_common_client-1.1.jar"/>
-	<classpathentry kind="lib" path="ext/lib/mobius_mako_client-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/castor-0.9.9.jar"/>
 	<classpathentry kind="lib" path="ext/test/lib/jdepend-2.7-patched.jar"/>
 	<classpathentry kind="lib" path="ext/test/lib/junit.jar"/>
