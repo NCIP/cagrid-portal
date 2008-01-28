@@ -44,7 +44,7 @@ import org.apache.axis.types.URI.MalformedURIException;
  * @author David Ervin
  * 
  * @created Aug 28, 2007 12:14:58 PM
- * @version $Id: DeploymentValidationBuilder.java,v 1.2 2007-12-03 16:27:19 hastings Exp $ 
+ * @version $Id: DeploymentValidationBuilder.java,v 1.3 2008-01-28 16:29:34 dervin Exp $ 
  */
 public class DeploymentValidationBuilder extends JFrame {
     // -XX:MaxPermSize=256m
@@ -345,7 +345,7 @@ public class DeploymentValidationBuilder extends JFrame {
             gridBagConstraints5.fill = GridBagConstraints.HORIZONTAL;
             gridBagConstraints5.insets = new Insets(2, 2, 2, 2);
             gridBagConstraints5.weightx = 1.0D;
-            gridBagConstraints5.weighty = 1.0D;
+            gridBagConstraints5.weighty = 0.5D;
             gridBagConstraints5.gridy = 3;
             GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
             gridBagConstraints4.gridx = 0;
