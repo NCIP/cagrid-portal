@@ -515,6 +515,7 @@
 			<artifact refid="core.jars" />
 			<artifact refid="mds.jars" />
 			<artifact refid="common.test.jars" />
+			<artifact refid="gridca.jars" />
 			<artifact refid="core.test.jars" />
 			<artifact refid="servicesecurity.jars" />
 			<artifact refid="security.metadata.jars" />
