@@ -15,8 +15,6 @@ import java.util.Properties;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import sun.awt.windows.ThemeReader;
-
 public class Metrics {
 
 	public static String METRICS_CLIENT_PROPERTY_FILE = "metrics-client.properties";
