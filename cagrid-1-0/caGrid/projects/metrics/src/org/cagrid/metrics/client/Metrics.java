@@ -183,8 +183,8 @@ public class Metrics {
 					} catch (Exception e) {
 						logError(e);
 					}
-					Date now = new Date();
 					loadProperties(false);
+					Date now = new Date();
 					if (queue.size() >= flushQueueSize) {
 						flushEventQueue();
 					} else if (nextFlush.after(now)) {
