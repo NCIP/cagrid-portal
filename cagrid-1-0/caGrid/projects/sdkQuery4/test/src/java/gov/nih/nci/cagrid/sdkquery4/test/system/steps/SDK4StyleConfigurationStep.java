@@ -7,7 +7,6 @@ import gov.nih.nci.cagrid.data.extension.CadsrInformation;
 import gov.nih.nci.cagrid.data.extension.CadsrPackage;
 import gov.nih.nci.cagrid.data.extension.ClassMapping;
 import gov.nih.nci.cagrid.data.extension.Data;
-import gov.nih.nci.cagrid.data.ui.NamespaceUtils;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
@@ -46,7 +45,7 @@ import java.util.Set;
  * @author David Ervin
  * 
  * @created Jan 28, 2008 11:24:21 AM
- * @version $Id: SDK4StyleConfigurationStep.java,v 1.1 2008-01-29 16:06:58 dervin Exp $ 
+ * @version $Id: SDK4StyleConfigurationStep.java,v 1.2 2008-01-29 17:32:25 dervin Exp $ 
  */
 public class SDK4StyleConfigurationStep extends Step {
     
@@ -221,7 +220,7 @@ public class SDK4StyleConfigurationStep extends Step {
         Iterator packageNameIter = packageClasses.keySet().iterator();
         while (packageNameIter.hasNext()) {
             String packName = (String) packageNameIter.next();
-            String mappedNamespace = NamespaceUtils.createNamespaceString(
+            String mappedNamespace = suggestNamespaceString(
                 model.getProjectShortName(), model.getProjectVersion(), packName);
             CadsrPackage pack = new CadsrPackage();
             pack.setName(packName);
@@ -246,6 +245,15 @@ public class SDK4StyleConfigurationStep extends Step {
         info.setPackages(packages);
         extensionData.setCadsrInformation(info);
         storeExtensionData(extensionData);
+    }
+    
+    
+    private String suggestNamespaceString(String projectShortName, String projectVersion, String packName) {
+        String modVersion = projectVersion;
+        if (modVersion.indexOf('.') == -1) {
+            modVersion += ".0";
+        }
+        return "gme://" + projectShortName + ".caBIG/" + modVersion + "/" + packName;
     }
     
     
