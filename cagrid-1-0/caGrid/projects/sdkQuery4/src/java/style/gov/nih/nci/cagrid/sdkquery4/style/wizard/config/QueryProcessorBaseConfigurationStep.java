@@ -17,12 +17,13 @@ import gov.nih.nci.cagrid.sdkquery4.style.common.SDK4StyleConstants;
 
 /** 
  *  QueryProcessorBaseConfigurationStep
- *  TODO:DOCUMENT ME
+ *  Config step for applying some basic configuration of the
+ *  SDK 4.0 Query Processor to the service
  * 
  * @author David Ervin
  * 
  * @created Jan 18, 2008 3:26:22 PM
- * @version $Id: QueryProcessorBaseConfigurationStep.java,v 1.1 2008-01-18 21:18:57 dervin Exp $ 
+ * @version $Id: QueryProcessorBaseConfigurationStep.java,v 1.2 2008-01-29 16:02:51 dervin Exp $ 
  */
 public class QueryProcessorBaseConfigurationStep extends AbstractStyleConfigurationStep {
     
