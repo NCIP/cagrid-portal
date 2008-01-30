@@ -12,7 +12,7 @@ import java.io.IOException;
  * @author David Ervin
  * 
  * @created Oct 16, 2007 12:09:02 PM
- * @version $Id: ServiceContainerFactory.java,v 1.6 2008-01-28 20:15:39 hastings Exp $ 
+ * @version $Id: ServiceContainerFactory.java,v 1.7 2008-01-30 15:28:59 dervin Exp $ 
  */
 public class ServiceContainerFactory {
     
@@ -40,11 +40,6 @@ public class ServiceContainerFactory {
      * 
      * @param type
      *      The type of container
-     * @param secure
-     *      If set to true, security will be enabled on the container
-     * @param securityDescriptor
-     *      If non-null, represents the security descriptor which the container will use.
-     *      Only relavent if @secure == true
      * @param ports
      *      The port preference to use when starting the container
      * @return

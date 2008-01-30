@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Properties;
 
 
 /**
@@ -17,7 +16,7 @@ import java.util.Properties;
  * 
  * @author David Ervin
  * @created Nov 5, 2007 10:13:07 AM
- * @version $Id: PortFactory.java,v 1.5 2008-01-28 20:15:39 hastings Exp $
+ * @version $Id: PortFactory.java,v 1.6 2008-01-30 15:28:59 dervin Exp $
  */
 public class PortFactory {
     private static List<Integer> assignedPortNumbers = null;
