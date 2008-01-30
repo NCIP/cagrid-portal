@@ -1,6 +1,9 @@
 package gov.nih.nci.cagrid.testing.system.deployment;
 
+import gov.nih.nci.cagrid.testing.core.TestingConstants;
+
 import java.net.ServerSocket;
+import java.util.Arrays;
 
 
 /**
@@ -15,12 +18,11 @@ import java.net.ServerSocket;
 public class ContainerPorts {
 
     private Integer port = null;
-    private Integer shutDownPort = null;
-
+    private Integer shutdownPort = null;
 
     public ContainerPorts(Integer port, Integer shutdownPort) {
         this.port = port;
-        this.shutDownPort = shutdownPort;
+        this.shutdownPort = shutdownPort;
     }
 
 
@@ -35,10 +37,9 @@ public class ContainerPorts {
     public Integer getPort() throws NoAvailablePortException {
         return port;
     }
-
-
-    public Integer getShutdownPort() throws NoAvailablePortException {
-        return port;
+    
+   public Integer getShutdownPort() throws NoAvailablePortException {
+        return shutdownPort;
     }
 
 

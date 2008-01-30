@@ -357,6 +357,7 @@ public class TomcatServiceContainer extends ServiceContainer {
         File serverConfigFile = new File(getProperties().getContainerDirectory(), 
             "conf" + File.separator + "server.xml");
         Element configRoot = XMLUtilities.fileNameToDocument(serverConfigFile.getAbsolutePath()).getRootElement();
+        configRoot.setAttribute("port",String.valueOf(getProperties().getPortPreference().getShutdownPort()));
         Iterator serviceElementIterator = configRoot.getChildren("Service", configRoot.getNamespace()).iterator();
         while (serviceElementIterator.hasNext()) {
             Element serviceElement = (Element) serviceElementIterator.next();
