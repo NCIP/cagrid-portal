@@ -99,7 +99,7 @@ public class TransferServiceTest extends Story {
         }
         DestroyContainerStep step3 = new DestroyContainerStep(container);
         try {
-            //step3.runStep();
+            step3.runStep();
         } catch (Throwable e) {
             e.printStackTrace();
         }
