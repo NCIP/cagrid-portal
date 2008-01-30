@@ -8,6 +8,7 @@ import org.cagrid.transfer.descriptor.DataStorageDescriptor;
 import org.cagrid.transfer.descriptor.Status;
 import org.globus.ftp.dc.TransferContext;
 
+
 /**
  * TODO:I am the service side implementation class. IMPLEMENT AND DOCUMENT ME
  * 
@@ -19,7 +20,8 @@ public class TransferServiceContextImpl extends TransferServiceContextImplBase {
         super();
     }
 
-  public org.cagrid.transfer.descriptor.DataTransferDescriptor getDataTransferDescriptor() throws RemoteException {
+
+    public org.cagrid.transfer.descriptor.DataTransferDescriptor getDataTransferDescriptor() throws RemoteException {
         TransferServiceContextResource resource = null;
         try {
             resource = getResourceHome().getAddressedResource();
@@ -52,7 +54,8 @@ public class TransferServiceContextImpl extends TransferServiceContextImplBase {
         return dataDesc;
     }
 
-  public org.cagrid.transfer.descriptor.Status getStatus() throws RemoteException {
+
+    public org.cagrid.transfer.descriptor.Status getStatus() throws RemoteException {
         TransferServiceContextResource resource = null;
         try {
             resource = getResourceHome().getAddressedResource();
@@ -63,26 +66,28 @@ public class TransferServiceContextImpl extends TransferServiceContextImplBase {
         return resource.getDataStorageDescriptor().getStatus();
     }
 
-  public void setStatus(org.cagrid.transfer.descriptor.Status status) throws RemoteException {
+
+    public void setStatus(org.cagrid.transfer.descriptor.Status status) throws RemoteException {
+        TransferServiceContextResource resource = null;
         try {
-            final TransferServiceContextResource resource = getResourceHome().getAddressedResource();
-
-            DataStorageDescriptor desc = resource.getDataStorageDescriptor();
-            desc.setStatus(status);
-            resource.setDataStorageDescriptor(desc);
-
-            if (status.equals(Status.Staged) && resource.getDataStagedCallback() != null) {
-                Thread th = new Thread(new Runnable() {
-                    public void run() {
-                        DataStagedCallback callback = resource.getDataStagedCallback();
-                        callback.dataStaged(resource);
-                    }
-                });
-                th.start();
-            }
+            resource = getResourceHome().getAddressedResource();
         } catch (Exception e) {
             e.printStackTrace();
-            throw new RemoteException("Error locating resource", e);
+            throw new RemoteException("Error locating resource: " + e.getMessage(), e);
+        }
+        DataStorageDescriptor desc = resource.getDataStorageDescriptor();
+        desc.setStatus(status);
+        resource.setDataStorageDescriptor(desc);
+
+        if (status.equals(Status.Staged) && resource.getDataStagedCallback() != null) {
+            final TransferServiceContextResource threadresource = resource;
+            Thread th = new Thread(new Runnable() {
+                public void run() {
+                    DataStagedCallback callback = threadresource.getDataStagedCallback();
+                    callback.dataStaged(threadresource);
+                }
+            });
+            th.start();
         }
     }
 

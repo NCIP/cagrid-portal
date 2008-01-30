@@ -1,21 +1,12 @@
 package org.cagrid.transfer.context.client.helper;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.PipedInputStream;
-import java.io.PipedOutputStream;
-import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 
 import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.methods.InputStreamRequestEntity;
 import org.apache.commons.httpclient.methods.PostMethod;
-import org.apache.commons.httpclient.methods.RequestEntity;
 import org.cagrid.transfer.descriptor.DataTransferDescriptor;
 import org.globus.axis.gsi.GSIConstants;
 import org.globus.gsi.GlobusCredential;
@@ -29,10 +20,12 @@ public class TransferClientHelper {
     /**
      * Returns a handle to the input stream of the socket which is returning the
      * data referred to by the descriptor. This method can make an https
-     * connection if desired using the credentials passed in.
+     * connection if desired using the credentials passed in.  If you wish to use this
+     * method to connect to http it will not use the Crediential whether you pass 
+     * them in or they are null,
      * 
-     * @param desc
-     * @param creds
+     * @param desc              data transfer descriptor received from TransferServiceContextClient
+     * @param creds             creator of the transfer resource credentials
      * @return
      * @throws Exception
      */
@@ -58,7 +51,7 @@ public class TransferClientHelper {
      * data referred to by the descriptor. This method cannot make secure https
      * connects and only works with http.
      * 
-     * @param desc
+     * @param desc              data transfer descriptor received from TransferServiceContextClient
      * @return
      * @throws Exception
      */
@@ -77,19 +70,21 @@ public class TransferClientHelper {
 
 
     /**
-     * Get the output stream to put the data. Be sure to close the stream when
+     * Reads from the input stream to put the data to the server. Be sure to close the stream when
      * done writing the data. This method can use http and https if the
-     * credentials are provided.
+     * credentials are provided.  This is a blocking call. Will return with the entire data has been transmitted.
      * 
-     * @param desc
-     * @param creds
+     * @param is                input stream providing the data
+     * @param contentLength     number of bytes in the input stream to be read
+     * @param desc              data transfer descriptor received from TransferServiceContextClient
+     * @param creds             creator of the transfer resource credentials
      * @return
      * @throws Exception
      */
     public static void putData(InputStream is, int contentLength, DataTransferDescriptor desc, GlobusCredential creds) throws Exception {
         URL url = new URL(desc.getUrl());
         if (url.getProtocol().equals("http")) {
-            final PostMethod post = new PostMethod(desc.getUrl());
+            PostMethod post = new PostMethod(desc.getUrl());
             InputStreamRequestEntity re = new InputStreamRequestEntity(is, contentLength);
             post.setRequestEntity(re);
             HttpClient client = new HttpClient();
@@ -110,6 +105,7 @@ public class TransferClientHelper {
                 is.close();
             }
             connection.getOutputStream().close();
+            connection.getInputStream().close();
             return;
         }
         throw new Exception("Protocol " + url.getProtocol() + " not supported.");
@@ -117,49 +113,24 @@ public class TransferClientHelper {
 
 
     /**
-     * Gets an output stream to put the data. This method can only put to an
+     * Reads from the input stream to put the data to the server. This method can only put to an
      * http connection and not an https one. Be sure to close the stream when
-     * done writing to it.
+     * done writing to it. Will return with the entire data has been transmitted.
      * 
-     * @param desc
+     * @param is                input stream providing the data
+     * @param contentLength     number of bytes in the input stream to be read
+     * @param desc              data transfer descriptor received from TransferServiceContextClient              
+     * @param creds             creator of the transfer resource credentials
      * @return
      * @throws Exception
      */
     public static void putData(InputStream is, int contentLength, DataTransferDescriptor desc) throws Exception {
         URL url = new URL(desc.getUrl());
         if (url.getProtocol().equals("http")) {
-            final PostMethod post = new PostMethod(desc.getUrl());
+            PostMethod post = new PostMethod(desc.getUrl());
             InputStreamRequestEntity re = new InputStreamRequestEntity(is, contentLength);
             post.setRequestEntity(re);
 
-            HttpClient client = new HttpClient();
-            int status = client.executeMethod(post);
-            return;
-        } else if (url.getProtocol().equals("https")) {
-            throw new Exception(
-                "To use the https protocol you must call the secure method:  getDataStream(DataTransferDescriptor desc, GSSCredential creds)");
-        }
-        throw new Exception("Protocol " + url.getProtocol() + " not supported.");
-    }
-
-
-    /**
-     * Gets an output stream to put the data. This method can only put to an
-     * http connection and not an https one. Be sure to close the stream when
-     * done writing to it.
-     * 
-     * @param desc
-     * @return
-     * @throws Exception
-     */
-    public static void putData(byte[] data, DataTransferDescriptor desc) throws Exception {
-        URL url = new URL(desc.getUrl());
-        if (url.getProtocol().equals("http")) {
-            PostMethod post = new PostMethod(desc.getUrl());
-            ByteArrayInputStream istream = new ByteArrayInputStream(data);
-            InputStreamRequestEntity isreq = new InputStreamRequestEntity(istream);
-            post.setRequestEntity(isreq);
-            // execute the POST
             HttpClient client = new HttpClient();
             int status = client.executeMethod(post);
             return;

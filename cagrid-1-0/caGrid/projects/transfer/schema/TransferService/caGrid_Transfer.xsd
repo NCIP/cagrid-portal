@@ -31,6 +31,7 @@
 		<xs:sequence>
 			<xs:element type="string" name="location"></xs:element>
 			<xs:element type="string" name="userDN"></xs:element>
+			<xs:element type="boolean" name="deleteOnDestroy"></xs:element>
 			<xs:element ref="tns:Status"></xs:element>
 			<xs:element ref="tns:DataDescriptor"></xs:element>
 		</xs:sequence>

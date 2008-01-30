@@ -21,6 +21,8 @@ import org.globus.gsi.GlobusCredential;
 import org.cagrid.transfer.system.test.stubs.TransferSystemTestPortType;
 import org.cagrid.transfer.system.test.stubs.service.TransferSystemTestServiceAddressingLocator;
 import org.cagrid.transfer.system.test.common.TransferSystemTestI;
+
+import gov.nih.nci.cagrid.common.security.ProxyUtil;
 import gov.nih.nci.cagrid.introduce.security.client.ServiceSecurityClient;
 
 
@@ -66,7 +68,14 @@ public class TransferSystemTestClient extends TransferSystemTestClientBase imple
         try {
             if (!(args.length < 2)) {
                 if (args[0].equals("-url")) {
-                    TransferSystemTestClient client = new TransferSystemTestClient(args[1]);
+                    GlobusCredential creds = null;
+                    try {
+                        creds = ProxyUtil.loadProxy("localhost.proxy");
+                        System.out.println("Using proxy with id= " + creds.getIdentity() + " and lifetime " + creds.getTimeLeft());
+                    } catch (Exception e1) {
+                        System.out.println("No proxy file loaded so running with no credentials");
+                    }
+                    TransferSystemTestClient client = new TransferSystemTestClient(args[1], creds);
                     // place client calls here if you want to use this main as a
                     // test....
                     System.out.println("Creating transfer context");
@@ -75,22 +84,22 @@ public class TransferSystemTestClient extends TransferSystemTestClientBase imple
 
                     System.out.println("retrieving transfer descriptor");
                     org.cagrid.transfer.context.client.TransferServiceContextClient tclient = new org.cagrid.transfer.context.client.TransferServiceContextClient(
-                        tref.getEndpointReference());
+                        tref.getEndpointReference(), creds);
 
-                    System.out.println("Getting handle to data transfer descriptor");
+                    System.out.println("getting handle to data transfer descriptor");
                     org.cagrid.transfer.descriptor.DataTransferDescriptor desc = tclient.getDataTransferDescriptor();
 
                     System.out.println("writing data to service at: " + desc.getUrl());
                     String testString = "Testing the TrasferService";
                     org.cagrid.transfer.context.client.helper.TransferClientHelper.putData(new ByteArrayInputStream(
-                        testString.getBytes()), testString.getBytes().length, desc);
-
-                    System.out.println("Setting status to Staged");
+                        testString.getBytes()), testString.getBytes().length, desc, creds);
+                    
+                    System.out.println("setting status to Staged");
                     tclient.setStatus(org.cagrid.transfer.descriptor.Status.Staged);
-
+                    
                     System.out.println("reading data from service");
                     java.io.InputStream istream = org.cagrid.transfer.context.client.helper.TransferClientHelper
-                        .getData(tclient.getDataTransferDescriptor());
+                        .getData(tclient.getDataTransferDescriptor(), creds);
                     java.io.InputStreamReader reader = new java.io.InputStreamReader(istream);
                     java.lang.StringBuffer str = new java.lang.StringBuffer();
                     char[] buff = new char[8192];
@@ -113,7 +122,7 @@ public class TransferSystemTestClient extends TransferSystemTestClientBase imple
 
                     System.out.println("try to receive that data again after destroyed");
                     try {
-                        istream = org.cagrid.transfer.context.client.helper.TransferClientHelper.getData(desc);
+                        istream = org.cagrid.transfer.context.client.helper.TransferClientHelper.getData(desc, creds);
                         reader = new java.io.InputStreamReader(istream);
                         str = new java.lang.StringBuffer();
                         len = 0;

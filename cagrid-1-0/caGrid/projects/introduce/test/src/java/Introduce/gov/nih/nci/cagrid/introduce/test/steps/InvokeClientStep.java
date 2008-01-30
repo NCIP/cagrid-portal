@@ -6,8 +6,7 @@ import gov.nih.nci.cagrid.introduce.test.TestCaseInfo;
 import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainer;
 
 
-public class InvokeClientStep extends BaseStep {
-    public static final String TEST_URL_PREFIX = "http://localhost:"; 
+public class InvokeClientStep extends BaseStep { 
     public static final String TEST_URL_SUFFIX = "/wsrf/services/cagrid/";
     
 	private TestCaseInfo tci;
@@ -26,7 +25,13 @@ public class InvokeClientStep extends BaseStep {
 		System.out.println("Invoking a simple methods implementation.");
 
 		String cmd = AntTools.getAntCommand("runClient", tci.getDir());
-		cmd += " -Dservice.url=" + TEST_URL_PREFIX 
+		cmd += " -Dservice.url=";
+		if(container.getProperties().isSecure()){
+		    cmd +=  "https://";
+		} else{
+		    cmd +=  "http://";
+		}
+		cmd +=  "localhost:" 
             + container.getProperties().getPortPreference().getPort() + TEST_URL_SUFFIX + tci.getName();
 		Process p = CommonTools.createAndOutputProcess(cmd);
 		p.waitFor();

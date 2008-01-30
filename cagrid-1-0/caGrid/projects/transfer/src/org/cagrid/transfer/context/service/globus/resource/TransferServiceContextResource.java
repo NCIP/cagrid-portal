@@ -28,26 +28,27 @@ import org.globus.wsrf.ResourceException;
 public class TransferServiceContextResource extends TransferServiceContextResourceBase {
 
     private DataStagedCallback callback = null;
-    
-    
+    private boolean shouldDeleteFileOnDestroy = true;
+
+
     @Override
     public void initialize(Object resourceBean, QName resourceElementQName, Object id) throws ResourceException {
         super.initialize(resourceBean, resourceElementQName, id);
         Calendar cal = GregorianCalendar.getInstance();
         cal.roll(Calendar.MINUTE, 30);
+        // default termination time is 30 minutes.
         this.setTerminationTime(cal);
     }
-    
-    
-    public DataStagedCallback getDataStagedCallback(){
+
+
+    public DataStagedCallback getDataStagedCallback() {
         return this.callback;
     }
-    
-    
-    
+
+
     public void stage(DataDescriptor dd, DataStagedCallback callback) throws Exception {
         this.callback = callback;
-        
+
         File storageFile = new File(getStorageDirectory().getAbsolutePath() + File.separator + (String) getID()
             + ".cache");
         DataStorageDescriptor desc = new DataStorageDescriptor();
@@ -57,119 +58,75 @@ public class TransferServiceContextResource extends TransferServiceContextResour
         }
         desc.setDataDescriptor(dd);
         desc.setStatus(Status.Staging);
+        desc.setDeleteOnDestroy(shouldDeleteFileOnDestroy);
         setDataStorageDescriptor(desc);
     }
 
 
     public void stage(final byte[] data, final DataDescriptor dd) throws Exception {
-        Thread th = new Thread(new Runnable() {
-        
-            public void run() {
-                try {
-                    DataStorageDescriptor desc = new DataStorageDescriptor();
-                    File storageFile = new File(getStorageDirectory().getAbsolutePath() + File.separator + (String) getID()
-                        + ".cache");
-                    desc.setLocation(storageFile.getAbsolutePath());
-                    if (SecurityUtils.getCallerIdentity() != null) {
-                        desc.setUserDN(SecurityUtils.getCallerIdentity());
-                    }
-                    desc.setDataDescriptor(dd);
-                    desc.setStatus(Status.Staging);
-                    setDataStorageDescriptor(desc);
-                    
-                    
-                    FileOutputStream fw = new FileOutputStream(storageFile);
-                    fw.write(data);
-                    fw.close();
-                    
-                    
-                    desc.setStatus(Status.Staged);
-                    setDataStorageDescriptor(desc);
-                    
-                } catch (ResourceException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                } catch (FileNotFoundException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                } catch (Exception e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-            }
-        
-        });
-        
-        th.start();
-        
+
+        DataStorageDescriptor desc = new DataStorageDescriptor();
+        File storageFile = new File(getStorageDirectory().getAbsolutePath() + File.separator + (String) getID()
+            + ".cache");
+        desc.setLocation(storageFile.getAbsolutePath());
+        if (SecurityUtils.getCallerIdentity() != null) {
+            desc.setUserDN(SecurityUtils.getCallerIdentity());
+        }
+        desc.setDataDescriptor(dd);
+        desc.setStatus(Status.Staging);
+        desc.setDeleteOnDestroy(shouldDeleteFileOnDestroy);
+        setDataStorageDescriptor(desc);
+
+        FileOutputStream fw = new FileOutputStream(storageFile);
+        fw.write(data);
+        fw.close();
+
+        desc.setStatus(Status.Staged);
+        setDataStorageDescriptor(desc);
+
     }
 
 
     public void stage(final InputStream is, final DataDescriptor dd) throws Exception {
-        Thread th = new Thread(new Runnable() {
-        
-            public void run() {
-                try {
-                    
-                    DataStorageDescriptor desc = new DataStorageDescriptor();
-                    File storageFile = new File(getStorageDirectory().getAbsolutePath() + File.separator + (String) getID()
-                        + ".cache");
-                    desc.setLocation(storageFile.getAbsolutePath());
-                    if (SecurityUtils.getCallerIdentity() != null) {
-                        desc.setUserDN(SecurityUtils.getCallerIdentity());
-                    }
-                    desc.setDataDescriptor(dd);
-                    desc.setStatus(Status.Staging);
-                    setDataStorageDescriptor(desc);
-                    
-            
-                    FileOutputStream fw = new FileOutputStream(storageFile);
-                    byte[] data = new byte[1024];
-                    int length = is.read(data);
-                    while (length >= 0) {
-                        fw.write(data);
-                        length = is.read(data);
-                    }
-                    fw.write(data,0,length);
-                    fw.close();
-                    
-                    desc.setStatus(Status.Staged);
-                    setDataStorageDescriptor(desc);
-                    
-                } catch (ResourceException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                } catch (FileNotFoundException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                } catch (Exception e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-        
-            }
-        
-        });
-        
-        th.start();
+
+        DataStorageDescriptor desc = new DataStorageDescriptor();
+        File storageFile = new File(getStorageDirectory().getAbsolutePath() + File.separator + (String) getID()
+            + ".cache");
+        desc.setLocation(storageFile.getAbsolutePath());
+        if (SecurityUtils.getCallerIdentity() != null) {
+            desc.setUserDN(SecurityUtils.getCallerIdentity());
+        }
+        desc.setDataDescriptor(dd);
+        desc.setStatus(Status.Staging);
+        desc.setDeleteOnDestroy(shouldDeleteFileOnDestroy);
+        setDataStorageDescriptor(desc);
+
+        FileOutputStream fw = new FileOutputStream(storageFile);
+        byte[] data = new byte[1024];
+        int length = is.read(data);
+        while (length >= 0) {
+            fw.write(data);
+            length = is.read(data);
+        }
+        fw.write(data, 0, length);
+        fw.close();
+
+        desc.setStatus(Status.Staged);
+        setDataStorageDescriptor(desc);
 
     }
 
 
-    public void stage(File file, DataDescriptor dd) throws Exception {
+    public void stage(File file, DataDescriptor dd, boolean shouldDeleteFileOnDestroy) throws Exception {
         DataStorageDescriptor desc = new DataStorageDescriptor();
         desc.setLocation(file.getAbsolutePath());
         if (SecurityUtils.getCallerIdentity() != null) {
             desc.setUserDN(SecurityUtils.getCallerIdentity());
         }
+
         desc.setDataDescriptor(dd);
         desc.setStatus(Status.Staged);
+        desc.setDeleteOnDestroy(shouldDeleteFileOnDestroy);
         setDataStorageDescriptor(desc);
     }
 
@@ -177,9 +134,12 @@ public class TransferServiceContextResource extends TransferServiceContextResour
     private void removeDataFile() throws Exception {
         if (getDataStorageDescriptor() != null && getDataStorageDescriptor().getLocation() != null) {
             String location = getDataStorageDescriptor().getLocation();
-            if (location.startsWith(getStorageDirectory().getAbsolutePath())) {
+            if (shouldDeleteFileOnDestroy) {
                 File dataFile = new File(location);
-                dataFile.delete();
+                boolean deleted = dataFile.delete();
+                if (!deleted) {
+                    throw new Exception("Cound not delete file on destroy of resource: " + location);
+                }
             }
         }
     }
@@ -205,6 +165,5 @@ public class TransferServiceContextResource extends TransferServiceContextResour
             throw new ResourceException(e);
         }
     }
-    
-    
+
 }

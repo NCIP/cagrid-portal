@@ -94,7 +94,6 @@ public class FixSoapBindingStub extends Task {
                         for (int i = 0; i < 6; i++) {
                             br.readLine();
                         }
-                        System.out.println("removed reference");
                     } else {
                         newFileContent.append(line + "\n");
                     }

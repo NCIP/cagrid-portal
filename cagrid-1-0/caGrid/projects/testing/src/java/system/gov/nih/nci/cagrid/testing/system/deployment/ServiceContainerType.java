@@ -10,7 +10,7 @@ import java.util.GregorianCalendar;
  * @author David Ervin
  * 
  * @created Oct 16, 2007 12:01:50 PM
- * @version $Id: ServiceContainerType.java,v 1.5 2008-01-28 20:15:37 hastings Exp $ 
+ * @version $Id: ServiceContainerType.java,v 1.6 2008-01-30 00:52:33 hastings Exp $ 
  */
 public enum ServiceContainerType {
     GLOBUS_CONTAINER, TOMCAT_CONTAINER, JBOSS_CONTAINER, SECURE_TOMCAT_CONTAINER;
@@ -43,7 +43,7 @@ public enum ServiceContainerType {
             case JBOSS_CONTAINER:
                 return "JBoss";
             case SECURE_TOMCAT_CONTAINER:
-                return "Secure Tomcat";
+                return "SecureTomcat";
         }
         throw new AssertionError("Unknown service container type: " + this);
     }
