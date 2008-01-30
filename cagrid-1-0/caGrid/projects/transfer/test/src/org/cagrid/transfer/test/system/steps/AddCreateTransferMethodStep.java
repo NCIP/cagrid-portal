@@ -20,6 +20,7 @@ import gov.nih.nci.cagrid.introduce.test.steps.BaseStep;
 import gov.nih.nci.cagrid.introduce.test.steps.StepTools;
 import gov.nih.nci.cagrid.metadata.security.CommunicationMechanism;
 import gov.nih.nci.cagrid.metadata.security.GSITransport;
+import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainer;
 
 import java.io.File;
 
@@ -27,59 +28,64 @@ import javax.xml.namespace.QName;
 
 
 public class AddCreateTransferMethodStep extends BaseStep {
-	private TestCaseInfo tci;
+    private TestCaseInfo tci;
+    private ServiceContainer container;
 
 
+    public AddCreateTransferMethodStep(TestCaseInfo tci, ServiceContainer container, boolean build) throws Exception {
+        super(tci.getDir(), build);
+        this.tci = tci;
+        this.container = container;
+    }
 
-	public AddCreateTransferMethodStep(TestCaseInfo tci, boolean build) throws Exception {
-		super(tci.getDir(),build);
-		this.tci = tci;
-	}
 
+    public void runStep() throws Throwable {
+        System.out.println("Adding a createTransferMethod method.");
 
-	public void runStep() throws Throwable {
-		System.out.println("Adding a createTransferMethod method.");
+        ServiceDescription introService = (ServiceDescription) Utils.deserializeDocument(getBaseDir() + File.separator
+            + tci.getDir() + File.separator + "introduce.xml", ServiceDescription.class);
+        MethodsType methodsType = CommonTools.getService(introService.getServices(), tci.getName()).getMethods();
 
-		ServiceDescription introService = (ServiceDescription) Utils.deserializeDocument(getBaseDir() + File.separator
-			+ tci.getDir() + File.separator + "introduce.xml", ServiceDescription.class);
-		MethodsType methodsType = CommonTools.getService(introService.getServices(),tci.getName()).getMethods();
+        MethodType method = new MethodType();
+        method.setName("createTransferMethodStep");
+        MethodTypeOutput output = new MethodTypeOutput();
+        output.setQName(new QName("http://transfer.cagrid.org/TransferService/Context/types",
+            "TransferServiceContextReference"));
+        method.setOutput(output);
+        MethodTypeInputs inputs = new MethodTypeInputs();
+        method.setInputs(inputs);
 
-		MethodType method = new MethodType();
-		method.setName("createTransferMethodStep");
-		MethodTypeOutput output = new MethodTypeOutput();
-		output.setQName(new QName("http://transfer.cagrid.org/TransferService/Context/types","TransferServiceContextReference"));
-		method.setOutput(output);
-		MethodTypeInputs inputs = new MethodTypeInputs();
-		method.setInputs(inputs);
-		
-		MethodSecurity msec = new MethodSecurity();
-		msec.setSecuritySetting(SecuritySetting.Custom);
-		TransportLevelSecurity security = new TransportLevelSecurity();
-		security.setCommunicationMethod(CommunicationMethod.Privacy);
-		msec.setAnonymousClients(AnonymousCommunication.No);
-		msec.setTransportLevelSecurity(security);
-		
-		method.setMethodSecurity(msec);
-		
-		CommonTools.addMethod(CommonTools.getService(introService.getServices(), tci.getName()), method);
+        if (container.getProperties().isSecure()) {
+            MethodSecurity msec = new MethodSecurity();
+            msec.setSecuritySetting(SecuritySetting.Custom);
+            TransportLevelSecurity security = new TransportLevelSecurity();
+            security.setCommunicationMethod(CommunicationMethod.Privacy);
+            msec.setAnonymousClients(AnonymousCommunication.No);
+            msec.setTransportLevelSecurity(security);
 
-		Utils.serializeDocument(getBaseDir() + File.separator + tci.getDir() + File.separator + "introduce.xml",
-			introService, IntroduceConstants.INTRODUCE_SKELETON_QNAME);
+            method.setMethodSecurity(msec);
+        }
 
-		try {
-			SyncTools sync = new SyncTools(new File(getBaseDir() + File.separator + tci.getDir()));
-			sync.sync();
-		} catch (Exception e) {
-			e.printStackTrace();
-			fail(e.getMessage());
-		}
-		
-		// look at the interface to make sure method exists.......
-		String serviceInterface = getBaseDir() + File.separator + tci.getDir() + File.separator + "src" + File.separator
-			+ tci.getPackageDir() + File.separator + "common" + File.separator + tci.getName() + "I.java";
-		assertTrue(StepTools.methodExists(serviceInterface, "createTransferMethodStep"));
+        CommonTools.addMethod(CommonTools.getService(introService.getServices(), tci.getName()), method);
 
-		buildStep();
-	}
+        Utils.serializeDocument(getBaseDir() + File.separator + tci.getDir() + File.separator + "introduce.xml",
+            introService, IntroduceConstants.INTRODUCE_SKELETON_QNAME);
+
+        try {
+            SyncTools sync = new SyncTools(new File(getBaseDir() + File.separator + tci.getDir()));
+            sync.sync();
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
+
+        // look at the interface to make sure method exists.......
+        String serviceInterface = getBaseDir() + File.separator + tci.getDir() + File.separator + "src"
+            + File.separator + tci.getPackageDir() + File.separator + "common" + File.separator + tci.getName()
+            + "I.java";
+        assertTrue(StepTools.methodExists(serviceInterface, "createTransferMethodStep"));
+
+        buildStep();
+    }
 
 }

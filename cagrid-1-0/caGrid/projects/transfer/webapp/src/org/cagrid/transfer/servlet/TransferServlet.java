@@ -189,6 +189,7 @@ public class TransferServlet extends HttpServlet {
                     length = fis.read(bytes);
                 }
                 resp.getOutputStream().write(bytes,0,length);
+                fis.close();
             } catch (Exception e) {
                 System.out.println("Trouble retrieving data for requested object: " + requestedID + " at file: " + desc.getLocation());
                 e.printStackTrace();

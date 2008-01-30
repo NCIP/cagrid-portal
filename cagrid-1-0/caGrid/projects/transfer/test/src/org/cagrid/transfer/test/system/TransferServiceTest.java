@@ -48,7 +48,7 @@ public class TransferServiceTest extends Story {
             steps.add(new DeployServiceStep(container, "../transfer"));
 
             steps.add(new CreateSkeletonStep(tci, false));
-            steps.add(new AddCreateTransferMethodStep(tci, false));
+            steps.add(new AddCreateTransferMethodStep(tci,container, false));
             steps.add(new AddCreateTransferMethodImplStep(tci, false));
             if (container instanceof SecureContainer) {
                 steps.add(new CopyProxyStep((SecureContainer) container, tci));
@@ -68,7 +68,7 @@ public class TransferServiceTest extends Story {
     protected boolean storySetUp() throws Throwable {
         // init the container
         try {
-            container = ServiceContainerFactory.createContainer(ServiceContainerType.SECURE_TOMCAT_CONTAINER);
+            container = ServiceContainerFactory.createContainer(ServiceContainerType.TOMCAT_CONTAINER);
         } catch (Exception ex) {
             ex.printStackTrace();
             fail("Failed to create container: " + ex.getMessage());
