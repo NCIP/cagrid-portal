@@ -87,7 +87,7 @@ public class TransferServiceTest extends Story {
     protected void storyTearDown() throws Throwable {
         RemoveSkeletonStep step1 = new RemoveSkeletonStep(tci);
         try {
-            //step1.runStep();
+            step1.runStep();
         } catch (Throwable e) {
             e.printStackTrace();
         }
@@ -99,7 +99,7 @@ public class TransferServiceTest extends Story {
         }
         DestroyContainerStep step3 = new DestroyContainerStep(container);
         try {
-            //step3.runStep();
+            step3.runStep();
         } catch (Throwable e) {
             e.printStackTrace();
         }

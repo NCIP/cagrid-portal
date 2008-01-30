@@ -25,7 +25,7 @@ public class TransferServlet extends HttpServlet {
 
     private Properties props = null;
     String persistenceDir = null;
-    int blockSize = 1024;   //default block size for transfer and recieve
+    int blockSize = 1024;   //default block size for transfer and receive
 
 
     @Override
@@ -179,17 +179,24 @@ public class TransferServlet extends HttpServlet {
         // verify that the user calling is the owner or there is no owner
         if (desc.getUserDN() == null || desc.getUserDN().equals(userDN)) {
             System.out.println("Transfering data using block size of: " + blockSize );
-            // 4 write data to the response
-            FileInputStream fis = new FileInputStream(desc.getLocation());
-            byte[] bytes = new byte[blockSize];
-            int length = fis.read(bytes);
-            while (length == blockSize) {
-                resp.getOutputStream().write(bytes);
-                length = fis.read(bytes);
+            try {
+                // 4 write data to the response
+                FileInputStream fis = new FileInputStream(desc.getLocation());
+                byte[] bytes = new byte[blockSize];
+                int length = fis.read(bytes);
+                while (length == blockSize) {
+                    resp.getOutputStream().write(bytes);
+                    length = fis.read(bytes);
+                }
+                resp.getOutputStream().write(bytes,0,length);
+            } catch (Exception e) {
+                System.out.println("Trouble retrieving data for requested object: " + requestedID + " at file: " + desc.getLocation());
+                e.printStackTrace();
+                resp.sendError(500);
+                return;
             }
-            resp.getOutputStream().write(bytes,0,length);
         } else {
-            System.out.println("Trouble retrieving data for requested object: " + requestedID + " at file: " + desc.getLocation());
+            System.out.println("Not authorized to recieve: " + requestedID + " at file: " + desc.getLocation());
             resp.sendError(403);
             return;
         }

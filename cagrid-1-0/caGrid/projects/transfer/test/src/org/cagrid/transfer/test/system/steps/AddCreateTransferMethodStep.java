@@ -7,11 +7,19 @@ import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputs;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
+import gov.nih.nci.cagrid.introduce.beans.security.AnonymousCommunication;
+import gov.nih.nci.cagrid.introduce.beans.security.CommunicationMethod;
+import gov.nih.nci.cagrid.introduce.beans.security.MethodSecurity;
+import gov.nih.nci.cagrid.introduce.beans.security.SecureMessage;
+import gov.nih.nci.cagrid.introduce.beans.security.SecuritySetting;
+import gov.nih.nci.cagrid.introduce.beans.security.TransportLevelSecurity;
 import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.test.TestCaseInfo;
 import gov.nih.nci.cagrid.introduce.test.steps.BaseStep;
 import gov.nih.nci.cagrid.introduce.test.steps.StepTools;
+import gov.nih.nci.cagrid.metadata.security.CommunicationMechanism;
+import gov.nih.nci.cagrid.metadata.security.GSITransport;
 
 import java.io.File;
 
@@ -43,6 +51,15 @@ public class AddCreateTransferMethodStep extends BaseStep {
 		method.setOutput(output);
 		MethodTypeInputs inputs = new MethodTypeInputs();
 		method.setInputs(inputs);
+		
+		MethodSecurity msec = new MethodSecurity();
+		msec.setSecuritySetting(SecuritySetting.Custom);
+		TransportLevelSecurity security = new TransportLevelSecurity();
+		security.setCommunicationMethod(CommunicationMethod.Privacy);
+		msec.setAnonymousClients(AnonymousCommunication.No);
+		msec.setTransportLevelSecurity(security);
+		
+		method.setMethodSecurity(msec);
 		
 		CommonTools.addMethod(CommonTools.getService(introService.getServices(), tci.getName()), method);
 
