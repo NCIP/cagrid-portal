@@ -36,7 +36,7 @@ import java.io.PrintWriter;
 /**
  * StoryBook contains and executes a series of Story objects.
  * This is the system-test-level analogue of JUnit's TestSuite.
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public abstract class StoryBook extends junit.framework.TestSuite {
 
@@ -168,6 +168,10 @@ public abstract class StoryBook extends junit.framework.TestSuite {
 			</pre>
 	 */
 	protected abstract void stories();
+	
+    public void testDummy(){
+        
+    }
 }
 
 
