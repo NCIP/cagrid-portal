@@ -13,7 +13,7 @@ import gov.nih.nci.cagrid.testing.system.deployment.steps.DestroyContainerStep;
 import gov.nih.nci.cagrid.testing.system.deployment.steps.StartContainerStep;
 import gov.nih.nci.cagrid.testing.system.deployment.steps.StopContainerStep;
 import gov.nih.nci.cagrid.testing.system.deployment.steps.UnpackContainerStep;
-import gov.nih.nci.cagrid.testing.system.haste.Story;
+import gov.nih.nci.cagrid.testing.system.deployment.story.ServiceStoryBase;
 
 import java.io.File;
 import java.util.Vector;
@@ -24,19 +24,32 @@ import org.cagrid.transfer.test.system.steps.AddCreateTransferMethodStep;
 import org.cagrid.transfer.test.system.steps.CopyProxyStep;
 
 
-public class TransferServiceTest extends Story {
+public class TransferServiceTest extends ServiceStoryBase {
 
     private TestCaseInfo tci = new TransferTestCaseInfo();
-    private ServiceContainer container;
 
 
+    public TransferServiceTest(ServiceContainer container) {
+       super(container);
+    }
+    
     public TransferServiceTest() {
         PropertyConfigurator.configure("." + File.separator + "conf" + File.separator + "introduce" + File.separator
             + "log4j.properties");
+        // init the container
+        try {
+            this.setContainer(ServiceContainerFactory.createContainer(ServiceContainerType.TOMCAT_CONTAINER));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            fail("Failed to create container: " + ex.getMessage());
+        }
     }
 
 
     public String getDescription() {
+        if(getContainer().getProperties().isSecure()){
+            return "Secure Transfer Service Test";
+        }
         return "Transfer Service Test";
     }
 
@@ -44,19 +57,19 @@ public class TransferServiceTest extends Story {
     protected Vector steps() {
         Vector steps = new Vector();
         try {
-            steps.add(new UnpackContainerStep(container));
-            steps.add(new DeployServiceStep(container, "../transfer"));
+            steps.add(new UnpackContainerStep(getContainer()));
+            steps.add(new DeployServiceStep(getContainer(), "../transfer"));
 
             steps.add(new CreateSkeletonStep(tci, false));
-            steps.add(new AddCreateTransferMethodStep(tci,container, false));
+            steps.add(new AddCreateTransferMethodStep(tci,getContainer(), false));
             steps.add(new AddCreateTransferMethodImplStep(tci, false));
-            if (container instanceof SecureContainer) {
-                steps.add(new CopyProxyStep((SecureContainer) container, tci));
+            if (getContainer() instanceof SecureContainer) {
+                steps.add(new CopyProxyStep((SecureContainer) getContainer(), tci));
             }
-            steps.add(new DeployServiceStep(container, tci.getDir()));
-            steps.add(new StartContainerStep(container));
+            steps.add(new DeployServiceStep(getContainer(), tci.getDir()));
+            steps.add(new StartContainerStep(getContainer()));
 
-            steps.add(new InvokeClientStep(container, tci));
+            steps.add(new InvokeClientStep(getContainer(), tci));
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -66,13 +79,7 @@ public class TransferServiceTest extends Story {
 
 
     protected boolean storySetUp() throws Throwable {
-        // init the container
-        try {
-            container = ServiceContainerFactory.createContainer(ServiceContainerType.TOMCAT_CONTAINER);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            fail("Failed to create container: " + ex.getMessage());
-        }
+        
 
         RemoveSkeletonStep step1 = new RemoveSkeletonStep(tci);
         try {
@@ -91,13 +98,13 @@ public class TransferServiceTest extends Story {
         } catch (Throwable e) {
             e.printStackTrace();
         }
-        StopContainerStep step2 = new StopContainerStep(container);
+        StopContainerStep step2 = new StopContainerStep(getContainer());
         try {
             step2.runStep();
         } catch (Throwable e) {
             e.printStackTrace();
         }
-        DestroyContainerStep step3 = new DestroyContainerStep(container);
+        DestroyContainerStep step3 = new DestroyContainerStep(getContainer());
         try {
             step3.runStep();
         } catch (Throwable e) {
