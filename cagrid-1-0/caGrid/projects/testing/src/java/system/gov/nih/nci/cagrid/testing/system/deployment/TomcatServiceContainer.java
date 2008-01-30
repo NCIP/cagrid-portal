@@ -39,8 +39,7 @@ import com.counter.service.CounterServiceAddressingLocator;
 
 
 /**
- * TomcatServiceContainer 
- * Service container implementation for tomcat
+ * TomcatServiceContainer Service container implementation for tomcat
  * 
  * @author David Ervin
  * @created Oct 19, 2007 12:01:22 PM
@@ -119,7 +118,6 @@ public class TomcatServiceContainer extends ServiceContainer {
             throw new ContainerException("deployService ant command failed: " + deployProcess.exitValue());
         }
 
-
     }
 
 
@@ -172,7 +170,7 @@ public class TomcatServiceContainer extends ServiceContainer {
                 LOG.debug("Waiting for catalina process");
                 catalinaProcess.waitFor();
                 LOG.debug("Done waiting");
-                
+
                 return Boolean.valueOf(finalShutdownProcess.exitValue() == 0);
             }
         });
@@ -196,7 +194,6 @@ public class TomcatServiceContainer extends ServiceContainer {
             shutdownProcess.destroy();
             catalinaProcess.destroy();
         }
-
 
         shutdownProcess = null;
         catalinaProcess = null;
@@ -234,7 +231,8 @@ public class TomcatServiceContainer extends ServiceContainer {
         if (getProperties().getHeapSizeInMegabytes() != null) {
             String currentCatalinaOpts = System.getenv(ENV_CATALINA_OPTS);
             if (currentCatalinaOpts != null) {
-                edits.add(ENV_CATALINA_OPTS + "=\"" + currentCatalinaOpts + " -Xmx" + getProperties().getHeapSizeInMegabytes() + "m\"");
+                edits.add(ENV_CATALINA_OPTS + "=\"" + currentCatalinaOpts + " -Xmx"
+                    + getProperties().getHeapSizeInMegabytes() + "m\"");
             } else {
                 edits.add(ENV_CATALINA_OPTS + "=\"-Xmx" + getProperties().getHeapSizeInMegabytes() + "m\"");
             }
@@ -287,7 +285,6 @@ public class TomcatServiceContainer extends ServiceContainer {
     // ---------------
     // Helpers
     // ---------------
-    
 
     private String[] editEnvironment(String[] edits) {
         Map<String, String> envm = new HashMap<String, String>(System.getenv());
@@ -354,22 +351,23 @@ public class TomcatServiceContainer extends ServiceContainer {
 
     private void setServerPort() throws Exception {
         Integer port = getProperties().getPortPreference().getPort();
-        File serverConfigFile = new File(getProperties().getContainerDirectory(), 
-            "conf" + File.separator + "server.xml");
+        File serverConfigFile = new File(getProperties().getContainerDirectory(), "conf" + File.separator
+            + "server.xml");
         Element configRoot = XMLUtilities.fileNameToDocument(serverConfigFile.getAbsolutePath()).getRootElement();
-        configRoot.setAttribute("port",String.valueOf(getProperties().getPortPreference().getShutdownPort()));
+        configRoot.setAttribute("port", String.valueOf(getProperties().getPortPreference().getShutdownPort()));
         Iterator serviceElementIterator = configRoot.getChildren("Service", configRoot.getNamespace()).iterator();
         while (serviceElementIterator.hasNext()) {
             Element serviceElement = (Element) serviceElementIterator.next();
             if (serviceElement.getAttributeValue("name").equals("Catalina")) {
-                Iterator connectorElementIterator = serviceElement.getChildren(
-                    "Connector", configRoot.getNamespace()).iterator();
+                Iterator connectorElementIterator = serviceElement.getChildren("Connector", configRoot.getNamespace())
+                    .iterator();
                 while (connectorElementIterator.hasNext()) {
                     Element connectorElement = (Element) connectorElementIterator.next();
                     boolean connectorFound = false;
                     if (getProperties().isSecure()) {
                         if (connectorElement.getAttributeValue("port").equals("8443")
-                            && connectorElement.getAttributeValue("className").equals("org.globus.tomcat.coyote.net.HTTPSConnector")) {
+                            && connectorElement.getAttributeValue("className").equals(
+                                "org.globus.tomcat.coyote.net.HTTPSConnector")) {
                             connectorFound = true;
                         }
                     } else {
@@ -387,5 +385,37 @@ public class TomcatServiceContainer extends ServiceContainer {
         }
         String xml = XMLUtilities.formatXML(XMLUtilities.elementToString(configRoot));
         Utils.stringBufferToFile(new StringBuffer(xml), serverConfigFile.getAbsolutePath());
+
+        // need to adjust the web.xml to also me consistent with this custom
+        // ports...
+        File webappConfigFile = new File(getProperties().getContainerDirectory(), "webapps" + File.separator + "wsrf"
+            + File.separator + "WEB-INF" + File.separator + "web.xml");
+        Element webappConfigRoot = XMLUtilities.fileNameToDocument(webappConfigFile.getAbsolutePath()).getRootElement();
+        Element servletEl = webappConfigRoot.getChild("servlet");
+        Element initEl = new Element("init-param");
+        Element paramName = new Element("param-name");
+        paramName.setText("defaultProtocol");
+        Element paramValue = new Element("param-value");
+        if (getProperties().isSecure()) {
+            paramValue.setText("https");
+        } else {
+            paramValue.setText("http");
+        }
+        initEl.addContent(paramName);
+        initEl.addContent(paramValue);
+        servletEl.addContent(servletEl.getChildren().size()-1,initEl);
+
+        Element initEl2 = new Element("init-param");
+        Element paramName2 = new Element("param-name");
+        paramName2.setText("defaultPort");
+        Element paramValue2 = new Element("param-value");
+        paramValue2.setText(String.valueOf(getProperties().getPortPreference().getPort()));
+        initEl2.addContent(paramName2);
+        initEl2.addContent(paramValue2);
+        servletEl.addContent(servletEl.getChildren().size()-1,initEl2);
+        
+        String webappxml = XMLUtilities.formatXML(XMLUtilities.elementToString(webappConfigRoot));
+        Utils.stringBufferToFile(new StringBuffer(webappxml), webappConfigFile.getAbsolutePath());
+
     }
 }
