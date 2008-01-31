@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.sdkquery4.test.system.steps;
 
+import gov.nih.nci.cagrid.common.JarUtilities;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.data.ExtensionDataUtils;
@@ -27,15 +28,18 @@ import gov.nih.nci.cagrid.sdkquery4.style.wizard.config.SchemaMappingConfigurati
 import gov.nih.nci.cagrid.testing.system.haste.Step;
 
 import java.io.File;
-import java.io.FileFilter;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 
 /** 
  *  SDK4StyleConfigurationStep
@@ -45,14 +49,17 @@ import java.util.Set;
  * @author David Ervin
  * 
  * @created Jan 28, 2008 11:24:21 AM
- * @version $Id: SDK4StyleConfigurationStep.java,v 1.2 2008-01-29 17:32:25 dervin Exp $ 
+ * @version $Id: SDK4StyleConfigurationStep.java,v 1.3 2008-01-31 19:40:52 dervin Exp $ 
  */
 public class SDK4StyleConfigurationStep extends Step {
+    public static final String SDKQUERY4_BASE_DIR = "../sdkQuery4";
     
-    public static final String EXT_SDK_DIR = "ext/lib/sdk/remote-client";
-    public static final String DOMAIN_MODEL_FILE = "test/resources/sdkExampleDomainModel.xml";
+    public static final String EXT_SDK_DIR = SDKQUERY4_BASE_DIR + File.separator + "ext/lib/sdk/remote-client";
+    public static final String DOMAIN_MODEL_FILE = SDKQUERY4_BASE_DIR + File.separator + "test/resources/sdkExampleDomainModel.xml";
     public static final String PROPERTY_REMOTE_HOST_NAME = "remote.sdk.host.name";
     public static final String PROPERTY_REMOTE_HOST_PORT = "remote.sdk.host.port";
+    public static final String DEFAULT_REMOTE_HOST_NAME_VALUE = "http://localhost";
+    public static final String DEFAULT_REMOTE_HOST_PORT_VALUE = "8080";
     
     private File serviceBaseDirectory = null;
     private ServiceInformation serviceInformation = null;
@@ -63,17 +70,17 @@ public class SDK4StyleConfigurationStep extends Step {
 
 
     public void runStep() throws Throwable {
-        List<AbstractStyleConfigurationStep> configSteps =
-            new ArrayList<AbstractStyleConfigurationStep>();
-        configSteps.add(getInitialConfiguration());
-        configSteps.add(getQueryProcessorConfiguration());
-        configSteps.add(getQueryProcessorSecurityConfiguration());
+        getInitialConfiguration().applyConfiguration();
+        getQueryProcessorConfiguration().applyConfiguration();
+        getQueryProcessorSecurityConfiguration().applyConfiguration();
         applyDomainModelConfiguration();
-        configSteps.add(getSchemaMappingConfiguration());
-        
-        for (AbstractStyleConfigurationStep step : configSteps) {
-            step.applyConfiguration();
-        }
+        getSchemaMappingConfiguration().applyConfiguration();
+        // persist the changes made by the configuration steps
+        File serviceModelFile = new File(getServiceInformation().getBaseDirectory(), IntroduceConstants.INTRODUCE_XML_FILE);
+        FileWriter writer = new FileWriter(serviceModelFile);
+        Utils.serializeObject(getServiceInformation().getServiceDescriptor(), IntroduceConstants.INTRODUCE_SKELETON_QNAME, writer);
+        writer.flush();
+        writer.close();
     }
     
     
@@ -93,14 +100,14 @@ public class SDK4StyleConfigurationStep extends Step {
             new QueryProcessorBaseConfigurationStep(getServiceInformation());
         File remoteClientDir = new File(EXT_SDK_DIR);
         File remoteClientLibDir = new File(remoteClientDir, "lib");
-        File remoteClientConfDir = new File(remoteClientDir, "config");
+        File remoteClientConfDir = new File(remoteClientDir, "conf");
         configuration.setApplicationName("example40");
-        configuration.setBeansJarLocation(new File(remoteClientLibDir, "example40-client.jar").getAbsolutePath());
+        configuration.setBeansJarLocation(new File(remoteClientLibDir, "example40-beans.jar").getAbsolutePath());
         configuration.setCaseInsensitiveQueries(false);
         configuration.setConfigurationDir(remoteClientConfDir.getAbsolutePath());
         configuration.setUseLocalApi(false);
-        String hostName = System.getProperty(PROPERTY_REMOTE_HOST_NAME);
-        Integer hostPort = Integer.valueOf(System.getProperty(PROPERTY_REMOTE_HOST_PORT));
+        String hostName = System.getProperty(PROPERTY_REMOTE_HOST_NAME, DEFAULT_REMOTE_HOST_NAME_VALUE);
+        Integer hostPort = Integer.valueOf(System.getProperty(PROPERTY_REMOTE_HOST_PORT, DEFAULT_REMOTE_HOST_PORT_VALUE));
         configuration.setHostName(hostName);
         configuration.setHostPort(hostPort);
         return configuration;
@@ -124,8 +131,17 @@ public class SDK4StyleConfigurationStep extends Step {
     private AbstractStyleConfigurationStep getSchemaMappingConfiguration() throws Exception {
         SchemaMappingConfigurationStep configuration = 
             new SchemaMappingConfigurationStep(getServiceInformation());
-        // iterate packages in the domain model, locate schemas in the sdk config dir
-        File sdkConfigDir = new File(EXT_SDK_DIR + File.separator + "config");
+        File schemaDir = new File(getServiceInformation().getBaseDirectory(),
+            "schema" + File.separator + getServiceInformation().getIntroduceServiceProperties()
+                .getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME));
+        // the sdk's config dir jar will have the schemas in it
+        String applicationName = CommonTools.getServicePropertyValue(
+            getServiceInformation().getServiceDescriptor(), 
+            DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX 
+                + SDK4QueryProcessor.PROPERTY_APPLICATION_NAME);
+        String configJarFilename = getServiceInformation().getBaseDirectory().getAbsolutePath()
+            + File.separator + "lib" + File.separator + applicationName + "-config.jar";
+        // get the package names from the domain model
         File domainModelFile = new File(DOMAIN_MODEL_FILE);
         FileReader modelReader = new FileReader(domainModelFile);
         DomainModel model = (DomainModel) Utils.deserializeObject(modelReader, DomainModel.class);
@@ -133,21 +149,32 @@ public class SDK4StyleConfigurationStep extends Step {
         // extract a set of package names
         Set<String> packages = new HashSet<String>();
         for (UMLClass c : classes) {
-            packages.add(c.getPackageName());
-        }
-        // list schemas in the config dir
-        File[] schemas = sdkConfigDir.listFiles(new FileFilter() {
-            public boolean accept(File path) {
-                return path.getName().toLowerCase().endsWith(".xsd");
+            String name = c.getPackageName();
+            if (!packages.contains(name)) {
+                packages.add(name);
             }
-        });
-        for (String packName : packages) {
-            // find the schema with the same name
-            for (File schema : schemas) {
-                String name = schema.getName();
-                if (name.substring(0, name.length() - 4).equals(packName)) {
-                    configuration.mapPackageToSchema(packName, schema);
-                    break;
+        }
+        // walk jar entries, looking for xsds
+        JarFile configJar = new JarFile(configJarFilename);
+        Enumeration<JarEntry> entries = configJar.entries();
+        while (entries.hasMoreElements()) {
+            JarEntry entry = entries.nextElement();
+            if (entry.getName().endsWith(".xsd")) {
+                // found a schema, what package does it go with?
+                String schemaPackageName = new File(entry.getName()).getName();
+                schemaPackageName = schemaPackageName.substring(0, schemaPackageName.length() - 4);
+                for (String packageName : packages) {
+                    if (packageName.equals(schemaPackageName)) {
+                        // create a schema file and namespace type
+                        StringBuffer schemaText = JarUtilities.getFileContents(configJar, entry.getName());
+                        File schemaFile = new File(schemaDir, new File(entry.getName()).getName());
+                        Utils.stringBufferToFile(schemaText, schemaFile.getAbsolutePath());
+                        
+                        // add the namespace to the configuration for later
+                        // incorperation in the service
+                        configuration.mapPackageToSchema(packageName, schemaFile);                            
+                        break;
+                    }
                 }
             }
         }
@@ -276,10 +303,8 @@ public class SDK4StyleConfigurationStep extends Step {
     
     
     private void storeExtensionData(Data data) throws Exception {
-        File serviceModelFile = new File(getServiceInformation().getBaseDirectory(), IntroduceConstants.INTRODUCE_XML_FILE);
-        ServiceDescription serviceDesc = getServiceInformation().getServiceDescriptor();
-        
-        ExtensionType[] extensions = serviceDesc.getExtensions().getExtension();
+        ExtensionType[] extensions = getServiceInformation().getServiceDescriptor()
+            .getExtensions().getExtension();
         ExtensionType dataExtension = null;
         for (int i = 0; i < extensions.length; i++) {
             if (extensions[i].getName().equals("data")) {
@@ -291,7 +316,6 @@ public class SDK4StyleConfigurationStep extends Step {
             dataExtension.setExtensionData(new ExtensionTypeExtensionData());
         }
         ExtensionDataUtils.storeExtensionData(dataExtension.getExtensionData(), data);
-        Utils.serializeDocument(serviceModelFile.getAbsolutePath(), serviceDesc, IntroduceConstants.INTRODUCE_SKELETON_QNAME);
     }
     
     

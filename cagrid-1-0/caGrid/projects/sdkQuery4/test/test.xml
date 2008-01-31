@@ -7,6 +7,7 @@
 	<property name="cobertura.report.dir" value="${build.dir}/coverage"/>
 	<property name="cobertura.data.file"
 		location="${instrumented.classes.dir}/${project.name}-cobertura.ser"/>	
+	<property name="introduce.dir" location="../introduce"/>
 	
 	
 	<!-- =============================================================== -->
@@ -30,6 +31,34 @@
 			<include name="**/*.jar" />
 		</fileset>
 	</path>
+	
+	
+	<target name="prepareClasspaths">
+		<path id="Introduce.test.classpath">
+	    	<fileset dir="${introduce.dir}/lib">
+	        	<include name="*.jar" />
+			</fileset>
+	        <fileset dir="${introduce.dir}/ext/lib">
+	        	<include name="*.jar" />
+			</fileset>
+	        <fileset dir="${introduce.dir}/build/jars">
+	        	<include name="*.jar" />
+			</fileset>
+	        <fileset dir="${introduce.dir}/test/lib">
+	        	<include name="*.jar" />
+			</fileset>
+	        <fileset dir="${introduce.dir}/ext/test/lib">
+	        	<include name="*.jar" />
+			</fileset>
+	        <fileset dir="${ant.library.dir}">
+	        	<include name="*.jar" />
+			</fileset>
+		</path>
+	    <path id="all.test.classpath">
+	    	<path refid="test.classpath" />
+	        <path refid="Introduce.test.classpath" />
+		</path>
+	</target>
 	
 
 	<target name="instrument">
@@ -76,13 +105,14 @@
 	
 	<target name="systemTest" depends="compileTests, instrument" description="Runs the tests.">
 		<mkdir dir="${junit.results.dir}"/>
-		<junit dir="${basedir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="yes" forkmode="once">
+		<junit dir="${introduce.dir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="yes" forkmode="once">
 			<sysproperty key="build.dirs" value="${instrumented.classes.dir}"/>
+			<sysproperty key="introduce.base.dir" value="${introduce.dir}"/>
 			<sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.data.file}"/>
 			<sysproperty key="processor.config.file" file="test/resources/testProcessorConfig.properties"/>
 			<jvmarg value="-Dbuild.dir=${test.classes.dir}"/>
 			<classpath location="${instrumented.classes.dir}"/>
-			<classpath refid="test.classpath"/>
+			<classpath refid="all.test.classpath"/>
 			<classpath>
 				<pathelement path="${test.classes.dir}"/>
 			</classpath>
