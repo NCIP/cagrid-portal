@@ -981,6 +981,7 @@
 			<artifact refid="data.jars" />
 			<artifact refid="gme.globus.client.jars" />
 			<artifact refid="grape.jars" />
+			<artifact refid="introduce.core.test.jars" />
 			<artifact refid="introduce.jars" />
 			<artifact refid="test.coverage.jars" />
 			<artifact refid="testing.system.jars" />
