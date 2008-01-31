@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.sdkquery4.test.system;
 
+import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.data.creation.DataTestCaseInfo;
 import gov.nih.nci.cagrid.sdkquery4.test.system.steps.SDK4StyleCreationStep;
 import gov.nih.nci.cagrid.testing.system.haste.Step;
@@ -19,7 +20,7 @@ import junit.textui.TestRunner;
  * @author David Ervin
  * 
  * @created Jan 29, 2008 9:09:34 AM
- * @version $Id: Sdk4ServiceStyleCreationTest.java,v 1.1 2008-01-31 19:40:52 dervin Exp $ 
+ * @version $Id: Sdk4ServiceStyleCreationTest.java,v 1.2 2008-01-31 20:29:09 dervin Exp $ 
  */
 public class Sdk4ServiceStyleCreationTest extends Story {
     // system property to locate the Introduce base directory
@@ -94,7 +95,7 @@ public class Sdk4ServiceStyleCreationTest extends Story {
     
     
     public void storyTearDown() throws Throwable {
-        // Utils.deleteDir(new File(styleTestCaseInfo.getDir()));
+        Utils.deleteDir(new File(styleTestCaseInfo.getDir()));
     }
     
     
