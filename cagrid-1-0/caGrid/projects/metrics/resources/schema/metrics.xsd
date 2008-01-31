@@ -62,7 +62,8 @@
 	<xs:complexType name="EventDescription">
 		<xs:choice>
 			<xs:element ref="metrics:InvocationEvent"/>
-			<xs:element ref="metrics:LifeCycleEvent"/>
+			<xs:element ref="metrics:ServiceLifeCycleEvent"/>
+			<xs:element ref="metrics:UsageEvent"/>
 		</xs:choice>
 	</xs:complexType>
 
@@ -87,14 +88,9 @@
 		</xs:attribute>
 	</xs:complexType>
 
-	<xs:element name="LifeCycleEvent" type="metrics:LifeCycleEvent"/>
-	<xs:complexType name="LifeCycleEvent">
-		<xs:annotation>
-			<xs:documentation>Describes an event in the lifecycle of a service.</xs:documentation>
-		</xs:annotation>
-		<xs:attribute name="type" use="required" type="metrics:ServiceLifeCycle"/>
-	</xs:complexType>
-	<xs:simpleType name="ServiceLifeCycle">
+	<xs:element name="ServiceLifeCycleEvent" type="metrics:ServiceLifeCycleEvent"/>
+
+	<xs:simpleType name="ServiceLifeCycleEvent">
 		<xs:annotation>
 			<xs:documentation>Enumeration of service lifecycle events</xs:documentation>
 		</xs:annotation>
@@ -104,6 +100,19 @@
 			<xs:enumeration value="DEPLOYMENT" id="DEPLOYMENT"/>
 			<xs:enumeration value="STARTUP" id="STARTUP"/>
 			<xs:enumeration value="SHUTDOWN" id="SHUTDOWN"/>
+		</xs:restriction>
+	</xs:simpleType>
+	
+	<xs:element name="UsageEvent" type="metrics:UsageEvent"/>
+	<xs:simpleType name="UsageEvent">
+		<xs:annotation>
+			<xs:documentation>Enumeration of usuage events</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="DOWNLOAD" id="DOWNLOAD"/>
+			<xs:enumeration value="INSTALL" id="INSTALL"/>
+			<xs:enumeration value="UNINSTALL" id="UNINSTALL"/>
+			<xs:enumeration value="LAUNCH" id="LAUNCH"/>
 		</xs:restriction>
 	</xs:simpleType>
 
