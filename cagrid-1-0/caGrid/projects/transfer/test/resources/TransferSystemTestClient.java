@@ -69,9 +69,12 @@ public class TransferSystemTestClient extends TransferSystemTestClientBase imple
             if (!(args.length < 2)) {
                 if (args[0].equals("-url")) {
                     GlobusCredential creds = null;
+                    GlobusCredential anothercreds = null;
                     try {
-                        creds = ProxyUtil.loadProxy("localhost.proxy");
-                        System.out.println("Using proxy with id= " + creds.getIdentity() + " and lifetime " + creds.getTimeLeft());
+                        creds = ProxyUtil.loadProxy("user.proxy");
+                        anothercreds = ProxyUtil.loadProxy("user2.proxy");
+                        System.out.println("Using proxy with id= " + creds.getIdentity() + " and lifetime "
+                            + creds.getTimeLeft());
                     } catch (Exception e1) {
                         System.out.println("No proxy file loaded so running with no credentials");
                     }
@@ -93,10 +96,30 @@ public class TransferSystemTestClient extends TransferSystemTestClientBase imple
                     String testString = "Testing the TrasferService";
                     org.cagrid.transfer.context.client.helper.TransferClientHelper.putData(new ByteArrayInputStream(
                         testString.getBytes()), testString.getBytes().length, desc, creds);
-                    
+
                     System.out.println("setting status to Staged");
                     tclient.setStatus(org.cagrid.transfer.descriptor.Status.Staged);
-                    
+
+                    if (anothercreds != null) {
+                        System.out.println("try to read with bad creds");
+                        try {
+                            java.io.InputStream istream = org.cagrid.transfer.context.client.helper.TransferClientHelper
+                                .getData(tclient.getDataTransferDescriptor(), anothercreds);
+                            java.io.InputStreamReader reader = new java.io.InputStreamReader(istream);
+                            java.lang.StringBuffer str = new java.lang.StringBuffer();
+                            char[] buff = new char[8192];
+                            int len = 0;
+                            while ((len = reader.read(buff)) != -1) {
+                                str.append(buff, 0, len);
+                            }
+                            reader.close();
+                            System.out.println("Should not have been able to read with another users credentials");
+                            System.exit(1);
+                        } catch (Exception e) {
+                            System.out.println("Not able to read the data with bad creds as expected.");
+                        }
+                    }
+
                     System.out.println("reading data from service");
                     java.io.InputStream istream = org.cagrid.transfer.context.client.helper.TransferClientHelper
                         .getData(tclient.getDataTransferDescriptor(), creds);

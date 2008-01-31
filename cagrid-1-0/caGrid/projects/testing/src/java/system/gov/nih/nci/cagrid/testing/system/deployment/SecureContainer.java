@@ -4,5 +4,5 @@ import java.io.File;
 
 public interface SecureContainer {
 
-    public File getProxyFile() throws Exception;
+    public File getCertificatesDirectory() throws Exception;
 }

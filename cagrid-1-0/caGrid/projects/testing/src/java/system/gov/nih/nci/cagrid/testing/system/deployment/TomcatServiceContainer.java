@@ -128,7 +128,7 @@ public class TomcatServiceContainer extends ServiceContainer {
         }
 
         String shutdown = getProperties().getContainerDirectory().getAbsolutePath() + File.separator + "bin"
-            + File.separator + "catalina";
+            + File.separator + "shutdown";
 
         List<String> command = new ArrayList<String>();
 
@@ -136,9 +136,9 @@ public class TomcatServiceContainer extends ServiceContainer {
         if (System.getProperty("os.name").toLowerCase().contains("win")) {
             command.add("cmd");
             command.add("/c");
-            command.add(shutdown + ".bat stop");
+            command.add(shutdown + ".bat");
         } else {
-            command.add(shutdown + ".sh stop");
+            command.add(shutdown + ".sh");
         }
 
         String[] locationEnvironment = new String[]{ENV_CATALINA_HOME + "="
@@ -212,7 +212,7 @@ public class TomcatServiceContainer extends ServiceContainer {
         }
 
         String startup = getProperties().getContainerDirectory().getAbsolutePath() + File.separator + "bin"
-            + File.separator + "catalina";
+            + File.separator + "startup";
 
         List<String> command = new ArrayList<String>();
 
@@ -220,9 +220,9 @@ public class TomcatServiceContainer extends ServiceContainer {
         if (System.getProperty("os.name").toLowerCase().contains("win")) {
             command.add("cmd");
             command.add("/c");
-            command.add(startup + ".bat run");
+            command.add(startup + ".bat");
         } else {
-            command.add(startup + ".sh run");
+            command.add(startup + ".sh");
         }
 
         // edit the environment

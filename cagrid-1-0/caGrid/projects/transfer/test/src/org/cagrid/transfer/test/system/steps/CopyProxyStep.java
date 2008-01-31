@@ -21,11 +21,18 @@ public class CopyProxyStep extends Step {
 
 
     public void runStep() throws Throwable {
-        System.out.println("Adding a simple methods implementation.");
+        System.out.println("Copying user proxys to services dir");
 
-        File inFileClient = container.getProxyFile();
-        File outFileClient = new File(tci.getDir() + File.separator + "localhost.proxy");
-
+        File inFileClient = new File(container.getCertificatesDirectory().getAbsolutePath() + File.separator + "user.proxy");
+        File outFileClient = new File(tci.getDir() + File.separator + "user.proxy");
+        Utils.copyFile(inFileClient, outFileClient);
+        
+        inFileClient = new File(container.getCertificatesDirectory().getAbsolutePath() + File.separator + "user2.proxy");
+        outFileClient = new File(tci.getDir() + File.separator + "user2.proxy");
+        Utils.copyFile(inFileClient, outFileClient);
+        
+        inFileClient = new File(container.getCertificatesDirectory().getAbsolutePath() + File.separator + "user3.proxy");
+        outFileClient = new File(tci.getDir() + File.separator + "user3.proxy");
         Utils.copyFile(inFileClient, outFileClient);
     }
 

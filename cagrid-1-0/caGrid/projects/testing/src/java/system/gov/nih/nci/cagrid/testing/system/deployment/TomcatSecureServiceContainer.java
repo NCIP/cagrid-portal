@@ -19,9 +19,8 @@ public class TomcatSecureServiceContainer extends TomcatServiceContainer impleme
     }
 
 
-    public File getProxyFile() throws Exception {
-        return new File(this.getProperties().getContainerDirectory() + File.separator + "certificates" + File.separator
-            + "localhost.proxy");
+    public File getCertificatesDirectory() throws Exception {
+        return new File(this.getProperties().getContainerDirectory() + File.separator + "certificates");
     }
 
 }
