@@ -156,24 +156,35 @@ public class FileTypesSelectionComponent extends NamespaceTypeDiscoveryComponent
                 return null;
             }
             
-            NamespaceType root = new NamespaceType();
-            // set the package name
-            String packageName = CommonTools.getPackageName(this.currentNamespace);
-            root.setPackageName(packageName);
-            root.setNamespace(this.currentNamespace);
-            root.setLocation("./" + currentFileName);
+            Set storedSchemas = new HashSet();
+            copySchemas(this.currentFile, schemaDestinationDir, new HashSet(), storedSchemas, namespaceExistsPolicy);
+            
+            NamespaceType root = null;
+            if (namespaceAlreadyExists(this.currentNamespace)) {
+                NamespaceType oldnsType = CommonTools.getNamespaceType(getCurrentNamespaces(), currentNamespace);
+                root = CommonTools.reCreateNamespaceType(schemaDestinationDir + File.separator + currentFileName,
+                    schemaDestinationDir,oldnsType);
+            } else {
+                root = CommonTools.createNamespaceType(schemaDestinationDir + File.separator + currentFileName,
+                    schemaDestinationDir);
+            }
+           
 
             namespaces.add(root);
 
-            ExtensionTools.setSchemaElements(root, XMLUtilities.fileNameToDocument(this.currentFile));
-            Set storedSchemas = new HashSet();
-            copySchemas(this.currentFile, schemaDestinationDir, new HashSet(), storedSchemas, namespaceExistsPolicy);
             Iterator schemaFileIter = storedSchemas.iterator();
             while (schemaFileIter.hasNext()) {
                 File storedSchemaFile = new File((String) schemaFileIter.next());
                 if (!storedSchemaFile.getName().equals(currentFileName)) {
-                    NamespaceType nsType = CommonTools.createNamespaceType(storedSchemaFile.getAbsolutePath(),
-                        schemaDestinationDir);
+                    NamespaceType nsType  = null;
+                    if(CommonTools.getNamespaceType(getCurrentNamespaces(), nsType.getNamespace())!=null){
+                        NamespaceType oldnsType = CommonTools.getNamespaceType(getCurrentNamespaces(), nsType.getNamespace());
+                        nsType = CommonTools.reCreateNamespaceType(storedSchemaFile.getAbsolutePath(),
+                            schemaDestinationDir,oldnsType);
+                    } else {
+                        nsType = CommonTools.createNamespaceType(storedSchemaFile.getAbsolutePath(),
+                            schemaDestinationDir);
+                    }
                     namespaces.add(nsType);
                 }
             }

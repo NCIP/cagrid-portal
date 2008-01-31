@@ -58,17 +58,17 @@ public final class CommonTools {
     public static final String ALLOWED_JAVA_OP_NAME = "[a-zA-Z\\_]++[A-Za-z0-9\\_]*";
 
     public static final String ALLOWED_JAVA_PACKAGE_REGEX = "[a-zA-Z\\_]++[A-Za-z0-9\\_\\$]*";
-    
+
     public static final String SUGGESTED_JAVA_PACKAGE_REGEX = "[a-z\\_]++[A-Za-z0-9\\_\\$]*";
 
     public static final String ALLOWED_EXISTING_JAVA_PACKAGE_REGEX = "[a-zA-Z\\_]++[A-Za-z0-9\\_\\$]*";
 
-    public static final List JAVA_KEYWORDS = new ArrayList(Arrays.asList(new String[]{"abstract", "continue", "for", "new",
-            "switch", "assert", "default", "goto", "package", "synchronized", "boolean", "do", "if", "private", "this",
-            "break", "double", "implements", "protected", "throw", "byte", "else", "import", "public", "throws",
-            "case", "enum", "instanceof", "return", "transient", "catch", "extends", "int", "short", "try", "char",
-            "final", "interface", "static", "void", "class", "finally", "long", "strictfp", "volatile", "const",
-            "float", "native", "super", "while"}));
+    public static final List JAVA_KEYWORDS = new ArrayList(Arrays.asList(new String[]{"abstract", "continue", "for",
+            "new", "switch", "assert", "default", "goto", "package", "synchronized", "boolean", "do", "if", "private",
+            "this", "break", "double", "implements", "protected", "throw", "byte", "else", "import", "public",
+            "throws", "case", "enum", "instanceof", "return", "transient", "catch", "extends", "int", "short", "try",
+            "char", "final", "interface", "static", "void", "class", "finally", "long", "strictfp", "volatile",
+            "const", "float", "native", "super", "while"}));
 
 
     private CommonTools() {
@@ -185,7 +185,8 @@ public final class CommonTools {
         }
         return true;
     }
-    
+
+
     public static boolean isSuggestedPackageName(String packageName) {
         if (packageName.length() > 0) {
             if (packageName.endsWith(".")) {
@@ -211,7 +212,7 @@ public final class CommonTools {
             StringTokenizer strtok = new StringTokenizer(packageName, ".", false);
             while (strtok.hasMoreElements()) {
                 String packageItem = strtok.nextToken();
-                if (!packageItem.matches(ALLOWED_EXISTING_JAVA_PACKAGE_REGEX)|| JAVA_KEYWORDS.contains(packageItem)) {
+                if (!packageItem.matches(ALLOWED_EXISTING_JAVA_PACKAGE_REGEX) || JAVA_KEYWORDS.contains(packageItem)) {
                     return false;
                 }
             }
@@ -233,7 +234,7 @@ public final class CommonTools {
         if (classname.substring(0, 1).toLowerCase().equals(classname.substring(0, 1))) {
             return false;
         }
-        if (!classname.matches(ALLOWED_JAVA_CLASS_REGEX)|| JAVA_KEYWORDS.contains(classname)) {
+        if (!classname.matches(ALLOWED_JAVA_CLASS_REGEX) || JAVA_KEYWORDS.contains(classname)) {
             return false;
         }
         return true;
@@ -243,7 +244,7 @@ public final class CommonTools {
 
     public static boolean isValidJavaField(String serviceName) {
         if (serviceName.length() > 0) {
-            if (!serviceName.matches(ALLOWED_JAVA_FIELD_REGEX)|| JAVA_KEYWORDS.contains(serviceName)) {
+            if (!serviceName.matches(ALLOWED_JAVA_FIELD_REGEX) || JAVA_KEYWORDS.contains(serviceName)) {
                 return false;
             }
         }
@@ -371,7 +372,7 @@ public final class CommonTools {
         for (int i = 0; i < elementTypes.size(); i++) {
             Element element = (Element) elementTypes.get(i);
             SchemaElementType type = new SchemaElementType();
-            if(element.getAttributeValue("name")==null || element.getAttributeValue("name").length()<=0){
+            if (element.getAttributeValue("name") == null || element.getAttributeValue("name").length() <= 0) {
                 throw new Exception("Schema does not appear to be valid: an element does not contain a name attribute");
             }
             type.setType(element.getAttributeValue("name"));
@@ -379,6 +380,71 @@ public final class CommonTools {
         }
         namespaceType.setSchemaElement(schemaTypes);
         return namespaceType;
+    }
+
+
+    /**
+     * This method will create a namespaceType fully populated with the schema
+     * elements. It will set default the location to the relative path from the
+     * serviceSchemaDir.
+     * 
+     * @param xsdFilename
+     *            The file name of the XSD schema
+     * @param serviceSchemaDir
+     *            the directory where the service's schemas (wsdls) are
+     * @return The NamespaceType representation of the schema
+     * @throws MobiusException
+     */
+    public static NamespaceType reCreateNamespaceType(String xsdFilename, File serviceSchemaDir, NamespaceType oldType)
+        throws Exception {
+        NamespaceType namespaceType = new NamespaceType();
+        File xsdFile = new File(xsdFilename);
+        String location;
+        try {
+            location = "./" + Utils.getRelativePath(serviceSchemaDir, xsdFile).replace('\\', '/');
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new Exception("Problem getting relative path of XSD.", e);
+        }
+        namespaceType.setLocation(location);
+        Document schemaDoc = XMLUtilities.fileNameToDocument(xsdFilename);
+
+        String rawNamespace = schemaDoc.getRootElement().getAttributeValue("targetNamespace");
+        namespaceType.setPackageName(oldType.getPackageName());
+        namespaceType.setNamespace(rawNamespace);
+
+        List elementTypes = schemaDoc.getRootElement()
+            .getChildren("element", schemaDoc.getRootElement().getNamespace());
+        SchemaElementType[] schemaTypes = new SchemaElementType[elementTypes.size()];
+        for (int i = 0; i < elementTypes.size(); i++) {
+            Element element = (Element) elementTypes.get(i);
+            SchemaElementType type = new SchemaElementType();
+            if (element.getAttributeValue("name") == null || element.getAttributeValue("name").length() <= 0) {
+                throw new Exception("Schema does not appear to be valid: an element does not contain a name attribute");
+            }
+            type.setType(element.getAttributeValue("name"));
+            SchemaElementType oldElType = getSchemaElementType(oldType, element.getAttributeValue("name"));
+            if (oldElType != null) {
+                type.setPackageName(oldElType.getPackageName());
+                type.setClassName(oldElType.getClassName());
+                type.setDeserializer(oldElType.getDeserializer());
+                type.setSerializer(oldElType.getSerializer());
+            }
+            schemaTypes[i] = type;
+        }
+        namespaceType.setSchemaElement(schemaTypes);
+        return namespaceType;
+    }
+
+
+    public static SchemaElementType getSchemaElementType(NamespaceType nsType, String name) {
+        for (int i = 0; i < nsType.getSchemaElement().length; i++) {
+            SchemaElementType type = nsType.getSchemaElement(i);
+            if (type.getType().equals(name)) {
+                return type;
+            }
+        }
+        return null;
     }
 
 
