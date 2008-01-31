@@ -4,9 +4,13 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.StringReader;
 
+import javax.xml.XMLConstants;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
 
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -121,6 +125,26 @@ public class SchemaValidator {
 	public static void validate(String xsdFilename, String xmlText) throws SchemaValidationException {
 		SchemaValidator validator = new SchemaValidator(xsdFilename);
 		validator.validate(xmlText);
+	}
+	
+	
+	/**
+	 * Verify that a schema is well formed
+	 * 
+	 * @param xsdFilename
+	 * @throws SchemaValidationException 
+	 */
+	public static void verify(String xsdFilename) throws SchemaValidationException{
+	    final String sl = XMLConstants.W3C_XML_SCHEMA_NS_URI;
+	    SchemaFactory factory = SchemaFactory.newInstance(sl);
+	    StreamSource ss = new StreamSource(xsdFilename);
+	    try {
+            Schema schema = factory.newSchema(ss);
+        } catch (SAXException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            throw new SchemaValidationException(e);
+        }
 	}
 	
 	
