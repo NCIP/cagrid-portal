@@ -1,53 +1,157 @@
-<xs:schema targetNamespace="http://cagrid.org/metrics"
-	attributeFormDefault="qualified" elementFormDefault="qualified"
-	xmlns:xs="http://www.w3.org/2001/XMLSchema"
-	xmlns:metrics="http://cagrid.org/metrics">
+<xs:schema targetNamespace="http://cagrid.org/metrics" attributeFormDefault="unqualified"
+	elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:metrics="http://cagrid.org/metrics"
+	xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/03/addressing">
 
-	<xs:element name="Event" type="metrics:Event" />
+	<xs:import namespace="http://schemas.xmlsoap.org/ws/2004/03/addressing"
+		schemaLocation="../ws/addressing/WS-Addressing.xsd"/>
+
+
+	<xs:element name="EventSubmission" type="metrics:EventSubmission"/>
+	<xs:complexType name="EventSubmission">
+		<xs:annotation>
+			<xs:documentation>A submission of one or more events, from an entity part of a specific
+				community.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element ref="metrics:Community" minOccurs="1" maxOccurs="1"/>
+			<xs:element ref="metrics:Event" minOccurs="1" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:element name="Community" type="metrics:Community"/>
+	<xs:complexType name="Community">
+		<xs:annotation>
+			<xs:documentation>An identifiable organization of entities, possible classified by an
+				area. For example, name=caBIG, deployment=production</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="AdditionalDetail" type="metrics:Detail" minOccurs="0"
+				maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="name" use="required" type="xs:string"/>
+		<xs:attribute name="deployment" use="required" type="xs:string"/>
+
+	</xs:complexType>
+
+	<xs:element name="Event" type="metrics:Event"/>
 	<xs:complexType name="Event">
+		<xs:annotation>
+			<xs:documentation>The details of an event, originating from a known
+			component.</xs:documentation>
+		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="Product" type="xs:string" minOccurs="1"
-				maxOccurs="1" />
-			<xs:element name="ProductInstance" type="xs:string"
-				minOccurs="1" maxOccurs="1" />
-			<xs:element name="ProductVersion" type="xs:string"
-				minOccurs="1" maxOccurs="1" />
-			<xs:element ref="metrics:EventType" minOccurs="1"
-				maxOccurs="1" />
-			<xs:element name="Community" type="xs:string" minOccurs="1"
-				maxOccurs="1" />
-			<xs:element name="CommunityInstance" type="xs:string"
-				minOccurs="1" maxOccurs="1" />
-			<xs:element name="Attributes" type="metrics:Attribute"
-				minOccurs="0" maxOccurs="unbounded" />
+			<xs:element ref="metrics:EventSource" minOccurs="1" maxOccurs="1"/>
+			<xs:element ref="metrics:EventDescription" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="AdditionalDetail" type="metrics:Detail" minOccurs="0"
+				maxOccurs="unbounded"/>
 		</xs:sequence>
+		<xs:attribute name="started" use="optional" type="xs:dateTime"/>
+		<xs:attribute name="ended" use="optional" type="xs:dateTime"/>
 	</xs:complexType>
 
-	<xs:element name="Attribute" type="metrics:Attribute" />
-	<xs:complexType name="Attribute">
-		<xs:sequence>
-			<xs:element name="Name" type="xs:string" minOccurs="1"
-				maxOccurs="1" />
-			<xs:element name="Value" type="xs:string" minOccurs="1"
-				maxOccurs="1" />
-		</xs:sequence>
+	<xs:element name="EventSource" type="metrics:EventSource"/>
+	<xs:complexType name="EventSource">
+		<xs:choice>
+			<xs:element ref="metrics:Component"/>
+			<xs:element ref="metrics:Service"/>
+		</xs:choice>
 	</xs:complexType>
 
-	<xs:element name="ServiceEventType" type="metrics:ServiceEventType" />
+	<xs:element name="EventDescription" type="metrics:EventDescription"/>
+	<xs:complexType name="EventDescription">
+		<xs:choice>
+			<xs:element ref="metrics:InvocationEvent"/>
+			<xs:element ref="metrics:LifeCycleEvent"/>
+		</xs:choice>
+	</xs:complexType>
 
-	<xs:simpleType name="ServiceEventType">
-		<xs:restriction base="metrics:EventType">
-			<xs:enumeration value="ServiceDeploy" />
-			<xs:enumeration value="ServiceStartup" />
-		</xs:restriction>
-	</xs:simpleType>
-	
-	<xs:element name="EventType" type="metrics:EventType" />
+	<xs:element name="InvocationEvent" type="metrics:InvocationEvent"/>
+	<xs:complexType name="InvocationEvent">
+		<xs:annotation>
+			<xs:documentation>The details of an invocation of an operation.</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="operationName" use="required" type="xs:string"/>
+		<xs:attribute name="operationQName" use="optional" type="xs:QName"/>
+		<xs:attribute name="clientIdentity" use="optional" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>The grid identity or subject of the client doing the
+				invocation.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="clientAddress" use="optional" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>The hostname or IP address of the client doing the
+				invocation.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
 
-	<xs:simpleType name="EventType">
+	<xs:element name="LifeCycleEvent" type="metrics:LifeCycleEvent"/>
+	<xs:complexType name="LifeCycleEvent">
+		<xs:annotation>
+			<xs:documentation>Describes an event in the lifecycle of a service.</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="type" use="required" type="metrics:ServiceLifeCycle"/>
+	</xs:complexType>
+	<xs:simpleType name="ServiceLifeCycle">
+		<xs:annotation>
+			<xs:documentation>Enumeration of service lifecycle events</xs:documentation>
+		</xs:annotation>
 		<xs:restriction base="xs:string">
-			<xs:minLength value="1" />
-			<xs:maxLength value="255" />
+			<xs:enumeration value="CREATION" id="CREATION"/>
+			<xs:enumeration value="MODIFICATION" id="MODIFICATION"/>
+			<xs:enumeration value="DEPLOYMENT" id="DEPLOYMENT"/>
+			<xs:enumeration value="STARTUP" id="STARTUP"/>
+			<xs:enumeration value="SHUTDOWN" id="SHUTDOWN"/>
 		</xs:restriction>
 	</xs:simpleType>
+
+	<xs:element name="Component" type="metrics:Component"/>
+	<xs:complexType name="Component">
+		<xs:annotation>
+			<xs:documentation>An identifiable component. For example, name=Introduce</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="AdditionalDetail" type="metrics:Detail" minOccurs="0"
+				maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="name" use="required" type="xs:string"/>
+		<xs:attribute name="version" use="optional" type="xs:string"/>
+	</xs:complexType>
+
+	<xs:element name="Service" type="metrics:Service"/>
+	<xs:complexType name="Service">
+		<xs:annotation>
+			<xs:documentation>A component which is a service, optionally providing its service URL
+				or resource qualified EPR.</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="metrics:Component">
+				<xs:choice minOccurs="0" maxOccurs="1">
+					<xs:element name="url" type="xs:anyURI"/>
+					<xs:element name="epr" type="wsa:EndpointReferenceType"/>
+				</xs:choice>
+				<xs:attribute name="identity" use="optional" type="xs:string">
+					<xs:annotation>
+						<xs:documentation>The grid identity or subject of the
+						service.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:element name="Detail" type="metrics:Detail"/>
+	<xs:complexType name="Detail">
+		<xs:annotation>
+			<xs:documentation>A name-value pair of string used to capture general
+			information.</xs:documentation>
+		</xs:annotation>
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+				<xs:attribute name="name" use="required" type="xs:string"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
 </xs:schema>
