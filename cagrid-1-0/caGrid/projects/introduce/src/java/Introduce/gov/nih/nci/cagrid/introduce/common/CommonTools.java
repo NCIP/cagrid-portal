@@ -371,6 +371,9 @@ public final class CommonTools {
         for (int i = 0; i < elementTypes.size(); i++) {
             Element element = (Element) elementTypes.get(i);
             SchemaElementType type = new SchemaElementType();
+            if(element.getAttributeValue("name")==null || element.getAttributeValue("name").length()<=0){
+                throw new Exception("Schema does not appear to be valid: an element does not contain a name attribute");
+            }
             type.setType(element.getAttributeValue("name"));
             schemaTypes[i] = type;
         }

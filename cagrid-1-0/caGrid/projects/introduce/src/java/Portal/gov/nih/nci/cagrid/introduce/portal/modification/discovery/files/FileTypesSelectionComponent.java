@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.discovery.files;
 
+import gov.nih.nci.cagrid.common.SchemaValidator;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.common.XMLUtilities;
 import gov.nih.nci.cagrid.common.portal.MultiEventProgressBar;
@@ -144,6 +145,17 @@ public class FileTypesSelectionComponent extends NamespaceTypeDiscoveryComponent
             List namespaces = new ArrayList();
 
             String currentFileName = (new File(this.currentFile)).getName();
+            
+            try {
+                SchemaValidator.verify(this.currentFile);
+            } catch (Exception e) {
+                e.printStackTrace();
+                addError("File does not appear to be a valid schema");
+                setErrorCauseThrowable(e);
+                e.printStackTrace();
+                return null;
+            }
+            
             NamespaceType root = new NamespaceType();
             // set the package name
             String packageName = CommonTools.getPackageName(this.currentNamespace);
