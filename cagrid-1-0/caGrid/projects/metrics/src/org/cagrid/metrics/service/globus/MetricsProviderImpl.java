@@ -28,7 +28,7 @@ public class MetricsProviderImpl{
 
     public org.cagrid.metrics.stubs.ReportEventResponse reportEvent(org.cagrid.metrics.stubs.ReportEventRequest params) throws RemoteException {
     org.cagrid.metrics.stubs.ReportEventResponse boxedResult = new org.cagrid.metrics.stubs.ReportEventResponse();
-    impl.reportEvent(params.getEvent().getEvent());
+    impl.reportEvent();
     return boxedResult;
   }
 

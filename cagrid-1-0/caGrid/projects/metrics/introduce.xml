@@ -1,10 +1,31 @@
 <ns1:ServiceDescription introduceVersion="1.1" xmlns:ns1="gme://gov.nih.nci.cagrid/1/Introduce">
  <ns2:Namespaces xsi:type="ns2:NamespacesType" xmlns:ns2="gme://gov.nih.nci.cagrid.introduce/1/Namespace" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <ns2:Namespace location="./metrics.xsd" namespace="http://cagrid.org/metrics" packageName="org.cagrid.metrics.common" xsi:type="ns2:NamespaceType">
+   <ns2:SchemaElement type="EventSubmission" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Community" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="Event" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="Attribute" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="ServiceEventType" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="EventType" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="EventSource" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="EventDescription" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="InvocationEvent" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ServiceLifeCycleEvent" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="UsageEvent" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="CustomEvent" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Component" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Service" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Detail" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="EventRecord" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ReporterDetails" xsi:type="ns2:SchemaElementType"/>
+  </ns2:Namespace>
+  <ns2:Namespace location="./WS-Addressing.xsd" namespace="http://schemas.xmlsoap.org/ws/2004/03/addressing" packageName="addressing" xsi:type="ns2:NamespaceType">
+   <ns2:SchemaElement type="EndpointReference" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="MessageID" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="RelatesTo" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="To" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Action" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="From" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ReplyTo" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="FaultTo" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ReplyAfter" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
   <ns2:Namespace namespace="http://www.w3.org/2001/XMLSchema" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="anyType" xsi:type="ns2:SchemaElementType"/>
@@ -80,20 +101,18 @@
      <ns4:ProviderInformation providerClass="gov.nih.nci.cagrid.introduce.security.service.globus.ServiceSecurityProviderImpl"/>
     </ns4:Method>
     <ns4:Method description="" isImported="false" isProvided="false" name="reportEvent" xsi:type="ns4:MethodType">
-     <ns4:Inputs>
-      <ns4:Input qName="ns6:Event" description="" isArray="false" name="event" xmlns:ns6="http://cagrid.org/metrics"/>
-     </ns4:Inputs>
+     <ns4:Inputs/>
      <ns4:Output qName="void" description="" isArray="false"/>
      <ns4:Exceptions/>
     </ns4:Method>
    </ns4:Methods>
-   <ns7:ResourcePropertiesList xsi:type="ns7:ResourcePropertiesListType" xmlns:ns7="gme://gov.nih.nci.cagrid.introduce/1/Resources">
-    <ns7:ResourceProperty qName="ns8:ServiceMetadata" description="" fileLocation="serviceMetadata.xml" populateFromFile="true" register="true" xsi:type="ns7:ResourcePropertyType" xmlns:ns8="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"/>
-   </ns7:ResourcePropertiesList>
+   <ns6:ResourcePropertiesList xsi:type="ns6:ResourcePropertiesListType" xmlns:ns6="gme://gov.nih.nci.cagrid.introduce/1/Resources">
+    <ns6:ResourceProperty qName="ns7:ServiceMetadata" description="" fileLocation="serviceMetadata.xml" populateFromFile="true" register="true" xsi:type="ns6:ResourcePropertyType" xmlns:ns7="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"/>
+   </ns6:ResourcePropertiesList>
    <ns3:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema"></ns3:description>
   </ns3:Service>
  </ns3:Services>
- <ns9:Extensions xsi:type="ns9:ExtensionsType" xmlns:ns9="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <ns9:Extension name="cagrid_metadata" version="1.1" xsi:type="ns9:ExtensionType"/>
- </ns9:Extensions>
+ <ns8:Extensions xsi:type="ns8:ExtensionsType" xmlns:ns8="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ns8:Extension name="cagrid_metadata" version="1.1" xsi:type="ns8:ExtensionType"/>
+ </ns8:Extensions>
 </ns1:ServiceDescription>

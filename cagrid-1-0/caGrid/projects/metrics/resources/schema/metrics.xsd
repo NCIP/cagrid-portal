@@ -4,7 +4,7 @@
 	xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/03/addressing">
 
 	<xs:import namespace="http://schemas.xmlsoap.org/ws/2004/03/addressing"
-		schemaLocation="../ws/addressing/WS-Addressing.xsd"/>
+		schemaLocation="./WS-Addressing.xsd"/>
 
 
 	<xs:element name="EventSubmission" type="metrics:EventSubmission"/>

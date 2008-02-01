@@ -12,7 +12,7 @@ import java.rmi.RemoteException;
  */
 public interface MetricsI {
 
-  public void reportEvent(org.cagrid.metrics.common.Event event) throws RemoteException ;
+  public void reportEvent() throws RemoteException ;
 
 }
 
