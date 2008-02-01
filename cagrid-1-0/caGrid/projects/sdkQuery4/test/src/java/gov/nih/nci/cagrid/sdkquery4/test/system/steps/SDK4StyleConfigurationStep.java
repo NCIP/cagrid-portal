@@ -41,6 +41,8 @@ import java.util.Set;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
+import org.apache.log4j.Logger;
+
 /** 
  *  SDK4StyleConfigurationStep
  *  Step to apply configuration to the 
@@ -49,7 +51,7 @@ import java.util.jar.JarFile;
  * @author David Ervin
  * 
  * @created Jan 28, 2008 11:24:21 AM
- * @version $Id: SDK4StyleConfigurationStep.java,v 1.3 2008-01-31 19:40:52 dervin Exp $ 
+ * @version $Id: SDK4StyleConfigurationStep.java,v 1.4 2008-02-01 14:41:04 dervin Exp $ 
  */
 public class SDK4StyleConfigurationStep extends Step {
     public static final String SDKQUERY4_BASE_DIR = "../sdkQuery4";
@@ -60,6 +62,8 @@ public class SDK4StyleConfigurationStep extends Step {
     public static final String PROPERTY_REMOTE_HOST_PORT = "remote.sdk.host.port";
     public static final String DEFAULT_REMOTE_HOST_NAME_VALUE = "http://localhost";
     public static final String DEFAULT_REMOTE_HOST_PORT_VALUE = "8080";
+    
+    private static Logger LOG = Logger.getLogger(SDK4StyleConfigurationStep.class);
     
     private File serviceBaseDirectory = null;
     private ServiceInformation serviceInformation = null;
@@ -77,6 +81,7 @@ public class SDK4StyleConfigurationStep extends Step {
         getSchemaMappingConfiguration().applyConfiguration();
         // persist the changes made by the configuration steps
         File serviceModelFile = new File(getServiceInformation().getBaseDirectory(), IntroduceConstants.INTRODUCE_XML_FILE);
+        LOG.debug("Persisting changes to service model (" + serviceModelFile.getAbsolutePath() + ")");
         FileWriter writer = new FileWriter(serviceModelFile);
         Utils.serializeObject(getServiceInformation().getServiceDescriptor(), IntroduceConstants.INTRODUCE_SKELETON_QNAME, writer);
         writer.flush();
@@ -108,6 +113,8 @@ public class SDK4StyleConfigurationStep extends Step {
         configuration.setUseLocalApi(false);
         String hostName = System.getProperty(PROPERTY_REMOTE_HOST_NAME, DEFAULT_REMOTE_HOST_NAME_VALUE);
         Integer hostPort = Integer.valueOf(System.getProperty(PROPERTY_REMOTE_HOST_PORT, DEFAULT_REMOTE_HOST_PORT_VALUE));
+        LOG.debug("Setting caCORE Application host name to " + hostName);
+        LOG.debug("Setting caCORE Application host port to " + hostPort);
         configuration.setHostName(hostName);
         configuration.setHostPort(hostPort);
         return configuration;
@@ -172,6 +179,7 @@ public class SDK4StyleConfigurationStep extends Step {
                         
                         // add the namespace to the configuration for later
                         // incorperation in the service
+                        LOG.debug("Mapping package " + packageName + " to schema " + schemaFile.getName());
                         configuration.mapPackageToSchema(packageName, schemaFile);                            
                         break;
                     }
