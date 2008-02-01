@@ -28,9 +28,11 @@ import org.apache.log4j.Logger;
  * @author David Ervin
  * 
  * @created Mar 2, 2007 10:26:47 AM
- * @version $Id: CQL2ParameterizedHQL.java,v 1.3 2008-01-18 15:13:29 dervin Exp $ 
+ * @version $Id: CQL2ParameterizedHQL.java,v 1.4 2008-02-01 19:11:06 dervin Exp $ 
  */
 public class CQL2ParameterizedHQL {
+    public static final String TARGET_ALIAS = "__TargetAlias__";
+    
     private static Logger LOG = Logger.getLogger(CQL2ParameterizedHQL.class);
 	
     // maps a CQL predicate to its HQL string representation 
@@ -150,9 +152,10 @@ public class CQL2ParameterizedHQL {
         
         // the stack of associations processed at the current depth of the query
 		List<String> associationTrace = new LinkedList<String>();
+        associationTrace.add(TARGET_ALIAS);
 		
         // start the query
-		hql.append("From ").append(target.getName()).append(' ');
+		hql.append("From ").append(target.getName()).append(" as ").append(TARGET_ALIAS).append(' ');
 		
 		if (target.getAssociation() != null) {
 			hql.append("where ");
@@ -177,7 +180,9 @@ public class CQL2ParameterizedHQL {
 			} else {
 				hql.append(" and ");
 			}
-			hql.append("class = ").append(target.getName());
+			hql.append(TARGET_ALIAS).append(".class = ?");
+            // 0 is the targeted class, 1 is the first subclass, 2 is the next...
+            parameters.add(Integer.valueOf(0));
 		}
 	}
 	
