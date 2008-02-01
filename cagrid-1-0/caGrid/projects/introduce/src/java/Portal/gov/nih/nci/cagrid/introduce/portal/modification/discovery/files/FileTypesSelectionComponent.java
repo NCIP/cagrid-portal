@@ -11,7 +11,6 @@ import gov.nih.nci.cagrid.introduce.beans.namespace.NamespacesType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.FileFilters;
 import gov.nih.nci.cagrid.introduce.common.ResourceManager;
-import gov.nih.nci.cagrid.introduce.portal.extension.tools.ExtensionTools;
 import gov.nih.nci.cagrid.introduce.portal.modification.discovery.NamespaceTypeDiscoveryComponent;
 
 import java.awt.GridBagConstraints;
@@ -32,6 +31,43 @@ import org.jdom.Document;
 
 
 public class FileTypesSelectionComponent extends NamespaceTypeDiscoveryComponent {
+
+    private class SchemaInfo {
+        String filename;
+        String namespace;
+
+        public SchemaInfo(String filename, String namespace) {
+            this.filename = filename;
+            this.namespace = namespace;
+        }
+
+
+        public boolean equals(Object obj) {
+            SchemaInfo info = (SchemaInfo)obj;
+            return filename.equals(info.getFilename()) && namespace.equals(info.getNamespace());
+        }
+
+
+        public String getFilename() {
+            return filename;
+        }
+
+
+        public void setFilename(String filename) {
+            this.filename = filename;
+        }
+
+
+        public String getNamespace() {
+            return namespace;
+        }
+
+
+        public void setNamespace(String namespace) {
+            this.namespace = namespace;
+        }
+
+    }
 
     public String currentNamespace = null;
 
@@ -145,7 +181,7 @@ public class FileTypesSelectionComponent extends NamespaceTypeDiscoveryComponent
             List namespaces = new ArrayList();
 
             String currentFileName = (new File(this.currentFile)).getName();
-            
+
             try {
                 SchemaValidator.verify(this.currentFile);
             } catch (Exception e) {
@@ -155,45 +191,32 @@ public class FileTypesSelectionComponent extends NamespaceTypeDiscoveryComponent
                 e.printStackTrace();
                 return null;
             }
-            
+
             Set storedSchemas = new HashSet();
             copySchemas(this.currentFile, schemaDestinationDir, new HashSet(), storedSchemas, namespaceExistsPolicy);
-            
-            NamespaceType root = null;
-            if (namespaceAlreadyExists(this.currentNamespace)) {
-                NamespaceType oldnsType = CommonTools.getNamespaceType(getCurrentNamespaces(), currentNamespace);
-                root = CommonTools.reCreateNamespaceType(schemaDestinationDir + File.separator + currentFileName,
-                    schemaDestinationDir,oldnsType);
-            } else {
-                root = CommonTools.createNamespaceType(schemaDestinationDir + File.separator + currentFileName,
-                    schemaDestinationDir);
-            }
-           
-
-            namespaces.add(root);
 
             Iterator schemaFileIter = storedSchemas.iterator();
             while (schemaFileIter.hasNext()) {
-                File storedSchemaFile = new File((String) schemaFileIter.next());
-                if (!storedSchemaFile.getName().equals(currentFileName)) {
-                    NamespaceType nsType  = null;
-                    if(CommonTools.getNamespaceType(getCurrentNamespaces(), nsType.getNamespace())!=null){
-                        NamespaceType oldnsType = CommonTools.getNamespaceType(getCurrentNamespaces(), nsType.getNamespace());
-                        nsType = CommonTools.reCreateNamespaceType(storedSchemaFile.getAbsolutePath(),
-                            schemaDestinationDir,oldnsType);
-                    } else {
-                        nsType = CommonTools.createNamespaceType(storedSchemaFile.getAbsolutePath(),
-                            schemaDestinationDir);
-                    }
-                    namespaces.add(nsType);
+                SchemaInfo info = ((SchemaInfo) schemaFileIter.next());
+                File storedSchemaFile = new File(info.getFilename());
+
+                NamespaceType nsType = null;
+                if (CommonTools.getNamespaceType(getCurrentNamespaces(), info.getNamespace()) != null) {
+                    NamespaceType oldnsType = CommonTools.getNamespaceType(getCurrentNamespaces(), info.getNamespace());
+                    nsType = CommonTools.reCreateNamespaceType(storedSchemaFile.getAbsolutePath(),
+                        schemaDestinationDir, oldnsType);
+                } else {
+                    nsType = CommonTools.createNamespaceType(storedSchemaFile.getAbsolutePath(), schemaDestinationDir);
                 }
+                namespaces.add(nsType);
             }
+
             NamespaceType[] types = new NamespaceType[namespaces.size()];
             namespaces.toArray(types);
             return types;
         } catch (Exception e) {
-        	addError("Error processing schema: " + e.getMessage());
-        	setErrorCauseThrowable(e);
+            addError("Error processing schema: " + e.getMessage());
+            setErrorCauseThrowable(e);
             e.printStackTrace();
             return null;
         }
@@ -203,10 +226,11 @@ public class FileTypesSelectionComponent extends NamespaceTypeDiscoveryComponent
     private boolean checkAgainstPolicy(String fileName, Set visitedSchemas, String namespaceExistsPolicy) {
         try {
             File schemaFile = new File(fileName);
-            // mark the schema as visited
-            visitedSchemas.add(schemaFile.getCanonicalPath());
+
             // look for imports
             Document schema = XMLUtilities.fileNameToDocument(schemaFile.getCanonicalPath());
+            visitedSchemas.add(schemaFile.getCanonicalPath());
+
             List importEls = schema.getRootElement().getChildren("import",
                 schema.getRootElement().getNamespace(IntroduceConstants.W3CNAMESPACE));
             if (importEls != null) {
@@ -233,7 +257,7 @@ public class FileTypesSelectionComponent extends NamespaceTypeDiscoveryComponent
                         File currentPath = schemaFile.getCanonicalFile().getParentFile();
                         if (!schemaFile.equals(new File(currentPath.getCanonicalPath() + File.separator + location))) {
                             File importedSchema = new File(currentPath + File.separator + location);
-                            if (!visitedSchemas.contains(importedSchema.getCanonicalPath())) {
+                            if (!visitedSchemas.contains(importedSchema.getCanonicalPath())){
                                 // only copy schemas not yet visited
                                 boolean result = checkAgainstPolicy(importedSchema.getCanonicalPath(), visitedSchemas,
                                     namespaceExistsPolicy);
@@ -268,9 +292,9 @@ public class FileTypesSelectionComponent extends NamespaceTypeDiscoveryComponent
             System.out.println("Copying schema " + fileName + " to " + copyToDirectory.getCanonicalPath());
             File outFile = new File(copyToDirectory.getCanonicalPath() + File.separator + schemaFile.getName());
             Utils.copyFile(schemaFile, outFile);
-            storedSchemas.add(outFile.getAbsolutePath());
+            storedSchemas.add(new SchemaInfo(outFile.getAbsolutePath(),namespaceURI));
             // mark the schema as visited
-            visitedSchemas.add(schemaFile.getCanonicalPath());
+            visitedSchemas.add(new SchemaInfo(schemaFile.getCanonicalPath(),namespaceURI));
         }
 
         // look for imports
@@ -280,19 +304,22 @@ public class FileTypesSelectionComponent extends NamespaceTypeDiscoveryComponent
             for (int i = 0; i < importEls.size(); i++) {
                 org.jdom.Element importEl = (org.jdom.Element) importEls.get(i);
                 String location = importEl.getAttributeValue("schemaLocation");
+                String namespace = importEl.getAttributeValue("namespace");
                 if (location != null && !(location.startsWith("http:") || location.startsWith("gme:"))) {
                     File currentPath = schemaFile.getCanonicalFile().getParentFile();
                     if (!schemaFile.equals(new File(currentPath.getCanonicalPath() + File.separator + location))) {
                         File importedSchema = new File(currentPath + File.separator + location);
-                        if (!visitedSchemas.contains(importedSchema.getCanonicalPath())) {
+                        if (!visitedSchemas.contains(new SchemaInfo(importedSchema.getCanonicalPath(),namespace))) {
                             // only copy schemas not yet visited
-                        	if(importedSchema.exists() && importedSchema.canRead()){
-                            copySchemas(importedSchema.getCanonicalPath(), new File(copyToDirectory.getCanonicalFile()
-                                + File.separator + location).getParentFile(), visitedSchemas, storedSchemas,
-                                namespaceExistsPolicy);
-                        	} else {
-                        		throw new Exception("Imported schema cannot be found: " + importedSchema.getAbsolutePath());
-                        	}
+                            if (importedSchema.exists() && importedSchema.canRead()) {
+                                copySchemas(importedSchema.getCanonicalPath(), new File(copyToDirectory
+                                    .getCanonicalFile()
+                                    + File.separator + location).getParentFile(), visitedSchemas, storedSchemas,
+                                    namespaceExistsPolicy);
+                            } else {
+                                throw new Exception("Imported schema cannot be found: "
+                                    + importedSchema.getAbsolutePath());
+                            }
                         }
                     } else {
                         System.err.println("WARNING: Schema is importing itself. " + schemaFile);
