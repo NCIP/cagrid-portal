@@ -6,12 +6,10 @@ import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.common.AntTools;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
-import gov.nih.nci.cagrid.introduce.common.IntroduceEnginePropertiesManager;
 import gov.nih.nci.cagrid.introduce.common.ResourceManager;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 import gov.nih.nci.cagrid.introduce.portal.modification.ModificationViewer;
-import gov.nih.nci.cagrid.introduce.statistics.StatisticsClient;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -128,11 +126,6 @@ public abstract class CreationViewerBaseComponent extends ApplicationComponent {
 						}
 
 						setProgressText("creating service");
-
-						StatisticsClient.sendCreatedServiceStat(
-								IntroduceEnginePropertiesManager
-										.getIntroduceVersion(), serviceName,
-								serviceNsDomain, serviceExtensions);
 
 						String cmd = AntTools.getAntSkeletonCreationCommand(
 								".", serviceName, dirName, packageName,

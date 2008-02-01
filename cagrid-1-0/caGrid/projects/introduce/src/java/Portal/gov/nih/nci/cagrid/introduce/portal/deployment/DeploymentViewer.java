@@ -6,13 +6,11 @@ import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.common.AntTools;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
-import gov.nih.nci.cagrid.introduce.common.IntroduceEnginePropertiesManager;
 import gov.nih.nci.cagrid.introduce.common.ResourceManager;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
 import gov.nih.nci.cagrid.introduce.portal.extension.ServiceDeploymentUIPanel;
-import gov.nih.nci.cagrid.introduce.statistics.StatisticsClient;
 
 import java.awt.Component;
 import java.awt.Font;
@@ -31,7 +29,6 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
-import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
 import org.cagrid.grape.ApplicationComponent;
@@ -221,15 +218,6 @@ public class DeploymentViewer extends ApplicationComponent {
 							"Deployment") {
 
 						public void process() {
-							StatisticsClient.sendDeployedServiceStat(
-									IntroduceEnginePropertiesManager
-											.getIntroduceVersion(), info
-											.getServiceDescriptor()
-											.getServices().getService(0)
-											.getName(), info.getServices()
-											.getService(0).getNamespace(),
-									(String) getDeploymentTypeSelector()
-											.getSelectedItem());
 
 							setProgressText("setting introduce resource properties...");
 

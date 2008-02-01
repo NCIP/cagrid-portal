@@ -60,17 +60,6 @@
 		</sequential>
 	</macrodef>
 	
-	<target name="startStatServer" depends="checkGlobus" >
-		<runStatServer/>
-	</target>
-	<macrodef name="runStatServer">
-		<sequential>
-			<echo message="Running Statistics Server"/>
-			<java classname="gov.nih.nci.cagrid.introduce.statistics.StatisticsServer" fork="true">
-				<classpath refid="Introduce.classpath"/>
-			</java>
-		</sequential>
-	</macrodef>
 	
 	<!-- =================================================================== -->
 	<!-- Create new service                                                  -->
