@@ -96,11 +96,6 @@
 				<include name="**\*"/>
 			</fileset>
 		</copy>
-		<copy todir="${introduce.skeleton.destination.dir}/lib" flatten="true" includeemptydirs="false">
-			<fileset dir="${ext.lib.dir}">
-				<include name="caGrid-1.0-core.jar"/>
-			</fileset>
-		</copy>
 		<!-- create the propertites files for this project-->
 		<propertyfile file="${introduce.skeleton.destination.dir}/introduce.properties"
 			comment="Service introdue properties">

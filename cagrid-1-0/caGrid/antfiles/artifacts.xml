@@ -672,11 +672,6 @@
 				<include name="*core-tests*.jar" />
 			</fileset>
 		</artifact>
-		<artifact track="main" type="resources" id="introduce.resources">
-			<fileset dir="${projects.dir}/introduce/resources">
-				<include name="**" />
-			</fileset>
-		</artifact>
 		<artifact track="main" type="jars" id="servicesecurity.jars">
 			<generatingantcall target="build-service-security-provider" />
 			<fileset dir="${projects.dir}/service-security-provider/build/lib">

@@ -874,7 +874,6 @@
 		<resolveDependencies extdir="${projects.dir}/bulkDataTransfer/ext">
 			<artifact refid="cagrid.properties" />
 			<artifact refid="introduce.jars" />
-			<artifact refid="introduce.resources" />
 			<artifact refid="mds.jars" />
 			<artifact refid="ws.enum.jars" />
 			<artifact refid="ws.enum.schemas" />
