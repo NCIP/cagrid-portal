@@ -8,10 +8,12 @@ import gov.nih.nci.cagrid.data.creation.DataTestCaseInfo;
 import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainer;
 import gov.nih.nci.cagrid.testing.system.haste.Step;
 
+import java.io.File;
 import java.io.FileReader;
 
 import org.apache.axis.types.URI;
 import org.apache.axis.types.URI.MalformedURIException;
+import org.apache.log4j.Logger;
 
 /** 
  *  InvokeSDK4DataServiceStep
@@ -21,9 +23,15 @@ import org.apache.axis.types.URI.MalformedURIException;
  * @author David Ervin
  * 
  * @created Feb 1, 2008 9:02:20 AM
- * @version $Id: InvokeSDK4DataServiceStep.java,v 1.1 2008-02-01 16:19:34 dervin Exp $ 
+ * @version $Id: InvokeSDK4DataServiceStep.java,v 1.2 2008-02-01 18:04:47 dervin Exp $ 
  */
 public class InvokeSDK4DataServiceStep extends Step {
+    public static final String TEST_RESOURCES_DIR = ".." + File.separator + "sdkQuery4" +
+    File.separator + "test" + File.separator + "resources" + File.separator;
+    public static final String TEST_QUERIES_DIR = TEST_RESOURCES_DIR + "testQueries" + File.separator;
+    public static final String TEST_RESULTS_DIR = TEST_RESOURCES_DIR + "testGoldResults" + File.separator;
+    
+    private static Logger LOG = Logger.getLogger(InvokeSDK4DataServiceStep.class);
     
     private ServiceContainer container;
     private DataTestCaseInfo testInfo;
@@ -35,12 +43,18 @@ public class InvokeSDK4DataServiceStep extends Step {
 
 
     public void runStep() throws Throwable {
-        // TODO Auto-generated method stub
-
+        testStudentWithName();
     }
     
     
-    private CQLQuery loadQuery(String filename) {
+    private void testStudentWithName() throws Throwable {
+        CQLQuery query = loadQuery(TEST_QUERIES_DIR + "studentWithName.xml");
+        // CQLQueryResults results = loadQueryResults(TEST_RESULTS_DIR + "studentWithNameResults.xml");
+        invokeValidQueryValidResults(query, null);
+    }
+    
+    
+    private CQLQuery loadQuery(String filename) throws Throwable {
         CQLQuery query = null;
         try {
             FileReader reader = new FileReader(filename);
@@ -54,7 +68,7 @@ public class InvokeSDK4DataServiceStep extends Step {
     }
     
     
-    private CQLQueryResults loadQueryResults(String filename) {
+    private CQLQueryResults loadQueryResults(String filename) throws Throwable {
         CQLQueryResults results = null;
         try {
             FileReader reader = new FileReader(filename);
@@ -76,8 +90,17 @@ public class InvokeSDK4DataServiceStep extends Step {
      * @param goldResults
      *      The gold results set
      */
-    private void invokeValidQueryValidResults(CQLQuery query, CQLQueryResults goldResults) {
-        
+    private void invokeValidQueryValidResults(CQLQuery query, CQLQueryResults goldResults) throws Throwable {
+        DataServiceClient client = getServiceClient();
+        CQLQueryResults queryResults = null;
+        try {
+            queryResults = client.query(query);
+            // If this fails, we need to still be able to exit the jvm
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            fail("Query failed to execute: " + ex.getMessage());
+        }
+        // TODO: compare results to gold
     }
     
     
@@ -86,12 +109,18 @@ public class InvokeSDK4DataServiceStep extends Step {
      * @param query
      *      The expected invalid query
      */
-    private void invokeInvalidQuery(CQLQuery query) {
-        
+    private void invokeInvalidQuery(CQLQuery query) throws Throwable {
+        DataServiceClient client = getServiceClient();
+        try {
+            client.query(query);
+            fail("Query returned results, should have failed");
+        } catch (Exception ex) {
+            // expected
+        }
     }
     
     
-    private DataServiceClient getServiceClient() {
+    private DataServiceClient getServiceClient() throws Throwable {
         DataServiceClient client = null;
         try {
             client = new DataServiceClient(getServiceUrl()); 
@@ -103,7 +132,7 @@ public class InvokeSDK4DataServiceStep extends Step {
     }
     
     
-    private String getServiceUrl() {
+    private String getServiceUrl() throws Throwable {
         String url = null;
         try {
             URI baseUri = container.getContainerBaseURI();
@@ -112,6 +141,7 @@ public class InvokeSDK4DataServiceStep extends Step {
             ex.printStackTrace();
             fail("Error generating service url: " + ex.getMessage());
         }
+        LOG.debug("Data service url: " + url);
         return url;
     }
 }

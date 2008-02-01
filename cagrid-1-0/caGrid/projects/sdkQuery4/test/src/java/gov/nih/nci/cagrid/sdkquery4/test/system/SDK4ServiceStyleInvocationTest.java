@@ -25,7 +25,7 @@ import java.util.Vector;
  * @author David Ervin
  * 
  * @created Feb 1, 2008 7:49:44 AM
- * @version $Id: SDK4ServiceStyleInvocationTest.java,v 1.2 2008-02-01 16:34:43 dervin Exp $ 
+ * @version $Id: SDK4ServiceStyleInvocationTest.java,v 1.3 2008-02-01 18:04:47 dervin Exp $ 
  */
 public class SDK4ServiceStyleInvocationTest extends Story {
     
@@ -67,13 +67,13 @@ public class SDK4ServiceStyleInvocationTest extends Story {
         steps.add(new DeployServiceStep(container, serviceTestInfo.getDir()));
         steps.add(new StartContainerStep(container));
         steps.add(new InvokeSDK4DataServiceStep(container, serviceTestInfo));
-        steps.add(new StopContainerStep(container));
         return steps;
     }
     
     
     public void storyTearDown() throws Throwable {
         Utils.deleteDir(new File(serviceTestInfo.getDir()));
+        new StopContainerStep(container).runStep();
         new DestroyContainerStep(container).runStep();
     }
     
