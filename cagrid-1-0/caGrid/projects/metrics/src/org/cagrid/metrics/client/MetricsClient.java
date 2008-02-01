@@ -13,6 +13,7 @@ import org.apache.axis.client.Stub;
 import org.apache.axis.configuration.FileProvider;
 import org.apache.axis.message.addressing.EndpointReferenceType;
 import org.apache.axis.types.URI.MalformedURIException;
+import org.cagrid.metrics.common.EventSubmission;
 import org.cagrid.metrics.common.MetricsI;
 import org.cagrid.metrics.stubs.MetricsPortType;
 import org.cagrid.metrics.stubs.service.MetricsServiceAddressingLocator;
@@ -91,18 +92,21 @@ public class MetricsClient extends ServiceSecurityClient implements MetricsI {
 		try{
 		
 			 MetricsClient client = new MetricsClient("https://140.254.80.203:8443/wsrf/services/cagrid/Metrics");
-			 client.reportEvent();
+			 client.report(new EventSubmission());
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.exit(1);
 		}
 	}
 
-  public void reportEvent() throws RemoteException {
+  public void report(org.cagrid.metrics.common.EventSubmission submission) throws RemoteException {
     synchronized(portTypeMutex){
-      configureStubSecurity((Stub)portType,"reportEvent");
-    org.cagrid.metrics.stubs.ReportEventRequest params = new org.cagrid.metrics.stubs.ReportEventRequest();
-    org.cagrid.metrics.stubs.ReportEventResponse boxedResult = portType.reportEvent(params);
+      configureStubSecurity((Stub)portType,"report");
+    org.cagrid.metrics.stubs.ReportRequest params = new org.cagrid.metrics.stubs.ReportRequest();
+    org.cagrid.metrics.stubs.ReportRequestSubmission submissionContainer = new org.cagrid.metrics.stubs.ReportRequestSubmission();
+    submissionContainer.setEventSubmission(submission);
+    params.setSubmission(submissionContainer);
+    org.cagrid.metrics.stubs.ReportResponse boxedResult = portType.report(params);
     }
   }
 

@@ -3,7 +3,6 @@ package org.cagrid.metrics.client;
 import gov.nih.nci.cagrid.common.Runner;
 import gov.nih.nci.cagrid.common.Utils;
 
-import java.awt.Event;
 import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -14,6 +13,9 @@ import java.util.Properties;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.cagrid.metrics.common.Community;
+import org.cagrid.metrics.common.Event;
+import org.cagrid.metrics.common.EventSubmission;
 
 public class Metrics {
 
@@ -108,17 +110,50 @@ public class Metrics {
 		}
 	}
 
-	
-	// TODO: THIS IS A PLACE HOLDER, ACTUAL FUNCTION WILL CHANGE WHEN SCHEMA IS FINALIZED
-	public void reportEvent(Event event) {
+	public void report(List<Event> events) {
+		if (reportingEnabled) {
+			for (int i = 0; i < events.size(); i++) {
+				report(events.get(i));
+			}
+		}
+	}
+
+	public void report(Event event) {
 		if (reportingEnabled) {
 			synchronized (queueMutex) {
 				queue.add(event);
 			}
 		}
 	}
-	
-	// TODO: ADD INSTANT REPORTING METHOD
+
+	public void reportNow(List<Event> events) {
+		if ((reportingEnabled) && (events != null)) {
+			try {
+				Event[] array = new Event[events.size()];
+				for (int i = 0; i < events.size(); i++) {
+					array[i] = events.get(i);
+				}
+				EventSubmission submission = new EventSubmission();
+				Community community = new Community();
+				community.setName(this.community);
+				community.setDeployment(this.communityInstance);
+				submission.setCommunity(community);
+				submission.setEvent(array);
+				MetricsClient client = new MetricsClient(this.metricsURL);
+				client.report(submission);
+			} catch (Exception e) {
+				logError("Error reporting events to the Metrics Service.", e);
+			}
+		}
+	}
+
+	public void reportNow(Event event) {
+		if (reportingEnabled) {
+			List<Event> list = new ArrayList<Event>();
+			list.add(event);
+			reportNow(list);
+		}
+	}
 
 	private void resetFlushTime() {
 		Calendar c = new GregorianCalendar();
@@ -138,8 +173,15 @@ public class Metrics {
 		}
 
 		try {
-			if((events!=null)&&(events.length>0)){
-				//TODO: ADD REPORTING CODE
+			if ((events != null) && (events.length > 0)) {
+				EventSubmission submission = new EventSubmission();
+				Community community = new Community();
+				community.setName(this.community);
+				community.setDeployment(this.communityInstance);
+				submission.setCommunity(community);
+				submission.setEvent(events);
+				MetricsClient client = new MetricsClient(this.metricsURL);
+				client.report(submission);
 			}
 		} catch (Exception e) {
 			logError(

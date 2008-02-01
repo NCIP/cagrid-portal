@@ -12,7 +12,12 @@ import java.rmi.RemoteException;
  */
 public interface MetricsI {
 
-  public void reportEvent() throws RemoteException ;
+  /**
+   * Enables the submission of event(s).
+   *
+   * @param submission
+   */
+  public void report(org.cagrid.metrics.common.EventSubmission submission) throws RemoteException ;
 
 }
 

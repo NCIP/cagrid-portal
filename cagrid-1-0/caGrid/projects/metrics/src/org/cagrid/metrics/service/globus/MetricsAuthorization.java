@@ -53,7 +53,7 @@ public class MetricsAuthorization implements PDP {
 		
 	}
 					
-	public static void authorizeReportEvent() throws RemoteException {
+	public static void authorizeReport() throws RemoteException {
 		
 		
 	}
@@ -73,9 +73,9 @@ public class MetricsAuthorization implements PDP {
 				e.printStackTrace();
 				return false;
 			}
-		} else if(operation.getLocalPart().equals("reportEvent")){
+		} else if(operation.getLocalPart().equals("report")){
 			try{
-				authorizeReportEvent();
+				authorizeReport();
 				return true;
 			} catch (Exception e){
 				e.printStackTrace();

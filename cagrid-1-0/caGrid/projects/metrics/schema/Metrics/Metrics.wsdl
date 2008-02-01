@@ -16,12 +16,20 @@
       <import namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security" schemaLocation="./xsd/cagrid/types/security/security.xsd" />
       <import namespace="http://metrics.cagrid.org/Metrics/types" schemaLocation="./MetricsTypes.xsd" />
       <import namespace="http://schemas.xmlsoap.org/ws/2004/03/addressing" schemaLocation="./WS-Addressing.xsd" />
-      <element name="ReportEventRequest">
+      <element name="ReportRequest">
         <complexType>
-          <sequence />
+          <sequence>
+            <element name="submission">
+              <complexType>
+                <sequence>
+                  <element ref="ns0:EventSubmission" minOccurs="1" maxOccurs="1" />
+                </sequence>
+              </complexType>
+            </element>
+          </sequence>
         </complexType>
       </element>
-      <element name="ReportEventResponse">
+      <element name="ReportResponse">
         <complexType>
           <sequence />
         </complexType>
@@ -36,11 +44,11 @@
     </schema>
   </types>
   <!--  place service messages here -->
-  <message name="ReportEventRequest">
-    <part name="parameters" element="tns:ReportEventRequest" />
+  <message name="ReportRequest">
+    <part name="parameters" element="tns:ReportRequest" />
   </message>
-  <message name="ReportEventResponse">
-    <part name="parameters" element="tns:ReportEventResponse" />
+  <message name="ReportResponse">
+    <part name="parameters" element="tns:ReportResponse" />
   </message>
   <!--============================================================
 
@@ -48,9 +56,9 @@
                       
   ============================================================-->
   <portType name="MetricsPortType" wsrp:ResourceProperties="tns:MetricsResourceProperties">
-    <operation name="reportEvent">
-      <input message="tns:ReportEventRequest" wsa:Action="http://metrics.cagrid.org/Metrics/ReportEventRequest" />
-      <output message="tns:ReportEventResponse" wsa:Action="http://metrics.cagrid.org/Metrics/ReportEventResponse" />
+    <operation name="report">
+      <input message="tns:ReportRequest" wsa:Action="http://metrics.cagrid.org/Metrics/ReportRequest" />
+      <output message="tns:ReportResponse" wsa:Action="http://metrics.cagrid.org/Metrics/ReportResponse" />
     </operation>
     <operation name="GetResourceProperty">
       <input name="GetResourcePropertyRequest" message="wsrpw:GetResourcePropertyRequest" wsa:Action="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties/GetResourceProperty" />
