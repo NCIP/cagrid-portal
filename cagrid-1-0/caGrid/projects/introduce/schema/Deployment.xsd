@@ -9,6 +9,7 @@
 		<attribute name="serviceName" type="string"></attribute>
 		<attribute name="deploymentPrefix" type="string"></attribute>
 		<attribute name="serviceDeploymentDirName" type="string"></attribute>
+		<attribute name="deployDateTime" type="string"></attribute>
 	</complexType>
 
 	<complexType name="Jars">

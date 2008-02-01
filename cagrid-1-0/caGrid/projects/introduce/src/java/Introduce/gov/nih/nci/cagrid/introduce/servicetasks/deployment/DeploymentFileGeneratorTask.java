@@ -36,7 +36,8 @@ public class DeploymentFileGeneratorTask extends Task {
         deployment.setServiceName(properties.getProperty("introduce.skeleton.service.name"));
         deployment.setDeploymentPrefix(properties.getProperty("service.deployment.prefix"));
         deployment.setServiceDeploymentDirName(properties.getProperty("service.deployment.dir.name"));
-
+        deployment.setDeployDateTime(String.valueOf(System.currentTimeMillis()));
+        
         // get the list of jars to be deployed and add them
         File libDir = new File(properties.getProperty("build.lib.dir"));
         String[] jars = libDir.list();
