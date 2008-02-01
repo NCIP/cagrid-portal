@@ -11,6 +11,7 @@ import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
+import gov.nih.nci.cagrid.sdkquery4.test.system.SDK4ServiceStyleSystemTestConstants;
 
 import java.io.File;
 
@@ -22,11 +23,9 @@ import java.io.File;
  * @author David Ervin
  * 
  * @created Jan 29, 2008 1:18:44 PM
- * @version $Id: SDK4StyleCreationStep.java,v 1.1 2008-01-31 19:40:52 dervin Exp $ 
+ * @version $Id: SDK4StyleCreationStep.java,v 1.2 2008-02-01 15:52:13 dervin Exp $ 
  */
 public class SDK4StyleCreationStep extends CreationStep {
-    
-    public static final String STYLE_NAME = "caCORE SDK v 4.0";
     
     private ServiceInformation serviceInformation = null;
 
@@ -57,7 +56,7 @@ public class SDK4StyleCreationStep extends CreationStep {
             features = new ServiceFeatures();
             extensionData.setServiceFeatures(features);
         }
-        features.setServiceStyle(STYLE_NAME);
+        features.setServiceStyle(SDK4ServiceStyleSystemTestConstants.STYLE_NAME);
         storeExtensionData(extensionData);
     }
     
