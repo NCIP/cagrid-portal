@@ -220,21 +220,17 @@
 	<xs:complexType name="EventRecord">
 		<xs:annotation>
 			<xs:documentation>
-				The full details of an event, originating from a known
-				component.
+				The full details of an event, including the Reporter Details.
 			</xs:documentation>
 		</xs:annotation>
-		<xs:sequence>
-			<xs:element ref="metrics:EventSource" minOccurs="1"
-				maxOccurs="1" />
-			<xs:element ref="metrics:EventDescription" minOccurs="1"
-				maxOccurs="1" />
-			<xs:element ref="metrics:ReporterDetails" minOccurs="1" maxOccurs="1" />
-			<xs:element name="AdditionalDetail" type="metrics:Detail" minOccurs="0" maxOccurs="unbounded" />
-		</xs:sequence>
-		<xs:attribute name="startedAt" use="optional" type="xs:dateTime" />
-		<xs:attribute name="endedAt" use="optional" type="xs:dateTime" />
-		<xs:attribute name="reportedAt" use="required" type="xs:dateTime" />
+		<xs:complexContent>
+			<xs:extension base="metrics:Event">
+				<xs:sequence>
+					<xs:element ref="metrics:ReporterDetails" minOccurs="1" maxOccurs="1" />
+				</xs:sequence>
+				<xs:attribute name="reportedAt" use="required" type="xs:dateTime" />
+			</xs:extension>
+		</xs:complexContent>
 	</xs:complexType>
 	
 	<xs:element name="ReporterDetails" type="metrics:ReporterDetails" />
@@ -250,8 +246,5 @@
 			<xs:element name="IPAddress" type="xs:string"
 				minOccurs="1" maxOccurs="1" />
 		</xs:sequence>
-		<xs:attribute name="startedAt" use="optional" type="xs:dateTime" />
-		<xs:attribute name="endedAt" use="optional" type="xs:dateTime" />
-		<xs:attribute name="reportedAt" use="required" type="xs:dateTime" />
 	</xs:complexType>
 </xs:schema>

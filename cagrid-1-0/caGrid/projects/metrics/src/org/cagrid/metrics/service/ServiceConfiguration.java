@@ -1,7 +1,5 @@
 package org.cagrid.metrics.service;
 
-import org.globus.wsrf.config.ContainerConfig;
-import java.io.File;
 import javax.naming.InitialContext;
 
 import org.apache.axis.MessageContext;

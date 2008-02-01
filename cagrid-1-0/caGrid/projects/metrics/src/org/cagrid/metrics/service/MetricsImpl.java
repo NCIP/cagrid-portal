@@ -4,7 +4,6 @@ import java.net.InetAddress;
 import java.rmi.RemoteException;
 
 import org.apache.axis.MessageContext;
-import org.apache.axis.transport.http.HTTPConstants;
 import org.globus.wsrf.security.SecurityManager;
 
 /**

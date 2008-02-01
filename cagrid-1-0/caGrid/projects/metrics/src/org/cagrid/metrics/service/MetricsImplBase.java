@@ -1,14 +1,12 @@
 package org.cagrid.metrics.service;
 
-import org.cagrid.metrics.service.globus.resource.MetricsResource;
-import org.cagrid.metrics.service.ServiceConfiguration;
-
 import java.rmi.RemoteException;
 
 import javax.naming.InitialContext;
 import javax.xml.namespace.QName;
 
 import org.apache.axis.MessageContext;
+import org.cagrid.metrics.service.globus.resource.MetricsResource;
 import org.globus.wsrf.Constants;
 import org.globus.wsrf.ResourceContext;
 import org.globus.wsrf.ResourceContextException;
