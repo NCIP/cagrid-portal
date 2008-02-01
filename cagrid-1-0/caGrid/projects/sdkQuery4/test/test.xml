@@ -9,6 +9,11 @@
 		location="${instrumented.classes.dir}/${project.name}-cobertura.ser"/>	
 	<property name="introduce.dir" location="../introduce"/>
 	
+	<!-- properties for caCORE SDK application's location -->
+	<!-- TODO: MOVE TO A MORE PERMANENT LOCATION -->
+	<property name="remote.sdk.host.name" value="http://kramer.bmi.ohio-state.edu"/>
+	<property name="remote.sdk.host.port" value="8080"/>
+	
 	
 	<!-- =============================================================== -->
 	<!-- The Cobertura Run Classpath                                     -->
@@ -109,7 +114,8 @@
 			<sysproperty key="build.dirs" value="${instrumented.classes.dir}"/>
 			<sysproperty key="introduce.base.dir" value="${introduce.dir}"/>
 			<sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.data.file}"/>
-			<sysproperty key="processor.config.file" file="test/resources/testProcessorConfig.properties"/>
+			<sysproperty key="remote.sdk.host.name" value="${remote.sdk.host.name}"/>
+			<sysproperty key="remote.sdk.host.port" value="${remote.sdk.host.port}"/>
 			<jvmarg value="-Dbuild.dir=${test.classes.dir}"/>
 			<classpath location="${instrumented.classes.dir}"/>
 			<classpath refid="all.test.classpath"/>
