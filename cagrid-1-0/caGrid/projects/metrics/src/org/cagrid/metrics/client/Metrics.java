@@ -1,5 +1,6 @@
 package org.cagrid.metrics.client;
 
+import gov.nih.nci.cagrid.common.IOUtils;
 import gov.nih.nci.cagrid.common.Runner;
 import gov.nih.nci.cagrid.common.Utils;
 
@@ -14,8 +15,12 @@ import java.util.Properties;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.cagrid.metrics.common.Community;
+import org.cagrid.metrics.common.Component;
 import org.cagrid.metrics.common.Event;
+import org.cagrid.metrics.common.EventDescription;
+import org.cagrid.metrics.common.EventSource;
 import org.cagrid.metrics.common.EventSubmission;
+import org.cagrid.metrics.common.UsageEvent;
 
 public class Metrics {
 
@@ -55,13 +60,14 @@ public class Metrics {
 		this.queue = new ArrayList<Event>();
 		queueMutex = new Object();
 		propertiesMutex = new Object();
-		loadProperties(true);
+		this.flushQueueSeconds = Integer.MIN_VALUE;
+		loadProperties();
 		Thread t = new Thread(getRunner());
 		t.setDaemon(true);
 		t.start();
 	}
 
-	private void loadProperties(boolean resetFlushTime) {
+	private void loadProperties() {
 		synchronized (propertiesMutex) {
 			try {
 				Properties properties = new Properties();
@@ -91,6 +97,7 @@ public class Metrics {
 						properties.getProperty(QUEUE_SIZE_FLUSH_PROPERTY,
 								QUEUE_SIZE_FLUSH_PROPERTY_DEFAULT_VALUE))
 						.intValue();
+				int oldFlushTime = this.flushQueueSeconds;
 				this.flushQueueSeconds = Integer.valueOf(
 						properties.getProperty(QUEUE_TIME_FLUSH_PROPERTY,
 								QUEUE_TIME_FLUSH_PROPERTY_DEFAULT_VALUE))
@@ -99,7 +106,7 @@ public class Metrics {
 						properties.getProperty(THREAD_SLEEP_TIME_PROPERTY,
 								THREAD_SLEEP_TIME_PROPERTY_DEFAULT_VALUE))
 						.intValue();
-				if (resetFlushTime) {
+				if (oldFlushTime!=this.flushQueueSeconds) {
 					resetFlushTime();
 				}
 			} catch (Exception e) {
@@ -156,9 +163,10 @@ public class Metrics {
 	}
 
 	private void resetFlushTime() {
-		Calendar c = new GregorianCalendar();
-		c.add(Calendar.SECOND, this.flushQueueSeconds);
-		this.nextFlush = c.getTime();
+		System.out.println("Resetting Flush time....");
+		GregorianCalendar cal = new GregorianCalendar();
+		cal.add(Calendar.SECOND, this.flushQueueSeconds);
+		this.nextFlush = cal.getTime();
 	}
 
 	public void flushEventQueue() {
@@ -209,7 +217,7 @@ public class Metrics {
 		}
 	}
 
-	public Metrics getInstance() {
+	public static Metrics getInstance() {
 		if (instance == null) {
 			instance = new Metrics();
 		}
@@ -221,20 +229,47 @@ public class Metrics {
 			public void execute() {
 				while (true) {
 					try {
-						Thread.currentThread().sleep(threadSleepTime);
+						Thread.currentThread().sleep(threadSleepTime*1000);
 					} catch (Exception e) {
 						logError(e);
 					}
-					loadProperties(false);
+					loadProperties();
 					Date now = new Date();
 					if (queue.size() >= flushQueueSize) {
+						System.out.println("Flushing queue "+queue.size()+">="+flushQueueSize);
 						flushEventQueue();
-					} else if (nextFlush.after(now)) {
+					} else if (now.after(nextFlush)) {
+						System.out.println("Flushing queue "+nextFlush.toString()+" is after "+now.toString());
 						flushEventQueue();
 					}
 				}
 			}
 		};
 		return runner;
+	}
+	
+	public static void main(String[] args){
+		int count = 1;
+		while(true){
+			try{
+				IOUtils.readLine("Hit enter to submit event");
+				Event e = new Event();
+				e.setStartedAt(new GregorianCalendar());
+				e.setEndedAt(new GregorianCalendar());
+				EventDescription des = new EventDescription();
+				des.setUsageEvent(UsageEvent.LAUNCH);
+				e.setEventDescription(des);
+				EventSource source = new EventSource();
+				Component c = new Component();
+				c.setName("Dorian");
+				c.setVersion("1.2");
+				source.setComponent(c);
+				e.setEventSource(source);
+				Metrics.getInstance().report(e);
+				count = count+1;
+			}catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 	}
 }
