@@ -982,6 +982,7 @@
 			<artifact refid="grape.jars" />
 			<artifact refid="introduce.core.test.jars" />
 			<artifact refid="introduce.jars" />
+			<artifact refid="servicesecurity.jars" />
 			<artifact refid="test.coverage.jars" />
 			<artifact refid="testing.system.jars" />
 			<artifact refid="validation.jars" />
