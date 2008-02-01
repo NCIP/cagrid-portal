@@ -139,6 +139,7 @@ public class TomcatServiceContainer extends ServiceContainer {
             command.add(shutdown + ".bat");
             command.add("stop");
         } else {
+            command.add("sh");
             command.add(shutdown + ".sh");
             command.add("stop");
         }
@@ -225,6 +226,7 @@ public class TomcatServiceContainer extends ServiceContainer {
             command.add(startup + ".bat");
             command.add("run");
         } else {
+            command.add("sh");
             command.add(startup + ".sh");
             command.add("run");
         }
