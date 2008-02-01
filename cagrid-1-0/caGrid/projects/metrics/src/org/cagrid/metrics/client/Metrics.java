@@ -106,7 +106,7 @@ public class Metrics {
 						properties.getProperty(THREAD_SLEEP_TIME_PROPERTY,
 								THREAD_SLEEP_TIME_PROPERTY_DEFAULT_VALUE))
 						.intValue();
-				if (oldFlushTime!=this.flushQueueSeconds) {
+				if (oldFlushTime != this.flushQueueSeconds) {
 					resetFlushTime();
 				}
 			} catch (Exception e) {
@@ -163,7 +163,6 @@ public class Metrics {
 	}
 
 	private void resetFlushTime() {
-		System.out.println("Resetting Flush time....");
 		GregorianCalendar cal = new GregorianCalendar();
 		cal.add(Calendar.SECOND, this.flushQueueSeconds);
 		this.nextFlush = cal.getTime();
@@ -171,34 +170,36 @@ public class Metrics {
 
 	public void flushEventQueue() {
 		resetFlushTime();
-		Event[] events = null;
-		synchronized (queueMutex) {
-			events = new Event[queue.size()];
-			for (int i = 0; i < queue.size(); i++) {
-				events[i] = queue.get(i);
-			}
-			queue.clear();
-		}
-
-		try {
-			if ((events != null) && (events.length > 0)) {
-				EventSubmission submission = new EventSubmission();
-				Community community = new Community();
-				community.setName(this.community);
-				community.setDeployment(this.communityInstance);
-				submission.setCommunity(community);
-				submission.setEvent(events);
-				MetricsClient client = new MetricsClient(this.metricsURL);
-				client.report(submission);
-			}
-		} catch (Exception e) {
-			logError(
-					"Error reporting events in the event queue to the Metrics Service.",
-					e);
+		if (reportingEnabled) {
+			Event[] events = null;
 			synchronized (queueMutex) {
-				if (events != null) {
-					for (int i = 0; i < events.length; i++) {
-						queue.add(events[i]);
+				events = new Event[queue.size()];
+				for (int i = 0; i < queue.size(); i++) {
+					events[i] = queue.get(i);
+				}
+				queue.clear();
+			}
+
+			try {
+				if ((events != null) && (events.length > 0)) {
+					EventSubmission submission = new EventSubmission();
+					Community community = new Community();
+					community.setName(this.community);
+					community.setDeployment(this.communityInstance);
+					submission.setCommunity(community);
+					submission.setEvent(events);
+					MetricsClient client = new MetricsClient(this.metricsURL);
+					client.report(submission);
+				}
+			} catch (Exception e) {
+				logError(
+						"Error reporting events in the event queue to the Metrics Service.",
+						e);
+				synchronized (queueMutex) {
+					if (events != null) {
+						for (int i = 0; i < events.length; i++) {
+							queue.add(events[i]);
+						}
 					}
 				}
 			}
@@ -228,18 +229,24 @@ public class Metrics {
 		Runner runner = new Runner() {
 			public void execute() {
 				while (true) {
+					System.out.println("SLEEPING");
 					try {
-						Thread.currentThread().sleep(threadSleepTime*1000);
+						Thread.currentThread().sleep(threadSleepTime * 1000);
 					} catch (Exception e) {
 						logError(e);
 					}
+					
+					System.out.println("AWAKE");
 					loadProperties();
 					Date now = new Date();
 					if (queue.size() >= flushQueueSize) {
-						System.out.println("Flushing queue "+queue.size()+">="+flushQueueSize);
+						System.out.println("Flushing queue " + queue.size()
+								+ ">=" + flushQueueSize);
 						flushEventQueue();
 					} else if (now.after(nextFlush)) {
-						System.out.println("Flushing queue "+nextFlush.toString()+" is after "+now.toString());
+						System.out.println("Flushing queue "
+								+ nextFlush.toString() + " is after "
+								+ now.toString());
 						flushEventQueue();
 					}
 				}
@@ -247,11 +254,11 @@ public class Metrics {
 		};
 		return runner;
 	}
-	
-	public static void main(String[] args){
+
+	public static void main(String[] args) {
 		int count = 1;
-		while(true){
-			try{
+		while (true) {
+			try {
 				IOUtils.readLine("Hit enter to submit event");
 				Event e = new Event();
 				e.setStartedAt(new GregorianCalendar());
@@ -266,8 +273,8 @@ public class Metrics {
 				source.setComponent(c);
 				e.setEventSource(source);
 				Metrics.getInstance().report(e);
-				count = count+1;
-			}catch (Exception e) {
+				count = count + 1;
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
