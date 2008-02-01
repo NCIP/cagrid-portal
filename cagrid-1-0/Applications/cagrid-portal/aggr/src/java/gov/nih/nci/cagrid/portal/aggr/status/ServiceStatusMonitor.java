@@ -73,9 +73,9 @@ public class ServiceStatusMonitor extends AbstractMonitor {
 
 				try {
 
-					if (getServiceStatusPolicy().shouldBanService(
+					if (getServiceStatusPolicy().shouldSetServiceDormant(
 							gridService.getStatusHistory())) {
-						logger.debug("Banning " + serviceUrl);
+						logger.debug("Setting service '" + serviceUrl + "' dormant.");
 						getGridServiceDao().banService(gridService);
 					}
 

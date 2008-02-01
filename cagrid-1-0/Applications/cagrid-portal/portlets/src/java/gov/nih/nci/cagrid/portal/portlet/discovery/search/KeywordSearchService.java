@@ -143,7 +143,7 @@ public class KeywordSearchService {
 			for(DomainObject obj : objects){
 				svcs.add((GridService)obj);
 			}
-			svcs = PortletUtils.filterBannedServices(svcs);
+			svcs = PortletUtils.filterDormantServices(PortletUtils.filterBannedServices(svcs));
 			objects.clear();
 			objects.addAll(svcs);
 		}

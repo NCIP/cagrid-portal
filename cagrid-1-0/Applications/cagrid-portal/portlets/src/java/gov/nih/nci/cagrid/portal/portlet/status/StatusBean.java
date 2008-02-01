@@ -37,7 +37,8 @@ public class StatusBean {
 	
 	public List<ServiceInfo> getLatestServices(){
 		List<ServiceInfo> serviceInfos = new ArrayList<ServiceInfo>();
-		List<GridService> services = PortletUtils.filterBannedServices(getGridServiceDao().getLatestServices(getLatestServicesLimit()));
+		List<GridService> latest = getGridServiceDao().getLatestServices(getLatestServicesLimit());
+		List<GridService> services = PortletUtils.filterDormantServices(PortletUtils.filterBannedServices(latest));
 		for(GridService service : services){
 			serviceInfos.add(new ServiceInfo(service));
 		}

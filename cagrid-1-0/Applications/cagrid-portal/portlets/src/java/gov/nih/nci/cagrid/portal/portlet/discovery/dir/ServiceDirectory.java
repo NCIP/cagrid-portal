@@ -47,7 +47,7 @@ public class ServiceDirectory extends DiscoveryDirectory {
 			throw new CaGridPortletApplicationException("Unknown ServiceDirectoryType: " + getServiceDirectoryType());
 		}
 		
-		objects = PortletUtils.filterBannedServices(objects);
+		objects = PortletUtils.filterDormantServices(PortletUtils.filterBannedServices(objects));
 		
 		return objects;
 	}

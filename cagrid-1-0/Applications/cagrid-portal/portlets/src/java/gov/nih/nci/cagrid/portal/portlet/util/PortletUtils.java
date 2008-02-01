@@ -173,9 +173,24 @@ public class PortletUtils {
 	}
 	
 	public static List<GridService> filterBannedServices(List<GridService> in){
+		return filterServicesByStatus(in, ServiceStatus.BANNED);
+	}
+	
+	public static List<GridService> filterDormantServices(List<GridService> in){
+		return filterServicesByStatus(in, ServiceStatus.DORMANT);
+	}
+	
+	public static List<GridService> filterServicesByStatus(List<GridService> in, ServiceStatus... statuses){
 		List<GridService> out = new ArrayList<GridService>();
 		for(GridService svc : in){
-			if(!ServiceStatus.BANNED.equals(svc.getCurrentStatus())){
+			boolean filter = false;
+			for(ServiceStatus status : statuses){
+				if(status.equals(svc.getCurrentStatus())){
+					filter = true;
+					break;
+				}
+			}
+			if(!filter){
 				out.add(svc);
 			}
 		}
