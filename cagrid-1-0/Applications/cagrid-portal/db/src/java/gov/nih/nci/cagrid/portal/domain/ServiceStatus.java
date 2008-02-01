@@ -8,5 +8,5 @@ package gov.nih.nci.cagrid.portal.domain;
  *
  */
 public enum ServiceStatus {
-	ACTIVE, INACTIVE, INVALID, BANNED, UNKNOWN;
+	ACTIVE, INACTIVE, INVALID, BANNED, UNKNOWN, DORMANT;
 }

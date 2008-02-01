@@ -35,14 +35,15 @@ public class SimpleServiceStatusPolicy implements ServiceStatusPolicy {
 	 * 
 	 * @see gov.nih.nci.cagrid.portal.aggr.status.ServiceStatusPolicy#shouldBanService(java.util.List)
 	 */
-	public boolean shouldBanService(List<StatusChange> statusHistory) {
-		boolean shouldBan = false;
+	public boolean shouldSetServiceDormant(List<StatusChange> statusHistory) {
+		boolean should = false;
 
 		StatusChange lastChange = statusHistory.get(statusHistory.size() - 1);
 		ServiceStatus currentStatus = lastChange.getStatus();
 
 		if (!ServiceStatus.ACTIVE.equals(currentStatus)
-				&& !ServiceStatus.BANNED.equals(currentStatus)) {
+				&& !ServiceStatus.BANNED.equals(currentStatus)
+				&& !ServiceStatus.DORMANT.equals(currentStatus)) {
 
 			int changeToNotActiveIdx = -1;
 			for (int i = statusHistory.size() - 1; i >= 0; i--) {
@@ -59,11 +60,11 @@ public class SimpleServiceStatusPolicy implements ServiceStatusPolicy {
 				int diffInHours = (int) ((now
 						.getTime() - change.getTime().getTime()) / (1000 * 60 * 60));
 				if (diffInHours >= getMaxDowntimeHours()) {
-					shouldBan = true;
+					should = true;
 				}
 			}
 		}
-		return shouldBan;
+		return should;
 	}
 
 	public int getMaxDowntimeHours() {

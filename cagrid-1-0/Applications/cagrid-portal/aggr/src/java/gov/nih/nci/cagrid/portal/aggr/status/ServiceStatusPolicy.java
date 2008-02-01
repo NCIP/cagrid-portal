@@ -13,6 +13,6 @@ import java.util.List;
  */
 public interface ServiceStatusPolicy {
 
-	boolean shouldBanService(List<StatusChange> statusHistory);
+	boolean shouldSetServiceDormant(List<StatusChange> statusHistory);
 	
 }

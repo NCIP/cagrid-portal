@@ -33,7 +33,7 @@ public class ServiceStatusTest extends TestCase {
 
 	}
 	
-	public void testBanningPolicy(){
+	public void testDormantPolicy(){
 
 		SimpleServiceStatusPolicy policy = new SimpleServiceStatusPolicy();
 		policy.setMaxDowntimeHours(1);
@@ -59,7 +59,7 @@ public class ServiceStatusTest extends TestCase {
 		status.setService(svc1);
 		svc1.getStatusHistory().add(status);
 		
-		assertTrue("not banning service that should be banned", policy.shouldBanService(svc1.getStatusHistory()));
+		assertTrue("not setting service dormant that should be dormant", policy.shouldSetServiceDormant(svc1.getStatusHistory()));
 		
 	}
 

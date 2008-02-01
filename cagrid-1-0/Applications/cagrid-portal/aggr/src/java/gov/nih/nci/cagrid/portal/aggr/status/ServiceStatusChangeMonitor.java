@@ -79,12 +79,22 @@ public class ServiceStatusChangeMonitor extends AbstractMonitor {
 					logger.debug(serviceUrl
 							+ " is banned. No event will be published.");
 				} else if (!dynamicStatus.equals(cachedStatus)) {
-					ServiceStatusChangeEvent event = new ServiceStatusChangeEvent(
-							this);
-					event.setOldStatus(cachedStatus);
-					event.setNewStatus(dynamicStatus);
-					event.setServiceUrl(serviceUrl);
-					getApplicationContext().publishEvent(event);
+
+					if (ServiceStatus.DORMANT.equals(cachedStatus)
+							&& ServiceStatus.INACTIVE.equals(dynamicStatus)) {
+						// do nothing
+						logger
+								.debug(serviceUrl
+										+ " is dormant and service is inactive. No event will be published.");
+					} else {
+
+						ServiceStatusChangeEvent event = new ServiceStatusChangeEvent(
+								this);
+						event.setOldStatus(cachedStatus);
+						event.setNewStatus(dynamicStatus);
+						event.setServiceUrl(serviceUrl);
+						getApplicationContext().publishEvent(event);
+					}
 				}
 
 			}
