@@ -1,6 +1,7 @@
 package org.cagrid.transfer.system.test.client;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.rmi.RemoteException;
@@ -16,6 +17,7 @@ import org.apache.axis.types.URI.MalformedURIException;
 
 import org.oasis.wsrf.properties.GetResourcePropertyResponse;
 
+import org.globus.common.CoGProperties;
 import org.globus.gsi.GlobusCredential;
 
 import org.cagrid.transfer.system.test.stubs.TransferSystemTestPortType;
@@ -68,6 +70,10 @@ public class TransferSystemTestClient extends TransferSystemTestClientBase imple
         try {
             if (!(args.length < 2)) {
                 if (args[0].equals("-url")) {
+                	org.globus.common.CoGProperties properties = org.globus.common.CoGProperties.getDefault();
+            		properties.setCaCertLocations(".");
+            		org.globus.common.CoGProperties.setDefault(properties);
+                	
                     GlobusCredential creds = null;
                     GlobusCredential anothercreds = null;
                     try {

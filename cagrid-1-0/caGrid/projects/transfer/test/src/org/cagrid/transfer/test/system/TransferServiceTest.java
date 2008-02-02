@@ -21,6 +21,7 @@ import java.util.Vector;
 import org.apache.log4j.PropertyConfigurator;
 import org.cagrid.transfer.test.system.steps.AddCreateTransferMethodImplStep;
 import org.cagrid.transfer.test.system.steps.AddCreateTransferMethodStep;
+import org.cagrid.transfer.test.system.steps.CopyCAStep;
 import org.cagrid.transfer.test.system.steps.CopyProxyStep;
 
 
@@ -65,6 +66,7 @@ public class TransferServiceTest extends ServiceStoryBase {
             steps.add(new AddCreateTransferMethodImplStep(tci, false));
             if (getContainer() instanceof SecureContainer) {
                 steps.add(new CopyProxyStep((SecureContainer) getContainer(), tci));
+                steps.add(new CopyCAStep((SecureContainer)getContainer(), tci));
             }
             steps.add(new DeployServiceStep(getContainer(), tci.getDir()));
             steps.add(new StartContainerStep(getContainer()));
