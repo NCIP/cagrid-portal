@@ -14,10 +14,10 @@
 	<!-- Information -->
 	<property name="project.version" value="1.0" />
 	<property name="project.name" value="${cagrid.master.jar.prefix}${ant.project.name}" />
-	<property name="java.source" value="1.5"/>
+	<property name="java.source" value="1.5" />
 
-	<property name="system.src.dir" value="${basedir}/src/java/system"/>
-	<property name="core.src.dir" value="${basedir}/src/java/core"/>
+	<property name="system.src.dir" value="${basedir}/src/java/system" />
+	<property name="core.src.dir" value="${basedir}/src/java/core" />
 	<property name="build.dir" value="${basedir}/build" />
 	<property name="javadoc.dir" value="${build.dir}/javadoc" />
 	<property name="system.classes.dir" value="${build.dir}/system/classes" />
@@ -30,11 +30,12 @@
 	<property name="ext.test.lib.dir" location="${basedir}/ext/test/lib" />
 
 	<!-- testing stuff -->
+	<property name="test.log.dir" value="log" />
+	<property name="junit.results.dir" value="${test.log.dir}/junit" />
 	<property name="test.dir" location="${basedir}/test" />
 	<property name="test.src.dir" location="${test.dir}/src/java" />
 	<property name="test.classes.dir" location="${build.dir}/test/classes" />
 	<property name="test.lib.dir" location="${test.dir}/lib" />
-	<property name="test.logs.dir" location="${test.dir}/logs" />
 	<property name="test.project.jar" location="${jar.dir}/${project.name}${cagrid.master.jar.separator}tests.jar" />
 
 	<!-- no testing file yet
@@ -62,6 +63,9 @@
 	<!-- The Run Classpath                                                   -->
 	<!-- =============================================================== -->
 	<path id="run.classpath">
+		<fileset dir="${jar.dir}">
+			<include name="**/*.jar" />
+		</fileset>
 		<fileset dir="${lib.dir}">
 			<include name="**/*.jar" />
 		</fileset>
@@ -72,7 +76,7 @@
 			<include name="**/*.jar" />
 		</fileset>
 	</path>
-	
+
 
 	<!-- =============================================================== -->
 	<!-- The Test Classpath                                              -->
@@ -97,19 +101,18 @@
 		</fileset>
 	</path>
 
-
 	<!-- =============================================================== -->
 	<!-- Prepares the build directory                                    -->
 	<!-- =============================================================== -->
 	<target name="prepare">
 		<tstamp />
 		<mkdir dir="${build.dir}" />
-		<mkdir dir="${system.classes.dir}"/>
-		<mkdir dir="${core.classes.dir}"/>
-		<mkdir dir="${jar.dir}"/>
+		<mkdir dir="${system.classes.dir}" />
+		<mkdir dir="${core.classes.dir}" />
+		<mkdir dir="${jar.dir}" />
 	</target>
-	
-	
+
+
 	<!-- =============================================================== -->
 	<!-- Compiles the core source code                                   -->
 	<!-- =============================================================== -->
@@ -127,11 +130,11 @@
 		<javac srcdir="${system.src.dir}" destdir="${system.classes.dir}" source="${java.source}" debug="on" deprecation="off" optimize="off">
 			<classpath refid="build.classpath" />
 			<classpath>
-				<pathelement location="${core.classes.dir}"/>
+				<pathelement location="${core.classes.dir}" />
 			</classpath>
 		</javac>
 	</target>
-	
+
 
 	<!-- =============================================================== -->
 	<!-- Compiles the test source code                                   -->
@@ -163,10 +166,10 @@
 				<attribute name="Main-Class" value="${main.class}" />
 			</manifest>
 			<fileset dir="${core.classes.dir}">
-				<include name="**/*.class"/>
+				<include name="**/*.class" />
 			</fileset>
 			<fileset dir="${core.src.dir}">
-				<include name="**/*.java"/>
+				<include name="**/*.java" />
 			</fileset>
 		</jar>
 		<jar jarfile="${system.jarfile}">
@@ -175,14 +178,14 @@
 				<attribute name="Main-Class" value="${main.class}" />
 			</manifest>
 			<fileset dir="${system.classes.dir}">
-				<include name="**/*.class"/>
+				<include name="**/*.class" />
 			</fileset>
 			<fileset dir="${system.src.dir}">
-				<include name="**/*.java"/>
+				<include name="**/*.java" />
 			</fileset>
-		</jar>	
+		</jar>
 	</target>
-	
+
 
 	<!-- ============================================================== -->
 	<!-- Creates the jar files                                          -->
@@ -195,7 +198,7 @@
 			</manifest>
 		</jar>
 	</target>
-	
+
 
 	<!-- =================================================================== -->
 	<!-- Builds Code Docuementation                                          -->
@@ -223,5 +226,29 @@
 	<!-- Builds from scratch                                                -->
 	<!-- ============================================================== -->
 	<target name="all" description="Builds the entire application" depends="jar, jarTests" />
+
+	<!-- call the test target for each project and aggregates the log resutls  -->
+	<target name="systemTest">
+		<echo message="Test results dir: ${junit.results.dir}" />
+		<mkdir dir="${junit.results.dir}" />
+		<junit dir="." printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" forkmode="once">
+			<sysproperty key="basedir" value="." />
+			<sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.data.file}" />
+			<jvmarg value="-Dbuild.dir=build" />
+			<classpath>
+				<path refid="run.classpath" />
+				<pathelement location="${test.dir}/resources" />
+			</classpath>
+			<formatter type="xml" />
+			<test if="testcase" name="${testcase}" fork="yes" todir="${junit.results.dir}" />
+			<batchtest unless="testcase" fork="yes" todir="${junit.results.dir}">
+				<fileset dir="${test.src.dir}">
+					<include name="**/*StoryBook.java" />
+				</fileset>
+			</batchtest>
+		</junit>
+		<fail message="Tests failed! Check test reports." if="test.failed" />
+	</target>
+
 </project>
 
