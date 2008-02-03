@@ -36,11 +36,16 @@ public class TransferClientHelper {
             conn.connect();
             return conn.getInputStream();
         } else if (url.getProtocol().equals("https")) {
+            if(creds!=null){
             GlobusGSSCredentialImpl cred = new GlobusGSSCredentialImpl(creds, GSSCredential.INITIATE_AND_ACCEPT);
             GSIHttpURLConnection connection = new GSIHttpURLConnection(url);
             connection.setGSSMode(GSIConstants.MODE_SSL);
             connection.setCredentials(cred);
             return connection.getInputStream();
+            } else {
+                throw new Exception(
+                "To use the https protocol to retrieve data from the Transfer Service you must have credentials");
+            }
         }
         throw new Exception("Protocol " + url.getProtocol() + " not supported.");
     }
@@ -56,16 +61,7 @@ public class TransferClientHelper {
      * @throws Exception
      */
     public static InputStream getData(DataTransferDescriptor desc) throws Exception {
-        URL url = new URL(desc.getUrl());
-        if (url.getProtocol().equals("http")) {
-            URLConnection conn = url.openConnection();
-            conn.connect();
-            return conn.getInputStream();
-        } else if (url.getProtocol().equals("https")) {
-            throw new Exception(
-                "To use the https protocol you must call the secure method:  getDataStream(DataTransferDescriptor desc, GSSCredential creds)");
-        }
-        throw new Exception("Protocol " + url.getProtocol() + " not supported.");
+        return getData(desc, null);
     }
 
 
@@ -91,6 +87,7 @@ public class TransferClientHelper {
             int status = client.executeMethod(post);
             return;
         } else if (url.getProtocol().equals("https")) {
+            if(creds!=null){
             GlobusGSSCredentialImpl cred = new GlobusGSSCredentialImpl(creds, GSSCredential.INITIATE_AND_ACCEPT);
             GSIHttpURLConnection connection = new GSIHttpURLConnection(url);
             connection.setGSSMode(GSIConstants.MODE_SSL);
@@ -107,6 +104,10 @@ public class TransferClientHelper {
             connection.getOutputStream().close();
             connection.getInputStream().close();
             return;
+            } else {
+                throw new Exception(
+                "To use the https protocol to stage data to the Transfer Service you must have credentials");
+            }
         }
         throw new Exception("Protocol " + url.getProtocol() + " not supported.");
     }
@@ -125,20 +126,7 @@ public class TransferClientHelper {
      * @throws Exception
      */
     public static void putData(InputStream is, int contentLength, DataTransferDescriptor desc) throws Exception {
-        URL url = new URL(desc.getUrl());
-        if (url.getProtocol().equals("http")) {
-            PostMethod post = new PostMethod(desc.getUrl());
-            InputStreamRequestEntity re = new InputStreamRequestEntity(is, contentLength);
-            post.setRequestEntity(re);
-
-            HttpClient client = new HttpClient();
-            int status = client.executeMethod(post);
-            return;
-        } else if (url.getProtocol().equals("https")) {
-            throw new Exception(
-                "To use the https protocol you must call the secure method:  getDataStream(DataTransferDescriptor desc, GSSCredential creds)");
-        }
-        throw new Exception("Protocol " + url.getProtocol() + " not supported.");
+        putData(is, contentLength, desc, null);
     }
 
 }
