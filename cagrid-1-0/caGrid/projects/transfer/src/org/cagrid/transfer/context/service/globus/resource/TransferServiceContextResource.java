@@ -35,7 +35,7 @@ public class TransferServiceContextResource extends TransferServiceContextResour
     public void initialize(Object resourceBean, QName resourceElementQName, Object id) throws ResourceException {
         super.initialize(resourceBean, resourceElementQName, id);
         Calendar cal = GregorianCalendar.getInstance();
-        cal.roll(Calendar.MINUTE, 30);
+        cal.add(Calendar.MINUTE, 30);
         // default termination time is 30 minutes.
         this.setTerminationTime(cal);
     }
