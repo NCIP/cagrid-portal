@@ -1,6 +1,7 @@
 package org.cagrid.transfer.servlet;
 
 import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -15,6 +16,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
 import org.cagrid.transfer.context.common.TransferServiceContextConstants;
 import org.cagrid.transfer.context.stubs.TransferServiceContextResourceProperties;
 import org.cagrid.transfer.descriptor.DataStorageDescriptor;
@@ -22,6 +24,7 @@ import org.globus.axis.gsi.GSIConstants;
 
 
 public class TransferServlet extends HttpServlet {
+    private static final Logger logger = Logger.getLogger(TransferServlet.class);
 
     private Properties props = null;
     String persistenceDir = null;
@@ -31,8 +34,8 @@ public class TransferServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         props = new Properties();
-        System.out.println("Calling Transfer Servlet PUT: " + getServletContext().getServerInfo() + getServletInfo());
-        System.out.println("Calling Transfer Servlet at: " + getServletContext().getRealPath("/"));
+        logger.info("Calling Transfer Servlet PUT: " + getServletContext().getServerInfo() + getServletInfo());
+        logger.info("Calling Transfer Servlet at: " + getServletContext().getRealPath("/"));
 
         // reload everytime now so that it can be changed while container is
         // running.....
@@ -49,7 +52,7 @@ public class TransferServlet extends HttpServlet {
         rootWebappLocation = rootWebappLocation.substring(0, rootWebappLocation.lastIndexOf("/") + 1);
         String persistenceDir = rootWebappLocation
             + props.getProperty("transfer.service.persistence.relative.location");
-        System.out.println("Storage data is stored in: " + persistenceDir);
+        logger.info("Storage data is stored in: " + persistenceDir);
 
         String configBlockSizeS = props.getProperty("transfer.service.block.size");
         if (configBlockSizeS != null) {
@@ -58,7 +61,7 @@ public class TransferServlet extends HttpServlet {
                 int configBlockSize = Integer.parseInt(configBlockSizeS);
                 blockSize = configBlockSize;
             } catch (NumberFormatException e) {
-                System.out.println("Service attribute block size not configured properly");
+                logger.info("Service attribute block size not configured properly");
                 resp.sendError(500);
                 return;
             }
@@ -70,7 +73,7 @@ public class TransferServlet extends HttpServlet {
         // 2 get the requested ID
         String requestedID = (String) req.getParameter("id");
         if (requestedID == null || requestedID.length() <= 0) {
-            System.out.println("Not ID");
+            logger.info("Not ID");
             resp.sendError(400);
             return;
         }
@@ -81,7 +84,7 @@ public class TransferServlet extends HttpServlet {
             props = (TransferServiceContextResourceProperties) Utils.deserializeObject(new FileReader(persistenceDir
                 + File.separator + requestedID + ".xml"), TransferServiceContextResourceProperties.class);
         } catch (Exception e) {
-            System.out.println("Cannot find or deserialize the resource properties describing this transfer object: "
+            logger.info("Cannot find or deserialize the resource properties describing this transfer object: "
                 + requestedID);
             e.printStackTrace();
             resp.sendError(500);
@@ -91,11 +94,12 @@ public class TransferServlet extends HttpServlet {
         DataStorageDescriptor desc = props.getDataStorageDescriptor();
         // verify that the user calling is the owner or there is no owner
         if (desc.getUserDN() == null || desc.getUserDN().equals(userDN)) {
-            System.out.println("Storing data using block size of: " + blockSize);
+            logger.info("Storing data using block size of: " + blockSize);
             // 4 read the data from the request and write it
+            logger.info("Data file storing is located at: " + desc.getLocation());
             File outFile = new File(desc.getLocation());
             if (outFile.exists()) {
-                System.out.println("File is already staged for resource: " + requestedID + " at file: "
+                logger.info("File is already staged for resource: " + requestedID + " at file: "
                     + desc.getLocation());
                 resp.sendError(500);
                 return;
@@ -113,7 +117,7 @@ public class TransferServlet extends HttpServlet {
             }
             fos.close();
         } else {
-            System.out.println("Trouble storing data for requested object: " + requestedID + " at file: "
+            logger.info("Trouble storing data for requested object: " + requestedID + " at file: "
                 + desc.getLocation());
             resp.sendError(403);
             return;
@@ -125,8 +129,8 @@ public class TransferServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         props = new Properties();
-        System.out.println("Calling Transfer Servlet GET: " + getServletContext().getServerInfo() + getServletInfo());
-        System.out.println("Calling Transfer Servlet at: " + getServletContext().getRealPath("/"));
+        logger.info("Calling Transfer Servlet GET: " + getServletContext().getServerInfo() + getServletInfo());
+        logger.info("Calling Transfer Servlet at: " + getServletContext().getRealPath("/"));
 
         // reload everytime now so that it can be changed while container is
         // running.....
@@ -144,7 +148,7 @@ public class TransferServlet extends HttpServlet {
         rootWebappLocation = rootWebappLocation.substring(0, rootWebappLocation.lastIndexOf("/") + 1);
         String persistenceDir = rootWebappLocation
             + props.getProperty("transfer.service.persistence.relative.location");
-        System.out.println("Storage data is stored in: " + persistenceDir);
+        logger.info("Storage data is stored in: " + persistenceDir);
 
         String configBlockSizeS = props.getProperty("transfer.service.block.size");
         if (configBlockSizeS != null) {
@@ -153,7 +157,7 @@ public class TransferServlet extends HttpServlet {
                 int configBlockSize = Integer.parseInt(configBlockSizeS);
                 blockSize = configBlockSize;
             } catch (NumberFormatException e) {
-                System.out.println("Service attribute block size not configured properly");
+                logger.info("Service attribute block size not configured properly");
                 resp.sendError(500);
                 return;
             }
@@ -165,7 +169,7 @@ public class TransferServlet extends HttpServlet {
         // 2 get the requested ID
         String requestedID = (String) req.getParameter("id");
         if (requestedID == null || requestedID.length() <= 0) {
-            System.out.println("Not ID");
+            logger.info("Not ID");
             resp.sendError(400);
             return;
         }
@@ -176,7 +180,7 @@ public class TransferServlet extends HttpServlet {
             props = (TransferServiceContextResourceProperties) Utils.deserializeObject(new FileReader(persistenceDir
                 + File.separator + requestedID + ".xml"), TransferServiceContextResourceProperties.class);
         } catch (Exception e) {
-            System.out.println("Cannot find or deserialize the resource properties describing this transfer object: "
+            logger.info("Cannot find or deserialize the resource properties describing this transfer object: "
                 + requestedID);
             e.printStackTrace();
             resp.sendError(500);
@@ -186,9 +190,10 @@ public class TransferServlet extends HttpServlet {
         DataStorageDescriptor desc = props.getDataStorageDescriptor();
         // verify that the user calling is the owner or there is no owner
         if (desc.getUserDN() == null || desc.getUserDN().equals(userDN)) {
-            System.out.println("Transfering data using block size of: " + blockSize);
+            logger.info("Transfering data using block size of: " + blockSize);
             try {
                 // 4 write data to the response
+                logger.info("Data file requested is located at: " + desc.getLocation());
                 FileInputStream fis = new FileInputStream(desc.getLocation());
                 byte[] bytes = new byte[blockSize];
                 int length = fis.read(bytes);
@@ -201,14 +206,14 @@ public class TransferServlet extends HttpServlet {
                 }
                 fis.close();
             } catch (Exception e) {
-                System.out.println("Trouble retrieving data for requested object: " + requestedID + " at file: "
+                logger.info("Trouble retrieving data for requested object: " + requestedID + " at file: "
                     + desc.getLocation());
                 e.printStackTrace();
                 resp.sendError(500);
                 return;
             }
         } else {
-            System.out.println("Not authorized to recieve: " + requestedID + " at file: " + desc.getLocation());
+            logger.info("Not authorized to recieve: " + requestedID + " at file: " + desc.getLocation());
             resp.sendError(403);
             return;
         }
