@@ -230,9 +230,12 @@ public class XmlPersistenceHelper extends FilePersistenceHelper implements Persi
 
         try {
             copyFile(tmpFile, file);
+            tmpFile.delete();
         } catch (IOException e) {
             file.delete();
             throw new ResourceException("resourceStoreFailed: unable to write to " + file.getAbsolutePath());
+        } finally {
+            tmpFile.delete();
         }
 
     }
