@@ -5,11 +5,14 @@ import gov.nih.nci.cagrid.cqlquery.CQLQuery;
 import gov.nih.nci.cagrid.cqlresultset.CQLQueryResults;
 import gov.nih.nci.cagrid.data.client.DataServiceClient;
 import gov.nih.nci.cagrid.data.creation.DataTestCaseInfo;
+import gov.nih.nci.cagrid.data.utilities.CQLQueryResultsIterator;
 import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainer;
 import gov.nih.nci.cagrid.testing.system.haste.Step;
 
 import java.io.File;
 import java.io.FileReader;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.apache.axis.types.URI;
 import org.apache.axis.types.URI.MalformedURIException;
@@ -23,7 +26,7 @@ import org.apache.log4j.Logger;
  * @author David Ervin
  * 
  * @created Feb 1, 2008 9:02:20 AM
- * @version $Id: InvokeSDK4DataServiceStep.java,v 1.2 2008-02-01 18:04:47 dervin Exp $ 
+ * @version $Id: InvokeSDK4DataServiceStep.java,v 1.3 2008-02-04 18:26:54 dervin Exp $ 
  */
 public class InvokeSDK4DataServiceStep extends Step {
     public static final String TEST_RESOURCES_DIR = ".." + File.separator + "sdkQuery4" +
@@ -43,14 +46,14 @@ public class InvokeSDK4DataServiceStep extends Step {
 
 
     public void runStep() throws Throwable {
-        testStudentWithName();
+        testUndergraduateStudentWithName();
     }
     
     
-    private void testStudentWithName() throws Throwable {
-        CQLQuery query = loadQuery(TEST_QUERIES_DIR + "studentWithName.xml");
-        // CQLQueryResults results = loadQueryResults(TEST_RESULTS_DIR + "studentWithNameResults.xml");
-        invokeValidQueryValidResults(query, null);
+    private void testUndergraduateStudentWithName() throws Throwable {
+        CQLQuery query = loadQuery(TEST_QUERIES_DIR + "undergraduateStudentWithName.xml");
+        CQLQueryResults results = loadQueryResults(TEST_RESULTS_DIR + "goldUndergraduateStudentWithName.xml");
+        invokeValidQueryValidResults(query, results);
     }
     
     
@@ -100,7 +103,7 @@ public class InvokeSDK4DataServiceStep extends Step {
             ex.printStackTrace();
             fail("Query failed to execute: " + ex.getMessage());
         }
-        // TODO: compare results to gold
+        compareResults(goldResults, queryResults);
     }
     
     
@@ -143,5 +146,23 @@ public class InvokeSDK4DataServiceStep extends Step {
         }
         LOG.debug("Data service url: " + url);
         return url;
+    }
+    
+    
+    private void compareResults(CQLQueryResults gold, CQLQueryResults test) {
+        Set<String> goldXml = new HashSet<String>();
+        Set<String> testXml = new HashSet<String>();
+        
+        CQLQueryResultsIterator goldIter = new CQLQueryResultsIterator(gold, true);
+        while (goldIter.hasNext()) {
+            goldXml.add((String) goldIter.next());
+        }
+        
+        CQLQueryResultsIterator testIter = new CQLQueryResultsIterator(test, true);
+        while (testIter.hasNext()) {
+            testXml.add((String) testIter.next());
+        }
+        
+        assertEquals("Result count differed from expected", goldXml.size(), testXml.size());
     }
 }
