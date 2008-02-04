@@ -14,6 +14,7 @@ import gov.nih.nci.cagrid.introduce.common.SpecificServiceInformation;
 import java.io.File;
 import java.io.FileWriter;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -201,41 +202,56 @@ public class SyncUtils {
 	 *            The set of schemas already visited by this method
 	 * @throws Exception
 	 */
-	public static void walkSchemasGetNamespaces(String schemaFile, Set namespaces, Set excludedNamespaces,
-		Set visitedSchemas) throws Exception {
-		logger.debug("Getting namespaces from schema " + schemaFile);
-		visitedSchemas.add(schemaFile);
-		File currentPath = new File(schemaFile).getCanonicalFile().getParentFile();
-		Document schema = XMLUtilities.fileNameToDocument(schemaFile);
-		List importEls = schema.getRootElement().getChildren("import",
-			schema.getRootElement().getNamespace(IntroduceConstants.W3CNAMESPACE));
-		for (int i = 0; i < importEls.size(); i++) {
-			// get the import element
-			Element importEl = (Element) importEls.get(i);
-
-			// get the location of the imported schema
-			String location = importEl.getAttributeValue("schemaLocation");
-			if (location != null && !location.equals("")) {
-				File importedSchema = new File(currentPath + File.separator + location);
-
-				// has the schema been visited yet?
-				if (!visitedSchemas.contains(importedSchema.getCanonicalPath())) {
-					String namespace = importEl.getAttributeValue("namespace");
-					if (!excludedNamespaces.contains(namespace)) {
-						if (namespaces.add(namespace)) {
-							logger.debug("adding namepace " + namespace);
-						}
-						if (!schemaFile.equals(importedSchema.getCanonicalPath())) {
-							walkSchemasGetNamespaces(importedSchema.getCanonicalPath(), namespaces, excludedNamespaces,
-								visitedSchemas);
-						} else {
-							logger.debug("WARNING: Schema is importing itself. " + schemaFile);
-						}
-					}
-				} else {
-					logger.debug("WARNING: Schema imports contain circular references. " + schemaFile);
-				}
-			}
-		}
+	public static void walkSchemasGetNamespaces(String schemaFile, Set namespaces, 
+	    Set excludedNamespaces, Set visitedSchemas) throws Exception {
+		internalWalkSchemasGetNamespaces(schemaFile, namespaces, excludedNamespaces, 
+            visitedSchemas, new HashSet<String>(), new HashSet<String>());
 	}
+    
+    
+    private static void internalWalkSchemasGetNamespaces(String schemaFile, Set<String> namespaces, Set<String> excludedNamespaces,
+        Set<String> visitedSchemas, Set<String> cycleSchemas, Set<String> selfImportSchemas) throws Exception {
+        logger.debug("Getting namespaces from schema " + schemaFile);
+        visitedSchemas.add(schemaFile);
+        File currentPath = new File(schemaFile).getCanonicalFile().getParentFile();
+        Document schema = XMLUtilities.fileNameToDocument(schemaFile);
+        List importEls = schema.getRootElement().getChildren("import",
+            schema.getRootElement().getNamespace(IntroduceConstants.W3CNAMESPACE));
+        for (int i = 0; i < importEls.size(); i++) {
+            // get the import element
+            Element importEl = (Element) importEls.get(i);
+
+            // get the location of the imported schema
+            String location = importEl.getAttributeValue("schemaLocation");
+            if (location != null && !location.equals("")) {
+                // imports must be at or below current directory, or contain
+                // appropriate '../' to reach path on file system
+                File importedSchema = new File(currentPath + File.separator + location);
+
+                // has the schema been visited yet?
+                if (!visitedSchemas.contains(importedSchema.getCanonicalPath())) {
+                    String namespace = importEl.getAttributeValue("namespace");
+                    if (!excludedNamespaces.contains(namespace)) {
+                        if (namespaces.add(namespace)) {
+                            logger.debug("adding namepace " + namespace);
+                        }
+                        if (!schemaFile.equals(importedSchema.getCanonicalPath())) {
+                            internalWalkSchemasGetNamespaces(importedSchema.getCanonicalPath(), namespaces, excludedNamespaces,
+                                visitedSchemas, cycleSchemas, selfImportSchemas);
+                        } else {
+                            if (!selfImportSchemas.contains(schemaFile)) {
+                                logger.debug("WARNING: Schema is importing itself. " + schemaFile);
+                                selfImportSchemas.add(schemaFile);
+                            }
+                        }
+                    }
+                } else {
+                    if (!cycleSchemas.contains(schemaFile)) {
+                        logger.debug("WARNING: Schema imports contain circular references. " + schemaFile);
+                        cycleSchemas.add(schemaFile);
+                    }
+                }
+            }
+        }
+    }
 }
