@@ -28,7 +28,7 @@ import org.apache.log4j.Logger;
  * @author David Ervin
  * 
  * @created Mar 2, 2007 10:26:47 AM
- * @version $Id: CQL2ParameterizedHQL.java,v 1.4 2008-02-01 19:11:06 dervin Exp $ 
+ * @version $Id: CQL2ParameterizedHQL.java,v 1.5 2008-02-05 16:53:43 dervin Exp $ 
  */
 public class CQL2ParameterizedHQL {
     public static final String TARGET_ALIAS = "__TargetAlias__";
@@ -172,9 +172,9 @@ public class CQL2ParameterizedHQL {
 		
 		if (avoidSubclasses) {
 			boolean mustAddWhereClause = 
-				target.getAssociation() != null
-				&& target.getAttribute() != null
-				&& target.getGroup() != null;
+				target.getAssociation() == null
+				&& target.getAttribute() == null
+				&& target.getGroup() == null;
 			if (mustAddWhereClause) {
 				hql.append(" where ");
 			} else {
