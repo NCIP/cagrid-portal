@@ -57,6 +57,8 @@
 	<property name="test.classes.dir" location="${build.dir}/test/classes" />
 	<property name="test.lib.dir" location="${test.dir}/lib" />
 	<property name="test.logs.dir" location="${test.dir}/logs" />
+	<property name="test.resources.dir" location="${test.dir}/resources"/>
+	<property name="test.resources.jar" location="${build.jars.dir}/${project.jar.prefix}tests-resources.jar"/>
 	<property name="test.project.jar" location="${build.jars.dir}/${project.jar.prefix}tests.jar" />
 	<import file="test\test.xml" />
 	
@@ -123,6 +125,7 @@
 		<fileset dir="${globus.dir}/lib">
 			<include name="**/*.jar" />
 		</fileset>
+		<pathelement location="${test.resources.jar}"/>
 		<pathelement location="${build.beans.dest}"/>
 		<pathelement location="${build.processor.dest}"/>
 		<pathelement location="${build.style.dest}"/>
@@ -302,6 +305,11 @@
 		<jar destfile="${test.project.jar}">
 			<fileset dir="${test.classes.dir}">
 				<include name="**/*.class"/>
+			</fileset>
+		</jar>
+		<jar destfile="${test.resources.jar}">
+			<fileset dir="${basedir}">
+				<include name="test/resources/**/*"/>
 			</fileset>
 		</jar>
 	</target>
