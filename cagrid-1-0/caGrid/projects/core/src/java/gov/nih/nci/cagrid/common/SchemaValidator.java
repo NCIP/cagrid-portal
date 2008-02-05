@@ -9,7 +9,6 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import javax.xml.transform.stream.StreamSource;
-import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 
 import org.xml.sax.InputSource;
@@ -139,7 +138,7 @@ public class SchemaValidator {
 	    SchemaFactory factory = SchemaFactory.newInstance(sl);
 	    StreamSource ss = new StreamSource(xsdFilename);
 	    try {
-            Schema schema = factory.newSchema(ss);
+            factory.newSchema(ss);
         } catch (SAXException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
