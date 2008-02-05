@@ -26,7 +26,7 @@ import java.util.Map;
  * @author David Ervin
  * 
  * @created Mar 2, 2007 10:26:47 AM
- * @version $Id: CQL2HQL.java,v 1.2 2007-03-08 20:35:29 dervin Exp $ 
+ * @version $Id: CQL2HQL.java,v 1.3 2008-02-05 21:33:09 dervin Exp $ 
  */
 public class CQL2HQL {
 	
@@ -131,9 +131,9 @@ public class CQL2HQL {
 		
 		if (avoidSubclasses) {
 			boolean mustAddWhereClause = 
-				target.getAssociation() != null
-				&& target.getAttribute() != null
-				&& target.getGroup() != null;
+				target.getAssociation() == null
+				&& target.getAttribute() == null
+				&& target.getGroup() == null;
 			if (mustAddWhereClause) {
 				hql.append(" where ");
 			} else {
