@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapping PUBLIC "-//EXOLAB/Castor Object Mapping DTD Version 1.0//EN" "http://www.castor.org/mapping.dtd">
-
 <mapping>
   <class name="gov.nih.nci.cacoresdk.domain.other.primarykey.DoublePrimitiveKey" identity="id">
     <map-to xml="DoublePrimitiveKey" ns-uri="gme://caCORE.caCORE/4.0/gov.nih.nci.cacoresdk.domain.other.primarykey" />
@@ -37,9 +35,6 @@
     <field name="name" type="string">
       <bind-xml name="name" node="attribute" />
     </field>
-    <field name="restaurant" type="gov.nih.nci.cacoresdk.domain.manytoone.unidirectional.Restaurant">
-      <bind-xml name="Restaurant" type="gov.nih.nci.cacoresdk.domain.manytoone.unidirectional.Restaurant" location="restaurant" node="element" />
-    </field>
   </class>
   <class name="gov.nih.nci.cacoresdk.domain.onetoone.unidirectional.withjoin.Handle" identity="id">
     <map-to xml="Handle" ns-uri="gme://caCORE.caCORE/4.0/gov.nih.nci.cacoresdk.domain.onetoone.unidirectional.withjoin" />
@@ -57,9 +52,6 @@
     </field>
     <field name="name" type="string">
       <bind-xml name="name" node="attribute" />
-    </field>
-    <field name="product" type="gov.nih.nci.cacoresdk.domain.onetoone.bidirectional.Product">
-      <bind-xml name="Product" type="gov.nih.nci.cacoresdk.domain.onetoone.bidirectional.Product" location="product" node="element" />
     </field>
   </class>
   <class name="gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.Display" identity="id">
@@ -91,12 +83,6 @@
     <field name="name" type="string">
       <bind-xml name="name" node="attribute" />
     </field>
-    <field name="deck" type="gov.nih.nci.cacoresdk.domain.other.levelassociation.Deck">
-      <bind-xml name="Deck" type="gov.nih.nci.cacoresdk.domain.other.levelassociation.Deck" location="deck" node="element" />
-    </field>
-    <field name="cardCollection" type="gov.nih.nci.cacoresdk.domain.other.levelassociation.Card" collection="collection">
-      <bind-xml name="Card" type="gov.nih.nci.cacoresdk.domain.other.levelassociation.Card" location="cardCollection" node="element" />
-    </field>
   </class>
   <class name="gov.nih.nci.cacoresdk.domain.onetoone.unidirectional.Address" identity="id">
     <map-to xml="Address" ns-uri="gme://caCORE.caCORE/4.0/gov.nih.nci.cacoresdk.domain.onetoone.unidirectional" />
@@ -114,9 +100,6 @@
     </field>
     <field name="name" type="string">
       <bind-xml name="name" node="attribute" />
-    </field>
-    <field name="employeeCollection" type="gov.nih.nci.cacoresdk.domain.manytomany.bidirectional.Employee" collection="collection">
-      <bind-xml name="Employee" type="gov.nih.nci.cacoresdk.domain.manytomany.bidirectional.Employee" location="employeeCollection" node="element" />
     </field>
   </class>
   <class name="gov.nih.nci.cacoresdk.domain.other.datatype.AllDataType" identity="id">
@@ -175,9 +158,6 @@
     <field name="stringValue" type="string">
       <bind-xml name="stringValue" node="attribute" />
     </field>
-    <field name="stringCollection" type="string" collection="collection">
-      <bind-xml name="string" type="string" location="stringCollection" node="element" />
-    </field>
   </class>
   <class name="gov.nih.nci.cacoresdk.domain.onetoone.multipleassociation.withjoin.Bride" identity="id">
     <map-to xml="Bride" ns-uri="gme://caCORE.caCORE/4.0/gov.nih.nci.cacoresdk.domain.onetoone.multipleassociation.withjoin" />
@@ -186,12 +166,6 @@
     </field>
     <field name="name" type="string">
       <bind-xml name="name" node="attribute" />
-    </field>
-    <field name="father" type="gov.nih.nci.cacoresdk.domain.onetoone.multipleassociation.withjoin.InLaw">
-      <bind-xml name="InLaw" type="gov.nih.nci.cacoresdk.domain.onetoone.multipleassociation.withjoin.InLaw" location="father" node="element" />
-    </field>
-    <field name="mother" type="gov.nih.nci.cacoresdk.domain.onetoone.multipleassociation.withjoin.InLaw">
-      <bind-xml name="InLaw" type="gov.nih.nci.cacoresdk.domain.onetoone.multipleassociation.withjoin.InLaw" location="mother" node="element" />
     </field>
   </class>
   <class name="gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.sametable.Goverment" identity="id">
@@ -229,9 +203,6 @@
     <field name="style" type="string">
       <bind-xml name="style" node="attribute" />
     </field>
-    <field name="handle" type="gov.nih.nci.cacoresdk.domain.onetoone.unidirectional.withjoin.Handle">
-      <bind-xml name="Handle" type="gov.nih.nci.cacoresdk.domain.onetoone.unidirectional.withjoin.Handle" location="handle" node="element" />
-    </field>
   </class>
   <class name="gov.nih.nci.cacoresdk.domain.inheritance.parentwithassociation.Assistant" identity="id">
     <map-to xml="Assistant" ns-uri="gme://caCORE.caCORE/4.0/gov.nih.nci.cacoresdk.domain.inheritance.parentwithassociation" />
@@ -246,9 +217,6 @@
     <map-to xml="Hand" ns-uri="gme://caCORE.caCORE/4.0/gov.nih.nci.cacoresdk.domain.other.levelassociation" />
     <field name="id" type="integer">
       <bind-xml name="id" node="attribute" />
-    </field>
-    <field name="cardCollection" type="gov.nih.nci.cacoresdk.domain.other.levelassociation.Card" collection="collection">
-      <bind-xml name="Card" type="gov.nih.nci.cacoresdk.domain.other.levelassociation.Card" location="cardCollection" node="element" />
     </field>
   </class>
   <class name="gov.nih.nci.cacoresdk.domain.other.primarykey.FloatKey" identity="id">
@@ -270,9 +238,6 @@
     </field>
     <field name="Name" type="string">
       <bind-xml name="Name" node="attribute" />
-    </field>
-    <field name="suit" type="gov.nih.nci.cacoresdk.domain.other.levelassociation.Suit">
-      <bind-xml name="Suit" type="gov.nih.nci.cacoresdk.domain.other.levelassociation.Suit" location="suit" node="element" />
     </field>
   </class>
   <class name="gov.nih.nci.cacoresdk.domain.other.primarykey.LongPrimitiveKey" identity="id">
@@ -301,9 +266,6 @@
     <field name="name" type="string">
       <bind-xml name="name" node="attribute" />
     </field>
-    <field name="projectCollection" type="gov.nih.nci.cacoresdk.domain.manytomany.bidirectional.Project" collection="collection">
-      <bind-xml name="Project" type="gov.nih.nci.cacoresdk.domain.manytomany.bidirectional.Project" location="projectCollection" node="element" />
-    </field>
   </class>
   <class name="gov.nih.nci.cacoresdk.domain.onetoone.bidirectional.withjoin.Pendant" identity="id">
     <map-to xml="Pendant" ns-uri="gme://caCORE.caCORE/4.0/gov.nih.nci.cacoresdk.domain.onetoone.bidirectional.withjoin" />
@@ -312,9 +274,6 @@
     </field>
     <field name="shape" type="string">
       <bind-xml name="shape" node="attribute" />
-    </field>
-    <field name="chain" type="gov.nih.nci.cacoresdk.domain.onetoone.bidirectional.withjoin.Chain">
-      <bind-xml name="Chain" type="gov.nih.nci.cacoresdk.domain.onetoone.bidirectional.withjoin.Chain" location="chain" node="element" />
     </field>
   </class>
   <class name="gov.nih.nci.cacoresdk.domain.inheritance.multiplechild.Student" identity="id">
@@ -343,9 +302,6 @@
     <field name="metal" type="string">
       <bind-xml name="metal" node="attribute" />
     </field>
-    <field name="pendant" type="gov.nih.nci.cacoresdk.domain.onetoone.bidirectional.withjoin.Pendant">
-      <bind-xml name="Pendant" type="gov.nih.nci.cacoresdk.domain.onetoone.bidirectional.withjoin.Pendant" location="pendant" node="element" />
-    </field>
   </class>
   <class name="gov.nih.nci.cacoresdk.domain.onetomany.unidirectional.withjoin.Shirt" identity="id">
     <map-to xml="Shirt" ns-uri="gme://caCORE.caCORE/4.0/gov.nih.nci.cacoresdk.domain.onetomany.unidirectional.withjoin" />
@@ -354,9 +310,6 @@
     </field>
     <field name="style" type="string">
       <bind-xml name="style" node="attribute" />
-    </field>
-    <field name="buttonCollection" type="gov.nih.nci.cacoresdk.domain.onetomany.unidirectional.withjoin.Button" collection="collection">
-      <bind-xml name="Button" type="gov.nih.nci.cacoresdk.domain.onetomany.unidirectional.withjoin.Button" location="buttonCollection" node="element" />
     </field>
   </class>
   <class name="gov.nih.nci.cacoresdk.domain.manytomany.unidirectional.Book" identity="id">
@@ -367,9 +320,6 @@
     <field name="name" type="string">
       <bind-xml name="name" node="attribute" />
     </field>
-    <field name="authorCollection" type="gov.nih.nci.cacoresdk.domain.manytomany.unidirectional.Author" collection="collection">
-      <bind-xml name="Author" type="gov.nih.nci.cacoresdk.domain.manytomany.unidirectional.Author" location="authorCollection" node="element" />
-    </field>
   </class>
   <class name="gov.nih.nci.cacoresdk.domain.onetoone.unidirectional.Person" identity="id">
     <map-to xml="Person" ns-uri="gme://caCORE.caCORE/4.0/gov.nih.nci.cacoresdk.domain.onetoone.unidirectional" />
@@ -378,9 +328,6 @@
     </field>
     <field name="name" type="string">
       <bind-xml name="name" node="attribute" />
-    </field>
-    <field name="livesAt" type="gov.nih.nci.cacoresdk.domain.onetoone.unidirectional.Address">
-      <bind-xml name="Address" type="gov.nih.nci.cacoresdk.domain.onetoone.unidirectional.Address" location="livesAt" node="element" />
     </field>
   </class>
   <class name="gov.nih.nci.cacoresdk.domain.other.primarykey.IntegerPrimitiveKey" identity="id">
@@ -409,9 +356,6 @@
     <field name="title" type="string">
       <bind-xml name="title" node="attribute" />
     </field>
-    <field name="album" type="gov.nih.nci.cacoresdk.domain.manytoone.unidirectional.withjoin.Album">
-      <bind-xml name="Album" type="gov.nih.nci.cacoresdk.domain.manytoone.unidirectional.withjoin.Album" location="album" node="element" />
-    </field>
   </class>
   <class name="gov.nih.nci.cacoresdk.domain.other.primarykey.StringPrimitiveKey" identity="id">
     <map-to xml="StringPrimitiveKey" ns-uri="gme://caCORE.caCORE/4.0/gov.nih.nci.cacoresdk.domain.other.primarykey" />
@@ -439,9 +383,6 @@
     <field name="size" type="integer">
       <bind-xml name="size" node="attribute" />
     </field>
-    <field name="computer" type="gov.nih.nci.cacoresdk.domain.onetomany.bidirectional.Computer">
-      <bind-xml name="Computer" type="gov.nih.nci.cacoresdk.domain.onetomany.bidirectional.Computer" location="computer" node="element" />
-    </field>
   </class>
   <class name="gov.nih.nci.cacoresdk.domain.onetomany.unidirectional.KeyChain" identity="id">
     <map-to xml="KeyChain" ns-uri="gme://caCORE.caCORE/4.0/gov.nih.nci.cacoresdk.domain.onetomany.unidirectional" />
@@ -450,9 +391,6 @@
     </field>
     <field name="name" type="string">
       <bind-xml name="name" node="attribute" />
-    </field>
-    <field name="keyCollection" type="gov.nih.nci.cacoresdk.domain.onetomany.unidirectional.Key" collection="collection">
-      <bind-xml name="Key" type="gov.nih.nci.cacoresdk.domain.onetomany.unidirectional.Key" location="keyCollection" node="element" />
     </field>
   </class>
   <class name="gov.nih.nci.cacoresdk.domain.onetomany.bidirectional.withjoin.Passanger" identity="id">
@@ -463,9 +401,6 @@
     <field name="name" type="string">
       <bind-xml name="name" node="attribute" />
     </field>
-    <field name="flight" type="gov.nih.nci.cacoresdk.domain.onetomany.bidirectional.withjoin.Flight">
-      <bind-xml name="Flight" type="gov.nih.nci.cacoresdk.domain.onetomany.bidirectional.withjoin.Flight" location="flight" node="element" />
-    </field>
   </class>
   <class name="gov.nih.nci.cacoresdk.domain.inheritance.parentwithassociation.Professor" identity="id">
     <map-to xml="Professor" ns-uri="gme://caCORE.caCORE/4.0/gov.nih.nci.cacoresdk.domain.inheritance.parentwithassociation" />
@@ -474,9 +409,6 @@
     </field>
     <field name="name" type="string">
       <bind-xml name="name" node="attribute" />
-    </field>
-    <field name="assistantCollection" type="gov.nih.nci.cacoresdk.domain.inheritance.parentwithassociation.Assistant" collection="collection">
-      <bind-xml name="Assistant" type="gov.nih.nci.cacoresdk.domain.inheritance.parentwithassociation.Assistant" location="assistantCollection" node="element" />
     </field>
   </class>
   <class name="gov.nih.nci.cacoresdk.domain.onetomany.bidirectional.Computer" identity="id">
@@ -487,9 +419,6 @@
     <field name="type" type="string">
       <bind-xml name="type" node="attribute" />
     </field>
-    <field name="hardDriveCollection" type="gov.nih.nci.cacoresdk.domain.onetomany.bidirectional.HardDrive" collection="collection">
-      <bind-xml name="HardDrive" type="gov.nih.nci.cacoresdk.domain.onetomany.bidirectional.HardDrive" location="hardDriveCollection" node="element" />
-    </field>
   </class>
   <class name="gov.nih.nci.cacoresdk.domain.inheritance.parentwithassociation.sametable.Luggage" identity="id">
     <map-to xml="Luggage" ns-uri="gme://caCORE.caCORE/4.0/gov.nih.nci.cacoresdk.domain.inheritance.parentwithassociation.sametable" />
@@ -498,9 +427,6 @@
     </field>
     <field name="id" type="integer">
       <bind-xml name="id" node="attribute" />
-    </field>
-    <field name="wheel" type="gov.nih.nci.cacoresdk.domain.inheritance.parentwithassociation.sametable.Wheel">
-      <bind-xml name="Wheel" type="gov.nih.nci.cacoresdk.domain.inheritance.parentwithassociation.sametable.Wheel" location="wheel" node="element" />
     </field>
   </class>
   <class name="gov.nih.nci.cacoresdk.domain.onetomany.unidirectional.withjoin.Button" identity="id">
@@ -538,12 +464,6 @@
     <field name="name" type="string">
       <bind-xml name="name" node="attribute" />
     </field>
-    <field name="father" type="gov.nih.nci.cacoresdk.domain.onetoone.multipleassociation.Parent">
-      <bind-xml name="Parent" type="gov.nih.nci.cacoresdk.domain.onetoone.multipleassociation.Parent" location="father" node="element" />
-    </field>
-    <field name="mother" type="gov.nih.nci.cacoresdk.domain.onetoone.multipleassociation.Parent">
-      <bind-xml name="Parent" type="gov.nih.nci.cacoresdk.domain.onetoone.multipleassociation.Parent" location="mother" node="element" />
-    </field>
   </class>
   <class name="gov.nih.nci.cacoresdk.domain.onetoone.multipleassociation.withjoin.InLaw" identity="id">
     <map-to xml="InLaw" ns-uri="gme://caCORE.caCORE/4.0/gov.nih.nci.cacoresdk.domain.onetoone.multipleassociation.withjoin" />
@@ -579,9 +499,6 @@
     </field>
     <field name="name" type="string">
       <bind-xml name="name" node="attribute" />
-    </field>
-    <field name="line" type="gov.nih.nci.cacoresdk.domain.onetoone.bidirectional.OrderLine">
-      <bind-xml name="OrderLine" type="gov.nih.nci.cacoresdk.domain.onetoone.bidirectional.OrderLine" location="line" node="element" />
     </field>
   </class>
   <class name="gov.nih.nci.cacoresdk.domain.other.primarykey.CharacterKey" identity="id">
@@ -619,9 +536,6 @@
     <field name="radius" type="integer">
       <bind-xml name="radius" node="attribute" />
     </field>
-    <field name="luggage" type="gov.nih.nci.cacoresdk.domain.inheritance.parentwithassociation.sametable.Luggage" collection="collection">
-      <bind-xml name="Luggage" type="gov.nih.nci.cacoresdk.domain.inheritance.parentwithassociation.sametable.Luggage" location="luggage" node="element" />
-    </field>
   </class>
   <class name="gov.nih.nci.cacoresdk.domain.other.primarykey.FloatPrimitiveKey" identity="id">
     <map-to xml="FloatPrimitiveKey" ns-uri="gme://caCORE.caCORE/4.0/gov.nih.nci.cacoresdk.domain.other.primarykey" />
@@ -649,9 +563,6 @@
     <field name="name" type="string">
       <bind-xml name="name" node="attribute" />
     </field>
-    <field name="childCollection" type="gov.nih.nci.cacoresdk.domain.onetomany.selfassociation.Element" collection="collection">
-      <bind-xml name="Element" type="gov.nih.nci.cacoresdk.domain.onetomany.selfassociation.Element" location="childCollection" node="element" />
-    </field>
   </class>
   <class name="gov.nih.nci.cacoresdk.domain.other.primarykey.IntegerKey" identity="id">
     <map-to xml="IntegerKey" ns-uri="gme://caCORE.caCORE/4.0/gov.nih.nci.cacoresdk.domain.other.primarykey" />
@@ -670,9 +581,6 @@
     <field name="id" type="integer">
       <bind-xml name="id" node="attribute" />
     </field>
-    <field name="passangerCollection" type="gov.nih.nci.cacoresdk.domain.onetomany.bidirectional.withjoin.Passanger" collection="collection">
-      <bind-xml name="Passanger" type="gov.nih.nci.cacoresdk.domain.onetomany.bidirectional.withjoin.Passanger" location="passangerCollection" node="element" />
-    </field>
   </class>
   <class name="gov.nih.nci.cacoresdk.domain.onetomany.unidirectional.Key" identity="id">
     <map-to xml="Key" ns-uri="gme://caCORE.caCORE/4.0/gov.nih.nci.cacoresdk.domain.onetomany.unidirectional" />
@@ -690,9 +598,6 @@
     </field>
     <field name="name" type="string">
       <bind-xml name="name" node="attribute" />
-    </field>
-    <field name="suitCollection" type="gov.nih.nci.cacoresdk.domain.other.levelassociation.Suit" collection="collection">
-      <bind-xml name="Suit" type="gov.nih.nci.cacoresdk.domain.other.levelassociation.Suit" location="suitCollection" node="element" />
     </field>
   </class>
   <class name="gov.nih.nci.cacoresdk.domain.inheritance.childwithassociation.Payment" identity="id">
@@ -739,9 +644,6 @@
   </class>
   <class name="gov.nih.nci.cacoresdk.domain.inheritance.childwithassociation.sametable.DesignerShoes" identity="id" extends="gov.nih.nci.cacoresdk.domain.inheritance.childwithassociation.sametable.Shoes">
     <map-to xml="DesignerShoes" ns-uri="gme://caCORE.caCORE/4.0/gov.nih.nci.cacoresdk.domain.inheritance.childwithassociation.sametable" />
-    <field name="designer" type="gov.nih.nci.cacoresdk.domain.inheritance.childwithassociation.sametable.Designer">
-      <bind-xml name="Designer" type="gov.nih.nci.cacoresdk.domain.inheritance.childwithassociation.sametable.Designer" location="designer" node="element" />
-    </field>
   </class>
   <class name="gov.nih.nci.cacoresdk.domain.inheritance.multiplechild.sametable.PvtOrganization" identity="id" extends="gov.nih.nci.cacoresdk.domain.inheritance.multiplechild.sametable.Organization">
     <map-to xml="PvtOrganization" ns-uri="gme://caCORE.caCORE/4.0/gov.nih.nci.cacoresdk.domain.inheritance.multiplechild.sametable" />
@@ -777,9 +679,6 @@
     <map-to xml="Credit" ns-uri="gme://caCORE.caCORE/4.0/gov.nih.nci.cacoresdk.domain.inheritance.childwithassociation" />
     <field name="cardNumber" type="string">
       <bind-xml name="cardNumber" node="attribute" />
-    </field>
-    <field name="issuingBank" type="gov.nih.nci.cacoresdk.domain.inheritance.childwithassociation.Bank">
-      <bind-xml name="Bank" type="gov.nih.nci.cacoresdk.domain.inheritance.childwithassociation.Bank" location="issuingBank" node="element" />
     </field>
   </class>
   <class name="gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.sametable.CommunistGovt" identity="id" extends="gov.nih.nci.cacoresdk.domain.inheritance.twolevelinheritance.sametable.Goverment">
