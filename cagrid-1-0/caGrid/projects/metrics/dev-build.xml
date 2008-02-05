@@ -11,10 +11,11 @@
 	<!-- Place any other properties you will need here                  -->
 	<!-- ============================================================== -->
 
-	<property file="${basedir}/ext/resources/cagrid.properties"/>
+	<property file="${basedir}/ext/resources/cagrid.properties" />
 	<property name="jar.prefix" value="${cagrid.master.jar.prefix}metrics" />
 	<property name="ext.lib.dir" value="ext/lib" />
 	<property name="ext.test.lib" value="ext/test/lib" />
+	<property name="introduce.ns.excludes" value="" />
 
 
 	<!-- ============================================================== -->
@@ -23,8 +24,8 @@
 	<target name="defineExtendedClasspaths">
 		<path id="base.extended.classpath">
 			<fileset dir="${ext.lib.dir}">
-							<include name="*.jar" />
-						</fileset>
+				<include name="*.jar" />
+			</fileset>
 		</path>
 		<path id="service.build.extended.classpath">
 		</path>
@@ -34,8 +35,8 @@
 		</path>
 		<path id="test.run.extended.classpath">
 			<fileset dir="${ext.test.lib}">
-							<include name="*.jar" />
-						</fileset>
+				<include name="*.jar" />
+			</fileset>
 		</path>
 		<path id="run.extended.classpath">
 		</path>
@@ -216,6 +217,45 @@
 	<target name="postClean">
 
 	</target>
+
+
+	<!-- Default target "all" builds and jars everything, including test....does not make a GAR-->
+	<target name="all" depends="jars" description="Builds the entire service.">
+		<ant inheritall="false" antfile="build.xml" target="all" dir="extension">
+		</ant>
+	</target>
+	
+
+	<target name="installIntroduceExtensions">
+
+		<delete dir="${introduce.extensions.dir}/caGrid_Metrics" />
+		<mkdir dir="${introduce.extensions.dir}/caGrid_Metrics" />
+		<mkdir dir="${introduce.extensions.dir}/caGrid_Metrics/lib" />
+		<!-- extension description file -->
+		<copy overwrite="true" todir="${introduce.extensions.dir}/caGrid_Metrics" file="extension/extension.xml" />
+		<!-- libraries -->
+		<copy overwrite="true" todir="${introduce.extensions.dir}/lib">
+			<fileset dir="extension/lib">
+				<include name="*.jar" />
+			</fileset>
+			<fileset dir="extension/build/lib">
+				<include name="*.jar" />
+			</fileset>
+		</copy>
+		<!-- libraries for the service -->
+		<copy overwrite="true" todir="${introduce.extensions.dir}/caGrid_Metrics/lib">
+			<fileset dir="${lib.dir}">
+				<include name="*.jar" />
+			</fileset>
+			<fileset dir="${ext.lib.dir}">
+				<include name="*.jar" />
+			</fileset>
+			<fileset dir="${build.lib.dir}">
+				<include name="*.jar" />
+			</fileset>
+		</copy>
+	</target>
+
 
 
 	<!-- ============================================================== -->
