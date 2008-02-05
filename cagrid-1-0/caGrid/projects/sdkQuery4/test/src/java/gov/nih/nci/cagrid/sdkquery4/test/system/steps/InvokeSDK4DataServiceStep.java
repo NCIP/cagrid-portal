@@ -10,7 +10,10 @@ import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainer;
 import gov.nih.nci.cagrid.testing.system.haste.Step;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -26,13 +29,12 @@ import org.apache.log4j.Logger;
  * @author David Ervin
  * 
  * @created Feb 1, 2008 9:02:20 AM
- * @version $Id: InvokeSDK4DataServiceStep.java,v 1.4 2008-02-05 16:53:53 dervin Exp $ 
+ * @version $Id: InvokeSDK4DataServiceStep.java,v 1.5 2008-02-05 21:21:00 dervin Exp $ 
  */
 public class InvokeSDK4DataServiceStep extends Step {
-    public static final String TEST_RESOURCES_DIR = ".." + File.separator + "sdkQuery4" +
-    File.separator + "test" + File.separator + "resources" + File.separator;
-    public static final String TEST_QUERIES_DIR = TEST_RESOURCES_DIR + "testQueries" + File.separator;
-    public static final String TEST_RESULTS_DIR = TEST_RESOURCES_DIR + "testGoldResults" + File.separator;
+    public static final String TEST_RESOURCES_DIR = "/test/resources/";
+    public static final String TEST_QUERIES_DIR = TEST_RESOURCES_DIR + "testQueries/";
+    public static final String TEST_RESULTS_DIR = TEST_RESOURCES_DIR + "testGoldResults/";
     
     private static Logger LOG = Logger.getLogger(InvokeSDK4DataServiceStep.class);
     
@@ -48,6 +50,7 @@ public class InvokeSDK4DataServiceStep extends Step {
     public void runStep() throws Throwable {
         testUndergraduateStudentWithName();
         testAllPayments();
+        testDistinctAttributeFromCash();
     }
     
     
@@ -65,12 +68,21 @@ public class InvokeSDK4DataServiceStep extends Step {
     }
     
     
+    private void testDistinctAttributeFromCash() {
+        CQLQuery query = loadQuery(TEST_QUERIES_DIR + "distinctAttributeFromCash.xml");
+        CQLQueryResults results = loadQueryResults(TEST_RESULTS_DIR + "goldDistinctAttributeFromCash.xml");
+        invokeValidQueryValidResults(query, results);
+    }
+    
+    
     private CQLQuery loadQuery(String filename) {
         CQLQuery query = null;
         try {
-            FileReader reader = new FileReader(filename);
+            InputStream queryInputStream = InvokeSDK4DataServiceStep.class.getResourceAsStream(filename);
+            InputStreamReader reader = new InputStreamReader(queryInputStream);
             query = (CQLQuery) Utils.deserializeObject(reader, CQLQuery.class);
             reader.close();
+            queryInputStream.close();
         } catch (Exception ex) {
             ex.printStackTrace();
             fail("Error deserializing query (" + filename + "): " + ex.getMessage());
@@ -82,9 +94,11 @@ public class InvokeSDK4DataServiceStep extends Step {
     private CQLQueryResults loadQueryResults(String filename)  {
         CQLQueryResults results = null;
         try {
-            FileReader reader = new FileReader(filename);
+            InputStream resultInputStream = InvokeSDK4DataServiceStep.class.getResourceAsStream(filename);
+            InputStreamReader reader = new InputStreamReader(resultInputStream);
             results = (CQLQueryResults) Utils.deserializeObject(reader, CQLQueryResults.class);
             reader.close();
+            resultInputStream.close();
         } catch (Exception ex) {
             ex.printStackTrace();
             fail("Error deserializing query results (" + filename + "): " + ex.getMessage());
@@ -158,19 +172,33 @@ public class InvokeSDK4DataServiceStep extends Step {
     
     
     private void compareResults(CQLQueryResults gold, CQLQueryResults test) {
-        Set<String> goldXml = new HashSet<String>();
-        Set<String> testXml = new HashSet<String>();
+        Set<Object> goldXml = new HashSet<Object>();
+        Set<Object> testXml = new HashSet<Object>();
         
-        CQLQueryResultsIterator goldIter = new CQLQueryResultsIterator(gold, true);
+        CQLQueryResultsIterator goldIter = new CQLQueryResultsIterator(gold, getClientConfigStream());
         while (goldIter.hasNext()) {
-            goldXml.add((String) goldIter.next());
+            goldXml.add(goldIter.next());
         }
         
-        CQLQueryResultsIterator testIter = new CQLQueryResultsIterator(test, true);
+        CQLQueryResultsIterator testIter = new CQLQueryResultsIterator(test, getClientConfigStream());
         while (testIter.hasNext()) {
-            testXml.add((String) testIter.next());
+            testXml.add(testIter.next());
         }
         
         assertEquals("Result count differed from expected", goldXml.size(), testXml.size());
+        
+        // TODO: compare objects
+    }
+    
+    
+    private InputStream getClientConfigStream() {
+        InputStream is = null;
+        try {
+            is = InvokeSDK4DataServiceStep.class.getResourceAsStream(TEST_RESOURCES_DIR + "wsdd/client-config.wsdd");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            fail("Error obtaining client config input stream: " + ex.getMessage());
+        }
+        return is;
     }
 }
