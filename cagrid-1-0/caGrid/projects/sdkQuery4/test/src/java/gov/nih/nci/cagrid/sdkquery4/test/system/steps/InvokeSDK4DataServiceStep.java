@@ -26,7 +26,7 @@ import org.apache.log4j.Logger;
  * @author David Ervin
  * 
  * @created Feb 1, 2008 9:02:20 AM
- * @version $Id: InvokeSDK4DataServiceStep.java,v 1.3 2008-02-04 18:26:54 dervin Exp $ 
+ * @version $Id: InvokeSDK4DataServiceStep.java,v 1.4 2008-02-05 16:53:53 dervin Exp $ 
  */
 public class InvokeSDK4DataServiceStep extends Step {
     public static final String TEST_RESOURCES_DIR = ".." + File.separator + "sdkQuery4" +
@@ -47,17 +47,25 @@ public class InvokeSDK4DataServiceStep extends Step {
 
     public void runStep() throws Throwable {
         testUndergraduateStudentWithName();
+        testAllPayments();
     }
     
     
-    private void testUndergraduateStudentWithName() throws Throwable {
+    private void testUndergraduateStudentWithName() {
         CQLQuery query = loadQuery(TEST_QUERIES_DIR + "undergraduateStudentWithName.xml");
         CQLQueryResults results = loadQueryResults(TEST_RESULTS_DIR + "goldUndergraduateStudentWithName.xml");
         invokeValidQueryValidResults(query, results);
     }
     
     
-    private CQLQuery loadQuery(String filename) throws Throwable {
+    private void testAllPayments() {
+        CQLQuery query = loadQuery(TEST_QUERIES_DIR + "allPayments.xml");
+        CQLQueryResults results = loadQueryResults(TEST_RESULTS_DIR + "goldAllPayments.xml");
+        invokeValidQueryValidResults(query, results);
+    }
+    
+    
+    private CQLQuery loadQuery(String filename) {
         CQLQuery query = null;
         try {
             FileReader reader = new FileReader(filename);
@@ -71,7 +79,7 @@ public class InvokeSDK4DataServiceStep extends Step {
     }
     
     
-    private CQLQueryResults loadQueryResults(String filename) throws Throwable {
+    private CQLQueryResults loadQueryResults(String filename)  {
         CQLQueryResults results = null;
         try {
             FileReader reader = new FileReader(filename);
@@ -93,7 +101,7 @@ public class InvokeSDK4DataServiceStep extends Step {
      * @param goldResults
      *      The gold results set
      */
-    private void invokeValidQueryValidResults(CQLQuery query, CQLQueryResults goldResults) throws Throwable {
+    private void invokeValidQueryValidResults(CQLQuery query, CQLQueryResults goldResults) {
         DataServiceClient client = getServiceClient();
         CQLQueryResults queryResults = null;
         try {
@@ -112,7 +120,7 @@ public class InvokeSDK4DataServiceStep extends Step {
      * @param query
      *      The expected invalid query
      */
-    private void invokeInvalidQuery(CQLQuery query) throws Throwable {
+    private void invokeInvalidQuery(CQLQuery query) {
         DataServiceClient client = getServiceClient();
         try {
             client.query(query);
@@ -123,7 +131,7 @@ public class InvokeSDK4DataServiceStep extends Step {
     }
     
     
-    private DataServiceClient getServiceClient() throws Throwable {
+    private DataServiceClient getServiceClient() {
         DataServiceClient client = null;
         try {
             client = new DataServiceClient(getServiceUrl()); 
@@ -135,7 +143,7 @@ public class InvokeSDK4DataServiceStep extends Step {
     }
     
     
-    private String getServiceUrl() throws Throwable {
+    private String getServiceUrl() {
         String url = null;
         try {
             URI baseUri = container.getContainerBaseURI();
