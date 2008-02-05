@@ -39,7 +39,9 @@
         <parameter name="className" value="org.globus.wsrf.impl.security.authentication.wssec.WSSecurityClientHandler" />
       </handler>
     </responseFlow>
-    <parameter name="castorMapping" value="test/resources/wsdd/ExampleSdk4-xml-mapping.xml" />
+    <parameter name="castorMarshallerMapping" value="org/cagrid/example/sdk4/ExampleSdk4-edited-xml-mapping.xml" />
+    <parameter name="castorUnmarshallerMapping" value="org/cagrid/example/sdk4/ExampleSdk4-edited-unmarshaller-xml-mapping.xml" />
+    <parameter name="castorMapping" value="org/cagrid/example/sdk4/ExampleSdk4-xml-mapping.xml" />
   </globalConfiguration>
   <transport name="java" pivot="java:org.apache.axis.transport.java.JavaSender" />
   <transport name="https" pivot="java:org.globus.axis.transport.HTTPSSender">
