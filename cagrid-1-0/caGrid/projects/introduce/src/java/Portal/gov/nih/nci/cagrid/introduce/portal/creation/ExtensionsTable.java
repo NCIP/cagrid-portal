@@ -1,6 +1,11 @@
 package gov.nih.nci.cagrid.introduce.portal.creation;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import gov.nih.nci.cagrid.common.portal.PortalBaseTable;
+import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
+import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 
 import javax.swing.table.DefaultTableModel;
 
@@ -143,6 +148,22 @@ public class ExtensionsTable extends PortalBaseTable {
 	public void doubleClick() throws Exception {
 		// TODO Auto-generated method stub
 
+	}
+	
+	
+	public List<String> getExtensionNamesAsList(){
+		List<String> extensions = new ArrayList();
+        for (int i = 0; i < getRowCount(); i++) {
+            ServiceExtensionDescriptionType edt = null;
+            try {
+                edt = ExtensionsLoader.getInstance().getServiceExtensionByDisplayName(
+                    getRowData(i));
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
+            extensions.add(edt.getName());
+        }
+        return extensions;
 	}
 
 

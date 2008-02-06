@@ -47,7 +47,7 @@ public abstract class CreationViewerBaseComponent extends ApplicationComponent {
 	 * @param serviceNamespace
 	 *            the namespace to be used for this services wsdl and stubs
 	 * @param extensions
-	 *            a list of strings with the display names of the extensions to
+	 *            a list of strings with the extension names of the extensions to
 	 *            be added
 	 */
 	public void createService(final String dir, final String service,
@@ -117,7 +117,7 @@ public abstract class CreationViewerBaseComponent extends ApplicationComponent {
 						for (int i = 0; i < extensions.size(); i++) {
 							ServiceExtensionDescriptionType edt = ExtensionsLoader
 									.getInstance()
-									.getServiceExtensionByDisplayName(
+									.getServiceExtension(
 											(String) extensions.get(i));
 							serviceExtensions += edt.getName();
 							if (i < extensions.size() - 1) {
@@ -157,7 +157,7 @@ public abstract class CreationViewerBaseComponent extends ApplicationComponent {
 						for (int i = 0; i < extensions.size(); i++) {
 							ServiceExtensionDescriptionType edt = ExtensionsLoader
 									.getInstance()
-									.getServiceExtensionByDisplayName(
+									.getServiceExtension(
 											(String) extensions.get(i));
 							JDialog extDialog = gov.nih.nci.cagrid.introduce.portal.extension.tools.ExtensionTools
 									.getCreationUIDialog(GridApplication.getContext().getApplication(), edt

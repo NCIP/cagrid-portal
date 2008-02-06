@@ -205,5 +205,7 @@ public class SkeletonCreator extends Task {
             be.printStackTrace();
             throw be;
         }
+        
+        //process the extensions
     }
 }

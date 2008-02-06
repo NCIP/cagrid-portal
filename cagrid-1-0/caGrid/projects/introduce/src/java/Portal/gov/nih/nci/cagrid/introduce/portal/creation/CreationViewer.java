@@ -410,17 +410,6 @@ public class CreationViewer extends CreationViewerBaseComponent {
             createButton.setIcon(IntroduceLookAndFeel.getCreateServiceIcon());
             createButton.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
-                    List extensions = new ArrayList();
-                    for (int i = 0; i < getExtensionsTable().getRowCount(); i++) {
-                        ServiceExtensionDescriptionType edt = null;
-                        try {
-                            edt = ExtensionsLoader.getInstance().getServiceExtensionByDisplayName(
-                                getExtensionsTable().getRowData(i));
-                        } catch (Exception e1) {
-                            e1.printStackTrace();
-                        }
-                        extensions.add(edt.getDisplayName());
-                    }
                     
                     List resourceOptions = new ArrayList();
                     resourceOptions.add(IntroduceConstants.INTRODUCE_MAIN_RESOURCE);
@@ -442,7 +431,7 @@ public class CreationViewer extends CreationViewerBaseComponent {
                     	resourceOptions.add(IntroduceConstants.INTRODUCE_SECURE_RESOURCE);
                     }
                     createService(getDir().getText(), getService().getText(), getServicePackage().getText(),
-                        getNamespaceDomain().getText(),resourceOptions, extensions);
+                        getNamespaceDomain().getText(),resourceOptions, getExtensionsTable().getExtensionNamesAsList());
 
                     try {
                         ResourceManager.setStateProperty(ResourceManager.LAST_DIRECTORY, getDir().getText());
