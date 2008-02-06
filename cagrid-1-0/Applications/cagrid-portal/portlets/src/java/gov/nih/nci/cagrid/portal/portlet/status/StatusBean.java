@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package gov.nih.nci.cagrid.portal.portlet.status;
 
@@ -20,83 +20,98 @@ import org.springframework.beans.factory.annotation.Required;
  *
  */
 public class StatusBean {
-	
-	private ParticipantDirectory participantsDirectory;
-	private ServiceDirectory servicesDirectory;
-	private ServiceDirectory analyticalServicesDirectory;
-	private ServiceDirectory dataServicesDirectory;
-	private GridServiceDao gridServiceDao;
-	private int latestServicesLimit = 5;
 
-	/**
-	 * 
-	 */
-	public StatusBean() {
+    private ParticipantDirectory participantsDirectory;
+    private ServiceDirectory servicesDirectory;
+    private ServiceDirectory analyticalServicesDirectory;
+    private ServiceDirectory dataServicesDirectory;
+    private GridServiceDao gridServiceDao;
+    private int latestServicesLimit = 5;
 
-	}
-	
-	public List<ServiceInfo> getLatestServices(){
-		List<ServiceInfo> serviceInfos = new ArrayList<ServiceInfo>();
-		List<GridService> latest = getGridServiceDao().getLatestServices(getLatestServicesLimit());
-		List<GridService> services = PortletUtils.filterDormantServices(PortletUtils.filterBannedServices(latest));
-		for(GridService service : services){
-			serviceInfos.add(new ServiceInfo(service));
-		}
-		return serviceInfos;
-	}
+    /**
+     *
+     */
+    public StatusBean() {
 
-	@Required
-	public ParticipantDirectory getParticipantsDirectory() {
-		return participantsDirectory;
-	}
+    }
 
-	public void setParticipantsDirectory(ParticipantDirectory participantsDirectory) {
-		this.participantsDirectory = participantsDirectory;
-	}
+    /**
+     * Will find latest x number of valid services where
+     * x is defined by the latestServicesLimit
+      * @return
+     */
+    public List<ServiceInfo> getLatestServices(){
+        List<ServiceInfo> serviceInfos = new ArrayList<ServiceInfo>();
 
-	@Required
-	public ServiceDirectory getServicesDirectory() {
-		return servicesDirectory;
-	}
+        List<GridService> services;
+        int serviceLookupIncrement = 0;
+        int totalServicesAvailable = getGridServiceDao().getAll().size();
+        do{
+            List<GridService> latest = getGridServiceDao().getLatestServices(getLatestServicesLimit()+ serviceLookupIncrement++);
+            services = PortletUtils.filterDormantServices(PortletUtils.filterBannedServices(latest));
+        }
+        //run this loop till we find <latestServicesLimit> number of valid  services
+        //But at the same time don't get more than available services
+        while(services.size()<getLatestServicesLimit() && (getLatestServicesLimit() + serviceLookupIncrement) <= totalServicesAvailable);
 
-	public void setServicesDirectory(ServiceDirectory servicesDirectory) {
-		this.servicesDirectory = servicesDirectory;
-	}
+        for(GridService service : services){
+            serviceInfos.add(new ServiceInfo(service));
+        }
+        return serviceInfos;
+    }
 
-	@Required
-	public ServiceDirectory getAnalyticalServicesDirectory() {
-		return analyticalServicesDirectory;
-	}
+    @Required
+    public ParticipantDirectory getParticipantsDirectory() {
+        return participantsDirectory;
+    }
 
-	public void setAnalyticalServicesDirectory(
-			ServiceDirectory analyticalServicesDirectory) {
-		this.analyticalServicesDirectory = analyticalServicesDirectory;
-	}
+    public void setParticipantsDirectory(ParticipantDirectory participantsDirectory) {
+        this.participantsDirectory = participantsDirectory;
+    }
 
-	@Required
-	public ServiceDirectory getDataServicesDirectory() {
-		return dataServicesDirectory;
-	}
+    @Required
+    public ServiceDirectory getServicesDirectory() {
+        return servicesDirectory;
+    }
 
-	public void setDataServicesDirectory(ServiceDirectory dataServicesDirectory) {
-		this.dataServicesDirectory = dataServicesDirectory;
-	}
+    public void setServicesDirectory(ServiceDirectory servicesDirectory) {
+        this.servicesDirectory = servicesDirectory;
+    }
 
-	@Required
-	public GridServiceDao getGridServiceDao() {
-		return gridServiceDao;
-	}
+    @Required
+    public ServiceDirectory getAnalyticalServicesDirectory() {
+        return analyticalServicesDirectory;
+    }
 
-	public void setGridServiceDao(GridServiceDao gridServiceDao) {
-		this.gridServiceDao = gridServiceDao;
-	}
+    public void setAnalyticalServicesDirectory(
+            ServiceDirectory analyticalServicesDirectory) {
+        this.analyticalServicesDirectory = analyticalServicesDirectory;
+    }
 
-	public int getLatestServicesLimit() {
-		return latestServicesLimit;
-	}
+    @Required
+    public ServiceDirectory getDataServicesDirectory() {
+        return dataServicesDirectory;
+    }
 
-	public void setLatestServicesLimit(int latestServicesLimit) {
-		this.latestServicesLimit = latestServicesLimit;
-	}
+    public void setDataServicesDirectory(ServiceDirectory dataServicesDirectory) {
+        this.dataServicesDirectory = dataServicesDirectory;
+    }
+
+    @Required
+    public GridServiceDao getGridServiceDao() {
+        return gridServiceDao;
+    }
+
+    public void setGridServiceDao(GridServiceDao gridServiceDao) {
+        this.gridServiceDao = gridServiceDao;
+    }
+
+    public int getLatestServicesLimit() {
+        return latestServicesLimit;
+    }
+
+    public void setLatestServicesLimit(int latestServicesLimit) {
+        this.latestServicesLimit = latestServicesLimit;
+    }
 
 }
