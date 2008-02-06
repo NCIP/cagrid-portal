@@ -26,7 +26,7 @@ import org.apache.log4j.Logger;
  * @author David Ervin
  * 
  * @created Feb 1, 2008 9:02:20 AM
- * @version $Id: InvokeSDK4DataServiceStep.java,v 1.6 2008-02-06 15:44:04 dervin Exp $ 
+ * @version $Id: InvokeSDK4DataServiceStep.java,v 1.7 2008-02-06 16:15:25 dervin Exp $ 
  */
 public class InvokeSDK4DataServiceStep extends Step {
     public static final String TEST_RESOURCES_DIR = "/test/resources/";
@@ -49,64 +49,79 @@ public class InvokeSDK4DataServiceStep extends Step {
         testAllPayments();
         testDistinctAttributeFromCash();
         testAssociationNotNull();
+        testAssociationWithAttributeEqual();
     }
     
     
     private void testUndergraduateStudentWithName() {
-        CQLQuery query = loadQuery(TEST_QUERIES_DIR + "undergraduateStudentWithName.xml");
-        CQLQueryResults results = loadQueryResults(TEST_RESULTS_DIR + "goldUndergraduateStudentWithName.xml");
+        LOG.debug("testUndergraduateStudentWithName");
+        CQLQuery query = loadQuery("undergraduateStudentWithName.xml");
+        CQLQueryResults results = loadQueryResults("goldUndergraduateStudentWithName.xml");
         invokeValidQueryValidResults(query, results);
     }
     
     
     private void testAllPayments() {
-        CQLQuery query = loadQuery(TEST_QUERIES_DIR + "allPayments.xml");
-        CQLQueryResults results = loadQueryResults(TEST_RESULTS_DIR + "goldAllPayments.xml");
+        LOG.debug("testAllPayments");
+        CQLQuery query = loadQuery("allPayments.xml");
+        CQLQueryResults results = loadQueryResults("goldAllPayments.xml");
         invokeValidQueryValidResults(query, results);
     }
     
     
     private void testDistinctAttributeFromCash() {
-        CQLQuery query = loadQuery(TEST_QUERIES_DIR + "distinctAttributeFromCash.xml");
-        CQLQueryResults results = loadQueryResults(TEST_RESULTS_DIR + "goldDistinctAttributeFromCash.xml");
+        LOG.debug("testDistinctAttributeFromCash");
+        CQLQuery query = loadQuery("distinctAttributeFromCash.xml");
+        CQLQueryResults results = loadQueryResults("goldDistinctAttributeFromCash.xml");
         invokeValidQueryValidResults(query, results);
     }
     
     
     private void testAssociationNotNull() {
-        CQLQuery query = loadQuery(TEST_QUERIES_DIR + "associationNotNull.xml");
-        CQLQueryResults results = loadQueryResults(TEST_RESULTS_DIR + "goldAssociationNotNull.xml");
+        LOG.debug("testAssociationNotNull");
+        CQLQuery query = loadQuery("associationNotNull.xml");
+        CQLQueryResults results = loadQueryResults("goldAssociationNotNull.xml");
+        invokeValidQueryValidResults(query, results);
+    }
+    
+    
+    private void testAssociationWithAttributeEqual() {
+        LOG.debug("testAssociationWithAttributeEqual");
+        CQLQuery query = loadQuery("associationWithAttributeEqual.xml");
+        CQLQueryResults results = loadQueryResults("goldAssociationWithAttributeEqual.xml");
         invokeValidQueryValidResults(query, results);
     }
     
     
     private CQLQuery loadQuery(String filename) {
+        String fullFilename = TEST_QUERIES_DIR + filename;
         CQLQuery query = null;
         try {
-            InputStream queryInputStream = InvokeSDK4DataServiceStep.class.getResourceAsStream(filename);
+            InputStream queryInputStream = InvokeSDK4DataServiceStep.class.getResourceAsStream(fullFilename);
             InputStreamReader reader = new InputStreamReader(queryInputStream);
             query = (CQLQuery) Utils.deserializeObject(reader, CQLQuery.class);
             reader.close();
             queryInputStream.close();
         } catch (Exception ex) {
             ex.printStackTrace();
-            fail("Error deserializing query (" + filename + "): " + ex.getMessage());
+            fail("Error deserializing query (" + fullFilename + "): " + ex.getMessage());
         }
         return query;
     }
     
     
     private CQLQueryResults loadQueryResults(String filename)  {
+        String fullFilename = TEST_RESULTS_DIR + filename;
         CQLQueryResults results = null;
         try {
-            InputStream resultInputStream = InvokeSDK4DataServiceStep.class.getResourceAsStream(filename);
+            InputStream resultInputStream = InvokeSDK4DataServiceStep.class.getResourceAsStream(fullFilename);
             InputStreamReader reader = new InputStreamReader(resultInputStream);
             results = (CQLQueryResults) Utils.deserializeObject(reader, CQLQueryResults.class);
             reader.close();
             resultInputStream.close();
         } catch (Exception ex) {
             ex.printStackTrace();
-            fail("Error deserializing query results (" + filename + "): " + ex.getMessage());
+            fail("Error deserializing query results (" + fullFilename + "): " + ex.getMessage());
         }
         return results;
     }
