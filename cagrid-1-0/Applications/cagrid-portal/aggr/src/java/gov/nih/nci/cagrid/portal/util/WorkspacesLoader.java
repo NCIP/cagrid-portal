@@ -39,9 +39,7 @@ public class WorkspacesLoader {
 
 	private static final boolean DEBUG = false;
 
-    public static final int MAX_POSTAL_CODE_LENGTH = 5;
-
-    private static final Log logger = LogFactory.getLog(WorkspacesLoader.class);
+	private static final Log logger = LogFactory.getLog(WorkspacesLoader.class);
 
 	private WorkspaceDao workspaceDao;
 
@@ -157,9 +155,8 @@ public class WorkspacesLoader {
 								.getCell((short) 7)));
 						address.setCountry(getDataCellValue(dataRow
 								.getCell((short) 8)));
-                        /*  just get the first 5 digits of the postal code */
-                        address.setPostalCode(prunePostalCode(getDataCellValue(dataRow
-								.getCell((short) 9))));
+						address.setPostalCode(getDataCellValue(dataRow
+								.getCell((short) 9)));
 						try {
 							Address existingAddr = getAddressDao()
 									.getByExample(address);
@@ -227,7 +224,7 @@ public class WorkspacesLoader {
 
 		if (cell != null) {
 			if (cell.getCellType() == HSSFCell.CELL_TYPE_NUMERIC) {
-				returnValue = String.valueOf(cell.getNumericCellValue());
+				returnValue = String.valueOf(new Double(cell.getNumericCellValue()).intValue());
 			} else {
 				returnValue = cell.getStringCellValue();
 			}
@@ -243,22 +240,7 @@ public class WorkspacesLoader {
 		return returnValue;
 	}
 
-    /**
-     * Will only get the first (n) digits of the postal code
-     * where (n) = MAX_POSTAL_CODE_LENGTH
-     *
-     *
-     * @param postalCode Postal code input
-     * @return postalCode Modified Postal code
-     */
-    //Todo move to utils class
-    private String prunePostalCode(String postalCode){
-        if(postalCode != null && postalCode.length()>MAX_POSTAL_CODE_LENGTH)
-        return postalCode.substring(0,MAX_POSTAL_CODE_LENGTH);
-        return postalCode;
-    }
-
-    public AddressDao getAddressDao() {
+	public AddressDao getAddressDao() {
 		return addressDao;
 	}
 
