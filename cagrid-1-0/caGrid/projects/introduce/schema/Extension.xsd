@@ -12,7 +12,7 @@
 	<xs:element name="Extension" type="ExtensionType"/>
 	<xs:element name="ExtensionDescription">
 		<xs:annotation>
-			<xs:documentation>he extension type states whether or not this is a discovery type or
+			<xs:documentation>The extension type states whether or not this is a discovery type or
 				service type extension. The extension preferencesPanel is a java classname which
 				extends the ExtensionPreferencesConfigurationPanel</xs:documentation>
 		</xs:annotation>
@@ -116,7 +116,13 @@
 				<xs:annotation>
 					<xs:documentation>Deployment GUI component that must extend a
 						ServiceDeploymentUIPanel.  This must not edit anything introduce 
-						managed such as the model.  Only to be used for configureation etc.</xs:documentation>
+						managed such as the model.  Only to be used for configuration etc.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ServiceExtensionRemover" type="xs:string" minOccurs="0"
+				maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>Class to implement for removing the extension from a service. Must extend the ServiceExtensionRemover interface.</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element ref="Properties"/>

@@ -93,6 +93,31 @@ public class ExtensionTools {
 		}
 		return null;
 	}
+	
+	
+	
+    /**
+     * Gets a named service extension remover
+     * 
+     * @param extensionName
+     *      The name of the extension
+     *      
+     * @return
+     *      The ServiceExtensionRemover of the named extension, 
+     *      or <code>null</code> if none is present
+     * @throws Exception
+     */
+    public static ServiceExtensionRemover getServiceExtensionRemover(String extensionName) throws Exception {
+        ServiceExtensionDescriptionType extensionDesc = ExtensionsLoader.getInstance()
+            .getServiceExtension(extensionName);
+        if (extensionDesc != null && extensionDesc.getServiceExtensionRemover() != null
+            && !extensionDesc.getServiceExtensionRemover().equals("")) {
+            Class c = Class.forName(extensionDesc.getServiceExtensionRemover());
+            Object obj = c.newInstance();
+            return (ServiceExtensionRemover) obj;
+        }
+        return null;
+    }
 
 
     /**

@@ -13,13 +13,16 @@ import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionsType;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
+import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
-import gov.nih.nci.cagrid.introduce.portal.creation.ExtensionsTable;
 import javax.swing.JScrollPane;
 import javax.swing.JLabel;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
 import javax.swing.BorderFactory;
 import javax.swing.border.TitledBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+
 import java.awt.Font;
 import java.awt.Color;
 import java.util.List;
@@ -59,11 +62,11 @@ public class ExtensionsManagerPanel extends JPanel {
 		this.info = info;
 		initialize();
 	}
-	
-	public void reInitialize(ServiceInformation info){
+
+	public void reInitialize(ServiceInformation info) {
 		this.info = info;
-		for(int i = getExtensionsTable().getRowCount(); i >0; i--){
-			getExtensionsTable().removeRow(i-1);
+		for (int i = getExtensionsTable().getRowCount(); i > 0; i--) {
+			getExtensionsTable().removeRow(i - 1);
 		}
 		if (info.getExtensions() != null
 				&& info.getExtensions().getExtension() != null) {
@@ -102,7 +105,7 @@ public class ExtensionsManagerPanel extends JPanel {
 		this.setSize(new Dimension(631, 289));
 		this.add(getExtSelectionPanel(), gridBagConstraints3);
 		this.add(getExtensionsTablePanel(), gridBagConstraints2);
-		
+
 	}
 
 	/**
@@ -170,23 +173,29 @@ public class ExtensionsManagerPanel extends JPanel {
 			removeExtensionButton.setEnabled(false);
 			removeExtensionButton.setIcon(PortalLookAndFeel.getRemoveIcon());
 			removeExtensionButton.setText("Remove");
-			removeExtensionButton.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					try {
-						getExtensionsTable().removeSelectedRow();
-					} catch (Exception e1) {
-					}
-					List<String> extensions = getExtensionsTable().getExtensionNamesAsList();
-					String extS = "";
-					for(int i =0; i < extensions.size(); i++){
-						extS += extensions.get(i);
-						if(i < extensions.size()-1){
-							extS += ",";
+			removeExtensionButton
+					.addActionListener(new java.awt.event.ActionListener() {
+						public void actionPerformed(java.awt.event.ActionEvent e) {
+							try {
+								getExtensionsTable().removeSelectedRow();
+							} catch (Exception e1) {
+							}
+							List<String> extensions = getExtensionsTable()
+									.getExtensionNamesAsList();
+							String extS = "";
+							for (int i = 0; i < extensions.size(); i++) {
+								extS += extensions.get(i);
+								if (i < extensions.size() - 1) {
+									extS += ",";
+								}
+							}
+							info
+									.getIntroduceServiceProperties()
+									.setProperty(
+											IntroduceConstants.INTRODUCE_SKELETON_EXTENSIONS,
+											extS);
 						}
-					}
-					info.getIntroduceServiceProperties().setProperty(IntroduceConstants.INTRODUCE_SKELETON_EXTENSIONS, extS);
-				}
-			});
+					});
 		}
 		return removeExtensionButton;
 	}
@@ -201,20 +210,28 @@ public class ExtensionsManagerPanel extends JPanel {
 			addExtensionButton = new JButton();
 			addExtensionButton.setIcon(PortalLookAndFeel.getAddIcon());
 			addExtensionButton.setText("Add");
-			addExtensionButton.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					getExtensionsTable().addRow((String)getServiceStyleSeletor().getSelectedItem());
-					List<String> extensions = getExtensionsTable().getExtensionNamesAsList();
-					String extS = "";
-					for(int i =0; i < extensions.size(); i++){
-						extS += extensions.get(i);
-						if(i < extensions.size()-1){
-							extS += ",";
+			addExtensionButton
+					.addActionListener(new java.awt.event.ActionListener() {
+						public void actionPerformed(java.awt.event.ActionEvent e) {
+							getExtensionsTable().addRow(
+									(String) getServiceStyleSeletor()
+											.getSelectedItem());
+							List<String> extensions = getExtensionsTable()
+									.getExtensionNamesAsList();
+							String extS = "";
+							for (int i = 0; i < extensions.size(); i++) {
+								extS += extensions.get(i);
+								if (i < extensions.size() - 1) {
+									extS += ",";
+								}
+							}
+							info
+									.getIntroduceServiceProperties()
+									.setProperty(
+											IntroduceConstants.INTRODUCE_SKELETON_EXTENSIONS,
+											extS);
 						}
-					}
-					info.getIntroduceServiceProperties().setProperty(IntroduceConstants.INTRODUCE_SKELETON_EXTENSIONS, extS);
-				}
-			});
+					});
 		}
 		return addExtensionButton;
 	}
@@ -239,6 +256,27 @@ public class ExtensionsManagerPanel extends JPanel {
 					}
 				}
 			}
+			
+			extensionsTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+				
+				public void valueChanged(ListSelectionEvent e) {
+				    int row = extensionsTable.getSelectedRow();
+				    if(row < 0 || row >= extensionsTable.getRowCount()){
+				    	try {
+							if(ExtensionTools.getServiceExtensionRemover(extensionsTable.getSelectedRowData())!=null){
+								getRemoveExtensionButton().setEnabled(true);
+							} else {
+								getRemoveExtensionButton().setEnabled(false);
+							}
+						} catch (Exception e1) {
+							getRemoveExtensionButton().setEnabled(false);
+						}
+				    } else {
+				    	getRemoveExtensionButton().setEnabled(false);
+				    }
+				} 
+			
+			});
 		}
 		return extensionsTable;
 	}
@@ -259,48 +297,60 @@ public class ExtensionsManagerPanel extends JPanel {
 					.setToolTipText("moves the selected extension down "
 							+ "in the list so that it will be executed after the preceding extensions");
 			downExtensionLabel.setIcon(IntroduceLookAndFeel.getDownIcon());
-			downExtensionLabel.addMouseListener(new java.awt.event.MouseAdapter() {
-				public void mouseClicked(java.awt.event.MouseEvent e) {
-					try {
-						getExtensionsTable().moveSelectedRowDown();
-					} catch (Exception e1) {
-						
-					}
-					List<String> extensions = getExtensionsTable().getExtensionNamesAsList();
-					String extS = "";
-					for(int i =0; i < extensions.size(); i++){
-						extS += extensions.get(i);
-						if(i < extensions.size()-1){
-							extS += ",";
+			downExtensionLabel
+					.addMouseListener(new java.awt.event.MouseAdapter() {
+						public void mouseClicked(java.awt.event.MouseEvent e) {
+							try {
+								getExtensionsTable().moveSelectedRowDown();
+							} catch (Exception e1) {
+
+							}
+							List<String> extensions = getExtensionsTable()
+									.getExtensionNamesAsList();
+							String extS = "";
+							for (int i = 0; i < extensions.size(); i++) {
+								extS += extensions.get(i);
+								if (i < extensions.size() - 1) {
+									extS += ",";
+								}
+							}
+							info
+									.getIntroduceServiceProperties()
+									.setProperty(
+											IntroduceConstants.INTRODUCE_SKELETON_EXTENSIONS,
+											extS);
 						}
-					}
-					info.getIntroduceServiceProperties().setProperty(IntroduceConstants.INTRODUCE_SKELETON_EXTENSIONS, extS);
-				}
-			});
+					});
 			GridBagConstraints gridBagConstraints21 = new GridBagConstraints();
 			gridBagConstraints21.anchor = GridBagConstraints.SOUTHWEST;
 			gridBagConstraints21.gridx = 1;
 			gridBagConstraints21.gridy = 0;
 			gridBagConstraints21.fill = GridBagConstraints.NONE;
 			upExtensionLabel = new JLabel();
-			upExtensionLabel.addMouseListener(new java.awt.event.MouseAdapter() {
-				public void mouseClicked(java.awt.event.MouseEvent e) {
-					try {
-						getExtensionsTable().moveSelectedRowUp();
-					} catch (Exception e1) {
-						
-					}
-					List<String> extensions = getExtensionsTable().getExtensionNamesAsList();
-					String extS = "";
-					for(int i =0; i < extensions.size(); i++){
-						extS += extensions.get(i);
-						if(i < extensions.size()-1){
-							extS += ",";
+			upExtensionLabel
+					.addMouseListener(new java.awt.event.MouseAdapter() {
+						public void mouseClicked(java.awt.event.MouseEvent e) {
+							try {
+								getExtensionsTable().moveSelectedRowUp();
+							} catch (Exception e1) {
+
+							}
+							List<String> extensions = getExtensionsTable()
+									.getExtensionNamesAsList();
+							String extS = "";
+							for (int i = 0; i < extensions.size(); i++) {
+								extS += extensions.get(i);
+								if (i < extensions.size() - 1) {
+									extS += ",";
+								}
+							}
+							info
+									.getIntroduceServiceProperties()
+									.setProperty(
+											IntroduceConstants.INTRODUCE_SKELETON_EXTENSIONS,
+											extS);
 						}
-					}
-					info.getIntroduceServiceProperties().setProperty(IntroduceConstants.INTRODUCE_SKELETON_EXTENSIONS, extS);
-				}
-			});
+					});
 			upExtensionLabel
 					.setToolTipText("moves the selected extension "
 							+ "higher in the list so that it will be executed before the following extensions");
@@ -314,7 +364,8 @@ public class ExtensionsManagerPanel extends JPanel {
 			gridBagConstraints18.weighty = 1.0;
 			extensionsTablePanel = new JPanel();
 			extensionsTablePanel.setLayout(new GridBagLayout());
-			extensionsTablePanel.add(getExtensionsScrollPane(), gridBagConstraints18);
+			extensionsTablePanel.add(getExtensionsScrollPane(),
+					gridBagConstraints18);
 			extensionsTablePanel.add(upExtensionLabel, gridBagConstraints21);
 			extensionsTablePanel.add(downExtensionLabel, gridBagConstraints14);
 		}
