@@ -36,6 +36,7 @@ import gov.nih.nci.cagrid.introduce.extension.CreationExtensionException;
 import gov.nih.nci.cagrid.introduce.extension.CreationExtensionPostProcessor;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
+import gov.nih.nci.cagrid.introduce.extension.ServiceExtensionRemover;
 import gov.nih.nci.cagrid.introduce.templates.NamespaceMappingsTemplate;
 import gov.nih.nci.cagrid.introduce.templates.NewServerConfigTemplate;
 import gov.nih.nci.cagrid.introduce.templates.NewServiceJNDIConfigTemplate;
@@ -795,7 +796,7 @@ public class SyncTools {
 				String next = strtok.nextToken();
 				newExts.add(next);
 				if (!oldExts.contains(next)) {
-					logger.info("A new extension is being added: " + next);
+					logger.info("A new extension needs added: " + next);
 					CreationExtensionPostProcessor pp = null;
 					ServiceExtensionDescriptionType desc = ExtensionsLoader
 							.getInstance().getServiceExtension(next);
@@ -813,7 +814,20 @@ public class SyncTools {
 			while (it.hasNext()) {
 				String next = (String) it.next();
 				if (!newExts.contains(next)) {
-					logger.info("An extension was removed: " + next);
+					logger.info("An extension needs removed: " + next);
+					ServiceExtensionRemover remover = ExtensionTools.getServiceExtensionRemover(next);
+					if(remover!=null){
+					    remover.remove(ExtensionsLoader.getInstance().getServiceExtension(next), info);
+					}
+					ExtensionType[] modifiedExtensionsArray = new ExtensionType[info.getExtensions().getExtension().length-1];
+					int kept = 0;
+					for(int i = 0; i < info.getExtensions().getExtension().length; i++){
+					    ExtensionType extType = info.getExtensions().getExtension(i);
+					    if(!extType.getName().equals(next)){
+					        modifiedExtensionsArray[kept++]=extType;
+					    }
+					}
+					info.getExtensions().setExtension(modifiedExtensionsArray);
 				}
 			}
 
