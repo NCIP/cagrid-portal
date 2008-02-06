@@ -399,6 +399,7 @@ public class DelegateProxyWindowStep1 extends ApplicationComponent implements
 		if (delegationPolicy == null) {
 			delegationPolicy = new JComboBox();
 			delegationPolicy.addItem(CDSUIConstants.IDENTITY_POLICY_TYPE);
+			delegationPolicy.addItem(CDSUIConstants.GROUP_POLICY_TYPE);
 		}
 		return delegationPolicy;
 	}

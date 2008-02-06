@@ -1,6 +1,7 @@
 package org.cagrid.gaards.cds.service.policy;
 
 import gov.nih.nci.cagrid.common.FaultHelper;
+import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.gridgrouper.client.GridGrouper;
 
 import java.sql.Connection;
@@ -165,6 +166,7 @@ public class GroupPolicyHandler implements PolicyHandler {
 			throw f;
 
 		}
+
 		if (this.policyExists(id)) {
 			InvalidPolicyFault f = new InvalidPolicyFault();
 			f.setFaultString("A policy already exists for the delegation "
@@ -173,6 +175,32 @@ public class GroupPolicyHandler implements PolicyHandler {
 		}
 
 		GroupDelegationPolicy policy = (GroupDelegationPolicy) pol;
+		if (Utils.clean(policy.getGridGrouperServiceURL()) == null) {
+			InvalidPolicyFault f = new InvalidPolicyFault();
+			f.setFaultString("Invalid Grid Grouper Service URL specified.");
+			throw f;
+		}
+
+		if (Utils.clean(policy.getGroupName()) == null) {
+			InvalidPolicyFault f = new InvalidPolicyFault();
+			f.setFaultString("Invalid Group Name specified.");
+			throw f;
+		}
+
+		try {
+			GridGrouper grouper = new GridGrouper(policy
+					.getGridGrouperServiceURL());
+			grouper.findGroup(policy.getGroupName());
+		} catch (Exception e) {
+			InvalidPolicyFault f = new InvalidPolicyFault();
+			f.setFaultString("Could not resolve the group "
+					+ policy.getGroupName() + " on the Grid Grouper "
+					+ policy.getGridGrouperServiceURL() + ".");
+			FaultHelper helper = new FaultHelper(f);
+			helper.addFaultCause(e);
+			f = (InvalidPolicyFault) helper.getFault();
+			throw f;
+		}
 
 		Connection c = null;
 
