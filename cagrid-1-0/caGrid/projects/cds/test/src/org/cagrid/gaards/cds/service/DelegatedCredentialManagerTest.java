@@ -54,6 +54,10 @@ public class DelegatedCredentialManagerTest extends TestCase {
 
 	private int DEFAULT_PROXY_LIFETIME_SECONDS = 300;
 
+	private int PROXY_BUFFER_MAX_COUNT = 8;
+
+	private int PROXY_BUFFER_TIME_MULTIPLIER = 2;
+
 	public void testDelegatedCredentialCreateDestroy() {
 		try {
 			DelegatedCredentialManager dcm = Utils
@@ -797,12 +801,15 @@ public class DelegatedCredentialManagerTest extends TestCase {
 					fail("Should not be able get delegated credential.");
 				}
 			}
-			assertEquals(2,dcm.searchAuditLog(Utils.getAccessDeniedAuditFilter(id)).length);
+			assertEquals(2, dcm.searchAuditLog(Utils
+					.getAccessDeniedAuditFilter(id)).length);
 			dcm.updateDelegatedCredentialStatus(gridIdentity, id,
 					DelegationStatus.Approved);
-			assertEquals(2,dcm.searchAuditLog(Utils.getUpdateStatusAuditFilter(id)).length);
+			assertEquals(2, dcm.searchAuditLog(Utils
+					.getUpdateStatusAuditFilter(id)).length);
 			dcm.getDelegatedCredential(GRID_IDENTITY, id, pKey);
-			assertEquals(2,dcm.searchAuditLog(Utils.getIssuedAuditFilter(id)).length);
+			assertEquals(2,
+					dcm.searchAuditLog(Utils.getIssuedAuditFilter(id)).length);
 
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
@@ -815,16 +822,22 @@ public class DelegatedCredentialManagerTest extends TestCase {
 		}
 
 	}
-	
 
 	public void testGetDelegatedCredentialSignatureCredentialAboutToExpire() {
 
 		DelegatedCredentialManager dcm = null;
+		int originalProxyExpiration = DelegatedCredentialManager.PROXY_EXPIRATION_BUFFER_SECONDS;
 		try {
 			dcm = Utils.getDelegatedCredentialManager();
 			String alias = "jdoe";
 			GlobusCredential cred = ca.createCredential(alias);
 			String gridIdentity = cred.getIdentity();
+			
+			boolean ok = false;
+			int count = 1;
+
+			while (!ok && (count <= PROXY_BUFFER_MAX_COUNT)) {
+
 			DelegationRequest request = getSimpleDelegationRequest();
 			DelegationSigningRequest req = dcm.initiateDelegation(gridIdentity,
 					request);
@@ -836,45 +849,66 @@ public class DelegatedCredentialManagerTest extends TestCase {
 
 			PublicKey publicKey = KeyUtil.loadPublicKey(req.getPublicKey()
 					.getKeyAsString());
-			X509Certificate[] proxy = this.ca.createProxyCertifcates(alias,
-					publicKey, 1, 0, 0,
-					DelegatedCredentialManager.PROXY_EXPIRATION_BUFFER_SECONDS);
-			DelegationSigningResponse res = new DelegationSigningResponse();
-			res.setDelegationIdentifier(id);
-			res.setCertificateChain(org.cagrid.gaards.cds.common.Utils
-					.toCertificateChain(proxy));
-			dcm.approveDelegation(gridIdentity, res);
+
 			
-			DelegatedCredentialAuditRecord[] ar1 = dcm.searchAuditLog(Utils
-					.getApprovedAuditFilter(id));
-			assertEquals(1, ar1.length);
-			assertEquals(id, ar1[0].getDelegationIdentifier());
-			assertEquals(gridIdentity, ar1[0].getSourceGridIdentity());
-			assertEquals(DelegatedCredentialEvent.DelegationApproved,
-					ar1[0].getEvent());
-			
-			try {
-				dcm.getDelegatedCredential(GRID_IDENTITY, id, pKey);
-				fail("Should not be able get delegated credential.");
-			} catch (DelegationFault e) {
-				if (!e.getFaultString().equals(
-						Errors.SIGNING_CREDENTIAL_ABOUT_EXPIRE)) {
+				X509Certificate[] proxy = this.ca
+						.createProxyCertifcates(
+								alias,
+								publicKey,
+								1,
+								0,
+								0,
+								DelegatedCredentialManager.PROXY_EXPIRATION_BUFFER_SECONDS);
+				DelegationSigningResponse res = new DelegationSigningResponse();
+				res.setDelegationIdentifier(id);
+				res.setCertificateChain(org.cagrid.gaards.cds.common.Utils
+						.toCertificateChain(proxy));
+				dcm.approveDelegation(gridIdentity, res);
+
+				DelegatedCredentialAuditRecord[] ar1 = dcm.searchAuditLog(Utils
+						.getApprovedAuditFilter(id));
+				assertEquals(1, ar1.length);
+				assertEquals(id, ar1[0].getDelegationIdentifier());
+				assertEquals(gridIdentity, ar1[0].getSourceGridIdentity());
+				assertEquals(DelegatedCredentialEvent.DelegationApproved,
+						ar1[0].getEvent());
+		
+				try {
+					dcm.getDelegatedCredential(GRID_IDENTITY, id, pKey);
 					fail("Should not be able get delegated credential.");
+				} catch (DelegationFault e) {
+					if (e.getFaultString().equals(
+							Errors.SIGNING_CREDENTIAL_ABOUT_EXPIRE)) {
+						ok = true;
+					} else if (!e.getFaultString().equals(
+							Errors.SIGNING_CREDENTIAL_EXPIRED)) {
+						FaultUtil.printFault(e);
+						fail("Unexpected error encountered");
+					}
 				}
+
+				DelegatedCredentialAuditRecord[] ar2 = dcm.searchAuditLog(Utils
+						.getAccessDeniedAuditFilter(id));
+				assertEquals(1, ar2.length);
+				assertEquals(id, ar2[0].getDelegationIdentifier());
+				assertEquals(GRID_IDENTITY, ar2[0].getSourceGridIdentity());
+				assertEquals(
+						DelegatedCredentialEvent.DelegatedCredentialAccessDenied,
+						ar2[0].getEvent());
+				DelegatedCredentialManager.PROXY_EXPIRATION_BUFFER_SECONDS = DelegatedCredentialManager.PROXY_EXPIRATION_BUFFER_SECONDS
+						* PROXY_BUFFER_TIME_MULTIPLIER;
+				count = count + 1;
 			}
-			
-			DelegatedCredentialAuditRecord[] ar2 = dcm.searchAuditLog(Utils
-					.getAccessDeniedAuditFilter(id));
-			assertEquals(1, ar2.length);
-			assertEquals(id, ar2[0].getDelegationIdentifier());
-			assertEquals(GRID_IDENTITY, ar2[0].getSourceGridIdentity());
-			assertEquals(DelegatedCredentialEvent.DelegatedCredentialAccessDenied,
-					ar2[0].getEvent());
+
+			if (!ok) {
+				fail("Unable to validate testGetDelegatedCredentialSignatureCredentialAboutToExpire.");
+			}
 
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			fail(e.getMessage());
 		} finally {
+			DelegatedCredentialManager.PROXY_EXPIRATION_BUFFER_SECONDS = originalProxyExpiration;
 			try {
 				dcm.clearDatabase();
 			} catch (Exception e) {
@@ -882,11 +916,10 @@ public class DelegatedCredentialManagerTest extends TestCase {
 		}
 
 	}
-	
+
 	// ///////////////////////////////////////////////////////////////////////////////
 	/* LEFT OFF HERE */
 	// ///////////////////////////////////////////////////////////////////////////////
-
 	public void testGetDelegatedCredentialInvalidKeyLength() {
 
 		DelegatedCredentialManager dcm = null;
@@ -913,15 +946,15 @@ public class DelegatedCredentialManagerTest extends TestCase {
 			res.setCertificateChain(org.cagrid.gaards.cds.common.Utils
 					.toCertificateChain(proxy));
 			dcm.approveDelegation(gridIdentity, res);
-			
+
 			DelegatedCredentialAuditRecord[] ar1 = dcm.searchAuditLog(Utils
 					.getApprovedAuditFilter(id));
 			assertEquals(1, ar1.length);
 			assertEquals(id, ar1[0].getDelegationIdentifier());
 			assertEquals(gridIdentity, ar1[0].getSourceGridIdentity());
-			assertEquals(DelegatedCredentialEvent.DelegationApproved,
-					ar1[0].getEvent());
-			
+			assertEquals(DelegatedCredentialEvent.DelegationApproved, ar1[0]
+					.getEvent());
+
 			try {
 				dcm.getDelegatedCredential(GRID_IDENTITY, id, pKey);
 				fail("Should not be able get delegated credential.");
@@ -931,13 +964,14 @@ public class DelegatedCredentialManagerTest extends TestCase {
 					fail("Should not be able get delegated credential.");
 				}
 			}
-			
+
 			DelegatedCredentialAuditRecord[] ar2 = dcm.searchAuditLog(Utils
 					.getAccessDeniedAuditFilter(id));
 			assertEquals(1, ar2.length);
 			assertEquals(id, ar2[0].getDelegationIdentifier());
 			assertEquals(GRID_IDENTITY, ar2[0].getSourceGridIdentity());
-			assertEquals(DelegatedCredentialEvent.DelegatedCredentialAccessDenied,
+			assertEquals(
+					DelegatedCredentialEvent.DelegatedCredentialAccessDenied,
 					ar2[0].getEvent());
 
 		} catch (Exception e) {
@@ -1061,14 +1095,14 @@ public class DelegatedCredentialManagerTest extends TestCase {
 				.getDefaultTrustedCertificates().getCertificates(),
 				CertificateRevocationLists
 						.getDefaultCertificateRevocationLists());
-		
+
 		DelegatedCredentialAuditRecord[] ar = dcm.searchAuditLog(Utils
 				.getIssuedAuditFilter(id));
 		assertEquals(1, ar.length);
 		assertEquals(id, ar[0].getDelegationIdentifier());
 		assertEquals(GRID_IDENTITY, ar[0].getSourceGridIdentity());
-		assertEquals(DelegatedCredentialEvent.DelegatedCredentialIssued,
-				ar[0].getEvent());
+		assertEquals(DelegatedCredentialEvent.DelegatedCredentialIssued, ar[0]
+				.getEvent());
 
 		return new GlobusCredential(pair.getPrivate(), delegatedProxy);
 	}
