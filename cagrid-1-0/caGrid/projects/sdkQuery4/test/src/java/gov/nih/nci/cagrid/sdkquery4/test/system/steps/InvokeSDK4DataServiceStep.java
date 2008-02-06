@@ -3,6 +3,7 @@ package gov.nih.nci.cagrid.sdkquery4.test.system.steps;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.cqlquery.CQLQuery;
 import gov.nih.nci.cagrid.cqlresultset.CQLQueryResults;
+import gov.nih.nci.cagrid.cqlresultset.TargetAttribute;
 import gov.nih.nci.cagrid.data.client.DataServiceClient;
 import gov.nih.nci.cagrid.data.creation.DataTestCaseInfo;
 import gov.nih.nci.cagrid.data.utilities.CQLQueryResultsIterator;
@@ -26,7 +27,7 @@ import org.apache.log4j.Logger;
  * @author David Ervin
  * 
  * @created Feb 1, 2008 9:02:20 AM
- * @version $Id: InvokeSDK4DataServiceStep.java,v 1.7 2008-02-06 16:15:25 dervin Exp $ 
+ * @version $Id: InvokeSDK4DataServiceStep.java,v 1.8 2008-02-06 16:55:33 dervin Exp $ 
  */
 public class InvokeSDK4DataServiceStep extends Step {
     public static final String TEST_RESOURCES_DIR = "/test/resources/";
@@ -192,22 +193,37 @@ public class InvokeSDK4DataServiceStep extends Step {
     
     
     private void compareResults(CQLQueryResults gold, CQLQueryResults test) {
-        Set<Object> goldXml = new HashSet<Object>();
-        Set<Object> testXml = new HashSet<Object>();
+        Set<Object> goldObjects = new HashSet<Object>();
+        Set<Object> testObjects = new HashSet<Object>();
         
+        boolean goldIsAttributes = false;
         CQLQueryResultsIterator goldIter = new CQLQueryResultsIterator(gold, getClientConfigStream());
         while (goldIter.hasNext()) {
-            goldXml.add(goldIter.next());
+            Object o = goldIter.next();
+            if (o instanceof TargetAttribute[]) {
+                goldIsAttributes = true;
+            }
+            goldObjects.add(o);
         }
         
+        boolean testIsAttributes = false;
         CQLQueryResultsIterator testIter = new CQLQueryResultsIterator(test, getClientConfigStream());
         while (testIter.hasNext()) {
-            testXml.add(testIter.next());
+            Object o = testIter.next();
+            if (o instanceof TargetAttribute[]) {
+                testIsAttributes = true;
+            }
+            testObjects.add(o);
         }
         
-        assertEquals("Result count differed from expected", goldXml.size(), testXml.size());
+        assertEquals("Result count differed from expected", goldObjects.size(), testObjects.size());
+        assertEquals("Test results as attributes differed from expected", goldIsAttributes, testIsAttributes);
         
-        // TODO: compare objects
+        if (goldIsAttributes) {
+            // TODO: compare TargetAttribute[]
+        } else {
+            assertTrue("Gold and Test contained different objects", goldObjects.containsAll(testObjects));
+        }
     }
     
     
