@@ -28,7 +28,7 @@ import org.apache.log4j.Logger;
  * @author David Ervin
  * 
  * @created Feb 1, 2008 9:02:20 AM
- * @version $Id: InvokeSDK4DataServiceStep.java,v 1.9 2008-02-06 18:30:26 dervin Exp $ 
+ * @version $Id: InvokeSDK4DataServiceStep.java,v 1.10 2008-02-06 18:55:10 dervin Exp $ 
  */
 public class InvokeSDK4DataServiceStep extends Step {
     public static final String TEST_RESOURCES_DIR = "/test/resources/";
@@ -52,6 +52,8 @@ public class InvokeSDK4DataServiceStep extends Step {
         testDistinctAttributeFromCash();
         testAssociationNotNull();
         testAssociationWithAttributeEqual();
+        testGroupOfAttributesUsingAnd();
+        testGroupOfAttributesUsingOr();
     }
     
     
@@ -91,6 +93,22 @@ public class InvokeSDK4DataServiceStep extends Step {
         LOG.debug("testAssociationWithAttributeEqual");
         CQLQuery query = loadQuery("associationWithAttributeEqual.xml");
         CQLQueryResults results = loadQueryResults("goldAssociationWithAttributeEqual.xml");
+        invokeValidQueryValidResults(query, results);
+    }
+    
+    
+    private void testGroupOfAttributesUsingAnd() {
+        LOG.debug("testGroupOfAttributesUsingAnd");
+        CQLQuery query = loadQuery("groupOfAttributesUsingAnd.xml");
+        CQLQueryResults results = loadQueryResults("goldGroupOfAttributesUsingAnd.xml");
+        invokeValidQueryValidResults(query, results);
+    }
+    
+    
+    private void testGroupOfAttributesUsingOr() {
+        LOG.debug("testGroupOfAttributesUsingOr");
+        CQLQuery query = loadQuery("groupOfAttributesUsingOr.xml");
+        CQLQueryResults results = loadQueryResults("goldGroupOfAttributesUsingOr.xml");
         invokeValidQueryValidResults(query, results);
     }
     
