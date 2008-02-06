@@ -9,9 +9,6 @@ import gov.nih.nci.cagrid.data.utilities.CQLQueryResultsIterator;
 import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainer;
 import gov.nih.nci.cagrid.testing.system.haste.Step;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashSet;
@@ -29,7 +26,7 @@ import org.apache.log4j.Logger;
  * @author David Ervin
  * 
  * @created Feb 1, 2008 9:02:20 AM
- * @version $Id: InvokeSDK4DataServiceStep.java,v 1.5 2008-02-05 21:21:00 dervin Exp $ 
+ * @version $Id: InvokeSDK4DataServiceStep.java,v 1.6 2008-02-06 15:44:04 dervin Exp $ 
  */
 public class InvokeSDK4DataServiceStep extends Step {
     public static final String TEST_RESOURCES_DIR = "/test/resources/";
@@ -51,6 +48,7 @@ public class InvokeSDK4DataServiceStep extends Step {
         testUndergraduateStudentWithName();
         testAllPayments();
         testDistinctAttributeFromCash();
+        testAssociationNotNull();
     }
     
     
@@ -71,6 +69,13 @@ public class InvokeSDK4DataServiceStep extends Step {
     private void testDistinctAttributeFromCash() {
         CQLQuery query = loadQuery(TEST_QUERIES_DIR + "distinctAttributeFromCash.xml");
         CQLQueryResults results = loadQueryResults(TEST_RESULTS_DIR + "goldDistinctAttributeFromCash.xml");
+        invokeValidQueryValidResults(query, results);
+    }
+    
+    
+    private void testAssociationNotNull() {
+        CQLQuery query = loadQuery(TEST_QUERIES_DIR + "associationNotNull.xml");
+        CQLQueryResults results = loadQueryResults(TEST_RESULTS_DIR + "goldAssociationNotNull.xml");
         invokeValidQueryValidResults(query, results);
     }
     

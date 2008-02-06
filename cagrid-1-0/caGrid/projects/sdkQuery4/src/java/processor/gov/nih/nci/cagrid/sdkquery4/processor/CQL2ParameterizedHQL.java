@@ -28,7 +28,7 @@ import org.apache.log4j.Logger;
  * @author David Ervin
  * 
  * @created Mar 2, 2007 10:26:47 AM
- * @version $Id: CQL2ParameterizedHQL.java,v 1.5 2008-02-05 16:53:43 dervin Exp $ 
+ * @version $Id: CQL2ParameterizedHQL.java,v 1.6 2008-02-06 15:44:04 dervin Exp $ 
  */
 public class CQL2ParameterizedHQL {
     public static final String TARGET_ALIAS = "__TargetAlias__";
@@ -281,6 +281,7 @@ public class CQL2ParameterizedHQL {
 		String roleName = roleNameResolver.getRoleName(sourceClassName, association);
 		if (roleName == null) {
 			// still null?? no association to the object!
+            // TODO: should probably be malformed query exception
 			throw new QueryProcessingException("Association from type " + sourceClassName + 
 				" to type " + association.getName() + " does not exist.  Use only direct associations");
 		}
@@ -289,16 +290,25 @@ public class CQL2ParameterizedHQL {
 		associationTrace.add(roleName);
         LOG.debug("Role name determined to be " + roleName);
 		
+        boolean simpleNullCheck = true;
 		if (association.getAssociation() != null) {
+            simpleNullCheck = false;
 			processAssociation(association.getAssociation(), hql, parameters, associationTrace, association.getName());
 		}
 		if (association.getAttribute() != null) {
+            simpleNullCheck = false;
 			processAttribute(association.getAttribute(), hql, parameters, associationTrace, association.getName());
 		}
 		if (association.getGroup() != null) {
+            simpleNullCheck = false;
 			processGroup(association.getGroup(), hql, parameters, associationTrace, association.getName());
 		}
 		
+        if (simpleNullCheck) {
+            // query is checking for the association to exist and be non-null
+            hql.append(buildAssociationTrace(associationTrace)).append(".id is not null ");
+        }
+        
 		// remove this association from the trace
 		associationTrace.remove(associationTrace.size() - 1);
 	}
