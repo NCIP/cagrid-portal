@@ -461,6 +461,7 @@
 			<artifact refid="common.metadata.jars" />
 			<artifact refid="advertisement.jars" />
 			<artifact refid="jdom.jars" />
+			<artifact refid="gridgrouper.client.jars" />
 		</resolveDependencies>
 		<delete dir="${projects.dir}/cds/schema/CredentialDelegationService/xsd" />
 		<resolveDependencies extdir="${projects.dir}/cds/schema/CredentialDelegationService">
