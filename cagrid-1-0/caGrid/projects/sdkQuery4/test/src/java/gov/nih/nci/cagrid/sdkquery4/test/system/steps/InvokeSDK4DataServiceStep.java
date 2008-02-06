@@ -13,6 +13,7 @@ import gov.nih.nci.cagrid.testing.system.haste.Step;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 import org.apache.axis.types.URI;
@@ -27,7 +28,7 @@ import org.apache.log4j.Logger;
  * @author David Ervin
  * 
  * @created Feb 1, 2008 9:02:20 AM
- * @version $Id: InvokeSDK4DataServiceStep.java,v 1.8 2008-02-06 16:55:33 dervin Exp $ 
+ * @version $Id: InvokeSDK4DataServiceStep.java,v 1.9 2008-02-06 18:30:26 dervin Exp $ 
  */
 public class InvokeSDK4DataServiceStep extends Step {
     public static final String TEST_RESOURCES_DIR = "/test/resources/";
@@ -220,10 +221,46 @@ public class InvokeSDK4DataServiceStep extends Step {
         assertEquals("Test results as attributes differed from expected", goldIsAttributes, testIsAttributes);
         
         if (goldIsAttributes) {
-            // TODO: compare TargetAttribute[]
+            Set<TargetAttribute[]> goldAttributes = recastSet(goldObjects);
+            Set<TargetAttribute[]> testAttributes = recastSet(testObjects);
+            compareTargetAttributes(goldAttributes, testAttributes);
         } else {
             assertTrue("Gold and Test contained different objects", goldObjects.containsAll(testObjects));
         }
+    }
+    
+    
+    private void compareTargetAttributes(Set<TargetAttribute[]> gold, Set<TargetAttribute[]> test) {
+        // assumes sizes of both sets are equal
+        Iterator<TargetAttribute[]> goldIter = gold.iterator();
+        Iterator<TargetAttribute[]> testIter = test.iterator();
+        while (goldIter.hasNext()) {
+            TargetAttribute[] goldAttributes = goldIter.next();
+            TargetAttribute[] testAttributes = testIter.next();
+            // veriy the same number of attributes
+            assertEquals("Number of attributes differed from expected", goldAttributes.length, testAttributes.length);
+            for (TargetAttribute goldAttrib : goldAttributes) {
+                // find the attribute of the same in the test attributes
+                TargetAttribute matchingTestAttrib = null;
+                for (TargetAttribute testAttrib : testAttributes) {
+                    if (testAttrib.getName().equals(goldAttrib.getName())) {
+                        matchingTestAttrib = testAttrib;
+                        break;
+                    }
+                }
+                assertNotNull("No attribute named " + goldAttrib.getName() + " found in test result attributes", matchingTestAttrib);
+                assertEquals("Value of attribute " + goldAttrib.getName() + " did not match expected", goldAttrib.getValue(), matchingTestAttrib.getValue());
+            }
+        }
+    }
+    
+    
+    private <T> Set<T> recastSet(Set<?> set) {
+        Set<T> returnme = new HashSet<T>();
+        for (Object o : set) {
+            returnme.add((T) o);
+        }
+        return returnme;
     }
     
     
