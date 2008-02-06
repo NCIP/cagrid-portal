@@ -414,7 +414,7 @@ public class CaBIGCreationViewer extends CreationViewerBaseComponent {
                         } catch (Exception e1) {
                             e1.printStackTrace();
                         }
-                        extensions.add(edt.getDisplayName());
+                        extensions.add(edt.getName());
                     }
                     createService(getDir().getText(), getService().getText(), getServicePackage().getText(),
                         getNamespaceDomain().getText(), Arrays.asList(new String[]{
