@@ -1,14 +1,12 @@
 package org.cagrid.gaards.cds.service.policy;
 
 import gov.nih.nci.cagrid.common.FaultHelper;
-import gov.nih.nci.cagrid.common.security.ProxyUtil;
 import gov.nih.nci.cagrid.gridgrouper.client.GridGrouper;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-import org.apache.axis.MessageContext;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.cagrid.gaards.cds.common.DelegationIdentifier;
@@ -17,7 +15,6 @@ import org.cagrid.gaards.cds.common.GroupDelegationPolicy;
 import org.cagrid.gaards.cds.stubs.types.CDSInternalFault;
 import org.cagrid.gaards.cds.stubs.types.InvalidPolicyFault;
 import org.cagrid.tools.database.Database;
-import org.globus.gsi.GlobusCredential;
 
 public class GroupPolicyHandler implements PolicyHandler {
 	private final static String TABLE = "group_policies";
@@ -66,7 +63,7 @@ public class GroupPolicyHandler implements PolicyHandler {
 				if (rs.next()) {
 					policy.setGridGrouperServiceURL(rs
 							.getString(GRID_GROUPER_URL));
-					policy.setGroupId(rs.getString(GROUP_SYSTEM_NAME));
+					policy.setGroupName(rs.getString(GROUP_SYSTEM_NAME));
 				}
 				rs.close();
 				s.close();
@@ -96,7 +93,7 @@ public class GroupPolicyHandler implements PolicyHandler {
 			GroupDelegationPolicy policy = (GroupDelegationPolicy) getPolicy(id);
 			GridGrouper grouper = new GridGrouper(policy
 					.getGridGrouperServiceURL());
-			return grouper.isMemberOf(gridIdentity, policy.getGroupId());
+			return grouper.isMemberOf(gridIdentity, policy.getGroupName());
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 			CDSInternalFault f = new CDSInternalFault();
@@ -186,7 +183,7 @@ public class GroupPolicyHandler implements PolicyHandler {
 					+ "= ?," + GROUP_SYSTEM_NAME + "= ?");
 			s.setLong(1, id.getDelegationId());
 			s.setString(2, policy.getGridGrouperServiceURL());
-			s.setString(3, policy.getGroupId());
+			s.setString(3, policy.getGroupName());
 			s.execute();
 			s.close();
 
