@@ -76,5 +76,10 @@
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-db.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-events.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-groups.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-gridgrouper-client.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-gridgrouper-common.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-gridgrouper-stubs.jar"/>
+	<classpathentry kind="lib" path="ext/lib/grouper.jar"/>
+	<classpathentry kind="lib" path="ext/lib/subject-0.2.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

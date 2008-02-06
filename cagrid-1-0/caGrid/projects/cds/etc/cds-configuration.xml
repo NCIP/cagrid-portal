@@ -15,6 +15,11 @@
 		class="org.cagrid.gaards.cds.service.policy.IdentityPolicyHandler">
 		<constructor-arg index="0" ref="database" />
 	</bean>
+	
+	<bean id="groupPolicyHandler"
+		class="org.cagrid.gaards.cds.service.policy.GroupPolicyHandler">
+		<constructor-arg index="0" ref="database" />
+	</bean>
 
 
 	<!-- SPECIFY KEY MANAGER HERE -->
@@ -107,6 +112,7 @@
 		<constructor-arg index="3">
 			<list>
 				<ref bean="identityPolicyHandler" />
+				<ref bean="groupPolicyHandler" />
 			</list>
 		</constructor-arg>
 		<constructor-arg index="4" ref="proxyPolicy" />

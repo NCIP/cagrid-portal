@@ -69,7 +69,7 @@ public class DelegatedCredentialManager {
 	private final static String PROXY_LIFETIME_SECONDS = "PROXY_LIFETIME_SECONDS";
 	private final static String DELEGATED_CREDENTIAL_AUDITOR = "delegatedCredentialAuditor";
 
-	public final static int PROXY_EXPIRATION_BUFFER_SECONDS = 5;
+	public static int PROXY_EXPIRATION_BUFFER_SECONDS = 5;
 
 	private Database db;
 	private boolean dbBuilt = false;
