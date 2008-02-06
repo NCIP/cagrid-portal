@@ -28,7 +28,6 @@ import java.util.Set;
 
 import org.globus.gsi.GlobusCredential;
 
-
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella</A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster</A>
@@ -43,7 +42,6 @@ public class GridGrouper extends GridGrouperObject implements GrouperI {
 
 	private GridGrouperClient client;
 
-
 	/**
 	 * Used to Construct a Grid Grouper object corresponding to a Grid Grouper
 	 * Service.
@@ -55,6 +53,14 @@ public class GridGrouper extends GridGrouperObject implements GrouperI {
 		this(serviceURI, null);
 	}
 
+	public GridGrouper(String serviceURI, boolean preferAnonymous) {
+		try {
+			this.setClient(new GridGrouperClient(serviceURI, preferAnonymous));
+		} catch (Exception e) {
+			getLog().error(e.getMessage(), e);
+			throw new GrouperRuntimeException(Utils.getExceptionMessage(e));
+		}
+	}
 
 	/**
 	 * Used to Construct a Grid Grouper object corresponding to a Grid Grouper
@@ -75,7 +81,6 @@ public class GridGrouper extends GridGrouperObject implements GrouperI {
 		}
 	}
 
-
 	/**
 	 * Returns a Stem object corresponding to the Grid Grouper root stem.
 	 * 
@@ -86,7 +91,6 @@ public class GridGrouper extends GridGrouperObject implements GrouperI {
 	public StemI getRootStem() throws StemNotFoundException {
 		return findStem(ROOT_STEM);
 	}
-
 
 	/**
 	 * Obtains the Stem object for a specified Stem.
@@ -112,7 +116,6 @@ public class GridGrouper extends GridGrouperObject implements GrouperI {
 		}
 	}
 
-
 	/**
 	 * Obtains the Group object for a specified Group.
 	 * 
@@ -124,7 +127,8 @@ public class GridGrouper extends GridGrouperObject implements GrouperI {
 	 */
 	public GroupI findGroup(String name) throws GroupNotFoundException {
 		try {
-			GroupDescriptor des = getClient().getGroup(getGroupIdentifier(name));
+			GroupDescriptor des = getClient()
+					.getGroup(getGroupIdentifier(name));
 			return new Group(this, des);
 		} catch (GroupNotFoundFault f) {
 			throw new GroupNotFoundException(f.getFaultString());
@@ -137,10 +141,10 @@ public class GridGrouper extends GridGrouperObject implements GrouperI {
 		}
 	}
 
-
 	protected Set getChildStems(String stemName) {
 		try {
-			StemDescriptor[] children = getClient().getChildStems(getStemIdentifier(stemName));
+			StemDescriptor[] children = getClient().getChildStems(
+					getStemIdentifier(stemName));
 			Set set = new HashSet();
 			if (children != null) {
 				for (int i = 0; i < children.length; i++) {
@@ -157,10 +161,11 @@ public class GridGrouper extends GridGrouperObject implements GrouperI {
 		}
 	}
 
-
-	protected StemI getParentStem(String childStemName) throws StemNotFoundException {
+	protected StemI getParentStem(String childStemName)
+			throws StemNotFoundException {
 		try {
-			StemDescriptor des = getClient().getParentStem(getStemIdentifier(childStemName));
+			StemDescriptor des = getClient().getParentStem(
+					getStemIdentifier(childStemName));
 			return new Stem(this, des);
 		} catch (StemNotFoundFault f) {
 			throw new StemNotFoundException(f.getFaultString());
@@ -173,16 +178,13 @@ public class GridGrouper extends GridGrouperObject implements GrouperI {
 		}
 	}
 
-
 	protected GridGrouperClient getClient() {
 		return client;
 	}
 
-
 	protected void setClient(GridGrouperClient client) {
 		this.client = client;
 	}
-
 
 	protected StemIdentifier getStemIdentifier(String stemName) {
 		StemIdentifier id = new StemIdentifier();
@@ -191,14 +193,12 @@ public class GridGrouper extends GridGrouperObject implements GrouperI {
 		return id;
 	}
 
-
 	protected GroupIdentifier getGroupIdentifier(String groupName) {
 		GroupIdentifier id = new GroupIdentifier();
 		id.setGridGrouperURL(getName());
 		id.setGroupName(groupName);
 		return id;
 	}
-
 
 	/**
 	 * Obtains the name of the Grid Grouper, generally the Grid Grouper service
@@ -210,11 +210,9 @@ public class GridGrouper extends GridGrouperObject implements GrouperI {
 		return getClient().getEndpointReference().getAddress().toString();
 	}
 
-
 	public String getProxyIdentity() {
 		return getClient().getProxyIdentity();
 	}
-
 
 	/**
 	 * Determines whether or not a subject is a member of a group.
@@ -223,15 +221,16 @@ public class GridGrouper extends GridGrouperObject implements GrouperI {
 	 *            The id of the subject.
 	 * @param groupName
 	 *            The name of the group.
-	 * @return
-     *      True if member
+	 * @return True if member
 	 * @throws GroupNotFoundException
 	 *             Thrown if the request group could not be found.
 	 */
 
-	public boolean isMemberOf(String subjectId, String groupName) throws GroupNotFoundException {
+	public boolean isMemberOf(String subjectId, String groupName)
+			throws GroupNotFoundException {
 		try {
-			return getClient().isMemberOf(getGroupIdentifier(groupName), subjectId, MemberFilter.All);
+			return getClient().isMemberOf(getGroupIdentifier(groupName),
+					subjectId, MemberFilter.All);
 		} catch (GridGrouperRuntimeFault e) {
 			getLog().error(e.getMessage(), e);
 			throw new GrouperRuntimeException(e.getFaultString());
@@ -242,7 +241,6 @@ public class GridGrouper extends GridGrouperObject implements GrouperI {
 			throw new GrouperRuntimeException(Utils.getExceptionMessage(e));
 		}
 	}
-
 
 	/**
 	 * Determines whether or not a subject is a member of a group.
@@ -257,9 +255,11 @@ public class GridGrouper extends GridGrouperObject implements GrouperI {
 	 *             Thrown if the request group could not be found.
 	 */
 
-	public boolean isMemberOf(Subject subject, String groupName) throws GroupNotFoundException {
+	public boolean isMemberOf(Subject subject, String groupName)
+			throws GroupNotFoundException {
 		try {
-			return getClient().isMemberOf(getGroupIdentifier(groupName), subject.getId(), MemberFilter.All);
+			return getClient().isMemberOf(getGroupIdentifier(groupName),
+					subject.getId(), MemberFilter.All);
 		} catch (GridGrouperRuntimeFault e) {
 			getLog().error(e.getMessage(), e);
 			throw new GrouperRuntimeException(e.getFaultString());
@@ -272,7 +272,6 @@ public class GridGrouper extends GridGrouperObject implements GrouperI {
 
 	}
 
-
 	public boolean isMember(String member, MembershipExpression exp) {
 		try {
 			return getClient().isMember(member, exp);
@@ -282,13 +281,13 @@ public class GridGrouper extends GridGrouperObject implements GrouperI {
 		}
 	}
 
-
-	public MemberI findMember(Subject subject) throws GrouperRuntimeException, InsufficientPrivilegeException {
+	public MemberI findMember(Subject subject) throws GrouperRuntimeException,
+			InsufficientPrivilegeException {
 		return findMember(subject.getId());
 	}
 
-
-	public MemberI findMember(String subject) throws GrouperRuntimeException, InsufficientPrivilegeException {
+	public MemberI findMember(String subject) throws GrouperRuntimeException,
+			InsufficientPrivilegeException {
 		try {
 			return new Member(this, getClient().getMember(subject));
 		} catch (GridGrouperRuntimeFault e) {
@@ -302,11 +301,11 @@ public class GridGrouper extends GridGrouperObject implements GrouperI {
 		}
 	}
 
-
-	public Set getMembersGroups(String subject, MembershipType type) throws GrouperRuntimeException,
-		InsufficientPrivilegeException {
+	public Set getMembersGroups(String subject, MembershipType type)
+			throws GrouperRuntimeException, InsufficientPrivilegeException {
 		try {
-			GroupDescriptor[] list = getClient().getMembersGroups(subject, type);
+			GroupDescriptor[] list = getClient()
+					.getMembersGroups(subject, type);
 			Set grps = new LinkedHashSet();
 			if (list != null) {
 				for (int i = 0; i < list.length; i++) {
@@ -325,18 +324,18 @@ public class GridGrouper extends GridGrouperObject implements GrouperI {
 		}
 	}
 
-
-	public Set getMembersEffectiveGroups(String subject) throws GrouperRuntimeException, InsufficientPrivilegeException {
+	public Set getMembersEffectiveGroups(String subject)
+			throws GrouperRuntimeException, InsufficientPrivilegeException {
 		return getMembersGroups(subject, MembershipType.EffectiveMembers);
 	}
 
-
-	public Set getMembersGroups(String subject) throws GrouperRuntimeException, InsufficientPrivilegeException {
+	public Set getMembersGroups(String subject) throws GrouperRuntimeException,
+			InsufficientPrivilegeException {
 		return getMembersGroups(subject, MembershipType.Any);
 	}
 
-
-	public Set getMembersImmediateGroups(String subject) throws GrouperRuntimeException, InsufficientPrivilegeException {
+	public Set getMembersImmediateGroups(String subject)
+			throws GrouperRuntimeException, InsufficientPrivilegeException {
 		return getMembersGroups(subject, MembershipType.ImmediateMembers);
 	}
 

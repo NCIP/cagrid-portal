@@ -29,7 +29,7 @@ public class GridGrouperImpl {
 
 	private String getCallerIdentity() {
 		String caller = SecurityManager.getManager().getCaller();
-		// System.out.println("Caller: " + caller);
+		System.out.println("Grid Grouper Caller: " + caller);
 		if ((caller == null) || (caller.equals("<anonymous>"))) {
 			return AnonymousGridUserSubject.ANONYMOUS_GRID_USER_ID;
 		} else {

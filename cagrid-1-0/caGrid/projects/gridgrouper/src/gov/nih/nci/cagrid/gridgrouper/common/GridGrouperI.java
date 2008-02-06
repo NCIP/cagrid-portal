@@ -420,6 +420,15 @@ public interface GridGrouperI {
    */
   public boolean isMember(java.lang.String member,gov.nih.nci.cagrid.gridgrouper.bean.MembershipExpression expression) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.types.GridGrouperRuntimeFault ;
 
+  /**
+   * Get information about a member.
+   *
+   * @param member
+   * @throws GridGrouperRuntimeFault
+   *	
+   * @throws InsufficientPrivilegeFault
+   *	
+   */
   public gov.nih.nci.cagrid.gridgrouper.bean.MemberDescriptor getMember(java.lang.String member) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.types.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.types.InsufficientPrivilegeFault ;
 
   public gov.nih.nci.cagrid.gridgrouper.bean.GroupDescriptor[] getMembersGroups(java.lang.String member,gov.nih.nci.cagrid.gridgrouper.bean.MembershipType type) throws RemoteException, gov.nih.nci.cagrid.gridgrouper.stubs.types.GridGrouperRuntimeFault, gov.nih.nci.cagrid.gridgrouper.stubs.types.InsufficientPrivilegeFault ;

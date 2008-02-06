@@ -32,27 +32,48 @@ import org.globus.wsrf.impl.security.authorization.NoAuthorization;
  * @version $Id: GridGrouperBaseTreeNode.java,v 1.1 2006/08/04 03:49:26 langella
  *          Exp $
  */
-public class GridGrouperClient extends ServiceSecurityClient implements GridGrouperI {
+public class GridGrouperClient extends ServiceSecurityClient implements
+		GridGrouperI {
 	protected GridGrouperPortType portType;
 
 	private Object portTypeMutex;
+	private boolean preferAnonymous;
 
-	public GridGrouperClient(String url) throws MalformedURIException, RemoteException {
+	public GridGrouperClient(String url) throws MalformedURIException,
+			RemoteException {
 		this(url, null);
 	}
 
-	public GridGrouperClient(String url, GlobusCredential proxy) throws MalformedURIException, RemoteException {
-		super(url, proxy);
+	public GridGrouperClient(String url, boolean preferAnonymous)
+			throws MalformedURIException, RemoteException {
+		super(url, null);
+		this.preferAnonymous = preferAnonymous;
 		initialize();
 	}
 
-	public GridGrouperClient(EndpointReferenceType epr) throws MalformedURIException, RemoteException {
+	public GridGrouperClient(String url, GlobusCredential proxy)
+			throws MalformedURIException, RemoteException {
+		super(url, proxy);
+		this.preferAnonymous = false;
+		initialize();
+	}
+
+	public GridGrouperClient(EndpointReferenceType epr)
+			throws MalformedURIException, RemoteException {
 		this(epr, null);
 	}
 
-	public GridGrouperClient(EndpointReferenceType epr, GlobusCredential proxy) throws MalformedURIException,
-		RemoteException {
+	public GridGrouperClient(EndpointReferenceType epr, boolean preferAnonymous)
+			throws MalformedURIException, RemoteException {
+		super(epr, null);
+		this.preferAnonymous = preferAnonymous;
+		initialize();
+	}
+
+	public GridGrouperClient(EndpointReferenceType epr, GlobusCredential proxy)
+			throws MalformedURIException, RemoteException {
 		super(epr, proxy);
+		this.preferAnonymous = false;
 		initialize();
 	}
 
@@ -65,10 +86,12 @@ public class GridGrouperClient extends ServiceSecurityClient implements GridGrou
 
 		GridGrouperServiceAddressingLocator locator = new GridGrouperServiceAddressingLocator();
 		// attempt to load our context sensitive wsdd file
-		InputStream resourceAsStream = ClassUtils.getResourceAsStream(getClass(), "client-config.wsdd");
+		InputStream resourceAsStream = ClassUtils.getResourceAsStream(
+				getClass(), "client-config.wsdd");
 		if (resourceAsStream != null) {
 			// we found it, so tell axis to configure an engine to use it
-			EngineConfiguration engineConfig = new FileProvider(resourceAsStream);
+			EngineConfiguration engineConfig = new FileProvider(
+					resourceAsStream);
 			// set the engine of the locator
 			locator.setEngine(new AxisClient(engineConfig));
 		}
@@ -76,13 +99,15 @@ public class GridGrouperClient extends ServiceSecurityClient implements GridGrou
 		try {
 			port = locator.getGridGrouperPortTypePort(getEndpointReference());
 		} catch (Exception e) {
-			throw new RemoteException("Unable to locate portType:" + e.getMessage(), e);
+			throw new RemoteException("Unable to locate portType:"
+					+ e.getMessage(), e);
 		}
 
 		return port;
 	}
 
-	protected void configureStubSecurity(Stub stub, String method) throws RemoteException {
+	protected void configureStubSecurity(Stub stub, String method)
+			throws RemoteException {
 
 		boolean https = false;
 		if (epr.getAddress().getScheme().equals("https")) {
@@ -92,11 +117,17 @@ public class GridGrouperClient extends ServiceSecurityClient implements GridGrou
 		if (method.equals("getServiceSecurityMetadata")) {
 			if (https) {
 				resetStub(stub);
-				stub._setProperty(org.globus.wsrf.security.Constants.GSI_TRANSPORT,
-					org.globus.wsrf.security.Constants.SIGNATURE);
-				stub._setProperty(org.globus.wsrf.security.Constants.GSI_ANONYMOUS, Boolean.TRUE);
-				stub._setProperty(org.globus.wsrf.security.Constants.AUTHORIZATION,
-					org.globus.wsrf.impl.security.authorization.NoAuthorization.getInstance());
+				stub._setProperty(
+						org.globus.wsrf.security.Constants.GSI_TRANSPORT,
+						org.globus.wsrf.security.Constants.SIGNATURE);
+				stub._setProperty(
+						org.globus.wsrf.security.Constants.GSI_ANONYMOUS,
+						Boolean.TRUE);
+				stub
+						._setProperty(
+								org.globus.wsrf.security.Constants.AUTHORIZATION,
+								org.globus.wsrf.impl.security.authorization.NoAuthorization
+										.getInstance());
 			}
 			return;
 		}
@@ -105,7 +136,8 @@ public class GridGrouperClient extends ServiceSecurityClient implements GridGrou
 			operations = new HashMap();
 			this.authorization = NoAuthorization.getInstance();
 			this.securityMetadata = getServiceSecurityMetadata();
-			ServiceSecurityMetadataOperations ssmo = securityMetadata.getOperations();
+			ServiceSecurityMetadataOperations ssmo = securityMetadata
+					.getOperations();
 			if (ssmo != null) {
 				Operation[] ops = ssmo.getOperation();
 				if (ops != null) {
@@ -118,7 +150,8 @@ public class GridGrouperClient extends ServiceSecurityClient implements GridGrou
 		}
 		resetStub(stub);
 
-		CommunicationMechanism serviceDefault = securityMetadata.getDefaultCommunicationMechanism();
+		CommunicationMechanism serviceDefault = securityMetadata
+				.getDefaultCommunicationMechanism();
 
 		CommunicationMechanism mechanism = null;
 		if (operations.containsKey(method)) {
@@ -133,57 +166,72 @@ public class GridGrouperClient extends ServiceSecurityClient implements GridGrou
 		boolean credentialsAllowed = true;
 
 		if ((https) && (mechanism.getGSITransport() != null)) {
-			ProtectionLevelType level = mechanism.getGSITransport().getProtectionLevel();
+			ProtectionLevelType level = mechanism.getGSITransport()
+					.getProtectionLevel();
 			if (level != null) {
-				if ((level.equals(ProtectionLevelType.privacy)) || (level.equals(ProtectionLevelType.either))) {
-					stub._setProperty(org.globus.wsrf.security.Constants.GSI_TRANSPORT,
-						org.globus.wsrf.security.Constants.ENCRYPTION);
+				if ((level.equals(ProtectionLevelType.privacy))
+						|| (level.equals(ProtectionLevelType.either))) {
+					stub._setProperty(
+							org.globus.wsrf.security.Constants.GSI_TRANSPORT,
+							org.globus.wsrf.security.Constants.ENCRYPTION);
 				} else {
-					stub._setProperty(org.globus.wsrf.security.Constants.GSI_TRANSPORT,
-						org.globus.wsrf.security.Constants.SIGNATURE);
+					stub._setProperty(
+							org.globus.wsrf.security.Constants.GSI_TRANSPORT,
+							org.globus.wsrf.security.Constants.SIGNATURE);
 				}
 
 			} else {
-				stub._setProperty(org.globus.wsrf.security.Constants.GSI_TRANSPORT,
-					org.globus.wsrf.security.Constants.SIGNATURE);
+				stub._setProperty(
+						org.globus.wsrf.security.Constants.GSI_TRANSPORT,
+						org.globus.wsrf.security.Constants.SIGNATURE);
 			}
 			delegationAllowed = false;
 
 		} else if (https) {
 			stub._setProperty(org.globus.wsrf.security.Constants.GSI_TRANSPORT,
-				org.globus.wsrf.security.Constants.SIGNATURE);
+					org.globus.wsrf.security.Constants.SIGNATURE);
 			delegationAllowed = false;
 		} else if (mechanism.getGSISecureConversation() != null) {
-			ProtectionLevelType level = mechanism.getGSISecureConversation().getProtectionLevel();
+			ProtectionLevelType level = mechanism.getGSISecureConversation()
+					.getProtectionLevel();
 			if (level != null) {
-				if ((level.equals(ProtectionLevelType.privacy)) || (level.equals(ProtectionLevelType.either))) {
-					stub._setProperty(org.globus.wsrf.security.Constants.GSI_SEC_CONV,
-						org.globus.wsrf.security.Constants.ENCRYPTION);
+				if ((level.equals(ProtectionLevelType.privacy))
+						|| (level.equals(ProtectionLevelType.either))) {
+					stub._setProperty(
+							org.globus.wsrf.security.Constants.GSI_SEC_CONV,
+							org.globus.wsrf.security.Constants.ENCRYPTION);
 
 				} else {
-					stub._setProperty(org.globus.wsrf.security.Constants.GSI_SEC_CONV,
-						org.globus.wsrf.security.Constants.SIGNATURE);
+					stub._setProperty(
+							org.globus.wsrf.security.Constants.GSI_SEC_CONV,
+							org.globus.wsrf.security.Constants.SIGNATURE);
 				}
 
 			} else {
-				stub._setProperty(org.globus.wsrf.security.Constants.GSI_SEC_CONV,
-					org.globus.wsrf.security.Constants.ENCRYPTION);
+				stub._setProperty(
+						org.globus.wsrf.security.Constants.GSI_SEC_CONV,
+						org.globus.wsrf.security.Constants.ENCRYPTION);
 			}
 
 		} else if (mechanism.getGSISecureMessage() != null) {
-			ProtectionLevelType level = mechanism.getGSISecureMessage().getProtectionLevel();
+			ProtectionLevelType level = mechanism.getGSISecureMessage()
+					.getProtectionLevel();
 			if (level != null) {
-				if ((level.equals(ProtectionLevelType.privacy)) || (level.equals(ProtectionLevelType.either))) {
-					stub._setProperty(org.globus.wsrf.security.Constants.GSI_SEC_MSG,
-						org.globus.wsrf.security.Constants.ENCRYPTION);
+				if ((level.equals(ProtectionLevelType.privacy))
+						|| (level.equals(ProtectionLevelType.either))) {
+					stub._setProperty(
+							org.globus.wsrf.security.Constants.GSI_SEC_MSG,
+							org.globus.wsrf.security.Constants.ENCRYPTION);
 				} else {
-					stub._setProperty(org.globus.wsrf.security.Constants.GSI_SEC_MSG,
-						org.globus.wsrf.security.Constants.SIGNATURE);
+					stub._setProperty(
+							org.globus.wsrf.security.Constants.GSI_SEC_MSG,
+							org.globus.wsrf.security.Constants.SIGNATURE);
 				}
 
 			} else {
-				stub._setProperty(org.globus.wsrf.security.Constants.GSI_SEC_MSG,
-					org.globus.wsrf.security.Constants.ENCRYPTION);
+				stub._setProperty(
+						org.globus.wsrf.security.Constants.GSI_SEC_MSG,
+						org.globus.wsrf.security.Constants.ENCRYPTION);
 			}
 			delegationAllowed = false;
 			anonymousAllowed = false;
@@ -194,40 +242,35 @@ public class GridGrouperClient extends ServiceSecurityClient implements GridGrou
 			credentialsAllowed = false;
 		}
 
-		if ((credentialsAllowed) && (proxy == null)) {
+		if ((anonymousAllowed) && (preferAnonymous)) {
+			stub._setProperty(org.globus.wsrf.security.Constants.GSI_ANONYMOUS,
+					Boolean.TRUE);
+		} else if ((credentialsAllowed) && (proxy != null)) {
 			try {
-				GlobusCredential cred = ProxyUtil.getDefaultProxy();
-				if (cred.getTimeLeft() > 0) {
-					proxy = cred;
-				}
-			} catch (Exception e) {
-				System.out.println("Error loading default proxy: " + e.getMessage());
-			}
-
-		}
-
-		if ((credentialsAllowed) && (proxy != null)) {
-			try {
-				org.ietf.jgss.GSSCredential gss = new org.globus.gsi.gssapi.GlobusGSSCredentialImpl(proxy,
-					org.ietf.jgss.GSSCredential.INITIATE_AND_ACCEPT);
-				stub._setProperty(org.globus.axis.gsi.GSIConstants.GSI_CREDENTIALS, gss);
+				org.ietf.jgss.GSSCredential gss = new org.globus.gsi.gssapi.GlobusGSSCredentialImpl(
+						proxy, org.ietf.jgss.GSSCredential.INITIATE_AND_ACCEPT);
+				stub._setProperty(
+						org.globus.axis.gsi.GSIConstants.GSI_CREDENTIALS, gss);
 			} catch (org.ietf.jgss.GSSException ex) {
 				throw new RemoteException(ex.getMessage());
 			}
-		} else if (anonymousAllowed) {
-			stub._setProperty(org.globus.wsrf.security.Constants.GSI_ANONYMOUS, Boolean.TRUE);
 		}
 
 		if (authorizationAllowed) {
 			if (authorization == null) {
-				stub._setProperty(org.globus.wsrf.security.Constants.AUTHORIZATION, NoAuthorization.getInstance());
+				stub._setProperty(
+						org.globus.wsrf.security.Constants.AUTHORIZATION,
+						NoAuthorization.getInstance());
 			} else {
-				stub._setProperty(org.globus.wsrf.security.Constants.AUTHORIZATION, getAuthorization());
+				stub._setProperty(
+						org.globus.wsrf.security.Constants.AUTHORIZATION,
+						getAuthorization());
 			}
 		}
 		if (delegationAllowed) {
 			if (getDelegationMode() != null) {
-				stub._setProperty(org.globus.axis.gsi.GSIConstants.GSI_MODE, getDelegationMode());
+				stub._setProperty(org.globus.axis.gsi.GSIConstants.GSI_MODE,
+						getDelegationMode());
 			}
 		}
 	}
@@ -235,7 +278,7 @@ public class GridGrouperClient extends ServiceSecurityClient implements GridGrou
 	public String getProxyIdentity() {
 		if (getProxy() != null) {
 			return getProxy().getIdentity();
-		} else {
+		} else if(!this.preferAnonymous){
 			try {
 				GlobusCredential cred = ProxyUtil.getDefaultProxy();
 				if (cred.getTimeLeft() > 0) {
@@ -244,6 +287,8 @@ public class GridGrouperClient extends ServiceSecurityClient implements GridGrou
 			} catch (Exception e) {
 				// TODO: handle exception
 			}
+			return null;
+		}else{
 			return null;
 		}
 	}

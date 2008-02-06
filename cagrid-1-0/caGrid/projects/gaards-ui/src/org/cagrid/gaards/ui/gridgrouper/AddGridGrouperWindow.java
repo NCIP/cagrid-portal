@@ -228,8 +228,13 @@ public class AddGridGrouperWindow extends ApplicationComponent {
 			uri = ((GridGrouperServiceList) this.services).getSelectedService();
 			GlobusCredential cred = ((ProxyComboBox) this.credentials).getSelectedProxy();
 			this.dispose();
+			if(cred!=null){
 			GridGrouper grouper = new GridGrouper(uri, cred);
 			this.root.addGridGrouper(grouper);
+			}else{
+				GridGrouper grouper = new GridGrouper(uri, true);
+				this.root.addGridGrouper(grouper);
+			}
 		} catch (Exception e) {
 			ErrorDialog.showError(e);
 		}

@@ -386,11 +386,11 @@
   </ns2:Service>
  </ns1:serviceDescription>
  <ns1:hostingResearchCenter>
-  <ns23:ResearchCenter displayName="" shortName="" xmlns:ns23="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
-   <ns23:Address country="" locality="" postalCode="" stateProvince="" street1="" street2=""/>
-   <ns23:pointOfContactCollection>
-    <ns23:PointOfContact affiliation="" email="" firstName="" lastName="" phoneNumber="" role=""/>
-   </ns23:pointOfContactCollection>
-  </ns23:ResearchCenter>
+  <ns85:ResearchCenter displayName="" shortName="" xmlns:ns85="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+   <ns85:Address country="" locality="" postalCode="" stateProvince="" street1="" street2=""/>
+   <ns85:pointOfContactCollection>
+    <ns85:PointOfContact affiliation="" email="" firstName="" lastName="" phoneNumber="" role=""/>
+   </ns85:pointOfContactCollection>
+  </ns85:ResearchCenter>
  </ns1:hostingResearchCenter>
 </ns1:ServiceMetadata>
