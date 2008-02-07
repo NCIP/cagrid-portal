@@ -6,6 +6,9 @@ import gov.nih.nci.cagrid.common.Runner;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
+import org.cagrid.gaards.ui.gridgrouper.GridGrouperLookAndFeel;
+import org.cagrid.gaards.ui.gridgrouper.tree.GridGrouperTree;
+
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella</A>
@@ -61,7 +64,7 @@ public abstract class GridGrouperTreeNodeMenu extends JPopupMenu {
 		if (refresh == null) {
 			refresh = new JMenuItem();
 			refresh.setText("Refresh");
-			refresh.setIcon(LookAndFeel.getLoadIcon());
+			refresh.setIcon(GridGrouperLookAndFeel.getLoadIcon());
 			refresh.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					Runner runner = new Runner() {

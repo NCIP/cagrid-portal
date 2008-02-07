@@ -49,6 +49,7 @@ import gov.nih.nci.cagrid.gridgrouper.bean.MembershipStatus;
 import javax.swing.ImageIcon;
 import javax.swing.tree.TreeNode;
 
+import org.cagrid.gaards.ui.gridgrouper.GridGrouperLookAndFeel;
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella</A>
@@ -62,12 +63,10 @@ public class QueryNode extends ExpressionBaseTreeNode {
 
 	private MembershipQuery query;
 
-
 	public QueryNode(GridGrouperExpressionEditor editor, MembershipQuery query) {
 		super(editor);
 		this.query = query;
 	}
-
 
 	public void refresh() {
 		TreeNode parentNode = this.getParent();
@@ -78,21 +77,20 @@ public class QueryNode extends ExpressionBaseTreeNode {
 		}
 	}
 
-
 	public ImageIcon getIcon() {
-		return LookAndFeel.getGroupIcon16x16();
+		return GridGrouperLookAndFeel.getGroupIcon16x16();
 	}
 
-
 	public String toString() {
-		if ((query.getMembershipStatus() == null) || (query.getMembershipStatus().equals(MembershipStatus.MEMBER_OF))) {
+		if ((query.getMembershipStatus() == null)
+				|| (query.getMembershipStatus()
+						.equals(MembershipStatus.MEMBER_OF))) {
 			return query.getGroupIdentifier().getGroupName() + " [Member]";
 		} else {
 			return query.getGroupIdentifier().getGroupName() + " [Not Member]";
 		}
 
 	}
-
 
 	public MembershipQuery getQuery() {
 		return query;

@@ -1,5 +1,7 @@
 package org.cagrid.gaards.ui.gridgrouper.expressioneditor;
 
+import org.cagrid.gaards.ui.gridgrouper.tree.GridGrouperTree;
+
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella</A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster</A>

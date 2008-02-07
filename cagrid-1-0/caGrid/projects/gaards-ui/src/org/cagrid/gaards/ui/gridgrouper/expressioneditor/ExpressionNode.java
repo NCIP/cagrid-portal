@@ -53,6 +53,8 @@ import javax.swing.ImageIcon;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
+import org.cagrid.gaards.ui.gridgrouper.GridGrouperLookAndFeel;
+
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella</A>
@@ -236,7 +238,7 @@ public class ExpressionNode extends ExpressionBaseTreeNode {
 
 
 	public ImageIcon getIcon() {
-		return LookAndFeel.getMembershipExpressionIcon16x16();
+		return GridGrouperLookAndFeel.getMembershipExpressionIcon16x16();
 	}
 
 

@@ -43,17 +43,17 @@
 
 package org.cagrid.gaards.ui.gridgrouper.expressioneditor;
 
-import gov.nih.nci.cagrid.gridgrouper.client.GridGrouper;
-import gov.nih.nci.cagrid.gridgrouper.client.Group;
-import gov.nih.nci.cagrid.gridgrouper.client.Stem;
-import gov.nih.nci.cagrid.gridgrouper.grouper.GroupI;
-import gov.nih.nci.cagrid.gridgrouper.grouper.StemI;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.HashMap;
 
-import java.util.Iterator;
-import java.util.Set;
+import javax.swing.JPopupMenu;
+import javax.swing.SwingUtilities;
+import javax.swing.tree.DefaultMutableTreeNode;
 
-import javax.swing.ImageIcon;
-import javax.swing.tree.TreeNode;
+import org.cagrid.gaards.ui.gridgrouper.tree.GridGrouperTree;
+import org.cagrid.gaards.ui.gridgrouper.tree.GroupTreeNode;
+import org.cagrid.gaards.ui.gridgrouper.tree.StemTreeNode;
 
 
 /**
@@ -64,105 +64,62 @@ import javax.swing.tree.TreeNode;
  * @version $Id: GridGrouperBaseTreeNode.java,v 1.1 2006/08/04 03:49:26 langella
  *          Exp $
  */
-public class StemTreeNode extends GridGrouperBaseTreeNode {
+public class GrouperTreeExpressionEventListener extends MouseAdapter {
 
-	private Stem stem;
+	private GridGrouperTree tree;
 
-	private boolean rootStem;
+	private GridGrouperExpressionEditor editor;
+
+	private HashMap popupMappings;
 
 
-	public StemTreeNode(GridGrouperExpressionEditor editor, Stem stem, boolean root) {
-		super(editor);
-		this.rootStem = root;
-		this.stem = stem;
+	public GrouperTreeExpressionEventListener(GridGrouperTree owningTree, GridGrouperExpressionEditor editor) {
+		this.tree = owningTree;
+		this.popupMappings = new HashMap();
+		this.editor = editor;
+		this.associatePopup(StemTreeNode.class, new StemNodeMenu(editor, this.tree));
+		this.associatePopup(GroupTreeNode.class, new GroupNodeMenu(editor, this.tree));
 	}
 
 
-	public void loadStem() throws Exception {
-		this.removeAllChildren();
-		Set set = stem.getChildStems();
-		Iterator itr = set.iterator();
-		while (itr.hasNext()) {
-			StemI currentStem = (StemI) itr.next();
-			StemTreeNode node = new StemTreeNode(getEditor(), ((Stem) currentStem), false);
-			synchronized (getTree()) {
-				this.add(node);
-				TreeNode parentNode = this.getParent();
-				if (parentNode != null) {
-					getTree().reload(parentNode);
-				} else {
-					getTree().reload();
-				}
+	/**
+	 * Associate a GridServiceTreeNode type with a popup menu
+	 * 
+	 * @param nodeType
+	 * @param popup
+	 */
+	public void associatePopup(Class nodeType, JPopupMenu popup) {
+		this.popupMappings.put(nodeType, popup);
+	}
+
+
+	public void mouseEntered(MouseEvent e) {
+		maybeShowPopup(e);
+	}
+
+
+	public void mouseReleased(MouseEvent e) {
+		maybeShowPopup(e);
+	}
+
+
+	private void maybeShowPopup(MouseEvent e) {
+		if ((e.isPopupTrigger()) || (SwingUtilities.isRightMouseButton(e))) {
+			DefaultMutableTreeNode currentNode = this.tree.getCurrentNode();
+			GridGrouperTreeNodeMenu popup = null;
+			if (currentNode != null) {
+				popup = (GridGrouperTreeNodeMenu) popupMappings.get(currentNode.getClass());
 			}
-			node.loadStem();
-		}
-		Set grps = stem.getChildGroups();
-		Iterator itr2 = grps.iterator();
-		while (itr2.hasNext()) {
-			GroupI group = (GroupI) itr2.next();
-			GroupTreeNode node = new GroupTreeNode(getEditor(), (Group) group);
-			synchronized (getTree()) {
-				this.add(node);
-				TreeNode parentNode = this.getParent();
-				if (parentNode != null) {
-					getTree().reload(parentNode);
-				} else {
-					getTree().reload();
-				}
+			if (popup != null) {
+				popup.show(e.getComponent(), e.getX(), e.getY());
+			}
+
+		} else if (e.getClickCount() == 2) {
+			DefaultMutableTreeNode currentNode = this.tree.getCurrentNode();
+			if (currentNode instanceof GroupTreeNode) {
+				GroupTreeNode grp = (GroupTreeNode) currentNode;
+				this.editor.addGroupToCurrentExpression(grp.getGroup());
 			}
 		}
 	}
-
-
-	public void refresh() {
-		int id = getEditor().getProgress().startEvent("Refreshing " + toString() + ".... ");
-		try {
-			stem = (Stem) stem.getGridGrouper().findStem(stem.getName());
-			if (parent != null) {
-				getTree().reload(parent);
-			} else {
-				getTree().reload();
-			}
-			loadStem();
-			getEditor().getProgress().stopEvent(id, "Refreshed " + toString() + "!!!");
-		} catch (Exception e) {
-			e.printStackTrace();
-			getEditor().getProgress().stopEvent(id, "Error refreshing " + toString() + "!!!");
-			Util.showErrorMessage(e);
-		}
-	}
-
-
-	public ImageIcon getIcon() {
-		if (this.rootStem) {
-			return LookAndFeel.getGrouperIcon16x16();
-		} else {
-			return LookAndFeel.getStemIcon16x16();
-		}
-	}
-
-
-	public String toString() {
-		if (this.rootStem) {
-			return stem.getGridGrouper().getName();
-		} else {
-			return stem.getDisplayExtension();
-		}
-	}
-
-
-	public boolean isRootStem() {
-		return rootStem;
-	}
-
-
-	public GridGrouper getGridGrouper() {
-		return stem.getGridGrouper();
-	}
-
-
-	public Stem getStem() {
-		return stem;
-	}
-
 }
