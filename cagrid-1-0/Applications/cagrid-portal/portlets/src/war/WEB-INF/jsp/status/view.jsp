@@ -1,4 +1,6 @@
 <%@ include file="/WEB-INF/jsp/include/includes.jspf" %>
+<%@ taglib prefix="m" tagdir="/WEB-INF/tags"%>
+
 <div style="height:500px">
 Here are the five newest services...
 <table cellpadding="10" width="100%">
@@ -18,7 +20,8 @@ Here are the five newest services...
 					</portlet:actionURL>
 					<a href="<c:out value="${selectItemAction}"/>">			
 						<c:out value="${serviceInfo.name}"/>
-					</a>
+                        <m:centerName name="${serviceInfo.center}"/>
+                    </a>
 				</td>
 				<td>
 					<c:choose>
