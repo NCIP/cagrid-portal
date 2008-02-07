@@ -30,7 +30,7 @@ import org.apache.log4j.Logger;
  * @author David Ervin
  * 
  * @created Feb 1, 2008 9:02:20 AM
- * @version $Id: InvokeSDK4DataServiceStep.java,v 1.12 2008-02-07 17:48:56 dervin Exp $ 
+ * @version $Id: InvokeSDK4DataServiceStep.java,v 1.13 2008-02-07 20:42:58 dervin Exp $ 
  */
 public class InvokeSDK4DataServiceStep extends Step {
     public static final String TEST_RESOURCES_DIR = "/test/resources/";
@@ -51,11 +51,14 @@ public class InvokeSDK4DataServiceStep extends Step {
     public void runStep() throws Throwable {
         testUndergraduateStudentWithName();
         testAllPayments();
+        // This test fails because the order of returned attributes varies
         // testDistinctAttributeFromCash();
         testAssociationNotNull();
         testAssociationWithAttributeEqual();
         testGroupOfAttributesUsingAnd();
         testGroupOfAttributesUsingOr();
+        testGroupOfAssociationsUsingAnd();
+        testGroupOfAssociationsUsingOr();
     }
     
     
@@ -111,6 +114,22 @@ public class InvokeSDK4DataServiceStep extends Step {
         LOG.debug("testGroupOfAttributesUsingOr");
         CQLQuery query = loadQuery("groupOfAttributesUsingOr.xml");
         CQLQueryResults results = loadQueryResults("goldGroupOfAttributesUsingOr.xml");
+        invokeValidQueryValidResults(query, results);
+    }
+    
+    
+    private void testGroupOfAssociationsUsingAnd() {
+        LOG.debug("testGroupOfAssociationsUsingAnd");
+        CQLQuery query = loadQuery("groupOfAssociationsUsingAnd.xml");
+        CQLQueryResults results = loadQueryResults("goldGroupOfAssociationsUsingAnd.xml");
+        invokeValidQueryValidResults(query, results);
+    }
+    
+    
+    private void testGroupOfAssociationsUsingOr() {
+        LOG.debug("testGroupOfAssociationsUsingOr");
+        CQLQuery query = loadQuery("groupOfAssociationsUsingOr.xml");
+        CQLQueryResults results = loadQueryResults("goldGroupOfAssociationsUsingOr.xml");
         invokeValidQueryValidResults(query, results);
     }
     
