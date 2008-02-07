@@ -14,9 +14,13 @@
         <ant dir="${basedir}/projects/introduce" antfile="build.xml" target="introduce" inheritall="false" />
     </target>
 
-    <target name="security" description="Run the Security Administrative GUI">
+    <target name="gaardsui" description="Run the Security Administrative GUI">
         <ant dir="${basedir}/projects/gaards-ui" antfile="build.xml" target="ui" inheritall="false" />
     </target>
+	
+	<target name="security" description="Run the Security Administrative GUI">
+	        <ant dir="${basedir}/projects/gaards-ui" antfile="build.xml" target="ui" inheritall="false" />
+	</target>
 
     <target name="syncWithTrustFabric" description="Syncs With Trust Fabric">
         <ant dir="${basedir}/projects/syncgts" antfile="build.xml" target="syncWithTrustFabric" inheritall="false" />
