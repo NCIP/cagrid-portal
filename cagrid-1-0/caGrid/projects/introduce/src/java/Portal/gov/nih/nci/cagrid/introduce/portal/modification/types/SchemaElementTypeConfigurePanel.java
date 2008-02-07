@@ -6,6 +6,7 @@ import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.MouseAdapter;
@@ -25,6 +26,9 @@ import com.jgoodies.validation.message.SimpleValidationMessage;
 import com.jgoodies.validation.util.DefaultValidationResultModel;
 import com.jgoodies.validation.util.ValidationUtils;
 import com.jgoodies.validation.view.ValidationComponentUtils;
+import javax.swing.BorderFactory;
+import javax.swing.border.TitledBorder;
+import java.awt.Color;
 
 public class SchemaElementTypeConfigurePanel extends JPanel {
 
@@ -104,25 +108,22 @@ public class SchemaElementTypeConfigurePanel extends JPanel {
 		GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
 		gridBagConstraints8.gridx = 0;
 		gridBagConstraints8.fill = java.awt.GridBagConstraints.BOTH;
+		gridBagConstraints8.weightx = 1.0D;
+		gridBagConstraints8.weighty = 1.0D;
 		gridBagConstraints8.gridy = 1;
 		GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
 		gridBagConstraints2.gridx = 0;
 		gridBagConstraints2.gridy = 0;
-		gridBagConstraints2.weighty = 0.0D;
+		gridBagConstraints2.weighty = 1.0D;
 		gridBagConstraints2.weightx = 1.0D;
 		gridBagConstraints2.insets = new java.awt.Insets(0, 0, 0, 0);
 		gridBagConstraints2.ipady = 2;
+		gridBagConstraints2.ipadx = 2;
 		gridBagConstraints2.fill = java.awt.GridBagConstraints.BOTH;
 		this.setLayout(new GridBagLayout());
-		this.setBorder(javax.swing.BorderFactory.createTitledBorder(null,
-				"Element Type Configuration",
-				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
-				PortalLookAndFeel.getPanelLabelColor()));
-		this.setSize(new Dimension(265, 279));
+		this.setBorder(BorderFactory.createTitledBorder(null, "Element Type Configuration", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), new Color(62, 109, 181)));
 		this.add(getBeanPanel(), gridBagConstraints2);
 		this.add(getCustomBeanWrapperPanel(), gridBagConstraints8);
-
 		initValidation();
 	}
 

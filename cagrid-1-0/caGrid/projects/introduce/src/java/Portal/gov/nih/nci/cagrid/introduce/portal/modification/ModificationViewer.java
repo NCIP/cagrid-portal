@@ -273,6 +273,8 @@ public class ModificationViewer extends ApplicationComponent {
 
 	private ExtensionsManagerPanel extensionsPanel = null;
 
+	private JTabbedPane namespaceManageTabbedPane = null;
+
 	public ModificationViewer(File methodsDirectory, BusyDialogRunnable br)
 			throws Exception {
 		super();
@@ -1440,11 +1442,6 @@ public class ModificationViewer extends ApplicationComponent {
 							TitledBorder.DEFAULT_POSITION, new Font("Dialog",
 									Font.BOLD, 12), IntroduceLookAndFeel
 									.getPanelLabelColor()));
-
-			// this.namespaceTableScrollPane.setPreferredSize(new Dimension(300,
-			// 400));
-			// this.namespaceTableScrollPane.setSize(new Dimension(300,
-			// 400));
 			this.namespaceTableScrollPane.setViewportView(getNamespaceJTree());
 		}
 		return this.namespaceTableScrollPane;
@@ -1548,7 +1545,7 @@ public class ModificationViewer extends ApplicationComponent {
 		if (this.namespaceTypeConfigurationPanel == null) {
 			this.namespaceTypeConfigurationPanel = new NamespaceTypeConfigurePanel();
 			this.namespaceTypeConfigurationPanel
-					.setName("namespaceTypeCconfigurationPanel");
+					.setName("namespaceTypeConfigurationPanel");
 		}
 		return this.namespaceTypeConfigurationPanel;
 	}
@@ -1988,8 +1985,7 @@ public class ModificationViewer extends ApplicationComponent {
 			this.namespaceConfPanel = new JPanel();
 			this.namespaceConfPanel.setLayout(new BoxLayout(
 					this.namespaceConfPanel, BoxLayout.Y_AXIS));
-			this.namespaceConfPanel.add(getDiscoveryPanel());
-			this.namespaceConfPanel.add(getNamespaceTypePropertiesPanel());
+			namespaceConfPanel.add(getNamespaceManageTabbedPane(), null);
 		}
 		return this.namespaceConfPanel;
 	}
@@ -2782,6 +2778,20 @@ public class ModificationViewer extends ApplicationComponent {
 			//extensionsPanel.setLayout(new GridBagLayout());
 		}
 		return extensionsPanel;
+	}
+
+	/**
+	 * This method initializes namespaceManageTabbedPane	
+	 * 	
+	 * @return javax.swing.JTabbedPane	
+	 */
+	private JTabbedPane getNamespaceManageTabbedPane() {
+		if (namespaceManageTabbedPane == null) {
+			namespaceManageTabbedPane = new JTabbedPane();
+			namespaceManageTabbedPane.addTab("Add/Remove", null, getDiscoveryPanel(), null);
+			namespaceManageTabbedPane.addTab("Configure Types", null, getNamespaceTypePropertiesPanel(), null);
+		}
+		return namespaceManageTabbedPane;
 	}
 
 }

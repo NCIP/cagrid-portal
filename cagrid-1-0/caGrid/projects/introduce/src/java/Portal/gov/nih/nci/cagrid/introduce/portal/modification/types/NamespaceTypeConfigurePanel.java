@@ -6,6 +6,7 @@ import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -97,7 +98,8 @@ public class NamespaceTypeConfigurePanel extends JPanel {
 		this.setBorder(javax.swing.BorderFactory.createTitledBorder(null,
 				"Namespace Type Configuration",
 				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
+				javax.swing.border.TitledBorder.DEFAULT_POSITION, new Font("Dialog",
+						Font.BOLD, 12),
 				PortalLookAndFeel.getPanelLabelColor()));
 		//this.add(getMainPanel(), gridBagConstraints6);
 		this.add(new IconFeedbackPanel(this.validationModel,this.getMainPanel()),gridBagConstraints6);
