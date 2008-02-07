@@ -291,7 +291,7 @@
                 <component>
                     <title>Group Browser</title>
                     <description>Browsing and Administration of groups.</description>
-                    <classname>org.cagrid.gaards.ui.gridgrouper.GroupManagementBrowser</classname>
+                    <classname>org.cagrid.gaards.ui.gridgrouper.browser.GroupManagementBrowser</classname>
                     <icon>/grouper_logo_no_background_22x22.png</icon>
                     <showOnToolBar>false</showOnToolBar>
                     <dimensions>

@@ -6,11 +6,14 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
 import org.cagrid.gaards.cds.common.DelegationPolicy;
 import org.cagrid.gaards.cds.common.GroupDelegationPolicy;
+import org.cagrid.gaards.ui.gridgrouper.selector.GroupSelector;
+import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.LookAndFeel;
 
 public class GroupDelegationPolicyPanel extends DelegationPolicyPanel {
@@ -24,6 +27,8 @@ public class GroupDelegationPolicyPanel extends DelegationPolicyPanel {
 	private JLabel jLabel1 = null;
 
 	private JTextField groupName = null;
+
+	private JButton searchButton = null;
 
 	/**
 	 * This is the default constructor
@@ -53,6 +58,11 @@ public class GroupDelegationPolicyPanel extends DelegationPolicyPanel {
 	 * @return void
 	 */
 	private void initialize() {
+		GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
+		gridBagConstraints11.gridx = 0;
+		gridBagConstraints11.insets = new Insets(2, 2, 2, 2);
+		gridBagConstraints11.gridwidth = 2;
+		gridBagConstraints11.gridy = 2;
 		GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
 		gridBagConstraints3.fill = GridBagConstraints.HORIZONTAL;
 		gridBagConstraints3.gridy = 1;
@@ -92,6 +102,7 @@ public class GroupDelegationPolicyPanel extends DelegationPolicyPanel {
 		this.add(getGridGrouperURL(), gridBagConstraints);
 		this.add(jLabel1, gridBagConstraints2);
 		this.add(getGroupName(), gridBagConstraints3);
+		this.add(getSearchButton(), gridBagConstraints11);
 	}
 
 	/**
@@ -122,6 +133,31 @@ public class GroupDelegationPolicyPanel extends DelegationPolicyPanel {
 			}
 		}
 		return groupName;
+	}
+
+	/**
+	 * This method initializes searchButton	
+	 * 	
+	 * @return javax.swing.JButton	
+	 */
+	private JButton getSearchButton() {
+		if (searchButton == null) {
+			searchButton = new JButton();
+			searchButton.setText("Browse Groups....");
+			searchButton.setIcon(LookAndFeel.getQueryIcon());
+			if(!isEditMode()){
+				searchButton.setEnabled(false);
+				searchButton.setVisible(false);
+			}
+			searchButton.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					GroupSelector selector = new GroupSelector(GridApplication.getContext().getApplication());
+					selector.setModal(true);
+					GridApplication.getContext().showDialog(selector);
+				}
+			});
+		}
+		return searchButton;
 	}
 
 }

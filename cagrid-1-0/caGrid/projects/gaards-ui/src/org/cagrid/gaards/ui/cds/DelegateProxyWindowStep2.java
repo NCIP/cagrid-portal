@@ -13,8 +13,6 @@ import javax.swing.JTextField;
 
 import org.cagrid.gaards.cds.client.ClientConstants;
 import org.cagrid.gaards.cds.client.DelegationUserClient;
-import org.cagrid.gaards.cds.common.GroupDelegationPolicy;
-import org.cagrid.gaards.cds.common.IdentityDelegationPolicy;
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.LookAndFeel;
