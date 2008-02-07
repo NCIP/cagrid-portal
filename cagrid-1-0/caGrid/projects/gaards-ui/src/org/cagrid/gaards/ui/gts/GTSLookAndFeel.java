@@ -42,12 +42,12 @@ public class GTSLookAndFeel extends GAARDSLookAndFeel{
 
 
 	public final static ImageIcon getIncreasePriorityIcon() {
-		return IconUtils.loadIcon("/go-up.png");
+		return IconUtils.loadIcon("/priority-up.png");
 	}
 
 
 	public final static ImageIcon getDecresePriorityIcon() {
-		return IconUtils.loadIcon("/go-down.png");
+		return IconUtils.loadIcon("/priority-down.png");
 	}
 
 }
