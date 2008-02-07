@@ -73,7 +73,7 @@ public class PropertyManager {
 	public float getVersion() {
 		String s = this.version.getValue();
 		if (s == null) {
-			return 1.0F;
+			return CURRENT_VERSION;
 		} else {
 			return Float.valueOf(s).floatValue();
 		}

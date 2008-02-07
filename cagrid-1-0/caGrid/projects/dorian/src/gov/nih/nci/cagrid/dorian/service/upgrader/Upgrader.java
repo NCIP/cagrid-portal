@@ -20,7 +20,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.cagrid.tools.database.Database;
 
-
 public class Upgrader {
 
 	public static final String HELP_OPT = "h";
@@ -41,51 +40,58 @@ public class Upgrader {
 	private PropertyManager properties;
 	private Map<Float, Upgrade> upgradeSet;
 
-
 	public Upgrader(DorianConfiguration conf) throws Exception {
 		this.conf = conf;
 		this.log = LogFactory.getLog(this.getClass().getName());
-		Database db = new Database(conf.getDatabaseConfiguration(), conf.getDorianInternalId());
+		Database db = new Database(conf.getDatabaseConfiguration(), conf
+				.getDorianInternalId());
 		db.createDatabaseIfNeeded();
 		this.properties = new PropertyManager(db);
 		buildUpgraders();
 	}
 
-
 	private void buildUpgraders() {
 		upgradeSet = new HashMap<Float, Upgrade>();
-		// Upgrade u = new Upgrade1_0To1_1();
-		//upgradeSet.put(u.getStartingVersion(), u);
+		Upgrade u = new Upgrade1_1To1_2();
+		upgradeSet.put(u.getStartingVersion(), u);
 	}
-
 
 	public void upgrade(boolean trialRun) {
 		try {
 
-			List<Upgrade> upgrades = determineUpgrades(this.properties.getVersion(), new ArrayList());
+			List<Upgrade> upgrades = determineUpgrades(this.properties
+					.getVersion(), new ArrayList());
 			if (upgrades.size() == 0) {
-				log.info("No upgrades required, Dorian is already upgraded to the latest version ("
-					+ PropertyManager.CURRENT_VERSION + ").");
+				log
+						.info("No upgrades required, Dorian is already upgraded to the latest version ("
+								+ PropertyManager.CURRENT_VERSION + ").");
 			} else {
-				log.info("Attempting to upgrade Dorian from version " + properties.getVersion() + " to version "
-					+ PropertyManager.CURRENT_VERSION + ".");
+				log.info("Attempting to upgrade Dorian from version "
+						+ properties.getVersion() + " to version "
+						+ PropertyManager.CURRENT_VERSION + ".");
 				for (int i = 0; i < upgrades.size(); i++) {
 					Upgrade u = upgrades.get(i);
 					if (properties.getVersion() != u.getStartingVersion()) {
-						if (!trialRun) {		
-							throw new Exception("Cannot run the upgrader " + getClass().getName()
-								+ ", this upgrader starts with version 1.0, your system is using version "
-								+ properties.getVersion() + ".");
+						if (!trialRun) {
+							throw new Exception(
+									"Cannot run the upgrader "
+											+ getClass().getName()
+											+ ", this upgrader starts with "+u.getStartingVersion()+", your system is using version "
+											+ properties.getVersion() + ".");
 						}
 					}
 
-					log.info("Attempting to run upgrader " + u.getClass().getName() + " which upgrades from Dorian "
-						+ u.getStartingVersion() + " to Dorian " + u.getUpgradedVersion() + ".");
+					log.info("Attempting to run upgrader "
+							+ u.getClass().getName()
+							+ " which upgrades from Dorian "
+							+ u.getStartingVersion() + " to Dorian "
+							+ u.getUpgradedVersion() + ".");
 					u.upgrade(conf, trialRun);
 
 					if (!trialRun) {
-						log.info("Dorian upgraded from version " + u.getStartingVersion() + " to version "
-							+ u.getUpgradedVersion() + ".");
+						log.info("Dorian upgraded from version "
+								+ u.getStartingVersion() + " to version "
+								+ u.getUpgradedVersion() + ".");
 					}
 				}
 			}
@@ -95,14 +101,15 @@ public class Upgrader {
 
 	}
 
-
-	private List<Upgrade> determineUpgrades(float version, List<Upgrade> upgrades) throws Exception {
+	private List<Upgrade> determineUpgrades(float version,
+			List<Upgrade> upgrades) throws Exception {
 		if (version == PropertyManager.CURRENT_VERSION) {
 			return upgrades;
 		} else {
 			Upgrade u = upgradeSet.get(Float.valueOf(version));
 			if (u == null) {
-				throw new Exception("No upgrade to version " + version + " could be determined.");
+				throw new Exception("No upgrade to version " + version
+						+ " could be determined.");
 			} else {
 				upgrades.add(u);
 				return determineUpgrades(u.getUpgradedVersion(), upgrades);
@@ -110,16 +117,18 @@ public class Upgrader {
 		}
 	}
 
-
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
 		Options options = new Options();
-		Option service = new Option(CONFIG_FILE_OPT, CONFIG_FILE_FULL, true, "The config file for the Dorian CA.");
+		Option service = new Option(CONFIG_FILE_OPT, CONFIG_FILE_FULL, true,
+				"The config file for the Dorian CA.");
 		service.setRequired(true);
-		Option help = new Option(HELP_OPT, HELP_OPT_FULL, false, "Prints this message.");
-		Option trial = new Option(TRIAL_OPT, TRIAL_OPT_FULL, false, "Prints this message.");
+		Option help = new Option(HELP_OPT, HELP_OPT_FULL, false,
+				"Prints this message.");
+		Option trial = new Option(TRIAL_OPT, TRIAL_OPT_FULL, false,
+				"Prints this message.");
 
 		options.addOption(help);
 		options.addOption(service);
@@ -135,8 +144,10 @@ public class Upgrader {
 				System.exit(0);
 			} else {
 				String configFile = line.getOptionValue(CONFIG_FILE_OPT);
-				gov.nih.nci.cagrid.dorian.conf.DorianConfiguration c = (DorianConfiguration) Utils.deserializeDocument(
-					configFile, gov.nih.nci.cagrid.dorian.conf.DorianConfiguration.class);
+				gov.nih.nci.cagrid.dorian.conf.DorianConfiguration c = (DorianConfiguration) Utils
+						.deserializeDocument(
+								configFile,
+								gov.nih.nci.cagrid.dorian.conf.DorianConfiguration.class);
 				boolean trialRun = false;
 				if (line.hasOption(TRIAL_OPT)) {
 					trialRun = true;

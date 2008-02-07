@@ -189,19 +189,13 @@ public class Dorian extends LoggingObject {
 					ignoreCRL);
 
 			if (this.properties.getVersion() != PropertyManager.CURRENT_VERSION) {
-				if ((this.properties.getVersion() == PropertyManager.DORIAN_VERSION_1_1)
-						&& (PropertyManager.CURRENT_VERSION == PropertyManager.DORIAN_VERSION_1_2)) {
-					this.properties
-							.setVersion(PropertyManager.DORIAN_VERSION_1_2);
-				} else {
-					DorianInternalFault fault = new DorianInternalFault();
-					fault
-							.setFaultString("Version conflict detected, your are running Dorian "
-									+ PropertyManager.CURRENT_VERSION
-									+ " against a Dorian "
-									+ properties.getVersion() + " database.");
-					throw fault;
-				}
+				DorianInternalFault fault = new DorianInternalFault();
+				fault
+						.setFaultString("Version conflict detected, your are running Dorian "
+								+ PropertyManager.CURRENT_VERSION
+								+ " against a Dorian "
+								+ properties.getVersion() + " database.");
+				throw fault;
 			}
 
 		} catch (Exception e) {
