@@ -19,7 +19,8 @@ public class PropertyManager {
 	private static String TABLE = "properties";
 	private static String VERSION_PROPERTY = "version";
 	private static String KEY_MANAGER = "Key Manager";
-	public static float CURRENT_VERSION = 1.2F;
+	public static float CDS_VERSION_1_2 = 1.2F;
+	public static float CURRENT_VERSION = CDS_VERSION_1_2;
 	private MetadataManager manager;
 	private Metadata version;
 	private Metadata keyManager;
