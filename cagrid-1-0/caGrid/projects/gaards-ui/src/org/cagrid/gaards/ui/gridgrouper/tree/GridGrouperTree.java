@@ -55,6 +55,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
+import javax.swing.tree.TreeSelectionModel;
 
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.utils.ErrorDialog;
@@ -79,8 +80,49 @@ public class GridGrouperTree extends JTree {
 		super();
 		setLargeModel(true);
 		this.rootNode = new GridGroupersTreeNode(this);
+		getSelectionModel().setSelectionMode(
+				TreeSelectionModel.SINGLE_TREE_SELECTION);
 		setModel(new DefaultTreeModel(this.rootNode));
 		this.setCellRenderer(new TreeRenderer());
+	}
+
+	public StemTreeNode getSelectedStem() {
+		GridGrouperBaseTreeNode selected = getSelectedNode();
+		if (selected != null) {
+			if (selected instanceof StemTreeNode) {
+				return (StemTreeNode) selected;
+			} else {
+				return null;
+			}
+		} else {
+			return null;
+		}
+	}
+
+	public GroupTreeNode getSelectedGroup() {
+		GridGrouperBaseTreeNode selected = getSelectedNode();
+		if (selected != null) {
+			if (selected instanceof GroupTreeNode) {
+				return (GroupTreeNode) selected;
+			} else {
+				return null;
+			}
+		} else {
+			return null;
+		}
+	}
+
+	public GridGrouperBaseTreeNode getSelectedNode() {
+		List list = getSelectedNodes();
+		if (list == null) {
+			return null;
+		} else {
+			if (list.size() > 0) {
+				return (GridGrouperBaseTreeNode) list.get(0);
+			} else {
+				return null;
+			}
+		}
 	}
 
 	public int startEvent(String message) {

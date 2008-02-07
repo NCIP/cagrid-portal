@@ -1,6 +1,7 @@
 package org.cagrid.gaards.ui.cds;
 
 import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.gridgrouper.client.Group;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -154,6 +155,9 @@ public class GroupDelegationPolicyPanel extends DelegationPolicyPanel {
 					GroupSelector selector = new GroupSelector(GridApplication.getContext().getApplication());
 					selector.setModal(true);
 					GridApplication.getContext().showDialog(selector);
+					Group group = selector.getSelectedGroup();
+					gridGrouperURL.setText(group.getGridGrouper().getName());
+					groupName.setText(group.getName());
 				}
 			});
 		}
