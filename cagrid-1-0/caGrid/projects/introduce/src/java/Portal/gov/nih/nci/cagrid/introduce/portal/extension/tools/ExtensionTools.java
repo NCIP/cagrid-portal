@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.introduce.portal.extension.tools;
 
 import gov.nih.nci.cagrid.introduce.beans.extension.AuthorizationExtensionDescriptionType;
+import gov.nih.nci.cagrid.introduce.beans.extension.DeploymentExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.DiscoveryExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
@@ -20,6 +21,7 @@ import gov.nih.nci.cagrid.introduce.portal.discoverytools.NamespaceTypeToolsComp
 import gov.nih.nci.cagrid.introduce.portal.extension.AbstractMethodAuthorizationPanel;
 import gov.nih.nci.cagrid.introduce.portal.extension.AbstractServiceAuthorizationPanel;
 import gov.nih.nci.cagrid.introduce.portal.extension.CreationExtensionUIDialog;
+import gov.nih.nci.cagrid.introduce.portal.extension.DeploymentUIPanel;
 import gov.nih.nci.cagrid.introduce.portal.extension.ResourcePropertyEditorPanel;
 import gov.nih.nci.cagrid.introduce.portal.extension.ServiceDeploymentUIPanel;
 import gov.nih.nci.cagrid.introduce.portal.extension.ServiceModificationUIPanel;
@@ -81,6 +83,22 @@ public class ExtensionTools {
                     ServiceInformation.class});
             Object obj = con.newInstance(new Object[]{extensionDesc, info});
             return (ServiceDeploymentUIPanel) obj;
+        }
+        return null;
+    }
+    
+    
+    public static DeploymentUIPanel getDeploymentUIPanel(String extensionName,
+        gov.nih.nci.cagrid.introduce.common.ServiceInformation info) throws Exception {
+        DeploymentExtensionDescriptionType extensionDesc = ExtensionsLoader.getInstance().getDeploymentExtension(
+            extensionName);
+        if ((extensionDesc != null) && (extensionDesc.getDeploymentUIPanel() != null)
+            && !extensionDesc.getDeploymentUIPanel().equals("")) {
+            Class c = Class.forName(extensionDesc.getDeploymentUIPanel());
+            Constructor con = c.getConstructor(new Class[]{DeploymentExtensionDescriptionType.class,
+                    ServiceInformation.class});
+            Object obj = con.newInstance(new Object[]{extensionDesc, info});
+            return (DeploymentUIPanel) obj;
         }
         return null;
     }

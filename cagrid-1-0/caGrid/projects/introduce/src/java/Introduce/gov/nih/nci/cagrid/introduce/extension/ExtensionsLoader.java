@@ -2,6 +2,7 @@ package gov.nih.nci.cagrid.introduce.extension;
 
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.introduce.beans.extension.AuthorizationExtensionDescriptionType;
+import gov.nih.nci.cagrid.introduce.beans.extension.DeploymentExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.DiscoveryExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionDescription;
 import gov.nih.nci.cagrid.introduce.beans.extension.Properties;
@@ -28,6 +29,8 @@ public class ExtensionsLoader {
 	public static final String DISCOVERY_EXTENSION = "DISCOVERY";
 
 	public static final String SERVICE_EXTENSION = "SERVICE";
+	
+	public static final String DEPLOYMENT_EXTENSION = "DEPLOYMENT";
 
 	public static final String RESOURCE_PROPERTY_EDITOR_EXTENSION = "RESOURCE_PROPERTY_EDITOR";
 
@@ -36,6 +39,8 @@ public class ExtensionsLoader {
 	private List serviceExtensionDescriptors;
 
 	private List discoveryExtensionDescriptors;
+	
+	private List deploymentExtensionDescriptors;
 
 	private List resourcePropertyEditorExtensionDescriptors;
 
@@ -52,6 +57,7 @@ public class ExtensionsLoader {
 		discoveryExtensionDescriptors = new ArrayList();
 		resourcePropertyEditorExtensionDescriptors = new ArrayList();
 		authorizationExtensionDescriptors = new ArrayList();
+		deploymentExtensionDescriptors = new ArrayList();
 		extensions = new ArrayList();
 		try {
 			this.load();
@@ -109,7 +115,11 @@ public class ExtensionsLoader {
 								authorizationExtensionDescriptors.add(extDesc.getAuthorizationExtensionDescription());
 								processExtensionProperties(extDesc.getAuthorizationExtensionDescription()
 									.getProperties());
-							} else {
+							} else if (extDesc.getExtensionType().equals(DEPLOYMENT_EXTENSION)) {
+                                deploymentExtensionDescriptors.add(extDesc.getDeploymentExtensionDescription());
+                                processExtensionProperties(extDesc.getDeploymentExtensionDescription()
+                                    .getProperties());
+                            } else {
 								logger.warn("Unsupported Extension Type: " + extDesc.getExtensionType());
 							}// TODO Auto-generated method stub
 						} catch (Exception e) {
@@ -196,6 +206,16 @@ public class ExtensionsLoader {
 		}
 		return null;
 	}
+	
+	   public DeploymentExtensionDescriptionType getDeploymentExtension(String name) {
+	        for (int i = 0; i < deploymentExtensionDescriptors.size(); i++) {
+	            DeploymentExtensionDescriptionType ex = (DeploymentExtensionDescriptionType) deploymentExtensionDescriptors.get(i);
+	            if (ex.getName().equals(name)) {
+	                return ex;
+	            }
+	        }
+	        return null;
+	    }
 
 
 	public AuthorizationExtensionDescriptionType getAuthorizationExtension(String name) {
@@ -271,6 +291,10 @@ public class ExtensionsLoader {
 
 	public List getDiscoveryExtensions() {
 		return this.discoveryExtensionDescriptors;
+	}
+	
+	public List getDeploymentExtensions() {
+		return this.deploymentExtensionDescriptors;
 	}
 
 

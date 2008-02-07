@@ -23,6 +23,7 @@
 				  <xs:element ref="ServiceExtensionDescription"/>
 				  <xs:element ref="ResourcePropertyEditorExtensionDescription"/>
 				  <xs:element ref="AuthorizationExtensionDescription"/>
+				  <xs:element ref="DeploymentExtensionDescription"/>
 			  </xs:choice>
 			  <xs:element ref="UpgradesDescription" minOccurs="0" maxOccurs="1"/>
 			</xs:sequence>
@@ -31,7 +32,11 @@
 			<xs:attribute name="extensionPreferencesPanel" type="xs:string"/>
 		</xs:complexType>
 	</xs:element>
-	<xs:element name="UpgradesDescription" type="UpgradesDescriptionType"/>
+	<xs:element name="UpgradesDescription" type="UpgradesDescriptionType">
+		<xs:annotation>
+			<xs:documentation>Provides upgrade information for any extension type</xs:documentation>
+		</xs:annotation>
+	</xs:element>
 	<xs:complexType name="UpgradesDescriptionType">
 	  <xs:sequence>
 	     <xs:element ref="UpgradeDescription" minOccurs="0" maxOccurs="unbounded"/>
@@ -44,7 +49,11 @@
 	  <xs:attribute name="upgradeClass" type="xs:string" use="required"/>
 	</xs:complexType>
 	<xs:element name="ResourcePropertyEditorExtensionDescription"
-		type="ResourcePropertyEditorExtensionDescriptionType"/>
+		type="ResourcePropertyEditorExtensionDescriptionType">
+		<xs:annotation>
+			<xs:documentation>Enables custom editors to be used for editing resource properties of specific data types.</xs:documentation>
+		</xs:annotation>
+	</xs:element>
 	<xs:complexType name="ResourcePropertyEditorExtensionDescriptionType">
 		<xs:sequence>
 			<xs:element name="ResourcePropertyEditorPanel" type="xs:string" minOccurs="1"
@@ -59,7 +68,31 @@
 		<xs:attribute name="displayName" type="xs:string" use="required"/>
 		<xs:attribute name="name" type="xs:string" use="required"/>
 	</xs:complexType>
-	<xs:element name="DiscoveryExtensionDescription" type="DiscoveryExtensionDescriptionType"/>
+	<xs:element name="DeploymentExtensionDescription"
+		type="DeploymentExtensionDescriptionType">
+		<xs:annotation>
+			<xs:documentation>This extension will be used to add functionality to the deployment window.</xs:documentation>
+		</xs:annotation>
+   </xs:element>
+	<xs:complexType name="DeploymentExtensionDescriptionType">
+		<xs:sequence>
+			<xs:element name="DeploymentUIPanel" type="xs:string" minOccurs="1"
+				maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>Must extend the DeploymentUIPanel</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element ref="Properties"/>
+		</xs:sequence>
+		<xs:attribute name="qname" type="xs:QName" use="required"/>
+		<xs:attribute name="displayName" type="xs:string" use="required"/>
+		<xs:attribute name="name" type="xs:string" use="required"/>
+	</xs:complexType>
+	<xs:element name="DiscoveryExtensionDescription" type="DiscoveryExtensionDescriptionType">
+		<xs:annotation>
+			<xs:documentation>Enables type discovery componets, like filesystem or gme, to be plugged into the types panel in the modification viewer</xs:documentation>
+		</xs:annotation>
+	</xs:element>
 	<xs:complexType name="DiscoveryExtensionDescriptionType">
 		<xs:sequence>
 			<xs:element name="DiscoveryToolsPanelExtension" type="xs:string" minOccurs="0"

@@ -75,7 +75,6 @@
 	<classpathentry kind="lib" path="ext/lib/subject-0.2.1.jar"/>
 	<classpathentry kind="lib" path="lib/wizard-0.1.12.jar"/>
 	<classpathentry kind="lib" path="lib/jaxen-1.1.jar"/>
-	<classpathentry kind="lib" path="ext/lib/boot.jar"/>
 	<classpathentry kind="lib" path="ext/lib/codegen.jar"/>
 	<classpathentry kind="lib" path="ext/lib/jdtcore.jar"/>
 	<classpathentry kind="lib" path="ext/lib/jetc-task.jar"/>

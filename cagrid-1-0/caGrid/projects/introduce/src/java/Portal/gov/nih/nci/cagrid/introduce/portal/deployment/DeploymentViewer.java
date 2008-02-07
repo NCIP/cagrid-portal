@@ -2,6 +2,7 @@ package gov.nih.nci.cagrid.introduce.portal.deployment;
 
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
+import gov.nih.nci.cagrid.introduce.beans.extension.DeploymentExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.common.AntTools;
@@ -10,6 +11,7 @@ import gov.nih.nci.cagrid.introduce.common.ResourceManager;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
+import gov.nih.nci.cagrid.introduce.portal.extension.DeploymentUIPanel;
 import gov.nih.nci.cagrid.introduce.portal.extension.ServiceDeploymentUIPanel;
 
 import java.awt.Component;
@@ -21,6 +23,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.List;
 import java.util.Properties;
 
 import javax.swing.BorderFactory;
@@ -134,7 +137,7 @@ public class DeploymentViewer extends ApplicationComponent {
 					getAdvancedDeploymentPanel());
 			mainPanel.addTab("Service Properties", getServicePropertiesPanel());
 
-			// run any extensions that need to be ran
+			// run any service extensions deployment UI's that need to be ran
 			if ((info != null && info.getServiceDescriptor().getExtensions() != null)
 					&& (info.getServiceDescriptor().getExtensions()
 							.getExtension() != null)) {
@@ -162,6 +165,26 @@ public class DeploymentViewer extends ApplicationComponent {
 					}
 				}
 			}
+			
+			// run an deployment extensions UI's that need to be ran
+			List<DeploymentExtensionDescriptionType> deploymentExtensions = ExtensionsLoader
+					.getInstance().getDeploymentExtensions();
+			for (DeploymentExtensionDescriptionType type : deploymentExtensions) {
+				try {
+					DeploymentUIPanel depPanel = gov.nih.nci.cagrid.introduce.portal.extension.tools.ExtensionTools
+							.getDeploymentUIPanel(type.getName(), info);
+					if (depPanel != null) {
+						mainPanel.addTab(type.getDisplayName(), depPanel);
+					}
+				} catch (Exception ex) {
+					CompositeErrorDialog.showErrorDialog(
+							"Error loading deployment UI for extension "
+									+ type.getName(), ex.getMessage(), ex);
+				}
+			}
+
+			//add a change listner that will be invoked on a tab change and will
+			//call to refresh the gui components if they choose to implement
 			mainPanel.addChangeListener(new javax.swing.event.ChangeListener() {
 				public void stateChanged(javax.swing.event.ChangeEvent e) {
 					resetGUI();
@@ -169,6 +192,9 @@ public class DeploymentViewer extends ApplicationComponent {
 						Component tab = getMainPanel().getComponentAt(i);
 						if (tab instanceof ServiceDeploymentUIPanel) {
 							((ServiceDeploymentUIPanel) tab).resetGUI();
+						}
+						if (tab instanceof DeploymentUIPanel) {
+							((DeploymentUIPanel) tab).resetGUI();
 						}
 					}
 				}
@@ -218,6 +244,18 @@ public class DeploymentViewer extends ApplicationComponent {
 							"Deployment") {
 
 						public void process() {
+						    
+						    setProgressText("calling pre deployment callbacks...");
+						    
+						    for (int i = 0; i < getMainPanel().getTabCount(); i++) {
+		                        Component tab = getMainPanel().getComponentAt(i);
+		                        if (tab instanceof ServiceDeploymentUIPanel) {
+		                            ((ServiceDeploymentUIPanel) tab).preDeploy();
+		                        }
+		                        if (tab instanceof DeploymentUIPanel) {
+		                            ((DeploymentUIPanel) tab).preDeploy();
+		                        }
+		                    }
 
 							setProgressText("setting introduce resource properties...");
 
@@ -604,8 +642,8 @@ public class DeploymentViewer extends ApplicationComponent {
 							.getProperty(
 									IntroduceConstants.INTRODUCE_DEPLOYMENT_PREFIX_PROPERTY)
 							+ "/" + info.getServices().getService(0).getName());
-			serviceDeploymentNameTextField
-					.setForeground(IntroduceLookAndFeel.getPanelLabelColor());
+			serviceDeploymentNameTextField.setForeground(IntroduceLookAndFeel
+					.getPanelLabelColor());
 		}
 		return serviceDeploymentNameTextField;
 	}
@@ -632,7 +670,8 @@ public class DeploymentViewer extends ApplicationComponent {
 	private JLabel getServiceNamespaceTextField() {
 		if (serviceNamespaceTextField == null) {
 			serviceNamespaceTextField = new JLabel();
-			serviceNamespaceTextField.setForeground(IntroduceLookAndFeel.getPanelLabelColor());
+			serviceNamespaceTextField.setForeground(IntroduceLookAndFeel
+					.getPanelLabelColor());
 			serviceNamespaceTextField.setText(info.getServices().getService(0)
 					.getNamespace());
 		}
@@ -647,7 +686,8 @@ public class DeploymentViewer extends ApplicationComponent {
 	private JLabel getServiceLocationTextField() {
 		if (serviceLocationTextField == null) {
 			serviceLocationTextField = new JLabel();
-			serviceLocationTextField.setForeground(IntroduceLookAndFeel.getPanelLabelColor());
+			serviceLocationTextField.setForeground(IntroduceLookAndFeel
+					.getPanelLabelColor());
 			serviceLocationTextField.setText(info.getBaseDirectory()
 					.getAbsolutePath());
 		}

@@ -25,7 +25,7 @@ import org.cagrid.grape.utils.CompositeErrorDialog;
  * @author David Ervin
  * 
  * @created May 24, 2007 1:34:32 PM
- * @version $Id: AuditorDeploymentConfigPanel.java,v 1.3 2007-11-06 15:53:41 hastings Exp $ 
+ * @version $Id: AuditorDeploymentConfigPanel.java,v 1.4 2008-02-07 14:43:56 hastings Exp $ 
  */
 public class AuditorDeploymentConfigPanel extends ServiceDeploymentUIPanel {
     
@@ -100,5 +100,12 @@ public class AuditorDeploymentConfigPanel extends ServiceDeploymentUIPanel {
                     "Error writing auditor configuration: " + ex.getMessage(), ex);
             }
         }
+    }
+
+
+    @Override
+    public void preDeploy() {
+        // TODO Auto-generated method stub
+        
     }
 }
