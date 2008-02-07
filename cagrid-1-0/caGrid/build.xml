@@ -499,7 +499,7 @@
 		<resolveDependencies extdir="${projects.dir}/metrics/schema/Metrics">
 			<artifact refid="metadata.schemas" />
 		</resolveDependencies>
-		<delete dir="${projects.dir}/transfer/extension/ext" />
+		<delete dir="${projects.dir}/metrics/extension/ext" />
 		<resolveDependencies extdir="${projects.dir}/metrics/extension/ext">
 			<artifact refid="cagrid.properties" />
 			<artifact refid="core.jars" />
@@ -903,7 +903,6 @@
 	<target name="build-wsEnum" depends="prepare" description="Builds caGrid WS-Enumeration components">
 		<resolveDependencies extdir="${projects.dir}/wsEnum/ext">
 			<artifact refid="cagrid.properties" />
-			<artifact refid="introduce.jars" />
 			<artifact refid="core.jars" />
 			<artifact refid="core.test.jars" />
 			<artifact refid="common.test.jars" />
