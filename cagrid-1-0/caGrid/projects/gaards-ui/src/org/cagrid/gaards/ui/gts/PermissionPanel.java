@@ -16,6 +16,13 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.JButton;
+
+import org.cagrid.gaards.ui.dorian.ifs.FindUserDialog;
+import org.cagrid.grape.GridApplication;
+import org.cagrid.grape.LookAndFeel;
+
+import java.awt.Insets;
 
 
 /**
@@ -47,6 +54,8 @@ public class PermissionPanel extends JPanel {
 
 	private boolean wildcards = false;
 
+	private JButton find = null;
+
 
 	/**
 	 * This is the default constructor
@@ -63,12 +72,17 @@ public class PermissionPanel extends JPanel {
 	 * 
 	 */
 	private void initialize() {
+		GridBagConstraints gridBagConstraints41 = new GridBagConstraints();
+		gridBagConstraints41.gridx = 2;
+		gridBagConstraints41.insets = new Insets(2, 2, 2, 2);
+		gridBagConstraints41.gridy = 0;
 		GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
 		gridBagConstraints5.fill = java.awt.GridBagConstraints.HORIZONTAL;
 		gridBagConstraints5.gridy = 2;
 		gridBagConstraints5.weightx = 1.0;
 		gridBagConstraints5.anchor = java.awt.GridBagConstraints.WEST;
 		gridBagConstraints5.insets = new java.awt.Insets(2, 2, 2, 2);
+		gridBagConstraints5.gridwidth = 2;
 		gridBagConstraints5.gridx = 1;
 		GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
 		gridBagConstraints4.anchor = java.awt.GridBagConstraints.WEST;
@@ -83,6 +97,7 @@ public class PermissionPanel extends JPanel {
 		gridBagConstraints3.weightx = 1.0;
 		gridBagConstraints3.anchor = java.awt.GridBagConstraints.WEST;
 		gridBagConstraints3.insets = new java.awt.Insets(2, 2, 2, 2);
+		gridBagConstraints3.gridwidth = 2;
 		gridBagConstraints3.gridx = 1;
 		GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
 		gridBagConstraints2.anchor = java.awt.GridBagConstraints.WEST;
@@ -113,6 +128,7 @@ public class PermissionPanel extends JPanel {
 		this.add(getTrustedAuthorities(), gridBagConstraints3);
 		this.add(jLabel2, gridBagConstraints4);
 		this.add(getRole(), gridBagConstraints5);
+		this.add(getFind(), gridBagConstraints41);
 	}
 
 
@@ -261,6 +277,31 @@ public class PermissionPanel extends JPanel {
 				role.addItem(Role.TrustAuthorityManager);
 			}
 		}
+	}
+
+
+	/**
+	 * This method initializes find	
+	 * 	
+	 * @return javax.swing.JButton	
+	 */
+	private JButton getFind() {
+		if (find == null) {
+			find = new JButton();
+			find.setText("Find...");
+			find.setIcon(LookAndFeel.getQueryIcon());
+			find.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					FindUserDialog dialog = new FindUserDialog();
+					dialog.setModal(true);
+					GridApplication.getContext().showDialog(dialog);
+					if (dialog.getSelectedUser() != null) {
+						getGid().setText(dialog.getSelectedUser());
+					}
+				}
+			});
+		}
+		return find;
 	}
 
 }

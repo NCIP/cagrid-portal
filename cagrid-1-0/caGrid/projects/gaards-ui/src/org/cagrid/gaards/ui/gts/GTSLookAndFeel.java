@@ -24,11 +24,9 @@ public class GTSLookAndFeel extends GAARDSLookAndFeel{
 	}
 
 
-
 	public final static ImageIcon getTrustedAuthorityIcon() {
 		return IconUtils.loadIcon("/certificate-authority.png");
 	}
-
 
 
 	public final static ImageIcon getCRLIcon() {
