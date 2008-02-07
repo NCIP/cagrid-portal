@@ -13,6 +13,7 @@ import gov.nih.nci.cagrid.testing.system.haste.Step;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Method;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -29,7 +30,7 @@ import org.apache.log4j.Logger;
  * @author David Ervin
  * 
  * @created Feb 1, 2008 9:02:20 AM
- * @version $Id: InvokeSDK4DataServiceStep.java,v 1.11 2008-02-07 17:16:11 dervin Exp $ 
+ * @version $Id: InvokeSDK4DataServiceStep.java,v 1.12 2008-02-07 17:48:56 dervin Exp $ 
  */
 public class InvokeSDK4DataServiceStep extends Step {
     public static final String TEST_RESOURCES_DIR = "/test/resources/";
@@ -258,24 +259,34 @@ public class InvokeSDK4DataServiceStep extends Step {
             tempGold.removeAll(test);
             StringBuffer errors = new StringBuffer();
             errors.append("The following objects were expected but not found\n");
-            for (Object o : tempGold) {
-                errors.append(o.getClass().getName()).append("\n");
-                Method[] methods = o.getClass().getMethods();
-                for (Method m : methods) {
-                    if (m.getName().startsWith("get") && m.getParameterTypes().length == 0) {
-                        try {
-                            Object value = m.invoke(o, new Object[0]);
-                            errors.append(m.getName());
-                            errors.append(" --> ");
-                            errors.append(String.valueOf(value));
-                            errors.append("\n");
-                        } catch (Exception ex) {
-                            ex.printStackTrace();
-                        }
+            dumpGetters(tempGold, errors);
+            Set<Object> tempTest = new HashSet<Object>();
+            tempTest.addAll(test);
+            tempTest.removeAll(gold);
+            errors.append("\n\nThe following objects were found, but not expected\n");
+            dumpGetters(tempTest, errors);
+            fail(errors.toString());
+        }
+    }
+    
+    
+    private void dumpGetters(Collection<Object> objs, StringBuffer buff) {
+        for (Object o : objs) {
+            buff.append(o.getClass().getName()).append("\n");
+            Method[] methods = o.getClass().getMethods();
+            for (Method m : methods) {
+                if (m.getName().startsWith("get") && m.getParameterTypes().length == 0) {
+                    try {
+                        Object value = m.invoke(o, new Object[0]);
+                        buff.append(m.getName());
+                        buff.append(" --> ");
+                        buff.append(String.valueOf(value));
+                        buff.append("\n");
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
                     }
                 }
             }
-            fail(errors.toString());
         }
     }
     
