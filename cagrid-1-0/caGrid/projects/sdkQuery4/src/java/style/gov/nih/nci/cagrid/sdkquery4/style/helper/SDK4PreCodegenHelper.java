@@ -29,7 +29,7 @@ import gov.nih.nci.cagrid.sdkquery4.style.common.SDK4StyleConstants;
  * @author David Ervin
  * 
  * @created Jan 18, 2008 9:56:27 AM
- * @version $Id: SDK4PreCodegenHelper.java,v 1.1 2008-01-18 15:12:06 dervin Exp $ 
+ * @version $Id: SDK4PreCodegenHelper.java,v 1.2 2008-02-07 20:42:08 dervin Exp $ 
  */
 public class SDK4PreCodegenHelper implements StyleCodegenPreProcessor {
     
@@ -69,7 +69,6 @@ public class SDK4PreCodegenHelper implements StyleCodegenPreProcessor {
                 String message = "Mapping class " + e.getBeanClassname() 
                     + " (" + e.getCurrentBean() + " of " + e.getTotalBeans() + ")";
                 LOG.debug(message);
-                System.out.println(message); // TODO: remove once it works
             }
         });
         
