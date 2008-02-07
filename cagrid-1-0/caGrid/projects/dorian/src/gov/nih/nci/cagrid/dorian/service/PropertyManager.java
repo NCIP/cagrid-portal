@@ -19,7 +19,11 @@ public class PropertyManager {
 	private static String TABLE = "properties";
 	private static String VERSION_PROPERTY = "version";
 	private static String CA_TYPE_PROPERTY = "certificate authority";
-	public static float CURRENT_VERSION = 1.2F;
+	
+	public static float DORIAN_VERSION_1_2 = 1.2F;
+	public static float DORIAN_VERSION_1_1= 1.1F;
+	public static float DORIAN_VERSION_1_0= 1.0F;
+	public static float CURRENT_VERSION=DORIAN_VERSION_1_2;
 	private MetadataManager manager;
 	private Metadata version;
 	private Metadata certificateAuthorityType;
