@@ -218,7 +218,7 @@
      <ns46:NoAuthorization xsi:type="ns46:NoAuthorization"/>
     </ns46:ServiceAuthorization>
    </ns46:ServiceSecurity>
-   <ns3:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema"></ns3:description>
+   <ns3:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">The Credential Delegation Service (CDS) is a WSRF-compliant Grid service that enables users/services (delegator) to delegate their Grid credentials to other users/services (delegatee) such that the delegatee(s) may act on the delegator's behalf.</ns3:description>
   </ns3:Service>
   <ns3:Service name="DelegatedCredential" namespace="http://cds.gaards.cagrid.org/CredentialDelegationService/DelegatedCredential" packageName="org.cagrid.gaards.cds.delegated" resourceFrameworkType="custom" xsi:type="ns3:ServiceType">
    <ns47:Methods xsi:type="ns47:MethodsType" xmlns:ns47="gme://gov.nih.nci.cagrid.introduce/1/Methods">
