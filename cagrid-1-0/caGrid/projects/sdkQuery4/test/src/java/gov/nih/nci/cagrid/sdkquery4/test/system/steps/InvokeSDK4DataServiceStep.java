@@ -13,7 +13,9 @@ import gov.nih.nci.cagrid.testing.system.haste.Step;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -30,7 +32,7 @@ import org.apache.log4j.Logger;
  * @author David Ervin
  * 
  * @created Feb 1, 2008 9:02:20 AM
- * @version $Id: InvokeSDK4DataServiceStep.java,v 1.13 2008-02-07 20:42:58 dervin Exp $ 
+ * @version $Id: InvokeSDK4DataServiceStep.java,v 1.14 2008-02-08 18:41:27 dervin Exp $ 
  */
 public class InvokeSDK4DataServiceStep extends Step {
     public static final String TEST_RESOURCES_DIR = "/test/resources/";
@@ -51,8 +53,7 @@ public class InvokeSDK4DataServiceStep extends Step {
     public void runStep() throws Throwable {
         testUndergraduateStudentWithName();
         testAllPayments();
-        // This test fails because the order of returned attributes varies
-        // testDistinctAttributeFromCash();
+        testDistinctAttributeFromCash();
         testAssociationNotNull();
         testAssociationWithAttributeEqual();
         testGroupOfAttributesUsingAnd();
@@ -312,25 +313,55 @@ public class InvokeSDK4DataServiceStep extends Step {
     
     private void compareTargetAttributes(Set<TargetAttribute[]> gold, Set<TargetAttribute[]> test) {
         // assumes sizes of both sets are equal
+        
+        // Must find each array of gold attributes (in any order) 
+        // in the test attributes set
+        Set<TargetAttribute[]> tempTestAttributes = new HashSet<TargetAttribute[]>();
+        tempTestAttributes.addAll(test);
+        Comparator<TargetAttribute> attributeSorter = new Comparator<TargetAttribute>() {
+            public int compare(TargetAttribute o1, TargetAttribute o2) {
+                return o1.getName().compareTo(o2.getName());
+            }
+        };
         Iterator<TargetAttribute[]> goldIter = gold.iterator();
-        Iterator<TargetAttribute[]> testIter = test.iterator();
         while (goldIter.hasNext()) {
             TargetAttribute[] goldAttributes = goldIter.next();
-            TargetAttribute[] testAttributes = testIter.next();
-            // veriy the same number of attributes
-            assertEquals("Number of attributes differed from expected", goldAttributes.length, testAttributes.length);
-            for (TargetAttribute goldAttrib : goldAttributes) {
-                // find the attribute of the same in the test attributes
-                TargetAttribute matchingTestAttrib = null;
-                for (TargetAttribute testAttrib : testAttributes) {
-                    if (testAttrib.getName().equals(goldAttrib.getName())) {
-                        matchingTestAttrib = testAttrib;
-                        break;
-                    }
+            Arrays.sort(goldAttributes, attributeSorter);
+            // find a matching array of attributes in the test set
+            Iterator<TargetAttribute[]> testIter = tempTestAttributes.iterator();
+            while (testIter.hasNext()) {
+                TargetAttribute[] testAttributes = testIter.next();
+                Arrays.sort(testAttributes, attributeSorter);
+                // veriy the same number of attributes.  This should be true for every array
+                assertEquals("Number of attributes differed from expected", goldAttributes.length, testAttributes.length);
+                // check that the current goldAttribute[] matches the test[]
+                boolean matching = true;
+                for (int i = 0; i < goldAttributes.length && matching; i++) {
+                    assertEquals("Unexpected attribute name in test results", 
+                        goldAttributes[i].getName(), testAttributes[i].getName());
+                    String goldValue = goldAttributes[i].getValue();
+                    String testValue = testAttributes[i].getValue();
+                    matching = String.valueOf(goldValue).equals(String.valueOf(testValue));
                 }
-                assertNotNull("No attribute named " + goldAttrib.getName() + " found in test result attributes", matchingTestAttrib);
-                assertEquals("Value of attribute " + goldAttrib.getName() + " did not match expected", goldAttrib.getValue(), matchingTestAttrib.getValue());
+                if (matching) {
+                    // found a matching TargetAttribute[] in test for one in gold.
+                    // remove it from the test set so anything left in there is
+                    // not a valid result when this process completes
+                    testIter.remove();
+                }
             }
+        }
+        if (tempTestAttributes.size() != 0) {
+            StringBuffer errors = new StringBuffer();
+            errors.append("The following attribute arrays were not expected in the test results:");
+            for (TargetAttribute[] atts : tempTestAttributes) {
+                errors.append("---------\n");
+                for (TargetAttribute ta : atts) {
+                    errors.append("Attribute: ").append(ta.getName()).append("\t\tValue: ")
+                        .append(ta.getValue()).append("\n");
+                }
+            }
+            fail(errors.toString());
         }
     }
     
