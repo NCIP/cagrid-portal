@@ -536,7 +536,7 @@
 			</fileset>
 		</artifact>
 		<artifact track="main" type="jars" id="evs.jars">
-			<generatingantcall target="build-cadsr" />
+			<generatingantcall target="build-evs" />
 			<fileset dir="${projects.dir}/evs/build/lib">
 				<include name="*.jar" />
 				<exclude name="*test*.jar" />
