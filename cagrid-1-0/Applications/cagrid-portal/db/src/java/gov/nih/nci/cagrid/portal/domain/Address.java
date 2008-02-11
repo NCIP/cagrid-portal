@@ -9,6 +9,7 @@ import javax.persistence.Transient;
 
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
+import gov.nih.nci.cagrid.portal.util.StringUtils;
 
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
@@ -59,9 +60,10 @@ public class Address extends AbstractDomainObject {
 	}
 	
 	public String getPostalCode() {
-		return postalCode;
+		return StringUtils.parsePostalCode(postalCode);
 	}
-	public void setPostalCode(String postalCode) {
+
+    public void setPostalCode(String postalCode) {
 		this.postalCode = postalCode;
 	}
 	

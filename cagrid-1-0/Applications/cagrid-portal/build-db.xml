@@ -140,7 +140,9 @@
 			includes="**/dao/**/*.class"/>
 		<jar basedir="${db.classes.dir}" destfile="${db.build.dir}/cagrid-portal-domain.jar"
 					includes="**/domain/**/*.class"/>
-	</target>
+        <jar basedir="${db.classes.dir}" destfile="${db.build.dir}/cagrid-portal-utils.jar"
+                    includes="**/util/**/*.class"/>
+    </target>
 
 	<target name="db:compile-test">
 		<mkdir dir="${db.test.classes.dir}" />

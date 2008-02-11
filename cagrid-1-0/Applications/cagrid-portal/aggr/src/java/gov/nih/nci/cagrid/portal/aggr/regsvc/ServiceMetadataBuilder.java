@@ -319,8 +319,9 @@ public class ServiceMetadataBuilder {
 		umlAttrOut.setDescription(umlAttrIn.getDescription());
 		umlAttrOut.setVersion(umlAttrIn.getVersion());
 		umlAttrOut.setName(umlAttrIn.getName());
+        umlAttrOut.setPublicID(umlAttrIn.getPublicID());
 
-		return (UMLAttribute) handlePersist(umlAttrOut);
+        return (UMLAttribute) handlePersist(umlAttrOut);
 	}
 
 	protected ValueDomain buildValueDomain(

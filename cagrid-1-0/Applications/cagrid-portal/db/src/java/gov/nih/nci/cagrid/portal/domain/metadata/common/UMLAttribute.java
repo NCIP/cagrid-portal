@@ -35,7 +35,8 @@ public class UMLAttribute extends AbstractDomainObject {
 	private String name;
 	private List<SemanticMetadata> semanticMetadata = new ArrayList<SemanticMetadata>();
 	private ValueDomain valueDomain;
-	private float version;
+    private Long publicID;
+    private float version;
 	private String dataTypeName;
 	private UMLClass umlClass;
 	
@@ -98,4 +99,12 @@ public class UMLAttribute extends AbstractDomainObject {
 	public void setVersion(float version) {
 		this.version = version;
 	}
+
+    public Long getPublicID() {
+        return publicID;
+    }
+
+    public void setPublicID(Long publicID) {
+        this.publicID = publicID;
+    }
 }
