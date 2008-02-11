@@ -27,7 +27,7 @@ public class SyncToolsSimpleImportTest extends Story {
 
     public SyncToolsSimpleImportTest() {
         this.setName("Introduce Codegen Simple Import System Test");
-        PropertyConfigurator.configure("." + File.separator + "conf" + File.separator + "introduce" + File.separator
+        PropertyConfigurator.configure("." + File.separator + "conf" + File.separator
             + "log4j.properties");
     }
 

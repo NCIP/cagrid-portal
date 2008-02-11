@@ -21,7 +21,7 @@ public class IntroducePortalInitializer implements ApplicationInitializer {
 
 
     public void intialize() throws Exception {
-        PropertyConfigurator.configure("." + File.separator + "conf" + File.separator + "introduce" + File.separator
+        PropertyConfigurator.configure("." + File.separator + "conf" + File.separator
             + "log4j.properties");
 
         ExtensionsLoader.getInstance();

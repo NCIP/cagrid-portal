@@ -34,7 +34,7 @@ public class Upgrade_1_1_Test extends Story {
     
     public Upgrade_1_1_Test() {
         this.setName("Introduce Upgrades System Test");
-        PropertyConfigurator.configure("." + File.separator + "conf" + File.separator + "introduce" + File.separator
+        PropertyConfigurator.configure("." + File.separator + "conf" + File.separator
             + "log4j.properties");
     }
     

@@ -38,7 +38,7 @@ public class PersistenceNotificationResourcesTest extends Story {
 
     public PersistenceNotificationResourcesTest() {
         this.setName("Introduce Persistence Notification System Test");
-        PropertyConfigurator.configure("." + File.separator + "conf" + File.separator + "introduce" + File.separator
+        PropertyConfigurator.configure("." + File.separator + "conf" + File.separator
             + "log4j.properties");
     }
 

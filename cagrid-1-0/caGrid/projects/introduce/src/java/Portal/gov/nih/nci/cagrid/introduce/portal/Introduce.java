@@ -42,7 +42,7 @@ public final class Introduce {
             showIntroduceSplash();
 
             if (confFile == null) {
-                confFile = "conf" + File.separator + "introduce" + File.separator + "introduce-portal-conf.xml";
+                confFile = "conf" + File.separator + "introduce-portal-conf.xml";
             }
 
             Application app = (Application) Utils.deserializeDocument(confFile, Application.class);

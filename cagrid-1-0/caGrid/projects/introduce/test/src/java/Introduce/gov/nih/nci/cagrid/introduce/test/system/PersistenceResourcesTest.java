@@ -38,7 +38,7 @@ public class PersistenceResourcesTest extends Story {
 
     public PersistenceResourcesTest() {
         this.setName("Introduce Persistence System Test");
-        PropertyConfigurator.configure("." + File.separator + "conf" + File.separator + "introduce" + File.separator
+        PropertyConfigurator.configure("." + File.separator + "conf" +  File.separator
             + "log4j.properties");
     }
 
