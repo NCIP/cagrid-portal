@@ -53,14 +53,6 @@
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xmlsec.jar"/>
 	<classpathentry kind="lib" path="ext/lib/castor-0.9.9.jar"/>
 	<classpathentry kind="lib" path="ext/lib/mobius_common_client-1.1.jar"/>
-	<classpathentry kind="lib" path="ext/lib/mobius_factories-1.1.jar"/>
-	<classpathentry kind="lib" path="ext/lib/mobius_gme_client-1.1.jar"/>
-	<classpathentry kind="lib" path="ext/lib/GlobalModelExchange.jar"/>
-	<classpathentry kind="lib" path="ext/lib/globus_wsrf_mds_aggregator_stubs.jar"/>
-	<classpathentry kind="lib" path="ext/lib/globus_wsrf_mds_aggregator.jar"/>
-	<classpathentry kind="lib" path="ext/lib/globus_wsrf_servicegroup_stubs.jar"/>
-	<classpathentry kind="lib" path="ext/lib/globus_wsrf_servicegroup.jar"/>
-	<classpathentry kind="lib" path="ext/lib/mobius-castor-0.9.4.3-xml.jar"/>
 	<classpathentry kind="src" path="test/src/java"/>
 	<classpathentry kind="lib" path="ext/test/lib/asm-2.2.1.jar"/>
 	<classpathentry kind="lib" path="ext/test/lib/cobertura.jar"/>
@@ -88,14 +80,7 @@
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-BulkDataHandler-service.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-BulkDataHandler-stubs.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-BulkDataHandler-tests.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-caDSR-client.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-caDSR-common.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-caDSR-portal.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-caDSR-service.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-caDSR-stubs.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-core.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-GlobalModelExchange.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-GlobalModelExchange-stubs.jar"/>
+	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-core.jar" />
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-graph.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-metadata-common.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-metadata-data.jar"/>
@@ -114,11 +99,8 @@
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-grape.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-grape-resources.jar"/>
 	<classpathentry kind="var" path="ANT_HOME/lib/ant-launcher.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-advertisement.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-Introduce-1.1-serviceTools.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-wsEnum-stubs.jar"/>
 	<classpathentry kind="lib" path="ext/lib/jasciidammit-1.1.jar"/>
-	<classpathentry kind="lib" path="ext/lib/mobius_tools-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/test/lib/caGrid-1.1-Introduce-1.2-core-tests.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-Introduce-1.2-core.jar"/>
 	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-Introduce-1.2-portal.jar"/>

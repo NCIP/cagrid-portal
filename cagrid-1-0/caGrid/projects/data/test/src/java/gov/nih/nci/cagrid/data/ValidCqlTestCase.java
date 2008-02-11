@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.data;
 
+import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.cqlquery.CQLQuery;
 import gov.nih.nci.cagrid.data.cql.validation.CqlStructureValidator;
 import gov.nih.nci.cagrid.data.cql.validation.ObjectWalkingCQLValidator;
@@ -12,9 +13,6 @@ import junit.framework.TestCase;
 import junit.framework.TestResult;
 import junit.framework.TestSuite;
 import junit.textui.TestRunner;
-
-import org.globus.wsrf.encoding.ObjectDeserializer;
-import org.xml.sax.InputSource;
 
 /** 
  *  ValidCqlTestCase
@@ -39,8 +37,9 @@ public class ValidCqlTestCase extends TestCase {
 	private CQLQuery getQuery(String filename) {
 		try {
 			System.out.println("Validating structure of CQL: " + filename);
-			InputSource queryInput = new InputSource(new FileReader(filename));
-			CQLQuery query = (CQLQuery) ObjectDeserializer.deserialize(queryInput, CQLQuery.class);
+            FileReader reader = new FileReader(filename);
+			CQLQuery query = (CQLQuery) Utils.deserializeObject(reader, CQLQuery.class);
+            reader.close();
 			return query;
 		} catch (FileNotFoundException ex) {
 			System.out.println("File not found: " + filename);
