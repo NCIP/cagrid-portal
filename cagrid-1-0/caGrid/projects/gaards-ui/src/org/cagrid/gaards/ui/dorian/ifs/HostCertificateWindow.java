@@ -30,8 +30,8 @@ import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
 import org.cagrid.gaards.ui.common.CertificatePanel;
-import org.cagrid.gaards.ui.common.ProxyCaddy;
-import org.cagrid.gaards.ui.common.ProxyComboBox;
+import org.cagrid.gaards.ui.common.CredentialCaddy;
+import org.cagrid.gaards.ui.common.CredentialComboBox;
 import org.cagrid.gaards.ui.dorian.DorianLookAndFeel;
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
@@ -296,7 +296,7 @@ public class HostCertificateWindow extends ApplicationComponent {
         try {
             getApprove().setEnabled(false);
             String serviceUrl = getService().getText();
-            GlobusCredential c = ((ProxyCaddy) getProxy().getSelectedItem()).getProxy();
+            GlobusCredential c = ((CredentialCaddy) getProxy().getSelectedItem()).getProxy();
             IFSAdministrationClient client = new IFSAdministrationClient(serviceUrl, c);
             record = client.approveHostCertificate(record.getId());
             loadRecord();
@@ -313,7 +313,7 @@ public class HostCertificateWindow extends ApplicationComponent {
         try {
             getRenew().setEnabled(false);
             String serviceUrl = getService().getText();
-            GlobusCredential c = ((ProxyCaddy) getProxy().getSelectedItem()).getProxy();
+            GlobusCredential c = ((CredentialCaddy) getProxy().getSelectedItem()).getProxy();
             IFSAdministrationClient client = new IFSAdministrationClient(serviceUrl, c);
             record = client.renewHostCertificate(record.getId());
             loadRecord();
@@ -358,7 +358,7 @@ public class HostCertificateWindow extends ApplicationComponent {
 
             if (performUpdate) {
                 String serviceUrl = getService().getText();
-                GlobusCredential c = ((ProxyCaddy) getProxy().getSelectedItem()).getProxy();
+                GlobusCredential c = ((CredentialCaddy) getProxy().getSelectedItem()).getProxy();
                 IFSAdministrationClient client = new IFSAdministrationClient(serviceUrl, c);
                 client.updateHostCertificateRecord(certUpdate);
                 if (!record.getStatus().equals(getStatus().getSelectedItem())) {
@@ -608,7 +608,7 @@ public class HostCertificateWindow extends ApplicationComponent {
      */
     private JComboBox getProxy() {
         if (proxy == null) {
-            proxy = new ProxyComboBox(cred);
+            proxy = new CredentialComboBox(cred);
             if (!admin) {
                 proxy.setEditable(false);
             }

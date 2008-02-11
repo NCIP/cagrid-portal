@@ -23,8 +23,8 @@ import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
 import org.cagrid.gaards.ui.common.CertificatePanel;
-import org.cagrid.gaards.ui.common.ProxyCaddy;
-import org.cagrid.gaards.ui.common.ProxyComboBox;
+import org.cagrid.gaards.ui.common.CredentialCaddy;
+import org.cagrid.gaards.ui.common.CredentialComboBox;
 import org.cagrid.gaards.ui.dorian.DorianLookAndFeel;
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
@@ -36,7 +36,7 @@ import org.globus.gsi.GlobusCredential;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: UserWindow.java,v 1.2 2008-01-15 20:57:39 langella Exp $
+ * @version $Id: UserWindow.java,v 1.3 2008-02-11 19:24:51 langella Exp $
  */
 public class UserWindow extends ApplicationComponent {
 
@@ -253,7 +253,7 @@ public class UserWindow extends ApplicationComponent {
 
 		try {
 			String serviceUrl = getService().getText();
-			GlobusCredential c = ((ProxyCaddy) getProxy().getSelectedItem())
+			GlobusCredential c = ((CredentialCaddy) getProxy().getSelectedItem())
 					.getProxy();
 			IFSAdministrationClient client = new IFSAdministrationClient(
 					serviceUrl, c);
@@ -273,7 +273,7 @@ public class UserWindow extends ApplicationComponent {
 	private void renewCredentials() {
 		try {
 			String serviceUrl = getService().getText();
-			GlobusCredential c = ((ProxyCaddy) getProxy().getSelectedItem())
+			GlobusCredential c = ((CredentialCaddy) getProxy().getSelectedItem())
 					.getProxy();
 			IFSAdministrationClient client = new IFSAdministrationClient(
 					serviceUrl, c);
@@ -531,7 +531,7 @@ public class UserWindow extends ApplicationComponent {
 	 */
 	private JComboBox getProxy() {
 		if (proxy == null) {
-			proxy = new ProxyComboBox(cred);
+			proxy = new CredentialComboBox(cred);
 		}
 		return proxy;
 	}

@@ -25,7 +25,7 @@ import org.cagrid.gaards.cds.client.DelegationAdminClient;
 import org.cagrid.gaards.cds.client.DelegationUserClient;
 import org.cagrid.gaards.cds.common.DelegatedCredentialAuditFilter;
 import org.cagrid.gaards.cds.common.DelegationRecord;
-import org.cagrid.gaards.ui.common.ProxyComboBox;
+import org.cagrid.gaards.ui.common.CredentialComboBox;
 import org.cagrid.gaards.ui.dorian.ifs.FindUserDialog;
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
@@ -79,7 +79,7 @@ public class DelegatedCredentialWindow extends ApplicationComponent {
 
 	private JLabel credentialLabel = null;
 
-	private ProxyComboBox proxy = null;
+	private CredentialComboBox proxy = null;
 
 	private JLabel gridIdLabel = null;
 
@@ -377,7 +377,7 @@ public class DelegatedCredentialWindow extends ApplicationComponent {
 	private synchronized void updateDelegationStatus() {
 		try {
 			DelegationAdminClient client = new DelegationAdminClient(
-					getService().getText(), getProxy().getSelectedProxy());
+					getService().getText(), getProxy().getSelectedCredential());
 			client.updateDelegationStatus(record.getDelegationIdentifier(),
 					getStatus().getDelegationStatus());
 			GridApplication.getContext().showMessage(
@@ -645,9 +645,9 @@ public class DelegatedCredentialWindow extends ApplicationComponent {
 	 * 
 	 * @return javax.swing.JComboBox
 	 */
-	private ProxyComboBox getProxy() {
+	private CredentialComboBox getProxy() {
 		if (proxy == null) {
-			proxy = new ProxyComboBox(cred);
+			proxy = new CredentialComboBox(cred);
 		}
 		return proxy;
 	}

@@ -13,7 +13,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
 
-import org.cagrid.gaards.ui.common.ProxyComboBox;
+import org.cagrid.gaards.ui.common.CredentialComboBox;
 import org.cagrid.grape.LookAndFeel;
 import org.globus.gsi.GlobusCredential;
 
@@ -27,7 +27,7 @@ public class SessionPanel extends JPanel {
 
 	private JLabel jLabel1 = null;
 
-	private ProxyComboBox cred = null;
+	private CredentialComboBox cred = null;
 
 	/**
 	 * This is the default constructor
@@ -99,16 +99,16 @@ public class SessionPanel extends JPanel {
 	 * 
 	 * @return javax.swing.JComboBox
 	 */
-	private ProxyComboBox getCred() {
+	private CredentialComboBox getCred() {
 		if (cred == null) {
-			cred = new ProxyComboBox();
+			cred = new CredentialComboBox();
 		}
 		return cred;
 	}
 
 	public IFSAdministrationClient getAdminClient() throws Exception {
 		String serviceUrl = getService().getSelectedService();
-		GlobusCredential proxyCred = getCred().getSelectedProxy();
+		GlobusCredential proxyCred = getCred().getSelectedCredential();
 		IFSAdministrationClient client = new IFSAdministrationClient(
 				serviceUrl, proxyCred);
 		return client;
@@ -116,14 +116,14 @@ public class SessionPanel extends JPanel {
 
 	public IFSUserClient getUserClientWithCredentials() throws Exception {
 		String serviceUrl = getService().getSelectedService();
-		GlobusCredential proxyCred = getCred().getSelectedProxy();
+		GlobusCredential proxyCred = getCred().getSelectedCredential();
 		IFSUserClient client = new IFSUserClient(serviceUrl, proxyCred);
 		return client;
 	}
 
 	public IdPAdministrationClient getLocalAdminClient() throws Exception {
 		String serviceUrl = getService().getSelectedService();
-		GlobusCredential proxyCred = getCred().getSelectedProxy();
+		GlobusCredential proxyCred = getCred().getSelectedCredential();
 		IdPAdministrationClient client = new IdPAdministrationClient(
 				serviceUrl, proxyCred);
 		return client;
@@ -134,7 +134,7 @@ public class SessionPanel extends JPanel {
 	}
 
 	public GlobusCredential getCredential() throws Exception {
-		return getCred().getSelectedProxy();
+		return getCred().getSelectedCredential();
 	}
 
 }

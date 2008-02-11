@@ -25,7 +25,7 @@ import org.globus.gsi.GlobusCredential;
  * @version $Id: ProxyInformationComponent.java,v 1.3 2005/12/03 07:18:56
  *          langella Exp $
  */
-public class ProxyPanel extends JPanel {
+public class CredentialPanel extends JPanel {
 
 	private JPanel jPanel = null;
 	private JLabel jLabel = null;
@@ -47,7 +47,7 @@ public class ProxyPanel extends JPanel {
 	/**
 	 * This is the default constructor
 	 */
-	public ProxyPanel() {
+	public CredentialPanel() {
 		super();
 		initialize();
 	}
@@ -185,7 +185,7 @@ public class ProxyPanel extends JPanel {
 			jLabel.setText("Subject");
 			jPanel = new JPanel();
 			jPanel.setLayout(new GridBagLayout());
-			jPanel.setBorder(BorderFactory.createTitledBorder(null, "Proxy Information",
+			jPanel.setBorder(BorderFactory.createTitledBorder(null, "Credential Information",
 				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, 
                 LookAndFeel.getPanelLabelColor()));
 			jPanel.add(jLabel, gridBagConstraints);

@@ -14,7 +14,7 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import org.cagrid.gaards.ui.common.ProxyComboBox;
+import org.cagrid.gaards.ui.common.CredentialComboBox;
 import org.cagrid.gaards.ui.gridgrouper.GridGrouperLookAndFeel;
 import org.cagrid.gaards.ui.gridgrouper.GridGrouperServiceList;
 import org.cagrid.grape.ApplicationComponent;
@@ -188,7 +188,7 @@ public class AddGridGrouperWindow extends ApplicationComponent {
 	 */
 	private JComboBox getCredentials() {
 		if (credentials == null) {
-			credentials = new ProxyComboBox(true);
+			credentials = new CredentialComboBox(true);
 		}
 		return credentials;
 	}
@@ -228,7 +228,7 @@ public class AddGridGrouperWindow extends ApplicationComponent {
 		String uri = null;
 		try {
 			uri = ((GridGrouperServiceList) this.services).getSelectedService();
-			GlobusCredential cred = ((ProxyComboBox) this.credentials).getSelectedProxy();
+			GlobusCredential cred = ((CredentialComboBox) this.credentials).getSelectedCredential();
 			this.dispose();
 			if(cred!=null){
 			GridGrouper grouper = new GridGrouper(uri, cred);

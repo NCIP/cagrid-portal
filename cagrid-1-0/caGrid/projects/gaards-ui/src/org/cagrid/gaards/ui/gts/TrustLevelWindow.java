@@ -17,8 +17,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-import org.cagrid.gaards.ui.common.ProxyCaddy;
-import org.cagrid.gaards.ui.common.ProxyComboBox;
+import org.cagrid.gaards.ui.common.CredentialCaddy;
+import org.cagrid.gaards.ui.common.CredentialComboBox;
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.LookAndFeel;
@@ -114,7 +114,7 @@ public class TrustLevelWindow extends ApplicationComponent {
 		}
 		initialize();
 		this.gts.setSelectedItem(service);
-		this.proxy.setSelectedItem(new ProxyCaddy(cred));
+		this.proxy.setSelectedItem(new CredentialCaddy(cred));
 		if (level != null) {
 			this.getGts().setEnabled(false);
 			this.getTrustLevelName().setEditable(false);
@@ -264,7 +264,7 @@ public class TrustLevelWindow extends ApplicationComponent {
 	 */
 	private JComboBox getProxy() {
 		if (proxy == null) {
-			proxy = new ProxyComboBox();
+			proxy = new CredentialComboBox();
 		}
 		return proxy;
 	}
@@ -346,7 +346,7 @@ public class TrustLevelWindow extends ApplicationComponent {
 	private void addUpdateTrustLevel() {
 		try {
 			getAddButton().setEnabled(false);
-			GlobusCredential selectedProxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
+			GlobusCredential selectedProxy = ((CredentialComboBox) getProxy()).getSelectedCredential();
 			String service = ((GTSServiceListComboBox) getGts()).getSelectedService();
 			TrustLevel level = new TrustLevel();
 			level.setName(getTrustLevelName().getText().trim());

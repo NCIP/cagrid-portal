@@ -19,7 +19,7 @@ import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 import javax.swing.border.TitledBorder;
 
-import org.cagrid.gaards.ui.common.ProxyComboBox;
+import org.cagrid.gaards.ui.common.CredentialComboBox;
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.LookAndFeel;
@@ -272,7 +272,7 @@ public class PermissionManagerWindow extends ApplicationComponent implements Per
 	public void addPermission() {
 		try {
 			String selectedService = ((GTSServiceListComboBox) getService()).getSelectedService();
-			GlobusCredential selectedProxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
+			GlobusCredential selectedProxy = ((CredentialComboBox) getProxy()).getSelectedCredential();
 			GridApplication.getContext().addApplicationComponent(
                 new AddPermissionWindow(selectedService, selectedProxy, this), 600, 300);
 		} catch (Exception e) {
@@ -404,7 +404,7 @@ public class PermissionManagerWindow extends ApplicationComponent implements Per
 
 		try {
 			String selectedService = ((GTSServiceListComboBox) getService()).getSelectedService();
-			GlobusCredential selectedProxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
+			GlobusCredential selectedProxy = ((CredentialComboBox) getProxy()).getSelectedCredential();
 			PermissionFilter f = filterPanel.getPermissionFilter();
 			GTSAdminClient client = new GTSAdminClient(selectedService, selectedProxy);
 			Permission[] perms = client.findPermissions(f);
@@ -462,7 +462,7 @@ public class PermissionManagerWindow extends ApplicationComponent implements Per
 	 */
 	private JComboBox getProxy() {
 		if (proxy == null) {
-			proxy = new ProxyComboBox();
+			proxy = new CredentialComboBox();
 		}
 		return proxy;
 	}
@@ -550,7 +550,7 @@ public class PermissionManagerWindow extends ApplicationComponent implements Per
 	private void removePermission() {
 		try {
 			String selectedService = ((GTSServiceListComboBox) getService()).getSelectedService();
-			GlobusCredential selectedProxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
+			GlobusCredential selectedProxy = ((CredentialComboBox) getProxy()).getSelectedCredential();
 			GTSAdminClient client = new GTSAdminClient(selectedService, selectedProxy);
 			client.revokePermission(this.permissionsTable.getSelectedPermission());
 			this.refreshPermissions();

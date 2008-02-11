@@ -24,7 +24,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.border.TitledBorder;
 
-import org.cagrid.gaards.ui.common.ProxyComboBox;
+import org.cagrid.gaards.ui.common.CredentialComboBox;
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.LookAndFeel;
@@ -333,7 +333,7 @@ public class TrustedAuthoritiesWindow extends ApplicationComponent implements Tr
 	public void showTrustedAuthority() {
 		try {
 			String selectedService = ((GTSServiceListComboBox) getService()).getSelectedService();
-			GlobusCredential selectedProxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
+			GlobusCredential selectedProxy = ((CredentialComboBox) getProxy()).getSelectedCredential();
 			TrustedAuthorityWindow window = new TrustedAuthorityWindow(selectedService, selectedProxy, this.getTrustedAuthorityTable()
 				.getSelectedTrustedAuthority(), this);
 			GridApplication.getContext().addApplicationComponent(window);
@@ -527,7 +527,7 @@ public class TrustedAuthoritiesWindow extends ApplicationComponent implements Tr
 	 */
 	private JComboBox getProxy() {
 		if (proxy == null) {
-			proxy = new ProxyComboBox();
+			proxy = new CredentialComboBox();
 		}
 		return proxy;
 	}
@@ -615,7 +615,7 @@ public class TrustedAuthoritiesWindow extends ApplicationComponent implements Tr
 	private void removeTrustedAuthority() {
 		try {
 			String selectedService = ((GTSServiceListComboBox) getService()).getSelectedService();
-			GlobusCredential selectedProxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
+			GlobusCredential selectedProxy = ((CredentialComboBox) getProxy()).getSelectedCredential();
 			GTSAdminClient client = new GTSAdminClient(selectedService, selectedProxy);
 			client.removeTrustedAuthority(this.getTrustedAuthorityTable().getSelectedTrustedAuthority().getName());
 			this.getTrustedAuthorityTable().removeSelectedTrustedAuthority();

@@ -14,7 +14,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import org.cagrid.gaards.cds.common.ProxyLifetime;
-import org.cagrid.gaards.ui.common.ProxyComboBox;
+import org.cagrid.gaards.ui.common.CredentialComboBox;
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.LookAndFeel;
@@ -41,7 +41,7 @@ public class DelegateProxyWindowStep1 extends ApplicationComponent implements
 
 	private JLabel jLabel1 = null;
 
-	private ProxyComboBox proxy = null;
+	private CredentialComboBox proxy = null;
 
 	private JPanel buttonPanel = null;
 
@@ -72,6 +72,9 @@ public class DelegateProxyWindowStep1 extends ApplicationComponent implements
 	private JComboBox issuedCredentialPathLength = null;
 
 	private boolean firstProxyLifetimeChange = true;
+	
+	private static final int DEFAULT_MAX_PATH_LENGTH = 10;
+	
 
 	/**
 	 * This is the default constructor
@@ -275,9 +278,9 @@ public class DelegateProxyWindowStep1 extends ApplicationComponent implements
 	 * 
 	 * @return javax.swing.JComboBox
 	 */
-	private ProxyComboBox getProxy() {
+	private CredentialComboBox getProxy() {
 		if (proxy == null) {
-			proxy = new ProxyComboBox();
+			proxy = new CredentialComboBox();
 			proxy.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					handleCredentialSelection();
@@ -355,7 +358,7 @@ public class DelegateProxyWindowStep1 extends ApplicationComponent implements
 		try {
 			DelegationRequestCache cache = new DelegationRequestCache();
 			cache.setDelegationURL((String) getCds().getSelectedItem());
-			cache.setCredential(getProxy().getSelectedProxy());
+			cache.setCredential(getProxy().getSelectedCredential());
 			cache.setDelegationLifetime(getDelegationLifetime()
 					.getProxyLifetime());
 			cache
@@ -424,7 +427,7 @@ public class DelegateProxyWindowStep1 extends ApplicationComponent implements
 			int maxLength = delegationPathLength - 1;
 			return maxLength;
 		} else {
-			return Integer.MAX_VALUE;
+			return DEFAULT_MAX_PATH_LENGTH;
 		}
 	}
 
@@ -432,10 +435,10 @@ public class DelegateProxyWindowStep1 extends ApplicationComponent implements
 		int maxPathLength = 0;
 		long lifetimeSeconds = 0;
 		try {
-			X509Certificate[] certs = getProxy().getSelectedProxy()
+			X509Certificate[] certs = getProxy().getSelectedCredential()
 					.getCertificateChain();
 			maxPathLength = getDelegationPathLength(certs[0]);
-			lifetimeSeconds = getProxy().getSelectedProxy().getTimeLeft()
+			lifetimeSeconds = getProxy().getSelectedCredential().getTimeLeft()
 					- SECONDS_OFFSET;
 		} catch (Exception e) {
 			e.printStackTrace();

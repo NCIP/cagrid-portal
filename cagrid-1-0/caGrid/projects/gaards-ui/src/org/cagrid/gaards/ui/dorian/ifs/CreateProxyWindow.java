@@ -23,8 +23,8 @@ import javax.swing.JProgressBar;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
-import org.cagrid.gaards.ui.common.ProxyManager;
-import org.cagrid.gaards.ui.common.ProxyManagerComponent;
+import org.cagrid.gaards.ui.common.CredentialManager;
+import org.cagrid.gaards.ui.common.CredentialManagerComponent;
 import org.cagrid.gaards.ui.dorian.DorianLookAndFeel;
 import org.cagrid.gaards.ui.dorian.DorianServiceListComboBox;
 import org.cagrid.gaards.ui.dorian.DorianUIUtils;
@@ -425,8 +425,8 @@ public class CreateProxyWindow extends ApplicationComponent {
             }
             GlobusCredential cred = c2.createProxy(saml, lifetime, delegation);
             this.updateProgress(false, "Proxy Created!!!");
-            ProxyManager.getInstance().addProxy(cred);
-            GridApplication.getContext().addApplicationComponent(new ProxyManagerComponent(cred), 700, 450);
+            CredentialManager.getInstance().addCredential(cred);
+            GridApplication.getContext().addApplicationComponent(new CredentialManagerComponent(cred), 750, 450);
 
             // enable the authenticate button
             getAuthenticateButton().setEnabled(true);

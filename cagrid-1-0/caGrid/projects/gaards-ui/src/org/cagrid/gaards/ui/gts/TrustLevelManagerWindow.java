@@ -19,7 +19,7 @@ import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 import javax.swing.border.TitledBorder;
 
-import org.cagrid.gaards.ui.common.ProxyComboBox;
+import org.cagrid.gaards.ui.common.CredentialComboBox;
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.LookAndFeel;
@@ -263,7 +263,7 @@ public class TrustLevelManagerWindow extends ApplicationComponent implements Tru
 	public void addTrustLevel() {
 		try {
 			String selectedService = ((GTSServiceListComboBox) getService()).getSelectedService();
-			GlobusCredential selectedProxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
+			GlobusCredential selectedProxy = ((CredentialComboBox) getProxy()).getSelectedCredential();
 			GridApplication.getContext().addApplicationComponent(new TrustLevelWindow(selectedService, selectedProxy, this), 500, 400);
 		} catch (Exception e) {
 			ErrorDialog.showError(e);
@@ -274,7 +274,7 @@ public class TrustLevelManagerWindow extends ApplicationComponent implements Tru
 	public void viewModifyLevel() {
 		try {
 			String selectedService = ((GTSServiceListComboBox) getService()).getSelectedService();
-			GlobusCredential selectedProxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
+			GlobusCredential selectedProxy = ((CredentialComboBox) getProxy()).getSelectedCredential();
 			GridApplication.getContext().addApplicationComponent(
 				new TrustLevelWindow(selectedService, selectedProxy, getTrustLevelTable().getSelectedTrustLevel(), this), 500, 400);
 		} catch (Exception e) {
@@ -444,7 +444,7 @@ public class TrustLevelManagerWindow extends ApplicationComponent implements Tru
 	 */
 	private JComboBox getProxy() {
 		if (proxy == null) {
-			proxy = new ProxyComboBox();
+			proxy = new CredentialComboBox();
 		}
 		return proxy;
 	}
@@ -532,7 +532,7 @@ public class TrustLevelManagerWindow extends ApplicationComponent implements Tru
 	private void removeTrustLevel() {
 		try {
 			String selectedService = ((GTSServiceListComboBox) getService()).getSelectedService();
-			GlobusCredential selectedProxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
+			GlobusCredential selectedProxy = ((CredentialComboBox) getProxy()).getSelectedCredential();
 			GTSAdminClient client = new GTSAdminClient(selectedService, selectedProxy);
 			TrustLevel level = getTrustLevelTable().getSelectedTrustLevel();
 			client.removeTrustLevel(level.getName());

@@ -11,7 +11,7 @@ import javax.swing.border.TitledBorder;
 
 import org.cagrid.gaards.cds.client.DelegationAdminClient;
 import org.cagrid.gaards.cds.client.DelegationUserClient;
-import org.cagrid.gaards.ui.common.ProxyComboBox;
+import org.cagrid.gaards.ui.common.CredentialComboBox;
 import org.cagrid.grape.LookAndFeel;
 import org.globus.gsi.GlobusCredential;
 
@@ -25,7 +25,7 @@ public class SessionPanel extends JPanel {
 
 	private JLabel jLabel1 = null;
 
-	private ProxyComboBox cred = null;
+	private CredentialComboBox cred = null;
 
 	/**
 	 * This is the default constructor
@@ -97,16 +97,16 @@ public class SessionPanel extends JPanel {
 	 * 
 	 * @return javax.swing.JComboBox
 	 */
-	private ProxyComboBox getCred() {
+	private CredentialComboBox getCred() {
 		if (cred == null) {
-			cred = new ProxyComboBox();
+			cred = new CredentialComboBox();
 		}
 		return cred;
 	}
 
 	public DelegationAdminClient getAdminClient() throws Exception {
 		String serviceUrl = getService().getSelectedService();
-		GlobusCredential proxyCred = getCred().getSelectedProxy();
+		GlobusCredential proxyCred = getCred().getSelectedCredential();
 		DelegationAdminClient client = new DelegationAdminClient(serviceUrl,
 				proxyCred);
 		return client;
@@ -114,7 +114,7 @@ public class SessionPanel extends JPanel {
 
 	public DelegationUserClient getUserClient() throws Exception {
 		String serviceUrl = getService().getSelectedService();
-		GlobusCredential proxyCred = getCred().getSelectedProxy();
+		GlobusCredential proxyCred = getCred().getSelectedCredential();
 		DelegationUserClient client = new DelegationUserClient(serviceUrl,
 				proxyCred);
 		return client;
@@ -125,7 +125,7 @@ public class SessionPanel extends JPanel {
 	}
 
 	public GlobusCredential getCredential() throws Exception {
-		return getCred().getSelectedProxy();
+		return getCred().getSelectedCredential();
 	}
 
 }

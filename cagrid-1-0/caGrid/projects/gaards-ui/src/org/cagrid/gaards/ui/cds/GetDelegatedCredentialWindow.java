@@ -17,8 +17,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
 import org.cagrid.gaards.cds.client.DelegatedCredentialUserClient;
-import org.cagrid.gaards.ui.common.ProxyManager;
-import org.cagrid.gaards.ui.common.ProxyManagerComponent;
+import org.cagrid.gaards.ui.common.CredentialManager;
+import org.cagrid.gaards.ui.common.CredentialManagerComponent;
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.LookAndFeel;
@@ -358,10 +358,10 @@ public class GetDelegatedCredentialWindow extends ApplicationComponent {
 					getDelegatedCredentials().getSelectedDelegationDescriptor()
 							.getDelegatedCredentialReference());
 			GlobusCredential cred = client.getDelegatedCredential();
-			ProxyManager.getInstance().addProxy(cred);
+			CredentialManager.getInstance().addCredential(cred);
 			dispose();
 			GridApplication.getContext().addApplicationComponent(
-					new ProxyManagerComponent(cred), 700, 450);
+					new CredentialManagerComponent(cred), 700, 450);
 
 		} catch (Exception e) {
 			getGetButton().setEnabled(true);

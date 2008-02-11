@@ -35,8 +35,8 @@ import javax.swing.JTextField;
 
 import org.cagrid.gaards.ui.common.CRLPanel;
 import org.cagrid.gaards.ui.common.CertificatePanel;
-import org.cagrid.gaards.ui.common.ProxyCaddy;
-import org.cagrid.gaards.ui.common.ProxyComboBox;
+import org.cagrid.gaards.ui.common.CredentialCaddy;
+import org.cagrid.gaards.ui.common.CredentialComboBox;
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.LookAndFeel;
@@ -153,7 +153,7 @@ public class TrustedAuthorityWindow extends ApplicationComponent {
 		}
 		initialize();
 		this.gts.setSelectedItem(service);
-		this.proxy.setSelectedItem(new ProxyCaddy(cred));
+		this.proxy.setSelectedItem(new CredentialCaddy(cred));
 		this.updateTrustLevels();
 		this.getTrustedAuthorityName().setText(ta.getName());
 		((StatusComboBox) this.getStatus()).setSelectedItem(ta.getStatus());
@@ -381,7 +381,7 @@ public class TrustedAuthorityWindow extends ApplicationComponent {
 	 */
 	private JComboBox getProxy() {
 		if (proxy == null) {
-			proxy = new ProxyComboBox();
+			proxy = new CredentialComboBox();
 			if (state == VIEW) {
 				proxy.setEnabled(false);
 			}
@@ -778,8 +778,8 @@ public class TrustedAuthorityWindow extends ApplicationComponent {
 				ta.setCRL(new gov.nih.nci.cagrid.gts.bean.X509CRL(CertUtil
 						.writeCRL(crlPanel.getCRL())));
 			}
-			GlobusCredential selectedProxy = ((ProxyComboBox) getProxy())
-					.getSelectedProxy();
+			GlobusCredential selectedProxy = ((CredentialComboBox) getProxy())
+					.getSelectedCredential();
 			String service = ((GTSServiceListComboBox) getGts())
 					.getSelectedService();
 			GTSAdminClient client = new GTSAdminClient(service, selectedProxy);
@@ -807,8 +807,8 @@ public class TrustedAuthorityWindow extends ApplicationComponent {
 				ta.setCRL(new gov.nih.nci.cagrid.gts.bean.X509CRL(CertUtil
 						.writeCRL(crlPanel.getCRL())));
 			}
-			GlobusCredential selectedProxy = ((ProxyComboBox) getProxy())
-					.getSelectedProxy();
+			GlobusCredential selectedProxy = ((CredentialComboBox) getProxy())
+					.getSelectedCredential();
 			String service = ((GTSServiceListComboBox) getGts())
 					.getSelectedService();
 			GTSAdminClient client = new GTSAdminClient(service, selectedProxy);

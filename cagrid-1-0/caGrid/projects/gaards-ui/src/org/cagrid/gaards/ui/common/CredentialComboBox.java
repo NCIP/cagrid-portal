@@ -15,44 +15,44 @@ import org.globus.gsi.GlobusCredential;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public class ProxyComboBox extends JComboBox {
+public class CredentialComboBox extends JComboBox {
 
 	private static final String DEFAULT_PROXY = "Globus Default Proxy";
 
 	private static final String NO_PROXY = "None";
 
-	public ProxyComboBox() {
+	public CredentialComboBox() {
 		this(false);
 	}
 
-	public ProxyComboBox(boolean none) {
-		List creds = ProxyManager.getInstance().getProxies();
+	public CredentialComboBox(boolean none) {
+		List creds = CredentialManager.getInstance().getCredentials();
 		if (none) {
-			addItem(new ProxyCaddy(NO_PROXY, null));
+			addItem(new CredentialCaddy(NO_PROXY, null));
 		}
-		addItem(new ProxyCaddy(DEFAULT_PROXY, null));
+		addItem(new CredentialCaddy(DEFAULT_PROXY, null));
 		for (int i = 0; i < creds.size(); i++) {
-			addItem(new ProxyCaddy((GlobusCredential) creds.get(i)));
+			addItem(new CredentialCaddy((GlobusCredential) creds.get(i)));
 		}
 	}
 
-	public ProxyComboBox(GlobusCredential cred) {
+	public CredentialComboBox(GlobusCredential cred) {
 		this(false);
-		this.setSelectedItem(new ProxyCaddy(cred));
+		this.setSelectedItem(new CredentialCaddy(cred));
 	}
 
-	public ProxyComboBox(GlobusCredential cred, boolean none) {
+	public CredentialComboBox(GlobusCredential cred, boolean none) {
 		this(none);
-		this.setSelectedItem(new ProxyCaddy(cred));
+		this.setSelectedItem(new CredentialCaddy(cred));
 	}
 
-	public ProxyCaddy getSelectedProxyCaddy() {
-		ProxyCaddy caddy = ((ProxyCaddy) this.getSelectedItem());
+	public CredentialCaddy getSelectedCredentialCaddy() {
+		CredentialCaddy caddy = ((CredentialCaddy) this.getSelectedItem());
 		return caddy;
 	}
 
-	public GlobusCredential getSelectedProxy() throws Exception {
-		ProxyCaddy caddy = ((ProxyCaddy) this.getSelectedItem());
+	public GlobusCredential getSelectedCredential() throws Exception {
+		CredentialCaddy caddy = ((CredentialCaddy) this.getSelectedItem());
 		if (caddy.getIdentity().equals(DEFAULT_PROXY)) {
 			try {
 				caddy.setProxy(ProxyUtil.getDefaultProxy());

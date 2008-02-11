@@ -30,11 +30,11 @@
                 <component>
                     <title>Credential Manager</title>
                     <description>Allows the management of grid proxy credentials.</description>
-                    <classname>org.cagrid.gaards.ui.common.ProxyManagerComponent</classname>
+                    <classname>org.cagrid.gaards.ui.common.CredentialManagerComponent</classname>
                     <icon>/certificate.png</icon>
                     <showOnToolBar>true</showOnToolBar>
                     <dimensions>
-                        <width>700</width>
+                        <width>750</width>
                         <height>400</height>
                     </dimensions>
                 </component>

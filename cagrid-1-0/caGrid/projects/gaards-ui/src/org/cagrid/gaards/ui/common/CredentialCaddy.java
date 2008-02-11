@@ -3,19 +3,19 @@ package org.cagrid.gaards.ui.common;
 import org.globus.gsi.GlobusCredential;
 
 
-public class ProxyCaddy {
+public class CredentialCaddy {
 	private GlobusCredential proxy;
 
 	private String identity;
 
 
-	public ProxyCaddy(GlobusCredential cred) {
+	public CredentialCaddy(GlobusCredential cred) {
 		this.identity = cred.getIdentity();
 		this.proxy = cred;
 	}
 
 
-	public ProxyCaddy(String identity, GlobusCredential cred) {
+	public CredentialCaddy(String identity, GlobusCredential cred) {
 		this.identity = identity;
 		this.proxy = cred;
 	}
@@ -50,7 +50,7 @@ public class ProxyCaddy {
 		if (obj == null) {
 			return false;
 		}
-		ProxyCaddy caddy = (ProxyCaddy) obj;
+		CredentialCaddy caddy = (CredentialCaddy) obj;
 		if (this.identity.equals(caddy.getIdentity())) {
 			return true;
 		} else {

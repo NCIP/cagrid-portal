@@ -21,9 +21,9 @@ import org.globus.gsi.GlobusCredential;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public class ProxyManager {
+public class CredentialManager {
 
-	private static ProxyManager instance;
+	private static CredentialManager instance;
 
 	private Map proxies;
 
@@ -34,14 +34,14 @@ public class ProxyManager {
 	private Map proxiesToFile;
 
 
-	private ProxyManager() {
+	private CredentialManager() {
 		this.proxies = new HashMap();
 		this.proxiesToFile = new HashMap();
-		loadProxies();
+		loadCredential();
 	}
 
 
-	public synchronized void loadProxies() {
+	public synchronized void loadCredential() {
 		this.proxies.clear();
 		this.proxiesToFile.clear();
 		String dir = Utils.getCaGridUserHome() + File.separator + File.separator + "proxy";
@@ -100,15 +100,15 @@ public class ProxyManager {
 	}
 
 
-	public static ProxyManager getInstance() {
+	public static CredentialManager getInstance() {
 		if (instance == null) {
-			instance = new ProxyManager();
+			instance = new CredentialManager();
 		}
 		return instance;
 	}
 
 
-	public synchronized void addProxy(GlobusCredential cred) throws Exception {
+	public synchronized void addCredential(GlobusCredential cred) throws Exception {
 		proxies.put(cred.getIdentity(), cred);
 		lastId = lastId + 1;
 		File f = new File(proxyDir.getAbsolutePath() + File.separator + lastId + ".proxy");
@@ -117,7 +117,7 @@ public class ProxyManager {
 	}
 
 
-	public synchronized void deleteProxy(GlobusCredential cred) {
+	public synchronized void deleteCredential(GlobusCredential cred) {
 		proxies.remove(cred.getIdentity());
 		File f = (File) proxiesToFile.get(cred.getIdentity());
 		f.delete();
@@ -125,14 +125,14 @@ public class ProxyManager {
 	}
 
 
-	public synchronized List getProxies() {
-		loadProxies();
+	public synchronized List getCredentials() {
+		loadCredential();
 		List l = new ArrayList();
 		Iterator itr = this.proxies.values().iterator();
 		while (itr.hasNext()) {
 			GlobusCredential cred = (GlobusCredential) itr.next();
 			if (cred.getTimeLeft() == 0) {
-				deleteProxy(cred);
+				deleteCredential(cred);
 			} else {
 				l.add(cred);
 			}

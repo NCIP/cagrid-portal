@@ -19,7 +19,7 @@ import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 import javax.swing.border.TitledBorder;
 
-import org.cagrid.gaards.ui.common.ProxyComboBox;
+import org.cagrid.gaards.ui.common.CredentialComboBox;
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.LookAndFeel;
@@ -279,7 +279,7 @@ public class AuthorityManagerWindow extends ApplicationComponent implements Auth
 		try {
 
 			String selectedService = ((GTSServiceListComboBox) getService()).getSelectedService();
-			GlobusCredential selectedProxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
+			GlobusCredential selectedProxy = ((CredentialComboBox) getProxy()).getSelectedCredential();
 			GridApplication.getContext().addApplicationComponent(new AuthorityWindow(selectedService, selectedProxy, this), 600, 400);
 		} catch (Exception e) {
 			ErrorDialog.showError(e);
@@ -290,7 +290,7 @@ public class AuthorityManagerWindow extends ApplicationComponent implements Auth
 	public void viewModifyAuthority() {
 		try {
 			String selectedService = ((GTSServiceListComboBox) getService()).getSelectedService();
-			GlobusCredential selectedProxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
+			GlobusCredential selectedProxy = ((CredentialComboBox) getProxy()).getSelectedCredential();
 			GridApplication.getContext().addApplicationComponent(
 				new AuthorityWindow(selectedService, selectedProxy, getAuthorityTable().getSelectedAuthority(), this), 600, 400);
 		} catch (Exception e) {
@@ -463,7 +463,7 @@ public class AuthorityManagerWindow extends ApplicationComponent implements Auth
 	 */
 	private JComboBox getProxy() {
 		if (proxy == null) {
-			proxy = new ProxyComboBox();
+			proxy = new CredentialComboBox();
 		}
 		return proxy;
 	}
@@ -551,7 +551,7 @@ public class AuthorityManagerWindow extends ApplicationComponent implements Auth
 	private void removeAuthority() {
 		try {
 			String selectedService = ((GTSServiceListComboBox) getService()).getSelectedService();
-			GlobusCredential selectedProxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
+			GlobusCredential selectedProxy = ((CredentialComboBox) getProxy()).getSelectedCredential();
 			GTSAdminClient client = new GTSAdminClient(selectedService, selectedProxy);
 			AuthorityGTS gts = this.getAuthorityTable().getSelectedAuthority();
 			client.removeAuthority(gts.getServiceURI());
@@ -568,7 +568,7 @@ public class AuthorityManagerWindow extends ApplicationComponent implements Auth
 		try {
 			disableAllActions();
 			String selectedService = ((GTSServiceListComboBox) getService()).getSelectedService();
-			GlobusCredential selectedProxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
+			GlobusCredential selectedProxy = ((CredentialComboBox) getProxy()).getSelectedCredential();
 			GTSAdminClient client = new GTSAdminClient(selectedService, selectedProxy);
 			client.updateAuthorityPriorities(getAuthorityTable().getPriorityUpdate());
 			GridApplication.getContext().showMessage("Successfully updated the authority priorities!!!");

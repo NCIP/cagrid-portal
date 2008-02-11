@@ -13,8 +13,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
 
-import org.cagrid.gaards.ui.common.ProxyCaddy;
-import org.cagrid.gaards.ui.common.ProxyComboBox;
+import org.cagrid.gaards.ui.common.CredentialCaddy;
+import org.cagrid.gaards.ui.common.CredentialComboBox;
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.LookAndFeel;
@@ -62,7 +62,7 @@ public class AddPermissionWindow extends ApplicationComponent {
 		this.refresher = refresher;
 		initialize();
 		this.gts.setSelectedItem(service);
-		this.proxy.setSelectedItem(new ProxyCaddy(cred));
+		this.proxy.setSelectedItem(new CredentialCaddy(cred));
 		syncServices();
 	}
 
@@ -198,7 +198,7 @@ public class AddPermissionWindow extends ApplicationComponent {
 	 */
 	private JComboBox getProxy() {
 		if (proxy == null) {
-			proxy = new ProxyComboBox();
+			proxy = new CredentialComboBox();
 		}
 		return proxy;
 	}
@@ -273,7 +273,7 @@ public class AddPermissionWindow extends ApplicationComponent {
 	private void addPermission() {
 		try {
 			getAddButton().setEnabled(false);
-			GlobusCredential selectedProxy = ((ProxyComboBox) getProxy()).getSelectedProxy();
+			GlobusCredential selectedProxy = ((CredentialComboBox) getProxy()).getSelectedCredential();
 			String service = ((GTSServiceListComboBox) getGts()).getSelectedService();
 			GTSAdminClient client = new GTSAdminClient(service, selectedProxy);
 			client.addPermission(permissionPanel.getPermission());

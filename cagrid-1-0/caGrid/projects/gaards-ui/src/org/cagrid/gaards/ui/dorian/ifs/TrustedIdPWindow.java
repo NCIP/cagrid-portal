@@ -29,8 +29,8 @@ import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
 import org.cagrid.gaards.ui.common.CertificatePanel;
-import org.cagrid.gaards.ui.common.ProxyCaddy;
-import org.cagrid.gaards.ui.common.ProxyComboBox;
+import org.cagrid.gaards.ui.common.CredentialCaddy;
+import org.cagrid.gaards.ui.common.CredentialComboBox;
 import org.cagrid.gaards.ui.dorian.DorianLookAndFeel;
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
@@ -43,7 +43,7 @@ import org.globus.gsi.GlobusCredential;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: TrustedIdPWindow.java,v 1.1 2007-09-24 19:09:38 langella Exp $
+ * @version $Id: TrustedIdPWindow.java,v 1.2 2008-02-11 19:24:51 langella Exp $
  */
 public class TrustedIdPWindow extends ApplicationComponent {
 	public static final String PASSWORD = SAMLAuthenticationMethod.value1.getValue();
@@ -417,7 +417,7 @@ public class TrustedIdPWindow extends ApplicationComponent {
 			idp.setEmailAttributeDescriptor(emailDes);
 
 			String serviceUrl = getService().getText();
-			GlobusCredential c = ((ProxyCaddy) getProxy().getSelectedItem()).getProxy();
+			GlobusCredential c = ((CredentialCaddy) getProxy().getSelectedItem()).getProxy();
 			IFSAdministrationClient client = new IFSAdministrationClient(serviceUrl, c);
 			if (newTrustedIdP) {
 				window.addTrustedIdP(client.addTrustedIdP(idp));
@@ -635,7 +635,7 @@ public class TrustedIdPWindow extends ApplicationComponent {
 	 */
 	private JComboBox getProxy() {
 		if (proxy == null) {
-			proxy = new ProxyComboBox(cred);
+			proxy = new CredentialComboBox(cred);
 		}
 		return proxy;
 	}
