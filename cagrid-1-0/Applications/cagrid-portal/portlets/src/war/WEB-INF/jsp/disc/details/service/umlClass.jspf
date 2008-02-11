@@ -10,10 +10,6 @@
 			<td><c:out value="${umlClass.packageName}"/></td>
 		</tr>
 		<tr>
-			<td class="detailslabelcell">caDSR ID:</td>
-			<td><c:out value="${umlClass.cadsrId}"/></td>
-		</tr>
-		<tr>
 			<td class="detailslabelcell">Description:</td>
 			<td><c:out value="${umlClass.description}"/></td>
 		</tr>
