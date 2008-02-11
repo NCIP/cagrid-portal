@@ -39,7 +39,7 @@ public abstract class IntroduceConstants {
 
 	public static final String INTRODUCE_DEFAULT_INDEX_SERVICE_PROPERTY = "introduce.default.index.service";
 
-	public static final String INTRODUCE_ENGINE_PROPERTIES = "conf/introduce/introduce.engine.properties";
+	public static final String INTRODUCE_ENGINE_PROPERTIES = "conf/introduce.engine.properties";
 
 	public static final String GLOBUS_LOCATION = "Globus Location";
 

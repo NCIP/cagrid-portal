@@ -60,7 +60,7 @@ import javax.swing.tree.DefaultTreeModel;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella</A>
  * 
  * @created Nov 17, 2004 
- * @version $Id: NamespacesTreeRenderer.java,v 1.4 2006-03-22 17:28:01 hastings Exp $ 
+ * @version $Id: NamespacesTreeRenderer.java,v 1.5 2008-02-11 20:35:43 hastings Exp $ 
  */
 public class NamespacesTreeRenderer extends DefaultTreeCellRenderer {
 	DefaultTreeModel model = null;
@@ -85,15 +85,15 @@ public class NamespacesTreeRenderer extends DefaultTreeCellRenderer {
 		this.setFont(normal);
 		if (value instanceof NamespaceTypeTreeNode) {
 			NamespaceTypeTreeNode node = (NamespaceTypeTreeNode) value;
-			this.setIcon(node.getOpenIcon());
-			//this.setOpenIcon(node.getOpenIcon());
-			//this.setClosedIcon(node.getClosedIcon());
+			//this.setIcon(node.getOpenIcon());
+			this.setOpenIcon(node.getOpenIcon());
+			this.setClosedIcon(node.getClosedIcon());
 			this.setFont(normal.deriveFont(Font.BOLD,12));
 			this.setText(node.toString());
 		} else if (value instanceof SchemaElementTypeTreeNode) {
 			SchemaElementTypeTreeNode node = (SchemaElementTypeTreeNode) value;
 			this.setIcon(node.getOpenIcon());
-			this.setFont(normal.deriveFont(Font.ITALIC));
+			this.setFont(normal.deriveFont(Font.PLAIN,12));
 			//this.setOpenIcon(null);
 			//this.setClosedIcon(null);
 			this.setText(node.toString());
@@ -102,7 +102,7 @@ public class NamespacesTreeRenderer extends DefaultTreeCellRenderer {
 			this.setOpenIcon(null);
 			this.setClosedIcon(null);
 			this.setText(node.toString());
-			this.setFont(normal.deriveFont(Font.BOLD,15));
+			this.setFont(normal.deriveFont(Font.BOLD,14));
 		} 
 		return this;
 	}

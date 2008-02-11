@@ -43,6 +43,11 @@
 
 package gov.nih.nci.cagrid.introduce.portal.modification.types;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
@@ -63,13 +68,23 @@ import javax.swing.tree.DefaultTreeModel;
  *          Exp $
  */
 public class NamespaceTypeTreeNode extends DefaultMutableTreeNode {
+	
+	public class SchemaElementTypeSorter implements Comparator<SchemaElementType>{
+
+		public int compare(SchemaElementType o1, SchemaElementType o2) {
+			return o1.getType().toLowerCase().compareTo(o2.getType().toLowerCase());
+		}
+		
+	}
 
 	public NamespaceTypeTreeNode(NamespaceType namespaceType,DefaultTreeModel model) {
 		super();
 		this.setUserObject(namespaceType);
 		if(namespaceType != null && namespaceType.getSchemaElement()!=null){
-			for(int i = 0; i < namespaceType.getSchemaElement().length; i++){
-				SchemaElementType type = namespaceType.getSchemaElement(i);
+			List<SchemaElementType> schemaTypes = Arrays.asList(namespaceType.getSchemaElement());
+			Collections.sort(schemaTypes,new SchemaElementTypeSorter());
+			for(int i = 0; i < schemaTypes.size(); i++){
+				SchemaElementType type = schemaTypes.get(i);
 				model.insertNodeInto(new SchemaElementTypeTreeNode(type),this,this.getChildCount());
 			}
 		}
@@ -80,7 +95,7 @@ public class NamespaceTypeTreeNode extends DefaultMutableTreeNode {
 	}
 	
 	public ImageIcon getClosedIcon(){
-		return IntroduceLookAndFeel.getNamespaceIcon();
+		return IntroduceLookAndFeel.getClosedNamespaceIcon();
 	}
 	
 	public String toString(){

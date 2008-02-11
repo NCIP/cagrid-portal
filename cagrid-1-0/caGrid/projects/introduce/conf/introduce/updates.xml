@@ -1,8 +1,0 @@
-<packages>
-	<package version="1.1">
-		<extensions>
-			<extension name="Bulk Data Transfer">
-			</extension>
-		</extensions>
-	</package>
-</packages>

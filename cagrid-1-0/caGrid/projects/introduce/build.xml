@@ -9,7 +9,7 @@
     <import file="${antfiles.dir}/build-portal.xml" />
     <import file="${antfiles.dir}/build-updater.xml" />
     <import file="${antfiles.dir}/introduce-utils.xml" />
-    <import file="install/introduce-release.xml" />
+    <import file="${antfiles.dir}/introduce-release.xml" />
     <!-- Load test files -->
     <import file="test/test.xml" />
 
@@ -70,7 +70,7 @@
     <target name="configure" description="Configures the project based on settings.">
         <copy todir="${basedir}" overwrite="true">
             <fileset dir="${basedir}">
-                <include name="conf/**/*.template" />
+                <include name="conf/*.template" />
                 <include name="extensions/**/*.template" />
             </fileset>
             <mapper type="glob" from="*.template" to="*" />
@@ -79,8 +79,8 @@
         </copy>
 
         <!-- TODO: check that we actually created the critical files we need at runtime-->
-        <available file="${conf.dir}/introduce/introduce.engine.properties" property="introduce.engine.properties.available" />
-        <fail message="Critical configuration file [${conf.dir}/introduce/introduce.engine.properties] not found!" unless="introduce.engine.properties.available" />
+        <available file="${conf.dir}/introduce.engine.properties" property="introduce.engine.properties.available" />
+        <fail message="Critical configuration file [${conf.dir}/introduce.engine.properties] not found!" unless="introduce.engine.properties.available" />
     </target>
 
 

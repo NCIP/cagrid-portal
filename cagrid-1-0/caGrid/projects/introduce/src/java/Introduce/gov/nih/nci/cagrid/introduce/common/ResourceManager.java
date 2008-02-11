@@ -36,15 +36,13 @@ public class ResourceManager {
     private static final Logger logger = Logger.getLogger(ResourceManager.class);
     public static final int MAX_ARCHIVE = 5;
 
-    public final static String PORTAL_CONFIG_FILE = "introduce-portal-conf.xml";
-
     public final static String SERVICE_URL_FILE = "service_urls.properties";
 
     public final static String CONFIG_PROPERTIES_FILE = "configuration.properties";
+    
+    public final static String STATE_FILE = "introduce.state.properties";
 
     public final static String CACHE_POSTFIX = "_backup.zip";
-
-    public final static String STATE_FILE = "introduce.state.resources";
 
     public final static String LAST_DIRECTORY = "introduce.lastdir";
 
@@ -69,6 +67,13 @@ public class ResourceManager {
         File introduceCache = getIntroduceUserHome();
         introduceCache.mkdir();
         return introduceCache.getAbsolutePath();
+    }
+    
+    
+    public static String getServiceCachePath() {
+        File introduceServiceCache = new File(getResourcePath() + File.separator + "serviceCache");
+        introduceServiceCache.mkdir();
+        return introduceServiceCache.getAbsolutePath();
     }
 
 
@@ -165,37 +170,6 @@ public class ResourceManager {
     }
 
 
-    public static String getPortalConfigFileLocation() {
-        if (!new File(getResourcePath() + File.separator + PORTAL_CONFIG_FILE).exists()) {
-            // need to copy over the example configuration file to the users
-            // space
-            try {
-                Utils.copyFile(new File("conf" + File.separator + "introduce" + File.separator
-                    + "introduce-portal-conf.xml.example"), new File(getResourcePath() + File.separator
-                    + PORTAL_CONFIG_FILE));
-            } catch (Exception e) {
-                System.err
-                    .println("FATAL ERROR: "
-                        + "the introduce installation seems to be corrupt.  The default configuration file (conf"
-                        + File.separator
-                        + "introduce"
-                        + File.separator
-                        + "introduce-portal-conf.xml.example) is either missing or there is not write access to the users home directory.");
-                e.printStackTrace();
-                System.exit(1);
-            }
-        }
-        return new File(getResourcePath() + File.separator + PORTAL_CONFIG_FILE).getAbsolutePath();
-    }
-
-
-    public static void setConfigFile(Document doc) throws IOException, Exception {
-        FileWriter fw = new FileWriter(getPortalConfigFileLocation());
-        fw.write(XMLUtilities.formatXML(XMLUtilities.documentToString(doc)));
-        fw.close();
-    }
-
-
     public static String getStateProperty(String key) throws IOException {
         File lastDir = new File(getResourcePath() + File.separator + STATE_FILE);
         Properties properties = new Properties();
@@ -222,7 +196,7 @@ public class ResourceManager {
 
 
     public static synchronized void purgeArchives(String serviceName) {
-        String introduceCache = getResourcePath();
+        String introduceCache = getServiceCachePath();
 
         final String finalServiceName = serviceName;
         FilenameFilter f = new FilenameFilter() {
@@ -250,7 +224,7 @@ public class ResourceManager {
         throws FileNotFoundException, IOException {
         File dir = new File(baseDir);
 
-        String introduceCache = getResourcePath();
+        String introduceCache = getServiceCachePath();
 
         // Create the ZIP file
         String outFilename = introduceCache + File.separator + serviceName + "_" + id + CACHE_POSTFIX;
@@ -264,7 +238,7 @@ public class ResourceManager {
 
 
     private static void cleanup(String serviceName) {
-        String introduceCache = getResourcePath();
+        String introduceCache = getServiceCachePath();
 
         final String finalServiceName = serviceName;
         FilenameFilter f = new FilenameFilter() {
@@ -300,7 +274,7 @@ public class ResourceManager {
                 + "May be unused new files leftover.");
         }
 
-        File introduceCache = new File(getResourcePath());
+        File introduceCache = new File(getServiceCachePath());
         introduceCache.mkdir();
         File cachedFile = new File(introduceCache.getAbsolutePath() + File.separator + serviceName + "_" + currentId
             + CACHE_POSTFIX);
@@ -313,7 +287,7 @@ public class ResourceManager {
     
     public static String[] getBackups(String serviceName){
     	
-    	File introduceCache = new File(getResourcePath());
+    	File introduceCache = new File(getServiceCachePath());
         final String finalServiceName = serviceName;
         FilenameFilter f = new FilenameFilter() {
             public boolean accept(File dir, String name) {
@@ -329,7 +303,7 @@ public class ResourceManager {
 
     public static synchronized void restoreLatest(String currentId, String serviceName, String baseDir)
         throws FileNotFoundException, IOException, Exception {
-    	File introduceCache = new File(getResourcePath());
+    	File introduceCache = new File(getServiceCachePath());
         String[] cacheFiles = getBackups(serviceName);
         
         long thisTime = Long.parseLong(currentId);

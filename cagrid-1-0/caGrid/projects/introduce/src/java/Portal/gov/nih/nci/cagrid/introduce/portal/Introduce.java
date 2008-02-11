@@ -6,6 +6,7 @@ import gov.nih.nci.cagrid.introduce.common.ResourceManager;
 
 import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.io.File;
 
 import javax.swing.JFrame;
 
@@ -41,7 +42,7 @@ public final class Introduce {
             showIntroduceSplash();
 
             if (confFile == null) {
-                confFile = ResourceManager.getPortalConfigFileLocation();
+                confFile = "conf" + File.separator + "introduce" + File.separator + "introduce-portal-conf.xml";
             }
 
             Application app = (Application) Utils.deserializeDocument(confFile, Application.class);
