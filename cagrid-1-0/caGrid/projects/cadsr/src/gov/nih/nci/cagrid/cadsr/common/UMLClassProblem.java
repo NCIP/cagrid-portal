@@ -8,7 +8,7 @@ package gov.nih.nci.cagrid.cadsr.common;
  * @author David Ervin
  * 
  * @created Feb 8, 2008 9:54:09 AM
- * @version $Id: UMLClassProblem.java,v 1.1 2008-02-08 16:36:49 dervin Exp $ 
+ * @version $Id: UMLClassProblem.java,v 1.2 2008-02-11 15:30:03 dervin Exp $ 
  */
 public class UMLClassProblem extends ModelProblem {
     
@@ -32,19 +32,24 @@ public class UMLClassProblem extends ModelProblem {
     }
     
     
-    public String toString() {
-        StringBuffer buf = new StringBuffer();
-        buf.append("UMLClassProblem:\n");
-        buf.append("\tPackage: ").append(packageName).append("\n");
-        buf.append("\tClass: ").append(className).append("\n");
-        buf.append("\tDescription: ").append(classDescription).append("\n");
-        buf.append("\tErrors at chars: ");
+    public void writeToBuffer(StringBuffer buff) {
+        buff.append("UMLClassProblem:\n");
+        buff.append("\tPackage: ").append(packageName).append("\n");
+        buff.append("\tClass: ").append(className).append("\n");
+        buff.append("\tDescription: ").append(classDescription).append("\n");
+        buff.append("\tErrors at chars: ");
         for (int i = 0; i < errorIndices.length; i++) {
-            buf.append(errorIndices[i]);
+            buff.append(errorIndices[i]);
             if (i + 1 < errorIndices.length) {
-                buf.append(", ");
+                buff.append(", ");
             }
         }
-        return buf.toString();
+    }
+    
+    
+    public String toString() {
+        StringBuffer buff = new StringBuffer();
+        writeToBuffer(buff);
+        return buff.toString();
     }
 }
