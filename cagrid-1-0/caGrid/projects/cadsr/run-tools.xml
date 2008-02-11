@@ -14,4 +14,13 @@
             <arg value="${service.url}" />
         </java>
     </target>
+	
+	<target name="runCadsrModelProblemFinder" depends="checkGlobus, defineClasspaths" description="Runs the caDSR Model Problems finder GUI">
+		<java classname="gov.nih.nci.cagrid.cadsr.portal.CadsrModelProblemFinder" fork="yes">
+			<classpath refid="run.classpath"/>
+			<classpath>
+				<pathelement location="${portal.build.dest}"/>
+			</classpath>
+		</java>
+	</target>
 </project>
