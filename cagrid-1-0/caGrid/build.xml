@@ -915,13 +915,6 @@
 		<ant dir="${projects.dir}/wsEnum" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
 
-	<!-- =============================================================== -->
-	<!-- CAGRID WS-TRANSFER:                                             	 -->
-	<!-- =============================================================== -->
-	<target name="build-ws-transfer" depends="prepare" description="Builds caGrid WS-transfer components">
-		<ant dir="${projects.dir}/ws-transfer" inheritAll="false" antfile="build.xml" target="deploy" />
-	</target>
-
 
 	<!-- =============================================================== -->
 	<!-- CAGRID SDK Data Service Query Processor:                        -->
