@@ -22,13 +22,11 @@ import org.apache.log4j.Logger;
  * @author David Ervin
  * 
  * @created Feb 8, 2008 9:49:12 AM
- * @version $Id: ModelProblemsUtil.java,v 1.1 2008-02-08 16:36:49 dervin Exp $ 
+ * @version $Id: ModelProblemsUtil.java,v 1.2 2008-02-11 15:29:47 dervin Exp $ 
  */
 public class ModelProblemsUtil {
     
-    /**
-     * Comment for <code>DEFAULT_CADSR_APPLICATION_URL</code>
-     */
+    // default URL of the cadsr application service
     public static final String DEFAULT_CADSR_APPLICATION_URL = "http://cabio.nci.nih.gov/cacore31/http/remoteService";
 
     private static final Logger LOG = Logger.getLogger(ModelProblemsUtil.class);
