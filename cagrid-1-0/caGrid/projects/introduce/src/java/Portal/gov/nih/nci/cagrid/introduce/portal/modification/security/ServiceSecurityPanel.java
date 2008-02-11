@@ -44,7 +44,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JTabbedPane;
 
 import org.cagrid.gaards.ui.common.CertificatePanel;
-import org.cagrid.gaards.ui.common.ProxyPanel;
+import org.cagrid.gaards.ui.common.CredentialPanel;
 import org.cagrid.gaards.ui.gridgrouper.expressioneditor.GridGrouperExpressionEditor;
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.utils.CompositeErrorDialog;
@@ -150,7 +150,7 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 
     private CertificatePanel certificatePanel = null;
 
-    private ProxyPanel proxyPanel = null;
+    private CredentialPanel proxyPanel = null;
 
     private boolean isSyncingRunAs = false;
 
@@ -1047,9 +1047,9 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
      * 
      * @return javax.swing.JPanel
      */
-    private ProxyPanel getProxyPanel() {
+    private CredentialPanel getProxyPanel() {
         if (proxyPanel == null) {
-            proxyPanel = new ProxyPanel();
+            proxyPanel = new CredentialPanel();
         }
         return proxyPanel;
     }
