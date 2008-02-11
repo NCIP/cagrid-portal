@@ -782,6 +782,7 @@
 			<artifact refid="core.jars" />
 			<artifact refid="core.test.jars" />
 			<artifact refid="core.resources" />
+			<artifact refid="caCORE.jars"/>
 			<artifact refid="common.metadata.jars"/>
 			<artifact refid="common.test.jars" />
 			<artifact refid="test.coverage.jars" />
