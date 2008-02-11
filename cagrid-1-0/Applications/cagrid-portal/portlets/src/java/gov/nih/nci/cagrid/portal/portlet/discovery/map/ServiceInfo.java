@@ -28,7 +28,7 @@ public class ServiceInfo {
 		setName(service.getServiceMetadata().getServiceDescription().getName());
 		ResearchCenter rc = service.getServiceMetadata().getHostingResearchCenter();
 		if(rc != null){
-			setCenter(rc.getDisplayName());
+			setCenter(rc.getShortName());
 		}
 		setStatus(service.getCurrentStatus().toString());
 		setUrl(service.getUrl());
