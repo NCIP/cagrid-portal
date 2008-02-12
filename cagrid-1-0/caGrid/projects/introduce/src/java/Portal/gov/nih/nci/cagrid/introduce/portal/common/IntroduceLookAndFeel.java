@@ -17,6 +17,15 @@ import javax.swing.ImageIcon;
  */
 public class IntroduceLookAndFeel extends PortalLookAndFeel {
 
+	
+    public final static ImageIcon getPluginIcon() {
+        return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/plugin.png"));
+    }
+    
+    public final static ImageIcon getPropertiesIcon() {
+        return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/edit_small.png"));
+    }
+    
     public final static ImageIcon getResyncIcon() {
         return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/view-refresh.png"));
     }
@@ -137,6 +146,10 @@ public class IntroduceLookAndFeel extends PortalLookAndFeel {
 
     public static final Icon getDiscoveryToolsIcon() {
         return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/models.png"));
+    }
+    
+    public static final Icon getTypesIcon() {
+        return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/models_small.png"));
     }
 
 

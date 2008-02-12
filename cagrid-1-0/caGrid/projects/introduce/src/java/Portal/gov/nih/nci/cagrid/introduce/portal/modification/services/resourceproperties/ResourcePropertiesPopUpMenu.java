@@ -61,7 +61,7 @@ public class ResourcePropertiesPopUpMenu extends JPopupMenu {
 
 
     public static void modifyResourceProperties(ResourcePropertiesTypeTreeNode node) {
-        ModifyResourcePropertiesComponent comp = new ModifyResourcePropertiesComponent(node.getService(), node
+        ModifyResourcePropertiesComponent comp = new ModifyResourcePropertiesComponent(node.getService(), node.getInfo(), node
             .getInfo().getNamespaces(), new File(node.getInfo().getBaseDirectory().getAbsolutePath() + File.separator
             + "etc"), new File(node.getInfo().getBaseDirectory().getAbsolutePath() + File.separator + "schema"
             + File.separator + node.getInfo().getServices().getService(0).getName()), true);

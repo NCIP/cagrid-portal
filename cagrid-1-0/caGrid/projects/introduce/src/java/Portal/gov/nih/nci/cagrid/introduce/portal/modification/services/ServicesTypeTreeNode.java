@@ -31,7 +31,7 @@ public class ServicesTypeTreeNode extends DefaultMutableTreeNode implements Popu
 		super();
 		this.info = info;
 		menu = new ServicesPopUpMenu(this);
-		this.setUserObject("Service Contexts");
+		this.setUserObject("Services");
 
 	}
 

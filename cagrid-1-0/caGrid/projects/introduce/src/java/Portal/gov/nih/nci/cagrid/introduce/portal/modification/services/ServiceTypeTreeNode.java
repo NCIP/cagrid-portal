@@ -121,7 +121,12 @@ public class ServiceTypeTreeNode extends DefaultMutableTreeNode implements Popup
 
 
 	public String toString() {
-		return ((ServiceType) this.getUserObject()).getName();
+		if(((ServiceType) this.getUserObject()).getName().equals(info.getServices().getService(0).getName())){
+			return ((ServiceType) this.getUserObject()).getName() + " (Main Service)";
+		} else {
+			return ((ServiceType) this.getUserObject()).getName() + " (Service Context)";
+		}
+		
 	}
 	
 	public JPopupMenu getPopUpMenu() {

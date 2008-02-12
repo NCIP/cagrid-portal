@@ -2,6 +2,7 @@ package gov.nih.nci.cagrid.introduce.portal.modification.services.resourceproper
 
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespacesType;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
+import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
 
 import java.awt.GridBagConstraints;
@@ -16,25 +17,34 @@ import javax.swing.JPanel;
 
 import org.cagrid.grape.GridApplication;
 
-
 public class ModifyResourcePropertiesComponent extends JDialog {
 
 	private JPanel mainPanel = null;
+
 	private JPanel resourcesPanel = null;
+
 	private JPanel buttonPanel = null;
+
 	private NamespacesType namespaces;
+
 	private JButton doneButton = null;
+
 	private boolean showW3Cnamespaces;
+
 	private ServiceType service;
+
 	private File etcDir;
+
 	private File schemaDir;
 
+	private ServiceInformation info;
 
 	/**
 	 * This method initializes
 	 */
-	public ModifyResourcePropertiesComponent(ServiceType service, NamespacesType namespaces, File etcDir,
-		File schemaDir, boolean showW3Cnamespaces) {
+	public ModifyResourcePropertiesComponent(ServiceType service,
+			ServiceInformation info, NamespacesType namespaces, File etcDir,
+			File schemaDir, boolean showW3Cnamespaces) {
 		super(GridApplication.getContext().getApplication());
 		this.setModal(true);
 		this.service = service;
@@ -42,9 +52,9 @@ public class ModifyResourcePropertiesComponent extends JDialog {
 		this.schemaDir = schemaDir;
 		this.namespaces = namespaces;
 		this.showW3Cnamespaces = showW3Cnamespaces;
+		this.info = info;
 		initialize();
 	}
-
 
 	/**
 	 * This method initializes this
@@ -54,7 +64,6 @@ public class ModifyResourcePropertiesComponent extends JDialog {
 		this.setContentPane(getMainPanel());
 		GridApplication.getContext().centerDialog(this);
 	}
-
 
 	/**
 	 * This method initializes mainPanel
@@ -83,7 +92,6 @@ public class ModifyResourcePropertiesComponent extends JDialog {
 		return mainPanel;
 	}
 
-
 	/**
 	 * This method initializes resourcesPanel
 	 * 
@@ -91,12 +99,16 @@ public class ModifyResourcePropertiesComponent extends JDialog {
 	 */
 	private JPanel getResourcesPanel() {
 		if (resourcesPanel == null) {
-			resourcesPanel = new ModifyResourcePropertiesPanel(service, namespaces, etcDir, schemaDir,
-				showW3Cnamespaces,false);
+			if (info.getServices().getService(0).getName().equals(service.getName())) {
+				resourcesPanel = new ModifyResourcePropertiesPanel(service,
+						namespaces, etcDir, schemaDir, showW3Cnamespaces, true);
+			} else {
+				resourcesPanel = new ModifyResourcePropertiesPanel(service,
+						namespaces, etcDir, schemaDir, showW3Cnamespaces, false);
+			}
 		}
 		return resourcesPanel;
 	}
-
 
 	/**
 	 * This method initializes buttonPanel
@@ -114,7 +126,6 @@ public class ModifyResourcePropertiesComponent extends JDialog {
 		}
 		return buttonPanel;
 	}
-
 
 	/**
 	 * This method initializes doneButton

@@ -42,7 +42,7 @@ public class ServicesJTree extends JTree {
 		this.optionsPanel = optionsPanel;
 		setCellRenderer(new ServicesTreeRenderer());
 		setServices(services, info);
-		setRootVisible(false);
+		//setRootVisible(false);
 		this.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 				super.mouseClicked(e);
