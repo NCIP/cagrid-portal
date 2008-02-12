@@ -409,7 +409,7 @@
 
 
 	<!-- Build and install extensions for introduce -->
-	<target name="installIntroduceExtensions" description="Builds and installs the Data Services extensions into Introduce.">
+	<target name="installIntroduceExtensions" depends="defineContribTasks" description="Builds and installs the Data Services extensions into Introduce.">
 		<mkdir dir="${introduce.extensions.dir}/data" />
 		<mkdir dir="${introduce.extensions.dir}/data/lib" />
 		<mkdir dir="${introduce.extensions.dir}/data/schema/Data" />
@@ -454,6 +454,7 @@
 		<copy todir="${introduce.extensions.dir}/data">
 			<fileset dir="${extension.dir}">
 				<include name="**/*" />
+				<exclude name="cacore32/**"/>
 			    <exclude name="*.template" />
 			</fileset>
 		</copy>
@@ -467,6 +468,7 @@
 				<!-- CANNOT USE A PROPERTY, since they are immutable once set -->
 				<var name="style.dest.dir" value="${introduce.extensions.dir}/data/styles/@{style.name}"/>
 				<var name="style.description" value="${basedir}/styles/@{style.name}/style.xml"/>
+				<var name="style.extension.lib.dir" value="${basedir}/extension/@{style.name}/ext/lib"/>
 				<var name="style.lib.file" value="${build.jars.dir}/${project.jar.prefix}style${cagrid.master.jar.separator}@{style.name}.jar"/>
 				<!-- make requisite directories -->
 				<delete dir="${style.dest.dir}"/>
@@ -478,6 +480,15 @@
 				<copy todir="${style.dest.dir}/lib" file="${style.lib.file}"/>
 				<!-- copy the SDK common style jar file -->
 				<copy todir="${style.dest.dir}/lib" file="${sdkstyle.jar.file}"/>
+				<!-- copy the style's ext libs into the style dest lib dir -->
+				<condition property="style.ext.exists">
+					<available file="${style.extension.lib.dir}" type="dir"/>
+				</condition>
+				<copy todir="${style.dest.dir}/lib" failonerror="${style.ext.exists}">
+					<fileset dir="${style.extension.lib.dir}">
+						<include name="**/*.jar"/>
+					</fileset>
+				</copy>
 			</sequential>
 		</for>
 	</target>
