@@ -853,6 +853,10 @@
 		<resolveDependencies extdir="${projects.dir}/dataExtensions/extension/sdk32">
 			<artifact refid="sdk.32.query.jars" />
 		</resolveDependencies>
+		<!-- SDK 32 style needs authz jars -->
+		<resolveDependencies extdir="${projects.dir}/dataExtensions/extension/cacore32/ext">
+			<artifact refid="authz.jars" />
+		</resolveDependencies>
 		<ant dir="${projects.dir}/dataExtensions" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
 
