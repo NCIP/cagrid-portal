@@ -38,7 +38,7 @@ import org.apache.tools.ant.Task;
 public class SkeletonCreator extends Task {
 
     public SkeletonCreator() {
-        PropertyConfigurator.configure("." + File.separator + "conf" + File.separator + "introduce" + File.separator
+        PropertyConfigurator.configure("." + File.separator + "conf" + File.separator
             + "log4j.properties");
     }
 

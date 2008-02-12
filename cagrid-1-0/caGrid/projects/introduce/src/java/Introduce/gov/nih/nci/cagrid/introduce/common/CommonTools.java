@@ -773,6 +773,26 @@ public final class CommonTools {
     }
 
 
+    public static void removeResourceProperty(ServiceType service, QName resourcePropertyType) {
+        // remove from resource properties list
+        ResourcePropertyType[] metadatas;
+        if (service.getResourcePropertiesList() != null
+            && service.getResourcePropertiesList().getResourceProperty() != null) {
+            int newLength = service.getResourcePropertiesList().getResourceProperty().length - 1;
+            metadatas = new ResourcePropertyType[newLength];
+            int resourcesCount = 0;
+            for (int i = 0; i < service.getResourcePropertiesList().getResourceProperty().length; i++) {
+                ResourcePropertyType oldResource = service.getResourcePropertiesList().getResourceProperty(i);
+                if (!oldResource.getQName().equals(resourcePropertyType)) {
+                    metadatas[resourcesCount++] = oldResource;
+                }
+            }
+            ResourcePropertiesListType list = new ResourcePropertiesListType(metadatas);
+            service.setResourcePropertiesList(list);
+        }
+    }
+
+
     /**
      * Gets all resource properties from a service which have a specified QName
      * 
@@ -864,26 +884,48 @@ public final class CommonTools {
      *            The namespace type to add
      */
     public static void addNamespace(ServiceDescription serviceD, NamespaceType nsType) {
-        NamespaceType[] namespacesArray = null;
-        int length = 0;
-        if ((serviceD.getNamespaces() != null) && (serviceD.getNamespaces().getNamespace() != null)) {
-            length = serviceD.getNamespaces().getNamespace().length + 1;
+        if (getNamespaceType(serviceD.getNamespaces(), nsType.getNamespace()) == null) {
+
+            NamespaceType[] namespacesArray = null;
+            int length = 0;
+            if ((serviceD.getNamespaces() != null) && (serviceD.getNamespaces().getNamespace() != null)) {
+                length = serviceD.getNamespaces().getNamespace().length + 1;
+            } else {
+                length = 1;
+            }
+            namespacesArray = new NamespaceType[length];
+            if (length > 1) {
+                System.arraycopy(serviceD.getNamespaces().getNamespace(), 0, namespacesArray, 0, length - 1);
+            }
+            namespacesArray[length - 1] = nsType;
+            NamespacesType namespaces = null;
+            if (serviceD.getNamespaces() == null) {
+                namespaces = new NamespacesType();
+                serviceD.setNamespaces(namespaces);
+            } else {
+                namespaces = serviceD.getNamespaces();
+            }
+            namespaces.setNamespace(namespacesArray);
         } else {
-            length = 1;
+            logger.warn("Namesapce already exists and is being ignored: " + nsType.getNamespace(), new Throwable());
         }
-        namespacesArray = new NamespaceType[length];
-        if (length > 1) {
-            System.arraycopy(serviceD.getNamespaces().getNamespace(), 0, namespacesArray, 0, length - 1);
+    }
+
+
+    public static void removeNamespace(ServiceDescription serviceD, String namespace) {
+        if (serviceD.getNamespaces() != null && serviceD.getNamespaces().getNamespace() != null
+            && serviceD.getNamespaces().getNamespace().length > 0) {
+            NamespaceType[] newNamespaceTypes = new NamespaceType[serviceD.getNamespaces().getNamespace().length - 1];
+            int kept = 0;
+            for (int i = 0; i < serviceD.getNamespaces().getNamespace().length; i++) {
+                NamespaceType type = serviceD.getNamespaces().getNamespace(i);
+                if (!type.getNamespace().equals(namespace)) {
+                    newNamespaceTypes[kept] = type;
+                    kept++;
+                }
+            }
+            serviceD.getNamespaces().setNamespace(newNamespaceTypes);
         }
-        namespacesArray[length - 1] = nsType;
-        NamespacesType namespaces = null;
-        if (serviceD.getNamespaces() == null) {
-            namespaces = new NamespacesType();
-            serviceD.setNamespaces(namespaces);
-        } else {
-            namespaces = serviceD.getNamespaces();
-        }
-        namespaces.setNamespace(namespacesArray);
     }
 
 

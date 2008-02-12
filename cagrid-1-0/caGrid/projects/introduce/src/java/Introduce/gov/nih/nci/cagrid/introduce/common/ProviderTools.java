@@ -119,16 +119,18 @@ public final class ProviderTools {
 
     }
 
-//
-//    public static void removeLifetimeResourceProvider(ServiceType service, ServiceInformation info) {
-//        CommonTools.removeMethod(service.getMethods(), CommonTools.getMethod(service.getMethods(), "Destroy"));
-//        CommonTools.removeMethod(service.getMethods(), CommonTools
-//            .getMethod(service.getMethods(), "SetTerminationTime"));
-//        CommonTools.removeMethod(service.getMethods(), CommonTools
-//            .getMethod(service.getMethods(), "SetTerminationTime"));
-//        
-//    }
-//
+
+    public static void removeLifetimeResourceProvider(ServiceType service, ServiceInformation info) {
+        CommonTools.removeMethod(service.getMethods(), CommonTools.getMethod(service.getMethods(), "Destroy"));
+        CommonTools.removeMethod(service.getMethods(), CommonTools
+            .getMethod(service.getMethods(), "SetTerminationTime"));
+        //CommonTools.removeNamespace(info.getServiceDescriptor(), "http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.xsd");
+        CommonTools.removeResourceProperty(service, new QName(
+            "http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.xsd", "TerminationTime"));
+        CommonTools.removeResourceProperty(service, new QName(
+            "http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.xsd", "CurrentTime"));
+    }
+
 
     public static void addSubscribeResourceProvider(ServiceType service, ServiceInformation info) {
         MethodType subscribeMethod = new MethodType();
@@ -195,7 +197,7 @@ public final class ProviderTools {
     }
 
 
-    public static void removeGetResourcePropertyResourceProvider(ServiceType service, ServiceInformation info) {
+    private static void removeGetResourcePropertyResourceProvider(ServiceType service, ServiceInformation info) {
         CommonTools.removeMethod(service.getMethods(), CommonTools.getMethod(service.getMethods(),
             "GetResourceProperty"));
     }
@@ -232,7 +234,7 @@ public final class ProviderTools {
     }
 
 
-    public static void removeGetMultipeResourcePropertiesResourceProvider(ServiceType service, ServiceInformation info) {
+    private static void removeGetMultipeResourcePropertiesResourceProvider(ServiceType service, ServiceInformation info) {
         CommonTools.removeMethod(service.getMethods(), CommonTools.getMethod(service.getMethods(),
             "GetMultipleResourceProperties"));
     }
@@ -269,7 +271,7 @@ public final class ProviderTools {
     }
 
 
-    public static void removeQueryResourcePropertiesResourceProvider(ServiceType service, ServiceInformation info) {
+    private static void removeQueryResourcePropertiesResourceProvider(ServiceType service, ServiceInformation info) {
         CommonTools.removeMethod(service.getMethods(), CommonTools.getMethod(service.getMethods(),
             "QueryResourceProperties"));
     }
@@ -306,7 +308,7 @@ public final class ProviderTools {
     }
 
 
-    public static void removeSetResourcePropertyResourceProvider(ServiceType service, ServiceInformation info) {
+    private static void removeSetResourcePropertyResourceProvider(ServiceType service, ServiceInformation info) {
         CommonTools.removeMethod(service.getMethods(), CommonTools.getMethod(service.getMethods(),
             "SetResourceProperties"));
     }
@@ -352,6 +354,13 @@ public final class ProviderTools {
         addGetResourcePropertyResourceProvider(service, info);
         addSetResourcePropertyResourceProvider(service, info);
         addQueryResourcePropertiesResourceProvider(service, info);
+    }
+    
+    public static void removeResourcePropertiesManagementResourceFrameworkOption(ServiceType service, ServiceInformation info){
+        removeGetMultipeResourcePropertiesResourceProvider(service, info);
+        removeGetResourcePropertyResourceProvider(service, info);
+        removeSetResourcePropertyResourceProvider(service, info);
+        removeQueryResourcePropertiesResourceProvider(service, info);
     }
 
 }

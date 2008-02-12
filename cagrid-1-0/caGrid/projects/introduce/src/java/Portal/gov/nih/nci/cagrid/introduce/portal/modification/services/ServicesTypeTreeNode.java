@@ -57,7 +57,7 @@ public class ServicesTypeTreeNode extends DefaultMutableTreeNode implements Popu
 		if (services.getService() != null) {
 			// starting from one because we want to skip service 0, service 0 is
 			// the main service.
-			for (int i = 1; i < services.getService().length; i++) {
+			for (int i = 0; i < services.getService().length; i++) {
 				ServiceTypeTreeNode newNode = new ServiceTypeTreeNode(services.getService(i), info, model);
 				model.insertNodeInto(newNode, this, this.getChildCount());
 			}

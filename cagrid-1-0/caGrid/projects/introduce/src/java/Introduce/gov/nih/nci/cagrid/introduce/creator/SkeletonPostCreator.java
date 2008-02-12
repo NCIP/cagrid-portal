@@ -27,7 +27,7 @@ import org.apache.tools.ant.Task;
 public class SkeletonPostCreator extends Task {
 
     public SkeletonPostCreator() {
-        PropertyConfigurator.configure("." + File.separator + "conf" + File.separator + "introduce" + File.separator
+        PropertyConfigurator.configure("." + File.separator + "conf" + File.separator
             + "log4j.properties");
     }
 

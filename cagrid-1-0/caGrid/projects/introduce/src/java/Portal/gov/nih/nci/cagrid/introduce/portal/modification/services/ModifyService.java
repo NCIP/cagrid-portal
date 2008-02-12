@@ -14,9 +14,11 @@ import gov.nih.nci.cagrid.introduce.beans.service.Secure;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.beans.service.Singleton;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
+import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.common.SpecificServiceInformation;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
 import gov.nih.nci.cagrid.introduce.portal.modification.security.ServiceSecurityPanel;
+import gov.nih.nci.cagrid.introduce.portal.modification.services.resourceproperties.ResourceFrameworkOptionsManager;
 
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -99,23 +101,9 @@ public class ModifyService extends JDialog {
 
     private JTextPane jTextPane = null;
 
-    private JPanel resourceOptionsPanel = null;
+    private JPanel infoPanel = null;
 
-    private JCheckBox lifetimeResource = null;
-
-    private JCheckBox singletonResource = null;
-
-    private JCheckBox persistantResource = null;
-
-    private JCheckBox notificationResource = null;
-
-    private JCheckBox customResource = null;
-
-    private JCheckBox secureResource = null;
-
-    private JCheckBox resourceProperty = null;
-
-	private JPanel infoPanel = null;
+	private ResourceFrameworkOptionsManager resourceOptionsPanel = null;
 
 
     /**
@@ -184,10 +172,7 @@ public class ModifyService extends JDialog {
 
         this.pack();
         GridApplication.getContext().centerDialog(this);
-        
-        if(isNew){
-            checkResourcePropertyOptions();
-        }
+
     }
 
 
@@ -385,26 +370,26 @@ public class ModifyService extends JDialog {
                     service.getService().setNamespace(namespaceTextField.getText());
                     service.getService().setPackageName(servicePackageNameTextField.getText());
                     service.getService().setResourceFrameworkOptions(new ResourceFrameworkOptions());
-                    if (getCustomResource().isSelected()) {
+                    if (getResourceOptionsPanel().getCustomResource().isSelected()) {
                         service.getService().getResourceFrameworkOptions().setCustom(new Custom());
                     } else {
                         service.getService().getResourceFrameworkOptions().setIdentifiable(new Identifiable());
-                        if (getSingletomResource().isSelected()) {
+                        if (getResourceOptionsPanel().getSingletonResource().isSelected()) {
                             service.getService().getResourceFrameworkOptions().setSingleton(new Singleton());
                         }
-                        if (getLifetimeResource().isSelected()) {
+                        if (getResourceOptionsPanel().getLifetimeResource().isSelected()) {
                             service.getService().getResourceFrameworkOptions().setLifetime(new Lifetime());
                         }
-                        if (getPersistantResource().isSelected()) {
+                        if (getResourceOptionsPanel().getPersistantResource().isSelected()) {
                             service.getService().getResourceFrameworkOptions().setPersistent(new Persistent());
                         }
-                        if (getNotificationResource().isSelected()) {
+                        if (getResourceOptionsPanel().getNotificationResource().isSelected()) {
                             service.getService().getResourceFrameworkOptions().setNotification(new Notification());
                         }
-                        if (getSecureResource().isSelected()) {
+                        if (getResourceOptionsPanel().getSecureResource().isSelected()) {
                             service.getService().getResourceFrameworkOptions().setSecure(new Secure());
                         }
-                        if (getResourceProperty().isSelected()) {
+                        if (getResourceOptionsPanel().getResourceProperty().isSelected()) {
                             service.getService().getResourceFrameworkOptions().setResourcePropertyManagement(
                                 new ResourcePropertyManagement());
                         }
@@ -432,19 +417,19 @@ public class ModifyService extends JDialog {
      */
     private JPanel getContentPanel() {
         if (contentPanel == null) {
+            GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
+            gridBagConstraints5.gridx = 1;
+            gridBagConstraints5.weightx = 0.0D;
+            gridBagConstraints5.weighty = 0.0D;
+            gridBagConstraints5.insets = new Insets(2, 2, 2, 2);
+            gridBagConstraints5.fill = GridBagConstraints.BOTH;
+            gridBagConstraints5.gridy = 0;
             GridBagConstraints gridBagConstraints21 = new GridBagConstraints();
             gridBagConstraints21.gridx = 0;
             gridBagConstraints21.weightx = 1.0D;
             gridBagConstraints21.fill = GridBagConstraints.BOTH;
             gridBagConstraints21.weighty = 1.0D;
             gridBagConstraints21.gridy = 0;
-            GridBagConstraints gridBagConstraints15 = new GridBagConstraints();
-            gridBagConstraints15.gridx = 1;
-            gridBagConstraints15.fill = GridBagConstraints.BOTH;
-            gridBagConstraints15.weightx = 0.0D;
-            gridBagConstraints15.weighty = 0.0D;
-            gridBagConstraints15.gridheight = 7;
-            gridBagConstraints15.gridy = 0;
             descriptionLabel = new JLabel();
             descriptionLabel.setText("Description");
             servicePackageNameLabel = new JLabel();
@@ -456,8 +441,8 @@ public class ModifyService extends JDialog {
             contentPanel = new JPanel();
             contentPanel.setLayout(new GridBagLayout());
             contentPanel.setSize(new Dimension(494, 153));
-            contentPanel.add(getResourceOptionsPanel(), gridBagConstraints15);
             contentPanel.add(getInfoPanel(), gridBagConstraints21);
+            contentPanel.add(getResourceOptionsPanel(), gridBagConstraints5);
         }
         return contentPanel;
     }
@@ -564,278 +549,6 @@ public class ModifyService extends JDialog {
 
 
     /**
-     * This method initializes resourceOptionsPanel
-     * 
-     * @return javax.swing.JPanel
-     */
-    private JPanel getResourceOptionsPanel() {
-        if (resourceOptionsPanel == null) {
-            GridBagConstraints gridBagConstraints20 = new GridBagConstraints();
-            gridBagConstraints20.gridx = 0;
-            gridBagConstraints20.gridwidth = 2;
-            gridBagConstraints20.gridy = 4;
-            GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
-            gridBagConstraints6.gridx = 1;
-            gridBagConstraints6.anchor = GridBagConstraints.NORTHWEST;
-            gridBagConstraints6.gridy = 3;
-            GridBagConstraints gridBagConstraints19 = new GridBagConstraints();
-            gridBagConstraints19.gridx = 0;
-            gridBagConstraints19.anchor = GridBagConstraints.NORTHWEST;
-            gridBagConstraints19.gridy = 0;
-            GridBagConstraints gridBagConstraints18 = new GridBagConstraints();
-            gridBagConstraints18.gridx = 1;
-            gridBagConstraints18.anchor = GridBagConstraints.NORTHWEST;
-            gridBagConstraints18.gridy = 2;
-            GridBagConstraints gridBagConstraints17 = new GridBagConstraints();
-            gridBagConstraints17.gridx = 0;
-            gridBagConstraints17.anchor = GridBagConstraints.NORTHWEST;
-            gridBagConstraints17.gridy = 3;
-            GridBagConstraints gridBagConstraints16 = new GridBagConstraints();
-            gridBagConstraints16.gridx = 1;
-            gridBagConstraints16.anchor = GridBagConstraints.NORTHWEST;
-            gridBagConstraints16.gridy = 0;
-            GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
-            gridBagConstraints5.gridx = 0;
-            gridBagConstraints5.anchor = GridBagConstraints.NORTHWEST;
-            gridBagConstraints5.gridy = 2;
-            resourceOptionsPanel = new JPanel();
-            resourceOptionsPanel.setLayout(new GridBagLayout());
-            resourceOptionsPanel.setBorder(BorderFactory.createTitledBorder(null, "Resource Framework Options", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, IntroduceLookAndFeel.getPanelLabelColor()));
-            resourceOptionsPanel.add(getLifetimeResource(), gridBagConstraints5);
-            resourceOptionsPanel.add(getSingletomResource(), gridBagConstraints16);
-            resourceOptionsPanel.add(getPersistantResource(), gridBagConstraints17);
-            resourceOptionsPanel.add(getNotificationResource(), gridBagConstraints18);
-            resourceOptionsPanel.add(getCustomResource(), gridBagConstraints19);
-            resourceOptionsPanel.add(getSecureResource(), gridBagConstraints6);
-            resourceOptionsPanel.add(getResourceProperty(), gridBagConstraints20);
-        }
-        return resourceOptionsPanel;
-    }
-
-
-    /**
-     * This method initializes lifetimeResource
-     * 
-     * @return javax.swing.JCheckBox
-     */
-    private JCheckBox getLifetimeResource() {
-        if (lifetimeResource == null) {
-            lifetimeResource = new JCheckBox();
-            lifetimeResource.setText(IntroduceConstants.INTRODUCE_LIFETIME_RESOURCE);
-            if (service.getService().getResourceFrameworkOptions().getLifetime() != null) {
-                lifetimeResource.setSelected(true);
-            }
-            lifetimeResource.setHorizontalAlignment(SwingConstants.LEADING);
-            lifetimeResource.setHorizontalTextPosition(SwingConstants.TRAILING);
-            if (isNew) {
-                lifetimeResource.addActionListener(new java.awt.event.ActionListener() {
-                    public void actionPerformed(java.awt.event.ActionEvent e) {
-                        checkResourcePropertyOptions();
-                    }
-                });
-            } else {
-                lifetimeResource.setEnabled(false);
-            }
-        }
-        return lifetimeResource;
-    }
-
-
-    /**
-     * This method initializes singletomResource
-     * 
-     * @return javax.swing.JCheckBox
-     */
-    private JCheckBox getSingletomResource() {
-        if (singletonResource == null) {
-            singletonResource = new JCheckBox();
-            singletonResource.setText(IntroduceConstants.INTRODUCE_SINGLETON_RESOURCE);
-            if (service.getService().getResourceFrameworkOptions().getSingleton() != null) {
-                singletonResource.setSelected(true);
-            }
-            singletonResource.setHorizontalAlignment(SwingConstants.LEADING);
-            if (isNew) {
-                singletonResource.addActionListener(new java.awt.event.ActionListener() {
-                    public void actionPerformed(java.awt.event.ActionEvent e) {
-                        checkResourcePropertyOptions();
-                    }
-                });
-            } else {
-                singletonResource.setEnabled(false);
-            }
-        }
-        return singletonResource;
-    }
-
-
-    /**
-     * This method initializes persistantResource
-     * 
-     * @return javax.swing.JCheckBox
-     */
-    private JCheckBox getPersistantResource() {
-        if (persistantResource == null) {
-            persistantResource = new JCheckBox();
-            persistantResource.setText(IntroduceConstants.INTRODUCE_PERSISTENT_RESOURCE);
-            if (service.getService().getResourceFrameworkOptions().getPersistent() != null) {
-                persistantResource.setSelected(true);
-            }
-            if (isNew) {
-                persistantResource.addActionListener(new java.awt.event.ActionListener() {
-                    public void actionPerformed(java.awt.event.ActionEvent e) {
-                        checkResourcePropertyOptions();
-                    }
-                });
-            } else {
-                persistantResource.setEnabled(false);
-            }
-        }
-        return persistantResource;
-    }
-
-
-    /**
-     * This method initializes notificationResource
-     * 
-     * @return javax.swing.JCheckBox
-     */
-    private JCheckBox getNotificationResource() {
-        if (notificationResource == null) {
-            notificationResource = new JCheckBox();
-            notificationResource.setText(IntroduceConstants.INTRODUCE_NOTIFICATION_RESOURCE);
-            if (service.getService().getResourceFrameworkOptions().getNotification() != null) {
-                notificationResource.setSelected(true);
-            }
-            if (isNew) {
-                notificationResource.addActionListener(new java.awt.event.ActionListener() {
-                    public void actionPerformed(java.awt.event.ActionEvent e) {
-                        checkResourcePropertyOptions();
-                    }
-                });
-            } else {
-                notificationResource.setEnabled(false);
-            }
-        }
-        return notificationResource;
-    }
-
-
-    /**
-     * This method initializes customResource
-     * 
-     * @return javax.swing.JCheckBox
-     */
-    private JCheckBox getCustomResource() {
-        if (customResource == null) {
-            customResource = new JCheckBox();
-            customResource.setText(IntroduceConstants.INTRODUCE_CUSTOM_RESOURCE);
-            if (service.getService().getResourceFrameworkOptions().getCustom() != null) {
-                customResource.setSelected(true);
-            }
-            if (isNew) {
-                customResource.addActionListener(new java.awt.event.ActionListener() {
-                    public void actionPerformed(java.awt.event.ActionEvent e) {
-                        checkResourcePropertyOptions();
-                    }
-                });
-            } else {
-                customResource.setEnabled(false);
-            }
-        }
-        return customResource;
-    }
-
-
-    private void checkResourcePropertyOptions() {
-        getSingletomResource().setEnabled(true);
-        getLifetimeResource().setEnabled(true);
-        getPersistantResource().setEnabled(true);
-        getNotificationResource().setEnabled(true);
-        getCustomResource().setEnabled(true);
-        getSecureResource().setEnabled(true);
-        getResourceProperty().setEnabled(true);
-
-        if (getSingletomResource().isSelected()) {
-            getLifetimeResource().setSelected(false);
-            getLifetimeResource().setEnabled(false);
-            getCustomResource().setSelected(false);
-            getCustomResource().setEnabled(false);
-        } else if (getLifetimeResource().isSelected()) {
-            getSingletomResource().setSelected(false);
-            getSingletomResource().setEnabled(false);
-            getCustomResource().setSelected(false);
-            getCustomResource().setEnabled(false);
-        } else if (getCustomResource().isSelected()) {
-            getSingletomResource().setSelected(false);
-            getSingletomResource().setEnabled(false);
-            getLifetimeResource().setSelected(false);
-            getLifetimeResource().setEnabled(false);
-            getPersistantResource().setSelected(false);
-            getPersistantResource().setEnabled(false);
-            getNotificationResource().setSelected(false);
-            getNotificationResource().setEnabled(false);
-            getSecureResource().setEnabled(false);
-            getSecureResource().setSelected(false);
-            getResourceProperty().setEnabled(false);
-            getResourceProperty().setSelected(false);
-        }
-
-    }
-
-
-    /**
-     * This method initializes secureResource
-     * 
-     * @return javax.swing.JCheckBox
-     */
-    private JCheckBox getSecureResource() {
-        if (secureResource == null) {
-            secureResource = new JCheckBox();
-            secureResource.setText(IntroduceConstants.INTRODUCE_SECURE_RESOURCE);
-            if (service.getService().getResourceFrameworkOptions().getSecure() != null) {
-                secureResource.setSelected(true);
-            }
-            if (isNew) {
-                secureResource.addActionListener(new java.awt.event.ActionListener() {
-                    public void actionPerformed(java.awt.event.ActionEvent e) {
-                        checkResourcePropertyOptions();
-                    }
-                });
-            } else {
-                secureResource.setEnabled(false);
-            }
-        } 
-        return secureResource;
-    }
-
-
-    /**
-     * This method initializes resourceProperty
-     * 
-     * @return javax.swing.JCheckBox
-     */
-    private JCheckBox getResourceProperty() {
-        if (resourceProperty == null) {
-            resourceProperty = new JCheckBox();
-            resourceProperty.setText(IntroduceConstants.INTRODUCE_RESOURCEPROPETIES_RESOURCE);
-            if (service.getService().getResourceFrameworkOptions().getResourcePropertyManagement() != null) {
-                resourceProperty.setSelected(true);
-            }
-            if (isNew) {
-                resourceProperty.addActionListener(new java.awt.event.ActionListener() {
-                    public void actionPerformed(java.awt.event.ActionEvent e) {
-                        checkResourcePropertyOptions();
-                    }
-                });
-            } else {
-                resourceProperty.setEnabled(false);
-            }
-        }
-        return resourceProperty;
-    }
-
-
-	/**
 	 * This method initializes infoPanel	
 	 * 	
 	 * @return javax.swing.JPanel	
@@ -905,5 +618,18 @@ public class ModifyService extends JDialog {
 			infoPanel.add(getTextBoxPane(), gridBagConstraints14);
 		}
 		return infoPanel;
+	}
+
+
+	/**
+	 * This method initializes resourceOptionsPanel	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private ResourceFrameworkOptionsManager getResourceOptionsPanel() {
+		if (resourceOptionsPanel == null) {
+			resourceOptionsPanel = new ResourceFrameworkOptionsManager(service.getService(),(ServiceInformation)service,isNew);
+		}
+		return resourceOptionsPanel;
 	}
 } // @jve:decl-index=0:visual-constraint="10,10"
