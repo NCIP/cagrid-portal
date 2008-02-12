@@ -304,7 +304,7 @@ public class ChangePasswordWindow extends ApplicationComponent {
 	private JButton getResetPassword() {
 		if (resetPassword == null) {
 			resetPassword = new JButton();
-			resetPassword.setText("Reset Password");
+			resetPassword.setText("Change Password");
 			resetPassword.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					resetPassword();
