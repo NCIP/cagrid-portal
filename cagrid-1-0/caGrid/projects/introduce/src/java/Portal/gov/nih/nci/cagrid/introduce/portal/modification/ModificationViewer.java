@@ -448,7 +448,7 @@ public class ModificationViewer extends ApplicationComponent {
 
 					setContentPane(getMainPanel());
 					setTitle("Modify Service Interface");
-					setFrameIcon(IntroduceLookAndFeel.getModifyIcon());
+					setFrameIcon(IntroduceLookAndFeel.getModifyServiceIcon());
 
 					initServicePropertyValidation();
 
@@ -779,9 +779,9 @@ public class ModificationViewer extends ApplicationComponent {
 					null);
 			this.contentTabbedPane.addTab("Services", IntroduceLookAndFeel.getServiceIcon(),
 					getResourceesTabbedPanel(), null);
-			this.contentTabbedPane.addTab("Service Properties", IntroduceLookAndFeel.getPropertiesIcon(),
+			this.contentTabbedPane.addTab("Service Properties", IntroduceLookAndFeel.getServicePropertiesIcon(),
 					getServicePropertiesPanel(), null);
-			this.contentTabbedPane.addTab("Extensions", IntroduceLookAndFeel.getPluginIcon(),
+			this.contentTabbedPane.addTab("Extensions", IntroduceLookAndFeel.getExtensionIcon(),
 					getExtensionsPanel(), null);
 			// add a tab for each extension...
 			ExtensionsType exts = this.info.getExtensions();

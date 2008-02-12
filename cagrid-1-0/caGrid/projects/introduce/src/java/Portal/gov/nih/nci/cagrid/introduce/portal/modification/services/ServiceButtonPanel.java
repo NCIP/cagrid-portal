@@ -66,7 +66,7 @@ public class ServiceButtonPanel extends ServiceContextsOptionsPanel {
         if (this.modifyServiceButton == null) {
             this.modifyServiceButton = new JButton();
             this.modifyServiceButton.setText("Modify Service");
-            this.modifyServiceButton.setIcon(IntroduceLookAndFeel.getModifyServiceIcon());
+            this.modifyServiceButton.setIcon(IntroduceLookAndFeel.getModifyServiceSmallIcon());
             this.modifyServiceButton.addActionListener(new ActionListener() {
 
                 public void actionPerformed(ActionEvent e) {

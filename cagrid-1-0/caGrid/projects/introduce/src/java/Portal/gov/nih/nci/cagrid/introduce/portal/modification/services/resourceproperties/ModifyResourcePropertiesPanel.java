@@ -451,7 +451,7 @@ public class ModifyResourcePropertiesPanel extends JPanel {
         if (this.editInstanceButton == null) {
             this.editInstanceButton = new JButton();
             this.editInstanceButton.setText("View/Edit Instance");
-            this.editInstanceButton.setIcon(IntroduceLookAndFeel.getModifyIcon());
+            this.editInstanceButton.setIcon(IntroduceLookAndFeel.getModifyResourcePropertyIcon());
             this.editInstanceButton.addActionListener(new ActionListener() {
 
                 public void actionPerformed(ActionEvent e) {

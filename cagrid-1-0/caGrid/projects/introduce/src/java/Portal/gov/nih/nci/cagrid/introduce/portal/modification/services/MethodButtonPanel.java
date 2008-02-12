@@ -64,7 +64,7 @@ public class MethodButtonPanel extends ServiceContextsOptionsPanel {
 		if (modifyMethodButton == null) {
 		    modifyMethodButton = new JButton();
 		    modifyMethodButton.setText("Modify Method");
-		    modifyMethodButton.setIcon(IntroduceLookAndFeel.getModifyIcon());
+		    modifyMethodButton.setIcon(IntroduceLookAndFeel.getModifyMethodIcon());
 		    modifyMethodButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 

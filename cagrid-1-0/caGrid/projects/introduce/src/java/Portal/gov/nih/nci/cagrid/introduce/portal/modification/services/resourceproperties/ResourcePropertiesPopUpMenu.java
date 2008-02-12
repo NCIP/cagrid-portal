@@ -46,7 +46,7 @@ public class ResourcePropertiesPopUpMenu extends JPopupMenu {
         if (this.modifyResourcePropetiesMenuItem == null) {
             this.modifyResourcePropetiesMenuItem = new JMenuItem();
             this.modifyResourcePropetiesMenuItem.setText("Modify Properties");
-            this.modifyResourcePropetiesMenuItem.setIcon(IntroduceLookAndFeel.getModifyIcon());
+            this.modifyResourcePropetiesMenuItem.setIcon(IntroduceLookAndFeel.getModifyResourcePropertiesIcon());
             this.modifyResourcePropetiesMenuItem.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mousePressed(MouseEvent e) {

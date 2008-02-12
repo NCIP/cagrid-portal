@@ -65,7 +65,7 @@ public class MethodPopUpMenu extends JPopupMenu {
 	private JMenuItem getModifyMethodMenuItem() {
 		if (modifyMethodMenuItem == null) {
 			modifyMethodMenuItem = new JMenuItem();
-			modifyMethodMenuItem.setIcon(IntroduceLookAndFeel.getModifyIcon());
+			modifyMethodMenuItem.setIcon(IntroduceLookAndFeel.getModifyMethodIcon());
 			modifyMethodMenuItem.setText("Modify Method");
 			modifyMethodMenuItem.addMouseListener(new MouseAdapter() {
 				public void mousePressed(MouseEvent e) {

@@ -18,41 +18,21 @@ import javax.swing.ImageIcon;
 public class IntroduceLookAndFeel extends PortalLookAndFeel {
 
 	
-    public final static ImageIcon getPluginIcon() {
-        return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/plugin.png"));
+    public final static ImageIcon getAddMethodIcon() {
+        return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/page_add.png"));
     }
     
-    public final static ImageIcon getPropertiesIcon() {
-        return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/edit_small.png"));
+    public static final Icon getBrowseIcon() {
+        return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/folder-open.png"));
     }
     
-    public final static ImageIcon getResyncIcon() {
-        return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/view-refresh.png"));
+    public final static ImageIcon getCADSRIcon() {
+        return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/caDSR_logo.gif"));
     }
 
 
-    public final static ImageIcon getUpdateIcon() {
-        return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/system-software-update.png"));
-    }
-
-
-    public final static ImageIcon getKeyIcon() {
-        return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/key.png"));
-    }
-
-
-    public final static ImageIcon getPreferencesIcon() {
-        return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/configure.png"));
-    }
-
-
-    public final static ImageIcon getServiceIcon() {
-        return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/cog.png"));
-    }
-
-
-    public final static ImageIcon getModifyServiceIcon() {
-        return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/cog_edit.png"));
+    public final static ImageIcon getClosedNamespaceIcon() {
+        return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/chart_organisation_closed.png"));
     }
 
 
@@ -61,13 +41,42 @@ public class IntroduceLookAndFeel extends PortalLookAndFeel {
     }
 
 
-    public final static ImageIcon getResourcePropertiesIcon() {
-        return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/package_green.png"));
+    public final static ImageIcon getCreateServiceSmallIcon() {
+        return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/cog_add_small.png"));
     }
 
 
-    public final static ImageIcon getResourcePropertyIcon() {
-        return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/tag.png"));
+    public final static ImageIcon getDeployIcon() {
+        return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/cog_go.png"));
+    }
+
+
+    public static final Icon getDiscoveryToolsIcon() {
+        return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/models.png"));
+    }
+    
+    public static final Icon getDoneIcon() {
+        return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/media-playback-start.png"));
+    }
+
+
+    public static final Icon getDownIcon() {
+        return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/go-down.png"));
+    }
+
+
+    public static final Icon getHelpIcon() {
+        return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/help-browser.png"));
+    }
+
+
+    public final static ImageIcon getKeyIcon() {
+        return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/key.png"));
+    }
+
+
+    public static final Icon getLoadCredentialsIcon() {
+        return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/contact-new.png"));
     }
 
 
@@ -80,24 +89,89 @@ public class IntroduceLookAndFeel extends PortalLookAndFeel {
         return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/page_gear.png"));
     }
 
+    
+    public final static ImageIcon getModifyMethodIcon() {
+        return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/page_edit.png"));
+    }
 
-    public final static ImageIcon getAddMethodIcon() {
-        return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/page_add.png"));
+    
+    public final static ImageIcon getModifyServiceIcon() {
+        return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/cog_edit.png"));
     }
 
 
+    public final static ImageIcon getModifyServiceSmallIcon() {
+        return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/cog_edit_small.png"));
+    }
+
+
+    public final static ImageIcon getNamespaceIcon() {
+        return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/chart_organisation.png"));
+    }
+
+
+    public final static ImageIcon getExtensionIcon() {
+        return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/plugin.png"));
+    }
+
+
+    public final static ImageIcon getPreferencesIcon() {
+        return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/configure.png"));
+    }
+    
+    public final static ImageIcon getServicePropertiesIcon() {
+        return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/edit_small.png"));
+    }
+
+    public final static ImageIcon getRedoIcon() {
+        return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/edit-redos.png"));
+    }
+    
     public final static ImageIcon getRemoveMethodIcon() {
         return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/page_delete.png"));
     }
 
 
-    public final static ImageIcon getModifyIcon() {
-        return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/cog_edit.png"));
+    public final static ImageIcon getResourcePropertiesIcon() {
+        return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/package_green.png"));
     }
 
 
-    public final static ImageIcon getMobiusIcon() {
-        return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/mobiusIcon.gif"));
+    public final static ImageIcon getResourcePropertyIcon() {
+        return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/tag.png"));
+    }
+    
+    
+    public final static ImageIcon getModifyResourcePropertyIcon() {
+        return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/tag.png"));
+    }
+
+    public final static ImageIcon getModifyResourcePropertiesIcon() {
+        return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/package_green.png"));
+    }
+
+    public final static ImageIcon getResyncIcon() {
+        return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/view-refresh.png"));
+    }
+
+
+    public final static ImageIcon getSchemaTypeIcon() {
+        return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/tag.png"));
+    }
+    
+    
+    public final static ImageIcon getServiceIcon() {
+        return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/cog_small.png"));
+    }
+
+
+    public static final Icon getTypesIcon() {
+        return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/models_small.png"));
+    }
+
+
+    public final static ImageIcon getUndeployIcon() {
+        return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/cog_back.png"));
     }
 
 
@@ -106,75 +180,13 @@ public class IntroduceLookAndFeel extends PortalLookAndFeel {
     }
 
 
-    public final static ImageIcon getRedoIcon() {
-        return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/edit-redos.png"));
-    }
-
-
-    public final static ImageIcon getDeployIcon() {
-        return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/cog_go.png"));
-    }
-    
-    public final static ImageIcon getUndeployIcon() {
-        return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/cog_back.png"));
-    }
-
-    public final static ImageIcon getNamespaceIcon() {
-        return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/chart_organisation.png"));
-    }
-    
-    public final static ImageIcon getClosedNamespaceIcon() {
-        return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/chart_organisation_closed.png"));
-    }
-
-
-
-    public final static ImageIcon getSchemaTypeIcon() {
-        return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/tag.png"));
-    }
-
-
-    public final static ImageIcon getCADSRIcon() {
-        return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/caDSR_logo.gif"));
-    }
-
-
-    public static final Icon getDoneIcon() {
-        return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/media-playback-start.png"));
-    }
-
-
-    public static final Icon getDiscoveryToolsIcon() {
-        return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/models.png"));
-    }
-    
-    public static final Icon getTypesIcon() {
-        return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/models_small.png"));
-    }
-
-
-    public static final Icon getLoadCredentialsIcon() {
-        return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/contact-new.png"));
-    }
-
-
-    public static final Icon getBrowseIcon() {
-        return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/folder-open.png"));
+    public final static ImageIcon getUpdateIcon() {
+        return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/system-software-update.png"));
     }
 
 
     public static final Icon getUpIcon() {
         return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/go-up.png"));
-    }
-
-
-    public static final Icon getDownIcon() {
-        return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/go-down.png"));
-    }
-
-
-    public static final Icon getHelpIcon() {
-        return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/help-browser.png"));
     }
 
 }

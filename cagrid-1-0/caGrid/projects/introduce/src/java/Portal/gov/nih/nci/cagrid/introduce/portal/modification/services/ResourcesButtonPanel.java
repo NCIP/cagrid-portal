@@ -51,7 +51,7 @@ public class ResourcesButtonPanel extends ServiceContextsOptionsPanel {
 		if (addServiceButton == null) {
 			addServiceButton = new JButton();
 			addServiceButton.setText("Modify Resources");
-			addServiceButton.setIcon(IntroduceLookAndFeel.getModifyIcon());
+			addServiceButton.setIcon(IntroduceLookAndFeel.getModifyResourcePropertiesIcon());
 			addServiceButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					DefaultMutableTreeNode tnode = ResourcesButtonPanel.this.getTree().getCurrentNode();

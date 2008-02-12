@@ -49,7 +49,7 @@ public class ServicesButtonPanel extends ServiceContextsOptionsPanel {
 		if (addServiceButton == null) {
 			addServiceButton = new JButton();
 			addServiceButton.setText("Add Service Context");
-			addServiceButton.setIcon(IntroduceLookAndFeel.getCreateServiceIcon());
+			addServiceButton.setIcon(IntroduceLookAndFeel.getCreateServiceSmallIcon());
 			addServiceButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 
