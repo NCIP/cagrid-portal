@@ -176,32 +176,6 @@
 		<ant dir="${projects.dir}/grape" inheritAll="false" antfile="build.xml" target="all" />
 	</target>
 
-	<!-- =============================================================== -->
-	<!-- PORTAL:                                                    	 -->
-	<!-- =============================================================== -->
-	<target name="configure-portal" depends="prepare">
-		<resolveDependencies extdir="${projects.dir}/portal/ext">
-			<artifact refid="gts.sync.description" />
-		</resolveDependencies>
-		<!-- <ant dir="${projects.dir}/portal" inheritAll="false" antfile="build.xml" target="configure" /> -->
-	</target>
-	<target name="build-portal" depends="configure-portal" description="Builds the portal project">
-		<resolveDependencies extdir="${projects.dir}/portal/ext">
-			<artifact refid="cagrid.properties" />
-			<artifact refid="core.jars" />
-			<artifact refid="common.test.jars" />
-			<artifact refid="core.test.jars" />
-			<artifact refid="caCORE.jars" />
-			<artifact refid="test.coverage.jars" />
-			<artifact refid="common.metadata.jars" />
-			<artifact refid="data.metadata.jars" />
-			<artifact refid="discovery.jars" />
-			<artifact refid="metadatautils.jars" />
-			<artifact refid="syncgts.client.jars" />
-			<artifact refid="security.metadata.jars" />
-		</resolveDependencies>
-		<ant dir="${projects.dir}/portal" inheritAll="false" antfile="build.xml" target="all" />
-	</target>
 
 	<!-- =============================================================== -->
 	<!-- caBIG Introduce Extensions:                                     -->
