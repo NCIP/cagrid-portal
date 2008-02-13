@@ -4,23 +4,12 @@
 package gov.nih.nci.cagrid.portal.domain.metadata.common;
 
 import gov.nih.nci.cagrid.portal.domain.AbstractDomainObject;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
-
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
+
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author <a href="joshua.phillips@semanticbits.com">Joshua Phillips</a>
@@ -35,7 +24,8 @@ public class UMLAttribute extends AbstractDomainObject {
 	private String name;
 	private List<SemanticMetadata> semanticMetadata = new ArrayList<SemanticMetadata>();
 	private ValueDomain valueDomain;
-	private float version;
+    private Long publicID;
+    private float version;
 	private String dataTypeName;
 	private UMLClass umlClass;
 	
@@ -98,4 +88,12 @@ public class UMLAttribute extends AbstractDomainObject {
 	public void setVersion(float version) {
 		this.version = version;
 	}
+
+    public Long getPublicID() {
+        return publicID;
+    }
+
+    public void setPublicID(Long publicID) {
+        this.publicID = publicID;
+    }
 }

@@ -1,6 +1,10 @@
 <table class="detailstable">
 	<tbody>
-		<tr>
+        <tr>
+			<td class="detailslabelcell">Public ID:</td>
+			<td><c:out value="${att.publicID}"/></td>
+		</tr>
+        <tr>
 			<td class="detailslabelcell">Version:</td>
 			<td><c:out value="${att.version}"/></td>
 		</tr>

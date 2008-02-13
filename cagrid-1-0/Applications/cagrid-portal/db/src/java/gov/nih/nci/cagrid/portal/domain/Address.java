@@ -3,12 +3,13 @@
  */
 package gov.nih.nci.cagrid.portal.domain;
 
+import gov.nih.nci.cagrid.portal.util.StringUtils;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Parameter;
+
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Parameter;
 
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
@@ -59,9 +60,10 @@ public class Address extends AbstractDomainObject {
 	}
 	
 	public String getPostalCode() {
-		return postalCode;
+		return StringUtils.parsePostalCode(postalCode);
 	}
-	public void setPostalCode(String postalCode) {
+
+    public void setPostalCode(String postalCode) {
 		this.postalCode = postalCode;
 	}
 	

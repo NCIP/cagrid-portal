@@ -6,20 +6,7 @@ package gov.nih.nci.cagrid.portal.util;
 import gov.nih.nci.cagrid.portal.dao.AddressDao;
 import gov.nih.nci.cagrid.portal.dao.ParticipantDao;
 import gov.nih.nci.cagrid.portal.dao.WorkspaceDao;
-import gov.nih.nci.cagrid.portal.domain.Address;
-import gov.nih.nci.cagrid.portal.domain.Participant;
-import gov.nih.nci.cagrid.portal.domain.ParticipantStatus;
-import gov.nih.nci.cagrid.portal.domain.Participation;
-import gov.nih.nci.cagrid.portal.domain.Workspace;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.List;
-
-import javax.persistence.NonUniqueResultException;
-
+import gov.nih.nci.cagrid.portal.domain.*;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.poi.hssf.usermodel.HSSFCell;
@@ -29,6 +16,13 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.persistence.NonUniqueResultException;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
 
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
@@ -224,7 +218,7 @@ public class WorkspacesLoader {
 
 		if (cell != null) {
 			if (cell.getCellType() == HSSFCell.CELL_TYPE_NUMERIC) {
-				returnValue = String.valueOf(cell.getNumericCellValue());
+				returnValue = String.valueOf(new Double(cell.getNumericCellValue()).intValue());
 			} else {
 				returnValue = cell.getStringCellValue();
 			}

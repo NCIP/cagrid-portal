@@ -6,17 +6,22 @@ package gov.nih.nci.cagrid.portal.portlet.discovery.map;
 import gov.nih.nci.cagrid.portal.domain.GridDataService;
 import gov.nih.nci.cagrid.portal.domain.GridService;
 import gov.nih.nci.cagrid.portal.domain.metadata.common.ResearchCenter;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
  *
  */
 public class ServiceInfo {
+	
+	private static final Log logger = LogFactory.getLog(ServiceInfo.class);
 
 	private String name;
 	private String center;
 	private String status;	
 	private String url;
+	private String urlAbbrv;
 	private String id;
 	private ServiceType type;
 	
@@ -28,10 +33,16 @@ public class ServiceInfo {
 		setName(service.getServiceMetadata().getServiceDescription().getName());
 		ResearchCenter rc = service.getServiceMetadata().getHostingResearchCenter();
 		if(rc != null){
-			setCenter(rc.getDisplayName());
+			setCenter(rc.getShortName());
 		}
 		setStatus(service.getCurrentStatus().toString());
 		setUrl(service.getUrl());
+		try{
+			setUrlAbbrv(getUrl().substring(0, Math.min(35, getUrl().length() - 1)));
+		}catch(Exception ex){
+			setUrlAbbrv("");
+			logger.error("Error generating urlAbbrv: " + ex.getMessage(), ex);
+		}
 		setId(String.valueOf(service.getId()));
 		if(service instanceof GridDataService){
 			setType(ServiceType.DATA);
@@ -94,6 +105,14 @@ public class ServiceInfo {
 
 	public void setType(ServiceType type) {
 		this.type = type;
+	}
+
+	public String getUrlAbbrv() {
+		return urlAbbrv;
+	}
+
+	public void setUrlAbbrv(String urlAbbrv) {
+		this.urlAbbrv = urlAbbrv;
 	}
 	
 }

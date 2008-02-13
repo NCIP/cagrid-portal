@@ -93,7 +93,8 @@
 			<fileset dir="${db.build.dir}">
 				<include name="cagrid-portal-domain.jar"/>
 				<include name="cagrid-portal-dao.jar"/>
-			</fileset>
+                <include name="cagrid-portal-utils.jar"/>
+            </fileset>
 			
 			<fileset dir="${security.build.dir}">
 				<include name="cagrid-portal-security.jar"/>

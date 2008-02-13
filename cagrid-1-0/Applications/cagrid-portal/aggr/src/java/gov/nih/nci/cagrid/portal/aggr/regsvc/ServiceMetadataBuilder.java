@@ -9,31 +9,15 @@ import gov.nih.nci.cagrid.portal.domain.AbstractDomainObject;
 import gov.nih.nci.cagrid.portal.domain.Address;
 import gov.nih.nci.cagrid.portal.domain.Person;
 import gov.nih.nci.cagrid.portal.domain.metadata.ServiceMetadata;
-import gov.nih.nci.cagrid.portal.domain.metadata.common.Enumeration;
-import gov.nih.nci.cagrid.portal.domain.metadata.common.PointOfContact;
-import gov.nih.nci.cagrid.portal.domain.metadata.common.ResearchCenter;
-import gov.nih.nci.cagrid.portal.domain.metadata.common.ResearchCenterPointOfContact;
-import gov.nih.nci.cagrid.portal.domain.metadata.common.SemanticMetadata;
-import gov.nih.nci.cagrid.portal.domain.metadata.common.UMLAttribute;
-import gov.nih.nci.cagrid.portal.domain.metadata.common.UMLClass;
-import gov.nih.nci.cagrid.portal.domain.metadata.common.ValueDomain;
-import gov.nih.nci.cagrid.portal.domain.metadata.service.CaDSRRegistration;
-import gov.nih.nci.cagrid.portal.domain.metadata.service.ContextProperty;
-import gov.nih.nci.cagrid.portal.domain.metadata.service.Fault;
-import gov.nih.nci.cagrid.portal.domain.metadata.service.InputParameter;
-import gov.nih.nci.cagrid.portal.domain.metadata.service.Operation;
-import gov.nih.nci.cagrid.portal.domain.metadata.service.Output;
-import gov.nih.nci.cagrid.portal.domain.metadata.service.Service;
-import gov.nih.nci.cagrid.portal.domain.metadata.service.ServiceContext;
-import gov.nih.nci.cagrid.portal.domain.metadata.service.ServicePointOfContact;
+import gov.nih.nci.cagrid.portal.domain.metadata.common.*;
+import gov.nih.nci.cagrid.portal.domain.metadata.service.*;
 import gov.nih.nci.cagrid.portal.util.PortalUtils;
-
-import java.io.File;
-import java.io.FileReader;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.orm.hibernate3.HibernateTemplate;
+
+import java.io.File;
+import java.io.FileReader;
 
 /**
  * @author <a href="joshua.phillips@semanticbits.com">Joshua Phillips</a>
@@ -319,8 +303,9 @@ public class ServiceMetadataBuilder {
 		umlAttrOut.setDescription(umlAttrIn.getDescription());
 		umlAttrOut.setVersion(umlAttrIn.getVersion());
 		umlAttrOut.setName(umlAttrIn.getName());
+        umlAttrOut.setPublicID(umlAttrIn.getPublicID());
 
-		return (UMLAttribute) handlePersist(umlAttrOut);
+        return (UMLAttribute) handlePersist(umlAttrOut);
 	}
 
 	protected ValueDomain buildValueDomain(
