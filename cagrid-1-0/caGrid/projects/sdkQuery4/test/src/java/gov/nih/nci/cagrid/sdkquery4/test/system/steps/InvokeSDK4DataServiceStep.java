@@ -32,7 +32,7 @@ import org.apache.log4j.Logger;
  * @author David Ervin
  * 
  * @created Feb 1, 2008 9:02:20 AM
- * @version $Id: InvokeSDK4DataServiceStep.java,v 1.14 2008-02-08 18:41:27 dervin Exp $ 
+ * @version $Id: InvokeSDK4DataServiceStep.java,v 1.15 2008-02-13 16:35:37 dervin Exp $ 
  */
 public class InvokeSDK4DataServiceStep extends Step {
     public static final String TEST_RESOURCES_DIR = "/test/resources/";
@@ -60,6 +60,8 @@ public class InvokeSDK4DataServiceStep extends Step {
         testGroupOfAttributesUsingOr();
         testGroupOfAssociationsUsingAnd();
         testGroupOfAssociationsUsingOr();
+        testNestedAssociations();
+        testNestedAssociationsNoRoleNames();
     }
     
     
@@ -131,6 +133,23 @@ public class InvokeSDK4DataServiceStep extends Step {
         LOG.debug("testGroupOfAssociationsUsingOr");
         CQLQuery query = loadQuery("groupOfAssociationsUsingOr.xml");
         CQLQueryResults results = loadQueryResults("goldGroupOfAssociationsUsingOr.xml");
+        invokeValidQueryValidResults(query, results);
+    }
+    
+    
+    private void testNestedAssociations() {
+        LOG.debug("testNestedAssociations");
+        CQLQuery query = loadQuery("nestedAssociations.xml");
+        CQLQueryResults results = loadQueryResults("goldNestedAssociations.xml");
+        invokeValidQueryValidResults(query, results);
+    }
+    
+    
+    private void testNestedAssociationsNoRoleNames() {
+        LOG.debug("testNestedAssociationsNoRoleNames");
+        CQLQuery query = loadQuery("nestedAssociationsNoRoleNames.xml");
+        // should have same results as with role names
+        CQLQueryResults results = loadQueryResults("goldNestedAssociations.xml");
         invokeValidQueryValidResults(query, results);
     }
     
