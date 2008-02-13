@@ -67,7 +67,7 @@ import com.jgoodies.validation.view.ValidationComponentUtils;
  * @author David Ervin
  * 
  * @created Jun 4, 2007 1:45:08 PM
- * @version $Id: SDKClientSelectionPanel.java,v 1.9 2007-11-06 15:53:43 hastings Exp $ 
+ * @version $Id: SDKClientSelectionPanel.java,v 1.10 2008-02-13 15:15:36 dervin Exp $ 
  */
 public class SDKClientSelectionPanel extends AbstractWizardPanel {
     // keys for validation components
@@ -80,9 +80,9 @@ public class SDKClientSelectionPanel extends AbstractWizardPanel {
     public static final String[] LOCAL_CONFIG_DIR_FILES = new String[] {
         "ApplicationSecurityConfig.xml", "hibernate.properties",
         "applicationService.xml", "log4j.properties",
-        "ehcache.xml", "remoteService.xml",
-        "sdk.csm.new.hibernate.cfg.xml"
+        "ehcache.xml", "remoteService.xml"
     };
+    public static final String LOCAL_CONFIG_CSM_FILE_SUFFIX = ".csm.new.hibernate.cfg.xml"; 
     
     // from HQLCoreQueryProcessor...
     public static final String USE_LOCAL_APPSERVICE = "useLocalAppservice";
@@ -703,13 +703,18 @@ public class SDKClientSelectionPanel extends AbstractWizardPanel {
         if (!dir.isDirectory() || !dir.canRead()) {
             return false;
         }
+        // check for the required filenames and the CSM config suffix
         String[] names = dir.list();
         Set<String> required = new HashSet();
         Collections.addAll(required, LOCAL_CONFIG_DIR_FILES);
+        boolean csmConfigFound = false;
         for (String name : names) {
             required.remove(name);
+            if (name.endsWith(LOCAL_CONFIG_CSM_FILE_SUFFIX)) {
+                csmConfigFound = true;
+            }
         }
-        return required.size() == 0;
+        return required.size() == 0 && csmConfigFound;
     }
     
     
