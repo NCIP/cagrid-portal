@@ -3,14 +3,10 @@
  */
 package org.cagrid.installer.tasks;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-
 import org.cagrid.installer.model.CaGridInstallerModel;
 import org.cagrid.installer.steps.Constants;
+
+import java.util.*;
 
 
 /**
@@ -86,10 +82,6 @@ public class CopySelectedServicesToTempDirTask extends CaGridInstallerAntTask {
         sysProps.setProperty("selected.services", sb.toString());
 
         new AntTask("", "", target, env, sysProps).execute(model);
-
-        if (model.isTrue(Constants.INSTALL_BROWSER)) {
-            new AntTask("", "", "copy-browser", env, sysProps).execute(model);
-        }
 
         return null;
     }

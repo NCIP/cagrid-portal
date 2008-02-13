@@ -42,8 +42,7 @@ public class SelectInstallationTypeStep extends PropertyConfigurationStep {
 		if (isSelected(Constants.INSTALL_CAGRID)
 				|| isSelected(Constants.CONFIGURE_CONTAINER)
 				|| isSelected(Constants.INSTALL_SERVICES)
-				|| isSelected(Constants.INSTALL_PORTAL)
-				|| isSelected(Constants.INSTALL_BROWSER)) {
+				|| isSelected(Constants.INSTALL_PORTAL)){
 			setComplete(true);
 		} else {
 			setComplete(false);
@@ -57,12 +56,7 @@ public class SelectInstallationTypeStep extends PropertyConfigurationStep {
 
 	public void applyState() throws InvalidStateException {
 		super.applyState();
-
-		if (this.model.isTrue(Constants.INSTALL_BROWSER)) {
-			this.model.setProperty(Constants.CONTAINER_TYPE, this.model
-					.getMessage("container.type.tomcat"));
-		}
-        else if (this.model.isTrue(Constants.INSTALL_PORTAL)) {
+        if (this.model.isTrue(Constants.INSTALL_PORTAL)) {
 			this.model.setProperty(Constants.CONTAINER_TYPE, this.model
 					.getMessage("container.type.jboss"));
 		}

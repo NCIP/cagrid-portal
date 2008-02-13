@@ -28,7 +28,6 @@ installer/cagrid.installer.properties
    - cagrid.md5.checksum
    - globus.md5.checksum
    - activebpel.md5.checksum
-   - browser.md5.checksum
 
 installer/src/org/cagrid/installer/AbstractDownloadedComponentInstaller.java
  - added <componentId>.md5.checksum parameter to DownloadFileTask constructor
@@ -39,4 +38,7 @@ installer/src/org/cagrid/installer/tasks/DownloadFileTask.java
 
 installer/src/org/cagrid/installer/util/MD5Checksum.java
  - newly added
- 
+
+ Added new Portal installer (02/12/2008)
+
+ Removed browser installer (02/13/2008)

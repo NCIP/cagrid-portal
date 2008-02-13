@@ -79,8 +79,6 @@ public interface CaGridInstallerModel extends WizardModel {
 	
 	boolean isGlobusDeployed();
 
-	boolean isBrowserInstalled();
-
     boolean isPortalInstalled();
 
     boolean isAuthnSvcServiceCredentialsPresent();

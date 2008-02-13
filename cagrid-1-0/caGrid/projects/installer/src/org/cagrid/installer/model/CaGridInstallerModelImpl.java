@@ -111,10 +111,6 @@ CaGridInstallerModel {
             setProperty(Constants.ACTIVEBPEL_HOME, getHomeDir(Constants.ACTIVEBPEL_HOME, null));
         }
 
-        // Look for browser
-        if (isBrowserInstalled()) {
-            setProperty(Constants.BROWSER_HOME, getHomeDir(Constants.BROWSER_HOME, null));
-        }
         if (isPortalInstalled()) {
             setProperty(Constants.PORTAL_HOME, getHomeDir(Constants.PORTAL_HOME, null));
         }
@@ -283,8 +279,7 @@ CaGridInstallerModel {
 
     public boolean isSecureContainerRequired() {
         return isTrue(Constants.INSTALL_DORIAN) || isTrue(Constants.INSTALL_GTS) || isTrue(Constants.INSTALL_CDS)
-            || isTrue(Constants.INSTALL_AUTHN_SVC) || isTrue(Constants.INSTALL_GRID_GROUPER)
-            || isTrue(Constants.INSTALL_BROWSER);
+            || isTrue(Constants.INSTALL_AUTHN_SVC) || isTrue(Constants.INSTALL_GRID_GROUPER);
     }
 
 
@@ -294,8 +289,7 @@ CaGridInstallerModel {
 
 
     public boolean isConfigureContainerSelected() {
-        return isTrue(Constants.CONFIGURE_CONTAINER) || isTrue(Constants.INSTALL_SERVICES)
-             || isTrue(Constants.INSTALL_BROWSER);
+        return isTrue(Constants.CONFIGURE_CONTAINER) || isTrue(Constants.INSTALL_SERVICES);
     }
 
 
@@ -433,15 +427,6 @@ CaGridInstallerModel {
         return globusDeployed;
     }
 
-
-    public boolean isBrowserInstalled() {
-        boolean installed = false;
-        String homeDir = getHomeDir(Constants.BROWSER_HOME, null);
-        if (homeDir != null) {
-            installed = InstallerUtils.checkBrowserVersion(homeDir);
-        }
-        return installed;
-    }
 
     public boolean isPortalInstalled() {
         boolean installed = false;

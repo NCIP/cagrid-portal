@@ -6,7 +6,6 @@ package org.cagrid.installer;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.cagrid.installer.authnsvc.AuthenticationServiceComponentInstaller;
-import org.cagrid.installer.browser.BrowserComponentInstaller;
 import org.cagrid.installer.cadsr.CaDSRComponentInstaller;
 import org.cagrid.installer.cds.CDSComponentInstaller;
 import org.cagrid.installer.dorian.DorianComponentInstaller;
@@ -67,7 +66,6 @@ public class Installer {
         downloadedComponentInstallers.add(new GlobusComponentInstaller());
         downloadedComponentInstallers.add(new ActiveBPELComponentInstaller());
         downloadedComponentInstallers.add(new CaGridSourceComponentInstaller());
-        downloadedComponentInstallers.add(new BrowserSourceComponentInstaller());
         downloadedComponentInstallers.add(new PortalSourceComponentInstaller());
 
 
@@ -86,7 +84,6 @@ public class Installer {
         componentInstallers.add(new GridGrouperComponentInstaller());
         componentInstallers.add(new PortalComponentInstaller());
         componentInstallers.add(new IndexServiceComponentInstaller());
-        componentInstallers.add(new BrowserComponentInstaller());
     }
 
 
@@ -350,10 +347,6 @@ public class Installer {
             new BooleanPropertyConfigurationOption(Constants.INSTALL_PORTAL, this.model
                 .getMessage("select.install.install.portal"), false, true));
 
-        selectInstallStep.getOptions().add(
-            new BooleanPropertyConfigurationOption(Constants.INSTALL_BROWSER, this.model
-                .getMessage("select.install.install.browser"), false, true));
-
         this.model.add(selectInstallStep);
 
         incrementProgress();
@@ -428,7 +421,7 @@ public class Installer {
             public boolean evaluate(WizardModel m) {
                 CaGridInstallerModel model = (CaGridInstallerModel) m;
                 return model.isConfigureContainerSelected()
-                    && !(model.isTrue(Constants.INSTALL_PORTAL) || model.isTrue(Constants.INSTALL_BROWSER)) && !model.isTrue(Constants.INSTALL_TRANSFER);
+                    && !(model.isTrue(Constants.INSTALL_PORTAL)) && !model.isTrue(Constants.INSTALL_TRANSFER);
             }
 
         });
@@ -438,7 +431,7 @@ public class Installer {
             public boolean evaluate(WizardModel m) {
                 CaGridInstallerModel model = (CaGridInstallerModel) m;
                 return model.isConfigureContainerSelected()
-                    && !(model.isTrue(Constants.INSTALL_PORTAL) || model.isTrue(Constants.INSTALL_BROWSER) && model.isTrue(Constants.INSTALL_TRANSFER));
+                    && !(model.isTrue(Constants.INSTALL_PORTAL) && model.isTrue(Constants.INSTALL_TRANSFER));
             }
 
         });
@@ -463,8 +456,7 @@ public class Installer {
                 public boolean evaluate(WizardModel m) {
                     CaGridInstallerModel model = (CaGridInstallerModel) m;
                     return model.isTrue(Constants.INSTALL_SERVICES) || model.isTrue(Constants.INSTALL_PORTAL)
-                        || model.isTrue(Constants.INSTALL_BROWSER);
-                }
+                ;}
             }));
 
         installDependenciesStep.getTasks()
@@ -762,7 +754,6 @@ public class Installer {
         this.model.unsetProperty(Constants.DORIAN_CA_PRESENT);
         this.model.unsetProperty(Constants.INSTALL_ACTIVEBPEL);
         this.model.unsetProperty(Constants.INSTALL_AUTHN_SVC);
-        this.model.unsetProperty(Constants.INSTALL_BROWSER);
         this.model.unsetProperty(Constants.INSTALL_CADSR);
         this.model.unsetProperty(Constants.INSTALL_DORIAN);
         this.model.unsetProperty(Constants.INSTALL_CDS);

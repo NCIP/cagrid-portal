@@ -52,14 +52,6 @@
 
 	</target>
 
-	<target name="copy-browser">
-		<mkdir dir="${service.dest.dir}/cagrid-browser" />
-		<copy todir="${service.dest.dir}/cagrid-browser"
-			overwrite="false">
-			<fileset dir="${browser.home}" />
-		</copy>
-	</target>
-
 	<target name="configure-dorian-conf">
 
 		<property name="dorian.config.ns"
@@ -972,25 +964,10 @@ ${authn.svc.csm.ctx}{
 		</ant>
 	</target>
 
-	<target name="deploy-browser">
-		<ant dir="${service.dest.dir}/cagrid-browser" inheritAll="false"
-			target="deployWebapp">
-			<property name="project.name"
-				value="${browser.context.name}" />
-		</ant>
-	</target>
-
 	<target name="deploy-portal-crypto-jars">
 		<antcall target="deploy-webapp-crypto-jars">
 			<param name="webapp.context.name"
 				value="${portal.context.name}" />
-		</antcall>
-	</target>
-
-	<target name="deploy-browser-crypto-jars">
-		<antcall target="deploy-webapp-crypto-jars">
-			<param name="webapp.context.name"
-				value="${browser.context.name}" />
 		</antcall>
 	</target>
 
@@ -1067,84 +1044,6 @@ ${authn.svc.csm.ctx}{
 		</if>
 	</target>
 
-	<target name="configure-browser">
-
-		<property name="config.file"
-			value="${service.dest.dir}/cagrid-browser/webcontent/WEB-INF/faces-config.xml" />
-			
-			
-		
-
-		<xmltask source="${config.file}" dest="${config.file}"
-			preservetype="true">
-			
-			<xmlcatalog refid="installer.catalog"/>
-			
-			<replace path="/*[local-name()='faces-config']/*[local-name()='managed-bean' and ./*[local-name()='managed-bean-name' and contains(text(),'loginBean')]]/*[local-name()='managed-property' and ./*[local-name()='property-name' and contains(text(),'idpUrl1')]]/*[local-name()='value']/text()" withText="${browser.idp.url1}"/>
-			<replace path="/*[local-name()='faces-config']/*[local-name()='managed-bean' and ./*[local-name()='managed-bean-name' and contains(text(),'loginBean')]]/*[local-name()='managed-property' and ./*[local-name()='property-name' and contains(text(),'idpUrl2')]]/*[local-name()='value']/text()" withText="${browser.idp.url2}"/>
-			<replace path="/*[local-name()='faces-config']/*[local-name()='managed-bean' and ./*[local-name()='managed-bean-name' and contains(text(),'loginBean')]]/*[local-name()='managed-property' and ./*[local-name()='property-name' and contains(text(),'ifsUrl')]]/*[local-name()='value']/text()" withText="${browser.ifs.url}"/>
-			<replace path="/*[local-name()='faces-config']/*[local-name()='managed-bean' and ./*[local-name()='managed-bean-name' and contains(text(),'semanticSearchConfig')]]/*[local-name()='managed-property' and ./*[local-name()='property-name' and contains(text(),'evsGridServiceUrl')]]/*[local-name()='value']/text()" withText="${browser.evs.svc.url}"/>
-			
-			<remove
-				path="/*[local-name()='faces-config']/*[local-name()='managed-bean' and ./*[local-name()='managed-bean-name' and text()='discoveryBean']]/*[local-name()='managed-property' and ./*[local-name()='property-name' and text()='indexServiceUrls']]/*[local-name()='list-entries']/*[local-name()='value']" />
-			<remove
-				path="/*[local-name()='faces-config']/*[local-name()='managed-bean' and ./*[local-name()='managed-bean-name' and text()='discoveryBean']]/*[local-name()='managed-property' and ./*[local-name()='property-name' and text()='indexServiceUrlsSelected']]/*[local-name()='list-entries']/*[local-name()='value']" />
-
-			<remove
-				path="/*[local-name()='faces-config']/*[local-name()='managed-bean' and ./*[local-name()='managed-bean-name' and starts-with(text(),'indexService')]]" />
-		</xmltask>
-
-		<var name="idx" value="0" />
-		<for list="${browser.index.svc.urls}" param="url">
-			<sequential>
-				<math result="sum" operand1="${idx}" operation="+"
-					operand2="1" datatype="int" />
-				<var name="idx" value="${sum}" />
-
-				<xmltask source="${config.file}" dest="${config.file}"
-					preservetype="true">
-					
-					<xmlcatalog refid="installer.catalog"/>
-
-					<insert
-						path="/*[local-name()='faces-config']/*[local-name()='managed-bean' and ./*[local-name()='managed-bean-name' and text()='discoveryBean']]/*[local-name()='managed-property' and ./*[local-name()='property-name' and text()='indexServiceUrls']]/*[local-name()='list-entries']">
-						<![CDATA[
-						<value xmlns="http://java.sun.com/JSF/Configuration">#{indexService${idx}}</value>
-						]]>
-					</insert>
-
-					<insert
-						path="/*[local-name()='faces-config']/*[local-name()='managed-bean' and ./*[local-name()='managed-bean-name' and text()='discoveryBean']]/*[local-name()='managed-property' and ./*[local-name()='property-name' and text()='indexServiceUrlsSelected']]/*[local-name()='list-entries']">
-						<![CDATA[
-						<value xmlns="http://java.sun.com/JSF/Configuration">#{indexService${idx}.value}</value>
-						]]>
-					</insert>
-
-
-					<insert path="/*[local-name()='faces-config']">
-						<![CDATA[
-    <managed-bean xmlns="http://java.sun.com/JSF/Configuration">
-        <managed-bean-name>indexService${idx}</managed-bean-name>
-        <managed-bean-class>javax.faces.model.SelectItem</managed-bean-class>
-        <managed-bean-scope>none</managed-bean-scope>
-        <managed-property>
-            <property-name>label</property-name>
-            <value>@{url}</value>
-        </managed-property>
-        <managed-property>
-            <property-name>value</property-name>
-            <value>@{url}</value>
-        </managed-property>
-    </managed-bean> 					
-						]]>
-					</insert>
-
-				</xmltask>
-
-
-			</sequential>
-		</for>
-	</target>
 
 	<target name="unpack-bpel-admin-war">
 		<mkdir dir="${tomcat.home}/webapps/BpelAdmin" />

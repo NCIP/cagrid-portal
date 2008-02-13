@@ -3,35 +3,6 @@
  */
 package org.cagrid.installer.util;
 
-import java.awt.Component;
-import java.awt.GridBagConstraints;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.StringWriter;
-import java.lang.reflect.Method;
-import java.net.URL;
-import java.net.URLClassLoader;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.util.Properties;
-
-import javax.swing.BorderFactory;
-import javax.swing.JOptionPane;
-import javax.swing.JTable;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.TableColumn;
-import javax.xml.transform.Result;
-import javax.xml.transform.Source;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.cagrid.installer.model.CaGridInstallerModel;
@@ -46,6 +17,24 @@ import org.cagrid.installer.validator.MySqlDBConnectionValidator;
 import org.cagrid.installer.validator.PathExistsValidator;
 import org.pietschy.wizard.InvalidStateException;
 import org.w3c.dom.Node;
+
+import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableColumn;
+import javax.xml.transform.Result;
+import javax.xml.transform.Source;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import java.awt.*;
+import java.io.*;
+import java.lang.reflect.Method;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.util.Properties;
 
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
@@ -396,13 +385,7 @@ public class InstallerUtils {
 		return new File(home).exists();
 	}
 
-	public static boolean checkBrowserVersion(String homeDir) {
-		File coreJar = new File(homeDir + "/ext/lib/caGrid-"
-				+ Constants.CAGRID_VERSION + "-core.jar");
-		return coreJar.exists();
-	}
-
-	public static void addDBConfigPropertyOptions(CaGridInstallerModel model,
+    public static void addDBConfigPropertyOptions(CaGridInstallerModel model,
 			PropertyConfigurationStep step, String propPrefix,
 			String dbIdDefault) {
 		step.getOptions().add(

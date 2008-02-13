@@ -390,8 +390,6 @@ public abstract class Constants {
 
 	public static final String INSTALL_PORTAL = "install.portal";
 
-	public static final String INSTALL_BROWSER = "install.browser";
-
     public static final String PORTAL_DB_URL = "cagrid.portal.db.url";
 
     public static final String PORTAL_DB_USERNAME = "cagrid.portal.db.username";
@@ -406,7 +404,7 @@ public abstract class Constants {
 
 	public static final String PORTAL_INDEX_SVC_URLS = "cagrid.portal.indexServiceUrls";
 
-    public static final String PORTAL_AGGR_TARGET_GRID = "aggr.target.grid";
+    public static final String PORTAL_AGGR_TARGET_GRID = "aggr.trust.target.grid";
 
     public static final String PORTAL_ADMIN_EMAIL = "cagrid.portal.admin.email";
 
@@ -443,30 +441,6 @@ public abstract class Constants {
     public static final String JBOSS_CONTAINER_TYPE = "container.type.jboss";
 
     public static final String CAGRID_VERSION = "1.1";
-
-    public static final String BROWSER_HOME = "browser.home";
-
-	public static final String BROWSER_INSTALLED = "browser.installed";
-
-	public static final String BROWSER_INSTALL_DIR_PATH = "browser.install.dir.path";
-
-	public static final String BROWSER_DOWNLOAD_URL = "browser.download.url";
-
-	public static final String BROWSER_TEMP_FILE_NAME = "browser.temp.file.name";
-
-	public static final String BROWSER_DIR_NAME = "browser.dir.name";
-
-	public static final String BROWSER_INDEX_SERVICE_URLS = "browser.index.svc.urls";
-
-	public static final String BROWSER_EVS_SVC_URL = "browser.evs.svc.url";
-
-	public static final String BROWSER_IDP_URL1 = "browser.idp.url1";
-
-	public static final String BROWSER_IDP_URL2 = "browser.idp.url2";
-
-	public static final String BROWSER_IFS_URL = "browser.ifs.url";
-
-	public static final String BROWSER_CONTEXT_NAME = "browser.context.name";
 
 	public static final String BPEL_ADMIN_ROLE = "bpel.admin.role";
 
