@@ -18,9 +18,8 @@ Here are the five newest services...
 						<portlet:param name="selectedId" value="${serviceInfo.id}"/>
 						<portlet:param name="type" value="SERVICE"/>
 					</portlet:actionURL>
-					<a href="<c:out value="${selectItemAction}"/>">			
+					<a href="<c:out value="${selectItemAction}"/>">
 						<c:out value="${serviceInfo.name}"/>
-                        <m:centerName name="${serviceInfo.center}"/>
                     </a>
 				</td>
 				<td>
@@ -34,7 +33,13 @@ Here are the five newest services...
 					</c:choose>
 				</td>
 			</tr>
+			<tr>
+				<td colspan="2" style="font-size:90%">
+					[<c:out value="${serviceInfo.urlAbbrv}"/>...]
+				</td>
+			</tr>
 		</c:forEach>	
+		
 	</tbody>
 </table>
 <br/>
