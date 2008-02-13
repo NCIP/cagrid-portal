@@ -128,6 +128,7 @@ public class ErrorDialog extends JDialog {
 		super(owner);
 		this.message = message;
 		this.exception = exception;
+		this.setModal(true);
 		initialize();
 	}
 
@@ -136,6 +137,7 @@ public class ErrorDialog extends JDialog {
 		super(owner);
 		this.message = message;
 		this.strDetails = strDetails;
+		this.setModal(true);
 		initialize();
 	}
 

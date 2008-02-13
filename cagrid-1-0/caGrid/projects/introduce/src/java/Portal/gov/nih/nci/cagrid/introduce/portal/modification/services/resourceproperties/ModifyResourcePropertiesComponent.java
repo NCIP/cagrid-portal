@@ -45,7 +45,7 @@ public class ModifyResourcePropertiesComponent extends JDialog {
 	public ModifyResourcePropertiesComponent(ServiceType service,
 			ServiceInformation info, NamespacesType namespaces, File etcDir,
 			File schemaDir, boolean showW3Cnamespaces) {
-		super(GridApplication.getContext().getApplication());
+		super(GridApplication.getContext().getApplication(),"Modify Resource Properties");
 		this.setModal(true);
 		this.service = service;
 		this.etcDir = etcDir;

@@ -2489,7 +2489,7 @@ public class MethodViewer extends javax.swing.JDialog {
                     validateImportInput();
                 }
             });
-            isFromIntroduceCheckBox.setSelected(true);
+            isFromIntroduceCheckBox.setSelected(method.isIsImported() && method.getImportInformation()!=null && method.getImportInformation().getFromIntroduce().booleanValue());
         }
         return isFromIntroduceCheckBox;
     }

@@ -37,6 +37,7 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.xml.namespace.QName;
 
+import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.utils.ErrorDialog;
 import javax.swing.BorderFactory;
 import javax.swing.border.TitledBorder;
@@ -512,7 +513,7 @@ public class ModifyResourcePropertiesPanel extends JPanel {
                                 }
                                 ResourcePropertyEditorDialog diag = new ResourcePropertyEditorDialog(mdec,
                                     resourcePropertyFile);
-                                diag.setVisible(true);
+                                GridApplication.getContext().showDialog(diag);
                             }
 
                         } catch (Exception ex) {
