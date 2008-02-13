@@ -1,2 +1,2 @@
 Main-Class: org.cagrid.installer.Installer
-Class-Path: lib/ant.jar lib/caGrid-1.1-wizard.jar lib/commons-logging.jar lib/log4j-1.2.14.jar lib/mysql-connector-3.0.16-ga-bin.jar lib/jce-jdk13-125.jar lib/cog-jglobus.jar
+Class-Path: lib/caGrid-1.1-wizard.jar lib/commons-logging.jar lib/log4j-1.2.14.jar lib/mysql-connector-3.0.16-ga-bin.jar lib/jce-jdk13-125.jar lib/cog-jglobus.jar
