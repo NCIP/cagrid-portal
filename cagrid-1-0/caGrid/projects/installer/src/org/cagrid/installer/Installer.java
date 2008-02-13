@@ -3,23 +3,6 @@
  */
 package org.cagrid.installer;
 
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.cagrid.installer.authnsvc.AuthenticationServiceComponentInstaller;
@@ -37,36 +20,24 @@ import org.cagrid.installer.model.CaGridInstallerModel;
 import org.cagrid.installer.model.CaGridInstallerModelImpl;
 import org.cagrid.installer.myservice.MyServiceComponentInstaller;
 import org.cagrid.installer.portal.PortalComponentInstaller;
-import org.cagrid.installer.steps.CheckSecureContainerStep;
-import org.cagrid.installer.steps.ConfigureCAStep;
-import org.cagrid.installer.steps.ConfigureServiceCertStep;
-import org.cagrid.installer.steps.Constants;
-import org.cagrid.installer.steps.InstallationCompleteStep;
-import org.cagrid.installer.steps.PresentLicenseStep;
-import org.cagrid.installer.steps.PropertyConfigurationStep;
-import org.cagrid.installer.steps.RunTasksStep;
-import org.cagrid.installer.steps.SelectComponentStep;
-import org.cagrid.installer.steps.SelectInstallationTypeStep;
-import org.cagrid.installer.steps.SpecifyTomcatPortsStep;
+import org.cagrid.installer.steps.*;
 import org.cagrid.installer.steps.options.BooleanPropertyConfigurationOption;
 import org.cagrid.installer.steps.options.FilePropertyConfigurationOption;
 import org.cagrid.installer.steps.options.ListPropertyConfigurationOption;
 import org.cagrid.installer.steps.options.TextPropertyConfigurationOption;
 import org.cagrid.installer.syncgts.SyncGTSComponentInstaller;
-import org.cagrid.installer.tasks.ConditionalTask;
-import org.cagrid.installer.tasks.ConfigureGlobusTask;
-import org.cagrid.installer.tasks.ConfigureTomcatTask;
-import org.cagrid.installer.tasks.CopySelectedServicesToTempDirTask;
-import org.cagrid.installer.tasks.DeployGlobusToTomcatTask;
-import org.cagrid.installer.tasks.GenerateCATask;
-import org.cagrid.installer.tasks.GenerateServiceCredsTask;
-import org.cagrid.installer.tasks.SaveSettingsTask;
+import org.cagrid.installer.tasks.*;
 import org.cagrid.installer.transfer.TransferComponentInstaller;
 import org.cagrid.installer.util.InstallerUtils;
 import org.cagrid.installer.workflow.WorkflowComponentInstaller;
 import org.pietschy.wizard.Wizard;
 import org.pietschy.wizard.WizardModel;
 import org.pietschy.wizard.models.Condition;
+
+import javax.swing.*;
+import java.io.*;
+import java.net.URL;
+import java.util.*;
 
 
 /**
@@ -97,6 +68,8 @@ public class Installer {
         downloadedComponentInstallers.add(new ActiveBPELComponentInstaller());
         downloadedComponentInstallers.add(new CaGridSourceComponentInstaller());
         downloadedComponentInstallers.add(new BrowserSourceComponentInstaller());
+        downloadedComponentInstallers.add(new PortalSourceComponentInstaller());
+
 
         componentInstallers.add(new MyServiceComponentInstaller());
         componentInstallers.add(new SyncGTSComponentInstaller());

@@ -392,19 +392,59 @@ public abstract class Constants {
 
 	public static final String INSTALL_BROWSER = "install.browser";
 
-	public static final String PORTAL_META_AGG_FREQ = "portal.meta.agg.freq";
+    public static final String PORTAL_DB_URL = "cagrid.portal.db.url";
 
-	public static final String PORTAL_GOOGLE_MAP_KEY = "portal.google.map.key";
+    public static final String PORTAL_DB_USERNAME = "cagrid.portal.db.username";
 
-	public static final String PORTAL_GEOCODER_APP_ID = "portal.geocoder.app.id";
+    public static final String PORTAL_DB_PASSWORD = "cagrid.portal.db.password";
 
-	public static final String PORTAL_INDEX_SVC_URLS = "portal.index.svc.urls";
+    public static final String PORTAL_META_AGG_FREQ = "portal.meta.agg.freq";
 
-	public static final String PORTAL_CONTEXT_NAME = "portal.context.name";
+	public static final String PORTAL_GOOGLE_MAP_KEY = "cagrid.portal.map.google.apiKey";
 
-	public static final String CAGRID_VERSION = "1.1";
+	public static final String PORTAL_GEOCODER_APP_ID = "cagrid.portal.geocoder.yahoo.appId";
 
-	public static final String BROWSER_HOME = "browser.home";
+	public static final String PORTAL_INDEX_SVC_URLS = "cagrid.portal.indexServiceUrls";
+
+    public static final String PORTAL_AGGR_TARGET_GRID = "aggr.target.grid";
+
+    public static final String PORTAL_ADMIN_EMAIL = "cagrid.portal.admin.email";
+
+    public static final String PORTAL_SECURITY_ENCRYPTION_KEY = "cagrid.portal.security.encryption.key";
+
+    public static final String PORTAL_TRUST_SYNCHRONIZED_ENABLED = "cagrid.portal.trust.synchronizeEnabled";
+
+    public static final String PORATL_HTTP_REDIRECT_PORT ="cagrid.portal.httpRedirect.port";
+
+    public static final String PORATL_HTTPS_REDIRECT_PORT ="cagrid.portal.httpsRedirect.port";
+
+    public static final String PORTAL_GME_URL="cagrid.portal.gmeUrl";
+
+    public static final String PORTAL_CADSR_URL = "cagrid.portal.cadsrUrl";
+
+    public static final String PORTAL_HOME = "portal.home";
+
+    public static final String PORTAL_INSTALLED = "portal.installed";
+
+    public static final String PORTAL_INSTALL_DIR_PATH = "portal.install.dir.path";
+
+    public static final String PORTAL_DOWNLOAD_URL = "portal.download.url";
+
+    public static final String PORTAL_LIFERAY_DIR_NAME = "portal-liferay" ;
+
+    public static final String PORTAL_LIFERAY_DB_NAME = "liferay.db.name" ;
+
+    public static final String LIFERAY_KEYSTORE_PATH = "liferay.https.keystore.path";
+
+    public static final String LIFERAY_KEYSTORE_PASSWORD = "liferay.https.keystore.password";
+
+    public static final String LIFERAY_JBOSS_DIR = "liferay.jboss.dir";
+
+    public static final String JBOSS_CONTAINER_TYPE = "container.type.jboss";
+
+    public static final String CAGRID_VERSION = "1.1";
+
+    public static final String BROWSER_HOME = "browser.home";
 
 	public static final String BROWSER_INSTALLED = "browser.installed";
 
@@ -451,8 +491,5 @@ public abstract class Constants {
 	public static final String DORIAN_IDP_MAX_CONSEC_INVALID_LOGINS = "dorian.idp.max.consec.invalid.logins";
 
 	public static final String DORIAN_IDP_MAX_TOTAL_INVALID_LOGINS = "dorian.idp.max.total.invalid.logins";
-
-	
-
 
 }

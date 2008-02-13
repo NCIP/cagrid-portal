@@ -1,192 +1,199 @@
 /**
- * 
+ *
  */
 package org.cagrid.installer.portal;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.cagrid.installer.CaGridComponentInstaller;
 import org.cagrid.installer.model.CaGridInstallerModel;
 import org.cagrid.installer.steps.Constants;
 import org.cagrid.installer.steps.DropServiceDatabaseStep;
 import org.cagrid.installer.steps.PropertyConfigurationStep;
 import org.cagrid.installer.steps.RunTasksStep;
-import org.cagrid.installer.syncgts.ConfigureSyncGTSStep;
+import org.cagrid.installer.steps.options.PasswordPropertyConfigurationOption;
+import org.cagrid.installer.steps.options.TextPropertyConfigurationOption;
 import org.cagrid.installer.tasks.CaGridInstallerAntTask;
 import org.cagrid.installer.tasks.ConditionalTask;
 import org.cagrid.installer.util.InstallerUtils;
+import org.cagrid.installer.validator.MySqlDBConnectionValidator;
 import org.pietschy.wizard.WizardModel;
 import org.pietschy.wizard.models.Condition;
 
+import java.util.Map;
+
 /**
  * @author <a href="joshua.phillips@semanticbits.com">Joshua Phillips</a>
+ * @author kherm manav.kher@semanticbits.com
  *
  */
 public class PortalComponentInstaller implements CaGridComponentInstaller {
 
-	/**
-	 * 
-	 */
-	public PortalComponentInstaller() {
+    private static final Log logger = LogFactory
+            .getLog(PortalComponentInstaller.class);
 
-	}
-
-	/* (non-Javadoc)
-	 * @see org.cagrid.installer.ComponentInstaller#addInstallTasks(org.cagrid.installer.model.CaGridInstallerModel, org.cagrid.installer.steps.RunTasksStep)
-	 */
-	public void addInstallTasks(CaGridInstallerModel model,
-			RunTasksStep installStep) {
-		Condition installPortal = new Condition() {
-
-			public boolean evaluate(WizardModel m) {
-				CaGridInstallerModel model = (CaGridInstallerModel) m;
-				return model.isTrue(Constants.INSTALL_PORTAL);
-			}
-
-		};
-
-		// Configure Portal Properties
-		installStep.getTasks().add(
-				new ConditionalTask(new CaGridInstallerAntTask(model
-						.getMessage("installing.portal.title"), "",
-						"configure-portal-properties"), installPortal));
-
-		// Configure Portal Index Svc URLs
-		installStep.getTasks().add(
-				new ConditionalTask(new CaGridInstallerAntTask(model
-						.getMessage("installing.portal.title"), "",
-						"configure-portal-index-svc"), installPortal));
-
-		installStep.getTasks().add(
-				new ConditionalTask(new CaGridInstallerAntTask(model
-						.getMessage("installing.portal.title"), "",
-						"configure-portal-deactivate-syncgts"),
-						new Condition() {
-
-							public boolean evaluate(WizardModel m) {
-								CaGridInstallerModel model = (CaGridInstallerModel) m;
-								return model.isTrue(Constants.INSTALL_PORTAL)
-										&& (model
-												.isTrue(Constants.INSTALL_SYNC_GTS) || model
-												.isSyncGTSInstalled());
-							}
-
-						}));
-
-		// Deploy Portal
-		installStep.getTasks().add(
-				new ConditionalTask(new CaGridInstallerAntTask(model
-						.getMessage("installing.portal.title"), "",
-						"deploy-portal"), installPortal));
-
-		// Deploy Portal Crypto Jars
-		installStep.getTasks().add(
-				new ConditionalTask(new CaGridInstallerAntTask(model
-						.getMessage("installing.portal.title"), "",
-						"deploy-portal-crypto-jars"), installPortal));
-
-		CreatePortalDatabaseTask createPortalDB = new CreatePortalDatabaseTask(
-				model.getMessage("installing.portal.title"), "");
-		installStep.getTasks().add(
-				new ConditionalTask(createPortalDB, installPortal));
-
-		// Initialze Portal DB
-		CaGridInstallerAntTask initPortalDB1 = new CaGridInstallerAntTask(
-				model.getMessage("installing.portal.title"), "",
-				"createPortalDatabase") {
-			@Override
-			protected String getBuildFilePath(CaGridInstallerModel model) {
-				return model.getServiceDestDir() + "/portal/build.xml";
-			}
-		};
-		installStep.getTasks().add(
-				new ConditionalTask(initPortalDB1, installPortal));
-
-		CaGridInstallerAntTask initPortalDB2 = new CaGridInstallerAntTask(
-				model.getMessage("installing.portal.title"), "",
-				"createPortalZipCodeSeedData") {
-			@Override
-			protected String getBuildFilePath(CaGridInstallerModel model) {
-				return model.getServiceDestDir() + "/portal/build.xml";
-			}
-		};
-		installStep.getTasks().add(
-				new ConditionalTask(initPortalDB2, installPortal));
+    /**
+     *
+     */
+    public PortalComponentInstaller() {
 
 
-		CaGridInstallerAntTask initPortalDB4 = new CaGridInstallerAntTask(
-				model.getMessage("installing.portal.title"), "",
-				"createCaBIGWorkspaceSeedData") {
-			@Override
-			protected String getBuildFilePath(CaGridInstallerModel model) {
-				return model.getServiceDestDir() + "/portal/build.xml";
-			}
-		};
-		installStep.getTasks().add(
-				new ConditionalTask(initPortalDB4, installPortal));
+    }
 
-	}
+    /* (non-Javadoc)
+      * @see org.cagrid.installer.ComponentInstaller#addInstallTasks(org.cagrid.installer.model.CaGridInstallerModel, org.cagrid.installer.steps.RunTasksStep)
+      */
+    public void addInstallTasks(CaGridInstallerModel model,
+                                RunTasksStep installStep) {
+        Condition installPortal = new Condition() {
+            public boolean evaluate(WizardModel m) {
+                CaGridInstallerModel model = (CaGridInstallerModel) m;
+                return model.isTrue(Constants.INSTALL_PORTAL);
+            }};
 
-	/* (non-Javadoc)
-	 * @see org.cagrid.installer.ComponentInstaller#addSteps(org.cagrid.installer.model.CaGridInstallerModel)
-	 */
-	public void addSteps(CaGridInstallerModel model) {
-		Condition installPortal = new Condition() {
+        CreatePortalDatabaseTask createPortalDB = new CreatePortalDatabaseTask(
+                model.getMessage("installing.portal.title"), "");
+        installStep.getTasks().add(
+                new ConditionalTask(createPortalDB, installPortal));
 
-			public boolean evaluate(WizardModel m) {
-				CaGridInstallerModel model = (CaGridInstallerModel) m;
-				return model.isTrue(Constants.INSTALL_PORTAL);
-			}
+        CreateLiferayDatabaseTask createLiferayDB = new CreateLiferayDatabaseTask(
+                model.getMessage("installing.portal.title"), "");
+        installStep.getTasks().add(
+                new ConditionalTask(createLiferayDB, installPortal));
 
-		};
+        model.setProperty(Constants.LIFERAY_JBOSS_DIR,model.getProperty(Constants.PORTAL_INSTALL_DIR_PATH)+"/" + Constants.PORTAL_LIFERAY_DIR_NAME);
 
-		// Configure portal DB
-		PropertyConfigurationStep portalDbStep = new PropertyConfigurationStep(
-				model.getMessage("portal.db.config.title"), model
-						.getMessage("portal.db.config.desc"));
-		InstallerUtils.addDBConfigPropertyOptions(model, portalDbStep, "portal.", "portal");
-		model.add(portalDbStep, installPortal);
+        installStep.getTasks().add(
+                new ConditionalTask(new CaGridInstallerAntTask(model
+                        .getMessage("installing.portal.title"), "", "install") {
 
-		// Drop existing portal DB
-		final DropServiceDatabaseStep dropPortalDbStep = new DropServiceDatabaseStep(
-				model.getMessage("portal.db.drop.title"), model
-						.getMessage("portal.db.drop.desc"), "portal.",
-				"drop.portal.db");
-		model.add(dropPortalDbStep, new Condition() {
+                    protected String getBuildFilePath(CaGridInstallerModel model) {
+                        return model.getProperty(Constants.PORTAL_INSTALL_DIR_PATH)
+                                + "/cagrid-portal/build.xml";
+                    }
 
-			public boolean evaluate(WizardModel m) {
-				CaGridInstallerModel model = (CaGridInstallerModel) m;
-				return model.isTrue(Constants.INSTALL_PORTAL)
-						&& dropPortalDbStep.databaseExists(model);
-			}
-		});
+                },installPortal));
+    }
 
-		// Configure portal properties
-		ConfigurePortalPropertiesStep portalPropsStep = new ConfigurePortalPropertiesStep(
-				model.getMessage("portal.props.config.title"), model
-						.getMessage("portal.props.config.desc"));
-		model.add(portalPropsStep, installPortal);
+    /* (non-Javadoc)
+      * @see org.cagrid.installer.ComponentInstaller#addSteps(org.cagrid.installer.model.CaGridInstallerModel)
+      */
+    public void addSteps(CaGridInstallerModel model) {
+        Condition installPortal = new Condition() {
 
-		// Configure portal SyncGTS
-		ConfigureSyncGTSStep portalSyncGTSStep = new ConfigureSyncGTSStep(
-				model.getMessage("portal.syncgts.title"), model
-						.getMessage("portal.syncgts.desc")) {
-			protected boolean isShowPerformFirstSyncField() {
-				return false;
-			}
+            public boolean evaluate(WizardModel m) {
+                CaGridInstallerModel model = (CaGridInstallerModel) m;
+                return model.isTrue(Constants.INSTALL_PORTAL);
+            }
 
-			protected String getSyncDescriptionFileName() {
-				return this.model.getServiceDestDir()
-						+ "/portal/ext/resources/sync-description.xml";
-			}
-		};
-		model.add(portalSyncGTSStep, new Condition() {
-			public boolean evaluate(WizardModel m) {
-				CaGridInstallerModel model = (CaGridInstallerModel) m;
-				return model.isTrue(Constants.INSTALL_PORTAL)
-						&& !(model.isTrue(Constants.INSTALL_SYNC_GTS) || model
-								.isSyncGTSInstalled());
-			}
-		});
+        };
 
-	}
+        // Configure portal DB
+        PropertyConfigurationStep portalDbStep = new PropertyConfigurationStep(
+                model.getMessage("portal.db.config.title"), model
+                .getMessage("portal.db.config.desc"));
+        portalDbStep.getOptions().add(new TextPropertyConfigurationOption(
+                Constants.PORTAL_DB_URL,model.getMessage("portal.db.url"),
+                model.getProperty(Constants.PORTAL_DB_URL,"jdbc:mysql://localhost:3306/portal"),
+                true));
+        portalDbStep.getOptions().add(new TextPropertyConfigurationOption(
+                Constants.PORTAL_DB_USERNAME,model.getMessage("portal.db.username"),
+                model.getProperty(Constants.PORTAL_DB_USERNAME,"root"),
+                true));
+        portalDbStep.getOptions().add(new PasswordPropertyConfigurationOption(
+                Constants.PORTAL_DB_PASSWORD,model.getMessage("portal.db.password"),
+                model.getProperty(Constants.PORTAL_DB_PASSWORD,""),
+                false));
+
+        portalDbStep.getValidators().add(
+                new MySqlDBConnectionValidator("", "",
+                        Constants.PORTAL_DB_USERNAME,
+                        Constants.PORTAL_DB_PASSWORD, "select 1",
+                        model.getMessage("db.validation.failed")) {
+
+                    protected String getJdbcUrl(Map state) {
+                        String url = (String) state
+                                .get(Constants.PORTAL_DB_URL);
+                        return InstallerUtils.getJdbcBaseFromJdbcUrl(url)
+                                + "/mysql";
+                    }
+
+                });
+        model.add(portalDbStep, installPortal);
+
+        // Drop existing portal DB
+        final DropServiceDatabaseStep dropPortalDbStep = new DropServiceDatabaseStep(
+                model.getMessage("portal.db.drop.title"), model
+                .getMessage("portal.db.drop.desc"), "portal.",
+                "drop.portal.db"){
+            protected String getJdbcUrl(CaGridInstallerModel model) {
+                logger.debug("Portal DB URL " + model.getProperty(Constants.PORTAL_DB_URL));
+                return model.getProperty(Constants.PORTAL_DB_URL);
+            }
+
+            protected String getPassword(CaGridInstallerModel model) {
+                return model.getProperty(Constants.PORTAL_DB_PASSWORD);
+            }
+
+            protected String getUsername(CaGridInstallerModel model) {
+                return model.getProperty(Constants.PORTAL_DB_USERNAME);
+            }
+
+            protected String getDatabase(CaGridInstallerModel model) {
+                String db = null;
+                String url = getJdbcUrl(model);
+                if(url != null){
+                    db = InstallerUtils.getDbNameFromJdbcUrl(url);
+                }
+                return db;
+            }
+        };
+
+        model.add(dropPortalDbStep, new Condition() {
+
+            public boolean evaluate(WizardModel m) {
+                CaGridInstallerModel model = (CaGridInstallerModel) m;
+                return model.isTrue(Constants.INSTALL_PORTAL)
+                        && dropPortalDbStep.databaseExists(model);
+            }});
+
+
+        // Configure portal liferay DB
+        PropertyConfigurationStep liferayDbStep = new PropertyConfigurationStep(
+                model.getMessage("liferay.db.config.title"), model
+                .getMessage("liferay.db.config.desc"));
+        InstallerUtils.addDBConfigPropertyOptions(model, liferayDbStep, "liferay.", "liferay");
+
+        logger.debug("Setting Liferay DB Name same as the ID");
+        model.add(liferayDbStep, installPortal);
+
+        // Drop existing portal DB
+        final DropServiceDatabaseStep dropLiferayDbStep = new DropServiceDatabaseStep(
+                model.getMessage("liferay.db.drop.title"), model
+                .getMessage("liferay.db.drop.desc"), "liferay.",
+                "drop.liferay.db");
+        model.add(dropLiferayDbStep, new Condition() {
+
+            public boolean evaluate(WizardModel m) {
+                CaGridInstallerModel model = (CaGridInstallerModel) m;
+                return model.isTrue(Constants.INSTALL_PORTAL)
+                        && dropLiferayDbStep.databaseExists(model);
+            }
+        });
+
+        // Configure portal misc properties
+        ConfigurePortalMiscPropertiesStep portalMiscPropsStep = new ConfigurePortalMiscPropertiesStep(
+                model.getMessage("portal.props.config.title"), model
+                .getMessage("portal.props.config.desc"));
+        model.add(portalMiscPropsStep, installPortal);
+
+        // Configure portal grid properties
+        ConfigurePortalGridPropertiesStep portalGridPropsStep = new ConfigurePortalGridPropertiesStep(
+                model.getMessage("portal.props.config.title"), model
+                .getMessage("portal.props.config.desc"));
+        model.add(portalGridPropsStep, installPortal);
+
+    }
+
 
 }

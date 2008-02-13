@@ -3,11 +3,11 @@
  */
 package org.cagrid.installer.model;
 
-import java.util.Map;
-
 import org.pietschy.wizard.WizardModel;
 import org.pietschy.wizard.WizardStep;
 import org.pietschy.wizard.models.Condition;
+
+import java.util.Map;
 
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
@@ -81,5 +81,7 @@ public interface CaGridInstallerModel extends WizardModel {
 
 	boolean isBrowserInstalled();
 
-	boolean isAuthnSvcServiceCredentialsPresent();
+    boolean isPortalInstalled();
+
+    boolean isAuthnSvcServiceCredentialsPresent();
 }

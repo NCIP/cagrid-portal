@@ -20,7 +20,8 @@
 	<property name="download.properties.url" value="http://localhost:8080/downloads/cagrid.installer.properties"/>
 	<property name="cagrid.download.url" value="http://localhost:8080/downloads/${cagrid.master.jar.prefix}src.zip"/>
 	<property name="browser.download.url" value="http://localhost:8080/downloads/caGrid-1.1-browser.zip"/>
-	
+    <property name="portal.download.url" value="http://gforge.nci.nih.gov/frs/download.php/3059/cagrid-portal-2.0.zip"/>
+
 
 	<path id="build.classpath">
 		<fileset dir="${lib.dir}" includes="**/*.jar" />
@@ -125,10 +126,19 @@
 			<filterset>
 				<filter token="CAGRID_DOWNLOAD_URL" value="${cagrid.download.url}"/>
 				<filter token="BROWSER_DOWNLOAD_URL" value="${browser.download.url}"/>
-			</filterset>
+                <filter token="PORTAL_DOWNLOAD_URL" value="${portal.download.url}"/>
+            </filterset>
 		</copy>
 		
 	</target>
+
+   <target name="run-installer" depends="dist-installer">
+       <mkdir dir="${build}/temp"/>
+
+       <unzip src="build/${project.jar.prefix}.zip" dest="${build}/temp"/>
+
+       <java jar="${build}/temp/${project.jar.prefix}.jar" fork="true"/>
+   </target>
 
 </project>
 

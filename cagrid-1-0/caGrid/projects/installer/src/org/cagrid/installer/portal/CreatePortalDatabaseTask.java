@@ -4,6 +4,7 @@
 package org.cagrid.installer.portal;
 
 import org.cagrid.installer.model.CaGridInstallerModel;
+import org.cagrid.installer.steps.Constants;
 import org.cagrid.installer.tasks.AbstractCreateDatabaseTask;
 
 /**
@@ -27,10 +28,7 @@ public class CreatePortalDatabaseTask extends AbstractCreateDatabaseTask {
 	 */
 	@Override
 	protected String getJdbcUrl(CaGridInstallerModel model) {
-		return "jdbc:mysql://" + model.getProperty("portal.db.host") + ":"
-				+ model.getProperty("portal.db.port") + "/"
-				+ model.getProperty("portal.db.id");
-
+		return model.getProperty(Constants.PORTAL_DB_URL);
 	}
 
 	/*
@@ -40,7 +38,7 @@ public class CreatePortalDatabaseTask extends AbstractCreateDatabaseTask {
 	 */
 	@Override
 	protected String getPassword(CaGridInstallerModel model) {
-		return model.getProperty("portal.db.password");
+		return model.getProperty(Constants.PORTAL_DB_PASSWORD);
 	}
 
 	/*
@@ -50,7 +48,7 @@ public class CreatePortalDatabaseTask extends AbstractCreateDatabaseTask {
 	 */
 	@Override
 	protected String getUsername(CaGridInstallerModel model) {
-		return model.getProperty("portal.db.username");
+		return model.getProperty(Constants.PORTAL_DB_USERNAME);
 	}
 
 }

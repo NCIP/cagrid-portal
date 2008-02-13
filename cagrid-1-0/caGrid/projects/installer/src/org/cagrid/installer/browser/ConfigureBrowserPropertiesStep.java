@@ -3,18 +3,18 @@
  */
 package org.cagrid.installer.browser;
 
-import javax.swing.Icon;
-
-import org.cagrid.installer.portal.ConfigurePortalPropertiesStep;
+import org.cagrid.installer.portal.ConfigurePortalGridPropertiesStep;
 import org.cagrid.installer.steps.Constants;
 import org.cagrid.installer.steps.options.TextPropertyConfigurationOption;
+
+import javax.swing.*;
 
 /**
  * @author <a href="joshua.phillips@semanticbits.com">Joshua Phillips</a>
  * 
  */
 public class ConfigureBrowserPropertiesStep extends
-		ConfigurePortalPropertiesStep {
+        ConfigurePortalGridPropertiesStep {
 
 	/**
 	 * 
