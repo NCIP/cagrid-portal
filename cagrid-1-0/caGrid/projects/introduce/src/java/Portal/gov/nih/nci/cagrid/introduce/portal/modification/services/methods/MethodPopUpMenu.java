@@ -45,7 +45,7 @@ public class MethodPopUpMenu extends JPopupMenu {
 		if (removeMethodMenuItem == null) {
 			removeMethodMenuItem = new JMenuItem();
 			removeMethodMenuItem.setText("Remove Method");
-			removeMethodMenuItem.setIcon(PortalLookAndFeel.getAddIcon());
+			removeMethodMenuItem.setIcon(IntroduceLookAndFeel.getRemoveMethodIcon());
 			removeMethodMenuItem.addMouseListener(new MouseAdapter() {
 				public void mousePressed(MouseEvent e) {
 					super.mousePressed(e);

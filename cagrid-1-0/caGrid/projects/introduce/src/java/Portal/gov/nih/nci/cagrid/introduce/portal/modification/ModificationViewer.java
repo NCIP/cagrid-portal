@@ -1012,7 +1012,7 @@ public class ModificationViewer extends ApplicationComponent {
 		if (this.namespaceAddButton == null) {
 			this.namespaceAddButton = new JButton();
 			this.namespaceAddButton.setText("Add");
-			this.namespaceAddButton.setIcon(PortalLookAndFeel.getAddIcon());
+			this.namespaceAddButton.setIcon(IntroduceLookAndFeel.getPlusIcon());
 			this.namespaceAddButton
 					.addActionListener(new java.awt.event.ActionListener() {
 						public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -1056,8 +1056,7 @@ public class ModificationViewer extends ApplicationComponent {
 		if (this.namespaceRemoveButton == null) {
 			this.namespaceRemoveButton = new JButton();
 			this.namespaceRemoveButton.setText("Remove");
-			this.namespaceRemoveButton.setIcon(PortalLookAndFeel
-					.getRemoveIcon());
+			this.namespaceRemoveButton.setIcon(IntroduceLookAndFeel.getSubtractIcon());
 			this.namespaceRemoveButton
 					.addActionListener(new java.awt.event.ActionListener() {
 						public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -1841,7 +1840,7 @@ public class ModificationViewer extends ApplicationComponent {
 			this.addServiceProperyButton = new JButton();
 			this.addServiceProperyButton.setText("Add");
 			this.addServiceProperyButton
-					.setIcon(PortalLookAndFeel.getAddIcon());
+					.setIcon(IntroduceLookAndFeel.getAddServicePropertyIcon());
 			this.addServiceProperyButton
 					.addActionListener(new java.awt.event.ActionListener() {
 						public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -1880,8 +1879,7 @@ public class ModificationViewer extends ApplicationComponent {
 		if (this.removeServicePropertyButton == null) {
 			this.removeServicePropertyButton = new JButton();
 			this.removeServicePropertyButton.setText("Remove");
-			this.removeServicePropertyButton.setIcon(PortalLookAndFeel
-					.getRemoveIcon());
+			this.removeServicePropertyButton.setIcon(IntroduceLookAndFeel.getRemveServicePropertyIcon());
 			this.removeServicePropertyButton
 					.addActionListener(new java.awt.event.ActionListener() {
 						public void actionPerformed(java.awt.event.ActionEvent e) {

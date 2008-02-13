@@ -18,10 +18,28 @@ import javax.swing.ImageIcon;
 public class IntroduceLookAndFeel extends PortalLookAndFeel {
 
 	
-    public final static ImageIcon getAddMethodIcon() {
+    public final static ImageIcon getServicePropertiesIcon() {
+        return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/page.png"));
+    }
+    
+    public final static ImageIcon getServicePropertyIcon() {
+        return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/page.png"));
+    }
+    
+    public static final Icon getAddServicePropertyIcon() {
         return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/page_add.png"));
     }
     
+    public final static ImageIcon getRemveServicePropertyIcon() {
+        return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/page_delete.png"));
+    }
+    
+    public final static ImageIcon getModifyServicePropertyIcon() {
+        return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/page_edit.png"));
+    }
+    
+	
+
     public static final Icon getBrowseIcon() {
         return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/folder-open.png"));
     }
@@ -81,7 +99,7 @@ public class IntroduceLookAndFeel extends PortalLookAndFeel {
 
 
     public final static ImageIcon getMethodIcon() {
-        return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/page.png"));
+        return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/cup.png"));
     }
 
 
@@ -91,7 +109,7 @@ public class IntroduceLookAndFeel extends PortalLookAndFeel {
 
     
     public final static ImageIcon getModifyMethodIcon() {
-        return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/page_edit.png"));
+        return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/cup_edit.png"));
     }
 
     
@@ -119,35 +137,40 @@ public class IntroduceLookAndFeel extends PortalLookAndFeel {
         return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/configure.png"));
     }
     
-    public final static ImageIcon getServicePropertiesIcon() {
-        return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/edit_small.png"));
-    }
-
     public final static ImageIcon getRedoIcon() {
         return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/edit-redos.png"));
     }
     
     public final static ImageIcon getRemoveMethodIcon() {
-        return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/page_delete.png"));
+        return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/cup_delete.png"));
+    }
+    
+    public final static ImageIcon getAddMethodIcon() {
+        return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/cup_add.png"));
     }
 
 
+
     public final static ImageIcon getResourcePropertiesIcon() {
-        return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/package_green.png"));
+        return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/bricks.png"));
     }
 
 
     public final static ImageIcon getResourcePropertyIcon() {
-        return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/tag.png"));
+        return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/brick.png"));
     }
     
     
     public final static ImageIcon getModifyResourcePropertyIcon() {
-        return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/tag.png"));
+        return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/brick_edit.png"));
+    }
+    
+    public final static ImageIcon getRemoveResourcePropertyIcon() {
+        return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/brick_delete.png"));
     }
 
     public final static ImageIcon getModifyResourcePropertiesIcon() {
-        return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/package_green.png"));
+        return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/brick_edit.png"));
     }
 
     public final static ImageIcon getResyncIcon() {
@@ -162,6 +185,16 @@ public class IntroduceLookAndFeel extends PortalLookAndFeel {
     
     public final static ImageIcon getServiceIcon() {
         return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/cog_small.png"));
+    }
+    
+    
+    public final static ImageIcon getPlusIcon() {
+        return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/list-add.png"));
+    }
+    
+    
+    public final static ImageIcon getSubtractIcon() {
+        return new javax.swing.ImageIcon(IntroduceLookAndFeel.class.getResource("/list-remove.png"));
     }
 
 

@@ -45,7 +45,7 @@ public class ResourcePropertiesPopUpMenu extends JPopupMenu {
     private JMenuItem getModifyResourcePropetiesMenuItem() {
         if (this.modifyResourcePropetiesMenuItem == null) {
             this.modifyResourcePropetiesMenuItem = new JMenuItem();
-            this.modifyResourcePropetiesMenuItem.setText("Modify Properties");
+            this.modifyResourcePropetiesMenuItem.setText("Modify Resource Properties");
             this.modifyResourcePropetiesMenuItem.setIcon(IntroduceLookAndFeel.getModifyResourcePropertiesIcon());
             this.modifyResourcePropetiesMenuItem.addMouseListener(new MouseAdapter() {
                 @Override
@@ -65,9 +65,8 @@ public class ResourcePropertiesPopUpMenu extends JPopupMenu {
             .getInfo().getNamespaces(), new File(node.getInfo().getBaseDirectory().getAbsolutePath() + File.separator
             + "etc"), new File(node.getInfo().getBaseDirectory().getAbsolutePath() + File.separator + "schema"
             + File.separator + node.getInfo().getServices().getService(0).getName()), true);
-        comp.setSize(600, 300);
-        GridApplication.getContext().centerDialog(comp);
-        comp.setVisible(true);
+        comp.setSize(800, 500);
+        GridApplication.getContext().showDialog(comp);
     }
 
 }

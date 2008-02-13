@@ -316,7 +316,7 @@ public class ModifyResourcePropertiesPanel extends JPanel {
             this.addResourcePropertyButton = new JButton();
             this.addResourcePropertyButton.setToolTipText("add new operation");
             this.addResourcePropertyButton.setText("Add");
-            this.addResourcePropertyButton.setIcon(PortalLookAndFeel.getAddIcon());
+            this.addResourcePropertyButton.setIcon(IntroduceLookAndFeel.getAddIcon());
             this.addResourcePropertyButton.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
                     addResourceProperty();
@@ -388,7 +388,7 @@ public class ModifyResourcePropertiesPanel extends JPanel {
             this.removeResourcePropertyButton = new JButton();
             this.removeResourcePropertyButton.setToolTipText("remove selected operation");
             this.removeResourcePropertyButton.setText("Remove");
-            this.removeResourcePropertyButton.setIcon(PortalLookAndFeel.getRemoveIcon());
+            this.removeResourcePropertyButton.setIcon(IntroduceLookAndFeel.getSubtractIcon());
             this.removeResourcePropertyButton.addActionListener(new java.awt.event.ActionListener() {
                 // remove from table
                 public void actionPerformed(java.awt.event.ActionEvent e) {

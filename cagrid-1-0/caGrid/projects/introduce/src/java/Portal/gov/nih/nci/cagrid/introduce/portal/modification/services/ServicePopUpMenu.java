@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.services;
 
 import gov.nih.nci.cagrid.introduce.common.SpecificServiceInformation;
+import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -41,7 +42,8 @@ public class ServicePopUpMenu extends JPopupMenu {
     private JMenuItem getModificationMenuItem() {
         if (this.modificationMenuItem == null) {
             this.modificationMenuItem = new JMenuItem();
-            this.modificationMenuItem.setText("Modify Service Context");
+            this.modificationMenuItem.setText("Modify Service");
+            this.modificationMenuItem.setIcon(IntroduceLookAndFeel.getModifyServiceSmallIcon());
             this.modificationMenuItem.addMouseListener(new MouseAdapter() {
 
                 @Override

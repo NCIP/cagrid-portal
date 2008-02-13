@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.services.resourceproperties;
 
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
+import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -44,7 +45,7 @@ public class ResourcePropertyPopUpMenu extends JPopupMenu {
 	private JMenuItem getRemoveResourcePropertyMenuItem() {
 		if (removeResourcePropertyMenuItem == null) {
 			removeResourcePropertyMenuItem = new JMenuItem();
-			removeResourcePropertyMenuItem.setIcon(PortalLookAndFeel.getRemoveIcon());
+			removeResourcePropertyMenuItem.setIcon(IntroduceLookAndFeel.getRemoveResourcePropertyIcon());
 			removeResourcePropertyMenuItem.setText("Remove Resource Property");
 			removeResourcePropertyMenuItem.addMouseListener(new MouseAdapter() {
 				public void mousePressed(MouseEvent e) {

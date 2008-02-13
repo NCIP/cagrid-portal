@@ -111,9 +111,9 @@ public class ServicesTreeRenderer extends DefaultTreeCellRenderer {
 			this.setOpenIcon(node.getOpenIcon());
 			this.setClosedIcon(node.getClosedIcon());
 			this.setText(node.toString());
-			this.setFont(normal.deriveFont(Font.ITALIC));
 			if(node.getMethod().isIsImported()){
-				this.setForeground(Color.BLUE);
+				this.setFont(normal.deriveFont(Font.ITALIC));
+				this.setForeground(Color.GRAY);
 			}
 		} else if (value instanceof ResourcePropertiesTypeTreeNode) {
 			ResourcePropertiesTypeTreeNode node = (ResourcePropertiesTypeTreeNode) value;

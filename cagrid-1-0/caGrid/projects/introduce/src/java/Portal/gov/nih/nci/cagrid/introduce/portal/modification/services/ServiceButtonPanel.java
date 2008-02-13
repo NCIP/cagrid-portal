@@ -16,6 +16,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.SwingConstants;
 
 
 public class ServiceButtonPanel extends ServiceContextsOptionsPanel {
@@ -126,8 +127,8 @@ public class ServiceButtonPanel extends ServiceContextsOptionsPanel {
     private JButton getModifyResourcesButton() {
         if (this.modifyResourcesButton == null) {
             this.modifyResourcesButton = new JButton();
-            this.modifyResourcesButton.setText("Modify Resources");
-            this.modifyResourcesButton.setIcon(IntroduceLookAndFeel.getResourcePropertiesIcon());
+            this.modifyResourcesButton.setText("Modify Resource Properties");
+            this.modifyResourcesButton.setIcon(IntroduceLookAndFeel.getModifyResourcePropertiesIcon());
             this.modifyResourcesButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     // this first node will be the selected service context node

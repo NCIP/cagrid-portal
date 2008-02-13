@@ -38,7 +38,6 @@ public class ResourcesButtonPanel extends ServiceContextsOptionsPanel {
 		gridBagConstraints.gridx = 0;
 		this.setLayout(new GridBagLayout());
 		this.add(getAddServiceButton(), gridBagConstraints);
-
 	}
 
 
@@ -50,7 +49,7 @@ public class ResourcesButtonPanel extends ServiceContextsOptionsPanel {
 	private JButton getAddServiceButton() {
 		if (addServiceButton == null) {
 			addServiceButton = new JButton();
-			addServiceButton.setText("Modify Resources");
+			addServiceButton.setText("Modify Resource Properties");
 			addServiceButton.setIcon(IntroduceLookAndFeel.getModifyResourcePropertiesIcon());
 			addServiceButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
