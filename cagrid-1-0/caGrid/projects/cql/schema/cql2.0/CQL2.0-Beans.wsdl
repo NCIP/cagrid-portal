@@ -6,4 +6,5 @@
 	<import location="CQLAttribute.xsd"/>
 	<import location="CQLQueryModifier.xsd"/>
 	<import location="CQLQueryComponents.xsd"/>
+	<import location="CQLQueryResults.xsd"/>
 </definitions>
