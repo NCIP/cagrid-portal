@@ -63,7 +63,7 @@ public class GlobalModelExchangeImpl extends GlobalModelExchangeImplBase {
 	}
 
 	/**
-	 * Add a shema to this GME's repository.
+	 * Add a schema to this GME's repository.
 	 * 
 	 * @param addSchema
 	 * @throws RemoteException

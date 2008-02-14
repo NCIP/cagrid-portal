@@ -21,8 +21,8 @@ public class XSDUtil {
 
 	public static final XSModel loadSchemas(final Schema[] schemas, SchemaPersistenceI schemaPersistence)
 		throws IllegalArgumentException, XMLParseException {
-		if (schemas == null || schemas == null) {
-			throw new IllegalArgumentException("Schemas must be non null, as must the Schema array.");
+		if (schemas == null ) {
+			throw new IllegalArgumentException("Schemas must be non null.");
 		}
 
 		LSInputList list = new LSInputList() {
