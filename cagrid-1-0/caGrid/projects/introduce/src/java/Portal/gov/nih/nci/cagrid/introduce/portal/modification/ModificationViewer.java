@@ -35,6 +35,7 @@ import gov.nih.nci.cagrid.introduce.portal.modification.extensions.ExtensionsMan
 import gov.nih.nci.cagrid.introduce.portal.modification.properties.ServicePropertiesTable;
 import gov.nih.nci.cagrid.introduce.portal.modification.services.MethodButtonPanel;
 import gov.nih.nci.cagrid.introduce.portal.modification.services.MethodsButtonPanel;
+import gov.nih.nci.cagrid.introduce.portal.modification.services.ResourcePropertyButtonPanel;
 import gov.nih.nci.cagrid.introduce.portal.modification.services.ResourcesButtonPanel;
 import gov.nih.nci.cagrid.introduce.portal.modification.services.ServiceButtonPanel;
 import gov.nih.nci.cagrid.introduce.portal.modification.services.ServicesButtonPanel;
@@ -2075,6 +2076,8 @@ public class ModificationViewer extends ApplicationComponent {
 					this.resourcesJTree), "methods");
 			this.resourcesOptionsPanel.add(new MethodButtonPanel(
 					this.resourcesJTree), "method");
+			this.resourcesOptionsPanel.add(new ResourcePropertyButtonPanel(
+					this.resourcesJTree), "resourceProperty");
 			this.resourcesOptionsPanel.add(new ResourcesButtonPanel(
 					this.resourcesJTree), "resources");
 			this.resourcesOptionsPanel.add(new JPanel(), "blank");

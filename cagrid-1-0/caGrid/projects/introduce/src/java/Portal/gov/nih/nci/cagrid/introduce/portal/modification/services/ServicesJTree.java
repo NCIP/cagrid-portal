@@ -71,7 +71,7 @@ public class ServicesJTree extends JTree {
 					} else if (currentNode instanceof ResourcePropertyTypeTreeNode) {
 						((CardLayout) ServicesJTree.this.optionsPanel
 								.getLayout()).show(
-								ServicesJTree.this.optionsPanel, "blank");
+								ServicesJTree.this.optionsPanel, "resourceProperty");
 					} else if (currentNode instanceof ServiceTypeTreeNode) {
 						((CardLayout) ServicesJTree.this.optionsPanel
 								.getLayout()).show(
