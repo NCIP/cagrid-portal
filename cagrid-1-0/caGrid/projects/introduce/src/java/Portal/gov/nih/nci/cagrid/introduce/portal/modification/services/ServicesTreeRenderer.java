@@ -43,6 +43,7 @@
 
 package gov.nih.nci.cagrid.introduce.portal.modification.services;
 
+import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
 import gov.nih.nci.cagrid.introduce.portal.modification.services.methods.MethodTypeTreeNode;
 import gov.nih.nci.cagrid.introduce.portal.modification.services.methods.MethodsTypeTreeNode;
 import gov.nih.nci.cagrid.introduce.portal.modification.services.resourceproperties.ResourcePropertiesTypeTreeNode;
@@ -114,6 +115,9 @@ public class ServicesTreeRenderer extends DefaultTreeCellRenderer {
 			if(node.getMethod().isIsImported()){
 				this.setFont(normal.deriveFont(Font.ITALIC));
 				this.setForeground(Color.GRAY);
+			} else {
+				this.setFont(normal.deriveFont(Font.BOLD));
+				this.setForeground(IntroduceLookAndFeel.getPanelLabelColor());
 			}
 		} else if (value instanceof ResourcePropertiesTypeTreeNode) {
 			ResourcePropertiesTypeTreeNode node = (ResourcePropertiesTypeTreeNode) value;
