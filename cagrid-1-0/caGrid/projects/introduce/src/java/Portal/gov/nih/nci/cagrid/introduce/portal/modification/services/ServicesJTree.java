@@ -34,7 +34,7 @@ public class ServicesJTree extends JTree {
 	private ServicesType services;
 
 	private JPanel optionsPanel;
-	
+
 	private DefaultMutableTreeNode currentNode = null;
 
 	public ServicesJTree(ServicesType services, ServiceInformation info,
@@ -44,11 +44,8 @@ public class ServicesJTree extends JTree {
 		setCellRenderer(new ServicesTreeRenderer());
 		setServices(services, info);
 		this.addMouseListener(new MouseAdapter() {
-			
-			public void mouseClicked(MouseEvent e) {
-				super.mouseClicked(e);
-				System.out.println(getRowForLocation(e.getX(), e.getY()));
-				setSelectionRow(getRowForLocation(e.getX(), e.getY()));
+
+			public void mousePressed(MouseEvent e) {
 				List nodes = getSelectedNodes();
 				if (nodes.size() >= 1) {
 					currentNode = (DefaultMutableTreeNode) nodes.get(0);
@@ -85,9 +82,8 @@ public class ServicesJTree extends JTree {
 								ServicesJTree.this.optionsPanel, "blank");
 					}
 				} else {
-					((CardLayout) ServicesJTree.this.optionsPanel
-							.getLayout()).show(
-							ServicesJTree.this.optionsPanel, "blank");
+					((CardLayout) ServicesJTree.this.optionsPanel.getLayout())
+							.show(ServicesJTree.this.optionsPanel, "blank");
 				}
 				if (SwingUtilities.isRightMouseButton(e)) {
 					if (currentNode instanceof PopupTreeNode) {
@@ -98,6 +94,7 @@ public class ServicesJTree extends JTree {
 
 			}
 		});
+
 	}
 
 	public ServicesTypeTreeNode getRoot() {
