@@ -226,6 +226,8 @@
 		<xs:complexContent>
 			<xs:extension base="metrics:Event">
 				<xs:sequence>
+					<xs:element name="id" minOccurs="1" maxOccurs="1" type="xs:long"/>
+					<xs:element ref="metrics:Community" minOccurs="1" maxOccurs="1" />
 					<xs:element ref="metrics:ReporterDetails" minOccurs="1" maxOccurs="1" />
 				</xs:sequence>
 				<xs:attribute name="reportedAt" use="required" type="xs:dateTime" />

@@ -22,8 +22,7 @@ public class MetricsImpl extends MetricsImplBase {
 		return SecurityManager.getManager().getCaller();
 	}
 
-	public void report(org.cagrid.metrics.common.EventSubmission submission)
-			throws RemoteException {
+  public void report(org.cagrid.metrics.common.EventSubmission submission) throws RemoteException {
 		String callerIP = (String) MessageContext.getCurrentContext()
 				.getProperty("remoteaddr");
 		int count = 0;
