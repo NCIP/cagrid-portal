@@ -32,7 +32,7 @@ import org.apache.log4j.Logger;
  * @author David Ervin
  * 
  * @created Feb 1, 2008 9:02:20 AM
- * @version $Id: InvokeSDK4DataServiceStep.java,v 1.16 2008-02-14 16:49:03 dervin Exp $ 
+ * @version $Id: InvokeSDK4DataServiceStep.java,v 1.17 2008-02-14 18:30:52 dervin Exp $ 
  */
 public class InvokeSDK4DataServiceStep extends Step {
     public static final String TEST_RESOURCES_DIR = "/test/resources/";
@@ -159,6 +159,14 @@ public class InvokeSDK4DataServiceStep extends Step {
         LOG.debug("testAssociationWithGroup");
         CQLQuery query = loadQuery("associationWithGroup.xml");
         CQLQueryResults results = loadQueryResults("goldAssociationWithGroup.xml");
+        invokeValidQueryValidResults(query, results);
+    }
+    
+    
+    private void testNestedGroups() {
+        LOG.debug("testNestedGroups");
+        CQLQuery query = loadQuery("nestedGroups.xml");
+        CQLQueryResults results = loadQueryResults("goldNestedGroups.xml");
         invokeValidQueryValidResults(query, results);
     }
     
