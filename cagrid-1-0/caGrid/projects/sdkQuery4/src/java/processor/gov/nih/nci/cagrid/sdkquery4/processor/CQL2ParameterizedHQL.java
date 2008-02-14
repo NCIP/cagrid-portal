@@ -28,7 +28,7 @@ import org.apache.log4j.Logger;
  * @author David Ervin
  * 
  * @created Mar 2, 2007 10:26:47 AM
- * @version $Id: CQL2ParameterizedHQL.java,v 1.7 2008-02-14 14:29:46 dervin Exp $ 
+ * @version $Id: CQL2ParameterizedHQL.java,v 1.8 2008-02-14 16:49:03 dervin Exp $ 
  */
 public class CQL2ParameterizedHQL {
     public static final String TARGET_ALIAS = "__TargetAlias__";
@@ -321,7 +321,11 @@ public class CQL2ParameterizedHQL {
 		}
 		if (association.getGroup() != null) {
             simpleNullCheck = false;
+            hql.append(sourceAlias).append('.').append(roleName);            
+            hql.append(".id in (select ").append(alias).append(".id from ");
+            hql.append(association.getName()).append(" as ").append(alias).append(" where ");
 			processGroup(association.getGroup(), hql, parameters, associationStack, association, alias);
+            hql.append(") ");
 		}
 		
         if (simpleNullCheck) {
