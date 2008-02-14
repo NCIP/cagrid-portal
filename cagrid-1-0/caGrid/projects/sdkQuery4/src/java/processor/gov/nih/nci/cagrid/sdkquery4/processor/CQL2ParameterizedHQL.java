@@ -13,10 +13,10 @@ import gov.nih.nci.cagrid.sdkquery4.beans.domaininfo.DomainTypesInformation;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Stack;
 
 import org.apache.log4j.Logger;
 
@@ -28,7 +28,7 @@ import org.apache.log4j.Logger;
  * @author David Ervin
  * 
  * @created Mar 2, 2007 10:26:47 AM
- * @version $Id: CQL2ParameterizedHQL.java,v 1.6 2008-02-06 15:44:04 dervin Exp $ 
+ * @version $Id: CQL2ParameterizedHQL.java,v 1.7 2008-02-14 14:29:46 dervin Exp $ 
  */
 public class CQL2ParameterizedHQL {
     public static final String TARGET_ALIAS = "__TargetAlias__";
@@ -79,17 +79,25 @@ public class CQL2ParameterizedHQL {
 	public ParameterizedHqlQuery convertToHql(CQLQuery query) throws QueryProcessingException {
 		// create a string builder to build up the HQL
 		StringBuilder rawHql = new StringBuilder();
+        
         // create the list in which parameters will be placed
         List<java.lang.Object> parameters = new LinkedList<java.lang.Object>();
+        
         // determine if the target has subclasses
         List<String> subclasses = typesInfoUtil.getSubclasses(query.getTarget().getName());
         boolean hasSubclasses = !(subclasses == null || subclasses.size() == 0);
         LOG.debug(query.getTarget().getName() 
             + (hasSubclasses ? " has " + subclasses.size() + " subclasses" : " has no subclasse"));
+        
+        // begin processing at the target level
 		processTarget(query.getTarget(), rawHql, parameters, hasSubclasses);
+        
+        // apply query modifiers
 		if (query.getQueryModifier() != null) {
 			handleQueryModifier(query.getQueryModifier(), rawHql);
 		}
+        
+        // build the final query object
         ParameterizedHqlQuery hqlQuery = new ParameterizedHqlQuery(rawHql.toString(), parameters);
 		return hqlQuery;
 	}
@@ -151,23 +159,22 @@ public class CQL2ParameterizedHQL {
 		LOG.debug("Processing target " + target.getName());
         
         // the stack of associations processed at the current depth of the query
-		List<String> associationTrace = new LinkedList<String>();
-        associationTrace.add(TARGET_ALIAS);
-		
+		Stack<Association> associationStack = new Stack<Association>();
+        
         // start the query
 		hql.append("From ").append(target.getName()).append(" as ").append(TARGET_ALIAS).append(' ');
 		
 		if (target.getAssociation() != null) {
 			hql.append("where ");
-			processAssociation(target.getAssociation(), hql, parameters, associationTrace, target.getName());
+			processAssociation(target.getAssociation(), hql, parameters, associationStack, target, TARGET_ALIAS);
 		}
 		if (target.getAttribute() != null) {
 			hql.append("where ");
-			processAttribute(target.getAttribute(), hql, parameters, associationTrace, target.getName());
+			processAttribute(target.getAttribute(), hql, parameters, target, TARGET_ALIAS);
 		}
 		if (target.getGroup() != null) {
 			hql.append("where ");
-			processGroup(target.getGroup(), hql, parameters, associationTrace, target.getName());
+			processGroup(target.getGroup(), hql, parameters, associationStack, target, TARGET_ALIAS);
 		}
 		
 		if (avoidSubclasses) {
@@ -202,15 +209,15 @@ public class CQL2ParameterizedHQL {
 	 * 		The class name of the object to which this association belongs
 	 * @throws QueryProcessingException
 	 */
-	private void processAttribute(Attribute attribute, StringBuilder hql, List<java.lang.Object> parameters, 
-		List<String> associationTrace, String objectClassName) throws QueryProcessingException {
-        LOG.debug("Processing attribute " + objectClassName + "." + attribute.getName());
+	private void processAttribute(Attribute attribute, StringBuilder hql, 
+        List<java.lang.Object> parameters, Object queryObject, String queryObjectAlias) throws QueryProcessingException {
+        LOG.debug("Processing attribute " + queryObject.getName() + "." + attribute.getName());
         
         // determine the Java type of the field being processed
-        String attributeFieldType = typesInfoUtil.getAttributeJavaType(objectClassName, attribute.getName());
+        String attributeFieldType = typesInfoUtil.getAttributeJavaType(queryObject.getName(), attribute.getName());
         if (attributeFieldType == null) {
             throw new QueryProcessingException("Field type of " 
-                + objectClassName + "." + attribute.getName() + " could not be determined");
+                + queryObject.getName() + "." + attribute.getName() + " could not be determined");
         }
         LOG.debug("Attribute found to be of type " + attributeFieldType);
         
@@ -219,22 +226,22 @@ public class CQL2ParameterizedHQL {
 		boolean unaryPredicate = attribute.getPredicate().equals(Predicate.IS_NOT_NULL)
 			|| attribute.getPredicate().equals(Predicate.IS_NULL);
 		
-        // build the association trace, if applicable
-		String trace = associationTrace.size() != 0 ? buildAssociationTrace(associationTrace) : null;
-		
         // construct the query fragment
         // TODO: does Hibernate 3.2.0ga not allow lower() for booleans?  
         // If it allows it, can get rid of the isBoolAttribute checking
 		if (caseInsensitive && !isBoolAttribute) {
 			hql.append("lower(");
 		}
-		if (trace != null) {
-			hql.append(trace).append('.');
-		}
-		hql.append(attribute.getName());
+        
+        // append the path to the attribute itself
+        hql.append(queryObjectAlias).append('.').append(attribute.getName());
+        
+        // close up case insensitivity
 		if (caseInsensitive && !isBoolAttribute) {
 			hql.append(')');
 		}
+        
+        // append the predicate
 		hql.append(' ');
 		String predicateAsString = predicateValues.get(attribute.getPredicate());
 		if (!unaryPredicate) {
@@ -246,7 +253,8 @@ public class CQL2ParameterizedHQL {
             
             // add a placeholder parameter to the HQL query
 			hql.append('?');
-            // include a positional parameter value
+            
+            // add a positional parameter value to the list
             parameters.add(valueToObject(attributeFieldType, 
                 caseInsensitive ? attribute.getValue().toLowerCase() : attribute.getValue()));
 			
@@ -254,6 +262,7 @@ public class CQL2ParameterizedHQL {
 				hql.append(')');
 			}
 		} else {
+            // binary predicates just get appended w/o values associated with them
 			hql.append(predicateAsString);
 		}
 	}
@@ -275,42 +284,54 @@ public class CQL2ParameterizedHQL {
 	 * @throws QueryProcessingException
 	 */
 	private void processAssociation(Association association, StringBuilder hql, List<java.lang.Object> parameters, 
-        List<String> associationTrace, String sourceClassName) throws QueryProcessingException {
-        LOG.debug("Processing association " + sourceClassName + " to " + association.getName());
+        Stack<Association> associationStack, Object sourceQueryObject, String sourceAlias) throws QueryProcessingException {
+        LOG.debug("Processing association " + sourceQueryObject.getName() + " to " + association.getName());
         
-		String roleName = roleNameResolver.getRoleName(sourceClassName, association);
+        // get the association's role name
+		String roleName = roleNameResolver.getRoleName(sourceQueryObject.getName(), association);
 		if (roleName == null) {
 			// still null?? no association to the object!
             // TODO: should probably be malformed query exception
-			throw new QueryProcessingException("Association from type " + sourceClassName + 
+			throw new QueryProcessingException("Association from type " + sourceQueryObject.getName() + 
 				" to type " + association.getName() + " does not exist.  Use only direct associations");
 		}
-        
-		// add the role name to the association trace
-		associationTrace.add(roleName);
         LOG.debug("Role name determined to be " + roleName);
-		
+        
+        // determine the alias for this association
+        String alias = getAssociationAlias(sourceQueryObject.getName(), association.getName(), roleName);
+        LOG.debug("Association alias determined to be " + alias);
+        
+		// add this association to the stack
+		associationStack.push(association);
+        
+        // flag indicates the query is only verifying the association is populated
         boolean simpleNullCheck = true;
 		if (association.getAssociation() != null) {
             simpleNullCheck = false;
-			processAssociation(association.getAssociation(), hql, parameters, associationTrace, association.getName());
+            // add clause to select things from this association
+            hql.append(sourceAlias).append('.').append(roleName);            
+            hql.append(".id in (select ").append(alias).append(".id from ");
+            hql.append(association.getName()).append(" as ").append(alias).append(" where ");
+            processAssociation(association.getAssociation(), hql, parameters, associationStack, association, alias);
+            hql.append(") ");
 		}
 		if (association.getAttribute() != null) {
             simpleNullCheck = false;
-			processAttribute(association.getAttribute(), hql, parameters, associationTrace, association.getName());
+			processAttribute(association.getAttribute(), hql, parameters, association, sourceAlias + "." + roleName);
 		}
 		if (association.getGroup() != null) {
             simpleNullCheck = false;
-			processGroup(association.getGroup(), hql, parameters, associationTrace, association.getName());
+			processGroup(association.getGroup(), hql, parameters, associationStack, association, alias);
 		}
 		
         if (simpleNullCheck) {
             // query is checking for the association to exist and be non-null
-            hql.append(buildAssociationTrace(associationTrace)).append(".id is not null ");
+            hql.append(sourceAlias).append('.').append(roleName).append(".id is not null ");
         }
         
-		// remove this association from the trace
-		associationTrace.remove(associationTrace.size() - 1);
+		// pop this association off the stack
+        associationStack.pop();
+        LOG.debug(associationStack.size() + " associations remain on the stack");
 	}
 	
 	
@@ -330,8 +351,8 @@ public class CQL2ParameterizedHQL {
 	 * @throws QueryProcessingException
 	 */
 	private void processGroup(Group group, StringBuilder hql, List<java.lang.Object> parameters,
-        List<String> associationTrace, String sourceClassName) throws QueryProcessingException {
-        LOG.debug("Processing group on " + sourceClassName);
+        Stack<Association> associationStack, Object sourceQueryObject, String sourceAlias) throws QueryProcessingException {
+        LOG.debug("Processing group on " + sourceQueryObject.getName());
         
 		String logic = convertLogicalOperator(group.getLogicRelation());
 		boolean mustAddLogic = false;
@@ -342,7 +363,7 @@ public class CQL2ParameterizedHQL {
 		if (group.getAssociation() != null) {
 			for (int i = 0; i < group.getAssociation().length; i++) {
 				mustAddLogic = true;
-				processAssociation(group.getAssociation(i), hql, parameters, associationTrace, sourceClassName);
+				processAssociation(group.getAssociation(i), hql, parameters, associationStack, sourceQueryObject, sourceAlias);
 				if (i + 1 < group.getAssociation().length) {
 					hql.append(' ').append(logic).append(' ');
 				}
@@ -354,7 +375,7 @@ public class CQL2ParameterizedHQL {
 			}
 			for (int i = 0; i < group.getAttribute().length; i++) {
 				mustAddLogic = true;
-				processAttribute(group.getAttribute(i), hql, parameters, associationTrace, sourceClassName);
+				processAttribute(group.getAttribute(i), hql, parameters, sourceQueryObject, sourceAlias);
 				if (i + 1 < group.getAttribute().length) {
 					hql.append(' ').append(logic).append(' ');
 				}
@@ -365,7 +386,7 @@ public class CQL2ParameterizedHQL {
 				hql.append(' ').append(logic).append(' ');
 			}
 			for (int i = 0; i < group.getGroup().length; i++) {
-				processGroup(group.getGroup(i), hql, parameters, associationTrace, sourceClassName);
+				processGroup(group.getGroup(i), hql, parameters, associationStack, sourceQueryObject, sourceAlias);
 				if (i + 1 < group.getGroup().length) {
 					hql.append(' ').append(logic).append(' ');
 				}
@@ -392,27 +413,6 @@ public class CQL2ParameterizedHQL {
 			return "OR";
 		}
 		throw new QueryProcessingException("Logical operator '" + op.getValue() + "' is not recognized.");
-	}
-	
-	
-	/**
-	 * Builds a trace of association names from a list of those names
-	 * 
-	 * @param associationTrace
-	 * @return
-	 * 		An HQL fragment
-	 */
-	private String buildAssociationTrace(List<String> associationTrace) {
-		// build up what the trace to this association looks like
-		StringBuilder trace = new StringBuilder();
-		Iterator traceIter = associationTrace.iterator();
-		while (traceIter.hasNext()) {
-			trace.append(traceIter.next());
-			if (traceIter.hasNext()) {
-				trace.append('.');
-			}
-		}
-		return trace.toString();
 	}
     
     
@@ -443,5 +443,15 @@ public class CQL2ParameterizedHQL {
         // TODO: Date
         
         throw new QueryProcessingException("No conversion for type " + className);
+    }
+    
+    
+    private String getAssociationAlias(String parentClassName, String associationClassName, String roleName) {
+        int dotIndex = parentClassName.lastIndexOf('.');
+        String parentShortName = dotIndex != -1 ? parentClassName.substring(dotIndex + 1) : parentClassName;
+        dotIndex = associationClassName.lastIndexOf('.');
+        String associationShortName = dotIndex != -1 ? associationClassName.substring(dotIndex + 1) : associationClassName;
+        String alias = "__" + parentShortName + "_" + associationShortName + "_" + roleName;
+        return alias;
     }
 }
