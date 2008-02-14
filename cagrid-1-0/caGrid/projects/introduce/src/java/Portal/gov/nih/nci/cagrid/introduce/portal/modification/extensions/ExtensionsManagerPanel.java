@@ -169,7 +169,7 @@ public class ExtensionsManagerPanel extends JPanel {
 		if (removeExtensionButton == null) {
 			removeExtensionButton = new JButton();
 			removeExtensionButton.setEnabled(false);
-			removeExtensionButton.setIcon(PortalLookAndFeel.getRemoveIcon());
+			removeExtensionButton.setIcon(IntroduceLookAndFeel.getSubtractIcon());
 			removeExtensionButton.setText("Remove");
 			removeExtensionButton
 					.addActionListener(new java.awt.event.ActionListener() {
@@ -206,7 +206,7 @@ public class ExtensionsManagerPanel extends JPanel {
 	private JButton getAddExtensionButton() {
 		if (addExtensionButton == null) {
 			addExtensionButton = new JButton();
-			addExtensionButton.setIcon(PortalLookAndFeel.getAddIcon());
+			addExtensionButton.setIcon(IntroduceLookAndFeel.getAddIcon());
 			addExtensionButton.setText("Add");
 			addExtensionButton
 					.addActionListener(new java.awt.event.ActionListener() {
