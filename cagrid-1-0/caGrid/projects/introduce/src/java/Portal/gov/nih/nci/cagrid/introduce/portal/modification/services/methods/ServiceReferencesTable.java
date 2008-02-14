@@ -16,7 +16,7 @@ import javax.swing.table.DefaultTableModel;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * 
  */
-public class ServicesTable extends PortalBaseTable {
+public class ServiceReferencesTable extends PortalBaseTable {
 
 	public static String NAME = "Service Client Handles";
 
@@ -27,7 +27,7 @@ public class ServicesTable extends PortalBaseTable {
 	private ServicesType services;
 
 
-	public ServicesTable(ServicesType services) {
+	public ServiceReferencesTable(ServicesType services) {
 		super(createTableModel());
 		this.services = services;
 

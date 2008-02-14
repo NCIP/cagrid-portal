@@ -95,12 +95,11 @@ public class ServiceTypeTreeNode extends DefaultMutableTreeNode implements Popup
 
 	private void initialize() {
 		if (serviceType.getMethods() != null) {
-			MethodsTypeTreeNode newNode = new MethodsTypeTreeNode(serviceType.getMethods(), model, new SpecificServiceInformation(info,serviceType));
+			MethodsTypeTreeNode newNode = new MethodsTypeTreeNode(serviceType, model, new SpecificServiceInformation(info,serviceType));
 			model.insertNodeInto(newNode, this, this.getChildCount());
 		}
 		if (serviceType.getResourcePropertiesList() != null) {
-			ResourcePropertiesTypeTreeNode newNode = new ResourcePropertiesTypeTreeNode(serviceType, serviceType
-				.getResourcePropertiesList(), model, info);
+			ResourcePropertiesTypeTreeNode newNode = new ResourcePropertiesTypeTreeNode(serviceType, model, info);
 		model.insertNodeInto(newNode, this, this.getChildCount());
 		}
 	}

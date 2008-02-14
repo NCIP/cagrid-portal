@@ -262,7 +262,7 @@ public class MethodViewer extends javax.swing.JDialog {
 
     private JScrollPane servicesTypeScrollPane = null;
 
-    private ServicesTable servicesTypeTable = null;
+    private ServiceReferencesTable servicesTypeTable = null;
 
     private JTextField providerClassnameTextField = null;
 
@@ -2018,9 +2018,9 @@ public class MethodViewer extends javax.swing.JDialog {
      * 
      * @return javax.swing.JTable
      */
-    private ServicesTable getServicesTypeTable() {
+    private ServiceReferencesTable getServicesTypeTable() {
         if (servicesTypeTable == null) {
-            servicesTypeTable = new ServicesTable(info.getServices());
+            servicesTypeTable = new ServiceReferencesTable(info.getServices());
             servicesTypeTable.addMouseListener(new MouseAdapter() {
                 public void mouseClicked(MouseEvent e) {
                     super.mouseClicked(e);

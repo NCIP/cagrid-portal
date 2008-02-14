@@ -46,6 +46,7 @@ package gov.nih.nci.cagrid.introduce.portal.modification.services.resourceproper
 import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertiesListType;
 import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertyType;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
+import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
 import gov.nih.nci.cagrid.introduce.portal.common.PopupTreeNode;
@@ -67,18 +68,16 @@ import javax.swing.tree.DefaultTreeModel;
  *          Exp $
  */
 public class ResourcePropertiesTypeTreeNode extends DefaultMutableTreeNode implements PopupTreeNode {
-	private ResourcePropertiesListType resourceProperties;
 	private DefaultTreeModel model;
 	private ResourcePropertiesPopUpMenu menu;
 	private ServiceInformation info;
 	private ServiceType service;
 
 
-	public ResourcePropertiesTypeTreeNode(ServiceType service, ResourcePropertiesListType methods, DefaultTreeModel model,
+	public ResourcePropertiesTypeTreeNode(ServiceType service, DefaultTreeModel model,
 		ServiceInformation info) {
 		super();
 		this.service = service;
-		this.resourceProperties = methods;
 		this.setUserObject("Resource Properties");
 		this.model = model;
 		this.menu = new ResourcePropertiesPopUpMenu(this);
@@ -88,9 +87,9 @@ public class ResourcePropertiesTypeTreeNode extends DefaultMutableTreeNode imple
 
 
 	private void initialize() {
-		if (resourceProperties != null && resourceProperties.getResourceProperty() != null) {
-			for (int i = 0; i < resourceProperties.getResourceProperty().length; i++) {
-				ResourcePropertyType resource = resourceProperties.getResourceProperty(i);
+		if (service.getResourcePropertiesList() != null && service.getResourcePropertiesList().getResourceProperty() != null) {
+			for (int i = 0; i < service.getResourcePropertiesList().getResourceProperty().length; i++) {
+				ResourcePropertyType resource = service.getResourcePropertiesList().getResourceProperty(i);
 				ResourcePropertyTypeTreeNode newNode = new ResourcePropertyTypeTreeNode(resource);
 				model.insertNodeInto(newNode, this, this.getChildCount());
 			}
@@ -98,35 +97,9 @@ public class ResourcePropertiesTypeTreeNode extends DefaultMutableTreeNode imple
 	}
 
 
-	public void reInitialize(ResourcePropertiesListType properties) {
-		this.resourceProperties = properties;
-		for (int i = this.getChildCount() - 1; i == 0; i--) {
-			model.removeNodeFromParent((DefaultMutableTreeNode) this.getChildAt(i));
-		}
-		initialize();
-	}
-
-
 	public void add(ResourcePropertyType resourceProperty) {
-		if (resourceProperties == null) {
-			System.err.println("ERROR: cannot add new resource when the resourcePropertys container is null.");
-		}
-		// add new resourceProperty to array in bean
-		// this seems to be a wierd way be adding things....
-		ResourcePropertyType[] newResourceProperty;
-		int newLength = 0;
-		if (resourceProperties != null && resourceProperties.getResourceProperty() != null) {
-			newLength = resourceProperties.getResourceProperty().length + 1;
-			newResourceProperty = new ResourcePropertyType[newLength];
-			System.arraycopy(resourceProperties.getResourceProperty(), 0, newResourceProperty, 0, resourceProperties
-				.getResourceProperty().length);
-		} else {
-			newLength = 1;
-			newResourceProperty = new ResourcePropertyType[newLength];
-		}
-		newResourceProperty[newLength - 1] = resourceProperty;
-		resourceProperties.setResourceProperty(newResourceProperty);
-
+		CommonTools.addResourcePropety(getService(), resourceProperty);
+		
 		ResourcePropertyTypeTreeNode newNode = new ResourcePropertyTypeTreeNode(resourceProperty);
 		model.insertNodeInto(newNode, this, this.getChildCount());
 	}
@@ -134,15 +107,7 @@ public class ResourcePropertiesTypeTreeNode extends DefaultMutableTreeNode imple
 
 	public void removeResourceProperty(ResourcePropertyTypeTreeNode node) {
 
-		ResourcePropertyType[] newResourceProperties = new ResourcePropertyType[resourceProperties
-			.getResourceProperty().length - 1];
-		int resourcePropertyCount = 0;
-		for (int i = 0; i < resourceProperties.getResourceProperty().length; i++) {
-			if (!resourceProperties.getResourceProperty(i).equals(node.getUserObject())) {
-				newResourceProperties[resourcePropertyCount++] = (ResourcePropertyType) node.getUserObject();
-			}
-		}
-		resourceProperties.setResourceProperty(newResourceProperties);
+		CommonTools.removeResourceProperty(getService(), ((ResourcePropertyType) node.getUserObject()).getQName());
 
 		model.removeNodeFromParent(node);
 	}
@@ -170,16 +135,6 @@ public class ResourcePropertiesTypeTreeNode extends DefaultMutableTreeNode imple
 
 	public void setInfo(ServiceInformation info) {
 		this.info = info;
-	}
-
-
-	public ResourcePropertiesListType getResourceProperties() {
-		return resourceProperties;
-	}
-
-
-	public void setResourceProperties(ResourcePropertiesListType resourceProperties) {
-		this.resourceProperties = resourceProperties;
 	}
 
 

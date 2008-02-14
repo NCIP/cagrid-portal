@@ -46,6 +46,8 @@ package gov.nih.nci.cagrid.introduce.portal.modification.services.methods;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
+import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
+import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.SpecificServiceInformation;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
 import gov.nih.nci.cagrid.introduce.portal.common.PopupTreeNode;
@@ -67,16 +69,15 @@ import javax.swing.tree.DefaultTreeModel;
  *          Exp $
  */
 public class MethodsTypeTreeNode extends DefaultMutableTreeNode implements PopupTreeNode {
-	private MethodsType methods;
-	// private ServicesJTree tree;
 	private MethodsPopUpMenu menu;
 	private DefaultTreeModel model;
 	private SpecificServiceInformation info;
+	private ServiceType service;
 
 
-	public MethodsTypeTreeNode(MethodsType methods, DefaultTreeModel model, SpecificServiceInformation info) {
+	public MethodsTypeTreeNode(ServiceType service, DefaultTreeModel model, SpecificServiceInformation info) {
 		super();
-		this.methods = methods;
+		this.service = service;
 		this.setUserObject("Operations");
 		this.info = info;
 		this.menu = new MethodsPopUpMenu(this);
@@ -86,9 +87,9 @@ public class MethodsTypeTreeNode extends DefaultMutableTreeNode implements Popup
 
 
 	private void initialize() {
-		if (methods != null && methods.getMethod() != null) {
-			for (int i = 0; i < methods.getMethod().length; i++) {
-				MethodType method = methods.getMethod(i);
+		if (service.getMethods() != null && service.getMethods() .getMethod() != null) {
+			for (int i = 0; i < service.getMethods() .getMethod().length; i++) {
+				MethodType method = service.getMethods() .getMethod(i);
 				if (!method.getName().equals(IntroduceConstants.SERVICE_SECURITY_METADATA_METHOD)) {
 					MethodTypeTreeNode newNode = new MethodTypeTreeNode(method, info);
 					model.insertNodeInto(newNode, this, this.getChildCount());
@@ -99,23 +100,7 @@ public class MethodsTypeTreeNode extends DefaultMutableTreeNode implements Popup
 
 
 	public void addMethod(MethodType method) {
-		if (getMethods() == null) {
-			System.err.println("ERROR: cannot add new method when the methods container is null.");
-		}
-		// add new method to array in bean
-		// this seems to be a wierd way be adding things....
-		MethodType[] newMethods;
-		int newLength = 0;
-		if (getMethods() != null && getMethods().getMethod() != null) {
-			newLength = getMethods().getMethod().length + 1;
-			newMethods = new MethodType[newLength];
-			System.arraycopy(getMethods().getMethod(), 0, newMethods, 0, getMethods().getMethod().length);
-		} else {
-			newLength = 1;
-			newMethods = new MethodType[newLength];
-		}
-		newMethods[newLength - 1] = method;
-		getMethods().setMethod(newMethods);
+		CommonTools.addMethod(service, method);
 
 		MethodTypeTreeNode newNode = new MethodTypeTreeNode(method, info);
 		model.insertNodeInto(newNode, this, this.getChildCount());
@@ -125,17 +110,7 @@ public class MethodsTypeTreeNode extends DefaultMutableTreeNode implements Popup
 
 	public void removeMethod(MethodTypeTreeNode node) {
 		MethodType removedMethod = (MethodType)node.getUserObject();
-
-		MethodType[] newMethods = new MethodType[getMethods().getMethod().length - 1];
-		int newMethodsCount = 0;
-		for (int i = 0; i < getMethods().getMethod().length; i++) {
-			MethodType potentialMethod = getMethods().getMethod(i);
-			if (!potentialMethod.equals(removedMethod)) {
-				newMethods[newMethodsCount++] = potentialMethod;
-			}
-		}
-
-		getMethods().setMethod(newMethods);
+		CommonTools.removeMethod(service.getMethods(), removedMethod);
 
 		model.removeNodeFromParent(node);
 	}
@@ -150,15 +125,6 @@ public class MethodsTypeTreeNode extends DefaultMutableTreeNode implements Popup
 		return this.getUserObject().toString();
 	}
 
-
-	public MethodsType getMethods() {
-		return methods;
-	}
-
-
-	public void setMethods(MethodsType methods) {
-		this.methods = methods;
-	}
 
 
 	public DefaultTreeModel getModel() {

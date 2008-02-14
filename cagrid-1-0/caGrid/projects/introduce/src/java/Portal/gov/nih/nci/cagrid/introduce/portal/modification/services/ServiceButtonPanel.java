@@ -141,8 +141,7 @@ public class ServiceButtonPanel extends ServiceContextsOptionsPanel {
                     } else {
                         ResourcePropertiesListType resourcePropsList = new ResourcePropertiesListType();
                         serviceNode.getServiceType().setResourcePropertiesList(resourcePropsList);
-                        resourceNode = new ResourcePropertiesTypeTreeNode(serviceNode.getServiceType(), serviceNode
-                            .getServiceType().getResourcePropertiesList(), serviceNode.getModel(), serviceNode
+                        resourceNode = new ResourcePropertiesTypeTreeNode(serviceNode.getServiceType(), serviceNode.getModel(), serviceNode
                             .getInfo());
                         serviceNode.getModel().insertNodeInto(resourceNode, serviceNode, serviceNode.getChildCount());
                     }
