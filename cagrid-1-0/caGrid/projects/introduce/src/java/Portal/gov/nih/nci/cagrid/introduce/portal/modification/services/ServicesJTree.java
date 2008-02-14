@@ -44,6 +44,15 @@ public class ServicesJTree extends JTree {
 		setCellRenderer(new ServicesTreeRenderer());
 		setServices(services, info);
 		this.addMouseListener(new MouseAdapter() {
+			
+			
+			public void mouseEntered(MouseEvent e) {
+				setSelectionRow(getRowForLocation(e.getX(), e.getY()));
+			}
+
+			public void mouseClicked(MouseEvent e) {
+				setSelectionRow(getRowForLocation(e.getX(), e.getY()));
+			}
 
 			public void mousePressed(MouseEvent e) {
 				List nodes = getSelectedNodes();

@@ -96,6 +96,8 @@ public class ResourceFrameworkOptionsManager extends JPanel {
 		} else {
 			secureResource.setSelected(false);
 		}
+		
+		checkResourcePropertyOptions();
 
 	}
 
