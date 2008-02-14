@@ -134,7 +134,9 @@ public class ServicesJTree extends JTree {
 		root = new ServicesTypeTreeNode(info);
 		((DefaultTreeModel) this.getModel()).setRoot(root);
 		root.setServices(services, (DefaultTreeModel) this.getModel());
-		expandAll(true);
+		//expand the root
+		this.expandPath(new TreePath(root));
+		
 	}
 
 	public DefaultMutableTreeNode getCurrentNode() {
@@ -207,15 +209,6 @@ public class ServicesJTree extends JTree {
 			tree.expandPath(parent);
 		} else {
 			tree.collapsePath(parent);
-		}
-	}
-
-	protected void setExpandedState(TreePath path, boolean state) {
-		// Ignore all collapse requests; collapse events will not be fired
-		if (path.getLastPathComponent() != root) {
-			super.setExpandedState(path, state);
-		} else if (state && (path.getLastPathComponent() == root)) {
-			super.setExpandedState(path, state);
 		}
 	}
 }
