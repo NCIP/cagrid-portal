@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="org.cagrid.metrics.common.EventRecord"
+		table="events">
+		<id name="id" column="event_id">
+			<generator class="native" />
+		</id>
+		<property name="ReportedAt" column="reported_at"
+			type="calendar" />
+
+		<component name="EventSource"
+			class="org.cagrid.metrics.common.EventSource">
+			<many-to-one name="component" class="org.cagrid.metrics.common.Component"/>
+			<many-to-one name="service" class="org.cagrid.metrics.common.Service"/>
+		</component>
+	</class>
+</hibernate-mapping>

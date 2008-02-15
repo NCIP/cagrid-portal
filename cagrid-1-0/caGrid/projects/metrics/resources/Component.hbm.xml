@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="org.cagrid.metrics.common.Component" table="components"
+		discriminator-value="component">
+		<id name="id" column="component_id">
+			<generator class="native" />
+		</id>
+		<discriminator column="component_type" type="string" length="20" />
+		<property name="name" type="string" not-null="true"/>
+		<property name="version" type="string" />
+		<subclass name="org.cagrid.metrics.common.Service"
+			discriminator-value="service">
+			<property name="url" type="text" />
+			<property name="epr" type="text" />
+			<property name="identity" type="string" />
+		</subclass>
+	</class>
+</hibernate-mapping>
