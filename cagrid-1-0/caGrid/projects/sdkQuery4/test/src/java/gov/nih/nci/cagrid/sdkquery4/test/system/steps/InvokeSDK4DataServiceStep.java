@@ -32,7 +32,7 @@ import org.apache.log4j.Logger;
  * @author David Ervin
  * 
  * @created Feb 1, 2008 9:02:20 AM
- * @version $Id: InvokeSDK4DataServiceStep.java,v 1.18 2008-02-15 14:53:34 dervin Exp $ 
+ * @version $Id: InvokeSDK4DataServiceStep.java,v 1.19 2008-02-15 15:20:59 dervin Exp $ 
  */
 public class InvokeSDK4DataServiceStep extends Step {
     public static final String TEST_RESOURCES_DIR = "/test/resources/";
@@ -68,6 +68,9 @@ public class InvokeSDK4DataServiceStep extends Step {
         
         // invalid queries
         testNonExistantTarget();
+        testNonExistantAssociation();
+        testNonExistantAttribute();
+        testAssociationWithWrongAttributeDatatype();
     }
     
     
@@ -179,6 +182,27 @@ public class InvokeSDK4DataServiceStep extends Step {
     private void testNonExistantTarget() {
         LOG.debug("testNonExistantTarget");
         CQLQuery query = loadQuery("invalid_nonExistantTarget.xml");
+        invokeInvalidQuery(query);
+    }
+    
+    
+    private void testNonExistantAssociation() {
+        LOG.debug("testNonExistantAssociation");
+        CQLQuery query = loadQuery("invalid_nonExistantAssociation.xml");
+        invokeInvalidQuery(query);
+    }
+    
+    
+    private void testNonExistantAttribute() {
+        LOG.debug("testNonExistantAttribute");
+        CQLQuery query = loadQuery("invalid_nonExistantAttribute.xml");
+        invokeInvalidQuery(query);
+    }
+    
+    
+    private void testAssociationWithWrongAttributeDatatype() {
+        LOG.debug("testAssociationWithWrongAttributeDatatype");
+        CQLQuery query = loadQuery("invalid_associationWithWrongAttributeDatatype.xml");
         invokeInvalidQuery(query);
     }
     
