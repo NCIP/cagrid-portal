@@ -90,6 +90,8 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import org.apache.log4j.Logger;
@@ -1658,7 +1660,7 @@ public class ModificationViewer extends ApplicationComponent {
 			gridBagConstraints28.gridy = 0;
 			gridBagConstraints28.weightx = 1.0;
 			gridBagConstraints28.weighty = 1.0;
-			gridBagConstraints28.insets = new java.awt.Insets(5, 5, 5, 5);
+			gridBagConstraints28.insets = new Insets(0, 0, 0, 0);
 			this.servicePropertiesTableContainerPanel = new JPanel();
 			this.servicePropertiesTableContainerPanel
 					.setLayout(new GridBagLayout());
@@ -1668,9 +1670,7 @@ public class ModificationViewer extends ApplicationComponent {
 							TitledBorder.DEFAULT_POSITION, new Font("Dialog",
 									Font.BOLD, 12), IntroduceLookAndFeel
 									.getPanelLabelColor()));
-			this.servicePropertiesTableContainerPanel
-					.add(getServicePropertiesTableScrollPane(),
-							gridBagConstraints28);
+			servicePropertiesTableContainerPanel.add(getServicePropertiesTableScrollPane(), gridBagConstraints28);
 		}
 		return this.servicePropertiesTableContainerPanel;
 	}
@@ -1685,6 +1685,7 @@ public class ModificationViewer extends ApplicationComponent {
 			this.servicePropertiesTableScrollPane = new JScrollPane();
 			this.servicePropertiesTableScrollPane
 					.setViewportView(getServicePropertiesTable());
+			
 		}
 		return this.servicePropertiesTableScrollPane;
 	}
@@ -1697,6 +1698,18 @@ public class ModificationViewer extends ApplicationComponent {
 	private ServicePropertiesTable getServicePropertiesTable() {
 		if (this.servicePropertiesTable == null) {
 			this.servicePropertiesTable = new ServicePropertiesTable(this.info);
+			this.servicePropertiesTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+				
+				public void valueChanged(ListSelectionEvent e) {
+					int row = servicePropertiesTable.getSelectedRow();
+					if ((row < 0) || (row >= servicePropertiesTable.getRowCount())) {
+						getRemoveServicePropertyButton().setEnabled(false);
+					} else {
+						getRemoveServicePropertyButton().setEnabled(true);
+					}
+				}
+			});
+			getRemoveServicePropertyButton().setEnabled(false);
 		}
 		return this.servicePropertiesTable;
 	}
