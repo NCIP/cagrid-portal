@@ -32,7 +32,7 @@ import org.apache.log4j.Logger;
  * @author David Ervin
  * 
  * @created Feb 1, 2008 9:02:20 AM
- * @version $Id: InvokeSDK4DataServiceStep.java,v 1.17 2008-02-14 18:30:52 dervin Exp $ 
+ * @version $Id: InvokeSDK4DataServiceStep.java,v 1.18 2008-02-15 14:53:34 dervin Exp $ 
  */
 public class InvokeSDK4DataServiceStep extends Step {
     public static final String TEST_RESOURCES_DIR = "/test/resources/";
@@ -51,6 +51,7 @@ public class InvokeSDK4DataServiceStep extends Step {
 
 
     public void runStep() throws Throwable {
+        // valid queries
         testUndergraduateStudentWithName();
         testAllPayments();
         testDistinctAttributeFromCash();
@@ -63,6 +64,10 @@ public class InvokeSDK4DataServiceStep extends Step {
         testNestedAssociations();
         testNestedAssociationsNoRoleNames();
         testAssociationWithGroup();
+        testNestedGroups();
+        
+        // invalid queries
+        testNonExistantTarget();
     }
     
     
@@ -168,6 +173,13 @@ public class InvokeSDK4DataServiceStep extends Step {
         CQLQuery query = loadQuery("nestedGroups.xml");
         CQLQueryResults results = loadQueryResults("goldNestedGroups.xml");
         invokeValidQueryValidResults(query, results);
+    }
+    
+    
+    private void testNonExistantTarget() {
+        LOG.debug("testNonExistantTarget");
+        CQLQuery query = loadQuery("invalid_nonExistantTarget.xml");
+        invokeInvalidQuery(query);
     }
     
     
