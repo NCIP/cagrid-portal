@@ -27,6 +27,7 @@
 		
         <mapping resource="EventRecord.hbm.xml"/>
         <mapping resource="Component.hbm.xml"/>
+        <mapping resource="Detail.hbm.xml"/>
 
     </session-factory>
 

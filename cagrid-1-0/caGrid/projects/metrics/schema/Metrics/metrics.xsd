@@ -4,11 +4,6 @@
 	xmlns:metrics="http://cagrid.org/metrics"
 	xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/03/addressing">
 
-	<xs:import
-		namespace="http://schemas.xmlsoap.org/ws/2004/03/addressing"
-		schemaLocation="./WS-Addressing.xsd" />
-
-
 	<xs:element name="EventSubmission" type="metrics:EventSubmission" />
 	<xs:complexType name="EventSubmission">
 		<xs:annotation>
@@ -35,7 +30,7 @@
 			</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="AdditionalDetail" type="metrics:Detail"
+			<xs:element name="AdditionalDetails" type="metrics:Detail"
 				minOccurs="0" maxOccurs="unbounded" />
 		</xs:sequence>
 		<xs:attribute name="name" use="required" type="xs:string" />
@@ -56,10 +51,11 @@
 				maxOccurs="1" />
 			<xs:element ref="metrics:EventDescription" minOccurs="1"
 				maxOccurs="1" />
-			<xs:element name="AdditionalDetail" type="metrics:Detail"
+			<xs:element name="AdditionalDetails" type="metrics:Detail"
 				minOccurs="0" maxOccurs="unbounded" />
 		</xs:sequence>
-		<xs:attribute name="startedAt" use="optional" type="xs:dateTime" />
+		<xs:attribute name="startedAt" use="optional"
+			type="xs:dateTime" />
 		<xs:attribute name="endedAt" use="optional" type="xs:dateTime" />
 	</xs:complexType>
 
@@ -144,7 +140,7 @@
 			<xs:enumeration value="LAUNCH" id="LAUNCH" />
 		</xs:restriction>
 	</xs:simpleType>
-	
+
 	<xs:element name="CustomEvent" type="metrics:CustomEvent" />
 	<xs:simpleType name="CustomEvent">
 		<xs:annotation>
@@ -153,8 +149,8 @@
 			</xs:documentation>
 		</xs:annotation>
 		<xs:restriction base="xs:string">
-			<xs:minLength value="0"/>
-			<xs:maxLength value="255"/>
+			<xs:minLength value="0" />
+			<xs:maxLength value="255" />
 		</xs:restriction>
 	</xs:simpleType>
 
@@ -166,7 +162,7 @@
 			</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="AdditionalDetail" type="metrics:Detail"
+			<xs:element name="AdditionalDetails" type="metrics:Detail"
 				minOccurs="0" maxOccurs="unbounded" />
 		</xs:sequence>
 		<xs:attribute name="id" use="optional" type="xs:string" />
@@ -184,11 +180,10 @@
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="metrics:Component">
-				<xs:choice minOccurs="0" maxOccurs="1">
-					<xs:element name="url" type="xs:anyURI" />
-					<xs:element name="epr"
-						type="wsa:EndpointReferenceType" />
-				</xs:choice>
+				<xs:attribute name="address" use="optional"
+					type="xs:string" />
+				<xs:attribute name="namespace" use="required"
+					type="xs:string" />
 				<xs:attribute name="identity" use="optional"
 					type="xs:string">
 					<xs:annotation>
@@ -211,31 +206,36 @@
 		</xs:annotation>
 		<xs:simpleContent>
 			<xs:extension base="xs:string">
-			<xs:attribute name="id" use="required" type="xs:string" />
-			<xs:attribute name="name" use="required" type="xs:string" />
+				<xs:attribute name="id" use="required" type="xs:string" />
+				<xs:attribute name="name" use="required"
+					type="xs:string" />
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
-	
+
 	<xs:element name="EventRecord" type="metrics:EventRecord" />
 	<xs:complexType name="EventRecord">
 		<xs:annotation>
 			<xs:documentation>
-				The full details of an event, including the Reporter Details.
+				The full details of an event, including the Reporter
+				Details.
 			</xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="metrics:Event">
 				<xs:sequence>
-					<xs:element ref="metrics:Community" minOccurs="1" maxOccurs="1" />
-					<xs:element ref="metrics:ReporterDetails" minOccurs="1" maxOccurs="1" />
+					<xs:element ref="metrics:Community" minOccurs="1"
+						maxOccurs="1" />
+					<xs:element ref="metrics:ReporterDetails"
+						minOccurs="1" maxOccurs="1" />
 				</xs:sequence>
 				<xs:attribute name="id" use="required" type="xs:string" />
-				<xs:attribute name="reportedAt" use="required" type="xs:dateTime" />
+				<xs:attribute name="reportedAt" use="required"
+					type="xs:dateTime" />
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-	
+
 	<xs:element name="ReporterDetails" type="metrics:ReporterDetails" />
 	<xs:complexType name="ReporterDetails">
 		<xs:annotation>
@@ -244,10 +244,10 @@
 			</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="identity" type="xs:string"
-				minOccurs="1" maxOccurs="1" />
-			<xs:element name="IPAddress" type="xs:string"
-				minOccurs="1" maxOccurs="1" />
+			<xs:element name="identity" type="xs:string" minOccurs="1"
+				maxOccurs="1" />
+			<xs:element name="IPAddress" type="xs:string" minOccurs="1"
+				maxOccurs="1" />
 		</xs:sequence>
 	</xs:complexType>
 </xs:schema>
