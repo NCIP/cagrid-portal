@@ -39,7 +39,7 @@
     <artifact name="caGrid-TransferExtension" conf="extension" type="jar"/>
     <artifact name="caGrid-Transfer-webapp" conf="webapp" type="jar"/>
     
-    <artifact name="caGrid-${ivy.module}-tests" conf="test" type="jar"/>
+    <artifact name="caGrid-Transfer-tests" conf="test" type="jar"/>
   </publications>
 
   <dependencies>

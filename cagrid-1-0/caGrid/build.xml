@@ -135,7 +135,7 @@
 	</target>
 
 
-	<target name="all" depends="prepare" description="compile, jar and publish all projects in the right order">
+	<target name="all" depends="prepare,clean" description="compile, jar and publish all projects in the right order">
 		<for parallel="false" param="project.buildfile" trim="true">
 			<path refid="ivy.projects.list" />
 			<sequential>				
