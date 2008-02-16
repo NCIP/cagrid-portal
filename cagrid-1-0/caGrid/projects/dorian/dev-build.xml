@@ -11,11 +11,28 @@
 	<!-- ============================================================== -->
 	<!-- Place any other properties you will need here                  -->
 	<!-- ============================================================== -->
-	<property file="${basedir}/ext/resources/cagrid.properties" />
-	<property name="jar.prefix" value="${cagrid.master.jar.prefix}dorian" />
-	<property name="ext.lib" value="${basedir}/ext/lib" />
-	<property name="ext.test.lib" value="${basedir}/ext/test/lib" />
-	<property name="ext.endorsed.dir" value="ext/endorsed/lib" />
+
+	<property environment="env" />
+	<property file="${basedir}/project.properties" />
+	<property file="${basedir}/build.properties" />
+
+	<property name="jar.prefix" value="caGrid-dorian" />
+	<property name="jar.suffix" value="${project.version}.jar" />
+
+	<property name="common.jar.name" value="${jar.prefix}-common-${jar.suffix}" />
+	<property name="client.jar.name" value="${jar.prefix}-client-${jar.suffix}" />
+	<property name="service.jar.name" value="${jar.prefix}-service-${jar.suffix}" />
+	<property name="stubs.jar.name" value="${jar.prefix}-stubs-${jar.suffix}" />
+	<property name="test.jar.name" value="${jar.prefix}-tests-${jar.suffix}" />
+
+
+	<property name="ext.dir" location="${basedir}/ext" />
+	<property name="ext.dependencies.dir" location="${ext.dir}/dependencies" />
+	<property name="ext.targetgrid.dir" location="${ext.dir}/target_grid" />
+	<property name="ext.lib" location="${ext.dependencies.dir}/service/jars" />
+	<property name="ext.test.lib" value="${ext.dependencies.dir}/test/jars" />
+	<property name="ext.endorsed.dir" value="${ext.dependencies.dir}/endorsed/jars" />
+
 	<!--need to preset these for the testing build-->
 	<property name="test.log.dir" value="test/logs" />
 	<property name="build.dir" location="build" />
@@ -92,11 +109,6 @@
 		<path id="service.build.extended.classpath">
 		</path>
 		<path id="service.run.extended.classpath">
-			<!-- Eracom -->
-			<fileset dir="${lib.dir}/eracom">
-				<include name="jce.jar" />
-				<include name="jprov.jar" />
-			</fileset>
 		</path>
 		<path id="test.build.extended.classpath">
 			<fileset dir="${ext.test.lib}">
@@ -110,19 +122,6 @@
 		</path>
 	</target>
 
-	<!-- Eracom -->
-
-	<target name="defineEracomClasspaths" depends="init">
-		<path refid="run.classpath" />
-		<path id="eracom.run.classpath">
-			<fileset dir="${lib.dir}/eracom">
-				<include name="jce.jar" />
-				<include name="jprov.jar" />
-				<include name="kmu.jar" />
-				<include name="gctadmin.jar" />
-			</fileset>
-		</path>
-	</target>
 
 
 	<!-- Create a JAR file with the implementation classes -->
@@ -292,7 +291,7 @@
 			<include name="*.template" />
 		</fileset>
 		<!-- We need to basically reverse the mapper used in the copy to 
-                 identify the target files -->
+	                 identify the target files -->
 		<fileset id="template.results.fileset" dir="${basedir}">
 			<include name="*" />
 			<present targetdir="${basedir}">
@@ -311,14 +310,14 @@
 				</not>
 			</fileset>
 			<mapper type="glob" from="*.template" to="*" />
-			<filterset filtersfile="${basedir}/ext/resources/service_urls.properties" />
+			<filterset filtersfile="${ext.targetgrid.dir}/service_urls.properties" />
 		</copy>
 
 		<!-- Next, re-template all the files, if either the filter value files or the template files 
-                 are newer than the their targets -->
+	                 are newer than the their targets -->
 		<outofdate verbose="true">
 			<sourcefiles>
-				<pathelement path="${basedir}/ext/resources/service_urls.properties" />
+				<pathelement path="${ext.targetgrid.dir}/service_urls.properties" />
 				<fileset refid="templates.fileset" />
 			</sourcefiles>
 			<targetfiles>
@@ -328,11 +327,12 @@
 				<copy todir="${basedir}" overwrite="true">
 					<fileset refid="templates.fileset" />
 					<mapper type="glob" from="*.template" to="*" />
-					<filterset filtersfile="${basedir}/ext/resources/service_urls.properties" />
+					<filterset filtersfile="${ext.targetgrid.dir}/service_urls.properties" />
 				</copy>
 			</sequential>
 		</outofdate>
 	</target>
+
 
 
 
@@ -429,15 +429,15 @@
 		</java>
 	</target>
 
-	<target name="adminEracomHSM" description="Brings up the Eracom Admin tool." depends="defineEracomClasspaths">
+	<target name="adminEracomHSM" description="Brings up the Eracom Admin tool." depends="defineClasspaths">
 		<java classname="jprov.tools.admin.CtAdmin" fork="true" newenvironment="true" failonerror="true">
-			<classpath refid="eracom.run.classpath" />
+			<classpath refid="service.run.classpath" />
 		</java>
 	</target>
 
-	<target name="manageEracomKeys" description="Brings up the Eracom Admin tool." depends="defineEracomClasspaths">
+	<target name="manageEracomKeys" description="Brings up the Eracom Admin tool." depends="defineClasspaths">
 		<java classname="jprov.tools.kmu.KMU" fork="true" newenvironment="true" failonerror="true">
-			<classpath refid="eracom.run.classpath" />
+			<classpath refid="service.run.classpath" />
 		</java>
 	</target>
 

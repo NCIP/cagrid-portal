@@ -1,32 +1,34 @@
 <!-- Build configutaion for OpenSAML/Java - Walter Hoehn 06/05/2002 -->
 
-<project name="OpenSAML" default="all" basedir=".">
+<project name="caGrid-opensaml" default="all" basedir=".">
 	<!-- Define the environment variable -->
-	<property environment="env" />
-    <property file="${basedir}/ext/resources/cagrid.properties" />
+    <property environment="env" />
+    <property file="${basedir}/project.properties" />
+    <property file="${basedir}/build.properties" />
+	
 	<!-- Directory where GT4 is installed --> 
 	<!-- Note that the buildfile requires an environment variable GLOBUS_LOCATION
 	     pointing to that directory -->
 	<property name="globus.location" location="${env.GLOBUS_LOCATION}" />
 	<!-- Set global properties for this build -->
-	<property name="distname" value="${cagrid.master.jar.prefix}opensaml" />
+	<property name="distname" value="${ant.project.name}" />
 	<property name="root" value="." />
 	<property name="src" value="src" />
     <property name="data" value="data" />
 	<property name="build" value="build" />
-	<property name="libdir" value="lib" />
-	<property name="endorsed" value="endorsed" />
+	<property name="libdir" value="${basedir}/ext/dependencies/compile/jars" />
+	<property name="endorsed" value="${basedir}/ext/dependencies/endorsed/jars" />
 	<property name="dist" value="dist" />
 	<property name="docs" value="doc" />
 	<property name="javadocs" value="${docs}/api" />
-    <property name="version" value="1.1" />
+   
 	<property name="year" value="2005"/>
 	<property name="copyright" value="Copyright &#169; ${year} UCAID. All Rights Reserved."/>
 	<property name="javaversion" value="1.4" />
 	
-    <property name="jarfile" value="${dist}/${distname}${cagrid.master.jar.separator}${version}.jar"/>
-    <property name="tarfile" value="${dist}/${distname}-java-${version}.tar"/>
-    <property name="gzipfile" value="${dist}/${distname}-java-${version}.tar.gz"/>
+    <property name="jarfile" value="${dist}/${distname}-${project.version}.jar"/>
+    <property name="tarfile" value="${dist}/${distname}-java-${project.version}.tar"/>
+    <property name="gzipfile" value="${dist}/${distname}-java-${project.version}.tar.gz"/>
    
 	<!-- Macro substitutions for conditional compilation. -->
 

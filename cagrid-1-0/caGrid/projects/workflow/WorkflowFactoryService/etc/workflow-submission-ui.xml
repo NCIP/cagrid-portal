@@ -37,7 +37,7 @@
                     <name>GeneralConfiguration</name>
                 </qname>
                 <ConfigurationPanel>org.cagrid.grape.GeneralConfigurationEditor</ConfigurationPanel>
-                <DefaultFile>ext/resources/workflow-ui-configuration.xml</DefaultFile>
+                <DefaultFile>ext/target_grid/workflow-ui-configuration.xml</DefaultFile>
             </ConfigurationDescriptor>
         </ConfigurationDescriptors>
     </configuration>

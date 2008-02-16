@@ -1,13 +1,13 @@
 <!-- ======================================================================= -->
 <!-- caGrid 1.0 Data Service Tools build file                                -->
 <!-- ======================================================================= -->
-<project name="data" default="all" basedir=".">
+<project name="caGrid-data" default="all" basedir=".">
 	<!-- Environment -->
 	<property environment="env" />
+	<property file="${basedir}/project.properties" />
 	<property file="${basedir}/build.properties" />
-	<property file="${user.dir}/build.properties" />
-	<property file="${basedir}/ext/resources/cagrid.properties" />
 	<property name="globus.dir" location="${env.GLOBUS_LOCATION}" />
+
 	<property file="introduce.properties" />
 	<property name="introduce.ns.excludes" value="" />
 
@@ -17,9 +17,9 @@
 	<property name="java.source" value="1.5" />
 
 	<!-- Information -->
-	<property name="project.version" value="${cagrid.master.project.version}" />
-	<property name="project.name" value="${cagrid.master.project.name}-${project.version}-${ant.project.name}" />
-	<property name="project.jar.prefix" value="${cagrid.master.jar.prefix}${ant.project.name}${cagrid.master.jar.separator}" />
+	<property name="project.name" value="${ant.project.name}" />
+	<property name="project.jar.prefix" value="${project.name}-" />
+	<property name="project.jar.suffix" value="-${project.version}.jar" />
 
 	<!-- build output dirs -->
 	<property name="build.dir" location="build" />
@@ -32,13 +32,13 @@
 	<property name="build.jars.dir" location="build/lib" />
 
 	<!-- jar names -->
-	<property name="utils.jar.name" value="${project.jar.prefix}utils.jar" />
-	<property name="service.jar.name" value="${project.jar.prefix}service.jar" />
-	<property name="validation.jar.name" value="${project.jar.prefix}validation.jar" />
-	<property name="common.jar.name" value="${project.jar.prefix}common.jar" />
-	<property name="cql.jar.name" value="${project.jar.prefix}cql.jar" />
-	<property name="tools.jar.name" value="${project.jar.prefix}tools.jar" />
-	<property name="tests.jar.name" value="${project.jar.prefix}tests.jar" />
+	<property name="utils.jar.name" value="${project.jar.prefix}utils${project.jar.suffix}" />
+	<property name="service.jar.name" value="${project.jar.prefix}service${project.jar.suffix}" />
+	<property name="validation.jar.name" value="${project.jar.prefix}validation${project.jar.suffix}" />
+	<property name="common.jar.name" value="${project.jar.prefix}common${project.jar.suffix}" />
+	<property name="cql.jar.name" value="${project.jar.prefix}cql${project.jar.suffix}" />
+	<property name="tools.jar.name" value="${project.jar.prefix}tools${project.jar.suffix}" />
+	<property name="tests.jar.name" value="${project.jar.prefix}tests${project.jar.suffix}" />
 
 	<!-- jar files -->
 	<property name="utils.jar.file" value="${build.jars.dir}/${utils.jar.name}" />
@@ -56,7 +56,7 @@
 	<property name="test.stubs.src" location="${test.stubs.dir}/src" />
 	<property name="stubs.dest" location="${stubs.dir}/classes" />
 	<property name="test.stubs.dest" location="${test.stubs.dir}/classes" />
-	<property name="stubs.jar.name" value="${project.jar.prefix}stubs.jar" />
+	<property name="stubs.jar.name" value="${project.jar.prefix}stubs${project.jar.suffix}" />
 	<property name="stubs.jar.file" value="${build.jars.dir}/${stubs.jar.name}" />
 	<property name="ant.build.stubs" location="${globus.dir}/share/globus_wsrf_tools/build-stubs.xml" />
 
@@ -64,7 +64,7 @@
 	<property name="schema.src" location="${globus.dir}/share/schema" />
 	<property name="schema.dest" location="${build.dir}/schema" />
 	<property name="mapping.src" value="${basedir}/NStoPkg.properties" />
-	<property name="ext.schema.dir" location="${basedir}/ext/xsd" />
+	<property name="ext.schema.dir" location="${basedir}/ext/dependencies/xsd" />
 
 	<!-- source directories -->
 	<property name="src.dir" location="${basedir}/src" />
@@ -78,8 +78,8 @@
 
 	<!-- libraries -->
 	<property name="lib.dir" location="${basedir}/lib" />
-	<property name="ext.lib.dir" location="${basedir}/ext/lib" />
-	<property name="ext.test.lib.dir" location="${basedir}/ext/test/lib" />
+	<property name="ext.lib.dir" location="${basedir}/ext/dependencies/jars" />
+	<property name="ext.test.lib.dir" location="${basedir}/ext/dependencies/test/jars" />
 
 	<!-- testing stuff -->
 	<property name="test.dir" location="${basedir}/test" />
@@ -106,7 +106,7 @@
 		</fileset>
 	</path>
 
-	
+
 	<path id="test.classpath">
 		<path refid="base.classpath" />
 		<pathelement location="${test.stubs.dest}" />
@@ -139,7 +139,7 @@
 
 
 	<!-- creates output directories -->
-    <target name="init">
+	<target name="init">
 		<mkdir dir="${build.dir}" />
 		<mkdir dir="${build.common.dest}" />
 		<mkdir dir="${build.utils.dest}" />
@@ -163,25 +163,20 @@
 				<include name="Data/**/*.wsdl" />
 			</fileset>
 		</copy>
-		<copy todir="${schema.dest}/Data">
-			<fileset dir="ext/">
-				<include name="xsd/**/*.xsd" />
-				<exclude name="xsd/**/enumeration.xsd" />
-				<exclude name="xsd/**/enumeration.wsdl" />
-				<exclude name="xsd/**/addressing.xsd" />
+		<copy todir="${schema.dest}/Data/xsd">
+			<fileset dir="${ext.schema.dir}">
+				<include name="cagrid/**/*.xsd" />
 			</fileset>
 		</copy>
 		<copy todir="${schema.dest}/Data">
 			<fileset dir="${ext.schema.dir}">
-				<include name="EnumerationResponseContainer.xsd" />
-				<include name="enumeration.xsd" />
-				<include name="enumeration.wsdl" />
-				<include name="addressing.xsd" />
+				<include name="*.xsd" />
+				<include name="*.wsdl" />
 			</fileset>
 		</copy>
 		<available property="stubs.present" type="dir" file="${stubs.dest}/gov/nih/nci/cagrid" />
 	</target>
-	
+
 
 	<target name="copyGlobusSchemas" depends="init">
 		<copy toDir="${schema.dest}">
@@ -209,9 +204,9 @@
 		<property name="mapping.file" value="${mapping.dst}" />
 		<!-- generate stubs in general for the data service -->
 		<ant antfile="${ant.build.stubs}" target="generateStubs">
-			<property name="source.stubs.dir" location="${schema.dest}/Data"/>
-			<property name="wsdl.file" value="Beans.wsdl"/>
-			<property name="target.stubs.dir" location="${stubs.src}"/>
+			<property name="source.stubs.dir" location="${schema.dest}/Data" />
+			<property name="wsdl.file" value="Beans.wsdl" />
+			<property name="target.stubs.dir" location="${stubs.src}" />
 		</ant>
 		<!-- generate stubs for Bookstore classes used in testing -->
 		<ant antfile="${ant.build.stubs}" target="generateStubs">
@@ -319,7 +314,7 @@
 			<include name="**/*.java" />
 		</javac>
 	</target>
-	
+
 
 	<!-- compiles the service side code -->
 	<target name="compileService" depends="compileStubs, compileUtils, compileValidation, compileCommon, compileCql">
@@ -437,7 +432,7 @@
 		</jar>
 	</target>
 
-	
+
 	<!-- jars the validation -->
 	<target name="jarValidation" depends="compileValidation" description="Jars the validation code">
 		<jar destfile="${validation.jar.file}">
@@ -489,7 +484,7 @@
 			</fileset>
 		</jar>
 	</target>
-	
+
 
 	<!-- jars the tests -->
 	<target name="jarTests" depends="compileTests" description="Jars the testing code and resources">
@@ -525,7 +520,7 @@
 		<delete dir="${stubs.dest}" />
 	</target>
 
-	
+
 	<!-- runs the query building tool -->
 	<target name="queryBuilder" depends="all" description="Runs the CQL query builder tool">
 		<java fork="true" classname="gov.nih.nci.cagrid.data.utilities.query.QueryBuilder">
@@ -547,8 +542,8 @@
 			</classpath>
 		</java>
 	</target>
-	
-	
+
+
 	<!-- runs the query building tool -->
 	<target name="vizQuery" depends="all" description="Runs the Visual Query builder tool">
 		<java fork="true" classname="gov.nih.nci.cagrid.data.utilities.vizquery.VisualQueryBuilder">
@@ -570,13 +565,13 @@
 			</classpath>
 		</java>
 	</target>
-	
-	
+
+
 	<target name="invokeDataService" description="Invokes a remote caGrid Data Service">
-		<property name="service.url" value="http://localhost:8080/wsrf/services/cagrid/DataService"/>
-		<property name="service.cql" value="cqlQuery.xml"/>				
+		<property name="service.url" value="http://localhost:8080/wsrf/services/cagrid/DataService" />
+		<property name="service.cql" value="cqlQuery.xml" />
 		<java fork="true" classname="gov.nih.nci.cagrid.data.utilities.invoker.DataServiceInvoker">
-			<arg line="${service.url} ${service.cql}"/>
+			<arg line="${service.url} ${service.cql}" />
 			<classpath>
 				<fileset dir="${build.jars.dir}">
 					<include name="**/*.jar" />

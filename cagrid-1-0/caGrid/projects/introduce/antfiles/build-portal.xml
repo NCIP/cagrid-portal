@@ -22,7 +22,6 @@
 				<include name="*.jar" />
 			</fileset>
 			<pathelement location="${basedir}/resources/portal/introduce" />
-			<pathelement location="${ext.resources.dir}/portal/common" />
 			<pathelement location="${basedir}/doc/help" />
 		</path>
 		<path id="Portal.test.classpath">
@@ -50,7 +49,6 @@
 				<include name="*.jar" />
 			</fileset>
 			<pathelement location="${basedir}/resources/portal/introduce" />
-			<pathelement location="${ext.resources.dir}/portal/common" />
 			<pathelement location="${basedir}/doc/help" />
 		</path>
 		<path id="Portal.run.test.classpath">
@@ -68,40 +66,6 @@
 			</fileset>
 			<fileset dir="${ext.lib.dir}">
 				<include name="*.jar" />
-			</fileset>
-			<fileset dir="${ext.globus.dir}/lib">
-				<include name="*.jar" />
-			</fileset>
-			<fileset dir="${ant.library.dir}">
-				<include name="*.jar" />
-			</fileset>
-			<fileset dir="${basedir}/extensions/lib">
-				<include name="*.jar" />
-				<exclude name="${jars.prefixname}*" />
-			</fileset>
-			<pathelement location="${basedir}/resources/portal/introduce" />
-			<pathelement location="${ext.resources.dir}/portal/common" />
-			<pathelement location="${basedir}/doc/help" />
-		</path>
-		<path id="Portal.run.classpath">
-			<fileset dir="${lib.dir}">
-				<include name="*.jar" />
-			</fileset>
-			<fileset dir="${build.lib.dir}">
-				<include name="*.jar" />
-			</fileset>
-			<fileset dir="${test.lib.dir}">
-				<include name="*.jar" />
-			</fileset>
-			<fileset dir="${ext.test.lib.dir}">
-				<include name="*.jar" />
-			</fileset>
-			<fileset dir="${ext.lib.dir}">
-				<include name="*.jar" />
-			</fileset>
-			<fileset dir="${extensions.lib.dir}">
-				<include name="*.jar" />
-				<exclude name="${jars.prefixname}*" />
 			</fileset>
 			<fileset dir="${ext.globus.dir}/lib">
 				<include name="addressing-1.0.jar" />
@@ -174,8 +138,40 @@
 			<fileset dir="${ant.library.dir}">
 				<include name="*.jar" />
 			</fileset>
+			<fileset dir="${basedir}/extensions/lib">
+				<include name="*.jar" />
+				<exclude name="${jars.prefixname}*" />
+			</fileset>
 			<pathelement location="${basedir}/resources/portal/introduce" />
-			<pathelement location="${ext.resources.dir}/portal/common" />
+			<pathelement location="${basedir}/doc/help" />
+		</path>
+		<path id="Portal.run.classpath">
+			<fileset dir="${lib.dir}">
+				<include name="*.jar" />
+			</fileset>
+			<fileset dir="${build.lib.dir}">
+				<include name="*.jar" />
+			</fileset>
+			<fileset dir="${test.lib.dir}">
+				<include name="*.jar" />
+			</fileset>
+			<fileset dir="${ext.test.lib.dir}">
+				<include name="*.jar" />
+			</fileset>
+			<fileset dir="${ext.lib.dir}">
+				<include name="*.jar" />
+			</fileset>
+			<fileset dir="${extensions.lib.dir}">
+				<include name="*.jar" />
+				<exclude name="${jars.prefixname}*" />
+			</fileset>
+			<fileset dir="${ext.globus.dir}/lib">
+				<include name="*.jar" />
+			</fileset>
+			<fileset dir="${ant.library.dir}">
+				<include name="*.jar" />
+			</fileset>
+			<pathelement location="${basedir}/resources/portal/introduce" />
 			<pathelement location="${basedir}/doc/help" />
 		</path>
 	</target>

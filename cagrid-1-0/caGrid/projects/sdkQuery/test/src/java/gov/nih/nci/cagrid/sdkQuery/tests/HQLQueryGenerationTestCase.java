@@ -18,6 +18,8 @@ import junit.textui.TestRunner;
  * @version $Id$ 
  */
 public class HQLQueryGenerationTestCase extends TestCase {
+    
+    public static final String TEST_QUERIES_DIR="ext/dependencies/test/xml/";
 	
 	public HQLQueryGenerationTestCase(String name) {
 		super(name);
@@ -50,37 +52,37 @@ public class HQLQueryGenerationTestCase extends TestCase {
 	
 	
 	public void testReturnAllQuery() {
-		translateQuery("ext/resources/returnAllOfType.xml");
+		translateQuery(TEST_QUERIES_DIR + "returnAllOfType.xml");
 	}
 	
 	
 	public void testAttributePredicates() {
-		translateQuery("ext/resources/attributePredicates.xml");
+		translateQuery(TEST_QUERIES_DIR + "attributePredicates.xml");
 	}
 	
 	
 	public void testObjectWithAssociation() {
-		translateQuery("ext/resources/objectWithAssociation.xml");
+		translateQuery(TEST_QUERIES_DIR + "objectWithAssociation.xml");
 	}
 	
 	
 	public void testObjectWithAssociationNoRoleName() {
-		translateQuery("ext/resources/objectWithAssociationNoRoleName.xml");
+		translateQuery(TEST_QUERIES_DIR + "objectWithAssociationNoRoleName.xml");
 	}
 	
 	
 	public void testObjectWithAttribute() {
-		translateQuery("ext/resources/objectWithAttribute.xml");
+		translateQuery(TEST_QUERIES_DIR + "objectWithAttribute.xml");
 	}
 	
 	
 	public void testObjectWithGroup() {
-		translateQuery("ext/resources/objectWithGroup.xml");
+		translateQuery(TEST_QUERIES_DIR + "objectWithGroup.xml");
 	}
 	
 	
 	public void testObjectWithNestedGroup() {
-		translateQuery("ext/resources/objectWithNestedGroup.xml");
+		translateQuery(TEST_QUERIES_DIR + "objectWithNestedGroup.xml");
 	}
 	
 

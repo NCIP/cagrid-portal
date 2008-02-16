@@ -2,7 +2,7 @@
 <xsd:schema targetNamespace="http://caGrid.caBIG/1.0/gov.nih.nci.cagrid.dcql" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	xmlns:dcql="http://caGrid.caBIG/1.0/gov.nih.nci.cagrid.dcql" xmlns:cql="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery" elementFormDefault="qualified"
 	attributeFormDefault="unqualified">
-	<xsd:import namespace="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery" schemaLocation="./xsd/cql1.0/1_gov.nih.nci.cagrid.CQLQuery.xsd"/>
+	<xsd:import namespace="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery" schemaLocation="./xsd/1_gov.nih.nci.cagrid.CQLQuery.xsd"/>
 	<xsd:element name="DCQLQuery">
 		<xsd:annotation>
 			<xsd:documentation>caGrid Distributed CQL Query, the desired result objects are described by the TargetObject, and the CQL query resulting from the processing is sent to each data service identified by the targetServiceURLs</xsd:documentation>

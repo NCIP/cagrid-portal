@@ -14,7 +14,7 @@
 	<!-- ============================================================== -->
 	<target name="preDeployTomcat" depends="deployTrustedCerts,deployPatchedCogToTomcat">
 		<copy todir="${build.lib.dir}">
-			<fileset dir="${ext.lib}">
+			<fileset dir="${ext.lib.dir}">
 				<include name="*.jar" />
 			</fileset>
 		</copy>
@@ -29,7 +29,7 @@
 	<target name="deployPatchedCogToTomcatLib" if="cog-jglobus.tomcat.deploy.present">
 		<echo message="Replacing cog-jglobus.jar in tomcat's service area: ${tomcat.deploy.lib.dir}" />
 		<copy overwrite="true" toDir="${tomcat.deploy.lib.dir}">
-			<fileset dir="${lib.dir}/globus-patches">
+			<fileset dir="${ext.patched.jars.dir}">
 				<include name="cog-jglobus.jar" />
 			</fileset>
 		</copy>
@@ -37,7 +37,7 @@
 	<target name="deployPatchedCogToTomcatCommon" if="cog-jglobus.tomcat.common.present">
 		<echo message="Replacing cog-jglobus.jar in tomcat's common area: ${tomcat.common.lib.dir}" />
 		<copy overwrite="true" todir="${tomcat.common.lib.dir}">
-			<fileset dir="${lib.dir}/globus-patches">
+			<fileset dir="${ext.patched.jars.dir}">
 				<include name="cog-jglobus.jar" />
 			</fileset>
 		</copy>
@@ -50,7 +50,7 @@
 	<!-- ============================================================== -->
 	<target name="preDeployGlobus" depends="deployTrustedCerts">
 		<copy todir="${build.lib.dir}">
-			<fileset dir="${ext.lib}">
+			<fileset dir="${ext.lib.dir}">
 				<include name="*.jar" />
 			</fileset>
 		</copy>

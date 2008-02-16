@@ -2,8 +2,7 @@
 <!-- caGrid Analytical Utilities build file                                  -->
 <!-- ======================================================================= -->
 <project name="introduce_utilities" basedir="." default="usage">
-	<property name="conf.dir" location="conf"/>
-	
+
 	<!-- ============================================================== -->
 	<!-- Globus properties                                              -->
 	<!-- ============================================================== -->

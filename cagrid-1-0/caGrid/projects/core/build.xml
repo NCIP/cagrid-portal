@@ -3,18 +3,16 @@
 <!-- caGrid 1.0 core build file                                        -->
 <!-- ================================================================= -->
 
-<project name="core" default="compile" basedir=".">
+<project name="caGrid-core" default="compile" basedir=".">
 	<!-- Environment -->
 	<property environment="env" />
+	<property file="${basedir}/project.properties" />
 	<property file="${basedir}/build.properties" />
-	<property file="${user.dir}/build.properties" />
-      <property file="${basedir}/ext/resources/cagrid.properties" />
 	<property name="globus.dir" location="${env.GLOBUS_LOCATION}" />
 
 	<!-- Information -->
-	<property name="project.version" value="1.0" />
-	<property name="project.name" value="${cagrid.master.jar.prefix}${ant.project.name}" />
-	<property name="java.source" value="1.5"/>
+	<property name="project.name" value="${ant.project.name}" />
+	<property name="java.source" value="1.5" />
 
 
 	<property name="src.dir" value="${basedir}/src/java" />
@@ -22,10 +20,13 @@
 	<property name="javadoc.dir" value="${build.dir}/javadoc" />
 	<property name="classes.dir" value="${build.dir}/classes" />
 	<property name="jar.dir" value="${build.dir}/jars" />
-	<property name="project.jarfile" value="${jar.dir}/${project.name}.jar" />
-	<property name="lib.dir" value="${basedir}/lib" />
-	<property name="ext.lib.dir" value="${basedir}/ext/lib" />
-	<property name="ext.test.lib.dir" location="${basedir}/ext/test/lib" />
+	<property name="project.jarfile" value="${jar.dir}/${project.name}-${project.version}.jar" />
+	<property name="ext.lib.dir" value="${basedir}/ext/dependencies/default/jars" />
+	<property name="ext.ui.lib.dir" value="${basedir}/ext/dependencies/ui/jars" />
+	<property name="ext.test.lib.dir" location="${basedir}/ext/dependencies/test/jars" />
+
+	<property name="resources.dir" value="${basedir}/resources" />
+	<property name="project.resources.jarfile" value="${jar.dir}/${project.name}-resources-${project.version}.jar" />
 
 	<!-- testing stuff -->
 	<property name="test.dir" location="${basedir}/test" />
@@ -33,7 +34,7 @@
 	<property name="test.classes.dir" location="${build.dir}/test/classes" />
 	<property name="test.lib.dir" location="${test.dir}/lib" />
 	<property name="test.logs.dir" location="${test.dir}/logs" />
-	<property name="test.project.jar" location="${jar.dir}/${project.name}${cagrid.master.jar.separator}tests.jar" />
+	<property name="test.project.jar" location="${jar.dir}/${project.name}-tests-${project.version}.jar" />
 
 	<import file="test/test.xml" />
 
@@ -42,10 +43,10 @@
 	<!-- The Build Classpath                                             -->
 	<!-- =============================================================== -->
 	<path id="build.classpath">
-		<fileset dir="${lib.dir}">
+		<fileset dir="${ext.lib.dir}">
 			<include name="**/*.jar" />
 		</fileset>
-		<fileset dir="${ext.lib.dir}">
+		<fileset dir="${ext.ui.lib.dir}">
 			<include name="**/*.jar" />
 		</fileset>
 		<fileset dir="${globus.dir}/lib">
@@ -58,15 +59,7 @@
 	<!-- The Run Classpath                                                   -->
 	<!-- =============================================================== -->
 	<path id="run.classpath">
-		<fileset dir="${lib.dir}">
-			<include name="**/*.jar" />
-		</fileset>
-		<fileset dir="${ext.lib.dir}">
-			<include name="**/*.jar" />
-		</fileset>
-		<fileset dir="${globus.dir}/lib">
-			<include name="**/*.jar" />
-		</fileset>
+		<path refid="build.classpath" />
 	</path>
 
 	<!-- =============================================================== -->
@@ -74,19 +67,8 @@
 	<!-- =============================================================== -->
 	<path id="test.classpath">
 		<pathelement path="${classes.dir}" />
-		<fileset dir="${lib.dir}">
-			<include name="**/*.jar" />
-		</fileset>
-		<fileset dir="${ext.lib.dir}">
-			<include name="**/*.jar" />
-		</fileset>
-		<fileset dir="${test.lib.dir}">
-			<include name="**/*.jar" />
-		</fileset>
+		<path refid="build.classpath" />
 		<fileset dir="${ext.test.lib.dir}">
-			<include name="**/*.jar" />
-		</fileset>
-		<fileset dir="${globus.dir}/lib">
 			<include name="**/*.jar" />
 		</fileset>
 	</path>
@@ -131,26 +113,46 @@
 
 
 	<!-- ============================================================== -->
-	<!-- Creates the test jar files                                          -->
+	<!-- Creates the jar files                                          -->
 	<!-- ============================================================== -->
-	<target name="jar" depends="compile" description="Builds the Jar Files">
+	<target name="jar" depends="compile" description="Builds the main Jar Files">
 		<mkdir dir="${jar.dir}" />
 		<jar jarfile="${project.jarfile}" basedir="${classes.dir}">
 			<manifest>
 				<attribute name="Built-By" value="${user.name}" />
 				<attribute name="Main-Class" value="${main.class}" />
+				<attribute name="Specification-Version" value="${project.version}" />
+				<attribute name="Implementation-Version" value="${project.version}" />
 			</manifest>
 		</jar>
 	</target>
 
 	<!-- ============================================================== -->
-	<!-- Creates the jar files                                          -->
+	<!-- Creates the resources jar files                                          -->
 	<!-- ============================================================== -->
-	<target name="jar-tests" depends="compile-tests" description="Builds the Jar Files">
+	<target name="jar-resources" depends="prepare" description="Builds the resources Jar Files">
+		<mkdir dir="${jar.dir}" />
+		<jar jarfile="${project.resources.jarfile}" basedir="${resources.dir}/portal/common">
+			<manifest>
+				<attribute name="Built-By" value="${user.name}" />
+				<attribute name="Main-Class" value="${main.class}" />
+				<attribute name="Specification-Version" value="${project.version}" />
+				<attribute name="Implementation-Version" value="${project.version}" />
+			</manifest>
+		</jar>
+	</target>
+
+	<!-- ============================================================== -->
+	<!-- Creates the test jar files                                          -->
+	<!-- ============================================================== -->
+	<target name="jar-tests" depends="compile-tests" description="Builds the test Jar Files">
 		<mkdir dir="${jar.dir}" />
 		<jar jarfile="${test.project.jar}" basedir="${test.classes.dir}">
 			<manifest>
 				<attribute name="Built-By" value="${user.name}" />
+				<attribute name="Main-Class" value="${main.class}" />
+				<attribute name="Specification-Version" value="${project.version}" />
+				<attribute name="Implementation-Version" value="${project.version}" />
 			</manifest>
 		</jar>
 	</target>
@@ -177,6 +179,6 @@
 	<!-- ============================================================== -->
 	<!-- Builds from scratch                                                -->
 	<!-- ============================================================== -->
-	<target name="all" description="Builds the entire application" depends="jar,jar-tests" />
+	<target name="all" description="Builds the entire application" depends="jar,jar-tests,jar-resources" />
 </project>
 

@@ -3,17 +3,15 @@
 <!-- caGrid Service Tools build file                                        -->
 <!-- ================================================================= -->
 
-<project name="service-tools" default="compile" basedir=".">
+<project name="caGrid-service-tools" default="compile" basedir=".">
 	<!-- Environment -->
 	<property environment="env" />
+	<property file="${basedir}/project.properties" />
 	<property file="${basedir}/build.properties" />
-	<property file="${user.dir}/build.properties" />
-	<property file="${basedir}/ext/resources/cagrid.properties" />
 	<property name="globus.dir" location="${env.GLOBUS_LOCATION}" />
 
 	<!-- Information -->
-	<property name="project.version" value="1.0" />
-	<property name="project.name" value="${cagrid.master.jar.prefix}${ant.project.name}" />
+	<property name="project.name" value="${ant.project.name}" />
 	<property name="java.source" value="1.5" />
 
 
@@ -22,12 +20,11 @@
 	<property name="javadoc.dir" value="${build.dir}/javadoc" />
 	<property name="classes.dir" value="${build.dir}/classes" />
 	<property name="jar.dir" value="${build.dir}/jars" />
-	<property name="db.jarfile" value="${jar.dir}/${cagrid.master.jar.prefix}db.jar" />
-	<property name="events.jarfile" value="${jar.dir}/${cagrid.master.jar.prefix}events.jar" />
-	<property name="groups.jarfile" value="${jar.dir}/${cagrid.master.jar.prefix}groups.jar" />
-	<property name="lib.dir" value="${basedir}/lib" />
-	<property name="ext.lib.dir" value="${basedir}/ext/lib" />
-	<property name="ext.test.lib.dir" location="${basedir}/ext/test/lib" />
+	<property name="db.jarfile" value="${jar.dir}/${project.name}-db-${project.version}.jar" />
+	<property name="events.jarfile" value="${jar.dir}/${project.name}-events-${project.version}.jar" />
+	<property name="groups.jarfile" value="${jar.dir}/${project.name}-groups-${project.version}.jar" />
+	<property name="ext.lib.dir" value="${basedir}/ext/dependencies/jars" />
+	<property name="ext.test.lib.dir" location="${basedir}/ext/dependencies/test/jars" />
 	<property name="stubs.dir" location="${build.dir}/stubs-core" />
 	<property name="stubs.src" location="${stubs.dir}/src" />
 	<property name="stubs.dest" location="${stubs.dir}/classes" />
@@ -40,7 +37,7 @@
 	<property name="test.classes.dir" location="${build.dir}/test/classes" />
 	<property name="test.lib.dir" location="${test.dir}/lib" />
 	<property name="test.logs.dir" location="${test.dir}/logs" />
-	<property name="test.project.jar" location="${jar.dir}/${project.name}${cagrid.master.jar.separator}tests.jar" />
+	<property name="test.project.jar" location="${jar.dir}/${project.name}-tests-${project.version}.jar" />
 
 	<import file="test/test.xml" />
 
@@ -49,15 +46,12 @@
 	<!-- The Build Classpath                                             -->
 	<!-- =============================================================== -->
 	<path id="build.classpath">
-		<fileset dir="${lib.dir}">
-			<include name="**/*.jar" />
-		</fileset>
 		<fileset dir="${ext.lib.dir}">
 			<include name="**/*.jar" />
 		</fileset>
 		<fileset dir="${globus.dir}/lib">
-					<include name="**/*.jar" />
-				</fileset>
+			<include name="**/*.jar" />
+		</fileset>
 		<pathelement location="${stubs.dest}" />
 	</path>
 
@@ -66,9 +60,6 @@
 	<!-- The Run Classpath                                                   -->
 	<!-- =============================================================== -->
 	<path id="run.classpath">
-		<fileset dir="${lib.dir}">
-			<include name="**/*.jar" />
-		</fileset>
 		<fileset dir="${ext.lib.dir}">
 			<include name="**/*.jar" />
 		</fileset>
@@ -84,9 +75,6 @@
 	<path id="test.classpath">
 		<pathelement path="${classes.dir}" />
 		<pathelement path="${test.classes.dir}" />
-		<fileset dir="${lib.dir}">
-			<include name="**/*.jar" />
-		</fileset>
 		<fileset dir="${ext.lib.dir}">
 			<include name="**/*.jar" />
 		</fileset>
@@ -213,14 +201,14 @@
 			<fileset dir="${classes.dir}" includes="**/events/**" />
 			<fileset dir="${stubs.dest}" includes="**/events/**" />
 		</jar>
-		
+
 		<jar jarfile="${groups.jarfile}">
-				<manifest>
-					<attribute name="Built-By" value="${user.name}" />
-				</manifest>
-				<fileset dir="${classes.dir}" includes="**/groups/**" />
-				<fileset dir="${stubs.dest}" includes="**/groups/**" />
-			</jar>
+			<manifest>
+				<attribute name="Built-By" value="${user.name}" />
+			</manifest>
+			<fileset dir="${classes.dir}" includes="**/groups/**" />
+			<fileset dir="${stubs.dest}" includes="**/groups/**" />
+		</jar>
 
 	</target>
 

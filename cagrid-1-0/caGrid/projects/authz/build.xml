@@ -1,14 +1,16 @@
-<project name="authz" default="all" basedir=".">
+<project name="caGrid-authz" default="all" basedir=".">
 
-	<property file="build.properties" />
-	<property file="${basedir}/ext/resources/cagrid.properties" />
 	<property environment="env" />
+	<property file="${basedir}/project.properties" />
+	<property file="${basedir}/build.properties" />
+
 	<property name="globus.location" value="${env.GLOBUS_LOCATION}" />
 	<property name="build.dir" value="build" />
 	<property name="build.classes.dir" value="${build.dir}/classes" />
-	<property name="lib.dir" value="${basedir}/lib" />
-	<property name="ext.lib.dir" value="${basedir}/ext/lib" />
-	<property name="ext.test.lib.dir" location="${basedir}/ext/test/lib" />
+
+	<property name="ext.lib.dir" value="${basedir}/ext/dependencies/jars" />
+	<property name="ext.test.lib.dir" location="${basedir}/ext/dependencies/test/jars" />
+
 	<property name="src.java.dir" value="src/java" />
 
 	<property name="test.dir" location="${basedir}/test" />
@@ -17,10 +19,9 @@
 	<!-- property name="test.lib.dir" location="${test.dir}/lib" / -->
 	<property name="test.logs.dir" location="${test.dir}/logs" />
 
-	<property name="project.version" value="${cagrid.master.project.version}" />
-	<property name="project.name" value="${cagrid.master.project.name}-${project.version}-${ant.project.name}" />
-	<property name="project.jar.prefix" value="${cagrid.master.jar.prefix}${ant.project.name}${cagrid.master.jar.separator}" />
-	<property name="jar.name" value="${project.jar.prefix}common" />
+	<property name="project.name" value="${ant.project.name}" />
+	<property name="project.jar.prefix" value="${project.name}-" />
+	<property name="jar.name" value="${project.jar.prefix}common-${project.version}" />
 
 	<!-- Jars from GLOBUS_LOCATION/lib -->
 	<patternset id="globus.jars">
@@ -57,54 +58,10 @@
 		<include name="xml-apis.jar" />
 	</patternset>
 
-	<!-- Jars from other caGrid projects -->
-	<patternset id="cagrid.jars">
-		<include name="caGrid-*-core.jar" />
-		<include name="caGrid-*-gridca.jar" />
-		<include name="caGrid-*-gridgrouper-client.jar" />
-		<include name="caGrid-*-gridgrouper-common.jar" />
-		<include name="caGrid-*-gridgrouper-stubs.jar" />
-		<include name="caGrid-*-metadata-common.jar" />
-		<include name="caGrid-*-metadata-security.jar" />
-		<include name="caGrid-*-ServiceSecurityProvider-client.jar" />
-		<include name="caGrid-*-ServiceSecurityProvider-common.jar" />
-		<include name="caGrid-*-ServiceSecurityProvider-service.jar" />
-		<include name="caGrid-*-ServiceSecurityProvider-stubs.jar" />
-		<include name="cglib-nodep-2.1_3.jar" />
-		<include name="grouper.jar" />
-		<include name="hibernate3.jar" />
-		<include name="jdom-1.0.jar" />
-		<include name="junit.jar" />
-		<include name="mobius_common_client.jar" />
-		<include name="mobius_factories.jar" />
-		<include name="mobius_gme_client.jar" />
-		<include name="mobius_mako_client.jar" />
-		<include name="mobius_tools.jar" />
-		<include name="spring.jar" />
-		<include name="subject-0.2.1.jar" />
-	</patternset>
-
-	<!-- Jars from the CSM project's dist directory  -->
-	<patternset id="csm.jars">
-		<include name="antlr-2.7.6rc1.jar" />
-		<include name="c3p0-0.8.5.2.jar" />
-		<include name="clm.jar" />
-		<include name="commons-dbcp-1.2.1.jar" />
-		<include name="commons-lang-1.0.1.jar" />
-		<include name="csmapi.jar" />
-		<include name="dom4j-1.6.1.jar" />
-		<include name="ehcache-1.1.jar" />
-		<include name="jta.jar" />
-		<include name="jtds-1.2.jar" />
-		<include name="mysql-connector-java-3.1.11-bin.jar" />
-	</patternset>
 
 	<path id="compile.classpath">
-		<fileset dir="${lib.dir}">
-			<patternset refid="csm.jars" />
-		</fileset>
 		<fileset dir="${ext.lib.dir}">
-			<patternset refid="cagrid.jars" />
+			<include name="*.jar" />
 		</fileset>
 		<fileset dir="${globus.location}/lib">
 			<patternset refid="globus.jars" />
@@ -115,12 +72,8 @@
 		<path refid="compile.classpath" />
 		<pathelement location="${build.dir}/${jar.name}.jar" />
 		<pathelement location="${build.classes.dir}" />
-		<!--   <fileset dir="${test.lib.dir}">
-        <include name="**/*.jar" />
-    </fileset>
-    -->
 		<fileset dir="${ext.test.lib.dir}">
-			<include name="**/*.jar" />
+			<include name="*.jar" />
 		</fileset>
 	</path>
 
@@ -149,29 +102,11 @@
 		</jar>
 	</target>
 
-	<!--    
-    <target name="test" depends="compile-test">
-        
-        <junit printsummary="yes" showoutput="true" fork="true">
-            
-            <jvmarg value="-Dgov.nih.nci.security.configFile=test/etc/ApplicationSecurityConfig.xml"/>
-            <jvmarg value="-Djava.security.auth.login.config=test/etc/jaas.config"/>
-            
-
-            <classpath refid="run.cp"/>
-
-
-            <formatter type="plain"/>
-            <test name="gov.nih.nci.cagrid.authorization.GridAuthorizationTestCase" haltonfailure="no" outfile="test/authz-junit"/>
-
-        </junit>
-    </target>
-    -->
-
 	<target name="clean">
 		<delete dir="build" />
 	</target>
 
 	<target name="all" depends="clean, jar" />
+
 
 </project>

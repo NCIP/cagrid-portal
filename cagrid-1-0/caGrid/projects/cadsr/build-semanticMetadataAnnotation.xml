@@ -29,6 +29,6 @@
             <arg value="${uml2xml.config.file}" />
             <arg value="${serviceMetadata.file}" />
         </java>
-        <echo message="Results written to ${user.dir}${file.separator}annotatedServiceMetadata.xml" />
+        <echo message="Results written to ${basedir}${file.separator}annotatedServiceMetadata.xml" />
     </target>
 </project>    

@@ -1,4 +1,4 @@
-// $Id: ClassdiagramLayouter.java,v 1.1 2007-12-19 17:39:19 oster Exp $
+// $Id: ClassdiagramLayouter.java,v 1.2 2008-02-16 05:43:26 oster Exp $
 // Copyright (c) 1996-2005 The Regents of the University of California. All
 // Rights Reserved. Permission to use, copy, modify, and distribute this
 // software and its documentation without fee, and without a written

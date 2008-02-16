@@ -2,77 +2,47 @@
 <!-- caGrid caBIG Extensions project build file                              -->
 <!-- ======================================================================= -->
 <project name="caGrid-cabigextensions_tests_harness" basedir=".">
-    <property name="junit.results.dir" value="${test.logs.dir}/junit" />
-    <property name="introduce.dir" value="../introduce" />
-
-    <property name="instrumented.classes.dir" value="${build.dir}/instrumented-classes" />
-    <property name="cobertura.report.dir" value="${build.dir}/coverage" />
-    <property name="cobertura.data.file" location="${instrumented.classes.dir}/${project.name}-cobertura.ser" />
+	<property name="junit.results.dir" value="${test.logs.dir}/junit" />
+	<property name="introduce.dir" value="../introduce" />
 
 
-    <target name="instrument" depends="defineClasspaths">
-        <taskdef classpathref="test.classpath" resource="tasks.properties" />
-        <mkdir dir="${instrumented.classes.dir}" />
-        <cobertura-instrument todir="${instrumented.classes.dir}" datafile="${cobertura.data.file}">
-            <fileset dir="${classes.dir}">
-                <include name="**/*.class" />
-            </fileset>
-        </cobertura-instrument>
-    </target>
+	<!-- call the test target for each project and aggregates the log resutls  -->
+	<target name="test" depends="defineClasspaths">
+		<mkdir dir="${junit.results.dir}" />
+		<junit dir="${basedir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="true" forkmode="once">
+			<sysproperty key="build.dir" value="${classes.dir}" />
+			<jvmarg value="-Dbuild.dir=${classes.dir}" />
+			<classpath refid="test.classpath" />
+			<classpath>
+				<pathelement path="${test.classes.dir}" />
+			</classpath>
+			<formatter type="xml" />
+			<batchtest fork="yes" todir="${junit.results.dir}">
+				<fileset dir="${test.src.dir}">
+					<include name="**/*TestCase.java" />
+				</fileset>
+			</batchtest>
+		</junit>
+		<fail message="Tests failed! Check test reports." if="test.failed" />
+	</target>
 
+	<target name="systemTest" depends="defineClasspaths">
+		<mkdir dir="${junit.results.dir}" />
+		<junit dir="${introduce.dir}" printsummary="yes" errorproperty="system.test.failed" failureproperty="system.test.failed" showoutput="true" fork="true" forkmode="once">
+			<sysproperty key="basedir" value="${introduce.dir}" />
+			<jvmarg value="-Dbasedir=${introduce.dir}" />
 
-    <!-- call the test target for each project and aggregates the log resutls  -->
-    <target name="test" depends="instrument">
-        <mkdir dir="${junit.results.dir}" />
-        <junit dir="${basedir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="true" forkmode="once">
-            <sysproperty key="build.dir" value="${classes.dir}" />
-            <jvmarg value="-Dbuild.dir=${classes.dir}" />
-            <sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.data.file}" />
-            <classpath location="${instrumented.classes.dir}" />
-            <classpath refid="test.classpath" />
-            <classpath>
-                <pathelement path="${test.classes.dir}" />
-            </classpath>
-            <formatter type="xml" />
-            <batchtest fork="yes" todir="${junit.results.dir}">
-                <fileset dir="${test.src.dir}">
-                    <include name="**/*TestCase.java" />
-                </fileset>
-            </batchtest>
-        </junit>
-        <fail message="Tests failed! Check test reports." if="test.failed" />
-    </target>
-
-    <target name="systemTest" depends="instrument">
-         <mkdir dir="${junit.results.dir}" />
-         <junit dir="${introduce.dir}" printsummary="yes" errorproperty="system.test.failed" failureproperty="system.test.failed" showoutput="true" fork="true" forkmode="once">
-             <sysproperty key="basedir" value="${introduce.dir}" />
-             <jvmarg value="-Dbasedir=${introduce.dir}" />
-             <sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.data.file}" />
-             <classpath location="${instrumented.classes.dir}" />
-             <classpath refid="test.classpath" />
-             <classpath>
-                 <pathelement path="${test.classes.dir}" />
-             </classpath>
-             <formatter type="xml" />
-             <batchtest fork="yes" todir="${junit.results.dir}">
-                 <fileset dir="${test.src.dir}">
-                     <include name="**/*Story.java" />
-                 </fileset>
-             </batchtest>
-         </junit>
-         <fail message="Tests failed! Check test reports." if="system.test.failed" />
-     </target>
-
-    <target name="coverageReport" depends="test" description="Runs the tests and generates a test
-		coverage report.">
-        <cobertura-report format="html" datafile="${cobertura.data.file}" destdir="${cobertura.report.dir}">
-            <fileset dir="${src.dir}">
-                <include name="**/*.java" />
-            </fileset>
-            <fileset dir="${test.src.dir}">
-                <include name="**/*.java" />
-            </fileset>
-        </cobertura-report>
-    </target>
+			<classpath refid="test.classpath" />
+			<classpath>
+				<pathelement path="${test.classes.dir}" />
+			</classpath>
+			<formatter type="xml" />
+			<batchtest fork="yes" todir="${junit.results.dir}">
+				<fileset dir="${test.src.dir}">
+					<include name="**/*Story.java" />
+				</fileset>
+			</batchtest>
+		</junit>
+		<fail message="Tests failed! Check test reports." if="system.test.failed" />
+	</target>
 </project>

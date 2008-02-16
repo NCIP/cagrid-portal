@@ -28,7 +28,9 @@
 		</path>
 		<path id="test.run.extended.classpath">
 		</path>
-		<path id="run.extended.classpath">	
+		<path id="run.extended.classpath">
+		</path>
+		<path id="tasks.run.extended.classpath">
 		</path>
 	</target>
 
@@ -159,25 +161,25 @@
 	<target name="postClean">
 
 	</target>
-	
-	
+
+
 	<!-- ============================================================== -->
 	<!-- Call any tests.                                                -->
 	<!-- ============================================================== -->
-    <target name="test" depends="checkGlobus" description="Runs the service's tests.">
-        <echo message="Test results dir: ${junit.results.dir}" />
-        <mkdir dir="${junit.results.dir}" />
-        <junit dir="${basedir}" printsummary="yes" showoutput="true">
-            <classpath refid="test.run.classpath" />
-            <formatter type="xml" />
-            <batchtest fork="yes" todir="${junit.results.dir}">
-                <fileset dir="${test.src.dir}">
-                    <include name="**/Test*.java" />
-                    <include name="**/*TestCase.java" />
-                </fileset>
-            </batchtest>
-        </junit>
-    </target>
+	<target name="test" depends="checkGlobus" description="Runs the service's tests.">
+		<echo message="Test results dir: ${junit.results.dir}" />
+		<mkdir dir="${junit.results.dir}" />
+		<junit dir="${basedir}" printsummary="yes" showoutput="true">
+			<classpath refid="test.run.classpath" />
+			<formatter type="xml" />
+			<batchtest fork="yes" todir="${junit.results.dir}">
+				<fileset dir="${test.src.dir}">
+					<include name="**/Test*.java" />
+					<include name="**/*TestCase.java" />
+				</fileset>
+			</batchtest>
+		</junit>
+	</target>
 
 
 </project>

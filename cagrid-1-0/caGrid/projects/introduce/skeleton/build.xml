@@ -184,11 +184,12 @@
 			<pathelement location="${ext.globus.dir}" />
 		</path>
 		<path id="tasks.run.classpath">
+			<path refid="tasks.run.extended.classpath" />
 			<fileset dir="${tools.lib.dir}">
 				<include name="*.jar" />
 			</fileset>
 			<fileset dir="${lib.dir}">
-				<include name="caGrid-*-core.jar" />
+				<include name="caGrid-core*.jar" />
 			</fileset>
 			<fileset dir="${ext.globus.dir}/lib">
 				<include name="axis.jar" />

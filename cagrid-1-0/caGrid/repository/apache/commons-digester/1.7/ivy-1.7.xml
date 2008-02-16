@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<ivy-module version="2.0">
+    <info organisation="apache" module="commons-digester" revision="1.7" status="release"
+        publication="20050612024300">
+        <license name="Apache" url="http://www.apache.org/licenses/LICENSE-2.0.txt"/>
+        <ivyauthor name="jayasoft" url="http://www.jayasoft.org/"/>
+
+        <description homepage="http://jakarta.apache.org/commons/digester"> Digester package lets
+            you configure an XML -> Java object mapping module, which triggers certain actions
+            called rules whenever a particular pattern of nested XML elements is recognized This ivy
+            file has been written from the maven dependencies declarations for the project.
+        </description>
+    </info>
+</ivy-module>

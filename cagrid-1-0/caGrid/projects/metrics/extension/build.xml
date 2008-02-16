@@ -6,17 +6,18 @@
 	<!-- In order to customize the build please edit the dev-build.xml  -->
 	<!-- ============================================================== -->
 
-	<property file="${basedir}/ext/resources/cagrid.properties" />
-	<property name="jar.prefix" value="${cagrid.master.jar.prefix}MetricsExtension" />
-	
-	<!-- Define the environment variable -->
 	<property environment="env" />
+	<property file="${basedir}/../project.properties" />
+	<property file="${basedir}/../build.properties" />
+
+	<property name="jar.prefix" value="caGrid-MetricsExtension-" />
+	<property name="jar.suffix" value="${project.version}.jar" />
 
 	<property file="introduce.properties" />
 
 	<!-- Important directories and files -->
 	<property name="src.dir" value="src" />
-	<property name="ext.lib.dir" value="ext/lib" />
+	<property name="ext.lib.dir" value="ext/dependencies/jars" />
 	<property name="lib.dir" value="lib" />
 
 
@@ -33,7 +34,7 @@
 
 	<!-- We want detailed error messages -->
 	<property name="java.debug" value="on" />
-	
+
 	<!-- ============================================================== -->
 	<!-- Globus properties                                              -->
 	<!-- ============================================================== -->
@@ -53,7 +54,7 @@
 		<!-- GT4 build files and directories-->
 		<property name="ext.globus.dir" value="${env.GLOBUS_LOCATION}" />
 	</target>
-	
+
 
 
 	<!-- Sets up the build directory structure -->
@@ -63,7 +64,7 @@
 		<mkdir dir="${build.lib.dir}" />
 	</target>
 
-	<target name="defineClasspaths" depends="checkGlobus" >
+	<target name="defineClasspaths" depends="checkGlobus">
 		<path id="build.classpath">
 			<fileset dir="${lib.dir}">
 				<include name="*.jar" />
@@ -93,7 +94,7 @@
 
 	<!-- Create a JAR file with the implementation classes -->
 	<target name="jar" depends="compile">
-		<jar jarfile="${build.lib.dir}/${jar.prefix}.jar" basedir="${build.dest}">
+		<jar jarfile="${build.lib.dir}/${jar.prefix}${jar.suffix}" basedir="${build.dest}">
 			<include name="**/*" />
 		</jar>
 	</target>

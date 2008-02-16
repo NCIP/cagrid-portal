@@ -1,1 +1,0 @@
-The schemas here are from the QA Build of the caCORE SDK version 3.2, dated 2006-10-24.  It may be updated as newer versions of the SDK become available.

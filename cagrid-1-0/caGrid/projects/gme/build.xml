@@ -1,30 +1,19 @@
 <?xml version="1.0"?>
 
 <project default="all" basedir=".">
-	<description>
-        GSBT GT4 buildfile
-    </description>
 
-	<!-- Define the environment variable -->
+	<!-- Environment -->
 	<property environment="env" />
+	<property file="${basedir}/project.properties" />
+	<property file="${basedir}/build.properties" />
+	<property name="globus.dir" location="${env.GLOBUS_LOCATION}" />
 
-	<!-- 
-	Properties in these files will override the properties defined in this file.
-    -->
-	<property file="build.properties" />
-	<property file="${user.home}/build.properties" />
-
-    <property file="${basedir}/ext/resources/cagrid.properties" />
-    
-	<property name="project.version" value="${cagrid.master.project.version}" />
-	<property name="project.name" value="${cagrid.master.jar.prefix}GlobalModelExchange" />
+	<property name="project.name" value="caGrid-GlobalModelExchange" />
 
 	<!-- Directory where GT4 is installed -->
 	<!-- Note that the buildfile requires an environment variable GLOBUS_LOCATION
 	     pointing to that directory -->
 	<property name="globus.location" location="${env.GLOBUS_LOCATION}" />
-
-
 
 	<!-- GT4 build files and directories-->
 	<property name="build.packages" location="${globus.location}/share/globus_wsrf_common/build-packages.xml" />
@@ -32,25 +21,20 @@
 	<property name="schema.src" location="${globus.location}/share/schema" />
 
 
-
 	<!-- Important directories and files -->
 	<property name="src.dir" value="src" />
 	<property name="etc.dir" value="etc" />
 	<property name="lib.dir" location="lib" />
-	<property name="ext.lib.dir" location="ext/lib" />
+	<property name="ext.lib.dir" location="${basedir}/ext/dependencies/service/jars" />
 	<property name="mappings.file" value="${basedir}/namespace2package.mappings" />
-
-
-
 
 	<!-- Name of the GAR file that will be generated -->
 	<property name="gar.filename" value="${project.name}" />
 
 
 	<!-- Name of the JAR files to be generated -->
-	<property name="jar.name" value="${project.name}.jar" />
-	<property name="stubs.jar.name" value="${project.name}${cagrid.master.jar.separator}stubs.jar" />
-
+	<property name="jar.name" value="${project.name}-${project.version}.jar" />
+	<property name="stubs.jar.name" value="${project.name}-stubs-${project.version}.jar" />
 
 
 	<!-- Build directories -->
@@ -117,7 +101,7 @@
 
 	<import file="${basedir}/antfiles/GlobalModelExchange-utils.xml" />
 	<!--import deployment ant files -->
-	<import file="build-deploy.xml"/>
+	<import file="build-deploy.xml" />
 
 	<!-- Sets up the build directory structure -->
 	<target name="init">
@@ -197,8 +181,12 @@
 		<javac srcdir="${src.dir}" includes="${package.dir}/**" destdir="${build.dest}" debug="${java.debug}" deprecation="${deprecation}">
 			<classpath>
 				<pathelement location="${stubs.dest}" />
-				<fileset dir="${basedir}/lib" />
-				<fileset dir="${ext.lib.dir}" />
+				<fileset dir="${basedir}/lib">
+					<include name="*.jar" />
+				</fileset>
+				<fileset dir="${ext.lib.dir}">
+					<include name="*.jar" />
+				</fileset>
 				<fileset dir="${globus.location}/lib">
 					<include name="*.jar" />
 					<exclude name="${stubs.jar.name}" />

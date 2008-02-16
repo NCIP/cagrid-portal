@@ -1,76 +1,42 @@
 <?xml version="1.0"?>
-<!--
-Adopted and modified from GSBT
-GSBT - Globus Service Build Tools
--->
-<project default="all" name="gridca" basedir=".">
-	<description>
-		caGrid 1.0 gridca buildfile
-    </description>
-	<!-- Define the environment variable -->
+<project default="all" name="caGrid-gridca" basedir=".">
 	<property environment="env" />
+	<property file="${basedir}/project.properties" />
+	<property file="${basedir}/build.properties" />
 
-	<!-- 
-	Properties in these files will override the properties defined in this file.
-    -->
-	<property file="build.properties" />
-	<property file="${user.home}/build.properties" />
-	<property file="${basedir}/ext/resources/cagrid.properties" />
-
-	<property name="project.version" value="${cagrid.master.project.version}" />
-	<property name="project.name" value="${cagrid.master.jar.prefix}${ant.project.name}" />
-
-
-	<property name="service.name" value="gridca" />
-	<property name="service.version" value="1.0" />
+	<property name="project.name" value="${ant.project.name}" />
 
 	<!-- Directory where GT4 is installed -->
 	<!-- Note that the buildfile requires an environment variable GLOBUS_LOCATION
 	     pointing to that directory -->
 	<property name="globus.location" location="${env.GLOBUS_LOCATION}" />
 
-	<!-- GT4 build files and directories-->
-	<property name="build.packages" location="${globus.location}/share/globus_wsrf_common/build-packages.xml" />
-	<property name="build.stubs" location="${globus.location}/share/globus_wsrf_tools/build-stubs.xml" />
-	<property name="schema.src" location="${globus.location}/share/schema" />
-
-
-
 	<!-- Important directories and files -->
 	<property name="src.dir" value="src" />
-	<property name="lib.dir" value="lib" />
-	<property name="ext.lib.dir" value="ext/lib" />
+	<property name="ext.lib.dir" value="${basedir}/ext/dependencies/default/jars" />
 	<property name="test.dir" value="test" />
 	<property name="test.src.dir" value="test/src" />
 	<property name="test.lib.dir" value="test/lib" />
 	<property name="test.log.dir" value="test/logs" />
-	<property name="ext.test.lib.dir" value="ext/test/lib" />
+	<property name="ext.test.lib.dir" value="${basedir}/ext/dependencies/test/jars" />
 	<property name="etc.dir" value="etc" />
 
 
-
 	<!-- Name of the JAR files to be generated -->
-	<property name="jar.name" value="${project.name}.jar" />
+	<property name="jar.name" value="${project.name}-${project.version}.jar" />
+	<property name="test.jar.name" value="${project.name}-tests-${project.version}.jar" />
 
-
-
-	<!-- Build directories -->
 
 	<!-- Auxiliary directory where all the intermediate files will be placed -->
 	<property name="build.dir" location="build" />
 	<!-- Directory for compiled service classes -->
 	<property name="build.dest" location="${build.dir}/classes" />
+	<property name="test.build.dest" location="${build.dir}/test/classes" />
 	<!-- Directory for compiled JAR files (additional library files required by
 	     the service will also be placed here) -->
-	<property name="build.lib.dir" location="${build.dir}/lib" />
+	<property name="build.lib.dir" location="${build.dir}/jars" />
 	<!-- Directory where stub source and class files are placed -->
 
-
-	<!-- Miscellaneous properties -->
-
-	<!-- This property is defined simply so we can write ${sep} instead of
-	     ${file.separator}, which makes some expressions too long -->
-	<property name="sep" value="${file.separator}" />
 	<!-- We want detailed error messages -->
 	<property name="java.debug" value="on" />
 
@@ -81,15 +47,27 @@ GSBT - Globus Service Build Tools
 	<target name="init">
 		<mkdir dir="${build.dir}" />
 		<mkdir dir="${build.dest}" />
+		<mkdir dir="${test.build.dest}" />
 		<mkdir dir="${build.lib.dir}" />
+		<mkdir dir="${test.log.dir}" />
 
-		<copy toDir="${build.lib.dir}">
-			<fileset dir="lib/">
+		<path id="base.classpath">
+			<fileset dir="${ext.lib.dir}">
 				<include name="*.jar" />
 			</fileset>
-		</copy>
 
-		<mkdir dir="${test.log.dir}" />
+			<fileset dir="${globus.location}/lib">
+				<include name="*.jar" />
+				<exclude name="${jar.name}" />
+				<exclude name="xml-apis.jar" />
+				<exclude name="xercesImpl.jar" />
+			</fileset>
+		</path>
+
+		<path id="run.classpath">
+			<pathelement location="${build.dest}" />
+			<path refid="base.classpath" />
+		</path>
 
 		<path id="test.classpath">
 			<fileset dir="${test.lib.dir}">
@@ -98,58 +76,38 @@ GSBT - Globus Service Build Tools
 			<fileset dir="${ext.test.lib.dir}">
 				<include name="*.jar" />
 			</fileset>
-			<fileset dir="${lib.dir}">
-				<include name="*.jar" />
-			</fileset>
-			<fileset dir="${ext.lib.dir}">
-				<include name="*.jar" />
-			</fileset>
-			<pathelement location="${test.dir}/resources" />
+			<path refid="base.classpath" />
 			<pathelement location="${build.dest}" />
-			<pathelement location="${stubs.dest}" />
+		</path>
 
-			<fileset dir="${globus.location}/lib">
-				<include name="*.jar" />
-				<exclude name="${stubs.jar.name}" />
-				<exclude name="${jar.name}" />
-				<exclude name="xml-apis.jar" />
-				<exclude name="xercesImpl.jar" />
-			</fileset>
+		<path id="test.run.classpath">
+			<pathelement location="${test.dir}/resources" />
+			<pathelement location="${test.build.dest}" />
+			<path refid="test.classpath" />
 		</path>
 	</target>
 
 
 	<!-- Compile the implementation classes (service, resource, etc.) -->
 	<target name="compile" depends="init">
-		<javac srcdir="${src.dir}" destdir="${build.dest}" debug="${java.debug}" deprecation="${deprecation}">
-			<classpath>
-				<pathelement location="${stubs.dest}" />
-				<fileset dir="${lib.dir}">
-					<include name="*.jar" />
-				</fileset>
-				<fileset dir="${ext.lib.dir}">
-					<include name="*.jar" />
-				</fileset>
-
-				<fileset dir="${globus.location}/lib">
-					<include name="*.jar" />
-					<exclude name="${jar.name}" />
-					<exclude name="xml-apis.jar" />
-					<exclude name="xercesImpl.jar" />
-				</fileset>
-			</classpath>
-		</javac>
+		<javac srcdir="${src.dir}" destdir="${build.dest}" debug="${java.debug}" deprecation="${deprecation}" classpathref="base.classpath" />
 	</target>
 
 	<!-- Compile the implementation classes (service, resource, etc.) -->
 	<target name="compileTests" depends="compile">
-		<javac srcdir="${test.src.dir}" destdir="${build.dest}" debug="${java.debug}" deprecation="${deprecation}" classpathref="test.classpath" />
+		<javac srcdir="${test.src.dir}" destdir="${test.build.dest}" debug="${java.debug}" deprecation="${deprecation}" classpathref="test.classpath" />
 	</target>
 
 
 	<!-- Create a JAR file with the implementation classes -->
-	<target name="jar" depends="compile, compileTests">
+	<target name="jar" depends="compile">
 		<jar jarfile="${build.lib.dir}/${jar.name}" basedir="${build.dest}">
+			<include name="**/gridca/**" />
+		</jar>
+	</target>
+
+	<target name="jarTests" depends="compileTests">
+		<jar jarfile="${build.lib.dir}/${test.jar.name}" basedir="${test.build.dest}">
 			<include name="**/gridca/**" />
 		</jar>
 	</target>
@@ -164,7 +122,7 @@ GSBT - Globus Service Build Tools
 
 
 	<!-- Default target "all" generates the GAR file -->
-	<target name="all" depends="jar" />
+	<target name="all" depends="jar,jarTests" />
 
 	<target name="generateCA" description="Generates a certificate authority.">
 		<input message="Please enter the DN for the new CA (ex. O=osu,OU=bmi,CN=Some CA):" addproperty="dn.input" />
@@ -178,23 +136,7 @@ GSBT - Globus Service Build Tools
 			<arg value="${password.input}" />
 			<arg value="${key.input}" />
 			<arg value="${cert.input}" />
-			<classpath>
-				<fileset dir="${build.lib.dir}">
-					<include name="**/*.jar" />
-				</fileset>
-				<fileset dir="${ext.lib.dir}">
-					<include name="*.jar" />
-				</fileset>
-				<fileset dir="${lib.dir}">
-					<include name="**/*.jar" />
-				</fileset>
-				<fileset dir="${globus.location}/lib">
-					<include name="*.jar" />
-					<exclude name="${jar.name}" />
-					<exclude name="xml-apis.jar" />
-					<exclude name="xercesImpl.jar" />
-				</fileset>
-			</classpath>
+			<classpath refid="run.classpath" />
 		</java>
 	</target>
 
@@ -213,23 +155,7 @@ GSBT - Globus Service Build Tools
 			<arg value="${slot.input}" />
 			<arg value="${password.input}" />
 			<arg value="${dir.input}" />
-			<classpath>
-				<fileset dir="${build.lib.dir}">
-					<include name="**/*.jar" />
-				</fileset>
-				<fileset dir="${ext.lib.dir}">
-					<include name="*.jar" />
-				</fileset>
-				<fileset dir="${lib.dir}">
-					<include name="**/*.jar" />
-				</fileset>
-				<fileset dir="${globus.location}/lib">
-					<include name="*.jar" />
-					<exclude name="${jar.name}" />
-					<exclude name="xml-apis.jar" />
-					<exclude name="xercesImpl.jar" />
-				</fileset>
-			</classpath>
+			<classpath refid="run.classpath" />
 		</java>
 	</target>
 
@@ -250,23 +176,7 @@ GSBT - Globus Service Build Tools
 			<arg value="${days.input}" />
 			<arg value="${hostkey.input}" />
 			<arg value="${cert.input}" />
-			<classpath>
-				<fileset dir="${build.lib.dir}">
-					<include name="**/*.jar" />
-				</fileset>
-				<fileset dir="${ext.lib.dir}">
-					<include name="*.jar" />
-				</fileset>
-				<fileset dir="${lib.dir}">
-					<include name="**/*.jar" />
-				</fileset>
-				<fileset dir="${globus.location}/lib">
-					<include name="*.jar" />
-					<exclude name="${jar.name}" />
-					<exclude name="xml-apis.jar" />
-					<exclude name="xercesImpl.jar" />
-				</fileset>
-			</classpath>
+			<classpath refid="run.classpath" />
 		</java>
 	</target>
 
@@ -287,23 +197,7 @@ GSBT - Globus Service Build Tools
 			<arg value="${days.input}" />
 			<arg value="${hostkey.input}" />
 			<arg value="${cert.input}" />
-			<classpath>
-				<fileset dir="${build.lib.dir}">
-					<include name="**/*.jar" />
-				</fileset>
-				<fileset dir="${ext.lib.dir}">
-					<include name="*.jar" />
-				</fileset>
-				<fileset dir="${lib.dir}">
-					<include name="**/*.jar" />
-				</fileset>
-				<fileset dir="${globus.location}/lib">
-					<include name="*.jar" />
-					<exclude name="${jar.name}" />
-					<exclude name="xml-apis.jar" />
-					<exclude name="xercesImpl.jar" />
-				</fileset>
-			</classpath>
+			<classpath refid="run.classpath" />
 		</java>
 	</target>
 
@@ -326,23 +220,7 @@ GSBT - Globus Service Build Tools
 			<arg value="${project.input}" />
 			<arg value="${phone.input}" />
 			<arg value="${reason.input}" />
-			<classpath>
-				<fileset dir="${build.lib.dir}">
-					<include name="**/*.jar" />
-				</fileset>
-				<fileset dir="${ext.lib.dir}">
-					<include name="*.jar" />
-				</fileset>
-				<fileset dir="${lib.dir}">
-					<include name="**/*.jar" />
-				</fileset>
-				<fileset dir="${globus.location}/lib">
-					<include name="*.jar" />
-					<exclude name="${jar.name}" />
-					<exclude name="xml-apis.jar" />
-					<exclude name="xercesImpl.jar" />
-				</fileset>
-			</classpath>
+			<classpath refid="run.classpath" />
 		</java>
 	</target>
 
@@ -361,23 +239,7 @@ GSBT - Globus Service Build Tools
 			<arg value="${public.input}" />
 			<arg value="${days.input}" />
 			<arg value="${cert.input}" />
-			<classpath>
-				<fileset dir="${build.lib.dir}">
-					<include name="**/*.jar" />
-				</fileset>
-				<fileset dir="${ext.lib.dir}">
-					<include name="*.jar" />
-				</fileset>
-				<fileset dir="${lib.dir}">
-					<include name="**/*.jar" />
-				</fileset>
-				<fileset dir="${globus.location}/lib">
-					<include name="*.jar" />
-					<exclude name="${jar.name}" />
-					<exclude name="xml-apis.jar" />
-					<exclude name="xercesImpl.jar" />
-				</fileset>
-			</classpath>
+			<classpath refid="run.classpath" />
 		</java>
 	</target>
 
@@ -386,6 +248,12 @@ GSBT - Globus Service Build Tools
 		<input message="Please enter a file location to write the report to [grid-trust-report.txt]:" addproperty="out.input" defaultvalue="grid-trust-report.txt" />
 		<java classname="gov.nih.nci.cagrid.gridca.commandline.GenerateTrustReport" fork="true" newenvironment="true" failonerror="true">
 			<arg value="${out.input}" />
+			<classpath refid="run.classpath" />
+		</java>
+	</target>
+
+	<target name="createTomcatKeystore" description="Generates a Grid Trust Report.">
+		<java classname="gov.nih.nci.cagrid.gridca.commandline.TomcatKeystoreCreator" fork="false" newenvironment="true" failonerror="true">
 			<classpath>
 				<fileset dir="${build.lib.dir}">
 					<include name="**/*.jar" />
@@ -405,27 +273,4 @@ GSBT - Globus Service Build Tools
 			</classpath>
 		</java>
 	</target>
-	
-	<target name="createTomcatKeystore" description="Generates a Grid Trust Report.">
-			<java classname="gov.nih.nci.cagrid.gridca.commandline.TomcatKeystoreCreator" fork="false" newenvironment="true" failonerror="true">
-				<classpath>
-					<fileset dir="${build.lib.dir}">
-						<include name="**/*.jar" />
-					</fileset>
-					<fileset dir="${ext.lib.dir}">
-						<include name="*.jar" />
-					</fileset>
-					<fileset dir="${lib.dir}">
-						<include name="**/*.jar" />
-					</fileset>
-					<fileset dir="${globus.location}/lib">
-						<include name="*.jar" />
-						<exclude name="${jar.name}" />
-						<exclude name="xml-apis.jar" />
-						<exclude name="xercesImpl.jar" />
-					</fileset>
-				</classpath>
-			</java>
-		</target>
-
 </project>

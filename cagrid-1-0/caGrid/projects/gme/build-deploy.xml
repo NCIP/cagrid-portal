@@ -66,7 +66,7 @@
 		</copy>
 		<!--copy over the jars to the lib -->
 		<copy overwrite="true" toDir="${tomcat.deploy.lib.dir}">
-			<fileset dir="ext/lib">
+			<fileset dir="${ext.lib.dir}">
 				<include name="*" />
 			</fileset>
 			<fileset dir="lib">

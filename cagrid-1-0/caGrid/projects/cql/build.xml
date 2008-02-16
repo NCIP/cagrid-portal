@@ -1,12 +1,12 @@
 <!-- ======================================================================= -->
 <!-- caGrid CQL project build file                                           -->
 <!-- ======================================================================= -->
-<project name="CQL" default="all" basedir=".">
+<project name="caGrid-CQL" default="all" basedir=".">
 	<!-- Environment -->
 	<property environment="env" />
 	<property file="${basedir}/build.properties" />
-	<property file="${user.dir}/build.properties" />
-	<property file="${basedir}/ext/resources/cagrid.properties" />
+	<property file="${basedir}/project.properties" />
+
 	<property name="globus.dir" location="${env.GLOBUS_LOCATION}" />
 
 	<!-- build with debugging information -->
@@ -15,14 +15,14 @@
 	<property name="java.source" value="1.5" />
 
 	<!-- Information -->
-	<property name="project.version" value="${cagrid.master.project.version}" />
-	<property name="project.name" value="${cagrid.master.project.name}${cagrid.master.jar.separator}${project.version}${cagrid.master.jar.separator}${ant.project.name}" />
-	<property name="project.jar.prefix" value="${cagrid.master.jar.prefix}${ant.project.name}${cagrid.master.jar.separator}" />
-	
+	<property name="project.name" value="${ant.project.name}" />
+	<property name="project.jar.prefix" value="${project.name}-" />
+	<property name="project.jar.suffix" value="-${project.version}.jar" />
+
 	<!-- directory locations -->
 	<property name="ext.dir" location="${basedir}/ext" />
-	<property name="ext.test.lib.dir" location="${ext.dir}/test/lib"/>
-	
+	<property name="ext.test.lib.dir" location="${ext.dir}/dependencies/test/jars" />
+
 	<!-- source dirs -->
 	<property name="test.src.dir" location="${basedir}/test/src/java" />
 
@@ -34,15 +34,15 @@
 	<property name="build.jars.dir" location="build/lib" />
 
 	<!-- jar names -->
-	<property name="cql.1.0.jar.name" value="${project.jar.prefix}cql.1.0.jar" />
-	<property name="cql.2.0.jar.name" value="${project.jar.prefix}cql.2.0.jar" />
-	<property name="test.jar.name" value="${project.jar.prefix}tests.jar" />
+	<property name="cql.1.0.jar.name" value="${project.jar.prefix}cql.1.0${project.jar.suffix}" />
+	<property name="cql.2.0.jar.name" value="${project.jar.prefix}cql.2.0${project.jar.suffix}" />
+	<property name="test.jar.name" value="${project.jar.prefix}tests${project.jar.suffix}" />
 
 	<!-- jar files -->
 	<property name="cql.1.0.jar.file" value="${build.jars.dir}/${cql.1.0.jar.name}" />
 	<property name="cql.2.0.jar.file" value="${build.jars.dir}/${cql.2.0.jar.name}" />
 	<property name="test.jar.file" value="${build.jars.dir}/${test.jar.name}" />
-	
+
 	<!-- build file for stub generation -->
 	<property name="ant.build.stubs" location="${globus.dir}/share/globus_wsrf_tools/build-stubs.xml" />
 
@@ -50,13 +50,13 @@
 	<property name="globus.schema.src" location="${globus.dir}/share/schema" />
 	<property name="cql.1.0.schema.dest" location="${build.dir}/schema/cql1.0" />
 	<property name="cql.2.0.schema.dest" location="${build.dir}/schema/cql2.0" />
-	<property name="cql.1.0.stubs.src" location="${build.dir}/stubs/cql1.0/source"/>
-	<property name="cql.2.0.stubs.src" location="${build.dir}/stubs/cql2.0/source"/>
+	<property name="cql.1.0.stubs.src" location="${build.dir}/stubs/cql1.0/source" />
+	<property name="cql.2.0.stubs.src" location="${build.dir}/stubs/cql2.0/source" />
 	<property name="mapping.src" value="${basedir}/NStoPkg.properties" />
-	
-	<import file="test/test.xml"/>
 
-	
+	<import file="test/test.xml" />
+
+
 	<!-- sets up GT4 related variables -->
 	<target name="setGlobus" if="env.GLOBUS_LOCATION">
 		<!-- GT4 build files and directories-->
@@ -70,12 +70,12 @@
 
 
 	<!-- creates output directories -->
-    <target name="init">
+	<target name="init">
 		<mkdir dir="${build.dir}" />
-    	<mkdir dir="${build.jars.dir}" />
-    	<mkdir dir="${build.cql.1.0.stubs.dest}"/>
-    	<mkdir dir="${build.cql.2.0.stubs.dest}"/>
-    	<mkdir dir="${build.test.dest}"/>
+		<mkdir dir="${build.jars.dir}" />
+		<mkdir dir="${build.cql.1.0.stubs.dest}" />
+		<mkdir dir="${build.cql.2.0.stubs.dest}" />
+		<mkdir dir="${build.test.dest}" />
 		<!-- copy schemas to the output directory -->
 		<copy toDir="${cql.1.0.schema.dest}">
 			<fileset dir="schema/cql1.0" casesensitive="yes">
@@ -108,9 +108,9 @@
 		<property name="mapping.file" value="${mapping.dst}" />
 		<!-- generate beans for CQL 1.0 -->
 		<ant antfile="${ant.build.stubs}" target="generateStubs">
-			<property name="source.stubs.dir" location="${cql.1.0.schema.dest}"/>
-			<property name="wsdl.file" value="CQL1.0-Beans.wsdl"/>
-			<property name="target.stubs.dir" location="${cql.1.0.stubs.src}"/>
+			<property name="source.stubs.dir" location="${cql.1.0.schema.dest}" />
+			<property name="wsdl.file" value="CQL1.0-Beans.wsdl" />
+			<property name="target.stubs.dir" location="${cql.1.0.stubs.src}" />
 		</ant>
 		<!-- generate beans for CQL 2.0 -->
 		<ant antfile="${ant.build.stubs}" target="generateStubs">
@@ -140,12 +140,12 @@
 			</classpath>
 		</javac>
 	</target>
-	
-	
+
+
 	<!-- compiles the test classes -->
 	<target name="compileTests" depends="compileStubs">
 		<javac srcdir="${test.src.dir}" destdir="${build.test.dest}" debug="${java.debug}" source="${java.source}">
-			<include name="**/*.java"/>
+			<include name="**/*.java" />
 			<classpath>
 				<fileset dir="${globus.dir}/lib">
 					<include name="**/*.jar" />
@@ -153,8 +153,8 @@
 				<fileset dir="${ext.test.lib.dir}">
 					<include name="**/*.jar" />
 				</fileset>
-				<pathelement location="${build.cql.1.0.stubs.dest}"/>
-				<pathelement location="${build.cql.2.0.stubs.dest}"/>
+				<pathelement location="${build.cql.1.0.stubs.dest}" />
+				<pathelement location="${build.cql.2.0.stubs.dest}" />
 			</classpath>
 		</javac>
 	</target>
@@ -172,7 +172,7 @@
 		</jar>
 		<jar destfile="${cql.2.0.jar.file}">
 			<fileset dir="${build.cql.2.0.stubs.dest}">
-				<include name="**/*.class"/>
+				<include name="**/*.class" />
 			</fileset>
 			<fileset dir="${cql.2.0.stubs.src}">
 				<include name="**/*.java" />
@@ -180,10 +180,10 @@
 		</jar>
 		<jar destfile="${test.jar.file}">
 			<fileset dir="${build.test.dest}">
-				<include name="**/*.class"/>
+				<include name="**/*.class" />
 			</fileset>
 			<fileset dir="${test.src.dir}">
-				<include name="**/*.java"/>
+				<include name="**/*.java" />
 			</fileset>
 		</jar>
 	</target>

@@ -5,3 +5,4 @@ ext
 log
 tmp
 junit*.properties
+deploy.properties

@@ -2,177 +2,116 @@
 <!-- caGrid SDK Query 4.0 test file                                          -->
 <!-- ======================================================================= -->
 <project name="caGrid-sdkQuery4_tests_harness" basedir=".">
-	<property name="junit.results.dir" value="${test.logs.dir}/junit"/>
-	<property name="instrumented.classes.dir" value="${build.dir}/instrumented-classes"/>
-	<property name="cobertura.report.dir" value="${build.dir}/coverage"/>
-	<property name="cobertura.data.file"
-		location="${instrumented.classes.dir}/${project.name}-cobertura.ser"/>	
-	<property name="introduce.dir" location="../introduce"/>
-	
+	<property name="junit.results.dir" value="${test.logs.dir}/junit" />
+	<property name="introduce.dir" location="../introduce" />
+
 	<!-- properties for caCORE SDK application's location -->
 	<!-- TODO: MOVE TO A MORE PERMANENT LOCATION -->
-	<property name="remote.sdk.host.name" value="http://kramer.bmi.ohio-state.edu"/>
-	<property name="remote.sdk.host.port" value="8080"/>
-	
-	
-	<!-- =============================================================== -->
-	<!-- The Cobertura Run Classpath                                     -->
-	<!-- =============================================================== -->
-	<path id="cobertura.run.classpath">
-		<fileset dir="${lib.dir}">
-			<include name="**/*.jar" />
-		</fileset>
-		<!-- no recursion to ommit the sdk libs, including a conflicting asm jar -->
-		<fileset dir="${ext.lib.dir}">
-			<include name="*.jar" />
-		</fileset>
-		<fileset dir="${test.lib.dir}">
-			<include name="**/*.jar" />
-		</fileset>
-		<fileset dir="${ext.test.lib.dir}">
-			<include name="**/*.jar" />
-		</fileset>
-		<fileset dir="${globus.dir}/lib">
-			<include name="**/*.jar" />
-		</fileset>
-	</path>
-	
-	
+	<property name="remote.sdk.host.name" value="http://kramer.bmi.ohio-state.edu" />
+	<property name="remote.sdk.host.port" value="8080" />
+
+
+
 	<target name="prepareClasspaths">
 		<path id="Introduce.test.classpath">
-	    	<fileset dir="${introduce.dir}/lib">
-	        	<include name="*.jar" />
+			<fileset dir="${introduce.dir}/lib">
+				<include name="*.jar" />
 			</fileset>
-	        <fileset dir="${introduce.dir}/ext/lib">
-	        	<include name="*.jar" />
+			<fileset dir="${introduce.dir}/ext/lib">
+				<include name="*.jar" />
 			</fileset>
-	        <fileset dir="${introduce.dir}/build/jars">
-	        	<include name="*.jar" />
+			<fileset dir="${introduce.dir}/build/jars">
+				<include name="*.jar" />
 			</fileset>
-	        <fileset dir="${introduce.dir}/test/lib">
-	        	<include name="*.jar" />
+			<fileset dir="${introduce.dir}/test/lib">
+				<include name="*.jar" />
 			</fileset>
-	        <fileset dir="${introduce.dir}/ext/test/lib">
-	        	<include name="*.jar" />
+			<fileset dir="${introduce.dir}/ext/test/lib">
+				<include name="*.jar" />
 			</fileset>
-	        <fileset dir="${ant.library.dir}">
-	        	<include name="*.jar" />
+			<fileset dir="${ant.library.dir}">
+				<include name="*.jar" />
 			</fileset>
 		</path>
-	    <path id="all.test.classpath">
-	    	<path refid="test.classpath" />
-	        <path refid="Introduce.test.classpath" />
+		<path id="all.test.classpath">
+			<path refid="test.classpath" />
+			<path refid="Introduce.test.classpath" />
 		</path>
 	</target>
-	
 
-	<target name="instrument">
-		<taskdef classpathref="cobertura.run.classpath" resource="tasks.properties"/>
-		<mkdir dir="${instrumented.classes.dir}"/>
-		<cobertura-instrument todir="${instrumented.classes.dir}" datafile="${cobertura.data.file}">
-			<fileset dir="${build.beans.dest}">
-				<include name="**/*.class"/>
-			</fileset>
-			<fileset dir="${build.processor.dest}">
-				<include name="**/*.class"/>
-			</fileset>
-			<fileset dir="${build.style.dest}">
-				<include name="**/*.class"/>
-			</fileset>
-		</cobertura-instrument>
-	</target>
-	
-	
-	<target name="test" depends="testCore, testCreation" description="Runs the tests"/>
-	
-	
+
+
+	<target name="test" depends="testCore, testCreation" description="Runs the tests" />
+
+
 	<!-- call the test target for each project and aggregates the log resutls  -->
-	<target name="testCore" depends="compileTests, instrument" description="Runs the tests.">
-		<mkdir dir="${junit.results.dir}"/>
+	<target name="testCore" depends="compileTests" description="Runs the tests.">
+		<mkdir dir="${junit.results.dir}" />
 		<junit dir="${basedir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="yes" forkmode="once">
 			<!-- is this needed any more? -->
-			<sysproperty key="build.dirs" value="${instrumented.classes.dir}"/>
-			<sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.data.file}"/>
-			<jvmarg value="-Dbuild.dir=${test.classes.dir}"/>
-			<classpath location="${instrumented.classes.dir}"/>
-			<classpath refid="test.classpath"/>
+			<sysproperty key="build.dirs" value="${test.classes.dir}" />
+			<jvmarg value="-Dbuild.dir=${test.classes.dir}" />
+			<classpath refid="test.classpath" />
 			<classpath>
-				<pathelement path="${test.classes.dir}"/>
+				<pathelement path="${test.classes.dir}" />
 			</classpath>
-			<formatter type="xml"/>
+			<formatter type="xml" />
 			<batchtest fork="yes" todir="${junit.results.dir}">
 				<fileset dir="${test.src.dir}">
-					<include name="**/*TestCase.java"/>
-					<exclude name="**/system/*"/>
-				</fileset>
-			</batchtest>
-		</junit>
-        <fail message="Tests failed! Check test reports." if="test.failed" />   
-	</target>
-	
-	
-	<target name="testCreation" depends="compileTests, instrument" description="Runs the creation tests.">
-		<mkdir dir="${junit.results.dir}"/>
-		<junit dir="${introduce.dir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="yes" forkmode="once">
-			<!-- is this needed any more? -->
-			<sysproperty key="build.dirs" value="${instrumented.classes.dir}"/>
-			<sysproperty key="introduce.base.dir" value="${introduce.dir}"/>
-			<sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.data.file}"/>
-			<sysproperty key="remote.sdk.host.name" value="${remote.sdk.host.name}"/>
-			<sysproperty key="remote.sdk.host.port" value="${remote.sdk.host.port}"/>
-			<jvmarg value="-Dbuild.dir=${test.classes.dir}"/>
-			<classpath location="${instrumented.classes.dir}"/>
-			<classpath refid="all.test.classpath"/>
-			<classpath>
-				<pathelement path="${test.classes.dir}"/>
-			</classpath>
-			<formatter type="xml"/>
-			<batchtest fork="yes" todir="${junit.results.dir}">
-				<fileset dir="${test.src.dir}">
-					<include name="**/system/*CreationTest.java"/>
-				</fileset>
-			</batchtest>
-		</junit>
-        <fail message="Tests failed! Check test reports." if="test.failed" />   
-	</target>	
-	
-	
-	<target name="systemTest" depends="compileTests, instrument" description="Runs the system tests.">
-		<mkdir dir="${junit.results.dir}"/>
-		<junit dir="${introduce.dir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="yes" forkmode="once">
-			<sysproperty key="build.dirs" value="${instrumented.classes.dir}"/>
-			<sysproperty key="introduce.base.dir" value="${introduce.dir}"/>
-			<sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.data.file}"/>
-			<sysproperty key="remote.sdk.host.name" value="${remote.sdk.host.name}"/>
-			<sysproperty key="remote.sdk.host.port" value="${remote.sdk.host.port}"/>
-			<jvmarg value="-Dbuild.dir=${test.classes.dir}"/>
-			<classpath location="${instrumented.classes.dir}"/>
-			<classpath refid="all.test.classpath"/>
-			<classpath>
-				<pathelement path="${test.classes.dir}"/>
-			</classpath>
-			<formatter type="xml"/>
-			<batchtest fork="yes" todir="${junit.results.dir}">
-				<fileset dir="${test.src.dir}">
-					<include name="**/system/*Test.java"/>
-					<exclude name="**/system/*CreationTest.java"/>
+					<include name="**/*TestCase.java" />
+					<exclude name="**/system/*" />
 				</fileset>
 			</batchtest>
 		</junit>
 		<fail message="Tests failed! Check test reports." if="test.failed" />
 	</target>
-	
-	
-	<target name="coverageReport" depends="test" description="Runs the tests and generates a test
-		coverage report.">
-		<cobertura-report format="html" datafile="${cobertura.data.file}"
-			destdir="${cobertura.report.dir}">
-			<fileset dir="${src.dir}">
-				<include name="**/*.java"/>
-			</fileset>
-			<fileset dir="${test.src.dir}">
-				<include name="**/*.java"/>
-			</fileset>
-		</cobertura-report>
+
+
+	<target name="testCreation" depends="compileTests" description="Runs the creation tests.">
+		<mkdir dir="${junit.results.dir}" />
+		<junit dir="${introduce.dir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="yes" forkmode="once">
+			<!-- is this needed any more? -->
+			<sysproperty key="build.dirs" value="${test.classes.dir}" />
+			<sysproperty key="introduce.base.dir" value="${introduce.dir}" />
+			<sysproperty key="remote.sdk.host.name" value="${remote.sdk.host.name}" />
+			<sysproperty key="remote.sdk.host.port" value="${remote.sdk.host.port}" />
+			<jvmarg value="-Dbuild.dir=${test.classes.dir}" />
+			<classpath refid="all.test.classpath" />
+			<classpath>
+				<pathelement path="${test.classes.dir}" />
+			</classpath>
+			<formatter type="xml" />
+			<batchtest fork="yes" todir="${junit.results.dir}">
+				<fileset dir="${test.src.dir}">
+					<include name="**/system/*CreationTest.java" />
+				</fileset>
+			</batchtest>
+		</junit>
+		<fail message="Tests failed! Check test reports." if="test.failed" />
 	</target>
+
+
+	<target name="systemTest" depends="compileTests" description="Runs the system tests.">
+		<mkdir dir="${junit.results.dir}" />
+		<junit dir="${introduce.dir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="yes" forkmode="once">
+			<sysproperty key="build.dirs" value="${test.classes.dir}" />
+			<sysproperty key="introduce.base.dir" value="${introduce.dir}" />
+			<sysproperty key="remote.sdk.host.name" value="${remote.sdk.host.name}" />
+			<sysproperty key="remote.sdk.host.port" value="${remote.sdk.host.port}" />
+			<jvmarg value="-Dbuild.dir=${test.classes.dir}" />
+			<classpath refid="all.test.classpath" />
+			<classpath>
+				<pathelement path="${test.classes.dir}" />
+			</classpath>
+			<formatter type="xml" />
+			<batchtest fork="yes" todir="${junit.results.dir}">
+				<fileset dir="${test.src.dir}">
+					<include name="**/system/*Test.java" />
+					<exclude name="**/system/*CreationTest.java" />
+				</fileset>
+			</batchtest>
+		</junit>
+		<fail message="Tests failed! Check test reports." if="test.failed" />
+	</target>
+
 </project>

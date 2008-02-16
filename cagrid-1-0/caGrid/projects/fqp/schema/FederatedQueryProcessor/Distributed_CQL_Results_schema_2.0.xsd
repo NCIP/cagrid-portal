@@ -4,7 +4,7 @@
 	xmlns:cqlr="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLResultSet" elementFormDefault="qualified"
 	attributeFormDefault="unqualified">
 	<xsd:import namespace="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLResultSet"
-		schemaLocation="./xsd/cql1.0/1_gov.nih.nci.cagrid.CQLResultSet.xsd"/>
+		schemaLocation="./xsd/1_gov.nih.nci.cagrid.CQLResultSet.xsd"/>
 	
 	<xsd:element name="DCQLQueryResultsCollection" type="dcqlr:DCQLQueryResultsCollection"/>
 	<xsd:complexType name="DCQLQueryResultsCollection">

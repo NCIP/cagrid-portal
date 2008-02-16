@@ -8,7 +8,7 @@ import javax.xml.namespace.QName;
 public interface MetadataConstants {
 
     public static final String EXTENSION_NAME = "cagrid_metadata";
-    public static final String METADATA_JAR_PREFIX = "caGrid-1.1-metadata";
+    public static final String METADATA_JAR_PREFIX = "caGrid-metadata";
 
     // metadata schema constants
     public static final String METADATA_SCHEMA_LOCATION = "cagrid" + File.separator + "types";

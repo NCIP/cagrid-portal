@@ -8,22 +8,26 @@ GSBT - Globus Service Build Tools
 		caGrid Security UI buildfile
     </description>
 	<!-- Define the environment variable -->
-	<property environment="env" />
 
+	<property environment="env" />
+	<property file="${basedir}/project.properties" />
+	<property file="${basedir}/build.properties" />
 	<property name="globus.location" location="${env.GLOBUS_LOCATION}" />
-	<property file="ext/resources/cagrid.properties" />
-	<property name="jar.name" value="${cagrid.master.jar.prefix}gaards-ui.jar" />
+
+	<property name="jar.name" value="caGrid-gaards-ui-${project.version}.jar" />
+
 	<!-- Important directories and files -->
 	<property name="src.dir" value="src" />
-	<property name="lib.dir" value="lib" />
 	<property name="images.dir" value="resources/images" />
 	<property name="common.images" value="${images.dir}/common" />
 	<property name="dorian.images" value="${images.dir}/dorian" />
 	<property name="gts.images" value="${images.dir}/gts" />
 	<property name="gridgrouper.images" value="${images.dir}/gridgrouper" />
 	<property name="cds.images" value="${images.dir}/cds" />
-	<property name="ext.dir" value="ext" />
-	<property name="ext.lib.dir" value="${ext.dir}/lib" />
+
+	<property name="ext.dir" location="${basedir}/ext" />
+	<property name="ext.lib.dir" location="${ext.dir}/dependencies/impl/jars" />
+
 	<property name="etc.dir" value="etc" />
 
 
@@ -53,20 +57,11 @@ GSBT - Globus Service Build Tools
 		<mkdir dir="${build.dir}" />
 		<mkdir dir="${build.dest}" />
 		<mkdir dir="${build.lib.dir}" />
-
-		<copy toDir="${build.lib.dir}">
-			<fileset dir="lib/">
-				<include name="*.jar" />
-			</fileset>
-		</copy>
 	</target>
 
 
 	<target name="defineClasspaths">
 		<path id="base.classpath">
-			<fileset dir="${lib.dir}">
-				<include name="*.jar" />
-			</fileset>
 			<fileset dir="${ext.lib.dir}">
 				<include name="*.jar" />
 			</fileset>
@@ -97,6 +92,7 @@ GSBT - Globus Service Build Tools
 			<pathelement location="${gts.images}" />
 			<pathelement location="${gridgrouper.images}" />
 			<pathelement location="${cds.images}" />
+
 		</path>
 	</target>
 
@@ -134,7 +130,6 @@ GSBT - Globus Service Build Tools
 			<fileset dir="${cds.images}">
 				<include name="**" />
 			</fileset>
-
 		</jar>
 
 	</target>

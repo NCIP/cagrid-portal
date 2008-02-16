@@ -1,9 +1,13 @@
 <?xml version="1.0"?>
 <!-- adopted from GTBS and modified -->
-<project default="help" name="Introduce Build File" basedir=".">
+<project default="help" name="caGrid-ServiceSecurityProvider" basedir=".">
 
 	<!-- Define the environment variable -->
 	<property environment="env" />
+	<property file="${basedir}/build.properties" />
+	<property file="${basedir}/project.properties" />
+
+	   <property name="project.name" value="${ant.project.name}" />
 
 	<!-- 
 		Properties in these files will override the properties defined in this file.
@@ -15,18 +19,19 @@
 	<!-- Important directories and files -->
 	<property name="src.dir" value="src" />
 	<property name="lib.dir" value="lib" />
-	<property name="ext.lib.dir" value="ext/lib" />
+	<property name="ext.lib.dir" value="ext/dependencies/service/jars" />
 	<property name="schema.dir" value="schema" />
 	<property name="mappings.file" value="${basedir}/namespace2package.mappings" />
 
 	<!--these are overriden from introduce -->
-    <property file="${basedir}/ext/resources/cagrid.properties" />
-    <property name="project.jar.prefix" value="${cagrid.master.jar.prefix}ServiceSecurityProvider-" />
+	<property file="${basedir}/ext/resources/cagrid.properties" />
+	<property name="project.jar.prefix" value="${project.name}-" />
+	<property name="project.jar.suffix" value="-${project.version}.jar" />
 
-	<property name="common.jar.name" value="${project.jar.prefix}common.jar" />
-	<property name="client.jar.name" value="${project.jar.prefix}client.jar" />
-	<property name="service.jar.name" value="${project.jar.prefix}service.jar" />
-	<property name="stubs.jar.name" value="${project.jar.prefix}stubs.jar" />
+	<property name="common.jar.name" value="${project.jar.prefix}common${project.jar.suffix}" />
+	<property name="client.jar.name" value="${project.jar.prefix}client${project.jar.suffix}" />
+	<property name="service.jar.name" value="${project.jar.prefix}service${project.jar.suffix}" />
+	<property name="stubs.jar.name" value="${project.jar.prefix}stubs${project.jar.suffix}" />
 
 
 	<!-- Basic Build directories -->
@@ -37,7 +42,7 @@
 	<property name="build.dest" location="${build.dir}/classes" />
 	<!-- Directory for compiled JAR files (additional library files required by
 	     the service will also be placed here) -->
-	<property name="build.lib.dir" location="${build.dir}/lib" />
+	<property name="build.lib.dir" location="${build.dir}/jars" />
 	<!-- Directory where stub source and class files are placed -->
 	<property name="stubs.dir" location="${build.dir}/stubs-${service.name}" />
 	<!-- Stub source files -->

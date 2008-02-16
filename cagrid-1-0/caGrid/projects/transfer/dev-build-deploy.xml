@@ -13,13 +13,13 @@
 	<target name="preDeployTomcat">
 		<!-- deploy the webapp-->
 		<ant antfile="build.xml" dir="webapp" target="deployTomcat" inheritall="false" />
-		
+
 		<!--move the ext lib to the lib so it will be deployed -->
 		<copy todir="${build.lib.dir}">
 			<fileset dir="${ext.lib.dir}">
 				<include name="*.jar" />
 			</fileset>
-	    </copy>
+		</copy>
 	</target>
 
 
@@ -28,26 +28,26 @@
 	<!-- ============================================================== -->
 	<target name="preDeployGlobus">
 		<copy todir="${build.lib.dir}">
-					<fileset dir="${ext.lib.dir}">
-						<include name="*.jar" />
-					</fileset>
-	    </copy>
+			<fileset dir="${ext.lib.dir}">
+				<include name="*.jar" />
+			</fileset>
+		</copy>
 	</target>
-	
+
 	<!-- ============================================================== -->
 	<!-- Pre Deploy JBOSS                                               -->
 	<!-- ============================================================== -->
 	<target name="preDeployJBoss">
 		<!-- deploy the webapp-->
 		<ant antfile="build.xml" dir="webapp" target="deployJBoss" inheritall="false" />
-				
+
 		<copy todir="${build.lib.dir}">
-					<fileset dir="${ext.lib.dir}">
-						<include name="*.jar" />
-					</fileset>
-	    </copy>
+			<fileset dir="${ext.lib.dir}">
+				<include name="*.jar" />
+			</fileset>
+		</copy>
 	</target>
-	
+
 	<!-- ============================================================== -->
 	<!-- Post UnDDeploy Tomcat                                              -->
 	<!-- ============================================================== -->
@@ -62,7 +62,7 @@
 	<target name="postUndeployGlobus">
 
 	</target>
-	
+
 	<!-- ============================================================== -->
 	<!-- Post UnDeploy JBOSS                                               -->
 	<!-- ============================================================== -->

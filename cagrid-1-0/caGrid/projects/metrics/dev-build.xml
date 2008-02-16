@@ -11,10 +11,25 @@
 	<!-- Place any other properties you will need here                  -->
 	<!-- ============================================================== -->
 
-	<property file="${basedir}/ext/resources/cagrid.properties" />
-	<property name="jar.prefix" value="${cagrid.master.jar.prefix}metrics" />
-	<property name="ext.lib.dir" value="ext/lib" />
-	<property name="ext.test.lib" value="ext/test/lib" />
+	<property environment="env" />
+	<property file="${basedir}/project.properties" />
+	<property file="${basedir}/build.properties" />
+
+	<property name="jar.prefix" value="caGrid-metrics" />
+	<property name="jar.suffix" value="${project.version}.jar" />
+
+	<property name="common.jar.name" value="${jar.prefix}-common-${jar.suffix}" />
+	<property name="client.jar.name" value="${jar.prefix}-client-${jar.suffix}" />
+	<property name="service.jar.name" value="${jar.prefix}-service-${jar.suffix}" />
+	<property name="stubs.jar.name" value="${jar.prefix}-stubs-${jar.suffix}" />
+	<property name="test.jar.name" value="${jar.prefix}-tests-${jar.suffix}" />
+
+	<property name="ext.dir" location="${basedir}/ext" />
+	<property name="ext.dependencies.dir" location="${ext.dir}/dependencies" />
+	<property name="ext.targetgrid.dir" location="${ext.dir}/target_grid" />
+	<property name="ext.lib.dir" location="${ext.dependencies.dir}/service/jars" />
+	<property name="ext.test.lib" value="${ext.dependencies.dir}/test/jars" />
+
 	<property name="introduce.ns.excludes" value="" />
 
 
@@ -56,7 +71,7 @@
 			<include name="*.template" />
 		</fileset>
 		<!-- We need to basically reverse the mapper used in the copy to 
-		                 identify the target files -->
+	                 identify the target files -->
 		<fileset id="template.results.fileset" dir="${basedir}">
 			<include name="*" />
 			<present targetdir="${basedir}">
@@ -75,14 +90,14 @@
 				</not>
 			</fileset>
 			<mapper type="glob" from="*.template" to="*" />
-			<filterset filtersfile="${basedir}/ext/resources/service_urls.properties" />
+			<filterset filtersfile="${ext.targetgrid.dir}/service_urls.properties" />
 		</copy>
 
 		<!-- Next, re-template all the files, if either the filter value files or the template files 
-		                 are newer than the their targets -->
+	                 are newer than the their targets -->
 		<outofdate verbose="true">
 			<sourcefiles>
-				<pathelement path="${basedir}/ext/resources/service_urls.properties" />
+				<pathelement path="${ext.targetgrid.dir}/service_urls.properties" />
 				<fileset refid="templates.fileset" />
 			</sourcefiles>
 			<targetfiles>
@@ -92,7 +107,7 @@
 				<copy todir="${basedir}" overwrite="true">
 					<fileset refid="templates.fileset" />
 					<mapper type="glob" from="*.template" to="*" />
-					<filterset filtersfile="${basedir}/ext/resources/service_urls.properties" />
+					<filterset filtersfile="${ext.targetgrid.dir}/service_urls.properties" />
 				</copy>
 			</sequential>
 		</outofdate>
@@ -224,7 +239,7 @@
 		<ant inheritall="false" antfile="build.xml" target="all" dir="extension">
 		</ant>
 	</target>
-	
+
 
 	<target name="installIntroduceExtensions">
 

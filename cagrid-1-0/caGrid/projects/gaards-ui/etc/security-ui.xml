@@ -314,7 +314,7 @@
                     <name>GeneralConfiguration</name>
                 </qname>
                 <ConfigurationPanel>org.cagrid.grape.GeneralConfigurationEditor</ConfigurationPanel>
-                <DefaultFile>ext/resources/dorian-ui-configuration.xml</DefaultFile>
+                <DefaultFile>ext/target_grid/dorian-ui-configuration.xml</DefaultFile>
             </ConfigurationDescriptor>
             <ConfigurationDescriptor>
                 <DisplayName>Grid Trust Fabric</DisplayName>
@@ -325,7 +325,7 @@
                     <name>GeneralConfiguration</name>
                 </qname>
                 <ConfigurationPanel>org.cagrid.grape.GeneralConfigurationEditor</ConfigurationPanel>
-                <DefaultFile>ext/resources/gts-ui-configuration.xml</DefaultFile>
+                <DefaultFile>ext/target_grid/gts-ui-configuration.xml</DefaultFile>
             </ConfigurationDescriptor>
             <ConfigurationDescriptor>
                 <DisplayName>Group Management</DisplayName>
@@ -336,7 +336,7 @@
                     <name>GeneralConfiguration</name>
                 </qname>
                 <ConfigurationPanel>org.cagrid.grape.GeneralConfigurationEditor</ConfigurationPanel>
-                <DefaultFile>ext/resources/gridgrouper-ui-configuration.xml</DefaultFile>
+                <DefaultFile>ext/target_grid/gridgrouper-ui-configuration.xml</DefaultFile>
             </ConfigurationDescriptor>
              <ConfigurationDescriptor>
                 <DisplayName>Credential Delegation Service</DisplayName>
@@ -347,7 +347,7 @@
                     <name>GeneralConfiguration</name>
                 </qname>
                 <ConfigurationPanel>org.cagrid.grape.GeneralConfigurationEditor</ConfigurationPanel>
-                <DefaultFile>ext/resources/cds-ui-configuration.xml</DefaultFile>
+                <DefaultFile>ext/target_grid/cds-ui-configuration.xml</DefaultFile>
             </ConfigurationDescriptor>
         </ConfigurationDescriptors>
     </configuration>

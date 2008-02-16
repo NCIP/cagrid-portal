@@ -1,7 +1,6 @@
 package org.cagrid.transfer.servlet;
 
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
 
 import java.io.File;
 import java.io.FileInputStream;

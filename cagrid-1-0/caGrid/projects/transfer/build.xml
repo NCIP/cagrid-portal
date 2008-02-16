@@ -184,6 +184,7 @@
 			<pathelement location="${ext.globus.dir}" />
 		</path>
 		<path id="tasks.run.classpath">
+			<path refid="tasks.run.extended.classpath" />
 			<fileset dir="${tools.lib.dir}">
 				<include name="*.jar" />
 			</fileset>
@@ -253,8 +254,7 @@
 	</target>
 
 	<target name="stubGenerationPostProcessor">
-		<taskdef name="fixSoapBindingStubs" classname="gov.nih.nci.cagrid.introduce.servicetasks.axis.FixSoapBindingStub" classpathref="tasks.run.classpath">
-		</taskdef>
+		<taskdef name="fixSoapBindingStubs" classname="gov.nih.nci.cagrid.introduce.servicetasks.axis.FixSoapBindingStub" classpathref="tasks.run.classpath"/>
 		<fixSoapBindingStubs />
 	</target>
 

@@ -1,22 +1,22 @@
 <?xml version="1.0"?>
-<project default="all" name="build transfer extension" basedir=".">
+<project default="all" name="caGrid-TransferExtension" basedir=".">
 
 	<!-- ============================================================== -->
 	<!-- MASTER BUILD FILE DO NOT EDIT OR INTRODUCE MAY OVERWRITE       -->
 	<!-- In order to customize the build please edit the dev-build.xml  -->
 	<!-- ============================================================== -->
+    <property environment="env" />
+    <property file="${basedir}/../project.properties" />
+    <property file="${basedir}/../build.properties" />
 
-	<property file="${basedir}/ext/resources/cagrid.properties" />
-	<property name="jar.prefix" value="${cagrid.master.jar.prefix}TransferExtension" />
+    <property name="jar.prefix" value="caGrid-TransferExtension-" />
+    <property name="jar.suffix" value="${project.version}.jar" />
 	
-	<!-- Define the environment variable -->
-	<property environment="env" />
-
 	<property file="introduce.properties" />
 
 	<!-- Important directories and files -->
 	<property name="src.dir" value="src" />
-	<property name="ext.lib.dir" value="ext/lib" />
+	<property name="ext.lib.dir" value="ext/dependencies/jars" />
 	<property name="lib.dir" value="lib" />
 
 
@@ -93,7 +93,7 @@
 
 	<!-- Create a JAR file with the implementation classes -->
 	<target name="jar" depends="compile">
-		<jar jarfile="${build.lib.dir}/${jar.prefix}.jar" basedir="${build.dest}">
+		<jar jarfile="${build.lib.dir}/${jar.prefix}${jar.suffix}" basedir="${build.dest}">
 			<include name="**/*" />
 		</jar>
 	</target>

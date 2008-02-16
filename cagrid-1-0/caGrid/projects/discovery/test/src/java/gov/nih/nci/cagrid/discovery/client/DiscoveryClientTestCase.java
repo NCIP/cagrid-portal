@@ -28,7 +28,7 @@ public class DiscoveryClientTestCase extends TestCase {
 
     private static final String NO_SERVICES_RESOURCE = "noServices.xml";
     private static final String REGISTERED_SERVICES = "RegisteredServices.xml";
-    private static final String METADATA_XSD_PATH = "ext" + File.separator + "xsd" + File.separator + "cagrid"
+    private static final String METADATA_XSD_PATH = "ext" + File.separator + "dependencies" + File.separator + "test" + File.separator + "xsd" + File.separator + "cagrid"
         + File.separator + "types" + File.separator;
     private static final String METADATA_XSD = METADATA_XSD_PATH + "caGridMetadata.xsd";
     private static final String DATA_METADATA_XSD = METADATA_XSD_PATH + "data" + File.separator + "data.xsd";

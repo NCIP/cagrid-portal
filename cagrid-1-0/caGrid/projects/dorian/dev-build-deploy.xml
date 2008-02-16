@@ -20,15 +20,7 @@
 			<fileset dir="${ext.lib}">
 				<include name="*.jar" />
 			</fileset>
-			<!-- Eracom -->
-					    <fileset dir="${lib.dir}/eracom">
-							<include name="jce.jar" />
-							<include name="jprov.jar" />
-					   </fileset>
 		</copy>
-		
-		
-		
 	</target>
 
 
@@ -45,11 +37,6 @@
 			<fileset dir="${ext.lib}">
 				<include name="*.jar" />
 			</fileset>
-			<!-- Eracom -->
-					    <fileset dir="${lib.dir}/eracom">
-							<include name="jce.jar" />
-							<include name="jprov.jar" />
-					   </fileset>
 		</copy>
 	</target>
 

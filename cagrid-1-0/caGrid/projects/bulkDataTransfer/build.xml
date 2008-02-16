@@ -5,15 +5,18 @@
 	<!-- Define the environment variable -->
 	<property environment="env" />
 	<!-- 
-		Properties in these files will override the properties defined in this file.
-    -->
+	        Properties in these files will override the properties defined in this file.
+	    -->
+	<property file="${basedir}/project.properties" />
+	<property file="${basedir}/build.properties" />
 	<property file="introduce.properties" />
+
 	<property name="introduce.ns.excludes" value="" />
 	<property name="service.name" value="${introduce.skeleton.service.name}" />
 	<property name="schema.path" value="${introduce.skeleton.service.name}" />
 
-	<property file="${basedir}/ext/resources/cagrid.properties" />
-	<property name="project.jar.prefix" value="${cagrid.master.jar.prefix}${service.name}${cagrid.master.jar.separator}" />
+	<property name="project.jar.prefix" value="caGrid-${introduce.skeleton.service.name}-" />
+	<property name="project.jar.suffix" value="-${project.version}.jar" />
 
 
 	<!-- Important directories and files -->
@@ -21,24 +24,25 @@
 	<property name="metadata.beans.src.dir" value="${src.dir}/gov/nih/nci/cagrid/bdt/metadata/beans" />
 
 	<property name="lib.dir" value="lib" />
-	<property name="ext.lib.dir" value="ext/lib" />
+	<property name="ext.lib.dir" value="ext/dependencies/service/jars" />
+
 	<property name="etc.dir" value="etc" />
 	<property name="schema.dir" value="schema" />
-	<property name="ext.schema.dir" value="ext/xsd" />
+	<property name="ext.schema.dir" value="ext/dependencies/service/xsd" />
 	<property name="metadata.dir" value="metadata" />
 	<property name="mappings.file" value="${basedir}/namespace2package.mappings" />
-	<property name="common.jar.name" value="${project.jar.prefix}common.jar" />
-	<property name="client.jar.name" value="${project.jar.prefix}client.jar" />
-	<property name="service.jar.name" value="${project.jar.prefix}service.jar" />
-	<property name="extension.jar.name" value="${project.jar.prefix}extension.jar" />
-	<property name="stubs.jar.name" value="${project.jar.prefix}stubs.jar" />
-	<property name="test.jar.name" value="${project.jar.prefix}tests.jar" />
+	<property name="common.jar.name" value="${project.jar.prefix}common${project.jar.suffix}" />
+	<property name="client.jar.name" value="${project.jar.prefix}client${project.jar.suffix}" />
+	<property name="service.jar.name" value="${project.jar.prefix}service${project.jar.suffix}" />
+	<property name="extension.jar.name" value="${project.jar.prefix}extension${project.jar.suffix}" />
+	<property name="stubs.jar.name" value="${project.jar.prefix}stubs${project.jar.suffix}" />
+	<property name="test.jar.name" value="${project.jar.prefix}tests${project.jar.suffix}" />
 
 	<!-- Important test directories and files -->
 	<property name="test.dir" value="test" />
 	<property name="test.src.dir" value="${test.dir}/src" />
 	<property name="test.lib.dir" value="${test.dir}/lib" />
-	<property name="ext.test.lib.dir" value="ext/test/lib" />
+	<property name="ext.test.lib.dir" value="ext/dependencies/test/jars" />
 	<property name="test.log.dir" value="test/logs" />
 	<property name="junit.results.dir" value="${test.log.dir}/junit" />
 
@@ -129,7 +133,13 @@
 		</copy>
 		<copy toDir="${schema.dest}/${introduce.skeleton.service.name}">
 			<fileset dir="${ext.schema.dir}">
-				<include name="EnumerationResponseContainer.xsd" />
+				<include name="**" />
+				<exclude name="cagrid/**" />
+			</fileset>
+		</copy>
+		<copy toDir="${schema.dest}/${introduce.skeleton.service.name}/xsd">
+			<fileset dir="${ext.schema.dir}">
+				<include name="cagrid/**" />
 			</fileset>
 		</copy>
 
@@ -190,6 +200,9 @@
 		<path id="test.run.classpath">
 			<pathelement location="${test.build.dest}" />
 			<pathelement location="${test.dir}/resources" />
+			<fileset dir="${ext.test.lib.dir}">
+				<include name="*.jar" />
+			</fileset>
 			<path refid="test.build.classpath" />
 		</path>
 		<path id="run.classpath">

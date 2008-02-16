@@ -10,12 +10,24 @@
 	<!-- ============================================================== -->
 	<!-- Place any other properties you will need here                  -->
 	<!-- ============================================================== -->
-	<property file="${basedir}/ext/resources/cagrid.properties" />
-	<property name="jar.prefix" value="${cagrid.master.jar.prefix}fqp" />
-	<property name="ext.lib" value="${basedir}/ext/lib" />
-	<property name="ext.test.lib" value="${basedir}/ext/test/lib" />
+	<property environment="env" />
+	<property file="${basedir}/project.properties" />
+	<property file="${basedir}/build.properties" />
 
+	<property name="jar.prefix" value="caGrid-fqp" />
+	<property name="jar.suffix" value="${project.version}.jar" />
 
+	<property name="common.jar.name" value="${jar.prefix}-common-${jar.suffix}" />
+	<property name="client.jar.name" value="${jar.prefix}-client-${jar.suffix}" />
+	<property name="service.jar.name" value="${jar.prefix}-service-${jar.suffix}" />
+	<property name="stubs.jar.name" value="${jar.prefix}-stubs-${jar.suffix}" />
+	<property name="test.jar.name" value="${jar.prefix}-tests-${jar.suffix}" />
+
+	<property name="ext.dir" location="${basedir}/ext" />
+	<property name="ext.dependencies.dir" location="${ext.dir}/dependencies" />
+	<property name="ext.targetgrid.dir" location="${ext.dir}/target_grid" />
+	<property name="ext.lib" location="${ext.dependencies.dir}/service/jars" />
+	<property name="ext.test.lib" value="${ext.dependencies.dir}/test/jars" />
 
 	<!-- ============================================================== -->
 	<!-- Create any extended Classpaths here                            -->
@@ -169,53 +181,53 @@
 
 	</target>
 
-    <target name="configure" description="Configures the project based on settings.">
-            <!-- These are the template files we are copying from -->
-            <fileset id="templates.fileset" dir="${basedir}">
-                <include name="*.template" />
-            </fileset>
-            <!-- We need to basically reverse the mapper used in the copy to 
-                 identify the target files -->
-            <fileset id="template.results.fileset" dir="${basedir}">
-                <include name="*" />
-                <present targetdir="${basedir}">
-                    <mapper type="glob" from="*" to="*.template" />
-                </present>
-            </fileset>
+	<target name="configure" description="Configures the project based on settings.">
+		<!-- These are the template files we are copying from -->
+		<fileset id="templates.fileset" dir="${basedir}">
+			<include name="*.template" />
+		</fileset>
+		<!-- We need to basically reverse the mapper used in the copy to 
+	                 identify the target files -->
+		<fileset id="template.results.fileset" dir="${basedir}">
+			<include name="*" />
+			<present targetdir="${basedir}">
+				<mapper type="glob" from="*" to="*.template" />
+			</present>
+		</fileset>
 
-            <!-- First, create any target file that doesn't exist; outofdate doesn't handle this case -->
-            <copy todir="${basedir}">
-                <fileset dir="${basedir}">
-                    <include name="*.template" />
-                    <not>
-                        <present targetdir="${basedir}">
-                            <mapper type="glob" from="*.template" to="*" />
-                        </present>
-                    </not>
-                </fileset>
-                <mapper type="glob" from="*.template" to="*" />
-                <filterset filtersfile="${basedir}/ext/resources/service_urls.properties" />
-            </copy>
+		<!-- First, create any target file that doesn't exist; outofdate doesn't handle this case -->
+		<copy todir="${basedir}">
+			<fileset dir="${basedir}">
+				<include name="*.template" />
+				<not>
+					<present targetdir="${basedir}">
+						<mapper type="glob" from="*.template" to="*" />
+					</present>
+				</not>
+			</fileset>
+			<mapper type="glob" from="*.template" to="*" />
+			<filterset filtersfile="${ext.targetgrid.dir}/service_urls.properties" />
+		</copy>
 
-            <!-- Next, re-template all the files, if either the filter value files or the template files 
-                 are newer than the their targets -->
-            <outofdate verbose="true">
-                <sourcefiles>
-                    <pathelement path="${basedir}/ext/resources/service_urls.properties" />
-                    <fileset refid="templates.fileset" />
-                </sourcefiles>
-                <targetfiles>
-                    <fileset refid="template.results.fileset" />
-                </targetfiles>
-                <sequential>
-                    <copy todir="${basedir}" overwrite="true">
-                        <fileset refid="templates.fileset" />
-                        <mapper type="glob" from="*.template" to="*" />
-                        <filterset filtersfile="${basedir}/ext/resources/service_urls.properties" />
-                    </copy>
-                </sequential>
-            </outofdate>
-        </target>
+		<!-- Next, re-template all the files, if either the filter value files or the template files 
+	                 are newer than the their targets -->
+		<outofdate verbose="true">
+			<sourcefiles>
+				<pathelement path="${ext.targetgrid.dir}/service_urls.properties" />
+				<fileset refid="templates.fileset" />
+			</sourcefiles>
+			<targetfiles>
+				<fileset refid="template.results.fileset" />
+			</targetfiles>
+			<sequential>
+				<copy todir="${basedir}" overwrite="true">
+					<fileset refid="templates.fileset" />
+					<mapper type="glob" from="*.template" to="*" />
+					<filterset filtersfile="${ext.targetgrid.dir}/service_urls.properties" />
+				</copy>
+			</sequential>
+		</outofdate>
+	</target>
 
 
 	<!-- ============================================================== -->

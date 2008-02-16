@@ -1,33 +1,32 @@
 <!-- ======================================================================= -->
 <!-- caGrid 1.0 GRAPE build file                                   -->
 <!-- ======================================================================= -->
-<project name="grape" default="all" basedir=".">
+<project name="caGrid-grape" default="all" basedir=".">
 	<!-- Environment -->
 	<property environment="env" />
-    <property file="${basedir}/ext/resources/cagrid.properties" />
+    <property file="${basedir}/project.properties" />
+    <property file="${basedir}/build.properties" />
 	<property name="globus.location" location="${env.GLOBUS_LOCATION}" />
 
 	<!-- Information -->
-	<property name="project.version" value="${cagrid.master.project.version}" />
-    <property name="project.name" value="${cagrid.master.jar.prefix}${ant.project.name}" />
-  
+	<property name="project.name" value="${ant.project.name}" />
+
 	<property name="build.dir" location="build" />
 	<property name="build.dest" location="build/classes" />
-	<property name="build.jars.dir" location="build/lib" />
+	<property name="build.jars.dir" location="build/jars" />
 
 	<property name="stubs.dir" location="build/stubs" />
 	<property name="stubs.src" location="build/stubs/src" />
 	<property name="stubs.dest" location="build/stubs/classes" />
-	<property name="grape.jar.name" value="${project.name}.jar" />
-	<property name="resources.jar.name" value="${project.name}${cagrid.master.jar.separator}resources.jar" />
+	<property name="grape.jar.name" value="${project.name}-${project.version}.jar" />
+	<property name="resources.jar.name" value="${project.name}-resources-${project.version}.jar" />
 	<property name="ant.build.stubs" location="${globus.location}/share/globus_wsrf_tools/build-stubs.xml" />
 	<property name="java.debug" value="on" />
 	<property name="schema.src" location="${globus.location}/share/schema" />
 	<property name="schema.dest" location="${build.dir}/schema" />
 	<property name="mapping.src" value="${basedir}/NStoPkg.properties" />
 	<property name="src.dir" value="src" />
-	<property name="lib.dir" value="lib" />
-	<property name="ext.lib.dir" value="ext/lib" />
+	<property name="ext.lib.dir" value="${basedir}/ext/dependencies/default/jars" />
 	<!-- Copied from build.stubs file, as there is no way to "append" to the value in the remote file -->
 	<property name="GT4.ns.excludes" value="-x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.wsdl -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.xsd -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.xsd -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ServiceGroup-1.2-draft-01.xsd -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ServiceGroup-1.2-draft-01.wsdl -x http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.xsd -x http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.wsdl -x http://schemas.xmlsoap.org/ws/2004/04/trust -x http://schemas.xmlsoap.org/ws/2002/12/policy -x http://schemas.xmlsoap.org/ws/2002/07/utility -x http://schemas.xmlsoap.org/ws/2004/04/sc -x http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd -x http://www.w3.org/2000/09/xmldsig# -x http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" />
 
@@ -45,13 +44,10 @@
 			</fileset>
 		</copy>
 	</target>
-	
-	
+
+
 	<target name="defineClasspaths">
 		<path id="base.classpath">
-			<fileset dir="${lib.dir}">
-				<include name="*.jar" />
-			</fileset>
 			<fileset dir="${ext.lib.dir}">
 				<include name="*.jar" />
 			</fileset>
@@ -62,12 +58,12 @@
 			</fileset>
 		</path>
 		<path id="compile.classpath">
-			<path refid="base.classpath" />	
-			<pathelement location="${stubs.dest}"/>
+			<path refid="base.classpath" />
+			<pathelement location="${stubs.dest}" />
 		</path>
 		<path id="run.classpath">
 			<pathelement location="${build.dest}" />
-			<path refid="compile.classpath" />			
+			<path refid="compile.classpath" />
 		</path>
 	</target>
 
@@ -83,14 +79,14 @@
 			<property name="target.stubs.dir" location="${stubs.src}" />
 			<property name="ns.excludes" value="${GT4.ns.excludes}" />
 		</ant>
-		
+
 		<!-- GRAPE GENERAL CONFIGURATION SCHEMA -->
-				<ant antfile="${ant.build.stubs}" target="generateStubs">
-					<property name="source.stubs.dir" location="${schema.dest}" />
-					<property name="wsdl.file" value="GrapeGeneralConfiguration.wsdl" />
-					<property name="target.stubs.dir" location="${stubs.src}" />
-					<property name="ns.excludes" value="${GT4.ns.excludes}" />
-				</ant>
+		<ant antfile="${ant.build.stubs}" target="generateStubs">
+			<property name="source.stubs.dir" location="${schema.dest}" />
+			<property name="wsdl.file" value="GrapeGeneralConfiguration.wsdl" />
+			<property name="target.stubs.dir" location="${stubs.src}" />
+			<property name="ns.excludes" value="${GT4.ns.excludes}" />
+		</ant>
 	</target>
 
 
@@ -100,10 +96,10 @@
 			<include name="**/*.java" />
 		</javac>
 	</target>
-	
+
 	<target name="compile" depends="compileStubs">
 		<javac srcdir="${src.dir}" classpathref="compile.classpath" destdir="${build.dest}" debug="${java.debug}" deprecation="${deprecation}">
-			
+
 		</javac>
 	</target>
 
@@ -111,21 +107,21 @@
 	<target name="jar" depends="compile">
 		<jar destfile="${build.jars.dir}/${grape.jar.name}">
 			<fileset dir="${stubs.dest}">
-				<include name="**"/>
+				<include name="**" />
 			</fileset>
 			<fileset dir="${build.dest}">
-				<include name="**"/>
+				<include name="**" />
 			</fileset>
 			<fileset dir="${src.dir}">
-				<include name="**"/>
+				<include name="**" />
 			</fileset>
 			<fileset dir="${stubs.src}">
-				<include name="**"/>
+				<include name="**" />
 			</fileset>
 		</jar>
-		  <jar jarfile="${build.jars.dir}/${resources.jar.name}">
-			  <fileset dir="resources/ui/common"/>
-		 </jar>
+		<jar jarfile="${build.jars.dir}/${resources.jar.name}">
+			<fileset dir="resources/ui/common" />
+		</jar>
 	</target>
 
 	<target name="clean">
