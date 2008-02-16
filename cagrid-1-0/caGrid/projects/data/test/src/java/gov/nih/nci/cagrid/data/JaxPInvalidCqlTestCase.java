@@ -31,7 +31,7 @@ public class JaxPInvalidCqlTestCase extends TestCase {
 	public JaxPInvalidCqlTestCase(String name) {
 		super(name);
 		try {
-			validator = new JaxPCqlValidator("ext/dependencies/xsd/cql1.0/1_gov.nih.nci.cagrid.CQLQuery.xsd");
+			validator = new JaxPCqlValidator("ext/dependencies/xsd/1_gov.nih.nci.cagrid.CQLQuery.xsd");
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
