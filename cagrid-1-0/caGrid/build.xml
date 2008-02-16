@@ -138,8 +138,9 @@
 	<target name="all" depends="prepare" description="compile, jar and publish all projects in the right order">
 		<for parallel="false" param="project.buildfile" trim="true">
 			<path refid="ivy.projects.list" />
-			<sequential>
-				<ant inheritAll="false" inheritrefs="false" antfile="@{project.buildfile}" target="publish">
+			<sequential>				
+				<dirname file="@{project.buildfile}" property="@{project.buildfile}.dir"/>
+				<ant inheritAll="false" inheritrefs="false" dir="${@{project.buildfile}.dir}" antfile="@{project.buildfile}" target="publish">
 					<property name="target.grid" value="${target.grid}" />
 				</ant>
 			</sequential>
@@ -154,7 +155,8 @@
 		<for parallel="true" param="project.buildfile" trim="true" threadcount="10">
 			<path refid="ivy.projects.list" />
 			<sequential>
-				<ant inheritAll="false" antfile="@{project.buildfile}" target="clean-dependencies" />
+                <dirname file="@{project.buildfile}" property="@{project.buildfile}.dir"/>
+				<ant inheritAll="false" dir="${@{project.buildfile}.dir}" antfile="@{project.buildfile}" target="clean-dependencies" />
 			</sequential>
 		</for>
 
