@@ -29,7 +29,7 @@ import org.xml.sax.InputSource;
  */
 public class ValidDomainTestCase extends TestCase {
 	public static final String DOMAIN_MODEL_FILE = "test/resources/domainModel.xml";
-	public static final String DOMAIN_MODEL_XSD = "ext/xsd/cagrid/types/data/data.xsd";
+	public static final String DOMAIN_MODEL_XSD = "ext/dependencies/xsd/cagrid/types/data/data.xsd";
 	
 	private CqlDomainValidator validator = null;
 	private DomainModel domainModel = null;
