@@ -51,12 +51,12 @@ import org.apache.log4j.Logger;
  * @author David Ervin
  * 
  * @created Jan 28, 2008 11:24:21 AM
- * @version $Id: SDK4StyleConfigurationStep.java,v 1.4 2008-02-01 14:41:04 dervin Exp $ 
+ * @version $Id: SDK4StyleConfigurationStep.java,v 1.5 2008-02-16 18:25:04 oster Exp $ 
  */
 public class SDK4StyleConfigurationStep extends Step {
     public static final String SDKQUERY4_BASE_DIR = "../sdkQuery4";
     
-    public static final String EXT_SDK_DIR = SDKQUERY4_BASE_DIR + File.separator + "ext/lib/sdk/remote-client";
+    public static final String EXT_SDK_DIR = SDKQUERY4_BASE_DIR + File.separator + "build/remote-client";
     public static final String DOMAIN_MODEL_FILE = SDKQUERY4_BASE_DIR + File.separator + "test/resources/sdkExampleDomainModel.xml";
     public static final String PROPERTY_REMOTE_HOST_NAME = "remote.sdk.host.name";
     public static final String PROPERTY_REMOTE_HOST_PORT = "remote.sdk.host.port";

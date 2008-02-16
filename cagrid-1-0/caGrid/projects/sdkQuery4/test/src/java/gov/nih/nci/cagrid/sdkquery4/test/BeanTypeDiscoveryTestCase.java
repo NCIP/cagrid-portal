@@ -34,11 +34,11 @@ import org.apache.log4j.Logger;
  * @author David Ervin
  * 
  * @created Jan 15, 2008 1:33:01 PM
- * @version $Id: BeanTypeDiscoveryTestCase.java,v 1.4 2008-01-18 15:13:29 dervin Exp $ 
+ * @version $Id: BeanTypeDiscoveryTestCase.java,v 1.5 2008-02-16 18:25:03 oster Exp $ 
  */
 public class BeanTypeDiscoveryTestCase extends TestCase {
 
-    public static final String BEANS_JAR_FILENAME = "ext/lib/sdk/remote-client/lib/example40-beans.jar";
+    public static final String BEANS_JAR_FILENAME = "build/remote-client/lib/example40-beans.jar";
     public static final String DOMAIN_MODEL_FILENAME = "test/resources/sdkExampleDomainModel.xml";
     public static final String GOLD_DOMAIN_TYPES_FILENAME = "test/resources/goldExampleDomainTypes.xml";
 
