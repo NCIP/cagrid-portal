@@ -318,7 +318,7 @@ public class BDTCreationExtensionPostProcessor implements CreationExtensionPostP
 		File[] libs = libDir.listFiles(new FileFilter() {
 			public boolean accept(File pathname) {
 				String name = pathname.getName();
-				return (name.endsWith(".jar") && (name.startsWith("caGrid-1.1-BulkDataHandler")
+				return (name.endsWith(".jar") && (name.startsWith("caGrid-BulkDataHandler")
 					|| name.startsWith("wsrf_core_enum") || name.startsWith("wsrf_core_stubs_enum")));
 			}
 		});
