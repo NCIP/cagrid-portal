@@ -41,6 +41,7 @@
     <artifact name="gridgrouper-ui-configuration" type="xml" conf="gridgrouper-ui"/>
     <artifact name="gts-ui-configuration" type="xml" conf="gts-ui"/>
     <artifact name="workflow-ui-configuration" type="xml" conf="workflow-ui"/>
+    <artifact name="cds-ui-configuration" type="xml" conf="cds-ui"/>
 
     <!--  properties-->
     <artifact name="introduce" type="properties" conf="introduce"/>
