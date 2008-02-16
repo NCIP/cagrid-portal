@@ -32,10 +32,10 @@
 
 
   <publications>
-    <artifact name="caGrid-${ivy.module}-stubs" conf="stubs" type="jar"/>
-    <artifact name="caGrid-${ivy.module}-common" conf="common" type="jar"/>
-    <artifact name="caGrid-${ivy.module}-client" conf="client" type="jar"/>
-    <artifact name="caGrid-${ivy.module}-service" conf="service" type="jar"/>
+    <artifact name="caGrid-Transfer-stubs" conf="stubs" type="jar"/>
+    <artifact name="caGrid-Transfer-common" conf="common" type="jar"/>
+    <artifact name="caGrid-Transfer-client" conf="client" type="jar"/>
+    <artifact name="caGrid-Transfer-service" conf="service" type="jar"/>
     <artifact name="caGrid-TransferExtension" conf="extension" type="jar"/>
     <artifact name="caGrid-Transfer-webapp" conf="webapp" type="jar"/>
     
