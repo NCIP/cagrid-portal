@@ -20,12 +20,9 @@
 	<!-- call the test target for each project and aggregates the log resutls  -->
     <target name="test" description="Runs the tests.">
         <mkdir dir="${junit.results.dir}" />
-        <junit dir="${basedir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="yes" forkmode="once">
-        	<!--
-            <sysproperty key="build.dir" value="${classes.dir}" />
-            <sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.data.file}" />
-            <jvmarg value="-Dbuild.dir=${classes.dir}" />
-            -->
+        <junit dir="${basedir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="yes" forkmode="once">        	
+            <sysproperty key="build.dir" value="${build.dir}" />
+            <jvmarg value="-Dbuild.dir=${build.dir}" />
             <classpath refid="test.classpath" />
             <formatter type="xml" />
             <batchtest fork="yes" todir="${junit.results.dir}">
