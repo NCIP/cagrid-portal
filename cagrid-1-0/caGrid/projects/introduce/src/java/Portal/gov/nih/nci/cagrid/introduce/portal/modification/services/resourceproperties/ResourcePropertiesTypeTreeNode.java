@@ -68,93 +68,103 @@ import javax.swing.tree.DefaultTreeModel;
  *          Exp $
  */
 public class ResourcePropertiesTypeTreeNode extends DefaultMutableTreeNode implements PopupTreeNode {
-	private DefaultTreeModel model;
-	private ResourcePropertiesPopUpMenu menu;
-	private ServiceInformation info;
-	private ServiceType service;
+    private DefaultTreeModel model;
+    private ResourcePropertiesPopUpMenu menu;
+    private ServiceInformation info;
+    private ServiceType service;
 
 
-	public ResourcePropertiesTypeTreeNode(ServiceType service, DefaultTreeModel model,
-		ServiceInformation info) {
-		super();
-		this.service = service;
-		this.setUserObject("Resource Properties");
-		this.model = model;
-		this.menu = new ResourcePropertiesPopUpMenu(this);
-		this.info = info;
-		initialize();
-	}
+    public ResourcePropertiesTypeTreeNode(ServiceType service, DefaultTreeModel model, ServiceInformation info) {
+        super();
+        this.service = service;
+        this.setUserObject("Resource Properties");
+        this.model = model;
+        this.menu = new ResourcePropertiesPopUpMenu(this);
+        this.info = info;
+        initialize();
+    }
 
 
-	private void initialize() {
-		if (service.getResourcePropertiesList() != null && service.getResourcePropertiesList().getResourceProperty() != null) {
-			for (int i = 0; i < service.getResourcePropertiesList().getResourceProperty().length; i++) {
-				ResourcePropertyType resource = service.getResourcePropertiesList().getResourceProperty(i);
-				ResourcePropertyTypeTreeNode newNode = new ResourcePropertyTypeTreeNode(resource);
-				model.insertNodeInto(newNode, this, this.getChildCount());
-			}
-		}
-	}
+    private void initialize() {
+        if (service.getResourcePropertiesList() != null
+            && service.getResourcePropertiesList().getResourceProperty() != null) {
+            for (int i = 0; i < service.getResourcePropertiesList().getResourceProperty().length; i++) {
+                ResourcePropertyType resource = service.getResourcePropertiesList().getResourceProperty(i);
+                ResourcePropertyTypeTreeNode newNode = new ResourcePropertyTypeTreeNode(resource);
+                model.insertNodeInto(newNode, this, this.getChildCount());
+            }
+        }
+    }
 
 
-	public void add(ResourcePropertyType resourceProperty) {
-		CommonTools.addResourcePropety(getService(), resourceProperty);
-		
-		ResourcePropertyTypeTreeNode newNode = new ResourcePropertyTypeTreeNode(resourceProperty);
-		model.insertNodeInto(newNode, this, this.getChildCount());
-	}
+    public void reInitialize() {
+        int children = getChildCount();
+        for (int i = children - 1; i >= 0; i--) {
+            model.removeNodeFromParent((DefaultMutableTreeNode) getChildAt(i));
+        }
+
+        initialize();
+    }
 
 
-	public void removeResourceProperty(ResourcePropertyTypeTreeNode node) {
+    public void add(ResourcePropertyType resourceProperty) {
+        CommonTools.addResourcePropety(getService(), resourceProperty);
 
-		CommonTools.removeResourceProperty(getService(), ((ResourcePropertyType) node.getUserObject()).getQName());
-
-		model.removeNodeFromParent(node);
-	}
-
-
-	public JPopupMenu getPopUpMenu() {
-		return menu;
-	}
+        ResourcePropertyTypeTreeNode newNode = new ResourcePropertyTypeTreeNode(resourceProperty);
+        model.insertNodeInto(newNode, this, this.getChildCount());
+    }
 
 
-	public String toString() {
-		return this.getUserObject().toString();
-	}
+    public void removeResourceProperty(ResourcePropertyTypeTreeNode node) {
+
+        CommonTools.removeResourceProperty(getService(), ((ResourcePropertyType) node.getUserObject()).getQName());
+
+        model.removeNodeFromParent(node);
+    }
 
 
-	public ServiceInformation getInfo() {
-		return info;
-	}
+    public JPopupMenu getPopUpMenu() {
+        return menu;
+    }
 
 
-	public DefaultTreeModel getModel() {
-		return this.model;
-	}
+    public String toString() {
+        return this.getUserObject().toString();
+    }
 
 
-	public void setInfo(ServiceInformation info) {
-		this.info = info;
-	}
+    public ServiceInformation getInfo() {
+        return info;
+    }
 
 
-	public ImageIcon getOpenIcon() {
-		return IntroduceLookAndFeel.getResourcePropertiesIcon();
-	}
+    public DefaultTreeModel getModel() {
+        return this.model;
+    }
 
 
-	public ImageIcon getClosedIcon() {
-		return IntroduceLookAndFeel.getResourcePropertiesIcon();
-	}
+    public void setInfo(ServiceInformation info) {
+        this.info = info;
+    }
 
 
-	public ServiceType getService() {
-		return service;
-	}
+    public ImageIcon getOpenIcon() {
+        return IntroduceLookAndFeel.getResourcePropertiesIcon();
+    }
 
 
-	public void setService(ServiceType service) {
-		this.service = service;
-	}
+    public ImageIcon getClosedIcon() {
+        return IntroduceLookAndFeel.getResourcePropertiesIcon();
+    }
+
+
+    public ServiceType getService() {
+        return service;
+    }
+
+
+    public void setService(ServiceType service) {
+        this.service = service;
+    }
 
 }

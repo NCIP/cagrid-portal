@@ -20,6 +20,8 @@ import java.util.List;
 import javax.swing.JPanel;
 import javax.swing.JTree;
 import javax.swing.SwingUtilities;
+import javax.swing.event.TreeModelEvent;
+import javax.swing.event.TreeModelListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.MutableTreeNode;
@@ -103,6 +105,34 @@ public class ServicesJTree extends JTree {
 
 			}
 		});
+		
+		//expand anything in the tree if it changes
+		this.getModel().addTreeModelListener(new TreeModelListener() {
+        
+            public void treeStructureChanged(TreeModelEvent e) {
+                expandPath(e.getTreePath());
+        
+            }
+        
+        
+            public void treeNodesRemoved(TreeModelEvent e) {
+                expandPath(e.getTreePath());
+        
+            }
+        
+        
+            public void treeNodesInserted(TreeModelEvent e) {
+                expandPath(e.getTreePath());
+        
+            }
+        
+        
+            public void treeNodesChanged(TreeModelEvent e) {
+                expandPath(e.getTreePath());
+        
+            }
+        
+        });
 
 	}
 

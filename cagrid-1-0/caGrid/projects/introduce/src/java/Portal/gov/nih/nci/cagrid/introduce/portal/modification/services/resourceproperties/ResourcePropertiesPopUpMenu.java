@@ -67,6 +67,8 @@ public class ResourcePropertiesPopUpMenu extends JPopupMenu {
             + File.separator + node.getInfo().getServices().getService(0).getName()), true);
         comp.setSize(800, 500);
         GridApplication.getContext().showDialog(comp);
+        //rebuild this part of tree
+        node.reInitialize();        
     }
 
 }
