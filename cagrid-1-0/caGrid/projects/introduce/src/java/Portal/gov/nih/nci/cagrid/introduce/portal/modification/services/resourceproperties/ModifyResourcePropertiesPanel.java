@@ -47,8 +47,6 @@ import java.awt.Color;
 
 public class ModifyResourcePropertiesPanel extends JPanel {
 
-    private ResourcePropertiesListType properties;
-
     private NamespacesType namespaces;
 
     private JPanel resourcePropertiesPanel = null;
@@ -87,7 +85,6 @@ public class ModifyResourcePropertiesPanel extends JPanel {
         this.service = service;
         this.etcDir = etcDir;
         this.schemaDir = schemaDir;
-        this.properties = service.getResourcePropertiesList();
         this.namespaces = namespaces;
         this.showW3Cnamespaces = showW3Cnamespaces;
         this.isMainMetadataPanel = isMainMetadataPanel;
@@ -115,10 +112,9 @@ public class ModifyResourcePropertiesPanel extends JPanel {
 
     public void reInitialize(ServiceType initService, NamespacesType ns) {
         this.service = initService;
-        this.properties = initService.getResourcePropertiesList();
         this.namespaces = ns;
         this.namespacesJTree.setNamespaces(ns);
-        this.resourcePropertiesTable.setResourceProperties(this.properties);
+        this.resourcePropertiesTable.setResourceProperties(service.getResourcePropertiesList());
     }
 
 
@@ -214,9 +210,9 @@ public class ModifyResourcePropertiesPanel extends JPanel {
     private ResourcePropertyTable getResourcePropertiesTable() {
         if (this.resourcePropertiesTable == null) {
             if (this.isMainMetadataPanel) {
-                this.resourcePropertiesTable = new ResourcePropertyTable(this.properties, true);
+                this.resourcePropertiesTable = new ResourcePropertyTable(service.getResourcePropertiesList(), true);
             } else {
-                this.resourcePropertiesTable = new ResourcePropertyTable(this.properties, false);
+                this.resourcePropertiesTable = new ResourcePropertyTable(service.getResourcePropertiesList(), false);
             }
             SelectionListener listener = new SelectionListener(this.resourcePropertiesTable);
             this.resourcePropertiesTable.getSelectionModel().addListSelectionListener(listener);
@@ -338,10 +334,11 @@ public class ModifyResourcePropertiesPanel extends JPanel {
             metadata.setQName(new QName(nt.getNamespace(), st.getType()));
             metadata.setPopulateFromFile(false);
             metadata.setRegister(false);
-
-            if (this.properties != null && this.properties.getResourceProperty() != null) {
-                for (int i = 0; i < this.properties.getResourceProperty().length; i++) {
-                    ResourcePropertyType rp = this.properties.getResourceProperty(i);
+            
+            //look to make sure it is not already in there
+            if (service.getResourcePropertiesList() != null && service.getResourcePropertiesList().getResourceProperty() != null) {
+                for (int i = 0; i < service.getResourcePropertiesList().getResourceProperty().length; i++) {
+                    ResourcePropertyType rp = service.getResourcePropertiesList().getResourceProperty(i);
                     if (rp.getQName().equals(metadata.getQName())) {
                         return;
                     }
@@ -350,26 +347,13 @@ public class ModifyResourcePropertiesPanel extends JPanel {
 
             getResourcePropertiesTable().addRow(metadata);
 
-            // add new metadata to array in bean
-            // this seems to be a wierd way be adding things....
-            ResourcePropertyType[] metadatas;
-            int newLength = 0;
-            if (this.properties != null && this.properties.getResourceProperty() != null) {
-                newLength = this.properties.getResourceProperty().length + 1;
-                metadatas = new ResourcePropertyType[newLength];
-                System.arraycopy(this.properties.getResourceProperty(), 0, metadatas, 0, this.properties
-                    .getResourceProperty().length);
-            } else {
-                newLength = 1;
-                metadatas = new ResourcePropertyType[newLength];
-            }
-            metadatas[newLength - 1] = metadata;
-            this.properties.setResourceProperty(metadatas);
+            // add new metadata
+            CommonTools.addResourcePropety(service, metadata);
 
             // set the file name for the resource property instance......
             int i = 0;
-            for (i = 0; i < this.properties.getResourceProperty().length; i++) {
-                if (metadata.equals(this.properties.getResourceProperty(i))) {
+            for (i = 0; i < service.getResourcePropertiesList().getResourceProperty().length; i++) {
+                if (metadata.equals(service.getResourcePropertiesList().getResourceProperty(i))) {
                     break;
                 }
             }
@@ -407,19 +391,9 @@ public class ModifyResourcePropertiesPanel extends JPanel {
                         ErrorDialog.showError("Please select a metdata type to remove.");
                         return;
                     }
+                    
                     // remove from resource properties list
-                    ResourcePropertyType[] metadatas;
-                    int newLength = ModifyResourcePropertiesPanel.this.properties.getResourceProperty().length - 1;
-                    metadatas = new ResourcePropertyType[newLength];
-                    int resourcesCount = 0;
-                    for (int i = 0; i < ModifyResourcePropertiesPanel.this.properties.getResourceProperty().length; i++) {
-                        ResourcePropertyType oldResource = ModifyResourcePropertiesPanel.this.properties
-                            .getResourceProperty(i);
-                        if (!resource.equals(oldResource)) {
-                            metadatas[resourcesCount++] = oldResource;
-                        }
-                    }
-                    ModifyResourcePropertiesPanel.this.properties.setResourceProperty(metadatas);
+                    CommonTools.removeResourceProperty(service, resource.getQName());
                 }
             });
         }
@@ -478,8 +452,8 @@ public class ModifyResourcePropertiesPanel extends JPanel {
                                     // create it, set the path to file, and then
                                     // call the editor
                                     int i = 0;
-                                    for (i = 0; i < ModifyResourcePropertiesPanel.this.properties.getResourceProperty().length; i++) {
-                                        if (type.equals(ModifyResourcePropertiesPanel.this.properties
+                                    for (i = 0; i < service.getResourcePropertiesList().getResourceProperty().length; i++) {
+                                        if (type.equals(service.getResourcePropertiesList()
                                             .getResourceProperty(i))) {
                                             break;
                                         }

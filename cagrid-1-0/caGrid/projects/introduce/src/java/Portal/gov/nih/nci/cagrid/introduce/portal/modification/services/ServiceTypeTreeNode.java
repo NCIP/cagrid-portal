@@ -68,68 +68,72 @@ import javax.swing.tree.DefaultTreeModel;
  *          Exp $
  */
 public class ServiceTypeTreeNode extends DefaultMutableTreeNode implements PopupTreeNode {
-	private ServiceType serviceType;
-	private ServiceInformation info;
-	private ServicePopUpMenu popUpMenu;
-	private DefaultTreeModel model;
+    private ServiceType serviceType;
+    private ServiceInformation info;
+    private ServicePopUpMenu popUpMenu;
+    private DefaultTreeModel model;
 
 
-	public ServiceTypeTreeNode(ServiceType serviceType, ServiceInformation info, DefaultTreeModel model) {
-		super();
-		this.info = info;
-		this.setUserObject(serviceType);
-		this.serviceType = serviceType;
-		this.model = model;
-		this.popUpMenu = new ServicePopUpMenu(this);
-		initialize();
-	}
-	
-	public ServiceInformation getInfo(){
-		return this.info;
-	}
-	
-	public DefaultTreeModel getModel(){
-		return model;
-	}
+    public ServiceTypeTreeNode(ServiceType serviceType, ServiceInformation info, DefaultTreeModel model) {
+        super();
+        this.info = info;
+        this.setUserObject(serviceType);
+        this.serviceType = serviceType;
+        this.model = model;
+        this.popUpMenu = new ServicePopUpMenu(this);
+        initialize();
+    }
 
 
-	private void initialize() {
-		if (serviceType.getMethods() != null) {
-			MethodsTypeTreeNode newNode = new MethodsTypeTreeNode(serviceType, model, new SpecificServiceInformation(info,serviceType));
-			model.insertNodeInto(newNode, this, this.getChildCount());
-		}
-		if (serviceType.getResourcePropertiesList() != null) {
-			ResourcePropertiesTypeTreeNode newNode = new ResourcePropertiesTypeTreeNode(serviceType, model, info);
-		model.insertNodeInto(newNode, this, this.getChildCount());
-		}
-	}
-	
-	public ServiceType getServiceType(){
-		return this.serviceType;
-	}
+    public ServiceInformation getInfo() {
+        return this.info;
+    }
 
 
-	public ImageIcon getOpenIcon() {
-		return IntroduceLookAndFeel.getServiceIcon();
-	}
+    public DefaultTreeModel getModel() {
+        return model;
+    }
 
 
-	public ImageIcon getClosedIcon() {
-		return IntroduceLookAndFeel.getServiceIcon();
-	}
+    private void initialize() {
+
+        MethodsTypeTreeNode newNode1 = new MethodsTypeTreeNode(serviceType, model, new SpecificServiceInformation(info,
+            serviceType));
+        model.insertNodeInto(newNode1, this, this.getChildCount());
+
+        ResourcePropertiesTypeTreeNode newNode = new ResourcePropertiesTypeTreeNode(serviceType, model, info);
+        model.insertNodeInto(newNode, this, this.getChildCount());
+
+    }
 
 
-	public String toString() {
-		if(((ServiceType) this.getUserObject()).getName().equals(info.getServices().getService(0).getName())){
-			return ((ServiceType) this.getUserObject()).getName() + " (Main Service)";
-		} else {
-			return ((ServiceType) this.getUserObject()).getName() + " (Service Context)";
-		}
-		
-	}
-	
-	public JPopupMenu getPopUpMenu() {
-		return popUpMenu;
-	}
+    public ServiceType getServiceType() {
+        return this.serviceType;
+    }
+
+
+    public ImageIcon getOpenIcon() {
+        return IntroduceLookAndFeel.getServiceIcon();
+    }
+
+
+    public ImageIcon getClosedIcon() {
+        return IntroduceLookAndFeel.getServiceIcon();
+    }
+
+
+    public String toString() {
+        if (((ServiceType) this.getUserObject()).getName().equals(info.getServices().getService(0).getName())) {
+            return ((ServiceType) this.getUserObject()).getName() + " (Main Service)";
+        } else {
+            return ((ServiceType) this.getUserObject()).getName() + " (Service Context)";
+        }
+
+    }
+
+
+    public JPopupMenu getPopUpMenu() {
+        return popUpMenu;
+    }
 
 }

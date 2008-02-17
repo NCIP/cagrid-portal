@@ -113,6 +113,6 @@
 	<classpathentry kind="lib" path="ext/dependencies/test/jars/jdom-1.0.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/test/jars/mobius_common_client-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/test/jars/mobius_tools-1.1.jar"/>
-	<classpathentry kind="lib" path="test/lib/junit.jar"/>
+	<classpathentry kind="var" path="ANT_HOME/lib/junit.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
