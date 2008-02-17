@@ -62,6 +62,7 @@
     
     <artifact name="DataService" conf="service-schemas" type="wsdl"/>
     <artifact name="DataServiceExceptions" conf="service-schemas" type="xsd"/>
+    <artifact name="DataServiceTypes" conf="service-schemas" type="xsd"/>
     <!-- TODO: these should be coming from a service-security-provider dependency -->
     <artifact name="ServiceSecurity" conf="service-schemas" type="wsdl"/>
     

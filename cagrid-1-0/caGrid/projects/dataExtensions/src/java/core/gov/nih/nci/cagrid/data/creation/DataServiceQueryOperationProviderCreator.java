@@ -48,8 +48,7 @@ import org.apache.log4j.Logger;
 
 
 /**
- * DataServiceQueryOperationProviderCreator 
- * Adds the operation provider for the
+ * DataServiceQueryOperationProviderCreator Adds the operation provider for the
  * data service query operation to an introduce created service at post-create
  * time
  * 
@@ -84,8 +83,7 @@ public class DataServiceQueryOperationProviderCreator implements CreationExtensi
             try {
                 CQLResultTypesGenerator.generateCQLResultTypesXSD(typeInfo);
             } catch (CodegenExtensionException ex) {
-                throw new CreationExtensionException(
-                    "Problen creating initial permissible result type XSD.", ex);
+                throw new CreationExtensionException("Problen creating initial permissible result type XSD.", ex);
             }
             // add the data namespaces
             addDataServiceNamespaces(serviceInfo);
@@ -97,21 +95,23 @@ public class DataServiceQueryOperationProviderCreator implements CreationExtensi
             processFeatures(serviceInfo, mainService, desc);
         }
     }
-    
-    
+
+
     private void checkServiceNaming(ServiceInformation serviceInfo) throws CreationExtensionException {
         ServiceType mainService = serviceInfo.getServices().getService(0);
         if (DataServiceConstants.DATA_SERVICE_SERVICE_NAME.equals(mainService.getName())) {
             throw new CreationExtensionException(
-                "The data service infrastructure already makes use of the Service Name " + DataServiceConstants.DATA_SERVICE_SERVICE_NAME);
+                "The data service infrastructure already makes use of the Service Name "
+                    + DataServiceConstants.DATA_SERVICE_SERVICE_NAME);
         }
         if (DataServiceConstants.DATA_SERVICE_PACKAGE.equals(mainService.getPackageName())) {
             throw new CreationExtensionException(
-                "The data service infrastructure already makes use of the package name " + DataServiceConstants.DATA_SERVICE_PACKAGE);
+                "The data service infrastructure already makes use of the package name "
+                    + DataServiceConstants.DATA_SERVICE_PACKAGE);
         }
         if (DataServiceConstants.DATA_SERVICE_NAMESPACE.equals(mainService.getNamespace())) {
-            throw new CreationExtensionException(
-                "The data service infrastructure already makes use of the namespace " + DataServiceConstants.DATA_SERVICE_NAMESPACE);
+            throw new CreationExtensionException("The data service infrastructure already makes use of the namespace "
+                + DataServiceConstants.DATA_SERVICE_NAMESPACE);
         }
     }
 
@@ -132,8 +132,8 @@ public class DataServiceQueryOperationProviderCreator implements CreationExtensi
             }
         };
         // get schemas for data services
-        File baseSchemaDir = new File(ExtensionsLoader.getInstance().getExtensionsDir(), 
-            "data" + File.separator + "schema");
+        File baseSchemaDir = new File(ExtensionsLoader.getInstance().getExtensionsDir(), "data" + File.separator
+            + "schema");
         File dataSchemaDir = new File(baseSchemaDir, "Data");
         List<File> dataSchemaFiles = Utils.recursiveListFiles(dataSchemaDir, dataXsdFilter);
         // also copy the WSDL for data services
@@ -146,17 +146,7 @@ public class DataServiceQueryOperationProviderCreator implements CreationExtensi
                 Utils.copyFile(schemaFile, schemaOut);
             }
         } catch (Exception ex) {
-            throw new CreationExtensionException("Error copying data service schemas: " 
-                + ex.getMessage(), ex);
-        }
-        // finally, all external (to data services) schemas, including CQL
-        File externalSchemaDir = new File(baseSchemaDir, "xsd");
-        File xsdOutDir = new File(schemaDir + File.separator + "xsd");
-        try {
-            Utils.copyDirectory(externalSchemaDir, xsdOutDir);
-        } catch (Exception ex) {
-            throw new CreationExtensionException("Error copying external schemas: " 
-                + ex.getMessage(), ex);
+            throw new CreationExtensionException("Error copying data service schemas: " + ex.getMessage(), ex);
         }
     }
 
@@ -179,15 +169,13 @@ public class DataServiceQueryOperationProviderCreator implements CreationExtensi
         try {
             // query namespace
             queryNamespace = CommonTools.createNamespaceType(schemaDir + File.separator
-                + "xsd" + File.separator + "cql1.0" + File.separator 
                 + DataServiceConstants.CQL_QUERY_SCHEMA, schemaDirFile);
             // query result namespace
             resultNamespace = CommonTools.createNamespaceType(schemaDir + File.separator
-                + "xsd" + File.separator + "cql1.0" + File.separator
                 + DataServiceConstants.CQL_RESULT_SET_SCHEMA, schemaDirFile);
             resultRestrictionNamespace = CommonTools.createNamespaceType(schemaDir + File.separator
-                + CQLResultTypesGenerator.getResultTypeXSDFileName(
-                    getDataService(serviceInfo.getServiceDescriptor())), schemaDirFile);
+                + CQLResultTypesGenerator.getResultTypeXSDFileName(getDataService(serviceInfo.getServiceDescriptor())),
+                schemaDirFile);
             // ds metadata namespace
             dsMetadataNamespace = CommonTools.createNamespaceType(schemaDir + File.separator
                 + DataServiceConstants.DATA_METADATA_SCHEMA, schemaDirFile);
@@ -199,16 +187,16 @@ public class DataServiceQueryOperationProviderCreator implements CreationExtensi
                 + DataServiceConstants.CAGRID_METADATA_SCHEMA, schemaDirFile);
         } catch (Exception ex) {
             ex.printStackTrace();
-            throw new CreationExtensionException("Error creating namespace for data service: " 
-                + ex.getMessage(), ex);
+            throw new CreationExtensionException("Error creating namespace for data service: " + ex.getMessage(), ex);
         }
         // prevent the metadata beans from being generated
         cagridMdNamespace.setGenerateStubs(Boolean.FALSE);
         dsExceptionsNamespace.setGenerateStubs(Boolean.FALSE);
 
         // set package mappings for result restriction types
-        resultRestrictionNamespace.setPackageName(serviceInfo.getServiceDescriptor()
-            .getServices().getService(0).getPackageName() + ".cqlresulttypes");
+        resultRestrictionNamespace.setPackageName(serviceInfo.getServiceDescriptor().getServices().getService(0)
+            .getPackageName()
+            + ".cqlresulttypes");
 
         // set package mappings for exceptions
         dsExceptionsNamespace.setPackageName(DataServiceConstants.DATA_SERVICE_PACKAGE + ".faults");
@@ -251,14 +239,14 @@ public class DataServiceQueryOperationProviderCreator implements CreationExtensi
             directory.mkdirs();
         }
         // from the lib directory
-        // FIXME: These depend on the caGrid version, and should probably read it from a file
+        // FIXME: These depend on the caGrid version, and should probably read
+        // it from a file
         File libDir = new File(ExtensionsLoader.getInstance().getExtensionsDir() + File.separator + "lib");
         File[] libs = libDir.listFiles(new FileFilter() {
             public boolean accept(File pathname) {
                 String name = pathname.getName();
-                return (name.endsWith(".jar") && (name.startsWith("caGrid-data-")
-                    || name.startsWith("caGrid-core-") || name.startsWith("caGrid-caDSR-") 
-                    || name.startsWith("caGrid-metadata-")));
+                return (name.endsWith(".jar") && (name.startsWith("caGrid-data-") || name.startsWith("caGrid-core-")
+                    || name.startsWith("caGrid-caDSR-") || name.startsWith("caGrid-metadata-")));
             }
         });
         File[] copiedLibs = new File[libs.length];
@@ -271,14 +259,12 @@ public class DataServiceQueryOperationProviderCreator implements CreationExtensi
                 }
             }
         } catch (Exception ex) {
-            throw new CreationExtensionException("Error copying data service libraries: " 
-                + ex.getMessage(), ex);
+            throw new CreationExtensionException("Error copying data service libraries: " + ex.getMessage(), ex);
         }
         try {
             modifyClasspathFile(copiedLibs, serviceInfo);
         } catch (Exception ex) {
-            throw new CreationExtensionException("Error modifying eclipse .classpath file: " 
-                + ex.getMessage(), ex);
+            throw new CreationExtensionException("Error modifying eclipse .classpath file: " + ex.getMessage(), ex);
         }
     }
 
@@ -297,8 +283,7 @@ public class DataServiceQueryOperationProviderCreator implements CreationExtensi
 
 
     private void modifyClasspathFile(File[] libs, ServiceInformation serviceInfo) throws Exception {
-        File classpathFile = new File(serviceInfo.getBaseDirectory().getAbsolutePath() 
-            + File.separator + ".classpath");
+        File classpathFile = new File(serviceInfo.getBaseDirectory().getAbsolutePath() + File.separator + ".classpath");
         if (classpathFile.exists()) {
             ExtensionUtilities.syncEclipseClasspath(classpathFile, libs);
         } else {
@@ -314,8 +299,8 @@ public class DataServiceQueryOperationProviderCreator implements CreationExtensi
         if (!CommonTools.servicePropertyExists(desc, DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY)) {
             // set the service property to the stub query processor class name
             String stubQpClassname = ExtensionDataUtils.getQueryProcessorStubClassName(info);
-            CommonTools.setServiceProperty(desc, 
-                DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY, stubQpClassname, false);
+            CommonTools.setServiceProperty(desc, DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY, stubQpClassname,
+                false);
         } else {
             try {
                 String value = CommonTools.getServicePropertyValue(desc,
@@ -323,14 +308,14 @@ public class DataServiceQueryOperationProviderCreator implements CreationExtensi
                 System.out.println(DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY
                     + " property is already defined as " + value);
             } catch (Exception ex) {
-                throw new CreationExtensionException("Error creating service property " 
+                throw new CreationExtensionException("Error creating service property "
                     + DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY);
             }
         }
         // does the server config location property exist?
         if (!CommonTools.servicePropertyExists(desc, DataServiceConstants.SERVER_CONFIG_LOCATION)) {
-            CommonTools.setServiceProperty(desc, DataServiceConstants.SERVER_CONFIG_LOCATION, 
-                "server-config.wsdd", true, "The location of the server-config.wsdd file");
+            CommonTools.setServiceProperty(desc, DataServiceConstants.SERVER_CONFIG_LOCATION, "server-config.wsdd",
+                true, "The location of the server-config.wsdd file");
         }
         // validation properties
         CommonTools.setServiceProperty(desc, DataServiceConstants.CQL_VALIDATOR_CLASS, DEFAULT_CQL_VALIDATOR_CLASS,
@@ -356,8 +341,7 @@ public class DataServiceQueryOperationProviderCreator implements CreationExtensi
         try {
             features = ExtensionDataUtils.getExtensionData(extensionData).getServiceFeatures();
         } catch (Exception ex) {
-            throw new CreationExtensionException("Error getting service features: " 
-                + ex.getMessage(), ex);
+            throw new CreationExtensionException("Error getting service features: " + ex.getMessage(), ex);
         }
         if (features != null) {
             // ws-enumeration
@@ -374,21 +358,20 @@ public class DataServiceQueryOperationProviderCreator implements CreationExtensi
             if (features.getServiceStyle() != null) {
                 try {
                     ServiceStyleContainer styleContainer = ServiceStyleLoader.getStyle(features.getServiceStyle());
-                    // copy libraries from the style into the service's lib directory
+                    // copy libraries from the style into the service's lib
+                    // directory
                     File[] styleLibs = styleContainer.getStyleLibraries();
-                    File serviceLibDir = new File(info.getBaseDirectory().getAbsolutePath() 
-                        + File.separator + "lib");
+                    File serviceLibDir = new File(info.getBaseDirectory().getAbsolutePath() + File.separator + "lib");
                     for (File lib : styleLibs) {
-                        Utils.copyFile(lib, new File(serviceLibDir.getAbsolutePath() 
-                            + File.separator + lib.getName()));
+                        Utils.copyFile(lib, new File(serviceLibDir.getAbsolutePath() + File.separator + lib.getName()));
                     }
                     StyleCreationPostProcessor processor = styleContainer.loadCreationPostProcessor();
                     if (processor != null) {
                         processor.creationPostProcessStyle(extensionDesc, info);
                     }
                     // sync up the eclipse .classpath file
-                    ExtensionUtilities.resyncWithLibDir(
-                        new File(info.getBaseDirectory().getAbsolutePath() + File.separator + ".classpath"));
+                    ExtensionUtilities.resyncWithLibDir(new File(info.getBaseDirectory().getAbsolutePath()
+                        + File.separator + ".classpath"));
                 } catch (Exception ex) {
                     throw new CreationExtensionException("Error executing style creation post processor: "
                         + ex.getMessage(), ex);
@@ -427,7 +410,7 @@ public class DataServiceQueryOperationProviderCreator implements CreationExtensi
         queryInput.setIsArray(false);
         queryInput.setQName(DataServiceConstants.CQL_QUERY_QNAME);
         queryInput.setDescription(DataServiceConstants.QUERY_METHOD_PARAMETER_DESCRIPTION);
-        inputs.setInput(new MethodTypeInputsInput[] {queryInput});
+        inputs.setInput(new MethodTypeInputsInput[]{queryInput});
         queryMethod.setInputs(inputs);
         // method output
         MethodTypeOutput output = new MethodTypeOutput();
@@ -443,7 +426,7 @@ public class DataServiceQueryOperationProviderCreator implements CreationExtensi
         MethodTypeExceptionsException mqException = new MethodTypeExceptionsException(
             DataServiceConstants.MALFORMED_QUERY_EXCEPTION_DESCRIPTION,
             DataServiceConstants.MALFORMED_QUERY_EXCEPTION_NAME, DataServiceConstants.MALFORMED_QUERY_EXCEPTION_QNAME);
-        queryExceptions.setException(new MethodTypeExceptionsException[] {qpException, mqException});
+        queryExceptions.setException(new MethodTypeExceptionsException[]{qpException, mqException});
         queryMethod.setExceptions(queryExceptions);
         // query method is imported
         MethodTypeImportInformation importInfo = new MethodTypeImportInformation();
@@ -466,8 +449,8 @@ public class DataServiceQueryOperationProviderCreator implements CreationExtensi
 
     private boolean queryOperationCreated(ServiceInformation info) {
         ServiceType mainService = info.getServices().getService(0);
-        MethodType queryMethod = CommonTools.getMethod(
-            mainService.getMethods(), DataServiceConstants.QUERY_METHOD_NAME);
+        MethodType queryMethod = CommonTools
+            .getMethod(mainService.getMethods(), DataServiceConstants.QUERY_METHOD_NAME);
         if (queryMethod != null) {
             return createQueryMethodType().equals(queryMethod);
         }

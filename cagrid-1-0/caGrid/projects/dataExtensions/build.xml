@@ -419,11 +419,11 @@
 			<fileset dir="${ext.schema.dir}">
 				<include name="**/*.xsd" />
 				<include name="**/*.wsdl" />
-				<include name="cagrid/**" />
+				<exclude name="cagrid/**" />
 			</fileset>
 		</copy>
 		<!-- other schemas -->
-		<copy todir="${introduce.extensions.dir}/data/schema">
+		<copy todir="${introduce.extensions.dir}/data/schema/Data/xsd">
 			<fileset dir="${ext.schema.dir}">
 				<include name="cagrid/**" />
 			</fileset>
