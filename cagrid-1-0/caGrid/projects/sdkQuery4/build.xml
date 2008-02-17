@@ -82,10 +82,10 @@
 		<fileset dir="${lib.dir}">
 			<include name="**/*.jar" />
 		</fileset>
-	      <fileset dir="${ext.remote-client.lib.dir}">
-	            <include name="*.jar" />
-	            <!-- TODO: include more stuff? -->
-	        </fileset>
+		<fileset dir="${ext.remote-client.lib.dir}">
+			<include name="*.jar" />
+			<!-- TODO: include more stuff? -->
+		</fileset>
 		<fileset dir="${ext.lib.dir}">
 			<include name="**/*.jar" />
 			<!-- castor is supplied from the remote-client -->
@@ -112,9 +112,13 @@
 		<fileset dir="${lib.dir}">
 			<include name="**/*.jar" />
 		</fileset>
-		<!-- recursion here picks up SDK jars too -->
+
 		<fileset dir="${ext.lib.dir}">
 			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${ext.remote-client.lib.dir}">
+			<include name="*.jar" />
+			<!-- TODO: include more stuff? -->
 		</fileset>
 		<fileset dir="${test.lib.dir}">
 			<include name="**/*.jar" />
