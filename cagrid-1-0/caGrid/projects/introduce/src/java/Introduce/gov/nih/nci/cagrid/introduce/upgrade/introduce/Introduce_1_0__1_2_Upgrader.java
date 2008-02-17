@@ -84,8 +84,9 @@ public class Introduce_1_0__1_2_Upgrader extends IntroduceUpgraderBase {
                 "Put any additions you need to the service deployment in the dev-build-deploy.xml file which has now been created.");
 
         // copy the jdom.jar from the lib to the tools/lib
-        Utils.copyFile(new File("skeleton"  + File.separator + "tools" + File.separator + "lib" + File.separator + "jdom-1.0.jar"), new File(
-            getServicePath() + File.separator + "tools" + File.separator + "lib" + File.separator + "jdom-1.0.jar"));
+        Utils.copyFile(new File("skeleton" + File.separator + "tools" + File.separator + "lib" + File.separator
+            + "jdom-1.0.jar"), new File(getServicePath() + File.separator + "tools" + File.separator + "lib"
+            + File.separator + "jdom-1.0.jar"));
 
         // clean the config
         removeResourcePropertyProvidersFromConfig();
@@ -281,18 +282,30 @@ public class Introduce_1_0__1_2_Upgrader extends IntroduceUpgraderBase {
         getStatus().addDescriptionLine("retemplated jndi file");
 
         // need to add the service tasks .jar to the tools lib directory
-        File serviceTasksJar = new File("." + File.separator + "skeleton" + File.separator + "tools" + File.separator
-            + "lib" + File.separator + "caGrid-" + getCaGridVersion() +  "-Introduce-1.2-serviceTasks.jar");
-        if (serviceTasksJar.exists() && serviceTasksJar.canRead()) {
-            Utils.copyFile(serviceTasksJar, new File(getServicePath() + File.separator + "tools" + File.separator
-                + "lib" + File.separator + "caGrid-" + getCaGridVersion() + "-Introduce-1.2-serviceTasks.jar"));
-            getStatus().addDescriptionLine(
-                "added service tasks jar to enable patching the soap bindings that get generated for custom beans");
+        FileFilter serviceTasksFilter = new FileFilter() {
+            public boolean accept(File name) {
+                String filename = name.getName();
+                return filename.matches("caGrid.*Introduce.*serviceTasks.*jar");
+            }
+        };
+        File serviceTasksJardir = new File("." + File.separator + "skeleton" + File.separator + "tools"
+            + File.separator + "lib");
+        File[] serviceTasksCandidates = serviceTasksJardir.listFiles(serviceTasksFilter);
+        if (serviceTasksCandidates.length == 1) {
+            File serviceTasksJar = serviceTasksCandidates[0];
+            if (serviceTasksJar.exists() && serviceTasksJar.canRead()) {
+                Utils.copyFile(serviceTasksJar, new File(getServicePath() + File.separator + "tools" + File.separator
+                    + "lib" + File.separator + serviceTasksJar.getName()));
+                getStatus().addDescriptionLine(
+                    "added service tasks jar to enable patching the soap bindings that get generated for custom beans");
+            } else {
+                throw new Exception("Cannot find or cannot read service tasks jar to copy into the service: "
+                    + serviceTasksJar.getAbsolutePath());
+            }
         } else {
-            throw new Exception("Cannot find service tasks jar to copy into the service: "
-                + serviceTasksJar.getAbsolutePath());
+            throw new Exception("Cannot find service tasks jar to copy into the service");
         }
-
+        
         // need to move the ant-contrib.jar to the tools lib directory
         File currentContribFile = new File(getServicePath() + File.separator + "lib" + File.separator
             + "ant-contrib.jar");

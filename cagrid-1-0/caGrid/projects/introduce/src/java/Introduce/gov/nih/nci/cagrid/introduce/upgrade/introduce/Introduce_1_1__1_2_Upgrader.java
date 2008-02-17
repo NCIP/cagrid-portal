@@ -62,27 +62,24 @@ public class Introduce_1_1__1_2_Upgrader extends IntroduceUpgraderBase {
         Utils.copyFile(new File("." + File.separator + "skeleton" + File.separator + "dev-build.xml"), new File(
             getServicePath() + File.separator + "dev-build.xml"));
         getStatus().addDescriptionLine("replaced build.xml with new version");
-        
+
         Utils.copyFile(new File("." + File.separator + "skeleton" + File.separator + "build-deploy.xml"), new File(
             getServicePath() + File.separator + "build-deploy.xml"));
         Utils.copyFile(new File("." + File.separator + "skeleton" + File.separator + "dev-build-deploy.xml"), new File(
             getServicePath() + File.separator + "dev-build-deploy.xml"));
         getStatus().addDescriptionLine("replaced build-deploy.xml with new version");
-        
+
         getStatus().addIssue("Replaced the build.xml file.",
-        "Put any additions you need to the service build in the dev-build.xml file which has now been created.");
-        
+            "Put any additions you need to the service build in the dev-build.xml file which has now been created.");
+
         Utils.copyFile(new File("." + File.separator + "skeleton" + File.separator + "build-stubs.xml"), new File(
             getServicePath() + File.separator + "build-stubs.xml"));
         getStatus().addDescriptionLine("added build-stubs.xml");
-        
-        
 
         // copy the jdom.jar from the lib to the tools/lib
-        Utils.copyFile(new File("skeleton"  + File.separator + "tools" + File.separator + "lib" + File.separator + "jdom-1.0.jar"), new File(
-            getServicePath() + File.separator + "tools" + File.separator + "lib" + File.separator + "jdom-1.0.jar"));
-
-        
+        Utils.copyFile(new File("skeleton" + File.separator + "tools" + File.separator + "lib" + File.separator
+            + "jdom-1.0.jar"), new File(getServicePath() + File.separator + "tools" + File.separator + "lib"
+            + File.separator + "jdom-1.0.jar"));
 
         // clean the config
         removeResourcePropertyProvidersFromConfig();
@@ -95,9 +92,10 @@ public class Introduce_1_1__1_2_Upgrader extends IntroduceUpgraderBase {
             ServiceType service = getServiceInformation().getServices().getService(i);
 
             File oldConstantsFile = new File(srcDir.getAbsolutePath() + File.separator
-                + CommonTools.getPackageDir(service) + File.separator + "service" + File.separator + "globus" + File.separator + "resource" + File.separator + "ResourceConstants.java");
+                + CommonTools.getPackageDir(service) + File.separator + "service" + File.separator + "globus"
+                + File.separator + "resource" + File.separator + "ResourceConstants.java");
             oldConstantsFile.delete();
-            
+
             ServiceConstantsTemplate resourceContanstsT = new ServiceConstantsTemplate();
             String resourceContanstsS = resourceContanstsT.generate(new SpecificServiceInformation(
                 getServiceInformation(), service));
@@ -108,8 +106,7 @@ public class Introduce_1_1__1_2_Upgrader extends IntroduceUpgraderBase {
             FileWriter resourceContanstsFW = new FileWriter(resourceContanstsF);
             resourceContanstsFW.write(resourceContanstsS);
             resourceContanstsFW.close();
-            
-            
+
             if (service.getResourceFrameworkOptions().getMain() != null) {
 
                 File oldServiceConfF = new File(srcDir.getAbsolutePath() + File.separator
@@ -127,9 +124,9 @@ public class Introduce_1_1__1_2_Upgrader extends IntroduceUpgraderBase {
                 serviceConfFW.write(serviceConfS);
                 serviceConfFW.close();
             }
-            
+
             if (service.getResourceFrameworkOptions().getCustom() == null) {
-             // delete the old base resource
+                // delete the old base resource
                 File oldbaseResourceF = new File(srcDir.getAbsolutePath() + File.separator
                     + CommonTools.getPackageDir(service) + File.separator + "service" + File.separator + "globus"
                     + File.separator + "resource" + File.separator + "BaseResource.java");
@@ -205,8 +202,9 @@ public class Introduce_1_1__1_2_Upgrader extends IntroduceUpgraderBase {
 
         upgradeJars();
         getStatus().addDescriptionLine("updating service with the new version of the jars");
-        
-        // change the jndi to use the new classes names for resource home and resource configuration and service configuration
+
+        // change the jndi to use the new classes names for resource home and
+        // resource configuration and service configuration
         Document jndiDoc = XMLUtilities.fileNameToDocument(getServicePath() + File.separator + "jndi-config.xml");
         List services = jndiDoc.getRootElement().getChildren("service",
             Namespace.getNamespace("http://wsrf.globus.org/jndi/config"));
@@ -240,37 +238,49 @@ public class Introduce_1_1__1_2_Upgrader extends IntroduceUpgraderBase {
                     sb.delete(sb.lastIndexOf(".") + 1, sb.length());
                     sb.insert(sb.lastIndexOf(".") + 1, serviceName + "ServiceConfiguration");
                     resource.setAttribute("type", sb.toString());
-                }    
+                }
             }
         }
         FileWriter writer = new FileWriter(new File(getServicePath() + File.separator + "jndi-config.xml"));
         writer.write(XMLUtilities.formatXML(XMLUtilities.documentToString(jndiDoc)));
         writer.close();
-        getStatus().addDescriptionLine("changed jndi file to use new names of the resource home and configureation classes");
+        getStatus().addDescriptionLine(
+            "changed jndi file to use new names of the resource home and configureation classes");
 
-        
-        //replacing the soap fix jar with the new service tasks jar
-        File oldSoapJar = new File(getServicePath() + File.separator + "tools" + File.separator
-            + "lib" + File.separator + "caGrid-" + getCaGridVersion() + "-Introduce-1.1-soapBindingFix.jar");
-        if(oldSoapJar.exists() && oldSoapJar.canRead()){
+        // replacing the soap fix jar with the new service tasks jar
+        File oldSoapJar = new File(getServicePath() + File.separator + "tools" + File.separator + "lib"
+            + File.separator + "caGrid-1.1-Introduce-1.1-soapBindingFix.jar");
+        if (oldSoapJar.exists() && oldSoapJar.canRead()) {
             oldSoapJar.delete();
-        } else{
+        } else {
             throw new Exception("Cannot remove old soap fix jar: " + oldSoapJar.delete());
         }
+
         // need to add the service tasks .jar to the tools lib directory
-        File serviceTasksJar = new File("." + File.separator + "skeleton" + File.separator + "tools" + File.separator
-            + "lib" + File.separator + "caGrid-" + getCaGridVersion() + "-Introduce-1.2-serviceTasks.jar");
-        if (serviceTasksJar.exists() && serviceTasksJar.canRead()) {
-            Utils.copyFile(serviceTasksJar, new File(getServicePath() + File.separator + "tools" + File.separator
-                + "lib" + File.separator + "caGrid-" + getCaGridVersion() + "-Introduce-1.2-serviceTasks.jar"));
-            getStatus().addDescriptionLine(
-                "added service tasks jar to enable patching the soap bindings that get generated for custom beans");
+        FileFilter serviceTasksFilter = new FileFilter() {
+            public boolean accept(File name) {
+                String filename = name.getName();
+                return filename.matches("caGrid.*Introduce.*serviceTasks.*jar");
+            }
+        };
+        File serviceTasksJardir = new File("." + File.separator + "skeleton" + File.separator + "tools"
+            + File.separator + "lib");
+        File[] serviceTasksCandidates = serviceTasksJardir.listFiles(serviceTasksFilter);
+        if (serviceTasksCandidates.length == 1) {
+            File serviceTasksJar = serviceTasksCandidates[0];
+            if (serviceTasksJar.exists() && serviceTasksJar.canRead()) {
+                Utils.copyFile(serviceTasksJar, new File(getServicePath() + File.separator + "tools" + File.separator
+                    + "lib" + File.separator + serviceTasksJar.getName()));
+                getStatus().addDescriptionLine(
+                    "added service tasks jar to enable patching the soap bindings that get generated for custom beans");
+            } else {
+                throw new Exception("Cannot find or cannot read service tasks jar to copy into the service: "
+                    + serviceTasksJar.getAbsolutePath());
+            }
         } else {
-            throw new Exception("Cannot find service tasks jar to copy into the service: "
-                + serviceTasksJar.getAbsolutePath());
+            throw new Exception("Cannot find service tasks jar to copy into the service");
         }
-        
-        
+
         getStatus().setStatus(StatusBase.UPGRADE_OK);
     }
 
@@ -392,7 +402,9 @@ public class Introduce_1_1__1_2_Upgrader extends IntroduceUpgraderBase {
 
     private void removeGetResourcePropertyMethods() throws Exception {
         // foreach service need to replace the resource files.....
-        // File srcDir = new File(getServiceInformation().getBaseDirectory().getAbsolutePath() + File.separator + "src");
+        // File srcDir = new
+        // File(getServiceInformation().getBaseDirectory().getAbsolutePath() +
+        // File.separator + "src");
         for (int i = 0; i < getServiceInformation().getServices().getService().length; i++) {
             ServiceType service = getServiceInformation().getServices().getService(i);
             SyncSource syncsource = new SyncSource(getServiceInformation().getBaseDirectory(), getServiceInformation(),

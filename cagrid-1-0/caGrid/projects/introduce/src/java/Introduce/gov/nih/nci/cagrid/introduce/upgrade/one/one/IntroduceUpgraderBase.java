@@ -18,7 +18,6 @@ public abstract class IntroduceUpgraderBase implements  IntroduceUpgraderI{
     String fromVersion;
     String toVersion;
     String servicePath;
-    String caGridVersion;
 
 
     public IntroduceUpgraderBase(IntroduceUpgradeStatus status, ServiceInformation serviceInformation, String servicePath, String fromVersion,
@@ -32,9 +31,6 @@ public abstract class IntroduceUpgraderBase implements  IntroduceUpgraderI{
         status.setToVersion(toVersion);
         status.setType(StatusBase.UPGRADE_TYPE_INTRODUCE);
         status.setName("IntroduceUpgrader " + fromVersion + " - " + toVersion);
-        Properties caGridProperties = new Properties();
-            caGridProperties.load(new FileInputStream(new File("ext" + File.separator + "resources" + File.separator + "cagrid.properties")));
-        this.caGridVersion = caGridProperties.getProperty("cagrid.master.project.version");
         
     }
 
@@ -51,10 +47,6 @@ public abstract class IntroduceUpgraderBase implements  IntroduceUpgraderI{
         return fromVersion;
     }
     
-    public String getCaGridVersion() {
-        return caGridVersion;
-    }
-
 
     public void setFromVersion(String fromVersion) {
         this.fromVersion = fromVersion;
