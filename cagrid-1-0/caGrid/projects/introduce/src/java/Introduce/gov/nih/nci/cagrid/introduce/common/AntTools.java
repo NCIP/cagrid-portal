@@ -158,7 +158,7 @@ public class AntTools {
         String cmd = "";
         if ((os.indexOf("Windows") >= 0) || (os.indexOf("windows") >= 0)) {
             cmd = "-classpath \"" + AntTools.getAntLauncherJarLocation(System.getProperty("java.class.path"), true)
-                + "\" org.apache.tools.ant.launch.Launcher -buildfile " + "\"" + buildFileDir + File.separator
+                + "\" org.apache.tools.ant.launch.Launcher -verbose -buildfile " + "\"" + buildFileDir + File.separator
                 + "build.xml\"" + cmd;
             if (debug) {
                 cmd = "java.exe " + DEBUG_ANT_CALL_JAVA_OPTS + " " + cmd;
