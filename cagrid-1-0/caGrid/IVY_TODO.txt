@@ -11,3 +11,5 @@ manually test GUIs
 fix system test (tests module)
 
 create target grids for 1.2
+
+remove mobius from core
