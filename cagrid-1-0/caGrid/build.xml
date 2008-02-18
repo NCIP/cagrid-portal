@@ -118,7 +118,7 @@
 	<target name="build-depending-on-project" depends="prepare,input-project-name,check-project-name">
 		<echo message="Building all projects depending on ${single.project.name}.  Note, the depending projects' dependencies are not built, this should just be used to propagate changes to the given project for integration." />
 
-		<ivy:buildlist reference="depending.on.single.ivy.project.list" leaf="caGrid-${single.project.name}">
+		<ivy:buildlist reference="depending.on.single.ivy.project.list" leaf="${single.project.name}">
 			<fileset dir="${projects.dir}">
 				<include name="*/dependencies-build.xml" />
 			</fileset>
