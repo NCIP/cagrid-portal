@@ -30,8 +30,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.jdom.Element;
-import org.projectmobius.common.MobiusException;
-import org.projectmobius.common.XMLUtilities;
+
+import gov.nih.nci.cagrid.common.XMLUtilities;
 
 
 /**
@@ -40,7 +40,7 @@ import org.projectmobius.common.XMLUtilities;
  * 
  * @author David Ervin
  * @created Apr 4, 2007 9:56:09 AM
- * @version $Id: BDTFeatureCreator.java,v 1.3 2007-10-30 14:12:18 hastings Exp $
+ * @version $Id: BDTFeatureCreator.java,v 1.4 2008-02-18 17:18:21 oster Exp $
  */
 public class BDTFeatureCreator extends FeatureCreator {
 
@@ -259,7 +259,7 @@ public class BDTFeatureCreator extends FeatureCreator {
                 Element metadataRoot = null;
                 try {
                     metadataRoot = XMLUtilities.fileNameToDocument(metadataFile.getAbsolutePath()).getRootElement();
-                } catch (MobiusException ex) {
+                } catch (Exception ex) {
                     throw new CreationExtensionException("Error loading BDT metadata for editing: " + ex.getMessage(),
                         ex);
                 }

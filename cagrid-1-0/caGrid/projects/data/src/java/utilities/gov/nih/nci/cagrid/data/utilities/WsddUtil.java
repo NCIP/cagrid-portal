@@ -4,7 +4,7 @@ import java.io.FileWriter;
 import java.util.Iterator;
 
 import org.jdom.Element;
-import org.projectmobius.common.XMLUtilities;
+import gov.nih.nci.cagrid.common.XMLUtilities;
 
 /** 
  *  WsddUtil

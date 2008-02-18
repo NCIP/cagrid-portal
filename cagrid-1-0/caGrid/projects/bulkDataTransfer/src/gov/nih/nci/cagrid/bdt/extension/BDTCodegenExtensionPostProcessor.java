@@ -23,8 +23,8 @@ import javax.xml.namespace.QName;
 
 import org.jdom.Document;
 import org.jdom.Element;
-import org.projectmobius.common.MobiusException;
-import org.projectmobius.common.XMLUtilities;
+
+import gov.nih.nci.cagrid.common.XMLUtilities;
 
 
 public class BDTCodegenExtensionPostProcessor implements CodegenExtensionPostProcessor {
@@ -43,7 +43,7 @@ public class BDTCodegenExtensionPostProcessor implements CodegenExtensionPostPro
         Document serverConfigJNDIDoc = null;
         try {
             serverConfigJNDIDoc = XMLUtilities.fileNameToDocument(jndiConfigF.getAbsolutePath());
-        } catch (MobiusException ex) {
+        } catch (Exception ex) {
             throw new CodegenExtensionException("Error parsing jndi-config.xml: " + ex.getMessage(), ex);
         }
 
@@ -67,7 +67,7 @@ public class BDTCodegenExtensionPostProcessor implements CodegenExtensionPostPro
                 Element newResourceEl;
                 try {
                     newResourceEl = XMLUtilities.stringToDocument(generatedResource).getRootElement();
-                } catch (MobiusException ex) {
+                } catch (Exception ex) {
                     throw new CodegenExtensionException(ex.getMessage(), ex);
                 }
                 serviceEl.addContent(newResourceEl.detach());

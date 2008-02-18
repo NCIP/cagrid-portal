@@ -55,6 +55,7 @@
     <!-- Extenernal Dependencies -->
     <dependency rev="1.0" org="jdom" name="jdom" conf="service->*"/>
     <dependency rev="3.0.+" org="mysql" name="connector-java" conf="service->*"/>
+    <dependency rev="1.1" org="mobius" name="mobius" conf="service->common-client,tools"/>    
 
   </dependencies>
 </ivy-module>

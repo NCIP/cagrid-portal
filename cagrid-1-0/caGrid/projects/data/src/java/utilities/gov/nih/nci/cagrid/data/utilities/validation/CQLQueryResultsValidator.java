@@ -24,8 +24,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.globus.wsrf.utils.AddressingUtils;
 import org.jdom.Element;
-import org.projectmobius.common.MobiusException;
-import org.projectmobius.common.XMLUtilities;
+
+import gov.nih.nci.cagrid.common.XMLUtilities;
 
 
 /**
@@ -93,7 +93,7 @@ public class CQLQueryResultsValidator {
 				xsdText = xsdText
 					.replaceAll(TOKEN_SERVICE_RESTRICTIONS_XSD_NAMESPACE, this.serviceResultTypesNamespace);
 				LOG.debug("Created XSD:\n" + xsdText);
-			} catch (MobiusException e) {
+			} catch (Exception e) {
 				LOG.error(e);
 				throw new SchemaValidationException("Problem configuring service specific XSD.");
 			}

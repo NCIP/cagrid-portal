@@ -11,7 +11,7 @@ import java.sql.ResultSet;
 import junit.framework.TestCase;
 
 import org.jdom.Document;
-import org.projectmobius.common.XMLUtilities;
+import gov.nih.nci.cagrid.common.XMLUtilities;
 import org.projectmobius.db.ConnectionManager;
 import org.projectmobius.db.DatabaseException;
 import org.projectmobius.db.Query;
@@ -21,7 +21,7 @@ import org.projectmobius.db.Query;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: MysqlDBUtil.java,v 1.6 2007-03-21 20:11:35 langella Exp $
+ * @version $Id: MysqlDBUtil.java,v 1.7 2008-02-18 17:18:21 oster Exp $
  */
 public class MysqlDBUtil {
 

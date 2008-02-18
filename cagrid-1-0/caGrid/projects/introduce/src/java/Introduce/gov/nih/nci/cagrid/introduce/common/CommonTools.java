@@ -40,7 +40,7 @@ import org.apache.log4j.Logger;
 import org.apache.log4j.Priority;
 import org.jdom.Document;
 import org.jdom.Element;
-import org.projectmobius.common.MobiusException;
+
 
 
 /**
@@ -345,7 +345,7 @@ public final class CommonTools {
      * @param serviceSchemaDir
      *            the directory where the service's schemas (wsdls) are
      * @return The NamespaceType representation of the schema
-     * @throws MobiusException
+     * @throws Exception
      */
     public static NamespaceType createNamespaceType(String xsdFilename, File serviceSchemaDir) throws Exception {
         NamespaceType namespaceType = new NamespaceType();
@@ -393,7 +393,7 @@ public final class CommonTools {
      * @param serviceSchemaDir
      *            the directory where the service's schemas (wsdls) are
      * @return The NamespaceType representation of the schema
-     * @throws MobiusException
+     * @throws Exception
      */
     public static NamespaceType reCreateNamespaceType(String xsdFilename, File serviceSchemaDir, NamespaceType oldType)
         throws Exception {

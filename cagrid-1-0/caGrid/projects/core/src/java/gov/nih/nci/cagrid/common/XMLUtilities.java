@@ -1,7 +1,9 @@
 package gov.nih.nci.cagrid.common;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.StringReader;
 
 import org.jdom.Document;
@@ -17,9 +19,8 @@ import org.jdom.output.XMLOutputter;
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A href="mailto:hastings@bmi.osu.edu">Shannon Hastings </A>
  * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
- * 
  * @created May 16, 2003
- * @version $Id: XMLUtilities.java,v 1.2 2007-11-15 01:26:04 dervin Exp $
+ * @version $Id: XMLUtilities.java,v 1.3 2008-02-18 17:18:20 oster Exp $
  */
 
 public class XMLUtilities {
@@ -40,12 +41,11 @@ public class XMLUtilities {
      * Builds a dom document from a file
      * 
      * @param fileName
-     * @return
-     *      A JDom document representation of the file contents
+     * @return A JDom document representation of the file contents
      * @throws Exception
      */
     public static Document fileNameToDocument(String fileName) throws Exception {
-        //TODO: add schema validation
+        // TODO: add schema validation
         try {
             SAXBuilder builder = new SAXBuilder(false);
             Document doc = builder.build(fileName);
@@ -60,8 +60,7 @@ public class XMLUtilities {
      * Builds a dom document from a string
      * 
      * @param string
-     * @return
-     *      A JDom document representation of the String's contents
+     * @return A JDom document representation of the String's contents
      * @throws Exception
      */
     public static Document stringToDocument(String string) throws Exception {
@@ -73,8 +72,7 @@ public class XMLUtilities {
      * Builds a dom document from a stream
      * 
      * @param stream
-     * @return
-     *      A JDom document representation of the stream's contents
+     * @return A JDom document representation of the stream's contents
      * @throws Exception
      */
     public static Document streamToDocument(InputStream stream) throws Exception {
@@ -90,9 +88,8 @@ public class XMLUtilities {
     }
 
 
-
     public static String formatXML(String s) throws Exception {
-        //This is not efficient but ok for now
+        // This is not efficient but ok for now
         try {
             SAXBuilder builder = new SAXBuilder();
             Document doc = builder.build(new StringReader(s));
@@ -103,4 +100,22 @@ public class XMLUtilities {
         }
     }
 
+
+    private static String bufferToString(BufferedReader br) throws Exception {
+        StringBuffer sb = new StringBuffer();
+        try {
+            for (String s = null; (s = br.readLine()) != null;)
+                sb.append(s + "\n");
+
+        } catch (Exception e) {
+            throw new Exception("Error reading the buffer: " + e.getMessage());
+        }
+        return sb.toString();
+    }
+
+
+    public static String streamToString(InputStream stream) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(stream));
+        return bufferToString(br);
+    }
 }

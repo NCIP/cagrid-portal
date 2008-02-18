@@ -59,6 +59,7 @@
 
     <!-- Extenernal Dependencies -->
     <dependency rev="1.0" org="jdom" name="jdom" conf="service->*"/>
+    <dependency rev="1.1" org="mobius" name="mobius" conf="service->common-client,tools"/>        
     <dependency rev="1.1" org="internet2" name="grouper" conf="service->default;client->minimal"/>
     <!-- OVERRIDE NOTE: these are overrides from grouper's dependencies, to newer backwards compatible
       versions, more similar to what other project's are using-->
