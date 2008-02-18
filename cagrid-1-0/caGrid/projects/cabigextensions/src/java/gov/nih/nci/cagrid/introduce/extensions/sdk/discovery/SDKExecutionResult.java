@@ -49,18 +49,11 @@ public class SDKExecutionResult {
         if (!dirValid) {
             throw new SDKExecutionException("Expected result directory was not readible:" + output.getAbsolutePath());
         }
-
-        if (!this.info.isXSDOnly()) {
-            // TODO: validate classes
-
-            // TODO: validate xml mapping
-        }
-
     }
 
 
     protected File getOutputDirectory() {
-        return new File(this.sdkDir, OUTPUT_DIR + File.separator + this.info.getCaDSRProjectName());
+        return new File(this.sdkDir, OUTPUT_DIR + File.separator + this.info.getProjectName());
     }
 
 
@@ -84,13 +77,4 @@ public class SDKExecutionResult {
         return FileUtils.listFiles(schemaDir, new String[]{"xsd"}, false);
 
     }
-    // public File getClassesDirectory() {
-    // return new File(this.outputDir, "classes");
-    // }
-
-    // public File getXMLMappingFile() {
-    // // we return the unmarshallar because it doesn't use the field handler
-    // // (which we don't need)
-    // return new File(this.outputDir, "src/unmarshaller-xml-mapping.xml");
-    // }
 }

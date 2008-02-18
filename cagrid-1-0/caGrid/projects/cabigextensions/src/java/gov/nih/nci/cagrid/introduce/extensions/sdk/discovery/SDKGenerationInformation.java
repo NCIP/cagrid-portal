@@ -5,14 +5,12 @@ package gov.nih.nci.cagrid.introduce.extensions.sdk.discovery;
  */
 public class SDKGenerationInformation {
 
-    private String caDSRcontext;
-    private String caDSRProjectName;
-    private String caDSRProjectVersion;
+    private String projectName;
+    private String namespacePrefix;
 
     private String xmiFile;
     private String packageIncludes;
     private String packageExcludes;
-    private boolean isXSDOnly = true;
 
 
     public SDKGenerationInformation() {
@@ -20,54 +18,16 @@ public class SDKGenerationInformation {
     }
 
 
-    /**
-     * @param context
-     * @param name
-     * @param version
-     * @param excludes
-     * @param includes
-     * @param file
-     */
-    public SDKGenerationInformation(String context, String name, String version, String excludes, String includes,
+    public SDKGenerationInformation(String projectName, String namespacePrefix, String excludes, String includes,
         String file) {
         super();
 
-        this.caDSRcontext = context;
-        this.caDSRProjectName = name;
-        this.caDSRProjectVersion = version;
+        this.projectName = projectName;
+        this.namespacePrefix = namespacePrefix;
+
         this.packageExcludes = excludes;
         this.packageIncludes = includes;
         this.xmiFile = file;
-    }
-
-
-    public String getCaDSRcontext() {
-        return this.caDSRcontext;
-    }
-
-
-    public void setCaDSRcontext(String caDSRcontext) {
-        this.caDSRcontext = caDSRcontext;
-    }
-
-
-    public String getCaDSRProjectName() {
-        return this.caDSRProjectName;
-    }
-
-
-    public void setCaDSRProjectName(String caDSRProjectName) {
-        this.caDSRProjectName = caDSRProjectName;
-    }
-
-
-    public String getCaDSRProjectVersion() {
-        return this.caDSRProjectVersion;
-    }
-
-
-    public void setCaDSRProjectVersion(String caDSRProjectVersion) {
-        this.caDSRProjectVersion = caDSRProjectVersion;
     }
 
 
@@ -103,19 +63,29 @@ public class SDKGenerationInformation {
 
     @Override
     public String toString() {
-        return "Generation will read file: " + this.xmiFile + "\n\tincluding packages: " + this.packageIncludes
-            + "\n\texcluding packages: " + this.packageExcludes + "\nrepresenting Project: " + this.caDSRProjectName
-            + "\n\tversion: " + this.caDSRProjectVersion + "\n\tin context:" + this.caDSRcontext + "\n"
-            + "generate schemas only:" + this.isXSDOnly;
+        return "Generation will read file: " + this.xmiFile + "\n\tfor project: " + this.projectName
+            + " \nincluding packages: " + this.packageIncludes + "\n\texcluding packages: " + this.packageExcludes
+            + "\ngenerating schemas under namespace prefix: " + this.namespacePrefix;
     }
 
 
-    public boolean isXSDOnly() {
-        return this.isXSDOnly;
+    public String getNamespacePrefix() {
+        return namespacePrefix;
     }
 
 
-    public void setIsXSDOnly(boolean isXSDOnly) {
-        this.isXSDOnly = isXSDOnly;
+    public void setNamespacePrefix(String namespacePrefix) {
+        this.namespacePrefix = namespacePrefix;
     }
+
+
+    public String getProjectName() {
+        return projectName;
+    }
+
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
+    }
+
 }

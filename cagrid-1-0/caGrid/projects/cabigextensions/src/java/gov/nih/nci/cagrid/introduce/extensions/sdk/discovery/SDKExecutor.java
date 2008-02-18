@@ -19,37 +19,32 @@ import org.apache.commons.logging.LogFactory;
  * @author oster
  */
 public class SDKExecutor {
-    private static final String SDK_CONFIG_MODELS_DIR = "models/xmi";
-    private static final String SDK_CONFIG_PROP_EXCLUDE_PACKAGE = "exclude_package";
-    private static final String SDK_CONFIG_PROP_INCLUDE_PACKAGE = "include_package";
-    private static final String SDK_CONFIG_PROP_FIXED_FILENAME = "fixed_filename";
-    private static final String SDK_CONFIG_PROP_MODEL_FILENAME = "model_filename";
-    private static final String SDK_CONFIG_PROP_VERSION = "version";
-    private static final String SDK_CONFIG_PROP_CONTEXT = "context";
-    private static final String SDK_CONFIG_PROP_CLASSIFICATION = "classification";
-    private static final String SDK_CONFIG_PROP_PROJECT_NAME = "project_name";
+    private static final String SDK_CONFIG_MODELS_DIR = "models";
+    private static final String SDK_CONFIG_PROP_EXCLUDE_PACKAGE = "EXCLUDE_PACKAGE";
+    private static final String SDK_CONFIG_PROP_INCLUDE_PACKAGE = "INCLUDE_PACKAGE";
+    private static final String SDK_CONFIG_PROP_MODEL_FILENAME = "MODEL_FILE";
+    private static final String SDK_CONFIG_PROP_NAMEPSACE = "NAMESPACE_PREFIX";
+    private static final String SDK_CONFIG_PROP_PROJECT_NAME = "PROJECT_NAME";
 
-    private static final String SDK_CONFIG_FILE_XML_PROPERTIES = "conf/resources/server/xml.properties";
+    private static final String SDK_CONFIG_PROP_GENERATE_HIBERNATE_MAPPING = "GENERATE_HIBERNATE_MAPPING";
+    private static final String SDK_CONFIG_PROP_GENERATE_BEANS = "GENERATE_BEANS";
+    private static final String SDK_CONFIG_PROP_GENERATE_CASTOR_MAPPING = "GENERATE_CASTOR_MAPPING";
+    private static final String SDK_CONFIG_PROP_GENERATE_XSD = "GENERATE_XSD";
+    private static final String SDK_CONFIG_PROP_GENERATE_WSDD = "GENERATE_WSDD";
+
     private static final String SDK_CONFIG_FILE_DEPLOY_PROPERTIES = "conf/deploy.properties";
 
-    private static final String XSD_ONLY_ANT_TARGETS = "generate-schemas";
-    public static final String XSD_CASTOR_ANT_TARGETS = "build-pojo-beans-xsd-xml-mapping";
+    private static final String ANT_TARGET = "codegen";
 
     protected static Log LOG = LogFactory.getLog(SDKExecutor.class.getName());
 
 
-    // conf/resources/server/xml.properties:
-    // ==========
-    // context = caDSR context @CONTEXT@
-    // version = caDSR Project version @VERSION@
-    // classification = caDSR Project short name @CLASSIFICATION@
-
     // conf/deploy.properties:
     // ==========
-    // model_filename = XMI file from user @MODEL_NAME@
-    // fixed_filename = create from model_filename (fixed-$model_filename)
-    // include_package = package regex to include
-    // exclude_package = package regex to exclude
+    // MODEL_FILE = XMI file from user @MODEL_NAME@
+    // NAMESPACE_PREFIX = the namespace prefix to use for generated schemas
+    // INCLUDE_PACKAGE = package substring to include
+    // EXCLUDE_PACKAGE = package substring to exclude
 
     public static SDKExecutionResult runSDK(File sdkDirectory, SDKGenerationInformation info,
         MultiEventProgressBar progress) throws SDKExecutionException {
@@ -89,8 +84,13 @@ public class SDKExecutor {
             LOG.debug("Copying model file to: " + destModelFile);
             Utils.copyFile(modelFile, destModelFile);
         } catch (IOException e) {
-            String error = "Problem copying model file from: " + modelFile.getAbsolutePath() + " to:"
-                + destModelFile.getAbsolutePath();
+            String error = "";
+            if (destModelFile == null) {
+                error = "Problem loading model file:" + modelFile.getName();
+            } else {
+                error = "Problem copying model file from: " + modelFile.getAbsolutePath() + " to:"
+                    + destModelFile.getAbsolutePath();
+            }
             LOG.error(error, e);
             throw new SDKExecutionException(error, e);
 
@@ -104,7 +104,7 @@ public class SDKExecutor {
 
         // execute the SDK
         currEventID = progress.startEvent("Applying configuration changes.");
-        String antTargets = info.isXSDOnly() ? XSD_ONLY_ANT_TARGETS : XSD_CASTOR_ANT_TARGETS;
+        String antTargets = ANT_TARGET;
         LOG.debug("Invoking ant targets (" + antTargets + ")");
         invokeAnt(antTargets, workDir);
         progress.stopEvent(currEventID, "Configuration Complete.");
@@ -122,8 +122,6 @@ public class SDKExecutor {
 
     private static void applyConfigurationChanges(File workDir, SDKGenerationInformation info)
         throws SDKExecutionException {
-
-        applyXMLConfigurationChanges(workDir, info);
         applyDeployConfigurationChanges(workDir, info);
     }
 
@@ -153,16 +151,19 @@ public class SDKExecutor {
             throw new SDKExecutionException(error, e);
         }
 
-        // project_name = = caDSR Project short name
-        deployProperties.setProperty(SDK_CONFIG_PROP_PROJECT_NAME, info.getCaDSRProjectName());
-        // model_filename = XMI file from user @MODEL_NAME@
+        // configure the options
+        deployProperties.setProperty(SDK_CONFIG_PROP_GENERATE_BEANS, "false");
+        deployProperties.setProperty(SDK_CONFIG_PROP_GENERATE_CASTOR_MAPPING, "false");
+        deployProperties.setProperty(SDK_CONFIG_PROP_GENERATE_HIBERNATE_MAPPING, "false");
+        deployProperties.setProperty(SDK_CONFIG_PROP_GENERATE_WSDD, "false");
+        deployProperties.setProperty(SDK_CONFIG_PROP_GENERATE_XSD, "true");
+
+        // configure the settings
+        deployProperties.setProperty(SDK_CONFIG_PROP_PROJECT_NAME, info.getProjectName());
+        deployProperties.setProperty(SDK_CONFIG_PROP_NAMEPSACE, info.getNamespacePrefix());
         File modelfile = new File(info.getXmiFile());
         deployProperties.setProperty(SDK_CONFIG_PROP_MODEL_FILENAME, modelfile.getName());
-        // fixed_filename = create from model_filename (fixed-$model_filename)
-        deployProperties.setProperty(SDK_CONFIG_PROP_FIXED_FILENAME, "fixed-" + modelfile.getName());
-        // include_package = package regex to include
         deployProperties.setProperty(SDK_CONFIG_PROP_INCLUDE_PACKAGE, info.getPackageIncludes());
-        // exclude_package = package regex to exclude
         deployProperties.setProperty(SDK_CONFIG_PROP_EXCLUDE_PACKAGE, info.getPackageExcludes());
 
         try {
@@ -173,52 +174,6 @@ public class SDKExecutor {
         } catch (IOException e) {
             String error = "Problem saving edited properties file at location: "
                 + deployPropertiesFile.getAbsolutePath();
-            LOG.error(error, e);
-            throw new SDKExecutionException(error, e);
-        }
-    }
-
-
-    /**
-     * @param workDir
-     * @param info
-     * @throws SDKExecutionException
-     */
-    private static void applyXMLConfigurationChanges(File workDir, SDKGenerationInformation info)
-        throws SDKExecutionException {
-        // conf/resources/server/xml.properties:
-        File xmlPropertiesFile = new File(workDir, SDK_CONFIG_FILE_XML_PROPERTIES);
-        if (!(xmlPropertiesFile.exists() && xmlPropertiesFile.canRead())) {
-            String errror = "Expected readible properties file at location: " + xmlPropertiesFile.getAbsolutePath();
-            LOG.error(errror);
-            throw new SDKExecutionException(errror);
-        }
-        Properties xmlProperties = new Properties();
-        try {
-            FileInputStream fileInputStream = new FileInputStream(xmlPropertiesFile);
-            xmlProperties.load(fileInputStream);
-            fileInputStream.close();
-        } catch (IOException e) {
-            String error = "Problem loading properties file at location: " + xmlPropertiesFile.getAbsolutePath();
-            LOG.error(error, e);
-            throw new SDKExecutionException(error, e);
-        }
-
-        // ==========
-        // context = caDSR context @CONTEXT@
-        xmlProperties.setProperty(SDK_CONFIG_PROP_CONTEXT, info.getCaDSRcontext());
-        // version = caDSR Project version @VERSION@
-        xmlProperties.setProperty(SDK_CONFIG_PROP_VERSION, info.getCaDSRProjectVersion());
-        // classification = caDSR Project short name @CLASSIFICATION@
-        xmlProperties.setProperty(SDK_CONFIG_PROP_CLASSIFICATION, info.getCaDSRProjectName());
-
-        try {
-            FileOutputStream fileOutputStream = new FileOutputStream(xmlPropertiesFile);
-            xmlProperties.store(fileOutputStream, "Generated by:" + SDKExecutor.class.getCanonicalName());
-            fileOutputStream.close();
-            LOG.debug("Saving properties:" + xmlProperties.toString());
-        } catch (IOException e) {
-            String error = "Problem saving edited properties file at location: " + xmlPropertiesFile.getAbsolutePath();
             LOG.error(error, e);
             throw new SDKExecutionException(error, e);
         }
