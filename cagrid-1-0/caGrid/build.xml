@@ -145,6 +145,7 @@
 				</ant>
 			</sequential>
 		</for>
+		<runtarget target="installIntroduceExtensions" />
 	</target>
 
 
