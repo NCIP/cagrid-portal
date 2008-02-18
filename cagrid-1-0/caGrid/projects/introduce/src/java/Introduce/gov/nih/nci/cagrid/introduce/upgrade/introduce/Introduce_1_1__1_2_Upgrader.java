@@ -293,6 +293,8 @@ public class Introduce_1_1__1_2_Upgrader extends IntroduceUpgraderBase {
         public boolean accept(File name) {
             String filename = name.getName();
             boolean core = filename.startsWith("caGrid-1.1-core") && filename.endsWith(".jar");
+            boolean advertisement = filename.startsWith("caGrid-1.1-advertisement") && filename.endsWith(".jar");
+            boolean introduce = filename.startsWith("caGrid-1.1-Introduce") && filename.endsWith(".jar");
             boolean security = (filename.startsWith("caGrid-1.1-ServiceSecurityProvider") || filename
                 .startsWith("caGrid-1.1-metadata-security"))
                 && filename.endsWith(".jar");
@@ -312,7 +314,7 @@ public class Introduce_1_1__1_2_Upgrader extends IntroduceUpgraderBase {
                 && filename.endsWith(".jar");
             boolean mobius = filename.startsWith("mobius") && filename.endsWith(".jar");
 
-            return core || security || gridGrouper || csm || wsrf || mobius || otherSecurityJarsNotNeeded;
+            return core || advertisement || introduce ||  security || gridGrouper || csm || wsrf || mobius || otherSecurityJarsNotNeeded;
         }
 
     };
@@ -327,8 +329,12 @@ public class Introduce_1_1__1_2_Upgrader extends IntroduceUpgraderBase {
         File[] serviceLibs = serviceLibDir.listFiles(oldDkeletonLibFilter);
         // delete the old libraries
         for (int i = 0; i < serviceLibs.length; i++) {
-            serviceLibs[i].delete();
-            getStatus().addDescriptionLine(serviceLibs[i].getName() + " removed");
+            boolean deleted = serviceLibs[i].delete();
+            if(deleted){
+                getStatus().addDescriptionLine(serviceLibs[i].getName() + " removed");
+            } else{
+                getStatus().addDescriptionLine(serviceLibs[i].getName() + " could not be removed");
+            }
         }
 
         FileFilter srcSkeletonLibFilter = new FileFilter() {
