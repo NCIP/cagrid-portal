@@ -302,8 +302,18 @@ public class Introduce_1_0__1_2_Upgrader extends IntroduceUpgraderBase {
                 throw new Exception("Cannot find or cannot read service tasks jar to copy into the service: "
                     + serviceTasksJar.getAbsolutePath());
             }
+        } else if (serviceTasksCandidates.length == 0) {
+            throw new Exception("Cannot find any service tasks jar to copy into the service");
         } else {
-            throw new Exception("Cannot find service tasks jar to copy into the service");
+            StringBuffer message = new StringBuffer();
+            message.append("Found multiple service tasks jar candidates:\n");
+            for (int i = 0; i < serviceTasksCandidates.length; i++) {
+                message.append("\t").append(serviceTasksCandidates[i].getAbsolutePath());
+                if (i + 1 < serviceTasksCandidates.length) {
+                    message.append("\n");
+                }
+            }
+            throw new Exception(message.toString());
         }
         
         // need to move the ant-contrib.jar to the tools lib directory
