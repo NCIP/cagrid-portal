@@ -41,11 +41,11 @@ import org.jdom.JDOMException;
 
 
 /**
- * DataServiceUpgrade1pt0to1pt1 Utility to upgrade a 1.0 data service to 1.1
+ * DataServiceUpgrade1pt0to1pt1 Utility to upgrade a 1.0 data service to 1.2
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A> *
  * @created Feb 19, 2007
- * @version $Id: DataServiceUpgrade1pt0to1pt1.java,v 1.1 2007/02/19 21:52:52
+ * @version $Id: DataServiceUpgrade1pt0to1pt2.java,v 1.1 2007/02/19 21:52:52
  *          dervin Exp $
  */
 public class DataServiceUpgrade1pt0to1pt2 extends ExtensionUpgraderBase {
@@ -133,9 +133,11 @@ public class DataServiceUpgrade1pt0to1pt2 extends ExtensionUpgraderBase {
         FileFilter newDataLibFilter = new FileFilter() {
             public boolean accept(File pathname) {
                 String name = pathname.getName();
-                return (name.endsWith(".jar") && (name.startsWith("caGrid-1.1-data")
-                    || name.startsWith("caGrid-1.1-core") || name.startsWith("caGrid-1.1-caDSR") 
-                    || name.startsWith("caGrid-1.1-metadata")));
+                return (name.endsWith(".jar") && 
+                    (name.startsWith("caGrid-data")
+                    || name.startsWith("caGrid-core") 
+                    || name.startsWith("caGrid-caDSR") 
+                    || name.startsWith("caGrid-metadata")));
             }
         };
         // locate the old data service libs in the service
