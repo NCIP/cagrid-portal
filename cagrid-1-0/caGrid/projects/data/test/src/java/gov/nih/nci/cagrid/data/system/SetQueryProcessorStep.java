@@ -99,7 +99,7 @@ public class SetQueryProcessorStep extends Step {
         File dataBuildLibDir = new File(".." + File.separator + "data" + File.separator + "build" + File.separator + "lib");
         File[] testJars = dataBuildLibDir.listFiles(new FileFilter() {
             public boolean accept(File pathname) {
-                return (pathname.getName().endsWith("tests.jar"));
+                return pathname.getName().matches(".*tests.*.jar");
             }
         });
         String serviceLibDir = serviceDir + File.separator + "lib";
