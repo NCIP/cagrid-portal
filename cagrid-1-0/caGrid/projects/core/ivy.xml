@@ -9,10 +9,13 @@
   </info>
 
   <configurations>
+    <conf name="impl" visibility="private" extends="ui"/>
+    <conf name="impl-test" visibility="private"/>
+    
     <!-- Public Configurations-->
     <conf name="default" visibility="public"/>
     <conf name="ui" visibility="public" extends="default"/>
-    <conf name="test" visibility="public" extends="default"/>
+    <conf name="test" visibility="public" extends="default,impl-test"/>
   </configurations>
 
 
@@ -24,11 +27,11 @@
 
   <dependencies>
     <!--  TODO: only one class needs Mobius (SimpleResourceManager) in HEAD, and that should just be moved to the projects that need it... then this dependency can be removed altogether -->
-    <dependency rev="1.1" org="mobius" name="mobius" conf="*->common-client,tools"/>
+    <dependency rev="1.1" org="mobius" name="mobius" conf="default->common-client,tools"/>
 
-    <dependency rev="0.9.9" org="castor" name="castor"/>
+    <dependency rev="0.9.9" org="castor" name="castor" conf="default->default"/>
     <dependency rev="1.0" org="jdom" name="jdom" conf="default->*"/>
-    <dependency rev="2.7" org="clarkware" name="jdepend" conf="test->*"/>
+    <dependency rev="2.7" org="clarkware" name="jdepend" conf="impl-test->*"/>
     <dependency rev="2.0.0" org="jgoodies" name="validation" conf="ui->*"/>
   </dependencies>
 </ivy-module>
