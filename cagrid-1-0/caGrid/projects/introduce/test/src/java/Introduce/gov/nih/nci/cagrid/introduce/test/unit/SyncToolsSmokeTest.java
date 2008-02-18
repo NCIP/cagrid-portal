@@ -33,8 +33,7 @@ public class SyncToolsSmokeTest extends Story {
 
     public SyncToolsSmokeTest() {
         this.setName("Introduce Codegen System Test");
-        PropertyConfigurator.configure("." + File.separator + "conf" + File.separator + "introduce" + File.separator
-            + "log4j.properties");
+        PropertyConfigurator.configure("." + File.separator + "conf" + File.separator + "log4j.properties");
     }
 
 
