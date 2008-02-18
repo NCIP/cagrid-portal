@@ -4,6 +4,7 @@ import gov.nih.nci.cagrid.bdt.service.BDTServiceConstants;
 import gov.nih.nci.cagrid.bdt.templates.BDTResourceTemplate;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
+import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeImportInformation;
@@ -31,6 +32,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import javax.xml.namespace.QName;
@@ -44,6 +46,9 @@ public class BDTCreationExtensionPostProcessor implements CreationExtensionPostP
 		throws CreationExtensionException {
 	    
         checkServiceNaming(serviceInfo);
+        
+        // add the ws-enumeration extension
+        installWsEnumExtension(serviceInfo);
 
         // apply BDT service requirements to it
 		try {
@@ -55,8 +60,6 @@ public class BDTCreationExtensionPostProcessor implements CreationExtensionPostP
 			throw new CreationExtensionException(
 				"Error adding BDT service components to template! " + ex.getMessage(), ex);
 		}
-        // add the ws-enumeration
-        installWsEnumExtension(serviceInfo);        
 		// add the proper deployment metadata
 		try {
 			System.out.println("Modifying metadata");
@@ -343,8 +346,28 @@ public class BDTCreationExtensionPostProcessor implements CreationExtensionPostP
 
         if (!wsEnumExtensionUsed(info)) {
             System.out.println("Adding the WS-Enumeration extension to the service");
-            // add the ws Enumeration extension
+            // add the WS-Enumeration extension
             ExtensionTools.addExtensionToService(info, WS_ENUM_EXTENSION_NAME);
+            // order the extensions so WS-Enumeration runs before BDT
+            List<ExtensionType> extensions = new ArrayList<ExtensionType>();
+            Collections.addAll(extensions, info.getExtensions().getExtension());
+            int bdtIndex = -1;
+            int enumIndex = -1;
+            for (int i = 0; i < extensions.size(); i++) {
+                ExtensionType extension = extensions.get(i);
+                if (extension.getName().equals("bdt")) {
+                    bdtIndex = i;
+                } else if (extension.getName().equals(WS_ENUM_EXTENSION_NAME)) {
+                    enumIndex = i;
+                }
+            }
+            if (bdtIndex < enumIndex) {
+                System.out.println("Reordering extensions so enumeration runs before BDT");
+                Collections.swap(extensions, bdtIndex, enumIndex);
+                info.getExtensions().setExtension(extensions.toArray(new ExtensionType[0]));
+            }
+            // execute the extension, since it won't run otherwise
+            executeWsEnumExtension(info);
         }
     }
     
@@ -371,6 +394,25 @@ public class BDTCreationExtensionPostProcessor implements CreationExtensionPostP
             }
         }
         return false;
+    }
+    
+    
+    private void executeWsEnumExtension(ServiceInformation info) throws CreationExtensionException{
+        // invoke
+        CreationExtensionPostProcessor pp = null;
+        ServiceExtensionDescriptionType desc = ExtensionsLoader.getInstance()
+            .getServiceExtension(WS_ENUM_EXTENSION_NAME);
+        try {
+            pp = ExtensionTools.getCreationPostProcessor(WS_ENUM_EXTENSION_NAME);
+        } catch (Exception ex) {
+            throw new CreationExtensionException("Error loading " + WS_ENUM_EXTENSION_NAME 
+                + " creation post processor: " + ex.getMessage(), ex);
+        }
+        if (pp != null) {
+            pp.postCreate(desc, info);
+        } else {
+            System.out.println(WS_ENUM_EXTENSION_NAME + " did not provide a creation post processing class");
+        }
     }
 
 
