@@ -305,7 +305,6 @@ public class ServicePropertiesTable extends PortalBaseTable implements
 	
 	public void tableChanged(TableModelEvent e){
 		super.tableChanged(e);
-		System.out.println(e);
 		if(e.getColumn()==3){
 			modifySelectedServicePropertyIsFromETC(((Boolean)getSelectedRowData().get(3)));
 		}
