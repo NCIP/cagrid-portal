@@ -67,7 +67,7 @@ import com.jgoodies.validation.view.ValidationComponentUtils;
  * @author David Ervin
  * 
  * @created Jun 4, 2007 1:45:08 PM
- * @version $Id: SDKClientSelectionPanel.java,v 1.10 2008-02-13 15:15:36 dervin Exp $ 
+ * @version $Id: SDKClientSelectionPanel.java,v 1.11 2008-02-19 20:32:09 dervin Exp $ 
  */
 public class SDKClientSelectionPanel extends AbstractWizardPanel {
     // keys for validation components
@@ -241,7 +241,7 @@ public class SDKClientSelectionPanel extends AbstractWizardPanel {
     public void update() {
         // -- configure the UI -- //
         // verify the sdk query library has been copied into the service
-        String sdkQueryLibName = new File(SDK32InitializationPanel.SDK_32_QUERY_LIB).getName();
+        String sdkQueryLibName = new File(SDK32InitializationPanel.SDK_32_QUERY_LIB_PREFIX).getName();
         File sdkQueryLib = new File(getServiceInformation().getBaseDirectory().getAbsolutePath() 
             + File.separator + "lib" + File.separator + sdkQueryLibName);
         

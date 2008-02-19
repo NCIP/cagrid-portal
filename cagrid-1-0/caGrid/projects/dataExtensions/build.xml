@@ -465,6 +465,12 @@
 				<include name="*sdk*.jar"/>
 			</fileset>
 		</copy>
+		<!-- sdk32 authz required libraries -->
+		<copy todir="${sdk32.extension.lib.dir}"> <!-- ?? -->
+			<fileset dir="${ext.dependencies.dir}/authz/jars">
+				<include name="**/*.jar"/>
+			</fileset>
+		</copy>
 		<!-- install the service styles -->
 		<!-- must not run in parallel due to use of a variable -->
 		<for list="${data.service.styles}" parallel="false" param="style.name" trim="true">
@@ -474,7 +480,6 @@
 				<!-- CANNOT USE A PROPERTY, since they are immutable once set -->
 				<var name="style.dest.dir" value="${introduce.extensions.dir}/data/styles/@{style.name}" />
 				<var name="style.description" value="${basedir}/styles/@{style.name}/style.xml" />
-				<var name="style.extension.lib.dir" value="ext/dependencies/@{style.name}/jars" />
 				<var name="style.lib.file" value="${build.jars.dir}/${project.jar.prefix}style-@{style.name}${project.jar.suffix}" />
 				<!-- make requisite directories -->
 				<delete dir="${style.dest.dir}" />
@@ -486,15 +491,6 @@
 				<copy todir="${style.dest.dir}/lib" file="${style.lib.file}" />
 				<!-- copy the SDK common style jar file -->
 				<copy todir="${style.dest.dir}/lib" file="${sdkstyle.jar.file}" />
-				<!-- copy the style's ext libs into the style dest lib dir -->
-				<condition property="style.ext.exists">
-					<available file="${style.extension.lib.dir}" type="dir" />
-				</condition>
-				<copy todir="${style.dest.dir}/lib" failonerror="${style.ext.exists}">
-					<fileset dir="${style.extension.lib.dir}">
-						<include name="**/*.jar" />
-					</fileset>
-				</copy>
 			</sequential>
 		</for>
 	</target>

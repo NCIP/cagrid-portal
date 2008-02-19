@@ -12,6 +12,7 @@ import gov.nih.nci.cagrid.data.style.sdkstyle.wizard.SchemaTypesPanel;
 import gov.nih.nci.cagrid.data.ui.wizard.CacoreWizardUtils;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
+import gov.nih.nci.cagrid.introduce.common.FileFilters;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 
@@ -29,29 +30,41 @@ import org.cagrid.grape.utils.CompositeErrorDialog;
  * @author David Ervin
  * 
  * @created Jul 12, 2007 3:37:04 PM
- * @version $Id: SDK32InitializationPanel.java,v 1.3 2007-11-06 15:53:43 hastings Exp $ 
+ * @version $Id: SDK32InitializationPanel.java,v 1.4 2008-02-19 20:32:09 dervin Exp $ 
  */
 public class SDK32InitializationPanel extends CoreDsIntroPanel {
     
     //  constants for the 3.2 version of the SDK Query Processor
-    public static final String SDK_32_QUERY_LIB = ExtensionsLoader.EXTENSIONS_DIRECTORY + File.separator + "data"
-        + File.separator + "sdk32" + File.separator + "lib" + File.separator + "caGrid-1.1-sdkQuery32-core.jar";
+    public static final String SDK_32_LIB_DIR = ExtensionsLoader.getInstance().getExtensionsDir().getAbsolutePath() 
+        + File.separator + "data" + File.separator + "sdk32" + File.separator + "lib";
+    public static final String SDK_32_QUERY_LIB_PREFIX = "caGrid-sdkQuery32-core";
     public static final String SDK_32_QUERY_PROCESSOR = "gov.nih.nci.cagrid.data.sdk32query.HQLCoreQueryProcessor";
 
 
     public SDK32InitializationPanel(ServiceExtensionDescriptionType extensionDescription, ServiceInformation info) {
         super(extensionDescription, info);
     }
+    
+    
+    private File getSdk32QPLib() {
+        File libDir = new File(SDK_32_LIB_DIR);
+        File[] jars = libDir.listFiles(new FileFilters.JarFileFilter());
+        for (File f : jars) {
+            if (f.getName().startsWith(SDK_32_QUERY_LIB_PREFIX)) {
+                return f;
+            }
+        }
+        return null;
+    }
 
 
     protected void setLibrariesAndProcessor() {
-        String libName = SDK_32_QUERY_LIB;
         String qpClassName = SDK_32_QUERY_PROCESSOR;
         // get the path to the SDK Query project
-        File sdkQuery = new File(libName);
-        if (!sdkQuery.exists()) {
+        File sdkQuery = getSdk32QPLib();
+        if (sdkQuery == null || !sdkQuery.exists()) {
             String[] error = {"The SDK Query project does not exist or has not",
-                    "yet been built.  Please build this project first!"};
+                "yet been built.  Please build this project first!"};
             CompositeErrorDialog.showErrorDialog("SDK Query Library Not Found", error);
         } else {
             // copy the library to the service's lib dir
