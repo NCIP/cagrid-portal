@@ -157,7 +157,7 @@ public class DataServiceUpgrade1pt0to1pt2 extends ExtensionUpgraderBase {
                 + File.separator + newLib.getName());
             try {
                 Utils.copyFile(newLib, out);
-                getStatus().addDescriptionLine("caGrid 1.1 library " + newLib.getName() + " added");
+                getStatus().addDescriptionLine("caGrid 1.2 library " + newLib.getName() + " added");
             } catch (IOException ex) {
                 throw new UpgradeException("Error copying new data service library: " 
                     + ex.getMessage(), ex);
@@ -189,8 +189,7 @@ public class DataServiceUpgrade1pt0to1pt2 extends ExtensionUpgraderBase {
         FileFilter newEnumLibFilter = new FileFilter() {
             public boolean accept(File name) {
                 String filename = name.getName();
-                // TODO: evaluate if this should stay hard-coded or not
-                return filename.equals("caGrid-1.1-wsEnum.jar");
+                return filename.startsWith("caGrid-wsEnum-1.2") && filename.endsWith(".jar");
             }
         };
         // locate old enumeration libraries in the service
@@ -209,7 +208,7 @@ public class DataServiceUpgrade1pt0to1pt2 extends ExtensionUpgraderBase {
                 + File.separator + newEnumLibs[i].getName());
             try {
                 Utils.copyFile(newEnumLibs[i], outFile);
-                getStatus().addDescriptionLine("caGrid 1.1 library " + newEnumLibs[i].getName() + " added");
+                getStatus().addDescriptionLine("caGrid 1.2 library " + newEnumLibs[i].getName() + " added");
             } catch (IOException ex) {
                 throw new UpgradeException("Error copying new enumeration library: " 
                     + ex.getMessage(), ex);
@@ -241,8 +240,8 @@ public class DataServiceUpgrade1pt0to1pt2 extends ExtensionUpgraderBase {
         FileFilter newSdkLibFilter = new FileFilter() {
             public boolean accept(File name) {
                 String filename = name.getName();
-                return (filename.startsWith("caGrid-1.1-sdkQuery") 
-                    || filename.startsWith("caGrid-1.1-sdkQuery32"))
+                return (filename.startsWith("caGrid-sdkQuery") 
+                    || filename.startsWith("caGrid-sdkQuery32"))
                     && filename.endsWith(".jar");
             }
         };
@@ -290,7 +289,7 @@ public class DataServiceUpgrade1pt0to1pt2 extends ExtensionUpgraderBase {
                 + File.separator + newLibs[i].getName());
             try {
                 Utils.copyFile(newLibs[i], output);
-                getStatus().addDescriptionLine("caGrid 1.1 library " + newLibs[i].getName() + " added");
+                getStatus().addDescriptionLine("caGrid 1.2 library " + newLibs[i].getName() + " added");
             } catch (IOException ex) {
                 throw new UpgradeException("Error copying SDK Query Processor library: " 
                     + ex.getMessage(), ex);
@@ -400,8 +399,8 @@ public class DataServiceUpgrade1pt0to1pt2 extends ExtensionUpgraderBase {
             FileFilter sdkLibFilter = new FileFilter() {
                 public boolean accept(File name) {
                     String filename = name.getName();
-                    return (filename.startsWith("caGrid-1.1-sdkQuery") 
-                        || filename.startsWith("caGrid-1.1-sdkQuery32"))
+                    return (filename.startsWith("caGrid-sdkQuery") 
+                        || filename.startsWith("caGrid-sdkQuery32"))
                         && filename.endsWith(".jar");
                 }
             };
@@ -411,10 +410,10 @@ public class DataServiceUpgrade1pt0to1pt2 extends ExtensionUpgraderBase {
             File[] oldLibs = serviceLibDir.listFiles(sdkLibFilter);
             // first must see which version of SDK we're using
             for (int i = 0; i < oldLibs.length; i++) {
-                if (oldLibs[i].getName().indexOf("caGrid-1.1-sdkQuery32") != -1) {
+                if (oldLibs[i].getName().indexOf("caGrid-sdkQuery32") != -1) {
                     isSdk32 = true;
                 } else {
-                    if (oldLibs[i].getName().indexOf("caGrid-1.1-sdkQuery") != -1) {
+                    if (oldLibs[i].getName().indexOf("caGrid-sdkQuery") != -1) {
                         isSdk31 = true;
                     }
                 }
@@ -435,7 +434,7 @@ public class DataServiceUpgrade1pt0to1pt2 extends ExtensionUpgraderBase {
 
 
     private void setCurrentExtensionVersion() throws UpgradeException {
-        getExtensionType().setVersion("1.1");
+        getExtensionType().setVersion("1.2");
     }
 
 
@@ -450,10 +449,11 @@ public class DataServiceUpgrade1pt0to1pt2 extends ExtensionUpgraderBase {
             while (libsElsIt.hasNext()) {
                 Element nextLib = (Element) libsElsIt.next();
                 String jarName = nextLib.getText();
+                // TODO: change the names from 1.2-dev to 1.2 for the final 1.2 release
                 if (jarName.equals("caGrid-1.0-sdkQuery.jar")) {
-                    nextLib.setText("caGrid-1.1-sdkQuery-core.jar");
+                    nextLib.setText("caGrid-sdkQuery-core-1.2-dev.jar");
                 } else if (jarName.equals("caGrid-1.0-sdkQuery32.jar")) {
-                    nextLib.setText("caGrid-1.1-sdkQuery32-core.jar");
+                    nextLib.setText("caGrid-sdkQuery32-core-1.2-dev.jar");
                 }
             }
         }
