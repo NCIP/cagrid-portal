@@ -92,7 +92,6 @@
 	<classpathentry kind="lib" path="ext/dependencies/jars/mobius_common_client-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/jars/mobius_common_server-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/jars/mobius_gme_client-1.1.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/jars/mobius_tools-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/jars/mobius-castor-0.9.4.3-xml.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/jars/mysql-connector-java-3.0.16-ga-bin.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/jars/osgi.jar"/>
@@ -108,11 +107,8 @@
 	<classpathentry kind="lib" path="ext/dependencies/test/jars/caGrid-testing-core-1.2-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/test/jars/caGrid-testing-system-1.2-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/test/jars/castor-0.9.9.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/test/jars/concurrent-1.3.4.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/test/jars/jdepend-2.7.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/test/jars/jdom-1.0.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/test/jars/mobius_common_client-1.1.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/test/jars/mobius_tools-1.1.jar"/>
 	<classpathentry kind="var" path="ANT_HOME/lib/junit.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
