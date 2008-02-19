@@ -465,12 +465,6 @@
 				<include name="*sdk*.jar"/>
 			</fileset>
 		</copy>
-		<!-- sdk32 authz required libraries -->
-		<copy todir="${sdk32.extension.lib.dir}"> <!-- ?? -->
-			<fileset dir="${ext.dependencies.dir}/authz/jars">
-				<include name="**/*.jar"/>
-			</fileset>
-		</copy>
 		<!-- install the service styles -->
 		<!-- must not run in parallel due to use of a variable -->
 		<for list="${data.service.styles}" parallel="false" param="style.name" trim="true">
@@ -493,6 +487,12 @@
 				<copy todir="${style.dest.dir}/lib" file="${sdkstyle.jar.file}" />
 			</sequential>
 		</for>
+		<!-- sdk32 authz required libraries -->
+		<copy todir="${introduce.extensions.dir}/data/styles/cacore32/lib">
+			<fileset dir="${ext.dependencies.dir}/authz/jars">
+				<include name="**/*.jar"/>
+			</fileset>
+		</copy>
 	</target>
 
 	
