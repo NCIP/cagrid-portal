@@ -48,7 +48,6 @@ public class Introduce_1_1__1_2_Upgrader extends IntroduceUpgraderBase {
     protected void upgrade() throws Exception {
 
         // need to replace the build.xml
-        // need to replace the build.xml
         Utils.copyFile(new File(getServicePath() + File.separator + "build.xml"), new File(getServicePath()
             + File.separator + "build.xml.OLD"));
         Utils.copyFile(new File(getServicePath() + File.separator + "build-deploy.xml"), new File(getServicePath()

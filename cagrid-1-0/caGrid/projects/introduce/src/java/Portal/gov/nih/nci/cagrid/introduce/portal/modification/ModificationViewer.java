@@ -362,8 +362,7 @@ public class ModificationViewer extends ApplicationComponent {
 
 				if (upgrader.canIntroduceBeUpgraded()
 						|| upgrader.extensionsNeedUpgraded()) {
-					String result = PromptButtonDialog
-							.prompt(
+				    PromptButtonDialog diag = new PromptButtonDialog(
 									GridApplication.getContext()
 											.getApplication(),
 									"Upgrade?",
@@ -377,6 +376,8 @@ public class ModificationViewer extends ApplicationComponent {
 											"Close: Do nothing and close the modification viewer.",
 											"" }, new String[] { "Upgrade",
 											"Open", "Close" }, "Close");
+				    GridApplication.getContext().showDialog(diag);
+				    String result = diag.getSelection();
 					System.out.println(result);
 					if (result != null && result.equals("Upgrade")) {
 						try {
@@ -803,7 +804,7 @@ public class ModificationViewer extends ApplicationComponent {
 											.getName(), this.info);
 							this.extensionPanels.add(extPanel);
 							this.contentTabbedPane.addTab(extDtype
-									.getDisplayName(), null, extPanel, null);
+									.getDisplayName(), extPanel.getIcon(), extPanel, null);
 						}
 					} catch (Exception e) {
 						e.printStackTrace();

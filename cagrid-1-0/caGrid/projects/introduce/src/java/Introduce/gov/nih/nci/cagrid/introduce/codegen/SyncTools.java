@@ -462,6 +462,11 @@ public class SyncTools {
                                 }
                                 type.setClassName(getRelativeClassName(element.getName()));
                                 type.setPackageName(getPackageName(element.getName()));
+                                
+                                if(type.getClassName()==null || type.getClassName().length()<=0){
+                                    throw new SynchronizationException(
+                                        "Error when setting finding classname mapping for element " + type.getType() + " , classname is null or empty.");
+                                }
                             }
                         } else {
                             if ((type.getSerializer() == null) || (type.getDeserializer() == null)) {
@@ -474,6 +479,7 @@ public class SyncTools {
                             // package name in the namespace type
                             type.setPackageName(ntype.getPackageName());
                         }
+                        
                     }
                 }
 

@@ -36,7 +36,7 @@ public class PromptButtonDialog extends JDialog {
 	private JPanel textPanel = null;
 	private JPanel buttonPanel = null;
 
-	private PromptButtonDialog(Frame owner, String title, String[] message, String[] options, String def) {
+	public PromptButtonDialog(Frame owner, String title, String[] message, String[] options, String def) {
 		super(owner, title, true);
 		this.message = message;
 		this.options = options;
@@ -46,7 +46,7 @@ public class PromptButtonDialog extends JDialog {
 	}
 	
 	
-	private PromptButtonDialog(Dialog owner, String title, String[] message, String[] options, String def) {
+	public PromptButtonDialog(Dialog owner, String title, String[] message, String[] options, String def) {
 		super(owner, title, true);
 		this.message = message;
 		this.options = options;
@@ -82,7 +82,7 @@ public class PromptButtonDialog extends JDialog {
 	}
 	
 	
-	private String getSelection() {
+	public String getSelection() {
 		return selection;
 	}
 
