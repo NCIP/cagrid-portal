@@ -100,7 +100,6 @@
 	<classpathentry kind="lib" path="ext/dependencies/service/jars/mobius_common_client-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/service/jars/mobius_common_server-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/service/jars/mobius_gme_client-1.1.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/service/jars/mobius_tools-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/service/jars/mobius-castor-0.9.4.3-xml.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/service/jars/mysql-connector-java-3.0.16-ga-bin.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/service/jars/osgi.jar"/>

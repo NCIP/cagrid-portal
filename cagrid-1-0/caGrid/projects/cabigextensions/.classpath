@@ -91,7 +91,6 @@
 	<classpathentry kind="lib" path="ext/dependencies/jars/GlobalModelExchange.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/jars/grouper.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/jars/hibernate3.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/jars/jakarta-oro-2.0.8.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/jars/jasciidammit-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/jars/jaxen-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/jars/jaxmejs-0.5.2.jar"/>
