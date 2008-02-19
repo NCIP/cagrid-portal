@@ -49,39 +49,44 @@
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xercesImpl.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xml-apis.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xmlsec.jar"/>
-	<classpathentry kind="lib" path="lib/cglib-full-2.0.2.jar"/>
-	<classpathentry kind="lib" path="lib/commons-dbcp-1.2.1.jar"/>
-	<classpathentry kind="lib" path="lib/commons-lang-2.0.jar"/>
-	<classpathentry kind="lib" path="lib/commons-pool-1.2.jar"/>
-	<classpathentry kind="lib" path="lib/dom4j-1.4.jar"/>
-	<classpathentry kind="lib" path="lib/ehcache-0.9.jar"/>
-	<classpathentry kind="lib" path="lib/hsqldb-1.7.2.11.jar"/>
-	<classpathentry kind="lib" path="lib/jta-1.0.1B.jar"/>
-	<classpathentry kind="lib" path="lib/jug-1.1.1.jar"/>
-	<classpathentry kind="lib" path="lib/junit-3.8.1.jar"/>
-	<classpathentry kind="lib" path="lib/mysql-connector-java-3.0.16-ga-bin.jar"/>
-	<classpathentry kind="lib" path="lib/odmg-3.0.jar"/>
-	<classpathentry kind="lib" path="lib/subject-0.2.1.jar"/>
-	<classpathentry kind="lib" path="ext/lib/castor-0.9.9.jar"/>
-	<classpathentry kind="lib" path="ext/lib/globus_wsrf_mds_aggregator_stubs.jar"/>
-	<classpathentry kind="lib" path="ext/lib/globus_wsrf_mds_aggregator.jar"/>
-	<classpathentry kind="lib" path="ext/lib/globus_wsrf_servicegroup_stubs.jar"/>
-	<classpathentry kind="lib" path="ext/lib/globus_wsrf_servicegroup.jar"/>
-	<classpathentry kind="lib" path="ext/lib/mobius_common_client-1.1.jar"/>
-	<classpathentry kind="lib" path="lib/hibernate2-2.1.8.jar"/>
-	<classpathentry kind="lib" path="lib/commons-math-1.1.jar"/>
-	<classpathentry kind="lib" path="lib/grouper.jar" sourcepath="/Grouper"/>
-	<classpathentry kind="lib" path="lib/commons-collections-3.2.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-core.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-metadata-common.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-metadata-security.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-ServiceSecurityProvider-client.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-ServiceSecurityProvider-common.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-ServiceSecurityProvider-service.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-ServiceSecurityProvider-stubs.jar"/>
 	<classpathentry kind="lib" path="lib/caGrid-1.1-Introduce-1.1-serviceTools.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-advertisement.jar"/>
-	<classpathentry kind="lib" path="ext/lib/jdom-1.0.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-gridca.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/service/jars/caGrid-advertisement-1.2-dev.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/service/jars/caGrid-core-1.2-dev.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/service/jars/caGrid-gridca-1.2-dev.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/service/jars/caGrid-metadata-common-1.2-dev.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/service/jars/caGrid-metadata-security-1.2-dev.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/service/jars/caGrid-ServiceSecurityProvider-client-1.2-dev.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/service/jars/caGrid-ServiceSecurityProvider-common-1.2-dev.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/service/jars/caGrid-ServiceSecurityProvider-service-1.2-dev.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/service/jars/caGrid-ServiceSecurityProvider-stubs-1.2-dev.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/service/jars/castor-0.9.9.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/service/jars/cglib-nodep-2.1_3.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/service/jars/commons-beanutils-core-1.7.0.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/service/jars/commons-collections-3.2.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/service/jars/commons-dbcp-1.2.2.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/service/jars/commons-lang-2.1.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/service/jars/commons-math-1.1.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/service/jars/commons-pool-1.3.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/service/jars/concurrent-1.3.4.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/service/jars/dom4j-1.6.1.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/service/jars/ehcache-0.9.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/service/jars/globus_wsrf_mds_aggregator_stubs.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/service/jars/globus_wsrf_mds_aggregator.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/service/jars/globus_wsrf_servicegroup_stubs.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/service/jars/globus_wsrf_servicegroup.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/service/jars/grouper.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/service/jars/hibernate2-2.1.8.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/service/jars/hsqldb-1.7.2.11.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/service/jars/jdom-1.0.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/service/jars/jprov.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/service/jars/jta-1.0.1B.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/service/jars/jug-1.1.1.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/service/jars/mobius_common_client-1.1.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/service/jars/mobius_tools-1.1.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/service/jars/mysql-connector-java-3.0.16-ga-bin.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/service/jars/odmg-3.0.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/service/jars/subject-0.2.1.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/test/jars/caGrid-core-tests-1.2-dev.jar"/>
+	<classpathentry kind="var" path="ANT_HOME/lib/junit.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

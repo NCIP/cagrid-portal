@@ -6,17 +6,17 @@
 	<classpathentry kind="var" path="GT4_LOCATION/lib/jce-jdk13-125.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/cog-jglobus.jar" sourcepath="/GLOBUS_SOURCE_DIR"/>
 	<classpathentry kind="lib" path="test/resources"/>
-	<classpathentry kind="lib" path="ext/test/lib/jdepend-2.7-patched.jar"/>
-	<classpathentry kind="lib" path="ext/test/lib/junit.jar"/>
-	<classpathentry kind="lib" path="ext/test/lib/junit-addons-1.4.jar"/>
-	<classpathentry kind="lib" path="ext/test/lib/xmlunit1.0.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/concurrent.jar"/>
-	<classpathentry kind="lib" path="lib/jdom-1.0.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/axis.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xercesImpl.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/wsrf_core_stubs.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/commons-cli-2.0.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-core.jar"/>
-	<classpathentry kind="lib" path="lib/jprov.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/default/jars/caGrid-core-1.2-dev.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/default/jars/castor-0.9.9.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/default/jars/jdom-1.0.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/default/jars/jprov.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/test/jars/caGrid-core-tests-1.2-dev.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/test/jars/jdepend-2.7.jar"/>
+	<classpathentry kind="var" path="ANT_HOME/lib/junit.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
