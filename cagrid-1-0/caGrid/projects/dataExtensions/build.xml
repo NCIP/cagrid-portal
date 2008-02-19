@@ -56,7 +56,8 @@
 
 	<!-- libraries -->
 	<property name="lib.dir" location="${basedir}/lib" />
-	<property name="ext.lib.dir" location="${basedir}/ext/dependencies/impl/jars" />
+	<property name="ext.dependencies.dir" location="${basedir}/ext/dependencies"/>
+	<property name="ext.lib.dir" location="${ext.dependencies.dir}/impl/jars" />
 	<property name="ext.test.lib.dir" location="${basedir}/ext/dependencies/test/jars" />
 
 	<!-- testing stuff -->
@@ -80,6 +81,7 @@
 		</fileset>
 	</path>
 
+	
 	<path id="test.classpath">
 		<path refid="base.classpath" />
 		<fileset dir="${ext.test.lib.dir}">
@@ -95,7 +97,6 @@
 
 
 	<!-- creates output directories -->
-	<!-- creates output directories -->
 	<target name="init" depends="defineJetcTask, defineContribTasks, configure">
 		<mkdir dir="${build.dir}" />
 		<mkdir dir="${build.jars.dir}" />
@@ -106,6 +107,7 @@
 		<mkdir dir="${test.core.classes.dir}" />
 	</target>
 
+	
 	<target name="defineJetcTask">
 		<!-- using jet for templates -->
 		<taskdef name="jetc" classname="ch.paranor.epla.structure.JETCTask">
@@ -135,6 +137,7 @@
 		</taskdef>
 	</target>
 
+	
 	<!-- =================================================================== -->
 	<!--  Configures Service URLS                                            -->
 	<!-- =================================================================== -->
@@ -313,6 +316,7 @@
 		</jar>
 	</target>
 
+	
 	<!-- jars the styles -->
 	<target name="jarStyles" depends="compileStyles" description="Jars the styles">
 		<!-- must not run in parallel due to use of a variable -->
@@ -379,6 +383,8 @@
 		<delete dir="tmp" />
 		<delete dir="${build.dir}" />
 	</target>
+	
+	
 	<target name="xmiToDomainModel" description="Runs the XMI to Domain Model conversion GUI">
 		<java classname="gov.nih.nci.cagrid.data.ui.domain.DomainModelFromXmiDialog" fork="true">
 			<jvmarg value="-Xmx512m" />
@@ -395,6 +401,7 @@
 			</classpath>
 		</java>
 	</target>
+	
 
 	<!-- Build and install extensions for introduce -->
 	<target name="installIntroduceExtensions" depends="defineContribTasks" description="Builds and installs the Data Services extensions into Introduce.">
@@ -434,15 +441,30 @@
 				<include name="DomainModel-client-config.wsdd" />
 			</fileset>
 		</copy>
-		<!-- everything else -->
+		<!-- the extension definition -->
 		<copy todir="${introduce.extensions.dir}/data">
 			<fileset dir="${extension.dir}">
-				<include name="**/*" />
-				<exclude name="cacore32/**" />
-				<exclude name="*.template" />
+				<include name="extension.xml"/>
 			</fileset>
 		</copy>
-
+		<!-- sdk31 required libraries -->
+		<property name="sdk31.extension.lib.dir" location="${introduce.extensions.dir}/data/sdk31/lib"/>
+		<delete dir="${sdk31.extension.lib.dir}"/>
+		<mkdir dir="${sdk31.extension.lib.dir}"/>
+		<copy todir="${sdk31.extension.lib.dir}">
+			<fileset dir="${ext.dependencies.dir}/sdk31/jars">
+				<include name="*sdk*.jar"/>
+			</fileset>
+		</copy>
+		<!-- sdk32 required libraries -->
+		<property name="sdk32.extension.lib.dir" location="${introduce.extensions.dir}/data/sdk32/lib"/>
+		<delete dir="${sdk32.extension.lib.dir}"/>
+		<mkdir dir="${sdk32.extension.lib.dir}"/>
+		<copy todir="${sdk32.extension.lib.dir}">
+			<fileset dir="${ext.dependencies.dir}/sdk32/jars">
+				<include name="*sdk*.jar"/>
+			</fileset>
+		</copy>
 		<!-- install the service styles -->
 		<!-- must not run in parallel due to use of a variable -->
 		<for list="${data.service.styles}" parallel="false" param="style.name" trim="true">
@@ -477,6 +499,7 @@
 		</for>
 	</target>
 
+	
 	<!-- build and jar everything -->
 	<target name="all" depends="jarCore, jarUi, jarUpgrades, jarSdkStyle, jarStyles, jarCoreTests, jarStyleTests" description="Builds and jars all the classes in the project" />
 </project>

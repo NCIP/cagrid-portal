@@ -9,7 +9,7 @@
   </info>
 
   <configurations>
-    <conf name="impl" visibility="private" extends="default"/>
+    <conf name="impl" visibility="public" extends="default"/>
     <conf name="impl-test" visibility="private"/>
     
     <!-- Public Configurations-->

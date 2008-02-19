@@ -17,6 +17,7 @@
 
     <conf name="sdk31" visibility="private"/>
     <conf name="sdk32" visibility="private"/>
+    <conf name="authz" visibility="private"/>
 
     <!-- Public Configurations-->
     <conf name="core" visibility="public"/>
@@ -64,6 +65,8 @@
 
     <dependency rev="latest.integration" org="caGrid" name="sdkQuery" conf="sdk31->default"/>
     <dependency rev="latest.integration" org="caGrid" name="sdkQuery32" conf="sdk32->default"/>
+    
+    <dependency rev="latest.integration" org="caGrid" name="authz" conf="authz->impl"/>
 
     <!-- Extenernal Dependencies -->
     <dependency rev="1.0" org="wannheden" name="jetc-task" conf="impl->*"/>
