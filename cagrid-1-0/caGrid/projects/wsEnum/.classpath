@@ -60,10 +60,7 @@
 	<classpathentry kind="lib" path="ext/dependencies/jars/caGrid-ServiceSecurityProvider-service-1.2-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/jars/caGrid-ServiceSecurityProvider-stubs-1.2-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/jars/castor-0.9.9.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/jars/concurrent-1.3.4.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/jars/jdom-1.0.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/jars/mobius_common_client-1.1.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/jars/mobius_tools-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/test/jars/caGrid-core-tests-1.2-dev.jar"/>
 	<classpathentry kind="var" path="ANT_HOME/lib/junit.jar"/>
 	<classpathentry kind="output" path="bin"/>
