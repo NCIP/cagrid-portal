@@ -4,10 +4,6 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="test/src"/>
 	<classpathentry kind="src" path="build/stubs-AuthenticationService/src"/>
-	<classpathentry kind="lib" path="ext/endorsed/lib/xercesImpl.jar"/>
-	<classpathentry kind="lib" path="ext/endorsed/lib/xml-apis.jar"/>
-	<classpathentry kind="lib" path="ext/lib/castor-0.9.9.jar"/>
-	<classpathentry kind="lib" path="ext/lib/mobius_common_client-1.1.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xmlsec.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xml-apis.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xercesImpl.jar"/>
@@ -66,27 +62,31 @@
 	<classpathentry kind="var" path="GT4_LOCATION/lib/axis-url.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/axis.jar" sourcepath="/AXIS_HOME"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/addressing-1.0.jar"/>
-	<classpathentry kind="lib" path="ext/lib/globus_wsrf_servicegroup.jar"/>
-	<classpathentry kind="lib" path="ext/lib/globus_wsrf_servicegroup_stubs.jar"/>
-	<classpathentry kind="lib" path="ext/lib/globus_wsrf_mds_aggregator.jar"/>
-	<classpathentry kind="lib" path="ext/lib/globus_wsrf_mds_aggregator_stubs.jar"/>
-	<classpathentry kind="lib" path="lib/commons-httpclient-3.0.jar"/>
-	<classpathentry kind="lib" path="ext/lib/commons-codec-1.3.jar"/>
-	<classpathentry kind="lib" path="ext/lib/csmapi.jar"/>
-	<classpathentry kind="lib" path="lib/spring-core.jar"/>
-	<classpathentry kind="lib" path="lib/spring-beans.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-core.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-gridca.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-metadata-common.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-metadata-data.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-metadata-security.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-opensaml-1.1.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-ServiceSecurityProvider-client.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-ServiceSecurityProvider-common.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-ServiceSecurityProvider-service.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-ServiceSecurityProvider-stubs.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-advertisement.jar"/>
-	<classpathentry kind="lib" path="ext/lib/jdom-1.0.jar"/>
 	<classpathentry kind="lib" path="lib/caGrid-1.1-Introduce-1.1-serviceTools.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/service/jars/caGrid-advertisement-1.2-dev.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/service/jars/caGrid-core-1.2-dev.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/service/jars/caGrid-gridca-1.2-dev.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/service/jars/caGrid-metadata-common-1.2-dev.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/service/jars/caGrid-metadata-security-1.2-dev.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/service/jars/caGrid-opensaml-1.2-dev.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/service/jars/caGrid-ServiceSecurityProvider-client-1.2-dev.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/service/jars/caGrid-ServiceSecurityProvider-common-1.2-dev.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/service/jars/caGrid-ServiceSecurityProvider-service-1.2-dev.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/service/jars/caGrid-ServiceSecurityProvider-stubs-1.2-dev.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/service/jars/castor-0.9.9.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/service/jars/clm.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/service/jars/commons-codec-1.3.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/service/jars/commons-httpclient-3.0.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/service/jars/csmapi.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/service/jars/globus_wsrf_mds_aggregator_stubs.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/service/jars/globus_wsrf_mds_aggregator.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/service/jars/globus_wsrf_servicegroup_stubs.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/service/jars/globus_wsrf_servicegroup.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/service/jars/jdom-1.0.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/service/jars/jprov.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/service/jars/mysql-connector-java-3.0.16-ga-bin.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/service/jars/servlet.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/service/jars/spring-beans.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/service/jars/spring-core.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
