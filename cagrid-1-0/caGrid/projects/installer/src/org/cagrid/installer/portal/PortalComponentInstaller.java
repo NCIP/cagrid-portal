@@ -61,8 +61,6 @@ public class PortalComponentInstaller implements CaGridComponentInstaller {
         installStep.getTasks().add(
                 new ConditionalTask(createLiferayDB, installPortal));
 
-        model.setProperty(Constants.LIFERAY_JBOSS_DIR,model.getProperty(Constants.PORTAL_INSTALL_DIR_PATH)+"/" + Constants.PORTAL_LIFERAY_DIR_NAME);
-
         installStep.getTasks().add(
                 new ConditionalTask(new CaGridInstallerAntTask(model
                         .getMessage("installing.portal.title"), "", "install") {
@@ -127,7 +125,7 @@ public class PortalComponentInstaller implements CaGridComponentInstaller {
                 .getMessage("portal.db.drop.desc"), "portal.",
                 "drop.portal.db"){
             protected String getJdbcUrl(CaGridInstallerModel model) {
-                logger.debug("Portal DB URL " + model.getProperty(Constants.PORTAL_DB_URL));
+                logger.debug("Portal DB URL " + this.model.getProperty(Constants.PORTAL_DB_URL));
                 return model.getProperty(Constants.PORTAL_DB_URL);
             }
 
@@ -164,7 +162,6 @@ public class PortalComponentInstaller implements CaGridComponentInstaller {
                 .getMessage("liferay.db.config.desc"));
         InstallerUtils.addDBConfigPropertyOptions(model, liferayDbStep, "liferay.", "liferay");
 
-        logger.debug("Setting Liferay DB Name same as the ID");
         model.add(liferayDbStep, installPortal);
 
         // Drop existing portal DB
@@ -194,6 +191,9 @@ public class PortalComponentInstaller implements CaGridComponentInstaller {
         model.add(portalGridPropsStep, installPortal);
 
     }
+
+
+
 
 
 }

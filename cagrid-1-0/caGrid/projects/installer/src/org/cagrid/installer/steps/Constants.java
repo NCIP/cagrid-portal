@@ -396,13 +396,15 @@ public abstract class Constants {
 
     public static final String PORTAL_DB_PASSWORD = "cagrid.portal.db.password";
 
-    public static final String PORTAL_META_AGG_FREQ = "portal.meta.agg.freq";
-
 	public static final String PORTAL_GOOGLE_MAP_KEY = "cagrid.portal.map.google.apiKey";
 
 	public static final String PORTAL_GEOCODER_APP_ID = "cagrid.portal.geocoder.yahoo.appId";
 
 	public static final String PORTAL_INDEX_SVC_URLS = "cagrid.portal.indexServiceUrls";
+
+    public static final String PORTAL_IDP_SVC_URLS = "cagrid.portal.idpInfo";
+
+    public static final String PORTAL_IFS_SVC_URL =  "cagrid.portal.ifsUrl";
 
     public static final String PORTAL_AGGR_TARGET_GRID = "aggr.trust.target.grid";
 

@@ -1,7 +1,6 @@
 package org.cagrid.installer.portal;
 
 import org.cagrid.installer.model.CaGridInstallerModel;
-import org.cagrid.installer.steps.Constants;
 import org.cagrid.installer.tasks.AbstractCreateDatabaseTask;
 
 /**
@@ -36,8 +35,6 @@ public class CreateLiferayDatabaseTask extends AbstractCreateDatabaseTask {
 	}
 
     protected Object internalExecute(CaGridInstallerModel model) throws Exception {
-        //reuse the id of the database for name
-        model.setProperty(Constants.PORTAL_LIFERAY_DB_NAME, model.getProperty("liferay.db.id"));
         return super.internalExecute(model);//To change body of overridden methods use File | Settings | File Templates.
     }
 }

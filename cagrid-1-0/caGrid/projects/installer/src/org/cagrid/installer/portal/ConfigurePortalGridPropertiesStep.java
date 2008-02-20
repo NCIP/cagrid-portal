@@ -41,6 +41,15 @@ public class ConfigurePortalGridPropertiesStep extends PropertyConfigurationStep
 
     private JTable idxTable;
 
+    //Idp table
+    private JButton idpCmdAdd;
+
+    private JButton idpCmdDelete;
+
+    private DefaultTableModel idpTableModel;
+
+    private JTable idpTable;
+
     /**
      *
      */
@@ -79,6 +88,7 @@ public class ConfigurePortalGridPropertiesStep extends PropertyConfigurationStep
         super.init(m);
 
         addIndexServiceURLsPanel();
+        addIdpServcieURLsPanel();
 
         checkComplete();
     }
@@ -86,6 +96,13 @@ public class ConfigurePortalGridPropertiesStep extends PropertyConfigurationStep
     protected String getIndexServiceURLsProperty(){
         return Constants.PORTAL_INDEX_SVC_URLS;
     }
+
+
+    protected String getIdpServiceURLsProperty(){
+           return Constants.PORTAL_IDP_SVC_URLS;
+       }
+
+
 
     protected void addIndexServiceURLsPanel() {
         JPanel indexSvcUrlsPanel = new JPanel();
@@ -123,6 +140,40 @@ public class ConfigurePortalGridPropertiesStep extends PropertyConfigurationStep
 
     }
 
+    protected void addIdpServcieURLsPanel(){
+        JPanel idpSvcUrlsPanel = new JPanel();
+        idpSvcUrlsPanel.setLayout(new BorderLayout());
+        idpSvcUrlsPanel.setPreferredSize(new Dimension(500, 125));
+        GridBagConstraints gbc = InstallerUtils.getGridBagConstraints(0, 3);
+        add(idpSvcUrlsPanel, gbc);
+
+        String[] idpSvcUrls = this.model
+                .getProperty(getIdpServiceURLsProperty(),
+                        "https://cagrid-dorian.nci.nih.gov:8443/wsrf/services/cagrid/Dorian")
+                .split(",");
+        Object[][] rowData = new Object[idpSvcUrls.length][1];
+        for (int i = 0; i < idpSvcUrls.length; i++) {
+            rowData[i][0] = idpSvcUrls[i];
+        }
+
+        JPanel idpButtonPanel = new JPanel();
+        this.idpCmdAdd = new JButton(this.model.getMessage("add"));
+        this.idpCmdAdd.addActionListener(this);
+        this.idpCmdDelete = new JButton(this.model.getMessage("delete"));
+        this.idpCmdDelete.addActionListener(this);
+        idpButtonPanel.add(this.idpCmdAdd);
+        idpButtonPanel.add(this.idpCmdDelete);
+
+        String[] idpColNames = new String[] { "URLs" };
+        this.idpTableModel = new DefaultTableModel(rowData, idpColNames);
+        this.idpTable = new AutoSizingJTable(this.idpTableModel);
+        InstallerUtils.setUpCellRenderer(this.idpTable);
+        idpSvcUrlsPanel.add(BorderLayout.NORTH, new JLabel(this.model
+                .getMessage("idp.svc.urls")));
+        idpSvcUrlsPanel.add(BorderLayout.CENTER, new JScrollPane(
+                this.idpTable));
+        idpSvcUrlsPanel.add(BorderLayout.SOUTH, idpButtonPanel);
+    }
 
     protected void addOptions() {
 
@@ -161,20 +212,46 @@ public class ConfigurePortalGridPropertiesStep extends PropertyConfigurationStep
                         "http://cagrid-service-qa.nci.nih.gov:8080/wsrf/services/cagrid/CaDSRService"),
                         true));
 
+        getOptions().add(
+                new TextPropertyConfigurationOption(
+                        Constants.PORTAL_IFS_SVC_URL, model
+                        .getMessage("portal.ifs.url"), model
+                        .getProperty(Constants.PORTAL_IFS_SVC_URL,
+                        "https://cagrid-dorian-qa.nci.nih.gov:8443/wsrf/services/cagrid/Dorian"),
+                        true));
+
     }
 
     public void applyState() throws InvalidStateException {
 
-        StringBuilder sb = new StringBuilder();
+        StringBuilder sbIdx = new StringBuilder();
 
         for (int i = 0; i < this.idxTableModel.getRowCount(); i++) {
             String url = (String) this.idxTableModel.getValueAt(i, 0);
             try {
                 new URL(url);
-                if(sb.length() > 0){
-                    sb.append(",");
+                if(sbIdx.length() > 0){
+                    sbIdx.append(",");
                 }
-                sb.append(url);
+                sbIdx.append(url);
+            } catch (Exception ex) {
+                // TODO: externalize error message
+                String msg = "'" + url + "' is not a valid URL.";
+                logger.error(msg, ex);
+                throw new InvalidStateException(msg, ex);
+            }
+        }
+
+        StringBuilder sbIdp = new StringBuilder();
+
+        for (int i = 0; i < this.idpTableModel.getRowCount(); i++) {
+            String url = (String) this.idpTableModel.getValueAt(i, 0);
+            try {
+                new URL(url);
+                if(sbIdp.length() > 0){
+                    sbIdp.append(",");
+                }
+                sbIdp.append(url);
             } catch (Exception ex) {
                 // TODO: externalize error message
                 String msg = "'" + url + "' is not a valid URL.";
@@ -185,7 +262,13 @@ public class ConfigurePortalGridPropertiesStep extends PropertyConfigurationStep
 
         super.applyState();
 
-        this.model.setProperty(getIndexServiceURLsProperty(), sb.toString());
+        //set up a bunch of properties
+        this.model.setProperty(Constants.LIFERAY_JBOSS_DIR,model.getProperty(Constants.PORTAL_INSTALL_DIR_PATH)+"/" + Constants.PORTAL_LIFERAY_DIR_NAME);
+        //reuse the id of the database for name
+        this.model.setProperty(Constants.PORTAL_LIFERAY_DB_NAME, model.getProperty("liferay.db.id"));
+        this.model.setProperty(getIndexServiceURLsProperty(), sbIdx.toString());
+        this.model.setProperty(getIdpServiceURLsProperty(), sbIdp.toString());
+
     }
 
     public void actionPerformed(ActionEvent evt) {
@@ -193,7 +276,14 @@ public class ConfigurePortalGridPropertiesStep extends PropertyConfigurationStep
         if (source == this.idxCmdAdd) {
             this.idxTableModel.addRow(new String[0]);
         } else if (source == this.idxCmdDelete) {
+            if(this.idxTable.getSelectedRow()>-1)
             this.idxTableModel.removeRow(this.idxTable.getSelectedRow());
+            //idp table
+        } else if (source == this.idpCmdAdd) {
+            this.idpTableModel.addRow(new String[0]);
+        } else if (source == this.idpCmdDelete){
+            if(this.idpTable.getSelectedRow()>-1)
+            this.idpTableModel.removeRow(this.idpTable.getSelectedRow());
         }
     }
 
@@ -208,6 +298,13 @@ public class ConfigurePortalGridPropertiesStep extends PropertyConfigurationStep
                 aUrlGiven = !InstallerUtils.isEmpty(value);
             }
         }
-        setComplete(isComplete() && aUrlGiven);
+        boolean bUrlGiven = false;
+        if (this.idpTable != null) {
+            for (int i = 0; i < this.idpTableModel.getRowCount() && !bUrlGiven; i++) {
+                String value = (String) this.idpTableModel.getValueAt(i, 0);
+                bUrlGiven = !InstallerUtils.isEmpty(value);
+            }
+        }
+            setComplete(isComplete() && aUrlGiven && bUrlGiven);
+        }
     }
-}

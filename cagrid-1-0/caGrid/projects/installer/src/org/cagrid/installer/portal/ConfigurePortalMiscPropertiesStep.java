@@ -45,13 +45,6 @@ public class ConfigurePortalMiscPropertiesStep  extends PropertyConfigurationSte
 
         getOptions().add(
                 new TextPropertyConfigurationOption(
-                        Constants.PORTAL_META_AGG_FREQ, model
-                        .getMessage("portal.meta.agg.freq"), model
-                        .getProperty(Constants.PORTAL_META_AGG_FREQ,
-                        "3600000"), true));
-
-        getOptions().add(
-                new TextPropertyConfigurationOption(
                         Constants.PORTAL_GOOGLE_MAP_KEY, model
                         .getMessage("portal.google.map.key"), model
                         .getProperty(Constants.PORTAL_GOOGLE_MAP_KEY,
@@ -104,10 +97,19 @@ public class ConfigurePortalMiscPropertiesStep  extends PropertyConfigurationSte
                         Constants.PORTAL_ADMIN_EMAIL, model
                         .getMessage("portal.admin.email"), model
                         .getProperty(Constants.PORTAL_ADMIN_EMAIL,
-                        "portaladmin@nci.nih.gov"), true));
+                        "ncicb@pop.nci.nih.gov"), true));
 
 
 
     }
 
+    @Override
+    public void prepare() {
+        super.prepare();//To change body of overridden methods use File | Settings | File Templates.
+
+        //need to do this otherwise null value is set when panel is initialized
+        JTextField keystorePath = (JTextField)getOption(Constants.LIFERAY_KEYSTORE_PATH);
+        keystorePath.setText(this.model.getProperty(Constants.PORTAL_INSTALL_DIR_PATH) + "/portal-liferay");
+
+    }
 }

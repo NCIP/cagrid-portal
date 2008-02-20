@@ -12,10 +12,15 @@ import org.pietschy.wizard.models.Condition;
  */
 public class PortalSourceComponentInstaller extends AbstractDownloadedComponentInstaller{
 
+    public PortalSourceComponentInstaller() {
+    }
+
+    @Override
     protected String getComponentId() {
         return "portal";
     }
 
+    @Override
     protected Condition getShouldCheckCondition() {
         return new Condition() {
 			public boolean evaluate(WizardModel m) {
@@ -25,6 +30,7 @@ public class PortalSourceComponentInstaller extends AbstractDownloadedComponentI
 		};
     }
 
+    @Override
     protected Condition getShouldInstallCondition() {
        return new Condition() {
 			public boolean evaluate(WizardModel m) {
