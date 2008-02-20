@@ -11,6 +11,7 @@ import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeExceptionsException;
+import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.FileFilters;
@@ -368,20 +369,34 @@ public class DataServiceUpgrade1pt0to1pt2 extends ExtensionUpgraderBase {
 
     private void updateDataSchemas() throws UpgradeException {
         String serviceName = getServiceInformation().getServices().getService(0).getName();
-        // extension data has been updated
+        // extension data has been updated, but is never used in the service
+        // so it can be removed
+        getStatus().addDescriptionLine("Data Service Extension data schema has been updated, " +
+                "but is not required and should be removed");
         File serviceExtensionDataSchema = new File(getServicePath() + File.separator + "schema" 
-            + File.separator + serviceName + "DataServiceExtensionData.xsd");
-        File newExtensionDataSchema = new File(ExtensionsLoader.getInstance().getExtensionsDir() 
-            + File.separator + "data" + File.separator + "schema" + File.separator 
-            + "Data" + File.separator + "DataServiceExtensionData.xsd");
+            + File.separator + serviceName + File.separator + "DataServiceExtensionData.xsd");
+        String targetNamespace = null;
         try {
-            Utils.copyFile(newExtensionDataSchema, serviceExtensionDataSchema);
-            getStatus().addDescriptionLine("Data service extension data schema updated");
-        } catch (IOException ex) {
-            throw new UpgradeException("Error upgrading extension data schema: " 
+            targetNamespace = CommonTools.getTargetNamespace(serviceExtensionDataSchema);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            throw new UpgradeException("Error determining namespace of extension data schema: " 
                 + ex.getMessage(), ex);
         }
-
+        
+        // verify the namespace exists and is not in use by the service
+        NamespaceType nsType = CommonTools.getNamespaceType(
+            getServiceInformation().getNamespaces(), targetNamespace);
+        if (nsType != null 
+            && !CommonTools.isNamespaceTypeInUse(
+                nsType, getServiceInformation().getServiceDescriptor())) {
+            // safe to remove the namespace
+            CommonTools.removeNamespace(getServiceInformation().getServiceDescriptor(), targetNamespace);
+            serviceExtensionDataSchema.delete();
+            getStatus().addDescriptionLine("Data Service Extension data schema was not used, " +
+                    "and so was removed from the service");
+        }
+        
         // if the CQL schema changes, upgrade it here
     }
 
