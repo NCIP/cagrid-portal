@@ -66,7 +66,7 @@
     <dependency rev="latest.integration" org="caGrid" name="sdkQuery" conf="sdk31->default"/>
     <dependency rev="latest.integration" org="caGrid" name="sdkQuery32" conf="sdk32->default"/>
     
-    <dependency rev="latest.integration" org="caGrid" name="authz" conf="authz->impl"/>
+    <dependency rev="latest.integration" org="caGrid" name="authz" conf="authz->default"/>
 
     <!-- Extenernal Dependencies -->
     <dependency rev="1.0" org="wannheden" name="jetc-task" conf="impl->*"/>
