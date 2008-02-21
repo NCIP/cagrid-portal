@@ -26,10 +26,10 @@
         <property name="hbm2ddl.auto">create</property>
 		
         <mapping resource="EventRecord.hbm.xml"/>
+        <mapping resource="Community.hbm.xml"/>
         <mapping resource="Component.hbm.xml"/>
         <mapping resource="Detail.hbm.xml"/>
         <mapping resource="InvocationEvent.hbm.xml"/>
-
     </session-factory>
 
 </hibernate-configuration>

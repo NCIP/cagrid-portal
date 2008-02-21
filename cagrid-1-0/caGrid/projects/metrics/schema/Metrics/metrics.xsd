@@ -33,9 +33,9 @@
 			<xs:element name="AdditionalDetails" type="metrics:Detail"
 				minOccurs="0" maxOccurs="unbounded" />
 		</xs:sequence>
+		<xs:attribute name="id" use="optional" type="xs:string" />
 		<xs:attribute name="name" use="required" type="xs:string" />
 		<xs:attribute name="deployment" use="required" type="xs:string" />
-
 	</xs:complexType>
 
 	<xs:element name="Event" type="metrics:Event" />

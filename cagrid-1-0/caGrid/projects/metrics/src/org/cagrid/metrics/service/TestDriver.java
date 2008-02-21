@@ -4,6 +4,7 @@ import java.util.GregorianCalendar;
 
 import javax.xml.namespace.QName;
 
+import org.cagrid.metrics.common.Community;
 import org.cagrid.metrics.common.Detail;
 import org.cagrid.metrics.common.EventDescription;
 import org.cagrid.metrics.common.EventRecord;
@@ -68,7 +69,12 @@ public class TestDriver {
 		ie.setClientAddress("dwight");
 		des.setInvocationEvent(ie);
 		e.setEventDescription(des);
-		System.out.println(qname.toString());
+		
+		Community c = new Community();
+		c.setName("caGrid");
+		c.setDeployment("Training");
+		c.setAdditionalDetails(getDetails(c.getName(), 3));
+		e.setCommunity(c);
 		return e;
 	}
 

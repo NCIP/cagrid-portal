@@ -34,6 +34,8 @@
 			type="string" />
 		</component>
 		
+		<many-to-one name="Community" column="community" cascade="all" class="org.cagrid.metrics.common.Community"/>
+		
 		<array name="AdditionalDetails" table="EVENT_DETAILS" cascade="all">
 			<key column="event_id" />
 			<list-index column="sort_order" />
