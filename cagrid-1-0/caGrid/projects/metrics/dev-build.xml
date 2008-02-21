@@ -52,6 +52,7 @@
 			<fileset dir="${ext.test.lib}">
 				<include name="*.jar" />
 			</fileset>
+			<pathelement location="resources"/>
 		</path>
 		<path id="run.extended.classpath">
 		</path>
