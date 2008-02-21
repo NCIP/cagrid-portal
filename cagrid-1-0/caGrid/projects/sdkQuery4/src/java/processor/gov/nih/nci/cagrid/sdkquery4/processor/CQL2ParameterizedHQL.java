@@ -12,7 +12,12 @@ import gov.nih.nci.cagrid.data.QueryProcessingException;
 import gov.nih.nci.cagrid.sdkquery4.beans.domaininfo.DomainTypesInformation;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -28,7 +33,7 @@ import org.apache.log4j.Logger;
  * @author David Ervin
  * 
  * @created Mar 2, 2007 10:26:47 AM
- * @version $Id: CQL2ParameterizedHQL.java,v 1.8 2008-02-14 16:49:03 dervin Exp $ 
+ * @version $Id: CQL2ParameterizedHQL.java,v 1.9 2008-02-21 15:57:41 dervin Exp $ 
  */
 public class CQL2ParameterizedHQL {
     public static final String TARGET_ALIAS = "__TargetAlias__";
@@ -426,7 +431,6 @@ public class CQL2ParameterizedHQL {
         if (className.equals(String.class.getName())) {
             return value;
         }
-        // TODO: Integer, Long, and Double have the same valueOf(String s) method.  Could use reflection
         if (className.equals(Integer.class.getName())) {
             return Integer.valueOf(value);
         }
@@ -444,7 +448,29 @@ public class CQL2ParameterizedHQL {
                     + value.length() + " is not a valid character");
             }
         }
-        // TODO: Date
+        if (className.equals(Date.class.getName())) {
+            // try time, then dateTime, then just date
+            List<SimpleDateFormat> formats = new ArrayList<SimpleDateFormat>(3);
+            formats.add(new SimpleDateFormat("HH:mm:ss"));
+            formats.add(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss"));
+            formats.add(new SimpleDateFormat("yyyy-MM-dd"));
+            
+            Date date = null;
+            Iterator<SimpleDateFormat> formatIter = formats.iterator();
+            while (date == null && formatIter.hasNext()) {
+                SimpleDateFormat formatter = formatIter.next();
+                try {
+                    date = formatter.parse(value);
+                } catch (ParseException ex) {
+                    LOG.debug(value + " was not parsable by pattern " + formatter.toPattern());
+                }
+            }
+            if (date == null) {
+                throw new QueryProcessingException("Unable to parse date value \"" + value + "\"");
+            }
+            
+            return date;
+        }
         
         throw new QueryProcessingException("No conversion for type " + className);
     }
