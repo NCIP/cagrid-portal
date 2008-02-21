@@ -10,6 +10,7 @@ import org.cagrid.metrics.common.EventDescription;
 import org.cagrid.metrics.common.EventRecord;
 import org.cagrid.metrics.common.EventSource;
 import org.cagrid.metrics.common.InvocationEvent;
+import org.cagrid.metrics.common.ReporterDetails;
 import org.cagrid.metrics.common.Service;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -69,12 +70,17 @@ public class TestDriver {
 		ie.setClientAddress("dwight");
 		des.setInvocationEvent(ie);
 		e.setEventDescription(des);
-		
+
 		Community c = new Community();
 		c.setName("caGrid");
 		c.setDeployment("Training");
 		c.setAdditionalDetails(getDetails(c.getName(), 3));
 		e.setCommunity(c);
+
+		ReporterDetails rp = new ReporterDetails();
+		rp.setIdentity("/O=caBIG/OU=caGrid/OU=Training/OU=Dorian/CN=langella");
+		rp.setIPAddress("127.0.0.1");
+		e.setReporterDetails(rp);
 		return e;
 	}
 
