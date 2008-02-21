@@ -8,6 +8,10 @@
 		<id name="id" column="event_id">
 			<generator class="uuid" />
 		</id>
+		<property name="StartedAt" column="started_at"
+			type="calendar" />
+			<property name="EndedAt" column="ended_at"
+			type="calendar" />
 		<property name="ReportedAt" column="reported_at"
 			type="calendar" />
 
@@ -21,6 +25,7 @@
 		
 		<component name="EventDescription"
 			class="org.cagrid.metrics.common.EventDescription">
+			<many-to-one name="InvocationEvent" column="invocation_event" cascade="all" class="org.cagrid.metrics.common.InvocationEvent"/>
 			<property name="ServiceLifeCycleEvent" column="service_lifecycle_event"
 			type="org.cagrid.metrics.service.hibernate.ServiceLifeCycleEventType" />
 			<property name="UsageEvent" column="usage_event"

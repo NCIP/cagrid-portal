@@ -84,6 +84,7 @@
 				The details of an invocation of an operation.
 			</xs:documentation>
 		</xs:annotation>
+		<xs:attribute name="id" use="optional" type="xs:string" />
 		<xs:attribute name="operationName" use="required"
 			type="xs:string" />
 		<xs:attribute name="operationQName" use="optional"
