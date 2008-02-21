@@ -42,7 +42,7 @@ public class UpgradeMetadataFrom1pt0To1pt2Story extends Story {
 
     @Override
     public String getName() {
-        return "Metadata Upgrade Story (1.0 to 1.2)";
+        return "Metadata Upgrade Story (1-0 to 1-2)";
     }
 
 
