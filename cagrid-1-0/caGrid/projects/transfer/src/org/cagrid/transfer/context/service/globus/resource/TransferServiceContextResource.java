@@ -105,10 +105,9 @@ public class TransferServiceContextResource extends TransferServiceContextResour
         byte[] data = new byte[1024];
         int length = is.read(data);
         while (length >= 0) {
-            fw.write(data);
+            fw.write(data,0,length);
             length = is.read(data);
         }
-        fw.write(data, 0, length);
         fw.close();
 
         desc.setStatus(Status.Staged);
