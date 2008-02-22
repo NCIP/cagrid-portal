@@ -9,6 +9,7 @@ import org.apache.commons.logging.LogFactory;
 import org.cagrid.gaards.cds.common.DelegationDescriptor;
 import org.cagrid.gaards.cds.common.DelegationIdentifier;
 import org.cagrid.gaards.cds.common.DelegationRecord;
+import org.cagrid.gaards.cds.common.Errors;
 import org.cagrid.gaards.cds.delegated.service.DelegatedCredentialResourceHome;
 import org.cagrid.gaards.cds.delegated.stubs.types.DelegatedCredentialReference;
 import org.cagrid.gaards.cds.stubs.types.CDSInternalFault;

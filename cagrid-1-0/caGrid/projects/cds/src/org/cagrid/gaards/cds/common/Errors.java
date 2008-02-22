@@ -1,4 +1,4 @@
-package org.cagrid.gaards.cds.service;
+package org.cagrid.gaards.cds.common;
 
 import gov.nih.nci.cagrid.common.FaultHelper;
 

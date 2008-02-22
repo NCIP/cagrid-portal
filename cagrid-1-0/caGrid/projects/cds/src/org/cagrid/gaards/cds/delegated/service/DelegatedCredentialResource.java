@@ -4,9 +4,9 @@ import gov.nih.nci.cagrid.common.Utils;
 
 import org.cagrid.gaards.cds.common.CertificateChain;
 import org.cagrid.gaards.cds.common.DelegationIdentifier;
+import org.cagrid.gaards.cds.common.Errors;
 import org.cagrid.gaards.cds.common.PublicKey;
 import org.cagrid.gaards.cds.service.DelegationManager;
-import org.cagrid.gaards.cds.service.Errors;
 import org.cagrid.gaards.cds.stubs.types.CDSInternalFault;
 import org.cagrid.gaards.cds.stubs.types.DelegationFault;
 import org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault;
