@@ -13,8 +13,15 @@
 	<target name="do.resolve-dependencies" depends="pre.resolve-dependencies">
 		<ivy:retrieve conf="default" pattern="${ivy.resolved.artifacts.dir}/dependencies/[type]s/[originalname](.[ext])" sync="true" />
 		<ivy:retrieve conf="impl-test" pattern="${ivy.resolved.artifacts.dir}/dependencies/test/jars/[originalname](.[ext])" sync="true" type="jar" />
-		
+
 		<ivy:retrieve conf="endorsed" pattern="${ivy.resolved.artifacts.dir}/dependencies/endorsed/jars/[originalname](.[ext])" sync="true" type="jar" />
+
+		<delete failonerror="false">
+			<fileset dir="${basedir}/test/resources/services/BasicDataService/lib">
+				<include name="*.jar" />
+			</fileset>
+		</delete>
+		<ivy:retrieve conf="query" pattern="${basedir}/test/resources/services/BasicDataService/lib/[originalname](.[ext])" type="jar" />
 	</target>
 </project>
 
