@@ -13,13 +13,8 @@
 		<property name="ReportedAt" column="reported_at"
 			type="calendar" />
 
-		<component name="EventSource"
-			class="org.cagrid.metrics.common.EventSource">
-			<many-to-one name="component"
-				class="org.cagrid.metrics.common.Component" cascade="all" />
-			<many-to-one name="service"
-				class="org.cagrid.metrics.common.Service" cascade="all" />
-		</component>
+		<many-to-one name="EventSource"
+			class="org.cagrid.metrics.common.Component" cascade="all" />
 
 		<component name="EventDescription"
 			class="org.cagrid.metrics.common.EventDescription">

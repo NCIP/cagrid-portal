@@ -8,7 +8,6 @@ import org.cagrid.metrics.common.Community;
 import org.cagrid.metrics.common.Detail;
 import org.cagrid.metrics.common.EventDescription;
 import org.cagrid.metrics.common.EventRecord;
-import org.cagrid.metrics.common.EventSource;
 import org.cagrid.metrics.common.InvocationEvent;
 import org.cagrid.metrics.common.ReporterDetails;
 import org.cagrid.metrics.common.Service;
@@ -25,13 +24,18 @@ public class TestDriver {
 					.buildSessionFactory();
 			Session s = factory.openSession();
 			s.beginTransaction();
-
-			s.save(getEvent());
+			EventRecord e = getEvent();
+			s.save(e);
 			s.getTransaction().commit();
 
-			// TODO: Test Get
+			EventRecord loadedEvent = (EventRecord) s.load(EventRecord.class, e
+					.getId());
 
 			// TODO: Test Delete
+			s.beginTransaction();
+			s.delete(e);
+			s.getTransaction().commit();
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -42,7 +46,6 @@ public class TestDriver {
 		e.setStartedAt(new GregorianCalendar());
 		e.setEndedAt(new GregorianCalendar());
 		e.setReportedAt(new GregorianCalendar());
-		EventSource source = new EventSource();
 
 		Service s = new Service();
 		s.setName("Dorian");
@@ -51,10 +54,9 @@ public class TestDriver {
 		s
 				.setAddress("https://dorian.cagrid.org:6443/wsrf/services/cagrid/Dorian");
 		s.setAdditionalDetails(getDetails(s.getName(), 3));
-
-		source.setComponent(s);
+		;
 		e.setAdditionalDetails(getDetails("Event", 3));
-		e.setEventSource(source);
+		e.setEventSource(s);
 
 		EventDescription des = new EventDescription();
 		// des.setCustomEvent("MyEvent");

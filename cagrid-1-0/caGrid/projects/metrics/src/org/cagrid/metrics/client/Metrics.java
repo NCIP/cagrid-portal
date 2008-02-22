@@ -18,7 +18,6 @@ import org.cagrid.metrics.common.Community;
 import org.cagrid.metrics.common.Component;
 import org.cagrid.metrics.common.Event;
 import org.cagrid.metrics.common.EventDescription;
-import org.cagrid.metrics.common.EventSource;
 import org.cagrid.metrics.common.EventSubmission;
 import org.cagrid.metrics.common.UsageEvent;
 
@@ -266,12 +265,10 @@ public class Metrics {
 				EventDescription des = new EventDescription();
 				des.setUsageEvent(UsageEvent.LAUNCH);
 				e.setEventDescription(des);
-				EventSource source = new EventSource();
 				Component c = new Component();
 				c.setName("Dorian");
 				c.setVersion("1.2");
-				source.setComponent(c);
-				e.setEventSource(source);
+				e.setEventSource(c);
 				Metrics.getInstance().report(e);
 				count = count + 1;
 			} catch (Exception e) {

@@ -4,7 +4,6 @@
    <ns2:SchemaElement type="EventSubmission" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="Community" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="Event" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="EventSource" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="EventDescription" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="InvocationEvent" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="ServiceLifeCycleEvent" xsi:type="ns2:SchemaElementType"/>

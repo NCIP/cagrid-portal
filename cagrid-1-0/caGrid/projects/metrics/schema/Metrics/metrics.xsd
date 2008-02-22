@@ -47,8 +47,8 @@
 			</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element ref="metrics:EventSource" minOccurs="1"
-				maxOccurs="1" />
+			<xs:element name="EventSource" minOccurs="1"
+				maxOccurs="1" type="metrics:Component"/>
 			<xs:element ref="metrics:EventDescription" minOccurs="1"
 				maxOccurs="1" />
 			<xs:element name="AdditionalDetails" type="metrics:Detail"
@@ -59,13 +59,6 @@
 		<xs:attribute name="endedAt" use="optional" type="xs:dateTime" />
 	</xs:complexType>
 
-	<xs:element name="EventSource" type="metrics:EventSource" />
-	<xs:complexType name="EventSource">
-		<xs:choice>
-			<xs:element ref="metrics:Component" />
-			<xs:element ref="metrics:Service" />
-		</xs:choice>
-	</xs:complexType>
 
 	<xs:element name="EventDescription" type="metrics:EventDescription" />
 	<xs:complexType name="EventDescription">
