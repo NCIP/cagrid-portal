@@ -40,7 +40,7 @@ import org.cagrid.gaards.cds.common.DelegationRecordFilter;
 import org.cagrid.gaards.cds.common.DelegationStatus;
 import org.cagrid.gaards.cds.common.ExpirationStatus;
 import org.cagrid.gaards.cds.common.ProxyLifetime;
-import org.cagrid.gaards.cds.service.Errors;
+import org.cagrid.gaards.cds.common.Errors;
 
 public class DelegateCredentialTest extends Story {
 	private GlobusHelper globus;

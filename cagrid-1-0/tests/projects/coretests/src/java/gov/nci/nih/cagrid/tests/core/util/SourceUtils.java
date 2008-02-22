@@ -18,7 +18,8 @@ import antlr.TokenStreamException;
 
 public class SourceUtils {
     /**
-     * @deprecated Don't use this method - it is based on JAXME and does not work.
+     * @deprecated Don't use this method - it is based on JAXME and does not
+     *             work.
      */
     public static void replaceMethodBodyWithJAXME(File inFile, File outFile, String methodName)
         throws RecognitionException, TokenStreamException, IOException {
@@ -65,7 +66,9 @@ public class SourceUtils {
         int targetEndOfSignature = endOfSignature(targetContent, targetStartOfMethod);
         int targetEndOfImplementation = endOfMethod(targetContent, targetEndOfSignature);
 
-        targetContent.delete(targetEndOfSignature, targetEndOfImplementation);
+        if (targetEndOfSignature >= 0 && targetEndOfImplementation >= 0) {
+            targetContent.delete(targetEndOfSignature, targetEndOfImplementation);
+        }
         targetContent.insert(targetEndOfSignature, sourceContent.substring(sourceEndOfSignature,
             sourceEndOfImplementation));
 

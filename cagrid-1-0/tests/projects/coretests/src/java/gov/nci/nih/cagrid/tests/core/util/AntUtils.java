@@ -3,7 +3,6 @@ package gov.nci.nih.cagrid.tests.core.util;
 import gov.nih.nci.cagrid.common.StreamGobbler;
 import gov.nih.nci.cagrid.introduce.common.AntTools;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -12,13 +11,11 @@ import java.util.Properties;
 
 
 /**
-  *  AntUtils
-  *  Utilities to fire off ant commands
-  * 
-  * @author David Ervin
-  * 
-  * @created Nov 6, 2007 12:52:56 PM
-  * @version $Id: AntUtils.java,v 1.12 2007-11-06 21:55:33 dervin Exp $
+ * AntUtils Utilities to fire off ant commands
+ * 
+ * @author David Ervin
+ * @created Nov 6, 2007 12:52:56 PM
+ * @version $Id: AntUtils.java,v 1.13 2008-02-22 19:04:26 oster Exp $
  */
 public class AntUtils {
     public static String getAntCommand() {
@@ -46,8 +43,8 @@ public class AntUtils {
         }
         return ant;
     }
-    
-    
+
+
     /**
      * @deprecated This code is a MESS! use getAntCommand();
      * @param dir
@@ -91,29 +88,30 @@ public class AntUtils {
         // run ant
         Process p = Runtime.getRuntime().exec(cmd.toArray(new String[0]), envp, dir);
         // track stdout and stderr
-        ByteArrayOutputStream stdoutStream = new ByteArrayOutputStream();
-        ByteArrayOutputStream stderrStream = new ByteArrayOutputStream();
-        new StreamGobbler(p.getInputStream(), StreamGobbler.TYPE_OUT, stdoutStream).start();
-        new StreamGobbler(p.getErrorStream(), StreamGobbler.TYPE_ERR, stderrStream).start();
+        new StreamGobbler(p.getInputStream(), StreamGobbler.TYPE_OUT, System.out).start();
+        new StreamGobbler(p.getErrorStream(), StreamGobbler.TYPE_ERR, System.err).start();
 
-        String stdout = stdoutStream.toString();
-        String stderr = stderrStream.toString();
         // wait and return
         int result = p.waitFor();
-        if (stdout.indexOf("BUILD FAILED") != -1 || stderr.indexOf("BUILD FAILED") != -1
-            || stdout.indexOf("Build failed") != -1 || stderr.indexOf("Build failed") != -1) {
-            System.err.println(stderr);
-            System.out.println(stdout);
+        // if (stdout.indexOf("BUILD FAILED") != -1 || stderr.indexOf("BUILD
+        // FAILED") != -1
+        // || stdout.indexOf("Build failed") != -1 || stderr.indexOf("Build
+        // failed") != -1) {
+        // System.err.println(stderr);
+        // System.out.println(stdout);
+        // throw new IOException("ant command '" + target + "' failed");
+        // }
+        if (result != 0) {
             throw new IOException("ant command '" + target + "' failed");
         }
     }
-    
-    
+
+
     public static String getAntCommand(File baseDir, String target) throws Exception {
         return getAntCommand(baseDir, target, null);
     }
-    
-    
+
+
     public static String getAntCommand(File baseDir, String target, Properties systemProps) throws Exception {
         String command = AntTools.getAntCommand(target, baseDir.getAbsolutePath());
         // add system properties
@@ -129,7 +127,7 @@ public class AntUtils {
                 command += propPart;
             }
         }
-        
+
         return command;
     }
 }

@@ -3,171 +3,64 @@
 <!-- caGrid Tests build file                                           -->
 <!-- ================================================================= -->
 
-<project name="cagrid-1.0-tests" default="all" basedir=".">
-    <dirname property="cagrid-1.0-tests.basedir" file="${ant.file.cagrid-1.0-tests}" />
+<project name="caGrid-tests" default="all" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant">
+	<dirname property="caGrid-tests.basedir" file="${ant.file.caGrid-tests}" />
 
-    <!-- Give user the chance to override properties -->
-    <property environment="env" />
-    <property file="build.properties" />
+	<!-- Give user the chance to override properties -->
+	<property environment="env" />
+	<property file="build.properties" />
 
-    <!-- Layout info -->
-    <property name="cagrid.dir" location="../caGrid" />
-    <property name="cagrid.antfiles.dir" location="${cagrid.dir}/antfiles" />
-    <property name="tests.projects.dir" location="${cagrid-1.0-tests.basedir}/projects" />
-    <property name="tests.test.dir" location="${cagrid-1.0-tests.basedir}/test" />
+	<!-- Layout info -->
+	<property name="cagrid.dir" location="../caGrid" />
+	<property name="tests.projects.dir" location="${caGrid-tests.basedir}/projects" />
+	<property name="tests.test.dir" location="${caGrid-tests.basedir}/test" />
 
-    <!-- ================================================================================ -->
-    <!--                          DEFINE THE SUB PROJECTS                                 -->
-    <!-- ================================================================================ -->
-    <!-- The name should be the path relative from projects.dir.  Its strongly encouraged you use a flat layout -->
-    <property name="tests.projects.list" value="echo,cqlprocessors,coretests,workflow-services,sdkInstaller,sdkQueryEquivalence" />
+	<!-- configuring (repurposing) the caGrid build -->
+	<property name="system.testable.projects.list" value="" />
+	<property name="unit.testable.projects.list" value="cqlprocessors,coretests,sdkInstaller" />
 
-    <!-- configuring (repurposing) the caGrid build -->
-    <property name="system.testable.projects.list" value="" />
-    <property name="unit.testable.projects.list" value="cqlprocessors,coretests,sdkInstaller" />
+	<!-- IMPORT THE UTILITIES TARGETS -->
+	<import file="${cagrid.dir}/build.xml" />
 
 
-    <!-- IMPORT THE UTILITIES TARGETS -->
-    <import file="${cagrid.dir}/build.xml" />
-    <import file="${cagrid-1.0-tests.basedir}/antfiles/artifacts.xml" />
+
+	<target name="prepare" depends="caGrid-Master.prepare, build-tests-projects-list" />
 
 
-    <!-- =============================================================== -->
-    <!-- echo                                                            -->
-    <!-- =============================================================== -->
-    <target name="build-echo" depends="prepare" description="Builds echo">
-        <ant dir="${tests.projects.dir}/echo" inheritAll="false" antfile="build.xml" target="all" />
-    </target>
-
-    <target name="build-workflow-services" description="Builds echo">
-        <ant dir="${tests.projects.dir}/workflow-services" inheritAll="false" antfile="build.xml" target="all" />
-    </target>
-
-
-    <!-- =============================================================== -->
-    <!-- cqlprocessors                                                   -->
-    <!-- =============================================================== -->
-    <target name="build-cqlprocessors" depends="prepare" description="Builds cqlprocessors">
-        <resolveDependencies extdir="${tests.projects.dir}/cqlprocessors/ext">
-            <artifact refid="common.test.jars" />
-            <artifact refid="test.coverage.jars" />
-            <artifact refid="core.jars" />
-            <artifact refid="data.jars" />
-	    <artifact refid="cql.1.0.beans.jar"/>
-        </resolveDependencies>
-        <ant dir="${tests.projects.dir}/cqlprocessors" inheritAll="false" antfile="build.xml" target="all" />
-    </target>
-
-	
-	<!-- =============================================================== -->
-	<!-- sdkInstaller                                                    -->
-	<!-- =============================================================== -->
-	<target name="build-sdkInstaller" depends="prepare" description="Builds the caCORE SDK installer utility">
-		<resolveDependencies extdir="${tests.projects.dir}/sdkInstaller/ext">
-			<artifact refid="cagrid.properties"/>
-			<artifact refid="core.jars"/>
-			<artifact refid="core.test.jars"/>
-			<artifact refid="common.test.jars" />
-			<artifact refid="test.coverage.jars" />
-			<artifact refid="introduce.jars"/>
-			<artifact refid="caCORE.3.2.1.sdk"/>
-		</resolveDependencies>
-		<ant dir="${tests.projects.dir}/sdkInstaller" inheritAll="false" antfile="build.xml" target="all" />
+	<target name="build-tests-projects-list">
+		<ivy:buildlist reference="ivy.tests.projects.list">
+			<fileset dir="${tests.projects.dir}">
+				<include name="*/dependencies-build.xml" />
+			</fileset>
+		</ivy:buildlist>
 	</target>
-	
-	
-	<!-- =============================================================== -->
-	<!-- sdkQueryEquivalence                                             -->
-	<!-- =============================================================== -->
-	<target name="build-sdkQueryEquivalence" depends="prepare" description="Builds the caCORE SDK query equivalence test">
-		<resolveDependencies extdir="${tests.projects.dir}/sdkQueryEquivalence/ext">
-			<artifact refid="cagrid.properties"/>
-			<artifact refid="core.jars"/>
-			<artifact refid="core.test.jars"/>
-			<artifact refid="common.test.jars" />
-			<artifact refid="test.coverage.jars" />
-			<artifact refid="sdk.32.query.jars"/>
-			<artifact refid="sdkInstaller.jars"/>
-			<artifact refid="cql.1.0.beans.jar"/>
-			<artifact refid="data.jars"/>
-		</resolveDependencies>
-		<ant dir="${tests.projects.dir}/sdkQueryEquivalence" inheritAll="false" antfile="build.xml" target="all" />
+
+	<!-- ============================================================== -->
+	<!-- Cleans up generated stuff                                      -->
+	<!-- ============================================================== -->
+	<target name="clean" depends="prepare, caGrid-Master.clean" description="Cleans all projects and test suites.">
+		<for parallel="true" param="project.buildfile" trim="true" threadcount="10">
+			<path refid="ivy.tests.projects.list" />
+			<sequential>
+				<dirname file="@{project.buildfile}" property="@{project.buildfile}.dir" />
+				<ant inheritAll="false" dir="${@{project.buildfile}.dir}" antfile="@{project.buildfile}" target="clean-dependencies" />
+			</sequential>
+		</for>
 	</target>
-	
-	
-    <!-- =============================================================== -->
-    <!-- coretests                                                       -->
-    <!-- =============================================================== -->
-    <target name="build-coretests" depends="prepare" description="Builds coretests">
-        <resolveDependencies extdir="${tests.projects.dir}/coretests/ext">
-            <artifact refid="echo.jars" />
-            <artifact refid="cqlprocessors.jars" />
-            <artifact refid="dorian.jars" />
-            <artifact refid="gridca.jars" />
-            <artifact refid="opensaml.jars" />
-            <artifact refid="opensaml.endorsed" />
-            <artifact refid="common.test.jars" />
-            <artifact refid="test.coverage.jars" />
-            <artifact refid="cadsr.jars" />
-            <artifact refid="discovery.jars" />
-            <artifact refid="core.jars" />
-            <artifact refid="introduce.jars" />
-            <artifact refid="gme.globus.client.jars" />
-            <artifact refid="security.metadata.jars" />
-            <artifact refid="mds.jars" />
-            <artifact refid="core.test.jars" />
-            <artifact refid="common.metadata.jars" />
-            <artifact refid="data.metadata.jars" />
-            <artifact refid="metadatautils.jars" />
-            <artifact refid="caCORE.jars" />
-            <artifact refid="graph.jars" />
-            <artifact refid="authentication.service.client.jars" />
-            <artifact refid="gridgrouper.jars" />
-            <artifact refid="gridgrouper.client.jars" />
-	    <artifact refid="cds.service.jars" />
-            <artifact refid="evs.jars" />
-            <artifact refid="fqp.jars" />
-            <artifact refid="data.jars" />
-	    <artifact refid="testing.system.jars"/>
-	    <artifact refid="testing.containers" />
-	    <artifact refid="cql.1.0.beans.jar"/>
-        </resolveDependencies>
-        <delete failonerror="false">
-            <fileset dir="${tests.projects.dir}/coretests/test/resources/services/BasicDataService/lib">
-                <include name="*.jar" />
-            </fileset>
-        </delete>
-        <resolveDependencies extdir="${tests.projects.dir}/coretests/test/resources/services/BasicDataService">
-            <artifact refid="cqlprocessors.jars" />
-        </resolveDependencies>
-        <ant dir="${tests.projects.dir}/coretests" inheritAll="false" antfile="build.xml" target="all" />
-    </target>
 
 
-    <!-- ============================================================== -->
-    <!-- Cleans up generated stuff                                      -->
-    <!-- ============================================================== -->
-    <target name="clean" depends="prepare, caGrid-Master.clean" description="Cleans all projects and test suites.">
-        <for list="${tests.projects.list}" parallel="true" param="project.name" trim="true">
-            <sequential>
-                <echo message="Cleaning project @{project.name}." />
-                <delete dir="${tests.projects.dir}/@{project.name}/ext" />
-                <ant dir="${tests.projects.dir}/@{project.name}" inheritAll="false" antfile="build.xml" target="clean" />
-            </sequential>
-        </for>
-    </target>
-
-
-    <!-- ============================================================== -->
-    <!-- Builds from scratch                                            -->
-    <!-- ============================================================== -->
-    <target name="all" depends="prepare, clean, caGrid-Master.all" description="Builds the entire application and test suite">
-        <for list="${tests.projects.list}" parallel="false" param="project.name" trim="true">
-            <sequential>
-                <echo message="Building project @{project.name}." />
-                <runtarget target="build-@{project.name}" />
-                <echo message="Built project @{project.name}." />
-            </sequential>
-        </for>
-    </target>
+	<!-- ============================================================== -->
+	<!-- Builds from scratch                                            -->
+	<!-- ============================================================== -->
+	<target name="all" depends="clean, caGrid-Master.all" description="Builds the entire application and test suite">
+		<for parallel="false" param="project.buildfile" trim="true">
+			<path refid="ivy.tests.projects.list" />
+			<sequential>
+				<dirname file="@{project.buildfile}" property="@{project.buildfile}.dir" />
+				<ant inheritAll="false" inheritrefs="false" dir="${@{project.buildfile}.dir}" antfile="@{project.buildfile}" target="publish">
+					<property name="target.grid" value="${target.grid}" />
+				</ant>
+			</sequential>
+		</for>
+	</target>
 </project>

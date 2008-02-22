@@ -96,7 +96,10 @@ public abstract class AbstractServiceTest extends Story {
 
 
     public GlobusHelper getGlobus() {
-        return this.helper.getGlobus();
+        if (this.helper != null) {
+            return this.helper.getGlobus();
+        }
+        return null;
     }
 
 

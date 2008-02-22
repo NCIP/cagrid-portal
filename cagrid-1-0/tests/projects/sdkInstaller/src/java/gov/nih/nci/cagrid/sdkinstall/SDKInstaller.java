@@ -10,26 +10,22 @@ import java.io.FileFilter;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-/** 
- *  SDKInstaller
- *  Base "driver" class for installing the caCORE sdk
+
+/**
+ * SDKInstaller Base "driver" class for installing the caCORE sdk
  * 
  * @author David Ervin
- * 
  * @created Jun 13, 2007 10:45:43 AM
- * @version $Id: SDKInstaller.java,v 1.8 2007-06-20 16:16:47 dervin Exp $ 
+ * @version $Id: SDKInstaller.java,v 1.9 2008-02-22 19:04:26 oster Exp $
  */
 public class SDKInstaller {
 
-    public static void installSdk(
-        SdkVersion version, InstallationDescription description) throws Exception {
-        installSdk(version, description, 
-            File.createTempFile("caCORE", "_" + System.currentTimeMillis()));
+    public static void installSdk(SdkVersion version, InstallationDescription description) throws Exception {
+        installSdk(version, description, File.createTempFile("caCORE", "_" + System.currentTimeMillis()));
     }
-    
-    
-    public static void installSdk(
-        SdkVersion version, InstallationDescription description, File installDir) 
+
+
+    public static void installSdk(SdkVersion version, InstallationDescription description, File installDir)
         throws Exception {
         // start by unpacking the caCORE SDK
         unpackSdk(version, installDir);
@@ -43,26 +39,28 @@ public class SDKInstaller {
             File jbossZip = new File(newInstall.getJbossZipFile()).getAbsoluteFile();
             File unpackDir = new File(newInstall.getUnpackDirectory()).getAbsoluteFile();
             ZipUtilities.unzip(jbossZip, unpackDir);
-            // jboss zips unpack a subdirectory... find it, call it jboss location
+            // jboss zips unpack a subdirectory... find it, call it jboss
+            // location
             File[] dirs = unpackDir.listFiles(new FileFilter() {
                 public boolean accept(File pathname) {
                     return pathname.isDirectory();
                 }
             });
             if (dirs.length != 1) {
-                throw new FileNotFoundException("No jboss subdirectory could be found in dir " + unpackDir.getAbsolutePath());
+                throw new FileNotFoundException("No jboss subdirectory could be found in dir "
+                    + unpackDir.getAbsolutePath());
             }
             jbossDir = dirs[0];
         }
         // locate the directory the SDK itself was installed into
         File sdkDir = new File(installDir.getAbsolutePath() + File.separator + "cacoresdk");
-        
+
         // handle the specialized deployment configuration
         runDeployPropertiesManager(version, description, sdkDir);
-        
+
         // invoke the build process
         invokeBuildProcess(version, description, sdkDir);
-        
+
         // wait for JBoss to finish up
         JBossTwiddler twiddler = new JBossTwiddler(jbossDir);
         while (!twiddler.isJBossRunning()) {
@@ -73,50 +71,47 @@ public class SDKInstaller {
                 // 
             }
         }
-        
+
         // invoke the deploy process
         invokeDeployProcess(version, description, sdkDir);
     }
-    
-    
-    private static void runDeployPropertiesManager(
-        SdkVersion version, InstallationDescription description, File sdkDir) 
+
+
+    private static void runDeployPropertiesManager(SdkVersion version, InstallationDescription description, File sdkDir)
         throws DeploymentConfigurationException {
         DeployPropertiesManager deployManager = null;
         switch (version) {
-            case VERSION_3_2_1:
+            case VERSION_3_2_1 :
                 deployManager = new Version321DeployPropertiesManager(description, sdkDir);
         }
         deployManager.configureDeployment();
     }
-    
-    
-    private static void invokeBuildProcess(SdkVersion version, 
-        InstallationDescription description, File sdkDir) 
+
+
+    private static void invokeBuildProcess(SdkVersion version, InstallationDescription description, File sdkDir)
         throws BuildInvocationException {
         BuildInvoker builder = null;
         switch (version) {
-            case VERSION_3_2_1:
+            case VERSION_3_2_1 :
                 builder = new Version321BuildInvoker(description, sdkDir);
         }
         builder.invokeBuildProcess();
     }
-    
-    
-    private static void invokeDeployProcess(SdkVersion version,
-        InstallationDescription description, File sdkDir) 
+
+
+    private static void invokeDeployProcess(SdkVersion version, InstallationDescription description, File sdkDir)
         throws DeployInvocationException {
         DeployInvoker invoker = null;
         switch (version) {
-            case VERSION_3_2_1:
+            case VERSION_3_2_1 :
                 invoker = new Version321DeployInvoker(description, sdkDir);
         }
         invoker.invokeDeployProcess();
     }
-    
-    
+
+
     private static void unpackSdk(SdkVersion version, File dir) throws IOException {
-        String resourcesDir = "ext" + File.separator + "resources" + File.separator;
+        String resourcesDir = "ext" + File.separator + "dependencies" + File.separator + "zips" + File.separator;
         File sdkZip = new File(resourcesDir + version.getZipFileName());
         ZipUtilities.unzip(sdkZip, dir);
     }
