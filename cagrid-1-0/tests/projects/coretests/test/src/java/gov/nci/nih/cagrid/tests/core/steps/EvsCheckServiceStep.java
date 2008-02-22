@@ -61,7 +61,8 @@ public class EvsCheckServiceStep extends Step {
         testSearchMetaThesaurusConcept();
 
         // test obtaining history record
-        testGetHistoryRecords();
+        // NOTE: this no longer works because of EVS backend!!!
+        // testGetHistoryRecords();
 
         // test searching meta thesaurus using code
         testSearchSourceByCode();
