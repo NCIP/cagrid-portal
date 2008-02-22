@@ -15,7 +15,7 @@ import java.util.Properties;
  * 
  * @author David Ervin
  * @created Nov 6, 2007 12:52:56 PM
- * @version $Id: AntUtils.java,v 1.13 2008-02-22 19:04:26 oster Exp $
+ * @version $Id: AntUtils.java,v 1.14 2008-02-22 20:55:49 oster Exp $
  */
 public class AntUtils {
     public static String getAntCommand() {
@@ -92,16 +92,7 @@ public class AntUtils {
         new StreamGobbler(p.getErrorStream(), StreamGobbler.TYPE_ERR, System.err).start();
 
         // wait and return
-        int result = p.waitFor();
-        // if (stdout.indexOf("BUILD FAILED") != -1 || stderr.indexOf("BUILD
-        // FAILED") != -1
-        // || stdout.indexOf("Build failed") != -1 || stderr.indexOf("Build
-        // failed") != -1) {
-        // System.err.println(stderr);
-        // System.out.println(stdout);
-        // throw new IOException("ant command '" + target + "' failed");
-        // }
-        if (result != 0) {
+        if (p.waitFor() != 0) {
             throw new IOException("ant command '" + target + "' failed");
         }
     }

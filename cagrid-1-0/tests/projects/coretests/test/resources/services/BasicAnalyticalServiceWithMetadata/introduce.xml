@@ -128,16 +128,6 @@
       xmlns:ns12="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl"/>
      <ns4:ProviderInformation providerClass="GetRPProvider"/>
     </ns4:Method>
-    <ns4:Method isImported="true" isProvided="true" name="SetResourceProperties"
-     xsi:type="ns4:MethodType">
-     <ns4:Output qName="void" isArray="false"/>
-     <ns4:ImportInformation fromIntroduce="false" inputMessage="ns13:SetResourcePropertiesRequest"
-      namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl"
-      outputMessage="ns13:SetResourcePropertiesResponse" packageName="org.oasis.wsrf.properties"
-      portTypeName="SetResourceProperties" wsdlFile="../wsrf/properties/WS-ResourceProperties.wsdl"
-      xmlns:ns13="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl"/>
-     <ns4:ProviderInformation providerClass="SetRPProvider"/>
-    </ns4:Method>
     <ns4:Method isImported="true" isProvided="true" name="QueryResourceProperties"
      xsi:type="ns4:MethodType">
      <ns4:Output qName="void" isArray="false"/>
@@ -159,6 +149,7 @@
    <ns3:ResourceFrameworkOptions xsi:type="ns3:ResourceFrameworkOptions">
     <ns3:Main xsi:type="ns3:Main"/>
     <ns3:Singleton xsi:type="ns3:Singleton"/>
+    <ns3:ResourcePropertyManagement xsi:type="ns3:ResourcePropertyManagement"/>
    </ns3:ResourceFrameworkOptions>
   </ns3:Service>
  </ns3:Services>
