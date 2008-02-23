@@ -61,7 +61,7 @@
 				<include name="*" />
 			</fileset>
 			<filterset>
-				<filterset filtersfile="${basedir}/ext/dependencies/target_grid/service_urls.properties" />
+				<filterset filtersfile="${basedir}/ext/target_grid/service_urls.properties" />
 			</filterset>
 		</copy>
 		<!--copy over the jars to the lib -->
@@ -153,7 +153,7 @@
 				<include name="**/*" />
 			</fileset>
 			<filterset>
-				<filterset filtersfile="${basedir}/ext/dependencies/target_grid/service_urls.properties" />
+				<filterset filtersfile="${basedir}/ext/target_grid/service_urls.properties" />
 			</filterset>
 		</copy>
 
