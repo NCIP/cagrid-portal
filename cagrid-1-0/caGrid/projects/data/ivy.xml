@@ -116,10 +116,11 @@
 
     <dependency rev="latest.integration" org="caGrid" name="wsEnum" conf="service->default;impl->schemas"/>
     <dependency rev="latest.integration" org="caGrid" name="introduce"
-    conf="tools->ui;impl-test->test"/>
+    conf="tools->extension;impl-test->extension-test"/>
     <dependency rev="latest.integration" org="caGrid" name="metadatautils"
       conf="validation->default"/>
     <dependency rev="latest.integration" org="caGrid" name="graph" conf="tools->default"/>
+    <dependency rev="latest.integration" org="caGrid" name="grape" conf="tools->default"/>
     <dependency rev="latest.integration" org="caGrid" name="bulkDataTransfer" conf="utils->client"/>
     <dependency rev="latest.integration" org="caGrid" name="cql" conf="service->cql,cql-schemas;service-schemas->cql-schemas;extension-schemas->cql-schemas"/>
     

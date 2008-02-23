@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.data.system.bdt;
 
 import gov.nih.nci.cagrid.bdt.client.BulkDataHandlerClient;
+import gov.nih.nci.cagrid.common.XMLUtilities;
 import gov.nih.nci.cagrid.cqlquery.CQLQuery;
 import gov.nih.nci.cagrid.data.bdt.client.BDTDataServiceClient;
 import gov.nih.nci.cagrid.data.system.enumeration.InvokeEnumerationDataServiceStep;
@@ -28,7 +29,6 @@ import org.globus.transfer.EmptyType;
 import org.globus.ws.enumeration.ClientEnumIterator;
 import org.jdom.Element;
 import org.projectmobius.bookstore.Book;
-import org.projectmobius.common.XMLUtilities;
 import org.xmlsoap.schemas.ws._2004._09.enumeration.DataSource;
 import org.xmlsoap.schemas.ws._2004._09.enumeration.service.EnumerationServiceAddressingLocator;
 
@@ -39,7 +39,7 @@ import org.xmlsoap.schemas.ws._2004._09.enumeration.service.EnumerationServiceAd
  * @author David Ervin
  * 
  * @created Mar 14, 2007 2:37:02 PM
- * @version $Id: InvokeBDTDataServiceStep.java,v 1.9 2007-12-04 15:49:09 dervin Exp $ 
+ * @version $Id: InvokeBDTDataServiceStep.java,v 1.10 2008-02-23 01:37:12 hastings Exp $ 
  */
 public class InvokeBDTDataServiceStep extends Step {
 	

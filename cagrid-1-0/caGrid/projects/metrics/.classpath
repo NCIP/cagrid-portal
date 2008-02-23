@@ -89,12 +89,7 @@
 	<classpathentry kind="lib" path="ext/dependencies/service/jars/globus_wsrf_servicegroup.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/service/jars/jdom-1.0.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/test/jars/caGrid-core-tests-1.2-dev.jar"/>
-	<classpathentry kind="lib" path="extension/build/lib/caGrid-1.1-MetricsExtension.jar"/>
 	<classpathentry kind="lib" path="extension/build/lib/caGrid-MetricsExtension-1.2-dev.jar"/>
-	<classpathentry kind="lib" path="extension/ext/lib/caGrid-1.1-Introduce-1.2-core.jar"/>
-	<classpathentry kind="lib" path="extension/ext/lib/caGrid-1.1-Introduce-1.2-portal.jar"/>
-	<classpathentry kind="lib" path="extension/ext/lib/caGrid-1.1-Introduce-1.2-serviceTasks.jar"/>
-	<classpathentry kind="lib" path="extension/ext/lib/caGrid-1.1-Introduce-1.2-updater.jar"/>
 	<classpathentry kind="lib" path="extension/ext/dependencies/jars/antlr-2.7.6rc1.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/service/jars/asm.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/service/jars/cglib-2.1_3.jar"/>
@@ -102,5 +97,34 @@
 	<classpathentry kind="lib" path="ext/dependencies/service/jars/hibernate3.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/service/jars/jta-1.0.1B.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/service/jars/mysql-connector-java-3.0.16-ga-bin.jar"/>
+	<classpathentry kind="lib" path="extension/ext/dependencies/jars/asm.jar"/>
+	<classpathentry kind="lib" path="extension/ext/dependencies/jars/caGrid-advertisement-1.2-dev.jar"/>
+	<classpathentry kind="lib" path="extension/ext/dependencies/jars/caGrid-core-1.2-dev.jar"/>
+	<classpathentry kind="lib" path="extension/ext/dependencies/jars/caGrid-Introduce-core-1.2-dev.jar"/>
+	<classpathentry kind="lib" path="extension/ext/dependencies/jars/caGrid-Introduce-portal-1.2-dev.jar"/>
+	<classpathentry kind="lib" path="extension/ext/dependencies/jars/caGrid-metadata-common-1.2-dev.jar"/>
+	<classpathentry kind="lib" path="extension/ext/dependencies/jars/caGrid-metadata-security-1.2-dev.jar"/>
+	<classpathentry kind="lib" path="extension/ext/dependencies/jars/caGrid-ServiceSecurityProvider-client-1.2-dev.jar"/>
+	<classpathentry kind="lib" path="extension/ext/dependencies/jars/caGrid-ServiceSecurityProvider-common-1.2-dev.jar"/>
+	<classpathentry kind="lib" path="extension/ext/dependencies/jars/caGrid-ServiceSecurityProvider-service-1.2-dev.jar"/>
+	<classpathentry kind="lib" path="extension/ext/dependencies/jars/caGrid-ServiceSecurityProvider-stubs-1.2-dev.jar"/>
+	<classpathentry kind="lib" path="extension/ext/dependencies/jars/caGrid-service-tools-db-1.2-dev.jar"/>
+	<classpathentry kind="lib" path="extension/ext/dependencies/jars/castor-0.9.9.jar"/>
+	<classpathentry kind="lib" path="extension/ext/dependencies/jars/cglib-2.1_3.jar"/>
+	<classpathentry kind="lib" path="extension/ext/dependencies/jars/commons-dbcp-1.2.2.jar"/>
+	<classpathentry kind="lib" path="extension/ext/dependencies/jars/commons-pool-1.2.jar"/>
+	<classpathentry kind="lib" path="extension/ext/dependencies/jars/dom4j-1.6.1.jar"/>
+	<classpathentry kind="lib" path="extension/ext/dependencies/jars/globus_wsrf_mds_aggregator_stubs.jar"/>
+	<classpathentry kind="lib" path="extension/ext/dependencies/jars/globus_wsrf_mds_aggregator.jar"/>
+	<classpathentry kind="lib" path="extension/ext/dependencies/jars/globus_wsrf_servicegroup_stubs.jar"/>
+	<classpathentry kind="lib" path="extension/ext/dependencies/jars/globus_wsrf_servicegroup.jar"/>
+	<classpathentry kind="lib" path="extension/ext/dependencies/jars/hibernate3.jar"/>
+	<classpathentry kind="lib" path="extension/ext/dependencies/jars/jaxen-1.1.jar"/>
+	<classpathentry kind="lib" path="extension/ext/dependencies/jars/jaxmejs-0.5.2.jar"/>
+	<classpathentry kind="lib" path="extension/ext/dependencies/jars/jdom-1.0.jar"/>
+	<classpathentry kind="lib" path="extension/ext/dependencies/jars/jta-1.0.1B.jar"/>
+	<classpathentry kind="lib" path="extension/ext/dependencies/jars/mysql-connector-java-3.0.16-ga-bin.jar"/>
+	<classpathentry kind="lib" path="extension/ext/dependencies/jars/relaxngDatatype.jar"/>
+	<classpathentry kind="lib" path="extension/ext/dependencies/jars/xsom14.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

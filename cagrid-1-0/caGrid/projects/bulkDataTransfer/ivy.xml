@@ -51,7 +51,7 @@
     <dependency rev="latest.integration" org="caGrid" name="wsEnum"
       conf="service->default,schemas"/>
     <dependency rev="latest.integration" org="caGrid" name="introduce"
-    conf="extension->core"/>
+    conf="extension->extension"/>
     <dependency rev="latest.integration" org="caGrid" name="testing" conf="impl-test->system"/>
     
 

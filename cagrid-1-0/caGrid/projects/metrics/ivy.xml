@@ -49,7 +49,7 @@
     <dependency rev="${target.grid}" org="caGrid" name="target_grid" conf="target_grid->urls"/>
 
     <!-- Specific caGrid Service Dependencies -->
-    <dependency rev="latest.integration" org="caGrid" name="introduce" conf="extension->core"/>
+    <dependency rev="latest.integration" org="caGrid" name="introduce" conf="extension->extension"/>
     <dependency rev="latest.integration" org="caGrid" name="service-tools" conf="service->db"/>
 
     <!-- Extenernal Dependencies -->

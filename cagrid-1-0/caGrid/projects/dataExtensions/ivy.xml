@@ -52,7 +52,7 @@
     <dependency rev="latest.integration" org="caGrid" name="core"
       conf="core->default;ui->ui;impl-test->test"/>
     <dependency rev="latest.integration" org="caGrid" name="introduce"
-      conf="core->core;ui->ui;impl-test->core-test"/>
+      conf="core->extension;impl-test->extension-test"/>
     <dependency rev="latest.integration" org="caGrid" name="data" conf="core->full,service-schemas;impl-test->test"/>
     <dependency rev="latest.integration" org="caGrid" name="gme" conf="ui->client"/>
     <dependency rev="latest.integration" org="caGrid" name="cadsr" conf="core->client;ui->portal"/>

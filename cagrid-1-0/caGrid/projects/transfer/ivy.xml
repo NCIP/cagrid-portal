@@ -55,7 +55,7 @@
     <dependency rev="${target.grid}" org="caGrid" name="target_grid" conf="target_grid->urls"/>
 
     <!-- Specific caGrid Service Dependencies -->
-    <dependency rev="latest.integration" org="caGrid" name="introduce" conf="extension->core;service->core,serviceTools;impl-test->core-test"/>
+    <dependency rev="latest.integration" org="caGrid" name="introduce" conf="extension->extension;service->serviceTools;impl-test->test"/>
     <dependency rev="latest.integration" org="caGrid" name="testing" conf="impl-test->system"/>
     
     <!-- Extenernal Dependencies -->
