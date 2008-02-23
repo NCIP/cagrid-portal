@@ -92,41 +92,6 @@
     </ns4:Method>
     <ns4:Method isImported="false" isProvided="false" name="reverseTranslate"
      xsi:type="ns4:MethodType">
-
-     <ns4:Method isImported="true" isProvided="true" name="GetMultipleResourceProperties"
-      xsi:type="ns4:MethodType">
-      <ns4:Output qName="void" isArray="false"/>
-      <ns4:ImportInformation fromIntroduce="false"
-       inputMessage="ns11:GetMultipleResourcePropertiesRequest"
-       namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl"
-       outputMessage="ns11:GetMultipleResourcePropertiesResponse"
-       packageName="org.oasis.wsrf.properties" portTypeName="GetMultipleResourceProperties"
-       wsdlFile="../wsrf/properties/WS-ResourceProperties.wsdl"
-       xmlns:ns11="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl"/>
-      <ns4:ProviderInformation providerClass="GetMRPProvider"/>
-     </ns4:Method>
-     <ns4:Method isImported="true" isProvided="true" name="GetResourceProperty"
-      xsi:type="ns4:MethodType">
-      <ns4:Output qName="void" isArray="false"/>
-      <ns4:ImportInformation fromIntroduce="false" inputMessage="ns12:GetResourcePropertyRequest"
-       namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl"
-       outputMessage="ns12:GetResourcePropertyResponse" packageName="org.oasis.wsrf.properties"
-       portTypeName="GetResourceProperty" wsdlFile="../wsrf/properties/WS-ResourceProperties.wsdl"
-       xmlns:ns12="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl"/>
-      <ns4:ProviderInformation providerClass="GetRPProvider"/>
-     </ns4:Method>
-     <ns4:Method isImported="true" isProvided="true" name="QueryResourceProperties"
-      xsi:type="ns4:MethodType">
-      <ns4:Output qName="void" isArray="false"/>
-      <ns4:ImportInformation fromIntroduce="false"
-       inputMessage="ns14:QueryResourcePropertiesRequest"
-       namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl"
-       outputMessage="ns14:QueryResourcePropertiesResponse" packageName="org.oasis.wsrf.properties"
-       portTypeName="QueryResourceProperties"
-       wsdlFile="../wsrf/properties/WS-ResourceProperties.wsdl"
-       xmlns:ns14="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl"/>
-      <ns4:ProviderInformation providerClass="QueryRPProvider"/>
-     </ns4:Method>
      <ns4:Inputs>
       <ns4:Input qName="xsd:string" isArray="false" name="dna"
        xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
@@ -134,6 +99,41 @@
      <ns4:Output qName="xsd:string" isArray="false" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
      <ns4:Exceptions/>
     </ns4:Method>
+
+    <ns4:Method isImported="true" isProvided="true" name="GetMultipleResourceProperties"
+     xsi:type="ns4:MethodType">
+     <ns4:Output qName="void" isArray="false"/>
+     <ns4:ImportInformation fromIntroduce="false"
+      inputMessage="ns11:GetMultipleResourcePropertiesRequest"
+      namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl"
+      outputMessage="ns11:GetMultipleResourcePropertiesResponse"
+      packageName="org.oasis.wsrf.properties" portTypeName="GetMultipleResourceProperties"
+      wsdlFile="../wsrf/properties/WS-ResourceProperties.wsdl"
+      xmlns:ns11="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl"/>
+     <ns4:ProviderInformation providerClass="GetMRPProvider"/>
+    </ns4:Method>
+    <ns4:Method isImported="true" isProvided="true" name="GetResourceProperty"
+     xsi:type="ns4:MethodType">
+     <ns4:Output qName="void" isArray="false"/>
+     <ns4:ImportInformation fromIntroduce="false" inputMessage="ns12:GetResourcePropertyRequest"
+      namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl"
+      outputMessage="ns12:GetResourcePropertyResponse" packageName="org.oasis.wsrf.properties"
+      portTypeName="GetResourceProperty" wsdlFile="../wsrf/properties/WS-ResourceProperties.wsdl"
+      xmlns:ns12="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl"/>
+     <ns4:ProviderInformation providerClass="GetRPProvider"/>
+    </ns4:Method>
+    <ns4:Method isImported="true" isProvided="true" name="QueryResourceProperties"
+     xsi:type="ns4:MethodType">
+     <ns4:Output qName="void" isArray="false"/>
+     <ns4:ImportInformation fromIntroduce="false" inputMessage="ns14:QueryResourcePropertiesRequest"
+      namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl"
+      outputMessage="ns14:QueryResourcePropertiesResponse" packageName="org.oasis.wsrf.properties"
+      portTypeName="QueryResourceProperties"
+      wsdlFile="../wsrf/properties/WS-ResourceProperties.wsdl"
+      xmlns:ns14="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl"/>
+     <ns4:ProviderInformation providerClass="QueryRPProvider"/>
+    </ns4:Method>
+
    </ns4:Methods>
    <ns7:ResourcePropertiesList xsi:type="ns7:ResourcePropertiesListType"
     xmlns:ns7="gme://gov.nih.nci.cagrid.introduce/1/Resources"/>
