@@ -1075,9 +1075,9 @@ public class CreationViewer extends CreationViewerBaseComponent {
 	private JCheckBox getResourceProperty() {
 		if (resourceProperty == null) {
 			resourceProperty = new JCheckBox();
-			resourceProperty.setSelected(false);
+			resourceProperty.setSelected(true);
 			resourceProperty.setToolTipText("enables access/query/set operations for the resource properties");
-			resourceProperty.setText(IntroduceConstants.INTRODUCE_RESOURCEPROPETIES_RESOURCE);
+			resourceProperty.setText("resource property access");
 			resourceProperty.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					checkResourcePropertyOptions();
@@ -1093,7 +1093,7 @@ public class CreationViewer extends CreationViewerBaseComponent {
 		getPersistantResource().setEnabled(true);
 		getNotificationResource().setEnabled(true);
 		getSecureResource().setEnabled(true);
-		getResourceProperty().setEnabled(true);
+		getResourceProperty().setEnabled(false);
 
 	}
 }  //  @jve:decl-index=0:visual-constraint="10,10"

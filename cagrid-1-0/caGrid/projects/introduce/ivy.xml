@@ -20,13 +20,6 @@
 
     <conf name="impl" visibility="private" extends="default"/>
     <conf name="impl-test" visibility="private"/>
-    <conf name="core" visibility="private" extends="extension"/>
-    <conf name="ui" visibility="private" extends="core"/>
-    
-    <conf name="core-test" visibility="private" extends="core,impl-test"/>
-    <conf name="ui-test" visibility="private" extends="ui,impl-test"/>
-    <conf name="test" visibility="private" extends="extension-test"/>
-    
 
     <!-- Public Configurations-->
     <conf name="default" visibility="public" extends="ui"/>

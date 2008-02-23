@@ -277,43 +277,6 @@ public final class ProviderTools {
     }
 
 
-    private static void addSetResourcePropertyResourceProvider(ServiceType service, ServiceInformation info) {
-        MethodType rpMethod = new MethodType();
-        rpMethod.setName("SetResourceProperties");
-        rpMethod.setOutput(new MethodTypeOutput());
-        rpMethod.getOutput().setIsArray(false);
-        rpMethod.getOutput().setQName(new QName("", "void"));
-
-        MethodTypeImportInformation ii = new MethodTypeImportInformation();
-        ii.setFromIntroduce(Boolean.FALSE);
-        ii.setInputMessage(new QName(
-            "http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl",
-            "SetResourcePropertiesRequest"));
-        ii.setOutputMessage(new QName(
-            "http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl",
-            "SetResourcePropertiesResponse"));
-        ii.setNamespace("http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl");
-        ii.setPackageName("org.oasis.wsrf.properties");
-        ii.setPortTypeName("SetResourceProperties");
-        ii.setWsdlFile("../wsrf/properties/WS-ResourceProperties.wsdl");
-        rpMethod.setImportInformation(ii);
-        rpMethod.setIsImported(true);
-
-        MethodTypeProviderInformation pi = new MethodTypeProviderInformation();
-        pi.setProviderClass("SetRPProvider");
-        rpMethod.setProviderInformation(pi);
-        rpMethod.setIsProvided(true);
-
-        CommonTools.addMethod(service, rpMethod);
-    }
-
-
-    private static void removeSetResourcePropertyResourceProvider(ServiceType service, ServiceInformation info) {
-        CommonTools.removeMethod(service.getMethods(), CommonTools.getMethod(service.getMethods(),
-            "SetResourceProperties"));
-    }
-
-
     public static void removeProviderFromServiceConfig(ServiceType service, String providerClass,
         ServiceInformation info) throws Exception, IOException {
 
@@ -352,14 +315,12 @@ public final class ProviderTools {
     public static void addResourcePropertiesManagementResourceFrameworkOption(ServiceType service, ServiceInformation info){
         addGetMultipeResourcePropertiesResourceProvider(service, info);
         addGetResourcePropertyResourceProvider(service, info);
-        addSetResourcePropertyResourceProvider(service, info);
         addQueryResourcePropertiesResourceProvider(service, info);
     }
     
     public static void removeResourcePropertiesManagementResourceFrameworkOption(ServiceType service, ServiceInformation info){
         removeGetMultipeResourcePropertiesResourceProvider(service, info);
         removeGetResourcePropertyResourceProvider(service, info);
-        removeSetResourcePropertyResourceProvider(service, info);
         removeQueryResourcePropertiesResourceProvider(service, info);
     }
 

@@ -323,7 +323,7 @@ public class ResourceFrameworkOptionsManager extends JPanel {
 		if (resourceProperty == null) {
 			resourceProperty = new JCheckBox();
 			resourceProperty
-					.setText(IntroduceConstants.INTRODUCE_RESOURCEPROPETIES_RESOURCE);
+					.setText("resource property access");
 
 			resourceProperty
 					.addActionListener(new java.awt.event.ActionListener() {
