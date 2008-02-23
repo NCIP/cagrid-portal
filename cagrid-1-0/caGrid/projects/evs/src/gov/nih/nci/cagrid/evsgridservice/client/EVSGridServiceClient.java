@@ -62,7 +62,7 @@ public class EVSGridServiceClient extends ServiceSecurityClient implements EVSGr
 
         EVSGridServiceAddressingLocator locator = new EVSGridServiceAddressingLocator();
         // attempt to load our context sensitive wsdd file
-        InputStream resourceAsStream = ClassUtils.getResourceAsStream(getClass(), "client-config.wsdd");
+        InputStream resourceAsStream = getClass().getResourceAsStream("client-config.wsdd");
         if (resourceAsStream != null) {
             // we found it, so tell axis to configure an engine to use it
             EngineConfiguration engineConfig = new FileProvider(resourceAsStream);
