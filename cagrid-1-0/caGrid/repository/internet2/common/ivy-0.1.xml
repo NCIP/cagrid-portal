@@ -17,7 +17,7 @@
 
 
     <publications>
-        <artifact name="i2mi-common" type="jar" conf="bundled"/>
+        <artifact name="i2mi-common-0.1.0" type="jar" conf="bundled"/>
     </publications>
 
     <dependencies>
