@@ -8,6 +8,8 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import EDU.oswego.cs.dl.util.concurrent.ObservableSync.SyncObserver;
+
 
 /**
  * PortFactory Utility to hand out PortPreference instances in a static way.
@@ -16,13 +18,13 @@ import java.util.List;
  * 
  * @author David Ervin
  * @created Nov 5, 2007 10:13:07 AM
- * @version $Id: PortFactory.java,v 1.6 2008-01-30 15:28:59 dervin Exp $
+ * @version $Id: PortFactory.java,v 1.7 2008-02-25 16:04:52 hastings Exp $
  */
 public class PortFactory {
     private static List<Integer> assignedPortNumbers = null;
 
 
-    public static ContainerPorts getContainerPorts() throws NoAvailablePortException {
+    public static synchronized ContainerPorts getContainerPorts() throws NoAvailablePortException {
         if (assignedPortNumbers == null) {
             assignedPortNumbers = new LinkedList<Integer>();
         }
