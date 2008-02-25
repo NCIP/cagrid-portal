@@ -64,9 +64,9 @@
 	</target>
 
 	<target name="build-projects-list">
-		<ivy:buildlist reference="ivy.projects.list">
+		<ivy:buildlist reference="ivy.projects.list" ivyfilepath="ivy.xml" skipbuildwithoutivy="true">
 			<fileset dir="${projects.dir}">
-				<include name="*/dependencies-build.xml" />				
+				<include name="*/dependencies-build.xml" />
 				<!-- can put additional patterns for others like workflow -->
 				<include name="workflow/*/dependencies-build.xml" />
 			</fileset>
@@ -100,9 +100,11 @@
 	<target name="build-project" depends="prepare,input-project-name,check-project-name">
 		<echo message="Building ${single.project.name}, and all its dependencies (as necessary)." />
 
-		<ivy:buildlist reference="single.ivy.project.list" root="${single.project.name}">
+		<ivy:buildlist reference="single.ivy.project.list" root="${single.project.name}" skipbuildwithoutivy="true" ivyfilepath="ivy.xml">
 			<fileset dir="${projects.dir}">
 				<include name="*/dependencies-build.xml" />
+				<!-- can put additional patterns for others like workflow -->
+				<include name="workflow/*/dependencies-build.xml" />
 			</fileset>
 		</ivy:buildlist>
 
@@ -118,9 +120,11 @@
 	<target name="build-depending-on-project" depends="prepare,input-project-name,check-project-name">
 		<echo message="Building all projects depending on ${single.project.name}.  Note, the depending projects' dependencies are not built, this should just be used to propagate changes to the given project for integration." />
 
-		<ivy:buildlist reference="depending.on.single.ivy.project.list" leaf="${single.project.name}">
+		<ivy:buildlist reference="depending.on.single.ivy.project.list" leaf="${single.project.name}" skipbuildwithoutivy="true" ivyfilepath="ivy.xml">
 			<fileset dir="${projects.dir}">
 				<include name="*/dependencies-build.xml" />
+				<!-- can put additional patterns for others like workflow -->
+				<include name="workflow/*/dependencies-build.xml" />
 			</fileset>
 		</ivy:buildlist>
 
@@ -134,12 +138,34 @@
 
 	</target>
 
+	<target name="set-project-versions" depends="prepare">
+		<fail unless="project.version" message="You must provide a a value for the property [project.version]!" />
+		<echo message="Setting all project versions to version ${project.version}" />
+
+		<ivy:buildlist reference="ivy.project.properties.list" skipbuildwithoutivy="true" ivyfilepath="ivy.xml">
+			<fileset dir="${projects.dir}">
+				<include name="*/project.properties" />
+				<!-- can put additional patterns for others like workflow -->
+				<include name="workflow/*/project.properties" />
+			</fileset>
+		</ivy:buildlist>
+
+		<for parallel="true" param="project.properties.file" trim="true">
+			<path refid="ivy.project.properties.list" />
+			<sequential>
+				<propertyfile file="@{project.properties.file}">
+					<entry key="project.version" value="${project.version}" />
+				</propertyfile>
+			</sequential>
+		</for>
+	</target>
+
 
 	<target name="all" depends="prepare,clean" description="compile, jar and publish all projects in the right order">
 		<for parallel="false" param="project.buildfile" trim="true">
 			<path refid="ivy.projects.list" />
-			<sequential>				
-				<dirname file="@{project.buildfile}" property="@{project.buildfile}.dir"/>
+			<sequential>
+				<dirname file="@{project.buildfile}" property="@{project.buildfile}.dir" />
 				<ant inheritAll="false" inheritrefs="false" dir="${@{project.buildfile}.dir}" antfile="@{project.buildfile}" target="publish">
 					<property name="target.grid" value="${target.grid}" />
 				</ant>
@@ -156,12 +182,12 @@
 		<for parallel="true" param="project.buildfile" trim="true" threadcount="10">
 			<path refid="ivy.projects.list" />
 			<sequential>
-                <dirname file="@{project.buildfile}" property="@{project.buildfile}.dir"/>
+				<dirname file="@{project.buildfile}" property="@{project.buildfile}.dir" />
 				<ant inheritAll="false" dir="${@{project.buildfile}.dir}" antfile="@{project.buildfile}" target="clean-dependencies" />
 			</sequential>
 		</for>
-
 	</target>
+
 
 	<!-- ============================================================== -->
 	<!-- Installs the Introduce Extensions                              -->
