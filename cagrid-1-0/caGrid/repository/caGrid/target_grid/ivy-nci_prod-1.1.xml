@@ -22,8 +22,7 @@
     <conf name="urls" visibility="public" extends="default"/>
 
     <!--  grape UI configurations-->
-    <conf name="ui" visibility="public" extends="dorian-ui,gridgrouper-ui,gts-ui,cds-ui,workflow-ui"/>
-    <conf name="cds-ui" visibility="public" extends="default"/>
+    <conf name="ui" visibility="public" extends="dorian-ui,gridgrouper-ui,gts-ui,workflow-ui"/>
     <conf name="dorian-ui" visibility="public" extends="default"/>
     <conf name="gridgrouper-ui" visibility="public" extends="default"/>
     <conf name="gts-ui" visibility="public" extends="default"/>
@@ -41,7 +40,6 @@
     <artifact name="gridgrouper-ui-configuration" type="xml" conf="gridgrouper-ui"/>
     <artifact name="gts-ui-configuration" type="xml" conf="gts-ui"/>
     <artifact name="workflow-ui-configuration" type="xml" conf="workflow-ui"/>
-    <artifact name="cds-ui-configuration" type="xml" conf="cds-ui"/>
 
     <!--  properties-->
     <artifact name="introduce" type="properties" conf="introduce"/>

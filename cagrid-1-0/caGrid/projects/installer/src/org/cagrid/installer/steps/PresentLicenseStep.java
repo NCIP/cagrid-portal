@@ -76,7 +76,7 @@ public class PresentLicenseStep extends PanelWizardStep {
 		try {
 			StringBuilder sb = new StringBuilder();
 			BufferedReader r = new BufferedReader(new InputStreamReader(
-					getClass().getResourceAsStream("/cagrid_1.1_license.txt")));
+					getClass().getResourceAsStream("/cagrid_license.txt")));
 			String line = null;
 			while ((line = r.readLine()) != null) {
 				sb.append(line).append("\n");

@@ -7,7 +7,7 @@
 
 	<!-- The default target grid -->
 	<property file="${current.grid.property.file}" />
-	<property name="target.grid" value="osu_dev-1.1" />
+	<property name="target.grid" value="osu_dev-1.2" />
 
 	<target name="configure-clean">
 		<delete file="${current.grid.property.file}" />
@@ -60,12 +60,13 @@
 
 		<ivy:listmodules organisation="caGrid" module="target_grid" revision="*" property="target.grid.names.[revision]" value="found" />
 		<propertyselector property="target.grid.list" delimiter="," match="target\.grid\.names\.ivy\-(.*)\.xml" select="\1" />
+		<sortlist property="sorted.target.grid.list" value="${target.grid.list}" delimiter="," />
 
 		<echo message="=====================================================================================" />
 		<echo message="|    CONFIGURED TO USE GRID: ${target.grid} AT: ${target.grid.configure.time}" />
 		<echo message="|" />
 		<echo message="|    THE VALID TARGET GRIDS ARE:" />
-		<for list="${target.grid.list}" param="grid.name">
+		<for list="${sorted.target.grid.list}" param="grid.name">
 			<sequential>
 				<echo message="|      - @{grid.name}" />
 			</sequential>

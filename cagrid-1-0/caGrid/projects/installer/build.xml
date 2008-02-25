@@ -20,8 +20,12 @@
 
 	<property name="runtime.mainclass" value="org.cagrid.installer.Installer" />
 
-	<property name="download.properties.url" value="http://localhost:8080/downloads/cagrid.installer.properties" />
-	<property name="cagrid.download.url" value="http://localhost:8080/downloads/${cagrid.master.jar.prefix}src.zip" />
+	<pathconvert property="download.properties.path" dirsep="/">
+		<path location="${build}/cagrid.installer.properties" />
+	</pathconvert>
+	<!-- NOTE: these are expected to be changed/overridden when releases are created -->
+	<property name="download.properties.url" value="file:/${download.properties.path}" />
+	<property name="cagrid.download.url" value="http://localhost:8080/downloads/caGrid-${project.version}.zip" />
 	<property name="portal.download.url" value="http://gforge.nci.nih.gov/frs/download.php/3059/cagrid-portal-2.0.zip" />
 
 	<fileset id="globus.jars" dir="${globus.dir}/lib">
