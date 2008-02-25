@@ -6,3 +6,4 @@ build
 old_stuff
 integration-repository
 .currentgrid.properties
+ivy-repository-report.xml
