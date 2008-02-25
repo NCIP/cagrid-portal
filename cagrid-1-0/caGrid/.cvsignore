@@ -1,9 +1,6 @@
 tmp
 .classpath
 .project
-javancss_metrics.html
 build
-old_stuff
 integration-repository
 .currentgrid.properties
-ivy-repository-report.xml
