@@ -155,7 +155,6 @@
 	<classpathentry kind="var" path="ANT_HOME/lib/junit.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/test/jars/caGrid-Introduce-core-tests-1.2-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/test/jars/caGrid-Introduce-portal-tests-1.2-dev.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/test/jars/caGrid-Introduce-updater-tests-1.2-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/test/jars/caGrid-testing-core-1.2-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/test/jars/caGrid-testing-system-1.2-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/test/jars/caGrid-data-tests-1.2-dev.jar"/>
