@@ -64,7 +64,7 @@ public class ResourcePropertiesPopUpMenu extends JPopupMenu {
         ModifyResourcePropertiesComponent comp = new ModifyResourcePropertiesComponent(node.getService(), node.getInfo(), node
             .getInfo().getNamespaces(), new File(node.getInfo().getBaseDirectory().getAbsolutePath() + File.separator
             + "etc"), new File(node.getInfo().getBaseDirectory().getAbsolutePath() + File.separator + "schema"
-            + File.separator + node.getInfo().getServices().getService(0).getName()), true);
+            + File.separator + node.getInfo().getServices().getService(0).getName()), false);
         comp.setSize(800, 500);
         GridApplication.getContext().showDialog(comp);
         //rebuild this part of tree
