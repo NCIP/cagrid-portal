@@ -101,7 +101,6 @@
 	<classpathentry kind="lib" path="extension/ext/dependencies/jars/caGrid-advertisement-1.2-dev.jar"/>
 	<classpathentry kind="lib" path="extension/ext/dependencies/jars/caGrid-core-1.2-dev.jar"/>
 	<classpathentry kind="lib" path="extension/ext/dependencies/jars/caGrid-Introduce-core-1.2-dev.jar"/>
-	<classpathentry kind="lib" path="extension/ext/dependencies/jars/caGrid-Introduce-portal-1.2-dev.jar"/>
 	<classpathentry kind="lib" path="extension/ext/dependencies/jars/caGrid-metadata-common-1.2-dev.jar"/>
 	<classpathentry kind="lib" path="extension/ext/dependencies/jars/caGrid-metadata-security-1.2-dev.jar"/>
 	<classpathentry kind="lib" path="extension/ext/dependencies/jars/caGrid-ServiceSecurityProvider-client-1.2-dev.jar"/>
