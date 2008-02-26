@@ -74,17 +74,12 @@ public class ServicesPopUpMenu extends JPopupMenu {
         service.getResourceFrameworkOptions().setLifetime(new Lifetime());
         service.getResourceFrameworkOptions().setIdentifiable(new Identifiable());
         service.getResourceFrameworkOptions().setSecure(new Secure());
-        
-        // service.setServiceSecurity(new ServiceSecurity());
-        service.setMethods(new MethodsType());
 
         ModifyService comp = new ModifyService(new SpecificServiceInformation(node.getInfo(), service), true);
         comp.setVisible(true);
 
         if (!comp.wasClosed()) {
-            ServiceTypeTreeNode newNode = node.addService(service);
-            newNode.getModel().nodeStructureChanged(node);
-            newNode.getModel().nodeChanged(node);
+            node.addService(service);
         }
     }
 
