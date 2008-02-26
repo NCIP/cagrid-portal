@@ -28,7 +28,7 @@ import java.util.Map;
  * @author David Ervin
  * 
  * @created Jan 15, 2008 10:21:55 AM
- * @version $Id: BeanTypeDiscoveryMapper.java,v 1.1 2008-01-16 17:05:31 dervin Exp $ 
+ * @version $Id: BeanTypeDiscoveryMapper.java,v 1.2 2008-02-26 16:49:36 dervin Exp $ 
  */
 public class BeanTypeDiscoveryMapper {
 
@@ -55,32 +55,36 @@ public class BeanTypeDiscoveryMapper {
     
     private void initializeInheritance() {
         UMLGeneralization[] generalizations = model.getUmlGeneralizationCollection().getUMLGeneralization();
-        for (UMLGeneralization gen : generalizations) {
-            UMLClass superclass = DomainModelUtils.getReferencedUMLClass(model, gen.getSuperClassReference());
-            UMLClass subclass = DomainModelUtils.getReferencedUMLClass(model, gen.getSubClassReference());
-            
-            String superName = superclass.getPackageName() + "." + superclass.getClassName();
-            String subName = subclass.getPackageName() + "." + subclass.getClassName();
-            
-            // map the superclass to a list of subclasses
-            List<String> subclassList = subclasses.get(superName);
-            if (subclassList == null) {
-                subclassList = new LinkedList<String>();
-                subclasses.put(superName, subclassList);
+        if (generalizations != null && generalizations.length != 0) {
+            for (UMLGeneralization gen : generalizations) {
+                UMLClass superclass = DomainModelUtils.getReferencedUMLClass(model, gen.getSuperClassReference());
+                UMLClass subclass = DomainModelUtils.getReferencedUMLClass(model, gen.getSubClassReference());
+
+                String superName = superclass.getPackageName() + "." + superclass.getClassName();
+                String subName = subclass.getPackageName() + "." + subclass.getClassName();
+
+                // map the superclass to a list of subclasses
+                List<String> subclassList = subclasses.get(superName);
+                if (subclassList == null) {
+                    subclassList = new LinkedList<String>();
+                    subclasses.put(superName, subclassList);
+                }
+                subclassList.add(subName);
+
+                // map the subclass to its super
+                superclasses.put(subName, superName);
             }
-            subclassList.add(subName);
-            
-            // map the subclass to its super
-            superclasses.put(subName, superName);
         }
     }
     
     
     private void initializeClassnameMapping() {
         UMLClass[] classes = model.getExposedUMLClassCollection().getUMLClass();
-        for (UMLClass c : classes) {
-            String name = c.getPackageName() + "." + c.getClassName();
-            classesByFullName.put(name, c);
+        if (classes != null && classes.length != 0) {
+            for (UMLClass c : classes) {
+                String name = c.getPackageName() + "." + c.getClassName();
+                classesByFullName.put(name, c);
+            }
         }
     }
     
@@ -88,8 +92,10 @@ public class BeanTypeDiscoveryMapper {
     private List<String> getClassesInModel() {
         List<String> names = new ArrayList<String>();
         UMLClass[] classes = model.getExposedUMLClassCollection().getUMLClass();
-        for (UMLClass c : classes) {
-            names.add(c.getPackageName() + "." + c.getClassName());
+        if (classes != null && classes.length != 0) {
+            for (UMLClass c : classes) {
+                names.add(c.getPackageName() + "." + c.getClassName());
+            }
         }
         return names;
     }
