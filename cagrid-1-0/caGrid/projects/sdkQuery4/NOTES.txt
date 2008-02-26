@@ -2,3 +2,5 @@
 for returned beans, which are otherwise POJOs.  It would be nice to figure
 out how this works, then devise a way to implement the callout with CQL based
 data services and populate the association accordingly.
+
+2) (DONE) CQL2ParameterizedHQL needs to handle Date attribute values
