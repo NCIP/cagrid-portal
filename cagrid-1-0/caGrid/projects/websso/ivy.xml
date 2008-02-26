@@ -29,9 +29,9 @@
   </publications>
 
   <dependencies>
-    <dependency rev="latest.integration" org="caGrid" name="dorian"
-      conf="default->client;endorsed->endorsed"/>
+    <dependency rev="latest.integration" org="caGrid" name="dorian" conf="default->client;endorsed->endorsed"/>
     <dependency rev="latest.integration" org="caGrid" name="cds" conf="default->client"/>
+    <dependency rev="latest.integration" org="caGrid" name="syncgts" conf="default->client"/>
 
     <!-- External Dependencies -->
     <dependency rev="3.1" org="jasig" name="cas-server" conf="default->default"/>

@@ -115,6 +115,14 @@
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 	
+	<servlet>
+		<servlet-name>Start Auto Sync GTS </servlet-name>
+		<servlet-class>
+			org.cagrid.gaards.websso.utils.StartSyncGTSServlet
+		</servlet-class>
+		<load-on-startup>2</load-on-startup>
+	</servlet>
+	
 	<servlet-mapping>
 		<servlet-name>cas</servlet-name>
 		<url-pattern>/login</url-pattern>

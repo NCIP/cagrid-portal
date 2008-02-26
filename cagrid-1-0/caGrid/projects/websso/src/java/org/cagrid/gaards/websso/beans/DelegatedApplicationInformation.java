@@ -1,6 +1,6 @@
 package org.cagrid.gaards.websso.beans;
 
-public class HostInformation
+public class DelegatedApplicationInformation
 {
 
 	/**

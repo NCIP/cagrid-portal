@@ -13,6 +13,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.cagrid.gaards.websso.exception.AuthenticationConfigurationException;
 import org.jdom.Document;
+import org.jdom.input.DOMBuilder;
 import org.w3c.dom.DOMException;
 import org.xml.sax.SAXException;
 
@@ -36,7 +37,7 @@ public class FileHelper
 	public URL getFileAsURL(String fileName, ClassLoader classLoader) throws AuthenticationConfigurationException
 	{
 		URL url = classLoader.getResource(fileName);
-		if (url != null)
+		if (url == null)
 		{
 			throw new AuthenticationConfigurationException ("Unable to load " + fileName + " file");
 		}
@@ -72,7 +73,7 @@ public class FileHelper
 	
 	public Document validateXMLwithSchema(String propertiesFileName, String schemaFileName) throws AuthenticationConfigurationException
 	{
-		Document document = null;
+		org.w3c.dom.Document document = null;
 		InputStream schemaFileInputStream = getFileAsStream(schemaFileName);
 		URL propertiesFileURL = getFileAsURL(propertiesFileName);
 		
@@ -91,7 +92,7 @@ public class FileHelper
 		}
     	try 
     	{
-			document = (Document) documentBuilder.parse(propertiesFileURL.getPath());
+			document = (org.w3c.dom.Document) documentBuilder.parse(propertiesFileURL.getPath());
 		} 
     	catch (SAXException e) 
     	{
@@ -105,7 +106,10 @@ public class FileHelper
 		{
 			throw new AuthenticationConfigurationException("Error in reading the " + propertiesFileName + " file");
 		}
-		return document;
+		DOMBuilder builder = new DOMBuilder();
+		org.jdom.Document jdomDocument = builder.build(document);
+
+		return jdomDocument;
 	}
 
 }

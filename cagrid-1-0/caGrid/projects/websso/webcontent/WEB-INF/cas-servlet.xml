@@ -178,7 +178,7 @@
 	<bean id="proxyController" class="org.jasig.cas.web.ProxyController"
 		p:centralAuthenticationService-ref="centralAuthenticationService" />
 
-	<bean id="logoutController" class="org.jasig.cas.web.LogoutController"
+	<bean id="logoutController" class="org.cagrid.gaards.websso.logout.CaGridLogoutController"
 		p:centralAuthenticationService-ref="centralAuthenticationService"
 		p:logoutView="casLogoutView"
 		p:warnCookieGenerator-ref="warnCookieGenerator"
@@ -189,7 +189,7 @@
 		p:warnCookieGenerator-ref="warnCookieGenerator"
 		p:ticketGrantingTicketCookieGenerator-ref="ticketGrantingTicketCookieGenerator" />
 	
-	<bean id="authenticationViaFormAction" class="org.jasig.cas.web.flow.AuthenticationViaFormAction"
+	<bean id="authenticationViaFormAction" class="org.cagrid.gaards.websso.authentication.CaGridWebSSOAuthenticationViaFormAction"
 		p:centralAuthenticationService-ref="centralAuthenticationService"
 		p:warnCookieGenerator-ref="warnCookieGenerator" />
 	

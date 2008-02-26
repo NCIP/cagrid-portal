@@ -17,6 +17,8 @@ public class WebSSOConstants
 
 	public static final String WEBSSO_BEAN_CONFIG_FILE = "websso-beans.xml";
 	
+	public static final String FILE_HELPER = "FileHelper";
+	
 	public static final String WEBSSO_PROPERTIES = "WebSSOProperties";
 
 	public static final String AUTHENTICATION_SERVICE_HELPER = "AuthenticationServiceHelper";
@@ -28,5 +30,11 @@ public class WebSSOConstants
 	public static final String GRID_CREDENTIAL_DELEGATOR = "GridCredentialDelegator";
 	
 	public static final String SAML_TO_ATTRIBUTE_MAPPER = "SAMLToAttributeMapper";
+
+	public static final String ATTRIBUTE_DELIMITER = "$";
+	
+	public static final String KEY_VALUE_PAIR_DELIMITER = "^";
+
+
 	
 }

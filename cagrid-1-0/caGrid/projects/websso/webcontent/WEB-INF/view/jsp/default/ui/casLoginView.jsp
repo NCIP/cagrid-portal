@@ -31,16 +31,24 @@
 							<spring:message code="screen.welcome.label.password.accesskey" var="passwordAccessKey" />
 							<form:password cssClass="required" cssErrorClass="error" id="password" size="25" tabindex="2" path="password"  accesskey="${passwordAccessKey}" htmlEscape="true" />
 	                    </div>
+	                    <div class="row">
+	                        <label for="authenticationServiceURL"><spring:message code="screen.welcome.label.authentication.service" /></label>
+							<spring:message code="screen.welcome.label.authentication.service.accesskey" var="authenticationServiceAccessKey" />
+							<form:select cssClass="required" cssErrorClass="error" id="authenticationServiceURL" tabindex="3" path="authenticationServiceURL"  accesskey="${authenticationServiceAccessKey}" htmlEscape="true" >
+								<form:option value="-" label="-- Please Select"/>
+            					<form:options items="${authenticationServiceInformationList}" itemValue="authenticationServiceURL" itemLabel="authenticationServiceName"/>
+        					</form:select>
+	                    </div>
 	                    <div class="row check">
-	                        <input id="warn" name="warn" value="true" tabindex="3" accesskey="<spring:message code="screen.welcome.label.warn.accesskey" />" type="checkbox" />
+	                        <input id="warn" name="warn" value="true" tabindex="4" accesskey="<spring:message code="screen.welcome.label.warn.accesskey" />" type="checkbox" />
 	                        <label for="warn"><spring:message code="screen.welcome.label.warn" /></label>
 	                    </div>
 	                    <div class="row btn-row">
 							<input type="hidden" name="lt" value="${flowExecutionKey}" />
 							<input type="hidden" name="_eventId" value="submit" />
 
-	                        <input class="btn-submit" accesskey="l" value="<spring:message code="screen.welcome.button.login" />" tabindex="4" type="submit" />
-	                        <input class="btn-reset" accesskey="c" value="<spring:message code="screen.welcome.button.clear" />" tabindex="5" type="reset" />
+	                        <input class="btn-submit" accesskey="l" value="<spring:message code="screen.welcome.button.login" />" tabindex="5" type="submit" />
+	                        <input class="btn-reset" accesskey="c" value="<spring:message code="screen.welcome.button.clear" />" tabindex="6" type="reset" />
 	                    </div>
 	                </div>
 	            </fieldset>
@@ -51,19 +59,9 @@
 						<c:set var="query" value="<%=request.getQueryString() == null ? "" : request.getQueryString().replaceAll("&locale=([A-Za-z][A-Za-z]_)?[A-Za-z][A-Za-z]|^locale=([A-Za-z][A-Za-z]_)?[A-Za-z][A-Za-z]", "")%>" />
 						<c:set var="loginUrl" value="login?${query}${not empty query ? '&' : ''}locale=" />
 	                    <h3>Languages:</h3>
-						<ul
-							><li class="first"><a href="login?${query}${not empty query ? '&' : ''}locale=en">English</a></li
-							><li><a href="${loginUrl}es">Spanish</a></li				
-							><li><a href="${loginUrl}fr">French</a></li
-							><li><a href="${loginUrl}ru">Russian</a></li
-							><li><a href="${loginUrl}nl">Nederlands</a></li
-							><li><a href="${loginUrl}sv">Svenskt</a></li
-							><li><a href="${loginUrl}it">Italiano</a></li
-							><li><a href="${loginUrl}ur">Urdu</a></li
-							><li><a href="${loginUrl}zh_CN">Chinese (Simplified)</a></li
-							><li><a href="${loginUrl}de">Deutsch</a></li
-							><li class="last"><a href="${loginUrl}ja">Japanese</a></li
-						></ul>
+						<ul>
+							<li class="first"><a href="login?${query}${not empty query ? '&' : ''}locale=en">English</a></li>
+						</ul>
 	                </div>
 	            </div>
         	</form:form>

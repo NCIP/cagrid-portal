@@ -26,6 +26,7 @@
 
   <dependencies>
     <dependency rev="latest.integration" org="caGrid" name="cds" conf="default->client"/>
+    <dependency rev="latest.integration" org="caGrid" name="syncgts" conf="default->client"/>
 
     <!-- External Dependencies -->
     <dependency rev="3.0" org="jasig" name="cas-client-core" conf="default->default"/>

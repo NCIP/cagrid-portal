@@ -1,6 +1,9 @@
 package org.cagrid.gaards.websso.client.filter;
 
+import gov.nih.nci.cagrid.common.Utils;
+
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.StringReader;
 
 import javax.servlet.Filter;
@@ -12,7 +15,9 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.cagrid.gaards.cds.client.CredentialDelegationServiceClient;
 import org.cagrid.gaards.cds.client.DelegatedCredentialUserClient;
+import org.cagrid.gaards.cds.client.DelegationUserClient;
 import org.cagrid.gaards.cds.delegated.stubs.types.DelegatedCredentialReference;
 import org.cagrid.gaards.cds.stubs.types.CDSInternalFault;
 import org.cagrid.gaards.cds.stubs.types.DelegationFault;
@@ -69,9 +74,9 @@ public class CaGridWebSSODelegationLookupFilter implements Filter
 				DelegatedCredentialReference delegatedCredentialReference = null;
 				try
 				{
-					delegatedCredentialReference = (DelegatedCredentialReference) ObjectDeserializer.deserialize(new InputSource(new StringReader(delegationEPR)), DelegatedCredentialReference.class);
+					delegatedCredentialReference = (DelegatedCredentialReference) Utils.deserializeObject(new StringReader(delegationEPR), DelegatedCredentialReference.class,  CaGridWebSSODelegationLookupFilter.class.getResourceAsStream("client-config.wsdd"));
 				}
-				catch (DeserializationException e)
+				catch (Exception e)
 				{
 					throw new ServletException("Unable to deserialize the Delegation Reference", e);
 				}
@@ -105,6 +110,7 @@ public class CaGridWebSSODelegationLookupFilter implements Filter
 				session.setAttribute(IS_GRID_CREDENTIAL_LOADED, Boolean.TRUE);
 			}
 		}
+		filterChain.doFilter(request, response);
 	}
 
 	public void init(FilterConfig filterConfig) throws ServletException

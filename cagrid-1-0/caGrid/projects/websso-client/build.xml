@@ -12,8 +12,10 @@
 	<property name="jar.name" value="${ant.project.name}-${project.version}.jar" />
 
 	<property name="src.java.dir" location="src/java" />
+    <property name="src.resources.dir" location="src/resources" />
 
 	<property name="build.dir" location="build" />
+	<property name="build.conf.dir" location="build/conf" />
 	<property name="build.classes.dir" location="build/classes" />
 
 
@@ -33,7 +35,6 @@
 			</fileset>
 			<fileset dir="${env.GLOBUS_LOCATION}/lib">
 				<include name="axis.jar" />
-				<include name="cog-jglobus.jar" />
 				<include name="wsrf_core_stubs.jar" />
 				<include name="jaxrpc.jar" />
 				<include name="addressing-1.0.jar" />
@@ -51,10 +52,16 @@
 				<include name="jce-jdk13-125.jar" />
 			</fileset>
 		</copy>
+    	<mkdir dir="${build.conf.dir}" />
+    	<copy todir="${build.conf.dir}" flatten="true" overwrite="true">
+    		<fileset dir="${src.resources.dir}">
+    			<include name="*.*" />
+    		</fileset>
+    	</copy>
 	</target>
 
 	<target name="build-jar">
-		<jar jarfile="${build.dir}/${jar.name}" basedir="${build.classes.dir}" includes="**/*.class" />
+		<jar jarfile="${build.dir}/${jar.name}" basedir="${build.classes.dir}" />
 		<delete dir="${build.classes.dir}" />
 	</target>
 
@@ -63,6 +70,7 @@
 		<mkdir dir="${build.dir}" />
 		<mkdir dir="${build.classes.dir}" />
 		<javac srcdir="${src.java.dir}" destdir="${build.classes.dir}" classpathref="build.classpath" debug="true" />
+		<copy file="${src.java.dir}/org/cagrid/gaards/websso/client/filter/client-config.wsdd" todir="${build.classes.dir}/org/cagrid/gaards/websso/client/filter/" />
 	</target>
 
 	<target name="jar" depends="compile,build-jar,dist">
@@ -73,6 +81,24 @@
 	</target>
 
 	<target name="all">
+		
+		
+    	<echo>*********************************************</echo>
+    	<echo>#     #                #####   #####  #######</echo>
+    	<echo>#  #  # ###### #####  #     # #     # #     #</echo>
+    	<echo>#  #  # #      #    # #       #       #     #</echo>
+    	<echo>#  #  # #####  #####   #####   #####  #     #</echo>
+    	<echo>#  #  # #      #    #       #       # #     #</echo>
+    	<echo>#  #  # #      #    # #     # #     # #     #</echo>
+    	<echo> ## ##  ###### #####   #####   #####  #######</echo>
+		<echo>     #####                              </echo>
+		<echo>    #     # #      # ###### #    # #####</echo>
+		<echo>    #       #      # #      ##   #   #  </echo>
+		<echo>    #       #      # #####  # #  #   #  </echo>
+		<echo>    #       #      # #      #  # #   #  </echo>
+		<echo>    #     # #      # #      #   ##   #  </echo>
+		<echo>     #####  ###### # ###### #    #   #  </echo>
+    	<echo>*********************************************</echo>
 		<antcall target="clean" />
 		<antcall target="jar" />
 	</target>

@@ -5,6 +5,7 @@ import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 import org.cagrid.gaards.websso.authentication.helper.AuthenticationServiceHelper;
 import org.cagrid.gaards.websso.authentication.helper.DorianHelper;
@@ -12,12 +13,15 @@ import org.cagrid.gaards.websso.authentication.helper.GridCredentialDelegator;
 import org.cagrid.gaards.websso.authentication.helper.ProxyValidator;
 import org.cagrid.gaards.websso.authentication.helper.SAMLToAttributeMapper;
 import org.cagrid.gaards.websso.beans.AuthenticationServiceInformation;
-import org.cagrid.gaards.websso.beans.HostInformation;
+import org.cagrid.gaards.websso.beans.DelegatedApplicationInformation;
+import org.cagrid.gaards.websso.beans.DorianInformation;
+import org.cagrid.gaards.websso.beans.WebSSOServerInformation;
 import org.cagrid.gaards.websso.exception.AuthenticationConfigurationException;
 import org.cagrid.gaards.websso.utils.ObjectFactory;
 import org.cagrid.gaards.websso.utils.WebSSOConstants;
 import org.cagrid.gaards.websso.utils.WebSSOProperties;
 import org.globus.gsi.GlobusCredential;
+import org.globus.gsi.GlobusCredentialException;
 import org.jasig.cas.authentication.Authentication;
 import org.jasig.cas.authentication.AuthenticationManager;
 import org.jasig.cas.authentication.MutableAuthentication;
@@ -25,7 +29,6 @@ import org.jasig.cas.authentication.handler.AuthenticationException;
 import org.jasig.cas.authentication.principal.Credentials;
 import org.jasig.cas.authentication.principal.Principal;
 import org.jasig.cas.authentication.principal.SimplePrincipal;
-import org.jasig.cas.authentication.principal.UsernamePasswordCredentials;
 
 /**
  * CaGridAuthenticationManager
@@ -41,8 +44,6 @@ public class CaGridAuthenticationManager implements AuthenticationManager
 	
 	private List<String> hostIdentities = null;
 	
-	private String authenticationServiceURL = null;
-
 	public CaGridAuthenticationManager()
 	{
 		ObjectFactory.initialize(WebSSOConstants.WEBSSO_BEAN_CONFIG_FILE);
@@ -67,13 +68,13 @@ public class CaGridAuthenticationManager implements AuthenticationManager
 		AuthenticationServiceHelper authenticationServiceHelper = (AuthenticationServiceHelper)ObjectFactory.getObject(WebSSOConstants.AUTHENTICATION_SERVICE_HELPER);
 		
 		// Authenticate the user credentials and retrieve 
-		SAMLAssertion samlAssertion = authenticationServiceHelper.authenticate(getAuthenticationServiceURL(), ((UsernamePasswordCredentials) credentials).getUsername(), ((UsernamePasswordCredentials) credentials).getPassword());
+		SAMLAssertion samlAssertion = authenticationServiceHelper.authenticate( ((UsernamePasswordAuthenticationServiceURLCredentials)credentials).getAuthenticationServiceURL() , ((UsernamePasswordAuthenticationServiceURLCredentials)credentials).getUsername(), ((UsernamePasswordAuthenticationServiceURLCredentials)credentials).getPassword());
 
 		// Obtain the implementation for the DorianHelper Interface
 		DorianHelper dorianHelper = (DorianHelper) ObjectFactory.getObject(WebSSOConstants.DORIAN_HELPER);
 		
 		// Obtained the GlobusCredential for the Authenticated User
-		GlobusCredential globusCredential = dorianHelper.obtainProxy(samlAssertion);
+		GlobusCredential globusCredential = dorianHelper.obtainProxy(samlAssertion, this.getDorianInformation(((UsernamePasswordAuthenticationServiceURLCredentials)credentials).getAuthenticationServiceURL()));
 		
 		// Obtain the implementation for the ProxyValidator Interface
 		ProxyValidator proxyValidator = (ProxyValidator)ObjectFactory.getObject(WebSSOConstants.PROXY_VALIDATOR);
@@ -85,57 +86,79 @@ public class CaGridAuthenticationManager implements AuthenticationManager
 		GridCredentialDelegator gridCredentialDelegator = (GridCredentialDelegator)ObjectFactory.getObject(WebSSOConstants.GRID_CREDENTIAL_DELEGATOR);
 		
 		// Delegate the Globus Credentials
-		String serializedDelegatedCredentialReference = gridCredentialDelegator.delegateGridCredential(globusCredential, dorianHelper.getProxyLifetime(), this.getHostIdentities());
+		String serializedDelegatedCredentialReference = gridCredentialDelegator.delegateGridCredential(globusCredential, this.getDorianInformation(((UsernamePasswordAuthenticationServiceURLCredentials)credentials).getAuthenticationServiceURL()).getProxyLifeTime(), this.getHostIdentities());
 		
 		// Obtain the implementation for the SAMLToAttributeMapper Interface
 		SAMLToAttributeMapper samlToAttributeMapper = (SAMLToAttributeMapper)ObjectFactory.getObject(WebSSOConstants.SAML_TO_ATTRIBUTE_MAPPER);  
 
 		HashMap<String, String> attributesMap = samlToAttributeMapper.convertSAMLtoHashMap(samlAssertion);
 
-		// Adding the serialed Delegated Credentails Reference and Grid Identity to the 
+		// Adding the serialed Delegated Credentials Reference and Grid Identity to the 
 		attributesMap.put(WebSSOConstants.CAGRID_SSO_DELEGATION_SERVICE_EPR, serializedDelegatedCredentialReference);
 		attributesMap.put(WebSSOConstants.CAGRID_SSO_GRID_IDENTITY, globusCredential.getIdentity());
 		
 		// Creating the Principal from the grid identity
-		Principal p = new SimplePrincipal(globusCredential.getIdentity());
+		Principal p = new SimplePrincipal(this.constructPrincipal(attributesMap));
 
 		// Create a new Authentication Object using the Principal
 		MutableAuthentication mutableAuthentication = new MutableAuthentication(p);
-
-		// Populate the Attributes Map for the Authentication Object
-		mutableAuthentication.getAttributes().putAll(attributesMap);
 		
 		return mutableAuthentication;
 			
 	}
 	
-	private String getAuthenticationServiceURL() throws AuthenticationConfigurationException
+	private DorianInformation getDorianInformation(String authenticationServiceURL) throws AuthenticationConfigurationException
 	{
-		if (null == authenticationServiceURL)
-		{
-			List<AuthenticationServiceInformation> authenticationServiceInformationList = webSSOProperties.getAuthenticationServices();
-			if (authenticationServiceInformationList.size() == 1)
-				authenticationServiceURL = authenticationServiceInformationList.get(0).getAuthenticationServiceURL();
-			else
-				throw new AuthenticationConfigurationException("More than one Authentication Service configured");
-		}
-		return authenticationServiceURL;
+		AuthenticationServiceInformation authenticationServiceInformation = new AuthenticationServiceInformation();
+		authenticationServiceInformation.setAuthenticationServiceURL(authenticationServiceURL);
+		List<AuthenticationServiceInformation> authenticationServiceInformationList = webSSOProperties.getAuthenticationServiceInformationList();
+		AuthenticationServiceInformation authenticationServiceInformationMatched = authenticationServiceInformationList.get(authenticationServiceInformationList.indexOf(authenticationServiceInformation));
+		return authenticationServiceInformationMatched.getDorianInformation();
 	}
 	
 	private List<String> getHostIdentities() throws AuthenticationConfigurationException
 	{
 		if (null == hostIdentities)
 		{
-			List<HostInformation> hostInformationList = webSSOProperties.getHostInformationList();
+			List<DelegatedApplicationInformation> delegatedApplicationInformationList = webSSOProperties.getDelegatedApplicationInformationList();
 			
-			if (hostInformationList.size() == 0)
+			if (delegatedApplicationInformationList.size() == 0)
 				throw new AuthenticationConfigurationException("None Host Identities configured for Delegation ");
 
 			hostIdentities = new ArrayList<String>();
 			
-			for (HostInformation hostInformation : hostInformationList)
-				hostIdentities.add(hostInformation.getHostIdentity());
+			for (DelegatedApplicationInformation delegatedApplicationInformation : delegatedApplicationInformationList)
+				hostIdentities.add(delegatedApplicationInformation.getHostIdentity());
+			hostIdentities = addWebSSOServerHostIdentity(hostIdentities, webSSOProperties.getWebSSOServerInformation());
 		}
 		return hostIdentities;
 	}
+	
+	private String constructPrincipal(HashMap<String, String> attributeMap)
+	{
+		String principalName = new String();
+		Set<String> keySet = attributeMap.keySet();
+		for(String key: keySet)
+		{
+			String value = attributeMap.get(key);
+			principalName = principalName.concat(key + WebSSOConstants.KEY_VALUE_PAIR_DELIMITER + value + WebSSOConstants.ATTRIBUTE_DELIMITER);
+		}
+		principalName = principalName.substring(0, principalName.lastIndexOf(WebSSOConstants.ATTRIBUTE_DELIMITER));
+		return principalName;
+	}
+	
+	private List<String> addWebSSOServerHostIdentity(List<String> hostIdentities, WebSSOServerInformation webSSOServerInformation) throws AuthenticationConfigurationException
+	{
+		try
+		{
+			GlobusCredential globusCredential = new GlobusCredential(webSSOServerInformation.getHostCredentialCertificateFilePath(),webSSOServerInformation.getHostCredentialKeyFilePath());
+			hostIdentities.add(globusCredential.getIdentity());
+		}
+		catch (GlobusCredentialException e)
+		{
+			throw new AuthenticationConfigurationException("Unable to create the WebSSO Host Credentials using the configuration provided", e);
+		}
+		return hostIdentities;
+	}
+	
 }
