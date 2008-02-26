@@ -79,7 +79,7 @@ public class ServicesPopUpMenu extends JPopupMenu {
         comp.setVisible(true);
 
         if (!comp.wasClosed()) {
-            node.addService(service);
+           node.addService(service);
         }
     }
 

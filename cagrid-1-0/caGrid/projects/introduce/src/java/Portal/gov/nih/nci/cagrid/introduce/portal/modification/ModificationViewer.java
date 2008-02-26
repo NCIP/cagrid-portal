@@ -292,7 +292,7 @@ public class ModificationViewer extends ApplicationComponent {
 		setLastSaved(this.info.getIntroduceServiceProperties().getProperty(
 				IntroduceConstants.INTRODUCE_SKELETON_TIMESTAMP));
 		getNamespaceJTree().setNamespaces(this.info.getNamespaces());
-		getResourcesJTree().setServices(this.info.getServices(), this.info);
+		getResourcesJTree().setServices(info);
 		getExtensionsPanel().reInitialize(this.info);
 		getServicePropertiesTable().setServiceInformation(this.info);
 		for (int i = 0; i < this.extensionPanels.size(); i++) {
@@ -824,8 +824,7 @@ public class ModificationViewer extends ApplicationComponent {
 						case 0:
 							getNamespaceJTree().setNamespaces(
 									info.getNamespaces());
-							getResourcesJTree().setServices(info.getServices(),
-									info);
+							getResourcesJTree().setServices(info);
 							break;
 						case 1:
 							getServicePropertiesTable().setServiceInformation(
@@ -2069,18 +2068,8 @@ public class ModificationViewer extends ApplicationComponent {
 	 */
 	private ServicesJTree getResourcesJTree() {
 		if (this.resourcesJTree == null) {
-			this.resourcesJTree = new ServicesJTree(this.info.getServices(),
-					this.info, getResourcesOptionsPanel());
-//			this.resourcesJTree.setVisibleRowCount(10);
-//			this.resourcesJTree.addFocusListener(new FocusAdapter() {
-//				@Override
-//				public void focusGained(FocusEvent e) {
-//					super.focusGained(e);
-//					ModificationViewer.this.resourcesJTree.setServices(
-//							ModificationViewer.this.info.getServices(),
-//							ModificationViewer.this.info);
-//				}
-//			});
+			this.resourcesJTree = new ServicesJTree(this.info, getResourcesOptionsPanel());
+
 			// initialize the option cards for this tree
 			this.resourcesOptionsPanel.add(new ServicesButtonPanel(
 					this.resourcesJTree), "services");

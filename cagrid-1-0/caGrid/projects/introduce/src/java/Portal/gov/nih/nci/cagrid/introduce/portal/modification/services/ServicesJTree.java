@@ -31,17 +31,18 @@ import javax.swing.tree.TreeSelectionModel;
 
 public class ServicesJTree extends JTree {
     private ServicesTypeTreeNode root;
-    private ServicesType services;
+    private ServiceInformation info;
     private JPanel optionsPanel;
     private DefaultMutableTreeNode currentNode = null;
 
 
-    public ServicesJTree(ServicesType services, ServiceInformation info, JPanel optionsPanel) {
+    public ServicesJTree(ServiceInformation info, JPanel optionsPanel) {
         super(new SortableJTreeModel(null, new ServiceJTreeComparator()));
         this.optionsPanel = optionsPanel;
+        this.info = info;
         this.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
         setCellRenderer(new ServicesTreeRenderer());
-        setServices(services, info);
+        setServices(info);
 
         this.addTreeSelectionListener(new TreeSelectionListener() {
             public void valueChanged(TreeSelectionEvent e) {
@@ -136,13 +137,12 @@ public class ServicesJTree extends JTree {
     }
 
 
-    public void setServices(ServicesType ns, ServiceInformation info) {
-        services = ns;
+    public void setServices(ServiceInformation info) {
         removeAllNodes(root);
         ((DefaultTreeModel) this.getModel()).setRoot(null);
         root = new ServicesTypeTreeNode(info);
         ((DefaultTreeModel) this.getModel()).setRoot(root);
-        root.setServices(services, (DefaultTreeModel) this.getModel());
+        root.setServices(info, (DefaultTreeModel) this.getModel());
         // expand the root
         this.expandAll(true);
 
