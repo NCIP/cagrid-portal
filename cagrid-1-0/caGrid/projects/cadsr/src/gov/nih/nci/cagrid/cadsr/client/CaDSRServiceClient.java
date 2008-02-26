@@ -114,7 +114,7 @@ public class CaDSRServiceClient extends ServiceSecurityClient implements CaDSRSe
 
                     System.out.println("Building domain model (this might take a while)...");
                     Project caCoreProj = new Project();
-                    caCoreProj.setShortName("caCORE 3.1");
+                    caCoreProj.setShortName("caCORE 3.2");
                     // caCoreProj.setVersion("3.0");
                     long start = System.currentTimeMillis();
                     DomainModel model = client.generateDomainModelForPackages(caCoreProj,
