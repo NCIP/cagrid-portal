@@ -48,7 +48,6 @@ public class ServicesJTree extends JTree {
         this.optionsPanel = optionsPanel;
         this.info = info;
         this.tree = this;
-        setRootVisible(false);
         this.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
         
         setCellRenderer(new ServicesTreeRenderer());
