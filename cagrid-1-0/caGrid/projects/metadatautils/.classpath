@@ -5,7 +5,7 @@
 	<classpathentry kind="src" path="test/resources"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/addressing-1.0.jar"/>
-	<classpathentry kind="var" path="GT4_LOCATION/lib/axis.jar" />
+	<classpathentry kind="var" path="GT4_LOCATION/lib/axis.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/axis-url.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/bootstrap.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/cog-axis.jar"/>
@@ -50,23 +50,18 @@
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xercesImpl.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xml-apis.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xmlsec.jar"/>
-	<classpathentry kind="lib" path="ext/lib/castor-0.9.9.jar"/>
-	<classpathentry kind="lib" path="ext/lib/mobius_common_client-1.1.jar"/>
-	<classpathentry kind="lib" path="ext/test/lib/asm-2.2.1.jar"/>
-	<classpathentry kind="lib" path="ext/test/lib/cobertura.jar"/>
-	<classpathentry kind="lib" path="ext/test/lib/jakarta-oro-2.0.8.jar"/>
-	<classpathentry kind="lib" path="ext/test/lib/jdepend-2.7-patched.jar"/>
-	<classpathentry kind="lib" path="ext/test/lib/junit.jar"/>
-	<classpathentry kind="lib" path="ext/test/lib/junit-addons-1.4.jar"/>
-	<classpathentry kind="lib" path="ext/test/lib/log4j-1.2.9.jar"/>
-	<classpathentry kind="lib" path="ext/test/lib/xmlunit1.0.jar"/>
-	<classpathentry kind="lib" path="ext/test/lib/caGrid-1.1-core-tests.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-core.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-metadata-common.jar"/>
-	<classpathentry kind="lib" path="ext/lib/caGrid-1.1-metadata-data.jar"/>
 	<classpathentry kind="var" path="ANT_HOME/lib/ant-launcher.jar"/>
-	<classpathentry kind="lib" path="ext/lib/jdom-1.0.jar"/>
-	<classpathentry kind="lib" path="ext/lib/jasciidammit-1.1.jar"/>
-	<classpathentry kind="lib" path="ext/test/lib/caGrid-1.1-testing-system.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/default/jars/caGrid-core-1.2-dev.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/default/jars/caGrid-metadata-common-1.2-dev.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/default/jars/caGrid-metadata-data-1.2-dev.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/default/jars/caGrid-metadata-security-1.2-dev.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/default/jars/castor-0.9.9.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/default/jars/jasciidammit-1.1.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/default/jars/jdom-1.0.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/test/jars/caGrid-core-tests-1.2-dev.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/test/jars/caGrid-testing-core-1.2-dev.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/test/jars/caGrid-testing-system-1.2-dev.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/test/jars/jdepend-2.7.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/3"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
