@@ -90,6 +90,7 @@ public class ServicesTreeRenderer extends DefaultTreeCellRenderer {
 			this.setIcon(node.getOpenIcon());
 			this.setOpenIcon(node.getOpenIcon());
 			this.setClosedIcon(node.getClosedIcon());
+			this.setLeafIcon(node.getOpenIcon());
 			this.setFont(normal.deriveFont(Font.BOLD));
 			this.setText(node.toString());
 		} else if (value instanceof ServicesTypeTreeNode) {
@@ -97,6 +98,7 @@ public class ServicesTreeRenderer extends DefaultTreeCellRenderer {
 			this.setIcon(null);
 			this.setOpenIcon(null);
 			this.setClosedIcon(null);
+			this.setLeafIcon(null);
 			this.setText(node.toString());
 			this.setFont(normal.deriveFont(Font.BOLD, 12));
 		} else if (value instanceof MethodsTypeTreeNode) {
@@ -104,6 +106,7 @@ public class ServicesTreeRenderer extends DefaultTreeCellRenderer {
 			this.setIcon(node.getOpenIcon());
 			this.setOpenIcon(node.getOpenIcon());
 			this.setClosedIcon(node.getClosedIcon());
+			this.setLeafIcon(node.getOpenIcon());
 			this.setText(node.toString());
 			this.setFont(normal);
 		} else if (value instanceof MethodTypeTreeNode) {
@@ -111,6 +114,7 @@ public class ServicesTreeRenderer extends DefaultTreeCellRenderer {
 			this.setIcon(node.getOpenIcon());
 			this.setOpenIcon(node.getOpenIcon());
 			this.setClosedIcon(node.getClosedIcon());
+			this.setLeafIcon(node.getOpenIcon());
 			this.setText(node.toString());
 			if(node.getMethod().isIsImported()){
 				this.setFont(normal.deriveFont(Font.ITALIC));
@@ -124,6 +128,7 @@ public class ServicesTreeRenderer extends DefaultTreeCellRenderer {
 			this.setIcon(node.getOpenIcon());
 			this.setOpenIcon(node.getOpenIcon());
 			this.setClosedIcon(node.getClosedIcon());
+			this.setLeafIcon(node.getOpenIcon());
 			this.setText(node.toString());
 			this.setFont(normal);
 		} else if (value instanceof ResourcePropertyTypeTreeNode) {
@@ -131,6 +136,7 @@ public class ServicesTreeRenderer extends DefaultTreeCellRenderer {
 			this.setIcon(node.getOpenIcon());
 			this.setOpenIcon(node.getOpenIcon());
 			this.setClosedIcon(node.getClosedIcon());
+			this.setLeafIcon(node.getOpenIcon());
 			this.setText(node.toString());
 			this.setFont(normal.deriveFont(Font.ITALIC));
 			this.setForeground(Color.GRAY);

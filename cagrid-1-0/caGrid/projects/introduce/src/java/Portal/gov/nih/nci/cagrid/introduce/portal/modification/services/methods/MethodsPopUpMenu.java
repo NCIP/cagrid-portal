@@ -3,7 +3,9 @@ package gov.nih.nci.cagrid.introduce.portal.modification.services.methods;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
+import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
+import gov.nih.nci.cagrid.introduce.portal.modification.services.ServicesJTree;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -70,7 +72,8 @@ public class MethodsPopUpMenu extends JPopupMenu {
         viewer.setVisible(true);
 
         if (!viewer.wasClosed()) {
-            node.addMethod(method);
+                CommonTools.addMethod(node.getService(), method);
+                ServicesJTree.getInstance().setServices(node.getInfo());
         }
     }
 

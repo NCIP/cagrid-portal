@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.services;
 
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
+import gov.nih.nci.cagrid.introduce.portal.modification.services.methods.MethodsTypeTreeNode;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -57,9 +58,7 @@ public class ServicesButtonPanel extends ServiceContextsOptionsPanel {
 					if (node instanceof ServicesTypeTreeNode) {
 						ServicesPopUpMenu.addService((ServicesTypeTreeNode) node);
 					}
-					
-					((DefaultTreeModel)getTree().getModel()).nodeStructureChanged(node);
-					((DefaultTreeModel)getTree().getModel()).nodeChanged(node);
+					ServicesJTree.getInstance().setServices(((ServicesTypeTreeNode) node).getInfo());
 				}
 			});
 		}

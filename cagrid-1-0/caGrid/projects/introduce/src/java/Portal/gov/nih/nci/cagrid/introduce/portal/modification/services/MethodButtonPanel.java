@@ -1,5 +1,7 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.services;
 
+import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
+import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
 import gov.nih.nci.cagrid.introduce.portal.modification.services.methods.MethodTypeTreeNode;
 import gov.nih.nci.cagrid.introduce.portal.modification.services.methods.MethodViewer;
@@ -72,8 +74,6 @@ public class MethodButtonPanel extends ServiceContextsOptionsPanel {
 					if (tnode instanceof MethodTypeTreeNode) {
 					    MethodViewer viewer = new MethodViewer(((MethodTypeTreeNode) tnode).getMethod(), ((MethodTypeTreeNode) tnode).getInfo());
 	                    viewer.setVisible(true);
-						((DefaultTreeModel) getTree().getModel()).nodeStructureChanged(tnode);
-						((DefaultTreeModel) getTree().getModel()).nodeChanged(tnode);
 					}
 
 				}
@@ -98,10 +98,13 @@ public class MethodButtonPanel extends ServiceContextsOptionsPanel {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					DefaultMutableTreeNode tnode = MethodButtonPanel.this.getTree().getCurrentNode();
 					if (tnode instanceof MethodTypeTreeNode) {
-						((MethodsTypeTreeNode) tnode.getParent()).removeMethod((MethodTypeTreeNode) tnode);
+					    MethodType removedMethod = (MethodType) tnode.getUserObject();
+	                    CommonTools.removeMethod(((MethodsTypeTreeNode) tnode.getParent()).getService().getMethods(),
+	                        removedMethod);
+	                    MethodsTypeTreeNode parent = ((MethodsTypeTreeNode) tnode.getParent());
+	                    parent.remove(tnode);
+	                    ServicesJTree.getInstance().setServices(parent.getInfo());
 					}
-					((DefaultTreeModel) getTree().getModel()).nodeStructureChanged(tnode.getParent());
-					((DefaultTreeModel) getTree().getModel()).nodeChanged(tnode.getParent());
 
 				}
 			});

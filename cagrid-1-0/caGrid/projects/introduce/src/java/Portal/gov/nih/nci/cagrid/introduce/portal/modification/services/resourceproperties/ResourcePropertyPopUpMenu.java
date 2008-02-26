@@ -1,7 +1,10 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.services.resourceproperties;
 
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
+import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertyType;
+import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
+import gov.nih.nci.cagrid.introduce.portal.modification.services.ServicesJTree;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -50,7 +53,10 @@ public class ResourcePropertyPopUpMenu extends JPopupMenu {
 			removeResourcePropertyMenuItem.addMouseListener(new MouseAdapter() {
 				public void mousePressed(MouseEvent e) {
 					super.mousePressed(e);
-					((ResourcePropertiesTypeTreeNode) node.getParent()).removeResourceProperty(node);
+					ResourcePropertiesTypeTreeNode parent = ((ResourcePropertiesTypeTreeNode) node.getParent());
+				        CommonTools.removeResourceProperty(parent.getService(), ((ResourcePropertyType) node.getUserObject()).getQName());
+				        parent.remove(node);  
+				        ServicesJTree.getInstance().setServices(parent.getInfo());
 				}
 			});
 		}

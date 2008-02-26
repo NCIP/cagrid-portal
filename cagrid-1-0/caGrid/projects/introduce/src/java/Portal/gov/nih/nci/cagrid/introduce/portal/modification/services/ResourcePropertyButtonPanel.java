@@ -1,5 +1,7 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.services;
 
+import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertyType;
+import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
 import gov.nih.nci.cagrid.introduce.portal.modification.services.methods.MethodTypeTreeNode;
 import gov.nih.nci.cagrid.introduce.portal.modification.services.methods.MethodViewer;
@@ -63,7 +65,10 @@ public class ResourcePropertyButtonPanel extends ServiceContextsOptionsPanel {
 
 					DefaultMutableTreeNode tnode = ResourcePropertyButtonPanel.this.getTree().getCurrentNode();
 					if (tnode instanceof ResourcePropertyTypeTreeNode) {
-						((ResourcePropertiesTypeTreeNode) tnode.getParent()).removeResourceProperty((ResourcePropertyTypeTreeNode)tnode);
+					    ResourcePropertiesTypeTreeNode parent = ((ResourcePropertiesTypeTreeNode) tnode.getParent());
+					    CommonTools.removeResourceProperty(parent.getService(), ((ResourcePropertyType) tnode.getUserObject()).getQName());
+                        parent.remove(tnode);  
+                        ServicesJTree.getInstance().setServices(parent.getInfo());
 					}
 
 				}

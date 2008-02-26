@@ -54,8 +54,6 @@ public class ServicePopUpMenu extends JPopupMenu {
                         ServicePopUpMenu.this.node.getInfo(), ServicePopUpMenu.this.node.getServiceType()), false);
                     comp.pack();
                     comp.setVisible(true);
-                    ServicePopUpMenu.this.node.getModel().nodeStructureChanged(node);
-                    ServicePopUpMenu.this.node.getModel().nodeChanged(node);
                 }
 
             });

@@ -97,23 +97,12 @@ public class MethodsTypeTreeNode extends DefaultMutableTreeNode implements Popup
 			}
 		}
 	}
-
-
-	public void addMethod(MethodType method) {
-		CommonTools.addMethod(service, method);
-
-		MethodTypeTreeNode newNode = new MethodTypeTreeNode(method, info);
-		model.insertNodeInto(newNode, this, this.getChildCount());
-
+	
+	
+	public ServiceType getService(){
+	    return this.service;
 	}
 
-
-	public void removeMethod(MethodTypeTreeNode node) {
-		MethodType removedMethod = (MethodType)node.getUserObject();
-		CommonTools.removeMethod(service.getMethods(), removedMethod);
-
-		model.removeNodeFromParent(node);
-	}
 
 
 	public JPopupMenu getPopUpMenu() {

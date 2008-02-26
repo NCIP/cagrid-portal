@@ -105,22 +105,8 @@ public class ResourcePropertiesTypeTreeNode extends DefaultMutableTreeNode imple
 
         initialize();
     }
+    
 
-
-    public void add(ResourcePropertyType resourceProperty) {
-        CommonTools.addResourcePropety(getService(), resourceProperty);
-
-        ResourcePropertyTypeTreeNode newNode = new ResourcePropertyTypeTreeNode(resourceProperty);
-        model.insertNodeInto(newNode, this, this.getChildCount());
-    }
-
-
-    public void removeResourceProperty(ResourcePropertyTypeTreeNode node) {
-
-        CommonTools.removeResourceProperty(getService(), ((ResourcePropertyType) node.getUserObject()).getQName());
-
-        model.removeNodeFromParent(node);
-    }
 
 
     public JPopupMenu getPopUpMenu() {

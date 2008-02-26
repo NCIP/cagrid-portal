@@ -7,6 +7,7 @@ import gov.nih.nci.cagrid.introduce.beans.service.Lifetime;
 import gov.nih.nci.cagrid.introduce.beans.service.ResourceFrameworkOptions;
 import gov.nih.nci.cagrid.introduce.beans.service.Secure;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
+import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.SpecificServiceInformation;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
 
@@ -79,7 +80,8 @@ public class ServicesPopUpMenu extends JPopupMenu {
         comp.setVisible(true);
 
         if (!comp.wasClosed()) {
-           node.addService(service);
+            CommonTools.addService(node.getInfo().getServices(), service);
+            ServicesJTree.getInstance().setServices(node.getInfo());
         }
     }
 

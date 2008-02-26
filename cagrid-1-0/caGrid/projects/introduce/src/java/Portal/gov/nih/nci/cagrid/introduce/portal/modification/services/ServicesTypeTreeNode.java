@@ -87,15 +87,6 @@ public class ServicesTypeTreeNode extends DefaultMutableTreeNode implements Popu
 	}
 
 
-	public ServiceTypeTreeNode addService(ServiceType type) {
-		ServiceTypeTreeNode newNode = new ServiceTypeTreeNode(type, info, model);
-		model.insertNodeInto(newNode, this, this.getChildCount());
-		
-		CommonTools.addService(info.getServices(), type);
-		
-		return newNode;
-	}
-
 
 	public JPopupMenu getPopUpMenu() {
 		return this.menu;

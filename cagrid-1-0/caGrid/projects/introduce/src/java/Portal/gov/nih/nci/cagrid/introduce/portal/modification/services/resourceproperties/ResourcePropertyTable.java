@@ -7,8 +7,6 @@ import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertyType;
 import java.util.Vector;
 
 import javax.swing.ListSelectionModel;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import javax.xml.namespace.QName;
 
@@ -36,33 +34,6 @@ public class ResourcePropertyTable extends PortalBaseTable {
 		super(createTableModel());
 		this.allowPopulateFromFile = allowPopulateFromFile;
 		this.metadatas = metadatas;
-		getModel().addTableModelListener(new TableModelListener() {
-			public void tableChanged(TableModelEvent e) {
-				if (e.getType() == TableModelEvent.UPDATE) {
-					int row = e.getFirstRow();
-					ResourcePropertyType edit = ResourcePropertyTable.this.metadatas.getResourceProperty(row);
-					String namespace = (String) getValueAt(row, 0);
-					String type = (String) getValueAt(row, 1);
-					Boolean populateFromFile = (Boolean) getValueAt(row, 2);
-					Boolean register = (Boolean) getValueAt(row, 3);
-					String description = (String) getValueAt(row, 4);
-					switch (e.getColumn()) {
-						case 0 :
-						case 1 :
-							edit.setQName(new QName(namespace, type));
-							break;
-						case 2 :
-							edit.setPopulateFromFile(populateFromFile.booleanValue());
-							break;
-						case 3 :
-							edit.setRegister(register.booleanValue());
-							break;
-						case 4 :
-							edit.setDescription(description);
-					}
-				}
-			}
-		});
 		initialize();
 	}
 
@@ -116,6 +87,7 @@ public class ResourcePropertyTable extends PortalBaseTable {
 		v.add(metadata);
 
 		((DefaultTableModel) this.getModel()).addRow(v);
+		
 		this.setRowSelectionInterval(this.getModel().getRowCount() - 1, this.getModel().getRowCount() - 1);
 		paint(getGraphics());
 	}

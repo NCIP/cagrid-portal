@@ -37,7 +37,7 @@ public class MethodsButtonPanel extends ServiceContextsOptionsPanel {
 		gridBagConstraints.gridy = 0;
 		gridBagConstraints.gridx = 0;
 		this.setLayout(new GridBagLayout());
-		this.add(getAddServiceButton(), gridBagConstraints);
+		this.add(getAddMethodButton(), gridBagConstraints);
 
 	}
 
@@ -47,7 +47,7 @@ public class MethodsButtonPanel extends ServiceContextsOptionsPanel {
 	 * 
 	 * @return javax.swing.JButton
 	 */
-	private JButton getAddServiceButton() {
+	private JButton getAddMethodButton() {
 		if (addServiceButton == null) {
 			addServiceButton = new JButton();
 			addServiceButton.setText("Add Method");
@@ -59,8 +59,7 @@ public class MethodsButtonPanel extends ServiceContextsOptionsPanel {
 					if (tnode instanceof MethodsTypeTreeNode) {
 						MethodsPopUpMenu.addMethod((MethodsTypeTreeNode) tnode);
 					}
-					((DefaultTreeModel)getTree().getModel()).nodeStructureChanged(tnode);
-					((DefaultTreeModel)getTree().getModel()).nodeChanged(tnode);
+					ServicesJTree.getInstance().setServices(((MethodsTypeTreeNode) tnode).getInfo());
 
 				}
 

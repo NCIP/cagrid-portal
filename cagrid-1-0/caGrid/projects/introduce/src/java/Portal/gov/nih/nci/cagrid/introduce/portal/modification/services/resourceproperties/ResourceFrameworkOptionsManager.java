@@ -123,6 +123,7 @@ public class ResourceFrameworkOptionsManager extends JPanel {
 	private JPanel getResourceOptionsPanel() {
 		if (resourceOptionsPanel == null) {
 			GridBagConstraints gridBagConstraints20 = new GridBagConstraints();
+			gridBagConstraints20.anchor = GridBagConstraints.NORTHWEST;
 			gridBagConstraints20.gridwidth = 2;
 			gridBagConstraints20.gridy = 4;
 			gridBagConstraints20.gridx = 0;

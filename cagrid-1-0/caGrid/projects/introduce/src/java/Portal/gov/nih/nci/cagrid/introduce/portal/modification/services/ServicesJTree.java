@@ -1,6 +1,5 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.services;
 
-import gov.nih.nci.cagrid.introduce.beans.service.ServicesType;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.portal.common.PopupTreeNode;
 import gov.nih.nci.cagrid.introduce.portal.common.SortableJTreeModel;
@@ -34,13 +33,24 @@ public class ServicesJTree extends JTree {
     private ServiceInformation info;
     private JPanel optionsPanel;
     private DefaultMutableTreeNode currentNode = null;
+    
+    private static ServicesJTree tree = null;
+    
+    
+    //will not create a new one
+    public static ServicesJTree getInstance(){
+        return tree;
+    }
 
 
     public ServicesJTree(ServiceInformation info, JPanel optionsPanel) {
         super(new SortableJTreeModel(null, new ServiceJTreeComparator()));
         this.optionsPanel = optionsPanel;
         this.info = info;
+        this.tree = this;
+        setRootVisible(false);
         this.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
+        
         setCellRenderer(new ServicesTreeRenderer());
         setServices(info);
 

@@ -79,8 +79,6 @@ public class ServiceButtonPanel extends ServiceContextsOptionsPanel {
                             node.getServiceType()), false);
                         comp.pack();
                         comp.setVisible(true);
-                        node.getModel().nodeStructureChanged(node);
-                        node.getModel().nodeChanged(node);
                     }
                 }
 
@@ -108,9 +106,6 @@ public class ServiceButtonPanel extends ServiceContextsOptionsPanel {
                     if (tnode instanceof MethodsTypeTreeNode) {
                         MethodsPopUpMenu.addMethod((MethodsTypeTreeNode) tnode);
                     }
-
-                    ((DefaultTreeModel) getTree().getModel()).nodeStructureChanged(tnode);
-                    ((DefaultTreeModel) getTree().getModel()).nodeChanged(tnode);
                 }
 
             });
@@ -147,8 +142,6 @@ public class ServiceButtonPanel extends ServiceContextsOptionsPanel {
                     }
                     ResourcePropertiesPopUpMenu.modifyResourceProperties(resourceNode);
 
-                    ((DefaultTreeModel) getTree().getModel()).nodeStructureChanged(resourceNode);
-                    ((DefaultTreeModel) getTree().getModel()).nodeChanged(resourceNode);
                 }
 
             });
