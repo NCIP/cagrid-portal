@@ -67,7 +67,7 @@ import com.jgoodies.validation.view.ValidationComponentUtils;
  * @author David Ervin
  * 
  * @created Jun 4, 2007 1:45:08 PM
- * @version $Id: SDKClientSelectionPanel.java,v 1.11 2008-02-19 20:32:09 dervin Exp $ 
+ * @version $Id: SDKClientSelectionPanel.java,v 1.12 2008-02-26 22:27:52 dervin Exp $ 
  */
 public class SDKClientSelectionPanel extends AbstractWizardPanel {
     // keys for validation components
@@ -241,11 +241,16 @@ public class SDKClientSelectionPanel extends AbstractWizardPanel {
     public void update() {
         // -- configure the UI -- //
         // verify the sdk query library has been copied into the service
-        String sdkQueryLibName = new File(SDK32InitializationPanel.SDK_32_QUERY_LIB_PREFIX).getName();
-        File sdkQueryLib = new File(getServiceInformation().getBaseDirectory().getAbsolutePath() 
-            + File.separator + "lib" + File.separator + sdkQueryLibName);
+        File serviceLibDir = new File(getServiceInformation().getBaseDirectory(), "lib");
+        File[] jars = serviceLibDir.listFiles(new FileFilters.JarFileFilter());
+        File sdkQueryLib = null;
+        for (File f : jars) {
+            if (f.getName().startsWith(SDK32InitializationPanel.SDK_32_QUERY_LIB_PREFIX)) {
+                sdkQueryLib = f;
+            }
+        }
         
-        if (sdkQueryLib.exists()) {
+        if (sdkQueryLib != null && sdkQueryLib.exists()) {
             getQpJarTextField().setText(sdkQueryLib.getName());
         } else {
             getQpJarTextField().setText("ERROR: LIBRARY NOT FOUND");
