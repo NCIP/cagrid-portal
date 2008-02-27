@@ -190,6 +190,7 @@
 			</fileset>
 			<fileset dir="${lib.dir}">
 				<include name="caGrid-core*.jar" />
+				<include name="jdom*.jar"/>
 			</fileset>
 			<fileset dir="${ext.globus.dir}/lib">
 				<include name="axis.jar" />
