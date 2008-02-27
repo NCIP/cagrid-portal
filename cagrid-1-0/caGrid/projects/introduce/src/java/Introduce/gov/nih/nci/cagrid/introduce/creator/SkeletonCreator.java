@@ -20,11 +20,14 @@ import gov.nih.nci.cagrid.introduce.common.ProviderTools;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.common.SpecificServiceInformation;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
+import gov.nih.nci.cagrid.introduce.servicetools.XmlPersistenceHelper;
 
 import java.io.File;
 import java.util.Properties;
 import java.util.StringTokenizer;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.log4j.PropertyConfigurator;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
@@ -37,9 +40,12 @@ import org.apache.tools.ant.Task;
  */
 public class SkeletonCreator extends Task {
 
+    private static Log logger = LogFactory.getLog(SkeletonCreator.class.getName());
+
+
     public SkeletonCreator() {
-        PropertyConfigurator.configure("." + File.separator + "conf" + File.separator
-            + "log4j.properties");
+        PropertyConfigurator.configure("." + File.separator + "conf" + File.separator + "log4j.properties");
+
     }
 
 
@@ -133,10 +139,16 @@ public class SkeletonCreator extends Task {
         while (strtok.hasMoreTokens()) {
             String token = strtok.nextToken();
             ExtensionDescription desc = ExtensionsLoader.getInstance().getExtension(token);
-            ExtensionType type = new ExtensionType();
-            type.setName(token);
-            type.setVersion(desc.getVersion());
-            types[count++] = type;
+            if (desc != null) {
+                ExtensionType type = new ExtensionType();
+                type.setName(token);
+                type.setVersion(desc.getVersion());
+                types[count++] = type;
+            } else {
+                System.err.println("Extension was requested but does not exist: "
+                    + token);
+                return;
+            }
         }
         ExtensionsType exts = new ExtensionsType();
         exts.setExtension(types);
@@ -164,7 +176,8 @@ public class SkeletonCreator extends Task {
         SkeletonDocsCreator sdc = new SkeletonDocsCreator();
         SkeletonSecurityOperationProviderCreator ssopc = new SkeletonSecurityOperationProviderCreator();
 
-        //add the providers that might be needed for particular resource options
+        // add the providers that might be needed for particular resource
+        // options
         if (serviceType.getResourceFrameworkOptions().getLifetime() != null) {
             ProviderTools.addLifetimeResourceProvider(info.getServices().getService(0), info);
         }
@@ -175,7 +188,7 @@ public class SkeletonCreator extends Task {
         if (serviceType.getResourceFrameworkOptions().getNotification() != null) {
             ProviderTools.addSubscribeResourceProvider(info.getServices().getService(0), info);
         }
-        
+
         // Generate the source
         try {
             if (info.getServices() != null && info.getServices().getService() != null) {
@@ -205,7 +218,7 @@ public class SkeletonCreator extends Task {
             be.printStackTrace();
             throw be;
         }
-        
-        //process the extensions
+
+        // process the extensions
     }
 }
