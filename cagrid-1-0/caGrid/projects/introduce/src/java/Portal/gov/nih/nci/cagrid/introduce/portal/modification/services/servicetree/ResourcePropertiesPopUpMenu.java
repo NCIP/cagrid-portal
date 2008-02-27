@@ -1,8 +1,8 @@
-package gov.nih.nci.cagrid.introduce.portal.modification.services.resourceproperties;
+package gov.nih.nci.cagrid.introduce.portal.modification.services.servicetree;
 
 import gov.nih.nci.cagrid.introduce.common.SpecificServiceInformation;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
-import gov.nih.nci.cagrid.introduce.portal.modification.services.ServicesJTree;
+import gov.nih.nci.cagrid.introduce.portal.modification.services.resourceproperties.ModifyResourcePropertiesComponent;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;

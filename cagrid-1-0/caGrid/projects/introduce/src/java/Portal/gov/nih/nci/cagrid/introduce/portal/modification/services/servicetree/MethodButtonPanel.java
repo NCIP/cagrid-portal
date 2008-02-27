@@ -1,11 +1,9 @@
-package gov.nih.nci.cagrid.introduce.portal.modification.services;
+package gov.nih.nci.cagrid.introduce.portal.modification.services.servicetree;
 
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
-import gov.nih.nci.cagrid.introduce.portal.modification.services.methods.MethodTypeTreeNode;
 import gov.nih.nci.cagrid.introduce.portal.modification.services.methods.MethodViewer;
-import gov.nih.nci.cagrid.introduce.portal.modification.services.methods.MethodsTypeTreeNode;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;

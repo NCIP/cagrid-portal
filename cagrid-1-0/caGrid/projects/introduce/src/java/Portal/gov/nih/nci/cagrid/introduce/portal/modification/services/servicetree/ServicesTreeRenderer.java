@@ -41,13 +41,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *---------------------------------------------------------------------------*/
 
-package gov.nih.nci.cagrid.introduce.portal.modification.services;
+package gov.nih.nci.cagrid.introduce.portal.modification.services.servicetree;
 
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
-import gov.nih.nci.cagrid.introduce.portal.modification.services.methods.MethodTypeTreeNode;
-import gov.nih.nci.cagrid.introduce.portal.modification.services.methods.MethodsTypeTreeNode;
-import gov.nih.nci.cagrid.introduce.portal.modification.services.resourceproperties.ResourcePropertiesTypeTreeNode;
-import gov.nih.nci.cagrid.introduce.portal.modification.services.resourceproperties.ResourcePropertyTypeTreeNode;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -66,7 +62,7 @@ import javax.swing.tree.DefaultTreeCellRenderer;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella</A>
  * 
  * @created Nov 17, 2004
- * @version $Id$
+ * @version $Id: ServicesTreeRenderer.java,v 1.1 2008-02-27 14:46:57 hastings Exp $
  */
 public class ServicesTreeRenderer extends DefaultTreeCellRenderer {
 

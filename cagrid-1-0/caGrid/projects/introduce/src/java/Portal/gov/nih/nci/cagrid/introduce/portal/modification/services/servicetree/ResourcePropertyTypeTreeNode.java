@@ -41,20 +41,15 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *---------------------------------------------------------------------------*/
 
-package gov.nih.nci.cagrid.introduce.portal.modification.services;
+package gov.nih.nci.cagrid.introduce.portal.modification.services.servicetree;
 
-import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
-import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
-import gov.nih.nci.cagrid.introduce.common.SpecificServiceInformation;
+import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertyType;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
 import gov.nih.nci.cagrid.introduce.portal.common.PopupTreeNode;
-import gov.nih.nci.cagrid.introduce.portal.modification.services.methods.MethodsTypeTreeNode;
-import gov.nih.nci.cagrid.introduce.portal.modification.services.resourceproperties.ResourcePropertiesTypeTreeNode;
 
 import javax.swing.ImageIcon;
 import javax.swing.JPopupMenu;
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeModel;
 
 
 /**
@@ -67,73 +62,41 @@ import javax.swing.tree.DefaultTreeModel;
  * @version $Id: MakoGridServiceTreeNode.java,v 1.21 2005/04/20 17:28:54 ervin
  *          Exp $
  */
-public class ServiceTypeTreeNode extends DefaultMutableTreeNode implements PopupTreeNode {
-    private ServiceType serviceType;
-    private ServiceInformation info;
-    private ServicePopUpMenu popUpMenu;
-    private DefaultTreeModel model;
+public class ResourcePropertyTypeTreeNode extends DefaultMutableTreeNode implements PopupTreeNode {
+	private ResourcePropertyPopUpMenu menu;
 
 
-    public ServiceTypeTreeNode(ServiceType serviceType, ServiceInformation info, DefaultTreeModel model) {
-        super();
-        this.info = info;
-        this.setUserObject(serviceType);
-        this.serviceType = serviceType;
-        this.model = model;
-        this.popUpMenu = new ServicePopUpMenu(this);
-        initialize();
-    }
+	public ResourcePropertyTypeTreeNode(ResourcePropertyType resourcePropertyType) {
+		super();
+		this.menu = new ResourcePropertyPopUpMenu(this);
+		this.setUserObject(resourcePropertyType);
+	}
+	
+	public ResourcePropertyType getResourcePropertyType(){
+		return (ResourcePropertyType)getUserObject();
+	}
 
 
-    public ServiceInformation getInfo() {
-        return this.info;
-    }
+	public ImageIcon getOpenIcon() {
+		return IntroduceLookAndFeel.getResourcePropertyIcon();
+	}
 
 
-    public DefaultTreeModel getModel() {
-        return model;
-    }
+	public ImageIcon getClosedIcon() {
+		return IntroduceLookAndFeel.getResourcePropertyIcon();
+	}
 
 
-    private void initialize() {
-
-        MethodsTypeTreeNode newNode1 = new MethodsTypeTreeNode(serviceType, model, new SpecificServiceInformation(info,
-            serviceType));
-        model.insertNodeInto(newNode1, this, this.getChildCount());
-
-        ResourcePropertiesTypeTreeNode newNode = new ResourcePropertiesTypeTreeNode(serviceType, model, info);
-        model.insertNodeInto(newNode, this, this.getChildCount());
-
-    }
+	public String toString() {
+		if (((ResourcePropertyType) this.getUserObject()).getQName() != null) {
+			return ((ResourcePropertyType) this.getUserObject()).getQName().toString();
+		}
+		return "N/A";
+	}
 
 
-    public ServiceType getServiceType() {
-        return this.serviceType;
-    }
-
-
-    public ImageIcon getOpenIcon() {
-        return IntroduceLookAndFeel.getServiceIcon();
-    }
-
-
-    public ImageIcon getClosedIcon() {
-        return IntroduceLookAndFeel.getServiceIcon();
-    }
-
-
-    public String toString() {
-        if (((ServiceType) this.getUserObject()).getName().equals(info.getServices().getService(0).getName())) {
-            return ((ServiceType) this.getUserObject()).getName() + " (Main Service)";
-        } else {
-            return ((ServiceType) this.getUserObject()).getName() + " (Service Context)";
-        }
-
-    }
-
-
-    public JPopupMenu getPopUpMenu() {
-        return popUpMenu;
-    }
+	public JPopupMenu getPopUpMenu() {
+		return this.menu;
+	}
 
 }

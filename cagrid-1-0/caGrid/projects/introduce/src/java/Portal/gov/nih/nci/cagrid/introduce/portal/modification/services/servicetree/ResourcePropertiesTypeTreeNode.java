@@ -41,7 +41,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *---------------------------------------------------------------------------*/
 
-package gov.nih.nci.cagrid.introduce.portal.modification.services.resourceproperties;
+package gov.nih.nci.cagrid.introduce.portal.modification.services.servicetree;
 
 import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertiesListType;
 import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertyType;

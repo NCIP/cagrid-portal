@@ -41,12 +41,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *---------------------------------------------------------------------------*/
 
-package gov.nih.nci.cagrid.introduce.portal.modification.services.methods;
+package gov.nih.nci.cagrid.introduce.portal.modification.services.servicetree;
 
-import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
-import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
-import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.SpecificServiceInformation;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
@@ -55,7 +52,6 @@ import gov.nih.nci.cagrid.introduce.portal.common.PopupTreeNode;
 import javax.swing.ImageIcon;
 import javax.swing.JPopupMenu;
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeModel;
 
 
 /**
@@ -68,76 +64,48 @@ import javax.swing.tree.DefaultTreeModel;
  * @version $Id: MakoGridServiceTreeNode.java,v 1.21 2005/04/20 17:28:54 ervin
  *          Exp $
  */
-public class MethodsTypeTreeNode extends DefaultMutableTreeNode implements PopupTreeNode {
-	private MethodsPopUpMenu menu;
-	private DefaultTreeModel model;
+public class MethodTypeTreeNode extends DefaultMutableTreeNode implements PopupTreeNode {
+	private MethodPopUpMenu popUpMenu;
 	private SpecificServiceInformation info;
-	private ServiceType service;
+	MethodType method;
 
 
-	public MethodsTypeTreeNode(ServiceType service, DefaultTreeModel model, SpecificServiceInformation info) {
+	public MethodTypeTreeNode(MethodType methodType, SpecificServiceInformation info) {
 		super();
-		this.service = service;
-		this.setUserObject("Operations");
 		this.info = info;
-		this.menu = new MethodsPopUpMenu(this);
-		this.model = model;
-		initialize();
+		popUpMenu = new MethodPopUpMenu(this);
+		this.method = methodType;
+		this.setUserObject(methodType);
 	}
 
 
-	private void initialize() {
-		if (service.getMethods() != null && service.getMethods() .getMethod() != null) {
-			for (int i = 0; i < service.getMethods() .getMethod().length; i++) {
-				MethodType method = service.getMethods() .getMethod(i);
-				if (!method.getName().equals(IntroduceConstants.SERVICE_SECURITY_METADATA_METHOD)) {
-					MethodTypeTreeNode newNode = new MethodTypeTreeNode(method, info);
-					model.insertNodeInto(newNode, this, this.getChildCount());
-				}
-			}
-		}
-	}
-	
-	
-	public ServiceType getService(){
-	    return this.service;
+	public ImageIcon getOpenIcon() {
+		return IntroduceLookAndFeel.getMethodIcon();
 	}
 
 
-
-	public JPopupMenu getPopUpMenu() {
-		return menu;
+	public ImageIcon getClosedIcon() {
+		return IntroduceLookAndFeel.getMethodIcon();
 	}
 
 
 	public String toString() {
-		return this.getUserObject().toString();
+		return CommonTools.methodTypeToString(((MethodType) this.getUserObject()));
 	}
 
 
+	public JPopupMenu getPopUpMenu() {
+		return popUpMenu;
+	}
 
-	public DefaultTreeModel getModel() {
-		return model;
+
+	public MethodType getMethod() {
+		return method;
 	}
 
 
 	public SpecificServiceInformation getInfo() {
 		return info;
-	}
-
-
-	public void setInfo(SpecificServiceInformation info) {
-		this.info = info;
-	}
-
-
-	public ImageIcon getOpenIcon() {
-		return IntroduceLookAndFeel.getMethodsIcon();
-	}
-
-
-	public ImageIcon getClosedIcon() {
-		return IntroduceLookAndFeel.getMethodsIcon();
 	}
 
 }

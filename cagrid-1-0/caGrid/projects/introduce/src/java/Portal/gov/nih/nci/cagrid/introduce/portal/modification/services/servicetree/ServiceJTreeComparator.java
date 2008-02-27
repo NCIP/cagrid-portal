@@ -1,9 +1,8 @@
-package gov.nih.nci.cagrid.introduce.portal.modification.services;
+package gov.nih.nci.cagrid.introduce.portal.modification.services.servicetree;
 
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.beans.service.ServicesType;
 import gov.nih.nci.cagrid.introduce.portal.modification.services.methods.MethodTypeContainer;
-import gov.nih.nci.cagrid.introduce.portal.modification.services.methods.MethodTypeTreeNode;
 
 import java.util.Comparator;
 

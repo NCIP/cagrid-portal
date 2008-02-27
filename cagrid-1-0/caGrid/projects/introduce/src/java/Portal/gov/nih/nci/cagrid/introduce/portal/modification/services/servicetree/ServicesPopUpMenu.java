@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.introduce.portal.modification.services;
+package gov.nih.nci.cagrid.introduce.portal.modification.services.servicetree;
 
 import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
 import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertiesListType;
@@ -10,6 +10,7 @@ import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.SpecificServiceInformation;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
+import gov.nih.nci.cagrid.introduce.portal.modification.services.ModifyService;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;

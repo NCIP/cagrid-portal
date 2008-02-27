@@ -1,7 +1,6 @@
-package gov.nih.nci.cagrid.introduce.portal.modification.services;
+package gov.nih.nci.cagrid.introduce.portal.modification.services.servicetree;
 
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
-import gov.nih.nci.cagrid.introduce.portal.modification.services.methods.MethodsTypeTreeNode;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -13,7 +12,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
 
-public class ServicesButtonPanel extends ServiceContextsOptionsPanel {
+public class MethodsButtonPanel extends ServiceContextsOptionsPanel {
 
 	private JButton addServiceButton = null;
 
@@ -21,7 +20,7 @@ public class ServicesButtonPanel extends ServiceContextsOptionsPanel {
 	/**
 	 * This method initializes
 	 */
-	public ServicesButtonPanel(ServicesJTree tree) {
+	public MethodsButtonPanel(ServicesJTree tree) {
 		super(tree);
 		initialize();
 	}
@@ -36,7 +35,7 @@ public class ServicesButtonPanel extends ServiceContextsOptionsPanel {
 		gridBagConstraints.gridy = 0;
 		gridBagConstraints.gridx = 0;
 		this.setLayout(new GridBagLayout());
-		this.add(getAddServiceButton(), gridBagConstraints);
+		this.add(getAddMethodButton(), gridBagConstraints);
 
 	}
 
@@ -46,20 +45,22 @@ public class ServicesButtonPanel extends ServiceContextsOptionsPanel {
 	 * 
 	 * @return javax.swing.JButton
 	 */
-	private JButton getAddServiceButton() {
+	private JButton getAddMethodButton() {
 		if (addServiceButton == null) {
 			addServiceButton = new JButton();
-			addServiceButton.setText("Add Service Context");
-			addServiceButton.setIcon(IntroduceLookAndFeel.getCreateServiceSmallIcon());
+			addServiceButton.setText("Add Method");
+			addServiceButton.setIcon(IntroduceLookAndFeel.getAddMethodIcon());
 			addServiceButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 
-					DefaultMutableTreeNode node = ServicesButtonPanel.this.getTree().getRoot();
-					if (node instanceof ServicesTypeTreeNode) {
-						ServicesPopUpMenu.addService((ServicesTypeTreeNode) node);
+					DefaultMutableTreeNode tnode = MethodsButtonPanel.this.getTree().getCurrentNode();
+					if (tnode instanceof MethodsTypeTreeNode) {
+						MethodsPopUpMenu.addMethod((MethodsTypeTreeNode) tnode);
 					}
-					ServicesJTree.getInstance().setServices(((ServicesTypeTreeNode) node).getInfo());
+					ServicesJTree.getInstance().setServices(((MethodsTypeTreeNode) tnode).getInfo());
+
 				}
+
 			});
 		}
 		return addServiceButton;

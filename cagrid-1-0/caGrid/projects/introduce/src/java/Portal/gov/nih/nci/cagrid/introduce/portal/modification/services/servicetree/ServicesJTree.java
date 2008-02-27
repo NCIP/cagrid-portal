@@ -1,12 +1,8 @@
-package gov.nih.nci.cagrid.introduce.portal.modification.services;
+package gov.nih.nci.cagrid.introduce.portal.modification.services.servicetree;
 
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.portal.common.PopupTreeNode;
 import gov.nih.nci.cagrid.introduce.portal.common.SortableJTreeModel;
-import gov.nih.nci.cagrid.introduce.portal.modification.services.methods.MethodTypeTreeNode;
-import gov.nih.nci.cagrid.introduce.portal.modification.services.methods.MethodsTypeTreeNode;
-import gov.nih.nci.cagrid.introduce.portal.modification.services.resourceproperties.ResourcePropertiesTypeTreeNode;
-import gov.nih.nci.cagrid.introduce.portal.modification.services.resourceproperties.ResourcePropertyTypeTreeNode;
 
 import java.awt.CardLayout;
 import java.awt.Component;

@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.introduce.portal.modification.services;
+package gov.nih.nci.cagrid.introduce.portal.modification.services.servicetree;
 
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.beans.service.ServicesType;
@@ -18,7 +18,7 @@ import javax.swing.tree.DefaultTreeModel;
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster</A>
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella</A>
  * @created Nov 22, 2004
- * @version $Id$
+ * @version $Id: ServicesTypeTreeNode.java,v 1.1 2008-02-27 14:46:57 hastings Exp $
  */
 public class ServicesTypeTreeNode extends DefaultMutableTreeNode implements PopupTreeNode {
 
