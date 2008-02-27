@@ -1,5 +1,6 @@
 package org.cagrid.gaards.websso.client.filter;
 
+import gov.nih.nci.cagrid.common.FaultUtil;
 import gov.nih.nci.cagrid.common.Utils;
 
 import java.io.IOException;
@@ -96,15 +97,18 @@ public class CaGridWebSSODelegationLookupFilter implements Filter
 				}
 				catch (CDSInternalFault e)
 				{
-					throw new ServletException("Error retrieve the Delegated Credentials", e);
+					FaultUtil.printFaultToString(e);
+					throw new ServletException("Error retrieving the Delegated Credentials", e);
 				}
 				catch (DelegationFault e)
 				{
-					throw new ServletException("Error retrieve the Delegated Credentials", e);
+					FaultUtil.printFaultToString(e);
+					throw new ServletException("Error retrieving the Delegated Credentials", e);
 				}
 				catch (PermissionDeniedFault e)
 				{
-					throw new ServletException("Error retrieve the Delegated Credentials", e);
+					FaultUtil.printFaultToString(e);
+					throw new ServletException("Permission denied to retrieve Delegated Credentials", e);
 				}
 				session.setAttribute(CAGRID_SSO_GRID_CREDENTIAL, userCredential);
 				session.setAttribute(IS_GRID_CREDENTIAL_LOADED, Boolean.TRUE);

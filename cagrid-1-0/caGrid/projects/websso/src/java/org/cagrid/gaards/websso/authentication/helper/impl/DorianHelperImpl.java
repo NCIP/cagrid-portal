@@ -1,5 +1,6 @@
 package org.cagrid.gaards.websso.authentication.helper.impl;
 
+import gov.nih.nci.cagrid.common.FaultUtil;
 import gov.nih.nci.cagrid.dorian.client.IFSUserClient;
 import gov.nih.nci.cagrid.dorian.common.DorianFault;
 import gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault;
@@ -48,27 +49,33 @@ public class DorianHelperImpl implements DorianHelper
 			globusCredential = ifsUserClient.createProxy(samlAssertion, dorianInformation.getProxyLifeTime(), dorianInformation.getDelegationPathLength());
 		} catch (DorianFault e)
 		{
-			throw new AuthenticationConfigurationException("Error accessing the Dorian Service : " + e.getMessage());
+			FaultUtil.printFaultToString(e);
+			throw new AuthenticationConfigurationException("Error accessing the Dorian Service");
 		} 
 		catch (DorianInternalFault e)
 		{
-			throw new AuthenticationConfigurationException("Error accessing the Dorian Service : " + e.getMessage());
+			FaultUtil.printFaultToString(e);
+			throw new AuthenticationConfigurationException("Error accessing the Dorian Service");
 		} 
 		catch (InvalidAssertionFault e)
 		{
-			throw new AuthenticationConfigurationException("Invalid SAML Assertion : " + e.getMessage());
+			FaultUtil.printFaultToString(e);
+			throw new AuthenticationConfigurationException("Invalid SAML Assertion obtained from Authentication Service");
 		} 
 		catch (InvalidProxyFault e)
 		{
-			throw new AuthenticationConfigurationException("Error accessing the Dorian Service : " + e.getMessage());
+			FaultUtil.printFaultToString(e);			
+			throw new AuthenticationConfigurationException("Error obtaining Proxy from Dorian ");
 		} 
 		catch (UserPolicyFault e)
 		{
-			throw new AuthenticationConfigurationException("Error accessing the Dorian Service : " + e.getMessage());
+			FaultUtil.printFaultToString(e);
+			throw new AuthenticationConfigurationException("Policy Error occured obtaining Proxy from Dorian");
 		} 
 		catch (PermissionDeniedFault e)
 		{
-			throw new AuthenticationErrorException("Permission denied while obtaining Grid Credentials : " + e.getMessage());
+			FaultUtil.printFaultToString(e);
+			throw new AuthenticationErrorException("Permission denied while obtaining Proxy from Dorian");
 		}
 
 		return globusCredential;

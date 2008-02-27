@@ -1,5 +1,6 @@
 package org.cagrid.gaards.websso.logout;
 
+import gov.nih.nci.cagrid.common.FaultUtil;
 import gov.nih.nci.cagrid.common.Utils;
 
 import java.io.StringReader;
@@ -30,12 +31,10 @@ import org.springframework.web.servlet.mvc.AbstractController;
 public class CaGridLogoutController extends AbstractController
 {
 	LogoutController logoutController = new LogoutController();
-	CentralAuthenticationService centralAuthenticationService = null;
 	
     protected ModelAndView handleRequestInternal( final HttpServletRequest request, final HttpServletResponse response) throws Exception 
     {
 		String delegationEPR = request.getParameter(WebSSOConstants.CAGRID_SSO_DELEGATION_SERVICE_EPR);
-    	System.out.println("Inside the New Logout ");
 		if (delegationEPR != null && delegationEPR.trim().length() != 0)
 		{
 			WebSSOProperties webSSOProperties = (WebSSOProperties)ObjectFactory.getObject(WebSSOConstants.WEBSSO_PROPERTIES);
@@ -76,15 +75,18 @@ public class CaGridLogoutController extends AbstractController
 			}
 			catch (CDSInternalFault e)
 			{
-				throw new Exception("Error retrieve the Delegated Credentials", e);
+				FaultUtil.printFaultToString(e);
+				throw new Exception("Error retrieving the Delegated Credentials", e);
 			}
 			catch (DelegationFault e)
 			{
-				throw new Exception("Error retrieve the Delegated Credentials", e);
+				FaultUtil.printFaultToString(e);
+				throw new Exception("Error retrieving the Delegated Credentials", e);
 			}
 			catch (PermissionDeniedFault e)
 			{
-				throw new Exception("Error retrieve the Delegated Credentials", e);
+				FaultUtil.printFaultToString(e);
+				throw new Exception("Permission Denied to retrieve Delegated Credentials", e);
 			}
 			
 		}
@@ -107,7 +109,6 @@ public class CaGridLogoutController extends AbstractController
      */
     public void setCentralAuthenticationService(final CentralAuthenticationService centralAuthenticationService) 
     {
-    	this.centralAuthenticationService = centralAuthenticationService;
     	logoutController.setCentralAuthenticationService(centralAuthenticationService);
     }
 

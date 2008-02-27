@@ -6,6 +6,7 @@ import gov.nih.nci.cagrid.authentication.client.AuthenticationClient;
 import gov.nih.nci.cagrid.authentication.stubs.types.AuthenticationProviderFault;
 import gov.nih.nci.cagrid.authentication.stubs.types.InsufficientAttributeFault;
 import gov.nih.nci.cagrid.authentication.stubs.types.InvalidCredentialFault;
+import gov.nih.nci.cagrid.common.FaultUtil;
 import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
 
 import java.rmi.RemoteException;
@@ -51,15 +52,18 @@ public class AuthenticationServiceHelperImpl implements AuthenticationServiceHel
 		} 
 		catch (InvalidCredentialFault e)
 		{
-			throw new AuthenticationErrorException("Invalid Credentials : " + e.getMessage());
+			FaultUtil.printFaultToString(e);
+			throw new AuthenticationErrorException("Invalid Credentials");
 		} 
 		catch (InsufficientAttributeFault e)
 		{
-			throw new AuthenticationConfigurationException("Insufficient Attribute configured for the Authentication Service : " + e.getMessage());
+			FaultUtil.printFaultToString(e);
+			throw new AuthenticationConfigurationException("Insufficient Attribute configured for the Authentication Service");
 		} 
 		catch (AuthenticationProviderFault e)
 		{
-			throw new AuthenticationConfigurationException("Error accessing the Authentication Service : " + e.getMessage());
+			FaultUtil.printFaultToString(e);
+			throw new AuthenticationConfigurationException("Error accessing the Authentication Provider");
 		} 
 		catch (RemoteException e)
 		{

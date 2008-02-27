@@ -1,5 +1,6 @@
 package org.cagrid.gaards.websso.authentication.helper.impl;
 
+import gov.nih.nci.cagrid.common.FaultUtil;
 import gov.nih.nci.cagrid.common.Utils;
 
 import java.io.StringWriter;
@@ -33,11 +34,9 @@ public class GridCredentialDelegatorImpl implements GridCredentialDelegator
 		this.credentialDelegationServiceInformation = credentialDelegationServiceInformation;
 	}
 
-	public String delegateGridCredential(GlobusCredential globusCredential, gov.nih.nci.cagrid.dorian.ifs.bean.ProxyLifetime credentialslifetime, List<String> hostIdentityList ) throws AuthenticationConfigurationException
+	public String delegateGridCredential(GlobusCredential globusCredential, List<String> hostIdentityList ) throws AuthenticationConfigurationException
 	{
 
-		ProxyLifetime credentialsCDSLifeTime = convertToCDSLifeTime(credentialslifetime);
-		
 		String[] hostIdentities = new String[hostIdentityList.size()];
 		hostIdentityList.toArray(hostIdentities);
 		
@@ -66,19 +65,21 @@ public class GridCredentialDelegatorImpl implements GridCredentialDelegator
 		DelegatedCredentialReference delegatedCredentialReference = null;
 		try
 		{
-			delegatedCredentialReference = client.delegateCredential( delegationProxyLifetime, identityDelegationPolicy, credentialsCDSLifeTime);
+			delegatedCredentialReference = client.delegateCredential( identityDelegationPolicy, delegationProxyLifetime);
 		}
 		catch (CDSInternalFault e)
 		{
+			FaultUtil.printFault(e);
 			throw new AuthenticationConfigurationException("Internal Error in the Delegation Service", e);
 		}
 		catch (DelegationFault e)
 		{
-			e.printStackTrace();
+			FaultUtil.printFault(e);
 			throw new AuthenticationConfigurationException("Error accessing the Delegation Service, Unable to delegate credentials", e);
 		}
 		catch (PermissionDeniedFault e)
 		{
+			FaultUtil.printFault(e);
 			throw new AuthenticationConfigurationException("Error accessing the Delegation Service, Permission Denied", e);
 		}
 		catch (RemoteException e)
@@ -104,11 +105,6 @@ public class GridCredentialDelegatorImpl implements GridCredentialDelegator
 		}
 
 		return serializedDelegatedCredentialReference;
-	}
-
-	private ProxyLifetime convertToCDSLifeTime(gov.nih.nci.cagrid.dorian.ifs.bean.ProxyLifetime credentialslifetime)
-	{
-		return new ProxyLifetime(credentialslifetime.getHours(), credentialslifetime.getMinutes(), credentialslifetime.getSeconds());
 	}
 
 }

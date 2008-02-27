@@ -86,7 +86,7 @@ public class CaGridAuthenticationManager implements AuthenticationManager
 		GridCredentialDelegator gridCredentialDelegator = (GridCredentialDelegator)ObjectFactory.getObject(WebSSOConstants.GRID_CREDENTIAL_DELEGATOR);
 		
 		// Delegate the Globus Credentials
-		String serializedDelegatedCredentialReference = gridCredentialDelegator.delegateGridCredential(globusCredential, this.getDorianInformation(((UsernamePasswordAuthenticationServiceURLCredentials)credentials).getAuthenticationServiceURL()).getProxyLifeTime(), this.getHostIdentities());
+		String serializedDelegatedCredentialReference = gridCredentialDelegator.delegateGridCredential(globusCredential, this.getHostIdentities());
 		
 		// Obtain the implementation for the SAMLToAttributeMapper Interface
 		SAMLToAttributeMapper samlToAttributeMapper = (SAMLToAttributeMapper)ObjectFactory.getObject(WebSSOConstants.SAML_TO_ATTRIBUTE_MAPPER);  
