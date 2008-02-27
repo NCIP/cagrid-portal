@@ -69,16 +69,16 @@ public class ServicesJTree extends JTree {
                         ((CardLayout) ServicesJTree.this.optionsPanel.getLayout()).show(
                             ServicesJTree.this.optionsPanel, "services");
                     } else if (currentNode instanceof ResourcePropertyTypeTreeNode) {
-                        ((CardLayout) ServicesJTree.this.optionsPanel.getLayout()).show(
-                            ServicesJTree.this.optionsPanel, "resourceProperty");
                         Component[] comps = ServicesJTree.this.optionsPanel.getComponents();
                         for(int i = 0; i < comps.length; i ++){
                             if(comps[i] instanceof ResourcePropertyButtonPanel){
                                 ResourcePropertyButtonPanel panel = (ResourcePropertyButtonPanel)comps[i];
-                                panel.initialize();
+                                panel.updateView();
                                 ServicesJTree.this.optionsPanel.repaint();
                             }
                         }
+                        ((CardLayout) ServicesJTree.this.optionsPanel.getLayout()).show(
+                            ServicesJTree.this.optionsPanel, "resourceProperty");
                     } else if (currentNode instanceof ServiceTypeTreeNode) {
                         ((CardLayout) ServicesJTree.this.optionsPanel.getLayout()).show(
                             ServicesJTree.this.optionsPanel, "service");
