@@ -80,26 +80,8 @@
 		<delete dir="${build.dir}" />
 	</target>
 
-	<target name="all">
-		
-		
-    	<echo>*********************************************</echo>
-    	<echo>#     #                #####   #####  #######</echo>
-    	<echo>#  #  # ###### #####  #     # #     # #     #</echo>
-    	<echo>#  #  # #      #    # #       #       #     #</echo>
-    	<echo>#  #  # #####  #####   #####   #####  #     #</echo>
-    	<echo>#  #  # #      #    #       #       # #     #</echo>
-    	<echo>#  #  # #      #    # #     # #     # #     #</echo>
-    	<echo> ## ##  ###### #####   #####   #####  #######</echo>
-		<echo>     #####                              </echo>
-		<echo>    #     # #      # ###### #    # #####</echo>
-		<echo>    #       #      # #      ##   #   #  </echo>
-		<echo>    #       #      # #####  # #  #   #  </echo>
-		<echo>    #       #      # #      #  # #   #  </echo>
-		<echo>    #     # #      # #      #   ##   #  </echo>
-		<echo>     #####  ###### # ###### #    #   #  </echo>
-    	<echo>*********************************************</echo>
-		<antcall target="clean" />
+	<target name="all">		
+ 		<antcall target="clean" />
 		<antcall target="jar" />
 	</target>
 </project>
