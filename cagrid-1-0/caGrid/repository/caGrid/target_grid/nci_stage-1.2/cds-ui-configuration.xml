@@ -8,7 +8,7 @@
             <name>Credential Delegation Service</name>
             <description>The URL(s) of available Credential Delegation Service(s)</description>
             <values>
-                <value>https://localhost:8443/wsrf/services/cagrid/CredentialDelegationService</value>
+                <value>https://cagrid-cds-stage.nci.nih.gov:8443/wsrf/services/cagrid/CredentialDelegationService</value>
             </values>
         </property>
     </properties>
