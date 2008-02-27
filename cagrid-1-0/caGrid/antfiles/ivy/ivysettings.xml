@@ -7,7 +7,7 @@
     
     Since we are only using local resolvers I'd like to disable the cache all together... don't think you can
   -->
-  <settings defaultResolver="caGrid-ivy-resolver" checkUpToDate="false"/>
+  <settings defaultResolver="caGrid-ivy-resolver" checkUpToDate="false" circularDependencyStrategy="error"/>/>
 
   <macrodef name="cagrid-fs-resolver">
     <attribute name="repo.dir"/>
