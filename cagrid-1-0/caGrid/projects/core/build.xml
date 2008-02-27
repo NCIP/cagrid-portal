@@ -116,7 +116,6 @@
 		<jar jarfile="${project.jarfile}" basedir="${classes.dir}">
 			<manifest>
 				<attribute name="Built-By" value="${user.name}" />
-				<attribute name="Main-Class" value="${main.class}" />
 				<attribute name="Specification-Version" value="${project.version}" />
 				<attribute name="Implementation-Version" value="${project.version}" />
 			</manifest>
@@ -131,7 +130,6 @@
 		<jar jarfile="${project.resources.jarfile}" basedir="${resources.dir}/portal/common">
 			<manifest>
 				<attribute name="Built-By" value="${user.name}" />
-				<attribute name="Main-Class" value="${main.class}" />
 				<attribute name="Specification-Version" value="${project.version}" />
 				<attribute name="Implementation-Version" value="${project.version}" />
 			</manifest>
@@ -146,7 +144,6 @@
 		<jar jarfile="${test.project.jar}" basedir="${test.classes.dir}">
 			<manifest>
 				<attribute name="Built-By" value="${user.name}" />
-				<attribute name="Main-Class" value="${main.class}" />
 				<attribute name="Specification-Version" value="${project.version}" />
 				<attribute name="Implementation-Version" value="${project.version}" />
 			</manifest>
