@@ -71,6 +71,10 @@ public class ResourcePropertyTypeTreeNode extends DefaultMutableTreeNode impleme
 		this.menu = new ResourcePropertyPopUpMenu(this);
 		this.setUserObject(resourcePropertyType);
 	}
+	
+	public ResourcePropertyType getResourcePropertyType(){
+		return (ResourcePropertyType)getUserObject();
+	}
 
 
 	public ImageIcon getOpenIcon() {

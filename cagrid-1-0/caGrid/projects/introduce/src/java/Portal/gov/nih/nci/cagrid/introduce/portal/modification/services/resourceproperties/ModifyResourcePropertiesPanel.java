@@ -10,6 +10,7 @@ import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertiesListType;
 import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertyType;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
+import gov.nih.nci.cagrid.introduce.common.SpecificServiceInformation;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
 import gov.nih.nci.cagrid.introduce.portal.extension.ResourcePropertyEditorPanel;
 import gov.nih.nci.cagrid.introduce.portal.extension.tools.ExtensionTools;
@@ -47,8 +48,6 @@ import java.awt.Color;
 
 public class ModifyResourcePropertiesPanel extends JPanel {
 
-    private NamespacesType namespaces;
-
     private JPanel resourcePropertiesPanel = null;
 
     private JScrollPane namespacesScrollPane = null;
@@ -71,21 +70,13 @@ public class ModifyResourcePropertiesPanel extends JPanel {
 
     private JButton editInstanceButton = null;
 
-    private File etcDir;
-
-    private File schemaDir;
-
-    private ServiceType service;
-
     private boolean isMainMetadataPanel = true;
+    
+    private SpecificServiceInformation info;
 
 
-    public ModifyResourcePropertiesPanel(ServiceType service, NamespacesType namespaces, File etcDir, File schemaDir,
-        boolean showW3Cnamespaces, boolean isMainMetadataPanel) {
-        this.service = service;
-        this.etcDir = etcDir;
-        this.schemaDir = schemaDir;
-        this.namespaces = namespaces;
+    public ModifyResourcePropertiesPanel(SpecificServiceInformation info, boolean showW3Cnamespaces, boolean isMainMetadataPanel) {
+        this.info = info;
         this.showW3Cnamespaces = showW3Cnamespaces;
         this.isMainMetadataPanel = isMainMetadataPanel;
         initialize();
@@ -110,11 +101,10 @@ public class ModifyResourcePropertiesPanel extends JPanel {
     }
 
 
-    public void reInitialize(ServiceType initService, NamespacesType ns) {
-        this.service = initService;
-        this.namespaces = ns;
-        this.namespacesJTree.setNamespaces(ns);
-        this.resourcePropertiesTable.setResourceProperties(service.getResourcePropertiesList());
+    public void reInitialize(SpecificServiceInformation info) {
+        this.info = info;
+        this.namespacesJTree.setNamespaces(info.getNamespaces());
+        this.resourcePropertiesTable.setResourceProperties(info.getService().getResourcePropertiesList());
     }
 
 
@@ -187,7 +177,7 @@ public class ModifyResourcePropertiesPanel extends JPanel {
      */
     private NamespacesJTree getNamespacesJTree() {
         if (this.namespacesJTree == null) {
-            this.namespacesJTree = new NamespacesJTree(this.namespaces, this.showW3Cnamespaces);
+            this.namespacesJTree = new NamespacesJTree(info.getNamespaces(), this.showW3Cnamespaces);
             this.namespacesJTree.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
@@ -210,9 +200,9 @@ public class ModifyResourcePropertiesPanel extends JPanel {
     private ResourcePropertyTable getResourcePropertiesTable() {
         if (this.resourcePropertiesTable == null) {
             if (this.isMainMetadataPanel) {
-                this.resourcePropertiesTable = new ResourcePropertyTable(service.getResourcePropertiesList(), true);
+                this.resourcePropertiesTable = new ResourcePropertyTable(info.getService().getResourcePropertiesList(), true);
             } else {
-                this.resourcePropertiesTable = new ResourcePropertyTable(service.getResourcePropertiesList(), false);
+                this.resourcePropertiesTable = new ResourcePropertyTable(info.getService().getResourcePropertiesList(), false);
             }
             SelectionListener listener = new SelectionListener(this.resourcePropertiesTable);
             this.resourcePropertiesTable.getSelectionModel().addListSelectionListener(listener);
@@ -336,9 +326,9 @@ public class ModifyResourcePropertiesPanel extends JPanel {
             metadata.setRegister(false);
             
             //look to make sure it is not already in there
-            if (service.getResourcePropertiesList() != null && service.getResourcePropertiesList().getResourceProperty() != null) {
-                for (int i = 0; i < service.getResourcePropertiesList().getResourceProperty().length; i++) {
-                    ResourcePropertyType rp = service.getResourcePropertiesList().getResourceProperty(i);
+            if (info.getService().getResourcePropertiesList() != null && info.getService().getResourcePropertiesList().getResourceProperty() != null) {
+                for (int i = 0; i < info.getService().getResourcePropertiesList().getResourceProperty().length; i++) {
+                    ResourcePropertyType rp = info.getService().getResourcePropertiesList().getResourceProperty(i);
                     if (rp.getQName().equals(metadata.getQName())) {
                         return;
                     }
@@ -348,17 +338,17 @@ public class ModifyResourcePropertiesPanel extends JPanel {
             getResourcePropertiesTable().addRow(metadata);
 
             // add new metadata
-            CommonTools.addResourcePropety(service, metadata);
+            CommonTools.addResourcePropety(info.getService(), metadata);
 
             // set the file name for the resource property instance......
             int i = 0;
-            for (i = 0; i < service.getResourcePropertiesList().getResourceProperty().length; i++) {
-                if (metadata.equals(service.getResourcePropertiesList().getResourceProperty(i))) {
+            for (i = 0; i < info.getService().getResourcePropertiesList().getResourceProperty().length; i++) {
+                if (metadata.equals(info.getService().getResourcePropertiesList().getResourceProperty(i))) {
                     break;
                 }
             }
-            metadata.setFileLocation(this.service.getName() + "_"
-                + CommonTools.getResourcePropertyVariableName(this.service.getResourcePropertiesList(), i) + ".xml");
+            metadata.setFileLocation(this.info.getService().getName() + "_"
+                + CommonTools.getResourcePropertyVariableName(this.info.getService().getResourcePropertiesList(), i) + ".xml");
         }
     }
 
@@ -393,7 +383,7 @@ public class ModifyResourcePropertiesPanel extends JPanel {
                     }
                     
                     // remove from resource properties list
-                    CommonTools.removeResourceProperty(service, resource.getQName());
+                    CommonTools.removeResourceProperty(info.getService(), resource.getQName());
                 }
             });
         }
@@ -434,62 +424,8 @@ public class ModifyResourcePropertiesPanel extends JPanel {
                         try {
                             ResourcePropertyType type = getResourcePropertiesTable().getRowData(
                                 getResourcePropertiesTable().getSelectedRow());
-                            if (type.isPopulateFromFile()) {
-                                String rpData = null;
-                                File resourcePropertyFile = null;
-
-                                if (type.getFileLocation() != null) {
-                                    resourcePropertyFile = new File(ModifyResourcePropertiesPanel.this.etcDir
-                                        .getAbsolutePath()
-                                        + File.separator + type.getFileLocation());
-                                }
-                                if (resourcePropertyFile != null && resourcePropertyFile.exists()) {
-                                    // file has already been created
-                                    System.out.println("Loading resource properties file : " + resourcePropertyFile);
-                                    rpData = Utils.fileToStringBuffer(new File(resourcePropertyFile.getAbsolutePath())).toString();
-                                } else {
-                                    // file has not been created yet, we will
-                                    // create it, set the path to file, and then
-                                    // call the editor
-                                    int i = 0;
-                                    for (i = 0; i < service.getResourcePropertiesList().getResourceProperty().length; i++) {
-                                        if (type.equals(service.getResourcePropertiesList()
-                                            .getResourceProperty(i))) {
-                                            break;
-                                        }
-                                    }
-                                    System.out.println("Creating a new resource properties file");
-                                    boolean created = resourcePropertyFile.createNewFile();
-                                    if (!created) {
-                                        throw new Exception("Could not create file"
-                                            + resourcePropertyFile.getAbsolutePath());
-                                    }
-                                    rpData = Utils.fileToStringBuffer(new File(resourcePropertyFile.getAbsolutePath())).toString();
-                                }
-
-                                QName qname = type.getQName();
-                                NamespaceType nsType = CommonTools.getNamespaceType(
-                                    ModifyResourcePropertiesPanel.this.namespaces, qname.getNamespaceURI());
-
-                                ResourcePropertyEditorExtensionDescriptionType mde = ExtensionTools
-                                    .getResourcePropertyEditorExtensionDescriptor(qname);
-                                ResourcePropertyEditorPanel mdec = null;
-
-                                if (mde != null) {
-                                    mdec = ExtensionTools.getMetadataEditorComponent(mde.getName(), rpData, new File(
-                                        ModifyResourcePropertiesPanel.this.schemaDir.getAbsolutePath() + File.separator
-                                            + nsType.getLocation()), ModifyResourcePropertiesPanel.this.schemaDir);
-                                } else {
-                                    // use the default editor....
-                                    mdec = new XMLEditorViewer(rpData, new File(
-                                        ModifyResourcePropertiesPanel.this.schemaDir.getAbsolutePath() + File.separator
-                                            + nsType.getLocation()), ModifyResourcePropertiesPanel.this.schemaDir);
-                                }
-                                ResourcePropertyEditorDialog diag = new ResourcePropertyEditorDialog(mdec,
-                                    resourcePropertyFile);
-                                GridApplication.getContext().showDialog(diag);
-                            }
-
+                            viewEditResourceProperty(type, info);
+                            
                         } catch (Exception ex) {
                             ex.printStackTrace();
                         }
@@ -501,5 +437,66 @@ public class ModifyResourcePropertiesPanel extends JPanel {
 
         }
         return this.editInstanceButton;
+    }
+    
+    
+    public static void viewEditResourceProperty(ResourcePropertyType type, SpecificServiceInformation info) throws Exception {
+    	File schemaDir = new File(info.getBaseDirectory() + File.separator + "schema" + File.separator + info.getService().getName());
+    	File etcDir = new File(info.getBaseDirectory() + File.separator + "etc");
+    	if (type.isPopulateFromFile()) {
+            String rpData = null;
+            File resourcePropertyFile = null;
+
+            if (type.getFileLocation() != null) {
+                resourcePropertyFile = new File(etcDir
+                    .getAbsolutePath()
+                    + File.separator + type.getFileLocation());
+            }
+            if (resourcePropertyFile != null && resourcePropertyFile.exists()) {
+                // file has already been created
+                System.out.println("Loading resource properties file : " + resourcePropertyFile);
+                rpData = Utils.fileToStringBuffer(new File(resourcePropertyFile.getAbsolutePath())).toString();
+            } else {
+                // file has not been created yet, we will
+                // create it, set the path to file, and then
+                // call the editor
+                int i = 0;
+                for (i = 0; i < info.getService().getResourcePropertiesList().getResourceProperty().length; i++) {
+                    if (type.equals(info.getService().getResourcePropertiesList()
+                        .getResourceProperty(i))) {
+                        break;
+                    }
+                }
+                System.out.println("Creating a new resource properties file");
+                boolean created = resourcePropertyFile.createNewFile();
+                if (!created) {
+                    throw new Exception("Could not create file"
+                        + resourcePropertyFile.getAbsolutePath());
+                }
+                rpData = Utils.fileToStringBuffer(new File(resourcePropertyFile.getAbsolutePath())).toString();
+            }
+
+            QName qname = type.getQName();
+            NamespaceType nsType = CommonTools.getNamespaceType(info.getNamespaces(), qname.getNamespaceURI());
+
+            ResourcePropertyEditorExtensionDescriptionType mde = ExtensionTools
+                .getResourcePropertyEditorExtensionDescriptor(qname);
+            ResourcePropertyEditorPanel mdec = null;
+
+            if (mde != null) {
+                mdec = ExtensionTools.getMetadataEditorComponent(mde.getName(), rpData, new File(
+                   schemaDir.getAbsolutePath() + File.separator
+                        + nsType.getLocation()), schemaDir);
+            } else {
+                // use the default editor....
+                mdec = new XMLEditorViewer(rpData, new File(
+                    schemaDir.getAbsolutePath() + File.separator
+                        + nsType.getLocation()), schemaDir);
+            }
+            ResourcePropertyEditorDialog diag = new ResourcePropertyEditorDialog(mdec,
+                resourcePropertyFile);
+            GridApplication.getContext().showDialog(diag);
+        }
+
     }
 }

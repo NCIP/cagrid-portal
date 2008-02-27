@@ -9,6 +9,7 @@ import gov.nih.nci.cagrid.introduce.portal.modification.services.resourcepropert
 import gov.nih.nci.cagrid.introduce.portal.modification.services.resourceproperties.ResourcePropertyTypeTreeNode;
 
 import java.awt.CardLayout;
+import java.awt.Component;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Enumeration;
@@ -74,6 +75,14 @@ public class ServicesJTree extends JTree {
                     } else if (currentNode instanceof ResourcePropertyTypeTreeNode) {
                         ((CardLayout) ServicesJTree.this.optionsPanel.getLayout()).show(
                             ServicesJTree.this.optionsPanel, "resourceProperty");
+                        Component[] comps = ServicesJTree.this.optionsPanel.getComponents();
+                        for(int i = 0; i < comps.length; i ++){
+                            if(comps[i] instanceof ResourcePropertyButtonPanel){
+                                ResourcePropertyButtonPanel panel = (ResourcePropertyButtonPanel)comps[i];
+                                panel.initialize();
+                                ServicesJTree.this.optionsPanel.repaint();
+                            }
+                        }
                     } else if (currentNode instanceof ServiceTypeTreeNode) {
                         ((CardLayout) ServicesJTree.this.optionsPanel.getLayout()).show(
                             ServicesJTree.this.optionsPanel, "service");

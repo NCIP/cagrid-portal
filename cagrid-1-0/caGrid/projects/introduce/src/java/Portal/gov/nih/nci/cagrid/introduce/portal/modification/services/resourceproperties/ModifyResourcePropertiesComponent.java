@@ -3,6 +3,7 @@ package gov.nih.nci.cagrid.introduce.portal.modification.services.resourceproper
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespacesType;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
+import gov.nih.nci.cagrid.introduce.common.SpecificServiceInformation;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
 
 import java.awt.GridBagConstraints;
@@ -31,26 +32,15 @@ public class ModifyResourcePropertiesComponent extends JDialog {
 
 	private boolean showW3Cnamespaces;
 
-	private ServiceType service;
 
-	private File etcDir;
-
-	private File schemaDir;
-
-	private ServiceInformation info;
+	private SpecificServiceInformation info;
 
 	/**
 	 * This method initializes
 	 */
-	public ModifyResourcePropertiesComponent(ServiceType service,
-			ServiceInformation info, NamespacesType namespaces, File etcDir,
-			File schemaDir, boolean showW3Cnamespaces) {
+	public ModifyResourcePropertiesComponent(SpecificServiceInformation info,boolean showW3Cnamespaces) {
 		super(GridApplication.getContext().getApplication(),"Modify Resource Properties");
 		this.setModal(true);
-		this.service = service;
-		this.etcDir = etcDir;
-		this.schemaDir = schemaDir;
-		this.namespaces = namespaces;
 		this.showW3Cnamespaces = showW3Cnamespaces;
 		this.info = info;
 		initialize();
@@ -99,12 +89,10 @@ public class ModifyResourcePropertiesComponent extends JDialog {
 	 */
 	private JPanel getResourcesPanel() {
 		if (resourcesPanel == null) {
-			if (info.getServices().getService(0).getName().equals(service.getName())) {
-				resourcesPanel = new ModifyResourcePropertiesPanel(service,
-						namespaces, etcDir, schemaDir, showW3Cnamespaces, true);
+			if (info.getServices().getService(0).getName().equals(info.getService().getName())) {
+				resourcesPanel = new ModifyResourcePropertiesPanel(info,showW3Cnamespaces, true);
 			} else {
-				resourcesPanel = new ModifyResourcePropertiesPanel(service,
-						namespaces, etcDir, schemaDir, showW3Cnamespaces, false);
+				resourcesPanel = new ModifyResourcePropertiesPanel(info,showW3Cnamespaces, false);
 			}
 		}
 		return resourcesPanel;

@@ -3,9 +3,11 @@ package gov.nih.nci.cagrid.introduce.portal.modification.services.resourceproper
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertyType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
+import gov.nih.nci.cagrid.introduce.common.SpecificServiceInformation;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
 import gov.nih.nci.cagrid.introduce.portal.modification.services.ServicesJTree;
 
+import java.awt.Component;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -17,6 +19,7 @@ public class ResourcePropertyPopUpMenu extends JPopupMenu {
 
 	private JMenuItem removeResourcePropertyMenuItem = null;
 	private ResourcePropertyTypeTreeNode node;
+	private JMenuItem editResourcePropertyMenuItem = null;
 
 
 	/**
@@ -34,13 +37,26 @@ public class ResourcePropertyPopUpMenu extends JPopupMenu {
 	 * This method initializes this
 	 * 
 	 */
-	private void initialize() {
+	public void initialize() {
+	    this.removeAll();
 		this.add(getRemoveResourcePropertyMenuItem());
-
+		//only if this is the first service  and it has a file can you edit hte metadata
+		if(node.getResourcePropertyType() !=null && node.getResourcePropertyType().isPopulateFromFile()){
+			this.add(getEditResourcePropertyMenuItem());
+		}
 	}
+	
+	
 
 
-	/**
+	@Override
+    public void show(Component invoker, int x, int y) {
+	    initialize();
+        super.show(invoker, x, y);
+    }
+
+
+    /**
 	 * This method initializes removeResourcePropertyMenuItem
 	 * 
 	 * @return javax.swing.JMenuItem
@@ -61,6 +77,33 @@ public class ResourcePropertyPopUpMenu extends JPopupMenu {
 			});
 		}
 		return removeResourcePropertyMenuItem;
+	}
+
+
+	/**
+	 * This method initializes editResourcePropertyMenuItem	
+	 * 	
+	 * @return javax.swing.JMenuItem	
+	 */
+	public JMenuItem getEditResourcePropertyMenuItem() {
+		if (editResourcePropertyMenuItem == null) {
+			editResourcePropertyMenuItem = new JMenuItem();
+			editResourcePropertyMenuItem.setIcon(IntroduceLookAndFeel.getModifyResourcePropertyIcon());
+			editResourcePropertyMenuItem.setText("Edit Resource Property");
+			editResourcePropertyMenuItem
+					.addMouseListener(new java.awt.event.MouseAdapter() {
+						public void mousePressed(java.awt.event.MouseEvent e) {
+							System.out.println("mousePressed()"); // TODO Auto-generated Event stub mousePressed()
+							SpecificServiceInformation info = new SpecificServiceInformation(((ResourcePropertiesTypeTreeNode)node.getParent()).getInfo(),((ResourcePropertiesTypeTreeNode)node.getParent()).getService());
+							try {
+								ModifyResourcePropertiesPanel.viewEditResourceProperty(node.getResourcePropertyType(), info);
+							} catch (Exception e1) {
+								e1.printStackTrace();
+							}
+						}
+					});
+		}
+		return editResourcePropertyMenuItem;
 	}
 
 }

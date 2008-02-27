@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.services.resourceproperties;
 
+import gov.nih.nci.cagrid.introduce.common.SpecificServiceInformation;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
 import gov.nih.nci.cagrid.introduce.portal.modification.services.ServicesJTree;
 
@@ -62,10 +63,8 @@ public class ResourcePropertiesPopUpMenu extends JPopupMenu {
 
 
     public static void modifyResourceProperties(ResourcePropertiesTypeTreeNode node) {
-        ModifyResourcePropertiesComponent comp = new ModifyResourcePropertiesComponent(node.getService(), node.getInfo(), node
-            .getInfo().getNamespaces(), new File(node.getInfo().getBaseDirectory().getAbsolutePath() + File.separator
-            + "etc"), new File(node.getInfo().getBaseDirectory().getAbsolutePath() + File.separator + "schema"
-            + File.separator + node.getInfo().getServices().getService(0).getName()), false);
+    	SpecificServiceInformation info = new SpecificServiceInformation(node.getInfo(), node.getService());
+        ModifyResourcePropertiesComponent comp = new ModifyResourcePropertiesComponent(info, false);
         comp.setSize(800, 500);
         GridApplication.getContext().showDialog(comp);
         //rebuild the tree

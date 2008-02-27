@@ -2,26 +2,26 @@ package gov.nih.nci.cagrid.introduce.portal.modification.services;
 
 import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertyType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
+import gov.nih.nci.cagrid.introduce.common.SpecificServiceInformation;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
-import gov.nih.nci.cagrid.introduce.portal.modification.services.methods.MethodTypeTreeNode;
-import gov.nih.nci.cagrid.introduce.portal.modification.services.methods.MethodViewer;
-import gov.nih.nci.cagrid.introduce.portal.modification.services.methods.MethodsTypeTreeNode;
+import gov.nih.nci.cagrid.introduce.portal.modification.services.resourceproperties.ModifyResourcePropertiesPanel;
 import gov.nih.nci.cagrid.introduce.portal.modification.services.resourceproperties.ResourcePropertiesTypeTreeNode;
 import gov.nih.nci.cagrid.introduce.portal.modification.services.resourceproperties.ResourcePropertyTypeTreeNode;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeModel;
 
 
 public class ResourcePropertyButtonPanel extends ServiceContextsOptionsPanel {
 
 	private JButton removeResourcePropertyButton = null;
+	private JButton editButton = null;
 	/**
 	 * This method initializes
 	 */
@@ -31,10 +31,16 @@ public class ResourcePropertyButtonPanel extends ServiceContextsOptionsPanel {
 	}
 
 
-	/**
+    /**
 	 * This method initializes this
 	 */
-	private void initialize() {
+	public void initialize() {
+		this.removeAll();
+		GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
+		gridBagConstraints1.gridx = 0;
+		gridBagConstraints1.fill = GridBagConstraints.BOTH;
+		gridBagConstraints1.insets = new Insets(2, 2, 2, 2);
+		gridBagConstraints1.gridy = 1;
 		GridBagConstraints gridBagConstraints = new GridBagConstraints();
 		gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
 		gridBagConstraints.gridy = 0;
@@ -42,6 +48,13 @@ public class ResourcePropertyButtonPanel extends ServiceContextsOptionsPanel {
 		gridBagConstraints.gridx = 0;
 		this.setLayout(new GridBagLayout());
 		this.add(getRemoveResourcePropertyButton(), gridBagConstraints);
+		if(ResourcePropertyButtonPanel.this.getTree().getCurrentNode()!=null && ResourcePropertyButtonPanel.this.getTree().getCurrentNode() instanceof ResourcePropertyTypeTreeNode ){
+			ResourcePropertyTypeTreeNode node = (ResourcePropertyTypeTreeNode)ResourcePropertyButtonPanel.this.getTree().getCurrentNode();
+			ResourcePropertiesTypeTreeNode parent = (ResourcePropertiesTypeTreeNode)node.getParent();
+			if(node.getResourcePropertyType().isPopulateFromFile()){
+				this.add(getEditButton(), gridBagConstraints1);
+			}
+		}
 	}
 
 
@@ -76,6 +89,32 @@ public class ResourcePropertyButtonPanel extends ServiceContextsOptionsPanel {
 			});
 		}
 		return removeResourcePropertyButton;
+	}
+
+
+	/**
+	 * This method initializes editButton	
+	 * 	
+	 * @return javax.swing.JButton	
+	 */
+	public JButton getEditButton() {
+		if (editButton == null) {
+			editButton = new JButton();
+			editButton.setIcon(IntroduceLookAndFeel.getModifyResourcePropertyIcon());
+			editButton.setText("Edit Resource Property");
+			editButton.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					ResourcePropertyTypeTreeNode node = (ResourcePropertyTypeTreeNode)ResourcePropertyButtonPanel.this.getTree().getCurrentNode();
+					SpecificServiceInformation info = new SpecificServiceInformation(((ResourcePropertiesTypeTreeNode)node.getParent()).getInfo(),((ResourcePropertiesTypeTreeNode)node.getParent()).getService());
+					try {
+						ModifyResourcePropertiesPanel.viewEditResourceProperty(node.getResourcePropertyType(), info);
+					} catch (Exception e1) {
+						e1.printStackTrace();
+					}
+				}
+			});
+		}
+		return editButton;
 	}
 
 } // @jve:decl-index=0:visual-constraint="10,10"
