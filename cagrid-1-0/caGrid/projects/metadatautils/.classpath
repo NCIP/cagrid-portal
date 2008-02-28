@@ -62,6 +62,6 @@
 	<classpathentry kind="lib" path="ext/dependencies/test/jars/caGrid-testing-core-1.2-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/test/jars/caGrid-testing-system-1.2-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/test/jars/jdepend-2.7.jar"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/3"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/3.8.1"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
