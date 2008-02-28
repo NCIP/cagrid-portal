@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.sdkquery4.style.wizard;
 
 import gov.nih.nci.cagrid.common.portal.DocumentChangeAdapter;
+import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.common.portal.validation.IconFeedbackPanel;
 import gov.nih.nci.cagrid.data.ui.GroupSelectionListener;
 import gov.nih.nci.cagrid.data.ui.NotifyingButtonGroup;
@@ -16,7 +17,10 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
@@ -48,13 +52,15 @@ import com.jgoodies.validation.view.ValidationComponentUtils;
  * @author David Ervin
  * 
  * @created Nov 27, 2007 4:50:32 PM
- * @version $Id: QueryProcessorConfigurationPanel.java,v 1.11 2008-01-18 21:18:57 dervin Exp $ 
+ * @version $Id: QueryProcessorConfigurationPanel.java,v 1.12 2008-02-28 18:43:21 dervin Exp $ 
  */
 public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
     // keys for validation
+    public static final String KEY_OUTPUT_DIRECTORY = "SDK Output Directory";
     public static final String KEY_APPLICATION_NAME = "Application name";
     public static final String KEY_BEANS_JAR = "Beans Jar file";
-    public static final String KEY_CONFIG_DIR = "Configuration directory";
+    public static final String KEY_LOCAL_CONFIG_DIR = "Local configuration directory";
+    public static final String KEY_REMOTE_CONFIG_DIR = "Remote configuration directory";
     public static final String KEY_ORM_JAR = "ORM Jar file";
     public static final String KEY_HOST_NAME = "Application service host name";
     public static final String KEY_PORT_NUMBER = "Application port number";
@@ -67,9 +73,9 @@ public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
     private JLabel beansJarLabel = null;
     private JTextField beansJarTextField = null;
     private JButton beansBrowseButton = null;
-    private JLabel configDirLabel = null;
-    private JTextField configDirTextField = null;
-    private JButton configBrowseButton = null;
+    private JLabel localConfigDirLabel = null;
+    private JTextField localConfigDirTextField = null;
+    private JButton localConfigBrowseButton = null;
     private JPanel basicConfigPanel = null;
     private JRadioButton localApiRadioButton = null;
     private JRadioButton remoteApiRadioButton = null;
@@ -85,12 +91,22 @@ public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
     private JPanel apiConfigPanel = null;
     private JPanel mainPanel = null;
     private JCheckBox caseInsensitiveCheckBox = null;
+    private JRadioButton simpleConfigRadioButton = null;
+    private JRadioButton advancedRadioButton = null;
+    private JPanel configTypePanel = null;
+    private JLabel outputDirLabel = null;
+    private JTextField outputDirTextField = null;
+    private JButton outputDirBrowseButton = null;
+    private JPanel outputDirSelectionPanel = null;
+    private JLabel remoteConfigDirLabel = null;
+    private JTextField remoteConfigDirTextField = null;
+    private JButton remoteConfigBrowseButton = null;
     
     private IconFeedbackPanel validationPanel = null;
     private ValidationResultModel validationModel = null;
     private DocumentChangeAdapter documentChangeListener = null;
-    private QueryProcessorBaseConfigurationStep configurationStep = null;
     
+    private QueryProcessorBaseConfigurationStep configurationStep = null;
 
     /**
      * @param extensionDescription
@@ -140,7 +156,7 @@ public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
     
     
     private void initialize() {
-        initRadioGroup();
+        initRadioGroups();
         this.setLayout(new GridLayout());
         this.add(getValidationPanel());
         // set up for validation
@@ -156,17 +172,28 @@ public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
     }
     
     
-    private void initRadioGroup() {
-        NotifyingButtonGroup radioGroup = new NotifyingButtonGroup();
-        radioGroup.addGroupSelectionListener(new GroupSelectionListener() {
+    private void initRadioGroups() {
+        NotifyingButtonGroup apiRadioGroup = new NotifyingButtonGroup();
+        apiRadioGroup.addGroupSelectionListener(new GroupSelectionListener() {
             public void selectionChanged(ButtonModel previousSelection, ButtonModel currentSelection) {
                 validateInput();
             }
         });
-        radioGroup.add(getLocalApiRadioButton());
-        radioGroup.add(getRemoteApiRadioButton());
-        radioGroup.setSelected(getLocalApiRadioButton().getModel(), true);
+        apiRadioGroup.add(getLocalApiRadioButton());
+        apiRadioGroup.add(getRemoteApiRadioButton());
+        apiRadioGroup.setSelected(getLocalApiRadioButton().getModel(), true);
         setLocalRemoteComponentsEnabled();
+        
+        NotifyingButtonGroup configTypeGroup = new NotifyingButtonGroup();
+        configTypeGroup.addGroupSelectionListener(new GroupSelectionListener() {
+            public void selectionChanged(ButtonModel previousSelection, ButtonModel currentSelection) {
+                validateInput();
+            }
+        });
+        configTypeGroup.add(getSimpleConfigRadioButton());
+        configTypeGroup.add(getAdvancedRadioButton());
+        configTypeGroup.setSelected(getSimpleConfigRadioButton().getModel(), true);
+        setSimpleAdvancedComponentsEnabled();
     }
     
     
@@ -269,49 +296,49 @@ public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
 
 
     /**
-     * This method initializes configDirLabel	
+     * This method initializes localConfigDirLabel	
      * 	
      * @return javax.swing.JLabel	
      */
-    private JLabel getConfigDirLabel() {
-        if (configDirLabel == null) {
-            configDirLabel = new JLabel();
-            configDirLabel.setText("Config Directory:");
+    private JLabel getLocalConfigDirLabel() {
+        if (localConfigDirLabel == null) {
+            localConfigDirLabel = new JLabel();
+            localConfigDirLabel.setText("Local Conf Directory:");
         }
-        return configDirLabel;
+        return localConfigDirLabel;
     }
 
 
     /**
-     * This method initializes configDirTextField	
+     * This method initializes localConfigDirTextField	
      * 	
      * @return javax.swing.JTextField	
      */
-    private JTextField getConfigDirTextField() {
-        if (configDirTextField == null) {
-            configDirTextField = new JTextField();
-            configDirTextField.setEditable(false);
-            configDirTextField.getDocument().addDocumentListener(documentChangeListener);
+    private JTextField getLocalConfigDirTextField() {
+        if (localConfigDirTextField == null) {
+            localConfigDirTextField = new JTextField();
+            localConfigDirTextField.setEditable(false);
+            localConfigDirTextField.getDocument().addDocumentListener(documentChangeListener);
         }
-        return configDirTextField;
+        return localConfigDirTextField;
     }
 
 
     /**
-     * This method initializes configBrowseButton	
+     * This method initializes localConfigBrowseButton	
      * 	
      * @return javax.swing.JButton	
      */
-    private JButton getConfigBrowseButton() {
-        if (configBrowseButton == null) {
-            configBrowseButton = new JButton();
-            configBrowseButton.setText("Browse");
-            configBrowseButton.addActionListener(new java.awt.event.ActionListener() {
+    private JButton getLocalConfigBrowseButton() {
+        if (localConfigBrowseButton == null) {
+            localConfigBrowseButton = new JButton();
+            localConfigBrowseButton.setText("Browse");
+            localConfigBrowseButton.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
                     try {
                         String filename = ResourceManager.promptDir(null);
-                        getConfigDirTextField().setText(filename);
-                        configurationStep.setConfigurationDir(filename);
+                        getLocalConfigDirTextField().setText(filename);
+                        configurationStep.setLocalConfigDir(filename);
                         validateInput();
                     } catch (IOException ex) {
                         ex.printStackTrace();
@@ -319,7 +346,7 @@ public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
                 }
             });
         }
-        return configBrowseButton;
+        return localConfigBrowseButton;
     }
 
 
@@ -330,12 +357,27 @@ public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
      */
     private JPanel getBasicConfigPanel() {
         if (basicConfigPanel == null) {
+            GridBagConstraints gridBagConstraints31 = new GridBagConstraints();
+            gridBagConstraints31.gridx = 2;
+            gridBagConstraints31.insets = new Insets(2, 2, 2, 2);
+            gridBagConstraints31.gridy = 4;
+            GridBagConstraints gridBagConstraints28 = new GridBagConstraints();
+            gridBagConstraints28.fill = GridBagConstraints.HORIZONTAL;
+            gridBagConstraints28.gridy = 4;
+            gridBagConstraints28.weightx = 1.0;
+            gridBagConstraints28.insets = new Insets(2, 2, 2, 2);
+            gridBagConstraints28.gridx = 1;
+            GridBagConstraints gridBagConstraints111 = new GridBagConstraints();
+            gridBagConstraints111.gridx = 0;
+            gridBagConstraints111.insets = new Insets(2, 2, 2, 2);
+            gridBagConstraints111.fill = GridBagConstraints.HORIZONTAL;
+            gridBagConstraints111.gridy = 4;
             GridBagConstraints gridBagConstraints110 = new GridBagConstraints();
             gridBagConstraints110.gridx = 0;
             gridBagConstraints110.fill = GridBagConstraints.HORIZONTAL;
             gridBagConstraints110.gridwidth = 3;
             gridBagConstraints110.insets = new Insets(2, 2, 2, 2);
-            gridBagConstraints110.gridy = 4;
+            gridBagConstraints110.gridy = 5;
             GridBagConstraints gridBagConstraints7 = new GridBagConstraints();
             gridBagConstraints7.gridx = 2;
             gridBagConstraints7.insets = new Insets(2, 2, 2, 2);
@@ -385,10 +427,13 @@ public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
             basicConfigPanel.add(getBeansJarLabel(), gridBagConstraints2);
             basicConfigPanel.add(getBeansJarTextField(), gridBagConstraints3);
             basicConfigPanel.add(getBeansBrowseButton(), gridBagConstraints4);
-            basicConfigPanel.add(getConfigDirLabel(), gridBagConstraints5);
-            basicConfigPanel.add(getConfigDirTextField(), gridBagConstraints6);
-            basicConfigPanel.add(getConfigBrowseButton(), gridBagConstraints7);
+            basicConfigPanel.add(getLocalConfigDirLabel(), gridBagConstraints5);
+            basicConfigPanel.add(getLocalConfigDirTextField(), gridBagConstraints6);
+            basicConfigPanel.add(getLocalConfigBrowseButton(), gridBagConstraints7);
             basicConfigPanel.add(getCaseInsensitiveCheckBox(), gridBagConstraints110);
+            basicConfigPanel.add(getRemoteConfigDirLabel(), gridBagConstraints111);
+            basicConfigPanel.add(getRemoteConfigDirTextField(), gridBagConstraints28);
+            basicConfigPanel.add(getRemoteConfigBrowseButton(), gridBagConstraints31);
         }
         return basicConfigPanel;
     }
@@ -706,23 +751,236 @@ public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
      */
     private JPanel getMainPanel() {
         if (mainPanel == null) {
+            GridBagConstraints gridBagConstraints21 = new GridBagConstraints();
+            gridBagConstraints21.gridx = 0;
+            gridBagConstraints21.fill = GridBagConstraints.HORIZONTAL;
+            gridBagConstraints21.weightx = 0.25D;
+            gridBagConstraints21.gridy = 0;
             GridBagConstraints gridBagConstraints20 = new GridBagConstraints();
             gridBagConstraints20.gridx = 0;
             gridBagConstraints20.fill = GridBagConstraints.HORIZONTAL;
             gridBagConstraints20.weightx = 1.0D;
-            gridBagConstraints20.gridy = 1;
+            gridBagConstraints20.gridy = 2;
             GridBagConstraints gridBagConstraints19 = new GridBagConstraints();
             gridBagConstraints19.gridx = 0;
             gridBagConstraints19.fill = GridBagConstraints.HORIZONTAL;
             gridBagConstraints19.weightx = 1.0D;
-            gridBagConstraints19.gridy = 0;
+            gridBagConstraints19.gridy = 1;
             mainPanel = new JPanel();
             mainPanel.setLayout(new GridBagLayout());
-            mainPanel.setSize(new Dimension(452, 217));
+            mainPanel.setSize(new Dimension(626, 305));
             mainPanel.add(getBasicConfigPanel(), gridBagConstraints19);
             mainPanel.add(getApiConfigPanel(), gridBagConstraints20);
+            mainPanel.add(getConfigTypePanel(), gridBagConstraints21);
         }
         return mainPanel;
+    }
+    
+    
+    /**
+     * This method initializes simpleConfigRadioButton  
+     *  
+     * @return javax.swing.JRadioButton 
+     */
+    private JRadioButton getSimpleConfigRadioButton() {
+        if (simpleConfigRadioButton == null) {
+            simpleConfigRadioButton = new JRadioButton();
+            simpleConfigRadioButton.setText("Simple");
+            simpleConfigRadioButton.addItemListener(new ItemListener() {
+                public void itemStateChanged(ItemEvent e) {
+                    setSimpleAdvancedComponentsEnabled();
+                }
+            });
+        }
+        return simpleConfigRadioButton;
+    }
+
+
+    /**
+     * This method initializes advancedRadioButton  
+     *  
+     * @return javax.swing.JRadioButton 
+     */
+    private JRadioButton getAdvancedRadioButton() {
+        if (advancedRadioButton == null) {
+            advancedRadioButton = new JRadioButton();
+            advancedRadioButton.setText("Advanced");
+            advancedRadioButton.addItemListener(new ItemListener() {
+                public void itemStateChanged(ItemEvent e) {
+                    setSimpleAdvancedComponentsEnabled();
+                }
+            });
+        }
+        return advancedRadioButton;
+    }
+
+
+    /**
+     * This method initializes configTypePanel  
+     *  
+     * @return javax.swing.JPanel   
+     */
+    private JPanel getConfigTypePanel() {
+        if (configTypePanel == null) {
+            GridBagConstraints gridBagConstraints25 = new GridBagConstraints();
+            gridBagConstraints25.fill = GridBagConstraints.HORIZONTAL;
+            gridBagConstraints25.gridy = 0;
+            gridBagConstraints25.weightx = 1.0D;
+            gridBagConstraints25.gridx = 2;
+            GridBagConstraints gridBagConstraints27 = new GridBagConstraints();
+            gridBagConstraints27.insets = new Insets(2, 2, 2, 2);
+            gridBagConstraints27.gridy = 0;
+            gridBagConstraints27.fill = GridBagConstraints.HORIZONTAL;
+            gridBagConstraints27.gridx = 0;
+            GridBagConstraints gridBagConstraints26 = new GridBagConstraints();
+            gridBagConstraints26.insets = new Insets(2, 2, 2, 2);
+            gridBagConstraints26.gridy = 0;
+            gridBagConstraints26.fill = GridBagConstraints.HORIZONTAL;
+            gridBagConstraints26.gridx = 1;
+            configTypePanel = new JPanel();
+            configTypePanel.setLayout(new GridBagLayout());
+            configTypePanel.add(getSimpleConfigRadioButton(), gridBagConstraints26);
+            configTypePanel.add(getAdvancedRadioButton(), gridBagConstraints27);
+            configTypePanel.add(getOutputDirSelectionPanel(), gridBagConstraints25);
+        }
+        return configTypePanel;
+    }
+
+
+    /**
+     * This method initializes outputDirLabel   
+     *  
+     * @return javax.swing.JLabel   
+     */
+    private JLabel getOutputDirLabel() {
+        if (outputDirLabel == null) {
+            outputDirLabel = new JLabel();
+            outputDirLabel.setText("SDK Output Directory:");
+        }
+        return outputDirLabel;
+    }
+
+
+    /**
+     * This method initializes outputDirTextField   
+     *  
+     * @return javax.swing.JTextField   
+     */
+    private JTextField getOutputDirTextField() {
+        if (outputDirTextField == null) {
+            outputDirTextField = new JTextField();
+            outputDirTextField.setEditable(false);
+        }
+        return outputDirTextField;
+    }
+
+
+    /**
+     * This method initializes outputDirBrowseButton    
+     *  
+     * @return javax.swing.JButton  
+     */
+    private JButton getOutputDirBrowseButton() {
+        if (outputDirBrowseButton == null) {
+            outputDirBrowseButton = new JButton();
+            outputDirBrowseButton.setText("Browse");
+            outputDirBrowseButton.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                    try {
+                        selectSdkOutputDirectory();
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        CompositeErrorDialog.showErrorDialog("Error processing selection", ex.getMessage(), ex);
+                    }
+                }
+            });
+        }
+        return outputDirBrowseButton;
+    }
+
+
+    /**
+     * This method initializes outputDirSelectionPanel  
+     *  
+     * @return javax.swing.JPanel   
+     */
+    private JPanel getOutputDirSelectionPanel() {
+        if (outputDirSelectionPanel == null) {
+            GridBagConstraints gridBagConstraints24 = new GridBagConstraints();
+            gridBagConstraints24.gridx = 3;
+            gridBagConstraints24.insets = new Insets(2, 2, 2, 2);
+            gridBagConstraints24.gridy = 0;
+            GridBagConstraints gridBagConstraints23 = new GridBagConstraints();
+            gridBagConstraints23.fill = GridBagConstraints.HORIZONTAL;
+            gridBagConstraints23.gridy = 0;
+            gridBagConstraints23.weightx = 1.0;
+            gridBagConstraints23.insets = new Insets(2, 2, 2, 2);
+            gridBagConstraints23.gridx = 2;
+            GridBagConstraints gridBagConstraints22 = new GridBagConstraints();
+            gridBagConstraints22.gridx = 1;
+            gridBagConstraints22.insets = new Insets(2, 2, 2, 2);
+            gridBagConstraints22.gridy = 0;
+            outputDirSelectionPanel = new JPanel();
+            outputDirSelectionPanel.setLayout(new GridBagLayout());
+            outputDirSelectionPanel.add(getOutputDirLabel(), gridBagConstraints22);
+            outputDirSelectionPanel.add(getOutputDirTextField(), gridBagConstraints23);
+            outputDirSelectionPanel.add(getOutputDirBrowseButton(), gridBagConstraints24);
+        }
+        return outputDirSelectionPanel;
+    }
+    
+    
+    /**
+     * This method initializes remoteConfigDirLabel 
+     *  
+     * @return javax.swing.JLabel   
+     */
+    private JLabel getRemoteConfigDirLabel() {
+        if (remoteConfigDirLabel == null) {
+            remoteConfigDirLabel = new JLabel();
+            remoteConfigDirLabel.setText("Remote Conf Directory:");
+        }
+        return remoteConfigDirLabel;
+    }
+
+
+    /**
+     * This method initializes remoteConfigDirTextField 
+     *  
+     * @return javax.swing.JTextField   
+     */
+    private JTextField getRemoteConfigDirTextField() {
+        if (remoteConfigDirTextField == null) {
+            remoteConfigDirTextField = new JTextField();
+            remoteConfigDirTextField.setEditable(false);
+        }
+        return remoteConfigDirTextField;
+    }
+
+
+    /**
+     * This method initializes remoteConfigBrowseButton 
+     *  
+     * @return javax.swing.JButton  
+     */
+    private JButton getRemoteConfigBrowseButton() {
+        if (remoteConfigBrowseButton == null) {
+            remoteConfigBrowseButton = new JButton();
+            remoteConfigBrowseButton.setText("Browse");
+            remoteConfigBrowseButton.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                    try {
+                        String filename = ResourceManager.promptDir(null);
+                        getRemoteConfigDirTextField().setText(filename);
+                        configurationStep.setRemoteConfigDir(filename);
+                        validateInput();
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            });
+        }
+        return remoteConfigBrowseButton;
     }
     
     
@@ -732,9 +990,11 @@ public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
     
     
     private void configureValidation() {
+        ValidationComponentUtils.setMessageKey(getOutputDirTextField(), KEY_OUTPUT_DIRECTORY);
         ValidationComponentUtils.setMessageKey(getApplicationNameTextField(), KEY_APPLICATION_NAME);
         ValidationComponentUtils.setMessageKey(getBeansJarTextField(), KEY_BEANS_JAR);
-        ValidationComponentUtils.setMessageKey(getConfigDirTextField(), KEY_CONFIG_DIR);
+        ValidationComponentUtils.setMessageKey(getLocalConfigDirTextField(), KEY_LOCAL_CONFIG_DIR);
+        ValidationComponentUtils.setMessageKey(getRemoteConfigDirTextField(), KEY_REMOTE_CONFIG_DIR);
         ValidationComponentUtils.setMessageKey(getOrmJarTextField(), KEY_ORM_JAR);
         ValidationComponentUtils.setMessageKey(getHostNameTextField(), KEY_HOST_NAME);
         ValidationComponentUtils.setMessageKey(getPortTextField(), KEY_PORT_NUMBER);
@@ -763,11 +1023,19 @@ public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
             // TODO: validate the beans jar somehow
         }
         
-        if (ValidationUtils.isBlank(getConfigDirTextField().getText())) {
+        if (ValidationUtils.isBlank(getLocalConfigDirTextField().getText())) {
             result.add(new SimpleValidationMessage(
-                KEY_CONFIG_DIR + " cannot be blank", Severity.ERROR, KEY_CONFIG_DIR));
+                KEY_LOCAL_CONFIG_DIR + " cannot be blank", Severity.ERROR, KEY_LOCAL_CONFIG_DIR));
         } else {
-            // TODO: validate the configuration directory
+            // TODO: validate the local configuration directory
+        }
+        
+        
+        if (ValidationUtils.isBlank(getRemoteConfigDirTextField().getText())) {
+            result.add(new SimpleValidationMessage(
+                KEY_REMOTE_CONFIG_DIR + " cannot be blank", Severity.ERROR, KEY_REMOTE_CONFIG_DIR));
+        } else {
+            // TODO: validate the remote configuration directory
         }
         
         if (getLocalApiRadioButton().isSelected()) {
@@ -846,7 +1114,7 @@ public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
     
     
     private void setLocalRemoteComponentsEnabled() {
-        boolean local = localApiRadioButton.isSelected();
+        boolean local = getLocalApiRadioButton().isSelected();
         
         getOrmJarLabel().setEnabled(local);
         getOrmJarTextField().setEnabled(local);
@@ -857,5 +1125,68 @@ public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
         getPortTextField().setEnabled(!local);
         
         configurationStep.setUseLocalApi(local);
+    }
+    
+    
+    private void setSimpleAdvancedComponentsEnabled() {
+        boolean simple = getSimpleConfigRadioButton().isSelected();
+        
+        PortalUtils.setContainerEnabled(getBasicConfigPanel(), !simple);
+        PortalUtils.setContainerEnabled(getRemoteApiPanel(), !simple);
+    }
+    
+    
+    private void selectSdkOutputDirectory() throws Exception {
+        String selection = ResourceManager.promptDir(null);
+        if (selection != null && selection.length() != 0) {
+            // selection made
+            File selectedDir = new File(selection);
+            File[] outputContents = selectedDir.listFiles();
+            if (outputContents.length != 1) {
+                throw new Exception("Unable to locate application directory");
+            }
+            File applicationOutDir = outputContents[0];
+            throwExceptionIfNotDirectory(applicationOutDir);
+            getApplicationNameTextField().setText(applicationOutDir.getName());
+            configurationStep.setApplicationName(applicationOutDir.getName());
+            File packageDir = new File(applicationOutDir, "package");
+            throwExceptionIfNotDirectory(packageDir);
+            // find remote and local client directories
+            File localClientDir = new File(packageDir, "local-client");
+            File remoteClientDir = new File(packageDir, "remote-client");
+            throwExceptionIfNotDirectory(localClientDir);
+            throwExceptionIfNotDirectory(remoteClientDir);
+            File remoteClientLibDir = new File(remoteClientDir, "lib");
+            File remoteClientConfDir = new File(remoteClientDir, "conf");
+            File localClientLibDir = new File(localClientDir, "lib");
+            File localClientConfDir = new File(localClientDir, "conf");
+            throwExceptionIfNotDirectory(remoteClientLibDir);
+            throwExceptionIfNotDirectory(remoteClientConfDir);
+            throwExceptionIfNotDirectory(localClientLibDir);
+            throwExceptionIfNotDirectory(localClientConfDir);
+            // set the remote-client config
+            getRemoteConfigDirTextField().setText(remoteClientConfDir.getAbsolutePath());
+            configurationStep.setRemoteConfigDir(remoteClientConfDir.getAbsolutePath());
+            // set the local-client config
+            getLocalConfigDirTextField().setText(localClientConfDir.getAbsolutePath());
+            configurationStep.setLocalConfigDir(localClientConfDir.getAbsolutePath());
+            // find the beans jar
+            File beansJar = new File(remoteClientLibDir, applicationOutDir.getName() + "-beans.jar");
+            getBeansJarTextField().setText(beansJar.getAbsolutePath());
+            configurationStep.setBeansJarLocation(beansJar.getAbsolutePath());
+            // find the ORM jar
+            File ormJar = new File(localClientLibDir, applicationOutDir.getName() + "-orm.jar");
+            getOrmJarTextField().setText(ormJar.getAbsolutePath());
+            configurationStep.setOrmJarLocation(ormJar.getAbsolutePath());
+            // run validation
+            validateInput();
+        }
+    }
+    
+    
+    private void throwExceptionIfNotDirectory(File checkMe) throws FileNotFoundException {
+        if (checkMe == null || !checkMe.exists() || !checkMe.isDirectory()) {
+            throw new FileNotFoundException("Unable to locate directory " + checkMe.getName());
+        }
     }
 }

@@ -51,7 +51,7 @@ import org.apache.log4j.Logger;
  * @author David Ervin
  * 
  * @created Jan 28, 2008 11:24:21 AM
- * @version $Id: SDK4StyleConfigurationStep.java,v 1.5 2008-02-16 18:25:04 oster Exp $ 
+ * @version $Id: SDK4StyleConfigurationStep.java,v 1.6 2008-02-28 18:43:21 dervin Exp $ 
  */
 public class SDK4StyleConfigurationStep extends Step {
     public static final String SDKQUERY4_BASE_DIR = "../sdkQuery4";
@@ -109,7 +109,7 @@ public class SDK4StyleConfigurationStep extends Step {
         configuration.setApplicationName("example40");
         configuration.setBeansJarLocation(new File(remoteClientLibDir, "example40-beans.jar").getAbsolutePath());
         configuration.setCaseInsensitiveQueries(false);
-        configuration.setConfigurationDir(remoteClientConfDir.getAbsolutePath());
+        configuration.setRemoteConfigDir(remoteClientConfDir.getAbsolutePath());
         configuration.setUseLocalApi(false);
         String hostName = System.getProperty(PROPERTY_REMOTE_HOST_NAME, DEFAULT_REMOTE_HOST_NAME_VALUE);
         Integer hostPort = Integer.valueOf(System.getProperty(PROPERTY_REMOTE_HOST_PORT, DEFAULT_REMOTE_HOST_PORT_VALUE));

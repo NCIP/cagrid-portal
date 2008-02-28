@@ -1,10 +1,5 @@
 package gov.nih.nci.cagrid.sdkquery4.style.wizard.config;
 
-import java.io.File;
-import java.io.IOException;
-
-import org.cagrid.grape.utils.CompositeErrorDialog;
-
 import gov.nih.nci.cagrid.common.JarUtilities;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
@@ -15,6 +10,11 @@ import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.sdkquery4.processor.SDK4QueryProcessor;
 import gov.nih.nci.cagrid.sdkquery4.style.common.SDK4StyleConstants;
 
+import java.io.File;
+import java.io.IOException;
+
+import org.cagrid.grape.utils.CompositeErrorDialog;
+
 /** 
  *  QueryProcessorBaseConfigurationStep
  *  Config step for applying some basic configuration of the
@@ -23,13 +23,14 @@ import gov.nih.nci.cagrid.sdkquery4.style.common.SDK4StyleConstants;
  * @author David Ervin
  * 
  * @created Jan 18, 2008 3:26:22 PM
- * @version $Id: QueryProcessorBaseConfigurationStep.java,v 1.2 2008-01-29 16:02:51 dervin Exp $ 
+ * @version $Id: QueryProcessorBaseConfigurationStep.java,v 1.3 2008-02-28 18:43:21 dervin Exp $ 
  */
 public class QueryProcessorBaseConfigurationStep extends AbstractStyleConfigurationStep {
     
     private String applicationName = null;
     private String beansJarLocation = null;
-    private String configurationDir = null;
+    private String localConfigDir = null;
+    private String remoteConfigDir = null;
     private boolean useLocalApi;
     private String ormJarLocation = null;
     private boolean caseInsensitiveQueries;
@@ -51,7 +52,7 @@ public class QueryProcessorBaseConfigurationStep extends AbstractStyleConfigurat
         // store configuration properties for the query processor
         ServiceDescription desc = getServiceInformation().getServiceDescriptor();
         // store the beans jar filename
-        File beansJarFile = new File(beansJarLocation);
+        File beansJarFile = new File(beansJarLocation); // THIS IS NULL, NOT GETTING SET FROM UI
         CommonTools.setServiceProperty(desc,
             SDK4StyleConstants.BEANS_JAR_FILENAME, beansJarFile.getName(), false);
         CommonTools.setServiceProperty(desc, 
@@ -86,22 +87,38 @@ public class QueryProcessorBaseConfigurationStep extends AbstractStyleConfigurat
             CompositeErrorDialog.showErrorDialog("Error copying beans jar", ex.getMessage(), ex);
         }
         // jar up the config dir, then copy it in too
-        File configDir = new File(configurationDir);
         File configJar = new File(getServiceInformation().getBaseDirectory(), 
             "lib" + File.separator + applicationName + "-config.jar");
+        // start with the remote config files
+        File remoteConfig = new File(remoteConfigDir);
         try {
-            JarUtilities.jarDirectory(configDir, configJar);
+            JarUtilities.jarDirectory(remoteConfig, configJar);
         } catch (IOException ex) {
             ex.printStackTrace();
-            CompositeErrorDialog.showErrorDialog("Error packaging configuration directory", ex.getMessage(), ex);
+            CompositeErrorDialog.showErrorDialog("Error packaging remote configuration directory", ex.getMessage(), ex);
+        }
+        // if using local, files from local conf override those in remote
+        if (useLocalApi) {
+            File[] overrides = new File(localConfigDir).listFiles();
+            for (File localFile : overrides) {
+                try {
+                    StringBuffer contents = Utils.fileToStringBuffer(localFile);
+                    JarUtilities.insertEntry(configJar, localFile.getName(), contents.toString().getBytes());
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                    CompositeErrorDialog.showErrorDialog(
+                        "Error adding local configuration file to package (" + localFile.getName() + ")", 
+                        ex.getMessage(), ex);
+                }
+            }
         }
         // grab the castor marshalling and unmarshalling xml mapping files
         // from the config dir and copy them into the service's package structure
         try {
             StringBuffer marshallingMappingFile = Utils.fileToStringBuffer(
-                new File(configDir, CastorMappingUtil.CASTOR_MARSHALLING_MAPPING_FILE));
+                new File(remoteConfigDir, CastorMappingUtil.CASTOR_MARSHALLING_MAPPING_FILE));
             StringBuffer unmarshallingMappingFile = Utils.fileToStringBuffer(
-                new File(configDir, CastorMappingUtil.CASTOR_UNMARSHALLING_MAPPING_FILE));
+                new File(remoteConfigDir, CastorMappingUtil.CASTOR_UNMARSHALLING_MAPPING_FILE));
             // copy the mapping files to the service's source dir + base package name
             String marshallOut = CastorMappingUtil.getMarshallingCastorMappingFileName(getServiceInformation());
             String unmarshallOut = CastorMappingUtil.getUnmarshallingCastorMappingFileName(getServiceInformation());
@@ -142,8 +159,13 @@ public class QueryProcessorBaseConfigurationStep extends AbstractStyleConfigurat
     }
 
 
-    public void setConfigurationDir(String configurationDir) {
-        this.configurationDir = configurationDir;
+    public void setLocalConfigDir(String configurationDir) {
+        this.localConfigDir = configurationDir;
+    }
+    
+    
+    public void setRemoteConfigDir(String configurationDir) {
+        this.remoteConfigDir = configurationDir;
     }
 
 
