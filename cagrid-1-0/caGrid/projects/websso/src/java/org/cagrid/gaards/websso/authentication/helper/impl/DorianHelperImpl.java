@@ -49,33 +49,27 @@ public class DorianHelperImpl implements DorianHelper
 			globusCredential = ifsUserClient.createProxy(samlAssertion, dorianInformation.getProxyLifeTime(), dorianInformation.getDelegationPathLength());
 		} catch (DorianFault e)
 		{
-			FaultUtil.printFaultToString(e);
-			throw new AuthenticationConfigurationException("Error accessing the Dorian Service");
+			throw new AuthenticationConfigurationException("Error accessing the Dorian Service : " + FaultUtil.printFaultToString(e));
 		} 
 		catch (DorianInternalFault e)
 		{
-			FaultUtil.printFaultToString(e);
-			throw new AuthenticationConfigurationException("Error accessing the Dorian Service");
+			throw new AuthenticationConfigurationException("Error accessing the Dorian Service : " + FaultUtil.printFaultToString(e));
 		} 
 		catch (InvalidAssertionFault e)
 		{
-			FaultUtil.printFaultToString(e);
-			throw new AuthenticationConfigurationException("Invalid SAML Assertion obtained from Authentication Service");
+			throw new AuthenticationConfigurationException("Invalid SAML Assertion obtained from Authentication Service : " + FaultUtil.printFaultToString(e));
 		} 
 		catch (InvalidProxyFault e)
 		{
-			FaultUtil.printFaultToString(e);			
-			throw new AuthenticationConfigurationException("Error obtaining Proxy from Dorian ");
+			throw new AuthenticationConfigurationException("Error obtaining Proxy from Dorian : " + FaultUtil.printFaultToString(e));
 		} 
 		catch (UserPolicyFault e)
 		{
-			FaultUtil.printFaultToString(e);
-			throw new AuthenticationConfigurationException("Policy Error occured obtaining Proxy from Dorian");
+			throw new AuthenticationConfigurationException("Policy Error occured obtaining Proxy from Dorian : " + FaultUtil.printFaultToString(e));
 		} 
 		catch (PermissionDeniedFault e)
 		{
-			FaultUtil.printFaultToString(e);
-			throw new AuthenticationErrorException("Permission denied while obtaining Proxy from Dorian");
+			throw new AuthenticationErrorException("Permission denied while obtaining Proxy from Dorian : " + FaultUtil.printFaultToString(e));
 		}
 
 		return globusCredential;

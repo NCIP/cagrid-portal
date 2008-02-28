@@ -59,7 +59,7 @@ public class GridCredentialDelegatorImpl implements GridCredentialDelegator
 		catch (Exception e)
 		{
 			e.printStackTrace();
-			throw new AuthenticationConfigurationException("Error accessing the Delegation Service : " + e.getMessage());
+			throw new AuthenticationConfigurationException("Error accessing the Delegation Service : " + e.getMessage(), e);
 		}
 
 		DelegatedCredentialReference delegatedCredentialReference = null;
@@ -69,26 +69,23 @@ public class GridCredentialDelegatorImpl implements GridCredentialDelegator
 		}
 		catch (CDSInternalFault e)
 		{
-			FaultUtil.printFault(e);
-			throw new AuthenticationConfigurationException("Internal Error in the Delegation Service", e);
+			throw new AuthenticationConfigurationException("Internal Error in the Delegation Service : " + FaultUtil.printFaultToString(e));
 		}
 		catch (DelegationFault e)
 		{
-			FaultUtil.printFault(e);
-			throw new AuthenticationConfigurationException("Error accessing the Delegation Service, Unable to delegate credentials", e);
+			throw new AuthenticationConfigurationException("Error accessing the Delegation Service, Unable to delegate credentials : " + FaultUtil.printFaultToString(e));
 		}
 		catch (PermissionDeniedFault e)
 		{
-			FaultUtil.printFault(e);
-			throw new AuthenticationConfigurationException("Error accessing the Delegation Service, Permission Denied", e);
+			throw new AuthenticationConfigurationException("Error accessing the Delegation Service, Permission Denied : " + FaultUtil.printFaultToString(e));
 		}
 		catch (RemoteException e)
 		{
-			throw new AuthenticationConfigurationException("Error accessing the Delegation Service", e);
+			throw new AuthenticationConfigurationException("Error accessing the Delegation Service : " + e.getMessage(), e);
 		}
 		catch (MalformedURIException e)
 		{
-			throw new AuthenticationConfigurationException("Error accessing the Delegation Service, Please check the URL for Delegation Service ", e);
+			throw new AuthenticationConfigurationException("Error accessing the Delegation Service, Please check the URL for Delegation Service : " + e.getMessage());
 		}
 		
 		String serializedDelegatedCredentialReference = null;
@@ -101,7 +98,7 @@ public class GridCredentialDelegatorImpl implements GridCredentialDelegator
 		}
 		catch (Exception e)
 		{
-			throw new AuthenticationConfigurationException("Unable to serialize the message Delegated Credentials", e);
+			throw new AuthenticationConfigurationException("Unable to serialize the message Delegated Credentials : " + e.getMessage(), e);
 		}
 
 		return serializedDelegatedCredentialReference;

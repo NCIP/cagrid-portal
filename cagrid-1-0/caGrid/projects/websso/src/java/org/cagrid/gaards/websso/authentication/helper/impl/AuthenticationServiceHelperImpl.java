@@ -52,18 +52,15 @@ public class AuthenticationServiceHelperImpl implements AuthenticationServiceHel
 		} 
 		catch (InvalidCredentialFault e)
 		{
-			FaultUtil.printFaultToString(e);
-			throw new AuthenticationErrorException("Invalid Credentials");
+			throw new AuthenticationErrorException("Invalid Credentials : " + FaultUtil.printFaultToString(e));
 		} 
 		catch (InsufficientAttributeFault e)
 		{
-			FaultUtil.printFaultToString(e);
-			throw new AuthenticationConfigurationException("Insufficient Attribute configured for the Authentication Service");
+			throw new AuthenticationConfigurationException("Insufficient Attribute configured for the Authentication Service : " + FaultUtil.printFaultToString(e));
 		} 
 		catch (AuthenticationProviderFault e)
 		{
-			FaultUtil.printFaultToString(e);
-			throw new AuthenticationConfigurationException("Error accessing the Authentication Provider");
+			throw new AuthenticationConfigurationException("Error accessing the Authentication Provider : " + FaultUtil.printFaultToString(e));
 		} 
 		catch (RemoteException e)
 		{

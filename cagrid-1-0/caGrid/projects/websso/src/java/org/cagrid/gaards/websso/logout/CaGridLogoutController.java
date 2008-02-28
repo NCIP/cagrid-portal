@@ -46,7 +46,7 @@ public class CaGridLogoutController extends AbstractController
 			}
 			catch (GlobusCredentialException e)
 			{
-				throw new Exception("Unable to create Host Credentials from the Certificate and Key File", e);
+				throw new Exception("Unable to create Host Credentials from the Certificate and Key File : " + e.getMessage(), e);
 			}
 			DelegatedCredentialReference delegatedCredentialReference = null;
 			try
@@ -55,7 +55,7 @@ public class CaGridLogoutController extends AbstractController
 			}
 			catch (DeserializationException e)
 			{
-				throw new ServletException("Unable to deserialize the Delegation Reference", e);
+				throw new ServletException("Unable to deserialize the Delegation Reference : " + e.getMessage(), e);
 			}			
 			DelegatedCredentialUserClient delegatedCredentialUserClient = null;
 			try
@@ -64,7 +64,7 @@ public class CaGridLogoutController extends AbstractController
 			}
 			catch (Exception e)
 			{
-				throw new ServletException("Unable to Initialize the Delegation Lookup Client", e);
+				throw new ServletException("Unable to Initialize the Delegation Lookup Client : " + e.getMessage(), e);
 			}
 			GlobusCredential userCredential = delegatedCredentialUserClient.getDelegatedCredential();
 			
@@ -75,18 +75,15 @@ public class CaGridLogoutController extends AbstractController
 			}
 			catch (CDSInternalFault e)
 			{
-				FaultUtil.printFaultToString(e);
-				throw new Exception("Error retrieving the Delegated Credentials", e);
+				throw new Exception("Error retrieving the Delegated Credentials : " + FaultUtil.printFaultToString(e));
 			}
 			catch (DelegationFault e)
 			{
-				FaultUtil.printFaultToString(e);
-				throw new Exception("Error retrieving the Delegated Credentials", e);
+				throw new Exception("Error retrieving the Delegated Credentials : " + FaultUtil.printFaultToString(e));
 			}
 			catch (PermissionDeniedFault e)
 			{
-				FaultUtil.printFaultToString(e);
-				throw new Exception("Permission Denied to retrieve Delegated Credentials", e);
+				throw new Exception("Permission Denied to retrieve Delegated Credentials : " + FaultUtil.printFaultToString(e));
 			}
 			
 		}
