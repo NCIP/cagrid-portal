@@ -23,8 +23,13 @@
 		<delete dir="${beans.created.src.dir}" />
 		<delete dir="${servicetasks.beans.created.src.dir}" />
 		<delete dir="${updates.dir}" />
-		<delete file="${service.tasks.jar}" />
 		<delete file="${service.tools.jar}" />
+		<delete>
+			<fileset dir="${skeleton.tools.lib.dir}">
+				<include name="${jars.prefixname}*.jar"/>
+			</fileset>
+		</delete>
+
 	</target>
 
 
