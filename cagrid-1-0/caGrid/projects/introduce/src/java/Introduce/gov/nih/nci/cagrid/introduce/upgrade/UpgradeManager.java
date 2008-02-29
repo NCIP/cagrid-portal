@@ -43,6 +43,10 @@ public class UpgradeManager {
         }
 
     }
+    
+    public boolean introduceNeedsUpgraded() {
+            return iUpgrader.needsUpgrading();
+    }
 
 
     public boolean extensionsNeedUpgraded() {

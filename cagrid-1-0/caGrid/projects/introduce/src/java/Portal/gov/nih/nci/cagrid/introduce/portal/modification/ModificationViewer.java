@@ -350,69 +350,75 @@ public class ModificationViewer extends ApplicationComponent {
                 }
 
                 UpgradeManager upgrader = new UpgradeManager(this.methodsDirectory.getAbsolutePath());
-
-                if (upgrader.canIntroduceBeUpgraded() || upgrader.extensionsNeedUpgraded()) {
-                    PromptButtonDialog diag = new PromptButtonDialog(
-                        GridApplication.getContext().getApplication(),
-                        "Upgrade?",
-                        new String[]{
-                                "",
-                                "This service is from an older of version of Introduce or uses an older version of an extension.",
-                                "Would you like to try to upgrade this service to work with the current version of Introduce and installed extensions?\n",
-                                "",
-                                "Upgrade: Yes I would like to upgrade my service to be able to work with the currently installed tools.",
-                                "Open: Introduce will attempt to open and work with this service.  This is very dangerous.",
-                                "Close: Do nothing and close the modification viewer.", ""}, new String[]{"Upgrade",
-                                "Open", "Close"}, "Close");
-                    GridApplication.getContext().showDialog(diag);
-                    String result = diag.getSelection();
-                    System.out.println(result);
-                    if (result != null && result.equals("Upgrade")) {
-                        try {
-                            if (dialog != null) {
-                                dialog.setProgressText("Upgrading service");
-                            }
-                            UpgradeStatus status = upgrader.upgrade();
-                            logger.info("SERVICE UPGRADE STATUS:\n" + status);
-                            int answer = UpgradeStatusView.showUpgradeStatusView(status);
-                            if (answer == UpgradeStatusView.PROCEED) {
-
-                            } else if (answer == UpgradeStatusView.ROLL_BACK) {
-                                upgrader.recover();
-                                ModificationViewer.this.dispose();
-                                this.beenDisposed = true;
-                            } else if (answer == UpgradeStatusView.CANCEL) {
-                                ModificationViewer.this.dispose();
-                                this.beenDisposed = true;
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            int answer = JOptionPane.showConfirmDialog(GridApplication.getContext().getApplication(),
-                                "The service had the following fatal error during the upgrade process:\n"
-                                    + e.getMessage()
-                                    + "If you select OK, Introduce will roll your service back to its previous\n"
-                                    + "state before the upgrade attempt", "Error upgrading service",
-                                JOptionPane.OK_CANCEL_OPTION);
-                            if (answer == JOptionPane.OK_OPTION) {
-                                try {
-                                    if (dialog != null) {
-                                        dialog.setProgressText("Rolling back upgrade changes");
-                                    }
-                                    upgrader.recover();
-                                } catch (Exception ex) {
-                                    ErrorDialog.showError(e);
+                if (upgrader.introduceNeedsUpgraded()) {
+                    if (upgrader.canIntroduceBeUpgraded() || upgrader.extensionsNeedUpgraded()) {
+                        PromptButtonDialog diag = new PromptButtonDialog(
+                            GridApplication.getContext().getApplication(),
+                            "Upgrade?",
+                            new String[]{
+                                    "",
+                                    "This service is from an older of version of Introduce or uses an older version of an extension.",
+                                    "Would you like to try to upgrade this service to work with the current version of Introduce and installed extensions?\n",
+                                    "",
+                                    "Upgrade: Yes I would like to upgrade my service to be able to work with the currently installed tools.",
+                                    "Open: Introduce will attempt to open and work with this service.  This is very dangerous.",
+                                    "Close: Do nothing and close the modification viewer.", ""}, new String[]{
+                                    "Upgrade", "Open", "Close"}, "Close");
+                        GridApplication.getContext().showDialog(diag);
+                        String result = diag.getSelection();
+                        System.out.println(result);
+                        if (result != null && result.equals("Upgrade")) {
+                            try {
+                                if (dialog != null) {
+                                    dialog.setProgressText("Upgrading service");
                                 }
-                                ModificationViewer.this.dispose();
-                                this.beenDisposed = true;
-                            } else {
-                                ModificationViewer.this.dispose();
-                                this.beenDisposed = true;
+                                UpgradeStatus status = upgrader.upgrade();
+                                logger.info("SERVICE UPGRADE STATUS:\n" + status);
+                                int answer = UpgradeStatusView.showUpgradeStatusView(status);
+                                if (answer == UpgradeStatusView.PROCEED) {
+
+                                } else if (answer == UpgradeStatusView.ROLL_BACK) {
+                                    upgrader.recover();
+                                    ModificationViewer.this.dispose();
+                                    this.beenDisposed = true;
+                                } else if (answer == UpgradeStatusView.CANCEL) {
+                                    ModificationViewer.this.dispose();
+                                    this.beenDisposed = true;
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                int answer = JOptionPane.showConfirmDialog(GridApplication.getContext()
+                                    .getApplication(),
+                                    "The service had the following fatal error during the upgrade process:\n"
+                                        + e.getMessage()
+                                        + "If you select OK, Introduce will roll your service back to its previous\n"
+                                        + "state before the upgrade attempt", "Error upgrading service",
+                                    JOptionPane.OK_CANCEL_OPTION);
+                                if (answer == JOptionPane.OK_OPTION) {
+                                    try {
+                                        if (dialog != null) {
+                                            dialog.setProgressText("Rolling back upgrade changes");
+                                        }
+                                        upgrader.recover();
+                                    } catch (Exception ex) {
+                                        ErrorDialog.showError(e);
+                                    }
+                                    ModificationViewer.this.dispose();
+                                    this.beenDisposed = true;
+                                } else {
+                                    ModificationViewer.this.dispose();
+                                    this.beenDisposed = true;
+                                }
                             }
+                        } else if (result == null || result.equals("Close")) {
+                            ModificationViewer.this.dispose();
+                            this.beenDisposed = true;
                         }
-                    } else if (result == null || result.equals("Close")) {
-                        ModificationViewer.this.dispose();
-                        this.beenDisposed = true;
                     }
+                    JOptionPane.showMessageDialog(GridApplication.getContext().getApplication(),
+                        "Service was build with another version of Introduce and is no upgrader currently exists");
+                    ModificationViewer.this.dispose();
+                    this.beenDisposed = true;
                 }
 
                 if (!beenDisposed) {
