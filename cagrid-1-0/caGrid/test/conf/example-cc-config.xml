@@ -25,6 +25,7 @@
         uselogger="true" usedebug="false" timeout="2000"/>
     <plugin name="antpublisher" buildfile="${project.dir}/caGrid/build.xml" target="ccpublish"/>
     <plugin name="htmlemail"
+        skipusers="true" reportsuccess="fixes"
         buildresultsurl="http://${env.HOSTNAME}:8080/cruisecontrol/buildresults/${project.name}"
         mailhost="${mail.host}" returnaddress="${mail.return.addr}"
         css="${cc.home}/reporting/jsp/webcontent/css/cruisecontrol.css"
