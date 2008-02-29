@@ -124,7 +124,7 @@
 	<!-- Default target "all" generates the GAR file -->
 	<target name="all" depends="jar,jarTests" />
 
-	<target name="generateCA" description="Generates a certificate authority.">
+	<target name="generateCA" description="Generates a certificate authority." depends="init">
 		<input message="Please enter the DN for the new CA (ex. O=osu,OU=bmi,CN=Some CA):" addproperty="dn.input" />
 		<input message="Please enter the number of days the new CA will be valid for:" addproperty="days.input" />
 		<input message="Please enter a password for the new CA:" addproperty="password.input" />
@@ -141,7 +141,7 @@
 	</target>
 
 
-	<target name="generateEracomCA" description="Generates a certificate authority.">
+	<target name="generateEracomCA" description="Generates a certificate authority." depends="init">
 		<input message="Please enter an alias for the new CA (ex. gtsca):" addproperty="alias.input" />
 		<input message="Please enter the DN for the new CA (ex. O=osu,OU=bmi,CN=Some CA):" addproperty="dn.input" />
 		<input message="Please enter the number of days the new CA will be valid for:" addproperty="days.input" />
@@ -159,7 +159,7 @@
 		</java>
 	</target>
 
-	<target name="createAndSignEracomHostCertificate" description="Create and signs a host certificate.">
+	<target name="createAndSignEracomHostCertificate" description="Create and signs a host certificate." depends="init">
 		<input message="Please enter an alias for the new CA (ex. gtsca):" addproperty="alias.input" />
 		<input message="Please enter a slot number on the HSM where the CA is stored:" addproperty="slot.input" />
 		<input message="Please enter the password for the HSM:" addproperty="password.input" />
@@ -180,7 +180,7 @@
 		</java>
 	</target>
 
-	<target name="createAndSignHostCertificate" description="Create and signs a host certificate.">
+	<target name="createAndSignHostCertificate" description="Create and signs a host certificate." depends="init">
 		<input message="Please enter the location of the CA's private key:" addproperty="key.input" />
 		<input message="Please enter the CA's password:" addproperty="password.input" />
 		<input message="Please enter the location of the CA's certificate:" addproperty="ca.input" />
@@ -201,7 +201,7 @@
 		</java>
 	</target>
 
-	<target name="requestHostCertificate" description="Requests a Host Ceritificate">
+	<target name="requestHostCertificate" description="Requests a Host Ceritificate" depends="init">
 		<input message="Please enter the Hostname [${env.HOST}]:" addproperty="hostname.input" defaultvalue="${env.HOST}" />
 		<input message="Please enter your first name:" addproperty="first.name.input" />
 		<input message="Please enter your last name:" addproperty="last.name.input" />
@@ -224,7 +224,7 @@
 		</java>
 	</target>
 
-	<target name="signHostCertificate" description="Create and signs a host certificate.">
+	<target name="signHostCertificate" description="Create and signs a host certificate." depends="init">
 		<input message="Please enter the location of the CA's private key:" addproperty="key.input" />
 		<input message="Please enter the CA's password:" addproperty="password.input" />
 		<input message="Please enter the location of the CA's certificate:" addproperty="ca.input" />
@@ -244,7 +244,7 @@
 	</target>
 
 
-	<target name="generateTrustReport" description="Generates a Grid Trust Report.">
+	<target name="generateTrustReport" description="Generates a Grid Trust Report." depends="init">
 		<input message="Please enter a file location to write the report to [grid-trust-report.txt]:" addproperty="out.input" defaultvalue="grid-trust-report.txt" />
 		<java classname="gov.nih.nci.cagrid.gridca.commandline.GenerateTrustReport" fork="true" newenvironment="true" failonerror="true">
 			<arg value="${out.input}" />
@@ -252,7 +252,7 @@
 		</java>
 	</target>
 
-	<target name="createTomcatKeystore" description="Generates a Grid Trust Report.">
+	<target name="createTomcatKeystore" description="Generates a Grid Trust Report." depends="init">
 		<java classname="gov.nih.nci.cagrid.gridca.commandline.TomcatKeystoreCreator" fork="false" newenvironment="true" failonerror="true">
 			<classpath>
 				<fileset dir="${build.lib.dir}">
