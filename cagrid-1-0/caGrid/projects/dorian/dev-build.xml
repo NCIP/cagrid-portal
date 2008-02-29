@@ -429,13 +429,13 @@
 		</java>
 	</target>
 
-	<target name="adminEracomHSM" description="Brings up the Eracom Admin tool." depends="defineClasspaths">
+	<target name="adminEracomHSM" description="Brings up the Eracom Admin tool." depends="init">
 		<java classname="jprov.tools.admin.CtAdmin" fork="true" newenvironment="true" failonerror="true">
 			<classpath refid="service.run.classpath" />
 		</java>
 	</target>
 
-	<target name="manageEracomKeys" description="Brings up the Eracom Admin tool." depends="defineClasspaths">
+	<target name="manageEracomKeys" description="Brings up the Eracom Admin tool." depends="init">
 		<java classname="jprov.tools.kmu.KMU" fork="true" newenvironment="true" failonerror="true">
 			<classpath refid="service.run.classpath" />
 		</java>
