@@ -41,8 +41,7 @@ import com.counter.service.CounterServiceAddressingLocator;
 
 
 /**
- * GlobusServiceContainer 
- * Service container implementation for globus 4.0.3
+ * GlobusServiceContainer Service container implementation for globus 4.0.3
  * 
  * @author David Ervin
  * @created Oct 12, 2007 12:01:17 PM
@@ -186,44 +185,14 @@ public class GlobusServiceContainer extends ServiceContainer {
 
         final Process shutdownProc = proc;
 
-        boolean success = false;
-        // create a Future to get the boolean success status
-        FutureTask<Boolean> future = new FutureTask<Boolean>(new Callable<Boolean>() {
-            public Boolean call() throws Exception {
-                shutdownProc.waitFor();
-                // return true if the status is 0
-                boolean result = shutdownProc.exitValue() == 0;
-                shutdownProc.destroy();
-                return Boolean.valueOf(result);
-            }
-        });
-
-        // execute the task of waiting for completion and getting the status
-        ExecutorService executor = Executors.newSingleThreadExecutor();
-        executor.execute(future);
-
+        int retval = 0;
         try {
-            // try to get the status
-            int wait = DEFAULT_SHUTDOWN_WAIT_TIME;
-            if (getProperties().getMaxShutdownWaitTime() != null) {
-                wait = getProperties().getMaxShutdownWaitTime().intValue();
-            }
-            success = future.get(wait, TimeUnit.SECONDS).booleanValue();
-        } catch (TimeoutException ex) {
-            throw new ContainerException("Timeout while shutting down globus", ex);
-        } catch (Exception ex) {
-            throw new ContainerException("Error shutting down globus: " + ex.getMessage(), ex);
-        } finally {
-            // close down all stop operations
-            future.cancel(true);            
-            executor.shutdownNow();
-
-            // destroy globus process for saftey
-            this.globusProcess.destroy();
-            this.globusProcess = null;
+            retval = proc.waitFor();
+        } catch (InterruptedException e) {
+            throw new ContainerException("Exception error shutting down globus", e);
         }
 
-        if (!success) {
+        if (retval != 0) {
             throw new ContainerException("Unknown error shutting down globus");
         }
     }
@@ -244,9 +213,9 @@ public class GlobusServiceContainer extends ServiceContainer {
             System.out.println("Starting Globus on port: " + port);
             LOG.debug("Starting Globus on port: " + port);
         }
-        
-            opts.add("-nosec");
-    
+
+        opts.add("-nosec");
+
         // start the container
         try {
             globusProcess = runGlobusCommand(GLOBUS_CONTAINER_CLASSNAME, opts);
@@ -324,13 +293,14 @@ public class GlobusServiceContainer extends ServiceContainer {
         stub._setProperty(GSIConstants.GSI_AUTHORIZATION, org.globus.gsi.gssapi.auth.NoAuthorization.getInstance());
     }
 
+
     /**
-     * 
      * @param clName
-     * @param heapSizeInMegabytes null for default value. This must make sense for java command line. E.g., 64, 128, 256, etc.
+     * @param heapSizeInMegabytes
+     *            null for default value. This must make sense for java command
+     *            line. E.g., 64, 128, 256, etc.
      * @param options
-     * @return
-     *      The process created
+     * @return The process created
      * @throws IOException
      */
     private synchronized Process runGlobusCommand(String clName, List<String> options) throws IOException {
@@ -361,7 +331,7 @@ public class GlobusServiceContainer extends ServiceContainer {
         ArrayList<String> cmd = new ArrayList<String>();
         cmd.add(java.getAbsolutePath());
         if (getProperties().getHeapSizeInMegabytes() != null) {
-        	cmd.add("-Xmx" + getProperties().getHeapSizeInMegabytes().toString() + "m");
+            cmd.add("-Xmx" + getProperties().getHeapSizeInMegabytes().toString() + "m");
         }
         cmd.add("-Dlog4j.configuration=container-log4j.properties");
         cmd.add("-DGLOBUS_LOCATION=" + containerDir.getAbsolutePath());

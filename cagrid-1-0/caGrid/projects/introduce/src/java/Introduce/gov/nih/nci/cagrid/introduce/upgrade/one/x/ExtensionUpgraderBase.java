@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.introduce.upgrade.one.one;
+package gov.nih.nci.cagrid.introduce.upgrade.one.x;
 
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;

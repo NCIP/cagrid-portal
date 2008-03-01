@@ -414,11 +414,12 @@ public class ModificationViewer extends ApplicationComponent {
                             ModificationViewer.this.dispose();
                             this.beenDisposed = true;
                         }
+                    } else {
+                        JOptionPane.showMessageDialog(GridApplication.getContext().getApplication(),
+                            "Service was built with another version of Introduce and no upgrader currently exists");
+                        ModificationViewer.this.dispose();
+                        this.beenDisposed = true;
                     }
-                    JOptionPane.showMessageDialog(GridApplication.getContext().getApplication(),
-                        "Service was build with another version of Introduce and is no upgrader currently exists");
-                    ModificationViewer.this.dispose();
-                    this.beenDisposed = true;
                 }
 
                 if (!beenDisposed) {

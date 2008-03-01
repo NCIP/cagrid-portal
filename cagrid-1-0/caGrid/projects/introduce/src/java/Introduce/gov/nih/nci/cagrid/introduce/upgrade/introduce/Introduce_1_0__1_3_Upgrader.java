@@ -2,8 +2,11 @@ package gov.nih.nci.cagrid.introduce.upgrade.introduce;
 
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.common.XMLUtilities;
+import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
+import gov.nih.nci.cagrid.introduce.beans.namespace.NamespacesType;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.codegen.common.SynchronizationException;
+import gov.nih.nci.cagrid.introduce.codegen.services.methods.SyncHelper;
 import gov.nih.nci.cagrid.introduce.codegen.services.methods.SyncSource;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.ProviderTools;
@@ -17,7 +20,7 @@ import gov.nih.nci.cagrid.introduce.templates.service.globus.resource.ResourceTe
 import gov.nih.nci.cagrid.introduce.templates.service.globus.resource.SingletonResourceHomeTemplate;
 import gov.nih.nci.cagrid.introduce.upgrade.common.IntroduceUpgradeStatus;
 import gov.nih.nci.cagrid.introduce.upgrade.common.StatusBase;
-import gov.nih.nci.cagrid.introduce.upgrade.one.one.IntroduceUpgraderBase;
+import gov.nih.nci.cagrid.introduce.upgrade.one.x.IntroduceUpgraderBase;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -25,6 +28,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Properties;
 
 import org.apache.ws.jaxme.js.JavaMethod;
 import org.apache.ws.jaxme.js.JavaQName;
@@ -37,47 +41,51 @@ import org.jdom.Element;
 import org.jdom.Namespace;
 
 
-public class Introduce_1_1__1_2_Upgrader extends IntroduceUpgraderBase {
+public class Introduce_1_0__1_3_Upgrader extends IntroduceUpgraderBase {
 
-    public Introduce_1_1__1_2_Upgrader(IntroduceUpgradeStatus status, ServiceInformation serviceInformation,
+    public Introduce_1_0__1_3_Upgrader(IntroduceUpgradeStatus status, ServiceInformation serviceInformation,
         String servicePath) throws Exception {
-        super(status, serviceInformation, servicePath, "1.1", "1.2");
+        super(status, serviceInformation, servicePath, "1.0", "1.3");
     }
 
 
     protected void upgrade() throws Exception {
+        // need to delete the old registration.xml file
+        File registrationFile = new File(getServicePath() + File.separator + "etc" + File.separator
+            + "registration.xml");
+        registrationFile.delete();
+        getStatus().addDescriptionLine(
+            "removed old registration.xml file, it is now replaced with service specific one for each service");
 
         // need to replace the build.xml
         Utils.copyFile(new File(getServicePath() + File.separator + "build.xml"), new File(getServicePath()
             + File.separator + "build.xml.OLD"));
-        Utils.copyFile(new File(getServicePath() + File.separator + "build-deploy.xml"), new File(getServicePath()
-            + File.separator + "build-deploy.xml.OLD"));
-        Utils.copyFile(new File(getServicePath() + File.separator + "dev-build.xml"), new File(getServicePath()
-            + File.separator + "dev-build.xml.OLD"));
-        Utils.copyFile(new File(getServicePath() + File.separator + "dev-build-deploy.xml"), new File(getServicePath()
-            + File.separator + "dev-build-deploy.xml.OLD"));
         Utils.copyFile(new File("." + File.separator + "skeleton" + File.separator + "build.xml"), new File(
             getServicePath() + File.separator + "build.xml"));
+        Utils.copyFile(new File("." + File.separator + "skeleton" + File.separator + "build-stubs.xml"), new File(
+            getServicePath() + File.separator + "build-stubs.xml"));
         Utils.copyFile(new File("." + File.separator + "skeleton" + File.separator + "dev-build.xml"), new File(
             getServicePath() + File.separator + "dev-build.xml"));
         getStatus().addDescriptionLine("replaced build.xml with new version");
+        getStatus().addDescriptionLine("added build-stubs.xml");
+        getStatus().addIssue("Replaced the build.xml file.",
+            "Put any additions you need to the service build in the dev-build.xml file which has now been created.");
 
+        // need to replace the build-deploy.xml
+        Utils.copyFile(new File(getServicePath() + File.separator + "build-deploy.xml"), new File(getServicePath()
+            + File.separator + "build-deploy.xml.OLD"));
         Utils.copyFile(new File("." + File.separator + "skeleton" + File.separator + "build-deploy.xml"), new File(
             getServicePath() + File.separator + "build-deploy.xml"));
         Utils.copyFile(new File("." + File.separator + "skeleton" + File.separator + "dev-build-deploy.xml"), new File(
             getServicePath() + File.separator + "dev-build-deploy.xml"));
         getStatus().addDescriptionLine("replaced build-deploy.xml with new version");
-
-        getStatus().addIssue("Replaced the build.xml file.",
-            "Put any additions you need to the service build in the dev-build.xml file which has now been created.");
-
-        Utils.copyFile(new File("." + File.separator + "skeleton" + File.separator + "build-stubs.xml"), new File(
-            getServicePath() + File.separator + "build-stubs.xml"));
-        getStatus().addDescriptionLine("added build-stubs.xml");
+        getStatus()
+            .addIssue("Replaced the build-deploy.xml file.",
+                "Put any additions you need to the service deployment in the dev-build-deploy.xml file which has now been created.");
 
         // clean the config
         removeResourcePropertyProvidersFromConfig();
-        // remove rp methods
+        // clean the client impl
         removeGetResourcePropertyMethods();
 
         // foreach service need to replace the resource files.....
@@ -94,8 +102,8 @@ public class Introduce_1_1__1_2_Upgrader extends IntroduceUpgraderBase {
             String resourceContanstsS = resourceContanstsT.generate(new SpecificServiceInformation(
                 getServiceInformation(), service));
             File resourceContanstsF = new File(srcDir.getAbsolutePath() + File.separator
-                + CommonTools.getPackageDir(service) + File.separator + "common" + File.separator + File.separator
-                + service.getName() + "Constants.java");
+                + CommonTools.getPackageDir(service) + File.separator + "common" + File.separator + service.getName()
+                + "Constants.java");
 
             FileWriter resourceContanstsFW = new FileWriter(resourceContanstsF);
             resourceContanstsFW.write(resourceContanstsS);
@@ -120,6 +128,7 @@ public class Introduce_1_1__1_2_Upgrader extends IntroduceUpgraderBase {
             }
 
             if (service.getResourceFrameworkOptions().getCustom() == null) {
+
                 // delete the old base resource
                 File oldbaseResourceF = new File(srcDir.getAbsolutePath() + File.separator
                     + CommonTools.getPackageDir(service) + File.separator + "service" + File.separator + "globus"
@@ -194,11 +203,17 @@ public class Introduce_1_1__1_2_Upgrader extends IntroduceUpgraderBase {
             }
         }
 
-        upgradeJars();
-        getStatus().addDescriptionLine("updating service with the new version of the jars");
+        // need to add to the deploy.properties
+        Properties deployProperties = getServiceInformation().getDeploymentProperties();
+        deployProperties.put("index.service.registration.refresh_seconds", "600");
+        deployProperties.put("index.service.index.refresh_milliseconds", "30000");
+        deployProperties.put("perform.index.service.registration", "true");
+        getStatus().addDescriptionLine("adding new deployment variables to deploy.properties");
 
-        // change the jndi to use the new classes names for resource home and
-        // resource configuration and service configuration
+        // need to add the new template var to the jndi so that it can be
+        // replaced
+        // by the new property for shutting off registration
+        // and fix up new resource class value becuase it has a new class name
         Document jndiDoc = XMLUtilities.fileNameToDocument(getServicePath() + File.separator + "jndi-config.xml");
         List services = jndiDoc.getRootElement().getChildren("service",
             Namespace.getNamespace("http://wsrf.globus.org/jndi/config"));
@@ -233,22 +248,33 @@ public class Introduce_1_1__1_2_Upgrader extends IntroduceUpgraderBase {
                     sb.insert(sb.lastIndexOf(".") + 1, serviceName + "ServiceConfiguration");
                     resource.setAttribute("type", sb.toString());
                 }
+                List parameters = resource.getChild("resourceParams",
+                    Namespace.getNamespace("http://wsrf.globus.org/jndi/config")).getChildren("parameter",
+                    Namespace.getNamespace("http://wsrf.globus.org/jndi/config"));
+                Iterator parameterI = parameters.iterator();
+                while (parameterI.hasNext()) {
+                    Element parameter = (Element) parameterI.next();
+                    if (parameter.getChild("name", Namespace.getNamespace("http://wsrf.globus.org/jndi/config"))
+                        .getText().equals("performRegistration")) {
+                        parameter.getChild("value", Namespace.getNamespace("http://wsrf.globus.org/jndi/config"))
+                            .setText("PERFORM_REGISTRATION");
+                    }
+                    if (parameter.getChild("name", Namespace.getNamespace("http://wsrf.globus.org/jndi/config"))
+                        .getText().equals("resourceClass")) {
+                        String oldValue = parameter.getChild("value",
+                            Namespace.getNamespace("http://wsrf.globus.org/jndi/config")).getText();
+                        String newValue = oldValue.substring(0, oldValue.lastIndexOf(".") + 1) + serviceName
+                            + "Resource";
+                        parameter.getChild("value", Namespace.getNamespace("http://wsrf.globus.org/jndi/config"))
+                            .setText(newValue);
+                    }
+                }
             }
         }
         FileWriter writer = new FileWriter(new File(getServicePath() + File.separator + "jndi-config.xml"));
         writer.write(XMLUtilities.formatXML(XMLUtilities.documentToString(jndiDoc)));
         writer.close();
-        getStatus().addDescriptionLine(
-            "changed jndi file to use new names of the resource home and configureation classes");
-
-        // replacing the soap fix jar with the new service tasks jar
-        File oldSoapJar = new File(getServicePath() + File.separator + "tools" + File.separator + "lib"
-            + File.separator + "caGrid-1.1-Introduce-1.1-soapBindingFix.jar");
-        if (oldSoapJar.exists() && oldSoapJar.canRead()) {
-            oldSoapJar.delete();
-        } else {
-            throw new Exception("Cannot remove old soap fix jar: " + oldSoapJar.delete());
-        }
+        getStatus().addDescriptionLine("retemplated jndi file");
 
         // need to add the service tasks .jar to the tools lib directory
         FileFilter serviceTasksFilter = new FileFilter() {
@@ -271,11 +297,99 @@ public class Introduce_1_1__1_2_Upgrader extends IntroduceUpgraderBase {
                 throw new Exception("Cannot find or cannot read service tasks jar to copy into the service: "
                     + serviceTasksJar.getAbsolutePath());
             }
+        } else if (serviceTasksCandidates.length == 0) {
+            throw new Exception("Cannot find any service tasks jar to copy into the service");
         } else {
-            throw new Exception("Cannot find service tasks jar to copy into the service");
+            StringBuffer message = new StringBuffer();
+            message.append("Found multiple service tasks jar candidates:\n");
+            for (int i = 0; i < serviceTasksCandidates.length; i++) {
+                message.append("\t").append(serviceTasksCandidates[i].getAbsolutePath());
+                if (i + 1 < serviceTasksCandidates.length) {
+                    message.append("\n");
+                }
+            }
+            throw new Exception(message.toString());
         }
+        
+        // need to move the ant-contrib.jar to the tools lib directory
+        File currentContribFile = new File(getServicePath() + File.separator + "lib" + File.separator
+            + "ant-contrib.jar");
+        if (currentContribFile.exists()) {
+            Utils.copyFile(currentContribFile, new File(getServicePath() + File.separator + "tools" + File.separator
+                + "lib" + File.separator + "ant-contrib.jar"));
+            currentContribFile.delete();
+        } else {
+            getStatus().addIssue("Missing ant-contrib.jar", "Locate jar and place it in the tols/lib directory");
+        }
+        getStatus().addDescriptionLine(
+            "moving ant-contrib to a location which will not cause it to be deployed with the service");
+
+        upgradeJars();
+        getStatus().addDescriptionLine("updating service with the new version of the jars");
+
+        fixUpSchemaLocationsInModel();
+
+        fixBugInClientLoadingClientWSDD();
+
+        // recreate the authorization class
+        // recreate the service descriptor
+        // recreate the provider impl
+        // those will be done during the resync
 
         getStatus().setStatus(StatusBase.UPGRADE_OK);
+    }
+
+
+    private void fixBugInClientLoadingClientWSDD() {
+        ServiceType[] services = getServiceInformation().getServices().getService();
+        for (int i = 0; i < services.length; i++) {
+            ServiceType service = services[i];
+            StringBuffer fileContent = null;
+            String serviceClient = getServiceInformation().getBaseDirectory().getAbsolutePath() + File.separator
+                + "src" + File.separator + CommonTools.getPackageDir(service) + File.separator + "client"
+                + File.separator + service.getName() + "Client.java";
+            try {
+                fileContent = Utils.fileToStringBuffer(new File(serviceClient));
+                int startOfMethod = SyncHelper.startOfSignature(fileContent, "private " + service.getName()
+                    + "PortType createPortType()");
+                if (startOfMethod >= 0) {
+                    int endOfMethod = SyncHelper.bracketMatch(fileContent, startOfMethod);
+                    String subString = fileContent.substring(startOfMethod, endOfMethod);
+                    int lineStart = subString.indexOf("InputStream resourceAsStream =");
+                    if (lineStart > 0) {
+                        String lineandon = subString.substring(lineStart);
+                        int lineEnd = lineandon.indexOf(";");
+                        fileContent.replace(startOfMethod + lineStart, startOfMethod + lineStart + lineEnd,
+                            "InputStream resourceAsStream = getClass().getResourceAsStream(\"client-config.wsdd\")");
+                        FileWriter fw = new FileWriter(serviceClient);
+                        fw.write(fileContent.toString());
+                        fw.close();
+                        getStatus().addDescriptionLine("fixed client load of wsdd bug in: " + serviceClient);
+                    } else {
+                        getStatus().addDescriptionLine("unable to fix client load of wsdd: " + serviceClient);
+                        getStatus()
+                            .addIssue(
+                                "unable to fix client load of wsdd: " + serviceClient,
+                                "please replace the line:\n\tInputStream resourceAsStream = ClassUtils.getResourceAsStream(getClass(), \"client-config.wsdd\"); \nwith:\n\tInputStream resourceAsStream = getClass().getResourceAsStream(\"client-config.wsdd\");\nin the createPortType() method of the "
+                                    + serviceClient + " client java class");
+                    }
+                } else {
+                    getStatus().addDescriptionLine("unable to fix client load of wsdd: " + serviceClient);
+                    getStatus()
+                        .addIssue(
+                            "unable to fix client load of wsdd: " + serviceClient,
+                            "please replace the line:\n\tInputStream resourceAsStream = ClassUtils.getResourceAsStream(getClass(), \"client-config.wsdd\"); \nwith:\n\tInputStream resourceAsStream = getClass().getResourceAsStream(\"client-config.wsdd\");\nin the createPortType() method of the "
+                                + serviceClient + " client java class");
+                }
+            } catch (Exception e) {
+                getStatus().addDescriptionLine("unable to fix client load of wsdd: " + serviceClient);
+                getStatus()
+                    .addIssue(
+                        "unable to fix client load of wsdd: " + serviceClient,
+                        "please replace the line:\n\tInputStream resourceAsStream = ClassUtils.getResourceAsStream(getClass(), \"client-config.wsdd\"); \nwith:\n\tInputStream resourceAsStream = getClass().getResourceAsStream(\"client-config.wsdd\");\nin the createPortType() method of the "
+                            + serviceClient + " client java class");
+            }
+        }
     }
 
 
@@ -286,29 +400,27 @@ public class Introduce_1_1__1_2_Upgrader extends IntroduceUpgraderBase {
 
         public boolean accept(File name) {
             String filename = name.getName();
-            boolean core = filename.startsWith("caGrid-1.1-core") && filename.endsWith(".jar");
-            boolean advertisement = filename.startsWith("caGrid-1.1-advertisement") && filename.endsWith(".jar");
-            boolean introduce = filename.startsWith("caGrid-1.1-Introduce") && filename.endsWith(".jar");
-            boolean security = (filename.startsWith("caGrid-1.1-ServiceSecurityProvider") || filename
-                .startsWith("caGrid-1.1-metadata-security"))
+            boolean core = filename.startsWith("caGrid-1.0-core") && filename.endsWith(".jar");
+            boolean security = (filename.startsWith("caGrid-1.0-ServiceSecurityProvider") || filename
+                .startsWith("caGrid-1.0-metadata-security"))
                 && filename.endsWith(".jar");
-            boolean gridGrouper = (filename.startsWith("caGrid-1.1-gridgrouper")) && filename.endsWith(".jar");
+            boolean gridGrouper = (filename.startsWith("caGrid-1.0-gridgrouper")) && filename.endsWith(".jar");
             if (gridGrouper) {
                 hadGridGrouperJars = true;
             }
-            boolean csm = (filename.startsWith("caGrid-1.1-authz-common")) && filename.endsWith(".jar");
+            boolean csm = (filename.startsWith("caGrid-1.0-authz-common")) && filename.endsWith(".jar");
             if (csm) {
                 hadCSMJars = true;
             }
 
-            boolean otherSecurityJarsNotNeeded = (filename.startsWith("caGrid-1.1-gridca"))
+            boolean otherSecurityJarsNotNeeded = (filename.startsWith("caGrid-1.0-gridca"))
                 && filename.endsWith(".jar");
 
             boolean wsrf = (filename.startsWith("globus_wsrf_mds") || filename.startsWith("globus_wsrf_servicegroup"))
                 && filename.endsWith(".jar");
             boolean mobius = filename.startsWith("mobius") && filename.endsWith(".jar");
 
-            return core || advertisement || introduce ||  security || gridGrouper || csm || wsrf || mobius || otherSecurityJarsNotNeeded;
+            return core || security || gridGrouper || csm || wsrf || mobius || otherSecurityJarsNotNeeded;
         }
 
     };
@@ -323,12 +435,8 @@ public class Introduce_1_1__1_2_Upgrader extends IntroduceUpgraderBase {
         File[] serviceLibs = serviceLibDir.listFiles(oldDkeletonLibFilter);
         // delete the old libraries
         for (int i = 0; i < serviceLibs.length; i++) {
-            boolean deleted = serviceLibs[i].delete();
-            if(deleted){
-                getStatus().addDescriptionLine(serviceLibs[i].getName() + " removed");
-            } else{
-                getStatus().addDescriptionLine(serviceLibs[i].getName() + " could not be removed");
-            }
+            serviceLibs[i].delete();
+            getStatus().addDescriptionLine(serviceLibs[i].getName() + " removed");
         }
 
         FileFilter srcSkeletonLibFilter = new FileFilter() {
@@ -387,6 +495,28 @@ public class Introduce_1_1__1_2_Upgrader extends IntroduceUpgraderBase {
             }
         }
 
+    }
+
+
+    private void fixUpSchemaLocationsInModel() {
+        boolean editsMade = false;
+        NamespacesType namespaces = getServiceInformation().getServiceDescriptor().getNamespaces();
+        if (namespaces != null && namespaces.getNamespace() != null) {
+            for (NamespaceType namespace : namespaces.getNamespace()) {
+                String schemaLocation = namespace.getLocation();
+                if (schemaLocation != null && schemaLocation.indexOf('\\') != -1) {
+                    String cleanLocation = schemaLocation.replace('\\', '/');
+                    namespace.setLocation(cleanLocation);
+                    getStatus().addDescriptionLine("Edited schema location of namespace " + namespace.getNamespace());
+                    getStatus().addDescriptionLine("\t(" + schemaLocation + " -> " + cleanLocation + ")");
+                    editsMade = true;
+                }
+            }
+        }
+        if (editsMade) {
+            getStatus().addIssue("Schema locations may not be platform independent",
+                "Please ensure that all schema locations are specified using forward slash(/) as file separators.");
+        }
     }
 
 
@@ -449,5 +579,4 @@ public class Introduce_1_1__1_2_Upgrader extends IntroduceUpgraderBase {
         }
 
     }
-
 }

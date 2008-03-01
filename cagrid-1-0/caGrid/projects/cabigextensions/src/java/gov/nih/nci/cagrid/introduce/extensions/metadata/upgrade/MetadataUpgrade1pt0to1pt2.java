@@ -19,7 +19,7 @@ import gov.nih.nci.cagrid.introduce.extension.utils.ExtensionUtilities;
 import gov.nih.nci.cagrid.introduce.extensions.metadata.common.MetadataExtensionHelper;
 import gov.nih.nci.cagrid.introduce.extensions.metadata.constants.MetadataConstants;
 import gov.nih.nci.cagrid.introduce.upgrade.common.StatusBase;
-import gov.nih.nci.cagrid.introduce.upgrade.one.one.ExtensionUpgraderBase;
+import gov.nih.nci.cagrid.introduce.upgrade.one.x.ExtensionUpgraderBase;
 import gov.nih.nci.cagrid.metadata.MetadataUtils;
 import gov.nih.nci.cagrid.metadata.service.ContextProperty;
 import gov.nih.nci.cagrid.metadata.service.Fault;

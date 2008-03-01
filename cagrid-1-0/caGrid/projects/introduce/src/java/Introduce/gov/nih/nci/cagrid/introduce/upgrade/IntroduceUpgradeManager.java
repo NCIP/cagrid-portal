@@ -26,9 +26,11 @@ public class IntroduceUpgradeManager {
 
     private static String getIntroduceUpgradeClass(String oldVersion) {
         if (oldVersion.equals("1.0")) {
-            return "gov.nih.nci.cagrid.introduce.upgrade.introduce.Introduce_1_0__1_2_Upgrader";
+            return "gov.nih.nci.cagrid.introduce.upgrade.introduce.Introduce_1_0__1_3_Upgrader";
         } else if (oldVersion.equals("1.1")) {
-            return "gov.nih.nci.cagrid.introduce.upgrade.introduce.Introduce_1_1__1_2_Upgrader";
+            return "gov.nih.nci.cagrid.introduce.upgrade.introduce.Introduce_1_1__1_3_Upgrader";
+        } else if (oldVersion.equals("1.2")) {
+            return "gov.nih.nci.cagrid.introduce.upgrade.introduce.Introduce_1_2__1_3_Upgrader";
         }
         return null;
     }
@@ -36,9 +38,11 @@ public class IntroduceUpgradeManager {
 
     private static String getModelUpgradeClass(String oldVersion) {
         if (oldVersion.equals("1.0")) {
-            return "gov.nih.nci.cagrid.introduce.upgrade.model.Model_1_0__1_2_Upgrader";
+            return "gov.nih.nci.cagrid.introduce.upgrade.model.Model_1_0__1_3_Upgrader";
         } else if (oldVersion.equals("1.1")) {
-            return "gov.nih.nci.cagrid.introduce.upgrade.model.Model_1_1__1_2_Upgrader";
+            return "gov.nih.nci.cagrid.introduce.upgrade.model.Model_1_1__1_3_Upgrader";
+        } else if (oldVersion.equals("1.2")) {
+            return "gov.nih.nci.cagrid.introduce.upgrade.model.Model_1_2__1_3_Upgrader";
         }
         return null;
     }

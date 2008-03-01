@@ -20,7 +20,7 @@ import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 import gov.nih.nci.cagrid.introduce.extension.utils.AxisJdomUtils;
 import gov.nih.nci.cagrid.introduce.extension.utils.ExtensionUtilities;
 import gov.nih.nci.cagrid.introduce.upgrade.common.StatusBase;
-import gov.nih.nci.cagrid.introduce.upgrade.one.one.ExtensionUpgraderBase;
+import gov.nih.nci.cagrid.introduce.upgrade.one.x.ExtensionUpgraderBase;
 import gov.nih.nci.cagrid.wsenum.utils.IterImplType;
 
 import java.io.File;

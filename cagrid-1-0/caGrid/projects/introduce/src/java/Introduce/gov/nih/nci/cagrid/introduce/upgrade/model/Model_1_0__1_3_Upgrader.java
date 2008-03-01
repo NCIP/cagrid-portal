@@ -14,10 +14,10 @@ import org.jdom.Element;
 import org.jdom.Namespace;
 
 
-public class Model_1_0__1_2_Upgrader extends ModelUpgraderBase {
+public class Model_1_0__1_3_Upgrader extends ModelUpgraderBase {
 
-    public Model_1_0__1_2_Upgrader(IntroduceUpgradeStatus status, String servicePath) {
-        super(status, servicePath, "1.0", "1.2");
+    public Model_1_0__1_3_Upgrader(IntroduceUpgradeStatus status, String servicePath) {
+        super(status, servicePath, "1.0", "1.3");
     }
 
 

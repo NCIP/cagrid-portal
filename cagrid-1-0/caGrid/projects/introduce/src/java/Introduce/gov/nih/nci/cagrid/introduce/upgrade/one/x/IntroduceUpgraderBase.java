@@ -1,4 +1,10 @@
-package gov.nih.nci.cagrid.introduce.upgrade.two.zero;
+package gov.nih.nci.cagrid.introduce.upgrade.one.x;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Properties;
 
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.upgrade.common.IntroduceUpgradeStatus;
@@ -15,7 +21,7 @@ public abstract class IntroduceUpgraderBase implements  IntroduceUpgraderI{
 
 
     public IntroduceUpgraderBase(IntroduceUpgradeStatus status, ServiceInformation serviceInformation, String servicePath, String fromVersion,
-        String toVersion) {
+        String toVersion)  throws Exception {
         this.status = status;
         this.serviceInformation = serviceInformation;
         this.fromVersion = fromVersion;
@@ -25,6 +31,7 @@ public abstract class IntroduceUpgraderBase implements  IntroduceUpgraderI{
         status.setToVersion(toVersion);
         status.setType(StatusBase.UPGRADE_TYPE_INTRODUCE);
         status.setName("IntroduceUpgrader " + fromVersion + " - " + toVersion);
+        
     }
 
 
@@ -39,7 +46,7 @@ public abstract class IntroduceUpgraderBase implements  IntroduceUpgraderI{
     public String getFromVersion() {
         return fromVersion;
     }
-
+    
 
     public void setFromVersion(String fromVersion) {
         this.fromVersion = fromVersion;
