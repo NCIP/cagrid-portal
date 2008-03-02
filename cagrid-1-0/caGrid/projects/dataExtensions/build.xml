@@ -56,6 +56,7 @@
 
 	<!-- libraries -->
 	<property name="lib.dir" location="${basedir}/lib" />
+	<property name="ext.dir" location="${basedir}/ext"/>
 	<property name="ext.dependencies.dir" location="${basedir}/ext/dependencies"/>
 	<property name="ext.lib.dir" location="${ext.dependencies.dir}/impl/jars" />
 	<property name="ext.test.lib.dir" location="${basedir}/ext/dependencies/test/jars" />
@@ -455,6 +456,9 @@
 			<fileset dir="${ext.dependencies.dir}/sdk31/jars">
 				<include name="*sdk*.jar"/>
 			</fileset>
+			<fileset dir="${ext.dir}">
+				<include name="sdk31*.properties"/>
+			</fileset>
 		</copy>
 		<!-- sdk32 required libraries -->
 		<property name="sdk32.extension.lib.dir" location="${introduce.extensions.dir}/data/sdk32/lib"/>
@@ -463,6 +467,9 @@
 		<copy todir="${sdk32.extension.lib.dir}">
 			<fileset dir="${ext.dependencies.dir}/sdk32/jars">
 				<include name="*sdk*.jar"/>
+			</fileset>
+			<fileset dir="${ext.dir}">
+				<include name="sdk32*.properties"/>
 			</fileset>
 		</copy>
 		<!-- install the service styles -->

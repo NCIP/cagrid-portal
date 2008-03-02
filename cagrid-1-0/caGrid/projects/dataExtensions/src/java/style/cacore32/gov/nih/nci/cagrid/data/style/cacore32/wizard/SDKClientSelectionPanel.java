@@ -26,12 +26,14 @@ import java.awt.GridLayout;
 import java.awt.Insets;
 import java.io.File;
 import java.io.FileFilter;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Properties;
 import java.util.Set;
 import java.util.Vector;
 import java.util.jar.JarEntry;
@@ -67,7 +69,7 @@ import com.jgoodies.validation.view.ValidationComponentUtils;
  * @author David Ervin
  * 
  * @created Jun 4, 2007 1:45:08 PM
- * @version $Id: SDKClientSelectionPanel.java,v 1.12 2008-02-26 22:27:52 dervin Exp $ 
+ * @version $Id: SDKClientSelectionPanel.java,v 1.13 2008-03-02 04:22:45 dervin Exp $ 
  */
 public class SDKClientSelectionPanel extends AbstractWizardPanel {
     // keys for validation components
@@ -236,6 +238,26 @@ public class SDKClientSelectionPanel extends AbstractWizardPanel {
     public String getPanelTitle() {
         return "Client jar and dependency selection";
     }
+    
+    
+    private File getSdk32QPLib() {
+        File lib = null;
+        File libDir = new File(SDK32InitializationPanel.SDK_32_LIB_DIR);
+        Properties ivyProps = new Properties();
+        try {
+            FileInputStream propsInput = new FileInputStream(
+                new File(libDir, SDK32InitializationPanel.IVY_PROPERTIES_FILE));
+            ivyProps.load(propsInput);
+            propsInput.close();
+            lib = new File(libDir, 
+                ivyProps.getProperty(SDK32InitializationPanel.SDK_32_QUERY_LIB_PROPERTY));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            CompositeErrorDialog.showErrorDialog("Error locating SDK 3.2 query processor library", 
+                ex.getMessage(), ex);
+        }
+        return lib;
+    }
 
 
     public void update() {
@@ -243,9 +265,10 @@ public class SDKClientSelectionPanel extends AbstractWizardPanel {
         // verify the sdk query library has been copied into the service
         File serviceLibDir = new File(getServiceInformation().getBaseDirectory(), "lib");
         File[] jars = serviceLibDir.listFiles(new FileFilters.JarFileFilter());
+        File expectedSdkQueryLib = getSdk32QPLib();
         File sdkQueryLib = null;
         for (File f : jars) {
-            if (f.getName().startsWith(SDK32InitializationPanel.SDK_32_QUERY_LIB_PREFIX)) {
+            if (f.getName().equals(expectedSdkQueryLib.getName())) {
                 sdkQueryLib = f;
             }
         }

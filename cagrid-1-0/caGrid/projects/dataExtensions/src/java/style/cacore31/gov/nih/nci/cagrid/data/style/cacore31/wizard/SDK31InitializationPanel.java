@@ -13,8 +13,10 @@ import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Properties;
 import java.util.Set;
 
 import org.cagrid.grape.utils.CompositeErrorDialog;
@@ -26,26 +28,48 @@ import org.cagrid.grape.utils.CompositeErrorDialog;
  * @author David Ervin
  * 
  * @created Jul 12, 2007 3:33:36 PM
- * @version $Id: SDK31InitializationPanel.java,v 1.2 2007-11-06 15:53:41 hastings Exp $ 
+ * @version $Id: SDK31InitializationPanel.java,v 1.3 2008-03-02 04:22:45 dervin Exp $ 
  */
 public class SDK31InitializationPanel extends CoreDsIntroPanel {
     
-    // constants for the 3.1 version of the SDK Query Processor
-    public static final String SDK_31_QUERY_LIB = ExtensionsLoader.EXTENSIONS_DIRECTORY + File.separator + "data"
-        + File.separator + "sdk31" + File.separator + "lib" + File.separator + "caGrid-1.1-sdkQuery-core.jar";
+    // directory for SDK query processor libraries
+    public static final String SDK_31_LIB_DIR = ExtensionsLoader.getInstance().getExtensionsDir().getAbsolutePath() 
+        + File.separator + "data" + File.separator + "sdk31" + File.separator + "lib";
+    
+    // make use of the Ivy properties file to find the SDK 32 Query lib
+    public static final String SDK_31_QUERY_LIB_PROPERTY = "sdk31.needs.sdkQuery.caGrid-sdkQuery-core";
+    public static final String IVY_PROPERTIES_FILE = "sdk31-jars.properties";
+    
     public static final String SDK_31_QUERY_PROCESSOR = "gov.nih.nci.cagrid.data.cql.cacore.HQLCoreQueryProcessor";
     
     public SDK31InitializationPanel(ServiceExtensionDescriptionType extensionDescription, ServiceInformation info) {
         super(extensionDescription, info);
     }
+    
+    
+    private File getSdk32QPLib() {
+        File lib = null;
+        File libDir = new File(SDK_31_LIB_DIR);
+        Properties ivyProps = new Properties();
+        try {
+            FileInputStream propsInput = new FileInputStream(new File(libDir, IVY_PROPERTIES_FILE));
+            ivyProps.load(propsInput);
+            propsInput.close();
+            lib = new File(libDir, ivyProps.getProperty(SDK_31_QUERY_LIB_PROPERTY));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            CompositeErrorDialog.showErrorDialog("Error locating SDK 3.1 query processor library", 
+                ex.getMessage(), ex);
+        }
+        return lib;
+    }
 
     
     protected void setLibrariesAndProcessor() {
-        String libName = SDK_31_QUERY_LIB;
         String qpClassName = SDK_31_QUERY_PROCESSOR;
         // get the path to the SDK Query project
-        File sdkQuery = new File(libName);
-        if (!sdkQuery.exists()) {
+        File sdkQuery = getSdk32QPLib();
+        if (sdkQuery == null || !sdkQuery.exists()) {
             String[] error = {"The SDK Query project does not exist or has not",
                     "yet been built.  Please build this project first!"};
             CompositeErrorDialog.showErrorDialog("SDK Query Library Not Found", error);

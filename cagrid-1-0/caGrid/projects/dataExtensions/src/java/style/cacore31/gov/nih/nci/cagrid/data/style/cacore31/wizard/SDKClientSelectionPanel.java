@@ -22,12 +22,14 @@ import java.awt.GridLayout;
 import java.awt.Insets;
 import java.io.File;
 import java.io.FileFilter;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Properties;
 import java.util.Set;
 import java.util.Vector;
 import java.util.jar.JarEntry;
@@ -61,7 +63,7 @@ import com.jgoodies.validation.view.ValidationComponentUtils;
  * @author David Ervin
  * 
  * @created Jun 4, 2007 1:45:08 PM
- * @version $Id: SDKClientSelectionPanel.java,v 1.8 2007-11-07 15:27:41 dervin Exp $ 
+ * @version $Id: SDKClientSelectionPanel.java,v 1.9 2008-03-02 04:22:45 dervin Exp $ 
  */
 public class SDKClientSelectionPanel extends AbstractWizardPanel {
     // keys for validation components
@@ -188,12 +190,31 @@ public class SDKClientSelectionPanel extends AbstractWizardPanel {
     public String getPanelTitle() {
         return "Client jar and dependency selection";
     }
+    
+    
+    private File getSdk32QPLib() {
+        File lib = null;
+        File libDir = new File(SDK31InitializationPanel.SDK_31_LIB_DIR);
+        Properties ivyProps = new Properties();
+        try {
+            FileInputStream propsInput = new FileInputStream(
+                new File(libDir, SDK31InitializationPanel.IVY_PROPERTIES_FILE));
+            ivyProps.load(propsInput);
+            propsInput.close();
+            lib = new File(libDir, ivyProps.getProperty(SDK31InitializationPanel.SDK_31_QUERY_LIB_PROPERTY));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            CompositeErrorDialog.showErrorDialog("Error locating SDK 3.1 query processor library", 
+                ex.getMessage(), ex);
+        }
+        return lib;
+    }
 
 
     public void update() {
         // -- configure the UI -- //
         // verify the sdk query library has been copied into the service
-        String sdkQueryLibName = new File(SDK31InitializationPanel.SDK_31_QUERY_LIB).getName();
+        String sdkQueryLibName = getSdk32QPLib().getName();
         File sdkQueryLib = new File(getServiceInformation().getBaseDirectory().getAbsolutePath() 
             + File.separator + "lib" + File.separator + sdkQueryLibName);
         
