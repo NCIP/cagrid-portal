@@ -131,7 +131,7 @@ public class DataServiceUpgrade1pt1to1pt2 extends ExtensionUpgraderBase {
         FileFilter newDataLibFilter = new FileFilter() {
             public boolean accept(File pathname) {
                 String name = pathname.getName();
-                return (name.endsWith("1.2.jar") && 
+                return (name.endsWith(".jar") && 
                     (name.startsWith("caGrid-data-")
                     || name.startsWith("caGrid-core-") 
                     || name.startsWith("caGrid-caDSR-") 
