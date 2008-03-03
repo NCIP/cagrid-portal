@@ -26,6 +26,7 @@ GSBT - Globus Service Build Tools
 	<property name="cds.images" value="${images.dir}/cds" />
 
 	<property name="ext.dir" location="${basedir}/ext" />
+	<property name="endorsed.lib.dir" location="${ext.dir}/dependencies/endorsed/jars" />
 	<property name="ext.lib.dir" location="${ext.dir}/dependencies/impl/jars" />
 
 	<property name="etc.dir" value="etc" />
@@ -151,7 +152,7 @@ GSBT - Globus Service Build Tools
 	<target name="ui" description="Run the Security UI" depends="defineClasspaths">
 		<java classname="org.cagrid.grape.GridApplication" classpathref="run.classpath" fork="yes">
 			<arg value="etc/security-ui.xml" />
-			<jvmarg value="-Djava.endorsed.dirs=ext/endorsed/lib" />
+			<jvmarg value="-Djava.endorsed.dirs=${endorsed.lib.dir}" />
 		</java>
 	</target>
 
