@@ -99,7 +99,7 @@ public class DataServiceUpgrade1pt0to1pt2 extends ExtensionUpgraderBase {
             throw new UpgradeException(getClass().getName() 
                 + " upgrades FROM 1.0 TO 1.2, found FROM = " + getFromVersion());
         }
-        if (!getToVersion().equals("1.1")) {
+        if (!getToVersion().equals("1.2")) {
             throw new UpgradeException(getClass().getName() 
                 + " upgrades FROM 1.0 TO 1.2, found TO = " + getToVersion());
         }
