@@ -84,9 +84,9 @@
 	<classpathentry kind="lib" path="ext/dependencies/impl/jars/jcalendar.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/impl/jars/jdom-1.0.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/impl/jars/jprov.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/impl/jars/resolver.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/impl/jars/subject-0.2.1.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/impl/jars/xercesImpl.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/impl/jars/xml-apis.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/endorsed/jars/resolver.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/endorsed/jars/xercesImpl.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/endorsed/jars/xml-apis.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
