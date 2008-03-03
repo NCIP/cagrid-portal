@@ -20,7 +20,7 @@
 	<xs:complexType name="DataDescriptor">
 		<xs:sequence>
 			<xs:element type="string" name="name"></xs:element>
-			<xs:element type="QName" name="type"></xs:element>
+			<xs:element type="anyType" name="metadata"></xs:element>
 		</xs:sequence>
 	</xs:complexType>
 
