@@ -44,12 +44,13 @@
 
 
 	<!-- tests everything but system -->
-	<target name="test" depends="testCore, testCreation, testEnumerationCreation, testBdtCreation, testUpgradeFrom1pt0" description="Runs all non-system tests.">
+	<target name="test" depends="testCore, testCreation, testEnumerationCreation, testBdtCreation, testUpgradeFrom1pt0, testUpgradeFrom1pt1" description="Runs all non-system tests.">
 		<fail message="Data core ${failed.message}" if="core.test.failed" />
 		<fail message="Data basic creation ${failed.message}" if="basic.creation.test.failed" />
 		<fail message="Data enumeration creation ${failed.message}" if="enumeration.creation.test.failed" />
 		<fail message="Data BDT creation ${failed.message}" if="bdt.creation.test.failed" />
-		<fail message="Data upgrade ${failed.message}" if="upgrade.test.failed" />
+		<fail message="Data upgrade from 1.0 ${failed.message}" if="upgrade.1.0.test.failed" />
+		<fail message="Data upgrade from 1.1 ${failed.message}" if="upgrade.1.1.test.failed" />
 	</target>
 
 
@@ -200,7 +201,7 @@
 	<!-- tests upgrading a 1.0 service to current -->
 	<target name="testUpgradeFrom1pt0" depends="setGlobus, prepareClasspaths" description="Tests the ability to upgrade a service from 1.0 to the current version" unless="upgrade.1pt0.completed">
 		<mkdir dir="${junit.results.dir}" />
-		<junit dir="${introduce.dir}" printsummary="yes" haltonerror="${halt.on.error}" haltonfailure="${halt.on.error}" errorproperty="upgrade.test.failed" failureproperty="upgrade.test.failed" showoutput="true" fork="yes">
+		<junit dir="${introduce.dir}" printsummary="yes" haltonerror="${halt.on.error}" haltonfailure="${halt.on.error}" errorproperty="upgrade.1.0.test.failed" failureproperty="upgrade.1.0.test.failed" showoutput="true" fork="yes">
 			<jvmarg value="-Dintroduce.base.dir=../introduce" />
 			<classpath refid="all.test.classpath" />
 			<classpath>
@@ -216,13 +217,40 @@
 			<test if="testcase" name="${testcase}" fork="no" todir="${junit.results.dir}" />
 			<batchtest unless="testcase" fork="yes" todir="${junit.results.dir}">
 				<fileset dir="${test.src.dir}">
-					<include name="**/Upgrade*To1pt2Tests.java" />
+					<include name="**/from1pt0/**Upgrade*To1pt2Tests.java" />
 				</fileset>
 			</batchtest>
 		</junit>
 		<property name="upgrade.1pt0.completed" value="true" />
 	</target>
 
+	
+	<!-- tests upgrading a 1.1 service to current -->
+	<target name="testUpgradeFrom1pt1" depends="setGlobus, prepareClasspaths" description="Tests the ability to upgrade a service from 1.1 to the current version" unless="upgrade.1pt1.completed">
+		<mkdir dir="${junit.results.dir}" />
+		<junit dir="${introduce.dir}" printsummary="yes" haltonerror="${halt.on.error}" haltonfailure="${halt.on.error}" errorproperty="upgrade.1.1.test.failed" failureproperty="upgrade.1.1.test.failed" showoutput="true" fork="yes">
+			<jvmarg value="-Dintroduce.base.dir=../introduce" />
+			<classpath refid="all.test.classpath" />
+			<classpath>
+				<pathelement path="${test.classes.dir}" />
+			</classpath>
+			<!-- also needs the other extensions (such as metadata) to be upgraded, so need their upgraders on the classpath -->
+			<classpath>
+				<fileset dir="${introduce.dir}/extensions/lib">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+			<formatter type="xml" />
+			<test if="testcase" name="${testcase}" fork="no" todir="${junit.results.dir}" />
+			<batchtest unless="testcase" fork="yes" todir="${junit.results.dir}">
+				<fileset dir="${test.src.dir}">
+					<include name="**/from1pt1/**/Upgrade*To1pt2Tests.java" />
+				</fileset>
+			</batchtest>
+		</junit>
+		<property name="upgrade.1pt1.completed" value="true" />
+	</target>
+	
 
 	<!-- system tests against the service upgraded from 1.0 to current -->
 	<target name="testUpgradedFrom1pt0System" depends="setGlobus, testUpgradeFrom1pt0" description="Performs system tests on the upgraded (1.0 to current) service">

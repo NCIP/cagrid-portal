@@ -28,7 +28,7 @@ public class UpgradeIntroduceServiceStep extends Step {
     public void runStep() throws Throwable {
         // create the introduce upgrade manager
         UpgradeManager upgrader = new UpgradeManager(serviceDir);
-        assertTrue("Introduce service should have required upgrade to 1.1", upgrader.canIntroduceBeUpgraded());
+        assertTrue("Introduce service should have required upgrade to 1.2", upgrader.canIntroduceBeUpgraded());
         upgrader.upgrade();
 
         try {
