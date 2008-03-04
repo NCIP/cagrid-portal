@@ -8,8 +8,12 @@
 	<target name="upgradeConfiguration">
 		<property name="service.deployment.dir" value="${tomcat.deploy.dir}/etc/${service.deployment.dir.name}" />
 		<copy file="${service.deployment.dir}/dorian-conf.xml" tofile="etc/dorian-conf.xml" />
-		<replace file="etc/dorian-conf.xml" token="database" value="DatabaseConfiguration" />
+		<replace file="etc/dorian-conf.xml">
+			<replacefilter token="&lt;database&gt;" value="&lt;DatabaseConfiguration&gt;" />
+			<replacefilter token="&lt;/database&gt;" value="&lt;/DatabaseConfiguration&gt;" />
+		</replace>
 	</target>
+
 
 	<target name="deleteOlderJars">
 		<property name="service.lib.dir" value="${tomcat.deploy.dir}/lib" />
