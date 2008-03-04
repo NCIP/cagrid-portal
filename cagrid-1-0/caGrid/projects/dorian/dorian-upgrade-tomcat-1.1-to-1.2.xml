@@ -3,7 +3,7 @@
 	<import file="build.xml" />
 
 
-	<target name="upgradeTomcat" description="" depends="all,upgrade, setDeploymentProperties, upgradeConfiguration, deleteOlderJars, deployTomcat" />
+	<target name="upgradeTomcat" description="" depends="all, setDeploymentProperties, upgradeConfiguration, upgrade, deleteOlderJars, deployTomcat" />
 
 	<target name="upgradeConfiguration">
 		<property name="service.deployment.dir" value="${tomcat.deploy.dir}/etc/${service.deployment.dir.name}" />
