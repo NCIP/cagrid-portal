@@ -11,12 +11,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.FutureTask;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 import javax.xml.rpc.ServiceException;
 
@@ -55,8 +49,8 @@ public class GlobusServiceContainer extends ServiceContainer {
     public static final String GLOBUS_CONTAINER_CLASSNAME = "org.globus.wsrf.container.ServiceContainer";
     public static final String GLOBUS_SHUTDOWN_CLASSNAME = "org.globus.wsrf.container.ShutdownClient";
 
-    public static final int DEFAULT_SHUTDOWN_WAIT_TIME = 10; // seconds
-    public static final int DEFAULT_STARTUP_WAIT_TIME = 10; // seconds
+    public static final int DEFAULT_SHUTDOWN_WAIT_TIME = 60; // seconds
+    public static final int DEFAULT_STARTUP_WAIT_TIME = 60; // seconds
 
     public static final String ENV_ANT_HOME = "ANT_HOME";
     public static final String ENV_GLOBUS_LOCATION = "GLOBUS_LOCATION";

@@ -4,7 +4,7 @@ introduce.patch.version=0
 introduce.update.site=@introduce.update.site@
 
 #Statistics Related
-introduce.statistics.site=@introduce.statistics.site@s
+introduce.statistics.site=@introduce.statistics.site@
 introduce.statistics.port=@introduce.statistics.port@
 introduce.statistics.collect=@introduce.statistics.collect@
 
