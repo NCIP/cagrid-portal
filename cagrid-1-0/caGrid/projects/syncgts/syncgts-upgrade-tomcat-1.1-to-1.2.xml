@@ -1,4 +1,4 @@
-<project name="Upgrade Tomcat Dorian 1.1 to 1.2" basedir="." default="upgradeTomcat">
+<project name="Upgrade Tomcat SyncGTS 1.1 to 1.2" basedir="." default="upgradeTomcat">
 
 	<import file="build.xml" />
 
@@ -7,7 +7,7 @@
 
 	<target name="upgradeConfiguration">
 		<property name="service.deployment.dir" value="${tomcat.deploy.dir}/etc/${service.deployment.dir.name}" />
-		<copy file="${service.deployment.dir}/sync-description.xml" tofile="ext/target_grid/sync-description.xml" />
+		<copy overwrite="true" file="${service.deployment.dir}/sync-description.xml" tofile="ext/target_grid/sync-description.xml" />
 	</target>
 
 
