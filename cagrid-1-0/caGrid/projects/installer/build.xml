@@ -155,10 +155,8 @@
 
 	<target name="run-installer" depends="dist-installer">
 		<mkdir dir="${build}/temp" />
-
 		<unzip src="build/${project.zip.name}" dest="${build}/temp" />
-
-		<java jar="${build}/temp/${project.jar.name}" fork="true" />
+		<java jar="${build}/temp/${project.jar.name}" fork="true" dir="${build}/temp" failonerror="true"/>
 	</target>
 
 </project>
