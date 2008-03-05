@@ -4,7 +4,7 @@
         <license name="BSD" url="http://www.opensource.org/licenses/bsd-license.php"/>
         <ivyauthor name="jayasoft" url="http://www.jayasoft.org/"/>
         <description homepage="http://asm.objectweb.org/"> ASM is a Java bytecode manipulation
-            framework<br/>
+            framework
         </description>
     </info>
 </ivy-module>

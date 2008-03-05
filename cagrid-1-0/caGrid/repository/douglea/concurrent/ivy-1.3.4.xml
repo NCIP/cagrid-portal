@@ -9,7 +9,7 @@
         <description
             homepage="http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/intro.html"
             > This package provides standardized, efficient versions of utility classes commonly
-            encountered in concurrent Java programming<br/><br/> J2SE5 package java.util.concurrent
+            encountered in concurrent Java programming J2SE5 package java.util.concurrent
             includes improved, more efficient, standardized versions of the main components in this
             package. </description>
     </info>

@@ -9,7 +9,7 @@
         <description homepage="http://jakarta.apache.org/commons/lang"> The Lang Component provides
             a host of helper utilities for the java.lang API, notably String manipulation methods,
             basic numerical methods, object reflection, creation and serialization, and System
-            properties.<br/> This ivy file has been written from the maven dependencies declarations
+            properties. This ivy file has been written from the maven dependencies declarations
             for the project. </description>
     </info>
 </ivy-module>

@@ -7,7 +7,7 @@
         <description homepage="http://java.sun.com/products/jta"> JTA (Java Transaction API)
             specifies standard Java interfaces between a transaction manager and the parties
             involved in a distributed transaction system: the resource manager, the application
-            server, and the transactional applications.<br/>
+            server, and the transactional applications.
         </description>
     </info>
 </ivy-module>

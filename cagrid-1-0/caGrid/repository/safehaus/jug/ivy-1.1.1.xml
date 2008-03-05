@@ -7,7 +7,7 @@
 
         <description homepage="http://java.sun.com/products/jta"> "JUG is a pure java UUID
             generator, that can be used either as a component in a bigger application, or as a
-            standalone command line tool (a la 'uuidgen')."<br/>
+            standalone command line tool (a la 'uuidgen')."
         </description>
     </info>
 </ivy-module>

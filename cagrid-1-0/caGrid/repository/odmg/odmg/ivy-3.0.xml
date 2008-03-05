@@ -4,7 +4,7 @@
         publication="20030205184700">
         <ivyauthor name="jayasoft" url="http://www.jayasoft.org/"/>
         <description homepage="http://www.odmg.org/"> Standard for object-relational mapping
-            products as well as object DBMSs<br/>
+            products as well as object DBMSs
         </description>
     </info>
 </ivy-module>

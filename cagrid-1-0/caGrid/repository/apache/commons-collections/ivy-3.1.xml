@@ -8,7 +8,7 @@
 
         <description homepage="http://jakarta.apache.org/commons/collections/"> Commons-Collections
             seek to build upon the JDK classes by providing new interfaces, implementations and
-            utilities.<br/>
+            utilities.
         </description>
     </info>
 </ivy-module>

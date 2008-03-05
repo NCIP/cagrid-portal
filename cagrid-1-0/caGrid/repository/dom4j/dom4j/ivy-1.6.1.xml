@@ -6,7 +6,7 @@
         <ivyauthor name="jayasoft" url="http://www.jayasoft.org/"/>
         <description homepage="http://www.dom4j.org/"> dom4j is an easy to use, open source library
             for working with XML, XPath and XSLT on the Java platform using the Java Collections
-            Framework and with full support for DOM, SAX and JAXP.<br/>
+            Framework and with full support for DOM, SAX and JAXP.
         </description>
     </info>
 </ivy-module>
