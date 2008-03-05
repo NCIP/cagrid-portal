@@ -19,183 +19,192 @@ import org.cagrid.installer.util.InstallerUtils;
 import org.cagrid.installer.util.MD5Checksum;
 import org.pietschy.wizard.InvalidStateException;
 
+
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
- * 
  */
 public class DownloadFileTask extends BasicTask {
 
-	private static final int BUFFER_SIZE = 1024;
+    private static final int BUFFER_SIZE = 1024;
 
-	private static final int LOGAFTER_SIZE = BUFFER_SIZE * 1000;
+    private static final int LOGAFTER_SIZE = BUFFER_SIZE * 1000;
 
-	private static final int NUM_ATTEMPTS = 2;
+    private static final int NUM_ATTEMPTS = 2;
 
-	private static final Log logger = LogFactory.getLog(DownloadFileTask.class);
+    private static final Log logger = LogFactory.getLog(DownloadFileTask.class);
 
-	private String fromUrlProp;
+    private String fromUrlProp;
 
-	private String toFileProp;
+    private String toFileProp;
 
-	private String checksumProp;
+    private String checksumProp;
 
-	// Max time to wait for connection
-	private long connectTimeout;
+    // Max time to wait for connection
+    private long connectTimeout;
 
-	/**
-	 * @param name
-	 * @param description
-	 */
-	public DownloadFileTask(String name, String description,
-			String fromUrlProp, String toFileProp, String checksumProp,
-			long timeout) {
-		super(name, description);
-		this.fromUrlProp = fromUrlProp;
-		this.toFileProp = toFileProp;
-		this.checksumProp = checksumProp;
-		this.connectTimeout = timeout;
-	}
 
-	protected Object internalExecute(CaGridInstallerModel model)
-			throws Exception {
+    /**
+     * @param name
+     * @param description
+     */
+    public DownloadFileTask(String name, String description, String fromUrlProp, String toFileProp,
+        String checksumProp, long timeout) {
+        super(name, description);
+        this.fromUrlProp = fromUrlProp;
+        this.toFileProp = toFileProp;
+        this.checksumProp = checksumProp;
+        this.connectTimeout = timeout;
+    }
 
-		String fromUrl = model.getProperty(this.fromUrlProp);
 
-		URL url = null;
-		try {
-			url = new URL(fromUrl);
-		} catch (MalformedURLException ex) {
-			throw new RuntimeException("Bad URL: '" + fromUrl + "'", ex);
-		}
+    @Override
+    protected Object internalExecute(CaGridInstallerModel model) throws Exception {
 
-		String toFile = model.getProperty(Constants.TEMP_DIR_PATH) + "/"
-				+ model.getProperty(this.toFileProp);
+        String fromUrl = model.getProperty(this.fromUrlProp);
 
-		boolean enforceChecksum = true;
-		String expectedChecksum = model.getProperty(this.checksumProp);
-		if (InstallerUtils.isEmpty(expectedChecksum)) {
-			enforceChecksum = false;
-			logger.warn("No checksum specified for '" + fromUrl + "'");
-		}
+        URL url = null;
+        try {
+            url = new URL(fromUrl);
+        } catch (MalformedURLException ex) {
+            throw new RuntimeException("Bad URL: '" + fromUrl + "'", ex);
+        }
 
-		String checksum = null;
-		for (int i = 0; i < NUM_ATTEMPTS; i++) {
-			try {
-				download(url, new File(toFile));
-				if (!enforceChecksum) {
-					break;
-				} else {
-					checksum = MD5Checksum.getChecksum(toFile);
-					if (expectedChecksum.equals(checksum)) {
-						break;
-					} else {
-						logger.warn("Downloaded file '" + toFile
-								+ "' is corrupted.");
-					}
-				}
-			} catch (Exception ex) {
-				logger.warn("Failed attempt (" + (i + 1) + ") to download '"
-						+ fromUrl + "': " + ex.getMessage(), ex);
-			}
-		}
-		if (enforceChecksum && !expectedChecksum.equals(checksum)) {
-			throw new InvalidStateException("Could not download '" + fromUrl
-					+ "'. See logs for details.");
-		}
+        String toFile = model.getProperty(Constants.TEMP_DIR_PATH) + "/" + model.getProperty(this.toFileProp);
 
-		return null;
-	}
+        boolean enforceChecksum = true;
+        String expectedChecksum = model.getProperty(this.checksumProp);
+        if (InstallerUtils.isEmpty(expectedChecksum)) {
+            enforceChecksum = false;
+            logger.warn("No checksum specified for '" + fromUrl + "'");
+        }
 
-	private void download(URL fromUrl, File toFile) throws Exception {
+        String checksum = null;
+        for (int i = 0; i < NUM_ATTEMPTS; i++) {
+            try {
+                download(url, new File(toFile), this.connectTimeout);
+                if (!enforceChecksum) {
+                    break;
+                } else {
+                    checksum = MD5Checksum.getChecksum(toFile);
+                    if (expectedChecksum.equals(checksum)) {
+                        break;
+                    } else {
+                        logger.warn("Downloaded file '" + toFile + "' is corrupted.  Expected checksum ("
+                            + expectedChecksum + ") but recieved (" + checksum + ").");
+                    }
+                }
+            } catch (Exception ex) {
+                logger.warn("Failed attempt (" + (i + 1) + ") to download '" + fromUrl + "': " + ex.getMessage(), ex);
+            }
+        }
+        if (enforceChecksum && !expectedChecksum.equals(checksum)) {
+            throw new InvalidStateException("Could not download '" + fromUrl + "'. See logs for details.");
+        }
 
-		ConnectThread t = new ConnectThread(fromUrl);
-		t.start();
-		try {
-			t.join(this.connectTimeout);
-		} catch (InterruptedException ex) {
-			throw new RuntimeException("Thread interrupted", ex);
-		}
+        return null;
+    }
 
-		if (t.getEx() != null) {
-			throw new RuntimeException("Error connecting to " + fromUrl + ": "
-					+ t.getEx().getMessage(), t.getEx());
-		}
-		if (!t.isFinished()) {
-			throw new RuntimeException("Connection to " + fromUrl
-					+ " timed out.");
-		}
-		InputStream inputStream = t.getIn();
 
-		BufferedOutputStream out = new BufferedOutputStream(
-				new FileOutputStream(toFile));
-		byte[] buffer = new byte[BUFFER_SIZE];
-		int len = -1;
-		int bytesRead = 0;
-		int nextLog = -1;
-		String lastMsg = null;
-		while ((len = inputStream.read(buffer)) > 0) {
-			out.write(buffer, 0, len);
-			bytesRead += len;
+    private static void download(URL fromUrl, File toFile, long connectTimeout) throws Exception {
 
-			if (bytesRead > nextLog) {
-				nextLog += LOGAFTER_SIZE;
-				double percent = bytesRead / (double) t.getTotalBytes();
-				String currMsg = Math.round(percent * 100) + " % complete";
-				if (!currMsg.equals(lastMsg)) {
-					System.out.println(currMsg);
-				}
-				lastMsg = currMsg;
-			}
+        ConnectThread t = new ConnectThread(fromUrl);
+        t.start();
+        try {
+            t.join(connectTimeout);
+        } catch (InterruptedException ex) {
+            throw new RuntimeException("Thread interrupted", ex);
+        }
 
-		}
-		out.flush();
-		out.close();
-		inputStream.close();
+        if (t.getEx() != null) {
+            throw new RuntimeException("Error connecting to " + fromUrl + ": " + t.getEx().getMessage(), t.getEx());
+        }
+        if (!t.isFinished()) {
+            throw new RuntimeException("Connection to " + fromUrl + " timed out.");
+        }
+        InputStream inputStream = t.getIn();
 
-	}
+        BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(toFile));
+        byte[] buffer = new byte[BUFFER_SIZE];
+        int len = -1;
+        int bytesRead = 0;
+        int nextLog = -1;
+        String lastMsg = null;
+        while ((len = inputStream.read(buffer)) != -1) {
+            out.write(buffer, 0, len);
+            bytesRead += len;
 
-	private class ConnectThread extends Thread {
-		private InputStream in;
+            if (bytesRead > nextLog) {
+                nextLog += LOGAFTER_SIZE;
+                double percent = bytesRead / (double) t.getTotalBytes();
+                String currMsg = "";
+                if (percent > 0) {
+                    currMsg = Math.round(percent * 100) + " % complete";
+                } else {
+                    currMsg = "Read " + bytesRead + " bytes of unknown total size.";
+                }
 
-		private Exception ex;
+                if (!currMsg.equals(lastMsg)) {
+                    System.out.println(currMsg);
+                }
+                lastMsg = currMsg;
+            }
 
-		private boolean finished;
+        }
+        out.flush();
+        out.close();
+        inputStream.close();
+    }
 
-		private URL url;
 
-		int totalBytes;
+    private static class ConnectThread extends Thread {
+        private InputStream in;
 
-		ConnectThread(URL url) {
-			this.url = url;
-		}
+        private Exception ex;
 
-		public void run() {
-			try {
-				URLConnection conn = this.url.openConnection();
-				conn.connect();
-				this.totalBytes = conn.getContentLength();
-				this.in = conn.getInputStream();
-				this.finished = true;
-			} catch (Exception ex) {
-				this.ex = ex;
-			}
-		}
+        private boolean finished;
 
-		int getTotalBytes() {
-			return this.totalBytes;
-		}
+        private URL url;
 
-		Exception getEx() {
-			return this.ex;
-		}
+        int totalBytes;
 
-		boolean isFinished() {
-			return this.finished;
-		}
 
-		InputStream getIn() {
-			return this.in;
-		}
-	}
+        ConnectThread(URL url) {
+            this.url = url;
+            this.setDaemon(true);
+        }
 
+
+        @Override
+        public void run() {
+            try {
+                URLConnection conn = this.url.openConnection();
+                conn.connect();
+                this.totalBytes = conn.getContentLength();
+                this.in = conn.getInputStream();
+                this.finished = true;
+            } catch (Exception e) {
+                this.ex = e;
+            }
+        }
+
+
+        int getTotalBytes() {
+            return this.totalBytes;
+        }
+
+
+        Exception getEx() {
+            return this.ex;
+        }
+
+
+        boolean isFinished() {
+            return this.finished;
+        }
+
+
+        InputStream getIn() {
+            return this.in;
+        }
+    }
 }
