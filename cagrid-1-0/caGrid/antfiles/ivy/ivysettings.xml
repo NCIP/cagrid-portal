@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ivysettings>
-  <!--
+  <settings defaultResolver="caGrid-ivy-resolver" circularDependencyStrategy="error"/>/> <!--
     TODO: I had to set checkUpToDate="false" so target grids would resolve properly...
     The cache was correct, but it was not copying artificats to projects if the previous date was newer than the new date
     It should retrieve the necessary version regardless of the date... not sure why it does that.
     
     Since we are only using local resolvers I'd like to disable the cache all together... don't think you can
   -->
-  <settings defaultResolver="caGrid-ivy-resolver" checkUpToDate="false" circularDependencyStrategy="error"/>/>
-
+  <caches checkUpToDate="false"/>
   <macrodef name="cagrid-fs-resolver">
     <attribute name="repo.dir"/>
     <filesystem name="fs" local="true">
@@ -17,7 +16,6 @@
       <artifact pattern="@{repo.dir}/[organisation]/[module]/[revision]/[artifact].[ext]"/>
     </filesystem>
   </macrodef>
-
   <resolvers>
     <chain name="caGrid-ivy-resolver" returnFirst="true">
       <!-- First, try developer's local integration repository-->
