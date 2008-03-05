@@ -30,6 +30,7 @@
 
     <!-- External Dependencies -->
     <dependency rev="3.0" org="jasig" name="cas-client-core" conf="default->default"/>
+    <dependency rev="syncgts-patched-4.0.3" org="globus" name="jcog" conf="default->default"/>
 
   </dependencies>
 </ivy-module>
