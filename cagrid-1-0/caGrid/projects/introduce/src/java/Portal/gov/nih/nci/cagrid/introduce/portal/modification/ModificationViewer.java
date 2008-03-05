@@ -276,7 +276,7 @@ public class ModificationViewer extends ApplicationComponent {
             e.printStackTrace();
         }
         if (beenDisposed) {
-            throw new Exception("Unable to modify service at " + this.methodsDirectory.getAbsolutePath());
+            throw new Exception("Unable to modify service or service modification exited on service at " + this.methodsDirectory.getAbsolutePath());
         }
     }
 

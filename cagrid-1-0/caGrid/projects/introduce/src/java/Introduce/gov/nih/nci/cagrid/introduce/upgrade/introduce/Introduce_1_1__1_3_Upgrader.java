@@ -52,24 +52,33 @@ public class Introduce_1_1__1_3_Upgrader extends IntroduceUpgraderBase {
             + File.separator + "build.xml.OLD"));
         Utils.copyFile(new File(getServicePath() + File.separator + "build-deploy.xml"), new File(getServicePath()
             + File.separator + "build-deploy.xml.OLD"));
-        Utils.copyFile(new File(getServicePath() + File.separator + "dev-build.xml"), new File(getServicePath()
-            + File.separator + "dev-build.xml.OLD"));
-        Utils.copyFile(new File(getServicePath() + File.separator + "dev-build-deploy.xml"), new File(getServicePath()
-            + File.separator + "dev-build-deploy.xml.OLD"));
         Utils.copyFile(new File("." + File.separator + "skeleton" + File.separator + "build.xml"), new File(
             getServicePath() + File.separator + "build.xml"));
-        Utils.copyFile(new File("." + File.separator + "skeleton" + File.separator + "dev-build.xml"), new File(
-            getServicePath() + File.separator + "dev-build.xml"));
-        getStatus().addDescriptionLine("replaced build.xml with new version");
-
         Utils.copyFile(new File("." + File.separator + "skeleton" + File.separator + "build-deploy.xml"), new File(
             getServicePath() + File.separator + "build-deploy.xml"));
-        Utils.copyFile(new File("." + File.separator + "skeleton" + File.separator + "dev-build-deploy.xml"), new File(
-            getServicePath() + File.separator + "dev-build-deploy.xml"));
-        getStatus().addDescriptionLine("replaced build-deploy.xml with new version");
+        getStatus().addDescriptionLine("replaced build.xml and build-deploy.xml with new version");
 
-        getStatus().addIssue("Replaced the build.xml file.",
-            "Put any additions you need to the service build in the dev-build.xml file which has now been created.");
+        StringBuffer devsb = Utils.fileToStringBuffer(new File(getServicePath() + File.separator
+            + "dev-build-deploy.xml"));
+        int eof = devsb.indexOf("</project>");
+        String addition = "\n\n" + "\t<!-- ============================================================== -->\n"
+            + "\t<!-- Post Undeploy Tomcat                                           -->\n"
+            + "\t<!-- ============================================================== -->\n"
+            + "\t<target name=\"postUndeployyTomcat\">\n" + "\t</target>\n\n"
+            + "\t<!-- ============================================================== -->\n"
+            + "\t<!-- Post Undeploy Globus                                           -->\n"
+            + "\t<!-- ============================================================== -->\n"
+            + "\t<target name=\"postUndeployGlobus\">\n" + "\t</target>\n\n"
+            + "\t<!-- ============================================================== -->\n"
+            + "\t<!-- Post Undeploy JBOSS                                            -->\n"
+            + "\t<!-- ============================================================== -->\n"
+            + "\t<target name=\"postUndeployJBoss\">\n" + "\t</target>\n\n";
+        devsb.insert(eof, addition);
+        FileWriter fw = new FileWriter(new File(getServicePath() + File.separator + "dev-build-deploy.xml"));
+        fw.write(devsb.toString());
+        fw.close();
+
+        getStatus().addDescriptionLine("updated build-deploy.xml with new version");
 
         Utils.copyFile(new File("." + File.separator + "skeleton" + File.separator + "build-stubs.xml"), new File(
             getServicePath() + File.separator + "build-stubs.xml"));
@@ -308,7 +317,8 @@ public class Introduce_1_1__1_3_Upgrader extends IntroduceUpgraderBase {
                 && filename.endsWith(".jar");
             boolean mobius = filename.startsWith("mobius") && filename.endsWith(".jar");
 
-            return core || advertisement || introduce ||  security || gridGrouper || csm || wsrf || mobius || otherSecurityJarsNotNeeded;
+            return core || advertisement || introduce || security || gridGrouper || csm || wsrf || mobius
+                || otherSecurityJarsNotNeeded;
         }
 
     };
@@ -324,9 +334,9 @@ public class Introduce_1_1__1_3_Upgrader extends IntroduceUpgraderBase {
         // delete the old libraries
         for (int i = 0; i < serviceLibs.length; i++) {
             boolean deleted = serviceLibs[i].delete();
-            if(deleted){
+            if (deleted) {
                 getStatus().addDescriptionLine(serviceLibs[i].getName() + " removed");
-            } else{
+            } else {
                 getStatus().addDescriptionLine(serviceLibs[i].getName() + " could not be removed");
             }
         }
