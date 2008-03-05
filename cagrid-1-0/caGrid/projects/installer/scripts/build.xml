@@ -17,7 +17,7 @@
 
 	<taskdef resource="net/sf/antcontrib/antlib.xml">
 		<classpath>
-			<fileset dir="${cagrid.home}/share/lib">
+			<fileset dir="${cagrid.home}/antfiles/lib">
 				<include name="ant-contrib*.jar" />
 			</fileset>
 		</classpath>
@@ -979,7 +979,7 @@ ${authn.svc.csm.ctx}{
 				<echo>Installing to secure container. Copying patched cog-jglobus.jar and removing crypto jars in all other web aplications.</echo>
 
 				<copy
-					file="${cagrid.home}/projects/syncgts/lib/globus-patches/cog-jglobus.jar"
+					file="${cagrid.home}/projects/syncgts/ext/dependencies/globus-patches/jars/cog-jglobus.jar"
 					todir="${tomcat.home}/common/lib" overwrite="true" />
 
 				<delete>
@@ -1013,7 +1013,7 @@ ${authn.svc.csm.ctx}{
 					</delete>				
 						
 					<copy
-						file="${cagrid.home}/projects/syncgts/lib/globus-patches/cog-jglobus.jar"
+						file="${cagrid.home}/projects/syncgts/ext/dependencies/globus-patches/jars/cog-jglobus.jar"
 						todir="${tomcat.home}/common/lib" overwrite="true" />
 					<copy todir="${tomcat.home}/common/lib"
 						overwrite="true">
@@ -1028,7 +1028,7 @@ ${authn.svc.csm.ctx}{
 			<else>
 				<!-- Installing webapp into non-secure container, without any other globus services. -->
 				<copy
-					file="${cagrid.home}/projects/syncgts/lib/globus-patches/cog-jglobus.jar"
+					file="${cagrid.home}/projects/syncgts/ext/dependencies/globus-patches/jars/cog-jglobus.jar"
 					todir="${tomcat.home}/webapps/${webapp.context.name}/WEB-INF/lib"
 					overwrite="true" />
 				<copy
