@@ -4,3 +4,4 @@ tmp
 build
 integration-repository
 .currentgrid.properties
+.cache
