@@ -32,8 +32,6 @@ public class CredentialManagerComponent extends ApplicationComponent {
 
 	private JPanel buttonPanel = null;
 
-	private JButton closeButton = null;
-
 	private JPanel proxyPanel = null;
 
 	private JComboBox proxyComboBox = null;
@@ -150,28 +148,8 @@ public class CredentialManagerComponent extends ApplicationComponent {
 			buttonPanel.add(getSaveCredentialButton(), null);
 			buttonPanel.add(getDeleteCredentialButton(), null);
 			buttonPanel.add(getSetDefaultProxyButton(), null);
-			buttonPanel.add(getCloseButton(), null);
 		}
 		return buttonPanel;
-	}
-
-	/**
-	 * This method initializes jButton
-	 * 
-	 * @return javax.swing.JButton
-	 */
-	private JButton getCloseButton() {
-		if (closeButton == null) {
-			closeButton = new JButton();
-			closeButton.setText("Close");
-			closeButton.setIcon(org.cagrid.grape.LookAndFeel.getCloseIcon());
-			closeButton.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					dispose();
-				}
-			});
-		}
-		return closeButton;
 	}
 
 	/**

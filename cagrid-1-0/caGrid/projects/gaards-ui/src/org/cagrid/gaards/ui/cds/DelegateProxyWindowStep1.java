@@ -450,6 +450,9 @@ public class DelegateProxyWindowStep1 extends ApplicationComponent implements
 		for (int i = 0; i <= maxPathLength; i++) {
 			delegatedCredentialPathLength.addItem(new Integer(i));
 		}
+		if(maxPathLength>=1){
+			delegatedCredentialPathLength.setSelectedIndex(new Integer(1));
+		}
 
 		getDelegationLifetime().setLifetime(lifetimeSeconds);
 		getIssuedCredentialLifetime().setLifetime(
