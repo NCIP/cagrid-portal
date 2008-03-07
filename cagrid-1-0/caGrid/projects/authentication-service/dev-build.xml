@@ -26,7 +26,8 @@
 	<property name="ext.dir" location="${basedir}/ext" />
 	<property name="ext.dependencies.dir" location="${ext.dir}/dependencies" />
 	<property name="ext.targetgrid.dir" location="${ext.dir}/target_grid" />
-	<property name="ext.lib.dir" location="${ext.dependencies.dir}/service/jars" />
+	<property name="ext.endorsed.dir" location="${ext.dependencies.dir}/endorsed/jars" />
+	<property name="ext.lib.dir" location="${ext.dependencies.dir}/service/jars" />	
 	<property name="ext.test.lib" value="${ext.dependencies.dir}/test/jars" />
 
 	<!--need to preset these-->

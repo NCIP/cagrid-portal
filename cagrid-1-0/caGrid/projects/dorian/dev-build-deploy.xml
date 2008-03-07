@@ -11,12 +11,12 @@
 	<!-- Pre Deploy Tomcat                                              -->
 	<!-- ============================================================== -->
 	<target name="preDeployTomcat">
-		<copy todir="${tomcat.dir}/common/endorsed">
+		<copy todir="${tomcat.dir}/common/endorsed" overwrite="true">
 			<fileset dir="${ext.endorsed.dir}">
 				<include name="*.jar" />
 			</fileset>
 		</copy>
-		<copy todir="${build.lib.dir}">
+		<copy todir="${build.lib.dir}" overwrite="true">
 			<fileset dir="${ext.lib}">
 				<include name="*.jar" />
 			</fileset>
@@ -28,12 +28,12 @@
 	<!-- Pre Deploy Globus                                              -->
 	<!-- ============================================================== -->
 	<target name="preDeployGlobus">
-		<copy todir="${ext.globus.dir}/endorsed">
+		<copy todir="${ext.globus.dir}/endorsed" overwrite="true">
 			<fileset dir="${ext.endorsed.dir}">
 				<include name="*.jar" />
 			</fileset>
 		</copy>
-		<copy todir="${build.lib.dir}">
+		<copy todir="${build.lib.dir}" overwrite="true">
 			<fileset dir="${ext.lib}">
 				<include name="*.jar" />
 			</fileset>
