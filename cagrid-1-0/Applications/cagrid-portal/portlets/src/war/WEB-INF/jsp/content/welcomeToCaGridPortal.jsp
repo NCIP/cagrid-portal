@@ -1,6 +1,6 @@
 <%@ include file="/WEB-INF/jsp/include/includes.jspf" %>
 <div style="margin-top:10px">
-<span style="font-size:180%">:: entry-point to the cancer biomedical informatics grid.</span>
+<span style="font-size:180%">Gateway to the cancer biomedical informatics grid.</span>
 <br/>
 <br/>
 <p>
@@ -12,7 +12,7 @@ participants. You can also select categories of items to be viewed on the map.
 <br/>
 <p>
 From the Tools tab, 
-you can discover services, participants, and points of contact. There, you can also query caGrid data 
+you can discover caBIG applications, services, participants, and points of contact. There, you can also query caGrid data 
 services, share your queries, and search for queries of other community members.
 </p>
 </div>

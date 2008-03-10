@@ -5,7 +5,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd
 	                             http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd">
-	                             
+
 	<portlet>
 		<description>Direct Login</description>
 		<portlet-name>cagriddirectauthn</portlet-name>
@@ -37,7 +37,7 @@
 			</preference>
 		</portlet-preferences>
 	</portlet>
-	
+
 	<portlet>
 		<description>Greeting</description>
 		<portlet-name>cagridgreeting</portlet-name>
@@ -70,10 +70,10 @@
 			<preference>
 				<name>logoutUrl</name>
 				<value>/c/portal/logout</value>
-			</preference>			
+			</preference>
 		</portlet-preferences>
 	</portlet>
-	
+
 	<portlet>
 		<description>Register</description>
 		<portlet-name>cagridregistration</portlet-name>
@@ -94,9 +94,9 @@
 			<short-title>Registration</short-title>
 			<keywords>cagrid,registration</keywords>
 		</portlet-info>
-		
+
 	</portlet>
-	
+
 	<portlet>
 		<description>News Summary</description>
 		<portlet-name>cagridnewssummary</portlet-name>
@@ -117,28 +117,28 @@
 			<short-title>News</short-title>
 			<keywords>cagrid,news</keywords>
 		</portlet-info>
-		
+
 		<portlet-preferences>
 			<preference>
 				<name>selectItemForNewsRedirectUrl</name>
 				<value>/web/guest/news</value>
 			</preference>
 			<preference>
-                <name>newsItemSelectMode</name> 
+                <name>newsItemSelectMode</name>
                 <value>INTERPORTLET</value>
             </preference>
             <preference>
-                <name>selectedNewsItemOutputQueueName</name> 
+                <name>selectedNewsItemOutputQueueName</name>
                 <value>newssummary:selectedNewsItem</value>
             </preference>
             <preference>
-                <name>newssummary:selectedNewsItem</name> 
+                <name>newssummary:selectedNewsItem</name>
                 <value>news:selectedNewsItem</value>
             </preference>
 		</portlet-preferences>
-		
+
 	</portlet>
-	                 
+
 	<portlet>
 		<description>News</description>
 		<portlet-name>cagridnews</portlet-name>
@@ -160,20 +160,20 @@
 			<short-title>News</short-title>
 			<keywords>cagrid,news</keywords>
 		</portlet-info>
-		
+
 		<portlet-preferences>
 			<preference>
-                <name>newsItemSelectMode</name> 
+                <name>newsItemSelectMode</name>
                 <value>INTERPORTLET</value>
             </preference>
             <preference>
-                <name>selectedNewsItemInputQueueName</name> 
+                <name>selectedNewsItemInputQueueName</name>
                 <value>news:selectedNewsItem</value>
             </preference>
 		</portlet-preferences>
-		
+
 	</portlet>
-	                             
+
 	<portlet>
 		<description>caGrid Status</description>
 		<portlet-name>cagridstatus</portlet-name>
@@ -195,285 +195,316 @@
 			<keywords>cagrid,status</keywords>
 		</portlet-info>
 
-		<portlet-preferences>
-			<preference>
-				<name>selectItemForDiscoveryRedirectUrl</name>
-				<value>/web/guest/tools</value>
-			</preference>
-			<preference>
-				<name>selectDirectoryForDiscoveryRedirectUrl</name>
-				<value>/web/guest/tools</value>
-			</preference>
-			<preference>
-             	<name>discoveryDirectorySelectMode</name> 
-            	<value>INTERPORTLET</value>
-         	</preference>
-         	<preference>
-            	<name>selectedDiscoveryDirectoryOutputQueueName</name> 
-            	<value>status:selectedDirectory</value>
-         	</preference>
-        	<preference>
-             	<name>status:selectedDirectory</name>
-            	<value>disc:selectedDirectory</value>
-        	</preference>
-				
-			<preference>
-             	<name>discoveryItemSelectMode</name> 
-            	<value>INTERPORTLET</value>
-         	</preference>
-         	<preference>
-            	<name>selectedDiscoveryItemOutputQueueName</name> 
-            	<value>status:selectedItem</value>
-         	</preference>
-        	<preference>
-             	<name>status:selectedItem</name>
-            	<value>disc:selectedItem</value>
-        	</preference>
-        	
-		</portlet-preferences>
-	</portlet>
-
-
-	<portlet>
-		<description>caGrid Map Portlet</description>
-		<portlet-name>cagridmap</portlet-name>
-		<display-name>caGrid Map Portlet</display-name>
-		<portlet-class>
-			org.springframework.web.portlet.DispatcherPortlet
-		</portlet-class>
-		<init-param>
-			<name>contextConfigLocation</name>
-			<value>/WEB-INF/context/map-portlet.xml</value>
-		</init-param>
-		<supports>
-			<mime-type>text/html</mime-type>
-			<portlet-mode>view</portlet-mode>
-		</supports>
-		<portlet-info>
-			<title>caGrid Map Portlet</title>
-			<short-title>caGrid Map Portlet</short-title>
-			<keywords>cagrid,map</keywords>
-		</portlet-info>
-
-		<portlet-preferences>
-		
-			<preference>
-				<name>selectItemForDiscoveryRedirectUrl</name>
-				<value>/web/guest/tools</value>
-			</preference>	
-			<preference>
-             	<name>discoveryItemSelectMode</name> 
-            	<value>INTERPORTLET</value>
-         	</preference>
-         	<preference>
-            	<name>selectedDiscoveryItemOutputQueueName</name> 
-            	<value>map:selectedItem</value>
-         	</preference>
-        	<preference>
-             	<name>map:selectedItem</name>
-            	<value>disc:selectedItem</value>
-        	</preference>
-        	
-        	<preference>
-				<name>selectItemsForDiscoveryRedirectUrl</name>
-				<value>/web/guest/tools</value>
-			</preference>	
-			<preference>
-             	<name>discoveryItemsSelectMode</name> 
-            	<value>INTERPORTLET</value>
-         	</preference>
-         	<preference>
-            	<name>selectedDiscoveryItemsOutputQueueName</name> 
-            	<value>map:selectedItems</value>
-         	</preference>
-        	<preference>
-             	<name>map:selectedItems</name>
-            	<value>disc:selectedResults</value>
-        	</preference>
-        	
-		</portlet-preferences>
-	</portlet>
-
-	<portlet>
-		<description>Discovery</description>
-		<portlet-name>cagriddiscovery</portlet-name>
-		<display-name>Discovery</display-name>
-		<portlet-class>
-			org.springframework.web.portlet.DispatcherPortlet
-		</portlet-class>
-		<init-param>
-			<name>contextConfigLocation</name>
-			<value>/WEB-INF/context/discovery-portlet.xml</value>
-		</init-param>
-		<supports>
-			<mime-type>text/html</mime-type>
-			<portlet-mode>view</portlet-mode>
-		</supports>
-		<portlet-info>
-			<title>Discovery</title>
-			<short-title>Discovery</short-title>
-			<keywords>cagrid,discovery</keywords>
-		</portlet-info>
-		
-		<portlet-preferences>
-		
-			<preference>
-                <name>discoveryDirectorySelectMode</name> 
+        <portlet-preferences>
+            <preference>
+                <name>selectItemForDiscoveryRedirectUrl</name>
+                <value>/web/guest/discovery</value>
+            </preference>
+            <preference>
+                <name>selectDirectoryForDiscoveryRedirectUrl</name>
+                <value>/web/guest/discovery</value>
+            </preference>
+            <preference>
+                <name>discoveryDirectorySelectMode</name>
                 <value>INTERPORTLET</value>
             </preference>
             <preference>
-                <name>selectedDiscoveryDirectoryInputQueueName</name> 
+                <name>selectedDiscoveryDirectoryOutputQueueName</name>
+                <value>status:selectedDirectory</value>
+            </preference>
+            <preference>
+                <name>status:selectedDirectory</name>
                 <value>disc:selectedDirectory</value>
             </preference>
-		
-			<preference>
-                <name>discoveryItemSelectMode</name> 
+
+            <preference>
+                <name>discoveryItemSelectMode</name>
                 <value>INTERPORTLET</value>
             </preference>
             <preference>
-                <name>selectedDiscoveryItemInputQueueName</name> 
+                <name>selectedDiscoveryItemOutputQueueName</name>
+                <value>status:selectedItem</value>
+            </preference>
+            <preference>
+                <name>status:selectedItem</name>
                 <value>disc:selectedItem</value>
             </preference>
-            
+
+        </portlet-preferences>
+    </portlet>
+
+
+    <portlet>
+        <description>caGrid Map Portlet</description>
+        <portlet-name>cagridmap</portlet-name>
+        <display-name>caGrid Map Portlet</display-name>
+        <portlet-class>
+            org.springframework.web.portlet.DispatcherPortlet
+        </portlet-class>
+        <init-param>
+            <name>contextConfigLocation</name>
+            <value>/WEB-INF/context/map-portlet.xml</value>
+        </init-param>
+        <supports>
+            <mime-type>text/html</mime-type>
+            <portlet-mode>view</portlet-mode>
+        </supports>
+        <portlet-info>
+            <title>caGrid Map Portlet</title>
+            <short-title>caGrid Map Portlet</short-title>
+            <keywords>cagrid,map</keywords>
+        </portlet-info>
+
+        <portlet-preferences>
+
             <preference>
-                <name>discoveryResultsSelectMode</name> 
+                <name>selectItemForDiscoveryRedirectUrl</name>
+                <value>/web/guest/discovery</value>
+            </preference>
+            <preference>
+                <name>discoveryItemSelectMode</name>
                 <value>INTERPORTLET</value>
             </preference>
             <preference>
-                <name>selectedDiscoveryResultsInputQueueName</name> 
+                <name>selectedDiscoveryItemOutputQueueName</name>
+                <value>map:selectedItem</value>
+            </preference>
+            <preference>
+                <name>map:selectedItem</name>
+                <value>disc:selectedItem</value>
+            </preference>
+
+            <preference>
+                <name>selectItemsForDiscoveryRedirectUrl</name>
+                <value>/web/guest/discovery</value>
+            </preference>
+            <preference>
+                <name>discoveryItemsSelectMode</name>
+                <value>INTERPORTLET</value>
+            </preference>
+            <preference>
+                <name>selectedDiscoveryItemsOutputQueueName</name>
+                <value>map:selectedItems</value>
+            </preference>
+            <preference>
+                <name>map:selectedItems</name>
                 <value>disc:selectedResults</value>
             </preference>
 
-			<preference>
-                <name>umlClassSelectMode</name> 
+        </portlet-preferences>
+    </portlet>
+
+    <portlet>
+        <description>Discovery</description>
+        <portlet-name>cagriddiscovery</portlet-name>
+        <display-name>Discovery</display-name>
+        <portlet-class>
+            org.springframework.web.portlet.DispatcherPortlet
+        </portlet-class>
+        <init-param>
+            <name>contextConfigLocation</name>
+            <value>/WEB-INF/context/discovery-portlet.xml</value>
+        </init-param>
+        <supports>
+            <mime-type>text/html</mime-type>
+            <portlet-mode>view</portlet-mode>
+        </supports>
+        <portlet-info>
+            <title>Discovery</title>
+            <short-title>Discovery</short-title>
+            <keywords>cagrid,discovery</keywords>
+        </portlet-info>
+
+        <portlet-preferences>
+
+            <preference>
+                <name>discoveryDirectorySelectMode</name>
                 <value>INTERPORTLET</value>
             </preference>
             <preference>
-                <name>selectedUmlClassOutputQueueName</name> 
+                <name>selectedDiscoveryDirectoryInputQueueName</name>
+                <value>disc:selectedDirectory</value>
+            </preference>
+
+            <preference>
+                <name>discoveryItemSelectMode</name>
+                <value>INTERPORTLET</value>
+            </preference>
+            <preference>
+                <name>selectedDiscoveryItemInputQueueName</name>
+                <value>disc:selectedItem</value>
+            </preference>
+
+            <preference>
+                <name>discoveryResultsSelectMode</name>
+                <value>INTERPORTLET</value>
+            </preference>
+            <preference>
+                <name>selectedDiscoveryResultsInputQueueName</name>
+                <value>disc:selectedResults</value>
+            </preference>
+
+            <preference>
+                <name>umlClassSelectMode</name>
+                <value>INTERPORTLET</value>
+            </preference>
+            <preference>
+                <name>selectedUmlClassOutputQueueName</name>
                 <value>disc:selectedUmlClassId</value>
             </preference>
             <preference>
                 <name>disc:selectedUmlClassId</name>
                 <value>query:selectedUmlClassId</value>
             </preference>
-            
+
             <preference>
-                <name>dataServiceSelectMode</name> 
+                <name>dataServiceSelectMode</name>
                 <value>INTERPORTLET</value>
             </preference>
             <preference>
-                <name>selectedDataServiceOutputQueueName</name> 
+                <name>selectedDataServiceOutputQueueName</name>
                 <value>disc:selectedDataServiceId</value>
             </preference>
             <preference>
                 <name>disc:selectedDataServiceId</name>
                 <value>query:selectedDataServiceId</value>
             </preference>
-            
+
         </portlet-preferences>
-		
-	</portlet>
-	
-	<portlet>
-		<description>Data Service Query</description>
-		<portlet-name>cagridquery</portlet-name>
-		<display-name>Data Service Query</display-name>
-		<portlet-class>
-			org.springframework.web.portlet.DispatcherPortlet
-		</portlet-class>
-		<init-param>
-			<name>contextConfigLocation</name>
-			<value>/WEB-INF/context/query-portlet.xml</value>
-		</init-param>
-		<supports>
-			<mime-type>text/html</mime-type>
-			<portlet-mode>view</portlet-mode>
-		</supports>
-		<portlet-info>
-			<title>Data Service Query</title>
-			<short-title>Data Service Query</short-title>
-			<keywords>cagrid,query</keywords>
-		</portlet-info>
-		
-		<portlet-preferences>
-		
-			<preference>
-                <name>umlClassSelectMode</name> 
+
+    </portlet>
+
+    <portlet>
+        <description>Data Service Query</description>
+        <portlet-name>cagridquery</portlet-name>
+        <display-name>Data Service Query</display-name>
+        <portlet-class>
+            org.springframework.web.portlet.DispatcherPortlet
+        </portlet-class>
+        <init-param>
+            <name>contextConfigLocation</name>
+            <value>/WEB-INF/context/query-portlet.xml</value>
+        </init-param>
+        <supports>
+            <mime-type>text/html</mime-type>
+            <portlet-mode>view</portlet-mode>
+        </supports>
+        <portlet-info>
+            <title>Data Service Query</title>
+            <short-title>Data Service Query</short-title>
+            <keywords>cagrid,query</keywords>
+        </portlet-info>
+
+        <portlet-preferences>
+
+            <preference>
+                <name>umlClassSelectMode</name>
                 <value>INTERPORTLET</value>
             </preference>
             <preference>
-                <name>selectedUmlClassInputQueueName</name> 
+                <name>selectedUmlClassInputQueueName</name>
                 <value>query:selectedUmlClassId</value>
             </preference>
-            
+
             <preference>
-                <name>dataServiceSelectMode</name> 
+                <name>dataServiceSelectMode</name>
                 <value>INTERPORTLET</value>
             </preference>
             <preference>
-                <name>selectedDataServiceInputQueueName</name> 
+                <name>selectedDataServiceInputQueueName</name>
                 <value>query:selectedDataServiceId</value>
             </preference>
-            
-        </portlet-preferences>
-	</portlet>
 
-	<portlet>
-		<description>Content introducing the caGrid Portal</description>
-		<portlet-name>WelcomeToCaGridPortal</portlet-name>
-		<display-name>Welcome to caGrid Portal</display-name>
-		<portlet-class>
-			org.springframework.web.portlet.DispatcherPortlet
-		</portlet-class>
-		<init-param>
-			<name>contextConfigLocation</name>
-			<value>/WEB-INF/context/content-portlet.xml</value>
-		</init-param>
-		<supports>
-			<mime-type>text/html</mime-type>
-			<portlet-mode>view</portlet-mode>
-			<portlet-mode>edit</portlet-mode>
-		</supports>
-		<portlet-info>
-			<title>Welcome to caGrid Portal</title>
-			<short-title>Welcome</short-title>
-			<keywords>welcome</keywords>
-		</portlet-info>
-		<portlet-preferences>
-			<preference>
-				<name>jsp</name>
-				<value>welcomeToCaGridPortal</value>
-			</preference>
-		</portlet-preferences>
-	</portlet>
-	
-	<portlet>
-		<description>Interesting Links</description>
-		<portlet-name>cagridinterestinglinks</portlet-name>
-		<display-name>Interesting Links</display-name>
-		<portlet-class>
-			org.springframework.web.portlet.DispatcherPortlet
-		</portlet-class>
-		<init-param>
-			<name>contextConfigLocation</name>
-			<value>/WEB-INF/context/content-portlet.xml</value>
-		</init-param>
-		<supports>
-			<mime-type>text/html</mime-type>
-			<portlet-mode>view</portlet-mode>
-			<portlet-mode>edit</portlet-mode>
-		</supports>
-		<portlet-info>
-			<title>Interesting Links</title>
-			<short-title>Links</short-title>
-			<keywords>cagrid,links</keywords>
-		</portlet-info>
-		<portlet-preferences>
-			<preference>
-				<name>jsp</name>
-				<value>links</value>
-			</preference>
-		</portlet-preferences>
-	</portlet>
+        </portlet-preferences>
+    </portlet>
+
+    <portlet>
+        <description>Content introducing the caGrid Portal</description>
+        <portlet-name>WelcomeToCaGridPortal</portlet-name>
+        <display-name>Welcome to caGrid Portal</display-name>
+        <portlet-class>
+            org.springframework.web.portlet.DispatcherPortlet
+        </portlet-class>
+        <init-param>
+            <name>contextConfigLocation</name>
+            <value>/WEB-INF/context/content-portlet.xml</value>
+        </init-param>
+        <supports>
+            <mime-type>text/html</mime-type>
+            <portlet-mode>view</portlet-mode>
+            <portlet-mode>edit</portlet-mode>
+        </supports>
+        <portlet-info>
+            <title>Welcome to caGrid Portal</title>
+            <short-title>Welcome</short-title>
+            <keywords>welcome</keywords>
+        </portlet-info>
+        <portlet-preferences>
+            <preference>
+                <name>jsp</name>
+                <value>welcomeToCaGridPortal</value>
+            </preference>
+        </portlet-preferences>
+    </portlet>
+
+    <portlet>
+        <description>Interesting Links</description>
+        <portlet-name>cagridinterestinglinks</portlet-name>
+        <display-name>Interesting Links</display-name>
+        <portlet-class>
+            org.springframework.web.portlet.DispatcherPortlet
+        </portlet-class>
+        <init-param>
+            <name>contextConfigLocation</name>
+            <value>/WEB-INF/context/content-portlet.xml</value>
+        </init-param>
+        <supports>
+            <mime-type>text/html</mime-type>
+            <portlet-mode>view</portlet-mode>
+            <portlet-mode>edit</portlet-mode>
+        </supports>
+        <portlet-info>
+            <title>Interesting Links</title>
+            <short-title>Links</short-title>
+            <keywords>cagrid,links</keywords>
+        </portlet-info>
+        <portlet-preferences>
+            <preference>
+                <name>jsp</name>
+                <value>links</value>
+            </preference>
+        </portlet-preferences>
+    </portlet>
+
+
+    <portlet>
+        <description>caBIG Tools</description>
+        <portlet-name>cabigtools</portlet-name>
+        <display-name>caBIG Tools</display-name>
+        <portlet-class>
+            org.springframework.web.portlet.DispatcherPortlet
+        </portlet-class>
+        <init-param>
+            <name>contextConfigLocation</name>
+            <value>/WEB-INF/context/tools-portlet.xml</value>
+        </init-param>
+        <supports>
+            <mime-type>text/html</mime-type>
+            <portlet-mode>view</portlet-mode>
+            <portlet-mode>edit</portlet-mode>
+        </supports>
+        <portlet-info>
+            <title>Tools</title>
+            <short-title>Tools</short-title>
+            <keywords>cagrid,cabig,tools</keywords>
+        </portlet-info>
+        <portlet-preferences>
+            <preference>
+                <name>jsp</name>
+                <value>tools</value>
+            </preference>
+        </portlet-preferences>
+    </portlet>
+
 
 </portlet-app>

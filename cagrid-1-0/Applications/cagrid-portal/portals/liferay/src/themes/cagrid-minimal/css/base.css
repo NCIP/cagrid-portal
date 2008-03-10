@@ -39,7 +39,7 @@ abbr, acronym {
 
 body {
 	background-color: #fff;
-	font: 62.5%/1.6em 'Tahoma','Lucida Sans Unicode','Lucida Grande','Lucida',Arial,Verdana,sans-serif;
+	font: 11px 'Arial','Verdana','sans-serif','Lucida';
 }
 
 html, body {
@@ -303,3 +303,32 @@ hr, .separator {
 	padding: 2px 20px;
 	text-align: left;
 }
+
+.link-extenal {
+    background: transparent url(../images/linkext_icon.gif) no-repeat scroll right center ;
+    padding:1px 16px 1px 0px;
+}
+
+
+div.row {
+    padding: 2px;
+    margin: 1px 0;
+}
+
+div.row div.label div.value {
+    line-height: 1.5em;
+    font-weight: normal;
+}
+
+div.row div.label {
+    font-weight: bold;
+    float: left;
+    margin-left:-6px;
+}
+
+div.value{
+    margin-left:25px;
+}
+
+
+

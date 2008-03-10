@@ -24,8 +24,9 @@ public class ServiceInfo {
 	private String urlAbbrv;
 	private String id;
 	private ServiceType type;
-	
-	/**
+    private boolean secure;
+
+    /**
 	 * @param service 
 	 * 
 	 */
@@ -38,7 +39,7 @@ public class ServiceInfo {
 		setStatus(service.getCurrentStatus().toString());
 		setUrl(service.getUrl());
 		try{
-			setUrlAbbrv(getUrl().substring(0, Math.min(35, getUrl().length() - 1)));
+			setUrlAbbrv(getUrl().substring(0, Math.min(getUrl().indexOf("/"), getUrl().length() - 1)) + "..");
 		}catch(Exception ex){
 			setUrlAbbrv("");
 			logger.error("Error generating urlAbbrv: " + ex.getMessage(), ex);
@@ -49,7 +50,8 @@ public class ServiceInfo {
 		}else{
 			setType(ServiceType.ANALYTICAL);
 		}
-	}
+        secure=url.indexOf("https")>-1?true:false;
+    }
 	
 	public ServiceInfo(){
 		
@@ -114,5 +116,12 @@ public class ServiceInfo {
 	public void setUrlAbbrv(String urlAbbrv) {
 		this.urlAbbrv = urlAbbrv;
 	}
-	
+
+    public boolean isSecure() {
+        return secure;
+    }
+
+    public void setSecure(boolean secure) {
+        this.secure = secure;
+    }
 }
