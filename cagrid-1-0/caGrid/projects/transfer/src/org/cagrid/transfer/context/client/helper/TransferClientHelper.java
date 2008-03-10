@@ -77,7 +77,7 @@ public class TransferClientHelper {
      * @return
      * @throws Exception
      */
-    public static void putData(InputStream is, int contentLength, DataTransferDescriptor desc, GlobusCredential creds) throws Exception {
+    public static void putData(InputStream is, long contentLength, DataTransferDescriptor desc, GlobusCredential creds) throws Exception {
         URL url = new URL(desc.getUrl());
         if (url.getProtocol().equals("http")) {
             PostMethod post = new PostMethod(desc.getUrl());
@@ -125,7 +125,7 @@ public class TransferClientHelper {
      * @return
      * @throws Exception
      */
-    public static void putData(InputStream is, int contentLength, DataTransferDescriptor desc) throws Exception {
+    public static void putData(InputStream is, long contentLength, DataTransferDescriptor desc) throws Exception {
         putData(is, contentLength, desc, null);
     }
 
