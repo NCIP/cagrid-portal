@@ -9,6 +9,21 @@
 	<property name="failed.message" value="Tests failed! Check test reports." />
 	<property name="testing.port.assignment.mode" value="true" />
 
+	<condition property="test.resource.available.upgrade-1.0">
+		<and>
+			<available file="${test.resources.dir}/BasicDataService_1-0.zip" />
+			<available file="${test.resources.dir}/DataServiceBackedBySDK_1-0.zip" />
+			<available file="${test.resources.dir}/DataServiceWithEnumeration_1-0.zip" />
+		</and>
+	</condition>
+	<condition property="test.resource.available.upgrade-1.1">
+		<and>
+			<available file="${test.resources.dir}/BasicDataService_1-1.zip" />
+			<available file="${test.resources.dir}/DataServiceWithBdt_1-1.zip" />
+			<available file="${test.resources.dir}/DataServiceWithSdk_1-1.zip" />
+		</and>
+	</condition>
+
 
 	<target name="prepareClasspaths">
 		<path id="Introduce.test.classpath">
@@ -199,7 +214,7 @@
 
 
 	<!-- tests upgrading a 1.0 service to current -->
-	<target name="testUpgradeFrom1pt0" depends="setGlobus, prepareClasspaths" description="Tests the ability to upgrade a service from 1.0 to the current version" unless="upgrade.1pt0.completed">
+	<target name="testUpgradeFrom1pt0" depends="setGlobus, prepareClasspaths" description="Tests the ability to upgrade a service from 1.0 to the current version" unless="upgrade.1pt0.completed" if="test.resource.available.upgrade-1.0">
 		<mkdir dir="${junit.results.dir}" />
 		<junit dir="${introduce.dir}" printsummary="yes" haltonerror="${halt.on.error}" haltonfailure="${halt.on.error}" errorproperty="upgrade.1.0.test.failed" failureproperty="upgrade.1.0.test.failed" showoutput="true" fork="yes">
 			<jvmarg value="-Dintroduce.base.dir=../introduce" />
@@ -224,9 +239,9 @@
 		<property name="upgrade.1pt0.completed" value="true" />
 	</target>
 
-	
+
 	<!-- tests upgrading a 1.1 service to current -->
-	<target name="testUpgradeFrom1pt1" depends="setGlobus, prepareClasspaths" description="Tests the ability to upgrade a service from 1.1 to the current version" unless="upgrade.1pt1.completed">
+	<target name="testUpgradeFrom1pt1" depends="setGlobus, prepareClasspaths" description="Tests the ability to upgrade a service from 1.1 to the current version" unless="upgrade.1pt1.completed" if="test.resource.available.upgrade-1.1">
 		<mkdir dir="${junit.results.dir}" />
 		<junit dir="${introduce.dir}" printsummary="yes" haltonerror="${halt.on.error}" haltonfailure="${halt.on.error}" errorproperty="upgrade.1.1.test.failed" failureproperty="upgrade.1.1.test.failed" showoutput="true" fork="yes">
 			<jvmarg value="-Dintroduce.base.dir=../introduce" />
@@ -250,10 +265,10 @@
 		</junit>
 		<property name="upgrade.1pt1.completed" value="true" />
 	</target>
-	
+
 
 	<!-- system tests against the service upgraded from 1.0 to current -->
-	<target name="testUpgradedFrom1pt0System" depends="setGlobus, testUpgradeFrom1pt0" description="Performs system tests on the upgraded (1.0 to current) service">
+	<target name="testUpgradedFrom1pt0System" depends="setGlobus, testUpgradeFrom1pt0" description="Performs system tests on the upgraded (1.0 to current) service" if="test.resource.available.upgrade-1.0">
 		<junit dir="${basedir}" printsummary="yes" haltonerror="${halt.on.error}" haltonfailure="${halt.on.error}" errorproperty="upgrade.system.test.failed" failureproperty="upgrade.system.test.failed" showoutput="true" fork="yes" forkmode="once">
 			<sysproperty key="use.testing.port.assignment" value="${testing.port.assignment.mode}" />
 			<jvmarg value="-Dintroduce.base.dir=../introduce" />
