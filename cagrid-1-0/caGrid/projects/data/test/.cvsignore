@@ -7,3 +7,6 @@ TestBDTDataService
 DataServiceWithEnumeration
 DataServiceBackedBySDK
 PlainTestDataService
+BasicDataService_1-1
+DataServiceWithBdt_1-1
+DataServiceWithSdk_1-1
