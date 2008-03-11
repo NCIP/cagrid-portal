@@ -28,7 +28,7 @@ import org.globus.wsrf.ResourceException;
 public class TransferServiceContextResource extends TransferServiceContextResourceBase {
 
     private DataStagedCallback callback = null;
-    private boolean shouldDeleteFileOnDestroy = true;
+    private boolean shouldDeleteFileOnDestroyDefault = true;
 
 
     @Override
@@ -58,7 +58,7 @@ public class TransferServiceContextResource extends TransferServiceContextResour
         }
         desc.setDataDescriptor(dd);
         desc.setStatus(Status.Staging);
-        desc.setDeleteOnDestroy(shouldDeleteFileOnDestroy);
+        desc.setDeleteOnDestroy(shouldDeleteFileOnDestroyDefault);
         setDataStorageDescriptor(desc);
     }
 
@@ -74,7 +74,7 @@ public class TransferServiceContextResource extends TransferServiceContextResour
         }
         desc.setDataDescriptor(dd);
         desc.setStatus(Status.Staging);
-        desc.setDeleteOnDestroy(shouldDeleteFileOnDestroy);
+        desc.setDeleteOnDestroy(shouldDeleteFileOnDestroyDefault);
         setDataStorageDescriptor(desc);
 
         FileOutputStream fw = new FileOutputStream(storageFile);
@@ -98,7 +98,7 @@ public class TransferServiceContextResource extends TransferServiceContextResour
         }
         desc.setDataDescriptor(dd);
         desc.setStatus(Status.Staging);
-        desc.setDeleteOnDestroy(shouldDeleteFileOnDestroy);
+        desc.setDeleteOnDestroy(shouldDeleteFileOnDestroyDefault);
         setDataStorageDescriptor(desc);
 
         FileOutputStream fw = new FileOutputStream(storageFile);
@@ -133,7 +133,7 @@ public class TransferServiceContextResource extends TransferServiceContextResour
     private void removeDataFile() throws Exception {
         if (getDataStorageDescriptor() != null && getDataStorageDescriptor().getLocation() != null) {
             String location = getDataStorageDescriptor().getLocation();
-            if (shouldDeleteFileOnDestroy) {
+            if (getDataStorageDescriptor().isDeleteOnDestroy()) {
                 File dataFile = new File(location);
                 boolean deleted = dataFile.delete();
                 if (!deleted) {
