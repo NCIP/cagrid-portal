@@ -12,7 +12,7 @@
             <name>Dorian Service(s)</name>
             <description>The URL(s) of available Dorian Service(s)</description>
             <values>
-                <value>https://dorian.cagrid.org:6443/wsrf/services/cagrid/Dorian</value>
+                <value>https://dorian.training.cagrid.org:8443/wsrf/services/cagrid/Dorian</value>
             </values>
         </property>
     </properties>
