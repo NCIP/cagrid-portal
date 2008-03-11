@@ -5,7 +5,7 @@
 
   <info organisation="caGrid" module="service-tools" revision="${project.version}">
     <license name="caGrid" url="http://www.cagrid.org/mwiki/index.php?title=CaGrid:LICENSE-1.1"/>
-    <description>Provides APIs for service advertisement</description>
+    <description>Provides utility APIs for working with events, groups, and databases.</description>
   </info>
 
   <configurations>
