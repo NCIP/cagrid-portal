@@ -3,23 +3,6 @@
  */
 package org.cagrid.installer;
 
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.cagrid.installer.authnsvc.AuthenticationServiceComponentInstaller;
@@ -36,30 +19,13 @@ import org.cagrid.installer.model.CaGridInstallerModel;
 import org.cagrid.installer.model.CaGridInstallerModelImpl;
 import org.cagrid.installer.myservice.MyServiceComponentInstaller;
 import org.cagrid.installer.portal.PortalComponentInstaller;
-import org.cagrid.installer.steps.CheckSecureContainerStep;
-import org.cagrid.installer.steps.ConfigureCAStep;
-import org.cagrid.installer.steps.ConfigureServiceCertStep;
-import org.cagrid.installer.steps.Constants;
-import org.cagrid.installer.steps.InstallationCompleteStep;
-import org.cagrid.installer.steps.PresentLicenseStep;
-import org.cagrid.installer.steps.PropertyConfigurationStep;
-import org.cagrid.installer.steps.RunTasksStep;
-import org.cagrid.installer.steps.SelectComponentStep;
-import org.cagrid.installer.steps.SelectInstallationTypeStep;
-import org.cagrid.installer.steps.SpecifyTomcatPortsStep;
+import org.cagrid.installer.steps.*;
 import org.cagrid.installer.steps.options.BooleanPropertyConfigurationOption;
 import org.cagrid.installer.steps.options.FilePropertyConfigurationOption;
 import org.cagrid.installer.steps.options.ListPropertyConfigurationOption;
 import org.cagrid.installer.steps.options.TextPropertyConfigurationOption;
 import org.cagrid.installer.syncgts.SyncGTSComponentInstaller;
-import org.cagrid.installer.tasks.ConditionalTask;
-import org.cagrid.installer.tasks.ConfigureGlobusTask;
-import org.cagrid.installer.tasks.ConfigureTomcatTask;
-import org.cagrid.installer.tasks.CopySelectedServicesToTempDirTask;
-import org.cagrid.installer.tasks.DeployGlobusToTomcatTask;
-import org.cagrid.installer.tasks.GenerateCATask;
-import org.cagrid.installer.tasks.GenerateServiceCredsTask;
-import org.cagrid.installer.tasks.SaveSettingsTask;
+import org.cagrid.installer.tasks.*;
 import org.cagrid.installer.transfer.TransferComponentInstaller;
 import org.cagrid.installer.util.InstallerUtils;
 import org.cagrid.installer.workflow.WorkflowComponentInstaller;
@@ -67,13 +33,18 @@ import org.pietschy.wizard.Wizard;
 import org.pietschy.wizard.WizardModel;
 import org.pietschy.wizard.models.Condition;
 
+import javax.swing.*;
+import java.io.*;
+import java.net.URL;
+import java.util.*;
+
 
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
  */
 public class Installer {
 
-    private static final Log logger = LogFactory.getLog(Installer.class);
+    private final Log logger;
 
     private CaGridInstallerModelImpl model;
 
@@ -89,6 +60,14 @@ public class Installer {
 
 
     public Installer() {
+
+
+        File _basePath = new File(System.getProperty("user.home") + "/" + Constants.CAGRID_BASE_DIR_NAME);
+        if(!_basePath.exists()){
+            _basePath.mkdir();
+        }
+        logger = LogFactory.getLog(Installer.class);
+        logger.debug("Logger initialized");
 
         downloadedComponentInstallers.add(new AntComponentInstaller());
         downloadedComponentInstallers.add(new TomcatComponentInstaller());
@@ -150,8 +129,23 @@ public class Installer {
 
             Map<String, String> defaultState = new HashMap<String, String>();
 
+            incrementProgress();
+
+            // Load default properties
+            Properties downloadedProps = getDownloadedProps();
+            incrementProgress();
+
+            Enumeration e = downloadedProps.propertyNames();
+            while (e.hasMoreElements()) {
+                String propName = (String) e.nextElement();
+                defaultState.put(propName, downloadedProps.getProperty(propName));
+            }
+            incrementProgress();
+
             // Set up temp dir
-            String tempDir = InstallerUtils.getInstallerTempDir();
+            String installerDir = InstallerUtils.buildInstallerDirPath(defaultState.get(Constants.CAGRID_VERSION));
+            logger.info("installer dir: " + installerDir);
+            String tempDir = installerDir + "/tmp"; 
             defaultState.put(Constants.TEMP_DIR_PATH, tempDir);
             File tempDirFile = new File(tempDir);
             if (tempDirFile.exists()) {
@@ -166,25 +160,12 @@ public class Installer {
                 throw new RuntimeException(msg, ex);
             }
 
-            incrementProgress();
-
-            // Load default properties
-            Properties downloadedProps = getDownloadedProps(tempDir);
-            incrementProgress();
-
-            Enumeration e = downloadedProps.propertyNames();
-            while (e.hasMoreElements()) {
-                String propName = (String) e.nextElement();
-                defaultState.put(propName, downloadedProps.getProperty(propName));
-            }
-            incrementProgress();
-
             // Check for presence of cagrid.installer.properties file
             String cagridInstallerFileName = System.getProperty(Constants.CAGRID_INSTALLER_PROPERTIES);
             if (cagridInstallerFileName != null) {
                 logger.info("Custom installer properties file specified: '" + cagridInstallerFileName + "'");
             } else {
-                cagridInstallerFileName = InstallerUtils.getInstallerDir() + "/"
+                cagridInstallerFileName = installerDir + "/"
                     + Constants.CAGRID_INSTALLER_PROPERTIES;
                 logger.info("Using default properties file: '" + cagridInstallerFileName + "'");
             }
@@ -255,7 +236,7 @@ public class Installer {
     }
 
 
-    private Properties getDownloadedProps(String tempDir) {
+    private Properties getDownloadedProps() {
 
         Properties defaultProps = null;
 
@@ -289,8 +270,17 @@ public class Installer {
         }
         logger.info("Downloading default properties from: " + downloadUrl);
 
-        String toFile = tempDir + "/downloaded.properties";
-        DownloadPropsThread dpt = new DownloadPropsThread(downloadUrl, toFile);
+        File toFile = null;
+		try {
+            String tempDir = new File(System.getProperty("java.io.tmpdir")).getAbsolutePath();
+			toFile = new File(tempDir + "/download.properties");
+			if(toFile.exists()){
+				toFile.delete();
+			}
+		} catch (Exception ex) {
+			handleException("Getting path for download.properties", ex);
+		}
+        DownloadPropsThread dpt = new DownloadPropsThread(downloadUrl, toFile.getAbsolutePath());
         dpt.start();
         try {
             dpt.join(Constants.CONNECT_TIMEOUT);
@@ -735,13 +725,13 @@ public class Installer {
             .getMessage("service.cert.new.info.title"), this.model.getMessage("service.cert.new.info.desc"));
         FilePropertyConfigurationOption nscPathOption = new FilePropertyConfigurationOption(
             Constants.SERVICE_CERT_PATH, this.model.getMessage("service.cert.info.cert.path"), this.model.getProperty(
-                Constants.SERVICE_CERT_PATH, InstallerUtils.getInstallerDir() + "/certs/service.cert"), true);
+                Constants.SERVICE_CERT_PATH, this.model.getInstallerDir() + "/certs/service.cert"), true);
         nscPathOption.setDirectoriesOnly(false);
         nscPathOption.setBrowseLabel(this.model.getMessage("browse"));
         newServiceCertInfoStep.getOptions().add(nscPathOption);
         FilePropertyConfigurationOption nskPathOption = new FilePropertyConfigurationOption(Constants.SERVICE_KEY_PATH,
             this.model.getMessage("service.cert.info.key.path"), this.model.getProperty(Constants.SERVICE_KEY_PATH,
-                InstallerUtils.getInstallerDir() + "/certs/service.key"), true);
+                this.model.getInstallerDir() + "/certs/service.key"), true);
         nskPathOption.setDirectoriesOnly(false);
         nskPathOption.setBrowseLabel(this.model.getMessage("browse"));
         newServiceCertInfoStep.getOptions().add(nskPathOption);

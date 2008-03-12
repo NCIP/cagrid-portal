@@ -5,17 +5,8 @@ package org.cagrid.installer.dorian;
 
 import org.cagrid.installer.CaGridComponentInstaller;
 import org.cagrid.installer.model.CaGridInstallerModel;
-import org.cagrid.installer.steps.ConfigureServiceMetadataStep;
-import org.cagrid.installer.steps.Constants;
-import org.cagrid.installer.steps.DeployPropertiesFileEditorStep;
-import org.cagrid.installer.steps.DropServiceDatabaseStep;
-import org.cagrid.installer.steps.PropertyConfigurationStep;
-import org.cagrid.installer.steps.RunTasksStep;
-import org.cagrid.installer.steps.options.BooleanPropertyConfigurationOption;
-import org.cagrid.installer.steps.options.FilePropertyConfigurationOption;
-import org.cagrid.installer.steps.options.ListPropertyConfigurationOption;
-import org.cagrid.installer.steps.options.PasswordPropertyConfigurationOption;
-import org.cagrid.installer.steps.options.TextPropertyConfigurationOption;
+import org.cagrid.installer.steps.*;
+import org.cagrid.installer.steps.options.*;
 import org.cagrid.installer.tasks.ConditionalTask;
 import org.cagrid.installer.util.InstallerUtils;
 import org.cagrid.installer.validator.DorianIdpInfoValidator;
@@ -567,7 +558,7 @@ public class DorianComponentInstaller implements CaGridComponentInstaller {
 				Constants.DORIAN_HOST_CRED_DIR, model
 						.getMessage("dorian.host.cred.dir"), model
 						.getProperty(Constants.DORIAN_HOST_CRED_DIR,
-								InstallerUtils.getInstallerDir() + "/certs"),
+								model.getInstallerDir() + "/certs"),
 				true);
 		dorianHostCredDir.setBrowseLabel(model.getMessage("browse"));
 		dorianHostCredDir.setDirectoriesOnly(true);

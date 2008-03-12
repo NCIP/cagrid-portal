@@ -3,33 +3,6 @@
  */
 package org.cagrid.installer.util;
 
-import java.awt.Component;
-import java.awt.GridBagConstraints;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.StringWriter;
-import java.lang.reflect.Method;
-import java.net.URL;
-import java.net.URLClassLoader;
-import java.sql.Connection;
-import java.sql.DriverManager;
-
-import javax.swing.BorderFactory;
-import javax.swing.JOptionPane;
-import javax.swing.JTable;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.TableColumn;
-import javax.xml.transform.Result;
-import javax.xml.transform.Source;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.cagrid.installer.model.CaGridInstallerModel;
@@ -45,6 +18,22 @@ import org.cagrid.installer.validator.PathExistsValidator;
 import org.pietschy.wizard.InvalidStateException;
 import org.w3c.dom.Node;
 
+import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableColumn;
+import javax.xml.transform.Result;
+import javax.xml.transform.Source;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import java.awt.*;
+import java.io.*;
+import java.lang.reflect.Method;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.sql.Connection;
+import java.sql.DriverManager;
 
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
@@ -150,15 +139,15 @@ public class InstallerUtils {
     }
 
 
-    public static String getInstallerTempDir() {
-        return getInstallerDir() + "/tmp";
-
-    }
-
-
-    public static String getInstallerDir() {
-        return System.getProperty("user.home") + "/.cagrid/installer";
-    }
+//    public static String getInstallerTempDir() {
+//        return getInstallerDir() + "/tmp";
+//
+//    }
+//
+//
+//    public static String getInstallerDir() {
+//        return System.getProperty("user.home") + "/.cagrid/installer";
+//    }
 
 
     public static boolean isEmpty(String value) {
@@ -453,14 +442,14 @@ public class InstallerUtils {
         String caCertPathProp, String caKeyPathProp, String caKeyPwdProp, boolean validate) {
 
         FilePropertyConfigurationOption caCertPathOption = new FilePropertyConfigurationOption(caCertPathProp, model
-            .getMessage("ca.cert.info.cert.path"), model.getProperty(caCertPathProp, InstallerUtils.getInstallerDir()
+            .getMessage("ca.cert.info.cert.path"), model.getProperty(caCertPathProp, model.getInstallerDir()
             + "/certs/ca.cert"), true);
         caCertPathOption.setDirectoriesOnly(false);
         caCertPathOption.setBrowseLabel(model.getMessage("browse"));
         step.getOptions().add(caCertPathOption);
 
         FilePropertyConfigurationOption caKeyPathOption = new FilePropertyConfigurationOption(caKeyPathProp, model
-            .getMessage("ca.cert.info.key.path"), model.getProperty(caKeyPathProp, InstallerUtils.getInstallerDir()
+            .getMessage("ca.cert.info.key.path"), model.getProperty(caKeyPathProp, model.getInstallerDir()
             + "/certs/ca.key"), true);
         caKeyPathOption.setDirectoriesOnly(false);
         caKeyPathOption.setBrowseLabel(model.getMessage("browse"));
@@ -605,6 +594,16 @@ public class InstallerUtils {
             return finished;
         }
 
+    }
+
+
+	public static String getInstallerDirBase() {
+		return System.getProperty("user.home") + "/.cagrid/installer";
+        }
+
+
+	public static String buildInstallerDirPath(String cagridVersion) {
+		return InstallerUtils.getInstallerDirBase() + "-" + cagridVersion;
     }
 
 }

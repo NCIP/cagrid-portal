@@ -24,9 +24,10 @@
 		<path location="${build}/cagrid.installer.properties" />
 	</pathconvert>
 	<!-- NOTE: these are expected to be changed/overridden when releases are created -->
+	<property name="cagrid.version" value="${project.version}"/>
 	<property name="download.properties.url" value="file:/${download.properties.path}" />
 	<property name="cagrid.download.url" value="http://localhost:8080/downloads/caGrid-${project.version}.zip" />
-	<property name="portal.download.url" value="http://gforge.nci.nih.gov/frs/download.php/3059/cagrid-portal-2.0.zip" />
+	<property name="portal.download.url" value="http://gforge.nci.nih.gov/frs/download.php/3672/cagrid-portal-2.0.1.zip" />
 
 	<fileset id="globus.jars" dir="${globus.dir}/lib">
 		<include name="commons-logging*.jar" />
@@ -147,6 +148,7 @@
 
 		<copy file="cagrid.installer.properties" todir="build" overwrite="true">
 			<filterset>
+				<filter token="CAGRID_VERSION" value="${cagrid.version}" />
 				<filter token="CAGRID_DOWNLOAD_URL" value="${cagrid.download.url}" />
 				<filter token="PORTAL_DOWNLOAD_URL" value="${portal.download.url}" />
 			</filterset>

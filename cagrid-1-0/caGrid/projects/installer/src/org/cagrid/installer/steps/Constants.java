@@ -465,4 +465,8 @@ public abstract class Constants {
 
     public static final String DORIAN_IDP_MAX_TOTAL_INVALID_LOGINS = "dorian.idp.max.total.invalid.logins";
 
+    public static final String CAGRID_VERSION = "cagrid.version";
+
+    public static final String CAGRID_BASE_DIR_NAME = ".cagrid";
+
 }

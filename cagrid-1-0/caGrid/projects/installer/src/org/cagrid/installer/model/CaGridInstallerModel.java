@@ -82,4 +82,6 @@ public interface CaGridInstallerModel extends WizardModel {
     boolean isPortalInstalled();
 
     boolean isAuthnSvcServiceCredentialsPresent();
+    
+    String getInstallerDir();
 }
