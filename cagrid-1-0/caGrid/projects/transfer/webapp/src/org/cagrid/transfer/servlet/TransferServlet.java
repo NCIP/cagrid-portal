@@ -105,15 +105,12 @@ public class TransferServlet extends HttpServlet {
             }
 
             FileOutputStream fos = new FileOutputStream(desc.getLocation());
-            byte[] data = new byte[blockSize];
-            int length = req.getInputStream().read(data);
-            while (length == blockSize) {
-                fos.write(data);
-                length = req.getInputStream().read(data);
+            int l;
+            byte[] buffer = new byte[blockSize];
+            while ((l = req.getInputStream().read(buffer)) != -1) {
+                fos.write(buffer, 0, l);
             }
-            if (length > 0) {
-                fos.write(data, 0, length);
-            }
+           
             fos.close();
         } else {
             logger.info("Trouble storing data for requested object: " + requestedID + " at file: "
@@ -194,14 +191,10 @@ public class TransferServlet extends HttpServlet {
                 // 4 write data to the response
                 logger.info("Data file requested is located at: " + desc.getLocation());
                 FileInputStream fis = new FileInputStream(desc.getLocation());
-                byte[] bytes = new byte[blockSize];
-                int length = fis.read(bytes);
-                while (length == blockSize) {
-                    resp.getOutputStream().write(bytes);
-                    length = fis.read(bytes);
-                }
-                if (length > 0) {
-                    resp.getOutputStream().write(bytes, 0, length);
+                int l;
+                byte[] buffer = new byte[blockSize];
+                while ((l = fis.read(buffer)) != -1) {
+                    resp.getOutputStream().write(buffer, 0, l);
                 }
                 fis.close();
             } catch (Exception e) {
