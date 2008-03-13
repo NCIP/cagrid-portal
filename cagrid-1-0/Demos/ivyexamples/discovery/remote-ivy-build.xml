@@ -1,11 +1,7 @@
 
-<project name="ivyexamples-discovery-ivy" default="ivy-resolve" xmlns:ivy="antlib:org.apache.ivy.ant">
+<project name="ivyexamples-discovery-remote-ivy" default="ivy-resolve" xmlns:ivy="antlib:org.apache.ivy.ant">
 
 	<import file="build.xml" />
-
-	<property name="caGrid.dir" value="${env.CAGRID_LOCATION}" />
-	<fail unless="env.CAGRID_LOCATION" message="You must set the environment variable CAGRID_LOCATION to the directory in which you have caGrid installed (the caGrid directory)." />
-
 
 	<taskdef resource="org/apache/ivy/ant/antlib.xml" uri="antlib:org.apache.ivy.ant">
 		<classpath>
@@ -13,15 +9,12 @@
 		</classpath>
 	</taskdef>
 
-	<property name="repository.dir" location="${caGrid.dir}/repository" />
-	<property name="integration.repository.dir" location="${caGrid.dir}/integration-repository" />
-	<ivy:settings id="ivy.instance" file="${caGrid.dir}/antfiles/ivy/ivysettings.xml" override="true" />
-
+	<property name="ivy.settings.url" value="http://download.cagrid.org/repository/ivysettings.xml" />
+	<ivy:settings id="ivy.instance" url="${ivy.settings.url}" override="true" />
 
 	<target name="ivy-resolve" description="--> retreive dependencies with ivy">
 		<ivy:retrieve type="jar" />
 	</target>
-
 
 	<target name="ivy-report" depends="ivy-resolve" description="--> generates a report of dependencies">
 		<ivy:report todir="${build.dir}" />
