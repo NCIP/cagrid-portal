@@ -19,9 +19,9 @@
   <resolvers>
     <chain name="caGrid-ivy-resolver" returnFirst="true">
       <!-- First, try developer's local integration repository-->
-      <cagrid-fs-resolver repo.dir="${integration.repository.dir}" name="caGrid-local-fs"/>
-      <!-- Then, use the integration repository -->
-      <cagrid-fs-resolver repo.dir="${repository.dir}" name="caGrid-fs"/>
+      <cagrid-fs-resolver repo.dir="${integration.repository.dir}" name="caGrid-local"/>
+      <!-- Then, use the external repository -->
+      <cagrid-fs-resolver repo.dir="${repository.dir}" name="caGrid-external"/>
     </chain>
   </resolvers>
 </ivysettings>
