@@ -16,8 +16,8 @@
 	<property name="src" value="src" />
     <property name="data" value="data" />
 	<property name="build" value="build" />
-	<property name="libdir" value="${basedir}/ext/dependencies/compile/jars" />
-	<property name="endorsed" value="${basedir}/ext/dependencies/endorsed/jars" />
+	<property name="libdir" value="ext/dependencies/compile/jars" />
+	<property name="endorsed" value="ext/dependencies/endorsed/jars" />
 	<property name="dist" value="dist" />
 	<property name="docs" value="doc" />
 	<property name="javadocs" value="${docs}/api" />
