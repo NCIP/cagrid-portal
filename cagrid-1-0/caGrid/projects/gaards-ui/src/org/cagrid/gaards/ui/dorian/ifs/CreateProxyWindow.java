@@ -426,7 +426,7 @@ public class CreateProxyWindow extends ApplicationComponent {
             GlobusCredential cred = c2.createProxy(saml, lifetime, delegation);
             this.updateProgress(false, "Proxy Created!!!");
             CredentialManager.getInstance().addCredential(cred);
-            GridApplication.getContext().addApplicationComponent(new CredentialManagerComponent(cred), 750, 450);
+            GridApplication.getContext().addApplicationComponent(new CredentialManagerComponent(cred), 800, 450);
 
             // enable the authenticate button
             getAuthenticateButton().setEnabled(true);

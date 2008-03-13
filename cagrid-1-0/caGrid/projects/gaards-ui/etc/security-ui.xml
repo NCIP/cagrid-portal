@@ -34,8 +34,8 @@
                     <icon>/certificate.png</icon>
                     <showOnToolBar>true</showOnToolBar>
                     <dimensions>
-                        <width>750</width>
-                        <height>400</height>
+                        <width>800</width>
+                        <height>450</height>
                     </dimensions>
                 </component>
                  <component>
