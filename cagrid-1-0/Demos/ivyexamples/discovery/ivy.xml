@@ -1,0 +1,7 @@
+
+<ivy-module version="2.0">
+    <info organisation="org.cagrid.ivyexamples" module="discovery"/>
+    <dependencies>
+        <dependency org="caGrid" name="discovery" rev="1.3-dev"/>
+    </dependencies>
+</ivy-module>
