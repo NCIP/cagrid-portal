@@ -3,7 +3,6 @@ package gov.nih.nci.cagrid.data.upgrades;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.data.common.CastorMappingUtil;
-import gov.nih.nci.cagrid.data.cql.CQLQueryProcessor;
 import gov.nih.nci.cagrid.data.extension.Data;
 import gov.nih.nci.cagrid.data.utilities.WsddUtil;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
@@ -14,7 +13,6 @@ import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeExceptionsException;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
-import gov.nih.nci.cagrid.introduce.common.FileFilters;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 import gov.nih.nci.cagrid.introduce.extension.utils.AxisJdomUtils;
@@ -27,11 +25,7 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLClassLoader;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
@@ -475,7 +469,6 @@ public class DataServiceUpgrade1pt0to1pt2 extends ExtensionUpgraderBase {
         // service properties now contain CQL Query Processor configuration
         // get the current config properties out of the data element
         Element procConfig = extensionData.getChild("CQLProcessorConfig", extensionData.getNamespace());
-        Properties configuredProps = new Properties();
         // processor config is optional
         if (procConfig != null) {
             Iterator configuredPropElemIter = procConfig.getChildren(
@@ -484,40 +477,15 @@ public class DataServiceUpgrade1pt0to1pt2 extends ExtensionUpgraderBase {
                 Element propElem = (Element) configuredPropElemIter.next();
                 String key = propElem.getAttributeValue("name");
                 String value = propElem.getAttributeValue("value");
-                configuredProps.setProperty(key, value);
-            }
-        }
-        // remove all the processor config properties from the model
-        extensionData.removeChild("CQLProcessorConfig", extensionData.getNamespace());
-
-        // locate the query processor class property
-        String queryProcessorClassName = null;
-        try {
-            queryProcessorClassName = CommonTools.getServicePropertyValue(
-                getServiceInformation().getServiceDescriptor(), "queryProcessorClass");
-        } catch (Exception ex) {
-            throw new UpgradeException("Error getting query processor class name: " 
-                + ex.getMessage(), ex);
-        }
-        if (queryProcessorClassName != null) {
-            // load the query processor so we can ask it some questions
-            CQLQueryProcessor proc = loadQueryProcessorInstance(queryProcessorClassName);
-            // get the properties for the query processor
-            Properties qpProps = proc.getRequiredParameters();
-            // set the user configured properties
-            Enumeration keyEnum = qpProps.keys();
-            while (keyEnum.hasMoreElements()) {
-                String key = (String) keyEnum.nextElement();
-                String value = qpProps.getProperty(key);
-                if (configuredProps.containsKey(key)) {
-                    value = configuredProps.getProperty(key);
-                }
                 // add the property to the service properties
                 String extendedKey = "cqlQueryProcessorConfig_" + key;
                 CommonTools.setServiceProperty(getServiceInformation().getServiceDescriptor(), 
                     extendedKey, value, false);
             }
         }
+        // remove all the processor config properties from the model
+        extensionData.removeChild("CQLProcessorConfig", extensionData.getNamespace());
+
         getStatus().addDescriptionLine(
             "CQL Query Processor configuration properties are now managed in service properties");
     }
@@ -532,38 +500,7 @@ public class DataServiceUpgrade1pt0to1pt2 extends ExtensionUpgraderBase {
                 + IterImplType.CAGRID_CONCURRENT_COMPLETE);
         }
     }
-
-
-    private CQLQueryProcessor loadQueryProcessorInstance(String queryProcessorClassName) throws UpgradeException {
-        // reflect load the query processor (this should live in the service's lib dir)
-        File libDir = new File(getServicePath() + File.separator + "lib");
-        File buildLibDir = new File(getServicePath() + File.separator + "build" + File.separator + "lib");
-        File[] libs = libDir.listFiles(new FileFilters.JarFileFilter());
-        if (buildLibDir.exists() && buildLibDir.canRead() && buildLibDir.isDirectory()) {
-            File[] buildLibs = buildLibDir.listFiles(new FileFilters.JarFileFilter());
-            libs = (File[]) Utils.concatenateArrays(File.class, libs, buildLibs);
-        }
-        URL[] libUrls = new URL[libs.length];
-        try {
-            for (int i = 0; i < libs.length; i++) {
-                libUrls[i] = libs[i].toURL();
-            }
-        } catch (MalformedURLException ex) {
-            throw new UpgradeException("Error converting library path to URL: " + ex.getMessage(), ex);
-        }
-        ClassLoader libLoader = new URLClassLoader(
-            libUrls, Thread.currentThread().getContextClassLoader());
-        CQLQueryProcessor proc = null;
-        try {
-            Class qpClass = libLoader.loadClass(queryProcessorClassName);
-            proc = (CQLQueryProcessor) qpClass.newInstance();
-        } catch (Exception ex) {
-            throw new UpgradeException("Error instantiating query processor class: " 
-                + ex.getMessage(), ex);
-        }
-        return proc;
-    }
-
+    
 
     private void setCadsrInformation(Element extensionData) {
         // additional libraries / jar names elements are unchanged
