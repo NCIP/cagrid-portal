@@ -1,5 +1,5 @@
 
-<project name="ivyexamples-discovery-local-ivy" default="ivy-resolve" xmlns:ivy="antlib:org.apache.ivy.ant">
+<project name="ivyexamples-discovery-local-ivy" default="all" xmlns:ivy="antlib:org.apache.ivy.ant">
 
 	<import file="build.xml" />
 
@@ -33,4 +33,6 @@
 		</delete>
 		<ivy:cleancache />
 	</target>
+
+	<target name="all" depends="ivy-clean,ivy-resolve,ivy-report"/>
 </project>
