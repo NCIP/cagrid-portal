@@ -160,7 +160,11 @@ public class IntroduceUpdateTreeNode extends UpdateTypeTreeNode {
                 || (installedVersion != null && extension.getVersion() != null && installedVersion.equals(extension
                     .getVersion()))) {
                 newer = true;
+            } else {
+                newer = false;
             }
+        } else {
+            newer = true;
         }
         return newer;
     }

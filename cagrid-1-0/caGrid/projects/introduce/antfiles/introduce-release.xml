@@ -9,7 +9,7 @@
 		</classpath>
 	</taskdef>
 
-	<property name="introduce.extension.projects.list" value="cabigextensions, cadsr, bulkDataTransfer, dataExtensions" />
+	<property name="introduce.extension.projects.list" value="cabigextensions, cadsr, bulkDataTransfer, dataExtensions, transfer" />
 	<property name="introduce.extensions.dir" value="${basedir}/tmp/extensions" />
 
 
@@ -25,13 +25,6 @@
 				<ant dir="${basedir}/../@{project.name}" inheritAll="false" antfile="build.xml" target="installIntroduceExtensions">
 					<property name="introduce.extensions.dir" value="${introduce.extensions.dir}/@{project.name}" />
 				</ant>
-				<zip destfile="${introduce.extensions.dir}/@{project.name}.zip">
-					<fileset dir="${introduce.extensions.dir}/@{project.name}">
-						<include name="**\*" />
-					</fileset>
-				</zip>
-				<!--<delete dir="${introduce.extensions.dir}/@{project.name}">
-				</delete>-->
 			</sequential>
 		</for>
 	</target>
