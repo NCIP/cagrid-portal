@@ -109,7 +109,7 @@ public class DataServiceUpgrade1pt1to1pt2 extends ExtensionUpgraderBase {
         
         if (serviceIsUsingEnumeration(extDataElement)) {
         	getStatus().addDescriptionLine("-- Data Service WS-Enumeration Support Detected");
-            updateEnumerationLibraries();
+            // updateEnumerationLibraries();
         }
         
         if (serviceIsUsingSdkDataSource(extDataElement)) {
