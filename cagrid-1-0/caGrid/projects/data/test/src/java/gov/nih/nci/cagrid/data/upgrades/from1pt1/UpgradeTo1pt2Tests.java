@@ -22,7 +22,7 @@ import junit.textui.TestRunner;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Feb 20, 2007 
- * @version $Id: UpgradeTo1pt2Tests.java,v 1.2 2008-03-03 14:49:26 dervin Exp $ 
+ * @version $Id: UpgradeTo1pt2Tests.java,v 1.3 2008-03-14 14:14:53 dervin Exp $ 
  */
 public class UpgradeTo1pt2Tests extends Story {
     public static final String TEST_DIR = ".." + File.separator + "data" + File.separator + "test";
@@ -47,7 +47,7 @@ public class UpgradeTo1pt2Tests extends Story {
 	protected Vector steps() {
         TestCaseInfo info = new DataTestCaseInfo() {
         	public String getDir() {
-    	        return UpgradeTo1pt2Tests.SERVICE_DIR;
+    	        return SERVICE_DIR;
     	    }
 
 
