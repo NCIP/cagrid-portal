@@ -19,7 +19,7 @@
 	<condition property="test.resource.available.upgrade-1.1">
 		<and>
 			<available file="${test.resources.dir}/BasicDataService_1-1.zip" />
-			<available file="${test.resources.dir}/DataServiceWithBdt_1-1.zip" />
+			<available file="${test.resources.dir}/DataServiceWithEnumeration_1-1.zip" />
 			<available file="${test.resources.dir}/DataServiceWithSdk_1-1.zip" />
 		</and>
 	</condition>
