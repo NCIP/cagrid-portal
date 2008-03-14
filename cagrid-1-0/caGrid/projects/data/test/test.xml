@@ -232,7 +232,7 @@
 			<test if="testcase" name="${testcase}" fork="no" todir="${junit.results.dir}" />
 			<batchtest unless="testcase" fork="yes" todir="${junit.results.dir}">
 				<fileset dir="${test.src.dir}">
-					<include name="**/from1pt0/**Upgrade*To1pt2Tests.java" />
+					<include name="**/from1pt0/**/Upgrade*To1pt2Tests.java" />
 				</fileset>
 			</batchtest>
 		</junit>
