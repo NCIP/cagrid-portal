@@ -161,7 +161,7 @@ public abstract class <%=info.getService().getName()%>ClientBase extends Service
             .getResourcePropertyValueChangeNotification();
 
         if (changeMessage != null) {
-            System.out.println("Got notification with value: \n" + changeMessage.getNewValue().get_any()[0].getAsString());
+            System.out.println("Got notification");
         }
     }
 <%}%>
