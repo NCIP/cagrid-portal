@@ -25,7 +25,6 @@ import java.net.URL;
 
 /**
  * @author <a href="joshua.phillips@semanticbits.com">Joshua Phillips</a>
- *
  */
 public class ConfigurePortalGridPropertiesStep extends PropertyConfigurationStep
         implements ActionListener {
@@ -93,15 +92,14 @@ public class ConfigurePortalGridPropertiesStep extends PropertyConfigurationStep
         checkComplete();
     }
 
-    protected String getIndexServiceURLsProperty(){
+    protected String getIndexServiceURLsProperty() {
         return Constants.PORTAL_INDEX_SVC_URLS;
     }
 
 
-    protected String getIdpServiceURLsProperty(){
-           return Constants.PORTAL_IDP_SVC_URLS;
-       }
-
+    protected String getIdpServiceURLsProperty() {
+        return Constants.PORTAL_IDP_SVC_URLS;
+    }
 
 
     protected void addIndexServiceURLsPanel() {
@@ -128,7 +126,7 @@ public class ConfigurePortalGridPropertiesStep extends PropertyConfigurationStep
         idxButtonPanel.add(this.idxCmdAdd);
         idxButtonPanel.add(this.idxCmdDelete);
 
-        String[] idxColNames = new String[] { "URLs" };
+        String[] idxColNames = new String[]{"URLs"};
         this.idxTableModel = new DefaultTableModel(rowData, idxColNames);
         this.idxTable = new AutoSizingJTable(this.idxTableModel);
         InstallerUtils.setUpCellRenderer(this.idxTable);
@@ -140,7 +138,7 @@ public class ConfigurePortalGridPropertiesStep extends PropertyConfigurationStep
 
     }
 
-    protected void addIdpServcieURLsPanel(){
+    protected void addIdpServcieURLsPanel() {
         JPanel idpSvcUrlsPanel = new JPanel();
         idpSvcUrlsPanel.setLayout(new BorderLayout());
         idpSvcUrlsPanel.setPreferredSize(new Dimension(500, 125));
@@ -164,7 +162,7 @@ public class ConfigurePortalGridPropertiesStep extends PropertyConfigurationStep
         idpButtonPanel.add(this.idpCmdAdd);
         idpButtonPanel.add(this.idpCmdDelete);
 
-        String[] idpColNames = new String[] { "URLs" };
+        String[] idpColNames = new String[]{"URLs"};
         this.idpTableModel = new DefaultTableModel(rowData, idpColNames);
         this.idpTable = new AutoSizingJTable(this.idpTableModel);
         InstallerUtils.setUpCellRenderer(this.idpTable);
@@ -182,8 +180,8 @@ public class ConfigurePortalGridPropertiesStep extends PropertyConfigurationStep
                         Constants.PORTAL_AGGR_TARGET_GRID, model
                         .getMessage("portal.aggr.target.grid"),
                         new String[]{
-                                "nci_qa",
                                 "nci_prod",
+                                "nci_qa",
                                 "nci_dev",
                                 "nci_stage",
                                 "osu_dev",
@@ -193,7 +191,7 @@ public class ConfigurePortalGridPropertiesStep extends PropertyConfigurationStep
         getOptions().add(
                 new BooleanPropertyConfigurationOption(
                         Constants.PORTAL_TRUST_SYNCHRONIZED_ENABLED, model
-                        .getMessage("portal.trust.synchronizeEnabled"),true, false));
+                        .getMessage("portal.trust.synchronizeEnabled"), true, false));
 
 
         getOptions().add(
@@ -201,7 +199,7 @@ public class ConfigurePortalGridPropertiesStep extends PropertyConfigurationStep
                         Constants.PORTAL_GME_URL, model
                         .getMessage("portal.gme.url"), model
                         .getProperty(Constants.PORTAL_GME_URL,
-                        "http://cagrid-service-qa.nci.nih.gov:8080/wsrf/services/cagrid/GlobalModelExchange"),
+                        "http://cagrid-service.nci.nih.gov:8080/wsrf/services/cagrid/GlobalModelExchange"),
                         true));
 
         getOptions().add(
@@ -209,7 +207,7 @@ public class ConfigurePortalGridPropertiesStep extends PropertyConfigurationStep
                         Constants.PORTAL_CADSR_URL, model
                         .getMessage("portal.cadsr.url"), model
                         .getProperty(Constants.PORTAL_CADSR_URL,
-                        "http://cagrid-service-qa.nci.nih.gov:8080/wsrf/services/cagrid/CaDSRService"),
+                        "http://cagrid-service.nci.nih.gov:8080/wsrf/services/cagrid/CaDSRService"),
                         true));
 
         getOptions().add(
@@ -217,7 +215,7 @@ public class ConfigurePortalGridPropertiesStep extends PropertyConfigurationStep
                         Constants.PORTAL_IFS_SVC_URL, model
                         .getMessage("portal.ifs.url"), model
                         .getProperty(Constants.PORTAL_IFS_SVC_URL,
-                        "https://cagrid-dorian-qa.nci.nih.gov:8443/wsrf/services/cagrid/Dorian"),
+                        "https://cagrid-dorian.nci.nih.gov:8443/wsrf/services/cagrid/Dorian"),
                         true));
 
     }
@@ -230,7 +228,7 @@ public class ConfigurePortalGridPropertiesStep extends PropertyConfigurationStep
             String url = (String) this.idxTableModel.getValueAt(i, 0);
             try {
                 new URL(url);
-                if(sbIdx.length() > 0){
+                if (sbIdx.length() > 0) {
                     sbIdx.append(",");
                 }
                 sbIdx.append(url);
@@ -248,9 +246,11 @@ public class ConfigurePortalGridPropertiesStep extends PropertyConfigurationStep
             String url = (String) this.idpTableModel.getValueAt(i, 0);
             try {
                 new URL(url);
-                if(sbIdp.length() > 0){
+                if (sbIdp.length() > 0) {
                     sbIdp.append(",");
                 }
+                //Expected value is Label|Value
+                sbIdp.append(url).append("|");
                 sbIdp.append(url);
             } catch (Exception ex) {
                 // TODO: externalize error message
@@ -263,7 +263,7 @@ public class ConfigurePortalGridPropertiesStep extends PropertyConfigurationStep
         super.applyState();
 
         //set up a bunch of properties
-        this.model.setProperty(Constants.LIFERAY_JBOSS_DIR,model.getProperty(Constants.PORTAL_INSTALL_DIR_PATH)+"/" + Constants.PORTAL_LIFERAY_DIR_NAME);
+        this.model.setProperty(Constants.LIFERAY_JBOSS_DIR, model.getProperty(Constants.PORTAL_INSTALL_DIR_PATH) + "/" + Constants.PORTAL_LIFERAY_DIR_NAME);
         //reuse the id of the database for name
         this.model.setProperty(Constants.PORTAL_LIFERAY_DB_NAME, model.getProperty("liferay.db.id"));
         this.model.setProperty(getIndexServiceURLsProperty(), sbIdx.toString());
@@ -276,14 +276,14 @@ public class ConfigurePortalGridPropertiesStep extends PropertyConfigurationStep
         if (source == this.idxCmdAdd) {
             this.idxTableModel.addRow(new String[0]);
         } else if (source == this.idxCmdDelete) {
-            if(this.idxTable.getSelectedRow()>-1)
-            this.idxTableModel.removeRow(this.idxTable.getSelectedRow());
+            if (this.idxTable.getSelectedRow() > -1)
+                this.idxTableModel.removeRow(this.idxTable.getSelectedRow());
             //idp table
         } else if (source == this.idpCmdAdd) {
             this.idpTableModel.addRow(new String[0]);
-        } else if (source == this.idpCmdDelete){
-            if(this.idpTable.getSelectedRow()>-1)
-            this.idpTableModel.removeRow(this.idpTable.getSelectedRow());
+        } else if (source == this.idpCmdDelete) {
+            if (this.idpTable.getSelectedRow() > -1)
+                this.idpTableModel.removeRow(this.idpTable.getSelectedRow());
         }
     }
 
@@ -305,6 +305,6 @@ public class ConfigurePortalGridPropertiesStep extends PropertyConfigurationStep
                 bUrlGiven = !InstallerUtils.isEmpty(value);
             }
         }
-            setComplete(isComplete() && aUrlGiven && bUrlGiven);
-        }
+        setComplete(isComplete() && aUrlGiven && bUrlGiven);
     }
+}

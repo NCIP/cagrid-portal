@@ -409,6 +409,10 @@ public abstract class Constants {
 
     public static final String PORTAL_ADMIN_EMAIL = "cagrid.portal.admin.email";
 
+    public static final String PORTAL_LIFERAY_ADMIN_USERNAME = "liferay.admin.username";
+
+    public static final String PORTAL_LIFERAY_ADMIN_PASSWORD = "liferay.admin.password";
+
     public static final String PORTAL_SECURITY_ENCRYPTION_KEY = "cagrid.portal.security.encryption.key";
 
     public static final String PORTAL_TRUST_SYNCHRONIZED_ENABLED = "cagrid.portal.trust.synchronizeEnabled";
@@ -464,7 +468,7 @@ public abstract class Constants {
     public static final String DORIAN_IDP_MAX_CONSEC_INVALID_LOGINS = "dorian.idp.max.consec.invalid.logins";
 
     public static final String DORIAN_IDP_MAX_TOTAL_INVALID_LOGINS = "dorian.idp.max.total.invalid.logins";
-
+    
     public static final String CAGRID_VERSION = "cagrid.version";
 
     public static final String CAGRID_BASE_DIR_NAME = ".cagrid";

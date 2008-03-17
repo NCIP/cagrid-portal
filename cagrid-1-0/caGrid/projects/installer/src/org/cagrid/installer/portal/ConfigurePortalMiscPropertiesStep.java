@@ -17,7 +17,7 @@ import javax.swing.*;
  *
  * @author kherm manav.kher@semanticbits.com
  */
-public class ConfigurePortalMiscPropertiesStep  extends PropertyConfigurationStep {
+public class ConfigurePortalMiscPropertiesStep extends PropertyConfigurationStep {
     private static final Log logger = LogFactory
             .getLog(ConfigurePortalMiscPropertiesStep.class);
 
@@ -99,7 +99,19 @@ public class ConfigurePortalMiscPropertiesStep  extends PropertyConfigurationSte
                         .getProperty(Constants.PORTAL_ADMIN_EMAIL,
                         "ncicb@pop.nci.nih.gov"), true));
 
+        getOptions().add(
+                new TextPropertyConfigurationOption(
+                        Constants.PORTAL_LIFERAY_ADMIN_USERNAME, model
+                        .getMessage("liferay.admin.username"), model
+                        .getProperty(Constants.PORTAL_LIFERAY_ADMIN_USERNAME,
+                        ""), true));
 
+        getOptions().add(
+                new PasswordPropertyConfigurationOption(
+                        Constants.PORTAL_LIFERAY_ADMIN_PASSWORD, model
+                        .getMessage("liferay.admin.password"), model
+                        .getProperty(Constants.PORTAL_LIFERAY_ADMIN_PASSWORD,
+                        ""), true));
 
     }
 
@@ -108,7 +120,7 @@ public class ConfigurePortalMiscPropertiesStep  extends PropertyConfigurationSte
         super.prepare();//To change body of overridden methods use File | Settings | File Templates.
 
         //need to do this otherwise null value is set when panel is initialized
-        JTextField keystorePath = (JTextField)getOption(Constants.LIFERAY_KEYSTORE_PATH);
+        JTextField keystorePath = (JTextField) getOption(Constants.LIFERAY_KEYSTORE_PATH);
         keystorePath.setText(this.model.getProperty(Constants.PORTAL_INSTALL_DIR_PATH) + "/portal-liferay");
 
     }
