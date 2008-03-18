@@ -137,11 +137,10 @@ public class SchemaValidator {
 	    final String sl = XMLConstants.W3C_XML_SCHEMA_NS_URI;
 	    SchemaFactory factory = SchemaFactory.newInstance(sl);
 	    StreamSource ss = new StreamSource(xsdFilename);
+        // StreamSource ss = new StreamSource(new File(xsdFilename));
 	    try {
             factory.newSchema(ss);
         } catch (SAXException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
             throw new SchemaValidationException(e);
         }
 	}
