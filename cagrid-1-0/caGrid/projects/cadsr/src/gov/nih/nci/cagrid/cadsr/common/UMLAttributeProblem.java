@@ -8,7 +8,7 @@ package gov.nih.nci.cagrid.cadsr.common;
  * @author David Ervin
  * 
  * @created Feb 8, 2008 9:54:09 AM
- * @version $Id: UMLAttributeProblem.java,v 1.2 2008-02-11 15:30:03 dervin Exp $ 
+ * @version $Id: UMLAttributeProblem.java,v 1.3 2008-03-19 19:51:44 dervin Exp $ 
  */
 public class UMLAttributeProblem extends ModelProblem {
 
@@ -47,7 +47,7 @@ public class UMLAttributeProblem extends ModelProblem {
         buff.append("\tClass: ").append(className).append("\n");
         buff.append("\tAttribute: ").append(attributeName).append("\n");
         buff.append("\tDescription: ").append(attributeDescription).append("\n");
-        buff.append("\tErrors at chars: ");
+        buff.append("\tErrors at char position(s): ");
         for (int i = 0; i < errorIndices.length; i++) {
             buff.append(errorIndices[i]);
             if (i + 1 < errorIndices.length) {
