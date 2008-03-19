@@ -28,7 +28,7 @@ if [ $# -eq 2 ]; then
 fi
 
 if [ $# -eq 3 ]; then
-        mysql -u root -p=$2 ${databaseprefix}_${database} < ${database}.sql
+        mysql -u root --password=$3 ${databaseprefix}_${database} < ${database}.sql
 fi
 
 rm -fr ${database}.sql.gz

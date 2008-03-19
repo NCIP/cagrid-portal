@@ -29,7 +29,7 @@ echo "use ${database}; update NAMESPACES set SERVICE_ID='${newservicename}' wher
 fi
 
 if [ $# -eq 4 ]; then
-echo "use ${database}; update NAMESPACES set SERVICE_ID='${newservicename}' where SERVICE_id='${oldservicename}';" | mysql -u root -p=$4
+echo "use ${database}; update NAMESPACES set SERVICE_ID='${newservicename}' where SERVICE_id='${oldservicename}';" | mysql -u root --password=$4
 fi
 
 

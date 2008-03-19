@@ -25,11 +25,11 @@ if [ $# -eq 1 ]; then
 fi
 
 if [ $# -eq 2 ]; then
-	mysqldump -u root -p=$2 --add-locks -n -t ${databaseprefix}_GME_REGISTRY | gzip > GME_REGISTRY.sql.gz
+	mysqldump -u root --password=$2 --add-locks -n -t ${databaseprefix}_GME_REGISTRY | gzip > GME_REGISTRY.sql.gz
 
-	mysqldump -u root -p=$2 --add-locks -n -t ${databaseprefix}_GME_SCHEMA_STORE | gzip > GME_SCHEMA_STORE.sql.gz
+	mysqldump -u root --password=$2 --add-locks -n -t ${databaseprefix}_GME_SCHEMA_STORE | gzip > GME_SCHEMA_STORE.sql.gz
 
-	mysqldump -u root -p=$2 --add-locks -n -t ${databaseprefix}_GME_SCHEMA_CACHE | gzip > GME_SCHEMA_CACHE.sql.gz
+	mysqldump -u root --password=$2 --add-locks -n -t ${databaseprefix}_GME_SCHEMA_CACHE | gzip > GME_SCHEMA_CACHE.sql.gz
 fi
 
 
