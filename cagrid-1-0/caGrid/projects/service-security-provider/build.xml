@@ -24,7 +24,6 @@
 	<property name="mappings.file" value="${basedir}/namespace2package.mappings" />
 
 	<!--these are overriden from introduce -->
-	<property file="${basedir}/ext/resources/cagrid.properties" />
 	<property name="project.jar.prefix" value="${project.name}-" />
 	<property name="project.jar.suffix" value="-${project.version}.jar" />
 

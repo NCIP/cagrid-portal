@@ -10,7 +10,6 @@
 
     <property file="introduce.properties" />
 
-    <property file="ext/resources/cagrid.properties" />
     <property name="introduce.ns.excludes" value="" />
     <property name="service.name" value="${introduce.skeleton.service.name}" />
     <property name="schema.path" value="${introduce.skeleton.service.name}" />

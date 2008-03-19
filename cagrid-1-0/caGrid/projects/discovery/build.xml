@@ -181,7 +181,7 @@
 	<!-- Runs the Discovery Client                                      -->
 	<!-- ============================================================== -->
 	<target name="runClient" depends="defineClasspaths" description="Run the sample Discovery Client">
-		<property file="${basedir}/ext/resources/service_urls.properties" />
+		<property file="${basedir}/ext/target_grid/service_urls.properties" />
 		<property name="service.url" value="${cagrid.master.index.service.url}" />
 		<echo message="Discovering from Index Service: ${service.url}" />
 		<java classname="gov.nih.nci.cagrid.discovery.client.DiscoveryClient" classpathref="run.classpath" fork="yes">
