@@ -88,7 +88,7 @@ public class ConfigurePortalMiscPropertiesStep extends PropertyConfigurationStep
         getOptions().add(
                 new TextPropertyConfigurationOption(
                         Constants.PORATL_HTTPS_REDIRECT_PORT, model
-                        .getMessage("portal.http.redirect.port"), model
+                        .getMessage("portal.https.redirect.port"), model
                         .getProperty(Constants.PORATL_HTTPS_REDIRECT_PORT,
                         "8443"), true));
 
