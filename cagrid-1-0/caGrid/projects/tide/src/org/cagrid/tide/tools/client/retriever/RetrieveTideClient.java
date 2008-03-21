@@ -1,4 +1,4 @@
-package org.cagrid.tide.tools.client.retreivers;
+package org.cagrid.tide.tools.client.retriever;
 
 import java.io.File;
 
@@ -11,17 +11,17 @@ import org.cagrid.tide.stubs.types.TideReference;
 import org.cagrid.tide.tools.client.publishers.PublishTideClient;
 
 
-public class RetreiveTideClient {
+public class RetrieveTideClient {
 
-    public static void retreiveTide(String tideID, TideReplicaManagerReference replicaServer, TideRetreiver retreiver,
+    public static void retrieveTide(String tideID, TideReplicaManagerReference replicaServer, TideRetriever retreiver,
         File tideStorageFile)  throws Exception {
-        retreiver.retreive(tideID, replicaServer, retreiver, tideStorageFile);
+        retreiver.retrieve(tideID, replicaServer, retreiver, tideStorageFile);
     }
 
 
-    public static void reteiveTide(String tideID, TideReplicaManagerReference replicaServer, File tideStorageFile) throws Exception {
-        RoundRobinReteiver retreiver = new RoundRobinReteiver();
-        retreiveTide(tideID, replicaServer, retreiver, tideStorageFile);
+    public static void retieveTide(String tideID, TideReplicaManagerReference replicaServer, File tideStorageFile) throws Exception {
+        RoundRobinRetiever retreiver = new RoundRobinRetiever();
+        retrieveTide(tideID, replicaServer, retreiver, tideStorageFile);
     }
     
     
@@ -34,7 +34,7 @@ public class RetreiveTideClient {
             TideReplicaManagerReference tideRepRef = new TideReplicaManagerReference(new EndpointReferenceType(new Address("http://localhost:8080/wsrf/services/cagrid/TideReplicaManager")));
 //            TideDescriptor tideD = PublishTideClient.publishNewTide(f, tideRef, tideRepRef);
 //            
-            RetreiveTideClient.reteiveTide("391b8f0e-cbfe-4fb6-992f-c9e218694539", tideRepRef, newFile);
+            RetrieveTideClient.retieveTide("391b8f0e-cbfe-4fb6-992f-c9e218694539", tideRepRef, newFile);
         } catch (MalformedURIException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

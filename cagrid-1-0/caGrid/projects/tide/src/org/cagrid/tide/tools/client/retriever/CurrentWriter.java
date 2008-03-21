@@ -1,4 +1,4 @@
-package org.cagrid.tide.tools.client.retreivers;
+package org.cagrid.tide.tools.client.retriever;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -36,9 +36,10 @@ public class CurrentWriter implements Runnable {
     public void addCurrentCollector(CurrentCollector current) throws Exception {
         this.currents.put(current);
     }
-    
-    public CurrentCollector getCurrentCurrentCollector(){
-     return currentCurrentCollector;   
+
+
+    public CurrentCollector getCurrentCurrentCollector() {
+        return currentCurrentCollector;
     }
 
 
@@ -46,8 +47,9 @@ public class CurrentWriter implements Runnable {
         while (chunksProcessed < tide.getChunks()) {
             currentCurrentCollector = currents.poll();
             if (currentCurrentCollector != null) {
-                System.out.println("Writting chunk " +  currentCurrentCollector.getCurrent().getChunkNum());
-                Current current = this.tide.getCurrents().getCurrent(currentCurrentCollector.getCurrent().getChunkNum());
+                System.out.println("Writting chunk " + currentCurrentCollector.getCurrent().getChunkNum());
+                Current current = this.tide.getCurrents()
+                    .getCurrent(currentCurrentCollector.getCurrent().getChunkNum());
                 long start = System.currentTimeMillis();
                 try {
                     raf.seek(this.tide.getChunkSize() * current.getChunkNum());
@@ -61,7 +63,7 @@ public class CurrentWriter implements Runnable {
                     e.printStackTrace();
                 }
                 long stop = System.currentTimeMillis();
-                this.totalDataWriteTime += (stop-start);
+                this.totalDataWriteTime += (stop - start);
             } else {
                 try {
                     System.out.println("Waiting for data to write");
@@ -69,7 +71,9 @@ public class CurrentWriter implements Runnable {
                 } catch (InterruptedException e) {
                     failed = true;
                     e.printStackTrace();
-                    callback.failedWriter(this);
+                    if (callback != null) {
+                        callback.failedWriter(this);
+                    }
                 }
             }
         }
@@ -87,7 +91,9 @@ public class CurrentWriter implements Runnable {
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-            callback.failedWriter(this);
+            if (callback != null) {
+                callback.failedWriter(this);
+            }
         }
 
     }

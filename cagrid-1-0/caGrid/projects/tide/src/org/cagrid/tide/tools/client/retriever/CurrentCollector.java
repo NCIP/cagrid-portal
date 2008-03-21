@@ -1,4 +1,4 @@
-package org.cagrid.tide.tools.client.retreivers;
+package org.cagrid.tide.tools.client.retriever;
 
 import java.io.InputStream;
 import java.util.ArrayList;

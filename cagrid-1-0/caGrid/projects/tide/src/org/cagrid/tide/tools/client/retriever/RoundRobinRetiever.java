@@ -1,4 +1,4 @@
-package org.cagrid.tide.tools.client.retreivers;
+package org.cagrid.tide.tools.client.retriever;
 
 import java.io.File;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -13,17 +13,21 @@ import org.cagrid.tide.replica.context.client.TideReplicaManagerContextClient;
 import org.cagrid.tide.replica.stubs.types.TideReplicaManagerReference;
 
 
-public class RoundRobinReteiver implements TideRetreiver, FailedCollectorCallback, FailedWriterCallback {
-
-    public synchronized void retreive(String tideID, TideReplicaManagerReference replicaServer,
-        TideRetreiver retreiver, File tideStorageFile) throws Exception {
+public class RoundRobinRetiever implements TideRetriever, FailedCollectorCallback, FailedWriterCallback {
+    private ThreadPoolExecutor executor = null;
+    
+    public RoundRobinRetiever(){
+        executor = new ThreadPoolExecutor(5, 10, 10, TimeUnit.SECONDS,
+            new ArrayBlockingQueue<Runnable>(20));
+    }
+   
+    
+    public synchronized void retrieve(String tideID, TideReplicaManagerReference replicaServer,
+        TideRetriever retreiver, File tideStorageFile) throws Exception {
 
         TideReplicaManagerClient client = new TideReplicaManagerClient(replicaServer.getEndpointReference());
         TideReplicaManagerContextClient tclient = client.getTideReplicaManagerContext(tideID);
         final TideReplicasDescriptor replicas = tclient.getReplicas();
-
-        ThreadPoolExecutor executor = new ThreadPoolExecutor(5, 10, 10, TimeUnit.SECONDS,
-            new ArrayBlockingQueue<Runnable>(20));
 
         final CurrentWriter writer = new CurrentWriter(tideStorageFile, replicas.getTideDescriptor(), this);
         Thread th = new Thread(writer);
@@ -36,7 +40,7 @@ public class RoundRobinReteiver implements TideRetreiver, FailedCollectorCallbac
             Current current = replicas.getTideDescriptor().getCurrents().getCurrent(i);
 
             CurrentCollector collector = new CurrentCollector(current, writer, replicas.getTideDescriptor(), tideRep,
-                RoundRobinReteiver.this);
+                RoundRobinRetiever.this);
 
             executor.submit(collector);
         }
