@@ -52,7 +52,6 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import org.cagrid.grape.LookAndFeel;
-import org.cagrid.grape.utils.BusyDialogRunnable;
 
 /** 
  *  ServiceTypePanel
@@ -61,7 +60,7 @@ import org.cagrid.grape.utils.BusyDialogRunnable;
  * @author David Ervin
  * 
  * @created Sep 5, 2007 12:25:19 PM
- * @version $Id: ServiceTypePanel.java,v 1.2 2008-01-23 16:22:08 dervin Exp $ 
+ * @version $Id: ServiceTypePanel.java,v 1.3 2008-03-21 18:01:39 dervin Exp $ 
  */
 public class ServiceTypePanel extends JPanel {
     public static final String JAVA_CLASS_PATH = "java.class.path";
@@ -730,10 +729,10 @@ public class ServiceTypePanel extends JPanel {
     
     
     private void discoverStepClasses() {
-        BusyDialogRunnable discoverThread = new BusyDialogRunnable(
-            (JFrame) SwingUtilities.getWindowAncestor(ServiceTypePanel.this), "Discovering Types") {
-            public void process() {
-                setProgressText("Starting discovery");
+        Thread discoverThread = new Thread() {
+            public void run() {
+                getDiscoverStepsButton().setEnabled(false);
+                System.out.println("Starting discovery");
                 Class baseClass = AbstractBaseServiceTestStep.class;
                 List<String> subs = new ArrayList();
                 String classPath = System.getProperty(JAVA_CLASS_PATH);
@@ -745,7 +744,7 @@ public class ServiceTypePanel extends JPanel {
                     }
                 } catch (MalformedURLException ex) {
                     ex.printStackTrace();
-                    setErrorMessage("Error converting path to URL: " + ex.getMessage());
+                    System.out.println("Error converting path to URL: " + ex.getMessage());
                 }
                 StringTokenizer pathTokenizer 
                     = new StringTokenizer(classPath, File.pathSeparator);
@@ -754,7 +753,7 @@ public class ServiceTypePanel extends JPanel {
                     ClassLoader loader = new URLClassLoader(pathUrls);
                     // locate class names in the path element
                     File path = new File(pathTokenizer.nextToken());
-                    setProgressText("Examining " + path.getAbsolutePath());
+                    System.out.println("Examining " + path.getAbsolutePath());
                     List<String> classNames = null;
                     if (!path.exists() && path.canRead()) {
                         continue;
@@ -790,14 +789,15 @@ public class ServiceTypePanel extends JPanel {
                     System.gc();
                 }
                 Collections.sort(subs);
+                System.out.println("Adding classes to steps combo box");
                 getStepClassnameComboBox().removeAllItems();
                 for (String name : subs) {
                     getStepClassnameComboBox().addItem(name);   
                 }
+                getDiscoverStepsButton().setEnabled(true);
             }
         };
-        Thread th = new Thread(discoverThread);
-        th.start();
+        SwingUtilities.invokeLater(discoverThread);
     }
     
     
@@ -845,8 +845,9 @@ public class ServiceTypePanel extends JPanel {
         for (File classFile : classFiles) {
             String rawName = classFile.getAbsolutePath();
             rawName = rawName.substring(baseDirNameLength);
-            classNames.add(rawName.substring(0, rawName.length() - CLASS_EXTSNSION.length())
-                .replace('/', '.'));
+            rawName = rawName.substring(0, rawName.length() - CLASS_EXTSNSION.length());
+            rawName = rawName.replace(File.separatorChar, '.');
+            classNames.add(rawName);
         }
         return classNames;
     }
