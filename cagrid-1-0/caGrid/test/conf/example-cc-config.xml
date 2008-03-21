@@ -24,8 +24,7 @@
     <plugin name="ant" anthome="${env.ANT_HOME}" buildfile="build-${project.name}.xml" target="test"
         uselogger="true" usedebug="false" timeout="2000"/>
     <plugin name="antpublisher" buildfile="${project.dir}/caGrid/build.xml" target="ccpublish"/>
-    <plugin name="htmlemail"
-        skipusers="true" reportsuccess="fixes"
+    <plugin name="htmlemail" skipusers="true" reportsuccess="fixes"
         buildresultsurl="http://${env.HOSTNAME}:8080/cruisecontrol/buildresults/${project.name}"
         mailhost="${mail.host}" returnaddress="${mail.return.addr}"
         css="${cc.home}/reporting/jsp/webcontent/css/cruisecontrol.css"
@@ -66,7 +65,6 @@
         </listeners>
         <bootstrappers/>
         <modificationset quietperiod="30">
-            <cvs/>
             <alwaysbuild/>
         </modificationset>
         <schedule interval="300">
@@ -113,14 +111,24 @@
     </plugin>
 
     <!-- Make as many of these as you like -->
-    <!-- 
-        <continuous.project name="caGrid-1.0-continuous" buildafterfailed="false"/>
-        <nightly.project name="caGrid-1.0-nightly" buildafterfailed="false"/>
-        <nightly.project name="caGrid-1.0-release-nightly" buildafterfailed="false"/>
-        <nightly.project name="caGrid-1.1-release-nightly" buildafterfailed="false"/>
-        <nightly.project name="caGrid-1.2-release-nightly" buildafterfailed="false"/>
-        <system.project name="caGrid-1.0-system" buildafterfailed="false"/>
-        <system.project name="caGrid-1.1-release-system" buildafterfailed="false"/>
-        <system.project name="caGrid-1.2-release-system" buildafterfailed="false"/>
+
+    <!--
+    <continuous.project name="caGrid-1.0-continuous" buildafterfailed="false"/>
+    <nightly.project name="caGrid-1.0-nightly" buildafterfailed="false"/>
+    <nightly.project name="caGrid-1.0-release-nightly" buildafterfailed="false"/>
+    <nightly.project name="caGrid-1.1-release-nightly" buildafterfailed="false"/>
+    <nightly.project name="caGrid-1.2-release-nightly" buildafterfailed="false"/>
+    <system.project name="caGrid-1.0-system" buildafterfailed="false"/>
+    <system.project name="caGrid-1.1-release-system" buildafterfailed="false">
+        <modificationset>
+            <cvs tag="caGrid-1_1_release"/>
+        </modificationset>
+    </system.project>
+    <system.project name="caGrid-1.2-release-system" buildafterfailed="false">
+        <modificationset>
+            <cvs tag="caGrid-1_2_release"/>
+        </modificationset>
+    </system.project>
     -->
+
 </cruisecontrol>
