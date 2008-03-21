@@ -67,6 +67,7 @@
         <bootstrappers/>
         <modificationset quietperiod="30">
             <cvs/>
+            <alwaysbuild/>
         </modificationset>
         <schedule interval="300">
             <ant time="0400" timeout="2000">
