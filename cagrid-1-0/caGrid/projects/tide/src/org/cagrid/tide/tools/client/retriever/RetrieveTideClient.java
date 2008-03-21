@@ -35,6 +35,7 @@ public class RetrieveTideClient {
 //            TideDescriptor tideD = PublishTideClient.publishNewTide(f, tideRef, tideRepRef);
 //            
             RetrieveTideClient.retieveTide("391b8f0e-cbfe-4fb6-992f-c9e218694539", tideRepRef, newFile);
+            RetrieverWorkerPool.getInstance().shutdown();
         } catch (MalformedURIException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
