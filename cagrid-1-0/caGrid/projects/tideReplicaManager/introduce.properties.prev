@@ -1,0 +1,11 @@
+#Introduce Properties
+#Thu Mar 20 19:40:20 EDT 2008
+introduce.skeleton.services.list=TideReplicaManager,TideReplicaManagerContext
+introduce.skeleton.extensions=caGrid_Transfer
+introduce.skeleton.timestamp=1206035304415
+introduce.skeleton.service.name=TideReplicaManager
+introduce.skeleton.resource.options=main,singleton,identifiable,resourcePropertyManagement
+introduce.skeleton.destination.dir=C\:\\Users\\hastings\\TideReplicaManager
+introduce.skeleton.namespace.domain=http\://replica.tide.cagrid.org/TideReplicaManager
+introduce.soap.binding.excludes=\ 
+introduce.ns.excludes=\ -x http\://transfer.cagrid.org/Transfer -x gme\://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security
