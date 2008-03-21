@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/caGrid-TideReplicaManager"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/caGrid-tideReplicaManager"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/addressing-1.0.jar" sourcepath="/GT4_LOCATION/ws-core-4.0.3-src.zip"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/axis.jar" sourcepath="/GT4_LOCATION/java/core/source/src"/>
@@ -86,6 +86,6 @@
 	<classpathentry kind="lib" path="lib/fast-md5.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/caGrid-transfer-1.2"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/caGrid-service-security-provider-1.2"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/caGrid-TideServer"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/caGrid-tideServer"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

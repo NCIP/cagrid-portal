@@ -13,5 +13,5 @@
 </listAttribute>
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="org.cagrid.tide.client.TideClient"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-url ${string_prompt:the service url}"/>
-<stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="caGrid-Tide"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="caGrid-tide"/>
 </launchConfiguration>
