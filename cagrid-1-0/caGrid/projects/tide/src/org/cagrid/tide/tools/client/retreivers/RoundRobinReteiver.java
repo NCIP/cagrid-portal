@@ -13,7 +13,7 @@ import org.cagrid.tide.replica.context.client.TideReplicaManagerContextClient;
 import org.cagrid.tide.replica.stubs.types.TideReplicaManagerReference;
 
 
-public class RoundRobinReteiver implements TideRetreiver, FailedCollectorCallback {
+public class RoundRobinReteiver implements TideRetreiver, FailedCollectorCallback, FailedWriterCallback {
 
     public synchronized void retreive(String tideID, TideReplicaManagerReference replicaServer,
         TideRetreiver retreiver, File tideStorageFile) throws Exception {
@@ -25,7 +25,7 @@ public class RoundRobinReteiver implements TideRetreiver, FailedCollectorCallbac
         ThreadPoolExecutor executor = new ThreadPoolExecutor(5, 10, 10, TimeUnit.SECONDS,
             new ArrayBlockingQueue<Runnable>(20));
 
-        final CurrentWriter writer = new CurrentWriter(tideStorageFile, replicas.getTideDescriptor());
+        final CurrentWriter writer = new CurrentWriter(tideStorageFile, replicas.getTideDescriptor(), this);
         Thread th = new Thread(writer);
         th.start();
 
@@ -49,6 +49,12 @@ public class RoundRobinReteiver implements TideRetreiver, FailedCollectorCallbac
 
     public void failedCollector(CurrentCollector collector) {
         System.out.println("Failed Collector");
+    }
+
+
+    public void failedWriter(CurrentWriter writer) {
+        System.out.println("Failed Writer");
+        
     }
 
 }

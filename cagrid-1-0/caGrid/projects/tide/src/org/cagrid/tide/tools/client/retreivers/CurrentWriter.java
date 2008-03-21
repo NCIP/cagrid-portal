@@ -21,11 +21,14 @@ public class CurrentWriter implements Runnable {
     private boolean failed = false;
     private int chunksProcessed = 0;
     private long totalDataWriteTime = 0;
+    private FailedWriterCallback callback;
+    CurrentCollector currentCurrentCollector = null;
 
 
-    public CurrentWriter(File outputFile, final TideDescriptor tide) throws Exception {
+    public CurrentWriter(File outputFile, final TideDescriptor tide, FailedWriterCallback callback) throws Exception {
         this.outputFile = outputFile;
         this.tide = tide;
+        this.callback = callback;
         raf = new RandomAccessFile(outputFile, "rw");
     }
 
@@ -33,18 +36,22 @@ public class CurrentWriter implements Runnable {
     public void addCurrentCollector(CurrentCollector current) throws Exception {
         this.currents.put(current);
     }
+    
+    public CurrentCollector getCurrentCurrentCollector(){
+     return currentCurrentCollector;   
+    }
 
 
     public void run() {
         while (chunksProcessed < tide.getChunks()) {
-            CurrentCollector collector = currents.poll();
-            if (collector != null) {
-                System.out.println("Writting chunk " +  collector.getCurrent().getChunkNum());
-                Current current = this.tide.getCurrents().getCurrent(collector.getCurrent().getChunkNum());
+            currentCurrentCollector = currents.poll();
+            if (currentCurrentCollector != null) {
+                System.out.println("Writting chunk " +  currentCurrentCollector.getCurrent().getChunkNum());
+                Current current = this.tide.getCurrents().getCurrent(currentCurrentCollector.getCurrent().getChunkNum());
                 long start = System.currentTimeMillis();
                 try {
                     raf.seek(this.tide.getChunkSize() * current.getChunkNum());
-                    Iterator<byte[]> it = collector.getDataArrays().iterator();
+                    Iterator<byte[]> it = currentCurrentCollector.getDataArrays().iterator();
                     while (it.hasNext()) {
                         raf.write(it.next());
                     }
@@ -62,6 +69,7 @@ public class CurrentWriter implements Runnable {
                 } catch (InterruptedException e) {
                     failed = true;
                     e.printStackTrace();
+                    callback.failedWriter(this);
                 }
             }
         }
@@ -79,6 +87,7 @@ public class CurrentWriter implements Runnable {
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+            callback.failedWriter(this);
         }
 
     }

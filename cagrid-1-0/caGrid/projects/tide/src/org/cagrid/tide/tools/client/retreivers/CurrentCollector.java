@@ -23,6 +23,7 @@ public class CurrentCollector implements Runnable {
     private FailedCollectorCallback failedCallback = null;
     private boolean failed = false;
     private CurrentWriter writer = null;
+    private long collectionTimeWithOverhead = 0;
     private long collectionTime = 0;
 
 
@@ -38,11 +39,15 @@ public class CurrentCollector implements Runnable {
     public long getCollectionTimeInMillis() {
         return collectionTime;
     }
+    
+    public long getCollectionTimeWithOverheadInMillis() {
+        return collectionTimeWithOverhead;
+    }
 
 
     private void collect() throws Exception {
        
-        
+        long start1 = System.currentTimeMillis();
         TideContextClient tideClient = new TideContextClient(tideRep.getEndpointReference());
         WaveDescriptor wave = tideClient.getWave(new WaveRequest(new Current[]{current},tideDescriptor.getId()));
         TransferServiceContextClient transClient = new TransferServiceContextClient(wave
@@ -50,7 +55,8 @@ public class CurrentCollector implements Runnable {
         InputStream is = TransferClientHelper.getData(transClient.getDataTransferDescriptor());
         MD5InputStream mis = new MD5InputStream(is);
         
-        long start = System.currentTimeMillis();
+        long start2 = System.currentTimeMillis();
+        
         byte[] bytes = new byte[65536];
 
         int currentAmmountRead = 0;
@@ -70,8 +76,9 @@ public class CurrentCollector implements Runnable {
         }
 
         long stop = System.currentTimeMillis();
-        collectionTime = stop - start;
-        System.out.println("Read chunk " + this.current.getChunkNum()  + " in " +  collectionTime + " milliseconds");
+        collectionTime = stop - start2;
+        collectionTimeWithOverhead = stop - start1;
+        System.out.println("Read chunk " + this.current.getChunkNum()  + " in " +  collectionTime + " milliseconds for data read and " + collectionTimeWithOverhead + " in total");
         if (!this.current.getMd5Sum().equals(mis.getMD5().asHex())) {
             this.failed = true;
         } else {
