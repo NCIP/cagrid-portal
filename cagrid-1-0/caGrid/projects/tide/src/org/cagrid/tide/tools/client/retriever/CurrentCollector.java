@@ -15,6 +15,7 @@ import org.cagrid.transfer.context.client.helper.TransferClientHelper;
 
 import com.twmacinta.util.MD5InputStream;
 
+
 public class CurrentCollector implements Runnable {
     private TideReplicaDescriptor tideRep = null;
     private TideDescriptor tideDescriptor = null;
@@ -25,9 +26,11 @@ public class CurrentCollector implements Runnable {
     private CurrentWriter writer = null;
     private long collectionTimeWithOverhead = 0;
     private long collectionTime = 0;
+    private long bytesRead = 0;
 
 
-    public CurrentCollector(Current current, CurrentWriter writer, TideDescriptor tideDescriptor, TideReplicaDescriptor tideRep, FailedCollectorCallback callback) throws Exception {
+    public CurrentCollector(Current current, CurrentWriter writer, TideDescriptor tideDescriptor,
+        TideReplicaDescriptor tideRep, FailedCollectorCallback callback) throws Exception {
         this.current = current;
         this.writer = writer;
         this.tideDescriptor = tideDescriptor;
@@ -39,31 +42,32 @@ public class CurrentCollector implements Runnable {
     public long getCollectionTimeInMillis() {
         return collectionTime;
     }
-    
+
+
     public long getCollectionTimeWithOverheadInMillis() {
         return collectionTimeWithOverhead;
     }
 
 
     private void collect() throws Exception {
-       
+
         long start1 = System.currentTimeMillis();
         TideContextClient tideClient = new TideContextClient(tideRep.getEndpointReference());
-        WaveDescriptor wave = tideClient.getWave(new WaveRequest(new Current[]{current},tideDescriptor.getId()));
+        WaveDescriptor wave = tideClient.getWave(new WaveRequest(new Current[]{current}, tideDescriptor.getId()));
         TransferServiceContextClient transClient = new TransferServiceContextClient(wave
             .getTransferServiceContextReference().getEndpointReference());
         InputStream is = TransferClientHelper.getData(transClient.getDataTransferDescriptor());
         MD5InputStream mis = new MD5InputStream(is);
-        
+
         long start2 = System.currentTimeMillis();
-        
+
         byte[] bytes = new byte[65536];
 
         int currentAmmountRead = 0;
         byte[] readBytes = new byte[65536];
         int read = mis.read(bytes);
         while (read != -1) {
-
+            bytesRead += read;
             if (currentAmmountRead + read > 65536) {
                 byteArrays.add(readBytes);
                 readBytes = new byte[65536];
@@ -78,7 +82,8 @@ public class CurrentCollector implements Runnable {
         long stop = System.currentTimeMillis();
         collectionTime = stop - start2;
         collectionTimeWithOverhead = stop - start1;
-        System.out.println("Read chunk " + this.current.getChunkNum()  + " in " +  collectionTime + " milliseconds for data read and " + collectionTimeWithOverhead + " in total");
+        System.out.println("Read chunk " + this.current.getChunkNum() + " in " + collectionTime
+            + " milliseconds for data read and " + collectionTimeWithOverhead + " in total");
         if (!this.current.getMd5Sum().equals(mis.getMD5().asHex())) {
             this.failed = true;
         } else {
@@ -104,7 +109,7 @@ public class CurrentCollector implements Runnable {
         } catch (Exception e) {
             failed = true;
             e.printStackTrace();
-            if(failedCallback!=null){
+            if (failedCallback != null) {
                 failedCallback.failedCollector(this);
             }
         }

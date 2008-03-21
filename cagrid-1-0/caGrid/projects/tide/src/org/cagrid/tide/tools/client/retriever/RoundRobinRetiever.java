@@ -1,50 +1,37 @@
 package org.cagrid.tide.tools.client.retriever;
 
 import java.io.File;
-import java.util.Queue;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 import org.cagrid.tide.descriptor.Current;
 import org.cagrid.tide.descriptor.TideReplicaDescriptor;
 import org.cagrid.tide.descriptor.TideReplicasDescriptor;
-import org.cagrid.tide.replica.client.TideReplicaManagerClient;
-import org.cagrid.tide.replica.context.client.TideReplicaManagerContextClient;
 import org.cagrid.tide.replica.stubs.types.TideReplicaManagerReference;
 
 
-public class RoundRobinRetiever implements TideRetriever, FailedCollectorCallback, FailedWriterCallback {
+public class RoundRobinRetiever extends TideRetriever  {
 
-    public RoundRobinRetiever() {
 
+    public RoundRobinRetiever(String tideID, File tideStorageFile, TideReplicaManagerReference replicaServer,
+        TideReplicasDescriptor replicasDescriptor) throws Exception {
+        super(tideID, tideStorageFile, replicaServer, replicasDescriptor);
+        // TODO Auto-generated constructor stub
     }
 
 
-    public synchronized void retrieve(String tideID, TideReplicaManagerReference replicaServer,
-        TideRetriever retreiver, File tideStorageFile) throws Exception {
+    public void executeRetrievalAlgothim() throws Exception {
 
-        TideReplicaManagerClient client = new TideReplicaManagerClient(replicaServer.getEndpointReference());
-        TideReplicaManagerContextClient tclient = client.getTideReplicaManagerContext(tideID);
-        final TideReplicasDescriptor replicas = tclient.getReplicas();
+        for (int i = 0; i < getReplicasDescriptor().getTideDescriptor().getChunks(); i++) {
+            int nextHost = i % getReplicasDescriptor().getTideReplicaDescriptor().length;
 
-        final CurrentWriter writer = new CurrentWriter(tideStorageFile, replicas.getTideDescriptor(), this);
-        Thread th = new Thread(writer);
-        th.start();
+            TideReplicaDescriptor tideRep = getReplicasDescriptor().getTideReplicaDescriptor(nextHost);
+            Current current = getReplicasDescriptor().getTideDescriptor().getCurrents().getCurrent(i);
 
-        for (int i = 0; i < replicas.getTideDescriptor().getChunks(); i++) {
-            int nextHost = i % replicas.getTideReplicaDescriptor().length;
-
-            TideReplicaDescriptor tideRep = replicas.getTideReplicaDescriptor(nextHost);
-            Current current = replicas.getTideDescriptor().getCurrents().getCurrent(i);
-
-            CurrentCollector collector = new CurrentCollector(current, writer, replicas.getTideDescriptor(), tideRep,
+            CurrentCollector collector = new CurrentCollector(current, getWriter(), getReplicasDescriptor().getTideDescriptor(), tideRep,
                 RoundRobinRetiever.this);
 
             RetrieverWorkerPool.getInstance().submit(collector);
         }
 
-        th.join();
     }
 
 
