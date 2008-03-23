@@ -48,6 +48,7 @@
 	<complexType name="Current">
 		<xs:attribute type="int" name="chunkNum"></xs:attribute>
 		<xs:attribute type="string" name="md5sum"></xs:attribute>
+		<xs:attribute type="long" name="actualSize"></xs:attribute>
 	</complexType>
 
 	<element name="WaveRequest" type="tns:WaveRequest"></element>
@@ -67,12 +68,11 @@
 			<xs:element
 				ref="transferTypes:TransferServiceContextReference">
 			</xs:element>
+			<element ref="tns:Current" minOccurs="1"
+				maxOccurs="unbounded">
+			</element>
 		</xs:sequence>
 		<xs:attribute type="string" name="tideId"></xs:attribute>
-		<xs:attribute type="long" name="size"></xs:attribute>
-		<xs:attribute type="long" name="startpos"></xs:attribute>
-		<xs:attribute type="long" name="stoppos"></xs:attribute>
-		<xs:attribute type="string" name="md5sum"></xs:attribute>
 	</complexType>
 
 	<xs:element name="TideReplicasDescriptor"

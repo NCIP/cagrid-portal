@@ -5,7 +5,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.RandomAccessFile;
 import java.rmi.RemoteException;
+import java.util.LinkedList;
+import java.util.NoSuchElementException;
+import java.util.Queue;
 
+import org.cagrid.tide.descriptor.Current;
 import org.cagrid.tide.descriptor.TideDescriptor;
 import org.cagrid.tide.descriptor.WaveDescriptor;
 import org.cagrid.tide.descriptor.WaveRequest;
@@ -16,48 +20,70 @@ import org.cagrid.transfer.context.stubs.types.TransferServiceContextReference;
 
 public class FilePersistenceWaveFetcher implements WaveFetcher {
 
-    public abstract class CountInputStream extends InputStream {
-        abstract public long getRead();
+    public class CurrentInputStream extends InputStream {
+        RandomAccessFile raf;
+        Current[] currents;
+        long chunkSize;
+        long waveBytesRead = 0;
+        int currentChunk = 0;
+        LinkedList<RandomPortionFileInputStream> inputStreams;
+        RandomPortionFileInputStream ris;
+
+
+        public CurrentInputStream(File dataFile, Current[] currents, long chunkSize) throws Exception {
+            this.raf = raf;
+            this.currents = currents;
+            this.chunkSize = chunkSize;
+            inputStreams = new LinkedList<RandomPortionFileInputStream>();
+            System.out.println("Processing chunks");
+            for (int i = 0; i < currents.length; i++) {
+                System.out.println(currents[i].getChunkNum());
+                RandomPortionFileInputStream fileIS = new RandomPortionFileInputStream(dataFile, chunkSize
+                    * currents[i].getChunkNum(), chunkSize);
+                inputStreams.addLast(fileIS);
+            }
+            ris = inputStreams.removeFirst();
+            System.out.println("Offset is: " + ris.getOffset());
+        }
+
+
+        public long getRead() {
+            return waveBytesRead;
+        }
+
+
+        public int read() throws IOException {
+            if (waveBytesRead < chunkSize * currents.length && ris!=null) {
+                int b = ris.read();
+                if (b != -1) {
+                    waveBytesRead++;
+                } else {
+                    try {
+                        ris = inputStreams.removeFirst();
+                        System.out.println("Offset is: " + ris.getOffset());
+                        b = ris.read();
+                        waveBytesRead++;
+                    } catch (NoSuchElementException e) {
+                        b = -1;
+                    }
+                }
+                return b;
+            } else {
+                return -1;
+            }
+        }
     }
 
 
     public WaveDescriptor getWave(WaveRequest waveRequest, TideDescriptor tideDescriptor) throws Exception {
         try {
-            final WaveRequest waveR = waveRequest;
-            final File tideFile = new File(TideConfiguration.getConfiguration().getTideStorageDir() + File.separator
+            WaveRequest waveR = waveRequest;
+            File tideFile = new File(TideConfiguration.getConfiguration().getTideStorageDir() + File.separator
                 + tideDescriptor.getName() + "_" + tideDescriptor.getId() + ".tide");
-            final RandomAccessFile fis = new RandomAccessFile(tideFile, "r");
-            final long chunkSize = tideDescriptor.getChunkSize();
-            if (waveRequest.getCurrent(0).getChunkNum() > 0) {
-                fis.seek(waveRequest.getCurrent(0).getChunkNum() * chunkSize);
-            }
-            // only lets reading from the seeked to position to the size
-            CountInputStream is = new CountInputStream() {
-                long waveRead = 0;
 
-
-                public long getRead() {
-                    return waveRead;
-                }
-
-
-                public int read() throws IOException {
-                    if (waveRead < chunkSize) {
-                        int b = fis.read();
-                        if (b != -1) {
-                            waveRead++;
-                        }
-                        return b;
-                    } else {
-                        return -1;
-                    }
-                }
-
-            };
-
+            InputStream is = new CurrentInputStream(tideFile, waveR.getCurrent(), tideDescriptor.getChunkSize());
             TransferServiceContextReference tref = TransferServiceHelper.createTransferContext(is, null);
-            WaveDescriptor wave = new WaveDescriptor(null, is.getRead(), waveRequest.getCurrent(0).getChunkNum() * chunkSize,
-                waveRequest.getCurrent(0).getChunkNum() * chunkSize + is.getRead() - 1, waveRequest.getTideId(), tref);
+            WaveDescriptor wave = new WaveDescriptor(waveR.getCurrent(), waveR.getTideId(), tref);
 
             return wave;
         } catch (Exception e) {
