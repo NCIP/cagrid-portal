@@ -44,7 +44,7 @@
 
 
     <!-- Extenernal Dependencies -->
-    <dependency rev="1.1" org="mobius" name="mobius" conf="service->gme-server;client->gme-client,gme-grid-connector"/>
+    <dependency rev="1.1" org="mobius" name="mobius" conf="service->gme-server,tools,factory-base;client->gme-client,gme-grid-connector"/>
 
 
   </dependencies>
