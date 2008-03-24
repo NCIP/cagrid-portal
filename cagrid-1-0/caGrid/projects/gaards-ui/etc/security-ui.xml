@@ -23,8 +23,8 @@
                     <icon>/login.png</icon>
                     <showOnToolBar>true</showOnToolBar>
                     <dimensions>
-                        <width>600</width>
-                        <height>350</height>
+                        <width>700</width>
+                        <height>400</height>
                     </dimensions>
                 </component>
                 <component>
@@ -35,7 +35,7 @@
                     <showOnToolBar>true</showOnToolBar>
                     <dimensions>
                         <width>800</width>
-                        <height>450</height>
+                        <height>500</height>
                     </dimensions>
                 </component>
                  <component>
@@ -93,7 +93,7 @@
                     <showOnToolBar>false</showOnToolBar>
                     <dimensions>
                         <width>500</width>
-                        <height>325</height>
+                        <height>350</height>
                     </dimensions>
                 </component>
                  <component>
@@ -102,10 +102,6 @@
                     <classname>org.cagrid.gaards.ui.dorian.ifs.MyHostCertificatesWindow</classname>
                     <icon>/computers.png</icon>
                     <showOnToolBar>false</showOnToolBar>
-                    <dimensions>
-                        <width>550</width>
-                        <height>400</height>
-                    </dimensions>
                 </component>
                 <component>
                     <title>Download CA Certificate(s)</title>
@@ -114,8 +110,8 @@
                     <icon>/download.png</icon>
                     <showOnToolBar>false</showOnToolBar>
                     <dimensions>
-                        <width>500</width>
-                        <height>150</height>
+                        <width>625</width>
+                        <height>200</height>
                     </dimensions>
                 </component>
             </components>
@@ -136,9 +132,9 @@
                     <classname>org.cagrid.gaards.ui.dorian.ifs.UserManagerWindow</classname>
                     <icon>/users.png</icon>
                     <showOnToolBar>false</showOnToolBar>
-                    <dimensions>
-                        <width>700</width>
-                        <height>550</height>
+                       <dimensions>
+                        <width>800</width>
+                        <height>650</height>
                     </dimensions>
                 </component>
                 <component>
@@ -148,8 +144,8 @@
                     <icon>/computers.png</icon>
                     <showOnToolBar>false</showOnToolBar>
                     <dimensions>
-                        <width>700</width>
-                        <height>550</height>
+                        <width>800</width>
+                        <height>650</height>
                     </dimensions>
                 </component>
                 <component>
@@ -185,7 +181,7 @@
                     <showOnToolBar>false</showOnToolBar>
                     <dimensions>
                         <width>800</width>
-                        <height>500</height>
+                        <height>600</height>
                     </dimensions>
                 </component>
                 <component>
@@ -213,8 +209,8 @@
                     <icon>/application.png</icon>
                     <showOnToolBar>false</showOnToolBar>
                     <dimensions>
-                        <width>400</width>
-                        <height>550</height>
+                        <width>700</width>
+                        <height>650</height>
                     </dimensions>
                 </component>
                    <component>
@@ -224,8 +220,8 @@
                     <icon>/password.png</icon>
                     <showOnToolBar>false</showOnToolBar>
                     <dimensions>
-                        <width>500</width>
-                        <height>250</height>
+                        <width>650</width>
+                        <height>300</height>
                     </dimensions>
                 </component>
                 <component>
@@ -235,8 +231,8 @@
                     <icon>/users.png</icon>
                     <showOnToolBar>false</showOnToolBar>
                     <dimensions>
-                        <width>600</width>
-                        <height>550</height>
+                        <width>800</width>
+                        <height>650</height>
                     </dimensions>
                 </component>
 
@@ -296,7 +292,7 @@
                     <showOnToolBar>false</showOnToolBar>
                     <dimensions>
                         <width>1000</width>
-                        <height>600</height>
+                        <height>700</height>
                     </dimensions>
                 </component>
             </components>

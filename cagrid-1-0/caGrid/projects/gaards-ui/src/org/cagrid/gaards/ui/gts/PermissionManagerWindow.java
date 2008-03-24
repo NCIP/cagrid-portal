@@ -274,7 +274,7 @@ public class PermissionManagerWindow extends ApplicationComponent implements Per
 			String selectedService = ((GTSServiceListComboBox) getService()).getSelectedService();
 			GlobusCredential selectedProxy = ((CredentialComboBox) getProxy()).getSelectedCredential();
 			GridApplication.getContext().addApplicationComponent(
-                new AddPermissionWindow(selectedService, selectedProxy, this), 600, 300);
+                new AddPermissionWindow(selectedService, selectedProxy, this), 700, 350);
 		} catch (Exception e) {
 			ErrorDialog.showError(e);
 		}

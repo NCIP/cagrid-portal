@@ -126,7 +126,7 @@ public class HostCertificatesWindow extends ApplicationComponent implements Host
         try {
             HostCertificateWindow window = new HostCertificateWindow(getSession().getServiceURI(), getSession()
                 .getCredential(), getHostCertificatesTable().getSelectedHostCertificate(), true);
-            GridApplication.getContext().addApplicationComponent(window, 600, 575);
+            GridApplication.getContext().addApplicationComponent(window, 750, 650);
         } catch (Exception e) {
             ErrorDialog.showError(e);
         }

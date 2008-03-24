@@ -36,7 +36,7 @@ import org.globus.gsi.GlobusCredential;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: UserWindow.java,v 1.3 2008-02-11 19:24:51 langella Exp $
+ * @version $Id: UserWindow.java,v 1.4 2008-03-24 16:42:35 langella Exp $
  */
 public class UserWindow extends ApplicationComponent {
 
@@ -658,6 +658,7 @@ public class UserWindow extends ApplicationComponent {
 				credPanel = new CertificatePanel(CertUtil.loadCertificate(user
 						.getCertificate().getCertificateAsString()));
 				credPanel.setAllowImport(false);
+				credPanel.setAllowExport(false);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

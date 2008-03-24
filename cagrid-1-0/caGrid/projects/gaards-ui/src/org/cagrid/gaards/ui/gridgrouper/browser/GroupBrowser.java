@@ -1114,7 +1114,7 @@ public class GroupBrowser extends BaseBrowserPanel {
 								ErrorDialog.showError("You cannot add a member to a composite group!!!");
 							} else {
 								AddMemberWindow window = new AddMemberWindow(gp, node);
-								GridApplication.getContext().addApplicationComponent(window, 600, 300);
+								GridApplication.getContext().addApplicationComponent(window, 650, 325);
 							}
 						}
 					};
@@ -1406,7 +1406,7 @@ public class GroupBrowser extends BaseBrowserPanel {
 						public void execute() {
 							try {
 								GridApplication.getContext().addApplicationComponent(
-                                    new GroupPrivilegeWindow(gb), 500, 225);
+                                    new GroupPrivilegeWindow(gb), 650, 250);
 							} catch (Exception ex) {
 								ErrorDialog.showError(ex);
 							}

@@ -89,6 +89,11 @@ public class StemPrivilegeWindow extends ApplicationComponent {
 		this.browser = browser;
 		this.update = true;
 		this.targetStem = browser.getStem();
+		if(caddy==null){
+			update = false;
+		}else{
+			update = true;
+		}
 		initialize();
 	}
 

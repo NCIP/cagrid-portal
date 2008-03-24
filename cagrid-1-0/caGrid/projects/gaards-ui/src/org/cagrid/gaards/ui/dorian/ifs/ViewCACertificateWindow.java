@@ -194,7 +194,7 @@ public class ViewCACertificateWindow extends ApplicationComponent {
 			X509Certificate cert = client.getCACertificate();
 			dispose();
 			CertificateInformationComponent cic = new CertificateInformationComponent(cert);
-			GridApplication.getContext().addApplicationComponent(cic, 600, 425);
+			GridApplication.getContext().addApplicationComponent(cic, 700, 500);
 		} catch (Exception e) {
 			ErrorDialog.showError(e);
 		}

@@ -336,7 +336,7 @@ public class TrustedAuthoritiesWindow extends ApplicationComponent implements Tr
 			GlobusCredential selectedProxy = ((CredentialComboBox) getProxy()).getSelectedCredential();
 			TrustedAuthorityWindow window = new TrustedAuthorityWindow(selectedService, selectedProxy, this.getTrustedAuthorityTable()
 				.getSelectedTrustedAuthority(), this);
-			GridApplication.getContext().addApplicationComponent(window);
+			GridApplication.getContext().addApplicationComponent(window, 800, 675);
 		} catch (Exception e) {
 			ErrorDialog.showError(e);
 		}

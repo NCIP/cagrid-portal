@@ -125,7 +125,7 @@ public class GroupPrivilegesTable extends GrapeBaseTable {
 
 	public void doubleClick() throws Exception {
 		GroupPrivilegeCaddy caddy = getSelectedPrivilege();
-		GridApplication.getContext().addApplicationComponent(new GroupPrivilegeWindow(browser, caddy), 500, 200);
+		GridApplication.getContext().addApplicationComponent(new GroupPrivilegeWindow(browser, caddy), 650, 250);
 	}
 
 

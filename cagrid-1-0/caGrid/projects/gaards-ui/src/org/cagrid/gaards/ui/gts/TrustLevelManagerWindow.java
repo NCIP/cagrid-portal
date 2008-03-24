@@ -264,7 +264,7 @@ public class TrustLevelManagerWindow extends ApplicationComponent implements Tru
 		try {
 			String selectedService = ((GTSServiceListComboBox) getService()).getSelectedService();
 			GlobusCredential selectedProxy = ((CredentialComboBox) getProxy()).getSelectedCredential();
-			GridApplication.getContext().addApplicationComponent(new TrustLevelWindow(selectedService, selectedProxy, this), 500, 400);
+			GridApplication.getContext().addApplicationComponent(new TrustLevelWindow(selectedService, selectedProxy, this), 700, 400);
 		} catch (Exception e) {
 			ErrorDialog.showError(e);
 		}
@@ -276,7 +276,7 @@ public class TrustLevelManagerWindow extends ApplicationComponent implements Tru
 			String selectedService = ((GTSServiceListComboBox) getService()).getSelectedService();
 			GlobusCredential selectedProxy = ((CredentialComboBox) getProxy()).getSelectedCredential();
 			GridApplication.getContext().addApplicationComponent(
-				new TrustLevelWindow(selectedService, selectedProxy, getTrustLevelTable().getSelectedTrustLevel(), this), 500, 400);
+				new TrustLevelWindow(selectedService, selectedProxy, getTrustLevelTable().getSelectedTrustLevel(), this), 700, 400);
 		} catch (Exception e) {
 			ErrorDialog.showError(e);
 		}

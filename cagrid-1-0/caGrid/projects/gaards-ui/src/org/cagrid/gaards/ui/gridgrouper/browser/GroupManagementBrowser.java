@@ -254,7 +254,7 @@ public class GroupManagementBrowser extends ApplicationComponent {
 					Runner runner = new Runner() {
 						public void execute() {
 							GridApplication.getContext().addApplicationComponent(
-								new AddGridGrouperWindow(getGroupTree().getRootNode()), 400, 150);
+								new AddGridGrouperWindow(getGroupTree().getRootNode()), 650, 150);
 						}
 					};
 					try {

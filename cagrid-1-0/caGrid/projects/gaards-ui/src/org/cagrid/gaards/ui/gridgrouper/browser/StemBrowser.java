@@ -1696,7 +1696,7 @@ stopEvent(
 												.getContext()
 												.addApplicationComponent(
 														new StemPrivilegeWindow(
-																sb), 500, 200);
+																sb), 600, 200);
 
 									} catch (Exception ex) {
 										ErrorDialog.showError(ex);

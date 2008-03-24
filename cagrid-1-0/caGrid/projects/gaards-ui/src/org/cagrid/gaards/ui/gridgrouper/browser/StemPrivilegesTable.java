@@ -96,7 +96,7 @@ public class StemPrivilegesTable extends GrapeBaseTable {
 
 	public void doubleClick() throws Exception {
 		StemPrivilegeCaddy caddy = getSelectedPrivilege();
-		GridApplication.getContext().addApplicationComponent(new StemPrivilegeWindow(browser, caddy), 500, 200);
+		GridApplication.getContext().addApplicationComponent(new StemPrivilegeWindow(browser, caddy), 600, 200);
 	}
 
 

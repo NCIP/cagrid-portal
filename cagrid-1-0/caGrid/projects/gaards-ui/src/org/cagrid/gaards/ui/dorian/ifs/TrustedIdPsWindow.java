@@ -27,7 +27,7 @@ import org.cagrid.grape.utils.ErrorDialog;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: TrustedIdPsWindow.java,v 1.2 2007-11-15 00:52:30 dervin Exp $
+ * @version $Id: TrustedIdPsWindow.java,v 1.3 2008-03-24 16:42:35 langella Exp $
  */
 public class TrustedIdPsWindow extends ApplicationComponent {
 
@@ -254,7 +254,7 @@ public class TrustedIdPsWindow extends ApplicationComponent {
         try {
             GridApplication.getContext().addApplicationComponent(
                 new TrustedIdPWindow(getSession().getServiceURI(), getSession().getCredential(), getTrustedIdPTable()
-                    .getSelectedTrustedIdP(), getUserPolicies()));
+                    .getSelectedTrustedIdP(), getUserPolicies()), 750,650);
         } catch (Exception e) {
             ErrorDialog.showError(e);
         }

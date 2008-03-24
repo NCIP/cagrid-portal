@@ -280,7 +280,7 @@ public class AuthorityManagerWindow extends ApplicationComponent implements Auth
 
 			String selectedService = ((GTSServiceListComboBox) getService()).getSelectedService();
 			GlobusCredential selectedProxy = ((CredentialComboBox) getProxy()).getSelectedCredential();
-			GridApplication.getContext().addApplicationComponent(new AuthorityWindow(selectedService, selectedProxy, this), 600, 400);
+			GridApplication.getContext().addApplicationComponent(new AuthorityWindow(selectedService, selectedProxy, this), 700, 450);
 		} catch (Exception e) {
 			ErrorDialog.showError(e);
 		}
@@ -292,7 +292,7 @@ public class AuthorityManagerWindow extends ApplicationComponent implements Auth
 			String selectedService = ((GTSServiceListComboBox) getService()).getSelectedService();
 			GlobusCredential selectedProxy = ((CredentialComboBox) getProxy()).getSelectedCredential();
 			GridApplication.getContext().addApplicationComponent(
-				new AuthorityWindow(selectedService, selectedProxy, getAuthorityTable().getSelectedAuthority(), this), 600, 400);
+				new AuthorityWindow(selectedService, selectedProxy, getAuthorityTable().getSelectedAuthority(), this), 700, 450);
 		} catch (Exception e) {
 			ErrorDialog.showError(e);
 		}

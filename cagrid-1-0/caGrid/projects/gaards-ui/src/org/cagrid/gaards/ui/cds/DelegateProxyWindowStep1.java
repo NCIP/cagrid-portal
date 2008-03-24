@@ -373,7 +373,7 @@ public class DelegateProxyWindowStep1 extends ApplicationComponent implements
 			DelegateProxyWindowStep2 window = new DelegateProxyWindowStep2((String)getDelegationPolicy().getSelectedItem(),
 					cache);
 			GridApplication.getContext().addApplicationComponent(window, 600,
-					350);
+					400);
 			dispose();
 		} catch (Exception e) {
 			ErrorDialog.showError(e);

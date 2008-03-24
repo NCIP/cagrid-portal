@@ -65,7 +65,7 @@ public class GroupSelector extends JDialog {
 	 */
 	private void initialize() {
 		this.setTitle("Select Group");
-		this.setSize(500, 400);
+		this.setSize(600, 400);
 		this.setContentPane(getJContentPane());
 	}
 

@@ -105,6 +105,11 @@ public class GroupPrivilegeWindow extends ApplicationComponent {
 		this.browser = browser;
 		this.isUpdate = true;
 		this.targetGroup = browser.getGroupNode().getGroup();
+		if(caddy == null){
+			isUpdate = false;
+		}else{
+			isUpdate = true;
+		}
 		initialize();
 	}
 
