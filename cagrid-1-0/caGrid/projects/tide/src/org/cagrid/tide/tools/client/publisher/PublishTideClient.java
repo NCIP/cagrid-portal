@@ -1,4 +1,4 @@
-package org.cagrid.tide.tools.client.publishers;
+package org.cagrid.tide.tools.client.publisher;
 
 import gov.nih.nci.cagrid.common.FixedPortionFileInputStream;
 

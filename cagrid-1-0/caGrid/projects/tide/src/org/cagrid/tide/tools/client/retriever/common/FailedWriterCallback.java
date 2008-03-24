@@ -1,4 +1,5 @@
-package org.cagrid.tide.tools.client.retriever;
+package org.cagrid.tide.tools.client.retriever.common;
+
 
 
 public interface FailedWriterCallback {

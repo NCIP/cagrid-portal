@@ -1,4 +1,4 @@
-package org.cagrid.tide.tools.client.retriever;
+package org.cagrid.tide.tools.client.retriever.common;
 
 import org.cagrid.tide.descriptor.Current;
 import org.cagrid.tide.descriptor.TideDescriptor;

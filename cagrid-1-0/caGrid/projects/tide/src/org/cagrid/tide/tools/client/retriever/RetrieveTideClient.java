@@ -10,6 +10,8 @@ import org.cagrid.tide.replica.client.TideReplicaManagerClient;
 import org.cagrid.tide.replica.context.client.TideReplicaManagerContextClient;
 import org.cagrid.tide.replica.stubs.types.TideReplicaManagerReference;
 import org.cagrid.tide.stubs.types.TideReference;
+import org.cagrid.tide.tools.client.retriever.common.RetrieverWorkerPool;
+import org.cagrid.tide.tools.client.retriever.common.TideRetriever;
 
 
 public class RetrieveTideClient {
@@ -29,7 +31,7 @@ public class RetrieveTideClient {
         TideReplicaManagerContextClient tclient = client.getTideReplicaManagerContext(tideID);
         final TideReplicasDescriptor replicas = tclient.getReplicas();
 
-        RoundRobinRetiever retreiver = new RoundRobinRetiever(tideID, tideStorageFile, replicaServer, replicas);
+        BalancedRetiever retreiver = new BalancedRetiever(tideID, tideStorageFile, replicaServer, replicas);
         retreiver.retrieve();
     }
 

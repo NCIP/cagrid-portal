@@ -1,4 +1,4 @@
-package org.cagrid.tide.tools.client.retriever;
+package org.cagrid.tide.tools.client.retriever.common;
 
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
