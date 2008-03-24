@@ -117,6 +117,7 @@ public class TransferServiceContextResource extends TransferServiceContextResour
             length = is.read(data);
         }
         fw.close();
+        is.close();
 
         desc.setStatus(Status.Staged);
         setDataStorageDescriptor(desc);
