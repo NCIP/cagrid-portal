@@ -46,6 +46,14 @@ public class CurrentCollector implements Runnable {
     public List getCurrentByteArrayData(int index) {
         return byteArrays[index];
     }
+    
+    public long getDataTransferTime(int index) {
+        return collectionTime[index];
+    }
+    
+    public long getTransferSetupTime(){
+        return connectionTime;
+    }
 
 
     public Current getCurrent(int index) {
@@ -67,7 +75,7 @@ public class CurrentCollector implements Runnable {
         this.connectionTime = finishedConnection - startConnection;
 
         for (int i = 0; i < currents.length; i++) {
-            System.out.println("bout to read data from chunk " + currents[i].getChunkNum());
+            System.out.println("prepared to read data from chunk " + currents[i].getChunkNum());
             MD5InputStream mis = new MD5InputStream(is);
             long start = System.currentTimeMillis();
 
@@ -107,7 +115,7 @@ public class CurrentCollector implements Runnable {
             long stop = System.currentTimeMillis();
             collectionTime[i] = stop - start;
 
-            System.out.println("Read chunk " + this.currents[i].getChunkNum() + " in " + collectionTime[i] + "milliseconds");
+            System.out.println("Read chunk " + this.currents[i].getChunkNum() + " in " + collectionTime[i] + " milliseconds");
 
             if (!this.currents[i].getMd5Sum().equals(mis.getMD5().asHex())) {
                 System.out.println("expect : " + this.currents[i].getMd5Sum() + " but got : " +  mis.getMD5().asHex());

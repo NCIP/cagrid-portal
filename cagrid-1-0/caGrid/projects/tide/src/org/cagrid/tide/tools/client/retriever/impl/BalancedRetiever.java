@@ -33,6 +33,7 @@ public class BalancedRetiever extends TideRetriever {
         int chunkNum = 0;
         for (int i = 0; i < getReplicasDescriptor().getTideReplicaDescriptor().length; i++) {
             TideReplicaDescriptor tideRep = getReplicasDescriptor().getTideReplicaDescriptor()[i];
+            System.out.println("Retrieve from: " + tideRep.getEndpointReference());
             List<Current> currentList = new ArrayList<Current>();
             for (int j = 0; j < chunksPerReplica; j++) {
                 Current curr = getReplicasDescriptor().getTideDescriptor().getCurrents().getCurrent(chunkNum++);

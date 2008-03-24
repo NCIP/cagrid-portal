@@ -14,25 +14,28 @@ import com.twmacinta.util.MD5InputStream;
 
 
 public class CurrentWriter implements Runnable {
-  
+
     public class CurrentHolder {
         public CurrentCollector collector;
         public int currentIndex;
-        
-        public CurrentHolder(CurrentCollector collector, int currentIndex){
+
+
+        public CurrentHolder(CurrentCollector collector, int currentIndex) {
             this.currentIndex = currentIndex;
             this.collector = collector;
         }
+
 
         public CurrentCollector getCollector() {
             return collector;
         }
 
+
         public int getCurrentIndex() {
             return currentIndex;
         }
     }
-    
+
     private File outputFile = null;
     private ArrayBlockingQueue<CurrentHolder> currents = new ArrayBlockingQueue<CurrentHolder>(20);
     private RandomAccessFile raf = null;
@@ -64,19 +67,23 @@ public class CurrentWriter implements Runnable {
 
 
     public void run() {
+        int sleepCount = 0;
         while (chunksProcessed < tide.getChunks()) {
             CurrentHolder holder = currents.poll();
-            
             if (holder != null) {
+                long start = System.currentTimeMillis();
+                sleepCount = 0;
+
                 this.currentCurrentCollector = holder.getCollector();
                 this.currentCurrentCollectorIndex = holder.getCurrentIndex();
-                System.out.println("Writting chunk " + currentCurrentCollector.getCurrent(this.currentCurrentCollectorIndex).getChunkNum());
-                Current current = this.tide.getCurrents()
-                    .getCurrent(currentCurrentCollector.getCurrent(this.currentCurrentCollectorIndex).getChunkNum());
-                long start = System.currentTimeMillis();
+                System.out.println("Writting chunk "
+                    + currentCurrentCollector.getCurrent(this.currentCurrentCollectorIndex).getChunkNum());
+                Current current = this.tide.getCurrents().getCurrent(
+                    currentCurrentCollector.getCurrent(this.currentCurrentCollectorIndex).getChunkNum());
                 try {
                     raf.seek(this.tide.getChunkSize() * current.getChunkNum());
-                    Iterator<byte[]> it = currentCurrentCollector.getCurrentByteArrayData(this.currentCurrentCollectorIndex).iterator();
+                    Iterator<byte[]> it = currentCurrentCollector.getCurrentByteArrayData(
+                        this.currentCurrentCollectorIndex).iterator();
                     while (it.hasNext()) {
                         raf.write(it.next());
                     }
@@ -89,8 +96,13 @@ public class CurrentWriter implements Runnable {
                 this.totalDataWriteTime += (stop - start);
             } else {
                 try {
-                    System.out.println("Waiting for data to write");
-                    Thread.sleep(1000);
+                    System.out.println("Writer sleeping for " + (1 * sleepCount) + " seconds...");
+
+                    Thread.sleep(1000 * sleepCount++);
+                    if (sleepCount > 5) {
+                        sleepCount--;
+                    }
+
                 } catch (InterruptedException e) {
                     failed = true;
                     e.printStackTrace();

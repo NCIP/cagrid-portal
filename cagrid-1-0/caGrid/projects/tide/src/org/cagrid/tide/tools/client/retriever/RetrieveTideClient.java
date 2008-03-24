@@ -41,14 +41,14 @@ public class RetrieveTideClient {
         File f = new File("c:/apache-ant-1.7.0-bin.zip");
         File newFile = new File("c:/newapache-ant-1.7.0-bin.zip");
         try {
-            TideReference tideRef = new TideReference(new EndpointReferenceType(new Address(
-                "http://localhost:8080/wsrf/services/cagrid/Tide")));
+//            TideReference tideRef = new TideReference(new EndpointReferenceType(new Address(
+//                "http://localhost:8080/wsrf/services/cagrid/Tide")));
             TideReplicaManagerReference tideRepRef = new TideReplicaManagerReference(new EndpointReferenceType(
                 new Address("http://localhost:8080/wsrf/services/cagrid/TideReplicaManager")));
             // TideDescriptor tideD = PublishTideClient.publishNewTide(f,
             // tideRef, tideRepRef);
             //            
-            RetrieveTideClient.retieveTide("9b13021d-d70d-4d80-8b46-122e1f0be22f", tideRepRef, newFile);
+            RetrieveTideClient.retieveTide("a82f33e5-7193-4379-a95b-6308ce990cc5", tideRepRef, newFile);
             RetrieverWorkerPool.getInstance().shutdown();
         } catch (MalformedURIException e) {
             // TODO Auto-generated catch block
