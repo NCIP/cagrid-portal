@@ -7,14 +7,17 @@ import org.cagrid.tide.descriptor.TideDescriptor;
 import org.cagrid.tide.descriptor.TideReplicaDescriptor;
 import org.cagrid.tide.descriptor.TideReplicasDescriptor;
 import org.cagrid.tide.replica.stubs.types.TideReplicaManagerReference;
+import org.cagrid.tide.tools.client.retriever.common.CurrentCollector;
+import org.cagrid.tide.tools.client.retriever.common.CurrentWriter;
+import org.cagrid.tide.tools.client.retriever.common.RetrieverWorkerPool;
+import org.cagrid.tide.tools.client.retriever.common.TideRetriever;
 
 
-public class RoundRobinRetiever extends TideRetriever {
+public class BalancedRetiever extends TideRetriever {
 
-    public RoundRobinRetiever(String tideID, File tideStorageFile, TideReplicaManagerReference replicaServer,
+    public BalancedRetiever(String tideID, File tideStorageFile, TideReplicaManagerReference replicaServer,
         TideReplicasDescriptor replicasDescriptor) throws Exception {
         super(tideID, tideStorageFile, replicaServer, replicasDescriptor);
-        // TODO Auto-generated constructor stub
     }
 
 
@@ -26,7 +29,7 @@ public class RoundRobinRetiever extends TideRetriever {
             TideReplicaDescriptor tideRep = getReplicasDescriptor().getTideReplicaDescriptor(nextHost);
             Current current = getReplicasDescriptor().getTideDescriptor().getCurrents().getCurrent(i);
             CurrentCollector collector = new CurrentCollector(new Current[]{current}, getWriter(),
-                getReplicasDescriptor().getTideDescriptor(), tideRep, RoundRobinRetiever.this);
+                getReplicasDescriptor().getTideDescriptor(), tideRep, BalancedRetiever.this);
 
             RetrieverWorkerPool.getInstance().submit(collector);
         }

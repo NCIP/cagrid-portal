@@ -1,18 +1,18 @@
-package org.cagrid.tide.tools.common;
+package gov.nih.nci.cagrid.common;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.RandomAccessFile;
 
-public class RandomPortionFileInputStream extends InputStream {
+public class FixedPortionFileInputStream extends InputStream {
     File file;
     long offset;
     long length;
     RandomAccessFile randFile;
     long amountRead = 0;
     
-    public RandomPortionFileInputStream(File file, long offset, long length) throws Exception {
+    public FixedPortionFileInputStream(File file, long offset, long length) throws Exception {
         this.file = file;
         this.offset = offset;
         this.length = length;
@@ -22,6 +22,10 @@ public class RandomPortionFileInputStream extends InputStream {
     
     public long getAmountRead(){
         return this.amountRead;
+    }
+    
+    public long getOffset(){
+        return this.getOffset();
     }
     
     public int read() throws IOException {

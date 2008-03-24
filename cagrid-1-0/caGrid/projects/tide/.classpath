@@ -87,5 +87,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/caGrid-transfer-1.2"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/caGrid-service-security-provider-1.2"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/caGrid-tideServer"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/caGrid-core"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

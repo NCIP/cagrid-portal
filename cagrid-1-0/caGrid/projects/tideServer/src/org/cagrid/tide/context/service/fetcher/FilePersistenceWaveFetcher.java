@@ -1,5 +1,7 @@
 package org.cagrid.tide.context.service.fetcher;
 
+import gov.nih.nci.cagrid.common.FixedPortionFileInputStream;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -7,7 +9,6 @@ import java.io.RandomAccessFile;
 import java.rmi.RemoteException;
 import java.util.LinkedList;
 import java.util.NoSuchElementException;
-import java.util.Queue;
 
 import org.cagrid.tide.descriptor.Current;
 import org.cagrid.tide.descriptor.TideDescriptor;
@@ -26,19 +27,19 @@ public class FilePersistenceWaveFetcher implements WaveFetcher {
         long chunkSize;
         long waveBytesRead = 0;
         int currentChunk = 0;
-        LinkedList<RandomPortionFileInputStream> inputStreams;
-        RandomPortionFileInputStream ris;
+        LinkedList<FixedPortionFileInputStream> inputStreams;
+        FixedPortionFileInputStream ris;
 
 
         public CurrentInputStream(File dataFile, Current[] currents, long chunkSize) throws Exception {
             this.raf = raf;
             this.currents = currents;
             this.chunkSize = chunkSize;
-            inputStreams = new LinkedList<RandomPortionFileInputStream>();
+            inputStreams = new LinkedList<FixedPortionFileInputStream>();
             System.out.println("Processing chunks");
             for (int i = 0; i < currents.length; i++) {
                 System.out.println(currents[i].getChunkNum());
-                RandomPortionFileInputStream fileIS = new RandomPortionFileInputStream(dataFile, chunkSize
+                FixedPortionFileInputStream fileIS = new FixedPortionFileInputStream(dataFile, chunkSize
                     * currents[i].getChunkNum(), chunkSize);
                 inputStreams.addLast(fileIS);
             }

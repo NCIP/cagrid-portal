@@ -1,5 +1,7 @@
 package org.cagrid.tide.tools.client.publishers;
 
+import gov.nih.nci.cagrid.common.FixedPortionFileInputStream;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -16,7 +18,6 @@ import org.cagrid.tide.replica.client.TideReplicaManagerClient;
 import org.cagrid.tide.replica.context.client.TideReplicaManagerContextClient;
 import org.cagrid.tide.replica.stubs.types.TideReplicaManagerReference;
 import org.cagrid.tide.stubs.types.TideReference;
-import org.cagrid.tide.tools.common.RandomPortionFileInputStream;
 import org.cagrid.transfer.context.client.TransferServiceContextClient;
 import org.cagrid.transfer.context.client.helper.TransferClientHelper;
 import org.cagrid.transfer.context.stubs.types.TransferServiceContextReference;
@@ -58,7 +59,7 @@ public class PublishTideClient {
         Current[] currents = new Current[tide.getChunks()];
         
         for(int i = 0; i < tide.getChunks(); i++){
-           MD5InputStream portionmis = new MD5InputStream(new RandomPortionFileInputStream(data, i*tide.getChunkSize(), tide.getChunkSize()));
+           MD5InputStream portionmis = new MD5InputStream(new FixedPortionFileInputStream(data, i*tide.getChunkSize(), tide.getChunkSize()));
            long chunkActualSize = 0;
            while ((num_read = portionmis.read(buf)) != -1){
                chunkActualSize +=num_read;

@@ -86,5 +86,6 @@
 	<classpathentry kind="lib" path="lib/caGrid-Transfer-client-1.2.jar"/>
 	<classpathentry kind="lib" path="lib/caGrid-Transfer-common-1.2.jar"/>
 	<classpathentry kind="lib" path="lib/fast-md5.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/caGrid-core"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
