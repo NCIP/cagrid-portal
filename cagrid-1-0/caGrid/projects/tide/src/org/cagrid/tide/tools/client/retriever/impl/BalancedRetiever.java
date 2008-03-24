@@ -1,6 +1,9 @@
 package org.cagrid.tide.tools.client.retriever.impl;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import org.cagrid.tide.descriptor.Current;
 import org.cagrid.tide.descriptor.TideDescriptor;
@@ -23,13 +26,25 @@ public class BalancedRetiever extends TideRetriever {
 
     public void executeRetrievalAlgothim() throws Exception {
 
-        for (int i = 0; i < getReplicasDescriptor().getTideDescriptor().getChunks(); i++) {
-            int nextHost = i % getReplicasDescriptor().getTideReplicaDescriptor().length;
+        // currently assumes that the number of chunks is more than the number
+        // of replications......
+        // currently assumes that it should use all the replicas.....
+        int chunksPerReplica = getReplicasDescriptor().getTideDescriptor().getChunks() /getReplicasDescriptor().getTideReplicaDescriptor().length;
+        int chunkNum = 0;
+        for (int i = 0; i < getReplicasDescriptor().getTideReplicaDescriptor().length; i++) {
+            TideReplicaDescriptor tideRep = getReplicasDescriptor().getTideReplicaDescriptor()[i];
+            List<Current> currentList = new ArrayList<Current>();
+            for (int j = 0; j < chunksPerReplica; j++) {
+                Current curr = getReplicasDescriptor().getTideDescriptor().getCurrents().getCurrent(chunkNum++);
+                if (curr != null) {
+                    currentList.add(curr);
+                }
 
-            TideReplicaDescriptor tideRep = getReplicasDescriptor().getTideReplicaDescriptor(nextHost);
-            Current current = getReplicasDescriptor().getTideDescriptor().getCurrents().getCurrent(i);
-            CurrentCollector collector = new CurrentCollector(new Current[]{current}, getWriter(),
-                getReplicasDescriptor().getTideDescriptor(), tideRep, BalancedRetiever.this);
+            }
+            Current[] currs = new Current[currentList.size()];
+            currentList.toArray(currs);
+            CurrentCollector collector = new CurrentCollector(currs, getWriter(), getReplicasDescriptor()
+                .getTideDescriptor(), tideRep, BalancedRetiever.this);
 
             RetrieverWorkerPool.getInstance().submit(collector);
         }
