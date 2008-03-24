@@ -16,6 +16,12 @@ import org.cagrid.tide.tools.client.retriever.common.RetrieverWorkerPool;
 import org.cagrid.tide.tools.client.retriever.common.TideRetriever;
 
 
+/**
+ * Simple retriever algorithm for balancing the data to be retrieved across the
+ * registered data servers.
+ * 
+ * @author hastings
+ */
 public class BalancedRetiever extends TideRetriever {
 
     public BalancedRetiever(String tideID, File tideStorageFile, TideReplicaManagerReference replicaServer,
@@ -29,7 +35,8 @@ public class BalancedRetiever extends TideRetriever {
         // currently assumes that the number of chunks is more than the number
         // of replications......
         // currently assumes that it should use all the replicas.....
-        int chunksPerReplica = getReplicasDescriptor().getTideDescriptor().getChunks() /getReplicasDescriptor().getTideReplicaDescriptor().length;
+        int chunksPerReplica = getReplicasDescriptor().getTideDescriptor().getChunks()
+            / getReplicasDescriptor().getTideReplicaDescriptor().length;
         int chunkNum = 0;
         for (int i = 0; i < getReplicasDescriptor().getTideReplicaDescriptor().length; i++) {
             TideReplicaDescriptor tideRep = getReplicasDescriptor().getTideReplicaDescriptor()[i];

@@ -16,6 +16,13 @@ import org.cagrid.transfer.context.client.helper.TransferClientHelper;
 import com.twmacinta.util.MD5InputStream;
 
 
+/**
+ * The CurrentCollector is a class that talks to a particular TideServer and
+ * requests a chunk of list of chunks (Currents) to be delivered back. The data
+ * is then collection and stored in data arrays and passed on to a writer.
+ * 
+ * @author hastings
+ */
 public class CurrentCollector implements Runnable {
     private TideReplicaDescriptor tideRep = null;
     private TideDescriptor tideDescriptor = null;
@@ -46,12 +53,14 @@ public class CurrentCollector implements Runnable {
     public List getCurrentByteArrayData(int index) {
         return byteArrays[index];
     }
-    
+
+
     public long getDataTransferTime(int index) {
         return collectionTime[index];
     }
-    
-    public long getTransferSetupTime(){
+
+
+    public long getTransferSetupTime() {
         return connectionTime;
     }
 
@@ -70,7 +79,7 @@ public class CurrentCollector implements Runnable {
             .getTransferServiceContextReference().getEndpointReference());
         // this stream currently only has one current in it...........
         InputStream is = TransferClientHelper.getData(transClient.getDataTransferDescriptor());
-       
+
         long finishedConnection = System.currentTimeMillis();
         this.connectionTime = finishedConnection - startConnection;
 
@@ -115,10 +124,11 @@ public class CurrentCollector implements Runnable {
             long stop = System.currentTimeMillis();
             collectionTime[i] = stop - start;
 
-            System.out.println("Read chunk " + this.currents[i].getChunkNum() + " in " + collectionTime[i] + " milliseconds");
+            System.out.println("Read chunk " + this.currents[i].getChunkNum() + " in " + collectionTime[i]
+                + " milliseconds");
 
             if (!this.currents[i].getMd5Sum().equals(mis.getMD5().asHex())) {
-                System.out.println("expect : " + this.currents[i].getMd5Sum() + " but got : " +  mis.getMD5().asHex());
+                System.out.println("expect : " + this.currents[i].getMd5Sum() + " but got : " + mis.getMD5().asHex());
                 this.failed[i] = true;
                 this.failedCallback.failedCollector(currents[i], this.tideDescriptor, this.tideRep);
             } else {

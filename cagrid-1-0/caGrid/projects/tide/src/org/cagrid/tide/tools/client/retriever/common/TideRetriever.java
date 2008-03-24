@@ -5,6 +5,13 @@ import java.io.File;
 import org.cagrid.tide.descriptor.TideReplicasDescriptor;
 import org.cagrid.tide.replica.stubs.types.TideReplicaManagerReference;
 
+
+/**
+ * Base Class for a Retriever Algorithm.
+ * 
+ * @author hastings
+ *
+ */
 public abstract class TideRetriever implements FailedWriterCallback, FailedCollectorCallback {
     private String tideID;
     private TideReplicaManagerReference replicaServer;

@@ -13,6 +13,12 @@ import org.cagrid.tide.descriptor.TideDescriptor;
 import com.twmacinta.util.MD5InputStream;
 
 
+/**
+ * The CurrentWriter is a Runnable class that maintains a Queue of collected
+ * data chunks that needs to be written to specific areas of a file.
+ * 
+ * @author hastings
+ */
 public class CurrentWriter implements Runnable {
 
     public class CurrentHolder {

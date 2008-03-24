@@ -5,6 +5,13 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 
+/**
+ * Makes so that if we start N downloads from the same client that we don't have
+ * N thread pools trying to manage them. This is one static thread pool that any
+ * Retriever should used to place runnable tasks to be executed.
+ * 
+ * @author hastings
+ */
 public class RetrieverWorkerPool {
     private ThreadPoolExecutor executor = null;
     private static RetrieverWorkerPool pool = null;
