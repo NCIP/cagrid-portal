@@ -49,7 +49,7 @@ public class TransferServiceConfiguration implements ServiceConfiguration {
 	
 	private String storageDirectory;
 	
-	private String defaultTrasferContextTerminaitionTimeInMinutes;
+	private String defaultTransferServiceContextTerminationTimeInMinutes;
 	
 	
 	public String getEtcDirectoryPath() {
@@ -81,13 +81,13 @@ public class TransferServiceConfiguration implements ServiceConfiguration {
 	}
 
 	
-	public String getDefaultTrasferContextTerminaitionTimeInMinutes() {
-		return defaultTrasferContextTerminaitionTimeInMinutes;
+	public String getDefaultTransferServiceContextTerminationTimeInMinutes() {
+		return defaultTransferServiceContextTerminationTimeInMinutes;
 	}
 	
 	
-	public void setDefaultTrasferContextTerminaitionTimeInMinutes(String defaultTrasferContextTerminaitionTimeInMinutes) {
-		this.defaultTrasferContextTerminaitionTimeInMinutes = defaultTrasferContextTerminaitionTimeInMinutes;
+	public void setDefaultTransferServiceContextTerminationTimeInMinutes(String defaultTransferServiceContextTerminationTimeInMinutes) {
+		this.defaultTransferServiceContextTerminationTimeInMinutes = defaultTransferServiceContextTerminationTimeInMinutes;
 	}
 
 	

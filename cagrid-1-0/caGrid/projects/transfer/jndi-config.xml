@@ -80,8 +80,8 @@
           <value>ETC-PATH/@storageDirectory@</value>
         </parameter>
         <parameter>
-          <name>defaultTrasferContextTerminaitionTimeInMinutes</name>
-          <value>@defaultTrasferContextTerminaitionTimeInMinutes@</value>
+          <name>defaultTransferServiceContextTerminationTimeInMinutes</name>
+          <value>@defaultTransferServiceContextTerminationTimeInMinutes@</value>
         </parameter>
       </resourceParams>
     </resource>

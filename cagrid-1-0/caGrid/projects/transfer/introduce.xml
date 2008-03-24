@@ -152,6 +152,6 @@
  <ns20:ServiceProperties xmlns:ns20="gme://gov.nih.nci.cagrid.introduce/1/Property">
   <ns20:Property description="The webapp and servlet name of the deployed transfer servlet" isFromETC="false" key="transferServletPathName" value="/caGridTransfer/TransferServlet"/>
   <ns20:Property description="The directory to store the transfer files" isFromETC="true" key="storageDirectory" value="transferCache"/>
-  <ns20:Property description="The default termination time that will be set on a transfer context." isFromETC="false" key="defaultTrasferContextTerminaitionTimeInMinutes" value="30"/>
+  <ns20:Property description="The default time set to terminate a transfer service context." isFromETC="false" key="defaultTransferServiceContextTerminationTimeInMinutes" value="30"/>
  </ns20:ServiceProperties>
 </ns1:ServiceDescription>

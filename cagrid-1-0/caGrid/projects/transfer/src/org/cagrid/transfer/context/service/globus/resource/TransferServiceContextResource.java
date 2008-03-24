@@ -37,7 +37,7 @@ public class TransferServiceContextResource extends TransferServiceContextResour
         Calendar cal = GregorianCalendar.getInstance();
         try {
             cal.add(Calendar.MINUTE, Integer.parseInt(TransferServiceConfiguration.getConfiguration()
-                .getDefaultTrasferContextTerminaitionTimeInMinutes()));
+                .getDefaultTransferServiceContextTerminationTimeInMinutes()));
         } catch (NumberFormatException e) {
             e.printStackTrace();
             throw new ResourceException(e);
