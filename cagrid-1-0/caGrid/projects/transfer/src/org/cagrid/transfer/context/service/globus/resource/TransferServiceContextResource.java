@@ -170,7 +170,6 @@ public class TransferServiceContextResource extends TransferServiceContextResour
             removeDataFile();
         } catch (Exception e) {
             e.printStackTrace();
-            throw new ResourceException(e);
         }
     }
 
