@@ -45,12 +45,9 @@ public class FixedPortionFileInputStream extends InputStream {
             int b = randFile.read();
             if (b != -1) {
                 amountRead++;
-            } else {
-                close();
             }
             return b;
         } else {
-            close();
             return -1;
         }
     }
