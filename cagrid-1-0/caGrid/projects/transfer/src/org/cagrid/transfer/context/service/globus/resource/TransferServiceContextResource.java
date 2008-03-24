@@ -35,8 +35,16 @@ public class TransferServiceContextResource extends TransferServiceContextResour
     public void initialize(Object resourceBean, QName resourceElementQName, Object id) throws ResourceException {
         super.initialize(resourceBean, resourceElementQName, id);
         Calendar cal = GregorianCalendar.getInstance();
-        cal.add(Calendar.MINUTE, 30);
-        // default termination time is 30 minutes.
+        try {
+            cal.add(Calendar.MINUTE, Integer.parseInt(TransferServiceConfiguration.getConfiguration()
+                .getDefaultTrasferContextTerminaitionTimeInMinutes()));
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            throw new ResourceException(e);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ResourceException(e);
+        } 
         this.setTerminationTime(cal);
     }
 
@@ -105,7 +113,7 @@ public class TransferServiceContextResource extends TransferServiceContextResour
         byte[] data = new byte[1024];
         int length = is.read(data);
         while (length >= 0) {
-            fw.write(data,0,length);
+            fw.write(data, 0, length);
             length = is.read(data);
         }
         fw.close();

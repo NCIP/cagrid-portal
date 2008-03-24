@@ -49,6 +49,8 @@ public class TransferServiceConfiguration implements ServiceConfiguration {
 	
 	private String storageDirectory;
 	
+	private String defaultTrasferContextTerminaitionTimeInMinutes;
+	
 	
 	public String getEtcDirectoryPath() {
 		return ContainerConfig.getBaseDirectory() + File.separator + etcDirectoryPath;
@@ -76,6 +78,16 @@ public class TransferServiceConfiguration implements ServiceConfiguration {
 	
 	public void setStorageDirectory(String storageDirectory) {
 		this.storageDirectory = storageDirectory;
+	}
+
+	
+	public String getDefaultTrasferContextTerminaitionTimeInMinutes() {
+		return defaultTrasferContextTerminaitionTimeInMinutes;
+	}
+	
+	
+	public void setDefaultTrasferContextTerminaitionTimeInMinutes(String defaultTrasferContextTerminaitionTimeInMinutes) {
+		this.defaultTrasferContextTerminaitionTimeInMinutes = defaultTrasferContextTerminaitionTimeInMinutes;
 	}
 
 	

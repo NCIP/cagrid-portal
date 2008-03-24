@@ -1,79 +1,79 @@
 <ns1:ServiceDescription introduceVersion="1.2" xmlns:ns1="gme://gov.nih.nci.cagrid/1/Introduce">
  <ns2:Namespaces xsi:type="ns2:NamespacesType" xmlns:ns2="gme://gov.nih.nci.cagrid.introduce/1/Namespace" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <ns2:Namespace location="./caGrid_Transfer.xsd" namespace="http://transfer.cagrid.org/Transfer" packageName="org.cagrid.transfer.descriptor" xsi:type="ns2:NamespaceType">
-   <ns2:SchemaElement type="DataTransferDescriptor" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="DataDescriptor" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="Status" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="DataStorageDescriptor" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="DataTransferDescriptor" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Status" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
   <ns2:Namespace namespace="http://www.w3.org/2001/XMLSchema" xsi:type="ns2:NamespaceType">
-   <ns2:SchemaElement type="anyType" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="string" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="boolean" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="int" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="integer" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="decimal" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="float" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="double" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="short" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="long" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="byte" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="base64Binary" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="dateTime" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="date" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="QName" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="anySimpleType" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="anyType" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="anyURI" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="base64Binary" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="boolean" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="byte" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="date" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="dateTime" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="decimal" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="double" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="duration" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="time" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="gYearMonth" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="gYear" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="gMonthDay" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ENTITIES" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ENTITY" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="float" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="gDay" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="gMonth" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="gMonthDay" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="gYear" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="gYearMonth" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="hexBinary" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="NOTATION" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="anyURI" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="normalizedString" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="token" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="nonPositiveInteger" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="nonNegativeInteger" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="language" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="Name" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="NMTOKEN" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="negativeInteger" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="unsignedLong" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="positiveInteger" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="NCName" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="NMTOKENS" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="unsignedInt" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="ID" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="IDREF" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="ENTITY" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="unsignedShort" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="IDREFS" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="ENTITIES" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="int" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="integer" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="language" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="long" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Name" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="NCName" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="negativeInteger" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="NMTOKEN" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="NMTOKENS" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="nonNegativeInteger" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="nonPositiveInteger" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="normalizedString" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="NOTATION" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="positiveInteger" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="QName" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="short" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="string" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="time" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="token" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="unsignedByte" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="unsignedInt" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="unsignedLong" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="unsignedShort" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
   <ns2:Namespace location="./TransferServiceTypes.xsd" namespace="http://transfer.cagrid.org/TransferService/types" packageName="org.cagrid.transfer.stubs.types" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="TransferServiceReference" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
   <ns2:Namespace generateStubs="false" location="./xsd/cagrid/types/security/security.xsd" namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security" packageName="gov.nih.nci.cagrid.metadata.security" xsi:type="ns2:NamespaceType">
-   <ns2:SchemaElement type="ServiceSecurityMetadata" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="CommunicationMechanism" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="Operation" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="CommunicationStyle" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="GSISecureMessage" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="GSISecureConversation" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="GSISecureMessage" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="GSITransport" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="None" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Operation" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ServiceSecurityMetadata" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
   <ns2:Namespace location="./TransferServiceContextTypes.xsd" namespace="http://transfer.cagrid.org/TransferService/Context/types" packageName="org.cagrid.transfer.context.stubs.types" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="TransferServiceContextReference" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
   <ns2:Namespace location="../wsrf/lifetime/WS-ResourceLifetime.xsd" namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.xsd" packageName="org.oasis.wsrf.lifetime" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="CurrentTime" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="TerminationTime" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="TerminationNotification" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="TerminationTime" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
  </ns2:Namespaces>
  <ns3:Services xsi:type="ns3:ServicesType" xmlns:ns3="gme://gov.nih.nci.cagrid.introduce/1/Services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
@@ -152,5 +152,6 @@
  <ns20:ServiceProperties xmlns:ns20="gme://gov.nih.nci.cagrid.introduce/1/Property">
   <ns20:Property description="The webapp and servlet name of the deployed transfer servlet" isFromETC="false" key="transferServletPathName" value="/caGridTransfer/TransferServlet"/>
   <ns20:Property description="The directory to store the transfer files" isFromETC="true" key="storageDirectory" value="transferCache"/>
+  <ns20:Property description="The default termination time that will be set on a transfer context." isFromETC="false" key="defaultTrasferContextTerminaitionTimeInMinutes" value="30"/>
  </ns20:ServiceProperties>
 </ns1:ServiceDescription>

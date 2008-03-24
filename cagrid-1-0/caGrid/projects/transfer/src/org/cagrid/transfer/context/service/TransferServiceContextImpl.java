@@ -8,7 +8,6 @@ import org.cagrid.transfer.descriptor.DataStorageDescriptor;
 import org.cagrid.transfer.descriptor.Status;
 import org.globus.ftp.dc.TransferContext;
 
-
 /**
  * TODO:I am the service side implementation class. IMPLEMENT AND DOCUMENT ME
  * 
@@ -20,8 +19,7 @@ public class TransferServiceContextImpl extends TransferServiceContextImplBase {
         super();
     }
 
-
-    public org.cagrid.transfer.descriptor.DataTransferDescriptor getDataTransferDescriptor() throws RemoteException {
+  public org.cagrid.transfer.descriptor.DataTransferDescriptor getDataTransferDescriptor() throws RemoteException {
         TransferServiceContextResource resource = null;
         try {
             resource = getResourceHome().getAddressedResource();
@@ -54,8 +52,7 @@ public class TransferServiceContextImpl extends TransferServiceContextImplBase {
         return dataDesc;
     }
 
-
-    public org.cagrid.transfer.descriptor.Status getStatus() throws RemoteException {
+  public org.cagrid.transfer.descriptor.Status getStatus() throws RemoteException {
         TransferServiceContextResource resource = null;
         try {
             resource = getResourceHome().getAddressedResource();
@@ -66,8 +63,7 @@ public class TransferServiceContextImpl extends TransferServiceContextImplBase {
         return resource.getDataStorageDescriptor().getStatus();
     }
 
-
-    public void setStatus(org.cagrid.transfer.descriptor.Status status) throws RemoteException {
+  public void setStatus(org.cagrid.transfer.descriptor.Status status) throws RemoteException {
         TransferServiceContextResource resource = null;
         try {
             resource = getResourceHome().getAddressedResource();

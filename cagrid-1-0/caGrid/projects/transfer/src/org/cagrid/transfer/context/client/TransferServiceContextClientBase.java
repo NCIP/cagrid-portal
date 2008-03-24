@@ -138,7 +138,7 @@ public abstract class TransferServiceContextClientBase extends ServiceSecurityCl
             .getResourcePropertyValueChangeNotification();
 
         if (changeMessage != null) {
-            System.out.println("Got notification with value: " + changeMessage.getNewValue().get_any()[0].getValue());
+            System.out.println("Got notification");
         }
     }
 

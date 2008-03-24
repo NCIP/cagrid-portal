@@ -79,6 +79,10 @@
           <name>storageDirectory</name>
           <value>ETC-PATH/@storageDirectory@</value>
         </parameter>
+        <parameter>
+          <name>defaultTrasferContextTerminaitionTimeInMinutes</name>
+          <value>@defaultTrasferContextTerminaitionTimeInMinutes@</value>
+        </parameter>
       </resourceParams>
     </resource>
     <resource name="home" type="org.cagrid.transfer.service.globus.resource.TransferServiceResourceHome">
