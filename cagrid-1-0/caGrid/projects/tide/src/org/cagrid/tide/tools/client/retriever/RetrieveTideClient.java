@@ -12,6 +12,7 @@ import org.cagrid.tide.replica.stubs.types.TideReplicaManagerReference;
 import org.cagrid.tide.stubs.types.TideReference;
 import org.cagrid.tide.tools.client.retriever.common.RetrieverWorkerPool;
 import org.cagrid.tide.tools.client.retriever.common.TideRetriever;
+import org.cagrid.tide.tools.client.retriever.impl.BalancedRetiever;
 
 
 public class RetrieveTideClient {

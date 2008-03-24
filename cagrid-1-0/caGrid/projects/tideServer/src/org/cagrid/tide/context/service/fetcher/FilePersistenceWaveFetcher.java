@@ -32,11 +32,9 @@ public class FilePersistenceWaveFetcher implements WaveFetcher {
 
 
         public CurrentInputStream(File dataFile, Current[] currents, long chunkSize) throws Exception {
-            this.raf = raf;
             this.currents = currents;
             this.chunkSize = chunkSize;
             inputStreams = new LinkedList<FixedPortionFileInputStream>();
-            System.out.println("Processing chunks");
             for (int i = 0; i < currents.length; i++) {
                 System.out.println(currents[i].getChunkNum());
                 FixedPortionFileInputStream fileIS = new FixedPortionFileInputStream(dataFile, chunkSize
@@ -44,7 +42,6 @@ public class FilePersistenceWaveFetcher implements WaveFetcher {
                 inputStreams.addLast(fileIS);
             }
             ris = inputStreams.removeFirst();
-            System.out.println("Offset is: " + ris.getOffset());
         }
 
 
@@ -54,14 +51,14 @@ public class FilePersistenceWaveFetcher implements WaveFetcher {
 
 
         public int read() throws IOException {
-            if (waveBytesRead < chunkSize * currents.length && ris!=null) {
+            if (waveBytesRead < chunkSize * currents.length && ris != null) {
                 int b = ris.read();
                 if (b != -1) {
                     waveBytesRead++;
                 } else {
                     try {
+                        ris.close();
                         ris = inputStreams.removeFirst();
-                        System.out.println("Offset is: " + ris.getOffset());
                         b = ris.read();
                         waveBytesRead++;
                     } catch (NoSuchElementException e) {
@@ -70,6 +67,9 @@ public class FilePersistenceWaveFetcher implements WaveFetcher {
                 }
                 return b;
             } else {
+                if (ris != null) {
+                    ris.close();
+                }
                 return -1;
             }
         }

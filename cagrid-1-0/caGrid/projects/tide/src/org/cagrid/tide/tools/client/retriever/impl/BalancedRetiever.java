@@ -1,4 +1,4 @@
-package org.cagrid.tide.tools.client.retriever;
+package org.cagrid.tide.tools.client.retriever.impl;
 
 import java.io.File;
 
@@ -23,7 +23,7 @@ public class BalancedRetiever extends TideRetriever {
 
     public void executeRetrievalAlgothim() throws Exception {
 
-        for (int i = 0; i < getReplicasDescriptor().getTideDescriptor().getChunks(); i = i + 2) {
+        for (int i = 0; i < getReplicasDescriptor().getTideDescriptor().getChunks(); i++) {
             int nextHost = i % getReplicasDescriptor().getTideReplicaDescriptor().length;
 
             TideReplicaDescriptor tideRep = getReplicasDescriptor().getTideReplicaDescriptor(nextHost);
