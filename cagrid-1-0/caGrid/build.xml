@@ -196,7 +196,7 @@
 		<delete>
 			<fileset dir="${introduce.extensions.dir}/lib" includes="**" />
 		</delete>
-		<for list="${introduce.extension.projects.list}" parallel="true" param="project.name" trim="true">
+		<for list="${introduce.extension.projects.list}" parallel="false" param="project.name" trim="true">
 			<sequential>
 				<echo message="Installing Introduce Extensions from @{project.name}." />
 				<ant dir="${projects.dir}/@{project.name}" inheritAll="false" antfile="build.xml" target="installIntroduceExtensions">
