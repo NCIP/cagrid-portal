@@ -406,7 +406,10 @@
 
 	<!-- Build and install extensions for introduce -->
 	<target name="installIntroduceExtensions" depends="defineContribTasks" description="Builds and installs the Data Services extensions into Introduce.">
+		<delete dir="${introduce.extensions.dir}/data"/>
+		<echo message="Deleted data extensions dir (${introduce.extensions.dir}/data)"/>
 		<mkdir dir="${introduce.extensions.dir}/data" />
+		<echo message="Created data extrensions dir (${introduce.extensions.dir}/data)"/>
 		<mkdir dir="${introduce.extensions.dir}/data/lib" />
 		<mkdir dir="${introduce.extensions.dir}/data/schema/Data" />
 		<mkdir dir="${introduce.extensions.dir}/data/styles" />
