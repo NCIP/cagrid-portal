@@ -267,7 +267,7 @@
 	<!-- Runs a deployment validation builder tool                      -->
 	<!-- ============================================================== -->
 	<target name="runValidation" description="Runs a grid deployment validation package.  Use -Dvalidation.desc to specify the description file">
-		<java classname="gov.nih.nci.cagrid.validator.ValidationRunner" fork="true">
+		<java classname="gov.nih.nci.cagrid.validator.ValidationRunner" fork="true" failonerror="true">
 			<arg line="${validation.desc}" />
 			<classpath refid="build.classpath" />
 			<classpath refid="test.classpath" />
