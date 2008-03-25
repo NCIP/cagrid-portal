@@ -1,6 +1,5 @@
 package gov.nih.nci.cagrid.validator;
 
-import gov.nih.nci.cagrid.testing.system.haste.Story;
 import gov.nih.nci.cagrid.testing.system.haste.StoryBook;
 import gov.nih.nci.cagrid.tests.core.beans.validation.Interval;
 
@@ -10,7 +9,6 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.Vector;
 
 import junit.framework.TestResult;
 import junit.textui.TestRunner;
@@ -24,7 +22,7 @@ import org.apache.axis.types.Time;
  * @author David Ervin
  * 
  * @created Aug 29, 2007 1:17:37 PM
- * @version $Id: ValidationRunner.java,v 1.1 2008-03-25 14:20:30 dervin Exp $ 
+ * @version $Id: ValidationRunner.java,v 1.2 2008-03-25 20:04:01 dervin Exp $ 
  */
 public class ValidationRunner {
     
@@ -39,16 +37,8 @@ public class ValidationRunner {
 
     public TestResult testNow() {
         StoryBook validationStory = pack.getValidationStoryBook();
-        /*
         TestRunner runner = new TestRunner();
         TestResult results = runner.doRun(validationStory);
-        */
-        TestResult results = new TestResult();
-        Vector stories = validationStory.getStories();
-        for (int i = 0; i < stories.size(); i++) {
-            Story story = (Story) stories.get(i);
-            story.run(results);
-        }
         System.out.flush();
         return results;
     }

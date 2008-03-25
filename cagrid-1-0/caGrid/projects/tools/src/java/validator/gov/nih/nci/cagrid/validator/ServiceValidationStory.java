@@ -12,20 +12,23 @@ import java.util.Vector;
  * @author David Ervin
  * 
  * @created Aug 28, 2007 10:33:18 AM
- * @version $Id: ServiceValidationStory.java,v 1.1 2008-03-25 14:20:30 dervin Exp $ 
+ * @version $Id: ServiceValidationStory.java,v 1.2 2008-03-25 20:04:01 dervin Exp $ 
  */
-public abstract class ServiceValidationStory extends Story {
+public class ServiceValidationStory extends Story {
     
     private String name;
     private String description;
     private Vector<Step> setUpSteps;
+    private Vector<Step> tests;
     private Vector<Step> tearDownSteps;
 
     public ServiceValidationStory(String name, String desc, 
-        final Vector<Step> setUp, final Vector<Step> tearDown) {
+        final Vector<Step> setUp, final Vector<Step> tests, final Vector<Step> tearDown) {
+        super();
         this.name = name;
         this.description = desc;        
         this.setUpSteps = setUp;
+        this.tests = tests;
         this.tearDownSteps = tearDown;
     }
     
@@ -50,6 +53,11 @@ public abstract class ServiceValidationStory extends Story {
     }
     
     
+    public Vector steps() {
+        return tests; 
+    }
+    
+    
     protected void storyTearDown() throws Throwable {
         super.storyTearDown();
         if (tearDownSteps != null) {
@@ -57,12 +65,5 @@ public abstract class ServiceValidationStory extends Story {
                 step.runStep();
             }
         }
-    }
-    
-    
-    // used to make sure that if we are going to use a junit testsuite to 
-    // test this that the test suite will not error out 
-    // looking for a single test......
-    public void testDummy() throws Throwable {
     }
 }

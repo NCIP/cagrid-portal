@@ -34,7 +34,7 @@ import javax.xml.namespace.QName;
  * @author David Ervin
  * 
  * @created Aug 27, 2007 3:04:08 PM
- * @version $Id: GridDeploymentValidationLoader.java,v 1.1 2008-03-25 14:20:30 dervin Exp $ 
+ * @version $Id: GridDeploymentValidationLoader.java,v 1.2 2008-03-25 20:04:01 dervin Exp $ 
  */
 public class GridDeploymentValidationLoader {
     
@@ -84,6 +84,7 @@ public class GridDeploymentValidationLoader {
         final Vector<Step> tests = createStepsForServiceType(service, desc);
         Vector<Step> tearDown = createTearDownStepsForService(service);
         
+        /*
         ServiceValidationStory serviceStory = new ServiceValidationStory(
             testName, testDescription, setUp, tearDown) {
             // Haste Story's constructor calls steps() right away, and stores
@@ -95,6 +96,9 @@ public class GridDeploymentValidationLoader {
                 return tests;
             }
         };
+        */
+        ServiceValidationStory serviceStory = 
+            new ServiceValidationStory(testName, testDescription, setUp, tests, tearDown);
         return serviceStory;
     }
     
