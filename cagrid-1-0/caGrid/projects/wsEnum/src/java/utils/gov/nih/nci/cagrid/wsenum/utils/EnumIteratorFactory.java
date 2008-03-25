@@ -21,7 +21,7 @@ import org.globus.wsrf.utils.io.IndexedObjectFileUtils;
  * @author David Ervin
  * 
  * @created Apr 30, 2007 12:18:15 PM
- * @version $Id: EnumIteratorFactory.java,v 1.3 2007-12-17 19:18:38 dervin Exp $ 
+ * @version $Id: EnumIteratorFactory.java,v 1.4 2008-03-25 13:21:42 dervin Exp $ 
  */
 public class EnumIteratorFactory {
 
@@ -32,11 +32,11 @@ public class EnumIteratorFactory {
             case GLOBUS_INDEXED_FILE:
                 return getGlobusIndexedFileIterator(objects, objectQName, null);
             case CAGRID_SIMPLE:
-                SimplePersistantSDKObjectIterator.createIterator(objects, objectQName, wsddInput);
+                return SimplePersistantSDKObjectIterator.createIterator(objects, objectQName, wsddInput);
             case CAGRID_THREADED_COMPLETE:
-                PersistantSDKObjectIterator.createIterator(objects, objectQName, wsddInput);
+                return PersistantSDKObjectIterator.createIterator(objects, objectQName, wsddInput);
             case CAGRID_CONCURRENT_COMPLETE:
-                ConcurrenPersistantObjectEnumIterator.createIterator(objects, objectQName, wsddInput);
+                return ConcurrenPersistantObjectEnumIterator.createIterator(objects, objectQName, wsddInput);
         }
         throw new EnumIteratorInitializationException("Unknown enum iter implementation: " + iterType.toString());
     }
