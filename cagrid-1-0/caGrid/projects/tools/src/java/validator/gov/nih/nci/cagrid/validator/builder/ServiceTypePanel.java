@@ -60,7 +60,7 @@ import org.cagrid.grape.LookAndFeel;
  * @author David Ervin
  * 
  * @created Sep 5, 2007 12:25:19 PM
- * @version $Id: ServiceTypePanel.java,v 1.1 2008-03-25 14:20:30 dervin Exp $ 
+ * @version $Id: ServiceTypePanel.java,v 1.2 2008-03-25 18:55:07 dervin Exp $ 
  */
 public class ServiceTypePanel extends JPanel {
     public static final String JAVA_CLASS_PATH = "java.class.path";
@@ -130,7 +130,11 @@ public class ServiceTypePanel extends JPanel {
     
     
     public void setServiceTypes(ServiceType[] types) {
-        getTypesList().setListData(types);
+        DefaultListModel model = (DefaultListModel) getTypesList().getModel();
+        model.removeAllElements();
+        for (ServiceType st : types) {
+            model.addElement(st);
+        }
         ((DefaultListModel) getStepsList().getModel()).removeAllElements();
     }
 
@@ -143,6 +147,7 @@ public class ServiceTypePanel extends JPanel {
     private JList getTypesList() {
         if (typesList == null) {
             typesList = new JList();
+            typesList.setModel(new DefaultListModel());
             typesList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
             // set up a renderer to allow storing ServiceTypes directly in the JList
             typesList.setCellRenderer(new DefaultListCellRenderer() {
@@ -167,7 +172,6 @@ public class ServiceTypePanel extends JPanel {
                     }
                 }
             });
-            typesList.setModel(new DefaultListModel());
         }
         return typesList;
     }
