@@ -54,7 +54,7 @@ import junit.framework.TestResult;
 public class JVMStoryRunner {
 
 	/** The class used to execute Stories in a separate process */
-	static final String RUNNER_CLASS = "com.atomicobject.haste.framework.JVMStoryRunner";
+	static final String RUNNER_CLASS = JVMStoryRunner.class.getName();
 
 	// Exit codes
 	static final int NORMAL_EXIT = 0;
