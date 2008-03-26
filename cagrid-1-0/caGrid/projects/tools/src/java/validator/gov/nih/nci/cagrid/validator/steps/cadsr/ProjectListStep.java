@@ -20,7 +20,7 @@ import org.jdom.input.SAXBuilder;
  * @author David Ervin
  * 
  * @created Sep 11, 2007 10:21:40 AM
- * @version $Id: ProjectListStep.java,v 1.1 2008-03-25 14:20:30 dervin Exp $ 
+ * @version $Id: ProjectListStep.java,v 1.2 2008-03-26 14:34:15 dervin Exp $ 
  */
 public class ProjectListStep extends BaseCadsrTestStep {
     public static final String EXPECTED_PROJECTS_FILE = "expectedProjectsFile";
@@ -105,6 +105,7 @@ public class ProjectListStep extends BaseCadsrTestStep {
     
     private Element getGoldProjects() {
         String goldFilename = getConfiguration().getProperty(EXPECTED_PROJECTS_FILE);
+        assertNotNull("Property " + EXPECTED_PROJECTS_FILE + " must be set for caDSR tests!", goldFilename);
         File goldFile = new File(goldFilename);
         if (!goldFile.exists() && goldFile.canRead()) {
             fail("Could not read file " + goldFilename);
