@@ -27,7 +27,7 @@ import javax.swing.table.DefaultTableModel;
  * @author David Ervin
  * 
  * @created Sep 10, 2007 1:18:44 PM
- * @version $Id: StepConfigurationDialog.java,v 1.1 2008-03-25 14:20:30 dervin Exp $ 
+ * @version $Id: StepConfigurationDialog.java,v 1.2 2008-03-26 14:40:56 dervin Exp $ 
  */
 public class StepConfigurationDialog extends JDialog {
 
@@ -51,7 +51,7 @@ public class StepConfigurationDialog extends JDialog {
     
     private void initialize() {
         this.setContentPane(getMainPanel());
-        
+        this.setSize(300, 260);
     }
     
     
