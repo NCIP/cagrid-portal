@@ -31,7 +31,7 @@ import org.xml.sax.InputSource;
  * @author David Ervin
  * 
  * @created Aug 27, 2007 4:37:36 PM
- * @version $Id: SchemaDownloadStep.java,v 1.2 2008-03-25 15:57:49 dervin Exp $ 
+ * @version $Id: SchemaDownloadStep.java,v 1.3 2008-03-26 14:32:45 dervin Exp $ 
  */
 public class SchemaDownloadStep extends BaseGmeTestStep {
     
@@ -43,13 +43,16 @@ public class SchemaDownloadStep extends BaseGmeTestStep {
     public void runStep() throws Throwable {
         List<String> domains = getNamespaceDomains();
         for (String domain : domains) {
+            System.out.println("Inspecting domain " + domain);
             List<Namespace> namespaces = getSchemasFromDomain(domain);
             for (Namespace namespace : namespaces) {
+                System.out.println("\tInspecting namespace " + namespace.getRaw());
                 File tempSchemaDir = new File(getTempDir(), "Schemas_" + System.currentTimeMillis());
                 tempSchemaDir.mkdirs();
                 List<Namespace> cachedSchemas = cacheSchemasToDirectory(namespace, tempSchemaDir);
                 // verify each schema was cached correctly
                 for (Namespace cached : cachedSchemas) {
+                    System.out.println("\t\tVerifying namespace of schema " + cached.getRaw());
                     ImportInfo ii = new ImportInfo(cached);
                     File schemaFile = new File(tempSchemaDir.getAbsolutePath() 
                         + File.separator + ii.getFileName());
@@ -122,6 +125,7 @@ public class SchemaDownloadStep extends BaseGmeTestStep {
             List namespaces = new ArrayList();
             
             // get the base namespace and its imports
+            System.out.println("\t\tTrying to download " + namespace.getRaw());
             SchemaNode node = gmeClient.getSchema(namespace, true);
             
             // recursively parse the schema and its imports
