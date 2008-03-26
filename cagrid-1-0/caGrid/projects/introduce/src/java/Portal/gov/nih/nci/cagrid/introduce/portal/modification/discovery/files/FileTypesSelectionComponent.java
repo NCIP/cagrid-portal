@@ -43,8 +43,13 @@ public class FileTypesSelectionComponent extends NamespaceTypeDiscoveryComponent
 
 
         public boolean equals(Object obj) {
-            SchemaInfo info = (SchemaInfo)obj;
+            SchemaInfo info = (SchemaInfo) obj;
             return filename.equals(info.getFilename()) && namespace.equals(info.getNamespace());
+        }
+        
+        
+        public int hashCode() {
+            return toString().hashCode();
         }
 
 
@@ -67,6 +72,10 @@ public class FileTypesSelectionComponent extends NamespaceTypeDiscoveryComponent
             this.namespace = namespace;
         }
 
+        
+        public String toString() {
+            return filename + " : " + namespace;
+        }
     }
 
     public String currentNamespace = null;
@@ -179,8 +188,6 @@ public class FileTypesSelectionComponent extends NamespaceTypeDiscoveryComponent
             }
 
             List namespaces = new ArrayList();
-
-            String currentFileName = (new File(this.currentFile)).getName();
 
             try {
                 SchemaValidator.verify(this.currentFile);
@@ -309,11 +316,12 @@ public class FileTypesSelectionComponent extends NamespaceTypeDiscoveryComponent
                     File currentPath = schemaFile.getCanonicalFile().getParentFile();
                     if (!schemaFile.equals(new File(currentPath.getCanonicalPath() + File.separator + location))) {
                         File importedSchema = new File(currentPath + File.separator + location);
-                        if (!visitedSchemas.contains(new SchemaInfo(importedSchema.getCanonicalPath(),namespace))) {
+                        SchemaInfo currentSchemaInfo = new SchemaInfo(importedSchema.getCanonicalPath(), namespace);
+                        if (!visitedSchemas.contains(currentSchemaInfo)) {
                             // only copy schemas not yet visited
                             if (importedSchema.exists() && importedSchema.canRead()) {
-                                copySchemas(importedSchema.getCanonicalPath(), new File(copyToDirectory
-                                    .getCanonicalFile()
+                                copySchemas(importedSchema.getCanonicalPath(), 
+                                    new File(copyToDirectory.getCanonicalFile()
                                     + File.separator + location).getParentFile(), visitedSchemas, storedSchemas,
                                     namespaceExistsPolicy);
                             } else {
