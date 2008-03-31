@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.validator;
+package gov.nih.nci.cagrid.validator.steps;
 
 import org.apache.axis.client.Call;
 
@@ -13,7 +13,7 @@ import org.apache.axis.client.Call;
  * @author David Ervin
  * 
  * @created Mar 31, 2008 2:50:44 PM
- * @version $Id: TransportUtil.java,v 1.1 2008-03-31 19:17:55 dervin Exp $ 
+ * @version $Id: TransportUtil.java,v 1.1 2008-03-31 20:04:23 dervin Exp $ 
  */
 public class TransportUtil {
     private static String DEFAULT_TRANSPORTS = null;

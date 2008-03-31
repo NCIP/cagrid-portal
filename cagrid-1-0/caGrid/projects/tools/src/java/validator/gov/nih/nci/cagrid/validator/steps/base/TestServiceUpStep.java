@@ -2,7 +2,7 @@ package gov.nih.nci.cagrid.validator.steps.base;
 
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.testing.system.haste.Step;
-import gov.nih.nci.cagrid.validator.TransportUtil;
+import gov.nih.nci.cagrid.validator.steps.TransportUtil;
 
 import java.io.IOException;
 import java.io.InputStream;
