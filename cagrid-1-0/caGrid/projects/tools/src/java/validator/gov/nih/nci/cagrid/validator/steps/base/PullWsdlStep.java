@@ -2,6 +2,7 @@ package gov.nih.nci.cagrid.validator.steps.base;
 
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.testing.system.haste.Step;
+import gov.nih.nci.cagrid.validator.TransportUtil;
 
 import java.io.InputStream;
 import java.io.StringReader;
@@ -24,7 +25,7 @@ import org.xml.sax.InputSource;
  * @author David Ervin
  * 
  * @created Mar 28, 2008 3:08:11 PM
- * @version $Id: PullWsdlStep.java,v 1.1 2008-03-31 16:02:24 dervin Exp $ 
+ * @version $Id: PullWsdlStep.java,v 1.2 2008-03-31 19:20:50 dervin Exp $ 
  */
 public class PullWsdlStep extends Step {
     
@@ -36,6 +37,8 @@ public class PullWsdlStep extends Step {
     
 
     public void runStep() throws Throwable {
+        TransportUtil.resetUrlTransports();
+        
         URL wsdlUrl = null;
         try {
             wsdlUrl = new URL(rawUrl + "?wsdl");

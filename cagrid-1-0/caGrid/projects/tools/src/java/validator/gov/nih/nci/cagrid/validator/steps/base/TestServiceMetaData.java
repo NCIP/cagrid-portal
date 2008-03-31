@@ -30,12 +30,11 @@ public class TestServiceMetaData extends Step {
     public void runStep() throws Throwable {
         System.out.println("Checking Service @ " + serviceURL);
         // connect to the url and validate a return
-        EndpointReferenceType serviceMetaDataEPR = new EndpointReferenceType();
-
+        
         try {
             // TODO: maybe we can have checks in here for the various parts of the metadata?
             Address address = new Address(serviceURL);
-            serviceMetaDataEPR.setAddress(address);
+            EndpointReferenceType serviceMetaDataEPR = new EndpointReferenceType(address);
 
             ServiceMetadata serviceMetaData = MetadataUtils.getServiceMetadata(serviceMetaDataEPR);
             System.out.println("   Service Name: "
