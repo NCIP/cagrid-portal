@@ -8,7 +8,7 @@
             <name>Credential Delegation Service</name>
             <description>The URL(s) of available Credential Delegation Service(s)</description>
             <values>
-                <value>https://training04.cagrid.org:6443/wsrf/services/cagrid/CredentialDelegationService</value>
+                <value>https://cds.training.cagrid.org:8443/wsrf/services/cagrid/CredentialDelegationService</value>
                 <value>https://localhost:8443/wsrf/services/cagrid/CredentialDelegationService</value>
             </values>
         </property>

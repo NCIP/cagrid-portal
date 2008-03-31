@@ -8,8 +8,8 @@
             <name>Grid Trust Service</name>
             <description>The URL(s) of available Grid Trust Service(s)</description>
             <values>
-            	<value>https://training05.cagrid.org:6442/wsrf/services/cagrid/GTS</value>
-                <value>https://training04.cagrid.org:6442/wsrf/services/cagrid/GTS</value>
+            	<value>https://mastergts.training.cagrid.org:8443/wsrf/services/cagrid/GTS</value>
+                <value>https://slavegts.training.cagrid.org:8443/wsrf/services/cagrid/GTS</value>
             </values>
         </property>
     </properties>

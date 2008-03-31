@@ -8,7 +8,7 @@
             <name>Grid Grouper Service(s)</name>
             <description>The URL(s) of available Grid Grouper Service(s)</description>
             <values>
-                <value>https://training03.cagrid.org:6443/wsrf/services/cagrid/GridGrouper</value>
+                <value>https://grouper.training.cagrid.org:8443/wsrf/services/cagrid/GridGrouper</value>
             </values>
         </property>
     </properties>
