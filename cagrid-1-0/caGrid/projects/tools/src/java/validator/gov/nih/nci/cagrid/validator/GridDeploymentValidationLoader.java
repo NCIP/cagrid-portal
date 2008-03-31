@@ -35,7 +35,7 @@ import javax.xml.namespace.QName;
  * @author David Ervin
  * 
  * @created Aug 27, 2007 3:04:08 PM
- * @version $Id: GridDeploymentValidationLoader.java,v 1.3 2008-03-31 16:02:24 dervin Exp $ 
+ * @version $Id: GridDeploymentValidationLoader.java,v 1.4 2008-03-31 19:18:13 dervin Exp $ 
  */
 public class GridDeploymentValidationLoader {
     
@@ -94,7 +94,7 @@ public class GridDeploymentValidationLoader {
     private static Vector<Step> createSetupStepsForService(final ServiceDescription service) {
         Vector<Step> setup = new Vector();
         String rawUrl = service.getServiceUrl().toString();
-        // setup.add(new TestServiceUpStep(rawUrl));
+        setup.add(new TestServiceUpStep(rawUrl));
         setup.add(new PullWsdlStep(rawUrl));
         if (rawUrl.contains("/cagrid/")) {
             // should only allow caGrid services to be tested for metadata
