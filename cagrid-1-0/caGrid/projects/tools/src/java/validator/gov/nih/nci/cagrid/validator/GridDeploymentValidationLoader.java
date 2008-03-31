@@ -11,6 +11,7 @@ import gov.nih.nci.cagrid.tests.core.beans.validation.ServiceType;
 import gov.nih.nci.cagrid.tests.core.beans.validation.ValidationDescription;
 import gov.nih.nci.cagrid.validator.steps.AbstractBaseServiceTestStep;
 import gov.nih.nci.cagrid.validator.steps.base.DeleteTempDirStep;
+import gov.nih.nci.cagrid.validator.steps.base.PullWsdlStep;
 import gov.nih.nci.cagrid.validator.steps.base.TestServiceMetaData;
 import gov.nih.nci.cagrid.validator.steps.base.TestServiceUpStep;
 
@@ -34,7 +35,7 @@ import javax.xml.namespace.QName;
  * @author David Ervin
  * 
  * @created Aug 27, 2007 3:04:08 PM
- * @version $Id: GridDeploymentValidationLoader.java,v 1.2 2008-03-25 20:04:01 dervin Exp $ 
+ * @version $Id: GridDeploymentValidationLoader.java,v 1.3 2008-03-31 16:02:24 dervin Exp $ 
  */
 public class GridDeploymentValidationLoader {
     
@@ -84,19 +85,6 @@ public class GridDeploymentValidationLoader {
         final Vector<Step> tests = createStepsForServiceType(service, desc);
         Vector<Step> tearDown = createTearDownStepsForService(service);
         
-        /*
-        ServiceValidationStory serviceStory = new ServiceValidationStory(
-            testName, testDescription, setUp, tearDown) {
-            // Haste Story's constructor calls steps() right away, and stores
-            // the result internally, and iterates over THAT vector when running
-            // steps.  Hence, passing the vector to a constructor of the ServiceValidationStory,
-            // storing it in an instance variable, and returning it when steps() is called
-            // DOESN'T WORK.
-            public Vector steps() {
-                return tests;
-            }
-        };
-        */
         ServiceValidationStory serviceStory = 
             new ServiceValidationStory(testName, testDescription, setUp, tests, tearDown);
         return serviceStory;
@@ -105,8 +93,13 @@ public class GridDeploymentValidationLoader {
     
     private static Vector<Step> createSetupStepsForService(final ServiceDescription service) {
         Vector<Step> setup = new Vector();
-        setup.add(new TestServiceUpStep(service.getServiceUrl().toString()));
-        setup.add(new TestServiceMetaData(service.getServiceUrl().toString()));
+        String rawUrl = service.getServiceUrl().toString();
+        // setup.add(new TestServiceUpStep(rawUrl));
+        setup.add(new PullWsdlStep(rawUrl));
+        if (rawUrl.contains("/cagrid/")) {
+            // should only allow caGrid services to be tested for metadata
+            setup.add(new TestServiceMetaData(rawUrl));
+        }
         return setup;
     }
     
@@ -167,6 +160,7 @@ public class GridDeploymentValidationLoader {
                 }
             }
         }
+        
         // Haste Story dies if you have no steps
         if (steps.size() == 0) {
             steps.add(new Step() {
@@ -177,7 +171,7 @@ public class GridDeploymentValidationLoader {
                 
                 
                 public void runStep() throws Throwable {
-                    System.out.println("No steps defined for this service type");
+                    System.out.println("No testing steps defined for this service type");
                 }
             });
         }
