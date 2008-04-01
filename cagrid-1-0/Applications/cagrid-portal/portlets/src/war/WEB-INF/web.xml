@@ -36,7 +36,8 @@
 			classpath*:applicationContext-*.xml
 			/WEB-INF/context/common.xml
 			/WEB-INF/context/facades.xml
-		</param-value>
+            /WEB-INF/context/dwr-applicationContext.xml
+        </param-value>
 	</context-param>
 
 	<!--

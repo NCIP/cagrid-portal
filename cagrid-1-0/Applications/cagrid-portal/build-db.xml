@@ -40,7 +40,13 @@
 		</fileset>
 	</path>
 
-	<taskdef name="hibernatetool"
+    <path id="log4j.cp">
+        <fileset dir="${db.lib.dir}/hibernate">
+            <include name="**/log4j*.jar"/>
+        </fileset>
+    </path>
+
+    <taskdef name="hibernatetool"
 		classname="org.hibernate.tool.ant.HibernateToolTask"
 		classpathref="hibernatetoolslib" />
 

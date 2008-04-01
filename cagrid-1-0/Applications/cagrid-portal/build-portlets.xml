@@ -1,187 +1,190 @@
 <project>
 
-	<property name="portlets.dir" value="portlets" />
-	<property name="portlets.lib.dir" value="${portlets.dir}/lib" />
-	<property name="portlets.build.dir" value="${portlets.dir}/build" />
-	<property name="portlets.build.war.dir"
-		value="${portlets.build.dir}/war" />
-	<property name="portlets.classes.dir"
-		value="${portlets.build.war.dir}/WEB-INF/classes" />
-	<property name="portlets.src.java.dir"
-		value="${portlets.dir}/src/java" />
-	<property name="portlets.src.war.dir"
-		value="${portlets.dir}/src/war" />
+    <property name="portlets.dir" value="portlets" />
+    <property name="portlets.lib.dir" value="${portlets.dir}/lib" />
+    <property name="portlets.build.dir" value="${portlets.dir}/build" />
+    <property name="portlets.build.war.dir"
+              value="${portlets.build.dir}/war" />
+    <property name="portlets.classes.dir"
+              value="${portlets.build.war.dir}/WEB-INF/classes" />
+    <property name="portlets.src.java.dir"
+              value="${portlets.dir}/src/java" />
+    <property name="portlets.src.war.dir"
+              value="${portlets.dir}/src/war" />
 
-	<property name="portlets.test.dir" value="portlets/test" />
-	<property name="portlets.test.lib.dir"
-		value="${portlets.test.dir}/lib" />
-	<property name="portlets.test.build.dir"
-		value="${portlets.test.dir}/build" />
-	<property name="portlets.test.classes.dir"
-		value="${portlets.test.build.dir}/classes" />
-	<property name="portlets.test.src.java.dir"
-		value="${portlets.test.dir}/src/java" />
-		
-	<property name="portlets.context.name" value="cagridportlets"/>
+    <property name="portlets.test.dir" value="portlets/test" />
+    <property name="portlets.test.lib.dir"
+              value="${portlets.test.dir}/lib" />
+    <property name="portlets.test.build.dir"
+              value="${portlets.test.dir}/build" />
+    <property name="portlets.test.classes.dir"
+              value="${portlets.test.build.dir}/classes" />
+    <property name="portlets.test.src.java.dir"
+              value="${portlets.test.dir}/src/java" />
+
+    <property name="portlets.context.name" value="cagridportlets"/>
 
 
 
-	<property name="portlets.debug" value="true" />
+    <property name="portlets.debug" value="true" />
 
-	<path id="portlets.compile.cp">
-		<path refid="aggr.compile.cp" />
-		<pathelement location="${aggr.classes.dir}" />
-		<pathelement location="${security.classes.dir}" />
-		<fileset dir="${portlets.lib.dir}">
-			<include name="*.jar" />
-		</fileset>
-	</path>
-	
-	<path id="portlets.test.compile.cp">
-		<path refid="portlets.compile.cp"/>
-		<pathelement location="${portlets.classes.dir}"/>
-		<!-- There is are no test-specific jars yet. 
-		<fileset dir="${portlets.test.lib.dir}">
-			<include name="*.jar" />
-		</fileset>
-		 -->
-	</path>
+    <path id="portlets.compile.cp">
+        <path refid="aggr.compile.cp" />
+        <pathelement location="${aggr.classes.dir}" />
+        <pathelement location="${security.classes.dir}" />
+        <fileset dir="${portlets.lib.dir}">
+            <include name="*.jar" />
+        </fileset>
+    </path>
 
-	<target name="portlets:compile" depends="aggr:compile, security:compile">
-		<mkdir dir="${portlets.classes.dir}" />
-		<javac srcdir="${portlets.src.java.dir}"
-			destdir="${portlets.classes.dir}" debug="${portlets.debug}">
-			<classpath refid="portlets.compile.cp" />
-		</javac>
-	</target>
-	
-	<target name="portlets:compile-test" depends="portlets:compile">
-		<mkdir dir="${portlets.test.classes.dir}" />
-		<javac srcdir="${portlets.test.src.java.dir}"
-			destdir="${portlets.test.classes.dir}" debug="${portlets.debug}">
-			<classpath refid="portlets.test.compile.cp" />
-		</javac>
-	</target>
+    <path id="portlets.test.compile.cp">
+        <path refid="portlets.compile.cp"/>
+        <path refid="db.test.compile.cp"/>
+        <path refid="log4j.cp"/>
+        <pathelement location="${portlets.classes.dir}"/>
+        <fileset dir="${portlets.test.lib.dir}">
+            <include name="*.jar" />
+        </fileset>
+    </path>
 
-	<target name="portlets:build-war-dir" depends="db:jar, security:jar, portlets:compile">
+    <target name="portlets:compile" depends="aggr:compile, security:compile">
+        <mkdir dir="${portlets.classes.dir}" />
+        <javac srcdir="${portlets.src.java.dir}"
+               destdir="${portlets.classes.dir}" debug="${portlets.debug}">
+            <classpath refid="portlets.compile.cp" />
+        </javac>
+    </target>
 
-		<mkdir dir="${portlets.build.war.dir}/WEB-INF/lib" />
-		<copy todir="${portlets.build.war.dir}/WEB-INF/lib"
-			overwrite="true" flatten="true">
-			
-			<fileset dir="${aggr.lib.dir}/globus">
-				<patternset refid="globus.jars"/>
-			</fileset>
-			
-			<fileset dir="${db.lib.dir}">
-				<patternset refid="db.compile.jars" />
-				<patternset refid="db.run.jars" />
-			</fileset>
-			<fileset dir="${aggr.lib.dir}">
-				<include name="cagrid/*.jar" />
-				<include name="cacore/*.jar" />
-				<include name="poi/*.jar" />
-			</fileset>
-			<fileset dir="${portlets.lib.dir}">
-				<include name="dwr.jar"/>
-				<include name="jstl.jar" />
-				<include name="portlet-messaging-2.4.jar" />
-				<include name="spring-portlet.jar" />
-				<include name="standard.jar" />
-			</fileset>
-			
-			<fileset dir="${db.build.dir}">
-				<include name="cagrid-portal-domain.jar"/>
-				<include name="cagrid-portal-dao.jar"/>
+    <target name="portlets:compile-test" depends="portlets:compile">
+        <mkdir dir="${portlets.test.classes.dir}" />
+
+        <copy todir="${portlets.test.classes.dir}">
+            <filelist dir="${portlets.test.dir}/src" files="applicationContext-portlets-test.xml"/>
+        </copy>
+
+        <javac srcdir="${portlets.test.src.java.dir}"
+               destdir="${portlets.test.classes.dir}" debug="${portlets.debug}">
+            <classpath refid="portlets.test.compile.cp" />
+        </javac>
+    </target>
+
+    <target name="portlets:build-war-dir" depends="db:jar, security:jar, portlets:compile">
+
+        <mkdir dir="${portlets.build.war.dir}/WEB-INF/lib" />
+        <copy todir="${portlets.build.war.dir}/WEB-INF/lib"
+              overwrite="true" flatten="true">
+
+            <fileset dir="${aggr.lib.dir}/globus">
+                <patternset refid="globus.jars"/>
+            </fileset>
+
+            <fileset dir="${liferay.src.war.dir}/WEB-INF/lib">
+                <include name="acegi-security-*.jar"/>
+            </fileset>
+
+            <fileset dir="${db.lib.dir}">
+                <patternset refid="db.compile.jars" />
+                <patternset refid="db.run.jars" />
+            </fileset>
+            <fileset dir="${aggr.lib.dir}">
+                <include name="cagrid/*.jar" />
+                <include name="cacore/*.jar" />
+                <include name="poi/*.jar" />
+            </fileset>
+            <fileset dir="${portlets.lib.dir}">
+                <include name="dwr.jar"/>
+                <include name="jstl.jar" />
+                <include name="portlet-messaging-2.4.jar" />
+                <include name="spring-portlet.jar" />
+                <include name="standard.jar" />
+            </fileset>
+
+            <fileset dir="${db.build.dir}">
+                <include name="cagrid-portal-domain.jar"/>
+                <include name="cagrid-portal-dao.jar"/>
                 <include name="cagrid-portal-utils.jar"/>
             </fileset>
-			
-			<fileset dir="${security.build.dir}">
-				<include name="cagrid-portal-security.jar"/>
-			</fileset>
-			
-		</copy>
-		
-		<copy file="${db.jdbc.driver.jar}" todir="${portlets.build.war.dir}/WEB-INF/lib"/>
 
-		<mkdir dir="${portlets.build.war.dir}/WEB-INF/classes" />
-		<copy todir="${portlets.build.war.dir}/WEB-INF/classes"
-			overwrite="true">
-			
-			<fileset dir="${aggr.classes.dir}">
-				<include name="**/*.class"/>
-			</fileset>
-			
-			<fileset dir="${db.dir}/etc">
-				<include name="*.properties" />
-				<include name="*.xml" />
-			</fileset>
-			<fileset dir="${security.dir}/etc">
-				<include name="*.xml" />
-			</fileset>
-			<fileset dir="${aggr.dir}/etc">
-				<include name="*.properties" />
-				<include name="*.xml" />
-				<exclude name="applicationContext-workspaces.xml"/>
-				<include name="*.wsdd" />
-				<exclude name="*.sync-description.xml"/>
-			</fileset>
+            <fileset dir="${security.build.dir}">
+                <include name="cagrid-portal-security.jar"/>
+            </fileset>
 
-		</copy>
-			
-		<copy file="${aggr.trust.syncgts.file}"
-			tofile="${portlets.classes.dir}/sync-description.xml"
-			overwrite="true" />			
+        </copy>
 
+        <copy file="${db.jdbc.driver.jar}" todir="${portlets.build.war.dir}/WEB-INF/lib"/>
+        <mkdir dir="${portlets.build.war.dir}/WEB-INF/classes" />
+        <copy todir="${portlets.build.war.dir}/WEB-INF/classes"
+              overwrite="true">
 
-		<copy todir="${portlets.build.war.dir}"
-			overwrite="true">
-			<fileset dir="${portlets.src.war.dir}" />
-		</copy>
-		
-		<antcall target="create-cagridportal-properties">
-			<param name="target.dir" value="${portlets.classes.dir}/cagridportal.properties"/>
-		</antcall>
+            <fileset dir="${aggr.classes.dir}">
+                <include name="**/*.class"/>
+            </fileset>
 
-	</target>
+            <fileset dir="${db.dir}/etc">
+                <include name="*.properties" />
+                <include name="*.xml" />
+            </fileset>
+            <fileset dir="${security.dir}/etc">
+                <include name="*.xml" />
+            </fileset>
+            <fileset dir="${aggr.dir}/etc">
+                <include name="*.properties" />
+                <include name="*.xml" />
+                <exclude name="applicationContext-workspaces.xml"/>
+                <include name="*.wsdd" />
+                <exclude name="*.sync-description.xml"/>
+            </fileset>
+
+        </copy>
+
+        <copy file="${aggr.trust.syncgts.file}"
+              tofile="${portlets.classes.dir}/sync-description.xml"
+              overwrite="true" />
 
 
-	<target name="portlets:war" depends="portlets:build-war-dir">
-		<jar destfile="${portlets.build.dir}/${portlets.context.name}.war"
-			basedir="${portlets.build.war.dir}"/>
-	</target>
+        <copy todir="${portlets.build.war.dir}"
+              overwrite="true">
+            <fileset dir="${portlets.src.war.dir}" />
+        </copy>
 
-	<target name="portlets:clean">
-		<delete dir="${portlets.build.dir}" />
-		<delete dir="${portlets.test.build.dir}" />
-	</target>
-	
-	<target name="portlets:test" depends="portlets:compile-test, portlets:build-war-dir">
+        <antcall target="create-cagridportal-properties">
+            <param name="target.dir" value="${portlets.classes.dir}/cagridportal.properties"/>
+        </antcall>
 
-		<mkdir dir="${portlets.test.build.dir}/junit-reports" />
-		
-		<junit printsummary="yes" showoutput="true" fork="true">
+    </target>
 
-			<classpath>
-				
-				<pathelement location="${portlets.build.war.dir}/WEB-INF/classes"/>
-				<fileset dir="${portlets.build.war.dir}/WEB-INF/lib">
-					<include name="*.jar"/>
-				</fileset>
-				<pathelement location="portlets/test/etc"/>
-				<path refid="portlets.test.compile.cp"/>
-				<pathelement location="${portlets.test.classes.dir}"/>
-			</classpath>
 
-			<formatter type="xml" />
+    <target name="portlets:war" depends="portlets:build-war-dir">
+        <jar destfile="${portlets.build.dir}/${portlets.context.name}.war"
+             basedir="${portlets.build.war.dir}"/>
+    </target>
 
-			<batchtest todir="${portlets.test.build.dir}/junit-reports">
-				<fileset dir="${portlets.test.src.java.dir}">
-					<include name="**/*Test.java" />
-				</fileset>
-			</batchtest>
+    <target name="portlets:clean">
+        <delete dir="${portlets.build.dir}" />
+        <delete dir="${portlets.test.build.dir}" />
+    </target>
 
-		</junit>
-	</target>	
+    <target name="portlets:test" depends="portlets:compile-test, portlets:build-war-dir">
+
+        <mkdir dir="${portlets.test.build.dir}/junit-reports" />
+
+        <junit printsummary="yes"  showoutput="true" fork="true"  forkmode="once">
+            <sysproperty key="basedir" value="${basedir}"/>
+
+            <classpath>
+                <path refid="portlets.test.compile.cp"/>
+                <pathelement location="${portlets.test.classes.dir}"/>
+            </classpath>
+
+            <formatter type="xml" />
+
+            <batchtest todir="${portlets.test.build.dir}/junit-reports">
+                <fileset dir="${portlets.test.src.java.dir}">
+                    <include name="**/*Test.java" />
+                </fileset>
+            </batchtest>
+
+        </junit>
+    </target>
 
 </project>

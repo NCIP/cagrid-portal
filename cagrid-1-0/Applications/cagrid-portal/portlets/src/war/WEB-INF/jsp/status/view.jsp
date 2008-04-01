@@ -1,64 +1,72 @@
 <%@ include file="/WEB-INF/jsp/include/includes.jspf" %>
 <%@ taglib prefix="tags" tagdir="/WEB-INF/tags"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <script
         src="<c:url value="/js/scriptaculous/prototype.js"/>"
         type="text/javascript"></script>
 <script
-        src="<c:url value="/js/scriptaculous/scriptaculous.js"/>"
+        src="<c:url value="/js/scriptaculous/effects.js"/>"
         type="text/javascript"></script>
 
 
 <div style="height:500px">
+<div class="label">
     Here are the five newest services...
-    <table cellpadding="10" width="100%">
-        <thead>
-            <tr>
-                <th><b>Name</b></th><th><b>Type</b></th>
-            </tr>
-        </thead>
-        <tbody>
-            <c:forEach var="serviceInfo" items="${statusBean.latestServices}">
-                <tr>
-                    <td style="padding-top:8px; padding-right:10px">
-                        <portlet:actionURL var="selectItemAction">
-                            <portlet:param name="operation" value="selectItemForDiscovery"/>
-                            <portlet:param name="selectedId" value="${serviceInfo.id}"/>
-                            <portlet:param name="type" value="SERVICE"/>
-                        </portlet:actionURL>
+</div>
 
-                        <tags:serviceInfoPopup id="${serviceInfo.id}"
-                                               link_href="${selectItemAction}"
-                                               link_text="${serviceInfo.name}"
-                                               serviceInfo="${serviceInfo}"/>
-                    </td>
+<div class="row">
+    <div class="label">
+        Name
+    </div>
+    <div class="value" style="font-weight:bold;">
+        Type
+    </div>
+</div>
 
-                    <td>
-                        <c:choose>
-                            <c:when test="${serviceInfo.type == 'DATA'}">
-                                <img src="<c:url value="/images/data-services.gif"/>" height="20" />
-                            </c:when>
-                            <c:otherwise>
-                                <img src="<c:url value="/images/analytical_services.gif"/>" height="20" />
-                            </c:otherwise>
-                        </c:choose>
-                    </td>
-                </tr>
-            </c:forEach>
 
-        </tbody>
-    </table>
-    <br/>
-    There are currently...<br/>
-    <table cellpadding="3">
+<c:forEach var="serviceInfo" items="${statusBean.latestServices}">
+<div class="row">
+    <div class="label">
+        <portlet:actionURL var="selectItemAction">
+            <portlet:param name="operation" value="selectItemForDiscovery"/>
+            <portlet:param name="selectedId" value="${serviceInfo.id}"/>
+            <portlet:param name="type" value="SERVICE"/>
+        </portlet:actionURL>
+
+        <tags:serviceInfoPopup id="${serviceInfo.id}"
+                               link_href="${selectItemAction}"
+                               link_text="${serviceInfo.nameAbbrv}"
+                               serviceInfo="${serviceInfo}"/>
+
+    </div>
+
+    <div class="value">
+        <c:choose>
+            <c:when test="${serviceInfo.type == 'DATA'}">
+                <img src="<c:url value="/images/data-services.gif"/>" height="20" />
+            </c:when>
+            <c:otherwise>
+                <img src="<c:url value="/images/analytical_services.gif"/>" height="20" />
+            </c:otherwise>
+        </c:choose>
+    </div>
+</div>
+</c:forEach>
+
+<br/>
+<div class="row">
+    <div class="label">
+        There are currently...
+    </div>
+
+    <table cellpadding="5">
         <tr>
-            <td style="padding-right:5px;">
+            <td style="padding-right:5px;text-align:left;">
                 <portlet:actionURL var="participantsAction">
                     <portlet:param name="operation" value="selectDirectoryForDiscovery"/>
                     <portlet:param name="selectedDirectory" value="${statusBean.participantsDirectory.id}"/>
                 </portlet:actionURL>
-                <a href="<c:out value="${participantsAction}"/>">
+                <a style="text-align:left;" href="<c:out value="${participantsAction}"/>" >
                     <c:out value="${fn:length(statusBean.participantsDirectory.objects)}"/>
                 </a>
             </td>

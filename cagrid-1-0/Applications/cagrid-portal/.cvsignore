@@ -2,3 +2,6 @@ bin
 *.log
 docs
 downloads
+.DS_Store
+build-windows-box.properties
+portal.iml

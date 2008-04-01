@@ -1,20 +1,24 @@
-
-
 /* The popup to Hide and Show */
-.serviceInfoPopup {
+.infoPopup {
+    font-size:9px;
     display: none;
     position: absolute;
-    width: 180px;
-    margin-top: -4px;
+    width: 170px;
+    margin-top: -8px;
+    margin-left: 11px;
     border: 1px solid #c93;
-    padding: 10px 12px;
+    padding: 10px 10px;
     opacity:1.0;
     z-index:30;
     background: #ffc url(../images/pointer.gif) no-repeat -10px 5px;
 }
 
+div.row div.infoPopupValue{
+    margin-left:1em;
+}
+
 /* The pointer image is hadded by using another span */
-.serviceInfoPopup .serviceInfoPopup-pointer {
+.infoPopup .infoPopup-pointer {
     position: absolute;
     left: -10px;
     top: 5px;
@@ -23,3 +27,7 @@
     background: url(../images/pointer.gif) left top no-repeat;
 }
 
+a.infoPopupLink{
+    text-decoration:none;
+    font-weight:bold;
+}

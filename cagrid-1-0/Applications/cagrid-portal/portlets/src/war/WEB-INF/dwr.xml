@@ -1,31 +1,37 @@
 <!DOCTYPE dwr PUBLIC
-    "-//GetAhead Limited//DTD Direct Web Remoting 1.0//EN"
-    "http://www.getahead.ltd.uk/dwr/dwr10.dtd">
+        "-//GetAhead Limited//DTD Direct Web Remoting 1.0//EN"
+        "http://www.getahead.ltd.uk/dwr/dwr10.dtd">
 
 <dwr>
-  <allow>
-    
-    <create creator="spring" javascript="QueryHistoryFacade">
-    	<param name="beanName" value="cqlQueryHistoryFacade"/>
-    </create>
-    
-    <convert converter="enum" match="gov.nih.nci.cagrid.portal.domain.dataservice.QueryInstanceState"/>
-    
-    <convert converter="bean" match="gov.nih.nci.cagrid.portal.domain.dataservice.CQLQueryInstance">
-    	<param name="include" value="id, finishTime, startTime, state"/>
-    </convert>
-    
-    <create creator="spring" javascript="ServiceDetailsTreeFacade">
-    	<param name="beanName" value="serviceDetailsTreeFacade"/>
-    </create>
-    
-    <create creator="spring" javascript="UMLClassTreeFacade">
-    	<param name="beanName" value="umlClassTreeFacade"/>
-    </create>
-    
-    <create creator="spring" javascript="CQLQueryTreeFacade">
-    	<param name="beanName" value="cqlQueryTreeFacade"/>
-    </create>
-    
-  </allow>
+    <allow>
+
+        <create creator="spring" javascript="QueryHistoryFacade">
+            <param name="beanName" value="cqlQueryHistoryFacade"/>
+        </create>
+
+        <convert converter="enum" match="gov.nih.nci.cagrid.portal.domain.dataservice.QueryInstanceState"/>
+
+        <convert converter="bean" match="gov.nih.nci.cagrid.portal.domain.dataservice.CQLQueryInstance">
+            <param name="include" value="id, finishTime, startTime, state"/>
+        </convert>
+
+        <create creator="spring" javascript="ServiceDetailsTreeFacade">
+            <param name="beanName" value="serviceDetailsTreeFacade"/>
+        </create>
+
+        <create creator="spring" javascript="UMLClassTreeFacade">
+            <param name="beanName" value="umlClassTreeFacade"/>
+        </create>
+
+        <create creator="spring" javascript="CQLQueryTreeFacade">
+            <param name="beanName" value="cqlQueryTreeFacade"/>
+        </create>
+
+        <create creator="spring" javascript="EVSAutomcompleter">
+            <param name="beanName" value="evsAutoCompleter"/>
+        </create>
+
+        <convert converter="bean" match="gov.nih.nci.cagrid.portal.portlet.discovery.evs.EVSConceptDTO"/>
+
+    </allow>
 </dwr>
