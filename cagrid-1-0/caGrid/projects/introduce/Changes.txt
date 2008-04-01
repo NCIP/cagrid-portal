@@ -5,7 +5,7 @@
 
 1.1 - 1.2
 -- Removed ServiceTasks JDOM dependency to the services lib directory and moved it to the tools directory.
--- Added abilty for services to be undeployed
+-- Added ability for services to be undeployed
 -- Added ability to have resources be persisted
 	-- using XMLPersistanceHelper customized from globus
 -- Renamed some service files so that they all now start with the service name
@@ -67,9 +67,9 @@ For example:
    
 Removed synconizedResourceFramework from the ResourcePropertiesType bean.
 
-<resourceLink> have been added for every sub resources home to al other sub resource homes
+<resourceLink> have been added for every sub resources home to all other sub resource homes
 
-a baseImpl has been added to the server to hide some of the provided methods from the users implemenation
+a baseImpl has been added to the server to hide some of the provided methods from the users implementation
 
 wsdl files where not importing xsd's correctly so changed the wsdl to define the namespaces of all types in the top of hte wsdl
 and import the xsd's in the schema part of the wsdl
