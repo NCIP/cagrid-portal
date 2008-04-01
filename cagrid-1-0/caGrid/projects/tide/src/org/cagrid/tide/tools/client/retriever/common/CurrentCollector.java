@@ -28,25 +28,21 @@ public class CurrentCollector implements Runnable {
     private TideDescriptor tideDescriptor = null;
     private Current[] currents = null;
     private List<byte[]>[] byteArrays = null;
-    private FailedCollectorCallback failedCallback = null;
-    private boolean failed[] = null;
+    private TideRetriever retriever = null;
     private CurrentWriter writer = null;
-    private long[] collectionTime = null;
-    private long[] bytesRead = null;
-    private long connectionTime;
+    private CurrentCollectionInformation[] currentCollectionInformation;
+    private long transferSetupTime;
 
 
     public CurrentCollector(Current[] currents, CurrentWriter writer, TideDescriptor tideDescriptor,
-        TideReplicaDescriptor tideRep, FailedCollectorCallback callback) throws Exception {
+        TideReplicaDescriptor tideRep, TideRetriever retriever) throws Exception {
         this.currents = currents;
         this.writer = writer;
         this.tideDescriptor = tideDescriptor;
         this.tideRep = tideRep;
-        this.failedCallback = callback;
+        this.retriever = retriever;
         this.byteArrays = new ArrayList[currents.length];
-        this.collectionTime = new long[currents.length];
-        this.bytesRead = new long[currents.length];
-        this.failed = new boolean[currents.length];
+        this.currentCollectionInformation = new CurrentCollectionInformation[currents.length];
     }
 
 
@@ -54,14 +50,8 @@ public class CurrentCollector implements Runnable {
         return byteArrays[index];
     }
 
-
-    public long getDataTransferTime(int index) {
-        return collectionTime[index];
-    }
-
-
     public long getTransferSetupTime() {
-        return connectionTime;
+        return transferSetupTime;
     }
 
 
@@ -81,10 +71,12 @@ public class CurrentCollector implements Runnable {
         InputStream is = TransferClientHelper.getData(transClient.getDataTransferDescriptor());
 
         long finishedConnection = System.currentTimeMillis();
-        this.connectionTime = finishedConnection - startConnection;
+        this.transferSetupTime = finishedConnection - startConnection;
 
         for (int i = 0; i < currents.length; i++) {
             System.out.println("prepared to read data from chunk " + currents[i].getChunkNum());
+            CurrentCollectionInformation colInfo = new CurrentCollectionInformation(currents[i].getChunkNum());
+            this.currentCollectionInformation[i] = colInfo;
             MD5InputStream mis = new MD5InputStream(is);
             long start = System.currentTimeMillis();
 
@@ -93,7 +85,6 @@ public class CurrentCollector implements Runnable {
             byte[] bytes = new byte[65536];
 
             int currentAmmountRead = 0;
-            bytesRead[i] = 0;
             long needToRead = currents[i].getActualSize();
             byte[] readBytes = new byte[65536];
             int read = -2;
@@ -102,8 +93,8 @@ public class CurrentCollector implements Runnable {
             } else {
                 read = mis.read(bytes, 0, (int) needToRead);
             }
-            while (read != -1 && bytesRead[i] != currents[i].getActualSize()) {
-                bytesRead[i] += read;
+            while (read != -1 && colInfo.getBytesRead()!= currents[i].getActualSize()) {
+                colInfo.setBytesRead(colInfo.getBytesRead()+ read);
                 if (currentAmmountRead + read > 65536) {
                     byteArrays[i].add(readBytes);
                     readBytes = new byte[65536];
@@ -122,16 +113,16 @@ public class CurrentCollector implements Runnable {
             }
 
             long stop = System.currentTimeMillis();
-            collectionTime[i] = stop - start;
+            colInfo.setCollectionTime(stop - start);
 
-            System.out.println("Read chunk " + this.currents[i].getChunkNum() + " in " + collectionTime[i]
+            System.out.println("Read chunk " + this.currents[i].getChunkNum() + " in " + colInfo.getCollectionTime()
                 + " milliseconds");
 
             if (!this.currents[i].getMd5Sum().equals(mis.getMD5().asHex())) {
                 System.out.println("expect : " + this.currents[i].getMd5Sum() + " but got : " + mis.getMD5().asHex());
-                this.failed[i] = true;
-                this.failedCallback.failedCollector(currents[i], this.tideDescriptor, this.tideRep);
+                this.retriever.failedCurrent(currents[i], this.tideDescriptor, this.tideRep);
             } else {
+                this.retriever.finishedCurrent(this, colInfo);
                 writer.addCurrentCollector(this, i);
             }
         }
@@ -144,9 +135,16 @@ public class CurrentCollector implements Runnable {
             collect();
         } catch (Exception e) {
             e.printStackTrace();
-            if (failedCallback != null) {
-                failedCallback.failedCollector(this);
+            if (retriever != null) {
+                retriever.failedCollector(this);
+            } else {
+                retriever.finishedCollector(this);
             }
         }
+    }
+
+
+    public TideReplicaDescriptor getTideRep() {
+        return tideRep;
     }
 }

@@ -7,5 +7,5 @@ import org.cagrid.tide.descriptor.TideReplicaDescriptor;
 
 public interface FailedCollectorCallback {
     public void failedCollector(CurrentCollector collector);
-    public void failedCollector(Current current, TideDescriptor tideDescriptor, TideReplicaDescriptor tideRepDescriptor);
+    public void failedCurrent(Current current, TideDescriptor tideDescriptor, TideReplicaDescriptor tideRepDescriptor);
 }

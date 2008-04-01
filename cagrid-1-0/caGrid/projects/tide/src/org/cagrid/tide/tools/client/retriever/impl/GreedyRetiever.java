@@ -19,9 +19,10 @@ import org.cagrid.tide.tools.client.retriever.common.TideRetriever;
  * 
  * @author hastings
  */
-public class BalancedRetiever extends TideRetriever {
+public class GreedyRetiever extends TideRetriever {
+    
 
-    public BalancedRetiever(String tideID, File tideStorageFile, TideReplicaManagerReference replicaServer,
+    public GreedyRetiever(String tideID, File tideStorageFile, TideReplicaManagerReference replicaServer,
         TideReplicasDescriptor replicasDescriptor) throws Exception {
         super(tideID, tideStorageFile, replicaServer, replicasDescriptor);
     }
@@ -49,13 +50,11 @@ public class BalancedRetiever extends TideRetriever {
             Current[] currs = new Current[currentList.size()];
             currentList.toArray(currs);
             CurrentCollector collector = new CurrentCollector(currs, getWriter(), getReplicasDescriptor()
-                .getTideDescriptor(), tideRep, BalancedRetiever.this);
+                .getTideDescriptor(), tideRep, GreedyRetiever.this);
 
             RetrieverWorkerPool.getInstance().submit(collector);
         }
 
     }
-
-
 
 }
