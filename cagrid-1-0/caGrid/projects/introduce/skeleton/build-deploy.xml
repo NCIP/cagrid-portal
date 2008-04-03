@@ -234,7 +234,7 @@
 		<property name="webapp.deploy.schema.dir" value="${webapp.deploy.dir}/share/schema" />
 		<property name="webapp.deploy.etc.dir" value="${webapp.deploy.dir}/etc" />
 
-		<echo message="Deploying service ${service.deployment.path} under Globus at ${webapp.deploy.dir}" />
+		<echo message="Undeploying service ${service.deployment.path} under Globus at ${webapp.deploy.dir}" />
 
 		<property name="service.deployment.dir" value="${webapp.deploy.etc.dir}/${service.deployment.dir.name}" />
 		
@@ -250,7 +250,7 @@
 		<property name="webapp.deploy.schema.dir" value="${webapp.deploy.dir}/share/schema" />
 		<property name="webapp.deploy.etc.dir" value="${webapp.deploy.dir}/WEB-INF/etc" />
 
-		<echo message="Uneploying service ${service.deployment.path} under Tomcat at ${webapp.deploy.dir}" />
+		<echo message="Undeploying service ${service.deployment.path} under Tomcat at ${webapp.deploy.dir}" />
 
 		<property name="service.deployment.dir" value="${webapp.deploy.etc.dir}/${service.deployment.dir.name}" />
 		
@@ -266,7 +266,7 @@
 		<property name="webapp.deploy.schema.dir" value="${webapp.deploy.dir}/share/schema" />
 		<property name="webapp.deploy.etc.dir" value="${webapp.deploy.dir}/WEB-INF/etc" />
 
-		<echo message="Unploying service ${service.deployment.path} under JBoss at ${webapp.deploy.dir}" />
+		<echo message="Undeploying service ${service.deployment.path} under JBoss at ${webapp.deploy.dir}" />
 
 		<property name="service.deployment.dir" value="${webapp.deploy.etc.dir}/${service.deployment.dir.name}" />
 		
