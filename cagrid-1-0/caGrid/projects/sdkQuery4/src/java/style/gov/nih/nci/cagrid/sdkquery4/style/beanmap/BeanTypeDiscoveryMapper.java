@@ -28,7 +28,7 @@ import java.util.Map;
  * @author David Ervin
  * 
  * @created Jan 15, 2008 10:21:55 AM
- * @version $Id: BeanTypeDiscoveryMapper.java,v 1.2 2008-02-26 16:49:36 dervin Exp $ 
+ * @version $Id: BeanTypeDiscoveryMapper.java,v 1.3 2008-04-03 15:53:07 dervin Exp $ 
  */
 public class BeanTypeDiscoveryMapper {
 
@@ -104,7 +104,7 @@ public class BeanTypeDiscoveryMapper {
     public DomainTypesInformation discoverTypesInformation() throws IOException, 
         ClassNotFoundException, NoSuchFieldException {
         // create simple URL class loader for the beans jar
-        URLClassLoader loader = new URLClassLoader(new URL[] {beansJar.toURL()});
+        URLClassLoader loader = new URLClassLoader(new URL[] {beansJar.toURL()}, null);
         // begin walking classes
         DomainTypesInformation info = new DomainTypesInformation();
         List<String> classNames = getClassesInModel();
