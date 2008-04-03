@@ -27,6 +27,9 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import org.cagrid.grape.ApplicationComponent;
+import org.cagrid.grape.utils.CompositeErrorDialog;
+import org.cagrid.grape.utils.ErrorDialog;
+
 import javax.swing.JScrollPane;
 
 
@@ -319,6 +322,7 @@ public class UndeployServiceViewer extends ApplicationComponent {
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
+                        ErrorDialog.showError("Undeployment Error" ,ex);
                     }
                 }
             });

@@ -2,8 +2,10 @@ package gov.nih.nci.cagrid.introduce.upgrade.introduce;
 
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.common.XMLUtilities;
+import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespacesType;
+import gov.nih.nci.cagrid.introduce.beans.service.ResourcePropertyManagement;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.codegen.common.SynchronizationException;
 import gov.nih.nci.cagrid.introduce.codegen.services.methods.SyncHelper;
@@ -50,6 +52,22 @@ public class Introduce_1_0__1_3_Upgrader extends IntroduceUpgraderBase {
 
 
     protected void upgrade() throws Exception {
+        // need to make sure to save a copy of hte introduce.xml to a prev file
+        // so that the
+        // sync tools can pick up any service changes i make here.....
+        // make a copy of the model to compate with next time
+        Utils.copyFile(new File(getServicePath() + File.separator + IntroduceConstants.INTRODUCE_XML_FILE), new File(
+            getServicePath() + File.separator + IntroduceConstants.INTRODUCE_XML_FILE + ".prev"));
+
+        // make a copy of the properties to compate with next time
+        Utils.copyFile(new File(getServicePath() + File.separator + IntroduceConstants.INTRODUCE_PROPERTIES_FILE),
+            new File(getServicePath() + File.separator + IntroduceConstants.INTRODUCE_PROPERTIES_FILE + ".prev"));
+
+        // add the resource property management to the main service
+        ServiceType mainService = getServiceInformation().getServices().getService(0);
+        mainService.getResourceFrameworkOptions().setResourcePropertyManagement(new ResourcePropertyManagement());
+
+        
         // need to delete the old registration.xml file
         File registrationFile = new File(getServicePath() + File.separator + "etc" + File.separator
             + "registration.xml");
