@@ -22,54 +22,51 @@ import org.globus.wsrf.encoding.DeserializationException;
 import org.globus.wsrf.encoding.ObjectDeserializer;
 import org.xml.sax.InputSource;
 
+
 public class UndeployServiceTask extends Task {
 
-	private String webAppDeployLocation;
+    private String webAppDeployLocation;
 
-	private String webAppDeployLibLocation;
+    private String webAppDeployLibLocation;
 
-	private String webAppDeploySchemaLocation;
+    private String webAppDeploySchemaLocation;
 
-	private String webAppDeployEtcLocation;
+    private String webAppDeployEtcLocation;
 
-	private String serviceDeploymentDirectoryName;
+    private String serviceDeploymentDirectoryName;
 
-	private String servicePrefix;
+    private String servicePrefix;
 
-	private String serviceName;
+    private String serviceName;
 
-	private Deployment undeployService = null;
+    private Deployment undeployService = null;
 
-	private Map<String, Deployment> otherDeployedServices = new HashMap<String, Deployment>();
+    private Map<String, Deployment> otherDeployedServices = new HashMap<String, Deployment>();
 
-	public void execute() throws BuildException {
-		super.execute();
 
-		Properties properties = new Properties();
-		properties.putAll(this.getProject().getProperties());
+    public void execute() throws BuildException {
+        super.execute();
 
-		// 1.get some basic properties about the deployment
-		webAppDeployLocation = properties.getProperty("webapp.deploy.dir");
-		webAppDeployLibLocation = properties
-				.getProperty("webapp.deploy.lib.dir");
-		webAppDeploySchemaLocation = properties
-				.getProperty("webapp.deploy.schema.dir");
-		webAppDeploySchemaLocation = properties
-				.getProperty("webapp.deploy.etc.dir");
-		serviceDeploymentDirectoryName = properties
-				.getProperty("service.deployment.dir.name");
-		servicePrefix = properties.getProperty("service.deployment.prefix");
-		serviceName = properties.getProperty("service.name");
+        Properties properties = new Properties();
+        properties.putAll(this.getProject().getProperties());
 
-		UndeployServiceHelper helper = new UndeployServiceHelper(
-				webAppDeployLocation, webAppDeployLibLocation,
-				webAppDeploySchemaLocation, webAppDeployEtcLocation,
-				serviceDeploymentDirectoryName, servicePrefix, serviceName);
-		try {
-			helper.execute();
-		} catch (Exception e) {
-			throw new BuildException(e);
-		}
+        // 1.get some basic properties about the deployment
+        webAppDeployLocation = properties.getProperty("webapp.deploy.dir");
+        webAppDeployLibLocation = properties.getProperty("webapp.deploy.lib.dir");
+        webAppDeploySchemaLocation = properties.getProperty("webapp.deploy.schema.dir");
+        webAppDeployEtcLocation = properties.getProperty("webapp.deploy.etc.dir");
+        serviceDeploymentDirectoryName = properties.getProperty("service.deployment.dir.name");
+        servicePrefix = properties.getProperty("service.deployment.prefix");
+        serviceName = properties.getProperty("service.name");
 
-	}
+        UndeployServiceHelper helper = new UndeployServiceHelper(webAppDeployLocation, webAppDeployLibLocation,
+            webAppDeploySchemaLocation, webAppDeployEtcLocation, serviceDeploymentDirectoryName, servicePrefix,
+            serviceName);
+        try {
+            helper.execute();
+        } catch (Exception e) {
+            throw new BuildException(e);
+        }
+
+    }
 }
