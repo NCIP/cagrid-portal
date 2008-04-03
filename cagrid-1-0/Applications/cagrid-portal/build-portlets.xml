@@ -59,7 +59,9 @@
         <mkdir dir="${portlets.test.classes.dir}" />
 
         <copy todir="${portlets.test.classes.dir}">
-            <filelist dir="${portlets.test.dir}/src" files="applicationContext-portlets-test.xml"/>
+            <fileset dir="${portlets.test.dir}/src">
+                <include name="applicationContext-portlets-test.xml"/>
+            </fileset>
         </copy>
 
         <javac srcdir="${portlets.test.src.java.dir}"
