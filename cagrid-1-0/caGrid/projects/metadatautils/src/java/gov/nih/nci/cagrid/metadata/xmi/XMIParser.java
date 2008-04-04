@@ -1,5 +1,9 @@
 package gov.nih.nci.cagrid.metadata.xmi;
 
+import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.metadata.MetadataConstants;
+import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -12,10 +16,7 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
 import org.xml.sax.SAXException;
-
-import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.metadata.MetadataConstants;
-import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
+import org.xml.sax.helpers.DefaultHandler;
 
 /**
   *  XMIParser
@@ -25,7 +26,7 @@ import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
   * @author David Ervin
   * 
   * @created Oct 22, 2007 10:19:59 AM
-  * @version $Id: XMIParser.java,v 1.3 2007-10-23 21:01:13 dervin Exp $
+  * @version $Id: XMIParser.java,v 1.4 2008-04-04 15:57:41 dervin Exp $
  */
 public class XMIParser {
     DomainModel model;
@@ -61,16 +62,36 @@ public class XMIParser {
     
     
     public DomainModel parse(InputStream xmiStream) throws SAXException, IOException, ParserConfigurationException {
+        return parse(xmiStream, XmiFileType.SDK_32_EA);
+    }
+    
+    
+    public DomainModel parse(File file) throws SAXException, IOException, ParserConfigurationException {
+        return parse(file, XmiFileType.SDK_32_EA);
+    }
+    
+    
+    public DomainModel parse(InputStream xmiStream, XmiFileType type) throws SAXException, IOException, ParserConfigurationException {
         SAXParser parser = SAXParserFactory.newInstance().newSAXParser();
-        XMIHandler handler = new XMIHandler(this);
+        DefaultHandler handler = null;
+        switch (type) {
+            case SDK_32_EA:
+                handler = new XMIHandler(this);
+                break;
+            case SDK_40_EA:
+                handler = new Sdk4EaXMIHandler(this);
+                break;
+            case SDK_40_ARGO:
+                handler = new ArgoXmiHandler(this);
+        }
         parser.parse(xmiStream, handler);
         return model;
     }
 
 
-    public DomainModel parse(File file) throws SAXException, IOException, ParserConfigurationException {
+    public DomainModel parse(File file, XmiFileType type) throws SAXException, IOException, ParserConfigurationException {
         FileInputStream fis = new FileInputStream(file);
-        parse(fis);
+        parse(fis, type);
         fis.close();
         return model;
     }
