@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.introduce.extensions.metadata.upgrade.system.steps;
 
+import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.testing.system.haste.Step;
 
 import java.util.Iterator;
@@ -30,11 +31,11 @@ public abstract class XPathValidatingStep extends Step {
 
         // iterate orig and fail if new doesn't have the same entry
         while (iter1.hasNext()) {
-            String val1 = (String) iter1.next();
+            String val1 = Utils.clean((String) iter1.next());
             if (!iter2.hasNext()) {
                 fail("The first iterator has more values than the second.");
             }
-            String val2 = (String) iter2.next();
+            String val2 = Utils.clean((String) iter2.next());
 
             // System.out.println("Comparing [" + val1 + "] to [" + val2 +
             // "].");
