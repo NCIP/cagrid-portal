@@ -22,7 +22,7 @@ public class CompareServiceMetadataStep extends XPathValidatingStep {
     // TODO: could use this if the UMLClass stuff still worked for caCORE
     // private static final String DESCRIPTION_XPATH = "//*/@description";
     private static final String DESCRIPTION_XPATH = "//*[local-name()='service' or local-name()='serviceContext'"
-        + " or local-name()='operation' or local-name()='fault'  or local-name()='contextProperty']/@description";
+        + " or (local-name()='operation' and @name!='GetMultipleResourceProperties' and @name!='GetResourceProperty' and @name!='QueryResourceProperties') or local-name()='fault'  or local-name()='contextProperty']/@description";
     protected File origServiceMetadata;
     protected File newServiceMetadata;
 
