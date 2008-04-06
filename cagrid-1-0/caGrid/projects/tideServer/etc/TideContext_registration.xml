@@ -13,15 +13,14 @@
   <Content xsi:type="agg:AggregatorContent" xmlns:agg="http://mds.globus.org/aggregator/types">
     <agg:AggregatorConfig xsi:type="agg:AggregatorConfig">
       <agg:GetMultipleResourcePropertiesPollType
-			xmlns:ns6="http://transfer.cagrid.org/Transfer"
-			xmlns:ns0="http://transfer.cagrid.org/TransferService/Context/types"
-			xmlns:ns4="http://tide.cagrid.org/Tide/types"
+			xmlns:ns5="http://transfer.cagrid.org/Transfer"
+			xmlns:ns1="http://transfer.cagrid.org/TransferService/Context/types"
+			xmlns:ns3="http://tide.cagrid.org/Tide/types"
 			xmlns:xs="http://www.w3.org/2001/XMLSchema"
-			xmlns:ns5="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security"
-			xmlns:ns1="http://schemas.xmlsoap.org/ws/2004/03/addressing"
-			xmlns:ns3="http://tide.cagrid.org/Tide/Context/types"
-			xmlns:ns2="http://tide.cagrid.org/TideDescriptor"
-			xmlns:ns7="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.xsd">
+			xmlns:ns4="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security"
+			xmlns:ns2="http://tide.cagrid.org/Tide/Context/types"
+			xmlns:ns0="http://tide.cagrid.org/TideDescriptor"
+			xmlns:ns6="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.xsd">
         <!-- Specifies that the index should refresh information
             every 300000 milliseconds (once every 5 minutes) -->
         <agg:PollIntervalMillis>INDEX_REFRESH</agg:PollIntervalMillis>

@@ -26,23 +26,22 @@ public class FilePersistenceWaveFetcher implements WaveFetcher {
     public class CurrentInputStream extends InputStream {
         RandomAccessFile raf;
         Current[] currents;
-        long chunkSize;
         long waveBytesRead = 0;
         int currentChunk = 0;
         LinkedList<FixedPortionFileInputStream> inputStreams;
         List<FixedPortionFileInputStream> readStreams;
         FixedPortionFileInputStream ris;
+        long toRead = 0;
 
 
-        public CurrentInputStream(File dataFile, Current[] currents, long chunkSize) throws Exception {
+        public CurrentInputStream(File dataFile, Current[] currents) throws Exception {
             this.currents = currents;
-            this.chunkSize = chunkSize;
             readStreams = new ArrayList<FixedPortionFileInputStream>();
             inputStreams = new LinkedList<FixedPortionFileInputStream>();
             for (int i = 0; i < currents.length; i++) {
+                toRead += currents[i].getSize();
                 System.out.println(currents[i].getChunkNum());
-                FixedPortionFileInputStream fileIS = new FixedPortionFileInputStream(dataFile, chunkSize
-                    * currents[i].getChunkNum(), chunkSize);
+                FixedPortionFileInputStream fileIS = new FixedPortionFileInputStream(dataFile, currents[i].getOffset(), currents[i].getSize());
                 inputStreams.addLast(fileIS);
             }
             ris = inputStreams.removeFirst();
@@ -55,7 +54,7 @@ public class FilePersistenceWaveFetcher implements WaveFetcher {
 
 
         public int read() throws IOException {
-            if (waveBytesRead < chunkSize * currents.length && ris != null) {
+            if (waveBytesRead < toRead && ris != null) {
                 int b = ris.read();
                 if (b != -1) {
                     waveBytesRead++;
@@ -96,7 +95,7 @@ public class FilePersistenceWaveFetcher implements WaveFetcher {
             File tideFile = new File(TideConfiguration.getConfiguration().getTideStorageDir() + File.separator
                 + tideDescriptor.getName() + "_" + tideDescriptor.getId() + ".tide");
 
-            InputStream is = new CurrentInputStream(tideFile, waveR.getCurrent(), tideDescriptor.getChunkSize());
+            InputStream is = new CurrentInputStream(tideFile, waveR.getCurrent());
             TransferServiceContextReference tref = TransferServiceHelper.createTransferContext(is, null);
             WaveDescriptor wave = new WaveDescriptor(waveR.getCurrent(), waveR.getTideId(), tref);
 

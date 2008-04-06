@@ -30,7 +30,7 @@ public class PublishTideClient {
 
     
     
-    public static TideDescriptor publishNewTide(File data, long chunkSize, TideReference tideServer,
+    public static TideDescriptor publishNewTideFixedChunks(File data, long chunkSize, TideReference tideServer,
         TideReplicaManagerReference replicaServer) throws Exception {
         String newID = UUID.randomUUID().toString();
         FileInputStream fis = new FileInputStream(data);
@@ -100,7 +100,7 @@ public class PublishTideClient {
 
     public static TideDescriptor publishNewTide(File data, TideReference tideServer, TideReplicaManagerReference replicaServer)
         throws Exception {
-        return PublishTideClient.publishNewTide(data, 1024 * 512, tideServer, replicaServer);
+        return PublishTideClient.publishNewTideFixedChunks(data, 1024 * 512, tideServer, replicaServer);
     }
     
     

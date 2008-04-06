@@ -95,7 +95,6 @@ public class CurrentWriter implements Runnable {
                     }
                     chunksProcessed++;
                 } catch (IOException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
                 long stop = System.currentTimeMillis();
