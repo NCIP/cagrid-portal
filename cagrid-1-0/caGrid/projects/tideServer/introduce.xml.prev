@@ -4,6 +4,7 @@
    <ns2:SchemaElement type="Current" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="Currents" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="TideDescriptor" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="TideInformation" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="TideReplicaDescriptor" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="TideReplicasDescriptor" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="WaveDescriptor" xsi:type="ns2:SchemaElementType"/>

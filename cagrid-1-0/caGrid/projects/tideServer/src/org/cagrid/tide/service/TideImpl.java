@@ -71,7 +71,7 @@ public class TideImpl extends TideImplBase {
             javax.naming.Context initialContext = new javax.naming.InitialContext();
             home = (org.cagrid.tide.context.service.globus.resource.TideContextResourceHome) initialContext
                 .lookup(homeName);
-            resourceKey = home.createResource(tideDescriptor.getId());
+            resourceKey = home.createResource(tideDescriptor.getTideInformation().getId());
 
             // Grab the newly created resource
             org.cagrid.tide.context.service.globus.resource.TideContextResource thisResource = (org.cagrid.tide.context.service.globus.resource.TideContextResource) home
@@ -123,7 +123,7 @@ public class TideImpl extends TideImplBase {
 
         };
         createTide(tideDescriptor);
-        return TransferServiceHelper.createTransferContext(new DataDescriptor(null, tideDescriptor.getId()), callback);
+        return TransferServiceHelper.createTransferContext(new DataDescriptor(null, tideDescriptor.getTideInformation().getId()), callback);
     }
 
 }

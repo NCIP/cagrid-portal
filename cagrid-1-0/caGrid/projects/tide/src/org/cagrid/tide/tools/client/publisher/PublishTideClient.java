@@ -14,6 +14,7 @@ import org.cagrid.tide.client.TideClient;
 import org.cagrid.tide.descriptor.Current;
 import org.cagrid.tide.descriptor.Currents;
 import org.cagrid.tide.descriptor.TideDescriptor;
+import org.cagrid.tide.descriptor.TideInformation;
 import org.cagrid.tide.replica.client.TideReplicaManagerClient;
 import org.cagrid.tide.replica.context.client.TideReplicaManagerContextClient;
 import org.cagrid.tide.replica.stubs.types.TideReplicaManagerReference;
@@ -35,15 +36,16 @@ public class PublishTideClient {
         String newID = UUID.randomUUID().toString();
         FileInputStream fis = new FileInputStream(data);
         TideDescriptor tide = new TideDescriptor();
-        tide.setId(newID);
-        tide.setSize(data.length());
+        TideInformation info = new TideInformation();
+        info.setId(newID);
+        info.setSize(data.length());
         int numChunks = ((int)(data.length() / (chunkSize)));
         if (data.length() % (chunkSize) != 0) {
             numChunks += 1;
         }
 
-        tide.setChunks(numChunks);
-        tide.setName(data.getName());
+        info.setChunks(numChunks);
+        info.setName(data.getName());
         
         MD5InputStream mis = new MD5InputStream(fis);
         byte[] buf = new byte[65536];
@@ -51,11 +53,13 @@ public class PublishTideClient {
         while ((num_read = mis.read(buf)) != -1);
         mis.getMD5().asHex();
         
-        tide.setMd5Sum(mis.getMD5().asHex());
+        info.setMd5Sum(mis.getMD5().asHex());
         
-        Current[] currents = new Current[tide.getChunks()];
+        tide.setTideInformation(info);
         
-        for(int i = 0; i < tide.getChunks(); i++){
+        Current[] currents = new Current[tide.getTideInformation().getChunks()];
+        
+        for(int i = 0; i < tide.getTideInformation().getChunks(); i++){
            MD5InputStream portionmis = new MD5InputStream(new FixedPortionFileInputStream(data, i*chunkSize, chunkSize));
            long chunkActualSize = 0;
            while ((num_read = portionmis.read(buf)) != -1){
@@ -81,7 +85,7 @@ public class PublishTideClient {
 
         TransferServiceContextReference tref = client.putTide(tide);
         
-        System.out.println("Published Tide: " + tide.getId());
+        System.out.println("Published Tide: " + tide.getTideInformation().getId());
 
         TransferServiceContextClient tclient = new TransferServiceContextClient(tref.getEndpointReference());
         InputStream is = new FileInputStream(data);
@@ -89,8 +93,8 @@ public class PublishTideClient {
         tclient.setStatus(Status.Staged);
 
         TideReplicaManagerClient repclient = new TideReplicaManagerClient(replicaServer.getEndpointReference());
-        TideReplicaManagerContextClient repcontextclient = repclient.getTideReplicaManagerContext(tide.getId());
-        repcontextclient.addReplicaHost(client.getTideContext(tide.getId()).getEndpointReference());
+        TideReplicaManagerContextClient repcontextclient = repclient.getTideReplicaManagerContext(tide.getTideInformation().getId());
+        repcontextclient.addReplicaHost(client.getTideContext(tide.getTideInformation().getId()).getEndpointReference());
         
         return tide;
 

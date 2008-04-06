@@ -64,7 +64,7 @@ public class CurrentCollector implements Runnable {
 
         long startConnection = System.currentTimeMillis();
         TideContextClient tideClient = new TideContextClient(tideRep.getEndpointReference());
-        WaveDescriptor wave = tideClient.getWave(new WaveRequest(currents, tideDescriptor.getId()));
+        WaveDescriptor wave = tideClient.getWave(new WaveRequest(currents, tideDescriptor.getTideInformation().getId()));
         TransferServiceContextClient transClient = new TransferServiceContextClient(wave
             .getTransferServiceContextReference().getEndpointReference());
         // this stream currently only has one current in it...........

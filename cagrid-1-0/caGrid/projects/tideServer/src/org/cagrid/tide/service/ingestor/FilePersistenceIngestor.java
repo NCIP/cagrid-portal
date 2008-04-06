@@ -18,7 +18,7 @@ public class FilePersistenceIngestor implements TideIngestor {
         File storageDir = new File(storageDirS);
         storageDir.mkdirs();
         Utils.copyFile(new File(desc.getLocation()), new File(storageDir.getAbsolutePath() + File.separator
-            + tide.getName() + "_" + tide.getId() + ".tide"));
+            + tide.getTideInformation().getName() + "_" + tide.getTideInformation().getId() + ".tide"));
     }
 
 }

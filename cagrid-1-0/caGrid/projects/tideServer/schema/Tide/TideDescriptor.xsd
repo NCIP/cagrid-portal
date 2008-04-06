@@ -16,22 +16,29 @@
 		namespace="http://transfer.cagrid.org/TransferService/Context/types"
 		schemaLocation="./TransferServiceContextTypes.xsd">
 	</xs:import>
+	
+	<element name="TideInformation" type="tns:TideInformation"></element>
+
+	<complexType name="TideInformation">
+		<xs:attribute type="string" name="id" use="required"></xs:attribute>
+		<xs:attribute type="string" name="name" use="required"></xs:attribute>
+		<xs:attribute type="string" name="description"></xs:attribute>
+		<xs:attribute type="string" name="type"></xs:attribute>
+		<xs:attribute type="long" name="size" use="required"></xs:attribute>
+		<xs:attribute type="string" name="md5sum" use="required"></xs:attribute>
+		<xs:attribute type="int" name="chunks" use="required"></xs:attribute>
+	</complexType>
 
 
 	<element name="TideDescriptor" type="tns:TideDescriptor"></element>
 
 	<complexType name="TideDescriptor">
 		<xs:sequence>
+		    <element ref="tns:TideInformation" minOccurs="1" maxOccurs="1"></element>
 			<element ref="tns:Currents" minOccurs="1"
 				maxOccurs="1">
 			</element>
 		</xs:sequence>
-		<xs:attribute type="string" name="id"></xs:attribute>
-		<xs:attribute type="string" name="name" use="required"></xs:attribute>
-		<xs:attribute type="string" name="type"></xs:attribute>
-		<xs:attribute type="long" name="size"></xs:attribute>
-		<xs:attribute type="int" name="chunks"></xs:attribute>
-		<xs:attribute type="string" name="md5sum"></xs:attribute>
 	</complexType>
 
 	<element name="Currents" type="tns:Currents"></element>

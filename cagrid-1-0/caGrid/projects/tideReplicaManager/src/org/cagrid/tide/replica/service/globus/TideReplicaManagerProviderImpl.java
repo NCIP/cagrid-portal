@@ -26,6 +26,18 @@ public class TideReplicaManagerProviderImpl{
 	}
 	
 
+    public org.cagrid.tide.replica.stubs.ListTidesResponse listTides(org.cagrid.tide.replica.stubs.ListTidesRequest params) throws RemoteException {
+    org.cagrid.tide.replica.stubs.ListTidesResponse boxedResult = new org.cagrid.tide.replica.stubs.ListTidesResponse();
+    boxedResult.setTideInformation(impl.listTides());
+    return boxedResult;
+  }
+
+    public org.cagrid.tide.replica.stubs.QueryTidesResponse queryTides(org.cagrid.tide.replica.stubs.QueryTidesRequest params) throws RemoteException {
+    org.cagrid.tide.replica.stubs.QueryTidesResponse boxedResult = new org.cagrid.tide.replica.stubs.QueryTidesResponse();
+    boxedResult.setTideInformation(impl.queryTides(params.getString()));
+    return boxedResult;
+  }
+
     public org.cagrid.tide.replica.stubs.CreateTideReplicaManagerContextResponse createTideReplicaManagerContext(org.cagrid.tide.replica.stubs.CreateTideReplicaManagerContextRequest params) throws RemoteException {
     org.cagrid.tide.replica.stubs.CreateTideReplicaManagerContextResponse boxedResult = new org.cagrid.tide.replica.stubs.CreateTideReplicaManagerContextResponse();
     boxedResult.setTideReplicaManagerContextReference(impl.createTideReplicaManagerContext(params.getTideDescriptor().getTideDescriptor()));

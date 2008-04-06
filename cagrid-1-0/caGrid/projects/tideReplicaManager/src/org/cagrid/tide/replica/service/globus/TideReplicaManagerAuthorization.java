@@ -77,6 +77,16 @@ public class TideReplicaManagerAuthorization implements PDP {
 		
 		
 	}
+					
+	public static void authorizeListTides() throws RemoteException {
+		
+		
+	}
+					
+	public static void authorizeQueryTides() throws RemoteException {
+		
+		
+	}
 	
 	
 	public boolean isPermitted(Subject peerSubject, MessageContext context, QName operation)
@@ -128,6 +138,22 @@ public class TideReplicaManagerAuthorization implements PDP {
 		} else if(operation.getLocalPart().equals("getTideReplicaManagerContext")){
 			try{
 				authorizeGetTideReplicaManagerContext();
+				return true;
+			} catch (Exception e){
+				e.printStackTrace();
+				return false;
+			}
+		} else if(operation.getLocalPart().equals("listTides")){
+			try{
+				authorizeListTides();
+				return true;
+			} catch (Exception e){
+				e.printStackTrace();
+				return false;
+			}
+		} else if(operation.getLocalPart().equals("queryTides")){
+			try{
+				authorizeQueryTides();
 				return true;
 			} catch (Exception e){
 				e.printStackTrace();

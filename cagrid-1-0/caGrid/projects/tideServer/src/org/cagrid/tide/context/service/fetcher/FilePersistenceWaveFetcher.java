@@ -93,7 +93,7 @@ public class FilePersistenceWaveFetcher implements WaveFetcher {
         try {
             WaveRequest waveR = waveRequest;
             File tideFile = new File(TideConfiguration.getConfiguration().getTideStorageDir() + File.separator
-                + tideDescriptor.getName() + "_" + tideDescriptor.getId() + ".tide");
+                + tideDescriptor.getTideInformation().getName() + "_" + tideDescriptor.getTideInformation().getId() + ".tide");
 
             InputStream is = new CurrentInputStream(tideFile, waveR.getCurrent());
             TransferServiceContextReference tref = TransferServiceHelper.createTransferContext(is, null);

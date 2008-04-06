@@ -12,6 +12,10 @@ import java.rmi.RemoteException;
  */
 public interface TideReplicaManagerI {
 
+  public org.cagrid.tide.descriptor.TideInformation[] listTides() throws RemoteException ;
+
+  public org.cagrid.tide.descriptor.TideInformation[] queryTides(java.lang.String string) throws RemoteException ;
+
   public org.oasis.wsrf.properties.GetMultipleResourcePropertiesResponse getMultipleResourceProperties(org.oasis.wsrf.properties.GetMultipleResourceProperties_Element params) throws RemoteException ;
 
   public org.oasis.wsrf.properties.GetResourcePropertyResponse getResourceProperty(javax.xml.namespace.QName params) throws RemoteException ;

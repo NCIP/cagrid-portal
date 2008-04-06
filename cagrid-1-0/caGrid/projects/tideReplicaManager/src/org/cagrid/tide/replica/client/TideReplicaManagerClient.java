@@ -122,6 +122,25 @@ public class TideReplicaManagerClient extends TideReplicaManagerClientBase imple
 		}
 	}
 
+  public org.cagrid.tide.descriptor.TideInformation[] listTides() throws RemoteException {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"listTides");
+    org.cagrid.tide.replica.stubs.ListTidesRequest params = new org.cagrid.tide.replica.stubs.ListTidesRequest();
+    org.cagrid.tide.replica.stubs.ListTidesResponse boxedResult = portType.listTides(params);
+    return boxedResult.getTideInformation();
+    }
+  }
+
+  public org.cagrid.tide.descriptor.TideInformation[] queryTides(java.lang.String string) throws RemoteException {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"queryTides");
+    org.cagrid.tide.replica.stubs.QueryTidesRequest params = new org.cagrid.tide.replica.stubs.QueryTidesRequest();
+    params.setString(string);
+    org.cagrid.tide.replica.stubs.QueryTidesResponse boxedResult = portType.queryTides(params);
+    return boxedResult.getTideInformation();
+    }
+  }
+
   public org.oasis.wsrf.properties.GetMultipleResourcePropertiesResponse getMultipleResourceProperties(org.oasis.wsrf.properties.GetMultipleResourceProperties_Element params) throws RemoteException {
     synchronized(portTypeMutex){
       configureStubSecurity((Stub)portType,"getMultipleResourceProperties");

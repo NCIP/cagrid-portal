@@ -74,7 +74,7 @@ public class CurrentWriter implements Runnable {
 
     public void run() {
         int sleepCount = 0;
-        while (chunksProcessed < tide.getChunks()) {
+        while (chunksProcessed < tide.getTideInformation().getChunks()) {
             CurrentHolder holder = currents.poll();
             if (holder != null) {
                 long start = System.currentTimeMillis();
@@ -125,7 +125,7 @@ public class CurrentWriter implements Runnable {
             int num_read;
             while ((num_read = mis.read(buf)) != -1);
             mis.getMD5().asHex();
-            if (!mis.getMD5().asHex().equals(tide.getMd5Sum())) {
+            if (!mis.getMD5().asHex().equals(tide.getTideInformation().getMd5Sum())) {
                 throw new Exception("File download was corrupted!");
             }
         } catch (Exception e) {
