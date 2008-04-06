@@ -37,7 +37,6 @@ public class PublishTideClient {
         TideDescriptor tide = new TideDescriptor();
         tide.setId(newID);
         tide.setSize(data.length());
-        tide.setChunkSize(chunkSize);
         int numChunks = ((int)(data.length() / (chunkSize)));
         if (data.length() % (chunkSize) != 0) {
             numChunks += 1;
@@ -57,12 +56,12 @@ public class PublishTideClient {
         Current[] currents = new Current[tide.getChunks()];
         
         for(int i = 0; i < tide.getChunks(); i++){
-           MD5InputStream portionmis = new MD5InputStream(new FixedPortionFileInputStream(data, i*tide.getChunkSize(), tide.getChunkSize()));
+           MD5InputStream portionmis = new MD5InputStream(new FixedPortionFileInputStream(data, i*chunkSize, chunkSize));
            long chunkActualSize = 0;
            while ((num_read = portionmis.read(buf)) != -1){
                chunkActualSize +=num_read;
            }
-           Current newCurrent = new Current(chunkActualSize,i,portionmis.getMD5().asHex());
+           Current newCurrent = new Current(i,portionmis.getMD5().asHex(),i*chunkSize,chunkActualSize);
            currents[i] = newCurrent;
         }
      

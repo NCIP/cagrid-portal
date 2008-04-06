@@ -87,7 +87,7 @@ public class CurrentWriter implements Runnable {
                 Current current = this.tide.getCurrents().getCurrent(
                     currentCurrentCollector.getCurrent(this.currentCurrentCollectorIndex).getChunkNum());
                 try {
-                    raf.seek(this.tide.getChunkSize() * current.getChunkNum());
+                    raf.seek(current.getOffset());
                     Iterator<byte[]> it = currentCurrentCollector.getCurrentByteArrayData(
                         this.currentCurrentCollectorIndex).iterator();
                     while (it.hasNext()) {

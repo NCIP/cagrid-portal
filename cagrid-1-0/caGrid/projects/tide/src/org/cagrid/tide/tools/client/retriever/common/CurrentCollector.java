@@ -85,7 +85,7 @@ public class CurrentCollector implements Runnable {
             byte[] bytes = new byte[65536];
 
             int currentAmmountRead = 0;
-            long needToRead = currents[i].getActualSize();
+            long needToRead = currents[i].getSize();
             byte[] readBytes = new byte[65536];
             int read = -2;
             if (needToRead > 65536) {
@@ -93,7 +93,7 @@ public class CurrentCollector implements Runnable {
             } else {
                 read = mis.read(bytes, 0, (int) needToRead);
             }
-            while (read != -1 && colInfo.getBytesRead()!= currents[i].getActualSize()) {
+            while (read != -1 && colInfo.getBytesRead()!= currents[i].getSize()) {
                 colInfo.setBytesRead(colInfo.getBytesRead()+ read);
                 if (currentAmmountRead + read > 65536) {
                     byteArrays[i].add(readBytes);
