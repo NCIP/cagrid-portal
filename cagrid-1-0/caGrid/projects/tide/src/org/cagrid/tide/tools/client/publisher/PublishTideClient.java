@@ -112,10 +112,10 @@ public class PublishTideClient {
         File f = new File("c:/apache-ant-1.7.0-bin.zip");
         try {
             TideReference tideRef = new TideReference(new EndpointReferenceType(new Address("http://localhost:8080/wsrf/services/cagrid/Tide")));
-            TideReference tideRef2 = new TideReference(new EndpointReferenceType(new Address("http://cagrid06:8123/wsrf/services/cagrid/Tide")));
+            //TideReference tideRef2 = new TideReference(new EndpointReferenceType(new Address("http://localhost:8080/wsrf/services/cagrid/Tide")));
             TideReplicaManagerReference tideRepRef = new TideReplicaManagerReference(new EndpointReferenceType(new Address("http://localhost:8080/wsrf/services/cagrid/TideReplicaManager")));
             TideDescriptor desc = PublishTideClient.publishNewTide(f, tideRef, tideRepRef);
-            TideDescriptor anotherDesc = PublishTideClient.publishTide(f, desc, tideRef2, tideRepRef);
+           // TideDescriptor anotherDesc = PublishTideClient.publishTide(f, desc, tideRef2, tideRepRef);
                     
         } catch (MalformedURIException e) {
             // TODO Auto-generated catch block
