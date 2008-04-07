@@ -2,7 +2,6 @@ package gov.nih.nci.cagrid.introduce.portal;
 
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.common.portal.SplashScreen;
-import gov.nih.nci.cagrid.introduce.common.ResourceManager;
 
 import java.awt.Dimension;
 import java.awt.EventQueue;

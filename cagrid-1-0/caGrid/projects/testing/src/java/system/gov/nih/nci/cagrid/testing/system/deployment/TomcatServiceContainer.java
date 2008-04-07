@@ -404,9 +404,9 @@ public class TomcatServiceContainer extends ServiceContainer {
 						url)));
 		setAnonymous((Stub) counter);
 		
-		CoGProperties properties = CoGProperties.getDefault();
-		properties.setCaCertLocations(getProperties().getContainerDirectory() + File.separator + "certificates" + File.separator + "ca");
-		CoGProperties.setDefault(properties);
+		CoGProperties cogProperties = CoGProperties.getDefault();
+		cogProperties.setCaCertLocations(getProperties().getContainerDirectory() + File.separator + "certificates" + File.separator + "ca");
+		CoGProperties.setDefault(cogProperties);
 
 		CreateCounterResponse response = counter
 				.createCounter(new CreateCounter());
@@ -429,14 +429,18 @@ public class TomcatServiceContainer extends ServiceContainer {
 	}
 
 	private void setServerPort() throws Exception {
+        // get the server's listen port
 		Integer port = getProperties().getPortPreference().getPort();
-		File serverConfigFile = new File(getProperties()
-				.getContainerDirectory(), "conf" + File.separator
-				+ "server.xml");
+        // load the server config file
+		File serverConfigFile = new File(
+            getProperties().getContainerDirectory(), "conf" + File.separator + "server.xml");
+        // root config element
 		Element configRoot = XMLUtilities.fileNameToDocument(
 				serverConfigFile.getAbsolutePath()).getRootElement();
+        // set the shutdown port
 		configRoot.setAttribute("port", String.valueOf(getProperties()
 				.getPortPreference().getShutdownPort()));
+        // locate catalina connector and set the port
 		Iterator serviceElementIterator = configRoot.getChildren("Service",
 				configRoot.getNamespace()).iterator();
 		while (serviceElementIterator.hasNext()) {
