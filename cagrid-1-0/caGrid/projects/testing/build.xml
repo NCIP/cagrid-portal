@@ -29,17 +29,14 @@
 	<property name="ext.test.lib.dir" location="${basedir}/ext/dependencies/test/jars" />
 
 	<!-- testing stuff -->
-	<property name="test.log.dir" value="log" />
-	<property name="junit.results.dir" value="${test.log.dir}/junit" />
 	<property name="test.dir" location="${basedir}/test" />
 	<property name="test.src.dir" location="${test.dir}/src/java" />
 	<property name="test.classes.dir" location="${build.dir}/test/classes" />
 	<property name="test.lib.dir" location="${test.dir}/lib" />
 	<property name="test.project.jar" location="${jar.dir}/${project.name}-tests-${project.version}.jar" />
 
-	<!-- no testing file yet
+	<!-- import the testing build file -->
 	<import file="test/test.xml" />
-	-->
 
 
 	<!-- =============================================================== -->
@@ -59,7 +56,7 @@
 
 
 	<!-- =============================================================== -->
-	<!-- The Run Classpath                                                   -->
+	<!-- The Run Classpath                                               -->
 	<!-- =============================================================== -->
 	<path id="run.classpath">
 		<fileset dir="${jar.dir}">
@@ -76,30 +73,7 @@
 		</fileset>
 	</path>
 
-
-	<!-- =============================================================== -->
-	<!-- The Test Classpath                                              -->
-	<!-- =============================================================== -->
-	<path id="test.classpath">
-		<pathelement path="${core.classes.dir}" />
-		<pathelement path="${system.classes.dir}" />
-		<fileset dir="${lib.dir}">
-			<include name="**/*.jar" />
-		</fileset>
-		<fileset dir="${ext.lib.dir}">
-			<include name="**/*.jar" />
-		</fileset>
-		<fileset dir="${test.lib.dir}">
-			<include name="**/*.jar" />
-		</fileset>
-		<fileset dir="${ext.test.lib.dir}">
-			<include name="**/*.jar" />
-		</fileset>
-		<fileset dir="${globus.dir}/lib">
-			<include name="**/*.jar" />
-		</fileset>
-	</path>
-
+	
 	<!-- =============================================================== -->
 	<!-- Prepares the build directory                                    -->
 	<!-- =============================================================== -->
@@ -225,28 +199,6 @@
 	<!-- Builds from scratch                                                -->
 	<!-- ============================================================== -->
 	<target name="all" description="Builds the entire application" depends="jar, jarTests" />
-
-	<!-- call the test target for each project and aggregates the log resutls  -->
-	<target name="systemTest">
-		<echo message="Test results dir: ${junit.results.dir}" />
-		<mkdir dir="${junit.results.dir}" />
-		<junit dir="." printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" forkmode="once">
-			<sysproperty key="basedir" value="." />
-			<jvmarg value="-Dbuild.dir=build" />
-			<classpath>
-				<path refid="run.classpath" />
-				<pathelement location="${test.dir}/resources" />
-			</classpath>
-			<formatter type="xml" />
-			<test if="testcase" name="${testcase}" fork="yes" todir="${junit.results.dir}" />
-			<batchtest unless="testcase" fork="yes" todir="${junit.results.dir}">
-				<fileset dir="${test.src.dir}">
-					<include name="**/*StoryBook.java" />
-				</fileset>
-			</batchtest>
-		</junit>
-		<fail message="Tests failed! Check test reports." if="test.failed" />
-	</target>
 
 </project>
 
