@@ -1,13 +1,14 @@
 package org.cagrid.gme.common;
 
-import org.apache.xerces.dom.DOMInputImpl;
-import org.apache.xerces.xni.parser.XMLParseException;
-import org.apache.xerces.xs.LSInputList;
-import org.apache.xerces.xs.XSModel;
-import org.cagrid.gme.persistence.SchemaPersistenceI;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
+import org.apache.axis.types.URI;
+import org.apache.commons.io.IOUtils;
 import org.cagrid.gme.protocol.stubs.Schema;
-import org.cagrid.gme.sax.GMEXMLSchemaLoader;
-import org.w3c.dom.ls.LSInput;
+import org.cagrid.gme.protocol.stubs.SchemaDocument;
 
 
 /**
@@ -15,38 +16,106 @@ import org.w3c.dom.ls.LSInput;
  */
 public class XSDUtil {
 
-	private XSDUtil() {
-	}
+    private XSDUtil() {
+    }
 
 
-	public static final XSModel loadSchemas(final Schema[] schemas, SchemaPersistenceI schemaPersistence)
-		throws IllegalArgumentException, XMLParseException {
-		if (schemas == null ) {
-			throw new IllegalArgumentException("Schemas must be non null.");
-		}
+    /**
+     * Convenience method when only a single file is needed
+     * 
+     * @param namespace
+     *            the namespace to assign to the schema
+     * @param schemaFiles
+     *            the files to create the schema with
+     * @return the constructed Schema
+     * @throws FileNotFoundException
+     *             if a file is not valid
+     * @throws IOException
+     *             if a file is not valid
+     */
+    public static Schema createSchema(URI namespace, File schemaFiles) throws FileNotFoundException, IOException {
+        return createSchema(namespace, new File[]{schemaFiles});
+    }
 
-		LSInputList list = new LSInputList() {
-			public LSInput item(int index) {
-				DOMInputImpl input = new DOMInputImpl();
-				input.setSystemId(schemas[index].getNamespace().getNamespace().toString());
-				input.setStringData(schemas[index].getSchemaText());
-				return input;
-			}
+
+    /**
+     * Constructs a Schema using the given namespace and populates it with
+     * SchemaDocuments with the given files' contents. Note: this does not check
+     * that the files actually represent valid XML Schemas, nor does it check
+     * that the are all of the same specified namespace.
+     * 
+     * @param namespace
+     *            the namespace to assign to the schema
+     * @param schemaFiles
+     *            the files to create the schema with
+     * @return the constructed Schema
+     * @throws FileNotFoundException
+     *             if a file is not valid
+     * @throws IOException
+     *             if a file is not valid
+     */
+    public static Schema createSchema(URI namespace, File schemaFiles[]) throws FileNotFoundException, IOException {
+        if (schemaFiles == null || schemaFiles.length == 0) {
+            throw new IllegalArgumentException("schemaFiles must be a valid array of files.");
+        }
+
+        SchemaDocument[] schemadocuments = new SchemaDocument[schemaFiles.length];
+        for (int i = 0; i < schemaFiles.length; i++) {
+            schemadocuments[i] = createSchemaDocument(schemaFiles[i]);
+        }
+
+        return new Schema(namespace, schemadocuments);
+    }
 
 
-			public int getLength() {
-				return schemas.length;
-			}
-		};
+    /**
+     * Constructs a SchemaDocument with the given file's contents. Note: this
+     * does not check that the file actually represents a valid XML Schema.
+     * 
+     * @param schemaFile
+     *            the file to convert to a schemadocument
+     * @return the constructed SchemaDocument
+     * @throws FileNotFoundException
+     *             if the file is not valid
+     * @throws IOException
+     *             if the file is not valid
+     */
+    public static SchemaDocument createSchemaDocument(File schemaFile) throws FileNotFoundException, IOException {
+        if (schemaFile == null || !schemaFile.canRead()) {
+            throw new IllegalArgumentException("schemaFile must be a valid, readable file.");
+        }
 
-		GMEXMLSchemaLoader schemaLoader = new GMEXMLSchemaLoader(schemas, schemaPersistence);
+        FileInputStream fileInputStream = new FileInputStream(schemaFile);
+        String fileContents = IOUtils.toString(fileInputStream);
+        fileInputStream.close();
+        String systemID = schemaFile.getName();
 
-		XSModel model = schemaLoader.loadInputList(list);
-		if (model == null) {
-			throw schemaLoader.getErrorHandler().createXMLParseException();
-		}
+        return new SchemaDocument(fileContents, systemID);
+    }
 
-		return model;
-	}
 
+    /**
+     * Loops through the SchemaDocuments in the Schema and returns null or the
+     * first which has a matching systemID to the given systemID;
+     * 
+     * @throws IllegalArgumentException
+     *             if Schema is null or contains no SchemaDocuments
+     * @param schema
+     *            the Schema to search
+     * @param systemId
+     *            the systemID to look for
+     * @return the matching SchemaDocuemnt or null
+     */
+    public static SchemaDocument getSchemaDocumentFromSchema(Schema schema, String systemId) {
+        if (schema == null || schema.getSchemaDocument() == null || schema.getSchemaDocument().length == 0) {
+            throw new IllegalArgumentException("Schema must be non null and contain at least one SchemaDocument.");
+        }
+        for (SchemaDocument sd : schema.getSchemaDocument()) {
+            if (sd.getSystemID().equals(systemId)) {
+                return sd;
+            }
+        }
+
+        return null;
+    }
 }

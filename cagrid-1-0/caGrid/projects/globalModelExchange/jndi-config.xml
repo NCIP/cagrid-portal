@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jndiConfig xmlns="http://wsrf.globus.org/jndi/config">
   <service name="SERVICE-INSTANCE-PREFIX/GlobalModelExchange">
-    <resource name="configuration" type="org.cagrid.gme.service.globus.resource.ResourceConfiguration">
+    <resource name="configuration" type="org.cagrid.gme.service.globus.resource.GlobalModelExchangeResourceConfiguration">
       <resourceParams>
         <parameter>
           <name>factory</name>
@@ -24,11 +24,15 @@
         </parameter>
       </resourceParams>
     </resource>
-    <resource name="serviceconfiguration" type="org.cagrid.gme.service.ServiceConfiguration">
+    <resource name="serviceconfiguration" type="org.cagrid.gme.service.GlobalModelExchangeConfiguration">
       <resourceParams>
         <parameter>
           <name>factory</name>
           <value>org.globus.wsrf.jndi.BeanFactory</value>
+        </parameter>
+        <parameter>
+          <name>etcDirectoryPath</name>
+          <value>ETC-PATH</value>
         </parameter>
         <parameter>
           <name>schemaPersistenceImplementationClassname</name>
@@ -40,7 +44,7 @@
         </parameter>
       </resourceParams>
     </resource>
-    <resource name="home" type="org.cagrid.gme.service.globus.resource.BaseResourceHome">
+    <resource name="home" type="org.cagrid.gme.service.globus.resource.GlobalModelExchangeResourceHome">
       <resourceParams>
         <parameter>
           <name>factory</name>

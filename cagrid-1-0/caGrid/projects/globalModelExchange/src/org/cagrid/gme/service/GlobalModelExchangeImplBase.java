@@ -1,7 +1,7 @@
 package org.cagrid.gme.service;
 
 import org.cagrid.gme.service.globus.resource.GlobalModelExchangeResource;
-import org.cagrid.gme.service.ServiceConfiguration;
+import  org.cagrid.gme.service.GlobalModelExchangeConfiguration;
 
 import java.rmi.RemoteException;
 
@@ -23,7 +23,7 @@ import org.globus.wsrf.ResourcePropertySet;
  *
  * Provides some simple accessors for the Impl.
  * 
- * @created by Introduce Toolkit version 1.1
+ * @created by Introduce Toolkit version 1.2
  * 
  */
 public abstract class GlobalModelExchangeImplBase {
@@ -32,14 +32,14 @@ public abstract class GlobalModelExchangeImplBase {
 	
 	}
 	
-	public ServiceConfiguration getConfiguration() throws Exception {
-		return ServiceConfiguration.getConfiguration();
+	public GlobalModelExchangeConfiguration getConfiguration() throws Exception {
+		return GlobalModelExchangeConfiguration.getConfiguration();
 	}
 	
 	
-	public org.cagrid.gme.service.globus.resource.BaseResourceHome getResourceHome() throws Exception {
+	public org.cagrid.gme.service.globus.resource.GlobalModelExchangeResourceHome getResourceHome() throws Exception {
 		ResourceHome resource = getResourceHome("home");
-		return (org.cagrid.gme.service.globus.resource.BaseResourceHome)resource;
+		return (org.cagrid.gme.service.globus.resource.GlobalModelExchangeResourceHome)resource;
 	}
 
 	
@@ -63,45 +63,6 @@ public abstract class GlobalModelExchangeImplBase {
 
 		return resourceHome;
 	}
-	
-	
-	
-	
-	protected gov.nih.nci.cagrid.metadata.ServiceMetadata getServiceMetadataValue(){
-		GlobalModelExchangeResource serviceBaseResource;
-		try {
-			serviceBaseResource = (GlobalModelExchangeResource)ResourceContext.getResourceContext().getResource();
-		} catch (ResourceContextException e) {
-			return null;
-		} catch (ResourceException e) {
-			return null;
-		}
-		return serviceBaseResource.getServiceMetadataValue();
-	}
-
-		
-	
-	
-	protected Object getMetadata(QName metadataQName) {
-		GlobalModelExchangeResource serviceBaseResource = null;
-		try {
-			serviceBaseResource = (GlobalModelExchangeResource) ResourceContext.getResourceContext().getResource();
-		} catch (ResourceContextException e) {
-			return null;
-		} catch (ResourceException e) {
-			return null;
-		}
-		ResourcePropertySet resourcePropertySet = serviceBaseResource.getResourcePropertySet();
-		if (resourcePropertySet != null) {
-			ResourceProperty property = resourcePropertySet.get(metadataQName);
-			if (property != null) {
-				return property.get(0);
-			}
-
-		}
-		return null;
-	}
-	
 
 
 }

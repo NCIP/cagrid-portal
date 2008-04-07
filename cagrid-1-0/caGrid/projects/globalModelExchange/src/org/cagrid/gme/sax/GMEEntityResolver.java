@@ -11,11 +11,12 @@ import org.apache.xerces.xni.XNIException;
 import org.apache.xerces.xni.grammars.XMLSchemaDescription;
 import org.apache.xerces.xni.parser.XMLEntityResolver;
 import org.apache.xerces.xni.parser.XMLInputSource;
+import org.cagrid.gme.common.XSDUtil;
 import org.cagrid.gme.common.exceptions.SchemaParsingException;
 import org.cagrid.gme.persistence.SchemaPersistenceGeneralException;
 import org.cagrid.gme.persistence.SchemaPersistenceI;
-import org.cagrid.gme.protocol.stubs.Namespace;
 import org.cagrid.gme.protocol.stubs.Schema;
+import org.cagrid.gme.protocol.stubs.SchemaDocument;
 
 
 /**
@@ -44,7 +45,7 @@ public class GMEEntityResolver implements XMLEntityResolver {
     public XMLInputSource resolveEntity(XMLResourceIdentifier identifier) throws XNIException, IOException {
         String idNamespace = identifier.getNamespace();
         String systemId = identifier.getLiteralSystemId();
-        // TODO: handle different types (import/include/redefine)
+
         boolean isImport = true;
         if (identifier instanceof XMLSchemaDescription) {
             XMLSchemaDescription desc = (XMLSchemaDescription) identifier;
@@ -55,15 +56,20 @@ public class GMEEntityResolver implements XMLEntityResolver {
                 isImport = false;
             } else if (contextType == XMLSchemaDescription.CONTEXT_REDEFINE) {
                 isImport = false;
+            } else {
+                SchemaParsingException e = new SchemaParsingException(
+                    "Internal Error!  Got a request to resolve an entity of unknown/unsupported type [" + contextType
+                        + "].");
+                LOG.error(e.getMessage(), e);
+                throw e;
             }
+            LOG.debug("Got a request to " + (getDisplayNameForContextType(contextType)) + " namespace (" + idNamespace
+                + ") and systemId (" + systemId + ").");
         }
 
         XMLInputSource result = new XMLInputSource(identifier);
         result.setPublicId(idNamespace);
         result.setSystemId(systemId);
-
-        LOG.debug("Got a request namespace (" + idNamespace + ") and systemId (" + systemId + ")");
-
         URI namespace = new URI(idNamespace);
 
         // first load schema from submission if present
@@ -72,7 +78,7 @@ public class GMEEntityResolver implements XMLEntityResolver {
         // if not in submission load from DB
         if (schema == null) {
             if (this.schemaPersistence != null) {
-                Namespace ns = new Namespace(namespace);
+                URI ns = new URI(namespace);
                 try {
                     schema = this.schemaPersistence.getSchema(ns);
                 } catch (SchemaPersistenceGeneralException e) {
@@ -86,13 +92,51 @@ public class GMEEntityResolver implements XMLEntityResolver {
 
         // if not in DB error out
         if (schema == null) {
-            // TODO: does this always cause failure?
-            throw new SchemaParsingException("Unable to resolve reference to schema (" + namespace + " - " + systemId
-                + "); reference not found in submission package, nor as an existing schema.");
+            SchemaParsingException e = new SchemaParsingException("Unable to resolve reference to Schema (" + namespace
+                + " - " + systemId + "); reference not found in submission package, nor as an existing Schema.");
+            LOG.error(e.getMessage(), e);
+            throw e;
+        }
+
+        SchemaDocument sd = null;
+        if (isImport) {
+            // if it is an import, we need to return the "root" SchemaDocument
+            // for the namespace
+
+            // TODO: how to find the "root" schema?
+            sd = schema.getSchemaDocument(0);
         } else {
+            // else, we need to find the SchemaDocument with a matching systemid
             // convert schema to InputSource
-            result.setByteStream(new ByteArrayInputStream(schema.getSchemaText().getBytes()));
-            return result;
+            sd = XSDUtil.getSchemaDocumentFromSchema(schema, systemId);
+
+        }
+
+        // if not found in schema, error out
+        if (sd == null) {
+            SchemaParsingException e = new SchemaParsingException("Unable to resolve reference to SchemaDocument ("
+                + namespace + " - " + systemId + "); Schema was located but no matching SchemaDocument was found.");
+            LOG.error(e.getMessage(), e);
+            throw e;
+        }
+
+        // load the text from the SchemaDocument
+        result.setByteStream(new ByteArrayInputStream(sd.getSchemaText().getBytes()));
+
+        return result;
+
+    }
+
+
+    private String getDisplayNameForContextType(short contextType) {
+        if (contextType == XMLSchemaDescription.CONTEXT_IMPORT) {
+            return "import";
+        } else if (contextType == XMLSchemaDescription.CONTEXT_INCLUDE) {
+            return "include";
+        } else if (contextType == XMLSchemaDescription.CONTEXT_REDEFINE) {
+            return "redifine";
+        } else {
+            return "?";
         }
     }
 
@@ -102,14 +146,16 @@ public class GMEEntityResolver implements XMLEntityResolver {
         if (this.submissionSchemas != null) {
             for (int i = 0; i < this.submissionSchemas.length; i++) {
                 Schema schema = this.submissionSchemas[i];
-                if (schema.getNamespace() != null && namespace.equals(schema.getNamespace().getNamespace())) {
+                if (schema.getNamespace() != null && namespace.equals(schema.getNamespace())) {
                     LOG.debug("Found desired schema in submission package, at index (" + i + ").");
                     if (result == null) {
                         result = schema;
                     } else {
-                        throw new SchemaParsingException(
+                        SchemaParsingException e = new SchemaParsingException(
                             "Schema submission contains multiple schemas claiming the same namespace(" + namespace
                                 + ").");
+                        LOG.error(e.getMessage(), e);
+                        throw e;
                     }
                 }
             }
@@ -119,4 +165,5 @@ public class GMEEntityResolver implements XMLEntityResolver {
 
         return result;
     }
+
 }

@@ -97,6 +97,14 @@ could support a GME "Context" as a basic container for everything
 what query styles to we want to support?  may effect what XSOM information we store
 - regex on the namespace
 - free text on the schema
+- look into supporting xpointer for pointing inside schemas:
+    - e.g. #xpointer(xs:schema/xs:element[@name="person"]) 
+
+=================================================================================
+GME RESTRICTIONS FROM SCHEMA SPECIFICATION:
+=================================================================================
+* Use of "no namespace" is not allowed
+* Namespaces are universally unique; they can only be reused as targetnamespaces across documents that are included together
 
 
 =================================================================================
@@ -116,4 +124,4 @@ XSD APIs:
   - claims to have 100% support... seems to be what all "validators" use
   - example:
      - org.globus.wsrf.tools.wsdl.WSDLPreprocessor
-     - (great stuff here) http://svn.apache.org/repos/asf/incubator/ode/trunk/utils/src/main/java/org/apache/ode/utils/xsd/
+     - (great stuff here) http://fisheye6.cenqua.com/browse/ode/trunk/utils/src/main/java/org/apache/ode/utils/xsd

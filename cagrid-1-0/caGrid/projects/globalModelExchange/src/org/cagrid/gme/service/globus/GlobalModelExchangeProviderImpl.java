@@ -26,16 +26,4 @@ public class GlobalModelExchangeProviderImpl{
 	}
 	
 
-    public org.cagrid.gme.stubs.AddSchemasResponse addSchemas(org.cagrid.gme.stubs.AddSchemasRequest params) throws RemoteException, org.cagrid.gme.stubs.types.SchemaAlreadyExists, org.cagrid.gme.stubs.types.InvalidSchemaSubmission {
-    org.cagrid.gme.stubs.AddSchemasResponse boxedResult = new org.cagrid.gme.stubs.AddSchemasResponse();
-    impl.addSchemas(params.getSchemas().getSchema());
-    return boxedResult;
-  }
-
-    public org.cagrid.gme.stubs.GetNamespacesResponse getNamespaces(org.cagrid.gme.stubs.GetNamespacesRequest params) throws RemoteException {
-    org.cagrid.gme.stubs.GetNamespacesResponse boxedResult = new org.cagrid.gme.stubs.GetNamespacesResponse();
-    boxedResult.setNamespace(impl.getNamespaces());
-    return boxedResult;
-  }
-
 }

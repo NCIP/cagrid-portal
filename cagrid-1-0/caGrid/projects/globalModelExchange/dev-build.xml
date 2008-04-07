@@ -66,6 +66,13 @@
 		</path>
 		<path id="run.extended.classpath">
 		</path>
+
+		<path id="tasks.run.extended.classpath">
+			<fileset dir="${ext.lib}">
+				<include name="caGrid-core*.jar" />
+				<include name="jdom*.jar" />
+			</fileset>
+		</path>
 	</target>
 
 

@@ -24,7 +24,7 @@ import org.w3c.dom.Node;
  * authorization requirements placed on each method call.  Each method will either return
  * apon a successful authorization or will throw an exception apon a failed authorization.
  * 
- * @created by Introduce Toolkit version 1.1
+ * @created by Introduce Toolkit version 1.2
  * 
  */
 public class GlobalModelExchangeAuthorization implements PDP {
@@ -53,12 +53,17 @@ public class GlobalModelExchangeAuthorization implements PDP {
 		
 	}
 					
-	public static void authorizeAddSchemas() throws RemoteException {
+	public static void authorizeGetMultipleResourceProperties() throws RemoteException {
 		
 		
 	}
 					
-	public static void authorizeGetNamespaces() throws RemoteException {
+	public static void authorizeGetResourceProperty() throws RemoteException {
+		
+		
+	}
+					
+	public static void authorizeQueryResourceProperties() throws RemoteException {
 		
 		
 	}
@@ -78,17 +83,25 @@ public class GlobalModelExchangeAuthorization implements PDP {
 				e.printStackTrace();
 				return false;
 			}
-		} else if(operation.getLocalPart().equals("addSchemas")){
+		} else if(operation.getLocalPart().equals("getMultipleResourceProperties")){
 			try{
-				authorizeAddSchemas();
+				authorizeGetMultipleResourceProperties();
 				return true;
 			} catch (Exception e){
 				e.printStackTrace();
 				return false;
 			}
-		} else if(operation.getLocalPart().equals("getNamespaces")){
+		} else if(operation.getLocalPart().equals("getResourceProperty")){
 			try{
-				authorizeGetNamespaces();
+				authorizeGetResourceProperty();
+				return true;
+			} catch (Exception e){
+				e.printStackTrace();
+				return false;
+			}
+		} else if(operation.getLocalPart().equals("queryResourceProperties")){
+			try{
+				authorizeQueryResourceProperties();
 				return true;
 			} catch (Exception e){
 				e.printStackTrace();

@@ -6,27 +6,27 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.axis.types.URI;
 import org.cagrid.gme.persistence.SchemaPersistenceI;
-import org.cagrid.gme.protocol.stubs.Namespace;
 import org.cagrid.gme.protocol.stubs.Schema;
 
 
 public class FacadeSchemaPersistenceImpl implements SchemaPersistenceI {
-    Map<Schema, List<Namespace>> schemaStore = null;
+    Map<Schema, List<URI>> schemaStore = null;
 
 
-    public FacadeSchemaPersistenceImpl(Map<Schema, List<Namespace>> initialStore) {
+    public FacadeSchemaPersistenceImpl(Map<Schema, List<URI>> initialStore) {
         if (initialStore == null) {
-            schemaStore = new HashMap<Schema, List<Namespace>>();
+            schemaStore = new HashMap<Schema, List<URI>>();
         } else {
             this.schemaStore = initialStore;
         }
     }
 
 
-    public Schema getSchema(Namespace schemaTargetNamespace) {
+    public Schema getSchema(URI schemaTargetURI) {
         for (Schema s : this.schemaStore.keySet()) {
-            if (s.getNamespace().equals(schemaTargetNamespace)) {
+            if (s.getNamespace().equals(schemaTargetURI)) {
                 return s;
             }
         }
@@ -34,14 +34,14 @@ public class FacadeSchemaPersistenceImpl implements SchemaPersistenceI {
     }
 
 
-    public Collection<Schema> getDependingSchemas(Namespace namespace) {
+    public Collection<Schema> getDependingSchemas(URI URI) {
         ArrayList<Schema> result = new ArrayList<Schema>();
         // for each schema in the store
         for (Schema s : this.schemaStore.keySet()) {
-            List<Namespace> imports = this.schemaStore.get(s);
-            // if the stored schema's imports contain the namespace in
+            List<URI> imports = this.schemaStore.get(s);
+            // if the stored schema's imports contain the URI in
             // question, add the schema
-            if (imports.contains(namespace)) {
+            if (imports.contains(URI)) {
                 result.add(s);
             }
         }
@@ -50,8 +50,8 @@ public class FacadeSchemaPersistenceImpl implements SchemaPersistenceI {
     }
 
 
-    public Collection<Namespace> getNamespaces() {
-        ArrayList<Namespace> result = new ArrayList<Namespace>();
+    public Collection<URI> getNamespaces() {
+        ArrayList<URI> result = new ArrayList<URI>();
         for (Schema s : this.schemaStore.keySet()) {
             result.add(s.getNamespace());
         }
@@ -60,7 +60,7 @@ public class FacadeSchemaPersistenceImpl implements SchemaPersistenceI {
     }
 
 
-    public void storeSchemas(Map<Schema, List<Namespace>> schemasToStore) {
+    public void storeSchemas(Map<Schema, List<URI>> schemasToStore) {
         this.schemaStore.putAll(schemasToStore);
     }
 }

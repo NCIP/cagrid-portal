@@ -1,16 +1,17 @@
 package org.cagrid.gme.service.globus.resource;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.globus.wsrf.InvalidResourceKeyException;
+import org.globus.wsrf.NoSuchResourceException;
+import org.globus.wsrf.ResourceException;
+import org.globus.wsrf.ResourceKey;
+
 
 /** 
  * The implementation of this GlobalModelExchangeResource type.
  * 
- * @created by Introduce Toolkit version 1.1
+ * @created by Introduce Toolkit version 1.2
  * 
  */
-public class GlobalModelExchangeResource extends BaseResourceBase {
-
-
+public class GlobalModelExchangeResource extends GlobalModelExchangeResourceBase {
 
 }
