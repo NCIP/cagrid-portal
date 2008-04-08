@@ -81,7 +81,7 @@ public class TestDB {
 
 		Connection conn = getJdbcConnection();
 		IDatabaseConnection dbConn = new DatabaseConnection(conn);
-		IDataSet data = new XmlDataSet(new FileInputStream(dataFilePath));
+		IDataSet data = new FlatXmlDataSet(new FileInputStream(dataFilePath));
 		try {
 			DatabaseOperation.CLEAN_INSERT.execute(dbConn, data);
 		} finally {
