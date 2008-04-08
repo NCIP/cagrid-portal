@@ -23,7 +23,7 @@ import org.cagrid.grape.utils.CompositeErrorDialog;
  * @author David Ervin
  * 
  * @created Jan 18, 2008 3:26:22 PM
- * @version $Id: QueryProcessorBaseConfigurationStep.java,v 1.3 2008-02-28 18:43:21 dervin Exp $ 
+ * @version $Id: QueryProcessorBaseConfigurationStep.java,v 1.4 2008-04-08 15:53:36 dervin Exp $ 
  */
 public class QueryProcessorBaseConfigurationStep extends AbstractStyleConfigurationStep {
     
@@ -52,7 +52,7 @@ public class QueryProcessorBaseConfigurationStep extends AbstractStyleConfigurat
         // store configuration properties for the query processor
         ServiceDescription desc = getServiceInformation().getServiceDescriptor();
         // store the beans jar filename
-        File beansJarFile = new File(beansJarLocation); // THIS IS NULL, NOT GETTING SET FROM UI
+        File beansJarFile = new File(beansJarLocation);
         CommonTools.setServiceProperty(desc,
             SDK4StyleConstants.BEANS_JAR_FILENAME, beansJarFile.getName(), false);
         CommonTools.setServiceProperty(desc, 
