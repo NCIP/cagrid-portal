@@ -144,7 +144,7 @@ public class Retriever extends JFrame {
 			queryStringLabel = new JLabel();
 			queryStringLabel.setText("Query");
 			GridBagConstraints gridBagConstraints = new GridBagConstraints();
-			gridBagConstraints.fill = GridBagConstraints.VERTICAL;
+			gridBagConstraints.fill = GridBagConstraints.BOTH;
 			gridBagConstraints.gridx = 1;
 			gridBagConstraints.gridy = 0;
 			gridBagConstraints.weightx = 1.0;
