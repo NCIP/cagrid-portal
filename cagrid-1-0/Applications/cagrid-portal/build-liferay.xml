@@ -374,8 +374,20 @@
 			</then>
 		</if>
 	</target>
-	
-	<target name="liferay:configure-jboss">
+
+     <target name="liferay:configure-startup-scripts">
+        <if>
+            <istrue value="${liferay.jboss.deploy.scripts}"/>
+            <then>
+                <chmod dir="${liferay.jboss.home}/bin"
+                       perm="u+x"
+                       includes="*.sh">
+                </chmod>
+            </then>
+        </if>
+    </target>
+
+    <target name="liferay:configure-jboss">
 		<antcall target="liferay:configure-jboss-classpath"/>	
 		<antcall target="liferay:configure-jboss-root"/>
 		<antcall target="liferay:configure-jboss-mail-service"/>
@@ -386,7 +398,8 @@
 		<antcall target="liferay:copy-liferay-ext-jars"/>
 		<antcall target="liferay:configure-jboss-tomcat"/>
 		<antcall target="liferay:copy-startup-scripts"/>
-	</target>
+        <antcall target="liferay:configure-startup-scripts"/>
+    </target>
 	
 	<target name="liferay:check-dependencies-downloaded">
 		<condition property="liferay.dependencies.zip.available">

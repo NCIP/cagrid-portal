@@ -189,7 +189,8 @@
 			<entry key="cagrid.portal.httpRedirect.port" value="${cagrid.portal.httpRedirect.port}"/>
 			<entry key="cagrid.portal.httpsRedirect.port" value="${cagrid.portal.httpsRedirect.port}"/>
 			<entry key="cagrid.portal.trust.synchronizeEnabled" value="${cagrid.portal.trust.synchronizeEnabled}"/>
-		</propertyfile>
+            <entry key="cabig.tools.remoteView" value="${cabig.tools.remoteView}"/>
+        </propertyfile>
 	</target>
 	
 	<target name="config-trust">

@@ -1,7 +1,8 @@
 <%@ include file="/WEB-INF/jsp/include/includes.jspf"%>
 
 <iframe
-			src="https://cabig.nci.nih.gov/tools/toolfolder_view"
-			width="100%"
-			height="800px">
-		</iframe>
+        src='<c:out value="${remoteView}"/>'
+        scrolling="auto"
+        frameborder="0"
+        style="width:100%;min-height:1100px;height:auto;">
+</iframe>

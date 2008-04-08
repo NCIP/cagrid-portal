@@ -20,6 +20,16 @@
 
     <bean class="org.springframework.beans.factory.annotation.RequiredAnnotationBeanPostProcessor"/>
 
+    <bean id="listActionResponseHandler" class="gov.nih.nci.cagrid.portal.portlet.tab.TabActionResponseHandler">
+        <property name="tabControlConfig" ref="discoveryTabControlConfig"/>
+        <property name="newTabPath" value="/directory/listView"/>
+    </bean>
+
+    <bean id="mapActionResponseHandler" class="gov.nih.nci.cagrid.portal.portlet.tab.TabActionResponseHandler">
+        <property name="tabControlConfig" ref="discoveryTabControlConfig"/>
+        <property name="newTabPath" value="/directory/mapView"/>
+    </bean>
+
     <bean id="viewDirectoryListController"
           class="gov.nih.nci.cagrid.portal.portlet.discovery.list.ViewDirectoryListController"
           autowire="byName">
@@ -36,7 +46,8 @@
         <property name="commandName" value="scrollCommand"/>
         <property name="commandClass" value="gov.nih.nci.cagrid.portal.portlet.util.ScrollCommand"/>
         <property name="listBeanSessionAttributeName" value="listBean"/>
-        <property name="actionResponseHandler" ref="discoveryTabActionResponseHandler"/>
+        <property name="actionResponseHandler" ref="listActionResponseHandler"/>
+
     </bean>
 
     <bean
@@ -53,7 +64,7 @@
             autowire="byName">
         <property name="commandName" value="mapCommand"/>
         <property name="commandClass" value="gov.nih.nci.cagrid.portal.portlet.discovery.map.MapBean"/>
-        <property name="actionResponseHandler" ref="discoveryTabActionResponseHandler"/>
+        <property name="actionResponseHandler" ref="mapActionResponseHandler"/>
     </bean>
 
     <bean
@@ -62,7 +73,7 @@
             autowire="byName">
         <property name="commandName" value="listCommand"/>
         <property name="commandClass" value="gov.nih.nci.cagrid.portal.portlet.discovery.list.ListBean"/>
-        <property name="actionResponseHandler" ref="discoveryTabActionResponseHandler"/>
+        <property name="actionResponseHandler" ref="listActionResponseHandler"/>
     </bean>
 
     <bean

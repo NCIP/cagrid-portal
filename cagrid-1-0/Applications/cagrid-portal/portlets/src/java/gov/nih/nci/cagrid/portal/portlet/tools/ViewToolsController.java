@@ -15,14 +15,13 @@ import javax.portlet.RenderResponse;
 public class ViewToolsController extends AbstractController {
 
     private String viewName;
+    private String remoteViewName;
 
 
     public ModelAndView handleRenderRequestInternal(
             RenderRequest request,
             RenderResponse response) throws Exception {
-        ModelAndView mav = new ModelAndView(getViewName());
-
-
+        ModelAndView mav = new ModelAndView(getViewName(),"remoteView",getRemoteViewName());
         return mav;
 
     }
@@ -33,5 +32,13 @@ public class ViewToolsController extends AbstractController {
 
     public void setViewName(String viewName) {
         this.viewName = viewName;
+    }
+
+    public String getRemoteViewName() {
+        return remoteViewName;
+    }
+
+    public void setRemoteViewName(String remoteViewName) {
+        this.remoteViewName = remoteViewName;
     }
 }

@@ -145,8 +145,11 @@
 
 
         <copy todir="${portlets.build.war.dir}"
-              overwrite="true">
+              overwrite="true" filtering="true">
             <fileset dir="${portlets.src.war.dir}" />
+            <filterset>
+                <filter token="evs40.remoteAPI.url" value="${evs40.remoteAPI.url}"/>
+            </filterset>
         </copy>
 
         <antcall target="create-cagridportal-properties">
