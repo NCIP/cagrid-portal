@@ -8,10 +8,9 @@ import gov.nih.nci.cagrid.portal.domain.GridService;
 import gov.nih.nci.cagrid.portal.portlet.CaGridPortletApplicationException;
 import gov.nih.nci.cagrid.portal.portlet.discovery.DiscoveryType;
 import gov.nih.nci.cagrid.portal.portlet.util.PortletUtils;
+import org.springframework.beans.factory.annotation.Required;
 
 import java.util.List;
-
-import org.springframework.beans.factory.annotation.Required;
 
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
@@ -47,7 +46,7 @@ public class ServiceDirectory extends DiscoveryDirectory {
 			throw new CaGridPortletApplicationException("Unknown ServiceDirectoryType: " + getServiceDirectoryType());
 		}
 		
-		objects = PortletUtils.filterDormantServices(PortletUtils.filterBannedServices(objects));
+		objects = PortletUtils.filterServicesByInvalidMetadata(PortletUtils.filterDormantServices(PortletUtils.filterBannedServices(objects)));
 		
 		return objects;
 	}

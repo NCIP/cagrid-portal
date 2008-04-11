@@ -9,11 +9,10 @@ import gov.nih.nci.cagrid.portal.portlet.discovery.dir.ParticipantDirectory;
 import gov.nih.nci.cagrid.portal.portlet.discovery.dir.ServiceDirectory;
 import gov.nih.nci.cagrid.portal.portlet.discovery.map.ServiceInfo;
 import gov.nih.nci.cagrid.portal.portlet.util.PortletUtils;
+import org.springframework.beans.factory.annotation.Required;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import org.springframework.beans.factory.annotation.Required;
 
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
@@ -48,7 +47,7 @@ public class StatusBean {
         int totalServicesAvailable = getGridServiceDao().getAll().size();
         do{
             List<GridService> latest = getGridServiceDao().getLatestServices(getLatestServicesLimit()+ serviceLookupIncrement++);
-            services = PortletUtils.filterDormantServices(PortletUtils.filterBannedServices(latest));
+            services = PortletUtils.filterServicesByInvalidMetadata(PortletUtils.filterDormantServices(PortletUtils.filterBannedServices(latest)));
         }
         //run this loop till we find <latestServicesLimit> number of valid  services
         //But at the same time don't get more than available services
