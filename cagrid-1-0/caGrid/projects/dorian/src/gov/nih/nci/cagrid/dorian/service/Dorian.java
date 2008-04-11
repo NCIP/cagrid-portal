@@ -3,9 +3,6 @@ package gov.nih.nci.cagrid.dorian.service;
 import gov.nih.nci.cagrid.common.FaultHelper;
 import gov.nih.nci.cagrid.dorian.common.LoggingObject;
 import gov.nih.nci.cagrid.dorian.common.SAMLConstants;
-import gov.nih.nci.cagrid.dorian.conf.CertificateAuthorityType;
-import gov.nih.nci.cagrid.dorian.conf.DorianConfiguration;
-import gov.nih.nci.cagrid.dorian.conf.IdentityFederationConfiguration;
 import gov.nih.nci.cagrid.dorian.idp.bean.Application;
 import gov.nih.nci.cagrid.dorian.idp.bean.BasicAuthCredential;
 import gov.nih.nci.cagrid.dorian.idp.bean.IdPUser;
@@ -24,14 +21,12 @@ import gov.nih.nci.cagrid.dorian.ifs.bean.SAMLAuthenticationMethod;
 import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdP;
 import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdPStatus;
 import gov.nih.nci.cagrid.dorian.service.ca.CertificateAuthority;
-import gov.nih.nci.cagrid.dorian.service.ca.DBCertificateAuthority;
-import gov.nih.nci.cagrid.dorian.service.ca.EracomCertificateAuthority;
-import gov.nih.nci.cagrid.dorian.service.ca.EracomWrappingCertificateAuthority;
 import gov.nih.nci.cagrid.dorian.service.idp.IdentityProvider;
 import gov.nih.nci.cagrid.dorian.service.idp.UserManager;
 import gov.nih.nci.cagrid.dorian.service.ifs.AutoApprovalAutoRenewalPolicy;
 import gov.nih.nci.cagrid.dorian.service.ifs.IFS;
 import gov.nih.nci.cagrid.dorian.service.ifs.IFSDefaults;
+import gov.nih.nci.cagrid.dorian.service.ifs.IdentityFederationProperties;
 import gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault;
 import gov.nih.nci.cagrid.dorian.stubs.types.InvalidAssertionFault;
 import gov.nih.nci.cagrid.dorian.stubs.types.InvalidHostCertificateFault;
@@ -73,69 +68,34 @@ public class Dorian extends LoggingObject {
 
 	private IFS ifs;
 
-	private IdentityFederationConfiguration ifsConfiguration;
+	private IdentityFederationProperties ifsConfiguration;
 
-	private DorianConfiguration configuration;
+	private DorianProperties configuration;
 
 	private PropertyManager properties;
 
-	public Dorian(DorianConfiguration conf, String serviceId)
+	public Dorian(DorianProperties conf, String serviceId)
 			throws DorianInternalFault {
 		this(conf, serviceId, false);
 	}
 
-	public Dorian(DorianConfiguration conf, String serviceId, boolean ignoreCRL)
+	public Dorian(DorianProperties conf, String serviceId, boolean ignoreCRL)
 			throws DorianInternalFault {
 		try {
 
 			this.configuration = conf;
 			UserManager.ADMIN_USER_ID = IDP_ADMIN_USER_ID;
 			UserManager.ADMIN_PASSWORD = IDP_ADMIN_PASSWORD;
-			this.db = new Database(conf.getDatabaseConfiguration(),
-					getConfiguration().getDorianInternalId());
+			this.db = this.configuration.getDatabase();
 			this.db.createDatabaseIfNeeded();
 			this.properties = new PropertyManager(this.db);
 
-			if (this.properties.getCertificateAuthorityType() == null) {
-				this.properties.setCertificateAuthorityType(configuration
-						.getDorianCAConfiguration()
-						.getCertificateAuthorityType());
-			} else if (!this.properties.getCertificateAuthorityType().equals(
-					configuration.getDorianCAConfiguration()
-							.getCertificateAuthorityType())) {
-				DorianInternalFault fault = new DorianInternalFault();
-				fault
-						.setFaultString("Certificate Authority type conflict detected, this Dorian was created using a "
-								+ this.properties.getCertificateAuthorityType()
-										.getValue()
-								+ " CA but the configuration file specifies the usage of a "
-								+ configuration.getDorianCAConfiguration()
-										.getCertificateAuthorityType()
-										.getValue() + " CA.");
-				throw fault;
-			}
+			this.ca = this.configuration.getCertificateAuthority();
 
-			if (configuration.getDorianCAConfiguration()
-					.getCertificateAuthorityType().equals(
-							CertificateAuthorityType.Eracom)) {
-				this.ca = new EracomCertificateAuthority(configuration
-						.getDorianCAConfiguration());
-			} else if (configuration.getDorianCAConfiguration()
-					.getCertificateAuthorityType().equals(
-							CertificateAuthorityType.EracomHybrid)) {
-				this.ca = new EracomWrappingCertificateAuthority(db,
-						configuration.getDorianCAConfiguration());
-			} else {
-				this.ca = new DBCertificateAuthority(db, configuration
-						.getDorianCAConfiguration());
-			}
-
-			this.identityProvider = new IdentityProvider(configuration
-					.getIdentityProviderConfiguration(), db, ca);
+			this.identityProvider = new IdentityProvider(configuration.getIdentityProviderProperties(), db, ca);
 
 			TrustedIdP idp = new TrustedIdP();
-			idp.setName(conf.getIdentityProviderConfiguration()
-					.getIdentityProviderName());
+			idp.setName(conf.getIdentityProviderProperties().getName());
 			SAMLAuthenticationMethod[] methods = new SAMLAuthenticationMethod[1];
 			methods[0] = SAMLAuthenticationMethod
 					.fromString("urn:oasis:names:tc:SAML:1.0:am:password");
@@ -182,13 +142,12 @@ public class Dorian extends LoggingObject {
 			} catch (Exception e) {
 			}
 
-			ifsConfiguration = configuration
-					.getIdentityFederationConfiguration();
+			ifsConfiguration = configuration.getIdentityFederationProperties();
 			IFSDefaults defaults = new IFSDefaults(idp, usr);
 			this.ifs = new IFS(ifsConfiguration, db, properties, ca, defaults,
 					ignoreCRL);
 
-			if (this.properties.getVersion() != PropertyManager.CURRENT_VERSION) {
+			if (!this.properties.getVersion().equals(PropertyManager.CURRENT_VERSION)) {
 				DorianInternalFault fault = new DorianInternalFault();
 				fault
 						.setFaultString("Version conflict detected, your are running Dorian "
@@ -210,7 +169,7 @@ public class Dorian extends LoggingObject {
 		}
 	}
 
-	public DorianConfiguration getConfiguration() {
+	public DorianProperties getConfiguration() {
 		return configuration;
 	}
 

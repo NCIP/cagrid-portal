@@ -4,7 +4,6 @@ import gov.nih.nci.cagrid.authentication.stubs.types.InvalidCredentialFault;
 import gov.nih.nci.cagrid.common.FaultHelper;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.dorian.common.SAMLUtils;
-import gov.nih.nci.cagrid.dorian.conf.DorianConfiguration;
 import gov.nih.nci.cagrid.dorian.idp.bean.BasicAuthCredential;
 import gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault;
 import gov.nih.nci.cagrid.dorian.stubs.types.InvalidAssertionFault;
@@ -15,7 +14,6 @@ import gov.nih.nci.cagrid.gridca.common.CertUtil;
 import gov.nih.nci.cagrid.gridca.common.KeyUtil;
 import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
 
-import java.io.File;
 import java.rmi.RemoteException;
 import java.security.PublicKey;
 import java.security.cert.X509Certificate;
@@ -25,9 +23,9 @@ import javax.naming.InitialContext;
 import org.apache.axis.MessageContext;
 import org.apache.axis.message.addressing.EndpointReferenceType;
 import org.globus.wsrf.Constants;
-import org.globus.wsrf.config.ContainerConfig;
 import org.globus.wsrf.security.SecurityManager;
 import org.globus.wsrf.utils.AddressingUtils;
+import org.springframework.core.io.FileSystemResource;
 
 /**
  * gov.nih.nci.cagrid.dorianI TODO:DOCUMENT ME
@@ -35,7 +33,6 @@ import org.globus.wsrf.utils.AddressingUtils;
  * @created by Introduce Toolkit version 1.0
  */
 public class DorianImpl {
-	private static final String DORIAN_CONFIG = "dorianConfig";
 
 	private ServiceConfiguration configuration;
 
@@ -44,10 +41,10 @@ public class DorianImpl {
 	public DorianImpl() throws RemoteException {
 		try {
 			EndpointReferenceType type = AddressingUtils.createEndpointReference(null);
-			String configFileEnd = (String) MessageContext.getCurrentContext().getProperty(DORIAN_CONFIG);
-			String configFile = ContainerConfig.getBaseDirectory() + File.separator + configFileEnd;
-			DorianConfiguration conf = (DorianConfiguration) Utils.deserializeDocument(configFile,
-				gov.nih.nci.cagrid.dorian.conf.DorianConfiguration.class);
+			String configFile = ServiceConfiguration.getConfiguration().getDorianConfiguration();
+			String propertiesFile = ServiceConfiguration.getConfiguration().getDorianProperties();
+			BeanUtils utils = new BeanUtils(new FileSystemResource(configFile), new FileSystemResource(propertiesFile));
+			DorianProperties conf = utils.getDorianProperties();
 			this.dorian = new Dorian(conf, type.getAddress().toString());
 		} catch (Exception e) {
 			FaultHelper.printStackTrace(e);

@@ -127,7 +127,7 @@ public class Database {
 			if (root != null) {
 				root.close();
 			}
-			coreDB = null;
+			//coreDB = null;
 			dbBuilt = false;
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);

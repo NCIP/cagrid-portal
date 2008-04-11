@@ -3,10 +3,9 @@ package gov.nih.nci.cagrid.dorian.service.ifs;
 import gov.nih.nci.cagrid.common.FaultHelper;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.dorian.bean.X509Certificate;
+import gov.nih.nci.cagrid.dorian.common.Lifetime;
 import gov.nih.nci.cagrid.dorian.common.LoggingObject;
 import gov.nih.nci.cagrid.dorian.common.PreparedStatementBuilder;
-import gov.nih.nci.cagrid.dorian.conf.CredentialLifetime;
-import gov.nih.nci.cagrid.dorian.conf.IdentityFederationConfiguration;
 import gov.nih.nci.cagrid.dorian.ifs.bean.HostCertificateFilter;
 import gov.nih.nci.cagrid.dorian.ifs.bean.HostCertificateRecord;
 import gov.nih.nci.cagrid.dorian.ifs.bean.HostCertificateRequest;
@@ -49,12 +48,12 @@ public class HostCertificateManager extends LoggingObject {
 	private boolean dbBuilt = false;
 	private Database db;
 	private CertificateAuthority ca;
-	private IdentityFederationConfiguration conf;
+	private IdentityFederationProperties conf;
 	private Publisher publisher;
 	private CertificateBlacklistManager blackList;
 
 
-	public HostCertificateManager(Database db, IdentityFederationConfiguration conf, CertificateAuthority ca,
+	public HostCertificateManager(Database db, IdentityFederationProperties conf, CertificateAuthority ca,
 		Publisher publisher, CertificateBlacklistManager blackList) {
 		this.db = db;
 		this.ca = ca;
@@ -129,7 +128,7 @@ public class HostCertificateManager extends LoggingObject {
 			ca.deleteCredentials(record.getHost());
 			java.security.PublicKey key = KeyUtil.loadPublicKey(record.getPublicKey().getKeyAsString());
 			Date start = new Date();
-			CredentialLifetime lifetime = this.conf.getCredentialPolicy().getCredentialLifetime();
+			Lifetime lifetime = this.conf.getIssuedCertificateLifetime();
 			Date end = gov.nih.nci.cagrid.dorian.common.Utils.getExpiredDate(lifetime);
 			if (end.after(ca.getCACertificate().getNotAfter())) {
 				end = ca.getCACertificate().getNotAfter();
@@ -186,7 +185,7 @@ public class HostCertificateManager extends LoggingObject {
 			}
 
 			Date start = new Date();
-			CredentialLifetime lifetime = this.conf.getCredentialPolicy().getCredentialLifetime();
+			Lifetime lifetime = this.conf.getIssuedCertificateLifetime();
 			Date end = gov.nih.nci.cagrid.dorian.common.Utils.getExpiredDate(lifetime);
 			if (end.after(ca.getCACertificate().getNotAfter())) {
 				end = ca.getCACertificate().getNotAfter();
@@ -293,7 +292,7 @@ public class HostCertificateManager extends LoggingObject {
 			}
 		}
 		// 3) We need to verify the size of the public key
-		int keySize = ca.getConfiguration().getUserKeySize().getValue();
+		int keySize = ca.getProperties().getIssuedCertificateKeySize();
 		int size = ((RSAPublicKey) key).getModulus().bitLength();
 		if (keySize != size) {
 			InvalidHostCertificateRequestFault fault = new InvalidHostCertificateRequestFault();

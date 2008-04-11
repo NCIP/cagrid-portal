@@ -2,8 +2,6 @@ package gov.nih.nci.cagrid.dorian.service.idp;
 
 import gov.nih.nci.cagrid.common.FaultUtil;
 import gov.nih.nci.cagrid.dorian.common.SAMLConstants;
-import gov.nih.nci.cagrid.dorian.conf.IdentityProviderConfiguration;
-import gov.nih.nci.cagrid.dorian.conf.PasswordSecurityPolicy;
 import gov.nih.nci.cagrid.dorian.idp.bean.Application;
 import gov.nih.nci.cagrid.dorian.idp.bean.BasicAuthCredential;
 import gov.nih.nci.cagrid.dorian.idp.bean.CountryCode;
@@ -15,21 +13,17 @@ import gov.nih.nci.cagrid.dorian.idp.bean.StateCode;
 import gov.nih.nci.cagrid.dorian.service.ca.CertificateAuthority;
 import gov.nih.nci.cagrid.dorian.stubs.types.InvalidUserPropertyFault;
 import gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault;
-import gov.nih.nci.cagrid.dorian.test.Constants;
 import gov.nih.nci.cagrid.dorian.test.Utils;
 import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
 import gov.nih.nci.cagrid.opensaml.SAMLAttributeStatement;
 import gov.nih.nci.cagrid.opensaml.SAMLAuthenticationStatement;
 import gov.nih.nci.cagrid.opensaml.SAMLStatement;
 
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.Iterator;
 
 import junit.framework.TestCase;
 
 import org.cagrid.tools.database.Database;
-
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
@@ -40,21 +34,21 @@ import org.cagrid.tools.database.Database;
  */
 public class TestIdentityProvider extends TestCase {
 
-	private IdentityProviderConfiguration conf;
-
 	private Database db;
 
 	private CertificateAuthority ca;
 
 	private int count = 0;
 
-
 	public void testAutomaticRegistration() {
 		IdentityProvider idp = null;
 		try {
-			conf.setRegistrationPolicy(AutomaticRegistrationPolicy.class.getName());
-			idp = new IdentityProvider(conf, db, ca);
-			assertEquals(AutomaticRegistrationPolicy.class.getName(), conf.getRegistrationPolicy());
+			IdentityProviderProperties props = Utils
+					.getIdentityProviderProperties();
+			props.setRegistrationPolicy(new AutomaticRegistrationPolicy());
+			idp = new IdentityProvider(props, db, ca);
+			assertEquals(AutomaticRegistrationPolicy.class, props
+					.getRegistrationPolicy().getClass());
 			Application a = createApplication();
 			idp.register(a);
 			BasicAuthCredential cred = getAdminCreds();
@@ -76,13 +70,13 @@ public class TestIdentityProvider extends TestCase {
 		}
 	}
 
-
 	public void testAuthenticate() {
 		IdentityProvider idp = null;
 		try {
-			conf.setRegistrationPolicy(AutomaticRegistrationPolicy.class.getName());
-			idp = new IdentityProvider(conf, db, ca);
-			assertEquals(AutomaticRegistrationPolicy.class.getName(), conf.getRegistrationPolicy());
+			IdentityProviderProperties props = Utils
+					.getIdentityProviderProperties();
+			props.setRegistrationPolicy(new AutomaticRegistrationPolicy());
+			idp = new IdentityProvider(props, db, ca);
 			Application a = createApplication();
 			idp.register(a);
 			BasicAuthCredential cred = getAdminCreds();
@@ -106,18 +100,20 @@ public class TestIdentityProvider extends TestCase {
 		}
 	}
 
-
 	public void testResetLockedPassword() {
 		IdentityProvider idp = null;
 		try {
-			PasswordSecurityPolicy policy = conf.getPasswordSecurityPolicy();
-			policy.setMaxConsecutiveInvalidLogins(3);
-			policy.setMaxTotalInvalidLogins(4);
-			policy.getLockoutTime().setHours(0);
-			policy.getLockoutTime().setMinutes(0);
-			policy.getLockoutTime().setSeconds(3);
-			conf.setRegistrationPolicy(AutomaticRegistrationPolicy.class.getName());
-			idp = new IdentityProvider(conf, db, ca);
+			IdentityProviderProperties props = Utils
+					.getIdentityProviderProperties();
+			props.setRegistrationPolicy(new AutomaticRegistrationPolicy());
+			PasswordSecurityPolicy policy = props.getPasswordSecurityPolicy();
+			policy.setConsecutiveInvalidLogins(3);
+			policy.setTotalInvalidLogins(4);
+			policy.getLockout().setHours(0);
+			policy.getLockout().setMinutes(0);
+			policy.getLockout().setSeconds(3);
+			props.setRegistrationPolicy(new AutomaticRegistrationPolicy());
+			idp = new IdentityProvider(props, db, ca);
 			Application a = createApplication();
 
 			idp.register(a);
@@ -134,14 +130,14 @@ public class TestIdentityProvider extends TestCase {
 			bad.setPassword("foobar");
 
 			int localCount = 0;
-			for (int i = 1; i <= (policy.getMaxTotalInvalidLogins() + 2); i++) {
-				if (i > policy.getMaxTotalInvalidLogins()) {
+			for (int i = 1; i <= (policy.getTotalInvalidLogins() + 2); i++) {
+				if (i > policy.getTotalInvalidLogins()) {
 					try {
 						idp.authenticate(getCredential(a));
 						fail("Should NOT be able to authenticate!!!");
 					} catch (PermissionDeniedFault e) {
 					}
-				} else if (localCount != policy.getMaxConsecutiveInvalidLogins()) {
+				} else if (localCount != policy.getConsecutiveInvalidLogins()) {
 					try {
 						idp.authenticate(bad);
 						fail("Should NOT be able to authenticate!!!");
@@ -156,7 +152,8 @@ public class TestIdentityProvider extends TestCase {
 					} catch (PermissionDeniedFault e) {
 
 					}
-					Thread.sleep((policy.getLockoutTime().getSeconds() * 1000) + 100);
+					Thread
+							.sleep((policy.getLockout().getSeconds() * 1000) + 100);
 					verifyAuthentication(idp, a);
 					try {
 						idp.authenticate(bad);
@@ -184,18 +181,19 @@ public class TestIdentityProvider extends TestCase {
 		}
 	}
 
-
 	public void testResetPasswordSecurityOnSuccessfulLogin() {
 		IdentityProvider idp = null;
 		try {
-			PasswordSecurityPolicy policy = conf.getPasswordSecurityPolicy();
-			policy.setMaxConsecutiveInvalidLogins(3);
-			policy.setMaxTotalInvalidLogins(10);
-			policy.getLockoutTime().setHours(0);
-			policy.getLockoutTime().setMinutes(0);
-			policy.getLockoutTime().setSeconds(3);
-			conf.setRegistrationPolicy(AutomaticRegistrationPolicy.class.getName());
-			idp = new IdentityProvider(conf, db, ca);
+			IdentityProviderProperties props = Utils
+					.getIdentityProviderProperties();
+			PasswordSecurityPolicy policy = props.getPasswordSecurityPolicy();
+			policy.setConsecutiveInvalidLogins(3);
+			policy.setTotalInvalidLogins(10);
+			policy.getLockout().setHours(0);
+			policy.getLockout().setMinutes(0);
+			policy.getLockout().setSeconds(3);
+			props.setRegistrationPolicy(new AutomaticRegistrationPolicy());
+			idp = new IdentityProvider(props, db, ca);
 			Application a = createApplication();
 
 			idp.register(a);
@@ -212,8 +210,8 @@ public class TestIdentityProvider extends TestCase {
 			bad.setPassword("foobar");
 
 			int localCount = 0;
-			for (int i = 1; i <= (policy.getMaxTotalInvalidLogins()); i++) {
-				if (localCount == (policy.getMaxConsecutiveInvalidLogins() - 1)) {
+			for (int i = 1; i <= (policy.getTotalInvalidLogins()); i++) {
+				if (localCount == (policy.getConsecutiveInvalidLogins() - 1)) {
 					verifyAuthentication(idp, a);
 					localCount = 0;
 				} else {
@@ -239,18 +237,19 @@ public class TestIdentityProvider extends TestCase {
 		}
 	}
 
-
 	public void testPasswordSecurity() {
 		IdentityProvider idp = null;
 		try {
-			PasswordSecurityPolicy policy = conf.getPasswordSecurityPolicy();
-			policy.setMaxConsecutiveInvalidLogins(3);
-			policy.setMaxTotalInvalidLogins(7);
-			policy.getLockoutTime().setHours(0);
-			policy.getLockoutTime().setMinutes(0);
-			policy.getLockoutTime().setSeconds(3);
-			conf.setRegistrationPolicy(AutomaticRegistrationPolicy.class.getName());
-			idp = new IdentityProvider(conf, db, ca);
+			IdentityProviderProperties props = Utils
+					.getIdentityProviderProperties();
+			PasswordSecurityPolicy policy = props.getPasswordSecurityPolicy();
+			policy.setConsecutiveInvalidLogins(3);
+			policy.setTotalInvalidLogins(7);
+			policy.getLockout().setHours(0);
+			policy.getLockout().setMinutes(0);
+			policy.getLockout().setSeconds(3);
+			props.setRegistrationPolicy(new AutomaticRegistrationPolicy());
+			idp = new IdentityProvider(props, db, ca);
 			for (int j = 0; j < 2; j++) {
 				Application a = createApplication();
 
@@ -268,15 +267,16 @@ public class TestIdentityProvider extends TestCase {
 				bad.setPassword("foobar");
 
 				int localCount = 0;
-				for (int i = 1; i <= (policy.getMaxTotalInvalidLogins() + 1); i++) {
-					if (i > policy.getMaxTotalInvalidLogins()) {
+				for (int i = 1; i <= (policy.getTotalInvalidLogins() + 1); i++) {
+					if (i > policy.getTotalInvalidLogins()) {
 						try {
 							idp.authenticate(getCredential(a));
 							fail("Should NOT be able to authenticate!!!");
 						} catch (PermissionDeniedFault e) {
 
 						}
-					} else if (localCount != policy.getMaxConsecutiveInvalidLogins()) {
+					} else if (localCount != policy
+							.getConsecutiveInvalidLogins()) {
 						try {
 							idp.authenticate(bad);
 							fail("Should NOT be able to authenticate!!!");
@@ -291,7 +291,8 @@ public class TestIdentityProvider extends TestCase {
 						} catch (PermissionDeniedFault e) {
 
 						}
-						Thread.sleep((policy.getLockoutTime().getSeconds() * 1000) + 100);
+						Thread
+								.sleep((policy.getLockout().getSeconds() * 1000) + 100);
 						verifyAuthentication(idp, a);
 						try {
 							idp.authenticate(bad);
@@ -316,13 +317,13 @@ public class TestIdentityProvider extends TestCase {
 		}
 	}
 
-
 	public void testAuthenticateBadPassword() {
 		IdentityProvider idp = null;
 		try {
-			conf.setRegistrationPolicy(AutomaticRegistrationPolicy.class.getName());
-			idp = new IdentityProvider(conf, db, ca);
-			assertEquals(AutomaticRegistrationPolicy.class.getName(), conf.getRegistrationPolicy());
+			IdentityProviderProperties props = Utils
+					.getIdentityProviderProperties();
+			props.setRegistrationPolicy(new AutomaticRegistrationPolicy());
+			idp = new IdentityProvider(props, db, ca);
 			Application a = createApplication();
 			idp.register(a);
 			BasicAuthCredential cred = getAdminCreds();
@@ -352,13 +353,13 @@ public class TestIdentityProvider extends TestCase {
 		}
 	}
 
-
 	public void testChangePassword() {
 		IdentityProvider idp = null;
 		try {
-			conf.setRegistrationPolicy(AutomaticRegistrationPolicy.class.getName());
-			idp = new IdentityProvider(conf, db, ca);
-			assertEquals(AutomaticRegistrationPolicy.class.getName(), conf.getRegistrationPolicy());
+			IdentityProviderProperties props = Utils
+					.getIdentityProviderProperties();
+			props.setRegistrationPolicy(new AutomaticRegistrationPolicy());
+			idp = new IdentityProvider(props, db, ca);
 			Application a = createApplication();
 			idp.register(a);
 			BasicAuthCredential cred = getAdminCreds();
@@ -393,13 +394,13 @@ public class TestIdentityProvider extends TestCase {
 		}
 	}
 
-
 	public void testChangePasswordToBadPassword() {
 		IdentityProvider idp = null;
 		try {
-			conf.setRegistrationPolicy(AutomaticRegistrationPolicy.class.getName());
-			idp = new IdentityProvider(conf, db, ca);
-			assertEquals(AutomaticRegistrationPolicy.class.getName(), conf.getRegistrationPolicy());
+			IdentityProviderProperties props = Utils
+					.getIdentityProviderProperties();
+			props.setRegistrationPolicy(new AutomaticRegistrationPolicy());
+			idp = new IdentityProvider(props, db, ca);
 			Application a = createApplication();
 			idp.register(a);
 			BasicAuthCredential cred = getAdminCreds();
@@ -417,7 +418,8 @@ public class TestIdentityProvider extends TestCase {
 			}
 
 			try {
-				idp.changePassword(getCredential(a), "$W0rdD0ct0R$$$$$$$$$$$$$$$$$$$$$$$W0rdD0ct0R$");
+				idp.changePassword(getCredential(a),
+						"$W0rdD0ct0R$$$$$$$$$$$$$$$$$$$$$$$W0rdD0ct0R$");
 				fail("Should not be able to change the password to something to long");
 			} catch (InvalidUserPropertyFault f) {
 			}
@@ -433,13 +435,13 @@ public class TestIdentityProvider extends TestCase {
 		}
 	}
 
-
 	public void testRegistrationNoAddress2() {
 		IdentityProvider idp = null;
 		try {
-			conf.setRegistrationPolicy(AutomaticRegistrationPolicy.class.getName());
-			idp = new IdentityProvider(conf, db, ca);
-			assertEquals(AutomaticRegistrationPolicy.class.getName(), conf.getRegistrationPolicy());
+			IdentityProviderProperties props = Utils
+					.getIdentityProviderProperties();
+			props.setRegistrationPolicy(new AutomaticRegistrationPolicy());
+			idp = new IdentityProvider(props, db, ca);
 			Application a = createApplication();
 			a.setAddress2(null);
 			idp.register(a);
@@ -462,13 +464,14 @@ public class TestIdentityProvider extends TestCase {
 		}
 	}
 
-
 	public void testManualRegistration() {
 		IdentityProvider idp = null;
 		try {
-			conf.setRegistrationPolicy(ManualRegistrationPolicy.class.getName());
-			idp = new IdentityProvider(conf, db, ca);
-			assertEquals(ManualRegistrationPolicy.class.getName(), conf.getRegistrationPolicy());
+			assertEquals(ManualRegistrationPolicy.class, Utils
+					.getIdentityProviderProperties().getRegistrationPolicy()
+					.getClass());
+			idp = Utils.getIdentityProvider();
+
 			Application a = createApplication();
 			idp.register(a);
 			BasicAuthCredential cred = getAdminCreds();
@@ -495,13 +498,13 @@ public class TestIdentityProvider extends TestCase {
 		}
 	}
 
-
 	public void testBadRegisterWithIdP() {
 		IdentityProvider idp = null;
 		try {
-			conf.setRegistrationPolicy(AutomaticRegistrationPolicy.class.getName());
-			idp = new IdentityProvider(conf, db, ca);
-			assertEquals(AutomaticRegistrationPolicy.class.getName(), conf.getRegistrationPolicy());
+			IdentityProviderProperties props = Utils
+					.getIdentityProviderProperties();
+			props.setRegistrationPolicy(new AutomaticRegistrationPolicy());
+			idp = new IdentityProvider(props, db, ca);
 			// Application a = createApplication();
 			// idp.register(a);
 			// test the password length too long
@@ -547,12 +550,13 @@ public class TestIdentityProvider extends TestCase {
 		}
 	}
 
-
 	public void testPasswordConstraints() {
 		IdentityProvider idp = null;
 		try {
-			conf.setRegistrationPolicy(AutomaticRegistrationPolicy.class.getName());
-			idp = new IdentityProvider(conf, db, ca);
+			IdentityProviderProperties props = Utils
+					.getIdentityProviderProperties();
+			props.setRegistrationPolicy(new AutomaticRegistrationPolicy());
+			idp = new IdentityProvider(props, db, ca);
 			assertTrue(isValidPassword(idp, UserManager.ADMIN_PASSWORD));
 			assertFalse(isValidPassword(idp, "$$$$User44"));
 			assertFalse(isValidPassword(idp, "12345Dorian6789"));
@@ -571,13 +575,13 @@ public class TestIdentityProvider extends TestCase {
 		}
 	}
 
-
 	public void testBadRemoveIdPUserNoSuchUser() {
 		IdentityProvider idp = null;
 		try {
-			conf.setRegistrationPolicy(AutomaticRegistrationPolicy.class.getName());
-			idp = new IdentityProvider(conf, db, ca);
-			assertEquals(AutomaticRegistrationPolicy.class.getName(), conf.getRegistrationPolicy());
+			IdentityProviderProperties props = Utils
+					.getIdentityProviderProperties();
+			props.setRegistrationPolicy(new AutomaticRegistrationPolicy());
+			idp = new IdentityProvider(props, db, ca);
 			Application a = createApplication();
 			idp.register(a);
 			BasicAuthCredential cred = getAdminCreds();
@@ -604,13 +608,13 @@ public class TestIdentityProvider extends TestCase {
 		}
 	}
 
-
 	public void testBadRegisterWithIdPTwoIdenticalUsers() {
 		IdentityProvider idp = null;
 		try {
-			conf.setRegistrationPolicy(AutomaticRegistrationPolicy.class.getName());
-			idp = new IdentityProvider(conf, db, ca);
-			assertEquals(AutomaticRegistrationPolicy.class.getName(), conf.getRegistrationPolicy());
+			IdentityProviderProperties props = Utils
+					.getIdentityProviderProperties();
+			props.setRegistrationPolicy(new AutomaticRegistrationPolicy());
+			idp = new IdentityProvider(props, db, ca);
 			Application a = createApplication();
 			idp.register(a);
 			Application b = a;
@@ -629,13 +633,11 @@ public class TestIdentityProvider extends TestCase {
 		}
 	}
 
-
 	public void testMultipleUsers() {
 		IdentityProvider idp = null;
 		try {
-			conf.setRegistrationPolicy(ManualRegistrationPolicy.class.getName());
-			idp = new IdentityProvider(conf, db, ca);
-			assertEquals(ManualRegistrationPolicy.class.getName(), conf.getRegistrationPolicy());
+			idp = Utils.getIdentityProvider();
+			
 			BasicAuthCredential cred = getAdminCreds();
 			int times = 3;
 			for (int i = 0; i < times; i++) {
@@ -659,7 +661,8 @@ public class TestIdentityProvider extends TestCase {
 				BasicAuthCredential auth = new BasicAuthCredential();
 				auth.setUserId(a.getUserId());
 				auth.setPassword(a.getPassword());
-				gov.nih.nci.cagrid.opensaml.SAMLAssertion saml = idp.authenticate(auth);
+				gov.nih.nci.cagrid.opensaml.SAMLAssertion saml = idp
+						.authenticate(auth);
 				assertNotNull(saml);
 				this.verifySAMLAssertion(saml, idp, a);
 			}
@@ -697,8 +700,8 @@ public class TestIdentityProvider extends TestCase {
 		}
 	}
 
-
-	private boolean isValidPassword(IdentityProvider idp, String password) throws Exception {
+	private boolean isValidPassword(IdentityProvider idp, String password)
+			throws Exception {
 		Application app = this.createApplication(password);
 		try {
 			idp.register(app);
@@ -712,19 +715,20 @@ public class TestIdentityProvider extends TestCase {
 
 	}
 
-
-	private void verifyAuthentication(IdentityProvider idp, Application a) throws Exception {
+	private void verifyAuthentication(IdentityProvider idp, Application a)
+			throws Exception {
 		SAMLAssertion saml = idp.authenticate(getCredential(a));
 		verifySAMLAssertion(saml, idp, a);
 
 	}
 
-
-	public void verifySAMLAssertion(SAMLAssertion saml, IdentityProvider idp, Application app) throws Exception {
+	public void verifySAMLAssertion(SAMLAssertion saml, IdentityProvider idp,
+			Application app) throws Exception {
 		assertNotNull(saml);
 		saml.verify(idp.getIdPCertificate());
 
-		assertEquals(idp.getIdPCertificate().getSubjectDN().toString(), saml.getIssuer());
+		assertEquals(idp.getIdPCertificate().getSubjectDN().toString(), saml
+				.getIssuer());
 		Iterator itr = saml.getStatements();
 		int statementCount = 0;
 		boolean authFound = false;
@@ -738,22 +742,28 @@ public class TestIdentityProvider extends TestCase {
 					authFound = true;
 				}
 				SAMLAuthenticationStatement auth = (SAMLAuthenticationStatement) stmt;
-				assertEquals(app.getUserId(), auth.getSubject().getNameIdentifier().getName());
-				assertEquals("urn:oasis:names:tc:SAML:1.0:am:password", auth.getAuthMethod());
+				assertEquals(app.getUserId(), auth.getSubject()
+						.getNameIdentifier().getName());
+				assertEquals("urn:oasis:names:tc:SAML:1.0:am:password", auth
+						.getAuthMethod());
 			}
 
 			if (stmt instanceof SAMLAttributeStatement) {
-				String uid = Utils.getAttribute(saml, SAMLConstants.UID_ATTRIBUTE_NAMESPACE,
-					SAMLConstants.UID_ATTRIBUTE);
+				String uid = Utils.getAttribute(saml,
+						SAMLConstants.UID_ATTRIBUTE_NAMESPACE,
+						SAMLConstants.UID_ATTRIBUTE);
 				assertNotNull(uid);
-				String email = Utils.getAttribute(saml, SAMLConstants.EMAIL_ATTRIBUTE_NAMESPACE,
-					SAMLConstants.EMAIL_ATTRIBUTE);
+				String email = Utils.getAttribute(saml,
+						SAMLConstants.EMAIL_ATTRIBUTE_NAMESPACE,
+						SAMLConstants.EMAIL_ATTRIBUTE);
 				assertNotNull(email);
-				String firstName = Utils.getAttribute(saml, SAMLConstants.FIRST_NAME_ATTRIBUTE_NAMESPACE,
-					SAMLConstants.FIRST_NAME_ATTRIBUTE);
+				String firstName = Utils.getAttribute(saml,
+						SAMLConstants.FIRST_NAME_ATTRIBUTE_NAMESPACE,
+						SAMLConstants.FIRST_NAME_ATTRIBUTE);
 				assertNotNull(firstName);
-				String lastName = Utils.getAttribute(saml, SAMLConstants.LAST_NAME_ATTRIBUTE_NAMESPACE,
-					SAMLConstants.LAST_NAME_ATTRIBUTE);
+				String lastName = Utils.getAttribute(saml,
+						SAMLConstants.LAST_NAME_ATTRIBUTE_NAMESPACE,
+						SAMLConstants.LAST_NAME_ATTRIBUTE);
 				assertNotNull(lastName);
 
 				assertEquals(app.getUserId(), uid);
@@ -768,14 +778,12 @@ public class TestIdentityProvider extends TestCase {
 		assertTrue(authFound);
 	}
 
-
 	private BasicAuthCredential getCredential(Application app) {
 		BasicAuthCredential cred = new BasicAuthCredential();
 		cred.setUserId(app.getUserId());
 		cred.setPassword(app.getPassword());
 		return cred;
 	}
-
 
 	private BasicAuthCredential getAdminCreds() {
 		BasicAuthCredential cred = new BasicAuthCredential();
@@ -784,11 +792,9 @@ public class TestIdentityProvider extends TestCase {
 		return cred;
 	}
 
-
 	private Application createApplication() {
 		return createApplication(count + "$W0rdD0ct0R$");
 	}
-
 
 	private Application createApplication(String password) {
 		Application u = new Application();
@@ -809,7 +815,6 @@ public class TestIdentityProvider extends TestCase {
 		return u;
 	}
 
-
 	private Application createTooLongPasswordApplication() {
 		Application u = new Application();
 		u.setUserId(count + "user");
@@ -828,7 +833,6 @@ public class TestIdentityProvider extends TestCase {
 		count = count + 1;
 		return u;
 	}
-
 
 	private Application createTooShortPasswordApplication() {
 		Application u = new Application();
@@ -849,7 +853,6 @@ public class TestIdentityProvider extends TestCase {
 		return u;
 	}
 
-
 	private Application createTooLongUserIdApplication() {
 		Application u = new Application();
 		u.setUserId(count + "thisuseridiswaytoolong");
@@ -868,7 +871,6 @@ public class TestIdentityProvider extends TestCase {
 		count = count + 1;
 		return u;
 	}
-
 
 	private Application createTooShortUserIdApplication() {
 		Application u = new Application();
@@ -889,7 +891,6 @@ public class TestIdentityProvider extends TestCase {
 		return u;
 	}
 
-
 	protected void setUp() throws Exception {
 		super.setUp();
 		try {
@@ -897,15 +898,11 @@ public class TestIdentityProvider extends TestCase {
 			db = Utils.getDB();
 			assertEquals(0, db.getUsedConnectionCount());
 			ca = Utils.getCA();
-			InputStream resource = TestCase.class.getResourceAsStream(Constants.IDP_CONFIG);
-			this.conf = (IdentityProviderConfiguration) gov.nih.nci.cagrid.common.Utils.deserializeObject(
-				new InputStreamReader(resource), IdentityProviderConfiguration.class);
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
 		}
 	}
-
 
 	protected void tearDown() throws Exception {
 		super.setUp();

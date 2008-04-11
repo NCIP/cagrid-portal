@@ -2,9 +2,7 @@ package gov.nih.nci.cagrid.dorian.service.ifs;
 
 import gov.nih.nci.cagrid.common.FaultUtil;
 import gov.nih.nci.cagrid.dorian.bean.X509Certificate;
-import gov.nih.nci.cagrid.dorian.conf.CredentialLifetime;
-import gov.nih.nci.cagrid.dorian.conf.CredentialPolicy;
-import gov.nih.nci.cagrid.dorian.conf.IdentityFederationConfiguration;
+import gov.nih.nci.cagrid.dorian.common.Lifetime;
 import gov.nih.nci.cagrid.dorian.ifs.bean.HostCertificateFilter;
 import gov.nih.nci.cagrid.dorian.ifs.bean.HostCertificateRecord;
 import gov.nih.nci.cagrid.dorian.ifs.bean.HostCertificateRequest;
@@ -393,7 +391,7 @@ public class TestHostCertificateManager extends TestCase implements Publisher {
 
 	public void testFindExpiredHostCertificates() {
 		try {
-			IdentityFederationConfiguration conf = getExpiringCredentialsConf();
+			IdentityFederationProperties conf = getExpiringCredentialsConf();
 			HostCertificateManager hcm = new HostCertificateManager(db, conf,
 					ca, this, blackList);
 			hcm.clearDatabase();
@@ -410,14 +408,14 @@ public class TestHostCertificateManager extends TestCase implements Publisher {
 			f2.setIsExpired(Boolean.FALSE);
 			assertEquals(0, hcm.findHostCertificates(f1).size());
 			assertEquals(1, hcm.findHostCertificates(f2).size());
-			Thread.sleep((conf.getCredentialPolicy().getCredentialLifetime()
+			Thread.sleep((conf.getIssuedCertificateLifetime()
 					.getSeconds() * 1000) + 100);
 			assertEquals(1, hcm.findHostCertificates(f1).size());
 			assertEquals(0, hcm.findHostCertificates(f2).size());
 			hcm.approveHostCertifcate(id2);
 			assertEquals(1, hcm.findHostCertificates(f1).size());
 			assertEquals(1, hcm.findHostCertificates(f2).size());
-			Thread.sleep((conf.getCredentialPolicy().getCredentialLifetime()
+			Thread.sleep((conf.getIssuedCertificateLifetime()
 					.getSeconds() * 1000) + 100);
 			assertEquals(2, hcm.findHostCertificates(f1).size());
 			assertEquals(0, hcm.findHostCertificates(f2).size());
@@ -966,8 +964,7 @@ public class TestHostCertificateManager extends TestCase implements Publisher {
 
 	private HostCertificateRequest getHostCertificateRequest(String host)
 			throws Exception {
-		return getHostCertificateRequest(host, ca.getConfiguration()
-				.getUserKeySize().getValue());
+		return getHostCertificateRequest(host, ca.getProperties().getIssuedCertificateKeySize());
 	}
 
 	private HostCertificateRequest getHostCertificateRequest(String host,
@@ -1124,33 +1121,24 @@ public class TestHostCertificateManager extends TestCase implements Publisher {
 		hcm.updateHostCertificateRecord(update);
 	}
 
-	private IdentityFederationConfiguration getConf() {
-		IdentityFederationConfiguration conf = new IdentityFederationConfiguration();
-		CredentialPolicy cp = new CredentialPolicy();
-		CredentialLifetime l = new CredentialLifetime();
-		l.setYears(1);
-		l.setMonths(0);
-		l.setDays(0);
-		l.setHours(0);
-		l.setMinutes(0);
-		l.setSeconds(0);
-		cp.setCredentialLifetime(l);
-		conf.setCredentialPolicy(cp);
+	private IdentityFederationProperties getConf() throws Exception {
+		IdentityFederationProperties conf = Utils
+				.getIdentityFederationProperties();
 		return conf;
 	}
 
-	private IdentityFederationConfiguration getExpiringCredentialsConf() {
-		IdentityFederationConfiguration conf = new IdentityFederationConfiguration();
-		CredentialPolicy cp = new CredentialPolicy();
-		CredentialLifetime l = new CredentialLifetime();
+	private IdentityFederationProperties getExpiringCredentialsConf()
+			throws Exception {
+		IdentityFederationProperties conf = Utils
+				.getIdentityFederationProperties();
+		Lifetime l = new Lifetime();
 		l.setYears(0);
 		l.setMonths(0);
 		l.setDays(0);
 		l.setHours(0);
 		l.setMinutes(0);
 		l.setSeconds(35);
-		cp.setCredentialLifetime(l);
-		conf.setCredentialPolicy(cp);
+		conf.setIssuedCertificateLifetime(l);
 		return conf;
 	}
 
@@ -1159,7 +1147,7 @@ public class TestHostCertificateManager extends TestCase implements Publisher {
 		try {
 			db = Utils.getDB();
 			assertEquals(0, db.getUsedConnectionCount());
-			ca = Utils.getCA(db);
+			ca = Utils.getCA();
 			blackList = new CertificateBlacklistManager(db);
 			blackList.clearDatabase();
 		} catch (Exception e) {

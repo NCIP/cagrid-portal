@@ -5,7 +5,6 @@ import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdP;
 import gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault;
 import gov.nih.nci.cagrid.dorian.stubs.types.UserPolicyFault;
 
-
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
@@ -15,7 +14,12 @@ import gov.nih.nci.cagrid.dorian.stubs.types.UserPolicyFault;
  */
 
 public class ManualApprovalPolicy extends AccountPolicy {
-	public void applyPolicy(TrustedIdP idp, IFSUser user) throws DorianInternalFault, UserPolicyFault {
+	public void applyPolicy(TrustedIdP idp, IFSUser user)
+			throws DorianInternalFault, UserPolicyFault {
 
+	}
+
+	public String getDisplayName() {
+		return "Manual Approval / Manual Renewal";
 	}
 }

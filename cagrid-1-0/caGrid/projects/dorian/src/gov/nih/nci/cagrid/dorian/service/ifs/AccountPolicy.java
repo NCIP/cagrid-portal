@@ -1,6 +1,5 @@
 package gov.nih.nci.cagrid.dorian.service.ifs;
 
-import gov.nih.nci.cagrid.dorian.conf.IdentityFederationConfiguration;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUser;
 import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdP;
 import gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault;
@@ -16,12 +15,12 @@ import gov.nih.nci.cagrid.dorian.stubs.types.UserPolicyFault;
  */
 public abstract class AccountPolicy {
 
-	private IdentityFederationConfiguration configuration;
+	private IdentityFederationProperties configuration;
 
 	private UserManager userManager;
 
 
-	public void configure(IdentityFederationConfiguration conf, UserManager um) {
+	public void configure(IdentityFederationProperties conf, UserManager um) {
 		this.configuration = conf;
 		this.userManager = um;
 	}
@@ -30,7 +29,7 @@ public abstract class AccountPolicy {
 	public abstract void applyPolicy(TrustedIdP idp, IFSUser user) throws DorianInternalFault, UserPolicyFault;
 
 
-	public IdentityFederationConfiguration getConfiguration() {
+	public IdentityFederationProperties getConfiguration() {
 		return configuration;
 	}
 
@@ -38,4 +37,6 @@ public abstract class AccountPolicy {
 	public UserManager getUserManager() {
 		return userManager;
 	}
+	
+	public abstract String getDisplayName();
 }

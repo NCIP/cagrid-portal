@@ -2,7 +2,6 @@ package gov.nih.nci.cagrid.dorian.service.idp;
 
 import gov.nih.nci.cagrid.common.FaultHelper;
 import gov.nih.nci.cagrid.dorian.common.LoggingObject;
-import gov.nih.nci.cagrid.dorian.conf.PasswordSecurityPolicy;
 import gov.nih.nci.cagrid.dorian.idp.bean.PasswordSecurity;
 import gov.nih.nci.cagrid.dorian.idp.bean.PasswordStatus;
 import gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault;
@@ -14,7 +13,6 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import org.cagrid.tools.database.Database;
-
 
 public class PasswordSecurityManager extends LoggingObject {
 
@@ -29,20 +27,20 @@ public class PasswordSecurityManager extends LoggingObject {
 	private boolean dbBuilt = false;
 	private PasswordSecurityPolicy policy;
 
-
 	public PasswordSecurityManager(Database db, PasswordSecurityPolicy policy) {
 		this.db = db;
 		this.policy = policy;
 	}
 
-
-	public synchronized boolean entryExists(String uid) throws DorianInternalFault {
+	public synchronized boolean entryExists(String uid)
+			throws DorianInternalFault {
 		this.buildDatabase();
 		Connection c = null;
 		boolean exists = false;
 		try {
 			c = db.getConnection();
-			PreparedStatement s = c.prepareStatement("select count(*) from " + TABLE + " where UID= ?");
+			PreparedStatement s = c.prepareStatement("select count(*) from "
+					+ TABLE + " where UID= ?");
 			s.setString(1, uid);
 			ResultSet rs = s.executeQuery();
 			if (rs.next()) {
@@ -67,14 +65,16 @@ public class PasswordSecurityManager extends LoggingObject {
 		return exists;
 	}
 
-
-	private synchronized void insertEntry(String uid) throws DorianInternalFault {
+	private synchronized void insertEntry(String uid)
+			throws DorianInternalFault {
 		this.buildDatabase();
 		Connection c = null;
 		try {
 			c = db.getConnection();
-			PreparedStatement ps = c.prepareStatement("INSERT INTO " + TABLE + " SET " + UID + " = ?, "
-				+ CONSECUTIVE_INVALID_LOGINS + "= ?, " + TOTAL_INVALID_LOGINS + "= ?, " + LOCK_OUT_EXPIRATION + "= ?");
+			PreparedStatement ps = c.prepareStatement("INSERT INTO " + TABLE
+					+ " SET " + UID + " = ?, " + CONSECUTIVE_INVALID_LOGINS
+					+ "= ?, " + TOTAL_INVALID_LOGINS + "= ?, "
+					+ LOCK_OUT_EXPIRATION + "= ?");
 			ps.setString(1, uid);
 			ps.setLong(2, 0);
 			ps.setLong(3, 0);
@@ -95,25 +95,25 @@ public class PasswordSecurityManager extends LoggingObject {
 
 	}
 
-
-	public void reportSuccessfulLoginAttempt(String uid) throws DorianInternalFault {
+	public void reportSuccessfulLoginAttempt(String uid)
+			throws DorianInternalFault {
 		PasswordSecurity entry = getEntry(uid);
 		entry.setConsecutiveInvalidLogins(0);
 		updateEntry(uid, entry);
 	}
 
-
-	public void reportInvalidLoginAttempt(String uid) throws DorianInternalFault {
+	public void reportInvalidLoginAttempt(String uid)
+			throws DorianInternalFault {
 		PasswordSecurity entry = getEntry(uid);
 		long count = entry.getConsecutiveInvalidLogins() + 1;
 		long total = entry.getTotalInvalidLogins() + 1;
-		if (count >= policy.getMaxConsecutiveInvalidLogins()) {
+		if (count >= policy.getConsecutiveInvalidLogins()) {
 			entry.setConsecutiveInvalidLogins(0);
 			entry.setTotalInvalidLogins(total);
 			Calendar exp = new GregorianCalendar();
-			exp.add(Calendar.HOUR_OF_DAY, policy.getLockoutTime().getHours());
-			exp.add(Calendar.MINUTE, policy.getLockoutTime().getMinutes());
-			exp.add(Calendar.SECOND, policy.getLockoutTime().getSeconds());
+			exp.add(Calendar.HOUR_OF_DAY, policy.getLockout().getHours());
+			exp.add(Calendar.MINUTE, policy.getLockout().getMinutes());
+			exp.add(Calendar.SECOND, policy.getLockout().getSeconds());
 			entry.setLockoutExpiration(exp.getTimeInMillis());
 			updateEntry(uid, entry);
 		} else {
@@ -123,8 +123,8 @@ public class PasswordSecurityManager extends LoggingObject {
 		}
 	}
 
-
-	public synchronized PasswordSecurity getEntry(String uid) throws DorianInternalFault {
+	public synchronized PasswordSecurity getEntry(String uid)
+			throws DorianInternalFault {
 		this.buildDatabase();
 		if (!entryExists(uid)) {
 			insertEntry(uid);
@@ -133,15 +133,18 @@ public class PasswordSecurityManager extends LoggingObject {
 		Connection c = null;
 		try {
 			c = db.getConnection();
-			PreparedStatement s = c.prepareStatement("select * from " + TABLE + " where UID= ?");
+			PreparedStatement s = c.prepareStatement("select * from " + TABLE
+					+ " where UID= ?");
 			s.setString(1, uid);
 			ResultSet rs = s.executeQuery();
 			if (rs.next()) {
 				entry = new PasswordSecurity();
-				entry.setConsecutiveInvalidLogins(rs.getLong(CONSECUTIVE_INVALID_LOGINS));
+				entry.setConsecutiveInvalidLogins(rs
+						.getLong(CONSECUTIVE_INVALID_LOGINS));
 				entry.setTotalInvalidLogins(rs.getLong(TOTAL_INVALID_LOGINS));
 				entry.setLockoutExpiration(rs.getLong(LOCK_OUT_EXPIRATION));
-				if (entry.getTotalInvalidLogins() >= policy.getMaxTotalInvalidLogins()) {
+				if (entry.getTotalInvalidLogins() >= policy
+						.getTotalInvalidLogins()) {
 					entry.setPasswordStatus(PasswordStatus.LockedUntilChanged);
 				} else {
 					long curr = System.currentTimeMillis();
@@ -169,27 +172,30 @@ public class PasswordSecurityManager extends LoggingObject {
 
 		if (entry == null) {
 			DorianInternalFault fault = new DorianInternalFault();
-			fault.setFaultString("An unexpected error occurred in locating the password security entry for " + uid
-				+ ".");
+			fault
+					.setFaultString("An unexpected error occurred in locating the password security entry for "
+							+ uid + ".");
 			throw fault;
 		}
 
 		return entry;
 	}
 
-
-	public PasswordStatus getPasswordStatus(String uid) throws DorianInternalFault {
+	public PasswordStatus getPasswordStatus(String uid)
+			throws DorianInternalFault {
 		return getEntry(uid).getPasswordStatus();
 	}
 
-
-	private synchronized void updateEntry(String uid, PasswordSecurity entry) throws DorianInternalFault {
+	private synchronized void updateEntry(String uid, PasswordSecurity entry)
+			throws DorianInternalFault {
 		this.buildDatabase();
 		Connection c = null;
 		try {
 			c = db.getConnection();
-			PreparedStatement ps = c.prepareStatement("UPDATE " + TABLE + " SET " + CONSECUTIVE_INVALID_LOGINS + "= ?,"
-				+ TOTAL_INVALID_LOGINS + "= ?," + LOCK_OUT_EXPIRATION + "= ?  WHERE " + UID + "=?");
+			PreparedStatement ps = c.prepareStatement("UPDATE " + TABLE
+					+ " SET " + CONSECUTIVE_INVALID_LOGINS + "= ?,"
+					+ TOTAL_INVALID_LOGINS + "= ?," + LOCK_OUT_EXPIRATION
+					+ "= ?  WHERE " + UID + "=?");
 			ps.setLong(1, entry.getConsecutiveInvalidLogins());
 			ps.setLong(2, entry.getTotalInvalidLogins());
 			ps.setLong(3, entry.getLockoutExpiration());
@@ -210,13 +216,13 @@ public class PasswordSecurityManager extends LoggingObject {
 
 	}
 
-
 	public synchronized void deleteEntry(String uid) throws DorianInternalFault {
 		this.buildDatabase();
 		Connection c = null;
 		try {
 			c = db.getConnection();
-			PreparedStatement ps = c.prepareStatement("DELETE FROM " + TABLE + " WHERE " + UID + " = ?");
+			PreparedStatement ps = c.prepareStatement("DELETE FROM " + TABLE
+					+ " WHERE " + UID + " = ?");
 			ps.setString(1, uid);
 			ps.executeUpdate();
 			ps.close();
@@ -234,14 +240,16 @@ public class PasswordSecurityManager extends LoggingObject {
 
 	}
 
-
 	private void buildDatabase() throws DorianInternalFault {
 		if (!dbBuilt) {
 			try {
 				if (!this.db.tableExists(TABLE)) {
-					String table = "CREATE TABLE " + TABLE + " (" + UID + " VARCHAR(255) NOT NULL PRIMARY KEY,"
-						+ CONSECUTIVE_INVALID_LOGINS + " BIGINT NOT NULL," + TOTAL_INVALID_LOGINS + " BIGINT NOT NULL,"
-						+ LOCK_OUT_EXPIRATION + " BIGINT NOT NULL," + "INDEX document_index (UID));";
+					String table = "CREATE TABLE " + TABLE + " (" + UID
+							+ " VARCHAR(255) NOT NULL PRIMARY KEY,"
+							+ CONSECUTIVE_INVALID_LOGINS + " BIGINT NOT NULL,"
+							+ TOTAL_INVALID_LOGINS + " BIGINT NOT NULL,"
+							+ LOCK_OUT_EXPIRATION + " BIGINT NOT NULL,"
+							+ "INDEX document_index (UID));";
 					db.update(table);
 
 				}
@@ -257,7 +265,6 @@ public class PasswordSecurityManager extends LoggingObject {
 			}
 		}
 	}
-
 
 	public void clearDatabase() throws DorianInternalFault {
 		this.buildDatabase();

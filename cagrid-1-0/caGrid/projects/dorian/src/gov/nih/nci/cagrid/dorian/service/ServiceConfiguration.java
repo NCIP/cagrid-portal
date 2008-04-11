@@ -1,5 +1,7 @@
 package gov.nih.nci.cagrid.dorian.service;
 
+import org.globus.wsrf.config.ContainerConfig;
+import java.io.File;
 import javax.naming.InitialContext;
 
 import org.apache.axis.MessageContext;
@@ -39,6 +41,30 @@ public class ServiceConfiguration {
 	}
 	
 	
+	private String dorianConfiguration;
+	
+	private String dorianProperties;
+	
+
+	
+	public String getDorianConfiguration() {
+		return ContainerConfig.getBaseDirectory() + File.separator + dorianConfiguration;
+	}
+	
+	
+	public void setDorianConfiguration(String dorianConfiguration) {
+		this.dorianConfiguration = dorianConfiguration;
+	}
+
+	
+	public String getDorianProperties() {
+		return ContainerConfig.getBaseDirectory() + File.separator + dorianProperties;
+	}
+	
+	
+	public void setDorianProperties(String dorianProperties) {
+		this.dorianProperties = dorianProperties;
+	}
 
 	
 }

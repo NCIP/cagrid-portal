@@ -6,7 +6,6 @@ import gov.nih.nci.cagrid.common.ThreadManager;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.dorian.common.AddressValidator;
 import gov.nih.nci.cagrid.dorian.common.LoggingObject;
-import gov.nih.nci.cagrid.dorian.conf.IdentityFederationConfiguration;
 import gov.nih.nci.cagrid.dorian.ifs.bean.HostCertificateFilter;
 import gov.nih.nci.cagrid.dorian.ifs.bean.HostCertificateRecord;
 import gov.nih.nci.cagrid.dorian.ifs.bean.HostCertificateRequest;
@@ -70,7 +69,7 @@ public class IFS extends LoggingObject implements Publisher {
 
 	private TrustedIdPManager tm;
 
-	private IdentityFederationConfiguration conf;
+	private IdentityFederationProperties conf;
 
 	private CertificateAuthority ca;
 
@@ -90,13 +89,13 @@ public class IFS extends LoggingObject implements Publisher {
 
 	private CertificateBlacklistManager blackList;
 
-	public IFS(IdentityFederationConfiguration conf, Database db,
+	public IFS(IdentityFederationProperties conf, Database db,
 			PropertyManager properties, CertificateAuthority ca,
 			IFSDefaults defaults) throws DorianInternalFault {
 		this(conf, db, properties, ca, defaults, false);
 	}
 
-	public IFS(IdentityFederationConfiguration conf, Database db,
+	public IFS(IdentityFederationProperties conf, Database db,
 			PropertyManager properties, CertificateAuthority ca,
 			IFSDefaults defaults, boolean ignoreCRL) throws DorianInternalFault {
 		this.conf = conf;
@@ -522,14 +521,11 @@ public class IFS extends LoggingObject implements Publisher {
 			InvalidProxyFault fault = new InvalidProxyFault();
 			fault
 					.setFaultString("The proxy valid length exceeds the maximum proxy valid length (hrs="
-							+ conf.getProxyPolicy().getProxyLifetime()
-									.getHours()
+							+ conf.getMaxProxyLifetime().getHours()
 							+ ", mins="
-							+ conf.getProxyPolicy().getProxyLifetime()
-									.getMinutes()
+							+ conf.getMaxProxyLifetime().getMinutes()
 							+ ", sec="
-							+ conf.getProxyPolicy().getProxyLifetime()
-									.getSeconds() + ")");
+							+ conf.getMaxProxyLifetime().getSeconds() + ")");
 			throw fault;
 		}
 
@@ -630,7 +626,7 @@ public class IFS extends LoggingObject implements Publisher {
 		verifyActiveUser(caller);
 		long id = hostManager.requestHostCertifcate(callerGridId, req);
 		HostCertificateRecord record = null;
-		if (this.conf.getCredentialPolicy().isHostCertificateAutoApproval()) {
+		if (this.conf.autoHostCertificateApproval()) {
 			record = hostManager.approveHostCertifcate(id);
 		} else {
 			record = hostManager.getHostCertificateRecord(id);
@@ -714,58 +710,50 @@ public class IFS extends LoggingObject implements Publisher {
 
 	public void publishCRL() {
 		if (publishCRL) {
-			if (conf.getCRLPublish() != null) {
-				if ((conf.getCRLPublish().getGts() != null)
-						&& (conf.getCRLPublish().getGts().length > 0)) {
-					Runner runner = new Runner() {
-						public void execute() {
-							synchronized (mutex) {
-								String[] services = conf.getCRLPublish()
-										.getGts();
-								if ((services != null) && (services.length > 0)) {
-									try {
-										X509CRL crl = getCRL();
-										gov.nih.nci.cagrid.gts.bean.X509CRL x509 = new gov.nih.nci.cagrid.gts.bean.X509CRL();
-										x509.setCrlEncodedString(CertUtil
+			if ((conf.getGtsPublishCRLList() != null)
+					&& (conf.getGtsPublishCRLList().size() > 0)) {
+				Runner runner = new Runner() {
+					public void execute() {
+						synchronized (mutex) {
+							List<String> services = conf.getGtsPublishCRLList();
+							try {
+								X509CRL crl = getCRL();
+								gov.nih.nci.cagrid.gts.bean.X509CRL x509 = new gov.nih.nci.cagrid.gts.bean.X509CRL();
+								x509
+										.setCrlEncodedString(CertUtil
 												.writeCRL(crl));
-										String authName = ca.getCACertificate()
-												.getSubjectDN().getName();
-										for (int i = 0; i < services.length; i++) {
-											String uri = services[i];
-											try {
-												debug("Publishing CRL to the GTS "
-														+ uri);
-												GTSAdminClient client = new GTSAdminClient(
-														uri, null);
-												client
-														.updateCRL(authName,
-																x509);
-												debug("Published CRL to the GTS "
-														+ uri);
-											} catch (Exception ex) {
-												getLog().error(
-														"Error publishing the CRL to the GTS "
-																+ uri + "!!!",
-														ex);
-											}
-
-										}
-
-									} catch (Exception e) {
-										getLog()
-												.error(
-														"Unexpected Error publishing the CRL!!!",
-														e);
+								String authName = ca.getCACertificate()
+										.getSubjectDN().getName();
+								for (int i = 0; i < services.size(); i++) {
+									String uri = services.get(i);
+									try {
+										debug("Publishing CRL to the GTS "
+												+ uri);
+										GTSAdminClient client = new GTSAdminClient(
+												uri, null);
+										client.updateCRL(authName, x509);
+										debug("Published CRL to the GTS " + uri);
+									} catch (Exception ex) {
+										getLog().error(
+												"Error publishing the CRL to the GTS "
+														+ uri + "!!!", ex);
 									}
+
 								}
+
+							} catch (Exception e) {
+								getLog()
+										.error(
+												"Unexpected Error publishing the CRL!!!",
+												e);
 							}
 						}
-					};
-					try {
-						threadManager.executeInBackground(runner);
-					} catch (Exception t) {
-						t.getMessage();
 					}
+				};
+				try {
+					threadManager.executeInBackground(runner);
+				} catch (Exception t) {
+					t.getMessage();
 				}
 			}
 		}

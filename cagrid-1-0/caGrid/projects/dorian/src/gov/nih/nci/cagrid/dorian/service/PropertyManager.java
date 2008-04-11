@@ -1,7 +1,6 @@
 package gov.nih.nci.cagrid.dorian.service;
 
 import gov.nih.nci.cagrid.dorian.bean.Metadata;
-import gov.nih.nci.cagrid.dorian.conf.CertificateAuthorityType;
 import gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault;
 
 import org.cagrid.tools.database.Database;
@@ -20,10 +19,11 @@ public class PropertyManager {
 	private static String VERSION_PROPERTY = "version";
 	private static String CA_TYPE_PROPERTY = "certificate authority";
 	
-	public static float DORIAN_VERSION_1_2 = 1.2F;
-	public static float DORIAN_VERSION_1_1= 1.1F;
-	public static float DORIAN_VERSION_1_0= 1.0F;
-	public static float CURRENT_VERSION=DORIAN_VERSION_1_2;
+	public static String DORIAN_VERSION_1_3 = "1.3";
+	public static String DORIAN_VERSION_1_2 = "1.2";
+	public static String DORIAN_VERSION_1_1= "1.1";
+	public static String DORIAN_VERSION_1_0= "1.0";
+	public static String CURRENT_VERSION=DORIAN_VERSION_1_3;
 	private MetadataManager manager;
 	private Metadata version;
 	private Metadata certificateAuthorityType;
@@ -41,20 +41,20 @@ public class PropertyManager {
 	}
 
 
-	public CertificateAuthorityType getCertificateAuthorityType() {
+	public String getCertificateAuthorityType() {
 		if (this.certificateAuthorityType == null) {
 			return null;
 		} else {
-			return CertificateAuthorityType.fromValue(certificateAuthorityType.getValue());
+			return certificateAuthorityType.getValue();
 		}
 	}
 
 
-	public void setCertificateAuthorityType(CertificateAuthorityType ca) throws DorianInternalFault {
+	public void setCertificateAuthorityType(String caType) throws DorianInternalFault {
 		this.certificateAuthorityType = new Metadata();
 		this.certificateAuthorityType.setName(CA_TYPE_PROPERTY);
 		this.certificateAuthorityType.setDescription("The certificate authority type used by this Dorian.");
-		this.certificateAuthorityType.setValue(ca.getValue());
+		this.certificateAuthorityType.setValue(caType);
 		this.manager.update(this.certificateAuthorityType);
 	}
 
@@ -64,18 +64,18 @@ public class PropertyManager {
 	}
 
 
-	public void setVersion(float version) throws DorianInternalFault {
+	public void setVersion(String version) throws DorianInternalFault {
 		this.version.setValue(String.valueOf(version));
 		this.manager.update(this.version);
 	}
 
 
-	public float getVersion() {
+	public String getVersion() {
 		String s = this.version.getValue();
 		if (s == null) {
 			return CURRENT_VERSION;
 		} else {
-			return Float.valueOf(s).floatValue();
+			return s;
 		}
 	}
 

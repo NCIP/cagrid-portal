@@ -1,7 +1,6 @@
 package gov.nih.nci.cagrid.dorian.service.ifs;
 
 import gov.nih.nci.cagrid.common.FaultHelper;
-import gov.nih.nci.cagrid.dorian.conf.IdentityFederationConfiguration;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUser;
 import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdP;
 import gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault;
@@ -22,7 +21,7 @@ public class AutoApprovalAutoRenewalPolicy extends AutoApprovalPolicy {
 	public void applyPolicy(TrustedIdP idp, IFSUser user) throws DorianInternalFault, UserPolicyFault {
 		super.applyPolicy(idp, user);
 		UserManager um = getUserManager();
-		IdentityFederationConfiguration conf = getConfiguration();
+		IdentityFederationProperties conf = getConfiguration();
 
 		try {
 			// Next we check if the user's credentials have expired
@@ -40,5 +39,9 @@ public class AutoApprovalAutoRenewalPolicy extends AutoApprovalPolicy {
 			fault = (DorianInternalFault) helper.getFault();
 			throw fault;
 		}
+	}
+	
+	public String getDisplayName() {
+		return "Auto Approval / Auto Renewal";
 	}
 }

@@ -1,7 +1,6 @@
 package gov.nih.nci.cagrid.dorian.service.ca;
 
 import gov.nih.nci.cagrid.common.FaultHelper;
-import gov.nih.nci.cagrid.dorian.conf.DorianCAConfiguration;
 import gov.nih.nci.cagrid.gridca.common.SecurityUtil;
 
 import java.security.PrivateKey;
@@ -22,8 +21,8 @@ public class DBCertificateAuthority extends CertificateAuthority {
 
 	private CredentialsManager manager;
 
-	public DBCertificateAuthority(Database db, DorianCAConfiguration conf) {
-		super(conf);
+	public DBCertificateAuthority(Database db, CertificateAuthorityProperties properties) {
+		super(properties);
 		SecurityUtil.init();
 		this.manager = new CredentialsManager(db);
 	}
@@ -193,7 +192,7 @@ public class DBCertificateAuthority extends CertificateAuthority {
 
 	}
 
-	// ////////////////////////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////////////////////////////
 
 	public void clear() throws CertificateAuthorityFault {
 		try {

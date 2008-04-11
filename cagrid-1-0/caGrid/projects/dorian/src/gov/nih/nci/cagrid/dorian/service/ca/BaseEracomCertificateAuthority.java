@@ -1,7 +1,6 @@
 package gov.nih.nci.cagrid.dorian.service.ca;
 
 import gov.nih.nci.cagrid.common.FaultHelper;
-import gov.nih.nci.cagrid.dorian.conf.DorianCAConfiguration;
 import gov.nih.nci.cagrid.gridca.common.CertUtil;
 import gov.nih.nci.cagrid.gridca.common.KeyUtil;
 
@@ -30,27 +29,17 @@ public abstract class BaseEracomCertificateAuthority extends CertificateAuthorit
 	private boolean isInit = false;
 
 
-	public BaseEracomCertificateAuthority(DorianCAConfiguration conf) throws CertificateAuthorityFault {
-		super(conf);
+	public BaseEracomCertificateAuthority(EracomCertificateAuthorityProperties properties) throws CertificateAuthorityFault {
+		super(properties);
 		try {
 			isInit = false;
-			int slot = 0;
-			String strSlot = getProperty(SLOT_PROPERTY);
-			if (strSlot != null) {
-				try {
-					slot = Integer.valueOf(strSlot).intValue();
-					if ((slot < 0) || (slot > 15)) {
-						throw new Exception("Invalid slot specified in configuration, slot must be between 0 and 15.");
-					}
-				} catch (Exception e) {
-					throw new Exception("Invalid slot specified in configuration.");
-				}
-			}
+			int slot = properties.getSlot();
+
 			provider = (Provider) Class.forName("au.com.eracom.crypto.provider.slot" + slot + ".ERACOMProvider")
 				.newInstance();
 			Security.addProvider(provider);
 			keyStore = KeyStore.getInstance("CRYPTOKI", provider.getName());
-			keyStore.load(null, conf.getCertificateAuthorityPassword().toCharArray());
+			keyStore.load(null, properties.getCertificateAuthorityPassword().toCharArray());
 		} catch (Exception e) {
 			logError(e.getMessage(), e);
 			CertificateAuthorityFault fault = new CertificateAuthorityFault();

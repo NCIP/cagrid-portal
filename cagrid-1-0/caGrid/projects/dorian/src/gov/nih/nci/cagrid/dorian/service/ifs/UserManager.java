@@ -3,10 +3,8 @@ package gov.nih.nci.cagrid.dorian.service.ifs;
 import gov.nih.nci.cagrid.common.FaultHelper;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.dorian.common.AddressValidator;
+import gov.nih.nci.cagrid.dorian.common.Lifetime;
 import gov.nih.nci.cagrid.dorian.common.LoggingObject;
-import gov.nih.nci.cagrid.dorian.conf.CredentialLifetime;
-import gov.nih.nci.cagrid.dorian.conf.IdentityAssignmentPolicy;
-import gov.nih.nci.cagrid.dorian.conf.IdentityFederationConfiguration;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUser;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserFilter;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserStatus;
@@ -52,7 +50,7 @@ public class UserManager extends LoggingObject {
 
 	private boolean dbBuilt = false;
 
-	private IdentityFederationConfiguration conf;
+	private IdentityFederationProperties conf;
 
 	private CertificateAuthority ca;
 
@@ -66,7 +64,7 @@ public class UserManager extends LoggingObject {
 
 	private CertificateBlacklistManager blackList;
 
-	public UserManager(Database db, IdentityFederationConfiguration conf,
+	public UserManager(Database db, IdentityFederationProperties conf,
 			PropertyManager properties, CertificateAuthority ca,
 			CertificateBlacklistManager blackList, TrustedIdPManager tm,
 			Publisher publisher, IFSDefaults defaults) {
@@ -189,11 +187,11 @@ public class UserManager extends LoggingObject {
 				caSubject, idp, uid);
 	}
 
-	public static String getUserSubject(IdentityAssignmentPolicy policy,
-			String caSubject, TrustedIdP idp, String uid) {
+	public static String getUserSubject(String policy, String caSubject,
+			TrustedIdP idp, String uid) {
 		int caindex = caSubject.lastIndexOf(",");
 		String caPreSub = caSubject.substring(0, caindex);
-		if (policy.equals(IdentityAssignmentPolicy.id)) {
+		if (policy.equals(IdentityAssignmentPolicy.ID)) {
 			return caPreSub + ",OU=IdP [" + idp.getId() + "],CN=" + uid;
 		} else {
 			return caPreSub + ",OU=" + idp.getName() + ",CN=" + uid;
@@ -207,8 +205,7 @@ public class UserManager extends LoggingObject {
 			String sub = getUserSubject(caSubject, idp, uid);
 			Calendar c = new GregorianCalendar();
 			Date start = c.getTime();
-			CredentialLifetime lifetime = conf.getCredentialPolicy()
-					.getCredentialLifetime();
+			Lifetime lifetime = conf.getIssuedCertificateLifetime();
 			Date end = gov.nih.nci.cagrid.dorian.common.Utils
 					.getExpiredDate(lifetime);
 			if (end.after(ca.getCACertificate().getNotAfter())) {
@@ -812,6 +809,7 @@ public class UserManager extends LoggingObject {
 						.getIdPId(), users[i].getUID()));
 			}
 		} catch (Exception e) {
+			//FaultUtil.printFault(e);
 			log.error(e.getMessage(), e);
 		}
 		try {

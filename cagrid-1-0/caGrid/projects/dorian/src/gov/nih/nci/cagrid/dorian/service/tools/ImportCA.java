@@ -2,8 +2,8 @@ package gov.nih.nci.cagrid.dorian.service.tools;
 
 import gov.nih.nci.cagrid.common.IOUtils;
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.dorian.conf.DorianConfiguration;
-import gov.nih.nci.cagrid.dorian.service.ca.DBCertificateAuthority;
+import gov.nih.nci.cagrid.dorian.service.BeanUtils;
+import gov.nih.nci.cagrid.dorian.service.ca.CertificateAuthority;
 import gov.nih.nci.cagrid.gridca.common.CertUtil;
 import gov.nih.nci.cagrid.gridca.common.KeyUtil;
 
@@ -19,6 +19,7 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
 import org.cagrid.tools.database.Database;
+import org.springframework.core.io.FileSystemResource;
 
 
 /**
@@ -53,6 +54,10 @@ public class ImportCA {
 	public static final String CONFIG_FILE_OPT = "f";
 
 	public static final String CONFIG_FILE_FULL = "conf";
+	
+	public static final String PROPERTIES_FILE_OPT = "a";
+
+	public static final String PROPERTIES_FILE_FULL = "properties";
 
 
 	public static void main(String[] args) {
@@ -69,6 +74,10 @@ public class ImportCA {
 			"The file containing the CA's private key in PEM format.");
 		Option im = new Option(INTERACTIVE_MODE_OPT, INTERACTIVE_MODE_FULL, false,
 			"Specifies the use of interactive mode.");
+		Option props = new Option(PROPERTIES_FILE_OPT, PROPERTIES_FILE_FULL,
+				true, "The properties file for the Dorian CA.");
+		props.setRequired(true);
+		options.addOption(props);
 		options.addOption(help);
 		options.addOption(service);
 		options.addOption(cacert);
@@ -86,12 +95,13 @@ public class ImportCA {
 				System.exit(0);
 			} else {
 				String configFile = line.getOptionValue(CONFIG_FILE_OPT);
-				gov.nih.nci.cagrid.dorian.conf.DorianConfiguration c = (DorianConfiguration) Utils.deserializeDocument(
-					configFile, gov.nih.nci.cagrid.dorian.conf.DorianConfiguration.class);
-				Database db = new Database(c.getDatabaseConfiguration(), c.getDorianInternalId());
+				String propertiesFile = line
+						.getOptionValue(PROPERTIES_FILE_OPT);
+				BeanUtils utils = new BeanUtils(new FileSystemResource(configFile), new FileSystemResource(propertiesFile));
+				Database db = utils.getDatabase();
 				db.destroyDatabase();
 				db.createDatabaseIfNeeded();
-				DBCertificateAuthority ca = new DBCertificateAuthority(db, c.getDorianCAConfiguration());
+				CertificateAuthority ca = utils.getCertificateAuthority();
 				boolean interactive = false;
 				if (line.hasOption(INTERACTIVE_MODE_OPT)) {
 					interactive = true;

@@ -3,7 +3,6 @@ package gov.nih.nci.cagrid.dorian.service.idp;
 import gov.nih.nci.cagrid.common.FaultHelper;
 import gov.nih.nci.cagrid.dorian.common.LoggingObject;
 import gov.nih.nci.cagrid.dorian.common.SAMLConstants;
-import gov.nih.nci.cagrid.dorian.conf.IdentityProviderConfiguration;
 import gov.nih.nci.cagrid.dorian.service.ca.CertificateAuthority;
 import gov.nih.nci.cagrid.dorian.service.ca.WrappedKey;
 import gov.nih.nci.cagrid.dorian.service.ca.WrappingCertificateAuthority;
@@ -51,14 +50,14 @@ public class AssertionCredentialsManager extends LoggingObject {
 
 	private CertificateAuthority ca;
 
-	private IdentityProviderConfiguration conf;
+	private IdentityProviderProperties conf;
 
 	private Database db;
 
 	private boolean dbBuilt = false;
 
 
-	public AssertionCredentialsManager(IdentityProviderConfiguration conf, CertificateAuthority ca, Database db)
+	public AssertionCredentialsManager(IdentityProviderProperties conf, CertificateAuthority ca, Database db)
 		throws DorianInternalFault {
 		try {
 			this.ca = ca;
@@ -138,7 +137,7 @@ public class AssertionCredentialsManager extends LoggingObject {
 						+ " SET ALIAS= ?,CERTIFICATE= ?,PRIVATE_KEY= ?");
 					s.setString(1, CERT_DN);
 					s.setString(2, certStr);
-					s.setBytes(3, KeyUtil.writePrivateKey(key, conf.getAssertingCredentials().getKeyPassword())
+					s.setBytes(3, KeyUtil.writePrivateKey(key, conf.getAssertingCredentialsEncryptionPassword())
 						.getBytes());
 					s.execute();
 					s.close();
@@ -195,8 +194,7 @@ public class AssertionCredentialsManager extends LoggingObject {
 					WrappedKey wk = new WrappedKey(wrapped, iv);
 					key = wca.unwrap(wk);
 				} else {
-					key = KeyUtil.loadPrivateKey(new ByteArrayInputStream(wrapped), conf.getAssertingCredentials()
-						.getKeyPassword());
+					key = KeyUtil.loadPrivateKey(new ByteArrayInputStream(wrapped), conf.getAssertingCredentialsEncryptionPassword());
 				}
 			}
 			rs.close();
@@ -342,7 +340,7 @@ public class AssertionCredentialsManager extends LoggingObject {
 
 			Date now = new Date();
 			if (now.before(cert.getNotBefore()) || (now.after(cert.getNotAfter()))) {
-				if ((firstTime) && (conf.getAssertingCredentials().isAutoRenew())) {
+				if ((firstTime) && (conf.autoRenewAssertingCredentials())) {
 					deleteAssertingCredentials();
 					createNewCredentials();
 					return getIdPCertificate(false);

@@ -3,7 +3,6 @@ package gov.nih.nci.cagrid.dorian.service.ifs;
 import gov.nih.nci.cagrid.common.FaultHelper;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.dorian.common.LoggingObject;
-import gov.nih.nci.cagrid.dorian.conf.IdentityFederationConfiguration;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserPolicy;
 import gov.nih.nci.cagrid.dorian.ifs.bean.SAMLAttributeDescriptor;
 import gov.nih.nci.cagrid.dorian.ifs.bean.SAMLAuthenticationMethod;
@@ -46,37 +45,21 @@ public class TrustedIdPManager extends LoggingObject {
 
 	private boolean dbBuilt = false;
 
-	private IdentityFederationConfiguration conf;
+	private IdentityFederationProperties conf;
 
 	private IFSUserPolicy[] accountPolicies;
 
 
-	public TrustedIdPManager(IdentityFederationConfiguration conf, Database db) throws DorianInternalFault {
+	public TrustedIdPManager(IdentityFederationProperties conf, Database db) throws DorianInternalFault {
 		this.db = db;
 		this.conf = conf;
-		gov.nih.nci.cagrid.dorian.conf.AccountPolicy[] policies = conf.getAccountPolicies().getAccountPolicy();
-		this.accountPolicies = new IFSUserPolicy[policies.length];
-		for (int i = 0; i < policies.length; i++) {
-
-			try {
-				Class c = Class.forName(policies[i].getClassname());
-				if (!AccountPolicy.class.isAssignableFrom(c)) {
-					DorianInternalFault fault = new DorianInternalFault();
-					fault.setFaultString("Error configuring IFS, Invalid policy class (" + policies[i].getClassname()
-						+ ") specified.");
-					throw fault;
-				}
-
-			} catch (ClassNotFoundException e) {
-				DorianInternalFault fault = new DorianInternalFault();
-				fault.setFaultString("Error configuring IFS, Invalid policy class (" + policies[i].getClassname()
-					+ ") specified.");
-				throw fault;
-			}
-
+		List<AccountPolicy> policies = conf.getAccountPolicies();
+		this.accountPolicies = new IFSUserPolicy[policies.size()];
+		for (int i = 0; i < policies.size(); i++) {
+			AccountPolicy p = policies.get(i);
 			accountPolicies[i] = new IFSUserPolicy();
-			accountPolicies[i].setName(policies[i].getName());
-			accountPolicies[i].setClassName(policies[i].getClassname());
+			accountPolicies[i].setName(p.getDisplayName());
+			accountPolicies[i].setClassName(p.getClass().getName());
 		}
 	}
 
@@ -663,12 +646,12 @@ public class TrustedIdPManager extends LoggingObject {
 
 	private String validateAndGetName(TrustedIdP idp) throws DorianInternalFault, InvalidTrustedIdPFault {
 		String name = idp.getName();
-		if ((name == null) || (name.trim().length() < conf.getIdentityProviderNameLength().getMin())
-			|| (name.trim().length() > conf.getIdentityProviderNameLength().getMax())) {
+		if ((name == null) || (name.trim().length() < conf.getMinIdPNameLength())
+			|| (name.trim().length() > conf.getMaxIdPNameLength())) {
 			InvalidTrustedIdPFault fault = new InvalidTrustedIdPFault();
 			fault.setFaultString("Invalid IdP name specified, the IdP name must be between "
-				+ conf.getIdentityProviderNameLength().getMin() + " and "
-				+ conf.getIdentityProviderNameLength().getMax() + " in length.");
+				+ conf.getMinIdPNameLength() + " and "
+				+ conf.getMaxIdPNameLength() + " in length.");
 			throw fault;
 		}
 

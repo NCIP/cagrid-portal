@@ -2,7 +2,6 @@ package gov.nih.nci.cagrid.dorian.service.idp;
 
 import gov.nih.nci.cagrid.common.FaultHelper;
 import gov.nih.nci.cagrid.dorian.common.LoggingObject;
-import gov.nih.nci.cagrid.dorian.conf.IdentityProviderConfiguration;
 import gov.nih.nci.cagrid.dorian.idp.bean.Application;
 import gov.nih.nci.cagrid.dorian.idp.bean.ApplicationReview;
 import gov.nih.nci.cagrid.dorian.idp.bean.BasicAuthCredential;
@@ -37,13 +36,12 @@ public class IdentityProvider extends LoggingObject {
 	private AssertionCredentialsManager assertionManager;
 
 	private IdPRegistrationPolicy registrationPolicy;
-	
 
 
-	public IdentityProvider(IdentityProviderConfiguration conf, Database db, CertificateAuthority ca)
+	public IdentityProvider(IdentityProviderProperties conf, Database db, CertificateAuthority ca)
 		throws DorianInternalFault {
 		try {
-			this.registrationPolicy = (IdPRegistrationPolicy) Class.forName(conf.getRegistrationPolicy()).newInstance();
+			this.registrationPolicy = conf.getRegistrationPolicy();
 			this.userManager = new UserManager(db, conf);
 			this.assertionManager = new AssertionCredentialsManager(conf, ca, db);
 		} catch (Exception e) {

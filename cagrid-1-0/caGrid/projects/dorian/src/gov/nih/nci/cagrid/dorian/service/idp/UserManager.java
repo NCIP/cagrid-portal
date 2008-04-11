@@ -5,7 +5,6 @@ import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.dorian.common.AddressValidator;
 import gov.nih.nci.cagrid.dorian.common.Crypt;
 import gov.nih.nci.cagrid.dorian.common.LoggingObject;
-import gov.nih.nci.cagrid.dorian.conf.IdentityProviderConfiguration;
 import gov.nih.nci.cagrid.dorian.idp.bean.BasicAuthCredential;
 import gov.nih.nci.cagrid.dorian.idp.bean.CountryCode;
 import gov.nih.nci.cagrid.dorian.idp.bean.IdPUser;
@@ -50,12 +49,12 @@ public class UserManager extends LoggingObject {
 
 	private boolean dbBuilt = false;
 
-	private IdentityProviderConfiguration conf;
+	private IdentityProviderProperties conf;
 
 	private PasswordSecurityManager passwordSecurityManager;
 
 
-	public UserManager(Database db, IdentityProviderConfiguration conf) throws DorianInternalFault {
+	public UserManager(Database db, IdentityProviderProperties conf) throws DorianInternalFault {
 		this.db = db;
 		this.conf = conf;
 		this.passwordSecurityManager = new PasswordSecurityManager(db, conf.getPasswordSecurityPolicy());
@@ -144,11 +143,11 @@ public class UserManager extends LoggingObject {
 
 	private void validatePassword(IdPUser user) throws DorianInternalFault, InvalidUserPropertyFault {
 		String password = user.getPassword();
-		if ((password == null) || (conf.getPasswordLength().getMin() > password.length())
-			|| (conf.getPasswordLength().getMax() < password.length())) {
+		if ((password == null) || (conf.getPasswordSecurityPolicy().getMinPasswordLength() > password.length())
+			|| (conf.getPasswordSecurityPolicy().getMaxPasswordLength() < password.length())) {
 			InvalidUserPropertyFault fault = new InvalidUserPropertyFault();
 			fault.setFaultString("Unacceptable password, the length of the password must be between "
-				+ conf.getPasswordLength().getMin() + " and " + conf.getPasswordLength().getMax() + " characters.");
+				+ conf.getPasswordSecurityPolicy().getMinPasswordLength() + " and " + conf.getPasswordSecurityPolicy().getMaxPasswordLength() + " characters.");
 			throw fault;
 		} else {
 			boolean hasDictionaryWord = true;
@@ -178,11 +177,11 @@ public class UserManager extends LoggingObject {
 
 	private void validateUserId(IdPUser user) throws InvalidUserPropertyFault {
 		String uid = user.getUserId();
-		if ((uid == null) || (conf.getUIDLength().getMin() > uid.length())
-			|| (conf.getUIDLength().getMax() < uid.length())) {
+		if ((uid == null) || (conf.getMinUserIdLength() > uid.length())
+			|| (conf.getMaxUserIdLength() < uid.length())) {
 			InvalidUserPropertyFault fault = new InvalidUserPropertyFault();
 			fault.setFaultString("Unacceptable User ID, the length of the user id must be between "
-				+ conf.getUIDLength().getMin() + " and " + conf.getUIDLength().getMax() + " characters.");
+				+ conf.getMinUserIdLength() + " and " + conf.getMaxUserIdLength() + " characters.");
 			throw fault;
 		}
 	}

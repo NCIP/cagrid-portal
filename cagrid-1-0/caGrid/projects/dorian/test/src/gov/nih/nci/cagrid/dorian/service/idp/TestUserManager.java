@@ -2,7 +2,6 @@ package gov.nih.nci.cagrid.dorian.service.idp;
 
 import gov.nih.nci.cagrid.common.FaultUtil;
 import gov.nih.nci.cagrid.dorian.common.Crypt;
-import gov.nih.nci.cagrid.dorian.conf.IdentityProviderConfiguration;
 import gov.nih.nci.cagrid.dorian.idp.bean.CountryCode;
 import gov.nih.nci.cagrid.dorian.idp.bean.IdPUser;
 import gov.nih.nci.cagrid.dorian.idp.bean.IdPUserFilter;
@@ -10,12 +9,7 @@ import gov.nih.nci.cagrid.dorian.idp.bean.IdPUserRole;
 import gov.nih.nci.cagrid.dorian.idp.bean.IdPUserStatus;
 import gov.nih.nci.cagrid.dorian.idp.bean.StateCode;
 import gov.nih.nci.cagrid.dorian.stubs.types.NoSuchUserFault;
-import gov.nih.nci.cagrid.dorian.test.Constants;
 import gov.nih.nci.cagrid.dorian.test.Utils;
-
-import java.io.InputStream;
-import java.io.InputStreamReader;
-
 import junit.framework.TestCase;
 
 import org.cagrid.tools.database.Database;
@@ -34,8 +28,6 @@ public class TestUserManager extends TestCase {
 
 	private int count = 0;
 
-	private IdentityProviderConfiguration conf;
-
 
 	public void testMultipleUsers() {
 		int userCount = 20;
@@ -53,7 +45,7 @@ public class TestUserManager extends TestCase {
 		UserManager um = null;
 		try {
 
-			um = new UserManager(db, conf);
+			um = Utils.getIdPUserManager();
 
 			for (int i = 0; i < users.length; i++) {
 				if ((i % 8) == 0) {
@@ -202,7 +194,7 @@ public class TestUserManager extends TestCase {
 		UserManager um = null;
 		try {
 
-			um = new UserManager(db, conf);
+			um = Utils.getIdPUserManager();
 			IdPUser u1 = makeActiveUser();
 			um.addUser(u1);
 			assertTrue(um.userExists(u1.getUserId()));
@@ -230,7 +222,7 @@ public class TestUserManager extends TestCase {
 		UserManager um = null;
 		try {
 
-			um = new UserManager(db, conf);
+			um = Utils.getIdPUserManager();
 			IdPUser u1 = makeActiveUser();
 			um.addUser(u1);
 			assertTrue(um.userExists(u1.getUserId()));
@@ -256,7 +248,7 @@ public class TestUserManager extends TestCase {
 		UserManager um = null;
 		try {
 
-			um = new UserManager(db, conf);
+			um = Utils.getIdPUserManager();
 			IdPUser u1 = makeActiveUser();
 			um.addUser(u1);
 			assertTrue(um.userExists(u1.getUserId()));
@@ -284,7 +276,7 @@ public class TestUserManager extends TestCase {
 		UserManager um = null;
 		try {
 
-			um = new UserManager(db, conf);
+			um = Utils.getIdPUserManager();
 			IdPUser u1 = makeActiveUser();
 			um.addUser(u1);
 			assertTrue(um.userExists(u1.getUserId()));
@@ -324,7 +316,7 @@ public class TestUserManager extends TestCase {
 		UserManager um = null;
 		try {
 
-			um = new UserManager(db, conf);
+			um = Utils.getIdPUserManager();
 			IdPUser u1 = makeActiveUser();
 			um.addUser(u1);
 			u1.setPassword(Crypt.crypt(u1.getPassword()));
@@ -382,7 +374,7 @@ public class TestUserManager extends TestCase {
 		UserManager um = null;
 		try {
 
-			um = new UserManager(db, conf);
+			um = Utils.getIdPUserManager();
 			int size = 10;
 
 			for (int i = 0; i < size; i++) {
@@ -547,7 +539,7 @@ public class TestUserManager extends TestCase {
 		UserManager um = null;
 		try {
 
-			um = new UserManager(db, conf);
+			um = Utils.getIdPUserManager();
 
 			IdPUser u = new IdPUser();
 			u.setUserId("user");
@@ -627,9 +619,6 @@ public class TestUserManager extends TestCase {
 			count = 0;
 			db = Utils.getDB();
 			assertEquals(0, db.getUsedConnectionCount());
-			InputStream resource = TestCase.class.getResourceAsStream(Constants.IDP_CONFIG);
-			this.conf = (IdentityProviderConfiguration) gov.nih.nci.cagrid.common.Utils.deserializeObject(
-				new InputStreamReader(resource), IdentityProviderConfiguration.class);
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);

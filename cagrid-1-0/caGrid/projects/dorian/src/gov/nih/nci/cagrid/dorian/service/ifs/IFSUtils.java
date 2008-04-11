@@ -1,6 +1,5 @@
 package gov.nih.nci.cagrid.dorian.service.ifs;
 
-import gov.nih.nci.cagrid.dorian.conf.IdentityFederationConfiguration;
 import gov.nih.nci.cagrid.dorian.ifs.bean.ProxyLifetime;
 
 import java.util.Calendar;
@@ -18,11 +17,11 @@ public class IFSUtils {
 	}
 
 
-	public static Date getMaxProxyLifetime(IdentityFederationConfiguration conf) {
+	public static Date getMaxProxyLifetime(IdentityFederationProperties conf) {
 		Calendar c = new GregorianCalendar();
-		c.add(Calendar.HOUR_OF_DAY, conf.getProxyPolicy().getProxyLifetime().getHours());
-		c.add(Calendar.MINUTE, conf.getProxyPolicy().getProxyLifetime().getMinutes());
-		c.add(Calendar.SECOND, conf.getProxyPolicy().getProxyLifetime().getSeconds());
+		c.add(Calendar.HOUR_OF_DAY, conf.getMaxProxyLifetime().getHours());
+		c.add(Calendar.MINUTE, conf.getMaxProxyLifetime().getMinutes());
+		c.add(Calendar.SECOND, conf.getMaxProxyLifetime().getSeconds());
 		return c.getTime();
 	}
 

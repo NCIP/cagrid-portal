@@ -1,19 +1,17 @@
 package gov.nih.nci.cagrid.dorian.service.idp;
 
 import gov.nih.nci.cagrid.common.FaultUtil;
-import gov.nih.nci.cagrid.dorian.conf.LockoutTime;
-import gov.nih.nci.cagrid.dorian.conf.PasswordSecurityPolicy;
+import gov.nih.nci.cagrid.dorian.common.Lifetime;
 import gov.nih.nci.cagrid.dorian.idp.bean.PasswordSecurity;
 import gov.nih.nci.cagrid.dorian.idp.bean.PasswordStatus;
+import gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault;
 import gov.nih.nci.cagrid.dorian.test.Utils;
 import junit.framework.TestCase;
 
 import org.cagrid.tools.database.Database;
 
-
 public class TestPasswordSecurityManager extends TestCase {
 	private Database db;
-
 
 	public void testGetAndDeleteEntry() {
 		PasswordSecurityManager psm = null;
@@ -23,7 +21,7 @@ public class TestPasswordSecurityManager extends TestCase {
 			assertEquals(false, psm.entryExists(uid));
 			PasswordSecurity entry = psm.getEntry(uid);
 			assertEquals(true, psm.entryExists(uid));
-			validateEntry(entry, 0, 0, false,PasswordStatus.Valid);
+			validateEntry(entry, 0, 0, false, PasswordStatus.Valid);
 			assertEquals(PasswordStatus.Valid, psm.getPasswordStatus(uid));
 			psm.deleteEntry(uid);
 			assertEquals(false, psm.entryExists(uid));
@@ -39,7 +37,6 @@ public class TestPasswordSecurityManager extends TestCase {
 		}
 	}
 
-
 	public void testSuspendedPassword() {
 		PasswordSecurityManager psm = null;
 		try {
@@ -48,37 +45,50 @@ public class TestPasswordSecurityManager extends TestCase {
 			for (int j = 0; j < 2; j++) {
 				String uid = "user" + j;
 				assertEquals(false, psm.entryExists(uid));
-				validateEntry(psm.getEntry(uid), 0, 0, false,PasswordStatus.Valid);
+				validateEntry(psm.getEntry(uid), 0, 0, false,
+						PasswordStatus.Valid);
 				assertEquals(true, psm.entryExists(uid));
 				assertEquals(PasswordStatus.Valid, psm.getPasswordStatus(uid));
 
 				int localCount = 0;
 				boolean expiredOnce = false;
-				for (int i = 1; i <= (policy.getMaxTotalInvalidLogins() + 1); i++) {
+				for (int i = 1; i <= (policy.getTotalInvalidLogins() + 1); i++) {
 					psm.reportInvalidLoginAttempt(uid);
 					localCount = localCount + 1;
-					if (i >= policy.getMaxTotalInvalidLogins()) {
-						if (localCount == policy.getMaxConsecutiveInvalidLogins()) {
+					if (i >= policy.getTotalInvalidLogins()) {
+						if (localCount == policy.getConsecutiveInvalidLogins()) {
 							localCount = 0;
 						}
-						validateEntry(psm.getEntry(uid), localCount, i, expiredOnce,PasswordStatus.LockedUntilChanged);
-						assertEquals(PasswordStatus.LockedUntilChanged, psm.getPasswordStatus(uid));
-					} else if (localCount != policy.getMaxConsecutiveInvalidLogins()) {
-						validateEntry(psm.getEntry(uid), localCount, i, expiredOnce,PasswordStatus.Valid);
-						assertEquals(PasswordStatus.Valid, psm.getPasswordStatus(uid));
+						validateEntry(psm.getEntry(uid), localCount, i,
+								expiredOnce, PasswordStatus.LockedUntilChanged);
+						assertEquals(PasswordStatus.LockedUntilChanged, psm
+								.getPasswordStatus(uid));
+					} else if (localCount != policy
+							.getConsecutiveInvalidLogins()) {
+						validateEntry(psm.getEntry(uid), localCount, i,
+								expiredOnce, PasswordStatus.Valid);
+						assertEquals(PasswordStatus.Valid, psm
+								.getPasswordStatus(uid));
 					} else {
 						localCount = 0;
 						expiredOnce = true;
-						validateEntry(psm.getEntry(uid), localCount, i, expiredOnce,PasswordStatus.Locked);
-						assertEquals(PasswordStatus.Locked, psm.getPasswordStatus(uid));
+						validateEntry(psm.getEntry(uid), localCount, i,
+								expiredOnce, PasswordStatus.Locked);
+						assertEquals(PasswordStatus.Locked, psm
+								.getPasswordStatus(uid));
 
 						psm.reportSuccessfulLoginAttempt(uid);
-						validateEntry(psm.getEntry(uid), localCount, i, expiredOnce,PasswordStatus.Locked);
-						assertEquals(PasswordStatus.Locked, psm.getPasswordStatus(uid));
+						validateEntry(psm.getEntry(uid), localCount, i,
+								expiredOnce, PasswordStatus.Locked);
+						assertEquals(PasswordStatus.Locked, psm
+								.getPasswordStatus(uid));
 
-						Thread.sleep((policy.getLockoutTime().getSeconds() * 1000) + 100);
-						assertEquals(PasswordStatus.Valid, psm.getPasswordStatus(uid));
-						validateEntry(psm.getEntry(uid), localCount, i, expiredOnce,PasswordStatus.Valid);
+						Thread
+								.sleep((policy.getLockout().getSeconds() * 1000) + 100);
+						assertEquals(PasswordStatus.Valid, psm
+								.getPasswordStatus(uid));
+						validateEntry(psm.getEntry(uid), localCount, i,
+								expiredOnce, PasswordStatus.Valid);
 					}
 
 				}
@@ -96,7 +106,6 @@ public class TestPasswordSecurityManager extends TestCase {
 
 	}
 
-
 	public void testResetPassword() {
 		PasswordSecurityManager psm = null;
 		try {
@@ -104,19 +113,19 @@ public class TestPasswordSecurityManager extends TestCase {
 			psm = new PasswordSecurityManager(db, policy);
 			String uid = "user";
 			assertEquals(false, psm.entryExists(uid));
-			validateEntry(psm.getEntry(uid), 0, 0, false,PasswordStatus.Valid);
+			validateEntry(psm.getEntry(uid), 0, 0, false, PasswordStatus.Valid);
 			assertEquals(PasswordStatus.Valid, psm.getPasswordStatus(uid));
 
 			psm.reportInvalidLoginAttempt(uid);
-			validateEntry(psm.getEntry(uid),  1, 1, false,PasswordStatus.Valid);
+			validateEntry(psm.getEntry(uid), 1, 1, false, PasswordStatus.Valid);
 			assertEquals(PasswordStatus.Valid, psm.getPasswordStatus(uid));
 
 			psm.reportInvalidLoginAttempt(uid);
-			validateEntry(psm.getEntry(uid),  2, 2, false,PasswordStatus.Valid);
+			validateEntry(psm.getEntry(uid), 2, 2, false, PasswordStatus.Valid);
 			assertEquals(PasswordStatus.Valid, psm.getPasswordStatus(uid));
 
 			psm.reportSuccessfulLoginAttempt(uid);
-			validateEntry(psm.getEntry(uid),  0, 2, false,PasswordStatus.Valid);
+			validateEntry(psm.getEntry(uid), 0, 2, false, PasswordStatus.Valid);
 			assertEquals(PasswordStatus.Valid, psm.getPasswordStatus(uid));
 
 		} catch (Exception e) {
@@ -132,8 +141,8 @@ public class TestPasswordSecurityManager extends TestCase {
 
 	}
 
-
-	protected void validateEntry(PasswordSecurity entry, long count, long totalCount, boolean expired, PasswordStatus status) {
+	protected void validateEntry(PasswordSecurity entry, long count,
+			long totalCount, boolean expired, PasswordStatus status) {
 		assertEquals(count, entry.getConsecutiveInvalidLogins());
 		assertEquals(totalCount, entry.getTotalInvalidLogins());
 		assertEquals(status, entry.getPasswordStatus());
@@ -146,19 +155,17 @@ public class TestPasswordSecurityManager extends TestCase {
 		}
 	}
 
-
-	private PasswordSecurityPolicy getPolicy() {
-		PasswordSecurityPolicy policy = new PasswordSecurityPolicy();
-		LockoutTime time = new LockoutTime();
+	private PasswordSecurityPolicy getPolicy() throws DorianInternalFault {
+		Lifetime time = new Lifetime();
 		time.setHours(0);
 		time.setMinutes(0);
 		time.setSeconds(3);
-		policy.setLockoutTime(time);
-		policy.setMaxConsecutiveInvalidLogins(3);
-		policy.setMaxTotalInvalidLogins(8);
+		PasswordSecurityPolicy policy = new PasswordSecurityPolicy();
+		policy.setLockout(time);
+		policy.setConsecutiveInvalidLogins(3);
+		policy.setTotalInvalidLogins(8);
 		return policy;
 	}
-
 
 	protected void setUp() throws Exception {
 		super.setUp();
@@ -171,7 +178,6 @@ public class TestPasswordSecurityManager extends TestCase {
 			assertTrue(false);
 		}
 	}
-
 
 	protected void tearDown() throws Exception {
 		super.setUp();

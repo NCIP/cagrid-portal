@@ -7,6 +7,14 @@
           <name>factory</name>
           <value>org.globus.wsrf.jndi.BeanFactory</value>
         </parameter>
+        <parameter>
+          <name>dorianConfiguration</name>
+          <value>ETC-PATH/@dorianConfiguration@</value>
+        </parameter>
+        <parameter>
+          <name>dorianProperties</name>
+          <value>ETC-PATH/@dorianProperties@</value>
+        </parameter>
       </resourceParams>
     </resource>
     <resource name="configuration" type="gov.nih.nci.cagrid.dorian.service.globus.resource.ResourceConfiguration">

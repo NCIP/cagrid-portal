@@ -32,6 +32,7 @@ import org.globus.wsrf.container.ServiceHost;
 import org.globus.wsrf.encoding.DeserializationException;
 import org.globus.wsrf.encoding.ObjectDeserializer;
 import org.globus.wsrf.impl.SimpleResourceProperty;
+import org.globus.wsrf.impl.SimpleResourcePropertyMetaData;
 import org.globus.wsrf.impl.SimpleResourcePropertySet;
 import org.globus.wsrf.impl.servicegroup.client.ServiceGroupRegistrationClient;
 import org.globus.wsrf.utils.AddressingUtils;
@@ -140,7 +141,7 @@ public abstract class BaseResourceBase implements Resource, ResourceProperties {
                 + getConfiguration().getRegistrationTemplateFile());
 
             if (registrationFile.exists() && registrationFile.canRead()) {
-                logger.debug("Loading registration arguments from:" + registrationFile);
+                logger.debug("Loading registration argumentsrmation from:" + registrationFile);
 
                 try {
                     params = ServiceGroupRegistrationClient.readParams(registrationFile.getAbsolutePath());

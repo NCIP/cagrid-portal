@@ -3,8 +3,6 @@ package gov.nih.nci.cagrid.dorian.service;
 import gov.nih.nci.cagrid.common.FaultHelper;
 import gov.nih.nci.cagrid.common.FaultUtil;
 import gov.nih.nci.cagrid.dorian.common.SAMLConstants;
-import gov.nih.nci.cagrid.dorian.conf.DorianConfiguration;
-import gov.nih.nci.cagrid.dorian.conf.IdentityAssignmentPolicy;
 import gov.nih.nci.cagrid.dorian.idp.bean.Application;
 import gov.nih.nci.cagrid.dorian.idp.bean.BasicAuthCredential;
 import gov.nih.nci.cagrid.dorian.idp.bean.CountryCode;
@@ -32,7 +30,6 @@ import gov.nih.nci.cagrid.dorian.stubs.types.InvalidAssertionFault;
 import gov.nih.nci.cagrid.dorian.stubs.types.NoSuchUserFault;
 import gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault;
 import gov.nih.nci.cagrid.dorian.test.CA;
-import gov.nih.nci.cagrid.dorian.test.Constants;
 import gov.nih.nci.cagrid.dorian.test.Utils;
 import gov.nih.nci.cagrid.gridca.common.CertUtil;
 import gov.nih.nci.cagrid.gridca.common.CertificateExtensionsUtil;
@@ -46,8 +43,6 @@ import gov.nih.nci.cagrid.opensaml.SAMLNameIdentifier;
 import gov.nih.nci.cagrid.opensaml.SAMLStatement;
 import gov.nih.nci.cagrid.opensaml.SAMLSubject;
 
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.PublicKey;
@@ -65,7 +60,6 @@ import junit.framework.TestCase;
 
 import org.apache.xml.security.signature.XMLSignature;
 import org.globus.gsi.GlobusCredential;
-
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
@@ -89,12 +83,6 @@ public class TestDorian extends TestCase {
 
 	private CA memoryCA;
 
-	private InputStream resource = TestCase.class.getResourceAsStream(Constants.DORIAN_CONF);
-
-	private InputStream expiringCredentialsResource = TestCase.class
-		.getResourceAsStream(Constants.DORIAN_CONF_EXPIRING_CREDENTIALS);
-
-
 	/** *************** IdP TEST FUNCTIONS ********************** */
 	/** ********************************************************* */
 	/** ********************************************************* */
@@ -103,13 +91,13 @@ public class TestDorian extends TestCase {
 	public void testAuthenticate() {
 		try {
 			// initialize a Dorian object
-			DorianConfiguration conf = (DorianConfiguration) gov.nih.nci.cagrid.common.Utils.deserializeObject(
-				new InputStreamReader(resource), DorianConfiguration.class);
+			DorianProperties conf = Utils.getDorianProperties();
 			dorian = new Dorian(conf, "localhost");
 			assertNotNull(dorian.getConfiguration());
 			assertNotNull(dorian.getDatabase());
 
-			String gridSubject = getDorianIdPUserId(conf, dorian, Dorian.IDP_ADMIN_USER_ID);
+			String gridSubject = getDorianIdPUserId(conf, dorian,
+					Dorian.IDP_ADMIN_USER_ID);
 			String gridId = UserManager.subjectToIdentity(gridSubject);
 
 			// test authentication with an active user
@@ -205,16 +193,15 @@ public class TestDorian extends TestCase {
 		}
 	}
 
-
 	public void testFindUpdateRemoveIdPUser() {
 		try {
-			DorianConfiguration conf = (DorianConfiguration) gov.nih.nci.cagrid.common.Utils.deserializeObject(
-				new InputStreamReader(resource), DorianConfiguration.class);
+			DorianProperties conf = Utils.getDorianProperties();
 			dorian = new Dorian(conf, "localhost");
 			assertNotNull(dorian.getConfiguration());
 			assertNotNull(dorian.getDatabase());
 
-			String gridSubject = getDorianIdPUserId(conf, dorian, Dorian.IDP_ADMIN_USER_ID);
+			String gridSubject = getDorianIdPUserId(conf, dorian,
+					Dorian.IDP_ADMIN_USER_ID);
 			String gridId = UserManager.subjectToIdentity(gridSubject);
 
 			Application a = createApplication();
@@ -306,7 +293,6 @@ public class TestDorian extends TestCase {
 		}
 	}
 
-
 	/** *************** IFS TEST FUNCTIONS ********************** */
 	/** ********************************************************* */
 	/** ********************************************************* */
@@ -314,8 +300,8 @@ public class TestDorian extends TestCase {
 
 	public void testCreateProxy() {
 		try {
-			DorianConfiguration conf = (DorianConfiguration) gov.nih.nci.cagrid.common.Utils.deserializeObject(
-				new InputStreamReader(resource), DorianConfiguration.class);
+			
+			DorianProperties conf = Utils.getDorianProperties();
 			dorian = new Dorian(conf, "localhost");
 			assertNotNull(dorian.getConfiguration());
 			assertNotNull(dorian.getDatabase());
@@ -326,8 +312,10 @@ public class TestDorian extends TestCase {
 			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 			PublicKey publicKey = pair.getPublic();
 			ProxyLifetime lifetime = getProxyLifetime();
-			X509Certificate[] certs = dorian.createProxy(saml, publicKey, lifetime, DELEGATION_LENGTH);
-			createAndCheckProxyLifetime(lifetime, pair.getPrivate(), certs, DELEGATION_LENGTH);
+			X509Certificate[] certs = dorian.createProxy(saml, publicKey,
+					lifetime, DELEGATION_LENGTH);
+			createAndCheckProxyLifetime(lifetime, pair.getPrivate(), certs,
+					DELEGATION_LENGTH);
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
@@ -343,15 +331,14 @@ public class TestDorian extends TestCase {
 		}
 	}
 
-
 	public void testRemoveDorianIdPDefaultAdmin() {
 		try {
-			DorianConfiguration conf = (DorianConfiguration) gov.nih.nci.cagrid.common.Utils.deserializeObject(
-				new InputStreamReader(resource), DorianConfiguration.class);
+			DorianProperties conf = Utils.getDorianProperties();
 			dorian = new Dorian(conf, "localhost");
 			assertNotNull(dorian.getConfiguration());
 			assertNotNull(dorian.getDatabase());
-			String gridSubject = getDorianIdPUserId(conf, dorian, Dorian.IDP_ADMIN_USER_ID);
+			String gridSubject = getDorianIdPUserId(conf, dorian,
+					Dorian.IDP_ADMIN_USER_ID);
 			String gridId = UserManager.subjectToIdentity(gridSubject);
 
 			IFSUserFilter uf = new IFSUserFilter();
@@ -376,8 +363,10 @@ public class TestDorian extends TestCase {
 			SAMLAssertion saml = dorian.authenticate(cred);
 			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 			ProxyLifetime lifetime = getProxyLifetimeShort();
-			X509Certificate[] certs = dorian.createProxy(saml, pair.getPublic(), lifetime, DELEGATION_LENGTH);
-			createAndCheckProxyLifetime(lifetime, pair.getPrivate(), certs, DELEGATION_LENGTH);
+			X509Certificate[] certs = dorian.createProxy(saml,
+					pair.getPublic(), lifetime, DELEGATION_LENGTH);
+			createAndCheckProxyLifetime(lifetime, pair.getPrivate(), certs,
+					DELEGATION_LENGTH);
 			IFSUserFilter filter = new IFSUserFilter();
 			filter.setUID(username);
 			filter.setIdPId(1);
@@ -432,16 +421,15 @@ public class TestDorian extends TestCase {
 			}
 		}
 	}
-	
-	
+
 	public void testSuspendDorianIdPDefaultAdmin() {
 		try {
-			DorianConfiguration conf = (DorianConfiguration) gov.nih.nci.cagrid.common.Utils.deserializeObject(
-				new InputStreamReader(resource), DorianConfiguration.class);
+			DorianProperties conf = Utils.getDorianProperties();
 			dorian = new Dorian(conf, "localhost");
 			assertNotNull(dorian.getConfiguration());
 			assertNotNull(dorian.getDatabase());
-			String gridSubject = getDorianIdPUserId(conf, dorian, Dorian.IDP_ADMIN_USER_ID);
+			String gridSubject = getDorianIdPUserId(conf, dorian,
+					Dorian.IDP_ADMIN_USER_ID);
 			String gridId = UserManager.subjectToIdentity(gridSubject);
 
 			IFSUserFilter uf = new IFSUserFilter();
@@ -464,8 +452,10 @@ public class TestDorian extends TestCase {
 			SAMLAssertion saml = dorian.authenticate(cred);
 			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 			ProxyLifetime lifetime = getProxyLifetimeShort();
-			X509Certificate[] certs = dorian.createProxy(saml, pair.getPublic(), lifetime, DELEGATION_LENGTH);
-			createAndCheckProxyLifetime(lifetime, pair.getPrivate(), certs, DELEGATION_LENGTH);
+			X509Certificate[] certs = dorian.createProxy(saml,
+					pair.getPublic(), lifetime, DELEGATION_LENGTH);
+			createAndCheckProxyLifetime(lifetime, pair.getPrivate(), certs,
+					DELEGATION_LENGTH);
 			IFSUserFilter filter = new IFSUserFilter();
 			filter.setUID(username);
 			filter.setIdPId(1);
@@ -474,8 +464,7 @@ public class TestDorian extends TestCase {
 			String userGridId = ifsUser[0].getGridId();
 			dorian.addAdmin(gridId, userGridId);
 			assertEquals(2, dorian.findIFSUsers(gridId, null).length);
-			
-			
+
 			IdPUserFilter f2 = new IdPUserFilter();
 			f2.setUserId(Dorian.IDP_ADMIN_USER_ID);
 			IdPUser[] list2 = dorian.findIdPUsers(gridId, f2);
@@ -483,14 +472,14 @@ public class TestDorian extends TestCase {
 			assertEquals(Dorian.IDP_ADMIN_USER_ID, list2[0].getUserId());
 			list2[0].setStatus(IdPUserStatus.Suspended);
 			dorian.updateIdPUser(userGridId, list2[0]);
-			
+
 			Dorian dorian2 = new Dorian(conf, "localhost");
-			
-			try{
+
+			try {
 				dorian2.findIdPUsers(gridId, null);
 				fail("Should not have permission to execute.");
-			}catch(PermissionDeniedFault pdf){
-				
+			} catch (PermissionDeniedFault pdf) {
+
 			}
 			IdPUserFilter idpf = new IdPUserFilter();
 			idpf.setUserId(Dorian.IDP_ADMIN_USER_ID);
@@ -498,7 +487,7 @@ public class TestDorian extends TestCase {
 			assertEquals(1, dorian2.findIdPUsers(userGridId, idpf).length);
 			idpf.setStatus(IdPUserStatus.Active);
 			assertEquals(0, dorian2.findIdPUsers(userGridId, idpf).length);
-			
+
 			assertEquals(2, dorian2.findIFSUsers(userGridId, null).length);
 			assertEquals(1, dorian2.findIFSUsers(userGridId, uf).length);
 		} catch (Exception e) {
@@ -516,15 +505,14 @@ public class TestDorian extends TestCase {
 		}
 	}
 
-
 	public void testMembershipRemovalOnIdPUserRemoval() {
 		try {
-			DorianConfiguration conf = (DorianConfiguration) gov.nih.nci.cagrid.common.Utils.deserializeObject(
-				new InputStreamReader(resource), DorianConfiguration.class);
+			DorianProperties conf = Utils.getDorianProperties();
 			dorian = new Dorian(conf, "localhost");
 			assertNotNull(dorian.getConfiguration());
 			assertNotNull(dorian.getDatabase());
-			String gridSubject = getDorianIdPUserId(conf, dorian, Dorian.IDP_ADMIN_USER_ID);
+			String gridSubject = getDorianIdPUserId(conf, dorian,
+					Dorian.IDP_ADMIN_USER_ID);
 			String gridId = UserManager.subjectToIdentity(gridSubject);
 			Application app = createApplication();
 			dorian.registerWithIdP(app);
@@ -543,8 +531,10 @@ public class TestDorian extends TestCase {
 			SAMLAssertion saml = dorian.authenticate(cred);
 			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 			ProxyLifetime lifetime = getProxyLifetimeShort();
-			X509Certificate[] certs = dorian.createProxy(saml, pair.getPublic(), lifetime, DELEGATION_LENGTH);
-			createAndCheckProxyLifetime(lifetime, pair.getPrivate(), certs, DELEGATION_LENGTH);
+			X509Certificate[] certs = dorian.createProxy(saml,
+					pair.getPublic(), lifetime, DELEGATION_LENGTH);
+			createAndCheckProxyLifetime(lifetime, pair.getPrivate(), certs,
+					DELEGATION_LENGTH);
 			IFSUserFilter filter = new IFSUserFilter();
 			filter.setUID(username);
 			filter.setIdPId(1);
@@ -590,24 +580,26 @@ public class TestDorian extends TestCase {
 		}
 	}
 
-
 	public void testMembershipRemovalOnUserRemoval() {
 		try {
-			DorianConfiguration conf = (DorianConfiguration) gov.nih.nci.cagrid.common.Utils.deserializeObject(
-				new InputStreamReader(resource), DorianConfiguration.class);
+			DorianProperties conf = Utils.getDorianProperties();
 			dorian = new Dorian(conf, "localhost");
 			assertNotNull(dorian.getConfiguration());
 			assertNotNull(dorian.getDatabase());
-			String gridSubject = getDorianIdPUserId(conf, dorian, Dorian.IDP_ADMIN_USER_ID);
+			String gridSubject = getDorianIdPUserId(conf, dorian,
+					Dorian.IDP_ADMIN_USER_ID);
 			String gridId = UserManager.subjectToIdentity(gridSubject);
 			IdPContainer idp = this.getTrustedIdpAutoApproveAutoRenew("My IdP");
-			idp.getIdp().setId(dorian.addTrustedIdP(gridId, idp.getIdp()).getId());
+			idp.getIdp().setId(
+					dorian.addTrustedIdP(gridId, idp.getIdp()).getId());
 			String username = "user";
 			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 			ProxyLifetime lifetime = getProxyLifetimeShort();
-			X509Certificate[] certs = dorian.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), lifetime,
-				DELEGATION_LENGTH);
-			createAndCheckProxyLifetime(lifetime, pair.getPrivate(), certs, DELEGATION_LENGTH);
+			X509Certificate[] certs = dorian.createProxy(getSAMLAssertion(
+					username, idp), pair.getPublic(), lifetime,
+					DELEGATION_LENGTH);
+			createAndCheckProxyLifetime(lifetime, pair.getPrivate(), certs,
+					DELEGATION_LENGTH);
 			IFSUserFilter filter = new IFSUserFilter();
 			filter.setUID(username);
 			filter.setIdPId(idp.getIdp().getId());
@@ -652,25 +644,27 @@ public class TestDorian extends TestCase {
 		}
 	}
 
-
 	public void testAutoApprovalAutoRenewal() {
 		try {
-			DorianConfiguration conf = (DorianConfiguration) gov.nih.nci.cagrid.common.Utils.deserializeObject(
-				new InputStreamReader(expiringCredentialsResource), DorianConfiguration.class);
+			DorianProperties conf = Utils.getExpiringDorianProperties();
 			dorian = new Dorian(conf, "localhost");
 			assertNotNull(dorian.getConfiguration());
 			assertNotNull(dorian.getDatabase());
 
-			String gridSubject = getDorianIdPUserId(conf, dorian, Dorian.IDP_ADMIN_USER_ID);
+			String gridSubject = getDorianIdPUserId(conf, dorian,
+					Dorian.IDP_ADMIN_USER_ID);
 			String gridId = UserManager.subjectToIdentity(gridSubject);
 			IdPContainer idp = this.getTrustedIdpAutoApproveAutoRenew("My IdP");
-			idp.getIdp().setId(dorian.addTrustedIdP(gridId, idp.getIdp()).getId());
+			idp.getIdp().setId(
+					dorian.addTrustedIdP(gridId, idp.getIdp()).getId());
 			String username = "user";
 			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 			ProxyLifetime lifetime = getProxyLifetimeShort();
-			X509Certificate[] certs = dorian.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), lifetime,
-				DELEGATION_LENGTH);
-			createAndCheckProxyLifetime(lifetime, pair.getPrivate(), certs, DELEGATION_LENGTH);
+			X509Certificate[] certs = dorian.createProxy(getSAMLAssertion(
+					username, idp), pair.getPublic(), lifetime,
+					DELEGATION_LENGTH);
+			createAndCheckProxyLifetime(lifetime, pair.getPrivate(), certs,
+					DELEGATION_LENGTH);
 
 			IFSUserFilter filter = new IFSUserFilter();
 			filter.setUID(username);
@@ -680,7 +674,8 @@ public class TestDorian extends TestCase {
 			IFSUser before = ifsUser[0];
 			assertEquals(before.getUserStatus(), IFSUserStatus.Active);
 			Thread.sleep((SHORT_CREDENTIALS_VALID * 1000) + 100);
-			certs = dorian.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), lifetime, DELEGATION_LENGTH);
+			certs = dorian.createProxy(getSAMLAssertion(username, idp), pair
+					.getPublic(), lifetime, DELEGATION_LENGTH);
 			ifsUser = dorian.findIFSUsers(gridId, filter);
 			assertEquals(ifsUser.length, 1);
 			IFSUser after = ifsUser[0];
@@ -703,26 +698,28 @@ public class TestDorian extends TestCase {
 		}
 	}
 
-
 	public void testManualApprovalAutoRenewal() {
 		try {
-			DorianConfiguration conf = (DorianConfiguration) gov.nih.nci.cagrid.common.Utils.deserializeObject(
-				new InputStreamReader(expiringCredentialsResource), DorianConfiguration.class);
+			DorianProperties conf = Utils.getExpiringDorianProperties();
 			dorian = new Dorian(conf, "localhost");
 			assertNotNull(dorian.getConfiguration());
 			assertNotNull(dorian.getDatabase());
 
-			String gridSubject = getDorianIdPUserId(conf, dorian, Dorian.IDP_ADMIN_USER_ID);
+			String gridSubject = getDorianIdPUserId(conf, dorian,
+					Dorian.IDP_ADMIN_USER_ID);
 			String gridId = UserManager.subjectToIdentity(gridSubject);
 
-			IdPContainer idp = this.getTrustedIdpManualApproveAutoRenew("My IdP");
-			idp.getIdp().setId(dorian.addTrustedIdP(gridId, idp.getIdp()).getId());
+			IdPContainer idp = this
+					.getTrustedIdpManualApproveAutoRenew("My IdP");
+			idp.getIdp().setId(
+					dorian.addTrustedIdP(gridId, idp.getIdp()).getId());
 			String username = "user";
 			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 			ProxyLifetime lifetime = getProxyLifetimeShort();
 			try {
-				dorian.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), getProxyLifetimeShort(),
-					DELEGATION_LENGTH);
+				dorian.createProxy(getSAMLAssertion(username, idp), pair
+						.getPublic(), getProxyLifetimeShort(),
+						DELEGATION_LENGTH);
 				fail("Should not be able to create a proxy with an IdP that is not approved");
 			} catch (PermissionDeniedFault f) {
 
@@ -737,9 +734,11 @@ public class TestDorian extends TestCase {
 			assertEquals(before.getUserStatus(), IFSUserStatus.Pending);
 			before.setUserStatus(IFSUserStatus.Active);
 			dorian.updateIFSUser(gridId, before);
-			dorian.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), lifetime, DELEGATION_LENGTH);
+			dorian.createProxy(getSAMLAssertion(username, idp), pair
+					.getPublic(), lifetime, DELEGATION_LENGTH);
 			Thread.sleep((SHORT_CREDENTIALS_VALID * 1000) + 100);
-			dorian.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), lifetime, DELEGATION_LENGTH);
+			dorian.createProxy(getSAMLAssertion(username, idp), pair
+					.getPublic(), lifetime, DELEGATION_LENGTH);
 			ifsUser = dorian.findIFSUsers(gridId, filter);
 			assertEquals(ifsUser.length, 1);
 			IFSUser after = ifsUser[0];
@@ -763,23 +762,24 @@ public class TestDorian extends TestCase {
 		}
 	}
 
-
 	public void testAutoApprovalManualRenewal() {
 		try {
-			DorianConfiguration conf = (DorianConfiguration) gov.nih.nci.cagrid.common.Utils.deserializeObject(
-				new InputStreamReader(expiringCredentialsResource), DorianConfiguration.class);
+			DorianProperties conf = Utils.getExpiringDorianProperties();
 			dorian = new Dorian(conf, "localhost");
 			assertNotNull(dorian.getConfiguration());
 			assertNotNull(dorian.getDatabase());
 
-			String gridSubject = getDorianIdPUserId(conf, dorian, Dorian.IDP_ADMIN_USER_ID);
+			String gridSubject = getDorianIdPUserId(conf, dorian,
+					Dorian.IDP_ADMIN_USER_ID);
 			String gridId = UserManager.subjectToIdentity(gridSubject);
 			IdPContainer idp = this.getTrustedIdpAutoApprove("My IdP");
-			idp.getIdp().setId(dorian.addTrustedIdP(gridId, idp.getIdp()).getId());
+			idp.getIdp().setId(
+					dorian.addTrustedIdP(gridId, idp.getIdp()).getId());
 			String username = "user";
 			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 			ProxyLifetime lifetime = getProxyLifetimeShort();
-			dorian.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), lifetime, DELEGATION_LENGTH);
+			dorian.createProxy(getSAMLAssertion(username, idp), pair
+					.getPublic(), lifetime, DELEGATION_LENGTH);
 
 			IFSUserFilter filter = new IFSUserFilter();
 			filter.setUID(username);
@@ -788,20 +788,23 @@ public class TestDorian extends TestCase {
 			assertEquals(ifsUser.length, 1);
 			IFSUser before = ifsUser[0];
 			assertEquals(before.getUserStatus(), IFSUserStatus.Active);
-			X509Certificate certBefore = CertUtil.loadCertificate(before.getCertificate().getCertificateAsString());
+			X509Certificate certBefore = CertUtil.loadCertificate(before
+					.getCertificate().getCertificateAsString());
 
 			Thread.sleep((SHORT_CREDENTIALS_VALID * 1000) + 100);
 
 			try {
-				dorian.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), getProxyLifetimeShort(),
-					DELEGATION_LENGTH);
+				dorian.createProxy(getSAMLAssertion(username, idp), pair
+						.getPublic(), getProxyLifetimeShort(),
+						DELEGATION_LENGTH);
 				fail("Should not be able to create a proxy with an IdP that has not been renewed");
 			} catch (PermissionDeniedFault f) {
 
 			}
 			dorian.renewIFSUserCredentials(gridId, ifsUser[0]);
 
-			dorian.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), lifetime, DELEGATION_LENGTH);
+			dorian.createProxy(getSAMLAssertion(username, idp), pair
+					.getPublic(), lifetime, DELEGATION_LENGTH);
 			ifsUser = dorian.findIFSUsers(gridId, filter);
 			assertEquals(ifsUser.length, 1);
 			IFSUser after = ifsUser[0];
@@ -825,26 +828,27 @@ public class TestDorian extends TestCase {
 		}
 	}
 
-
 	public void testManualApprovalManualRenewal() {
 		try {
-			DorianConfiguration conf = (DorianConfiguration) gov.nih.nci.cagrid.common.Utils.deserializeObject(
-				new InputStreamReader(expiringCredentialsResource), DorianConfiguration.class);
+			DorianProperties conf = Utils.getExpiringDorianProperties();
 			dorian = new Dorian(conf, "localhost");
 			assertNotNull(dorian.getConfiguration());
 			assertNotNull(dorian.getDatabase());
 
-			String gridSubject = getDorianIdPUserId(conf, dorian, Dorian.IDP_ADMIN_USER_ID);
+			String gridSubject = getDorianIdPUserId(conf, dorian,
+					Dorian.IDP_ADMIN_USER_ID);
 			String gridId = UserManager.subjectToIdentity(gridSubject);
 
 			IdPContainer idp = this.getTrustedIdpManualApprove("My IdP");
-			idp.getIdp().setId(dorian.addTrustedIdP(gridId, idp.getIdp()).getId());
+			idp.getIdp().setId(
+					dorian.addTrustedIdP(gridId, idp.getIdp()).getId());
 			String username = "user";
 			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 			ProxyLifetime lifetime = getProxyLifetimeShort();
 			try {
-				dorian.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), getProxyLifetimeShort(),
-					DELEGATION_LENGTH);
+				dorian.createProxy(getSAMLAssertion(username, idp), pair
+						.getPublic(), getProxyLifetimeShort(),
+						DELEGATION_LENGTH);
 				fail("Should not be able to create a proxy with an IdP that has not been approved");
 			} catch (PermissionDeniedFault f) {
 
@@ -859,20 +863,24 @@ public class TestDorian extends TestCase {
 			assertEquals(before.getUserStatus(), IFSUserStatus.Pending);
 			before.setUserStatus(IFSUserStatus.Active);
 			dorian.updateIFSUser(gridId, before);
-			dorian.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), lifetime, DELEGATION_LENGTH);
-			X509Certificate certBefore = CertUtil.loadCertificate(before.getCertificate().getCertificateAsString());
+			dorian.createProxy(getSAMLAssertion(username, idp), pair
+					.getPublic(), lifetime, DELEGATION_LENGTH);
+			X509Certificate certBefore = CertUtil.loadCertificate(before
+					.getCertificate().getCertificateAsString());
 			Thread.sleep((SHORT_CREDENTIALS_VALID * 1000) + 100);
 
 			try {
-				dorian.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), getProxyLifetimeShort(),
-					DELEGATION_LENGTH);
+				dorian.createProxy(getSAMLAssertion(username, idp), pair
+						.getPublic(), getProxyLifetimeShort(),
+						DELEGATION_LENGTH);
 				fail("Should not be able to create a proxy with an IdP that has not been renewed");
 			} catch (PermissionDeniedFault f) {
 
 			}
 			dorian.renewIFSUserCredentials(gridId, ifsUser[0]);
 
-			dorian.createProxy(getSAMLAssertion(username, idp), pair.getPublic(), lifetime, DELEGATION_LENGTH);
+			dorian.createProxy(getSAMLAssertion(username, idp), pair
+					.getPublic(), lifetime, DELEGATION_LENGTH);
 			ifsUser = dorian.findIFSUsers(gridId, filter);
 			assertEquals(ifsUser.length, 1);
 			IFSUser after = ifsUser[0];
@@ -896,21 +904,23 @@ public class TestDorian extends TestCase {
 		}
 	}
 
-
 	/** *************** HELPER FUNCTIONS ************************ */
 	/** ********************************************************* */
 	/** ********************************************************* */
 	/** ********************************************************* */
 
-	public void verifySAMLAssertion(SAMLAssertion saml, X509Certificate idpCert, Application app) throws Exception {
+	public void verifySAMLAssertion(SAMLAssertion saml,
+			X509Certificate idpCert, Application app) throws Exception {
 		assertNotNull(saml);
 
 		Calendar cal = new GregorianCalendar();
 		Date now = cal.getTime();
-		if ((now.before(saml.getNotBefore())) || (now.after(saml.getNotOnOrAfter()))) {
+		if ((now.before(saml.getNotBefore()))
+				|| (now.after(saml.getNotOnOrAfter()))) {
 			InvalidAssertionFault fault = new InvalidAssertionFault();
-			fault.setFaultString("The Assertion is not valid at " + now + ", the assertion is valid from "
-				+ saml.getNotBefore() + " to " + saml.getNotOnOrAfter());
+			fault.setFaultString("The Assertion is not valid at " + now
+					+ ", the assertion is valid from " + saml.getNotBefore()
+					+ " to " + saml.getNotOnOrAfter());
 			throw fault;
 		}
 
@@ -930,22 +940,28 @@ public class TestDorian extends TestCase {
 					authFound = true;
 				}
 				SAMLAuthenticationStatement auth = (SAMLAuthenticationStatement) stmt;
-				assertEquals(app.getUserId(), auth.getSubject().getNameIdentifier().getName());
-				assertEquals("urn:oasis:names:tc:SAML:1.0:am:password", auth.getAuthMethod());
+				assertEquals(app.getUserId(), auth.getSubject()
+						.getNameIdentifier().getName());
+				assertEquals("urn:oasis:names:tc:SAML:1.0:am:password", auth
+						.getAuthMethod());
 			}
 
 			if (stmt instanceof SAMLAttributeStatement) {
-				String uid = Utils.getAttribute(saml, SAMLConstants.UID_ATTRIBUTE_NAMESPACE,
-					SAMLConstants.UID_ATTRIBUTE);
+				String uid = Utils.getAttribute(saml,
+						SAMLConstants.UID_ATTRIBUTE_NAMESPACE,
+						SAMLConstants.UID_ATTRIBUTE);
 				assertNotNull(uid);
-				String email = Utils.getAttribute(saml, SAMLConstants.EMAIL_ATTRIBUTE_NAMESPACE,
-					SAMLConstants.EMAIL_ATTRIBUTE);
+				String email = Utils.getAttribute(saml,
+						SAMLConstants.EMAIL_ATTRIBUTE_NAMESPACE,
+						SAMLConstants.EMAIL_ATTRIBUTE);
 				assertNotNull(email);
-				String firstName = Utils.getAttribute(saml, SAMLConstants.FIRST_NAME_ATTRIBUTE_NAMESPACE,
-					SAMLConstants.FIRST_NAME_ATTRIBUTE);
+				String firstName = Utils.getAttribute(saml,
+						SAMLConstants.FIRST_NAME_ATTRIBUTE_NAMESPACE,
+						SAMLConstants.FIRST_NAME_ATTRIBUTE);
 				assertNotNull(firstName);
-				String lastName = Utils.getAttribute(saml, SAMLConstants.LAST_NAME_ATTRIBUTE_NAMESPACE,
-					SAMLConstants.LAST_NAME_ATTRIBUTE);
+				String lastName = Utils.getAttribute(saml,
+						SAMLConstants.LAST_NAME_ATTRIBUTE_NAMESPACE,
+						SAMLConstants.LAST_NAME_ATTRIBUTE);
 				assertNotNull(lastName);
 
 				assertEquals(app.getUserId(), uid);
@@ -960,18 +976,18 @@ public class TestDorian extends TestCase {
 		assertTrue(authFound);
 	}
 
-
-	private SAMLAssertion getSAMLAssertion(String id, IdPContainer idp) throws Exception {
+	private SAMLAssertion getSAMLAssertion(String id, IdPContainer idp)
+			throws Exception {
 		GregorianCalendar cal = new GregorianCalendar();
 		Date start = cal.getTime();
 		cal.add(Calendar.MINUTE, 2);
 		Date end = cal.getTime();
-		return this.getSAMLAssertion(id, idp, start, end, "urn:oasis:names:tc:SAML:1.0:am:password");
+		return this.getSAMLAssertion(id, idp, start, end,
+				"urn:oasis:names:tc:SAML:1.0:am:password");
 	}
 
-
-	private SAMLAssertion getSAMLAssertion(String id, IdPContainer idp, Date start, Date end, String method)
-		throws Exception {
+	private SAMLAssertion getSAMLAssertion(String id, IdPContainer idp,
+			Date start, Date end, String method) throws Exception {
 		try {
 			org.apache.xml.security.Init.init();
 			X509Certificate cert = idp.getCert();
@@ -985,49 +1001,58 @@ public class TestDorian extends TestCase {
 			String ipAddress = null;
 			String subjectDNS = null;
 			SAMLNameIdentifier ni = new SAMLNameIdentifier(id, federation,
-				"urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified");
+					"urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified");
 			SAMLNameIdentifier ni2 = new SAMLNameIdentifier(id, federation,
-				"urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified");
+					"urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified");
 			SAMLSubject sub = new SAMLSubject(ni, null, null, null);
 			SAMLSubject sub2 = new SAMLSubject(ni2, null, null, null);
-			SAMLAuthenticationStatement auth = new SAMLAuthenticationStatement(sub, method, new Date(), ipAddress,
-				subjectDNS, null);
+			SAMLAuthenticationStatement auth = new SAMLAuthenticationStatement(
+					sub, method, new Date(), ipAddress, subjectDNS, null);
 
-			QName quid = new QName(SAMLConstants.UID_ATTRIBUTE_NAMESPACE, SAMLConstants.UID_ATTRIBUTE);
+			QName quid = new QName(SAMLConstants.UID_ATTRIBUTE_NAMESPACE,
+					SAMLConstants.UID_ATTRIBUTE);
 			List vals1 = new ArrayList();
 			vals1.add(id);
-			SAMLAttribute uidAtt = new SAMLAttribute(quid.getLocalPart(), quid.getNamespaceURI(), quid, 0, vals1);
+			SAMLAttribute uidAtt = new SAMLAttribute(quid.getLocalPart(), quid
+					.getNamespaceURI(), quid, 0, vals1);
 
-			QName qfirst = new QName(SAMLConstants.FIRST_NAME_ATTRIBUTE_NAMESPACE, SAMLConstants.FIRST_NAME_ATTRIBUTE);
+			QName qfirst = new QName(
+					SAMLConstants.FIRST_NAME_ATTRIBUTE_NAMESPACE,
+					SAMLConstants.FIRST_NAME_ATTRIBUTE);
 			List vals2 = new ArrayList();
 			vals2.add(firstName);
-			SAMLAttribute firstNameAtt = new SAMLAttribute(qfirst.getLocalPart(), qfirst.getNamespaceURI(), qfirst, 0,
-				vals2);
+			SAMLAttribute firstNameAtt = new SAMLAttribute(qfirst
+					.getLocalPart(), qfirst.getNamespaceURI(), qfirst, 0, vals2);
 
-			QName qLast = new QName(SAMLConstants.LAST_NAME_ATTRIBUTE_NAMESPACE, SAMLConstants.LAST_NAME_ATTRIBUTE);
+			QName qLast = new QName(
+					SAMLConstants.LAST_NAME_ATTRIBUTE_NAMESPACE,
+					SAMLConstants.LAST_NAME_ATTRIBUTE);
 			List vals3 = new ArrayList();
 			vals3.add(lastName);
-			SAMLAttribute lastNameAtt = new SAMLAttribute(qLast.getLocalPart(), qLast.getNamespaceURI(), qLast, 0,
-				vals3);
+			SAMLAttribute lastNameAtt = new SAMLAttribute(qLast.getLocalPart(),
+					qLast.getNamespaceURI(), qLast, 0, vals3);
 
-			QName qemail = new QName(SAMLConstants.EMAIL_ATTRIBUTE_NAMESPACE, SAMLConstants.EMAIL_ATTRIBUTE);
+			QName qemail = new QName(SAMLConstants.EMAIL_ATTRIBUTE_NAMESPACE,
+					SAMLConstants.EMAIL_ATTRIBUTE);
 			List vals4 = new ArrayList();
 			vals4.add(email);
-			SAMLAttribute emailAtt = new SAMLAttribute(qemail.getLocalPart(), qemail.getNamespaceURI(), qemail, 0,
-				vals4);
+			SAMLAttribute emailAtt = new SAMLAttribute(qemail.getLocalPart(),
+					qemail.getNamespaceURI(), qemail, 0, vals4);
 
 			List atts = new ArrayList();
 			atts.add(uidAtt);
 			atts.add(firstNameAtt);
 			atts.add(lastNameAtt);
 			atts.add(emailAtt);
-			SAMLAttributeStatement attState = new SAMLAttributeStatement(sub2, atts);
+			SAMLAttributeStatement attState = new SAMLAttributeStatement(sub2,
+					atts);
 
 			List l = new ArrayList();
 			l.add(auth);
 			l.add(attState);
 
-			SAMLAssertion saml = new SAMLAssertion(issuer, start, end, null, null, l);
+			SAMLAssertion saml = new SAMLAssertion(issuer, start, end, null,
+					null, l);
 			List a = new ArrayList();
 			a.add(cert);
 			saml.sign(XMLSignature.ALGO_ID_SIGNATURE_RSA_SHA1, key, a);
@@ -1043,7 +1068,6 @@ public class TestDorian extends TestCase {
 
 		}
 	}
-
 
 	private Application createApplication() {
 		Application u = new Application();
@@ -1064,9 +1088,9 @@ public class TestDorian extends TestCase {
 		return u;
 	}
 
-
-	private void createAndCheckProxyLifetime(ProxyLifetime lifetime, PrivateKey key, X509Certificate[] certs,
-		int delegationLength) throws Exception {
+	private void createAndCheckProxyLifetime(ProxyLifetime lifetime,
+			PrivateKey key, X509Certificate[] certs, int delegationLength)
+			throws Exception {
 		assertNotNull(certs);
 		assertEquals(2, certs.length);
 		GlobusCredential cred = new GlobusCredential(key, certs);
@@ -1077,18 +1101,18 @@ public class TestDorian extends TestCase {
 		if ((min > timeLeft) || (timeLeft > max)) {
 			assertTrue(false);
 		}
-		assertEquals(certs[1].getSubjectDN().toString(), identityToSubject(cred.getIdentity()));
+		assertEquals(certs[1].getSubjectDN().toString(), identityToSubject(cred
+				.getIdentity()));
 		assertEquals(cred.getIssuer(), identityToSubject(cred.getIdentity()));
-		assertEquals(delegationLength, CertificateExtensionsUtil.getDelegationPathLength(certs[0]));
+		assertEquals(delegationLength, CertificateExtensionsUtil
+				.getDelegationPathLength(certs[0]));
 		cred.verify();
 	}
-
 
 	private String identityToSubject(String identity) {
 		String s = identity.substring(1);
 		return s.replace('/', ',');
 	}
-
 
 	private ProxyLifetime getProxyLifetime() {
 		ProxyLifetime valid = new ProxyLifetime();
@@ -1098,7 +1122,6 @@ public class TestDorian extends TestCase {
 		return valid;
 	}
 
-
 	private ProxyLifetime getProxyLifetimeShort() {
 		ProxyLifetime valid = new ProxyLifetime();
 		valid.setHours(0);
@@ -1107,28 +1130,29 @@ public class TestDorian extends TestCase {
 		return valid;
 	}
 
-
-	private IdPContainer getTrustedIdpAutoApproveAutoRenew(String name) throws Exception {
-		return this.getTrustedIdp(name, AutoApprovalAutoRenewalPolicy.class.getName());
+	private IdPContainer getTrustedIdpAutoApproveAutoRenew(String name)
+			throws Exception {
+		return this.getTrustedIdp(name, AutoApprovalAutoRenewalPolicy.class
+				.getName());
 	}
-
 
 	private IdPContainer getTrustedIdpAutoApprove(String name) throws Exception {
 		return this.getTrustedIdp(name, AutoApprovalPolicy.class.getName());
 	}
 
-
-	private IdPContainer getTrustedIdpManualApprove(String name) throws Exception {
+	private IdPContainer getTrustedIdpManualApprove(String name)
+			throws Exception {
 		return this.getTrustedIdp(name, ManualApprovalPolicy.class.getName());
 	}
 
-
-	private IdPContainer getTrustedIdpManualApproveAutoRenew(String name) throws Exception {
-		return this.getTrustedIdp(name, ManualApprovalAutoRenewalPolicy.class.getName());
+	private IdPContainer getTrustedIdpManualApproveAutoRenew(String name)
+			throws Exception {
+		return this.getTrustedIdp(name, ManualApprovalAutoRenewalPolicy.class
+				.getName());
 	}
 
-
-	private IdPContainer getTrustedIdp(String name, String policyClass) throws Exception {
+	private IdPContainer getTrustedIdp(String name, String policyClass)
+			throws Exception {
 		TrustedIdP idp = new TrustedIdP();
 		idp.setName(name);
 		idp.setUserPolicyClass(policyClass);
@@ -1154,7 +1178,8 @@ public class TestDorian extends TestCase {
 		idp.setEmailAttributeDescriptor(email);
 
 		SAMLAuthenticationMethod[] methods = new SAMLAuthenticationMethod[1];
-		methods[0] = SAMLAuthenticationMethod.fromString("urn:oasis:names:tc:SAML:1.0:am:password");
+		methods[0] = SAMLAuthenticationMethod
+				.fromString("urn:oasis:names:tc:SAML:1.0:am:password");
 		idp.setAuthenticationMethod(methods);
 
 		String subject = Utils.CA_SUBJECT_PREFIX + ",CN=" + name;
@@ -1166,7 +1191,6 @@ public class TestDorian extends TestCase {
 		return new IdPContainer(idp, cert, cred.getPrivateKey());
 	}
 
-
 	public class IdPContainer {
 
 		TrustedIdP idp;
@@ -1175,29 +1199,24 @@ public class TestDorian extends TestCase {
 
 		PrivateKey key;
 
-
 		public IdPContainer(TrustedIdP idp, X509Certificate cert, PrivateKey key) {
 			this.idp = idp;
 			this.cert = cert;
 			this.key = key;
 		}
 
-
 		public X509Certificate getCert() {
 			return cert;
 		}
-
 
 		public TrustedIdP getIdp() {
 			return idp;
 		}
 
-
 		public PrivateKey getKey() {
 			return key;
 		}
 	}
-
 
 	protected void setUp() throws Exception {
 		super.setUp();
@@ -1210,20 +1229,20 @@ public class TestDorian extends TestCase {
 		}
 	}
 
-
 	protected void tearDown() throws Exception {
 		super.tearDown();
 	}
 
-
-	private String getDorianIdPUserId(DorianConfiguration conf, Dorian d, String uid) throws Exception {
+	private String getDorianIdPUserId(DorianProperties conf, Dorian d,
+			String uid) throws Exception {
 		String caSubject = d.getCACertificate().getSubjectDN().getName();
-		IdentityAssignmentPolicy policy = conf.getIdentityFederationConfiguration().getIdentityAssignmentPolicy();
+		String policy = conf.getIdentityFederationProperties()
+				.getIdentityAssignmentPolicy();
 		TrustedIdP idp = new TrustedIdP();
 		idp.setId(1);
-		idp.setName(conf.getIdentityProviderConfiguration().getIdentityProviderName());
-		return Utils.getDorianIdPUserId(policy, conf.getIdentityProviderConfiguration().getIdentityProviderName(),
-			caSubject, uid);
+		idp.setName(conf.getIdentityProviderProperties().getName());
+		return Utils.getDorianIdPUserId(policy, conf
+				.getIdentityProviderProperties().getName(), caSubject, uid);
 	}
 
 }

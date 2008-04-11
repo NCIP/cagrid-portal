@@ -3,6 +3,9 @@
  */
 package gov.nci.nih.cagrid.tests.core.compare;
 
+import gov.nci.nih.cagrid.tests.core.types.BooleanType;
+import gov.nci.nih.cagrid.tests.core.types.DateTimeType;
+
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
@@ -17,9 +20,6 @@ import javax.xml.parsers.SAXParserFactory;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
-
-import gov.nci.nih.cagrid.tests.core.types.BooleanType;
-import gov.nci.nih.cagrid.tests.core.types.DateTimeType;
 
 /**
  * Provides support for mapping types to XmlSchema elements and attributes.

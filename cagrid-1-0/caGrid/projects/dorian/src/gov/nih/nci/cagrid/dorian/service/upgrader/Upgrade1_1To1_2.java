@@ -1,32 +1,34 @@
 package gov.nih.nci.cagrid.dorian.service.upgrader;
 
-import org.cagrid.tools.database.Database;
-
-import gov.nih.nci.cagrid.dorian.conf.DorianConfiguration;
 import gov.nih.nci.cagrid.dorian.service.PropertyManager;
 
-public class Upgrade1_1To1_2 implements Upgrade {
+import org.cagrid.tools.database.Database;
 
-	public float getStartingVersion() {
-		return 1.1F;
+public class Upgrade1_1To1_2 extends Upgrade {
+
+	public String getStartingVersion() {
+		return PropertyManager.DORIAN_VERSION_1_1;
 	}
 
-	public float getUpgradedVersion() {
-		return 1.2F;
+	public String getUpgradedVersion() {
+		return PropertyManager.DORIAN_VERSION_1_2;
 	}
 
-	public void upgrade(DorianConfiguration conf, boolean trialRun)
-			throws Exception {
-		Database db = new Database(conf.getDatabaseConfiguration(), conf
-				.getDorianInternalId());
+	public void upgrade(boolean trialRun) throws Exception {
+		Database db = getBeanUtils().getDatabase();
 		db.createDatabaseIfNeeded();
 		PropertyManager pm = new PropertyManager(db);
-		if (PropertyManager.CURRENT_VERSION == PropertyManager.DORIAN_VERSION_1_2) {
-			if (pm.getVersion() == PropertyManager.DORIAN_VERSION_1_1) {
-				if (!trialRun) {
-					pm.setVersion(PropertyManager.DORIAN_VERSION_1_2);
-				}
+		if (pm.getVersion().equals(PropertyManager.DORIAN_VERSION_1_1)) {
+			if (!trialRun) {
+				pm.setVersion(PropertyManager.DORIAN_VERSION_1_2);
 			}
+		} else {
+			if (!trialRun) {
+				throw new Exception("Failed to run upgrader "
+						+ getClass().getName()
+						+ " the version of Dorian you are running is not "
+						+ PropertyManager.DORIAN_VERSION_1_1 + ".");
+			} 
 		}
 	}
 }

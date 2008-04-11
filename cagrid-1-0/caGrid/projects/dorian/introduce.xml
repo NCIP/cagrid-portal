@@ -429,5 +429,8 @@
  <ns120:Extensions xsi:type="ns120:ExtensionsType" xmlns:ns120="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <ns120:Extension name="cagrid_metadata" version="1.1" xsi:type="ns120:ExtensionType"/>
  </ns120:Extensions>
- <ns121:ServiceProperties xmlns:ns121="gme://gov.nih.nci.cagrid.introduce/1/Property"/>
+ <ns121:ServiceProperties xmlns:ns121="gme://gov.nih.nci.cagrid.introduce/1/Property">
+  <ns121:Property description="" isFromETC="true" key="dorianConfiguration" value="dorian-configuration.xml"/>
+  <ns121:Property description="" isFromETC="true" key="dorianProperties" value="dorian.properties"/>
+ </ns121:ServiceProperties>
 </ns1:ServiceDescription>

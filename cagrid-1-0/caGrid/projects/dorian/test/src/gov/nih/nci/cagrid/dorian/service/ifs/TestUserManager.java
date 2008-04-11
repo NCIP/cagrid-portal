@@ -2,12 +2,6 @@ package gov.nih.nci.cagrid.dorian.service.ifs;
 
 import gov.nih.nci.cagrid.common.FaultUtil;
 import gov.nih.nci.cagrid.dorian.common.SAMLConstants;
-import gov.nih.nci.cagrid.dorian.conf.CredentialLifetime;
-import gov.nih.nci.cagrid.dorian.conf.CredentialPolicy;
-import gov.nih.nci.cagrid.dorian.conf.IdentityAssignmentPolicy;
-import gov.nih.nci.cagrid.dorian.conf.IdentityFederationConfiguration;
-import gov.nih.nci.cagrid.dorian.conf.Length;
-import gov.nih.nci.cagrid.dorian.conf.ProxyPolicy;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUser;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserFilter;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserStatus;
@@ -38,11 +32,6 @@ import org.cagrid.tools.database.Database;
  *          Exp $
  */
 public class TestUserManager extends TestCase implements Publisher {
-
-	private static final int MIN_NAME_LENGTH = 4;
-
-	private static final int MAX_NAME_LENGTH = 50;
-
 	private static final int INIT_USER = 1;
 	private static final String DEFAULT_IDP_NAME = "Dorian IdP";
 
@@ -476,33 +465,10 @@ public class TestUserManager extends TestCase implements Publisher {
 		}
 	}
 
-	private IdentityFederationConfiguration getConf(IdentityAssignmentPolicy p)
+	private IdentityFederationProperties getConf(String policy)
 			throws Exception {
-		IdentityFederationConfiguration conf = new IdentityFederationConfiguration();
-		conf.setIdentityAssignmentPolicy(p);
-		CredentialPolicy cp = new CredentialPolicy();
-		CredentialLifetime l = new CredentialLifetime();
-		l.setYears(1);
-		l.setMonths(0);
-		l.setDays(0);
-		l.setHours(0);
-		l.setMinutes(0);
-		l.setSeconds(0);
-		cp.setCredentialLifetime(l);
-		conf.setCredentialPolicy(cp);
-		Length len = new Length();
-		len.setMin(MIN_NAME_LENGTH);
-		len.setMax(MAX_NAME_LENGTH);
-		conf.setIdentityProviderNameLength(len);
-
-		ProxyPolicy policy = new ProxyPolicy();
-		gov.nih.nci.cagrid.dorian.conf.ProxyLifetime pl = new gov.nih.nci.cagrid.dorian.conf.ProxyLifetime();
-		pl.setHours(12);
-		pl.setMinutes(0);
-		pl.setSeconds(0);
-		policy.setProxyLifetime(pl);
-		conf.setProxyPolicy(policy);
-		conf.setAccountPolicies(Utils.getAccountPolicies());
+		IdentityFederationProperties conf = Utils.getIdentityFederationProperties();
+		conf.setIdentityAssignmentPolicy(policy);
 		return conf;
 	}
 
@@ -559,7 +525,7 @@ public class TestUserManager extends TestCase implements Publisher {
 			blackList = new CertificateBlacklistManager(db);
 			blackList.clearDatabase();
 			assertEquals(0, db.getUsedConnectionCount());
-			ca = Utils.getCA(db);
+			ca = Utils.getCA();
 			memoryCA = new CA(Utils.getCASubject());
 			props = new PropertyManager(db);
 		} catch (Exception e) {
@@ -569,7 +535,7 @@ public class TestUserManager extends TestCase implements Publisher {
 	}
 
 	public UserManager getUserManagerNameBasedIdentities() throws Exception {
-		IdentityFederationConfiguration conf = getConf(IdentityAssignmentPolicy.name);
+		IdentityFederationProperties conf = getConf(IdentityAssignmentPolicy.NAME);
 		TrustedIdPManager tm = new TrustedIdPManager(conf, db);
 		UserManager um = new UserManager(db, conf, props, ca, blackList, tm,
 				this, getDefaults());
@@ -578,7 +544,7 @@ public class TestUserManager extends TestCase implements Publisher {
 	}
 
 	public UserManager getUserManagerIdBasedIdentities() throws Exception {
-		IdentityFederationConfiguration conf = getConf(IdentityAssignmentPolicy.id);
+		IdentityFederationProperties conf = getConf(IdentityAssignmentPolicy.ID);
 		TrustedIdPManager tm = new TrustedIdPManager(conf, db);
 		UserManager um = new UserManager(db, conf, props, ca, blackList, tm,
 				this, getDefaults());

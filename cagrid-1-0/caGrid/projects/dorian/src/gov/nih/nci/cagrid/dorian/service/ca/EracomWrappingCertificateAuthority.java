@@ -1,7 +1,6 @@
 package gov.nih.nci.cagrid.dorian.service.ca;
 
 import gov.nih.nci.cagrid.common.FaultHelper;
-import gov.nih.nci.cagrid.dorian.conf.DorianCAConfiguration;
 import gov.nih.nci.cagrid.gridca.common.CertUtil;
 
 import java.security.PrivateKey;
@@ -34,8 +33,8 @@ public class EracomWrappingCertificateAuthority extends BaseEracomCertificateAut
 	private Database db;
 
 
-	public EracomWrappingCertificateAuthority(Database db, DorianCAConfiguration conf) throws CertificateAuthorityFault {
-		super(conf);
+	public EracomWrappingCertificateAuthority(Database db, EracomCertificateAuthorityProperties properties) throws CertificateAuthorityFault {
+		super(properties);
 		this.db = db;
 	}
 

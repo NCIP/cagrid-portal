@@ -2,13 +2,8 @@ package gov.nih.nci.cagrid.dorian.service.ifs;
 
 import gov.nih.nci.cagrid.common.FaultHelper;
 import gov.nih.nci.cagrid.common.FaultUtil;
+import gov.nih.nci.cagrid.dorian.common.Lifetime;
 import gov.nih.nci.cagrid.dorian.common.SAMLConstants;
-import gov.nih.nci.cagrid.dorian.conf.CredentialLifetime;
-import gov.nih.nci.cagrid.dorian.conf.CredentialPolicy;
-import gov.nih.nci.cagrid.dorian.conf.IdentityAssignmentPolicy;
-import gov.nih.nci.cagrid.dorian.conf.IdentityFederationConfiguration;
-import gov.nih.nci.cagrid.dorian.conf.Length;
-import gov.nih.nci.cagrid.dorian.conf.ProxyPolicy;
 import gov.nih.nci.cagrid.dorian.ifs.bean.HostCertificateFilter;
 import gov.nih.nci.cagrid.dorian.ifs.bean.HostCertificateRecord;
 import gov.nih.nci.cagrid.dorian.ifs.bean.HostCertificateRequest;
@@ -95,7 +90,7 @@ public class TestIFS extends TestCase {
 		IFS ifs = null;
 		try {
 			IdPContainer idp = this.getTrustedIdpAutoApproveAutoRenew("My IdP");
-			IdentityFederationConfiguration conf = getConf(false);
+			IdentityFederationProperties conf = getConf(false);
 			IFSDefaults defaults = getDefaults();
 			defaults.setDefaultIdP(idp.getIdp());
 			ifs = new IFS(conf, db, props, ca, defaults);
@@ -135,7 +130,7 @@ public class TestIFS extends TestCase {
 		IFS ifs = null;
 		try {
 			IdPContainer idp = this.getTrustedIdpAutoApproveAutoRenew("My IdP");
-			IdentityFederationConfiguration conf = getConf(true);
+			IdentityFederationProperties conf = getConf(true);
 			IFSDefaults defaults = getDefaults();
 			defaults.setDefaultIdP(idp.getIdp());
 			ifs = new IFS(conf, db, props, ca, defaults);
@@ -172,7 +167,7 @@ public class TestIFS extends TestCase {
 		IFS ifs = null;
 		try {
 			IdPContainer idp = this.getTrustedIdpAutoApproveAutoRenew("My IdP");
-			IdentityFederationConfiguration conf = getConf(false);
+			IdentityFederationProperties conf = getConf(false);
 			IFSDefaults defaults = getDefaults();
 			defaults.setDefaultIdP(idp.getIdp());
 			ifs = new IFS(conf, db, props, ca, defaults);
@@ -207,7 +202,7 @@ public class TestIFS extends TestCase {
 		IFS ifs = null;
 		try {
 			IdPContainer idp = this.getTrustedIdpAutoApproveAutoRenew("My IdP");
-			IdentityFederationConfiguration conf = getConf(false);
+			IdentityFederationProperties conf = getConf(false);
 			IFSDefaults defaults = getDefaults();
 			defaults.setDefaultIdP(idp.getIdp());
 			ifs = new IFS(conf, db, props, ca, defaults);
@@ -245,7 +240,7 @@ public class TestIFS extends TestCase {
 		IFS ifs = null;
 		try {
 			IdPContainer idp = this.getTrustedIdpAutoApproveAutoRenew("My IdP");
-			IdentityFederationConfiguration conf = getConf(true);
+			IdentityFederationProperties conf = getConf(true);
 			IFSDefaults defaults = getDefaults();
 			defaults.setDefaultIdP(idp.getIdp());
 			ifs = new IFS(conf, db, props, ca, defaults);
@@ -323,7 +318,7 @@ public class TestIFS extends TestCase {
 		IFS ifs = null;
 		try {
 			IdPContainer idp = this.getTrustedIdpAutoApproveAutoRenew("My IdP");
-			IdentityFederationConfiguration conf = getConf(false);
+			IdentityFederationProperties conf = getConf(false);
 			IFSDefaults defaults = getDefaults();
 			defaults.setDefaultIdP(idp.getIdp());
 			ifs = new IFS(conf, db, props, ca, defaults);
@@ -356,7 +351,7 @@ public class TestIFS extends TestCase {
 		IFS ifs = null;
 		try {
 			IdPContainer idp = this.getTrustedIdpAutoApproveAutoRenew("My IdP");
-			IdentityFederationConfiguration conf = getConf(true);
+			IdentityFederationProperties conf = getConf(true);
 			IFSDefaults defaults = getDefaults();
 			defaults.setDefaultIdP(idp.getIdp());
 			ifs = new IFS(conf, db, props, ca, defaults);
@@ -403,7 +398,7 @@ public class TestIFS extends TestCase {
 		IFS ifs = null;
 		try {
 			IdPContainer idp = this.getTrustedIdpAutoApproveAutoRenew("My IdP");
-			IdentityFederationConfiguration conf = getConf(false);
+			IdentityFederationProperties conf = getConf(false);
 			IFSDefaults defaults = getDefaults();
 			defaults.setDefaultIdP(idp.getIdp());
 			ifs = new IFS(conf, db, props, ca, defaults);
@@ -436,7 +431,7 @@ public class TestIFS extends TestCase {
 		IFS ifs = null;
 		try {
 			IdPContainer idp = this.getTrustedIdpAutoApproveAutoRenew("My IdP");
-			IdentityFederationConfiguration conf = getConf(false);
+			IdentityFederationProperties conf = getConf(false);
 			IFSDefaults defaults = getDefaults();
 			defaults.setDefaultIdP(idp.getIdp());
 			ifs = new IFS(conf, db, props, ca, defaults);
@@ -501,7 +496,7 @@ public class TestIFS extends TestCase {
 		IFS ifs = null;
 		try {
 			IdPContainer idp = this.getTrustedIdpAutoApproveAutoRenew("My IdP");
-			IdentityFederationConfiguration conf = getConf(true);
+			IdentityFederationProperties conf = getConf(true);
 			IFSDefaults defaults = getDefaults();
 			defaults.setDefaultIdP(idp.getIdp());
 			ifs = new IFS(conf, db, props, ca, defaults);
@@ -553,7 +548,7 @@ public class TestIFS extends TestCase {
 		IFS ifs = null;
 		try {
 			IdPContainer idp = this.getTrustedIdpAutoApproveAutoRenew("My IdP");
-			IdentityFederationConfiguration conf = getConf(false);
+			IdentityFederationProperties conf = getConf(false);
 			IFSDefaults defaults = getDefaults();
 			defaults.setDefaultIdP(idp.getIdp());
 			ifs = new IFS(conf, db, props, ca, defaults);
@@ -585,7 +580,7 @@ public class TestIFS extends TestCase {
 		IFS ifs = null;
 		try {
 			IdPContainer idp = this.getTrustedIdpAutoApproveAutoRenew("My IdP");
-			IdentityFederationConfiguration conf = getConf(false);
+			IdentityFederationProperties conf = getConf(false);
 			IFSDefaults defaults = getDefaults();
 			defaults.setDefaultIdP(idp.getIdp());
 			ifs = new IFS(conf, db, props, ca, defaults);
@@ -650,7 +645,7 @@ public class TestIFS extends TestCase {
 		IFS ifs = null;
 		try {
 			IdPContainer idp = this.getTrustedIdpAutoApproveAutoRenew("My IdP");
-			IdentityFederationConfiguration conf = getConf();
+			IdentityFederationProperties conf = getConf();
 			IFSDefaults defaults = getDefaults();
 			defaults.setDefaultIdP(idp.getIdp());
 			ifs = new IFS(conf, db, props, ca, defaults);
@@ -704,7 +699,7 @@ public class TestIFS extends TestCase {
 		IFS ifs = null;
 		try {
 			IdPContainer idp = this.getTrustedIdpAutoApproveAutoRenew("My IdP");
-			IdentityFederationConfiguration conf = getConf();
+			IdentityFederationProperties conf = getConf();
 			IFSDefaults defaults = getDefaults();
 			defaults.setDefaultIdP(idp.getIdp());
 			ifs = new IFS(conf, db, props, ca, defaults);
@@ -852,7 +847,7 @@ public class TestIFS extends TestCase {
 		try {
 			int times = 3;
 			IdPContainer idp = this.getTrustedIdpAutoApproveAutoRenew("My IdP");
-			IdentityFederationConfiguration conf = getConf();
+			IdentityFederationProperties conf = getConf();
 			IFSDefaults defaults = getDefaults();
 			defaults.setDefaultIdP(idp.getIdp());
 			ifs = new IFS(conf, db, props, ca, defaults);
@@ -924,7 +919,7 @@ public class TestIFS extends TestCase {
 		try {
 
 			IdPContainer idp = this.getTrustedIdpAutoApproveAutoRenew("My IdP");
-			IdentityFederationConfiguration conf = getConf();
+			IdentityFederationProperties conf = getConf();
 			IFSDefaults defaults = getDefaults();
 			defaults.setDefaultIdP(idp.getIdp());
 			ifs = new IFS(conf, db, props, ca, defaults);
@@ -954,7 +949,7 @@ public class TestIFS extends TestCase {
 
 			IdPContainer idp = this.getTrustedIdpAutoApproveAutoRenew("My IdP");
 			idp.getIdp().setStatus(TrustedIdPStatus.Suspended);
-			IdentityFederationConfiguration conf = getConf();
+			IdentityFederationProperties conf = getConf();
 			IFSDefaults defaults = getDefaults();
 			defaults.setDefaultIdP(idp.getIdp());
 			ifs = new IFS(conf, db, props, ca, defaults);
@@ -989,7 +984,7 @@ public class TestIFS extends TestCase {
 			KeyPair pair2 = KeyUtil.generateRSAKeyPair1024();
 			String username = "user";
 			IdPContainer idp = this.getTrustedIdpAutoApprove("My IdP");
-			IdentityFederationConfiguration conf = getExpiringCredentialsConf();
+			IdentityFederationProperties conf = getExpiringCredentialsConf();
 			IFSDefaults defaults = getDefaults();
 			defaults.setDefaultIdP(idp.getIdp());
 			ifs = new IFS(conf, db, props, ca, defaults);
@@ -1041,7 +1036,7 @@ public class TestIFS extends TestCase {
 			ProxyLifetime lifetime = getProxyLifetimeShort();
 			String username = "user";
 			IdPContainer idp = this.getTrustedIdpManualApprove("My IdP");
-			IdentityFederationConfiguration conf = getExpiringCredentialsConf();
+			IdentityFederationProperties conf = getExpiringCredentialsConf();
 			IFSDefaults defaults = getDefaults();
 			defaults.setDefaultIdP(idp.getIdp());
 			ifs = new IFS(conf, db, props, ca, defaults);
@@ -1081,7 +1076,7 @@ public class TestIFS extends TestCase {
 
 			IdPContainer idp = this.getTrustedIdpAutoApproveAutoRenew("My IdP");
 			String username = "user";
-			IdentityFederationConfiguration conf = getExpiringCredentialsConf();
+			IdentityFederationProperties conf = getExpiringCredentialsConf();
 			IFSDefaults defaults = getDefaults();
 			defaults.setDefaultIdP(idp.getIdp());
 			ifs = new IFS(conf, db, props, ca, defaults);
@@ -1138,7 +1133,7 @@ public class TestIFS extends TestCase {
 			String username = "user";
 			IdPContainer idp = this
 					.getTrustedIdpManualApproveAutoRenew("My IdP");
-			IdentityFederationConfiguration conf = getExpiringCredentialsConf();
+			IdentityFederationProperties conf = getExpiringCredentialsConf();
 			IFSDefaults defaults = getDefaults();
 			defaults.setDefaultIdP(idp.getIdp());
 			ifs = new IFS(conf, db, props, ca, defaults);
@@ -1200,7 +1195,7 @@ public class TestIFS extends TestCase {
 		IFS ifs = null;
 		try {
 			IdPContainer idp = this.getTrustedIdpAutoApproveAutoRenew("My IdP");
-			IdentityFederationConfiguration conf = getConf();
+			IdentityFederationProperties conf = getConf();
 			IFSDefaults defaults = getDefaults();
 			defaults.setDefaultIdP(idp.getIdp());
 			ifs = new IFS(conf, db, props, ca, defaults);
@@ -1234,7 +1229,7 @@ public class TestIFS extends TestCase {
 		IFS ifs = null;
 		try {
 			IdPContainer idp = this.getTrustedIdpAutoApproveAutoRenew("My IdP");
-			IdentityFederationConfiguration conf = getConf();
+			IdentityFederationProperties conf = getConf();
 			IFSDefaults defaults = getDefaults();
 			defaults.setDefaultIdP(idp.getIdp());
 			ifs = new IFS(conf, db, props, ca, defaults);
@@ -1266,7 +1261,7 @@ public class TestIFS extends TestCase {
 			IdPContainer idp2 = this
 					.getTrustedIdpAutoApproveAutoRenew("My IdP 2");
 
-			IdentityFederationConfiguration conf = getConf();
+			IdentityFederationProperties conf = getConf();
 			IFSDefaults defaults = getDefaults();
 			defaults.setDefaultIdP(idp.getIdp());
 			ifs = new IFS(conf, db, props, ca, defaults);
@@ -1296,7 +1291,7 @@ public class TestIFS extends TestCase {
 		IFS ifs = null;
 		try {
 			IdPContainer idp = this.getTrustedIdpAutoApproveAutoRenew("My IdP");
-			IdentityFederationConfiguration conf = getConf();
+			IdentityFederationProperties conf = getConf();
 			IFSDefaults defaults = getDefaults();
 			defaults.setDefaultIdP(idp.getIdp());
 			ifs = new IFS(conf, db, props, ca, defaults);
@@ -1326,7 +1321,7 @@ public class TestIFS extends TestCase {
 		try {
 			IdPContainer idp0 = this
 					.getTrustedIdpAutoApproveAutoRenew("My IdP");
-			IdentityFederationConfiguration conf = getExpiringCredentialsConf();
+			IdentityFederationProperties conf = getExpiringCredentialsConf();
 			IFSDefaults defaults = getDefaults();
 			defaults.setDefaultIdP(idp0.getIdp());
 			ifs = new IFS(conf, db, props, ca, defaults);
@@ -1386,7 +1381,7 @@ public class TestIFS extends TestCase {
 		try {
 
 			IdPContainer idp = this.getTrustedIdpAutoApproveAutoRenew("My IdP");
-			IdentityFederationConfiguration conf = getConf();
+			IdentityFederationProperties conf = getConf();
 			IFSDefaults defaults = getDefaults();
 			defaults.setDefaultIdP(idp.getIdp());
 			ifs = new IFS(conf, db, props, ca, defaults);
@@ -1512,68 +1507,72 @@ public class TestIFS extends TestCase {
 		}
 	}
 
-	private IdentityFederationConfiguration getConf() throws Exception {
+	private IdentityFederationProperties getConf() throws Exception {
 		return getConf(true);
 	}
 
-	private IdentityFederationConfiguration getConf(
+	private IdentityFederationProperties getConf(
 			boolean autoHostCertificateApproval) throws Exception {
-		IdentityFederationConfiguration conf = new IdentityFederationConfiguration();
-		conf.setIdentityAssignmentPolicy(IdentityAssignmentPolicy.name);
-		CredentialPolicy cp = new CredentialPolicy();
-		CredentialLifetime l = new CredentialLifetime();
+		IdentityFederationProperties conf = new IdentityFederationProperties();
+		conf
+				.setIdentityAssignmentPolicy(gov.nih.nci.cagrid.dorian.service.ifs.IdentityAssignmentPolicy.NAME);
+		Lifetime l = new Lifetime();
 		l.setYears(1);
 		l.setMonths(0);
 		l.setDays(0);
 		l.setHours(0);
 		l.setMinutes(0);
 		l.setSeconds(0);
-		cp.setCredentialLifetime(l);
-		cp.setHostCertificateAutoApproval(autoHostCertificateApproval);
-		conf.setCredentialPolicy(cp);
-		Length len = new Length();
-		len.setMin(MIN_NAME_LENGTH);
-		len.setMax(MAX_NAME_LENGTH);
-		conf.setIdentityProviderNameLength(len);
+		conf.setIssuedCertificateLifetime(l);
+		conf.setAutoHostCertificateApproval(autoHostCertificateApproval);
 
-		ProxyPolicy policy = new ProxyPolicy();
-		gov.nih.nci.cagrid.dorian.conf.ProxyLifetime pl = new gov.nih.nci.cagrid.dorian.conf.ProxyLifetime();
+		conf.setMinIdPNameLength(MIN_NAME_LENGTH);
+		conf.setMaxIdPNameLength(MAX_NAME_LENGTH);
+		
+		Lifetime pl = new Lifetime();
 		pl.setHours(12);
 		pl.setMinutes(0);
 		pl.setSeconds(0);
-		policy.setProxyLifetime(pl);
-		conf.setProxyPolicy(policy);
-		conf.setAccountPolicies(Utils.getAccountPolicies());
+		conf.setMaxProxyLifetime(pl);
+		List<AccountPolicy> policies = new ArrayList<AccountPolicy>();
+		policies.add(new ManualApprovalPolicy());
+		policies.add(new ManualApprovalAutoRenewalPolicy());
+		policies.add(new AutoApprovalAutoRenewalPolicy());
+		policies.add(new AutoApprovalPolicy());
+		conf.setAccountPolicies(policies);
 		return conf;
 	}
 
-	private IdentityFederationConfiguration getExpiringCredentialsConf()
+	private IdentityFederationProperties getExpiringCredentialsConf()
 			throws Exception {
-		IdentityFederationConfiguration conf = new IdentityFederationConfiguration();
-		conf.setIdentityAssignmentPolicy(IdentityAssignmentPolicy.name);
-		CredentialPolicy cp = new CredentialPolicy();
-		CredentialLifetime l = new CredentialLifetime();
+
+		IdentityFederationProperties conf = new IdentityFederationProperties();
+		conf
+				.setIdentityAssignmentPolicy(gov.nih.nci.cagrid.dorian.service.ifs.IdentityAssignmentPolicy.NAME);
+		Lifetime l = new Lifetime();
 		l.setYears(0);
 		l.setMonths(0);
 		l.setDays(0);
 		l.setHours(0);
 		l.setMinutes(0);
 		l.setSeconds(SHORT_CREDENTIALS_VALID);
-		cp.setCredentialLifetime(l);
-		conf.setCredentialPolicy(cp);
-		Length len = new Length();
-		len.setMin(MIN_NAME_LENGTH);
-		len.setMax(MAX_NAME_LENGTH);
-		conf.setIdentityProviderNameLength(len);
+		conf.setIssuedCertificateLifetime(l);
+		conf.setAutoHostCertificateApproval(false);
 
-		ProxyPolicy policy = new ProxyPolicy();
-		gov.nih.nci.cagrid.dorian.conf.ProxyLifetime pl = new gov.nih.nci.cagrid.dorian.conf.ProxyLifetime();
+		conf.setMinIdPNameLength(MIN_NAME_LENGTH);
+		conf.setMaxIdPNameLength(MAX_NAME_LENGTH);
+
+		Lifetime pl = new Lifetime();
 		pl.setHours(12);
 		pl.setMinutes(0);
 		pl.setSeconds(0);
-		policy.setProxyLifetime(pl);
-		conf.setProxyPolicy(policy);
-		conf.setAccountPolicies(Utils.getAccountPolicies());
+		conf.setMaxProxyLifetime(pl);
+		List<AccountPolicy> policies = new ArrayList<AccountPolicy>();
+		policies.add(new ManualApprovalPolicy());
+		policies.add(new ManualApprovalAutoRenewalPolicy());
+		policies.add(new AutoApprovalAutoRenewalPolicy());
+		policies.add(new AutoApprovalPolicy());
+		conf.setAccountPolicies(policies);
 		return conf;
 	}
 
@@ -1819,7 +1818,8 @@ public class TestIFS extends TestCase {
 				}
 			}
 			if (alreadyRevokedCerts > 0) {
-				assertEquals(alreadyRevokedCerts, ifs.getCRL().getRevokedCertificates().size());
+				assertEquals(alreadyRevokedCerts, ifs.getCRL()
+						.getRevokedCertificates().size());
 			} else {
 				assertEquals(null, ifs.getCRL().getRevokedCertificates());
 			}
@@ -1888,7 +1888,7 @@ public class TestIFS extends TestCase {
 		try {
 			db = Utils.getDB();
 			assertEquals(0, db.getUsedConnectionCount());
-			ca = Utils.getCA(db);
+			ca = Utils.getCA();
 			memoryCA = new CA(Utils.getCASubject());
 			props = new PropertyManager(db);
 		} catch (Exception e) {
@@ -1928,11 +1928,11 @@ public class TestIFS extends TestCase {
 	}
 
 	private HostCertificateRecord createAndSubmitHostCert(IFS ifs,
-			IdentityFederationConfiguration conf, String admin, String owner,
+			IdentityFederationProperties conf, String admin, String owner,
 			String host) throws Exception {
 		HostCertificateRequest req = getHostCertificateRequest(host);
 		HostCertificateRecord record = ifs.requestHostCertificate(owner, req);
-		if (!conf.getCredentialPolicy().isHostCertificateAutoApproval()) {
+		if (!conf.autoHostCertificateApproval()) {
 			assertEquals(HostCertificateStatus.Pending, record.getStatus());
 			record = ifs.approveHostCertificate(admin, record.getId());
 		}
@@ -1943,8 +1943,8 @@ public class TestIFS extends TestCase {
 
 	private HostCertificateRequest getHostCertificateRequest(String host)
 			throws Exception {
-		KeyPair pair = KeyUtil.generateRSAKeyPair(ca.getConfiguration()
-				.getUserKeySize().getValue());
+		KeyPair pair = KeyUtil.generateRSAKeyPair(ca.getProperties()
+				.getIssuedCertificateKeySize());
 		HostCertificateRequest req = new HostCertificateRequest();
 		req.setHostname(host);
 		gov.nih.nci.cagrid.dorian.ifs.bean.PublicKey key = new gov.nih.nci.cagrid.dorian.ifs.bean.PublicKey();

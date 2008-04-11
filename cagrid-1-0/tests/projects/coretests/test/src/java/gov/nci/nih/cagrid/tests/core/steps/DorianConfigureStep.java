@@ -8,6 +8,9 @@ import gov.nci.nih.cagrid.tests.core.util.SimpleXmlReplacer;
 import gov.nih.nci.cagrid.testing.system.haste.Step;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.util.Properties;
 
 /**
  * This step sets the mysql username and password fields in dorian-conf.xml of a deployed Dorian service
@@ -40,11 +43,12 @@ public class DorianConfigureStep
 	public void runStep() throws Throwable
 	{
 		File configFile = new File(globus.getTempGlobusLocation(), 
-			"etc" + File.separator + "cagrid_Dorian" + File.separator + "dorian-conf.xml"
+			"etc" + File.separator + "cagrid_Dorian" + File.separator + "dorian.properties"
 		);
-		SimpleXmlReplacer replacer = new SimpleXmlReplacer();
-		replacer.addReplacement("username", user);
-		replacer.addReplacement("password", password);
-		replacer.performReplacement(configFile);
+		Properties props = new Properties();
+		props.load(new FileInputStream(configFile));
+		props.setProperty("gaards.dorian.db.user", user);
+		props.setProperty("gaards.dorian.db.password", password);
+		props.store(new FileOutputStream(configFile), "");
 	}
 }

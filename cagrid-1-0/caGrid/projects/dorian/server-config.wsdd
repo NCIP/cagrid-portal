@@ -9,7 +9,6 @@
     <parameter name="scope" value="Application" />
     <parameter name="providers" value="GetRPProvider GetMRPProvider QueryRPProvider gov.nih.nci.cagrid.introduce.security.service.globus.ServiceSecurityProviderImpl" />
     <parameter name="loadOnStartup" value="true" />
-    <parameter name="dorianConfig" value="ETC-PATH/dorian-conf.xml" />
     <parameter name="securityMetadata" value="ETC-PATH/Dorian-security-metadata.xml" />
   </service>
   <typeMapping name="AggregatorContent" qname="aggr:AggregatorContent" type="java:org.globus.mds.aggregator.types.AggregatorContent" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="" />

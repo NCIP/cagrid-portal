@@ -1,16 +1,13 @@
 package gov.nih.nci.cagrid.dorian.common;
 
-import gov.nih.nci.cagrid.dorian.conf.CredentialLifetime;
-
 import java.security.cert.X509Certificate;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-
 public class Utils {
 
-	public static Date getExpiredDate(CredentialLifetime lifetime) {
+	public static Date getExpiredDate(Lifetime lifetime) {
 		GregorianCalendar cal = new GregorianCalendar();
 		cal.add(Calendar.YEAR, lifetime.getYears());
 		cal.add(Calendar.MONTH, lifetime.getMonths());
@@ -21,15 +18,16 @@ public class Utils {
 		return cal.getTime();
 	}
 
-	public static String getHostCertificateSubjectPrefix(X509Certificate cacert){
+	public static String getHostCertificateSubjectPrefix(X509Certificate cacert) {
 		String caSubject = cacert.getSubjectDN().getName();
 		int caindex = caSubject.lastIndexOf(",");
 		String caPreSub = caSubject.substring(0, caindex);
 		return caPreSub + ",OU=Services,CN=host/";
 	}
 
-	public static String getHostCertificateSubject(X509Certificate cacert, String host) {
-		return getHostCertificateSubjectPrefix(cacert)+host;
+	public static String getHostCertificateSubject(X509Certificate cacert,
+			String host) {
+		return getHostCertificateSubjectPrefix(cacert) + host;
 	}
 
 }

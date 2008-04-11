@@ -3,8 +3,6 @@ package gov.nih.nci.cagrid.dorian.service.idp;
 import gov.nih.nci.cagrid.common.FaultUtil;
 import gov.nih.nci.cagrid.dorian.common.SAMLConstants;
 import gov.nih.nci.cagrid.dorian.common.SAMLUtils;
-import gov.nih.nci.cagrid.dorian.conf.AssertingCredentials;
-import gov.nih.nci.cagrid.dorian.conf.IdentityProviderConfiguration;
 import gov.nih.nci.cagrid.dorian.service.ca.CertificateAuthority;
 import gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault;
 import gov.nih.nci.cagrid.dorian.test.Constants;
@@ -30,7 +28,6 @@ import junit.framework.TestCase;
 
 import org.cagrid.tools.database.Database;
 
-
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
@@ -52,20 +49,22 @@ public class TestAssertionCredentialsManager extends TestCase {
 
 	private static String TEST_LAST_NAME = "Doe";
 
-
-	public void verifySAMLAssertion(SAMLAssertion saml, AssertionCredentialsManager cm) throws Exception {
+	public void verifySAMLAssertion(SAMLAssertion saml,
+			AssertionCredentialsManager cm) throws Exception {
 		assertNotNull(saml);
 		saml.verify(cm.getIdPCertificate());
 
 		try {
 			// Test against a bad certificate
-			InputStream resource = TestCase.class.getResourceAsStream(Constants.BMI_CACERT);
+			InputStream resource = TestCase.class
+					.getResourceAsStream(Constants.BMI_CACERT);
 			saml.verify(CertUtil.loadCertificate(resource));
 			assertTrue(false);
 		} catch (InvalidCryptoException ex) {
 
 		}
-		assertEquals(cm.getIdPCertificate().getSubjectDN().toString(), saml.getIssuer());
+		assertEquals(cm.getIdPCertificate().getSubjectDN().toString(), saml
+				.getIssuer());
 		Iterator itr = saml.getStatements();
 		int count = 0;
 		boolean authFound = false;
@@ -79,23 +78,29 @@ public class TestAssertionCredentialsManager extends TestCase {
 					authFound = true;
 				}
 				SAMLAuthenticationStatement auth = (SAMLAuthenticationStatement) stmt;
-				assertEquals(TEST_UID, auth.getSubject().getNameIdentifier().getName());
-				assertEquals("urn:oasis:names:tc:SAML:1.0:am:password", auth.getAuthMethod());
+				assertEquals(TEST_UID, auth.getSubject().getNameIdentifier()
+						.getName());
+				assertEquals("urn:oasis:names:tc:SAML:1.0:am:password", auth
+						.getAuthMethod());
 			}
 
 			if (stmt instanceof SAMLAttributeStatement) {
 
-				String uid = Utils.getAttribute(saml, SAMLConstants.UID_ATTRIBUTE_NAMESPACE,
-					SAMLConstants.UID_ATTRIBUTE);
+				String uid = Utils.getAttribute(saml,
+						SAMLConstants.UID_ATTRIBUTE_NAMESPACE,
+						SAMLConstants.UID_ATTRIBUTE);
 				assertNotNull(uid);
-				String email = Utils.getAttribute(saml, SAMLConstants.EMAIL_ATTRIBUTE_NAMESPACE,
-					SAMLConstants.EMAIL_ATTRIBUTE);
+				String email = Utils.getAttribute(saml,
+						SAMLConstants.EMAIL_ATTRIBUTE_NAMESPACE,
+						SAMLConstants.EMAIL_ATTRIBUTE);
 				assertNotNull(email);
-				String firstName = Utils.getAttribute(saml, SAMLConstants.FIRST_NAME_ATTRIBUTE_NAMESPACE,
-					SAMLConstants.FIRST_NAME_ATTRIBUTE);
+				String firstName = Utils.getAttribute(saml,
+						SAMLConstants.FIRST_NAME_ATTRIBUTE_NAMESPACE,
+						SAMLConstants.FIRST_NAME_ATTRIBUTE);
 				assertNotNull(firstName);
-				String lastName = Utils.getAttribute(saml, SAMLConstants.LAST_NAME_ATTRIBUTE_NAMESPACE,
-					SAMLConstants.LAST_NAME_ATTRIBUTE);
+				String lastName = Utils.getAttribute(saml,
+						SAMLConstants.LAST_NAME_ATTRIBUTE_NAMESPACE,
+						SAMLConstants.LAST_NAME_ATTRIBUTE);
 				assertNotNull(lastName);
 
 				assertEquals(TEST_UID, uid);
@@ -110,19 +115,18 @@ public class TestAssertionCredentialsManager extends TestCase {
 		assertTrue(authFound);
 	}
 
-
 	public void testAutoCredentialCreation() {
-
-		IdentityProviderConfiguration conf = getIdpConfigurationAuto();
 		AssertionCredentialsManager cm = null;
 		try {
-			cm = new AssertionCredentialsManager(conf, ca, db);
+			cm = Utils.getAssertionCredentialsManager();
 			X509Certificate cert = cm.getIdPCertificate();
 			assertNotNull(cert);
 			assertNotNull(cm.getIdPKey());
-			String expectedSub = Utils.CA_SUBJECT_PREFIX + ",CN=" + AssertionCredentialsManager.CERT_DN;
+			String expectedSub = Utils.CA_SUBJECT_PREFIX + ",CN="
+					+ AssertionCredentialsManager.CERT_DN;
 			assertEquals(expectedSub, cert.getSubjectDN().toString());
-			SAMLAssertion saml = cm.getAuthenticationAssertion(TEST_UID, TEST_FIRST_NAME, TEST_LAST_NAME, TEST_EMAIL);
+			SAMLAssertion saml = cm.getAuthenticationAssertion(TEST_UID,
+					TEST_FIRST_NAME, TEST_LAST_NAME, TEST_EMAIL);
 			verifySAMLAssertion(saml, cm);
 			String xml = SAMLUtils.samlAssertionToString(saml);
 			SAMLAssertion saml2 = SAMLUtils.stringToSAMLAssertion(xml);
@@ -139,16 +143,15 @@ public class TestAssertionCredentialsManager extends TestCase {
 		}
 	}
 
-
 	public void testAutoCredentialCreationRenew() {
-		IdentityProviderConfiguration conf = getIdpConfigurationAuto();
 		AssertionCredentialsManager cm = null;
 		try {
-			cm = new AssertionCredentialsManager(conf, ca, db);
+			cm = Utils.getAssertionCredentialsManager();
 			X509Certificate cert = cm.getIdPCertificate();
 			assertNotNull(cert);
 			assertNotNull(cm.getIdPKey());
-			String expectedSub = Utils.CA_SUBJECT_PREFIX + ",CN=" + AssertionCredentialsManager.CERT_DN;
+			String expectedSub = Utils.CA_SUBJECT_PREFIX + ",CN="
+					+ AssertionCredentialsManager.CERT_DN;
 			assertEquals(expectedSub, cert.getSubjectDN().toString());
 
 			String subject = cert.getSubjectDN().toString();
@@ -158,8 +161,9 @@ public class TestAssertionCredentialsManager extends TestCase {
 			cal.add(Calendar.SECOND, 6);
 			Date end = cal.getTime();
 			cm.deleteAssertingCredentials();
-			X509Certificate shortCert = ca.signCertificate(AssertionCredentialsManager.CERT_DN, subject, pair
-				.getPublic(), start, end);
+			X509Certificate shortCert = ca.signCertificate(
+					AssertionCredentialsManager.CERT_DN, subject, pair
+							.getPublic(), start, end);
 
 			cm.storeCredentials(shortCert, pair.getPrivate());
 
@@ -188,7 +192,8 @@ public class TestAssertionCredentialsManager extends TestCase {
 				assertTrue(false);
 			}
 
-			SAMLAssertion saml = cm.getAuthenticationAssertion(TEST_UID, TEST_FIRST_NAME, TEST_LAST_NAME, TEST_EMAIL);
+			SAMLAssertion saml = cm.getAuthenticationAssertion(TEST_UID,
+					TEST_FIRST_NAME, TEST_LAST_NAME, TEST_EMAIL);
 			verifySAMLAssertion(saml, cm);
 			String xml = SAMLUtils.samlAssertionToString(saml);
 			SAMLAssertion saml2 = SAMLUtils.stringToSAMLAssertion(xml);
@@ -206,16 +211,19 @@ public class TestAssertionCredentialsManager extends TestCase {
 		}
 	}
 
-
 	public void testAutoCredentialCreationNoRenewal() {
-		IdentityProviderConfiguration conf = getIdpConfigurationAutoNoRenew();
+
 		AssertionCredentialsManager cm = null;
 		try {
-			cm = new AssertionCredentialsManager(conf, ca, db);
+			IdentityProviderProperties props = Utils
+					.getIdentityProviderProperties();
+			props.setAutoRenewAssertingCredentials(false);
+			cm = new AssertionCredentialsManager(props, ca, db);
 			X509Certificate cert = cm.getIdPCertificate();
 			assertNotNull(cert);
 			assertNotNull(cm.getIdPKey());
-			String expectedSub = Utils.CA_SUBJECT_PREFIX + ",CN=" + AssertionCredentialsManager.CERT_DN;
+			String expectedSub = Utils.CA_SUBJECT_PREFIX + ",CN="
+					+ AssertionCredentialsManager.CERT_DN;
 			assertEquals(expectedSub, cert.getSubjectDN().toString());
 
 			String subject = cert.getSubjectDN().toString();
@@ -225,8 +233,9 @@ public class TestAssertionCredentialsManager extends TestCase {
 			cal.add(Calendar.SECOND, 2);
 			Date end = cal.getTime();
 			cm.deleteAssertingCredentials();
-			X509Certificate shortCert = ca.signCertificate(AssertionCredentialsManager.CERT_DN, subject, pair
-				.getPublic(), start, end);
+			X509Certificate shortCert = ca.signCertificate(
+					AssertionCredentialsManager.CERT_DN, subject, pair
+							.getPublic(), start, end);
 			cm.storeCredentials(shortCert, pair.getPrivate());
 			if (cert.equals(shortCert)) {
 				assertTrue(false);
@@ -254,27 +263,6 @@ public class TestAssertionCredentialsManager extends TestCase {
 		}
 	}
 
-
-	private IdentityProviderConfiguration getIdpConfigurationAuto() {
-		IdentityProviderConfiguration config = new IdentityProviderConfiguration();
-		AssertingCredentials cred = new AssertingCredentials();
-		cred.setAutoRenew(true);
-		cred.setKeyPassword("password");
-		config.setAssertingCredentials(cred);
-		return config;
-	}
-
-
-	private IdentityProviderConfiguration getIdpConfigurationAutoNoRenew() {
-		IdentityProviderConfiguration config = new IdentityProviderConfiguration();
-		AssertingCredentials cred = new AssertingCredentials();
-		cred.setAutoRenew(false);
-		cred.setKeyPassword("password");
-		config.setAssertingCredentials(cred);
-		return config;
-	}
-
-
 	protected void setUp() throws Exception {
 		super.setUp();
 		try {
@@ -287,7 +275,6 @@ public class TestAssertionCredentialsManager extends TestCase {
 			assertTrue(false);
 		}
 	}
-
 
 	protected void tearDown() throws Exception {
 		super.setUp();

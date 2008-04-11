@@ -1,9 +1,8 @@
 package gov.nih.nci.cagrid.dorian.service.tools;
 
 import gov.nih.nci.cagrid.common.IOUtils;
-import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.dorian.conf.DorianConfiguration;
-import gov.nih.nci.cagrid.dorian.service.ca.DBCertificateAuthority;
+import gov.nih.nci.cagrid.dorian.service.BeanUtils;
+import gov.nih.nci.cagrid.dorian.service.ca.CertificateAuthority;
 import gov.nih.nci.cagrid.gridca.common.CertUtil;
 import gov.nih.nci.cagrid.gridca.common.KeyUtil;
 
@@ -24,6 +23,7 @@ import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
 import org.bouncycastle.asn1.x509.X509Name;
 import org.cagrid.tools.database.Database;
+import org.springframework.core.io.FileSystemResource;
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
@@ -37,6 +37,10 @@ public class CreateCACertificate {
 	public static final String CONFIG_FILE_OPT = "c";
 
 	public static final String CONFIG_FILE_FULL = "conf";
+
+	public static final String PROPERTIES_FILE_OPT = "p";
+
+	public static final String PROPERTIES_FILE_FULL = "properties";
 
 	public static final String INTERACTIVE_MODE_OPT = "i";
 
@@ -76,6 +80,10 @@ public class CreateCACertificate {
 				true,
 				"Specifies the number of days the ca certificate should be valid for, this option is required in non interactive mode.");
 
+		Option props = new Option(PROPERTIES_FILE_OPT, PROPERTIES_FILE_FULL,
+				true, "The properties file for the Dorian CA.");
+		props.setRequired(true);
+		options.addOption(props);
 		options.addOption(help);
 		options.addOption(service);
 		options.addOption(im);
@@ -93,12 +101,14 @@ public class CreateCACertificate {
 				System.exit(0);
 			} else {
 				String configFile = line.getOptionValue(CONFIG_FILE_OPT);
-				DorianConfiguration c = (DorianConfiguration) Utils.deserializeDocument(configFile,
-					gov.nih.nci.cagrid.dorian.conf.DorianConfiguration.class);
-				Database db = new Database(c.getDatabaseConfiguration(), c
-						.getDorianInternalId());
+				String propertiesFile = line
+						.getOptionValue(PROPERTIES_FILE_OPT);
+				BeanUtils utils = new BeanUtils(new FileSystemResource(configFile), new FileSystemResource(propertiesFile));
+				Database db = utils.getDatabase();
+				db.destroyDatabase();
 				db.createDatabaseIfNeeded();
-				DBCertificateAuthority ca = new DBCertificateAuthority(db, c.getDorianCAConfiguration());
+				CertificateAuthority ca = utils.getCertificateAuthority();
+				
 				boolean interactive = false;
 				if (line.hasOption(INTERACTIVE_MODE_OPT)) {
 					interactive = true;
@@ -155,19 +165,17 @@ public class CreateCACertificate {
 				GregorianCalendar date = new GregorianCalendar(TimeZone
 						.getTimeZone("GMT"));
 
-				
-
 				Date start = new Date(date.getTimeInMillis());
-				date.add(Calendar.DAY_OF_MONTH,days);
+				date.add(Calendar.DAY_OF_MONTH, days);
 				Date end = new Date(date.getTimeInMillis());
 				KeyPair root = KeyUtil.generateRSAKeyPair1024();
 				X509Certificate cert = CertUtil.generateCACertificate(
 						new X509Name(sub), start, end, root);
 				ca.setCACredentials(cert, root.getPrivate());
 				System.out.println("Successfully created the CA cerrtificate:");
-				System.out.println("Subject: "+cert.getSubjectDN());
-				System.out.println("Created: "+cert.getNotBefore());
-				System.out.println("Expires: "+cert.getNotAfter());
+				System.out.println("Subject: " + cert.getSubjectDN());
+				System.out.println("Created: " + cert.getNotBefore());
+				System.out.println("Expires: " + cert.getNotAfter());
 			}
 		} catch (ParseException exp) {
 			HelpFormatter formatter = new HelpFormatter();

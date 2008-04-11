@@ -177,13 +177,7 @@
 	<!-- Post Stubs Build Target                                        -->
 	<!-- ============================================================== -->
 	<target name="postStubs">
-		<!-- DORIAN CONFIGURATION SCHEMA -->
-		<ant antfile="${build.stubs}" target="generateStubs">
-			<property name="source.stubs.dir" location="${schema.dest}/Dorian" />
-			<property name="wsdl.file" value="DorianConfiguration.wsdl" />
-			<property name="target.stubs.dir" location="${stubs.src}" />
-			<property name="ns.excludes" value="${GT4.ns.excludes}" />
-		</ant>
+
 	</target>
 
 	<!-- ============================================================== -->
@@ -346,7 +340,7 @@
 		<input message="Please enter your password:" addproperty="password.input" />
 		<input message="Please enter the number of hours the proxy should be valid for [12]:" addproperty="hours.input" defaultvalue="12" />
 		<java classname="gov.nih.nci.cagrid.dorian.tools.GridProxyInit" fork="yes" newenvironment="true" failonerror="true">
-			<jvmarg value="-Djava.endorsed.dirs=ext/endorsed/lib" />
+			<jvmarg value="-Djava.endorsed.dirs=ext/dependencies/endorsed/jars" />
 			<arg value="-a" />
 			<arg value="${auth.input}" />
 			<arg value="-d" />
@@ -367,7 +361,9 @@
 		<input message="Please enter the password to the CA's private key (Enter if None):" addproperty="password.input" />
 		<java classname="gov.nih.nci.cagrid.dorian.service.tools.ImportCA" fork="yes" newenvironment="true" failonerror="true">
 			<arg value="-conf" />
-			<arg value="etc/dorian-conf.xml" />
+			<arg value="etc/dorian-configuration.xml" />
+			<arg value="-properties" />
+			<arg value="etc/dorian.properties" />
 			<arg value="-cert" />
 			<arg value="${cacert.input}" />
 			<arg value="-key" />
@@ -382,7 +378,9 @@
 	<target name="configureGlobusToTrustDorian" description="Configures Globus to trust the Dorian CA." depends="init">
 		<java classname="gov.nih.nci.cagrid.dorian.service.tools.ConfigureGlobusToTrustDorian" fork="yes" newenvironment="true" failonerror="true">
 			<arg value="-conf" />
-			<arg value="etc/dorian-conf.xml" />
+			<arg value="etc/dorian-configuration.xml" />
+			<arg value="-properties" />
+			<arg value="etc/dorian.properties" />
 			<classpath refid="service.run.classpath" />
 		</java>
 	</target>
@@ -392,7 +390,9 @@
 		<input message="Please enter the directory to write out the host credentials:" addproperty="dir.input" />
 		<java classname="gov.nih.nci.cagrid.dorian.service.tools.CreateHostCertificate" fork="yes" newenvironment="true" failonerror="true">
 			<arg value="-conf" />
-			<arg value="etc/dorian-conf.xml" />
+			<arg value="etc/dorian-configuration.xml" />
+			<arg value="-properties" />
+			<arg value="etc/dorian.properties" />
 			<arg value="-host" />
 			<arg value="${host.input}" />
 			<arg value="-directory" />
@@ -405,7 +405,11 @@
 		<java classname="gov.nih.nci.cagrid.dorian.service.upgrader.Upgrader" fork="yes" newenvironment="true" failonerror="true">
 			<jvmarg value="-Dlog4j.configuration=file:upgrader-log4j.properties" />
 			<arg value="-conf" />
-			<arg value="etc/dorian-conf.xml" />
+			<arg value="etc/dorian-configuration.xml" />
+			<arg value="-properties" />
+			<arg value="etc/dorian.properties" />
+			<arg value="-uconf" />
+			<arg value="etc/dorian-upgrader-configuration.xml" />
 			<classpath refid="service.run.classpath" />
 		</java>
 	</target>
@@ -414,7 +418,11 @@
 		<java classname="gov.nih.nci.cagrid.dorian.service.upgrader.Upgrader" fork="yes" newenvironment="true" failonerror="true">
 			<jvmarg value="-Dlog4j.configuration=file:upgrader-log4j.properties" />
 			<arg value="-conf" />
-			<arg value="etc/dorian-conf.xml" />
+			<arg value="etc/dorian-configuration.xml" />
+			<arg value="-properties" />
+			<arg value="etc/dorian.properties" />
+			<arg value="-uconf" />
+			<arg value="etc/dorian-upgrader-configuration.xml" />
 			<arg value="-trial" />
 			<classpath refid="service.run.classpath" />
 		</java>
