@@ -10,12 +10,12 @@ import java.io.IOException;
 
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.xml.sax.SAXException;
-
 import junit.framework.TestCase;
 import junit.framework.TestResult;
 import junit.framework.TestSuite;
 import junit.textui.TestRunner;
+
+import org.xml.sax.SAXException;
 
 /**
  * This is a unit test that validates the functionality of the IntroduceServiceInfo class, which is

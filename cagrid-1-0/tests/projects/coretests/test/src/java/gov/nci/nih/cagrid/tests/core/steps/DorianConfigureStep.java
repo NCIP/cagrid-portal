@@ -4,7 +4,6 @@
 package gov.nci.nih.cagrid.tests.core.steps;
 
 import gov.nci.nih.cagrid.tests.core.util.GlobusHelper;
-import gov.nci.nih.cagrid.tests.core.util.SimpleXmlReplacer;
 import gov.nih.nci.cagrid.testing.system.haste.Step;
 
 import java.io.File;
