@@ -47,7 +47,7 @@ public class StatusBean {
         int totalServicesAvailable = getGridServiceDao().getAll().size();
         do{
             List<GridService> latest = getGridServiceDao().getLatestServices(getLatestServicesLimit()+ serviceLookupIncrement++);
-            services = PortletUtils.filterDormantServices(PortletUtils.filterBannedServices(latest));
+            services = PortletUtils.filterServicesByInvalidMetadata(PortletUtils.filterDormantServices(PortletUtils.filterBannedServices(latest)));
         }
         //run this loop till we find <latestServicesLimit> number of valid  services
         //But at the same time don't get more than available services

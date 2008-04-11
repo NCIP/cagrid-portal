@@ -3,11 +3,7 @@
  */
 package gov.nih.nci.cagrid.portal.portlet.discovery.search;
 
-import gov.nih.nci.cagrid.portal.domain.DomainObject;
-import gov.nih.nci.cagrid.portal.domain.GridDataService;
-import gov.nih.nci.cagrid.portal.domain.GridService;
-import gov.nih.nci.cagrid.portal.domain.Participant;
-import gov.nih.nci.cagrid.portal.domain.Person;
+import gov.nih.nci.cagrid.portal.domain.*;
 import gov.nih.nci.cagrid.portal.domain.dataservice.SharedCQLQuery;
 import gov.nih.nci.cagrid.portal.domain.metadata.common.PointOfContact;
 import gov.nih.nci.cagrid.portal.domain.metadata.common.ResearchCenterPointOfContact;
@@ -16,22 +12,15 @@ import gov.nih.nci.cagrid.portal.portlet.CaGridPortletApplicationException;
 import gov.nih.nci.cagrid.portal.portlet.discovery.DiscoveryResults;
 import gov.nih.nci.cagrid.portal.portlet.discovery.DiscoveryType;
 import gov.nih.nci.cagrid.portal.portlet.util.PortletUtils;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.Map.Entry;
-
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.orm.hibernate3.HibernateTemplate;
+
+import java.util.*;
+import java.util.Map.Entry;
 
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
@@ -143,7 +132,7 @@ public class KeywordSearchService {
 			for(DomainObject obj : objects){
 				svcs.add((GridService)obj);
 			}
-			svcs = PortletUtils.filterDormantServices(PortletUtils.filterBannedServices(svcs));
+			svcs = PortletUtils.filterServicesByInvalidMetadata(PortletUtils.filterDormantServices(PortletUtils.filterBannedServices(svcs)));
 			objects.clear();
 			objects.addAll(svcs);
 		}
