@@ -116,7 +116,7 @@ public class GridGrouperTest extends Story {
     @Override
     @SuppressWarnings("unchecked")
     protected Vector steps() {
-        String idp = "/C=US/O=abc/OU=xyz/OU=caGrid/OU=Dorian IdP/CN=";
+        String idp = "/C=US/O=abc/OU=xyz/OU=caGrid/OU=Dorian/CN=";
 
         this.dorianGlobus = new GlobusHelper(true);
         this.dorianDir = new File(System.getProperty("dorian.dir", ".." + File.separator + ".." + File.separator + ".."
