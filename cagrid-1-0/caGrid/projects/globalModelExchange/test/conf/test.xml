@@ -115,7 +115,7 @@
         <fail message="Unit Tests failed! Consult the logs for details." if="unit.test.failed" />
     </target>
     <target name="system-test">
-        <junit dir="${basedir}" haltonerror="${test.failfast}" haltonfailure="${test.failfast}" printsummary="yes" errorproperty="system.test.failed" failureproperty="system.test.failed" forkmode="once">
+        <!--<junit dir="${basedir}" haltonerror="${test.failfast}" haltonfailure="${test.failfast}" printsummary="yes" errorproperty="system.test.failed" failureproperty="system.test.failed" forkmode="once">
             <jvmarg value="-Dbuild.dir=${build.dest}" />
             <sysproperty key="build.dir" value="${build.dest}" />
             <classpath refid="test.run.classpath" />
@@ -129,6 +129,7 @@
         </junit>
 
         <fail message="System Tests failed! Consult the logs for details." if="system.test.failed" />
+        -->
     </target>
 
     <target name="createTestDatabase">
