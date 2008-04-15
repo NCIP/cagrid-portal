@@ -12,9 +12,11 @@
 	<configurations>
 		<!-- Public Configurations-->
 		<conf name="full" visibility="public"/>
+		<conf name="mock" visibility="public"/>
 	</configurations>
 
 	<publications>
 		<artifact name="spring" conf="full" type="jar"/>
+		<artifact name="spring-mock" conf="mock" type="jar"/>
 	</publications>
 </ivy-module>

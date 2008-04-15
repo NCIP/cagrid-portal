@@ -8,4 +8,7 @@
 		<description homepage="http://commons.apache.org/dbcp">Apache Commons Database Connection
 			Pooling API</description>
 	</info>
+	<dependencies>
+		<dependency org="apache" name="commons-pool" rev="1.2" conf="default"/>
+	</dependencies>
 </ivy-module>

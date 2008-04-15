@@ -11,4 +11,7 @@
 			configuration data from a variety of sources. Commons Configuration provides typed
 			access to single, and multi-valued configuration parameters </description>
 	</info>
+	<dependencies>
+		<dependency rev="2.1" org="apache" name="commons-lang" conf="*->*"/>
+	</dependencies>
 </ivy-module>

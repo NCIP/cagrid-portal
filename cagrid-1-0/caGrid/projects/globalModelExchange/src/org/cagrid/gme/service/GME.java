@@ -17,6 +17,7 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.xerces.impl.xs.SchemaGrammar;
 import org.apache.xerces.xni.XNIException;
 import org.apache.xerces.xni.parser.XMLInputSource;
+import org.apache.xerces.xs.StringList;
 import org.cagrid.gme.persistence.SchemaPersistenceGeneralException;
 import org.cagrid.gme.persistence.SchemaPersistenceI;
 import org.cagrid.gme.protocol.stubs.Schema;
@@ -90,6 +91,17 @@ public class GME {
 
                     throw e;
                 } else {
+
+                    // TODO: should probably check SchemaDocument rules here:
+                    // unique systemIDs for all
+                    // need to actually check that the schema rules are true
+                    // (i.e include must have no ns, or same ns), but basically
+                    // need the parsed model to know this... so i can check at
+                    // resolution time, but if something is never referenced, it
+                    // wont be loaded and so may be invalid... probably need to
+                    // check it after we have the grammar (can we ask for
+                    // includes and check for correspondence in the submission?)
+
                     // preload the submission schemas with "null" models (which
                     // will be replaced by the actual models once they are
                     // processed) so they don't get inappropriately processed
@@ -162,6 +174,61 @@ public class GME {
                 SchemaGrammar schemaGrammar = processedSchemas.get(submittedSchema.getNamespace());
                 assert schemaGrammar != null;
                 assert !toCommit.containsKey(submittedSchema);
+
+                // this has all the expanded locations which built up the schema
+                // for us (using the namespace as the basesystemID, this should
+                // be the ns+systemID)
+                // REVISIT: is there a better way to figure out the
+                // included/redefined documents?
+                StringList documentLocations = schemaGrammar.getDocumentLocations();
+                for (SchemaDocument schemaDocument : submittedSchema.getSchemaDocument()) {
+                    URI expandedURI;
+                    try {
+                        expandedURI = new URI(submittedSchema.getNamespace(), schemaDocument.getSystemID());
+                    } catch (MalformedURIException e) {
+                        String message = "Problem processing schema submissions; the schema ["
+                            + submittedSchema.getNamespace() + "] included a SchemaDocument ["
+                            + schemaDocument.getSystemID() + "] whose expanded URI was not valid:" + e.getMessage();
+                        LOG.error(message, e);
+
+                        InvalidSchemaSubmission fault = new InvalidSchemaSubmission();
+                        fault.setFaultString(message);
+                        FaultHelper helper = new FaultHelper(fault);
+                        helper.addFaultCause(e);
+                        fault = (InvalidSchemaSubmission) helper.getFault();
+
+                        throw fault;
+                    }
+                    if (!documentLocations.contains(expandedURI.toString())) {
+                        String message = "Problem processing schema submissions; the schema ["
+                            + submittedSchema.getNamespace() + "] included a SchemaDocument ["
+                            + schemaDocument.getSystemID() + "] which was not used by the parsed grammar";
+                        LOG.error(message);
+
+                        InvalidSchemaSubmission fault = new InvalidSchemaSubmission();
+                        fault.setFaultString(message);
+                        FaultHelper helper = new FaultHelper(fault);
+                        fault = (InvalidSchemaSubmission) helper.getFault();
+
+                        throw fault;
+                    }
+                }
+                if (documentLocations.getLength() != submittedSchema.getSchemaDocument().length) {
+                    String message = "Problem processing schema submissions; the schema ["
+                        + submittedSchema.getNamespace() + "] contained [" + submittedSchema.getSchemaDocument().length
+                        + "] SchemaDocuments but the parsed grammar contained [" + documentLocations.getLength()
+                        + "].  All SchemaDocuments must be used by the Schema.";
+                    LOG.error(message);
+
+                    InvalidSchemaSubmission fault = new InvalidSchemaSubmission();
+                    fault.setFaultString(message);
+                    FaultHelper helper = new FaultHelper(fault);
+                    fault = (InvalidSchemaSubmission) helper.getFault();
+
+                    throw fault;
+
+                }
+
                 // build an import list
                 List<URI> importList = new ArrayList<URI>();
                 Vector importedGrammars = schemaGrammar.getImportedGrammars();
@@ -172,7 +239,7 @@ public class GME {
                         LOG.info("Schema [" + schemaGrammar.getTargetNamespace() + "] imports schema ["
                             + importedTargetNS + "]");
                         try {
-                            importList.add(new URI(new URI(importedTargetNS)));
+                            importList.add(new URI(importedTargetNS));
                         } catch (MalformedURIException e) {
                             String message = "Problem processing schema submissions; the schema ["
                                 + submittedSchema.getNamespace() + "] imported a schema [" + importedTargetNS
@@ -214,13 +281,16 @@ public class GME {
 
         // TODO: need to check the schema is actually valid (1..n
         // schemadocuemnts exist, and the namespace of all is what is specified
-        // by the schema)
+        // by the schema... but can only do that after parse time)
 
         // TODO: how to get "root" schema
         SchemaDocument rootSD = schemaToProcess.getSchemaDocument(0);
 
-        XMLInputSource xis = new XMLInputSource(ns, rootSD.getSystemID(), null,
-            new StringReader(rootSD.getSchemaText()), "UTF-16");
+        // REVISIT: what to set for the baseSystemID? it's used to convert
+        // includes, etc into full URIs and so is relevant later when examining
+        // documentLocations of the SchemaGrammar
+        XMLInputSource xis = new XMLInputSource(ns, rootSD.getSystemID(), ns, new StringReader(rootSD.getSchemaText()),
+            "UTF-16");
         SchemaGrammar model = (SchemaGrammar) schemaLoader.loadGrammar(xis);
         if (model == null) {
             GMEErrorHandler errorHandler = schemaLoader.getErrorHandler();
@@ -259,6 +329,8 @@ public class GME {
                 LOG.debug("Depending schema [" + dependingSchema.getNamespace()
                     + "] was already processed (or will be processed).");
             } else {
+                LOG.debug("Processing depending schema [" + dependingSchema.getNamespace()
+                    + "] which is not in the submission package.");
                 processSchema(schemaLoader, processedSchemas, dependingSchema);
             }
         }

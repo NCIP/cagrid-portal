@@ -1,13 +1,3 @@
-
-=================================================================================
-Installing the torque database
-=================================================================================
- -- go into the resources/torque-gen-3.3-RC1 directory
- -- run ant -f build-torque.xml
- 	-- this rebuilds the beans and the sql files
- -- run ant -f build-torque.xml sql create-db insert-sql
- 	-- this re-creates the databases and tables etc
-
 =================================================================================
 Features/Issues:
 =================================================================================
@@ -34,9 +24,6 @@ but provide a policy interface to allow the enforcement of local policy.
 Should we capture and make available (non-fatal) "schema warnings"?
   - for example, importing a non-existent schema and not using it is not a fatal error, only a warning
   - this information should be passed to policy interface 
-
-how to pass torque init params?
-  - are we packaging right so we can run against other DBs?
 
 make a utility for validating an XML document against the GME:
 - will need an entity resolver that talks to GME to get XSDs
@@ -110,6 +97,8 @@ GME RESTRICTIONS FROM SCHEMA SPECIFICATION:
 =================================================================================
 XSD APIs:
 =================================================================================
+http://www.w3.org/Submission/2004/SUBM-xmlschema-api-20040309/xml-schema-api.html
+
 # http://ws.apache.org/commons/XmlSchema/
   - doesn't seem to validate anything
   - handles imports/includes nicely
@@ -119,9 +108,10 @@ XSD APIs:
   - seems to validate well
   - API is nice
   - nice error handling
-  - doesn't seemt to give access to imports/includes in result
+  - doesn't seem to give access to imports/includes in result (UPDATE: i think i could have gotten these from xsdcomponent.getSourceDocument)
 # http://xerces.apache.org/xerces-j/schema.html (currently using)
   - claims to have 100% support... seems to be what all "validators" use
+  - http://xerces.apache.org/xerces2-j/faq-grammars.html
   - example:
      - org.globus.wsrf.tools.wsdl.WSDLPreprocessor
      - (great stuff here) http://fisheye6.cenqua.com/browse/ode/trunk/utils/src/main/java/org/apache/ode/utils/xsd

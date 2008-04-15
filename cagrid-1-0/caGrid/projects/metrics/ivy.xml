@@ -53,12 +53,8 @@
     <dependency rev="latest.integration" org="caGrid" name="service-tools" conf="service->db"/>
 
     <!-- Extenernal Dependencies -->
-    <dependency rev="1.0" org="jdom" name="jdom" conf="service->*"/>
-    <dependency rev="1.5.3" org="objectweb" name="asm" conf="service->default"/>
-    <dependency rev="2.1_3" org="cglib" name="cglib" conf="service->default"/>
-    <dependency rev="1.6.1" org="dom4j" name="dom4j" conf="service->default"/>
-    <dependency rev="1.0.1B" org="sun" name="jta" conf="service->default"/>
-    <dependency rev="3.2.6.ga" org="hibernate" name="hibernate" conf="service->full"/>    
+    <dependency rev="1.0" org="jdom" name="jdom" conf="service->*"/>   
+    <dependency rev="3.2.6.ga" org="hibernate" name="hibernate" conf="service->default"/>    
     
   </dependencies>
 </ivy-module>
