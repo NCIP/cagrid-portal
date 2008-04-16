@@ -4,6 +4,7 @@
 	<classpathentry kind="src" path="test/src"/>
 	<classpathentry kind="src" path="test/system/src"/>
 	<classpathentry kind="src" path="test/unit/src"/>
+	<classpathentry kind="src" path="test/resources"/>
 	<classpathentry kind="src" path="build/stubs-GlobalModelExchange/src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/addressing-1.0.jar"/>
@@ -94,10 +95,10 @@
 	<classpathentry kind="lib" path="ext/dependencies/service/jars/ejb3-persistence.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/service/jars/hibernate-annotations.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/service/jars/hibernate-commons-annotations.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/service/jars/spring-2.0.6.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/service/jars/spring-2.0.6.jar" sourcepath="C:/Users/oster/Desktop/spring-framework-2.0.6/src"/>
 	<classpathentry kind="lib" path="ext/dependencies/service/jars/commons-dbcp-1.2.2.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/commons-collections-3.0.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/service/jars/commons-pool-1.2.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/test/jars/spring-mock.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/test/jars/spring-mock.jar" sourcepath="C:/Users/oster/Desktop/spring-framework-2.0.6/mock"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

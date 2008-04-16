@@ -7,11 +7,13 @@
 	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
 	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd">
 
+	<description>This document is loaded in the context of tests, in addition to the main document.</description>
+
 	<bean id="propertyConfigurer"
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="locations">
 			<list>
-				<value>file:etc/gme.properties</value>
+				<value>classpath*:gme.test.properties</value>
 			</list>
 		</property>
 	</bean>

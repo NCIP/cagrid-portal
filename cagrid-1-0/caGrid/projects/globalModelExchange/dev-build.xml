@@ -63,6 +63,7 @@
 			</fileset>
 		</path>
 		<path id="test.run.extended.classpath">
+	         <pathelement location="${test.dir}/resources"/>
 		</path>
 		<path id="run.extended.classpath">
 		</path>
@@ -260,18 +261,4 @@
 			</sequential>
 		</outofdate>
 	</target>
-
-	<!-- ============================================================== -->
-	<!-- Creates conf files from examples                               -->
-	<!-- ============================================================== -->
-	<target name="create_config_files" description="Creates conf files from examples. Set property
-		force.config.replace to true to force replacement.">
-		<copy todir="${etc.dir}" overwrite="${force.config.replace}">
-			<fileset dir="${etc.dir}">
-				<include name="**/*.example" />
-			</fileset>
-			<mapper type="glob" from="*.example" to="*" />
-		</copy>
-	</target>
-
 </project>
