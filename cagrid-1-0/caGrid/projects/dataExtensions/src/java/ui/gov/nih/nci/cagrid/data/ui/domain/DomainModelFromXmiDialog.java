@@ -57,7 +57,7 @@ import com.jgoodies.validation.view.ValidationComponentUtils;
  * @author David Ervin
  * 
  * @created Oct 23, 2007 11:05:04 AM
- * @version $Id: DomainModelFromXmiDialog.java,v 1.9 2008-04-16 13:31:28 dervin Exp $ 
+ * @version $Id: DomainModelFromXmiDialog.java,v 1.10 2008-04-16 14:05:43 dervin Exp $ 
  */
 public class DomainModelFromXmiDialog extends JDialog {
     // keys for validation messages
@@ -648,7 +648,6 @@ public class DomainModelFromXmiDialog extends JDialog {
             xmiTypeComboBox.addItemListener(new ItemListener() {
                 public void itemStateChanged(ItemEvent e) {
                     XmiFileType selectedType = (XmiFileType) getXmiTypeComboBox().getSelectedItem();
-                    System.out.println("Selected type: " + selectedType);
                     boolean fixXmiAllowed = (selectedType == XmiFileType.SDK_32_EA);
                     getFixEaModelCheckBox().setEnabled(fixXmiAllowed);
                     getSdkDirTextField().setEnabled(fixXmiAllowed);
