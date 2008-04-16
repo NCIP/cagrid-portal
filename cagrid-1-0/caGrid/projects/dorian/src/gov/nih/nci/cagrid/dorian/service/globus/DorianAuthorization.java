@@ -187,6 +187,11 @@ public class DorianAuthorization implements PDP {
 		
 		
 	}
+					
+	public static void authorizeDoesIdPUserExist() throws RemoteException {
+		
+		
+	}
 	
 	
 	public boolean isPermitted(Subject peerSubject, MessageContext context, QName operation)
@@ -414,6 +419,14 @@ public class DorianAuthorization implements PDP {
 		} else if(operation.getLocalPart().equals("changeIdPUserPassword")){
 			try{
 				authorizeChangeIdPUserPassword();
+				return true;
+			} catch (Exception e){
+				e.printStackTrace();
+				return false;
+			}
+		} else if(operation.getLocalPart().equals("doesIdPUserExist")){
+			try{
+				authorizeDoesIdPUserExist();
 				return true;
 			} catch (Exception e){
 				e.printStackTrace();

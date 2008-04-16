@@ -408,29 +408,38 @@
       </ns116:MethodAuthorization>
      </ns116:MethodSecurity>
     </ns4:Method>
+    <ns4:Method description="This method determines whether or not a IdP user exists." isImported="false" isProvided="false" name="doesIdPUserExist" xsi:type="ns4:MethodType">
+     <ns4:Inputs>
+      <ns4:Input qName="xsd:string" description="" isArray="false" name="userId" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+     </ns4:Inputs>
+     <ns4:Output qName="xsd:boolean" description="" isArray="false" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+     <ns4:Exceptions>
+      <ns4:Exception description="" name="DorianInternalFault" qname="ns117:DorianInternalFault" xmlns:ns117="http://cagrid.nci.nih.gov/Dorian/types"/>
+     </ns4:Exceptions>
+    </ns4:Method>
    </ns4:Methods>
-   <ns117:ResourcePropertiesList xsi:type="ns117:ResourcePropertiesListType" xmlns:ns117="gme://gov.nih.nci.cagrid.introduce/1/Resources">
-    <ns117:ResourceProperty qName="ns118:ServiceMetadata" description="" fileLocation="serviceMetadata.xml" populateFromFile="true" register="true" xsi:type="ns117:ResourcePropertyType" xmlns:ns118="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"/>
-   </ns117:ResourcePropertiesList>
-   <ns119:ServiceSecurity xsi:type="ns119:ServiceSecurity" xmlns:ns119="gme://gov.nih.nci.cagrid.introduce/1/Security">
-    <ns119:SecuritySetting xsi:type="ns119:SecuritySetting">Custom</ns119:SecuritySetting>
-    <ns119:TransportLevelSecurity xsi:type="ns119:TransportLevelSecurity">
-     <ns119:CommunicationMethod xsi:type="ns119:CommunicationMethod">Privacy</ns119:CommunicationMethod>
-    </ns119:TransportLevelSecurity>
-    <ns119:RunAsMode xsi:type="ns119:RunAsMode">System</ns119:RunAsMode>
-    <ns119:AnonymousClients xsi:type="ns119:AnonymousCommunication">No</ns119:AnonymousClients>
-    <ns119:ServiceAuthorization xsi:type="ns119:ServiceAuthorization">
-     <ns119:NoAuthorization xsi:type="ns119:NoAuthorization"/>
-    </ns119:ServiceAuthorization>
-   </ns119:ServiceSecurity>
+   <ns118:ResourcePropertiesList xsi:type="ns118:ResourcePropertiesListType" xmlns:ns118="gme://gov.nih.nci.cagrid.introduce/1/Resources">
+    <ns118:ResourceProperty qName="ns119:ServiceMetadata" description="" fileLocation="serviceMetadata.xml" populateFromFile="true" register="true" xsi:type="ns118:ResourcePropertyType" xmlns:ns119="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"/>
+   </ns118:ResourcePropertiesList>
+   <ns120:ServiceSecurity xsi:type="ns120:ServiceSecurity" xmlns:ns120="gme://gov.nih.nci.cagrid.introduce/1/Security">
+    <ns120:SecuritySetting xsi:type="ns120:SecuritySetting">Custom</ns120:SecuritySetting>
+    <ns120:TransportLevelSecurity xsi:type="ns120:TransportLevelSecurity">
+     <ns120:CommunicationMethod xsi:type="ns120:CommunicationMethod">Privacy</ns120:CommunicationMethod>
+    </ns120:TransportLevelSecurity>
+    <ns120:RunAsMode xsi:type="ns120:RunAsMode">System</ns120:RunAsMode>
+    <ns120:AnonymousClients xsi:type="ns120:AnonymousCommunication">No</ns120:AnonymousClients>
+    <ns120:ServiceAuthorization xsi:type="ns120:ServiceAuthorization">
+     <ns120:NoAuthorization xsi:type="ns120:NoAuthorization"/>
+    </ns120:ServiceAuthorization>
+   </ns120:ServiceSecurity>
    <ns3:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">Dorian Grid Service</ns3:description>
   </ns3:Service>
  </ns3:Services>
- <ns120:Extensions xsi:type="ns120:ExtensionsType" xmlns:ns120="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <ns120:Extension name="cagrid_metadata" version="1.1" xsi:type="ns120:ExtensionType"/>
- </ns120:Extensions>
- <ns121:ServiceProperties xmlns:ns121="gme://gov.nih.nci.cagrid.introduce/1/Property">
-  <ns121:Property description="" isFromETC="true" key="dorianConfiguration" value="dorian-configuration.xml"/>
-  <ns121:Property description="" isFromETC="true" key="dorianProperties" value="dorian.properties"/>
- </ns121:ServiceProperties>
+ <ns121:Extensions xsi:type="ns121:ExtensionsType" xmlns:ns121="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ns121:Extension name="cagrid_metadata" version="1.1" xsi:type="ns121:ExtensionType"/>
+ </ns121:Extensions>
+ <ns122:ServiceProperties xmlns:ns122="gme://gov.nih.nci.cagrid.introduce/1/Property">
+  <ns122:Property description="" isFromETC="true" key="dorianConfiguration" value="dorian-configuration.xml"/>
+  <ns122:Property description="" isFromETC="true" key="dorianProperties" value="dorian.properties"/>
+ </ns122:ServiceProperties>
 </ns1:ServiceDescription>

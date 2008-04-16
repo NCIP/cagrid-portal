@@ -19,6 +19,12 @@ public class DorianProviderImpl{
 	}
 	
 
+    public gov.nih.nci.cagrid.dorian.stubs.DoesIdPUserExistResponse doesIdPUserExist(gov.nih.nci.cagrid.dorian.stubs.DoesIdPUserExistRequest params) throws RemoteException, gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault {
+    gov.nih.nci.cagrid.dorian.stubs.DoesIdPUserExistResponse boxedResult = new gov.nih.nci.cagrid.dorian.stubs.DoesIdPUserExistResponse();
+    boxedResult.setResponse(impl.doesIdPUserExist(params.getUserId()));
+    return boxedResult;
+  }
+
     public gov.nih.nci.cagrid.dorian.stubs.RegisterWithIdPResponse registerWithIdP(gov.nih.nci.cagrid.dorian.stubs.RegisterWithIdPRequest params) throws RemoteException, gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault, gov.nih.nci.cagrid.dorian.stubs.types.InvalidUserPropertyFault {
     gov.nih.nci.cagrid.dorian.stubs.RegisterWithIdPResponse boxedResult = new gov.nih.nci.cagrid.dorian.stubs.RegisterWithIdPResponse();
     boxedResult.setResponse(impl.registerWithIdP(params.getApplication().getApplication()));

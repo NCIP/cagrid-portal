@@ -14,7 +14,7 @@ gaards.dorian.db.password=
 
 gaards.dorian.idp.name=Dorian
 gaards.dorian.idp.renew.asserting.credentials=true
-gaards.dorian.idp.asserting.credentials.password=changeme
+gaards.dorian.idp.asserting.credentials.password=idpkey
 gaards.dorian.idp.min.uid=4
 gaards.dorian.idp.max.uid=10
 gaards.dorian.idp.password.min.length=10
@@ -46,7 +46,7 @@ gaards.dorian.ifs.max.proxy.lifetime.seconds=0
 #######################################################
 #***      Certificate Authority Configuration      ***#
 #######################################################
-gaards.dorian.ca.password=changeme
+gaards.dorian.ca.password=admin
 gaards.dorian.ca.policy.oid=
 gaards.dorian.ca.issued.cert.key.size=1024
 gaards.dorian.ca.auto.create=true

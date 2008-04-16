@@ -96,6 +96,16 @@ public class DorianClient extends ServiceSecurityClient implements DorianI {
 		}
 	}
 
+  public boolean doesIdPUserExist(java.lang.String userId) throws RemoteException, gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"doesIdPUserExist");
+    gov.nih.nci.cagrid.dorian.stubs.DoesIdPUserExistRequest params = new gov.nih.nci.cagrid.dorian.stubs.DoesIdPUserExistRequest();
+    params.setUserId(userId);
+    gov.nih.nci.cagrid.dorian.stubs.DoesIdPUserExistResponse boxedResult = portType.doesIdPUserExist(params);
+    return boxedResult.isResponse();
+    }
+  }
+
   public gov.nih.nci.cagrid.metadata.security.ServiceSecurityMetadata getServiceSecurityMetadata() throws RemoteException {
     synchronized(portTypeMutex){
       configureStubSecurity((Stub)portType,"getServiceSecurityMetadata");

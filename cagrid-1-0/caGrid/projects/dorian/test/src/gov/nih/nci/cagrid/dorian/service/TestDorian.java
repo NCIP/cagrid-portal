@@ -102,7 +102,9 @@ public class TestDorian extends TestCase {
 
 			// test authentication with an active user
 			Application a = createApplication();
+			assertFalse(dorian.doesIdPUserExist(a.getUserId()));
 			dorian.registerWithIdP(a);
+			assertTrue(dorian.doesIdPUserExist(a.getUserId()));
 			IdPUserFilter uf = new IdPUserFilter();
 			uf.setUserId(a.getUserId());
 			IdPUser[] users = dorian.findIdPUsers(gridId, uf);

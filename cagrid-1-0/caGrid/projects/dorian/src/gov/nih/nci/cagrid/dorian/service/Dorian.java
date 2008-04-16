@@ -368,6 +368,10 @@ public class Dorian extends LoggingObject {
 			InvalidHostCertificateFault, PermissionDeniedFault {
 		return ifs.renewHostCertificate(callerGridId, recordId);
 	}
+	
+	 public boolean doesIdPUserExist(String userId) throws DorianInternalFault {
+		  return this.identityProvider.doesUserExist(userId);
+     }
 
 	public void clearDatabase() throws DorianInternalFault {
 		this.identityProvider.clearDatabase();

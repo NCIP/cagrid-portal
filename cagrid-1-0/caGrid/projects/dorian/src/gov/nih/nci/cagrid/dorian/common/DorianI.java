@@ -15,6 +15,15 @@ public interface DorianI {
     public gov.nih.nci.cagrid.metadata.security.ServiceSecurityMetadata getServiceSecurityMetadata() throws RemoteException ;
 
   /**
+   * This method determines whether or not a IdP user exists.
+   *
+   * @param userId
+   * @throws DorianInternalFault
+   *	
+   */
+  public boolean doesIdPUserExist(java.lang.String userId) throws RemoteException, gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault ;
+
+  /**
    * Submits an application for an account with a the Dorian Identity Provider.
    *
    * @param application

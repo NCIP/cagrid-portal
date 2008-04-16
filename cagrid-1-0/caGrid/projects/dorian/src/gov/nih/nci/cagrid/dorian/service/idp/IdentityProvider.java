@@ -180,5 +180,10 @@ public class IdentityProvider extends LoggingObject {
 		assertionManager.clearDatabase();
 		userManager.clearDatabase();
 	}
+	
+	 public boolean doesUserExist(String userId) throws DorianInternalFault {
+		  return this.userManager.userExists(userId);
+    }
+
 
 }

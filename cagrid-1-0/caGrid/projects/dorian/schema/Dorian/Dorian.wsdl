@@ -472,6 +472,20 @@
           <sequence />
         </complexType>
       </element>
+      <element name="DoesIdPUserExistRequest">
+        <complexType>
+          <sequence>
+            <element name="userId" type="xs:string" minOccurs="1" maxOccurs="1" />
+          </sequence>
+        </complexType>
+      </element>
+      <element name="DoesIdPUserExistResponse">
+        <complexType>
+          <sequence>
+            <element name="response" type="xs:boolean" minOccurs="1" maxOccurs="1" />
+          </sequence>
+        </complexType>
+      </element>
       <element name="DorianResourceProperties">
         <complexType>
           <sequence>
@@ -637,6 +651,12 @@
   </message>
   <message name="ChangeIdPUserPasswordResponse">
     <part name="parameters" element="tns:ChangeIdPUserPasswordResponse" />
+  </message>
+  <message name="DoesIdPUserExistRequest">
+    <part name="parameters" element="tns:DoesIdPUserExistRequest" />
+  </message>
+  <message name="DoesIdPUserExistResponse">
+    <part name="parameters" element="tns:DoesIdPUserExistResponse" />
   </message>
   <message name="DorianInternalFaultFaultMessage">
     <part name="fault" element="ns7:DorianInternalFault" />
@@ -847,6 +867,11 @@
       <fault name="DorianInternalFault" message="tns:DorianInternalFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/Dorian/DorianInternalFaultFaultMessage" />
       <fault name="PermissionDeniedFault" message="tns:PermissionDeniedFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/Dorian/PermissionDeniedFaultFaultMessage" />
       <fault name="InvalidUserPropertyFault" message="tns:InvalidUserPropertyFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/Dorian/InvalidUserPropertyFaultFaultMessage" />
+    </operation>
+    <operation name="doesIdPUserExist">
+      <input message="tns:DoesIdPUserExistRequest" wsa:Action="http://cagrid.nci.nih.gov/Dorian/DoesIdPUserExistRequest" />
+      <output message="tns:DoesIdPUserExistResponse" wsa:Action="http://cagrid.nci.nih.gov/Dorian/DoesIdPUserExistResponse" />
+      <fault name="DorianInternalFault" message="tns:DorianInternalFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/Dorian/DorianInternalFaultFaultMessage" />
     </operation>
     <operation name="GetResourceProperty">
       <input name="GetResourcePropertyRequest" message="wsrpw:GetResourcePropertyRequest" wsa:Action="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties/GetResourceProperty" />

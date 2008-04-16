@@ -19,7 +19,6 @@ import java.rmi.RemoteException;
 
 import org.apache.axis.types.URI.MalformedURIException;
 
-
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
@@ -31,14 +30,31 @@ public class IdPUserClient {
 
 	private DorianClient client;
 
-
-	public IdPUserClient(String serviceURI) throws MalformedURIException, RemoteException {
+	public IdPUserClient(String serviceURI) throws MalformedURIException,
+			RemoteException {
 		client = new DorianClient(serviceURI);
 	}
 
+	public boolean doesIdPUserExist(String userId) throws DorianFault,
+			DorianInternalFault {
+		try {
+			return client.doesIdPUserExist(userId);
+		} catch (DorianInternalFault f) {
+			throw f;
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			DorianFault fault = new DorianFault();
+			fault.setFaultString(Utils.getExceptionMessage(e));
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (DorianFault) helper.getFault();
+			throw fault;
+		}
+	}
 
-	public SAMLAssertion authenticate(Credential cred) throws DorianFault, InvalidCredentialFault,
-		InsufficientAttributeFault, AuthenticationProviderFault {
+	public SAMLAssertion authenticate(Credential cred) throws DorianFault,
+			InvalidCredentialFault, InsufficientAttributeFault,
+			AuthenticationProviderFault {
 
 		try {
 			String xml = client.authenticate(cred).getXml();
@@ -60,9 +76,8 @@ public class IdPUserClient {
 		}
 	}
 
-
-	public SAMLAssertion authenticate(BasicAuthCredential cred) throws DorianFault, DorianInternalFault,
-		PermissionDeniedFault {
+	public SAMLAssertion authenticate(BasicAuthCredential cred)
+			throws DorianFault, DorianInternalFault, PermissionDeniedFault {
 		try {
 			String xml = client.authenticateWithIdP(cred).getXml();
 			return SAMLUtils.stringToSAMLAssertion(xml);
@@ -81,9 +96,9 @@ public class IdPUserClient {
 		}
 	}
 
-
-	public void changePassword(BasicAuthCredential cred, String newPassword) throws DorianFault, DorianInternalFault,
-		PermissionDeniedFault, InvalidUserPropertyFault {
+	public void changePassword(BasicAuthCredential cred, String newPassword)
+			throws DorianFault, DorianInternalFault, PermissionDeniedFault,
+			InvalidUserPropertyFault {
 		try {
 			client.changeIdPUserPassword(cred, newPassword);
 		} catch (DorianInternalFault f) {

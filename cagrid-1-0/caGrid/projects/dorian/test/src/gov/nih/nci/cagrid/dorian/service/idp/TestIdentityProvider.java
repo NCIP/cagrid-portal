@@ -50,7 +50,9 @@ public class TestIdentityProvider extends TestCase {
 			assertEquals(AutomaticRegistrationPolicy.class, props
 					.getRegistrationPolicy().getClass());
 			Application a = createApplication();
+			assertFalse(idp.doesUserExist(a.getUserId()));
 			idp.register(a);
+			assertTrue(idp.doesUserExist(a.getUserId()));
 			BasicAuthCredential cred = getAdminCreds();
 			IdPUserFilter uf = new IdPUserFilter();
 			uf.setUserId(a.getUserId());
@@ -473,7 +475,9 @@ public class TestIdentityProvider extends TestCase {
 			idp = Utils.getIdentityProvider();
 
 			Application a = createApplication();
+			assertFalse(idp.doesUserExist(a.getUserId()));
 			idp.register(a);
+			assertTrue(idp.doesUserExist(a.getUserId()));
 			BasicAuthCredential cred = getAdminCreds();
 			IdPUserFilter uf = new IdPUserFilter();
 			uf.setUserId(a.getUserId());
