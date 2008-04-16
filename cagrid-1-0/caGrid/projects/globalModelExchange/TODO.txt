@@ -1,10 +1,5 @@
-NEED TO IVYIZE spring-mock.jar
 
 edit service to load properties and spring config (similar to cds)
-
-fix test to load properties correctly (remove property placeholder in config)
-
-need to deal with db creation for testing
 
 finish hibernate annotations
 
@@ -13,8 +8,6 @@ springize GME:
   -GMEXMLSchemaLoader
   -policy?
   -something to get current identity (UserInformationProvider.getCurrentUserIdentity()?)
-
-
     
 
 add a test for no namespace schema (need to disallow)
