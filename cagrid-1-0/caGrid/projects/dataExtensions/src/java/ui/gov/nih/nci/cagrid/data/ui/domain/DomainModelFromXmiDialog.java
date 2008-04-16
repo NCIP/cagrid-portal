@@ -57,7 +57,7 @@ import com.jgoodies.validation.view.ValidationComponentUtils;
  * @author David Ervin
  * 
  * @created Oct 23, 2007 11:05:04 AM
- * @version $Id: DomainModelFromXmiDialog.java,v 1.8 2008-04-04 17:17:21 dervin Exp $ 
+ * @version $Id: DomainModelFromXmiDialog.java,v 1.9 2008-04-16 13:31:28 dervin Exp $ 
  */
 public class DomainModelFromXmiDialog extends JDialog {
     // keys for validation messages
@@ -574,6 +574,7 @@ public class DomainModelFromXmiDialog extends JDialog {
         if (fixEaModelCheckBox == null) {
             fixEaModelCheckBox = new JCheckBox();
             fixEaModelCheckBox.setText("Fix EA Model");
+            fixEaModelCheckBox.setToolTipText("Requires caCORE SDK 3.2");
             fixEaModelCheckBox.addItemListener(new java.awt.event.ItemListener() {
                 public void itemStateChanged(java.awt.event.ItemEvent e) {
                     boolean enable = fixEaModelCheckBox.isSelected();
@@ -595,6 +596,7 @@ public class DomainModelFromXmiDialog extends JDialog {
     private JTextField getSdkDirTextField() {
         if (sdkDirTextField == null) {
             sdkDirTextField = new JTextField();
+            sdkDirTextField.setToolTipText("Select the caCORE SDK 3.2 Directory");
             sdkDirTextField.setEditable(false);
             sdkDirTextField.setEnabled(getFixEaModelCheckBox().isSelected());
             sdkDirTextField.getDocument().addDocumentListener(documentChangeListener);
