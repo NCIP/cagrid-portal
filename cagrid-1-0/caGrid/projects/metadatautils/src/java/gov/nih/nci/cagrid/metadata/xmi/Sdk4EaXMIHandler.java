@@ -21,7 +21,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -34,10 +35,10 @@ import org.xml.sax.helpers.DefaultHandler;
   * @author David Ervin
   * 
   * @created Oct 22, 2007 10:26:25 AM
-  * @version $Id: Sdk4EaXMIHandler.java,v 1.1 2008-04-04 15:57:41 dervin Exp $
+  * @version $Id: Sdk4EaXMIHandler.java,v 1.2 2008-04-17 19:18:23 dervin Exp $
  */
 class Sdk4EaXMIHandler extends DefaultHandler {
-    private static final Logger LOG = Logger.getLogger(Sdk4EaXMIHandler.class);   
+    private static final Log LOG = LogFactory.getLog(Sdk4EaXMIHandler.class);   
     
     // parser contains configuration options and information for the handler
     private final XMIParser parser;

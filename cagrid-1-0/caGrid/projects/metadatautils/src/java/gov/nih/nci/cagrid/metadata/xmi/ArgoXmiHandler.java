@@ -22,7 +22,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -34,11 +35,11 @@ import org.xml.sax.helpers.DefaultHandler;
  * @author David Ervin
  * 
  * @created Mar 19, 2008 3:16:47 PM
- * @version $Id: ArgoXmiHandler.java,v 1.1 2008-04-04 15:57:41 dervin Exp $ 
+ * @version $Id: ArgoXmiHandler.java,v 1.2 2008-04-17 19:18:23 dervin Exp $ 
  */
 public class ArgoXmiHandler extends DefaultHandler {
     
-    private static final Logger LOG = Logger.getLogger(ArgoXmiHandler.class);
+    private static final Log LOG = LogFactory.getLog(ArgoXmiHandler.class);
 
     // parser contains configuration options and information for the handler
     private final XMIParser parser;

@@ -3,7 +3,8 @@ package gov.nih.nci.cagrid.testing.system.deployment.steps;
 import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainer;
 import gov.nih.nci.cagrid.testing.system.haste.Step;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /** 
  *  StartContainerStep
@@ -12,10 +13,10 @@ import org.apache.log4j.Logger;
  * @author David Ervin
  * 
  * @created Nov 1, 2007 3:28:58 PM
- * @version $Id: StartContainerStep.java,v 1.2 2007-12-03 16:27:18 hastings Exp $ 
+ * @version $Id: StartContainerStep.java,v 1.3 2008-04-17 19:19:01 dervin Exp $ 
  */
 public class StartContainerStep extends Step {
-    private static final Logger LOG = Logger.getLogger(StartContainerStep.class);
+    private static final Log LOG = LogFactory.getLog(StartContainerStep.class);
     
     private ServiceContainer container;
     

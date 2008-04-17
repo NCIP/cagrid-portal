@@ -3,6 +3,7 @@ package gov.nih.nci.cagrid.testing.system.deployment;
 import gov.nih.nci.cagrid.common.StreamGobbler;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.common.XMLUtilities;
+import gov.nih.nci.cagrid.common.StreamGobbler.LogPriority;
 
 import java.io.File;
 import java.io.IOException;
@@ -25,8 +26,8 @@ import org.apache.axis.client.Stub;
 import org.apache.axis.configuration.FileProvider;
 import org.apache.axis.message.addressing.Address;
 import org.apache.axis.message.addressing.EndpointReferenceType;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.globus.axis.gsi.GSIConstants;
 import org.globus.common.CoGProperties;
 import org.globus.wsrf.impl.security.authorization.NoAuthorization;
@@ -48,7 +49,7 @@ import com.counter.service.CounterServiceAddressingLocator;
  */
 public class TomcatServiceContainer extends ServiceContainer {
 
-	private static final Logger LOG = Logger.getLogger(ServiceContainer.class);
+	private static final Log LOG = LogFactory.getLog(ServiceContainer.class);
 
 	public static final int DEFAULT_STARTUP_WAIT_TIME = 10; // seconds
 	public static final int DEFAULT_SHUTDOWN_WAIT_TIME = 10; // seconds
@@ -150,9 +151,9 @@ public class TomcatServiceContainer extends ServiceContainer {
 			deployProcess = Runtime.getRuntime().exec(commandArray,
 					editedEnvironment, serviceDir);
 			new StreamGobbler(deployProcess.getInputStream(),
-					StreamGobbler.TYPE_OUT, LOG, Level.DEBUG).start();
+					StreamGobbler.TYPE_OUT, LOG, LogPriority.DEBUG).start();
 			new StreamGobbler(deployProcess.getErrorStream(),
-					StreamGobbler.TYPE_OUT, LOG, Level.ERROR).start();
+					StreamGobbler.TYPE_OUT, LOG, LogPriority.ERROR).start();
 			deployProcess.waitFor();
 		} catch (Exception ex) {
 			throw new ContainerException("Error invoking deploy process: "
@@ -204,9 +205,9 @@ public class TomcatServiceContainer extends ServiceContainer {
 			shutdownProcess = Runtime.getRuntime().exec(commandArray,
 					editedEnvironment, getProperties().getContainerDirectory());
 			new StreamGobbler(shutdownProcess.getInputStream(),
-					StreamGobbler.TYPE_OUT, LOG, Level.DEBUG).start();
+					StreamGobbler.TYPE_OUT, LOG, LogPriority.DEBUG).start();
 			new StreamGobbler(shutdownProcess.getErrorStream(),
-					StreamGobbler.TYPE_OUT, LOG, Level.ERROR).start();
+					StreamGobbler.TYPE_OUT, LOG, LogPriority.ERROR).start();
 		} catch (Exception ex) {
 			throw new ContainerException("Error invoking startup process: "
 					+ ex.getMessage(), ex);

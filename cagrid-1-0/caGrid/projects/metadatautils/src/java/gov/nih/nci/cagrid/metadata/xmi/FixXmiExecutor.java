@@ -7,7 +7,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.StringTokenizer;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /** 
  *  FixXmiExecutor
@@ -16,10 +17,10 @@ import org.apache.log4j.Logger;
  * @author David Ervin
  * 
  * @created Oct 29, 2007 2:11:31 PM
- * @version $Id: FixXmiExecutor.java,v 1.7 2007-12-10 20:36:19 dervin Exp $ 
+ * @version $Id: FixXmiExecutor.java,v 1.8 2008-04-17 19:18:23 dervin Exp $ 
  */
 public class FixXmiExecutor {
-    public static final Logger LOG = Logger.getLogger(FixXmiExecutor.class);
+    public static final Log LOG = LogFactory.getLog(FixXmiExecutor.class);
     
     // ant tasks
     public static final String FIX_XMI_TASK = "fix-xmi";
@@ -78,9 +79,9 @@ public class FixXmiExecutor {
         Process proc = Runtime.getRuntime().exec(command.toString());
         /* streams to LOG
         new StreamGobbler(proc.getInputStream(), StreamGobbler.TYPE_OUT,
-            LOG, Priority.DEBUG).start();
+            LOG, LogPriority.DEBUG).start();
         new StreamGobbler(proc.getErrorStream(), StreamGobbler.TYPE_ERR,
-            LOG, Priority.DEBUG).start();
+            LOG, LogPriority.DEBUG).start();
         */
         // Streams to out
         new StreamGobbler(proc.getInputStream(), StreamGobbler.TYPE_OUT, System.out).start();

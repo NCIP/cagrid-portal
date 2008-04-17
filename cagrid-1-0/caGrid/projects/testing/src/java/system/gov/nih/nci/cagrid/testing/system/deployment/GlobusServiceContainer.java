@@ -2,6 +2,7 @@ package gov.nih.nci.cagrid.testing.system.deployment;
 
 import gov.nih.nci.cagrid.common.StreamGobbler;
 import gov.nih.nci.cagrid.common.XMLUtilities;
+import gov.nih.nci.cagrid.common.StreamGobbler.LogPriority;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -20,8 +21,8 @@ import org.apache.axis.client.Stub;
 import org.apache.axis.configuration.FileProvider;
 import org.apache.axis.message.addressing.Address;
 import org.apache.axis.message.addressing.EndpointReferenceType;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.globus.axis.gsi.GSIConstants;
 import org.globus.wsrf.impl.security.authorization.NoAuthorization;
 import org.jdom.Document;
@@ -44,7 +45,7 @@ import com.counter.service.CounterServiceAddressingLocator;
  */
 public class GlobusServiceContainer extends ServiceContainer {
 
-    private static final Logger LOG = Logger.getLogger(ServiceContainer.class);
+    private static final Log LOG = LogFactory.getLog(ServiceContainer.class);
 
     public static final String GLOBUS_CONTAINER_CLASSNAME = "org.globus.wsrf.container.ServiceContainer";
     public static final String GLOBUS_SHUTDOWN_CLASSNAME = "org.globus.wsrf.container.ShutdownClient";
@@ -112,8 +113,8 @@ public class GlobusServiceContainer extends ServiceContainer {
         Process deployProcess = null;
         try {
             deployProcess = Runtime.getRuntime().exec(commandArray, editedEnvironment, serviceDir);
-            new StreamGobbler(deployProcess.getInputStream(), StreamGobbler.TYPE_OUT, LOG, Level.DEBUG).start();
-            new StreamGobbler(deployProcess.getErrorStream(), StreamGobbler.TYPE_ERR, LOG, Level.ERROR).start();
+            new StreamGobbler(deployProcess.getInputStream(), StreamGobbler.TYPE_OUT, LOG, LogPriority.DEBUG).start();
+            new StreamGobbler(deployProcess.getErrorStream(), StreamGobbler.TYPE_ERR, LOG, LogPriority.ERROR).start();
             deployProcess.waitFor();
         } catch (Exception ex) {
             throw new ContainerException("Error invoking deploy process: " + ex.getMessage(), ex);
@@ -176,8 +177,6 @@ public class GlobusServiceContainer extends ServiceContainer {
         } catch (IOException ex) {
             throw new ContainerException("Error executing shutdown client process: " + ex.getMessage(), ex);
         }
-
-        final Process shutdownProc = proc;
 
         int retval = 0;
         try {
@@ -349,8 +348,8 @@ public class GlobusServiceContainer extends ServiceContainer {
 
         // start the process
         Process proc = Runtime.getRuntime().exec(cmd.toArray(new String[0]), editedEnvironment, containerDir);
-        new StreamGobbler(proc.getInputStream(), StreamGobbler.TYPE_OUT, LOG, Level.DEBUG).start();
-        new StreamGobbler(proc.getErrorStream(), StreamGobbler.TYPE_ERR, LOG, Level.ERROR).start();
+        new StreamGobbler(proc.getInputStream(), StreamGobbler.TYPE_OUT, LOG, LogPriority.DEBUG).start();
+        new StreamGobbler(proc.getErrorStream(), StreamGobbler.TYPE_ERR, LOG, LogPriority.ERROR).start();
         return proc;
     }
 
