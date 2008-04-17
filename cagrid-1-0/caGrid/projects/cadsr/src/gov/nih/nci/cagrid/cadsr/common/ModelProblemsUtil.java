@@ -11,7 +11,8 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 
 /** 
@@ -22,14 +23,14 @@ import org.apache.log4j.Logger;
  * @author David Ervin
  * 
  * @created Feb 8, 2008 9:49:12 AM
- * @version $Id: ModelProblemsUtil.java,v 1.2 2008-02-11 15:29:47 dervin Exp $ 
+ * @version $Id: ModelProblemsUtil.java,v 1.3 2008-04-17 19:47:44 dervin Exp $ 
  */
 public class ModelProblemsUtil {
     
     // default URL of the cadsr application service
     public static final String DEFAULT_CADSR_APPLICATION_URL = "http://cabio.nci.nih.gov/cacore31/http/remoteService";
 
-    private static final Logger LOG = Logger.getLogger(ModelProblemsUtil.class);
+    private static final Log LOG = LogFactory.getLog(ModelProblemsUtil.class);
 
     private ApplicationService cadsrService = null;
 
