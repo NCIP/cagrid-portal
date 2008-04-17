@@ -4,9 +4,11 @@ import gov.nih.nci.cagrid.portal.portlet.PortletIntegrationTestBase;
 import gov.nih.nci.cagrid.portal.portlet.discovery.evs.EVSConceptDTO;
 import gov.nih.nci.cagrid.portal.portlet.discovery.evs.EVSService;
 import gov.nih.nci.cagrid.portal.portlet.discovery.evs.LexbigEVSService;
-import org.apache.log4j.Logger;
 
 import java.util.Set;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  * User: kherm
@@ -18,7 +20,7 @@ public class EVSServiceTest extends PortletIntegrationTestBase {
     protected EVSService caCoreEVSService;
     protected LexbigEVSService lexbigEVSService;
 
-    private Logger log = Logger.getLogger(EVSServiceTest.class);
+    private Log log = LogFactory.getLog(EVSServiceTest.class);
 
     public EVSServiceTest() {
         setAutowireMode(AUTOWIRE_BY_NAME);

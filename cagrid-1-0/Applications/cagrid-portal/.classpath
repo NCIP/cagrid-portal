@@ -85,7 +85,23 @@
 	<classpathentry kind="lib" path="aggr/lib/cagrid/caGrid-1.1-caDSR-common.jar"/>
 	<classpathentry kind="lib" path="aggr/lib/cagrid/caGrid-1.1-caDSR-client.jar"/>
 	<classpathentry kind="lib" path="aggr/lib/cagrid/caGrid-1.1-caDSR-stubs.jar"/>
-	<classpathentry kind="lib" path="aggr/lib/cacore/client.jar"/>
+	<classpathentry kind="lib" path="aggr/lib/cacore/caDSR-beans.jar"/>
+	<classpathentry kind="lib" path="portlets/test/lib/spring-mock.jar"/>
+	<classpathentry kind="lib" path="aggr/lib/cacore/cabio40-beans.jar"/>
+	<classpathentry kind="lib" path="aggr/lib/cacore/cabio40-client-framework.jar"/>
+	<classpathentry kind="lib" path="aggr/lib/cacore/evsapi40-beans.jar"/>
+	<classpathentry kind="lib" path="aggr/lib/cacore/evsapi40-framework.jar"/>
+	<classpathentry kind="lib" path="aggr/lib/cacore/lbAdmin.jar"/>
+	<classpathentry kind="lib" path="aggr/lib/cacore/lbImpl.jar"/>
+	<classpathentry kind="lib" path="aggr/lib/cacore/lbInterfaces.jar"/>
+	<classpathentry kind="lib" path="aggr/lib/cacore/lbModel.jar"/>
+	<classpathentry kind="lib" path="aggr/lib/cacore/lbPatch.jar"/>
+	<classpathentry kind="lib" path="aggr/lib/cacore/lgModel.jar"/>
+	<classpathentry kind="lib" path="aggr/lib/cacore/lgRDFConverter.jar"/>
+	<classpathentry kind="lib" path="aggr/lib/cacore/lgUtility.jar"/>
+	<classpathentry kind="lib" path="aggr/lib/cacore/lucene-core-2.0.0.jar"/>
+	<classpathentry kind="lib" path="aggr/lib/cacore/lucene-regex-10-9-06-nightly.jar"/>
+	<classpathentry kind="lib" path="aggr/lib/cacore/sdk-client-framework.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xmlsec.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/puretls.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/jgss.jar"/>
