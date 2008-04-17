@@ -11,7 +11,8 @@ import gov.nih.nci.cagrid.sdkquery4.processor.SDK4QueryProcessor;
 import java.io.File;
 import java.util.jar.JarFile;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /** 
  *  SDK4PostCodegenHelper
@@ -19,7 +20,7 @@ import org.apache.log4j.Logger;
  * @author David Ervin
  * 
  * @created Jan 8, 2008 12:54:15 PM
- * @version $Id: SDK4PostCodegenHelper.java,v 1.2 2008-01-18 15:11:48 dervin Exp $ 
+ * @version $Id: SDK4PostCodegenHelper.java,v 1.3 2008-04-17 15:25:51 dervin Exp $ 
  */
 public class SDK4PostCodegenHelper extends PostCodegenHelper {
     
@@ -27,7 +28,7 @@ public class SDK4PostCodegenHelper extends PostCodegenHelper {
     public static final String SDK_PROXY_HELPER = "gov.nih.nci.system.client.proxy.ProxyHelperImpl";
     public static final String POJO_PROXY_HELPER = "gov.nih.nci.cagrid.sdkquery4.processor.PojoProxyHelperImpl";
     
-    private static final Logger LOG = Logger.getLogger(SDK4PostCodegenHelper.class);
+    private static final Log LOG = LogFactory.getLog(SDK4PostCodegenHelper.class);
 
     public void codegenPostProcessStyle(ServiceExtensionDescriptionType desc, ServiceInformation info) throws Exception {
         super.codegenPostProcessStyle(desc, info);

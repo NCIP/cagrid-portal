@@ -22,7 +22,8 @@ import java.util.Set;
 
 import org.apache.axis.types.URI;
 import org.apache.axis.types.URI.MalformedURIException;
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /** 
  *  InvokeSDK4DataServiceStep
@@ -32,14 +33,14 @@ import org.apache.log4j.Logger;
  * @author David Ervin
  * 
  * @created Feb 1, 2008 9:02:20 AM
- * @version $Id: InvokeSDK4DataServiceStep.java,v 1.19 2008-02-15 15:20:59 dervin Exp $ 
+ * @version $Id: InvokeSDK4DataServiceStep.java,v 1.20 2008-04-17 15:26:29 dervin Exp $ 
  */
 public class InvokeSDK4DataServiceStep extends Step {
     public static final String TEST_RESOURCES_DIR = "/test/resources/";
     public static final String TEST_QUERIES_DIR = TEST_RESOURCES_DIR + "testQueries/";
     public static final String TEST_RESULTS_DIR = TEST_RESOURCES_DIR + "testGoldResults/";
     
-    private static Logger LOG = Logger.getLogger(InvokeSDK4DataServiceStep.class);
+    private static Log LOG = LogFactory.getLog(InvokeSDK4DataServiceStep.class);
     
     private ServiceContainer container;
     private DataTestCaseInfo testInfo;

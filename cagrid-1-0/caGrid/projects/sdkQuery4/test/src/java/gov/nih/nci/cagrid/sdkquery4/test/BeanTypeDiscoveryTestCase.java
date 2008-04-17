@@ -25,7 +25,8 @@ import junit.framework.TestResult;
 import junit.framework.TestSuite;
 import junit.textui.TestRunner;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /** 
  *  BeanTypeDiscoveryTest
@@ -34,7 +35,7 @@ import org.apache.log4j.Logger;
  * @author David Ervin
  * 
  * @created Jan 15, 2008 1:33:01 PM
- * @version $Id: BeanTypeDiscoveryTestCase.java,v 1.5 2008-02-16 18:25:03 oster Exp $ 
+ * @version $Id: BeanTypeDiscoveryTestCase.java,v 1.6 2008-04-17 15:26:29 dervin Exp $ 
  */
 public class BeanTypeDiscoveryTestCase extends TestCase {
 
@@ -42,7 +43,7 @@ public class BeanTypeDiscoveryTestCase extends TestCase {
     public static final String DOMAIN_MODEL_FILENAME = "test/resources/sdkExampleDomainModel.xml";
     public static final String GOLD_DOMAIN_TYPES_FILENAME = "test/resources/goldExampleDomainTypes.xml";
 
-    private static final Logger LOG = Logger.getLogger(BeanTypeDiscoveryTestCase.class);
+    private static final Log LOG = LogFactory.getLog(BeanTypeDiscoveryTestCase.class);
     
     private File beansJar = null;
     private DomainModel model = null;

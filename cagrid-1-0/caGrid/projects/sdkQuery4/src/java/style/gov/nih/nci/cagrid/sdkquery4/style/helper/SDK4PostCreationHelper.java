@@ -14,7 +14,9 @@ import gov.nih.nci.cagrid.sdkquery4.encoding.SDK40EncodingUtils;
 
 import java.io.File;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 
 /** 
  *  SDK4PostCreationHelper
@@ -23,13 +25,13 @@ import org.apache.log4j.Logger;
  * @author David Ervin
  * 
  * @created Jan 18, 2008 12:38:01 PM
- * @version $Id: SDK4PostCreationHelper.java,v 1.2 2008-02-05 15:39:44 dervin Exp $ 
+ * @version $Id: SDK4PostCreationHelper.java,v 1.3 2008-04-17 15:25:51 dervin Exp $ 
  */
 public class SDK4PostCreationHelper implements StyleCreationPostProcessor {
     
     public static final String OLD_CASTOR_JAR_NAME = "castor-0.9.9.jar";
     
-    private static final Logger LOG = Logger.getLogger(SDK4PostCreationHelper.class);
+    private static final Log LOG = LogFactory.getLog(SDK4PostCreationHelper.class);
 
     public void creationPostProcessStyle(ServiceExtensionDescriptionType desc, 
         ServiceInformation serviceInfo) throws Exception {

@@ -23,7 +23,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 
 /** 
  *  CQL2ParameterizedHQL
@@ -33,12 +35,12 @@ import org.apache.log4j.Logger;
  * @author David Ervin
  * 
  * @created Mar 2, 2007 10:26:47 AM
- * @version $Id: CQL2ParameterizedHQL.java,v 1.9 2008-02-21 15:57:41 dervin Exp $ 
+ * @version $Id: CQL2ParameterizedHQL.java,v 1.10 2008-04-17 15:26:12 dervin Exp $ 
  */
 public class CQL2ParameterizedHQL {
     public static final String TARGET_ALIAS = "__TargetAlias__";
     
-    private static Logger LOG = Logger.getLogger(CQL2ParameterizedHQL.class);
+    private static Log LOG = LogFactory.getLog(CQL2ParameterizedHQL.class);
 	
     // maps a CQL predicate to its HQL string representation 
 	private Map<Predicate, String> predicateValues = null;

@@ -27,7 +27,8 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.globus.wsrf.Resource;
 import org.globus.wsrf.ResourceContext;
 import org.globus.wsrf.security.SecurityManager;
@@ -39,7 +40,7 @@ import org.globus.wsrf.security.SecurityManager;
  * @author David Ervin
  * 
  * @created Oct 3, 2007 10:34:55 AM
- * @version $Id: SDK4QueryProcessor.java,v 1.14 2008-01-18 18:20:22 dervin Exp $ 
+ * @version $Id: SDK4QueryProcessor.java,v 1.15 2008-04-17 15:26:12 dervin Exp $ 
  */
 public class SDK4QueryProcessor extends CQLQueryProcessor {
     // configuration property keys
@@ -61,8 +62,8 @@ public class SDK4QueryProcessor extends CQLQueryProcessor {
     public static final String DEFAULT_USE_LOGIN = String.valueOf(false);
     public static final String DEFAULT_USE_GRID_IDENTITY_LOGIN = String.valueOf(false);
     
-    // Log4J logger
-    private static final Logger LOG = Logger.getLogger(SDK4QueryProcessor.class);
+    // logger
+    private static final Log LOG = LogFactory.getLog(SDK4QueryProcessor.class);
     
     private CQL2ParameterizedHQL cqlTranslator;
         

@@ -26,7 +26,9 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 
 /** 
  *  HQLCoreQueryProcessor
@@ -35,7 +37,7 @@ import org.apache.log4j.Logger;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created May 2, 2006 
- * @version $Id: HQLCoreQueryProcessor.java,v 1.9 2007-06-07 14:36:18 dervin Exp $ 
+ * @version $Id: HQLCoreQueryProcessor.java,v 1.10 2008-04-17 15:25:30 dervin Exp $ 
  */
 public class HQLCoreQueryProcessor extends LazyCQLQueryProcessor {
     // parameter which determines the remote appservice URL
@@ -60,7 +62,7 @@ public class HQLCoreQueryProcessor extends LazyCQLQueryProcessor {
     public static final String USE_LOCAL_APPSERVICE = "useLocalAppservice";
     public static final String USE_LOCAL_APPSERVICE_DEFAULT = String.valueOf(false);
     
-	private static Logger LOG = Logger.getLogger(HQLCoreQueryProcessor.class);
+	private static Log LOG = LogFactory.getLog(HQLCoreQueryProcessor.class);
 	
 	private ApplicationService coreService;
 	

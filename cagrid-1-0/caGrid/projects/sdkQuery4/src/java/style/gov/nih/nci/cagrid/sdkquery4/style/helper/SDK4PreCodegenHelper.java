@@ -1,11 +1,5 @@
 package gov.nih.nci.cagrid.sdkquery4.style.helper;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-
-import org.apache.log4j.Logger;
-
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.data.style.StyleCodegenPreProcessor;
@@ -22,6 +16,13 @@ import gov.nih.nci.cagrid.sdkquery4.style.beanmap.BeanTypeDiscoveryEventListener
 import gov.nih.nci.cagrid.sdkquery4.style.beanmap.BeanTypeDiscoveryMapper;
 import gov.nih.nci.cagrid.sdkquery4.style.common.SDK4StyleConstants;
 
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 /** 
  *  SDK4PreCodegenHelper
  *  Helper for the caCORE SDK 4 Data Service style -- pre codegen
@@ -29,13 +30,13 @@ import gov.nih.nci.cagrid.sdkquery4.style.common.SDK4StyleConstants;
  * @author David Ervin
  * 
  * @created Jan 18, 2008 9:56:27 AM
- * @version $Id: SDK4PreCodegenHelper.java,v 1.2 2008-02-07 20:42:08 dervin Exp $ 
+ * @version $Id: SDK4PreCodegenHelper.java,v 1.3 2008-04-17 15:25:51 dervin Exp $ 
  */
 public class SDK4PreCodegenHelper implements StyleCodegenPreProcessor {
     
     public static final String DOMAIN_TYPES_INFO_FILE_SUFFIX = "domainTypesInformation.xml";
     
-    private static final Logger LOG = Logger.getLogger(SDK4PreCodegenHelper.class);
+    private static final Log LOG = LogFactory.getLog(SDK4PreCodegenHelper.class);
     
 
     public void codegenPreProcessStyle(ServiceExtensionDescriptionType desc, ServiceInformation info) throws Exception {

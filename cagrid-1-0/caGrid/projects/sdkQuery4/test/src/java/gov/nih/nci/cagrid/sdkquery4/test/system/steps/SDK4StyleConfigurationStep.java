@@ -41,7 +41,8 @@ import java.util.Set;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /** 
  *  SDK4StyleConfigurationStep
@@ -51,7 +52,7 @@ import org.apache.log4j.Logger;
  * @author David Ervin
  * 
  * @created Jan 28, 2008 11:24:21 AM
- * @version $Id: SDK4StyleConfigurationStep.java,v 1.6 2008-02-28 18:43:21 dervin Exp $ 
+ * @version $Id: SDK4StyleConfigurationStep.java,v 1.7 2008-04-17 15:26:29 dervin Exp $ 
  */
 public class SDK4StyleConfigurationStep extends Step {
     public static final String SDKQUERY4_BASE_DIR = "../sdkQuery4";
@@ -63,7 +64,7 @@ public class SDK4StyleConfigurationStep extends Step {
     public static final String DEFAULT_REMOTE_HOST_NAME_VALUE = "http://localhost";
     public static final String DEFAULT_REMOTE_HOST_PORT_VALUE = "8080";
     
-    private static Logger LOG = Logger.getLogger(SDK4StyleConfigurationStep.class);
+    private static Log LOG = LogFactory.getLog(SDK4StyleConfigurationStep.class);
     
     private File serviceBaseDirectory = null;
     private ServiceInformation serviceInformation = null;

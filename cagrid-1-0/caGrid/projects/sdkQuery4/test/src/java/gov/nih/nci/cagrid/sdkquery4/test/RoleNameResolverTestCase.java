@@ -18,7 +18,8 @@ import junit.framework.TestResult;
 import junit.framework.TestSuite;
 import junit.textui.TestRunner;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /** 
  *  RoleNameResolverTestCase
@@ -27,11 +28,11 @@ import org.apache.log4j.Logger;
  * @author David Ervin
  * 
  * @created Feb 13, 2008 1:59:59 PM
- * @version $Id: RoleNameResolverTestCase.java,v 1.1 2008-02-13 22:18:00 dervin Exp $ 
+ * @version $Id: RoleNameResolverTestCase.java,v 1.2 2008-04-17 15:26:29 dervin Exp $ 
  */
 public class RoleNameResolverTestCase extends TestCase {
     
-    public static final Logger LOG = Logger.getLogger(RoleNameResolverTestCase.class);
+    public static final Log LOG = LogFactory.getLog(RoleNameResolverTestCase.class);
     
     private RoleNameResolver resolver = null;
     

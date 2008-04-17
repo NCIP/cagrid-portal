@@ -13,7 +13,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /** 
  *  RoleNameResolver
@@ -22,10 +23,10 @@ import org.apache.log4j.Logger;
  * @author David Ervin
  * 
  * @created Dec 20, 2007 11:40:22 AM
- * @version $Id: RoleNameResolver.java,v 1.2 2008-02-14 14:22:44 dervin Exp $ 
+ * @version $Id: RoleNameResolver.java,v 1.3 2008-04-17 15:26:12 dervin Exp $ 
  */
 public class RoleNameResolver {
-    private static Logger LOG = Logger.getLogger(RoleNameResolver.class);
+    private static Log LOG = LogFactory.getLog(RoleNameResolver.class);
     
     private DomainModel domainModel = null;
     private Map<String, String> roleNames = null;
