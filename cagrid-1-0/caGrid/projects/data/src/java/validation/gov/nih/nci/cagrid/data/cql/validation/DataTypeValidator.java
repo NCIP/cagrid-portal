@@ -5,7 +5,8 @@ import gov.nih.nci.cagrid.data.MalformedQueryException;
 import java.text.DateFormat;
 import java.util.Date;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 
 /**
@@ -17,7 +18,7 @@ import org.apache.log4j.Logger;
  * @version $Id$
  */
 public class DataTypeValidator {
-	private static Logger LOG = Logger.getLogger(DataTypeValidator.class);
+	private static Log LOG = LogFactory.getLog(DataTypeValidator.class);
 
 
 	public static void validate(String value, String dataType) throws MalformedQueryException {

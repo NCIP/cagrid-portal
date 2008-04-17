@@ -26,7 +26,9 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 
 /** 
  *  HQLCoreQueryProcessor
@@ -46,7 +48,7 @@ public class HQLCoreQueryProcessor extends CQLQueryProcessor {
 	public static final String CASE_INSENSITIVE_QUERYING = "queryCaseInsensitive";
 	public static final String USE_CASE_INSENSITIVE_DEFAULT = String.valueOf(false);
 	
-	private static Logger LOG = Logger.getLogger(HQLCoreQueryProcessor.class);
+	private static Log LOG = LogFactory.getLog(HQLCoreQueryProcessor.class);
 	
 	private static Object sessionMutex = new Object(); 
 	

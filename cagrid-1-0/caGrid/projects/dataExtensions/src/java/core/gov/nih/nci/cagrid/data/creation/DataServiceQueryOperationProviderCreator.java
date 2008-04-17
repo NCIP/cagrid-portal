@@ -44,7 +44,8 @@ import java.util.List;
 
 import javax.xml.namespace.QName;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 
 /**
@@ -62,7 +63,7 @@ public class DataServiceQueryOperationProviderCreator implements CreationExtensi
     public static final String DEFAULT_CQL_VALIDATOR_CLASS = ObjectWalkingCQLValidator.class.getName();
     public static final String DEFAULT_DOMAIN_MODEL_VALIDATOR = DomainModelValidator.class.getName();
 
-    private static Logger log = Logger.getLogger(DataServiceQueryOperationProviderCreator.class);
+    private static Log log = LogFactory.getLog(DataServiceQueryOperationProviderCreator.class);
 
 
     public void postCreate(ServiceExtensionDescriptionType desc, ServiceInformation serviceInfo)

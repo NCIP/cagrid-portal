@@ -19,9 +19,9 @@ import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.cagrid.grape.utils.CompositeErrorDialog;
-
 
 /**
  * DataServiceModificationPanel 
@@ -30,11 +30,11 @@ import org.cagrid.grape.utils.CompositeErrorDialog;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * @created Oct 10, 2006
- * @version $Id: DataServiceModificationPanel.java,v 1.5 2007-11-06 15:53:41 hastings Exp $
+ * @version $Id: DataServiceModificationPanel.java,v 1.6 2008-04-17 15:16:07 dervin Exp $
  */
 public class DataServiceModificationPanel extends ServiceModificationUIPanel {
     
-    private static final Logger LOG = Logger.getLogger(DataServiceModificationPanel.class.getName()); 
+    private static final Log LOG = LogFactory.getLog(DataServiceModificationPanel.class.getName()); 
 
     private DomainModelConfigPanel domainConfigPanel = null;
 	private JTabbedPane mainTabbedPane = null;

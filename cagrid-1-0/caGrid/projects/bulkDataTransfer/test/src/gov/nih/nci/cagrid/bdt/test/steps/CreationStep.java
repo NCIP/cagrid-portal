@@ -3,6 +3,7 @@ package gov.nih.nci.cagrid.bdt.test.steps;
 import gov.nih.nci.cagrid.bdt.test.unit.CreationTest;
 import gov.nih.nci.cagrid.common.StreamGobbler;
 import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.common.StreamGobbler.LogPriority;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
@@ -17,8 +18,8 @@ import java.io.File;
 
 import javax.xml.namespace.QName;
 
-import org.apache.log4j.Logger;
-import org.apache.log4j.Priority;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 
 /**
@@ -26,11 +27,11 @@ import org.apache.log4j.Priority;
  * Step to create a BDT service using the Introduce engine
  * 
  * @created Aug 22, 2006
- * @version $Id: CreationStep.java,v 1.14 2007-12-03 16:27:18 hastings Exp $
+ * @version $Id: CreationStep.java,v 1.15 2008-04-17 15:13:13 dervin Exp $
  */
 public class CreationStep extends Step {
     
-    private static final Logger logger = Logger.getLogger(CreationStep.class);
+    private static final Log logger = LogFactory.getLog(CreationStep.class);
     
     private static final String BDT_START_RETURNS_CLIENT = "bdtStartReturnsClient";
     public static final String BDT_START_RETURNS_REFERENCE = "bdtStartReturnsReference";
@@ -49,8 +50,8 @@ public class CreationStep extends Step {
         String cmd = AntTools.getAntSkeletonCreationCommand(introduceDir, CreationTest.SERVICE_NAME,
             CreationTest.SERVICE_DIR, CreationTest.PACKAGE_NAME, CreationTest.SERVICE_NAMESPACE, IntroduceConstants.INTRODUCE_MAIN_RESOURCE + "," + IntroduceConstants.INTRODUCE_SINGLETON_RESOURCE, "bdt");
         Process p = CommonTools.createAndOutputProcess(cmd);
-        new StreamGobbler(p.getInputStream(), StreamGobbler.TYPE_OUT, logger,Priority.DEBUG).start();
-        new StreamGobbler(p.getErrorStream(), StreamGobbler.TYPE_ERR, logger,Priority.ERROR).start();
+        new StreamGobbler(p.getInputStream(), StreamGobbler.TYPE_OUT, logger, LogPriority.DEBUG).start();
+        new StreamGobbler(p.getErrorStream(), StreamGobbler.TYPE_ERR, logger, LogPriority.ERROR).start();
         p.waitFor();
         assertTrue("Creating new bdt service failed", p.exitValue() == 0);
         
@@ -60,16 +61,16 @@ public class CreationStep extends Step {
         cmd = AntTools.getAntSkeletonPostCreationCommand(introduceDir, CreationTest.SERVICE_NAME,
             CreationTest.SERVICE_DIR, CreationTest.PACKAGE_NAME, CreationTest.SERVICE_NAMESPACE, "bdt");
         p = CommonTools.createAndOutputProcess(cmd);
-        new StreamGobbler(p.getInputStream(), StreamGobbler.TYPE_OUT, logger,Priority.DEBUG).start();
-        new StreamGobbler(p.getErrorStream(), StreamGobbler.TYPE_ERR, logger,Priority.ERROR).start();
+        new StreamGobbler(p.getInputStream(), StreamGobbler.TYPE_OUT, logger, LogPriority.DEBUG).start();
+        new StreamGobbler(p.getErrorStream(), StreamGobbler.TYPE_ERR, logger, LogPriority.ERROR).start();
         p.waitFor();
         assertTrue("Service post creation process failed", p.exitValue() == 0);
 
         System.out.println("Building created service...");
         cmd = AntTools.getAntAllCommand(CreationTest.SERVICE_DIR);
         p = CommonTools.createAndOutputProcess(cmd);
-        new StreamGobbler(p.getInputStream(), StreamGobbler.TYPE_OUT, logger, Priority.DEBUG).start();
-        new StreamGobbler(p.getErrorStream(), StreamGobbler.TYPE_ERR, logger, Priority.ERROR).start();
+        new StreamGobbler(p.getInputStream(), StreamGobbler.TYPE_OUT, logger, LogPriority.DEBUG).start();
+        new StreamGobbler(p.getErrorStream(), StreamGobbler.TYPE_ERR, logger, LogPriority.ERROR).start();
         p.waitFor();
         assertTrue("Build process failed", p.exitValue() == 0);
     }

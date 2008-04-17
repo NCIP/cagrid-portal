@@ -31,7 +31,9 @@ import java.util.Set;
 
 import javax.xml.namespace.QName;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 
 /** 
  *  BaseCodegenPostProcessorExtension
@@ -40,10 +42,10 @@ import org.apache.log4j.Logger;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created Jun 16, 2006 
- * @version $Id: BaseCodegenPostProcessorExtension.java,v 1.3 2007-12-18 19:10:26 dervin Exp $ 
+ * @version $Id: BaseCodegenPostProcessorExtension.java,v 1.4 2008-04-17 15:15:56 dervin Exp $ 
  */
 public abstract class BaseCodegenPostProcessorExtension implements CodegenExtensionPostProcessor {
-	private static final Logger logger = Logger.getLogger(DataServiceOperationProviderCodegenPostProcessor.class);
+	private static final Log logger = LogFactory.getLog(DataServiceOperationProviderCodegenPostProcessor.class);
     
     public void postCodegen(ServiceExtensionDescriptionType desc, ServiceInformation info)
         throws CodegenExtensionException {

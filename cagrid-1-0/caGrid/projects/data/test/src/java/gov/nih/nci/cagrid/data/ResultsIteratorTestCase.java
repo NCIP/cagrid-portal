@@ -19,7 +19,8 @@ import junit.framework.TestResult;
 import junit.framework.TestSuite;
 import junit.textui.TestRunner;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.Namespace;
@@ -32,7 +33,7 @@ import org.projectmobius.bookstore.Book;
  * @author David Ervin
  * 
  * @created Dec 12, 2007 1:02:25 PM
- * @version $Id: ResultsIteratorTestCase.java,v 1.3 2007-12-13 20:03:59 dervin Exp $ 
+ * @version $Id: ResultsIteratorTestCase.java,v 1.4 2008-04-17 15:14:52 dervin Exp $ 
  */
 public class ResultsIteratorTestCase extends TestCase {
     public static final int EXPECTED_ATTRIBUTE_PER_RESULT_COUNT = 2;
@@ -44,7 +45,7 @@ public class ResultsIteratorTestCase extends TestCase {
     
     public static final String BOOKSTORE_URI = "gme://projectmobius.org/1/BookStore";
     
-    private static Logger LOG = Logger.getLogger(ResultsIteratorTestCase.class);
+    private static Log LOG = LogFactory.getLog(ResultsIteratorTestCase.class);
     
     public ResultsIteratorTestCase(String name) {
         super(name);

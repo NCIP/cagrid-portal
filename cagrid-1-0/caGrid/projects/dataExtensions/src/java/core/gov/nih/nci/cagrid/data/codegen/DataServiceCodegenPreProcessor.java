@@ -28,7 +28,8 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 
 /**
@@ -37,12 +38,13 @@ import org.apache.log4j.Logger;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * @created May 11, 2006
- * @version $Id: DataServiceCodegenPreProcessor.java,v 1.3 2007-08-24 14:14:50 dervin Exp $
+ * @version $Id: DataServiceCodegenPreProcessor.java,v 1.4 2008-04-17 15:15:56 dervin Exp $
  */
 public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProcessor {
 
 	private static final String DEFAULT_DOMAIN_MODEL_XML_FILE = "domainModel.xml";
-	private static final Logger LOG = Logger.getLogger(DataServiceCodegenPreProcessor.class);
+    
+	private static final Log LOG = LogFactory.getLog(DataServiceCodegenPreProcessor.class);
 
 
 	public void preCodegen(ServiceExtensionDescriptionType desc, ServiceInformation info)

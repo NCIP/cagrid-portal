@@ -3,6 +3,7 @@ package gov.nih.nci.cagrid.data.creation;
 
 import gov.nih.nci.cagrid.common.StreamGobbler;
 import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.common.StreamGobbler.LogPriority;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
@@ -12,8 +13,8 @@ import gov.nih.nci.cagrid.testing.system.haste.Step;
 
 import java.io.File;
 
-import org.apache.log4j.Logger;
-import org.apache.log4j.Priority;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /** 
  *  CreationStep
@@ -26,7 +27,7 @@ import org.apache.log4j.Priority;
  */
 public class CreationStep extends Step {
     
-    private static final Logger logger = Logger.getLogger(CreationStep.class);
+    private static final Log logger = LogFactory.getLog(CreationStep.class);
     
     protected DataTestCaseInfo serviceInfo;
     protected String introduceDir;
@@ -46,10 +47,11 @@ public class CreationStep extends Step {
 			serviceInfo.getDir(), serviceInfo.getPackageName(), serviceInfo.getNamespace(), serviceInfo.getResourceFrameworkType(), serviceInfo.getExtensions());
         System.out.println("EXECUTING COMMAND: " + cmd);
 		Process createSkeletonProcess = CommonTools.createAndOutputProcess(cmd);
+        // TODO: Stream gobbler needs to take a commons Log instance
         new StreamGobbler(createSkeletonProcess.getInputStream(), 
-            StreamGobbler.TYPE_OUT, logger, Priority.DEBUG).start();
+            StreamGobbler.TYPE_OUT, logger, LogPriority.DEBUG).start();
         new StreamGobbler(createSkeletonProcess.getErrorStream(), 
-            StreamGobbler.TYPE_ERR, logger, Priority.ERROR).start();
+            StreamGobbler.TYPE_ERR, logger, LogPriority.ERROR).start();
         createSkeletonProcess.waitFor();
 		assertTrue("Creating new data service failed", createSkeletonProcess.exitValue() == 0);
         
@@ -61,9 +63,9 @@ public class CreationStep extends Step {
         System.out.println("EXECUTING COMMAND: " + cmd);
 		Process postCreateProcess = CommonTools.createAndOutputProcess(cmd);
         new StreamGobbler(postCreateProcess.getInputStream(), 
-            StreamGobbler.TYPE_OUT, logger, Priority.DEBUG).start();
+            StreamGobbler.TYPE_OUT, logger, LogPriority.DEBUG).start();
         new StreamGobbler(postCreateProcess.getErrorStream(), 
-            StreamGobbler.TYPE_ERR, logger, Priority.ERROR).start();
+            StreamGobbler.TYPE_ERR, logger, LogPriority.ERROR).start();
         postCreateProcess.waitFor();
 		assertTrue("Service post creation process failed", postCreateProcess.exitValue() == 0);
         
@@ -74,9 +76,9 @@ public class CreationStep extends Step {
         System.out.println("EXECUTING COMMAND: " + cmd);
 		Process antAllProcess = CommonTools.createAndOutputProcess(cmd);
         new StreamGobbler(antAllProcess.getInputStream(), 
-            StreamGobbler.TYPE_OUT, logger, Priority.DEBUG).start();
+            StreamGobbler.TYPE_OUT, logger, LogPriority.DEBUG).start();
         new StreamGobbler(antAllProcess.getErrorStream(), 
-            StreamGobbler.TYPE_ERR, logger, Priority.ERROR).start();
+            StreamGobbler.TYPE_ERR, logger, LogPriority.ERROR).start();
         antAllProcess.waitFor();
 		assertTrue("Build process failed", antAllProcess.exitValue() == 0);
 	}
