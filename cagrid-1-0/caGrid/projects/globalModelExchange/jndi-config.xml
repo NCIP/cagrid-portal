@@ -35,12 +35,12 @@
           <value>ETC-PATH</value>
         </parameter>
         <parameter>
-          <name>schemaPersistenceImplementationClassname</name>
-          <value>@schemaPersistenceImplementationClassname@</value>
+          <name>gmeConfigurationFile</name>
+          <value>ETC-PATH/@gmeConfigurationFile@</value>
         </parameter>
         <parameter>
-          <name>schemaPersistenceImplementationPropertiesFile</name>
-          <value>ETC-PATH/@schemaPersistenceImplementationPropertiesFile@</value>
+          <name>gmePropertiesFile</name>
+          <value>ETC-PATH/@gmePropertiesFile@</value>
         </parameter>
       </resourceParams>
     </resource>

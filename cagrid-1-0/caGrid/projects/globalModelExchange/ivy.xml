@@ -55,9 +55,6 @@
     <!-- Extenernal Dependencies -->
     <dependency rev="1.0" org="jdom" name="jdom" conf="service->*"/>
 
-    <!-- TODO: remove when change to spring -->
-    <dependency rev="1.2" org="apache" name="commons-configuration" conf="service->*"/>
-
     <dependency rev="1.3.2" org="apache" name="commons-io" conf="common->*"/>
     <dependency rev="3.0.+" org="mysql" name="connector-java" conf="service->*"/>
     <dependency rev="3.2.6.ga" org="hibernate" name="hibernate" conf="service->default"/>

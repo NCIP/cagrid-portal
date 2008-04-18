@@ -45,9 +45,9 @@ public class GlobalModelExchangeConfiguration implements ServiceConfiguration {
 	private String etcDirectoryPath;
 	
 	
-	private String schemaPersistenceImplementationClassname;
+	private String gmeConfigurationFile;
 	
-	private String schemaPersistenceImplementationPropertiesFile;
+	private String gmePropertiesFile;
 	
 	
 	public String getEtcDirectoryPath() {
@@ -59,23 +59,23 @@ public class GlobalModelExchangeConfiguration implements ServiceConfiguration {
 	}
 
 	
-	public String getSchemaPersistenceImplementationClassname() {
-		return schemaPersistenceImplementationClassname;
+	public String getGmeConfigurationFile() {
+		return ContainerConfig.getBaseDirectory() + File.separator + gmeConfigurationFile;
 	}
 	
 	
-	public void setSchemaPersistenceImplementationClassname(String schemaPersistenceImplementationClassname) {
-		this.schemaPersistenceImplementationClassname = schemaPersistenceImplementationClassname;
+	public void setGmeConfigurationFile(String gmeConfigurationFile) {
+		this.gmeConfigurationFile = gmeConfigurationFile;
 	}
 
 	
-	public String getSchemaPersistenceImplementationPropertiesFile() {
-		return ContainerConfig.getBaseDirectory() + File.separator + schemaPersistenceImplementationPropertiesFile;
+	public String getGmePropertiesFile() {
+		return ContainerConfig.getBaseDirectory() + File.separator + gmePropertiesFile;
 	}
 	
 	
-	public void setSchemaPersistenceImplementationPropertiesFile(String schemaPersistenceImplementationPropertiesFile) {
-		this.schemaPersistenceImplementationPropertiesFile = schemaPersistenceImplementationPropertiesFile;
+	public void setGmePropertiesFile(String gmePropertiesFile) {
+		this.gmePropertiesFile = gmePropertiesFile;
 	}
 
 	

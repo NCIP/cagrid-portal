@@ -1,11 +1,12 @@
 
-edit service to load properties and spring config (similar to cds)
-
 finish hibernate annotations
+
+
 
 springize GME:
   -schemapersistence
   -GMEXMLSchemaLoader
+    - look into using this: http://static.springframework.org/spring/docs/2.0.x/api/org/springframework/beans/factory/config/ServiceLocatorFactoryBean.html
   -policy?
   -something to get current identity (UserInformationProvider.getCurrentUserIdentity()?)
     
