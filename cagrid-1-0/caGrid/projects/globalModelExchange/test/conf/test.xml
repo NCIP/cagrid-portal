@@ -158,7 +158,7 @@
 		<property name="root.db.url" value="jdbc:mysql://localhost:3306/"/>
 		<sql driver="${cagrid.gme.db.driver}" url="${root.db.url}" userid="${root.db.username}" password="${root.db.password}">
 			<classpath refid="test.run.classpath"/>
-			DROP DATABASE ${cagrid.gme.db.name};
+			DROP DATABASE IF EXISTS ${cagrid.gme.db.name};
 			CREATE DATABASE ${cagrid.gme.db.name};
 		</sql>
 	</target>
