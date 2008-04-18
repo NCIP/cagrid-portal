@@ -51,7 +51,7 @@
 
 
 	<bean id="gme" class="org.cagrid.gme.service.GME">
-		<constructor-arg index="0" ref="hibernateSchemaPersistence"/>
+		<constructor-arg type="org.cagrid.gme.persistence.SchemaPersistenceI" ref="hibernateSchemaPersistence"/>
 	</bean>
 
 
