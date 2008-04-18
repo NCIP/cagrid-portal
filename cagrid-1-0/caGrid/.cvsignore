@@ -5,3 +5,4 @@ build
 integration-repository
 .currentgrid.properties
 .cache
+build.properties
