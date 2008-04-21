@@ -42,6 +42,7 @@
 			<xsd:element name="LongValue" type="xsd:long"/>
 			<xsd:element name="IntegerValue" type="xsd:int"/>
 			<xsd:element name="BooleanValue" type="xsd:boolean"/>
+			<xsd:element name="DoubleValue" type="xsd:double"/>
 		</xsd:choice>
 	</xsd:complexType>
 </xsd:schema>
