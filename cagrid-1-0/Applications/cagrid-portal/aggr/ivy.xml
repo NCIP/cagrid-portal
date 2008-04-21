@@ -1,0 +1,50 @@
+
+<ivy-module version="2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="http://incubator.apache.org/ivy/schemas/ivy.xsd">
+
+	<info organisation="caGrid" module="portal-aggr" revision="${project.version}">
+		<license name="caGrid" url="http://www.cagrid.org/mwiki/index.php?title=CaGrid:LICENSE-1.1"/>
+		<description>caGrid Portal</description>
+	</info>
+
+	<configurations>
+		<!-- Public Configurations-->
+		<conf name="default" visibility="public"/>
+	</configurations>
+
+
+	<publications>
+		<artifact name="caGrid-portal-aggr" conf="default" type="jar"/>
+	</publications>
+
+	<dependencies>
+		<dependency rev="latest.integration" org="caGrid" name="advertisement" conf="default"/>
+
+		<dependency rev="latest.integration" org="caGrid" name="cadsr" conf="default->client"/>
+		<dependency rev="latest.integration" org="caGrid" name="authentication-service"
+			conf="default->client"/>
+		<dependency rev="latest.integration" transitive="false" org="caGrid" name="data"
+			conf="default->service"/>
+		<dependency rev="latest.integration" org="caGrid" name="discovery" conf="default->default"/>
+		<dependency rev="latest.integration" org="caGrid" name="dorian" conf="default->client"/>
+		<dependency rev="latest.integration" org="caGrid" name="opensaml" conf="default->default"/>
+		<dependency rev="latest.integration" org="caGrid" name="gridca" conf="default->default"/>
+		<dependency rev="latest.integration" org="caGrid" name="gts" conf="default->client"/>
+		<dependency rev="latest.integration" org="caGrid" name="gme" conf="default->client"/>
+		<dependency rev="latest.integration" org="caGrid" name="syncgts" conf="default->client"/>
+		<dependency rev="latest.integration" org="caGrid" name="wsEnum" conf="default->stubs"/>
+
+		<dependency rev="latest.integration" org="caGrid" name="portal-db" conf="*->default"/>
+
+		<dependency rev="4.0.3" org="globus" name="mds" conf="default->jars"/>
+		<dependency rev="4.0.3" org="globus" name="globus" conf="default->default"/>
+
+		<dependency rev="4.0" org="cacore" name="cadsr" conf="default->default"/>
+		<dependency rev="4.0" org="cacore" name="evs" conf="default->default"/>
+
+		<dependency rev="2.5.1" org="poi" name="poi" conf="default->default"/>
+		<dependency rev="2.5.1" org="poi" name="poi-contrib" conf="default->default"/>
+		<dependency rev="2.5.1" org="poi" name="poi-scratchpad" conf="default->default"/>
+
+	</dependencies>
+</ivy-module>
