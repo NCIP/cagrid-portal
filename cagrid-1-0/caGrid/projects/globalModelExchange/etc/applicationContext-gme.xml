@@ -7,15 +7,26 @@
 	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
 	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd">
 
-	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close"
-		p:driverClassName="${cagrid.gme.db.driver}" p:maxActive="5" p:maxIdle="2" p:maxWait="180000"
-		p:removeAbandoned="true" p:removeAbandonedTimeout="300" p:logAbandoned="true"
-		p:testWhileIdle="true" p:testOnReturn="true" p:timeBetweenEvictionRunsMillis="300000"
-		p:minEvictableIdleTimeMillis="600000" p:url="${cagrid.gme.db.url}"
+	<bean id="dataSourceTemplate" abstract="true" class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close" p:driverClassName="${cagrid.gme.db.driver}" p:maxActive="5"
+		p:maxIdle="2" p:maxWait="180000" p:removeAbandoned="true" p:removeAbandonedTimeout="300"
+		p:logAbandoned="true" p:testWhileIdle="true" p:testOnReturn="true"
+		p:validationQuery="select 1" p:timeBetweenEvictionRunsMillis="300000"
+		p:minEvictableIdleTimeMillis="600000"/>
+	<bean id="dataSource" parent="dataSourceTemplate" p:url="${cagrid.gme.db.url}"
 		p:username="${cagrid.gme.db.username}" p:password="${cagrid.gme.db.password}"/>
 
+	<bean id="databaseValidator" class="org.springframework.jdbc.support.DatabaseStartupValidator">
+		<property name="dataSource" ref="dataSource"/>
+		<!-- timeout in seconds -->
+		<property name="timeout" value="30"/>
+		<property name="validationQuery" value="Select 1"/>
+	</bean>
+
+
 	<bean id="sessionFactory"
-		class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+		class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean"
+		depends-on="databaseValidator">
 		<property name="dataSource">
 			<ref bean="dataSource"/>
 		</property>
@@ -51,7 +62,8 @@
 
 
 	<bean id="gme" class="org.cagrid.gme.service.GME">
-		<constructor-arg type="org.cagrid.gme.persistence.SchemaPersistenceI" ref="hibernateSchemaPersistence"/>
+		<constructor-arg type="org.cagrid.gme.persistence.SchemaPersistenceI"
+			ref="hibernateSchemaPersistence"/>
 	</bean>
 
 

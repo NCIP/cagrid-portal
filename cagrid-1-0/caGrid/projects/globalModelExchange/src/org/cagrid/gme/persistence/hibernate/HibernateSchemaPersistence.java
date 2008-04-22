@@ -12,15 +12,11 @@ import org.hibernate.SessionFactory;
 
 
 public class HibernateSchemaPersistence implements SchemaPersistenceI {
+
     private SessionFactory sessionFactory;
 
 
     public HibernateSchemaPersistence(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
-    }
-
-
-    public void setSessionFactory(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
 

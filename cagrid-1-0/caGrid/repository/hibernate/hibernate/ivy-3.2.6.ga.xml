@@ -54,8 +54,9 @@
 		<dependency org="javassist" name="javassist" rev="3.4" conf="javassist->default"/>
 		-->
 
-		<!-- 
-		<dependency org="c3p0" name="c3p0" rev="0.9.1.1" conf="c3p0->default"/> 
+		
+		<dependency org="c3p0" name="c3p0" rev="0.9.1+" conf="c3p0->default"/> 
+		<!--
 		<dependency org="proxool" name="proxool" rev="0.8.3" conf="proxool->default"/>
 		-->
 
