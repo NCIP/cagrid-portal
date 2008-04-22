@@ -116,6 +116,16 @@
           </module>
         </modules>
       </facet-type>
+      <facet-type id="Spring">
+        <modules>
+          <module name="aggr">
+            <files>
+              <file url="file://$PROJECT_DIR$/aggr/etc/applicationContext-aggr-metachange.xml" />
+              <file url="file://$PROJECT_DIR$/aggr/etc/applicationContext-aggr-status.xml" />
+            </files>
+          </module>
+        </modules>
+      </facet-type>
     </autodetection-disabled>
   </component>
   <component name="IdProvider" IDEtalkID="3D019CD69A58A4E19BC7CCCD132AE7D1" />
@@ -343,15 +353,15 @@
   <component name="ProjectFileVersion" converted="true" />
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/aggr/aggr.iml" filepath="$PROJECT_DIR$/aggr/aggr.iml" />
+      <module fileurl="file:///Users/kherm/dev/cvsroot/cagrid-1-0/caGrid/caGrid.iml" filepath="/Users/kherm/dev/cvsroot/cagrid-1-0/caGrid/caGrid.iml" />
       <module fileurl="file:///Users/kherm/dev/cvsroot/cagrid-1-0/caGrid/projects/cadsr/cadsr.iml" filepath="/Users/kherm/dev/cvsroot/cagrid-1-0/caGrid/projects/cadsr/cadsr.iml" />
       <module fileurl="file://$PROJECT_DIR$/cagrid-portal.iml" filepath="$PROJECT_DIR$/cagrid-portal.iml" />
-      <module fileurl="file:///Users/kherm/dev/utils/castor-1.2/castor-1.2.iml" filepath="/Users/kherm/dev/utils/castor-1.2/castor-1.2.iml" />
+      <module fileurl="file://$PROJECT_DIR$/aggr/cagrid-portal-aggr.iml" filepath="$PROJECT_DIR$/aggr/cagrid-portal-aggr.iml" />
+      <module fileurl="file://$PROJECT_DIR$/db/cagrid-portal-db.iml" filepath="$PROJECT_DIR$/db/cagrid-portal-db.iml" />
+      <module fileurl="file://$PROJECT_DIR$/portals/cagrid-portal-portals.iml" filepath="$PROJECT_DIR$/portals/cagrid-portal-portals.iml" />
+      <module fileurl="file://$PROJECT_DIR$/portlets/cagrid-portal-portlets.iml" filepath="$PROJECT_DIR$/portlets/cagrid-portal-portlets.iml" />
+      <module fileurl="file://$PROJECT_DIR$/security/cagrid-portal-security.iml" filepath="$PROJECT_DIR$/security/cagrid-portal-security.iml" />
       <module fileurl="file:///Users/kherm/dev/cvsroot/cagrid-1-0/caGrid/projects/core/core.iml" filepath="/Users/kherm/dev/cvsroot/cagrid-1-0/caGrid/projects/core/core.iml" />
-      <module fileurl="file://$PROJECT_DIR$/db/db.iml" filepath="$PROJECT_DIR$/db/db.iml" />
-      <module fileurl="file://$PROJECT_DIR$/portals/portals.iml" filepath="$PROJECT_DIR$/portals/portals.iml" />
-      <module fileurl="file://$PROJECT_DIR$/portlets/portlets.iml" filepath="$PROJECT_DIR$/portlets/portlets.iml" />
-      <module fileurl="file://$PROJECT_DIR$/security/security.iml" filepath="$PROJECT_DIR$/security/security.iml" />
     </modules>
   </component>
   <component name="ProjectRootConfigurable.UI">
@@ -585,7 +595,6 @@
         <root url="jar://$PROJECT_DIR$/aggr/lib/cagrid/caGrid-1.1-GlobalModelExchange.jar!/" />
         <root url="jar://$PROJECT_DIR$/aggr/lib/cagrid/caGrid-1.1-metadata-data.jar!/" />
         <root url="jar://$PROJECT_DIR$/aggr/lib/cagrid/wsrf_core_stubs_enum.jar!/" />
-        <root url="jar://$PROJECT_DIR$/aggr/lib/cagrid/cog-jglobus.jar!/" />
         <root url="jar://$PROJECT_DIR$/aggr/lib/cagrid/caGrid-1.1-metadata-common.jar!/" />
         <root url="jar://$PROJECT_DIR$/aggr/lib/cagrid/mobius_gme_client-1.1.jar!/" />
         <root url="jar://$PROJECT_DIR$/aggr/lib/cagrid/mobius_mako_client-1.1.jar!/" />
@@ -595,7 +604,6 @@
         <root url="jar://$PROJECT_DIR$/aggr/lib/cagrid/mobius_tools-1.1.jar!/" />
         <root url="jar://$PROJECT_DIR$/aggr/lib/cagrid/caGrid-1.1-wsEnum.jar!/" />
         <root url="jar://$PROJECT_DIR$/aggr/lib/cagrid/caGrid-1.1-ServiceSecurityProvider-stubs.jar!/" />
-        <root url="jar://$PROJECT_DIR$/aggr/lib/cagrid/castor-1.2.jar!/" />
         <root url="jar://$PROJECT_DIR$/aggr/lib/cagrid/caGrid-1.1-data-common.jar!/" />
         <root url="jar://$PROJECT_DIR$/aggr/lib/cagrid/caGrid-1.1-gridca.jar!/" />
       </CLASSES>

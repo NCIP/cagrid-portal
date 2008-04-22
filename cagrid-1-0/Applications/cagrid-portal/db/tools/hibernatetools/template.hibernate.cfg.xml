@@ -8,11 +8,11 @@
 	<session-factory>
 
 		<!-- Database connection settings -->
-		<property name="connection.driver_class">com.mysql.jdbc.Driver</property>
+		<property name="connection.driver_class">@DB_DRIVER@</property>
 		<property name="connection.url">@DB_URL@</property>
 		<property name="connection.username">@DB_USERNAME@</property>
 		<property name="connection.password">@DB_PASSWORD@</property>
-		<property name="dialect">org.hibernate.dialect.MySQLDialect</property>
+		<property name="dialect">@DB_DIALECT@</property>
 
 	</session-factory>
 
