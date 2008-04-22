@@ -26,7 +26,7 @@ import org.xml.sax.helpers.DefaultHandler;
   * @author David Ervin
   * 
   * @created Oct 22, 2007 10:19:59 AM
-  * @version $Id: XMIParser.java,v 1.4 2008-04-04 15:57:41 dervin Exp $
+  * @version $Id: XMIParser.java,v 1.5 2008-04-22 19:41:23 dervin Exp $
  */
 public class XMIParser {
     DomainModel model;
@@ -82,7 +82,7 @@ public class XMIParser {
                 handler = new Sdk4EaXMIHandler(this);
                 break;
             case SDK_40_ARGO:
-                handler = new ArgoXmiHandler(this);
+                handler = new Sdk4ArgoUMLXMIHandler(this);
         }
         parser.parse(xmiStream, handler);
         return model;
