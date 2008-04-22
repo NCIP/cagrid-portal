@@ -26,7 +26,7 @@ import org.xml.sax.helpers.DefaultHandler;
  * @author David Ervin
  * 
  * @created Apr 22, 2008 3:44:03 PM
- * @version $Id: BaseXMIHandler.java,v 1.1 2008-04-22 20:34:27 dervin Exp $ 
+ * @version $Id: BaseXMIHandler.java,v 1.2 2008-04-22 20:35:19 dervin Exp $ 
  */
 public abstract class BaseXMIHandler extends DefaultHandler {
 
@@ -39,12 +39,12 @@ public abstract class BaseXMIHandler extends DefaultHandler {
     private List<UMLClass> classList;
     private List<UMLAttribute> attribList;
     private List<UMLAssociation> assocList;
-    private List<UMLGeneralization> genList;
+    private List<UMLGeneralization> generalizationList;
     
     // maps from XMI name to domain model component
     private Map<String, UMLClass> classTable; // class ID to class instance
     private Map<String, UMLAttribute> attribTable; // attribute ID to attribute instance
-    private Map<String, List<SemanticMetadata>> smTable; // element ID to semantic metadata list
+    private Map<String, List<SemanticMetadata>> semanticMetadataTable; // element ID to semantic metadata list
     private Map<String, String> typeTable; // type ID to type name
     
     public BaseXMIHandler(XMIParser parser) {
@@ -55,11 +55,11 @@ public abstract class BaseXMIHandler extends DefaultHandler {
         this.classList = new ArrayList<UMLClass>();
         this.attribList = new ArrayList<UMLAttribute>();
         this.assocList = new ArrayList<UMLAssociation>();
-        this.genList = new ArrayList<UMLGeneralization>();
+        this.generalizationList = new ArrayList<UMLGeneralization>();
         // initialize tables
         this.classTable = new HashMap<String, UMLClass>();
         this.attribTable = new HashMap<String, UMLAttribute>();
-        this.smTable = new HashMap<String, List<SemanticMetadata>>();
+        this.semanticMetadataTable = new HashMap<String, List<SemanticMetadata>>();
         this.typeTable = new HashMap<String, String>();
     }
 
@@ -94,8 +94,8 @@ public abstract class BaseXMIHandler extends DefaultHandler {
     }
 
 
-    public List<UMLGeneralization> getGenList() {
-        return genList;
+    public List<UMLGeneralization> getGeneralizationList() {
+        return generalizationList;
     }
 
 
@@ -104,8 +104,8 @@ public abstract class BaseXMIHandler extends DefaultHandler {
     }
 
 
-    public Map<String, List<SemanticMetadata>> getSmTable() {
-        return smTable;
+    public Map<String, List<SemanticMetadata>> getSemanticMetadataTable() {
+        return semanticMetadataTable;
     }
 
 
@@ -160,7 +160,7 @@ public abstract class BaseXMIHandler extends DefaultHandler {
         this.parser.model.setExposedUMLAssociationCollection(
             new DomainModelExposedUMLAssociationCollection(assocList.toArray(new UMLAssociation[0])));
         this.parser.model.setUmlGeneralizationCollection(
-            new DomainModelUmlGeneralizationCollection(genList.toArray(new UMLGeneralization[0])));
+            new DomainModelUmlGeneralizationCollection(generalizationList.toArray(new UMLGeneralization[0])));
     }
     
     
@@ -170,13 +170,13 @@ public abstract class BaseXMIHandler extends DefaultHandler {
     
     
     private void applySemanticMetadata() {
-        for (String id : smTable.keySet()) {
+        for (String id : semanticMetadataTable.keySet()) {
             if (classTable.containsKey(id)) {
                 classTable.get(id).setSemanticMetadata(
-                    smTable.get(id).toArray(new SemanticMetadata[0]));
+                    semanticMetadataTable.get(id).toArray(new SemanticMetadata[0]));
             } else if (attribTable.containsKey(id)) {
                 attribTable.get(id).setSemanticMetadata(
-                    smTable.get(id).toArray(new SemanticMetadata[0]));
+                    semanticMetadataTable.get(id).toArray(new SemanticMetadata[0]));
             }
         }
     }
@@ -215,7 +215,7 @@ public abstract class BaseXMIHandler extends DefaultHandler {
     private void flattenAttributes() {
         // build parent table
         Map<String, String> parentTable = new HashMap<String, String>();
-        for (UMLGeneralization gen : genList) {
+        for (UMLGeneralization gen : generalizationList) {
             parentTable.put(gen.getSubClassReference().getRefid(), 
                 gen.getSuperClassReference().getRefid());
         }
@@ -297,13 +297,13 @@ public abstract class BaseXMIHandler extends DefaultHandler {
 
         // filter generalizations
         List<UMLGeneralization> filteredGeneralizations = 
-            new ArrayList<UMLGeneralization>(this.genList.size());
-        for (UMLGeneralization gen : this.genList) {
+            new ArrayList<UMLGeneralization>(this.generalizationList.size());
+        for (UMLGeneralization gen : this.generalizationList) {
             if (!filterSet.contains(gen.getSubClassReference().getRefid())
                 && !filterSet.contains(gen.getSuperClassReference().getRefid())) {
                 filteredGeneralizations.add(gen);
             }
         }
-        this.genList = filteredGeneralizations;
+        this.generalizationList = filteredGeneralizations;
     }
 }
