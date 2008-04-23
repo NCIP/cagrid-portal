@@ -1,13 +1,13 @@
 package gov.nih.nci.cagrid.workflow.context.service.globus.resource;
 
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.workflow.context.stubs.types.StartCalledOnStartedWorkflowFaultType;
+import gov.nih.nci.cagrid.workflow.context.stubs.types.StartCalledOnStartedWorkflow;
 import gov.nih.nci.cagrid.workflow.service.ActiveBPELAdapter;
 import gov.nih.nci.cagrid.workflow.service.ServiceConfiguration;
 import gov.nih.nci.cagrid.workflow.stubs.types.StartInputType;
 import gov.nih.nci.cagrid.workflow.stubs.types.WMSInputType;
 import gov.nih.nci.cagrid.workflow.stubs.types.WSDLReferences;
-import gov.nih.nci.cagrid.workflow.stubs.types.WorkflowExceptionType;
+import gov.nih.nci.cagrid.workflow.stubs.types.WorkflowException;
 import gov.nih.nci.cagrid.workflow.stubs.types.WorkflowOutputType;
 import gov.nih.nci.cagrid.workflow.stubs.types.WorkflowStatusEventType;
 import gov.nih.nci.cagrid.workflow.stubs.types.WorkflowStatusType;
@@ -144,41 +144,41 @@ public class WorkflowResource implements Resource,
 	}
 
 	public WorkflowStatusType start(StartInputType startInput) 
-		throws WorkflowExceptionType, StartCalledOnStartedWorkflowFaultType {
+		throws WorkflowException, StartCalledOnStartedWorkflow {
 		if (this.started) {
-			throw new StartCalledOnStartedWorkflowFaultType();
+			throw new StartCalledOnStartedWorkflow();
 		}
 		try {
 			this.abAdapter.startWorkflow(startInput);
 			this.workflowStatus = WorkflowStatusType.Active;
 		} catch (Exception e) {
 			this.workflowStatus = WorkflowStatusType.Failed;
-			throw new WorkflowExceptionType();
+			throw new WorkflowException();
 		}
 		this.setStatusRP(this.workflowStatus);
 		return this.workflowStatus;
 	}
 
-	public WorkflowStatusType getStatus() throws WorkflowExceptionType {
+	public WorkflowStatusType getStatus() throws WorkflowException {
 		this.workflowStatus = this.abAdapter.getWorkflowStatus();
 		return this.workflowStatus;
 	}
 	
-	public WorkflowStatusType pause() throws WorkflowExceptionType {
+	public WorkflowStatusType pause() throws WorkflowException {
 		this.abAdapter.suspend();
 		this.workflowStatus = WorkflowStatusType.Pending;
 		this.setStatusRP(this.workflowStatus);
 		return this.workflowStatus;
 	}
 	
-	public WorkflowStatusType resume() throws WorkflowExceptionType {
+	public WorkflowStatusType resume() throws WorkflowException {
 		this.abAdapter.resume();
 		this.workflowStatus = WorkflowStatusType.Active;
 		this.setStatusRP(this.workflowStatus);
 		return this.workflowStatus;
 	}
 	
-	public void cancel() throws WorkflowExceptionType {
+	public void cancel() throws WorkflowException {
 		this.workflowStatus = WorkflowStatusType.Cancelled;
 		this.setStatusRP(this.workflowStatus);
 		this.abAdapter.cancel();
@@ -196,7 +196,7 @@ public class WorkflowResource implements Resource,
 		return (WorkflowStatusType) this.statusRP.get(0);
 	}
 	
-	public WorkflowStatusEventType[] getDetailedStatus() throws WorkflowExceptionType {
+	public WorkflowStatusEventType[] getDetailedStatus() throws WorkflowException {
 		
 		return this.abAdapter.getWorkflowStatusEventsArray();
 	}

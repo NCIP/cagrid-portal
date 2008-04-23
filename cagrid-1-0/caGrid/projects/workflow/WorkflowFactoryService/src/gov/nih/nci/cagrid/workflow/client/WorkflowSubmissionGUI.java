@@ -8,7 +8,7 @@ import gov.nih.nci.cagrid.workflow.stubs.types.StartInputType;
 import gov.nih.nci.cagrid.workflow.stubs.types.WMSInputType;
 import gov.nih.nci.cagrid.workflow.stubs.types.WMSOutputType;
 import gov.nih.nci.cagrid.workflow.stubs.types.WSDLReferences;
-import gov.nih.nci.cagrid.workflow.stubs.types.WorkflowExceptionType;
+import gov.nih.nci.cagrid.workflow.stubs.types.WorkflowException;
 import gov.nih.nci.cagrid.workflow.stubs.types.WorkflowInputType;
 import gov.nih.nci.cagrid.workflow.stubs.types.WorkflowOutputType;
 import gov.nih.nci.cagrid.workflow.stubs.types.WorkflowStatusEventType;
@@ -542,7 +542,7 @@ public class WorkflowSubmissionGUI extends ApplicationComponent {
 									JOptionPane.ERROR_MESSAGE);
 							return;
 						}
-					} catch (WorkflowExceptionType e1) {
+					} catch (WorkflowException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					} catch (RemoteException e1) {
