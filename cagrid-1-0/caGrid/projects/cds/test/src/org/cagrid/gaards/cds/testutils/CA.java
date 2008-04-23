@@ -32,7 +32,7 @@ public class CA {
 	public static final Provider PROVIDER = new org.bouncycastle.jce.provider.BouncyCastleProvider();
 	public static final String SIGNATURE_ALGORITHM = "MD5WithRSAEncryption";
 	public static final String PASSWORD = "password";
-	public final static String DEFAULT_CA_DN = "O=Organization ABC,OU=Unit XYZ,CN=Certificate Authority";
+	public static final String DEFAULT_CA_DN = "O=Organization ABC,OU=Unit XYZ,CN=Certificate Authority";
 
 	private Map<String, GlobusCredential> creds = new HashMap<String, GlobusCredential>();
 

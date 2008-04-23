@@ -6,6 +6,7 @@ import gov.nih.nci.cagrid.gridca.common.KeyUtil;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import junit.framework.TestCase;
@@ -40,6 +41,7 @@ public class DelegationManagerTest extends TestCase {
 
 	private CA ca;
 	private File caCert;
+	private String caDN;
 
 	public void testDelegatedCredentialCreateDestroy() {
 		try {
@@ -755,12 +757,14 @@ public class DelegationManagerTest extends TestCase {
 		super.setUp();
 		Utils.getDatabase().createDatabaseIfNeeded();
 		try {
-			this.ca = new CA();
+			Date now = new Date();	
+			this.caDN = "O=Delegation Credential Manager,OU="+now.getTime()+",CN=Certificate Authority";
+			this.ca = new CA(this.caDN);
 			File f = gov.nih.nci.cagrid.common.Utils
 					.getTrustedCerificatesDirectory();
 			f.mkdirs();
 			caCert = new File(f.getAbsoluteFile() + File.separator
-					+ "cds-test-ca.0");
+					+ now.getTime()+".0");
 			CertUtil.writeCertificate(this.ca.getCertificate(), caCert);
 		} catch (Exception e) {
 			e.printStackTrace();

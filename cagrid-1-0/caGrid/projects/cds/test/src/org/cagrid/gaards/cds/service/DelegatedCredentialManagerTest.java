@@ -10,6 +10,7 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import junit.framework.TestCase;
@@ -52,12 +53,16 @@ public class DelegatedCredentialManagerTest extends TestCase {
 	private CA ca;
 
 	private File caCert;
+	
+	private String caDN;
 
 	private int DEFAULT_PROXY_LIFETIME_SECONDS = 300;
 
 	private int PROXY_BUFFER_MAX_COUNT = 8;
 
 	private int PROXY_BUFFER_TIME_MULTIPLIER = 2;
+	
+	
 
 	public void testDelegatedCredentialCreateDestroy() {
 		try {
@@ -1339,12 +1344,14 @@ public class DelegatedCredentialManagerTest extends TestCase {
 		super.setUp();
 		Utils.getDatabase().createDatabaseIfNeeded();
 		try {
-			this.ca = new CA();
+			Date now = new Date();	
+			this.caDN = "O=Delegation Credential Manager,OU="+now.getTime()+",CN=Certificate Authority";
+			this.ca = new CA(this.caDN);
 			File f = gov.nih.nci.cagrid.common.Utils
 					.getTrustedCerificatesDirectory();
 			f.mkdirs();
 			caCert = new File(f.getAbsoluteFile() + File.separator
-					+ "cds-test-ca.0");
+					+ now.getTime()+".0");
 			CertUtil.writeCertificate(this.ca.getCertificate(), caCert);
 		} catch (Exception e) {
 			e.printStackTrace();
