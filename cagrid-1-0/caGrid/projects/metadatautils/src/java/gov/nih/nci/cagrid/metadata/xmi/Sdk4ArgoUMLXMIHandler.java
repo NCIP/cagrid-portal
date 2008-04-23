@@ -1,14 +1,9 @@
 package gov.nih.nci.cagrid.metadata.xmi;
 
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.metadata.common.SemanticMetadata;
 import gov.nih.nci.cagrid.metadata.common.UMLAttribute;
 import gov.nih.nci.cagrid.metadata.common.UMLClass;
 import gov.nih.nci.cagrid.metadata.common.UMLClassUmlAttributeCollection;
-import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
-import gov.nih.nci.cagrid.metadata.dataservice.DomainModelExposedUMLAssociationCollection;
-import gov.nih.nci.cagrid.metadata.dataservice.DomainModelExposedUMLClassCollection;
-import gov.nih.nci.cagrid.metadata.dataservice.DomainModelUmlGeneralizationCollection;
 import gov.nih.nci.cagrid.metadata.dataservice.UMLAssociation;
 import gov.nih.nci.cagrid.metadata.dataservice.UMLAssociationEdge;
 import gov.nih.nci.cagrid.metadata.dataservice.UMLAssociationSourceUMLAssociationEdge;
@@ -16,17 +11,10 @@ import gov.nih.nci.cagrid.metadata.dataservice.UMLAssociationTargetUMLAssociatio
 import gov.nih.nci.cagrid.metadata.dataservice.UMLClassReference;
 import gov.nih.nci.cagrid.metadata.dataservice.UMLGeneralization;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
-import org.xml.sax.helpers.DefaultHandler;
 
 /**
   *  Sdk4ArgoUMLXMIHandler
@@ -35,28 +23,11 @@ import org.xml.sax.helpers.DefaultHandler;
   * @author David Ervin
   * 
   * @created Oct 22, 2007 10:26:25 AM
-  * @version $Id: Sdk4ArgoUMLXMIHandler.java,v 1.3 2008-04-22 19:41:23 dervin Exp $
+  * @version $Id: Sdk4ArgoUMLXMIHandler.java,v 1.4 2008-04-23 00:35:21 dervin Exp $
  */
-class Sdk4ArgoUMLXMIHandler extends DefaultHandler {
+class Sdk4ArgoUMLXMIHandler extends BaseXMIHandler {
     private static final Log LOG = LogFactory.getLog(Sdk4ArgoUMLXMIHandler.class);
 
-    // parser contains configuration options and information for the handler
-    private final XMIParser parser;
-
-    private StringBuffer chars;
-
-    // lists of domain model components
-    private List<UMLClass> classList;
-    private List<UMLAttribute> attribList;
-    private List<UMLAssociation> assocList;
-    private List<UMLGeneralization> genList;
-
-    // maps from XMI name to domain model component
-    private Map<String, UMLClass> classTable; // class ID to class instance
-    private Map<String, UMLAttribute> attribTable; // attribute ID to attribute instance
-    private Map<String, List<SemanticMetadata>> smTable; // element ID to semantic metadata list
-    private Map<String, String> typeTable; // type ID to type name
-    
     // some state variables
     private int currentNodeDepth;
     private String currentPackageName;
@@ -73,19 +44,7 @@ class Sdk4ArgoUMLXMIHandler extends DefaultHandler {
     private boolean associationSourceParticipantSet;
     
     public Sdk4ArgoUMLXMIHandler(XMIParser parser) {
-        super();
-        this.parser = parser;
-        this.chars = new StringBuffer();
-        // initialize lists
-        this.classList = new ArrayList<UMLClass>();
-        this.attribList = new ArrayList<UMLAttribute>();
-        this.assocList = new ArrayList<UMLAssociation>();
-        this.genList = new ArrayList<UMLGeneralization>();
-        // initialize tables
-        this.classTable = new HashMap<String, UMLClass>();
-        this.attribTable = new HashMap<String, UMLAttribute>();
-        this.smTable = new HashMap<String, List<SemanticMetadata>>();
-        this.typeTable = new HashMap<String, String>();
+        super(parser);
         // initialize state
         currentNodeDepth = 0;
         currentPackageName = "";
@@ -99,16 +58,11 @@ class Sdk4ArgoUMLXMIHandler extends DefaultHandler {
     }
     
     
-    public void characters(char[] ch, int start, int length) throws SAXException {
-        chars.append(ch, start, length);
-    }
-    
-    
     public void startElement(
         String uri, String localName, String qName, Attributes atts) throws SAXException {
         currentNodeDepth++;
         // clean out the character buffer
-        chars.delete(0, chars.length());
+        clearChars();
         
         // start handling elements by name
         if (qName.equals(XMIConstants.XMI_UML_PACKAGE)) {
@@ -160,55 +114,15 @@ class Sdk4ArgoUMLXMIHandler extends DefaultHandler {
                 }
             } else if (qName.equals(XMIConstants.XMI_UML_ASSOCIATION)) {
                 LOG.debug("ASSOCIATION ENDED");
-                UMLAssociation currentAssociation = assocList.get(assocList.size() - 1);
+                UMLAssociation currentAssociation = getAssocList().get(getAssocList().size() - 1);
                 currentAssociation.setBidirectional(associationSourceIsNavigable && associationTargetIsNavigable);
                 handlingAssociation = false;
             }
         }
         
         // clean out the char buffer
-        chars.delete(0, chars.length());
+        clearChars();
         currentNodeDepth--;
-    }
-    
-    
-    public void endDocument() throws SAXException {
-        applySemanticMetadata();
-        applyDataTypes();
-        flattenAttributes();
-        applyFilters();
-
-        this.parser.model = new DomainModel();
-
-        this.parser.model.setProjectShortName(this.parser.projectShortName);
-        this.parser.model.setProjectLongName(this.parser.projectLongName);
-        this.parser.model.setProjectVersion(this.parser.projectVersion);
-        this.parser.model.setProjectDescription(this.parser.projectDescription);
-
-        // convert base UML classes to data UML classes
-        gov.nih.nci.cagrid.metadata.dataservice.UMLClass[] dataClasses = 
-            new gov.nih.nci.cagrid.metadata.dataservice.UMLClass[classList.size()];
-        int i = 0;
-        for (UMLClass commonClass : classList) {
-            gov.nih.nci.cagrid.metadata.dataservice.UMLClass dataClass = 
-                new gov.nih.nci.cagrid.metadata.dataservice.UMLClass();
-            dataClass.setClassName(commonClass.getClassName());
-            dataClass.setDescription(commonClass.getDescription());
-            dataClass.setId(commonClass.getId());
-            dataClass.setPackageName(commonClass.getPackageName());
-            dataClass.setProjectName(commonClass.getProjectName());
-            dataClass.setProjectVersion(commonClass.getProjectVersion());
-            dataClass.setSemanticMetadata(commonClass.getSemanticMetadata());
-            dataClass.setUmlAttributeCollection(commonClass.getUmlAttributeCollection());
-            dataClass.setAllowableAsTarget(true); // NEW attribute for data classes
-            dataClasses[i++] = dataClass;
-        }
-        this.parser.model.setExposedUMLClassCollection(
-            new DomainModelExposedUMLClassCollection(dataClasses));
-        this.parser.model.setExposedUMLAssociationCollection(
-            new DomainModelExposedUMLAssociationCollection(assocList.toArray(new UMLAssociation[0])));
-        this.parser.model.setUmlGeneralizationCollection(
-            new DomainModelUmlGeneralizationCollection(genList.toArray(new UMLGeneralization[0])));
     }
     
     
@@ -277,19 +191,19 @@ class Sdk4ArgoUMLXMIHandler extends DefaultHandler {
         clazz.setId(atts.getValue(XMIConstants.XMI_ID_ATTRIBUTE));
         clazz.setPackageName(packageName);
         // project name and version from parser
-        clazz.setProjectName(this.parser.getProjectShortName());
-        clazz.setProjectVersion(this.parser.getProjectVersion());
+        clazz.setProjectName(getParser().getProjectShortName());
+        clazz.setProjectVersion(getParser().getProjectVersion());
         clazz.setUmlAttributeCollection(new UMLClassUmlAttributeCollection());
         LOG.debug("Created new class " + clazz.getPackageName() + "." + clazz.getClassName());
         // add the class to the list
-        classList.add(clazz);
+        getClassList().add(clazz);
         // and the table of xmi.id to class
-        classTable.put(clazz.getId(), clazz);
+        getClassTable().put(clazz.getId(), clazz);
     }
     
     
     private void handleGeneralizationClassRef(Attributes atts) {
-        UMLGeneralization currentGeneralization = genList.get(genList.size() - 1);
+        UMLGeneralization currentGeneralization = getGeneralizationList().get(getGeneralizationList().size() - 1);
         if (handlingChildGeneralization) {
             LOG.debug("Handling subclass generalization");
             currentGeneralization.setSubClassReference(
@@ -306,14 +220,13 @@ class Sdk4ArgoUMLXMIHandler extends DefaultHandler {
         if (handlingClass) {
             UMLAttribute attrib = new UMLAttribute();
             attrib.setName(atts.getValue(XMIConstants.XMI_NAME_ATTRIBUTE));
-            attrib.setVersion(this.parser.getAttributeVersion());
+            attrib.setVersion(getParser().getAttributeVersion());
             String idValue = atts.getValue(XMIConstants.XMI_ID_ATTRIBUTE);
             attrib.setPublicID(idValue.hashCode());
-            attribList.add(attrib);
-            attribTable.put(String.valueOf(attrib.getPublicID()), attrib);
-            // TODO: ???
+            getAttribList().add(attrib);
+            getAttribTable().put(String.valueOf(attrib.getPublicID()), attrib);
             // attach the attribute to the most recent class
-            UMLClass lastClass = classList.get(classList.size() - 1);
+            UMLClass lastClass = getClassList().get(getClassList().size() - 1);
             UMLClassUmlAttributeCollection attribCollection = lastClass.getUmlAttributeCollection();
             UMLAttribute[] currentAttributes = attribCollection.getUMLAttribute();
             if (currentAttributes == null) {
@@ -332,7 +245,7 @@ class Sdk4ArgoUMLXMIHandler extends DefaultHandler {
             handlingGeneralization = true;
             currentGeneralizationNodeDepth = currentNodeDepth;
             UMLGeneralization gen = new UMLGeneralization();
-            genList.add(gen);
+            getGeneralizationList().add(gen);
             LOG.debug("Started new generalization");
         }
     }
@@ -341,7 +254,7 @@ class Sdk4ArgoUMLXMIHandler extends DefaultHandler {
     private void handleAssociation() {
         LOG.debug("HANDLING ASSOCIATION");
         UMLAssociation association = new UMLAssociation();
-        assocList.add(association);
+        getAssocList().add(association);
         handlingAssociation = true;
         associationSourceMultiplicitySet = false;
         associationSourceParticipantSet = false;
@@ -350,7 +263,7 @@ class Sdk4ArgoUMLXMIHandler extends DefaultHandler {
     
     private void handleAssociationEnd(Attributes atts) {
         LOG.debug("Handling association edge");
-        UMLAssociation currentAssociation = assocList.get(assocList.size() - 1);
+        UMLAssociation currentAssociation = getAssocList().get(getAssocList().size() - 1);
         // create the new edge
         UMLAssociationEdge edge = new UMLAssociationEdge();
         String roleName = atts.getValue(XMIConstants.XMI_NAME_ATTRIBUTE);
@@ -379,7 +292,7 @@ class Sdk4ArgoUMLXMIHandler extends DefaultHandler {
     
     private void handleMultiplicityRange(Attributes atts) {
         LOG.debug("Handling association multiplicity");
-        UMLAssociation currentAssociation = assocList.get(assocList.size() - 1);
+        UMLAssociation currentAssociation = getAssocList().get(getAssocList().size() - 1);
         UMLAssociationEdge edge = null;
         if (!associationSourceMultiplicitySet) {
             // source edge
@@ -399,7 +312,7 @@ class Sdk4ArgoUMLXMIHandler extends DefaultHandler {
     
     private void handleAssociationParticipantClass(Attributes atts) {
         LOG.debug("Handling association participant");
-        UMLAssociation currentAssociation = assocList.get(assocList.size() - 1);
+        UMLAssociation currentAssociation = getAssocList().get(getAssocList().size() - 1);
         UMLAssociationEdge edge = null;
         if (!associationSourceParticipantSet) {
             // source edge
@@ -412,148 +325,5 @@ class Sdk4ArgoUMLXMIHandler extends DefaultHandler {
         }
         String refid = atts.getValue(XMIConstants.XMI_IDREF);
         edge.setUMLClassReference(new UMLClassReference(refid));
-    }
-    
-    
-    // -------------------------------
-    // end of document cleanup tooling
-    // -------------------------------
-    
-    
-    private void applySemanticMetadata() {
-        for (String id : smTable.keySet()) {
-            if (classTable.containsKey(id)) {
-                classTable.get(id).setSemanticMetadata(
-                    smTable.get(id).toArray(new SemanticMetadata[0]));
-            } else if (attribTable.containsKey(id)) {
-                attribTable.get(id).setSemanticMetadata(
-                    smTable.get(id).toArray(new SemanticMetadata[0]));
-            }
-        }
-    }
-
-
-    private void applyDataTypes() {
-        for (String id : attribTable.keySet()) {
-            UMLAttribute att = attribTable.get(id);
-            String typeRef = att.getDataTypeName();
-
-            String dataType = null;
-
-            // check for class
-            if (dataType == null) {
-                UMLClass typeCl = classTable.get(typeRef);
-                if (typeCl != null)
-                    dataType = typeCl.getClassName();
-            }
-
-            // check type table
-            if (dataType == null) {
-                dataType = typeTable.get(typeRef);
-            }
-
-            // perform mapping
-            if (dataType != null && XMIParser.DATATYPE_MAP.containsKey(dataType)) {
-                dataType = XMIParser.DATATYPE_MAP.get(dataType);
-            }
-
-            // set data type
-            att.setDataTypeName(dataType);
-        }
-    }
-
-
-    private void flattenAttributes() {
-        // build parent table
-        Map<String, String> parentTable = new HashMap<String, String>();
-        for (UMLGeneralization gen : genList) {
-            parentTable.put(gen.getSubClassReference().getRefid(), 
-                gen.getSuperClassReference().getRefid());
-        }
-
-        // flatten each class by ID
-        for (String classId : classTable.keySet()) {
-            UMLClass clazz = classTable.get(classId);
-            List<UMLAttribute> flatAttributes = 
-                flattenAttributesOfClass(parentTable, classId);
-            clazz.getUmlAttributeCollection().setUMLAttribute(
-                flatAttributes.toArray(new UMLAttribute[0]));
-        }
-    }
-
-
-    private List<UMLAttribute> flattenAttributesOfClass(
-        Map<String, String> parentTable, String classId) {
-        if (classId == null) {
-            return new ArrayList<UMLAttribute>(0);
-        }
-        List<UMLAttribute> flat = new ArrayList<UMLAttribute>();
-
-        // my atts
-        UMLClass cl = classTable.get(classId);
-        if (cl.getUmlAttributeCollection() != null && cl.getUmlAttributeCollection().getUMLAttribute() != null) {
-            for (UMLAttribute att : cl.getUmlAttributeCollection().getUMLAttribute()) {
-                flat.add(att);
-            }
-        }
-        // my parent's atts
-        for (UMLAttribute att : flattenAttributesOfClass(parentTable, parentTable.get(classId))) {
-            flat.add(att);
-        }
-
-        return flat;
-    }
-
-
-    private void applyFilters() {
-        // build filter set
-        HashSet<String> filterSet = new HashSet<String>();
-        // filter primtives
-        if (this.parser.filterPrimitiveClasses) {
-            for (UMLClass cl : classList) {
-                if (cl.getPackageName().startsWith("java")) {
-                    filterSet.add(cl.getId());
-                }
-            }
-        }
-        // filter root class
-        for (UMLClass cl : classList) {
-            if (cl.getPackageName().equals("")) {
-                filterSet.add(cl.getId());
-            }
-        }
-
-        // filter classes
-        List<UMLClass> filteredClasses = new ArrayList<UMLClass>(this.classList.size());
-        for (UMLClass cl : this.classList) {
-            if (!filterSet.contains(cl.getId())) {
-                filteredClasses.add(cl);
-            }
-        }
-        this.classList = filteredClasses;
-
-        // filter assocations
-        List<UMLAssociation> filteredAssociations = 
-            new ArrayList<UMLAssociation>(this.assocList.size());
-        for (UMLAssociation assoc : this.assocList) {
-            if (!filterSet.contains(assoc.getSourceUMLAssociationEdge()
-                .getUMLAssociationEdge().getUMLClassReference().getRefid())
-                && !filterSet.contains(assoc.getTargetUMLAssociationEdge()
-                    .getUMLAssociationEdge().getUMLClassReference().getRefid())) {
-                filteredAssociations.add(assoc);
-            }
-        }
-        this.assocList = filteredAssociations;
-
-        // filter generalizations
-        List<UMLGeneralization> filteredGeneralizations = 
-            new ArrayList<UMLGeneralization>(this.genList.size());
-        for (UMLGeneralization gen : this.genList) {
-            if (!filterSet.contains(gen.getSubClassReference().getRefid())
-                && !filterSet.contains(gen.getSuperClassReference().getRefid())) {
-                filteredGeneralizations.add(gen);
-            }
-        }
-        this.genList = filteredGeneralizations;
     }
 }
