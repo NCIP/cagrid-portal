@@ -2,7 +2,7 @@ package gov.nih.nci.cagrid.workflow.service;
 
 import gov.nih.nci.cagrid.workflow.stubs.types.StartInputType;
 import gov.nih.nci.cagrid.workflow.stubs.types.WSDLReferences;
-import gov.nih.nci.cagrid.workflow.stubs.types.WorkflowException;
+import gov.nih.nci.cagrid.workflow.stubs.types.WorkflowExceptionType;
 import gov.nih.nci.cagrid.workflow.stubs.types.WorkflowOutputType;
 import gov.nih.nci.cagrid.workflow.stubs.types.WorkflowStateType;
 import gov.nih.nci.cagrid.workflow.stubs.types.WorkflowStatusEventType;
@@ -144,17 +144,17 @@ public class ActiveBPELAdapter implements WorkflowEngineAdapter {
 	}
 	
 	public String deployWorkflow(String bpelFileName, String workflowName, 
-			WSDLReferences[] wsdlRefArray) throws WorkflowException {
+			WSDLReferences[] wsdlRefArray) throws WorkflowExceptionType {
 		try {
 			return deployBpr(bpelFileName, workflowName, wsdlRefArray);
 		} catch (Exception e) {
-			throw new WorkflowException();
+			throw new WorkflowExceptionType();
 		}
 	}
 
 
 	public WorkflowStatusType startWorkflow(
-			StartInputType startInput) throws WorkflowException {
+			StartInputType startInput) throws WorkflowExceptionType {
 		WorkflowStatusType status = WorkflowStatusType.Pending;
 		System.out.println("Starting workflow : " + this.workflowName);
 		try {
@@ -167,7 +167,7 @@ public class ActiveBPELAdapter implements WorkflowEngineAdapter {
 	}
 
 
-	public WorkflowStatusType getWorkflowStatus() throws WorkflowException {
+	public WorkflowStatusType getWorkflowStatus() throws WorkflowExceptionType {
 		try {
 			AeProcessInstanceDetail detail = null;
 			AeProcessFilter filter = new AeProcessFilter();
@@ -184,48 +184,48 @@ public class ActiveBPELAdapter implements WorkflowEngineAdapter {
 			return getStatusFromString(status);
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new WorkflowException();
+			throw new WorkflowExceptionType();
 		}
 	}
 
 
-	public void suspend() throws WorkflowException {
+	public void suspend() throws WorkflowExceptionType {
 		try {
 			this.mRemote.suspendProcess(this.processId);
 		} catch (Exception e) {
-			throw new WorkflowException();
+			throw new WorkflowExceptionType();
 		}
 	}
 
 
-	public void resume() throws WorkflowException {
+	public void resume() throws WorkflowExceptionType {
 		try {
 			this.mRemote.resumeProcess(this.processId);
 		} catch (Exception e) {
-			throw new WorkflowException();
+			throw new WorkflowExceptionType();
 		}		
 		
 	}
 
 
-	public void cancel() throws WorkflowException {
+	public void cancel() throws WorkflowExceptionType {
 		try {
 			this.mRemote.terminateProcess(this.processId);
 		} catch (Exception e) {
-			throw new WorkflowException();
+			throw new WorkflowExceptionType();
 		}		
 	}
 	
-	/*public String getProcessLog() throws WorkflowException {
+	/*public String getProcessLog() throws WorkflowExceptionType {
 		try {
 			return this.mRemote.getProcessLog(this.processId);
 		} catch (Exception e) {
-			throw new WorkflowException();
+			throw new WorkflowExceptionType();
 		}
 	}*/
 	
 	public WorkflowStatusEventType[] 
-	    getWorkflowStatusEventsArray() throws WorkflowException {
+	    getWorkflowStatusEventsArray() throws WorkflowExceptionType {
 		
 		return readFromFile(this.processLogFileLocation);
 	}
@@ -297,7 +297,7 @@ public class ActiveBPELAdapter implements WorkflowEngineAdapter {
 		// If activebpel exposes remote interface to remove bpr files
 	}
 
-	public WorkflowStatusEventType[] readFromFile(String fileName) throws WorkflowException {
+	public WorkflowStatusEventType[] readFromFile(String fileName) throws WorkflowExceptionType {
 		String timeStamp = "";
 		String DataLine = null;
 		String state = null;
@@ -357,9 +357,9 @@ public class ActiveBPELAdapter implements WorkflowEngineAdapter {
 			System.out.println(processStates.size());
 			toString(processStates);
 		} catch (FileNotFoundException ex) {
-			throw new WorkflowException();
+			throw new WorkflowExceptionType();
 		} catch (IOException ex) {
-			throw  new WorkflowException();
+			throw  new WorkflowExceptionType();
 		}
 		ArrayList temp = new ArrayList(this.processStates.values());
 		System.out.println("EVENTS:" + temp.size());

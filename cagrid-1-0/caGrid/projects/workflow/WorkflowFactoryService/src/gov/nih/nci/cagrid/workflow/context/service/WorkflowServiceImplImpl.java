@@ -1,9 +1,6 @@
 package gov.nih.nci.cagrid.workflow.context.service;
 
 import gov.nih.nci.cagrid.workflow.context.service.globus.resource.WorkflowResource;
-import gov.nih.nci.cagrid.workflow.context.stubs.types.CannotCancelWorkflowFault;
-import gov.nih.nci.cagrid.workflow.stubs.types.WorkflowException;
-
 import java.rmi.RemoteException;
 
 import org.globus.wsrf.ResourceContext;
@@ -21,7 +18,7 @@ public class WorkflowServiceImplImpl extends WorkflowServiceImplImplBase {
 		super();
 	}
 
-  public gov.nih.nci.cagrid.workflow.stubs.types.WorkflowStatusType start(gov.nih.nci.cagrid.workflow.stubs.types.StartInputType startInputElement) throws RemoteException, gov.nih.nci.cagrid.workflow.stubs.types.WorkflowException, gov.nih.nci.cagrid.workflow.context.stubs.types.StartCalledOnStartedWorkflow {
+  public gov.nih.nci.cagrid.workflow.stubs.types.WorkflowStatusType start(gov.nih.nci.cagrid.workflow.stubs.types.StartInputType startInputElement) throws RemoteException, gov.nih.nci.cagrid.workflow.stubs.types.WorkflowExceptionType, gov.nih.nci.cagrid.workflow.context.stubs.types.StartCalledOnStartedWorkflowFaultType {
 		gov.nih.nci.cagrid.workflow.stubs.types.WorkflowStatusType status = null;
 		WorkflowResource resource = null;
 		try {
@@ -41,26 +38,26 @@ public class WorkflowServiceImplImpl extends WorkflowServiceImplImplBase {
 		return resource;
 	}
 
-  public gov.nih.nci.cagrid.workflow.stubs.types.WorkflowStatusType getStatus() throws RemoteException, gov.nih.nci.cagrid.workflow.stubs.types.WorkflowException {
+  public gov.nih.nci.cagrid.workflow.stubs.types.WorkflowStatusType getStatus() throws RemoteException, gov.nih.nci.cagrid.workflow.stubs.types.WorkflowExceptionType {
 		return getWorkflowResource().getStatus();
 	}
 
-  public gov.nih.nci.cagrid.workflow.stubs.types.WorkflowStatusType pause() throws RemoteException, gov.nih.nci.cagrid.workflow.stubs.types.WorkflowException, gov.nih.nci.cagrid.workflow.context.stubs.types.CannotPauseWorkflowFault {
+  public gov.nih.nci.cagrid.workflow.stubs.types.WorkflowStatusType pause() throws RemoteException, gov.nih.nci.cagrid.workflow.stubs.types.WorkflowExceptionType, gov.nih.nci.cagrid.workflow.context.stubs.types.CannotPauseWorkflowFaultType {
 		return getWorkflowResource().pause();
 	}
 
-  public gov.nih.nci.cagrid.workflow.stubs.types.WorkflowStatusType resume() throws RemoteException, gov.nih.nci.cagrid.workflow.stubs.types.WorkflowException, gov.nih.nci.cagrid.workflow.context.stubs.types.CannotResumeWorkflowFault {
+  public gov.nih.nci.cagrid.workflow.stubs.types.WorkflowStatusType resume() throws RemoteException, gov.nih.nci.cagrid.workflow.stubs.types.WorkflowExceptionType, gov.nih.nci.cagrid.workflow.context.stubs.types.CannotResumeWorkflowFaultType {
 		return getWorkflowResource().resume();
 	}
 
-  public void cancel() throws RemoteException, gov.nih.nci.cagrid.workflow.stubs.types.WorkflowException, gov.nih.nci.cagrid.workflow.context.stubs.types.CannotCancelWorkflowFault {
+  public void cancel() throws RemoteException, gov.nih.nci.cagrid.workflow.stubs.types.WorkflowExceptionType, gov.nih.nci.cagrid.workflow.context.stubs.types.CannotCancelWorkflowFaultType {
 		getWorkflowResource().cancel();
 	}
 
-  public gov.nih.nci.cagrid.workflow.stubs.types.WorkflowOutputType getWorkflowOutput() throws RemoteException, gov.nih.nci.cagrid.workflow.stubs.types.WorkflowException {
+  public gov.nih.nci.cagrid.workflow.stubs.types.WorkflowOutputType getWorkflowOutput() throws RemoteException, gov.nih.nci.cagrid.workflow.stubs.types.WorkflowExceptionType {
 		return getWorkflowResource().getWorkflowOutput();
 	}
-  public gov.nih.nci.cagrid.workflow.stubs.types.WorkflowStatusEventType[] getDetailedStatus() throws RemoteException, gov.nih.nci.cagrid.workflow.stubs.types.WorkflowException {
+  public gov.nih.nci.cagrid.workflow.stubs.types.WorkflowStatusEventType[] getDetailedStatus() throws RemoteException, gov.nih.nci.cagrid.workflow.stubs.types.WorkflowExceptionType {
 	  return getWorkflowResource().getDetailedStatus();
   }
 

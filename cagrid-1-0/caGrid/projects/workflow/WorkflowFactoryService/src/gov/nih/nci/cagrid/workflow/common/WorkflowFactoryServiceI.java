@@ -14,20 +14,14 @@ public interface WorkflowFactoryServiceI {
 
     public gov.nih.nci.cagrid.metadata.security.ServiceSecurityMetadata getServiceSecurityMetadata() throws RemoteException ;
 
-  public org.oasis.wsrf.properties.GetMultipleResourcePropertiesResponse getMultipleResourceProperties(org.oasis.wsrf.properties.GetMultipleResourceProperties_Element params) throws RemoteException ;
-
-  public org.oasis.wsrf.properties.GetResourcePropertyResponse getResourceProperty(javax.xml.namespace.QName params) throws RemoteException ;
-
-  public org.oasis.wsrf.properties.QueryResourcePropertiesResponse queryResourceProperties(org.oasis.wsrf.properties.QueryResourceProperties_Element params) throws RemoteException ;
-
   /**
-   * creats workflow resources
+   * creating workflow resources
    *
    * @param wMSInputElement
    * @throws WorkflowException
    *	Workflow Exception
    */
-  public gov.nih.nci.cagrid.workflow.stubs.types.WMSOutputType createWorkflow(gov.nih.nci.cagrid.workflow.stubs.types.WMSInputType wMSInputElement) throws RemoteException, gov.nih.nci.cagrid.workflow.stubs.types.WorkflowException ;
+  public gov.nih.nci.cagrid.workflow.stubs.types.WMSOutputType createWorkflow(gov.nih.nci.cagrid.workflow.stubs.types.WMSInputType wMSInputElement) throws RemoteException, gov.nih.nci.cagrid.workflow.stubs.types.WorkflowExceptionType ;
 
 }
 
