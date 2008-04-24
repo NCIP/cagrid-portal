@@ -21,6 +21,7 @@ public class MetadataUtils {
      * 
      * @param serviceEPR
      * @return
+     *      The service metadata from the targeted service
      * @throws InvalidResourcePropertyException
      * @throws RemoteResourcePropertyRetrievalException
      * @throws ResourcePropertyRetrievalException
@@ -45,6 +46,7 @@ public class MetadataUtils {
      * 
      * @param serviceEPR
      * @return
+     *      The domain model from the targeted data service
      * @throws InvalidResourcePropertyException
      * @throws RemoteResourcePropertyRetrievalException
      * @throws ResourcePropertyRetrievalException
@@ -88,6 +90,7 @@ public class MetadataUtils {
      * 
      * @param xmlReader
      * @return
+     *      The deserialized service metadata
      * @throws Exception
      */
     public static ServiceMetadata deserializeServiceMetadata(Reader xmlReader) throws Exception {
@@ -122,6 +125,7 @@ public class MetadataUtils {
      * 
      * @param xmlReader
      * @return
+     *      The deserialized domain model
      * @throws Exception
      */
     public static DomainModel deserializeDomainModel(Reader xmlReader) throws Exception {
