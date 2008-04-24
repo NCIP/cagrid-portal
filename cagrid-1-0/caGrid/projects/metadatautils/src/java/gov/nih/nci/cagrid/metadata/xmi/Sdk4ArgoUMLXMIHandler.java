@@ -23,7 +23,7 @@ import org.xml.sax.SAXException;
   * @author David Ervin
   * 
   * @created Oct 22, 2007 10:26:25 AM
-  * @version $Id: Sdk4ArgoUMLXMIHandler.java,v 1.4 2008-04-23 00:35:21 dervin Exp $
+  * @version $Id: Sdk4ArgoUMLXMIHandler.java,v 1.5 2008-04-24 19:58:14 dervin Exp $
  */
 class Sdk4ArgoUMLXMIHandler extends BaseXMIHandler {
     private static final Log LOG = LogFactory.getLog(Sdk4ArgoUMLXMIHandler.class);
@@ -114,7 +114,7 @@ class Sdk4ArgoUMLXMIHandler extends BaseXMIHandler {
                 }
             } else if (qName.equals(XMIConstants.XMI_UML_ASSOCIATION)) {
                 LOG.debug("ASSOCIATION ENDED");
-                UMLAssociation currentAssociation = getAssocList().get(getAssocList().size() - 1);
+                UMLAssociation currentAssociation = getLastAssociation();
                 currentAssociation.setBidirectional(associationSourceIsNavigable && associationTargetIsNavigable);
                 handlingAssociation = false;
             }
@@ -196,14 +196,12 @@ class Sdk4ArgoUMLXMIHandler extends BaseXMIHandler {
         clazz.setUmlAttributeCollection(new UMLClassUmlAttributeCollection());
         LOG.debug("Created new class " + clazz.getPackageName() + "." + clazz.getClassName());
         // add the class to the list
-        getClassList().add(clazz);
-        // and the table of xmi.id to class
-        getClassTable().put(clazz.getId(), clazz);
+        addClass(clazz);
     }
     
     
     private void handleGeneralizationClassRef(Attributes atts) {
-        UMLGeneralization currentGeneralization = getGeneralizationList().get(getGeneralizationList().size() - 1);
+        UMLGeneralization currentGeneralization = getLastGeneralization();
         if (handlingChildGeneralization) {
             LOG.debug("Handling subclass generalization");
             currentGeneralization.setSubClassReference(
@@ -223,10 +221,9 @@ class Sdk4ArgoUMLXMIHandler extends BaseXMIHandler {
             attrib.setVersion(getParser().getAttributeVersion());
             String idValue = atts.getValue(XMIConstants.XMI_ID_ATTRIBUTE);
             attrib.setPublicID(idValue.hashCode());
-            getAttribList().add(attrib);
-            getAttribTable().put(String.valueOf(attrib.getPublicID()), attrib);
+            addAttribute(attrib);
             // attach the attribute to the most recent class
-            UMLClass lastClass = getClassList().get(getClassList().size() - 1);
+            UMLClass lastClass = getLastClass();
             UMLClassUmlAttributeCollection attribCollection = lastClass.getUmlAttributeCollection();
             UMLAttribute[] currentAttributes = attribCollection.getUMLAttribute();
             if (currentAttributes == null) {
@@ -242,11 +239,11 @@ class Sdk4ArgoUMLXMIHandler extends BaseXMIHandler {
     private void handleGeneralization(Attributes atts) {
         // verify this is a generalization we need to handle
         if (atts.getValue(XMIConstants.XMI_ID_ATTRIBUTE) != null) {
+            LOG.debug("Started new generalization");
             handlingGeneralization = true;
             currentGeneralizationNodeDepth = currentNodeDepth;
             UMLGeneralization gen = new UMLGeneralization();
-            getGeneralizationList().add(gen);
-            LOG.debug("Started new generalization");
+            addGeneralization(gen);
         }
     }
     
@@ -254,7 +251,7 @@ class Sdk4ArgoUMLXMIHandler extends BaseXMIHandler {
     private void handleAssociation() {
         LOG.debug("HANDLING ASSOCIATION");
         UMLAssociation association = new UMLAssociation();
-        getAssocList().add(association);
+        addAssociation(association);
         handlingAssociation = true;
         associationSourceMultiplicitySet = false;
         associationSourceParticipantSet = false;
@@ -263,7 +260,7 @@ class Sdk4ArgoUMLXMIHandler extends BaseXMIHandler {
     
     private void handleAssociationEnd(Attributes atts) {
         LOG.debug("Handling association edge");
-        UMLAssociation currentAssociation = getAssocList().get(getAssocList().size() - 1);
+        UMLAssociation currentAssociation = getLastAssociation();
         // create the new edge
         UMLAssociationEdge edge = new UMLAssociationEdge();
         String roleName = atts.getValue(XMIConstants.XMI_NAME_ATTRIBUTE);
@@ -292,7 +289,7 @@ class Sdk4ArgoUMLXMIHandler extends BaseXMIHandler {
     
     private void handleMultiplicityRange(Attributes atts) {
         LOG.debug("Handling association multiplicity");
-        UMLAssociation currentAssociation = getAssocList().get(getAssocList().size() - 1);
+        UMLAssociation currentAssociation = getLastAssociation();
         UMLAssociationEdge edge = null;
         if (!associationSourceMultiplicitySet) {
             // source edge
@@ -312,7 +309,7 @@ class Sdk4ArgoUMLXMIHandler extends BaseXMIHandler {
     
     private void handleAssociationParticipantClass(Attributes atts) {
         LOG.debug("Handling association participant");
-        UMLAssociation currentAssociation = getAssocList().get(getAssocList().size() - 1);
+        UMLAssociation currentAssociation = getLastAssociation();
         UMLAssociationEdge edge = null;
         if (!associationSourceParticipantSet) {
             // source edge

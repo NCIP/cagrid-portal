@@ -26,7 +26,7 @@ import org.xml.sax.helpers.DefaultHandler;
  * @author David Ervin
  * 
  * @created Apr 22, 2008 3:44:03 PM
- * @version $Id: BaseXMIHandler.java,v 1.2 2008-04-22 20:35:19 dervin Exp $ 
+ * @version $Id: BaseXMIHandler.java,v 1.3 2008-04-24 19:58:14 dervin Exp $ 
  */
 public abstract class BaseXMIHandler extends DefaultHandler {
 
@@ -62,42 +62,76 @@ public abstract class BaseXMIHandler extends DefaultHandler {
         this.semanticMetadataTable = new HashMap<String, List<SemanticMetadata>>();
         this.typeTable = new HashMap<String, String>();
     }
-
-
-    public List<UMLAssociation> getAssocList() {
-        return assocList;
+    
+    
+    public void addAssociation(UMLAssociation assoc) {
+        assocList.add(assoc);
     }
-
-
-    public List<UMLAttribute> getAttribList() {
-        return attribList;
+    
+    
+    public UMLAssociation getLastAssociation() {
+        return assocList.get(assocList.size() - 1);
     }
-
-
-    public Map<String, UMLAttribute> getAttribTable() {
-        return attribTable;
+    
+    
+    public void addClass(UMLClass clazz) {
+        classList.add(clazz);
+        classTable.put(clazz.getId(), clazz);
     }
-
-
+    
+    
+    public UMLClass getLastClass() {
+        return classList.get(classList.size() - 1);
+    }
+    
+    
+    public UMLClass getClassById(String id) {
+        return classTable.get(id);
+    }
+    
+    
+    public void addAttribute(UMLAttribute attrib) {
+        attribList.add(attrib);
+        attribTable.put(String.valueOf(attrib.getPublicID()), attrib);
+    }
+    
+    
+    public UMLAttribute getLastAttribute() {
+        return attribList.get(attribList.size() - 1);
+    }
+    
+    
+    public void clearAttributeList() {
+        this.attribList.clear();
+    }
+    
+    
+    public UMLAttribute[] getAttributes() {
+        UMLAttribute[] array = new UMLAttribute[attribList.size()];
+        attribList.toArray(array);
+        return array;
+    }
+    
+    
+    public UMLAttribute getAttributeById(String id) {
+        return attribTable.get(id);
+    }
+    
+    
+    public void addGeneralization(UMLGeneralization gen) {
+        generalizationList.add(gen);
+    }
+    
+    
+    public UMLGeneralization getLastGeneralization() {
+        return generalizationList.get(generalizationList.size() - 1);
+    }
+    
+    
     public StringBuffer getChars() {
         return chars;
     }
-
-
-    public List<UMLClass> getClassList() {
-        return classList;
-    }
-
-
-    public Map<String, UMLClass> getClassTable() {
-        return classTable;
-    }
-
-
-    public List<UMLGeneralization> getGeneralizationList() {
-        return generalizationList;
-    }
-
+    
 
     public XMIParser getParser() {
         return parser;
@@ -164,7 +198,7 @@ public abstract class BaseXMIHandler extends DefaultHandler {
     }
     
     
-//  -------------------------------
+    // -------------------------------
     // end of document cleanup tooling
     // -------------------------------
     
@@ -187,27 +221,31 @@ public abstract class BaseXMIHandler extends DefaultHandler {
             UMLAttribute att = attribTable.get(id);
             String typeRef = att.getDataTypeName();
 
-            String dataType = null;
+            String umlDataType = null;
+            String javaDataType = null;
 
             // check for class
-            if (dataType == null) {
+            if (umlDataType == null) {
                 UMLClass typeCl = classTable.get(typeRef);
-                if (typeCl != null)
-                    dataType = typeCl.getClassName();
+                if (typeCl != null) {
+                    umlDataType = typeCl.getClassName();
+                }
             }
 
             // check type table
-            if (dataType == null) {
-                dataType = typeTable.get(typeRef);
+            if (umlDataType == null) {
+                umlDataType = typeTable.get(typeRef);
             }
 
-            // perform mapping
-            if (dataType != null && XMIParser.DATATYPE_MAP.containsKey(dataType)) {
-                dataType = XMIParser.DATATYPE_MAP.get(dataType);
+            // perform mapping from UML to Java
+            System.out.println("UML Data Type: " + umlDataType);
+            if (umlDataType != null && XMIParser.DATATYPE_MAP.containsKey(umlDataType)) {
+                javaDataType = XMIParser.DATATYPE_MAP.get(umlDataType);
             }
-
+            System.out.println("Java Data Type: " + javaDataType);
+            
             // set data type
-            att.setDataTypeName(dataType);
+            att.setDataTypeName(javaDataType);
         }
     }
 

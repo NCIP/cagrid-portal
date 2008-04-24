@@ -27,7 +27,7 @@ import org.xml.sax.SAXException;
   * @author David Ervin
   * 
   * @created Oct 22, 2007 10:26:25 AM
-  * @version $Id: XMIHandler.java,v 1.11 2008-04-23 00:35:21 dervin Exp $
+  * @version $Id: XMIHandler.java,v 1.12 2008-04-24 19:58:14 dervin Exp $
  */
 class XMIHandler extends BaseXMIHandler {
     private static final Log LOG = LogFactory.getLog(XMIHandler.class);   
@@ -36,10 +36,13 @@ class XMIHandler extends BaseXMIHandler {
     private UMLAssociationEdge edge;
     private boolean sourceNavigable = false;
     private boolean targetNavigable = false;
-    private String pkg = "";
+    private String pkg;
+    private boolean handlingAttribute;
 
     public XMIHandler(XMIParser parser) {
         super(parser);
+        pkg = "";
+        handlingAttribute = false;
     }
 
 
@@ -53,12 +56,13 @@ class XMIHandler extends BaseXMIHandler {
                 pkg = pkg.substring(0, index);
             }
         } else if (qName.equals(XMIConstants.XMI_UML_CLASS)) {
-            UMLClass cl = getClassList().get(getClassList().size() - 1);
-            cl.setUmlAttributeCollection(new UMLClassUmlAttributeCollection(
-                getAttribList().toArray(new UMLAttribute[0])));
-            getAttribList().clear();
+            UMLClass cl = getLastClass();
+            cl.setUmlAttributeCollection(
+                new UMLClassUmlAttributeCollection(getAttributes()));
+            clearAttributeList();
+            handlingAttribute = false;
         } else if (qName.equals(XMIConstants.XMI_UML_ASSOCIATION)) {
-            UMLAssociation assoc = getAssocList().get(getAssocList().size() - 1);
+            UMLAssociation assoc = getLastAssociation();
             if (sourceNavigable && !targetNavigable) {
                 UMLAssociationEdge assocEdge = assoc.getSourceUMLAssociationEdge().getUMLAssociationEdge();
                 assoc.getSourceUMLAssociationEdge().setUMLAssociationEdge(
@@ -86,7 +90,7 @@ class XMIHandler extends BaseXMIHandler {
         } else if (qName.equals(XMIConstants.XMI_UML_ASSOCIATION)) {
             // start the new association
             UMLAssociation ass = new UMLAssociation();
-            getAssocList().add(ass);
+            addAssociation(ass);
         } else if (qName.equals(XMIConstants.XMI_UML_ASSOCIATION_END)) {
             handleAssociationEnd(atts);
         } else if (qName.equals(XMIConstants.XMI_UML_MULTIPLICITY_RANGE) && edge != null) {
@@ -98,11 +102,10 @@ class XMIHandler extends BaseXMIHandler {
         } else if (qName.equals(XMIConstants.XMI_UML_DATA_TYPE)) {
             handleDataType(atts);
         } else if (qName.equals(XMIConstants.XMI_FOUNDATION_CORE_CLASSIFIER)) {
-            if (getAttribList().size() == 0) {
+            if (!handlingAttribute) {
                 LOG.info("Ignoring " + XMIConstants.XMI_FOUNDATION_CORE_CLASSIFIER);
             } else {
-                getAttribList().get(getAttribList().size() - 1)
-                    .setDataTypeName(atts.getValue(XMIConstants.XMI_IDREF));
+                getLastAttribute().setDataTypeName(atts.getValue(XMIConstants.XMI_IDREF));
             }
         }
     }
@@ -131,7 +134,7 @@ class XMIHandler extends BaseXMIHandler {
         }
         gen.setSubClassReference(new UMLClassReference(subId));
         gen.setSuperClassReference(new UMLClassReference(superId));
-        getGeneralizationList().add(gen);
+        addGeneralization(gen);
     }
     
     
@@ -145,9 +148,9 @@ class XMIHandler extends BaseXMIHandler {
     
     private void handleAssociationEnd(Attributes atts) {
         // get the most recently found association
-        UMLAssociation assoc = getAssocList().get(getAssocList().size() - 1);
+        UMLAssociation assoc = getLastAssociation();
         // TODO: something with type?
-        // String type = atts.getValue(XMIConstants.XMI_TYPE_ATTRIBUTE);
+        String type = atts.getValue(XMIConstants.XMI_TYPE_ATTRIBUTE);
         boolean isNavigable = "true".equals(atts.getValue(XMIConstants.XMI_UML_ASSOCIATION_IS_NAVIGABLE));
 
         edge = new UMLAssociationEdge();
@@ -164,12 +167,12 @@ class XMIHandler extends BaseXMIHandler {
     
     
     private void handleAttribute(Attributes atts) {
+        handlingAttribute = true;
         UMLAttribute att = new UMLAttribute();
         att.setName(atts.getValue(XMIConstants.XMI_NAME_ATTRIBUTE));
         att.setPublicID(atts.getValue(XMIConstants.XMI_ID_ATTRIBUTE).hashCode());
         att.setVersion(getParser().attributeVersion);
-        getAttribList().add(att);
-        getAttribTable().put(String.valueOf(att.getPublicID()), att);
+        addAttribute(att);
     }
     
     
@@ -180,8 +183,7 @@ class XMIHandler extends BaseXMIHandler {
         cl.setPackageName(pkg);
         cl.setProjectName(getParser().projectShortName);
         cl.setProjectVersion(getParser().projectVersion);
-        getClassList().add(cl);
-        getClassTable().put(cl.getId(), cl);
+        addClass(cl);
     }
     
     
@@ -211,10 +213,12 @@ class XMIHandler extends BaseXMIHandler {
         LOG.debug(" = " + value);
 
         if (tag.equals(XMIConstants.XMI_TAG_DESCRIPTION)) {
-            if (getClassTable().containsKey(modelElement)) {
-                getClassTable().get(modelElement).setDescription(value);
-            } else if (getAttribTable().containsKey(modelElement)) {
-                getAttribTable().get(modelElement).setDescription(value);
+            UMLClass refedClass = getClassById(modelElement);
+            UMLAttribute refedAttribute = getAttributeById(modelElement);
+            if (refedClass != null) {
+                refedClass.setDescription(value);
+            } else if (refedAttribute != null) {
+                refedAttribute.setDescription(value);
             }
         } else if (tag.startsWith(XMIConstants.XMI_TAG_OBJECT_CLASS_CONCEPT_CODE)
             || tag.startsWith(XMIConstants.XMI_TAG_OBJECT_CLASS_QUALIFIER_CONCEPT_CODE) 
