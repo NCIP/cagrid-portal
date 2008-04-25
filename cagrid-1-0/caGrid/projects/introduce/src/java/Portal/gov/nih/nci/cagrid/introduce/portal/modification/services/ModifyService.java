@@ -6,6 +6,7 @@ import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.service.Custom;
 import gov.nih.nci.cagrid.introduce.beans.service.Identifiable;
 import gov.nih.nci.cagrid.introduce.beans.service.Lifetime;
+import gov.nih.nci.cagrid.introduce.beans.service.Main;
 import gov.nih.nci.cagrid.introduce.beans.service.Notification;
 import gov.nih.nci.cagrid.introduce.beans.service.Persistent;
 import gov.nih.nci.cagrid.introduce.beans.service.ResourceFrameworkOptions;
@@ -369,7 +370,15 @@ public class ModifyService extends JDialog {
                     service.getService().setName(serviceNameTextField.getText());
                     service.getService().setNamespace(namespaceTextField.getText());
                     service.getService().setPackageName(servicePackageNameTextField.getText());
-                    service.getService().setResourceFrameworkOptions(new ResourceFrameworkOptions());
+                    
+                    //remember if service was a main service
+                    ResourceFrameworkOptions newOptions = new ResourceFrameworkOptions();
+                    if(service.getService().getResourceFrameworkOptions().getMain()!=null){
+                        newOptions.setMain(new Main());
+                    }
+                    
+                    service.getService().setResourceFrameworkOptions(newOptions);
+                    
                     if (getResourceOptionsPanel().getCustomResource().isSelected()) {
                         service.getService().getResourceFrameworkOptions().setCustom(new Custom());
                     } else {
