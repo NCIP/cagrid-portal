@@ -17,7 +17,7 @@ import junit.textui.TestRunner;
  * @author David Ervin
  * 
  * @created Oct 24, 2007 11:48:02 AM
- * @version $Id: Sdk4XmiToDomainModelStory.java,v 1.1 2008-04-04 16:54:32 dervin Exp $ 
+ * @version $Id: Sdk4XmiToDomainModelStory.java,v 1.2 2008-04-28 18:10:22 dervin Exp $ 
  */
 public class Sdk4XmiToDomainModelStory extends Story {
     public static final String XMI_ZIP_FILE = "test/resources/sdk4/sdk4exampleXMI.zip";
@@ -65,19 +65,14 @@ public class Sdk4XmiToDomainModelStory extends Story {
             PROJECT_SHORT_NAME, PROJECT_VERSION));
         // compare the EA model
         steps.add(new GenericDomainModelComparisonStep(goldEaDomain, generatedEaDomain));
+        // compare the Argo model
+        steps.add(new GenericDomainModelComparisonStep(goldArgoDomain, generatedArgoDomain));
         // clean up dirs
         steps.add(new DeleteModelTempStep(XMI_UNPACK_DIR));
         steps.add(new DeleteModelTempStep(GOLD_MODELS_UNPACK_DIR));
         return steps;
     }
     
-    
-    // used to make sure that if we are going to use a junit testsuite to
-    // test this that the test suite will not error out
-    // looking for a single test......
-    public void testDummy() throws Throwable {
-    }
-
 
     public static void main(String[] args) {
         TestRunner runner = new TestRunner();
