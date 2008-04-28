@@ -17,6 +17,8 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.jasciidammit.ConfigurationException;
 import org.jasciidammit.JAsciiDammit;
 import org.jdom.Element;
@@ -30,9 +32,11 @@ import org.jdom.filter.Filter;
  * @author David Ervin
  * 
  * @created Dec 10, 2007 12:51:39 PM
- * @version $Id: XmiCleaner.java,v 1.1 2007-12-10 20:36:19 dervin Exp $ 
+ * @version $Id: XmiCleaner.java,v 1.2 2008-04-28 19:31:07 dervin Exp $ 
  */
 public class XmiCleaner {
+    private static Log log = LogFactory.getLog(XmiCleaner.class);
+    
     public static final String ERROR_APOSTROPHE = "â€™";
     
     public static final String ERROR_DOUBLE_OPEN_BRACKET = "«";
@@ -70,7 +74,7 @@ public class XmiCleaner {
     private static void cleanDoctype(StringBuffer xmiContents) {
         int start = xmiContents.indexOf(DOCTYPE_UML_EA); 
         if (start != -1) {
-            System.out.println("OFFENDING DOCTYPE ELEMENT FOUND");
+            log.debug("OFFENDING DOCTYPE ELEMENT FOUND");
             xmiContents.delete(start, start + DOCTYPE_UML_EA.length());
         }
     }
@@ -91,7 +95,7 @@ public class XmiCleaner {
         };
         
         int removed = removeElementsByFilter(xmiContents, taggedValueFilter);
-        System.out.println("Removed " + removed + " TaggedValue elements");
+        log.debug("Removed " + removed + " TaggedValue elements");
     }
     
     
@@ -108,7 +112,7 @@ public class XmiCleaner {
         };
         
         int removed = removeElementsByFilter(xmiContents, diagramFilter);
-        System.out.println("Removed " + removed + " Diagram elements");
+        log.debug("Removed " + removed + " Diagram elements");
     }
     
     
@@ -127,7 +131,7 @@ public class XmiCleaner {
         
         xmiContents.delete(0, xmiContents.length());
         xmiContents.append(cleaned.toString());
-        System.out.println("Removed " + removed + " elements with broken brackets");
+        log.debug("Removed " + removed + " elements with broken brackets");
     }
     
     
@@ -189,7 +193,7 @@ public class XmiCleaner {
         try {
             cmd = new BasicParser().parse(options, args);
         } catch (ParseException e) {
-            System.out.println("Error parsing arguments: " + e.getMessage());
+            log.debug("Error parsing arguments: " + e.getMessage());
             HelpFormatter formatter = new HelpFormatter();
             formatter.printHelp(XmiCleaner.class.getSimpleName(), options);
             System.exit(-1);
@@ -199,7 +203,9 @@ public class XmiCleaner {
         String inputFilename = cmd.getOptionValue("inputXmi");
         File inputXmiFile = new File(inputFilename);
         if (!inputXmiFile.isFile()) {
-            System.err.println(inputFilename + " does not appear to be a file");
+            String message = inputFilename + " does not appear to be a file";
+            log.error(message);
+            System.err.println(message);
             System.exit(1);
         }
         
@@ -214,11 +220,11 @@ public class XmiCleaner {
         
         StringBuffer xmiContents = null;
         try {
-            System.out.println("Loading xmi from " + inputXmiFile.getAbsolutePath());
+            log.debug("Loading xmi from " + inputXmiFile.getAbsolutePath());
             xmiContents = Utils.fileToStringBuffer(inputXmiFile);
-            System.out.println("Cleaning xmi");
+            log.debug("Cleaning xmi");
             cleanXmi(xmiContents);
-            System.out.println("Writing xmi to " + outputXmiFile.getAbsolutePath());
+            log.debug("Writing xmi to " + outputXmiFile.getAbsolutePath());
             Utils.stringBufferToFile(xmiContents, outputXmiFile.getAbsolutePath());
         } catch (Exception ex) {
             ex.printStackTrace();

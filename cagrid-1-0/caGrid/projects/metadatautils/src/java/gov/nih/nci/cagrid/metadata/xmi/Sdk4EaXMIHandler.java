@@ -27,7 +27,7 @@ import org.xml.sax.SAXException;
   * @author David Ervin
   * 
   * @created Oct 22, 2007 10:26:25 AM
-  * @version $Id: Sdk4EaXMIHandler.java,v 1.4 2008-04-24 19:58:14 dervin Exp $
+  * @version $Id: Sdk4EaXMIHandler.java,v 1.5 2008-04-28 19:30:50 dervin Exp $
  */
 class Sdk4EaXMIHandler extends BaseXMIHandler {
     private static final Log LOG = LogFactory.getLog(Sdk4EaXMIHandler.class);   
@@ -68,6 +68,10 @@ class Sdk4EaXMIHandler extends BaseXMIHandler {
                 assoc.getTargetUMLAssociationEdge().setUMLAssociationEdge(assocEdge);
             }
             assoc.setBidirectional(sourceNavigable && targetNavigable);
+        } else if (qName.equals(XMIConstants.XMI_UML_ATTRIBUTE)) {
+            addAttribute(currentAttribute);
+            currentAttribute = null;
+            handlingAttribute = false;
         }
 
         clearChars();
@@ -174,13 +178,8 @@ class Sdk4EaXMIHandler extends BaseXMIHandler {
     
     private void handleClassifier(Attributes atts) {
         if (handlingAttribute) {
-            UMLClass lastClass = getLastClass();
-            String localId = atts.getValue(XMIConstants.XMI_IDREF);
-            String className = "" + lastClass.getPackageName() + "." + lastClass.getClassName();
-            currentAttribute.setPublicID((className + localId).hashCode());
-            addAttribute(currentAttribute);
-            currentAttribute = null;
-            handlingAttribute = false;
+            String typeIdRef = atts.getValue(XMIConstants.XMI_IDREF);
+            currentAttribute.setDataTypeName(typeIdRef);
         }
     }
     
@@ -213,9 +212,9 @@ class Sdk4EaXMIHandler extends BaseXMIHandler {
         String tag = atts.getValue(XMIConstants.XMI_UML_TAGGED_VALUE_TAG);
         String modelElement = atts.getValue(XMIConstants.XMI_UML_TAGGED_VALUE_MODEL_ELEMENT);
         String value = atts.getValue(XMIConstants.XMI_UML_TAGGED_VALUE_VALUE);
-
-        if (handlingAttribute && "type".equals(tag)) {
-            currentAttribute.setDataTypeName(value);
+        
+        if (handlingAttribute && "ea_guid".equals(tag)) {
+            currentAttribute.setPublicID(value.hashCode());
         }
         
         LOG.debug(tag + " on " + modelElement);            

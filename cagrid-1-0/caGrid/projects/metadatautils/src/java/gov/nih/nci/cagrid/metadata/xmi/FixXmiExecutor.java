@@ -2,6 +2,7 @@ package gov.nih.nci.cagrid.metadata.xmi;
 
 import gov.nih.nci.cagrid.common.StreamGobbler;
 import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.common.StreamGobbler.LogPriority;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,7 +18,7 @@ import org.apache.commons.logging.LogFactory;
  * @author David Ervin
  * 
  * @created Oct 29, 2007 2:11:31 PM
- * @version $Id: FixXmiExecutor.java,v 1.8 2008-04-17 19:18:23 dervin Exp $ 
+ * @version $Id: FixXmiExecutor.java,v 1.9 2008-04-28 19:31:07 dervin Exp $ 
  */
 public class FixXmiExecutor {
     public static final Log LOG = LogFactory.getLog(FixXmiExecutor.class);
@@ -75,18 +76,14 @@ public class FixXmiExecutor {
         command.append("-D").append(PREPROCESSOR_PROPERTY)
             .append("=").append(EA_XMI_PREPROCESSOR);
         // execute the command
-        System.out.println("Executing " + command.toString());
+        LOG.debug("Executing " + command.toString());
         Process proc = Runtime.getRuntime().exec(command.toString());
-        /* streams to LOG
+        // streams to LOG
         new StreamGobbler(proc.getInputStream(), StreamGobbler.TYPE_OUT,
             LOG, LogPriority.DEBUG).start();
         new StreamGobbler(proc.getErrorStream(), StreamGobbler.TYPE_ERR,
             LOG, LogPriority.DEBUG).start();
-        */
-        // Streams to out
-        new StreamGobbler(proc.getInputStream(), StreamGobbler.TYPE_OUT, System.out).start();
-        new StreamGobbler(proc.getErrorStream(), StreamGobbler.TYPE_ERR, System.err).start();
-        System.out.println("Waiting");
+        LOG.debug("Waiting");
         proc.waitFor();
         if (proc.exitValue() == 0) {
             return new File(originalModel.getParent() + File.separator + "fixed_" + originalModel.getName());
@@ -130,7 +127,7 @@ public class FixXmiExecutor {
     
     
     private static File cleanXmi(File originalXmi) throws IOException {
-        System.out.println("Clean XMI");
+        LOG.debug("Clean XMI");
         File cleanedFile = new File(originalXmi.getParentFile(), "cleaned_" + originalXmi.getName());
         StringBuffer xmiContents = Utils.fileToStringBuffer(originalXmi);
         XmiCleaner.cleanXmi(xmiContents);

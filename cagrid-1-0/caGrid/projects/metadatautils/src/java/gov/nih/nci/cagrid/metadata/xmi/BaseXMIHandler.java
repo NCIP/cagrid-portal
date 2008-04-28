@@ -16,6 +16,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
@@ -26,9 +28,11 @@ import org.xml.sax.helpers.DefaultHandler;
  * @author David Ervin
  * 
  * @created Apr 22, 2008 3:44:03 PM
- * @version $Id: BaseXMIHandler.java,v 1.3 2008-04-24 19:58:14 dervin Exp $ 
+ * @version $Id: BaseXMIHandler.java,v 1.4 2008-04-28 19:30:50 dervin Exp $ 
  */
 public abstract class BaseXMIHandler extends DefaultHandler {
+    
+    private static Log logger = LogFactory.getLog(BaseXMIHandler.class);
 
     // parser contains configuration options and information for the handler
     private XMIParser parser;
@@ -238,11 +242,11 @@ public abstract class BaseXMIHandler extends DefaultHandler {
             }
 
             // perform mapping from UML to Java
-            System.out.println("UML Data Type: " + umlDataType);
+            logger.debug("UML Data Type: " + umlDataType);
             if (umlDataType != null && XMIParser.DATATYPE_MAP.containsKey(umlDataType)) {
                 javaDataType = XMIParser.DATATYPE_MAP.get(umlDataType);
             }
-            System.out.println("Java Data Type: " + javaDataType);
+            logger.debug("Java Data Type: " + javaDataType);
             
             // set data type
             att.setDataTypeName(javaDataType);

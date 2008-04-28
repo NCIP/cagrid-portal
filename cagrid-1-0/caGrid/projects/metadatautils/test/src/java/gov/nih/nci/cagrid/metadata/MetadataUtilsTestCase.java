@@ -9,6 +9,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import junit.framework.TestCase;
 
 
@@ -16,7 +19,8 @@ import junit.framework.TestCase;
  * @author oster
  */
 public class MetadataUtilsTestCase extends TestCase {
-
+    private static Log log = LogFactory.getLog(MetadataUtilsTestCase.class);
+    
 	private static final String DOMAIN_XML = "domainModel.xml";
 	private static final String SERVICE_XML = "serviceMetadata.xml";
 
@@ -39,7 +43,7 @@ public class MetadataUtilsTestCase extends TestCase {
 			FileWriter tmpFileWriter = new FileWriter(tmpFile);
 			MetadataUtils.serializeServiceMetadata(model, tmpFileWriter);
 			tmpFileWriter.close();
-			System.out.println("Wrote to file: " + tmpFile.getCanonicalPath());
+			log.debug("Wrote to file: " + tmpFile.getCanonicalPath());
 			assertTrue(tmpFile.exists());
 
 			Reader r = new FileReader(tmpFile);
@@ -66,7 +70,7 @@ public class MetadataUtilsTestCase extends TestCase {
 			FileWriter tmpFileWriter = new FileWriter(tmpFile);
 			MetadataUtils.serializeDomainModel(model, tmpFileWriter);
 			tmpFileWriter.close();
-			System.out.println("Wrote to file: " + tmpFile.getCanonicalPath());
+			log.debug("Wrote to file: " + tmpFile.getCanonicalPath());
 			assertTrue(tmpFile.exists());
 
 			Reader r = new FileReader(tmpFile);

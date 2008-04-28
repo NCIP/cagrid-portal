@@ -13,6 +13,9 @@ import java.io.FileReader;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 /** 
  *  ModelComparisonStep
  *  Compares models
@@ -20,9 +23,11 @@ import java.util.Set;
  * @author David Ervin
  * 
  * @created Oct 24, 2007 1:27:00 PM
- * @version $Id: ModelComparisonStep.java,v 1.4 2007-12-03 16:27:18 hastings Exp $ 
+ * @version $Id: ModelComparisonStep.java,v 1.5 2008-04-28 19:31:07 dervin Exp $ 
  */
 public class ModelComparisonStep extends Step {
+    
+    private static Log log = LogFactory.getLog(ModelComparisonStep.class);
     
     private static Set<String> modelsToValidate = null;
     
@@ -52,7 +57,7 @@ public class ModelComparisonStep extends Step {
         // iterate model directories
         for (File modelDir : dirs) {
             // locate model files
-            System.out.println("Processing directory " + modelDir.getAbsolutePath());
+            log.debug("Processing directory " + modelDir.getAbsolutePath());
             File convertedModelFile = new File(modelDir, "convertedDomainModel.xml");
             File goldModelFile = new File(modelDir, "goldDomainModel.xml");
             assertTrue("Converted model file does not exist", convertedModelFile.exists());
@@ -72,7 +77,7 @@ public class ModelComparisonStep extends Step {
             }
             // only validate a subset of models until we get caDSR issues solved
             if (modelsToValidate.contains(modelDir.getName())) {
-                System.out.println("Validating " + modelDir.getName());
+                log.debug("Validating " + modelDir.getName());
                 compareModels(goldModel, convertedModel);
             }
         }

@@ -9,6 +9,9 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.FileWriter;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 /** 
  *  ModelConversionStep
  *  Converts XMI to a domain model
@@ -16,9 +19,10 @@ import java.io.FileWriter;
  * @author David Ervin
  * 
  * @created Oct 24, 2007 12:05:19 PM
- * @version $Id: ModelConversionStep.java,v 1.2 2007-12-03 16:27:18 hastings Exp $ 
+ * @version $Id: ModelConversionStep.java,v 1.3 2008-04-28 19:31:07 dervin Exp $ 
  */
 public class ModelConversionStep extends Step {
+    private static Log log = LogFactory.getLog(ModelConversionStep.class);
     
     private String modelsDir;
     
@@ -39,7 +43,7 @@ public class ModelConversionStep extends Step {
         
         // iterate model directories
         for (File modelDir : dirs) {
-            System.out.println("Processing directory " + modelDir.getAbsolutePath());
+            log.debug("Processing directory " + modelDir.getAbsolutePath());
             // locate the XMI
             File[] xmis = modelDir.listFiles(new FileFilter() {
                 public boolean accept(File path) {
