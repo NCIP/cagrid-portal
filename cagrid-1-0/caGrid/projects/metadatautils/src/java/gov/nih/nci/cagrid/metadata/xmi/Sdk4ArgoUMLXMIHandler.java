@@ -23,7 +23,7 @@ import org.xml.sax.SAXException;
   * @author David Ervin
   * 
   * @created Oct 22, 2007 10:26:25 AM
-  * @version $Id: Sdk4ArgoUMLXMIHandler.java,v 1.5 2008-04-24 19:58:14 dervin Exp $
+  * @version $Id: Sdk4ArgoUMLXMIHandler.java,v 1.6 2008-04-28 18:10:00 dervin Exp $
  */
 class Sdk4ArgoUMLXMIHandler extends BaseXMIHandler {
     private static final Log LOG = LogFactory.getLog(Sdk4ArgoUMLXMIHandler.class);
@@ -37,6 +37,7 @@ class Sdk4ArgoUMLXMIHandler extends BaseXMIHandler {
     private int currentGeneralizationNodeDepth;
     private int currentClassNodeDepth;
     private boolean handlingClass;
+    private boolean handlingAttribute;
     private boolean handlingAssociation;
     private boolean associationSourceIsNavigable;
     private boolean associationTargetIsNavigable;
@@ -54,6 +55,7 @@ class Sdk4ArgoUMLXMIHandler extends BaseXMIHandler {
         currentGeneralizationNodeDepth = 0;
         currentClassNodeDepth = 0;
         handlingClass = false;
+        handlingAttribute = false;
         handlingAssociation = false;
     }
     
@@ -85,6 +87,8 @@ class Sdk4ArgoUMLXMIHandler extends BaseXMIHandler {
                 handleAssociationEnd(atts);
             } else if (qName.equals(XMIConstants.XMI_UML_MULTIPLICITY_RANGE) && handlingAssociation) {
                 handleMultiplicityRange(atts);
+            } else if (qName.equals(Sdk4ArgoUMLXMIConstants.UML_TYPE_FEATURE)) {
+                // iff handling association
             }
         }
     }
@@ -117,6 +121,9 @@ class Sdk4ArgoUMLXMIHandler extends BaseXMIHandler {
                 UMLAssociation currentAssociation = getLastAssociation();
                 currentAssociation.setBidirectional(associationSourceIsNavigable && associationTargetIsNavigable);
                 handlingAssociation = false;
+            } else if (qName.equals(XMIConstants.XMI_UML_ATTRIBUTE)) {
+                handlingAttribute = false;
+                LOG.debug("ATTRIBUTE ENDED");
             }
         }
         
@@ -167,17 +174,17 @@ class Sdk4ArgoUMLXMIHandler extends BaseXMIHandler {
     
     
     private void handleClass(Attributes atts) {
-        // clean up the package name
-        String trimmedPackageName = getTrimmedPackageName();
-
-        if (!handlingClass && !handlingAssociation && !handlingGeneralization) {
-            // if we're not actually handling a class, start a new one
-            handleNewClass(atts, trimmedPackageName);
-        } else if (!handlingAssociation && handlingGeneralization) {
-            // class elements appear inside generalization.child and generalization.parent
-            handleGeneralizationClassRef(atts);
+        if (handlingAttribute) {
+            handleAttributeTypeClassRef(atts);
         } else if (handlingAssociation) {
             handleAssociationParticipantClass(atts);
+        } else if (handlingGeneralization) {
+            handleGeneralizationClassRef(atts);
+        } else if (!handlingClass) {
+            // if not already handling a class, start a new one
+            // clean up the package name
+            String trimmedPackageName = getTrimmedPackageName();
+            handleNewClass(atts, trimmedPackageName);
         }
     }
     
@@ -214,8 +221,18 @@ class Sdk4ArgoUMLXMIHandler extends BaseXMIHandler {
     }
     
     
+    private void handleAttributeTypeClassRef(Attributes atts) {
+        // set the attribute's data type name to the class ref
+        // it will be replaced later with the correct value from a mapping table
+        String refid = atts.getValue(XMIConstants.XMI_IDREF);
+        UMLAttribute lastAttribute = getLastAttribute();
+        lastAttribute.setDataTypeName(refid);
+    }
+    
+    
     private void handleAttribute(Attributes atts) {
         if (handlingClass) {
+            handlingAttribute = true;
             UMLAttribute attrib = new UMLAttribute();
             attrib.setName(atts.getValue(XMIConstants.XMI_NAME_ATTRIBUTE));
             attrib.setVersion(getParser().getAttributeVersion());

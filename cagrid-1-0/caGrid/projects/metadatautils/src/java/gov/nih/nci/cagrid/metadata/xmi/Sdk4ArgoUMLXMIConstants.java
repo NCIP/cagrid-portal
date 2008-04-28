@@ -7,7 +7,7 @@ package gov.nih.nci.cagrid.metadata.xmi;
  * @author David Ervin
  * 
  * @created Oct 22, 2007 10:28:52 AM
- * @version $Id: Sdk4ArgoUMLXMIConstants.java,v 1.2 2008-04-22 19:41:23 dervin Exp $ 
+ * @version $Id: Sdk4ArgoUMLXMIConstants.java,v 1.3 2008-04-28 18:10:00 dervin Exp $ 
  */
 public class Sdk4ArgoUMLXMIConstants {
     // package naming constants
@@ -21,6 +21,9 @@ public class Sdk4ArgoUMLXMIConstants {
     
     // classifier constants
     public static final String XMI_UML_CLASSIFIER = "UML:Classifier";
+    
+    // type feature for attributes
+    public static final String UML_TYPE_FEATURE = "UML:StructuralFeature.type";
 
     private Sdk4ArgoUMLXMIConstants() {
         // no instantiation
