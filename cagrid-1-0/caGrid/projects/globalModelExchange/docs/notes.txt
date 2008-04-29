@@ -51,7 +51,7 @@ system id used as default name when written to filesystem
 AMR01
 last modified for each schema
 be able to ask for it (so client can determine if they have newest version when working with dev versions)
-need aggregate modified calcuated from schema and all of its namespaces
+need aggregate modified calculated from schema and all of its namespaces
 
 
 
@@ -60,3 +60,22 @@ schemas are processed by all schemas in namespace
 
 if existing schema includes are in database, if namespace is updated, all includes need to be resolved against
 schema in submission set; can't mix and match with includes in database and includes in submission set
+
+AMR03
+userinformation provider (springized into GME)
+  getUserIdentity
+implement with gt4provider to extract identity
+
+AMR04
+consider not doing database deletes, but rather keeping status (deleted, obsolete, active, etc).
+would allow to keep history
+
+AMR05
+store annotations (namespace, name, value) and a source (<system> or identity)
+create metadata profile (iso, dublin core), which creates annotations.
+a profile is instantiated with the typed values and submited as a number of annotations to a wellknown namespace (and names) 
+
+AMR06
+can we create persistible subclasses of domain objects (e.g PersistibleXMLSchema extends XMLSchema)
+base class (XMLSchema) is in common and used over the grid, persistible class is in server package and not serializable and is what is stored in the db
+the persistible classes would have more convenience operations (eg. getAnnotations(), getDependingSchemas()) rather than keeping all the features decoupled in the domain (for serialization and reusablility purposes) 

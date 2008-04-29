@@ -1,5 +1,7 @@
 
-Convert test bundles to be dymanically loaded from  spring and create tests for each feature type such as cycles, include, etcetera. 
+document features: cycles, includes, namespace restrictions, metadata, update, delete, annotations
+
+Convert test bundles to be dynamically loaded from  spring and create tests for each feature type such as cycles, include, etcetera. 
 
 finish hibernate annotations
 
