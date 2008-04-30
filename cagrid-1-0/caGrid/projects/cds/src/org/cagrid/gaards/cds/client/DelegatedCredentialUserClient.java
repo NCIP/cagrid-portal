@@ -2,7 +2,6 @@ package org.cagrid.gaards.cds.client;
 
 import gov.nih.nci.cagrid.common.FaultHelper;
 import gov.nih.nci.cagrid.common.security.ProxyUtil;
-import gov.nih.nci.cagrid.gridca.common.KeyUtil;
 
 import java.rmi.RemoteException;
 import java.security.KeyPair;
@@ -16,6 +15,7 @@ import org.cagrid.gaards.cds.delegated.stubs.types.DelegatedCredentialReference;
 import org.cagrid.gaards.cds.stubs.types.CDSInternalFault;
 import org.cagrid.gaards.cds.stubs.types.DelegationFault;
 import org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault;
+import org.cagrid.gaards.pki.KeyUtil;
 import org.globus.gsi.GlobusCredential;
 import org.globus.wsrf.ResourceException;
 import org.oasis.wsrf.lifetime.Destroy;

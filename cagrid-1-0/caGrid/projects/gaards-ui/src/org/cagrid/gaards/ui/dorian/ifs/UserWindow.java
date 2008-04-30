@@ -5,7 +5,6 @@ import gov.nih.nci.cagrid.dorian.client.IFSAdministrationClient;
 import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUser;
 import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdP;
 import gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault;
-import gov.nih.nci.cagrid.gridca.common.CertUtil;
 
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
@@ -22,6 +21,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
+import org.cagrid.gaards.pki.CertUtil;
 import org.cagrid.gaards.ui.common.CertificatePanel;
 import org.cagrid.gaards.ui.common.CredentialCaddy;
 import org.cagrid.gaards.ui.common.CredentialComboBox;
@@ -36,7 +36,7 @@ import org.globus.gsi.GlobusCredential;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: UserWindow.java,v 1.4 2008-03-24 16:42:35 langella Exp $
+ * @version $Id: UserWindow.java,v 1.5 2008-04-30 01:50:28 langella Exp $
  */
 public class UserWindow extends ApplicationComponent {
 

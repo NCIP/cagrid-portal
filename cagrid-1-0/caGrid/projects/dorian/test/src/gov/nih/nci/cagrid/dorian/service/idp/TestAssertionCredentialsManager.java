@@ -7,8 +7,6 @@ import gov.nih.nci.cagrid.dorian.service.ca.CertificateAuthority;
 import gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault;
 import gov.nih.nci.cagrid.dorian.test.Constants;
 import gov.nih.nci.cagrid.dorian.test.Utils;
-import gov.nih.nci.cagrid.gridca.common.CertUtil;
-import gov.nih.nci.cagrid.gridca.common.KeyUtil;
 import gov.nih.nci.cagrid.opensaml.InvalidCryptoException;
 import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
 import gov.nih.nci.cagrid.opensaml.SAMLAttributeStatement;
@@ -26,6 +24,8 @@ import java.util.Iterator;
 
 import junit.framework.TestCase;
 
+import org.cagrid.gaards.pki.CertUtil;
+import org.cagrid.gaards.pki.KeyUtil;
 import org.cagrid.tools.database.Database;
 
 /**

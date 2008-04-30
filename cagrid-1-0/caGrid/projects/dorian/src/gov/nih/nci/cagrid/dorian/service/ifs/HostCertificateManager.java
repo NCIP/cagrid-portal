@@ -16,8 +16,6 @@ import gov.nih.nci.cagrid.dorian.service.ca.CertificateAuthority;
 import gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault;
 import gov.nih.nci.cagrid.dorian.stubs.types.InvalidHostCertificateFault;
 import gov.nih.nci.cagrid.dorian.stubs.types.InvalidHostCertificateRequestFault;
-import gov.nih.nci.cagrid.gridca.common.CertUtil;
-import gov.nih.nci.cagrid.gridca.common.KeyUtil;
 
 import java.security.interfaces.RSAPublicKey;
 import java.sql.Connection;
@@ -29,6 +27,8 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import org.cagrid.gaards.pki.CertUtil;
+import org.cagrid.gaards.pki.KeyUtil;
 import org.cagrid.tools.database.Database;
 
 

@@ -1,5 +1,17 @@
 package gov.nih.nci.cagrid.gts.common;
 
+import gov.nih.nci.cagrid.gts.stubs.types.CertificateValidationFault;
+import gov.nih.nci.cagrid.gts.stubs.types.GTSInternalFault;
+import gov.nih.nci.cagrid.gts.stubs.types.IllegalAuthorityFault;
+import gov.nih.nci.cagrid.gts.stubs.types.IllegalPermissionFault;
+import gov.nih.nci.cagrid.gts.stubs.types.IllegalTrustLevelFault;
+import gov.nih.nci.cagrid.gts.stubs.types.IllegalTrustedAuthorityFault;
+import gov.nih.nci.cagrid.gts.stubs.types.InvalidAuthorityFault;
+import gov.nih.nci.cagrid.gts.stubs.types.InvalidPermissionFault;
+import gov.nih.nci.cagrid.gts.stubs.types.InvalidTrustLevelFault;
+import gov.nih.nci.cagrid.gts.stubs.types.InvalidTrustedAuthorityFault;
+import gov.nih.nci.cagrid.gts.stubs.types.PermissionDeniedFault;
+
 import java.rmi.RemoteException;
 
 /**

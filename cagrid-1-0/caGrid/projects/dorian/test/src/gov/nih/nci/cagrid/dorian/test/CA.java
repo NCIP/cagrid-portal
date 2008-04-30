@@ -1,10 +1,5 @@
 package gov.nih.nci.cagrid.dorian.test;
 
-import gov.nih.nci.cagrid.gridca.common.CRLEntry;
-import gov.nih.nci.cagrid.gridca.common.CertUtil;
-import gov.nih.nci.cagrid.gridca.common.Credential;
-import gov.nih.nci.cagrid.gridca.common.KeyUtil;
-
 import java.security.KeyPair;
 import java.security.KeyStore;
 import java.security.PrivateKey;
@@ -17,6 +12,10 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 import org.bouncycastle.asn1.x509.X509Name;
+import org.cagrid.gaards.pki.CRLEntry;
+import org.cagrid.gaards.pki.CertUtil;
+import org.cagrid.gaards.pki.Credential;
+import org.cagrid.gaards.pki.KeyUtil;
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>

@@ -26,10 +26,6 @@ import gov.nih.nci.cagrid.dorian.stubs.types.InvalidProxyFault;
 import gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault;
 import gov.nih.nci.cagrid.dorian.test.CA;
 import gov.nih.nci.cagrid.dorian.test.Utils;
-import gov.nih.nci.cagrid.gridca.common.CertUtil;
-import gov.nih.nci.cagrid.gridca.common.CertificateExtensionsUtil;
-import gov.nih.nci.cagrid.gridca.common.Credential;
-import gov.nih.nci.cagrid.gridca.common.KeyUtil;
 import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
 import gov.nih.nci.cagrid.opensaml.SAMLAttribute;
 import gov.nih.nci.cagrid.opensaml.SAMLAttributeStatement;
@@ -54,6 +50,10 @@ import javax.xml.namespace.QName;
 import junit.framework.TestCase;
 
 import org.apache.xml.security.signature.XMLSignature;
+import org.cagrid.gaards.pki.CertUtil;
+import org.cagrid.gaards.pki.CertificateExtensionsUtil;
+import org.cagrid.gaards.pki.Credential;
+import org.cagrid.gaards.pki.KeyUtil;
 import org.cagrid.tools.database.Database;
 import org.globus.gsi.GlobusCredential;
 

@@ -1,8 +1,9 @@
 package gov.nih.nci.cagrid.gts.test;
 
-import gov.nih.nci.cagrid.gts.service.SimpleResourceManager;
+import gov.nih.nci.cagrid.common.XMLUtilities;
 import gov.nih.nci.cagrid.gts.common.MySQLDatabase;
 import gov.nih.nci.cagrid.gts.service.GTSConfiguration;
+import gov.nih.nci.cagrid.gts.service.SimpleResourceManager;
 import gov.nih.nci.cagrid.gts.service.db.DBManager;
 import gov.nih.nci.cagrid.gts.service.db.mysql.MySQLManager;
 
@@ -11,7 +12,6 @@ import java.io.InputStream;
 import junit.framework.TestCase;
 
 import org.jdom.Document;
-import gov.nih.nci.cagrid.common.XMLUtilities;
 import org.projectmobius.db.ConnectionManager;
 
 
@@ -19,7 +19,7 @@ import org.projectmobius.db.ConnectionManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: Utils.java,v 1.11 2008-02-18 17:18:22 oster Exp $
+ * @version $Id: Utils.java,v 1.12 2008-04-30 01:50:28 langella Exp $
  */
 public class Utils {
 

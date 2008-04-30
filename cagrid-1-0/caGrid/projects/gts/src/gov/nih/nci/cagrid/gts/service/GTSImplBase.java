@@ -1,7 +1,6 @@
 package gov.nih.nci.cagrid.gts.service;
 
 import gov.nih.nci.cagrid.gts.service.globus.resource.GTSResource;
-import gov.nih.nci.cagrid.gts.service.ServiceConfiguration;
 
 import java.rmi.RemoteException;
 

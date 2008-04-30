@@ -5,9 +5,10 @@ import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUser;
 import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdP;
 import gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault;
 import gov.nih.nci.cagrid.dorian.stubs.types.UserPolicyFault;
-import gov.nih.nci.cagrid.gridca.common.CertUtil;
 
 import java.security.cert.X509Certificate;
+
+import org.cagrid.gaards.pki.CertUtil;
 
 
 /**

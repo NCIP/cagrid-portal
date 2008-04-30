@@ -1,7 +1,6 @@
 package gov.nih.nci.cagrid.syncgts.core;
 
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.gridca.common.CertUtil;
 import gov.nih.nci.cagrid.gts.bean.TrustedAuthority;
 import gov.nih.nci.cagrid.gts.bean.TrustedAuthorityFilter;
 import gov.nih.nci.cagrid.gts.client.GTSClient;
@@ -34,6 +33,7 @@ import javax.xml.namespace.QName;
 import org.apache.axis.message.addressing.Address;
 import org.apache.axis.message.addressing.EndpointReferenceType;
 import org.apache.log4j.Logger;
+import org.cagrid.gaards.pki.CertUtil;
 import org.globus.common.CoGProperties;
 import org.globus.gsi.TrustedCertificatesLock;
 import org.globus.wsrf.impl.security.authorization.IdentityAuthorization;

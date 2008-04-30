@@ -13,7 +13,6 @@ import gov.nih.nci.cagrid.dorian.service.ca.CertificateAuthority;
 import gov.nih.nci.cagrid.dorian.stubs.types.InvalidHostCertificateFault;
 import gov.nih.nci.cagrid.dorian.stubs.types.InvalidHostCertificateRequestFault;
 import gov.nih.nci.cagrid.dorian.test.Utils;
-import gov.nih.nci.cagrid.gridca.common.KeyUtil;
 
 import java.math.BigInteger;
 import java.security.KeyPair;
@@ -22,6 +21,7 @@ import java.util.List;
 
 import junit.framework.TestCase;
 
+import org.cagrid.gaards.pki.KeyUtil;
 import org.cagrid.tools.database.Database;
 
 /**
@@ -41,7 +41,6 @@ public class TestHostCertificateManager extends TestCase implements Publisher {
 		// TODO Auto-generated method stub
 
 	}
-
 	public void testCreateAndDestroy() {
 		try {
 			HostCertificateManager hcm = new HostCertificateManager(db,

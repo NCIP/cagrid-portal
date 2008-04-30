@@ -4,10 +4,11 @@
 package gov.nci.nih.cagrid.tests.core.steps;
 
 import gov.nih.nci.cagrid.dorian.client.DorianCertifcateAuthorityClient;
-import gov.nih.nci.cagrid.gridca.common.CertUtil;
 import gov.nih.nci.cagrid.testing.system.haste.Step;
 
 import java.io.File;
+
+import org.cagrid.gaards.pki.CertUtil;
 
 
 /**

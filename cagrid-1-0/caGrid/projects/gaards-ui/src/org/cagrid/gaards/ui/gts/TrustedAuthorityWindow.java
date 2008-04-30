@@ -1,7 +1,6 @@
 package org.cagrid.gaards.ui.gts;
 
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.gridca.common.CertUtil;
 import gov.nih.nci.cagrid.gts.bean.TrustLevel;
 import gov.nih.nci.cagrid.gts.bean.TrustLevels;
 import gov.nih.nci.cagrid.gts.bean.TrustedAuthority;
@@ -33,6 +32,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 
+import org.cagrid.gaards.pki.CertUtil;
 import org.cagrid.gaards.ui.common.CRLPanel;
 import org.cagrid.gaards.ui.common.CertificatePanel;
 import org.cagrid.gaards.ui.common.CredentialCaddy;

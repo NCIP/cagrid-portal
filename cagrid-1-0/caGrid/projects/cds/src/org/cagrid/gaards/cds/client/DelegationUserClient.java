@@ -2,8 +2,6 @@ package org.cagrid.gaards.cds.client;
 
 import gov.nih.nci.cagrid.common.FaultHelper;
 import gov.nih.nci.cagrid.common.security.ProxyUtil;
-import gov.nih.nci.cagrid.gridca.common.KeyUtil;
-import gov.nih.nci.cagrid.gridca.common.ProxyCreator;
 
 import java.rmi.RemoteException;
 import java.security.PublicKey;
@@ -33,6 +31,8 @@ import org.cagrid.gaards.cds.delegated.stubs.types.DelegatedCredentialReference;
 import org.cagrid.gaards.cds.stubs.types.CDSInternalFault;
 import org.cagrid.gaards.cds.stubs.types.DelegationFault;
 import org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault;
+import org.cagrid.gaards.pki.KeyUtil;
+import org.cagrid.gaards.pki.ProxyCreator;
 import org.globus.gsi.GlobusCredential;
 
 public class DelegationUserClient {

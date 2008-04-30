@@ -8,8 +8,6 @@ import gov.nih.nci.cagrid.dorian.service.BeanUtils;
 import gov.nih.nci.cagrid.dorian.service.Dorian;
 import gov.nih.nci.cagrid.dorian.service.DorianProperties;
 import gov.nih.nci.cagrid.dorian.service.ca.CertificateAuthorityProperties;
-import gov.nih.nci.cagrid.gridca.common.CertUtil;
-import gov.nih.nci.cagrid.gridca.common.KeyUtil;
 
 import java.io.File;
 import java.security.KeyPair;
@@ -22,6 +20,8 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
+import org.cagrid.gaards.pki.CertUtil;
+import org.cagrid.gaards.pki.KeyUtil;
 import org.springframework.core.io.FileSystemResource;
 
 /**

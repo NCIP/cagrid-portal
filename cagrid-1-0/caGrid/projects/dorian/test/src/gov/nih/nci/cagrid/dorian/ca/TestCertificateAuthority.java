@@ -17,9 +17,6 @@ import gov.nih.nci.cagrid.dorian.service.ca.WrappedKey;
 import gov.nih.nci.cagrid.dorian.service.ca.WrappingCertificateAuthority;
 import gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault;
 import gov.nih.nci.cagrid.dorian.test.Utils;
-import gov.nih.nci.cagrid.gridca.common.CertUtil;
-import gov.nih.nci.cagrid.gridca.common.CertificateExtensionsUtil;
-import gov.nih.nci.cagrid.gridca.common.KeyUtil;
 
 import java.io.ByteArrayInputStream;
 import java.security.KeyPair;
@@ -33,6 +30,9 @@ import java.util.GregorianCalendar;
 import junit.framework.TestCase;
 
 import org.bouncycastle.asn1.x509.X509Name;
+import org.cagrid.gaards.pki.CertUtil;
+import org.cagrid.gaards.pki.CertificateExtensionsUtil;
+import org.cagrid.gaards.pki.KeyUtil;
 import org.cagrid.tools.database.Database;
 import org.globus.gsi.GlobusCredential;
 

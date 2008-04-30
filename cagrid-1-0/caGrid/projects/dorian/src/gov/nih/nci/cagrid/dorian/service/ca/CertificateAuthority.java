@@ -5,10 +5,6 @@ import gov.nih.nci.cagrid.dorian.common.Lifetime;
 import gov.nih.nci.cagrid.dorian.common.LoggingObject;
 import gov.nih.nci.cagrid.dorian.common.Utils;
 import gov.nih.nci.cagrid.dorian.ifs.bean.ProxyLifetime;
-import gov.nih.nci.cagrid.gridca.common.CRLEntry;
-import gov.nih.nci.cagrid.gridca.common.CertUtil;
-import gov.nih.nci.cagrid.gridca.common.KeyUtil;
-import gov.nih.nci.cagrid.gridca.common.ProxyCreator;
 
 import java.security.KeyPair;
 import java.security.PrivateKey;
@@ -19,6 +15,10 @@ import java.security.interfaces.RSAPublicKey;
 import java.util.Date;
 
 import org.bouncycastle.asn1.x509.X509Name;
+import org.cagrid.gaards.pki.CRLEntry;
+import org.cagrid.gaards.pki.CertUtil;
+import org.cagrid.gaards.pki.KeyUtil;
+import org.cagrid.gaards.pki.ProxyCreator;
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>

@@ -1,12 +1,10 @@
 /**
- * $Id: DefaultSAMLProvider.java,v 1.4 2006-10-31 16:03:52 joshua Exp $
+ * $Id: DefaultSAMLProvider.java,v 1.5 2008-04-30 01:50:29 langella Exp $
  *
  */
 package gov.nih.nci.cagrid.authentication.service;
 
 import gov.nih.nci.cagrid.authentication.common.InsufficientAttributeException;
-import gov.nih.nci.cagrid.gridca.common.CertUtil;
-import gov.nih.nci.cagrid.gridca.common.KeyUtil;
 import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
 import gov.nih.nci.cagrid.opensaml.SAMLAttribute;
 import gov.nih.nci.cagrid.opensaml.SAMLAttributeStatement;
@@ -36,10 +34,12 @@ import javax.security.auth.Subject;
 import javax.xml.namespace.QName;
 
 import org.apache.xml.security.signature.XMLSignature;
+import org.cagrid.gaards.pki.CertUtil;
+import org.cagrid.gaards.pki.KeyUtil;
 
 /**
  *
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  * @author Joshua Phillips
  *
  */

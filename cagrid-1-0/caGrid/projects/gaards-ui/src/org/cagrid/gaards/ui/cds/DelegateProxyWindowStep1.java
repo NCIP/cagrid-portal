@@ -1,7 +1,6 @@
 package org.cagrid.gaards.ui.cds;
 
 import gov.nih.nci.cagrid.common.Runner;
-import gov.nih.nci.cagrid.gridca.common.CertificateExtensionsUtil;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -14,6 +13,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import org.cagrid.gaards.cds.common.ProxyLifetime;
+import org.cagrid.gaards.pki.CertificateExtensionsUtil;
 import org.cagrid.gaards.ui.common.CredentialComboBox;
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;

@@ -1,7 +1,5 @@
 package gov.nih.nci.cagrid.gts.service;
 
-import org.globus.wsrf.config.ContainerConfig;
-import java.io.File;
 import javax.naming.InitialContext;
 
 import org.apache.axis.MessageContext;

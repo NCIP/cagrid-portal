@@ -3,13 +3,13 @@ package gov.nih.nci.cagrid.dorian.service.ifs;
 import gov.nih.nci.cagrid.common.FaultUtil;
 import gov.nih.nci.cagrid.dorian.test.CA;
 import gov.nih.nci.cagrid.dorian.test.Utils;
-import gov.nih.nci.cagrid.gridca.common.Credential;
 
 import java.math.BigInteger;
 import java.util.List;
 
 import junit.framework.TestCase;
 
+import org.cagrid.gaards.pki.Credential;
 import org.cagrid.tools.database.Database;
 
 /**

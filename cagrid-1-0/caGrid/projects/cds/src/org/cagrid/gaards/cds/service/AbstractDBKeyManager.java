@@ -1,9 +1,6 @@
 package org.cagrid.gaards.cds.service;
 
 import gov.nih.nci.cagrid.common.FaultHelper;
-import gov.nih.nci.cagrid.gridca.common.CertUtil;
-import gov.nih.nci.cagrid.gridca.common.KeyUtil;
-import gov.nih.nci.cagrid.gridca.common.SecurityUtil;
 
 import java.security.KeyPair;
 import java.security.PrivateKey;
@@ -19,6 +16,9 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.cagrid.gaards.cds.stubs.types.CDSInternalFault;
 import org.cagrid.gaards.cds.stubs.types.DelegationFault;
+import org.cagrid.gaards.pki.CertUtil;
+import org.cagrid.gaards.pki.KeyUtil;
+import org.cagrid.gaards.pki.SecurityUtil;
 import org.cagrid.tools.database.Database;
 
 public abstract class AbstractDBKeyManager implements KeyManager {

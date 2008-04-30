@@ -2,7 +2,6 @@ package gov.nih.nci.cagrid.gts.service;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 

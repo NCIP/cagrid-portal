@@ -1,7 +1,6 @@
 package gov.nih.nci.cagrid.gts.service;
 
 import gov.nih.nci.cagrid.common.FaultHelper;
-import gov.nih.nci.cagrid.gts.service.SimpleResourceManager;
 import gov.nih.nci.cagrid.gts.service.globus.ServiceConfiguration;
 import gov.nih.nci.cagrid.gts.stubs.types.PermissionDeniedFault;
 

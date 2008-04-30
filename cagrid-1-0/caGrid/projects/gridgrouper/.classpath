@@ -52,7 +52,6 @@
 	<classpathentry kind="lib" path="lib/caGrid-1.1-Introduce-1.1-serviceTools.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/service/jars/caGrid-advertisement-1.3-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/service/jars/caGrid-core-1.3-dev.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/service/jars/caGrid-gridca-1.3-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/service/jars/caGrid-metadata-common-1.3-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/service/jars/caGrid-metadata-security-1.3-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/service/jars/caGrid-ServiceSecurityProvider-client-1.3-dev.jar"/>
@@ -88,5 +87,6 @@
 	<classpathentry kind="lib" path="ext/dependencies/service/jars/subject-0.2.1.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/test/jars/caGrid-core-tests-1.3-dev.jar"/>
 	<classpathentry kind="var" path="ANT_HOME/lib/junit.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/service/jars/caGrid-gaards-core-1.3-dev.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

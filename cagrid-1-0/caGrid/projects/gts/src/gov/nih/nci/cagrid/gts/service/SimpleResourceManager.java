@@ -1,8 +1,9 @@
 package gov.nih.nci.cagrid.gts.service;
 
+import java.io.InputStream;
+
 import org.projectmobius.common.MobiusConfigurator;
 import org.projectmobius.common.MobiusResourceManager;
-import java.io.InputStream;
 
 public class SimpleResourceManager extends MobiusResourceManager{
     public SimpleResourceManager(String file) throws Exception{

@@ -14,7 +14,6 @@ import gov.nih.nci.cagrid.dorian.service.ca.CertificateAuthority;
 import gov.nih.nci.cagrid.dorian.service.ca.CertificateAuthorityFault;
 import gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault;
 import gov.nih.nci.cagrid.dorian.stubs.types.InvalidUserFault;
-import gov.nih.nci.cagrid.gridca.common.CertUtil;
 
 import java.io.IOException;
 import java.security.PrivateKey;
@@ -32,6 +31,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.bouncycastle.asn1.x509.CRLReason;
+import org.cagrid.gaards.pki.CertUtil;
 import org.cagrid.tools.database.Database;
 import org.cagrid.tools.database.DatabaseException;
 

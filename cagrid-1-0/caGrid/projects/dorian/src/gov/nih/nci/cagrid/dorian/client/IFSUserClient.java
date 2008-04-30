@@ -16,8 +16,6 @@ import gov.nih.nci.cagrid.dorian.stubs.types.InvalidHostCertificateRequestFault;
 import gov.nih.nci.cagrid.dorian.stubs.types.InvalidProxyFault;
 import gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault;
 import gov.nih.nci.cagrid.dorian.stubs.types.UserPolicyFault;
-import gov.nih.nci.cagrid.gridca.common.CertUtil;
-import gov.nih.nci.cagrid.gridca.common.KeyUtil;
 import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
 
 import java.rmi.RemoteException;
@@ -26,6 +24,8 @@ import java.security.PublicKey;
 import java.security.cert.X509Certificate;
 
 import org.apache.axis.types.URI.MalformedURIException;
+import org.cagrid.gaards.pki.CertUtil;
+import org.cagrid.gaards.pki.KeyUtil;
 import org.globus.gsi.GlobusCredential;
 
 public class IFSUserClient {

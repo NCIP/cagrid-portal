@@ -3,12 +3,12 @@ package gov.nih.nci.cagrid.gts.service.globus.resource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.globus.wsrf.Resource;
+import org.globus.wsrf.ResourceContext;
+import org.globus.wsrf.ResourceContextException;
 import org.globus.wsrf.ResourceException;
 import org.globus.wsrf.ResourceKey;
 import org.globus.wsrf.impl.SingletonResourceHome;
 import org.globus.wsrf.jndi.Initializable;
-import org.globus.wsrf.ResourceContext;
-import org.globus.wsrf.ResourceContextException;
 
 
 /** 

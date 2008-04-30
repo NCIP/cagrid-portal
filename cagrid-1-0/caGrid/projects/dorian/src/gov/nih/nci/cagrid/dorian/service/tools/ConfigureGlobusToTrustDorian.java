@@ -4,7 +4,6 @@ import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.dorian.service.BeanUtils;
 import gov.nih.nci.cagrid.dorian.service.Dorian;
 import gov.nih.nci.cagrid.dorian.service.DorianProperties;
-import gov.nih.nci.cagrid.gridca.common.CertUtil;
 
 import java.io.File;
 import java.security.cert.X509Certificate;
@@ -16,6 +15,7 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
+import org.cagrid.gaards.pki.CertUtil;
 import org.springframework.core.io.FileSystemResource;
 
 /**

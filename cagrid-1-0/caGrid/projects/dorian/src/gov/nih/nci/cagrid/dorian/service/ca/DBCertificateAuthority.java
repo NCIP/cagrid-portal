@@ -1,11 +1,11 @@
 package gov.nih.nci.cagrid.dorian.service.ca;
 
 import gov.nih.nci.cagrid.common.FaultHelper;
-import gov.nih.nci.cagrid.gridca.common.SecurityUtil;
 
 import java.security.PrivateKey;
 import java.security.cert.X509Certificate;
 
+import org.cagrid.gaards.pki.SecurityUtil;
 import org.cagrid.tools.database.Database;
 
 /**

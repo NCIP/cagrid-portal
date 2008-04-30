@@ -50,7 +50,7 @@
       conf="target_grid->urls,certs,syncdesc"/>
 
     <!-- Specific caGrid Service Dependencies -->
-    <dependency rev="latest.integration" org="caGrid" name="gridca" conf="client,service->default"/>
+    <dependency rev="latest.integration" org="caGrid" name="gaards-core" conf="client,service->default"/>
     <dependency rev="latest.integration" org="caGrid" name="gts"
       conf="service->service;client->client"/>
 

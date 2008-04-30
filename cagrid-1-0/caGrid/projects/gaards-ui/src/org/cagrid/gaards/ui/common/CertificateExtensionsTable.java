@@ -1,7 +1,5 @@
 package org.cagrid.gaards.ui.common;
 
-import gov.nih.nci.cagrid.gridca.common.CertificateExtensionsUtil;
-
 import java.security.cert.X509Certificate;
 import java.util.Iterator;
 import java.util.Set;
@@ -10,6 +8,7 @@ import java.util.Vector;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
+import org.cagrid.gaards.pki.CertificateExtensionsUtil;
 import org.cagrid.grape.table.GrapeBaseTable;
 
 

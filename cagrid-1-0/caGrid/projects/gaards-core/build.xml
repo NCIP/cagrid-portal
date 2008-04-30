@@ -101,13 +101,13 @@
 	<!-- Create a JAR file with the implementation classes -->
 	<target name="jar" depends="compile">
 		<jar jarfile="${build.lib.dir}/${jar.name}" basedir="${build.dest}">
-			<include name="**/gridca/**" />
+			<include name="**/gaards/**" />
 		</jar>
 	</target>
 
 	<target name="jarTests" depends="compileTests">
 		<jar jarfile="${build.lib.dir}/${test.jar.name}" basedir="${test.build.dest}">
-			<include name="**/gridca/**" />
+			<include name="**/gaards/**" />
 		</jar>
 	</target>
 

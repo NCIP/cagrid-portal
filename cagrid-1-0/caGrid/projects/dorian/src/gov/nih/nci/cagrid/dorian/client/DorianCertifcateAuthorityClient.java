@@ -5,12 +5,12 @@ import gov.nih.nci.cagrid.common.FaultUtil;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.dorian.common.DorianFault;
 import gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault;
-import gov.nih.nci.cagrid.gridca.common.CertUtil;
 
 import java.rmi.RemoteException;
 import java.security.cert.X509Certificate;
 
 import org.apache.axis.types.URI.MalformedURIException;
+import org.cagrid.gaards.pki.CertUtil;
 
 
 /**

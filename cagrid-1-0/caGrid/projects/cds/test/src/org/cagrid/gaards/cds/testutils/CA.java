@@ -1,9 +1,5 @@
 package org.cagrid.gaards.cds.testutils;
 
-import gov.nih.nci.cagrid.gridca.common.CertUtil;
-import gov.nih.nci.cagrid.gridca.common.KeyUtil;
-import gov.nih.nci.cagrid.gridca.common.ProxyCreator;
-
 import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.Provider;
@@ -17,6 +13,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.bouncycastle.asn1.x509.X509Name;
+import org.cagrid.gaards.pki.CertUtil;
+import org.cagrid.gaards.pki.KeyUtil;
+import org.cagrid.gaards.pki.ProxyCreator;
 import org.globus.gsi.GlobusCredential;
 
 /**

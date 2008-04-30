@@ -1,6 +1,5 @@
 package gov.nih.nci.cagrid.gts.client;
 
-import gov.nih.nci.cagrid.gridca.common.CertUtil;
 import gov.nih.nci.cagrid.gts.bean.AuthorityGTS;
 import gov.nih.nci.cagrid.gts.bean.TrustLevel;
 import gov.nih.nci.cagrid.gts.bean.TrustedAuthority;
@@ -13,6 +12,7 @@ import java.rmi.RemoteException;
 import java.security.cert.X509Certificate;
 
 import org.apache.axis.types.URI.MalformedURIException;
+import org.cagrid.gaards.pki.CertUtil;
 
 
 /**

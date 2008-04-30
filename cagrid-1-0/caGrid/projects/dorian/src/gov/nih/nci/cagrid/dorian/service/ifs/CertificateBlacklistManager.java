@@ -2,7 +2,6 @@ package gov.nih.nci.cagrid.dorian.service.ifs;
 
 import gov.nih.nci.cagrid.common.FaultHelper;
 import gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault;
-import gov.nih.nci.cagrid.gridca.common.CertUtil;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
@@ -15,6 +14,7 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.cagrid.gaards.pki.CertUtil;
 import org.cagrid.tools.database.Database;
 
 public class CertificateBlacklistManager {

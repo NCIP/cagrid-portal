@@ -57,7 +57,7 @@
     <!-- caGrid Dependencies -->
     <dependency rev="latest.integration" org="caGrid" name="core" conf="extension->default;impl-test->test;ui->ui"/>
     <dependency rev="latest.integration" org="caGrid" name="metadata" conf="core->schemas"/>
-    <dependency rev="latest.integration" org="caGrid" name="gridca" conf="core->default"/>
+    <dependency rev="latest.integration" org="caGrid" name="gaards-core" conf="core->default"/>
     <dependency rev="latest.integration" org="caGrid" name="gme" conf="core->client"/>
     <dependency rev="latest.integration" org="caGrid" name="grape" conf="ui->default"/>
     <dependency rev="latest.integration" org="caGrid" name="testing" conf="impl-test->system"/>

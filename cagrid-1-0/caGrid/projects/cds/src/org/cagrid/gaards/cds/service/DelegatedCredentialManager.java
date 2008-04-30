@@ -1,9 +1,5 @@
 package org.cagrid.gaards.cds.service;
 
-import gov.nih.nci.cagrid.gridca.common.CertificateExtensionsUtil;
-import gov.nih.nci.cagrid.gridca.common.KeyUtil;
-import gov.nih.nci.cagrid.gridca.common.ProxyCreator;
-
 import java.security.KeyPair;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
@@ -42,6 +38,9 @@ import org.cagrid.gaards.cds.stubs.types.CDSInternalFault;
 import org.cagrid.gaards.cds.stubs.types.DelegationFault;
 import org.cagrid.gaards.cds.stubs.types.InvalidPolicyFault;
 import org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault;
+import org.cagrid.gaards.pki.CertificateExtensionsUtil;
+import org.cagrid.gaards.pki.KeyUtil;
+import org.cagrid.gaards.pki.ProxyCreator;
 import org.cagrid.tools.database.Database;
 import org.cagrid.tools.events.Event;
 import org.cagrid.tools.events.EventAuditor;

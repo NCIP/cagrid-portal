@@ -1,8 +1,6 @@
 package gov.nih.nci.cagrid.dorian.service.ca;
 
 import gov.nih.nci.cagrid.common.FaultHelper;
-import gov.nih.nci.cagrid.gridca.common.CertUtil;
-import gov.nih.nci.cagrid.gridca.common.KeyUtil;
 
 import java.io.ByteArrayInputStream;
 import java.security.Key;
@@ -16,6 +14,9 @@ import java.security.cert.X509Certificate;
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.spec.IvParameterSpec;
+
+import org.cagrid.gaards.pki.CertUtil;
+import org.cagrid.gaards.pki.KeyUtil;
 
 
 public abstract class BaseEracomCertificateAuthority extends CertificateAuthority {

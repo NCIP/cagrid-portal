@@ -29,8 +29,6 @@ import gov.nih.nci.cagrid.dorian.stubs.types.InvalidTrustedIdPFault;
 import gov.nih.nci.cagrid.dorian.stubs.types.InvalidUserFault;
 import gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault;
 import gov.nih.nci.cagrid.dorian.stubs.types.UserPolicyFault;
-import gov.nih.nci.cagrid.gridca.common.CRLEntry;
-import gov.nih.nci.cagrid.gridca.common.CertUtil;
 import gov.nih.nci.cagrid.gts.client.GTSAdminClient;
 import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
 import gov.nih.nci.cagrid.opensaml.SAMLAttribute;
@@ -51,6 +49,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.bouncycastle.asn1.x509.CRLReason;
+import org.cagrid.gaards.pki.CRLEntry;
+import org.cagrid.gaards.pki.CertUtil;
 import org.cagrid.tools.database.Database;
 import org.cagrid.tools.groups.Group;
 import org.cagrid.tools.groups.GroupException;

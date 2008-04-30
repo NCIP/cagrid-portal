@@ -13,8 +13,6 @@ import gov.nih.nci.cagrid.dorian.service.PropertyManager;
 import gov.nih.nci.cagrid.dorian.service.ca.CertificateAuthority;
 import gov.nih.nci.cagrid.dorian.test.CA;
 import gov.nih.nci.cagrid.dorian.test.Utils;
-import gov.nih.nci.cagrid.gridca.common.CertUtil;
-import gov.nih.nci.cagrid.gridca.common.Credential;
 
 import java.io.StringReader;
 import java.security.cert.X509Certificate;
@@ -22,6 +20,8 @@ import java.util.Map;
 
 import junit.framework.TestCase;
 
+import org.cagrid.gaards.pki.CertUtil;
+import org.cagrid.gaards.pki.Credential;
 import org.cagrid.tools.database.Database;
 
 /**

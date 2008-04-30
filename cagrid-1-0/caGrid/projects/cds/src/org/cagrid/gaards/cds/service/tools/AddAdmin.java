@@ -1,7 +1,5 @@
 package org.cagrid.gaards.cds.service.tools;
 
-import gov.nih.nci.cagrid.gridca.commandline.GenerateTrustReport;
-
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.HelpFormatter;
@@ -10,6 +8,7 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.PosixParser;
 import org.cagrid.gaards.cds.service.ConfigurationConstants;
 import org.cagrid.gaards.cds.service.DelegationManager;
+import org.cagrid.gaards.pki.tools.GenerateTrustReport;
 import org.cagrid.tools.database.Database;
 import org.cagrid.tools.groups.Group;
 import org.cagrid.tools.groups.GroupManager;

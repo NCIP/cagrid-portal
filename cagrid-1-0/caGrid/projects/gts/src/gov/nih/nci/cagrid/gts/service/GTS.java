@@ -1,6 +1,5 @@
 package gov.nih.nci.cagrid.gts.service;
 
-import gov.nih.nci.cagrid.gridca.common.CertUtil;
 import gov.nih.nci.cagrid.gts.bean.AuthorityGTS;
 import gov.nih.nci.cagrid.gts.bean.AuthorityPriorityUpdate;
 import gov.nih.nci.cagrid.gts.bean.Lifetime;
@@ -42,6 +41,7 @@ import org.apache.axis.message.addressing.Address;
 import org.apache.axis.message.addressing.EndpointReferenceType;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.cagrid.gaards.pki.CertUtil;
 import org.globus.wsrf.impl.security.authorization.IdentityAuthorization;
 import org.projectmobius.common.MobiusRunnable;
 

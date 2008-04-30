@@ -54,7 +54,7 @@
     <!-- Specific caGrid Service Dependencies -->
     <dependency rev="latest.integration" org="caGrid" name="service-tools"
       conf="service->groups,database-schemas"/>
-    <dependency rev="latest.integration" org="caGrid" name="gridca"
+    <dependency rev="latest.integration" org="caGrid" name="gaards-core"
       conf="client,service->default;impl-test->test"/>
     <dependency rev="latest.integration" org="caGrid" name="opensaml"
       conf="client->default;service->http;endorsed->endorsed"/>

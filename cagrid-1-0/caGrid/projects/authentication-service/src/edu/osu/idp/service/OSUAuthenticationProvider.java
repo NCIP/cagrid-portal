@@ -9,7 +9,6 @@ import gov.nih.nci.cagrid.authentication.common.InvalidCredentialException;
 import gov.nih.nci.cagrid.authentication.common.SAMLProvider;
 import gov.nih.nci.cagrid.authentication.common.SubjectProvider;
 import gov.nih.nci.cagrid.authentication.stubs.types.InvalidCredentialFault;
-import gov.nih.nci.cagrid.gridca.common.SecurityUtil;
 import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
 import gov.nih.nci.cagrid.opensaml.SAMLException;
 import gov.nih.nci.cagrid.opensaml.SAMLResponse;
@@ -23,6 +22,7 @@ import org.apache.commons.httpclient.UsernamePasswordCredentials;
 import org.apache.commons.httpclient.auth.AuthScope;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.protocol.Protocol;
+import org.cagrid.gaards.pki.SecurityUtil;
 
 
 /**
