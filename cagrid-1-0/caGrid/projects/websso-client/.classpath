@@ -3,9 +3,9 @@
 	<classpathentry kind="src" path="src/java"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/addressing-1.0.jar"/>
-	<classpathentry kind="var" path="GT4_LOCATION/lib/axis.jar" sourcepath="/AXIS_HOME"/>
+	<classpathentry kind="var" path="GT4_LOCATION/lib/axis.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/cog-axis.jar"/>
-	<classpathentry kind="var" path="GT4_LOCATION/lib/cog-jglobus.jar" sourcepath="/JGLOBUS_SOURCE"/>
+	<classpathentry kind="var" path="GT4_LOCATION/lib/cog-jglobus.jar" />
 	<classpathentry kind="var" path="GT4_LOCATION/lib/commons-discovery.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/cryptix.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/cryptix32.jar"/>
@@ -16,7 +16,7 @@
 	<classpathentry kind="var" path="GT4_LOCATION/lib/saaj.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/wsdl4j.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/wsrf_core_stubs.jar"/>
-	<classpathentry kind="var" path="GT4_LOCATION/lib/wsrf_core.jar" sourcepath="/globussource"/>
+	<classpathentry kind="var" path="GT4_LOCATION/lib/wsrf_core.jar" />
 	<classpathentry kind="var" path="GT4_LOCATION/lib/wss4j.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xercesImpl.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/servlet.jar"/>
@@ -42,7 +42,6 @@
 	<classpathentry kind="lib" path="ext/dependencies/default/jars/cas-server-3.0.5.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/default/jars/castor-0.9.9.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/default/jars/cog-jglobus.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/default/jars/commons-codec-1.2.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/default/jars/commons-httpclient-3.0.1.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/default/jars/commons-httpclient-contrib-3.0.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/default/jars/commons-logging-1.1.jar"/>

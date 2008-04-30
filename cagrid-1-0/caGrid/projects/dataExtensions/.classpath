@@ -101,7 +101,6 @@
 	<classpathentry kind="lib" path="ext/dependencies/impl/jars/caGrid-grape-1.3-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/impl/jars/caGrid-grape-resources-1.3-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/impl/jars/caGrid-graph-1.3-dev.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/impl/jars/caGrid-gridca-1.3-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/impl/jars/caGrid-gridgrouper-client-1.3-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/impl/jars/caGrid-gridgrouper-common-1.3-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/impl/jars/caGrid-gridgrouper-stubs-1.3-dev.jar"/>
