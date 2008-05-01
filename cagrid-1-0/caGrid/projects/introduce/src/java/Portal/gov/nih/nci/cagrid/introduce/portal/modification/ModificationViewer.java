@@ -1044,13 +1044,20 @@ public class ModificationViewer extends ApplicationComponent {
                         NamespaceTypeTreeNode parentNode = (NamespaceTypeTreeNode) node.getParent();
                         NamespaceType nsType = (NamespaceType) parentNode.getUserObject();
                         if (nsType.getGenerateStubs()!=null && !nsType.getGenerateStubs().booleanValue()) {
-                            getSchemaElementTypeConfigurationPanel().setHide(true);
-                            getSchemaElementTypeConfigurationPanel().setSchemaElementType(
-                                (SchemaElementType) node.getUserObject(), false);
-                        } else {
-                            getSchemaElementTypeConfigurationPanel().setHide(false);
+                        	if(nsType.getNamespace().equals(IntroduceConstants.W3CNAMESPACE)){
+                        		getSchemaElementTypeConfigurationPanel().setHide(true);
+                                getSchemaElementTypeConfigurationPanel().setSchemaElementType(
+                                    (SchemaElementType) node.getUserObject(), false);
+                        	} else {
+                        	getSchemaElementTypeConfigurationPanel().setHide(false);
                             getSchemaElementTypeConfigurationPanel().setSchemaElementType(
                                 (SchemaElementType) node.getUserObject(), true);
+                        	}
+                        } else {
+                        	getSchemaElementTypeConfigurationPanel().setHide(true);
+                            getSchemaElementTypeConfigurationPanel().setSchemaElementType(
+                                (SchemaElementType) node.getUserObject(), false);
+                            
                         }
                         getNamespaceTypeConfigurationPanel().setNamespaceType(nsType);
                     } else {

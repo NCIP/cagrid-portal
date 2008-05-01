@@ -341,11 +341,15 @@ public class NamespaceTypeConfigurePanel extends JPanel {
 					if(type!=null){
 						type.setGenerateStubs(new Boolean(generateStubsCheckBox.isSelected()));
 						if(typePanel.getSchemaElementType()!=null){
-							typePanel.setHide(!type.getGenerateStubs().booleanValue());
+							if(type.getNamespace().equals(IntroduceConstants.W3CNAMESPACE)){
+								typePanel.setHide(true);
+							} else {
+							typePanel.setHide(type.getGenerateStubs().booleanValue());
+							}
 						}
 					} else {
 						if(typePanel.getSchemaElementType()!=null){
-							typePanel.setHide(true);
+							typePanel.setHide(false);
 						}
 					}
 				}
