@@ -897,12 +897,11 @@ public class SyncTools {
             for (int i = 0; i < info.getNamespaces().getNamespace().length; i++) {
                 NamespaceType ntype = info.getNamespaces().getNamespace(i);
 
-                if ((ntype.getGenerateStubs() != null) && !ntype.getGenerateStubs().booleanValue()) {
+                if ((ntype.getGenerateStubs() != null) && !ntype.getGenerateStubs().booleanValue() && !ntype.getNamespace().equals(IntroduceConstants.W3CNAMESPACE)) {
                     // the model explictly says not to generate stubs
                     excludeSet.add(ntype.getNamespace());
-                    SyncUtils.walkSchemasGetNamespaces(schemaDir + File.separator + ntype.getLocation(), excludeSet,
-                        new HashSet(), new HashSet());
                 } else if (ntype.getSchemaElement() != null) {
+                    //only needed for backwards compatibility before the gui always set the generateStubs attribute
                     for (int j = 0; j < ntype.getSchemaElement().length; j++) {
                         SchemaElementType type = ntype.getSchemaElement(j);
                         if (type.getClassName() != null) {
@@ -911,8 +910,6 @@ public class SyncTools {
                                 // beans... so don't generate stubs
 
                                 excludeSet.add(ntype.getNamespace());
-                                SyncUtils.walkSchemasGetNamespaces(schemaDir + File.separator + ntype.getLocation(),
-                                    excludeSet, new HashSet(), new HashSet());
                                 // this schema is excluded.. no need to check
                                 // the rest of the schemaelements
                                 break;

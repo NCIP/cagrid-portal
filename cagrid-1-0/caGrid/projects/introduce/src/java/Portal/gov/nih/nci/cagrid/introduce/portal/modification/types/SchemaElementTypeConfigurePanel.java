@@ -81,6 +81,7 @@ public class SchemaElementTypeConfigurePanel extends JPanel {
 	public void setSchemaElementType(SchemaElementType type,
 			boolean classEditable) {
 		this.type = type;
+		
 		getTypeText().setText(type.getType());
 		getClassNameText().setText(type.getClassName());
 		getDeserializerText().setText(type.getDeserializer());
@@ -89,6 +90,10 @@ public class SchemaElementTypeConfigurePanel extends JPanel {
 		getDeserializerText().setEditable(classEditable);
 		getSerializerText().setEditable(classEditable);
 		validateInput();
+	}
+	
+	public SchemaElementType getSchemaElementType(){
+		return type;
 	}
 
 	public void clear() {

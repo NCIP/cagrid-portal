@@ -24,6 +24,7 @@ import com.jgoodies.validation.message.SimpleValidationMessage;
 import com.jgoodies.validation.util.DefaultValidationResultModel;
 import com.jgoodies.validation.util.ValidationUtils;
 import com.jgoodies.validation.view.ValidationComponentUtils;
+import javax.swing.JCheckBox;
 
 public class NamespaceTypeConfigurePanel extends JPanel {
 
@@ -39,7 +40,7 @@ public class NamespaceTypeConfigurePanel extends JPanel {
 
 	private JTextField locationText = null;
 
-	private NamespaceType type;
+	private NamespaceType type;  //  @jve:decl-index=0:
 
 	private ValidationResultModel validationModel = new DefaultValidationResultModel();
 
@@ -47,13 +48,19 @@ public class NamespaceTypeConfigurePanel extends JPanel {
 
 	public static final String PACKAGE_NAME = "package name";  //  @jve:decl-index=0:
 
+	private JCheckBox generateStubsCheckBox = null;
+	
+	private SchemaElementTypeConfigurePanel typePanel;
+
 	/**
 	 * This method initializes
 	 * 
 	 */
-	public NamespaceTypeConfigurePanel() {
+	public NamespaceTypeConfigurePanel(SchemaElementTypeConfigurePanel typePanel) {
 		super();
-		initialize();
+		this.typePanel = typePanel;
+		typePanel.setEnabled(false);
+		initialize();;
 	}
 
 	public void setNamespaceType(NamespaceType type) {
@@ -65,6 +72,11 @@ public class NamespaceTypeConfigurePanel extends JPanel {
 			getPackageNameText().setEditable(false);
 		} else {
 			getPackageNameText().setEditable(true);
+		}
+		if(type.getGenerateStubs()!=null && !type.getGenerateStubs().booleanValue()){
+			getGenerateStubsCheckBox().setSelected(false);
+		} else {
+			getGenerateStubsCheckBox().setSelected(true);
 		}
 		validateInput();
 	}
@@ -263,6 +275,14 @@ public class NamespaceTypeConfigurePanel extends JPanel {
 	 */
 	private JPanel getMainPanel() {
 		if (mainPanel == null) {
+			GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
+			gridBagConstraints11.gridx = 0;
+			gridBagConstraints11.fill = GridBagConstraints.BOTH;
+			gridBagConstraints11.gridwidth = 2;
+			gridBagConstraints11.weightx = 1.0D;
+			gridBagConstraints11.weighty = 0.0D;
+			gridBagConstraints11.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints11.gridy = 3;
 			GridBagConstraints gridBagConstraints = new GridBagConstraints();
 			gridBagConstraints.fill = GridBagConstraints.BOTH;
 			gridBagConstraints.gridy = 0;
@@ -301,8 +321,38 @@ public class NamespaceTypeConfigurePanel extends JPanel {
 			mainPanel.add(locationLabel, gridBagConstraints2);
 			mainPanel.add(packageNameLabel, gridBagConstraints1);
 			mainPanel.add(namespaceLabel, gridBagConstraints);
+			mainPanel.add(getGenerateStubsCheckBox(), gridBagConstraints11);
 		}
 		return mainPanel;
+	}
+
+	/**
+	 * This method initializes generateStubsCheckBox	
+	 * 	
+	 * @return javax.swing.JCheckBox	
+	 */
+	private JCheckBox getGenerateStubsCheckBox() {
+		if (generateStubsCheckBox == null) {
+			generateStubsCheckBox = new JCheckBox();
+			generateStubsCheckBox.setText("Generate Java Beans");
+			generateStubsCheckBox.setToolTipText("Tells Introduce wether or not to generate java beans for the data types in this schema.");
+			generateStubsCheckBox.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					if(type!=null){
+						type.setGenerateStubs(new Boolean(generateStubsCheckBox.isSelected()));
+						if(typePanel.getSchemaElementType()!=null){
+							typePanel.setHide(!type.getGenerateStubs().booleanValue());
+						}
+					} else {
+						if(typePanel.getSchemaElementType()!=null){
+							typePanel.setHide(true);
+						}
+					}
+				}
+			});
+		
+		}
+		return generateStubsCheckBox;
 	}
 
 	/**

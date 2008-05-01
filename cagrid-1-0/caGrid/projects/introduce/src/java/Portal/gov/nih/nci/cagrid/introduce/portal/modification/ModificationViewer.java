@@ -1043,7 +1043,7 @@ public class ModificationViewer extends ApplicationComponent {
                     } else if (node instanceof SchemaElementTypeTreeNode) {
                         NamespaceTypeTreeNode parentNode = (NamespaceTypeTreeNode) node.getParent();
                         NamespaceType nsType = (NamespaceType) parentNode.getUserObject();
-                        if (nsType.getNamespace().equals(IntroduceConstants.W3CNAMESPACE)) {
+                        if (nsType.getGenerateStubs()!=null && !nsType.getGenerateStubs().booleanValue()) {
                             getSchemaElementTypeConfigurationPanel().setHide(true);
                             getSchemaElementTypeConfigurationPanel().setSchemaElementType(
                                 (SchemaElementType) node.getUserObject(), false);
@@ -1097,7 +1097,7 @@ public class ModificationViewer extends ApplicationComponent {
      */
     private NamespaceTypeConfigurePanel getNamespaceTypeConfigurationPanel() {
         if (this.namespaceTypeConfigurationPanel == null) {
-            this.namespaceTypeConfigurationPanel = new NamespaceTypeConfigurePanel();
+            this.namespaceTypeConfigurationPanel = new NamespaceTypeConfigurePanel(getSchemaElementTypeConfigurationPanel());
             this.namespaceTypeConfigurationPanel.setName("namespaceTypeConfigurationPanel");
         }
         return this.namespaceTypeConfigurationPanel;
