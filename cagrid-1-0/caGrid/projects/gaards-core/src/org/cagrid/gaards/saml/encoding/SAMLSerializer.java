@@ -23,8 +23,8 @@ public class SAMLSerializer implements Serializer {
 			SerializationContext context) throws IOException {
 
 		try {
-			context.writeDOMElement(SAMLUtils
-					.samlAssertionToDOM((SAMLAssertion) value));
+			context.writeString(SAMLUtils.samlAssertionToString((SAMLAssertion) value));
+			//context.writeDOMElement(SAMLUtils.samlAssertionToDOM((SAMLAssertion) value));
 		} catch (Exception e) {
 			LOG
 					.error(

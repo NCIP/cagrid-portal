@@ -27,15 +27,15 @@ public class SAMLDeserializer extends DeserializerImpl implements Deserializer {
 	public void onEndElement(String namespace, String localName, DeserializationContext context) {
 		long startTime=System.currentTimeMillis();
 		MessageElement msgElem = context.getCurElement();
-		Element asDOM = null;
+		String dom = null;
 		try {
-			asDOM = msgElem.getAsDOM();
+			dom = msgElem.getAsString();
 		} catch (Exception e) {
 			LOG.error("Problem extracting SAML message type! Result will be null!", e);
 		}
-		if (asDOM != null) {
+		if (dom != null) {
 			try {
-				value = SAMLUtils.domToSAMLAssertion(asDOM);
+				value = SAMLUtils.stringToSAMLAssertion(dom);
 			} catch (Exception e) {
 				LOG.error("Problem with castor marshalling!", e);
 			} 
