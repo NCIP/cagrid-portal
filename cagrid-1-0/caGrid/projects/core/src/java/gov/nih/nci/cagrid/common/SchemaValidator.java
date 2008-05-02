@@ -136,8 +136,7 @@ public class SchemaValidator {
 	public static void verify(String xsdFilename) throws SchemaValidationException{
 	    final String sl = XMLConstants.W3C_XML_SCHEMA_NS_URI;
 	    SchemaFactory factory = SchemaFactory.newInstance(sl);
-	    StreamSource ss = new StreamSource(xsdFilename);
-        // StreamSource ss = new StreamSource(new File(xsdFilename));
+        StreamSource ss = new StreamSource(new File(xsdFilename));
 	    try {
             factory.newSchema(ss);
         } catch (SAXException e) {
