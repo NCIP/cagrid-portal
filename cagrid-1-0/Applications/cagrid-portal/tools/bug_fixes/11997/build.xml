@@ -1,0 +1,47 @@
+<project name="bugfixes_11997" basedir="." default="fix">
+
+    <property name="src.dir" value="${basedir}/src"/>
+    <property name="src.conf.dir" value="${src.dir}/conf"/>
+    <property name="src.java.dir" value="${src.dir}/java"/>
+    <property name="lib.dir" value="${basedir}/lib"/>
+    <property name="build.dir" value="${basedir}/build"/>
+    <property name="build.classes.dir" value="${build.dir}/classes"/>
+
+
+    <path id="compile.cp">
+        <fileset dir="${lib.dir}">
+            <include name="*.jar"/>
+        </fileset>
+    </path>
+    <path id="run.cp">
+        <path refid="compile.cp"/>
+        <path location="${build.classes.dir}"/>
+    </path>
+
+    <target name="clean">
+        <delete dir="${build.dir}"/>
+    </target>
+
+    <target name="compile" depends="clean">
+        <mkdir dir="${build.classes.dir}"/>
+
+        <javac srcdir="${src.java.dir}" classpathref="compile.cp"
+               destdir="${build.classes.dir}"/>
+
+        <copy todir="${build.classes.dir}">
+            <fileset dir="${src.conf.dir}">
+                <include name="**/*.xml"/>
+                <include name="**/log4j.properties"/>
+            </fileset>
+            <fileset dir="${basedir}">
+                <include name="*.properties"/>
+            </fileset>
+        </copy>
+
+    </target>
+
+    <target name="fix" depends="compile">
+        <java classname="gov.nih.nci.cagrid.portal.bugfixes.BugFixMain" classpathref="run.cp" fork="true"/>
+    </target>
+
+</project>
