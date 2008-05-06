@@ -87,6 +87,12 @@
 		<javac srcdir="${src.dir}" destdir="${classes.dir}" source="${java.source}" debug="on" deprecation="off" optimize="off">
 			<classpath refid="build.classpath" />
 		</javac>
+		<!-- Copy the source code, wsdd, properties, etc to the build dir for include in the jar -->
+		<copy toDir="${classes.dir}">
+			<fileset dir="${src.dir}">
+				<include name="**/*" />
+			</fileset>
+		</copy>
 	</target>
 
 	<!-- =============================================================== -->
