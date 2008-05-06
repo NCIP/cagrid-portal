@@ -56,6 +56,11 @@ public abstract class NamespaceTypeDiscoveryComponent extends JPanel {
     public NamespacesType getCurrentNamespaces() {
         return this.currentNamespaces;
     }
+    
+    
+    public void setCurrentNamespaces(NamespacesType types){
+        this.currentNamespaces = types;
+    }
 
 
     public boolean namespaceAlreadyExists(String namespaceURI) {

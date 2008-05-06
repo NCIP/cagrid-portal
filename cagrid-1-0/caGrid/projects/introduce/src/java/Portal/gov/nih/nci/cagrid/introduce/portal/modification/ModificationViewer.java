@@ -212,6 +212,8 @@ public class ModificationViewer extends ApplicationComponent {
     private JSplitPane typesSplitPane = null;
 
     private List extensionPanels = null;
+    
+    private List discoveryPanels = null;
 
     private JCheckBox propertyIsFromETCCheckBox = null;
 
@@ -239,6 +241,7 @@ public class ModificationViewer extends ApplicationComponent {
     public ModificationViewer(File methodsDirectory, BusyDialogRunnable br) throws Exception {
         super();
         this.extensionPanels = new ArrayList();
+        this.discoveryPanels = new ArrayList();
         this.methodsDirectory = methodsDirectory;
         initialize(br);
         if (beenDisposed) {
@@ -250,6 +253,7 @@ public class ModificationViewer extends ApplicationComponent {
     public ModificationViewer(File methodsDirectory) throws Exception {
         super();
         this.extensionPanels = new ArrayList();
+        this.discoveryPanels = new ArrayList();
         this.methodsDirectory = methodsDirectory;
         try {
 
@@ -299,6 +303,11 @@ public class ModificationViewer extends ApplicationComponent {
             ServiceModificationUIPanel panel = (ServiceModificationUIPanel) this.extensionPanels.get(i);
             panel.setServiceInfo(this.info);
         }
+        for(int i = 0; i < this.discoveryPanels.size(); i++){
+            NamespaceTypeDiscoveryComponent comp = (NamespaceTypeDiscoveryComponent)this.discoveryPanels.get(i);
+            comp.setCurrentNamespaces(this.info.getNamespaces());
+        }
+        
 
         // repaint the component that was selected before the save
         this.repaint();
@@ -1043,21 +1052,14 @@ public class ModificationViewer extends ApplicationComponent {
                     } else if (node instanceof SchemaElementTypeTreeNode) {
                         NamespaceTypeTreeNode parentNode = (NamespaceTypeTreeNode) node.getParent();
                         NamespaceType nsType = (NamespaceType) parentNode.getUserObject();
-                        if (nsType.getGenerateStubs()!=null && !nsType.getGenerateStubs().booleanValue()) {
-                        	if(nsType.getNamespace().equals(IntroduceConstants.W3CNAMESPACE)){
-                        		getSchemaElementTypeConfigurationPanel().setHide(true);
-                                getSchemaElementTypeConfigurationPanel().setSchemaElementType(
-                                    (SchemaElementType) node.getUserObject(), false);
-                        	} else {
-                        	getSchemaElementTypeConfigurationPanel().setHide(false);
-                            getSchemaElementTypeConfigurationPanel().setSchemaElementType(
-                                (SchemaElementType) node.getUserObject(), true);
-                        	}
-                        } else {
-                        	getSchemaElementTypeConfigurationPanel().setHide(true);
+                        if (nsType.getNamespace().equals(IntroduceConstants.W3CNAMESPACE)) {
+                            getSchemaElementTypeConfigurationPanel().setHide(true);
                             getSchemaElementTypeConfigurationPanel().setSchemaElementType(
                                 (SchemaElementType) node.getUserObject(), false);
-                            
+                        } else {
+                            getSchemaElementTypeConfigurationPanel().setHide(false);
+                            getSchemaElementTypeConfigurationPanel().setSchemaElementType(
+                                (SchemaElementType) node.getUserObject(), true);
                         }
                         getNamespaceTypeConfigurationPanel().setNamespaceType(nsType);
                     } else {
@@ -1141,6 +1143,7 @@ public class ModificationViewer extends ApplicationComponent {
                             .getNamespaceTypeDiscoveryComponent(dd.getName(), this.info.getNamespaces());
                         if (comp != null) {
                             this.discoveryTabbedPane.addTab(dd.getDisplayName(), comp);
+                            this.discoveryPanels.add(comp);
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
