@@ -1,7 +1,7 @@
 <!-- ======================================================================= -->
 <!-- caGrid Utilities build file                                             -->
 <!-- ======================================================================= -->
-<project name="caGrid-gridca_tests_harness" basedir=".">
+<project name="caGrid-gaards-core_tests_harness" basedir=".">
 	<property name="junit.results.dir" value="${test.log.dir}/junit" />
 	<property name="force.config.replace" value="false" />
 
