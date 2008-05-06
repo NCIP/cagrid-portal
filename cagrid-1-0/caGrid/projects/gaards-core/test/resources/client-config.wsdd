@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<deployment xmlns="http://xml.apache.org/axis/wsdd/" xmlns:java="http://xml.apache.org/axis/wsdd/providers/java">
+ <globalConfiguration>
+  <parameter name="castorMapping" value="/gov/nih/nci/cagrid/tutorial/xml-mapping.xml" />
+  
+ </globalConfiguration>
+ 
+<ns3:typeMapping encodingStyle="" serializer="org.cagrid.gaards.saml.encoding.SAMLSerializerFactory" deserializer="org.cagrid.gaards.saml.encoding.SAMLDeserializerFactory" type="ns1:gov.nih.nci.cagrid.opensaml.SAMLAssertion" qname="ns2:Assertion" xmlns:ns1="http://xml.apache.org/axis/wsdd/providers/java" xmlns:ns2="urn:oasis:names:tc:SAML:1.0:assertion" xmlns:ns3="http://xml.apache.org/axis/wsdd/"/>
+
+
+</deployment>

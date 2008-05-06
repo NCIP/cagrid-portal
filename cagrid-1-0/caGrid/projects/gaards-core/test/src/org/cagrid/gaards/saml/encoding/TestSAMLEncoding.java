@@ -1,7 +1,6 @@
 package org.cagrid.gaards.saml.encoding;
 
 import gov.nih.nci.cagrid.common.FaultUtil;
-import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.opensaml.InvalidCryptoException;
 import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
 import gov.nih.nci.cagrid.opensaml.SAMLAttribute;
@@ -10,9 +9,6 @@ import gov.nih.nci.cagrid.opensaml.SAMLAuthenticationStatement;
 import gov.nih.nci.cagrid.opensaml.SAMLNameIdentifier;
 import gov.nih.nci.cagrid.opensaml.SAMLSubject;
 
-import java.io.FileInputStream;
-import java.io.StringReader;
-import java.io.StringWriter;
 import java.security.PrivateKey;
 import java.security.Security;
 import java.security.cert.X509Certificate;
@@ -26,7 +22,6 @@ import javax.xml.namespace.QName;
 
 import junit.framework.TestCase;
 
-import org.apache.ws.security.trust.issue.STIssuer;
 import org.apache.xml.security.signature.XMLSignature;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.cagrid.gaards.pki.CA;
@@ -135,13 +130,9 @@ public class TestSAMLEncoding extends TestCase {
 
 			}
 
-			StringWriter writer = new StringWriter();
-			gov.nih.nci.cagrid.common.Utils.serializeObject(saml, new QName(
-					"A", "A"), writer, new FileInputStream(
-					"test/resources/server-config.wsdd"));
-			SAMLAssertion saml2 = (SAMLAssertion) Utils.deserializeObject(
-					new StringReader(writer.toString()), SAMLAssertion.class,
-					new FileInputStream("test/resources/server-config.wsdd"));
+			String str = Utils.serialize(saml);
+			SAMLAssertion saml2 = (SAMLAssertion) Utils.deserialize(str,
+					SAMLAssertion.class);
 			saml2.verify(cert);
 			saml2.verify(cert);
 			try {
