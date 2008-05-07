@@ -10,4 +10,11 @@
       <bind-xml name="password" node="attribute"/>
     </field>
   </class>
+  
+  <class name="org.cagrid.gaards.core.EncodedX509Certificate">
+    <map-to xml="EncodedX509Certificate" ns-uri="http://gaards.cagrid.org/core-types" ns-prefix="gaards"/>
+    <field name="encodedCertificate" type="string">
+      <bind-xml name="encodedCertificate" node="element"/>
+    </field>
+  </class>
 </mapping>

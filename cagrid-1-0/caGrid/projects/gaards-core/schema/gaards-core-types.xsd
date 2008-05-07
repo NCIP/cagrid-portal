@@ -18,4 +18,12 @@
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
+	
+	<xsd:element name="EncodedX509Certificate" type="gaards:EncodedX509Certificate"/>
+		<xsd:complexType name="EncodedX509Certificate">
+			<xsd:sequence>
+				<xsd:element name="encodedCertificate" minOccurs="1" maxOccurs="1" type="xsd:string"/>
+			</xsd:sequence>
+		</xsd:complexType>
+		
 </xs:schema>

@@ -18,7 +18,6 @@ public class TestBasicAuthentication extends TestCase {
 			BasicAuthenticationCredential credB = new BasicAuthenticationCredential("jdoe2","password");
 			assertFalse(credA.equals(credB));
 			String str = org.cagrid.gaards.core.Utils.serialize(credA);
-			System.out.println(str);
 			BasicAuthenticationCredential credA2 = (BasicAuthenticationCredential)org.cagrid.gaards.core.Utils.deserialize(str, BasicAuthenticationCredential.class);
 			assertTrue(credA.equals(credA2));
 			assertFalse(credA2.equals(credB));
