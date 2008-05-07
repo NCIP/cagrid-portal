@@ -7,20 +7,7 @@
 
 	<xs:complexType name="Credential" abstract="true" />
 
-	<xs:element name="BasicAuthentication"
-		type="gaards:BasicAuthentication" />
-
-	<xs:complexType name="BasicAuthentication">
-		<xs:complexContent>
-			<xs:extension base="gaards:Credential">
-				<xs:attribute name="userId" use="required" type="xs:string" />
-		        <xs:attribute name="password" use="required" type="xs:string" />
-			</xs:extension>
-		</xs:complexContent>
-	</xs:complexType>
-	
-	<xs:element name="BasicAuthentication"
-		type="gaards:BasicAuthentication" />
+	<xs:element name="BasicAuthentication" type="gaards:BasicAuthentication" />
 
 	<xs:complexType name="BasicAuthentication">
 		<xs:complexContent>
@@ -42,11 +29,13 @@
 		</xs:complexContent>
 	</xs:complexType>
 	
-	<xsd:element name="EncodedX509Certificate" type="gaards:EncodedX509Certificate"/>
-		<xsd:complexType name="EncodedX509Certificate">
-			<xsd:sequence>
-				<xsd:element name="encodedCertificate" minOccurs="1" maxOccurs="1" type="xsd:string"/>
-			</xsd:sequence>
-		</xsd:complexType>
+	<xs:element name="EncodedX509Certificate" type="gaards:EncodedX509Certificate"/>
+		<xs:complexType name="EncodedX509Certificate">
+			<xs:sequence>
+				<xs:element name="encodedCertificate" minOccurs="1" maxOccurs="1" type="xs:string"/>
+			</xs:sequence>
+		</xs:complexType>
+	
+	
 		
 </xs:schema>
