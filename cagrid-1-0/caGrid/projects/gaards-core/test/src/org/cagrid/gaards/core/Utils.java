@@ -1,9 +1,11 @@
-package org.cagrid.gaards.saml.encoding;
+package org.cagrid.gaards.core;
 
 import java.io.StringReader;
 import java.io.StringWriter;
 
 import javax.xml.namespace.QName;
+
+import org.cagrid.gaards.saml.encoding.TestSAMLEncoding;
 
 public class Utils {
 	public static final String CLIENT_WSDD = "/client-config.wsdd";

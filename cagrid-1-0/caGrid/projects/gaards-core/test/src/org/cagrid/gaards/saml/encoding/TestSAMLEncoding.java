@@ -24,6 +24,7 @@ import junit.framework.TestCase;
 
 import org.apache.xml.security.signature.XMLSignature;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.cagrid.gaards.core.Utils;
 import org.cagrid.gaards.pki.CA;
 import org.cagrid.gaards.pki.Credential;
 

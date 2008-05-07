@@ -91,6 +91,11 @@
 	<!-- Compile the implementation classes (service, resource, etc.) -->
 	<target name="compile" depends="init">
 		<javac srcdir="${src.dir}" destdir="${build.dest}" debug="${java.debug}" deprecation="${deprecation}" classpathref="base.classpath" />
+		<copy toDir="${build.dest}">
+			<fileset dir="${src.dir}">
+				<include name="**/*" />
+			</fileset>
+		</copy>
 	</target>
 
 	<!-- Compile the implementation classes (service, resource, etc.) -->
