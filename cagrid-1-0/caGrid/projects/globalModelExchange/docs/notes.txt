@@ -73,7 +73,7 @@ would allow to keep history
 AMR05
 store annotations (namespace, name, value) and a source (<system> or identity)
 create metadata profile (iso, dublin core), which creates annotations.
-a profile is instantiated with the typed values and submited as a number of annotations to a wellknown namespace (and names) 
+a profile is instantiated with the typed values and submitted as a number of annotations to a well-known namespace (and names) 
 
 AMR06
 can we create persistible subclasses of domain objects (e.g PersistibleXMLSchema extends XMLSchema)
