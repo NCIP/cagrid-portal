@@ -17,7 +17,6 @@ public class TestEncodedX509Certificate extends TestCase {
 	public void testEncoding() {
 		try {
 			CA ca = new CA();
-			
 			EncodedX509Certificate en1 = new EncodedX509Certificate();
 			en1.setCertificate(ca.getCertificate());
 			String str = org.cagrid.gaards.core.Utils.serialize(en1);
