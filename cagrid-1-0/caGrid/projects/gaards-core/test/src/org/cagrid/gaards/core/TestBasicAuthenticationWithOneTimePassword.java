@@ -10,15 +10,15 @@ import junit.framework.TestCase;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public class TestBasicAuthentication extends TestCase {
+public class TestBasicAuthenticationWithOneTimePassword extends TestCase {
 
 	public void testEncoding() {
 		try {
-			BasicAuthentication credA = new BasicAuthentication("jdoe","password");
-			BasicAuthentication credB = new BasicAuthentication("jdoe2","password");
+			BasicAuthenticationWithOneTimePassword credA = new BasicAuthenticationWithOneTimePassword("jdoe","password","onetimepassword");
+			BasicAuthenticationWithOneTimePassword credB = new BasicAuthenticationWithOneTimePassword("jdoe2","password","onetimepassword");
 			assertFalse(credA.equals(credB));
 			String str = org.cagrid.gaards.core.Utils.serialize(credA);
-			BasicAuthentication credA2 = (BasicAuthentication)org.cagrid.gaards.core.Utils.deserialize(str, BasicAuthentication.class);
+			BasicAuthenticationWithOneTimePassword credA2 = (BasicAuthenticationWithOneTimePassword)org.cagrid.gaards.core.Utils.deserialize(str, BasicAuthenticationWithOneTimePassword.class);
 			assertTrue(credA.equals(credA2));
 			assertFalse(credA2.equals(credB));
 		} catch (Exception e) {

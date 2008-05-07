@@ -2,16 +2,16 @@ package org.cagrid.gaards.core;
 
 import gov.nih.nci.cagrid.common.Utils;
 
-public class BasicAuthenticationCredential {
+public class BasicAuthentication implements Credential{
 
 	private String userId;
 	private String password;
 
-	public BasicAuthenticationCredential() {
+	public BasicAuthentication() {
 
 	}
 
-	public BasicAuthenticationCredential(String userId, String password) {
+	public BasicAuthentication(String userId, String password) {
 		this.userId = userId;
 		this.password = password;
 	}
@@ -35,10 +35,10 @@ public class BasicAuthenticationCredential {
 	public boolean equals(Object obj) {
 		if (obj == null) {
 			return false;
-		} else if (!(obj instanceof BasicAuthenticationCredential)) {
+		} else if (!(obj instanceof BasicAuthentication)) {
 			return false;
 		} else {
-			BasicAuthenticationCredential cred = (BasicAuthenticationCredential) obj;
+			BasicAuthentication cred = (BasicAuthentication) obj;
 			if (Utils.equals(getUserId(), cred.getUserId())
 					&& (Utils.equals(getPassword(), cred.getPassword()))) {
 				return true;

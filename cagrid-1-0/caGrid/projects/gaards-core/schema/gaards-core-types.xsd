@@ -7,14 +7,37 @@
 
 	<xs:complexType name="Credential" abstract="true" />
 
-	<xs:element name="BasicAuthenticationCredential"
-		type="gaards:BasicAuthenticationCredential" />
+	<xs:element name="BasicAuthentication"
+		type="gaards:BasicAuthentication" />
 
-	<xs:complexType name="BasicAuthenticationCredential">
+	<xs:complexType name="BasicAuthentication">
 		<xs:complexContent>
 			<xs:extension base="gaards:Credential">
 				<xs:attribute name="userId" use="required" type="xs:string" />
 		        <xs:attribute name="password" use="required" type="xs:string" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	
+	<xs:element name="BasicAuthentication"
+		type="gaards:BasicAuthentication" />
+
+	<xs:complexType name="BasicAuthentication">
+		<xs:complexContent>
+			<xs:extension base="gaards:Credential">
+				<xs:attribute name="userId" use="required" type="xs:string" />
+		        <xs:attribute name="password" use="required" type="xs:string" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	
+	<xs:element name="BasicAuthenticationWithOneTimePassword"
+		type="gaards:BasicAuthenticationWithOneTimePassword" />
+
+	<xs:complexType name="BasicAuthenticationWithOneTimePassword">
+		<xs:complexContent>
+			<xs:extension base="gaards:BasicAuthentication">
+		        <xs:attribute name="oneTimePassword" use="required" type="xs:string" />
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
