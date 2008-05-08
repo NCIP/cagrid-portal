@@ -11,12 +11,16 @@ import javax.swing.JProgressBar;
 import javax.swing.WindowConstants;
 
 import org.cagrid.grape.GridApplication;
+import javax.swing.JLabel;
+import javax.swing.SwingConstants;
+import java.awt.Font;
 
 
 public class BusyDialog extends JDialog {
 
     private JPanel mainPanel = null;
     private JProgressBar progress = null;
+    private JLabel infoLabel = null;
 
 
     /**
@@ -57,14 +61,25 @@ public class BusyDialog extends JDialog {
      */
     private JPanel getMainPanel() {
         if (this.mainPanel == null) {
+            GridBagConstraints gridBagConstraints = new GridBagConstraints();
+            gridBagConstraints.gridx = 0;
+            gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+            gridBagConstraints.gridy = 1;
+            infoLabel = new JLabel();
+            infoLabel.setText(" ");
+            infoLabel.setForeground(new java.awt.Color(153, 153, 255));
+            infoLabel.setFont(new Font("Lucida Grande", Font.ITALIC, 12));
+            infoLabel.setHorizontalAlignment(SwingConstants.TRAILING);
             GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
             gridBagConstraints4.gridx = 0;
             gridBagConstraints4.gridy = 0;
-            gridBagConstraints4.fill = java.awt.GridBagConstraints.HORIZONTAL;
+            gridBagConstraints4.fill = GridBagConstraints.BOTH;
+            gridBagConstraints4.weighty = 0.0D;
             gridBagConstraints4.weightx = 1.0D;
             this.mainPanel = new JPanel();
             this.mainPanel.setLayout(new GridBagLayout());
-            this.mainPanel.add(getProgress(), gridBagConstraints4);
+            mainPanel.add(getProgress(), gridBagConstraints4);
+            mainPanel.add(infoLabel, gridBagConstraints);
         }
         return this.mainPanel;
     }
@@ -84,6 +99,12 @@ public class BusyDialog extends JDialog {
             this.progress.setString("");
         }
         return this.progress;
+    }
+    
+    
+    public void setProgressText(String progressText){
+        //this.getProgress().setString(progressText);
+        this.infoLabel.setText(progressText);
     }
 
 

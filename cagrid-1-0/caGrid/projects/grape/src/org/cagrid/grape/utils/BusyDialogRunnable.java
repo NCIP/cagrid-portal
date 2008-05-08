@@ -26,7 +26,8 @@ public abstract class BusyDialogRunnable implements Runnable {
     public void setProgressText(final String text) {
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-                BusyDialogRunnable.this.dialog.getProgress().setString(text);
+                BusyDialogRunnable.this.dialog.setProgressText(text);
+                
             }
         });
     }
