@@ -104,7 +104,7 @@ public class BusyDialog extends JDialog {
     
     public void setProgressText(String progressText){
         //this.getProgress().setString(progressText);
-        this.infoLabel.setText(progressText);
+        this.infoLabel.setText(progressText + "/t");
     }
 
 
