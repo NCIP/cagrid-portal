@@ -109,6 +109,7 @@ public class ModifyService extends JDialog {
 
     private JTabbedPane mainTabbedPane = null;
 
+    private JPanel emptyPanel = null;
 
     /**
      * This method initializes
@@ -426,6 +427,12 @@ public class ModifyService extends JDialog {
      */
     private JPanel getContentPanel() {
         if (contentPanel == null) {
+            GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
+            gridBagConstraints6.gridx = 0;
+            gridBagConstraints6.weightx = 1.0D;
+            gridBagConstraints6.weighty = 1.0D;
+            gridBagConstraints6.fill = GridBagConstraints.BOTH;
+            gridBagConstraints6.gridy = 3;
             GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
             gridBagConstraints5.gridx = 0;
             gridBagConstraints5.weightx = 0.0D;
@@ -436,8 +443,8 @@ public class ModifyService extends JDialog {
             GridBagConstraints gridBagConstraints21 = new GridBagConstraints();
             gridBagConstraints21.gridx = 0;
             gridBagConstraints21.weightx = 1.0D;
-            gridBagConstraints21.fill = GridBagConstraints.BOTH;
-            gridBagConstraints21.weighty = 1.0D;
+            gridBagConstraints21.fill = GridBagConstraints.HORIZONTAL;
+            gridBagConstraints21.weighty = 0.0D;
             gridBagConstraints21.gridy = 0;
             descriptionLabel = new JLabel();
             descriptionLabel.setText("Description");
@@ -451,6 +458,7 @@ public class ModifyService extends JDialog {
             contentPanel.setLayout(new GridBagLayout());
             contentPanel.add(getInfoPanel(), gridBagConstraints21);
             contentPanel.add(getResourceOptionsPanel(), gridBagConstraints5);
+            contentPanel.add(getEmptyPanel(), gridBagConstraints6);
         }
         return contentPanel;
     }
@@ -532,9 +540,8 @@ public class ModifyService extends JDialog {
     private JScrollPane getTextBoxPane() {
         if (textBoxPane == null) {
             textBoxPane = new JScrollPane();
+            textBoxPane.setPreferredSize(new Dimension(200, 200));
             textBoxPane.setViewportView(getJTextPane());
-            textBoxPane.setPreferredSize(new Dimension(300, 50));
-
         }
         return textBoxPane;
     }
@@ -654,5 +661,19 @@ public class ModifyService extends JDialog {
             mainTabbedPane.addTab("Security", IntroduceLookAndFeel.getKeyIcon(), getSecurityPanel(), null);
         }
         return mainTabbedPane;
+    }
+
+
+    /**
+     * This method initializes emptyPanel	
+     * 	
+     * @return javax.swing.JPanel	
+     */
+    private JPanel getEmptyPanel() {
+        if (emptyPanel == null) {
+            emptyPanel = new JPanel();
+            emptyPanel.setLayout(new GridBagLayout());
+        }
+        return emptyPanel;
     }
 } // @jve:decl-index=0:visual-constraint="10,10"
