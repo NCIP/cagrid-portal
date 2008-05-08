@@ -123,7 +123,6 @@ public class CSMPanel extends JPanel {
 		gridBagConstraints.weightx = 1.0;
 		protectionMethodLabel = new JLabel();
 		protectionMethodLabel.setText("Protection Method");
-		this.setSize(300, 200);
 		this.setLayout(new GridBagLayout());
 		setBorder(BorderFactory.createTitledBorder(null, "Common Security Module (CSM)",
 			TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12),
