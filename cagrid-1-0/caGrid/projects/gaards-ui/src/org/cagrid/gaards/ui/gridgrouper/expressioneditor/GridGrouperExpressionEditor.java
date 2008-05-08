@@ -289,7 +289,7 @@ public class GridGrouperExpressionEditor extends JPanel {
 	protected GridGrouperTree getGrouperTree() {
 		if (grouperTree == null) {
 			grouperTree = new GridGrouperTree();
-            grouperTree.setVisibleRowCount(10);
+            grouperTree.setVisibleRowCount(5);
 			grouperTree.setProgress(getProgress());
 			grouperTree
 					.addMouseListener(new GrouperTreeExpressionEventListener(
@@ -321,6 +321,7 @@ public class GridGrouperExpressionEditor extends JPanel {
 		if (expressionTree == null) {
 			expressionTree = new ExpressionTree(this, expression);
 			expressionTree.getRootNode().loadExpression();
+            expressionTree.setVisibleRowCount(5);
 		}
 		return expressionTree;
 	}
