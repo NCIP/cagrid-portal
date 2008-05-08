@@ -14,7 +14,7 @@ public class PortletIntegrationTestBase extends AbstractDependencyInjectionSprin
     protected String[] getConfigLocations() {
         return new String[]{
                 "classpath*:applicationContext-portlets-test.xml"
-                
+
         };
     }
 }

@@ -1,74 +1,94 @@
 <script type="text/javascript">
-	//<![CDATA[
-    	
-	function <portlet:namespace/>goToPath(path){
-		var form = document.<portlet:namespace/>criteriaBeanForm;
-		form.action = '<portlet:renderURL/>';
-		form.selectedTabPath.value = path;
-		form.submit();
-	}
-	
-	function <portlet:namespace/>exportToXml(){
-		var form = document.<portlet:namespace/>criteriaBeanForm;
-		form.action = '<portlet:actionURL/>';
-		form.operation.value = 'exportToXml';
-		form.submit();
-	}
-	
-	function <portlet:namespace/>submitBuilderQuery(){
-		var form = document.<portlet:namespace/>criteriaBeanForm;
-		form.action = '<portlet:actionURL/>';
-		form.operation.value = 'submitBuilderQuery';
-		form.submit();
-	}
-	
-	function <portlet:namespace/>shareBuilderQuery(){
-		var form = document.<portlet:namespace/>criteriaBeanForm;
-		form.action = '<portlet:actionURL/>';
-		form.operation.value = 'shareBuilderQuery';
-		form.submit();
-	}
-	
-	//]]>
+    //<![CDATA[
+
+    function <portlet:namespace/>goToPath(path){
+    var form = document.<portlet:namespace/>criteriaBeanForm;
+    form.action = '<portlet:renderURL/>';
+    form.selectedTabPath.value = path;
+    form.submit();
+    }
+
+
+    function <portlet:namespace/>aggregateQuery(path){
+    var form = document.<portlet:namespace/>criteriaBeanForm;
+    form.action ='<portlet:renderURL/>';
+    form.operation.value='viewAggregateTargets';
+    form.submit();
+    }
+
+    function <portlet:namespace/>populateForiegnAssociations(path){
+    var form = document.<portlet:namespace/>criteriaBeanForm;
+    form.action ='<portlet:renderURL/>';
+    form.operation.value='populateForeignAssociations';
+    form.submit();
+    }
+
+    function <portlet:namespace/>exportToXml(){
+    var form = document.<portlet:namespace/>criteriaBeanForm;
+    form.action = '<portlet:actionURL/>';
+    form.operation.value = 'exportToXml';
+    form.submit();
+    }
+
+    function <portlet:namespace/>submitBuilderQuery(){
+    var form = document.<portlet:namespace/>criteriaBeanForm;
+    form.action = '<portlet:actionURL/>';
+    form.operation.value = 'submitBuilderQuery';
+    form.submit();
+    }
+
+    function <portlet:namespace/>shareBuilderQuery(){
+    var form = document.<portlet:namespace/>criteriaBeanForm;
+    form.action = '<portlet:actionURL/>';
+    form.operation.value = 'shareBuilderQuery';
+    form.submit();
+    }
+
+    //]]>
 </script>
 <c:set var="criteriaBeanFormName"><portlet:namespace/>criteriaBeanForm</c:set>
 <form:form name="${criteriaBeanFormName}">
-	<input type="button" value="Edit Query Modifiers" onclick="<portlet:namespace/>goToPath('/query/builder/editQueryModifierForm')"/>
-	<input type="button" value="Add Criterion" onclick="<portlet:namespace/>goToPath('/query/builder/umlClass')"/>
-	<input type="button" value="Export To XML" onclick="<portlet:namespace/>exportToXml()"/>
-	<input type="button" value="Submit Query" onclick="<portlet:namespace/>submitBuilderQuery()"/>
-	<c:if test="${!empty portalUser}">
-		<input type="button" value="Share Query" onclick="<portlet:namespace/>shareBuilderQuery()"/>
-	</c:if>
-	<input type="hidden" name="selectedTabPath" value=""/>
-	<input type="hidden" name="operation" value=""/>
+    <input type="button" value="Edit Query Modifiers"
+           onclick="<portlet:namespace/>goToPath('/query/builder/editQueryModifierForm')"/>
+    <input type="button" value="Add Criterion" onclick="<portlet:namespace/>goToPath('/query/builder/umlClass')"/>
+    <input type="button" value="Aggregate Query" onclick="<portlet:namespace/>aggregateQuery()"/>
+    <input type="button" value="Add Foreign Criterion"
+           onclick="<portlet:namespace/>populateForiegnAssociations('/query/builder/umlClass')"/>
+    <input type="button" value="Export To XML" onclick="<portlet:namespace/>exportToXml()"/>
+    <input type="button" value="Submit Query" onclick="<portlet:namespace/>submitBuilderQuery()"/>
+    <c:if test="${!empty portalUser}">
+        <input type="button" value="Share Query" onclick="<portlet:namespace/>shareBuilderQuery()"/>
+    </c:if>
+    <input type="hidden" name="selectedTabPath" value=""/>
+    <input type="hidden" name="operation" value=""/>
 </form:form>
 <br/>
-<b>Querying:</b> <c:out value="${cqlQueryBean.umlClass.packageName}"/>.<c:out value="${cqlQueryBean.umlClass.className}"/>
+<b>Querying:</b> <c:out
+        value="${cqlQueryBean.umlClass.packageName}"/>.<c:out value="${cqlQueryBean.umlClass.className}"/>
 <br/>
 <b>Result Type:</b>&nbsp;
 <c:set var="modifierType"><c:out value="${cqlQueryBean.modifierType}"/></c:set>
 <c:choose>
-	<c:when test="${'COUNT_ONLY' eq modifierType}">
-		Count 
-	</c:when>
-	<c:when test="${'DISTINCT_ATTRIBUTE' eq modifierType}">
-		Distinct Attribute [<c:out value="${cqlQueryBean.selectedAttributes[0]}"/>]
-	</c:when>
-	<c:when test="${'SELECTED_ATTRIBUTES' eq modifierType}">
-		Selected Attributes [
-		<c:set var="numAtts" value="${fn:length(cqlQueryBean.selectedAttributes)}"/>
-		<c:forEach var="attName" items="${cqlQueryBean.selectedAttributes}" varStatus="status">
-			<c:out value="${attName}"/>
-			<c:if test="${status.count < numAtts}">, </c:if>
-		</c:forEach>
-		]
-	</c:when>
-	<c:otherwise>
-		Object
-	</c:otherwise>
+    <c:when test="${'COUNT_ONLY' eq modifierType}">
+        Count
+    </c:when>
+    <c:when test="${'DISTINCT_ATTRIBUTE' eq modifierType}">
+        Distinct Attribute [<c:out value="${cqlQueryBean.selectedAttributes[0]}"/>]
+    </c:when>
+    <c:when test="${'SELECTED_ATTRIBUTES' eq modifierType}">
+        Selected Attributes [
+        <c:set var="numAtts" value="${fn:length(cqlQueryBean.selectedAttributes)}"/>
+        <c:forEach var="attName" items="${cqlQueryBean.selectedAttributes}" varStatus="status">
+            <c:out value="${attName}"/>
+            <c:if test="${status.count < numAtts}">, </c:if>
+        </c:forEach>
+        ]
+    </c:when>
+    <c:otherwise>
+        Object
+    </c:otherwise>
 </c:choose>
 <c:if test="${fn:length(cqlQueryBean.criteria) gt 0}">
-<br/>
-<b>Criteria:</b>
+    <br/>
+    <b>Criteria:</b>
 </c:if>

@@ -9,6 +9,20 @@
       <maximumHeapSize value="128" />
       <properties />
     </buildFile>
+    <buildFile url="file:///Users/kherm/dev/cvsroot/cagrid-1-0/caGrid/build.xml">
+      <additionalClassPath />
+      <antReference projectDefault="true" />
+      <customJdkName value="" />
+      <maximumHeapSize value="128" />
+      <properties />
+    </buildFile>
+    <buildFile url="file://$PROJECT_DIR$/tools/bug_fixes/11997/build.xml">
+      <additionalClassPath />
+      <antReference projectDefault="true" />
+      <customJdkName value="" />
+      <maximumHeapSize value="128" />
+      <properties />
+    </buildFile>
   </component>
   <component name="BuildJarProjectSettings">
     <option name="BUILD_JARS_ON_MAKE" value="false" />
@@ -353,6 +367,7 @@
   <component name="ProjectFileVersion" converted="true" />
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/tools/bug_fixes/bug_fixes.iml" filepath="$PROJECT_DIR$/tools/bug_fixes/bug_fixes.iml" />
       <module fileurl="file:///Users/kherm/dev/cvsroot/cagrid-1-0/caGrid/caGrid.iml" filepath="/Users/kherm/dev/cvsroot/cagrid-1-0/caGrid/caGrid.iml" />
       <module fileurl="file:///Users/kherm/dev/cvsroot/cagrid-1-0/caGrid/projects/cadsr/cadsr.iml" filepath="/Users/kherm/dev/cvsroot/cagrid-1-0/caGrid/projects/cadsr/cadsr.iml" />
       <module fileurl="file://$PROJECT_DIR$/cagrid-portal.iml" filepath="$PROJECT_DIR$/cagrid-portal.iml" />
@@ -486,7 +501,6 @@
         <root url="jar://$PROJECT_DIR$/db/lib/hibernate/core/jboss-jmx.jar!/" />
         <root url="jar://$PROJECT_DIR$/db/lib/hibernate/annotations/hibernate-annotations.jar!/" />
         <root url="jar://$PROJECT_DIR$/db/lib/hibernate/search/hibernate-search.jar!/" />
-        <root url="jar://$PROJECT_DIR$/db/lib/hibernate/core/ant-junit-1.6.5.jar!/" />
         <root url="jar://$PROJECT_DIR$/db/lib/hibernate/core/jaas.jar!/" />
         <root url="jar://$PROJECT_DIR$/db/lib/hibernate/core/oscache-2.1.jar!/" />
         <root url="jar://$PROJECT_DIR$/db/lib/hibernate/core/jboss-system.jar!/" />
@@ -560,7 +574,6 @@
         <root url="jar://$PROJECT_DIR$/aggr/lib/cagrid/wsrf_core_enum.jar!/" />
         <root url="jar://$PROJECT_DIR$/aggr/lib/cagrid/globus_wsrf_servicegroup.jar!/" />
         <root url="jar://$PROJECT_DIR$/aggr/lib/cagrid/caGrid-1.1-gts-stubs.jar!/" />
-        <root url="jar://$PROJECT_DIR$/aggr/lib/cagrid/caGrid-1.1-advertisement.jar!/" />
         <root url="jar://$PROJECT_DIR$/aggr/lib/cagrid/caGrid-1.1-gts-common.jar!/" />
         <root url="jar://$PROJECT_DIR$/aggr/lib/cagrid/caGrid-1.1-authentication-service-common.jar!/" />
         <root url="jar://$PROJECT_DIR$/aggr/lib/cagrid/caGrid-1.1-ServiceSecurityProvider-client.jar!/" />

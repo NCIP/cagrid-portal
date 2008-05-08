@@ -1,0 +1,66 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+
+    <SEM_META ID="-1" SM_CCODE="codeA"/>
+    <SEM_META ID="-2" SM_CCODE="codeB"/>
+    <SEM_META ID="-3" SM_CCODE="codeC"/>
+
+    <GRID_SERVICES SERVICE_TYPE="GridDataService" ID="-1"/>
+    <GRID_SERVICES SERVICE_TYPE="GridDataService" ID="-2"/>
+    <GRID_SERVICES SERVICE_TYPE="GridDataService" ID="-3"/>
+
+    <DOMAIN_MODELS id="-1" SERVICE_ID="-1"/>
+    <DOMAIN_MODELS id="-2" SERVICE_ID="-2"/>
+    <DOMAIN_MODELS id="-3" SERVICE_ID="-3"/>
+
+    <UML_CLASS ID="-1" CADSRID="123" UML_CLASS_TYPE="DataUMLClass" CLASSNAME="Class" MODEL_ID="-1"
+               ALLOWABLEASTARGET="true"/>
+    <UML_CLASS ID="-2" CADSRID="123" UML_CLASS_TYPE="DataUMLClass" CLASSNAME="RelatedClassInDifferentModel"
+               MODEL_ID="-2" ALLOWABLEASTARGET="true"/>
+    <UML_CLASS ID="-3" CADSRID="123" UML_CLASS_TYPE="DataUMLClass" CLASSNAME="RelatedClassInSameModel" MODEL_ID="-1"
+               ALLOWABLEASTARGET="true"/>
+    <UML_CLASS ID="-4" UML_CLASS_TYPE="DataUMLClass" CLASSNAME="UnrelatedClassWithNoAttributes" MODEL_ID="-3"
+               ALLOWABLEASTARGET="true"/>
+    <UML_CLASS ID="-5" UML_CLASS_TYPE="DataUMLClass" CLASSNAME="RelatedClassByAssociation" MODEL_ID="-3"
+               ALLOWABLEASTARGET="true"/>
+    <UML_CLASS ID="-6" UML_CLASS_TYPE="DataUMLClass" CLASSNAME="UnrelatedClass" MODEL_ID="-2"
+               ALLOWABLEASTARGET="false"/>
+
+    <UML_CLASS_SEM_META UML_CLASS_ID="-5" SEM_META_ID="-1"/>
+    <UML_CLASS_SEM_META UML_CLASS_ID="-6" SEM_META_ID="-1"/>
+    <UML_CLASS_SEM_META UML_CLASS_ID="-3" SEM_META_ID="-1"/>
+
+    <UML_ASSOC_EDGES id="-1" UML_CLASS_ID="-1" EDGE_TYPE="SourceUMLAssociationEdge" MAXCARDINALITY="1"
+                     MINCARDINALITY="0"/>
+    <UML_ASSOC_EDGES id="-2" UML_CLASS_ID="-1" EDGE_TYPE="SourceUMLAssociationEdge" MAXCARDINALITY="1"
+                     MINCARDINALITY="0"/>
+    <UML_ASSOC_EDGES id="-3" UML_CLASS_ID="-5" EDGE_TYPE="SourceUMLAssociationEdge" MAXCARDINALITY="1"
+                     MINCARDINALITY="0"/>
+    <UML_ASSOC_EDGES id="-4" UML_CLASS_ID="-2" EDGE_TYPE="SourceUMLAssociationEdge" MAXCARDINALITY="1"
+                     MINCARDINALITY="0"/>
+
+    <UML_ASSOCS ID="-1" TARGET_ID="-3" SOURCE_ID="-1" BIDIRECTIONAL="false"/>
+    <UML_ASSOCS ID="-2" TARGET_ID="-4" SOURCE_ID="-2" BIDIRECTIONAL="false"/>
+    <!--<UML_ASSOCS ID="-4" TARGET_ID="-5" SOURCE_ID="-1" BIDIRECTIONAL="false"/>-->
+
+    <UML_ATTR ID="-1" VERSION="1" NAME="name" UMLCLASS_ID="-1"/>
+    <UML_ATTR ID="-2" VERSION="1" NAME="name" UMLCLASS_ID="-2"/>
+    <UML_ATTR ID="-3" VERSION="1" NAME="name" UMLCLASS_ID="-2"/>
+    <UML_ATTR ID="-4" VERSION="1" NAME="name" UMLCLASS_ID="-3"/>
+
+    <UML_ATTR ID="-5" VERSION="1" NAME="name" UMLCLASS_ID="-1"/>
+    <UML_ATTR ID="-6" VERSION="1" NAME="name" UMLCLASS_ID="-2"/>
+    <!--add to unrelated classes-->
+    <UML_ATTR ID="-7" VERSION="1" NAME="name" UMLCLASS_ID="-5"/>
+    <UML_ATTR ID="-8" VERSION="1" NAME="name" UMLCLASS_ID="-5"/>
+
+
+    <UML_ATTR_SEM_META UML_ATTR_ID="-1" SEM_META_ID="-1"/>
+    <UML_ATTR_SEM_META UML_ATTR_ID="-2" SEM_META_ID="-1"/>
+    <UML_ATTR_SEM_META UML_ATTR_ID="-3" SEM_META_ID="-1"/>
+    <UML_ATTR_SEM_META UML_ATTR_ID="-4" SEM_META_ID="-1"/>
+
+    <UML_ATTR_SEM_META UML_ATTR_ID="-5" SEM_META_ID="-2"/>
+    <UML_ATTR_SEM_META UML_ATTR_ID="-6" SEM_META_ID="-3"/>
+
+</dataset>

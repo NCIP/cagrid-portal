@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package gov.nih.nci.cagrid.portal.portlet.query.builder;
 
@@ -17,79 +17,88 @@ import javax.portlet.RenderRequest;
 
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
- *
  */
 public class ViewUmlClassTreeController extends
-		AbstractQueryRenderController {
-	
-	private TreeFacade umlClassTreeFacade;
-	private UMLClassTreeNodeListener umlClassTreeNodeListener;
+        AbstractQueryRenderController {
 
-	private UMLClassDao umlClassDao;
-	
-	/**
-	 * 
-	 */
-	public ViewUmlClassTreeController() {
+    private TreeFacade umlClassTreeFacade;
+    private UMLClassTreeNodeListener umlClassTreeNodeListener;
 
-	}
+    private UMLClassDao umlClassDao;
 
-	/* (non-Javadoc)
-	 * @see gov.nih.nci.cagrid.portal.portlet.AbstractViewObjectController#getObject(javax.portlet.RenderRequest)
-	 */
-	@Override
-	protected Object getObject(RenderRequest request) {
-		TreeNode rootNode = null;
-		UMLClass umlClass = getQueryModel().getSelectedUmlClass();
-		if(umlClass == null){
-			logger.debug("no UMLClass selected");
-		}else{
-			logger.debug("UMLClass:" + umlClass.getId() + " selected");
-			
-			//Need to associate with current session
-			umlClass = getUmlClassDao().getById(umlClass.getId());
-			rootNode = getUmlClassTreeFacade().getRootNode();
-			if(rootNode == null || !umlClass.getId().equals(((UMLClassBean)rootNode.getContent()).getUmlClass().getId())){
-				logger.debug("Creating new tree for UMLClass:" + umlClass.getId());
-				rootNode = createNode(umlClass);
-			}
-			getUmlClassTreeFacade().setRootNode(rootNode);
-		}
-		return rootNode;
-	}
-	
-	private TreeNode createNode(UMLClass umlClass) {
-		
-		TreeNode node = new TreeNode(null, "UMLClass:" + umlClass.getId());
-		node.setLabel(umlClass.getClassName());
-		node.setContent(new UMLClassBean(umlClass));
-		getUmlClassTreeNodeListener().onOpen(node, new HashMap());
-		return node;
-	}
+    /**
+     *
+     */
+    public ViewUmlClassTreeController() {
 
-	public UMLClassDao getUmlClassDao() {
-		return umlClassDao;
-	}
+    }
 
-	public void setUmlClassDao(UMLClassDao umlClassDao) {
-		this.umlClassDao = umlClassDao;
-	}
+    /* (non-Javadoc)
+      * @see gov.nih.nci.cagrid.portal.portlet.AbstractViewObjectController#getObject(javax.portlet.RenderRequest)
+      */
+    @Override
+    protected Object getObject(RenderRequest request) {
+        TreeNode rootNode = null;
+        UMLClass umlClass = getRootUmlClass();
+        if (umlClass == null) {
+            logger.debug("no UMLClass selected");
+        } else {
+            logger.debug("UMLClass:" + umlClass.getId() + " selected");
 
-	public TreeFacade getUmlClassTreeFacade() {
-		return umlClassTreeFacade;
-	}
+            //Need to associate with current session
+            rootNode = getUmlClassTreeFacade().getRootNode();
+            if (rootNode == null || !umlClass.getId().equals(((UMLClassBean) rootNode.getContent()).getUmlClass().getId())) {
+                logger.debug("Creating new tree for UMLClass:" + umlClass.getId());
+                rootNode = createNode(umlClass, null);
+            }
+            getUmlClassTreeFacade().setRootNode(rootNode);
+        }
+        return rootNode;
+    }
 
-	public void setUmlClassTreeFacade(TreeFacade umlClassTreeFacade) {
-		this.umlClassTreeFacade = umlClassTreeFacade;
-	}
+    protected TreeNode createNode(UMLClass umlClass, TreeNode parent) {
+        TreeNode node = new TreeNode(parent, "UMLClass:" + umlClass.getId());
+        node.setLabel(umlClass.getClassName());
+        node.setContent(new UMLClassBean(umlClass));
+        getUmlClassTreeNodeListener().onOpen(node, new HashMap());
+        return node;
+    }
 
-	public UMLClassTreeNodeListener getUmlClassTreeNodeListener() {
-		return umlClassTreeNodeListener;
-	}
 
-	public void setUmlClassTreeNodeListener(
-			UMLClassTreeNodeListener umlClassTreeNodeListener) {
-		this.umlClassTreeNodeListener = umlClassTreeNodeListener;
-	}
+    protected UMLClass getRootUmlClass() {
+        UMLClass umlClass = getQueryModel().getSelectedUmlClass();
+
+        if (umlClass != null) {
+            umlClass = getUmlClassDao().getById(umlClass.getId());
+        }
+
+        return umlClass;
+
+    }
+
+    public UMLClassDao getUmlClassDao() {
+        return umlClassDao;
+    }
+
+    public void setUmlClassDao(UMLClassDao umlClassDao) {
+        this.umlClassDao = umlClassDao;
+    }
+
+    public TreeFacade getUmlClassTreeFacade() {
+        return umlClassTreeFacade;
+    }
+
+    public void setUmlClassTreeFacade(TreeFacade umlClassTreeFacade) {
+        this.umlClassTreeFacade = umlClassTreeFacade;
+    }
+
+    public UMLClassTreeNodeListener getUmlClassTreeNodeListener() {
+        return umlClassTreeNodeListener;
+    }
+
+    public void setUmlClassTreeNodeListener(
+            UMLClassTreeNodeListener umlClassTreeNodeListener) {
+        this.umlClassTreeNodeListener = umlClassTreeNodeListener;
+    }
 
 }

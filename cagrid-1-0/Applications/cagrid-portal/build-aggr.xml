@@ -1,189 +1,190 @@
 <project>
 
-	<property name="aggr.dir" value="aggr" />
-	<property name="aggr.lib.dir" value="${aggr.dir}/lib" />
-	<property name="aggr.build.dir" value="${aggr.dir}/build" />
-	<property name="aggr.classes.dir" value="${aggr.build.dir}/classes" />
-	<property name="aggr.src.java.dir" value="${aggr.dir}/src/java" />
+    <property name="aggr.dir" value="aggr"/>
+    <property name="aggr.lib.dir" value="${aggr.dir}/lib"/>
+    <property name="aggr.build.dir" value="${aggr.dir}/build"/>
+    <property name="aggr.classes.dir" value="${aggr.build.dir}/classes"/>
+    <property name="aggr.src.java.dir" value="${aggr.dir}/src/java"/>
 
-	<property name="aggr.test.dir" value="aggr/test" />
-	<property name="aggr.test.lib.dir" value="${aggr.test.dir}/lib" />
-	<property name="aggr.test.build.dir" value="${aggr.test.dir}/build" />
-	<property name="aggr.test.classes.dir"
-		value="${aggr.test.build.dir}/classes" />
-	<property name="aggr.test.src.java.dir"
-		value="${aggr.test.dir}/src/java" />	
-	
-	<property name="aggr.debug" value="true"/>
-	
-	<path id="aggr.compile.cp">
-		<path refid="db.compile.cp"/>
-		<pathelement location="${db.classes.dir}"/>
-		<fileset dir="${db.lib.dir}">
-			<include name="hibernate/search/*.jar"/>
-		</fileset>
-		<fileset dir="${aggr.lib.dir}">
-			<!-- TODO: sort this out a bit more -->
-			<include name="**/*.jar"/>
-		</fileset>
-		<fileset dir="${aggr.lib.dir}/globus">
-			<include name="*.jar"/>
-		</fileset>
-	</path>
-	
-	<path id="aggr.test.compile.cp">
-		<path refid="aggr.compile.cp"/>
-		<path refid="db.test.compile.cp"/>
-		<pathelement location="${aggr.classes.dir}"/>
-		<pathelement location="${db.test.classes.dir}" />		
-	</path>
-	
-	<path id="aggr.run.cp">
-		<pathelement location="${aggr.classes.dir}"/>
-		<path refid="db.run.cp"/>
-		<path refid="aggr.compile.cp"/>
-	</path>
-	
-	<path id="aggr.test.run.cp">
-		<path refid="aggr.run.cp" />
-		<path refid="aggr.test.compile.cp" />
-		<pathelement location="${aggr.test.classes.dir}" />
-		<pathelement location="${aggr.test.dir}"/>
-		<pathelement location="aggr/test/build/classes"/>
-		<path refid="db.test.run.cp" />
-	</path>	
-	
-	<target name="aggr:compile" depends="db:compile">
-		<mkdir dir="${aggr.classes.dir}" />
-		<javac srcdir="${aggr.src.java.dir}" destdir="${aggr.classes.dir}"
-			debug="${aggr.debug}">
-			<classpath refid="aggr.compile.cp" />
-		</javac>	
-	</target>
-	
-	<target name="aggr:compile-test" depends="aggr:compile, db:compile-test">
-		<mkdir dir="${aggr.test.classes.dir}" />
-		<javac srcdir="${aggr.test.src.java.dir}" destdir="${aggr.test.classes.dir}"
-			debug="true">
-			<classpath refid="aggr.test.compile.cp" />
-		</javac>	
-	</target>
-	
-	
-	<target name="aggr:prepare-test-cp"
-		depends="aggr:compile-test">
-		
-		<copy todir="${aggr.test.classes.dir}" overwrite="true">
-			<fileset dir="${db.dir}/etc">
-				<include name="*.properties" />
-				<include name="*.xml" />
-				<include name="*.wsdd" />
-			</fileset>
-		</copy>
+    <property name="aggr.test.dir" value="aggr/test"/>
+    <property name="aggr.test.lib.dir" value="${aggr.test.dir}/lib"/>
+    <property name="aggr.test.build.dir" value="${aggr.test.dir}/build"/>
+    <property name="aggr.test.classes.dir"
+              value="${aggr.test.build.dir}/classes"/>
+    <property name="aggr.test.src.java.dir"
+              value="${aggr.test.dir}/src/java"/>
+
+    <property name="aggr.debug" value="true"/>
+
+    <path id="aggr.compile.cp">
+        <path refid="db.compile.cp"/>
+        <pathelement location="${db.classes.dir}"/>
+        <fileset dir="${db.lib.dir}">
+            <include name="hibernate/search/*.jar"/>
+        </fileset>
+        <fileset dir="${aggr.lib.dir}">
+            <!-- TODO: sort this out a bit more -->
+            <include name="**/*.jar"/>
+        </fileset>
+        <fileset dir="${aggr.lib.dir}/globus">
+            <include name="*.jar"/>
+        </fileset>
+    </path>
+
+    <path id="aggr.test.compile.cp">
+        <path refid="aggr.compile.cp"/>
+        <path refid="db.test.compile.cp"/>
+        <pathelement location="${aggr.classes.dir}"/>
+        <pathelement location="${db.test.classes.dir}"/>
+    </path>
+
+    <path id="aggr.run.cp">
+        <pathelement location="${aggr.classes.dir}"/>
+        <path refid="db.run.cp"/>
+        <path refid="aggr.compile.cp"/>
+    </path>
+
+    <path id="aggr.test.run.cp">
+        <path refid="aggr.run.cp"/>
+        <path refid="aggr.test.compile.cp"/>
+        <pathelement location="${aggr.test.classes.dir}"/>
+        <pathelement location="${aggr.test.dir}"/>
+        <pathelement location="aggr/test/build/classes"/>
+        <path refid="db.test.run.cp"/>
+    </path>
+
+    <target name="aggr:compile" depends="db:compile">
+        <mkdir dir="${aggr.classes.dir}"/>
+        <javac srcdir="${aggr.src.java.dir}" destdir="${aggr.classes.dir}"
+               debug="${aggr.debug}">
+            <classpath refid="aggr.compile.cp"/>
+        </javac>
+    </target>
+
+    <target name="aggr:compile-test" depends="aggr:compile, db:compile-test">
+        <mkdir dir="${aggr.test.classes.dir}"/>
+        <javac srcdir="${aggr.test.src.java.dir}" destdir="${aggr.test.classes.dir}"
+               debug="true">
+            <classpath refid="aggr.test.compile.cp"/>
+        </javac>
+    </target>
 
 
-	</target>
-	
-	<target name="aggr:prepare-run-cp"
-		depends="aggr:compile">
-		
-		<copy todir="${aggr.classes.dir}" overwrite="true">
-			<fileset dir="${db.dir}/etc">
-				<include name="*.properties" />
-				<include name="*.xml" />
-			</fileset>
-			<fileset dir="${aggr.dir}/etc">
-				<include name="*.properties" />
-				<include name="*.xml" />
-				<include name="*.wsdd" />
-				<exclude name="*.sync-description.xml"/>
-			</fileset>
-		</copy>
+    <target name="aggr:prepare-test-cp"
+            depends="aggr:compile-test">
 
-		<antcall target="create-cagridportal-properties">
-			<param name="target.dir" value="${aggr.classes.dir}/cagridportal.properties"/>
-		</antcall>
-			
-		<copy file="${aggr.trust.syncgts.file}"
-			tofile="${aggr.classes.dir}/sync-description.xml"
-			overwrite="true" />			
-			
-	</target>
+        <copy todir="${aggr.test.classes.dir}" overwrite="true">
+            <fileset dir="${db.dir}/etc">
+                <include name="*.properties"/>
+                <include name="*.xml"/>
+                <include name="*.wsdd"/>
+            </fileset>
+        </copy>
 
-	<target name="aggr:test" depends="aggr:prepare-test-cp">
-	
-		<mkdir dir="${aggr.test.build.dir}/junit-reports" />
-		<junit printsummary="yes" showoutput="true" fork="true">
 
-			<classpath refid="aggr.test.run.cp" />
+    </target>
 
-			<formatter type="xml" />
+    <target name="aggr:prepare-run-cp"
+            depends="aggr:compile">
 
-			<batchtest todir="${aggr.test.build.dir}/junit-reports">
-				<fileset dir="${aggr.test.src.java.dir}">
-					<include name="**/*Test.java" />
-				</fileset>
-			</batchtest>
+        <copy todir="${aggr.classes.dir}" overwrite="true">
+            <fileset dir="${db.dir}/etc">
+                <include name="*.properties"/>
+                <include name="*.xml"/>
+            </fileset>
+            <fileset dir="${aggr.dir}/etc">
+                <include name="*.properties"/>
+                <include name="*.xml"/>
+                <include name="*.wsdd"/>
+                <include name="*.dtd"/>
+                <exclude name="*.sync-description.xml"/>
+            </fileset>
+        </copy>
 
-		</junit>
-	</target>
-	
-	<target name="aggr:clean">
-		<delete dir="${aggr.build.dir}"/>
-		<delete dir="${aggr.test.build.dir}"/>
-	</target>
-	
-	<target name="aggr:run-regsvc" depends="aggr:prepare-run-cp">
-		<java classname="gov.nih.nci.cagrid.portal.util.RunRegSvc" classpathref="aggr.run.cp" fork="true" />
-	</target>
+        <antcall target="create-cagridportal-properties">
+            <param name="target.dir" value="${aggr.classes.dir}/cagridportal.properties"/>
+        </antcall>
 
-	<target name="aggr:run-metachange" depends="aggr:prepare-run-cp">
-		<java classname="gov.nih.nci.cagrid.portal.util.RunMetaChange" classpathref="aggr.run.cp" fork="true" />
-	</target>
+        <copy file="${aggr.trust.syncgts.file}"
+              tofile="${aggr.classes.dir}/sync-description.xml"
+              overwrite="true"/>
 
-	<target name="aggr:run-status" depends="aggr:prepare-run-cp">
-		<java classname="gov.nih.nci.cagrid.portal.util.RunStatusChange" classpathref="aggr.run.cp" fork="true" />
-	</target>
+    </target>
 
-	<target name="aggr:run-trust" depends="aggr:prepare-run-cp">
-		<java classname="gov.nih.nci.cagrid.portal.util.RunTrust" classpathref="aggr.run.cp" fork="true" />
-	</target>
+    <target name="aggr:test" depends="aggr:prepare-test-cp">
 
-	<target name="aggr:run-geocode" depends="aggr:prepare-run-cp">
-		<java classname="gov.nih.nci.cagrid.portal.util.RunGeocode" classpathref="aggr.run.cp" fork="true" />
-	</target>
-	
-	<target name="aggr:run-xmlschemas" depends="aggr:prepare-run-cp">
-		<java classname="gov.nih.nci.cagrid.portal.util.RunXmlSchemas" classpathref="aggr.run.cp" fork="true" />
-	</target>
+        <mkdir dir="${aggr.test.build.dir}/junit-reports"/>
+        <junit printsummary="yes" showoutput="true" fork="true">
 
-	<!--
-	<target name="aggr:run-text" depends="aggr:prepare-run-cp">
-		<java classname="gov.nih.nci.cagrid.portal.util.RunTextIndex" classpathref="aggr.run.cp" fork="true" />
-	</target>
-	-->
+            <classpath refid="aggr.test.run.cp"/>
 
-	<target name="aggr:kill-svc-meta" depends="aggr:prepare-run-cp">
-		<java classname="gov.nih.nci.cagrid.portal.util.KillServiceMetadata" classpathref="aggr.run.cp" />
-	</target>
+            <formatter type="xml"/>
 
-	<target name="aggr:kill-grid-svcs" depends="aggr:prepare-run-cp">
-		<java classname="gov.nih.nci.cagrid.portal.util.KillGridServices" classpathref="aggr.run.cp" />
-	</target>
+            <batchtest todir="${aggr.test.build.dir}/junit-reports">
+                <fileset dir="${aggr.test.src.java.dir}">
+                    <include name="**/*Test.java"/>
+                </fileset>
+            </batchtest>
 
-	<target name="aggr:load-workspaces" depends="aggr:prepare-run-cp">
-		<java classname="gov.nih.nci.cagrid.portal.util.WorkspacesLoader" classpathref="aggr.run.cp" fork="true">
-			<arg value="${aggr.dir}/etc/caBIG_Workspaces_participants.xls" />
-		</java>
-	</target>	
-	
-	<target name="aggr:ban-mgr" depends="aggr:prepare-run-cp">
-		<input message="Enter operation:" validargs="ban,unban" addproperty="aggr:banOp"/>
-		<input message="Enter service URL:" addproperty="aggr:banOpUrl"/>
-		<java classname="gov.nih.nci.cagrid.portal.util.ServiceBanManager" classpathref="aggr.run.cp" >
-			<arg value="${aggr:banOp}"/>
-			<arg value="${aggr:banOpUrl}"/>
-		</java>
-	</target>
+        </junit>
+    </target>
+
+    <target name="aggr:clean">
+        <delete dir="${aggr.build.dir}"/>
+        <delete dir="${aggr.test.build.dir}"/>
+    </target>
+
+    <target name="aggr:run-regsvc" depends="aggr:prepare-run-cp">
+        <java classname="gov.nih.nci.cagrid.portal.util.RunRegSvc" classpathref="aggr.run.cp" fork="true"/>
+    </target>
+
+    <target name="aggr:run-metachange" depends="aggr:prepare-run-cp">
+        <java classname="gov.nih.nci.cagrid.portal.util.RunMetaChange" classpathref="aggr.run.cp" fork="true"/>
+    </target>
+
+    <target name="aggr:run-status" depends="aggr:prepare-run-cp">
+        <java classname="gov.nih.nci.cagrid.portal.util.RunStatusChange" classpathref="aggr.run.cp" fork="true"/>
+    </target>
+
+    <target name="aggr:run-trust" depends="aggr:prepare-run-cp">
+        <java classname="gov.nih.nci.cagrid.portal.util.RunTrust" classpathref="aggr.run.cp" fork="true"/>
+    </target>
+
+    <target name="aggr:run-geocode" depends="aggr:prepare-run-cp">
+        <java classname="gov.nih.nci.cagrid.portal.util.RunGeocode" classpathref="aggr.run.cp" fork="true"/>
+    </target>
+
+    <target name="aggr:run-xmlschemas" depends="aggr:prepare-run-cp">
+        <java classname="gov.nih.nci.cagrid.portal.util.RunXmlSchemas" classpathref="aggr.run.cp" fork="true"/>
+    </target>
+
+    <!--
+     <target name="aggr:run-text" depends="aggr:prepare-run-cp">
+         <java classname="gov.nih.nci.cagrid.portal.util.RunTextIndex" classpathref="aggr.run.cp" fork="true" />
+     </target>
+     -->
+
+    <target name="aggr:kill-svc-meta" depends="aggr:prepare-run-cp">
+        <java classname="gov.nih.nci.cagrid.portal.util.KillServiceMetadata" classpathref="aggr.run.cp"/>
+    </target>
+
+    <target name="aggr:kill-grid-svcs" depends="aggr:prepare-run-cp">
+        <java classname="gov.nih.nci.cagrid.portal.util.KillGridServices" classpathref="aggr.run.cp"/>
+    </target>
+
+    <target name="aggr:load-workspaces" depends="aggr:prepare-run-cp">
+        <java classname="gov.nih.nci.cagrid.portal.util.WorkspacesLoader" classpathref="aggr.run.cp" fork="true">
+            <arg value="${aggr.dir}/etc/caBIG_Workspaces_participants.xls"/>
+        </java>
+    </target>
+
+    <target name="aggr:ban-mgr" depends="aggr:prepare-run-cp">
+        <input message="Enter operation:" validargs="ban,unban" addproperty="aggr:banOp"/>
+        <input message="Enter service URL:" addproperty="aggr:banOpUrl"/>
+        <java classname="gov.nih.nci.cagrid.portal.util.ServiceBanManager" classpathref="aggr.run.cp">
+            <arg value="${aggr:banOp}"/>
+            <arg value="${aggr:banOpUrl}"/>
+        </java>
+    </target>
 
 </project>
