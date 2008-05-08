@@ -56,6 +56,7 @@ import com.jgoodies.validation.message.SimpleValidationMessage;
 import com.jgoodies.validation.util.DefaultValidationResultModel;
 import com.jgoodies.validation.util.ValidationUtils;
 import com.jgoodies.validation.view.ValidationComponentUtils;
+import javax.swing.JTabbedPane;
 
 
 public class ModifyService extends JDialog {
@@ -68,7 +69,7 @@ public class ModifyService extends JDialog {
 
     private JButton doneButton = null;
 
-    private JPanel contentPanel = null; // @jve:decl-index=0:visual-constraint="335,10"
+    private JPanel contentPanel = null;
 
     private JLabel serviceNameLabel = null;
 
@@ -105,6 +106,8 @@ public class ModifyService extends JDialog {
     private JPanel infoPanel = null;
 
 	private ResourceFrameworkOptionsManager resourceOptionsPanel = null;
+
+    private JTabbedPane mainTabbedPane = null;
 
 
     /**
@@ -167,7 +170,7 @@ public class ModifyService extends JDialog {
         this.setContentPane(getMainPanel());
         this.setTitle("Modify Service Context");
 
-        this.setSize(new Dimension(315, 275));
+       this.setSize(new Dimension(315, 275));
 
         initValidation();
 
@@ -302,12 +305,10 @@ public class ModifyService extends JDialog {
      */
     private JPanel getMainPanel() {
         if (mainPanel == null) {
-            GridBagConstraints gridBagConstraints12 = new GridBagConstraints();
-            gridBagConstraints12.gridx = 0;
-            gridBagConstraints12.fill = java.awt.GridBagConstraints.BOTH;
-            gridBagConstraints12.weightx = 1.0D;
-            gridBagConstraints12.weighty = 1.0D;
-            gridBagConstraints12.gridy = 1;
+            GridBagConstraints gridBagConstraints15 = new GridBagConstraints();
+            gridBagConstraints15.fill = GridBagConstraints.BOTH;
+            gridBagConstraints15.weighty = 1.0;
+            gridBagConstraints15.weightx = 1.0;
             GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
             gridBagConstraints2.gridx = 0;
             gridBagConstraints2.fill = java.awt.GridBagConstraints.BOTH;
@@ -322,8 +323,7 @@ public class ModifyService extends JDialog {
             mainPanel = new JPanel();
             mainPanel.setLayout(new GridBagLayout());
             mainPanel.add(getButtonPanel(), gridBagConstraints);
-            mainPanel.add(new IconFeedbackPanel(this.validationModel, getContentPanel()), gridBagConstraints2);
-            mainPanel.add(getSecurityPanel(), gridBagConstraints12);
+            mainPanel.add(getMainTabbedPane(), gridBagConstraints15);
         }
         return mainPanel;
     }
@@ -427,12 +427,12 @@ public class ModifyService extends JDialog {
     private JPanel getContentPanel() {
         if (contentPanel == null) {
             GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
-            gridBagConstraints5.gridx = 1;
+            gridBagConstraints5.gridx = 0;
             gridBagConstraints5.weightx = 0.0D;
             gridBagConstraints5.weighty = 0.0D;
             gridBagConstraints5.insets = new Insets(2, 2, 2, 2);
             gridBagConstraints5.fill = GridBagConstraints.BOTH;
-            gridBagConstraints5.gridy = 0;
+            gridBagConstraints5.gridy = 1;
             GridBagConstraints gridBagConstraints21 = new GridBagConstraints();
             gridBagConstraints21.gridx = 0;
             gridBagConstraints21.weightx = 1.0D;
@@ -449,7 +449,6 @@ public class ModifyService extends JDialog {
             serviceNameLabel.setText("Service Name");
             contentPanel = new JPanel();
             contentPanel.setLayout(new GridBagLayout());
-            contentPanel.setSize(new Dimension(494, 153));
             contentPanel.add(getInfoPanel(), gridBagConstraints21);
             contentPanel.add(getResourceOptionsPanel(), gridBagConstraints5);
         }
@@ -568,39 +567,39 @@ public class ModifyService extends JDialog {
 			gridBagConstraints14.fill = GridBagConstraints.BOTH;
 			gridBagConstraints14.gridheight = 3;
 			gridBagConstraints14.gridx = 1;
-			gridBagConstraints14.gridy = 3;
+			gridBagConstraints14.gridy = 6;
 			gridBagConstraints14.weightx = 1.0;
 			gridBagConstraints14.weighty = 1.0;
 			gridBagConstraints14.insets = new Insets(0, 2, 0, 2);
 			GridBagConstraints gridBagConstraints13 = new GridBagConstraints();
 			gridBagConstraints13.fill = GridBagConstraints.HORIZONTAL;
-			gridBagConstraints13.gridwidth = 3;
+			gridBagConstraints13.gridwidth = 1;
 			gridBagConstraints13.gridx = 0;
-			gridBagConstraints13.gridy = 3;
+			gridBagConstraints13.gridy = 6;
 			gridBagConstraints13.insets = new Insets(0, 2, 0, 2);
 			GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
 			gridBagConstraints8.fill = GridBagConstraints.HORIZONTAL;
 			gridBagConstraints8.gridx = 1;
-			gridBagConstraints8.gridy = 2;
+			gridBagConstraints8.gridy = 4;
 			gridBagConstraints8.weightx = 1.0;
 			gridBagConstraints8.weighty = 1.0D;
 			gridBagConstraints8.insets = new Insets(0, 2, 0, 2);
 			GridBagConstraints gridBagConstraints7 = new GridBagConstraints();
 			gridBagConstraints7.fill = GridBagConstraints.HORIZONTAL;
 			gridBagConstraints7.gridx = 0;
-			gridBagConstraints7.gridy = 2;
+			gridBagConstraints7.gridy = 4;
 			gridBagConstraints7.insets = new Insets(0, 2, 0, 2);
 			GridBagConstraints gridBagConstraints10 = new GridBagConstraints();
 			gridBagConstraints10.fill = GridBagConstraints.HORIZONTAL;
 			gridBagConstraints10.gridx = 1;
-			gridBagConstraints10.gridy = 1;
+			gridBagConstraints10.gridy = 2;
 			gridBagConstraints10.weightx = 1.0;
 			gridBagConstraints10.weighty = 1.0D;
 			gridBagConstraints10.insets = new Insets(0, 2, 0, 2);
 			GridBagConstraints gridBagConstraints9 = new GridBagConstraints();
 			gridBagConstraints9.fill = GridBagConstraints.HORIZONTAL;
 			gridBagConstraints9.gridx = 0;
-			gridBagConstraints9.gridy = 1;
+			gridBagConstraints9.gridy = 2;
 			gridBagConstraints9.insets = new Insets(0, 2, 0, 2);
 			GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
 			gridBagConstraints4.fill = GridBagConstraints.HORIZONTAL;
@@ -641,4 +640,19 @@ public class ModifyService extends JDialog {
 		}
 		return resourceOptionsPanel;
 	}
+
+
+    /**
+     * This method initializes mainTabbedPane	
+     * 	
+     * @return javax.swing.JTabbedPane	
+     */
+    private JTabbedPane getMainTabbedPane() {
+        if (mainTabbedPane == null) {
+            mainTabbedPane = new JTabbedPane();
+            mainTabbedPane.addTab("Information", IntroduceLookAndFeel.getInformIcon(), new IconFeedbackPanel(this.validationModel, getContentPanel()), null);
+            mainTabbedPane.addTab("Security", IntroduceLookAndFeel.getKeyIcon(), getSecurityPanel(), null);
+        }
+        return mainTabbedPane;
+    }
 } // @jve:decl-index=0:visual-constraint="10,10"

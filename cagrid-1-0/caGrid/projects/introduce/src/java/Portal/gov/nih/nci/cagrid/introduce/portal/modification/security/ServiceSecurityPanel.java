@@ -48,6 +48,7 @@ import org.cagrid.gaards.ui.common.CredentialPanel;
 import org.cagrid.gaards.ui.gridgrouper.expressioneditor.GridGrouperExpressionEditor;
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.utils.CompositeErrorDialog;
+import java.awt.Insets;
 
 
 /**
@@ -236,8 +237,13 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
      */
     private JPanel getSecureCommunicationPanel() {
         if (secureCommunicationPanel == null) {
+            GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
+            gridBagConstraints8.insets = new Insets(0, 0, 0, 0);
+            gridBagConstraints8.gridy = 0;
+            gridBagConstraints8.gridx = 0;
             secureCommunicationPanel = new JPanel();
-            secureCommunicationPanel.add(getChoicePanel());
+            secureCommunicationPanel.setLayout(new GridBagLayout());
+            secureCommunicationPanel.add(getChoicePanel(), gridBagConstraints8);
         }
         return secureCommunicationPanel;
     }
@@ -646,15 +652,32 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
      */
     private JPanel getChoicePanel() {
         if (choicePanel == null) {
+            GridBagConstraints gridBagConstraints15 = new GridBagConstraints();
+            gridBagConstraints15.insets = new Insets(0, 0, 0, 0);
+            gridBagConstraints15.gridy = 0;
+            gridBagConstraints15.gridx = 3;
+            GridBagConstraints gridBagConstraints14 = new GridBagConstraints();
+            gridBagConstraints14.insets = new Insets(0, 5, 0, 0);
+            gridBagConstraints14.gridy = 0;
+            gridBagConstraints14.gridx = 2;
+            GridBagConstraints gridBagConstraints13 = new GridBagConstraints();
+            gridBagConstraints13.insets = new Insets(0, 0, 0, 5);
+            gridBagConstraints13.gridy = 0;
+            gridBagConstraints13.gridx = 1;
+            GridBagConstraints gridBagConstraints9 = new GridBagConstraints();
+            gridBagConstraints9.insets = new Insets(0, 0, 0, 0);
+            gridBagConstraints9.gridy = 0;
+            gridBagConstraints9.gridx = 0;
             Custom = new JLabel();
             Custom.setText("Custom");
             jLabel1 = new JLabel();
             jLabel1.setText("None");
             choicePanel = new JPanel();
-            choicePanel.add(getNoneButton());
-            choicePanel.add(jLabel1);
-            choicePanel.add(getCustomButton());
-            choicePanel.add(Custom);
+            choicePanel.setLayout(new GridBagLayout());
+            choicePanel.add(getNoneButton(), gridBagConstraints9);
+            choicePanel.add(jLabel1, gridBagConstraints13);
+            choicePanel.add(getCustomButton(), gridBagConstraints14);
+            choicePanel.add(Custom, gridBagConstraints15);
         }
         return choicePanel;
     }
@@ -834,13 +857,13 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
         if (generalSecurity == null) {
             GridBagConstraints gridBagConstraints12 = new GridBagConstraints();
             gridBagConstraints12.anchor = java.awt.GridBagConstraints.NORTHWEST;
-            gridBagConstraints12.insets = new java.awt.Insets(5, 5, 5, 5);
+            gridBagConstraints12.insets = new Insets(2, 2, 2, 2);
             gridBagConstraints12.gridx = 1;
             gridBagConstraints12.gridy = 0;
             gridBagConstraints12.weightx = 1.0;
             gridBagConstraints12.fill = GridBagConstraints.HORIZONTAL;
             GridBagConstraints gridBagConstraints21 = new GridBagConstraints();
-            gridBagConstraints21.insets = new java.awt.Insets(5, 5, 5, 5);
+            gridBagConstraints21.insets = new Insets(2, 2, 2, 2);
             gridBagConstraints21.gridy = 0;
             gridBagConstraints21.gridx = 0;
             jLabel = new JLabel();
@@ -878,7 +901,7 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
     private JPanel getSelectPanel() {
         if (selectPanel == null) {
             GridBagConstraints gridBagConstraints24 = new GridBagConstraints();
-            gridBagConstraints24.insets = new java.awt.Insets(5, 5, 5, 5);
+            gridBagConstraints24.insets = new Insets(2, 2, 2, 2);
             gridBagConstraints24.gridy = 0;
             gridBagConstraints24.anchor = java.awt.GridBagConstraints.WEST;
             gridBagConstraints24.gridx = 2;
@@ -888,9 +911,9 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
             gridBagConstraints23.gridy = 0;
             gridBagConstraints23.weightx = 1.0;
             gridBagConstraints23.anchor = java.awt.GridBagConstraints.WEST;
-            gridBagConstraints23.insets = new java.awt.Insets(5, 5, 5, 5);
+            gridBagConstraints23.insets = new Insets(2, 2, 2, 2);
             GridBagConstraints gridBagConstraints22 = new GridBagConstraints();
-            gridBagConstraints22.insets = new java.awt.Insets(5, 5, 5, 5);
+            gridBagConstraints22.insets = new Insets(2, 2, 2, 2);
             gridBagConstraints22.gridy = 0;
             gridBagConstraints22.anchor = java.awt.GridBagConstraints.WEST;
             gridBagConstraints22.gridx = 0;
@@ -1238,19 +1261,19 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 
             GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
             gridBagConstraints5.fill = java.awt.GridBagConstraints.HORIZONTAL;
-            gridBagConstraints5.gridx = 1;
-            gridBagConstraints5.gridy = 1;
+            gridBagConstraints5.gridx = 3;
+            gridBagConstraints5.gridy = 0;
             gridBagConstraints5.insets = new java.awt.Insets(2, 2, 2, 2);
             gridBagConstraints5.weightx = 1.0;
             GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
-            gridBagConstraints3.gridx = 0;
+            gridBagConstraints3.gridx = 2;
             gridBagConstraints3.insets = new java.awt.Insets(2, 2, 2, 2);
-            gridBagConstraints3.gridy = 1;
+            gridBagConstraints3.gridy = 0;
             GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
             gridBagConstraints2.fill = java.awt.GridBagConstraints.HORIZONTAL;
             gridBagConstraints2.gridx = 1;
             gridBagConstraints2.gridy = 0;
-            gridBagConstraints2.insets = new java.awt.Insets(2, 2, 2, 2);
+            gridBagConstraints2.insets = new Insets(2, 2, 2, 10);
             gridBagConstraints2.weightx = 1.0;
             GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
             gridBagConstraints1.gridx = 0;
