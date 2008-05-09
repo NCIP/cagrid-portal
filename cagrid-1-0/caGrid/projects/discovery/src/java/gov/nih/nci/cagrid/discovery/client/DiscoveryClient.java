@@ -459,7 +459,22 @@ public class DiscoveryClient {
      */
     public EndpointReferenceType[] getAllDataServices() throws RemoteResourcePropertyRetrievalException,
         QueryInvalidException, ResourcePropertyRetrievalException {
-        return discoverByFilter(DATA_MD_PATH);
+        return discoverByFilter(MD_PATH + " and " + DATA_MD_PATH);
+    }
+
+
+    /**
+     * Query the registry for all registered analytical services (those which
+     * are metadata-compliant and not data services)
+     * 
+     * @return EndpointReferenceType[] contain all registered services
+     * @throws ResourcePropertyRetrievalException
+     * @throws QueryInvalidException
+     * @throws RemoteResourcePropertyRetrievalException
+     */
+    public EndpointReferenceType[] getAllAnalyticalServices() throws RemoteResourcePropertyRetrievalException,
+        QueryInvalidException, ResourcePropertyRetrievalException {
+        return discoverByFilter(MD_PATH + " and not(" + DATA_MD_PATH + ")");
     }
 
 

@@ -20,8 +20,7 @@ public class MetadataUtils {
      * Obtain the service metadata from the specified service.
      * 
      * @param serviceEPR
-     * @return
-     *      The service metadata from the targeted service
+     * @return The service metadata from the targeted service
      * @throws InvalidResourcePropertyException
      * @throws RemoteResourcePropertyRetrievalException
      * @throws ResourcePropertyRetrievalException
@@ -45,8 +44,7 @@ public class MetadataUtils {
      * Obtain the data service metadata from the specified service.
      * 
      * @param serviceEPR
-     * @return
-     *      The domain model from the targeted data service
+     * @return The domain model from the targeted data service
      * @throws InvalidResourcePropertyException
      * @throws RemoteResourcePropertyRetrievalException
      * @throws ResourcePropertyRetrievalException
@@ -63,6 +61,65 @@ public class MetadataUtils {
             throw new ResourcePropertyRetrievalException("Unable to deserailize DomainModel: " + e.getMessage(), e);
         }
         return result;
+    }
+
+
+    /**
+     * Determines if the given service is a data service
+     * 
+     * @param serviceEPR
+     * @return true iff the service is a data service
+     * @throws RemoteResourcePropertyRetrievalException
+     * @throws ResourcePropertyRetrievalException
+     */
+    public static boolean isDataService(EndpointReferenceType serviceEPR) throws InvalidResourcePropertyException,
+        RemoteResourcePropertyRetrievalException, ResourcePropertyRetrievalException {
+
+        DomainModel domainModel = null;
+        ServiceMetadata serviceMetadata = null;
+        try {
+            domainModel = getDomainModel(serviceEPR);
+            serviceMetadata = getServiceMetadata(serviceEPR);
+        } catch (InvalidResourcePropertyException e) {
+            // if it complains about not having the necessary metadata, its not
+            // a data service
+            return false;
+        }
+
+        return domainModel != null && serviceMetadata != null;
+    }
+
+
+    /**
+     * Determines if the given service is an analytical service (not a data
+     * service)
+     * 
+     * @param serviceEPR
+     * @return true iff the service is a data service
+     * @throws RemoteResourcePropertyRetrievalException
+     * @throws ResourcePropertyRetrievalException
+     */
+    public static boolean isAnalyticalService(EndpointReferenceType serviceEPR)
+        throws InvalidResourcePropertyException, RemoteResourcePropertyRetrievalException,
+        ResourcePropertyRetrievalException {
+
+        DomainModel domainModel = null;
+        ServiceMetadata serviceMetadata = null;
+        try {
+            serviceMetadata = getServiceMetadata(serviceEPR);
+        } catch (InvalidResourcePropertyException e) {
+            // if it complains about not having the necessary metadata, its not
+            // an analytical service
+            return false;
+        }
+        try {
+            domainModel = getDomainModel(serviceEPR);
+        } catch (InvalidResourcePropertyException e) {
+            // this is actually expected; the service should not be providing
+            // data service metadata
+        }
+
+        return domainModel == null && serviceMetadata != null;
     }
 
 
@@ -89,8 +146,7 @@ public class MetadataUtils {
      * thown.
      * 
      * @param xmlReader
-     * @return
-     *      The deserialized service metadata
+     * @return The deserialized service metadata
      * @throws Exception
      */
     public static ServiceMetadata deserializeServiceMetadata(Reader xmlReader) throws Exception {
@@ -124,8 +180,7 @@ public class MetadataUtils {
      * IllegalArgumentException will be thown.
      * 
      * @param xmlReader
-     * @return
-     *      The deserialized domain model
+     * @return The deserialized domain model
      * @throws Exception
      */
     public static DomainModel deserializeDomainModel(Reader xmlReader) throws Exception {

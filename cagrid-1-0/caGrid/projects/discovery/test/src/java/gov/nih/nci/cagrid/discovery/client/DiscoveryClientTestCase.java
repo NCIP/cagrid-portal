@@ -28,8 +28,8 @@ public class DiscoveryClientTestCase extends TestCase {
 
     private static final String NO_SERVICES_RESOURCE = "noServices.xml";
     private static final String REGISTERED_SERVICES = "RegisteredServices.xml";
-    private static final String METADATA_XSD_PATH = "ext" + File.separator + "dependencies" + File.separator + "test" + File.separator + "xsd" + File.separator + "cagrid"
-        + File.separator + "types" + File.separator;
+    private static final String METADATA_XSD_PATH = "ext" + File.separator + "dependencies" + File.separator + "test"
+        + File.separator + "xsd" + File.separator + "cagrid" + File.separator + "types" + File.separator;
     private static final String METADATA_XSD = METADATA_XSD_PATH + "caGridMetadata.xsd";
     private static final String DATA_METADATA_XSD = METADATA_XSD_PATH + "data" + File.separator + "data.xsd";
 
@@ -58,6 +58,7 @@ public class DiscoveryClientTestCase extends TestCase {
     private static final int BY_DS_ASSOC = 16;
     private static final int BY_DS_PERM = 17;
     private static final int ALL_DS = 18;
+    private static final int ALL_AS = 19;
 
     private EndpointReferenceType service1EPR = null;
     private EndpointReferenceType service2EPR = null;
@@ -403,6 +404,27 @@ public class DiscoveryClientTestCase extends TestCase {
     }
 
 
+    public void testGetAllAnalyticalServices() {
+        final int operation = ALL_AS;
+        EndpointReferenceType[] services = null;
+        EndpointReferenceType[] data_services = null;
+        EndpointReferenceType[] all_services = null;
+
+        services = invokeDiscoveryMethod(NO_SERVICES_RESOURCE, operation, null);
+        assertEquals(0, services.length);
+
+        data_services = invokeDiscoveryMethod(REGISTERED_SERVICES, ALL_DS, null);
+        all_services = invokeDiscoveryMethod(REGISTERED_SERVICES, ALL_SERVICES, true);
+        services = invokeDiscoveryMethod(REGISTERED_SERVICES, operation, null);
+        assertTrue("The number of analytical services returned (" + services.length
+            + ") should be equal to the total number of metadata compliant services (" + all_services.length
+            + ") minus the number of data services (" + data_services.length + ").", all_services.length
+            - data_services.length == services.length);
+
+        assertResultsEqual(new EndpointReferenceType[]{this.service1EPR, this.service3EPR}, services);
+    }
+
+
     public void testDiscoverDataServicesByDomainModel() {
         final int operation = BY_DS_MODEL;
         EndpointReferenceType[] services = null;
@@ -646,6 +668,9 @@ public class DiscoveryClientTestCase extends TestCase {
                     break;
                 case ALL_DS :
                     eprs = client.getAllDataServices();
+                    break;
+                case ALL_AS :
+                    eprs = client.getAllAnalyticalServices();
                     break;
                 case BY_CODE :
                     eprs = client.discoverServicesByConceptCode((String) criteria);
