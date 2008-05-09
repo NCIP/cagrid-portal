@@ -67,7 +67,6 @@ public class BusyDialog extends JDialog {
             gridBagConstraints.gridy = 1;
             infoLabel = new JLabel();
             infoLabel.setText(" ");
-            infoLabel.setForeground(new java.awt.Color(153, 153, 255));
             infoLabel.setFont(new Font("Lucida Grande", Font.ITALIC, 12));
             infoLabel.setHorizontalAlignment(SwingConstants.TRAILING);
             GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
@@ -104,7 +103,7 @@ public class BusyDialog extends JDialog {
     
     public void setProgressText(String progressText){
         //this.getProgress().setString(progressText);
-        this.infoLabel.setText(progressText + "/t");
+        this.infoLabel.setText(progressText + "\t");
     }
 
 

@@ -1,7 +1,14 @@
 1.2 - 1.3
 -- Fixed circular schema bug in filesystem data type discovery tool
 -- Fixed bug in updater that was looking in the wrong place for introduce.extension.properties and template when trying to set the patch version
-
+-- Added new build-deploy.xml so fix problems with undeploy (upgrader needs to handle the copy in)
+-- New heuristic for schema imports
+	-- if introduce imports the schema it will only set namespace excludes or type maps for that schema
+	-- if it is desired to do this for the schemas that schema imports than those schemas must be added and handled
+	   appropriatly individually.  This is different than in prior versions.
+	-- Prior versions of introduce would simple namespace exclude any namespace that was imported from a schema
+	   that was set to generate stubs false.  However this is not always the desired behavior
+-- Added button to enable user to control whether or not stubs will be generated for imported schema.
 
 1.1 - 1.2
 -- Removed ServiceTasks JDOM dependency to the services lib directory and moved it to the tools directory.
