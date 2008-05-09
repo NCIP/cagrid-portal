@@ -88,6 +88,16 @@ public class ServiceMetadataCreationPostProcessor implements CreationExtensionPo
             + File.separator + MetadataConstants.CAGRID_METADATA_SCHEMA, new File(schemaDir));
         cagridMdNamespace.setGenerateStubs(Boolean.FALSE);
         newNamespaces.add(cagridMdNamespace);
+        //add service metadata namespace
+        NamespaceType serviceMdNamespace = CommonTools.createNamespaceType(schemaDir + File.separator + "xsd"
+            + File.separator + MetadataConstants.SERVICE_METADATA_SCHEMA, new File(schemaDir));
+        serviceMdNamespace.setGenerateStubs(Boolean.FALSE);
+        newNamespaces.add(serviceMdNamespace);
+        //add common metadata namespace
+        NamespaceType commonMdNamespace = CommonTools.createNamespaceType(schemaDir + File.separator + "xsd"
+            + File.separator + MetadataConstants.COMMON_METADATA_SCHEMA, new File(schemaDir));
+        commonMdNamespace.setGenerateStubs(Boolean.FALSE);
+        newNamespaces.add(commonMdNamespace);
 
         // add those new namespaces to the list of namespace types
         NamespaceType[] nsArray = new NamespaceType[newNamespaces.size()];
@@ -115,6 +125,7 @@ public class ServiceMetadataCreationPostProcessor implements CreationExtensionPo
         ResourcePropertyType[] metadataArray = propsList.getResourceProperty();
         if (metadataArray == null || metadataArray.length == 0) {
             metadataArray = new ResourcePropertyType[]{serviceMetadata};
+            
         } else {
             ResourcePropertyType[] tmpArray = new ResourcePropertyType[metadataArray.length + 1];
             System.arraycopy(metadataArray, 0, tmpArray, 0, metadataArray.length);
@@ -129,7 +140,6 @@ public class ServiceMetadataCreationPostProcessor implements CreationExtensionPo
         return props.getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR) + File.separator + "schema"
             + File.separator + props.getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME);
     }
-
 
     private String getServiceLibDir(Properties props) {
         return props.getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR) + File.separator + "lib";
