@@ -2730,11 +2730,6 @@ public class MethodViewer extends javax.swing.JDialog {
 		parser.parse(new File(baseSchemaDir.getAbsolutePath() + File.separator
 				+ namespace.getLocation()));
 
-		parser.parse(new File(CommonTools.getGlobusLocation() + File.separator
-				+ "share" + File.separator + "schema" + File.separator + "wsrf"
-				+ File.separator + "faults" + File.separator
-				+ "WS-BaseFaults.xsd"));
-
 		XSSchemaSet sset = parser.getResult();
 		XSComplexType bfct = sset.getComplexType(
 				IntroduceConstants.BASEFAULTS_NAMESPACE, "BaseFaultType");
