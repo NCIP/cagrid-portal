@@ -1,7 +1,6 @@
 package gov.nih.nci.cagrid.authentication.client;
 
 import gov.nih.nci.cagrid.authentication.bean.Credential;
-import gov.nih.nci.cagrid.authentication.common.SAMLUtils;
 import gov.nih.nci.cagrid.authentication.stubs.types.AuthenticationProviderFault;
 import gov.nih.nci.cagrid.authentication.stubs.types.InsufficientAttributeFault;
 import gov.nih.nci.cagrid.authentication.stubs.types.InvalidCredentialFault;
@@ -10,6 +9,8 @@ import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
 import java.rmi.RemoteException;
 
 import org.apache.axis.types.URI.MalformedURIException;
+import org.cagrid.gaards.authentication.client.AuthenticationServiceClient;
+import org.cagrid.gaards.saml.encoding.SAMLUtils;
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
