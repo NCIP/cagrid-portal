@@ -27,7 +27,7 @@
 	<property name="ext.dependencies.dir" location="${ext.dir}/dependencies" />
 	<property name="ext.targetgrid.dir" location="${ext.dir}/target_grid" />
 	<property name="ext.endorsed.dir" location="${ext.dependencies.dir}/endorsed/jars" />
-	<property name="ext.lib.dir" location="${ext.dependencies.dir}/service/jars" />	
+	<property name="ext.lib.dir" location="${ext.dependencies.dir}/service/jars" />
 	<property name="ext.test.lib" value="${ext.dependencies.dir}/test/jars" />
 
 	<!--need to preset these-->
@@ -39,6 +39,8 @@
 	<property name="test.build.dest" value="${build.dir}/test/classes" />
 	<property name="test.dir" value="test" />
 	<property name="test.src.dir" value="${test.dir}/src" />
+
+
 
 	<!-- ============================================================== -->
 	<!-- Create any extended Classpaths here                            -->
@@ -62,7 +64,13 @@
 		</path>
 		<path id="run.extended.classpath">
 		</path>
+		<path id="tasks.run.extended.classpath">
+			<fileset dir="${ext.lib.dir}">
+				<include name="*.jar" />
+			</fileset>
+		</path>
 	</target>
+
 
 	<!-- ============================================================== -->
 	<!-- Pre Init Target                                                -->
@@ -77,6 +85,7 @@
 	<target name="postInit">
 
 	</target>
+
 
 
 	<!-- ============================================================== -->
@@ -142,35 +151,6 @@
 
 	</target>
 
-	<!-- Create a JAR file with the implementation classes -->
-	<target name="jar" depends="compile">
-		<jar jarfile="${build.lib.dir}/${client.jar.name}" basedir="${build.dest}">
-			<include name="**/client/**" />
-		</jar>
-
-
-		<copy toDir="${build.dest}" overwrite="true">
-			<fileset dir="resources">
-				<include name="authentication-config.xml" />
-			</fileset>
-			<filterset>
-				<filter token="CSM_APP_CONTEXT" value="${csm.app.context}" />
-				<filter token="SAML_PROVIDER_CRT" value="${saml.provider.crt}" />
-				<filter token="SAML_PROVIDER_KEY" value="${saml.provider.key}" />
-				<filter token="SAML_PROVIDER_PWD" value="${saml.provider.pwd}" />
-			</filterset>
-		</copy>
-		<jar jarfile="${build.lib.dir}/${service.jar.name}" basedir="${build.dest}">
-			<include name="**/service/**" />
-			<include name="authentication-config.xml" />
-		</jar>
-		<jar jarfile="${build.lib.dir}/${common.jar.name}" basedir="${build.dest}">
-			<include name="**/*" />
-			<exclude name="**/client/**" />
-			<exclude name="**/service/**" />
-		</jar>
-	</target>
-
 	<!-- ============================================================== -->
 	<!-- Post Jar Build Target                                          -->
 	<!-- ============================================================== -->
@@ -226,7 +206,7 @@
 			<include name="*.template" />
 		</fileset>
 		<!-- We need to basically reverse the mapper used in the copy to 
-                 identify the target files -->
+	                 identify the target files -->
 		<fileset id="template.results.fileset" dir="${basedir}">
 			<include name="*" />
 			<present targetdir="${basedir}">
@@ -249,7 +229,7 @@
 		</copy>
 
 		<!-- Next, re-template all the files, if either the filter value files or the template files 
-                 are newer than the their targets -->
+	                 are newer than the their targets -->
 		<outofdate verbose="true">
 			<sourcefiles>
 				<pathelement path="${ext.targetgrid.dir}/service_urls.properties" />
@@ -269,33 +249,14 @@
 	</target>
 
 
-
-	<!-- call the test target for each project and aggregates the log resutls  -->
+	<!-- ============================================================== -->
+	<!-- Call any tests.                                                -->
+	<!-- ============================================================== -->
 	<target name="test" depends="checkGlobus" description="Runs the service's tests.">
 		<echo message="Test results dir: ${junit.results.dir}" />
 		<mkdir dir="${junit.results.dir}" />
 		<junit dir="${basedir}" printsummary="yes" showoutput="true">
-
-
-			<jvmarg value="-Dgov.nih.nci.security.configFile=test/resources/ApplicationSecurityConfig.xml" />
-
-			<jvmarg value="-Djava.security.auth.login.config=test/resources/jaas.config" />
-
-			<classpath>
-				<pathelement location="${test.build.dest}" />
-				<fileset dir="${env.GLOBUS_LOCATION}/lib">
-					<include name="log4j-1.2.8.jar" />
-				</fileset>
-				<fileset dir="${ext.lib.dir}">
-					<include name="csmapi.jar" />
-					<include name="mysql-connector-java-*-bin.jar" />
-					<include name="jdom*.jar" />
-					<include name="clm.jar" />
-				</fileset>
-				<fileset dir="${build.lib.dir}">
-					<include name="*.jar" />
-				</fileset>
-			</classpath>
+			<classpath refid="test.run.classpath" />
 			<formatter type="xml" />
 			<batchtest fork="yes" todir="${junit.results.dir}">
 				<fileset dir="${test.src.dir}">
@@ -305,5 +266,6 @@
 			</batchtest>
 		</junit>
 	</target>
+
 
 </project>

@@ -1,5 +1,4 @@
-bin
+deploy.properties
 build
 ext
-cagrid_AuthenticationService.gar
-deploy.properties
+bin

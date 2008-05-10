@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jndiConfig xmlns="http://wsrf.globus.org/jndi/config">
   <service name="SERVICE-INSTANCE-PREFIX/AuthenticationService">
-    <resource name="configuration" type="gov.nih.nci.cagrid.authentication.service.globus.resource.ResourceConfiguration">
+    <resource name="configuration" type="org.cagrid.gaards.authentication.service.globus.resource.AuthenticationServiceResourceConfiguration">
       <resourceParams>
         <parameter>
           <name>factory</name>
@@ -24,15 +24,27 @@
         </parameter>
       </resourceParams>
     </resource>
-    <resource name="serviceconfiguration" type="gov.nih.nci.cagrid.authentication.service.ServiceConfiguration">
+    <resource name="serviceconfiguration" type="org.cagrid.gaards.authentication.service.AuthenticationServiceConfiguration">
       <resourceParams>
         <parameter>
           <name>factory</name>
           <value>org.globus.wsrf.jndi.BeanFactory</value>
         </parameter>
+        <parameter>
+          <name>etcDirectoryPath</name>
+          <value>ETC-PATH</value>
+        </parameter>
+        <parameter>
+          <name>authenticationConfiguration</name>
+          <value>ETC-PATH/@authenticationConfiguration@</value>
+        </parameter>
+        <parameter>
+          <name>authenticationProperties</name>
+          <value>ETC-PATH/@authenticationProperties@</value>
+        </parameter>
       </resourceParams>
     </resource>
-    <resource name="home" type="gov.nih.nci.cagrid.authentication.service.globus.resource.BaseResourceHome">
+    <resource name="home" type="org.cagrid.gaards.authentication.service.globus.resource.AuthenticationServiceResourceHome">
       <resourceParams>
         <parameter>
           <name>factory</name>
