@@ -43,7 +43,7 @@
 			<list>
 				<value>org.cagrid.gme.domain.XMLSchema</value>
 				<value>org.cagrid.gme.domain.XMLSchemaDocument</value>
-				<value>org.cagrid.gme.domain.XMLSchemaImports</value>
+				<value>org.cagrid.gme.service.domain.XMLSchemaInformation</value>
 			</list>
 		</property>
 	</bean>

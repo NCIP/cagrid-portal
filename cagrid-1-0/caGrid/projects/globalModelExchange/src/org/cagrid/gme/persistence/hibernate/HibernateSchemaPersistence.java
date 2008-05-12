@@ -1,13 +1,13 @@
 package org.cagrid.gme.persistence.hibernate;
 
+import java.net.URI;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.axis.types.URI;
+import org.cagrid.gme.domain.XMLSchema;
 import org.cagrid.gme.persistence.SchemaPersistenceGeneralException;
 import org.cagrid.gme.persistence.SchemaPersistenceI;
-import org.cagrid.gme.protocol.stubs.Schema;
 import org.hibernate.SessionFactory;
 
 
@@ -21,7 +21,7 @@ public class HibernateSchemaPersistence implements SchemaPersistenceI {
     }
 
 
-    public Collection<Schema> getDependingSchemas(URI namespace) throws SchemaPersistenceGeneralException {
+    public Collection<XMLSchema> getDependingSchemas(URI namespace) throws SchemaPersistenceGeneralException {
         // TODO Auto-generated method stub
         return null;
     }
@@ -33,14 +33,28 @@ public class HibernateSchemaPersistence implements SchemaPersistenceI {
     }
 
 
-    public Schema getSchema(URI schemaTargetNamespace) throws SchemaPersistenceGeneralException {
+    public XMLSchema getSchema(URI schemaTargetNamespace) throws SchemaPersistenceGeneralException {
         // TODO Auto-generated method stub
         return null;
     }
 
 
-    public void storeSchemas(Map<Schema, List<URI>> schemasToStore) throws SchemaPersistenceGeneralException {
-        // TODO Auto-generated method stub
+    public void storeSchemas(Map<XMLSchema, List<URI>> schemasToStore) throws SchemaPersistenceGeneralException {
+
+        // foreach XMLSchema
+        // -find PersistableXMLSchema (by URI), create if null, save
+        // -put in hash of URI->PersistableXMLSchema
+        // -foreach URI in import List
+        // --if not in hash
+        // --- getReference to PersistableXMLSchema, put in hash
+
+        // foreach XMLSchema
+        // -get PersistableXMLSchema from hash (assert not null)
+        // -setSchema XMLSchema on PersistableXMLSchema
+        // -foreach URI in import List
+        // --get PersistableXMLSchema from hash (assert not null), add to
+        // importSet
+        // -set importSet on PersistableXMLSchema
 
     }
 

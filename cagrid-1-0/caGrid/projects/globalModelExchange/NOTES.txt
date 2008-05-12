@@ -1,7 +1,7 @@
 =================================================================================
 Features/Issues:
 =================================================================================
-if we add more deploy configurable things (policy, security, persistence, etc), we may want
+[DONE]if we add more deploy configurable things (policy, security, persistence, etc), we may want
 to just use spring to initialize some GME configuration file, and make the spring conf the only
 deploy configuration (the serviceimpl would use spring to init the GME) 
 
@@ -45,7 +45,7 @@ do we need to do anything for xsi stuff.. like xsi:schemaLocation?
 
 need to be sure to require use of targetNamespace, even though XSOM may not
 
-we *could* support schema "includes" now
+[DONE]we *could* support schema "includes" now
   - this is fairly common in existing large schemas
   - i don't see any real problems with this but we may want to support multiple schema
     texts with this and this will require some more thought on the database
@@ -68,7 +68,7 @@ probably should allow even published/deprecated schemas to be removed
     be sure to only do it if there is no one referencing it and warn if there is
 
 need to work out algorithm for submission (depends on how we impl the db layer):
-see GME_submission.doc in docs dir
+-see GME_submission.doc in docs dir
    
 could support a GME "Context" as a basic container for everything
   - all namespaces/XSD/etc would be associated with a Context

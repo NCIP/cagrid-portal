@@ -16,8 +16,10 @@ import org.springframework.core.io.FileSystemResource;
  * @created by Introduce Toolkit version 1.0
  */
 public class GlobalModelExchangeImpl extends GlobalModelExchangeImplBase {
+    
     protected static Log LOG = LogFactory.getLog(GlobalModelExchangeImpl.class.getName());
-
+    
+    protected static final String GME_BEAN_NAME = "gme";
     protected GME gme = null;
 
 
@@ -34,7 +36,7 @@ public class GlobalModelExchangeImpl extends GlobalModelExchangeImplBase {
             cfg.setLocation(gmePropertiesResource);
             cfg.postProcessBeanFactory(factory);
 
-            gme = (GME) factory.getBean("gme", GME.class);
+            gme = (GME) factory.getBean(GME_BEAN_NAME, GME.class);
 
         } catch (Exception e) {
             String message = "Problem inititializing GME while loading configuration:" + e.getMessage();

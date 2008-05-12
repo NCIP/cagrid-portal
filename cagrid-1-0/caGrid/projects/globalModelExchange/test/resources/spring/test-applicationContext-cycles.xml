@@ -7,20 +7,18 @@
 	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
 	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd">
 
-	<description>This document is loaded in the context of tests, in addition to the main document.</description>
+	<description>This document is loaded in the context of tests, and defines resources used for
+		testing cycles.</description>
 
-	<import resource="spring/test-applicationContext-cycles.xml"/>
 
-	<bean id="propertyConfigurer"
-		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-		<property name="locations">
+	<bean id="testSchemaCycleA" parent="testSchemaTemplate">
+		<constructor-arg type="java.net.URI" value="gme://a"/>
+		<constructor-arg>
 			<list>
-				<value>classpath*:gme.test.properties</value>
+				<bean class="java.io.File">
+					<constructor-arg value="test/resources/schema/simple/A.xsd"/>
+				</bean>
 			</list>
-		</property>
+		</constructor-arg>
 	</bean>
-
-	<bean id="testSchemaTemplate" class="org.cagrid.gme.common.XSDUtil"
-		factory-method="createSchema" abstract="true"/>
-
 </beans>

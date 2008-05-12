@@ -2,8 +2,6 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="test/src"/>
-	<classpathentry kind="src" path="test/system/src"/>
-	<classpathentry kind="src" path="test/unit/src"/>
 	<classpathentry kind="src" path="test/resources"/>
 	<classpathentry kind="src" path="build/stubs-GlobalModelExchange/src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>

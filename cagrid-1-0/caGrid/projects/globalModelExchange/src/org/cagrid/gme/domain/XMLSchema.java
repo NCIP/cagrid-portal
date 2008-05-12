@@ -5,38 +5,54 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.Embeddable;
 
 import org.hibernate.annotations.CollectionOfElements;
-import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 
 
-@Entity
-@GenericGenerator(name = "id-generator", strategy = "native")
+@Embeddable
 public class XMLSchema {
 
+    @Column(nullable = false)
+    private XMLSchemaDocument rootDocument;
+
     @CollectionOfElements
-    private Set<XMLSchemaDocument> schemaDocuments = new HashSet<XMLSchemaDocument>();
+    private Set<XMLSchemaDocument> additionalSchemaDocuments = new HashSet<XMLSchemaDocument>();
 
     @Column(nullable = false, unique = true)
     @Type(type = "org.cagrid.gme.persistence.hibernate.types.URIUserType")
     private URI targetNamespace;
 
-    @Id
-    @GeneratedValue
-    private Long id;
 
-
-    public Set<XMLSchemaDocument> getSchemaDocuments() {
-        return schemaDocuments;
+    public XMLSchema() {
     }
 
 
-    public void setSchemaDocuments(Set<XMLSchemaDocument> schemaDocuments) {
-        this.schemaDocuments = schemaDocuments;
+    /**
+     * @return the rootDocument
+     */
+    public XMLSchemaDocument getRootDocument() {
+        return rootDocument;
+    }
+
+
+    /**
+     * @param rootDocument
+     *            the rootDocument to set
+     */
+    public void setRootDocument(XMLSchemaDocument rootDocument) {
+        this.rootDocument = rootDocument;
+    }
+
+
+    public Set<XMLSchemaDocument> getAdditionalSchemaDocuments() {
+        return additionalSchemaDocuments;
+    }
+
+
+    public void setAdditionalSchemaDocuments(Set<XMLSchemaDocument> schemaDocuments) {
+        this.additionalSchemaDocuments = schemaDocuments;
     }
 
 
@@ -50,21 +66,10 @@ public class XMLSchema {
     }
 
 
-    public Long getId() {
-        return id;
-    }
-
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((schemaDocuments == null) ? 0 : schemaDocuments.hashCode());
         result = prime * result + ((targetNamespace == null) ? 0 : targetNamespace.hashCode());
         return result;
     }
@@ -79,15 +84,10 @@ public class XMLSchema {
         if (getClass() != obj.getClass())
             return false;
         final XMLSchema other = (XMLSchema) obj;
-        if (schemaDocuments == null) {
-            if (other.schemaDocuments != null)
-                return false;
-        } else if (!schemaDocuments.equals(other.schemaDocuments))
-            return false;
         if (targetNamespace == null) {
             if (other.targetNamespace != null)
                 return false;
-        } else if (!targetNamespace.equals(other.targetNamespace))
+        } else if (!targetNamespace.equals(other.getTargetNamespace()))
             return false;
         return true;
     }

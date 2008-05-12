@@ -5,13 +5,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.cagrid.gme.test.GMEIntegrationTestCase;
+import org.cagrid.gme.test.GMEIntegrationTestCaseBase;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.persister.entity.EntityPersister;
 
 
-public class HibernateMappingTestCase extends GMEIntegrationTestCase {
+public class HibernateMappingTestCase extends GMEIntegrationTestCaseBase {
 
     private SessionFactory sessionFactory;
 

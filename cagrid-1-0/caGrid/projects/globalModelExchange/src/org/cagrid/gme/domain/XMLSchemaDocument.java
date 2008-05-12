@@ -16,6 +16,18 @@ public class XMLSchemaDocument {
     private java.lang.String systemID;
 
 
+    public XMLSchemaDocument() {
+
+    }
+
+
+    public XMLSchemaDocument(String schemaText, String systemID) {
+        super();
+        this.schemaText = schemaText;
+        this.systemID = systemID;
+    }
+
+
     public java.lang.String getSchemaText() {
         return schemaText;
     }
@@ -55,9 +67,9 @@ public class XMLSchemaDocument {
             return false;
         final XMLSchemaDocument other = (XMLSchemaDocument) obj;
         if (systemID == null) {
-            if (other.systemID != null)
+            if (other.getSystemID() != null)
                 return false;
-        } else if (!systemID.equals(other.systemID))
+        } else if (!systemID.equals(other.getSystemID()))
             return false;
         return true;
     }

@@ -2,8 +2,9 @@ package org.cagrid.gme.sax;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 
-import org.apache.axis.types.URI;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.xerces.xni.XMLResourceIdentifier;
@@ -13,23 +14,23 @@ import org.apache.xerces.xni.parser.XMLEntityResolver;
 import org.apache.xerces.xni.parser.XMLInputSource;
 import org.cagrid.gme.common.XSDUtil;
 import org.cagrid.gme.common.exceptions.SchemaParsingException;
+import org.cagrid.gme.domain.XMLSchema;
+import org.cagrid.gme.domain.XMLSchemaDocument;
 import org.cagrid.gme.persistence.SchemaPersistenceGeneralException;
 import org.cagrid.gme.persistence.SchemaPersistenceI;
-import org.cagrid.gme.protocol.stubs.Schema;
-import org.cagrid.gme.protocol.stubs.SchemaDocument;
 
 
 /**
  * @author oster
  */
 public class GMEEntityResolver implements XMLEntityResolver {
-    protected Schema[] submissionSchemas = null;
+    protected XMLSchema[] submissionSchemas = null;
     protected SchemaPersistenceI schemaPersistence = null;
 
     protected static Log LOG = LogFactory.getLog(GMEEntityResolver.class.getName());
 
 
-    public GMEEntityResolver(Schema[] submissionSchemas, SchemaPersistenceI schemaPersistence) {
+    public GMEEntityResolver(XMLSchema[] submissionSchemas, SchemaPersistenceI schemaPersistence) {
         super();
         this.submissionSchemas = submissionSchemas;
         this.schemaPersistence = schemaPersistence;
@@ -70,17 +71,24 @@ public class GMEEntityResolver implements XMLEntityResolver {
         XMLInputSource result = new XMLInputSource(identifier);
         result.setPublicId(idNamespace);
         result.setSystemId(systemId);
-        URI namespace = new URI(idNamespace);
+        result.setBaseSystemId(idNamespace + "/" + systemId);
+
+        URI namespace;
+        try {
+            namespace = new URI(idNamespace);
+        } catch (URISyntaxException e) {
+            LOG.error("Problem parsing systemID.", e);
+            throw new SchemaParsingException("Problem parsing systemID:" + e.getMessage());
+        }
 
         // first load schema from submission if present
-        Schema schema = getSchemaFromSchemas(namespace);
+        XMLSchema schema = getSchemaFromSchemas(namespace);
 
         // if not in submission load from DB
         if (schema == null) {
             if (this.schemaPersistence != null) {
-                URI ns = new URI(namespace);
                 try {
-                    schema = this.schemaPersistence.getSchema(ns);
+                    schema = this.schemaPersistence.getSchema(namespace);
                 } catch (SchemaPersistenceGeneralException e) {
                     LOG.error("Problem trying to load schema from backend.", e);
                     throw new SchemaParsingException("Problem trying to load schema from backend:" + e.getMessage());
@@ -98,13 +106,11 @@ public class GMEEntityResolver implements XMLEntityResolver {
             throw e;
         }
 
-        SchemaDocument sd = null;
+        XMLSchemaDocument sd = null;
         if (isImport) {
             // if it is an import, we need to return the "root" SchemaDocument
             // for the namespace
-
-            // TODO: how to find the "root" schema?
-            sd = schema.getSchemaDocument(0);
+            sd = schema.getRootDocument();
         } else {
             // else, we need to find the SchemaDocument with a matching systemid
             // convert schema to InputSource
@@ -141,12 +147,12 @@ public class GMEEntityResolver implements XMLEntityResolver {
     }
 
 
-    protected Schema getSchemaFromSchemas(URI namespace) throws SchemaParsingException {
-        Schema result = null;
+    protected XMLSchema getSchemaFromSchemas(URI namespace) throws SchemaParsingException {
+        XMLSchema result = null;
         if (this.submissionSchemas != null) {
             for (int i = 0; i < this.submissionSchemas.length; i++) {
-                Schema schema = this.submissionSchemas[i];
-                if (schema.getNamespace() != null && namespace.equals(schema.getNamespace())) {
+                XMLSchema schema = this.submissionSchemas[i];
+                if (schema.getTargetNamespace() != null && namespace.equals(schema.getTargetNamespace())) {
                     LOG.debug("Found desired schema in submission package, at index (" + i + ").");
                     if (result == null) {
                         result = schema;

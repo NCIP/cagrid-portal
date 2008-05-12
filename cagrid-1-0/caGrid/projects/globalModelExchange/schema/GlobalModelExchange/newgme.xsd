@@ -2,7 +2,7 @@
 <xs:schema targetNamespace="gme://gme.cagrid.org/2.0/GlobalModelExchange"
 	xmlns="gme://gme.cagrid.org/2.0/GlobalModelExchange" xmlns:xs="http://www.w3.org/2001/XMLSchema"
 	elementFormDefault="qualified" attributeFormDefault="unqualified">
-	
+	<!--
 	<xs:element name="Schema" type="Schema"/>
 	<xs:complexType name="Schema">
 		<xs:sequence>
@@ -19,5 +19,5 @@
 		</xs:sequence>
 		<xs:attribute name="systemID" type="xs:string"/>
 	</xs:complexType>
-
+-->
 </xs:schema>

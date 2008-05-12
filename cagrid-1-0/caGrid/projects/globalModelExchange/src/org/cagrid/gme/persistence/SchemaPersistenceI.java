@@ -1,11 +1,11 @@
 package org.cagrid.gme.persistence;
 
+import java.net.URI;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.axis.types.URI;
-import org.cagrid.gme.protocol.stubs.Schema;
+import org.cagrid.gme.domain.XMLSchema;
 
 
 public interface SchemaPersistenceI {
@@ -18,7 +18,7 @@ public interface SchemaPersistenceI {
      *            the namespace of the schema of interest
      * @return null or the Schema registered with the given namespace.
      */
-    public Schema getSchema(URI schemaTargetNamespace) throws SchemaPersistenceGeneralException;
+    public XMLSchema getSchema(URI schemaTargetNamespace) throws SchemaPersistenceGeneralException;
 
 
     /**
@@ -31,7 +31,7 @@ public interface SchemaPersistenceI {
      * @return a Collection of Schemas which depend on (i.e. xs:import) the
      *         schema identified by the given namespace.
      */
-    public Collection<Schema> getDependingSchemas(URI namespace) throws SchemaPersistenceGeneralException;
+    public Collection<XMLSchema> getDependingSchemas(URI namespace) throws SchemaPersistenceGeneralException;
 
 
     /**
@@ -50,9 +50,9 @@ public interface SchemaPersistenceI {
      * 
      * @param toCommit
      *            Map with Schema as key, and List of Namespaces as value, where
-     *            Schemas are schemas to store and Namespaces are that Schemas
+     *            Schemas are schemas to store and Namespaces are that Schema's
      *            imports
      */
-    public void storeSchemas(Map<Schema, List<URI>> schemasToStore) throws SchemaPersistenceGeneralException;
+    public void storeSchemas(Map<XMLSchema, List<URI>> schemasToStore) throws SchemaPersistenceGeneralException;
 
 }

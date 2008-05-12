@@ -32,17 +32,14 @@
 
 	<property name="test.dir" value="test" />
 	<property name="test.src.dir" value="${test.dir}/src" />
-	<property name="unit.test.src.dir" value="${test.dir}/unit/src" />
-	<property name="system.test.src.dir" value="${test.dir}/system/src" />
 
 	<property name="test.lib.dir" value="${test.dir}/lib" />
 	<property name="test.log.dir" value="test/logs" />
 	<property name="junit.results.dir" value="${test.log.dir}/junit" />
 
 	<property name="force.config.replace" value="false" />
-	<property name="torque.dir" value="resources/torque-gen-3.3-RC1" />
 
-	<import file="${test.dir}/conf/test.xml" />
+	<import file="${test.dir}/test.xml" />
 
 	<!-- ============================================================== -->
 	<!-- Create any extended Classpaths here                            -->
@@ -172,7 +169,7 @@
 	<!-- ============================================================== -->
 	<!-- Post Compile Tests Build Target                                -->
 	<!-- ============================================================== -->
-	<target name="postCompileTests" depends="compileUnitTests,compileSystemTests">
+	<target name="postCompileTests">
 
 	</target>
 
@@ -202,15 +199,6 @@
 	<!-- ============================================================== -->
 	<target name="postClean">
 
-	</target>
-
-
-	<target name="compileUnitTests" depends="compile">
-		<javac srcdir="${unit.test.src.dir}" classpathref="test.build.classpath" destdir="${test.build.dest}" debug="${java.debug}" deprecation="${deprecation}" />
-	</target>
-
-	<target name="compileSystemTests" depends="compile">
-		<javac srcdir="${system.test.src.dir}" classpathref="test.build.classpath" destdir="${test.build.dest}" debug="${java.debug}" deprecation="${deprecation}" />
 	</target>
 
 

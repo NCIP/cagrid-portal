@@ -1,9 +1,9 @@
 package org.cagrid.gme.test;
 
-import org.springframework.test.AbstractDependencyInjectionSpringContextTests;
+import org.springframework.test.annotation.AbstractAnnotationAwareTransactionalTests;
 
 
-public abstract class GMEIntegrationTestCase extends AbstractDependencyInjectionSpringContextTests {
+public abstract class GMEIntegrationTestCaseBase extends AbstractAnnotationAwareTransactionalTests {
 
     private static final String APPLICATION_CONTEXT_GME_XML = "etc/applicationContext-gme.xml";
     private static final String TEST_APPLICATION_CONTEXT_GME_XML = "test-applicationContext-gme.xml";

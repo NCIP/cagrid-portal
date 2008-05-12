@@ -4,16 +4,17 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
-import org.apache.axis.types.URI;
 import org.apache.commons.io.IOUtils;
-import org.cagrid.gme.protocol.stubs.Schema;
-import org.cagrid.gme.protocol.stubs.SchemaDocument;
+import org.cagrid.gme.domain.XMLSchema;
+import org.cagrid.gme.domain.XMLSchemaDocument;
 
 
-/**
- * @author oster
- */
 public class XSDUtil {
 
     private XSDUtil() {
@@ -33,8 +34,10 @@ public class XSDUtil {
      * @throws IOException
      *             if a file is not valid
      */
-    public static Schema createSchema(URI namespace, File schemaFiles) throws FileNotFoundException, IOException {
-        return createSchema(namespace, new File[]{schemaFiles});
+    public static XMLSchema createSchema(URI namespace, File schemaFile) throws FileNotFoundException, IOException {
+        List<File> list = new ArrayList<File>();
+        list.add(schemaFile);
+        return createSchema(namespace, list);
     }
 
 
@@ -54,17 +57,25 @@ public class XSDUtil {
      * @throws IOException
      *             if a file is not valid
      */
-    public static Schema createSchema(URI namespace, File schemaFiles[]) throws FileNotFoundException, IOException {
-        if (schemaFiles == null || schemaFiles.length == 0) {
+    public static XMLSchema createSchema(URI namespace, List<File> schemaFiles) throws FileNotFoundException,
+        IOException {
+        if (schemaFiles == null || schemaFiles.size() == 0) {
             throw new IllegalArgumentException("schemaFiles must be a valid array of files.");
         }
 
-        SchemaDocument[] schemadocuments = new SchemaDocument[schemaFiles.length];
-        for (int i = 0; i < schemaFiles.length; i++) {
-            schemadocuments[i] = createSchemaDocument(schemaFiles[i]);
+        XMLSchemaDocument root = createSchemaDocument(schemaFiles.get(0));
+
+        Set<XMLSchemaDocument> docs = new HashSet<XMLSchemaDocument>(schemaFiles.size() - 1);
+        for (int i = 1; i < schemaFiles.size(); i++) {
+            docs.add(createSchemaDocument(schemaFiles.get(i)));
         }
 
-        return new Schema(namespace, schemadocuments);
+        XMLSchema schema = new XMLSchema();
+        schema.setTargetNamespace(namespace);
+        schema.setRootDocument(root);
+        schema.setAdditionalSchemaDocuments(docs);
+
+        return schema;
     }
 
 
@@ -80,7 +91,7 @@ public class XSDUtil {
      * @throws IOException
      *             if the file is not valid
      */
-    public static SchemaDocument createSchemaDocument(File schemaFile) throws FileNotFoundException, IOException {
+    public static XMLSchemaDocument createSchemaDocument(File schemaFile) throws FileNotFoundException, IOException {
         if (schemaFile == null || !schemaFile.canRead()) {
             throw new IllegalArgumentException("schemaFile must be a valid, readable file.");
         }
@@ -90,7 +101,7 @@ public class XSDUtil {
         fileInputStream.close();
         String systemID = schemaFile.getName();
 
-        return new SchemaDocument(fileContents, systemID);
+        return new XMLSchemaDocument(fileContents, systemID);
     }
 
 
@@ -106,13 +117,17 @@ public class XSDUtil {
      *            the systemID to look for
      * @return the matching SchemaDocuemnt or null
      */
-    public static SchemaDocument getSchemaDocumentFromSchema(Schema schema, String systemId) {
-        if (schema == null || schema.getSchemaDocument() == null || schema.getSchemaDocument().length == 0) {
-            throw new IllegalArgumentException("Schema must be non null and contain at least one SchemaDocument.");
+    public static XMLSchemaDocument getSchemaDocumentFromSchema(XMLSchema schema, String systemId) {
+        if (schema == null) {
+            throw new IllegalArgumentException("Schema must be non null.");
         }
-        for (SchemaDocument sd : schema.getSchemaDocument()) {
-            if (sd.getSystemID().equals(systemId)) {
-                return sd;
+        if (schema.getRootDocument().getSystemID().equals(systemId)) {
+            return schema.getRootDocument();
+        } else {
+            for (XMLSchemaDocument sd : schema.getAdditionalSchemaDocuments()) {
+                if (sd.getSystemID().equals(systemId)) {
+                    return sd;
+                }
             }
         }
 
