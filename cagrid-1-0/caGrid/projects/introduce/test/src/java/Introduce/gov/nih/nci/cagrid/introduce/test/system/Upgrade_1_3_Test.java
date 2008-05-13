@@ -79,20 +79,6 @@ public class Upgrade_1_3_Test extends Story {
         }
         this.tci1 = new TestCaseInfoMain();
 
-        StopContainerStep step2 = new StopContainerStep(container);
-        try {
-            step2.runStep();
-        } catch (Throwable e) {
-            e.printStackTrace();
-        }
-
-        RemoveSkeletonStep step1 = new RemoveSkeletonStep(this.tci1);
-        try {
-            step1.runStep();
-        } catch (Throwable e) {
-
-            e.printStackTrace();
-        }
         return true;
     }
 
