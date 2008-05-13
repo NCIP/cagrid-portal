@@ -341,7 +341,7 @@ public class TomcatServiceContainer extends ServiceContainer {
 				testException = ex;
 				ex.printStackTrace();
 			}
-			sleep(1000);
+			sleep(5000);
 		}
 		if (!running) {
 			if (testException != null) {
