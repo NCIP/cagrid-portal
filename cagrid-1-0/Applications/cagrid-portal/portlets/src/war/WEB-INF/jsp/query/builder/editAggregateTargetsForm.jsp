@@ -15,13 +15,15 @@
            action="${aggregateTargetsFormAction}">
 
     <c:choose>
-        <c:when test="${empty aggregateTargets}">
+        <c:when test="${empty aggregateTargetsCmd.available}">
             <div class="row">
                 <div class="label">
-                    No Services found that have the same UML Class
+                    Cannot form aggregate query. No other Services
+                    have the same UML Class
                 </div>
             </div>
         </c:when>
+
         <c:otherwise>
             <div class="row">
                 <div class="label">
@@ -29,10 +31,21 @@
                     data from.
                 </div>
             </div>
-            <c:forEach var="aggregateTarget" items="${aggregateTargets}">
+
+            <div class="row">
+                <div class="label">
+                    <input type="checkbox" checked="true" value="${primary.model.service.url}" DISABLED/>
+                    &nbsp;
+                </div>
+                <div class="vale">
+                    <c:out value="${primary.model.service.url}"/>
+                </div>
+            </div>
+
+            <c:forEach var="aggregateTarget" items="${aggregateTargetsCmd.available}">
                 <div class="row">
                     <div class="label">
-                        <input type="checkbox" value="${aggregateTarget.model.service.url}"/>
+                        <form:checkbox path="selected" value="${aggregateTarget.model.service.url}"/>
                         &nbsp;
                     </div>
                     <div class="vale">
@@ -44,14 +57,13 @@
 
             <div class="row">
                 <div class="label">
+                    <input type="hidden" name="operation" value="selectAggregateTargets"/>
                     <input type="submit" value="Add Targets"/>
                 </div>
             </div>
+
+
         </c:otherwise>
-
     </c:choose>
-
-    <input type="hidden" name="operation" value="selectAggregateTargets"/>
-
 
 </form:form>

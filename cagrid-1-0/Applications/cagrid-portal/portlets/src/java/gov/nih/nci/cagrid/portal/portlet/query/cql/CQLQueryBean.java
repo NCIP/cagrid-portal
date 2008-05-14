@@ -1,87 +1,82 @@
 /**
- * 
+ *
  */
 package gov.nih.nci.cagrid.portal.portlet.query.cql;
 
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.cqlquery.CQLQuery;
-import gov.nih.nci.cagrid.cqlquery.QueryModifier;
+import gov.nih.nci.cagrid.cqlquery.*;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.portal.domain.metadata.dataservice.UMLClass;
+import gov.nih.nci.cagrid.portal.portlet.query.QueryFormulator;
+import gov.nih.nci.cagrid.fqp.common.DCQLConstants;
 
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.xml.namespace.QName;
+
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
- *
  */
 @Transactional
 public class CQLQueryBean extends CriteriaBean {
-	
-	private QueryModifierType modifierType = QueryModifierType.COUNT_ONLY;
-	private List<String> selectedAttributes = new ArrayList<String>();
 
-	/**
-	 * 
-	 */
-	public CQLQueryBean() {
-		
-	}
-	
-	public CQLQueryBean(UMLClass umlClass){
-		setUmlClass(umlClass);
-	}
+    private QueryModifierType modifierType = QueryModifierType.COUNT_ONLY;
+    private List<String> selectedAttributes = new ArrayList<String>();
 
-	public QueryModifierType getModifierType() {
-		return modifierType;
-	}
+    private Map<QName, QueryFormulator> formulators;
 
-	public void setModifierType(QueryModifierType modifierType) {
-		this.modifierType = modifierType;
-	}
+    /**
+     *
+     */
+    public CQLQueryBean() {
 
-	public List<String> getSelectedAttributes() {
-		return selectedAttributes;
-	}
+    }
 
-	public void setSelectedAttributes(List<String> selectedAttributes) {
-		this.selectedAttributes = selectedAttributes;
-	}
-	
-	public CQLQuery toCQLQuery(){
-		CQLQuery query = new CQLQuery();
+    public CQLQueryBean(UMLClass umlClass) {
+        setUmlClass(umlClass);
+    }
 
-		QueryModifier modifier = null;
-		if(QueryModifierType.COUNT_ONLY.equals(getModifierType())){
-			modifier = new QueryModifier(null, true, null);
-		}else if(QueryModifierType.DISTINCT_ATTRIBUTE.equals(getModifierType())){
-			modifier = new QueryModifier(null, false, getSelectedAttributes().get(0));
-		}else if(QueryModifierType.SELECTED_ATTRIBUTES.equals(getModifierType())){
-			String[] atts = new String[getSelectedAttributes().size()];
-			for(int i = 0; i < atts.length; i++){
-				atts[i] = getSelectedAttributes().get(i);
-			}
-			modifier = new QueryModifier(atts, false, null);
-		}else{
-			//No modifier
-		}
-		if(modifier != null){
-			query.setQueryModifier(modifier);
-		}
-		
-		query.setTarget(toTarget());
-		
-		return query;
-	}
+    public QueryModifierType getModifierType() {
+        return modifierType;
+    }
 
-	public String toXml() throws Exception {
-		StringWriter sw = new StringWriter();
-		Utils.serializeObject(toCQLQuery(), DataServiceConstants.CQL_QUERY_QNAME, sw);
-		return sw.getBuffer().toString();
-	}
+    public void setModifierType(QueryModifierType modifierType) {
+        this.modifierType = modifierType;
+    }
+
+    public List<String> getSelectedAttributes() {
+        return selectedAttributes;
+    }
+
+    public void setSelectedAttributes(List<String> selectedAttributes) {
+        this.selectedAttributes = selectedAttributes;
+    }
+
+    public Map<QName, QueryFormulator> getFormulators() {
+        return formulators;
+    }
+
+    public void setFormulators(Map<QName, QueryFormulator> formulators) {
+        this.formulators = formulators;
+    }
+
+    public boolean isDCQLQuery() {
+        return getAggregateTargets() != null && getAggregateTargets().getSelected().size() > 1;
+    }
+
+
+    public String toXml() throws Exception {
+        StringWriter sw = new StringWriter();
+        QueryFormulator queryFormulator;
+
+        queryFormulator = isDCQLQuery() ? formulators.get(DCQLConstants.DCQL_QUERY_QNAME) : formulators.get(DataServiceConstants.CQL_QUERY_QNAME);
+        Utils.serializeObject(queryFormulator.toQuery(this), queryFormulator.getQName(), sw);
+        return sw.getBuffer().toString();
+    }
 
 }

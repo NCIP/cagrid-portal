@@ -8,18 +8,10 @@
     form.submit();
     }
 
-
     function <portlet:namespace/>aggregateQuery(path){
     var form = document.<portlet:namespace/>criteriaBeanForm;
     form.action ='<portlet:renderURL/>';
     form.operation.value='viewAggregateTargets';
-    form.submit();
-    }
-
-    function <portlet:namespace/>populateForiegnAssociations(path){
-    var form = document.<portlet:namespace/>criteriaBeanForm;
-    form.action ='<portlet:renderURL/>';
-    form.operation.value='populateForeignAssociations';
     form.submit();
     }
 
@@ -52,8 +44,6 @@
            onclick="<portlet:namespace/>goToPath('/query/builder/editQueryModifierForm')"/>
     <input type="button" value="Add Criterion" onclick="<portlet:namespace/>goToPath('/query/builder/umlClass')"/>
     <input type="button" value="Aggregate Query" onclick="<portlet:namespace/>aggregateQuery()"/>
-    <input type="button" value="Add Foreign Criterion"
-           onclick="<portlet:namespace/>populateForiegnAssociations('/query/builder/umlClass')"/>
     <input type="button" value="Export To XML" onclick="<portlet:namespace/>exportToXml()"/>
     <input type="button" value="Submit Query" onclick="<portlet:namespace/>submitBuilderQuery()"/>
     <c:if test="${!empty portalUser}">

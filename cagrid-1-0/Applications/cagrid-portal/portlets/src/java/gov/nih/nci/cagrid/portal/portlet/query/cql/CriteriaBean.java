@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package gov.nih.nci.cagrid.portal.portlet.query.cql;
 
@@ -13,6 +13,7 @@ import gov.nih.nci.cagrid.portal.domain.metadata.dataservice.TargetUMLAssociatio
 import gov.nih.nci.cagrid.portal.domain.metadata.dataservice.UMLAssociationEdge;
 import gov.nih.nci.cagrid.portal.domain.metadata.dataservice.UMLClass;
 import gov.nih.nci.cagrid.portal.portlet.util.PortletUtils;
+import gov.nih.nci.cagrid.portal.portlet.query.builder.AggregateTargetsCommand;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -32,262 +33,270 @@ import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
- * 
  */
 @Transactional
 public class CriteriaBean implements ApplicationContextAware {
 
-	private static final Log logger = LogFactory.getLog(CriteriaBean.class);
+    private static final Log logger = LogFactory.getLog(CriteriaBean.class);
 
-	private UMLClass umlClass;
-	private Set<CriterionBean> criteria = new HashSet<CriterionBean>();
-	private Set<AssociationBean> associations = new HashSet<AssociationBean>();
-	private ApplicationContext applicationContext;
+    private UMLClass umlClass;
+    private Set<CriterionBean> criteria = new HashSet<CriterionBean>();
+    private Set<AssociationBean> associations = new HashSet<AssociationBean>();
+    private ApplicationContext applicationContext;
 
-	private HibernateTemplate hibernateTemplate;
+    private AggregateTargetsCommand aggregateTargets;
+    private HibernateTemplate hibernateTemplate;
 
-	/**
-	 * 
-	 */
-	public CriteriaBean() {
+    /**
+     *
+     */
+    public CriteriaBean() {
 
-	}
+    }
 
-	public UMLClass getUmlClass() {
-		return umlClass;
-	}
+    public UMLClass getUmlClass() {
+        return umlClass;
+    }
 
-	public void setUmlClass(UMLClass umlClass) {
-		this.umlClass = umlClass;
-	}
+    public void setUmlClass(UMLClass umlClass) {
+        this.umlClass = umlClass;
+    }
 
-	public Set<CriterionBean> getCriteria() {
-		return criteria;
-	}
+    public Set<CriterionBean> getCriteria() {
+        return criteria;
+    }
 
-	public void setCriteria(Set<CriterionBean> criteria) {
-		this.criteria = criteria;
-	}
+    public void setCriteria(Set<CriterionBean> criteria) {
+        this.criteria = criteria;
+    }
 
-	public Set<AssociationBean> getAssociations() {
-		return associations;
-	}
+    public Set<AssociationBean> getAssociations() {
+        return associations;
+    }
 
-	public void setAssociations(Set<AssociationBean> associations) {
-		this.associations = associations;
-	}
+    public void setAssociations(Set<AssociationBean> associations) {
+        this.associations = associations;
+    }
 
-	public CriterionBean find(String path) {
-		CriterionBean criterion = null;
-		String[] parts = PortletUtils.parsePath(path);
-		if (parts.length == 1) {
-			for (CriterionBean crit : getCriteria()) {
-				if (crit.getUmlAttribute().getName().equals(path)) {
-					criterion = crit;
-					break;
-				}
-			}
-		} else {
-			for (AssociationBean assoc : getAssociations()) {
-				CriterionBean crit = assoc.getCriteriaBean().find(parts[1]);
-				if (crit != null) {
-					criterion = crit;
-					break;
-				}
-			}
-		}
-		return criterion;
-	}
+    public CriterionBean find(String path) {
+        CriterionBean criterion = null;
+        String[] parts = PortletUtils.parsePath(path);
+        if (parts.length == 1) {
+            for (CriterionBean crit : getCriteria()) {
+                if (crit.getUmlAttribute().getName().equals(path)) {
+                    criterion = crit;
+                    break;
+                }
+            }
+        } else {
+            for (AssociationBean assoc : getAssociations()) {
+                CriterionBean crit = assoc.getCriteriaBean().find(parts[1]);
+                if (crit != null) {
+                    criterion = crit;
+                    break;
+                }
+            }
+        }
+        return criterion;
+    }
 
-	public void delete(String path) {
-		update(path, null, true);
-	}
+    public void delete(String path) {
+        update(path, null, true);
+    }
 
-	public void insert(String path, CriterionBean criterion) {
-		update(path, criterion, false);
-	}
+    public void insert(String path, CriterionBean criterion) {
+        update(path, criterion, false);
+    }
 
-	public void update(String path, CriterionBean criterion, boolean delete) {
-		logger.debug("path: " + path);
+    public void update(String path, CriterionBean criterion, boolean delete) {
+        logger.debug("path: " + path);
 
-		final String[] parts = PortletUtils.parsePath(path);
-		if (parts.length == 1) {
-			String op = delete ? "Deleting" : "Adding";
-			logger.debug(op + " criterion " + getUmlClass().getClassName()
-					+ "." + path + ": " + criterion);
-			if (!delete) {
-				getCriteria().add(criterion);
-			} else {
-				if (!getCriteria().remove(find(path))) {
-					throw new RuntimeException("Didn't remove " + path);
-				}
-			}
-		} else {
+        final String[] parts = PortletUtils.parsePath(path);
+        if (parts.length == 1) {
+            String op = delete ? "Deleting" : "Adding";
+            logger.debug(op + " criterion " + getUmlClass().getClassName()
+                    + "." + path + ": " + criterion);
+            if (!delete) {
+                getCriteria().add(criterion);
+            } else {
+                if (!getCriteria().remove(find(path))) {
+                    throw new RuntimeException("Didn't remove " + path);
+                }
+            }
+        } else {
 
-			AssociationBean assoc = null;
-			for (AssociationBean a : getAssociations()) {
-				if (a.getRoleName().equals(parts[0])) {
-					assoc = a;
-					break;
-				}
-			}
-			if (assoc == null) {
-				assoc = new AssociationBean();
-				assoc.setRoleName(parts[0]);
-				CriteriaBean subCriteria = (CriteriaBean) getApplicationContext()
-						.getBean("criteriaBeanPrototype");
+            AssociationBean assoc = null;
+            for (AssociationBean a : getAssociations()) {
+                if (a.getRoleName().equals(parts[0])) {
+                    assoc = a;
+                    break;
+                }
+            }
+            if (assoc == null) {
+                assoc = new AssociationBean();
+                assoc.setRoleName(parts[0]);
+                CriteriaBean subCriteria = (CriteriaBean) getApplicationContext()
+                        .getBean("criteriaBeanPrototype");
 
-				final UMLClass klass = getUmlClass();
-				UMLClass assocType = (UMLClass) getHibernateTemplate().execute(
-						new HibernateCallback() {
-							public Object doInHibernate(Session session)
-									throws HibernateException, SQLException {
-								UMLClass assocType2 = null;
-								UMLClass klass2 = (UMLClass) session.get(klass
-										.getClass(), klass.getId());
-								for (UMLAssociationEdge edge : klass2
-										.getAssociations()) {
-									if (edge instanceof SourceUMLAssociationEdge) {
-										SourceUMLAssociationEdge source = (SourceUMLAssociationEdge) edge;
-										TargetUMLAssociationEdge target = source
-												.getAssociation().getTarget();
-										if (target.getRole().equals(parts[0])) {
-											assocType2 = target.getType();
-											break;
-										}
-									}
-								}
-								return assocType2;
-							}
-						});
+                final UMLClass klass = getUmlClass();
+                UMLClass assocType = (UMLClass) getHibernateTemplate().execute(
+                        new HibernateCallback() {
+                            public Object doInHibernate(Session session)
+                                    throws HibernateException, SQLException {
+                                UMLClass assocType2 = null;
+                                UMLClass klass2 = (UMLClass) session.get(klass
+                                        .getClass(), klass.getId());
+                                for (UMLAssociationEdge edge : klass2
+                                        .getAssociations()) {
+                                    if (edge instanceof SourceUMLAssociationEdge) {
+                                        SourceUMLAssociationEdge source = (SourceUMLAssociationEdge) edge;
+                                        TargetUMLAssociationEdge target = source
+                                                .getAssociation().getTarget();
+                                        if (target.getRole().equals(parts[0])) {
+                                            assocType2 = target.getType();
+                                            break;
+                                        }
+                                    }
+                                }
+                                return assocType2;
+                            }
+                        });
 
-				if (assocType == null) {
-					throw new IllegalArgumentException(
-							"No association for role '" + parts[0] + "' on '"
-									+ getUmlClass().getClassName() + "'");
-				}
-				subCriteria.setUmlClass(assocType);
-				assoc.setCriteriaBean(subCriteria);
-				logger.debug("Adding association "
-						+ getUmlClass().getClassName() + "." + parts[0]);
-				getAssociations().add(assoc);
-			}
-			assoc.getCriteriaBean().update(parts[1], criterion, delete);
+                if (assocType == null) {
+                    throw new IllegalArgumentException(
+                            "No association for role '" + parts[0] + "' on '"
+                                    + getUmlClass().getClassName() + "'");
+                }
+                subCriteria.setUmlClass(assocType);
+                assoc.setCriteriaBean(subCriteria);
+                logger.debug("Adding association "
+                        + getUmlClass().getClassName() + "." + parts[0]);
+                getAssociations().add(assoc);
+            }
+            assoc.getCriteriaBean().update(parts[1], criterion, delete);
 
-			// Remove empty associations
-			if (assoc.getCriteriaBean().isEmpty()) {
-				logger.debug("Removing empty association: " + assoc.getRoleName());
-				getAssociations().remove(assoc);
-			}
-		}
-	}
+            // Remove empty associations
+            if (assoc.getCriteriaBean().isEmpty()) {
+                logger.debug("Removing empty association: " + assoc.getRoleName());
+                getAssociations().remove(assoc);
+            }
+        }
+    }
 
-	public boolean isEmpty() {
-		
-		boolean oneAssocNotEmpty = false;
-		if (getCriteria().size() == 0) {
-			for (AssociationBean assoc : getAssociations()) {
-				if (!assoc.getCriteriaBean().isEmpty()) {
-					oneAssocNotEmpty = true;
-					break;
-				}
-			}
-		}
-		
-		boolean isEmpty = !(getCriteria().size() > 0 || oneAssocNotEmpty); 
-		
-		return isEmpty;
-	}
+    public boolean isEmpty() {
 
-	public ApplicationContext getApplicationContext() {
-		return applicationContext;
-	}
+        boolean oneAssocNotEmpty = false;
+        if (getCriteria().size() == 0) {
+            for (AssociationBean assoc : getAssociations()) {
+                if (!assoc.getCriteriaBean().isEmpty()) {
+                    oneAssocNotEmpty = true;
+                    break;
+                }
+            }
+        }
 
-	public void setApplicationContext(ApplicationContext applicationContext) {
-		this.applicationContext = applicationContext;
-	}
+        boolean isEmpty = !(getCriteria().size() > 0 || oneAssocNotEmpty);
 
-	public HibernateTemplate getHibernateTemplate() {
-		return hibernateTemplate;
-	}
+        return isEmpty;
+    }
 
-	public void setHibernateTemplate(HibernateTemplate hibernateTemplate) {
-		this.hibernateTemplate = hibernateTemplate;
-	}
+    public ApplicationContext getApplicationContext() {
+        return applicationContext;
+    }
 
-	public gov.nih.nci.cagrid.cqlquery.Object toTarget() {
-		gov.nih.nci.cagrid.cqlquery.Object target = new gov.nih.nci.cagrid.cqlquery.Object();
-		return toTarget(target);
-	}
+    public void setApplicationContext(ApplicationContext applicationContext) {
+        this.applicationContext = applicationContext;
+    }
 
-	public gov.nih.nci.cagrid.cqlquery.Object toTarget(
-			gov.nih.nci.cagrid.cqlquery.Object target) {
-		target.setName(getUmlClass().getPackageName() + "."
-				+ getUmlClass().getClassName());
+    public HibernateTemplate getHibernateTemplate() {
+        return hibernateTemplate;
+    }
 
-		Group targetGroup = new Group();
-		targetGroup.setLogicRelation(LogicalOperator.AND);
+    public void setHibernateTemplate(HibernateTemplate hibernateTemplate) {
+        this.hibernateTemplate = hibernateTemplate;
+    }
 
-		List<Attribute> attEls = new ArrayList<Attribute>();
-		List<Group> groupEls = new ArrayList<Group>();
-		List<Association> assocEls = new ArrayList<Association>();
+    public gov.nih.nci.cagrid.cqlquery.Object toTarget() {
+        gov.nih.nci.cagrid.cqlquery.Object target = new gov.nih.nci.cagrid.cqlquery.Object();
+        return toTarget(target);
+    }
 
-		// Add attributes
-		for (CriterionBean crit : getCriteria()) {
+    public gov.nih.nci.cagrid.cqlquery.Object toTarget(
+            gov.nih.nci.cagrid.cqlquery.Object target) {
+        target.setName(getUmlClass().getPackageName() + "."
+                + getUmlClass().getClassName());
 
-			Predicate predicate = Predicate.fromString(crit.getPredicate());
-			if (predicate.equals(Predicate.IS_NULL)
-					|| predicate.equals(Predicate.IS_NOT_NULL)) {
-				attEls.add(new Attribute(crit.getUmlAttribute().getName(),
-						predicate, null));
-			} else {
-				String[] values = crit.getValue().split(",");
-				if (values.length == 1) {
-					attEls.add(new Attribute(crit.getUmlAttribute().getName(),
-							predicate, values[0].trim()));
-				} else if (values.length > 1) {
-					Group group = new Group();
-					group.setLogicRelation(LogicalOperator.OR);
-					Attribute[] atts = new Attribute[values.length];
-					for (int i = 0; i < atts.length; i++) {
-						atts[i] = new Attribute(crit.getUmlAttribute()
-								.getName(), predicate, values[i].trim());
-					}
-					group.setAttribute(atts);
-					groupEls.add(group);
-				}
-			}
-		}
+        Group targetGroup = new Group();
+        targetGroup.setLogicRelation(LogicalOperator.AND);
 
-		// Add associations
-		for (AssociationBean assocBean : getAssociations()) {
-			Association assoc = new Association();
-			assoc.setRoleName(assocBean.getRoleName());
-			assocBean.getCriteriaBean().toTarget(assoc);
-			assocEls.add(assoc);
-		}
+        List<Attribute> attEls = new ArrayList<Attribute>();
+        List<Group> groupEls = new ArrayList<Group>();
+        List<Association> assocEls = new ArrayList<Association>();
 
-		boolean addedSomething = false;
-		if (attEls.size() > 0) {
-			addedSomething = true;
-			targetGroup.setAttribute((Attribute[]) attEls
-					.toArray(new Attribute[attEls.size()]));
-		}
-		if (groupEls.size() > 0) {
-			addedSomething = true;
-			targetGroup.setGroup((Group[]) groupEls.toArray(new Group[groupEls
-					.size()]));
-		}
-		if (assocEls.size() > 0) {
-			addedSomething = true;
-			targetGroup.setAssociation((Association[]) assocEls
-					.toArray(new Association[assocEls.size()]));
-		}
+        // Add attributes
+        for (CriterionBean crit : getCriteria()) {
 
-		if (addedSomething) {
-			target.setGroup(targetGroup);
-		}
+            Predicate predicate = Predicate.fromString(crit.getPredicate());
+            if (predicate.equals(Predicate.IS_NULL)
+                    || predicate.equals(Predicate.IS_NOT_NULL)) {
+                attEls.add(new Attribute(crit.getUmlAttribute().getName(),
+                        predicate, null));
+            } else {
+                String[] values = crit.getValue().split(",");
+                if (values.length == 1) {
+                    attEls.add(new Attribute(crit.getUmlAttribute().getName(),
+                            predicate, values[0].trim()));
+                } else if (values.length > 1) {
+                    Group group = new Group();
+                    group.setLogicRelation(LogicalOperator.OR);
+                    Attribute[] atts = new Attribute[values.length];
+                    for (int i = 0; i < atts.length; i++) {
+                        atts[i] = new Attribute(crit.getUmlAttribute()
+                                .getName(), predicate, values[i].trim());
+                    }
+                    group.setAttribute(atts);
+                    groupEls.add(group);
+                }
+            }
+        }
 
-		return target;
-	}
+        // Add associations
+        for (AssociationBean assocBean : getAssociations()) {
+            Association assoc = new Association();
+            assoc.setRoleName(assocBean.getRoleName());
+            assocBean.getCriteriaBean().toTarget(assoc);
+            assocEls.add(assoc);
+        }
+
+        boolean addedSomething = false;
+        if (attEls.size() > 0) {
+            addedSomething = true;
+            targetGroup.setAttribute((Attribute[]) attEls
+                    .toArray(new Attribute[attEls.size()]));
+        }
+        if (groupEls.size() > 0) {
+            addedSomething = true;
+            targetGroup.setGroup((Group[]) groupEls.toArray(new Group[groupEls
+                    .size()]));
+        }
+        if (assocEls.size() > 0) {
+            addedSomething = true;
+            targetGroup.setAssociation((Association[]) assocEls
+                    .toArray(new Association[assocEls.size()]));
+        }
+
+        if (addedSomething) {
+            target.setGroup(targetGroup);
+        }
+
+        return target;
+    }
+
+    public AggregateTargetsCommand getAggregateTargets() {
+        return aggregateTargets;
+    }
+
+    public void setAggregateTargets(AggregateTargetsCommand aggregateTargets) {
+        this.aggregateTargets = aggregateTargets;
+    }
 }

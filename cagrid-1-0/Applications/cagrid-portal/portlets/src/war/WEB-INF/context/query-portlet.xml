@@ -90,7 +90,7 @@
         <property name="objectName" value="rootNode"/>
         <property name="successViewName" value="/builder/umlClassTree"/>
         <property name="targetsProvider">
-            <bean class="gov.nih.nci.cagrid.portal.portlet.query.builder.AssociationBasedForeignTargetsProvider"
+            <bean class="gov.nih.nci.cagrid.portal.portlet.query.builder.UMLClassBasedForeignTargetsProvider"
                   autowire="byName"/>
         </property>
     </bean>
@@ -98,7 +98,7 @@
     <bean id="viewAggregateTargetsController"
           class="gov.nih.nci.cagrid.portal.portlet.query.builder.ViewAggregateTargetsController"
           autowire="byName">
-        <property name="objectName" value="aggregateTargets"/>
+        <property name="objectName" value="aggregateTargetsCmd"/>
         <property name="successViewName" value="/builder/editAggregateTargetsForm"/>
         <property name="targetsProvider">
             <bean class="gov.nih.nci.cagrid.portal.portlet.query.builder.UMLClassBasedForeignTargetsProvider"
@@ -111,7 +111,7 @@
           autowire="byName">
         <property name="commandName" value="aggregateTargetsCmd"/>
         <property name="commandClass"
-                  value="gov.nih.nci.cagrid.portal.portlet.query.builder.SelectAggregateTargetsCommand"/>
+                  value="gov.nih.nci.cagrid.portal.portlet.query.builder.AggregateTargetsCommand"/>
         <property name="actionResponseHandler">
             <bean class="gov.nih.nci.cagrid.portal.portlet.tab.TabActionResponseHandler">
                 <property name="tabControlConfig" ref="queryTabControlConfig"/>
@@ -608,6 +608,7 @@
                         <entry key="selectMySharedQueryToView" value-ref="selectMySharedQueryToViewController"/>
                         <entry key="loadSharedQuery" value-ref="loadSharedQueryController"/>
                         <entry key="viewAggregateTargets" value-ref="viewAggregateTargetsController"/>
+                        <entry key="selectAggregateTargets" value-ref="selectAggregateTargetsController"/>
                         <entry key="populateForeignAssociations" value-ref="populateForeignAssociationsController"/>
                     </map>
                 </entry>
@@ -722,7 +723,7 @@
                             <bean
                                     class="gov.nih.nci.cagrid.portal.portlet.tab.Tab">
                                 <property name="name" value="builder"/>
-                                <property name="label" value="CQL Builder"/>
+                                <property name="label" value="Query Builder"/>
                                 <property name="children">
                                     <list>
                                         <bean
@@ -751,7 +752,7 @@
                             <bean
                                     class="gov.nih.nci.cagrid.portal.portlet.tab.Tab">
                                 <property name="name" value="xml"/>
-                                <property name="label" value="CQL XML"/>
+                                <property name="label" value="Query XML"/>
                             </bean>
                         </list>
                     </property>
@@ -849,8 +850,25 @@
 
     <bean id="cqlQueryBeanPrototype" class="gov.nih.nci.cagrid.portal.portlet.query.cql.CQLQueryBean" scope="prototype">
         <property name="hibernateTemplate" ref="hibernateTemplate"/>
+        <property name="formulators">
+            <map>
+                <entry>
+                    <key>
+                        <util:constant static-field="gov.nih.nci.cagrid.portal.portlet.query.DCQLFormulator.qname"/>
+                    </key>
+                    <bean class="gov.nih.nci.cagrid.portal.portlet.query.DCQLFormulator"/>
+                </entry>
+                <entry>
+                    <key>
+                        <util:constant static-field="gov.nih.nci.cagrid.portal.portlet.query.cql.CQLFormulator.qname"/>
+                    </key>
+                    <bean class="gov.nih.nci.cagrid.portal.portlet.query.cql.CQLFormulator"/>
+                </entry>
+            </map>
+        </property>
     </bean>
 
     <bean id="cqlQueryService" class="gov.nih.nci.cagrid.portal.portlet.query.cql.CQLQueryService" autowire="byName"/>
+
 
 </beans>

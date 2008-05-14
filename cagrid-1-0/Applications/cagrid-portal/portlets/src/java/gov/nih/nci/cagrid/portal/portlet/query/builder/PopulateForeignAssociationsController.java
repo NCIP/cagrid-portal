@@ -1,10 +1,12 @@
 package gov.nih.nci.cagrid.portal.portlet.query.builder;
 
 import gov.nih.nci.cagrid.portal.portlet.tree.TreeNode;
+import gov.nih.nci.cagrid.portal.portlet.query.cql.UMLClassBean;
 import gov.nih.nci.cagrid.portal.domain.metadata.dataservice.UMLClass;
 
 import javax.portlet.RenderRequest;
 import java.util.List;
+import java.util.HashMap;
 
 /**
  * User: kherm
@@ -24,13 +26,25 @@ public class PopulateForeignAssociationsController extends
     @Override
     protected Object getObject(RenderRequest request) {
         TreeNode rootNode = (TreeNode) super.getObject(request);
-        if (rootNode != null) {
-            List<UMLClass> classes = targetsProvider.getSemanticallyEquivalentClasses(getRootUmlClass());
+        TreeNode node = rootNode.find(request.getParameter("path"));
+        UMLClassBean umlClassBean = (UMLClassBean) node.getContent();
+
+        if (node != null) {
+            List<UMLClass> classes = targetsProvider.getSemanticallyEquivalentClasses(umlClassBean.getUmlClass());
             for (UMLClass target : classes) {
-                rootNode.getChildren().add(createNode(target, rootNode));
+                node.getChildren().add(createNode(target, node));
             }
         }
         return rootNode;
+    }
+
+    @Override
+    protected TreeNode createNode(UMLClass umlClass, TreeNode parent) {
+        TreeNode node = new TreeNode(parent, "ForiegnUMLClass:" + umlClass.getId());
+        node.setLabel(umlClass.getClassName());
+        node.setContent(new UMLClassBean(umlClass));
+        getUmlClassTreeNodeListener().onOpen(node, new HashMap());
+        return node;
     }
 
 

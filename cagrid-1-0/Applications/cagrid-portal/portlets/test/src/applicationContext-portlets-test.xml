@@ -55,5 +55,23 @@
 
     </bean>
 
+    <bean id="cqlQueryBeanPrototype" class="gov.nih.nci.cagrid.portal.portlet.query.cql.CQLQueryBean" scope="prototype">
+        <property name="formulators">
+            <map>
+                <entry>
+                    <key>
+                        <util:constant static-field="gov.nih.nci.cagrid.portal.portlet.query.DCQLFormulator.qname"/>
+                    </key>
+                    <bean class="gov.nih.nci.cagrid.portal.portlet.query.DCQLFormulator"/>
+                </entry>
+                <entry>
+                    <key>
+                        <util:constant static-field="gov.nih.nci.cagrid.portal.portlet.query.cql.CQLFormulator.qname"/>
+                    </key>
+                    <bean class="gov.nih.nci.cagrid.portal.portlet.query.cql.CQLFormulator"/>
+                </entry>
+            </map>
+        </property>
+    </bean>
 
 </beans>

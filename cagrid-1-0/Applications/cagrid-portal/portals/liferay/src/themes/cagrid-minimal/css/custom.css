@@ -8,9 +8,9 @@
 #banner {
 /*background: #475B82;*/
 /*filter: progid:DXImageTransform.Microsoft.Gradient(gradientType=1,startColorStr=#e6eef5,endColorStr=#2e3257);*/
-    background-image:url(../images/blue_white_grad.gif);
-    background-repeat:repeat-y;
-    background-position:left;
+    background-image: url( ../images/blue_white_grad.gif );
+    background-repeat: repeat-y;
+    background-position: left;
     height: 97px;
     position: relative;
     margin: 0 auto;
@@ -18,78 +18,86 @@
     padding: 0;
 }
 
-#banner .hdrBG{ /* for the cell that contains the required cancer.gov header */
-    background-color:#A90101; /* constant: red */
+#banner .hdrBG {
+/* for the cell that contains the required cancer.gov header */
+    background-color: #A90101; /* constant: red */
 }
 
-#banner .subhdrBG{ /* for the cell that contains the application header */
-    background-color:#475B82; /* darker */
+#banner .subhdrBG {
+/* for the cell that contains the application header */
+    background-color: #475B82; /* darker */
 }
+
 #footer {
     width: 100%;
-    line-height:1.5em;
+    line-height: 1.5em;
 }
 
-
-.footerMenu{ /* for the basic style of the footer menu (bottom) area */
-    background-color:#5C5C5C; /* constant: dark gray */
-    font-family:arial,helvetica,verdana,sans-serif;
-    border-top:1px solid #CCCCCC; /* constant: medium gray */
-    border-bottom:1px solid #CCCCCC; /* constant: medium gray */
+.footerMenu {
+/* for the basic style of the footer menu (bottom) area */
+    background-color: #5C5C5C; /* constant: dark gray */
+    font-family: arial, helvetica, verdana, sans-serif;
+    border-top: 1px solid #CCCCCC; /* constant: medium gray */
+    border-bottom: 1px solid #CCCCCC; /* constant: medium gray */
 }
 
-td.footerMenuItem{ /* for the off state of the footer menu (bottom) cells */
-    font-size:10px;
-    background-color:#5C5C5C; /* constant: dark gray */
-    padding-left:1em;
-    padding-right:1em;
-}
-.ftrTable{ /* for the table that contains the footer */
-    padding-top:0.4em;
+td.footerMenuItem {
+/* for the off state of the footer menu (bottom) cells */
+    font-size: 10px;
+    background-color: #5C5C5C; /* constant: dark gray */
+    padding-left: 1em;
+    padding-right: 1em;
 }
 
-a:link.footerMenuLink,a:visited.footerMenuLink,a:active.footerMenuLink{ /* for the text links at the top of the footer */
-    color:#FFFFFF; /* constant: white */
-    text-decoration:none;
+.ftrTable {
+/* for the table that contains the footer */
+    padding-top: 0.4em;
+}
+
+a:link.footerMenuLink, a:visited.footerMenuLink, a:active.footerMenuLink {
+/* for the text links at the top of the footer */
+    color: #FFFFFF; /* constant: white */
+    text-decoration: none;
     white-space: nowrap;
 }
-a:hover.footerMenuLink{
-    color:#FFFFFF; /* constant: white */
+
+a:hover.footerMenuLink {
+    color: #FFFFFF; /* constant: white */
 }
 
-.selected_tab
-{
-    background-color:#f0e6c1;
-    background-image:url(../images/selected_tab_bg.gif);
-    background-repeat:repeat-x;
-    border-color:#e7dcb4;
-    border:thin;
-    border-style:solid;
-    font-family:Verdana, Arial, Helvetica, sans-serif;
-    font-style:normal;
-    font-weight:400;
+.selected_tab {
+    background-color: #f0e6c1;
+    background-image: url( ../images/selected_tab_bg.gif );
+    background-repeat: repeat-x;
+    border-color: #e7dcb4;
+    border: thin;
+    border-style: solid;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-style: normal;
+    font-weight: 400;
 }
-.normal_tab
-{
-    font-family:Verdana, Arial, Helvetica, sans-serif;
-    font-style:normal;
-    color:#FFFFFF;
+
+.normal_tab {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-style: normal;
+    color: #FFFFFF;
 }
-.normal_tab_pipe
-{
-    font-family:Verdana, Arial, Helvetica, sans-serif;
-    font-size:17px;
-    font-style:normal;
-    color:#FFFFFF;
+
+.normal_tab_pipe {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 17px;
+    font-style: normal;
+    color: #FFFFFF;
 }
-.border_dash{
-    border-right:1px;
-    border-right-color:#FFFFFF;
-    border-right-style:dotted;
+
+.border_dash {
+    border-right: 1px;
+    border-right-color: #FFFFFF;
+    border-right-style: dotted;
 }
 
 #navigation {
-    background: url(../images/navigation/bg.png) no-repeat 0 0;
+    background: url( ../images/navigation/bg.png ) no-repeat 0 0;
     bottom: 0.5em;
     height: 25px;
     left: 5px;
@@ -100,7 +108,7 @@ a:hover.footerMenuLink{
 }
 
 #navigation ul {
-    background: url(../images/navigation/bg.png) no-repeat 100% 100%;
+    background: url( ../images/navigation/bg.png ) no-repeat 100% 100%;
     float: left;
     height: 25px;
     left: 0;
@@ -143,7 +151,7 @@ a:hover.footerMenuLink{
 }
 
 #navigation li a:hover {
-    background: url(../images/navigation/bg_hover.png) repeat-x;
+    background: url( ../images/navigation/bg_hover.png ) repeat-x;
     border-left: 1px solid #1D4A81;
     border-right: 1px solid #1D4A81;
     padding-left: 9px;
@@ -151,7 +159,7 @@ a:hover.footerMenuLink{
 }
 
 #navigation li.selected a {
-    background: url(../images/navigation/bg_selected.png) repeat-x;
+    background: url( ../images/navigation/bg_selected.png ) repeat-x;
     border-left: 1px solid #1D4A81;
     border-right: 1px solid #1D4A81;
 }
@@ -171,16 +179,10 @@ a:hover.footerMenuLink{
     padding-top: 5px;
 }
 
-input[type="button"]{
-    font-size:10px;
-    font-weight:bold;
-}
-
 .link-extenal {
-    background: transparent url(../images/linkext_icon.gif) no-repeat scroll right center ;
-    padding:1px 16px 1px 0px;
+    background: transparent url( ../images/linkext_icon.gif ) no-repeat scroll right center;
+    padding: 1px 16px 1px 0px;
 }
-
 
 div.row {
     padding: 2px;
@@ -197,8 +199,8 @@ div.row div.label {
     float: left;
 }
 
-div.row div.value{
-    margin-left:12em;  /* individual pages need to override */
+div.row div.value {
+    margin-left: 12em; /* individual pages need to override */
 }
 
 /* Automatically clear after each row
