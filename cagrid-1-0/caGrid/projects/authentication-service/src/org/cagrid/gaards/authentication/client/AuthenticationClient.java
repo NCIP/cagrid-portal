@@ -1,6 +1,5 @@
 package org.cagrid.gaards.authentication.client;
 
-
 import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
 
 import java.rmi.RemoteException;
@@ -10,7 +9,6 @@ import org.cagrid.gaards.authentication.Credential;
 import org.cagrid.gaards.authentication.faults.AuthenticationProviderFault;
 import org.cagrid.gaards.authentication.faults.InsufficientAttributeFault;
 import org.cagrid.gaards.authentication.faults.InvalidCredentialFault;
-
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
@@ -32,6 +30,24 @@ public class AuthenticationClient {
 			InvalidCredentialFault, InsufficientAttributeFault,
 			AuthenticationProviderFault {
 		try {
+			return client.authenticateWithIdentityProvider(cred);
+		} catch (InvalidCredentialFault gie) {
+			throw gie;
+		} catch (InsufficientAttributeFault ilf) {
+			throw ilf;
+		} catch (AuthenticationProviderFault ilf) {
+			throw ilf;
+		} catch (Exception e) {
+			throw new RemoteException(e.getMessage());
+		}
+	}
+
+	public static SAMLAssertion authenticate(String serviceURI, Credential cred)
+			throws RemoteException, InvalidCredentialFault,
+			InsufficientAttributeFault, AuthenticationProviderFault {
+		try {
+			AuthenticationServiceClient client = new AuthenticationServiceClient(
+					serviceURI);
 			return client.authenticateWithIdentityProvider(cred);
 		} catch (InvalidCredentialFault gie) {
 			throw gie;
