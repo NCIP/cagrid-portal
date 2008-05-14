@@ -22,7 +22,6 @@
   <publications>
     <artifact name="caGrid-${ivy.module}-core" conf="core" type="jar"/>
     <artifact name="caGrid-${ivy.module}-system" conf="system" type="jar"/>
-    <artifact name="caGrid-${ivy.module}-tests" conf="test" type="jar"/>
   </publications>
 
   <dependencies>
