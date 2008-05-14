@@ -7,9 +7,10 @@
 	<import file="${ivy-shared-targets.file}" />
 
 	<!-- Overloaded to support multiple artifact patterns  -->
-	<target name="publish" depends="resolve-dependencies">
+	<target name="do.publish" depends="resolve-dependencies">
 		<publish-artifacts>
 			<artifacts-list>
+				<artifacts pattern="${ivy.generated.artifacts.dir}/jars/[artifact]-[revision].[ext]" />
 				<artifacts pattern="${basedir}/containers/[artifact](.[ext])" />
 			</artifacts-list>
 		</publish-artifacts>

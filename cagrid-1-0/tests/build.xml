@@ -17,7 +17,7 @@
 
 	<!-- configuring (repurposing) the caGrid build -->
 	<property name="system.testable.projects.list" value="" />
-	<property name="unit.testable.projects.list" value="cqlprocessors,coretests,sdkInstaller" />
+	<property name="unit.testable.projects.list" value="cqlprocessors,coretests,introduceTests,sdkInstaller,testUtils,transferTests" />
 
 	<!-- IMPORT THE UTILITIES TARGETS -->
 	<import file="${cagrid.dir}/build.xml" />
@@ -53,6 +53,35 @@
 	<!-- Builds from scratch                                            -->
 	<!-- ============================================================== -->
 	<target name="all" depends="clean, caGrid-Master.all" description="Builds the entire application and test suite">
+		<for parallel="false" param="project.buildfile" trim="true">
+			<path refid="ivy.tests.projects.list" />
+			<sequential>
+				<dirname file="@{project.buildfile}" property="@{project.buildfile}.dir" />
+				<ant inheritAll="false" inheritrefs="false" dir="${@{project.buildfile}.dir}" antfile="@{project.buildfile}" target="publish">
+					<property name="target.grid" value="${target.grid}" />
+				</ant>
+			</sequential>
+		</for>
+	</target>
+	
+	<!-- ============================================================== -->
+	<!-- Cleans up generated stuff                                      -->
+	<!-- ============================================================== -->
+	<target name="cleanTests" depends="prepare" description="Cleans all projects and test suites.">
+		<for parallel="true" param="project.buildfile" trim="true" threadcount="10">
+			<path refid="ivy.tests.projects.list" />
+			<sequential>
+				<dirname file="@{project.buildfile}" property="@{project.buildfile}.dir" />
+				<ant inheritAll="false" dir="${@{project.buildfile}.dir}" antfile="@{project.buildfile}" target="clean-dependencies" />
+			</sequential>
+		</for>
+	</target>
+
+
+	<!-- ============================================================== -->
+	<!-- Builds from scratch                                            -->
+	<!-- ============================================================== -->
+	<target name="buildTests" depends="cleanTests" description="Builds the entire application and test suite">
 		<for parallel="false" param="project.buildfile" trim="true">
 			<path refid="ivy.tests.projects.list" />
 			<sequential>

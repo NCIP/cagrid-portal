@@ -3,7 +3,7 @@
 <!-- caGrid 1.0 testing project build file                             -->
 <!-- ================================================================= -->
 
-<project name="caGrid-Testing" default="all" basedir=".">
+<project name="caGrid-testUtils" default="all" basedir=".">
 	<!-- Environment -->
 	<property environment="env" />
 	<property file="${basedir}/build.properties" />
