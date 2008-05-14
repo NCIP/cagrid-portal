@@ -14,5 +14,10 @@
 			</artifacts-list>
 		</publish-artifacts>
 	</target>
+	
+
+	<target name="do.resolve-dependencies" depends="pre.resolve-dependencies">
+		<ivy:retrieve conf="impl" pattern="${ivy.resolved.artifacts.dir}/dependencies/[type]s/[originalname](.[ext])" sync="true" type="jar" />
+	</target>
 </project>
 

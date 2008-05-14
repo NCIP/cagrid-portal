@@ -10,7 +10,8 @@
 
   <configurations>
     <!-- Public Configurations-->
-
+    <conf name="impl" visibility="public"/>
+    
     <!-- Containers-->
     <conf name="containers" visibility="public" description="All containers"
       extends="globus.container,tomcat.container,secure.tomcat.container"/>
@@ -29,5 +30,10 @@
     <artifact name="minimal-secure-tomcat-5.0.28-with-globus-4.0.3" conf="secure.tomcat.container" type="zip"/>
   </publications>
 
-  <dependencies/>
+  <dependencies>
+  <dependency rev="latest.integration" org="caGrid" name="testing" conf="impl->system"/>
+ 	<dependency org="caGrid" name="core" rev="latest.integration" conf="impl->default;impl->test"/>
+
+    <dependency rev="1.0" org="jdom" name="jdom" conf="impl->*"/>
+  </dependencies>
 </ivy-module>
