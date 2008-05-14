@@ -55,21 +55,4 @@
 		<property name="base.service.created" value="true" />
 	</target>
 
-
-	<!-- system tests against the basic data service -->
-	<target name="systemTest" depends="setGlobus,  prepareClasspaths" description="Runs system tests">
-		<junit dir="${basedir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="yes">
-			<jvmarg value="-Dintroduce.base.dir=../introduce" />
-			<classpath refid="all.test.classpath" />
-			<formatter type="xml" />
-			<test if="testcase" name="${testcase}" fork="no" todir="${junit.results.dir}" />
-			<batchtest unless="testcase" fork="yes" todir="${junit.results.dir}">
-				<fileset dir="${test.src.dir}">
-					<include name="**/test/system/**/*Test.java" />
-					<include name="**/test/system/**/*TestCase.java" />
-				</fileset>
-			</batchtest>
-		</junit>
-		<fail message="Tests failed! Check test reports." if="test.failed" />
-	</target>
 </project>
