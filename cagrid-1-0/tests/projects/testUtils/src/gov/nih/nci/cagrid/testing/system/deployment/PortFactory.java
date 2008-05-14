@@ -1,7 +1,5 @@
 package gov.nih.nci.cagrid.testing.system.deployment;
 
-import gov.nih.nci.cagrid.testing.core.TestingConstants;
-
 import java.net.ServerSocket;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -18,7 +16,7 @@ import EDU.oswego.cs.dl.util.concurrent.ObservableSync.SyncObserver;
  * 
  * @author David Ervin
  * @created Nov 5, 2007 10:13:07 AM
- * @version $Id: PortFactory.java,v 1.1 2008-05-14 17:17:42 hastings Exp $
+ * @version $Id: PortFactory.java,v 1.2 2008-05-14 18:30:17 hastings Exp $
  */
 public class PortFactory {
     private static List<Integer> assignedPortNumbers = null;

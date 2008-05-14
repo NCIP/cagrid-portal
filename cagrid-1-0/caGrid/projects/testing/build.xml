@@ -28,15 +28,7 @@
 	<property name="ext.lib.dir" value="${basedir}/ext/dependencies/jars" />
 	<property name="ext.test.lib.dir" location="${basedir}/ext/dependencies/test/jars" />
 
-	<!-- testing stuff -->
-	<property name="test.dir" location="${basedir}/test" />
-	<property name="test.src.dir" location="${test.dir}/src/java" />
-	<property name="test.classes.dir" location="${build.dir}/test/classes" />
-	<property name="test.lib.dir" location="${test.dir}/lib" />
-	<property name="test.project.jar" location="${jar.dir}/${project.name}-tests-${project.version}.jar" />
 
-	<!-- import the testing build file -->
-	<import file="test/test.xml" />
 
 
 	<!-- =============================================================== -->
@@ -109,16 +101,6 @@
 	</target>
 
 
-	<!-- =============================================================== -->
-	<!-- Compiles the test source code                                   -->
-	<!-- =============================================================== -->
-	<target name="compileTests" depends="prepare" description="compiles testing code">
-		<mkdir dir="${test.classes.dir}" />
-		<javac srcdir="${test.src.dir}" destdir="${test.classes.dir}" source="${java.source}" debug="on" deprecation="off" optimize="off">
-			<classpath refid="test.classpath" />
-		</javac>
-	</target>
-
 
 	<!-- ============================================================== -->
 	<!-- Cleans up generated stuff                                      -->
@@ -160,18 +142,6 @@
 	</target>
 
 
-	<!-- ============================================================== -->
-	<!-- Creates the jar files                                          -->
-	<!-- ============================================================== -->
-	<target name="jarTests" depends="compileTests" description="Builds the test Jar File">
-		<mkdir dir="${jar.dir}" />
-		<jar jarfile="${test.project.jar}" basedir="${test.classes.dir}">
-			<manifest>
-				<attribute name="Built-By" value="${user.name}" />
-			</manifest>
-		</jar>
-	</target>
-
 
 	<!-- =================================================================== -->
 	<!-- Builds Code Docuementation                                          -->
@@ -198,7 +168,7 @@
 	<!-- ============================================================== -->
 	<!-- Builds from scratch                                                -->
 	<!-- ============================================================== -->
-	<target name="all" description="Builds the entire application" depends="jar, jarTests" />
+	<target name="all" description="Builds the entire application" depends="jar" />
 
 </project>
 
