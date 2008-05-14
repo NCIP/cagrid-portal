@@ -21,8 +21,7 @@
 
   <dependencies>
     <!-- Standard caGrid Service Dependencies -->
-    <dependency rev="latest.integration" org="caGrid" name="testUtils" conf="default->impl"/>
-    <dependency rev="latest.integration" org="caGrid" name="testUtils" conf="default->containers"/>
+    <dependency rev="latest.integration" org="caGrid" name="testUtils" conf="default->impl,containers"/>
     <dependency rev="latest.integration" org="caGrid" name="introduce" conf="default->extension-test"/>
   </dependencies>
 </ivy-module>
