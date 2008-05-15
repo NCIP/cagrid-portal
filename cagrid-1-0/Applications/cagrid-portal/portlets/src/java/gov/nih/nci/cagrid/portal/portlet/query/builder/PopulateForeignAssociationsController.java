@@ -17,6 +17,9 @@ import java.util.HashMap;
 public class PopulateForeignAssociationsController extends
         ViewUmlClassTreeController {
 
+    private static String FOREIGN_UML_CLASS_PREFIX = "ForeignUMLClass:";
+
+
     private ForeignTargetsProvider targetsProvider;
 
     public PopulateForeignAssociationsController() {
@@ -27,6 +30,12 @@ public class PopulateForeignAssociationsController extends
     protected Object getObject(RenderRequest request) {
         TreeNode rootNode = (TreeNode) super.getObject(request);
         TreeNode node = rootNode.find(request.getParameter("path"));
+
+        for (TreeNode n : node.getChildren()) {
+            if (n.getName().startsWith(FOREIGN_UML_CLASS_PREFIX)) {
+                return rootNode;
+            }
+        }
         UMLClassBean umlClassBean = (UMLClassBean) node.getContent();
 
         if (node != null) {
@@ -35,12 +44,13 @@ public class PopulateForeignAssociationsController extends
                 node.getChildren().add(createNode(target, node));
             }
         }
+        getUmlClassTreeFacade().setRootNode(rootNode);
         return rootNode;
     }
 
     @Override
     protected TreeNode createNode(UMLClass umlClass, TreeNode parent) {
-        TreeNode node = new TreeNode(parent, "ForiegnUMLClass:" + umlClass.getId());
+        TreeNode node = new TreeNode(parent, FOREIGN_UML_CLASS_PREFIX + umlClass.getId());
         node.setLabel(umlClass.getClassName());
         node.setContent(new UMLClassBean(umlClass));
         getUmlClassTreeNodeListener().onOpen(node, new HashMap());
