@@ -66,12 +66,9 @@ public class <%=arguments.getService().getName()%>Configuration implements Servi
 	%>
 	
 	public String getEtcDirectoryPath() {
-		return ContainerConfig.getBaseDirectory() + File.separator + etcDirectoryPath;
+		return ContainerConfig.getBaseDirectory();
 	}
-	
-	public void setEtcDirectoryPath(String etcDirectoryPath) {
-		this.etcDirectoryPath = etcDirectoryPath;
-	}
+
 
 	<%
 	if(sproperties!=null && sproperties.getProperty()!=null){
