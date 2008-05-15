@@ -9,6 +9,7 @@
 	<configs>
 		<config>etc/applicationContext-gme.xml</config>
 		<config>test/resources/test-applicationContext-gme.xml</config>
+		<config>test/resources/spring/test-applicationContext-cycles.xml</config>
 	</configs>
 	<configSets>
 	</configSets>

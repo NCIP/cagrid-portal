@@ -6,6 +6,8 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 
 import org.hibernate.annotations.CollectionOfElements;
 import org.hibernate.annotations.Type;
@@ -18,6 +20,7 @@ public class XMLSchema {
     private XMLSchemaDocument rootDocument;
 
     @CollectionOfElements
+    @JoinTable(name = "xmlschema_additionaldocuments", joinColumns = {@JoinColumn(name = "referencing_xmlschema_id")})
     private Set<XMLSchemaDocument> additionalSchemaDocuments = new HashSet<XMLSchemaDocument>();
 
     @Column(nullable = false, unique = true)

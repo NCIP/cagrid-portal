@@ -9,6 +9,11 @@ public abstract class GMEIntegrationTestCaseBase extends AbstractAnnotationAware
     private static final String TEST_APPLICATION_CONTEXT_GME_XML = "test-applicationContext-gme.xml";
 
 
+    public GMEIntegrationTestCaseBase() {
+        setPopulateProtectedVariables(true);
+    }
+
+
     @Override
     protected String[] getConfigLocations() {
         return new String[]{"file:" + APPLICATION_CONTEXT_GME_XML, "classpath*:" + TEST_APPLICATION_CONTEXT_GME_XML};

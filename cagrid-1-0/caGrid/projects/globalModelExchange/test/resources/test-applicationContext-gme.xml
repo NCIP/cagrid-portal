@@ -20,7 +20,10 @@
 		</property>
 	</bean>
 
-	<bean id="testSchemaTemplate" class="org.cagrid.gme.common.XSDUtil"
+	<bean id="testSchemaCreationTemplate" class="org.cagrid.gme.common.XSDUtil"
 		factory-method="createSchema" abstract="true"/>
+
+	<bean id="testSchemaDocumentCreationTemplate" class="org.cagrid.gme.common.XSDUtil"
+		factory-method="createSchemaDocument" abstract="true"/>
 
 </beans>

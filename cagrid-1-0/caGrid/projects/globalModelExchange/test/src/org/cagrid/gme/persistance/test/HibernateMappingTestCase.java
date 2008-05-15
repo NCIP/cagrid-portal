@@ -1,6 +1,5 @@
 package org.cagrid.gme.persistance.test;
 
-
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -13,7 +12,7 @@ import org.hibernate.persister.entity.EntityPersister;
 
 public class HibernateMappingTestCase extends GMEIntegrationTestCaseBase {
 
-    private SessionFactory sessionFactory;
+    protected SessionFactory sessionFactory;
 
 
     public void testEverything() throws Exception {

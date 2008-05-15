@@ -80,8 +80,9 @@ public class XSDUtil {
 
 
     /**
-     * Constructs a SchemaDocument with the given file's contents. Note: this
-     * does not check that the file actually represents a valid XML Schema.
+     * Constructs a SchemaDocument with the given file's contents, and uses the
+     * filename (not the full path), as the systemID. Note: this does not check
+     * that the file actually represents a valid XML Schema.
      * 
      * @param schemaFile
      *            the file to convert to a schemadocument

@@ -1,5 +1,3 @@
-package org.cagrid.gme.persistance.test;
-
 import java.net.URI;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -15,9 +13,9 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
 
-public class HibernateStoreTestCase extends GMEIntegrationTestCaseBase {
+public class HibernateStoreExample extends GMEIntegrationTestCaseBase {
 
-    private SessionFactory sessionFactory;
+    protected SessionFactory sessionFactory;
 
 
     public void testStore() throws Exception {

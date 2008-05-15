@@ -2,7 +2,6 @@
 
 Convert test bundles to be dynamically loaded from  spring and create tests for each feature type such as cycles, include, etcetera. 
 
-finish hibernate annotations
 
   -add deploy system test
   -add unsuccessful deploy system test that uses wrong database information and make sure service wont start

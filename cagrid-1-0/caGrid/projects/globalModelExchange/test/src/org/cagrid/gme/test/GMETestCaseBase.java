@@ -7,11 +7,6 @@ public abstract class GMETestCaseBase extends GMEIntegrationTestCaseBase {
     protected GME gme;
 
 
-    public void setGme(GME gme) {
-        this.gme = gme;
-    }
-
-
     public void testGME() {
         assertNotNull(gme);
     }

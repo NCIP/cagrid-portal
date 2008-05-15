@@ -11,14 +11,53 @@
 		testing cycles.</description>
 
 
-	<bean id="testSchemaCycleA" parent="testSchemaTemplate">
+
+	<bean id="testSchemaCycleA" parent="testSchemaCreationTemplate" scope="prototype">
 		<constructor-arg type="java.net.URI" value="gme://a"/>
 		<constructor-arg>
 			<list>
 				<bean class="java.io.File">
-					<constructor-arg value="test/resources/schema/simple/A.xsd"/>
+					<constructor-arg value="test/resources/schema/cycle/A.xsd"/>
 				</bean>
 			</list>
 		</constructor-arg>
 	</bean>
+	<bean id="testSchemaCycleB" parent="testSchemaCreationTemplate" scope="prototype">
+		<constructor-arg type="java.net.URI" value="gme://b"/>
+		<constructor-arg>
+			<list>
+				<bean class="java.io.File">
+					<constructor-arg value="test/resources/schema/cycle/B.xsd"/>
+				</bean>
+			</list>
+		</constructor-arg>
+	</bean>
+
+	<!--	<bean id="testSchemaDocumentCycleA" parent="testSchemaDocumentCreationTemplate">
+		<constructor-arg>
+			<bean class="java.io.File">
+				<constructor-arg value="test/resources/schema/cycle/A.xsd"/>
+			</bean>
+		</constructor-arg>
+	</bean>
+
+	<bean id="testSchemaDocumentCycleB" parent="testSchemaDocumentCreationTemplate">
+		<constructor-arg>
+			<bean class="java.io.File">
+				<constructor-arg value="test/resources/schema/cycle/B.xsd"/>
+			</bean>
+		</constructor-arg>
+	</bean>
+
+	<bean id="testSchemaCycle" class="org.cagrid.gme.domain.XMLSchema">
+		<property name="targetNamespace" value="gme://a"/>
+		<property name="rootDocument">
+			<ref bean="testSchemaDocumentCycleA"/>
+		</property>
+		<property name="additionalSchemaDocuments">
+			<set>
+				<ref bean="testSchemaDocumentCycleB"/>
+			</set>
+		</property>
+	</bean>-->
 </beans>
