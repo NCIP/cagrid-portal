@@ -10,7 +10,7 @@
         <customNs />
       </configuration>
     </facet>
-    <facet type="web" name="Web" implicit="true">
+    <facet type="web" name="Web">
       <configuration>
         <descriptors>
           <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/src/war/WEB-INF/web.xml" optional="false" version="2.5" />
@@ -148,6 +148,15 @@
       </library>
     </orderEntry>
     <orderEntry type="module" module-name="cagrid-portal-portals" />
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/test/lib/mockito-all-1.3.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
     <orderEntryProperties />
   </component>
 </module>

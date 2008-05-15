@@ -14,6 +14,7 @@ import gov.nih.nci.cagrid.portal.domain.metadata.dataservice.UMLAssociationEdge;
 import gov.nih.nci.cagrid.portal.domain.metadata.dataservice.UMLClass;
 import gov.nih.nci.cagrid.portal.portlet.util.PortletUtils;
 import gov.nih.nci.cagrid.portal.portlet.query.builder.AggregateTargetsCommand;
+import gov.nih.nci.cagrid.portal.portlet.query.builder.ForeignTargetsProvider;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -139,38 +140,56 @@ public class CriteriaBean implements ApplicationContextAware {
                         .getBean("criteriaBeanPrototype");
 
                 final UMLClass klass = getUmlClass();
-                UMLClass assocType = (UMLClass) getHibernateTemplate().execute(
-                        new HibernateCallback() {
-                            public Object doInHibernate(Session session)
-                                    throws HibernateException, SQLException {
-                                UMLClass assocType2 = null;
-                                UMLClass klass2 = (UMLClass) session.get(klass
-                                        .getClass(), klass.getId());
-                                for (UMLAssociationEdge edge : klass2
-                                        .getAssociations()) {
-                                    if (edge instanceof SourceUMLAssociationEdge) {
-                                        SourceUMLAssociationEdge source = (SourceUMLAssociationEdge) edge;
-                                        TargetUMLAssociationEdge target = source
-                                                .getAssociation().getTarget();
-                                        if (target.getRole().equals(parts[0])) {
-                                            assocType2 = target.getType();
-                                            break;
+
+                if (parts[0].indexOf(ForeignTargetsProvider.FOREIGN_TARGETS_CLASS_PREFIX) > -1) {
+
+                    UMLClass assocType = (UMLClass) getHibernateTemplate().execute(
+                            new HibernateCallback() {
+                                public Object doInHibernate(Session session)
+                                        throws HibernateException, SQLException {
+                                    UMLClass klass2 = (UMLClass) session.get(klass
+                                            .getClass(), klass.getId());
+                                    return klass2;
+                                }
+                            });
+                    subCriteria.setUmlClass(assocType);
+                    assoc.setRoleName(parts[0]);
+                    assoc.setCriteriaBean(subCriteria);
+
+                } else {
+                    UMLClass assocType = (UMLClass) getHibernateTemplate().execute(
+                            new HibernateCallback() {
+                                public Object doInHibernate(Session session)
+                                        throws HibernateException, SQLException {
+                                    UMLClass assocType2 = null;
+                                    UMLClass klass2 = (UMLClass) session.get(klass
+                                            .getClass(), klass.getId());
+                                    for (UMLAssociationEdge edge : klass2
+                                            .getAssociations()) {
+                                        if (edge instanceof SourceUMLAssociationEdge) {
+                                            SourceUMLAssociationEdge source = (SourceUMLAssociationEdge) edge;
+                                            TargetUMLAssociationEdge target = source
+                                                    .getAssociation().getTarget();
+                                            if (target.getRole().equals(parts[0])) {
+                                                assocType2 = target.getType();
+                                                break;
+                                            }
                                         }
                                     }
+                                    return assocType2;
                                 }
-                                return assocType2;
-                            }
-                        });
+                            });
 
-                if (assocType == null) {
-                    throw new IllegalArgumentException(
-                            "No association for role '" + parts[0] + "' on '"
-                                    + getUmlClass().getClassName() + "'");
+                    if (assocType == null) {
+                        throw new IllegalArgumentException(
+                                "No association for role '" + parts[0] + "' on '"
+                                        + getUmlClass().getClassName() + "'");
+                    }
+                    subCriteria.setUmlClass(assocType);
+                    assoc.setCriteriaBean(subCriteria);
+                    logger.debug("Adding association "
+                            + getUmlClass().getClassName() + "." + parts[0]);
                 }
-                subCriteria.setUmlClass(assocType);
-                assoc.setCriteriaBean(subCriteria);
-                logger.debug("Adding association "
-                        + getUmlClass().getClassName() + "." + parts[0]);
                 getAssociations().add(assoc);
             }
             assoc.getCriteriaBean().update(parts[1], criterion, delete);

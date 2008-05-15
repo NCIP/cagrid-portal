@@ -8,6 +8,7 @@ import gov.nih.nci.cagrid.cqlquery.*;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.portal.domain.metadata.dataservice.UMLClass;
 import gov.nih.nci.cagrid.portal.portlet.query.QueryFormulator;
+import gov.nih.nci.cagrid.portal.portlet.query.builder.ForeignTargetsProvider;
 import gov.nih.nci.cagrid.fqp.common.DCQLConstants;
 
 import java.io.StringWriter;
@@ -66,6 +67,11 @@ public class CQLQueryBean extends CriteriaBean {
     }
 
     public boolean isDCQLQuery() {
+        for (AssociationBean assocBean : getAssociations()) {
+            if (assocBean.getRoleName().startsWith(ForeignTargetsProvider.FOREIGN_TARGETS_CLASS_PREFIX)) {
+                return true;
+            }
+        }
         return getAggregateTargets() != null && getAggregateTargets().getSelected().size() > 1;
     }
 
