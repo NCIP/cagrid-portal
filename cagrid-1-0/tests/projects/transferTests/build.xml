@@ -86,6 +86,7 @@
 					<fileset dir="${ant.library.dir}">
 						<include name="*.jar" />
 					</fileset>
+			        <pathelement path="${introduce.dir}/test/resources"/>
 		</path>
 	</target>
 
@@ -160,7 +161,7 @@
 			</classpath>
 			<classpath refid="Introduce.test.classpath" />
 			<classpath>
-			    <pathelement location="${test.dir}/resources" />
+			    <pathelement location="${basedir}/resources" />
 			</classpath>
 			<formatter type="xml" />
 			<batchtest fork="yes" todir="${junit.results.dir}">

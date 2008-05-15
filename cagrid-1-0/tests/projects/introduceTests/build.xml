@@ -86,6 +86,7 @@
 					<fileset dir="${ant.library.dir}">
 						<include name="*.jar" />
 					</fileset>
+			        <pathelement path="${introduce.dir}/test/resources"/>
 		</path>
 	</target>
 
@@ -157,6 +158,9 @@
 			<classpath refid="build.classpath" />
 			<classpath>
 				<pathelement path="build/classes/" />
+			</classpath>
+			<classpath>
+				<pathelement path="resources/" />
 			</classpath>
 			<classpath refid="Introduce.test.classpath" />
 			<formatter type="xml" />
