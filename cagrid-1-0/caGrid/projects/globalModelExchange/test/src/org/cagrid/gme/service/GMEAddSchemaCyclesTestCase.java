@@ -1,18 +1,29 @@
 package org.cagrid.gme.service;
 
+import gov.nih.nci.cagrid.common.Utils;
+
 import java.net.URI;
 import java.util.Arrays;
 
 import org.cagrid.gme.domain.XMLSchema;
 import org.cagrid.gme.stubs.types.InvalidSchemaSubmission;
 import org.cagrid.gme.test.GMETestCaseBase;
+import org.cagrid.gme.test.SpringTestApplicationContextConstants;
 import org.springframework.test.annotation.ExpectedException;
 
 
 public class GMEAddSchemaCyclesTestCase extends GMETestCaseBase {
 
+    // these are loaded by Spring
     protected XMLSchema testSchemaCycleA;
     protected XMLSchema testSchemaCycleB;
+
+
+    @Override
+    protected String[] getConfigLocations() {
+        return (String[]) Utils.appendToArray(super.getConfigLocations(),
+            SpringTestApplicationContextConstants.CYCLES_LOCATION);
+    }
 
 
     @ExpectedException(InvalidSchemaSubmission.class)

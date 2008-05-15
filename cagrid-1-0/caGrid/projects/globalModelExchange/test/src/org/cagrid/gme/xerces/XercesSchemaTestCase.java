@@ -13,13 +13,9 @@ import org.cagrid.gme.common.XSDUtil;
 import org.cagrid.gme.domain.XMLSchema;
 import org.cagrid.gme.persistence.SchemaPersistenceI;
 import org.cagrid.gme.sax.GMEXMLSchemaLoader;
-import org.cagrid.gme.test.GMETestSchemaBundles;
 import org.w3c.dom.ls.LSInput;
 
 
-/**
- * @author oster
- */
 public class XercesSchemaTestCase extends TestCase {
 
     public void testNoImports() {
@@ -58,18 +54,18 @@ public class XercesSchemaTestCase extends TestCase {
     }
 
 
-    public void testIncludes() {
-        try {
-
-            XSModel model = loadSchemas(GMETestSchemaBundles.getSimpleIncludeBundle(), null);
-
-            assertEquals(2, model.getNamespaceItems().getLength());
-        } catch (Exception e) {
-            e.printStackTrace();
-            fail(e.getMessage());
-        }
-    }
-
+    // public void testIncludes() {
+    // try {
+    //
+    // XSModel model =
+    // loadSchemas(GMETestSchemaBundles.getSimpleIncludeBundle(), null);
+    //
+    // assertEquals(2, model.getNamespaceItems().getLength());
+    // } catch (Exception e) {
+    // e.printStackTrace();
+    // fail(e.getMessage());
+    // }
+    // }
 
     public void testImports() {
         try {

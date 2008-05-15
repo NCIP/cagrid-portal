@@ -14,7 +14,7 @@ springize GME:
   -something to get current identity (UserInformationProvider.getCurrentUserIdentity()?)
     
 
-add a test for no namespace schema (need to disallow)
+add a test for "already defined"
 
 add a test for schema with unused schemadocument (need to disallow)
 

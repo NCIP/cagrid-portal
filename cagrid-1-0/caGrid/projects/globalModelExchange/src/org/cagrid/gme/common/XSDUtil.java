@@ -94,7 +94,7 @@ public class XSDUtil {
      */
     public static XMLSchemaDocument createSchemaDocument(File schemaFile) throws FileNotFoundException, IOException {
         if (schemaFile == null || !schemaFile.canRead()) {
-            throw new IllegalArgumentException("schemaFile must be a valid, readable file.");
+            throw new IllegalArgumentException("schemaFile [" + schemaFile + "] must be a valid, readable file.");
         }
 
         FileInputStream fileInputStream = new FileInputStream(schemaFile);

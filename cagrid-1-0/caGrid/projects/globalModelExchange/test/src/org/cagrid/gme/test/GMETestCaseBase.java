@@ -7,8 +7,9 @@ public abstract class GMETestCaseBase extends GMEIntegrationTestCaseBase {
     protected GME gme;
 
 
-    public void testGME() {
+    @Override
+    protected void onSetUp() throws Exception {
+        super.onSetUp();
         assertNotNull(gme);
     }
-
 }

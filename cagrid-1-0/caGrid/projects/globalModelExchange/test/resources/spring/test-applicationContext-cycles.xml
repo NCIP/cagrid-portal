@@ -32,32 +32,4 @@
 			</list>
 		</constructor-arg>
 	</bean>
-
-	<!--	<bean id="testSchemaDocumentCycleA" parent="testSchemaDocumentCreationTemplate">
-		<constructor-arg>
-			<bean class="java.io.File">
-				<constructor-arg value="test/resources/schema/cycle/A.xsd"/>
-			</bean>
-		</constructor-arg>
-	</bean>
-
-	<bean id="testSchemaDocumentCycleB" parent="testSchemaDocumentCreationTemplate">
-		<constructor-arg>
-			<bean class="java.io.File">
-				<constructor-arg value="test/resources/schema/cycle/B.xsd"/>
-			</bean>
-		</constructor-arg>
-	</bean>
-
-	<bean id="testSchemaCycle" class="org.cagrid.gme.domain.XMLSchema">
-		<property name="targetNamespace" value="gme://a"/>
-		<property name="rootDocument">
-			<ref bean="testSchemaDocumentCycleA"/>
-		</property>
-		<property name="additionalSchemaDocuments">
-			<set>
-				<ref bean="testSchemaDocumentCycleB"/>
-			</set>
-		</property>
-	</bean>-->
 </beans>

@@ -9,8 +9,6 @@
 
 	<description>This document is loaded in the context of tests, in addition to the main document.</description>
 
-	<import resource="spring/test-applicationContext-cycles.xml"/>
-
 	<bean id="propertyConfigurer"
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="locations">
