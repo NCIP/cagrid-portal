@@ -3,6 +3,7 @@
 	<name>caGrid-introduce</name>
 	<comment></comment>
 	<projects>
+		<project>caGrid-gaards-ui</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
