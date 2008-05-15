@@ -72,7 +72,7 @@ public class DataServiceQueryExecutor {
             throw new RemoteDataServiceException("Invalid target service URL:" + targetServiceURL, e);
         } catch (RemoteException e) {
             LOG.error("Problem querying remote service:" + targetServiceURL, e);
-            throw new RemoteDataServiceException("Problem query data service at URL:" + targetServiceURL, e);
+            throw new RemoteDataServiceException("Problem querying data service at URL:" + targetServiceURL, e);
         }
         return cqlResults;
     }
