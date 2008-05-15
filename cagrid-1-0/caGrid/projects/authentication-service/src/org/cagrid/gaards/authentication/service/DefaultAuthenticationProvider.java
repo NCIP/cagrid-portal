@@ -1,5 +1,5 @@
 /**
- * $Id: DefaultAuthenticationProvider.java,v 1.1 2008-05-10 01:47:36 langella Exp $
+ * $Id: DefaultAuthenticationProvider.java,v 1.2 2008-05-15 19:54:01 langella Exp $
  *
  */
 package org.cagrid.gaards.authentication.service;
@@ -7,20 +7,19 @@ package org.cagrid.gaards.authentication.service;
 import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
 
 import java.rmi.RemoteException;
+import java.util.Set;
 
 import javax.security.auth.Subject;
+import javax.xml.namespace.QName;
 
 import org.cagrid.gaards.authentication.Credential;
-import org.cagrid.gaards.authentication.common.AuthenticationProvider;
 import org.cagrid.gaards.authentication.common.AuthenticationProviderException;
 import org.cagrid.gaards.authentication.common.InsufficientAttributeException;
 import org.cagrid.gaards.authentication.common.InvalidCredentialException;
-import org.cagrid.gaards.authentication.common.SAMLProvider;
-import org.cagrid.gaards.authentication.common.SubjectProvider;
 
 /**
  * 
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  * @author Joshua Phillips
  * 
  */
@@ -71,6 +70,10 @@ public class DefaultAuthenticationProvider implements AuthenticationProvider {
 
 	public void setSubjectProvider(SubjectProvider subjectProvider) {
 		this.subjectProvider = subjectProvider;
+	}
+	
+	public Set<QName> getSupportedAuthenticationProfiles(){
+		return getSubjectProvider().getSupportedAuthenticationProfiles();
 	}
 
 }

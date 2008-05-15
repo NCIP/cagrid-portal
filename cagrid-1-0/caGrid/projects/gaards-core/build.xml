@@ -229,23 +229,7 @@
 
 	<target name="createTomcatKeystore" description="Generates a Grid Trust Report." depends="init">
 		<java classname="org.cagrid.gaards.pki.tools.TomcatKeystoreCreator" fork="false" newenvironment="true" failonerror="true">
-			<classpath>
-				<fileset dir="${build.lib.dir}">
-					<include name="**/*.jar" />
-				</fileset>
-				<fileset dir="${ext.lib.dir}">
-					<include name="*.jar" />
-				</fileset>
-				<fileset dir="${lib.dir}">
-					<include name="**/*.jar" />
-				</fileset>
-				<fileset dir="${globus.location}/lib">
-					<include name="*.jar" />
-					<exclude name="${jar.name}" />
-					<exclude name="xml-apis.jar" />
-					<exclude name="xercesImpl.jar" />
-				</fileset>
-			</classpath>
+				<classpath refid="run.classpath" />
 		</java>
 	</target>
 </project>

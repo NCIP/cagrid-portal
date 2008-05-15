@@ -28,4 +28,12 @@
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
+	
+	<xs:element name="AuthenticationProfiles"
+		type="gaards:AuthenticationProfiles" />
+	 <xs:complexType name="AuthenticationProfiles">
+			<xs:sequence>
+				<xs:element name="profile" minOccurs="1" maxOccurs="unbounded" type="xs:QName"/>
+			</xs:sequence>
+	</xs:complexType>
 </xs:schema>

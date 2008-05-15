@@ -256,6 +256,7 @@
 		<echo message="Test results dir: ${junit.results.dir}" />
 		<mkdir dir="${junit.results.dir}" />
 		<junit dir="${basedir}" printsummary="yes" showoutput="true">
+			<jvmarg value="-Djava.endorsed.dirs=${ext.endorsed.dir}" />
 			<classpath refid="test.run.classpath" />
 			<formatter type="xml" />
 			<batchtest fork="yes" todir="${junit.results.dir}">

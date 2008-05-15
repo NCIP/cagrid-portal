@@ -1,6 +1,5 @@
 package org.cagrid.gaards.authentication.service;
 
-import org.cagrid.gaards.authentication.common.AuthenticationProvider;
 import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 import org.springframework.beans.factory.xml.XmlBeanFactory;
 import org.springframework.core.io.AbstractResource;

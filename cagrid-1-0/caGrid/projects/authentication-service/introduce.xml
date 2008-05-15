@@ -1,5 +1,11 @@
 <ns1:ServiceDescription introduceVersion="1.2" xmlns:ns1="gme://gov.nih.nci.cagrid/1/Introduce">
  <ns2:Namespaces xsi:type="ns2:NamespacesType" xmlns:ns2="gme://gov.nih.nci.cagrid.introduce/1/Namespace" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ns2:Namespace location="./authentication-core-types.xsd" namespace="http://gaards.cagrid.org/authentication" packageName="org.cagrid.gaards.authentication" xsi:type="ns2:NamespaceType">
+   <ns2:SchemaElement type="AuthenticationProfiles" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="BasicAuthentication" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="BasicAuthenticationWithOneTimePassword" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Credential" xsi:type="ns2:SchemaElementType"/>
+  </ns2:Namespace>
   <ns2:Namespace location="./authentication-faults.xsd" namespace="http://gaards.cagrid.org/authentication-faults" packageName="org.cagrid.gaards.authentication.faults" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="AuthenticationProviderFault" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="CredentialNotSupportedFault" xsi:type="ns2:SchemaElementType"/>
@@ -14,11 +20,6 @@
   <ns2:Namespace location="./authentication-service.xsd" namespace="http://cagrid.nci.nih.gov/1/authentication-service" packageName="gov.nih.nci.cagrid.authentication.bean" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="Credential" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="SAMLAssertion" xsi:type="ns2:SchemaElementType"/>
-  </ns2:Namespace>
-  <ns2:Namespace location="./authentication-core-types.xsd" namespace="http://gaards.cagrid.org/authentication" packageName="org.cagrid.gaards.authentication" xsi:type="ns2:NamespaceType">
-   <ns2:SchemaElement type="BasicAuthentication" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="BasicAuthenticationWithOneTimePassword" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="Credential" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
   <ns2:Namespace generateStubs="false" location="./xmldsig-core-schema.xsd" namespace="http://www.w3.org/2000/09/xmldsig#" packageName="org.w3.www._2000._09.xmldsig" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="CanonicalizationMethod" xsi:type="ns2:SchemaElementType"/>
@@ -193,19 +194,20 @@
     </ns4:Method>
    </ns4:Methods>
    <ns22:ResourcePropertiesList xsi:type="ns22:ResourcePropertiesListType" xmlns:ns22="gme://gov.nih.nci.cagrid.introduce/1/Resources">
-    <ns22:ResourceProperty qName="ns23:ServiceMetadata" fileLocation="serviceMetadata.xml" populateFromFile="true" register="true" xsi:type="ns22:ResourcePropertyType" xmlns:ns23="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"/>
+    <ns22:ResourceProperty qName="ns23:ServiceMetadata" description="" fileLocation="serviceMetadata.xml" populateFromFile="true" register="true" xsi:type="ns22:ResourcePropertyType" xmlns:ns23="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"/>
+    <ns22:ResourceProperty qName="ns24:AuthenticationProfiles" description="" fileLocation="AuthenticationService_authenticationProfiles.xml" populateFromFile="false" register="true" xsi:type="ns22:ResourcePropertyType" xmlns:ns24="http://gaards.cagrid.org/authentication"/>
    </ns22:ResourcePropertiesList>
-   <ns24:ServiceSecurity xsi:type="ns24:ServiceSecurity" xmlns:ns24="gme://gov.nih.nci.cagrid.introduce/1/Security">
-    <ns24:SecuritySetting xsi:type="ns24:SecuritySetting">Custom</ns24:SecuritySetting>
-    <ns24:TransportLevelSecurity xsi:type="ns24:TransportLevelSecurity">
-     <ns24:CommunicationMethod xsi:type="ns24:CommunicationMethod">Privacy</ns24:CommunicationMethod>
-    </ns24:TransportLevelSecurity>
-    <ns24:RunAsMode xsi:type="ns24:RunAsMode">System</ns24:RunAsMode>
-    <ns24:AnonymousClients xsi:type="ns24:AnonymousCommunication">Yes</ns24:AnonymousClients>
-    <ns24:ServiceAuthorization xsi:type="ns24:ServiceAuthorization">
-     <ns24:NoAuthorization xsi:type="ns24:NoAuthorization"/>
-    </ns24:ServiceAuthorization>
-   </ns24:ServiceSecurity>
+   <ns25:ServiceSecurity xsi:type="ns25:ServiceSecurity" xmlns:ns25="gme://gov.nih.nci.cagrid.introduce/1/Security">
+    <ns25:SecuritySetting xsi:type="ns25:SecuritySetting">Custom</ns25:SecuritySetting>
+    <ns25:TransportLevelSecurity xsi:type="ns25:TransportLevelSecurity">
+     <ns25:CommunicationMethod xsi:type="ns25:CommunicationMethod">Privacy</ns25:CommunicationMethod>
+    </ns25:TransportLevelSecurity>
+    <ns25:RunAsMode xsi:type="ns25:RunAsMode">System</ns25:RunAsMode>
+    <ns25:AnonymousClients xsi:type="ns25:AnonymousCommunication">Yes</ns25:AnonymousClients>
+    <ns25:ServiceAuthorization xsi:type="ns25:ServiceAuthorization">
+     <ns25:NoAuthorization xsi:type="ns25:NoAuthorization"/>
+    </ns25:ServiceAuthorization>
+   </ns25:ServiceSecurity>
    <ns3:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema"></ns3:description>
    <ns3:ResourceFrameworkOptions xsi:type="ns3:ResourceFrameworkOptions">
     <ns3:Main xsi:type="ns3:Main"/>
@@ -215,11 +217,11 @@
    </ns3:ResourceFrameworkOptions>
   </ns3:Service>
  </ns3:Services>
- <ns25:Extensions xsi:type="ns25:ExtensionsType" xmlns:ns25="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <ns25:Extension name="cagrid_metadata" version="1.2" xsi:type="ns25:ExtensionType"/>
- </ns25:Extensions>
- <ns26:ServiceProperties xmlns:ns26="gme://gov.nih.nci.cagrid.introduce/1/Property">
-  <ns26:Property description="The Authentication Provider to use." isFromETC="true" key="authenticationConfiguration" value="authentication-config.xml"/>
-  <ns26:Property description="The authentication properties file." isFromETC="true" key="authenticationProperties" value="authentication.properties"/>
- </ns26:ServiceProperties>
+ <ns26:Extensions xsi:type="ns26:ExtensionsType" xmlns:ns26="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ns26:Extension name="cagrid_metadata" version="1.2" xsi:type="ns26:ExtensionType"/>
+ </ns26:Extensions>
+ <ns27:ServiceProperties xmlns:ns27="gme://gov.nih.nci.cagrid.introduce/1/Property">
+  <ns27:Property description="The Authentication Provider to use." isFromETC="true" key="authenticationConfiguration" value="authentication-config.xml"/>
+  <ns27:Property description="The authentication properties file." isFromETC="true" key="authenticationProperties" value="authentication.properties"/>
+ </ns27:ServiceProperties>
 </ns1:ServiceDescription>

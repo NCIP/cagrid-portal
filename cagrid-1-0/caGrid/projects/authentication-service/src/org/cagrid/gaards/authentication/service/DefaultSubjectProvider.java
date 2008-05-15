@@ -1,5 +1,5 @@
 /**
- * $Id: DefaultSubjectProvider.java,v 1.1 2008-05-10 01:47:36 langella Exp $
+ * $Id: DefaultSubjectProvider.java,v 1.2 2008-05-15 19:54:01 langella Exp $
  *
  */
 package org.cagrid.gaards.authentication.service;
@@ -12,15 +12,14 @@ import javax.security.auth.Subject;
 import org.cagrid.gaards.authentication.BasicAuthentication;
 import org.cagrid.gaards.authentication.Credential;
 import org.cagrid.gaards.authentication.common.InvalidCredentialException;
-import org.cagrid.gaards.authentication.common.SubjectProvider;
 
 /**
  * 
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  * @author Joshua Phillips
  * 
  */
-public class DefaultSubjectProvider implements SubjectProvider {
+public class DefaultSubjectProvider extends BasicAuthenticationSubjectProvider {
 
 	private AuthenticationManager authenticationManager;
 
@@ -45,7 +44,8 @@ public class DefaultSubjectProvider implements SubjectProvider {
 			}
 			return subject;
 		} else {
-			throw new InvalidCredentialException("The credential type submitted is not supported by this service.");
+			throw new InvalidCredentialException(
+					"The credential type submitted is not supported by this service.");
 		}
 	}
 

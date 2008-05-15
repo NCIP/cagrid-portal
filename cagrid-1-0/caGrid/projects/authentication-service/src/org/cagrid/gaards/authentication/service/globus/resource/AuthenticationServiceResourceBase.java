@@ -100,6 +100,17 @@ public abstract class AuthenticationServiceResourceBase extends ReflectionResour
 		prop.set(0, serviceMetadata);
 	}
 	
+	
+	
+	public org.cagrid.gaards.authentication.AuthenticationProfiles getAuthenticationProfiles(){
+		return ((AuthenticationServiceResourceProperties) getResourceBean()).getAuthenticationProfiles();
+	}
+	
+	public void setAuthenticationProfiles(org.cagrid.gaards.authentication.AuthenticationProfiles authenticationProfiles ) throws ResourceException {
+        ResourceProperty prop = getResourcePropertySet().get(AuthenticationServiceConstants.AUTHENTICATIONPROFILES);
+		prop.set(0, authenticationProfiles);
+	}
+	
 
 
 	  

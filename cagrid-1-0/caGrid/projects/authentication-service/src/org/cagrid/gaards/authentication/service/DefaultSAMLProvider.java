@@ -1,5 +1,5 @@
 /**
- * $Id: DefaultSAMLProvider.java,v 1.1 2008-05-10 01:47:36 langella Exp $
+ * $Id: DefaultSAMLProvider.java,v 1.2 2008-05-15 19:54:01 langella Exp $
  *
  */
 package org.cagrid.gaards.authentication.service;
@@ -40,12 +40,12 @@ import org.cagrid.gaards.pki.KeyUtil;
 
 /**
  *
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  * @author Joshua Phillips
  *
  */
 public class DefaultSAMLProvider implements
-	org.cagrid.gaards.authentication.common.SAMLProvider {
+	org.cagrid.gaards.authentication.service.SAMLProvider {
     
     private String certificateFileName;
     private String privateKeyFileName;
