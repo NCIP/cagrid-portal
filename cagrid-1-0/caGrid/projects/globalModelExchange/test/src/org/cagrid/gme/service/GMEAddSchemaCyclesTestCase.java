@@ -47,6 +47,6 @@ public class GMEAddSchemaCyclesTestCase extends GMETestCaseBase {
         URI[] gmenamespaces = this.gme.getNamespaces();
         Arrays.sort(namespaces);
         Arrays.sort(gmenamespaces);
-        Arrays.equals(namespaces, gmenamespaces);
+        assertTrue(Arrays.equals(namespaces, gmenamespaces));
     }
 }

@@ -4,7 +4,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import org.cagrid.gme.domain.XMLSchema;
@@ -19,11 +18,6 @@ public class XMLSchemaInformationDaoTestCase extends GMEIntegrationTestCaseBase 
 
 
     public void test() throws URISyntaxException {
-
-        List<XMLSchemaInformation> all = xmlSchemaInformationDao.getAll();
-        for (XMLSchemaInformation schemaInformation : all) {
-            System.out.println("ALREADY IN THE DATABASE!!!!!!\t" + schemaInformation);
-        }
 
         XMLSchemaInformation schemaInfo = new XMLSchemaInformation();
         XMLSchema schema = new XMLSchema();
