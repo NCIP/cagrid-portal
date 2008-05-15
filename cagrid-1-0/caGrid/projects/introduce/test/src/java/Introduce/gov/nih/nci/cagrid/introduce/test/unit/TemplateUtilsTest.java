@@ -15,7 +15,7 @@ import junit.framework.TestCase;
 public class TemplateUtilsTest extends TestCase {
 	public static String GOLD_DIRECTORY = File.separator + "test" + File.separator + "resources" + File.separator + "gold" + File.separator;
 
-	public static String GOLD_FILE = "introduce_Example.xml";
+	public static String GOLD_FILE = "versions" + File.separator + "introduce_Example.xml";
 
 	private ServiceDescription info = null;
 
