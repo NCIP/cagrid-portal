@@ -58,10 +58,10 @@
     }
 
     function populateForiegnAssociations(path){
-    alert(path);
     var form = document.<portlet:namespace/>criteriaBeanForm;
     form.action ='<portlet:renderURL/>';
     form.path.value=path;
+    form.operation.value="populateForeignAssociations";
     form.submit();
     }
 
@@ -98,7 +98,7 @@
         </c:otherwise>
     </c:choose>
 
-    <input type="hidden" name="operation" value="populateForeignAssociations"/>
+    <input type="hidden" name="operation" value=""/>
     <input type="hidden" name="path" value=""/>
 
 </form:form>
