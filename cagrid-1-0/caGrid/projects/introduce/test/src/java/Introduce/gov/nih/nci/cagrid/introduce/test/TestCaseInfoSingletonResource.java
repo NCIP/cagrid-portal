@@ -6,7 +6,6 @@ import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import java.io.File;
 
 public class TestCaseInfoSingletonResource extends TestCaseInfo {
-	public static final String GOLD_SCHEMA_DIR= "test" + File.separator + "resources" + File.separator + "schema";
 
 	public String name = "IntroduceTestSingletonResourceService";
 

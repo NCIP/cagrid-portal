@@ -20,8 +20,8 @@ public class ModifyPersistenceClientStep extends BaseStep {
     public void runStep() throws Throwable {
         System.out.println("Adding a simple methods implementation.");
 
-        File inFileClient = new File("test" + File.separator + "resources" + File.separator + "gold" + File.separator
-            + "persistence" + File.separator + tci.getName() + "ClientGet.java");
+        File inFileClient = new File(this.getClass().getResource(File.separator +"gold" + File.separator
+            + "persistence" + File.separator + tci.getName() + "ClientGet.java").getFile());
         File outFileClient = new File(tci.getDir() + File.separator + "src" + File.separator + tci.getPackageDir()
             + File.separator + "client" + File.separator + tci.getName() + "Client.java");
 

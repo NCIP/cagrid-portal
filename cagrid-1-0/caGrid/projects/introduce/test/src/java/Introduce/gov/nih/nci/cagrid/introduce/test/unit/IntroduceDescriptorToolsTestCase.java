@@ -21,9 +21,6 @@ public class IntroduceDescriptorToolsTestCase extends TestCase {
 
 	private String baseDirectory;
 
-	private static final String GOLD_RESOURCES = "test" + File.separator
-			+ "resources" + File.separator + "gold";
-
 	private static final String NAMESPACE1 = "gme://caCORE.caBIG/3.0/gov.nih.nci.cadsr.domain";
 
 	private static final String NAMESPACE2 = "http://www.w3.org/2001/XMLSchema";
@@ -45,14 +42,12 @@ public class IntroduceDescriptorToolsTestCase extends TestCase {
 		}
 
 		ServiceDescription introService = (ServiceDescription) Utils
-				.deserializeDocument(baseDirectory + File.separator
-						+ GOLD_RESOURCES + File.separator
-						+ "introduceServicesExample.xml",
+				.deserializeDocument(this.getClass().getResource(File.separator + "gold" + File.separator
+						+ "introduceServicesExample.xml").getFile(),
 						ServiceDescription.class);
 
-		File servicePropertiesFile = new File(baseDirectory + File.separator
-				+ GOLD_RESOURCES + File.separator
-				+ "introduceServicesExample.properties");
+		File servicePropertiesFile = new File(this.getClass().getResource(File.separator +"gold" + File.separator
+				+ "introduceServicesExample.properties").getFile());
 		Properties serviceProperties = new Properties();
 		serviceProperties.load(new FileInputStream(servicePropertiesFile));
 		// have to set the service directory in the service properties
@@ -60,7 +55,7 @@ public class IntroduceDescriptorToolsTestCase extends TestCase {
 				IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR,
 				baseDirectory);
 		info = new ServiceInformation(introService, serviceProperties,
-				new File(baseDirectory + File.separator + GOLD_RESOURCES));
+				new File(this.getClass().getResource(File.separator +"gold").getFile()));
 
 	}
 

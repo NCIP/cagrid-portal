@@ -3,8 +3,6 @@ package gov.nih.nci.cagrid.introduce.test;
 import java.io.File;
 
 public abstract class TestCaseInfo {
-	public static final String GOLD_SCHEMA_DIR = 
-        "test" + File.separator + "resources" + File.separator + "schema";
 
 	public abstract String getDir();
 

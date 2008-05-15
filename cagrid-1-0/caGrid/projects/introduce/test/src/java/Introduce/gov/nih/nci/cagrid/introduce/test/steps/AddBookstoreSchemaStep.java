@@ -26,8 +26,8 @@ public class AddBookstoreSchemaStep extends BaseStep {
 		System.out.println("Adding a bookstore schema");
 
 		// copy over the bookstore schema to be used with the test
-		Utils.copyFile(new File(getBaseDir() + File.separator + TestCaseInfo.GOLD_SCHEMA_DIR + File.separator
-			+ "bookstore.xsd"), new File(getBaseDir() + File.separator + tci.getDir() + File.separator + "schema"
+		Utils.copyFile(new File(this.getClass().getResource(File.separator  + "schema" + File.separator
+			+ "bookstore.xsd").getFile()), new File(getBaseDir() + File.separator + tci.getDir() + File.separator + "schema"
 			+ File.separator + tci.getName() + File.separator + "bookstore.xsd"));
 
 		ServiceDescription introService = (ServiceDescription) Utils.deserializeDocument(getBaseDir() + File.separator

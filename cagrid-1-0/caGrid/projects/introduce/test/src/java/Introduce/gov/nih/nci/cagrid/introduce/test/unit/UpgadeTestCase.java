@@ -13,7 +13,7 @@ public class UpgadeTestCase extends TestCase {
     public void testGetVersion() {
 
         try {
-            String version = UpgradeUtilities.getCurrentServiceVersion("test" + File.separator + "resources" + File.separator + "gold" + File.separator + "introduceServicesExample.xml");
+            String version = UpgradeUtilities.getCurrentServiceVersion(this.getClass().getResource(File.separator +"gold" + File.separator + "introduceServicesExample.xml").getFile());
             assertTrue(version.equals("1.0b"));
         } catch (Exception e) {
             fail(e.getMessage());
@@ -24,7 +24,7 @@ public class UpgadeTestCase extends TestCase {
     public void testGetName() {
 
         try {
-            String version = UpgradeUtilities.getServiceName("test" + File.separator + "resources" + File.separator + "gold" + File.separator + "introduceServicesExample.xml");
+            String version = UpgradeUtilities.getServiceName(this.getClass().getResource(File.separator +"gold" + File.separator + "introduceServicesExample.xml").getFile());
             assertTrue(version.equals("HelloWorld"));
         } catch (Exception e) {
             fail(e.getMessage());
@@ -34,22 +34,22 @@ public class UpgadeTestCase extends TestCase {
 
     public void testNotUpgradable01b() {
 
-        UpgradeManager um = new UpgradeManager("test" + File.separator + "resources" + File.separator + "gold"
-            + File.separator + "01b");
+        UpgradeManager um = new UpgradeManager(this.getClass().getResource(File.separator +"gold"
+            + File.separator + "01b").getFile());
         assertFalse(um.canIntroduceBeUpgraded());
     }
 
     public void testUpgradable10() {
 
-        UpgradeManager um = new UpgradeManager("test" + File.separator + "resources" + File.separator + "gold"
-            + File.separator + "10");
+        UpgradeManager um = new UpgradeManager(this.getClass().getResource(File.separator +"gold"
+            + File.separator + "10").getFile());
         assertTrue(um.canIntroduceBeUpgraded());
     }
     
     public void testUpgradable11() {
 
-        UpgradeManager um = new UpgradeManager("test" + File.separator + "resources" + File.separator + "gold"
-            + File.separator + "11");
+        UpgradeManager um = new UpgradeManager(this.getClass().getResource(File.separator +"gold"
+            + File.separator + "11").getFile());
         assertTrue(um.canIntroduceBeUpgraded());
     }
     

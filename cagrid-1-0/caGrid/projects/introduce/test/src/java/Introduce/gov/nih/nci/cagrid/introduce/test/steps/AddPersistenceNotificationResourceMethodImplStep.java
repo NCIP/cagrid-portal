@@ -23,27 +23,27 @@ public class AddPersistenceNotificationResourceMethodImplStep extends BaseStep {
     public void runStep() throws Throwable {
         System.out.println("Adding a simple methods implementation.");
 
-        File inFileClient = new File("test" + File.separator + "resources" + File.separator + "gold" + File.separator
-            + "persistentnotification" + File.separator + tci.getName() + "SetClient.java");
+        File inFileClient = new File(this.getClass().getResource(File.separator +"gold" + File.separator
+            + "persistentnotification" + File.separator + tci.getName() + "SetClient.java").getFile());
         File outFileClient = new File(tci.getDir() + File.separator + "src" + File.separator + tci.getPackageDir()
             + File.separator + "client" + File.separator + tci.getName() + "Client.java");
 
         Utils.copyFile(inFileClient, outFileClient);
         
-        inFileClient = new File("test" + File.separator + "resources" + File.separator + "gold" + File.separator
-            + "persistentnotification" + File.separator + tci2.getName() + "Client.java");
+        inFileClient = new File(this.getClass().getResource(File.separator +"gold" + File.separator
+            + "persistentnotification" + File.separator + tci2.getName() + "Client.java").getFile());
         outFileClient = new File(tci2.getDir() + File.separator + "src" + File.separator + tci2.getPackageDir()
             + File.separator + "client" + File.separator + tci2.getName() + "Client.java");
 
         Utils.copyFile(inFileClient, outFileClient);
         
 
-        File inFileImpl = new File("test" + File.separator + "resources" + File.separator + "gold" + File.separator + "persistentnotification" + File.separator + tci2.getName() + "Impl.java");
+        File inFileImpl = new File(this.getClass().getResource(File.separator +"gold" + File.separator + "persistentnotification" + File.separator + tci2.getName() + "Impl.java").getFile());
         File outFileImpl = new File(tci2.getDir() + File.separator + "src" + File.separator + tci2.getPackageDir() + File.separator + "service" + File.separator  + tci2.getName() + "Impl.java");
         
         SourceUtils.modifyImpl(inFileImpl, outFileImpl, "setBook");
         
-        inFileImpl = new File("test" + File.separator + "resources" + File.separator + "gold" + File.separator + "persistentnotification" + File.separator + tci2.getName() + "Impl.java");
+        inFileImpl = new File(this.getClass().getResource(File.separator +"gold" + File.separator + "persistentnotification" + File.separator + tci2.getName() + "Impl.java").getFile());
         outFileImpl = new File(tci2.getDir() + File.separator + "src" + File.separator + tci2.getPackageDir() + File.separator + "service" + File.separator  + tci2.getName() + "Impl.java");
         
         SourceUtils.modifyImpl(inFileImpl, outFileImpl, "getBook");

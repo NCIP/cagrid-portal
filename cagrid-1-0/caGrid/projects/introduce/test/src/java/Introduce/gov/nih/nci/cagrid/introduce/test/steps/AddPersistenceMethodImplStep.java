@@ -21,19 +21,19 @@ public class AddPersistenceMethodImplStep extends BaseStep {
     public void runStep() throws Throwable {
         System.out.println("Adding a simple methods implementation.");
 
-        File inFileClient = new File("test" + File.separator + "resources" + File.separator + "gold" + File.separator
-            + "persistence" + File.separator + tci.getName() + "ClientSet.java");
+        File inFileClient = new File(this.getClass().getResource(File.separator +"gold" + File.separator
+            + "persistence" + File.separator + tci.getName() + "ClientSet.java").getFile());
         File outFileClient = new File(tci.getDir() + File.separator + "src" + File.separator + tci.getPackageDir()
             + File.separator + "client" + File.separator + tci.getName() + "Client.java");
 
         Utils.copyFile(inFileClient, outFileClient);
 
-        File inFileImpl = new File("test" + File.separator + "resources" + File.separator + "gold" + File.separator + "persistence" + File.separator + tci.getName() + "Impl.java");
+        File inFileImpl = new File(this.getClass().getResource(File.separator +"gold" + File.separator + "persistence" + File.separator + tci.getName() + "Impl.java").getFile());
         File outFileImpl = new File(tci.getDir() + File.separator + "src" + File.separator + tci.getPackageDir() + File.separator + "service" + File.separator  + tci.getName() + "Impl.java");
         
         SourceUtils.modifyImpl(inFileImpl, outFileImpl, "setBook");
         
-        inFileImpl = new File("test" + File.separator + "resources" + File.separator + "gold" + File.separator + "persistence" + File.separator + tci.getName() + "Impl.java");
+        inFileImpl = new File(this.getClass().getResource(File.separator +"gold" + File.separator + "persistence" + File.separator + tci.getName() + "Impl.java").getFile());
         outFileImpl = new File(tci.getDir() + File.separator + "src" + File.separator + tci.getPackageDir() + File.separator + "service" + File.separator  + tci.getName() + "Impl.java");
         
         SourceUtils.modifyImpl(inFileImpl, outFileImpl, "getBook");
