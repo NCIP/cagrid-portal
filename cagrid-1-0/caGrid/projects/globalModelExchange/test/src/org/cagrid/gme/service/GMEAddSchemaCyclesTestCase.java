@@ -30,22 +30,20 @@ public class GMEAddSchemaCyclesTestCase extends GMETestCaseBase {
     public void testCyclesAFirst() throws Exception {
         XMLSchema[] schemas = new XMLSchema[]{this.testSchemaCycleA, this.testSchemaCycleB};
         this.gme.addSchema(schemas);
-        URI[] namespaces = this.gme.getNamespaces();
-        assertEquals(schemas.length, namespaces.length);
-
+        URI[] namespaces = new URI[]{this.testSchemaCycleA.getTargetNamespace(),
+                this.testSchemaCycleB.getTargetNamespace()};
         URI[] gmenamespaces = this.gme.getNamespaces();
         Arrays.sort(namespaces);
         Arrays.sort(gmenamespaces);
-        Arrays.equals(namespaces, gmenamespaces);
+        assertTrue(Arrays.equals(namespaces, gmenamespaces));
     }
 
 
     public void testCyclesBFirst() throws Exception {
         XMLSchema[] schemas = new XMLSchema[]{this.testSchemaCycleB, this.testSchemaCycleA};
         this.gme.addSchema(schemas);
-        URI[] namespaces = this.gme.getNamespaces();
-        assertEquals(schemas.length, namespaces.length);
-
+        URI[] namespaces = new URI[]{this.testSchemaCycleA.getTargetNamespace(),
+                this.testSchemaCycleB.getTargetNamespace()};
         URI[] gmenamespaces = this.gme.getNamespaces();
         Arrays.sort(namespaces);
         Arrays.sort(gmenamespaces);
