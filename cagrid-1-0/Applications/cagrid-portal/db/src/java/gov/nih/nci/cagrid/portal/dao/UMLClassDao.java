@@ -47,11 +47,20 @@ public class UMLClassDao extends AbstractDao<UMLClass> {
                     public Object doInHibernate(Session session)
                             throws HibernateException, SQLException {
 
-                        return session.createCriteria(UMLClass.class)
-                                .add(Restrictions.eq("cadsrId",
-                                        example.getCadsrId()))
-                                .add(Restrictions.ne("model.id", example.getModel().getId()))
-                                .list();
+//                        return session.createCriteria(UMLClass.class)
+//                                .add(Restrictions.eq("cadsrId",
+//                                        example.getCadsrId()))
+//                                .add(Restrictions.ne("model.id", example.getModel().getId()))
+//                                .list();
+                    	return session.createCriteria(UMLClass.class).add(
+								Restrictions.eq("className", example
+										.getClassName())).add(
+								Restrictions.eq("packageName", example
+										.getPackageName())).add(
+								Restrictions.eq("projectName", example
+										.getProjectName())).add(
+								Restrictions.eq("projectVersion", example
+										.getProjectVersion())).add(Restrictions.ne("model.id", example.getModel().getId())).list();
                     }
                 });
         return resultSet;

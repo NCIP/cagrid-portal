@@ -13,16 +13,22 @@
     <DOMAIN_MODELS id="-2" SERVICE_ID="-2"/>
     <DOMAIN_MODELS id="-3" SERVICE_ID="-3"/>
 
-    <UML_CLASS ID="-1" CADSRID="123" UML_CLASS_TYPE="DataUMLClass" CLASSNAME="Class" MODEL_ID="-1"
-               ALLOWABLEASTARGET="true"/>
-    <UML_CLASS ID="-2" CADSRID="123" UML_CLASS_TYPE="DataUMLClass" CLASSNAME="RelatedClassInDifferentModel"
-               MODEL_ID="-2" ALLOWABLEASTARGET="true"/>
-    <UML_CLASS ID="-3" CADSRID="123" UML_CLASS_TYPE="DataUMLClass" CLASSNAME="RelatedClassInSameModel" MODEL_ID="-1"
-               ALLOWABLEASTARGET="true"/>
+    <UML_CLASS ID="-1" CADSRID="123" UML_CLASS_TYPE="DataUMLClass" CLASSNAME="SomeClass" MODEL_ID="-1"
+               ALLOWABLEASTARGET="true" PACKAGENAME="pkg1" PROJECTNAME="proj1" PROJECTVERSION="1"/>
+               
+    <!-- Same class in different model. -->
+    <UML_CLASS ID="-2" CADSRID="456" UML_CLASS_TYPE="DataUMLClass" CLASSNAME="SomeClass"
+               MODEL_ID="-2" ALLOWABLEASTARGET="true"  PACKAGENAME="pkg1" PROJECTNAME="proj1" PROJECTVERSION="1"/>
+               
+    <UML_CLASS ID="-3" CADSRID="789" UML_CLASS_TYPE="DataUMLClass" CLASSNAME="RelatedClassInSameModel" MODEL_ID="-1"
+               ALLOWABLEASTARGET="true" PACKAGENAME="pkg1" PROJECTNAME="proj1" PROJECTVERSION="1"/>
+               
     <UML_CLASS ID="-4" UML_CLASS_TYPE="DataUMLClass" CLASSNAME="UnrelatedClassWithNoAttributes" MODEL_ID="-3"
-               ALLOWABLEASTARGET="true"/>
+               ALLOWABLEASTARGET="true"  PACKAGENAME="pkg2" PROJECTNAME="proj1" PROJECTVERSION="1"/>
+               
     <UML_CLASS ID="-5" UML_CLASS_TYPE="DataUMLClass" CLASSNAME="RelatedClassByAssociation" MODEL_ID="-3"
-               ALLOWABLEASTARGET="true"/>
+               ALLOWABLEASTARGET="true" PACKAGENAME="pkg1" PROJECTNAME="proj2" PROJECTVERSION="1"/>
+               
     <UML_CLASS ID="-6" UML_CLASS_TYPE="DataUMLClass" CLASSNAME="UnrelatedClass" MODEL_ID="-2"
                ALLOWABLEASTARGET="false"/>
 

@@ -12,6 +12,7 @@ import java.util.List;
  */
 public class UmlClassDaoTest extends DBTestBase<UMLClassDao> {
 
+	
     public void testSemanticEquivalence() {
         UMLClass uClass = getDao().getById(-1);
         List<UMLClass> classes = getDao().getSemanticalyEquivalentClassesBasedOnAtrributes(uClass);
@@ -22,7 +23,7 @@ public class UmlClassDaoTest extends DBTestBase<UMLClassDao> {
         for (UMLClass umlClass : classes) {
             assertNotSame("Class returned is the same as original class",
                     umlClass.getId(), uClass.getId());
-            assertEquals("Unexpected class returned", "RelatedClassInDifferentModel", umlClass.getClassName());
+            assertEquals("Unexpected class returned", "SomeClass", umlClass.getClassName());
 
             assertNotSame("Class returned is from the same model",
                     umlClass.getModel().getId(), uClass.getModel().getId());
@@ -45,6 +46,7 @@ public class UmlClassDaoTest extends DBTestBase<UMLClassDao> {
 
         }
     }
+
 
     public void testQueryByExample() {
         UMLClass example = getDao().getById(-1);
