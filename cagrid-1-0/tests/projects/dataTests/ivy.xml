@@ -28,10 +28,16 @@
     <!-- Introduce testing -->
     <dependency rev="latest.integration" org="caGrid" name="introduce" conf="default->extension-test"/>
     
-    <!-- Data core -->
+    <!-- Data core 
     <dependency rev="latest.integration" org="caGrid" name="data" conf="default->utils"/>
     <dependency rev="latest.integration" org="caGrid" name="data" conf="default->tools"/>
     <dependency rev="latest.integration" org="caGrid" name="data" conf="default->stubs"/>
     <dependency rev="latest.integration" org="caGrid" name="data" conf="default->common"/>
+    <dependency rev="latest.integration" org="caGrid" name="data" conf="default->service"/>
+    -->
+    <dependency rev="latest.integration" org="caGrid" name="data" conf="default->full"/>
+    
+    <!-- CQL stubs -->
+    <dependency rev="latest.integration" org="caGrid" name="cql" conf="default->cql"/>
   </dependencies>
 </ivy-module>
