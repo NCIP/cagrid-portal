@@ -21,6 +21,7 @@ import java.util.TreeSet;
 public class LexbigEVSService extends BaseEVSService {
     private CodingSchemeVersionOrTag productionTag;
     private ConceptReference cr;
+    private boolean caseSensitive;
 
 
     public Set<EVSConceptDTO> getConceptsForKeyword(String keyword) throws CaGridPortletApplicationException {
@@ -32,20 +33,18 @@ public class LexbigEVSService extends BaseEVSService {
                     keyword, CodedNodeSet.SearchDesignationOption.ALL,
                     LBConstants.MatchAlgorithms.startsWith.toString(), null);
             SortOptionList sortCriteria =
-                    Constructors.createSortOptionList(new String[]{"matchToQuery","code"});
+                    Constructors.createSortOptionList(new String[]{"matchToQuery", "code"});
 
             // Resolve and analyze the result ...
             ResolvedConceptReferenceList matches =
-                    cns.resolveToList(sortCriteria, null, new CodedNodeSet.PropertyType[] {}, searchLimit);
-            if (matches == null)
-            {
+                    cns.resolveToList(sortCriteria, null, new CodedNodeSet.PropertyType[]{}, searchLimit);
+            if (matches == null) {
                 logger.warn("WARNING: getCodedEntry ResolvedConceptReferenceList returns matches = 0)");
 
-            }
-            else {
-                for(ResolvedConceptReference concept :matches.getResolvedConceptReference()){
+            } else {
+                for (ResolvedConceptReference concept : matches.getResolvedConceptReference()) {
                     //temporary fix for the EVS search startsWith not working
-                    if(concept.getEntityDescription().getContent().indexOf(keyword)>-1){
+                    if (concept.getEntityDescription().getContent().toLowerCase().indexOf(keyword.toLowerCase()) > -1) {
                         EVSConceptDTO dto = new EVSConceptDTO(concept);
                         resultSet.add(dto);
                     }
