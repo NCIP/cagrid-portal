@@ -16,12 +16,16 @@ import gov.nih.nci.cagrid.metadata.exceptions.QueryInvalidException;
 import gov.nih.nci.cagrid.metadata.exceptions.RemoteResourcePropertyRetrievalException;
 import gov.nih.nci.cagrid.metadata.exceptions.ResourcePropertyRetrievalException;
 
+import java.io.InputStream;
 import java.rmi.RemoteException;
 
 import javax.xml.namespace.QName;
 import javax.xml.rpc.ServiceException;
 
+import org.apache.axis.EngineConfiguration;
+import org.apache.axis.client.AxisClient;
 import org.apache.axis.client.Stub;
+import org.apache.axis.configuration.FileProvider;
 import org.apache.axis.message.MessageElement;
 import org.apache.axis.message.addressing.EndpointReferenceType;
 import org.apache.axis.types.URI.MalformedURIException;
@@ -46,18 +50,32 @@ import org.oasis.wsrf.properties.UnknownQueryExpressionDialectFaultType;
 import org.oasis.wsrf.properties.WSResourcePropertiesServiceAddressingLocator;
 import org.w3c.dom.Element;
 
-
 public class ResourcePropertyHelper {
 
 	static {
 		Util.registerTransport();
 	}
 
+	public static MessageElement[] queryResourceProperties(
+			EndpointReferenceType endpoint, String queryExpression)
+			throws RemoteResourcePropertyRetrievalException,
+			QueryInvalidException {
+		return queryResourceProperties(endpoint, queryExpression, null);
+	}
 
-	public static MessageElement[] queryResourceProperties(EndpointReferenceType endpoint, String queryExpression)
-		throws RemoteResourcePropertyRetrievalException, QueryInvalidException {
+	public static MessageElement[] queryResourceProperties(
+			EndpointReferenceType endpoint, String queryExpression,
+			InputStream wsdd) throws RemoteResourcePropertyRetrievalException,
+			QueryInvalidException {
 
 		WSResourcePropertiesServiceAddressingLocator locator = new WSResourcePropertiesServiceAddressingLocator();
+
+		if (wsdd != null) {
+			// we found it, so tell axis to configure an engine to use it
+			EngineConfiguration engineConfig = new FileProvider(wsdd);
+			// set the engine of the locator
+			locator.setEngine(new AxisClient(engineConfig));
+		}
 		QueryExpressionType query = new QueryExpressionType();
 
 		try {
@@ -90,13 +108,27 @@ public class ResourcePropertyHelper {
 
 	}
 
-
 	public static Element getResourceProperties(EndpointReferenceType endpoint)
-		throws ResourcePropertyRetrievalException, RemoteResourcePropertyRetrievalException, QueryInvalidException {
+			throws ResourcePropertyRetrievalException,
+			RemoteResourcePropertyRetrievalException, QueryInvalidException {
+		return getResourceProperties(endpoint, (InputStream) null);
+	}
+
+	public static Element getResourceProperties(EndpointReferenceType endpoint,
+			InputStream wsdd) throws ResourcePropertyRetrievalException,
+			RemoteResourcePropertyRetrievalException, QueryInvalidException {
 		String dialect = WSRFConstants.XPATH_1_DIALECT;
 		String queryExpression = "/";
 
 		WSResourcePropertiesServiceAddressingLocator locator = new WSResourcePropertiesServiceAddressingLocator();
+
+		if (wsdd != null) {
+			// we found it, so tell axis to configure an engine to use it
+			EngineConfiguration engineConfig = new FileProvider(wsdd);
+			// set the engine of the locator
+			locator.setEngine(new AxisClient(engineConfig));
+		}
+
 		QueryExpressionType query = new QueryExpressionType();
 
 		try {
@@ -128,25 +160,44 @@ public class ResourcePropertyHelper {
 		}
 
 		if (messageElements.length > 1) {
-			throw new ResourcePropertyRetrievalException("Resource property query returned "
-				+ Integer.toString(messageElements.length) + " elements; I only know how to deal with one");
+			throw new ResourcePropertyRetrievalException(
+					"Resource property query returned "
+							+ Integer.toString(messageElements.length)
+							+ " elements; I only know how to deal with one");
 		}
 		Element element;
 		try {
 			element = messageElements[0].getAsDOM();
 		} catch (Exception e) {
-			throw new ResourcePropertyRetrievalException("Error parsing message element(" + messageElements[0] + ")", e);
+			throw new ResourcePropertyRetrievalException(
+					"Error parsing message element(" + messageElements[0] + ")",
+					e);
 		}
 		return element;
 
 	}
 
+	public static Element getResourceProperty(EndpointReferenceType endpoint,
+			QName rpName) throws ResourcePropertyRetrievalException,
+			RemoteResourcePropertyRetrievalException,
+			InvalidResourcePropertyException {
+		return getResourceProperty(endpoint, rpName, null);
+	}
 
-	public static Element getResourceProperty(EndpointReferenceType endpoint, QName rpName)
-		throws ResourcePropertyRetrievalException, RemoteResourcePropertyRetrievalException,
-		InvalidResourcePropertyException {
+	public static Element getResourceProperty(EndpointReferenceType endpoint,
+			QName rpName, InputStream wsdd)
+			throws ResourcePropertyRetrievalException,
+			RemoteResourcePropertyRetrievalException,
+			InvalidResourcePropertyException {
 		GetResourceProperty port;
 		WSResourcePropertiesServiceAddressingLocator locator = new WSResourcePropertiesServiceAddressingLocator();
+
+		if (wsdd != null) {
+			// we found it, so tell axis to configure an engine to use it
+			EngineConfiguration engineConfig = new FileProvider(wsdd);
+			// set the engine of the locator
+			locator.setEngine(new AxisClient(engineConfig));
+		}
 		try {
 			port = locator.getGetResourcePropertyPort(endpoint);
 		} catch (ServiceException e) {
@@ -162,8 +213,9 @@ public class ResourcePropertyHelper {
 		} catch (InvalidResourcePropertyQNameFaultType e) {
 			throw new InvalidResourcePropertyException(e);
 		} catch (RemoteException e) {
-			throw new RemoteResourcePropertyRetrievalException("Error getting resource property; " + "endpoint was '"
-				+ endpoint + "', name was '" + rpName.toString(), e);
+			throw new RemoteResourcePropertyRetrievalException(
+					"Error getting resource property; " + "endpoint was '"
+							+ endpoint + "', name was '" + rpName.toString(), e);
 		}
 
 		MessageElement[] messageElements = response.get_any();
@@ -171,23 +223,40 @@ public class ResourcePropertyHelper {
 			return (null);
 		}
 		if (messageElements.length > 1) {
-			throw new ResourcePropertyRetrievalException("Get resource property returned "
-				+ Integer.toString(messageElements.length) + " elements; I only know how to deal with one");
+			throw new ResourcePropertyRetrievalException(
+					"Get resource property returned "
+							+ Integer.toString(messageElements.length)
+							+ " elements; I only know how to deal with one");
 		}
 		Element element;
 		try {
 			element = messageElements[0].getAsDOM();
 		} catch (Exception e) {
-			throw new ResourcePropertyRetrievalException("Error parsing message element(" + messageElements[0] + ")", e);
+			throw new ResourcePropertyRetrievalException(
+					"Error parsing message element(" + messageElements[0] + ")",
+					e);
 		}
 		return element;
 	}
 
+	public static Element[] getResourceProperties(
+			EndpointReferenceType endpoint, QName[] rpNames)
+			throws ResourcePropertyRetrievalException {
+		return getResourceProperties(endpoint, rpNames, null);
+	}
 
-	public static Element[] getResourceProperties(EndpointReferenceType endpoint, QName[] rpNames)
-		throws ResourcePropertyRetrievalException {
-
+	public static Element[] getResourceProperties(
+			EndpointReferenceType endpoint, QName[] rpNames, InputStream wsdd)
+			throws ResourcePropertyRetrievalException {
 		WSResourcePropertiesServiceAddressingLocator locator = new WSResourcePropertiesServiceAddressingLocator();
+		
+		if (wsdd != null) {
+			// we found it, so tell axis to configure an engine to use it
+			EngineConfiguration engineConfig = new FileProvider(wsdd);
+			// set the engine of the locator
+			locator.setEngine(new AxisClient(engineConfig));
+		}
+		
 		GetMultipleResourceProperties_PortType port;
 		try {
 			port = locator.getGetMultipleResourcePropertiesPort(endpoint);
@@ -213,26 +282,27 @@ public class ResourcePropertyHelper {
 		try {
 			result = AnyHelper.toElement(response.get_any());
 		} catch (Exception e) {
-			throw new ResourcePropertyRetrievalException("Error converting resource properties to elements: "
-				+ e.getMessage(), e);
+			throw new ResourcePropertyRetrievalException(
+					"Error converting resource properties to elements: "
+							+ e.getMessage(), e);
 		}
-
 		return result;
-
 	}
-
 
 	private static void setAnonymous(Stub stub) {
-		// stub._setProperty(org.globus.wsrf.security.Constants.GSI_TRANSPORT,
-		// org.globus.wsrf.security.Constants.ENCRYPTION);
-		stub._setProperty(org.globus.wsrf.security.Constants.GSI_ANONYMOUS, Boolean.TRUE);
-		stub._setProperty(org.globus.wsrf.security.Constants.AUTHORIZATION, NoAuthorization.getInstance());
-		stub._setProperty(GSIConstants.GSI_AUTHORIZATION, org.globus.gsi.gssapi.auth.NoAuthorization.getInstance());
+		stub._setProperty(org.globus.wsrf.security.Constants.GSI_ANONYMOUS,
+				Boolean.TRUE);
+		stub._setProperty(org.globus.wsrf.security.Constants.AUTHORIZATION,
+				NoAuthorization.getInstance());
+		stub._setProperty(GSIConstants.GSI_AUTHORIZATION,
+				org.globus.gsi.gssapi.auth.NoAuthorization.getInstance());
 	}
 
-
-	private static QueryResourcePropertiesResponse issueRPQuery(QueryResourceProperties_PortType port,
-		QueryResourceProperties_Element request) throws QueryInvalidException, RemoteResourcePropertyRetrievalException {
+	private static QueryResourcePropertiesResponse issueRPQuery(
+			QueryResourceProperties_PortType port,
+			QueryResourceProperties_Element request)
+			throws QueryInvalidException,
+			RemoteResourcePropertyRetrievalException {
 		QueryResourcePropertiesResponse response = null;
 		try {
 			response = port.queryResourceProperties(request);
