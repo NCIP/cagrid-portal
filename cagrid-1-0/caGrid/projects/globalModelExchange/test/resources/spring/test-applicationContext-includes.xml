@@ -8,7 +8,7 @@
 	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd">
 
 	<description>This document is loaded in the context of tests, and defines resources used for
-		testing invalid submissions.</description>
+		testing submissions using xsd:include.</description>
 
 
 	<bean id="testDocumentIncluder" parent="testSchemaDocumentCreationTemplate" scope="prototype">

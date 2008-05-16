@@ -10,4 +10,6 @@ public interface SpringTestApplicationContextConstants {
     public static final String ERRORS_LOCATION = SPRING_CLASSPATH_PREFIX + "spring/test-applicationContext-errors.xml";
     public static final String INCLUDES_LOCATION = SPRING_CLASSPATH_PREFIX
         + "spring/test-applicationContext-includes.xml";
+    public static final String REDEFINES_LOCATION = SPRING_CLASSPATH_PREFIX
+        + "spring/test-applicationContext-redefines.xml";
 }
