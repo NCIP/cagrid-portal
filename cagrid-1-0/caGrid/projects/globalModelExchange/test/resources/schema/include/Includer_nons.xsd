@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
-<xs:schema targetNamespace="gme://a" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:b="gme://b"
-	xmlns:a="gme://a" elementFormDefault="qualified">
+<xs:schema targetNamespace="gme://includenons" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:a="gme://includenons" elementFormDefault="qualified">
 	<xs:include schemaLocation="Included_nons.xsd"/>
 	<xs:element name="A">
 		<xs:complexType>

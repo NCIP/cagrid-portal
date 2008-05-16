@@ -8,4 +8,6 @@ public interface SpringTestApplicationContextConstants {
     public static final String TEST_BASE_LOCATION = SPRING_CLASSPATH_PREFIX + "spring/test-applicationContext-gme.xml";
     public static final String CYCLES_LOCATION = SPRING_CLASSPATH_PREFIX + "spring/test-applicationContext-cycles.xml";
     public static final String ERRORS_LOCATION = SPRING_CLASSPATH_PREFIX + "spring/test-applicationContext-errors.xml";
+    public static final String INCLUDES_LOCATION = SPRING_CLASSPATH_PREFIX
+        + "spring/test-applicationContext-includes.xml";
 }
