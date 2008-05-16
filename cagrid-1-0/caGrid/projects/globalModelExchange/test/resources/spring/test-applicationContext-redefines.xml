@@ -75,4 +75,43 @@
 			</set>
 		</property>
 	</bean>
+
+
+	<bean id="testDocumentRedefinerWrongNamespace" parent="testSchemaDocumentCreationTemplate"
+		scope="prototype">
+		<constructor-arg>
+			<bean class="java.io.File">
+				<constructor-arg value="test/resources/schema/redefine/Redefiner_wrongns.xsd"/>
+			</bean>
+		</constructor-arg>
+	</bean>
+
+	<bean id="testDocumentRedefinedWrongNamespace" parent="testSchemaDocumentCreationTemplate"
+		scope="prototype">
+		<constructor-arg>
+			<bean class="java.io.File">
+				<constructor-arg value="test/resources/schema/redefine/Redefined_wrongns.xsd"/>
+			</bean>
+		</constructor-arg>
+	</bean>
+
+	<bean id="testInvalidSchemaRedefineWrongNamespace" class="org.cagrid.gme.domain.XMLSchema">
+		<property name="targetNamespace" value="gme://redefinewrongns"/>
+		<property name="rootDocument">
+			<ref bean="testDocumentRedefinerWrongNamespace"/>
+		</property>
+		<property name="additionalSchemaDocuments">
+			<set>
+				<ref bean="testDocumentRedefinedWrongNamespace"/>
+			</set>
+		</property>
+	</bean>
+	
+	<bean id="testSchemaRedefineWrongNamespaceRedefinedOnly" class="org.cagrid.gme.domain.XMLSchema">
+		<property name="targetNamespace" value="gme://wrongnamespace"/>
+		<property name="rootDocument">
+			<ref bean="testDocumentRedefinedWrongNamespace"/>
+		</property>
+	</bean>
+
 </beans>
