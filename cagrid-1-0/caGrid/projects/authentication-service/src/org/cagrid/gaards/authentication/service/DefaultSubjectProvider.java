@@ -1,5 +1,5 @@
 /**
- * $Id: DefaultSubjectProvider.java,v 1.2 2008-05-15 19:54:01 langella Exp $
+ * $Id: DefaultSubjectProvider.java,v 1.3 2008-05-16 18:15:39 langella Exp $
  *
  */
 package org.cagrid.gaards.authentication.service;
@@ -15,13 +15,17 @@ import org.cagrid.gaards.authentication.common.InvalidCredentialException;
 
 /**
  * 
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  * @author Joshua Phillips
  * 
  */
 public class DefaultSubjectProvider extends BasicAuthenticationSubjectProvider {
 
 	private AuthenticationManager authenticationManager;
+	
+	public DefaultSubjectProvider(String trustStore){
+		System.setProperty("javax.net.ssl.trustStore", trustStore);
+	}
 
 	/*
 	 * (non-Javadoc)
