@@ -78,7 +78,7 @@
 	<classpathentry kind="lib" path="ext/dependencies/test/jars/jdom-1.0.jar"/>
 	<classpathentry kind="var" path="ANT_HOME/lib/junit.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/jars/caGrid-core-resources-1.3-dev.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/jars/caGrid-gaards-ui-1.3-dev.jar" sourcepath="/caGrid-gaards-ui"/>
+	<classpathentry kind="lib" path="ext/dependencies/jars/caGrid-gaards-ui-1.3-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/jars/caGrid-GlobalModelExchange-1.3-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/jars/caGrid-GlobalModelExchange-stubs-1.3-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/jars/caGrid-grape-1.3-dev.jar"/>
