@@ -44,10 +44,6 @@ imports="gov.nih.nci.cagrid.introduce.* gov.nih.nci.cagrid.introduce.beans.servi
 					<name>factory</name>
 					<value>org.globus.wsrf.jndi.BeanFactory</value>
 				</parameter>
-				<parameter>
-					<name>etcDirectoryPath</name>
-					<value>ETC-PATH</value>
-				</parameter>
 			</resourceParams>
 		</resource>
 	</service>

@@ -52,8 +52,7 @@ public class <%=arguments.getService().getName()%>Configuration implements Servi
 		return <%=arguments.getService().getName()%>Configuration.configuration;
 	}
 	
-	private String etcDirectoryPath;
-	
+
 	<%
 	if(sproperties!=null && sproperties.getProperty()!=null){
 	for (int i = 0; i < sproperties.getProperty().length; i++) {
