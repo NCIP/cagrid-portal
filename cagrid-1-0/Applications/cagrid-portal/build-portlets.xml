@@ -133,6 +133,7 @@
                 <include name="*.xml"/>
                 <exclude name="applicationContext-workspaces.xml"/>
                 <include name="*.wsdd"/>
+                <include name="*.dtd"/>
                 <exclude name="*.sync-description.xml"/>
             </fileset>
 
