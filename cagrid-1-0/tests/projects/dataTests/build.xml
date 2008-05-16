@@ -207,6 +207,8 @@
 		<junit dir="${introduce.dir}" printsummary="yes" showoutput="true">
 			<!-- directory where testing container zips live -->
 			<sysproperty key="testing.containers.dir" value="${basedir}/ext/dependencies/resources/containers" />
+			<!-- several of the data tests (esp creation) need this -->
+			<sysproperty key="introduce.base.dir" value="${introduce.dir}"/>
 			<sysproperty key="GLOBUS_LOCATION" value="${ext.globus.dir}" />
 			<sysproperty key="resources.dir" value="${introduce.dir}/resources" />
 			<sysproperty key="basedir" value="${introduce.dir}" />
