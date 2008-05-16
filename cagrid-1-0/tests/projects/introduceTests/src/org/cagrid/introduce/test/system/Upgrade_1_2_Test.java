@@ -26,13 +26,13 @@ import junit.textui.TestRunner;
 import org.apache.log4j.PropertyConfigurator;
 
 
-public class Upgrade_1_3_Test extends Story {
+public class Upgrade_1_2_Test extends Story {
     private TestCaseInfo tci1;
 
     private ServiceContainer container;
 
 
-    public Upgrade_1_3_Test() {
+    public Upgrade_1_2_Test() {
         this.setName("Introduce Upgrades System Test");
         PropertyConfigurator.configure("." + File.separator + "conf" + File.separator + "log4j.properties");
     }
@@ -111,7 +111,7 @@ public class Upgrade_1_3_Test extends Story {
      */
     public static void main(String args[]) {
         TestRunner runner = new TestRunner();
-        TestResult result = runner.doRun(new TestSuite(Upgrade_1_3_Test.class));
+        TestResult result = runner.doRun(new TestSuite(Upgrade_1_2_Test.class));
         System.exit(result.errorCount() + result.failureCount());
     }
 
