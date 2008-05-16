@@ -1,9 +1,10 @@
 /**
- * $Id: DefaultSubjectProvider.java,v 1.3 2008-05-16 18:15:39 langella Exp $
+ * $Id: DefaultSubjectProvider.java,v 1.4 2008-05-16 18:17:28 langella Exp $
  *
  */
 package org.cagrid.gaards.authentication.service;
 
+import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.security.AuthenticationManager;
 import gov.nih.nci.security.exceptions.CSException;
 
@@ -15,16 +16,18 @@ import org.cagrid.gaards.authentication.common.InvalidCredentialException;
 
 /**
  * 
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  * @author Joshua Phillips
  * 
  */
 public class DefaultSubjectProvider extends BasicAuthenticationSubjectProvider {
 
 	private AuthenticationManager authenticationManager;
-	
-	public DefaultSubjectProvider(String trustStore){
-		System.setProperty("javax.net.ssl.trustStore", trustStore);
+
+	public DefaultSubjectProvider(String trustStore) {
+		if (Utils.clean(trustStore) != null) {
+			System.setProperty("javax.net.ssl.trustStore", trustStore);
+		}
 	}
 
 	/*
