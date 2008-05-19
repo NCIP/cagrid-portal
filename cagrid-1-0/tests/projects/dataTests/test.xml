@@ -52,9 +52,9 @@
 	<target name="testBasicCreation" depends="setGlobus, prepareClasspaths" description="Runs the service creation tests" unless="base.service.created">
 		<mkdir dir="${junit.results.dir}" />
 		<junit dir="${introduce.dir}" printsummary="yes" haltonerror="${halt.on.error}" haltonfailure="${halt.on.error}" errorproperty="basic.creation.test.failed" failureproperty="basic.creation.test.failed" showoutput="true" fork="yes" forkmode="once">
-			<jvmarg value="-Dintroduce.base.dir=${introduce.dir}" />
-			<jvmarg value="-Dbuild.dir=${classes.dir}" />
-			<jvmarg value="-Dcql.docs.dir=${basedir}/docs/cqlExamples" />
+			<sysproperty key="introduce.base.dir" value="${introduce.dir}" />
+			<sysproperty key="build.dir" value="${classes.dir}" />
+			<sysproperty key="cql.docs.dir" value="${basedir}/docs/cqlExamples" />
 			<classpath refid="all.test.classpath" />
 			<formatter type="xml" />
 			<test if="testcase" name="${testcase}" fork="no" todir="${junit.results.dir}" />
@@ -72,9 +72,9 @@
 	<target name="testEnumerationCreation" depends="setGlobus, prepareClasspaths" description="Runs the service creation tests for a data service supporting WS-Enumeration" unless="enumeration.service.created">
 		<mkdir dir="${junit.results.dir}" />
 		<junit dir="${introduce.dir}" printsummary="yes" haltonerror="${halt.on.error}" haltonfailure="${halt.on.error}" errorproperty="enumeration.creation.test.failed" failureproperty="enumeration.creation.test.failed" showoutput="true" fork="yes" forkmode="once">
-			<jvmarg value="-Dintroduce.base.dir=${introduce.dir}" />
-			<jvmarg value="-Dbuild.dir=${classes.dir}" />
-			<jvmarg value="-Dcql.docs.dir=${basedir}/docs/cqlExamples" />
+			<sysproperty key="introduce.base.dir" value="${introduce.dir}" />
+			<sysproperty key="build.dir" value="${classes.dir}" />
+			<sysproperty key="cql.docs.dir" value="${basedir}/docs/cqlExamples" />
 			<classpath refid="all.test.classpath" />
 			<formatter type="xml" />
 			<test if="testcase" name="${testcase}" fork="no" todir="${junit.results.dir}" />
@@ -92,9 +92,9 @@
 	<target name="testBdtCreation" depends="setGlobus, prepareClasspaths" description="Runs the service creation tests for a data service supporting WS-Enumeration" unless="bdt.service.created">
 		<mkdir dir="${junit.results.dir}" />
 		<junit dir="${introduce.dir}" printsummary="yes" haltonerror="${halt.on.error}" haltonfailure="${halt.on.error}" errorproperty="bdt.creation.test.failed" failureproperty="bdt.creation.test.failed" showoutput="true" fork="yes" forkmode="once">
-			<jvmarg value="-Dintroduce.base.dir=${introduce.dir}" />
-			<jvmarg value="-Dbuild.dir=${classes.dir}" />
-			<jvmarg value="-Dcql.docs.dir=${basedir}/docs/cqlExamples" />
+			<sysproperty key="introduce.base.dir" value="${introduce.dir}" />
+			<sysproperty key="build.dir" value="${classes.dir}" />
+			<sysproperty key="cql.docs.dir" value="${basedir}/docs/cqlExamples" />
 			<classpath refid="all.test.classpath" />
 			<formatter type="xml" />
 			<test if="testcase" name="${testcase}" fork="no" todir="${junit.results.dir}" />
@@ -112,7 +112,9 @@
 	<target name="testBasicSystem" depends="setGlobus, prepareClasspaths, testBasicCreation" description="Runs the service creation and then system tests">
 		<junit dir="${basedir}" printsummary="yes" haltonerror="${halt.on.error}" haltonfailure="${halt.on.error}" errorproperty="basic.system.test.failed" failureproperty="basic.system.test.failed" showoutput="true" fork="yes" forkmode="once">
 			<sysproperty key="use.testing.port.assignment" value="${testing.port.assignment.mode}" />
-			<jvmarg value="-Dintroduce.base.dir=${introduce.dir}" />
+			<sysproperty key="introduce.base.dir" value="${introduce.dir}" />
+			<sysproperty key="build.dir" value="${classes.dir}" />
+			<sysproperty key="cql.docs.dir" value="${basedir}/docs/cqlExamples" />
 			<classpath refid="all.test.classpath" />
 			<formatter type="xml" />
 			<test if="testcase" name="${testcase}" fork="no" todir="${junit.results.dir}" />
@@ -130,7 +132,9 @@
 	<target name="testEnumerationSystem" depends="setGlobus, testEnumerationCreation" description="Tests the enumeration data service system">
 		<junit dir="${introduce.dir}" printsummary="yes" haltonerror="${halt.on.error}" haltonfailure="${halt.on.error}" errorproperty="enumeration.system.test.failed" failureproperty="enumeration.system.test.failed" showoutput="true" fork="yes" forkmode="once">
 			<sysproperty key="use.testing.port.assignment" value="${testing.port.assignment.mode}" />
-			<jvmarg value="-Dintroduce.base.dir=${introduce.dir}" />
+			<sysproperty key="introduce.base.dir" value="${introduce.dir}" />
+			<sysproperty key="build.dir" value="${classes.dir}" />
+			<sysproperty key="cql.docs.dir" value="${basedir}/docs/cqlExamples" />
 			<classpath refid="all.test.classpath" />
 			<formatter type="xml" />
 			<test if="testcase" name="${testcase}" fork="no" todir="${junit.results.dir}" />
@@ -147,7 +151,9 @@
 	<target name="testUpgradeFrom1pt0" depends="setGlobus, prepareClasspaths" description="Tests the ability to upgrade a service from 1.0 to the current version" unless="upgrade.1pt0.completed" if="test.resource.available.upgrade-1.0">
 		<mkdir dir="${junit.results.dir}" />
 		<junit dir="${introduce.dir}" printsummary="yes" haltonerror="${halt.on.error}" haltonfailure="${halt.on.error}" errorproperty="upgrade.1.0.test.failed" failureproperty="upgrade.1.0.test.failed" showoutput="true" fork="yes">
-			<jvmarg value="-Dintroduce.base.dir=${introduce.dir}" />
+			<sysproperty key="introduce.base.dir" value="${introduce.dir}" />
+			<sysproperty key="build.dir" value="${classes.dir}" />
+			<sysproperty key="cql.docs.dir" value="${basedir}/docs/cqlExamples" />
 			<classpath refid="all.test.classpath" />
 			<!-- also needs the other extensions (such as metadata) to be upgraded, so need their upgraders on the classpath -->
 			<classpath>
@@ -171,7 +177,9 @@
 	<target name="testUpgradeFrom1pt1" depends="setGlobus, prepareClasspaths" description="Tests the ability to upgrade a service from 1.1 to the current version" unless="upgrade.1pt1.completed" if="test.resource.available.upgrade-1.1">
 		<mkdir dir="${junit.results.dir}" />
 		<junit dir="${introduce.dir}" printsummary="yes" haltonerror="${halt.on.error}" haltonfailure="${halt.on.error}" errorproperty="upgrade.1.1.test.failed" failureproperty="upgrade.1.1.test.failed" showoutput="true" fork="yes">
-			<jvmarg value="-Dintroduce.base.dir=${introduce.dir}" />
+			<sysproperty key="introduce.base.dir" value="${introduce.dir}" />
+			<sysproperty key="build.dir" value="${classes.dir}" />
+			<sysproperty key="cql.docs.dir" value="${basedir}/docs/cqlExamples" />
 			<classpath refid="all.test.classpath" />
 			<!-- also needs the other extensions (such as metadata) to be upgraded, so need their upgraders on the classpath -->
 			<classpath>
@@ -195,7 +203,9 @@
 	<target name="testUpgradedFrom1pt0System" depends="setGlobus, testUpgradeFrom1pt0" description="Performs system tests on the upgraded (1.0 to current) service" if="test.resource.available.upgrade-1.0">
 		<junit dir="${basedir}" printsummary="yes" haltonerror="${halt.on.error}" haltonfailure="${halt.on.error}" errorproperty="upgrade.system.test.failed" failureproperty="upgrade.system.test.failed" showoutput="true" fork="yes" forkmode="once">
 			<sysproperty key="use.testing.port.assignment" value="${testing.port.assignment.mode}" />
-			<jvmarg value="-Dintroduce.base.dir=${introduce.dir}" />
+			<sysproperty key="introduce.base.dir" value="${introduce.dir}" />
+			<sysproperty key="build.dir" value="${classes.dir}" />
+			<sysproperty key="cql.docs.dir" value="${basedir}/docs/cqlExamples" />
 			<classpath refid="all.test.classpath" />
 			<formatter type="xml" />
 			<test if="testcase" name="${testcase}" fork="no" todir="${junit.results.dir}" />
@@ -212,7 +222,9 @@
 	<target name="testBdtSystem" depends="setGlobus, testBdtCreation" description="Tests invocation of the BDT data service">
 		<junit dir="${basedir}" printsummary="yes" haltonerror="${halt.on.error}" haltonfailure="${halt.on.error}" errorproperty="bdt.system.test.failed" failureproperty="bdt.system.test.failed" showoutput="true" fork="yes" forkmode="once">
 			<sysproperty key="use.testing.port.assignment" value="${testing.port.assignment.mode}" />
-			<jvmarg value="-Dintroduce.base.dir=${introduce.dir}" />
+			<sysproperty key="introduce.base.dir" value="${introduce.dir}" />
+			<sysproperty key="build.dir" value="${classes.dir}" />
+			<sysproperty key="cql.docs.dir" value="${basedir}/docs/cqlExamples" />
 			<classpath refid="all.test.classpath" />
 			<formatter type="xml" />
 			<test if="testcase" name="${testcase}" fork="no" todir="${junit.results.dir}" />
