@@ -52,7 +52,7 @@
     <!-- Specific caGrid Service Dependencies -->
     <dependency rev="latest.integration" org="caGrid" name="gaards-core" conf="service->default;impl-test->test"/>
     <dependency rev="latest.integration" org="caGrid" name="opensaml" conf="service->http;endorsed->endorsed"/>
-
+    <dependency rev="latest.integration" org="caGrid" name="metadatautils" conf="client->default"/>
 
     <!-- Extenernal Dependencies -->
     <dependency rev="1.0" org="jdom" name="jdom" conf="service->*"/>
