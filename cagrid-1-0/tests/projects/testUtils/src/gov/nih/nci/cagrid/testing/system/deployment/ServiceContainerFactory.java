@@ -12,12 +12,10 @@ import java.io.IOException;
  * @author David Ervin
  * 
  * @created Oct 16, 2007 12:09:02 PM
- * @version $Id: ServiceContainerFactory.java,v 1.1 2008-05-14 17:17:42 hastings Exp $ 
+ * @version $Id: ServiceContainerFactory.java,v 1.2 2008-05-19 14:09:37 hastings Exp $ 
  */
 public class ServiceContainerFactory {
-    
-    public static final String INTRODUCE_DIR_PROPERTY = "introduce.base.dir";
-    
+
     /**
      * Creates a new service container of the specified type.
      * No security will be enabled, and the service will start on a 
@@ -50,10 +48,6 @@ public class ServiceContainerFactory {
         ServiceContainerType type, ContainerPorts ports) throws IOException {
         File containerTempDir = getTempDirectory(type);
         String zipLocation = type.getZip();
-        String introduceLocation = getIntroduceBaseDir();
-        if (introduceLocation != null) {
-            zipLocation = introduceLocation + File.separator + zipLocation;
-        }
         File containerZip = new File(zipLocation);
         ContainerProperties props = new ContainerProperties(containerTempDir,
         	containerZip, ports, false,
@@ -94,9 +88,4 @@ public class ServiceContainerFactory {
         return tempContainerDir;
     }
     
-    
-    private static String getIntroduceBaseDir() {
-        String dir = System.getProperty(INTRODUCE_DIR_PROPERTY);
-        return dir;
-    }
 }
