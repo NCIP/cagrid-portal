@@ -49,6 +49,9 @@
 		<property name="GT4.ns.excludes" value="-x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.wsdl -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.xsd -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.xsd -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ServiceGroup-1.2-draft-01.xsd -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ServiceGroup-1.2-draft-01.wsdl -x http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.xsd -x http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.wsdl -x http://schemas.xmlsoap.org/ws/2004/04/trust -x http://schemas.xmlsoap.org/ws/2002/12/policy -x http://schemas.xmlsoap.org/ws/2002/07/utility -x http://schemas.xmlsoap.org/ws/2004/04/sc -x http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd -x http://www.w3.org/2000/09/xmldsig# -x http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd -x http://schemas.xmlsoap.org/ws/2004/09/enumeration" />
 	</target>
 
+	<!-- import the tests -->
+	<import file="test.xml"/>
+	
 
 	<!-- =============================================================== -->
 	<!-- Prepares the classpaths                                         -->
@@ -64,6 +67,11 @@
 			<fileset dir="${ext.globus.dir}/lib">
 				<include name="**/*.jar" />
 			</fileset>
+			<!--
+			<fileset dir="${ant.library.dir}">
+				<include name="**/*.jar"/>
+			</fileset>
+			-->
 			<pathelement location="${ext.globus.dir}" />
 		</path>
 		
@@ -87,6 +95,11 @@
 				<include name="*.jar" />
 			</fileset>
 		    <pathelement path="${introduce.dir}/test/resources"/>
+		</path>
+	
+		<path id="test.run.classpath">
+			<path refid="build.classpath"/>
+			<path refid="Introduce.test.classpath"/>
 		</path>
 	</target>
 
@@ -190,43 +203,11 @@
 	<!-- ============================================================== -->
 	<!-- Builds everything                                              -->
 	<!-- ============================================================== -->
-	<target name="all" description="Builds the entire application" depends="clean,compile,jar" />
+	<target name="all" description="Builds the entire application" depends="clean, compile, jar" />
 
 
 	<target name="configure">
-		<!-- placeholder -->
-	</target>
-	
-	
-	<!-- ============================================================== -->
-	<!-- Call any tests.  Tests run in introduce dir.                   -->
-	<!-- ============================================================== -->
-	<target name="test" depends="setGlobus,defineClasspaths" description="Runs the service's tests.">
-		<echo message="Test results dir: ${junit.results.dir}" />
-		<mkdir dir="${junit.results.dir}" />
-		<junit dir="${introduce.dir}" printsummary="yes" showoutput="true">
-			<!-- directory where testing container zips live -->
-			<sysproperty key="testing.containers.dir" value="${basedir}/ext/dependencies/resources/containers" />
-			<!-- several of the data tests (esp creation) need this -->
-			<sysproperty key="introduce.base.dir" value="${introduce.dir}"/>
-			<sysproperty key="GLOBUS_LOCATION" value="${ext.globus.dir}" />
-			<sysproperty key="resources.dir" value="${introduce.dir}/resources" />
-			<sysproperty key="basedir" value="${introduce.dir}" />
-			<classpath refid="build.classpath" />
-			<classpath>
-				<pathelement path="${classes.dir}" />
-				<pathelement path="${stubs.dest}" />
-			</classpath>
-			<classpath refid="Introduce.test.classpath" />
-			<formatter type="xml" />
-			<batchtest fork="yes" todir="${junit.results.dir}">
-				<fileset dir="${src.dir}">
-					<include name="**/*Test.java" />
-					<include name="**/*Tests.java" />
-					<include name="**/*Story.java" />
-				</fileset>
-			</batchtest>
-		</junit>
+		<!-- placeholder?? -->
 	</target>
 </project>
 
