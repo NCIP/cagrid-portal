@@ -42,11 +42,11 @@ public class IntroduceDescriptorToolsTestCase extends TestCase {
 		}
 
 		ServiceDescription introService = (ServiceDescription) Utils
-				.deserializeDocument(this.getClass().getResource(File.separator + "gold" + File.separator + "versions" + File.separator
+				.deserializeDocument(this.getClass().getResource("/gold/versions/"
 						+ "introduceServicesExample.xml").getFile(),
 						ServiceDescription.class);
 
-		File servicePropertiesFile = new File(this.getClass().getResource(File.separator +"gold" + File.separator + "versions" + File.separator
+		File servicePropertiesFile = new File(this.getClass().getResource("/gold/versions/" + File.separator
 				+ "introduceServicesExample.properties").getFile());
 		Properties serviceProperties = new Properties();
 		serviceProperties.load(new FileInputStream(servicePropertiesFile));
@@ -55,7 +55,7 @@ public class IntroduceDescriptorToolsTestCase extends TestCase {
 				IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR,
 				baseDirectory);
 		info = new ServiceInformation(introService, serviceProperties,
-				new File(this.getClass().getResource(File.separator +"gold"+ File.separator + "versions" ).getFile()));
+				new File(this.getClass().getResource("/gold/versions" ).getFile()));
 
 	}
 

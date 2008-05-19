@@ -34,8 +34,7 @@ public class AddMetadataStep extends BaseStep {
 			+ tci.getDir() + File.separator + "introduce.xml", ServiceDescription.class);
 		
 		//		 copy over the bookstore schema to be used with the test
-		Utils.copyFile(new File(this.getClass().getResource(File.separator +"schema" + File.separator
-			+ "caDSRMetadata.xsd").getFile()), new File(getBaseDir() + File.separator + tci.getDir() + File.separator + "schema"
+		Utils.copyFile(new File(this.getClass().getResource("/schema/" + "caDSRMetadata.xsd").getFile()), new File(getBaseDir() + File.separator + tci.getDir() + File.separator + "schema"
 			+ File.separator + tci.getName() + File.separator + "caDSRMetadata.xsd"));
 
 		int currentLength = 0;

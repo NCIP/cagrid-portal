@@ -23,20 +23,19 @@ public class AddPersistenceResourceMethodImplStep extends BaseStep {
     public void runStep() throws Throwable {
         System.out.println("Adding a simple methods implementation.");
 
-        File inFileClient = new File(this.getClass().getResource(File.separator + "gold" + File.separator
-            + "persistence" + File.separator + tci.getName() + "ClientSetPersistentResource.java").getFile());
+        File inFileClient = new File(this.getClass().getResource("/gold/persistence/" + tci.getName() + "ClientSetPersistentResource.java").getFile());
         File outFileClient = new File(tci.getDir() + File.separator + "src" + File.separator + tci.getPackageDir()
             + File.separator + "client" + File.separator + tci.getName() + "Client.java");
 
         Utils.copyFile(inFileClient, outFileClient);
         
 
-        File inFileImpl = new File(this.getClass().getResource(File.separator +"gold" + File.separator + "persistence" + File.separator + tci2.getName() + "Impl.java").getFile());
+        File inFileImpl = new File(this.getClass().getResource("/gold/persistence/" + tci2.getName() + "Impl.java").getFile());
         File outFileImpl = new File(tci2.getDir() + File.separator + "src" + File.separator + tci2.getPackageDir() + File.separator + "service" + File.separator  + tci2.getName() + "Impl.java");
         
         SourceUtils.modifyImpl(inFileImpl, outFileImpl, "setBook");
         
-        inFileImpl = new File(this.getClass().getResource(File.separator +"gold" + File.separator + "persistence" + File.separator + tci2.getName() + "Impl.java").getFile());
+        inFileImpl = new File(this.getClass().getResource("/gold/persistence/" + tci2.getName() + "Impl.java").getFile());
         outFileImpl = new File(tci2.getDir() + File.separator + "src" + File.separator + tci2.getPackageDir() + File.separator + "service" + File.separator  + tci2.getName() + "Impl.java");
         
         SourceUtils.modifyImpl(inFileImpl, outFileImpl, "getBook");
