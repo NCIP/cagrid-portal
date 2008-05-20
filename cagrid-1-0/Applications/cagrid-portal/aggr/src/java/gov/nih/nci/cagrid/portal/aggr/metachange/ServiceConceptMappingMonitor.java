@@ -51,6 +51,7 @@ public class ServiceConceptMappingMonitor {
 		try {
 			for (GridService gridService : getGridServiceDao().getAll()) {
 				try {
+					logger.debug("Indexing service: " + gridService.getUrl());
 					Set<Integer> mappedConceptIds = new HashSet<Integer>();
 					for (ConceptHierarchyNode node : gridService.getConcepts()) {
 						mappedConceptIds.add(node.getId());
