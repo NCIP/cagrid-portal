@@ -98,6 +98,8 @@
                 <value>gov.nih.nci.cagrid.portal.domain.news.NewsChannel</value>
                 <value>gov.nih.nci.cagrid.portal.domain.news.NewsItem</value>
                 <value>gov.nih.nci.cagrid.portal.domain.metadata.dataservice.XMLSchema</value>
+                <value>gov.nih.nci.cagrid.portal.domain.ConceptHierarchy</value>
+                <value>gov.nih.nci.cagrid.portal.domain.ConceptHierarchyNode</value>
 
             </list>
         </property>
@@ -181,6 +183,9 @@
 
     <bean id="xmlSchemaDao" parent="daoTemplate"
           class="gov.nih.nci.cagrid.portal.dao.XMLSchemaDao"/>
+          
+    <bean id="conceptHierarchyNodeDao" parent="daoTemplate"
+          class="gov.nih.nci.cagrid.portal.dao.ConceptHierarchyNodeDao"/>
 
     <bean id="openSessionInViewForTesting"
           class="org.springframework.orm.hibernate3.support.OpenSessionInViewInterceptor"

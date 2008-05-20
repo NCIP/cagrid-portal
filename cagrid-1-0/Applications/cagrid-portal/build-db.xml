@@ -187,7 +187,8 @@
 
             <batchtest todir="${db.test.build.dir}/junit-reports">
                 <fileset dir="${db.test.src.java.dir}">
-                    <include name="**/*Test.java"/>
+                	<!-- include name="**/*Test.java"/ -->
+                	<include name="**/ConceptHierarchyNodeDaoTest.java"/>
                     <exclude name="**/Abstract*.java"/>
                 </fileset>
             </batchtest>

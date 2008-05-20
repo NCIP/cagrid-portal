@@ -133,6 +133,9 @@ public class KeywordSearchService {
 				svcs.add((GridService)obj);
 			}
 			svcs = PortletUtils.filterServicesByInvalidMetadata(PortletUtils.filterDormantServices(PortletUtils.filterBannedServices(svcs)));
+			if(searchBean.isActiveServicesOnly()){
+				svcs = PortletUtils.filterServicesByStatus(svcs, ServiceStatus.INACTIVE, ServiceStatus.UNKNOWN, ServiceStatus.INVALID);
+			}
 			objects.clear();
 			objects.addAll(svcs);
 		}

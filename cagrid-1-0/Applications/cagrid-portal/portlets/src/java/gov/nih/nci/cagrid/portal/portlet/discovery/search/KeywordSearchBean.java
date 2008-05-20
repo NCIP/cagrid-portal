@@ -14,6 +14,7 @@ public class KeywordSearchBean {
 	private DiscoveryType discoveryType;
 	private String keywords;
 	private String[] searchFields;
+	private boolean activeServicesOnly;
 
 	/**
 	 * 
@@ -44,6 +45,14 @@ public class KeywordSearchBean {
 
 	public void setSearchFields(String[] searchFields) {
 		this.searchFields = searchFields;
+	}
+
+	public boolean isActiveServicesOnly() {
+		return activeServicesOnly;
+	}
+
+	public void setActiveServicesOnly(boolean activeServicesOnly) {
+		this.activeServicesOnly = activeServicesOnly;
 	}
 
 }

@@ -240,6 +240,7 @@ public class PortalUtils {
 	public static void main(String[] args) throws Exception {
 
 		// System.out.println(createHash("Howdy!"));
+//		String url = "https://cagrid-cccwfu.wfubmc.edu:8443/wsrf/share/schema/CaaersDataService";
 		String url = "https://cagrid-cccwfu.wfubmc.edu:8443/wsrf/share/schema/CaaersDataService";
 		Metadata m = getMetadata(
 				url,

@@ -39,9 +39,13 @@
     </path>
 
     <path id="aggr.run.cp">
+    	<pathelement location="db/test"/>
         <pathelement location="${aggr.classes.dir}"/>
         <path refid="db.run.cp"/>
         <path refid="aggr.compile.cp"/>
+        <pathelement location="portlets/test/lib/acegi-security-1.0.3.jar"/>
+        <pathelement location="portlets/src/war/WEB-INF/classes"/>
+        
     </path>
 
     <path id="aggr.test.run.cp">
@@ -156,6 +160,14 @@
 
     <target name="aggr:run-xmlschemas" depends="aggr:prepare-run-cp">
         <java classname="gov.nih.nci.cagrid.portal.util.RunXmlSchemas" classpathref="aggr.run.cp" fork="true"/>
+    </target>
+    
+    <target name="aggr:run-concepts" depends="aggr:prepare-run-cp">
+        <java classname="gov.nih.nci.cagrid.portal.util.RunConcepts" classpathref="aggr.run.cp" fork="true"/>
+    </target>
+    
+    <target name="aggr:run-conceptmapping" depends="aggr:prepare-run-cp">
+        <java classname="gov.nih.nci.cagrid.portal.util.RunServiceConceptMapping" classpathref="aggr.run.cp" fork="true"/>
     </target>
 
     <!--

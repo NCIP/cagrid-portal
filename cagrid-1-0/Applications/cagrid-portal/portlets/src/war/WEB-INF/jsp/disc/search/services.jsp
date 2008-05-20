@@ -175,6 +175,7 @@
             <tr>
                 <td colspan="2">
                     <input type="submit" value="Search"/>
+                    <input type="checkbox" namechecked/>
                 </td>
             </tr>
         </table>
