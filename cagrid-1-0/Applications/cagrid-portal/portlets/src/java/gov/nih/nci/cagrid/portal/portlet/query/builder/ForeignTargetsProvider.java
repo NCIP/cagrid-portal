@@ -11,7 +11,7 @@ import java.util.List;
  */
 public interface ForeignTargetsProvider {
 
-    public static String FOREIGN_TARGETS_CLASS_PREFIX = "ForeignUMLClass:";
+    public static String FOREIGN_TARGETS_CLASS_PREFIX = "ForeignUMLClassBean:";
 
     public List<UMLClass> getSemanticallyEquivalentClasses(UMLClass uClass);
 }

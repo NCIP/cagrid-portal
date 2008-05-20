@@ -15,6 +15,7 @@ import gov.nih.nci.cagrid.portal.domain.metadata.dataservice.UMLClass;
 import gov.nih.nci.cagrid.portal.portlet.util.PortletUtils;
 import gov.nih.nci.cagrid.portal.portlet.query.builder.AggregateTargetsCommand;
 import gov.nih.nci.cagrid.portal.portlet.query.builder.ForeignTargetsProvider;
+import gov.nih.nci.cagrid.portal.portlet.query.dcql.JoinCondition;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -46,6 +47,8 @@ public class CriteriaBean implements ApplicationContextAware {
     private ApplicationContext applicationContext;
 
     private AggregateTargetsCommand aggregateTargets;
+    private JoinCondition join;
+
     private HibernateTemplate hibernateTemplate;
 
     /**
@@ -153,8 +156,10 @@ public class CriteriaBean implements ApplicationContextAware {
                                 }
                             });
                     subCriteria.setUmlClass(assocType);
+                    subCriteria.setJoin(criterion.getJoin());
                     assoc.setRoleName(parts[0]);
                     assoc.setCriteriaBean(subCriteria);
+
 
                 } else {
                     UMLClass assocType = (UMLClass) getHibernateTemplate().execute(
@@ -311,11 +316,32 @@ public class CriteriaBean implements ApplicationContextAware {
         return target;
     }
 
+
+    public boolean isDCQLQuery() {
+        for (AssociationBean assocBean : getAssociations()) {
+            if (assocBean.getRoleName().startsWith(ForeignTargetsProvider.FOREIGN_TARGETS_CLASS_PREFIX))
+                return true;
+                //check recursively
+            else if (assocBean.getCriteriaBean() != null && assocBean.getCriteriaBean().isDCQLQuery())
+                return true;
+        }
+        return getAggregateTargets() != null && getAggregateTargets().getSelected().size() > 1;
+    }
+
+
     public AggregateTargetsCommand getAggregateTargets() {
         return aggregateTargets;
     }
 
     public void setAggregateTargets(AggregateTargetsCommand aggregateTargets) {
         this.aggregateTargets = aggregateTargets;
+    }
+
+    public JoinCondition getJoin() {
+        return join;
+    }
+
+    public void setJoin(JoinCondition join) {
+        this.join = join;
     }
 }

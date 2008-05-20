@@ -1,78 +1,71 @@
 /**
- * 
+ *
  */
 package gov.nih.nci.cagrid.portal.portlet.query.results;
 
 import gov.nih.nci.cagrid.portal.dao.PortalUserDao;
 import gov.nih.nci.cagrid.portal.domain.PortalUser;
-import gov.nih.nci.cagrid.portal.domain.dataservice.CQLQueryInstance;
 import gov.nih.nci.cagrid.portal.domain.dataservice.QueryInstance;
 import gov.nih.nci.cagrid.portal.portlet.query.AbstractQueryRenderController;
-import gov.nih.nci.cagrid.portal.portlet.query.cql.CQLQueryService;
+import org.springframework.beans.factory.annotation.Required;
 
+import javax.portlet.RenderRequest;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.portlet.RenderRequest;
-
-import org.springframework.beans.factory.annotation.Required;
-
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
- * 
  */
 public class ViewQueryHistoryController extends AbstractQueryRenderController {
 
-	private PortalUserDao portalUserDao;
+    private PortalUserDao portalUserDao;
 
-	/**
-	 * 
-	 */
-	public ViewQueryHistoryController() {
+    /**
+     *
+     */
+    public ViewQueryHistoryController() {
 
-	}
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see gov.nih.nci.cagrid.portal.portlet.AbstractViewObjectController#getObject(javax.portlet.RenderRequest)
-	 */
-	@Override
-	protected Object getObject(RenderRequest request) {
-		PortalUser user = getQueryModel().getPortalUser();
-		List<CQLQueryInstance> instances = getQueryModel().getSubmittedCqlQueries();
-		if(user != null){
-			//Since results are not stored, need to map results
-			//in http session to instances pulled from DB.
-			Map<Integer,CQLQueryInstance> map = new HashMap<Integer,CQLQueryInstance>();
-			for(CQLQueryInstance instance : instances){
-				map.put(instance.getId(), instance);
-			}
-			instances = new ArrayList<CQLQueryInstance>();
-			PortalUser p = getPortalUserDao().getById(user.getId());
-			instances = new ArrayList<CQLQueryInstance>();
-			for (QueryInstance inst : p.getQueryInstances()) {
-				if (inst instanceof CQLQueryInstance) {
-					CQLQueryInstance instance = (CQLQueryInstance)inst;
-					if(map.containsKey(instance.getId())){
-						instance.setResult(map.get(instance.getId()).getResult());
-					}
-					instances.add(instance);
-				}
-			}
-		}
-		return instances;
-	}
+    /*
+      * (non-Javadoc)
+      *
+      * @see gov.nih.nci.cagrid.portal.portlet.AbstractViewObjectController#getObject(javax.portlet.RenderRequest)
+      */
+    @Override
+    protected Object getObject(RenderRequest request) {
+        PortalUser user = getQueryModel().getPortalUser();
+        List<QueryInstance> instances = getQueryModel().getSubmittedQueries();
+        if (user != null) {
+            //Since results are not stored, need to map results
+            //in http session to instances pulled from DB.
+            Map<Integer, QueryInstance> map = new HashMap<Integer, QueryInstance>();
+            for (QueryInstance instance : instances) {
+                map.put(instance.getId(), instance);
+            }
+            instances = new ArrayList<QueryInstance>();
+            PortalUser p = getPortalUserDao().getById(user.getId());
+            instances = new ArrayList<QueryInstance>();
+            for (QueryInstance inst : p.getQueryInstances()) {
+                if (map.containsKey(inst.getId())) {
+                    inst.setResult(map.get(inst.getId()).getResult());
+                }
+                instances.add(inst);
 
-	@Required
-	public PortalUserDao getPortalUserDao() {
-		return portalUserDao;
-	}
+            }
+        }
+        return instances;
+    }
 
-	public void setPortalUserDao(PortalUserDao portalUserDao) {
-		this.portalUserDao = portalUserDao;
-	}
+    @Required
+    public PortalUserDao getPortalUserDao() {
+        return portalUserDao;
+    }
+
+    public void setPortalUserDao(PortalUserDao portalUserDao) {
+        this.portalUserDao = portalUserDao;
+    }
 
 }

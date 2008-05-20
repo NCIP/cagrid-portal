@@ -161,11 +161,20 @@
     <bean id="workspaceDao" parent="daoTemplate"
           class="gov.nih.nci.cagrid.portal.dao.WorkspaceDao"/>
 
+    <bean id="queryInstanceDao" parent="daoTemplate"
+          class="gov.nih.nci.cagrid.portal.dao.QueryInstanceDao"/>
+
     <bean id="cqlQueryDao" parent="daoTemplate"
           class="gov.nih.nci.cagrid.portal.dao.CQLQueryDao"/>
 
     <bean id="cqlQueryInstanceDao" parent="daoTemplate"
           class="gov.nih.nci.cagrid.portal.dao.CQLQueryInstanceDao"/>
+
+    <bean id="dcqlQueryDao" parent="daoTemplate"
+          class="gov.nih.nci.cagrid.portal.dao.DCQLQueryDao"/>
+
+    <bean id="dcqlQueryInstanceDao" parent="daoTemplate"
+          class="gov.nih.nci.cagrid.portal.dao.DCQLQueryInstanceDao"/>
 
     <bean id="sharedCqlQueryDao" parent="daoTemplate"
           class="gov.nih.nci.cagrid.portal.dao.SharedCQLQueryDao"/>
@@ -183,7 +192,7 @@
 
     <bean id="xmlSchemaDao" parent="daoTemplate"
           class="gov.nih.nci.cagrid.portal.dao.XMLSchemaDao"/>
-          
+
     <bean id="conceptHierarchyNodeDao" parent="daoTemplate"
           class="gov.nih.nci.cagrid.portal.dao.ConceptHierarchyNodeDao"/>
 

@@ -48,7 +48,7 @@
                         <form:checkbox path="selected" value="${aggregateTarget.model.service.url}"/>
                         &nbsp;
                     </div>
-                    <div class="vale">
+                    <div class="value">
                         <c:out value="${aggregateTarget.model.service.url}"/>
                     </div>
                 </div>

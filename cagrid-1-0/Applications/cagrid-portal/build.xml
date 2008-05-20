@@ -1,240 +1,243 @@
 <project name="cagrid-portal" default="all">
 
-	<property name="target.env" value="local"/>
-	<property name="build.ext.properties" value="build-${target.env}.properties"/>
-	<property file="${build.ext.properties}"/>
-	<property file="build.properties" />
-	<property environment="env" />
-	<property name="ant.home" value="${env.ANT_HOME}" />
-	<property name="tools.ant.lib" value="tools/ant/lib"/>
-	
-	<path id="xmltaskdef.cp">
-		<pathelement location="${tools.ant.lib}/xmltask-v1.14.jar"/>
-	</path>
+    <property name="target.env" value="local"/>
+    <property name="build.ext.properties" value="build-${target.env}.properties"/>
+    <property file="${build.ext.properties}"/>
+    <property file="build.properties"/>
+    <property environment="env"/>
+    <property name="ant.home" value="${env.ANT_HOME}"/>
+    <property name="tools.ant.lib" value="tools/ant/lib"/>
 
-	<taskdef name="xmltask"
-		classname="com.oopsconsultancy.xmltask.ant.XmlTask"
-		classpathref="xmltaskdef.cp" />
-		
-	<taskdef resource="net/sf/antcontrib/antlib.xml">
-		<classpath>
-			<fileset dir="${tools.ant.lib}">
-				<include name="ant-contrib*.jar" />
-			</fileset>
-		</classpath>
-	</taskdef>
+    <path id="xmltaskdef.cp">
+        <pathelement location="${tools.ant.lib}/xmltask-v1.14.jar"/>
+    </path>
+
+    <taskdef name="xmltask"
+             classname="com.oopsconsultancy.xmltask.ant.XmlTask"
+             classpathref="xmltaskdef.cp"/>
+
+    <taskdef resource="net/sf/antcontrib/antlib.xml">
+        <classpath>
+            <fileset dir="${tools.ant.lib}">
+                <include name="ant-contrib*.jar"/>
+            </fileset>
+        </classpath>
+    </taskdef>
 
 
-	<patternset id="db.compile.jars">
-		<include name="spring/spring.jar" />
-		<include name="hibernate/core/commons-logging-1.0.4.jar" />
-		<include
-			name="hibernate/annotations/hibernate-commons-annotations.jar" />
-		<include name="hibernate/annotations/hibernate-annotations.jar" />
-		<include name="hibernate/annotations/ejb3-persistence.jar" />
-		<include name="hibernate/core/hibernate3.jar" />
-		<include name="jakarta-commons/commons-lang.jar" />
-	</patternset>
+    <patternset id="db.compile.jars">
+        <include name="spring/spring.jar"/>
+        <include name="hibernate/core/commons-logging-1.0.4.jar"/>
+        <include
+                name="hibernate/annotations/hibernate-commons-annotations.jar"/>
+        <include name="hibernate/annotations/hibernate-annotations.jar"/>
+        <include name="hibernate/annotations/ejb3-persistence.jar"/>
+        <include name="hibernate/core/hibernate3.jar"/>
+        <include name="jakarta-commons/commons-lang.jar"/>
+    </patternset>
 
-	<patternset id="db.run.jars">
-		<include name="aspectj/aspectjrt.jar" />
-		<include name="aspectj/aspectjweaver.jar" />
+    <patternset id="db.run.jars">
+        <include name="aspectj/aspectjrt.jar"/>
+        <include name="aspectj/aspectjweaver.jar"/>
 
-		<include name="hibernate/core/*.jar"/>		
-		
+        <include name="hibernate/core/*.jar"/>
 
-		<include name="jakarta-commons/commons-dbcp.jar" />
-		<include name="jakarta-commons/commons-pool.jar" />
 
-	</patternset>
+        <include name="jakarta-commons/commons-dbcp.jar"/>
+        <include name="jakarta-commons/commons-pool.jar"/>
 
-	<patternset id="globus.crypto.jars">
-		<include name="cryptix-asn1.jar" />
-		<include name="cryptix.jar" />
-		<include name="cryptix32.jar" />
-		<include name="jce-jdk13-125.jar" />
-		<include name="jgss.jar" />
-		<include name="puretls.jar" />
-		<include name="xmlsec.jar" />
-	</patternset>
+    </patternset>
 
-	<patternset id="cagrid.crypto.jars">
-		<include name="cog-jglobus.jar" />
-	</patternset>
+    <patternset id="globus.crypto.jars">
+        <include name="cryptix-asn1.jar"/>
+        <include name="cryptix.jar"/>
+        <include name="cryptix32.jar"/>
+        <include name="jce-jdk13-125.jar"/>
+        <include name="jgss.jar"/>
+        <include name="puretls.jar"/>
+        <include name="xmlsec.jar"/>
+    </patternset>
 
-	<patternset id="globus.jars">
-		<include name="addressing-1.0.jar" />
-		<include name="axis.jar" />
-		<include name="bootstrap.jar" />
-		<include name="cog-axis.jar" />
-		<include name="commonj.jar" />
-		<include name="commons-discovery.jar" />
-		<include name="concurrent.jar" />
-		<include name="jaxrpc.jar" />
-		<include name="resolver.jar" />
-		<include name="saaj.jar" />
-		<include name="servlet.jar" />
-		<include name="wsdl4j.jar" />
-		<include name="wsrf_common.jar" />
-		<include name="wsrf_core_stubs.jar" />
-		<include name="wsrf_core.jar" />
-		<include name="wss4j.jar" />
-	</patternset>
+    <patternset id="cagrid.crypto.jars">
+        <include name="cog-jglobus.jar"/>
+    </patternset>
 
-	<patternset id="cagrid.jars">
-		<include name="caGrid-1.1-*client.jar" />
-		<include name="caGrid-1.1-*common.jar" />
-		<include name="caGrid-1.1-*stubs.jar" />
-		<include name="caGrid-1.1-advertisement.jar" />
-		<include name="caGrid-1.1-core.jar" />
-		<include name="caGrid-1.1-discovery.jar" />
-		<include name="caGrid-1.1-grape.jar" />
-		<include name="caGrid-1.1-gridca.jar" />
-		<include name="caGrid-1.1-metadata*.jar" />
-		<include name="caGrid-1.1-opensaml-1.1.jar" />
-		<include name="castor-0.9.9.jar" />
-		<include name="commons-codec-1.3.jar" />
-		<include name="globus*.jar" />
-		<include name="mobius*.jar" />
-		<include name="client.jar" />
-		<include name="activation.jar" />
-		<include name="mail.jar" />
-		<include name="caGrid-1.1-wsEnum.jar" />
-	</patternset>
-	
-	<xmlcatalog id="portal.catalog">
-		<dtd 
-			publicId="-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
-			location="./tools/ant/resources/web-app_2_3.dtd"/>
-		<dtd 
-			publicId="-//Liferay//DTD Display 4.0.0//EN"
-			location="./tools/ant/resources/liferay-display_4_0_0.dtd"/>
-		<dtd 
-			publicId="-//JBoss//DTD JBOSS Security Config 3.0//EN"
-			location="./tools/ant/resources/security_config.dtd"/>
-		<dtd 
-			publicId="-//Hibernate/Hibernate Configuration DTD 3.0//EN"
-			location="./tools/ant/resources/hibernate-configuration-3.0.dtd"/>
+    <patternset id="globus.jars">
+        <include name="addressing-1.0.jar"/>
+        <include name="axis.jar"/>
+        <include name="bootstrap.jar"/>
+        <include name="cog-axis.jar"/>
+        <include name="commonj.jar"/>
+        <include name="commons-discovery.jar"/>
+        <include name="concurrent.jar"/>
+        <include name="jaxrpc.jar"/>
+        <include name="resolver.jar"/>
+        <include name="saaj.jar"/>
+        <include name="servlet.jar"/>
+        <include name="wsdl4j.jar"/>
+        <include name="wsrf_common.jar"/>
+        <include name="wsrf_core_stubs.jar"/>
+        <include name="wsrf_core.jar"/>
+        <include name="wss4j.jar"/>
+    </patternset>
 
-	</xmlcatalog>
+    <patternset id="cagrid.jars">
+        <include name="caGrid-1.1-*client.jar"/>
+        <include name="caGrid-1.1-*common.jar"/>
+        <include name="caGrid-1.1-*stubs.jar"/>
+        <include name="caGrid-1.1-advertisement.jar"/>
+        <include name="caGrid-1.1-core.jar"/>
+        <include name="caGrid-1.1-discovery.jar"/>
+        <include name="caGrid-1.1-grape.jar"/>
+        <include name="caGrid-1.1-gridca.jar"/>
+        <include name="caGrid-1.1-metadata*.jar"/>
+        <include name="caGrid-1.1-opensaml-1.1.jar"/>
+        <include name="castor-0.9.9.jar"/>
+        <include name="commons-codec-1.3.jar"/>
+        <include name="globus*.jar"/>
+        <include name="mobius*.jar"/>
+        <include name="client.jar"/>
+        <include name="activation.jar"/>
+        <include name="mail.jar"/>
+        <include name="caGrid-1.1-wsEnum.jar"/>
+    </patternset>
 
-	
-	<import file="build-db.xml" />
-	<import file="build-security.xml" />
-	<import file="build-aggr.xml" />
-	<import file="build-portlets.xml" />
-	<!-- 
-	<import file="build-js2.xml" />
-	 -->
-	<import file="build-liferay.xml" />
-	
+    <xmlcatalog id="portal.catalog">
+        <dtd
+                publicId="-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+                location="./tools/ant/resources/web-app_2_3.dtd"/>
+        <dtd
+                publicId="-//Liferay//DTD Display 4.0.0//EN"
+                location="./tools/ant/resources/liferay-display_4_0_0.dtd"/>
+        <dtd
+                publicId="-//JBoss//DTD JBOSS Security Config 3.0//EN"
+                location="./tools/ant/resources/security_config.dtd"/>
+        <dtd
+                publicId="-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+                location="./tools/ant/resources/hibernate-configuration-3.0.dtd"/>
 
-	<target name="compile">
-		<antcall target="portlets:compile"/>
-	</target>
-	
-	<target name="test">
-	
-		<antcall target="db:test"/>
-		<antcall target="aggr:test"/>
-		<antcall target="portlets:test"/>
-	
-		<mkdir dir="docs/test/report/html"/>
-		
-		<junitreport todir="docs/test/report">
-  			<fileset dir=".">
-    			<include name="**/junit-reports/TEST-*.xml"/>
-  			</fileset>
-  			<report format="frames" todir="docs/test/report/html"/>
-		</junitreport>
-		
-	</target>
+    </xmlcatalog>
 
-	<target name="clean">
-		<antcall target="db:clean"/>
-		<antcall target="aggr:clean"/>
-		<antcall target="portlets:clean"/>
-		<!-- 
-		<antcall target="js2:clean"/>
-		 -->
-		<antcall target="liferay:clean"/>
-		<antcall target="security:clean"/>
-		
-		<delete dir="docs"/>
-	</target>
-	
-	<target name="all" depends="clean,compile,test"/>
-	
-	<target name="create-cagridportal-properties">
-		<propertyfile file="${target.dir}" comment="Auto-generated by cagridportal build.">
-			<entry key="cagrid.portal.db.url" value="${cagrid.portal.db.url}"/>
-			<entry key="cagrid.portal.db.username" value="${cagrid.portal.db.username}"/>
-			<entry key="cagrid.portal.db.password" value="${cagrid.portal.db.password}"/>
-			<entry key="cagrid.portal.db.dialect" value="${cagrid.portal.db.dialect}"/>
-			<entry key="cagrid.portal.db.driver" value="${cagrid.portal.db.driver}"/>
-			<entry key="cagrid.portal.db.show_sql" value="${cagrid.portal.db.show_sql}"/>
-			<entry key="cagrid.portal.indexServiceUrls" value="${cagrid.portal.indexServiceUrls}"/>
-			<entry key="cagrid.portal.geocoder.yahoo.baseUrl" value="${cagrid.portal.geocoder.yahoo.baseUrl}"/>
-			<entry key="cagrid.portal.geocoder.yahoo.appId" value="${cagrid.portal.geocoder.yahoo.appId}"/>
-			<entry key="cagrid.portal.map.google.baseUrl" value="${cagrid.portal.map.google.baseUrl}"/>
-			<entry key="cagrid.portal.map.google.apiKey" value="${cagrid.portal.map.google.apiKey}"/>
-			<entry key="cagrid.portal.gmeUrl" value="${cagrid.portal.gmeUrl}"/>
-			<entry key="cagrid.portal.cadsrUrl" value="${cagrid.portal.cadsrUrl}"/>
-			<entry key="cagrid.portal.security.encryption.key" value="${cagrid.portal.security.encryption.key}"/>
-			<entry key="cagrid.portal.admin.email" value="${cagrid.portal.admin.email}"/>
-			<entry key="cagrid.portal.idpInfo" value="${cagrid.portal.idpInfo}"/>
-			<entry key="cagrid.portal.ifsUrl" value="${cagrid.portal.ifsUrl}"/>
-			<entry key="cagrid.portal.http.port" value="${liferay.http.port}"/>
-			<entry key="cagrid.portal.https.port" value="${liferay.https.port}"/>
-			<entry key="cagrid.portal.httpRedirect.port" value="${cagrid.portal.httpRedirect.port}"/>
-			<entry key="cagrid.portal.httpsRedirect.port" value="${cagrid.portal.httpsRedirect.port}"/>
-			<entry key="cagrid.portal.trust.synchronizeEnabled" value="${cagrid.portal.trust.synchronizeEnabled}"/>
+
+    <import file="build-db.xml"/>
+    <import file="build-security.xml"/>
+    <import file="build-aggr.xml"/>
+    <import file="build-portlets.xml"/>
+    <!--
+     <import file="build-js2.xml" />
+      -->
+    <import file="build-liferay.xml"/>
+
+
+    <target name="compile">
+        <antcall target="portlets:compile"/>
+    </target>
+
+    <target name="test">
+
+        <antcall target="db:test"/>
+        <antcall target="aggr:test"/>
+        <antcall target="portlets:test"/>
+
+        <mkdir dir="docs/test/report/html"/>
+
+        <junitreport todir="docs/test/report">
+            <fileset dir=".">
+                <include name="**/junit-reports/TEST-*.xml"/>
+            </fileset>
+            <report format="frames" todir="docs/test/report/html"/>
+        </junitreport>
+
+    </target>
+
+    <target name="clean">
+        <antcall target="db:clean"/>
+        <antcall target="aggr:clean"/>
+        <antcall target="portlets:clean"/>
+        <!--
+          <antcall target="js2:clean"/>
+           -->
+        <antcall target="liferay:clean"/>
+        <antcall target="security:clean"/>
+
+        <delete dir="docs"/>
+    </target>
+
+    <target name="all" depends="clean,compile,test"/>
+
+    <target name="create-cagridportal-properties">
+        <propertyfile file="${target.dir}" comment="Auto-generated by cagridportal build.">
+            <entry key="cagrid.portal.db.url" value="${cagrid.portal.db.url}"/>
+            <entry key="cagrid.portal.db.username" value="${cagrid.portal.db.username}"/>
+            <entry key="cagrid.portal.db.password" value="${cagrid.portal.db.password}"/>
+            <entry key="cagrid.portal.db.dialect" value="${cagrid.portal.db.dialect}"/>
+            <entry key="cagrid.portal.db.driver" value="${cagrid.portal.db.driver}"/>
+            <entry key="cagrid.portal.db.show_sql" value="${cagrid.portal.db.show_sql}"/>
+            <entry key="cagrid.portal.indexServiceUrls" value="${cagrid.portal.indexServiceUrls}"/>
+            <entry key="cagrid.portal.geocoder.yahoo.baseUrl" value="${cagrid.portal.geocoder.yahoo.baseUrl}"/>
+            <entry key="cagrid.portal.geocoder.yahoo.appId" value="${cagrid.portal.geocoder.yahoo.appId}"/>
+            <entry key="cagrid.portal.map.google.baseUrl" value="${cagrid.portal.map.google.baseUrl}"/>
+            <entry key="cagrid.portal.map.google.apiKey" value="${cagrid.portal.map.google.apiKey}"/>
+            <entry key="cagrid.portal.gmeUrl" value="${cagrid.portal.gmeUrl}"/>
+            <entry key="cagrid.portal.cadsrUrl" value="${cagrid.portal.cadsrUrl}"/>
+            <entry key="cagrid.portal.security.encryption.key" value="${cagrid.portal.security.encryption.key}"/>
+            <entry key="cagrid.portal.admin.email" value="${cagrid.portal.admin.email}"/>
+            <entry key="cagrid.portal.idpInfo" value="${cagrid.portal.idpInfo}"/>
+            <entry key="cagrid.portal.ifsUrl" value="${cagrid.portal.ifsUrl}"/>
+            <entry key="cagrid.portal.http.port" value="${liferay.http.port}"/>
+            <entry key="cagrid.portal.https.port" value="${liferay.https.port}"/>
+            <entry key="cagrid.portal.httpRedirect.port" value="${cagrid.portal.httpRedirect.port}"/>
+            <entry key="cagrid.portal.httpsRedirect.port" value="${cagrid.portal.httpsRedirect.port}"/>
+            <entry key="cagrid.portal.trust.synchronizeEnabled" value="${cagrid.portal.trust.synchronizeEnabled}"/>
             <entry key="cabig.tools.remoteView" value="${cabig.tools.remoteView}"/>
+            <entry key="fqp.service.url" value="${fqp.service.url}"/>
+            <entry key="strict.index.verification" value="${strict.index.verification}"/>
         </propertyfile>
-	</target>
-	
-	<target name="config-trust">
-		<if>
-			<istrue value="${aggr.trust.copy.certificates}"/>
-			<then>
-				<mkdir dir="${user.home}/.globus/certificates"/>
-				<copy todir="${user.home}/.globus/certificates" overwrite="true">
-					<fileset dir="${aggr.trust.certs.dir}">
-						<include name="*"/>
-					</fileset>
-				</copy>
-			</then>
-		</if>
-	</target>
-	
-	<target name="install">
-		<antcall target="config-trust"/>
-		<antcall target="db:load-schema"/>
-		<antcall target="aggr:load-workspaces"/>
-		<antcall target="liferay:install-liferay"/>
-		<antcall target="liferay:deploy-all"/>
-		
-	</target>
-	
-	
-	<target name="javadoc" depends="db:compile,aggr:compile,portlets:compile,liferay:compile,security:compile">
-		<mkdir dir="docs/api"/>
-        <javadoc packagenames="*" destdir="docs/api" author="true" version="true" use="true" windowtitle="caGrid Portal API">
+    </target>
+
+    <target name="config-trust">
+        <if>
+            <istrue value="${aggr.trust.copy.certificates}"/>
+            <then>
+                <mkdir dir="${user.home}/.globus/certificates"/>
+                <copy todir="${user.home}/.globus/certificates" overwrite="true">
+                    <fileset dir="${aggr.trust.certs.dir}">
+                        <include name="*"/>
+                    </fileset>
+                </copy>
+            </then>
+        </if>
+    </target>
+
+    <target name="install">
+        <antcall target="config-trust"/>
+        <antcall target="db:load-schema"/>
+        <antcall target="aggr:load-workspaces"/>
+        <antcall target="liferay:install-liferay"/>
+        <antcall target="liferay:deploy-all"/>
+
+    </target>
+
+
+    <target name="javadoc" depends="db:compile,aggr:compile,portlets:compile,liferay:compile,security:compile">
+        <mkdir dir="docs/api"/>
+        <javadoc packagenames="*" destdir="docs/api" author="true" version="true" use="true"
+                 windowtitle="caGrid Portal API">
 
             <sourcepath>
-                <pathelement location="${db.src.java.dir}" />
-                <pathelement location="${aggr.src.java.dir}" />
-                <pathelement location="${portlets.src.java.dir}" />
-                <pathelement location="${liferay.src.java.dir}" />
-                <pathelement location="${security.src.java.dir}" />
+                <pathelement location="${db.src.java.dir}"/>
+                <pathelement location="${aggr.src.java.dir}"/>
+                <pathelement location="${portlets.src.java.dir}"/>
+                <pathelement location="${liferay.src.java.dir}"/>
+                <pathelement location="${security.src.java.dir}"/>
             </sourcepath>
 
             <classpath>
-                <pathelement location="${db.classes.dir}" />
-                <pathelement location="${aggr.classes.dir}" />
-                <pathelement location="${portlets.classes.dir}" />
-                <pathelement location="${liferay.classes.dir}" />
-                <pathelement location="${security.classes.dir}" />
+                <pathelement location="${db.classes.dir}"/>
+                <pathelement location="${aggr.classes.dir}"/>
+                <pathelement location="${portlets.classes.dir}"/>
+                <pathelement location="${liferay.classes.dir}"/>
+                <pathelement location="${security.classes.dir}"/>
                 <path refid="db.compile.cp"/>
                 <path refid="aggr.compile.cp"/>
                 <path refid="portlets.compile.cp"/>
@@ -242,8 +245,8 @@
                 <path refid="security.compile.cp"/>
             </classpath>
 
-            <tag name="todo" scope="all" description="To do:" />
-            <tag name="created" scope="all" description="Created On:" />
+            <tag name="todo" scope="all" description="To do:"/>
+            <tag name="created" scope="all" description="Created On:"/>
 
         </javadoc>
     </target>

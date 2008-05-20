@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package gov.nih.nci.cagrid.portal.portlet.query.cql;
 
@@ -7,72 +7,80 @@ import gov.nih.nci.cagrid.portal.portlet.query.model.SelectServiceCommand;
 
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
- *
  */
 public class CQLQueryCommand extends SelectServiceCommand {
-	
-	private String cqlQuery;
-	private String dataServiceUrlError;
-	private String cqlQueryError;
-	private String confirmationMessage;
-	private String cqlQuerySubmitError;
 
-	/**
-	 * 
-	 */
-	public CQLQueryCommand() {
+    private String cqlQuery;
+    private String dataServiceUrlError;
+    private String cqlQueryError;
+    private String confirmationMessage;
+    private String cqlQuerySubmitError;
+    private boolean dcql = false;
 
-	}
-	
-	public void clear(){
-		setCqlQuery(null);
-		setDataServiceUrlError(null);
-		setCqlQueryError(null);
-		setCqlQuerySubmitError(null);
-		setConfirmationMessage(null);
-	}
+    /**
+     *
+     */
+    public CQLQueryCommand() {
 
-	public String getConfirmationMessage() {
-		return confirmationMessage;
-	}
+    }
 
-	public void setConfirmationMessage(String confirmationMessage) {
-		this.confirmationMessage = confirmationMessage;
-	}
+    public void clear() {
+        setCqlQuery(null);
+        setDataServiceUrlError(null);
+        setCqlQueryError(null);
+        setCqlQuerySubmitError(null);
+        setConfirmationMessage(null);
+    }
 
-	public String getCqlQuery() {
-		return cqlQuery;
-	}
+    public String getConfirmationMessage() {
+        return confirmationMessage;
+    }
 
-	public void setCqlQuery(String cqlQuery) {
-		this.cqlQuery = cqlQuery;
-	}
+    public void setConfirmationMessage(String confirmationMessage) {
+        this.confirmationMessage = confirmationMessage;
+    }
 
-	public String getCqlQueryError() {
-		return cqlQueryError;
-	}
+    public String getCqlQuery() {
+        return cqlQuery;
+    }
 
-	public void setCqlQueryError(String cqlQueryError) {
-		this.cqlQueryError = cqlQueryError;
-	}
+    public void setCqlQuery(String cqlQuery) {
+        this.cqlQuery = cqlQuery;
+    }
 
-	public String getDataServiceUrlError() {
-		return dataServiceUrlError;
-	}
+    public String getCqlQueryError() {
+        return cqlQueryError;
+    }
 
-	public void setDataServiceUrlError(String dataServiceUrlError) {
-		this.dataServiceUrlError = dataServiceUrlError;
-	}
+    public void setCqlQueryError(String cqlQueryError) {
+        this.cqlQueryError = cqlQueryError;
+    }
 
-	public boolean hasErrors() {
-		return getDataServiceUrlError() != null || getCqlQueryError() != null || getCqlQuerySubmitError() != null;
-	}
+    public String getDataServiceUrlError() {
+        return dataServiceUrlError;
+    }
 
-	public void setCqlQuerySubmitError(String cqlQuerySubmitError) {
-		this.cqlQuerySubmitError = cqlQuerySubmitError;
-	}
-	public String getCqlQuerySubmitError(){
-		return cqlQuerySubmitError;
-	}
+    public void setDataServiceUrlError(String dataServiceUrlError) {
+        this.dataServiceUrlError = dataServiceUrlError;
+    }
 
+    public boolean hasErrors() {
+        return getDataServiceUrlError() != null || getCqlQueryError() != null || getCqlQuerySubmitError() != null;
+    }
+
+    public void setCqlQuerySubmitError(String cqlQuerySubmitError) {
+        this.cqlQuerySubmitError = cqlQuerySubmitError;
+    }
+
+    public String getCqlQuerySubmitError() {
+        return cqlQuerySubmitError;
+    }
+
+    public boolean isDcql() {
+        return dcql;
+    }
+
+    public void setDcql(boolean dcql) {
+        this.dcql = dcql;
+    }
 }

@@ -1,25 +1,45 @@
 <td style="padding-right:5px">
-<select name="operation"
-	onchange="<c:out value="${namespace}"/>executeHistoryOperation('<c:out value="${instance.id}"/>', this.options[this.selectedIndex].value)">
-	<option value="---" selected>---</option>
-	<c:if test="${instance.state == 'COMPLETE' and !empty instance.result}">
-		<option value="selectQueryInstance">View Results</option>
-	</c:if>
-	<c:if test="${instance.state == 'ERROR'}">
-		<option value="selectQueryInstanceError">View Error</option>
-	</c:if>
-	<c:if test="${instance.state == 'RUNNING'}">
-		<option value="cancelQueryInstance">Cancel</option>
-	</c:if>
-	<option value="reloadQueryInstance">Re-Load</option>
-	<option value="deleteQueryInstance">Delete</option>
-</select></td>
-<td style="padding-right:5px"><c:out value="${instance.state}" /></td>
+    <select name="operation"
+            onchange="<c:out value="${namespace}"/>executeHistoryOperation('<c:out value="${instance.id}"/>',
+    this.options[this.selectedIndex].value)">
+    <option value="---" selected>---</option>
+    <c:if test="${instance.state == 'COMPLETE' and !empty instance.result}">
+        <option value="selectQueryInstance">View Results</option>
+    </c:if>
+    <c:if test="${instance.state == 'ERROR'}">
+        <option value="selectQueryInstanceError">View Error</option>
+    </c:if>
+    <c:if test="${instance.state == 'RUNNING'}">
+        <option value="cancelQueryInstance">Cancel</option>
+    </c:if>
+    <option value="reloadQueryInstance">Re-Load</option>
+    <option value="deleteQueryInstance">Delete</option>
+    </select></td>
+<td style="padding-right:5px"><c:out value="${instance.state}"/></td>
 <td style="padding-right:5px"><c:if test="${!empty instance.startTime}">
-	<fmt:formatDate value="${instance.startTime}" type="both" />
+    <fmt:formatDate value="${instance.startTime}" type="both"/>
 </c:if></td>
 <td style="padding-right:5px"><c:if test="${!empty instance.finishTime}">
-	<fmt:formatDate value="${instance.finishTime}" type="both" />
+    <fmt:formatDate value="${instance.finishTime}" type="both"/>
 </c:if></td>
-<td style="padding-right:5px"><c:out value="${instance.dataService.serviceMetadata.serviceDescription.name}" /></td>
+
+<td style="padding-right:5px">
+    Service Name
+
+    <c:choose>
+        <c:when test="${instance.class.name =='gov.nih.nci.cagrid.portal.domain.dataservice.CQLQueryInstance'}">
+            <c:if test="${!empty instance.dataService}">
+                <c:out value="${instance.dataService.serviceMetadata.serviceDescription.name}"/>
+            </c:if>
+        </c:when>
+        <c:when test="${instance.class.name == 'gov.nih.nci.cagrid.portal.domain.dataservice.DCQLQueryInstance'}">
+            FQP
+        </c:when>
+
+        <c:otherwise>
+            Unknown
+        </c:otherwise>
+    </c:choose>
+
+</td>
 

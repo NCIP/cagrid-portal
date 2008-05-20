@@ -1,86 +1,89 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:p="http://www.springframework.org/schema/p"
-	xmlns:tx="http://www.springframework.org/schema/tx"
-	xmlns:aop="http://www.springframework.org/schema/aop"
-	xmlns:util="http://www.springframework.org/schema/util"
-	xsi:schemaLocation="
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="
 	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
 	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
 	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
 	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
 	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd">
-	
-	<bean id="propertyConfigurer"
-		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-		<property name="location"
-			value="classpath:cagridportal.properties" />
-	</bean>
-	
-	<bean class="org.springframework.beans.factory.annotation.RequiredAnnotationBeanPostProcessor"/>
 
-	<bean id="cqlQueryHistoryFacade" class="gov.nih.nci.cagrid.portal.portlet.query.cql.CQLQueryHistoryFacade" autowire="byName">
-		<property name="requestAttributeName" value="instance"/>
-		<property name="renderServletUrl" value="/WEB-INF/jsp/query/history/instance.jsp"/>
-	</bean>
-	
-	<bean id="serviceMetadataTreeNodeListener" class="gov.nih.nci.cagrid.portal.portlet.discovery.details.ServiceMetadataTreeNodeListener">
-		<property name="hibernateTemplate" ref="hibernateTemplate"/>
-	</bean>
+    <bean id="propertyConfigurer"
+          class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="location"
+                  value="classpath:cagridportal.properties"/>
+    </bean>
 
-	<bean id="serviceDetailsTreeFacade" class="gov.nih.nci.cagrid.portal.portlet.tree.TreeFacade" scope="globalSession">
-		<aop:scoped-proxy proxy-target-class="true"/>
-		<property name="renderer">
-			<bean class="gov.nih.nci.cagrid.portal.portlet.tree.ServletRenderer">
-				<property name="servletUrl" value="/tree/discovery/serviceDetailsNode" />
-				<property name="requestAttribute" value="node" />
-			</bean>
-		</property>
-		<property name="listeners">
-			<list>
-				<ref bean="serviceMetadataTreeNodeListener"/>
-			</list>
-		</property>		
-	</bean>
-	
-	
-	<bean id="umlClassTreeNodeListener" class="gov.nih.nci.cagrid.portal.portlet.query.cql.UMLClassTreeNodeListener">
-		<property name="hibernateTemplate" ref="hibernateTemplate"/>
-	</bean>
-	
-	<bean id="umlClassTreeFacade" class="gov.nih.nci.cagrid.portal.portlet.tree.TreeFacade" scope="globalSession">
-		<aop:scoped-proxy proxy-target-class="true"/>
-		<property name="renderer">
-			<bean class="gov.nih.nci.cagrid.portal.portlet.tree.ServletRenderer">
-				<property name="servletUrl" value="/tree/cqlquery/umlClassNode" />
-				<property name="requestAttribute" value="node" />
-			</bean>
-		</property>
-		<property name="listeners">
-			<list>
-				<ref bean="umlClassTreeNodeListener"/>
-			</list>
-		</property>
-	</bean>	
-	
-	<bean id="cqlQueryTreeNodeListener" class="gov.nih.nci.cagrid.portal.portlet.query.cql.CQLQueryTreeNodeListener">
+    <bean class="org.springframework.beans.factory.annotation.RequiredAnnotationBeanPostProcessor"/>
 
-	</bean>
-	
-	<bean id="cqlQueryTreeFacade" class="gov.nih.nci.cagrid.portal.portlet.tree.TreeFacade" scope="globalSession">
-		<aop:scoped-proxy proxy-target-class="true"/>
-		<property name="renderer">
-			<bean class="gov.nih.nci.cagrid.portal.portlet.tree.ServletRenderer">
-				<property name="servletUrl" value="/tree/cqlquery/cqlQueryNode" />
-				<property name="requestAttribute" value="node" />
-			</bean>
-		</property>
-		<property name="listeners">
-			<list>
-				<ref bean="cqlQueryTreeNodeListener"/>
-			</list>
-		</property>
-	</bean>	
-	
+    <bean id="cqlQueryHistoryFacade" class="gov.nih.nci.cagrid.portal.portlet.query.cql.CQLQueryHistoryFacade"
+          autowire="byName">
+        <property name="requestAttributeName" value="instance"/>
+        <property name="renderServletUrl" value="/WEB-INF/jsp/query/history/instance.jsp"/>
+    </bean>
+
+    <bean id="serviceMetadataTreeNodeListener"
+          class="gov.nih.nci.cagrid.portal.portlet.discovery.details.ServiceMetadataTreeNodeListener">
+        <property name="hibernateTemplate" ref="hibernateTemplate"/>
+    </bean>
+
+    <bean id="serviceDetailsTreeFacade" class="gov.nih.nci.cagrid.portal.portlet.tree.TreeFacade" scope="globalSession">
+        <aop:scoped-proxy proxy-target-class="true"/>
+        <property name="renderer">
+            <bean class="gov.nih.nci.cagrid.portal.portlet.tree.ServletRenderer">
+                <property name="servletUrl" value="/tree/discovery/serviceDetailsNode"/>
+                <property name="requestAttribute" value="node"/>
+            </bean>
+        </property>
+        <property name="listeners">
+            <list>
+                <ref bean="serviceMetadataTreeNodeListener"/>
+            </list>
+        </property>
+    </bean>
+
+
+    <bean id="umlClassTreeNodeListener" class="gov.nih.nci.cagrid.portal.portlet.query.cql.UMLClassTreeNodeListener">
+        <property name="hibernateTemplate" ref="hibernateTemplate"/>
+    </bean>
+
+    <bean id="umlClassTreeFacade" class="gov.nih.nci.cagrid.portal.portlet.tree.TreeFacade" scope="globalSession">
+        <aop:scoped-proxy proxy-target-class="true"/>
+        <property name="renderer">
+            <bean class="gov.nih.nci.cagrid.portal.portlet.tree.ServletRenderer">
+                <property name="servletUrl" value="/tree/cqlquery/umlClassNode"/>
+                <property name="requestAttribute" value="node"/>
+            </bean>
+        </property>
+        <property name="listeners">
+            <list>
+                <ref bean="umlClassTreeNodeListener"/>
+            </list>
+        </property>
+        <property name="predicates" ref="joinPredicates"/>
+    </bean>
+
+    <bean id="cqlQueryTreeNodeListener" class="gov.nih.nci.cagrid.portal.portlet.query.cql.CQLQueryTreeNodeListener">
+
+    </bean>
+
+    <bean id="cqlQueryTreeFacade" class="gov.nih.nci.cagrid.portal.portlet.tree.TreeFacade" scope="globalSession">
+        <aop:scoped-proxy proxy-target-class="true"/>
+        <property name="renderer">
+            <bean class="gov.nih.nci.cagrid.portal.portlet.tree.ServletRenderer">
+                <property name="servletUrl" value="/tree/cqlquery/cqlQueryNode"/>
+                <property name="requestAttribute" value="node"/>
+            </bean>
+        </property>
+        <property name="listeners">
+            <list>
+                <ref bean="cqlQueryTreeNodeListener"/>
+            </list>
+        </property>
+    </bean>
+
 </beans>

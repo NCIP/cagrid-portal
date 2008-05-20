@@ -1,33 +1,31 @@
-/**
- *
- */
-package gov.nih.nci.cagrid.portal.portlet.query.cql;
+package gov.nih.nci.cagrid.portal.portlet.query.dcql;
 
-import gov.nih.nci.cagrid.portal.domain.dataservice.CQLQueryInstance;
+import gov.nih.nci.cagrid.portal.domain.dataservice.DCQLQueryInstance;
 import gov.nih.nci.cagrid.portal.security.EncryptionService;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.globus.gsi.GlobusCredential;
+import org.springframework.beans.factory.InitializingBean;
 
 import java.io.ByteArrayInputStream;
 import java.util.Date;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.globus.gsi.GlobusCredential;
-import org.springframework.beans.factory.InitializingBean;
-
 /**
- * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
+ * User: kherm
+ *
+ * @author kherm manav.kher@semanticbits.com
  */
-public class DefaultCQLQueryInstanceExecutor implements
-        CQLQueryInstanceExecutor, InitializingBean {
+public class DefaultDCQLQueryInstanceExecutor implements
+        DCQLQueryInstanceExecutor, InitializingBean {
 
-    private static final Log logger = LogFactory.getLog(DefaultCQLQueryInstanceExecutor.class);
+    private static final Log logger = LogFactory.getLog(DefaultDCQLQueryInstanceExecutor.class);
 
     private EncryptionService encryptionService;
     private ExecutorService executorService;
-    private CQLQueryInstance instance;
-    private CQLQueryInstanceListener listener;
+    private DCQLQueryInstance instance;
+    private DCQLQueryInstanceListener listener;
     private Future future;
     private long timeout = 60000;
     private Date endTime;
@@ -35,7 +33,7 @@ public class DefaultCQLQueryInstanceExecutor implements
     /**
      *
      */
-    public DefaultCQLQueryInstanceExecutor() {
+    public DefaultDCQLQueryInstanceExecutor() {
 
     }
 
@@ -58,13 +56,10 @@ public class DefaultCQLQueryInstanceExecutor implements
         return future.cancel(true);
     }
 
-    public void setQueryInstance(CQLQueryInstance instance) {
+    public void setQueryInstance(DCQLQueryInstance instance) {
         this.instance = instance;
     }
 
-    public void setCqlQueryInstanceListener(CQLQueryInstanceListener listener) {
-        this.listener = listener;
-    }
 
     public void start() {
         GlobusCredential cred = null;
@@ -83,7 +78,7 @@ public class DefaultCQLQueryInstanceExecutor implements
             }
         }
 
-        CQLQueryTask task = new CQLQueryTask(instance, listener, cred);
+        DCQLQueryTask task = new DCQLQueryTask(instance, listener, cred);
         listener.onSheduled(instance);
         future = getExecutorService().submit(task);
         setEndTime(new Date(new Date().getTime() + getTimeout()));
@@ -105,11 +100,15 @@ public class DefaultCQLQueryInstanceExecutor implements
         }
     }
 
-    public CQLQueryInstance getQueryInstance() {
+    public DCQLQueryInstance getQueryInstance() {
         return instance;
     }
 
-    public CQLQueryInstanceListener getCqlQueryInstanceListener() {
+    public void setDcqlQueryInstanceListener(DCQLQueryInstanceListener listener) {
+        this.listener = listener;
+    }
+
+    public DCQLQueryInstanceListener getDcqlQueryInstanceListener() {
         return listener;
     }
 
@@ -151,3 +150,4 @@ public class DefaultCQLQueryInstanceExecutor implements
     }
 
 }
+

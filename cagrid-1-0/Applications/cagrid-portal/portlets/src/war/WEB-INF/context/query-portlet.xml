@@ -81,12 +81,14 @@
           autowire="byName">
         <property name="objectName" value="rootNode"/>
         <property name="successViewName" value="/builder/umlClassTree"/>
+        <property name="predicates" ref="joinPredicates">
+        </property>
     </bean>
 
     <bean
             id="populateForeignAssociationsController"
             class="gov.nih.nci.cagrid.portal.portlet.query.builder.PopulateForeignAssociationsController"
-            autowire="byName">
+            autowire="byName" parent="viewUmlClassTreeController">
         <property name="objectName" value="rootNode"/>
         <property name="successViewName" value="/builder/umlClassTree"/>
         <property name="targetsProvider">
@@ -216,7 +218,6 @@
             id="submitQueryController"
             class="gov.nih.nci.cagrid.portal.portlet.query.builder.SubmitQueryController"
             autowire="byName">
-
         <property name="validators">
             <list>
                 <bean class="gov.nih.nci.cagrid.portal.portlet.query.cql.CQLQueryCommandValidator" autowire="byName"/>
@@ -233,12 +234,18 @@
                 <property name="errorsAttributeName" value="submitQueryErrors"/>
             </bean>
         </property>
+        <property name="fqpService" value="${fqp.service.url}"/>
     </bean>
 
     <bean
             id="submitBuilderQueryController"
             class="gov.nih.nci.cagrid.portal.portlet.query.builder.SubmitBuilderQueryController"
             autowire="byName">
+        <property name="validators">
+            <list>
+                <bean class="gov.nih.nci.cagrid.portal.portlet.query.cql.CQLQueryCommandValidator" autowire="byName"/>
+            </list>
+        </property>
         <property name="commandName" value="cqlQueryCommand"/>
         <property name="commandClass" value="gov.nih.nci.cagrid.portal.portlet.query.cql.CQLQueryCommand"/>
         <property name="actionResponseHandler">
@@ -854,9 +861,10 @@
             <map>
                 <entry>
                     <key>
-                        <util:constant static-field="gov.nih.nci.cagrid.portal.portlet.query.DCQLFormulator.qname"/>
+                        <util:constant
+                                static-field="gov.nih.nci.cagrid.portal.portlet.query.dcql.DCQLFormulator.qname"/>
                     </key>
-                    <bean class="gov.nih.nci.cagrid.portal.portlet.query.DCQLFormulator"/>
+                    <bean class="gov.nih.nci.cagrid.portal.portlet.query.dcql.DCQLFormulator"/>
                 </entry>
                 <entry>
                     <key>

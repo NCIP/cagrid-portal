@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package gov.nih.nci.cagrid.portal.portlet.query;
 
@@ -7,11 +7,14 @@ import gov.nih.nci.cagrid.portal.dao.UMLClassDao;
 import gov.nih.nci.cagrid.portal.domain.GridDataService;
 import gov.nih.nci.cagrid.portal.domain.PortalUser;
 import gov.nih.nci.cagrid.portal.domain.dataservice.CQLQueryInstance;
+import gov.nih.nci.cagrid.portal.domain.dataservice.QueryInstance;
+import gov.nih.nci.cagrid.portal.domain.dataservice.DCQLQueryInstance;
 import gov.nih.nci.cagrid.portal.domain.metadata.dataservice.UMLClass;
 import gov.nih.nci.cagrid.portal.portlet.query.cql.CQLQueryCommand;
 import gov.nih.nci.cagrid.portal.portlet.query.cql.CQLQueryInstanceExecutor;
 import gov.nih.nci.cagrid.portal.portlet.query.cql.CriterionBean;
 import gov.nih.nci.cagrid.portal.portlet.query.shared.SharedQueryBean;
+import gov.nih.nci.cagrid.portal.portlet.query.dcql.DCQLQueryInstanceExecutor;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -28,193 +31,242 @@ import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
- * 
  */
 @Transactional
 public class QueryModel implements ApplicationContextAware {
 
-	private GridDataService selectedService;
-	private UMLClass selectedUmlClass;
-	private CriterionBean selectedCriterion;
-	private CQLQueryCommand workingQuery;
-	private Map<Integer, CQLQueryInstanceExecutor> executors = new HashMap<Integer, CQLQueryInstanceExecutor>();
-	private ApplicationContext applicationContext;
-	private CQLQueryInstance selectedQueryInstance;
-	private UMLClassDao umlClassDao;
-	private PortalUser portalUser;
-	private SharedQueryBean workingSharedQuery;
+    private GridDataService selectedService;
+    private UMLClass selectedUmlClass;
+    private CriterionBean selectedCriterion;
+    private CQLQueryCommand workingQuery;
+    private Map<Integer, QueryInstanceExecutor> executors = new HashMap<Integer, QueryInstanceExecutor>();
+    private ApplicationContext applicationContext;
+    private QueryInstance selectedQueryInstance;
+    private UMLClassDao umlClassDao;
+    private PortalUser portalUser;
+    private SharedQueryBean workingSharedQuery;
 
-	/**
-	 * 
-	 */
-	public QueryModel() {
+    /**
+     *
+     */
+    public QueryModel() {
 
-	}
+    }
 
-	public void selectUmlClassForQuery(Integer umlClassId) {
-		if (getSelectedUmlClass() != null
-				&& getSelectedUmlClass().getId().equals(umlClassId)) {
-			// Do nothing
-		} else {
-			UMLClass umlClass = getUmlClassDao().getById(umlClassId);
-			setSelectedUmlClass(umlClass);
-			setSelectedService(umlClass.getModel().getService());
-		}
-	}
+    public void selectUmlClassForQuery(Integer umlClassId) {
+        if (getSelectedUmlClass() != null
+                && getSelectedUmlClass().getId().equals(umlClassId)) {
+            // Do nothing
+        } else {
+            UMLClass umlClass = getUmlClassDao().getById(umlClassId);
+            setSelectedUmlClass(umlClass);
+            setSelectedService(umlClass.getModel().getService());
+        }
+    }
 
-	public void submitCqlQuery(CQLQueryInstance instance) {
+    public void submitCqlQuery(CQLQueryInstance instance) {
 
-		if (instance == null) {
-			throw new IllegalArgumentException(
-					"CQLQueryInstance must not be null.");
-		}
-		if (instance.getId() == null) {
-			throw new IllegalArgumentException(
-					"CQLQueryInstance must have an id value.");
-		}
-		if (executors.containsKey(instance.getId())) {
-			throw new IllegalStateException("CQLQueryInstance:"
-					+ instance.getId() + " has already been submitted.");
-		}
+        if (instance == null) {
+            throw new IllegalArgumentException(
+                    "CQLQueryInstance must not be null.");
+        }
+        if (instance.getId() == null) {
+            throw new IllegalArgumentException(
+                    "CQLQueryInstance must have an id value.");
+        }
+        if (executors.containsKey(instance.getId())) {
+            throw new IllegalStateException("CQLQueryInstance:"
+                    + instance.getId() + " has already been submitted.");
+        }
 
-		CQLQueryInstanceExecutor executor = (CQLQueryInstanceExecutor) applicationContext
-				.getBean("cqlQueryInstanceExecutorPrototype");
+        CQLQueryInstanceExecutor executor = (CQLQueryInstanceExecutor) applicationContext
+                .getBean("cqlQueryInstanceExecutorPrototype");
 
-		executor.setCqlQueryInstance(instance);
-		executor.start();
+        executor.setQueryInstance(instance);
+        executor.start();
 
-		executors.put(instance.getId(), executor);
-	}
+        executors.put(instance.getId(), executor);
+    }
 
-	public List<CQLQueryInstance> getSubmittedCqlQueries() {
 
-		List<CQLQueryInstance> ordered = new ArrayList<CQLQueryInstance>();
+    public void submitDcqlQuery(DCQLQueryInstance instance) {
 
-		TreeMap<Date, CQLQueryInstance> map = new TreeMap<Date, CQLQueryInstance>();
-		synchronized (executors) {
-			for (CQLQueryInstanceExecutor executor : executors.values()) {
-				CQLQueryInstance instance = executor.getCqlQueryInstance();
-				Date startTime = instance.getStartTime();
-				if (startTime == null) {
-					startTime = new Date();
-				}
-				map.put(startTime, instance);
-			}
-		}
-		for (CQLQueryInstance instance : map.values()) {
-			ordered.add(instance);
-		}
-		Collections.reverse(ordered);
+        if (instance == null) {
+            throw new IllegalArgumentException(
+                    "DCQLQueryInstance must not be null.");
+        }
+        if (instance.getId() == null) {
+            throw new IllegalArgumentException(
+                    "DCQLQueryInstance must have an id value.");
+        }
+        if (executors.containsKey(instance.getId())) {
+            throw new IllegalStateException("DCQLQueryInstance:"
+                    + instance.getId() + " has already been submitted.");
+        }
 
-		return ordered;
+        DCQLQueryInstanceExecutor executor = (DCQLQueryInstanceExecutor) applicationContext
+                .getBean("dcqlQueryInstanceExecutorPrototype");
 
-	}
+        executor.setQueryInstance(instance);
+        executor.start();
+        executors.put(instance.getId(), executor);
+    }
 
-	public GridDataService getSelectedService() {
-		return selectedService;
-	}
+    public List<QueryInstance> getSubmittedQueries() {
 
-	public void setSelectedService(GridDataService selectedService) {
-		this.selectedService = selectedService;
-	}
+        List<QueryInstance> ordered = new ArrayList<QueryInstance>();
 
-	public UMLClass getSelectedUmlClass() {
-		return selectedUmlClass;
-	}
+        TreeMap<Date, QueryInstance> map = new TreeMap<Date, QueryInstance>();
+        synchronized (executors) {
+            for (QueryInstanceExecutor executor : executors.values()) {
+                QueryInstance instance = executor.getQueryInstance();
+                Date startTime = instance.getStartTime();
+                if (startTime == null) {
+                    startTime = new Date();
+                }
+                map.put(startTime, instance);
+            }
+        }
+        for (QueryInstance instance : map.values()) {
+            ordered.add(instance);
+        }
+        Collections.reverse(ordered);
 
-	public void setSelectedUmlClass(UMLClass selectedUmlClass) {
-		this.selectedUmlClass = selectedUmlClass;
-	}
+        return ordered;
 
-	public CriterionBean getSelectedCriterion() {
-		return selectedCriterion;
-	}
+    }
 
-	public void setSelectedCriterion(CriterionBean selectedCriterion) {
-		this.selectedCriterion = selectedCriterion;
-	}
+    public List<CQLQueryInstance> getSubmittedCqlQueries() {
 
-	public CQLQueryCommand getWorkingQuery() {
-		return workingQuery;
-	}
+        List<CQLQueryInstance> ordered = new ArrayList<CQLQueryInstance>();
 
-	public void setWorkingQuery(CQLQueryCommand workingQuery) {
-		this.workingQuery = workingQuery;
-	}
+        TreeMap<Date, CQLQueryInstance> map = new TreeMap<Date, CQLQueryInstance>();
+        synchronized (executors) {
+            for (QueryInstanceExecutor executor : executors.values()) {
+                if (executor instanceof CQLQueryInstanceExecutor) {
+                    CQLQueryInstance instance = ((CQLQueryInstanceExecutor) executor).getQueryInstance();
+                    Date startTime = instance.getStartTime();
+                    if (startTime == null) {
+                        startTime = new Date();
+                    }
+                    map.put(startTime, instance);
+                }
+            }
+        }
+        for (CQLQueryInstance instance : map.values()) {
+            ordered.add(instance);
+        }
+        Collections.reverse(ordered);
 
-	public void setApplicationContext(ApplicationContext applicationContext)
-			throws BeansException {
-		this.applicationContext = applicationContext;
-	}
+        return ordered;
 
-	public Map<Integer, CQLQueryInstanceExecutor> getExecutors() {
-		return executors;
-	}
+    }
 
-	public void setExecutors(Map<Integer, CQLQueryInstanceExecutor> executors) {
-		this.executors = executors;
-	}
+    public GridDataService getSelectedService() {
+        return selectedService;
+    }
 
-	public ApplicationContext getApplicationContext() {
-		return applicationContext;
-	}
+    public void setSelectedService(GridDataService selectedService) {
+        this.selectedService = selectedService;
+    }
 
-	public void selectQueryInstance(Integer instanceId) {
-		setSelectedQueryInstance(getQueryInstance(instanceId));
-	}
+    public UMLClass getSelectedUmlClass() {
+        return selectedUmlClass;
+    }
 
-	public CQLQueryInstance getQueryInstance(Integer instanceId) {
-		CQLQueryInstance selected = null;
-		for (CQLQueryInstance instance : getSubmittedCqlQueries()) {
-			if (instance.getId().equals(instanceId)) {
-				selected = instance;
-				break;
-			}
-		}
-		return selected;
-	}
+    public void setSelectedUmlClass(UMLClass selectedUmlClass) {
+        this.selectedUmlClass = selectedUmlClass;
+    }
 
-	public void cancelQueryInstance(Integer instanceId) {
-		CQLQueryInstanceExecutor executor = executors.get(instanceId);
-		executor.cancel();
-	}
+    public CriterionBean getSelectedCriterion() {
+        return selectedCriterion;
+    }
 
-	public CQLQueryInstance deleteQueryInstance(Integer instanceId) {
-		cancelQueryInstance(instanceId);
-		CQLQueryInstanceExecutor executor = executors.remove(instanceId);
-		return executor.getCqlQueryInstance();
-	}
+    public void setSelectedCriterion(CriterionBean selectedCriterion) {
+        this.selectedCriterion = selectedCriterion;
+    }
 
-	public CQLQueryInstance getSelectedQueryInstance() {
-		return selectedQueryInstance;
-	}
+    public CQLQueryCommand getWorkingQuery() {
+        return workingQuery;
+    }
 
-	public void setSelectedQueryInstance(CQLQueryInstance selectedQueryInstance) {
-		this.selectedQueryInstance = selectedQueryInstance;
-	}
+    public void setWorkingQuery(CQLQueryCommand workingQuery) {
+        this.workingQuery = workingQuery;
+    }
 
-	public UMLClassDao getUmlClassDao() {
-		return umlClassDao;
-	}
+    public void setApplicationContext(ApplicationContext applicationContext)
+            throws BeansException {
+        this.applicationContext = applicationContext;
+    }
 
-	public void setUmlClassDao(UMLClassDao umlClassDao) {
-		this.umlClassDao = umlClassDao;
-	}
+    public Map<Integer, QueryInstanceExecutor> getExecutors() {
+        return executors;
+    }
 
-	public PortalUser getPortalUser() {
-		return portalUser;
-	}
+    public void setExecutors(Map<Integer, QueryInstanceExecutor> executors) {
+        this.executors = executors;
+    }
 
-	public void setPortalUser(PortalUser portalUser) {
-		this.portalUser = portalUser;
-	}
+    public ApplicationContext getApplicationContext() {
+        return applicationContext;
+    }
 
-	public SharedQueryBean getWorkingSharedQuery() {
-		return workingSharedQuery;
-	}
+    public void selectQueryInstance(Integer instanceId) {
+        setSelectedQueryInstance(getQueryInstance(instanceId));
+    }
 
-	public void setWorkingSharedQuery(SharedQueryBean workingSharedQuery) {
-		this.workingSharedQuery = workingSharedQuery;
-	}
+    public QueryInstance getQueryInstance(Integer instanceId) {
+        QueryInstance selected = null;
+        for (QueryInstance instance : getSubmittedQueries()) {
+            if (instance.getId().equals(instanceId)) {
+                selected = instance;
+                break;
+            }
+        }
+        return selected;
+    }
+
+    public void cancelQueryInstance(Integer instanceId) {
+        QueryInstanceExecutor executor = executors.get(instanceId);
+        executor.cancel();
+    }
+
+    public QueryInstance deleteQueryInstance(Integer instanceId) {
+        cancelQueryInstance(instanceId);
+        QueryInstanceExecutor executor = executors.remove(instanceId);
+        return executor.getQueryInstance();
+    }
+
+    public QueryInstance getSelectedQueryInstance() {
+        return selectedQueryInstance;
+    }
+
+    public void setSelectedQueryInstance(QueryInstance selectedQueryInstance) {
+        this.selectedQueryInstance = selectedQueryInstance;
+    }
+
+    public UMLClassDao getUmlClassDao() {
+        return umlClassDao;
+    }
+
+    public void setUmlClassDao(UMLClassDao umlClassDao) {
+        this.umlClassDao = umlClassDao;
+    }
+
+    public PortalUser getPortalUser() {
+        return portalUser;
+    }
+
+    public void setPortalUser(PortalUser portalUser) {
+        this.portalUser = portalUser;
+    }
+
+    public SharedQueryBean getWorkingSharedQuery() {
+        return workingSharedQuery;
+    }
+
+    public void setWorkingSharedQuery(SharedQueryBean workingSharedQuery) {
+        this.workingSharedQuery = workingSharedQuery;
+    }
 
 }

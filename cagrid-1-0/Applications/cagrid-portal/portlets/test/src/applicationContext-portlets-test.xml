@@ -60,9 +60,10 @@
             <map>
                 <entry>
                     <key>
-                        <util:constant static-field="gov.nih.nci.cagrid.portal.portlet.query.DCQLFormulator.qname"/>
+                        <util:constant
+                                static-field="gov.nih.nci.cagrid.portal.portlet.query.dcql.DCQLFormulator.qname"/>
                     </key>
-                    <bean class="gov.nih.nci.cagrid.portal.portlet.query.DCQLFormulator"/>
+                    <bean class="gov.nih.nci.cagrid.portal.portlet.query.dcql.DCQLFormulator"/>
                 </entry>
                 <entry>
                     <key>

@@ -1,26 +1,23 @@
-package gov.nih.nci.cagrid.portal.portlet.query;
+package gov.nih.nci.cagrid.portal.portlet.query.dcql;
 
-import gov.nih.nci.cagrid.dcql.DCQLQuery;
-import gov.nih.nci.cagrid.dcql.Group;
-import gov.nih.nci.cagrid.dcql.Association;
-import gov.nih.nci.cagrid.dcql.ForeignAssociation;
+import gov.nih.nci.cagrid.cqlquery.Attribute;
+import gov.nih.nci.cagrid.cqlquery.LogicalOperator;
+import gov.nih.nci.cagrid.cqlquery.Predicate;
+import gov.nih.nci.cagrid.dcql.*;
+import gov.nih.nci.cagrid.fqp.common.DCQLConstants;
+import gov.nih.nci.cagrid.portal.portlet.query.QueryFormulator;
 import gov.nih.nci.cagrid.portal.portlet.query.builder.AggregateTargetsCommand;
 import gov.nih.nci.cagrid.portal.portlet.query.builder.ForeignTargetsProvider;
-import gov.nih.nci.cagrid.portal.portlet.query.cql.CriterionBean;
 import gov.nih.nci.cagrid.portal.portlet.query.cql.AssociationBean;
 import gov.nih.nci.cagrid.portal.portlet.query.cql.CQLQueryBean;
 import gov.nih.nci.cagrid.portal.portlet.query.cql.CriteriaBean;
-import gov.nih.nci.cagrid.cqlquery.LogicalOperator;
-import gov.nih.nci.cagrid.cqlquery.Attribute;
-import gov.nih.nci.cagrid.cqlquery.Predicate;
-import gov.nih.nci.cagrid.fqp.common.DCQLConstants;
-
-import javax.xml.namespace.QName;
-import java.util.List;
-import java.util.ArrayList;
-
+import gov.nih.nci.cagrid.portal.portlet.query.cql.CriterionBean;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
+import javax.xml.namespace.QName;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * User: kherm
@@ -98,6 +95,11 @@ public class DCQLFormulator implements QueryFormulator<DCQLQuery> {
             if (assocBean.getRoleName().startsWith(ForeignTargetsProvider.FOREIGN_TARGETS_CLASS_PREFIX)) {
                 ForeignAssociation assoc = new ForeignAssociation();
                 assoc.setTargetServiceURL(assocBean.getCriteriaBean().getUmlClass().getModel().getService().getUrl());
+
+                gov.nih.nci.cagrid.dcql.JoinCondition joinCondition = new gov.nih.nci.cagrid.dcql.JoinCondition(assocBean.getCriteriaBean().getJoin().getLocalAttributeName(), assocBean.getCriteriaBean().getJoin().getForeignAttributeName(),
+                        ForeignPredicate.fromString(assocBean.getCriteriaBean().getJoin().getPredicate()));
+
+                assoc.setJoinCondition(joinCondition);
                 gov.nih.nci.cagrid.dcql.Object obj = new gov.nih.nci.cagrid.dcql.Object();
                 assoc.setForeignObject(obj);
                 toTarget(obj, assocBean.getCriteriaBean());

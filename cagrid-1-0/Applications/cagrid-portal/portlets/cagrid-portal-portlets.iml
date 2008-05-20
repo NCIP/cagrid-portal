@@ -46,6 +46,7 @@
       <sourceFolder url="file://$MODULE_DIR$/src/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/test/src/java" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/build" />
+      <excludeFolder url="file://$MODULE_DIR$/test/build" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
@@ -157,6 +158,7 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="globus" level="project" />
     <orderEntryProperties />
   </component>
 </module>

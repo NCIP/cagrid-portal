@@ -1,216 +1,286 @@
 /**
- * 
+ *
  */
 package gov.nih.nci.cagrid.portal.portlet.query.builder;
 
-import gov.nih.nci.cagrid.portal.dao.CQLQueryDao;
-import gov.nih.nci.cagrid.portal.dao.CQLQueryInstanceDao;
-import gov.nih.nci.cagrid.portal.dao.GridServiceDao;
-import gov.nih.nci.cagrid.portal.dao.PortalUserDao;
+import gov.nih.nci.cagrid.portal.dao.*;
 import gov.nih.nci.cagrid.portal.domain.GridDataService;
+import gov.nih.nci.cagrid.portal.domain.GridService;
 import gov.nih.nci.cagrid.portal.domain.PortalUser;
-import gov.nih.nci.cagrid.portal.domain.dataservice.CQLQuery;
-import gov.nih.nci.cagrid.portal.domain.dataservice.CQLQueryInstance;
-import gov.nih.nci.cagrid.portal.domain.dataservice.QueryInstanceState;
+import gov.nih.nci.cagrid.portal.domain.dataservice.*;
 import gov.nih.nci.cagrid.portal.portlet.CaGridPortletApplicationException;
 import gov.nih.nci.cagrid.portal.portlet.PortletConstants;
 import gov.nih.nci.cagrid.portal.portlet.query.AbstractQueryActionController;
 import gov.nih.nci.cagrid.portal.portlet.query.cql.CQLQueryCommand;
 import gov.nih.nci.cagrid.portal.portlet.util.XSSFilterEditor;
 import gov.nih.nci.cagrid.portal.util.PortalUtils;
+import org.springframework.beans.factory.annotation.Required;
+import org.springframework.validation.BindException;
+import org.springframework.web.portlet.bind.PortletRequestDataBinder;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletRequest;
 
-import org.springframework.beans.factory.annotation.Required;
-import org.springframework.validation.BindException;
-import org.springframework.web.portlet.bind.PortletRequestDataBinder;
-
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
- * 
  */
 public class SubmitQueryController extends AbstractQueryActionController {
 
-	private GridServiceDao gridServiceDao;
+    private GridServiceDao gridServiceDao;
 
-	private PortalUserDao portalUserDao;
-	private CQLQueryDao cqlQueryDao;
-	private CQLQueryInstanceDao cqlQueryInstanceDao;
-	private int maxActiveQueries = 3;
+    private PortalUserDao portalUserDao;
+    private CQLQueryDao cqlQueryDao;
+    private DCQLQueryDao dcqlQueryDao;
 
-	/**
-	 * 
-	 */
-	public SubmitQueryController() {
+    private CQLQueryInstanceDao cqlQueryInstanceDao;
+    private DCQLQueryInstanceDao dcqlQueryInstanceDao;
+    private String fqpService;
 
-	}
+    private int maxActiveQueries = 3;
 
-	/**
-	 * @param commandClass
-	 */
-	public SubmitQueryController(Class commandClass) {
-		super(commandClass);
+    /**
+     *
+     */
+    public SubmitQueryController() {
 
-	}
+    }
 
-	/**
-	 * @param commandClass
-	 * @param commandName
-	 */
-	public SubmitQueryController(Class commandClass, String commandName) {
-		super(commandClass, commandName);
+    /**
+     * @param commandClass
+     */
+    public SubmitQueryController(Class commandClass) {
+        super(commandClass);
 
-	}
+    }
 
-	protected void initBinder(PortletRequest request,
-			PortletRequestDataBinder binder) throws Exception {
-		binder.registerCustomEditor(String.class, "dataServiceUrl",
-				new XSSFilterEditor(binder.getBindingResult(), "dataServiceUrl"));
-	}
+    /**
+     * @param commandClass
+     * @param commandName
+     */
+    public SubmitQueryController(Class commandClass, String commandName) {
+        super(commandClass, commandName);
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see gov.nih.nci.cagrid.portal.portlet.AbstractActionResponseHandlerCommandController#doHandleAction(javax.portlet.ActionRequest,
-	 *      javax.portlet.ActionResponse, java.lang.Object,
-	 *      org.springframework.validation.BindException)
-	 */
-	@Override
-	protected void doHandleAction(ActionRequest request,
-			ActionResponse response, Object obj, BindException errors)
-			throws Exception {
+    }
 
-		if (errors.hasErrors()) {
-			return;
-		}
+    protected void initBinder(PortletRequest request,
+                              PortletRequestDataBinder binder) throws Exception {
+        binder.registerCustomEditor(String.class, "dataServiceUrl",
+                new XSSFilterEditor(binder.getBindingResult(), "dataServiceUrl"));
+    }
 
-		CQLQueryCommand command = (CQLQueryCommand) obj;
-		getQueryModel().setWorkingQuery(command);
+    /*
+      * (non-Javadoc)
+      *
+      * @see gov.nih.nci.cagrid.portal.portlet.AbstractActionResponseHandlerCommandController#doHandleAction(javax.portlet.ActionRequest,
+      *      javax.portlet.ActionResponse, java.lang.Object,
+      *      org.springframework.validation.BindException)
+      */
+    @Override
+    protected void doHandleAction(ActionRequest request,
+                                  ActionResponse response, Object obj, BindException errors)
+            throws Exception {
 
-		GridDataService dataService = null;
-		try {
-			dataService = (GridDataService) getGridServiceDao().getByUrl(
-					command.getDataServiceUrl().trim());
-		} catch (Exception ex) {
-			throw new CaGridPortletApplicationException(
-					"Error looking up GridDataService '"
-							+ command.getDataServiceUrl() + "': "
-							+ ex.getMessage(), ex);
-		}
+        if (errors.hasErrors()) {
+            return;
+        }
 
-		// Make sure the user has not exceeded the maximum
-		// number of simultaneous queries.
-		int active = 0;
-		for (CQLQueryInstance instance : getQueryModel()
-				.getSubmittedCqlQueries()) {
-			if (QueryInstanceState.RUNNING.equals(instance.getState())
-					|| QueryInstanceState.SCHEDULED.equals(instance.getState())
-					|| QueryInstanceState.UNSCHEDULED.equals(instance
-							.getState())) {
-				active++;
-			}
-		}
-		if (active >= getMaxActiveQueries()) {
-			errors
-					.reject(
-							PortletConstants.MAX_ACTIVE_QUERIES_MSG,
-							new String[] { String.valueOf(getMaxActiveQueries()) },
-							"You have reached the maximum number of" +
-							" simultaneous queries: " + getMaxActiveQueries() + 
-							". Please cancel a" +
-							" running query, or wait for one to complete.");
-			return;
-		}
+        CQLQueryCommand command = (CQLQueryCommand) obj;
+        getQueryModel().setWorkingQuery(command);
 
-		try {
-			submitQuery(getQueryModel().getPortalUser(), dataService, command
-					.getCqlQuery());
-		} catch (Exception ex) {
-			logger.error(ex);
-			errors.reject(PortletConstants.CQL_QUERY_SUBMIT_ERROR_MSG,
-					new String[] { ex.getMessage() },
-					"Error submitting CQL query.");
-		}
+        GridDataService dataService = null;
+        try {
+            dataService = (GridDataService) getGridServiceDao().getByUrl(
+                    command.getDataServiceUrl().trim());
+        } catch (Exception ex) {
+            throw new CaGridPortletApplicationException(
+                    "Error looking up GridDataService '"
+                            + command.getDataServiceUrl() + "': "
+                            + ex.getMessage(), ex);
+        }
 
-	}
+        // Make sure the user has not exceeded the maximum
+        // number of simultaneous queries.
+        int active = 0;
+        for (QueryInstance instance : getQueryModel()
+                .getSubmittedQueries()) {
+            if (QueryInstanceState.RUNNING.equals(instance.getState())
+                    || QueryInstanceState.SCHEDULED.equals(instance.getState())
+                    || QueryInstanceState.UNSCHEDULED.equals(instance
+                    .getState())) {
+                active++;
+            }
+        }
+        if (active >= getMaxActiveQueries()) {
+            errors
+                    .reject(
+                            PortletConstants.MAX_ACTIVE_QUERIES_MSG,
+                            new String[]{String.valueOf(getMaxActiveQueries())},
+                            "You have reached the maximum number of" +
+                                    " simultaneous queries: " + getMaxActiveQueries() +
+                                    ". Please cancel a" +
+                                    " running query, or wait for one to complete.");
+            return;
+        }
 
-	private void submitQuery(PortalUser user, GridDataService service,
-			String cql) {
-		logger.debug("Submitted Query: " + cql);
+        try {
+            if (command.isDcql()) {
+                submitDCQLQuery(getQueryModel().getPortalUser(), command.getCqlQuery());
+            } else
+                submitCQLQuery(getQueryModel().getPortalUser(), dataService, command
+                        .getCqlQuery());
+        } catch (Exception ex) {
+            logger.error(ex);
+            errors.reject(PortletConstants.CQL_QUERY_SUBMIT_ERROR_MSG,
+                    new String[]{ex.getMessage()},
+                    "Error submitting CQL query.");
+        }
 
-		String hash = PortalUtils.createHash(cql);
-		CQLQuery query = getCqlQueryDao().getByHash(hash);
+    }
 
-		if (query == null) {
-			query = new CQLQuery();
-			query.setXml(cql);
-			query.setHash(hash);
-			getCqlQueryDao().save(query);
-		}
+    private void submitDCQLQuery(PortalUser user, String dcql) throws CaGridPortletApplicationException {
+        logger.debug("Submitted Query: " + dcql);
 
-		CQLQueryInstance inst = new CQLQueryInstance();
-		inst.setDataService(service);
-		if (user != null) {
-			inst.setPortalUser(user);
-		}
-		inst.setQuery(query);
-		getCqlQueryInstanceDao().save(inst);
+        String hash = PortalUtils.createHash(dcql);
+        DCQLQuery query = getDcqlQueryDao().getByHash(hash);
 
-		query.getInstances().add(inst);
-		getCqlQueryDao().save(query);
+        if (query == null) {
+            query = new DCQLQuery();
+            query.setXml(dcql);
+            query.setHash(hash);
+            getDcqlQueryDao().save(query);
+        }
 
-		if (user != null) {
-			PortalUser p = getPortalUserDao().getById(user.getId());
-			p.getQueryInstances().add(inst);
-			getPortalUserDao().save(p);
-		}
-		getQueryModel().submitCqlQuery(inst);
-	}
+        DCQLQueryInstance inst = new DCQLQueryInstance();
+        if (user != null) {
+            inst.setPortalUser(user);
+        }
+        inst.setQuery(query);
 
-	@Required
-	public GridServiceDao getGridServiceDao() {
-		return gridServiceDao;
-	}
+        GridService _fqpService = null;
+        try {
+            _fqpService = getGridServiceDao().getByUrl(
+                    getFqpService());
+            inst.setFqpService(_fqpService);
+        } catch (Exception ex) {
+            throw new CaGridPortletApplicationException(
+                    "Error looking up FQP Service '"
+                            + fqpService + "': "
+                            + ex.getMessage(), ex);
+        }
 
-	public void setGridServiceDao(GridServiceDao gridServiceDao) {
-		this.gridServiceDao = gridServiceDao;
-	}
+        getDcqlQueryInstanceDao().save(inst);
+        query.getInstances().add(inst);
+        getDcqlQueryDao().save(query);
 
-	@Required
-	public PortalUserDao getPortalUserDao() {
-		return portalUserDao;
-	}
+        if (user != null) {
+            PortalUser p = getPortalUserDao().getById(user.getId());
+            p.getQueryInstances().add(inst);
+            getPortalUserDao().save(p);
+        }
+        getQueryModel().submitDcqlQuery(inst);
+    }
 
-	public void setPortalUserDao(PortalUserDao portalUserDao) {
-		this.portalUserDao = portalUserDao;
-	}
+    private void submitCQLQuery(PortalUser user, GridDataService service,
+                                String cql) {
+        logger.debug("Submitted Query: " + cql);
 
-	@Required
-	public CQLQueryDao getCqlQueryDao() {
-		return cqlQueryDao;
-	}
+        String hash = PortalUtils.createHash(cql);
+        CQLQuery query = getCqlQueryDao().getByHash(hash);
 
-	public void setCqlQueryDao(CQLQueryDao cqlQueryDao) {
-		this.cqlQueryDao = cqlQueryDao;
-	}
+        if (query == null) {
+            query = new CQLQuery();
+            query.setXml(cql);
+            query.setHash(hash);
+            getCqlQueryDao().save(query);
+        }
 
-	@Required
-	public CQLQueryInstanceDao getCqlQueryInstanceDao() {
-		return cqlQueryInstanceDao;
-	}
+        CQLQueryInstance inst = new CQLQueryInstance();
+        inst.setDataService(service);
+        if (user != null) {
+            inst.setPortalUser(user);
+        }
+        inst.setQuery(query);
+        getCqlQueryInstanceDao().save(inst);
 
-	public void setCqlQueryInstanceDao(CQLQueryInstanceDao cqlQueryInstanceDao) {
-		this.cqlQueryInstanceDao = cqlQueryInstanceDao;
-	}
+        query.getInstances().add(inst);
+        getCqlQueryDao().save(query);
 
-	public int getMaxActiveQueries() {
-		return maxActiveQueries;
-	}
+        if (user != null) {
+            PortalUser p = getPortalUserDao().getById(user.getId());
+            p.getQueryInstances().add(inst);
+            getPortalUserDao().save(p);
+        }
+        getQueryModel().submitCqlQuery(inst);
+    }
 
-	public void setMaxActiveQueries(int maxActiveQueries) {
-		this.maxActiveQueries = maxActiveQueries;
-	}
+    @Required
+    public GridServiceDao getGridServiceDao() {
+        return gridServiceDao;
+    }
 
+    public void setGridServiceDao(GridServiceDao gridServiceDao) {
+        this.gridServiceDao = gridServiceDao;
+    }
+
+    @Required
+    public PortalUserDao getPortalUserDao() {
+        return portalUserDao;
+    }
+
+    public void setPortalUserDao(PortalUserDao portalUserDao) {
+        this.portalUserDao = portalUserDao;
+    }
+
+    @Required
+    public CQLQueryDao getCqlQueryDao() {
+        return cqlQueryDao;
+    }
+
+    public void setCqlQueryDao(CQLQueryDao cqlQueryDao) {
+        this.cqlQueryDao = cqlQueryDao;
+    }
+
+    @Required
+    public CQLQueryInstanceDao getCqlQueryInstanceDao() {
+        return cqlQueryInstanceDao;
+    }
+
+    public void setCqlQueryInstanceDao(CQLQueryInstanceDao cqlQueryInstanceDao) {
+        this.cqlQueryInstanceDao = cqlQueryInstanceDao;
+    }
+
+    public int getMaxActiveQueries() {
+        return maxActiveQueries;
+    }
+
+    public void setMaxActiveQueries(int maxActiveQueries) {
+        this.maxActiveQueries = maxActiveQueries;
+    }
+
+    @Required
+    public DCQLQueryDao getDcqlQueryDao() {
+        return dcqlQueryDao;
+    }
+
+    public void setDcqlQueryDao(DCQLQueryDao dcqlQueryDao) {
+        this.dcqlQueryDao = dcqlQueryDao;
+    }
+
+    @Required
+    public DCQLQueryInstanceDao getDcqlQueryInstanceDao() {
+        return dcqlQueryInstanceDao;
+    }
+
+    public void setDcqlQueryInstanceDao(DCQLQueryInstanceDao dcqlQueryInstanceDao) {
+        this.dcqlQueryInstanceDao = dcqlQueryInstanceDao;
+    }
+
+    public String getFqpService() {
+        return fqpService;
+    }
+
+    public void setFqpService(String fqpService) {
+        this.fqpService = fqpService;
+    }
 }

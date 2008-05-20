@@ -1,83 +1,89 @@
 /**
- * 
+ *
  */
 package gov.nih.nci.cagrid.portal.portlet.query.results;
+
+import gov.nih.nci.cagrid.portal.dao.CQLQueryInstanceDao;
+import gov.nih.nci.cagrid.portal.dao.DCQLQueryInstanceDao;
+import gov.nih.nci.cagrid.portal.domain.dataservice.QueryInstance;
+import gov.nih.nci.cagrid.portal.portlet.query.AbstractQueryActionController;
+import org.springframework.validation.BindException;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 
-import org.springframework.validation.BindException;
-
-import gov.nih.nci.cagrid.portal.dao.CQLQueryInstanceDao;
-import gov.nih.nci.cagrid.portal.domain.dataservice.CQLQueryInstance;
-import gov.nih.nci.cagrid.portal.portlet.AbstractActionResponseHandlerCommandController;
-import gov.nih.nci.cagrid.portal.portlet.query.AbstractQueryActionController;
-
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
- * 
  */
 public class SelectQueryInstanceController extends
-		AbstractQueryActionController {
+        AbstractQueryActionController {
 
-	private CQLQueryInstanceDao cqlQueryInstanceDao;
+    private CQLQueryInstanceDao cqlQueryInstanceDao;
+    private DCQLQueryInstanceDao dcqlQueryInstanceDao;
 
-	/**
-	 * 
-	 */
-	public SelectQueryInstanceController() {
+    /**
+     *
+     */
+    public SelectQueryInstanceController() {
 
-	}
+    }
 
-	/**
-	 * @param commandClass
-	 */
-	public SelectQueryInstanceController(Class commandClass) {
-		super(commandClass);
+    /**
+     * @param commandClass
+     */
+    public SelectQueryInstanceController(Class commandClass) {
+        super(commandClass);
 
-	}
+    }
 
-	/**
-	 * @param commandClass
-	 * @param commandName
-	 */
-	public SelectQueryInstanceController(Class commandClass, String commandName) {
-		super(commandClass, commandName);
+    /**
+     * @param commandClass
+     * @param commandName
+     */
+    public SelectQueryInstanceController(Class commandClass, String commandName) {
+        super(commandClass, commandName);
 
-	}
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see gov.nih.nci.cagrid.portal.portlet.AbstractActionResponseHandlerCommandController#doHandleAction(javax.portlet.ActionRequest,
-	 *      javax.portlet.ActionResponse, java.lang.Object,
-	 *      org.springframework.validation.BindException)
-	 */
-	@Override
-	protected void doHandleAction(ActionRequest request,
-			ActionResponse response, Object obj, BindException errors)
-			throws Exception {
-		SelectQueryInstanceCommand command = (SelectQueryInstanceCommand) obj;
-		CQLQueryInstance instance = getQueryModel().getQueryInstance(
-				command.getInstanceId());
-		if (instance == null) {
-			// Will be null if created in previous http session
-			instance = getCqlQueryInstanceDao()
-					.getById(command.getInstanceId());
-			if (instance == null) {
-				throw new Exception("Couldn't find query instance with ID: "
-						+ command.getInstanceId());
-			}
-		}
-		getQueryModel().setSelectedQueryInstance(instance);
-	}
+    /*
+      * (non-Javadoc)
+      *
+      * @see gov.nih.nci.cagrid.portal.portlet.AbstractActionResponseHandlerCommandController#doHandleAction(javax.portlet.ActionRequest,
+      *      javax.portlet.ActionResponse, java.lang.Object,
+      *      org.springframework.validation.BindException)
+      */
+    @Override
+    protected void doHandleAction(ActionRequest request,
+                                  ActionResponse response, Object obj, BindException errors)
+            throws Exception {
+        SelectQueryInstanceCommand command = (SelectQueryInstanceCommand) obj;
+        QueryInstance instance = getQueryModel().getQueryInstance(
+                command.getInstanceId());
+        if (instance == null) {
+            // Will be null if created in previous http session
+            instance = getCqlQueryInstanceDao()
+                    .getById(command.getInstanceId());
+            if (instance == null) {
+                throw new Exception("Couldn't find query instance with ID: "
+                        + command.getInstanceId());
+            }
+        }
+        getQueryModel().setSelectedQueryInstance(instance);
+    }
 
-	public CQLQueryInstanceDao getCqlQueryInstanceDao() {
-		return cqlQueryInstanceDao;
-	}
+    public CQLQueryInstanceDao getCqlQueryInstanceDao() {
+        return cqlQueryInstanceDao;
+    }
 
-	public void setCqlQueryInstanceDao(CQLQueryInstanceDao cqlQueryInstanceDao) {
-		this.cqlQueryInstanceDao = cqlQueryInstanceDao;
-	}
+    public void setCqlQueryInstanceDao(CQLQueryInstanceDao cqlQueryInstanceDao) {
+        this.cqlQueryInstanceDao = cqlQueryInstanceDao;
+    }
 
+    public DCQLQueryInstanceDao getDcqlQueryInstanceDao() {
+        return dcqlQueryInstanceDao;
+    }
+
+    public void setDcqlQueryInstanceDao(DCQLQueryInstanceDao dcqlQueryInstanceDao) {
+        this.dcqlQueryInstanceDao = dcqlQueryInstanceDao;
+    }
 }

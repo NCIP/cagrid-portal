@@ -10,10 +10,12 @@ import gov.nih.nci.cagrid.portal.portlet.query.cql.UMLClassBean;
 import gov.nih.nci.cagrid.portal.portlet.query.cql.UMLClassTreeNodeListener;
 import gov.nih.nci.cagrid.portal.portlet.tree.TreeFacade;
 import gov.nih.nci.cagrid.portal.portlet.tree.TreeNode;
-
-import java.util.HashMap;
+import org.springframework.web.portlet.ModelAndView;
 
 import javax.portlet.RenderRequest;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
@@ -25,6 +27,8 @@ public class ViewUmlClassTreeController extends
     private UMLClassTreeNodeListener umlClassTreeNodeListener;
 
     private UMLClassDao umlClassDao;
+
+    private List<String> predicates = new ArrayList<String>();
 
     /**
      *
@@ -76,6 +80,17 @@ public class ViewUmlClassTreeController extends
 
     }
 
+    /**
+     * Needed by foreign associations. But need to load
+     * only once
+     */
+    @Override
+    protected void addData(RenderRequest request, ModelAndView mav) {
+        logger.debug("Loading predicates list of length" + predicates.size());
+        mav.addObject("predicates", getPredicates());
+    }
+
+
     public UMLClassDao getUmlClassDao() {
         return umlClassDao;
     }
@@ -101,4 +116,11 @@ public class ViewUmlClassTreeController extends
         this.umlClassTreeNodeListener = umlClassTreeNodeListener;
     }
 
+    public List<String> getPredicates() {
+        return predicates;
+    }
+
+    public void setPredicates(List<String> predicates) {
+        this.predicates = predicates;
+    }
 }

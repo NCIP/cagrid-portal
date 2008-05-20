@@ -1,244 +1,300 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:p="http://www.springframework.org/schema/p"
-	xmlns:tx="http://www.springframework.org/schema/tx"
-	xmlns:aop="http://www.springframework.org/schema/aop"
-	xmlns:util="http://www.springframework.org/schema/util"
-	xsi:schemaLocation="
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="
 	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
 	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
 	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
 	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
 	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd">
-	
-	<bean id="propertyConfigurer"
-		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-		<property name="location"
-			value="classpath:cagridportal.properties" />
-	</bean>
-	
-	<bean class="org.springframework.beans.factory.annotation.RequiredAnnotationBeanPostProcessor"/>
 
-	<bean id="interPortletMessageManager" class="gov.nih.nci.cagrid.portal.portlet.SessionBasedInterPortletMessageManager" scope="globalSession" autowire="byName">
-		<aop:scoped-proxy proxy-target-class="true"/>
-	</bean>
+    <bean id="propertyConfigurer"
+          class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="location"
+                  value="classpath:cagridportal.properties"/>
+    </bean>
 
-	<bean id="queryModel" class="gov.nih.nci.cagrid.portal.portlet.query.QueryModel" scope="globalSession" autowire="byName">
-		<aop:scoped-proxy proxy-target-class="true"/>
-	</bean>
-	
-	<bean id="discoveryModel" class="gov.nih.nci.cagrid.portal.portlet.discovery.DiscoveryModel" scope="globalSession" autowire="byName">
-		<aop:scoped-proxy proxy-target-class="true"/>
-	</bean>		
-	
-	
-	<bean id="cqlQueryInstanceExecutorPrototype" class="gov.nih.nci.cagrid.portal.portlet.query.cql.DefaultCQLQueryInstanceExecutor" scope="prototype">
-		<property name="executorService" ref="executorService"/>
-		<property name="cqlQueryInstanceListener">
-			<bean class="gov.nih.nci.cagrid.portal.portlet.query.cql.DefaultCQLQueryInstanceListener">
-				<property name="cqlQueryInstanceDao" ref="cqlQueryInstanceDao"/>
-			</bean>
-		</property>
-		<property name="timeout" value="60000"/>
-		<property name="encryptionService" ref="encryptionServicePrototype"/>
-	</bean>
+    <bean class="org.springframework.beans.factory.annotation.RequiredAnnotationBeanPostProcessor"/>
 
-	<bean id="executorService" class="gov.nih.nci.cagrid.portal.portlet.util.DelegatingExecutorService">
-	
-		<property name="executorService">
-			<bean class="java.util.concurrent.Executors" factory-method="newFixedThreadPool">
-				<constructor-arg value="20"/>
-			</bean>
-		</property>
-	
-	</bean>
-	
-	<bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
-		<property name="basenames">
-			<list>
-				<value>messages</value>
-			</list>
-		</property>										
-	</bean>
+    <bean id="interPortletMessageManager"
+          class="gov.nih.nci.cagrid.portal.portlet.SessionBasedInterPortletMessageManager" scope="globalSession"
+          autowire="byName">
+        <aop:scoped-proxy proxy-target-class="true"/>
+    </bean>
 
-	<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
-		<property name="prefix" value="/WEB-INF/jsp/"/>
-		<property name="suffix" value=".jsp"/>
-	</bean>
-	
-	<bean id="parameterMappingInterceptor" class="org.springframework.web.portlet.handler.ParameterMappingInterceptor"/>
-	
-	<bean id="openSessionInViewInterceptor" class="gov.nih.nci.cagrid.portal.portlet.util.OpenSessionInViewInterceptor">
-		<property name="sessionFactory" ref="sessionFactory"/>
-		<property name="singleSession" value="true"/>
-		<property name="flushModeName">
-			<value>FLUSH_AUTO</value>
-		</property>
-	</bean>
-	
-	<bean id="portalUserAttributeName" class="java.lang.String">
-		<constructor-arg value="CAGRIDPORTAL_ATTS_cagrid.portal.user"/>
-	</bean>
-	<bean id="portalUserInterceptor" class="gov.nih.nci.cagrid.portal.portlet.PortalUserInterceptor" autowire="byName">
-		<property name="portalUserAttributeName" ref="portalUserAttributeName"/>
-		<property name="userIdAttributeName" value="CAGRIDPORTAL_ATTS_userId"/>
-	</bean>
-	<bean id="portalUserRequestInterceptor" class="gov.nih.nci.cagrid.portal.portlet.PortalUserRequestInterceptor" autowire="byName">
-		<property name="portalUserSessionAttributeName" ref="portalUserAttributeName"/>
-		<property name="portalUserRequestAttributeName" value="portalUser"/>
-	</bean>
+    <bean id="queryModel" class="gov.nih.nci.cagrid.portal.portlet.query.QueryModel" scope="globalSession"
+          autowire="byName">
+        <aop:scoped-proxy proxy-target-class="true"/>
+    </bean>
+
+    <bean id="discoveryModel" class="gov.nih.nci.cagrid.portal.portlet.discovery.DiscoveryModel" scope="globalSession"
+          autowire="byName">
+        <aop:scoped-proxy proxy-target-class="true"/>
+    </bean>
 
 
-	<!-- Abstract Default ExceptionHandler -->
-	<bean id="defaultExceptionHandlerTemplate" class="gov.nih.nci.cagrid.portal.portlet.util.DefaultExceptionResolver" abstract="true">
-		<property name="adminEmail" value="${cagrid.portal.admin.email}"/>
-		<property name="viewName" value="error"/>
-	</bean>
+    <bean id="cqlQueryInstanceExecutorPrototype"
+          class="gov.nih.nci.cagrid.portal.portlet.query.cql.DefaultCQLQueryInstanceExecutor" scope="prototype">
+        <property name="executorService" ref="executorService"/>
+        <property name="cqlQueryInstanceListener">
+            <bean class="gov.nih.nci.cagrid.portal.portlet.query.cql.DefaultCQLQueryInstanceListener">
+                <property name="cqlQueryInstanceDao" ref="cqlQueryInstanceDao"/>
+            </bean>
+        </property>
+        <property name="timeout" value="60000"/>
+        <property name="encryptionService" ref="encryptionServicePrototype"/>
+    </bean>
 
-	
-	<bean id="defaultDirectory" class="gov.nih.nci.cagrid.portal.portlet.discovery.dir.ServiceDirectory"
-		autowire="byName">
-		<property name="id" value="services"/>
-		<property name="serviceDirectoryType" value="ALL"/>
-	</bean>
-	<alias name="defaultDirectory" alias="allServicesDirectory"/>
-	<alias name="defaultDirectory" alias="servicesDirectory"/>
-	
-	<bean id="allParticipantsDirectory" class="gov.nih.nci.cagrid.portal.portlet.discovery.dir.ParticipantDirectory" autowire="byName">
-		<property name="id" value="participants"/>
-		<property name="participantDirectoryType" value="ALL"/>
-	</bean>
-	<alias name="allParticipantsDirectory" alias="participantsDirectory"/>
-	
-	<bean id="dataServicesDirectory" class="gov.nih.nci.cagrid.portal.portlet.discovery.dir.ServiceDirectory" autowire="byName">
-		<property name="id" value="dataServices"/>
-		<property name="serviceDirectoryType" value="DATA"/>
-	</bean>
-	
-	<bean id="analyticalServicesDirectory" class="gov.nih.nci.cagrid.portal.portlet.discovery.dir.ServiceDirectory" autowire="byName">
-		<property name="id" value="analyticalServices"/>
-		<property name="serviceDirectoryType" value="ANALYTICAL"/>
-	</bean>
-	
-	<util:list id="directories">
-		<ref bean="defaultDirectory"/>
-		<ref bean="dataServicesDirectory"/>
-		<ref bean="analyticalServicesDirectory"/>
-		<ref bean="allParticipantsDirectory"/>
-		<bean class="gov.nih.nci.cagrid.portal.portlet.discovery.dir.WorkspaceParticipantDirectory" autowire="byName">
-			<property name="participantDirectoryType" value="CTMS"/>
-		</bean>
-		<bean class="gov.nih.nci.cagrid.portal.portlet.discovery.dir.WorkspaceParticipantDirectory" autowire="byName">
-			<property name="participantDirectoryType" value="ICR"/>
-		</bean>
-		<bean class="gov.nih.nci.cagrid.portal.portlet.discovery.dir.WorkspaceParticipantDirectory" autowire="byName">
-			<property name="participantDirectoryType" value="IMAGING"/>
-		</bean>
-		<bean class="gov.nih.nci.cagrid.portal.portlet.discovery.dir.WorkspaceParticipantDirectory" autowire="byName">
-			<property name="participantDirectoryType" value="TBPT"/>
-		</bean>
-		<bean class="gov.nih.nci.cagrid.portal.portlet.discovery.dir.WorkspaceParticipantDirectory" autowire="byName">
-			<property name="participantDirectoryType" value="ARCH"/>
-		</bean>
-		<bean class="gov.nih.nci.cagrid.portal.portlet.discovery.dir.WorkspaceParticipantDirectory" autowire="byName">
-			<property name="participantDirectoryType" value="VCDE"/>
-		</bean>
-		<bean class="gov.nih.nci.cagrid.portal.portlet.discovery.dir.WorkspaceParticipantDirectory" autowire="byName">
-			<property name="participantDirectoryType" value="DSIC"/>
-		</bean>
-		<bean class="gov.nih.nci.cagrid.portal.portlet.discovery.dir.WorkspaceParticipantDirectory" autowire="byName">
-			<property name="participantDirectoryType" value="TRAINING"/>
-		</bean>
-		<bean class="gov.nih.nci.cagrid.portal.portlet.discovery.dir.WorkspaceParticipantDirectory" autowire="byName">
-			<property name="participantDirectoryType" value="SP"/>
-		</bean>
-		<bean class="gov.nih.nci.cagrid.portal.portlet.discovery.dir.PointOfContactDirectory" autowire="byName">
-			<property name="id" value="pocs"/>
-		</bean>
-	</util:list>
-	
-	<bean id="mapBeanPrototype" class="gov.nih.nci.cagrid.portal.portlet.discovery.map.MapBean" scope="prototype" autowire="byName">
+    <bean id="dcqlQueryInstanceExecutorPrototype"
+          class="gov.nih.nci.cagrid.portal.portlet.query.dcql.DefaultDCQLQueryInstanceExecutor" scope="prototype">
+        <property name="executorService" ref="executorService"/>
+        <property name="dcqlQueryInstanceListener">
+            <bean class="gov.nih.nci.cagrid.portal.portlet.query.dcql.DefaultDCQLQueryInstanceListener">
+                <property name="dcqlQueryInstanceDao" ref="dcqlQueryInstanceDao"/>
+            </bean>
+        </property>
+        <property name="timeout" value="60000"/>
+        <property name="encryptionService" ref="encryptionServicePrototype"/>
+    </bean>
 
-		<property name="baseUrl" value="${cagrid.portal.map.google.baseUrl}"/>
-		<property name="apiKey" value="${cagrid.portal.map.google.apiKey}"/>
-		<property name="centerLatitude" value="40"/>
-		<property name="centerLongitude" value="-95"/>
-		<property name="zoomLevel" value="4"/>
-	
-	</bean>
-	
-	<bean id="listBeanPrototype" class="gov.nih.nci.cagrid.portal.portlet.discovery.list.ListBean" scope="prototype">
-		<property name="scroller">
-			<bean class="gov.nih.nci.cagrid.portal.portlet.util.Scroller">
-				<property name="pageSize" value="10"/>
-			</bean>
-		</property>
-		<property name="hibernateTemplate" ref="hibernateTemplate"/>
-	</bean>
-	
-	<bean id="keywordSearchService" class="gov.nih.nci.cagrid.portal.portlet.discovery.search.KeywordSearchService" autowire="byName"/>
-	
-	<util:map id="namedServiceKeywordCriteria">
-		<entry key="serviceUrl">
-			<list>
-				<value>url</value>
-			</list>
-		</entry>
-		<entry key="serviceName">
-			<list>
-				<value>serviceMetadata.serviceDescription.name</value>
-			</list>
-		</entry>
-		<entry key="serviceDescription">
-			<list>
-				<value>serviceMetadata.serviceDescription.description</value>
-			</list>
-		</entry>
-		<entry key="inputOutput">
-			<list>
-				<value>serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.inputParameterCollection.UMLClass.className</value>
-				<value>serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.output.UMLClass.className</value>
-			</list>
-		</entry>
-		<entry key="operationNames">
-			<list>
-				<value>serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.name</value>
-			</list>
-		</entry>
-		<entry key="semanticMetadata">
-			<list>
-				<value>serviceMetadata.serviceDescription.semanticMetadata.conceptCode</value>
-				<value>serviceMetadata.serviceDescription.semanticMetadata.conceptDefinition</value>
-				<value>serviceMetadata.serviceDescription.semanticMetadata.conceptName</value>
-					
-				<value>serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.semanticMetadata.conceptCode</value>
-				<value>serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.semanticMetadata.conceptDefinition</value>
-				<value>serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.semanticMetadata.conceptName</value>
-				
-				<value>serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.inputParameterCollection.UMLClass.semanticMetadata.conceptCode</value>
-				<value>serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.inputParameterCollection.UMLClass.semanticMetadata.conceptDefinition</value>
-				<value>serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.inputParameterCollection.UMLClass.semanticMetadata.conceptName</value>
-						
-				<value>serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.output.UMLClass.semanticMetadata.conceptCode</value>
-				<value>serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.output.UMLClass.semanticMetadata.conceptDefinition</value>
-				<value>serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.output.UMLClass.semanticMetadata.conceptName</value>
-						
-				<value>domainModel.classes.semanticMetadata.conceptCode</value>
-				<value>domainModel.classes.semanticMetadata.conceptDefinition</value>
-				<value>domainModel.classes.semanticMetadata.conceptName</value>
-						
-				<value>domainModel.classes.umlAttributeCollection.semanticMetadata.conceptCode</value>
-				<value>domainModel.classes.umlAttributeCollection.semanticMetadata.conceptDefinition</value>
-				<value>domainModel.classes.umlAttributeCollection.semanticMetadata.conceptName</value>
-			</list>
-		</entry>
-		<entry key="domainModel">
-			<list>
-				<value>domainModel.classes.className</value>
-			</list>
-		</entry>
-	</util:map>
+
+    <bean id="executorService" class="gov.nih.nci.cagrid.portal.portlet.util.DelegatingExecutorService">
+
+        <property name="executorService">
+            <bean class="java.util.concurrent.Executors" factory-method="newFixedThreadPool">
+                <constructor-arg value="20"/>
+            </bean>
+        </property>
+
+    </bean>
+
+    <bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+        <property name="basenames">
+            <list>
+                <value>messages</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+        <property name="prefix" value="/WEB-INF/jsp/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
+
+    <bean id="parameterMappingInterceptor" class="org.springframework.web.portlet.handler.ParameterMappingInterceptor"/>
+
+    <bean id="openSessionInViewInterceptor" class="gov.nih.nci.cagrid.portal.portlet.util.OpenSessionInViewInterceptor">
+        <property name="sessionFactory" ref="sessionFactory"/>
+        <property name="singleSession" value="true"/>
+        <property name="flushModeName">
+            <value>FLUSH_AUTO</value>
+        </property>
+    </bean>
+
+    <bean id="portalUserAttributeName" class="java.lang.String">
+        <constructor-arg value="CAGRIDPORTAL_ATTS_cagrid.portal.user"/>
+    </bean>
+    <bean id="portalUserInterceptor" class="gov.nih.nci.cagrid.portal.portlet.PortalUserInterceptor" autowire="byName">
+        <property name="portalUserAttributeName" ref="portalUserAttributeName"/>
+        <property name="userIdAttributeName" value="CAGRIDPORTAL_ATTS_userId"/>
+    </bean>
+    <bean id="portalUserRequestInterceptor" class="gov.nih.nci.cagrid.portal.portlet.PortalUserRequestInterceptor"
+          autowire="byName">
+        <property name="portalUserSessionAttributeName" ref="portalUserAttributeName"/>
+        <property name="portalUserRequestAttributeName" value="portalUser"/>
+    </bean>
+
+
+    <!-- Abstract Default ExceptionHandler -->
+    <bean id="defaultExceptionHandlerTemplate" class="gov.nih.nci.cagrid.portal.portlet.util.DefaultExceptionResolver"
+          abstract="true">
+        <property name="adminEmail" value="${cagrid.portal.admin.email}"/>
+        <property name="viewName" value="error"/>
+    </bean>
+
+
+    <bean id="defaultDirectory" class="gov.nih.nci.cagrid.portal.portlet.discovery.dir.ServiceDirectory"
+          autowire="byName">
+        <property name="id" value="services"/>
+        <property name="serviceDirectoryType" value="ALL"/>
+    </bean>
+    <alias name="defaultDirectory" alias="allServicesDirectory"/>
+    <alias name="defaultDirectory" alias="servicesDirectory"/>
+
+    <bean id="allParticipantsDirectory" class="gov.nih.nci.cagrid.portal.portlet.discovery.dir.ParticipantDirectory"
+          autowire="byName">
+        <property name="id" value="participants"/>
+        <property name="participantDirectoryType" value="ALL"/>
+    </bean>
+    <alias name="allParticipantsDirectory" alias="participantsDirectory"/>
+
+    <bean id="dataServicesDirectory" class="gov.nih.nci.cagrid.portal.portlet.discovery.dir.ServiceDirectory"
+          autowire="byName">
+        <property name="id" value="dataServices"/>
+        <property name="serviceDirectoryType" value="DATA"/>
+    </bean>
+
+    <bean id="analyticalServicesDirectory" class="gov.nih.nci.cagrid.portal.portlet.discovery.dir.ServiceDirectory"
+          autowire="byName">
+        <property name="id" value="analyticalServices"/>
+        <property name="serviceDirectoryType" value="ANALYTICAL"/>
+    </bean>
+
+    <util:list id="directories">
+        <ref bean="defaultDirectory"/>
+        <ref bean="dataServicesDirectory"/>
+        <ref bean="analyticalServicesDirectory"/>
+        <ref bean="allParticipantsDirectory"/>
+        <bean class="gov.nih.nci.cagrid.portal.portlet.discovery.dir.WorkspaceParticipantDirectory" autowire="byName">
+            <property name="participantDirectoryType" value="CTMS"/>
+        </bean>
+        <bean class="gov.nih.nci.cagrid.portal.portlet.discovery.dir.WorkspaceParticipantDirectory" autowire="byName">
+            <property name="participantDirectoryType" value="ICR"/>
+        </bean>
+        <bean class="gov.nih.nci.cagrid.portal.portlet.discovery.dir.WorkspaceParticipantDirectory" autowire="byName">
+            <property name="participantDirectoryType" value="IMAGING"/>
+        </bean>
+        <bean class="gov.nih.nci.cagrid.portal.portlet.discovery.dir.WorkspaceParticipantDirectory" autowire="byName">
+            <property name="participantDirectoryType" value="TBPT"/>
+        </bean>
+        <bean class="gov.nih.nci.cagrid.portal.portlet.discovery.dir.WorkspaceParticipantDirectory" autowire="byName">
+            <property name="participantDirectoryType" value="ARCH"/>
+        </bean>
+        <bean class="gov.nih.nci.cagrid.portal.portlet.discovery.dir.WorkspaceParticipantDirectory" autowire="byName">
+            <property name="participantDirectoryType" value="VCDE"/>
+        </bean>
+        <bean class="gov.nih.nci.cagrid.portal.portlet.discovery.dir.WorkspaceParticipantDirectory" autowire="byName">
+            <property name="participantDirectoryType" value="DSIC"/>
+        </bean>
+        <bean class="gov.nih.nci.cagrid.portal.portlet.discovery.dir.WorkspaceParticipantDirectory" autowire="byName">
+            <property name="participantDirectoryType" value="TRAINING"/>
+        </bean>
+        <bean class="gov.nih.nci.cagrid.portal.portlet.discovery.dir.WorkspaceParticipantDirectory" autowire="byName">
+            <property name="participantDirectoryType" value="SP"/>
+        </bean>
+        <bean class="gov.nih.nci.cagrid.portal.portlet.discovery.dir.PointOfContactDirectory" autowire="byName">
+            <property name="id" value="pocs"/>
+        </bean>
+    </util:list>
+
+    <bean id="mapBeanPrototype" class="gov.nih.nci.cagrid.portal.portlet.discovery.map.MapBean" scope="prototype"
+          autowire="byName">
+
+        <property name="baseUrl" value="${cagrid.portal.map.google.baseUrl}"/>
+        <property name="apiKey" value="${cagrid.portal.map.google.apiKey}"/>
+        <property name="centerLatitude" value="40"/>
+        <property name="centerLongitude" value="-95"/>
+        <property name="zoomLevel" value="4"/>
+
+    </bean>
+
+    <bean id="listBeanPrototype" class="gov.nih.nci.cagrid.portal.portlet.discovery.list.ListBean" scope="prototype">
+        <property name="scroller">
+            <bean class="gov.nih.nci.cagrid.portal.portlet.util.Scroller">
+                <property name="pageSize" value="10"/>
+            </bean>
+        </property>
+        <property name="hibernateTemplate" ref="hibernateTemplate"/>
+    </bean>
+
+    <bean id="keywordSearchService" class="gov.nih.nci.cagrid.portal.portlet.discovery.search.KeywordSearchService"
+          autowire="byName"/>
+
+    <util:map id="namedServiceKeywordCriteria">
+        <entry key="serviceUrl">
+            <list>
+                <value>url</value>
+            </list>
+        </entry>
+        <entry key="serviceName">
+            <list>
+                <value>serviceMetadata.serviceDescription.name</value>
+            </list>
+        </entry>
+        <entry key="serviceDescription">
+            <list>
+                <value>serviceMetadata.serviceDescription.description</value>
+            </list>
+        </entry>
+        <entry key="inputOutput">
+            <list>
+                <value>
+                    serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.inputParameterCollection.UMLClass.className
+                </value>
+                <value>
+                    serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.output.UMLClass.className
+                </value>
+            </list>
+        </entry>
+        <entry key="operationNames">
+            <list>
+                <value>serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.name</value>
+            </list>
+        </entry>
+        <entry key="semanticMetadata">
+            <list>
+                <value>serviceMetadata.serviceDescription.semanticMetadata.conceptCode</value>
+                <value>serviceMetadata.serviceDescription.semanticMetadata.conceptDefinition</value>
+                <value>serviceMetadata.serviceDescription.semanticMetadata.conceptName</value>
+
+                <value>
+                    serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.semanticMetadata.conceptCode
+                </value>
+                <value>
+                    serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.semanticMetadata.conceptDefinition
+                </value>
+                <value>
+                    serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.semanticMetadata.conceptName
+                </value>
+
+                <value>
+                    serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.inputParameterCollection.UMLClass.semanticMetadata.conceptCode
+                </value>
+                <value>
+                    serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.inputParameterCollection.UMLClass.semanticMetadata.conceptDefinition
+                </value>
+                <value>
+                    serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.inputParameterCollection.UMLClass.semanticMetadata.conceptName
+                </value>
+
+                <value>
+                    serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.output.UMLClass.semanticMetadata.conceptCode
+                </value>
+                <value>
+                    serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.output.UMLClass.semanticMetadata.conceptDefinition
+                </value>
+                <value>
+                    serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.output.UMLClass.semanticMetadata.conceptName
+                </value>
+
+                <value>domainModel.classes.semanticMetadata.conceptCode</value>
+                <value>domainModel.classes.semanticMetadata.conceptDefinition</value>
+                <value>domainModel.classes.semanticMetadata.conceptName</value>
+
+                <value>domainModel.classes.umlAttributeCollection.semanticMetadata.conceptCode</value>
+                <value>domainModel.classes.umlAttributeCollection.semanticMetadata.conceptDefinition</value>
+                <value>domainModel.classes.umlAttributeCollection.semanticMetadata.conceptName</value>
+            </list>
+        </entry>
+        <entry key="domainModel">
+            <list>
+                <value>domainModel.classes.className</value>
+            </list>
+        </entry>
+    </util:map>
+
+    <util:list id="joinPredicates">
+        <value>EQUAL_TO</value>
+        <value>GREATER_THAN</value>
+        <value>GREATER_THAN_EQUAL_TO</value>
+        <value>LESS_THAN</value>
+        <value>LESS_THAN_EQUAL_TO</value>
+        <value>NOT_EQUAL_TO</value>
+    </util:list>
 
 </beans>

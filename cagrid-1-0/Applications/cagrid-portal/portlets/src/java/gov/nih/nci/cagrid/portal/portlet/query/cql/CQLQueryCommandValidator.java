@@ -5,16 +5,14 @@ package gov.nih.nci.cagrid.portal.portlet.query.cql;
 
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
-import gov.nih.nci.cagrid.portal.portlet.PortletConstants;
-import gov.nih.nci.cagrid.portal.portlet.query.model.SelectServiceCommand;
-import gov.nih.nci.cagrid.portal.portlet.query.model.SelectServiceCommandValidator;
 import gov.nih.nci.cagrid.fqp.common.DCQLConstants;
+import gov.nih.nci.cagrid.portal.portlet.PortletConstants;
+import gov.nih.nci.cagrid.portal.portlet.query.model.SelectServiceCommandValidator;
+import org.springframework.validation.Errors;
+import org.springframework.validation.Validator;
 
 import java.io.StringReader;
 import java.io.StringWriter;
-
-import org.springframework.validation.Errors;
-import org.springframework.validation.Validator;
 
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
@@ -68,6 +66,7 @@ public class CQLQueryCommandValidator extends SelectServiceCommandValidator impl
                         w);
                 String dcql = w.toString();
                 command.setCqlQuery(dcql);
+                command.setDcql(true);
             } catch (Exception e) {
                 errors.rejectValue("cqlQuery", PortletConstants.BAD_CQL_MSG, null,
                         "Could not parse query XML.");

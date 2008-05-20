@@ -1,24 +1,18 @@
 /**
- * 
+ *
  */
 package gov.nih.nci.cagrid.portal.portlet.query.cql;
 
 import gov.nih.nci.cagrid.portal.domain.dataservice.CQLQueryInstance;
+import gov.nih.nci.cagrid.portal.portlet.query.QueryInstanceExecutor;
 
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
- *
  */
-public interface CQLQueryInstanceExecutor {
+public interface CQLQueryInstanceExecutor extends QueryInstanceExecutor<CQLQueryInstance> {
 
-	void setCqlQueryInstance(CQLQueryInstance instance);
-	CQLQueryInstance getCqlQueryInstance();
-	
-	void setCqlQueryInstanceListener(CQLQueryInstanceListener listener);
-	CQLQueryInstanceListener getCqlQueryInstanceListener();
-	
-	void start();
-	boolean cancel();
-	boolean timeout();
-	
+    void setCqlQueryInstanceListener(CQLQueryInstanceListener listener);
+
+    CQLQueryInstanceListener getCqlQueryInstanceListener();
+
 }
