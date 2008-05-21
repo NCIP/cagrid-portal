@@ -33,11 +33,12 @@ import junit.textui.TestRunner;
  * @author David Ervin
  * 
  * @created Mar 14, 2007 2:19:42 PM
- * @version $Id: BDTDataServiceSystemTests.java,v 1.1 2008-05-16 19:25:25 dervin Exp $ 
+ * @version $Id: BDTDataServiceSystemTests.java,v 1.2 2008-05-21 19:51:14 dervin Exp $ 
  */
 public class BDTDataServiceSystemTests extends BaseSystemTest {
     
     private ServiceContainer container;
+    private DataTestCaseInfo testServiceInfo;
     
     public BDTDataServiceSystemTests() {
         super();
@@ -55,6 +56,9 @@ public class BDTDataServiceSystemTests extends BaseSystemTest {
 	
 	
 	protected boolean storySetUp() {
+        // get the testing service info
+	    this.testServiceInfo = new BDTDataServiceCreationTests.TestBDTDataServiceInfo();
+        
         // obtain a new container instance
         try {
             container = ServiceContainerFactory.createContainer(ServiceContainerType.GLOBUS_CONTAINER);
@@ -64,7 +68,7 @@ public class BDTDataServiceSystemTests extends BaseSystemTest {
         }
         
 		// verify the BDT service has been built
-		File serviceDir = new File(BDTDataServiceCreationTests.SERVICE_DIR);
+		File serviceDir = new File(testServiceInfo.getDir());
 		assertTrue("BDT Data Service directory NOT FOUND", serviceDir.exists());
 		File serviceModel = new File(serviceDir.getAbsolutePath() 
 			+ File.separator + IntroduceConstants.INTRODUCE_XML_FILE);
@@ -84,23 +88,22 @@ public class BDTDataServiceSystemTests extends BaseSystemTest {
 
 
 	protected Vector steps() {
-        DataTestCaseInfo info = new BDTDataServiceCreationTests.TestBDTDataServiceInfo();
-		Vector<Step> steps = new Vector<Step>();
+        Vector<Step> steps = new Vector<Step>();
 		// assumes the BDT service has been created already
 		// 1) Add the bookstore schema to the data service
-		steps.add(new AddBookstoreStep(info));
+		steps.add(new AddBookstoreStep(testServiceInfo));
 		// 2) change out query processor
-		steps.add(new SetQueryProcessorStep(BDTDataServiceCreationTests.SERVICE_DIR));
+		steps.add(new SetQueryProcessorStep(testServiceInfo.getDir()));
 		// 3) Turn on query validation
-		steps.add(new EnableValidationStep(BDTDataServiceCreationTests.SERVICE_DIR));
+		steps.add(new EnableValidationStep(testServiceInfo.getDir()));
 		// 4) Rebuild the service to pick up the bookstore beans
-		steps.add(new RebuildServiceStep(info, getIntroduceBaseDir()));
+		steps.add(new RebuildServiceStep(testServiceInfo, getIntroduceBaseDir()));
 		// 5) deploy data service
-		steps.add(new DeployServiceStep(container, BDTDataServiceCreationTests.SERVICE_DIR));
+		steps.add(new DeployServiceStep(container, testServiceInfo.getDir()));
 		// 6) start the container
 		steps.add(new StartContainerStep(container));
 		// 7) test bdt data service
-		steps.add(new InvokeBDTDataServiceStep(container, BDTDataServiceCreationTests.SERVICE_NAME));
+		steps.add(new InvokeBDTDataServiceStep(container, testServiceInfo.getName()));
 		return steps;
 	}
 	

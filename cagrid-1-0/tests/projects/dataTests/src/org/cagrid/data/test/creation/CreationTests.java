@@ -3,7 +3,6 @@ package org.cagrid.data.test.creation;
 import gov.nih.nci.cagrid.testing.system.haste.Step;
 import gov.nih.nci.cagrid.testing.system.haste.Story;
 
-import java.io.File;
 import java.util.Vector;
 
 import junit.framework.TestResult;
@@ -17,18 +16,16 @@ import junit.textui.TestRunner;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created Aug 22, 2006 
- * @version $Id: CreationTests.java,v 1.1 2008-05-16 19:25:25 dervin Exp $ 
+ * @version $Id: CreationTests.java,v 1.2 2008-05-21 19:51:14 dervin Exp $ 
  */
 public class CreationTests extends Story {
 	public static final String INTRODUCE_DIR_PROPERTY = "introduce.base.dir";
     
 	public static final String SERVICE_NAME = "TestDataService";
-	public static final String SERVICE_DIR = (new File("..")).getAbsolutePath() + File.separator + "data" + File.separator + "test" + File.separator + SERVICE_NAME;
 	public static final String PACKAGE_NAME = "gov.nih.nci.cagrid.testds";
 	public static final String SERVICE_NAMESPACE = "http://" + PACKAGE_NAME + "/" + SERVICE_NAME;
     
     public static final String PLAIN_SERVICE_NAME = "PlainTestDataService";
-    public static final String PLAIN_SERVICE_DIR = (new File("..")).getAbsolutePath() + File.separator + "data" + File.separator + "test" + File.separator + PLAIN_SERVICE_NAME;
     public static final String PLAIN_PACKAGE_NAME = "gov.nih.nci.cagrid.plainds";
     public static final String PLAIN_SERVICE_NAMESPACE = "http://" + PLAIN_PACKAGE_NAME + "/" + PLAIN_SERVICE_NAME;
     
@@ -89,8 +86,8 @@ public class CreationTests extends Story {
 	    }
 
 
-	    public String getDir() {
-	        return SERVICE_DIR;
+	    public String getServiceDirName() {
+	        return SERVICE_NAME;
 	    }
 
 
@@ -111,8 +108,8 @@ public class CreationTests extends Story {
         }
 
 
-        public String getDir() {
-            return PLAIN_SERVICE_DIR;
+        public String getServiceDirName() {
+            return PLAIN_SERVICE_NAME;
         }
 
 

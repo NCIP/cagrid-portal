@@ -3,15 +3,14 @@ package org.cagrid.data.test.creation.enumeration;
 import gov.nih.nci.cagrid.testing.system.haste.Step;
 import gov.nih.nci.cagrid.testing.system.haste.Story;
 
-import java.io.File;
 import java.util.Vector;
-
-import org.cagrid.data.test.creation.DataTestCaseInfo;
-import org.cagrid.data.test.creation.DeleteOldServiceStep;
 
 import junit.framework.TestResult;
 import junit.framework.TestSuite;
 import junit.textui.TestRunner;
+
+import org.cagrid.data.test.creation.DataTestCaseInfo;
+import org.cagrid.data.test.creation.DeleteOldServiceStep;
 
 /** 
  *  CreateEnumerationTests
@@ -19,13 +18,11 @@ import junit.textui.TestRunner;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Nov 30, 2006 
- * @version $Id: CreateEnumerationTests.java,v 1.1 2008-05-16 19:25:25 dervin Exp $ 
+ * @version $Id: CreateEnumerationTests.java,v 1.2 2008-05-21 19:51:14 dervin Exp $ 
  */
 public class CreateEnumerationTests extends Story {
 	public static final String INTRODUCE_DIR_PROPERTY = "introduce.base.dir";
 	public static final String SERVICE_NAME = "TestEnumerationDataService";
-	public static final String SERVICE_DIR = (new File("..")).getAbsolutePath() + File.separator + "data" + File.separator 
-	+ "test" + File.separator + "TestEnumerationDataService";
 	public static final String PACKAGE_NAME = "gov.nih.nci.cagrid.test.enumds";
 	public static final String SERVICE_NAMESPACE = "http://" + PACKAGE_NAME + "/" + SERVICE_NAME;
     
@@ -79,8 +76,8 @@ public class CreateEnumerationTests extends Story {
         }
 
 
-        public String getDir() {
-            return SERVICE_DIR;
+        public String getServiceDirName() {
+            return SERVICE_NAME;
         }
 
 

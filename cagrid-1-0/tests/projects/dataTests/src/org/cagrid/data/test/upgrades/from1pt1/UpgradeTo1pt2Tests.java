@@ -1,11 +1,13 @@
 package org.cagrid.data.test.upgrades.from1pt1;
 
-import gov.nih.nci.cagrid.introduce.test.TestCaseInfo;
 import gov.nih.nci.cagrid.testing.system.haste.Step;
 import gov.nih.nci.cagrid.testing.system.haste.Story;
 
-import java.io.File;
 import java.util.Vector;
+
+import junit.framework.TestResult;
+import junit.framework.TestSuite;
+import junit.textui.TestRunner;
 
 import org.cagrid.data.test.creation.DataTestCaseInfo;
 import org.cagrid.data.test.creation.DeleteOldServiceStep;
@@ -13,23 +15,18 @@ import org.cagrid.data.test.upgrades.from1pt0.BuildUpgradedServiceStep;
 import org.cagrid.data.test.upgrades.from1pt0.UnzipOldServiceStep;
 import org.cagrid.data.test.upgrades.from1pt0.UpgradeIntroduceServiceStep;
 
-import junit.framework.TestResult;
-import junit.framework.TestSuite;
-import junit.textui.TestRunner;
-
 /** 
  *  UpgradeTo1pt1Tests
  *  Tests to upgrade a data service from 1.1 to 1.2
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Feb 20, 2007 
- * @version $Id: UpgradeTo1pt2Tests.java,v 1.1 2008-05-16 19:25:25 dervin Exp $ 
+ * @version $Id: UpgradeTo1pt2Tests.java,v 1.2 2008-05-21 19:51:14 dervin Exp $ 
  */
 public class UpgradeTo1pt2Tests extends Story {
-    public static final String TEST_DIR = ".." + File.separator + "data" + File.separator + "test";
     public static final String SERVICE_ZIP_NAME = "BasicDataService_1-1.zip";
     
-	public static final String SERVICE_DIR = TEST_DIR + File.separator + "BasicDataService_1-1";
+	public static final String SERVICE_DIR_NAME = "BasicDataService_1-1";
     public static final String SERVICE_NAME = "BasicDataService";
     public static final String SERVICE_PACKAGE = "gov.nih.nci.cagrid.basic.data.service";
     public static final String SERVICE_NAMESPACE = "http://service.data.basic.cagrid.nci.nih.gov/BasicDataService";
@@ -46,9 +43,9 @@ public class UpgradeTo1pt2Tests extends Story {
 	
 
 	protected Vector steps() {
-        TestCaseInfo info = new DataTestCaseInfo() {
-        	public String getDir() {
-    	        return SERVICE_DIR;
+        DataTestCaseInfo info = new DataTestCaseInfo() {
+        	public String getServiceDirName() {
+    	        return SERVICE_DIR_NAME;
     	    }
 
 
@@ -69,7 +66,7 @@ public class UpgradeTo1pt2Tests extends Story {
 		Vector<Step> steps = new Vector<Step>();
 		// steps to unpack and upgrade the old service
 		steps.add(new DeleteOldServiceStep(info));
-		steps.add(new UnzipOldServiceStep(TEST_DIR, SERVICE_ZIP_NAME));
+		steps.add(new UnzipOldServiceStep(DataTestCaseInfo.getTempDir(), SERVICE_ZIP_NAME));
 		steps.add(new UpgradeIntroduceServiceStep(info.getDir()));
 		steps.add(new BuildUpgradedServiceStep(info.getDir()));
 		

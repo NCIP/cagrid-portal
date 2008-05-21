@@ -20,14 +20,13 @@ import junit.textui.TestRunner;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Feb 20, 2007 
- * @version $Id: UpgradeTo1pt2Tests.java,v 1.1 2008-05-16 19:25:25 dervin Exp $ 
+ * @version $Id: UpgradeTo1pt2Tests.java,v 1.2 2008-05-21 19:51:14 dervin Exp $ 
  */
 public class UpgradeTo1pt2Tests extends Story {
     public static final String TEST_DIR = ".." + File.separator + "data" + File.separator + "test";
     public static final String SERVICE_ZIP_NAME = "BasicDataService_1-0.zip";
     
-	public static final String SERVICE_DIR = TEST_DIR + File.separator + "BasicDataService";
-    public static final String SERVICE_NAME = "BasicDataService";
+	public static final String SERVICE_NAME = "BasicDataService";
     public static final String SERVICE_PACKAGE = "basicdataservice.cagrid.nci.nih.gov";
     public static final String SERVICE_NAMESPACE = "http://basicdataservice.cagrid.nci.nih.gov/BasicDataService";
     
@@ -70,8 +69,8 @@ public class UpgradeTo1pt2Tests extends Story {
 	
 	
 	public static class Upgrade1pt0to1pt1TestServiceInfo extends DataTestCaseInfo {
-	    public String getDir() {
-	        return UpgradeTo1pt2Tests.SERVICE_DIR;
+	    public String getServiceDirName() {
+	        return SERVICE_NAME;
 	    }
 
 
