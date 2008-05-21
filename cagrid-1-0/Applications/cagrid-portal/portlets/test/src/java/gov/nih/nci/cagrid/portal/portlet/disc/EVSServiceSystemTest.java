@@ -199,8 +199,16 @@ public class EVSServiceSystemTest extends PortletIntegrationTestBase {
         return System.currentTimeMillis();
     }
 
-    public void setCaCoreEVSService(ConceptService caCoreConceptService) {
+    public ConceptService getCaCoreConceptService() {
+        return caCoreConceptService;
+    }
+
+    public void setCaCoreConceptService(ConceptService caCoreConceptService) {
         this.caCoreConceptService = caCoreConceptService;
+    }
+
+    public LexbigConceptService getLexbigEVSService() {
+        return lexbigEVSService;
     }
 
     public void setLexbigEVSService(LexbigConceptService lexbigEVSService) {
