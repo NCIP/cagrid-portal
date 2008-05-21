@@ -143,7 +143,7 @@ public class CriteriaBean implements ApplicationContextAware {
 
                     UMLClass assocType = (UMLClass) getHibernateTemplate().execute(
                             new HibernateCallback() {
-                                public Object doInHibernate(Session session)
+                                public java.lang.Object doInHibernate(Session session)
                                         throws HibernateException, SQLException {
                                     UMLClass klass2 = (UMLClass) session.get(klass
                                             .getClass(), klass.getId());
@@ -159,7 +159,7 @@ public class CriteriaBean implements ApplicationContextAware {
                 } else {
                     UMLClass assocType = (UMLClass) getHibernateTemplate().execute(
                             new HibernateCallback() {
-                                public Object doInHibernate(Session session)
+                                public java.lang.Object doInHibernate(Session session)
                                         throws HibernateException, SQLException {
                                     UMLClass assocType2 = null;
                                     UMLClass klass2 = (UMLClass) session.get(klass
