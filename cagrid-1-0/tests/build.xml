@@ -17,7 +17,7 @@
 
 	<!-- configuring (repurposing) the caGrid build -->
 	<property name="system.testable.projects.list" value="" />
-	<property name="unit.testable.projects.list" value="cqlprocessors,coretests,introduceTests,sdkInstaller,testUtils,transferTests" />
+	<property name="unit.testable.projects.list" value="authentication-service,cqlprocessors,coretests,introduceTests,sdkInstaller,testUtils,transferTests" />
 
 	<!-- IMPORT THE UTILITIES TARGETS -->
 	<import file="${cagrid.dir}/build.xml" />
