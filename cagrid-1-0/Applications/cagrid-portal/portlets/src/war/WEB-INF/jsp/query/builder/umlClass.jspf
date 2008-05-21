@@ -1,19 +1,22 @@
 <%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
 <%@ include file="/WEB-INF/jsp/include/includes.jspf" %>
 
+<c:set var="foreignNodeClassname" value="gov.nih.nci.cagrid.portal.portlet.query.dcql.ForeignUMLClassBean"/>
 
 <m:tree node="${node}" prefix="${prefix}">
 
 <jsp:attribute name="nodeFragment">
-		<b><c:out value="${currChildNode.label}"/></b>
+        <span>
+        <b><c:out value="${currChildNode.label}"/></b>
         <c:if test="${!empty currChildNode.content}">
-            <c:if test="${currChildNode.content.class.name == 'gov.nih.nci.cagrid.portal.portlet.query.dcql.ForeignUMLClassBean'}">
+            <c:if test="${currChildNode.content.class.name == foreignNodeClassname}">
                 <tags:serviceInfoPopup id="${currChildNode.path}"
                                        link_href="${currChildNode.content.serviceInfo.name}"
-                                       link_text="(${currChildNode.content.serviceInfo.nameAbbrv})"
+                                       link_text="(${currChildNode.content.serviceInfo.name})"
                                        serviceInfo="${currChildNode.content.serviceInfo}"/>
             </c:if>
         </c:if>
+        </span>
     </jsp:attribute>
 
 	<jsp:attribute name="contentFragment">
@@ -26,9 +29,18 @@
         <c:set var="nodePath"><c:out value="${currNode.path}"/></c:set>
 
         <input type="button" value="Load Foreign Classes"
-               onclick="populateForiegnAssociations('<c:out value="${nodePath}"/>')"/>
+               onclick="populateForiegnAssociations('<c:out value="${nodePath}"/>','/query/builder/umlClass')"
+                <c:forEach var="child" items="${currNode.children}">
+                    <c:if test="${child.content.class.name == foreignNodeClassname}">
+                        &nbsp;
+                        style="display:none;"
+                        &nbsp;
+                    </c:if>
+                </c:forEach>
+                />
 
-        <c:if test="${currNode.content.class.name == 'gov.nih.nci.cagrid.portal.portlet.query.dcql.ForeignUMLClassBean'}">
+
+        <c:if test="${currNode.content.class.name == foreignNodeClassname}">
             <br/><br/>
             <table border="1">
                 <tr>

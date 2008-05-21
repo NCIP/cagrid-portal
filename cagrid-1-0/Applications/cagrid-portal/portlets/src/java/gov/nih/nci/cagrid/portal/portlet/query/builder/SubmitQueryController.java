@@ -89,14 +89,16 @@ public class SubmitQueryController extends AbstractQueryActionController {
         getQueryModel().setWorkingQuery(command);
 
         GridDataService dataService = null;
-        try {
-            dataService = (GridDataService) getGridServiceDao().getByUrl(
-                    command.getDataServiceUrl().trim());
-        } catch (Exception ex) {
-            throw new CaGridPortletApplicationException(
-                    "Error looking up GridDataService '"
-                            + command.getDataServiceUrl() + "': "
-                            + ex.getMessage(), ex);
+        if (!command.isDcql()) {
+            try {
+                dataService = (GridDataService) getGridServiceDao().getByUrl(
+                        command.getDataServiceUrl().trim());
+            } catch (Exception ex) {
+                throw new CaGridPortletApplicationException(
+                        "Error looking up GridDataService '"
+                                + command.getDataServiceUrl() + "': "
+                                + ex.getMessage(), ex);
+            }
         }
 
         // Make sure the user has not exceeded the maximum

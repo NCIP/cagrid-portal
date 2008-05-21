@@ -3,17 +3,16 @@
  */
 package gov.nih.nci.cagrid.portal.portlet.query.results;
 
-import javax.portlet.ActionRequest;
-import javax.portlet.ActionResponse;
-
-import org.springframework.validation.BindException;
-
-import gov.nih.nci.cagrid.portal.dao.CQLQueryInstanceDao;
 import gov.nih.nci.cagrid.portal.dao.QueryInstanceDao;
 import gov.nih.nci.cagrid.portal.domain.dataservice.CQLQueryInstance;
+import gov.nih.nci.cagrid.portal.domain.dataservice.DCQLQueryInstance;
 import gov.nih.nci.cagrid.portal.domain.dataservice.QueryInstance;
 import gov.nih.nci.cagrid.portal.portlet.query.AbstractQueryActionController;
 import gov.nih.nci.cagrid.portal.portlet.query.cql.CQLQueryCommand;
+import org.springframework.validation.BindException;
+
+import javax.portlet.ActionRequest;
+import javax.portlet.ActionResponse;
 
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
@@ -57,6 +56,9 @@ public class ReloadQueryInstanceController extends AbstractQueryActionController
         QueryInstance instance = getQueryInstanceDao().getById(command.getInstanceId());
         CQLQueryCommand workingQuery = new CQLQueryCommand();
         workingQuery.setCqlQuery(instance.getQuery().getXml());
+        if (instance instanceof DCQLQueryInstance)
+            workingQuery.setDcql(true);
+
         if (instance instanceof CQLQueryInstance)
             workingQuery.setDataServiceUrl(((CQLQueryInstance) instance).getDataService().getUrl());
         getQueryModel().setWorkingQuery(workingQuery);

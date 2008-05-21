@@ -3,26 +3,15 @@
  */
 package gov.nih.nci.cagrid.portal.portlet.query.cql;
 
-import gov.nih.nci.cagrid.cqlquery.Association;
-import gov.nih.nci.cagrid.cqlquery.Attribute;
-import gov.nih.nci.cagrid.cqlquery.Group;
-import gov.nih.nci.cagrid.cqlquery.LogicalOperator;
-import gov.nih.nci.cagrid.cqlquery.Predicate;
+import gov.nih.nci.cagrid.cqlquery.*;
 import gov.nih.nci.cagrid.portal.domain.metadata.dataservice.SourceUMLAssociationEdge;
 import gov.nih.nci.cagrid.portal.domain.metadata.dataservice.TargetUMLAssociationEdge;
 import gov.nih.nci.cagrid.portal.domain.metadata.dataservice.UMLAssociationEdge;
 import gov.nih.nci.cagrid.portal.domain.metadata.dataservice.UMLClass;
-import gov.nih.nci.cagrid.portal.portlet.util.PortletUtils;
+import gov.nih.nci.cagrid.portal.portlet.query.QueryConstants;
 import gov.nih.nci.cagrid.portal.portlet.query.builder.AggregateTargetsCommand;
-import gov.nih.nci.cagrid.portal.portlet.query.builder.ForeignTargetsProvider;
 import gov.nih.nci.cagrid.portal.portlet.query.dcql.JoinCondition;
-
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
+import gov.nih.nci.cagrid.portal.portlet.util.PortletUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.HibernateException;
@@ -32,6 +21,12 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.orm.hibernate3.HibernateTemplate;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
@@ -55,7 +50,7 @@ public class CriteriaBean implements ApplicationContextAware {
      *
      */
     public CriteriaBean() {
-
+        aggregateTargets = new AggregateTargetsCommand();
     }
 
     public UMLClass getUmlClass() {
@@ -144,7 +139,7 @@ public class CriteriaBean implements ApplicationContextAware {
 
                 final UMLClass klass = getUmlClass();
 
-                if (parts[0].indexOf(ForeignTargetsProvider.FOREIGN_TARGETS_CLASS_PREFIX) > -1) {
+                if (parts[0].indexOf(QueryConstants.FOREIGN_UML_CLASS_PREFIX) > -1) {
 
                     UMLClass assocType = (UMLClass) getHibernateTemplate().execute(
                             new HibernateCallback() {
@@ -319,13 +314,13 @@ public class CriteriaBean implements ApplicationContextAware {
 
     public boolean isDCQLQuery() {
         for (AssociationBean assocBean : getAssociations()) {
-            if (assocBean.getRoleName().startsWith(ForeignTargetsProvider.FOREIGN_TARGETS_CLASS_PREFIX))
+            if (assocBean.getRoleName().startsWith(QueryConstants.FOREIGN_UML_CLASS_PREFIX))
                 return true;
                 //check recursively
             else if (assocBean.getCriteriaBean() != null && assocBean.getCriteriaBean().isDCQLQuery())
                 return true;
         }
-        return getAggregateTargets() != null && getAggregateTargets().getSelected().size() > 1;
+        return getAggregateTargets() != null && getAggregateTargets().getSelected().size() > 0;
     }
 
 

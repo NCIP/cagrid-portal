@@ -3,12 +3,11 @@ package gov.nih.nci.cagrid.portal.portlet.query.builder;
 import gov.nih.nci.cagrid.portal.portlet.query.AbstractQueryActionController;
 import gov.nih.nci.cagrid.portal.portlet.query.cql.CQLQueryBean;
 import gov.nih.nci.cagrid.portal.portlet.tree.TreeFacade;
+import org.springframework.beans.factory.annotation.Required;
+import org.springframework.validation.BindException;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
-
-import org.springframework.validation.BindException;
-import org.springframework.beans.factory.annotation.Required;
 
 /**
  * User: kherm
@@ -29,7 +28,6 @@ public class SelectAggregateTargetsController extends
         cqlQueryBean.getAggregateTargets().getSelected().clear();
         if (aggregateTargetsCmd.getSelected() != null)
             cqlQueryBean.getAggregateTargets().getSelected().addAll(aggregateTargetsCmd.getSelected());
-        cqlQueryBean.getAggregateTargets().getSelected().add(getQueryModel().getSelectedService().getUrl());
     }
 
     @Required

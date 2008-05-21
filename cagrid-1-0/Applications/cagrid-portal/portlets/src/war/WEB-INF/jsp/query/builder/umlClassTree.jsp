@@ -57,10 +57,11 @@
     }
     }
 
-    function populateForiegnAssociations(path){
+    function populateForiegnAssociations(path,tabPath){
     var form = document.<portlet:namespace/>criteriaBeanForm;
     form.action ='<portlet:renderURL/>';
     form.path.value=path;
+    form.selectedTabPath.value="/query/builder/cqlQuery";
     form.operation.value="populateForeignAssociations";
     form.submit();
     }
@@ -115,5 +116,7 @@
 
     <input type="hidden" name="operation" value=""/>
     <input type="hidden" name="path" value=""/>
+    <input type="hidden" name="selectedTabPath" value=""/>
+
 
 </form:form>

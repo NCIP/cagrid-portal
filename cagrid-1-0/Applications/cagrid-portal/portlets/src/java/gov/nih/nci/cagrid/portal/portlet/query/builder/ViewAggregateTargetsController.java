@@ -1,16 +1,15 @@
 package gov.nih.nci.cagrid.portal.portlet.query.builder;
 
+import gov.nih.nci.cagrid.portal.dao.UMLClassDao;
 import gov.nih.nci.cagrid.portal.portlet.query.AbstractQueryRenderController;
 import gov.nih.nci.cagrid.portal.portlet.query.cql.CQLQueryBean;
 import gov.nih.nci.cagrid.portal.portlet.tree.TreeFacade;
-import gov.nih.nci.cagrid.portal.dao.UMLClassDao;
-
-import javax.portlet.RenderRequest;
-
-import org.springframework.web.portlet.ModelAndView;
-import org.springframework.beans.factory.annotation.Required;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Required;
+import org.springframework.web.portlet.ModelAndView;
+
+import javax.portlet.RenderRequest;
 
 /**
  * User: kherm
@@ -32,12 +31,9 @@ public class ViewAggregateTargetsController extends AbstractQueryRenderControlle
         CQLQueryBean cqlQueryBean = (CQLQueryBean) getCqlQueryTreeFacade().getRootNode().getContent();
         AggregateTargetsCommand aggregateTargetsCmd = cqlQueryBean.getAggregateTargets();
 
-        if (aggregateTargetsCmd == null) {
-            aggregateTargetsCmd = new AggregateTargetsCommand();
-            log.debug("No Available aggregate targets. Refreshing from database");
-            aggregateTargetsCmd.setAvailable(targetsProvider.getSemanticallyEquivalentClasses(getQueryModel().getSelectedUmlClass()));
-            cqlQueryBean.setAggregateTargets(aggregateTargetsCmd);
-        }
+        log.debug("No Available aggregate targets. Refreshing from database");
+        aggregateTargetsCmd.setAvailable(targetsProvider.getSemanticallyEquivalentClasses(getQueryModel().getSelectedUmlClass()));
+        cqlQueryBean.setAggregateTargets(aggregateTargetsCmd);
 
         return aggregateTargetsCmd;
     }

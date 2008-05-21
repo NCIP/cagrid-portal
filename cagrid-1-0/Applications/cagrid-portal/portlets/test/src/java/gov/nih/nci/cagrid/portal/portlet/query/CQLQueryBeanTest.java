@@ -1,11 +1,13 @@
 package gov.nih.nci.cagrid.portal.portlet.query;
 
-import gov.nih.nci.cagrid.portal.portlet.query.cql.CQLQueryBean;
-import gov.nih.nci.cagrid.portal.portlet.query.builder.AggregateTargetsCommand;
-import gov.nih.nci.cagrid.portal.portlet.PortletIntegrationTestBase;
+import gov.nih.nci.cagrid.portal.domain.GridDataService;
+import gov.nih.nci.cagrid.portal.domain.metadata.dataservice.DomainModel;
 import gov.nih.nci.cagrid.portal.domain.metadata.dataservice.UMLClass;
-import junit.framework.TestCase;
-import static org.mockito.Mockito.*;
+import gov.nih.nci.cagrid.portal.portlet.PortletIntegrationTestBase;
+import gov.nih.nci.cagrid.portal.portlet.query.builder.AggregateTargetsCommand;
+import gov.nih.nci.cagrid.portal.portlet.query.cql.CQLQueryBean;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.stub;
 
 
 /**
@@ -30,9 +32,16 @@ public class CQLQueryBeanTest extends PortletIntegrationTestBase {
 
         bean.setAggregateTargets(targets);
 
-        System.out.println(bean.toXml());
+        UMLClass _mockUMLClass = mock(UMLClass.class);
+        DomainModel _mockDomain = mock(DomainModel.class);
+        GridDataService _mockService = mock(GridDataService.class);
+        stub(_mockUMLClass.getModel()).toReturn(_mockDomain);
+        stub(_mockDomain.getService()).toReturn(_mockService);
+        stub(_mockService.getUrl()).toReturn("http://service");
 
-        assertNotNull(bean.toXml());
+        bean.setUmlClass(_mockUMLClass);
+
+        assertNotNull("Query cannot be formed", bean.toXml());
 
     }
 }

@@ -5,9 +5,9 @@ import gov.nih.nci.cagrid.cqlquery.LogicalOperator;
 import gov.nih.nci.cagrid.cqlquery.Predicate;
 import gov.nih.nci.cagrid.dcql.*;
 import gov.nih.nci.cagrid.fqp.common.DCQLConstants;
+import gov.nih.nci.cagrid.portal.portlet.query.QueryConstants;
 import gov.nih.nci.cagrid.portal.portlet.query.QueryFormulator;
 import gov.nih.nci.cagrid.portal.portlet.query.builder.AggregateTargetsCommand;
-import gov.nih.nci.cagrid.portal.portlet.query.builder.ForeignTargetsProvider;
 import gov.nih.nci.cagrid.portal.portlet.query.cql.AssociationBean;
 import gov.nih.nci.cagrid.portal.portlet.query.cql.CQLQueryBean;
 import gov.nih.nci.cagrid.portal.portlet.query.cql.CriteriaBean;
@@ -39,14 +39,14 @@ public class DCQLFormulator implements QueryFormulator<DCQLQuery> {
         DCQLQuery query = new DCQLQuery();
 
         AggregateTargetsCommand cmd = bean.getAggregateTargets();
-        if (cmd != null && cmd.getSelected().size() > 1) {
-            logger.debug("Found multiple targets. Forming an aggregation query");
-            query.setTargetServiceURL(cmd.getSelected().toArray(new String[]{}));
-        }
+        // add root target       
+        cmd.getSelected().add(bean.getUmlClass().getModel().getService().getUrl());
+
+        logger.debug("Adding target URLS to dcql query");
+        query.setTargetServiceURL(cmd.getSelected().toArray(new String[]{}));
 
         gov.nih.nci.cagrid.dcql.Object targetObject = new gov.nih.nci.cagrid.dcql.Object();
         query.setTargetObject(toTarget(targetObject, bean));
-        logger.debug("Returning DCQL");
         return query;
     }
 
@@ -92,7 +92,7 @@ public class DCQLFormulator implements QueryFormulator<DCQLQuery> {
 
         // Add associations
         for (AssociationBean assocBean : bean.getAssociations()) {
-            if (assocBean.getRoleName().startsWith(ForeignTargetsProvider.FOREIGN_TARGETS_CLASS_PREFIX)) {
+            if (assocBean.getRoleName().startsWith(QueryConstants.FOREIGN_UML_CLASS_PREFIX)) {
                 ForeignAssociation assoc = new ForeignAssociation();
                 assoc.setTargetServiceURL(assocBean.getCriteriaBean().getUmlClass().getModel().getService().getUrl());
 
@@ -107,7 +107,7 @@ public class DCQLFormulator implements QueryFormulator<DCQLQuery> {
             } else {
                 Association assoc = new Association();
                 assoc.setRoleName(assocBean.getRoleName());
-                toTarget(assoc, bean);
+                toTarget(assoc, assocBean.getCriteriaBean());
                 assocEls.add(assoc);
             }
         }

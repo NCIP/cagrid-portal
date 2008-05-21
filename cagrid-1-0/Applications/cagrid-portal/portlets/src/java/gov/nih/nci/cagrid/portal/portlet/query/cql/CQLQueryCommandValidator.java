@@ -42,36 +42,37 @@ public class CQLQueryCommandValidator extends SelectServiceCommandValidator impl
       *      org.springframework.validation.Errors)
       */
     public void validate(Object obj, Errors errors) {
-
-        super.validate(obj, errors);
-
         CQLQueryCommand command = (CQLQueryCommand) obj;
 
         try {
-            gov.nih.nci.cagrid.cqlquery.CQLQuery query = (gov.nih.nci.cagrid.cqlquery.CQLQuery) Utils
+            //First check if dcql
+            gov.nih.nci.cagrid.dcql.DCQLQuery query = (gov.nih.nci.cagrid.dcql.DCQLQuery) Utils
                     .deserializeObject(new StringReader(command.getCqlQuery()),
-                            gov.nih.nci.cagrid.cqlquery.CQLQuery.class);
+                            gov.nih.nci.cagrid.dcql.DCQLQuery.class);
             StringWriter w = new StringWriter();
-            Utils.serializeObject(query, DataServiceConstants.CQL_QUERY_QNAME,
+            Utils.serializeObject(query, DCQLConstants.DCQL_QUERY_QNAME,
                     w);
-            String cql = w.toString();
-            command.setCqlQuery(cql);
-        } catch (Exception ex) {
+            String dcql = w.toString();
+            command.setCqlQuery(dcql);
+            command.setDcql(true);
+        } catch (Exception e) {
+            super.validate(obj, errors);
+
             try {
-                gov.nih.nci.cagrid.dcql.DCQLQuery query = (gov.nih.nci.cagrid.dcql.DCQLQuery) Utils
+                gov.nih.nci.cagrid.cqlquery.CQLQuery query = (gov.nih.nci.cagrid.cqlquery.CQLQuery) Utils
                         .deserializeObject(new StringReader(command.getCqlQuery()),
-                                gov.nih.nci.cagrid.dcql.DCQLQuery.class);
+                                gov.nih.nci.cagrid.cqlquery.CQLQuery.class);
                 StringWriter w = new StringWriter();
-                Utils.serializeObject(query, DCQLConstants.DCQL_QUERY_QNAME,
+                Utils.serializeObject(query, DataServiceConstants.CQL_QUERY_QNAME,
                         w);
-                String dcql = w.toString();
-                command.setCqlQuery(dcql);
-                command.setDcql(true);
-            } catch (Exception e) {
+                String cql = w.toString();
+                command.setCqlQuery(cql);
+            } catch (Exception ex) {
                 errors.rejectValue("cqlQuery", PortletConstants.BAD_CQL_MSG, null,
                         "Could not parse query XML.");
             }
-        }
-    }
 
+        }
+
+    }
 }
