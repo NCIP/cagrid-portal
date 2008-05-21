@@ -320,7 +320,7 @@ public class CriteriaBean implements ApplicationContextAware {
             else if (assocBean.getCriteriaBean() != null && assocBean.getCriteriaBean().isDCQLQuery())
                 return true;
         }
-        return getAggregateTargets() != null && getAggregateTargets().getSelected().size() > 0;
+        return getAggregateTargets() != null && getAggregateTargets().getSelected().size() > 1;
     }
 
 
