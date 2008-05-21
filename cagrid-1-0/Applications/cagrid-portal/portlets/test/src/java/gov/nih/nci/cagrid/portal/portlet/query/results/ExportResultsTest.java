@@ -48,24 +48,30 @@ public class ExportResultsTest extends TestCase {
 			while ((line = br.readLine()) != null) {
 				sb.append(line);
 			}
-			Table table = null;
-			try {
-				table = PortletUtils
-						.buildTableFromCQLResults(new ByteArrayInputStream(sb
-								.toString().getBytes()));
-			} catch (Exception ex) {
-				fail("Error building table: " + ex.getMessage());
-				ex.printStackTrace();
-			}
+			// Table table = null;
+			// try {
+			// table = PortletUtils
+			// .buildTableFromCQLResults(new ByteArrayInputStream(sb
+			// .toString().getBytes()));
+			// } catch (Exception ex) {
+			// fail("Error building table: " + ex.getMessage());
+			// ex.printStackTrace();
+			// }
 
-			HSSFWorkbook wb = ExportResultsController.createWorkbook(table, "query_results");
+			// HSSFWorkbook wb = ExportResultsController.createWorkbook(table,
+			// "query_results");
+			HSSFWorkbook wb = PortletUtils
+					.buildWorkbookFromCQLResults(new ByteArrayInputStream(sb
+							.toString().getBytes()));
 			HSSFSheet spreadSheet = wb.getSheetAt(0);
-			assertTrue("expected 91 rows; lastRowNum is " + spreadSheet.getLastRowNum(), spreadSheet.getLastRowNum() == 90);
-//			FileOutputStream output = new FileOutputStream(new File(
-//					"results.xls"));
-//			wb.write(output);
-//			output.flush();
-//			output.close();
+			assertTrue("expected 91 rows; lastRowNum is "
+					+ spreadSheet.getLastRowNum(),
+					spreadSheet.getLastRowNum() == 90);
+			// FileOutputStream output = new FileOutputStream(new File(
+			// "results.xls"));
+			// wb.write(output);
+			// output.flush();
+			// output.close();
 
 		} catch (Exception ex) {
 			fail("Error encountered: " + ex.getMessage());

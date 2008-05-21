@@ -15,7 +15,10 @@ import org.globus.gsi.GlobusCredential;
 import org.oasis.wsrf.lifetime.Destroy;
 
 import java.io.StringReader;
+import java.io.StringWriter;
 import java.util.concurrent.Callable;
+
+import javax.xml.namespace.QName;
 
 /**
  * User: kherm
@@ -66,23 +69,29 @@ public class DCQLQueryTask implements Callable {
             }
 
             DCQLQueryResultsCollection dcqlResultsCol = resultsClilent.getResults();
-            DCQLResult[] dcqlResults = dcqlResultsCol.getDCQLResult();
-            if (dcqlResults != null) {
-                for (DCQLResult result : dcqlResults) {
-                    String targetServiceURL = result.getTargetServiceURL();
-                    System.out.println("Got results from:" + targetServiceURL);
-                    CQLQueryResults queryResultCollection = result.getCQLQueryResultCollection();
-                    CQLQueryResultsIterator iterator = new CQLQueryResultsIterator(queryResultCollection, true);
-                    while (iterator.hasNext()) {
-                        logger.debug("DCQL resultset. Appending");
-                        out.append(iterator.next());
-                    }
+            
+            StringWriter writer = new StringWriter();
+    		Utils.serializeObject(dcqlResultsCol,
+    				new QName("http://caGrid.caBIG/1.0/gov.nih.nci.cagrid.dcqlresult", "DCQLQueryResultsCollection"), writer);
 
-                }
-            } else {
-                System.out.println("Got no results.");
-            }
-            listener.onComplete(instance, out.toString());
+            
+//            DCQLResult[] dcqlResults = dcqlResultsCol.getDCQLResult();
+//            if (dcqlResults != null) {
+//                for (DCQLResult result : dcqlResults) {
+//                    String targetServiceURL = result.getTargetServiceURL();
+//                    System.out.println("Got results from:" + targetServiceURL);
+//                    CQLQueryResults queryResultCollection = result.getCQLQueryResultCollection();
+//                    CQLQueryResultsIterator iterator = new CQLQueryResultsIterator(queryResultCollection, true);
+//                    while (iterator.hasNext()) {
+//                        logger.debug("DCQL resultset. Appending");
+//                        out.append(iterator.next());
+//                    }
+//
+//                }
+//            } else {
+//                System.out.println("Got no results.");
+//            }
+            listener.onComplete(instance, writer.getBuffer().toString());
             resultsClilent.destroy(new Destroy());
 
         } catch (Exception ex) {

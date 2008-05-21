@@ -275,7 +275,10 @@
         <property name="actionResponseHandler">
             <bean class="gov.nih.nci.cagrid.portal.portlet.tab.TabActionResponseHandler">
                 <property name="tabControlConfig" ref="queryTabControlConfig"/>
+                <!-- 
                 <property name="newTabPath" value="/results/tabular"/>
+                 -->
+                 <property name="newTabPath" value="/results"/>
             </bean>
         </property>
     </bean>
@@ -290,7 +293,10 @@
         <property name="actionResponseHandler">
             <bean class="gov.nih.nci.cagrid.portal.portlet.tab.TabActionResponseHandler">
                 <property name="tabControlConfig" ref="queryTabControlConfig"/>
+                <!-- 
                 <property name="newTabPath" value="/results/xml"/>
+                 -->
+                 <property name="newTabPath" value="/results"/>
             </bean>
         </property>
     </bean>
@@ -345,11 +351,15 @@
           class="gov.nih.nci.cagrid.portal.portlet.query.results.ViewQueryResultsController"
           autowire="byName">
         <property name="objectName" value="resultsCommand"/>
+        <!-- 
         <property name="successViewName" value="/results/tabular"/>
+         -->
+         <property name="successViewName" value="/results/tabular"/>
         <property name="xslResource" value="/WEB-INF/xsl/xmlverbatim.xsl"/>
         <property name="resultsBeanSessionAttributeName" value="queryInstanceResultsBean"/>
     </bean>
 
+<!-- 
     <bean id="viewQueryResultsXmlController"
           class="gov.nih.nci.cagrid.portal.portlet.query.results.ViewQueryResultsController"
           autowire="byName">
@@ -358,6 +368,7 @@
         <property name="xslResource" value="/WEB-INF/xsl/xmlverbatim.xsl"/>
         <property name="resultsBeanSessionAttributeName" value="queryInstanceResultsBean"/>
     </bean>
+     -->
 
     <bean
             id="scrollQueryInstanceResultsController"
@@ -368,7 +379,10 @@
         <property name="actionResponseHandler">
             <bean class="gov.nih.nci.cagrid.portal.portlet.tab.TabActionResponseHandler">
                 <property name="tabControlConfig" ref="queryTabControlConfig"/>
+                <!-- 
                 <property name="newTabPath" value="/results/tabular"/>
+                 -->
+                 <property name="newTabPath" value="/results"/>
             </bean>
         </property>
         <property name="resultsBeanSessionAttributeName" value="queryInstanceResultsBean"/>
@@ -672,8 +686,13 @@
                 <entry key="/query/builder/addAggregateTargets" value-ref="viewQueryModifierController"/>
                 <entry key="/query/xml" value-ref="viewCqlXmlController"/>
                 <entry key="/history" value-ref="viewQueryHistoryController"/>
+                
+                <entry key="/results" value-ref="viewQueryResultsTabularController"/>
+                <!-- 
                 <entry key="/results/tabular" value-ref="viewQueryResultsTabularController"/>
+                
                 <entry key="/results/xml" value-ref="viewQueryResultsXmlController"/>
+                 -->
                 <entry key="/shared/myQueries/edit" value-ref="viewSharedQueryFormController"/>
                 <entry key="/shared/myQueries/list" value-ref="viewSharedQueriesController"/>
                 <entry key="/shared/myQueries/view" value-ref="viewMySharedQueryController"/>
@@ -773,6 +792,7 @@
                         class="gov.nih.nci.cagrid.portal.portlet.tab.Tab">
                     <property name="name" value="results"/>
                     <property name="label" value="Results"/>
+                    <!-- 
                     <property name="children">
                         <list>
                             <bean
@@ -787,6 +807,7 @@
                             </bean>
                         </list>
                     </property>
+                     -->
                 </bean>
                 <bean
                         class="gov.nih.nci.cagrid.portal.portlet.tab.Tab">

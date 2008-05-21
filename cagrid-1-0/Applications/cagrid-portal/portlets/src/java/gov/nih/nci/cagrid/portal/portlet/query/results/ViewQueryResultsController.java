@@ -58,6 +58,7 @@ public class ViewQueryResultsController extends AbstractQueryRenderController
             command = new CQLQueryInstanceResultsBean();
             if (instance != null) {
                 String xml = instance.getResult();
+                logger.debug("XML: " + xml);
                 if (xml != null) {
                     Table table = null;
                     try {
@@ -72,15 +73,15 @@ public class ViewQueryResultsController extends AbstractQueryRenderController
                     if (table != null) {
                         command.setTableScroller(new TableScroller(table, 10));
                     }
-                    String pretty;
-                    try {
-                        pretty = transformXML(xml);
-                    } catch (TransformerException ex) {
-                        throw new CaGridPortletApplicationException(
-                                "Error transforming XML results: "
-                                        + ex.getMessage(), ex);
-                    }
-                    command.setPrettyXml(pretty);
+//                    String pretty;
+//                    try {
+//                        pretty = transformXML(xml);
+//                    } catch (TransformerException ex) {
+//                        throw new CaGridPortletApplicationException(
+//                                "Error transforming XML results: "
+//                                        + ex.getMessage(), ex);
+//                    }
+//                    command.setPrettyXml(pretty);
                 }
                 command.setInstance(instance);
             }
