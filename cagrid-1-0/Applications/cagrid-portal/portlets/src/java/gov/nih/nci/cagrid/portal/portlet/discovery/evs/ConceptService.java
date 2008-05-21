@@ -9,7 +9,7 @@ import java.util.Set;
  *
  * @author kherm manav.kher@semanticbits.com
  */
-public interface EVSService {
+public interface ConceptService {
 
     Set<EVSConceptDTO> getConceptsForKeyword(String keyword) throws CaGridPortletApplicationException;
 }

@@ -1,8 +1,9 @@
 /**
- * 
+ *
  */
 package gov.nih.nci.cagrid.portal.portlet.discovery.search;
 
+import gov.nih.nci.cagrid.portal.dao.ConceptHierarchyNodeDao;
 import gov.nih.nci.cagrid.portal.domain.*;
 import gov.nih.nci.cagrid.portal.domain.dataservice.SharedCQLQuery;
 import gov.nih.nci.cagrid.portal.domain.metadata.common.PointOfContact;
@@ -24,146 +25,165 @@ import java.util.Map.Entry;
 
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
- * 
  */
 public class KeywordSearchService {
 
-	private HibernateTemplate hibernateTemplate;
-	private Map<String,List<String>> namedServiceKeywordCriteria;
+    private HibernateTemplate hibernateTemplate;
+    private Map<String, List<String>> namedServiceKeywordCriteria;
 
-	/**
-	 * 
-	 */
-	public KeywordSearchService() {
+    private ConceptHierarchyNodeDao conceptHierarchyNodeDao;
 
-	}
+    /**
+     *
+     */
+    public KeywordSearchService() {
 
-	public DiscoveryResults search(KeywordSearchBean searchBean) {
-		Class klass = null;
-		String keywordsValue = searchBean.getKeywords();
-		String[] searchFields = searchBean.getSearchFields();
-		if (DiscoveryType.SERVICE.equals(searchBean.getDiscoveryType())) {
-			klass = GridService.class;
-		} else if (DiscoveryType.PARTICIPANT.equals(searchBean
-				.getDiscoveryType())) {
-			klass = Participant.class;
-		} else if (DiscoveryType.POC.equals(searchBean.getDiscoveryType())) {
-			klass = PointOfContact.class;
-		} else if (DiscoveryType.CQL_QUERY.equals(searchBean.getDiscoveryType())) {
-			klass = SharedCQLQuery.class;
-		} else {
-			throw new CaGridPortletApplicationException(
-					"invalid discoveryType: '" + searchBean.getDiscoveryType()
-							+ "'");
-		}
+    }
 
-		List<DomainObject> objects = new ArrayList<DomainObject>();
+    public DiscoveryResults search(KeywordSearchBean searchBean) {
+        Class klass = null;
+        String keywordsValue = searchBean.getKeywords();
+        String[] searchFields = searchBean.getSearchFields();
+        if (DiscoveryType.SERVICE.equals(searchBean.getDiscoveryType())) {
+            klass = GridService.class;
+        } else if (DiscoveryType.PARTICIPANT.equals(searchBean
+                .getDiscoveryType())) {
+            klass = Participant.class;
+        } else if (DiscoveryType.POC.equals(searchBean.getDiscoveryType())) {
+            klass = PointOfContact.class;
+        } else if (DiscoveryType.CQL_QUERY.equals(searchBean.getDiscoveryType())) {
+            klass = SharedCQLQuery.class;
+        } else if (DiscoveryType.CONCEPT.equals(searchBean.getDiscoveryType())) {
+            //not important
+        } else {
+            throw new CaGridPortletApplicationException(
+                    "invalid discoveryType: '" + searchBean.getDiscoveryType()
+                            + "'");
+        }
 
-		// TODO: This is a pretty lame search implementation. Need to optimize.
-		Map<String, String> criteria = new HashMap<String, String>();
+        List<DomainObject> objects = new ArrayList<DomainObject>();
 
-		String[] keywords = keywordsValue.split(" ");
-		for (String keyword : keywords) {
-			for (String searchField : searchFields) {
-				List<String> namedCriteria = getNamedServiceKeywordCriteria().get(searchField);
-				if(namedCriteria != null){
-					for(String namedCriterion : namedCriteria){
-						criteria.put(namedCriterion, "%" + keyword + "%");
-					}
-				}else{
-					criteria.put(searchField, "%" + keyword + "%");
-				}
-			}
-		}
-		Session sess = getHibernateTemplate().getSessionFactory().openSession();
-		Set<Integer> allIds = new HashSet<Integer>();
-		for (Entry<String, String> entry : criteria.entrySet()) {
+        if (DiscoveryType.CONCEPT.equals(searchBean.getDiscoveryType())) {
+            List<GridService> svcs = conceptHierarchyNodeDao.getServicesByCode(searchBean.getKeywords());
+            svcs = PortletUtils.filterServicesByInvalidMetadata(PortletUtils.filterDormantServices(PortletUtils.filterBannedServices(svcs)));
+            if (searchBean.isActiveServicesOnly()) {
+                svcs = PortletUtils.filterServicesByStatus(svcs, ServiceStatus.INACTIVE, ServiceStatus.UNKNOWN, ServiceStatus.INVALID);
+            }
+            objects.addAll(svcs);
+            searchBean.setDiscoveryType(DiscoveryType.SERVICE);
+        } else {
+            // TODO: This is a pretty lame search implementation. Need to optimize.
+            Map<String, String> criteria = new HashMap<String, String>();
 
-			String path = entry.getKey();
-			String value = entry.getValue();
+            String[] keywords = keywordsValue.split(" ");
+            for (String keyword : keywords) {
+                for (String searchField : searchFields) {
+                    List<String> namedCriteria = getNamedServiceKeywordCriteria().get(searchField);
+                    if (namedCriteria != null) {
+                        for (String namedCriterion : namedCriteria) {
+                            criteria.put(namedCriterion, "%" + keyword + "%");
+                        }
+                    } else {
+                        criteria.put(searchField, "%" + keyword + "%");
+                    }
+                }
+            }
+            Session sess = getHibernateTemplate().getSessionFactory().openSession();
+            Set<Integer> allIds = new HashSet<Integer>();
+            for (Entry<String, String> entry : criteria.entrySet()) {
 
-			Criteria crit = null;
-			if (path.startsWith("domainModel")) {
-				crit = sess.createCriteria(GridDataService.class);
-			} else if (DiscoveryType.POC.equals(searchBean.getDiscoveryType())
-					&& path.startsWith("serviceDescription")) {
-				crit = sess.createCriteria(ServicePointOfContact.class);
-			} else if (DiscoveryType.POC.equals(searchBean.getDiscoveryType())
-					&& path.startsWith("researchCenter")) {
-				crit = sess.createCriteria(ResearchCenterPointOfContact.class);
-			} else {
-				crit = sess.createCriteria(klass);
-			}
-			crit.setProjection(Projections.id());
+                String path = entry.getKey();
+                String value = entry.getValue();
 
-			if (path.indexOf(".") == -1) {
-				crit.add(Restrictions.like(path, value));
-			} else {
-				Criteria currCrit = crit;
-				String[] paths = path.split("\\.");
-				for (int i = 0; i < paths.length; i++) {
-					String currPath = paths[i];
-					if (i + 1 < paths.length) {
-						currCrit = currCrit.createCriteria(currPath);
-					} else {
-						currCrit.add(Restrictions.like(currPath, value));
-					}
-				}
-			}
-			List<Integer> currIds = crit.list();
-			for (Integer id : currIds) {
-				allIds.add(id);
-			}
-		}
-		for (Integer id : allIds) {
-			objects.add((DomainObject) sess.get(klass, id));
-		}
+                Criteria crit = null;
+                if (path.startsWith("domainModel")) {
+                    crit = sess.createCriteria(GridDataService.class);
+                } else if (DiscoveryType.POC.equals(searchBean.getDiscoveryType())
+                        && path.startsWith("serviceDescription")) {
+                    crit = sess.createCriteria(ServicePointOfContact.class);
+                } else if (DiscoveryType.POC.equals(searchBean.getDiscoveryType())
+                        && path.startsWith("researchCenter")) {
+                    crit = sess.createCriteria(ResearchCenterPointOfContact.class);
+                } else {
+                    crit = sess.createCriteria(klass);
+                }
+                crit.setProjection(Projections.id());
 
-		if (DiscoveryType.POC.equals(searchBean.getDiscoveryType())) {
-			Set<Person> persons = new HashSet<Person>();
-			for (Iterator i = objects.iterator(); i.hasNext();) {
-				PointOfContact poc = (PointOfContact) i.next();
-				persons.add(poc.getPerson());
-			}
-			objects.clear();
-			objects.addAll(persons);
-		}else if(DiscoveryType.SERVICE.equals(searchBean.getDiscoveryType())){
-			List<GridService> svcs = new ArrayList<GridService>();
-			for(DomainObject obj : objects){
-				svcs.add((GridService)obj);
-			}
-			svcs = PortletUtils.filterServicesByInvalidMetadata(PortletUtils.filterDormantServices(PortletUtils.filterBannedServices(svcs)));
-			if(searchBean.isActiveServicesOnly()){
-				svcs = PortletUtils.filterServicesByStatus(svcs, ServiceStatus.INACTIVE, ServiceStatus.UNKNOWN, ServiceStatus.INVALID);
-			}
-			objects.clear();
-			objects.addAll(svcs);
-		}
+                if (path.indexOf(".") == -1) {
+                    crit.add(Restrictions.like(path, value));
+                } else {
+                    Criteria currCrit = crit;
+                    String[] paths = path.split("\\.");
+                    for (int i = 0; i < paths.length; i++) {
+                        String currPath = paths[i].trim();
+                        if (i + 1 < paths.length) {
+                            currCrit = currCrit.createCriteria(currPath);
+                        } else {
+                            currCrit.add(Restrictions.like(currPath, value));
+                        }
+                    }
+                }
+                List<Integer> currIds = crit.list();
+                for (Integer id : currIds) {
+                    allIds.add(id);
+                }
+            }
+            for (Integer id : allIds) {
+                objects.add((DomainObject) sess.get(klass, id));
+            }
 
-		sess.close();
+            if (DiscoveryType.POC.equals(searchBean.getDiscoveryType())) {
+                Set<Person> persons = new HashSet<Person>();
+                for (Iterator i = objects.iterator(); i.hasNext();) {
+                    PointOfContact poc = (PointOfContact) i.next();
+                    persons.add(poc.getPerson());
+                }
+                objects.clear();
+                objects.addAll(persons);
+            } else if (DiscoveryType.SERVICE.equals(searchBean.getDiscoveryType())) {
+                List<GridService> svcs = new ArrayList<GridService>();
+                for (DomainObject obj : objects) {
+                    svcs.add((GridService) obj);
+                }
+                svcs = PortletUtils.filterServicesByInvalidMetadata(PortletUtils.filterDormantServices(PortletUtils.filterBannedServices(svcs)));
+                if (searchBean.isActiveServicesOnly()) {
+                    svcs = PortletUtils.filterServicesByStatus(svcs, ServiceStatus.INACTIVE, ServiceStatus.UNKNOWN, ServiceStatus.INVALID);
+                }
+                objects.clear();
+                objects.addAll(svcs);
+            }
 
-		DiscoveryResults results = new DiscoveryResults();
-		results.setObjects(objects);
-		results.setType(searchBean.getDiscoveryType());
-		return results;
-	}
+            sess.close();
+        }
+        DiscoveryResults results = new DiscoveryResults();
+        results.setObjects(objects);
+        results.setType(searchBean.getDiscoveryType());
+        return results;
+    }
 
-	@Required
-	public HibernateTemplate getHibernateTemplate() {
-		return hibernateTemplate;
-	}
+    @Required
+    public HibernateTemplate getHibernateTemplate() {
+        return hibernateTemplate;
+    }
 
-	public void setHibernateTemplate(HibernateTemplate hibernateTemplate) {
-		this.hibernateTemplate = hibernateTemplate;
-	}
+    public void setHibernateTemplate(HibernateTemplate hibernateTemplate) {
+        this.hibernateTemplate = hibernateTemplate;
+    }
 
-	public Map<String, List<String>> getNamedServiceKeywordCriteria() {
-		return namedServiceKeywordCriteria;
-	}
+    public Map<String, List<String>> getNamedServiceKeywordCriteria() {
+        return namedServiceKeywordCriteria;
+    }
 
-	public void setNamedServiceKeywordCriteria(
-			Map<String, List<String>> namedServiceKeywordCriteria) {
-		this.namedServiceKeywordCriteria = namedServiceKeywordCriteria;
-	}
+    public void setNamedServiceKeywordCriteria(
+            Map<String, List<String>> namedServiceKeywordCriteria) {
+        this.namedServiceKeywordCriteria = namedServiceKeywordCriteria;
+    }
 
+    public ConceptHierarchyNodeDao getConceptHierarchyNodeDao() {
+        return conceptHierarchyNodeDao;
+    }
+
+    public void setConceptHierarchyNodeDao(ConceptHierarchyNodeDao conceptHierarchyNodeDao) {
+        this.conceptHierarchyNodeDao = conceptHierarchyNodeDao;
+    }
 }

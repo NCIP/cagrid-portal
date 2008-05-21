@@ -18,18 +18,6 @@
 <script type="text/javascript" src='<c:url value="/dwr/interface/EVSAutomcompleter.js"/>'></script>
 <script type="text/javascript" src='<c:url value="/js/autocomplete.js"/>'></script>
 
-<script type="text/javascript">
-
-    function updateList(autocompleter, token) {
-    EVSAutomcompleter.autoCompleteConcept(token, function(data) {
-    autocompleter.setChoices(data)
-    });
-    }
-
-    function nameValueSelector(tag){
-    return tag.name;
-    }
-</script>
 
 <portlet:actionURL var="formAction">
     <portlet:param name="operation" value="searchServices"/>
@@ -46,179 +34,179 @@
 <form:form action="${formAction}" name="${advancedDiscoveryFormName}"
            onsubmit="return ${onSubmitAction}"
         >
-    <table>
-        <tr>
-            <td valign="top" style="padding-right:5px; text-align:right"><b>Keyword:</b></td>
-            <td valign="top">
-                <input type="text" name="keywords" class="searchField"/>
-            </td>
-        </tr>
-        <tr>
-            <td valign="top" style="padding-right:5px; align:right"><b>Search Fields:</b></td>
-            <td valign="top">
-                <select name="searchFields" multiple size="8">
-                    <option value="url">URL</option>
-                    <option value="serviceMetadata.serviceDescription.name">Name</option>
-                    <option value="serviceMetadata.serviceDescription.description">Description</option>
-                    <optgroup label="&nbsp;&nbsp; Semantic Metadata">
-                        <option value="serviceMetadata.serviceDescription.semanticMetadata.conceptCode">&nbsp;&nbsp;&nbsp;&nbsp;
-                            Concept Code
-                        </option>
-                        <option value="serviceMetadata.serviceDescription.semanticMetadata.conceptCode">&nbsp;&nbsp;&nbsp;&nbsp;
-                            Concept Definition
-                        </option>
-                        <option value="serviceMetadata.serviceDescription.semanticMetadata.conceptCode">&nbsp;&nbsp;&nbsp;&nbsp;
-                            Concept Name
-                        </option>
-                    </optgroup>
-                    <optgroup label="&nbsp;&nbsp; Service Contexts">
-                        <option value="serviceMetadata.serviceDescription.serviceContextCollection.name">&nbsp;&nbsp;&nbsp;&nbsp;
-                            Name
-                        </option>
-                        <option value="serviceMetadata.serviceDescription.serviceContextCollection.description">&nbsp;&nbsp;&nbsp;&nbsp;
-                            Description
-                        </option>
-                    </optgroup>
-                    <optgroup label="&nbsp;&nbsp;&nbsp;&nbsp; Context Properties">
-                        <option value="serviceMetadata.serviceDescription.serviceContextCollection.contextPropertyCollection.name">
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; QName
-                        </option>
-                        <option value="serviceMetadata.serviceDescription.serviceContextCollection.contextPropertyCollection.description">
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Description
-                        </option>
-                    </optgroup>
-                    <optgroup label="&nbsp;&nbsp;&nbsp;&nbsp; Operations">
-                        <option value="serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.name">
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Name
-                        </option>
-                        <option value="serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.description">
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Description
-                        </option>
-                    </optgroup>
-                    <optgroup label="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Semantic Metadata">
-                        <option value="serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.semanticMetadata.conceptCode">
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Concept Code
-                        </option>
-                        <option value="serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.semanticMetadata.conceptDefinition">
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Concept Definition
-                        </option>
-                        <option value="serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.semanticMetadata.conceptName">
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Concept Name
-                        </option>
-                    </optgroup>
-                    <optgroup label="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Input Parameters">
-                        <option value="serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.inputParameterCollection.QName">
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; QName
-                        </option>
-                    </optgroup>
-                    <optgroup label="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; UML Class">
-                        <option value="serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.inputParameterCollection.UMLClass.className">
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Class Name
-                        </option>
-                        <option value="serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.inputParameterCollection.UMLClass.packageName">
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Package Name
-                        </option>
-                        <option value="serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.inputParameterCollection.UMLClass.projectName">
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Project Name
-                        </option>
-                    </optgroup>
-                    <optgroup label="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Semantic Metadata">
-                        <option value="serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.inputParameterCollection.UMLClass.semanticMetadata.conceptCode">
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Concept Code
-                        </option>
-                        <option value="serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.inputParameterCollection.UMLClass.semanticMetadata.conceptDefinition">
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Concept Definition
-                        </option>
-                        <option value="serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.inputParameterCollection.UMLClass.semanticMetadata.conceptName">
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Concept Name
-                        </option>
-                    </optgroup>
-                    <optgroup label="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Output">
-                        <option value="serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.output.QName">
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; QName
-                        </option>
-                    </optgroup>
-                    <optgroup label="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; UML Class">
-                        <option value="serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.output.UMLClass.className">
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Class Name
-                        </option>
-                        <option value="serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.output.UMLClass.packageName">
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Package Name
-                        </option>
-                        <option value="serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.output.UMLClass.projectName">
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Project Name
-                        </option>
-                    </optgroup>
-                    <optgroup label="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Semantic Metadata">
-                        <option value="serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.output.UMLClass.semanticMetadata.conceptCode">
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Concept Code
-                        </option>
-                        <option value="serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.output.UMLClass.semanticMetadata.conceptDefinition">
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Concept Definition
-                        </option>
-                        <option value="serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.output.UMLClass.semanticMetadata.conceptName">
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Concept Name
-                        </option>
-                    </optgroup>
-                    <optgroup label="&nbsp;&nbsp; Domain Model">
-                        <option value="domainModel.projectLongName">&nbsp;&nbsp;&nbsp;&nbsp; Project Long Name</option>
-                        <option value="domainModel.projectShortName">&nbsp;&nbsp;&nbsp;&nbsp; Project Short Name
-                        </option>
-                    </optgroup>
-                    <optgroup label="&nbsp;&nbsp;&nbsp;&nbsp; UML Classes">
-                        <option value="domainModel.classes.className">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            Class Name
-                        </option>
-                        <option value="domainModel.classes.packageName">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            Package Name
-                        </option>
-                        <option value="domainModel.classes.projectName">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            Project Name
-                        </option>
-                    </optgroup>
-                    <optgroup label="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Semantic Metadata">
-                        <option value="domainModel.classes.semanticMetadata.conceptCode">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            Concept Code
-                        </option>
-                        <option value="domainModel.classes.semanticMetadata.conceptDefinition">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            Concept Definition
-                        </option>
-                        <option value="domainModel.classes.semanticMetadata.conceptName">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            Concept Name
-                        </option>
-                    </optgroup>
-                    <optgroup label="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Attributes">
-                        <option value="domainModel.classes.umlAttributeCollection.name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            Name
-                        </option>
-                        <option value="domainModel.classes.umlAttributeCollection.description">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            Description
-                        </option>
-                        <option value="domainModel.classes.umlAttributeCollection.dataTypeName">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            Data Type Name
-                        </option>
-                    </optgroup>
-                    <optgroup label="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Semantic Metadata">
-                        <option value="domainModel.classes.umlAttributeCollection.semanticMetadata.conceptCode">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            Concept Code
-                        </option>
-                        <option value="domainModel.classes.umlAttributeCollection.semanticMetadata.conceptDefinition">
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Concept Definition
-                        </option>
-                        <option value="domainModel.classes.umlAttributeCollection.semanticMetadata.conceptName">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            Concept Name
-                        </option>
-                    </optgroup>
-                </select>
-            </td>
-        </tr>
-        <tr>
-            <td colspan="2">
-                <input type="submit" value="Search"/>
-            </td>
-        </tr>
-    </table>
-    <input type="hidden" name="discoveryType" value="SERVICE"/>
+<table>
+<tr>
+    <td valign="top" style="padding-right:5px; text-align:right"><b>Keyword:</b></td>
+    <td valign="top">
+        <input type="text" name="keywords" class="searchField"/>
+    </td>
+</tr>
+<tr>
+<td valign="top" style="padding-right:5px; align:right"><b>Search Fields:</b></td>
+<td valign="top">
+<select name="searchFields" multiple size="8">
+<option value="url">URL</option>
+<option value="serviceMetadata.serviceDescription.name">Name</option>
+<option value="serviceMetadata.serviceDescription.description">Description</option>
+<optgroup label="&nbsp;&nbsp; Semantic Metadata">
+    <option value="serviceMetadata.serviceDescription.semanticMetadata.conceptCode">&nbsp;&nbsp;&nbsp;&nbsp;
+        Concept Code
+    </option>
+    <option value="serviceMetadata.serviceDescription.semanticMetadata.conceptCode">&nbsp;&nbsp;&nbsp;&nbsp;
+        Concept Definition
+    </option>
+    <option value="serviceMetadata.serviceDescription.semanticMetadata.conceptCode">&nbsp;&nbsp;&nbsp;&nbsp;
+        Concept Name
+    </option>
+</optgroup>
+<optgroup label="&nbsp;&nbsp; Service Contexts">
+    <option value="serviceMetadata.serviceDescription.serviceContextCollection.name">&nbsp;&nbsp;&nbsp;&nbsp;
+        Name
+    </option>
+    <option value="serviceMetadata.serviceDescription.serviceContextCollection.description">&nbsp;&nbsp;&nbsp;&nbsp;
+        Description
+    </option>
+</optgroup>
+<optgroup label="&nbsp;&nbsp;&nbsp;&nbsp; Context Properties">
+    <option value="serviceMetadata.serviceDescription.serviceContextCollection.contextPropertyCollection.name">
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; QName
+    </option>
+    <option value="serviceMetadata.serviceDescription.serviceContextCollection.contextPropertyCollection.description">
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Description
+    </option>
+</optgroup>
+<optgroup label="&nbsp;&nbsp;&nbsp;&nbsp; Operations">
+    <option value="serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.name">
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Name
+    </option>
+    <option value="serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.description">
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Description
+    </option>
+</optgroup>
+<optgroup label="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Semantic Metadata">
+    <option value="serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.semanticMetadata.conceptCode">
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Concept Code
+    </option>
+    <option value="serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.semanticMetadata.conceptDefinition">
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Concept Definition
+    </option>
+    <option value="serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.semanticMetadata.conceptName">
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Concept Name
+    </option>
+</optgroup>
+<optgroup label="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Input Parameters">
+    <option value="serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.inputParameterCollection.QName">
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; QName
+    </option>
+</optgroup>
+<optgroup label="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; UML Class">
+    <option value="serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.inputParameterCollection.UMLClass.className">
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Class Name
+    </option>
+    <option value="serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.inputParameterCollection.UMLClass.packageName">
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Package Name
+    </option>
+    <option value="serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.inputParameterCollection.UMLClass.projectName">
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Project Name
+    </option>
+</optgroup>
+<optgroup label="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Semantic Metadata">
+    <option value="serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.inputParameterCollection.UMLClass.semanticMetadata.conceptCode">
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Concept Code
+    </option>
+    <option value="serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.inputParameterCollection.UMLClass.semanticMetadata.conceptDefinition">
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Concept Definition
+    </option>
+    <option value="serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.inputParameterCollection.UMLClass.semanticMetadata.conceptName">
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Concept Name
+    </option>
+</optgroup>
+<optgroup label="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Output">
+    <option value="serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.output.QName">
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; QName
+    </option>
+</optgroup>
+<optgroup label="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; UML Class">
+    <option value="serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.output.UMLClass.className">
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Class Name
+    </option>
+    <option value="serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.output.UMLClass.packageName">
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Package Name
+    </option>
+    <option value="serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.output.UMLClass.projectName">
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Project Name
+    </option>
+</optgroup>
+<optgroup label="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Semantic Metadata">
+    <option value="serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.output.UMLClass.semanticMetadata.conceptCode">
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Concept Code
+    </option>
+    <option value="serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.output.UMLClass.semanticMetadata.conceptDefinition">
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Concept Definition
+    </option>
+    <option value="serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.output.UMLClass.semanticMetadata.conceptName">
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Concept Name
+    </option>
+</optgroup>
+<optgroup label="&nbsp;&nbsp; Domain Model">
+    <option value="domainModel.projectLongName">&nbsp;&nbsp;&nbsp;&nbsp; Project Long Name</option>
+    <option value="domainModel.projectShortName">&nbsp;&nbsp;&nbsp;&nbsp; Project Short Name
+    </option>
+</optgroup>
+<optgroup label="&nbsp;&nbsp;&nbsp;&nbsp; UML Classes">
+    <option value="domainModel.classes.className">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        Class Name
+    </option>
+    <option value="domainModel.classes.packageName">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        Package Name
+    </option>
+    <option value="domainModel.classes.projectName">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        Project Name
+    </option>
+</optgroup>
+<optgroup label="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Semantic Metadata">
+    <option value="domainModel.classes.semanticMetadata.conceptCode">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        Concept Code
+    </option>
+    <option value="domainModel.classes.semanticMetadata.conceptDefinition">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        Concept Definition
+    </option>
+    <option value="domainModel.classes.semanticMetadata.conceptName">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        Concept Name
+    </option>
+</optgroup>
+<optgroup label="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Attributes">
+    <option value="domainModel.classes.umlAttributeCollection.name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        Name
+    </option>
+    <option value="domainModel.classes.umlAttributeCollection.description">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        Description
+    </option>
+    <option value="domainModel.classes.umlAttributeCollection.dataTypeName">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        Data Type Name
+    </option>
+</optgroup>
+<optgroup label="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Semantic Metadata">
+    <option value="domainModel.classes.umlAttributeCollection.semanticMetadata.conceptCode">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        Concept Code
+    </option>
+    <option value="domainModel.classes.umlAttributeCollection.semanticMetadata.conceptDefinition">
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Concept Definition
+    </option>
+    <option value="domainModel.classes.umlAttributeCollection.semanticMetadata.conceptName">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        Concept Name
+    </option>
+</optgroup>
+</select>
+</td>
+</tr>
+<tr>
+    <td colspan="2">
+        <input type="submit" value="Search"/>
+    </td>
+</tr>
+</table>
+<input type="hidden" name="discoveryType" value="SERVICE"/>
 </form:form>
 </div>
 
@@ -266,12 +254,30 @@
     <c:set var="evsDiscoveryFormName"><portlet:namespace/>evsDiscoveryForm</c:set>
     <c:set var="onSubmitAction"><portlet:namespace/>doDiscoverySearch('<c:out
             value="${evsDiscoveryFormName}"/>')</c:set>
+
+    <script type="text/javascript">
+        function <portlet:namespace/>submitEVSForm(){
+        $("${evsDiscoveryFormName}").submit();
+        var form = document.evsDiscoveryForm;
+        form.submit();
+        }
+
+        function <portlet:namespace/>updateList(autocompleter, token) {
+        EVSAutomcompleter.autoCompleteConcept(token, function(data) {
+        autocompleter.setChoices(data)
+        });
+        }
+
+        function <portlet:namespace/>nameValueSelector(tag){
+        return tag.name;
+        }
+    </script>
     <form:form action="${formAction}" id="${evsDiscoveryFormName}" name="${evsDiscoveryFormName}"
                onsubmit="return ${onSubmitAction}">
 
         <table style="cellpadding:5px;" valign="top">
             <tr>
-                <td valign="top" style="padding-right:5px; text-align:right"><b>Keyword:</b></td>
+                <td valign="top" style="padding-left:12px;padding-right:12px; text-align:right"><b>Keyword:</b></td>
                 <td valign="top">
                     <input id="evsConcept" type="text" class="searchField auto_complete"/>
                     <tags:image id="indicator1"
@@ -282,55 +288,68 @@
                     <input type="hidden" name="keywords" id="keywords"/>
 
                     <div id="evsConceptList" class="auto_complete"></div>
-                    <div id="evsConceptDefinition">
-                        Definition:
+                    <div id="evsConceptDefinition" style="display:none;">
+                        <div class="row">
+                            <div>
+                                <b>Definition:</b>
+                                <span id="evsConceptDefinitionValue"/>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div>
+                                <b>Concept Code:</b>
+                                <span id="evsConceptCodeValue"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row" id="evsConceptResultDiv"
+                         style="font-size:12px;display:none;">
+                        <div class="label">
+                            Found
+                            <span id="discoveryResultDiv">
+                                <!---->
+                            </span>
+                            services
+                        </div>
                     </div>
 
                     <script type="text/javascript">
-                        new Autocompleter.DWR('evsConcept', 'evsConceptList', updateList,{ valueSelector:
-                        nameValueSelector, partialChars: 2, indicator: 'indicator1',
+                        new Autocompleter.DWR('evsConcept', 'evsConceptList', <portlet:namespace/>updateList,{
+                        valueSelector:
+                        <portlet:namespace/>nameValueSelector, partialChars: 2, indicator: 'indicator1',
                         afterUpdateElement: function(inputField, selectedItem,selectedTag){
                         $('${evsDiscoveryFormName}').keywords.value= selectedTag.code;
-                        $('evsConceptDefinition').innerHTML= "<b>Definition:</b>" + selectedTag.definitation;
+
+                        $('evsConceptDefinition').style.display= "";
+                        $('evsConceptDefinitionValue').innerHTML= selectedTag.definitation;
+                        $('keywords').value=selectedTag.code;
+                        $('evsConceptCodeValue').innerHTML= selectedTag.code;
+
+                        EVSAutomcompleter.resultCount(selectedTag.code,<portlet:namespace/>handleResultCount);
                         }});
+
+                        function <portlet:namespace/>handleResultCount(str){
+                        $("evsConceptResultDiv").style.display="";
+                        var _innerHtml = "";
+                        if(str>0){
+                        _innerHtml=_innerHtml +"<a href='javascript:<portlet:namespace/>submitEVSForm()'>";
+                        }
+                        _innerHtml=_innerHtml+ str+" services";
+
+                        if(str>0){
+                        _innerHtml=_innerHtml + "</a>";
+                        }
+                        $("discoveryResultDiv").innerHTML=_innerHtml;
+                        }
+
                     </script>
                 </td>
             </tr>
-            <tr>
-                <td valign="top" style="padding-right:5px; text-align:right"><b>Search Fields:</b></td>
-                <td valign="top">
-                    <select name="searchFields" multiple size="8" style="width:200px;">
-                        <option value="serviceMetadata.serviceDescription.semanticMetadata.conceptCode">Service
-                            Description
-                        </option>
-                        <optgroup label="Operations">
-                            <option value="serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.inputParameterCollection.UMLClass.semanticMetadata.conceptCode">
-                                &nbsp;&nbsp;Input Parameter
-                            </option>
-                            <option value="serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.output.UMLClass.semanticMetadata.conceptCode">
-                                &nbsp;&nbsp;Output Parameter
-                            </option>
-                        </optgroup>
-                        <optgroup label="Domain Model">
-                            <option value="domainModel.classes.semanticMetadata.conceptCode">&nbsp;&nbsp; UML Classes
-                            </option>
-                            <option value="domainModel.classes.umlAttributeCollection.semanticMetadata.conceptCode">
-                                &nbsp;&nbsp; UML Attribute
-                            </option>
-                        </optgroup>
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <input type="submit" value="Search"/>
-                </td>
-            </tr>
         </table>
-        <input type="hidden" name="discoveryType" value="SERVICE"/>
+        <input type="hidden" name="discoveryType" value="CONCEPT"/>
     </form:form>
 </div>
-
 </td>
 
 <td valign="top">

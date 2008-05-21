@@ -18,11 +18,9 @@ import java.util.TreeSet;
  *
  * @author kherm manav.kher@semanticbits.com
  */
-public class LexbigEVSService extends BaseEVSService {
+public class LexbigConceptService extends BaseConceptService {
     private CodingSchemeVersionOrTag productionTag;
     private ConceptReference cr;
-    private boolean caseSensitive;
-
 
     public Set<EVSConceptDTO> getConceptsForKeyword(String keyword) throws CaGridPortletApplicationException {
 
@@ -51,6 +49,7 @@ public class LexbigEVSService extends BaseEVSService {
                 }
             }
         } catch (Exception e) {
+            logger.warn(e);
             throw new CaGridPortletApplicationException(e);
         }
 

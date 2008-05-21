@@ -10,12 +10,12 @@ import org.springframework.beans.factory.annotation.Required;
  *
  * @author kherm manav.kher@semanticbits.com
  */
-public abstract class BaseEVSService implements EVSService {
-    protected static final Log logger = LogFactory.getLog(EVSService.class);
+public abstract class BaseConceptService implements ConceptService {
+    protected static final Log logger = LogFactory.getLog(ConceptService.class);
 
     protected EVSApplicationService appService;
     protected String vocabulary = "default";
-    protected int searchLimit = 1000; //default
+    protected int searchLimit = 100; //default
 
     @Required
     public EVSApplicationService getAppService() {

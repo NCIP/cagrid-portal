@@ -1,28 +1,27 @@
 package gov.nih.nci.cagrid.portal.portlet.disc;
 
 import gov.nih.nci.cagrid.portal.portlet.PortletIntegrationTestBase;
+import gov.nih.nci.cagrid.portal.portlet.discovery.evs.ConceptService;
 import gov.nih.nci.cagrid.portal.portlet.discovery.evs.EVSConceptDTO;
-import gov.nih.nci.cagrid.portal.portlet.discovery.evs.EVSService;
-import gov.nih.nci.cagrid.portal.portlet.discovery.evs.LexbigEVSService;
-
-import java.util.Set;
-
+import gov.nih.nci.cagrid.portal.portlet.discovery.evs.LexbigConceptService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
+import java.util.Set;
 
 /**
  * User: kherm
  *
  * @author kherm manav.kher@semanticbits.com
  */
-public class EVSServiceTest extends PortletIntegrationTestBase {
+public class EVSServiceSystemTest extends PortletIntegrationTestBase {
 
-    protected EVSService caCoreEVSService;
-    protected LexbigEVSService lexbigEVSService;
+    protected ConceptService caCoreConceptService;
+    protected LexbigConceptService lexbigEVSService;
 
-    private Log log = LogFactory.getLog(EVSServiceTest.class);
+    private Log log = LogFactory.getLog(EVSServiceSystemTest.class);
 
-    public EVSServiceTest() {
+    public EVSServiceSystemTest() {
         setAutowireMode(AUTOWIRE_BY_NAME);
     }
 
@@ -31,10 +30,10 @@ public class EVSServiceTest extends PortletIntegrationTestBase {
      */
     public void testcaCoreEVSKeywordSearch() {
 
-        Long startTime = EVSServiceTest.getTimestamp();
+        Long startTime = EVSServiceSystemTest.getTimestamp();
 
         String keyword = "Taxon";
-        Set<EVSConceptDTO> resultSet = caCoreEVSService.getConceptsForKeyword(keyword);
+        Set<EVSConceptDTO> resultSet = caCoreConceptService.getConceptsForKeyword(keyword);
         log.debug("Search for" + keyword);
 
         log.debug("Resultset size is " + resultSet.size());
@@ -47,18 +46,18 @@ public class EVSServiceTest extends PortletIntegrationTestBase {
             assertTrue("EVS concept does not have complete information", result.getName() != null);
         }
 
-        Long endTime = EVSServiceTest.getTimestamp();
+        Long endTime = EVSServiceSystemTest.getTimestamp();
         log.debug("Approx Total time taken using caCORE API: " + (endTime - startTime) + " milliseconds");
 
     }
 
     public void testCaseEVSSearch() {
-        caseSearch(caCoreEVSService);
+        caseSearch(caCoreConceptService);
         caseSearch(lexbigEVSService);
     }
 
-    private void caseSearch(EVSService service) {
-        Long startTime = EVSServiceTest.getTimestamp();
+    private void caseSearch(ConceptService service) {
+        Long startTime = EVSServiceSystemTest.getTimestamp();
 
         String lcKeyword = "taxon";
         String uckeyword = "TAXON";
@@ -77,10 +76,10 @@ public class EVSServiceTest extends PortletIntegrationTestBase {
             assertTrue("EVS concept does not have complete information", result.getName() != null);
         }
 
-        Long endTime = EVSServiceTest.getTimestamp();
+        Long endTime = EVSServiceSystemTest.getTimestamp();
         log.debug("Approx Total time taken using caCORE API: " + (endTime - startTime) + " milliseconds");
 
-        startTime = EVSServiceTest.getTimestamp();
+        startTime = EVSServiceSystemTest.getTimestamp();
         Set<EVSConceptDTO> ucResultSet = service.getConceptsForKeyword(uckeyword);
         log.debug("Search for" + lcKeyword);
 
@@ -103,7 +102,7 @@ public class EVSServiceTest extends PortletIntegrationTestBase {
                     wasFound);
         }
 
-        endTime = EVSServiceTest.getTimestamp();
+        endTime = EVSServiceSystemTest.getTimestamp();
         log.debug("Approx Total time taken using caCORE API: " + (endTime - startTime) + " milliseconds");
 
         assertEquals("Case matters in search", lcResultSet.size(), ucResultSet.size());
@@ -112,8 +111,8 @@ public class EVSServiceTest extends PortletIntegrationTestBase {
 
     public void testcaCoreEVSWildcardSearch1() {
 
-        Long startTime = EVSServiceTest.getTimestamp();
-        Set<EVSConceptDTO> resultSet = caCoreEVSService.getConceptsForKeyword("Tax*");
+        Long startTime = EVSServiceSystemTest.getTimestamp();
+        Set<EVSConceptDTO> resultSet = caCoreConceptService.getConceptsForKeyword("Tax*");
         log.debug("Search for Tax*");
 
         log.debug("Resultset size is " + resultSet.size());
@@ -126,14 +125,14 @@ public class EVSServiceTest extends PortletIntegrationTestBase {
             assertTrue("EVS concept does not have complete information", result.getCode() != null);
             assertTrue("EVS concept does not have complete information", result.getName() != null);
         }
-        Long endTime = EVSServiceTest.getTimestamp();
+        Long endTime = EVSServiceSystemTest.getTimestamp();
         log.debug("Approx Total time taken using caCORE API: " + (endTime - startTime) + " milliseconds");
     }
 
     public void testcaCoreEVSWildcardSearch2() {
-        Long startTime = EVSServiceTest.getTimestamp();
+        Long startTime = EVSServiceSystemTest.getTimestamp();
 
-        Set<EVSConceptDTO> resultSet = caCoreEVSService.getConceptsForKeyword("Ta*");
+        Set<EVSConceptDTO> resultSet = caCoreConceptService.getConceptsForKeyword("Ta*");
         log.debug("Search for Ta*");
 
         log.debug("Resultset size is " + resultSet.size());
@@ -147,16 +146,16 @@ public class EVSServiceTest extends PortletIntegrationTestBase {
             assertTrue("EVS concept does not have complete information", result.getName() != null);
         }
 
-        Long endTime = EVSServiceTest.getTimestamp();
+        Long endTime = EVSServiceSystemTest.getTimestamp();
         log.debug("Approx Total time taken using caCORE API: " + (endTime - startTime) + " milliseconds");
 
 
     }
 
     public void testcaCoreWildcardSearch3() {
-        Long startTime = EVSServiceTest.getTimestamp();
+        Long startTime = EVSServiceSystemTest.getTimestamp();
 
-        Set<EVSConceptDTO> resultSet = caCoreEVSService.getConceptsForKeyword("T*");
+        Set<EVSConceptDTO> resultSet = caCoreConceptService.getConceptsForKeyword("T*");
         log.debug("Search for T*");
 
         log.debug("Resultset size is " + resultSet.size());
@@ -170,12 +169,12 @@ public class EVSServiceTest extends PortletIntegrationTestBase {
             assertTrue("EVS concept does not have complete information", result.getName() != null);
         }
 
-        Long endTime = EVSServiceTest.getTimestamp();
+        Long endTime = EVSServiceSystemTest.getTimestamp();
         log.debug("Approx Total time taken using caCORE API: " + (endTime - startTime) + " milliseconds");
     }
 
     public void testLexBIGKeywordWithLexbig() {
-        Long startTime = EVSServiceTest.getTimestamp();
+        Long startTime = EVSServiceSystemTest.getTimestamp();
         Set<EVSConceptDTO> resultSet = lexbigEVSService.getConceptsForKeyword("Name");
         log.debug("Search for Taxon");
 
@@ -189,7 +188,7 @@ public class EVSServiceTest extends PortletIntegrationTestBase {
             assertTrue("EVS concept does not have complete information", result.getName() != null);
         }
 
-        Long endTime = EVSServiceTest.getTimestamp();
+        Long endTime = EVSServiceSystemTest.getTimestamp();
         log.debug("Approx Total time taken using caCORE API: " + (endTime - startTime) + " milliseconds");
 
 
@@ -200,11 +199,11 @@ public class EVSServiceTest extends PortletIntegrationTestBase {
         return System.currentTimeMillis();
     }
 
-    public void setCaCoreEVSService(EVSService caCoreEVSService) {
-        this.caCoreEVSService = caCoreEVSService;
+    public void setCaCoreEVSService(ConceptService caCoreConceptService) {
+        this.caCoreConceptService = caCoreConceptService;
     }
 
-    public void setLexbigEVSService(LexbigEVSService lexbigEVSService) {
+    public void setLexbigEVSService(LexbigConceptService lexbigEVSService) {
         this.lexbigEVSService = lexbigEVSService;
     }
 }

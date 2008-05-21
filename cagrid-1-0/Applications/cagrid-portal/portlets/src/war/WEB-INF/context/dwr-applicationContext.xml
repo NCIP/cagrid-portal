@@ -14,46 +14,59 @@
 
     <!--evs configuration-->
 
-       <bean id="defaultOntology" class="java.lang.String">
-           <constructor-arg value="NCI Thesaurus"/>
-       </bean>
+    <bean id="defaultOntology" class="java.lang.String">
+        <constructor-arg value="NCI Thesaurus"/>
+    </bean>
 
-       <bean id="baseEVService" class="gov.nih.nci.cagrid.portal.portlet.discovery.evs.BaseEVSService"
-             abstract="true"
-             p:searchLimit="6" p:vocabulary-ref="defaultOntology">
-           <property name="appService">
-               <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean"
-                     p:targetClass="gov.nih.nci.system.client.ApplicationServiceProvider"
-                     p:targetMethod="getApplicationServiceFromUrl">
-                   <property name="arguments">
-                       <list>
-                           <value>http://evsapi.nci.nih.gov/evsapi40</value>
-                       </list>
-                   </property>
-               </bean>
-           </property>
-       </bean>
+    <bean id="baseEVService" class="gov.nih.nci.cagrid.portal.portlet.discovery.evs.BaseConceptService"
+          abstract="true"
+          p:searchLimit="15" p:vocabulary-ref="defaultOntology">
+        <property name="appService">
+            <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean"
+                  p:targetClass="gov.nih.nci.system.client.ApplicationServiceProvider"
+                  p:targetMethod="getApplicationServiceFromUrl">
+                <property name="arguments">
+                    <list>
+                        <value>http://evsapi.nci.nih.gov/evsapi40</value>
+                    </list>
+                </property>
+            </bean>
+        </property>
+    </bean>
 
-       <bean id="caCoreEVSService" class="gov.nih.nci.cagrid.portal.portlet.discovery.evs.CacoreEVSService"
-             parent="baseEVService"/>
 
-      <bean id="lexbigEVSService" class="gov.nih.nci.cagrid.portal.portlet.discovery.evs.LexbigEVSService"
-             parent="baseEVService">
-           <property name="productionTag">
-               <bean class="org.LexGrid.LexBIG.DataModel.Core.CodingSchemeVersionOrTag"
-                     p:tag="PRODUCTION"/>
-           </property>
-           <property name="cr">
-               <bean class="org.LexGrid.LexBIG.DataModel.Core.ConceptReference">
-                   <property name="codingScheme" ref="defaultOntology"/>
-               </bean>
-           </property>
-       </bean>
+    <bean id="caCoreConceptService" class="gov.nih.nci.cagrid.portal.portlet.discovery.evs.CacoreConceptService"
+          parent="baseEVService"/>
 
-       <bean id="evsAutoCompleter"
-             class="gov.nih.nci.cagrid.portal.portlet.discovery.evs.DefaultEVSAutocompleterService"
-             scope="globalSession">
-           <property name="evsService" ref="lexbigEVSService"/>
-       </bean>
-    
+    <bean id="lexbigEVSService" class="gov.nih.nci.cagrid.portal.portlet.discovery.evs.LexbigConceptService"
+          parent="baseEVService">
+        <property name="productionTag">
+            <bean class="org.LexGrid.LexBIG.DataModel.Core.CodingSchemeVersionOrTag"
+                  p:tag="PRODUCTION"/>
+        </property>
+        <property name="cr">
+            <bean class="org.LexGrid.LexBIG.DataModel.Core.ConceptReference">
+                <property name="codingScheme" ref="defaultOntology"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="evsAutoCompleter"
+          class="gov.nih.nci.cagrid.portal.portlet.discovery.evs.DefaultConceptAutocompleterService"
+          scope="session" autowire="byName">
+        <property name="conceptService">
+            <bean id="delegatingEVSConceptAggregator"
+                  class="gov.nih.nci.cagrid.portal.portlet.discovery.evs.DelegatingConceptService"
+                  parent="baseEVService">
+                <property name="conceptServices">
+                    <list>
+                        <bean class="gov.nih.nci.cagrid.portal.portlet.discovery.evs.PortalConceptService"
+                              autowire="byName"/>
+                        <ref local="lexbigEVSService"/>
+                    </list>
+                </property>
+            </bean>
+        </property>
+    </bean>
+
 </beans>
