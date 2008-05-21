@@ -1,5 +1,7 @@
 package gov.nih.nci.cagrid.introduce.portal.help;
 
+import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
+
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.net.URL;
@@ -10,10 +12,14 @@ import javax.help.HelpSet;
 import javax.help.HelpSetException;
 import javax.swing.JFrame;
 
+import org.apache.log4j.Logger;
 import org.cagrid.grape.GridApplication;
 
 
 public class IntroduceHelp {
+    
+    private static final Logger logger = Logger.getLogger(IntroduceHelp.class);
+    
     private static HelpBroker fHelp;
     private static CSH.DisplayHelpFromSource fDisplayHelp;
     private static HelpSet helpSet;
@@ -76,7 +82,7 @@ public class IntroduceHelp {
             fDisplayHelp = new CSH.DisplayHelpFromSource(fHelp);
 
         } catch (HelpSetException ex) {
-            System.out.println("Cannot create help system with: " + helpSetURL + " " + ex.getMessage());
+            logger.warn("Cannot create help system with: " + helpSetURL + " " + ex.getMessage());
         }
     }
 

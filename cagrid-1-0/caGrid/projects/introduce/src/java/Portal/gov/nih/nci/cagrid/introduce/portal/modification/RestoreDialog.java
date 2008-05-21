@@ -139,7 +139,6 @@ public class RestoreDialog extends JDialog {
 			restoreButton
 					.addActionListener(new java.awt.event.ActionListener() {
 						public void actionPerformed(java.awt.event.ActionEvent e) {
-							System.out.println("actionPerformed()"); // TODO
 							
 							if(getBackupsComboBox().getItemCount()==0){
 								ErrorDialog

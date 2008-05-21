@@ -4,6 +4,7 @@
 	xmlns:xs="http://www.w3.org/2001/XMLSchema"
 	xmlns:methods="gme://gov.nih.nci.cagrid.introduce/1/Methods"
 	xmlns:security="gme://gov.nih.nci.cagrid.introduce/1/Security"
+	xmlns:extension="gme://gov.nih.nci.cagrid.introduce/1/Extension"
 	xmlns:resources="gme://gov.nih.nci.cagrid.introduce/1/Resources"
 	targetNamespace="gme://gov.nih.nci.cagrid.introduce/1/Services"
 	elementFormDefault="qualified" attributeFormDefault="unqualified">
@@ -14,6 +15,7 @@
 		schemaLocation="./Resources.xsd" />
 	<xs:import namespace="gme://gov.nih.nci.cagrid.introduce/1/Security"
 		schemaLocation="./Security.xsd" />
+	<xs:import namespace="gme://gov.nih.nci.cagrid.introduce/1/Extension" schemaLocation="./Extension.xsd"/>
 	<xs:element name="Services" type="tns:ServicesType">
 		<xs:annotation>
 			<xs:documentation>
@@ -42,6 +44,7 @@
 				minOccurs="0" maxOccurs="1" />
 			<xs:element ref="ResourceFrameworkOptions" minOccurs="1"
 				maxOccurs="1" />
+		    <xs:element ref="extension:Extensions" minOccurs="0" maxOccurs="1"></xs:element>
 		</xs:sequence>
 		<xs:attribute name="name" type="xs:string" use="required" />
 		<xs:attribute name="namespace" type="xs:string" use="required" />

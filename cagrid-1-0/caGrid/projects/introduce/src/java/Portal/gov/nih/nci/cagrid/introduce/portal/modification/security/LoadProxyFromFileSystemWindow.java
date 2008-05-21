@@ -215,7 +215,6 @@ public class LoadProxyFromFileSystemWindow extends ApplicationComponent {
 
 		try {
 			proxyStr = proxyStr.replace('\\', '/');
-			System.out.println(proxyStr);
 			ProxyCredential cred = new ProxyCredential(proxyStr);
 			this.serviceSecurity.setProxy(cred);
 		} catch (Exception e) {

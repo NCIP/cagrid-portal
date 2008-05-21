@@ -8,12 +8,16 @@ import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionsType;
 import gov.nih.nci.cagrid.introduce.beans.extension.Properties;
 import gov.nih.nci.cagrid.introduce.beans.extension.PropertiesProperty;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
+import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
+import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
+import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.axis.message.MessageElement;
+import org.apache.log4j.Logger;
 
 /**
   *  ExtensionTools
@@ -25,6 +29,8 @@ import org.apache.axis.message.MessageElement;
   * @version $Id$
  */
 public class ExtensionTools {
+    
+    private static final Logger logger = Logger.getLogger(ExtensionTools.class);
 
     /**
      * Gets a named creation post processor
@@ -180,15 +186,58 @@ public class ExtensionTools {
 		ServiceInformation info) {
 		String extensionName = desc.getName();
 		ExtensionType[] extensions = info.getServiceDescriptor().getExtensions().getExtension();
-		for (int i = 0; extensions != null && i < extensions.length; i++) {
-			if (extensions[i].getName().equals(extensionName)) {
-				if (extensions[i].getExtensionData() == null) {
-					extensions[i].setExtensionData(new ExtensionTypeExtensionData());
-				}
-				return extensions[i].getExtensionData();
-			}
-		}
-		return null;
+		return getExtensionData(extensions, extensionName);
+	}
+	
+	
+	
+    /**
+     * Gets the extension type extension data for a particular service
+     * 
+     * @param desc
+     *      The service extension description
+     * @param serviceType
+     *      The service type model
+     * @return
+     *      The extension data, or <code>null</code> if no extension is found
+     */
+    public static ExtensionTypeExtensionData getExtensionData(ServiceExtensionDescriptionType desc,
+        ServiceType serviceType) {
+        String extensionName = desc.getName();
+        ExtensionType[] extensions = serviceType.getExtensions().getExtension();
+        return getExtensionData(extensions, extensionName);
+    }
+    
+    
+    /**
+     * Gets the extension type extension data for a particular method
+     * 
+     * @param desc
+     *      The service extension description
+     * @param methodType
+     *      The method type model
+     * @return
+     *      The extension data, or <code>null</code> if no extension is found
+     */
+    public static ExtensionTypeExtensionData getExtensionData(ServiceExtensionDescriptionType desc,
+        MethodType methodType) {
+        String extensionName = desc.getName();
+        ExtensionType[] extensions = methodType.getExtensions().getExtension();
+        return getExtensionData(extensions, extensionName);
+    }
+	
+	
+	
+	private static ExtensionTypeExtensionData getExtensionData(ExtensionType[] extensions,String extensionName){
+	    for (int i = 0; extensions != null && i < extensions.length; i++) {
+            if (extensions[i].getName().equals(extensionName)) {
+                if (extensions[i].getExtensionData() == null) {
+                    extensions[i].setExtensionData(new ExtensionTypeExtensionData());
+                }
+                return extensions[i].getExtensionData();
+            }
+        }
+        return null;
 	}
 
 
@@ -288,17 +337,17 @@ public class ExtensionTools {
         ServiceExtensionDescriptionType serviceExtensionDescription = 
             ExtensionsLoader.getInstance().getServiceExtension(extensionName);
         if (extensionDescription == null || serviceExtensionDescription == null) {
-            System.out.println("Extension description NOT FOUND for " + extensionName);
+            logger.warn("Extension description NOT FOUND for " + extensionName);
             throw new CreationExtensionException(
                 "No service extension named " + extensionName + " was able to be loaded");
         }
         // add the extension to the service information
-        System.out.println("Creating new extension type");
+        logger.info("Creating new extension type");
         ExtensionType addedExtension = new ExtensionType();
         addedExtension.setName(extensionName);
         addedExtension.setVersion(extensionDescription.getVersion());
         addedExtension.setExtensionType(extensionDescription.getExtensionType());
-        System.out.println("Appending extension to extensions list");
+        logger.info("Appending extension to extensions list");
         if (service.getExtensions() == null) {
             service.setExtensions(new ExtensionsType());
         }
@@ -314,12 +363,12 @@ public class ExtensionTools {
         try {
             creationPostProcessor = getCreationPostProcessor(extensionName);
         } catch (Exception ex) {
-            System.out.println("ERROR LOADING EXTENSION POST PROCESSOR");
+            logger.error("ERROR LOADING EXTENSION POST PROCESSOR");
             throw new CreationExtensionException(
                 "Error loading post processor for extension: " + ex.getMessage(), ex);
         }
         if (creationPostProcessor != null) {
-            System.out.println("Invoking extension creation post processor");
+            logger.info("Invoking extension creation post processor");
             creationPostProcessor.postCreate(serviceExtensionDescription, service);
         }
     }

@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.introduce.servicetasks.undeployment;
 
+import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
 import gov.nih.nci.cagrid.introduce.servicetasks.beans.deployment.Deployment;
 import gov.nih.nci.cagrid.introduce.servicetasks.beans.deployment.Jar;
 import gov.nih.nci.cagrid.introduce.servicetasks.deployment.DeploymentFileGeneratorTask;
@@ -13,12 +14,15 @@ import java.util.Iterator;
 import java.util.Map;
 
 import org.apache.commons.collections.iterators.ArrayIterator;
+import org.apache.log4j.Logger;
 import org.globus.wsrf.encoding.DeserializationException;
 import org.globus.wsrf.encoding.ObjectDeserializer;
 import org.xml.sax.InputSource;
 
 
 public class UndeployServiceHelper {
+    
+    private static final Logger logger = Logger.getLogger(UndeployServiceHelper.class);
 
     private String webAppDeployLocation;
     private String webAppDeployLibLocation;
@@ -49,13 +53,13 @@ public class UndeployServiceHelper {
 
     public void execute() throws Exception {       
 
-        System.out.println("webapp.deploy.dir=" + webAppDeployLocation);
-        System.out.println("webapp.deploy.lib.dir=" + webAppDeployLibLocation);
-        System.out.println("webapp.deploy.schema.dir=" + webAppDeploySchemaLocation);
-        System.out.println("webapp.deploy.etc.dir=" + webAppDeployEtcLocation);
-        System.out.println("service.deployment.dir.name=" + serviceDeploymentDirectoryName);
-        System.out.println("service.deployment.prefix=" + servicePrefix);
-        System.out.println("service.name=" + serviceName);
+        logger.debug("webapp.deploy.dir=" + webAppDeployLocation);
+        logger.debug("webapp.deploy.lib.dir=" + webAppDeployLibLocation);
+        logger.debug("webapp.deploy.schema.dir=" + webAppDeploySchemaLocation);
+        logger.debug("webapp.deploy.etc.dir=" + webAppDeployEtcLocation);
+        logger.debug("service.deployment.dir.name=" + serviceDeploymentDirectoryName);
+        logger.debug("service.deployment.prefix=" + servicePrefix);
+        logger.debug("service.name=" + serviceName);
 
         if (webAppDeployLocation == null || webAppDeployLibLocation == null || webAppDeploySchemaLocation == null
             || webAppDeployEtcLocation == null || serviceName == null || servicePrefix == null
@@ -104,10 +108,10 @@ public class UndeployServiceHelper {
                     File jarFile = new File(webAppDeployLibLocation + File.separator + currentJar.getLocation()
                         + File.separator + currentJar.getName());
                     if (jarFile != null && jarFile.exists()) {
-                        System.out.println("Removing jar file: " + jarFile.getAbsolutePath());
+                        logger.debug("Removing jar file: " + jarFile.getAbsolutePath());
                         boolean deleted = jarFile.delete();
                         if (!deleted) {
-                            System.out.println("ERROR: unable to delete jar on undeploy: " + jarFile.getAbsolutePath());
+                            logger.error("ERROR: unable to delete jar on undeploy: " + jarFile.getAbsolutePath());
                             throw new Exception("ERROR: unable to delete jar on undeploy: " + jarFile.getAbsolutePath());
                         }
                     }
@@ -123,12 +127,12 @@ public class UndeployServiceHelper {
             File schemaLocation = new File(webAppDeploySchemaLocation + File.separator
                 + undeployService.getServiceName());
             if (schemaLocation.exists() && schemaLocation.canRead()) {
-                System.out.println("Removing schema location: " + schemaLocation.getAbsolutePath());
+                logger.debug("Removing schema location: " + schemaLocation.getAbsolutePath());
                 boolean deleted = deleteDir(schemaLocation);
                 if (!deleted) {
-                    System.out.println("ERROR: unable to completely remove schema location: "
+                    logger.error("ERROR: unable to completely remove schema location: "
                         + schemaLocation.getAbsolutePath());
-                    throw new Exception("ERROR: unable to completely remove schema location: "
+                    logger.error("ERROR: unable to completely remove schema location: "
                         + schemaLocation.getAbsolutePath());
                 }
             }
@@ -137,10 +141,10 @@ public class UndeployServiceHelper {
         // process the removal of the etc dir
         File etcLocation = new File(webAppDeployEtcLocation + File.separator + serviceDeploymentDirectoryName);
         if (etcLocation.exists() && etcLocation.canRead()) {
-            System.out.println("Removing etc location: " + etcLocation.getAbsolutePath());
+            logger.debug("Removing etc location: " + etcLocation.getAbsolutePath());
             boolean deleted = deleteDir(etcLocation);
             if (!deleted) {
-                System.out.println("WARNING: unable to completely remove etc location: "
+                logger.debug("WARNING: unable to completely remove etc location: "
                     + etcLocation.getAbsolutePath());
             }
         }

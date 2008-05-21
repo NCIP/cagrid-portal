@@ -2,6 +2,7 @@ package gov.nih.nci.cagrid.introduce.portal.extension.preferences.tree;
 
 import gov.nih.nci.cagrid.introduce.beans.extension.DiscoveryExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
+import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 import gov.nih.nci.cagrid.introduce.portal.extension.preferences.ExtensionPreferenceTool;
 import gov.nih.nci.cagrid.introduce.portal.extension.preferences.ExtensionsPreferencesConfigurationPanel;
@@ -13,8 +14,12 @@ import java.util.List;
 
 import javax.swing.tree.DefaultTreeModel;
 
+import org.apache.log4j.Logger;
+
 
 public class ExtensionsPreferencesTreeNode extends PreferencesTypeTreeNode {
+    
+    private static final Logger logger = Logger.getLogger(ExtensionsPreferencesTreeNode.class);
 
 	public ExtensionsPreferencesTreeNode(String displayName, DefaultTreeModel model) {
 		super(displayName, model);
@@ -41,7 +46,7 @@ public class ExtensionsPreferencesTreeNode extends PreferencesTypeTreeNode {
 					getModel().insertNodeInto(node, this, this.getChildCount());
 				}
 			} catch (Exception e) {
-				e.printStackTrace();
+				logger.error(e);
 			}
 		}
 		List discoveryExtensions = loader.getDiscoveryExtensions();

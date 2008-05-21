@@ -29,6 +29,7 @@
 	<property name="updates.dir" location="${basedir}/updates" />
 	<property name="updates.lib.dir" location="${basedir}/updates/lib" />
 	<property name="conf.dir" location="conf" />
+	<property name="log.dir" location="log" />
 
 	<!-- Generated stuff -->
 	<property name="build.dir" location="${basedir}/build" />

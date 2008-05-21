@@ -265,8 +265,7 @@ public class ModificationViewer extends ApplicationComponent {
                     try {
                         initialize(this);
                     } catch (Exception e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
+                        logger.error(e);
                     }
                 }
 
@@ -276,8 +275,7 @@ public class ModificationViewer extends ApplicationComponent {
             th.join();
 
         } catch (Exception e) {
-            // should never get here but in case.....
-            e.printStackTrace();
+            logger.error(e);
         }
         if (beenDisposed) {
             throw new Exception("Unable to modify service or service modification exited on service at " + this.methodsDirectory.getAbsolutePath());
@@ -381,7 +379,7 @@ public class ModificationViewer extends ApplicationComponent {
                                 "Open", "Close"}, "Close");
                     GridApplication.getContext().showDialog(diag);
                     String result = diag.getSelection();
-                    System.out.println(result);
+                    
                     if (result != null && result.equals("Upgrade")) {
                         try {
                             if (dialog != null) {
@@ -439,7 +437,6 @@ public class ModificationViewer extends ApplicationComponent {
                         }
                         this.info = new ServiceInformation(this.methodsDirectory);
                     } catch (Exception e) {
-                        e.printStackTrace();
                         CompositeErrorDialog.showErrorDialog(e);
                         ModificationViewer.this.dispose();
                         this.beenDisposed = true;
@@ -775,7 +772,6 @@ public class ModificationViewer extends ApplicationComponent {
                                 .addTab(extDtype.getDisplayName(), extPanel.getIcon(), extPanel, null);
                         }
                     } catch (Exception e) {
-                        e.printStackTrace();
                         CompositeErrorDialog.showErrorDialog("Cannot load extension: " + extDtype.getDisplayName(), e);
                     }
                 }
@@ -1372,8 +1368,7 @@ public class ModificationViewer extends ApplicationComponent {
                     try {
                         reInitialize(ModificationViewer.this.methodsDirectory);
                     } catch (Exception e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
+                        logger.error(e);
                     }
 
                 }

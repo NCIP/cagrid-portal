@@ -2,6 +2,7 @@ package gov.nih.nci.cagrid.introduce.portal.deployment;
 
 import gov.nih.nci.cagrid.common.portal.validation.IconFeedbackPanel;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
+import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
 
@@ -34,8 +35,12 @@ import com.jgoodies.validation.util.ValidationUtils;
 import com.jgoodies.validation.view.ValidationComponentUtils;
 import javax.swing.JComboBox;
 
+import org.apache.log4j.Logger;
+
 
 public class DeploymentPropertiesPanel extends JPanel {
+    
+    private static final Logger logger = Logger.getLogger(DeploymentPropertiesPanel.class);
 
     private ValidationResultModel validationModel = new DefaultValidationResultModel();
 
@@ -485,7 +490,7 @@ public class DeploymentPropertiesPanel extends JPanel {
                 .parseInt(getRegistrationRefreshjTextField().getText()) * multiplier)));
         } catch (NumberFormatException e) {
 
-            e.printStackTrace();
+            logger.error(e);
         }
         return props;
 

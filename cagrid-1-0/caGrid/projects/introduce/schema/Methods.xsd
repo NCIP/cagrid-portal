@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns="gme://gov.nih.nci.cagrid.introduce/1/Methods" xmlns:xs="http://www.w3.org/2001/XMLSchema"
-	xmlns:security="gme://gov.nih.nci.cagrid.introduce/1/Security"
+	xmlns:security="gme://gov.nih.nci.cagrid.introduce/1/Security" xmlns:extension="gme://gov.nih.nci.cagrid.introduce/1/Extension"
 	targetNamespace="gme://gov.nih.nci.cagrid.introduce/1/Methods" elementFormDefault="qualified"
 	attributeFormDefault="unqualified">
+	<xs:import namespace="gme://gov.nih.nci.cagrid.introduce/1/Extension" schemaLocation="./Extension.xsd"/>
 	<xs:import namespace="gme://gov.nih.nci.cagrid.introduce/1/Security" schemaLocation="./Security.xsd"/>
 	<xs:element name="Methods" type="MethodsType">
 		<xs:annotation>
@@ -72,6 +73,7 @@
 					<xs:attribute name="providerClass" type="xs:string" use="optional"/>
 				</xs:complexType>
 			</xs:element>
+			<xs:element ref="extension:Extensions" minOccurs="0" maxOccurs="1"></xs:element>
 		</xs:sequence>
 		<xs:attribute name="name" type="xs:string" use="required"/>
 		<xs:attribute name="isImported" type="xs:boolean" use="required"/>

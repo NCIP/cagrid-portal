@@ -5,6 +5,7 @@ import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.extension.DeploymentExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
+import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
 import gov.nih.nci.cagrid.introduce.common.AntTools;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.ResourceManager;
@@ -34,6 +35,7 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.border.TitledBorder;
 
+import org.apache.log4j.Logger;
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.utils.BusyDialogRunnable;
@@ -51,6 +53,8 @@ import org.cagrid.grape.utils.CompositeErrorDialog;
  *          Exp $
  */
 public class DeploymentViewer extends ApplicationComponent {
+    
+    private static final Logger logger = Logger.getLogger(DeploymentViewer.class);
 
 	public static final String GLOBUS = "Globus";
 
@@ -107,7 +111,7 @@ public class DeploymentViewer extends ApplicationComponent {
 		try {
 			initialize();
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e);
 			this.dispose();
 		}
 	}
@@ -465,8 +469,7 @@ public class DeploymentViewer extends ApplicationComponent {
 					}
 				}
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				logger.error(e);
 			}
 		}
 		return deploymentTypeSelector;

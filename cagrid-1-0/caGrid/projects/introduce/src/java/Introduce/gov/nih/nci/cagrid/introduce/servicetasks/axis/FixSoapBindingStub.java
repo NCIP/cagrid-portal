@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.introduce.servicetasks.axis;
 
 import gov.nih.nci.cagrid.common.XMLUtilities;
+import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -12,6 +13,7 @@ import java.util.List;
 import java.util.Properties;
 import java.util.StringTokenizer;
 
+import org.apache.log4j.Logger;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 import org.jdom.Document;
@@ -20,6 +22,8 @@ import org.jdom.Namespace;
 
 
 public class FixSoapBindingStub extends Task {
+    
+    private static final Logger logger = Logger.getLogger(FixSoapBindingStub.class);
 
     public FixSoapBindingStub() {
 
@@ -48,7 +52,7 @@ public class FixSoapBindingStub extends Task {
             String mainServiceName = ((Element) services.get(0)).getAttributeValue("name");
             String stubFileName = null;
             for (int i = 0; i < services.size(); i++) {
-                System.out.println("looking to fix soap binding for service "
+                logger.info("looking to fix soap binding for service "
                     + ((Element) services.get(i)).getAttributeValue("name"));
                 stubFileName = basedir.getAbsolutePath() + File.separator +  "build" + File.separator + "stubs-" + mainServiceName + File.separator + "src"
                     + File.separator
@@ -58,7 +62,7 @@ public class FixSoapBindingStub extends Task {
             }
 
             if (excludeArgs == null) {
-                System.out.println("there are no custom serialized namespaces");
+                logger.info("there are no custom serialized namespaces");
                 return;
             }
 
@@ -81,7 +85,7 @@ public class FixSoapBindingStub extends Task {
 
             while (strtok.hasMoreElements()) {
                 String namespace = strtok.nextToken();
-                System.out.println("scanning for references to objects from the namespace: " + namespace);
+                logger.info("scanning for references to objects from the namespace: " + namespace);
 
                 StringBuffer newFileContent = new StringBuffer();
 

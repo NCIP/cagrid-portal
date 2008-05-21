@@ -6,6 +6,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Properties;
 
+import org.apache.log4j.Logger;
+
+import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.upgrade.common.IntroduceUpgradeStatus;
 import gov.nih.nci.cagrid.introduce.upgrade.common.IntroduceUpgraderI;
@@ -13,6 +16,9 @@ import gov.nih.nci.cagrid.introduce.upgrade.common.StatusBase;
 
 
 public abstract class IntroduceUpgraderBase implements  IntroduceUpgraderI{
+    
+    private static final Logger logger = Logger.getLogger(IntroduceUpgraderBase.class);
+    
     ServiceInformation serviceInformation;
     IntroduceUpgradeStatus status;
     String fromVersion;
@@ -36,7 +42,7 @@ public abstract class IntroduceUpgraderBase implements  IntroduceUpgraderI{
 
 
     public void execute() throws Exception {
-        System.out.println("Upgrading Introduce Service From Version " + this.getFromVersion() + " to Version "
+        logger.info("Upgrading Introduce Service From Version " + this.getFromVersion() + " to Version "
             + this.getToVersion());
         upgrade();
         getServiceInformation().getServiceDescriptor().setIntroduceVersion(getToVersion());

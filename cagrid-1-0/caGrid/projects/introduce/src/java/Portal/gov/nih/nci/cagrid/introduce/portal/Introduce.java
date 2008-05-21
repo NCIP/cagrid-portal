@@ -3,6 +3,7 @@ package gov.nih.nci.cagrid.introduce.portal;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.common.portal.SplashScreen;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
+import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
 
 import java.awt.Dimension;
 import java.awt.EventQueue;
@@ -15,11 +16,14 @@ import java.util.Properties;
 
 import javax.swing.JFrame;
 
+import org.apache.log4j.Logger;
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.model.Application;
 
 
 public final class Introduce {
+    
+    private static final Logger logger = Logger.getLogger(Introduce.class);
 
     private static SplashScreen introduceSplash;
 
@@ -31,7 +35,7 @@ public final class Introduce {
             introduceSplash.setLocationRelativeTo(null);
             introduceSplash.setVisible(true);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
     }
 

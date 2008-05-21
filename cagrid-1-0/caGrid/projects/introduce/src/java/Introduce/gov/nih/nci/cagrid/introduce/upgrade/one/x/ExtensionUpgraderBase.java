@@ -1,6 +1,9 @@
 package gov.nih.nci.cagrid.introduce.upgrade.one.x;
 
+import org.apache.log4j.Logger;
+
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
+import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.upgrade.common.ExtensionUpgradeStatus;
 import gov.nih.nci.cagrid.introduce.upgrade.common.ExtensionUpgraderI;
@@ -18,6 +21,8 @@ import gov.nih.nci.cagrid.introduce.upgrade.common.ExtensionUpgraderI;
  * 
  */
 public abstract class ExtensionUpgraderBase implements ExtensionUpgraderI {
+    
+    private static final Logger logger = Logger.getLogger(ExtensionUpgraderBase.class);
 
 	ExtensionType extensionType;
 	   ServiceInformation serviceInformation;
@@ -38,7 +43,7 @@ public abstract class ExtensionUpgraderBase implements ExtensionUpgraderI {
 	}
 
 	public void execute() throws Exception {
-		System.out.println("Upgrading services " + extensionType.getName()
+		logger.info("Upgrading services " + extensionType.getName()
 				+ " extension  from Version " + this.getFromVersion()
 				+ " to Version " + this.getToVersion());
 		upgrade();

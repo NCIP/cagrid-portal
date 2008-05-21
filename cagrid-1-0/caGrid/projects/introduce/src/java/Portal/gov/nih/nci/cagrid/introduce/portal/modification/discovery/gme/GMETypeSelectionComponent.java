@@ -7,6 +7,7 @@ import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.extension.DiscoveryExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespacesType;
+import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.ResourceManager;
 import gov.nih.nci.cagrid.introduce.portal.discoverytools.gme.GMESchemaLocatorPanel;
@@ -22,6 +23,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
 import org.jdom.Document;
 import org.projectmobius.client.gme.ImportInfo;
 import org.projectmobius.common.GridServiceResolver;
@@ -41,6 +43,9 @@ import org.projectmobius.gme.client.GlobusGMEXMLDataModelServiceFactory;
  *          Exp $
  */
 public class GMETypeSelectionComponent extends NamespaceTypeDiscoveryComponent {
+    
+    private static final Logger logger = Logger.getLogger(GMETypeSelectionComponent.class);
+    
     public static String GME_URL = "Global Model Exchange URL";
     public static String TYPE = "GME";
 
@@ -112,7 +117,7 @@ public class GMETypeSelectionComponent extends NamespaceTypeDiscoveryComponent {
                     return null;
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                logger.error(e);
                 return null;
             }
         } else {
@@ -241,7 +246,7 @@ public class GMETypeSelectionComponent extends NamespaceTypeDiscoveryComponent {
         if (namespaceAlreadyExists(namespaceURI) && namespaceExistsPolicy.equals(IGNORE_POLICY)) {
             // do nothing just ignore.....
         } else {
-            System.out.println("Copying schema " + fileName + " to " + copyToDirectory.getCanonicalPath());
+            logger.debug("Copying schema " + fileName + " to " + copyToDirectory.getCanonicalPath());
             File outFile = new File(copyToDirectory.getCanonicalPath() + File.separator + schemaFile.getName());
             Utils.copyFile(schemaFile, outFile);
             storedSchemas.add(outFile.getAbsolutePath());

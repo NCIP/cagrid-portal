@@ -46,7 +46,6 @@ public class ExtensionsUpgradeManager {
 
 
     public void upgrade(IntroduceUpgradeStatus status) throws Exception {
-        System.out.println("Trying to upgrade the service");
         List error = new ArrayList();
 
         ExtensionType[] extensions = serviceInformation.getServiceDescriptor().getExtensions().getExtension();

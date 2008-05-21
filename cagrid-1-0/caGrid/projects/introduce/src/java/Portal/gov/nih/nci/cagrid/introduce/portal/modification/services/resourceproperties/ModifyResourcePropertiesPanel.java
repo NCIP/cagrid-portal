@@ -9,6 +9,7 @@ import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertiesListType;
 import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertyType;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
+import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.SpecificServiceInformation;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
@@ -38,6 +39,7 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.xml.namespace.QName;
 
+import org.apache.log4j.Logger;
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.utils.ErrorDialog;
 import javax.swing.BorderFactory;
@@ -47,6 +49,8 @@ import java.awt.Color;
 
 
 public class ModifyResourcePropertiesPanel extends JPanel {
+    
+    private static final Logger logger = Logger.getLogger(ModifyResourcePropertiesPanel.class);
 
     private JPanel resourcePropertiesPanel = null;
 
@@ -454,7 +458,7 @@ public class ModifyResourcePropertiesPanel extends JPanel {
             }
             if (resourcePropertyFile != null && resourcePropertyFile.exists()) {
                 // file has already been created
-                System.out.println("Loading resource properties file : " + resourcePropertyFile);
+                logger.debug("Loading resource properties file : " + resourcePropertyFile);
                 rpData = Utils.fileToStringBuffer(new File(resourcePropertyFile.getAbsolutePath())).toString();
             } else {
                 // file has not been created yet, we will
@@ -467,7 +471,7 @@ public class ModifyResourcePropertiesPanel extends JPanel {
                         break;
                     }
                 }
-                System.out.println("Creating a new resource properties file");
+                logger.debug("Creating a new resource properties file");
                 boolean created = resourcePropertyFile.createNewFile();
                 if (!created) {
                     throw new Exception("Could not create file"

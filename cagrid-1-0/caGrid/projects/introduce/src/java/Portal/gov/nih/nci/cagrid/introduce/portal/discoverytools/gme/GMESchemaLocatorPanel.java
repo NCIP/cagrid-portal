@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.introduce.portal.discoverytools.gme;
 
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
+import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
 import gov.nih.nci.cagrid.introduce.common.ResourceManager;
 
 import java.awt.BorderLayout;
@@ -21,6 +22,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import org.apache.log4j.Logger;
 import org.cagrid.grape.utils.CompositeErrorDialog;
 import org.projectmobius.common.GridServiceResolver;
 import org.projectmobius.common.MobiusException;
@@ -31,6 +33,8 @@ import org.projectmobius.protocol.gme.SchemaNode;
 
 
 public class GMESchemaLocatorPanel extends JPanel {
+    
+    private static final Logger logger = Logger.getLogger(GMESchemaLocatorPanel.class);
 
 	public static String GME_URL = "Global Model Exchange URL";
 	public static String TYPE = "gme_discovery";

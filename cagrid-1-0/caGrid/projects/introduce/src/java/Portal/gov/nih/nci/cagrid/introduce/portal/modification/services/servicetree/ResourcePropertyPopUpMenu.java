@@ -93,7 +93,6 @@ public class ResourcePropertyPopUpMenu extends JPopupMenu {
 			editResourcePropertyMenuItem
 					.addMouseListener(new java.awt.event.MouseAdapter() {
 						public void mousePressed(java.awt.event.MouseEvent e) {
-							System.out.println("mousePressed()"); // TODO Auto-generated Event stub mousePressed()
 							SpecificServiceInformation info = new SpecificServiceInformation(((ResourcePropertiesTypeTreeNode)node.getParent()).getInfo(),((ResourcePropertiesTypeTreeNode)node.getParent()).getService());
 							try {
 								ModifyResourcePropertiesPanel.viewEditResourceProperty(node.getResourcePropertyType(), info);

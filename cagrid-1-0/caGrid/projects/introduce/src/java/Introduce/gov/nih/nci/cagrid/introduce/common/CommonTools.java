@@ -114,7 +114,7 @@ public final class CommonTools {
                             return curFile;
                         }
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        logger.error(e);
                     }
 
                 }
@@ -135,7 +135,7 @@ public final class CommonTools {
                     try {
                         namespaces.add(getTargetNamespace(curFile));
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        logger.error(e);
                     }
 
                 }
@@ -278,7 +278,7 @@ public final class CommonTools {
             NamespaceToPackageMapper mapper = (NamespaceToPackageMapper) clazz.newInstance();
             return mapper.getPackageName(fullNamespace);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e);
             return null;
         }
     }
@@ -354,7 +354,7 @@ public final class CommonTools {
         try {
             location = "./" + Utils.getRelativePath(serviceSchemaDir, xsdFile).replace('\\', '/');
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error(e);
             throw new Exception("Problem getting relative path of XSD.", e);
         }
         namespaceType.setLocation(location);
@@ -403,7 +403,7 @@ public final class CommonTools {
         try {
             location = "./" + Utils.getRelativePath(serviceSchemaDir, xsdFile).replace('\\', '/');
         } catch (IOException e) {
-            e.printStackTrace();
+           logger.error(e);
             throw new Exception("Problem getting relative path of XSD.", e);
         }
         namespaceType.setLocation(location);

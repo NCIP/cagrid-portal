@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.introduce.upgrade;
 
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
+import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
 import gov.nih.nci.cagrid.introduce.common.IntroduceEnginePropertiesManager;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.extension.utils.ExtensionUtilities;
@@ -13,8 +14,13 @@ import gov.nih.nci.cagrid.introduce.upgrade.common.UpgradeUtilities;
 import java.io.File;
 import java.lang.reflect.Constructor;
 
+import org.apache.log4j.Logger;
+
 
 public class IntroduceUpgradeManager {
+    
+    private static final Logger logger = Logger.getLogger(IntroduceUpgradeManager.class);
+    
     private ExtensionsUpgradeManager eUpgrader;
     private String pathToService;
 
@@ -57,7 +63,7 @@ public class IntroduceUpgradeManager {
             }
             return false;
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e);
             return false;
         }
     }
@@ -73,7 +79,6 @@ public class IntroduceUpgradeManager {
 
 
     protected void upgrade(UpgradeStatus status) throws Exception {
-        System.out.println("Trying to upgrade the service");
 
         String serviceVersion = UpgradeUtilities.getCurrentServiceVersion(pathToService + File.separator
             + IntroduceConstants.INTRODUCE_XML_FILE);
@@ -89,7 +94,7 @@ public class IntroduceUpgradeManager {
 
                     String className = getModelUpgradeClass(vers);
                     if (className == null) {
-                        System.out.println("The model" + " is upgradeable however no upgrade class from the version "
+                        logger.warn("The model" + " is upgradeable however no upgrade class from the version "
                             + vers + " could be found.");
                         return;
                     }
@@ -108,7 +113,7 @@ public class IntroduceUpgradeManager {
 
                     className = getIntroduceUpgradeClass(vers);
                     if (className == null) {
-                        System.out.println("The service" + " is upgradeable however no upgrade class from the version "
+                        logger.warn("The service" + " is upgradeable however no upgrade class from the version "
                             + vers + " could be found.");
                         return;
                     }

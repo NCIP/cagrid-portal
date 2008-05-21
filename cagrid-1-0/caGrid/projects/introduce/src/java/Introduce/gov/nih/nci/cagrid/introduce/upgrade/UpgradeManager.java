@@ -38,7 +38,7 @@ public class UpgradeManager {
                 return false;
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e);
             return false;
         }
 

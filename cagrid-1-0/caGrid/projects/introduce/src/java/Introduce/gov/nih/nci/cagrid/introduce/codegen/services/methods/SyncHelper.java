@@ -27,7 +27,7 @@ import org.apache.ws.jaxme.js.Parameter;
  * 
  * @author David Ervin
  * @created Apr 4, 2007 1:32:03 PM
- * @version $Id: SyncHelper.java,v 1.6 2008-01-16 20:03:21 hastings Exp $
+ * @version $Id: SyncHelper.java,v 1.7 2008-05-21 13:06:58 hastings Exp $
  */
 public class SyncHelper {
     private static final Logger logger = Logger.getLogger(SyncHelper.class);
@@ -554,7 +554,7 @@ public class SyncHelper {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e);
             return startOfMethod;
         }
 
@@ -665,7 +665,7 @@ public class SyncHelper {
                 return index;
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return -1;
     }

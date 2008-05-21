@@ -188,8 +188,7 @@ public class SyncTools {
                                 IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME) + File.separator
                             + service.getName() + ".wsdl").getAbsolutePath());
                     } catch (Exception e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
+                        logger.error(e);
                     }
                     table = parser.getSymbolTable();
 
@@ -289,7 +288,7 @@ public class SyncTools {
                                         exception.setQname(new QName(service.getNamespace() + "/types", exception
                                             .getName()));
                                     } catch (Exception e) {
-                                        e.printStackTrace();
+                                       logger.error(e);
                                     }
                                 }
                             }
@@ -371,7 +370,7 @@ public class SyncTools {
         } catch (Exception e) {
             String mess = "ERROR: Unable to find all referenced elements in service wsdl and xsd.  Please make sure"
                 + " that if there are imported wsdl or xsd that they all exist and are in the right location and are well formed and valid.";
-            e.printStackTrace();
+            logger.error(e);
             throw new Exception(mess, e);
         }
 
@@ -521,8 +520,7 @@ public class SyncTools {
                                             throw new SynchronizationException(
                                                 "Unable to find Element in symbol table for: " + qname);
                                         } else if (type == null) {
-                                            System.out
-                                                .println("ERROR: The lement cannot be found in the symbol table: "
+                                            logger.error("ERROR: The lement cannot be found in the symbol table: "
                                                     + mtype.getName() + ":" + inputParam.getName());
                                         } else {
 
@@ -749,7 +747,7 @@ public class SyncTools {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         if ((info.getServices() != null) && (info.getServices().getService() != null)) {
             for (int serviceI = 0; serviceI < info.getServices().getService().length; serviceI++) {
@@ -856,7 +854,7 @@ public class SyncTools {
                 }
 
             } catch (Exception e) {
-                e.printStackTrace();
+                logger.error(e); 
             }
         }
         String serverConfigS;
@@ -872,8 +870,7 @@ public class SyncTools {
             jndiConfigFW.write(serverConfigJNDIS);
             jndiConfigFW.close();
         } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.error(e);
         }
     }
 

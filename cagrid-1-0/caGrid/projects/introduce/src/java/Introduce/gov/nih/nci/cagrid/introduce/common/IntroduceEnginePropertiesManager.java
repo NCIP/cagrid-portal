@@ -1,12 +1,17 @@
 package gov.nih.nci.cagrid.introduce.common;
 
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
+import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
 
+import org.apache.log4j.Logger;
+
 public final class IntroduceEnginePropertiesManager {
+    
+    private static final Logger logger = Logger.getLogger(IntroduceEnginePropertiesManager.class);
     
     private IntroduceEnginePropertiesManager(){
         
@@ -62,7 +67,7 @@ public final class IntroduceEnginePropertiesManager {
             engineProps.load(new FileInputStream(IntroduceConstants.INTRODUCE_ENGINE_PROPERTIES));
             return engineProps.getProperty(propertyKey);
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error(e);
             return null;
         }
     }

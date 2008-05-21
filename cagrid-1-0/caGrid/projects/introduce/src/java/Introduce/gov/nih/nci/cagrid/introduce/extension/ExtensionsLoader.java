@@ -62,7 +62,7 @@ public class ExtensionsLoader {
 		try {
 			this.load();
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e);
 		}
 	}
 
@@ -123,8 +123,7 @@ public class ExtensionsLoader {
 								logger.warn("Unsupported Extension Type: " + extDesc.getExtensionType());
 							}// TODO Auto-generated method stub
 						} catch (Exception e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
+							logger.error(e);
 						}
 
 					}
@@ -153,7 +152,6 @@ public class ExtensionsLoader {
 						}
 					}
 				} catch (Exception e) {
-					e.printStackTrace();
 					logger.warn("WARNING: extension property " + prop.getKey() + " could not be processed");
 				}
 			}

@@ -4,6 +4,7 @@ import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.introduce.beans.extension.DiscoveryExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionDescription;
+import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
 import gov.nih.nci.cagrid.introduce.common.FileFilters;
 import gov.nih.nci.cagrid.introduce.common.ResourceManager;
 import gov.nih.nci.cagrid.introduce.portal.common.jedit.JEditTextArea;
@@ -25,6 +26,7 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 
+import org.apache.log4j.Logger;
 import org.apache.tools.ant.filters.StringInputStream;
 import org.cagrid.grape.utils.CompositeErrorDialog;
 import org.projectmobius.castor.xml.schema.Schema;
@@ -50,6 +52,8 @@ import org.xml.sax.InputSource;
  *          Exp $
  */
 public class GMEViewer extends NamespaceTypeToolsComponent {
+    
+    private static final Logger logger = Logger.getLogger(GMEViewer.class);
 
 	private JPanel mainPanel = null;
 	private JTabbedPane gmeToolsTabs = null;
@@ -507,7 +511,7 @@ public class GMEViewer extends NamespaceTypeToolsComponent {
 			frame.pack();
 			frame.setVisible(true);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e);
 		}
 	}
 }

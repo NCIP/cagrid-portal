@@ -4,6 +4,7 @@ import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.introduce.beans.software.ExtensionType;
 import gov.nih.nci.cagrid.introduce.beans.software.IntroduceType;
 import gov.nih.nci.cagrid.introduce.beans.software.SoftwareType;
+import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
 
 import java.awt.Dimension;
 import java.awt.Font;
@@ -25,11 +26,14 @@ import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 import javax.xml.namespace.QName;
 
+import org.apache.log4j.Logger;
 import org.pietschy.wizard.InvalidStateException;
 import org.pietschy.wizard.PanelWizardStep;
 
 
 public class DownloadsUpdatesStep extends PanelWizardStep {
+    
+    private static final Logger logger = Logger.getLogger(DownloadsUpdatesStep.class);
 
     private SoftwareType softwareUpdates;
 
@@ -79,7 +83,7 @@ public class DownloadsUpdatesStep extends PanelWizardStep {
                             try {
                                 url = new URL(introduceTypes[i].getZipFileURL().toString());
                             } catch (MalformedURLException e) {
-                                e.printStackTrace();
+                                logger.error(e);
                                 break;
                             }
                             URLConnection connection = null;

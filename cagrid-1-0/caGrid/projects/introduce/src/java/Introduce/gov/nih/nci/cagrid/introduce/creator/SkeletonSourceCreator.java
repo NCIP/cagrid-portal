@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.introduce.creator;
 
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
+import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.common.SpecificServiceInformation;
@@ -23,6 +24,8 @@ import gov.nih.nci.cagrid.introduce.templates.service.globus.resource.SingletonR
 import java.io.File;
 import java.io.FileWriter;
 
+import org.apache.log4j.Logger;
+
 
 /**
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
@@ -30,13 +33,14 @@ import java.io.FileWriter;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  */
 public class SkeletonSourceCreator {
+    private static final Logger logger = Logger.getLogger(SkeletonSourceCreator.class);
 
     public SkeletonSourceCreator() {
     }
 
 
     public void createSkeleton(File baseDirectory, ServiceInformation info, ServiceType service) throws Exception {
-        System.out.println("Creating new source code in : " + baseDirectory.getAbsolutePath() + File.separator + "src");
+        logger.info("Creating new source code in : " + baseDirectory.getAbsolutePath() + File.separator + "src");
 
         File srcDir = new File(baseDirectory.getAbsolutePath() + File.separator + "src");
         srcDir.mkdir();

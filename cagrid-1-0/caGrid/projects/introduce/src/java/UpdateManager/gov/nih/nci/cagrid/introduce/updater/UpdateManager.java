@@ -3,6 +3,7 @@ package gov.nih.nci.cagrid.introduce.updater;
 import gov.nih.nci.cagrid.introduce.beans.software.ExtensionType;
 import gov.nih.nci.cagrid.introduce.beans.software.IntroduceType;
 import gov.nih.nci.cagrid.introduce.beans.software.SoftwareType;
+import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -18,6 +19,7 @@ import java.util.zip.ZipInputStream;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.axis.utils.XMLUtils;
+import org.apache.log4j.Logger;
 import org.globus.wsrf.encoding.DeserializationException;
 import org.globus.wsrf.encoding.ObjectDeserializer;
 import org.xml.sax.InputSource;
@@ -25,6 +27,8 @@ import org.xml.sax.SAXException;
 
 
 public class UpdateManager {
+    
+    private static final Logger logger = Logger.getLogger(UpdateManager.class);
 
     private SoftwareType software = null;
 
@@ -50,7 +54,7 @@ public class UpdateManager {
                     // and directories before unzipping
                     File baseDir = new File(".");
                     File[] files = baseDir.listFiles();
-                    System.out.println("Removing old version of Introduce.");
+                    logger.info("Removing old version of Introduce.");
                     for (int fileI = 0; fileI < files.length; fileI++) {
                         File f = files[fileI];
                         if (f.isDirectory() && !f.getName().equals("updates")) {
@@ -61,21 +65,20 @@ public class UpdateManager {
                     }
                     delete(new File("." + File.separator + "updates" + File.separator + "lib"));
 
-                    System.out.println("Installing new version of Introduce.");
+                    logger.info("Installing new version of Introduce.");
                     File updateFile = new File("." + File.separator + "updates" + File.separator + "introduce"
                         + update.getVersion() + ".zip");
                     try {
                         unzipIntroduce(updateFile);
                         updateFile.delete();
                     } catch (IOException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
+                        logger.error(e);
                     }
                 }
 
                 if (update.getIntroduceRev() != null && update.getIntroduceRev(0) != null) {
                     // just a patch, unzip overtop
-                    System.out.println("Installing updates for current version of Introduce.");
+                    logger.info("Installing updates for current version of Introduce.");
                     File updateFile = new File("." + File.separator + "updates" + File.separator + "introduce"
                         + update.getVersion() + "Patch" + update.getIntroduceRev(0).getPatchVersion() + ".zip");
                     try {
@@ -98,11 +101,9 @@ public class UpdateManager {
                         props.store(fos, "Introduce Engine Properties");
                         fos.close();
                     } catch (FileNotFoundException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
+                        logger.error(e);
                     } catch (IOException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
+                        logger.error(e);
                     }
                     File enginePropsT = new File("." + File.separator + "conf" + File.separator
                         + "introduce.engine.properties.template");
@@ -115,11 +116,9 @@ public class UpdateManager {
                         propsT.store(fos, "Introduce Engine Properties");
                         fos.close();
                     } catch (FileNotFoundException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
+                        logger.error(e);
                     } catch (IOException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
+                        logger.error(e);
                     }
 
                 }
@@ -136,8 +135,7 @@ public class UpdateManager {
                     unzipExtension(updateFile);
                     updateFile.delete();
                 } catch (IOException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
+                    logger.error(e);
                 }
             }
         }
@@ -201,7 +199,7 @@ public class UpdateManager {
         File file = new File(new File(baseDir).getAbsolutePath() + File.separator + s);
         file.getParentFile().mkdirs();
         FileOutputStream out = new FileOutputStream(file);
-        System.out.print(".");
+        logger.info(".");
         byte[] b = new byte[512];
         int len = 0;
         while ((len = zin.read(b)) != -1) {
@@ -214,7 +212,7 @@ public class UpdateManager {
     public static void main(String[] args) {
         File updateFile = new File("updates" + File.separator + "software.xml");
         if (!updateFile.exists()) {
-            System.out.println("No updates to process");
+            logger.info("No updates to process");
             System.exit(0);
         }
 
@@ -222,31 +220,25 @@ public class UpdateManager {
         try {
             doc = XMLUtils.newDocument(new InputSource(new FileInputStream(updateFile)));
         } catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.error(e);
         } catch (ParserConfigurationException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.error(e);
         } catch (SAXException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.error(e);
         } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.error(e);
         }
         SoftwareType software = null;
         try {
             software = (SoftwareType) ObjectDeserializer.toObject(doc.getDocumentElement(), SoftwareType.class);
         } catch (DeserializationException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.error(e);
         }
         UpdateManager manager = null;
         try {
             manager = new UpdateManager(software);
         } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.error(e);
             System.exit(2);
         }
         manager.execute();

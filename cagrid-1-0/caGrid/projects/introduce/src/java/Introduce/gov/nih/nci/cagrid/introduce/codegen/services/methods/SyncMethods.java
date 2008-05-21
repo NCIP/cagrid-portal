@@ -186,8 +186,7 @@ public class SyncMethods extends SyncTool {
                                 getServiceInformation());
                         }
                     } catch (Exception e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
+                        logger.error(e);
                     }
 
                 }

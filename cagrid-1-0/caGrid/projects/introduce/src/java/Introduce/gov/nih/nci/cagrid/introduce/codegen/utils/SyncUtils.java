@@ -164,7 +164,7 @@ public class SyncUtils {
 			fw.write(XMLUtilities.formatXML(XMLUtilities.documentToString(toDoc)));
 			fw.close();
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e);
 		}
 	}
 

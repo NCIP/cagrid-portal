@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.security;
 
+import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
 import gov.nih.nci.cagrid.introduce.common.IntroduceEnginePropertiesManager;
 import gov.nih.nci.cagrid.introduce.common.ResourceManager;
 
@@ -7,8 +8,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import org.apache.log4j.Logger;
+
 
 public class GridGrouperURLManager {
+    
+    private static final Logger logger = Logger.getLogger(GridGrouperURLManager.class);
+    
     public final static String GRID_GROUPER_URL_PROPERTY = "Grid Grouper URLs";
     public final static String GRID_GROUPER_LOAD_PROPERTY = "Grid Grouper Load On Startup";
 
@@ -30,7 +36,7 @@ public class GridGrouperURLManager {
             ResourceManager.setConfigurationProperty(GRID_GROUPER_LOAD_PROPERTY + ".boolean", "");
             loadOnStartup = Boolean.parseBoolean(load);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return loadOnStartup;
     }

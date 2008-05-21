@@ -196,7 +196,6 @@ public class SecurityDescriptorGenerator {
 			}
 			return xml.toString();
 		} catch (Exception e) {
-			e.printStackTrace();
 			throw new Exception("Error configuring the security descriptor for the method " + method.getName() + ": "
 				+ e.getMessage());
 		}

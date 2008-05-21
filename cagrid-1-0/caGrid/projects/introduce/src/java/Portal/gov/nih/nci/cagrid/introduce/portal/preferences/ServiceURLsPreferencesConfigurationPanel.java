@@ -1,12 +1,17 @@
 package gov.nih.nci.cagrid.introduce.portal.preferences;
 
+import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
 import gov.nih.nci.cagrid.introduce.common.ResourceManager;
 
 import java.util.Enumeration;
 
+import org.apache.log4j.Logger;
+
 
 public class ServiceURLsPreferencesConfigurationPanel extends DynamicPreferencesConfigurationPanel {
 
+    private static final Logger logger = Logger.getLogger(ServiceURLsPreferencesConfigurationPanel.class);
+    
 	public ServiceURLsPreferencesConfigurationPanel() {
 		super();
 		initialize();
@@ -23,8 +28,7 @@ public class ServiceURLsPreferencesConfigurationPanel extends DynamicPreferences
 				addTextField(this, key, value, count++, true);
 			}
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error(e);
 		}
 	}
 

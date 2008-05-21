@@ -19,6 +19,7 @@
 	<!-- =================================================================== -->
 	<target name="clean">
 		<delete dir="${build.dir}" />
+		<delete dir="${log.dir}" />
 		<delete dir="${templates.created.src.dir}" />
 		<delete dir="${beans.created.src.dir}" />
 		<delete dir="${servicetasks.beans.created.src.dir}" />
@@ -41,6 +42,7 @@
 	</target>
 	<target name="init" depends="checkGlobus">
 		<mkdir dir="${build.dir}" />
+		<mkdir dir="${log.dir}" />
 		<mkdir dir="${classes.dir}" />
 		<mkdir dir="${introduce.classes.dir}" />
 		<mkdir dir="${portal.classes.dir}" />

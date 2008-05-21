@@ -8,6 +8,7 @@ import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.extension.DiscoveryExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespacesType;
+import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.FileFilters;
 import gov.nih.nci.cagrid.introduce.common.ResourceManager;
@@ -26,11 +27,14 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
+import org.apache.log4j.Logger;
 import org.cagrid.grape.utils.CompositeErrorDialog;
 import org.jdom.Document;
 
 
 public class FileTypesSelectionComponent extends NamespaceTypeDiscoveryComponent {
+    
+    private static final Logger logger = Logger.getLogger(FileTypesSelectionComponent.class);
 
     private class SchemaInfo {
         String filename;
@@ -192,10 +196,8 @@ public class FileTypesSelectionComponent extends NamespaceTypeDiscoveryComponent
             try {
                 SchemaValidator.verify(this.currentFile);
             } catch (Exception e) {
-                e.printStackTrace();
                 addError("File does not appear to be a valid schema");
                 setErrorCauseThrowable(e);
-                e.printStackTrace();
                 return null;
             }
 
@@ -224,7 +226,6 @@ public class FileTypesSelectionComponent extends NamespaceTypeDiscoveryComponent
         } catch (Exception e) {
             addError("Error processing schema: " + e.getMessage());
             setErrorCauseThrowable(e);
-            e.printStackTrace();
             return null;
         }
     }
@@ -280,7 +281,7 @@ public class FileTypesSelectionComponent extends NamespaceTypeDiscoveryComponent
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e);
             addError(e.getMessage());
             return false;
         }
@@ -296,7 +297,7 @@ public class FileTypesSelectionComponent extends NamespaceTypeDiscoveryComponent
         if (namespaceAlreadyExists(namespaceURI) && namespaceExistsPolicy.equals(IGNORE_POLICY)) {
             // do nothing just ignore.....
         } else {
-            System.out.println("Copying schema " + fileName + " to " + copyToDirectory.getCanonicalPath());
+            logger.debug("Copying schema " + fileName + " to " + copyToDirectory.getCanonicalPath());
             File outFile = new File(copyToDirectory.getCanonicalPath() + File.separator + schemaFile.getName());
             Utils.copyFile(schemaFile, outFile);
             storedSchemas.add(new SchemaInfo(outFile.getAbsolutePath(),namespaceURI));

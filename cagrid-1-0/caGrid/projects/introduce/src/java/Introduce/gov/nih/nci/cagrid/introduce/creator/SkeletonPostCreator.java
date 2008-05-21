@@ -5,6 +5,7 @@ import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
+import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.extension.CreationExtensionException;
 import gov.nih.nci.cagrid.introduce.extension.CreationExtensionPostProcessor;
@@ -14,6 +15,7 @@ import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 import java.io.File;
 import java.util.Properties;
 
+import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
@@ -25,6 +27,8 @@ import org.apache.tools.ant.Task;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  */
 public class SkeletonPostCreator extends Task {
+    
+    private static final Logger logger = Logger.getLogger(SkeletonPostCreator.class);
 
     public SkeletonPostCreator() {
         PropertyConfigurator.configure("." + File.separator + "conf" + File.separator
@@ -50,7 +54,7 @@ public class SkeletonPostCreator extends Task {
         } catch (Exception e1) {
             BuildException be = new BuildException(e1.getMessage());
             be.setStackTrace(e1.getStackTrace());
-            be.printStackTrace();
+            logger.error(be);
             throw be;
         }
 
@@ -68,7 +72,7 @@ public class SkeletonPostCreator extends Task {
                 } catch (Exception e1) {
                     BuildException be = new BuildException(e1.getMessage());
                     be.setStackTrace(e1.getStackTrace());
-                    be.printStackTrace();
+                    logger.error(be);
                     throw be;
                 }
                 try {
@@ -78,7 +82,7 @@ public class SkeletonPostCreator extends Task {
                 } catch (CreationExtensionException e) {
                     BuildException be = new BuildException(e.getMessage());
                     be.setStackTrace(e.getStackTrace());
-                    be.printStackTrace();
+                    logger.error(be);
                     throw be;
                 }
             }
@@ -90,7 +94,7 @@ public class SkeletonPostCreator extends Task {
         } catch (Exception e) {
             BuildException be = new BuildException(e.getMessage());
             be.setStackTrace(e.getStackTrace());
-            be.printStackTrace();
+            logger.error(be);
             throw be;
         }
     }

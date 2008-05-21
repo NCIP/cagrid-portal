@@ -4,13 +4,14 @@ import gov.nih.nci.cagrid.introduce.common.ResourceManager;
 
 import java.io.File;
 
-import org.cagrid.grape.ApplicationComponent;
+import org.apache.log4j.Logger;
 import org.cagrid.grape.GridApplication;
-import org.cagrid.grape.model.Dimensions;
 import org.cagrid.grape.model.RenderOptions;
 
 
 public class ModificationLauncher {
+    
+    private static final Logger logger = Logger.getLogger(ModificationLauncher.class);
 
     public File methodsDirectory = null;
 
@@ -19,7 +20,7 @@ public class ModificationLauncher {
         try {
             chooseService();
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         if (this.methodsDirectory != null) {
             try {
@@ -27,7 +28,7 @@ public class ModificationLauncher {
                 RenderOptions ro = new RenderOptions();
                 GridApplication.getContext().addApplicationComponent(viewer, null, ro);
             } catch (Exception e) {
-                e.printStackTrace();
+                logger.error(e);
             }
         }
     }

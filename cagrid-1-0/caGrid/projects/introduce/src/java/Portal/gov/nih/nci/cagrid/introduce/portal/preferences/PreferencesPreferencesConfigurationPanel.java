@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.introduce.portal.preferences;
 
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
+import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
 import gov.nih.nci.cagrid.introduce.common.ResourceManager;
 
 import java.util.ArrayList;
@@ -8,9 +9,13 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import org.apache.log4j.Logger;
+
 
 public class PreferencesPreferencesConfigurationPanel extends DynamicPreferencesConfigurationPanel {
 
+    private static final Logger logger = Logger.getLogger(PreferencesPreferencesConfigurationPanel.class);
+    
     public PreferencesPreferencesConfigurationPanel() {
         super();
         initialize();
@@ -55,8 +60,7 @@ public class PreferencesPreferencesConfigurationPanel extends DynamicPreferences
                 }
             }
         } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.error(e);
         }
     }
 
@@ -79,8 +83,7 @@ public class PreferencesPreferencesConfigurationPanel extends DynamicPreferences
                 }
             }
         } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.error(e);
         }
     }
 

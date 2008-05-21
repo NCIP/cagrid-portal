@@ -1,8 +1,14 @@
 package gov.nih.nci.cagrid.introduce.upgrade.common;
 
+import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
+
+import org.apache.log4j.Logger;
+
 
 
 public abstract class ModelUpgraderBase implements ModelUpgraderI {
+    
+    private static final Logger logger = Logger.getLogger(ModelUpgraderBase.class);
 
 	String fromVersion;
 	String toVersion;
@@ -40,7 +46,7 @@ public abstract class ModelUpgraderBase implements ModelUpgraderI {
 	protected abstract void upgrade() throws Exception;
 
 	public void execute() throws Exception {
-	    System.out.println("Upgrading introduce model"
+	    logger.info("Upgrading introduce model"
             + " from Version " + this.getFromVersion()
             + " to Version " + this.getToVersion());
 		this.upgrade();

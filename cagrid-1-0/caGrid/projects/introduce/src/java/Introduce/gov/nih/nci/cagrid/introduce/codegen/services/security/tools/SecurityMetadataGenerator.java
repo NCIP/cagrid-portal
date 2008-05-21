@@ -120,7 +120,6 @@ public class SecurityMetadataGenerator {
 				return null;
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
 			throw new Exception("Error writing the security metadata for the method " + method.getName() + ": "
 				+ e.getMessage());
 		}

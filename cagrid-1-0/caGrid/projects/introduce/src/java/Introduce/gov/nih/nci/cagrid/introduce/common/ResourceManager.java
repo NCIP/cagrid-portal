@@ -83,7 +83,7 @@ public class ResourceManager {
             serviceProps = getServiceURLProperties();
         } catch (Exception e) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.error(e);
             return null;
         }
         return (String) serviceProps.get(key);
@@ -96,7 +96,7 @@ public class ResourceManager {
             serviceProps = getServiceURLProperties();
         } catch (Exception e) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.error(e);
             return null;
         }
         return serviceProps.keys();
@@ -128,8 +128,7 @@ public class ResourceManager {
         try {
             serviceProps = getConfigurationProperties();
         } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.error(e);
             return null;
         }
         return (String) serviceProps.get(key);
@@ -141,8 +140,7 @@ public class ResourceManager {
         try {
             serviceProps = getConfigurationProperties();
         } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.error(e);
             return null;
         }
         return serviceProps.keys();

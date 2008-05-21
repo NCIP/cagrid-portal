@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.introduce.portal.undeployment;
 
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
+import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
 import gov.nih.nci.cagrid.introduce.common.ResourceManager;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
 import gov.nih.nci.cagrid.introduce.portal.deployment.DeploymentViewer;
@@ -26,6 +27,7 @@ import javax.swing.border.TitledBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import org.apache.log4j.Logger;
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.utils.CompositeErrorDialog;
 import org.cagrid.grape.utils.ErrorDialog;
@@ -34,6 +36,8 @@ import javax.swing.JScrollPane;
 
 
 public class UndeployServiceViewer extends ApplicationComponent {
+    
+    private static final Logger logger = Logger.getLogger(UndeployServiceViewer.class);
 
     private JPanel mainPanel = null;
 
@@ -192,8 +196,7 @@ public class UndeployServiceViewer extends ApplicationComponent {
                     }
                 }
             } catch (Exception e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                logger.error(e);
             }
 
             processContainerSelection();

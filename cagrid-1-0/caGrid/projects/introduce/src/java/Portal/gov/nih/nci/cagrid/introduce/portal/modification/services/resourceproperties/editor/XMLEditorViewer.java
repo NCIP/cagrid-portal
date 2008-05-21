@@ -2,6 +2,7 @@ package gov.nih.nci.cagrid.introduce.portal.modification.services.resourceproper
 
 import gov.nih.nci.cagrid.common.XMLUtilities;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
+import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
 import gov.nih.nci.cagrid.introduce.portal.common.jedit.JEditTextArea;
 import gov.nih.nci.cagrid.introduce.portal.common.jedit.XMLTokenMarker;
 import gov.nih.nci.cagrid.introduce.portal.extension.ResourcePropertyEditorPanel;
@@ -13,6 +14,7 @@ import java.io.File;
 
 import javax.swing.JPanel;
 
+import org.apache.log4j.Logger;
 import org.cagrid.grape.utils.ErrorDialog;
 
 
@@ -27,6 +29,8 @@ import org.cagrid.grape.utils.ErrorDialog;
  *          Exp $
  */
 public class XMLEditorViewer extends ResourcePropertyEditorPanel {
+    
+    private static final Logger logger = Logger.getLogger(XMLEditorViewer.class);
 
     private JPanel xmlViewer = null;
     private String xml = null;
@@ -40,8 +44,8 @@ public class XMLEditorViewer extends ResourcePropertyEditorPanel {
         super(data, schemaFile, schemaDir);
         this.xml = getRPString();
         initialize();
-        System.out.println("SCHEMA FILE: " + schemaFile.getAbsolutePath());
-        System.out.println("SCHEMA DIR: " + schemaDir.getAbsolutePath());
+        logger.debug("SCHEMA FILE: " + schemaFile.getAbsolutePath());
+        logger.debug("SCHEMA DIR: " + schemaDir.getAbsolutePath());
 
     }
 
@@ -117,7 +121,7 @@ public class XMLEditorViewer extends ResourcePropertyEditorPanel {
             XMLUtilities.stringToDocument(xml);
         } catch (Exception e) {
             xml = null;
-            e.printStackTrace();
+            logger.error(e);
         }
         if (xml == null) {
             ErrorDialog.showError("ERROR: Invalid XML Document");

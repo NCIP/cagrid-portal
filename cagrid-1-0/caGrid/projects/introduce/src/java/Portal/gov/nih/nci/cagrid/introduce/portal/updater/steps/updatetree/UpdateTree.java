@@ -109,9 +109,7 @@ public class UpdateTree extends JTree {
                         }
                     }
                     UpdateTree.this.paintAll(UpdateTree.this.getGraphics());
-                } else {
-                    System.out.println("Object:" + obj);
-                }
+                } 
             }
         });
     }
