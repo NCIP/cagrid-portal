@@ -11,11 +11,6 @@
 
         <convert converter="enum" match="gov.nih.nci.cagrid.portal.domain.dataservice.QueryInstanceState"/>
 
-
-		<convert converter="bean" match="gov.nih.nci.cagrid.portal.domain.dataservice.QueryInstance">
-            <param name="include" value="id, finishTime, startTime, state"/>
-        </convert>
-		
         <convert converter="bean" match="gov.nih.nci.cagrid.portal.domain.dataservice.CQLQueryInstance">
             <param name="include" value="id, finishTime, startTime, state"/>
         </convert>
