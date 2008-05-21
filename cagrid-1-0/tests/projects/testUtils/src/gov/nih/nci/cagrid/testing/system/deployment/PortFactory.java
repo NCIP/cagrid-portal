@@ -6,8 +6,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import EDU.oswego.cs.dl.util.concurrent.ObservableSync.SyncObserver;
-
 
 /**
  * PortFactory Utility to hand out PortPreference instances in a static way.
@@ -16,7 +14,7 @@ import EDU.oswego.cs.dl.util.concurrent.ObservableSync.SyncObserver;
  * 
  * @author David Ervin
  * @created Nov 5, 2007 10:13:07 AM
- * @version $Id: PortFactory.java,v 1.2 2008-05-14 18:30:17 hastings Exp $
+ * @version $Id: PortFactory.java,v 1.3 2008-05-21 17:43:35 dervin Exp $
  */
 public class PortFactory {
     private static List<Integer> assignedPortNumbers = null;
