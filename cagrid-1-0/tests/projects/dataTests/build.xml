@@ -61,8 +61,13 @@
 			<fileset dir="${lib.dir}">
 				<include name="**/*.jar" />
 			</fileset>
+			<!-- this is kinda funny to make sure the testUtils jars get in ahead of the old testing stuff -->
 			<fileset dir="${ext.lib.dir}">
 				<include name="**/*.jar" />
+				<exclude name="**/*testing-system*.jar"/>
+			</fileset>
+			<fileset dir="${ext.lib.dir}">
+				<include name="**/*testing-system*.jar"/>
 			</fileset>
 			<fileset dir="${ext.globus.dir}/lib">
 				<include name="**/*.jar" />
