@@ -122,4 +122,9 @@ public abstract class QueryInstance extends AbstractDomainObject {
 		this.portalUser = portalUser;
 	}
 
+	
+	@Transient
+	public abstract String getType();
+	public abstract void setType(String type);
+
 }

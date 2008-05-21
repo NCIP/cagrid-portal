@@ -1,6 +1,5 @@
 package gov.nih.nci.cagrid.portal.dao;
 
-import gov.nih.nci.cagrid.portal.domain.dataservice.DCQLQueryInstance;
 import gov.nih.nci.cagrid.portal.domain.dataservice.QueryInstance;
 
 /**
@@ -14,6 +13,6 @@ public class QueryInstanceDao extends AbstractDao<QueryInstance> {
     }
 
     public Class domainClass() {
-        return DCQLQueryInstance.class;
+        return QueryInstance.class;
     }
 }

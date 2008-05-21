@@ -4,6 +4,8 @@
 package gov.nih.nci.cagrid.portal.portlet.query.cql;
 
 import gov.nih.nci.cagrid.portal.dao.QueryInstanceDao;
+import gov.nih.nci.cagrid.portal.domain.dataservice.CQLQueryInstance;
+import gov.nih.nci.cagrid.portal.domain.dataservice.DCQLQueryInstance;
 import gov.nih.nci.cagrid.portal.domain.dataservice.QueryInstance;
 import gov.nih.nci.cagrid.portal.domain.dataservice.QueryInstanceState;
 import gov.nih.nci.cagrid.portal.portlet.query.QueryModel;
@@ -61,9 +63,10 @@ public class CQLQueryHistoryFacade {
                 .getSubmittedQueries();
 
         for (QueryInstance inst : submitted) {
-            inst.getId().equals(instanceId);
-            instance = inst;
-            break;
+            if(inst.getId().equals(instanceId)){
+            	instance = inst;
+            	break;
+            }
         }
 
         if (instance != null) {
@@ -76,8 +79,15 @@ public class CQLQueryHistoryFacade {
         if (instance == null) {
             instance = getQueryInstanceDao().getById(instanceId);
         }
-
         return instance;
+    }
+    
+    public String renderCQLInstance(CQLQueryInstance bean, String namespace) {
+    	return renderInstance(bean, namespace);
+    }
+    
+    public String renderDCQLInstance(DCQLQueryInstance bean, String namespace) {
+    	return renderInstance(bean, namespace);
     }
 
     public String renderInstance(QueryInstance bean, String namespace) {

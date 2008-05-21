@@ -83,15 +83,27 @@
     }
     
     function <portlet:namespace/>updateInstanceDisplay(instance){
-    	QueryHistoryFacade.renderInstance(instance, '<portlet:namespace/>',
-    	{
-    		callback:function(html){
-    			jQuery("#<portlet:namespace/>-" + instance.id).html(html);
-    		},
-    		errorHandler:function(errorString, exception){
-    			alert("Error updating display: " + errorString);
-    		}
-    	}); 
+        if(instance.type = "CQL"){
+	    	QueryHistoryFacade.renderCQLInstance(instance, '<portlet:namespace/>',
+	    	{
+	    		callback:function(html){
+	    			jQuery("#<portlet:namespace/>-" + instance.id).html(html);
+	    		},
+	    		errorHandler:function(errorString, exception){
+	    			alert("Error updating display: " + errorString);
+	    		}
+	    	}); 
+    	}else{
+	    	QueryHistoryFacade.renderDCQLInstance(instance, '<portlet:namespace/>',
+	    	{
+	    		callback:function(html){
+	    			jQuery("#<portlet:namespace/>-" + instance.id).html(html);
+	    		},
+	    		errorHandler:function(errorString, exception){
+	    			alert("Error updating display: " + errorString);
+	    		}
+	    	});    	
+    	}
     }
     
     jQuery(document).ready(<portlet:namespace/>startHistoryPoll);

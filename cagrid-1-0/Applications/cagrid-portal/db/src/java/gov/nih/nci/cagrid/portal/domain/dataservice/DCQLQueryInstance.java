@@ -9,6 +9,7 @@ import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Transient;
 
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
@@ -35,6 +36,14 @@ public class DCQLQueryInstance extends QueryInstance {
 
 	public void setFqpService(GridService fqpService) {
 		this.fqpService = fqpService;
+	}
+
+	@Transient
+	public String getType() {
+		return "DCQL";
+	}
+	public void setType(String type) {
+		//Do nothing. Immutable.
 	}
 
 }

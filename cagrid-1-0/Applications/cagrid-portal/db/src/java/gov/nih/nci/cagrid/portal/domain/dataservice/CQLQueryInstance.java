@@ -9,6 +9,7 @@ import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Transient;
 
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
@@ -34,6 +35,15 @@ public class CQLQueryInstance extends QueryInstance {
 
 	public void setDataService(GridDataService dataService) {
 		this.dataService = dataService;
+	}
+
+	@Transient
+	public String getType() {
+		return "CQL";
+	}
+
+	public void setType(String type) {
+		//Do nothing. Immutable.
 	}
 
 
