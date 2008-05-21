@@ -1,7 +1,7 @@
 1.2 - 1.3
 -- Fixed circular schema bug in filesystem data type discovery tool
 -- Fixed bug in updater that was looking in the wrong place for introduce.extension.properties and template when trying to set the patch version
--- Added new build-deploy.xml so fix problems with undeploy (upgrader needs to handle the copy in)
+-- Added new build-deploy.xml to fix problems with undeploy (upgrader needs to handle the copy in)
 -- New heuristic for schema imports
 	-- if introduce imports the schema it will only set namespace excludes or type maps for that schema
 	-- if it is desired to do this for the schemas that schema imports than those schemas must be added and handled
