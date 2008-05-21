@@ -9,8 +9,12 @@
 	<property name="failed.message" value="Tests failed! Check test reports." />
 	<!-- tells the service container factories to assign ports in testing mode -->
 	<property name="testing.port.assignment.mode" value="true" />
-
-
+	<!-- tells data tests the base directory in which to create data services -->
+	<property name="temp.test.service.dir" value="${basedir}/test_services"/>
+	<!-- tells system tests where to find the service containers -->
+	<property name="testing.containers.dir" value="${basedir}/ext/dependencies/containers"/>
+	
+	
 	<target name="prepareClasspaths">
 		<path id="all.test.classpath">
 			<pathelement path="${classes.dir}" />
@@ -55,6 +59,7 @@
 			<sysproperty key="introduce.base.dir" value="${introduce.dir}" />
 			<sysproperty key="build.dir" value="${classes.dir}" />
 			<sysproperty key="cql.docs.dir" value="${basedir}/docs/cqlExamples" />
+			<sysproperty key="temp.test.service.dir" value="${temp.test.service.dir}"/>
 			<classpath refid="all.test.classpath" />
 			<formatter type="xml" />
 			<test if="testcase" name="${testcase}" fork="no" todir="${junit.results.dir}" />
@@ -75,6 +80,7 @@
 			<sysproperty key="introduce.base.dir" value="${introduce.dir}" />
 			<sysproperty key="build.dir" value="${classes.dir}" />
 			<sysproperty key="cql.docs.dir" value="${basedir}/docs/cqlExamples" />
+			<sysproperty key="temp.test.service.dir" value="${temp.test.service.dir}"/>
 			<classpath refid="all.test.classpath" />
 			<formatter type="xml" />
 			<test if="testcase" name="${testcase}" fork="no" todir="${junit.results.dir}" />
@@ -95,6 +101,7 @@
 			<sysproperty key="introduce.base.dir" value="${introduce.dir}" />
 			<sysproperty key="build.dir" value="${classes.dir}" />
 			<sysproperty key="cql.docs.dir" value="${basedir}/docs/cqlExamples" />
+			<sysproperty key="temp.test.service.dir" value="${temp.test.service.dir}"/>
 			<classpath refid="all.test.classpath" />
 			<formatter type="xml" />
 			<test if="testcase" name="${testcase}" fork="no" todir="${junit.results.dir}" />
@@ -115,6 +122,8 @@
 			<sysproperty key="introduce.base.dir" value="${introduce.dir}" />
 			<sysproperty key="build.dir" value="${classes.dir}" />
 			<sysproperty key="cql.docs.dir" value="${basedir}/docs/cqlExamples" />
+			<sysproperty key="temp.test.service.dir" value="${temp.test.service.dir}"/>
+			<sysproperty key="testing.containers.dir" value="${testing.containers.dir}"/>
 			<classpath refid="all.test.classpath" />
 			<formatter type="xml" />
 			<test if="testcase" name="${testcase}" fork="no" todir="${junit.results.dir}" />
@@ -135,6 +144,8 @@
 			<sysproperty key="introduce.base.dir" value="${introduce.dir}" />
 			<sysproperty key="build.dir" value="${classes.dir}" />
 			<sysproperty key="cql.docs.dir" value="${basedir}/docs/cqlExamples" />
+			<sysproperty key="temp.test.service.dir" value="${temp.test.service.dir}"/>
+			<sysproperty key="testing.containers.dir" value="${testing.containers.dir}"/>
 			<classpath refid="all.test.classpath" />
 			<formatter type="xml" />
 			<test if="testcase" name="${testcase}" fork="no" todir="${junit.results.dir}" />
@@ -154,6 +165,7 @@
 			<sysproperty key="introduce.base.dir" value="${introduce.dir}" />
 			<sysproperty key="build.dir" value="${classes.dir}" />
 			<sysproperty key="cql.docs.dir" value="${basedir}/docs/cqlExamples" />
+			<sysproperty key="temp.test.service.dir" value="${temp.test.service.dir}"/>
 			<classpath refid="all.test.classpath" />
 			<!-- also needs the other extensions (such as metadata) to be upgraded, so need their upgraders on the classpath -->
 			<classpath>
@@ -180,6 +192,7 @@
 			<sysproperty key="introduce.base.dir" value="${introduce.dir}" />
 			<sysproperty key="build.dir" value="${classes.dir}" />
 			<sysproperty key="cql.docs.dir" value="${basedir}/docs/cqlExamples" />
+			<sysproperty key="temp.test.service.dir" value="${temp.test.service.dir}"/>
 			<classpath refid="all.test.classpath" />
 			<!-- also needs the other extensions (such as metadata) to be upgraded, so need their upgraders on the classpath -->
 			<classpath>
@@ -206,6 +219,8 @@
 			<sysproperty key="introduce.base.dir" value="${introduce.dir}" />
 			<sysproperty key="build.dir" value="${classes.dir}" />
 			<sysproperty key="cql.docs.dir" value="${basedir}/docs/cqlExamples" />
+			<sysproperty key="temp.test.service.dir" value="${temp.test.service.dir}"/>
+			<sysproperty key="testing.containers.dir" value="${testing.containers.dir}"/>
 			<classpath refid="all.test.classpath" />
 			<formatter type="xml" />
 			<test if="testcase" name="${testcase}" fork="no" todir="${junit.results.dir}" />
@@ -225,6 +240,8 @@
 			<sysproperty key="introduce.base.dir" value="${introduce.dir}" />
 			<sysproperty key="build.dir" value="${classes.dir}" />
 			<sysproperty key="cql.docs.dir" value="${basedir}/docs/cqlExamples" />
+			<sysproperty key="temp.test.service.dir" value="${temp.test.service.dir}"/>
+			<sysproperty key="testing.containers.dir" value="${testing.containers.dir}"/>
 			<classpath refid="all.test.classpath" />
 			<formatter type="xml" />
 			<test if="testcase" name="${testcase}" fork="no" todir="${junit.results.dir}" />
