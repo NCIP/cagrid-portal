@@ -16,25 +16,18 @@
 
 
   <publications>
-    
+    <!-- no published artifacts yet -->
   </publications>
 
   <dependencies>
     <!-- Basic Testing stuff and containers -->
     <dependency rev="latest.integration" org="caGrid" name="testing" conf="default->system"/>
-    <dependency rev="latest.integration" org="caGrid" name="testUtils" conf="default->containers"/>
-    <dependency rev="latest.integration" org="caGrid" name="testUtils" conf="default->impl"/>
+    <dependency rev="latest.integration" org="caGrid" name="testUtils" conf="default->impl;default->containers"/>
     
     <!-- Introduce testing -->
     <dependency rev="latest.integration" org="caGrid" name="introduce" conf="default->extension-test"/>
     
-    <!-- Data core 
-    <dependency rev="latest.integration" org="caGrid" name="data" conf="default->utils"/>
-    <dependency rev="latest.integration" org="caGrid" name="data" conf="default->tools"/>
-    <dependency rev="latest.integration" org="caGrid" name="data" conf="default->stubs"/>
-    <dependency rev="latest.integration" org="caGrid" name="data" conf="default->common"/>
-    <dependency rev="latest.integration" org="caGrid" name="data" conf="default->service"/>
-    -->
+    <!-- Data core -->
     <dependency rev="latest.integration" org="caGrid" name="data" conf="default->full"/>
     
     <!-- CQL stubs -->
