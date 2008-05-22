@@ -43,6 +43,7 @@ public class CriteriaBean implements ApplicationContextAware {
 
     private AggregateTargetsCommand aggregateTargets;
     private JoinCondition join;
+    private boolean DCQLQuery;
 
     private HibernateTemplate hibernateTemplate;
 
@@ -320,7 +321,7 @@ public class CriteriaBean implements ApplicationContextAware {
             else if (assocBean.getCriteriaBean() != null && assocBean.getCriteriaBean().isDCQLQuery())
                 return true;
         }
-        return getAggregateTargets() != null && getAggregateTargets().getSelected().size() > 1;
+        return getAggregateTargets() != null && getAggregateTargets().getSelected().size() > 0;
     }
 
 

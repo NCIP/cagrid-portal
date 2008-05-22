@@ -56,8 +56,6 @@ public class CQLQueryCommandValidator extends SelectServiceCommandValidator impl
             command.setCqlQuery(dcql);
             command.setDcql(true);
         } catch (Exception e) {
-            super.validate(obj, errors);
-
             try {
                 gov.nih.nci.cagrid.cqlquery.CQLQuery query = (gov.nih.nci.cagrid.cqlquery.CQLQuery) Utils
                         .deserializeObject(new StringReader(command.getCqlQuery()),
@@ -67,9 +65,13 @@ public class CQLQueryCommandValidator extends SelectServiceCommandValidator impl
                         w);
                 String cql = w.toString();
                 command.setCqlQuery(cql);
+
+                //if its a cql whech service url
+                super.validate(obj, errors);
+
             } catch (Exception ex) {
                 errors.rejectValue("cqlQuery", PortletConstants.BAD_CQL_MSG, null,
-                        "Could not parse query XML.");
+                        "Could not parse query XML. Query XML is invalid");
             }
 
         }
