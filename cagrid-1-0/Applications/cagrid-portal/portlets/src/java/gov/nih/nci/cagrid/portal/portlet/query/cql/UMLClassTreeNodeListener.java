@@ -65,7 +65,7 @@ public class UMLClassTreeNodeListener implements TreeNodeListener {
                         umlClass.getId());
                 if (content instanceof ForeignUMLClassBean) {
                     UMLClassBean parentBean = (UMLClassBean) node.getParent().getContent();
-                    node.setContent(new ForeignUMLClassBean(umlClass, parentBean.getAttributes().get(0)));
+                    umlClassBean = new ForeignUMLClassBean(umlClass, parentBean.getAttributes().get(0));
                 } else {
                     umlClassBean = new UMLClassBean(umlClass);
                 }
