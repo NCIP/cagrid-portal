@@ -43,6 +43,15 @@ public class AuthenticationServiceTest extends ServiceStoryBase {
 		super(container);
 		this.configuration = configuration;
 	}
+	
+	
+
+	@Override
+	public String getName() {
+		return "Authentication Service System Test";
+	}
+
+
 
 	public String getDescription() {
 		return "Authentication Service Test";
