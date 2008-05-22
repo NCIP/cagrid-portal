@@ -40,7 +40,7 @@ public class DCQLFormulator implements QueryFormulator<DCQLQuery> {
 
         AggregateTargetsCommand cmd = bean.getAggregateTargets();
         // add root target
-        List<String> _targets = cmd.getSelected();
+        List<String> _targets = new ArrayList<String>(cmd.getSelected());
         _targets.add(bean.getUmlClass().getModel().getService().getUrl());
         logger.debug("Adding target URLS to dcql query");
         query.setTargetServiceURL(_targets.toArray(new String[]{}));

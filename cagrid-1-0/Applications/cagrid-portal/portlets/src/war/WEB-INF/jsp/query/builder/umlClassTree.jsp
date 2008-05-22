@@ -56,31 +56,6 @@
     node.className = "exp_node";
     }
     }
-
-    function populateForiegnAssociations(path,tabPath){
-    var form = document.<portlet:namespace/>criteriaBeanForm;
-    form.action ='<portlet:renderURL/>';
-    form.path.value=path;
-    form.selectedTabPath.value="/query/builder/cqlQuery";
-    form.operation.value="populateForeignAssociations";
-    form.submit();
-    }
-
-    function <portlet:namespace/>changeJoin(path){
-    <c:out value="${treeFacadeName}"/>.changeJoinCondition(path,{
-    localAttributeName : DWRUtil.getValue(path+'localAttributeName'),
-    foreignAttributeName : DWRUtil.getValue(path+'foreignAttributeName'),
-    predicate: DWRUtil.getValue(path+'predicate')
-    },
-    {
-    errorHandler:function(errorString, exception){
-    alert("Error setting join condition: " + errorString);
-    }
-    });
-
-
-    }
-
     // ]]>
 </script>
 
@@ -96,27 +71,16 @@
 <br/>
 <br/>
 <portlet:actionURL var="action"/>
+<c:choose>
+    <c:when test="${!empty rootNode}">
+        Select an attribute of <c:out value="${rootNode.label}"/>, or of an associated class.</br><br/>
+        <c:set var="prefix"><portlet:namespace/></c:set>
+        <c:set var="node" value="${rootNode}"/>
+        <%@ include file="/WEB-INF/jsp/query/builder/umlClass.jspf" %>
 
-<c:set var="criteriaBeanFormName"><portlet:namespace/>criteriaBeanForm</c:set>
-<form:form name="${criteriaBeanFormName}">
+    </c:when>
+    <c:otherwise>
+        No UMLClass is currently selected.
+    </c:otherwise>
+</c:choose>
 
-
-    <c:choose>
-        <c:when test="${!empty rootNode}">
-            Select an attribute of <c:out value="${rootNode.label}"/>, or of an associated class.</br><br/>
-            <c:set var="prefix"><portlet:namespace/></c:set>
-            <c:set var="node" value="${rootNode}"/>
-            <%@ include file="/WEB-INF/jsp/query/builder/umlClass.jspf" %>
-
-        </c:when>
-        <c:otherwise>
-            No UMLClass is currently selected.
-        </c:otherwise>
-    </c:choose>
-
-    <input type="hidden" name="operation" value=""/>
-    <input type="hidden" name="path" value=""/>
-    <input type="hidden" name="selectedTabPath" value=""/>
-
-
-</form:form>

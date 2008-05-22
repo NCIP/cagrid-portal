@@ -3,21 +3,19 @@
  */
 package gov.nih.nci.cagrid.portal.portlet.query.cql;
 
-import gov.nih.nci.cagrid.portal.domain.metadata.dataservice.SourceUMLAssociationEdge;
-import gov.nih.nci.cagrid.portal.domain.metadata.dataservice.TargetUMLAssociationEdge;
-import gov.nih.nci.cagrid.portal.domain.metadata.dataservice.UMLAssociation;
-import gov.nih.nci.cagrid.portal.domain.metadata.dataservice.UMLAssociationEdge;
-import gov.nih.nci.cagrid.portal.domain.metadata.dataservice.UMLClass;
+import gov.nih.nci.cagrid.portal.domain.metadata.dataservice.*;
+import gov.nih.nci.cagrid.portal.portlet.query.QueryConstants;
+import gov.nih.nci.cagrid.portal.portlet.query.builder.ForeignTargetsProvider;
+import gov.nih.nci.cagrid.portal.portlet.query.dcql.ForeignUMLClassBean;
 import gov.nih.nci.cagrid.portal.portlet.tree.TreeNode;
 import gov.nih.nci.cagrid.portal.portlet.tree.TreeNodeListener;
-import gov.nih.nci.cagrid.portal.portlet.query.dcql.ForeignUMLClassBean;
-
-import java.util.Map;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.orm.hibernate3.HibernateTemplate;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
@@ -28,6 +26,9 @@ public class UMLClassTreeNodeListener implements TreeNodeListener {
     private static final Log logger = LogFactory
             .getLog(UMLClassTreeNodeListener.class);
     private HibernateTemplate hibernateTemplate;
+
+
+    private ForeignTargetsProvider targetsProvider;
 
     /**
      *
@@ -81,8 +82,24 @@ public class UMLClassTreeNodeListener implements TreeNodeListener {
                         targetNode.setContent(new UMLClassBean(targetType));
                     }
                 }
+                // Add foreign nodes
+                List<UMLClass> classes = targetsProvider.getSemanticallyEquivalentClasses(umlClassBean.getUmlClass());
+                for (UMLClass target : classes) {
+                    TreeNode fnode = new TreeNode(node, QueryConstants.FOREIGN_UML_CLASS_PREFIX + umlClass.getClassName());
+                    fnode.setLabel(umlClass.getClassName());
+                    fnode.setContent(new ForeignUMLClassBean(target, umlClassBean.getAttributes().get(0)));
+                    node.getChildren().add(fnode);
+                }
             }
         }
+    }
+
+    public ForeignTargetsProvider getTargetsProvider() {
+        return targetsProvider;
+    }
+
+    public void setTargetsProvider(ForeignTargetsProvider targetsProvider) {
+        this.targetsProvider = targetsProvider;
     }
 
     public HibernateTemplate getHibernateTemplate() {

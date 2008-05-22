@@ -49,6 +49,10 @@
 
     <bean id="umlClassTreeNodeListener" class="gov.nih.nci.cagrid.portal.portlet.query.cql.UMLClassTreeNodeListener">
         <property name="hibernateTemplate" ref="hibernateTemplate"/>
+        <property name="targetsProvider">
+            <bean class="gov.nih.nci.cagrid.portal.portlet.query.builder.UMLClassBasedForeignTargetsProvider"
+                  autowire="byName"/>
+        </property>
     </bean>
 
     <bean id="umlClassTreeFacade" class="gov.nih.nci.cagrid.portal.portlet.tree.TreeFacade" scope="globalSession">

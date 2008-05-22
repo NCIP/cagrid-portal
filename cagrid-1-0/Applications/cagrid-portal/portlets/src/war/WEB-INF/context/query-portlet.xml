@@ -85,18 +85,6 @@
         </property>
     </bean>
 
-    <bean
-            id="populateForeignAssociationsController"
-            class="gov.nih.nci.cagrid.portal.portlet.query.builder.PopulateForeignAssociationsController"
-            autowire="byName" parent="viewUmlClassTreeController">
-        <property name="objectName" value="rootNode"/>
-        <property name="successViewName" value="/builder/umlClassTree"/>
-        <property name="targetsProvider">
-            <bean class="gov.nih.nci.cagrid.portal.portlet.query.builder.UMLClassSemanticMetadataBasedForeignTargetsProvider"
-                  autowire="byName"/>
-        </property>
-    </bean>
-
     <bean id="viewAggregateTargetsController"
           class="gov.nih.nci.cagrid.portal.portlet.query.builder.ViewAggregateTargetsController"
           autowire="byName">
@@ -278,7 +266,7 @@
                 <!-- 
                 <property name="newTabPath" value="/results/tabular"/>
                  -->
-                 <property name="newTabPath" value="/results"/>
+                <property name="newTabPath" value="/results"/>
             </bean>
         </property>
     </bean>
@@ -296,7 +284,7 @@
                 <!-- 
                 <property name="newTabPath" value="/results/xml"/>
                  -->
-                 <property name="newTabPath" value="/results"/>
+                <property name="newTabPath" value="/results"/>
             </bean>
         </property>
     </bean>
@@ -351,20 +339,20 @@
           class="gov.nih.nci.cagrid.portal.portlet.query.results.ViewQueryResultsController"
           autowire="byName">
         <property name="objectName" value="resultsCommand"/>
-         <property name="successViewName" value="/results/tabular"/>
+        <property name="successViewName" value="/results/tabular"/>
         <property name="resultsBeanSessionAttributeName" value="queryInstanceResultsBean"/>
     </bean>
 
-<!-- 
-    <bean id="viewQueryResultsXmlController"
-          class="gov.nih.nci.cagrid.portal.portlet.query.results.ViewQueryResultsController"
-          autowire="byName">
-        <property name="objectName" value="resultsCommand"/>
-        <property name="successViewName" value="/results/xml"/>
-        <property name="xslResource" value="/WEB-INF/xsl/xmlverbatim.xsl"/>
-        <property name="resultsBeanSessionAttributeName" value="queryInstanceResultsBean"/>
-    </bean>
-     -->
+    <!--
+   <bean id="viewQueryResultsXmlController"
+         class="gov.nih.nci.cagrid.portal.portlet.query.results.ViewQueryResultsController"
+         autowire="byName">
+       <property name="objectName" value="resultsCommand"/>
+       <property name="successViewName" value="/results/xml"/>
+       <property name="xslResource" value="/WEB-INF/xsl/xmlverbatim.xsl"/>
+       <property name="resultsBeanSessionAttributeName" value="queryInstanceResultsBean"/>
+   </bean>
+    -->
 
     <bean
             id="scrollQueryInstanceResultsController"
@@ -378,7 +366,7 @@
                 <!-- 
                 <property name="newTabPath" value="/results/tabular"/>
                  -->
-                 <property name="newTabPath" value="/results"/>
+                <property name="newTabPath" value="/results"/>
             </bean>
         </property>
         <property name="resultsBeanSessionAttributeName" value="queryInstanceResultsBean"/>
@@ -626,7 +614,6 @@
                         <entry key="loadSharedQuery" value-ref="loadSharedQueryController"/>
                         <entry key="viewAggregateTargets" value-ref="viewAggregateTargetsController"/>
                         <entry key="selectAggregateTargets" value-ref="selectAggregateTargetsController"/>
-                        <entry key="populateForeignAssociations" value-ref="populateForeignAssociationsController"/>
                     </map>
                 </entry>
             </map>
@@ -682,7 +669,7 @@
                 <entry key="/query/builder/addAggregateTargets" value-ref="viewQueryModifierController"/>
                 <entry key="/query/xml" value-ref="viewCqlXmlController"/>
                 <entry key="/history" value-ref="viewQueryHistoryController"/>
-                
+
                 <entry key="/results" value-ref="viewQueryResultsTabularController"/>
                 <!-- 
                 <entry key="/results/tabular" value-ref="viewQueryResultsTabularController"/>
