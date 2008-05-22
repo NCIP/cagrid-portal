@@ -3,6 +3,7 @@
  */
 package gov.nih.nci.cagrid.portal.portlet.query.results;
 
+import gov.nih.nci.cagrid.portal.dao.DCQLQueryDao;
 import gov.nih.nci.cagrid.portal.dao.DomainModelDao;
 import gov.nih.nci.cagrid.portal.domain.GridDataService;
 import gov.nih.nci.cagrid.portal.domain.dataservice.CQLQueryInstance;
@@ -34,6 +35,7 @@ public class ViewQueryResultsController extends AbstractQueryRenderController {
 
 	private String resultsBeanSessionAttributeName;
 	private DomainModelDao domainModelDao;
+	private DCQLQueryDao dcqlQueryDao;
 
 	/**
 	 * 
@@ -100,6 +102,7 @@ public class ViewQueryResultsController extends AbstractQueryRenderController {
 		} else {
 			DCQLQueryInstance dcqlQueryInstance = (DCQLQueryInstance) instance;
 			DCQLQuery query = (DCQLQuery) dcqlQueryInstance.getQuery();
+			query = getDcqlQueryDao().getById(query.getId());
 			domainModel = query.getTargetServices().get(0).getDomainModel();
 		}
 		domainModel = getDomainModelDao().getById(domainModel.getId());
@@ -127,6 +130,14 @@ public class ViewQueryResultsController extends AbstractQueryRenderController {
 
 	public void setDomainModelDao(DomainModelDao domainModelDao) {
 		this.domainModelDao = domainModelDao;
+	}
+
+	public DCQLQueryDao getDcqlQueryDao() {
+		return dcqlQueryDao;
+	}
+
+	public void setDcqlQueryDao(DCQLQueryDao dcqlQueryDao) {
+		this.dcqlQueryDao = dcqlQueryDao;
 	}
 
 }

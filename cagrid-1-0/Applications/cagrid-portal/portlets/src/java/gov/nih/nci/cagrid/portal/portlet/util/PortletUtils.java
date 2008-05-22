@@ -16,7 +16,9 @@ import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.portlet.PortletRequest;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -30,6 +32,8 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
@@ -190,21 +194,36 @@ public class PortletUtils {
 	}
 
 	public static void main(String[] args) throws Exception {
-		String targetClassName = null;
+		Set<String> urls = new HashSet<String>();
 		Document doc = DocumentBuilderFactory.newInstance()
-				.newDocumentBuilder().parse(new FileInputStream("aggr/test/data/cabioMouseQuery.xml"));
+				.newDocumentBuilder().parse(
+						new FileInputStream("tissueQuery.xml"));
 		XPathFactory xpFact = XPathFactory.newInstance();
-		Element targetEl = (Element) xpFact.newXPath().compile(
-				"/CQLQuery/Target").evaluate(doc, XPathConstants.NODE);
-		if (targetEl == null) {
-			targetEl = (Element) xpFact.newXPath().compile(
-					"/DCQLQuery/TargetObject").evaluate(doc,
-					XPathConstants.NODE);
+		NodeList urlEls = (NodeList) xpFact.newXPath().compile(
+				"/DCQLQuery/targetServiceURL").evaluate(doc,
+				XPathConstants.NODESET);
+		for (int i = 0; i < urlEls.getLength(); i++) {
+			Element el = (Element) urlEls.item(i);
+			urls.add(el.getTextContent());
 		}
-		if (targetEl != null) {
-			targetClassName = targetEl.getAttribute("name");
+		System.out.println(urls);
+	}
+
+	public static Set<String> getTargetServiceUrls(String dcql)
+			throws Exception {
+		Set<String> urls = new HashSet<String>();
+		Document doc = DocumentBuilderFactory.newInstance()
+				.newDocumentBuilder().parse(
+						new ByteArrayInputStream(dcql.getBytes()));
+		XPathFactory xpFact = XPathFactory.newInstance();
+		NodeList urlEls = (NodeList) xpFact.newXPath().compile(
+				"/DCQLQuery/targetServiceURL").evaluate(doc,
+				XPathConstants.NODESET);
+		for (int i = 0; i < urlEls.getLength(); i++) {
+			Element el = (Element) urlEls.item(i);
+			urls.add(el.getTextContent());
 		}
-		System.out.println("UMLClass: " + targetClassName);
+		return urls;
 	}
 
 }

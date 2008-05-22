@@ -92,7 +92,7 @@
         <property name="objectName" value="rootNode"/>
         <property name="successViewName" value="/builder/umlClassTree"/>
         <property name="targetsProvider">
-            <bean class="gov.nih.nci.cagrid.portal.portlet.query.builder.UMLClassBasedForeignTargetsProvider"
+            <bean class="gov.nih.nci.cagrid.portal.portlet.query.builder.UMLClassSemanticMetadataBasedForeignTargetsProvider"
                   autowire="byName"/>
         </property>
     </bean>

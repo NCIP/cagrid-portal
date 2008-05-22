@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.portal.portlet.query.builder;
 
+import gov.nih.nci.cagrid.portal.dao.UMLClassDao;
 import gov.nih.nci.cagrid.portal.domain.metadata.dataservice.UMLClass;
 import gov.nih.nci.cagrid.portal.portlet.query.QueryConstants;
 import gov.nih.nci.cagrid.portal.portlet.query.cql.UMLClassBean;
@@ -21,6 +22,7 @@ public class PopulateForeignAssociationsController extends
 
 
     private ForeignTargetsProvider targetsProvider;
+    private UMLClassDao umlClassDao;
 
     public PopulateForeignAssociationsController() {
     }
@@ -39,7 +41,8 @@ public class PopulateForeignAssociationsController extends
         UMLClassBean umlClassBean = (UMLClassBean) node.getContent();
 
         if (node != null) {
-            List<UMLClass> classes = targetsProvider.getSemanticallyEquivalentClasses(umlClassBean.getUmlClass());
+        	UMLClass example = getUmlClassDao().getById(umlClassBean.getUmlClass().getId());
+            List<UMLClass> classes = targetsProvider.getSemanticallyEquivalentClasses(example);
             for (UMLClass target : classes) {
                 node.getChildren().add(createNode(target, node));
             }
@@ -66,6 +69,16 @@ public class PopulateForeignAssociationsController extends
     public void setTargetsProvider(ForeignTargetsProvider targetsProvider) {
         this.targetsProvider = targetsProvider;
     }
+
+
+	public UMLClassDao getUmlClassDao() {
+		return umlClassDao;
+	}
+
+
+	public void setUmlClassDao(UMLClassDao umlClassDao) {
+		this.umlClassDao = umlClassDao;
+	}
 
 
 }
