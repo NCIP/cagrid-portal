@@ -150,4 +150,25 @@ public class UMLClassDao extends AbstractDao<UMLClass> {
     }
 
 
+	public UMLClass getUmlClassFromModel(final DomainModel domainModel,
+			final String umlClassName) {
+		return (UMLClass)getHibernateTemplate()
+        .execute(new HibernateCallback() {
+            public Object doInHibernate(Session session)
+                    throws HibernateException, SQLException {
+            	UMLClass umlClass = null;
+        		for (UMLClass klass : domainModel.getClasses()) {
+        			String className = klass.getPackageName() + "."
+        					+ klass.getClassName();
+        			if (className.equals(umlClassName)) {
+        				umlClass = klass;
+        				break;
+        			}
+        		}
+        		return umlClass;
+            }
+        });
+	}
+
+
 }

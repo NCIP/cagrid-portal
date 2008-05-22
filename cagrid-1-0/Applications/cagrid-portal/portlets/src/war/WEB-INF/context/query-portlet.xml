@@ -351,11 +351,7 @@
           class="gov.nih.nci.cagrid.portal.portlet.query.results.ViewQueryResultsController"
           autowire="byName">
         <property name="objectName" value="resultsCommand"/>
-        <!-- 
-        <property name="successViewName" value="/results/tabular"/>
-         -->
          <property name="successViewName" value="/results/tabular"/>
-        <property name="xslResource" value="/WEB-INF/xsl/xmlverbatim.xsl"/>
         <property name="resultsBeanSessionAttributeName" value="queryInstanceResultsBean"/>
     </bean>
 

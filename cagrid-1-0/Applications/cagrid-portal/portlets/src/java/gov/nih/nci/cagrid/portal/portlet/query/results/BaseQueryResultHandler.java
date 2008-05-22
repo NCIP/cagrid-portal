@@ -3,8 +3,8 @@
  */
 package gov.nih.nci.cagrid.portal.portlet.query.results;
 
-import gov.nih.nci.cagrid.portal.portlet.util.Table;
-
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Stack;
 
 import org.xml.sax.Attributes;
@@ -19,6 +19,7 @@ public abstract class BaseQueryResultHandler extends DefaultHandler {
 	protected Stack<ElementInfo> elementStack = new Stack<ElementInfo>();
 	protected ResultType resultType;
 	protected QueryType queryType;
+	private List<String> columnNames = new ArrayList<String>();
 	
 	enum ResultType {
 		EMPTY, OBJECT, ATTRIBUTE, COUNT;
@@ -40,6 +41,14 @@ public abstract class BaseQueryResultHandler extends DefaultHandler {
 			this.qName = qName;
 			this.atts = atts;
 		}
+	}
+
+	public List<String> getColumnNames() {
+		return columnNames;
+	}
+
+	public void setColumnNames(List<String> columnNames) {
+		this.columnNames = columnNames;
 	}
 
 }

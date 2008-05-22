@@ -3,7 +3,11 @@
  */
 package gov.nih.nci.cagrid.portal.portlet.query.cql;
 
+import gov.nih.nci.cagrid.portal.dao.UMLClassDao;
+import gov.nih.nci.cagrid.portal.domain.dataservice.CQLQuery;
 import gov.nih.nci.cagrid.portal.domain.dataservice.CQLQueryInstance;
+import gov.nih.nci.cagrid.portal.domain.metadata.dataservice.UMLClass;
+import gov.nih.nci.cagrid.portal.portlet.util.PortletUtils;
 import gov.nih.nci.cagrid.portal.security.EncryptionService;
 
 import java.io.ByteArrayInputStream;
@@ -149,5 +153,4 @@ public class DefaultCQLQueryInstanceExecutor implements
     public void setEncryptionService(EncryptionService encryptionService) {
         this.encryptionService = encryptionService;
     }
-
 }

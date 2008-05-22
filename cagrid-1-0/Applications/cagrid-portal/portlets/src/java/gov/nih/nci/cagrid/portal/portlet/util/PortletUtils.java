@@ -3,23 +3,33 @@
  */
 package gov.nih.nci.cagrid.portal.portlet.util;
 
+import gov.nih.nci.cagrid.portal.domain.GridDataService;
 import gov.nih.nci.cagrid.portal.domain.GridService;
 import gov.nih.nci.cagrid.portal.domain.ServiceStatus;
+import gov.nih.nci.cagrid.portal.domain.dataservice.CQLQuery;
+import gov.nih.nci.cagrid.portal.domain.metadata.dataservice.UMLClass;
 import gov.nih.nci.cagrid.portal.portlet.query.results.QueryResultToTableHandler;
 import gov.nih.nci.cagrid.portal.portlet.query.results.QueryResultToWorkbookHandler;
 import gov.nih.nci.cagrid.portal.util.PortalUtils;
 
+import java.io.ByteArrayInputStream;
+import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.portlet.PortletRequest;
+import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathFactory;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
@@ -29,139 +39,46 @@ public class PortletUtils {
 
 	private static final Log logger = LogFactory.getLog(PortletUtils.class);
 
-//	public static final String EMPTY_RESULT_PATTERN = "count(/CQLQueryResults/child::*) = 0";
-//	public static final String OBJECT_RESULT_PATTERN = "count(/CQLQueryResults/ObjectResult) > 0";
-//	public static final String ATTRIBUTE_RESULT_PATTERN = "count(/CQLQueryResults/AttributeResult) > 0";
-//	public static final String COUNT_RESULT_PATTERN = "count(/CQLQueryResults/CountResult) = 1";
+	// public static final String EMPTY_RESULT_PATTERN =
+	// "count(/CQLQueryResults/child::*) = 0";
+	// public static final String OBJECT_RESULT_PATTERN =
+	// "count(/CQLQueryResults/ObjectResult) > 0";
+	// public static final String ATTRIBUTE_RESULT_PATTERN =
+	// "count(/CQLQueryResults/AttributeResult) > 0";
+	// public static final String COUNT_RESULT_PATTERN =
+	// "count(/CQLQueryResults/CountResult) = 1";
 
 	private static SAXParser parser;
-	
-	public static HSSFWorkbook buildWorkbookFromCQLResults(InputStream in) throws Exception {
+
+	public static HSSFWorkbook buildWorkbookFromCQLResults(
+			List<String> colNames, InputStream in) throws Exception {
 		if (parser == null) {
 			SAXParserFactory fact = SAXParserFactory.newInstance();
 			fact.setNamespaceAware(true);
 			parser = fact.newSAXParser();
 		}
 		QueryResultToWorkbookHandler handler = new QueryResultToWorkbookHandler();
+		if (colNames != null) {
+			handler.setColumnNames(colNames);
+		}
 		parser.parse(in, handler);
 		return handler.getWorkbook();
 	}
 
-	public static Table buildTableFromCQLResults(InputStream in)
-			throws Exception {
+	public static Table buildTableFromCQLResults(List<String> colNames,
+			InputStream in) throws Exception {
 		if (parser == null) {
 			SAXParserFactory fact = SAXParserFactory.newInstance();
 			fact.setNamespaceAware(true);
 			parser = fact.newSAXParser();
 		}
 		QueryResultToTableHandler handler = new QueryResultToTableHandler();
+		if (colNames != null) {
+			handler.setColumnNames(colNames);
+		}
 		parser.parse(in, handler);
 		return handler.getTable();
-
-		// Table table = new Table();
-		// Document doc = DocumentBuilderFactory.newInstance()
-		// .newDocumentBuilder().parse(in);
-		// XPathFactory xpFact = XPathFactory.newInstance();
-		//
-		// Boolean isEmpty = (Boolean) xpFact.newXPath().compile(
-		// EMPTY_RESULT_PATTERN).evaluate(doc, XPathConstants.BOOLEAN);
-		// if (isEmpty) {
-		// return null;
-		// }
-		//
-		// if (isObjectResult(doc)) {
-		// populateObjectResults(doc, table);
-		// } else if (isAttributeResult(doc)) {
-		// populateAttributeResults(doc, table);
-		// } else if (isCountResult(doc)) {
-		// populateCountResult(doc, table);
-		// }
-		//
-		// return table;
-
 	}
-
-	// private static void populateCountResult(Document doc, Table table)
-	// throws Exception {
-	// table.getHeaders().add("count");
-	// XPathFactory xpFact = XPathFactory.newInstance();
-	// Element countEl = (Element) xpFact.newXPath().compile(
-	// "/CQLQueryResults/CountResult").evaluate(doc,
-	// XPathConstants.NODE);
-	// Map<String, Object> row = new HashMap<String, Object>();
-	// row.put("count", countEl.getAttribute("count"));
-	// table.getRows().add(row);
-	// }
-	//
-	// private static boolean isCountResult(Document doc)
-	// throws XPathExpressionException {
-	// return (Boolean) XPathFactory.newInstance().newXPath().compile(
-	// COUNT_RESULT_PATTERN).evaluate(doc, XPathConstants.BOOLEAN);
-	//
-	// }
-	//
-	// private static void populateAttributeResults(Document doc, Table table)
-	// throws Exception {
-	// XPathFactory xpFact = XPathFactory.newInstance();
-	// NodeList attResults = (NodeList) xpFact.newXPath().compile(
-	// "/CQLQueryResults/AttributeResult").evaluate(doc,
-	// XPathConstants.NODESET);
-	// for (int i = 0; i < attResults.getLength(); i++) {
-	// Element attResult = (Element) attResults.item(i);
-	// NodeList attEls = (NodeList) xpFact.newXPath().compile(
-	// "./Attribute").evaluate(attResult, XPathConstants.NODESET);
-	// Map<String, Object> row = new HashMap<String, Object>();
-	// for (int j = 0; j < attEls.getLength(); j++) {
-	// Element attEl = (Element) attEls.item(j);
-	// String name = attEl.getAttribute("name");
-	// String value = attEl.getAttribute("value");
-	// if (!table.getHeaders().contains(name)) {
-	// table.getHeaders().add(name);
-	// }
-	//
-	// row.put(name, value);
-	// }
-	// table.getRows().add(row);
-	// }
-	//
-	// }
-	//
-	// private static boolean isAttributeResult(Document doc)
-	// throws XPathExpressionException {
-	// return (Boolean) XPathFactory.newInstance().newXPath().compile(
-	// ATTRIBUTE_RESULT_PATTERN).evaluate(doc, XPathConstants.BOOLEAN);
-	// }
-	//
-	// private static void populateObjectResults(Document doc, Table table)
-	// throws Exception {
-	//
-	// XPathFactory xpFact = XPathFactory.newInstance();
-	// NodeList objResults = (NodeList) xpFact.newXPath().compile(
-	// "/CQLQueryResults/ObjectResult/child::*").evaluate(doc,
-	// XPathConstants.NODESET);
-	// for (int i = 0; i < objResults.getLength(); i++) {
-	// Element objResult = (Element) objResults.item(i);
-	// NodeList atts = (NodeList) xpFact.newXPath().compile(
-	// "./attribute::*").evaluate(objResult,
-	// XPathConstants.NODESET);
-	// Map<String, Object> row = new HashMap<String, Object>();
-	// for (int j = 0; j < atts.getLength(); j++) {
-	// Attr att = (Attr) atts.item(j);
-	// if (!table.getHeaders().contains(att.getName())) {
-	// table.getHeaders().add(att.getName());
-	// }
-	//
-	// row.put(att.getName(), att.getValue());
-	// }
-	// table.getRows().add(row);
-	// }
-	// }
-	//
-	// private static boolean isObjectResult(Document doc)
-	// throws XPathExpressionException {
-	// return (Boolean) XPathFactory.newInstance().newXPath().compile(
-	// OBJECT_RESULT_PATTERN).evaluate(doc, XPathConstants.BOOLEAN);
-	// }
 
 	public static void doScrollOp(PortletRequest request, Scroller scroller) {
 		String scrollOp = request.getParameter("scrollOp");
@@ -242,6 +159,52 @@ public class PortletUtils {
 			}
 		}
 		return out;
+	}
+
+	public static String getTargetUMLClassName(String cqlQuery) {
+		String targetClassName = null;
+		try {
+
+			// NOTE: We don't need to worry about XML bomb here since,
+			// CQL was already validated (i.e. parsed with Axis API which
+			// disables DOCTYPE).
+			Document doc = DocumentBuilderFactory.newInstance()
+					.newDocumentBuilder().parse(
+							new ByteArrayInputStream(cqlQuery.getBytes()));
+			XPathFactory xpFact = XPathFactory.newInstance();
+			Element targetEl = (Element) xpFact.newXPath().compile(
+					"/CQLQuery/Target").evaluate(doc, XPathConstants.NODE);
+			if (targetEl == null) {
+				targetEl = (Element) xpFact.newXPath().compile(
+						"/DCQLQuery/TargetObject").evaluate(doc,
+						XPathConstants.NODE);
+			}
+			if (targetEl != null) {
+				targetClassName = targetEl.getAttribute("name");
+			}
+		} catch (Exception ex) {
+			logger.error("Error getting target class name: " + ex.getMessage(),
+					ex);
+		}
+		return targetClassName;
+	}
+
+	public static void main(String[] args) throws Exception {
+		String targetClassName = null;
+		Document doc = DocumentBuilderFactory.newInstance()
+				.newDocumentBuilder().parse(new FileInputStream("aggr/test/data/cabioMouseQuery.xml"));
+		XPathFactory xpFact = XPathFactory.newInstance();
+		Element targetEl = (Element) xpFact.newXPath().compile(
+				"/CQLQuery/Target").evaluate(doc, XPathConstants.NODE);
+		if (targetEl == null) {
+			targetEl = (Element) xpFact.newXPath().compile(
+					"/DCQLQuery/TargetObject").evaluate(doc,
+					XPathConstants.NODE);
+		}
+		if (targetEl != null) {
+			targetClassName = targetEl.getAttribute("name");
+		}
+		System.out.println("UMLClass: " + targetClassName);
 	}
 
 }

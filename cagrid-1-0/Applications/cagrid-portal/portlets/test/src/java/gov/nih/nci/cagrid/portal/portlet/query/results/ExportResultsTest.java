@@ -61,7 +61,7 @@ public class ExportResultsTest extends TestCase {
 			// HSSFWorkbook wb = ExportResultsController.createWorkbook(table,
 			// "query_results");
 			HSSFWorkbook wb = PortletUtils
-					.buildWorkbookFromCQLResults(new ByteArrayInputStream(sb
+					.buildWorkbookFromCQLResults(null, new ByteArrayInputStream(sb
 							.toString().getBytes()));
 			HSSFSheet spreadSheet = wb.getSheetAt(0);
 			assertTrue("expected 91 rows; lastRowNum is "

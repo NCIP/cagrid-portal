@@ -62,7 +62,11 @@ public class ScrollQueryInstanceResultsController extends
 		CQLQueryInstanceResultsBean resultsBean = (CQLQueryInstanceResultsBean) request
 				.getPortletSession().getAttribute(
 						getResultsBeanSessionAttributeName());
-		resultsBean.getTableScroller().scroll(command);
+		if(resultsBean == null){
+			logger.warn("No results bean found in session. Session is probably expired.");
+		}else{
+			resultsBean.getTableScroller().scroll(command);
+		}
 	}
 
 	@Required

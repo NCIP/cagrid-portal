@@ -4,8 +4,10 @@
 package gov.nih.nci.cagrid.portal.portlet.query.results;
 
 import java.io.FileInputStream;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -33,8 +35,8 @@ public class QueryResultToWorkbookHandler extends BaseQueryResultHandler {
 	private HSSFRow headerRow;
 	private HSSFRow currentRow;
 	private int rowNum = 1;
-	private short colNum = 0;
-	private Set<String> colHeaders = new HashSet<String>();
+	private List<String> colHeaders = new ArrayList<String>();
+	private Map<String, String> currentRowValues = new HashMap<String, String>();
 
 	/**
 	 * 
@@ -42,7 +44,6 @@ public class QueryResultToWorkbookHandler extends BaseQueryResultHandler {
 	public QueryResultToWorkbookHandler() {
 		workbook = new HSSFWorkbook();
 		sheet = workbook.createSheet("query_results");
-		headerRow = sheet.createRow(0);
 	}
 
 	public void startElement(String uri, String localName, String qName,
@@ -73,7 +74,7 @@ public class QueryResultToWorkbookHandler extends BaseQueryResultHandler {
 		if (resultType != null) {
 			if (ResultType.COUNT.equals(resultType)) {
 
-				HSSFRow headerRow = sheet.createRow(0);
+				headerRow = sheet.createRow(0);
 				HSSFCell headerCell = headerRow.createCell((short) 0);
 				headerCell.setCellValue("count");
 				HSSFRow valueRow = sheet.createRow(1);
@@ -85,25 +86,23 @@ public class QueryResultToWorkbookHandler extends BaseQueryResultHandler {
 				if ("AttributeResult".equals(localName)) {
 
 					currentRow = sheet.createRow(rowNum++);
+					currentRowValues.clear();
 
 				} else if ("Attribute".equals(localName)) {
 
 					String name = attributes.getValue("name");
 					String value = attributes.getValue("value");
-					if (!colHeaders.contains(name)) {
+					if (headerRow == null) {
 						colHeaders.add(name);
-						HSSFCell headerCell = headerRow.createCell(colNum);
-						headerCell.setCellValue(name);
 					}
-					HSSFCell valueCell = currentRow.createCell(colNum);
-					valueCell.setCellValue(value);
-					colNum++;
+					currentRowValues.put(name, value);
 				}
 			} else if (ResultType.OBJECT.equals(resultType)) {
 
 				if ("ObjectResult".equals(localName)) {
 
 					currentRow = sheet.createRow(rowNum++);
+					currentRowValues.clear();
 
 				} else if ("ObjectResult".equals(elementStack.get(elementStack
 						.size() - 2).localName)) {
@@ -111,14 +110,15 @@ public class QueryResultToWorkbookHandler extends BaseQueryResultHandler {
 					for (int i = 0; i < attributes.getLength(); i++) {
 						String name = attributes.getLocalName(i);
 						String value = attributes.getValue(i);
-						if (!colHeaders.contains(name)) {
+						if (headerRow == null) {
 							colHeaders.add(name);
-							HSSFCell headerCell = headerRow.createCell(colNum);
-							headerCell.setCellValue(name);
 						}
-						HSSFCell valueCell = currentRow.createCell((short) i);
-						valueCell.setCellValue(value);
+						currentRowValues.put(name, value);
 					}
+					if(headerRow == null){
+						initHeaderRow();
+					}
+					setRowValues();
 				}
 			}
 		}
@@ -127,8 +127,12 @@ public class QueryResultToWorkbookHandler extends BaseQueryResultHandler {
 
 	public void endElement(String uri, String localName, String qName)
 			throws SAXException {
+		
 		if ("AttributeResult".equals(localName)) {
-			colNum = 0;
+			if (headerRow == null) {
+				initHeaderRow();
+			}
+			setRowValues();
 		}
 		elementStack.pop();
 	}
@@ -141,17 +145,45 @@ public class QueryResultToWorkbookHandler extends BaseQueryResultHandler {
 	public void endDocument() {
 
 	}
+	
+	private void setRowValues(){
+		short colNum = 0;
+		for(String colName : colHeaders){
+			HSSFCell cell = currentRow.createCell(colNum++);
+			cell.setCellValue(currentRowValues.get(colName));
+		}	
+	}
+	
+	private void initHeaderRow(){
+		headerRow = sheet.createRow(0);
+		if (getColumnNames() != null && getColumnNames().size() > 0) {
+			colHeaders = getColumnNames();
+		}
+		short colNum = 0;
+		for (String colName : colHeaders) {
+			HSSFCell headerCell = headerRow.createCell(colNum++);
+			headerCell.setCellValue(colName);
+		}		
+	}
 
 	public HSSFWorkbook getWorkbook() {
 		return workbook;
 	}
 
 	public static void main(String[] args) throws Exception {
+		List<String> colNames = new ArrayList();
+		colNames.add("description");
+		colNames.add("histology");
+		colNames.add("name");
+		colNames.add("yadda");
+		colNames.add("organ");
+		colNames.add("id");
 		SAXParserFactory fact = SAXParserFactory.newInstance();
 		fact.setNamespaceAware(true);
 		SAXParser parser = fact.newSAXParser();
 		QueryResultToWorkbookHandler handler = new QueryResultToWorkbookHandler();
-		parser.parse(new FileInputStream("tissueQueryResults_cql_count.xml"),
+//		handler.setColumnNames(colNames);
+		parser.parse(new FileInputStream("tissueQueryResults_dcql_atts.xml"),
 				handler);
 		handler.getWorkbook().write(
 				new java.io.FileOutputStream("query_results.xls"));

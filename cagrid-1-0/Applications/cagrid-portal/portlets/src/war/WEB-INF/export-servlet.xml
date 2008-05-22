@@ -19,5 +19,8 @@ http://www.springframework.org/schema/util http://www.springframework.org/schema
     
     <bean name="/query_results.xls" class="gov.nih.nci.cagrid.portal.portlet.query.results.ExportResultsController"
     	autowire="byName"/>
+    	
+    <bean name="/query_results.xml" class="gov.nih.nci.cagrid.portal.portlet.query.results.ExportXmlResultsController"
+    	autowire="byName"/>
 
 </beans>

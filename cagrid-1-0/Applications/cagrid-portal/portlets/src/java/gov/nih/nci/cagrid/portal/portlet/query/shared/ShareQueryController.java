@@ -10,19 +10,12 @@ import gov.nih.nci.cagrid.portal.domain.metadata.dataservice.UMLClass;
 import gov.nih.nci.cagrid.portal.portlet.PortletConstants;
 import gov.nih.nci.cagrid.portal.portlet.query.AbstractQueryActionController;
 import gov.nih.nci.cagrid.portal.portlet.query.cql.CQLQueryCommand;
-
-import java.io.ByteArrayInputStream;
+import gov.nih.nci.cagrid.portal.portlet.util.PortletUtils;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathFactory;
 
 import org.springframework.validation.BindException;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
@@ -75,21 +68,15 @@ public class ShareQueryController extends AbstractQueryActionController {
 
 		GridDataService targetService = (GridDataService) getGridServiceDao()
 				.getByUrl(command.getDataServiceUrl());
-		UMLClass targetClass = null;
-		String targetClassName = getTargetClassName(command.getCqlQuery());
-		for (UMLClass klass : targetService.getDomainModel().getClasses()) {
-			String className = klass.getPackageName() + "."
-					+ klass.getClassName();
-			if (className.equals(targetClassName)) {
-				targetClass = klass;
-				break;
-			}
-		}
+		String umlClassName = PortletUtils.getTargetUMLClassName(command
+				.getCqlQuery());
+		UMLClass targetClass = getQueryModel().getUmlClassDao()
+				.getUmlClassFromModel(targetService.getDomainModel(),
+						umlClassName);
 
 		if (targetClass == null) {
 			errors.rejectValue("cqlQuery", PortletConstants.INVALID_UML_CLASS,
-					null, "No such UMLClass in DomainModel: '"
-							+ targetClassName + "'");
+					null, "No such UMLClass in DomainModel.");
 			return;
 		}
 
@@ -101,29 +88,6 @@ public class ShareQueryController extends AbstractQueryActionController {
 		sharedQueryBean.setQuery(sharedQuery);
 		sharedQueryBean.setQueryCommand(command);
 		getQueryModel().setWorkingSharedQuery(sharedQueryBean);
-	}
-
-	private String getTargetClassName(String cqlQuery) {
-		String targetClassName = null;
-		try {
-
-			//NOTE: We don't need to worry about XML bomb here since,
-			//CQL was already validated (i.e. parsed with Axis API which
-			//disables DOCTYPE).
-			Document doc = DocumentBuilderFactory.newInstance()
-					.newDocumentBuilder().parse(
-							new ByteArrayInputStream(cqlQuery.getBytes()));
-			XPathFactory xpFact = XPathFactory.newInstance();
-			Element targetEl = (Element) xpFact.newXPath().compile(
-					"/CQLQuery/Target").evaluate(doc, XPathConstants.NODE);
-			if (targetEl != null) {
-				targetClassName = targetEl.getAttribute("name");
-			}
-		} catch (Exception ex) {
-			logger.error("Error getting target class name: " + ex.getMessage(),
-					ex);
-		}
-		return targetClassName;
 	}
 
 	public GridServiceDao getGridServiceDao() {

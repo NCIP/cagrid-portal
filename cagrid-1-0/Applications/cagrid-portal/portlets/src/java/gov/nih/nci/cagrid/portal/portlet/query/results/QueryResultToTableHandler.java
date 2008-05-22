@@ -6,7 +6,9 @@ package gov.nih.nci.cagrid.portal.portlet.query.results;
 import gov.nih.nci.cagrid.portal.portlet.util.Table;
 
 import java.io.FileInputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.xml.parsers.SAXParser;
@@ -120,7 +122,10 @@ public class QueryResultToTableHandler extends BaseQueryResultHandler {
 	}
 
 	public void endDocument() {
-
+		if (ResultType.OBJECT.equals(resultType) && getColumnNames() != null
+				&& getColumnNames().size() > 0) {
+			table.setHeaders(getColumnNames());
+		}
 	}
 
 	public Table getTable() {

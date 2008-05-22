@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.portal.portlet.query.dcql;
 
+import gov.nih.nci.cagrid.portal.dao.UMLClassDao;
 import gov.nih.nci.cagrid.portal.domain.dataservice.DCQLQueryInstance;
 import gov.nih.nci.cagrid.portal.security.EncryptionService;
 import org.apache.commons.logging.Log;
@@ -30,7 +31,9 @@ public class DefaultDCQLQueryInstanceExecutor implements
     private long timeout = 60000;
     private Date endTime;
 
-    /**
+    
+
+	/**
      *
      */
     public DefaultDCQLQueryInstanceExecutor() {

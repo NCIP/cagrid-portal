@@ -195,6 +195,9 @@
 
     <bean id="conceptHierarchyNodeDao" parent="daoTemplate"
           class="gov.nih.nci.cagrid.portal.dao.ConceptHierarchyNodeDao"/>
+          
+    <bean id="domainModelDao" parent="daoTemplate"
+          class="gov.nih.nci.cagrid.portal.dao.DomainModelDao"/>
 
     <bean id="openSessionInViewForTesting"
           class="org.springframework.orm.hibernate3.support.OpenSessionInViewInterceptor"

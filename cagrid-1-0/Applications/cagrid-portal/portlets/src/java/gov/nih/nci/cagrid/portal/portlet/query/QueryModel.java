@@ -45,6 +45,7 @@ public class QueryModel implements ApplicationContextAware {
     private UMLClassDao umlClassDao;
     private PortalUser portalUser;
     private SharedQueryBean workingSharedQuery;
+    private List<String> queryResultsColumnNames;
 
     /**
      *
@@ -268,5 +269,13 @@ public class QueryModel implements ApplicationContextAware {
     public void setWorkingSharedQuery(SharedQueryBean workingSharedQuery) {
         this.workingSharedQuery = workingSharedQuery;
     }
+
+	public List<String> getQueryResultsColumnNames() {
+		return queryResultsColumnNames;
+	}
+
+	public void setQueryResultsColumnNames(List<String> queryResultsColumnNames) {
+		this.queryResultsColumnNames = queryResultsColumnNames;
+	}
 
 }
