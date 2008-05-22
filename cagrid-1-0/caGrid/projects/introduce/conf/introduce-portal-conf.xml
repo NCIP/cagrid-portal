@@ -80,7 +80,7 @@
                     	<centered>true</centered>
                     </renderOptions>
                 </component>
-                 <component>
+                <component>
                     <title>Browse Data Types</title>
                     <description>Browse Data Types</description>
                     <classname>gov.nih.nci.cagrid.introduce.portal.discoverytools.core.TypesToolsComponent</classname>
@@ -89,6 +89,20 @@
                     <dimensions>
                         <width>800</width>
                         <height>600</height>
+                    </dimensions>
+                    <renderOptions>
+                    	<centered>true</centered>
+                    </renderOptions>
+                </component>
+                <component>
+                    <title>View Log</title>
+                    <description>View the Introduce Log File</description>
+                    <classname>gov.nih.nci.cagrid.introduce.portal.common.LogViewer</classname>
+                    <icon>/page.png</icon>
+                    <showOnToolBar>false</showOnToolBar>
+                    <dimensions>
+                        <width>700</width>
+                        <height>400</height>
                     </dimensions>
                     <renderOptions>
                     	<centered>true</centered>
