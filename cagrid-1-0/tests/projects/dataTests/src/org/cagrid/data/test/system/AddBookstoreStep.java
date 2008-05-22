@@ -17,7 +17,7 @@ import org.cagrid.data.test.creation.DataTestCaseInfo;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A> *
  * @created Nov 7, 2006
- * @version $Id: AddBookstoreStep.java,v 1.1 2008-05-16 19:25:25 dervin Exp $
+ * @version $Id: AddBookstoreStep.java,v 1.2 2008-05-22 20:35:30 dervin Exp $
  */
 public class AddBookstoreStep extends Step {
 
@@ -47,7 +47,7 @@ public class AddBookstoreStep extends Step {
 		String schemaDir = serviceInfo.getDir() + File.separator + "schema" 
 		    + File.separator + serviceInfo.getName();
 		File bookstoreXSDDest = new File(schemaDir + File.separator + "bookstore.xsd");
-		Utils.copyFile(new File(bookstoreFilename), bookstoreXSDDest);
+		Utils.copyFile(new File(bookstoreFilename).getAbsoluteFile(), bookstoreXSDDest);
 
 		NamespaceType bookstoreNsType = CommonTools.createNamespaceType(
             bookstoreXSDDest.getAbsolutePath(), new File(schemaDir));
