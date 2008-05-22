@@ -39,11 +39,11 @@ public class DCQLFormulator implements QueryFormulator<DCQLQuery> {
         DCQLQuery query = new DCQLQuery();
 
         AggregateTargetsCommand cmd = bean.getAggregateTargets();
-        // add root target       
-        cmd.getSelected().add(bean.getUmlClass().getModel().getService().getUrl());
-
+        // add root target
+        List<String> _targets = cmd.getSelected();
+        _targets.add(bean.getUmlClass().getModel().getService().getUrl());
         logger.debug("Adding target URLS to dcql query");
-        query.setTargetServiceURL(cmd.getSelected().toArray(new String[]{}));
+        query.setTargetServiceURL(_targets.toArray(new String[]{}));
 
         gov.nih.nci.cagrid.dcql.Object targetObject = new gov.nih.nci.cagrid.dcql.Object();
         query.setTargetObject(toTarget(targetObject, bean));
