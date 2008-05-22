@@ -1,9 +1,10 @@
 package gov.nih.nci.cagrid.testing.system.deployment.steps;
 
-import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.common.ZipUtilities;
 import gov.nih.nci.cagrid.testing.system.haste.Step;
 
 import java.io.File;
+import java.util.Date;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -13,21 +14,32 @@ import org.apache.commons.logging.LogFactory;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A> *
  * @created Nov 8, 2006
- * @version $Id: CopyServiceStep.java,v 1.1 2008-05-19 16:39:23 langella Exp $
+ * @version $Id: CopyServiceStep.java,v 1.2 2008-05-22 01:16:24 langella Exp $
  */
 public class CopyServiceStep extends Step {
 	private static final Log LOG = LogFactory.getLog(CopyServiceStep.class);
 
 	private File sourceDir;
 	private File destDir;
+	private File serviceDirectory;
 
-	public CopyServiceStep(File sourceDir, File destDir) {
+	public CopyServiceStep(File sourceDir, File destParentDir) {
 		this.sourceDir = sourceDir;
-		this.destDir = destDir;
+		this.destDir = destParentDir;
 	}
 
 	public void runStep() throws Throwable {
 		LOG.debug("Running step: " + getClass().getName());
-		Utils.copyDirectory(sourceDir, destDir);
+		File zip = new File(new Date().getTime()+".zip");
+		ZipUtilities.zipDirectory(sourceDir, zip);
+		ZipUtilities.unzip(zip, destDir);
+		zip.delete();
+		serviceDirectory = new File(destDir.getAbsolutePath()+File.separator+sourceDir.getName());
 	}
+
+	public File getServiceDirectory() {
+		return serviceDirectory;
+	}
+	
+	
 }

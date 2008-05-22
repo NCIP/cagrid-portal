@@ -14,10 +14,15 @@ import gov.nih.nci.cagrid.testing.system.deployment.story.ServiceStoryBase;
 import gov.nih.nci.cagrid.testing.system.haste.Step;
 
 import java.io.File;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Vector;
+
+import javax.xml.namespace.QName;
 
 import org.cagrid.gaards.authentication.BasicAuthentication;
 import org.cagrid.gaards.authentication.BasicAuthenticationWithOneTimePassword;
+import org.cagrid.gaards.authentication.common.AuthenticationProfile;
 import org.cagrid.gaards.authentication.faults.InvalidCredentialFault;
 import org.cagrid.gaards.authentication.test.AuthenticationProperties;
 import org.cagrid.gaards.authentication.test.system.steps.AuthenticationStep;
@@ -25,6 +30,7 @@ import org.cagrid.gaards.authentication.test.system.steps.CopyConfigurationStep;
 import org.cagrid.gaards.authentication.test.system.steps.DeprecatedAuthenticationStep;
 import org.cagrid.gaards.authentication.test.system.steps.InvalidAuthentication;
 import org.cagrid.gaards.authentication.test.system.steps.SuccessfullAuthentication;
+import org.cagrid.gaards.authentication.test.system.steps.ValidateSupportedAuthenticationProfilesStep;
 
 public class AuthenticationServiceTest extends ServiceStoryBase {
 
@@ -55,6 +61,11 @@ public class AuthenticationServiceTest extends ServiceStoryBase {
 
 			// Test Get supported authentication types
 
+			Set<QName> expectedProfiles = new HashSet<QName>();
+			expectedProfiles.add(AuthenticationProfile.BASIC_AUTHENTICATION);
+			steps.add(new ValidateSupportedAuthenticationProfilesStep(
+					getContainer(), expectedProfiles));
+
 			SuccessfullAuthentication success = new SuccessfullAuthentication(
 					"jdoe", "John", "Doe", "jdoe@doe.com", properties
 							.getSigningCertificate());
@@ -83,26 +94,33 @@ public class AuthenticationServiceTest extends ServiceStoryBase {
 			steps.add(new AuthenticationStep(getContainer(),
 					new InvalidAuthentication("Invalid password specified!!!",
 							InvalidCredentialFault.class), cred3));
-			
+
 			// Test invalid deprecated authentication, bad password
-			
+
 			Credential cred4 = new Credential();
 			BasicAuthenticationCredential bac2 = new BasicAuthenticationCredential();
 			bac2.setUserId("jdoe");
 			bac2.setPassword("badpassword");
 			cred4.setBasicAuthenticationCredential(bac2);
-			steps.add(new DeprecatedAuthenticationStep(getContainer(),
-					new InvalidAuthentication("Invalid password specified!!!",
-							gov.nih.nci.cagrid.authentication.stubs.types.InvalidCredentialFault.class), cred4));
+			steps
+					.add(new DeprecatedAuthenticationStep(
+							getContainer(),
+							new InvalidAuthentication(
+									"Invalid password specified!!!",
+									gov.nih.nci.cagrid.authentication.stubs.types.InvalidCredentialFault.class),
+							cred4));
 
 			// Test invalid authentication, unsupported credential
 			BasicAuthenticationWithOneTimePassword cred5 = new BasicAuthenticationWithOneTimePassword();
 			cred5.setUserId("jdoe");
 			cred5.setPassword("password");
 			cred5.setOneTimePassword("oneTimePassword");
-			steps.add(new AuthenticationStep(getContainer(),
-					new InvalidAuthentication("The credential provided is not accepted by this service.",
-							InvalidCredentialFault.class), cred5));
+			steps
+					.add(new AuthenticationStep(
+							getContainer(),
+							new InvalidAuthentication(
+									"The credential provided is not accepted by this service.",
+									InvalidCredentialFault.class), cred5));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
