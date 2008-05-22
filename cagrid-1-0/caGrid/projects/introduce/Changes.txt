@@ -11,6 +11,8 @@
 -- Added button to enable user to control whether or not stubs will be generated for imported schema.
 -- Removed ETC_LOCATION from generated services JNDI and removed setter from the service configuration.
 -- Added to introduce model so that services and methods can have extension data added to them
+-- Added an introduce log viewer component to the GUI.
+
 
 1.1 - 1.2
 -- Removed ServiceTasks JDOM dependency to the services lib directory and moved it to the tools directory.
