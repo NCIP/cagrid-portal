@@ -43,6 +43,8 @@ public class DomainModelBuilder extends ServiceMetadataBuilder {
 	public DomainModel build(
 			gov.nih.nci.cagrid.metadata.dataservice.DomainModel modelIn)
 			throws Exception {
+		
+		pushPath("domainModel");
 		DomainModel modelOut = new DomainModel();
 
 		Map<String, List<UMLAssociationEdge>> assocMap = new HashMap<String, List<UMLAssociationEdge>>();
@@ -148,10 +150,12 @@ public class DomainModelBuilder extends ServiceMetadataBuilder {
 			gov.nih.nci.cagrid.metadata.dataservice.UMLClass[] umlClassIns = classColl
 					.getUMLClass();
 			if (umlClassIns != null && umlClassIns.length > 0) {
+				pushPath("classes");
 				for (gov.nih.nci.cagrid.metadata.dataservice.UMLClass umlClassIn : umlClassIns) {
 					UMLClass umlClassOut = buildUMLClass(umlClassIn);
 					umlClasses.put(umlClassIn.getId(), umlClassOut);
 				}
+				popPath();
 				for (String umlClassId : umlClasses.keySet()) {
 					UMLClass umlClassOut = umlClasses.get(umlClassId);
 					List<UMLAssociationEdge> assocs = assocMap.get(umlClassId);
@@ -240,20 +244,11 @@ public class DomainModelBuilder extends ServiceMetadataBuilder {
 		modelOut.setProjectShortName(modelIn.getProjectShortName());
 		modelOut.setProjectVersion(modelIn.getProjectVersion());
 
-//		addXmlSchemas(modelOut, getGmeUrl(), getCadsrUrl());
 
+		popPath();
 		return (DomainModel) handlePersist(modelOut);
 	}
 
-//	protected void addXmlSchemas(DomainModel domainModel, String gmeUrl, String cadsrUrl) {
-//		List<XMLSchema> xmlSchemas = PortalUtils.getXMLSchemas(domainModel, cadsrUrl, gmeUrl); 
-//		for(XMLSchema xmlSchema : xmlSchemas){
-//			if(xmlSchema.getId() == null){
-//				handlePersist(xmlSchema);
-//			}
-//			domainModel.getXmlSchemas().add(xmlSchema);	
-//		}
-//	}
 
 	private void addAssocMapping(
 			Map<String, List<UMLAssociationEdge>> assocMap, String refId,
@@ -294,20 +289,24 @@ public class DomainModelBuilder extends ServiceMetadataBuilder {
 	private UMLClass buildUMLClass(
 			gov.nih.nci.cagrid.metadata.dataservice.UMLClass umlClassIn) {
 		UMLClass umlClassOut = new UMLClass();
+		handlePersist(umlClassOut);
 		if (umlClassIn.getSemanticMetadata() != null) {
+			String objectIdentifier = getObjectIdentifier(umlClassOut);
 			for (gov.nih.nci.cagrid.metadata.common.SemanticMetadata sMetaIn : umlClassIn
 					.getSemanticMetadata()) {
 				umlClassOut.getSemanticMetadata().add(
-						buildSemanticMetadata(sMetaIn));
+						buildSemanticMetadata(objectIdentifier, sMetaIn));
 			}
 		}
 		if (umlClassIn.getUmlAttributeCollection() != null) {
+			pushPath("umlAttributeCollection");
 			for (gov.nih.nci.cagrid.metadata.common.UMLAttribute umlAttrIn : umlClassIn
 					.getUmlAttributeCollection().getUMLAttribute()) {
 				UMLAttribute umlAttrOut = buildUMLAttribute(umlAttrIn);
 				umlAttrOut.setUmlClass(umlClassOut);
 				umlClassOut.getUmlAttributeCollection().add(umlAttrOut);
 			}
+			popPath();
 		}
 		umlClassOut.setCadsrId(umlClassIn.getId());
 		umlClassOut.setClassName(umlClassIn.getClassName());
@@ -318,21 +317,5 @@ public class DomainModelBuilder extends ServiceMetadataBuilder {
 		umlClassOut.setAllowableAsTarget(umlClassIn.isAllowableAsTarget());
 		return (UMLClass) handlePersist(umlClassOut);
 	}
-
-//	public String getGmeUrl() {
-//		return gmeUrl;
-//	}
-//
-//	public void setGmeUrl(String gmeUrl) {
-//		this.gmeUrl = gmeUrl;
-//	}
-//
-//	public String getCadsrUrl() {
-//		return cadsrUrl;
-//	}
-//
-//	public void setCadsrUrl(String cadsrUrl) {
-//		this.cadsrUrl = cadsrUrl;
-//	}
 
 }

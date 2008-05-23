@@ -100,6 +100,7 @@
                 <value>gov.nih.nci.cagrid.portal.domain.metadata.dataservice.XMLSchema</value>
                 <value>gov.nih.nci.cagrid.portal.domain.ConceptHierarchy</value>
                 <value>gov.nih.nci.cagrid.portal.domain.ConceptHierarchyNode</value>
+                <value>gov.nih.nci.cagrid.portal.domain.SemanticMetadataMapping</value>
 
             </list>
         </property>
@@ -198,6 +199,9 @@
           
     <bean id="domainModelDao" parent="daoTemplate"
           class="gov.nih.nci.cagrid.portal.dao.DomainModelDao"/>
+          
+    <bean id="semanticMetadataMappingDao" parent="daoTemplate"
+          class="gov.nih.nci.cagrid.portal.dao.SemanticMetadataMappingDao"/>
 
     <bean id="openSessionInViewForTesting"
           class="org.springframework.orm.hibernate3.support.OpenSessionInViewInterceptor"

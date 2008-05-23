@@ -165,16 +165,6 @@
     <target name="aggr:run-concepts" depends="aggr:prepare-run-cp">
         <java classname="gov.nih.nci.cagrid.portal.util.RunConcepts" classpathref="aggr.run.cp" fork="true"/>
     </target>
-    
-    <target name="aggr:run-conceptmapping" depends="aggr:prepare-run-cp">
-        <java classname="gov.nih.nci.cagrid.portal.util.RunServiceConceptMapping" classpathref="aggr.run.cp" fork="true"/>
-    </target>
-
-    <!--
-     <target name="aggr:run-text" depends="aggr:prepare-run-cp">
-         <java classname="gov.nih.nci.cagrid.portal.util.RunTextIndex" classpathref="aggr.run.cp" fork="true" />
-     </target>
-     -->
 
     <target name="aggr:kill-svc-meta" depends="aggr:prepare-run-cp">
         <java classname="gov.nih.nci.cagrid.portal.util.KillServiceMetadata" classpathref="aggr.run.cp"/>

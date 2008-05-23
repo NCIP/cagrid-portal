@@ -38,7 +38,7 @@ public class ConceptHierarchyNode extends AbstractDomainObject {
 	private List<ConceptHierarchyNode> ancestors = new ArrayList<ConceptHierarchyNode>();
 	private List<ConceptHierarchyNode> descendants = new ArrayList<ConceptHierarchyNode>();
 	private int level;
-	private List<GridService> services = new ArrayList<GridService>();
+	private List<SemanticMetadataMapping> semanticMetadataMappings = new ArrayList<SemanticMetadataMapping>();
 	
 	/**
 	 * 
@@ -140,15 +140,14 @@ public class ConceptHierarchyNode extends AbstractDomainObject {
 		this.level = level;
 	}
 
-	@ManyToMany(
-			mappedBy="concepts"
-    )
-	public List<GridService> getServices() {
-		return services;
+	@OneToMany(mappedBy = "concept")
+	public List<SemanticMetadataMapping> getSemanticMetadataMappings() {
+		return semanticMetadataMappings;
 	}
 
-	public void setServices(List<GridService> services) {
-		this.services = services;
+	public void setSemanticMetadataMappings(
+			List<SemanticMetadataMapping> semanticMetadataMappings) {
+		this.semanticMetadataMappings = semanticMetadataMappings;
 	}
 
 }

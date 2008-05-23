@@ -38,24 +38,16 @@
 	</bean>
 	
 	<bean id="metadataListenerTemplate" abstract="true">
-		<property name="serviceMetadataBuilder">
-			<bean
-				class="gov.nih.nci.cagrid.portal.aggr.regsvc.ServiceMetadataBuilder" >
-				<property name="hibernateTemplate" ref="hibernateTemplate"/>
-				<!-- property name="gmeUrl" ref="gmeUrl"/ -->
-			</bean>
-		</property>
-		<property name="domainModelBuilder">
-			<bean
-				class="gov.nih.nci.cagrid.portal.aggr.regsvc.DomainModelBuilder" >
-				<property name="hibernateTemplate" ref="hibernateTemplate"/>
-				<!-- property name="gmeUrl" ref="gmeUrl"/ -->
-				<!-- property name="cadsrUrl" ref="cadsrUrl"/ -->
-			</bean>
-		</property>
 		<property name="metadataTimeout" ref="defaultTimeout" />
 	</bean>	
 	
-
+	<bean id="serviceMetadataBuilderPrototype" scope="prototype"
+		class="gov.nih.nci.cagrid.portal.aggr.regsvc.ServiceMetadataBuilder" >
+		<property name="hibernateTemplate" ref="hibernateTemplate"/>
+	</bean>
+	<bean id="domainModelBuilderPrototype" scope="prototype"
+		class="gov.nih.nci.cagrid.portal.aggr.regsvc.DomainModelBuilder" >
+		<property name="hibernateTemplate" ref="hibernateTemplate"/>
+	</bean>	
 
 </beans>

@@ -50,7 +50,7 @@
     <bean id="umlClassTreeNodeListener" class="gov.nih.nci.cagrid.portal.portlet.query.cql.UMLClassTreeNodeListener">
         <property name="hibernateTemplate" ref="hibernateTemplate"/>
         <property name="targetsProvider">
-            <bean class="gov.nih.nci.cagrid.portal.portlet.query.builder.UMLClassBasedForeignTargetsProvider"
+            <bean class="gov.nih.nci.cagrid.portal.portlet.query.builder.UMLClassSemanticMetadataBasedForeignTargetsProvider"
                   autowire="byName"/>
         </property>
     </bean>

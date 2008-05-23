@@ -70,7 +70,7 @@ public class GridServiceDao extends AbstractDao<GridService> {
 		GridService svc = null;
 
 		List svcs = getHibernateTemplate().find(
-				"from GridService where url = ?", new Object[]{url});
+				"from GridService where url = ?", new Object[] { url });
 
 		if (svcs.size() > 1) {
 			throw new NonUniqueResultException("Found " + svcs.size()
@@ -99,10 +99,11 @@ public class GridServiceDao extends AbstractDao<GridService> {
 				logger.debug("Deleting domain model " + dModel.getId());
 				dataService.setDomainModel(null);
 				dModel.setService(null);
-				for(UMLClass klass : dModel.getClasses()){
-					for(UMLAssociationEdge edge : klass.getAssociations()){
-						if(edge instanceof SourceUMLAssociationEdge){
-							UMLAssociation assoc = ((SourceUMLAssociationEdge)edge).getAssociation();
+				for (UMLClass klass : dModel.getClasses()) {
+					for (UMLAssociationEdge edge : klass.getAssociations()) {
+						if (edge instanceof SourceUMLAssociationEdge) {
+							UMLAssociation assoc = ((SourceUMLAssociationEdge) edge)
+									.getAssociation();
 							getHibernateTemplate().delete(assoc);
 						}
 						getHibernateTemplate().delete(edge);
@@ -117,12 +118,13 @@ public class GridServiceDao extends AbstractDao<GridService> {
 		}
 		save(service);
 	}
-	
+
 	public void setServiceDormant(final GridService gridService) {
 		getHibernateTemplate().execute(new HibernateCallback() {
 			public Object doInHibernate(Session session)
 					throws HibernateException, SQLException {
-				GridService svc = (GridService) session.get(GridService.class, gridService.getId());
+				GridService svc = (GridService) session.get(GridService.class,
+						gridService.getId());
 				StatusChange change = new StatusChange();
 				change.setService(svc);
 				change.setTime(new Date());
@@ -139,7 +141,8 @@ public class GridServiceDao extends AbstractDao<GridService> {
 		getHibernateTemplate().execute(new HibernateCallback() {
 			public Object doInHibernate(Session session)
 					throws HibernateException, SQLException {
-				GridService svc = (GridService) session.get(GridService.class, gridService.getId());
+				GridService svc = (GridService) session.get(GridService.class,
+						gridService.getId());
 				StatusChange change = new StatusChange();
 				change.setService(svc);
 				change.setTime(new Date());
@@ -151,12 +154,13 @@ public class GridServiceDao extends AbstractDao<GridService> {
 			}
 		});
 	}
-	
+
 	public void unbanService(final GridService gridService) {
 		getHibernateTemplate().execute(new HibernateCallback() {
 			public Object doInHibernate(Session session)
 					throws HibernateException, SQLException {
-				GridService svc = (GridService) session.get(GridService.class, gridService.getId());
+				GridService svc = (GridService) session.get(GridService.class,
+						gridService.getId());
 				StatusChange change = new StatusChange();
 				change.setService(svc);
 				change.setTime(new Date());
@@ -175,36 +179,44 @@ public class GridServiceDao extends AbstractDao<GridService> {
 		services.addAll(l);
 		return services;
 	}
-	
-	public List<GridService> getAllAnalyticalServices(){
+
+	public List<GridService> getAllAnalyticalServices() {
 		List<GridService> services = new ArrayList<GridService>();
-		List l = getHibernateTemplate().find("from GridService gs where gs.class = GridService");
+		List l = getHibernateTemplate().find(
+				"from GridService gs where gs.class = GridService");
 		services.addAll(l);
 		return services;
 	}
 
 	public List<GridService> getLatestServices(int latestServicesLimit) {
 		List<GridService> latest = new ArrayList<GridService>();
-		//This query doesn't work on HSQLDB or Derby, which makes it difficult for testing.
-		//So, changing to just select IDs and then retrieve the objects.
-//		List<GridService> l = getHibernateTemplate().find(
-//				"select gs from GridService gs " +
-//				"join gs.statusHistory status " +
-//				"group by gs.id " + 
-//				"order by min(status.time) desc");
+		// This query doesn't work on HSQLDB or Derby, which makes it difficult
+		// for testing.
+		// So, changing to just select IDs and then retrieve the objects.
+		// List<GridService> l = getHibernateTemplate().find(
+		// "select gs from GridService gs " +
+		// "join gs.statusHistory status " +
+		// "group by gs.id " +
+		// "order by min(status.time) desc");
 		List<Integer> ids = getHibernateTemplate().find(
-				"select gs.id from GridService gs " +
-				"join gs.statusHistory status " +
-				"group by gs.id " + 
-				"order by min(status.time) desc");
+				"select gs.id from GridService gs "
+						+ "join gs.statusHistory status " + "group by gs.id "
+						+ "order by min(status.time) desc");
 		List<GridService> l = new ArrayList<GridService>();
-		for(Integer id : ids){
-			l.add((GridService) getHibernateTemplate().get(GridService.class, id));
+		for (Integer id : ids) {
+			l.add((GridService) getHibernateTemplate().get(GridService.class,
+					id));
 		}
-		for(int i = 0; i < latestServicesLimit && i < l.size(); i++){
+		for (int i = 0; i < latestServicesLimit && i < l.size(); i++) {
 			latest.add(l.get(i));
 		}
 		return latest;
+	}
+
+	public List<GridService> getUnindexedServices() {
+		return (List<GridService>) getHibernateTemplate().find(
+				"from GridService " + "where conceptIndexHash is null or "
+						+ "conceptIndexHash != metadataHash");
 	}
 
 }

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * User: kherm
@@ -18,7 +19,8 @@ public class DelegatingConceptService extends BaseConceptService {
 
 
     public Set<EVSConceptDTO> getConceptsForKeyword(String keyword) throws CaGridPortletApplicationException {
-        Set<EVSConceptDTO> _conceptSet = new HashSet<EVSConceptDTO>();
+    	//Use TreeSet so that we don't lose the ordering from the concept service
+        Set<EVSConceptDTO> _conceptSet = new TreeSet<EVSConceptDTO>();
 
         outer:
         for (ConceptService service : conceptServices) {

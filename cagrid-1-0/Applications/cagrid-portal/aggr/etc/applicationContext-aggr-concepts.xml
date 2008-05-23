@@ -16,8 +16,13 @@
 
 	<bean id="conceptMonitor"
 		class="gov.nih.nci.cagrid.portal.aggr.metachange.ConceptMonitor"
-		autowire="byName">
+		autowire="byName"/>
+		
+	<bean id="serviceConceptIndexer" class="gov.nih.nci.cagrid.portal.aggr.metachange.ServiceConceptIndexer" autowire="byName"/>
 
+	<bean id="conceptHandler"
+		class="gov.nih.nci.cagrid.portal.aggr.metachange.LexBIGConceptHandler"
+		autowire="byName">
 		<property name="version">
 			<bean
 				class="org.LexGrid.LexBIG.DataModel.Core.CodingSchemeVersionOrTag"
@@ -37,7 +42,6 @@
 				</property>
 			</bean>
 		</property>
-
 	</bean>
 
 	<bean id="processNewConcepts"

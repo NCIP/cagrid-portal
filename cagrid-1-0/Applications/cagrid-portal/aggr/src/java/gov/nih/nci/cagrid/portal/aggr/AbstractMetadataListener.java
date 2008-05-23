@@ -14,21 +14,21 @@ import gov.nih.nci.cagrid.portal.util.PortalUtils;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ApplicationListener;
 
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
  *
  */
-public abstract class AbstractMetadataListener implements ApplicationListener {
+public abstract class AbstractMetadataListener implements ApplicationListener, ApplicationContextAware {
 	
 	private static final Log logger = LogFactory.getLog(AbstractMetadataListener.class);
 
-	private ServiceMetadataBuilder serviceMetadataBuilder;
-
-	private DomainModelBuilder domainModelBuilder;
-
 	private long metadataTimeout = 5000;
+	
+	private ApplicationContext applicationContext;
 	
 
 	/**
@@ -38,11 +38,20 @@ public abstract class AbstractMetadataListener implements ApplicationListener {
 
 	}
 	
+	public void setApplicationContext(ApplicationContext applicationContext){
+		this.applicationContext = applicationContext;
+	}
+	public ApplicationContext getApplicationContext(){
+		return applicationContext;
+	}
+	
 	protected void setMetadata(GridService service, Metadata meta) throws Exception{
-		ServiceMetadataBuilder sMetaBuilder = getServiceMetadataBuilder();
+		ServiceMetadataBuilder sMetaBuilder = (ServiceMetadataBuilder) getApplicationContext().getBean("serviceMetadataBuilderPrototype");
 		sMetaBuilder.setPersist(true);
-		DomainModelBuilder dModelBuilder = getDomainModelBuilder();
+		sMetaBuilder.setGridService(service);
+		DomainModelBuilder dModelBuilder = (DomainModelBuilder) getApplicationContext().getBean("domainModelBuilderPrototype");
 		dModelBuilder.setPersist(true);
+		dModelBuilder.setGridService(service);
 		if (service instanceof GridDataService) {
 			
 			GridDataService dataService = (GridDataService)service;
@@ -58,16 +67,7 @@ public abstract class AbstractMetadataListener implements ApplicationListener {
 		logger.debug("new hash: " + hash);
 		service.setMetadataHash(hash);
 	}
-	
-	
 
-	public DomainModelBuilder getDomainModelBuilder() {
-		return domainModelBuilder;
-	}
-
-	public void setDomainModelBuilder(DomainModelBuilder domainModelBuilder) {
-		this.domainModelBuilder = domainModelBuilder;
-	}
 
 	public long getMetadataTimeout() {
 		return metadataTimeout;
@@ -76,15 +76,5 @@ public abstract class AbstractMetadataListener implements ApplicationListener {
 	public void setMetadataTimeout(long metadataTimeout) {
 		this.metadataTimeout = metadataTimeout;
 	}
-
-	public ServiceMetadataBuilder getServiceMetadataBuilder() {
-		return serviceMetadataBuilder;
-	}
-
-	public void setServiceMetadataBuilder(
-			ServiceMetadataBuilder serviceMetadataBuilder) {
-		this.serviceMetadataBuilder = serviceMetadataBuilder;
-	}
-
 
 }

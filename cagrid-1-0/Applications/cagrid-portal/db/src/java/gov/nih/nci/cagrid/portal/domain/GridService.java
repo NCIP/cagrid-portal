@@ -53,7 +53,8 @@ public class GridService extends AbstractDomainObject {
     private List<ServiceAnnotation> annotations = new ArrayList<ServiceAnnotation>();
     private String metadataHash;
     private List<StatusChange> statusHistory = new ArrayList<StatusChange>();
-    private List<ConceptHierarchyNode> concepts = new ArrayList<ConceptHierarchyNode>();
+    private List<SemanticMetadataMapping> semanticMetadataMappings = new ArrayList<SemanticMetadataMapping>();
+    private String conceptIndexHash;
 
 
     @OneToMany(mappedBy="service", cascade = CascadeType.ALL)
@@ -113,22 +114,20 @@ public class GridService extends AbstractDomainObject {
             return ServiceStatus.UNKNOWN;
         return history.get(history.size() - 1).getStatus();
     }
-    
-    @ManyToMany
-	@JoinTable(
-			name = "svc_c_hier_node", 
-			joinColumns = 
-				@JoinColumn(name = "service_id"), 
-			inverseJoinColumns = 
-				@JoinColumn(name = "c_hier_node_id"), 
-			uniqueConstraints = 
-				@UniqueConstraint(columnNames = 
-					{"service_id", "c_hier_node_id" }))
-	public List<ConceptHierarchyNode> getConcepts() {
-		return concepts;
+	
+	@OneToMany(mappedBy = "gridService")
+	public List<SemanticMetadataMapping> getSemanticMetadataMappings() {
+		return semanticMetadataMappings;
 	}
-	public void setConcepts(List<ConceptHierarchyNode> concepts) {
-		this.concepts = concepts;
+	public void setSemanticMetadataMappings(
+			List<SemanticMetadataMapping> semanticMetadataMappings) {
+		this.semanticMetadataMappings = semanticMetadataMappings;
+	}
+	public String getConceptIndexHash() {
+		return conceptIndexHash;
+	}
+	public void setConceptIndexHash(String conceptIndexHash) {
+		this.conceptIndexHash = conceptIndexHash;
 	}
 
 

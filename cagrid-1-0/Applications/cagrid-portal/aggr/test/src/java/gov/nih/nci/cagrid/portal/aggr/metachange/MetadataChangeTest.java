@@ -65,8 +65,9 @@ public class MetadataChangeTest extends TestCase {
 		serviceMetadataBuilder.setPersist(true);
 
 		TestMetadataListener l = new TestMetadataListener();
-		l.setDomainModelBuilder(domainModelBuilder);
-		l.setServiceMetadataBuilder(serviceMetadataBuilder);
+		
+//		l.setDomainModelBuilder(domainModelBuilder);
+//		l.setServiceMetadataBuilder(serviceMetadataBuilder);
 
 		GridServiceDao gridServiceDao = (GridServiceDao) TestDB
 				.getApplicationContext().getBean("gridServiceDao");
@@ -79,9 +80,9 @@ public class MetadataChangeTest extends TestCase {
 
 		MetadataChangeListener changeListener = new MetadataChangeListener();
 		changeListener.setCqlQueryInstanceDao(cqlQueryInstanceDao);
-		changeListener.setDomainModelBuilder(domainModelBuilder);
+//		changeListener.setDomainModelBuilder(domainModelBuilder);
 		changeListener.setGridServiceDao(gridServiceDao);
-		changeListener.setServiceMetadataBuilder(serviceMetadataBuilder);
+//		changeListener.setServiceMetadataBuilder(serviceMetadataBuilder);
 		changeListener.setSharedCqlQueryDao(sharedCqlQueryDao);
 
 		GridDataService dataService = new GridDataService();

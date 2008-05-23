@@ -149,7 +149,7 @@ public class ConceptHierarchyNodeDaoTest extends
     public void testSearchByName() {
         assertTrue("node returned null", getDao().getByName("node2").size() > 0);
         assertEquals("node returned null", 8, getDao().getByName("node2").size());
-        assertTrue(getDao().getByConceptCode("node1_code").size() > 0);
+        assertNotNull(getDao().getByConceptCode("node1_code"));
     }
 
     public void testServicesByCode() {
