@@ -20,6 +20,9 @@
 			<pathelement path="${classes.dir}" />
 			<pathelement path="${stubs.dest}" />
 			<path refid="test.run.classpath" />
+			<fileset dir="${jar.dir}">
+				<include name="**/*.jar"/>
+			</fileset>
 		</path>
 	</target>
 

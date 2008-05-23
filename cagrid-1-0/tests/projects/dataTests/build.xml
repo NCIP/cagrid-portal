@@ -11,6 +11,8 @@
 	<property name="classes.dir" value="${build.dir}/classes" />
 	<property name="jar.dir" value="${build.dir}/lib" />
 	<property name="project.jarfile" value="${jar.dir}/${project.name}-${project.version}.jar" />
+	<property name="resources.jarfile" value="${jar.dir}/${project.name}-resources-${project.version}.jar"/>
+	<property name="resources.file.pattern" value="./resources/**/*"/>
 	<property name="lib.dir" value="${basedir}/lib" />
 	<property name="ext.lib.dir" value="${basedir}/ext/dependencies/jars" />
 	
@@ -72,11 +74,6 @@
 			<fileset dir="${ext.globus.dir}/lib">
 				<include name="**/*.jar" />
 			</fileset>
-			<!--
-			<fileset dir="${ant.library.dir}">
-				<include name="**/*.jar"/>
-			</fileset>
-			-->
 			<pathelement location="${ext.globus.dir}" />
 		</path>
 		
@@ -196,10 +193,24 @@
 	<!-- ============================================================== -->
 	<target name="jar" depends="compile" description="Builds the Jar Files">
 		<mkdir dir="${jar.dir}" />
-		<jar jarfile="${project.jarfile}" basedir="${classes.dir}">
+		<jar destfile="${project.jarfile}">
+			<fileset dir="${classes.dir}">
+				<include name="**/*.class"/>
+			</fileset>
+			<fileset dir="${stubs.dest}">
+				<include name="**/*.class"/>
+			</fileset>
 			<manifest>
 				<attribute name="Built-By" value="${user.name}" />
-				<attribute name="Main-Class" value="${main.class}" />
+			</manifest>
+		</jar>
+	
+		<jar destfile="${resources.jarfile}">
+			<fileset dir="${basedir}">
+				<include name="resources/**"/>
+			</fileset>
+			<manifest>
+				<attribute name="Built-By" value="${user.name}" />
 			</manifest>
 		</jar>
 	</target>
