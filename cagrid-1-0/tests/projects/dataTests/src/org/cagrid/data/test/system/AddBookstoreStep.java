@@ -8,6 +8,7 @@ import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.testing.system.haste.Step;
 
 import java.io.File;
+import java.io.InputStream;
 
 import org.cagrid.data.test.creation.DataTestCaseInfo;
 
@@ -17,7 +18,7 @@ import org.cagrid.data.test.creation.DataTestCaseInfo;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A> *
  * @created Nov 7, 2006
- * @version $Id: AddBookstoreStep.java,v 1.2 2008-05-22 20:35:30 dervin Exp $
+ * @version $Id: AddBookstoreStep.java,v 1.3 2008-05-27 15:24:28 dervin Exp $
  */
 public class AddBookstoreStep extends Step {
 
@@ -39,15 +40,20 @@ public class AddBookstoreStep extends Step {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			fail("Error loading service description: " + ex.getMessage());
-		}
+		}        
+        
 		// create a namespace type for the bookstore
-		String bookstoreFilename = ".." + File.separator + "data" + File.separator + "test" + File.separator + "resources" + File.separator + "bookstore.xsd";
+		String bookstoreResourceName = "/resources/bookstore/bookstore.xsd";
 
 		// copy the schema to the service's lib directory
 		String schemaDir = serviceInfo.getDir() + File.separator + "schema" 
 		    + File.separator + serviceInfo.getName();
-		File bookstoreXSDDest = new File(schemaDir + File.separator + "bookstore.xsd");
-		Utils.copyFile(new File(bookstoreFilename).getAbsoluteFile(), bookstoreXSDDest);
+		File bookstoreXSDDest = new File(schemaDir, "bookstore.xsd");
+        InputStream bookstoreSchemaStream = getClass().getResourceAsStream(bookstoreResourceName);
+        assertNotNull("Unable to locate bookstore schema on classpath: " + bookstoreResourceName,
+            bookstoreSchemaStream);
+        StringBuffer bookstoreSchema = Utils.inputStreamToStringBuffer(bookstoreSchemaStream);
+        Utils.stringBufferToFile(bookstoreSchema, bookstoreXSDDest.getAbsolutePath());
 
 		NamespaceType bookstoreNsType = CommonTools.createNamespaceType(
             bookstoreXSDDest.getAbsolutePath(), new File(schemaDir));
