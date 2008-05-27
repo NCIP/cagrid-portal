@@ -93,6 +93,7 @@ public class LogPanel extends JPanel {
                                 try {
                                     Thread.sleep(500);
                                 } catch (Throwable t) {
+                                    t.printStackTrace();
                                 }
                             }
                         }
