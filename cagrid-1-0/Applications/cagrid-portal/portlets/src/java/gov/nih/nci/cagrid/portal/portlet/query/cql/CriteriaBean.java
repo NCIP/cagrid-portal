@@ -23,10 +23,7 @@ import org.springframework.orm.hibernate3.HibernateTemplate;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
@@ -138,26 +135,33 @@ public class CriteriaBean implements ApplicationContextAware {
                 CriteriaBean subCriteria = (CriteriaBean) getApplicationContext()
                         .getBean("criteriaBeanPrototype");
 
-                final UMLClass klass = getUmlClass();
 
                 if (parts[0].indexOf(QueryConstants.FOREIGN_UML_CLASS_PREFIX) > -1) {
-
-                    UMLClass assocType = (UMLClass) getHibernateTemplate().execute(
-                            new HibernateCallback() {
-                                public java.lang.Object doInHibernate(Session session)
-                                        throws HibernateException, SQLException {
-                                    UMLClass klass2 = (UMLClass) session.get(klass
-                                            .getClass(), klass.getId());
-                                    return klass2;
-                                }
-                            });
-                    subCriteria.setUmlClass(assocType);
-                    subCriteria.setJoin(criterion.getJoin());
-                    assoc.setRoleName(parts[0]);
-                    assoc.setCriteriaBean(subCriteria);
-
+                    //parse and get foreign class name
+                    final StringTokenizer fPath = new StringTokenizer(parts[0], ":");
+                    //should always return true
+                    if (fPath.countTokens() == 3 && QueryConstants.FOREIGN_UML_CLASS_PREFIX.indexOf(fPath.nextToken()) > -1) {
+                        // load foreign uml class
+                        final String identifier = fPath.nextToken();
+                        UMLClass assocType = (UMLClass) getHibernateTemplate().execute(
+                                new HibernateCallback() {
+                                    public java.lang.Object doInHibernate(Session session)
+                                            throws HibernateException, SQLException {
+                                        return session.get(UMLClass.class
+                                                , Integer.valueOf(identifier));
+                                    }
+                                });
+                        subCriteria.setUmlClass(assocType);
+                        subCriteria.setJoin(criterion.getJoin());
+                        assoc.setRoleName(parts[0]);
+                        assoc.setCriteriaBean(subCriteria);
+                    } else {
+                        logger.warn("Could not add foreign class. Path is invalid :" + parts[0]);
+                    }
 
                 } else {
+                    final UMLClass klass = getUmlClass();
+
                     UMLClass assocType = (UMLClass) getHibernateTemplate().execute(
                             new HibernateCallback() {
                                 public java.lang.Object doInHibernate(Session session)

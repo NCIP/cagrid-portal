@@ -93,7 +93,7 @@ public class UMLClassTreeNodeListener implements TreeNodeListener {
                 for (UMLClass target : classes) {
                     TreeNode fnode = new TreeNode(node,
                             QueryConstants.FOREIGN_UML_CLASS_PREFIX
-                                    + target.getClassName() + ":" + count++);
+                                    + target.getId() + ":" + count++);
                     fnode.setLabel(target.getClassName());
                     fnode.setContent(new ForeignUMLClassBean(target,
                             umlClassBean.getAttributes().get(0)));

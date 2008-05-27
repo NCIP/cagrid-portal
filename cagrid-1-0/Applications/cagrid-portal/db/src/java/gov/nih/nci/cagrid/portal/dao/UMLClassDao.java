@@ -48,8 +48,6 @@ public class UMLClassDao extends AbstractDao<UMLClass> {
                                         .getPackageName())).add(
                                 Restrictions.eq("projectName", example
                                         .getProjectName())).add(
-                                Restrictions.eq("projectVersion", example
-                                        .getProjectVersion())).add(
                                 Restrictions.ne("model.id", example.getModel()
                                         .getId())).list();
                     }
@@ -69,6 +67,8 @@ public class UMLClassDao extends AbstractDao<UMLClass> {
                         }
                         return session.createCriteria(UMLClass.class).add(
                                 Restrictions.ne("id", example.getId()))
+                                //not from the same model
+                                .add(Restrictions.ne("model.id", example.getModel().getId()))
                                 .createCriteria("semanticMetadata").add(
                                 Restrictions.in("conceptCode", codes))
                                 .setResultTransformer(
