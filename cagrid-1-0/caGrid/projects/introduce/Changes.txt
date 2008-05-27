@@ -5,7 +5,7 @@
 -- New heuristic for schema imports
 	-- if introduce imports the schema it will only set namespace excludes or type maps for that schema
 	-- if it is desired to do this for the schemas that schema imports than those schemas must be added and handled
-	   appropriatly individually.  This is different than in prior versions.
+	   appropriately individually.  This is different than in prior versions.
 	-- Prior versions of introduce would simple namespace exclude any namespace that was imported from a schema
 	   that was set to generate stubs false.  However this is not always the desired behavior
 -- Added button to enable user to control whether or not stubs will be generated for imported schema.
@@ -55,7 +55,7 @@
 -- Refactored service resource framework in order to enable registration of resource
    properties as well as enable the resource class itself to be user modified and 
    extended to there liking.  In doing this the BaseResource class was also renamed to
-   <serviceName>Resource to make more sence to the developer.
+   <serviceName>Resource to make more sense to the developer.
    This also caused the renaming of the etc/registration.xml to etc/<serviceName>_registration.xml
    in order to support registration for the all the resource framework types.
 
@@ -64,7 +64,7 @@
 1.0B --1.0
 A new field to the ResourcePropertiesType was added called fileLocation.  This field
 is used to tell introduce what file to use for reading in a populateFromFile resource
-property.  If you do not metadata files aleady filed out then you should not see a problem.
+property.  If you do not metadata files already filed out then you should not see a problem.
 If you do be sure that you go into this introduce.xml file and set that location to be relative
 to the etc directory and pointing to the file which represents that particular resource
 property instance document.
@@ -98,13 +98,13 @@ The client handle return functionality has been changed to use the strongly type
 
 
 
-ImportInformation now has a required attribute called FromIntroduce.  This designates the importe method to come from an
+ImportInformation now has a required attribute called FromIntroduce.  This designates the import method to come from an
 introduce generated service or not.  This is important because introduce will only "unbox" from introduce generated
 methods and for anything else will use document literal bindings.
 
 
 
-Index service URL was made to be a deployment time descision  
+Index service URL was made to be a deployment time decision  
 This caused a change in the registration.xml so that the url was not
 hard coded (replace the URL in you existing file with INDEX_SERVICE_URL or just update introduce and save your service). 
 The build-deploy.xml file was also updated to support pushing this variable value (look at the differences or do a merge)
