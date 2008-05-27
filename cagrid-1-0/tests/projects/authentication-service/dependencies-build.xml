@@ -4,7 +4,7 @@
 	<property file="project.properties" />
 
 	
-	<property name="ivy.resolve.configuations" value="default" />
+	<property name="ivy.resolve.configurations" value="default" />
 	
 	<property name="ivy.generated.artifacts.pattern" value="${ivy.generated.artifacts.dir}/lib/[artifact]-[revision].[ext]" />
 
