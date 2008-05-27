@@ -15,6 +15,7 @@ import java.util.Vector;
 import org.cagrid.data.test.creation.DataTestCaseInfo;
 import org.cagrid.data.test.creation.enumeration.CreateEnumerationTests;
 import org.cagrid.data.test.system.AddBookstoreStep;
+import org.cagrid.data.test.system.AddTestingJarToServiceStep;
 import org.cagrid.data.test.system.BaseSystemTest;
 import org.cagrid.data.test.system.EnableValidationStep;
 import org.cagrid.data.test.system.RebuildServiceStep;
@@ -80,19 +81,21 @@ public class EnumerationSystemTests extends BaseSystemTest {
 		Vector<Step> steps = new Vector<Step>();
 		// an enumeration supporting data service is presumed to have been
 		// created by a previous testing process
-		// 1) Add the bookstore schema to the data service
+        // 1) Add the data tests jar to the service lib
+        steps.add(new AddTestingJarToServiceStep(info));
+		// 2) Add the bookstore schema to the data service
 		steps.add(new AddBookstoreStep(info));
-		// 2) change out query processor
+		// 3) change out query processor
 		steps.add(new SetQueryProcessorStep(info.getDir()));
-		// 3) Turn on query validation
+		// 4) Turn on query validation
 		steps.add(new EnableValidationStep(info.getDir()));
-		// 4) Rebuild the service to pick up the bookstore beans
+		// 5) Rebuild the service to pick up the bookstore beans
 		steps.add(new RebuildServiceStep(info, getIntroduceBaseDir()));
-		// 5) deploy data service
+		// 6) deploy data service
 		steps.add(new DeployServiceStep(container, info.getDir()));
-		// 6) start container
+		// 7) start container
 		steps.add(new StartContainerStep(container));
-		// 7) test data service
+		// 8) test data service
 		steps.add(new InvokeEnumerationDataServiceStep(container, info.getName()));
 		return steps;
 	}

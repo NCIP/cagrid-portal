@@ -17,6 +17,7 @@ import java.util.Vector;
 import org.cagrid.data.test.creation.DataTestCaseInfo;
 import org.cagrid.data.test.creation.bdt.BDTDataServiceCreationTests;
 import org.cagrid.data.test.system.AddBookstoreStep;
+import org.cagrid.data.test.system.AddTestingJarToServiceStep;
 import org.cagrid.data.test.system.BaseSystemTest;
 import org.cagrid.data.test.system.EnableValidationStep;
 import org.cagrid.data.test.system.RebuildServiceStep;
@@ -33,7 +34,7 @@ import junit.textui.TestRunner;
  * @author David Ervin
  * 
  * @created Mar 14, 2007 2:19:42 PM
- * @version $Id: BDTDataServiceSystemTests.java,v 1.2 2008-05-21 19:51:14 dervin Exp $ 
+ * @version $Id: BDTDataServiceSystemTests.java,v 1.3 2008-05-27 18:03:35 dervin Exp $ 
  */
 public class BDTDataServiceSystemTests extends BaseSystemTest {
     
@@ -90,19 +91,21 @@ public class BDTDataServiceSystemTests extends BaseSystemTest {
 	protected Vector steps() {
         Vector<Step> steps = new Vector<Step>();
 		// assumes the BDT service has been created already
-		// 1) Add the bookstore schema to the data service
+        // 1) Add the data tests jar to the service lib
+        steps.add(new AddTestingJarToServiceStep(testServiceInfo));
+		// 2) Add the bookstore schema to the data service
 		steps.add(new AddBookstoreStep(testServiceInfo));
-		// 2) change out query processor
+		// 3) change out query processor
 		steps.add(new SetQueryProcessorStep(testServiceInfo.getDir()));
-		// 3) Turn on query validation
+		// 4) Turn on query validation
 		steps.add(new EnableValidationStep(testServiceInfo.getDir()));
-		// 4) Rebuild the service to pick up the bookstore beans
+		// 5) Rebuild the service to pick up the bookstore beans
 		steps.add(new RebuildServiceStep(testServiceInfo, getIntroduceBaseDir()));
-		// 5) deploy data service
+		// 6) deploy data service
 		steps.add(new DeployServiceStep(container, testServiceInfo.getDir()));
-		// 6) start the container
+		// 7) start the container
 		steps.add(new StartContainerStep(container));
-		// 7) test bdt data service
+		// 8) test bdt data service
 		steps.add(new InvokeBDTDataServiceStep(container, testServiceInfo.getName()));
 		return steps;
 	}
@@ -110,7 +113,7 @@ public class BDTDataServiceSystemTests extends BaseSystemTest {
 	
 	protected void storyTearDown() throws Throwable {
 		super.storyTearDown();
-		// 8) stop globus
+		// 9) stop globus
 		Step stopStep = new StopContainerStep(container);
 		try {
 			stopStep.runStep();
