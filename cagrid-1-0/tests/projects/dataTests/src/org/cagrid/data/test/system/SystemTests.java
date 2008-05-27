@@ -27,7 +27,7 @@ import junit.textui.TestRunner;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A> *
  * @created Nov 7, 2006
- * @version $Id: SystemTests.java,v 1.1 2008-05-16 19:25:25 dervin Exp $
+ * @version $Id: SystemTests.java,v 1.2 2008-05-27 15:24:56 dervin Exp $
  */
 public class SystemTests extends BaseSystemTest {
     
@@ -78,23 +78,25 @@ public class SystemTests extends BaseSystemTest {
         Vector<Step> steps = new Vector<Step>();
         // data service presumed to have been created
         // by the data service creation tests
-        // 2) Add the bookstore schema to the data service
+        // 2) Add the data tests jar to the service lib
+        steps.add(new AddTestingJarToServiceStep(info));
+        // 3) Add the bookstore schema to the data service
         steps.add(new AddBookstoreStep(info));
-        // 3) change out query processor
+        // 4) change out query processor
         steps.add(new SetQueryProcessorStep(info.getDir()));
-        // 4) Turn on query validation
+        // 5) Turn on query validation
         steps.add(new EnableValidationStep(info.getDir()));
-        // 5) Turn on and configure auditing
+        // 6) Turn on and configure auditing
         steps.add(new AddFileSystemAuditorStep(info.getDir(), auditorLogFile.getAbsolutePath()));
-        // 6) Rebuild the service to pick up the bookstore beans
+        // 7) Rebuild the service to pick up the bookstore beans
         steps.add(new RebuildServiceStep(info, getIntroduceBaseDir()));
-        // 7) deploy data service
+        // 8) deploy data service
         steps.add(new DeployServiceStep(container, info.getDir()));
-        // 8) start globus
+        // 9) start globus
         steps.add(new StartContainerStep(container));
-        // 9) test data service
+        // 10) test data service
         steps.add(new InvokeDataServiceStep(container, info.getName()));
-        // 10) verify the audit log
+        // 11) verify the audit log
         steps.add(new VerifyAuditLogStep(auditorLogFile.getAbsolutePath()));
         return steps;
     }
@@ -102,21 +104,21 @@ public class SystemTests extends BaseSystemTest {
 
     protected void storyTearDown() throws Throwable {
         super.storyTearDown();
-        // 11) stop globus
+        // 12) stop globus
         Step stopStep = new StopContainerStep(container);
         try {
             stopStep.runStep();
         } catch (Throwable ex) {
             ex.printStackTrace();
         }
-        // 12) throw away globus
+        // 13) throw away globus
         Step destroyStep = new DestroyContainerStep(container);
         try {
             destroyStep.runStep();
         } catch (Throwable ex) {
             ex.printStackTrace();
         }
-        // 13) throw away auditor log
+        // 14) throw away auditor log
         if (auditorLogFile.exists()) {
             auditorLogFile.delete();
         }
