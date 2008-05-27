@@ -27,7 +27,7 @@
 		<delete file="${service.tools.jar}" />
 		<delete>
 			<fileset dir="${skeleton.tools.lib.dir}">
-				<include name="${jars.prefixname}*.jar"/>
+				<include name="caGrid-*.jar"/>
 			</fileset>
 		</delete>
 
