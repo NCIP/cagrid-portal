@@ -38,7 +38,11 @@
 	</bean>
 	
 	<bean id="metadataListenerTemplate" abstract="true">
+		
 		<property name="metadataTimeout" ref="defaultTimeout" />
+		<!--  
+		 <property name="metadataTimeout" value="50000" />
+		 -->
 	</bean>	
 	
 	<bean id="serviceMetadataBuilderPrototype" scope="prototype"

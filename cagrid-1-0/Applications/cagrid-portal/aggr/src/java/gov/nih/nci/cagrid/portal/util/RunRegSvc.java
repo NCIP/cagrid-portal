@@ -19,7 +19,7 @@ public class RunRegSvc {
 		new ClassPathXmlApplicationContext(new String[] {
 				"classpath:applicationContext-db.xml",
 				"classpath:applicationContext-aggr-regsvc.xml" });
-
+		
 	}
 
 }

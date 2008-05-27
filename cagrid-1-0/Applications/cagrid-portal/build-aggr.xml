@@ -141,6 +141,17 @@
     <target name="aggr:run-regsvc" depends="aggr:prepare-run-cp">
         <java classname="gov.nih.nci.cagrid.portal.util.RunRegSvc" classpathref="aggr.run.cp" fork="true"/>
     </target>
+    
+    <target name="aggr:run-regsvcman" depends="aggr:prepare-run-cp">
+        <java classname="gov.nih.nci.cagrid.portal.util.RegisterService" classpathref="aggr.run.cp" fork="true">
+        	<arg value="http://cagrid-index.nci.nih.gov:8080/wsrf/services/DefaultIndexService"/>
+        	<arg value="http://cagrid.jax.org:18080/wsrf/services/cagrid/CaArraySvc"/>
+        </java>
+        <java classname="gov.nih.nci.cagrid.portal.util.RegisterService" classpathref="aggr.run.cp" fork="true">
+        	<arg value="http://cagrid-index.nci.nih.gov:8080/wsrf/services/DefaultIndexService"/>
+        	<arg value="http://array.nci.nih.gov:80/wsrf/services/cagrid/CaArraySvc"/>
+        </java>
+    </target>
 
     <target name="aggr:run-metachange" depends="aggr:prepare-run-cp">
         <java classname="gov.nih.nci.cagrid.portal.util.RunMetaChange" classpathref="aggr.run.cp" fork="true"/>
