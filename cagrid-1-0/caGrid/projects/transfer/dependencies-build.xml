@@ -4,7 +4,7 @@
 	<property file="project.properties" />
 
 	<!-- OVERLOADED-->
-	<property name="ivy.resolve.configuations" value="impl,test" />
+	<property name="ivy.resolve.configurations" value="impl,test" />
 	<property name="ivy.generated.artifacts.pattern" value="${ivy.generated.artifacts.dir}/lib/[artifact]-[revision].[ext]" />
 
 	<property name="ivy-shared-targets.file" location="${basedir}/../../antfiles/ivy/ivy-shared-targets.xml" />
@@ -16,7 +16,7 @@
 
 		<ivy:retrieve conf="extension" pattern="${basedir}/extension/ext/dependencies/[type]s/[originalname](.[ext])" sync="true" type="jar" />
 		
-		<ivy:retrieve conf="${ivy.resolve.configuations}" pattern="${basedir}/schema/TransferService/xsd/[artifact](.[ext])" sync="true" type="xsd" />
+		<ivy:retrieve conf="${ivy.resolve.configurations}" pattern="${basedir}/schema/TransferService/xsd/[artifact](.[ext])" sync="true" type="xsd" />
 	</target>
 	
 	   <!-- Overloaded to support multiple artifact patterns  -->

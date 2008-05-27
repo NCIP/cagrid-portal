@@ -5,7 +5,7 @@
 
 
 	<!-- OVERLOADED-->
-	<property name="ivy.resolve.configuations" value="default" />
+	<property name="ivy.resolve.configurations" value="default" />
 	<!-- This only finds the war file right now -->
 	<property name="ivy.generated.artifacts.pattern" value="${ivy.generated.artifacts.dir}/[artifact].[ext]" />
 

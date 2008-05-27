@@ -4,7 +4,7 @@
 	<property file="project.properties" />
 
 	<!-- OVERLOADED-->
-	<property name="ivy.resolve.configuations" value="impl,test" />
+	<property name="ivy.resolve.configurations" value="impl,test" />
 
 	<property name="ivy-shared-targets.file" location="${basedir}/../../antfiles/ivy/ivy-shared-targets.xml" />
 	<import file="${ivy-shared-targets.file}" />

@@ -7,8 +7,8 @@
 	<import file="${ivy-shared-targets.file}" />
 
 	<target name="do.resolve-dependencies" depends="pre.resolve-dependencies">
-		<ivy:retrieve conf="${ivy.resolve.configuations}" pattern="${ivy.resolved.artifacts.pattern}" sync="true" type="jar" />
-		<ivy:retrieve conf="${ivy.resolve.configuations}" pattern="${basedir}/schema/ServiceSecurity/xsd/[artifact].[ext]" sync="true" type="xsd" />
+		<ivy:retrieve conf="${ivy.resolve.configurations}" pattern="${ivy.resolved.artifacts.pattern}" sync="true" type="jar" />
+		<ivy:retrieve conf="${ivy.resolve.configurations}" pattern="${basedir}/schema/ServiceSecurity/xsd/[artifact].[ext]" sync="true" type="xsd" />
 	</target>
 
 	<!-- Overloaded to support multiple artifact patterns  -->

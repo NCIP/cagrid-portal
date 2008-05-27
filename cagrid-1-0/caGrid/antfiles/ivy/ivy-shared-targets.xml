@@ -35,8 +35,8 @@
 	<property name="ivy.generated.artifacts.dir" location="build" description="The directoy in which artifacts are created" />
 	<property name="ivy.generated.artifacts.pattern" value="${ivy.generated.artifacts.dir}/[type]s/[artifact]-[revision].[ext]" description="The ivy pattern used to locate generated artifacts" />
 
-	<property name="ivy.resolve.configuations" value="${ivy.public.configurations}" description="The Ivy configurations that should be resolved (defaults to public scope)" />
-	<property name="ivy.resolve.configure.configuations" value="target_grid" description="The Ivy configurations that should be resolved during a configure call (defaults to just the special 'target_grid' configuration)" />
+	<property name="ivy.resolve.configurations" value="${ivy.public.configurations}" description="The Ivy configurations that should be resolved (defaults to public scope)" />
+	<property name="ivy.resolve.configure.configurations" value="target_grid" description="The Ivy configurations that should be resolved during a configure call (defaults to just the special 'target_grid' configuration)" />
 
 	<property name="main.build.file" value="build.xml" description="The project's main build file" />
 	<property name="main.build.all.target" value="all" description="The ant target in the project's main build file that should be called to do a complete build" />
@@ -84,12 +84,12 @@
 
 	<target name="pre.resolve-configure-dependencies" if="configure.supported">
 		<!-- Ask Ivy to figure out what we need and cache it -->
-		<ivy:resolve conf="${ivy.resolve.configure.configuations}" />
+		<ivy:resolve conf="${ivy.resolve.configure.configurations}" />
 	</target>
 	<target name="do.resolve-configure-dependencies" depends="pre.resolve-configure-dependencies" if="configure.supported">
 		<echo message="Resolving configure dependencies for ${ivy.module}." />
 		<!-- Ask Ivy to copy our artifacts into the project -->
-		<ivy:retrieve conf="${ivy.resolve.configure.configuations}" pattern="${ivy.resolved.artifacts.dir}/target_grid/[artifact].[ext]" sync="true" />
+		<ivy:retrieve conf="${ivy.resolve.configure.configurations}" pattern="${ivy.resolved.artifacts.dir}/target_grid/[artifact].[ext]" sync="true" />
 	</target>
 	<target name="post.resolve-configure-dependencies" depends="do.resolve-configure-dependencies" if="configure.supported">
 		<!-- Tell the project to configure itself -->
@@ -108,7 +108,7 @@
 	<target name="do.resolve-dependencies" depends="pre.resolve-dependencies">
 		<echo message="Resolving dependencies for ${ivy.module}." />
 		<!-- Ask Ivy to copy our artifacts into the project -->
-		<ivy:retrieve conf="${ivy.resolve.configuations}" pattern="${ivy.resolved.artifacts.pattern}" sync="true" />
+		<ivy:retrieve conf="${ivy.resolve.configurations}" pattern="${ivy.resolved.artifacts.pattern}" sync="true" />
 	</target>
 	<target name="post.resolve-dependencies" depends="do.resolve-dependencies">
 		<!-- Ask Ivy to generate us a dependency report -->
