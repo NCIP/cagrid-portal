@@ -28,18 +28,6 @@
         <!--foreign class-->
         <c:set var="nodePath"><c:out value="${currNode.path}"/></c:set>
 
-        <input type="button" value="Load Foreign Classes"
-               onclick="populateForiegnAssociations('<c:out value="${nodePath}"/>','/query/builder/umlClass')"
-                <c:forEach var="child" items="${currNode.children}">
-                    <c:if test="${child.content.class.name == foreignNodeClassname}">
-                        &nbsp;
-                        style="display:none;"
-                        &nbsp;
-                    </c:if>
-                </c:forEach>
-                />
-
-
         <c:if test="${currNode.content.class.name == foreignNodeClassname}">
             <br/><br/>
             <table border="1">

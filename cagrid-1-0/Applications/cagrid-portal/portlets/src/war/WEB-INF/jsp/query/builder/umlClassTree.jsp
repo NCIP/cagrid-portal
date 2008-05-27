@@ -56,6 +56,22 @@
     node.className = "exp_node";
     }
     }
+
+    function <portlet:namespace/>changeJoin(path){
+    <c:out value="${treeFacadeName}"/>.changeJoinCondition(path,{
+    localAttributeName : DWRUtil.getValue(path+'localAttributeName'),
+    foreignAttributeName : DWRUtil.getValue(path+'foreignAttributeName'),
+    predicate: DWRUtil.getValue(path+'predicate')
+    },
+    {
+    errorHandler:function(errorString, exception){
+    alert("Error setting join condition: " + errorString);
+    }
+    });
+
+
+    }
+
     // ]]>
 </script>
 
