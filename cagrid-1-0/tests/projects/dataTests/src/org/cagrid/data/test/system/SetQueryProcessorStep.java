@@ -10,7 +10,6 @@ import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.testing.system.haste.Step;
 
 import java.io.File;
-import java.io.FileFilter;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
@@ -95,17 +94,6 @@ public class SetQueryProcessorStep extends Step {
         // set the service property for the new query processor
         CommonTools.setServiceProperty(desc, DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY,
             TestingCQLQueryProcessor.class.getName(), false);
-        // copy the testing jar file to the service
-        File dataBuildLibDir = new File(".." + File.separator + "data" + File.separator + "build" + File.separator + "lib");
-        File[] testJars = dataBuildLibDir.listFiles(new FileFilter() {
-            public boolean accept(File pathname) {
-                return pathname.getName().matches(".*tests.*.jar");
-            }
-        });
-        String serviceLibDir = serviceDir + File.separator + "lib";
-        for (int i = 0; i < testJars.length; i++) {
-            Utils.copyFile(testJars[i], new File(serviceLibDir + File.separator + testJars[i].getName()));
-        }
         // serialize the service model back to disk
         Utils.serializeDocument(serviceModelFile, desc, IntroduceConstants.INTRODUCE_SKELETON_QNAME);
     }
