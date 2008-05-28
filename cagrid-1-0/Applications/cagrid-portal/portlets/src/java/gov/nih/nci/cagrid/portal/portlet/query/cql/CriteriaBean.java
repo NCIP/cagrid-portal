@@ -10,7 +10,10 @@ import gov.nih.nci.cagrid.portal.domain.metadata.dataservice.UMLAssociationEdge;
 import gov.nih.nci.cagrid.portal.domain.metadata.dataservice.UMLClass;
 import gov.nih.nci.cagrid.portal.portlet.query.QueryConstants;
 import gov.nih.nci.cagrid.portal.portlet.query.builder.AggregateTargetsCommand;
+import gov.nih.nci.cagrid.portal.portlet.query.dcql.ForeignUMLClassBean;
 import gov.nih.nci.cagrid.portal.portlet.query.dcql.JoinCondition;
+import gov.nih.nci.cagrid.portal.portlet.tree.TreeFacade;
+import gov.nih.nci.cagrid.portal.portlet.tree.TreeNode;
 import gov.nih.nci.cagrid.portal.portlet.util.PortletUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -40,7 +43,8 @@ public class CriteriaBean implements ApplicationContextAware {
 
     private AggregateTargetsCommand aggregateTargets;
     private JoinCondition join;
-    private boolean DCQLQuery;
+    private TreeFacade umlClassTreeFacade;
+
 
     private HibernateTemplate hibernateTemplate;
 
@@ -152,7 +156,15 @@ public class CriteriaBean implements ApplicationContextAware {
                                     }
                                 });
                         subCriteria.setUmlClass(assocType);
-                        subCriteria.setJoin(criterion.getJoin());
+                        // ToDo Simplify. Only way to lookup path for current foreign node                       
+                        TreeNode fNode = getUmlClassTreeFacade().getRootNode().find(criterion.getPath().substring(0, criterion.getPath().indexOf(parts[0])) + parts[0]);
+
+                        // if foreign association then save the join
+                        if (fNode.getContent() instanceof ForeignUMLClassBean) {
+                            ForeignUMLClassBean fumlClassBean = (ForeignUMLClassBean) fNode.getContent();
+                            subCriteria.setJoin(fumlClassBean.getJoin());
+                        }
+
                         assoc.setRoleName(parts[0]);
                         assoc.setCriteriaBean(subCriteria);
                     } else {
@@ -343,5 +355,15 @@ public class CriteriaBean implements ApplicationContextAware {
 
     public void setJoin(JoinCondition join) {
         this.join = join;
+    }
+
+    public TreeFacade getUmlClassTreeFacade() {
+        if (umlClassTreeFacade == null)
+            return (TreeFacade) getApplicationContext().getBean("umlClassTreeFacade");
+        return umlClassTreeFacade;
+    }
+
+    public void setUmlClassTreeFacade(TreeFacade umlClassTreeFacade) {
+        this.umlClassTreeFacade = umlClassTreeFacade;
     }
 }

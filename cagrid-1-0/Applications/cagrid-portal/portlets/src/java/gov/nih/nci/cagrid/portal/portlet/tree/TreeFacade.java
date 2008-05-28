@@ -3,15 +3,14 @@
  */
 package gov.nih.nci.cagrid.portal.portlet.tree;
 
+import gov.nih.nci.cagrid.portal.portlet.query.QueryConstants;
+import gov.nih.nci.cagrid.portal.portlet.query.dcql.ForeignUMLClassBean;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import gov.nih.nci.cagrid.portal.portlet.query.dcql.ForeignUMLClassBean;
-import gov.nih.nci.cagrid.dcql.JoinCondition;
-import gov.nih.nci.cagrid.dcql.ForeignPredicate;
 
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
@@ -37,9 +36,15 @@ public class TreeFacade {
         TreeNode node = getRootNode().find(path);
         if (node != null) {
             ForeignUMLClassBean umlClass = (ForeignUMLClassBean) node.getContent();
-            umlClass.getJoin().setLocalAttributeName((String) params.get("localAttributeName"));
-            umlClass.getJoin().setForeignAttributeName((String) params.get("foreignAttributeName"));
-            umlClass.getJoin().setPredicate((String) params.get("predicate"));
+
+            if (params.containsKey(QueryConstants.FOREIGN_JOIN_LOCAL_ATTR_NAME))
+                umlClass.getJoin().setLocalAttributeName((String) params.get(QueryConstants.FOREIGN_JOIN_LOCAL_ATTR_NAME));
+
+            if (params.containsKey(QueryConstants.FOREIGN_JOIN_FOREIGN_ATTR_NAME))
+                umlClass.getJoin().setForeignAttributeName((String) params.get(QueryConstants.FOREIGN_JOIN_FOREIGN_ATTR_NAME));
+
+            if (params.containsKey(QueryConstants.FOREIGN_JOIN_PREDICATE))
+                umlClass.getJoin().setPredicate((String) params.get(QueryConstants.FOREIGN_JOIN_PREDICATE));
 
         } else {
             throw new RuntimeException("Didn't find node '" + path + "'.");

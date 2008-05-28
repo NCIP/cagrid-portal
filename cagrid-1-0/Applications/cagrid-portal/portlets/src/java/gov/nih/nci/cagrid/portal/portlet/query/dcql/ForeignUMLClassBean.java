@@ -18,10 +18,12 @@ public class ForeignUMLClassBean extends UMLClassBean {
         super(umlClass);
     }
 
-    public ForeignUMLClassBean(UMLClass umlClass, UMLAttribute leftJoinAttr) {
+    public ForeignUMLClassBean(UMLClass umlClass, UMLAttribute leftJoinAttr) throws IllegalArgumentException {
         this(umlClass);
         if (super.getAttributes().size() > 0)
             join = new JoinCondition(leftJoinAttr.getName(), getAttributes().get(0).getName(), "EQUAL_TO");
+        else
+            throw new IllegalArgumentException("Could not create valid join for class with ID" + umlClass.getId());
     }
 
     public JoinCondition getJoin() {

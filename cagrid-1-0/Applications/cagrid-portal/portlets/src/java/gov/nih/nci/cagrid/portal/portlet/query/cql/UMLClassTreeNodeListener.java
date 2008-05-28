@@ -95,8 +95,14 @@ public class UMLClassTreeNodeListener implements TreeNodeListener {
                             QueryConstants.FOREIGN_UML_CLASS_PREFIX
                                     + target.getId() + ":" + count++);
                     fnode.setLabel(target.getClassName());
-                    fnode.setContent(new ForeignUMLClassBean(target,
-                            umlClassBean.getAttributes().get(0)));
+                    //add only if foreign join can be established
+                    try {
+                        fnode.setContent(new ForeignUMLClassBean(target,
+                                umlClassBean.getAttributes().get(0)));
+                    } catch (IllegalArgumentException e) {
+                        logger.warn("Class does not have valid Join attributes." +
+                                "Not adding Foreign class with ID " + target.getId());
+                    }
                     node.getChildren().add(fnode);
                 }
             }

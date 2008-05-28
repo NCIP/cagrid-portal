@@ -9,6 +9,7 @@ import gov.nih.nci.cagrid.portal.domain.metadata.dataservice.*;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.orm.hibernate3.HibernateCallback;
 
@@ -19,6 +20,7 @@ import java.util.*;
  * @author <a href="joshua.phillips@semanticbits.com">Joshua Phillips</a>
  */
 public class UMLClassDao extends AbstractDao<UMLClass> {
+    public int maxResultSize = 10;
 
     /*
       * (non-Javadoc)
@@ -48,8 +50,11 @@ public class UMLClassDao extends AbstractDao<UMLClass> {
                                         .getPackageName())).add(
                                 Restrictions.eq("projectName", example
                                         .getProjectName())).add(
-                                Restrictions.ne("model.id", example.getModel()
-                                        .getId())).list();
+                                Restrictions.ne("model.id", example.getModel().getId()))
+                                .setResultTransformer(
+                                        Criteria.DISTINCT_ROOT_ENTITY)
+                                .setMaxResults(maxResultSize)
+                                .list();
                     }
                 });
         return resultSet;
@@ -69,10 +74,12 @@ public class UMLClassDao extends AbstractDao<UMLClass> {
                                 Restrictions.ne("id", example.getId()))
                                 //not from the same model
                                 .add(Restrictions.ne("model.id", example.getModel().getId()))
+                                .addOrder(Order.asc("className"))
                                 .createCriteria("semanticMetadata").add(
                                 Restrictions.in("conceptCode", codes))
                                 .setResultTransformer(
                                         Criteria.DISTINCT_ROOT_ENTITY)
+                                .setMaxResults(maxResultSize)
                                 .list();
                     }
                 });
@@ -122,6 +129,7 @@ public class UMLClassDao extends AbstractDao<UMLClass> {
                                                             code))
                                             .setResultTransformer(
                                                     Criteria.DISTINCT_ROOT_ENTITY)
+                                            .setMaxResults(maxResultSize)
                                             .list();
                                 }
                             });
@@ -170,17 +178,9 @@ public class UMLClassDao extends AbstractDao<UMLClass> {
                                     .createCriteria("semanticMetadata").add(
                                     Restrictions
                                             .eq("conceptCode", code))
-                                    .add(
-                                            Restrictions.ne("conceptCode",
-                                                    "C25364")).add(
-                                    Restrictions.ne("conceptCode",
-                                            "C25365")).add(
-                                    Restrictions.ne("conceptCode",
-                                            "C42778")).add(
-                                    Restrictions.ne("conceptCode",
-                                            "C42778"))
                                     .setResultTransformer(
                                             Criteria.DISTINCT_ROOT_ENTITY)
+                                    .setMaxResults(maxResultSize)
                                     .list();
                         }
                     });
@@ -211,4 +211,11 @@ public class UMLClassDao extends AbstractDao<UMLClass> {
                 });
     }
 
+    public int getMaxResultSize() {
+        return maxResultSize;
+    }
+
+    public void setMaxResultSize(int maxResultSize) {
+        this.maxResultSize = maxResultSize;
+    }
 }

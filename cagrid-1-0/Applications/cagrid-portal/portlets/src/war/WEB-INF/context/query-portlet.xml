@@ -857,6 +857,7 @@
 
     <bean id="criteriaBeanPrototype" class="gov.nih.nci.cagrid.portal.portlet.query.cql.CriteriaBean" scope="prototype">
         <property name="hibernateTemplate" ref="hibernateTemplate"/>
+        <property name="umlClassTreeFacade" ref="umlClassTreeFacade"/>
     </bean>
 
     <bean id="cqlQueryBeanPrototype" class="gov.nih.nci.cagrid.portal.portlet.query.cql.CQLQueryBean" scope="prototype">

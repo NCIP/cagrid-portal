@@ -12,7 +12,7 @@ import java.util.List;
  */
 public class UmlClassDaoTest extends DBTestBase<UMLClassDao> {
 
-	
+
     public void testSemanticEquivalence() {
         UMLClass uClass = getDao().getById(-1);
         List<UMLClass> classes = getDao().getSemanticalyEquivalentClassesBasedOnAtrributes(uClass);
@@ -47,11 +47,19 @@ public class UmlClassDaoTest extends DBTestBase<UMLClassDao> {
         }
     }
 
-
     public void testQueryByExample() {
         UMLClass example = getDao().getById(-1);
         List<UMLClass> result = getDao().getSameClassesInDifferentModel(example);
         assertNotNull(result);
         assertEquals(1, result.size());
+    }
+
+    public void testMaxResultSet() {
+        UMLClass uClass = getDao().getById(-1);
+
+        getDao().setMaxResultSize(0);
+        assertEquals(0, getDao().getSemanticallyEquivalentClassesBasedOnAssociations(uClass).size());
+        assertEquals(0, getDao().getSameClassesInDifferentModel(uClass).size());
+        assertEquals(0, getDao().getSemanticalyEquivalentClassesBasedOnAtrributes(uClass).size());
     }
 }
