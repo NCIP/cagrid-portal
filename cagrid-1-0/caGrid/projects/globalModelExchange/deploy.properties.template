@@ -1,5 +1,0 @@
-service.deployment.prefix=cagrid
-index.service.url=@cagrid.master.index.service.url@
-perform.index.service.registration=true
-index.service.index.refresh_milliseconds=300000
-index.service.registration.refresh_seconds=600

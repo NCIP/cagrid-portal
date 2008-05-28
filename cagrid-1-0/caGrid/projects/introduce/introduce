@@ -1,3 +1,0 @@
-#! sh
-echo "Starting Introduce..."
-ant introduce
