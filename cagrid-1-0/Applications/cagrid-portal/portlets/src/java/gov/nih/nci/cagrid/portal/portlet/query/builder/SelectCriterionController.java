@@ -8,7 +8,6 @@ import gov.nih.nci.cagrid.portal.portlet.query.AbstractQueryActionController;
 import gov.nih.nci.cagrid.portal.portlet.query.cql.CriteriaBean;
 import gov.nih.nci.cagrid.portal.portlet.query.cql.CriterionBean;
 import gov.nih.nci.cagrid.portal.portlet.query.cql.UMLClassBean;
-import gov.nih.nci.cagrid.portal.portlet.query.dcql.ForeignUMLClassBean;
 import gov.nih.nci.cagrid.portal.portlet.tree.TreeFacade;
 import gov.nih.nci.cagrid.portal.portlet.tree.TreeNode;
 import org.springframework.beans.factory.annotation.Required;
@@ -104,13 +103,6 @@ public class SelectCriterionController extends
                 throw new Exception("Couldn't find node for " + path);
             }
             UMLAttribute selectedAtt = null;
-
-            // if foreign association then save the join           
-            if (node.getContent() instanceof ForeignUMLClassBean) {
-                ForeignUMLClassBean fumlClassBean = (ForeignUMLClassBean) node.getContent();
-                bean.setJoin(fumlClassBean.getJoin());
-            }
-
             UMLClassBean umlClassBean = (UMLClassBean) node.getContent();
             for (UMLAttribute att : umlClassBean.getAttributes()) {
                 if (umlAttName.equals(att.getName())) {
