@@ -1,4 +1,4 @@
-<ns1:DomainModel projectDescription="proj" projectLongName="proj" projectShortName="proj" projectVersion="1.0" xsi:type="ns1:DomainModel" xmlns:ns1="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<ns1:DomainModel projectDescription="model1" projectLongName="model1" projectShortName="model1" projectVersion="1.0" xsi:type="ns1:DomainModel" xmlns:ns1="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
  <ns1:exposedUMLAssociationCollection>
   <ns1:UMLAssociation bidirectional="true" xsi:type="ns1:UMLAssociation">
    <ns1:targetUMLAssociationEdge>
@@ -74,6 +74,12 @@
     <ns3:UMLAttribute name="clusterId" publicID="451070277" version="1.0" xsi:type="ns3:UMLAttribute"/>
     <ns3:UMLAttribute name="id" publicID="451070234" version="1.0" xsi:type="ns3:UMLAttribute"/>
    </ns3:umlAttributeCollection>
+   <sm:SemanticMetadata 
+   	conceptCode="C16612" 
+   	conceptDefinition="A functional unit of heredity which occupies a specific position (locus) on a particular chromosome, is capable of reproducing itself exactly at each cell division, and directs the formation of a protein or other product." 
+   	conceptName="Gene" 
+   	order="0" 
+   	xmlns:sm="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
   </ns1:UMLClass>
   <ns1:UMLClass allowableAsTarget="true" className="Annotation" id="-64--88-1-100-782133d5:11a2bb3f585:-8000:0000000000000971" packageName="model1.domain" projectName="proj" projectVersion="1.0" xsi:type="ns1:UMLClass">
    <ns4:umlAttributeCollection xmlns:ns4="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
@@ -93,6 +99,12 @@
     <ns6:UMLAttribute name="level" publicID="451070329" version="1.0" xsi:type="ns6:UMLAttribute"/>
     <ns6:UMLAttribute name="id" publicID="451070234" version="1.0" xsi:type="ns6:UMLAttribute"/>
    </ns6:umlAttributeCollection>
+   <sm:SemanticMetadata 
+   	conceptCode="C43520" 
+   	conceptDefinition="The Gene Ontology (GO) project is a collaborative effort to address the need for consistent descriptions of gene products in different databases. The goal of the Gene Ontology project is to produce a controlled vocabulary that can be applied to all organisms even as knowledge of gene and protein roles in cells is accumulating and changing. GO provides three structured networks of defined terms, molecular function, biological process, and cellular component, to describe gene product attributes.|from http://www.geneontology.org/" 
+   	conceptName="Gene Ontology" 
+   	order="0" 
+   	xmlns:sm="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
   </ns1:UMLClass>
  </ns1:exposedUMLClassCollection>
  <ns1:umlGeneralizationCollection>

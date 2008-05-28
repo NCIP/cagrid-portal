@@ -1,4 +1,4 @@
-<ns1:DomainModel projectDescription="proj" projectLongName="proj" projectShortName="proj" projectVersion="1.0" xsi:type="ns1:DomainModel" xmlns:ns1="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<ns1:DomainModel projectDescription="model2" projectLongName="model2" projectShortName="model2" projectVersion="1.0" xsi:type="ns1:DomainModel" xmlns:ns1="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
  <ns1:exposedUMLAssociationCollection>
   <ns1:UMLAssociation bidirectional="true" xsi:type="ns1:UMLAssociation">
    <ns1:targetUMLAssociationEdge>
@@ -92,6 +92,12 @@
     <ns4:UMLAttribute name="level" publicID="451077905" version="1.0" xsi:type="ns4:UMLAttribute"/>
     <ns4:UMLAttribute name="id" publicID="451077873" version="1.0" xsi:type="ns4:UMLAttribute"/>
    </ns4:umlAttributeCollection>
+   <sm:SemanticMetadata 
+   	conceptCode="C43520" 
+   	conceptDefinition="The Gene Ontology (GO) project is a collaborative effort to address the need for consistent descriptions of gene products in different databases. The goal of the Gene Ontology project is to produce a controlled vocabulary that can be applied to all organisms even as knowledge of gene and protein roles in cells is accumulating and changing. GO provides three structured networks of defined terms, molecular function, biological process, and cellular component, to describe gene product attributes.|from http://www.geneontology.org/" 
+   	conceptName="Gene Ontology" 
+   	order="0" 
+   	xmlns:sm="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
   </ns1:UMLClass>
   <ns1:UMLClass allowableAsTarget="true" className="Gene" id="-64--88-1-100-782133d5:11a2bb3f585:-8000:0000000000000A77" packageName="model2.domain" projectName="proj" projectVersion="1.0" xsi:type="ns1:UMLClass">
    <ns5:umlAttributeCollection xmlns:ns5="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
@@ -100,6 +106,12 @@
     <ns5:UMLAttribute name="clusterId" publicID="451078012" version="1.0" xsi:type="ns5:UMLAttribute"/>
     <ns5:UMLAttribute name="id" publicID="451077873" version="1.0" xsi:type="ns5:UMLAttribute"/>
    </ns5:umlAttributeCollection>
+   <sm:SemanticMetadata 
+   	conceptCode="C16612" 
+   	conceptDefinition="A functional unit of heredity which occupies a specific position (locus) on a particular chromosome, is capable of reproducing itself exactly at each cell division, and directs the formation of a protein or other product." 
+   	conceptName="Gene" 
+   	order="0" 
+   	xmlns:sm="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
   </ns1:UMLClass>
   <ns1:UMLClass allowableAsTarget="true" className="Chromosome" id="-64--88-1-100-782133d5:11a2bb3f585:-8000:0000000000000A98" packageName="model2.domain" projectName="proj" projectVersion="1.0" xsi:type="ns1:UMLClass">
    <ns6:umlAttributeCollection xmlns:ns6="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
