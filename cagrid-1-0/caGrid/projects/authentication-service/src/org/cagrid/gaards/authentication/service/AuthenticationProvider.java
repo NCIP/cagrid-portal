@@ -14,11 +14,7 @@ import org.cagrid.gaards.authentication.common.InvalidCredentialException;
 
 
 public interface AuthenticationProvider {
-    
-    void setSAMLProvider(SAMLProvider samlProvider);
-    
-    void setSubjectProvider(SubjectProvider subjectProvider);
-
+	
     SAMLAssertion authenticate(Credential credential)
 	throws RemoteException, InvalidCredentialException,
 	InsufficientAttributeException, AuthenticationProviderException;
