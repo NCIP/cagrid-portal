@@ -30,6 +30,7 @@ import org.springframework.orm.hibernate3.SessionFactoryUtils;
 
 import org.apache.commons.logging.*;
 import org.dbunit.dataset.datatype.*;
+import org.dbunit.ext.mysql.MySqlDataTypeFactory;
 
 import java.sql.*;
 
@@ -88,8 +89,15 @@ public class TestDB {
         Connection conn = getJdbcConnection();
         IDatabaseConnection dbConn = new DatabaseConnection(conn);
         DatabaseConfig config = dbConn.getConfig();
-        config.setProperty(DatabaseConfig.PROPERTY_DATATYPE_FACTORY,
-                new HsqlDataTypeFactory());
+        if(isHsql()){
+        	config.setProperty(DatabaseConfig.PROPERTY_DATATYPE_FACTORY,
+        			new HsqlDataTypeFactory());
+        }else if(isMySql()){
+        	config.setProperty(DatabaseConfig.PROPERTY_DATATYPE_FACTORY,
+        			new MySqlDataTypeFactory());
+        }else{
+        	System.out.println("Using default data type factory.");
+        }
 
         IDataSet data = new FlatXmlDataSet(new FileInputStream(dataFilePath));
         try {
@@ -99,7 +107,17 @@ public class TestDB {
         }
     }
 
-    private static Connection getJdbcConnection() throws Exception {
+    private static boolean isMySql() {
+    	String prop = props.getProperty("cagrid.portal.db.driver"); 
+		return prop != null && prop.startsWith("com.mysql");
+	}
+
+	private static boolean isHsql() {
+		String prop = props.getProperty("cagrid.portal.db.driver"); 
+		return prop != null && prop.startsWith("org.hsqldb");
+	}
+
+	private static Connection getJdbcConnection() throws Exception {
         Class.forName(props.getProperty("cagrid.portal.db.driver"));
         return DriverManager.getConnection(props
                 .getProperty("cagrid.portal.db.url"), props
