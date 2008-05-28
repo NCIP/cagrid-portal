@@ -1,57 +1,57 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:p="http://www.springframework.org/schema/p"
-	xmlns:tx="http://www.springframework.org/schema/tx"
-	xmlns:aop="http://www.springframework.org/schema/aop"
-	xmlns:util="http://www.springframework.org/schema/util"
-	xsi:schemaLocation="
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="
 	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
 	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
 	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
 	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
 	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd">
-	
-	<import resource="classpath:applicationContext-aggr.xml"/>
-	
-	<bean id="registeredServiceMonitor"
-		class="gov.nih.nci.cagrid.portal.aggr.regsvc.RegisteredServiceMonitor">
-		<property name="indexServiceUrls" value="${cagrid.portal.indexServiceUrls}" />
-		<property name="dynamicServiceUrlProvider">
-			<bean
-				class="gov.nih.nci.cagrid.portal.aggr.regsvc.DynamicServiceUrlProvider">
-				<property name="requireMetadataCompliance" value="true" />
-				<property name="timeout" ref="defaultTimeout" />
-			</bean>
-		</property>
-		<property name="cachedServiceUrlProvider">
-			<bean
-				class="gov.nih.nci.cagrid.portal.aggr.regsvc.DBCachedServiceUrlProvider">
-				<property name="gridServiceDao" ref="gridServiceDao" />
-			</bean>
-		</property>
-	</bean>
 
-	<bean id="checkForNewServices"
-		class="org.springframework.scheduling.timer.MethodInvokingTimerTaskFactoryBean">
-		<property name="targetObject" ref="registeredServiceMonitor" />
-		<property name="targetMethod" value="checkForNewServices" />
-	</bean>
+    <import resource="classpath:applicationContext-aggr.xml"/>
 
-	<bean id="checkForNewServicesTask"
-		class="org.springframework.scheduling.timer.ScheduledTimerTask">
-		<property name="delay" value="3000"/>
-		<property name="period" value="600000" />
-		<property name="timerTask" ref="checkForNewServices" />
-	</bean>
+    <bean id="registeredServiceMonitor"
+          class="gov.nih.nci.cagrid.portal.aggr.regsvc.RegisteredServiceMonitor">
+        <property name="indexServiceUrls" value="${cagrid.portal.indexServiceUrls}"/>
+        <property name="dynamicServiceUrlProvider" ref="dynamicServiceUrlProvider"/>
+        <property name="cachedServiceUrlProvider">
+            <bean
+                    class="gov.nih.nci.cagrid.portal.aggr.regsvc.DBCachedServiceUrlProvider">
+                <property name="gridServiceDao" ref="gridServiceDao"/>
+            </bean>
+        </property>
+    </bean>
 
-	<bean id="registeredServiceListener" parent="metadataListenerTemplate"
-		class="gov.nih.nci.cagrid.portal.aggr.regsvc.RegisteredServiceListener">
-		<property name="indexServiceDao" ref="indexServiceDao" />
-		<property name="gridServiceDao" ref="gridServiceDao" />
-	</bean>	
-	
-	<bean id="regsvcTimerFactory"
+    <bean id="dynamicServiceUrlProvider"
+          class="gov.nih.nci.cagrid.portal.aggr.regsvc.DynamicServiceUrlProvider">
+        <property name="requireMetadataCompliance" value="true"/>
+        <property name="timeout" ref="defaultTimeout"/>
+    </bean>
+
+    <bean id="checkForNewServices"
+          class="org.springframework.scheduling.timer.MethodInvokingTimerTaskFactoryBean">
+        <property name="targetObject" ref="registeredServiceMonitor"/>
+        <property name="targetMethod" value="checkForNewServices"/>
+    </bean>
+
+    <bean id="checkForNewServicesTask"
+          class="org.springframework.scheduling.timer.ScheduledTimerTask">
+        <property name="delay" value="3000"/>
+        <property name="period" value="600000"/>
+        <property name="timerTask" ref="checkForNewServices"/>
+    </bean>
+
+    <bean id="registeredServiceListener" parent="metadataListenerTemplate"
+          class="gov.nih.nci.cagrid.portal.aggr.regsvc.RegisteredServiceListener">
+        <property name="indexServiceDao" ref="indexServiceDao"/>
+        <property name="gridServiceDao" ref="gridServiceDao"/>
+    </bean>
+
+    <bean id="regsvcTimerFactory"
           class="org.springframework.scheduling.timer.TimerFactoryBean">
 
         <property name="scheduledTimerTasks">
@@ -59,6 +59,6 @@
                 <ref bean="checkForNewServicesTask"/>
             </list>
         </property>
-    </bean>		
+    </bean>
 
 </beans>
