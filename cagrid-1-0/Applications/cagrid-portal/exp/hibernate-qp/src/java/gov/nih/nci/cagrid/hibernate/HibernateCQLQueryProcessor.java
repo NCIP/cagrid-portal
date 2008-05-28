@@ -73,7 +73,10 @@ public class HibernateCQLQueryProcessor extends CQLQueryProcessor implements
 
 			ParameterizedHqlQuery pQuery = cqlTranslator.convertToHql(cqlQuery);
 			List params = pQuery.getParameters();
-			String hql = "select __TargetAlias__ " + pQuery.getHql();
+			String hql = pQuery.getHql();
+			if(!hql.startsWith("select")){
+				hql = "select __TargetAlias__ " + hql;
+			}
 			logger.debug("HQL: " + hql);
 			List rawResults = hibernateTemplate
 					.find(hql, (Object[]) params
