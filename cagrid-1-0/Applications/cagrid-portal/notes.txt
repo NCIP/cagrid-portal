@@ -1,0 +1,4 @@
+select count(sh.id) as num_status, gs.url, gs.metadataHash
+from GridService as gs
+inner join gs.statusHistory as sh
+group by gs.id
