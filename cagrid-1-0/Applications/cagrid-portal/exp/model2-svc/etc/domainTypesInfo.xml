@@ -1,0 +1,46 @@
+<ns1:DomainTypesInformation xmlns:ns1="http://SDKQuery4.caBIG/1/gov.nih.nci.cagrid.sdkquery4.beans.domaininfo">
+ <ns1:DomainType javaClassName="model2.domain.AbstractDomainObject">
+  <ns1:TypeAttribute attributeName="id" javaTypeName="java.lang.Integer"/>
+  <ns1:SubclassName>model2.domain.HierarchyNode</ns1:SubclassName>
+  <ns1:SubclassName>model2.domain.Gene</ns1:SubclassName>
+  <ns1:SubclassName>model2.domain.Chromosome</ns1:SubclassName>
+  <ns1:SubclassName>model2.domain.Protein</ns1:SubclassName>
+ </ns1:DomainType>
+ <ns1:DomainType javaClassName="model2.domain.HierarchyNode">
+  <ns1:TypeAttribute attributeName="value" javaTypeName="java.lang.String"/>
+  <ns1:TypeAttribute attributeName="level" javaTypeName="int"/>
+  <ns1:TypeAttribute attributeName="id" javaTypeName="java.lang.Integer"/>
+  <ns1:SubclassName>model2.domain.GeneFunctionTerm</ns1:SubclassName>
+  <ns1:SubclassName>model2.domain.Taxon</ns1:SubclassName>
+  <ns1:SuperclassName>model2.domain.AbstractDomainObject</ns1:SuperclassName>
+ </ns1:DomainType>
+ <ns1:DomainType javaClassName="model2.domain.GeneFunctionTerm">
+  <ns1:TypeAttribute attributeName="value" javaTypeName="java.lang.String"/>
+  <ns1:TypeAttribute attributeName="level" javaTypeName="int"/>
+  <ns1:TypeAttribute attributeName="id" javaTypeName="java.lang.Integer"/>
+  <ns1:SuperclassName>model2.domain.HierarchyNode</ns1:SuperclassName>
+ </ns1:DomainType>
+ <ns1:DomainType javaClassName="model2.domain.Gene">
+  <ns1:TypeAttribute attributeName="name" javaTypeName="java.lang.String"/>
+  <ns1:TypeAttribute attributeName="symbol" javaTypeName="java.lang.String"/>
+  <ns1:TypeAttribute attributeName="clusterId" javaTypeName="java.lang.String"/>
+  <ns1:TypeAttribute attributeName="id" javaTypeName="java.lang.Integer"/>
+  <ns1:SuperclassName>model2.domain.AbstractDomainObject</ns1:SuperclassName>
+ </ns1:DomainType>
+ <ns1:DomainType javaClassName="model2.domain.Chromosome">
+  <ns1:TypeAttribute attributeName="name" javaTypeName="java.lang.String"/>
+  <ns1:TypeAttribute attributeName="id" javaTypeName="java.lang.Integer"/>
+  <ns1:SuperclassName>model2.domain.AbstractDomainObject</ns1:SuperclassName>
+ </ns1:DomainType>
+ <ns1:DomainType javaClassName="model2.domain.Taxon">
+  <ns1:TypeAttribute attributeName="value" javaTypeName="java.lang.String"/>
+  <ns1:TypeAttribute attributeName="level" javaTypeName="int"/>
+  <ns1:TypeAttribute attributeName="id" javaTypeName="java.lang.Integer"/>
+  <ns1:SuperclassName>model2.domain.HierarchyNode</ns1:SuperclassName>
+ </ns1:DomainType>
+ <ns1:DomainType javaClassName="model2.domain.Protein">
+  <ns1:TypeAttribute attributeName="name" javaTypeName="java.lang.String"/>
+  <ns1:TypeAttribute attributeName="id" javaTypeName="java.lang.Integer"/>
+  <ns1:SuperclassName>model2.domain.AbstractDomainObject</ns1:SuperclassName>
+ </ns1:DomainType>
+</ns1:DomainTypesInformation>

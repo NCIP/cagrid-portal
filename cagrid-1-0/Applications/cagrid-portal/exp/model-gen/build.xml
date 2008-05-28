@@ -45,7 +45,7 @@
 				<arg value="-projectVersion"/>
 				<arg value="1.0"/>
 				<arg value="-xmi"/>
-				<arg value="etc/model1-domain.xmi"/>
+				<arg value="../model2/model/model2-domain.xmi"/>
 			</java>
 	</target>
 		
@@ -58,7 +58,7 @@
 						<include name="*.jar"/>
 					</fileset>
 				</classpath>
-				<arg value="ext/lib/model1-domain.jar"/>
+				<arg value="../model2/build/model2-domain.jar"/>
 				<arg value="build/domainModel.xml"/>
 				<arg value="build/domainTypesInfo.xml"/>
 			</java>

@@ -1,0 +1,7 @@
+<ns1:ClassMappings xmlns:ns1="http://gov.nih.nci.cagrid.data">
+ <ns2:mapping className="model2.domain.GeneFunctionTerm" qname="{http://model2/model}GeneFunctionTerm" xsi:type="ns2:classToQname" xmlns:ns2="http://gov.nih.nci.cagrid.data/ClassMappings" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+ <ns3:mapping className="model2.domain.Gene" qname="{http://model2/model}Gene" xsi:type="ns3:classToQname" xmlns:ns3="http://gov.nih.nci.cagrid.data/ClassMappings" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+ <ns4:mapping className="model2.domain.Chromosome" qname="{http://model2/model}Chromosome" xsi:type="ns4:classToQname" xmlns:ns4="http://gov.nih.nci.cagrid.data/ClassMappings" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+ <ns5:mapping className="model2.domain.Taxon" qname="{http://model2/model}Taxon" xsi:type="ns5:classToQname" xmlns:ns5="http://gov.nih.nci.cagrid.data/ClassMappings" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+ <ns6:mapping className="model2.domain.Protein" qname="{http://model2/model}Protein" xsi:type="ns6:classToQname" xmlns:ns6="http://gov.nih.nci.cagrid.data/ClassMappings" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+</ns1:ClassMappings>
