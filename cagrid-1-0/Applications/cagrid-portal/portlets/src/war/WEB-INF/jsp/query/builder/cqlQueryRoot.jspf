@@ -56,28 +56,40 @@
 <b>Querying:</b> <c:out
         value="${cqlQueryBean.umlClass.packageName}"/>.<c:out value="${cqlQueryBean.umlClass.className}"/>
 <br/>
-<b>Result Type:</b>&nbsp;
-<c:set var="modifierType"><c:out value="${cqlQueryBean.modifierType}"/></c:set>
+
 <c:choose>
-    <c:when test="${'COUNT_ONLY' eq modifierType}">
-        Count
+    <c:when test="${cqlQueryBean.DCQLQuery == 'true'}">
+        <b>Query Type:</b> DCQL Query
     </c:when>
-    <c:when test="${'DISTINCT_ATTRIBUTE' eq modifierType}">
-        Distinct Attribute [<c:out value="${cqlQueryBean.selectedAttributes[0]}"/>]
-    </c:when>
-    <c:when test="${'SELECTED_ATTRIBUTES' eq modifierType}">
-        Selected Attributes [
-        <c:set var="numAtts" value="${fn:length(cqlQueryBean.selectedAttributes)}"/>
-        <c:forEach var="attName" items="${cqlQueryBean.selectedAttributes}" varStatus="status">
-            <c:out value="${attName}"/>
-            <c:if test="${status.count < numAtts}">, </c:if>
-        </c:forEach>
-        ]
-    </c:when>
+
     <c:otherwise>
-        Object
+        <b>Result Type:</b>&nbsp;
+        <c:set var="modifierType"><c:out value="${cqlQueryBean.modifierType}"/></c:set>
+
+        <c:choose>
+            <c:when test="${'COUNT_ONLY' eq modifierType}">
+                Count
+            </c:when>
+            <c:when test="${'DISTINCT_ATTRIBUTE' eq modifierType}">
+                Distinct Attribute [<c:out value="${cqlQueryBean.selectedAttributes[0]}"/>]
+            </c:when>
+            <c:when test="${'SELECTED_ATTRIBUTES' eq modifierType}">
+                Selected Attributes [
+                <c:set var="numAtts" value="${fn:length(cqlQueryBean.selectedAttributes)}"/>
+                <c:forEach var="attName" items="${cqlQueryBean.selectedAttributes}" varStatus="status">
+                    <c:out value="${attName}"/>
+                    <c:if test="${status.count < numAtts}">, </c:if>
+                </c:forEach>
+                ]
+            </c:when>
+            <c:otherwise>
+                Object
+            </c:otherwise>
+        </c:choose>
+
     </c:otherwise>
 </c:choose>
+
 <c:if test="${fn:length(cqlQueryBean.criteria) gt 0}">
     <br/>
     <b>Criteria:</b>
