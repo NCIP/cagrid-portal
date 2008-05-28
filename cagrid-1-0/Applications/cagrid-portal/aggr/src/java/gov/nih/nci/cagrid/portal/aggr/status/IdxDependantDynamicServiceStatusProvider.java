@@ -31,35 +31,34 @@ public class IdxDependantDynamicServiceStatusProvider extends DynamicServiceStat
 
         if (strictIndexVerification) {
 
+            //no point in checking Inactive service
             if (status.equals(ServiceStatus.ACTIVE)) {
-                logger.debug("Service is Active. Checking Index.");
+                logger.debug("Service:" + serviceUrl + " is Active. Checking Index.");
 
-                //set it to inactive and check indexes
+                //set it to Inactive first
                 status = ServiceStatus.INACTIVE;
-
                 for (String indexSvcUrl : indexServiceUrls) {
                     Set<String> dynamicSvcUrls = null;
                     try {
                         dynamicSvcUrls = getDynamicServiceUrlProvider().getUrls(
                                 indexSvcUrl);
-
-                        for (String svcUrl : dynamicSvcUrls) {
-                            if (svcUrl.equals(serviceUrl)) {
-                                status = ServiceStatus.ACTIVE;
-                                break;
-                            }
+                        if (dynamicSvcUrls.contains(serviceUrl)) {
+                            logger.debug("Service:" + serviceUrl + " found in index. All is well");
+                            status = ServiceStatus.ACTIVE;
+                            break;
                         }
-                    } catch (Exception ex) {
-                        //catch and log exception. Status returned will be ACTIVE
-                        logger.warn("Error retrieving dynamic service url." +
-                                " Will not check index for service status for service "
-                                + serviceUrl);
-                        logger.error(ex);
 
+                    } catch (Exception ex) {
+                        //Will happen during high server load
+                        //catch and log exception. Status returned will be ACTIVE
+                        logger.error(ex);
+                        logger.warn("Error retrieving service urls from Index." +
+                                " Will keep service:" + serviceUrl + " as active: ");
+                        status = ServiceStatus.ACTIVE;
                     }
                 }
                 if (status.equals(ServiceStatus.INACTIVE))
-                    logger.info("Active service is not in the index any more. Marking " + serviceUrl + " inactive");
+                    logger.info("Active Service:" + serviceUrl + " is not in the Index. Marking Service as Inactive");
             }
         }
         return status;
