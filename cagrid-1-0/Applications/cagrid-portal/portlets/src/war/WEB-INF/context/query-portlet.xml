@@ -244,6 +244,7 @@
                 <property name="errorsAttributeName" value="submitQueryErrors"/>
             </bean>
         </property>
+        <property name="fqpService" value="${fqp.service.url}"/>
     </bean>
 
     <bean id="viewQueryHistoryController"

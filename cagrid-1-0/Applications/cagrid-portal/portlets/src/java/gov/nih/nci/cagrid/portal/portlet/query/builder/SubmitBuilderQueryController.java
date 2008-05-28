@@ -52,7 +52,10 @@ public class SubmitBuilderQueryController extends SubmitQueryController {
 			throws Exception {
 		CQLQueryCommand command = (CQLQueryCommand)obj;
 		CQLQueryBean cqlQueryBean = (CQLQueryBean)getCqlQueryTreeFacade().getRootNode().getContent();
-		command.setCqlQuery(cqlQueryBean.toXml());
+		
+		String xml = cqlQueryBean.toXml();
+		logger.debug("XML: " + xml);
+		command.setCqlQuery(xml);
 		command.setDataServiceUrl(getQueryModel().getSelectedService().getUrl());		
 		
 		super.doHandleAction(request, response, command, errors);

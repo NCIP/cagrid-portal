@@ -59,7 +59,6 @@ public class ExportToXmlController extends AbstractQueryActionController {
         CQLQueryCommand command = (CQLQueryCommand) obj;
         CQLQueryBean cqlQueryBean = (CQLQueryBean) getCqlQueryTreeFacade().getRootNode().getContent();
         command.setCqlQuery(cqlQueryBean.toXml());
-        command.setDcql(cqlQueryBean.isDCQLQuery());
         command.setDataServiceUrl(getQueryModel().getSelectedService().getUrl());
     }
 

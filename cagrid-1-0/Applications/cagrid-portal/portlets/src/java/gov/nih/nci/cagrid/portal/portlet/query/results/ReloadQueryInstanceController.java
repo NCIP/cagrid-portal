@@ -56,11 +56,10 @@ public class ReloadQueryInstanceController extends AbstractQueryActionController
         QueryInstance instance = getQueryInstanceDao().getById(command.getInstanceId());
         CQLQueryCommand workingQuery = new CQLQueryCommand();
         workingQuery.setCqlQuery(instance.getQuery().getXml());
-        if (instance instanceof DCQLQueryInstance)
-            workingQuery.setDcql(true);
 
-        if (instance instanceof CQLQueryInstance)
+        if (instance instanceof CQLQueryInstance){
             workingQuery.setDataServiceUrl(((CQLQueryInstance) instance).getDataService().getUrl());
+        }
         getQueryModel().setWorkingQuery(workingQuery);
     }
 
