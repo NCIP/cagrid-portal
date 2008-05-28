@@ -33,7 +33,7 @@ import org.apache.commons.logging.LogFactory;
  * @author David Ervin
  * 
  * @created Feb 1, 2008 9:02:20 AM
- * @version $Id: InvokeSDK4DataServiceStep.java,v 1.20 2008-04-17 15:26:29 dervin Exp $ 
+ * @version $Id: InvokeSDK4DataServiceStep.java,v 1.21 2008-05-28 14:21:27 dervin Exp $ 
  */
 public class InvokeSDK4DataServiceStep extends Step {
     public static final String TEST_RESOURCES_DIR = "/test/resources/";
@@ -66,6 +66,7 @@ public class InvokeSDK4DataServiceStep extends Step {
         testNestedAssociationsNoRoleNames();
         testAssociationWithGroup();
         testNestedGroups();
+        testSingleAttributeFromCash();
         
         // invalid queries
         testNonExistantTarget();
@@ -176,6 +177,14 @@ public class InvokeSDK4DataServiceStep extends Step {
         LOG.debug("testNestedGroups");
         CQLQuery query = loadQuery("nestedGroups.xml");
         CQLQueryResults results = loadQueryResults("goldNestedGroups.xml");
+        invokeValidQueryValidResults(query, results);
+    }
+    
+    
+    private void testSingleAttributeFromCash() {
+        LOG.debug("testSingleAttributeFromCash");
+        CQLQuery query = loadQuery("singleAttributeFromCash.xml");
+        CQLQueryResults results = loadQueryResults("goldSingleAttributeFromCash.xml");
         invokeValidQueryValidResults(query, results);
     }
     
