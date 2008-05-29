@@ -208,6 +208,7 @@
 		<jar destfile="${resources.jarfile}">
 			<fileset dir="${basedir}">
 				<include name="resources/**"/>
+				<exclude name="resources/services/**"/>
 			</fileset>
 			<manifest>
 				<attribute name="Built-By" value="${user.name}" />
