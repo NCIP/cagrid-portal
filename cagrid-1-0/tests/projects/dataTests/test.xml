@@ -13,7 +13,26 @@
 	<property name="temp.test.service.dir" value="${basedir}/test_services"/>
 	<!-- tells system tests where to find the service containers -->
 	<property name="testing.containers.dir" value="${basedir}/ext/dependencies/resources/containers"/>
-	
+	<!-- directory of services for upgrade testing -->
+	<property name="testing.upgrade.services.dir" value="${basedir}/resources/services/upgrade"/>
+	<property name="upgrade.services.zip.dir" value="${basedir}/resources/services/upgrade"/>
+
+	<!-- conditionals ensure the upgrade tests only run when the zip resources are available 
+	<condition property="test.resource.available.upgrade-1.0">
+		<and>
+			<available file="${test.resources.dir}/BasicDataService_1-0.zip" />
+			<available file="${test.resources.dir}/DataServiceBackedBySDK_1-0.zip" />
+			<available file="${test.resources.dir}/DataServiceWithEnumeration_1-0.zip" />
+		</and>
+	</condition>
+	<condition property="test.resource.available.upgrade-1.1">
+		<and>
+			<available file="${test.resources.dir}/BasicDataService_1-1.zip" />
+			<available file="${test.resources.dir}/DataServiceWithEnumeration_1-1.zip" />
+			<available file="${test.resources.dir}/DataServiceWithSdk_1-1.zip" />
+		</and>
+	</condition>
+	-->
 	
 	<target name="prepareClasspaths">
 		<path id="all.test.classpath">
@@ -162,13 +181,14 @@
 
 
 	<!-- tests upgrading a 1.0 service to current -->
-	<target name="testUpgradeFrom1pt0" depends="setGlobus, prepareClasspaths" description="Tests the ability to upgrade a service from 1.0 to the current version" unless="upgrade.1pt0.completed" if="test.resource.available.upgrade-1.0">
+	<target name="testUpgradeFrom1pt0" depends="setGlobus, prepareClasspaths" description="Tests the ability to upgrade a service from 1.0 to the current version" unless="upgrade.1pt0.completed">
 		<mkdir dir="${junit.results.dir}" />
 		<junit dir="${introduce.dir}" printsummary="yes" haltonerror="${halt.on.error}" haltonfailure="${halt.on.error}" errorproperty="upgrade.1.0.test.failed" failureproperty="upgrade.1.0.test.failed" showoutput="true" fork="yes">
 			<sysproperty key="introduce.base.dir" value="${introduce.dir}" />
 			<sysproperty key="build.dir" value="${classes.dir}" />
 			<sysproperty key="cql.docs.dir" value="${basedir}/docs/cqlExamples" />
 			<sysproperty key="temp.test.service.dir" value="${temp.test.service.dir}"/>
+			<sysproperty key="upgrade.services.zip.dir" value="${upgrade.services.zip.dir}"/>
 			<classpath refid="all.test.classpath" />
 			<!-- also needs the other extensions (such as metadata) to be upgraded, so need their upgraders on the classpath -->
 			<classpath>
@@ -189,13 +209,14 @@
 
 
 	<!-- tests upgrading a 1.1 service to current -->
-	<target name="testUpgradeFrom1pt1" depends="setGlobus, prepareClasspaths" description="Tests the ability to upgrade a service from 1.1 to the current version" unless="upgrade.1pt1.completed" if="test.resource.available.upgrade-1.1">
+	<target name="testUpgradeFrom1pt1" depends="setGlobus, prepareClasspaths" description="Tests the ability to upgrade a service from 1.1 to the current version" unless="upgrade.1pt1.completed">
 		<mkdir dir="${junit.results.dir}" />
 		<junit dir="${introduce.dir}" printsummary="yes" haltonerror="${halt.on.error}" haltonfailure="${halt.on.error}" errorproperty="upgrade.1.1.test.failed" failureproperty="upgrade.1.1.test.failed" showoutput="true" fork="yes">
 			<sysproperty key="introduce.base.dir" value="${introduce.dir}" />
 			<sysproperty key="build.dir" value="${classes.dir}" />
 			<sysproperty key="cql.docs.dir" value="${basedir}/docs/cqlExamples" />
 			<sysproperty key="temp.test.service.dir" value="${temp.test.service.dir}"/>
+			<sysproperty key="upgrade.services.zip.dir" value="${upgrade.services.zip.dir}"/>
 			<classpath refid="all.test.classpath" />
 			<!-- also needs the other extensions (such as metadata) to be upgraded, so need their upgraders on the classpath -->
 			<classpath>

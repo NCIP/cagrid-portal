@@ -1,18 +1,17 @@
 package org.cagrid.data.test.upgrades.from1pt0;
 
-import gov.nih.nci.cagrid.introduce.test.TestCaseInfo;
 import gov.nih.nci.cagrid.testing.system.haste.Step;
 import gov.nih.nci.cagrid.testing.system.haste.Story;
 
-import java.io.File;
 import java.util.Vector;
-
-import org.cagrid.data.test.creation.DataTestCaseInfo;
-import org.cagrid.data.test.creation.DeleteOldServiceStep;
 
 import junit.framework.TestResult;
 import junit.framework.TestSuite;
 import junit.textui.TestRunner;
+
+import org.cagrid.data.test.creation.DataTestCaseInfo;
+import org.cagrid.data.test.creation.DeleteOldServiceStep;
+import org.cagrid.data.test.upgrades.UnpackOldServiceStep;
 
 /** 
  *  UpgradeTo1pt1Tests
@@ -20,12 +19,10 @@ import junit.textui.TestRunner;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Feb 20, 2007 
- * @version $Id: UpgradeTo1pt2Tests.java,v 1.2 2008-05-21 19:51:14 dervin Exp $ 
+ * @version $Id: UpgradeTo1pt2Tests.java,v 1.3 2008-05-29 18:53:17 dervin Exp $ 
  */
 public class UpgradeTo1pt2Tests extends Story {
-    public static final String TEST_DIR = ".." + File.separator + "data" + File.separator + "test";
-    public static final String SERVICE_ZIP_NAME = "BasicDataService_1-0.zip";
-    
+    public static final String SERVICE_ZIP_NAME = "BasicDataService_1-0.zip";    
 	public static final String SERVICE_NAME = "BasicDataService";
     public static final String SERVICE_PACKAGE = "basicdataservice.cagrid.nci.nih.gov";
     public static final String SERVICE_NAMESPACE = "http://basicdataservice.cagrid.nci.nih.gov/BasicDataService";
@@ -42,11 +39,11 @@ public class UpgradeTo1pt2Tests extends Story {
 	
 
 	protected Vector steps() {
-        TestCaseInfo info = new Upgrade1pt0to1pt1TestServiceInfo();
+        DataTestCaseInfo info = new Upgrade1pt0to1pt1TestServiceInfo();
 		Vector<Step> steps = new Vector<Step>();
 		// steps to unpack and upgrade the old service
 		steps.add(new DeleteOldServiceStep(info));
-		steps.add(new UnzipOldServiceStep(TEST_DIR, SERVICE_ZIP_NAME));
+		steps.add(new UnpackOldServiceStep(SERVICE_ZIP_NAME));
 		steps.add(new UpgradeIntroduceServiceStep(info.getDir()));
 		steps.add(new BuildUpgradedServiceStep(info.getDir()));
 		
