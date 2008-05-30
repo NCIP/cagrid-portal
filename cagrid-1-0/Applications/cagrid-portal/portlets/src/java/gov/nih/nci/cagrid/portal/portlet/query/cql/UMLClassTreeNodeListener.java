@@ -75,14 +75,19 @@ public class UMLClassTreeNodeListener implements TreeNodeListener {
                 }
                 node.setContent(umlClassBean);
 
-                for (UMLAssociationEdge edge : PortalUtils.getOtherEdges(
-                        umlClass.getClassName(), umlClass.getAssociations())) {
-                    UMLClass targetType = edge.getType();
-                    TreeNode targetNode = new TreeNode(node, edge.getRole());
-                    targetNode.setLabel(edge.getRole());
-                    node.getChildren().add(targetNode);
-                    targetNode.setContent(new UMLClassBean(targetType));
-                }
+                UMLClass superClass = umlClass;
+				while (superClass != null) {
+					for (UMLAssociationEdge edge : PortalUtils.getOtherEdges(
+							superClass.getClassName(), superClass
+									.getAssociations())) {
+						UMLClass targetType = edge.getType();
+						TreeNode targetNode = new TreeNode(node, edge.getRole());
+						targetNode.setLabel(edge.getRole());
+						node.getChildren().add(targetNode);
+						targetNode.setContent(new UMLClassBean(targetType));
+					}
+					superClass = superClass.getSuperClass();
+				}
                 // Add foreign nodes
                 List<UMLClass> classes = targetsProvider
                         .getSemanticallyEquivalentClasses(umlClassBean

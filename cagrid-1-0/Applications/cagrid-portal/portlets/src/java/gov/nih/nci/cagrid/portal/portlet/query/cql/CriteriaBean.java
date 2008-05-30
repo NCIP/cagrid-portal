@@ -16,6 +16,8 @@ import gov.nih.nci.cagrid.portal.portlet.query.dcql.JoinCondition;
 import gov.nih.nci.cagrid.portal.portlet.tree.TreeFacade;
 import gov.nih.nci.cagrid.portal.portlet.tree.TreeNode;
 import gov.nih.nci.cagrid.portal.portlet.util.PortletUtils;
+import gov.nih.nci.cagrid.portal.util.PortalUtils;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.HibernateException;
@@ -183,18 +185,21 @@ public class CriteriaBean implements ApplicationContextAware {
                                     UMLClass assocType2 = null;
                                     UMLClass klass2 = (UMLClass) session.get(klass
                                             .getClass(), klass.getId());
-                                    for (UMLAssociationEdge edge : klass2
-                                            .getAssociations()) {
-                                        if (edge instanceof SourceUMLAssociationEdge) {
-                                            SourceUMLAssociationEdge source = (SourceUMLAssociationEdge) edge;
-                                            TargetUMLAssociationEdge target = source
-                                                    .getAssociation().getTarget();
-                                            if (target.getRole().equals(parts[0])) {
-                                                assocType2 = target.getType();
-                                                break;
-                                            }
-                                        }
-                                    }
+                                    UMLClass superClass = klass2;
+									while (superClass != null) {
+										for (UMLAssociationEdge edge : PortalUtils
+												.getOtherEdges(
+														superClass
+																.getClassName(),
+														superClass
+																.getAssociations())) {
+											if (parts[0].equals(edge.getRole())) {
+												assocType2 = edge.getType();
+												break;
+											}
+										}
+										superClass = superClass.getSuperClass();
+									}
                                     return assocType2;
                                 }
                             });
