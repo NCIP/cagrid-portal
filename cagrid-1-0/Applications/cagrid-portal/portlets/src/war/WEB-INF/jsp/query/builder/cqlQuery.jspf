@@ -7,7 +7,7 @@
 	<jsp:attribute name="nodeFragment">
         <span>
         <b><c:out value="${currChildNode.label}"/></b>
-         <c:if test="${cqlQueryBean.DCQLQuery == 'true'}">
+         <c:if test="${fn:startsWith(currChildNode.name,'ForeignClass')}">
              <c:if test="${!empty currChildNode.content.serviceInfo}">
                  <tags:serviceInfoPopup id="${currChildNode.path}"
                                         link_href="${currChildNode.content.serviceInfo.name}"
