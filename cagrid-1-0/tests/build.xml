@@ -11,16 +11,9 @@
 	<property file="build.properties" />
 	<property file="tests.properties" />
 
-	<!-- Layout info 
-	<property name="cagrid.dir" location="../caGrid" />
-	-->
+	<!-- Layout info -->
 	<property name="tests.projects.dir" location="${caGrid-tests.basedir}/projects" />
 	<property name="tests.test.dir" location="${caGrid-tests.basedir}/test" />
-
-	<!-- configuring (repurposing) the caGrid build 
-	<property name="system.testable.projects.list" value="" />
-	<property name="unit.testable.projects.list" value="authentication-service,cqlprocessors,coretests,introduceTests,sdkInstaller,testUtils,transferTests" />
-	-->
 
 	<!-- IMPORT THE UTILITIES TARGETS -->
 	<import file="${cagrid.dir}/build.xml" />
