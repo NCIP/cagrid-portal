@@ -10,6 +10,10 @@ import gov.nih.nci.cagrid.cadsr.common.CaDSRServiceI;
 import gov.nih.nci.cagrid.metadata.MetadataUtils;
 import gov.nih.nci.cagrid.portal.aggr.MetadataThread;
 import gov.nih.nci.cagrid.portal.domain.metadata.dataservice.DomainModel;
+import gov.nih.nci.cagrid.portal.domain.metadata.dataservice.SourceUMLAssociationEdge;
+import gov.nih.nci.cagrid.portal.domain.metadata.dataservice.TargetUMLAssociationEdge;
+import gov.nih.nci.cagrid.portal.domain.metadata.dataservice.UMLAssociation;
+import gov.nih.nci.cagrid.portal.domain.metadata.dataservice.UMLAssociationEdge;
 import gov.nih.nci.cagrid.portal.domain.metadata.dataservice.UMLClass;
 import gov.nih.nci.cagrid.portal.domain.metadata.dataservice.XMLSchema;
 
@@ -236,6 +240,45 @@ public class PortalUtils {
 		}
 		return xmlSchema;
 	}
+	
+	public static List<UMLAssociationEdge> getOtherEdges(String className, List<UMLAssociationEdge> edges){
+		Set<UMLAssociationEdge> otherEdges = new HashSet<UMLAssociationEdge>();
+		for (UMLAssociationEdge assocEdge : edges) {
+
+			UMLAssociation assoc = null;
+			if (assocEdge instanceof SourceUMLAssociationEdge) {
+				assoc = ((SourceUMLAssociationEdge) assocEdge)
+						.getAssociation();
+			} else if (assocEdge instanceof TargetUMLAssociationEdge) {
+				assoc = ((TargetUMLAssociationEdge) assocEdge)
+						.getAssociation();
+			}
+			if (!assoc.getSource().getType().getClassName().equals(
+					className)) {
+				if (!isEmpty(assoc.getSource().getRole())) {
+					otherEdges.add(assoc.getSource());
+				}
+			} else if (!assoc.getTarget().getType().getClassName().equals(
+					className)) {
+				if (!isEmpty(assoc.getTarget().getRole())) {
+					otherEdges.add(assoc.getTarget());
+				}
+			} else if (assoc.getTarget().getType().getClassName().equals(
+					className)
+					&& assoc.getSource().getType().getClassName().equals(
+							className)) {
+				if (!isEmpty(assoc.getSource().getRole())) {
+					otherEdges.add(assoc.getSource());
+				}
+				if (!isEmpty(assoc.getTarget().getRole())) {
+					otherEdges.add(assoc.getTarget());
+				}
+			}
+		}
+		
+		return new ArrayList<UMLAssociationEdge>(otherEdges);
+	}
+
 
 	public static void main(String[] args) throws Exception {
 

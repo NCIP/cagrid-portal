@@ -2,15 +2,15 @@
 	<tbody>
 		<tr>
 			<td class="detailslabelcell">Type:</td>
-			<td><c:out value="${assoc.target.type.packageName}"/>.<c:out value="${assoc.target.type.className}"/></td>
+			<td><c:out value="${assoc.type.packageName}"/>.<c:out value="${assoc.type.className}"/></td>
 		</tr>
 		<tr>
 			<td class="detailslabelcell">Min Cardinality:</td>
-			<td><c:out value="${fn:replace(assoc.target.minCardinality, '-1', '*')}"/></td>
+			<td><c:out value="${fn:replace(assoc.minCardinality, '-1', '*')}"/></td>
 		</tr>
 		<tr>
 			<td class="detailslabelcell">Max Cardinality:</td>
-			<td><c:out value="${fn:replace(assoc.target.maxCardinality, '-1', '*')}"/></td>
+			<td><c:out value="${fn:replace(assoc.maxCardinality, '-1', '*')}"/></td>
 		</tr>
 	</tbody>
 </table>
