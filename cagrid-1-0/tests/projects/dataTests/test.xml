@@ -171,7 +171,7 @@
 			<sysproperty key="build.dir" value="${classes.dir}" />
 			<sysproperty key="cql.docs.dir" value="${basedir}/docs/cqlExamples" />
 			<sysproperty key="temp.test.service.dir" value="${temp.test.service.dir}"/>
-			<sysproperty key="upgrade.services.zip.dir" value="${upgrade.services.zip.dir}"/>
+			<sysproperty key="upgrade.services.zip.dir" value="${testing.upgrade.services.dir}"/>
 			<classpath refid="all.test.classpath" />
 			<!-- also needs the other extensions (such as metadata) to be upgraded, so need their upgraders on the classpath -->
 			<classpath>
@@ -199,7 +199,7 @@
 			<sysproperty key="build.dir" value="${classes.dir}" />
 			<sysproperty key="cql.docs.dir" value="${basedir}/docs/cqlExamples" />
 			<sysproperty key="temp.test.service.dir" value="${temp.test.service.dir}"/>
-			<sysproperty key="upgrade.services.zip.dir" value="${upgrade.services.zip.dir}"/>
+			<sysproperty key="upgrade.services.zip.dir" value="${testing.upgrade.services.dir}"/>
 			<classpath refid="all.test.classpath" />
 			<!-- also needs the other extensions (such as metadata) to be upgraded, so need their upgraders on the classpath -->
 			<classpath>
