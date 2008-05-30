@@ -31,6 +31,8 @@ import gov.nih.nci.cagrid.portal.domain.metadata.service.ServicePointOfContact;
 import gov.nih.nci.cagrid.portal.portlet.tree.NodeState;
 import gov.nih.nci.cagrid.portal.portlet.tree.TreeNode;
 import gov.nih.nci.cagrid.portal.portlet.tree.TreeNodeListener;
+import gov.nih.nci.cagrid.portal.portlet.util.PortletUtils;
+import gov.nih.nci.cagrid.portal.util.PortalUtils;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -276,19 +278,15 @@ public class ServiceMetadataTreeNodeListener implements TreeNodeListener {
 			}
 
 			// Add associations
-			List<UMLAssociationEdge> assocEdges = superClass.getAssociations();
-			for (UMLAssociationEdge assocEdge : assocEdges) {
+			List<UMLAssociationEdge> edgesToAdd = PortalUtils.getOtherEdges(
+					superClass.getClassName(), superClass.getAssociations());
 
-				if (assocEdge instanceof SourceUMLAssociationEdge) {
-					UMLAssociation assoc = ((SourceUMLAssociationEdge) assocEdge)
-							.getAssociation();
-					TargetUMLAssociationEdge otherEnd = assoc.getTarget();
-					TreeNode assocNode = new TreeNode(assocsNode, "assoc_"
-							+ assocIdx++);
-					assocNode.setLabel(otherEnd.getRole());
-					assocNodes.add(assocNode);
-					assocNode.setContent(assoc);
-				}
+			for (UMLAssociationEdge edge : edgesToAdd) {
+				TreeNode assocNode = new TreeNode(assocsNode, "assoc_"
+						+ assocIdx++);
+				assocNode.setLabel(edge.getRole());
+				assocNodes.add(assocNode);
+				assocNode.setContent(edge);
 			}
 
 			superClass = superClass.getSuperClass();

@@ -3,11 +3,8 @@
  */
 package gov.nih.nci.cagrid.portal.portlet.util;
 
-import gov.nih.nci.cagrid.portal.domain.GridDataService;
 import gov.nih.nci.cagrid.portal.domain.GridService;
 import gov.nih.nci.cagrid.portal.domain.ServiceStatus;
-import gov.nih.nci.cagrid.portal.domain.dataservice.CQLQuery;
-import gov.nih.nci.cagrid.portal.domain.metadata.dataservice.UMLClass;
 import gov.nih.nci.cagrid.portal.portlet.query.results.QueryResultToTableHandler;
 import gov.nih.nci.cagrid.portal.portlet.query.results.QueryResultToWorkbookHandler;
 import gov.nih.nci.cagrid.portal.util.PortalUtils;
@@ -32,7 +29,6 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
@@ -225,5 +221,7 @@ public class PortletUtils {
 		}
 		return urls;
 	}
+	
+
 
 }
