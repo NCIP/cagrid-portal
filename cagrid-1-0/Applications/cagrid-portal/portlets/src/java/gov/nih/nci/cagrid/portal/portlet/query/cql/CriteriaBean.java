@@ -8,6 +8,7 @@ import gov.nih.nci.cagrid.portal.domain.metadata.dataservice.SourceUMLAssociatio
 import gov.nih.nci.cagrid.portal.domain.metadata.dataservice.TargetUMLAssociationEdge;
 import gov.nih.nci.cagrid.portal.domain.metadata.dataservice.UMLAssociationEdge;
 import gov.nih.nci.cagrid.portal.domain.metadata.dataservice.UMLClass;
+import gov.nih.nci.cagrid.portal.portlet.discovery.map.ServiceInfo;
 import gov.nih.nci.cagrid.portal.portlet.query.QueryConstants;
 import gov.nih.nci.cagrid.portal.portlet.query.builder.AggregateTargetsCommand;
 import gov.nih.nci.cagrid.portal.portlet.query.dcql.ForeignUMLClassBean;
@@ -15,6 +16,8 @@ import gov.nih.nci.cagrid.portal.portlet.query.dcql.JoinCondition;
 import gov.nih.nci.cagrid.portal.portlet.tree.TreeFacade;
 import gov.nih.nci.cagrid.portal.portlet.tree.TreeNode;
 import gov.nih.nci.cagrid.portal.portlet.util.PortletUtils;
+import gov.nih.nci.cagrid.portal.util.PortalUtils;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.HibernateException;
@@ -43,8 +46,8 @@ public class CriteriaBean implements ApplicationContextAware {
 
     private AggregateTargetsCommand aggregateTargets;
     private JoinCondition join;
+    private ServiceInfo serviceInfo;
     private TreeFacade umlClassTreeFacade;
-
 
     private HibernateTemplate hibernateTemplate;
 
@@ -61,6 +64,7 @@ public class CriteriaBean implements ApplicationContextAware {
 
     public void setUmlClass(UMLClass umlClass) {
         this.umlClass = umlClass;
+        setServiceInfo(new ServiceInfo(umlClass.getModel().getService()));
     }
 
     public Set<CriterionBean> getCriteria() {
@@ -181,18 +185,21 @@ public class CriteriaBean implements ApplicationContextAware {
                                     UMLClass assocType2 = null;
                                     UMLClass klass2 = (UMLClass) session.get(klass
                                             .getClass(), klass.getId());
-                                    for (UMLAssociationEdge edge : klass2
-                                            .getAssociations()) {
-                                        if (edge instanceof SourceUMLAssociationEdge) {
-                                            SourceUMLAssociationEdge source = (SourceUMLAssociationEdge) edge;
-                                            TargetUMLAssociationEdge target = source
-                                                    .getAssociation().getTarget();
-                                            if (target.getRole().equals(parts[0])) {
-                                                assocType2 = target.getType();
-                                                break;
-                                            }
-                                        }
-                                    }
+                                    UMLClass superClass = klass2;
+									while (superClass != null) {
+										for (UMLAssociationEdge edge : PortalUtils
+												.getOtherEdges(
+														superClass
+																.getClassName(),
+														superClass
+																.getAssociations())) {
+											if (parts[0].equals(edge.getRole())) {
+												assocType2 = edge.getType();
+												break;
+											}
+										}
+										superClass = superClass.getSuperClass();
+									}
                                     return assocType2;
                                 }
                             });
@@ -365,5 +372,13 @@ public class CriteriaBean implements ApplicationContextAware {
 
     public void setUmlClassTreeFacade(TreeFacade umlClassTreeFacade) {
         this.umlClassTreeFacade = umlClassTreeFacade;
+    }
+
+    public ServiceInfo getServiceInfo() {
+        return serviceInfo;
+    }
+
+    public void setServiceInfo(ServiceInfo serviceInfo) {
+        this.serviceInfo = serviceInfo;
     }
 }
