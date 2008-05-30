@@ -8,6 +8,7 @@ import gov.nih.nci.cagrid.portal.domain.metadata.dataservice.SourceUMLAssociatio
 import gov.nih.nci.cagrid.portal.domain.metadata.dataservice.TargetUMLAssociationEdge;
 import gov.nih.nci.cagrid.portal.domain.metadata.dataservice.UMLAssociationEdge;
 import gov.nih.nci.cagrid.portal.domain.metadata.dataservice.UMLClass;
+import gov.nih.nci.cagrid.portal.portlet.discovery.map.ServiceInfo;
 import gov.nih.nci.cagrid.portal.portlet.query.QueryConstants;
 import gov.nih.nci.cagrid.portal.portlet.query.builder.AggregateTargetsCommand;
 import gov.nih.nci.cagrid.portal.portlet.query.dcql.ForeignUMLClassBean;
@@ -43,8 +44,8 @@ public class CriteriaBean implements ApplicationContextAware {
 
     private AggregateTargetsCommand aggregateTargets;
     private JoinCondition join;
+    private ServiceInfo serviceInfo;
     private TreeFacade umlClassTreeFacade;
-
 
     private HibernateTemplate hibernateTemplate;
 
@@ -61,6 +62,7 @@ public class CriteriaBean implements ApplicationContextAware {
 
     public void setUmlClass(UMLClass umlClass) {
         this.umlClass = umlClass;
+        setServiceInfo(new ServiceInfo(umlClass.getModel().getService()));
     }
 
     public Set<CriterionBean> getCriteria() {
@@ -365,5 +367,13 @@ public class CriteriaBean implements ApplicationContextAware {
 
     public void setUmlClassTreeFacade(TreeFacade umlClassTreeFacade) {
         this.umlClassTreeFacade = umlClassTreeFacade;
+    }
+
+    public ServiceInfo getServiceInfo() {
+        return serviceInfo;
+    }
+
+    public void setServiceInfo(ServiceInfo serviceInfo) {
+        this.serviceInfo = serviceInfo;
     }
 }
