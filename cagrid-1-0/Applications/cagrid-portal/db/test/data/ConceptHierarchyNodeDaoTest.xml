@@ -6,7 +6,7 @@
     <C_HIER_NODE ID="-1" NAME="root" CODE="root_code" DESCRIPTION="root_desc" HIERARCHY_ID="-1" PARENT_ID="-1"
                  LEVEL="0"/>
 
-    <C_HIER_NODE ID="-2" NAME="node1" CODE="node1_code" DESCRIPTION="node1_desc" HIERARCHY_ID="-1" PARENT_ID="-1"
+    <C_HIER_NODE ID="-2" NAME="node1" CODE="node1_code1" DESCRIPTION="node1_desc" HIERARCHY_ID="-1" PARENT_ID="-1"
                  LEVEL="1"/>
     <C_HIER_NODE ID="-3" NAME="node2" CODE="node2_code" DESCRIPTION="node2_desc" HIERARCHY_ID="-1" PARENT_ID="-1"
                  LEVEL="1"/>
@@ -68,6 +68,7 @@
 
     <!--Grid Services-->
     <GRID_SERVICES ID="-1" URL="http://service1" SERVICE_TYPE='GridService'/>
-    <SVC_C_HIER_NODE SERVICE_ID="-1" C_HIER_NODE_ID="-1"/>
+    <SEM_META_MAP SERVICE_ID="-1" C_HIER_NODE_ID="-2"/>
+
 
 </dataset>
