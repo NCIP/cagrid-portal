@@ -1,8 +1,8 @@
 <?xml version = '1.0' encoding = 'UTF-8' ?>
-<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Wed May 28 08:49:59 EDT 2008'>
+<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Thu May 29 16:59:55 EDT 2008'>
   <XMI.header>    <XMI.documentation>
       <XMI.exporter>ArgoUML (using Netbeans XMI Writer version 1.0)</XMI.exporter>
-      <XMI.exporterVersion>0.24(5) revised on $Date: 2008-05-28 14:13:12 $ </XMI.exporterVersion>
+      <XMI.exporterVersion>0.24(5) revised on $Date: 2008-05-30 02:32:40 $ </XMI.exporterVersion>
     </XMI.documentation>
     <XMI.metamodel xmi.name="UML" xmi.version="1.4"/></XMI.header>
   <XMI.content>
@@ -427,13 +427,13 @@
                   name = '' isSpecification = 'false' isRoot = 'false' isLeaf = 'false' isAbstract = 'false'>
                   <UML:Association.connection>
                     <UML:AssociationEnd xmi.id = '-64--88-1-100-782133d5:11a2bb3f585:-8000:0000000000000ACA'
-                      name = 'taxons' visibility = 'public' isSpecification = 'false' isNavigable = 'true'
+                      name = 'genes' visibility = 'public' isSpecification = 'false' isNavigable = 'true'
                       ordering = 'unordered' aggregation = 'none' targetScope = 'instance' changeability = 'changeable'>
                       <UML:AssociationEnd.multiplicity>
-                        <UML:Multiplicity xmi.id = '-64--88-1-100-782133d5:11a2bb3f585:-8000:0000000000000AD3'>
+                        <UML:Multiplicity xmi.id = '-64--88-1-100-c1d37a5:11a2f92ac4f:-8000:00000000000009D1'>
                           <UML:Multiplicity.range>
-                            <UML:MultiplicityRange xmi.id = '-64--88-1-100-782133d5:11a2bb3f585:-8000:0000000000000AD2'
-                              lower = '1' upper = '1'/>
+                            <UML:MultiplicityRange xmi.id = '-64--88-1-100-c1d37a5:11a2f92ac4f:-8000:00000000000009D0'
+                              lower = '0' upper = '-1'/>
                           </UML:Multiplicity.range>
                         </UML:Multiplicity>
                       </UML:AssociationEnd.multiplicity>
@@ -445,10 +445,10 @@
                       name = 'proteins' visibility = 'public' isSpecification = 'false' isNavigable = 'true'
                       ordering = 'unordered' aggregation = 'none' targetScope = 'instance' changeability = 'changeable'>
                       <UML:AssociationEnd.multiplicity>
-                        <UML:Multiplicity xmi.id = '-64--88-1-100-782133d5:11a2bb3f585:-8000:0000000000000AD1'>
+                        <UML:Multiplicity xmi.id = '-64--88-1-100-c1d37a5:11a2f92ac4f:-8000:00000000000009CD'>
                           <UML:Multiplicity.range>
-                            <UML:MultiplicityRange xmi.id = '-64--88-1-100-782133d5:11a2bb3f585:-8000:0000000000000AD0'
-                              lower = '1' upper = '1'/>
+                            <UML:MultiplicityRange xmi.id = '-64--88-1-100-c1d37a5:11a2f92ac4f:-8000:00000000000009CC'
+                              lower = '0' upper = '-1'/>
                           </UML:Multiplicity.range>
                         </UML:Multiplicity>
                       </UML:AssociationEnd.multiplicity>
