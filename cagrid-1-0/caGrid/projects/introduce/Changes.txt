@@ -12,6 +12,7 @@
 -- Removed ETC_LOCATION from generated services JNDI and removed setter from the service configuration.
 -- Added to introduce model so that services and methods can have extension data added to them
 -- Added an introduce log viewer component to the GUI.
+-- Added new extension type call INTRODUCE_GDE which enables adding grape components to the UI through extensions
 
 
 1.1 - 1.2
