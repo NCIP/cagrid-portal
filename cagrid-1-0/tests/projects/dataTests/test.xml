@@ -15,24 +15,7 @@
 	<property name="testing.containers.dir" value="${basedir}/ext/dependencies/resources/containers"/>
 	<!-- directory of services for upgrade testing -->
 	<property name="testing.upgrade.services.dir" value="${basedir}/resources/services/upgrade"/>
-	<property name="upgrade.services.zip.dir" value="${basedir}/resources/services/upgrade"/>
-
-	<!-- conditionals ensure the upgrade tests only run when the zip resources are available 
-	<condition property="test.resource.available.upgrade-1.0">
-		<and>
-			<available file="${test.resources.dir}/BasicDataService_1-0.zip" />
-			<available file="${test.resources.dir}/DataServiceBackedBySDK_1-0.zip" />
-			<available file="${test.resources.dir}/DataServiceWithEnumeration_1-0.zip" />
-		</and>
-	</condition>
-	<condition property="test.resource.available.upgrade-1.1">
-		<and>
-			<available file="${test.resources.dir}/BasicDataService_1-1.zip" />
-			<available file="${test.resources.dir}/DataServiceWithEnumeration_1-1.zip" />
-			<available file="${test.resources.dir}/DataServiceWithSdk_1-1.zip" />
-		</and>
-	</condition>
-	-->
+	
 	
 	<target name="prepareClasspaths">
 		<path id="all.test.classpath">
