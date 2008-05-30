@@ -24,6 +24,9 @@
                 <property name="gridServiceDao" ref="gridServiceDao"/>
             </bean>
         </property>
+        <property name="timestampProvider">
+            <bean class="gov.nih.nci.cagrid.portal.util.InMemoryTimestampProvider"/>
+        </property>
     </bean>
 
     <bean id="dynamicServiceUrlProvider"
