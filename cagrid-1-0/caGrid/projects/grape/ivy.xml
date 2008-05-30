@@ -11,13 +11,15 @@
 
   <configurations>
     <!-- Public Configurations-->
-    <conf name="default" visibility="public"/>
+    <conf name="default" visibility="public" />
+    <conf name="schemas" visibility="public" />
   </configurations>
 
 
   <publications>
     <artifact name="caGrid-${ivy.module}" conf="default" type="jar"/>
     <artifact name="caGrid-${ivy.module}-resources" conf="default" type="jar"/>
+    <artifact name="grape" conf="schemas" type="xsd"/>
   </publications>
 
   <dependencies>

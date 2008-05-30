@@ -22,6 +22,7 @@
 				<include name="*.jar" />
 			</fileset>
 			<pathelement location="${basedir}/resources/portal/introduce" />
+			<pathelement location="${basedir}/extensions" />
 			<pathelement location="${basedir}/doc/help" />
 		</path>
 		<path id="Portal.test.classpath">
@@ -145,6 +146,7 @@
 				<exclude name="${jars.prefixname}*" />
 			</fileset>
 			<pathelement location="${basedir}/resources/portal/introduce" />
+			<pathelement location="${basedir}/extensions" />
 			<pathelement location="${basedir}/doc/help" />
 		</path>
 		<path id="Portal.run.classpath">
@@ -206,6 +208,7 @@
 				<include name="*.jar" />
 			</fileset>
 			<pathelement location="${basedir}/resources/portal/introduce" />
+			<pathelement location="${basedir}/extensions" />
 			<pathelement location="${basedir}/doc/help" />
 		</path>
 	</target>

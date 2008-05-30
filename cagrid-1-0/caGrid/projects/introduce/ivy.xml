@@ -15,6 +15,7 @@
       different private configurations to use to retrieve to those locations-->
     <conf name="skeleton" visibility="private"/>
     <conf name="schema.gridgrouper" visibility="private"/>
+    <conf name="schema.grape" visibility="private"/>
     <conf name="skeleton.gridgrouper" visibility="private"/>
     <conf name="skeleton.csm" visibility="private"/>
 
@@ -59,7 +60,7 @@
     <dependency rev="latest.integration" org="caGrid" name="metadata" conf="core->schemas"/>
     <dependency rev="latest.integration" org="caGrid" name="gaards-core" conf="core->default"/>
     <dependency rev="latest.integration" org="caGrid" name="gme" conf="core->client"/>
-    <dependency rev="latest.integration" org="caGrid" name="grape" conf="ui->default"/>
+    <dependency rev="latest.integration" org="caGrid" name="grape" conf="ui->default;schema.grape->schemas"/>
     <dependency rev="latest.integration" org="caGrid" name="testing" conf="impl-test->system"/>
 
     <dependency rev="latest.integration" org="caGrid" name="gaards-ui" conf="ui->gridgrouper"/>

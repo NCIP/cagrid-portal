@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns="gme://gov.nih.nci.cagrid.introduce/1/Extension"
 	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:grape="http://www.cagrid.org/1/grape"
 	targetNamespace="gme://gov.nih.nci.cagrid.introduce/1/Extension" elementFormDefault="qualified"
 	attributeFormDefault="unqualified">
+	<xs:import namespace="http://www.cagrid.org/1/grape" schemaLocation="../ext/dependencies/xsd/grape/xsd/grape.xsd"/>
 	<xs:element name="Extensions" type="ExtensionsType"/>
 	<xs:complexType name="ExtensionsType">
 		<xs:sequence>
@@ -24,6 +26,7 @@
 				  <xs:element ref="ResourcePropertyEditorExtensionDescription"/>
 				  <xs:element ref="AuthorizationExtensionDescription"/>
 				  <xs:element ref="DeploymentExtensionDescription"/>
+				  <xs:element ref="IntroduceGDEExtensionDescriptionType"/>
 			  </xs:choice>
 			  <xs:element ref="UpgradesDescription" minOccurs="0" maxOccurs="1"/>
 			</xs:sequence>
@@ -32,6 +35,16 @@
 			<xs:attribute name="extensionPreferencesPanel" type="xs:string"/>
 		</xs:complexType>
 	</xs:element>
+	<xs:element name="IntroduceGDEExtensionDescriptionType" type="IntroduceGDEExtensionDescriptionType"/>
+	<xs:complexType name="IntroduceGDEExtensionDescriptionType">
+		<xs:sequence>
+		    <xs:element ref="grape:menus"/>
+		    <xs:element ref="Properties"/>
+		</xs:sequence>
+		<xs:attribute name="displayName" type="xs:string" use="required"/>
+		<xs:attribute name="name" type="xs:string" use="required"/>
+	</xs:complexType>
+	
 	<xs:element name="UpgradesDescription" type="UpgradesDescriptionType">
 		<xs:annotation>
 			<xs:documentation>Provides upgrade information for any extension type</xs:documentation>

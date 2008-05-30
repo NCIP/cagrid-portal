@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns="gme://gov.nih.nci.cagrid.introduce/1/Security" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:sec="gme://gov.nih.nci.cagrid.introduce/1/Security" xmlns:grouper="http://cagrid.nci.nih.gov/1/GridGrouper" targetNamespace="gme://gov.nih.nci.cagrid.introduce/1/Security" elementFormDefault="qualified" attributeFormDefault="unqualified">
-	<xs:import namespace="http://cagrid.nci.nih.gov/1/GridGrouper" schemaLocation="./gridgrouper/xsd/gridgrouper.xsd"/>
+	<xs:import namespace="http://cagrid.nci.nih.gov/1/GridGrouper" schemaLocation="../ext/dependencies/xsd/gridgrouper/xsd/gridgrouper.xsd"/>
 	<xs:element name="ServiceSecurity" type="sec:ServiceSecurity"/>
 	<xs:complexType name="ServiceSecurity">
 		<xs:sequence>

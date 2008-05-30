@@ -89,7 +89,6 @@ public class GridApplication extends JFrame {
         LookAndFeel.setApplicationLogo(this.app.getApplicationLogo());
         this.threadManager = new ThreadManager();
         this.context = new ApplicationContext(this);
-        configurationManager = new ConfigurationManager(app.getConfiguration());
         initialize();
     }
 
@@ -192,12 +191,14 @@ public class GridApplication extends JFrame {
             System.out.println("Failed to set system look and feel.");
         }
 
-        // run the initializer if there is one.
+        // run the initializer if there is one.  The initializer can edit the model before processing
         if (this.app.getInitializerClass() != null) {
             ApplicationInitializer appInit = (ApplicationInitializer) Class.forName(
                 this.app.getInitializerClass()).newInstance();
-            appInit.intialize();
+            appInit.intialize(app);
         }
+        
+        configurationManager = new ConfigurationManager(app.getConfiguration());
 
         List<Component> toolbarComponents = new ArrayList<Component>();
         this.setJMenuBar(getJJMenuBar(toolbarComponents));

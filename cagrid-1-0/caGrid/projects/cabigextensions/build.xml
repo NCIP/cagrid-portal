@@ -47,7 +47,7 @@
 	<!--                          DEFINE THE EXTENSIONS                                   -->
 	<!-- ================================================================================ -->
 	<!-- The name should be the path relative from extensions.dir.  Its strongly encouraged you use a flat layout -->
-	<property name="extensions.list" value="cagrid_metadata,cagrid_wsEnum,domainmodel_viewer,servicemetadata_editor, sdk_discovery" />
+	<property name="extensions.list" value="cagrid_metadata,cagrid_wsEnum,domainmodel_viewer,servicemetadata_editor, sdk_discovery, cagrid_creation_viewer" />
 	<property name="introduce.extensions.dir" location="../introduce/extensions" />
 
 	<fileset dir="${ext.schema.dir}" id="cagrid_metadata.schema.fileset">

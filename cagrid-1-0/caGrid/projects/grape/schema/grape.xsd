@@ -4,6 +4,7 @@
 	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	xmlns:grape="http://www.cagrid.org/1/grape">
 
+    <xsd:element name="component" type="grape:component" />
 	<xsd:complexType name="component">
 		<xsd:sequence>
 			<xsd:element name="title" minOccurs="1" maxOccurs="1"
@@ -24,11 +25,12 @@
 				maxOccurs="1" type="grape:renderOptions" />
 		</xsd:sequence>
 	</xsd:complexType>
+	<xsd:element name="menu" type="grape:menu" />
 	<xsd:complexType name="menu">
 		<xsd:sequence>
 			<xsd:element name="title" minOccurs="1" maxOccurs="1"
 				type="xsd:string" />
-			<xsd:element name="description" minOccurs="1" maxOccurs="1"
+			<xsd:element name="description" minOccurs="0" maxOccurs="1"
 				type="xsd:string" />
 			<xsd:element name="icon" minOccurs="0" maxOccurs="1"
 				type="xsd:string" />
@@ -40,6 +42,7 @@
 				type="grape:components" />
 		</xsd:sequence>
 	</xsd:complexType>
+	<xsd:element name="menus" type="grape:menus" />
 	<xsd:complexType name="menus">
 		<xsd:sequence>
 			<xsd:element name="menu" type="grape:menu" minOccurs="1"

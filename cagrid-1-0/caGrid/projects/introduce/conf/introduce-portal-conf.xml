@@ -31,20 +31,6 @@
                     	<centered>true</centered>
                     </renderOptions>
                 </component>
-                <component>
-                    <title>Create caGrid Service Skeleton</title>
-                    <description>Create caGrid Service Skeleton</description>
-                    <classname>gov.nih.nci.cagrid.introduce.portal.creation.CaBIGCreationViewer</classname>
-                    <icon>/caGrid_small.png</icon>
-                    <showOnToolBar>true</showOnToolBar>
-                    <dimensions>
-                    	<width>600</width>
-                    	<height>500</height>
-                    </dimensions>
-                    <renderOptions>
-                    	<centered>true</centered>
-                    </renderOptions>
-                </component>
              </components>
         </menu>
         <menu>

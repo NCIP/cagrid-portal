@@ -1,7 +1,7 @@
 package org.cagrid.grape;
 
 public interface ApplicationInitializer {
-    
-    public void intialize() throws Exception;
+
+    public void intialize(org.cagrid.grape.model.Application app) throws Exception;
 
 }
