@@ -19,10 +19,26 @@ public class CQLQueryBeanTest extends PortletIntegrationTestBase {
 
 
     public void testBean() throws Exception {
-        CQLQueryBean bean = (CQLQueryBean) getApplicationContext().getBean("cqlQueryBeanPrototype");
 
-        UMLClass mockUmlClass = mock(UMLClass.class);
-        bean.setUmlClass(mockUmlClass);
+        final UMLClass _mockUMLClass = mock(UMLClass.class);
+        DomainModel _mockDomain = mock(DomainModel.class);
+        GridDataService _mockService = mock(GridDataService.class);
+
+        stub(_mockUMLClass.getModel()).toReturn(_mockDomain);
+        stub(_mockDomain.getService()).toReturn(_mockService);
+
+        CQLQueryBean bean = new CQLQueryBean() {
+
+            @Override
+            public UMLClass getUmlClass() {
+                return _mockUMLClass;
+            }
+
+
+        };
+
+        CQLQueryBean prototypeBean = (CQLQueryBean) getApplicationContext().getBean("cqlQueryBeanPrototype");
+        bean.setFormulators(prototypeBean.getFormulators());
 
         assertNotNull(bean.toXml());
 
@@ -32,14 +48,8 @@ public class CQLQueryBeanTest extends PortletIntegrationTestBase {
 
         bean.setAggregateTargets(targets);
 
-        UMLClass _mockUMLClass = mock(UMLClass.class);
-        DomainModel _mockDomain = mock(DomainModel.class);
-        GridDataService _mockService = mock(GridDataService.class);
-        stub(_mockUMLClass.getModel()).toReturn(_mockDomain);
-        stub(_mockDomain.getService()).toReturn(_mockService);
         stub(_mockService.getUrl()).toReturn("http://service");
 
-        bean.setUmlClass(_mockUMLClass);
 
         assertNotNull("Query cannot be formed", bean.toXml());
 
