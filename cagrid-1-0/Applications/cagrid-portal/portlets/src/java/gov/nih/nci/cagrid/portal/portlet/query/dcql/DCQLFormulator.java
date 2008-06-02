@@ -93,7 +93,7 @@ public class DCQLFormulator implements QueryFormulator<DCQLQuery> {
                 ForeignAssociation assoc = new ForeignAssociation();
                 assoc.setTargetServiceURL(assocBean.getCriteriaBean().getUmlClass().getModel().getService().getUrl());
 
-                gov.nih.nci.cagrid.dcql.JoinCondition joinCondition = new gov.nih.nci.cagrid.dcql.JoinCondition(assocBean.getCriteriaBean().getJoin().getLocalAttributeName(), assocBean.getCriteriaBean().getJoin().getForeignAttributeName(),
+                gov.nih.nci.cagrid.dcql.JoinCondition joinCondition = new gov.nih.nci.cagrid.dcql.JoinCondition(assocBean.getCriteriaBean().getJoin().getForeignAttributeName(), assocBean.getCriteriaBean().getJoin().getLocalAttributeName(),
                         ForeignPredicate.fromString(assocBean.getCriteriaBean().getJoin().getPredicate()));
 
                 assoc.setJoinCondition(joinCondition);
