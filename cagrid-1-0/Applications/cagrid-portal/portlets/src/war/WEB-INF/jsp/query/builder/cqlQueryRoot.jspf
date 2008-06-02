@@ -40,10 +40,12 @@
 </script>
 <c:set var="criteriaBeanFormName"><portlet:namespace/>criteriaBeanForm</c:set>
 <form:form name="${criteriaBeanFormName}">
-    <input type="button" value="Edit Query Modifiers"
-           onclick="<portlet:namespace/>goToPath('/query/builder/editQueryModifierForm')"/>
-    <input type="button" value="Add Criterion" onclick="<portlet:namespace/>goToPath('/query/builder/umlClass')"/>
+    <c:if test="${cqlQueryBean.DCQLQuery == 'false'}">
+        <input type="button" value="Edit Query Modifiers"
+               onclick="<portlet:namespace/>goToPath('/query/builder/editQueryModifierForm')"/>
+    </c:if>
     <input type="button" value="Aggregate Query" onclick="<portlet:namespace/>aggregateQuery()"/>
+    <input type="button" value="Add Criterion" onclick="<portlet:namespace/>goToPath('/query/builder/umlClass')"/>
     <input type="button" value="Export To XML" onclick="<portlet:namespace/>exportToXml()"/>
     <input type="button" value="Submit Query" onclick="<portlet:namespace/>submitBuilderQuery()"/>
     <c:if test="${!empty portalUser}">
@@ -56,10 +58,24 @@
 <b>Querying:</b> <c:out
         value="${cqlQueryBean.umlClass.packageName}"/>.<c:out value="${cqlQueryBean.umlClass.className}"/>
 <br/>
-
 <c:choose>
     <c:when test="${cqlQueryBean.DCQLQuery == 'true'}">
         <b>Query Type:</b> DCQL Query
+        <br/>
+        <c:if test="${not empty cqlQueryBean.aggregateTargets.selected}">
+            <b> Aggregating from:</b>
+
+            <ul>
+                <li>
+                    <c:out value="${cqlQueryBean.umlClass.model.service.url}"/>
+                </li>
+                <c:forEach var="aggregateTarget" items="${cqlQueryBean.aggregateTargets.selected}">
+                    <li>
+                        <c:out value="${aggregateTarget}"/>
+                    </li>
+                </c:forEach>
+            </ul>
+        </c:if>
     </c:when>
 
     <c:otherwise>
@@ -90,7 +106,7 @@
     </c:otherwise>
 </c:choose>
 
-<c:if test="${fn:length(cqlQueryBean.criteria) gt 0}">
+<c:if test="${fn:length(cqlQueryBean.criteria) gt 0 or fn:length(cqlQueryBean.associations) gt 0}">
     <br/>
     <b>Criteria:</b>
 </c:if>
