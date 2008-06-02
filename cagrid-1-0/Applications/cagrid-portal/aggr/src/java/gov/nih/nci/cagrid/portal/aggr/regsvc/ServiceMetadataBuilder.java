@@ -122,7 +122,8 @@ public class ServiceMetadataBuilder {
 								semMeta));
 			}
 		}
-		if (svcIn.getServiceContextCollection() != null) {
+		if (svcIn.getServiceContextCollection() != null && svcIn
+				.getServiceContextCollection().getServiceContext() != null) {
 			for (gov.nih.nci.cagrid.metadata.service.ServiceContext svcCtxIn : svcIn
 					.getServiceContextCollection().getServiceContext()) {
 				ServiceContext svcCtxOut = buildServiceContext(svcCtxIn);
@@ -169,7 +170,8 @@ public class ServiceMetadataBuilder {
 				}
 			}
 		}
-		if (svcCtxIn.getOperationCollection() != null) {
+		if (svcCtxIn.getOperationCollection() != null && svcCtxIn
+				.getOperationCollection().getOperation() != null) {
 			for (gov.nih.nci.cagrid.metadata.service.Operation operIn : svcCtxIn
 					.getOperationCollection().getOperation()) {
 				Operation operOut = buildOperation(operIn);
@@ -281,7 +283,8 @@ public class ServiceMetadataBuilder {
 						buildSemanticMetadata(objectIdentifier, sMetaIn));
 			}
 		}
-		if (umlClassIn.getUmlAttributeCollection() != null) {
+		if (umlClassIn.getUmlAttributeCollection() != null && umlClassIn
+				.getUmlAttributeCollection().getUMLAttribute() != null) {
 			pushPath("umlAttributeCollection");
 			for (gov.nih.nci.cagrid.metadata.common.UMLAttribute umlAttrIn : umlClassIn
 					.getUmlAttributeCollection().getUMLAttribute()) {
@@ -351,13 +354,13 @@ public class ServiceMetadataBuilder {
 		if (valDomIn.getSemanticMetadata() != null) {
 			gov.nih.nci.cagrid.metadata.common.SemanticMetadata[] sMetaIns = valDomIn
 					.getSemanticMetadata();
-			if (sMetaIns != null) {
+			
 				String objectIdentifier = getObjectIdentifier(valDomOut);
 				for (gov.nih.nci.cagrid.metadata.common.SemanticMetadata sMetaIn : sMetaIns) {
 					valDomOut.getSemanticMetadata().add(
 							buildSemanticMetadata(objectIdentifier, sMetaIn));
 				}
-			}
+			
 		}
 
 		return (ValueDomain) handlePersist(valDomOut);
@@ -369,16 +372,16 @@ public class ServiceMetadataBuilder {
 		handlePersist(enumOut);
 		enumOut.setPermissibleValue(enumIn.getPermissibleValue());
 		enumOut.setValueMeaning(enumIn.getValueMeaning());
-		if (enumOut.getSemanticMetadata() != null) {
+		if (enumIn.getSemanticMetadata() != null) {
 			gov.nih.nci.cagrid.metadata.common.SemanticMetadata[] sMetaIns = enumIn
 					.getSemanticMetadata();
-			if (sMetaIns != null) {
+
 				String objectIdentifier = getObjectIdentifier(enumOut);
 				for (gov.nih.nci.cagrid.metadata.common.SemanticMetadata sMetaIn : sMetaIns) {
 					enumOut.getSemanticMetadata().add(
 							buildSemanticMetadata(objectIdentifier, sMetaIn));
 				}
-			}
+
 		}
 		return (Enumeration) handlePersist(enumOut);
 	}

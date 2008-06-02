@@ -298,7 +298,7 @@ public class DomainModelBuilder extends ServiceMetadataBuilder {
 						buildSemanticMetadata(objectIdentifier, sMetaIn));
 			}
 		}
-		if (umlClassIn.getUmlAttributeCollection() != null) {
+		if (umlClassIn.getUmlAttributeCollection() != null && umlClassIn.getUmlAttributeCollection().getUMLAttribute() != null) {
 			pushPath("umlAttributeCollection");
 			for (gov.nih.nci.cagrid.metadata.common.UMLAttribute umlAttrIn : umlClassIn
 					.getUmlAttributeCollection().getUMLAttribute()) {
