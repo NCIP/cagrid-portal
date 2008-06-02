@@ -21,7 +21,7 @@ import org.cagrid.data.test.upgrades.from1pt0.UpgradeIntroduceServiceStep;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Feb 20, 2007 
- * @version $Id: UpgradeEnumerationTo1pt2Tests.java,v 1.3 2008-05-29 20:22:18 dervin Exp $ 
+ * @version $Id: UpgradeEnumerationTo1pt2Tests.java,v 1.4 2008-06-02 20:34:18 dervin Exp $ 
  */
 public class UpgradeEnumerationTo1pt2Tests extends Story {
     public static final String SERVICE_ZIP_NAME = "DataServiceWithEnumeration_1-1.zip";
@@ -30,6 +30,7 @@ public class UpgradeEnumerationTo1pt2Tests extends Story {
     public static final String SERVICE_PACKAGE = "gov.nih.nci.cagrid.data.enumeration";
     public static final String SERVICE_NAMESPACE = "http://enumeration.data.cagrid.nci.nih.gov/DataServiceWithEnumeration";
     
+    private DataTestCaseInfo testServiceInfo = null;
 	
 	public String getDescription() {
 		return "Tests upgrade of an enumeration data service from version 1.1 to 1.2";
@@ -39,45 +40,49 @@ public class UpgradeEnumerationTo1pt2Tests extends Story {
     public String getName() {
         return "Data Service With Enumeration 1_1 to 1_2 Upgrade Tests";
     }
+    
+    
+    public boolean storySetUp() {
+        this.testServiceInfo = new DataTestCaseInfo() {
+            public String getServiceDirName() {
+                return SERVICE_DIR_NAME;
+            }
+
+
+            public String getName() {
+                return SERVICE_NAME;
+            }
+
+
+            public String getNamespace() {
+                return SERVICE_NAMESPACE;
+            }
+
+
+            public String getPackageName() {
+                return SERVICE_PACKAGE;
+            }
+        };
+        return true;
+    }
 	
 
 	protected Vector steps() {
-        DataTestCaseInfo info = new DataTestCaseInfo() {
-        	public String getServiceDirName() {
-    	        return SERVICE_DIR_NAME;
-    	    }
-
-
-    	    public String getName() {
-    	        return SERVICE_NAME;
-    	    }
-
-
-    	    public String getNamespace() {
-    	        return SERVICE_NAMESPACE;
-    	    }
-
-
-    	    public String getPackageName() {
-    	        return SERVICE_PACKAGE;
-    	    }
-        };
-		Vector<Step> steps = new Vector<Step>();
+        Vector<Step> steps = new Vector<Step>();
 		// steps to unpack and upgrade the old service
-		steps.add(new DeleteOldServiceStep(info));
+		steps.add(new DeleteOldServiceStep(testServiceInfo));
 		steps.add(new UnpackOldServiceStep(SERVICE_ZIP_NAME));
-		steps.add(new UpgradeIntroduceServiceStep(info.getDir()));
-		steps.add(new BuildUpgradedServiceStep(info.getDir()));
+		steps.add(new UpgradeIntroduceServiceStep(testServiceInfo.getDir()));
+		steps.add(new BuildUpgradedServiceStep(testServiceInfo.getDir()));
 		
 		return steps;
 	}
-	
-	
-	// used to make sure that if we are going to use a junit testsuite to 
-	// test this that the test suite will not error out 
-	// looking for a single test......
-	public void testDummy() throws Throwable {
-	}
+    
+    
+    protected void storyTearDown() throws Throwable {
+        Step deleteServiceStep = new DeleteOldServiceStep(testServiceInfo);
+        deleteServiceStep.runStep();
+    }
 
 
 	public static void main(String[] args) {

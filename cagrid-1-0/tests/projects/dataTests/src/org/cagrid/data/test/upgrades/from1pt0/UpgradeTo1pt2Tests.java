@@ -19,7 +19,7 @@ import org.cagrid.data.test.upgrades.UnpackOldServiceStep;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Feb 20, 2007 
- * @version $Id: UpgradeTo1pt2Tests.java,v 1.3 2008-05-29 18:53:17 dervin Exp $ 
+ * @version $Id: UpgradeTo1pt2Tests.java,v 1.4 2008-06-02 20:34:18 dervin Exp $ 
  */
 public class UpgradeTo1pt2Tests extends Story {
     public static final String SERVICE_ZIP_NAME = "BasicDataService_1-0.zip";    
@@ -48,13 +48,6 @@ public class UpgradeTo1pt2Tests extends Story {
 		steps.add(new BuildUpgradedServiceStep(info.getDir()));
 		
 		return steps;
-	}
-	
-	
-	// used to make sure that if we are going to use a junit testsuite to 
-	// test this that the test suite will not error out 
-	// looking for a single test......
-	public void testDummy() throws Throwable {
 	}
 
 

@@ -9,7 +9,7 @@ import gov.nih.nci.cagrid.testing.system.haste.Story;
  * @author David Ervin
  * 
  * @created Mar 14, 2007 2:21:41 PM
- * @version $Id: BaseSystemTest.java,v 1.1 2008-05-16 19:25:25 dervin Exp $ 
+ * @version $Id: BaseSystemTest.java,v 1.2 2008-06-02 20:34:18 dervin Exp $ 
  */
 public abstract class BaseSystemTest extends Story {
 	public static final String INTRODUCE_DIR_PROPERTY = "introduce.base.dir";
@@ -26,12 +26,5 @@ public abstract class BaseSystemTest extends Story {
 					+ INTRODUCE_DIR_PROPERTY + " is required");
 		}
 		return dir;
-	}
-	
-
-	// used to make sure that if we are going to use a junit testsuite to
-	// test this that the test suite will not error out
-	// looking for a single test......
-	public void testDummy() throws Throwable {
 	}
 }

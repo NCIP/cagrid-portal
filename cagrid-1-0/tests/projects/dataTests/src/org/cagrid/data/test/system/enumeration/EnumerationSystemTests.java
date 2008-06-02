@@ -13,6 +13,7 @@ import gov.nih.nci.cagrid.testing.system.haste.Step;
 import java.util.Vector;
 
 import org.cagrid.data.test.creation.DataTestCaseInfo;
+import org.cagrid.data.test.creation.DeleteOldServiceStep;
 import org.cagrid.data.test.creation.enumeration.CreateEnumerationTests;
 import org.cagrid.data.test.system.AddBookstoreStep;
 import org.cagrid.data.test.system.AddTestingJarToServiceStep;
@@ -37,6 +38,7 @@ import junit.textui.TestRunner;
  */
 public class EnumerationSystemTests extends BaseSystemTest {
     
+    private DataTestCaseInfo info;
     private ServiceContainer container;
 
 	public EnumerationSystemTests() {
@@ -56,6 +58,7 @@ public class EnumerationSystemTests extends BaseSystemTest {
 
 
 	protected boolean storySetUp() {
+        info = new CreateEnumerationTests.TestEnumerationDataServiceInfo();
         // obtain a new container instance
         try {
             container = ServiceContainerFactory.createContainer(ServiceContainerType.GLOBUS_CONTAINER);
@@ -77,8 +80,7 @@ public class EnumerationSystemTests extends BaseSystemTest {
 
 
 	protected Vector steps() {
-        DataTestCaseInfo info = new CreateEnumerationTests.TestEnumerationDataServiceInfo();
-		Vector<Step> steps = new Vector<Step>();
+        Vector<Step> steps = new Vector<Step>();
 		// an enumeration supporting data service is presumed to have been
 		// created by a previous testing process
         // 1) Add the data tests jar to the service lib
@@ -117,6 +119,13 @@ public class EnumerationSystemTests extends BaseSystemTest {
 		} catch (Throwable ex) {
 			ex.printStackTrace();
 		}
+        // 11) throw away service
+        Step deleteServiceStep = new DeleteOldServiceStep(info);
+        try {
+            deleteServiceStep.runStep();
+        } catch (Throwable th) {
+            th.printStackTrace();
+        }
 	}
 
 

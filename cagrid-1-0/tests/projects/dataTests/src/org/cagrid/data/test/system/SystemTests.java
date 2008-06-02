@@ -11,14 +11,17 @@ import gov.nih.nci.cagrid.testing.system.deployment.steps.UnpackContainerStep;
 import gov.nih.nci.cagrid.testing.system.haste.Step;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
-
-import org.cagrid.data.test.creation.CreationTests;
-import org.cagrid.data.test.creation.DataTestCaseInfo;
 
 import junit.framework.TestResult;
 import junit.framework.TestSuite;
 import junit.textui.TestRunner;
+
+import org.cagrid.data.test.creation.CreationTests;
+import org.cagrid.data.test.creation.DataTestCaseInfo;
+import org.cagrid.data.test.creation.DeleteOldServiceStep;
 
 
 /**
@@ -27,12 +30,13 @@ import junit.textui.TestRunner;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A> *
  * @created Nov 7, 2006
- * @version $Id: SystemTests.java,v 1.2 2008-05-27 15:24:56 dervin Exp $
+ * @version $Id: SystemTests.java,v 1.3 2008-06-02 20:34:18 dervin Exp $
  */
 public class SystemTests extends BaseSystemTest {
     
     private static File auditorLogFile = new File("./dataServiceAuditing.log").getAbsoluteFile();
     
+    private DataTestCaseInfo info;
     private ServiceContainer container;
     
     
@@ -53,6 +57,9 @@ public class SystemTests extends BaseSystemTest {
 
 
     protected boolean storySetUp() {
+        // init the test info
+        info = new CreationTests.TestDataServiceInfo();
+        
         // initialize the service container instance
         try {
             container = ServiceContainerFactory.createContainer(ServiceContainerType.GLOBUS_CONTAINER);
@@ -74,7 +81,6 @@ public class SystemTests extends BaseSystemTest {
 
 
     protected Vector steps() {
-        DataTestCaseInfo info = new CreationTests.TestDataServiceInfo();
         Vector<Step> steps = new Vector<Step>();
         // data service presumed to have been created
         // by the data service creation tests
@@ -104,23 +110,41 @@ public class SystemTests extends BaseSystemTest {
 
     protected void storyTearDown() throws Throwable {
         super.storyTearDown();
+        List<Throwable> exceptions = new ArrayList<Throwable>();
         // 12) stop globus
         Step stopStep = new StopContainerStep(container);
         try {
             stopStep.runStep();
         } catch (Throwable ex) {
-            ex.printStackTrace();
+            exceptions.add(ex);
         }
-        // 13) throw away globus
+        // 13) throw away auditor log
+        if (auditorLogFile.exists()) {
+            auditorLogFile.deleteOnExit();
+        }
+        // 14) throw away globus
         Step destroyStep = new DestroyContainerStep(container);
         try {
             destroyStep.runStep();
         } catch (Throwable ex) {
-            ex.printStackTrace();
+            exceptions.add(ex);
         }
-        // 14) throw away auditor log
-        if (auditorLogFile.exists()) {
-            auditorLogFile.delete();
+        // 15) Delete the old service
+        Step deleteServiceStep = new DeleteOldServiceStep(info);
+        try {
+            deleteServiceStep.runStep();
+        } catch (Throwable th) {
+            exceptions.add(th);
+        }
+        
+        // check on exceptions
+        if (exceptions.size() != 0) {
+            // uh oh
+            for (Throwable th : exceptions) {
+                System.err.println("EXCEPTION THROWN DURING TEAR DOWN:");
+                th.printStackTrace();
+            }
+            throw new Exception("Error during tear down, see logs");
         }
     }
 

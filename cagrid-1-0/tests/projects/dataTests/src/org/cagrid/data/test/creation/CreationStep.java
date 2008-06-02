@@ -23,7 +23,7 @@ import org.apache.commons.logging.LogFactory;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created Aug 22, 2006 
- * @version $Id: CreationStep.java,v 1.2 2008-06-02 18:30:46 dervin Exp $ 
+ * @version $Id: CreationStep.java,v 1.3 2008-06-02 20:34:18 dervin Exp $ 
  */
 public class CreationStep extends Step {
     
@@ -44,7 +44,8 @@ public class CreationStep extends Step {
 		System.out.println("Creating service...");
 
 		String cmd = AntTools.getAntSkeletonCreationCommand(introduceDir, serviceInfo.getName(), 
-			serviceInfo.getDir(), serviceInfo.getPackageName(), serviceInfo.getNamespace(), serviceInfo.getResourceFrameworkType(), serviceInfo.getExtensions());
+			serviceInfo.getDir(), serviceInfo.getPackageName(), serviceInfo.getNamespace(), 
+            serviceInfo.getResourceFrameworkType(), serviceInfo.getExtensions());
         System.out.println("EXECUTING COMMAND: " + cmd);
 		Process createSkeletonProcess = CommonTools.createAndOutputProcess(cmd);
         new StreamGobbler(createSkeletonProcess.getInputStream(), 

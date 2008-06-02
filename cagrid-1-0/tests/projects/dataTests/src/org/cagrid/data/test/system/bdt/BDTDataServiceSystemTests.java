@@ -15,6 +15,7 @@ import java.io.File;
 import java.util.Vector;
 
 import org.cagrid.data.test.creation.DataTestCaseInfo;
+import org.cagrid.data.test.creation.DeleteOldServiceStep;
 import org.cagrid.data.test.creation.bdt.BDTDataServiceCreationTests;
 import org.cagrid.data.test.system.AddBookstoreStep;
 import org.cagrid.data.test.system.AddTestingJarToServiceStep;
@@ -34,7 +35,7 @@ import junit.textui.TestRunner;
  * @author David Ervin
  * 
  * @created Mar 14, 2007 2:19:42 PM
- * @version $Id: BDTDataServiceSystemTests.java,v 1.3 2008-05-27 18:03:35 dervin Exp $ 
+ * @version $Id: BDTDataServiceSystemTests.java,v 1.4 2008-06-02 20:34:18 dervin Exp $ 
  */
 public class BDTDataServiceSystemTests extends BaseSystemTest {
     
@@ -127,6 +128,13 @@ public class BDTDataServiceSystemTests extends BaseSystemTest {
 		} catch (Throwable ex) {
 			ex.printStackTrace();
 		}
+        // 11) throw away service
+        Step deleteServiceStep = new DeleteOldServiceStep(testServiceInfo);
+        try {
+            deleteServiceStep.runStep();
+        } catch (Throwable th) {
+            th.printStackTrace();
+        }
 	}
 	
 
