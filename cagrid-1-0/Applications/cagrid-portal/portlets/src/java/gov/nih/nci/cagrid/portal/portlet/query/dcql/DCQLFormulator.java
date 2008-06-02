@@ -55,9 +55,6 @@ public class DCQLFormulator implements QueryFormulator<DCQLQuery> {
         targetObject.setName(bean.getUmlClass().getPackageName() + "."
                 + bean.getUmlClass().getClassName());
 
-        Group targetGroup = new Group();
-        targetGroup.setLogicRelation(LogicalOperator.AND);
-
         List<Attribute> attEls = new ArrayList<Attribute>();
         List<Group> groupEls = new ArrayList<Group>();
         List<Association> assocEls = new ArrayList<Association>();
@@ -112,32 +109,56 @@ public class DCQLFormulator implements QueryFormulator<DCQLQuery> {
             }
         }
 
-        boolean addedSomething = false;
-        if (attEls.size() > 0) {
-            addedSomething = true;
-            targetGroup.setAttribute((Attribute[]) attEls
-                    .toArray(new Attribute[attEls.size()]));
+        boolean needGroup = needGroup(attEls.size(), groupEls.size(), assocEls
+				.size(), fassocEls.size());
+        if(needGroup){
+            Group targetGroup = new Group();
+            targetGroup.setLogicRelation(LogicalOperator.AND);
+        	targetObject.setGroup(targetGroup);
+        	if(attEls.size() > 0){
+				targetGroup.setAttribute((Attribute[]) attEls
+						.toArray(new Attribute[attEls.size()]));
+        	}
+        	if(groupEls.size() > 0){
+				targetGroup.setGroup((Group[]) groupEls
+						.toArray(new Group[groupEls.size()]));
+        	}
+        	if(assocEls.size() > 0){
+				targetGroup.setAssociation((Association[]) assocEls
+						.toArray(new Association[assocEls.size()]));
+        	}
+        	if(fassocEls.size() > 0){
+				targetGroup
+						.setForeignAssociation((ForeignAssociation[]) fassocEls
+								.toArray(new ForeignAssociation[fassocEls
+										.size()]));
+        	}
+        }else{
+        	if(attEls.size() > 0){
+        		targetObject.setAttribute(attEls.get(0));
+        	}
+        	if(groupEls.size() > 0){
+        		targetObject.setGroup(groupEls.get(0));
+        	}
+        	if(assocEls.size() > 0){
+        		targetObject.setAssociation(assocEls.get(0));
+        	}
+        	if(fassocEls.size() > 0){
+        		targetObject.setForeignAssociation(fassocEls.get(0));
+        	}
         }
-        if (groupEls.size() > 0) {
-            addedSomething = true;
-            targetGroup.setGroup((Group[]) groupEls.toArray(new Group[groupEls
-                    .size()]));
-        }
-        if (assocEls.size() > 0) {
-            addedSomething = true;
-            targetGroup.setAssociation((Association[]) assocEls
-                    .toArray(new Association[assocEls.size()]));
-        }
-        if (fassocEls.size() > 0) {
-            addedSomething = true;
-            targetGroup.setForeignAssociation((ForeignAssociation[]) fassocEls
-                    .toArray(new ForeignAssociation[fassocEls.size()]));
-        }
-
-        if (addedSomething) {
-            targetObject.setGroup(targetGroup);
-        }
+        
         return targetObject;
 
     }
+    
+    private boolean needGroup(int... sizes) {
+		int numSizesGreaterThanZero = 0;
+		for(int size : sizes){
+			if(size > 0){
+				numSizesGreaterThanZero++;
+			}
+		}
+		return numSizesGreaterThanZero > 1;
+	}
 }
