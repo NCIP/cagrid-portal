@@ -23,7 +23,7 @@ import org.apache.commons.logging.LogFactory;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created Aug 22, 2006 
- * @version $Id: CreationStep.java,v 1.1 2008-05-16 19:25:25 dervin Exp $ 
+ * @version $Id: CreationStep.java,v 1.2 2008-06-02 18:30:46 dervin Exp $ 
  */
 public class CreationStep extends Step {
     
@@ -47,7 +47,6 @@ public class CreationStep extends Step {
 			serviceInfo.getDir(), serviceInfo.getPackageName(), serviceInfo.getNamespace(), serviceInfo.getResourceFrameworkType(), serviceInfo.getExtensions());
         System.out.println("EXECUTING COMMAND: " + cmd);
 		Process createSkeletonProcess = CommonTools.createAndOutputProcess(cmd);
-        // TODO: Stream gobbler needs to take a commons Log instance
         new StreamGobbler(createSkeletonProcess.getInputStream(), 
             StreamGobbler.TYPE_OUT, logger, LogPriority.DEBUG).start();
         new StreamGobbler(createSkeletonProcess.getErrorStream(), 

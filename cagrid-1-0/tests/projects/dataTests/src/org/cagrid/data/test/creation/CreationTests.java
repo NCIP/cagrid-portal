@@ -16,7 +16,7 @@ import junit.textui.TestRunner;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created Aug 22, 2006 
- * @version $Id: CreationTests.java,v 1.2 2008-05-21 19:51:14 dervin Exp $ 
+ * @version $Id: CreationTests.java,v 1.3 2008-06-02 18:30:46 dervin Exp $ 
  */
 public class CreationTests extends Story {
 	public static final String INTRODUCE_DIR_PROPERTY = "introduce.base.dir";
@@ -60,13 +60,6 @@ public class CreationTests extends Story {
 			fail("Introduce base dir environment variable " + INTRODUCE_DIR_PROPERTY + " is required");
 		}
 		return dir;
-	}
-	
-	
-	// used to make sure that if we are going to use a junit testsuite to 
-	// test this that the test suite will not error out 
-	// looking for a single test......
-	public void testDummy() throws Throwable {
 	}
 
 
@@ -120,7 +113,6 @@ public class CreationTests extends Story {
 
         public String getPackageName() {
             return PLAIN_PACKAGE_NAME;
-        }
-        
+        }   
     }
 }
