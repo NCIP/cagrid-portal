@@ -106,6 +106,7 @@
     </c:otherwise>
 </c:choose>
 
-<c:if test="${fn:length(cqlQueryBean.criteria) gt 0}">
+<c:if test="${fn:length(cqlQueryBean.criteria) gt 0 or fn:length(cqlQueryBean.associations) gt 0}">
+    <br/>
     <b>Criteria:</b>
 </c:if>
