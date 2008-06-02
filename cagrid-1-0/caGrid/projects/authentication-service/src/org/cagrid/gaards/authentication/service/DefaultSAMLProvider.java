@@ -1,5 +1,5 @@
 /**
- * $Id: DefaultSAMLProvider.java,v 1.2 2008-05-15 19:54:01 langella Exp $
+ * $Id: DefaultSAMLProvider.java,v 1.3 2008-06-02 14:50:12 langella Exp $
  *
  */
 package org.cagrid.gaards.authentication.service;
@@ -40,7 +40,7 @@ import org.cagrid.gaards.pki.KeyUtil;
 
 /**
  *
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  * @author Joshua Phillips
  *
  */
@@ -160,7 +160,7 @@ public class DefaultSAMLProvider implements
 	    SAMLSubject sub2 = new SAMLSubject(ni2, null, null, null);
 	    sub2.addConfirmationMethod(SAMLSubject.CONF_BEARER);
 	    SAMLAuthenticationStatement auth = new SAMLAuthenticationStatement(
-		    sub, "urn:oasis:names:tc:SAML:1.0:am:password", new Date(),
+		    sub, "urn:oasis:names:tc:SAML:1.0:am:unspecified", new Date(),
 		    ipAddress, subjectDNS, null);
 
 	    QName quid = new QName(SAMLConstants.UID_ATTRIBUTE_NAMESPACE,
