@@ -36,6 +36,7 @@ public class ViewQueryResultsController extends AbstractQueryRenderController {
 	private String resultsBeanSessionAttributeName;
 	private DomainModelDao domainModelDao;
 	private DCQLQueryDao dcqlQueryDao;
+	private List<ServiceErrorInterpretor> serviceErrorInterpretors = new ArrayList<ServiceErrorInterpretor>();
 
 	/**
 	 * 
@@ -83,6 +84,27 @@ public class ViewQueryResultsController extends AbstractQueryRenderController {
 						command.setTableScroller(new TableScroller(table, 10));
 					}
 				}
+
+				String error = instance.getError();
+				if (error != null) {
+					String message = null;
+					for (ServiceErrorInterpretor interpretor : getServiceErrorInterpretors()) {
+						logger.debug("Trying interpretor: " + interpretor);
+						try {
+							message = interpretor.getErrorMessage(error);
+							if (message != null) {
+								break;
+							}
+						} catch (Exception ex) {
+							logger.error("Couldn't get error message: " + ex.getMessage(), ex);
+						}
+					}
+					if (message != null) {
+						logger.debug("Setting message = " + message);
+						command.setError(message);
+					}
+				}
+
 				command.setInstance(instance);
 			}
 			request.getPortletSession().setAttribute(
@@ -93,7 +115,8 @@ public class ViewQueryResultsController extends AbstractQueryRenderController {
 
 	private List<String> getColumnNames(QueryInstance instance) {
 		List<String> colNames = new ArrayList<String>();
-		String umlClassName = PortletUtils.getTargetUMLClassName(instance.getQuery().getXml());
+		String umlClassName = PortletUtils.getTargetUMLClassName(instance
+				.getQuery().getXml());
 		logger.debug("Looking for UMLClass: " + umlClassName);
 		DomainModel domainModel = null;
 		if (instance instanceof CQLQueryInstance) {
@@ -138,6 +161,15 @@ public class ViewQueryResultsController extends AbstractQueryRenderController {
 
 	public void setDcqlQueryDao(DCQLQueryDao dcqlQueryDao) {
 		this.dcqlQueryDao = dcqlQueryDao;
+	}
+
+	public List<ServiceErrorInterpretor> getServiceErrorInterpretors() {
+		return serviceErrorInterpretors;
+	}
+
+	public void setServiceErrorInterpretors(
+			List<ServiceErrorInterpretor> serviceErrorInterpretors) {
+		this.serviceErrorInterpretors = serviceErrorInterpretors;
 	}
 
 }
