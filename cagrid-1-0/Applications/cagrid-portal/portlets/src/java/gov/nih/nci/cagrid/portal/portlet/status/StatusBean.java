@@ -134,12 +134,17 @@ public class StatusBean {
             SimpleDateFormat formatter = new SimpleDateFormat("mm");
 
             if (_elapsedTime < 60000) {
+                //in seconds
                 formatter.applyPattern("ss");
                 return formatter.format(new java.util.Date(_elapsedTime)) + " seconds ago";
-            } else if (_elapsedTime < 600000) {
+            } else if (_elapsedTime < 120000) {
+                //less than 2 minutue(s)
                 formatter.applyPattern("m");
                 return formatter.format(new java.util.Date(_elapsedTime)) + " minute ago";
-
+            } else if (_elapsedTime < 600000) {
+                //less than 10(mm) minutues
+                formatter.applyPattern("m");
+                return formatter.format(new java.util.Date(_elapsedTime)) + " minutes ago";
             }
             return formatter.format(new java.util.Date(_elapsedTime)) + " minutes ago";
         } catch (RuntimeException e) {
