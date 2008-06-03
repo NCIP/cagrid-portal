@@ -66,7 +66,7 @@
 					<formatter type="xml" />
 					<test if="testcase" name="${testcase}" fork="no" todir="${junit.results.dir}" />
 					<batchtest unless="testcase" fork="yes" todir="${junit.results.dir}">
-						<fileset dir="${test.src.dir}/style/@{style.name}">
+						<fileset dir="${src.dir}/@{style.name}">
 							<include name="**/*TestCase.java" />
 							<include name="**/*Story.java" />
 						</fileset>
