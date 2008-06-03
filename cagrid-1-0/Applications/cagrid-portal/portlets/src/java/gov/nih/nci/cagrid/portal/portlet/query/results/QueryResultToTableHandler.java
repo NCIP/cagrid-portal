@@ -30,6 +30,7 @@ public class QueryResultToTableHandler extends BaseQueryResultHandler {
 
 	private Table table = new Table();
 	private Map<String, Object> currentRow;
+	private int maxValueLength = 256;
 
 	/**
 	 * 
@@ -85,7 +86,7 @@ public class QueryResultToTableHandler extends BaseQueryResultHandler {
 					if (!table.getHeaders().contains(name)) {
 						table.getHeaders().add(name);
 					}
-					currentRow.put(name, value);
+					currentRow.put(name, sizeValue(value));
 				}
 			} else if (ResultType.OBJECT.equals(resultType)) {
 
@@ -103,12 +104,24 @@ public class QueryResultToTableHandler extends BaseQueryResultHandler {
 						if (!table.getHeaders().contains(name)) {
 							table.getHeaders().add(name);
 						}
-						currentRow.put(name, value);
+						currentRow.put(name, sizeValue(value));
 					}
 				}
 			}
 		}
 
+	}
+
+	private String sizeValue(String value) {
+		String out = null;
+		if(value != null){
+			if(value.length() > getMaxValueLength()){
+				out = value.substring(0, getMaxValueLength()) + "[export to see full results]";
+			}else{
+				out = value;
+			}
+		}
+		return out;
 	}
 
 	public void endElement(String uri, String localName, String qName)
@@ -140,5 +153,13 @@ public class QueryResultToTableHandler extends BaseQueryResultHandler {
 		parser.parse(new FileInputStream("tissueQueryResults_dcql_atts.xml"),
 				handler);
 		System.out.println(handler.getTable());
+	}
+
+	public int getMaxValueLength() {
+		return maxValueLength;
+	}
+
+	public void setMaxValueLength(int maxValueLength) {
+		this.maxValueLength = maxValueLength;
 	}
 }
