@@ -121,6 +121,33 @@
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Concept Name
     </option>
 </optgroup>
+
+<optgroup label="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Attributes">
+    <option value="serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.inputParameterCollection.UMLClass.umlAttributeCollection.publicID">
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; caDSR Public ID (CDE)
+    </option>
+    <option value="serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.inputParameterCollection.UMLClass.umlAttributeCollection.name">
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Name
+    </option>
+    <option value="serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.inputParameterCollection.UMLClass.umlAttributeCollection.description">
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Description
+    </option>
+    <option value="serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.inputParameterCollection.UMLClass.umlAttributeCollection.dataTypeName">
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Data Type Name
+    </option>
+</optgroup>
+<optgroup label="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Semantic Metadata">
+    <option value="serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.inputParameterCollection.UMLClass.umlAttributeCollection.semanticMetadata.conceptCode">
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Concept Code
+    </option>
+    <option value="serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.inputParameterCollection.UMLClass.umlAttributeCollection.semanticMetadata.conceptDefinition">
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Concept Definition
+    </option>
+    <option value="serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.inputParameterCollection.UMLClass.umlAttributeCollection.semanticMetadata.conceptName">
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Concept Name
+    </option>
+</optgroup>
+
 <optgroup label="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Output">
     <option value="serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.output.QName">
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; QName
@@ -148,6 +175,34 @@
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Concept Name
     </option>
 </optgroup>
+
+<optgroup label="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Attributes">
+    <option value="serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.output.UMLClass.umlAttributeCollection.publicID">
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; caDSR Public ID (CDE)
+    </option>
+    <option value="serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.output.UMLClass.umlAttributeCollection.name">
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Name
+    </option>
+    <option value="serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.output.UMLClass.umlAttributeCollection.description">
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Description
+    </option>
+    <option value="serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.output.UMLClass.umlAttributeCollection.dataTypeName">
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Data Type Name
+    </option>
+</optgroup>
+<optgroup label="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Semantic Metadata">
+    <option value="serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.output.UMLClass.umlAttributeCollection.semanticMetadata.conceptCode">
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Concept Code
+    </option>
+    <option value="serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.output.UMLClass.umlAttributeCollection.semanticMetadata.conceptDefinition">
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Concept Definition
+    </option>
+    <option value="serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.output.UMLClass.umlAttributeCollection.semanticMetadata.conceptName">
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Concept Name
+    </option>
+</optgroup>
+
+
 <optgroup label="&nbsp;&nbsp; Domain Model">
     <option value="domainModel.projectLongName">&nbsp;&nbsp;&nbsp;&nbsp; Project Long Name</option>
     <option value="domainModel.projectShortName">&nbsp;&nbsp;&nbsp;&nbsp; Project Short Name
@@ -176,6 +231,9 @@
     </option>
 </optgroup>
 <optgroup label="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Attributes">
+    <option value="domainModel.classes.umlAttributeCollection.publicID">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        caDSR Public ID (CDE)
+    </option>
     <option value="domainModel.classes.umlAttributeCollection.name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         Name
     </option>
@@ -229,12 +287,14 @@
                 <td valign="top" style="padding-right:5px; text-align:right"><b>Search Fields:</b></td>
                 <td valign="top">
                     <select name="searchFields" multiple size="8">
+                    	<option value="publicID">caDSR Public ID (CDE)</option>
+                    	<option value="conceptCode">Concept Code</option>
+                    	<option value="conceptName">Concept Name</option>
                         <option value="serviceUrl">URL</option>
                         <option value="serviceName">Name</option>
                         <option value="serviceDescription">Description</option>
                         <option value="inputOutput">Input/Output Class Names</option>
                         <option value="operationNames">Operation Names</option>
-                        <option value="semanticMetadata">Semantic Metadata</option>
                         <option value="domainModel">Domain Model Class Names</option>
                     </select>
                 </td>
