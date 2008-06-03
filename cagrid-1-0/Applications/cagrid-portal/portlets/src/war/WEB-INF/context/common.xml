@@ -236,50 +236,36 @@
                 <value>serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.name</value>
             </list>
         </entry>
-        <entry key="semanticMetadata">
+        <entry key="conceptCode">
             <list>
                 <value>serviceMetadata.serviceDescription.semanticMetadata.conceptCode</value>
-                <value>serviceMetadata.serviceDescription.semanticMetadata.conceptDefinition</value>
-                <value>serviceMetadata.serviceDescription.semanticMetadata.conceptName</value>
-
-                <value>
-                    serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.semanticMetadata.conceptCode
-                </value>
-                <value>
-                    serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.semanticMetadata.conceptDefinition
-                </value>
-                <value>
-                    serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.semanticMetadata.conceptName
-                </value>
-
-                <value>
-                    serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.inputParameterCollection.UMLClass.semanticMetadata.conceptCode
-                </value>
-                <value>
-                    serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.inputParameterCollection.UMLClass.semanticMetadata.conceptDefinition
-                </value>
-                <value>
-                    serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.inputParameterCollection.UMLClass.semanticMetadata.conceptName
-                </value>
-
-                <value>
-                    serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.output.UMLClass.semanticMetadata.conceptCode
-                </value>
-                <value>
-                    serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.output.UMLClass.semanticMetadata.conceptDefinition
-                </value>
-                <value>
-                    serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.output.UMLClass.semanticMetadata.conceptName
-                </value>
-
+                <value>serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.semanticMetadata.conceptCode</value>
+                <value>serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.inputParameterCollection.UMLClass.semanticMetadata.conceptCode</value>
+                <value>serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.inputParameterCollection.UMLClass.umlAttributeCollection.semanticMetadata.conceptCode</value>
+                <value>serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.output.UMLClass.semanticMetadata.conceptCode</value>
+                <value>serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.output.UMLClass.umlAttributeCollection.semanticMetadata.conceptCode</value>
                 <value>domainModel.classes.semanticMetadata.conceptCode</value>
-                <value>domainModel.classes.semanticMetadata.conceptDefinition</value>
-                <value>domainModel.classes.semanticMetadata.conceptName</value>
-
                 <value>domainModel.classes.umlAttributeCollection.semanticMetadata.conceptCode</value>
-                <value>domainModel.classes.umlAttributeCollection.semanticMetadata.conceptDefinition</value>
+            </list>
+        </entry>
+        <entry key="conceptName">
+            <list>
+                <value>serviceMetadata.serviceDescription.semanticMetadata.conceptName</value>
+                <value>serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.semanticMetadata.conceptName</value>
+                <value>serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.inputParameterCollection.UMLClass.semanticMetadata.conceptName</value>
+                <value>serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.inputParameterCollection.UMLClass.umlAttributeCollection.semanticMetadata.conceptName</value>
+                <value>serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.output.UMLClass.semanticMetadata.conceptName</value>
+                <value>serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.output.UMLClass.umlAttributeCollection.semanticMetadata.conceptName</value>
+                <value>domainModel.classes.semanticMetadata.conceptName</value>
                 <value>domainModel.classes.umlAttributeCollection.semanticMetadata.conceptName</value>
             </list>
+        </entry>
+        <entry key="publicID">
+        	<list>
+        		<value>serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.inputParameterCollection.UMLClass.umlAttributeCollection.publicID</value>
+        		<value>serviceMetadata.serviceDescription.serviceContextCollection.operationCollection.output.UMLClass.umlAttributeCollection.publicID</value>
+        		<value>domainModel.classes.umlAttributeCollection.publicID</value>
+        	</list>
         </entry>
         <entry key="domainModel">
             <list>
