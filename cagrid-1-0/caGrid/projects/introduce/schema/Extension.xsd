@@ -38,7 +38,8 @@
 	<xs:element name="IntroduceGDEExtensionDescriptionType" type="IntroduceGDEExtensionDescriptionType"/>
 	<xs:complexType name="IntroduceGDEExtensionDescriptionType">
 		<xs:sequence>
-		    <xs:element ref="grape:menus"/>
+		    <xs:element ref="grape:menus" minOccurs="0" maxOccurs="1"/>
+		    <xs:element ref="grape:configuration" minOccurs="0" maxOccurs="1"/>
 		    <xs:element ref="Properties"/>
 		</xs:sequence>
 		<xs:attribute name="displayName" type="xs:string" use="required"/>

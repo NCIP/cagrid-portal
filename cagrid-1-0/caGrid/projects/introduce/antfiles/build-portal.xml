@@ -132,8 +132,6 @@
 				<include name="wsrf_tools.jar" />
 				<include name="wss4j.jar" />
 				<include name="xalan.jar" />
-				<include name="xercesImpl.jar" />
-				<include name="xml-apis.jar" />
 				<include name="xmlsec.jar" />
 				<exclude name="globus_wsrf_mds*.jar"/>
 				<exclude name="globus_wsrf_servicegroup*.jar"/>
@@ -198,8 +196,6 @@
 				<include name="wsrf_*.jar" />
 				<include name="wss4j.jar" />
 				<include name="xalan.jar" />
-				<include name="xercesImpl.jar" />
-				<include name="xml-apis.jar" />
 				<include name="xmlsec.jar" />
 				<exclude name="globus_wsrf_mds*.jar"/>
 				<exclude name="globus_wsrf_servicegroup*.jar"/>

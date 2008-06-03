@@ -16,6 +16,9 @@ import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 import org.cagrid.grape.ApplicationInitializer;
 import org.cagrid.grape.model.Application;
+import org.cagrid.grape.model.Configuration;
+import org.cagrid.grape.model.ConfigurationDescriptor;
+import org.cagrid.grape.model.ConfigurationGroup;
 import org.cagrid.grape.model.Menu;
 import org.cagrid.grape.model.Menus;
 
@@ -53,6 +56,8 @@ public class IntroducePortalInitializer implements ApplicationInitializer {
         List gdeExtensions = ExtensionsLoader.getInstance().getIntroduceGDEExtensions();
         for (Iterator iterator = gdeExtensions.iterator(); iterator.hasNext();) {
             IntroduceGDEExtensionDescriptionType gdeExtension = (IntroduceGDEExtensionDescriptionType) iterator.next();
+            
+            //process menus first
             Menus extensionMenus = gdeExtension.getMenus();
             for (int menuI = 0; menuI < extensionMenus.getMenu().length; menuI++) {
                 Menu extensionMenu = extensionMenus.getMenu()[menuI];
@@ -64,7 +69,7 @@ public class IntroducePortalInitializer implements ApplicationInitializer {
                         break;
                     }
                 }
-                //TODO: currently only working on toplevel menus and not submenus
+                //TODO: currently only "merging" on toplevel menus and not submenus
                 if(existingMenu!=null){
                     //menu already exists
                     int existingMenuSize = 0;
@@ -82,11 +87,44 @@ public class IntroducePortalInitializer implements ApplicationInitializer {
                     //need to add a new menu
                     Menu[] newMenus = new Menu [app.getMenus().getMenu().length + 1];
                     System.arraycopy(app.getMenus().getMenu(), 0, newMenus, 0, app.getMenus().getMenu().length);
-                    newMenus[app.getMenus().getMenu().length+1] = extensionMenu;
+                    newMenus[app.getMenus().getMenu().length] = extensionMenu;
                     app.getMenus().setMenu(newMenus);
                 }
             }
             
+            //now process configurations
+            if(gdeExtension.getConfiguration()!=null){
+                //process descriptors
+                if(gdeExtension.getConfiguration().getConfigurationDescriptors()!=null){
+                    if(app.getConfiguration()==null){
+                        Configuration conf = new Configuration();
+                        app.setConfiguration(conf);
+                    }
+                    if(app.getConfiguration().getConfigurationDescriptors()!=null){
+                        ConfigurationDescriptor[] newDescriptors = new ConfigurationDescriptor[app.getConfiguration().getConfigurationDescriptors().getConfigurationDescriptor().length + gdeExtension.getConfiguration().getConfigurationDescriptors().getConfigurationDescriptor().length];
+                        System.arraycopy(app.getConfiguration().getConfigurationDescriptors().getConfigurationDescriptor(), 0, newDescriptors, 0, app.getConfiguration().getConfigurationDescriptors().getConfigurationDescriptor().length);
+                        System.arraycopy(gdeExtension.getConfiguration().getConfigurationDescriptors().getConfigurationDescriptor(), 0, newDescriptors, app.getConfiguration().getConfigurationDescriptors().getConfigurationDescriptor().length, gdeExtension.getConfiguration().getConfigurationDescriptors().getConfigurationDescriptor().length);
+                        app.getConfiguration().getConfigurationDescriptors().setConfigurationDescriptor(newDescriptors);
+                    } else {
+                       app.getConfiguration().setConfigurationDescriptors(gdeExtension.getConfiguration().getConfigurationDescriptors()); 
+                    }
+                }
+                //process groups
+                if(gdeExtension.getConfiguration().getConfigurationGroups()!=null){
+                    if(app.getConfiguration()==null){
+                        Configuration conf = new Configuration();
+                        app.setConfiguration(conf);
+                    }
+                    if(app.getConfiguration().getConfigurationGroups()!=null){
+                        ConfigurationGroup[] newGroups = new ConfigurationGroup[app.getConfiguration().getConfigurationGroups().getConfigurationGroup().length + gdeExtension.getConfiguration().getConfigurationGroups().getConfigurationGroup().length];
+                        System.arraycopy(app.getConfiguration().getConfigurationGroups().getConfigurationGroup(), 0, newGroups, 0, app.getConfiguration().getConfigurationGroups().getConfigurationGroup().length);
+                        System.arraycopy(gdeExtension.getConfiguration().getConfigurationGroups().getConfigurationGroup(), 0, newGroups, app.getConfiguration().getConfigurationGroups().getConfigurationGroup().length, gdeExtension.getConfiguration().getConfigurationGroups().getConfigurationGroup().length);
+                        app.getConfiguration().getConfigurationGroups().setConfigurationGroup(newGroups);
+                    } else {
+                       app.getConfiguration().setConfigurationGroups(gdeExtension.getConfiguration().getConfigurationGroups()); 
+                    }
+                }
+            }
             
         }
     }

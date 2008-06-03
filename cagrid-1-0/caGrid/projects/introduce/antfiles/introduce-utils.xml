@@ -38,8 +38,10 @@
 		<sequential>
 			<echo message="Running portal"/>
 			<java classname="gov.nih.nci.cagrid.introduce.portal.Introduce" fork="true">
+				<jvmarg value="-Djava.endorsed.dirs=extensions/endorsed" />
 				<sysproperty key="GLOBUS_LOCATION" value="${ext.globus.dir}"/>
 				<classpath refid="Portal.run.classpath"/>
+				
 			</java>
 		</sequential>
 	</macrodef>

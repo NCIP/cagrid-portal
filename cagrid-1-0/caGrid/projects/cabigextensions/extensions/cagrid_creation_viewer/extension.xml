@@ -4,7 +4,6 @@
 		   <menu>
             <title>File</title>
             <description>File</description>
-            <showIcons>true</showIcons>
             <components>
                 <component>
                     <title>Create caGrid Service Skeleton</title>
