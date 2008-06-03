@@ -285,6 +285,7 @@ public class ErrorDialog extends JDialog {
 	private JTextArea getDetails() {
 		if (details == null) {
 			details = new JTextArea();
+			details.setEditable(false);
 			if (strDetails != null) {
 				details.setText(this.strDetails);
 			} else if (exception != null) {
