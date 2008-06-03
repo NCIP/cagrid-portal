@@ -15,10 +15,12 @@ import org.cagrid.data.test.creation.DeleteOldServiceStep;
  * @author David Ervin
  * 
  * @created Jul 18, 2007 2:35:15 PM
- * @version $Id: SDK31StyleCreationStory.java,v 1.2 2008-06-03 18:23:30 dervin Exp $ 
+ * @version $Id: SDK31StyleCreationStory.java,v 1.3 2008-06-03 20:28:03 dervin Exp $ 
  */
 public class SDK31StyleCreationStory extends Story {
     public static final String INTRODUCE_DIR_PROPERTY = "introduce.base.dir";
+    
+    private DataTestCaseInfo tci = null;
 
     public SDK31StyleCreationStory() {
         setName("Data Service Creation with caCORE 3_1 Style");
@@ -43,19 +45,9 @@ public class SDK31StyleCreationStory extends Story {
         return dir;
     }
     
-
-    protected Vector steps() {
-        Vector<Step> steps = new Vector();
-        DataTestCaseInfo tci = getTestCaseInfo();
-        steps.add(new DeleteOldServiceStep(tci));
-        steps.add(new CreateSDK31StyleServiceStep(
-            tci, getIntroduceBaseDir()));
-        return steps;
-    }
     
-    
-    private DataTestCaseInfo getTestCaseInfo() {
-        DataTestCaseInfo tci = new DataTestCaseInfo() {
+    public boolean storySetUp() {
+        this.tci = new DataTestCaseInfo() {
             public String getServiceDirName() {
                 return getName();
             }
@@ -75,6 +67,22 @@ public class SDK31StyleCreationStory extends Story {
                 return "gov.nih.nci.cagrid.data.style.test.cacore31";
             }
         };
-        return tci;   
+
+        return true;
+    }
+    
+
+    protected Vector steps() {
+        Vector<Step> steps = new Vector();
+        steps.add(new DeleteOldServiceStep(tci));
+        steps.add(new CreateSDK31StyleServiceStep(
+            tci, getIntroduceBaseDir()));
+        return steps;
+    }
+    
+    
+    protected void storyTearDown() throws Throwable {
+        Step deleteStep = new DeleteOldServiceStep(tci);
+        deleteStep.runStep();
     }
 }
