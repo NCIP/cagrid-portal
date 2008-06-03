@@ -50,6 +50,7 @@ Build Instructions:
                            from. Defaults to $GLOBUS_LOCATION.
            - jboss.dir     The root directory of the JBoss
                            installation.
+		   - webapp.name   (optional) enables deploying to a different webapp name besides wsrf
 
     </description>
 
