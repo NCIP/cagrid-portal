@@ -11,8 +11,6 @@
 	<property name="testing.port.assignment.mode" value="true" />
 	<!-- tells data tests the base directory in which to create data services -->
 	<property name="temp.test.service.dir" value="${basedir}/test_services"/>
-	<!-- tells system tests where to find the service containers -->
-	<property name="testing.containers.dir" value="${basedir}/ext/dependencies/resources/containers"/>	
 	
 	<target name="prepareClasspaths">
 		<path id="all.test.classpath">
@@ -53,8 +51,9 @@
 				<echo message="Testing service style @{style.name}" />
 				<var name="style.test.lib.file" value="${build.jars.dir}/${project.jar.prefix}style${cagrid.master.jar.separator}tests${cagrid.master.jar.separator}@{style.name}.jar" />
 				<junit dir="${introduce.dir}" printsummary="yes" haltonerror="${halt.on.error}" haltonfailure="${halt.on.error}" errorproperty="@{style.name}.style.test.failed" failureproperty="@{style.name}.style.test.failed" showoutput="true" fork="yes" forkmode="once">
-					<jvmarg value="-Dintroduce.base.dir=${introduce.dir}" />
-					<jvmarg value="-Dbuild.dir=${test.core.classes.dir}" />
+					<sysproperty key="introduce.base.dir" value="${introduce.dir}" />
+					<sysproperty key="build.dir" value="${test.core.classes.dir}" />
+					<sysproperty key="temp.test.service.dir" value="${temp.test.service.dir}"/>
 					<classpath refid="all.test.classpath" />
 					<classpath>
 						<pathelement path="${test.core.classes.dir}" />
