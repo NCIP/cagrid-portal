@@ -16,7 +16,8 @@
 
 
   <publications>
-    <!-- no published artifacts yet -->
+	<artifact name="caGrid-${ivy.module}" conf="default" type="jar"/>
+	
   </publications>
 
   <dependencies>
