@@ -52,6 +52,8 @@ public class GlobusServiceContainer extends ServiceContainer {
 
     public static final int DEFAULT_SHUTDOWN_WAIT_TIME = 60; // seconds
     public static final int DEFAULT_STARTUP_WAIT_TIME = 60; // seconds
+    
+    public static final int MAX_SHUTDOWN_RETRY = 20;
 
     public static final String ENV_ANT_HOME = "ANT_HOME";
     public static final String ENV_GLOBUS_LOCATION = "GLOBUS_LOCATION";
@@ -182,8 +184,10 @@ public class GlobusServiceContainer extends ServiceContainer {
         try {
             retval = proc.waitFor();
             try {
-                while (isGlobusRunningCounter()) {
+                int retryCount = 0;
+                while (isGlobusRunningCounter() && retryCount < MAX_SHUTDOWN_RETRY) {
                     Thread.sleep(500);
+                    retryCount++;
                 }
             } catch (Exception ex) {
                 // whatever
