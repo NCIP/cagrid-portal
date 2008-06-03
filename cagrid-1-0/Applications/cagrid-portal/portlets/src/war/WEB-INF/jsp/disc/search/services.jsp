@@ -287,9 +287,9 @@
                 <td valign="top" style="padding-right:5px; text-align:right"><b>Search Fields:</b></td>
                 <td valign="top">
                     <select name="searchFields" multiple size="8">
-                    	<option value="publicID">caDSR Public ID (CDE)</option>
-                    	<option value="conceptCode">Concept Code</option>
-                    	<option value="conceptName">Concept Name</option>
+                        <option value="publicID">caDSR Public ID (CDE)</option>
+                        <option value="conceptCode">Concept Code</option>
+                        <option value="conceptName">Concept Name</option>
                         <option value="serviceUrl">URL</option>
                         <option value="serviceName">Name</option>
                         <option value="serviceDescription">Description</option>
@@ -385,7 +385,7 @@
                         $('evsConceptDefinitionValue').innerHTML= selectedTag.definitation;
                         $('keywords').value=selectedTag.code;
                         $('evsConceptCodeValue').innerHTML= selectedTag.code;
-
+                        $("discoveryResultDiv").innerHTML = '<img src="<c:url value="/images/indicator.gif"/>"/>';
                         EVSAutomcompleter.resultCount(selectedTag.code,<portlet:namespace/>handleResultCount);
                         }});
 
