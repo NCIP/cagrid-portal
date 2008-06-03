@@ -52,8 +52,11 @@ public class DCQLFormulator implements QueryFormulator<DCQLQuery> {
 
     private gov.nih.nci.cagrid.dcql.Object toTarget(
             gov.nih.nci.cagrid.dcql.Object targetObject, CriteriaBean bean) {
+    	
         targetObject.setName(bean.getUmlClass().getPackageName() + "."
                 + bean.getUmlClass().getClassName());
+        
+        logger.debug("TARGET: " + targetObject.getName());
 
         List<Attribute> attEls = new ArrayList<Attribute>();
         List<Group> groupEls = new ArrayList<Group>();
@@ -62,6 +65,8 @@ public class DCQLFormulator implements QueryFormulator<DCQLQuery> {
 
         // Add attributes
         for (CriterionBean criterion : bean.getCriteria()) {
+        	
+        	logger.debug("CRITERION: " + criterion.getPath() + ", " + criterion.getPath() + ", " + criterion.getValue());
 
             Predicate predicate = Predicate.fromString(criterion.getPredicate());
             if (predicate.equals(Predicate.IS_NULL)
@@ -89,6 +94,9 @@ public class DCQLFormulator implements QueryFormulator<DCQLQuery> {
 
         // Add associations
         for (AssociationBean assocBean : bean.getAssociations()) {
+        	
+        	logger.debug("ROLE: " + assocBean.getRoleName());
+        	
             if (assocBean.getRoleName().startsWith(QueryConstants.FOREIGN_UML_CLASS_PREFIX)) {
                 ForeignAssociation assoc = new ForeignAssociation();
                 assoc.setTargetServiceURL(assocBean.getCriteriaBean().getUmlClass().getModel().getService().getUrl());
@@ -96,6 +104,8 @@ public class DCQLFormulator implements QueryFormulator<DCQLQuery> {
                 gov.nih.nci.cagrid.dcql.JoinCondition joinCondition = new gov.nih.nci.cagrid.dcql.JoinCondition(assocBean.getCriteriaBean().getJoin().getForeignAttributeName(), assocBean.getCriteriaBean().getJoin().getLocalAttributeName(),
                         ForeignPredicate.fromString(assocBean.getCriteriaBean().getJoin().getPredicate()));
 
+                logger.debug("JOIN: " + joinCondition.getLocalAttributeName() + " " + joinCondition.getPredicate().getValue() + " " + joinCondition.getForeignAttributeName());
+                
                 assoc.setJoinCondition(joinCondition);
                 gov.nih.nci.cagrid.dcql.Object obj = new gov.nih.nci.cagrid.dcql.Object();
                 assoc.setForeignObject(obj);
@@ -109,9 +119,11 @@ public class DCQLFormulator implements QueryFormulator<DCQLQuery> {
             }
         }
 
-        boolean needGroup = needGroup(attEls.size(), groupEls.size(), assocEls
-				.size(), fassocEls.size());
+        boolean needGroup = needGroup(attEls, groupEls, assocEls, fassocEls);
         if(needGroup){
+        	
+        	logger.debug("GROUPING");
+        	
             Group targetGroup = new Group();
             targetGroup.setLogicRelation(LogicalOperator.AND);
         	targetObject.setGroup(targetGroup);
@@ -134,6 +146,9 @@ public class DCQLFormulator implements QueryFormulator<DCQLQuery> {
 										.size()]));
         	}
         }else{
+        	
+        	logger.debug("NOT GROUPING");
+        	
         	if(attEls.size() > 0){
         		targetObject.setAttribute(attEls.get(0));
         	}
@@ -152,13 +167,17 @@ public class DCQLFormulator implements QueryFormulator<DCQLQuery> {
 
     }
     
-    private boolean needGroup(int... sizes) {
+    private boolean needGroup(List... lists) {
+    	int numSizesGreaterThanOne = 0;
 		int numSizesGreaterThanZero = 0;
-		for(int size : sizes){
-			if(size > 0){
+		for(List list : lists){
+			if(list.size() > 0){
 				numSizesGreaterThanZero++;
 			}
+			if(list.size() > 1){
+				numSizesGreaterThanOne++;
+			}
 		}
-		return numSizesGreaterThanZero > 1;
+		return numSizesGreaterThanZero > 1 || numSizesGreaterThanOne > 0;
 	}
 }
