@@ -181,6 +181,13 @@ public class GlobusServiceContainer extends ServiceContainer {
         int retval = 0;
         try {
             retval = proc.waitFor();
+            try {
+                while (isGlobusRunningCounter()) {
+                    Thread.sleep(500);
+                }
+            } catch (Exception ex) {
+                // whatever
+            }
         } catch (InterruptedException e) {
             throw new ContainerException("Exception error shutting down globus", e);
         }
