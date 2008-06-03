@@ -3,8 +3,6 @@ package org.cagrid.data.style.test.cacore32;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.data.ExtensionDataUtils;
 import gov.nih.nci.cagrid.data.common.CastorMappingUtil;
-import gov.nih.nci.cagrid.data.creation.CreationStep;
-import gov.nih.nci.cagrid.data.creation.DataTestCaseInfo;
 import gov.nih.nci.cagrid.data.extension.Data;
 import gov.nih.nci.cagrid.data.extension.ServiceFeatures;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
@@ -16,6 +14,9 @@ import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import java.io.File;
 import java.io.InputStream;
 
+import org.cagrid.data.test.creation.CreationStep;
+import org.cagrid.data.test.creation.DataTestCaseInfo;
+
 /** 
  *  CreateSDK32StyleServiceStep
  *  Step to test creation of a data service using cacore32 style
@@ -23,7 +24,7 @@ import java.io.InputStream;
  * @author David Ervin
  * 
  * @created Jul 18, 2007 2:53:54 PM
- * @version $Id: CreateSDK32StyleServiceStep.java,v 1.1 2008-06-03 18:17:46 dervin Exp $ 
+ * @version $Id: CreateSDK32StyleServiceStep.java,v 1.2 2008-06-03 18:24:26 dervin Exp $ 
  */
 public class CreateSDK32StyleServiceStep extends CreationStep {
 
@@ -77,7 +78,7 @@ public class CreateSDK32StyleServiceStep extends CreationStep {
     private ServiceDescription getServiceDescription() throws Throwable {
         // verify the service model exists
         System.out.println("Verifying the service model file exists");
-        File serviceModelFile = new File(serviceInfo.getDir() + File.separator + IntroduceConstants.INTRODUCE_XML_FILE);
+        File serviceModelFile = new File(serviceInfo.getDir(), IntroduceConstants.INTRODUCE_XML_FILE);
         assertTrue("Service model file did not exist: " + serviceModelFile.getAbsolutePath(), serviceModelFile.exists());
         assertTrue("Service model file cannot be read: " + serviceModelFile.getAbsolutePath(), serviceModelFile.canRead());
         
@@ -110,7 +111,7 @@ public class CreateSDK32StyleServiceStep extends CreationStep {
     
     
     private void storeExtensionData(Data data) throws Throwable {
-        File serviceModelFile = new File(serviceInfo.getDir() + File.separator + IntroduceConstants.INTRODUCE_XML_FILE);
+        File serviceModelFile = new File(serviceInfo.getDir(), IntroduceConstants.INTRODUCE_XML_FILE);
         ServiceDescription serviceDesc = getServiceDescription();
         
         // get the extension data, set service style to cacore31
@@ -127,6 +128,7 @@ public class CreateSDK32StyleServiceStep extends CreationStep {
         }
         assertNotNull("Data service extension was not found in the service model", dataExtension);
         ExtensionDataUtils.storeExtensionData(dataExtension.getExtensionData(), data);
-        Utils.serializeDocument(serviceModelFile.getAbsolutePath(), serviceDesc, IntroduceConstants.INTRODUCE_SKELETON_QNAME);
+        Utils.serializeDocument(serviceModelFile.getAbsolutePath(), serviceDesc, 
+            IntroduceConstants.INTRODUCE_SKELETON_QNAME);
     }
 }

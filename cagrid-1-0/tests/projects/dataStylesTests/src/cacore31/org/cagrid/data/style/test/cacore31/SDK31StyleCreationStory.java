@@ -1,12 +1,12 @@
 package org.cagrid.data.style.test.cacore31;
 
-import gov.nih.nci.cagrid.data.creation.DataTestCaseInfo;
-import gov.nih.nci.cagrid.data.creation.DeleteOldServiceStep;
 import gov.nih.nci.cagrid.testing.system.haste.Step;
 import gov.nih.nci.cagrid.testing.system.haste.Story;
 
-import java.io.File;
 import java.util.Vector;
+
+import org.cagrid.data.test.creation.DataTestCaseInfo;
+import org.cagrid.data.test.creation.DeleteOldServiceStep;
 
 /** 
  *  SDK31StyleCreationStory
@@ -15,7 +15,7 @@ import java.util.Vector;
  * @author David Ervin
  * 
  * @created Jul 18, 2007 2:35:15 PM
- * @version $Id: SDK31StyleCreationStory.java,v 1.1 2008-06-03 18:17:46 dervin Exp $ 
+ * @version $Id: SDK31StyleCreationStory.java,v 1.2 2008-06-03 18:23:30 dervin Exp $ 
  */
 public class SDK31StyleCreationStory extends Story {
     public static final String INTRODUCE_DIR_PROPERTY = "introduce.base.dir";
@@ -43,13 +43,6 @@ public class SDK31StyleCreationStory extends Story {
         return dir;
     }
     
-    
-    // used to make sure that if we are going to use a junit testsuite to 
-    // test this that the test suite will not error out 
-    // looking for a single test......
-    public void testDummy() throws Throwable {
-    }
-
 
     protected Vector steps() {
         Vector<Step> steps = new Vector();
@@ -63,9 +56,8 @@ public class SDK31StyleCreationStory extends Story {
     
     private DataTestCaseInfo getTestCaseInfo() {
         DataTestCaseInfo tci = new DataTestCaseInfo() {
-            public String getDir() {
-                return (new File("..")).getAbsolutePath() + File.separator + "dataExtensions" 
-                    + File.separator + "test" + File.separator + "TestCaCORE31StyleService";
+            public String getServiceDirName() {
+                return getName();
             }
 
             
@@ -83,7 +75,6 @@ public class SDK31StyleCreationStory extends Story {
                 return "gov.nih.nci.cagrid.data.style.test.cacore31";
             }
         };
-        return tci;
-        
+        return tci;   
     }
 }
