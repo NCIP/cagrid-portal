@@ -1,5 +1,5 @@
 <%@ include file="/WEB-INF/jsp/include/includes.jspf" %>
-<%@ taglib prefix="tags" tagdir="/WEB-INF/tags"%>
+<%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
 
 <script
         src="<c:url value="/js/scriptaculous/prototype.js"/>"
@@ -43,17 +43,19 @@
     <div class="value">
         <c:choose>
             <c:when test="${serviceInfo.type == 'DATA'}">
-                <img src="<c:url value="/images/data-services.gif"/>" height="20" />
+                <img src="<c:url value="/images/data-services.gif"/>" height="20"/>
             </c:when>
             <c:otherwise>
-                <img src="<c:url value="/images/analytical_services.gif"/>" height="20" />
+                <img src="<c:url value="/images/analytical_services.gif"/>" height="20"/>
             </c:otherwise>
         </c:choose>
     </div>
 </div>
 </c:forEach>
 
+
 <br/>
+
 <div class="row">
     <div class="label">
         There are currently...
@@ -66,7 +68,7 @@
                     <portlet:param name="operation" value="selectDirectoryForDiscovery"/>
                     <portlet:param name="selectedDirectory" value="${statusBean.participantsDirectory.id}"/>
                 </portlet:actionURL>
-                <a style="text-align:left;" href="<c:out value="${participantsAction}"/>" >
+                <a style="text-align:left;" href="<c:out value="${participantsAction}"/>">
                     <c:out value="${fn:length(statusBean.participantsDirectory.objects)}"/>
                 </a>
             </td>
@@ -112,3 +114,19 @@
         </tr>
     </table>
 </div>
+
+
+<br/>
+<c:if test="${not empty statusBean.lastUpdated}">
+<div>
+    <div>
+        <tags:infoPopup id="<portlet:namespace>status" popup_href="javascript:void();"
+                        popup_name="Last Updated:"
+                        popup_text="Portal frequently searches for
+                            new services and updates its database."/>
+        <span>
+                ${statusBean.lastUpdated}
+        </span>
+    </div>
+</div>
+</c:if>
