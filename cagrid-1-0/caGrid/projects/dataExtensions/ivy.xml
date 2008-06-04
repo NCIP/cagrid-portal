@@ -42,8 +42,6 @@
     <artifact name="caGrid-${ivy.module}-style-cacore32" conf="style-cacore32" type="jar"/>
 
     <artifact name="caGrid-${ivy.module}-tests" conf="test" type="jar"/>
-    <artifact name="caGrid-${ivy.module}-style-tests-cacore31" conf="test" type="jar"/>
-    <artifact name="caGrid-${ivy.module}-style-tests-cacore32" conf="test" type="jar"/>
   </publications>
 
   <dependencies>

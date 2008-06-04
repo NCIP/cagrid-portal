@@ -236,31 +236,7 @@
 			<classpath refid="test.classpath" />
 		</javac>
 	</target>
-
-
-	<!-- compiles the data service styles -->
-	<target name="compileStyleTests" depends="compileCore, compileUi, compileSdkStyle, compileStyles, compileCoreTests">
-		<!-- must not run in parallel due to use of a variable -->
-		<for list="${data.service.styles}" parallel="false" param="style.name" trim="true">
-			<sequential>
-				<echo message="Compiling tests for style @{style.name}" />
-				<!-- CANNOT USE A PROPERTY, since they are immutable once set -->
-				<var name="test.build.style.dir" value="${build.dir}/@{style.name}/test/classes" />
-				<mkdir dir="${build.dir}/@{style.name}/test" />
-				<mkdir dir="${test.build.style.dir}" />
-				<javac srcdir="${test.src.dir}/style/@{style.name}" destdir="${test.build.style.dir}" debug="${java.debug}" source="${java.source}">
-					<classpath>
-						<pathelement location="${build.core.dest}" />
-						<pathelement location="${build.ui.dest}" />
-						<pathelement location="${build.sdkstyle.dest}" />
-						<pathelement location="${test.core.classes.dir}" />
-						<path refid="test.classpath" />
-					</classpath>
-				</javac>
-			</sequential>
-		</for>
-	</target>
-
+	
 
 	<!-- jars the common classes -->
 	<target name="jarCore" depends="compileCore" description="Builds and jars the core classes">
@@ -333,27 +309,6 @@
 						<include name="**/*.class" />
 					</fileset>
 					<fileset dir="${style.src.dir}">
-						<include name="**/*" />
-					</fileset>
-				</jar>
-			</sequential>
-		</for>
-	</target>
-
-
-	<!-- jar the style tests -->
-	<target name="jarStyleTests" depends="compileStyleTests" description="Jars the style tests">
-		<for list="${data.service.styles}" parallel="false" param="style.name" trim="true">
-			<sequential>
-				<echo message="Jaring tests for style @{style.name}" />
-				<var name="style.test.lib.file" value="${build.jars.dir}/${project.jar.prefix}style-tests-@{style.name}${project.jar.suffix}" />
-				<var name="test.build.style.dir" value="${build.dir}/@{style.name}/test/classes" />
-				<var name="test.style.src.dir" value="${test.src.dir}/style/@{style.name}" />
-				<jar destfile="${style.test.lib.file}">
-					<fileset dir="${test.build.style.dir}">
-						<include name="**/*.class" />
-					</fileset>
-					<fileset dir="${test.style.src.dir}">
 						<include name="**/*" />
 					</fileset>
 				</jar>
@@ -507,5 +462,5 @@
 
 	
 	<!-- build and jar everything -->
-	<target name="all" depends="jarCore, jarUi, jarUpgrades, jarSdkStyle, jarStyles, jarCoreTests, jarStyleTests" description="Builds and jars all the classes in the project" />
+	<target name="all" depends="jarCore, jarUi, jarUpgrades, jarSdkStyle, jarStyles, jarCoreTests" description="Builds and jars all the classes in the project" />
 </project>
