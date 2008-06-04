@@ -133,7 +133,20 @@ public abstract class <%=info.getService().getName()%>ClientBase extends Service
     }
 
 
+    /**
+    * Call this method if you want to subscribe and have the callbacks come back to the 
+    * client class.  You will want to overload the deliver method if this is the case.
+    */
     public org.oasis.wsn.SubscribeResponse subscribe(QName qname) throws RemoteException, ContainerException, MalformedURIException {
+        return subscribe(qname,this);
+    }
+    
+    
+    /**
+    * Call this method if you want to subscribe and provide a NotifyCallback to handle the
+    * messages
+    */
+    public org.oasis.wsn.SubscribeResponse subscribe(QName qname, NotifyCallback callback) throws RemoteException, ContainerException, MalformedURIException {
         synchronized (portTypeMutex) {
             configureStubSecurity((Stub) portType, "subscribe");
 
@@ -141,7 +154,7 @@ public abstract class <%=info.getService().getName()%>ClientBase extends Service
                 // Create client side notification consumer
                 consumer = org.globus.wsrf.NotificationConsumerManager.getInstance();
                 consumer.startListening();
-                consumerEPR = consumer.createNotificationConsumer(this);
+                consumerEPR = consumer.createNotificationConsumer(callback);
             }
 
             org.oasis.wsn.Subscribe params = new org.oasis.wsn.Subscribe();
