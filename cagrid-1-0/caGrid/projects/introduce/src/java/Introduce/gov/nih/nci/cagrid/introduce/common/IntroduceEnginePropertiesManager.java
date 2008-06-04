@@ -38,28 +38,6 @@ public final class IntroduceEnginePropertiesManager {
     }
 
 
-    public static String getStatisticSite() {
-        return getIntroducePropertyValue(IntroduceConstants.INTRODUCE_STATS_SITE);
-    }
-
-
-    public static int getStatisticPort() {
-        int port = -1;
-        String prop = getIntroducePropertyValue(IntroduceConstants.INTRODUCE_STATS_PORT);
-        try {
-            port = Integer.parseInt(prop);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return port;
-    }
-
-
-    public static boolean getCollectStats() {
-        return Boolean.parseBoolean(getIntroducePropertyValue(IntroduceConstants.INTRODUCE_STATS_COLLECT));
-    }
-
 
     public static String getIntroducePropertyValue(String propertyKey) {
         Properties engineProps = new Properties();
