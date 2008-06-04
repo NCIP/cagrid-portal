@@ -145,8 +145,14 @@
 
 
         <copy todir="${portlets.build.war.dir}"
-              overwrite="true" filtering="true">
+              overwrite="true">
             <fileset dir="${portlets.src.war.dir}"/>
+        </copy>
+
+        <!--cannot apply fitlter to entire war directory-->
+        <copy todir="${portlets.build.war.dir}/WEB-INF/classes"
+              overwrite="true" filtering="true">
+            <fileset dir="${portlets.src.war.dir}/WEB-INF/classes"/>
             <filterset>
                 <filter token="evs40.remoteAPI.url" value="${evs40.remoteAPI.url}"/>
             </filterset>
