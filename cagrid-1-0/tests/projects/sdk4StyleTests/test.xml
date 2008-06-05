@@ -1,0 +1,83 @@
+<!-- ======================================================================= -->
+<!-- caGrid Data Services test build file                                    -->
+<!-- ======================================================================= -->
+<project name="caGrid-data_tests_harness" basedir=".">
+	
+	<!-- should all testing stop on the first error or failure encountered? -->
+	<property name="halt.on.error" value="false" />
+	<!-- message when tests fail -->
+	<property name="failed.message" value="Tests failed! Check test reports." />
+	<!-- tells the service container factories to assign ports in testing mode -->
+	<property name="testing.port.assignment.mode" value="true" />
+	<!-- tells data tests the base directory in which to create data services -->
+	<property name="temp.test.service.dir" value="${basedir}/test_services"/>
+	
+
+	<!-- properties for caCORE SDK application's location -->
+	<!-- TODO: These will point to the SDK example VM -->
+	<property name="remote.sdk.host.name" value="http://kramer.bmi.ohio-state.edu" />
+	<property name="remote.sdk.host.port" value="8080" />
+
+	
+	<target name="prepareClasspaths">
+		<path id="all.test.classpath">
+			<pathelement path="${classes.dir}" />
+			<pathelement path="${stubs.dest}" />
+			<path refid="test.run.classpath" />
+			<fileset dir="${jar.dir}">
+				<include name="**/*.jar"/>
+			</fileset>
+		</path>
+	</target>
+	
+
+	<target name="test" depends="testCreation, testInvocation" description="Runs tests"/>
+	
+	
+	<target name="testCreation" depends="jar, prepareClasspaths" description="Runs the creation tests.">
+		<mkdir dir="${junit.results.dir}" />
+		<junit dir="${introduce.dir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="yes" forkmode="once">
+			<!-- is this needed any more? -->
+			<sysproperty key="build.dirs" value="${test.classes.dir}" />
+			<sysproperty key="build.dir" value="${test.classes.dir}" />
+			<sysproperty key="introduce.base.dir" value="${introduce.dir}" />
+			<sysproperty key="remote.sdk.host.name" value="${remote.sdk.host.name}" />
+			<sysproperty key="remote.sdk.host.port" value="${remote.sdk.host.port}" />
+			<classpath refid="all.test.classpath" />
+			<classpath>
+				<pathelement path="${test.classes.dir}" />
+			</classpath>
+			<formatter type="xml" />
+			<batchtest fork="yes" todir="${junit.results.dir}">
+				<fileset dir="${test.src.dir}">
+					<include name="**/system/*CreationTest.java" />
+				</fileset>
+			</batchtest>
+		</junit>
+		<fail message="Tests failed! Check test reports." if="test.failed" />
+	</target>
+
+	
+	<target name="testInvocation" depends="jar, prepareClasspaths" description="Runs the system tests.">
+		<mkdir dir="${junit.results.dir}" />
+		<junit dir="${introduce.dir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="yes" forkmode="once">
+			<sysproperty key="build.dirs" value="${test.classes.dir}" />
+			<sysproperty key="introduce.base.dir" value="${introduce.dir}" />
+			<sysproperty key="remote.sdk.host.name" value="${remote.sdk.host.name}" />
+			<sysproperty key="remote.sdk.host.port" value="${remote.sdk.host.port}" />
+			<jvmarg value="-Dbuild.dir=${test.classes.dir}" />
+			<classpath refid="all.test.classpath" />
+			<classpath>
+				<pathelement path="${test.classes.dir}" />
+			</classpath>
+			<formatter type="xml" />
+			<batchtest fork="yes" todir="${junit.results.dir}">
+				<fileset dir="${test.src.dir}">
+					<include name="**/system/*Test.java" />
+					<exclude name="**/system/*CreationTest.java" />
+				</fileset>
+			</batchtest>
+		</junit>
+		<fail message="Tests failed! Check test reports." if="test.failed" />
+	</target>
+</project>
