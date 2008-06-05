@@ -14,7 +14,14 @@
 	<property name="jar.dir" value="${build.dir}/lib" />
 	<property name="project.jarfile" value="${jar.dir}/${project.name}-${project.version}.jar" />
 	<property name="resources.jarfile" value="${jar.dir}/${project.name}-resources-${project.version}.jar" />
+	<property name="lib.dir" value="${basedir}/lib"/>
 	<property name="ext.lib.dir" value="${basedir}/ext/dependencies/jars" />
+	
+	<!-- dependencies on SDK clients -->
+	<property name="ext.remote-client.dir" location="${build.dir}/remote-client" />
+	<property name="ext.local-client.dir" location="${build.dir}/local-client" />
+	<property name="ext.remote-client.lib.dir" location="${ext.remote-client.dir}/lib" />
+	<property name="ext.local-client.lib.dir" location="${ext.local-client.dir}/lib" />
 	
 	<!-- depends on Introduce toolkit -->
 	<property name="introduce.dir" value="../../../caGrid/projects/introduce" />
@@ -88,6 +95,14 @@
 		<mkdir dir="${build.dir}"/>
 		<mkdir dir="${classes.dir}"/>
 		<mkdir dir="${jar.dir}"/>
+		<antcall target="unpackSdkClients"/>
+	</target>
+	
+	
+	<!-- unpacks the caCORE SDK client zip files -->
+	<target name="unpackSdkClients">
+		<unzip src="${lib.dir}/RemoteClient.zip" dest="${ext.remote-client.dir}" />
+		<unzip src="${lib.dir}/LocalClient.zip" dest="${ext.local-client.dir}" />
 	</target>
 	
 
