@@ -86,8 +86,8 @@
 		</copy>
 
 		<!-- check that we actually created the critical files we need at runtime-->
-		<available file="${conf.dir}/introduce.engine.properties" property="introduce.engine.properties.available" />
-		<fail message="Critical configuration file [${conf.dir}/introduce.engine.properties] not found!" unless="introduce.engine.properties.available" />
+		<available file="${conf.dir}/introduce.properties" property="introduce.properties.available" />
+		<fail message="Critical configuration file [${conf.dir}/introduce.properties] not found!" unless="introduce.properties.available" />
 	</target>
 
 

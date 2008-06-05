@@ -10,9 +10,3 @@ introduce.default.index.service=@cagrid.master.index.service.url@
 #Grid Grouper
 introduce.gridgrouper.load.on.startup=false
 introduce.gridgrouper.urls=@cagrid.master.gridgrouper.service.url@
-
-# Default Service Creation Information
-introduce.default.service.name=HelloWorld
-introduce.default.service.namespace=http://helloworld.cagrid.org/HelloWorld
-introduce.default.service.package=org.cagrid.helloworld
-introduce.default.deployment.prefix=cagrid

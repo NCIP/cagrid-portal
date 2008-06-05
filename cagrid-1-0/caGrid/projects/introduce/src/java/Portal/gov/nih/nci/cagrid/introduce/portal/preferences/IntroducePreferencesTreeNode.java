@@ -23,8 +23,6 @@ public class IntroducePreferencesTreeNode extends PreferencesTypeTreeNode {
 	public void initialize() {
 		ServiceURLsPreferencesTreeNode serviceURLs = new ServiceURLsPreferencesTreeNode("Service URLs", getModel());
 		getModel().insertNodeInto(serviceURLs, this, this.getChildCount());
-		PreferencesPreferencesTreeNode general = new PreferencesPreferencesTreeNode("Preferences", getModel());
-		getModel().insertNodeInto(general, this, this.getChildCount());
 	}
 
 }
