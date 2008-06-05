@@ -54,54 +54,54 @@ public class Backup {
 			outDir.mkdirs();
 		}
 
-//		List<GridService> gridServices = (List<GridService>) session
-//				.createQuery("from GridService").list();
-//		for (GridService gridService : gridServices) {
-//			if (gridService.getCurrentStatus().equals(ServiceStatus.ACTIVE)) {
-//				try {
-//					String url = gridService.getUrl();
-//
-//					System.out.println("Backing up " + url);
-//
-//					Metadata meta = PortalUtils.getMetadata(url, 10000);
-//					String urlHash = PortalUtils.createHash(url);
-//					File gsDir = new File(outDir.getAbsolutePath()
-//							+ "/services/" + urlHash);
-//					gsDir.mkdirs();
-//					File gsFile = new File(gsDir.getAbsolutePath()
-//							+ "/service.dat");
-//					IndexService idxSvc = gridService.getIndexServices().get(0);
-//					writeToFile(gsFile, gridService.getUrl() + SEPARATOR
-//							+ idxSvc.getUrl() + SEPARATOR
-//							+ gridService.getMetadataHash());
-//
-//					StringWriter w = new StringWriter();
-//					MetadataUtils.serializeServiceMetadata(meta.smeta, w);
-//					File smFile = new File(gsDir.getAbsolutePath()
-//							+ "/serviceMetadata.xml");
-//					writeToFile(smFile, w.getBuffer().toString());
-//					if (meta.dmodel != null) {
-//						w = new StringWriter();
-//						File dmFile = new File(gsDir.getAbsolutePath()
-//								+ "/domainModel.xml");
-//						MetadataUtils.serializeDomainModel(meta.dmodel, w);
-//						writeToFile(dmFile, w.getBuffer().toString());
-//					}
-//					StringBuilder sb = new StringBuilder();
-//
-//					for (StatusChange status : gridService.getStatusHistory()) {
-//						sb.append(DATE_FORMAT.format(status.getTime())).append(
-//								SEPARATOR).append(status.getStatus()).append(
-//								"\n");
-//					}
-//					File statusFile = new File(gsDir.getAbsolutePath()
-//							+ "/status.dat");
-//					writeToFile(statusFile, sb.toString());
-//				} catch (Exception ex) {
-//					ex.printStackTrace();
-//				}
-//			}
-//		}
+		List<GridService> gridServices = (List<GridService>) session
+				.createQuery("from GridService").list();
+		for (GridService gridService : gridServices) {
+			if (gridService.getCurrentStatus().equals(ServiceStatus.ACTIVE)) {
+				try {
+					String url = gridService.getUrl();
+
+					System.out.println("Backing up " + url);
+
+					Metadata meta = PortalUtils.getMetadata(url, 10000);
+					String urlHash = PortalUtils.createHash(url);
+					File gsDir = new File(outDir.getAbsolutePath()
+							+ "/services/" + urlHash);
+					gsDir.mkdirs();
+					File gsFile = new File(gsDir.getAbsolutePath()
+							+ "/service.dat");
+					IndexService idxSvc = gridService.getIndexServices().get(0);
+					writeToFile(gsFile, gridService.getUrl() + SEPARATOR
+							+ idxSvc.getUrl() + SEPARATOR
+							+ gridService.getMetadataHash());
+
+					StringWriter w = new StringWriter();
+					MetadataUtils.serializeServiceMetadata(meta.smeta, w);
+					File smFile = new File(gsDir.getAbsolutePath()
+							+ "/serviceMetadata.xml");
+					writeToFile(smFile, w.getBuffer().toString());
+					if (meta.dmodel != null) {
+						w = new StringWriter();
+						File dmFile = new File(gsDir.getAbsolutePath()
+								+ "/domainModel.xml");
+						MetadataUtils.serializeDomainModel(meta.dmodel, w);
+						writeToFile(dmFile, w.getBuffer().toString());
+					}
+					StringBuilder sb = new StringBuilder();
+
+					for (StatusChange status : gridService.getStatusHistory()) {
+						sb.append(DATE_FORMAT.format(status.getTime())).append(
+								SEPARATOR).append(status.getStatus()).append(
+								"\n");
+					}
+					File statusFile = new File(gsDir.getAbsolutePath()
+							+ "/status.dat");
+					writeToFile(statusFile, sb.toString());
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+			}
+		}
 
 		File queriesDir = new File(outDir.getAbsolutePath() + "/queries");
 		queriesDir.mkdir();
