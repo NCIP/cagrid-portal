@@ -1,0 +1,37 @@
+delete from newsitems;
+delete from newschannels;
+
+insert into newschannels 
+(id, description, lastBuildDate, link, pubDate, title) 
+values 
+(1, 'caGrid Portal News', '2007-12-28 18:36:16', 
+'http://@HOST_AND_PORT@/web/guest/news', '2007-12-28 18:36:16', 'caGrid Portal News');
+
+
+insert into newsitems
+(id, description, height, link, pubDate, title, width, channel_id)
+values
+(1, 'caGrid Portal 2.0 has been released.', '250px', 
+'http://@HOST_AND_PORT@/cagridportlets/content/caGridPortalReleased.html', 
+'2007-12-28 18:37:20', 'caGrid Portal 2.0 Released', '100%', 1);
+
+insert into newsitems
+(id, description, height, link, pubDate, title, width, channel_id)
+values
+(2, 'caGrid 1.2 released', '250px', 
+'http://@HOST_AND_PORT@/cagridportlets/content/caGrid_1-2_Release.html', 
+'2008-04-14 16:39:34', 'caGrid 1.2 released', '100%', 1);
+
+insert into newsitems
+(id, description, height, link, pubDate, title, width, channel_id)
+values
+(3, 'caGrid in the News', '250px', 
+'http://@HOST_AND_PORT@/cagridportlets/content/caGrid_in_the_news.jsp', 
+'2008-05-16 16:39:34', 'caGrid makes list of top open source tools.', '100%', 1);
+
+insert into newsitems
+(id, description, height, link, pubDate, title, width, channel_id)
+values
+(4, 'caGrid Portal 2.0.2 has been released', '250px', 
+'http://@HOST_AND_PORT@/cagridportlets/content/caGridPortal_2-0-2_Released.html', 
+'2008-06-16 16:39:34', 'caGrid Portal 2.0.2 Released', '100%', 1);

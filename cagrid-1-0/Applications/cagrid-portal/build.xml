@@ -278,6 +278,27 @@
 			<arg value="tools/migration/2-0-1_to_2-0-2/export"/>
 		</java>
 	</target>
+	
+	<target name="insert-news">
+		<input message="Host and port:" addproperty="host"/>
+		<copy file="tools/migration/2-0-1_to_2-0-2/news.sql.template" 
+			tofile="tools/migration/2-0-1_to_2-0-2/news.sql" 
+			overwrite="true">
+			<filterset>
+                <filter token="HOST_AND_PORT"
+                        value="${host}"/>
+            </filterset>			
+		</copy>
+		<sql driver="${cagrid.portal.db.driver}"
+             url="${cagrid.portal.db.url}"
+             userid="${cagrid.portal.db.username}"
+             password="${cagrid.portal.db.password}"
+             src="tools/migration/2-0-1_to_2-0-2/news.sql">
+            <classpath>
+                <pathelement location="${db.jdbc.driver.jar}"/>
+            </classpath>
+        </sql>
+	</target>
 
 	
 </project>
