@@ -2,5 +2,5 @@
 <IntroducePortalConfiguration xmlns="gme://gov.nih.nci.cagrid.introduce/1/Configuration"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <NamespaceReplacementPolicy>ERROR</NamespaceReplacementPolicy>
-    <UpdateSiteURL>http://software.cagrid.org</UpdateSiteURL>
+    <UpdateSiteURL>@introduce.update.site@</UpdateSiteURL>
 </IntroducePortalConfiguration>

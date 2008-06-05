@@ -5,5 +5,5 @@
     <ServiceNamespace>http://helloworld.cagrid.org/HelloWorld</ServiceNamespace>
     <ServicePackage>org.cagrid.helloworld</ServicePackage>
     <DeploymentPrefix>cagrid</DeploymentPrefix>
-    <IndexServiceRegistrationURL>http://index.training.cagrid.org:8080/wsrf/services/DefaultIndexService</IndexServiceRegistrationURL>
+    <IndexServiceRegistrationURL>@cagrid.master.index.service.url@</IndexServiceRegistrationURL>
 </IntroduceServiceDefaults>

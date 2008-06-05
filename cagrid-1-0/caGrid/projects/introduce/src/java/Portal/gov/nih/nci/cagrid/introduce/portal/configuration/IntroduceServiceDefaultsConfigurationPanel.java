@@ -365,8 +365,7 @@ public class IntroduceServiceDefaultsConfigurationPanel extends ConfigurationBas
             
                 public void removeUpdate(DocumentEvent e) {
                     getIntroduceServiceDefaults().setIndexServiceRegistrationURL(indexServiceURLTextField.getText());
-            
-                }
+                 }
             
             
                 public void insertUpdate(DocumentEvent e) {
