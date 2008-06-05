@@ -52,14 +52,13 @@ import org.apache.commons.logging.LogFactory;
  * @author David Ervin
  * 
  * @created Jan 28, 2008 11:24:21 AM
- * @version $Id: SDK4StyleConfigurationStep.java,v 1.1 2008-06-05 18:02:23 dervin Exp $ 
+ * @version $Id: SDK4StyleConfigurationStep.java,v 1.2 2008-06-05 19:09:08 dervin Exp $ 
  */
 public class SDK4StyleConfigurationStep extends Step {
-    // TODO: base this on caGrid dir
-    public static final String SDKQUERY4_BASE_DIR = "../sdkQuery4";
+    public static final String SDK_4_TESTS_BASE_DIR_PROPERTY = "sdk4.tests.base.dir";    
     
-    public static final String EXT_SDK_DIR = SDKQUERY4_BASE_DIR + File.separator + "build/remote-client";
-    public static final String DOMAIN_MODEL_FILE = SDKQUERY4_BASE_DIR + File.separator + "test/resources/sdkExampleDomainModel.xml";
+    public static final String EXT_SDK_DIR = File.separator + "build" + File.separator + "remote-client";
+    public static final String DOMAIN_MODEL_FILE = File.separator + "resources" + File.separator + "sdkExampleDomainModel.xml";
     public static final String PROPERTY_REMOTE_HOST_NAME = "remote.sdk.host.name";
     public static final String PROPERTY_REMOTE_HOST_PORT = "remote.sdk.host.port";
     public static final String DEFAULT_REMOTE_HOST_NAME_VALUE = "http://localhost";
@@ -105,7 +104,7 @@ public class SDK4StyleConfigurationStep extends Step {
     private AbstractStyleConfigurationStep getQueryProcessorConfiguration() throws Exception {
         QueryProcessorBaseConfigurationStep configuration = 
             new QueryProcessorBaseConfigurationStep(getServiceInformation());
-        File remoteClientDir = new File(EXT_SDK_DIR);
+        File remoteClientDir = new File(getSdkRemoteClientDir());
         File remoteClientLibDir = new File(remoteClientDir, "lib");
         File remoteClientConfDir = new File(remoteClientDir, "conf");
         configuration.setApplicationName("example40");
@@ -132,7 +131,7 @@ public class SDK4StyleConfigurationStep extends Step {
     
     
     private void applyDomainModelConfiguration() throws Exception {
-        File domainModelFile = new File(DOMAIN_MODEL_FILE);
+        File domainModelFile = new File(getDomainModelFilename());
         setSelectedDomainModelFilename(domainModelFile);
     }
 
@@ -151,7 +150,7 @@ public class SDK4StyleConfigurationStep extends Step {
         String configJarFilename = getServiceInformation().getBaseDirectory().getAbsolutePath()
             + File.separator + "lib" + File.separator + applicationName + "-config.jar";
         // get the package names from the domain model
-        File domainModelFile = new File(DOMAIN_MODEL_FILE);
+        File domainModelFile = new File(getDomainModelFilename());
         FileReader modelReader = new FileReader(domainModelFile);
         DomainModel model = (DomainModel) Utils.deserializeObject(modelReader, DomainModel.class);
         UMLClass[] classes = model.getExposedUMLClassCollection().getUMLClass();
@@ -343,5 +342,19 @@ public class SDK4StyleConfigurationStep extends Step {
         } else {
             return typedProps[0];
         }
+    }
+    
+    
+    private static String getSdkRemoteClientDir() {
+        String basedir = System.getProperty(SDK_4_TESTS_BASE_DIR_PROPERTY);
+        assertNotNull("System property " + SDK_4_TESTS_BASE_DIR_PROPERTY + " was not defined!", basedir);
+        return basedir + EXT_SDK_DIR;
+    }
+    
+    
+    private static String getDomainModelFilename() {
+        String basedir = System.getProperty(SDK_4_TESTS_BASE_DIR_PROPERTY);
+        assertNotNull("System property " + SDK_4_TESTS_BASE_DIR_PROPERTY + " was not defined!", basedir);
+        return basedir + DOMAIN_MODEL_FILE;
     }
 }

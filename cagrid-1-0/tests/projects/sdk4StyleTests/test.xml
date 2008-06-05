@@ -11,7 +11,8 @@
 	<property name="testing.port.assignment.mode" value="true" />
 	<!-- tells data tests the base directory in which to create data services -->
 	<property name="temp.test.service.dir" value="${basedir}/test_services"/>
-	
+	<!-- tells the creation tests where libraries and resources live -->
+	<property name="sdk4.tests.base.dir" value="${basedir}"/>	
 
 	<!-- properties for caCORE SDK application's location -->
 	<!-- TODO: These will point to the SDK example VM -->
@@ -43,6 +44,7 @@
 			<sysproperty key="introduce.base.dir" value="${introduce.dir}" />
 			<sysproperty key="remote.sdk.host.name" value="${remote.sdk.host.name}" />
 			<sysproperty key="remote.sdk.host.port" value="${remote.sdk.host.port}" />
+			<sysproperty key="sdk4.tests.base.dir" value="${sdk4.tests.base.dir}"/>
 			<classpath refid="all.test.classpath" />
 			<classpath>
 				<pathelement path="${test.classes.dir}" />
