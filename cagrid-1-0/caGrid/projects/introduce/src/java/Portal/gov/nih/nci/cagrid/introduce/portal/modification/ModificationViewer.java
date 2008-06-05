@@ -3,6 +3,7 @@ package gov.nih.nci.cagrid.introduce.portal.modification;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.common.portal.MultiEventProgressBar;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
+import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.common.portal.PromptButtonDialog;
 import gov.nih.nci.cagrid.common.portal.validation.IconFeedbackPanel;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
@@ -29,6 +30,7 @@ import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 import gov.nih.nci.cagrid.introduce.extension.utils.ExtensionUtilities;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
+import gov.nih.nci.cagrid.introduce.portal.configuration.PortalConfigurationUtils;
 import gov.nih.nci.cagrid.introduce.portal.extension.ServiceModificationUIPanel;
 import gov.nih.nci.cagrid.introduce.portal.modification.discovery.NamespaceTypeDiscoveryComponent;
 import gov.nih.nci.cagrid.introduce.portal.modification.extensions.ExtensionsManagerPanel;
@@ -2009,10 +2011,7 @@ public class ModificationViewer extends ApplicationComponent {
         NamespaceTypeDiscoveryComponent discoveryComponent = (NamespaceTypeDiscoveryComponent) getDiscoveryTabbedPane()
             .getSelectedComponent();
 
-        String replacementPolicy = ResourceManager
-            .getConfigurationProperty(IntroduceConstants.NAMESPACE_TYPE_REPLACEMENT_POLICY_PROPERTY);
-
-        NamespaceType[] types = discoveryComponent.createNamespaceType(schemaDir, replacementPolicy, progBar);
+        NamespaceType[] types = discoveryComponent.createNamespaceType(schemaDir, PortalConfigurationUtils.getIntroducePortalConfiguration().getNamespaceReplacementPolicy(), progBar);
 
         List<String> messages = new ArrayList<String>();
         if (types != null) {

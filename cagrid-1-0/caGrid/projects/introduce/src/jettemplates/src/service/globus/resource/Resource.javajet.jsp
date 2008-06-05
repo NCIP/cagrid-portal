@@ -19,7 +19,7 @@ import org.globus.wsrf.ResourceKey;
 /** 
  * The implementation of this <%=arguments.getService().getName()%>Resource type.
  * 
- * @created by Introduce Toolkit version <%=IntroduceEnginePropertiesManager.getIntroduceVersion()%>
+ * @created by Introduce Toolkit version <%=IntroducePropertiesManager.getIntroduceVersion()%>
  * 
  */
 public class <%=arguments.getService().getName()%>Resource extends <%=arguments.getService().getName()%>ResourceBase {

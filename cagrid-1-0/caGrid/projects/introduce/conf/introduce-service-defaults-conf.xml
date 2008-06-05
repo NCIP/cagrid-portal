@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<IntroduceServiceDefaults xmlns="gme://gov.nih.nci.cagrid.introduce/1/Configuration"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <ServiceName>HelloWorld</ServiceName>
+    <ServiceNamespace>http://helloworld.cagrid.org/HelloWorld</ServiceNamespace>
+    <ServicePackage>org.cagrid.helloworld</ServicePackage>
+    <DeploymentPrefix>cagrid</DeploymentPrefix>
+    <IndexServiceRegistrationURL>http://index.training.cagrid.org:8080/wsrf/services/DefaultIndexService</IndexServiceRegistrationURL>
+</IntroduceServiceDefaults>

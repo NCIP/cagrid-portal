@@ -9,6 +9,7 @@ import gov.nih.nci.cagrid.cadsr.portal.CaDSRBrowserPanel;
 import gov.nih.nci.cagrid.cadsr.portal.PackageSelectedListener;
 import gov.nih.nci.cagrid.cadsr.portal.ProjectSelectedListener;
 import gov.nih.nci.cagrid.common.portal.MultiEventProgressBar;
+import gov.nih.nci.cagrid.introduce.beans.configuration.NamespaceReplacementPolicy;
 import gov.nih.nci.cagrid.introduce.beans.extension.DiscoveryExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespacesType;
@@ -107,7 +108,7 @@ public class CaDSRTypeSelectionComponent extends NamespaceTypeDiscoveryComponent
 
 
     @Override
-    public NamespaceType[] createNamespaceType(File schemaDestinationDir, String namespaceExistsPolicy,
+    public NamespaceType[] createNamespaceType(File schemaDestinationDir, NamespaceReplacementPolicy replacementPolicy,
         MultiEventProgressBar progress) {
         try {
             List namespaceTypes = new ArrayList();

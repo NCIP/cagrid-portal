@@ -4,6 +4,7 @@ import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.common.portal.SplashScreen;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
+import gov.nih.nci.cagrid.introduce.common.IntroducePropertiesManager;
 
 import java.awt.Dimension;
 import java.awt.EventQueue;
@@ -89,7 +90,7 @@ public final class Introduce {
                     e.printStackTrace();
                 }
                 File enginePropsT = new File("." + File.separator + "conf" + File.separator
-                    + "introduce.engine.properties.template");
+                    + "introduce.properties.template");
                 Properties propsT = new Properties();
                 try {
                     propsT.load(new FileInputStream(enginePropsT));
@@ -125,7 +126,7 @@ public final class Introduce {
             showIntroduceSplash();
 
             if (confFile == null) {
-                confFile = "conf" + File.separator + "introduce-portal-conf.xml";
+                confFile = IntroducePropertiesManager.getIntroduceConfigurationFile();
             }
 
             Application app = (Application) Utils.deserializeDocument(confFile, Application.class);

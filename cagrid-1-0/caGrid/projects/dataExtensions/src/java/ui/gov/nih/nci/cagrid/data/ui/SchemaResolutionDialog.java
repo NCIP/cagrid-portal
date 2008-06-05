@@ -3,6 +3,7 @@ package gov.nih.nci.cagrid.data.ui;
 import gov.nih.nci.cagrid.common.portal.MultiEventProgressBar;
 import gov.nih.nci.cagrid.data.ui.wizard.CacoreWizardUtils;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
+import gov.nih.nci.cagrid.introduce.beans.configuration.NamespaceReplacementPolicy;
 import gov.nih.nci.cagrid.introduce.beans.extension.DiscoveryExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
@@ -36,7 +37,7 @@ import org.cagrid.grape.utils.CompositeErrorDialog;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * @created Sep 27, 2006
- * @version $Id: SchemaResolutionDialog.java,v 1.7 2007-12-18 19:11:40 dervin Exp $
+ * @version $Id: SchemaResolutionDialog.java,v 1.8 2008-06-05 14:18:13 hastings Exp $
  */
 public class SchemaResolutionDialog extends JDialog {
 
@@ -256,7 +257,7 @@ public class SchemaResolutionDialog extends JDialog {
                 IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME));
 
         NamespaceType[] namespaces = discComponent.createNamespaceType(schemaDir, 
-            NamespaceTypeDiscoveryComponent.REPLACE_POLICY,
+            NamespaceReplacementPolicy.REPLACE,
             getNamespaceDiscoveryProgressBar());
         if (namespaces == null) {
             CompositeErrorDialog.showErrorDialog("Error getting types from discovery component");

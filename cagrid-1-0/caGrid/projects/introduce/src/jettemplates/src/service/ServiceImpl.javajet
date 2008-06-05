@@ -15,7 +15,7 @@ import java.rmi.RemoteException;
 /** 
  * TODO:I am the service side implementation class.  IMPLEMENT AND DOCUMENT ME
  * 
- * @created by Introduce Toolkit version <%=IntroduceEnginePropertiesManager.getIntroduceVersion()%>
+ * @created by Introduce Toolkit version <%=IntroducePropertiesManager.getIntroduceVersion()%>
  * 
  */
 public class <%=info.getService().getName()%>Impl extends <%=info.getService().getName()%>ImplBase {

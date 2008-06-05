@@ -1,7 +1,9 @@
 package gov.nih.nci.cagrid.introduce.portal.updater.steps;
 
+import gov.nih.nci.cagrid.introduce.beans.configuration.IntroducePortalConfiguration;
 import gov.nih.nci.cagrid.introduce.beans.software.SoftwareType;
-import gov.nih.nci.cagrid.introduce.common.IntroduceEnginePropertiesManager;
+import gov.nih.nci.cagrid.introduce.common.IntroducePropertiesManager;
+import gov.nih.nci.cagrid.introduce.portal.configuration.PortalConfigurationUtils;
 import gov.nih.nci.cagrid.introduce.portal.updater.steps.updatetree.UpdateTree;
 
 import java.awt.Dimension;
@@ -24,6 +26,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
 import org.apache.axis.utils.XMLUtils;
+import org.cagrid.grape.GridApplication;
 import org.globus.wsrf.encoding.ObjectDeserializer;
 import org.pietschy.wizard.InvalidStateException;
 import org.pietschy.wizard.PanelWizardStep;
@@ -260,7 +263,11 @@ public class CheckForUpdatesStep extends PanelWizardStep {
 	private JTextField getUpdateSiteTextField() {
 		if (updateSiteTextField == null) {
 			updateSiteTextField = new JTextField();
-			updateSiteTextField.setText(IntroduceEnginePropertiesManager.getIntroduceUpdateSite());
+			try {
+                updateSiteTextField.setText(PortalConfigurationUtils.getIntroducePortalConfiguration().getUpdateSiteURL());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 		}
 		return updateSiteTextField;
 	}

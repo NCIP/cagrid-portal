@@ -4,6 +4,7 @@ import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.common.XMLUtilities;
 import gov.nih.nci.cagrid.common.portal.MultiEventProgressBar;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
+import gov.nih.nci.cagrid.introduce.beans.configuration.NamespaceReplacementPolicy;
 import gov.nih.nci.cagrid.introduce.beans.extension.DiscoveryExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespacesType;
@@ -90,7 +91,7 @@ public class GMETypeSelectionComponent extends NamespaceTypeDiscoveryComponent {
 
 
     @Override
-    public NamespaceType[] createNamespaceType(File schemaDestinationDir, String namespaceExistsPolicy,
+    public NamespaceType[] createNamespaceType(File schemaDestinationDir, NamespaceReplacementPolicy replacementPolicy,
         MultiEventProgressBar progress) {
         Namespace selectedNS = getGmePanel().getSelectedSchemaNamespace();
         if (!selectedNS.getRaw().equals(IntroduceConstants.W3CNAMESPACE)) {
@@ -108,7 +109,7 @@ public class GMETypeSelectionComponent extends NamespaceTypeDiscoveryComponent {
                             ImportInfo importInfo = new ImportInfo(ns);
                             String filename = importInfo.getFileName();
                             types = createNamespaceTypeFromFiles(tmpPath.getAbsolutePath() + File.separator + filename,
-                                ns, schemaDestinationDir, namespaceExistsPolicy);
+                                ns, schemaDestinationDir, replacementPolicy);
                         }
                     }
                     Utils.deleteDir(tmpPath);
@@ -135,14 +136,14 @@ public class GMETypeSelectionComponent extends NamespaceTypeDiscoveryComponent {
 
 
     public NamespaceType[] createNamespaceTypeFromFiles(String startingSchema, Namespace startingNamespace,
-        File schemaDestinationDir, String namespaceExistsPolicy) {
+        File schemaDestinationDir, NamespaceReplacementPolicy replacementPolicy) {
         try {
-            if (namespaceAlreadyExists(startingNamespace.getRaw()) && namespaceExistsPolicy.equals(ERROR_POLICY)) {
+            if (namespaceAlreadyExists(startingNamespace.getRaw()) && replacementPolicy.equals(NamespaceReplacementPolicy.ERROR)) {
                 addError("Namespace already exists.");
                 return null;
             }
 
-            boolean result = checkAgainstPolicy(startingSchema, new HashSet(), namespaceExistsPolicy);
+            boolean result = checkAgainstPolicy(startingSchema, new HashSet(), replacementPolicy);
             if (result == false) {
                 return null;
             }
@@ -161,7 +162,7 @@ public class GMETypeSelectionComponent extends NamespaceTypeDiscoveryComponent {
 
             ExtensionTools.setSchemaElements(root, XMLUtilities.fileNameToDocument(startingSchema));
             Set storedSchemas = new HashSet();
-            copySchemas(startingSchema, schemaDestinationDir, new HashSet(), storedSchemas, namespaceExistsPolicy);
+            copySchemas(startingSchema, schemaDestinationDir, new HashSet(), storedSchemas, replacementPolicy);
             Iterator schemaFileIter = storedSchemas.iterator();
             while (schemaFileIter.hasNext()) {
                 File storedSchemaFile = new File((String) schemaFileIter.next());
@@ -181,7 +182,7 @@ public class GMETypeSelectionComponent extends NamespaceTypeDiscoveryComponent {
     }
 
 
-    private boolean checkAgainstPolicy(String fileName, Set visitedSchemas, String namespaceExistsPolicy) {
+    private boolean checkAgainstPolicy(String fileName, Set visitedSchemas, NamespaceReplacementPolicy replacementPolicy) {
         try {
             File schemaFile = new File(fileName);
             // mark the schema as visited
@@ -201,7 +202,7 @@ public class GMETypeSelectionComponent extends NamespaceTypeDiscoveryComponent {
                             // property
                             // to see if supposed to error;
                             if (namespaceAlreadyExists(namespace)) {
-                                if (namespaceExistsPolicy.equals(ERROR_POLICY)) {
+                                if (replacementPolicy.equals(NamespaceReplacementPolicy.ERROR)) {
                                     addError("Imported namespace already exists: "
                                         + namespace
                                         + ". \nIf you want this schema to be overwriten please change the policy to \"ignore\" in the introduce preferences menu");
@@ -217,7 +218,7 @@ public class GMETypeSelectionComponent extends NamespaceTypeDiscoveryComponent {
                             if (!visitedSchemas.contains(importedSchema.getCanonicalPath())) {
                                 // only copy schemas not yet visited
                                 boolean result = checkAgainstPolicy(importedSchema.getCanonicalPath(), visitedSchemas,
-                                    namespaceExistsPolicy);
+                                    replacementPolicy);
                                 if (result == false) {
                                     return false;
                                 }
@@ -239,11 +240,11 @@ public class GMETypeSelectionComponent extends NamespaceTypeDiscoveryComponent {
 
 
     public void copySchemas(String fileName, File copyToDirectory, Set visitedSchemas, Set storedSchemas,
-        String namespaceExistsPolicy) throws Exception {
+        NamespaceReplacementPolicy replacementPolicy) throws Exception {
         File schemaFile = new File(fileName);
         Document schema = XMLUtilities.fileNameToDocument(schemaFile.getCanonicalPath());
         String namespaceURI = schema.getRootElement().getAttribute("targetNamespace").getValue();
-        if (namespaceAlreadyExists(namespaceURI) && namespaceExistsPolicy.equals(IGNORE_POLICY)) {
+        if (namespaceAlreadyExists(namespaceURI) && replacementPolicy.equals(NamespaceReplacementPolicy.IGNORE)) {
             // do nothing just ignore.....
         } else {
             logger.debug("Copying schema " + fileName + " to " + copyToDirectory.getCanonicalPath());
@@ -269,7 +270,7 @@ public class GMETypeSelectionComponent extends NamespaceTypeDiscoveryComponent {
                             // only copy schemas not yet visited
                             copySchemas(importedSchema.getCanonicalPath(), new File(copyToDirectory.getCanonicalFile()
                                 + File.separator + location).getParentFile(), visitedSchemas, storedSchemas,
-                                namespaceExistsPolicy);
+                                replacementPolicy);
                         }
                     } else {
                         System.err.println("WARNING: Schema is importing itself. " + schemaFile);

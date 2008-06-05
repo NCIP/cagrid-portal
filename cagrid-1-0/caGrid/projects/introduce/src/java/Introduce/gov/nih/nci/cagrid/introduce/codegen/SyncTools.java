@@ -21,7 +21,7 @@ import gov.nih.nci.cagrid.introduce.codegen.services.SyncServices;
 import gov.nih.nci.cagrid.introduce.codegen.utils.SyncUtils;
 import gov.nih.nci.cagrid.introduce.common.AntTools;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
-import gov.nih.nci.cagrid.introduce.common.IntroduceEnginePropertiesManager;
+import gov.nih.nci.cagrid.introduce.common.IntroducePropertiesManager;
 import gov.nih.nci.cagrid.introduce.common.ProviderTools;
 import gov.nih.nci.cagrid.introduce.common.SchemaInformation;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
@@ -242,10 +242,10 @@ public class SyncTools {
 
         if ((info.getServiceDescriptor().getIntroduceVersion() == null)
             || !info.getServiceDescriptor().getIntroduceVersion().equals(
-                IntroduceEnginePropertiesManager.getIntroduceVersion())) {
+                IntroducePropertiesManager.getIntroduceVersion())) {
             throw new Exception("Introduce version in project (" + info.getServiceDescriptor().getIntroduceVersion()
                 + ") does not match version provided by Introduce Toolkit ( "
-                + IntroduceEnginePropertiesManager.getIntroduceVersion() + " )");
+                + IntroducePropertiesManager.getIntroduceVersion() + " )");
         }
 
         // have to set the service directory in the service properties

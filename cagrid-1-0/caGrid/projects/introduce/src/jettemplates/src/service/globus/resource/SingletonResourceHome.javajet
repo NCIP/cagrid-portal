@@ -33,7 +33,7 @@ import org.globus.wsrf.jndi.Initializable;
  * This class implements the resource home for the resource type represented
  * by this service.
  * 
- * @created by Introduce Toolkit version <%=IntroduceEnginePropertiesManager.getIntroduceVersion()%>
+ * @created by Introduce Toolkit version <%=IntroducePropertiesManager.getIntroduceVersion()%>
  * 
  */
 public class <%=info.getService().getName()%>ResourceHome extends SingletonResourceHomeImpl implements Initializable {

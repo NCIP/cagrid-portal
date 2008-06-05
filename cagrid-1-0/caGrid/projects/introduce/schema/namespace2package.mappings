@@ -10,3 +10,4 @@ gme\://gov.nih.nci.cagrid.introduce/1/Software=gov.nih.nci.cagrid.introduce.bean
 gme\://gov.nih.nci.cagrid.introduce/1/Deployment=gov.nih.nci.cagrid.introduce.servicetasks.beans.deployment
 http\://cagrid.nci.nih.gov/1/GridGrouper=gov.nih.nci.cagrid.gridgrouper.bean
 http\://www.cagrid.org/1/grape=org.cagrid.grape.model
+gme\://gov.nih.nci.cagrid.introduce/1/Configuration=gov.nih.nci.cagrid.introduce.beans.configuration

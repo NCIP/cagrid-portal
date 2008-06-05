@@ -25,29 +25,18 @@ public abstract class IntroduceConstants {
 	public static final String JBOSS = "JBOSS_HOME";
 
 	// introduce specific constants
+	
+	public static final String INTRODUCE_CONFIGURATION_FILE = "introduce.grape.configuration.file";
+	
 	public static final String INTRODUCE_VERSION_PROPERTY = "introduce.version";
 
 	public static final String INTRODUCE_PATCH_VERSION_PROPERTY = "introduce.patch.version";
 
-	public static final String INTRODUCE_UPDATE_SITE_PROPERTY = "introduce.update.site";
-
-	public static final String INTRODUCE_DEFAULT_INDEX_SERVICE_PROPERTY = "introduce.default.index.service";
-
-	public static final String INTRODUCE_ENGINE_PROPERTIES = "conf/introduce.engine.properties";
+	public static final String INTRODUCE_PROPERTIES = "conf/introduce.properties";
 
 	public static final String GLOBUS_LOCATION = "Globus Location";
 
 	public static final String SERVICE_SECURITY_METADATA_METHOD = "getServiceSecurityMetadata";
-
-	public static final String NAMESPACE_TYPE_REPLACEMENT_POLICY_PROPERTY = "Namespace Type Replacement Policy";
-
-	public static final String DEFAULT_SERVICE_NAME = "introduce.default.service.name";
-
-	public static final String DEFAULT_SERVICE_NAMESPACE = "introduce.default.service.namespace";
-
-	public static final String DEFAULT_SERVICE_PACKAGE = "introduce.default.service.package";
-
-	public static final String DEFAULT_DEPLOYMENT_PREFIX = "introduce.default.deployment.prefix";
 
 	// service skeleton properties
 	public static final String INTRODUCE_PROPERTIES_FILE = "introduce.properties";

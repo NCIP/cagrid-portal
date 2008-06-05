@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.discovery;
 
 import gov.nih.nci.cagrid.common.portal.MultiEventProgressBar;
+import gov.nih.nci.cagrid.introduce.beans.configuration.NamespaceReplacementPolicy;
 import gov.nih.nci.cagrid.introduce.beans.extension.DiscoveryExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespacesType;
@@ -95,7 +96,7 @@ public abstract class NamespaceTypeDiscoveryComponent extends JPanel {
     }
 
 
-    public abstract NamespaceType[] createNamespaceType(File schemaDestinationDir, String namespaceExistsPolicy,
+    public abstract NamespaceType[] createNamespaceType(File schemaDestinationDir, NamespaceReplacementPolicy replacementPolicy,
         MultiEventProgressBar progress);
 
 }

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+	xmlns:tns="gme://gov.nih.nci.cagrid.introduce/1/Configuration"
+	targetNamespace="gme://gov.nih.nci.cagrid.introduce/1/Configuration">
+	
+	<element name="IntroducePortalConfiguration" type="tns:IntroducePortalConfiguration"></element>
+	<complexType name="IntroducePortalConfiguration">
+		<sequence>
+			<element ref="tns:NamespaceReplacementPolicy"></element>
+			<element ref="tns:UpdateSiteURL"></element>
+		</sequence>
+	</complexType>
+	
+	<element name="IntroduceServiceDefaults" type="tns:IntroduceServiceDefaults"></element>
+	<complexType name="IntroduceServiceDefaults">
+		<sequence>
+			<element ref="tns:ServiceName" ></element>
+			<element ref="tns:ServiceNamespace" ></element>
+			<element ref="tns:ServicePackage" ></element>
+			<element ref="tns:DeploymentPrefix" ></element>
+			<element ref="tns:IndexServiceRegistrationURL" ></element>
+		</sequence>
+	</complexType>
+
+    <element name="NamespaceReplacementPolicy" type="tns:NamespaceReplacementPolicy"></element>
+	<simpleType name="NamespaceReplacementPolicy">
+	  <restriction base="string">
+	    <enumeration value="ERROR"></enumeration>
+	    <enumeration value="REPLACE"></enumeration>
+	    <enumeration value="IGNORE"></enumeration>
+	  </restriction>
+	</simpleType>
+	
+	<element name="UpdateSiteURL" type="string"></element>
+	
+	<element name="ServiceName" type="string"></element>
+	<element name="ServiceNamespace" type="string"></element>
+	<element name="ServicePackage" type="string"></element>
+	<element name="DeploymentPrefix" type="string"></element>
+	<element name="IndexServiceRegistrationURL" type="string"></element>
+	
+
+</schema>

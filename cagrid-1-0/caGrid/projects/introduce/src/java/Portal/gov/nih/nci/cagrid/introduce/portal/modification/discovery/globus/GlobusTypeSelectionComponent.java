@@ -2,6 +2,7 @@ package gov.nih.nci.cagrid.introduce.portal.modification.discovery.globus;
 
 import gov.nih.nci.cagrid.common.XMLUtilities;
 import gov.nih.nci.cagrid.common.portal.MultiEventProgressBar;
+import gov.nih.nci.cagrid.introduce.beans.configuration.NamespaceReplacementPolicy;
 import gov.nih.nci.cagrid.introduce.beans.extension.DiscoveryExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespacesType;
@@ -67,7 +68,7 @@ public class GlobusTypeSelectionComponent extends NamespaceTypeDiscoveryComponen
 
 
     @Override
-    public NamespaceType[] createNamespaceType(File schemaDestinationDir, String namespaceExistsPolicy,
+    public NamespaceType[] createNamespaceType(File schemaDestinationDir, NamespaceReplacementPolicy replacementPolicy,
         MultiEventProgressBar progress) {
         NamespaceType input = new NamespaceType();
         try {

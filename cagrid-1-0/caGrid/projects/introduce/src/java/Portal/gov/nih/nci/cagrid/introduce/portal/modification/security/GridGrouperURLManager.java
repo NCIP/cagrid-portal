@@ -1,7 +1,7 @@
 package gov.nih.nci.cagrid.introduce.portal.modification.security;
 
 import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
-import gov.nih.nci.cagrid.introduce.common.IntroduceEnginePropertiesManager;
+import gov.nih.nci.cagrid.introduce.common.IntroducePropertiesManager;
 import gov.nih.nci.cagrid.introduce.common.ResourceManager;
 
 import java.util.ArrayList;
@@ -27,7 +27,7 @@ public class GridGrouperURLManager {
         try {
             String load = ResourceManager.getConfigurationProperty(GRID_GROUPER_LOAD_PROPERTY);
             if (load == null) {
-                String prop = IntroduceEnginePropertiesManager.getIntroducePropertyValue(DEFAULT_LOAD_ON_STARTUP_PROP);
+                String prop = IntroducePropertiesManager.getIntroducePropertyValue(DEFAULT_LOAD_ON_STARTUP_PROP);
                 boolean loadPropVal = Boolean.parseBoolean(prop);
 
                 ResourceManager.setConfigurationProperty(GRID_GROUPER_LOAD_PROPERTY, String.valueOf(loadPropVal));
@@ -47,7 +47,7 @@ public class GridGrouperURLManager {
         try {
             String urls = ResourceManager.getServiceURLProperty(GRID_GROUPER_URL_PROPERTY);
             if (urls == null) {
-                String prop = IntroduceEnginePropertiesManager.getIntroducePropertyValue(DEFAULT_GRID_GROUPER_URLS_PROP);
+                String prop = IntroducePropertiesManager.getIntroducePropertyValue(DEFAULT_GRID_GROUPER_URLS_PROP);
                 ResourceManager.setServiceURLProperty(GRID_GROUPER_URL_PROPERTY, prop);
                 urls = ResourceManager.getServiceURLProperty(GRID_GROUPER_URL_PROPERTY);
             }

@@ -37,7 +37,7 @@ import org.globus.wsrf.ResourcePropertySet;
  *
  * Provides some simple accessors for the Impl.
  * 
- * @created by Introduce Toolkit version <%=IntroduceEnginePropertiesManager.getIntroduceVersion()%>
+ * @created by Introduce Toolkit version <%=IntroducePropertiesManager.getIntroduceVersion()%>
  * 
  */
 public abstract class <%=info.getService().getName()%>ImplBase {

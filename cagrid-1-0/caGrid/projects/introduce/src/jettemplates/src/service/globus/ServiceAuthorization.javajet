@@ -33,7 +33,7 @@ import org.w3c.dom.Node;
  * authorization requirements placed on each method call.  Each method will either return
  * apon a successful authorization or will throw an exception apon a failed authorization.
  * 
- * @created by Introduce Toolkit version <%=IntroduceEnginePropertiesManager.getIntroduceVersion()%>
+ * @created by Introduce Toolkit version <%=IntroducePropertiesManager.getIntroduceVersion()%>
  * 
  */
 public class <%=info.getService().getName()%>Authorization implements PDP {

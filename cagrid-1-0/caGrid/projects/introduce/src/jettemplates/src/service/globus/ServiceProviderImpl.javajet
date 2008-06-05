@@ -23,7 +23,7 @@ import java.rmi.RemoteException;
  * has implemented.  Authorization callbacks are automatically made for each method based
  * on each methods authorization requirements.
  * 
- * @created by Introduce Toolkit version <%=IntroduceEnginePropertiesManager.getIntroduceVersion()%>
+ * @created by Introduce Toolkit version <%=IntroducePropertiesManager.getIntroduceVersion()%>
  * 
  */
 public class <%=info.getService().getName()%>ProviderImpl{

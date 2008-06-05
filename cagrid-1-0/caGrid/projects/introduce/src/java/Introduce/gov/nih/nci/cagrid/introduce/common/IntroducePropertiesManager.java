@@ -9,11 +9,11 @@ import java.util.Properties;
 
 import org.apache.log4j.Logger;
 
-public final class IntroduceEnginePropertiesManager {
+public final class IntroducePropertiesManager {
     
-    private static final Logger logger = Logger.getLogger(IntroduceEnginePropertiesManager.class);
+    private static final Logger logger = Logger.getLogger(IntroducePropertiesManager.class);
     
-    private IntroduceEnginePropertiesManager(){
+    private IntroducePropertiesManager(){
         
     }
 
@@ -27,22 +27,14 @@ public final class IntroduceEnginePropertiesManager {
         return getIntroducePropertyValue(IntroduceConstants.INTRODUCE_PATCH_VERSION_PROPERTY);
     }
 
-
-    public static String getIntroduceUpdateSite() {
-        return getIntroducePropertyValue(IntroduceConstants.INTRODUCE_UPDATE_SITE_PROPERTY);
+    public static String getIntroduceConfigurationFile() {
+        return getIntroducePropertyValue(IntroduceConstants.INTRODUCE_CONFIGURATION_FILE);
     }
-
-
-    public static String getIntroduceDefaultIndexService() {
-        return getIntroducePropertyValue(IntroduceConstants.INTRODUCE_DEFAULT_INDEX_SERVICE_PROPERTY);
-    }
-
-
 
     public static String getIntroducePropertyValue(String propertyKey) {
         Properties engineProps = new Properties();
         try {
-            engineProps.load(new FileInputStream(IntroduceConstants.INTRODUCE_ENGINE_PROPERTIES));
+            engineProps.load(new FileInputStream(IntroduceConstants.INTRODUCE_PROPERTIES));
             return engineProps.getProperty(propertyKey);
         } catch (IOException e) {
             logger.error(e);

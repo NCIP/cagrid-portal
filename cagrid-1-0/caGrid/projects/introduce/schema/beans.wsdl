@@ -6,11 +6,14 @@
             xmlns:introduce="gme://gov.nih.nci.cagrid/1/Introduce"
             xmlns:software="gme://gov.nih.nci.cagrid/1/Software"
             xmlns:security="gme://gov.nih.nci.cagrid.introduce/1/Security"
+            xmlns:conf="gme://gov.nih.nci.cagrid.introduce/1/Configuration"
             xmlns="http://www.w3.org/2001/XMLSchema">
             <import namespace="gme://gov.nih.nci.cagrid/1/Introduce"
                 schemaLocation="./ServiceDescription.xsd"/>
             <import namespace="gme://gov.nih.nci.cagrid/1/Software"
                 schemaLocation="./Software.xsd"/>
+            <import namespace="gme://gov.nih.nci.cagrid/1/Configuration"
+                schemaLocation="./Configuration.xsd"/>
         </schema>
     </types>
 </definitions>

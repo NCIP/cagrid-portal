@@ -2,11 +2,7 @@
 introduce.version=1.3
 introduce.patch.version=0
 introduce.update.site=@introduce.update.site@
-
-#Statistics Related
-introduce.statistics.site=@introduce.statistics.site@
-introduce.statistics.port=@introduce.statistics.port@
-introduce.statistics.collect=@introduce.statistics.collect@
+introduce.grape.configuration.file=conf/introduce-grape-conf.xml
 
 # Information on Dependent Services
 #Index Service

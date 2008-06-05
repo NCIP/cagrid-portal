@@ -37,7 +37,6 @@ public class IntroducePortalInitializer implements ApplicationInitializer {
         logger.info("\n\nStarting up Introduce ... \n\n");
         ExtensionsLoader.getInstance();
         addGDEExtensions(app);
-        setConfigurationOptions();
     }
 
 
@@ -128,22 +127,5 @@ public class IntroducePortalInitializer implements ApplicationInitializer {
             
         }
     }
-
-
-    private void setConfigurationOptions() {
-        try {
-            if (!hasKey(ResourceManager.getConfigurationPropertyKeys(),
-                IntroduceConstants.NAMESPACE_TYPE_REPLACEMENT_POLICY_PROPERTY)) {
-                ResourceManager.setConfigurationProperty(IntroduceConstants.NAMESPACE_TYPE_REPLACEMENT_POLICY_PROPERTY,
-                    NamespaceTypeDiscoveryComponent.ERROR_POLICY);
-            }
-            ResourceManager.setConfigurationProperty(IntroduceConstants.NAMESPACE_TYPE_REPLACEMENT_POLICY_PROPERTY
-                + ".options", NamespaceTypeDiscoveryComponent.ERROR_POLICY + "," + NamespaceTypeDiscoveryComponent.REPLACE_POLICY
-                + "," + NamespaceTypeDiscoveryComponent.IGNORE_POLICY);
-        } catch (IOException e1) {
-            e1.printStackTrace();
-        }
-    }
-
 
 }
