@@ -232,19 +232,19 @@ public class IntroduceServiceDefaultsConfigurationPanel extends ConfigurationBas
             serviceNameTextField.getDocument().addDocumentListener(new DocumentListener() {
             
                 public void removeUpdate(DocumentEvent e) {
-                    getIntroduceServiceDefaults().setServiceName(serviceNameTextField.getName());
+                    getIntroduceServiceDefaults().setServiceName(serviceNameTextField.getText());
             
                 }
             
             
                 public void insertUpdate(DocumentEvent e) {
-                    getIntroduceServiceDefaults().setServiceName(serviceNameTextField.getName());
+                    getIntroduceServiceDefaults().setServiceName(serviceNameTextField.getText());
             
                 }
             
             
                 public void changedUpdate(DocumentEvent e) {
-                    getIntroduceServiceDefaults().setServiceName(serviceNameTextField.getName());
+                    getIntroduceServiceDefaults().setServiceName(serviceNameTextField.getText());
             
                 }
             
