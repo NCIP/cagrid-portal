@@ -4,7 +4,6 @@
 package gov.nih.nci.cagrid.portal.util;
 
 import gov.nih.nci.cagrid.metadata.MetadataUtils;
-import gov.nih.nci.cagrid.portal.TestDB;
 import gov.nih.nci.cagrid.portal.aggr.regsvc.DomainModelBuilder;
 import gov.nih.nci.cagrid.portal.aggr.regsvc.ServiceMetadataBuilder;
 import gov.nih.nci.cagrid.portal.domain.GridDataService;
@@ -25,6 +24,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileReader;
+import java.sql.SQLException;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,7 +32,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.orm.hibernate3.HibernateTemplate;
 
 /**
@@ -45,11 +49,13 @@ public class DBImport_2_0_1_To_2_0_2 {
 			.getDateTimeInstance();
 	private static final String SEPARATOR = "@@@";
 	private HibernateTemplate hibernateTemplate;
+	private Session session;
 	private File inDir;
 
 	public DBImport_2_0_1_To_2_0_2(HibernateTemplate hibernateTemplate,
-			String inDir) {
+			Session session, String inDir) {
 		this.hibernateTemplate = hibernateTemplate;
+		this.session = session;
 		this.inDir = new File(inDir);
 	}
 
@@ -72,7 +78,6 @@ public class DBImport_2_0_1_To_2_0_2 {
 
 		Map<String, GridService> gridServiceMap = new HashMap<String, GridService>();
 		Map<String, CQLQuery> queryMap = new HashMap<String, CQLQuery>();
-		Map<String, PortalUser> userMap = new HashMap<String, PortalUser>();
 		File[] serviceDirs = new File(inDir.getAbsolutePath() + "/services")
 				.listFiles(directoryFilter);
 		for (File f : serviceDirs) {
@@ -86,14 +91,15 @@ public class DBImport_2_0_1_To_2_0_2 {
 			String[] data = readDataFile(
 					new File(f.getAbsolutePath() + "/service.dat")).get(0);
 			String url = data[0];
-			List l = hibernateTemplate.find("from GridService where url = ?", new Object[]{url});
-			if(l.size() != 0){
+			List l = session.createQuery("from GridService where url = :url")
+					.setParameter("url", url).list();
+			if (l.size() != 0) {
 				System.out.println("Skipping service: " + url);
-				gridServiceMap.put(PortalUtils.createHash(url), (GridService)l.get(0));
+				gridServiceMap.put(PortalUtils.createHash(url), (GridService) l
+						.get(0));
 				continue;
 			}
 			System.out.println("Creating service: " + url);
-			
 
 			String idxUrl = data[1];
 			String metadataHash = data[2];
@@ -101,9 +107,9 @@ public class DBImport_2_0_1_To_2_0_2 {
 			gridService.setUrl(url);
 			gridService.setMetadataHash(metadataHash);
 			gridService.getIndexServices().add(idxSvc);
-			hibernateTemplate.saveOrUpdate(gridService);
+			session.saveOrUpdate(gridService);
 			idxSvc.getServices().add(gridService);
-			hibernateTemplate.saveOrUpdate(idxSvc);
+			session.saveOrUpdate(idxSvc);
 
 			gridServiceMap.put(PortalUtils.createHash(url), gridService);
 
@@ -120,10 +126,10 @@ public class DBImport_2_0_1_To_2_0_2 {
 							+ ex.getMessage(), ex);
 				}
 				sc.setStatus(ServiceStatus.valueOf(statusRow[1]));
-				hibernateTemplate.saveOrUpdate(sc);
+				session.saveOrUpdate(sc);
 				gridService.getStatusHistory().add(sc);
 			}
-			hibernateTemplate.saveOrUpdate(gridService);
+			session.saveOrUpdate(gridService);
 
 			ServiceMetadataBuilder sMetaBuilder = new ServiceMetadataBuilder();
 			sMetaBuilder.setGridService(gridService);
@@ -131,12 +137,12 @@ public class DBImport_2_0_1_To_2_0_2 {
 			sMetaBuilder.setPersist(true);
 			ServiceMetadata sMetaOut = sMetaBuilder.build(meta.smeta);
 			sMetaOut.setService(gridService);
-			hibernateTemplate.saveOrUpdate(sMetaOut);
+			session.saveOrUpdate(sMetaOut);
 			gridService.setServiceMetadata(sMetaOut);
-			hibernateTemplate.saveOrUpdate(gridService);
-			
+			session.saveOrUpdate(gridService);
+
 			if (gridService instanceof GridDataService) {
-				GridDataService dataService = (GridDataService)gridService;
+				GridDataService dataService = (GridDataService) gridService;
 				DomainModelBuilder builder = new DomainModelBuilder();
 				builder.setGridService(dataService);
 				builder.setHibernateTemplate(hibernateTemplate);
@@ -150,12 +156,12 @@ public class DBImport_2_0_1_To_2_0_2 {
 							ex);
 				}
 				modelOut.setService(dataService);
-				hibernateTemplate.saveOrUpdate(modelOut);
+				session.saveOrUpdate(modelOut);
 				dataService.setDomainModel(modelOut);
-				hibernateTemplate.saveOrUpdate(dataService);
+				session.saveOrUpdate(dataService);
 			}
-			hibernateTemplate.saveOrUpdate(gridService);
-			hibernateTemplate.flush();
+			session.saveOrUpdate(gridService);
+			session.flush();
 
 		}
 
@@ -168,7 +174,7 @@ public class DBImport_2_0_1_To_2_0_2 {
 			CQLQuery query = new CQLQuery();
 			query.setHash(hash);
 			query.setXml(xml);
-			hibernateTemplate.saveOrUpdate(query);
+			session.saveOrUpdate(query);
 			queryMap.put(hash, query);
 		}
 
@@ -177,40 +183,39 @@ public class DBImport_2_0_1_To_2_0_2 {
 
 			String[] userData = readDataFile(
 					new File(userDir.getAbsolutePath() + "/user.dat")).get(0);
-			
-			
-			
-			
-			List l = hibernateTemplate.find("from PortalUser where gridIdentity = ?", new Object[]{userData[0]});
-			if(l.size() != 0){
+
+			List l = session.createQuery(
+					"from PortalUser where gridIdentity = :ident")
+					.setParameter("identi", userData[0]).list();
+			if (l.size() != 0) {
 				System.out.println("Skipping user " + userData[0]);
 				continue;
 			}
-			
+
 			System.out.println("Creating user: " + userData[0]);
-			
+
 			Person person = new Person();
 			person.setFirstName(userData[1]);
 			person.setLastName(userData[2]);
 			person.setEmailAddress(userData[3]);
 			person.setPhoneNumber(userData[4]);
-			hibernateTemplate.saveOrUpdate(person);
+			session.saveOrUpdate(person);
 			PortalUser user = new PortalUser();
 			user.setPerson(person);
 			user.setGridIdentity(userData[0]);
-			hibernateTemplate.saveOrUpdate(user);
+			session.saveOrUpdate(user);
 
 			List<String[]> queryInstancesData = readDataFile(new File(userDir
 					.getAbsolutePath()
 					+ "/queryInstances.dat"));
 			for (String[] queryInstanceData : queryInstancesData) {
-				
-				if(queryInstanceData.length != 7){
+
+				if (queryInstanceData.length != 7) {
 					continue;
 				}
-				
+
 				CQLQueryInstance instance = new CQLQueryInstance();
-				
+
 				CQLQuery query = queryMap.get(queryInstanceData[0]);
 				instance.setQuery(query);
 				GridDataService dataService = (GridDataService) gridServiceMap
@@ -238,16 +243,16 @@ public class DBImport_2_0_1_To_2_0_2 {
 
 				}
 				instance.setPortalUser(user);
-				hibernateTemplate.saveOrUpdate(instance);
+				session.saveOrUpdate(instance);
 				user.getQueryInstances().add(instance);
-				hibernateTemplate.saveOrUpdate(user);
+				session.saveOrUpdate(user);
 			}
 			List<String[]> sharedQueriesData = readDataFile(new File(userDir
 					.getAbsolutePath()
 					+ "/sharedQueries.dat"));
 			for (String[] sharedQueryData : sharedQueriesData) {
-				
-				if(sharedQueryData.length != 6){
+
+				if (sharedQueryData.length != 6) {
 					continue;
 				}
 
@@ -262,8 +267,9 @@ public class DBImport_2_0_1_To_2_0_2 {
 				UMLClass umlClass = null;
 				String umlClassName = sharedQueryData[4];
 				DomainModel domainModel = targetService.getDomainModel();
-				if(domainModel == null){
-					System.err.println(targetService.getUrl() + " has no domain model");
+				if (domainModel == null) {
+					System.err.println(targetService.getUrl()
+							+ " has no domain model");
 					continue;
 				}
 				for (UMLClass klass : targetService.getDomainModel()
@@ -299,13 +305,13 @@ public class DBImport_2_0_1_To_2_0_2 {
 				sharedQuery.setDescription(sharedQueryData[3]);
 
 				sharedQuery.setOwner(user);
-				hibernateTemplate.saveOrUpdate(sharedQuery);
+				session.saveOrUpdate(sharedQuery);
 				user.getSharedQueries().add(sharedQuery);
-				hibernateTemplate.saveOrUpdate(user);
+				session.saveOrUpdate(user);
 			}
 
-			hibernateTemplate.saveOrUpdate(user);
-			hibernateTemplate.flush();
+			session.saveOrUpdate(user);
+			session.flush();
 		}
 
 	}
@@ -328,14 +334,15 @@ public class DBImport_2_0_1_To_2_0_2 {
 
 	private IndexService getIndexService(String idxUrl) {
 		IndexService idxSvc = null;
-		List<IndexService> l = hibernateTemplate.find(
-				"from IndexService where url = ?", new Object[] { idxUrl });
+		List<IndexService> l = session.createQuery(
+				"from IndexService where url = :url").setParameter("url",
+				idxUrl).list();
 		if (l.size() == 1) {
 			idxSvc = l.get(0);
 		} else {
 			idxSvc = new IndexService();
 			idxSvc.setUrl(idxUrl);
-			hibernateTemplate.saveOrUpdate(idxSvc);
+			session.saveOrUpdate(idxSvc);
 		}
 		return idxSvc;
 	}
@@ -390,15 +397,21 @@ public class DBImport_2_0_1_To_2_0_2 {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		// ApplicationContext ctx = new ClassPathXmlApplicationContext(
-		// new String[] { "classpath:applicationContext-db.xml" });
-		ApplicationContext ctx = TestDB.getApplicationContext();
-		TestDB.create();
-		HibernateTemplate templ = (HibernateTemplate) ctx
+		ApplicationContext ctx = new ClassPathXmlApplicationContext(
+				new String[] { "classpath:applicationContext-db.xml" });
+		final HibernateTemplate templ = (HibernateTemplate) ctx
 				.getBean("hibernateTemplate");
-		String inDir = args.length == 1 ? args[0] : "export";
-		DBImport_2_0_1_To_2_0_2 i = new DBImport_2_0_1_To_2_0_2(templ, inDir);
-		i.run();
+		final String inDir = args.length == 1 ? args[0] : "export";
+
+		templ.execute(new HibernateCallback() {
+			public Object doInHibernate(Session session)
+					throws HibernateException, SQLException {
+				DBImport_2_0_1_To_2_0_2 i = new DBImport_2_0_1_To_2_0_2(templ,
+						session, inDir);
+				i.run();
+				return null;
+			}
+		});
 	}
 
 }

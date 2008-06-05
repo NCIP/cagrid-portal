@@ -251,4 +251,33 @@
         </javadoc>
     </target>
 
+	<target name="backup-2-0-1">
+		<java classname="gov.nih.nci.cagrid.portal.util.Backup">
+			<classpath>
+				<pathelement location="tools/migration/2-0-1_to_2-0-2/conf"/>
+				<fileset dir="tools/migration/2-0-1_to_2-0-2/lib">
+					<include name="*.jar"/>
+				</fileset>
+				<fileset dir="db/lib">
+					<include name="**/*.jar"/>
+				</fileset>
+				<fileset dir="aggr/lib">
+					<include name="**/*.jar"/>
+				</fileset>
+				<pathelement location="aggr/etc"/>
+				<fileset dir="${env.GLOBUS_LOCATION}/lib">
+					<include name="**.jar"/>
+				</fileset>
+			</classpath>
+			<arg value="tools/migration/2-0-1_to_2-0-2/export"/>
+		</java>
+	</target>
+	
+	<target name="import-2-0-1" depends="db:load-schema,aggr:prepare-run-cp">
+		<java classname="gov.nih.nci.cagrid.portal.util.DBImport_2_0_1_To_2_0_2" classpathref="aggr.run.cp" fork="true">
+			<arg value="tools/migration/2-0-1_to_2-0-2/export"/>
+		</java>
+	</target>
+
+	
 </project>
