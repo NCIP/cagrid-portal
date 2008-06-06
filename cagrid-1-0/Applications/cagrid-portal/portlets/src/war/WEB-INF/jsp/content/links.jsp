@@ -11,7 +11,7 @@
 
     <div class="row">
     <span class="link-extenal pdf">
-            <a href="https://gforge.nci.nih.gov/frs/download.php/3062/caGrid-Portal_2.0_UsersGuide.pdf">
+            <a href="<c:url value="/resources/caGrid-Portal_2.0_UsersGuide.pdf"/>">
                 caGrid Portal Users Guide</a>
         </span>
     </div>
