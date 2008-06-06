@@ -28,6 +28,9 @@
 			<fileset dir="${jar.dir}">
 				<include name="**/*.jar"/>
 			</fileset>
+			<fileset dir="${ext.remote-client.lib.dir}">
+				<include name="**/*.jar"/>
+			</fileset>
 		</path>
 	</target>
 	
@@ -47,12 +50,12 @@
 			<sysproperty key="sdk4.tests.base.dir" value="${sdk4.tests.base.dir}"/>
 			<classpath refid="all.test.classpath" />
 			<classpath>
-				<pathelement path="${test.classes.dir}" />
+				<pathelement path="${classes.dir}" />
 			</classpath>
 			<formatter type="xml" />
 			<batchtest fork="yes" todir="${junit.results.dir}">
-				<fileset dir="${test.src.dir}">
-					<include name="**/system/*CreationTest.java" />
+				<fileset dir="${src.dir}">
+					<include name="**/*CreationTest.java" />
 				</fileset>
 			</batchtest>
 		</junit>
@@ -63,20 +66,20 @@
 	<target name="testInvocation" depends="jar, prepareClasspaths" description="Runs the system tests.">
 		<mkdir dir="${junit.results.dir}" />
 		<junit dir="${introduce.dir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="yes" forkmode="once">
-			<sysproperty key="build.dirs" value="${test.classes.dir}" />
+			<sysproperty key="build.dirs" value="${classes.dir}" />
+			<sysproperty key="build.dir" value="${classes.dir}" />
 			<sysproperty key="introduce.base.dir" value="${introduce.dir}" />
 			<sysproperty key="remote.sdk.host.name" value="${remote.sdk.host.name}" />
 			<sysproperty key="remote.sdk.host.port" value="${remote.sdk.host.port}" />
-			<jvmarg value="-Dbuild.dir=${test.classes.dir}" />
+			<sysproperty key="sdk4.tests.base.dir" value="${sdk4.tests.base.dir}"/>
 			<classpath refid="all.test.classpath" />
 			<classpath>
-				<pathelement path="${test.classes.dir}" />
+				<pathelement path="${classes.dir}" />
 			</classpath>
 			<formatter type="xml" />
 			<batchtest fork="yes" todir="${junit.results.dir}">
-				<fileset dir="${test.src.dir}">
-					<include name="**/system/*Test.java" />
-					<exclude name="**/system/*CreationTest.java" />
+				<fileset dir="${src.dir}">
+					<include name="**/*InvocationTest.java" />
 				</fileset>
 			</batchtest>
 		</junit>

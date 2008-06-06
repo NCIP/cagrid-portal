@@ -13,6 +13,8 @@ import gov.nih.nci.cagrid.testing.system.haste.Step;
 import gov.nih.nci.cagrid.testing.system.haste.Story;
 
 import java.io.File;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Vector;
 
 import org.cagrid.data.styles.cacore4.test.steps.InvokeSDK4DataServiceStep;
@@ -26,7 +28,7 @@ import org.cagrid.data.test.creation.DataTestCaseInfo;
  * @author David Ervin
  * 
  * @created Feb 1, 2008 7:49:44 AM
- * @version $Id: SDK4ServiceStyleInvocationTest.java,v 1.1 2008-06-05 18:02:23 dervin Exp $ 
+ * @version $Id: SDK4ServiceStyleInvocationTest.java,v 1.2 2008-06-06 16:55:51 dervin Exp $ 
  */
 public class SDK4ServiceStyleInvocationTest extends Story {
     
@@ -73,9 +75,31 @@ public class SDK4ServiceStyleInvocationTest extends Story {
     
     
     public void storyTearDown() throws Throwable {
-        Utils.deleteDir(new File(serviceTestInfo.getDir()));
-        new StopContainerStep(container).runStep();
-        new DestroyContainerStep(container).runStep();
+        List<Throwable> errors = new LinkedList<Throwable>();
+        try {        
+            new StopContainerStep(container).runStep();
+        } catch (Throwable th) {
+            errors.add(th);
+        }
+        try {
+            new DestroyContainerStep(container).runStep();
+        } catch (Throwable th) {
+            errors.add(th);
+        }
+        try {
+            Utils.deleteDir(new File(serviceTestInfo.getDir()));
+        } catch (Throwable th) {
+            errors.add(th);
+        }
+        
+        if (errors.size() != 0) {
+            System.err.println("EXCEPTION(S) OCCURED DURING TEAR DOWN:");
+            for (Throwable t : errors) {
+                System.err.println("----------------");
+                t.printStackTrace();
+            }
+            throw new Exception("EXCEPTION(S) OCCURED DURING TEAR DOWN.  SEE LOGS");
+        }
     }
     
     

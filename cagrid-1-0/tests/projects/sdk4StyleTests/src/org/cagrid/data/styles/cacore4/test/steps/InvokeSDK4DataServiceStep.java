@@ -33,11 +33,10 @@ import org.cagrid.data.test.creation.DataTestCaseInfo;
  * @author David Ervin
  * 
  * @created Feb 1, 2008 9:02:20 AM
- * @version $Id: InvokeSDK4DataServiceStep.java,v 1.1 2008-06-05 18:02:23 dervin Exp $ 
+ * @version $Id: InvokeSDK4DataServiceStep.java,v 1.2 2008-06-06 16:55:51 dervin Exp $ 
  */
 public class InvokeSDK4DataServiceStep extends Step {
-    // TODO: test/resources is no longer accurate
-    public static final String TEST_RESOURCES_DIR = "/test/resources/";
+    public static final String TEST_RESOURCES_DIR = "/resources/";
     public static final String TEST_QUERIES_DIR = TEST_RESOURCES_DIR + "testQueries/";
     public static final String TEST_RESULTS_DIR = TEST_RESOURCES_DIR + "testGoldResults/";
     
@@ -52,7 +51,7 @@ public class InvokeSDK4DataServiceStep extends Step {
     }
 
 
-    public void runStep() throws Throwable {
+    public void runStep() throws Throwable {        
         // valid queries
         testUndergraduateStudentWithName();
         testAllPayments();
@@ -460,8 +459,9 @@ public class InvokeSDK4DataServiceStep extends Step {
     
     private InputStream getClientConfigStream() {
         InputStream is = null;
+        String resourceName = TEST_RESOURCES_DIR + "wsdd/client-config.wsdd";
         try {
-            is = InvokeSDK4DataServiceStep.class.getResourceAsStream(TEST_RESOURCES_DIR + "wsdd/client-config.wsdd");
+            is = InvokeSDK4DataServiceStep.class.getResourceAsStream(resourceName);
         } catch (Exception ex) {
             ex.printStackTrace();
             fail("Error obtaining client config input stream: " + ex.getMessage());
