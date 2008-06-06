@@ -222,6 +222,7 @@
 	<target name="generateTrustReport" description="Generates a Grid Trust Report." depends="init">
 		<input message="Please enter a file location to write the report to [grid-trust-report.txt]:" addproperty="out.input" defaultvalue="grid-trust-report.txt" />
 		<java classname="org.cagrid.gaards.pki.tools.GenerateTrustReport" fork="true" newenvironment="true" failonerror="true">
+			<arg value="-o" />
 			<arg value="${out.input}" />
 			<classpath refid="run.classpath" />
 		</java>
