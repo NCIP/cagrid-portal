@@ -10,6 +10,7 @@ import gov.nih.nci.cagrid.introduce.common.ResourceManager;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 import gov.nih.nci.cagrid.introduce.extensions.metadata.constants.MetadataConstants;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
+import gov.nih.nci.cagrid.introduce.portal.configuration.PortalConfigurationUtils;
 import gov.nih.nci.cagrid.introduce.portal.modification.extensions.ExtensionsTable;
 
 import java.awt.GridBagConstraints;
@@ -63,13 +64,6 @@ public class CaBIGCreationViewer extends CreationViewerBaseComponent {
 	public static final String SERVICE_PACKAGE = "Service package name";
 
 	public static final String SERVICE_NAMESPACE = "Service namespace";
-
-	// defaults
-	private static final String DEFAULT_NAME = "HelloWorld";
-
-	private static final String DEFAULT_JAVA_PACKAGE = "gov.nih.nci.cagrid.helloworld";
-
-	private static final String DEFAULT_NAMESPACE = "http://helloworld.cagrid.nci.nih.gov/HelloWorld";
 
 	// extension names
 	private static final String DATA_EXTSION_NAME = "data";
@@ -516,7 +510,7 @@ public class CaBIGCreationViewer extends CreationViewerBaseComponent {
 	private JTextField getService() {
 		if (service == null) {
 			service = new JTextField();
-			service.setText(DEFAULT_NAME);
+			service.setText(PortalConfigurationUtils.getIntroduceServiceDefaults().getServiceName());
 			service.getDocument().addDocumentListener(
 					new DocumentChangeAdapter() {
 						public void documentEdited(DocumentEvent e) {
@@ -559,7 +553,7 @@ public class CaBIGCreationViewer extends CreationViewerBaseComponent {
 		if (dir == null) {
 			dir = new JTextField();
 			String home = System.getProperty("user.home");
-			dir.setText(home + File.separator + DEFAULT_NAME);
+			dir.setText(home + File.separator + PortalConfigurationUtils.getIntroduceServiceDefaults().getServiceName());
 			dir.getDocument().addDocumentListener(new DocumentChangeAdapter() {
 				public void documentEdited(DocumentEvent e) {
 					validateInput();
@@ -606,7 +600,7 @@ public class CaBIGCreationViewer extends CreationViewerBaseComponent {
 	private JTextField getServicePackage() {
 		if (servicePackage == null) {
 			servicePackage = new JTextField();
-			servicePackage.setText((DEFAULT_JAVA_PACKAGE).toLowerCase());
+			servicePackage.setText((PortalConfigurationUtils.getIntroduceServiceDefaults().getServicePackage()).toLowerCase());
 			servicePackage.getDocument().addDocumentListener(
 					new DocumentChangeAdapter() {
 						public void documentEdited(DocumentEvent e) {
@@ -626,7 +620,7 @@ public class CaBIGCreationViewer extends CreationViewerBaseComponent {
 	private JTextField getNamespaceDomain() {
 		if (namespaceDomain == null) {
 			namespaceDomain = new JTextField();
-			namespaceDomain.setText(DEFAULT_NAMESPACE);
+			namespaceDomain.setText(PortalConfigurationUtils.getIntroduceServiceDefaults().getServiceNamespace());
 			namespaceDomain.getDocument().addDocumentListener(
 					new DocumentChangeAdapter() {
 						public void documentEdited(DocumentEvent e) {
