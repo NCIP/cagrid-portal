@@ -2,6 +2,7 @@ package gov.nih.nci.cagrid.portal.portlet.discovery.evs;
 
 import gov.nih.nci.cagrid.portal.dao.ConceptHierarchyNodeDao;
 import gov.nih.nci.cagrid.portal.domain.GridService;
+import gov.nih.nci.cagrid.portal.portlet.util.PortletUtils;
 import org.springframework.beans.factory.annotation.Required;
 
 import java.util.ArrayList;
@@ -26,6 +27,7 @@ public class DefaultConceptAutocompleterService implements ConceptAutocompleterS
 
     public String resultCount(String code) {
         List<GridService> svcs = conceptHierarchyNodeDao.getServicesByCode(code);
+        svcs = PortletUtils.filterServicesByInvalidMetadata(PortletUtils.filterDormantServices(PortletUtils.filterBannedServices(svcs)));
         return String.valueOf(svcs.size());
     }
 
