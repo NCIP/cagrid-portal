@@ -495,11 +495,6 @@
 			<fileset dir="${test.stubs.dest}">
 				<include name="**/*.class" />
 			</fileset>
-			<!-- don't need to include all these
-			<fileset dir="${test.resources.dir}">
-				<include name="**/*" />
-			</fileset>
-			-->
 			<fileset dir="${test.src.dir}">
 				<include name="**/*.java" />
 			</fileset>
