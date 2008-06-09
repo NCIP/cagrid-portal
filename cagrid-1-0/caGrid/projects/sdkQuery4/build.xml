@@ -56,8 +56,6 @@
 	<property name="test.classes.dir" location="${build.dir}/test/classes" />
 	<property name="test.lib.dir" location="${test.dir}/lib" />
 	<property name="test.logs.dir" location="${test.dir}/logs" />
-	<property name="test.resources.dir" location="${test.dir}/resources" />
-	<property name="test.resources.jar" location="${build.jars.dir}/${project.jar.prefix}tests-resources${project.jar.suffix}" />
 	<property name="test.project.jar" location="${build.jars.dir}/${project.jar.prefix}tests${project.jar.suffix}" />
 	<import file="test\test.xml" />
 
@@ -308,11 +306,6 @@
 		<jar destfile="${test.project.jar}">
 			<fileset dir="${test.classes.dir}">
 				<include name="**/*.class" />
-			</fileset>
-		</jar>
-		<jar destfile="${test.resources.jar}">
-			<fileset dir="${basedir}">
-				<include name="test/resources/**/*" />
 			</fileset>
 		</jar>
 	</target>

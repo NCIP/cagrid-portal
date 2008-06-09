@@ -40,8 +40,7 @@
 	</target>
 
 
-
-	<target name="test" depends="testCore, testCreation" description="Runs the tests" />
+	<target name="test" depends="testCore" description="Runs the tests" />
 
 
 	<!-- call the test target for each project and aggregates the log resutls  -->
@@ -65,53 +64,4 @@
 		</junit>
 		<fail message="Tests failed! Check test reports." if="test.failed" />
 	</target>
-
-
-	<target name="testCreation" depends="compileTests" description="Runs the creation tests.">
-		<mkdir dir="${junit.results.dir}" />
-		<junit dir="${introduce.dir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="yes" forkmode="once">
-			<!-- is this needed any more? -->
-			<sysproperty key="build.dirs" value="${test.classes.dir}" />
-			<sysproperty key="introduce.base.dir" value="${introduce.dir}" />
-			<sysproperty key="remote.sdk.host.name" value="${remote.sdk.host.name}" />
-			<sysproperty key="remote.sdk.host.port" value="${remote.sdk.host.port}" />
-			<jvmarg value="-Dbuild.dir=${test.classes.dir}" />
-			<classpath refid="all.test.classpath" />
-			<classpath>
-				<pathelement path="${test.classes.dir}" />
-			</classpath>
-			<formatter type="xml" />
-			<batchtest fork="yes" todir="${junit.results.dir}">
-				<fileset dir="${test.src.dir}">
-					<include name="**/system/*CreationTest.java" />
-				</fileset>
-			</batchtest>
-		</junit>
-		<fail message="Tests failed! Check test reports." if="test.failed" />
-	</target>
-
-
-	<target name="systemTest" depends="compileTests" description="Runs the system tests.">
-		<mkdir dir="${junit.results.dir}" />
-		<junit dir="${introduce.dir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="yes" forkmode="once">
-			<sysproperty key="build.dirs" value="${test.classes.dir}" />
-			<sysproperty key="introduce.base.dir" value="${introduce.dir}" />
-			<sysproperty key="remote.sdk.host.name" value="${remote.sdk.host.name}" />
-			<sysproperty key="remote.sdk.host.port" value="${remote.sdk.host.port}" />
-			<jvmarg value="-Dbuild.dir=${test.classes.dir}" />
-			<classpath refid="all.test.classpath" />
-			<classpath>
-				<pathelement path="${test.classes.dir}" />
-			</classpath>
-			<formatter type="xml" />
-			<batchtest fork="yes" todir="${junit.results.dir}">
-				<fileset dir="${test.src.dir}">
-					<include name="**/system/*Test.java" />
-					<exclude name="**/system/*CreationTest.java" />
-				</fileset>
-			</batchtest>
-		</junit>
-		<fail message="Tests failed! Check test reports." if="test.failed" />
-	</target>
-
 </project>
