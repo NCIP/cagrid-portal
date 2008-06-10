@@ -1,5 +1,7 @@
 <%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
 <%@ include file="/WEB-INF/jsp/include/includes.jspf" %>
+<%@ include file="/WEB-INF/jsp/include/table_styles.jspf" %>
+
 
 <c:set var="foreignNodeClassname" value="gov.nih.nci.cagrid.portal.portlet.query.dcql.ForeignUMLClassBean"/>
 
