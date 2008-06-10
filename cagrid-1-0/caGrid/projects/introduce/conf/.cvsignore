@@ -2,5 +2,6 @@ introduce.engine.properties
 introduce.properties
 introduce-portal-conf.xml
 introduce-service-defaults-conf.xml
+introduce-global-extension-properties-conf.xml
 
 
