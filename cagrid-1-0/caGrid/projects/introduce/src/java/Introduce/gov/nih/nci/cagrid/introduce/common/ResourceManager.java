@@ -1,7 +1,6 @@
 package gov.nih.nci.cagrid.introduce.common;
 
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.common.XMLUtilities;
 import gov.nih.nci.cagrid.common.ZipUtilities;
 
 import java.awt.Component;
@@ -9,12 +8,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Enumeration;
 import java.util.List;
 import java.util.Properties;
 import java.util.StringTokenizer;
@@ -24,7 +21,6 @@ import javax.swing.filechooser.FileFilter;
 
 import org.apache.log4j.Logger;
 import org.cagrid.grape.GridApplication;
-import org.jdom.Document;
 
 
 /**
@@ -35,10 +31,6 @@ import org.jdom.Document;
 public class ResourceManager {
     private static final Logger logger = Logger.getLogger(ResourceManager.class);
     public static final int MAX_ARCHIVE = 5;
-
-    public final static String SERVICE_URL_FILE = "service_urls.properties";
-
-    public final static String CONFIG_PROPERTIES_FILE = "configuration.properties";
     
     public final static String STATE_FILE = "introduce.state.properties";
 
@@ -76,96 +68,6 @@ public class ResourceManager {
         return introduceServiceCache.getAbsolutePath();
     }
 
-
-    public static String getServiceURLProperty(String key) {
-        Properties serviceProps = null;
-        try {
-            serviceProps = getServiceURLProperties();
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            logger.error(e);
-            return null;
-        }
-        return (String) serviceProps.get(key);
-    }
-
-
-    public static Enumeration getServiceURLPropertyKeys() {
-        Properties serviceProps = null;
-        try {
-            serviceProps = getServiceURLProperties();
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            logger.error(e);
-            return null;
-        }
-        return serviceProps.keys();
-    }
-
-
-    private static Properties getServiceURLProperties() throws IOException {
-        Properties serviceProps = new Properties();
-        if (!new File(getResourcePath() + File.separator + SERVICE_URL_FILE).exists()) {
-            serviceProps.store(new FileOutputStream(new File(getResourcePath() + File.separator + SERVICE_URL_FILE)),
-                "Introduce Global Service URLs");
-        } else {
-            serviceProps.load(new FileInputStream(new File(getResourcePath() + File.separator + SERVICE_URL_FILE)));
-        }
-        return serviceProps;
-    }
-
-
-    public static void setServiceURLProperty(String key, String value) throws IOException {
-        Properties serviceProps = getServiceURLProperties();
-        serviceProps.put(key, value);
-        serviceProps.store(new FileOutputStream(new File(getResourcePath() + File.separator + SERVICE_URL_FILE)),
-            "Introduce Global Service URLs");
-    }
-
-
-    public static String getConfigurationProperty(String key) {
-        Properties serviceProps = null;
-        try {
-            serviceProps = getConfigurationProperties();
-        } catch (Exception e) {
-            logger.error(e);
-            return null;
-        }
-        return (String) serviceProps.get(key);
-    }
-
-
-    public static Enumeration getConfigurationPropertyKeys() {
-        Properties serviceProps = null;
-        try {
-            serviceProps = getConfigurationProperties();
-        } catch (Exception e) {
-            logger.error(e);
-            return null;
-        }
-        return serviceProps.keys();
-    }
-
-
-    private static Properties getConfigurationProperties() throws IOException {
-        Properties serviceProps = new Properties();
-        if (!new File(getResourcePath() + File.separator + CONFIG_PROPERTIES_FILE).exists()) {
-            serviceProps.store(new FileOutputStream(new File(getResourcePath() + File.separator
-                + CONFIG_PROPERTIES_FILE)), "Introduce Global Configuration Properties");
-        } else {
-            serviceProps
-                .load(new FileInputStream(new File(getResourcePath() + File.separator + CONFIG_PROPERTIES_FILE)));
-        }
-        return serviceProps;
-    }
-
-
-    public static void setConfigurationProperty(String key, String value) throws IOException {
-        Properties serviceProps = getConfigurationProperties();
-        serviceProps.put(key, value);
-        serviceProps.store(new FileOutputStream(new File(getResourcePath() + File.separator + CONFIG_PROPERTIES_FILE)),
-            "Introduce Global Configuration Properties");
-    }
 
 
     public static String getStateProperty(String key) throws IOException {

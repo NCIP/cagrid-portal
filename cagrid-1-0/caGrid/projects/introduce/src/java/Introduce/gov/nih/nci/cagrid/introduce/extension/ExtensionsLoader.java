@@ -8,10 +8,9 @@ import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionDescription;
 import gov.nih.nci.cagrid.introduce.beans.extension.IntroduceGDEExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.Properties;
 import gov.nih.nci.cagrid.introduce.beans.extension.PropertiesProperty;
-import gov.nih.nci.cagrid.introduce.beans.extension.PropertyTypes;
 import gov.nih.nci.cagrid.introduce.beans.extension.ResourcePropertyEditorExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
-import gov.nih.nci.cagrid.introduce.common.ResourceManager;
+import gov.nih.nci.cagrid.introduce.common.ConfigurationUtil;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -150,15 +149,7 @@ public class ExtensionsLoader {
                 PropertiesProperty prop = properties.getProperty(i);
                 try {
                     if (prop != null && prop.getMakeGlobal() != null && prop.getMakeGlobal().booleanValue()) {
-                        if (prop.getType() != null && prop.getType().getValue().equals(PropertyTypes._SERVICE_URL)) {
-                            if (ResourceManager.getServiceURLProperty(prop.getKey()) == null) {
-                                ResourceManager.setServiceURLProperty(prop.getKey(), prop.getValue());
-                            }
-                        } else if (prop.getType() != null && prop.getType().getValue().equals(PropertyTypes._GENERAL)) {
-                            if (ResourceManager.getConfigurationProperty(prop.getKey()) == null) {
-                                ResourceManager.setConfigurationProperty(prop.getKey(), prop.getValue());
-                            }
-                        }
+                        ConfigurationUtil.addGlobalExtensionProperty(prop);
                     }
                 } catch (Exception e) {
                     logger.warn("WARNING: extension property " + prop.getKey() + " could not be processed");

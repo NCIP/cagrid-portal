@@ -16,6 +16,7 @@ import gov.nih.nci.cagrid.graph.uml.UMLClass;
 import gov.nih.nci.cagrid.graph.uml.UMLDiagram;
 import gov.nih.nci.cagrid.introduce.beans.extension.DiscoveryExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionDescription;
+import gov.nih.nci.cagrid.introduce.common.ConfigurationUtil;
 import gov.nih.nci.cagrid.introduce.common.ResourceManager;
 import gov.nih.nci.cagrid.introduce.portal.discoverytools.NamespaceTypeToolsComponent;
 
@@ -60,7 +61,12 @@ public class CaDSRTypeDiscoveryComponent extends NamespaceTypeToolsComponent
 
 
     private String getCaDSRURL() {
-        return ResourceManager.getServiceURLProperty(CaDSRDiscoveryConstants.CADSR_URL_PROPERTY);
+        try {
+            return ConfigurationUtil.getGlobalExtensionProperty(CaDSRDiscoveryConstants.CADSR_URL_PROPERTY).getValue();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 

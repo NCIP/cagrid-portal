@@ -5,14 +5,12 @@ import gov.nih.nci.cagrid.common.portal.validation.IconFeedbackPanel;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
-import gov.nih.nci.cagrid.introduce.common.IntroducePropertiesManager;
+import gov.nih.nci.cagrid.introduce.common.ConfigurationUtil;
 import gov.nih.nci.cagrid.introduce.common.ResourceManager;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
-import gov.nih.nci.cagrid.introduce.portal.configuration.PortalConfigurationUtils;
 import gov.nih.nci.cagrid.introduce.portal.modification.extensions.ExtensionsTable;
 
-import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.FocusEvent;
@@ -38,8 +36,6 @@ import javax.swing.SwingConstants;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-
-import org.cagrid.grape.GridApplication;
 
 import com.jgoodies.validation.Severity;
 import com.jgoodies.validation.ValidationResult;
@@ -476,7 +472,7 @@ public class CreationViewer extends CreationViewerBaseComponent {
     private JTextField getService() {
         if (service == null) {
             service = new JTextField();
-            service.setText(PortalConfigurationUtils.getIntroduceServiceDefaults().getServiceName());
+            service.setText(ConfigurationUtil.getIntroduceServiceDefaults().getServiceName());
             service.getDocument().addDocumentListener(new DocumentListener() {
                 public void changedUpdate(DocumentEvent e) {
                     updateSuggestedNamespace();
@@ -534,7 +530,7 @@ public class CreationViewer extends CreationViewerBaseComponent {
             dir = new JTextField();
             String home = System.getProperty("user.home");
             dir.setText(home + File.separator
-                + PortalConfigurationUtils.getIntroduceServiceDefaults().getServiceName());
+                + ConfigurationUtil.getIntroduceServiceDefaults().getServiceName());
             dir.getDocument().addDocumentListener(new DocumentListener() {
                 public void changedUpdate(DocumentEvent e) {
                     updateSuggestedNamespace();
@@ -598,7 +594,7 @@ public class CreationViewer extends CreationViewerBaseComponent {
     private JTextField getServicePackage() {
         if (servicePackage == null) {
             servicePackage = new JTextField();
-            servicePackage.setText(PortalConfigurationUtils.getIntroduceServiceDefaults().getServicePackage());
+            servicePackage.setText(ConfigurationUtil.getIntroduceServiceDefaults().getServicePackage());
             servicePackage.getDocument().addDocumentListener(new DocumentListener() {
                 public void changedUpdate(DocumentEvent e) {
                     updateSuggestedNamespace();
@@ -632,7 +628,7 @@ public class CreationViewer extends CreationViewerBaseComponent {
         if (namespaceDomain == null) {
             namespaceDomain = new JTextField();
             namespaceDomain
-                .setText(PortalConfigurationUtils.getIntroduceServiceDefaults().getServiceNamespace());
+                .setText(ConfigurationUtil.getIntroduceServiceDefaults().getServiceNamespace());
             namespaceDomain.getDocument().addDocumentListener(new DocumentListener() {
                 public void changedUpdate(DocumentEvent e) {          
                     validateInput();

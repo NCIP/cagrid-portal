@@ -13,6 +13,7 @@ import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
 import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertyType;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.beans.service.ServicesType;
+import gov.nih.nci.cagrid.introduce.common.ConfigurationUtil;
 import gov.nih.nci.cagrid.introduce.common.ResourceManager;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.extension.CodegenExtensionException;
@@ -105,7 +106,13 @@ public class MetadataCodegenPostProcessor implements CodegenExtensionPostProcess
 
 
     private String getCaDSRURL() {
-        return ResourceManager.getServiceURLProperty(MetadataConstants.CADSR_URL_PROPERTY);
+        try {
+            return ConfigurationUtil.getGlobalExtensionProperty(MetadataConstants.CADSR_URL_PROPERTY).getValue();
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return null;
     }
 
 

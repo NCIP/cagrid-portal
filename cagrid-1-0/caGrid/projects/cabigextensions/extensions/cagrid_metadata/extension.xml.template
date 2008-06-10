@@ -4,7 +4,7 @@
 		<ns1:CodegenPreProcessor>gov.nih.nci.cagrid.introduce.extensions.metadata.codegen.MetadataCodegenPreProcessor</ns1:CodegenPreProcessor>
 		<ns1:CodegenPostProcessor>gov.nih.nci.cagrid.introduce.extensions.metadata.codegen.MetadataCodegenPostProcessor</ns1:CodegenPostProcessor>
 		<ns1:Properties>
-			<property makeGlobal="true" type="SERVICE_URL" key="Cancer Data Standards Repository (caDSR) URL" value="@cagrid.master.cadsr.service.url@"/> 
+   			<ns1:Property makeGlobal="true" key="CADSR_URL" displayName="caDSR URL" description="Cancer Data Standards Repository (caDSR) URL" value="@cagrid.master.cadsr.service.url@"/>
 		</ns1:Properties>
 	</ns1:ServiceExtensionDescription>
 	<ns1:UpgradesDescription>

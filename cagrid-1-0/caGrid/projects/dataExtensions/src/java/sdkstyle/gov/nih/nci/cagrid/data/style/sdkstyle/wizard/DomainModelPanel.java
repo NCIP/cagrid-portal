@@ -21,6 +21,7 @@ import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionT
 import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertyType;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
+import gov.nih.nci.cagrid.introduce.common.ConfigurationUtil;
 import gov.nih.nci.cagrid.introduce.common.FileFilters;
 import gov.nih.nci.cagrid.introduce.common.ResourceManager;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
@@ -71,7 +72,7 @@ import org.cagrid.grape.utils.CompositeErrorDialog;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created Sep 25, 2006 
- * @version $Id: DomainModelPanel.java,v 1.6 2008-01-17 21:29:31 dervin Exp $ 
+ * @version $Id: DomainModelPanel.java,v 1.7 2008-06-10 15:30:25 hastings Exp $ 
  */
 public class DomainModelPanel extends AbstractWizardPanel {
 	
@@ -471,7 +472,14 @@ public class DomainModelPanel extends AbstractWizardPanel {
 	private InternalCaDSRBrowserPanel getCaDsrBrowser() {
 		if (caDsrBrowser == null) {
 			caDsrBrowser = new InternalCaDSRBrowserPanel(true, false);
-			String url = ResourceManager.getServiceURLProperty(DataServiceConstants.CADSR_SERVICE_URL);
+			String url;
+            try {
+                url = ConfigurationUtil.getGlobalExtensionProperty(DataServiceConstants.CADSR_SERVICE_URL).getValue();
+            } catch (Exception e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+                return null;
+            }
 			caDsrBrowser.setDefaultCaDSRURL(url);
 			caDsrBrowser.getCadsr().setText(url);
 		}

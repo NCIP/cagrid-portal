@@ -3,6 +3,7 @@ package gov.nih.nci.cagrid.introduce.portal.deployment;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.introduce.beans.property.ServicePropertiesProperty;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
+import gov.nih.nci.cagrid.introduce.portal.common.GenericPropertiesPanel;
 
 import java.awt.Color;
 import java.awt.Dimension;

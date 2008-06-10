@@ -14,6 +14,7 @@ import gov.nih.nci.cagrid.introduce.beans.extension.DiscoveryExtensionDescriptio
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespacesType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
+import gov.nih.nci.cagrid.introduce.common.ConfigurationUtil;
 import gov.nih.nci.cagrid.introduce.common.ResourceManager;
 import gov.nih.nci.cagrid.introduce.portal.modification.discovery.NamespaceTypeDiscoveryComponent;
 
@@ -59,12 +60,24 @@ public class CaDSRTypeSelectionComponent extends NamespaceTypeDiscoveryComponent
 
 
     private String getCaDSRURL() {
-        return ResourceManager.getServiceURLProperty(CaDSRDiscoveryConstants.CADSR_URL_PROPERTY);
+        try {
+            return ConfigurationUtil.getGlobalExtensionProperty(CaDSRDiscoveryConstants.CADSR_URL_PROPERTY).getValue();
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return null;
     }
 
 
     private String getGMEURL() {
-        return ResourceManager.getServiceURLProperty(CaDSRDiscoveryConstants.GME_URL_PROPERTY);
+        try {
+            return ConfigurationUtil.getGlobalExtensionProperty(CaDSRDiscoveryConstants.GME_URL_PROPERTY).getValue();
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return null;
     }
 
 

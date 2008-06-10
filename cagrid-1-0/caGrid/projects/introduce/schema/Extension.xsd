@@ -198,9 +198,10 @@
 				<xs:element name="Property" minOccurs="0" maxOccurs="unbounded">
 					<xs:complexType>
 						<xs:attribute name="makeGlobal" type="xs:boolean" use="optional"/>
-						<xs:attribute name="type" type="PropertyTypes" use="optional"/>
 						<xs:attribute name="key" type="xs:string" use="required"/>
 						<xs:attribute name="value" type="xs:string" use="optional"/>
+						<xs:attribute name="displayName" type="xs:string" use="optional"/>
+						<xs:attribute name="description" type="xs:string" use="optional"/>
 					</xs:complexType>
 				</xs:element>
 			</xs:sequence>
@@ -220,10 +221,4 @@
 		<xs:attribute name="extensionType" type="xs:string"/>
 		<xs:attribute name="version" type="xs:string" use="optional"/>
 	</xs:complexType>
-	<xs:simpleType name="PropertyTypes">
-		<xs:restriction base="xs:string">
-			<xs:enumeration value="SERVICE_URL"/>
-			<xs:enumeration value="GENERAL"/>
-		</xs:restriction>
-	</xs:simpleType>
 </xs:schema>

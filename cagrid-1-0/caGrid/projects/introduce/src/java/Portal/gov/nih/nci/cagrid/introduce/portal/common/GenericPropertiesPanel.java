@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.introduce.portal.deployment;
+package gov.nih.nci.cagrid.introduce.portal.common;
 import java.awt.GridBagConstraints;
 import java.util.HashMap;
 import java.util.Map;
@@ -15,7 +15,7 @@ import org.cagrid.grape.ApplicationComponent;
 /**
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
  */
-public abstract class GenericPropertiesPanel extends JPanel {
+public class GenericPropertiesPanel extends JPanel {
 
     private Map textFields;
     private Map labels;
@@ -30,7 +30,7 @@ public abstract class GenericPropertiesPanel extends JPanel {
     }
 
 
-    protected String getTextFieldValue(String label) {
+    public String getTextFieldValue(String label) {
         JTextField field = (JTextField) textFields.get(label);
         if (field != null) {
             return field.getText();
@@ -39,7 +39,7 @@ public abstract class GenericPropertiesPanel extends JPanel {
         }
     }
     
-    protected JTextField getTextField(String label) {
+    public JTextField getTextField(String label) {
         JTextField field = (JTextField) textFields.get(label);
         if (field != null) {
             return field;
@@ -48,7 +48,7 @@ public abstract class GenericPropertiesPanel extends JPanel {
         }
     }
     
-    protected JLabel getLabel(String label) {
+    public JLabel getLabel(String label) {
         JLabel jlabel = (JLabel) labels.get(label);
         if (jlabel != null) {
             return jlabel;
@@ -58,7 +58,7 @@ public abstract class GenericPropertiesPanel extends JPanel {
     }
 
 
-    protected void setTextFieldValue(String label, String value) {
+    public void setTextFieldValue(String label, String value) {
         JTextField field = (JTextField) textFields.get(label);
         if (field != null) {
             field.setText(value);
@@ -66,7 +66,7 @@ public abstract class GenericPropertiesPanel extends JPanel {
     }
 
 
-    protected void setTextFieldValueAndDisable(String label, String value) {
+    public void setTextFieldValueAndDisable(String label, String value) {
         JTextField field = (JTextField) textFields.get(label);
         if (field != null) {
             field.setText(value);
@@ -75,7 +75,7 @@ public abstract class GenericPropertiesPanel extends JPanel {
     }
 
 
-    protected void setJPasswordFieldValueAndDisable(String label, String value) {
+    public void setJPasswordFieldValueAndDisable(String label, String value) {
         JPasswordField field = (JPasswordField) textFields.get(label);
         if (field != null) {
             field.setText(value);
@@ -84,7 +84,7 @@ public abstract class GenericPropertiesPanel extends JPanel {
     }
 
 
-    protected String getPasswordFieldValue(String label) {
+    public String getPasswordFieldValue(String label) {
         JPasswordField field = (JPasswordField) passwordFields.get(label);
         if (field != null) {
             return new String(field.getPassword());
@@ -92,15 +92,19 @@ public abstract class GenericPropertiesPanel extends JPanel {
             return null;
         }
     }
-
-
-    protected void addTextField(JPanel panel, String label, String value, int y, boolean enabled) {
+    
+    
+    public void addTextField(JPanel panel, String label, String value, String tooltip, int y, boolean enabled){
         JLabel label1 = new JLabel();
         label1.setText(label);
         JComponent component = null;
         JTextField text = new JTextField();
         text.setText(value);
         text.setEditable(enabled);
+        if(tooltip!=null){
+            label1.setToolTipText(tooltip);
+            text.setToolTipText(tooltip);
+        }
         component = text;
         this.textFields.put(label, text);
         this.labels.put(label,label1);
@@ -125,7 +129,12 @@ public abstract class GenericPropertiesPanel extends JPanel {
     }
 
 
-    protected void addPasswordField(JPanel panel, String label, String value, int y, boolean enabled) {
+    public void addTextField(JPanel panel, String label, String value, int y, boolean enabled) {
+        addTextField(panel, label, value, null, y, enabled);
+    }
+
+
+    public void addPasswordField(JPanel panel, String label, String value, int y, boolean enabled) {
         JLabel label1 = new JLabel();
         label1.setText(label);
         JComponent component = null;

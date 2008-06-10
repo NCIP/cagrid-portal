@@ -3,7 +3,6 @@ package gov.nih.nci.cagrid.introduce.portal.modification;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.common.portal.MultiEventProgressBar;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
-import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.common.portal.PromptButtonDialog;
 import gov.nih.nci.cagrid.common.portal.validation.IconFeedbackPanel;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
@@ -24,13 +23,12 @@ import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
 import gov.nih.nci.cagrid.introduce.common.AntTools;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
+import gov.nih.nci.cagrid.introduce.common.ConfigurationUtil;
 import gov.nih.nci.cagrid.introduce.common.FileFilters;
-import gov.nih.nci.cagrid.introduce.common.ResourceManager;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 import gov.nih.nci.cagrid.introduce.extension.utils.ExtensionUtilities;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
-import gov.nih.nci.cagrid.introduce.portal.configuration.PortalConfigurationUtils;
 import gov.nih.nci.cagrid.introduce.portal.extension.ServiceModificationUIPanel;
 import gov.nih.nci.cagrid.introduce.portal.modification.discovery.NamespaceTypeDiscoveryComponent;
 import gov.nih.nci.cagrid.introduce.portal.modification.extensions.ExtensionsManagerPanel;
@@ -57,8 +55,6 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
 import java.io.File;
 import java.io.FileInputStream;
 import java.text.SimpleDateFormat;
@@ -84,7 +80,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.border.TitledBorder;
@@ -2011,7 +2006,7 @@ public class ModificationViewer extends ApplicationComponent {
         NamespaceTypeDiscoveryComponent discoveryComponent = (NamespaceTypeDiscoveryComponent) getDiscoveryTabbedPane()
             .getSelectedComponent();
 
-        NamespaceType[] types = discoveryComponent.createNamespaceType(schemaDir, PortalConfigurationUtils.getIntroducePortalConfiguration().getNamespaceReplacementPolicy(), progBar);
+        NamespaceType[] types = discoveryComponent.createNamespaceType(schemaDir, ConfigurationUtil.getIntroducePortalConfiguration().getNamespaceReplacementPolicy(), progBar);
 
         List<String> messages = new ArrayList<String>();
         if (types != null) {

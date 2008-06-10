@@ -2,6 +2,7 @@ package gov.nih.nci.cagrid.introduce.portal.discoverytools.gme;
 
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
+import gov.nih.nci.cagrid.introduce.common.ConfigurationUtil;
 import gov.nih.nci.cagrid.introduce.common.ResourceManager;
 
 import java.awt.BorderLayout;
@@ -36,7 +37,7 @@ public class GMESchemaLocatorPanel extends JPanel {
     
     private static final Logger logger = Logger.getLogger(GMESchemaLocatorPanel.class);
 
-	public static String GME_URL = "Global Model Exchange URL";
+	public static String GME_URL = "GME_URL";
 	public static String TYPE = "gme_discovery";
 
 	private JPanel mainPanel = null;
@@ -103,7 +104,7 @@ public class GMESchemaLocatorPanel extends JPanel {
                 GridServiceResolver.getInstance().setDefaultFactory(
                     new GlobusGMEXMLDataModelServiceFactory());
                 XMLDataModelService handle = (XMLDataModelService) GridServiceResolver.getInstance()
-                    .getGridService(ResourceManager.getServiceURLProperty(GME_URL));
+                    .getGridService(ConfigurationUtil.getGlobalExtensionProperty(GME_URL).getValue());
                 List domains = handle.getNamespaceDomainList();
 
                 Collections.sort(domains, new Comparator() {
@@ -172,8 +173,7 @@ public class GMESchemaLocatorPanel extends JPanel {
 	                                GridServiceResolver.getInstance().setDefaultFactory(
 	                                    new GlobusGMEXMLDataModelServiceFactory());
 	                                XMLDataModelService handle = (XMLDataModelService) GridServiceResolver
-	                                    .getInstance().getGridService(
-                                            ResourceManager.getServiceURLProperty(GME_URL));
+	                                    .getInstance().getGridService(ConfigurationUtil.getGlobalExtensionProperty(GME_URL).getValue());
 	                                List namespaces = handle.getSchemaListForNamespaceDomain(
 	                                    (String) namespaceComboBox.getSelectedItem());
 	                                Collections.sort(namespaces, namespaceSorter);
@@ -215,12 +215,12 @@ public class GMESchemaLocatorPanel extends JPanel {
                             try {
                                 XMLDataModelService handle = (XMLDataModelService) GridServiceResolver.getInstance()
                                     .getGridService(
-                                        gov.nih.nci.cagrid.introduce.common.ResourceManager.getServiceURLProperty(GME_URL));
+                                        ConfigurationUtil.getGlobalExtensionProperty(GME_URL).getValue());
                                 if (schemaComboBox.getSelectedItem() != null) {
                                     Namespace namespace = ((SchemaWrapper) schemaComboBox.getSelectedItem()).getNamespace();
                                     currentNode = handle.getSchema(namespace, false);
                                 }
-                            } catch (MobiusException ex) {
+                            } catch (Exception ex) {
                                 ex.printStackTrace();
                                 CompositeErrorDialog.showErrorDialog("Error contacting GME", ex.getMessage(), ex);
                             }

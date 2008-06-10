@@ -16,6 +16,7 @@ import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionT
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
+import gov.nih.nci.cagrid.introduce.common.ConfigurationUtil;
 import gov.nih.nci.cagrid.introduce.common.ResourceManager;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.sdkquery4.processor.SDK4QueryProcessor;
@@ -63,7 +64,7 @@ import org.projectmobius.gme.client.GlobusGMEXMLDataModelServiceFactory;
  * @author David Ervin
  * 
  * @created Jan 9, 2008 11:09:22 AM
- * @version $Id: SchemaMappingPanel.java,v 1.3 2008-01-23 19:59:19 dervin Exp $ 
+ * @version $Id: SchemaMappingPanel.java,v 1.4 2008-06-10 15:30:25 hastings Exp $ 
  */
 public class SchemaMappingPanel extends AbstractWizardPanel {
     
@@ -234,9 +235,15 @@ public class SchemaMappingPanel extends AbstractWizardPanel {
     private JTextField getGmeUrlTextField() {
         if (gmeUrlTextField == null) {
             gmeUrlTextField = new JTextField();
-            String url = ResourceManager.getServiceURLProperty(
-                DataServiceConstants.GME_SERVICE_URL);
-            gmeUrlTextField.setText(url);
+            try {
+                String url = ConfigurationUtil.getGlobalExtensionProperty(
+                    DataServiceConstants.GME_SERVICE_URL).getValue();
+                gmeUrlTextField.setText(url);
+            } catch (Exception e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+                return null;
+            }
         }
         return gmeUrlTextField;
     }

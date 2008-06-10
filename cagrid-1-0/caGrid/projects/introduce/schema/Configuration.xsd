@@ -1,43 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<schema xmlns="http://www.w3.org/2001/XMLSchema"
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
 	xmlns:tns="gme://gov.nih.nci.cagrid.introduce/1/Configuration"
-	targetNamespace="gme://gov.nih.nci.cagrid.introduce/1/Configuration">
+	targetNamespace="gme://gov.nih.nci.cagrid.introduce/1/Configuration" attributeFormDefault="qualified" elementFormDefault="qualified">
 	
-	<element name="IntroducePortalConfiguration" type="tns:IntroducePortalConfiguration"></element>
-	<complexType name="IntroducePortalConfiguration">
-		<sequence>
-			<element ref="tns:NamespaceReplacementPolicy"></element>
-			<element ref="tns:UpdateSiteURL"></element>
-		</sequence>
-	</complexType>
+	<xs:element name="IntroducePortalConfiguration" type="tns:IntroducePortalConfiguration"></xs:element>
+	<xs:complexType name="IntroducePortalConfiguration">
+		<xs:sequence>
+			<xs:element ref="tns:NamespaceReplacementPolicy"></xs:element>
+			<xs:element ref="tns:UpdateSiteURL"></xs:element>
+		</xs:sequence>
+	</xs:complexType>
 	
-	<element name="IntroduceServiceDefaults" type="tns:IntroduceServiceDefaults"></element>
-	<complexType name="IntroduceServiceDefaults">
-		<sequence>
-			<element ref="tns:ServiceName" ></element>
-			<element ref="tns:ServiceNamespace" ></element>
-			<element ref="tns:ServicePackage" ></element>
-			<element ref="tns:DeploymentPrefix" ></element>
-			<element ref="tns:IndexServiceRegistrationURL" ></element>
-		</sequence>
-	</complexType>
+	<xs:element name="IntroduceServiceDefaults" type="tns:IntroduceServiceDefaults"></xs:element>
+	<xs:complexType name="IntroduceServiceDefaults">
+		<xs:sequence>
+			<xs:element ref="tns:ServiceName" ></xs:element>
+			<xs:element ref="tns:ServiceNamespace" ></xs:element>
+			<xs:element ref="tns:ServicePackage" ></xs:element>
+			<xs:element ref="tns:DeploymentPrefix" ></xs:element>
+			<xs:element ref="tns:IndexServiceRegistrationURL" ></xs:element>
+		</xs:sequence>
+	</xs:complexType>
 
-    <element name="NamespaceReplacementPolicy" type="tns:NamespaceReplacementPolicy"></element>
-	<simpleType name="NamespaceReplacementPolicy">
-	  <restriction base="string">
-	    <enumeration value="ERROR"></enumeration>
-	    <enumeration value="REPLACE"></enumeration>
-	    <enumeration value="IGNORE"></enumeration>
-	  </restriction>
-	</simpleType>
+    <xs:element name="NamespaceReplacementPolicy" type="tns:NamespaceReplacementPolicy"></xs:element>
+	<xs:simpleType name="NamespaceReplacementPolicy">
+	  <xs:restriction base="xs:string">
+	    <xs:enumeration value="ERROR"></xs:enumeration>
+	    <xs:enumeration value="REPLACE"></xs:enumeration>
+	    <xs:enumeration value="IGNORE"></xs:enumeration>
+	  </xs:restriction>
+	</xs:simpleType>
 	
-	<element name="UpdateSiteURL" type="string"></element>
+	<xs:element name="UpdateSiteURL" type="xs:string"></xs:element>
 	
-	<element name="ServiceName" type="string"></element>
-	<element name="ServiceNamespace" type="string"></element>
-	<element name="ServicePackage" type="string"></element>
-	<element name="DeploymentPrefix" type="string"></element>
-	<element name="IndexServiceRegistrationURL" type="string"></element>
+	<xs:element name="ServiceName" type="xs:string"></xs:element>
+	<xs:element name="ServiceNamespace" type="xs:string"></xs:element>
+	<xs:element name="ServicePackage" type="xs:string"></xs:element>
+	<xs:element name="DeploymentPrefix" type="xs:string"></xs:element>
+	<xs:element name="IndexServiceRegistrationURL" type="xs:string"></xs:element>
 	
 
-</schema>
+</xs:schema>

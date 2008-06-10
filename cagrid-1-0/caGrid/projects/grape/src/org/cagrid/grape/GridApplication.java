@@ -109,6 +109,9 @@ public class GridApplication extends JFrame {
 
 
     public static ApplicationContext getContext() {
+        if(application==null){
+            return null;
+        }
         return application.context;
     }
 

@@ -13,6 +13,7 @@ import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionT
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
+import gov.nih.nci.cagrid.introduce.common.ConfigurationUtil;
 import gov.nih.nci.cagrid.introduce.common.ResourceManager;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 
@@ -50,7 +51,7 @@ import org.projectmobius.gme.client.GlobusGMEXMLDataModelServiceFactory;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * @created Sep 26, 2006
- * @version $Id: SchemaTypesPanel.java,v 1.5 2008-01-24 18:02:56 dervin Exp $
+ * @version $Id: SchemaTypesPanel.java,v 1.6 2008-06-10 15:30:25 hastings Exp $
  */
 public class SchemaTypesPanel extends AbstractWizardPanel {
     
@@ -157,7 +158,14 @@ public class SchemaTypesPanel extends AbstractWizardPanel {
     private JTextField getGmeUrlTextField() {
         if (this.gmeUrlTextField == null) {
             this.gmeUrlTextField = new JTextField();
-            String url = ResourceManager.getServiceURLProperty(DataServiceConstants.GME_SERVICE_URL);
+            String url;
+            try {
+                url = ConfigurationUtil.getGlobalExtensionProperty(DataServiceConstants.GME_SERVICE_URL).getValue();
+            } catch (Exception e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+                return null;
+            }
             this.gmeUrlTextField.setText(url);
         }
         return this.gmeUrlTextField;

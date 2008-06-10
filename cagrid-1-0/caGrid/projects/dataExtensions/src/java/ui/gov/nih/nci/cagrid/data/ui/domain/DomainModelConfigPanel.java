@@ -28,6 +28,7 @@ import gov.nih.nci.cagrid.data.ui.tree.uml.UMLProjectTree;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertyType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
+import gov.nih.nci.cagrid.introduce.common.ConfigurationUtil;
 import gov.nih.nci.cagrid.introduce.common.ResourceManager;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.metadata.MetadataUtils;
@@ -61,13 +62,13 @@ import org.cagrid.grape.utils.ErrorDialog;
 
 
 /**
- * DomainModelConfigPanel 
- * Panel to contain all the configuration of the domain model
+ * DomainModelConfigPanel Panel to contain all the configuration of the domain
+ * model
  * 
  * @author David Ervin
- * 
  * @created Apr 11, 2007 9:59:24 AM
- * @version $Id: DomainModelConfigPanel.java,v 1.10 2008-01-24 18:03:14 dervin Exp $
+ * @version $Id: DomainModelConfigPanel.java,v 1.10 2008/01/24 18:03:14 dervin
+ *          Exp $
  */
 public class DomainModelConfigPanel extends DataServiceModificationSubPanel {
 
@@ -104,7 +105,8 @@ public class DomainModelConfigPanel extends DataServiceModificationSubPanel {
         try {
             noDomainModel = getExtensionDataManager().isNoDomainModel();
             suppliedDomainModel = getExtensionDataManager().isSuppliedDomainModel();
-            // handle possibility that the domain model source has just been set to 'none'
+            // handle possibility that the domain model source has just been set
+            // to 'none'
             CadsrInformation cadsrInfo = getExtensionDataManager().getCadsrInformation();
             if (noDomainModel && cadsrInfo.getPackages() != null && cadsrInfo.getPackages().length != 0) {
                 Set<String> shownPackages = getUmlTree().getPackagesInTree();
@@ -118,12 +120,10 @@ public class DomainModelConfigPanel extends DataServiceModificationSubPanel {
             }
         } catch (Exception ex) {
             ex.printStackTrace();
-            CompositeErrorDialog.showErrorDialog("Error loading domain model source", 
-                ex.getMessage(), ex);
+            CompositeErrorDialog.showErrorDialog("Error loading domain model source", ex.getMessage(), ex);
         }
         // only enabled if domain model from caDSR
-        PortalUtils.setContainerEnabled(getCadsrBrowserPanel(), 
-            !noDomainModel && !suppliedDomainModel);
+        PortalUtils.setContainerEnabled(getCadsrBrowserPanel(), !noDomainModel && !suppliedDomainModel);
         getAddFullProjectButton().setEnabled(!noDomainModel && !suppliedDomainModel);
         getAddPackageButton().setEnabled(!noDomainModel && !suppliedDomainModel);
         getRemovePackageButton().setEnabled(!noDomainModel && !suppliedDomainModel);
@@ -140,8 +140,7 @@ public class DomainModelConfigPanel extends DataServiceModificationSubPanel {
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
-                CompositeErrorDialog.showErrorDialog("Error loading domain model",
-                    ex.getMessage(), ex);
+                CompositeErrorDialog.showErrorDialog("Error loading domain model", ex.getMessage(), ex);
             }
         } else {
             installedDomainModel = null;
@@ -155,8 +154,8 @@ public class DomainModelConfigPanel extends DataServiceModificationSubPanel {
             getUmlTree().expandFullTree();
         }
     }
-    
-    
+
+
     private synchronized void firstCadsrBrowserInit() {
         // domain model must be from caDSR
         try {
@@ -169,12 +168,10 @@ public class DomainModelConfigPanel extends DataServiceModificationSubPanel {
                 getCadsrBrowserPanel().getCadsr().setText(caDsrUrl);
             }
             // find the requested project in the caDSR
-            CaDSRServiceClient cadsrClient = new CaDSRServiceClient(
-                getCadsrBrowserPanel().getCadsr().getText());
+            CaDSRServiceClient cadsrClient = new CaDSRServiceClient(getCadsrBrowserPanel().getCadsr().getText());
             Project[] allProjects = cadsrClient.findAllProjects();
             for (Project proj : allProjects) {
-                if (proj.getLongName().equals(projectLongName) 
-                    && proj.getVersion().equals(projectVersion)) {
+                if (proj.getLongName().equals(projectLongName) && proj.getVersion().equals(projectVersion)) {
                     mostRecentProject = proj;
                     break;
                 }
@@ -186,11 +183,9 @@ public class DomainModelConfigPanel extends DataServiceModificationSubPanel {
                     if (getUmlTree().getUmlPackageNode(packName) == null) {
                         // package isn't in the tree yet
                         getUmlTree().addUmlPackage(packName);
-                        List<ClassMapping> mappings = getExtensionDataManager()
-                            .getClassMappingsInPackage(packName);
+                        List<ClassMapping> mappings = getExtensionDataManager().getClassMappingsInPackage(packName);
                         for (ClassMapping mapping : mappings) {
-                            UMLClassTreeNode classNode = getUmlTree().addUmlClass(
-                                packName, mapping.getClassName());
+                            UMLClassTreeNode classNode = getUmlTree().addUmlClass(packName, mapping.getClassName());
                             classNode.getCheckBox().setSelected(mapping.isSelected());
                         }
                     }
@@ -199,8 +194,7 @@ public class DomainModelConfigPanel extends DataServiceModificationSubPanel {
             currentlyFromCadsr = true;
         } catch (Exception ex) {
             ex.printStackTrace();
-            CompositeErrorDialog.showErrorDialog("Error loading cadsr domain model information", 
-                ex.getMessage(), ex);
+            CompositeErrorDialog.showErrorDialog("Error loading cadsr domain model information", ex.getMessage(), ex);
         }
     }
 
@@ -264,8 +258,9 @@ public class DomainModelConfigPanel extends DataServiceModificationSubPanel {
             }
             if (cadsrUrl == null || cadsrUrl.length() == 0) {
                 // grab the default URL and store it in the extension data
-                cadsrUrl = ResourceManager.getServiceURLProperty(CaDSRDiscoveryConstants.CADSR_URL_PROPERTY);
                 try {
+                    cadsrUrl = ConfigurationUtil.getGlobalExtensionProperty(CaDSRDiscoveryConstants.CADSR_URL_PROPERTY)
+                        .getValue();
                     getExtensionDataManager().storeCadsrServiceUrl(cadsrUrl);
                 } catch (Exception ex) {
                     ex.printStackTrace();
@@ -278,8 +273,7 @@ public class DomainModelConfigPanel extends DataServiceModificationSubPanel {
             cadsrBrowserPanel.getCadsr().getDocument().addDocumentListener(new DocumentChangeAdapter() {
                 public void documentEdited(DocumentEvent e) {
                     try {
-                        getExtensionDataManager().storeCadsrServiceUrl(
-                            getCadsrBrowserPanel().getCadsr().getText());
+                        getExtensionDataManager().storeCadsrServiceUrl(getCadsrBrowserPanel().getCadsr().getText());
                     } catch (Exception ex) {
                         ex.printStackTrace();
                         CompositeErrorDialog.showErrorDialog("Error storing domain model source", ex.getMessage(), ex);
@@ -325,10 +319,9 @@ public class DomainModelConfigPanel extends DataServiceModificationSubPanel {
                     if (selectedProject != null) {
                         // contact the caDSR for all packages in the project
                         try {
-                            CaDSRServiceClient cadsrClient = new CaDSRServiceClient(
-                                getCadsrBrowserPanel().getCadsr().getText());
-                            UMLPackageMetadata[] umlPackages = 
-                                cadsrClient.findPackagesInProject(selectedProject);
+                            CaDSRServiceClient cadsrClient = new CaDSRServiceClient(getCadsrBrowserPanel().getCadsr()
+                                .getText());
+                            UMLPackageMetadata[] umlPackages = cadsrClient.findPackagesInProject(selectedProject);
                             // only one project validation for all packages
                             if (verifyProjectSelection(selectedProject)) {
                                 for (UMLPackageMetadata pack : umlPackages) {
@@ -337,7 +330,7 @@ public class DomainModelConfigPanel extends DataServiceModificationSubPanel {
                             }
                         } catch (Exception ex) {
                             ex.printStackTrace();
-                            CompositeErrorDialog.showErrorDialog("Error loading packages from project", 
+                            CompositeErrorDialog.showErrorDialog("Error loading packages from project",
                                 ex.getMessage(), ex);
                         }
                     } else {
@@ -359,20 +352,23 @@ public class DomainModelConfigPanel extends DataServiceModificationSubPanel {
                     Project selectedProject = getCadsrBrowserPanel().getSelectedProject();
                     UMLPackageMetadata selectedPackage = cadsrBrowserPanel.getSelectedPackage();
                     if (selectedProject != null && selectedPackage != null) {
-                        // ensure the selected project is consistent with current domain model
+                        // ensure the selected project is consistent with
+                        // current domain model
                         if (verifyProjectSelection(selectedProject)) {
-                            // ensure the package is not already present in the model
+                            // ensure the package is not already present in the
+                            // model
                             try {
                                 if (!packageUsedInModel(selectedPackage)) {
                                     // add the package to the model
                                     addUmlPackageToModel(selectedProject, selectedPackage);
                                 } else {
                                     GridApplication.getContext().showMessage(
-                                    "The selected package is already part of the domain model");
+                                        "The selected package is already part of the domain model");
                                 }
                             } catch (Exception ex) {
                                 ex.printStackTrace();
-                                CompositeErrorDialog.showErrorDialog("Error determining package use", ex.getMessage(), ex);
+                                CompositeErrorDialog.showErrorDialog("Error determining package use", ex.getMessage(),
+                                    ex);
                             }
                         }
                     } else {
@@ -411,10 +407,9 @@ public class DomainModelConfigPanel extends DataServiceModificationSubPanel {
     private JScrollPane getUmlClassScrollPane() {
         if (umlClassScrollPane == null) {
             umlClassScrollPane = new JScrollPane();
-            umlClassScrollPane.setBorder(javax.swing.BorderFactory.createTitledBorder(
-                null, "UML Class Selection", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-                javax.swing.border.TitledBorder.DEFAULT_POSITION, null, 
-                PortalLookAndFeel.getPanelLabelColor()));
+            umlClassScrollPane.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "UML Class Selection",
+                javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+                javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
             umlClassScrollPane.setViewportView(getUmlTree());
         }
         return umlClassScrollPane;
@@ -433,22 +428,19 @@ public class DomainModelConfigPanel extends DataServiceModificationSubPanel {
                         String className = classNode.getClassName();
                         try {
                             // need the class mapping
-                            ClassMapping mapping = getExtensionDataManager()
-                                .getClassMapping(packName, className);
+                            ClassMapping mapping = getExtensionDataManager().getClassMapping(packName, className);
                             // and the namespace type
-                            String namespace = getExtensionDataManager()
-                                .getMappedNamespaceForPackage(packName);
-                            NamespaceType packageNamespace = CommonTools.getNamespaceType(
-                                getServiceInfo().getNamespaces(), namespace);
-                            // if the namespace type has been removed from the service,
-                            // there's no way the domain type can be used in the data service
+                            String namespace = getExtensionDataManager().getMappedNamespaceForPackage(packName);
+                            NamespaceType packageNamespace = CommonTools.getNamespaceType(getServiceInfo()
+                                .getNamespaces(), namespace);
+                            // if the namespace type has been removed from the
+                            // service,
+                            // there's no way the domain type can be used in the
+                            // data service
                             if (packageNamespace == null) {
                                 if (!warnedMissingNamespaces.contains(namespace)) {
-                                    String[] message = new String[] {
-                                        "The selected class maps to the XML namespace",
-                                        namespace,
-                                        "which could not be found in the service."
-                                    };
+                                    String[] message = new String[]{"The selected class maps to the XML namespace",
+                                            namespace, "which could not be found in the service."};
                                     JOptionPane.showMessageDialog(DomainModelConfigPanel.this, message,
                                         "Missing Namespace", JOptionPane.ERROR_MESSAGE);
                                 }
@@ -507,8 +499,8 @@ public class DomainModelConfigPanel extends DataServiceModificationSubPanel {
             advancedOptionsButton.setText("Advanced Options");
             advancedOptionsButton.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
-                    DomainModelAdvancedOptionsDialog dialog = new DomainModelAdvancedOptionsDialog(
-                        getServiceInfo(), getExtensionDataManager());
+                    DomainModelAdvancedOptionsDialog dialog = new DomainModelAdvancedOptionsDialog(getServiceInfo(),
+                        getExtensionDataManager());
                     dialog.setVisible(true);
                     updateDisplayedConfiguration();
                 }
@@ -563,8 +555,7 @@ public class DomainModelConfigPanel extends DataServiceModificationSubPanel {
                     isSupplied = getExtensionDataManager().isSuppliedDomainModel();
                 } catch (Exception ex) {
                     ex.printStackTrace();
-                    CompositeErrorDialog.showErrorDialog("Error determining domain model source", 
-                        ex.getMessage(), ex);
+                    CompositeErrorDialog.showErrorDialog("Error determining domain model source", ex.getMessage(), ex);
                 }
                 // get the domain model selected
                 if (isSupplied) {
@@ -592,8 +583,7 @@ public class DomainModelConfigPanel extends DataServiceModificationSubPanel {
                 }
                 if (model != null) {
                     setProgressText("Visualizing domain model");
-                    new DomainModelVisualizationDialog(
-                        GridApplication.getContext().getApplication(), model);
+                    new DomainModelVisualizationDialog(GridApplication.getContext().getApplication(), model);
                 }
             }
         };
@@ -643,8 +633,7 @@ public class DomainModelConfigPanel extends DataServiceModificationSubPanel {
 
         // walk classes from the model, grouping classes by package
         Map<String, List<String>> packageToClass = new HashMap<String, List<String>>();
-        if (model.getExposedUMLClassCollection() != null 
-            && model.getExposedUMLClassCollection().getUMLClass() != null) {
+        if (model.getExposedUMLClassCollection() != null && model.getExposedUMLClassCollection().getUMLClass() != null) {
             for (UMLClass umlClass : model.getExposedUMLClassCollection().getUMLClass()) {
                 String packName = umlClass.getPackageName();
                 List<String> classList = packageToClass.get(packName);
@@ -661,8 +650,7 @@ public class DomainModelConfigPanel extends DataServiceModificationSubPanel {
         List<UMLClassTreeNode> addedClassNodes = new LinkedList<UMLClassTreeNode>();
         for (String packName : packageToClass.keySet()) {
             // get the namespace type for the package
-            NamespaceType packageNamespace = getNamespaceForPackage(
-                proj.getShortName(), proj.getVersion(), packName);
+            NamespaceType packageNamespace = getNamespaceForPackage(proj.getShortName(), proj.getVersion(), packName);
             // create the cadsr package
             CadsrPackage pack = new CadsrPackage();
             pack.setName(packName);
@@ -692,27 +680,28 @@ public class DomainModelConfigPanel extends DataServiceModificationSubPanel {
             installedDomainModel = model;
         } catch (Exception ex) {
             ex.printStackTrace();
-            CompositeErrorDialog.showErrorDialog("Error storing domain model information", 
-                ex.getMessage(), ex);
+            CompositeErrorDialog.showErrorDialog("Error storing domain model information", ex.getMessage(), ex);
             return false;
         }
-        
-        // walk through the newly added class nodes, and check them off in the tree,
+
+        // walk through the newly added class nodes, and check them off in the
+        // tree,
         // by definition, they are part of the domain model
         for (UMLClassTreeNode node : addedClassNodes) {
-            node.getCheckBox().setSelected(true); // selecting the node causes the selection event to fire
+            node.getCheckBox().setSelected(true); // selecting the node causes
+                                                    // the selection event to
+                                                    // fire
         }
         return true;
     }
 
 
-    private ClassMapping[] createClassMappings(String packageName, 
-        NamespaceType packageNamespace, List<String> classNames) {
+    private ClassMapping[] createClassMappings(String packageName, NamespaceType packageNamespace,
+        List<String> classNames) {
         CadsrPackage pack = new CadsrPackage();
         pack.setName(packageName);
         pack.setMappedNamespace(packageNamespace.getNamespace());
-        Map<String, String> classToElement = NamespaceUtils.mapClassNamesToElementNames(
-            classNames, packageNamespace);
+        Map<String, String> classToElement = NamespaceUtils.mapClassNamesToElementNames(classNames, packageNamespace);
         // create ClassMappings for the package's classes
         List<ClassMapping> mappingList = new ArrayList<ClassMapping>(classNames.size());
         for (String className : classNames) {
@@ -730,8 +719,7 @@ public class DomainModelConfigPanel extends DataServiceModificationSubPanel {
     }
 
 
-    private NamespaceType getNamespaceForPackage(String projectShortName, 
-        String projectVersion, String packageName) {
+    private NamespaceType getNamespaceForPackage(String projectShortName, String projectVersion, String packageName) {
         String mappedNamespace = null;
         try {
             mappedNamespace = getExtensionDataManager().getMappedNamespaceForPackage(packageName);
@@ -741,24 +729,22 @@ public class DomainModelConfigPanel extends DataServiceModificationSubPanel {
         }
         if (mappedNamespace == null) {
             // fall back to the default mapping
-            mappedNamespace = NamespaceUtils.createNamespaceString(
-                projectShortName, projectVersion, packageName);
+            mappedNamespace = NamespaceUtils.createNamespaceString(projectShortName, projectVersion, packageName);
         }
         // try to get the namespace type from the service model
-        NamespaceType packageNamespace = CommonTools.getNamespaceType(
-            getServiceInfo().getNamespaces(), mappedNamespace);
+        NamespaceType packageNamespace = CommonTools
+            .getNamespaceType(getServiceInfo().getNamespaces(), mappedNamespace);
         if (packageNamespace == null) {
             // namespace not found, get the user to import it
             String[] message = {"The imported domain model has a package which maps to the namespace",
-                mappedNamespace + ".", 
-                "This namespace is not loaded into the service.",
-                "Please locate a suitable namespace."};
+                    mappedNamespace + ".", "This namespace is not loaded into the service.",
+                    "Please locate a suitable namespace."};
             JOptionPane.showMessageDialog(GridApplication.getContext().getApplication(), message);
             NamespaceType[] resolved = SchemaResolutionDialog.resolveSchemas(getServiceInfo());
             if (resolved == null || resolved.length == 0) {
                 // user didn't map it... show a warning
                 String[] error = {"The package " + packageName + " was not mapped to a namespace.",
-                    "This can cause errors when the service builds."};
+                        "This can cause errors when the service builds."};
                 CompositeErrorDialog.showErrorDialog("No namespace mapping provided", error);
                 return null;
             } else {
@@ -786,8 +772,8 @@ public class DomainModelConfigPanel extends DataServiceModificationSubPanel {
 
         // can now add the package's contents to the UI
         // do we have a namespace for the package?
-        NamespaceType packageNamespace = getNamespaceForPackage(
-            project.getShortName(), project.getVersion(), pack.getName());
+        NamespaceType packageNamespace = getNamespaceForPackage(project.getShortName(), project.getVersion(), pack
+            .getName());
         if (packageNamespace == null) {
             return false;
         }
@@ -808,16 +794,14 @@ public class DomainModelConfigPanel extends DataServiceModificationSubPanel {
 
         // get classes out of the package using the cadsr
         try {
-            CaDSRServiceClient cadsrClient = new CaDSRServiceClient(
-                getCadsrBrowserPanel().getCadsr().getText());
+            CaDSRServiceClient cadsrClient = new CaDSRServiceClient(getCadsrBrowserPanel().getCadsr().getText());
             // TODO: potentially slow, use some kind of threading
             UMLClassMetadata[] classes = cadsrClient.findClassesInPackage(project, pack.getName());
             List<String> classNames = new ArrayList<String>(classes.length);
             for (UMLClassMetadata currentClass : classes) {
                 classNames.add(currentClass.getName());
             }
-            ClassMapping[] classMappings = createClassMappings(
-                pack.getName(), packageNamespace, classNames);
+            ClassMapping[] classMappings = createClassMappings(pack.getName(), packageNamespace, classNames);
             cadsrPack.setCadsrClass(classMappings);
             getExtensionDataManager().storeCadsrPackage(cadsrPack);
             // add the classes to the UML tree
@@ -841,9 +825,8 @@ public class DomainModelConfigPanel extends DataServiceModificationSubPanel {
             // prompt the developer about it
             String[] choices = {"Remove all other packages and insert", "Cancel"};
             String[] message = {"Domain models may only be derived from one project.",
-                "To add the package you've selected, all other packages",
-                "currently in the domain model will have to be removed.", 
-                "Should this operation procede?"};
+                    "To add the package you've selected, all other packages",
+                    "currently in the domain model will have to be removed.", "Should this operation procede?"};
             String choice = PromptButtonDialog.prompt(GridApplication.getContext().getApplication(),
                 "Package incompatability...", message, choices, choices[1]);
             if (choice == choices[0]) {
@@ -854,22 +837,21 @@ public class DomainModelConfigPanel extends DataServiceModificationSubPanel {
                 // package selections. These should be removed.
                 for (String packageName : getUmlTree().getPackagesInTree()) {
                     try {
-                        String mappedNamespace = 
-                            getExtensionDataManager().getMappedNamespaceForPackage(packageName);
+                        String mappedNamespace = getExtensionDataManager().getMappedNamespaceForPackage(packageName);
                         NamespaceType nsType = CommonTools.getNamespaceType(getServiceInfo().getNamespaces(),
                             mappedNamespace);
                         if (!CommonTools.isNamespaceTypeInUse(nsType, getServiceInfo().getServiceDescriptor())) {
                             NamespaceType[] allNamespaces = getServiceInfo().getNamespaces().getNamespace();
-                            NamespaceType[] cleanedNamespaces = (NamespaceType[]) Utils.removeFromArray(
-                                allNamespaces, nsType);
+                            NamespaceType[] cleanedNamespaces = (NamespaceType[]) Utils.removeFromArray(allNamespaces,
+                                nsType);
                             getServiceInfo().getNamespaces().setNamespace(cleanedNamespaces);
                         }
                         // clear the package out of the UML tree
                         getUmlTree().removeUmlPackage(packageName);
                     } catch (Exception ex) {
                         ex.printStackTrace();
-                        CompositeErrorDialog.showErrorDialog("Error removing namespace for package", 
-                            ex.getMessage(), ex);
+                        CompositeErrorDialog.showErrorDialog("Error removing namespace for package", ex.getMessage(),
+                            ex);
                         return false;
                     }
                 }
@@ -887,16 +869,16 @@ public class DomainModelConfigPanel extends DataServiceModificationSubPanel {
 
 
     private File getSuppliedDomainModelFile() {
-        ResourcePropertyType[] domainModelProps = CommonTools.getResourcePropertiesOfType(
-            getServiceInfo().getServices().getService(0), DataServiceConstants.DOMAIN_MODEL_QNAME);
+        ResourcePropertyType[] domainModelProps = CommonTools.getResourcePropertiesOfType(getServiceInfo()
+            .getServices().getService(0), DataServiceConstants.DOMAIN_MODEL_QNAME);
         if (domainModelProps != null && domainModelProps.length != 0) {
-            return new File(getServiceInfo().getBaseDirectory().getAbsolutePath() + File.separator 
-                + "etc" + File.separator + domainModelProps[0].getFileLocation());
+            return new File(getServiceInfo().getBaseDirectory().getAbsolutePath() + File.separator + "etc"
+                + File.separator + domainModelProps[0].getFileLocation());
         }
         return null;
     }
-    
-    
+
+
     private boolean packageUsedInModel(UMLPackageMetadata pack) throws Exception {
         List<String> names = getExtensionDataManager().getCadsrPackageNames();
         return (names != null && names.contains(pack.getName()));
@@ -913,8 +895,7 @@ public class DomainModelConfigPanel extends DataServiceModificationSubPanel {
      */
     private boolean projectEquals(Project p1, Project p2) {
         if (p2 != null) {
-            return p1.getLongName().equals(p2.getLongName()) 
-                && p1.getVersion().equals(p2.getVersion());
+            return p1.getLongName().equals(p2.getLongName()) && p1.getVersion().equals(p2.getVersion());
         }
         return false;
     }
@@ -952,8 +933,8 @@ public class DomainModelConfigPanel extends DataServiceModificationSubPanel {
 
 
     /**
-     * Informs listeners that a class has been deselected from participation
-     * in the service's DomainModel
+     * Informs listeners that a class has been deselected from participation in
+     * the service's DomainModel
      * 
      * @param packageName
      * @param className
@@ -966,7 +947,8 @@ public class DomainModelConfigPanel extends DataServiceModificationSubPanel {
 
 
     /**
-     * Informs listeners that all classes have been removed from the domain model
+     * Informs listeners that all classes have been removed from the domain
+     * model
      */
     protected void fireClassesCleared() {
         for (DomainModelClassSelectionListener listener : classSelectionListeners) {

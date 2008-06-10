@@ -5,6 +5,7 @@ import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.introduce.beans.extension.DiscoveryExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionDescription;
 import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
+import gov.nih.nci.cagrid.introduce.common.ConfigurationUtil;
 import gov.nih.nci.cagrid.introduce.common.FileFilters;
 import gov.nih.nci.cagrid.introduce.common.ResourceManager;
 import gov.nih.nci.cagrid.introduce.portal.common.jedit.JEditTextArea;
@@ -359,7 +360,7 @@ public class GMEViewer extends NamespaceTypeToolsComponent {
 					try {
 						XMLDataModelService handle = (XMLDataModelService) GridServiceResolver.getInstance()
 							.getGridService(
-								ResourceManager.getServiceURLProperty(GMESchemaLocatorPanel.GME_URL));
+								ConfigurationUtil.getGlobalExtensionProperty(GMESchemaLocatorPanel.GME_URL).getValue());
 
 						// get the target namespace of the schema and make sure
 						// that it is acceptable by the GME
@@ -449,12 +450,12 @@ public class GMEViewer extends NamespaceTypeToolsComponent {
 							new GlobusGMEXMLDataModelServiceFactory());
 						try {
 							XMLDataModelService handle = (XMLDataModelService) GridServiceResolver.getInstance()
-							.getGridService(ResourceManager.getServiceURLProperty(GMESchemaLocatorPanel.GME_URL));
+							.getGridService(ConfigurationUtil.getGlobalExtensionProperty(GMESchemaLocatorPanel.GME_URL).getValue());
 							if (gmeSchemaLocatorPanel.getSchemaComboBox().getSelectedItem() != null) {
 								handle.cacheSchema(((SchemaWrapper) gmeSchemaLocatorPanel.getSchemaComboBox()
 									.getSelectedItem()).getNamespace(), new File(location));
 							}
-						} catch (MobiusException e1) {
+						} catch (Exception e1) {
 							e1.printStackTrace();
 							CompositeErrorDialog.showErrorDialog("Error contacting GME", 
 							"Please check the GME URL and make sure that you have the appropriate credentials!");

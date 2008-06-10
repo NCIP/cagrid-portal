@@ -161,7 +161,7 @@
         <name>Introduce</name>
         <ConfigurationDescriptors>
             <ConfigurationDescriptor>
-                <DisplayName>PortalConfiguration</DisplayName>
+                <DisplayName>Portal Configuration</DisplayName>
                 <SystemName>introducePortal</SystemName>
                 <ModelClassname>gov.nih.nci.cagrid.introduce.beans.configuration.IntroducePortalConfiguration</ModelClassname>
                 <qname>
@@ -181,6 +181,17 @@
                 </qname>
                 <ConfigurationPanel>gov.nih.nci.cagrid.introduce.portal.configuration.IntroduceServiceDefaultsConfigurationPanel</ConfigurationPanel>
                 <DefaultFile>conf/introduce-service-defaults-conf.xml</DefaultFile>
+            </ConfigurationDescriptor>
+            <ConfigurationDescriptor>
+                <DisplayName>Global Extension Properties</DisplayName>
+                <SystemName>introduceGlobalExtensionProperties</SystemName>
+                <ModelClassname>gov.nih.nci.cagrid.introduce.beans.extension.Properties</ModelClassname>
+                <qname>
+                    <namespace>gme://gov.nih.nci.cagrid.introduce/1/Extension</namespace>
+                    <name>Properties</name>
+                </qname>
+                <ConfigurationPanel>gov.nih.nci.cagrid.introduce.portal.configuration.IntroduceGlobalExtensionPropertiesConfigurationPanel</ConfigurationPanel>
+                <DefaultFile>conf/introduce-global-extension-properties-conf.xml</DefaultFile>
             </ConfigurationDescriptor>
         </ConfigurationDescriptors>
         </ConfigurationGroup>
