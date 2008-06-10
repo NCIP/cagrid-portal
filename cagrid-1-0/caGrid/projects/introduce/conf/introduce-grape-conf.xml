@@ -97,27 +97,6 @@
             </components>
         </menu>
         <menu>
-            <title>Configure</title>
-            <description>Configure</description>
-            <showIcons>true</showIcons>
-            <components>
-                <component>
-                    <title>Configure Introduce</title>
-                    <description>ConfigureIntroduce</description>
-                    <classname>gov.nih.nci.cagrid.introduce.portal.preferences.PreferencesDialog</classname>
-                    <icon>/configure.png</icon>
-                    <showOnToolBar>false</showOnToolBar>
-                    <dimensions>
-                    	<width>600</width>
-                    	<height>400</height>
-                    </dimensions>
-                    <renderOptions>
-                    	<centered>true</centered>
-                    </renderOptions>
-                </component>
-            </components>
-        </menu>
-        <menu>
             <title>Help</title>
             <description>Help</description>
             <showIcons>true</showIcons>

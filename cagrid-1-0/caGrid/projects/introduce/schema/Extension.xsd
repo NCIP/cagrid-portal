@@ -15,8 +15,7 @@
 	<xs:element name="ExtensionDescription">
 		<xs:annotation>
 			<xs:documentation>The extension type states whether or not this is a discovery type or
-				service type extension. The extension preferencesPanel is a java classname which
-				extends the ExtensionPreferencesConfigurationPanel</xs:documentation>
+				service type extension.</xs:documentation>
 		</xs:annotation>
 		<xs:complexType>
 		    <xs:sequence>
@@ -32,7 +31,6 @@
 			</xs:sequence>
 			<xs:attribute name="version" type="xs:string"/>
 			<xs:attribute name="extensionType" type="xs:string"/>
-			<xs:attribute name="extensionPreferencesPanel" type="xs:string"/>
 		</xs:complexType>
 	</xs:element>
 	<xs:element name="IntroduceGDEExtensionDescriptionType" type="IntroduceGDEExtensionDescriptionType"/>
