@@ -29,7 +29,7 @@ $theme.include($top_messages_include)
             </tr>
         </table>
         <!-- End NCICB Banner -->
-        <img src="$images_folder/caGrid_logo.png" height="70" alt="caGrid Portal Logo" style="position:relative;"/>
+        <img src="$images_folder/caGrid_logo.gif" height="70" alt="caGrid Portal Logo" style="position:relative;"/>
         <!--
           <img src="$images_folder/logo_v3b_copy.gif" height="60" alt="caGrid Portal Logo"/>
           -->
