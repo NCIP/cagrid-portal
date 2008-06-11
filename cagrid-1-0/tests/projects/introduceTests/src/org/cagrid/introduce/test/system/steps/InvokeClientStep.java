@@ -1,8 +1,9 @@
-package gov.nih.nci.cagrid.introduce.test.steps;
+package org.cagrid.introduce.test.system.steps;
 
 import gov.nih.nci.cagrid.introduce.common.AntTools;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.test.TestCaseInfo;
+import gov.nih.nci.cagrid.introduce.test.steps.BaseStep;
 import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainer;
 
 
