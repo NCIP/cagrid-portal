@@ -141,7 +141,7 @@ public class ConceptHierarchyNodeDao extends AbstractDao<ConceptHierarchyNode> {
 						return session.createCriteria(
 								ConceptHierarchyNode.class).add(
 								Restrictions.like("name", name,
-										MatchMode.ANYWHERE)).addOrder(
+										MatchMode.START)).addOrder(
 								Order.asc("name"))
 								.setResultTransformer(
 										Criteria.DISTINCT_ROOT_ENTITY).list();

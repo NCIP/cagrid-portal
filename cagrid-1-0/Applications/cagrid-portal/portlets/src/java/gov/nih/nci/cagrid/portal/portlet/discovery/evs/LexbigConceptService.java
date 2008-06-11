@@ -42,7 +42,7 @@ public class LexbigConceptService extends BaseConceptService {
             } else {
                 for (ResolvedConceptReference concept : matches.getResolvedConceptReference()) {
                     //temporary fix for the EVS search startsWith not working
-                    if (concept.getEntityDescription().getContent().toLowerCase().indexOf(keyword.toLowerCase()) > -1) {
+                    if (concept.getEntityDescription().getContent().toLowerCase().startsWith(keyword.toLowerCase())) {
                         EVSConceptDTO dto = new EVSConceptDTO(concept);
                         resultSet.add(dto);
                     }

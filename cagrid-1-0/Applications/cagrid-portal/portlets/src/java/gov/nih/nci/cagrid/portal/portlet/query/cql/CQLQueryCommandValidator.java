@@ -47,7 +47,12 @@ public class CQLQueryCommandValidator extends SelectServiceCommandValidator
 	public void validate(Object obj, Errors errors) {
 
 		CQLQueryCommand command = (CQLQueryCommand) obj;
-		boolean error = false;
+        if(command.getCqlQuery()==null){
+            logger.info("Query XML has not been set. Skipping validation");
+            return;
+        }
+
+        boolean error = false;
 		try {
 			command.setCqlQuery(serializeQuery(command,
 					DataServiceConstants.CQL_QUERY_QNAME,
