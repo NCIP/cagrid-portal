@@ -15,11 +15,10 @@
    onmouseover="$('${id}-infoPopup-content').style.display='inline'"
    onmouseout="$('${id}-infoPopup-content').style.display='none'"
    href='${popup_href}'>${popup_name}</a>
+&nbsp;
 
         <span id="${id}-infoPopup-content" class="infoPopup">
-            <div>
                 ${popup_text}
-            </div>
-              
+
 
 <span class="infoPopup-pointer">&nbsp;</span></span>
