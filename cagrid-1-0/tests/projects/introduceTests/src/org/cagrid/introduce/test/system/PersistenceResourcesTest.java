@@ -2,7 +2,6 @@ package org.cagrid.introduce.test.system;
 
 import gov.nih.nci.cagrid.introduce.test.PersistentTestCaseInfo;
 import gov.nih.nci.cagrid.introduce.test.TestCaseInfoPersistentLifetimeResource;
-import gov.nih.nci.cagrid.introduce.test.TestCaseInfoPersistentResource;
 import gov.nih.nci.cagrid.introduce.test.steps.AddBookResourcePropertyStep;
 import gov.nih.nci.cagrid.introduce.test.steps.AddBookstoreSchemaStep;
 import gov.nih.nci.cagrid.introduce.test.steps.AddFactoryMethodStep;
@@ -12,7 +11,6 @@ import gov.nih.nci.cagrid.introduce.test.steps.AddPersistenceResourceMethodImplS
 import gov.nih.nci.cagrid.introduce.test.steps.AddServiceContextStep;
 import gov.nih.nci.cagrid.introduce.test.steps.AddSetBookMethodStep;
 import gov.nih.nci.cagrid.introduce.test.steps.CreateSkeletonStep;
-import gov.nih.nci.cagrid.introduce.test.steps.InvokeClientStep;
 import gov.nih.nci.cagrid.introduce.test.steps.RemoveSkeletonStep;
 import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainer;
 import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainerFactory;
@@ -28,6 +26,7 @@ import java.io.File;
 import java.util.Vector;
 
 import org.apache.log4j.PropertyConfigurator;
+import org.cagrid.introduce.test.system.steps.InvokeClientStep;
 
 
 public class PersistenceResourcesTest extends Story {

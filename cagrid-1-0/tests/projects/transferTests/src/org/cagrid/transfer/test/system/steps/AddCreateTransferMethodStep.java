@@ -23,7 +23,6 @@ import java.io.File;
 
 import javax.xml.namespace.QName;
 
-
 public class AddCreateTransferMethodStep extends BaseStep {
     private TestCaseInfo tci;
     private ServiceContainer container;

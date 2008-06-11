@@ -18,7 +18,6 @@ import gov.nih.nci.cagrid.introduce.test.steps.AddSimpleMethodWithArraysStep;
 import gov.nih.nci.cagrid.introduce.test.steps.AddSimpleMethodWithFaultStep;
 import gov.nih.nci.cagrid.introduce.test.steps.AddSimpleMethodWithReturnStep;
 import gov.nih.nci.cagrid.introduce.test.steps.CreateSkeletonStep;
-import gov.nih.nci.cagrid.introduce.test.steps.InvokeClientStep;
 import gov.nih.nci.cagrid.introduce.test.steps.ModifySimpleMethodStep;
 import gov.nih.nci.cagrid.introduce.test.steps.RemoveAllMetadataStep;
 import gov.nih.nci.cagrid.introduce.test.steps.RemoveAllServicePropertiesStep;
@@ -42,6 +41,7 @@ import junit.framework.TestResult;
 import junit.framework.TestSuite;
 import junit.textui.TestRunner;
 
+import org.cagrid.introduce.test.system.steps.InvokeClientStep;
 
 public class SyncToolsTest extends Story {
     private TestCaseInfo tci1;

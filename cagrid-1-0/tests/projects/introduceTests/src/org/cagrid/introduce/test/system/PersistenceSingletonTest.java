@@ -7,7 +7,6 @@ import gov.nih.nci.cagrid.introduce.test.steps.AddGetBookMethodStep;
 import gov.nih.nci.cagrid.introduce.test.steps.AddPersistenceMethodImplStep;
 import gov.nih.nci.cagrid.introduce.test.steps.AddSetBookMethodStep;
 import gov.nih.nci.cagrid.introduce.test.steps.CreateSkeletonStep;
-import gov.nih.nci.cagrid.introduce.test.steps.InvokeClientStep;
 import gov.nih.nci.cagrid.introduce.test.steps.ModifyPersistenceClientStep;
 import gov.nih.nci.cagrid.introduce.test.steps.RemoveSkeletonStep;
 import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainer;
@@ -21,6 +20,8 @@ import gov.nih.nci.cagrid.testing.system.deployment.steps.UnpackContainerStep;
 import gov.nih.nci.cagrid.testing.system.haste.Story;
 
 import java.util.Vector;
+
+import org.cagrid.introduce.test.system.steps.InvokeClientStep;
 
 
 public class PersistenceSingletonTest extends Story {

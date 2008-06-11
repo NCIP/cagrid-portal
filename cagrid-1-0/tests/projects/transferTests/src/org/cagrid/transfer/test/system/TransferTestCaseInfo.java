@@ -1,9 +1,9 @@
 package org.cagrid.transfer.test.system;
 
-import java.io.File;
-
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.test.TestCaseInfo;
+
+import java.io.File;
 
 public class TransferTestCaseInfo extends TestCaseInfo {
     

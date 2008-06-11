@@ -6,12 +6,10 @@ import gov.nih.nci.cagrid.introduce.test.steps.AddBookResourcePropertyStep;
 import gov.nih.nci.cagrid.introduce.test.steps.AddBookstoreSchemaStep;
 import gov.nih.nci.cagrid.introduce.test.steps.AddFactoryMethodStep;
 import gov.nih.nci.cagrid.introduce.test.steps.AddGetBookMethodStep;
-import gov.nih.nci.cagrid.introduce.test.steps.AddGetPersistenceNotificationResourceMethodImplStep;
 import gov.nih.nci.cagrid.introduce.test.steps.AddPersistenceNotificationResourceMethodImplStep;
 import gov.nih.nci.cagrid.introduce.test.steps.AddServiceContextStep;
 import gov.nih.nci.cagrid.introduce.test.steps.AddSetBookMethodStep;
 import gov.nih.nci.cagrid.introduce.test.steps.CreateSkeletonStep;
-import gov.nih.nci.cagrid.introduce.test.steps.InvokeClientStep;
 import gov.nih.nci.cagrid.introduce.test.steps.RemoveSkeletonStep;
 import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainer;
 import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainerFactory;
@@ -27,6 +25,7 @@ import java.io.File;
 import java.util.Vector;
 
 import org.apache.log4j.PropertyConfigurator;
+import org.cagrid.introduce.test.system.steps.InvokeClientStep;
 
 
 public class PersistenceNotificationResourcesTest extends Story {

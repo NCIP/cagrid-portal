@@ -2,7 +2,6 @@ package org.cagrid.introduce.test.system;
 
 import gov.nih.nci.cagrid.introduce.test.TestCaseInfo;
 import gov.nih.nci.cagrid.introduce.test.TestCaseInfoMain;
-import gov.nih.nci.cagrid.introduce.test.steps.InvokeClientStep;
 import gov.nih.nci.cagrid.introduce.test.steps.RemoveSkeletonStep;
 import gov.nih.nci.cagrid.introduce.test.steps.UnzipOldServiceStep;
 import gov.nih.nci.cagrid.introduce.test.steps.UpgradesStep;
@@ -24,6 +23,7 @@ import junit.framework.TestSuite;
 import junit.textui.TestRunner;
 
 import org.apache.log4j.PropertyConfigurator;
+import org.cagrid.introduce.test.system.steps.InvokeClientStep;
 
 
 public class Upgrade_1_1_Test extends Story {

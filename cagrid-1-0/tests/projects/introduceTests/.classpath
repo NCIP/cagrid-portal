@@ -115,5 +115,6 @@
 	<classpathentry kind="var" path="ANT_HOME/lib/junit.jar"/>
 	<classpathentry kind="var" path="ANT_HOME/lib/xercesImpl.jar"/>
 	<classpathentry kind="var" path="ANT_HOME/lib/xml-apis.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/jars/caGrid-testUtils-1.3-dev.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -2,7 +2,6 @@ package org.cagrid.transfer.test.system;
 
 import gov.nih.nci.cagrid.introduce.test.TestCaseInfo;
 import gov.nih.nci.cagrid.introduce.test.steps.CreateSkeletonStep;
-import gov.nih.nci.cagrid.introduce.test.steps.InvokeClientStep;
 import gov.nih.nci.cagrid.introduce.test.steps.RemoveSkeletonStep;
 import gov.nih.nci.cagrid.testing.system.deployment.SecureContainer;
 import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainer;
@@ -23,6 +22,7 @@ import org.cagrid.transfer.test.system.steps.AddCreateTransferMethodImplStep;
 import org.cagrid.transfer.test.system.steps.AddCreateTransferMethodStep;
 import org.cagrid.transfer.test.system.steps.CopyCAStep;
 import org.cagrid.transfer.test.system.steps.CopyProxyStep;
+import org.cagrid.transfer.test.system.steps.InvokeClientStep;
 
 
 public class TransferServiceTest extends ServiceStoryBase {
