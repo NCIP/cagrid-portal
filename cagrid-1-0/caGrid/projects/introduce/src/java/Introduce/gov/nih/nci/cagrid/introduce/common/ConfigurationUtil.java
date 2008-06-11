@@ -1,8 +1,5 @@
 package gov.nih.nci.cagrid.introduce.common;
 
-import java.util.Arrays;
-import java.util.Collections;
-
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.introduce.beans.configuration.IntroducePortalConfiguration;
 import gov.nih.nci.cagrid.introduce.beans.configuration.IntroduceServiceDefaults;
@@ -12,8 +9,6 @@ import gov.nih.nci.cagrid.introduce.beans.extension.PropertiesProperty;
 import org.cagrid.grape.ConfigurationManager;
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.model.Application;
-
-import com.sun.tools.javac.code.Attribute.Array;
 
 
 /**
