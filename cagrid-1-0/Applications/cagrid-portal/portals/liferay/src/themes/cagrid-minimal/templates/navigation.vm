@@ -2,7 +2,7 @@
     <table width="100%" border="0" cellpadding="0" cellspacing="0">
     <tr>
     <td>
-	<table width="363" height="30px" border="0" cellpadding="0" cellspacing="0">
+	<table width="363" height="25px" border="0" cellpadding="0" cellspacing="0">
 		<tr>
 			#foreach ($nav_item in $nav_items)
 				#if ($nav_item.isSelected())
@@ -21,7 +21,7 @@
 	</table>
 	</td>
 	<td align="right">
-		<img src="$images_folder/CaBig_logo.gif" height="30px" alt="caBIG Logo"/>
+		<img src="$images_folder/CaBig_logo.gif" height="25px" alt="caBIG Logo"/>
 	</td>
 	</tr>
 	</table>

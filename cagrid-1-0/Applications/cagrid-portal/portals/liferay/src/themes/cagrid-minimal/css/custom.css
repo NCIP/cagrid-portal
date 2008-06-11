@@ -11,7 +11,7 @@
     background-image: url( ../images/blue_white_grad.gif );
     background-repeat: repeat-y;
     background-position: left;
-    height: 97px;
+    height: 110px;
     position: relative;
     margin: 0 auto;
     border: 0;
@@ -200,7 +200,7 @@ div.row div.label {
 }
 
 div.row div.value {
-    margin-left: 12em; /* individual pages need to override */
+    margin-left: 11em; /* individual pages need to override */
 }
 
 /* Automatically clear after each row

@@ -18,8 +18,8 @@
         <c:when test="${empty aggregateTargetsCmd.available}">
             <div class="row">
                 <div class="label">
-                    Cannot form aggregate query. No other Services
-                    have the same UML Class
+                    Cannot form aggregate query. No other Service
+                    has syntactically equivalent classes.
                 </div>
             </div>
         </c:when>

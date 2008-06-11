@@ -8,7 +8,7 @@
 
 <script type="text/javascript">
 	//<![CDATA[
-	
+
 	function <portlet:namespace/>doQueryModifierOp(editOp){
 		var form = document.<portlet:namespace/>editQueryModifierForm;
 		var somethingSelected = true;
@@ -44,7 +44,7 @@
 	<c:forEach var="att" items="${availableAttributes}">
 		<portlet:namespace/>availableAttributes.push('<c:out value="${att}"/>');
 	</c:forEach>
-	
+
 	function <portlet:namespace/>addSelectedAttributesInputElements(inputType){
 		for(var i = 0; i < <portlet:namespace/>availableAttributes.length; i++){
 			var attName = <portlet:namespace/>availableAttributes[i];
@@ -57,9 +57,9 @@
 		}
 	}
 
-	
+
 	jQuery(document).ready(function(){
-	 
+
 	 	jQuery("#<c:out value="${objectInputId}"/>").click(function(){
    			jQuery("#<portlet:namespace/>selectedAttributesDiv").html("");
         });
@@ -74,7 +74,7 @@
         	jQuery("#<portlet:namespace/>selectedAttributesDiv").html("");
         	<portlet:namespace/>addSelectedAttributesInputElements("checkbox");
         });
-        
+
         <c:set var="modifierType"><c:out value="${editQueryModifierCommand.modifierType}"/></c:set>
         <c:choose>
         	<c:when test="${'DISTINCT_ATTRIBUTE' eq modifierType}">
@@ -84,8 +84,8 @@
         		<portlet:namespace/>addSelectedAttributesInputElements("checkbox");
         	</c:when>
         </c:choose>
-    });	
-	
+    });
+
 	//]]>
 </script>
 
@@ -93,12 +93,6 @@
 <c:set var="editQueryModifierFormName"><portlet:namespace/>editQueryModifierForm</c:set>
 <form:form commandName="editQueryModifierCommand" name="${editQueryModifierFormName}" action="${editQueryModifierFormAction}">
 
-<input type="button" value="Update" onclick="<portlet:namespace/>doQueryModifierOp('update')"/>
-<input type="button" value="Cancel" onclick="<portlet:namespace/>doQueryModifierOp('cancel')"/>
-<input type="hidden" name="operation" value="updateQueryModifier"/>
-<input type="hidden" name="editOperation" value=""/>
-
-<br/>
 <br/>
 <form:radiobutton id="${objectInputId}" value="OBJECT" path="modifierType"/>Object&nbsp;&nbsp;
 <form:radiobutton id="${countOnlyInputId}" value="COUNT_ONLY" path="modifierType"/>Count Only&nbsp;&nbsp;
@@ -106,6 +100,13 @@
 <form:radiobutton id="${selectedAttributesInputId}" value="SELECTED_ATTRIBUTES" path="modifierType"/>Selected Attributes&nbsp;&nbsp;
 <br/>
 <br/>
+
+<input type="button" value="Update" onclick="<portlet:namespace/>doQueryModifierOp('update')"/>
+<input type="button" value="Cancel" onclick="<portlet:namespace/>doQueryModifierOp('cancel')"/>
+<input type="hidden" name="operation" value="updateQueryModifier"/>
+<input type="hidden" name="editOperation" value=""/>
+<br/>
+
 <div id="<portlet:namespace/>selectedAttributesDiv" style="border:3px">
 </div>
 

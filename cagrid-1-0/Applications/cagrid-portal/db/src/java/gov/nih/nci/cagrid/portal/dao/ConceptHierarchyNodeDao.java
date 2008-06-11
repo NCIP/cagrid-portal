@@ -27,7 +27,7 @@ import java.util.Set;
 public class ConceptHierarchyNodeDao extends AbstractDao<ConceptHierarchyNode> {
 
 	/**
-	 * 
+	 *
 	 */
 	public ConceptHierarchyNodeDao() {
 
@@ -35,7 +35,7 @@ public class ConceptHierarchyNodeDao extends AbstractDao<ConceptHierarchyNode> {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see gov.nih.nci.cagrid.portal.dao.AbstractDao#domainClass()
 	 */
 	@Override
@@ -141,7 +141,7 @@ public class ConceptHierarchyNodeDao extends AbstractDao<ConceptHierarchyNode> {
 						return session.createCriteria(
 								ConceptHierarchyNode.class).add(
 								Restrictions.like("name", name,
-										MatchMode.ANYWHERE)).addOrder(
+										MatchMode.START)).addOrder(
 								Order.asc("name"))
 								.setResultTransformer(
 										Criteria.DISTINCT_ROOT_ENTITY).list();

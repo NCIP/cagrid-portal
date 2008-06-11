@@ -59,6 +59,7 @@
         </property>
         <property name="timeout" value="60000"/>
         <property name="encryptionService" ref="encryptionServicePrototype"/>
+        <property name="defaultFQPServiceUrl" value="${fqp.service.url}"/>
     </bean>
 
 

@@ -28,11 +28,11 @@ Autocompleter.DWR.prototype = Object.extend(new Autocompleter.Base(), {
 
     setOptions: function(options) {
         this.options = Object.extend({
-            choices: 10,
+            choices: 15,
             partialSearch: true,
             partialChars: 2,
             ignoreCase: true,
-            fullSearch: false,
+            fullSearch: true,
             selector: function(instance) {
                 var ret       = []; // Beginning matches
                 var partial   = []; // Inside matches
@@ -77,8 +77,10 @@ Autocompleter.DWR.prototype = Object.extend(new Autocompleter.Base(), {
                     }
                 }
                 if (partial.length)
-                    ret = ret.concat(partial.slice(0, instance.options.choices - ret.length))
-			instance.options.internalArray=internalArray.concat(internalPartialArray);
+                    ret = ret.concat(partial.slice(0, instance.options.choices - ret.length));
+			        instance.options.internalArray=internalArray.concat(internalPartialArray);
+                    instance.options.internalArray.reverse();
+                    ret.reverse();        
                     return "<ul>" + ret.join('') + "</ul>";
             },
 

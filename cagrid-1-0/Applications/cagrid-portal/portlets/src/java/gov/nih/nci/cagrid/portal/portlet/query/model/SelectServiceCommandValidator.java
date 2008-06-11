@@ -20,7 +20,7 @@ import org.springframework.validation.Validator;
  */
 public class SelectServiceCommandValidator implements Validator {
 	
-	private static final Log logger = LogFactory.getLog(SelectServiceCommandValidator.class);
+	protected static final Log logger = LogFactory.getLog(SelectServiceCommandValidator.class);
 
 	private GridServiceDao gridServiceDao;
 	

@@ -287,9 +287,9 @@
                 <td valign="top" style="padding-right:5px; text-align:right"><b>Search Fields:</b></td>
                 <td valign="top">
                     <select name="searchFields" multiple size="8">
-                    	<option value="publicID">caDSR Public ID (CDE)</option>
-                    	<option value="conceptCode">Concept Code</option>
-                    	<option value="conceptName">Concept Name</option>
+                        <option value="publicID">caDSR Public ID (CDE)</option>
+                        <option value="conceptCode">Concept Code</option>
+                        <option value="conceptName">Concept Name</option>
                         <option value="serviceUrl">URL</option>
                         <option value="serviceName">Name</option>
                         <option value="serviceDescription">Description</option>
@@ -311,104 +311,112 @@
 
 <div id="<portlet:namespace/>evsDiv" style="display:none">
 
-    <c:set var="evsDiscoveryFormName"><portlet:namespace/>evsDiscoveryForm</c:set>
-    <c:set var="onSubmitAction"><portlet:namespace/>doDiscoverySearch('<c:out
-            value="${evsDiscoveryFormName}"/>')</c:set>
+<c:set var="evsDiscoveryFormName"><portlet:namespace/>evsDiscoveryForm</c:set>
+<c:set var="onSubmitAction"><portlet:namespace/>doDiscoverySearch('<c:out
+        value="${evsDiscoveryFormName}"/>')</c:set>
 
-    <script type="text/javascript">
-        function <portlet:namespace/>submitEVSForm(){
-        $("${evsDiscoveryFormName}").submit();
-        var form = document.evsDiscoveryForm;
-        form.submit();
-        }
+<script type="text/javascript">
+    function <portlet:namespace/>submitEVSForm(){
+    $("${evsDiscoveryFormName}").action ="${formAction}";
+    $("${evsDiscoveryFormName}").submit();
+    var form = document.evsDiscoveryForm;
+    }
 
-        function <portlet:namespace/>updateList(autocompleter, token) {
-        EVSAutomcompleter.autoCompleteConcept(token, function(data) {
-        autocompleter.setChoices(data)
-        });
-        }
+    function <portlet:namespace/>updateList(autocompleter, token) {
+    EVSAutomcompleter.autoCompleteConcept(token, function(data) {
+    autocompleter.setChoices(data)
+    });
+    }
 
-        function <portlet:namespace/>nameValueSelector(tag){
-        return tag.name;
-        }
-    </script>
-    <form:form action="${formAction}" id="${evsDiscoveryFormName}" name="${evsDiscoveryFormName}"
-               onsubmit="return ${onSubmitAction}">
+    function <portlet:namespace/>nameValueSelector(tag){
+    return tag.name;
+    }
+</script>
+<form:form id="${evsDiscoveryFormName}" name="${evsDiscoveryFormName}"
+           onsubmit="return ${onSubmitAction}">
 
-        <table style="cellpadding:5px;" valign="top">
-            <tr>
-                <td valign="top" style="padding-left:12px;padding-right:12px; text-align:right"><b>Keyword:</b></td>
-                <td valign="top">
-                    <input id="evsConcept" type="text" class="searchField auto_complete"/>
-                    <tags:image id="indicator1"
-                                name="indicator.gif"
-                                alt="Please wait"
-                                cssStyle="display:none;"
-                            />
-                    <input type="hidden" name="keywords" id="keywords"/>
+    <table style="cellpadding:5px;" valign="top">
+        <tr>
+            <td valign="top" style="padding-right:5px; text-align:right"><b>Keyword:</b></td>
+                         <td valign="top">
+                <input id="evsConcept" type="text" class="searchField auto_complete"/>
 
-                    <div id="evsConceptList" class="auto_complete"></div>
-                    <div id="evsConceptDefinition" style="display:none;">
-                        <div class="row">
-                            <div>
-                                <b>Definition:</b>
-                                <span id="evsConceptDefinitionValue"/>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div>
-                                <b>Concept Code:</b>
-                                <span id="evsConceptCodeValue"/>
-                            </div>
+                <tags:infoPopup id="evs"
+                                popup_text="NCI Thesaurus based service discovery.Enter concept name in the auto-completer text field. The auto-completer will load relevant concepts first."/>
+                <tags:image id="indicator1"
+                            name="indicator.gif"
+                            alt="Please wait"
+                            cssStyle="display:none;"
+                        />
+                  
+
+                <input type="hidden" name="keywords" id="keywords"/>
+
+                <div id="evsConceptList" class="auto_complete"></div>
+                <div id="evsConceptDefinition" style="display:none;">
+                    <div class="row">
+                        <div>
+                            <b>Definition:</b>
+                            <span id="evsConceptDefinitionValue">
+                                <!--cannot be empty in IE-->
+                                </span>
                         </div>
                     </div>
+                    <div class="row">
+                        <div>
+                            <b>Concept Code:</b>
+                            <span id="evsConceptCodeValue">
+                                <!--cannot be empty in IE-->
+                                </span>
+                        </div>
+                    </div>
+                </div>
 
-                    <div class="row" id="evsConceptResultDiv"
-                         style="font-size:12px;display:none;">
-                        <div class="label">
-                            Found
+                <div class="row" id="evsConceptResultDiv"
+                     style="font-size:12px;display:none;">
+                    <div class="label">
+                        Found&nbsp;
                             <span id="discoveryResultDiv">
-                                <!---->
-                            </span>
-                            services
-                        </div>
+                                <!--cannot be empty in IE-->
+                                </span>
+                        &nbsp;services
                     </div>
+                </div>
 
-                    <script type="text/javascript">
-                        new Autocompleter.DWR('evsConcept', 'evsConceptList', <portlet:namespace/>updateList,{
-                        valueSelector:
-                        <portlet:namespace/>nameValueSelector, partialChars: 2, indicator: 'indicator1',
-                        afterUpdateElement: function(inputField, selectedItem,selectedTag){
-                        $('${evsDiscoveryFormName}').keywords.value= selectedTag.code;
+                <script type="text/javascript">
+                    new Autocompleter.DWR('evsConcept', 'evsConceptList', <portlet:namespace/>updateList,{
+                    valueSelector:
+                    <portlet:namespace/>nameValueSelector, partialChars: 2, indicator: 'indicator1',
+                    afterUpdateElement: function(inputField, selectedItem,selectedTag){
+                    $('${evsDiscoveryFormName}').keywords.value= selectedTag.code;
+                    $('evsConceptDefinition').style.display= "";
+                    $('evsConceptDefinitionValue').innerHTML= selectedTag.definitation;
+                    $('keywords').value=selectedTag.code;
+                    $('evsConceptCodeValue').innerHTML= selectedTag.code;
+                    $("discoveryResultDiv").innerHTML = '<img src="<c:url value="/images/indicator.gif"/>"/>';
+                    EVSAutomcompleter.resultCount(selectedTag.code,<portlet:namespace/>handleResultCount);
+                    }});
 
-                        $('evsConceptDefinition').style.display= "";
-                        $('evsConceptDefinitionValue').innerHTML= selectedTag.definitation;
-                        $('keywords').value=selectedTag.code;
-                        $('evsConceptCodeValue').innerHTML= selectedTag.code;
+                    function <portlet:namespace/>handleResultCount(str){
+                    $("evsConceptResultDiv").style.display="";
+                    var _innerHtml = "";
+                    if(str>0){
+                    _innerHtml=_innerHtml +"<a href='javascript:<portlet:namespace/>submitEVSForm()'>";
+                    }
+                    _innerHtml=_innerHtml+ str+" services";
 
-                        EVSAutomcompleter.resultCount(selectedTag.code,<portlet:namespace/>handleResultCount);
-                        }});
+                    if(str>0){
+                    _innerHtml=_innerHtml + "</a>";
+                    }
+                    $("discoveryResultDiv").innerHTML=_innerHtml;
+                    }
 
-                        function <portlet:namespace/>handleResultCount(str){
-                        $("evsConceptResultDiv").style.display="";
-                        var _innerHtml = "";
-                        if(str>0){
-                        _innerHtml=_innerHtml +"<a href='javascript:<portlet:namespace/>submitEVSForm()'>";
-                        }
-                        _innerHtml=_innerHtml+ str+" services";
-
-                        if(str>0){
-                        _innerHtml=_innerHtml + "</a>";
-                        }
-                        $("discoveryResultDiv").innerHTML=_innerHtml;
-                        }
-
-                    </script>
-                </td>
-            </tr>
-        </table>
-        <input type="hidden" name="discoveryType" value="CONCEPT"/>
-    </form:form>
+                </script>
+            </td>
+        </tr>
+    </table>
+    <input type="hidden" name="discoveryType" value="CONCEPT"/>
+</form:form>
 </div>
 </td>
 
@@ -420,11 +428,7 @@
         <input name="level" value="advanced" type="radio"
                onclick="jQuery('#<portlet:namespace/>simpleDiv').hide();jQuery(document).find('#<portlet:namespace/>evsDiv').hide();jQuery('#<portlet:namespace/>advancedDiv').show();"/>Advanced&nbsp;
         <input name="level" value="evs" type="radio"
-               onclick="jQuery('#<portlet:namespace/>simpleDiv').hide();jQuery('#<portlet:namespace/>advancedDiv').hide();jQuery('#<portlet:namespace/>evsDiv').show();"/>
-        <tags:infoPopup id="evs" popup_href="javascript:void(0);"
-                        popup_name="EVS"
-                        popup_text="EVS Concept based service discovery.Please enter search term in the auto-completer."/>
-
+               onclick="jQuery('#<portlet:namespace/>simpleDiv').hide();jQuery('#<portlet:namespace/>advancedDiv').hide();jQuery('#<portlet:namespace/>evsDiv').show();"/>EVS&nbsp;
     </form>
 </td>
 </tr>

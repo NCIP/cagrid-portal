@@ -124,9 +124,7 @@
                         popup_name="Last Updated:"
                         popup_text="Portal frequently searches for
                             new services and updates its database."/>
-        <span>
-                ${statusBean.lastUpdated}
-        </span>
+        <span>${statusBean.lastUpdated}</span>
     </div>
 </div>
 </c:if>

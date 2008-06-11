@@ -35,13 +35,15 @@ public class DCQLQueryTask implements Callable {
 
     private GlobusCredential cred;
 
+    private String fqpUrl;
+
     public DCQLQueryTask(DCQLQueryInstance instance,
                          DCQLQueryInstanceListener listener, GlobusCredential cred) {
         this.instance = instance;
         this.listener = listener;
         this.cred = cred;
     }
-
+  
 
     public Object call() throws Exception {
         logger.debug("Running QueryInstance:" + instance.getId());
@@ -53,10 +55,13 @@ public class DCQLQueryTask implements Callable {
                     DCQLQuery.class);
             FederatedQueryProcessorClient client = null;
 
+            if(getFqpUrl()==null)
+                setFqpUrl(instance.getFqpService().getUrl());
+
             if (cred != null) {
-                client = new FederatedQueryProcessorClient(instance.getFqpService().getUrl(), cred);
+                client = new FederatedQueryProcessorClient(getFqpUrl(), cred);
             } else {
-                client = new FederatedQueryProcessorClient(instance.getFqpService().getUrl());
+                client = new FederatedQueryProcessorClient(getFqpUrl());
 
             }
             logger.debug("Requesting FQP to execute DCQL");
@@ -100,5 +105,13 @@ public class DCQLQueryTask implements Callable {
             throw ex;
         }
         return out;
+    }
+
+    public String getFqpUrl() {
+        return fqpUrl;
+    }
+
+    public void setFqpUrl(String fqpUrl) {
+        this.fqpUrl = fqpUrl;
     }
 }

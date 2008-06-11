@@ -30,10 +30,10 @@ public class DefaultDCQLQueryInstanceExecutor implements
     private Future future;
     private long timeout = 60000;
     private Date endTime;
+    private String defaultFQPServiceUrl;
 
-    
 
-	/**
+    /**
      *
      */
     public DefaultDCQLQueryInstanceExecutor() {
@@ -82,6 +82,11 @@ public class DefaultDCQLQueryInstanceExecutor implements
         }
 
         DCQLQueryTask task = new DCQLQueryTask(instance, listener, cred);
+        if(instance.getFqpService()==null){
+            task.setFqpUrl(getDefaultFQPServiceUrl());
+            logger.info("FQP Service not in Portal. Using default to execute DCQL");
+        }
+
         listener.onSheduled(instance);
         future = getExecutorService().submit(task);
         setEndTime(new Date(new Date().getTime() + getTimeout()));
@@ -152,5 +157,12 @@ public class DefaultDCQLQueryInstanceExecutor implements
         this.encryptionService = encryptionService;
     }
 
+    public String getDefaultFQPServiceUrl() {
+        return defaultFQPServiceUrl;
+    }
+
+    public void setDefaultFQPServiceUrl(String defaultFQPServiceUrl) {
+        this.defaultFQPServiceUrl = defaultFQPServiceUrl;
+    }
 }
 
