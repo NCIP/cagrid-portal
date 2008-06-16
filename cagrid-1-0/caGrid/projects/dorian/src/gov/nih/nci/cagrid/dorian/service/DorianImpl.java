@@ -34,7 +34,7 @@ import org.springframework.core.io.FileSystemResource;
  */
 public class DorianImpl {
 
-	private ServiceConfiguration configuration;
+	private DorianConfiguration configuration;
 
 	private Dorian dorian;
 
@@ -42,9 +42,9 @@ public class DorianImpl {
 		try {
 			EndpointReferenceType type = AddressingUtils
 					.createEndpointReference(null);
-			String configFile = ServiceConfiguration.getConfiguration()
+			String configFile = DorianConfiguration.getConfiguration()
 					.getDorianConfiguration();
-			String propertiesFile = ServiceConfiguration.getConfiguration()
+			String propertiesFile = DorianConfiguration.getConfiguration()
 					.getDorianProperties();
 			BeanUtils utils = new BeanUtils(new FileSystemResource(configFile),
 					new FileSystemResource(propertiesFile));
@@ -56,7 +56,7 @@ public class DorianImpl {
 		}
 	}
 
-	public ServiceConfiguration getConfiguration() throws Exception {
+	public DorianConfiguration getConfiguration() throws Exception {
 		if (this.configuration != null) {
 			return this.configuration;
 		}
@@ -68,7 +68,7 @@ public class DorianImpl {
 				+ "/serviceconfiguration";
 		try {
 			javax.naming.Context initialContext = new InitialContext();
-			this.configuration = (ServiceConfiguration) initialContext
+			this.configuration = (DorianConfiguration) initialContext
 					.lookup(jndiName);
 		} catch (Exception e) {
 			throw new Exception("Unable to instantiate service configuration.",
@@ -89,41 +89,23 @@ public class DorianImpl {
 		return caller;
 	}
 
-	public java.lang.String registerWithIdP(
-			gov.nih.nci.cagrid.dorian.idp.bean.Application application)
-			throws RemoteException,
-			gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault,
-			gov.nih.nci.cagrid.dorian.stubs.types.InvalidUserPropertyFault {
+  public java.lang.String registerWithIdP(gov.nih.nci.cagrid.dorian.idp.bean.Application application) throws RemoteException, gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault, gov.nih.nci.cagrid.dorian.stubs.types.InvalidUserPropertyFault {
 		return dorian.registerWithIdP(application);
 	}
 
-	public gov.nih.nci.cagrid.dorian.idp.bean.IdPUser[] findIdPUsers(
-			gov.nih.nci.cagrid.dorian.idp.bean.IdPUserFilter filter)
-			throws RemoteException,
-			gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault,
-			gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault {
+  public gov.nih.nci.cagrid.dorian.idp.bean.IdPUser[] findIdPUsers(gov.nih.nci.cagrid.dorian.idp.bean.IdPUserFilter filter) throws RemoteException, gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault, gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault {
 		return dorian.findIdPUsers(getCallerIdentity(), filter);
 	}
 
-	public void updateIdPUser(gov.nih.nci.cagrid.dorian.idp.bean.IdPUser user)
-			throws RemoteException,
-			gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault,
-			gov.nih.nci.cagrid.dorian.stubs.types.NoSuchUserFault,
-			gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault {
+  public void updateIdPUser(gov.nih.nci.cagrid.dorian.idp.bean.IdPUser user) throws RemoteException, gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault, gov.nih.nci.cagrid.dorian.stubs.types.NoSuchUserFault, gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault {
 		dorian.updateIdPUser(getCallerIdentity(), user);
 	}
 
-	public void removeIdPUser(java.lang.String userId) throws RemoteException,
-			gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault,
-			gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault {
+  public void removeIdPUser(java.lang.String userId) throws RemoteException, gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault, gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault {
 		dorian.removeIdPUser(getCallerIdentity(), userId);
 	}
 
-	public gov.nih.nci.cagrid.dorian.bean.SAMLAssertion authenticateWithIdP(
-			gov.nih.nci.cagrid.dorian.idp.bean.BasicAuthCredential cred)
-			throws RemoteException,
-			gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault,
-			gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault {
+  public gov.nih.nci.cagrid.dorian.bean.SAMLAssertion authenticateWithIdP(gov.nih.nci.cagrid.dorian.idp.bean.BasicAuthCredential cred) throws RemoteException, gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault, gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault {
 		SAMLAssertion saml = dorian.authenticate(cred);
 		try {
 			String xml = SAMLUtils.samlAssertionToString(saml);
@@ -139,17 +121,7 @@ public class DorianImpl {
 		}
 	}
 
-	public gov.nih.nci.cagrid.dorian.bean.X509Certificate[] createProxy(
-			gov.nih.nci.cagrid.dorian.bean.SAMLAssertion saml,
-			gov.nih.nci.cagrid.dorian.ifs.bean.PublicKey publicKey,
-			gov.nih.nci.cagrid.dorian.ifs.bean.ProxyLifetime lifetime,
-			gov.nih.nci.cagrid.dorian.ifs.bean.DelegationPathLength delegation)
-			throws RemoteException,
-			gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault,
-			gov.nih.nci.cagrid.dorian.stubs.types.InvalidAssertionFault,
-			gov.nih.nci.cagrid.dorian.stubs.types.InvalidProxyFault,
-			gov.nih.nci.cagrid.dorian.stubs.types.UserPolicyFault,
-			gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault {
+  public gov.nih.nci.cagrid.dorian.bean.X509Certificate[] createProxy(gov.nih.nci.cagrid.dorian.bean.SAMLAssertion saml,gov.nih.nci.cagrid.dorian.ifs.bean.PublicKey publicKey,gov.nih.nci.cagrid.dorian.ifs.bean.ProxyLifetime lifetime,gov.nih.nci.cagrid.dorian.ifs.bean.DelegationPathLength delegation) throws RemoteException, gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault, gov.nih.nci.cagrid.dorian.stubs.types.InvalidAssertionFault, gov.nih.nci.cagrid.dorian.stubs.types.InvalidProxyFault, gov.nih.nci.cagrid.dorian.stubs.types.UserPolicyFault, gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault {
 		try {
 			PublicKey key = KeyUtil.loadPublicKey(publicKey.getKeyAsString());
 			SAMLAssertion s = SAMLUtils.stringToSAMLAssertion(saml.getXml());
@@ -186,9 +158,7 @@ public class DorianImpl {
 		}
 	}
 
-	public gov.nih.nci.cagrid.dorian.bean.X509Certificate getCACertificate()
-			throws RemoteException,
-			gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault {
+  public gov.nih.nci.cagrid.dorian.bean.X509Certificate getCACertificate() throws RemoteException, gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault {
 		X509Certificate cert = dorian.getCACertificate();
 		try {
 			String certStr = CertUtil.writeCertificate(cert);
@@ -201,86 +171,43 @@ public class DorianImpl {
 		}
 	}
 
-	public gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdP[] getTrustedIdPs()
-			throws RemoteException,
-			gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault,
-			gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault {
+  public gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdP[] getTrustedIdPs() throws RemoteException, gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault, gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault {
 		return dorian.getTrustedIdPs(getCallerIdentity());
 	}
 
-	public gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdP addTrustedIdP(
-			gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdP idp)
-			throws RemoteException,
-			gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault,
-			gov.nih.nci.cagrid.dorian.stubs.types.InvalidTrustedIdPFault,
-			gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault {
+  public gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdP addTrustedIdP(gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdP idp) throws RemoteException, gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault, gov.nih.nci.cagrid.dorian.stubs.types.InvalidTrustedIdPFault, gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault {
 		return dorian.addTrustedIdP(getCallerIdentity(), idp);
 	}
 
-	public void updateTrustedIdP(
-			gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdP trustedIdP)
-			throws RemoteException,
-			gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault,
-			gov.nih.nci.cagrid.dorian.stubs.types.InvalidTrustedIdPFault,
-			gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault {
+  public void updateTrustedIdP(gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdP trustedIdP) throws RemoteException, gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault, gov.nih.nci.cagrid.dorian.stubs.types.InvalidTrustedIdPFault, gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault {
 		dorian.updateTrustedIdP(getCallerIdentity(), trustedIdP);
 	}
 
-	public void removeTrustedIdP(
-			gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdP trustedIdP)
-			throws RemoteException,
-			gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault,
-			gov.nih.nci.cagrid.dorian.stubs.types.InvalidTrustedIdPFault,
-			gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault {
+  public void removeTrustedIdP(gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdP trustedIdP) throws RemoteException, gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault, gov.nih.nci.cagrid.dorian.stubs.types.InvalidTrustedIdPFault, gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault {
 		dorian.removeTrustedIdP(getCallerIdentity(), trustedIdP);
 	}
 
-	public gov.nih.nci.cagrid.dorian.ifs.bean.IFSUser[] findIFSUsers(
-			gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserFilter filter)
-			throws RemoteException,
-			gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault,
-			gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault {
+  public gov.nih.nci.cagrid.dorian.ifs.bean.IFSUser[] findIFSUsers(gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserFilter filter) throws RemoteException, gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault, gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault {
 		return dorian.findIFSUsers(getCallerIdentity(), filter);
 	}
 
-	public void updateIFSUser(gov.nih.nci.cagrid.dorian.ifs.bean.IFSUser user)
-			throws RemoteException,
-			gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault,
-			gov.nih.nci.cagrid.dorian.stubs.types.InvalidUserFault,
-			gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault {
+  public void updateIFSUser(gov.nih.nci.cagrid.dorian.ifs.bean.IFSUser user) throws RemoteException, gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault, gov.nih.nci.cagrid.dorian.stubs.types.InvalidUserFault, gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault {
 		dorian.updateIFSUser(getCallerIdentity(), user);
 	}
 
-	public void removeIFSUser(gov.nih.nci.cagrid.dorian.ifs.bean.IFSUser user)
-			throws RemoteException,
-			gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault,
-			gov.nih.nci.cagrid.dorian.stubs.types.InvalidUserFault,
-			gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault {
+  public void removeIFSUser(gov.nih.nci.cagrid.dorian.ifs.bean.IFSUser user) throws RemoteException, gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault, gov.nih.nci.cagrid.dorian.stubs.types.InvalidUserFault, gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault {
 		dorian.removeIFSUser(getCallerIdentity(), user);
 	}
 
-	public gov.nih.nci.cagrid.dorian.ifs.bean.IFSUser renewIFSUserCredentials(
-			gov.nih.nci.cagrid.dorian.ifs.bean.IFSUser user)
-			throws RemoteException,
-			gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault,
-			gov.nih.nci.cagrid.dorian.stubs.types.InvalidUserFault,
-			gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault {
+  public gov.nih.nci.cagrid.dorian.ifs.bean.IFSUser renewIFSUserCredentials(gov.nih.nci.cagrid.dorian.ifs.bean.IFSUser user) throws RemoteException, gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault, gov.nih.nci.cagrid.dorian.stubs.types.InvalidUserFault, gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault {
 		return dorian.renewIFSUserCredentials(getCallerIdentity(), user);
 	}
 
-	public gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserPolicy[] getIFSUserPolicies()
-			throws RemoteException,
-			gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault,
-			gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault {
+  public gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserPolicy[] getIFSUserPolicies() throws RemoteException, gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault, gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault {
 		return dorian.getIFSUserPolicies(getCallerIdentity());
 	}
 
-	public gov.nih.nci.cagrid.authentication.bean.SAMLAssertion authenticate(
-			gov.nih.nci.cagrid.authentication.bean.Credential credential)
-			throws RemoteException,
-			gov.nih.nci.cagrid.authentication.stubs.types.InvalidCredentialFault,
-			gov.nih.nci.cagrid.authentication.stubs.types.InsufficientAttributeFault,
-			gov.nih.nci.cagrid.authentication.stubs.types.AuthenticationProviderFault {
+  public gov.nih.nci.cagrid.authentication.bean.SAMLAssertion authenticate(gov.nih.nci.cagrid.authentication.bean.Credential credential) throws RemoteException, gov.nih.nci.cagrid.authentication.stubs.types.InvalidCredentialFault, gov.nih.nci.cagrid.authentication.stubs.types.InsufficientAttributeFault, gov.nih.nci.cagrid.authentication.stubs.types.AuthenticationProviderFault {
 
 		if (credential.getBasicAuthenticationCredential() == null) {
 			InvalidCredentialFault fault = new InvalidCredentialFault();
@@ -315,91 +242,51 @@ public class DorianImpl {
 		}
 	}
 
-	public void addAdmin(java.lang.String gridIdentity) throws RemoteException,
-			gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault,
-			gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault {
+  public void addAdmin(java.lang.String gridIdentity) throws RemoteException, gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault, gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault {
 		dorian.addAdmin(getCallerIdentity(), gridIdentity);
 	}
 
-	public void removeAdmin(java.lang.String gridIdentity)
-			throws RemoteException,
-			gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault,
-			gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault {
+  public void removeAdmin(java.lang.String gridIdentity) throws RemoteException, gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault, gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault {
 		dorian.removeAdmin(getCallerIdentity(), gridIdentity);
 	}
 
-	public java.lang.String[] getAdmins() throws RemoteException,
-			gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault,
-			gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault {
+  public java.lang.String[] getAdmins() throws RemoteException, gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault, gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault {
 		return dorian.getAdmins(getCallerIdentity());
 	}
 
-	public gov.nih.nci.cagrid.dorian.ifs.bean.HostCertificateRecord requestHostCertificate(
-			gov.nih.nci.cagrid.dorian.ifs.bean.HostCertificateRequest req)
-			throws RemoteException,
-			gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault,
-			gov.nih.nci.cagrid.dorian.stubs.types.InvalidHostCertificateRequestFault,
-			gov.nih.nci.cagrid.dorian.stubs.types.InvalidHostCertificateFault,
-			gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault {
+  public gov.nih.nci.cagrid.dorian.ifs.bean.HostCertificateRecord requestHostCertificate(gov.nih.nci.cagrid.dorian.ifs.bean.HostCertificateRequest req) throws RemoteException, gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault, gov.nih.nci.cagrid.dorian.stubs.types.InvalidHostCertificateRequestFault, gov.nih.nci.cagrid.dorian.stubs.types.InvalidHostCertificateFault, gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault {
 		return dorian.requestHostCertificate(getCallerIdentity(), req);
 	}
 
-	public gov.nih.nci.cagrid.dorian.ifs.bean.HostCertificateRecord[] getOwnedHostCertificates()
-			throws RemoteException,
-			gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault,
-			gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault {
+  public gov.nih.nci.cagrid.dorian.ifs.bean.HostCertificateRecord[] getOwnedHostCertificates() throws RemoteException, gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault, gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault {
 		return dorian.getOwnedHostCertificates(getCallerIdentity());
 	}
 
-	public gov.nih.nci.cagrid.dorian.ifs.bean.HostCertificateRecord approveHostCertificate(
-			java.math.BigInteger recordId) throws RemoteException,
-			gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault,
-			gov.nih.nci.cagrid.dorian.stubs.types.InvalidHostCertificateFault,
-			gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault {
+  public gov.nih.nci.cagrid.dorian.ifs.bean.HostCertificateRecord approveHostCertificate(java.math.BigInteger recordId) throws RemoteException, gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault, gov.nih.nci.cagrid.dorian.stubs.types.InvalidHostCertificateFault, gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault {
 		return dorian.approveHostCertificate(getCallerIdentity(), recordId
 				.longValue());
 	}
 
-	public gov.nih.nci.cagrid.dorian.ifs.bean.HostCertificateRecord[] findHostCertificates(
-			gov.nih.nci.cagrid.dorian.ifs.bean.HostCertificateFilter hostCertificateFilter)
-			throws RemoteException,
-			gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault,
-			gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault {
+  public gov.nih.nci.cagrid.dorian.ifs.bean.HostCertificateRecord[] findHostCertificates(gov.nih.nci.cagrid.dorian.ifs.bean.HostCertificateFilter hostCertificateFilter) throws RemoteException, gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault, gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault {
 		return dorian.findHostCertificates(getCallerIdentity(),
 				hostCertificateFilter);
 	}
 
-	public void updateHostCertificateRecord(
-			gov.nih.nci.cagrid.dorian.ifs.bean.HostCertificateUpdate hostCertificateUpdate)
-			throws RemoteException,
-			gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault,
-			gov.nih.nci.cagrid.dorian.stubs.types.InvalidHostCertificateFault,
-			gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault {
+  public void updateHostCertificateRecord(gov.nih.nci.cagrid.dorian.ifs.bean.HostCertificateUpdate hostCertificateUpdate) throws RemoteException, gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault, gov.nih.nci.cagrid.dorian.stubs.types.InvalidHostCertificateFault, gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault {
 		dorian.updateHostCertificateRecord(getCallerIdentity(),
 				hostCertificateUpdate);
 	}
 
-	public gov.nih.nci.cagrid.dorian.ifs.bean.HostCertificateRecord renewHostCertificate(
-			java.math.BigInteger recordId) throws RemoteException,
-			gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault,
-			gov.nih.nci.cagrid.dorian.stubs.types.InvalidHostCertificateFault,
-			gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault {
+  public gov.nih.nci.cagrid.dorian.ifs.bean.HostCertificateRecord renewHostCertificate(java.math.BigInteger recordId) throws RemoteException, gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault, gov.nih.nci.cagrid.dorian.stubs.types.InvalidHostCertificateFault, gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault {
 		return dorian.renewHostCertificate(getCallerIdentity(), recordId
 				.longValue());
 	}
 
-	public void changeIdPUserPassword(
-			gov.nih.nci.cagrid.dorian.idp.bean.BasicAuthCredential credential,
-			java.lang.String newPassword) throws RemoteException,
-			gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault,
-			gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault,
-			gov.nih.nci.cagrid.dorian.stubs.types.InvalidUserPropertyFault {
+  public void changeIdPUserPassword(gov.nih.nci.cagrid.dorian.idp.bean.BasicAuthCredential credential,java.lang.String newPassword) throws RemoteException, gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault, gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault, gov.nih.nci.cagrid.dorian.stubs.types.InvalidUserPropertyFault {
 		dorian.changeIdPUserPassword(credential, newPassword);
 	}
 
-	public boolean doesIdPUserExist(java.lang.String userId)
-			throws RemoteException,
-			gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault {
+  public boolean doesIdPUserExist(java.lang.String userId) throws RemoteException, gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault {
 		return dorian.doesIdPUserExist(userId);
 	}
 

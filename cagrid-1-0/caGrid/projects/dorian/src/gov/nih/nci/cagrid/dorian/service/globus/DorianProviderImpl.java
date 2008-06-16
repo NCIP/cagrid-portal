@@ -19,12 +19,6 @@ public class DorianProviderImpl{
 	}
 	
 
-    public gov.nih.nci.cagrid.dorian.stubs.DoesIdPUserExistResponse doesIdPUserExist(gov.nih.nci.cagrid.dorian.stubs.DoesIdPUserExistRequest params) throws RemoteException, gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault {
-    gov.nih.nci.cagrid.dorian.stubs.DoesIdPUserExistResponse boxedResult = new gov.nih.nci.cagrid.dorian.stubs.DoesIdPUserExistResponse();
-    boxedResult.setResponse(impl.doesIdPUserExist(params.getUserId()));
-    return boxedResult;
-  }
-
     public gov.nih.nci.cagrid.dorian.stubs.RegisterWithIdPResponse registerWithIdP(gov.nih.nci.cagrid.dorian.stubs.RegisterWithIdPRequest params) throws RemoteException, gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault, gov.nih.nci.cagrid.dorian.stubs.types.InvalidUserPropertyFault {
     gov.nih.nci.cagrid.dorian.stubs.RegisterWithIdPResponse boxedResult = new gov.nih.nci.cagrid.dorian.stubs.RegisterWithIdPResponse();
     boxedResult.setResponse(impl.registerWithIdP(params.getApplication().getApplication()));
@@ -184,6 +178,12 @@ public class DorianProviderImpl{
     public gov.nih.nci.cagrid.dorian.stubs.ChangeIdPUserPasswordResponse changeIdPUserPassword(gov.nih.nci.cagrid.dorian.stubs.ChangeIdPUserPasswordRequest params) throws RemoteException, gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault, gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault, gov.nih.nci.cagrid.dorian.stubs.types.InvalidUserPropertyFault {
     gov.nih.nci.cagrid.dorian.stubs.ChangeIdPUserPasswordResponse boxedResult = new gov.nih.nci.cagrid.dorian.stubs.ChangeIdPUserPasswordResponse();
     impl.changeIdPUserPassword(params.getCredential().getBasicAuthCredential(),params.getNewPassword());
+    return boxedResult;
+  }
+
+    public gov.nih.nci.cagrid.dorian.stubs.DoesIdPUserExistResponse doesIdPUserExist(gov.nih.nci.cagrid.dorian.stubs.DoesIdPUserExistRequest params) throws RemoteException, gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault {
+    gov.nih.nci.cagrid.dorian.stubs.DoesIdPUserExistResponse boxedResult = new gov.nih.nci.cagrid.dorian.stubs.DoesIdPUserExistResponse();
+    boxedResult.setResponse(impl.doesIdPUserExist(params.getUserId()));
     return boxedResult;
   }
 

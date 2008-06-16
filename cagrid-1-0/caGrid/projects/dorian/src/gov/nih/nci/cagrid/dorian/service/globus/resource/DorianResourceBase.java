@@ -3,6 +3,9 @@ package gov.nih.nci.cagrid.dorian.service.globus.resource;
 import gov.nih.nci.cagrid.advertisement.AdvertisementClient;
 import gov.nih.nci.cagrid.advertisement.exceptions.UnregistrationException;
 import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.dorian.common.DorianConstants;
+import gov.nih.nci.cagrid.dorian.stubs.DorianResourceProperties;
+import gov.nih.nci.cagrid.introduce.servicetools.ReflectionResource;
 
 import java.io.File;
 import java.io.IOException;
@@ -10,6 +13,7 @@ import java.net.URL;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
+import javax.xml.namespace.QName;
 
 import org.apache.axis.MessageContext;
 import org.apache.axis.message.MessageElement;
@@ -24,17 +28,15 @@ import org.globus.wsrf.Constants;
 import org.globus.wsrf.Resource;
 import org.globus.wsrf.ResourceContext;
 import org.globus.wsrf.ResourceContextException;
-import org.globus.wsrf.ResourceProperties;
+import org.globus.wsrf.ResourceException;
 import org.globus.wsrf.ResourceProperty;
-import org.globus.wsrf.ResourcePropertySet;
 import org.globus.wsrf.config.ContainerConfig;
 import org.globus.wsrf.container.ServiceHost;
 import org.globus.wsrf.encoding.DeserializationException;
 import org.globus.wsrf.encoding.ObjectDeserializer;
-import org.globus.wsrf.impl.SimpleResourceProperty;
-import org.globus.wsrf.impl.SimpleResourcePropertyMetaData;
-import org.globus.wsrf.impl.SimpleResourcePropertySet;
+import org.globus.wsrf.impl.security.descriptor.ResourceSecurityDescriptor;
 import org.globus.wsrf.impl.servicegroup.client.ServiceGroupRegistrationClient;
+import org.globus.wsrf.security.SecureResource;
 import org.globus.wsrf.utils.AddressingUtils;
 
 
@@ -46,55 +48,107 @@ import org.globus.wsrf.utils.AddressingUtils;
  * of these resource as well as code for registering any properties selected
  * to the index service.
  * 
- * @created by Introduce Toolkit version 1.1
+ * @created by Introduce Toolkit version 1.2
  * 
  */
-public abstract class BaseResourceBase implements Resource, ResourceProperties {
+public abstract class DorianResourceBase extends ReflectionResource implements Resource
+                                                  ,SecureResource
+                                                  {
 
-	static final Log logger = LogFactory.getLog(BaseResourceBase.class);
+	static final Log logger = LogFactory.getLog(DorianResourceBase.class);
 
-	/** Stores the ResourceProperties of this service */
-	private ResourcePropertySet propSet;
-	
+	private DorianResourceConfiguration configuration;
+	private ResourceSecurityDescriptor desc;
+
 	// this can be used to cancel the registration renewal
     private AdvertisementClient registrationClient;
     
     private URL baseURL;
-
-	private ResourceConfiguration configuration;
-
-	//Define the metadata resource properties
-	
-		private ResourceProperty serviceMetadataRP;
-	private gov.nih.nci.cagrid.metadata.ServiceMetadata serviceMetadataValue;
-	
+    private boolean beingLoaded = false;
+    
+    public DorianResourceBase() {
+    }
 
 
+	/**
+	 * @see org.globus.wsrf.jndi.Initializable#initialize()
+	 */
+	public void initialize(Object resourceBean,
+                           QName resourceElementQName,
+                           Object id) throws ResourceException {
+                           
+        // Call the super initialize on the ReflectionResource                  
+	    super.initialize(resourceBean,resourceElementQName,id);
+		this.desc = null;
 
-	// initializes the resource
-	public void initialize() throws Exception {
-		// create the resource property set
-		this.propSet = new SimpleResourcePropertySet(ResourceConstants.RESOURCE_PROPERTY_SET);
+		// this loads the metadata from XML files if this is the main service
+		populateResourceProperties();
 
-		// this loads the metadata from XML files
-		populateResourceProperty();
-		
-		// now add the metadata as resource properties		//init the rp
-		this.serviceMetadataRP = new SimpleResourceProperty(ResourceConstants.SERVICEMETADATA_Value_RP);
-		//add the value to the rp
-		this.serviceMetadataRP.add(this.serviceMetadataValue);
-		//add the rp to the prop set
-		this.propSet.add(this.serviceMetadataRP);
-	
-
-
-		// register the service to the index sevice
+		// register the service to the index service
 		refreshRegistration(true);
+		
+	}
+	
+	
+	
 
+
+	    //Getters/Setters for ResourceProperties
+	
+	
+	public gov.nih.nci.cagrid.metadata.ServiceMetadata getServiceMetadata(){
+		return ((DorianResourceProperties) getResourceBean()).getServiceMetadata();
+	}
+	
+	public void setServiceMetadata(gov.nih.nci.cagrid.metadata.ServiceMetadata serviceMetadata ) throws ResourceException {
+        ResourceProperty prop = getResourcePropertySet().get(DorianConstants.SERVICEMETADATA);
+		prop.set(0, serviceMetadata);
+	}
+	
+
+
+	
+    /**
+     * Sets the security descriptor for this resource.  The default resource
+     * security will be null so it will fall back to method level then service
+     * level security.  If you want to protect this particular instance of this
+     * resource then provide a resource security descriptor to this resource
+     * through this method.
+     */
+	public void setSecurityDescriptor(ResourceSecurityDescriptor desc) {
+		this.desc = desc;
+	}
+	
+	
+	public ResourceSecurityDescriptor getSecurityDescriptor() {
+		return this.desc;
+	}  
+
+	
+	public DorianResourceConfiguration getConfiguration() {
+		if (this.configuration != null) {
+			return this.configuration;
+		}
+		MessageContext ctx = MessageContext.getCurrentContext();
+
+		String servicePath = ctx.getTargetService();
+		servicePath = servicePath.substring(0,servicePath.lastIndexOf("/"));
+		servicePath+="/Dorian";
+
+		String jndiName = Constants.JNDI_SERVICES_BASE_NAME + servicePath + "/configuration";
+		logger.debug("Will read configuration from jndi name: " + jndiName);
+		try {
+			Context initialContext = new InitialContext();
+			this.configuration = (DorianResourceConfiguration) initialContext.lookup(jndiName);
+		} catch (Exception e) {
+			logger.error("when performing JNDI lookup for " + jndiName + ": " + e, e);
+		}
+
+		return this.configuration;
 	}
 
 
-   /**
+    /**
      * This checks the configuration file, and attempts to register to the
      * IndexService if shouldPerformRegistration==true. It will first read the
      * current container URL, and compare it against the saved value. If the
@@ -254,10 +308,10 @@ public abstract class BaseResourceBase implements Resource, ResourceProperties {
             logger.info("Skipping registration.");
         }
     }
-
-
-
-	private void populateResourceProperty() {
+    
+    
+    
+    	private void populateResourceProperties() {
 	
 		loadServiceMetadataFromFile();
 	
@@ -266,61 +320,23 @@ public abstract class BaseResourceBase implements Resource, ResourceProperties {
 
 		
 	private void loadServiceMetadataFromFile() {
+      if(getServiceMetadata()==null){
 		try {
 			File dataFile = new File(ContainerConfig.getBaseDirectory() + File.separator
 					+ getConfiguration().getServiceMetadataFile());
-			this.serviceMetadataValue = (gov.nih.nci.cagrid.metadata.ServiceMetadata) Utils.deserializeDocument(dataFile.getAbsolutePath(),
-				gov.nih.nci.cagrid.metadata.ServiceMetadata.class);
+			((DorianResourceProperties) this.getResourceBean()).setServiceMetadata((gov.nih.nci.cagrid.metadata.ServiceMetadata) Utils.deserializeDocument(dataFile.getAbsolutePath(),
+				gov.nih.nci.cagrid.metadata.ServiceMetadata.class));
 		} catch (Exception e) {
 			logger.error("ERROR: problem populating metadata from file: " + e.getMessage(), e);
 		}
+	  }
 	}		
 	
 		
 
 
-	//Getters/Setters for ResourceProperties
+
+
 	
 	
-	protected ResourceProperty getServiceMetadataRP(){
-		return this.serviceMetadataRP;
-	}
-	
-	
-	public gov.nih.nci.cagrid.metadata.ServiceMetadata getServiceMetadataValue(){
-		return this.serviceMetadataValue;
-	}
-	
-	public void setServiceMetadataValue(gov.nih.nci.cagrid.metadata.ServiceMetadata serviceMetadata ){
-		this.serviceMetadataValue=serviceMetadata;
-		getServiceMetadataRP().set(0,serviceMetadata);
-	}
-		
-
-	public ResourceConfiguration getConfiguration() {
-		if (this.configuration != null) {
-			return this.configuration;
-		}
-		MessageContext ctx = MessageContext.getCurrentContext();
-
-		String servicePath = ctx.getTargetService();
-
-		String jndiName = Constants.JNDI_SERVICES_BASE_NAME + servicePath + "/configuration";
-		logger.debug("Will read configuration from jndi name: " + jndiName);
-		try {
-			Context initialContext = new InitialContext();
-			this.configuration = (ResourceConfiguration) initialContext.lookup(jndiName);
-		} catch (Exception e) {
-			logger.error("when performing JNDI lookup for " + jndiName + ": " + e, e);
-		}
-
-		return this.configuration;
-	}
-
-
-	public ResourcePropertySet getResourcePropertySet() {
-		return propSet;
-	}
-	
-
 }

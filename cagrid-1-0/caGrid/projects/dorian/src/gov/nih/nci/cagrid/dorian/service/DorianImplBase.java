@@ -1,21 +1,12 @@
 package gov.nih.nci.cagrid.dorian.service;
 
-import gov.nih.nci.cagrid.dorian.service.globus.resource.DorianResource;
-import gov.nih.nci.cagrid.dorian.service.ServiceConfiguration;
-
 import java.rmi.RemoteException;
 
 import javax.naming.InitialContext;
-import javax.xml.namespace.QName;
 
 import org.apache.axis.MessageContext;
 import org.globus.wsrf.Constants;
-import org.globus.wsrf.ResourceContext;
-import org.globus.wsrf.ResourceContextException;
-import org.globus.wsrf.ResourceException;
 import org.globus.wsrf.ResourceHome;
-import org.globus.wsrf.ResourceProperty;
-import org.globus.wsrf.ResourcePropertySet;
 
 
 /** 
@@ -23,7 +14,7 @@ import org.globus.wsrf.ResourcePropertySet;
  *
  * Provides some simple accessors for the Impl.
  * 
- * @created by Introduce Toolkit version 1.1
+ * @created by Introduce Toolkit version 1.2
  * 
  */
 public abstract class DorianImplBase {
@@ -32,14 +23,14 @@ public abstract class DorianImplBase {
 	
 	}
 	
-	public ServiceConfiguration getConfiguration() throws Exception {
-		return ServiceConfiguration.getConfiguration();
+	public DorianConfiguration getConfiguration() throws Exception {
+		return DorianConfiguration.getConfiguration();
 	}
 	
 	
-	public gov.nih.nci.cagrid.dorian.service.globus.resource.BaseResourceHome getResourceHome() throws Exception {
+	public gov.nih.nci.cagrid.dorian.service.globus.resource.DorianResourceHome getResourceHome() throws Exception {
 		ResourceHome resource = getResourceHome("home");
-		return (gov.nih.nci.cagrid.dorian.service.globus.resource.BaseResourceHome)resource;
+		return (gov.nih.nci.cagrid.dorian.service.globus.resource.DorianResourceHome)resource;
 	}
 
 	
@@ -63,45 +54,6 @@ public abstract class DorianImplBase {
 
 		return resourceHome;
 	}
-	
-	
-	
-	
-	protected gov.nih.nci.cagrid.metadata.ServiceMetadata getServiceMetadataValue(){
-		DorianResource serviceBaseResource;
-		try {
-			serviceBaseResource = (DorianResource)ResourceContext.getResourceContext().getResource();
-		} catch (ResourceContextException e) {
-			return null;
-		} catch (ResourceException e) {
-			return null;
-		}
-		return serviceBaseResource.getServiceMetadataValue();
-	}
-
-		
-	
-	
-	protected Object getMetadata(QName metadataQName) {
-		DorianResource serviceBaseResource = null;
-		try {
-			serviceBaseResource = (DorianResource) ResourceContext.getResourceContext().getResource();
-		} catch (ResourceContextException e) {
-			return null;
-		} catch (ResourceException e) {
-			return null;
-		}
-		ResourcePropertySet resourcePropertySet = serviceBaseResource.getResourcePropertySet();
-		if (resourcePropertySet != null) {
-			ResourceProperty property = resourcePropertySet.get(metadataQName);
-			if (property != null) {
-				return property.get(0);
-			}
-
-		}
-		return null;
-	}
-	
 
 
 }

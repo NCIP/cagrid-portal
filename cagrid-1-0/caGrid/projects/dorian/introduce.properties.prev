@@ -1,10 +1,10 @@
 #Introduce Properties
-#Mon Jun 16 11:15:15 EDT 2008
-introduce.skeleton.services.list=Dorian
+#Mon Jun 16 11:14:51 EDT 2008
 introduce.skeleton.extensions=
+introduce.skeleton.services.list=Dorian
 introduce.skeleton.destination.dir=/Users/langella/projects/caGrid/caGrid/projects/dorian
 introduce.skeleton.namespace.domain=http\://cagrid.nci.nih.gov/Dorian
+introduce.skeleton.timestamp=1208353224280
 introduce.skeleton.service.name=Dorian
-introduce.skeleton.timestamp=1213629315998
 introduce.soap.binding.excludes=\ 
 introduce.ns.excludes=\ -x gme\://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.service -x gme\://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata -x http\://cagrid.nci.nih.gov/1/authentication-service -x gme\://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security -x http\://cagrid.nci.nih.gov/AuthenticationService/types -x gme\://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common

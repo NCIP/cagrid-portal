@@ -2,6 +2,7 @@ package gov.nih.nci.cagrid.dorian.service.globus;
 
 
 import java.rmi.RemoteException;
+
 import javax.security.auth.Subject;
 import javax.xml.namespace.QName;
 import javax.xml.rpc.handler.MessageContext;
@@ -24,7 +25,7 @@ import org.w3c.dom.Node;
  * authorization requirements placed on each method call.  Each method will either return
  * apon a successful authorization or will throw an exception apon a failed authorization.
  * 
- * @created by Introduce Toolkit version 1.1
+ * @created by Introduce Toolkit version 1.2
  * 
  */
 public class DorianAuthorization implements PDP {
@@ -189,6 +190,21 @@ public class DorianAuthorization implements PDP {
 	}
 					
 	public static void authorizeDoesIdPUserExist() throws RemoteException {
+		
+		
+	}
+					
+	public static void authorizeGetMultipleResourceProperties() throws RemoteException {
+		
+		
+	}
+					
+	public static void authorizeGetResourceProperty() throws RemoteException {
+		
+		
+	}
+					
+	public static void authorizeQueryResourceProperties() throws RemoteException {
 		
 		
 	}
@@ -427,6 +443,30 @@ public class DorianAuthorization implements PDP {
 		} else if(operation.getLocalPart().equals("doesIdPUserExist")){
 			try{
 				authorizeDoesIdPUserExist();
+				return true;
+			} catch (Exception e){
+				e.printStackTrace();
+				return false;
+			}
+		} else if(operation.getLocalPart().equals("getMultipleResourceProperties")){
+			try{
+				authorizeGetMultipleResourceProperties();
+				return true;
+			} catch (Exception e){
+				e.printStackTrace();
+				return false;
+			}
+		} else if(operation.getLocalPart().equals("getResourceProperty")){
+			try{
+				authorizeGetResourceProperty();
+				return true;
+			} catch (Exception e){
+				e.printStackTrace();
+				return false;
+			}
+		} else if(operation.getLocalPart().equals("queryResourceProperties")){
+			try{
+				authorizeQueryResourceProperties();
 				return true;
 			} catch (Exception e){
 				e.printStackTrace();

@@ -15,15 +15,6 @@ public interface DorianI {
     public gov.nih.nci.cagrid.metadata.security.ServiceSecurityMetadata getServiceSecurityMetadata() throws RemoteException ;
 
   /**
-   * This method determines whether or not a IdP user exists.
-   *
-   * @param userId
-   * @throws DorianInternalFault
-   *	
-   */
-  public boolean doesIdPUserExist(java.lang.String userId) throws RemoteException, gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault ;
-
-  /**
    * Submits an application for an account with a the Dorian Identity Provider.
    *
    * @param application
@@ -250,6 +241,21 @@ public interface DorianI {
    *	
    */
   public void changeIdPUserPassword(gov.nih.nci.cagrid.dorian.idp.bean.BasicAuthCredential credential,java.lang.String newPassword) throws RemoteException, gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault, gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault, gov.nih.nci.cagrid.dorian.stubs.types.InvalidUserPropertyFault ;
+
+  /**
+   * This method determines whether or not a IdP user exists.
+   *
+   * @param userId
+   * @throws DorianInternalFault
+   *	
+   */
+  public boolean doesIdPUserExist(java.lang.String userId) throws RemoteException, gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault ;
+
+  public org.oasis.wsrf.properties.GetMultipleResourcePropertiesResponse getMultipleResourceProperties(org.oasis.wsrf.properties.GetMultipleResourceProperties_Element params) throws RemoteException ;
+
+  public org.oasis.wsrf.properties.GetResourcePropertyResponse getResourceProperty(javax.xml.namespace.QName params) throws RemoteException ;
+
+  public org.oasis.wsrf.properties.QueryResourcePropertiesResponse queryResourceProperties(org.oasis.wsrf.properties.QueryResourceProperties_Element params) throws RemoteException ;
 
 }
 
