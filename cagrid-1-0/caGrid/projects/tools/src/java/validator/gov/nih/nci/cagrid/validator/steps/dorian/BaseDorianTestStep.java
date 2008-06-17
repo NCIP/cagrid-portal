@@ -1,6 +1,5 @@
 package gov.nih.nci.cagrid.validator.steps.dorian;
 
-import gov.nih.nci.cagrid.dorian.client.DorianClient;
 import gov.nih.nci.cagrid.validator.steps.AbstractBaseServiceTestStep;
 
 import java.io.File;
@@ -8,6 +7,7 @@ import java.rmi.RemoteException;
 import java.util.Properties;
 
 import org.apache.axis.types.URI.MalformedURIException;
+import org.cagrid.gaards.dorian.client.DorianClient;
 
 
 /**
@@ -17,7 +17,7 @@ import org.apache.axis.types.URI.MalformedURIException;
  * @author David Ervin
  * 
  * @created Aug 27, 2007 4:04:29 PM
- * @version $Id: BaseDorianTestStep.java,v 1.1 2008-03-25 14:20:30 dervin Exp $
+ * @version $Id: BaseDorianTestStep.java,v 1.2 2008-06-17 19:33:11 langella Exp $
  */
 public abstract class BaseDorianTestStep extends AbstractBaseServiceTestStep {
     

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <deployment xmlns="http://xml.apache.org/axis/wsdd/" xmlns:aggr="http://mds.globus.org/aggregator/types" xmlns:java="http://xml.apache.org/axis/wsdd/providers/java" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="defaultServerConfig">
   <service name="SERVICE-INSTANCE-PREFIX/Dorian" provider="Handler" use="literal" style="document">
-    <parameter name="className" value="gov.nih.nci.cagrid.dorian.service.globus.DorianProviderImpl" />
+    <parameter name="className" value="org.cagrid.gaards.dorian.service.globus.DorianProviderImpl" />
     <wsdlFile>share/schema/Dorian/Dorian_service.wsdl</wsdlFile>
     <parameter name="securityDescriptor" value="ETC-PATH/Dorian-security-desc.xml" />
     <parameter name="allowedMethods" value="*" />

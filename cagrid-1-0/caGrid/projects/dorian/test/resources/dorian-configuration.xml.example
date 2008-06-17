@@ -3,7 +3,7 @@
 <beans>
 
      <bean id="dorianProperties"
-				class="gov.nih.nci.cagrid.dorian.service.DorianProperties">
+				class="org.cagrid.gaards.dorian.service.DorianProperties">
 		<constructor-arg index="0" ref="database" />
 		<constructor-arg index="1" ref="identityProviderProperties" />
 		<constructor-arg index="2" ref="identityFederationProperties" />
@@ -11,12 +11,12 @@
 	</bean>
 
     <bean id="identityFederationProperties"
-				class="gov.nih.nci.cagrid.dorian.service.ifs.IdentityFederationProperties">
+				class="org.cagrid.gaards.dorian.federation.IdentityFederationProperties">
         <property name="identityAssignmentPolicy" value="${gaards.dorian.ifs.identity.policy}" />
         <property name="minIdPNameLength" value="${gaards.dorian.ifs.min.idp.name.length}" />
         <property name="maxIdPNameLength" value="${gaards.dorian.ifs.max.idp.name.length}" />
         <property name="issuedCertificateLifetime">
-              <bean class="gov.nih.nci.cagrid.dorian.common.Lifetime">
+              <bean class="org.cagrid.gaards.dorian.common.Lifetime">
                  		<property name="years" value="${gaards.dorian.ifs.certificate.lifetime.years}" />
                  		<property name="months" value="${gaards.dorian.ifs.certificate.lifetime.months}" />
                  		<property name="days" value="${gaards.dorian.ifs.certificate.lifetime.days}" />
@@ -27,7 +27,7 @@
         </property>
         <property name="autoHostCertificateApproval" value="${gaards.dorian.ifs.auto.host.certificate.approval}" />
 	    <property name="maxProxyLifetime">
-              <bean class="gov.nih.nci.cagrid.dorian.common.Lifetime">
+              <bean class="org.cagrid.gaards.dorian.common.Lifetime">
                 		<property name="hours" value="${gaards.dorian.ifs.max.proxy.lifetime.hours}" />
                 		<property name="minutes" value="${gaards.dorian.ifs.max.proxy.lifetime.minutes}" />
                  		<property name="seconds" value="${gaards.dorian.ifs.max.proxy.lifetime.seconds}" />
@@ -48,10 +48,10 @@
 	  <bean id="accountPolicyList" class="org.springframework.beans.factory.config.ListFactoryBean">
              <property name="sourceList">
        			<list>
-       				<bean class="gov.nih.nci.cagrid.dorian.service.ifs.ManualApprovalPolicy"/>
-       				<bean class="gov.nih.nci.cagrid.dorian.service.ifs.ManualApprovalAutoRenewalPolicy"/>
-       				<bean class="gov.nih.nci.cagrid.dorian.service.ifs.AutoApprovalPolicy"/>
-       				<bean class="gov.nih.nci.cagrid.dorian.service.ifs.AutoApprovalAutoRenewalPolicy"/>
+       				<bean class="org.cagrid.gaards.dorian.federation.ManualApprovalPolicy"/>
+       				<bean class="org.cagrid.gaards.dorian.federation.ManualApprovalAutoRenewalPolicy"/>
+       				<bean class="org.cagrid.gaards.dorian.federation.AutoApprovalPolicy"/>
+       				<bean class="org.cagrid.gaards.dorian.federation.AutoApprovalAutoRenewalPolicy"/>
                    </list> 
   			</property>
        </bean>    
@@ -59,27 +59,27 @@
 	
 
     <bean id="identityProvider"
-		class="gov.nih.nci.cagrid.dorian.service.idp.IdentityProvider">
+		class="org.cagrid.gaards.dorian.idp.IdentityProvider">
 		<constructor-arg index="0" ref="identityProviderProperties"/>
 		<constructor-arg index="1" ref="database" />
 		<constructor-arg index="2" ref="certificateAuthority"/>
 	</bean>
 
     <bean id="idpUserManager"
-		class="gov.nih.nci.cagrid.dorian.service.idp.UserManager">
+		class="org.cagrid.gaards.dorian.idp.UserManager">
 		<constructor-arg index="0" ref="database" />
 		<constructor-arg index="1" ref="identityProviderProperties"/>
 	</bean>
 	
 	<bean id="assertionCredentialsManager"
-		class="gov.nih.nci.cagrid.dorian.service.idp.AssertionCredentialsManager">
+		class="org.cagrid.gaards.dorian.idp.AssertionCredentialsManager">
 		<constructor-arg index="0" ref="identityProviderProperties"/>
 		<constructor-arg index="1" ref="certificateAuthority"/>
 		<constructor-arg index="2" ref="database" />	
 	</bean>
 
     <bean id="identityProviderProperties"
-				class="gov.nih.nci.cagrid.dorian.service.idp.IdentityProviderProperties">
+				class="org.cagrid.gaards.dorian.idp.IdentityProviderProperties">
                  <property name="name" value="${gaards.dorian.idp.name}" />
                  <property name="autoRenewAssertingCredentials" value="${gaards.dorian.idp.renew.asserting.credentials}" />
                  <property name="assertingCredentialsEncryptionPassword" value="${gaards.dorian.idp.asserting.credentials.password}" />
@@ -90,17 +90,17 @@
 	</bean>
 	
 	  <bean id="registrationPolicy"
-				class="gov.nih.nci.cagrid.dorian.service.idp.ManualRegistrationPolicy"/>
+				class="org.cagrid.gaards.dorian.idp.ManualRegistrationPolicy"/>
 	
 	<!--  			
 	 <bean id="registrationPolicy"
-				class="gov.nih.nci.cagrid.dorian.service.idp.AutomaticRegistrationPolicy"/>           
+				class="org.cagrid.gaards.dorian.idp.AutomaticRegistrationPolicy"/>           
     -->
 
      <bean id="passwordSecurityPolicy"
-		class="gov.nih.nci.cagrid.dorian.service.idp.PasswordSecurityPolicy">
+		class="org.cagrid.gaards.dorian.idp.PasswordSecurityPolicy">
        <property name="lockout">
-       	   <bean class="gov.nih.nci.cagrid.dorian.common.Lifetime">
+       	   <bean class="org.cagrid.gaards.dorian.common.Lifetime">
                  <property name="hours" value="${gaards.dorian.idp.password.lock.hours}" />
                  <property name="minutes" value="${gaards.dorian.idp.password.lock.minutes}" />
                  <property name="seconds" value="${gaards.dorian.idp.password.lock.seconds}" />
@@ -115,14 +115,14 @@
 
 
 	<bean id="certificateAuthority"
-		class="gov.nih.nci.cagrid.dorian.service.ca.DBCertificateAuthority">
+		class="org.cagrid.gaards.dorian.ca.DBCertificateAuthority">
 		<constructor-arg index="0" ref="database" />
 		<constructor-arg index="1" ref="caProperties"/>
 	</bean>
 	
 	
 	<bean id="caProperties"
-				class="gov.nih.nci.cagrid.dorian.service.ca.CertificateAuthorityProperties">
+				class="org.cagrid.gaards.dorian.ca.CertificateAuthorityProperties">
 				 <constructor-arg index="0" value="${gaards.dorian.ca.password}" />
                  <constructor-arg index="1" value="${gaards.dorian.ca.policy.oid}" />
                  <constructor-arg index="2" value="${gaards.dorian.ca.issued.cert.key.size}" />
@@ -134,7 +134,7 @@
 			
 			<!--  
 	<bean id="certificateAuthority"
-		class="gov.nih.nci.cagrid.dorian.service.ca.EracomWrappingCertificateAuthority">
+		class="org.cagrid.gaards.dorian.ca.EracomWrappingCertificateAuthority">
 		<constructor-arg index="0" ref="database" />
 		<constructor-arg index="1" ref="eracomCAProperties"/>
 	</bean>
@@ -142,7 +142,7 @@
 	 
 	
 	<bean id="eracomCAProperties"
-				class="gov.nih.nci.cagrid.dorian.service.ca.EracomCertificateAuthorityProperties">
+				class="org.cagrid.gaards.dorian.ca.EracomCertificateAuthorityProperties">
 				 <constructor-arg index="0" value="${gaards.dorian.ca.password}" />
                  <constructor-arg index="1" value="${gaards.dorian.ca.policy.oid}" />
                  <constructor-arg index="2" value="${gaards.dorian.ca.issued.cert.key.size}" />
@@ -155,11 +155,11 @@
 	-->
 	
 	<bean id="caCreationPolicy"
-		class="gov.nih.nci.cagrid.dorian.service.ca.CertificateAuthorityCreationPolicy">
+		class="org.cagrid.gaards.dorian.ca.CertificateAuthorityCreationPolicy">
        <constructor-arg index="0" value="${gaards.dorian.ca.auto.create.subject}" />
        <constructor-arg index="1" value="${gaards.dorian.ca.auto.create.key.size}" />
        <constructor-arg index="2">
-       	   <bean class="gov.nih.nci.cagrid.dorian.common.Lifetime">
+       	   <bean class="org.cagrid.gaards.dorian.common.Lifetime">
                  <property name="years" value="${gaards.dorian.ca.auto.create.lifetime.years}" />
                  <property name="months" value="${gaards.dorian.ca.auto.create.lifetime.months}" />
                  <property name="days" value="${gaards.dorian.ca.auto.create.lifetime.days}" />
@@ -171,7 +171,7 @@
 	</bean>
 	
 	<bean id="caRenewalLifetime"
-				class="gov.nih.nci.cagrid.dorian.common.Lifetime">
+				class="org.cagrid.gaards.dorian.common.Lifetime">
                  <property name="years" value="${gaards.dorian.ca.auto.create.lifetime.years}" />
                  <property name="months" value="${gaards.dorian.ca.auto.create.lifetime.months}" />
                  <property name="days" value="${gaards.dorian.ca.auto.create.lifetime.days}" />

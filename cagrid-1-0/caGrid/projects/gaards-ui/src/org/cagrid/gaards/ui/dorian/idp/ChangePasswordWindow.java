@@ -1,8 +1,6 @@
 package org.cagrid.gaards.ui.dorian.idp;
 
 import gov.nih.nci.cagrid.common.Runner;
-import gov.nih.nci.cagrid.dorian.client.IdPUserClient;
-import gov.nih.nci.cagrid.dorian.idp.bean.BasicAuthCredential;
 
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
@@ -16,6 +14,8 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
+import org.cagrid.gaards.dorian.client.IdPUserClient;
+import org.cagrid.gaards.dorian.idp.BasicAuthCredential;
 import org.cagrid.gaards.ui.dorian.DorianLookAndFeel;
 import org.cagrid.gaards.ui.dorian.DorianServiceListComboBox;
 import org.cagrid.grape.ApplicationComponent;

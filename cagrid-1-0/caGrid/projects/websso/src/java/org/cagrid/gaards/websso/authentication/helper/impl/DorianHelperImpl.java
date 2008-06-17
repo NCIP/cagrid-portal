@@ -1,18 +1,18 @@
 package org.cagrid.gaards.websso.authentication.helper.impl;
 
 import gov.nih.nci.cagrid.common.FaultUtil;
-import gov.nih.nci.cagrid.dorian.client.IFSUserClient;
-import gov.nih.nci.cagrid.dorian.common.DorianFault;
-import gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault;
-import gov.nih.nci.cagrid.dorian.stubs.types.InvalidAssertionFault;
-import gov.nih.nci.cagrid.dorian.stubs.types.InvalidProxyFault;
-import gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault;
-import gov.nih.nci.cagrid.dorian.stubs.types.UserPolicyFault;
 import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
 
 import java.rmi.RemoteException;
 
 import org.apache.axis.types.URI.MalformedURIException;
+import org.cagrid.gaards.dorian.client.IFSUserClient;
+import org.cagrid.gaards.dorian.common.DorianFault;
+import org.cagrid.gaards.dorian.stubs.types.DorianInternalFault;
+import org.cagrid.gaards.dorian.stubs.types.InvalidAssertionFault;
+import org.cagrid.gaards.dorian.stubs.types.InvalidProxyFault;
+import org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault;
+import org.cagrid.gaards.dorian.stubs.types.UserPolicyFault;
 import org.cagrid.gaards.websso.authentication.helper.DorianHelper;
 import org.cagrid.gaards.websso.beans.DorianInformation;
 import org.cagrid.gaards.websso.exception.AuthenticationConfigurationException;

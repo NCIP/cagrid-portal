@@ -1,8 +1,8 @@
 package org.cagrid.gaards.websso.beans;
 
-import gov.nih.nci.cagrid.dorian.ifs.bean.ProxyLifetime;
-
 import java.io.Serializable;
+
+import org.cagrid.gaards.dorian.federation.ProxyLifetime;
 
 public class DorianInformation implements Serializable
 {

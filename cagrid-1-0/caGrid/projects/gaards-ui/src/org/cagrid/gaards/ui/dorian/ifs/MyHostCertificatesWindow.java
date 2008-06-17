@@ -1,8 +1,6 @@
 package org.cagrid.gaards.ui.dorian.ifs;
 
 import gov.nih.nci.cagrid.common.Runner;
-import gov.nih.nci.cagrid.dorian.client.IFSUserClient;
-import gov.nih.nci.cagrid.dorian.ifs.bean.HostCertificateRecord;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -13,6 +11,8 @@ import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 
+import org.cagrid.gaards.dorian.client.IFSUserClient;
+import org.cagrid.gaards.dorian.federation.HostCertificateRecord;
 import org.cagrid.gaards.ui.dorian.DorianLookAndFeel;
 import org.cagrid.gaards.ui.dorian.SessionPanel;
 import org.cagrid.grape.ApplicationComponent;

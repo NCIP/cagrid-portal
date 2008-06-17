@@ -1,19 +1,19 @@
-http\://cagrid.nci.nih.gov/Dorian=gov.nih.nci.cagrid.dorian.stubs
-http\://cagrid.nci.nih.gov/Dorian/bindings=gov.nih.nci.cagrid.dorian.stubs.bindings
-http\://cagrid.nci.nih.gov/Dorian/service=gov.nih.nci.cagrid.dorian.stubs.service
+http\://cagrid.nci.nih.gov/Dorian=org.cagrid.gaards.dorian.stubs
+http\://cagrid.nci.nih.gov/Dorian/bindings=org.cagrid.gaards.dorian.stubs.bindings
+http\://cagrid.nci.nih.gov/Dorian/service=org.cagrid.gaards.dorian.stubs.service
 http\://security.introduce.cagrid.nci.nih.gov/ServiceSecurity=gov.nih.nci.cagrid.introduce.security.stubs
 http\://cagrid.nci.nih.gov/AuthenticationService=gov.nih.nci.cagrid.authentication
 http\://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl=org.oasis.wsrf.properties
 http\://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl=org.oasis.wsrf.properties
 http\://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl=org.oasis.wsrf.properties
 
-http\://cagrid.nci.nih.gov/Dorian/types=gov.nih.nci.cagrid.dorian.stubs.types
+http\://cagrid.nci.nih.gov/Dorian/types=org.cagrid.gaards.dorian.stubs.types
 gme\://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata=gov.nih.nci.cagrid.metadata
-http\://cagrid.nci.nih.gov/1/dorian-ifs=gov.nih.nci.cagrid.dorian.ifs.bean
+http\://cagrid.nci.nih.gov/1/dorian-ifs=org.cagrid.gaards.dorian.federation
 http\://cagrid.nci.nih.gov/1/authentication-service=gov.nih.nci.cagrid.authentication.bean
 gme\://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security=gov.nih.nci.cagrid.metadata.security
-http\://cagrid.nci.nih.gov/1/dorian-common=gov.nih.nci.cagrid.dorian.bean
+http\://cagrid.nci.nih.gov/1/dorian-common=org.cagrid.gaards.dorian
 http\://cagrid.nci.nih.gov/AuthenticationService/types=gov.nih.nci.cagrid.authentication.stubs.types
-http\://cagrid.nci.nih.gov/1/dorian-idp=gov.nih.nci.cagrid.dorian.idp.bean
+http\://cagrid.nci.nih.gov/1/dorian-idp=org.cagrid.gaards.dorian.idp
 gme\://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.service=gov.nih.nci.cagrid.metadata.service
 gme\://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common=gov.nih.nci.cagrid.metadata.common

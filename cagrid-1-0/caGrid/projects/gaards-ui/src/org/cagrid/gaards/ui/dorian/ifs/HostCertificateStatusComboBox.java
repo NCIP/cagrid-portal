@@ -1,8 +1,8 @@
 package org.cagrid.gaards.ui.dorian.ifs;
 
-import gov.nih.nci.cagrid.dorian.ifs.bean.HostCertificateStatus;
-
 import javax.swing.JComboBox;
+
+import org.cagrid.gaards.dorian.federation.HostCertificateStatus;
 
 public class HostCertificateStatusComboBox extends JComboBox {
 	public HostCertificateStatusComboBox(boolean includeBlank) {

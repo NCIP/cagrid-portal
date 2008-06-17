@@ -20,7 +20,7 @@
       <none />
     </auth-method>
   </method>
-  <authz value="dorian:gov.nih.nci.cagrid.dorian.service.globus.DorianAuthorization" />
+  <authz value="dorian:org.cagrid.gaards.dorian.service.globus.DorianAuthorization" />
   <auth-method>
     <GSITransport>
       <protection-level>

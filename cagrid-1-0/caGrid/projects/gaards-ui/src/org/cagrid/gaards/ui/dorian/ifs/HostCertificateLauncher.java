@@ -1,6 +1,6 @@
 package org.cagrid.gaards.ui.dorian.ifs;
 
-import gov.nih.nci.cagrid.dorian.ifs.bean.HostCertificateRecord;
+import org.cagrid.gaards.dorian.federation.HostCertificateRecord;
 
 public interface HostCertificateLauncher {
 	public void viewHostCertificate(HostCertificateRecord record);

@@ -1,11 +1,6 @@
 package org.cagrid.gaards.ui.dorian.ifs;
 
 import gov.nih.nci.cagrid.common.Runner;
-import gov.nih.nci.cagrid.dorian.client.IFSAdministrationClient;
-import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUser;
-import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserFilter;
-import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdP;
-import gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -16,6 +11,11 @@ import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 
+import org.cagrid.gaards.dorian.client.IFSAdministrationClient;
+import org.cagrid.gaards.dorian.federation.IFSUser;
+import org.cagrid.gaards.dorian.federation.IFSUserFilter;
+import org.cagrid.gaards.dorian.federation.TrustedIdP;
+import org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault;
 import org.cagrid.gaards.ui.dorian.DorianLookAndFeel;
 import org.cagrid.gaards.ui.dorian.SessionPanel;
 import org.cagrid.grape.ApplicationComponent;

@@ -1,7 +1,6 @@
 package org.cagrid.gaards.ui.dorian.ifs;
 
 import gov.nih.nci.cagrid.common.Runner;
-import gov.nih.nci.cagrid.dorian.client.IFSAdministrationClient;
 
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -15,6 +14,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import org.cagrid.gaards.dorian.client.IFSAdministrationClient;
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.LookAndFeel;
 import org.cagrid.grape.utils.ErrorDialog;

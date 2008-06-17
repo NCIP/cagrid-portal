@@ -2,13 +2,6 @@ package org.cagrid.gaards.ui.dorian.ifs;
 
 import gov.nih.nci.cagrid.common.Runner;
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.dorian.client.IFSAdministrationClient;
-import gov.nih.nci.cagrid.dorian.common.SAMLConstants;
-import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUserPolicy;
-import gov.nih.nci.cagrid.dorian.ifs.bean.SAMLAttributeDescriptor;
-import gov.nih.nci.cagrid.dorian.ifs.bean.SAMLAuthenticationMethod;
-import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdP;
-import gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault;
 
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
@@ -27,6 +20,13 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
+import org.cagrid.gaards.dorian.client.IFSAdministrationClient;
+import org.cagrid.gaards.dorian.common.SAMLConstants;
+import org.cagrid.gaards.dorian.federation.IFSUserPolicy;
+import org.cagrid.gaards.dorian.federation.SAMLAttributeDescriptor;
+import org.cagrid.gaards.dorian.federation.SAMLAuthenticationMethod;
+import org.cagrid.gaards.dorian.federation.TrustedIdP;
+import org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault;
 import org.cagrid.gaards.pki.CertUtil;
 import org.cagrid.gaards.ui.common.CertificatePanel;
 import org.cagrid.gaards.ui.common.CredentialCaddy;
@@ -43,7 +43,7 @@ import org.globus.gsi.GlobusCredential;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: TrustedIdPWindow.java,v 1.3 2008-04-30 01:50:28 langella Exp $
+ * @version $Id: TrustedIdPWindow.java,v 1.4 2008-06-17 19:33:10 langella Exp $
  */
 public class TrustedIdPWindow extends ApplicationComponent {
 	public static final String PASSWORD = SAMLAuthenticationMethod.value1.getValue();

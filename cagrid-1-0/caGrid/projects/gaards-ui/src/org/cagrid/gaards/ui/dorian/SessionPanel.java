@@ -1,9 +1,5 @@
 package org.cagrid.gaards.ui.dorian;
 
-import gov.nih.nci.cagrid.dorian.client.IFSAdministrationClient;
-import gov.nih.nci.cagrid.dorian.client.IFSUserClient;
-import gov.nih.nci.cagrid.dorian.client.IdPAdministrationClient;
-
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -13,6 +9,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
 
+import org.cagrid.gaards.dorian.client.IFSAdministrationClient;
+import org.cagrid.gaards.dorian.client.IFSUserClient;
+import org.cagrid.gaards.dorian.client.IdPAdministrationClient;
 import org.cagrid.gaards.ui.common.CredentialComboBox;
 import org.cagrid.grape.LookAndFeel;
 import org.globus.gsi.GlobusCredential;

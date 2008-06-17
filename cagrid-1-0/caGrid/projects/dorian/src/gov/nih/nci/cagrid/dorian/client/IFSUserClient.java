@@ -4,7 +4,6 @@ import gov.nih.nci.cagrid.common.FaultHelper;
 import gov.nih.nci.cagrid.common.FaultUtil;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.dorian.common.DorianFault;
-import gov.nih.nci.cagrid.dorian.common.SAMLUtils;
 import gov.nih.nci.cagrid.dorian.ifs.bean.DelegationPathLength;
 import gov.nih.nci.cagrid.dorian.ifs.bean.HostCertificateRecord;
 import gov.nih.nci.cagrid.dorian.ifs.bean.HostCertificateRequest;
@@ -26,6 +25,7 @@ import java.security.cert.X509Certificate;
 import org.apache.axis.types.URI.MalformedURIException;
 import org.cagrid.gaards.pki.CertUtil;
 import org.cagrid.gaards.pki.KeyUtil;
+import org.cagrid.gaards.saml.encoding.SAMLUtils;
 import org.globus.gsi.GlobusCredential;
 
 public class IFSUserClient {

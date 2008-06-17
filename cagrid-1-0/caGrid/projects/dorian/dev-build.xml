@@ -41,62 +41,6 @@
 	<!--need to import the test build-->
 	<import file="test/test.xml" />
 
-
-	<target name="defineClasspaths">
-		<runtarget target="defineExtendedClasspaths" />
-		<path id="base.classpath">
-			<fileset dir="${lib.dir}">
-				<include name="*.jar" />
-			</fileset>
-			<fileset dir="${ext.globus.dir}/lib">
-				<include name="*.jar" />
-				<exclude name="${stubs.jar.name}" />
-				<exclude name="${common.jar.name}" />
-				<exclude name="${client.jar.name}" />
-				<exclude name="${service.jar.name}" />
-			</fileset>
-			<path refid="base.extended.classpath" />
-		</path>
-		<path id="service.build.classpath">
-			<pathelement location="${stubs.dest}" />
-			<path refid="service.build.extended.classpath" />
-			<path refid="base.classpath" />
-		</path>
-		<path id="service.run.classpath">
-			<pathelement location="${build.dest}" />
-			<path refid="service.run.extended.classpath" />
-			<path refid="service.build.classpath" />
-		</path>
-		<path id="test.build.classpath">
-			<fileset dir="${test.lib.dir}">
-				<include name="*.jar" />
-			</fileset>
-			<pathelement location="${build.dest}" />
-			<path refid="test.build.extended.classpath" />
-			<path refid="service.build.classpath" />
-		</path>
-		<path id="test.run.classpath">
-			<pathelement location="${test.build.dest}" />
-			<path refid="test.run.extended.classpath" />
-			<path refid="test.build.classpath" />
-		</path>
-		<path id="run.classpath">
-			<pathelement location="${build.dest}" />
-			<path refid="run.extended.classpath" />
-			<path refid="service.build.classpath" />
-		</path>
-		<path id="processor.run.classpath">
-			<fileset dir="${tools.lib.dir}">
-				<include name="*.jar" />
-			</fileset>
-			<path refid="run.classpath" />
-		</path>
-	</target>
-
-
-
-
-
 	<!-- ============================================================== -->
 	<!-- Create any extended Classpaths here                            -->
 	<!-- ============================================================== -->
@@ -120,6 +64,11 @@
 		</path>
 		<path id="run.extended.classpath">
 		</path>
+		<path id="tasks.run.extended.classpath">
+			<fileset dir="${ext.lib}">
+							<include name="*.jar" />
+						</fileset>
+				</path>
 	</target>
 
 
@@ -129,11 +78,15 @@
 		<runtarget target="preJar" />
 		<jar jarfile="${build.lib.dir}/${client.jar.name}" basedir="${build.dest}">
 			<include name="**/client/**" />
+			<include name="**/dorian/tools/**" />
 		</jar>
 
 
 		<jar jarfile="${build.lib.dir}/${service.jar.name}" basedir="${build.dest}">
 			<include name="**/service/**" />
+			<include name="**/idp/**" />
+			<include name="**/federation/**" />
+			<include name="**/ca/**" />
 		</jar>
 		<jar jarfile="${build.lib.dir}/${common.jar.name}" basedir="${build.dest}">
 			<include name="**/*.xml" />
@@ -145,6 +98,10 @@
 			<include name="**/common/**" />
 			<exclude name="**/client/**" />
 			<exclude name="**/service/**" />
+			<exclude name="**/dorian/tools/**" />
+			<exclude name="**/idp/**" />
+			<exclude name="**/federation/**" />
+			<exclude name="**/ca/**" />
 		</jar>
 		<runtarget target="postJar" />
 	</target>

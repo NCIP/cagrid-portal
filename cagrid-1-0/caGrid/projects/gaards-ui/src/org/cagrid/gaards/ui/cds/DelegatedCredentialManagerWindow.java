@@ -2,8 +2,6 @@ package org.cagrid.gaards.ui.cds;
 
 import gov.nih.nci.cagrid.common.Runner;
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdP;
-import gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -27,6 +25,7 @@ import org.cagrid.gaards.cds.client.DelegationUserClient;
 import org.cagrid.gaards.cds.common.DelegationIdentifier;
 import org.cagrid.gaards.cds.common.DelegationRecord;
 import org.cagrid.gaards.cds.common.DelegationRecordFilter;
+import org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault;
 import org.cagrid.gaards.ui.dorian.ifs.FindUserDialog;
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
@@ -580,23 +579,7 @@ public class DelegatedCredentialManagerWindow extends ApplicationComponent {
 		return gridIdentity;
 	}
 
-	public class TrustedIdPCaddy {
-		private TrustedIdP trustedIdp;
-
-		public TrustedIdPCaddy(TrustedIdP idp) {
-			this.trustedIdp = idp;
-		}
-
-		public TrustedIdP getTrustedIdP() {
-			return trustedIdp;
-		}
-
-		public String toString() {
-			return "[IdP Id: " + trustedIdp.getId() + "] "
-					+ trustedIdp.getName();
-		}
-
-	}
+	
 
 	/**
 	 * This method initializes delegationId

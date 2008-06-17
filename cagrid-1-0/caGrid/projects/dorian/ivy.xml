@@ -61,6 +61,8 @@
     <dependency rev="latest.integration" org="caGrid" name="authentication-service"
       conf="client->client"/>
     <dependency rev="latest.integration" org="caGrid" name="gts" conf="service->client"/>
+    <dependency rev="1.2" org="caGrid" name="dorian-deprecated"
+      conf="client->stubs"/>
 
 
     <!-- Extenernal Dependencies -->

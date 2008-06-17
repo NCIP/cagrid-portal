@@ -1,7 +1,6 @@
 package org.cagrid.gaards.ui.dorian.idp;
 
-import gov.nih.nci.cagrid.dorian.idp.bean.StateCode;
-
+import org.cagrid.gaards.dorian.idp.StateCode;
 import org.cagrid.gaards.ui.common.AxisTypeComboBox;
 
 

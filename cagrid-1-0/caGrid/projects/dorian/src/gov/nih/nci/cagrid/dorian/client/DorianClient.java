@@ -404,35 +404,4 @@ public class DorianClient extends ServiceSecurityClient implements DorianI {
     }
   }
 
-  public boolean doesIdPUserExist(java.lang.String userId) throws RemoteException, gov.nih.nci.cagrid.dorian.stubs.types.DorianInternalFault {
-    synchronized(portTypeMutex){
-      configureStubSecurity((Stub)portType,"doesIdPUserExist");
-    gov.nih.nci.cagrid.dorian.stubs.DoesIdPUserExistRequest params = new gov.nih.nci.cagrid.dorian.stubs.DoesIdPUserExistRequest();
-    params.setUserId(userId);
-    gov.nih.nci.cagrid.dorian.stubs.DoesIdPUserExistResponse boxedResult = portType.doesIdPUserExist(params);
-    return boxedResult.isResponse();
-    }
-  }
-
-  public org.oasis.wsrf.properties.GetMultipleResourcePropertiesResponse getMultipleResourceProperties(org.oasis.wsrf.properties.GetMultipleResourceProperties_Element params) throws RemoteException {
-    synchronized(portTypeMutex){
-      configureStubSecurity((Stub)portType,"getMultipleResourceProperties");
-    return portType.getMultipleResourceProperties(params);
-    }
-  }
-
-  public org.oasis.wsrf.properties.GetResourcePropertyResponse getResourceProperty(javax.xml.namespace.QName params) throws RemoteException {
-    synchronized(portTypeMutex){
-      configureStubSecurity((Stub)portType,"getResourceProperty");
-    return portType.getResourceProperty(params);
-    }
-  }
-
-  public org.oasis.wsrf.properties.QueryResourcePropertiesResponse queryResourceProperties(org.oasis.wsrf.properties.QueryResourceProperties_Element params) throws RemoteException {
-    synchronized(portTypeMutex){
-      configureStubSecurity((Stub)portType,"queryResourceProperties");
-    return portType.queryResourceProperties(params);
-    }
-  }
-
 }

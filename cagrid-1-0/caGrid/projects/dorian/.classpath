@@ -51,16 +51,20 @@
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xml-apis.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xmlsec.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/commons-collections-3.0.jar"/>
+	<classpathentry kind="var" path="ANT_HOME/lib/junit.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/service/jars/caGrid-advertisement-1.3-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/service/jars/caGrid-authentication-service-client-1.3-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/service/jars/caGrid-authentication-service-common-1.3-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/service/jars/caGrid-authentication-service-stubs-1.3-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/service/jars/caGrid-core-1.3-dev.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/service/jars/caGrid-gaards-core-1.3-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/service/jars/caGrid-gts-client-1.3-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/service/jars/caGrid-gts-common-1.3-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/service/jars/caGrid-gts-stubs-1.3-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/service/jars/caGrid-metadata-common-1.3-dev.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/service/jars/caGrid-metadata-data-1.3-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/service/jars/caGrid-metadata-security-1.3-dev.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/service/jars/caGrid-metadatautils-1.3-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/service/jars/caGrid-opensaml-1.3-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/service/jars/caGrid-ServiceSecurityProvider-client-1.3-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/service/jars/caGrid-ServiceSecurityProvider-common-1.3-dev.jar"/>
@@ -80,6 +84,7 @@
 	<classpathentry kind="lib" path="ext/dependencies/service/jars/globus_wsrf_mds_aggregator.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/service/jars/globus_wsrf_servicegroup_stubs.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/service/jars/globus_wsrf_servicegroup.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/service/jars/jasciidammit-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/service/jars/jdom-1.0.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/service/jars/jprov.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/service/jars/kmu.jar"/>
@@ -87,31 +92,12 @@
 	<classpathentry kind="lib" path="ext/dependencies/service/jars/servlet.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/service/jars/spring-beans.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/service/jars/spring-core.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/test/jars/caGrid-core-tests-1.3-dev.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/test/jars/jdepend-2.7.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/endorsed/jars/resolver.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/endorsed/jars/xercesImpl.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/endorsed/jars/xml-apis.jar"/>
 	<classpathentry kind="lib" path="tools/lib/ant-contrib.jar"/>
+	<classpathentry kind="lib" path="tools/lib/caGrid-Introduce-serviceTasks-1.2.jar"/>
 	<classpathentry kind="lib" path="tools/lib/mobius_common_client-1.1.jar"/>
-	<classpathentry kind="var" path="ANT_HOME/lib/junit.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/service/jars/caGrid-gaards-core-1.3-dev.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/test/jars/caGrid-gaards-core-tests-1.3-dev.jar"/>
-	<classpathentry kind="lib" path="lib/caGrid-advertisement-1.2.jar"/>
-	<classpathentry kind="lib" path="lib/caGrid-core-1.2.jar"/>
 	<classpathentry kind="lib" path="lib/caGrid-Introduce-serviceTools-1.2.jar"/>
-	<classpathentry kind="lib" path="lib/caGrid-metadata-common-1.2.jar"/>
-	<classpathentry kind="lib" path="lib/caGrid-metadata-security-1.2.jar"/>
-	<classpathentry kind="lib" path="lib/caGrid-metadatautils-1.2.jar"/>
-	<classpathentry kind="lib" path="lib/caGrid-ServiceSecurityProvider-client-1.2.jar"/>
-	<classpathentry kind="lib" path="lib/caGrid-ServiceSecurityProvider-common-1.2.jar"/>
-	<classpathentry kind="lib" path="lib/caGrid-ServiceSecurityProvider-service-1.2.jar"/>
-	<classpathentry kind="lib" path="lib/caGrid-ServiceSecurityProvider-stubs-1.2.jar"/>
-	<classpathentry kind="lib" path="lib/castor-0.9.9.jar"/>
-	<classpathentry kind="lib" path="lib/globus_wsrf_mds_aggregator.jar"/>
-	<classpathentry kind="lib" path="lib/globus_wsrf_mds_aggregator_stubs.jar"/>
-	<classpathentry kind="lib" path="lib/globus_wsrf_servicegroup.jar"/>
-	<classpathentry kind="lib" path="lib/globus_wsrf_servicegroup_stubs.jar"/>
-	<classpathentry kind="lib" path="lib/jdom-1.0.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/service/jars/caGrid-dorian-stubs-1.2.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/test/jars/caGrid-gaards-core-tests-1.3-dev.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/test/jars/caGrid-core-tests-1.3-dev.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

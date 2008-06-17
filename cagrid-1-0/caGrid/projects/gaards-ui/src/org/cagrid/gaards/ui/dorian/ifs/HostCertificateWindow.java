@@ -2,10 +2,6 @@ package org.cagrid.gaards.ui.dorian.ifs;
 
 import gov.nih.nci.cagrid.common.Runner;
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.dorian.client.IFSAdministrationClient;
-import gov.nih.nci.cagrid.dorian.ifs.bean.HostCertificateRecord;
-import gov.nih.nci.cagrid.dorian.ifs.bean.HostCertificateStatus;
-import gov.nih.nci.cagrid.dorian.ifs.bean.HostCertificateUpdate;
 
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
@@ -27,6 +23,10 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
+import org.cagrid.gaards.dorian.client.IFSAdministrationClient;
+import org.cagrid.gaards.dorian.federation.HostCertificateRecord;
+import org.cagrid.gaards.dorian.federation.HostCertificateStatus;
+import org.cagrid.gaards.dorian.federation.HostCertificateUpdate;
 import org.cagrid.gaards.pki.CertUtil;
 import org.cagrid.gaards.pki.KeyUtil;
 import org.cagrid.gaards.ui.common.CertificatePanel;

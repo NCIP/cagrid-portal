@@ -53,6 +53,7 @@ public class GenerateTrustReport {
 				if (Utils.clean(str) == null) {
 					str = "grid-trust-report.txt";
 				}
+				System.out.println(str);
 				pw = new PrintWriter(new File(str));
 				File f = Utils.getTrustedCerificatesDirectory();
 				List<TrustedCAFileListing> list = TrustUtils.getTrustedCertificates(f);

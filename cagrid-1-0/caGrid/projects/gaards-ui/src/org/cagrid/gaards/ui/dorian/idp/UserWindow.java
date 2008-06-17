@@ -1,9 +1,6 @@
 package org.cagrid.gaards.ui.dorian.idp;
 
 import gov.nih.nci.cagrid.common.Runner;
-import gov.nih.nci.cagrid.dorian.client.IdPAdministrationClient;
-import gov.nih.nci.cagrid.dorian.idp.bean.IdPUser;
-import gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault;
 
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
@@ -21,6 +18,9 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
+import org.cagrid.gaards.dorian.client.IdPAdministrationClient;
+import org.cagrid.gaards.dorian.idp.IdPUser;
+import org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault;
 import org.cagrid.gaards.ui.dorian.DorianLookAndFeel;
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
@@ -32,7 +32,7 @@ import org.globus.gsi.GlobusCredential;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: UserWindow.java,v 1.1 2007-09-24 19:09:38 langella Exp $
+ * @version $Id: UserWindow.java,v 1.2 2008-06-17 19:33:10 langella Exp $
  */
 public class UserWindow extends ApplicationComponent {
 

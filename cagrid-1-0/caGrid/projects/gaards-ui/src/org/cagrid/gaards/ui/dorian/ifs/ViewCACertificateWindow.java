@@ -1,7 +1,6 @@
 package org.cagrid.gaards.ui.dorian.ifs;
 
 import gov.nih.nci.cagrid.common.Runner;
-import gov.nih.nci.cagrid.dorian.client.DorianCertifcateAuthorityClient;
 
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
@@ -13,6 +12,7 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import org.cagrid.gaards.dorian.client.DorianCertifcateAuthorityClient;
 import org.cagrid.gaards.ui.common.CertificateInformationComponent;
 import org.cagrid.gaards.ui.dorian.DorianLookAndFeel;
 import org.cagrid.gaards.ui.dorian.DorianServiceListComboBox;

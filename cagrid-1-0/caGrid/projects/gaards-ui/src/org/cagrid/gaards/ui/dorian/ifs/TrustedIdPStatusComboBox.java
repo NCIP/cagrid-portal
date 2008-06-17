@@ -1,7 +1,6 @@
 package org.cagrid.gaards.ui.dorian.ifs;
 
-import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdPStatus;
-
+import org.cagrid.gaards.dorian.federation.TrustedIdPStatus;
 import org.cagrid.gaards.ui.common.AxisTypeComboBox;
 
 /**

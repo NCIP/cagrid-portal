@@ -1,10 +1,6 @@
 package org.cagrid.gaards.ui.dorian.ifs;
 
 import gov.nih.nci.cagrid.common.Runner;
-import gov.nih.nci.cagrid.dorian.client.IFSAdministrationClient;
-import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUser;
-import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdP;
-import gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault;
 
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
@@ -21,6 +17,10 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
+import org.cagrid.gaards.dorian.client.IFSAdministrationClient;
+import org.cagrid.gaards.dorian.federation.IFSUser;
+import org.cagrid.gaards.dorian.federation.TrustedIdP;
+import org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault;
 import org.cagrid.gaards.pki.CertUtil;
 import org.cagrid.gaards.ui.common.CertificatePanel;
 import org.cagrid.gaards.ui.common.CredentialCaddy;
@@ -36,7 +36,7 @@ import org.globus.gsi.GlobusCredential;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: UserWindow.java,v 1.5 2008-04-30 01:50:28 langella Exp $
+ * @version $Id: UserWindow.java,v 1.6 2008-06-17 19:33:10 langella Exp $
  */
 public class UserWindow extends ApplicationComponent {
 

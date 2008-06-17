@@ -4,8 +4,6 @@ import gov.nih.nci.cagrid.authentication.bean.BasicAuthenticationCredential;
 import gov.nih.nci.cagrid.authentication.bean.Credential;
 import gov.nih.nci.cagrid.authentication.client.AuthenticationClient;
 import gov.nih.nci.cagrid.common.Runner;
-import gov.nih.nci.cagrid.dorian.client.IFSUserClient;
-import gov.nih.nci.cagrid.dorian.ifs.bean.ProxyLifetime;
 import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
 
 import java.awt.BorderLayout;
@@ -23,6 +21,8 @@ import javax.swing.JProgressBar;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
+import org.cagrid.gaards.dorian.client.IFSUserClient;
+import org.cagrid.gaards.dorian.federation.ProxyLifetime;
 import org.cagrid.gaards.ui.common.CredentialManager;
 import org.cagrid.gaards.ui.common.CredentialManagerComponent;
 import org.cagrid.gaards.ui.dorian.DorianLookAndFeel;

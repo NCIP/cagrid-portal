@@ -1,15 +1,15 @@
 package org.cagrid.gaards.ui.dorian.ifs;
 
 import gov.nih.nci.cagrid.common.Runner;
-import gov.nih.nci.cagrid.dorian.client.IFSAdministrationClient;
-import gov.nih.nci.cagrid.dorian.ifs.bean.IFSUser;
-import gov.nih.nci.cagrid.dorian.ifs.bean.TrustedIdP;
 
 import java.util.Vector;
 
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
+import org.cagrid.gaards.dorian.client.IFSAdministrationClient;
+import org.cagrid.gaards.dorian.federation.IFSUser;
+import org.cagrid.gaards.dorian.federation.TrustedIdP;
 import org.cagrid.gaards.ui.dorian.SessionPanel;
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.table.GrapeBaseTable;
@@ -19,7 +19,7 @@ import org.cagrid.grape.utils.ErrorDialog;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: UsersTable.java,v 1.2 2008-03-24 16:42:35 langella Exp $
+ * @version $Id: UsersTable.java,v 1.3 2008-06-17 19:33:10 langella Exp $
  */
 public class UsersTable extends GrapeBaseTable {
 	public final static String USER = "user";
