@@ -31,7 +31,6 @@ public class LogPanel extends JPanel {
 
     /**
      * This method initializes
-     * 
      */
     public LogPanel(String fileName) {
         super();
@@ -42,7 +41,6 @@ public class LogPanel extends JPanel {
 
     /**
      * This method initializes this
-     * 
      */
     private void initialize() {
         GridBagConstraints gridBagConstraints = new GridBagConstraints();
@@ -63,32 +61,29 @@ public class LogPanel extends JPanel {
      * 
      * @return javax.swing.JTextArea
      */
-    private JTextArea getLogTextArea() {
+    private synchronized JTextArea getLogTextArea() {
         if (logTextArea == null) {
             logTextArea = new JTextArea();
             logTextArea.setEditable(false);
             logTextArea.setFont(new Font("Lucida Console", Font.PLAIN, 10));
-            logTextArea.setLineWrap(true);
-            //logTextArea.setFont(logTextArea.getFont().deriveFont((float) 10));
-            Thread th = new Thread(new Runnable() {
+            // logTextArea.setLineWrap(true);
+            Runnable reader = new Runnable() {
 
                 public void run() {
-                    // TODO Auto-generated method stub
                     try {
                         BufferedReader in = new BufferedReader(new FileReader(fileName));
                         boolean execute = true;
                         String line;
                         while (execute) {
                             line = in.readLine();
-                            final String finalLine = line;
                             if (line != null) {
-                               
-                                        int oldLength = logTextArea.getText().length();
-                                        logTextArea.insert(finalLine + "\n", oldLength + 1);
-                                        logTextArea.setCaretPosition(oldLength + 1);
-                                
-                                 
-                                
+
+                                final String finalLine = line;
+                                final int oldLength = logTextArea.getText().length();
+
+                                logTextArea.insert(finalLine + "\n", oldLength + 1);
+                                logTextArea.setCaretPosition(oldLength + 1);
+
                             } else {
                                 try {
                                     Thread.sleep(500);
@@ -104,7 +99,8 @@ public class LogPanel extends JPanel {
                     }
                 }
 
-            });
+            };
+            Thread th = new Thread(reader);
             th.start();
 
         }
