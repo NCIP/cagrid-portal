@@ -18,20 +18,13 @@ import java.util.List;
 import junit.framework.TestCase;
 
 import org.apache.xml.security.signature.XMLSignature;
-import org.cagrid.gaards.dorian.common.SAMLConstants;
-import org.cagrid.gaards.dorian.federation.AutoApprovalPolicy;
-import org.cagrid.gaards.dorian.federation.IdentityFederationProperties;
-import org.cagrid.gaards.dorian.federation.SAMLAttributeDescriptor;
-import org.cagrid.gaards.dorian.federation.SAMLAuthenticationMethod;
-import org.cagrid.gaards.dorian.federation.TrustedIdP;
-import org.cagrid.gaards.dorian.federation.TrustedIdPManager;
-import org.cagrid.gaards.dorian.federation.TrustedIdPStatus;
 import org.cagrid.gaards.dorian.stubs.types.InvalidAssertionFault;
 import org.cagrid.gaards.dorian.stubs.types.InvalidTrustedIdPFault;
 import org.cagrid.gaards.dorian.test.CA;
 import org.cagrid.gaards.dorian.test.Utils;
 import org.cagrid.gaards.pki.CertUtil;
 import org.cagrid.gaards.pki.Credential;
+import org.cagrid.gaards.saml.encoding.SAMLConstants;
 import org.cagrid.tools.database.Database;
 
 

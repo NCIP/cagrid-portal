@@ -13,11 +13,11 @@ import java.rmi.RemoteException;
 
 import org.apache.axis.types.URI.MalformedURIException;
 import org.cagrid.gaards.dorian.common.DorianFault;
-import org.cagrid.gaards.dorian.common.SAMLUtils;
 import org.cagrid.gaards.dorian.idp.BasicAuthCredential;
 import org.cagrid.gaards.dorian.stubs.types.DorianInternalFault;
 import org.cagrid.gaards.dorian.stubs.types.InvalidUserPropertyFault;
 import org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault;
+import org.cagrid.gaards.saml.encoding.SAMLUtils;
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>

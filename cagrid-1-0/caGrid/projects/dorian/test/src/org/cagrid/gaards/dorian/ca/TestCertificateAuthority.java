@@ -14,18 +14,6 @@ import java.util.GregorianCalendar;
 import junit.framework.TestCase;
 
 import org.bouncycastle.asn1.x509.X509Name;
-import org.cagrid.gaards.dorian.ca.CertificateAuthority;
-import org.cagrid.gaards.dorian.ca.CertificateAuthorityCreationPolicy;
-import org.cagrid.gaards.dorian.ca.CertificateAuthorityFault;
-import org.cagrid.gaards.dorian.ca.CertificateAuthorityProperties;
-import org.cagrid.gaards.dorian.ca.CredentialsManager;
-import org.cagrid.gaards.dorian.ca.DBCertificateAuthority;
-import org.cagrid.gaards.dorian.ca.EracomCertificateAuthority;
-import org.cagrid.gaards.dorian.ca.EracomCertificateAuthorityProperties;
-import org.cagrid.gaards.dorian.ca.EracomWrappingCertificateAuthority;
-import org.cagrid.gaards.dorian.ca.NoCACredentialsFault;
-import org.cagrid.gaards.dorian.ca.WrappedKey;
-import org.cagrid.gaards.dorian.ca.WrappingCertificateAuthority;
 import org.cagrid.gaards.dorian.common.Lifetime;
 import org.cagrid.gaards.dorian.federation.ProxyLifetime;
 import org.cagrid.gaards.dorian.stubs.types.DorianInternalFault;

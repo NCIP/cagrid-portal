@@ -16,11 +16,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.cagrid.gaards.dorian.common.LoggingObject;
-import org.cagrid.gaards.dorian.federation.IFSUserPolicy;
-import org.cagrid.gaards.dorian.federation.SAMLAttributeDescriptor;
-import org.cagrid.gaards.dorian.federation.SAMLAuthenticationMethod;
-import org.cagrid.gaards.dorian.federation.TrustedIdP;
-import org.cagrid.gaards.dorian.federation.TrustedIdPStatus;
 import org.cagrid.gaards.dorian.stubs.types.DorianInternalFault;
 import org.cagrid.gaards.dorian.stubs.types.InvalidAssertionFault;
 import org.cagrid.gaards.dorian.stubs.types.InvalidTrustedIdPFault;

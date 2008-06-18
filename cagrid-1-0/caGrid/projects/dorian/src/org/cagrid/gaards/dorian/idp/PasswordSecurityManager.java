@@ -9,8 +9,6 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import org.cagrid.gaards.dorian.common.LoggingObject;
-import org.cagrid.gaards.dorian.idp.PasswordSecurity;
-import org.cagrid.gaards.dorian.idp.PasswordStatus;
 import org.cagrid.gaards.dorian.stubs.types.DorianInternalFault;
 import org.cagrid.tools.database.Database;
 

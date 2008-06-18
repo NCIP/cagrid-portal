@@ -7,7 +7,6 @@ import java.util.List;
 
 import junit.framework.TestCase;
 
-import org.cagrid.gaards.dorian.federation.CertificateBlacklistManager;
 import org.cagrid.gaards.dorian.test.CA;
 import org.cagrid.gaards.dorian.test.Utils;
 import org.cagrid.gaards.pki.Credential;

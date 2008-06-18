@@ -12,7 +12,6 @@ import java.security.cert.X509Certificate;
 
 import org.apache.axis.types.URI.MalformedURIException;
 import org.cagrid.gaards.dorian.common.DorianFault;
-import org.cagrid.gaards.dorian.common.SAMLUtils;
 import org.cagrid.gaards.dorian.federation.DelegationPathLength;
 import org.cagrid.gaards.dorian.federation.HostCertificateRecord;
 import org.cagrid.gaards.dorian.federation.HostCertificateRequest;
@@ -26,6 +25,7 @@ import org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault;
 import org.cagrid.gaards.dorian.stubs.types.UserPolicyFault;
 import org.cagrid.gaards.pki.CertUtil;
 import org.cagrid.gaards.pki.KeyUtil;
+import org.cagrid.gaards.saml.encoding.SAMLUtils;
 import org.globus.gsi.GlobusCredential;
 
 public class IFSUserClient {

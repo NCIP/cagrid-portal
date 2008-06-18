@@ -7,13 +7,6 @@ import java.security.cert.X509Certificate;
 
 import org.cagrid.gaards.dorian.ca.CertificateAuthority;
 import org.cagrid.gaards.dorian.common.LoggingObject;
-import org.cagrid.gaards.dorian.idp.Application;
-import org.cagrid.gaards.dorian.idp.ApplicationReview;
-import org.cagrid.gaards.dorian.idp.BasicAuthCredential;
-import org.cagrid.gaards.dorian.idp.IdPUser;
-import org.cagrid.gaards.dorian.idp.IdPUserFilter;
-import org.cagrid.gaards.dorian.idp.IdPUserRole;
-import org.cagrid.gaards.dorian.idp.IdPUserStatus;
 import org.cagrid.gaards.dorian.stubs.types.DorianInternalFault;
 import org.cagrid.gaards.dorian.stubs.types.InvalidUserPropertyFault;
 import org.cagrid.gaards.dorian.stubs.types.NoSuchUserFault;

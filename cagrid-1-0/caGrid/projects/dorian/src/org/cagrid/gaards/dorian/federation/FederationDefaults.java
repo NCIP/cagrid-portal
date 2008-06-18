@@ -1,7 +1,5 @@
 package org.cagrid.gaards.dorian.federation;
 
-import org.cagrid.gaards.dorian.federation.IFSUser;
-import org.cagrid.gaards.dorian.federation.TrustedIdP;
 
 
 public class FederationDefaults {

@@ -4,8 +4,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-import org.cagrid.gaards.dorian.federation.ProxyLifetime;
-
 
 public class FederationUtils {
 	public static Date getProxyValid(ProxyLifetime valid) {

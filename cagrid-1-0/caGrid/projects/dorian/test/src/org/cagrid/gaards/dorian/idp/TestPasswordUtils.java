@@ -2,8 +2,6 @@ package org.cagrid.gaards.dorian.idp;
 
 import junit.framework.TestCase;
 
-import org.cagrid.gaards.dorian.idp.PasswordUtils;
-
 
 public class TestPasswordUtils extends TestCase {
 

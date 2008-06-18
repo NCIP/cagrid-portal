@@ -4,8 +4,6 @@ import gov.nih.nci.cagrid.common.FaultHelper;
 
 import java.security.cert.X509Certificate;
 
-import org.cagrid.gaards.dorian.federation.IFSUser;
-import org.cagrid.gaards.dorian.federation.TrustedIdP;
 import org.cagrid.gaards.dorian.stubs.types.DorianInternalFault;
 import org.cagrid.gaards.dorian.stubs.types.UserPolicyFault;
 import org.cagrid.gaards.pki.CertUtil;

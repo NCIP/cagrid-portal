@@ -4,10 +4,6 @@ import gov.nih.nci.cagrid.common.FaultUtil;
 import junit.framework.TestCase;
 
 import org.cagrid.gaards.dorian.common.Lifetime;
-import org.cagrid.gaards.dorian.idp.PasswordSecurity;
-import org.cagrid.gaards.dorian.idp.PasswordSecurityManager;
-import org.cagrid.gaards.dorian.idp.PasswordSecurityPolicy;
-import org.cagrid.gaards.dorian.idp.PasswordStatus;
 import org.cagrid.gaards.dorian.stubs.types.DorianInternalFault;
 import org.cagrid.gaards.dorian.test.Utils;
 import org.cagrid.tools.database.Database;

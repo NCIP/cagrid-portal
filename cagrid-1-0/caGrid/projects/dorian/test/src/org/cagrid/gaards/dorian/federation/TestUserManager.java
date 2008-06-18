@@ -9,28 +9,12 @@ import java.util.Map;
 import junit.framework.TestCase;
 
 import org.cagrid.gaards.dorian.ca.CertificateAuthority;
-import org.cagrid.gaards.dorian.common.SAMLConstants;
-import org.cagrid.gaards.dorian.federation.AutoApprovalAutoRenewalPolicy;
-import org.cagrid.gaards.dorian.federation.CertificateBlacklistManager;
-import org.cagrid.gaards.dorian.federation.DisabledUser;
-import org.cagrid.gaards.dorian.federation.FederationDefaults;
-import org.cagrid.gaards.dorian.federation.IFSUser;
-import org.cagrid.gaards.dorian.federation.IFSUserFilter;
-import org.cagrid.gaards.dorian.federation.IFSUserStatus;
-import org.cagrid.gaards.dorian.federation.IdentityAssignmentPolicy;
-import org.cagrid.gaards.dorian.federation.IdentityFederationProperties;
-import org.cagrid.gaards.dorian.federation.Publisher;
-import org.cagrid.gaards.dorian.federation.SAMLAttributeDescriptor;
-import org.cagrid.gaards.dorian.federation.SAMLAuthenticationMethod;
-import org.cagrid.gaards.dorian.federation.TrustedIdP;
-import org.cagrid.gaards.dorian.federation.TrustedIdPManager;
-import org.cagrid.gaards.dorian.federation.TrustedIdPStatus;
-import org.cagrid.gaards.dorian.federation.UserManager;
 import org.cagrid.gaards.dorian.service.PropertyManager;
 import org.cagrid.gaards.dorian.test.CA;
 import org.cagrid.gaards.dorian.test.Utils;
 import org.cagrid.gaards.pki.CertUtil;
 import org.cagrid.gaards.pki.Credential;
+import org.cagrid.gaards.saml.encoding.SAMLConstants;
 import org.cagrid.tools.database.Database;
 
 /**

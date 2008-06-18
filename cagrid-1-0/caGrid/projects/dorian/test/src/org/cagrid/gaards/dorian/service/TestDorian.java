@@ -26,7 +26,6 @@ import javax.xml.namespace.QName;
 import junit.framework.TestCase;
 
 import org.apache.xml.security.signature.XMLSignature;
-import org.cagrid.gaards.dorian.common.SAMLConstants;
 import org.cagrid.gaards.dorian.federation.AutoApprovalAutoRenewalPolicy;
 import org.cagrid.gaards.dorian.federation.AutoApprovalPolicy;
 import org.cagrid.gaards.dorian.federation.FederationUtils;
@@ -49,8 +48,6 @@ import org.cagrid.gaards.dorian.idp.IdPUserFilter;
 import org.cagrid.gaards.dorian.idp.IdPUserRole;
 import org.cagrid.gaards.dorian.idp.IdPUserStatus;
 import org.cagrid.gaards.dorian.idp.StateCode;
-import org.cagrid.gaards.dorian.service.Dorian;
-import org.cagrid.gaards.dorian.service.DorianProperties;
 import org.cagrid.gaards.dorian.stubs.types.DorianInternalFault;
 import org.cagrid.gaards.dorian.stubs.types.InvalidAssertionFault;
 import org.cagrid.gaards.dorian.stubs.types.NoSuchUserFault;
@@ -61,6 +58,7 @@ import org.cagrid.gaards.pki.CertUtil;
 import org.cagrid.gaards.pki.CertificateExtensionsUtil;
 import org.cagrid.gaards.pki.Credential;
 import org.cagrid.gaards.pki.KeyUtil;
+import org.cagrid.gaards.saml.encoding.SAMLConstants;
 import org.globus.gsi.GlobusCredential;
 
 /**
