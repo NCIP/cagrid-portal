@@ -301,6 +301,18 @@ public class DorianClient extends ServiceSecurityClient implements DorianI {
     }
   }
 
+  public gov.nih.nci.cagrid.opensaml.SAMLAssertion authenticateUser(org.cagrid.gaards.authentication.Credential credential) throws RemoteException, org.cagrid.gaards.authentication.faults.AuthenticationProviderFault, org.cagrid.gaards.authentication.faults.CredentialNotSupportedFault, org.cagrid.gaards.authentication.faults.InsufficientAttributeFault, org.cagrid.gaards.authentication.faults.InvalidCredentialFault {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"authenticateUser");
+    org.cagrid.gaards.authentication.AuthenticateUserRequest params = new org.cagrid.gaards.authentication.AuthenticateUserRequest();
+    org.cagrid.gaards.authentication.AuthenticateUserRequestCredential credentialContainer = new org.cagrid.gaards.authentication.AuthenticateUserRequestCredential();
+    credentialContainer.setCredential(credential);
+    params.setCredential(credentialContainer);
+    org.cagrid.gaards.authentication.AuthenticateUserResponse boxedResult = portType.authenticateUser(params);
+    return boxedResult.getAssertion();
+    }
+  }
+
   public void addAdmin(java.lang.String gridIdentity) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault {
     synchronized(portTypeMutex){
       configureStubSecurity((Stub)portType,"addAdmin");

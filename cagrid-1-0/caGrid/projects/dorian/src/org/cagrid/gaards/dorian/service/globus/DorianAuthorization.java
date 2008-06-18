@@ -138,6 +138,11 @@ public class DorianAuthorization implements PDP {
 		
 	}
 					
+	public static void authorizeAuthenticateUser() throws RemoteException {
+		
+		
+	}
+					
 	public static void authorizeAddAdmin() throws RemoteException {
 		
 		
@@ -354,6 +359,14 @@ public class DorianAuthorization implements PDP {
 		} else if(operation.getLocalPart().equals("authenticate")){
 			try{
 				authorizeAuthenticate();
+				return true;
+			} catch (Exception e){
+				e.printStackTrace();
+				return false;
+			}
+		} else if(operation.getLocalPart().equals("authenticateUser")){
+			try{
+				authorizeAuthenticateUser();
 				return true;
 			} catch (Exception e){
 				e.printStackTrace();

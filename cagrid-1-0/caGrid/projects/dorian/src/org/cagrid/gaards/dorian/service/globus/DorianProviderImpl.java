@@ -121,6 +121,12 @@ public class DorianProviderImpl{
     return boxedResult;
   }
 
+    public org.cagrid.gaards.authentication.AuthenticateUserResponse authenticateUser(org.cagrid.gaards.authentication.AuthenticateUserRequest params) throws RemoteException, org.cagrid.gaards.authentication.faults.AuthenticationProviderFault, org.cagrid.gaards.authentication.faults.CredentialNotSupportedFault, org.cagrid.gaards.authentication.faults.InsufficientAttributeFault, org.cagrid.gaards.authentication.faults.InvalidCredentialFault {
+    org.cagrid.gaards.authentication.AuthenticateUserResponse boxedResult = new org.cagrid.gaards.authentication.AuthenticateUserResponse();
+    boxedResult.setAssertion(impl.authenticateUser(params.getCredential().getCredential()));
+    return boxedResult;
+  }
+
     public org.cagrid.gaards.dorian.stubs.AddAdminResponse addAdmin(org.cagrid.gaards.dorian.stubs.AddAdminRequest params) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault {
     org.cagrid.gaards.dorian.stubs.AddAdminResponse boxedResult = new org.cagrid.gaards.dorian.stubs.AddAdminResponse();
     impl.addAdmin(params.getGridIdentity());

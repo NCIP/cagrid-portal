@@ -142,6 +142,17 @@ public abstract class DorianResourceBase extends ReflectionResource implements R
 		prop.set(0, serviceMetadata);
 	}
 	
+	
+	
+	public org.cagrid.gaards.authentication.AuthenticationProfiles getAuthenticationProfiles(){
+		return ((DorianResourceProperties) getResourceBean()).getAuthenticationProfiles();
+	}
+	
+	public void setAuthenticationProfiles(org.cagrid.gaards.authentication.AuthenticationProfiles authenticationProfiles ) throws ResourceException {
+        ResourceProperty prop = getResourcePropertySet().get(DorianConstants.AUTHENTICATIONPROFILES);
+		prop.set(0, authenticationProfiles);
+	}
+	
 
 
 	

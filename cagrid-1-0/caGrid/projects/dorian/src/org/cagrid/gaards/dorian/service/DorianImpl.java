@@ -10,9 +10,13 @@ import java.security.PublicKey;
 import java.security.cert.X509Certificate;
 
 import javax.naming.InitialContext;
+import javax.xml.namespace.QName;
 
 import org.apache.axis.MessageContext;
 import org.apache.axis.message.addressing.EndpointReferenceType;
+import org.cagrid.gaards.authentication.AuthenticationProfiles;
+import org.cagrid.gaards.authentication.BasicAuthentication;
+import org.cagrid.gaards.authentication.common.AuthenticationProfile;
 import org.cagrid.gaards.dorian.common.SAMLUtils;
 import org.cagrid.gaards.dorian.idp.BasicAuthCredential;
 import org.cagrid.gaards.dorian.stubs.types.DorianInternalFault;
@@ -32,7 +36,7 @@ import org.springframework.core.io.FileSystemResource;
  * 
  * @created by Introduce Toolkit version 1.0
  */
-public class DorianImpl {
+public class DorianImpl extends DorianImplBase {
 
 	private DorianConfiguration configuration;
 
@@ -50,6 +54,13 @@ public class DorianImpl {
 					new FileSystemResource(propertiesFile));
 			DorianProperties conf = utils.getDorianProperties();
 			this.dorian = new Dorian(conf, type.getAddress().toString());
+
+			QName[] list = new QName[1];
+			list[0] = AuthenticationProfile.BASIC_AUTHENTICATION;
+			AuthenticationProfiles profiles = new AuthenticationProfiles();
+			profiles.setProfile(list);
+			getResourceHome().getAddressedResource().setAuthenticationProfiles(
+					profiles);
 		} catch (Exception e) {
 			FaultHelper.printStackTrace(e);
 			throw new RemoteException(Utils.getExceptionMessage(e));
@@ -89,23 +100,41 @@ public class DorianImpl {
 		return caller;
 	}
 
-  public java.lang.String registerWithIdP(org.cagrid.gaards.dorian.idp.Application application) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.InvalidUserPropertyFault {
+	public java.lang.String registerWithIdP(
+			org.cagrid.gaards.dorian.idp.Application application)
+			throws RemoteException,
+			org.cagrid.gaards.dorian.stubs.types.DorianInternalFault,
+			org.cagrid.gaards.dorian.stubs.types.InvalidUserPropertyFault {
 		return dorian.registerWithIdP(application);
 	}
 
-  public org.cagrid.gaards.dorian.idp.IdPUser[] findIdPUsers(org.cagrid.gaards.dorian.idp.IdPUserFilter filter) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault {
+	public org.cagrid.gaards.dorian.idp.IdPUser[] findIdPUsers(
+			org.cagrid.gaards.dorian.idp.IdPUserFilter filter)
+			throws RemoteException,
+			org.cagrid.gaards.dorian.stubs.types.DorianInternalFault,
+			org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault {
 		return dorian.findIdPUsers(getCallerIdentity(), filter);
 	}
 
-  public void updateIdPUser(org.cagrid.gaards.dorian.idp.IdPUser user) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.NoSuchUserFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault {
+	public void updateIdPUser(org.cagrid.gaards.dorian.idp.IdPUser user)
+			throws RemoteException,
+			org.cagrid.gaards.dorian.stubs.types.DorianInternalFault,
+			org.cagrid.gaards.dorian.stubs.types.NoSuchUserFault,
+			org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault {
 		dorian.updateIdPUser(getCallerIdentity(), user);
 	}
 
-  public void removeIdPUser(java.lang.String userId) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault {
+	public void removeIdPUser(java.lang.String userId) throws RemoteException,
+			org.cagrid.gaards.dorian.stubs.types.DorianInternalFault,
+			org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault {
 		dorian.removeIdPUser(getCallerIdentity(), userId);
 	}
 
-  public org.cagrid.gaards.dorian.SAMLAssertion authenticateWithIdP(org.cagrid.gaards.dorian.idp.BasicAuthCredential cred) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault {
+	public org.cagrid.gaards.dorian.SAMLAssertion authenticateWithIdP(
+			org.cagrid.gaards.dorian.idp.BasicAuthCredential cred)
+			throws RemoteException,
+			org.cagrid.gaards.dorian.stubs.types.DorianInternalFault,
+			org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault {
 		SAMLAssertion saml = dorian.authenticate(cred);
 		try {
 			String xml = SAMLUtils.samlAssertionToString(saml);
@@ -121,7 +150,17 @@ public class DorianImpl {
 		}
 	}
 
-  public org.cagrid.gaards.dorian.X509Certificate[] createProxy(org.cagrid.gaards.dorian.SAMLAssertion saml,org.cagrid.gaards.dorian.federation.PublicKey publicKey,org.cagrid.gaards.dorian.federation.ProxyLifetime lifetime,org.cagrid.gaards.dorian.federation.DelegationPathLength delegation) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.InvalidAssertionFault, org.cagrid.gaards.dorian.stubs.types.InvalidProxyFault, org.cagrid.gaards.dorian.stubs.types.UserPolicyFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault {
+	public org.cagrid.gaards.dorian.X509Certificate[] createProxy(
+			org.cagrid.gaards.dorian.SAMLAssertion saml,
+			org.cagrid.gaards.dorian.federation.PublicKey publicKey,
+			org.cagrid.gaards.dorian.federation.ProxyLifetime lifetime,
+			org.cagrid.gaards.dorian.federation.DelegationPathLength delegation)
+			throws RemoteException,
+			org.cagrid.gaards.dorian.stubs.types.DorianInternalFault,
+			org.cagrid.gaards.dorian.stubs.types.InvalidAssertionFault,
+			org.cagrid.gaards.dorian.stubs.types.InvalidProxyFault,
+			org.cagrid.gaards.dorian.stubs.types.UserPolicyFault,
+			org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault {
 		try {
 			PublicKey key = KeyUtil.loadPublicKey(publicKey.getKeyAsString());
 			SAMLAssertion s = SAMLUtils.stringToSAMLAssertion(saml.getXml());
@@ -158,7 +197,9 @@ public class DorianImpl {
 		}
 	}
 
-  public org.cagrid.gaards.dorian.X509Certificate getCACertificate() throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault {
+	public org.cagrid.gaards.dorian.X509Certificate getCACertificate()
+			throws RemoteException,
+			org.cagrid.gaards.dorian.stubs.types.DorianInternalFault {
 		X509Certificate cert = dorian.getCACertificate();
 		try {
 			String certStr = CertUtil.writeCertificate(cert);
@@ -171,43 +212,86 @@ public class DorianImpl {
 		}
 	}
 
-  public org.cagrid.gaards.dorian.federation.TrustedIdP[] getTrustedIdPs() throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault {
+	public org.cagrid.gaards.dorian.federation.TrustedIdP[] getTrustedIdPs()
+			throws RemoteException,
+			org.cagrid.gaards.dorian.stubs.types.DorianInternalFault,
+			org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault {
 		return dorian.getTrustedIdPs(getCallerIdentity());
 	}
 
-  public org.cagrid.gaards.dorian.federation.TrustedIdP addTrustedIdP(org.cagrid.gaards.dorian.federation.TrustedIdP idp) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.InvalidTrustedIdPFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault {
+	public org.cagrid.gaards.dorian.federation.TrustedIdP addTrustedIdP(
+			org.cagrid.gaards.dorian.federation.TrustedIdP idp)
+			throws RemoteException,
+			org.cagrid.gaards.dorian.stubs.types.DorianInternalFault,
+			org.cagrid.gaards.dorian.stubs.types.InvalidTrustedIdPFault,
+			org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault {
 		return dorian.addTrustedIdP(getCallerIdentity(), idp);
 	}
 
-  public void updateTrustedIdP(org.cagrid.gaards.dorian.federation.TrustedIdP trustedIdP) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.InvalidTrustedIdPFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault {
+	public void updateTrustedIdP(
+			org.cagrid.gaards.dorian.federation.TrustedIdP trustedIdP)
+			throws RemoteException,
+			org.cagrid.gaards.dorian.stubs.types.DorianInternalFault,
+			org.cagrid.gaards.dorian.stubs.types.InvalidTrustedIdPFault,
+			org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault {
 		dorian.updateTrustedIdP(getCallerIdentity(), trustedIdP);
 	}
 
-  public void removeTrustedIdP(org.cagrid.gaards.dorian.federation.TrustedIdP trustedIdP) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.InvalidTrustedIdPFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault {
+	public void removeTrustedIdP(
+			org.cagrid.gaards.dorian.federation.TrustedIdP trustedIdP)
+			throws RemoteException,
+			org.cagrid.gaards.dorian.stubs.types.DorianInternalFault,
+			org.cagrid.gaards.dorian.stubs.types.InvalidTrustedIdPFault,
+			org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault {
 		dorian.removeTrustedIdP(getCallerIdentity(), trustedIdP);
 	}
 
-  public org.cagrid.gaards.dorian.federation.IFSUser[] findIFSUsers(org.cagrid.gaards.dorian.federation.IFSUserFilter filter) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault {
+	public org.cagrid.gaards.dorian.federation.IFSUser[] findIFSUsers(
+			org.cagrid.gaards.dorian.federation.IFSUserFilter filter)
+			throws RemoteException,
+			org.cagrid.gaards.dorian.stubs.types.DorianInternalFault,
+			org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault {
 		return dorian.findIFSUsers(getCallerIdentity(), filter);
 	}
 
-  public void updateIFSUser(org.cagrid.gaards.dorian.federation.IFSUser user) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.InvalidUserFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault {
+	public void updateIFSUser(org.cagrid.gaards.dorian.federation.IFSUser user)
+			throws RemoteException,
+			org.cagrid.gaards.dorian.stubs.types.DorianInternalFault,
+			org.cagrid.gaards.dorian.stubs.types.InvalidUserFault,
+			org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault {
 		dorian.updateIFSUser(getCallerIdentity(), user);
 	}
 
-  public void removeIFSUser(org.cagrid.gaards.dorian.federation.IFSUser user) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.InvalidUserFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault {
+	public void removeIFSUser(org.cagrid.gaards.dorian.federation.IFSUser user)
+			throws RemoteException,
+			org.cagrid.gaards.dorian.stubs.types.DorianInternalFault,
+			org.cagrid.gaards.dorian.stubs.types.InvalidUserFault,
+			org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault {
 		dorian.removeIFSUser(getCallerIdentity(), user);
 	}
 
-  public org.cagrid.gaards.dorian.federation.IFSUser renewIFSUserCredentials(org.cagrid.gaards.dorian.federation.IFSUser user) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.InvalidUserFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault {
+	public org.cagrid.gaards.dorian.federation.IFSUser renewIFSUserCredentials(
+			org.cagrid.gaards.dorian.federation.IFSUser user)
+			throws RemoteException,
+			org.cagrid.gaards.dorian.stubs.types.DorianInternalFault,
+			org.cagrid.gaards.dorian.stubs.types.InvalidUserFault,
+			org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault {
 		return dorian.renewIFSUserCredentials(getCallerIdentity(), user);
 	}
 
-  public org.cagrid.gaards.dorian.federation.IFSUserPolicy[] getIFSUserPolicies() throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault {
+	public org.cagrid.gaards.dorian.federation.IFSUserPolicy[] getIFSUserPolicies()
+			throws RemoteException,
+			org.cagrid.gaards.dorian.stubs.types.DorianInternalFault,
+			org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault {
 		return dorian.getIFSUserPolicies(getCallerIdentity());
 	}
 
-  public gov.nih.nci.cagrid.authentication.bean.SAMLAssertion authenticate(gov.nih.nci.cagrid.authentication.bean.Credential credential) throws RemoteException, gov.nih.nci.cagrid.authentication.stubs.types.InvalidCredentialFault, gov.nih.nci.cagrid.authentication.stubs.types.InsufficientAttributeFault, gov.nih.nci.cagrid.authentication.stubs.types.AuthenticationProviderFault {
+	public gov.nih.nci.cagrid.authentication.bean.SAMLAssertion authenticate(
+			gov.nih.nci.cagrid.authentication.bean.Credential credential)
+			throws RemoteException,
+			gov.nih.nci.cagrid.authentication.stubs.types.InvalidCredentialFault,
+			gov.nih.nci.cagrid.authentication.stubs.types.InsufficientAttributeFault,
+			gov.nih.nci.cagrid.authentication.stubs.types.AuthenticationProviderFault {
 
 		if (credential.getBasicAuthenticationCredential() == null) {
 			InvalidCredentialFault fault = new InvalidCredentialFault();
@@ -242,52 +326,112 @@ public class DorianImpl {
 		}
 	}
 
-  public void addAdmin(java.lang.String gridIdentity) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault {
+	public void addAdmin(java.lang.String gridIdentity) throws RemoteException,
+			org.cagrid.gaards.dorian.stubs.types.DorianInternalFault,
+			org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault {
 		dorian.addAdmin(getCallerIdentity(), gridIdentity);
 	}
 
-  public void removeAdmin(java.lang.String gridIdentity) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault {
+	public void removeAdmin(java.lang.String gridIdentity)
+			throws RemoteException,
+			org.cagrid.gaards.dorian.stubs.types.DorianInternalFault,
+			org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault {
 		dorian.removeAdmin(getCallerIdentity(), gridIdentity);
 	}
 
-  public java.lang.String[] getAdmins() throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault {
+	public java.lang.String[] getAdmins() throws RemoteException,
+			org.cagrid.gaards.dorian.stubs.types.DorianInternalFault,
+			org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault {
 		return dorian.getAdmins(getCallerIdentity());
 	}
 
-  public org.cagrid.gaards.dorian.federation.HostCertificateRecord requestHostCertificate(org.cagrid.gaards.dorian.federation.HostCertificateRequest req) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.InvalidHostCertificateRequestFault, org.cagrid.gaards.dorian.stubs.types.InvalidHostCertificateFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault {
+	public org.cagrid.gaards.dorian.federation.HostCertificateRecord requestHostCertificate(
+			org.cagrid.gaards.dorian.federation.HostCertificateRequest req)
+			throws RemoteException,
+			org.cagrid.gaards.dorian.stubs.types.DorianInternalFault,
+			org.cagrid.gaards.dorian.stubs.types.InvalidHostCertificateRequestFault,
+			org.cagrid.gaards.dorian.stubs.types.InvalidHostCertificateFault,
+			org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault {
 		return dorian.requestHostCertificate(getCallerIdentity(), req);
 	}
 
-  public org.cagrid.gaards.dorian.federation.HostCertificateRecord[] getOwnedHostCertificates() throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault {
+	public org.cagrid.gaards.dorian.federation.HostCertificateRecord[] getOwnedHostCertificates()
+			throws RemoteException,
+			org.cagrid.gaards.dorian.stubs.types.DorianInternalFault,
+			org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault {
 		return dorian.getOwnedHostCertificates(getCallerIdentity());
 	}
 
-  public org.cagrid.gaards.dorian.federation.HostCertificateRecord approveHostCertificate(java.math.BigInteger recordId) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.InvalidHostCertificateFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault {
+	public org.cagrid.gaards.dorian.federation.HostCertificateRecord approveHostCertificate(
+			java.math.BigInteger recordId) throws RemoteException,
+			org.cagrid.gaards.dorian.stubs.types.DorianInternalFault,
+			org.cagrid.gaards.dorian.stubs.types.InvalidHostCertificateFault,
+			org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault {
 		return dorian.approveHostCertificate(getCallerIdentity(), recordId
 				.longValue());
 	}
 
-  public org.cagrid.gaards.dorian.federation.HostCertificateRecord[] findHostCertificates(org.cagrid.gaards.dorian.federation.HostCertificateFilter hostCertificateFilter) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault {
+	public org.cagrid.gaards.dorian.federation.HostCertificateRecord[] findHostCertificates(
+			org.cagrid.gaards.dorian.federation.HostCertificateFilter hostCertificateFilter)
+			throws RemoteException,
+			org.cagrid.gaards.dorian.stubs.types.DorianInternalFault,
+			org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault {
 		return dorian.findHostCertificates(getCallerIdentity(),
 				hostCertificateFilter);
 	}
 
-  public void updateHostCertificateRecord(org.cagrid.gaards.dorian.federation.HostCertificateUpdate hostCertificateUpdate) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.InvalidHostCertificateFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault {
+	public void updateHostCertificateRecord(
+			org.cagrid.gaards.dorian.federation.HostCertificateUpdate hostCertificateUpdate)
+			throws RemoteException,
+			org.cagrid.gaards.dorian.stubs.types.DorianInternalFault,
+			org.cagrid.gaards.dorian.stubs.types.InvalidHostCertificateFault,
+			org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault {
 		dorian.updateHostCertificateRecord(getCallerIdentity(),
 				hostCertificateUpdate);
 	}
 
-  public org.cagrid.gaards.dorian.federation.HostCertificateRecord renewHostCertificate(java.math.BigInteger recordId) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.InvalidHostCertificateFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault {
+	public org.cagrid.gaards.dorian.federation.HostCertificateRecord renewHostCertificate(
+			java.math.BigInteger recordId) throws RemoteException,
+			org.cagrid.gaards.dorian.stubs.types.DorianInternalFault,
+			org.cagrid.gaards.dorian.stubs.types.InvalidHostCertificateFault,
+			org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault {
 		return dorian.renewHostCertificate(getCallerIdentity(), recordId
 				.longValue());
 	}
 
-  public void changeIdPUserPassword(org.cagrid.gaards.dorian.idp.BasicAuthCredential credential,java.lang.String newPassword) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault, org.cagrid.gaards.dorian.stubs.types.InvalidUserPropertyFault {
+	public void changeIdPUserPassword(
+			org.cagrid.gaards.dorian.idp.BasicAuthCredential credential,
+			java.lang.String newPassword) throws RemoteException,
+			org.cagrid.gaards.dorian.stubs.types.DorianInternalFault,
+			org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault,
+			org.cagrid.gaards.dorian.stubs.types.InvalidUserPropertyFault {
 		dorian.changeIdPUserPassword(credential, newPassword);
 	}
 
-  public boolean doesIdPUserExist(java.lang.String userId) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault {
+	public boolean doesIdPUserExist(java.lang.String userId)
+			throws RemoteException,
+			org.cagrid.gaards.dorian.stubs.types.DorianInternalFault {
 		return dorian.doesIdPUserExist(userId);
+	}
+
+	public gov.nih.nci.cagrid.opensaml.SAMLAssertion authenticateUser(
+			org.cagrid.gaards.authentication.Credential credential)
+			throws RemoteException,
+			org.cagrid.gaards.authentication.faults.AuthenticationProviderFault,
+			org.cagrid.gaards.authentication.faults.CredentialNotSupportedFault,
+			org.cagrid.gaards.authentication.faults.InsufficientAttributeFault,
+			org.cagrid.gaards.authentication.faults.InvalidCredentialFault {
+		if (credential.getClass().equals(BasicAuthentication.class)) {
+			BasicAuthentication cred = (BasicAuthentication) credential;
+			BasicAuthCredential bac = new BasicAuthCredential();
+			bac.setUserId(cred.getUserId());
+			bac.setPassword(cred.getPassword());
+			return dorian.authenticate(bac);
+		} else {
+			InvalidCredentialFault fault = new InvalidCredentialFault();
+			fault.setFaultString("The credential provided is not supported.");
+			throw fault;
+		}
 	}
 
 }

@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://cagrid.nci.nih.gov/Dorian" xmlns:wsrp="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.xsd" xmlns:wsrlw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl" xmlns:wsdlpp="http://www.globus.org/namespaces/2004/10/WSDLPreprocessor" xmlns:gtwsdl1="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ServiceGroup-1.2-draft-01.wsdl" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/03/addressing" xmlns:wsntw="http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.wsdl" xmlns:wsrbfw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.wsdl" xmlns:wsrpw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" xmlns:wns1="http://cagrid.nci.nih.gov/AuthenticationService" xmlns:wns2="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" xmlns:wns0="http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity" xmlns:ns7="http://cagrid.nci.nih.gov/Dorian/types" xmlns:ns5="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata" xmlns:ns1="http://cagrid.nci.nih.gov/1/dorian-ifs" xmlns:ns3="http://cagrid.nci.nih.gov/1/authentication-service" xmlns:ns6="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security" xmlns:ns4="http://cagrid.nci.nih.gov/1/dorian-common" xmlns:ns2="http://cagrid.nci.nih.gov/AuthenticationService/types" xmlns:ns0="http://cagrid.nci.nih.gov/1/dorian-idp" name="Dorian" targetNamespace="http://cagrid.nci.nih.gov/Dorian">
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://cagrid.nci.nih.gov/Dorian" xmlns:wsrp="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.xsd" xmlns:wsrlw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl" xmlns:wsdlpp="http://www.globus.org/namespaces/2004/10/WSDLPreprocessor" xmlns:gtwsdl1="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ServiceGroup-1.2-draft-01.wsdl" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/03/addressing" xmlns:wsntw="http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.wsdl" xmlns:wsrbfw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.wsdl" xmlns:wsrpw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" xmlns:wns1="http://cagrid.nci.nih.gov/AuthenticationService" xmlns:wns2="http://authentication.gaards.cagrid.org/AuthenticationService" xmlns:wns3="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" xmlns:wns0="http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity" xmlns:ns8="http://gaards.cagrid.org/authentication-faults" xmlns:ns10="http://cagrid.nci.nih.gov/Dorian/types" xmlns:ns5="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata" xmlns:ns1="http://cagrid.nci.nih.gov/1/dorian-ifs" xmlns:ns3="http://cagrid.nci.nih.gov/1/authentication-service" xmlns:ns7="http://gaards.cagrid.org/authentication" xmlns:ns6="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security" xmlns:ns4="http://cagrid.nci.nih.gov/1/dorian-common" xmlns:ns2="http://cagrid.nci.nih.gov/AuthenticationService/types" xmlns:ns12="urn:oasis:names:tc:SAML:1.0:assertion" xmlns:ns11="http://www.w3.org/2000/09/xmldsig#" xmlns:ns9="http://authentication.gaards.cagrid.org/AuthenticationService/types" xmlns:ns0="http://cagrid.nci.nih.gov/1/dorian-idp" name="Dorian" targetNamespace="http://cagrid.nci.nih.gov/Dorian">
   <import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" location="../wsrf/properties/WS-ResourceProperties.wsdl" />
   <import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.wsdl" location="../wsrf/faults/WS-BaseFaults.wsdl" />
   <import namespace="http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.wsdl" location="../wsrf/notification/WS-BaseN.wsdl" />
-  <import namespace="http://cagrid.nci.nih.gov/AuthenticationService" location="././AuthenticationService.wsdl" />
+  <import namespace="http://cagrid.nci.nih.gov/AuthenticationService" location="././AuthenticationServiceDeprecated.wsdl" />
+  <import namespace="http://authentication.gaards.cagrid.org/AuthenticationService" location="././AuthenticationService.wsdl" />
   <import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" location="./../wsrf/properties/WS-ResourceProperties.wsdl" />
   <import namespace="http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity" location="./ServiceSecurity.wsdl" />
   <!--============================================================
@@ -14,13 +15,18 @@
   <types>
     <schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:wsrbf="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd" targetNamespace="http://cagrid.nci.nih.gov/Dorian" elementFormDefault="qualified" attributeFormDefault="unqualified">
       <import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd" schemaLocation="../wsrf/faults/WS-BaseFaults.xsd" />
+      <import namespace="http://gaards.cagrid.org/authentication-faults" schemaLocation="./authentication-faults.xsd" />
       <import namespace="http://cagrid.nci.nih.gov/Dorian/types" schemaLocation="./DorianTypes.xsd" />
       <import namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata" schemaLocation="./xsd/cagrid/types/caGridMetadata.xsd" />
       <import namespace="http://cagrid.nci.nih.gov/1/dorian-ifs" schemaLocation="./dorian-ifs.xsd" />
       <import namespace="http://cagrid.nci.nih.gov/1/authentication-service" schemaLocation="./authentication-service.xsd" />
+      <import namespace="http://gaards.cagrid.org/authentication" schemaLocation="./authentication-core-types.xsd" />
       <import namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security" schemaLocation="./xsd/cagrid/types/security/security.xsd" />
       <import namespace="http://cagrid.nci.nih.gov/1/dorian-common" schemaLocation="./dorian-common.xsd" />
-      <import namespace="http://cagrid.nci.nih.gov/AuthenticationService/types" schemaLocation="./AuthenticationServiceTypes.xsd" />
+      <import namespace="http://cagrid.nci.nih.gov/AuthenticationService/types" schemaLocation="./AuthenticationServiceTypesDeprecated.xsd" />
+      <import namespace="urn:oasis:names:tc:SAML:1.0:assertion" schemaLocation="./cs-sstc-schema-assertion-1.1.xsd" />
+      <import namespace="http://www.w3.org/2000/09/xmldsig#" schemaLocation="./xmldsig-core-schema.xsd" />
+      <import namespace="http://authentication.gaards.cagrid.org/AuthenticationService/types" schemaLocation="./AuthenticationServiceTypes.xsd" />
       <import namespace="http://cagrid.nci.nih.gov/1/dorian-idp" schemaLocation="./dorian-idp.xsd" />
       <element name="RegisterWithIdPRequest">
         <complexType>
@@ -492,6 +498,7 @@
         <complexType>
           <sequence>
             <element ref="ns5:ServiceMetadata" />
+            <element ref="ns7:AuthenticationProfiles" />
           </sequence>
         </complexType>
       </element>
@@ -661,37 +668,37 @@
     <part name="parameters" element="tns:DoesIdPUserExistResponse" />
   </message>
   <message name="DorianInternalFaultFaultMessage">
-    <part name="fault" element="ns7:DorianInternalFault" />
+    <part name="fault" element="ns10:DorianInternalFault" />
   </message>
   <message name="InvalidUserPropertyFaultFaultMessage">
-    <part name="fault" element="ns7:InvalidUserPropertyFault" />
+    <part name="fault" element="ns10:InvalidUserPropertyFault" />
   </message>
   <message name="PermissionDeniedFaultFaultMessage">
-    <part name="fault" element="ns7:PermissionDeniedFault" />
+    <part name="fault" element="ns10:PermissionDeniedFault" />
   </message>
   <message name="NoSuchUserFaultFaultMessage">
-    <part name="fault" element="ns7:NoSuchUserFault" />
+    <part name="fault" element="ns10:NoSuchUserFault" />
   </message>
   <message name="InvalidAssertionFaultFaultMessage">
-    <part name="fault" element="ns7:InvalidAssertionFault" />
+    <part name="fault" element="ns10:InvalidAssertionFault" />
   </message>
   <message name="InvalidProxyFaultFaultMessage">
-    <part name="fault" element="ns7:InvalidProxyFault" />
+    <part name="fault" element="ns10:InvalidProxyFault" />
   </message>
   <message name="UserPolicyFaultFaultMessage">
-    <part name="fault" element="ns7:UserPolicyFault" />
+    <part name="fault" element="ns10:UserPolicyFault" />
   </message>
   <message name="InvalidTrustedIdPFaultFaultMessage">
-    <part name="fault" element="ns7:InvalidTrustedIdPFault" />
+    <part name="fault" element="ns10:InvalidTrustedIdPFault" />
   </message>
   <message name="InvalidUserFaultFaultMessage">
-    <part name="fault" element="ns7:InvalidUserFault" />
+    <part name="fault" element="ns10:InvalidUserFault" />
   </message>
   <message name="InvalidHostCertificateRequestFaultFaultMessage">
-    <part name="fault" element="ns7:InvalidHostCertificateRequestFault" />
+    <part name="fault" element="ns10:InvalidHostCertificateRequestFault" />
   </message>
   <message name="InvalidHostCertificateFaultFaultMessage">
-    <part name="fault" element="ns7:InvalidHostCertificateFault" />
+    <part name="fault" element="ns10:InvalidHostCertificateFault" />
   </message>
   <!--============================================================
 
@@ -885,6 +892,14 @@
       <fault name="InvalidCredentialFault" message="wns1:InvalidCredentialFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/AuthenticationService/InvalidCredentialFaultFaultMessage" />
       <fault name="InsufficientAttributeFault" message="wns1:InsufficientAttributeFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/AuthenticationService/InsufficientAttributeFaultFaultMessage" />
       <fault name="AuthenticationProviderFault" message="wns1:AuthenticationProviderFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/AuthenticationService/AuthenticationProviderFaultFaultMessage" />
+    </operation>
+    <operation name="authenticateUser">
+      <input message="wns2:AuthenticateUserRequest" wsa:Action="http://authentication.gaards.cagrid.org/AuthenticationService/AuthenticateUserRequest" />
+      <output message="wns2:AuthenticateUserResponse" wsa:Action="http://authentication.gaards.cagrid.org/AuthenticationService/AuthenticateUserResponse" />
+      <fault name="AuthenticationProviderFault" message="wns2:AuthenticationProviderFaultFaultMessage" wsa:Action="http://authentication.gaards.cagrid.org/AuthenticationService/AuthenticationProviderFaultFaultMessage" />
+      <fault name="CredentialNotSupportedFault" message="wns2:CredentialNotSupportedFaultFaultMessage" wsa:Action="http://authentication.gaards.cagrid.org/AuthenticationService/CredentialNotSupportedFaultFaultMessage" />
+      <fault name="InsufficientAttributeFault" message="wns2:InsufficientAttributeFaultFaultMessage" wsa:Action="http://authentication.gaards.cagrid.org/AuthenticationService/InsufficientAttributeFaultFaultMessage" />
+      <fault name="InvalidCredentialFault" message="wns2:InvalidCredentialFaultFaultMessage" wsa:Action="http://authentication.gaards.cagrid.org/AuthenticationService/InvalidCredentialFaultFaultMessage" />
     </operation>
     <wsdl:operation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="GetMultipleResourceProperties">
       <wsdl:input name="GetMultipleResourcePropertiesRequest" message="wsrpw:GetMultipleResourcePropertiesRequest" wsa:Action="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties/GetMultipleResourceProperties" />
