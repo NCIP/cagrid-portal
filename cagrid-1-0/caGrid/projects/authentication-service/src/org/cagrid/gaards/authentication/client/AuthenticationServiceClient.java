@@ -78,7 +78,7 @@ public class AuthenticationServiceClient extends
 			cred.setPassword("password");
 			cred.setOneTimePassword("onetimepassword");
 			
-			SAMLAssertion saml = client.authenticateWithIdentityProvider(cred);
+			SAMLAssertion saml = client.authenticateUser(cred);
 			saml.verify(cert);
 			System.out.println(SAMLUtils.samlAssertionToString(saml));
 		} catch (Exception e) {
@@ -108,14 +108,14 @@ public class AuthenticationServiceClient extends
     }
   }
 
-  public gov.nih.nci.cagrid.opensaml.SAMLAssertion authenticateWithIdentityProvider(org.cagrid.gaards.authentication.Credential credential) throws RemoteException, org.cagrid.gaards.authentication.faults.AuthenticationProviderFault, org.cagrid.gaards.authentication.faults.CredentialNotSupportedFault, org.cagrid.gaards.authentication.faults.InsufficientAttributeFault, org.cagrid.gaards.authentication.faults.InvalidCredentialFault {
+  public gov.nih.nci.cagrid.opensaml.SAMLAssertion authenticateUser(org.cagrid.gaards.authentication.Credential credential) throws RemoteException, org.cagrid.gaards.authentication.faults.AuthenticationProviderFault, org.cagrid.gaards.authentication.faults.CredentialNotSupportedFault, org.cagrid.gaards.authentication.faults.InsufficientAttributeFault, org.cagrid.gaards.authentication.faults.InvalidCredentialFault {
     synchronized(portTypeMutex){
-      configureStubSecurity((Stub)portType,"authenticateWithIdentityProvider");
-    org.cagrid.gaards.authentication.stubs.AuthenticateWithIdentityProviderRequest params = new org.cagrid.gaards.authentication.stubs.AuthenticateWithIdentityProviderRequest();
-    org.cagrid.gaards.authentication.stubs.AuthenticateWithIdentityProviderRequestCredential credentialContainer = new org.cagrid.gaards.authentication.stubs.AuthenticateWithIdentityProviderRequestCredential();
+      configureStubSecurity((Stub)portType,"authenticateUser");
+    org.cagrid.gaards.authentication.stubs.AuthenticateUserRequest params = new org.cagrid.gaards.authentication.stubs.AuthenticateUserRequest();
+    org.cagrid.gaards.authentication.stubs.AuthenticateUserRequestCredential credentialContainer = new org.cagrid.gaards.authentication.stubs.AuthenticateUserRequestCredential();
     credentialContainer.setCredential(credential);
     params.setCredential(credentialContainer);
-    org.cagrid.gaards.authentication.stubs.AuthenticateWithIdentityProviderResponse boxedResult = portType.authenticateWithIdentityProvider(params);
+    org.cagrid.gaards.authentication.stubs.AuthenticateUserResponse boxedResult = portType.authenticateUser(params);
     return boxedResult.getAssertion();
     }
   }

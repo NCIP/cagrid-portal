@@ -115,7 +115,7 @@ public class AuthenticationClient {
 			}
 		} else {
 			try {
-				return client.authenticateWithIdentityProvider(cred);
+				return client.authenticateUser(cred);
 			} catch (InvalidCredentialFault gie) {
 				throw gie;
 			} catch (InsufficientAttributeFault ilf) {

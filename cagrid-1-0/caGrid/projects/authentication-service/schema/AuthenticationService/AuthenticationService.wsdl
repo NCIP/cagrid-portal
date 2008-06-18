@@ -23,7 +23,7 @@
       <import namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security" schemaLocation="./xsd/cagrid/types/security/security.xsd" />
       <import namespace="http://authentication.gaards.cagrid.org/AuthenticationService/types" schemaLocation="./AuthenticationServiceTypes.xsd" />
       <import namespace="http://cagrid.nci.nih.gov/AuthenticationService/types" schemaLocation="./AuthenticationServiceTypesDeprecated.xsd" />
-      <element name="AuthenticateWithIdentityProviderRequest">
+      <element name="AuthenticateUserRequest">
         <complexType>
           <sequence>
             <element name="credential">
@@ -36,7 +36,7 @@
           </sequence>
         </complexType>
       </element>
-      <element name="AuthenticateWithIdentityProviderResponse">
+      <element name="AuthenticateUserResponse">
         <complexType>
           <sequence>
             <element ref="ns5:Assertion" minOccurs="1" maxOccurs="1" />
@@ -54,11 +54,11 @@
     </schema>
   </types>
   <!--  place service messages here -->
-  <message name="AuthenticateWithIdentityProviderRequest">
-    <part name="parameters" element="tns:AuthenticateWithIdentityProviderRequest" />
+  <message name="AuthenticateUserRequest">
+    <part name="parameters" element="tns:AuthenticateUserRequest" />
   </message>
-  <message name="AuthenticateWithIdentityProviderResponse">
-    <part name="parameters" element="tns:AuthenticateWithIdentityProviderResponse" />
+  <message name="AuthenticateUserResponse">
+    <part name="parameters" element="tns:AuthenticateUserResponse" />
   </message>
   <message name="AuthenticationProviderFaultFaultMessage">
     <part name="fault" element="ns1:AuthenticationProviderFault" />
@@ -78,9 +78,9 @@
                       
   ============================================================-->
   <portType name="AuthenticationServicePortType" wsrp:ResourceProperties="tns:AuthenticationServiceResourceProperties">
-    <operation name="authenticateWithIdentityProvider">
-      <input message="tns:AuthenticateWithIdentityProviderRequest" wsa:Action="http://authentication.gaards.cagrid.org/AuthenticationService/AuthenticateWithIdentityProviderRequest" />
-      <output message="tns:AuthenticateWithIdentityProviderResponse" wsa:Action="http://authentication.gaards.cagrid.org/AuthenticationService/AuthenticateWithIdentityProviderResponse" />
+    <operation name="authenticateUser">
+      <input message="tns:AuthenticateUserRequest" wsa:Action="http://authentication.gaards.cagrid.org/AuthenticationService/AuthenticateUserRequest" />
+      <output message="tns:AuthenticateUserResponse" wsa:Action="http://authentication.gaards.cagrid.org/AuthenticationService/AuthenticateUserResponse" />
       <fault name="AuthenticationProviderFault" message="tns:AuthenticationProviderFaultFaultMessage" wsa:Action="http://authentication.gaards.cagrid.org/AuthenticationService/AuthenticationProviderFaultFaultMessage" />
       <fault name="CredentialNotSupportedFault" message="tns:CredentialNotSupportedFaultFaultMessage" wsa:Action="http://authentication.gaards.cagrid.org/AuthenticationService/CredentialNotSupportedFaultFaultMessage" />
       <fault name="InsufficientAttributeFault" message="tns:InsufficientAttributeFaultFaultMessage" wsa:Action="http://authentication.gaards.cagrid.org/AuthenticationService/InsufficientAttributeFaultFaultMessage" />

@@ -26,9 +26,9 @@ public class AuthenticationServiceProviderImpl{
 	}
 	
 
-    public org.cagrid.gaards.authentication.stubs.AuthenticateWithIdentityProviderResponse authenticateWithIdentityProvider(org.cagrid.gaards.authentication.stubs.AuthenticateWithIdentityProviderRequest params) throws RemoteException, org.cagrid.gaards.authentication.faults.AuthenticationProviderFault, org.cagrid.gaards.authentication.faults.CredentialNotSupportedFault, org.cagrid.gaards.authentication.faults.InsufficientAttributeFault, org.cagrid.gaards.authentication.faults.InvalidCredentialFault {
-    org.cagrid.gaards.authentication.stubs.AuthenticateWithIdentityProviderResponse boxedResult = new org.cagrid.gaards.authentication.stubs.AuthenticateWithIdentityProviderResponse();
-    boxedResult.setAssertion(impl.authenticateWithIdentityProvider(params.getCredential().getCredential()));
+    public org.cagrid.gaards.authentication.stubs.AuthenticateUserResponse authenticateUser(org.cagrid.gaards.authentication.stubs.AuthenticateUserRequest params) throws RemoteException, org.cagrid.gaards.authentication.faults.AuthenticationProviderFault, org.cagrid.gaards.authentication.faults.CredentialNotSupportedFault, org.cagrid.gaards.authentication.faults.InsufficientAttributeFault, org.cagrid.gaards.authentication.faults.InvalidCredentialFault {
+    org.cagrid.gaards.authentication.stubs.AuthenticateUserResponse boxedResult = new org.cagrid.gaards.authentication.stubs.AuthenticateUserResponse();
+    boxedResult.setAssertion(impl.authenticateUser(params.getCredential().getCredential()));
     return boxedResult;
   }
 

@@ -24,7 +24,7 @@
        <ns2:Output qName="ns4:ServiceSecurityMetadata" dimensionality="1" isArray="false" xmlns:ns4="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security"/>
        <ns2:faultCollection/>
       </ns2:Operation>
-      <ns2:Operation description="" name="authenticateWithIdentityProvider">
+      <ns2:Operation description="" name="authenticateUser">
        <ns2:inputParameterCollection>
         <ns2:InputParameter qName="ns5:Credential" dimensionality="1" index="0" isArray="false" isRequired="false" name="credential" xmlns:ns5="http://gaards.cagrid.org/authentication"/>
        </ns2:inputParameterCollection>

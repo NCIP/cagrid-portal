@@ -2,7 +2,6 @@ package org.cagrid.gaards.authentication.service.globus;
 
 
 import java.rmi.RemoteException;
-
 import javax.security.auth.Subject;
 import javax.xml.namespace.QName;
 import javax.xml.rpc.handler.MessageContext;
@@ -69,7 +68,7 @@ public class AuthenticationServiceAuthorization implements PDP {
 		
 	}
 					
-	public static void authorizeAuthenticateWithIdentityProvider() throws RemoteException {
+	public static void authorizeAuthenticateUser() throws RemoteException {
 		
 		
 	}
@@ -118,9 +117,9 @@ public class AuthenticationServiceAuthorization implements PDP {
 				e.printStackTrace();
 				return false;
 			}
-		} else if(operation.getLocalPart().equals("authenticateWithIdentityProvider")){
+		} else if(operation.getLocalPart().equals("authenticateUser")){
 			try{
-				authorizeAuthenticateWithIdentityProvider();
+				authorizeAuthenticateUser();
 				return true;
 			} catch (Exception e){
 				e.printStackTrace();
