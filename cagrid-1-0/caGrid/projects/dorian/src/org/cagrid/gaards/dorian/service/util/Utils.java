@@ -1,9 +1,11 @@
-package org.cagrid.gaards.dorian.common;
+package org.cagrid.gaards.dorian.service.util;
 
 import java.security.cert.X509Certificate;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+
+import org.cagrid.gaards.dorian.common.Lifetime;
 
 public class Utils {
 

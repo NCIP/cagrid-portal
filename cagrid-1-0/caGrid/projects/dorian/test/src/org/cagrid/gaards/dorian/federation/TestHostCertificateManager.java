@@ -999,7 +999,7 @@ public class TestHostCertificateManager extends TestCase implements Publisher {
 		assertEquals(req.getPublicKey(), record.getPublicKey());
 		assertEquals(owner, record.getOwner());
 		assertEquals(HostCertificateStatus.Active, record.getStatus());
-		String subject = org.cagrid.gaards.dorian.common.Utils
+		String subject = org.cagrid.gaards.dorian.service.util.Utils
 				.getHostCertificateSubject(ca.getCACertificate(), req
 						.getHostname());
 		assertEquals(subject, record.getSubject());

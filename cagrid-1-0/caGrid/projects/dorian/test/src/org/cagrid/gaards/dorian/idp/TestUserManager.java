@@ -3,7 +3,7 @@ package org.cagrid.gaards.dorian.idp;
 import gov.nih.nci.cagrid.common.FaultUtil;
 import junit.framework.TestCase;
 
-import org.cagrid.gaards.dorian.common.Crypt;
+import org.cagrid.gaards.dorian.service.util.Crypt;
 import org.cagrid.gaards.dorian.stubs.types.NoSuchUserFault;
 import org.cagrid.gaards.dorian.test.Utils;
 import org.cagrid.tools.database.Database;

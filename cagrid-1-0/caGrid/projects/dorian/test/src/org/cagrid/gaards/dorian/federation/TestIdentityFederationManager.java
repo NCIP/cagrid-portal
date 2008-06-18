@@ -92,7 +92,7 @@ public class TestIdentityFederationManager extends TestCase {
 					.getGridId(), req);
 			assertEquals(HostCertificateStatus.Pending, record.getStatus());
 			assertEquals(null, record.getCertificate());
-			String subject = org.cagrid.gaards.dorian.common.Utils
+			String subject = org.cagrid.gaards.dorian.service.util.Utils
 					.getHostCertificateSubject(ca.getCACertificate(), host);
 			record = ifs.approveHostCertificate(adminGridId, record.getId());
 			assertEquals(HostCertificateStatus.Active, record.getStatus());
@@ -130,7 +130,7 @@ public class TestIdentityFederationManager extends TestCase {
 			HostCertificateRequest req = getHostCertificateRequest(host);
 			HostCertificateRecord record = ifs.requestHostCertificate(usr
 					.getGridId(), req);
-			String subject = org.cagrid.gaards.dorian.common.Utils
+			String subject = org.cagrid.gaards.dorian.service.util.Utils
 					.getHostCertificateSubject(ca.getCACertificate(), host);
 			assertEquals(HostCertificateStatus.Active, record.getStatus());
 			;
@@ -236,7 +236,7 @@ public class TestIdentityFederationManager extends TestCase {
 					.getSubjectDN().getName(), idp.getIdp(), INITIAL_ADMIN);
 			String adminGridId = UserManager.subjectToIdentity(adminSubject);
 			IFSUser usr = createUser(ifs, adminGridId, idp, "user");
-			String subjectPrefix = org.cagrid.gaards.dorian.common.Utils
+			String subjectPrefix = org.cagrid.gaards.dorian.service.util.Utils
 					.getHostCertificateSubjectPrefix(ca.getCACertificate());
 			String hostPrefix = "localhost";
 			int total = 3;
@@ -253,7 +253,7 @@ public class TestIdentityFederationManager extends TestCase {
 			assertEquals(total,
 					ifs.findHostCertificates(adminGridId, f1).length);
 			for (int i = 0; i < total; i++) {
-				String subject = org.cagrid.gaards.dorian.common.Utils
+				String subject = org.cagrid.gaards.dorian.service.util.Utils
 						.getHostCertificateSubject(ca.getCACertificate(),
 								hostPrefix + i);
 				f1.setSubject(subject);
@@ -351,7 +351,7 @@ public class TestIdentityFederationManager extends TestCase {
 			HostCertificateRequest req = getHostCertificateRequest(host);
 			HostCertificateRecord record = ifs.requestHostCertificate(usr
 					.getGridId(), req);
-			String subject = org.cagrid.gaards.dorian.common.Utils
+			String subject = org.cagrid.gaards.dorian.service.util.Utils
 					.getHostCertificateSubject(ca.getCACertificate(), host);
 			assertEquals(HostCertificateStatus.Active, record.getStatus());
 			;
@@ -582,7 +582,7 @@ public class TestIdentityFederationManager extends TestCase {
 					.getGridId(), req);
 			assertEquals(HostCertificateStatus.Pending, record.getStatus());
 			assertEquals(null, record.getCertificate());
-			String subject = org.cagrid.gaards.dorian.common.Utils
+			String subject = org.cagrid.gaards.dorian.service.util.Utils
 					.getHostCertificateSubject(ca.getCACertificate(), host);
 			record = ifs.approveHostCertificate(adminGridId, record.getId());
 			assertEquals(HostCertificateStatus.Active, record.getStatus());

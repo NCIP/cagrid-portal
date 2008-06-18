@@ -21,10 +21,10 @@ import java.util.Map;
 import org.bouncycastle.asn1.x509.CRLReason;
 import org.cagrid.gaards.dorian.ca.CertificateAuthority;
 import org.cagrid.gaards.dorian.ca.CertificateAuthorityFault;
-import org.cagrid.gaards.dorian.common.AddressValidator;
 import org.cagrid.gaards.dorian.common.Lifetime;
 import org.cagrid.gaards.dorian.common.LoggingObject;
 import org.cagrid.gaards.dorian.service.PropertyManager;
+import org.cagrid.gaards.dorian.service.util.AddressValidator;
 import org.cagrid.gaards.dorian.stubs.types.DorianInternalFault;
 import org.cagrid.gaards.dorian.stubs.types.InvalidUserFault;
 import org.cagrid.gaards.pki.CertUtil;
@@ -202,7 +202,7 @@ public class UserManager extends LoggingObject {
 			Calendar c = new GregorianCalendar();
 			Date start = c.getTime();
 			Lifetime lifetime = conf.getIssuedCertificateLifetime();
-			Date end = org.cagrid.gaards.dorian.common.Utils
+			Date end = org.cagrid.gaards.dorian.service.util.Utils
 					.getExpiredDate(lifetime);
 			if (end.after(ca.getCACertificate().getNotAfter())) {
 				end = ca.getCACertificate().getNotAfter();

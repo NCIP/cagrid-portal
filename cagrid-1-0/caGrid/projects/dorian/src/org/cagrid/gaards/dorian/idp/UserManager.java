@@ -10,9 +10,9 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.cagrid.gaards.dorian.common.AddressValidator;
-import org.cagrid.gaards.dorian.common.Crypt;
 import org.cagrid.gaards.dorian.common.LoggingObject;
+import org.cagrid.gaards.dorian.service.util.AddressValidator;
+import org.cagrid.gaards.dorian.service.util.Crypt;
 import org.cagrid.gaards.dorian.stubs.types.DorianInternalFault;
 import org.cagrid.gaards.dorian.stubs.types.InvalidUserPropertyFault;
 import org.cagrid.gaards.dorian.stubs.types.NoSuchUserFault;

@@ -1,4 +1,4 @@
-package org.cagrid.gaards.dorian.common;
+package org.cagrid.gaards.dorian.service.util;
 
 import gov.nih.nci.cagrid.common.Utils;
 

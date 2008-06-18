@@ -17,7 +17,7 @@ import org.cagrid.gaards.dorian.X509Certificate;
 import org.cagrid.gaards.dorian.ca.CertificateAuthority;
 import org.cagrid.gaards.dorian.common.Lifetime;
 import org.cagrid.gaards.dorian.common.LoggingObject;
-import org.cagrid.gaards.dorian.common.PreparedStatementBuilder;
+import org.cagrid.gaards.dorian.service.util.PreparedStatementBuilder;
 import org.cagrid.gaards.dorian.stubs.types.DorianInternalFault;
 import org.cagrid.gaards.dorian.stubs.types.InvalidHostCertificateFault;
 import org.cagrid.gaards.dorian.stubs.types.InvalidHostCertificateRequestFault;
@@ -123,7 +123,7 @@ public class HostCertificateManager extends LoggingObject {
 			java.security.PublicKey key = KeyUtil.loadPublicKey(record.getPublicKey().getKeyAsString());
 			Date start = new Date();
 			Lifetime lifetime = this.conf.getIssuedCertificateLifetime();
-			Date end = org.cagrid.gaards.dorian.common.Utils.getExpiredDate(lifetime);
+			Date end = org.cagrid.gaards.dorian.service.util.Utils.getExpiredDate(lifetime);
 			if (end.after(ca.getCACertificate().getNotAfter())) {
 				end = ca.getCACertificate().getNotAfter();
 			}
@@ -180,7 +180,7 @@ public class HostCertificateManager extends LoggingObject {
 
 			Date start = new Date();
 			Lifetime lifetime = this.conf.getIssuedCertificateLifetime();
-			Date end = org.cagrid.gaards.dorian.common.Utils.getExpiredDate(lifetime);
+			Date end = org.cagrid.gaards.dorian.service.util.Utils.getExpiredDate(lifetime);
 			if (end.after(ca.getCACertificate().getNotAfter())) {
 				end = ca.getCACertificate().getNotAfter();
 			}

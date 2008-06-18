@@ -1,4 +1,4 @@
-package org.cagrid.gaards.dorian.common;
+package org.cagrid.gaards.dorian.service.util;
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
