@@ -28,10 +28,10 @@ import org.cagrid.gaards.dorian.ca.CertificateAuthority;
 import org.cagrid.gaards.dorian.ca.WrappedKey;
 import org.cagrid.gaards.dorian.ca.WrappingCertificateAuthority;
 import org.cagrid.gaards.dorian.common.LoggingObject;
+import org.cagrid.gaards.dorian.common.SAMLConstants;
 import org.cagrid.gaards.dorian.stubs.types.DorianInternalFault;
 import org.cagrid.gaards.pki.CertUtil;
 import org.cagrid.gaards.pki.KeyUtil;
-import org.cagrid.gaards.saml.encoding.SAMLConstants;
 import org.cagrid.tools.database.Database;
 
 
