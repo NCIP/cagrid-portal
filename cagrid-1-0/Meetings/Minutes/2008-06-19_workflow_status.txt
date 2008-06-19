@@ -2,7 +2,7 @@
 * Meeting: 	caGrid Workflow Status
 * Date: 	2008-06-19
 * Venue:	Teleconference
-* Attendees: 	John Eisenschmidt, Ravi Madduri, Bronwyn Gagne, 
+* Attendees: 	John Eisenschmidt, Ravi Madduri, Bronwyn Gagne, Larry Brem
 ****************************************************************************
 
 Agenda

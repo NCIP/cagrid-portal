@@ -4,8 +4,8 @@
 * Venue:	Teleconference
 * Attendees: 	1:00pm John Eisenschmidt, Joshua Phillips
 *               1:30pm John Eisenschmidt, Carolyn Klinger
-*               3:00pm John Eisenschmidt, Manav Kher, Joshua Phillips, Wei Lu, Chet Bochan, Larry Brehm
-*               3:15pm John Eisenschmidt, Manav Kher, Joshua Phillips, Larry Brehm
+*               3:00pm John Eisenschmidt, Manav Kher, Joshua Phillips, Wei Lu, Chet Bochan, Larry Behm
+*               3:15pm John Eisenschmidt, Manav Kher, Joshua Phillips, Larry Brem
 ****************************************************************************
 
 Agenda
