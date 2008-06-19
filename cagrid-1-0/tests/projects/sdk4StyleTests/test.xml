@@ -16,8 +16,8 @@
 
 	<!-- properties for caCORE SDK application's location -->
 	<!-- TODO: These will point to the SDK example VM -->
-	<property name="remote.sdk.host.name" value="http://kramer.bmi.ohio-state.edu" />
-	<property name="remote.sdk.host.port" value="8080" />
+	<property name="remote.sdk.host.name" value="http://sdkexamples.bmi.ohio-state.edu" />
+	<property name="remote.sdk.host.port" value="8040" />
 
 	
 	<target name="prepareClasspaths">
