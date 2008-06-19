@@ -221,8 +221,9 @@ public class DBImport_2_0_1_To_2_0_2 {
 				GridDataService dataService = (GridDataService) gridServiceMap
 						.get(queryInstanceData[6]);
 				if (dataService == null) {
-					throw new RuntimeException("missing data service");
-				}
+                    System.out.println("Could not find data service. Will not save query.");
+                    continue;
+                }
 				instance.setDataService(dataService);
 				try {
 					instance.setCreateTime(DATE_FORMAT
@@ -260,8 +261,9 @@ public class DBImport_2_0_1_To_2_0_2 {
 				GridDataService targetService = (GridDataService) gridServiceMap
 						.get(sharedQueryData[5]);
 				if (targetService == null) {
-					throw new RuntimeException("missing data service");
-				}
+                    System.out.println("Could not find target service. Will not save shared query.");
+                    continue;
+                }
 				sharedQuery.setTargetService(targetService);
 
 				UMLClass umlClass = null;
