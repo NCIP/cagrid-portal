@@ -4,13 +4,13 @@
 package gov.nci.nih.cagrid.tests.core.steps;
 
 import gov.nci.nih.cagrid.tests.core.GridCredential;
-import gov.nih.nci.cagrid.dorian.client.IdPAdministrationClient;
-import gov.nih.nci.cagrid.dorian.idp.bean.Application;
-import gov.nih.nci.cagrid.dorian.idp.bean.IdPUser;
-import gov.nih.nci.cagrid.dorian.idp.bean.IdPUserFilter;
-import gov.nih.nci.cagrid.dorian.idp.bean.IdPUserStatus;
 import gov.nih.nci.cagrid.testing.system.haste.Step;
 
+import org.cagrid.gaards.dorian.client.IdPAdministrationClient;
+import org.cagrid.gaards.dorian.idp.Application;
+import org.cagrid.gaards.dorian.idp.IdPUser;
+import org.cagrid.gaards.dorian.idp.IdPUserFilter;
+import org.cagrid.gaards.dorian.idp.IdPUserStatus;
 import org.globus.gsi.GlobusCredential;
 
 /**

@@ -3,7 +3,7 @@
  */
 package gov.nci.nih.cagrid.tests.core.steps;
 
-import gov.nih.nci.cagrid.dorian.stubs.types.PermissionDeniedFault;
+import org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault;
 
 /**
  * This step attempts to authenticate to dorian and insures that the

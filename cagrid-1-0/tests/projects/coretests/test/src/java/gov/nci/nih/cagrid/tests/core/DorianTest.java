@@ -17,7 +17,6 @@ import gov.nci.nih.cagrid.tests.core.steps.GlobusInstallSecurityDescriptorStep;
 import gov.nci.nih.cagrid.tests.core.steps.GlobusStartStep;
 import gov.nci.nih.cagrid.tests.core.util.GlobusHelper;
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.dorian.idp.bean.Application;
 import gov.nih.nci.cagrid.testing.system.haste.Story;
 
 import java.io.File;
@@ -29,6 +28,7 @@ import junit.framework.TestSuite;
 import junit.textui.TestRunner;
 
 import org.apache.axis.types.URI.MalformedURIException;
+import org.cagrid.gaards.dorian.idp.Application;
 
 /**
  * This is an integration test that tests some of the major functionality of

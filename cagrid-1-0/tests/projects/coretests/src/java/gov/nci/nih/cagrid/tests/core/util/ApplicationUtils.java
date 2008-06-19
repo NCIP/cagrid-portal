@@ -1,13 +1,14 @@
 package gov.nci.nih.cagrid.tests.core.util;
 
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.dorian.idp.bean.Application;
-import gov.nih.nci.cagrid.dorian.idp.bean.CountryCode;
-import gov.nih.nci.cagrid.dorian.idp.bean.StateCode;
 
 import java.io.File;
 
 import javax.xml.namespace.QName;
+
+import org.cagrid.gaards.dorian.idp.Application;
+import org.cagrid.gaards.dorian.idp.CountryCode;
+import org.cagrid.gaards.dorian.idp.StateCode;
 
 
 public class ApplicationUtils {

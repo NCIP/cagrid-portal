@@ -6,13 +6,13 @@ package gov.nci.nih.cagrid.tests.core.steps;
 import gov.nci.nih.cagrid.tests.core.Constants;
 import gov.nci.nih.cagrid.tests.core.GridCredential;
 import gov.nih.nci.cagrid.common.security.ProxyUtil;
-import gov.nih.nci.cagrid.dorian.client.IFSUserClient;
-import gov.nih.nci.cagrid.dorian.client.IdPUserClient;
-import gov.nih.nci.cagrid.dorian.idp.bean.BasicAuthCredential;
-import gov.nih.nci.cagrid.dorian.ifs.bean.ProxyLifetime;
 import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
 import gov.nih.nci.cagrid.testing.system.haste.Step;
 
+import org.cagrid.gaards.dorian.client.IFSUserClient;
+import org.cagrid.gaards.dorian.client.IdPUserClient;
+import org.cagrid.gaards.dorian.federation.ProxyLifetime;
+import org.cagrid.gaards.dorian.idp.BasicAuthCredential;
 import org.globus.gsi.GlobusCredential;
 
 

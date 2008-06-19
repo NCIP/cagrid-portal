@@ -21,9 +21,6 @@ import gov.nci.nih.cagrid.tests.core.steps.cds.GetDelegatedCredentialFailStep;
 import gov.nci.nih.cagrid.tests.core.steps.cds.GetDelegatedCredentialStep;
 import gov.nci.nih.cagrid.tests.core.steps.cds.SuspendDelegatedCredentialStep;
 import gov.nci.nih.cagrid.tests.core.util.GlobusHelper;
-import gov.nih.nci.cagrid.dorian.idp.bean.Application;
-import gov.nih.nci.cagrid.dorian.idp.bean.CountryCode;
-import gov.nih.nci.cagrid.dorian.idp.bean.StateCode;
 import gov.nih.nci.cagrid.testing.system.haste.Story;
 
 import java.io.File;
@@ -41,6 +38,9 @@ import org.cagrid.gaards.cds.common.DelegationStatus;
 import org.cagrid.gaards.cds.common.Errors;
 import org.cagrid.gaards.cds.common.ExpirationStatus;
 import org.cagrid.gaards.cds.common.ProxyLifetime;
+import org.cagrid.gaards.dorian.idp.Application;
+import org.cagrid.gaards.dorian.idp.CountryCode;
+import org.cagrid.gaards.dorian.idp.StateCode;
 
 public class DelegateCredentialTest extends Story {
 	private GlobusHelper globus;

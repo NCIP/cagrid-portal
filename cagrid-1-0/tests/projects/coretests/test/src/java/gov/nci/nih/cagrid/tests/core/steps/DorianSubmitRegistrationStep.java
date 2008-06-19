@@ -3,9 +3,10 @@
  */
 package gov.nci.nih.cagrid.tests.core.steps;
 
-import gov.nih.nci.cagrid.dorian.client.IdPRegistrationClient;
-import gov.nih.nci.cagrid.dorian.idp.bean.Application;
 import gov.nih.nci.cagrid.testing.system.haste.Step;
+
+import org.cagrid.gaards.dorian.client.IdPRegistrationClient;
+import org.cagrid.gaards.dorian.idp.Application;
 
 
 /**
