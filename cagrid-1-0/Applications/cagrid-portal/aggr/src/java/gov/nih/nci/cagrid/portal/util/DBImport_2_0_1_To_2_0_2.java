@@ -186,7 +186,7 @@ public class DBImport_2_0_1_To_2_0_2 {
 
 			List l = session.createQuery(
 					"from PortalUser where gridIdentity = :ident")
-					.setParameter("identi", userData[0]).list();
+					.setParameter("ident", userData[0]).list();
 			if (l.size() != 0) {
 				System.out.println("Skipping user " + userData[0]);
 				continue;
