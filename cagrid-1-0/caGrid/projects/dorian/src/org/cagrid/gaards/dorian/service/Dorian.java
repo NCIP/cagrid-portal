@@ -201,7 +201,7 @@ public class Dorian extends LoggingObject {
 		return identityProvider.getIdPCertificate();
 	}
 
-	public void changeIdPUserPassword(BasicAuthentication credential,
+	public void changeLocalUserPassword(BasicAuthentication credential,
 			String newPassword) throws DorianInternalFault,
 			PermissionDeniedFault, InvalidUserPropertyFault {
 		this.identityProvider.changePassword(credential, newPassword);
@@ -376,7 +376,7 @@ public class Dorian extends LoggingObject {
 		return ifs.renewHostCertificate(callerGridId, recordId);
 	}
 
-	public boolean doesIdPUserExist(String userId) throws DorianInternalFault {
+	public boolean doesLocalUserExist(String userId) throws DorianInternalFault {
 		return this.identityProvider.doesUserExist(userId);
 	}
 

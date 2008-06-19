@@ -14,8 +14,8 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
-import org.cagrid.gaards.dorian.client.IdPUserClient;
-import org.cagrid.gaards.dorian.idp.BasicAuthCredential;
+import org.cagrid.gaards.authentication.BasicAuthentication;
+import org.cagrid.gaards.dorian.client.LocalUserClient;
 import org.cagrid.gaards.ui.dorian.DorianLookAndFeel;
 import org.cagrid.gaards.ui.dorian.DorianServiceListComboBox;
 import org.cagrid.grape.ApplicationComponent;
@@ -352,8 +352,8 @@ public class ChangePasswordWindow extends ApplicationComponent {
 		Runner runner = new Runner() {
 			public void execute() {
 				try {
-					IdPUserClient client = new IdPUserClient(serviceUrl);
-					BasicAuthCredential cred = new BasicAuthCredential();
+					LocalUserClient client = new LocalUserClient(serviceUrl);
+					BasicAuthentication cred = new BasicAuthentication();
 					cred.setUserId(getUsername().getText());
 					cred.setPassword(new String(getPassword().getPassword()));
 					client.changePassword(cred, pass);

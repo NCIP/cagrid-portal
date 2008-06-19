@@ -3,6 +3,7 @@
  */
 package gov.nci.nih.cagrid.tests.core.steps;
 
+import org.cagrid.gaards.authentication.faults.InvalidCredentialFault;
 import org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault;
 
 /**
@@ -35,6 +36,6 @@ public class DorianAuthenticateFailStep extends DorianAuthenticateStep {
 			exception = e;
 		}
 		assertNotNull(exception);
-		assertTrue(exception instanceof PermissionDeniedFault);
+		assertTrue(exception instanceof InvalidCredentialFault);
 	}
 }

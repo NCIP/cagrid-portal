@@ -1,9 +1,5 @@
 package org.cagrid.gaards.dorian.client;
 
-import gov.nih.nci.cagrid.authentication.bean.Credential;
-import gov.nih.nci.cagrid.authentication.stubs.types.AuthenticationProviderFault;
-import gov.nih.nci.cagrid.authentication.stubs.types.InsufficientAttributeFault;
-import gov.nih.nci.cagrid.authentication.stubs.types.InvalidCredentialFault;
 import gov.nih.nci.cagrid.common.FaultHelper;
 import gov.nih.nci.cagrid.common.FaultUtil;
 import gov.nih.nci.cagrid.common.Utils;
@@ -12,12 +8,15 @@ import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
 import java.rmi.RemoteException;
 
 import org.apache.axis.types.URI.MalformedURIException;
+import org.cagrid.gaards.authentication.BasicAuthentication;
+import org.cagrid.gaards.authentication.Credential;
+import org.cagrid.gaards.authentication.faults.AuthenticationProviderFault;
+import org.cagrid.gaards.authentication.faults.CredentialNotSupportedFault;
+import org.cagrid.gaards.authentication.faults.InvalidCredentialFault;
 import org.cagrid.gaards.dorian.common.DorianFault;
-import org.cagrid.gaards.dorian.idp.BasicAuthCredential;
 import org.cagrid.gaards.dorian.stubs.types.DorianInternalFault;
 import org.cagrid.gaards.dorian.stubs.types.InvalidUserPropertyFault;
 import org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault;
-import org.cagrid.gaards.saml.encoding.SAMLUtils;
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
@@ -26,19 +25,19 @@ import org.cagrid.gaards.saml.encoding.SAMLUtils;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public class IdPUserClient {
+public class LocalUserClient {
 
 	private DorianClient client;
 
-	public IdPUserClient(String serviceURI) throws MalformedURIException,
+	public LocalUserClient(String serviceURI) throws MalformedURIException,
 			RemoteException {
 		client = new DorianClient(serviceURI);
 	}
 
-	public boolean doesIdPUserExist(String userId) throws DorianFault,
+	public boolean doesUserExist(String userId) throws DorianFault,
 			DorianInternalFault {
 		try {
-			return client.doesIdPUserExist(userId);
+			return client.doesLocalUserExist(userId);
 		} catch (DorianInternalFault f) {
 			throw f;
 		} catch (Exception e) {
@@ -53,15 +52,14 @@ public class IdPUserClient {
 	}
 
 	public SAMLAssertion authenticate(Credential cred) throws DorianFault,
-			InvalidCredentialFault, InsufficientAttributeFault,
-			AuthenticationProviderFault {
+			AuthenticationProviderFault, InvalidCredentialFault,
+			CredentialNotSupportedFault, AuthenticationProviderFault {
 
 		try {
-			String xml = client.authenticate(cred).getXml();
-			return SAMLUtils.stringToSAMLAssertion(xml);
+			return client.authenticateUser(cred);
 		} catch (InvalidCredentialFault f) {
 			throw f;
-		} catch (InsufficientAttributeFault f) {
+		} catch (CredentialNotSupportedFault f) {
 			throw f;
 		} catch (AuthenticationProviderFault f) {
 			throw f;
@@ -76,31 +74,11 @@ public class IdPUserClient {
 		}
 	}
 
-	public SAMLAssertion authenticate(BasicAuthCredential cred)
-			throws DorianFault, DorianInternalFault, PermissionDeniedFault {
-		try {
-			String xml = client.authenticateWithIdP(cred).getXml();
-			return SAMLUtils.stringToSAMLAssertion(xml);
-		} catch (DorianInternalFault f) {
-			throw f;
-		} catch (PermissionDeniedFault f) {
-			throw f;
-		} catch (Exception e) {
-			FaultUtil.printFault(e);
-			DorianFault fault = new DorianFault();
-			fault.setFaultString(Utils.getExceptionMessage(e));
-			FaultHelper helper = new FaultHelper(fault);
-			helper.addFaultCause(e);
-			fault = (DorianFault) helper.getFault();
-			throw fault;
-		}
-	}
-
-	public void changePassword(BasicAuthCredential cred, String newPassword)
+	public void changePassword(BasicAuthentication cred, String newPassword)
 			throws DorianFault, DorianInternalFault, PermissionDeniedFault,
 			InvalidUserPropertyFault {
 		try {
-			client.changeIdPUserPassword(cred, newPassword);
+			client.changeLocalUserPassword(cred, newPassword);
 		} catch (DorianInternalFault f) {
 			throw f;
 		} catch (PermissionDeniedFault f) {

@@ -11,6 +11,8 @@ import java.util.Iterator;
 import junit.framework.TestCase;
 
 import org.cagrid.gaards.authentication.BasicAuthentication;
+import org.cagrid.gaards.authentication.BasicAuthenticationWithOneTimePassword;
+import org.cagrid.gaards.authentication.faults.CredentialNotSupportedFault;
 import org.cagrid.gaards.authentication.faults.InvalidCredentialFault;
 import org.cagrid.gaards.dorian.ca.CertificateAuthority;
 import org.cagrid.gaards.dorian.common.SAMLConstants;
@@ -349,6 +351,44 @@ public class TestIdentityProvider extends TestCase {
 		}
 	}
 
+	public void testAuthenticateInvalidCredential() {
+		IdentityProvider idp = null;
+		try {
+			IdentityProviderProperties props = Utils
+					.getIdentityProviderProperties();
+			props.setRegistrationPolicy(new AutomaticRegistrationPolicy());
+			idp = new IdentityProvider(props, db, ca);
+			Application a = createApplication();
+			idp.register(a);
+			BasicAuthCredential cred = getAdminCreds();
+			IdPUserFilter uf = new IdPUserFilter();
+			uf.setUserId(a.getUserId());
+			IdPUser[] users = idp.findUsers(cred.getUserId(), uf);
+			assertEquals(1, users.length);
+			assertEquals(IdPUserStatus.Active, users[0].getStatus());
+			assertEquals(IdPUserRole.Non_Administrator, users[0].getRole());
+			BasicAuthenticationWithOneTimePassword c = new BasicAuthenticationWithOneTimePassword();
+			c.setUserId(a.getUserId());
+			c.setPassword("$W0rdD0ct0R$2");
+			c.setOneTimePassword("onetimepassword");
+			try {
+				idp.authenticate(c);
+				fail("Should not be able to authenticate with an credential that is not supported!!!");
+			} catch (CredentialNotSupportedFault f) {
+
+			}
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			assertTrue(false);
+		} finally {
+			try {
+				idp.clearDatabase();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
 	public void testChangePassword() {
 		IdentityProvider idp = null;
 		try {
@@ -635,7 +675,7 @@ public class TestIdentityProvider extends TestCase {
 		IdentityProvider idp = null;
 		try {
 			idp = Utils.getIdentityProvider();
-			
+
 			BasicAuthCredential cred = getAdminCreds();
 			int times = 3;
 			for (int i = 0; i < times; i++) {

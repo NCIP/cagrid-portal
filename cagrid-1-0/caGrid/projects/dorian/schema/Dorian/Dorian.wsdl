@@ -98,26 +98,6 @@
           <sequence />
         </complexType>
       </element>
-      <element name="AuthenticateWithIdPRequest">
-        <complexType>
-          <sequence>
-            <element name="cred">
-              <complexType>
-                <sequence>
-                  <element ref="ns0:BasicAuthCredential" minOccurs="1" maxOccurs="1" />
-                </sequence>
-              </complexType>
-            </element>
-          </sequence>
-        </complexType>
-      </element>
-      <element name="AuthenticateWithIdPResponse">
-        <complexType>
-          <sequence>
-            <element ref="ns4:SAMLAssertion" minOccurs="1" maxOccurs="1" />
-          </sequence>
-        </complexType>
-      </element>
       <element name="CreateProxyRequest">
         <complexType>
           <sequence>
@@ -480,18 +460,37 @@
           <sequence />
         </complexType>
       </element>
-      <element name="DoesIdPUserExistRequest">
+      <element name="DoesLocalUserExistRequest">
         <complexType>
           <sequence>
             <element name="userId" type="xs:string" minOccurs="1" maxOccurs="1" />
           </sequence>
         </complexType>
       </element>
-      <element name="DoesIdPUserExistResponse">
+      <element name="DoesLocalUserExistResponse">
         <complexType>
           <sequence>
             <element name="response" type="xs:boolean" minOccurs="1" maxOccurs="1" />
           </sequence>
+        </complexType>
+      </element>
+      <element name="ChangeLocalUserPasswordRequest">
+        <complexType>
+          <sequence>
+            <element name="credential">
+              <complexType>
+                <sequence>
+                  <element ref="ns7:BasicAuthentication" minOccurs="1" maxOccurs="1" />
+                </sequence>
+              </complexType>
+            </element>
+            <element name="newPassword" type="xs:string" minOccurs="1" maxOccurs="1" />
+          </sequence>
+        </complexType>
+      </element>
+      <element name="ChangeLocalUserPasswordResponse">
+        <complexType>
+          <sequence />
         </complexType>
       </element>
       <element name="DorianResourceProperties">
@@ -528,12 +527,6 @@
   </message>
   <message name="RemoveIdPUserResponse">
     <part name="parameters" element="tns:RemoveIdPUserResponse" />
-  </message>
-  <message name="AuthenticateWithIdPRequest">
-    <part name="parameters" element="tns:AuthenticateWithIdPRequest" />
-  </message>
-  <message name="AuthenticateWithIdPResponse">
-    <part name="parameters" element="tns:AuthenticateWithIdPResponse" />
   </message>
   <message name="CreateProxyRequest">
     <part name="parameters" element="tns:CreateProxyRequest" />
@@ -661,11 +654,17 @@
   <message name="ChangeIdPUserPasswordResponse">
     <part name="parameters" element="tns:ChangeIdPUserPasswordResponse" />
   </message>
-  <message name="DoesIdPUserExistRequest">
-    <part name="parameters" element="tns:DoesIdPUserExistRequest" />
+  <message name="DoesLocalUserExistRequest">
+    <part name="parameters" element="tns:DoesLocalUserExistRequest" />
   </message>
-  <message name="DoesIdPUserExistResponse">
-    <part name="parameters" element="tns:DoesIdPUserExistResponse" />
+  <message name="DoesLocalUserExistResponse">
+    <part name="parameters" element="tns:DoesLocalUserExistResponse" />
+  </message>
+  <message name="ChangeLocalUserPasswordRequest">
+    <part name="parameters" element="tns:ChangeLocalUserPasswordRequest" />
+  </message>
+  <message name="ChangeLocalUserPasswordResponse">
+    <part name="parameters" element="tns:ChangeLocalUserPasswordResponse" />
   </message>
   <message name="DorianInternalFaultFaultMessage">
     <part name="fault" element="ns10:DorianInternalFault" />
@@ -728,12 +727,6 @@
     <operation name="removeIdPUser">
       <input message="tns:RemoveIdPUserRequest" wsa:Action="http://cagrid.nci.nih.gov/Dorian/RemoveIdPUserRequest" />
       <output message="tns:RemoveIdPUserResponse" wsa:Action="http://cagrid.nci.nih.gov/Dorian/RemoveIdPUserResponse" />
-      <fault name="DorianInternalFault" message="tns:DorianInternalFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/Dorian/DorianInternalFaultFaultMessage" />
-      <fault name="PermissionDeniedFault" message="tns:PermissionDeniedFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/Dorian/PermissionDeniedFaultFaultMessage" />
-    </operation>
-    <operation name="authenticateWithIdP">
-      <input message="tns:AuthenticateWithIdPRequest" wsa:Action="http://cagrid.nci.nih.gov/Dorian/AuthenticateWithIdPRequest" />
-      <output message="tns:AuthenticateWithIdPResponse" wsa:Action="http://cagrid.nci.nih.gov/Dorian/AuthenticateWithIdPResponse" />
       <fault name="DorianInternalFault" message="tns:DorianInternalFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/Dorian/DorianInternalFaultFaultMessage" />
       <fault name="PermissionDeniedFault" message="tns:PermissionDeniedFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/Dorian/PermissionDeniedFaultFaultMessage" />
     </operation>
@@ -877,10 +870,17 @@
       <fault name="PermissionDeniedFault" message="tns:PermissionDeniedFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/Dorian/PermissionDeniedFaultFaultMessage" />
       <fault name="InvalidUserPropertyFault" message="tns:InvalidUserPropertyFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/Dorian/InvalidUserPropertyFaultFaultMessage" />
     </operation>
-    <operation name="doesIdPUserExist">
-      <input message="tns:DoesIdPUserExistRequest" wsa:Action="http://cagrid.nci.nih.gov/Dorian/DoesIdPUserExistRequest" />
-      <output message="tns:DoesIdPUserExistResponse" wsa:Action="http://cagrid.nci.nih.gov/Dorian/DoesIdPUserExistResponse" />
+    <operation name="doesLocalUserExist">
+      <input message="tns:DoesLocalUserExistRequest" wsa:Action="http://cagrid.nci.nih.gov/Dorian/DoesLocalUserExistRequest" />
+      <output message="tns:DoesLocalUserExistResponse" wsa:Action="http://cagrid.nci.nih.gov/Dorian/DoesLocalUserExistResponse" />
       <fault name="DorianInternalFault" message="tns:DorianInternalFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/Dorian/DorianInternalFaultFaultMessage" />
+    </operation>
+    <operation name="changeLocalUserPassword">
+      <input message="tns:ChangeLocalUserPasswordRequest" wsa:Action="http://cagrid.nci.nih.gov/Dorian/ChangeLocalUserPasswordRequest" />
+      <output message="tns:ChangeLocalUserPasswordResponse" wsa:Action="http://cagrid.nci.nih.gov/Dorian/ChangeLocalUserPasswordResponse" />
+      <fault name="DorianInternalFault" message="tns:DorianInternalFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/Dorian/DorianInternalFaultFaultMessage" />
+      <fault name="InvalidUserPropertyFault" message="tns:InvalidUserPropertyFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/Dorian/InvalidUserPropertyFaultFaultMessage" />
+      <fault name="PermissionDeniedFault" message="tns:PermissionDeniedFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/Dorian/PermissionDeniedFaultFaultMessage" />
     </operation>
     <operation name="getServiceSecurityMetadata">
       <input message="wns0:GetServiceSecurityMetadataRequest" wsa:Action="http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity/GetServiceSecurityMetadataRequest" />

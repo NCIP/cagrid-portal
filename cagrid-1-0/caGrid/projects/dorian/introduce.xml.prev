@@ -190,197 +190,179 @@
       <ns4:Exception description="Client does not have permission to perform the request." name="PermissionDeniedFault" qname="ns19:PermissionDeniedFault" xmlns:ns19="http://cagrid.nci.nih.gov/Dorian/types"/>
      </ns4:Exceptions>
     </ns4:Method>
-    <ns4:Method description="Authenticate with the Dorian IdP." isImported="false" isProvided="false" name="authenticateWithIdP" xsi:type="ns4:MethodType">
-     <ns4:Inputs>
-      <ns4:Input qName="ns20:BasicAuthCredential" isArray="false" name="cred" xmlns:ns20="http://cagrid.nci.nih.gov/1/dorian-idp"/>
-     </ns4:Inputs>
-     <ns4:Output qName="ns21:SAMLAssertion" isArray="false" xmlns:ns21="http://cagrid.nci.nih.gov/1/dorian-common"/>
-     <ns4:Exceptions>
-      <ns4:Exception description="An unexpected internal Dorian error." name="DorianInternalFault" qname="ns22:DorianInternalFault" xmlns:ns22="http://cagrid.nci.nih.gov/Dorian/types"/>
-      <ns4:Exception description="Client does not have permission to perform the request." name="PermissionDeniedFault" qname="ns23:PermissionDeniedFault" xmlns:ns23="http://cagrid.nci.nih.gov/Dorian/types"/>
-     </ns4:Exceptions>
-     <ns24:MethodSecurity xsi:type="ns24:MethodSecurity" xmlns:ns24="gme://gov.nih.nci.cagrid.introduce/1/Security">
-      <ns24:SecuritySetting xsi:type="ns24:SecuritySetting">Custom</ns24:SecuritySetting>
-      <ns24:TransportLevelSecurity xsi:type="ns24:TransportLevelSecurity">
-       <ns24:CommunicationMethod xsi:type="ns24:CommunicationMethod">Privacy</ns24:CommunicationMethod>
-      </ns24:TransportLevelSecurity>
-      <ns24:RunAsMode xsi:type="ns24:RunAsMode">System</ns24:RunAsMode>
-      <ns24:AnonymousClients xsi:type="ns24:AnonymousCommunication">Yes</ns24:AnonymousClients>
-     </ns24:MethodSecurity>
-    </ns4:Method>
     <ns4:Method description="Create a proxy certificate." isImported="false" isProvided="false" name="createProxy" xsi:type="ns4:MethodType">
      <ns4:Inputs>
-      <ns4:Input qName="ns25:SAMLAssertion" isArray="false" name="saml" xmlns:ns25="http://cagrid.nci.nih.gov/1/dorian-common"/>
-      <ns4:Input qName="ns26:PublicKey" isArray="false" name="publicKey" xmlns:ns26="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
-      <ns4:Input qName="ns27:ProxyLifetime" isArray="false" name="lifetime" xmlns:ns27="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
-      <ns4:Input qName="ns28:DelegationPathLength" isArray="false" name="delegation" xmlns:ns28="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
+      <ns4:Input qName="ns20:SAMLAssertion" isArray="false" name="saml" xmlns:ns20="http://cagrid.nci.nih.gov/1/dorian-common"/>
+      <ns4:Input qName="ns21:PublicKey" isArray="false" name="publicKey" xmlns:ns21="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
+      <ns4:Input qName="ns22:ProxyLifetime" isArray="false" name="lifetime" xmlns:ns22="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
+      <ns4:Input qName="ns23:DelegationPathLength" isArray="false" name="delegation" xmlns:ns23="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
      </ns4:Inputs>
-     <ns4:Output qName="ns29:X509Certificate" isArray="true" xmlns:ns29="http://cagrid.nci.nih.gov/1/dorian-common"/>
+     <ns4:Output qName="ns24:X509Certificate" isArray="true" xmlns:ns24="http://cagrid.nci.nih.gov/1/dorian-common"/>
      <ns4:Exceptions>
-      <ns4:Exception description="An unexpected internal Dorian error." name="DorianInternalFault" qname="ns30:DorianInternalFault" xmlns:ns30="http://cagrid.nci.nih.gov/Dorian/types"/>
-      <ns4:Exception description="Invalid SAML Assertions provided." name="InvalidAssertionFault" qname="ns31:InvalidAssertionFault" xmlns:ns31="http://cagrid.nci.nih.gov/Dorian/types"/>
-      <ns4:Exception description="Invalid proxy error." name="InvalidProxyFault" qname="ns32:InvalidProxyFault" xmlns:ns32="http://cagrid.nci.nih.gov/Dorian/types"/>
-      <ns4:Exception description="The IdP's user policy reported an error." name="UserPolicyFault" qname="ns33:UserPolicyFault" xmlns:ns33="http://cagrid.nci.nih.gov/Dorian/types"/>
-      <ns4:Exception description="Client does not have permission to perform the request." name="PermissionDeniedFault" qname="ns34:PermissionDeniedFault" xmlns:ns34="http://cagrid.nci.nih.gov/Dorian/types"/>
+      <ns4:Exception description="An unexpected internal Dorian error." name="DorianInternalFault" qname="ns25:DorianInternalFault" xmlns:ns25="http://cagrid.nci.nih.gov/Dorian/types"/>
+      <ns4:Exception description="Invalid SAML Assertions provided." name="InvalidAssertionFault" qname="ns26:InvalidAssertionFault" xmlns:ns26="http://cagrid.nci.nih.gov/Dorian/types"/>
+      <ns4:Exception description="Invalid proxy error." name="InvalidProxyFault" qname="ns27:InvalidProxyFault" xmlns:ns27="http://cagrid.nci.nih.gov/Dorian/types"/>
+      <ns4:Exception description="The IdP's user policy reported an error." name="UserPolicyFault" qname="ns28:UserPolicyFault" xmlns:ns28="http://cagrid.nci.nih.gov/Dorian/types"/>
+      <ns4:Exception description="Client does not have permission to perform the request." name="PermissionDeniedFault" qname="ns29:PermissionDeniedFault" xmlns:ns29="http://cagrid.nci.nih.gov/Dorian/types"/>
      </ns4:Exceptions>
-     <ns35:MethodSecurity xsi:type="ns35:MethodSecurity" xmlns:ns35="gme://gov.nih.nci.cagrid.introduce/1/Security">
-      <ns35:SecuritySetting xsi:type="ns35:SecuritySetting">Custom</ns35:SecuritySetting>
-      <ns35:TransportLevelSecurity xsi:type="ns35:TransportLevelSecurity">
-       <ns35:CommunicationMethod xsi:type="ns35:CommunicationMethod">Privacy</ns35:CommunicationMethod>
-      </ns35:TransportLevelSecurity>
-      <ns35:RunAsMode xsi:type="ns35:RunAsMode">System</ns35:RunAsMode>
-      <ns35:AnonymousClients xsi:type="ns35:AnonymousCommunication">Yes</ns35:AnonymousClients>
-      <ns35:MethodAuthorization xsi:type="ns35:MethodAuthorization">
-       <ns35:NoAuthorization xsi:type="ns35:NoAuthorization"/>
-      </ns35:MethodAuthorization>
-     </ns35:MethodSecurity>
+     <ns30:MethodSecurity xsi:type="ns30:MethodSecurity" xmlns:ns30="gme://gov.nih.nci.cagrid.introduce/1/Security">
+      <ns30:SecuritySetting xsi:type="ns30:SecuritySetting">Custom</ns30:SecuritySetting>
+      <ns30:TransportLevelSecurity xsi:type="ns30:TransportLevelSecurity">
+       <ns30:CommunicationMethod xsi:type="ns30:CommunicationMethod">Privacy</ns30:CommunicationMethod>
+      </ns30:TransportLevelSecurity>
+      <ns30:RunAsMode xsi:type="ns30:RunAsMode">System</ns30:RunAsMode>
+      <ns30:AnonymousClients xsi:type="ns30:AnonymousCommunication">Yes</ns30:AnonymousClients>
+      <ns30:MethodAuthorization xsi:type="ns30:MethodAuthorization">
+       <ns30:NoAuthorization xsi:type="ns30:NoAuthorization"/>
+      </ns30:MethodAuthorization>
+     </ns30:MethodSecurity>
     </ns4:Method>
     <ns4:Method description="Obtains the Dorian CA certificate." isImported="false" isProvided="false" name="getCACertificate" xsi:type="ns4:MethodType">
      <ns4:Inputs/>
-     <ns4:Output qName="ns36:X509Certificate" isArray="false" xmlns:ns36="http://cagrid.nci.nih.gov/1/dorian-common"/>
+     <ns4:Output qName="ns31:X509Certificate" isArray="false" xmlns:ns31="http://cagrid.nci.nih.gov/1/dorian-common"/>
      <ns4:Exceptions>
-      <ns4:Exception description="An unexpected internal Dorian error." name="DorianInternalFault" qname="ns37:DorianInternalFault" xmlns:ns37="http://cagrid.nci.nih.gov/Dorian/types"/>
+      <ns4:Exception description="An unexpected internal Dorian error." name="DorianInternalFault" qname="ns32:DorianInternalFault" xmlns:ns32="http://cagrid.nci.nih.gov/Dorian/types"/>
      </ns4:Exceptions>
-     <ns38:MethodSecurity xsi:type="ns38:MethodSecurity" xmlns:ns38="gme://gov.nih.nci.cagrid.introduce/1/Security">
-      <ns38:SecuritySetting xsi:type="ns38:SecuritySetting">Custom</ns38:SecuritySetting>
-      <ns38:TransportLevelSecurity xsi:type="ns38:TransportLevelSecurity">
-       <ns38:CommunicationMethod xsi:type="ns38:CommunicationMethod">Privacy</ns38:CommunicationMethod>
-      </ns38:TransportLevelSecurity>
-      <ns38:RunAsMode xsi:type="ns38:RunAsMode">System</ns38:RunAsMode>
-      <ns38:AnonymousClients xsi:type="ns38:AnonymousCommunication">Yes</ns38:AnonymousClients>
-     </ns38:MethodSecurity>
+     <ns33:MethodSecurity xsi:type="ns33:MethodSecurity" xmlns:ns33="gme://gov.nih.nci.cagrid.introduce/1/Security">
+      <ns33:SecuritySetting xsi:type="ns33:SecuritySetting">Custom</ns33:SecuritySetting>
+      <ns33:TransportLevelSecurity xsi:type="ns33:TransportLevelSecurity">
+       <ns33:CommunicationMethod xsi:type="ns33:CommunicationMethod">Privacy</ns33:CommunicationMethod>
+      </ns33:TransportLevelSecurity>
+      <ns33:RunAsMode xsi:type="ns33:RunAsMode">System</ns33:RunAsMode>
+      <ns33:AnonymousClients xsi:type="ns33:AnonymousCommunication">Yes</ns33:AnonymousClients>
+     </ns33:MethodSecurity>
     </ns4:Method>
     <ns4:Method description="Gets a list of the IdPs trusted by Dorian." isImported="false" isProvided="false" name="getTrustedIdPs" xsi:type="ns4:MethodType">
      <ns4:Inputs/>
-     <ns4:Output qName="ns39:TrustedIdP" isArray="true" xmlns:ns39="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
+     <ns4:Output qName="ns34:TrustedIdP" isArray="true" xmlns:ns34="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
      <ns4:Exceptions>
-      <ns4:Exception description="An unexpected internal Dorian error." name="DorianInternalFault" qname="ns40:DorianInternalFault" xmlns:ns40="http://cagrid.nci.nih.gov/Dorian/types"/>
-      <ns4:Exception description="Client does not have permission to perform the request." name="PermissionDeniedFault" qname="ns41:PermissionDeniedFault" xmlns:ns41="http://cagrid.nci.nih.gov/Dorian/types"/>
+      <ns4:Exception description="An unexpected internal Dorian error." name="DorianInternalFault" qname="ns35:DorianInternalFault" xmlns:ns35="http://cagrid.nci.nih.gov/Dorian/types"/>
+      <ns4:Exception description="Client does not have permission to perform the request." name="PermissionDeniedFault" qname="ns36:PermissionDeniedFault" xmlns:ns36="http://cagrid.nci.nih.gov/Dorian/types"/>
      </ns4:Exceptions>
     </ns4:Method>
     <ns4:Method description="Add a Trusted Identity Provider to Dorian." isImported="false" isProvided="false" name="addTrustedIdP" xsi:type="ns4:MethodType">
      <ns4:Inputs>
-      <ns4:Input qName="ns42:TrustedIdP" isArray="false" name="idp" xmlns:ns42="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
+      <ns4:Input qName="ns37:TrustedIdP" isArray="false" name="idp" xmlns:ns37="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
      </ns4:Inputs>
-     <ns4:Output qName="ns43:TrustedIdP" isArray="false" xmlns:ns43="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
+     <ns4:Output qName="ns38:TrustedIdP" isArray="false" xmlns:ns38="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
      <ns4:Exceptions>
-      <ns4:Exception description="An unexpected internal Dorian error." name="DorianInternalFault" qname="ns44:DorianInternalFault" xmlns:ns44="http://cagrid.nci.nih.gov/Dorian/types"/>
-      <ns4:Exception description="Invalid Trusted Identity Provider specified." name="InvalidTrustedIdPFault" qname="ns45:InvalidTrustedIdPFault" xmlns:ns45="http://cagrid.nci.nih.gov/Dorian/types"/>
-      <ns4:Exception description="Client does not have permission to perform the request." name="PermissionDeniedFault" qname="ns46:PermissionDeniedFault" xmlns:ns46="http://cagrid.nci.nih.gov/Dorian/types"/>
+      <ns4:Exception description="An unexpected internal Dorian error." name="DorianInternalFault" qname="ns39:DorianInternalFault" xmlns:ns39="http://cagrid.nci.nih.gov/Dorian/types"/>
+      <ns4:Exception description="Invalid Trusted Identity Provider specified." name="InvalidTrustedIdPFault" qname="ns40:InvalidTrustedIdPFault" xmlns:ns40="http://cagrid.nci.nih.gov/Dorian/types"/>
+      <ns4:Exception description="Client does not have permission to perform the request." name="PermissionDeniedFault" qname="ns41:PermissionDeniedFault" xmlns:ns41="http://cagrid.nci.nih.gov/Dorian/types"/>
      </ns4:Exceptions>
     </ns4:Method>
     <ns4:Method description="Update the information for a Trusted IdP." isImported="false" isProvided="false" name="updateTrustedIdP" xsi:type="ns4:MethodType">
      <ns4:Inputs>
-      <ns4:Input qName="ns47:TrustedIdP" isArray="false" name="trustedIdP" xmlns:ns47="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
+      <ns4:Input qName="ns42:TrustedIdP" isArray="false" name="trustedIdP" xmlns:ns42="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
      </ns4:Inputs>
      <ns4:Output qName="void" isArray="false"/>
      <ns4:Exceptions>
-      <ns4:Exception description="An unexpected internal Dorian error." name="DorianInternalFault" qname="ns48:DorianInternalFault" xmlns:ns48="http://cagrid.nci.nih.gov/Dorian/types"/>
-      <ns4:Exception description="Invalid Trusted Identity Provider specified." name="InvalidTrustedIdPFault" qname="ns49:InvalidTrustedIdPFault" xmlns:ns49="http://cagrid.nci.nih.gov/Dorian/types"/>
-      <ns4:Exception description="Client does not have permission to perform the request." name="PermissionDeniedFault" qname="ns50:PermissionDeniedFault" xmlns:ns50="http://cagrid.nci.nih.gov/Dorian/types"/>
+      <ns4:Exception description="An unexpected internal Dorian error." name="DorianInternalFault" qname="ns43:DorianInternalFault" xmlns:ns43="http://cagrid.nci.nih.gov/Dorian/types"/>
+      <ns4:Exception description="Invalid Trusted Identity Provider specified." name="InvalidTrustedIdPFault" qname="ns44:InvalidTrustedIdPFault" xmlns:ns44="http://cagrid.nci.nih.gov/Dorian/types"/>
+      <ns4:Exception description="Client does not have permission to perform the request." name="PermissionDeniedFault" qname="ns45:PermissionDeniedFault" xmlns:ns45="http://cagrid.nci.nih.gov/Dorian/types"/>
      </ns4:Exceptions>
     </ns4:Method>
     <ns4:Method description="Remove a TrustedIdP." isImported="false" isProvided="false" name="removeTrustedIdP" xsi:type="ns4:MethodType">
      <ns4:Inputs>
-      <ns4:Input qName="ns51:TrustedIdP" isArray="false" name="trustedIdP" xmlns:ns51="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
+      <ns4:Input qName="ns46:TrustedIdP" isArray="false" name="trustedIdP" xmlns:ns46="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
      </ns4:Inputs>
      <ns4:Output qName="void" isArray="false"/>
      <ns4:Exceptions>
-      <ns4:Exception description="An unexpected internal Dorian error." name="DorianInternalFault" qname="ns52:DorianInternalFault" xmlns:ns52="http://cagrid.nci.nih.gov/Dorian/types"/>
-      <ns4:Exception description="Invalid Trusted Identity Provider specified." name="InvalidTrustedIdPFault" qname="ns53:InvalidTrustedIdPFault" xmlns:ns53="http://cagrid.nci.nih.gov/Dorian/types"/>
-      <ns4:Exception description="Client does not have permission to perform the request." name="PermissionDeniedFault" qname="ns54:PermissionDeniedFault" xmlns:ns54="http://cagrid.nci.nih.gov/Dorian/types"/>
+      <ns4:Exception description="An unexpected internal Dorian error." name="DorianInternalFault" qname="ns47:DorianInternalFault" xmlns:ns47="http://cagrid.nci.nih.gov/Dorian/types"/>
+      <ns4:Exception description="Invalid Trusted Identity Provider specified." name="InvalidTrustedIdPFault" qname="ns48:InvalidTrustedIdPFault" xmlns:ns48="http://cagrid.nci.nih.gov/Dorian/types"/>
+      <ns4:Exception description="Client does not have permission to perform the request." name="PermissionDeniedFault" qname="ns49:PermissionDeniedFault" xmlns:ns49="http://cagrid.nci.nih.gov/Dorian/types"/>
      </ns4:Exceptions>
     </ns4:Method>
     <ns4:Method description="Obtain a list of grid users accounts within the Dorian, meeting a specified search criteria." isImported="false" isProvided="false" name="findIFSUsers" xsi:type="ns4:MethodType">
      <ns4:Inputs>
-      <ns4:Input qName="ns55:IFSUserFilter" isArray="false" name="filter" xmlns:ns55="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
+      <ns4:Input qName="ns50:IFSUserFilter" isArray="false" name="filter" xmlns:ns50="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
      </ns4:Inputs>
-     <ns4:Output qName="ns56:IFSUser" isArray="true" xmlns:ns56="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
+     <ns4:Output qName="ns51:IFSUser" isArray="true" xmlns:ns51="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
      <ns4:Exceptions>
-      <ns4:Exception description="An unexpected internal Dorian error." name="DorianInternalFault" qname="ns57:DorianInternalFault" xmlns:ns57="http://cagrid.nci.nih.gov/Dorian/types"/>
-      <ns4:Exception description="Client does not have permission to perform the request." name="PermissionDeniedFault" qname="ns58:PermissionDeniedFault" xmlns:ns58="http://cagrid.nci.nih.gov/Dorian/types"/>
+      <ns4:Exception description="An unexpected internal Dorian error." name="DorianInternalFault" qname="ns52:DorianInternalFault" xmlns:ns52="http://cagrid.nci.nih.gov/Dorian/types"/>
+      <ns4:Exception description="Client does not have permission to perform the request." name="PermissionDeniedFault" qname="ns53:PermissionDeniedFault" xmlns:ns53="http://cagrid.nci.nih.gov/Dorian/types"/>
      </ns4:Exceptions>
     </ns4:Method>
     <ns4:Method description="" isImported="false" isProvided="false" name="updateIFSUser" xsi:type="ns4:MethodType">
      <ns4:Inputs>
-      <ns4:Input qName="ns59:IFSUser" isArray="false" name="user" xmlns:ns59="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
+      <ns4:Input qName="ns54:IFSUser" isArray="false" name="user" xmlns:ns54="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
      </ns4:Inputs>
      <ns4:Output qName="void" isArray="false"/>
      <ns4:Exceptions>
-      <ns4:Exception description="An unexpected internal Dorian error." name="DorianInternalFault" qname="ns60:DorianInternalFault" xmlns:ns60="http://cagrid.nci.nih.gov/Dorian/types"/>
-      <ns4:Exception description="Invalid user specified." name="InvalidUserFault" qname="ns61:InvalidUserFault" xmlns:ns61="http://cagrid.nci.nih.gov/Dorian/types"/>
-      <ns4:Exception description="Client does not have permission to perform the request." name="PermissionDeniedFault" qname="ns62:PermissionDeniedFault" xmlns:ns62="http://cagrid.nci.nih.gov/Dorian/types"/>
+      <ns4:Exception description="An unexpected internal Dorian error." name="DorianInternalFault" qname="ns55:DorianInternalFault" xmlns:ns55="http://cagrid.nci.nih.gov/Dorian/types"/>
+      <ns4:Exception description="Invalid user specified." name="InvalidUserFault" qname="ns56:InvalidUserFault" xmlns:ns56="http://cagrid.nci.nih.gov/Dorian/types"/>
+      <ns4:Exception description="Client does not have permission to perform the request." name="PermissionDeniedFault" qname="ns57:PermissionDeniedFault" xmlns:ns57="http://cagrid.nci.nih.gov/Dorian/types"/>
      </ns4:Exceptions>
     </ns4:Method>
     <ns4:Method description="Removes a grid user account." isImported="false" isProvided="false" name="removeIFSUser" xsi:type="ns4:MethodType">
      <ns4:Inputs>
-      <ns4:Input qName="ns63:IFSUser" isArray="false" name="user" xmlns:ns63="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
+      <ns4:Input qName="ns58:IFSUser" isArray="false" name="user" xmlns:ns58="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
      </ns4:Inputs>
      <ns4:Output qName="void" isArray="false"/>
+     <ns4:Exceptions>
+      <ns4:Exception description="An unexpected internal Dorian error." name="DorianInternalFault" qname="ns59:DorianInternalFault" xmlns:ns59="http://cagrid.nci.nih.gov/Dorian/types"/>
+      <ns4:Exception description="Invalid user specified." name="InvalidUserFault" qname="ns60:InvalidUserFault" xmlns:ns60="http://cagrid.nci.nih.gov/Dorian/types"/>
+      <ns4:Exception description="Client does not have permission to perform the request." name="PermissionDeniedFault" qname="ns61:PermissionDeniedFault" xmlns:ns61="http://cagrid.nci.nih.gov/Dorian/types"/>
+     </ns4:Exceptions>
+    </ns4:Method>
+    <ns4:Method description="Renews a grid user's long term credentials." isImported="false" isProvided="false" name="renewIFSUserCredentials" xsi:type="ns4:MethodType">
+     <ns4:Inputs>
+      <ns4:Input qName="ns62:IFSUser" isArray="false" name="user" xmlns:ns62="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
+     </ns4:Inputs>
+     <ns4:Output qName="ns63:IFSUser" isArray="false" xmlns:ns63="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
      <ns4:Exceptions>
       <ns4:Exception description="An unexpected internal Dorian error." name="DorianInternalFault" qname="ns64:DorianInternalFault" xmlns:ns64="http://cagrid.nci.nih.gov/Dorian/types"/>
       <ns4:Exception description="Invalid user specified." name="InvalidUserFault" qname="ns65:InvalidUserFault" xmlns:ns65="http://cagrid.nci.nih.gov/Dorian/types"/>
       <ns4:Exception description="Client does not have permission to perform the request." name="PermissionDeniedFault" qname="ns66:PermissionDeniedFault" xmlns:ns66="http://cagrid.nci.nih.gov/Dorian/types"/>
      </ns4:Exceptions>
     </ns4:Method>
-    <ns4:Method description="Renews a grid user's long term credentials." isImported="false" isProvided="false" name="renewIFSUserCredentials" xsi:type="ns4:MethodType">
-     <ns4:Inputs>
-      <ns4:Input qName="ns67:IFSUser" isArray="false" name="user" xmlns:ns67="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
-     </ns4:Inputs>
-     <ns4:Output qName="ns68:IFSUser" isArray="false" xmlns:ns68="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
-     <ns4:Exceptions>
-      <ns4:Exception description="An unexpected internal Dorian error." name="DorianInternalFault" qname="ns69:DorianInternalFault" xmlns:ns69="http://cagrid.nci.nih.gov/Dorian/types"/>
-      <ns4:Exception description="Invalid user specified." name="InvalidUserFault" qname="ns70:InvalidUserFault" xmlns:ns70="http://cagrid.nci.nih.gov/Dorian/types"/>
-      <ns4:Exception description="Client does not have permission to perform the request." name="PermissionDeniedFault" qname="ns71:PermissionDeniedFault" xmlns:ns71="http://cagrid.nci.nih.gov/Dorian/types"/>
-     </ns4:Exceptions>
-    </ns4:Method>
     <ns4:Method description="Get a list of the Trusted IdP user policies supported by Dorian." isImported="false" isProvided="false" name="getIFSUserPolicies" xsi:type="ns4:MethodType">
      <ns4:Inputs/>
-     <ns4:Output qName="ns72:IFSUserPolicy" isArray="true" xmlns:ns72="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
+     <ns4:Output qName="ns67:IFSUserPolicy" isArray="true" xmlns:ns67="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
      <ns4:Exceptions>
-      <ns4:Exception description="An unexpected internal Dorian error." name="DorianInternalFault" qname="ns73:DorianInternalFault" xmlns:ns73="http://cagrid.nci.nih.gov/Dorian/types"/>
-      <ns4:Exception description="Client does not have permission to perform the request." name="PermissionDeniedFault" qname="ns74:PermissionDeniedFault" xmlns:ns74="http://cagrid.nci.nih.gov/Dorian/types"/>
+      <ns4:Exception description="An unexpected internal Dorian error." name="DorianInternalFault" qname="ns68:DorianInternalFault" xmlns:ns68="http://cagrid.nci.nih.gov/Dorian/types"/>
+      <ns4:Exception description="Client does not have permission to perform the request." name="PermissionDeniedFault" qname="ns69:PermissionDeniedFault" xmlns:ns69="http://cagrid.nci.nih.gov/Dorian/types"/>
      </ns4:Exceptions>
     </ns4:Method>
     <ns4:Method description="Authentication Service interface for authenticating with the Dorian IdP." isImported="true" isProvided="false" name="authenticate" xsi:type="ns4:MethodType">
      <ns4:Inputs>
-      <ns4:Input qName="ns75:Credential" isArray="false" name="credential" xmlns:ns75="http://cagrid.nci.nih.gov/1/authentication-service"/>
+      <ns4:Input qName="ns70:Credential" isArray="false" name="credential" xmlns:ns70="http://cagrid.nci.nih.gov/1/authentication-service"/>
      </ns4:Inputs>
-     <ns4:Output qName="ns76:SAMLAssertion" isArray="false" xmlns:ns76="http://cagrid.nci.nih.gov/1/authentication-service"/>
+     <ns4:Output qName="ns71:SAMLAssertion" isArray="false" xmlns:ns71="http://cagrid.nci.nih.gov/1/authentication-service"/>
      <ns4:Exceptions>
-      <ns4:Exception description="An unexpected internal Dorian error." name="InvalidCredentialFault" qname="ns77:InvalidCredentialFault" xmlns:ns77="http://cagrid.nci.nih.gov/AuthenticationService/types"/>
-      <ns4:Exception description="The DorianIdP could obtain the attributes needed to issue a valid SAML assertion." name="InsufficientAttributeFault" qname="ns78:InsufficientAttributeFault" xmlns:ns78="http://cagrid.nci.nih.gov/AuthenticationService/types"/>
-      <ns4:Exception description="An error occurred in authenticating." name="AuthenticationProviderFault" qname="ns79:AuthenticationProviderFault" xmlns:ns79="http://cagrid.nci.nih.gov/AuthenticationService/types"/>
+      <ns4:Exception description="An unexpected internal Dorian error." name="InvalidCredentialFault" qname="ns72:InvalidCredentialFault" xmlns:ns72="http://cagrid.nci.nih.gov/AuthenticationService/types"/>
+      <ns4:Exception description="The DorianIdP could obtain the attributes needed to issue a valid SAML assertion." name="InsufficientAttributeFault" qname="ns73:InsufficientAttributeFault" xmlns:ns73="http://cagrid.nci.nih.gov/AuthenticationService/types"/>
+      <ns4:Exception description="An error occurred in authenticating." name="AuthenticationProviderFault" qname="ns74:AuthenticationProviderFault" xmlns:ns74="http://cagrid.nci.nih.gov/AuthenticationService/types"/>
      </ns4:Exceptions>
-     <ns80:MethodSecurity xsi:type="ns80:MethodSecurity" xmlns:ns80="gme://gov.nih.nci.cagrid.introduce/1/Security">
-      <ns80:SecuritySetting xsi:type="ns80:SecuritySetting">Custom</ns80:SecuritySetting>
-      <ns80:TransportLevelSecurity xsi:type="ns80:TransportLevelSecurity">
-       <ns80:CommunicationMethod xsi:type="ns80:CommunicationMethod">Privacy</ns80:CommunicationMethod>
-      </ns80:TransportLevelSecurity>
-      <ns80:RunAsMode xsi:type="ns80:RunAsMode">System</ns80:RunAsMode>
-      <ns80:AnonymousClients xsi:type="ns80:AnonymousCommunication">Yes</ns80:AnonymousClients>
-     </ns80:MethodSecurity>
+     <ns75:MethodSecurity xsi:type="ns75:MethodSecurity" xmlns:ns75="gme://gov.nih.nci.cagrid.introduce/1/Security">
+      <ns75:SecuritySetting xsi:type="ns75:SecuritySetting">Custom</ns75:SecuritySetting>
+      <ns75:TransportLevelSecurity xsi:type="ns75:TransportLevelSecurity">
+       <ns75:CommunicationMethod xsi:type="ns75:CommunicationMethod">Privacy</ns75:CommunicationMethod>
+      </ns75:TransportLevelSecurity>
+      <ns75:RunAsMode xsi:type="ns75:RunAsMode">System</ns75:RunAsMode>
+      <ns75:AnonymousClients xsi:type="ns75:AnonymousCommunication">Yes</ns75:AnonymousClients>
+     </ns75:MethodSecurity>
      <ns4:ImportInformation namespace="http://cagrid.nci.nih.gov/AuthenticationService" packageName="gov.nih.nci.cagrid.authentication" portTypeName="AuthenticationServicePortType" wsdlFile="./AuthenticationServiceDeprecated.wsdl"/>
     </ns4:Method>
     <ns4:Method description="Authentication Service interface for authenticating with the Dorian IdP." isImported="true" isProvided="false" name="authenticateUser" xsi:type="ns4:MethodType">
      <ns4:Inputs>
-      <ns4:Input qName="ns81:Credential" description="" isArray="false" name="credential" xmlns:ns81="http://gaards.cagrid.org/authentication"/>
+      <ns4:Input qName="ns76:Credential" description="" isArray="false" name="credential" xmlns:ns76="http://gaards.cagrid.org/authentication"/>
      </ns4:Inputs>
-     <ns4:Output qName="ns82:Assertion" description="" isArray="false" xmlns:ns82="urn:oasis:names:tc:SAML:1.0:assertion"/>
+     <ns4:Output qName="ns77:Assertion" description="" isArray="false" xmlns:ns77="urn:oasis:names:tc:SAML:1.0:assertion"/>
      <ns4:Exceptions>
-      <ns4:Exception description="" name="AuthenticationProviderFault" qname="ns83:AuthenticationProviderFault" xmlns:ns83="http://gaards.cagrid.org/authentication-faults"/>
-      <ns4:Exception description="" name="CredentialNotSupportedFault" qname="ns84:CredentialNotSupportedFault" xmlns:ns84="http://gaards.cagrid.org/authentication-faults"/>
-      <ns4:Exception description="" name="InsufficientAttributeFault" qname="ns85:InsufficientAttributeFault" xmlns:ns85="http://gaards.cagrid.org/authentication-faults"/>
-      <ns4:Exception description="" name="InvalidCredentialFault" qname="ns86:InvalidCredentialFault" xmlns:ns86="http://gaards.cagrid.org/authentication-faults"/>
+      <ns4:Exception description="" name="AuthenticationProviderFault" qname="ns78:AuthenticationProviderFault" xmlns:ns78="http://gaards.cagrid.org/authentication-faults"/>
+      <ns4:Exception description="" name="CredentialNotSupportedFault" qname="ns79:CredentialNotSupportedFault" xmlns:ns79="http://gaards.cagrid.org/authentication-faults"/>
+      <ns4:Exception description="" name="InsufficientAttributeFault" qname="ns80:InsufficientAttributeFault" xmlns:ns80="http://gaards.cagrid.org/authentication-faults"/>
+      <ns4:Exception description="" name="InvalidCredentialFault" qname="ns81:InvalidCredentialFault" xmlns:ns81="http://gaards.cagrid.org/authentication-faults"/>
      </ns4:Exceptions>
-     <ns87:MethodSecurity xsi:type="ns87:MethodSecurity" xmlns:ns87="gme://gov.nih.nci.cagrid.introduce/1/Security">
-      <ns87:SecuritySetting xsi:type="ns87:SecuritySetting">Custom</ns87:SecuritySetting>
-      <ns87:TransportLevelSecurity xsi:type="ns87:TransportLevelSecurity">
-       <ns87:CommunicationMethod xsi:type="ns87:CommunicationMethod">Privacy</ns87:CommunicationMethod>
-      </ns87:TransportLevelSecurity>
-      <ns87:RunAsMode xsi:type="ns87:RunAsMode">System</ns87:RunAsMode>
-      <ns87:AnonymousClients xsi:type="ns87:AnonymousCommunication">Yes</ns87:AnonymousClients>
-     </ns87:MethodSecurity>
+     <ns82:MethodSecurity xsi:type="ns82:MethodSecurity" xmlns:ns82="gme://gov.nih.nci.cagrid.introduce/1/Security">
+      <ns82:SecuritySetting xsi:type="ns82:SecuritySetting">Custom</ns82:SecuritySetting>
+      <ns82:TransportLevelSecurity xsi:type="ns82:TransportLevelSecurity">
+       <ns82:CommunicationMethod xsi:type="ns82:CommunicationMethod">Privacy</ns82:CommunicationMethod>
+      </ns82:TransportLevelSecurity>
+      <ns82:RunAsMode xsi:type="ns82:RunAsMode">System</ns82:RunAsMode>
+      <ns82:AnonymousClients xsi:type="ns82:AnonymousCommunication">Yes</ns82:AnonymousClients>
+     </ns82:MethodSecurity>
      <ns4:ImportInformation namespace="http://authentication.gaards.cagrid.org/AuthenticationService" packageName="org.cagrid.gaards.authentication" portTypeName="AuthenticationServicePortType" wsdlFile="./AuthenticationService.wsdl"/>
     </ns4:Method>
     <ns4:Method description="" isImported="false" isProvided="false" name="addAdmin" xsi:type="ns4:MethodType">
@@ -389,8 +371,8 @@
      </ns4:Inputs>
      <ns4:Output qName="void" isArray="false"/>
      <ns4:Exceptions>
-      <ns4:Exception description="" name="DorianInternalFault" qname="ns88:DorianInternalFault" xmlns:ns88="http://cagrid.nci.nih.gov/Dorian/types"/>
-      <ns4:Exception description="" name="PermissionDeniedFault" qname="ns89:PermissionDeniedFault" xmlns:ns89="http://cagrid.nci.nih.gov/Dorian/types"/>
+      <ns4:Exception description="" name="DorianInternalFault" qname="ns83:DorianInternalFault" xmlns:ns83="http://cagrid.nci.nih.gov/Dorian/types"/>
+      <ns4:Exception description="" name="PermissionDeniedFault" qname="ns84:PermissionDeniedFault" xmlns:ns84="http://cagrid.nci.nih.gov/Dorian/types"/>
      </ns4:Exceptions>
     </ns4:Method>
     <ns4:Method description="" isImported="false" isProvided="false" name="removeAdmin" xsi:type="ns4:MethodType">
@@ -399,144 +381,156 @@
      </ns4:Inputs>
      <ns4:Output qName="void" isArray="false"/>
      <ns4:Exceptions>
-      <ns4:Exception description="" name="DorianInternalFault" qname="ns90:DorianInternalFault" xmlns:ns90="http://cagrid.nci.nih.gov/Dorian/types"/>
-      <ns4:Exception description="" name="PermissionDeniedFault" qname="ns91:PermissionDeniedFault" xmlns:ns91="http://cagrid.nci.nih.gov/Dorian/types"/>
+      <ns4:Exception description="" name="DorianInternalFault" qname="ns85:DorianInternalFault" xmlns:ns85="http://cagrid.nci.nih.gov/Dorian/types"/>
+      <ns4:Exception description="" name="PermissionDeniedFault" qname="ns86:PermissionDeniedFault" xmlns:ns86="http://cagrid.nci.nih.gov/Dorian/types"/>
      </ns4:Exceptions>
     </ns4:Method>
     <ns4:Method description="" isImported="false" isProvided="false" name="getAdmins" xsi:type="ns4:MethodType">
      <ns4:Inputs/>
      <ns4:Output qName="xsd:string" isArray="true" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
      <ns4:Exceptions>
-      <ns4:Exception description="" name="DorianInternalFault" qname="ns92:DorianInternalFault" xmlns:ns92="http://cagrid.nci.nih.gov/Dorian/types"/>
-      <ns4:Exception description="" name="PermissionDeniedFault" qname="ns93:PermissionDeniedFault" xmlns:ns93="http://cagrid.nci.nih.gov/Dorian/types"/>
+      <ns4:Exception description="" name="DorianInternalFault" qname="ns87:DorianInternalFault" xmlns:ns87="http://cagrid.nci.nih.gov/Dorian/types"/>
+      <ns4:Exception description="" name="PermissionDeniedFault" qname="ns88:PermissionDeniedFault" xmlns:ns88="http://cagrid.nci.nih.gov/Dorian/types"/>
      </ns4:Exceptions>
     </ns4:Method>
     <ns4:Method description="" isImported="false" isProvided="false" name="requestHostCertificate" xsi:type="ns4:MethodType">
      <ns4:Inputs>
-      <ns4:Input qName="ns94:HostCertificateRequest" isArray="false" name="req" xmlns:ns94="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
+      <ns4:Input qName="ns89:HostCertificateRequest" isArray="false" name="req" xmlns:ns89="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
      </ns4:Inputs>
-     <ns4:Output qName="ns95:HostCertificateRecord" isArray="false" xmlns:ns95="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
+     <ns4:Output qName="ns90:HostCertificateRecord" isArray="false" xmlns:ns90="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
      <ns4:Exceptions>
-      <ns4:Exception description="" name="DorianInternalFault" qname="ns96:DorianInternalFault" xmlns:ns96="http://cagrid.nci.nih.gov/Dorian/types"/>
-      <ns4:Exception description="" name="InvalidHostCertificateRequestFault" qname="ns97:InvalidHostCertificateRequestFault" xmlns:ns97="http://cagrid.nci.nih.gov/Dorian/types"/>
-      <ns4:Exception description="" name="InvalidHostCertificateFault" qname="ns98:InvalidHostCertificateFault" xmlns:ns98="http://cagrid.nci.nih.gov/Dorian/types"/>
-      <ns4:Exception description="" name="PermissionDeniedFault" qname="ns99:PermissionDeniedFault" xmlns:ns99="http://cagrid.nci.nih.gov/Dorian/types"/>
+      <ns4:Exception description="" name="DorianInternalFault" qname="ns91:DorianInternalFault" xmlns:ns91="http://cagrid.nci.nih.gov/Dorian/types"/>
+      <ns4:Exception description="" name="InvalidHostCertificateRequestFault" qname="ns92:InvalidHostCertificateRequestFault" xmlns:ns92="http://cagrid.nci.nih.gov/Dorian/types"/>
+      <ns4:Exception description="" name="InvalidHostCertificateFault" qname="ns93:InvalidHostCertificateFault" xmlns:ns93="http://cagrid.nci.nih.gov/Dorian/types"/>
+      <ns4:Exception description="" name="PermissionDeniedFault" qname="ns94:PermissionDeniedFault" xmlns:ns94="http://cagrid.nci.nih.gov/Dorian/types"/>
      </ns4:Exceptions>
     </ns4:Method>
     <ns4:Method description="" isImported="false" isProvided="false" name="getOwnedHostCertificates" xsi:type="ns4:MethodType">
      <ns4:Inputs/>
-     <ns4:Output qName="ns100:HostCertificateRecord" isArray="true" xmlns:ns100="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
+     <ns4:Output qName="ns95:HostCertificateRecord" isArray="true" xmlns:ns95="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
      <ns4:Exceptions>
-      <ns4:Exception description="" name="DorianInternalFault" qname="ns101:DorianInternalFault" xmlns:ns101="http://cagrid.nci.nih.gov/Dorian/types"/>
-      <ns4:Exception description="" name="PermissionDeniedFault" qname="ns102:PermissionDeniedFault" xmlns:ns102="http://cagrid.nci.nih.gov/Dorian/types"/>
+      <ns4:Exception description="" name="DorianInternalFault" qname="ns96:DorianInternalFault" xmlns:ns96="http://cagrid.nci.nih.gov/Dorian/types"/>
+      <ns4:Exception description="" name="PermissionDeniedFault" qname="ns97:PermissionDeniedFault" xmlns:ns97="http://cagrid.nci.nih.gov/Dorian/types"/>
      </ns4:Exceptions>
     </ns4:Method>
     <ns4:Method description="" isImported="false" isProvided="false" name="approveHostCertificate" xsi:type="ns4:MethodType">
      <ns4:Inputs>
       <ns4:Input qName="xsd:integer" isArray="false" name="recordId" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
      </ns4:Inputs>
-     <ns4:Output qName="ns103:HostCertificateRecord" isArray="false" xmlns:ns103="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
+     <ns4:Output qName="ns98:HostCertificateRecord" isArray="false" xmlns:ns98="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
      <ns4:Exceptions>
-      <ns4:Exception description="" name="DorianInternalFault" qname="ns104:DorianInternalFault" xmlns:ns104="http://cagrid.nci.nih.gov/Dorian/types"/>
-      <ns4:Exception description="" name="InvalidHostCertificateFault" qname="ns105:InvalidHostCertificateFault" xmlns:ns105="http://cagrid.nci.nih.gov/Dorian/types"/>
-      <ns4:Exception description="" name="PermissionDeniedFault" qname="ns106:PermissionDeniedFault" xmlns:ns106="http://cagrid.nci.nih.gov/Dorian/types"/>
+      <ns4:Exception description="" name="DorianInternalFault" qname="ns99:DorianInternalFault" xmlns:ns99="http://cagrid.nci.nih.gov/Dorian/types"/>
+      <ns4:Exception description="" name="InvalidHostCertificateFault" qname="ns100:InvalidHostCertificateFault" xmlns:ns100="http://cagrid.nci.nih.gov/Dorian/types"/>
+      <ns4:Exception description="" name="PermissionDeniedFault" qname="ns101:PermissionDeniedFault" xmlns:ns101="http://cagrid.nci.nih.gov/Dorian/types"/>
      </ns4:Exceptions>
     </ns4:Method>
     <ns4:Method description="" isImported="false" isProvided="false" name="findHostCertificates" xsi:type="ns4:MethodType">
      <ns4:Inputs>
-      <ns4:Input qName="ns107:HostCertificateFilter" isArray="false" name="hostCertificateFilter" xmlns:ns107="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
+      <ns4:Input qName="ns102:HostCertificateFilter" isArray="false" name="hostCertificateFilter" xmlns:ns102="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
      </ns4:Inputs>
-     <ns4:Output qName="ns108:HostCertificateRecord" isArray="true" xmlns:ns108="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
+     <ns4:Output qName="ns103:HostCertificateRecord" isArray="true" xmlns:ns103="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
      <ns4:Exceptions>
-      <ns4:Exception description="" name="DorianInternalFault" qname="ns109:DorianInternalFault" xmlns:ns109="http://cagrid.nci.nih.gov/Dorian/types"/>
-      <ns4:Exception description="" name="PermissionDeniedFault" qname="ns110:PermissionDeniedFault" xmlns:ns110="http://cagrid.nci.nih.gov/Dorian/types"/>
+      <ns4:Exception description="" name="DorianInternalFault" qname="ns104:DorianInternalFault" xmlns:ns104="http://cagrid.nci.nih.gov/Dorian/types"/>
+      <ns4:Exception description="" name="PermissionDeniedFault" qname="ns105:PermissionDeniedFault" xmlns:ns105="http://cagrid.nci.nih.gov/Dorian/types"/>
      </ns4:Exceptions>
     </ns4:Method>
     <ns4:Method description="" isImported="false" isProvided="false" name="updateHostCertificateRecord" xsi:type="ns4:MethodType">
      <ns4:Inputs>
-      <ns4:Input qName="ns111:HostCertificateUpdate" isArray="false" name="hostCertificateUpdate" xmlns:ns111="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
+      <ns4:Input qName="ns106:HostCertificateUpdate" isArray="false" name="hostCertificateUpdate" xmlns:ns106="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
      </ns4:Inputs>
      <ns4:Output qName="void" isArray="false"/>
      <ns4:Exceptions>
-      <ns4:Exception description="" name="DorianInternalFault" qname="ns112:DorianInternalFault" xmlns:ns112="http://cagrid.nci.nih.gov/Dorian/types"/>
-      <ns4:Exception description="" name="InvalidHostCertificateFault" qname="ns113:InvalidHostCertificateFault" xmlns:ns113="http://cagrid.nci.nih.gov/Dorian/types"/>
-      <ns4:Exception description="" name="PermissionDeniedFault" qname="ns114:PermissionDeniedFault" xmlns:ns114="http://cagrid.nci.nih.gov/Dorian/types"/>
+      <ns4:Exception description="" name="DorianInternalFault" qname="ns107:DorianInternalFault" xmlns:ns107="http://cagrid.nci.nih.gov/Dorian/types"/>
+      <ns4:Exception description="" name="InvalidHostCertificateFault" qname="ns108:InvalidHostCertificateFault" xmlns:ns108="http://cagrid.nci.nih.gov/Dorian/types"/>
+      <ns4:Exception description="" name="PermissionDeniedFault" qname="ns109:PermissionDeniedFault" xmlns:ns109="http://cagrid.nci.nih.gov/Dorian/types"/>
      </ns4:Exceptions>
     </ns4:Method>
     <ns4:Method description="" isImported="false" isProvided="false" name="renewHostCertificate" xsi:type="ns4:MethodType">
      <ns4:Inputs>
       <ns4:Input qName="xsd:integer" isArray="false" name="recordId" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
      </ns4:Inputs>
-     <ns4:Output qName="ns115:HostCertificateRecord" isArray="false" xmlns:ns115="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
+     <ns4:Output qName="ns110:HostCertificateRecord" isArray="false" xmlns:ns110="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
      <ns4:Exceptions>
-      <ns4:Exception description="" name="DorianInternalFault" qname="ns116:DorianInternalFault" xmlns:ns116="http://cagrid.nci.nih.gov/Dorian/types"/>
-      <ns4:Exception description="" name="InvalidHostCertificateFault" qname="ns117:InvalidHostCertificateFault" xmlns:ns117="http://cagrid.nci.nih.gov/Dorian/types"/>
-      <ns4:Exception description="" name="PermissionDeniedFault" qname="ns118:PermissionDeniedFault" xmlns:ns118="http://cagrid.nci.nih.gov/Dorian/types"/>
+      <ns4:Exception description="" name="DorianInternalFault" qname="ns111:DorianInternalFault" xmlns:ns111="http://cagrid.nci.nih.gov/Dorian/types"/>
+      <ns4:Exception description="" name="InvalidHostCertificateFault" qname="ns112:InvalidHostCertificateFault" xmlns:ns112="http://cagrid.nci.nih.gov/Dorian/types"/>
+      <ns4:Exception description="" name="PermissionDeniedFault" qname="ns113:PermissionDeniedFault" xmlns:ns113="http://cagrid.nci.nih.gov/Dorian/types"/>
      </ns4:Exceptions>
     </ns4:Method>
-    <ns4:Method description="This method allows a user with a Dorian IdP account to change their password." isImported="false" isProvided="false" name="changeIdPUserPassword" xsi:type="ns4:MethodType">
+    <ns4:Method description="This method allows a user with a Dorian IdP account to change their password. (This method is DEPRECATED, please use changeLocalUserPassword)" isImported="false" isProvided="false" name="changeIdPUserPassword" xsi:type="ns4:MethodType">
      <ns4:Inputs>
-      <ns4:Input qName="ns119:BasicAuthCredential" description="" isArray="false" name="credential" xmlns:ns119="http://cagrid.nci.nih.gov/1/dorian-idp"/>
+      <ns4:Input qName="ns114:BasicAuthCredential" description="" isArray="false" name="credential" xmlns:ns114="http://cagrid.nci.nih.gov/1/dorian-idp"/>
       <ns4:Input qName="xsd:string" description="" isArray="false" name="newPassword" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
      </ns4:Inputs>
      <ns4:Output qName="void" description="" isArray="false"/>
      <ns4:Exceptions>
-      <ns4:Exception description="" name="DorianInternalFault" qname="ns120:DorianInternalFault" xmlns:ns120="http://cagrid.nci.nih.gov/Dorian/types"/>
-      <ns4:Exception description="" name="PermissionDeniedFault" qname="ns121:PermissionDeniedFault" xmlns:ns121="http://cagrid.nci.nih.gov/Dorian/types"/>
-      <ns4:Exception description="" name="InvalidUserPropertyFault" qname="ns122:InvalidUserPropertyFault" xmlns:ns122="http://cagrid.nci.nih.gov/Dorian/types"/>
+      <ns4:Exception description="" name="DorianInternalFault" qname="ns115:DorianInternalFault" xmlns:ns115="http://cagrid.nci.nih.gov/Dorian/types"/>
+      <ns4:Exception description="" name="PermissionDeniedFault" qname="ns116:PermissionDeniedFault" xmlns:ns116="http://cagrid.nci.nih.gov/Dorian/types"/>
+      <ns4:Exception description="" name="InvalidUserPropertyFault" qname="ns117:InvalidUserPropertyFault" xmlns:ns117="http://cagrid.nci.nih.gov/Dorian/types"/>
      </ns4:Exceptions>
-     <ns123:MethodSecurity xsi:type="ns123:MethodSecurity" xmlns:ns123="gme://gov.nih.nci.cagrid.introduce/1/Security">
-      <ns123:SecuritySetting xsi:type="ns123:SecuritySetting">Custom</ns123:SecuritySetting>
-      <ns123:TransportLevelSecurity xsi:type="ns123:TransportLevelSecurity">
-       <ns123:CommunicationMethod xsi:type="ns123:CommunicationMethod">Privacy</ns123:CommunicationMethod>
-      </ns123:TransportLevelSecurity>
-      <ns123:RunAsMode xsi:type="ns123:RunAsMode">System</ns123:RunAsMode>
-      <ns123:AnonymousClients xsi:type="ns123:AnonymousCommunication">Yes</ns123:AnonymousClients>
-      <ns123:MethodAuthorization xsi:type="ns123:MethodAuthorization">
-       <ns123:NoAuthorization xsi:type="ns123:NoAuthorization"/>
-      </ns123:MethodAuthorization>
-     </ns123:MethodSecurity>
+     <ns118:MethodSecurity xsi:type="ns118:MethodSecurity" xmlns:ns118="gme://gov.nih.nci.cagrid.introduce/1/Security">
+      <ns118:SecuritySetting xsi:type="ns118:SecuritySetting">Custom</ns118:SecuritySetting>
+      <ns118:TransportLevelSecurity xsi:type="ns118:TransportLevelSecurity">
+       <ns118:CommunicationMethod xsi:type="ns118:CommunicationMethod">Privacy</ns118:CommunicationMethod>
+      </ns118:TransportLevelSecurity>
+      <ns118:RunAsMode xsi:type="ns118:RunAsMode">System</ns118:RunAsMode>
+      <ns118:AnonymousClients xsi:type="ns118:AnonymousCommunication">Yes</ns118:AnonymousClients>
+      <ns118:MethodAuthorization xsi:type="ns118:MethodAuthorization">
+       <ns118:NoAuthorization xsi:type="ns118:NoAuthorization"/>
+      </ns118:MethodAuthorization>
+     </ns118:MethodSecurity>
     </ns4:Method>
-    <ns4:Method description="This method determines whether or not a IdP user exists." isImported="false" isProvided="false" name="doesIdPUserExist" xsi:type="ns4:MethodType">
+    <ns4:Method description="This method determines whether or not a IdP user exists." isImported="false" isProvided="false" name="doesLocalUserExist" xsi:type="ns4:MethodType">
      <ns4:Inputs>
       <ns4:Input qName="xsd:string" description="" isArray="false" name="userId" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
      </ns4:Inputs>
      <ns4:Output qName="xsd:boolean" description="" isArray="false" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
      <ns4:Exceptions>
-      <ns4:Exception description="" name="DorianInternalFault" qname="ns124:DorianInternalFault" xmlns:ns124="http://cagrid.nci.nih.gov/Dorian/types"/>
+      <ns4:Exception description="" name="DorianInternalFault" qname="ns119:DorianInternalFault" xmlns:ns119="http://cagrid.nci.nih.gov/Dorian/types"/>
      </ns4:Exceptions>
     </ns4:Method>
     <ns4:Method isImported="true" isProvided="true" name="GetMultipleResourceProperties" xsi:type="ns4:MethodType">
      <ns4:Output qName="void" isArray="false"/>
-     <ns4:ImportInformation fromIntroduce="false" inputMessage="ns125:GetMultipleResourcePropertiesRequest" namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" outputMessage="ns125:GetMultipleResourcePropertiesResponse" packageName="org.oasis.wsrf.properties" portTypeName="GetMultipleResourceProperties" wsdlFile="../wsrf/properties/WS-ResourceProperties.wsdl" xmlns:ns125="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl"/>
+     <ns4:ImportInformation fromIntroduce="false" inputMessage="ns120:GetMultipleResourcePropertiesRequest" namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" outputMessage="ns120:GetMultipleResourcePropertiesResponse" packageName="org.oasis.wsrf.properties" portTypeName="GetMultipleResourceProperties" wsdlFile="../wsrf/properties/WS-ResourceProperties.wsdl" xmlns:ns120="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl"/>
      <ns4:ProviderInformation providerClass="GetMRPProvider"/>
     </ns4:Method>
     <ns4:Method isImported="true" isProvided="true" name="GetResourceProperty" xsi:type="ns4:MethodType">
      <ns4:Output qName="void" isArray="false"/>
-     <ns4:ImportInformation fromIntroduce="false" inputMessage="ns126:GetResourcePropertyRequest" namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" outputMessage="ns126:GetResourcePropertyResponse" packageName="org.oasis.wsrf.properties" portTypeName="GetResourceProperty" wsdlFile="../wsrf/properties/WS-ResourceProperties.wsdl" xmlns:ns126="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl"/>
+     <ns4:ImportInformation fromIntroduce="false" inputMessage="ns121:GetResourcePropertyRequest" namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" outputMessage="ns121:GetResourcePropertyResponse" packageName="org.oasis.wsrf.properties" portTypeName="GetResourceProperty" wsdlFile="../wsrf/properties/WS-ResourceProperties.wsdl" xmlns:ns121="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl"/>
      <ns4:ProviderInformation providerClass="GetRPProvider"/>
     </ns4:Method>
     <ns4:Method isImported="true" isProvided="true" name="QueryResourceProperties" xsi:type="ns4:MethodType">
      <ns4:Output qName="void" isArray="false"/>
-     <ns4:ImportInformation fromIntroduce="false" inputMessage="ns127:QueryResourcePropertiesRequest" namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" outputMessage="ns127:QueryResourcePropertiesResponse" packageName="org.oasis.wsrf.properties" portTypeName="QueryResourceProperties" wsdlFile="../wsrf/properties/WS-ResourceProperties.wsdl" xmlns:ns127="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl"/>
+     <ns4:ImportInformation fromIntroduce="false" inputMessage="ns122:QueryResourcePropertiesRequest" namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" outputMessage="ns122:QueryResourcePropertiesResponse" packageName="org.oasis.wsrf.properties" portTypeName="QueryResourceProperties" wsdlFile="../wsrf/properties/WS-ResourceProperties.wsdl" xmlns:ns122="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl"/>
      <ns4:ProviderInformation providerClass="QueryRPProvider"/>
     </ns4:Method>
+    <ns4:Method description="This method allows a user with a Dorian IdP account to change their password." isImported="false" isProvided="false" name="changeLocalUserPassword" xsi:type="ns4:MethodType">
+     <ns4:Inputs>
+      <ns4:Input qName="ns123:BasicAuthentication" description="" isArray="false" name="credential" xmlns:ns123="http://gaards.cagrid.org/authentication"/>
+      <ns4:Input qName="xsd:string" description="" isArray="false" name="newPassword" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+     </ns4:Inputs>
+     <ns4:Output qName="void" description="" isArray="false"/>
+     <ns4:Exceptions>
+      <ns4:Exception description="" name="DorianInternalFault" qname="ns124:DorianInternalFault" xmlns:ns124="http://cagrid.nci.nih.gov/Dorian/types"/>
+      <ns4:Exception description="" name="InvalidUserPropertyFault" qname="ns125:InvalidUserPropertyFault" xmlns:ns125="http://cagrid.nci.nih.gov/Dorian/types"/>
+      <ns4:Exception description="" name="PermissionDeniedFault" qname="ns126:PermissionDeniedFault" xmlns:ns126="http://cagrid.nci.nih.gov/Dorian/types"/>
+     </ns4:Exceptions>
+    </ns4:Method>
    </ns4:Methods>
-   <ns128:ResourcePropertiesList xsi:type="ns128:ResourcePropertiesListType" xmlns:ns128="gme://gov.nih.nci.cagrid.introduce/1/Resources">
-    <ns128:ResourceProperty qName="ns129:ServiceMetadata" description="" fileLocation="serviceMetadata.xml" populateFromFile="true" register="true" xsi:type="ns128:ResourcePropertyType" xmlns:ns129="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"/>
-    <ns128:ResourceProperty qName="ns130:AuthenticationProfiles" description="" fileLocation="Dorian_authenticationProfiles.xml" populateFromFile="false" register="true" xsi:type="ns128:ResourcePropertyType" xmlns:ns130="http://gaards.cagrid.org/authentication"/>
-   </ns128:ResourcePropertiesList>
-   <ns131:ServiceSecurity xsi:type="ns131:ServiceSecurity" xmlns:ns131="gme://gov.nih.nci.cagrid.introduce/1/Security">
-    <ns131:SecuritySetting xsi:type="ns131:SecuritySetting">Custom</ns131:SecuritySetting>
-    <ns131:TransportLevelSecurity xsi:type="ns131:TransportLevelSecurity">
-     <ns131:CommunicationMethod xsi:type="ns131:CommunicationMethod">Privacy</ns131:CommunicationMethod>
-    </ns131:TransportLevelSecurity>
-    <ns131:RunAsMode xsi:type="ns131:RunAsMode">System</ns131:RunAsMode>
-    <ns131:AnonymousClients xsi:type="ns131:AnonymousCommunication">No</ns131:AnonymousClients>
-    <ns131:ServiceAuthorization xsi:type="ns131:ServiceAuthorization">
-     <ns131:NoAuthorization xsi:type="ns131:NoAuthorization"/>
-    </ns131:ServiceAuthorization>
-   </ns131:ServiceSecurity>
+   <ns127:ResourcePropertiesList xsi:type="ns127:ResourcePropertiesListType" xmlns:ns127="gme://gov.nih.nci.cagrid.introduce/1/Resources">
+    <ns127:ResourceProperty qName="ns128:ServiceMetadata" description="" fileLocation="serviceMetadata.xml" populateFromFile="true" register="true" xsi:type="ns127:ResourcePropertyType" xmlns:ns128="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"/>
+    <ns127:ResourceProperty qName="ns129:AuthenticationProfiles" description="" fileLocation="Dorian_authenticationProfiles.xml" populateFromFile="false" register="true" xsi:type="ns127:ResourcePropertyType" xmlns:ns129="http://gaards.cagrid.org/authentication"/>
+   </ns127:ResourcePropertiesList>
+   <ns130:ServiceSecurity xsi:type="ns130:ServiceSecurity" xmlns:ns130="gme://gov.nih.nci.cagrid.introduce/1/Security">
+    <ns130:SecuritySetting xsi:type="ns130:SecuritySetting">Custom</ns130:SecuritySetting>
+    <ns130:TransportLevelSecurity xsi:type="ns130:TransportLevelSecurity">
+     <ns130:CommunicationMethod xsi:type="ns130:CommunicationMethod">Privacy</ns130:CommunicationMethod>
+    </ns130:TransportLevelSecurity>
+    <ns130:RunAsMode xsi:type="ns130:RunAsMode">System</ns130:RunAsMode>
+    <ns130:AnonymousClients xsi:type="ns130:AnonymousCommunication">No</ns130:AnonymousClients>
+    <ns130:ServiceAuthorization xsi:type="ns130:ServiceAuthorization">
+     <ns130:NoAuthorization xsi:type="ns130:NoAuthorization"/>
+    </ns130:ServiceAuthorization>
+   </ns130:ServiceSecurity>
    <ns3:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">Dorian Grid Service</ns3:description>
    <ns3:ResourceFrameworkOptions xsi:type="ns3:ResourceFrameworkOptions">
     <ns3:Main xsi:type="ns3:Main"/>
@@ -547,11 +541,11 @@
    </ns3:ResourceFrameworkOptions>
   </ns3:Service>
  </ns3:Services>
- <ns132:Extensions xsi:type="ns132:ExtensionsType" xmlns:ns132="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <ns132:Extension name="cagrid_metadata" version="1.2" xsi:type="ns132:ExtensionType"/>
- </ns132:Extensions>
- <ns133:ServiceProperties xmlns:ns133="gme://gov.nih.nci.cagrid.introduce/1/Property">
-  <ns133:Property description="" isFromETC="true" key="dorianConfiguration" value="dorian-configuration.xml"/>
-  <ns133:Property description="" isFromETC="true" key="dorianProperties" value="dorian.properties"/>
- </ns133:ServiceProperties>
+ <ns131:Extensions xsi:type="ns131:ExtensionsType" xmlns:ns131="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ns131:Extension name="cagrid_metadata" version="1.2" xsi:type="ns131:ExtensionType"/>
+ </ns131:Extensions>
+ <ns132:ServiceProperties xmlns:ns132="gme://gov.nih.nci.cagrid.introduce/1/Property">
+  <ns132:Property description="" isFromETC="true" key="dorianConfiguration" value="dorian-configuration.xml"/>
+  <ns132:Property description="" isFromETC="true" key="dorianProperties" value="dorian.properties"/>
+ </ns132:ServiceProperties>
 </ns1:ServiceDescription>

@@ -2,7 +2,6 @@ package org.cagrid.gaards.dorian.service.globus;
 
 
 import java.rmi.RemoteException;
-
 import javax.security.auth.Subject;
 import javax.xml.namespace.QName;
 import javax.xml.rpc.handler.MessageContext;
@@ -70,11 +69,6 @@ public class DorianAuthorization implements PDP {
 	}
 					
 	public static void authorizeRemoveIdPUser() throws RemoteException {
-		
-		
-	}
-					
-	public static void authorizeAuthenticateWithIdP() throws RemoteException {
 		
 		
 	}
@@ -194,7 +188,7 @@ public class DorianAuthorization implements PDP {
 		
 	}
 					
-	public static void authorizeDoesIdPUserExist() throws RemoteException {
+	public static void authorizeDoesLocalUserExist() throws RemoteException {
 		
 		
 	}
@@ -210,6 +204,11 @@ public class DorianAuthorization implements PDP {
 	}
 					
 	public static void authorizeQueryResourceProperties() throws RemoteException {
+		
+		
+	}
+					
+	public static void authorizeChangeLocalUserPassword() throws RemoteException {
 		
 		
 	}
@@ -256,14 +255,6 @@ public class DorianAuthorization implements PDP {
 		} else if(operation.getLocalPart().equals("removeIdPUser")){
 			try{
 				authorizeRemoveIdPUser();
-				return true;
-			} catch (Exception e){
-				e.printStackTrace();
-				return false;
-			}
-		} else if(operation.getLocalPart().equals("authenticateWithIdP")){
-			try{
-				authorizeAuthenticateWithIdP();
 				return true;
 			} catch (Exception e){
 				e.printStackTrace();
@@ -453,9 +444,9 @@ public class DorianAuthorization implements PDP {
 				e.printStackTrace();
 				return false;
 			}
-		} else if(operation.getLocalPart().equals("doesIdPUserExist")){
+		} else if(operation.getLocalPart().equals("doesLocalUserExist")){
 			try{
-				authorizeDoesIdPUserExist();
+				authorizeDoesLocalUserExist();
 				return true;
 			} catch (Exception e){
 				e.printStackTrace();
@@ -480,6 +471,14 @@ public class DorianAuthorization implements PDP {
 		} else if(operation.getLocalPart().equals("queryResourceProperties")){
 			try{
 				authorizeQueryResourceProperties();
+				return true;
+			} catch (Exception e){
+				e.printStackTrace();
+				return false;
+			}
+		} else if(operation.getLocalPart().equals("changeLocalUserPassword")){
+			try{
+				authorizeChangeLocalUserPassword();
 				return true;
 			} catch (Exception e){
 				e.printStackTrace();

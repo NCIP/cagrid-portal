@@ -37,10 +37,10 @@ public class IdPAdministrationClient {
 		client = new DorianClient(serviceURI, proxy);
 	}
 
-	public boolean doesIdPUserExist(String userId) throws DorianFault,
+	public boolean doesUserExist(String userId) throws DorianFault,
 			DorianInternalFault {
 		try {
-			return client.doesIdPUserExist(userId);
+			return client.doesLocalUserExist(userId);
 		} catch (DorianInternalFault f) {
 			throw f;
 		} catch (Exception e) {

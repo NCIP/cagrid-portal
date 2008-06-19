@@ -61,17 +61,6 @@ public interface DorianI {
   public void removeIdPUser(java.lang.String userId) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault ;
 
   /**
-   * Authenticate with the Dorian IdP.
-   *
-   * @param cred
-   * @throws DorianInternalFault
-   *	An unexpected internal Dorian error.
-   * @throws PermissionDeniedFault
-   *	Client does not have permission to perform the request.
-   */
-  public org.cagrid.gaards.dorian.SAMLAssertion authenticateWithIdP(org.cagrid.gaards.dorian.idp.BasicAuthCredential cred) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault ;
-
-  /**
    * Create a proxy certificate.
    *
    * @param saml
@@ -244,7 +233,7 @@ public interface DorianI {
   public org.cagrid.gaards.dorian.federation.HostCertificateRecord renewHostCertificate(java.math.BigInteger recordId) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.InvalidHostCertificateFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault ;
 
   /**
-   * This method allows a user with a Dorian IdP account to change their password.
+   * This method allows a user with a Dorian IdP account to change their password. (This method is DEPRECATED, please use changeLocalUserPassword)
    *
    * @param credential
    * @param newPassword
@@ -264,13 +253,27 @@ public interface DorianI {
    * @throws DorianInternalFault
    *	
    */
-  public boolean doesIdPUserExist(java.lang.String userId) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault ;
+  public boolean doesLocalUserExist(java.lang.String userId) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault ;
 
   public org.oasis.wsrf.properties.GetMultipleResourcePropertiesResponse getMultipleResourceProperties(org.oasis.wsrf.properties.GetMultipleResourceProperties_Element params) throws RemoteException ;
 
   public org.oasis.wsrf.properties.GetResourcePropertyResponse getResourceProperty(javax.xml.namespace.QName params) throws RemoteException ;
 
   public org.oasis.wsrf.properties.QueryResourcePropertiesResponse queryResourceProperties(org.oasis.wsrf.properties.QueryResourceProperties_Element params) throws RemoteException ;
+
+  /**
+   * This method allows a user with a Dorian IdP account to change their password.
+   *
+   * @param credential
+   * @param newPassword
+   * @throws DorianInternalFault
+   *	
+   * @throws InvalidUserPropertyFault
+   *	
+   * @throws PermissionDeniedFault
+   *	
+   */
+  public void changeLocalUserPassword(org.cagrid.gaards.authentication.BasicAuthentication credential,java.lang.String newPassword) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.InvalidUserPropertyFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault ;
 
 }
 

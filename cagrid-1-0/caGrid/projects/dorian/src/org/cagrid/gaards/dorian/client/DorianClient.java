@@ -149,18 +149,6 @@ public class DorianClient extends ServiceSecurityClient implements DorianI {
     }
   }
 
-  public org.cagrid.gaards.dorian.SAMLAssertion authenticateWithIdP(org.cagrid.gaards.dorian.idp.BasicAuthCredential cred) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault {
-    synchronized(portTypeMutex){
-      configureStubSecurity((Stub)portType,"authenticateWithIdP");
-    org.cagrid.gaards.dorian.stubs.AuthenticateWithIdPRequest params = new org.cagrid.gaards.dorian.stubs.AuthenticateWithIdPRequest();
-    org.cagrid.gaards.dorian.stubs.AuthenticateWithIdPRequestCred credContainer = new org.cagrid.gaards.dorian.stubs.AuthenticateWithIdPRequestCred();
-    credContainer.setBasicAuthCredential(cred);
-    params.setCred(credContainer);
-    org.cagrid.gaards.dorian.stubs.AuthenticateWithIdPResponse boxedResult = portType.authenticateWithIdP(params);
-    return boxedResult.getSAMLAssertion();
-    }
-  }
-
   public org.cagrid.gaards.dorian.X509Certificate[] createProxy(org.cagrid.gaards.dorian.SAMLAssertion saml,org.cagrid.gaards.dorian.federation.PublicKey publicKey,org.cagrid.gaards.dorian.federation.ProxyLifetime lifetime,org.cagrid.gaards.dorian.federation.DelegationPathLength delegation) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.InvalidAssertionFault, org.cagrid.gaards.dorian.stubs.types.InvalidProxyFault, org.cagrid.gaards.dorian.stubs.types.UserPolicyFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault {
     synchronized(portTypeMutex){
       configureStubSecurity((Stub)portType,"createProxy");
@@ -416,12 +404,12 @@ public class DorianClient extends ServiceSecurityClient implements DorianI {
     }
   }
 
-  public boolean doesIdPUserExist(java.lang.String userId) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault {
+  public boolean doesLocalUserExist(java.lang.String userId) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault {
     synchronized(portTypeMutex){
-      configureStubSecurity((Stub)portType,"doesIdPUserExist");
-    org.cagrid.gaards.dorian.stubs.DoesIdPUserExistRequest params = new org.cagrid.gaards.dorian.stubs.DoesIdPUserExistRequest();
+      configureStubSecurity((Stub)portType,"doesLocalUserExist");
+    org.cagrid.gaards.dorian.stubs.DoesLocalUserExistRequest params = new org.cagrid.gaards.dorian.stubs.DoesLocalUserExistRequest();
     params.setUserId(userId);
-    org.cagrid.gaards.dorian.stubs.DoesIdPUserExistResponse boxedResult = portType.doesIdPUserExist(params);
+    org.cagrid.gaards.dorian.stubs.DoesLocalUserExistResponse boxedResult = portType.doesLocalUserExist(params);
     return boxedResult.isResponse();
     }
   }
@@ -444,6 +432,18 @@ public class DorianClient extends ServiceSecurityClient implements DorianI {
     synchronized(portTypeMutex){
       configureStubSecurity((Stub)portType,"queryResourceProperties");
     return portType.queryResourceProperties(params);
+    }
+  }
+
+  public void changeLocalUserPassword(org.cagrid.gaards.authentication.BasicAuthentication credential,java.lang.String newPassword) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.InvalidUserPropertyFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"changeLocalUserPassword");
+    org.cagrid.gaards.dorian.stubs.ChangeLocalUserPasswordRequest params = new org.cagrid.gaards.dorian.stubs.ChangeLocalUserPasswordRequest();
+    org.cagrid.gaards.dorian.stubs.ChangeLocalUserPasswordRequestCredential credentialContainer = new org.cagrid.gaards.dorian.stubs.ChangeLocalUserPasswordRequestCredential();
+    credentialContainer.setBasicAuthentication(credential);
+    params.setCredential(credentialContainer);
+    params.setNewPassword(newPassword);
+    org.cagrid.gaards.dorian.stubs.ChangeLocalUserPasswordResponse boxedResult = portType.changeLocalUserPassword(params);
     }
   }
 

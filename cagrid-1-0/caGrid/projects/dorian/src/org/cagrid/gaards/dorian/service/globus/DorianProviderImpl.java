@@ -43,12 +43,6 @@ public class DorianProviderImpl{
     return boxedResult;
   }
 
-    public org.cagrid.gaards.dorian.stubs.AuthenticateWithIdPResponse authenticateWithIdP(org.cagrid.gaards.dorian.stubs.AuthenticateWithIdPRequest params) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault {
-    org.cagrid.gaards.dorian.stubs.AuthenticateWithIdPResponse boxedResult = new org.cagrid.gaards.dorian.stubs.AuthenticateWithIdPResponse();
-    boxedResult.setSAMLAssertion(impl.authenticateWithIdP(params.getCred().getBasicAuthCredential()));
-    return boxedResult;
-  }
-
     public org.cagrid.gaards.dorian.stubs.CreateProxyResponse createProxy(org.cagrid.gaards.dorian.stubs.CreateProxyRequest params) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.InvalidAssertionFault, org.cagrid.gaards.dorian.stubs.types.InvalidProxyFault, org.cagrid.gaards.dorian.stubs.types.UserPolicyFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault {
     org.cagrid.gaards.dorian.stubs.CreateProxyResponse boxedResult = new org.cagrid.gaards.dorian.stubs.CreateProxyResponse();
     boxedResult.setX509Certificate(impl.createProxy(params.getSaml().getSAMLAssertion(),params.getPublicKey().getPublicKey(),params.getLifetime().getProxyLifetime(),params.getDelegation().getDelegationPathLength()));
@@ -187,9 +181,15 @@ public class DorianProviderImpl{
     return boxedResult;
   }
 
-    public org.cagrid.gaards.dorian.stubs.DoesIdPUserExistResponse doesIdPUserExist(org.cagrid.gaards.dorian.stubs.DoesIdPUserExistRequest params) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault {
-    org.cagrid.gaards.dorian.stubs.DoesIdPUserExistResponse boxedResult = new org.cagrid.gaards.dorian.stubs.DoesIdPUserExistResponse();
-    boxedResult.setResponse(impl.doesIdPUserExist(params.getUserId()));
+    public org.cagrid.gaards.dorian.stubs.DoesLocalUserExistResponse doesLocalUserExist(org.cagrid.gaards.dorian.stubs.DoesLocalUserExistRequest params) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault {
+    org.cagrid.gaards.dorian.stubs.DoesLocalUserExistResponse boxedResult = new org.cagrid.gaards.dorian.stubs.DoesLocalUserExistResponse();
+    boxedResult.setResponse(impl.doesLocalUserExist(params.getUserId()));
+    return boxedResult;
+  }
+
+    public org.cagrid.gaards.dorian.stubs.ChangeLocalUserPasswordResponse changeLocalUserPassword(org.cagrid.gaards.dorian.stubs.ChangeLocalUserPasswordRequest params) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.InvalidUserPropertyFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault {
+    org.cagrid.gaards.dorian.stubs.ChangeLocalUserPasswordResponse boxedResult = new org.cagrid.gaards.dorian.stubs.ChangeLocalUserPasswordResponse();
+    impl.changeLocalUserPassword(params.getCredential().getBasicAuthentication(),params.getNewPassword());
     return boxedResult;
   }
 

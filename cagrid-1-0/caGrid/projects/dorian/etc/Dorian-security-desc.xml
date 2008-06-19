@@ -43,18 +43,6 @@
       <system-identity />
     </run-as>
   </method>
-  <method name="authenticateWithIdP">
-    <auth-method>
-      <GSITransport>
-        <protection-level>
-          <privacy />
-        </protection-level>
-      </GSITransport>
-    </auth-method>
-    <run-as>
-      <system-identity />
-    </run-as>
-  </method>
   <method name="createProxy">
     <auth-method>
       <GSITransport>
