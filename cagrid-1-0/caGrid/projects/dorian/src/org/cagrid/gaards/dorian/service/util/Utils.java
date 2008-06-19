@@ -5,7 +5,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+import org.cagrid.gaards.authentication.BasicAuthentication;
 import org.cagrid.gaards.dorian.common.Lifetime;
+import org.cagrid.gaards.dorian.idp.BasicAuthCredential;
 
 public class Utils {
 
@@ -30,6 +32,14 @@ public class Utils {
 	public static String getHostCertificateSubject(X509Certificate cacert,
 			String host) {
 		return getHostCertificateSubjectPrefix(cacert) + host;
+	}
+
+	public static BasicAuthentication fromLegacyCredential(
+			BasicAuthCredential auth) {
+		BasicAuthentication cred = new BasicAuthentication();
+		cred.setUserId(auth.getUserId());
+		cred.setPassword(auth.getPassword());
+		return cred;
 	}
 
 }

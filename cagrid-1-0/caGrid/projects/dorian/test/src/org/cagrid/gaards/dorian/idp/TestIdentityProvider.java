@@ -10,6 +10,8 @@ import java.util.Iterator;
 
 import junit.framework.TestCase;
 
+import org.cagrid.gaards.authentication.BasicAuthentication;
+import org.cagrid.gaards.authentication.faults.InvalidCredentialFault;
 import org.cagrid.gaards.dorian.ca.CertificateAuthority;
 import org.cagrid.gaards.dorian.common.SAMLConstants;
 import org.cagrid.gaards.dorian.stubs.types.InvalidUserPropertyFault;
@@ -119,7 +121,7 @@ public class TestIdentityProvider extends TestCase {
 			assertEquals(IdPUserStatus.Active, users[0].getStatus());
 			assertEquals(IdPUserRole.Non_Administrator, users[0].getRole());
 
-			BasicAuthCredential bad = new BasicAuthCredential();
+			BasicAuthentication bad = new BasicAuthentication();
 			bad.setUserId(a.getUserId());
 			bad.setPassword("foobar");
 
@@ -129,13 +131,13 @@ public class TestIdentityProvider extends TestCase {
 					try {
 						idp.authenticate(getCredential(a));
 						fail("Should NOT be able to authenticate!!!");
-					} catch (PermissionDeniedFault e) {
+					} catch (InvalidCredentialFault e) {
 					}
 				} else if (localCount != policy.getConsecutiveInvalidLogins()) {
 					try {
 						idp.authenticate(bad);
 						fail("Should NOT be able to authenticate!!!");
-					} catch (PermissionDeniedFault e) {
+					} catch (InvalidCredentialFault e) {
 
 					}
 				} else {
@@ -143,7 +145,7 @@ public class TestIdentityProvider extends TestCase {
 					try {
 						idp.authenticate(getCredential(a));
 						fail("Should NOT be able to authenticate!!!");
-					} catch (PermissionDeniedFault e) {
+					} catch (InvalidCredentialFault e) {
 
 					}
 					Thread
@@ -152,7 +154,7 @@ public class TestIdentityProvider extends TestCase {
 					try {
 						idp.authenticate(bad);
 						fail("Should NOT be able to authenticate!!!");
-					} catch (PermissionDeniedFault e) {
+					} catch (InvalidCredentialFault e) {
 
 					}
 				}
@@ -199,7 +201,7 @@ public class TestIdentityProvider extends TestCase {
 			assertEquals(IdPUserStatus.Active, users[0].getStatus());
 			assertEquals(IdPUserRole.Non_Administrator, users[0].getRole());
 
-			BasicAuthCredential bad = new BasicAuthCredential();
+			BasicAuthentication bad = new BasicAuthentication();
 			bad.setUserId(a.getUserId());
 			bad.setPassword("foobar");
 
@@ -212,7 +214,7 @@ public class TestIdentityProvider extends TestCase {
 					try {
 						idp.authenticate(bad);
 						fail("Should NOT be able to authenticate!!!");
-					} catch (PermissionDeniedFault e) {
+					} catch (InvalidCredentialFault e) {
 
 					}
 					localCount = localCount + 1;
@@ -256,7 +258,7 @@ public class TestIdentityProvider extends TestCase {
 				assertEquals(IdPUserStatus.Active, users[0].getStatus());
 				assertEquals(IdPUserRole.Non_Administrator, users[0].getRole());
 
-				BasicAuthCredential bad = new BasicAuthCredential();
+				BasicAuthentication bad = new BasicAuthentication();
 				bad.setUserId(a.getUserId());
 				bad.setPassword("foobar");
 
@@ -266,7 +268,7 @@ public class TestIdentityProvider extends TestCase {
 						try {
 							idp.authenticate(getCredential(a));
 							fail("Should NOT be able to authenticate!!!");
-						} catch (PermissionDeniedFault e) {
+						} catch (InvalidCredentialFault e) {
 
 						}
 					} else if (localCount != policy
@@ -274,7 +276,7 @@ public class TestIdentityProvider extends TestCase {
 						try {
 							idp.authenticate(bad);
 							fail("Should NOT be able to authenticate!!!");
-						} catch (PermissionDeniedFault e) {
+						} catch (InvalidCredentialFault e) {
 
 						}
 					} else {
@@ -282,7 +284,7 @@ public class TestIdentityProvider extends TestCase {
 						try {
 							idp.authenticate(getCredential(a));
 							fail("Should NOT be able to authenticate!!!");
-						} catch (PermissionDeniedFault e) {
+						} catch (InvalidCredentialFault e) {
 
 						}
 						Thread
@@ -291,7 +293,7 @@ public class TestIdentityProvider extends TestCase {
 						try {
 							idp.authenticate(bad);
 							fail("Should NOT be able to authenticate!!!");
-						} catch (PermissionDeniedFault e) {
+						} catch (InvalidCredentialFault e) {
 
 						}
 					}
@@ -327,12 +329,12 @@ public class TestIdentityProvider extends TestCase {
 			assertEquals(1, users.length);
 			assertEquals(IdPUserStatus.Active, users[0].getStatus());
 			assertEquals(IdPUserRole.Non_Administrator, users[0].getRole());
-			BasicAuthCredential c = getCredential(a);
+			BasicAuthentication c = getCredential(a);
 			c.setPassword("bad password");
 			try {
 				idp.authenticate(c);
 				fail("Should not be able to authenticate with a bad password!!!");
-			} catch (PermissionDeniedFault f) {
+			} catch (InvalidCredentialFault f) {
 
 			}
 		} catch (Exception e) {
@@ -364,14 +366,14 @@ public class TestIdentityProvider extends TestCase {
 			assertEquals(IdPUserStatus.Active, users[0].getStatus());
 			assertEquals(IdPUserRole.Non_Administrator, users[0].getRole());
 			verifyAuthentication(idp, a);
-			BasicAuthCredential c = getCredential(a);
+			BasicAuthentication c = getCredential(a);
 			String newPassword = "$W0rdD0ct0R$2";
 			idp.changePassword(getCredential(a), newPassword);
 
 			try {
 				idp.authenticate(c);
 				fail("Should not be able to authenticate with the old password!!!");
-			} catch (PermissionDeniedFault f) {
+			} catch (InvalidCredentialFault f) {
 
 			}
 			a.setPassword(newPassword);
@@ -654,7 +656,7 @@ public class TestIdentityProvider extends TestCase {
 				uf.setUserId("user");
 				users = idp.findUsers(cred.getUserId(), uf);
 				assertEquals(i + 1, users.length);
-				BasicAuthCredential auth = new BasicAuthCredential();
+				BasicAuthentication auth = new BasicAuthentication();
 				auth.setUserId(a.getUserId());
 				auth.setPassword(a.getPassword());
 				gov.nih.nci.cagrid.opensaml.SAMLAssertion saml = idp
@@ -774,8 +776,8 @@ public class TestIdentityProvider extends TestCase {
 		assertTrue(authFound);
 	}
 
-	private BasicAuthCredential getCredential(Application app) {
-		BasicAuthCredential cred = new BasicAuthCredential();
+	private BasicAuthentication getCredential(Application app) {
+		BasicAuthentication cred = new BasicAuthentication();
 		cred.setUserId(app.getUserId());
 		cred.setPassword(app.getPassword());
 		return cred;

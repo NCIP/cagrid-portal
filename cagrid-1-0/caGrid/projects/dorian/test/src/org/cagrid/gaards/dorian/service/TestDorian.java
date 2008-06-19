@@ -26,6 +26,8 @@ import javax.xml.namespace.QName;
 import junit.framework.TestCase;
 
 import org.apache.xml.security.signature.XMLSignature;
+import org.cagrid.gaards.authentication.BasicAuthentication;
+import org.cagrid.gaards.authentication.faults.InvalidCredentialFault;
 import org.cagrid.gaards.dorian.federation.AutoApprovalAutoRenewalPolicy;
 import org.cagrid.gaards.dorian.federation.AutoApprovalPolicy;
 import org.cagrid.gaards.dorian.federation.FederationUtils;
@@ -41,7 +43,6 @@ import org.cagrid.gaards.dorian.federation.TrustedIdP;
 import org.cagrid.gaards.dorian.federation.TrustedIdPStatus;
 import org.cagrid.gaards.dorian.federation.UserManager;
 import org.cagrid.gaards.dorian.idp.Application;
-import org.cagrid.gaards.dorian.idp.BasicAuthCredential;
 import org.cagrid.gaards.dorian.idp.CountryCode;
 import org.cagrid.gaards.dorian.idp.IdPUser;
 import org.cagrid.gaards.dorian.idp.IdPUserFilter;
@@ -116,7 +117,7 @@ public class TestDorian extends TestCase {
 			users = dorian.findIdPUsers(gridId, uf);
 			assertEquals(1, users.length);
 			assertEquals(IdPUserStatus.Active, users[0].getStatus());
-			BasicAuthCredential auth = new BasicAuthCredential();
+			BasicAuthentication auth = new BasicAuthentication();
 			auth.setUserId(a.getUserId());
 			auth.setPassword(a.getPassword());
 			SAMLAssertion saml = dorian.authenticate(auth);
@@ -132,13 +133,13 @@ public class TestDorian extends TestCase {
 			assertEquals(1, users.length);
 			assertEquals(IdPUserStatus.Pending, users[0].getStatus());
 			assertEquals(IdPUserRole.Non_Administrator, users[0].getRole());
-			auth = new BasicAuthCredential();
+			auth = new BasicAuthentication();
 			auth.setUserId(b.getUserId());
 			auth.setPassword(b.getPassword());
 			try {
 				saml = dorian.authenticate(auth);
 				fail("User is pending and should not be able to authenticate.");
-			} catch (PermissionDeniedFault pdf) {
+			} catch (InvalidCredentialFault pdf) {
 			}
 
 			// test authentication with a status rejected user
@@ -152,13 +153,13 @@ public class TestDorian extends TestCase {
 			assertEquals(IdPUserRole.Non_Administrator, users[0].getRole());
 			users[0].setStatus(IdPUserStatus.Rejected);
 			dorian.updateIdPUser(gridId, users[0]);
-			auth = new BasicAuthCredential();
+			auth = new BasicAuthentication();
 			auth.setUserId(c.getUserId());
 			auth.setPassword(c.getPassword());
 			try {
 				saml = dorian.authenticate(auth);
 				fail("User is rejected and should not be able to authenticate.");
-			} catch (PermissionDeniedFault pdf) {
+			} catch (InvalidCredentialFault pdf) {
 			}
 
 			// test authentication with a status suspended user
@@ -172,13 +173,13 @@ public class TestDorian extends TestCase {
 			assertEquals(IdPUserRole.Non_Administrator, users[0].getRole());
 			users[0].setStatus(IdPUserStatus.Suspended);
 			dorian.updateIdPUser(gridId, users[0]);
-			auth = new BasicAuthCredential();
+			auth = new BasicAuthentication();
 			auth.setUserId(d.getUserId());
 			auth.setPassword(d.getPassword());
 			try {
 				saml = dorian.authenticate(auth);
 				fail("User is suspended and should not be able to authenticate.");
-			} catch (PermissionDeniedFault pdf) {
+			} catch (InvalidCredentialFault pdf) {
 			}
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
@@ -307,7 +308,7 @@ public class TestDorian extends TestCase {
 			dorian = new Dorian(conf, "localhost");
 			assertNotNull(dorian.getConfiguration());
 			assertNotNull(dorian.getDatabase());
-			BasicAuthCredential auth = new BasicAuthCredential();
+			BasicAuthentication auth = new BasicAuthentication();
 			auth.setUserId(Dorian.IDP_ADMIN_USER_ID);
 			auth.setPassword(Dorian.IDP_ADMIN_PASSWORD);
 			SAMLAssertion saml = dorian.authenticate(auth);
@@ -359,7 +360,7 @@ public class TestDorian extends TestCase {
 			list[0].setRole(IdPUserRole.Administrator);
 			dorian.updateIdPUser(gridId, list[0]);
 			String username = list[0].getUserId();
-			BasicAuthCredential cred = new BasicAuthCredential();
+			BasicAuthentication cred = new BasicAuthentication();
 			cred.setUserId(username);
 			cred.setPassword(app.getPassword());
 			SAMLAssertion saml = dorian.authenticate(cred);
@@ -448,7 +449,7 @@ public class TestDorian extends TestCase {
 			list[0].setRole(IdPUserRole.Administrator);
 			dorian.updateIdPUser(gridId, list[0]);
 			String username = list[0].getUserId();
-			BasicAuthCredential cred = new BasicAuthCredential();
+			BasicAuthentication cred = new BasicAuthentication();
 			cred.setUserId(username);
 			cred.setPassword(app.getPassword());
 			SAMLAssertion saml = dorian.authenticate(cred);
@@ -527,7 +528,7 @@ public class TestDorian extends TestCase {
 			list[0].setStatus(IdPUserStatus.Active);
 			dorian.updateIdPUser(gridId, list[0]);
 			String username = list[0].getUserId();
-			BasicAuthCredential cred = new BasicAuthCredential();
+			BasicAuthentication cred = new BasicAuthentication();
 			cred.setUserId(username);
 			cred.setPassword(app.getPassword());
 			SAMLAssertion saml = dorian.authenticate(cred);

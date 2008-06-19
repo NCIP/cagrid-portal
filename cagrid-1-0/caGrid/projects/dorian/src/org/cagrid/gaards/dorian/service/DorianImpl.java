@@ -17,7 +17,8 @@ import org.apache.axis.message.addressing.EndpointReferenceType;
 import org.cagrid.gaards.authentication.AuthenticationProfiles;
 import org.cagrid.gaards.authentication.BasicAuthentication;
 import org.cagrid.gaards.authentication.common.AuthenticationProfile;
-import org.cagrid.gaards.dorian.idp.BasicAuthCredential;
+import org.cagrid.gaards.authentication.faults.AuthenticationProviderFault;
+import org.cagrid.gaards.authentication.faults.CredentialNotSupportedFault;
 import org.cagrid.gaards.dorian.stubs.types.DorianInternalFault;
 import org.cagrid.gaards.dorian.stubs.types.InvalidAssertionFault;
 import org.cagrid.gaards.dorian.stubs.types.InvalidProxyFault;
@@ -135,10 +136,30 @@ public class DorianImpl extends DorianImplBase {
 			throws RemoteException,
 			org.cagrid.gaards.dorian.stubs.types.DorianInternalFault,
 			org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault {
-		SAMLAssertion saml = dorian.authenticate(cred);
+
 		try {
+			BasicAuthentication auth = new BasicAuthentication();
+			auth.setUserId(cred.getUserId());
+			auth.setPassword(cred.getPassword());
+			SAMLAssertion saml = dorian.authenticate(auth);
 			String xml = SAMLUtils.samlAssertionToString(saml);
 			return new org.cagrid.gaards.dorian.SAMLAssertion(xml);
+		} catch (AuthenticationProviderFault e) {
+			DorianInternalFault fault = new DorianInternalFault();
+			fault.setFaultString(e.getFaultString());
+			FaultHelper helper = new FaultHelper(fault);
+			helper.setDescription(Utils.getExceptionMessage(e));
+			helper.addFaultCause(e);
+			fault = (DorianInternalFault) helper.getFault();
+			throw fault;
+		} catch (org.cagrid.gaards.authentication.faults.InvalidCredentialFault e) {
+			PermissionDeniedFault fault = new PermissionDeniedFault();
+			fault.setFaultString(e.getFaultString());
+			throw fault;
+		} catch (CredentialNotSupportedFault e) {
+			PermissionDeniedFault fault = new PermissionDeniedFault();
+			fault.setFaultString(e.getFaultString());
+			throw fault;
 		} catch (Exception e) {
 			DorianInternalFault fault = new DorianInternalFault();
 			fault.setFaultString(e.getMessage());
@@ -296,10 +317,10 @@ public class DorianImpl extends DorianImplBase {
 		if (credential.getBasicAuthenticationCredential() == null) {
 			InvalidCredentialFault fault = new InvalidCredentialFault();
 			fault
-					.setFaultString("The Dorian IdP requires a username and password!!!");
+					.setFaultString("A username and password is required to authenticate in this manner!!!");
 			throw fault;
 		} else {
-			BasicAuthCredential cred = new BasicAuthCredential();
+			BasicAuthentication cred = new BasicAuthentication();
 			cred.setUserId(credential.getBasicAuthenticationCredential()
 					.getUserId());
 			cred.setPassword(credential.getBasicAuthenticationCredential()
@@ -310,7 +331,15 @@ public class DorianImpl extends DorianImplBase {
 				String xml = SAMLUtils.samlAssertionToString(saml);
 				return new gov.nih.nci.cagrid.authentication.bean.SAMLAssertion(
 						xml);
-			} catch (PermissionDeniedFault f) {
+			} catch (AuthenticationProviderFault f) {
+				gov.nih.nci.cagrid.authentication.stubs.types.AuthenticationProviderFault fault = new gov.nih.nci.cagrid.authentication.stubs.types.AuthenticationProviderFault();
+				fault.setFaultString(f.getFaultString());
+				throw fault;
+			} catch (org.cagrid.gaards.authentication.faults.InvalidCredentialFault f) {
+				InvalidCredentialFault fault = new InvalidCredentialFault();
+				fault.setFaultString(f.getFaultString());
+				throw fault;
+			} catch (CredentialNotSupportedFault f) {
 				InvalidCredentialFault fault = new InvalidCredentialFault();
 				fault.setFaultString(f.getFaultString());
 				throw fault;
@@ -405,7 +434,9 @@ public class DorianImpl extends DorianImplBase {
 			org.cagrid.gaards.dorian.stubs.types.DorianInternalFault,
 			org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault,
 			org.cagrid.gaards.dorian.stubs.types.InvalidUserPropertyFault {
-		dorian.changeIdPUserPassword(credential, newPassword);
+		dorian.changeIdPUserPassword(
+				org.cagrid.gaards.dorian.service.util.Utils
+						.fromLegacyCredential(credential), newPassword);
 	}
 
 	public boolean doesIdPUserExist(java.lang.String userId)
@@ -421,17 +452,7 @@ public class DorianImpl extends DorianImplBase {
 			org.cagrid.gaards.authentication.faults.CredentialNotSupportedFault,
 			org.cagrid.gaards.authentication.faults.InsufficientAttributeFault,
 			org.cagrid.gaards.authentication.faults.InvalidCredentialFault {
-		if (credential.getClass().equals(BasicAuthentication.class)) {
-			BasicAuthentication cred = (BasicAuthentication) credential;
-			BasicAuthCredential bac = new BasicAuthCredential();
-			bac.setUserId(cred.getUserId());
-			bac.setPassword(cred.getPassword());
-			return dorian.authenticate(bac);
-		} else {
-			InvalidCredentialFault fault = new InvalidCredentialFault();
-			fault.setFaultString("The credential provided is not supported.");
-			throw fault;
-		}
+		return dorian.authenticate(credential);
 	}
 
 }

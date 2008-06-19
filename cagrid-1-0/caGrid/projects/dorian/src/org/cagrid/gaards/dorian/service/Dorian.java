@@ -7,6 +7,11 @@ import java.rmi.RemoteException;
 import java.security.PublicKey;
 import java.security.cert.X509Certificate;
 
+import org.cagrid.gaards.authentication.BasicAuthentication;
+import org.cagrid.gaards.authentication.Credential;
+import org.cagrid.gaards.authentication.faults.AuthenticationProviderFault;
+import org.cagrid.gaards.authentication.faults.CredentialNotSupportedFault;
+import org.cagrid.gaards.authentication.faults.InvalidCredentialFault;
 import org.cagrid.gaards.dorian.ca.CertificateAuthority;
 import org.cagrid.gaards.dorian.common.LoggingObject;
 import org.cagrid.gaards.dorian.common.SAMLConstants;
@@ -28,7 +33,6 @@ import org.cagrid.gaards.dorian.federation.SAMLAuthenticationMethod;
 import org.cagrid.gaards.dorian.federation.TrustedIdP;
 import org.cagrid.gaards.dorian.federation.TrustedIdPStatus;
 import org.cagrid.gaards.dorian.idp.Application;
-import org.cagrid.gaards.dorian.idp.BasicAuthCredential;
 import org.cagrid.gaards.dorian.idp.IdPUser;
 import org.cagrid.gaards.dorian.idp.IdPUserFilter;
 import org.cagrid.gaards.dorian.idp.IdentityProvider;
@@ -92,7 +96,8 @@ public class Dorian extends LoggingObject {
 
 			this.ca = this.configuration.getCertificateAuthority();
 
-			this.identityProvider = new IdentityProvider(configuration.getIdentityProviderProperties(), db, ca);
+			this.identityProvider = new IdentityProvider(configuration
+					.getIdentityProviderProperties(), db, ca);
 
 			TrustedIdP idp = new TrustedIdP();
 			idp.setName(conf.getIdentityProviderProperties().getName());
@@ -144,10 +149,11 @@ public class Dorian extends LoggingObject {
 
 			ifsConfiguration = configuration.getIdentityFederationProperties();
 			FederationDefaults defaults = new FederationDefaults(idp, usr);
-			this.ifs = new IdentityFederationManager(ifsConfiguration, db, properties, ca, defaults,
-					ignoreCRL);
+			this.ifs = new IdentityFederationManager(ifsConfiguration, db,
+					properties, ca, defaults, ignoreCRL);
 
-			if (!this.properties.getVersion().equals(PropertyManager.CURRENT_VERSION)) {
+			if (!this.properties.getVersion().equals(
+					PropertyManager.CURRENT_VERSION)) {
 				DorianInternalFault fault = new DorianInternalFault();
 				fault
 						.setFaultString("Version conflict detected, your are running Dorian "
@@ -195,7 +201,7 @@ public class Dorian extends LoggingObject {
 		return identityProvider.getIdPCertificate();
 	}
 
-	public void changeIdPUserPassword(BasicAuthCredential credential,
+	public void changeIdPUserPassword(BasicAuthentication credential,
 			String newPassword) throws DorianInternalFault,
 			PermissionDeniedFault, InvalidUserPropertyFault {
 		this.identityProvider.changePassword(credential, newPassword);
@@ -246,8 +252,9 @@ public class Dorian extends LoggingObject {
 				.getIdPCertificate(), userId);
 	}
 
-	public SAMLAssertion authenticate(BasicAuthCredential credential)
-			throws DorianInternalFault, PermissionDeniedFault {
+	public SAMLAssertion authenticate(Credential credential)
+			throws AuthenticationProviderFault, InvalidCredentialFault,
+			CredentialNotSupportedFault {
 		return this.identityProvider.authenticate(credential);
 	}
 
@@ -368,10 +375,10 @@ public class Dorian extends LoggingObject {
 			InvalidHostCertificateFault, PermissionDeniedFault {
 		return ifs.renewHostCertificate(callerGridId, recordId);
 	}
-	
-	 public boolean doesIdPUserExist(String userId) throws DorianInternalFault {
-		  return this.identityProvider.doesUserExist(userId);
-     }
+
+	public boolean doesIdPUserExist(String userId) throws DorianInternalFault {
+		return this.identityProvider.doesUserExist(userId);
+	}
 
 	public void clearDatabase() throws DorianInternalFault {
 		this.identityProvider.clearDatabase();
