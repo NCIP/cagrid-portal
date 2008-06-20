@@ -247,7 +247,7 @@ public class DomainModelUtils {
      * Represents a simplified Common Data Element (a Class and Attribute),
      * identified by attributed public ID and version.
      */
-    static class CDE {
+    public static class CDE {
         private UMLClass umlClass;
         private UMLAttribute umlAttribute;
 
