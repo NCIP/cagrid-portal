@@ -327,7 +327,7 @@ public class ServiceMetadataTreeNodeListener implements TreeNodeListener {
 		node.getChildren().add(classesNode);
 		for (UMLClass umlClass : classes) {
 			addUMLClass(classesNode, params, umlClass, umlClass
-					.getPackageName());
+					.getPackageName()+".");
 		}
 
 		List<XMLSchema> xmlSchemas = domainModel.getXmlSchemas();

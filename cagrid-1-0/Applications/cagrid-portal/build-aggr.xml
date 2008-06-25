@@ -127,8 +127,7 @@
             <batchtest todir="${aggr.test.build.dir}/junit-reports">
                 <fileset dir="${aggr.test.src.java.dir}">
                     <include name="**/*Test.java"/>
-                    <include name="**/*SystemTest.java"/>
-
+                    <exclude name="**/*SystemTest.java"/>
                 </fileset>
             </batchtest>
 
@@ -197,5 +196,5 @@
             <arg value="${aggr:banOpUrl}"/>
         </java>
     </target>
-
+	
 </project>
