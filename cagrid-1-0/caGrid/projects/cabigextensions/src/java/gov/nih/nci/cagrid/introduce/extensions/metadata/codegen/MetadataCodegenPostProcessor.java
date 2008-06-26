@@ -14,7 +14,6 @@ import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertyType;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.beans.service.ServicesType;
 import gov.nih.nci.cagrid.introduce.common.ConfigurationUtil;
-import gov.nih.nci.cagrid.introduce.common.ResourceManager;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.extension.CodegenExtensionException;
 import gov.nih.nci.cagrid.introduce.extension.CodegenExtensionPostProcessor;
@@ -162,7 +161,7 @@ public class MetadataCodegenPostProcessor implements CodegenExtensionPostProcess
             newServContexts[i] = currContext;
 
             // use the main service to set some higher level items
-            if (serv.getResourceFrameworkOptions().getMain()!=null) {
+            if (serv.getResourceFrameworkOptions().getMain() != null) {
                 service.setName(serv.getName());
                 // set a version
                 if (service.getVersion() == null || service.getVersion().trim().equals("")) {
@@ -214,8 +213,8 @@ public class MetadataCodegenPostProcessor implements CodegenExtensionPostProcess
 
     /**
      * @param info
-     * @return
-     *      True if the service information is that of a Data Service, false otherwise
+     * @return True if the service information is that of a Data Service, false
+     *         otherwise
      */
     private boolean isDataService(ServiceInformation info) {
         ServicesType services = info.getServices();
@@ -224,7 +223,7 @@ public class MetadataCodegenPostProcessor implements CodegenExtensionPostProcess
             // find the main service
             for (int i = 0; i < services.getService().length; i++) {
                 ServiceType serv = services.getService(i);
-                if (serv.getResourceFrameworkOptions().getMain()!=null) {
+                if (serv.getResourceFrameworkOptions().getMain() != null) {
                     mainService = serv;
                     break;
                 }
@@ -312,7 +311,7 @@ public class MetadataCodegenPostProcessor implements CodegenExtensionPostProcess
             }
 
             // edit the operation
-            method.setDescription(currOp.getDescription());
+            currOp.setDescription(method.getDescription());
             editOperation(method, currOp);
             newOperations[i] = currOp;
 
