@@ -9,7 +9,7 @@
 
 	<!-- Post Introduce Edit-->
 	<target name="nuke" description="Nukes the Dorian Test DB">
-		<java classname="gov.nih.nci.cagrid.dorian.test.Nuker" fork="no">
+		<java classname="org.cagrid.gaards.dorian.test.Nuker" fork="no">
 			<classpath>
 				<path refid="test.run.classpath" />
 				<pathelement location="${test.dir}/resources" />
