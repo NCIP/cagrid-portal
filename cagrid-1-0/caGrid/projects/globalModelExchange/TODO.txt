@@ -4,7 +4,7 @@ TESTS TO WRITE:
 add deploy system test
   add unsuccessful deploy system test that uses wrong database information and make sure service wont start
 
-add a test for "already defined"
+add a test for "already defined" schema
 
 add a test for schema with unused schemadocument (need to disallow)
 
@@ -30,6 +30,7 @@ springize GME:
 need to check use of these we need:
 http://xerces.apache.org/xerces2-j/features.html
 
+castor configuration for domain
 
 should be able to add a validateXMLDocument method that uses the schemaloader
  to resolve the documents schema, and then validate it
