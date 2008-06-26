@@ -7,23 +7,53 @@
   <ns2:Namespace generateStubs="false" location="./xsd/cagrid/types/caGridMetadata.xsd" namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata" packageName="gov.nih.nci.cagrid.metadata" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="ServiceMetadata" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
-  <ns2:Namespace location="./schema.xsd" namespace="http://www.w3.org/2001/XMLSchema" packageName="xmlschema" xsi:type="ns2:NamespaceType">
-   <ns2:SchemaElement type="enumeration" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="fractionDigits" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="length" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="list" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="maxExclusive" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="maxInclusive" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="maxLength" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="minExclusive" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="minInclusive" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="minLength" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="pattern" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="restriction" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="simpleType" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="totalDigits" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="union" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="whiteSpace" xsi:type="ns2:SchemaElementType"/>
+  <ns2:Namespace namespace="http://www.w3.org/2001/XMLSchema" xsi:type="ns2:NamespaceType">
+   <ns2:SchemaElement type="anySimpleType" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="anyType" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="anyURI" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="base64Binary" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="boolean" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="byte" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="date" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="dateTime" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="decimal" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="double" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="duration" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ENTITIES" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ENTITY" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="float" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="gDay" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="gMonth" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="gMonthDay" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="gYear" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="gYearMonth" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="hexBinary" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ID" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="IDREF" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="IDREFS" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="int" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="integer" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="language" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="long" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Name" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="NCName" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="negativeInteger" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="NMTOKEN" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="NMTOKENS" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="nonNegativeInteger" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="nonPositiveInteger" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="normalizedString" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="NOTATION" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="positiveInteger" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="QName" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="short" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="string" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="time" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="token" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="unsignedByte" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="unsignedInt" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="unsignedLong" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="unsignedShort" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
   <ns2:Namespace location="./GlobalModelExchangeTypes.xsd" namespace="http://gme.cagrid.org/GlobalModelExchange/types" packageName="org.cagrid.gme.stubs.types" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="GlobalModelExchangeReference" xsi:type="ns2:SchemaElementType"/>
@@ -64,10 +94,17 @@
      <ns4:ImportInformation fromIntroduce="false" inputMessage="ns8:QueryResourcePropertiesRequest" namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" outputMessage="ns8:QueryResourcePropertiesResponse" packageName="org.oasis.wsrf.properties" portTypeName="QueryResourceProperties" wsdlFile="../wsrf/properties/WS-ResourceProperties.wsdl" xmlns:ns8="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl"/>
      <ns4:ProviderInformation providerClass="QueryRPProvider"/>
     </ns4:Method>
+    <ns4:Method description="Publishes the provided schemas, replacing existing versions as necessary." isImported="false" isProvided="false" name="publishSchemas" xsi:type="ns4:MethodType">
+     <ns4:Inputs>
+      <ns4:Input qName="ns9:XMLSchema" description="The schemas to publish" isArray="true" name="schemas" xmlns:ns9="gme://gme.cagrid.org/2.0/GlobalModelExchange/domain"/>
+     </ns4:Inputs>
+     <ns4:Output qName="void" description="" isArray="false"/>
+     <ns4:Exceptions/>
+    </ns4:Method>
    </ns4:Methods>
-   <ns9:ResourcePropertiesList xsi:type="ns9:ResourcePropertiesListType" xmlns:ns9="gme://gov.nih.nci.cagrid.introduce/1/Resources">
-    <ns9:ResourceProperty qName="ns10:ServiceMetadata" description="caGrid standard Service Metadata" fileLocation="serviceMetadata.xml" populateFromFile="true" register="true" xsi:type="ns9:ResourcePropertyType" xmlns:ns10="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"/>
-   </ns9:ResourcePropertiesList>
+   <ns10:ResourcePropertiesList xsi:type="ns10:ResourcePropertiesListType" xmlns:ns10="gme://gov.nih.nci.cagrid.introduce/1/Resources">
+    <ns10:ResourceProperty qName="ns11:ServiceMetadata" description="caGrid standard Service Metadata" fileLocation="serviceMetadata.xml" populateFromFile="true" register="true" xsi:type="ns10:ResourcePropertyType" xmlns:ns11="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"/>
+   </ns10:ResourcePropertiesList>
    <ns3:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">The Global Model Exchange (GME) acts as an authoritative source
         for XML Schemas, providing a robust type management system for
         use in Grids and other XML-based environments.</ns3:description>
@@ -80,11 +117,11 @@
    </ns3:ResourceFrameworkOptions>
   </ns3:Service>
  </ns3:Services>
- <ns11:Extensions xsi:type="ns11:ExtensionsType" xmlns:ns11="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <ns11:Extension name="cagrid_metadata" version="1.2" xsi:type="ns11:ExtensionType"/>
- </ns11:Extensions>
- <ns12:ServiceProperties xmlns:ns12="gme://gov.nih.nci.cagrid.introduce/1/Property">
-  <ns12:Property description="The location (relative to the service's ETC location) of the XML configuration file" isFromETC="true" key="gmeConfigurationFile" value="applicationContext-gme.xml"/>
-  <ns12:Property description="The location (relative to the service's ETC location) of the properties file containing information about the database and other settings" isFromETC="true" key="gmePropertiesFile" value="gme.properties"/>
- </ns12:ServiceProperties>
+ <ns12:Extensions xsi:type="ns12:ExtensionsType" xmlns:ns12="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ns12:Extension name="cagrid_metadata" version="1.2" xsi:type="ns12:ExtensionType"/>
+ </ns12:Extensions>
+ <ns13:ServiceProperties xmlns:ns13="gme://gov.nih.nci.cagrid.introduce/1/Property">
+  <ns13:Property description="The location (relative to the service's ETC location) of the XML configuration file" isFromETC="true" key="gmeConfigurationFile" value="applicationContext-gme.xml"/>
+  <ns13:Property description="The location (relative to the service's ETC location) of the properties file containing information about the database and other settings" isFromETC="true" key="gmePropertiesFile" value="gme.properties"/>
+ </ns13:ServiceProperties>
 </ns1:ServiceDescription>

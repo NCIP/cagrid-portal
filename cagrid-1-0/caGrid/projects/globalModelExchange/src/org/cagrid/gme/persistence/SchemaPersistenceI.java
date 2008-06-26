@@ -18,7 +18,7 @@ public interface SchemaPersistenceI {
      *            the namespace of the schema of interest
      * @return null or the Schema registered with the given namespace.
      */
-    public XMLSchema getSchema(URI schemaTargetNamespace) throws SchemaPersistenceGeneralException;
+    public XMLSchema getSchema(URI schemaTargetNamespace);
 
 
     /**
@@ -31,7 +31,7 @@ public interface SchemaPersistenceI {
      * @return a Collection of Schemas which depend on (i.e. xs:import) the
      *         schema identified by the given namespace.
      */
-    public Collection<XMLSchema> getDependingSchemas(URI namespace) throws SchemaPersistenceGeneralException;
+    public Collection<XMLSchema> getDependingSchemas(URI namespace);
 
 
     /**
@@ -41,7 +41,7 @@ public interface SchemaPersistenceI {
      * @return the Collection of Namespaces which correspond to the
      *         targetNamespaces of the schemas which are published.
      */
-    public Collection<URI> getNamespaces() throws SchemaPersistenceGeneralException;
+    public Collection<URI> getNamespaces();
 
 
     /**
@@ -53,6 +53,6 @@ public interface SchemaPersistenceI {
      *            Schemas are schemas to store and Namespaces are that Schema's
      *            imports
      */
-    public void storeSchemas(Map<XMLSchema, List<URI>> schemasToStore) throws SchemaPersistenceGeneralException;
+    public void storeSchemas(Map<XMLSchema, List<URI>> schemasToStore);
 
 }

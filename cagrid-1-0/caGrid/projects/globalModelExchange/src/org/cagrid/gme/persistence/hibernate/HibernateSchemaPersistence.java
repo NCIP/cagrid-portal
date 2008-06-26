@@ -10,7 +10,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.cagrid.gme.domain.XMLSchema;
-import org.cagrid.gme.persistence.SchemaPersistenceGeneralException;
 import org.cagrid.gme.persistence.SchemaPersistenceI;
 import org.cagrid.gme.service.dao.XMLSchemaInformationDao;
 import org.cagrid.gme.service.domain.XMLSchemaInformation;
@@ -36,7 +35,7 @@ public class HibernateSchemaPersistence implements SchemaPersistenceI {
     }
 
 
-    public Collection<XMLSchema> getDependingSchemas(URI namespace) throws SchemaPersistenceGeneralException {
+    public Collection<XMLSchema> getDependingSchemas(URI namespace) {
         Collection<XMLSchema> schemas = new ArrayList<XMLSchema>();
 
         Collection<XMLSchemaInformation> dependingSchemas = getSchemaInformationDao().getDependingSchemas(namespace);
@@ -47,17 +46,17 @@ public class HibernateSchemaPersistence implements SchemaPersistenceI {
     }
 
 
-    public Collection<URI> getNamespaces() throws SchemaPersistenceGeneralException {
+    public Collection<URI> getNamespaces() {
         return getSchemaInformationDao().getAllNamespaces();
     }
 
 
-    public XMLSchema getSchema(URI schemaTargetNamespace) throws SchemaPersistenceGeneralException {
+    public XMLSchema getSchema(URI schemaTargetNamespace) {
         return getSchemaInformationDao().getXMLSchemaByTargetNamespace(schemaTargetNamespace);
     }
 
 
-    public void storeSchemas(Map<XMLSchema, List<URI>> schemasToStore) throws SchemaPersistenceGeneralException {
+    public void storeSchemas(Map<XMLSchema, List<URI>> schemasToStore) {
         // REVISIT: is there a simpler way to do this
 
         // this is a list of newly persistent XMLSchemaInformation (for those

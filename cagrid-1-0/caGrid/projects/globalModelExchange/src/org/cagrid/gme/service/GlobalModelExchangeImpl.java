@@ -8,7 +8,6 @@ import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 import org.springframework.beans.factory.xml.XmlBeanFactory;
 import org.springframework.core.io.FileSystemResource;
 
-
 /**
  * The service side implementation class of the GlobalModelExchange,managed by
  * Introduce.
@@ -16,12 +15,11 @@ import org.springframework.core.io.FileSystemResource;
  * @created by Introduce Toolkit version 1.0
  */
 public class GlobalModelExchangeImpl extends GlobalModelExchangeImplBase {
-    
+
     protected static Log LOG = LogFactory.getLog(GlobalModelExchangeImpl.class.getName());
-    
+
     protected static final String GME_BEAN_NAME = "gme";
     protected GME gme = null;
-
 
     public GlobalModelExchangeImpl() throws RemoteException {
         super();
@@ -43,6 +41,10 @@ public class GlobalModelExchangeImpl extends GlobalModelExchangeImplBase {
             LOG.error(message, e);
             throw new RemoteException(message, e);
         }
+    }
+
+  public void publishSchemas(org.cagrid.gme.domain.XMLSchema[] schemas) throws RemoteException {
+        this.gme.addSchema(schemas);
     }
 
 }

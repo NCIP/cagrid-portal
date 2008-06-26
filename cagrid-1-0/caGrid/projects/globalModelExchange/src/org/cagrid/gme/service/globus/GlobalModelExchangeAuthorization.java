@@ -67,6 +67,11 @@ public class GlobalModelExchangeAuthorization implements PDP {
 		
 		
 	}
+					
+	public static void authorizePublishSchemas() throws RemoteException {
+		
+		
+	}
 	
 	
 	public boolean isPermitted(Subject peerSubject, MessageContext context, QName operation)
@@ -102,6 +107,14 @@ public class GlobalModelExchangeAuthorization implements PDP {
 		} else if(operation.getLocalPart().equals("queryResourceProperties")){
 			try{
 				authorizeQueryResourceProperties();
+				return true;
+			} catch (Exception e){
+				e.printStackTrace();
+				return false;
+			}
+		} else if(operation.getLocalPart().equals("publishSchemas")){
+			try{
+				authorizePublishSchemas();
 				return true;
 			} catch (Exception e){
 				e.printStackTrace();

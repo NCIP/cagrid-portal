@@ -137,4 +137,15 @@ public class GlobalModelExchangeClient extends ServiceSecurityClient implements 
     }
   }
 
+  public void publishSchemas(org.cagrid.gme.domain.XMLSchema[] schemas) throws RemoteException {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"publishSchemas");
+    org.cagrid.gme.stubs.PublishSchemasRequest params = new org.cagrid.gme.stubs.PublishSchemasRequest();
+    org.cagrid.gme.stubs.PublishSchemasRequestSchemas schemasContainer = new org.cagrid.gme.stubs.PublishSchemasRequestSchemas();
+    schemasContainer.setXMLSchema(schemas);
+    params.setSchemas(schemasContainer);
+    org.cagrid.gme.stubs.PublishSchemasResponse boxedResult = portType.publishSchemas(params);
+    }
+  }
+
 }

@@ -26,4 +26,10 @@ public class GlobalModelExchangeProviderImpl{
 	}
 	
 
+    public org.cagrid.gme.stubs.PublishSchemasResponse publishSchemas(org.cagrid.gme.stubs.PublishSchemasRequest params) throws RemoteException {
+    org.cagrid.gme.stubs.PublishSchemasResponse boxedResult = new org.cagrid.gme.stubs.PublishSchemasResponse();
+    impl.publishSchemas(params.getSchemas().getXMLSchema());
+    return boxedResult;
+  }
+
 }

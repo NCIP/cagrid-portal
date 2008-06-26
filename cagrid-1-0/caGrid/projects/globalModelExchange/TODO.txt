@@ -1,4 +1,8 @@
 
+what to return for getNamespaces?
+ideally return java.net.URI in API, but need to make it anyURI in WSDL, and not really a way to remap the standard schema NS to that package (don't want to do it for all types/classes)
+
+
 TESTS TO WRITE:
 ==========
 add deploy system test
@@ -16,6 +20,7 @@ add tests which check our use of ns as the basesystemid (i.e., does new URI(ns,s
   --probably just need to make a constraint that includes/systemIDs need to be relative URIs 
 
 add a test which does import of no namespace schema (need to disallow)
+
 
 
 

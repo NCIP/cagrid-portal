@@ -24,4 +24,12 @@ public interface GlobalModelExchangeI {
 
   public org.oasis.wsrf.properties.QueryResourcePropertiesResponse queryResourceProperties(org.oasis.wsrf.properties.QueryResourceProperties_Element params) throws RemoteException ;
 
+  /**
+   * Publishes the provided schemas, replacing existing versions as necessary.
+   *
+   * @param schemas
+   *	The schemas to publish
+   */
+  public void publishSchemas(org.cagrid.gme.domain.XMLSchema[] schemas) throws RemoteException ;
+
 }

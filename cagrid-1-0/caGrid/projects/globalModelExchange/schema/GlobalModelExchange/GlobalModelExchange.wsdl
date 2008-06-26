@@ -17,6 +17,24 @@
       <import namespace="http://gme.cagrid.org/GlobalModelExchange/types" schemaLocation="./GlobalModelExchangeTypes.xsd" />
       <import namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata" schemaLocation="./xsd/cagrid/types/caGridMetadata.xsd" />
       <import namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security" schemaLocation="./xsd/cagrid/types/security/security.xsd" />
+      <element name="PublishSchemasRequest">
+        <complexType>
+          <sequence>
+            <element name="schemas">
+              <complexType>
+                <sequence>
+                  <element ref="ns0:XMLSchema" minOccurs="1" maxOccurs="unbounded" />
+                </sequence>
+              </complexType>
+            </element>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="PublishSchemasResponse">
+        <complexType>
+          <sequence />
+        </complexType>
+      </element>
       <element name="GlobalModelExchangeResourceProperties">
         <complexType>
           <sequence>
@@ -27,12 +45,22 @@
     </schema>
   </types>
   <!--  place service messages here -->
+  <message name="PublishSchemasRequest">
+    <part name="parameters" element="tns:PublishSchemasRequest" />
+  </message>
+  <message name="PublishSchemasResponse">
+    <part name="parameters" element="tns:PublishSchemasResponse" />
+  </message>
   <!--============================================================
 
                        P O R T T Y P E
                       
   ============================================================-->
   <portType name="GlobalModelExchangePortType" wsrp:ResourceProperties="tns:GlobalModelExchangeResourceProperties">
+    <operation name="publishSchemas">
+      <input message="tns:PublishSchemasRequest" wsa:Action="http://gme.cagrid.org/GlobalModelExchange/PublishSchemasRequest" />
+      <output message="tns:PublishSchemasResponse" wsa:Action="http://gme.cagrid.org/GlobalModelExchange/PublishSchemasResponse" />
+    </operation>
     <operation name="getServiceSecurityMetadata">
       <input message="wns0:GetServiceSecurityMetadataRequest" wsa:Action="http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity/GetServiceSecurityMetadataRequest" />
       <output message="wns0:GetServiceSecurityMetadataResponse" wsa:Action="http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity/GetServiceSecurityMetadataResponse" />

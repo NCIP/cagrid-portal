@@ -48,8 +48,7 @@ public class GME {
     }
 
 
-    public void addSchema(XMLSchema[] schemas) throws SchemaAlreadyExists, InvalidSchemaSubmission,
-        SchemaPersistenceGeneralException {
+    public void addSchema(XMLSchema[] schemas) throws SchemaAlreadyExists, InvalidSchemaSubmission {
 
         // 0. sanity check submission
         if (schemas == null || schemas.length == 0) {
@@ -109,7 +108,7 @@ public class GME {
 
 
     Map<URI, SchemaGrammar> verifySubmissionAndInitializeProcessedSchemasMap(XMLSchema[] schemas)
-        throws InvalidSchemaSubmission, SchemaPersistenceGeneralException, SchemaAlreadyExists {
+        throws InvalidSchemaSubmission, SchemaAlreadyExists {
         Map<URI, SchemaGrammar> processedSchemas = new HashMap<URI, SchemaGrammar>();
         for (XMLSchema submittedSchema : schemas) {
             // verify the schema's have unique and valid URIs
@@ -196,7 +195,7 @@ public class GME {
 
 
     protected void commitSchemas(XMLSchema[] schemas, Map<URI, SchemaGrammar> processedSchemas)
-        throws InvalidSchemaSubmission, SchemaPersistenceGeneralException {
+        throws InvalidSchemaSubmission {
 
         // if got here with no error, schemas are ok to persist
         // build up DB objects to commit
@@ -373,7 +372,7 @@ public class GME {
     }
 
 
-    public URI[] getNamespaces() throws SchemaPersistenceGeneralException {
+    public URI[] getNamespaces() {
         this.lock.readLock().lock();
         try {
             Collection<URI> nsCol = this.schemaPersistence.getNamespaces();

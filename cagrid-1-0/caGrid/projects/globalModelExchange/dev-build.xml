@@ -30,6 +30,9 @@
 	<property name="ext.lib" location="${ext.dependencies.dir}/service/jars" />
 	<property name="ext.test.lib" value="${ext.dependencies.dir}/test/jars" />
 
+	<property name="domain.dir" value="domain" />
+	<property name="domain.src.dir" value="${domain.dir}/src" />
+
 	<property name="test.dir" value="test" />
 	<property name="test.src.dir" value="${test.dir}/src" />
 
@@ -49,6 +52,7 @@
 			<fileset dir="${ext.lib}">
 				<include name="*.jar" />
 			</fileset>
+			<pathelement location="${build.dest}" />
 		</path>
 		<path id="service.build.extended.classpath">
 		</path>
@@ -60,7 +64,7 @@
 			</fileset>
 		</path>
 		<path id="test.run.extended.classpath">
-	         <pathelement location="${test.dir}/resources"/>
+			<pathelement location="${test.dir}/resources" />
 		</path>
 		<path id="run.extended.classpath">
 		</path>
@@ -103,10 +107,22 @@
 
 	</target>
 
+
+	<target name="compileDomain" depends="init" description="Compiles the domain model for the service.">
+		<javac srcdir="${domain.src.dir}" classpathref="service.build.classpath" includes="**" destdir="${build.dest}" debug="${java.debug}" deprecation="${deprecation}" />
+
+		<!-- Copy the source code, wsdd, properties, etc to the build dir for include in the jar -->
+		<copy toDir="${build.dest}">
+			<fileset dir="${domain.src.dir}">
+				<include name="**/*" />
+			</fileset>
+		</copy>
+	</target>
+
 	<!-- ============================================================== -->
 	<!-- Pre Compile Stubs Build Target                                 -->
 	<!-- ============================================================== -->
-	<target name="preCompileStubs">
+	<target name="preCompileStubs" depends="compileDomain">
 
 	</target>
 
