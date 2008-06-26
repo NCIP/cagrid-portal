@@ -1,8 +1,8 @@
 <ns1:ServiceDescription introduceVersion="1.2" xmlns:ns1="gme://gov.nih.nci.cagrid/1/Introduce">
  <ns2:Namespaces xsi:type="ns2:NamespacesType" xmlns:ns2="gme://gov.nih.nci.cagrid.introduce/1/Namespace" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <ns2:Namespace location="./newgme.xsd" namespace="gme://gme.cagrid.org/2.0/GlobalModelExchange" packageName="org.cagrid.gme.protocol.stubs" xsi:type="ns2:NamespaceType">
-   <ns2:SchemaElement type="Schema" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="SchemaDocument" xsi:type="ns2:SchemaElementType"/>
+  <ns2:Namespace location="./org.cagrid.gme.domain.xsd" namespace="gme://gme.cagrid.org/2.0/GlobalModelExchange/domain" packageName="org.cagrid.gme.domain" xsi:type="ns2:NamespaceType">
+   <ns2:SchemaElement className="XMLSchema" deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory" type="XMLSchema" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="XMLSchemaDocument" deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory" type="XMLSchemaDocument" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
   <ns2:Namespace generateStubs="false" location="./xsd/cagrid/types/caGridMetadata.xsd" namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata" packageName="gov.nih.nci.cagrid.metadata" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="ServiceMetadata" xsi:type="ns2:SchemaElementType"/>

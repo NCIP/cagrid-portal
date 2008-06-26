@@ -27,7 +27,7 @@
 		</constructor-arg>
 	</bean>
 
-	<bean id="testSchemaInclude" class="org.cagrid.gme.domain.XMLSchema">
+	<bean id="testSchemaInclude" class="org.cagrid.gme.domain.XMLSchema" scope="prototype">
 		<property name="targetNamespace" value="gme://include"/>
 		<property name="rootDocument">
 			<ref bean="testDocumentIncluder"/>
@@ -59,7 +59,7 @@
 	</bean>
 
 
-	<bean id="testSchemaIncludeCycle" class="org.cagrid.gme.domain.XMLSchema">
+	<bean id="testSchemaIncludeCycle" class="org.cagrid.gme.domain.XMLSchema" scope="prototype">
 		<property name="targetNamespace" value="gme://includecycle"/>
 		<property name="rootDocument">
 			<ref bean="testDocumentIncluderCycle"/>
@@ -91,7 +91,8 @@
 	</bean>
 
 
-	<bean id="testSchemaIncludeNoNamespace" class="org.cagrid.gme.domain.XMLSchema">
+	<bean id="testSchemaIncludeNoNamespace" class="org.cagrid.gme.domain.XMLSchema"
+		scope="prototype">
 		<property name="targetNamespace" value="gme://includenons"/>
 		<property name="rootDocument">
 			<ref bean="testDocumentIncluderNoNamespace"/>

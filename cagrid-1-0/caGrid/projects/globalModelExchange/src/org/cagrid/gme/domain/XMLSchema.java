@@ -59,7 +59,7 @@ public class XMLSchema {
     }
 
 
-    public java.net.URI getTargetNamespace() {
+    public URI getTargetNamespace() {
         return targetNamespace;
     }
 

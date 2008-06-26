@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema targetNamespace="gme://gme.cagrid.org/2.0/GlobalModelExchange/domain"
+	xmlns="gme://gme.cagrid.org/2.0/GlobalModelExchange/domain"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
+	attributeFormDefault="unqualified">
+
+	<xs:element name="XMLSchema" type="XMLSchema"/>
+	<xs:complexType name="XMLSchema">
+		<xs:sequence>
+			<xs:element name="rootDocument">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element minOccurs="1" maxOccurs="1" ref="XMLSchemaDocument"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="additionalDocuments" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element minOccurs="1" maxOccurs="unbounded" ref="XMLSchemaDocument"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="targetNamespace" type="xs:anyURI"/>
+	</xs:complexType>
+
+
+	<xs:element name="XMLSchemaDocument" type="XMLSchemaDocument"/>
+	<xs:complexType name="XMLSchemaDocument">
+		<xs:sequence>
+			<xs:element name="schemaText" type="xs:string"/>
+		</xs:sequence>
+		<xs:attribute name="systemID" type="xs:string"/>
+	</xs:complexType>
+
+</xs:schema>

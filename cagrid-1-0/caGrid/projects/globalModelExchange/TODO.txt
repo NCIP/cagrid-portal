@@ -30,7 +30,5 @@ springize GME:
 need to check use of these we need:
 http://xerces.apache.org/xerces2-j/features.html
 
-castor configuration for domain
-
 should be able to add a validateXMLDocument method that uses the schemaloader
  to resolve the documents schema, and then validate it

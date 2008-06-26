@@ -27,14 +27,14 @@
 		</constructor-arg>
 	</bean>
 
-	<bean id="testSchemaRedefined" class="org.cagrid.gme.domain.XMLSchema">
+	<bean id="testSchemaRedefined" class="org.cagrid.gme.domain.XMLSchema" scope="prototype">
 		<property name="targetNamespace" value="gme://redefine"/>
 		<property name="rootDocument">
 			<ref bean="testDocumentRedefined"/>
 		</property>
 	</bean>
 
-	<bean id="testSchemaRedefine" class="org.cagrid.gme.domain.XMLSchema">
+	<bean id="testSchemaRedefine" class="org.cagrid.gme.domain.XMLSchema" scope="prototype">
 		<property name="targetNamespace" value="gme://redefine"/>
 		<property name="rootDocument">
 			<ref bean="testDocumentRedefiner"/>
@@ -64,7 +64,8 @@
 		</constructor-arg>
 	</bean>
 
-	<bean id="testSchemaRedefineNoNamespace" class="org.cagrid.gme.domain.XMLSchema">
+	<bean id="testSchemaRedefineNoNamespace" class="org.cagrid.gme.domain.XMLSchema"
+		scope="prototype">
 		<property name="targetNamespace" value="gme://redefinenons"/>
 		<property name="rootDocument">
 			<ref bean="testDocumentRedefinerNoNamespace"/>
@@ -95,7 +96,8 @@
 		</constructor-arg>
 	</bean>
 
-	<bean id="testInvalidSchemaRedefineWrongNamespace" class="org.cagrid.gme.domain.XMLSchema">
+	<bean id="testInvalidSchemaRedefineWrongNamespace" class="org.cagrid.gme.domain.XMLSchema"
+		scope="prototype">
 		<property name="targetNamespace" value="gme://redefinewrongns"/>
 		<property name="rootDocument">
 			<ref bean="testDocumentRedefinerWrongNamespace"/>
@@ -106,8 +108,9 @@
 			</set>
 		</property>
 	</bean>
-	
-	<bean id="testSchemaRedefineWrongNamespaceRedefinedOnly" class="org.cagrid.gme.domain.XMLSchema">
+
+	<bean id="testSchemaRedefineWrongNamespaceRedefinedOnly" class="org.cagrid.gme.domain.XMLSchema"
+		scope="prototype">
 		<property name="targetNamespace" value="gme://wrongnamespace"/>
 		<property name="rootDocument">
 			<ref bean="testDocumentRedefinedWrongNamespace"/>
