@@ -34,6 +34,9 @@
     <!-- CQL stubs -->
     <dependency rev="latest.integration" org="caGrid" name="cql" conf="default->cql"/>
     
+    <!-- FQP -->
+    <dependency rev="latest.integration" org="caGrid" name="fqp" conf="default->stubs;default->client;default->common"/>
+    
     <!-- Apache Commons Logging-->
     <dependency rev="1.1" org="apache" name="commons-logging" conf="default"/>
     
