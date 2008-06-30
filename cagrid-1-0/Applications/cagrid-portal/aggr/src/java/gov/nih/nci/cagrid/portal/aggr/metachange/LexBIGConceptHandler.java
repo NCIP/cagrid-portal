@@ -181,7 +181,7 @@ public class LexBIGConceptHandler implements ConceptHandler {
 				1);
 		ResolvedConceptReference[] rcr = rcrl.getResolvedConceptReference();
 		if (rcr.length == 0) {
-			logger.warn("Couldn't resolve concept code: " + code);
+			logger.debug("Couldn't resolve concept code: " + code);
 		} else {
 			pathList.add(rcr[0]);
 		}

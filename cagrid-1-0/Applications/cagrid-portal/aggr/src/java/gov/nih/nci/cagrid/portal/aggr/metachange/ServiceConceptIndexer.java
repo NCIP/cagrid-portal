@@ -11,7 +11,9 @@ import gov.nih.nci.cagrid.portal.domain.GridService;
 import gov.nih.nci.cagrid.portal.domain.SemanticMetadataMapping;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -38,16 +40,18 @@ public class ServiceConceptIndexer {
 		
 	}
 	
-	public void indexService(String url){
+	public void indexService(String url, Set<String> unresolvable){
+
 		try{
 			GridService gridService = getGridServiceDao().getByUrl(url);
 			if(gridService == null){
 				throw new Exception("No service found for " + url);
 			}
+			
 			Map<String,ConceptHierarchyNode> mapped = new HashMap<String,ConceptHierarchyNode>();
 			for(SemanticMetadataMapping mapping : gridService.getSemanticMetadataMappings()){
 				String code = mapping.getSemanticMetadata().getConceptCode();
-				if(mapping.getConcept() == null){
+				if(!unresolvable.contains(code) && mapping.getConcept() == null){
 					ConceptHierarchyNode concept = mapped.get(code);
 					if(concept == null){
 						concept = getConceptHierarchyNodeDao().getByConceptCode(code);
@@ -60,6 +64,8 @@ public class ServiceConceptIndexer {
 						concept = getConceptHierarchyNodeDao().getById(concept.getId());
 						mapping.setConcept(concept);
 						getSemanticMetadataMappingDao().save(mapping);
+					}else{
+						unresolvable.add(code);
 					}
 				}
 			}

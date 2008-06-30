@@ -6,6 +6,9 @@ package gov.nih.nci.cagrid.portal.aggr.metachange;
 import gov.nih.nci.cagrid.portal.dao.GridServiceDao;
 import gov.nih.nci.cagrid.portal.domain.GridService;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,10 +34,11 @@ public class ConceptMonitor {
 
 	public void processNewConcepts() {
 		try {
+			Set<String> unresolvable = new HashSet<String>();
 			for (GridService gridService : getGridServiceDao()
 					.getUnindexedServices()) {
 				logger.debug("Processing service: " + gridService.getUrl());
-				getServiceConceptIndexer().indexService(gridService.getUrl());
+				getServiceConceptIndexer().indexService(gridService.getUrl(), unresolvable);
 			}
 		} catch (Exception ex) {
 			String msg = "Error processing new concepts: " + ex.getMessage();
