@@ -1,16 +1,20 @@
 package gov.nih.nci.cagrid.data.ui.domain;
 
 import gov.nih.nci.cagrid.data.utilities.dmviz.DomainModelVisualizationPanel;
+import gov.nih.nci.cagrid.metadata.MetadataUtils;
 import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
 
 import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.io.FileReader;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.UIManager;
 
 import org.cagrid.grape.GridApplication;
 
@@ -36,13 +40,24 @@ public class DomainModelVisualizationDialog extends JDialog {
         getDmVizPanel().setDomainModel(model);
         initialize();
     }
+    
+    
+    private DomainModelVisualizationDialog(DomainModel model) {
+        super();
+        setTitle("Domain Model");
+        setModal(true);
+        getDmVizPanel().setDomainModel(model);
+        initialize();
+    }
 
 
     private void initialize() {
         setContentPane(getMainPanel());
         pack();
         setSize(500, 500);
-        GridApplication.getContext().centerDialog(this);
+        if (GridApplication.getContext() != null) {
+            GridApplication.getContext().centerDialog(this);
+        }
         setVisible(true);
     }
 
@@ -99,5 +114,27 @@ public class DomainModelVisualizationDialog extends JDialog {
             this.mainPanel.add(getOkButton(), gridBagConstraints1);
         }
         return this.mainPanel;
+    }
+    
+    
+    public static void main(String[] args) {
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception ex) {
+            System.err.println("Error setting system look and feel: " + ex.getMessage());
+        }
+        if (args.length != 1) {
+            throw new IllegalArgumentException(
+                "USAGE: " + DomainModelVisualizationDialog.class.getName() + " <domainModel>");
+        }
+        try {
+            FileReader reader = new FileReader(args[0]);
+            DomainModel model = MetadataUtils.deserializeDomainModel(reader);
+            DomainModelVisualizationDialog dialog = new DomainModelVisualizationDialog(model);
+            dialog.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            System.exit(1);
+        }
     }
 }

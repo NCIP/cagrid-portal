@@ -358,6 +358,22 @@
 		</java>
 	</target>
 	
+		
+    <!-- ============================================================== -->
+    <!-- Runs the domain model visualization GUI                        -->
+    <!-- ============================================================== -->
+	<target name="visualizeDomainModel" description="Visualize a caGrid Domain Model.  Use -Ddomain.model flag to specify model.">
+		<java classname="gov.nih.nci.cagrid.data.ui.domain.DomainModelVisualizationDialog" fork="true">
+			<arg value="${domain.model}"/>
+			<classpath refid="base.classpath"/>
+			<classpath>
+				<fileset dir="${build.jars.dir}">
+					<include name="**/*.jar"/>
+				</fileset>
+			</classpath>
+		</java>
+	</target>
+	
 
 	<!-- Build and install extensions for introduce -->
 	<target name="installIntroduceExtensions" depends="defineContribTasks" description="Builds and installs the Data Services extensions into Introduce.">
