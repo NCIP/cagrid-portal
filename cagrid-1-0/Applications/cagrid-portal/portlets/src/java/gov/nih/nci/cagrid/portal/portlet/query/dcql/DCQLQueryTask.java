@@ -43,7 +43,7 @@ public class DCQLQueryTask implements Callable {
         this.listener = listener;
         this.cred = cred;
     }
-  
+
 
     public Object call() throws Exception {
         logger.debug("Running QueryInstance:" + instance.getId());
@@ -67,6 +67,9 @@ public class DCQLQueryTask implements Callable {
             logger.debug("Requesting FQP to execute DCQL");
             FederatedQueryResultsClient resultsClilent = client.executeAsynchronously(query);
 
+            if (cred != null)
+                resultsClilent.setProxy(cred);
+
             // hackish... need to subscribe to isComplete RP
             while (!resultsClilent.isProcessingComplete()) {
                 Thread.sleep(5000);
@@ -74,28 +77,11 @@ public class DCQLQueryTask implements Callable {
             }
 
             DCQLQueryResultsCollection dcqlResultsCol = resultsClilent.getResults();
-            
-            StringWriter writer = new StringWriter();
-    		Utils.serializeObject(dcqlResultsCol,
-    				new QName("http://caGrid.caBIG/1.0/gov.nih.nci.cagrid.dcqlresult", "DCQLQueryResultsCollection"), writer);
 
-            
-//            DCQLResult[] dcqlResults = dcqlResultsCol.getDCQLResult();
-//            if (dcqlResults != null) {
-//                for (DCQLResult result : dcqlResults) {
-//                    String targetServiceURL = result.getTargetServiceURL();
-//                    System.out.println("Got results from:" + targetServiceURL);
-//                    CQLQueryResults queryResultCollection = result.getCQLQueryResultCollection();
-//                    CQLQueryResultsIterator iterator = new CQLQueryResultsIterator(queryResultCollection, true);
-//                    while (iterator.hasNext()) {
-//                        logger.debug("DCQL resultset. Appending");
-//                        out.append(iterator.next());
-//                    }
-//
-//                }
-//            } else {
-//                System.out.println("Got no results.");
-//            }
+            StringWriter writer = new StringWriter();
+            Utils.serializeObject(dcqlResultsCol,
+                    new QName("http://caGrid.caBIG/1.0/gov.nih.nci.cagrid.dcqlresult", "DCQLQueryResultsCollection"), writer);
+
             listener.onComplete(instance, writer.getBuffer().toString());
             resultsClilent.destroy(new Destroy());
 
