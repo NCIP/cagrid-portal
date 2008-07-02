@@ -1,7 +1,5 @@
 package gov.nih.nci.cagrid.introduce.servicetools.security;
 
-import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
-
 import org.apache.log4j.Logger;
 import org.globus.wsrf.impl.security.authorization.ResourcePDPConfig;
 import org.globus.wsrf.impl.security.authorization.exceptions.InitializeException;
@@ -15,8 +13,9 @@ import org.globus.wsrf.security.SecurityManager;
  * @author hastings
  */
 public class SecurityUtils {
-    
+
     private static final Logger logger = Logger.getLogger(SecurityUtils.class);
+
 
     public static String getCallerIdentity() throws Exception {
         String caller = SecurityManager.getManager().getCaller();
