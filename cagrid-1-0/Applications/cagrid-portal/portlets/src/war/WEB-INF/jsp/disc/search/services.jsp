@@ -379,7 +379,6 @@
                             <span id="discoveryResultDiv">
                                 <!--cannot be empty in IE-->
                                 </span>
-                        &nbsp;services
                     </div>
                 </div>
 
@@ -394,11 +393,11 @@
                     $('keywords').value=selectedTag.code;
                     $('evsConceptCodeValue').innerHTML= selectedTag.code;
                     $("discoveryResultDiv").innerHTML = '<img src="<c:url value="/images/indicator.gif"/>"/>';
+                    $("evsConceptResultDiv").style.display="";
                     EVSAutomcompleter.resultCount(selectedTag.code,<portlet:namespace/>handleResultCount);
                     }});
 
                     function <portlet:namespace/>handleResultCount(str){
-                    $("evsConceptResultDiv").style.display="";
                     var _innerHtml = "";
                     if(str>0){
                     _innerHtml=_innerHtml +"<a href='javascript:<portlet:namespace/>submitEVSForm()'>";
