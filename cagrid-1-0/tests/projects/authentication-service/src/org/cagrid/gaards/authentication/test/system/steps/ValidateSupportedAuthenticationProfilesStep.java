@@ -12,12 +12,12 @@ import org.cagrid.gaards.authentication.client.AuthenticationClient;
 
 public class ValidateSupportedAuthenticationProfilesStep extends Step {
 
-	private ServiceContainer container;
+	private String serviceURL;
 	private Set<QName> expectedProfiles;
 
 	public ValidateSupportedAuthenticationProfilesStep(
-			ServiceContainer container, Set<QName> profiles) {
-		this.container = container;
+			String serviceURL, Set<QName> profiles) {
+		this.serviceURL = serviceURL;
 		this.expectedProfiles = profiles;
 	}
 
@@ -29,8 +29,6 @@ public class ValidateSupportedAuthenticationProfilesStep extends Step {
 
 	@Override
 	public void runStep() throws Throwable {
-		String serviceURL = this.container.getContainerBaseURI().toString()
-				+ "cagrid/AuthenticationService";
 		AuthenticationClient client = new AuthenticationClient(serviceURL);
 		Set<QName> profiles = client.getSupportedAuthenticationProfiles();
 

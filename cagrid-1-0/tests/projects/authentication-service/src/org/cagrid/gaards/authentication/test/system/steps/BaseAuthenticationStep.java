@@ -5,12 +5,12 @@ import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainer;
 import gov.nih.nci.cagrid.testing.system.haste.Step;
 
 public abstract class BaseAuthenticationStep extends Step {
-	private ServiceContainer container;
+	private String serviceURL;
 	private AuthenticationOutcome outcome;
 
-	public BaseAuthenticationStep(ServiceContainer container,
+	public BaseAuthenticationStep(String serviceURL,
 			AuthenticationOutcome outcome) {
-		this.container = container;
+		this.serviceURL = serviceURL;
 		this.outcome = outcome;
 	}
 
@@ -27,8 +27,10 @@ public abstract class BaseAuthenticationStep extends Step {
 		outcome.check(saml, error);
 	}
 
-	public ServiceContainer getContainer() {
-		return container;
+	public String getServiceURL() {
+		return serviceURL;
 	}
+
+	
 
 }

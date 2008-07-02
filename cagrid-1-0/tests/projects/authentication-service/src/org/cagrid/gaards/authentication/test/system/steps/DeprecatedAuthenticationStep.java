@@ -9,9 +9,9 @@ public class DeprecatedAuthenticationStep extends BaseAuthenticationStep {
 
 	private Credential credential;
 
-	public DeprecatedAuthenticationStep(ServiceContainer container,
+	public DeprecatedAuthenticationStep(String serviceURL,
 			AuthenticationOutcome outcome, Credential credential) {
-		super(container, outcome);
+		super(serviceURL, outcome);
 		this.credential = credential;
 	}
 
@@ -22,9 +22,7 @@ public class DeprecatedAuthenticationStep extends BaseAuthenticationStep {
 	}
 
 	public SAMLAssertion authenticate() throws Exception {
-		String serviceURL = getContainer().getContainerBaseURI().toString()
-				+ "cagrid/AuthenticationService";
-		AuthenticationClient client = new AuthenticationClient(serviceURL,
+		AuthenticationClient client = new AuthenticationClient(getServiceURL(),
 				this.credential);
 		return client.authenticate();
 	}

@@ -10,9 +10,9 @@ public class AuthenticationStep extends BaseAuthenticationStep {
 
 	private Credential credential;
 
-	public AuthenticationStep(ServiceContainer container,
+	public AuthenticationStep(String serviceURL,
 			AuthenticationOutcome outcome, Credential credential) {
-		super(container, outcome);
+		super(serviceURL, outcome);
 		this.credential = credential;
 	}
 
@@ -23,9 +23,7 @@ public class AuthenticationStep extends BaseAuthenticationStep {
 	}
 
 	public SAMLAssertion authenticate() throws Exception {
-		String serviceURL = getContainer().getContainerBaseURI().toString()
-				+ "cagrid/AuthenticationService";
-		AuthenticationClient client = new AuthenticationClient(serviceURL);
+		AuthenticationClient client = new AuthenticationClient(getServiceURL());
 		return client.authenticate(this.credential);
 	}
 

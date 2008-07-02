@@ -6,7 +6,6 @@
 	
 	<property name="ivy.resolve.configurations" value="default" />
 	
-	<property name="ivy.generated.artifacts.pattern" value="${ivy.generated.artifacts.dir}/lib/[artifact]-[revision].[ext]" />
 
 	<property name="ivy-shared-targets.file" location="${basedir}/../../../caGrid/antfiles/ivy/ivy-shared-targets.xml" />
 	<import file="${ivy-shared-targets.file}" />

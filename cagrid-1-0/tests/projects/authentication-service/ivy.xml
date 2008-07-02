@@ -3,12 +3,16 @@
 <ivy-module version="2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:noNamespaceSchemaLocation="http://incubator.apache.org/ivy/schemas/ivy.xsd">
 
-  <info organisation="caGrid" module="authenticationServiceTests" revision="${project.version}">
+  <info organisation="caGrid" module="AuthenticationServiceSystemTests" revision="${project.version}">
     <license name="caGrid" url="http://www.cagrid.org/wiki/CaGrid:LICENSE-1.2"/>
     <description>caGrid Authentication Service Tests</description>
   </info>
 
   <configurations>
+  
+   <!-- Public Configurations-->
+   <conf name="impl" visibility="public" extends="default"/>
+   
     <!-- Private Configurations-->
     <conf name="default" visibility="public"/>
     <conf name="endorsed" visibility="public" />
@@ -16,7 +20,7 @@
 
 
   <publications>
-    
+    <artifact name="caGrid-${ivy.module}" conf="impl" type="jar"/>
   </publications>
 
   <dependencies>

@@ -67,13 +67,14 @@ public class AuthenticationServiceTest extends ServiceStoryBase {
 			steps.add(new DeployServiceStep(getContainer(), this.tempService
 					.getAbsolutePath()));
 			steps.add(new StartContainerStep(getContainer()));
-
+			String serviceURL = getContainer().getContainerBaseURI().toString()
+			+ "cagrid/AuthenticationService";
 			// Test Get supported authentication types
 
 			Set<QName> expectedProfiles = new HashSet<QName>();
 			expectedProfiles.add(AuthenticationProfile.BASIC_AUTHENTICATION);
 			steps.add(new ValidateSupportedAuthenticationProfilesStep(
-					getContainer(), expectedProfiles));
+					serviceURL, expectedProfiles));
 
 			SuccessfullAuthentication success = new SuccessfullAuthentication(
 					"jdoe", "John", "Doe", "jdoe@doe.com", properties
@@ -83,7 +84,7 @@ public class AuthenticationServiceTest extends ServiceStoryBase {
 			BasicAuthentication cred = new BasicAuthentication();
 			cred.setUserId("jdoe");
 			cred.setPassword("password");
-			steps.add(new AuthenticationStep(getContainer(), success, cred));
+			steps.add(new AuthenticationStep(serviceURL, success, cred));
 
 			// Test successful deprecated authentication
 
@@ -93,14 +94,14 @@ public class AuthenticationServiceTest extends ServiceStoryBase {
 			bac.setPassword("password");
 			cred2.setBasicAuthenticationCredential(bac);
 
-			steps.add(new DeprecatedAuthenticationStep(getContainer(), success,
+			steps.add(new DeprecatedAuthenticationStep(serviceURL, success,
 					cred2));
 
 			// Test invalid authentication, bad password
 			BasicAuthentication cred3 = new BasicAuthentication();
 			cred3.setUserId("jdoe");
 			cred3.setPassword("badpassword");
-			steps.add(new AuthenticationStep(getContainer(),
+			steps.add(new AuthenticationStep(serviceURL,
 					new InvalidAuthentication("Invalid password specified!!!",
 							InvalidCredentialFault.class), cred3));
 
@@ -113,7 +114,7 @@ public class AuthenticationServiceTest extends ServiceStoryBase {
 			cred4.setBasicAuthenticationCredential(bac2);
 			steps
 					.add(new DeprecatedAuthenticationStep(
-							getContainer(),
+							serviceURL,
 							new InvalidAuthentication(
 									"Invalid password specified!!!",
 									gov.nih.nci.cagrid.authentication.stubs.types.InvalidCredentialFault.class),
@@ -126,7 +127,7 @@ public class AuthenticationServiceTest extends ServiceStoryBase {
 			cred5.setOneTimePassword("oneTimePassword");
 			steps
 					.add(new AuthenticationStep(
-							getContainer(),
+							serviceURL,
 							new InvalidAuthentication(
 									"The credential provided is not accepted by this service.",
 									InvalidCredentialFault.class), cred5));
