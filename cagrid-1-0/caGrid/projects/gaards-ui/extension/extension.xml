@@ -99,17 +99,6 @@
                     <icon>/computers.png</icon>
                     <showOnToolBar>false</showOnToolBar>
                 </component>
-                <component>
-                    <title>Download CA Certificate(s)</title>
-                    <description>Download the Dorian CA certificate.</description>
-                    <classname>org.cagrid.gaards.ui.dorian.ifs.ViewCACertificateWindow</classname>
-                    <icon>/download.png</icon>
-                    <showOnToolBar>false</showOnToolBar>
-                    <dimensions>
-                        <width>625</width>
-                        <height>200</height>
-                    </dimensions>
-                </component>
             </components>
         </menu>
         <menu>
