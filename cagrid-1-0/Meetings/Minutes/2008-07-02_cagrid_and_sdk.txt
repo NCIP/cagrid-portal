@@ -34,8 +34,10 @@ Notes
 
 Action Items
 ------------
-2) caGrid 1.3's Introduce should support SDK 4.1
+1) Satish will send Dave design documents for SDK 4.x
+2) caGrid 1.3's Introduce should support SDK 4.1 (caGrid 1.2 uses SDK 4.0)
 3) Satish will send Dave a pointer to JAR containing caCORE XMI reader, Dave will investigate using it in next release.
+7) Satish will provide details on issues encountered, appropriate caGrid team member will investigate (Dave?).  Bug will be addressed or SOP will be written.
 9) Dave and Satish will exchange their current integration testing approaches in an attempt to come up with a common one. A separate integration project may need to be built for this testing.
-12) Data services in next caGrid release will support next level of isolation to achieve this.
+12) Need to come up with timeline for CQL2 and next caGrid and SDK releases, then determine if CQL2 or CQL (if we want to do it now and CQL2 won't be in next release) should be used for this.
 14) Charles will add the items from Satish's list to gforge and send tracker id's to John. John will add gforge tracker items on caGrid side and reference SDK's. 
