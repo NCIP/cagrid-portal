@@ -415,7 +415,8 @@
             </td>
         </tr>
     </table>
-    <input type="hidden" name="discoveryType" value="CONCEPT"/>
+    <input type="hidden" name="discoveryType" value="SERVICE"/>
+    <input type="hidden" name="searchFields" value="conceptCode"/>
 </form:form>
 </div>
 </td>
