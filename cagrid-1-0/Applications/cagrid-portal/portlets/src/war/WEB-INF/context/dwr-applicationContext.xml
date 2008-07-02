@@ -34,7 +34,6 @@
         </property>
     </bean>
 
-
     <bean id="caCoreConceptService" class="gov.nih.nci.cagrid.portal.portlet.discovery.evs.CacoreConceptService"
           parent="baseEVService"/>
 
@@ -60,12 +59,14 @@
                   parent="baseEVService">
                 <property name="conceptServices">
                     <list>
-                        <bean class="gov.nih.nci.cagrid.portal.portlet.discovery.evs.PortalConceptService"
-                              autowire="byName"/>
                         <ref local="lexbigEVSService"/>
                     </list>
                 </property>
             </bean>
+        </property>
+        <property name="ccSearchProvider">
+            <bean class="gov.nih.nci.cagrid.portal.portlet.discovery.evs.KeywordConceptCodeSearchProvider"
+                    autowire="byName"/>
         </property>
     </bean>
 

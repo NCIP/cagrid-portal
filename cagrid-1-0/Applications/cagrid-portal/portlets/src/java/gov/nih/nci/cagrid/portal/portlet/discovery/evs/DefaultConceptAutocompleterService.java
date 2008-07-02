@@ -1,8 +1,5 @@
 package gov.nih.nci.cagrid.portal.portlet.discovery.evs;
 
-import gov.nih.nci.cagrid.portal.dao.ConceptHierarchyNodeDao;
-import gov.nih.nci.cagrid.portal.domain.GridService;
-import gov.nih.nci.cagrid.portal.portlet.util.PortletUtils;
 import org.springframework.beans.factory.annotation.Required;
 
 import java.util.ArrayList;
@@ -16,7 +13,7 @@ import java.util.List;
 public class DefaultConceptAutocompleterService implements ConceptAutocompleterService {
 
     private ConceptService conceptService;
-    private ConceptHierarchyNodeDao conceptHierarchyNodeDao;
+    private ConceptCodeSearchProvider ccSearchProvider;
 
 
     public List<EVSConceptDTO> autoCompleteConcept(String partialConceptName) {
@@ -26,20 +23,19 @@ public class DefaultConceptAutocompleterService implements ConceptAutocompleterS
     }
 
     public String resultCount(String code) {
-        List<GridService> svcs = conceptHierarchyNodeDao.getServicesByCode(code);
-        svcs = PortletUtils.filterServicesByInvalidMetadata(PortletUtils.filterDormantServices(PortletUtils.filterBannedServices(svcs)));
-        return String.valueOf(svcs.size());
+     return String.valueOf(ccSearchProvider.search(code).size());
+    }
+
+
+    public ConceptCodeSearchProvider getCcSearchProvider() {
+        return ccSearchProvider;
+    }
+
+    public void setCcSearchProvider(ConceptCodeSearchProvider ccSearchProvider) {
+        this.ccSearchProvider = ccSearchProvider;
     }
 
     @Required
-    public ConceptHierarchyNodeDao getConceptHierarchyNodeDao() {
-        return conceptHierarchyNodeDao;
-    }
-
-    public void setConceptHierarchyNodeDao(ConceptHierarchyNodeDao conceptHierarchyNodeDao) {
-        this.conceptHierarchyNodeDao = conceptHierarchyNodeDao;
-    }
-
     public ConceptService getConceptService() {
         return conceptService;
     }
