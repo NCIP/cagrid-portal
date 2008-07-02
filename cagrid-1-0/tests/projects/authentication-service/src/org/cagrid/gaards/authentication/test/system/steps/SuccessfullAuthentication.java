@@ -23,6 +23,12 @@ public class SuccessfullAuthentication extends BaseAuthenticationOutcome
 	private String lastNameAttributeName = SAMLConstants.LAST_NAME_ATTRIBUTE;
 	private String emailAttributeNamespace = SAMLConstants.EMAIL_ATTRIBUTE_NAMESPACE;
 	private String emailAttributeName = SAMLConstants.EMAIL_ATTRIBUTE;
+	
+	public SuccessfullAuthentication(String expectedUserId,
+			String expectedFirstName, String expectedLastName,
+			String expectedEmail, SigningCertificateProxy proxy) {
+		this(expectedUserId,expectedFirstName,expectedLastName,expectedEmail,proxy.getSigningCertificate());
+	}
 
 	public SuccessfullAuthentication(String expectedUserId,
 			String expectedFirstName, String expectedLastName,
