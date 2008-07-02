@@ -1,5 +1,7 @@
 package org.cagrid.gaards.dorian.test.system;
 
+import gov.nih.nci.cagrid.authentication.bean.BasicAuthenticationCredential;
+import gov.nih.nci.cagrid.authentication.bean.Credential;
 import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainer;
 import gov.nih.nci.cagrid.testing.system.deployment.steps.CopyServiceStep;
 import gov.nih.nci.cagrid.testing.system.deployment.steps.DeleteServiceStep;
@@ -18,25 +20,33 @@ import java.util.Vector;
 
 import javax.xml.namespace.QName;
 
+import org.cagrid.gaards.authentication.BasicAuthentication;
+import org.cagrid.gaards.authentication.BasicAuthenticationWithOneTimePassword;
 import org.cagrid.gaards.authentication.common.AuthenticationProfile;
+import org.cagrid.gaards.authentication.faults.InvalidCredentialFault;
+import org.cagrid.gaards.authentication.test.system.steps.AuthenticationStep;
+import org.cagrid.gaards.authentication.test.system.steps.DeprecatedAuthenticationStep;
+import org.cagrid.gaards.authentication.test.system.steps.InvalidAuthentication;
+import org.cagrid.gaards.authentication.test.system.steps.SuccessfullAuthentication;
 import org.cagrid.gaards.authentication.test.system.steps.ValidateSupportedAuthenticationProfilesStep;
 import org.cagrid.gaards.dorian.test.system.steps.CopyConfigurationStep;
+import org.cagrid.gaards.dorian.test.system.steps.GetAsserionSigningCertificateStep;
 
-public class DorianSystemTest extends ServiceStoryBase {
+public class DorianIdentityProviderAuthenticationTest extends ServiceStoryBase {
 
 	private File configuration;
 	private File properties;
 	private File tempService;
 
-	public DorianSystemTest(ServiceContainer container) {
+	public DorianIdentityProviderAuthenticationTest(ServiceContainer container) {
 		this(container, null, null);
 	}
 
-	public DorianSystemTest(ServiceContainer container, File properties) {
+	public DorianIdentityProviderAuthenticationTest(ServiceContainer container, File properties) {
 		this(container, null, properties);
 	}
 
-	public DorianSystemTest(ServiceContainer container, File configuration,
+	public DorianIdentityProviderAuthenticationTest(ServiceContainer container, File configuration,
 			File properties) {
 		super(container);
 		this.configuration = configuration;
@@ -62,9 +72,11 @@ public class DorianSystemTest extends ServiceStoryBase {
 			steps.add(new DeployServiceStep(getContainer(), this.tempService
 					.getAbsolutePath()));
 			steps.add(new StartContainerStep(getContainer()));
+			
+			GetAsserionSigningCertificateStep signingCertStep = new GetAsserionSigningCertificateStep(getContainer());
+			steps.add(signingCertStep);
 
-			String serviceURL = getContainer().getContainerBaseURI().toString()
-			+ "cagrid/Dorian";
+			String serviceURL = getContainer().getContainerBaseURI().toString()+"cagrid/Dorian";
 			
 			// Test Get supported authentication types
 
@@ -72,63 +84,63 @@ public class DorianSystemTest extends ServiceStoryBase {
 			expectedProfiles.add(AuthenticationProfile.BASIC_AUTHENTICATION);
 			steps.add(new ValidateSupportedAuthenticationProfilesStep(serviceURL
 					, expectedProfiles));
-/*
+			
+
 			SuccessfullAuthentication success = new SuccessfullAuthentication(
-					"jdoe", "John", "Doe", "jdoe@doe.com", properties
-							.getSigningCertificate());
+					"dorian", "Mr.", "Administrator", "dorian@dorian.org", signingCertStep);
 
 			// Test Successful authentication
 			BasicAuthentication cred = new BasicAuthentication();
-			cred.setUserId("jdoe");
-			cred.setPassword("password");
-			steps.add(new AuthenticationStep(getContainer(), success, cred));
+			cred.setUserId("dorian");
+			cred.setPassword("DorianAdmin$1");
+			steps.add(new AuthenticationStep(serviceURL, success, cred));
 
 			// Test successful deprecated authentication
 
 			Credential cred2 = new Credential();
 			BasicAuthenticationCredential bac = new BasicAuthenticationCredential();
-			bac.setUserId("jdoe");
-			bac.setPassword("password");
+			bac.setUserId("dorian");
+			bac.setPassword("DorianAdmin$1");
 			cred2.setBasicAuthenticationCredential(bac);
 
-			steps.add(new DeprecatedAuthenticationStep(getContainer(), success,
+			steps.add(new DeprecatedAuthenticationStep(serviceURL, success,
 					cred2));
-
+			
 			// Test invalid authentication, bad password
 			BasicAuthentication cred3 = new BasicAuthentication();
-			cred3.setUserId("jdoe");
+			cred3.setUserId("dorian");
 			cred3.setPassword("badpassword");
-			steps.add(new AuthenticationStep(getContainer(),
-					new InvalidAuthentication("Invalid password specified!!!",
+			steps.add(new AuthenticationStep(serviceURL,
+					new InvalidAuthentication("The uid or password is incorrect.",
 							InvalidCredentialFault.class), cred3));
 
 			// Test invalid deprecated authentication, bad password
 
 			Credential cred4 = new Credential();
 			BasicAuthenticationCredential bac2 = new BasicAuthenticationCredential();
-			bac2.setUserId("jdoe");
+			bac2.setUserId("dorian");
 			bac2.setPassword("badpassword");
 			cred4.setBasicAuthenticationCredential(bac2);
 			steps
 					.add(new DeprecatedAuthenticationStep(
-							getContainer(),
+							serviceURL,
 							new InvalidAuthentication(
-									"Invalid password specified!!!",
+									"The uid or password is incorrect.",
 									gov.nih.nci.cagrid.authentication.stubs.types.InvalidCredentialFault.class),
 							cred4));
 
 			// Test invalid authentication, unsupported credential
 			BasicAuthenticationWithOneTimePassword cred5 = new BasicAuthenticationWithOneTimePassword();
-			cred5.setUserId("jdoe");
+			cred5.setUserId("dorian");
 			cred5.setPassword("password");
 			cred5.setOneTimePassword("oneTimePassword");
 			steps
 					.add(new AuthenticationStep(
-							getContainer(),
+							serviceURL,
 							new InvalidAuthentication(
 									"The credential provided is not accepted by this service.",
 									InvalidCredentialFault.class), cred5));
-									*/
+									
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -14,7 +14,7 @@ public class SuccessfullAuthentication extends BaseAuthenticationOutcome
 	private String expectedFirstName;
 	private String expectedLastName;
 	private String expectedEmail;
-	private X509Certificate expectedSigningCertificate;
+	private SigningCertificateProxy proxy;
 	private String userIdAttributeNamespace = SAMLConstants.UID_ATTRIBUTE_NAMESPACE;
 	private String userIdAttributeName = SAMLConstants.UID_ATTRIBUTE;
 	private String firstNameAttributeNamespace = SAMLConstants.FIRST_NAME_ATTRIBUTE_NAMESPACE;
@@ -27,18 +27,18 @@ public class SuccessfullAuthentication extends BaseAuthenticationOutcome
 	public SuccessfullAuthentication(String expectedUserId,
 			String expectedFirstName, String expectedLastName,
 			String expectedEmail, SigningCertificateProxy proxy) {
-		this(expectedUserId,expectedFirstName,expectedLastName,expectedEmail,proxy.getSigningCertificate());
-	}
-
-	public SuccessfullAuthentication(String expectedUserId,
-			String expectedFirstName, String expectedLastName,
-			String expectedEmail, X509Certificate expectedSigningCertificate) {
 		super();
 		this.expectedUserId = expectedUserId;
 		this.expectedFirstName = expectedFirstName;
 		this.expectedLastName = expectedLastName;
 		this.expectedEmail = expectedEmail;
-		this.expectedSigningCertificate = expectedSigningCertificate;
+		this.proxy = proxy;
+		}
+
+	public SuccessfullAuthentication(String expectedUserId,
+			String expectedFirstName, String expectedLastName,
+			String expectedEmail, X509Certificate expectedSigningCertificate) {
+		this(expectedUserId,expectedFirstName,expectedLastName,expectedEmail,new CertificateProxy(expectedSigningCertificate));
 	}
 
 	public String getExpectedUserId() {
@@ -58,7 +58,7 @@ public class SuccessfullAuthentication extends BaseAuthenticationOutcome
 	}
 
 	public X509Certificate getExpectedSigningCertificate() {
-		return expectedSigningCertificate;
+		return proxy.getSigningCertificate();
 	}
 
 	public String getUserIdAttributeNamespace() {
@@ -179,4 +179,5 @@ public class SuccessfullAuthentication extends BaseAuthenticationOutcome
 		}
 
 	}
+
 }

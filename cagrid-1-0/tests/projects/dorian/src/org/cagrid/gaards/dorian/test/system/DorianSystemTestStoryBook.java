@@ -12,7 +12,7 @@ public class DorianSystemTestStoryBook extends StoryBook {
 	
 	protected void stories() {
 		try {
-			this.addStory(new DorianSystemTest(
+			this.addStory(new DorianIdentityProviderAuthenticationTest(
 							ServiceContainerFactory
 									.createContainer(ServiceContainerType.SECURE_TOMCAT_CONTAINER)));
 		} catch (IOException e) {
