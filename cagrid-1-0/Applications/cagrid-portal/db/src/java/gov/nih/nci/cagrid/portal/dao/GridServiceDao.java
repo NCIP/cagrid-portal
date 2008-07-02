@@ -164,7 +164,7 @@ public class GridServiceDao extends AbstractDao<GridService> {
 				StatusChange change = new StatusChange();
 				change.setService(svc);
 				change.setTime(new Date());
-				change.setStatus(ServiceStatus.UNKNOWN);
+				change.setStatus(ServiceStatus.DORMANT);
 				session.save(change);
 				svc.getStatusHistory().add(change);
 				session.save(svc);
