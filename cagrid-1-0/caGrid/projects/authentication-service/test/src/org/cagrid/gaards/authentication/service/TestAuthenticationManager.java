@@ -14,6 +14,7 @@ import junit.framework.TestCase;
 import org.cagrid.gaards.authentication.BasicAuthentication;
 import org.cagrid.gaards.authentication.BasicAuthenticationWithOneTimePassword;
 import org.cagrid.gaards.authentication.common.AuthenticationProfile;
+import org.cagrid.gaards.authentication.faults.CredentialNotSupportedFault;
 import org.cagrid.gaards.authentication.faults.InvalidCredentialFault;
 import org.cagrid.gaards.authentication.test.AuthenticationProperties;
 import org.cagrid.gaards.authentication.test.Constants;
@@ -217,7 +218,7 @@ public class TestAuthenticationManager extends TestCase {
 			try {
 				manager.authenticate(auth);
 				fail("Should not be able to authenticate.");
-			} catch (InvalidCredentialFault e) {
+			} catch (CredentialNotSupportedFault e) {
 
 			}
 
