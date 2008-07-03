@@ -14,6 +14,7 @@ import org.cagrid.gaards.authentication.faults.AuthenticationProviderFault;
 import org.cagrid.gaards.authentication.faults.CredentialNotSupportedFault;
 import org.cagrid.gaards.authentication.faults.InvalidCredentialFault;
 import org.cagrid.gaards.dorian.common.DorianFault;
+import org.cagrid.gaards.dorian.idp.Application;
 import org.cagrid.gaards.dorian.stubs.types.DorianInternalFault;
 import org.cagrid.gaards.dorian.stubs.types.InvalidUserPropertyFault;
 import org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault;
@@ -83,6 +84,24 @@ public class LocalUserClient {
 			throw f;
 		} catch (PermissionDeniedFault f) {
 			throw f;
+		} catch (InvalidUserPropertyFault f) {
+			throw f;
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			DorianFault fault = new DorianFault();
+			fault.setFaultString(Utils.getExceptionMessage(e));
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (DorianFault) helper.getFault();
+			throw fault;
+		}
+	}
+	
+	public String register(Application a) throws DorianFault, DorianInternalFault, InvalidUserPropertyFault {
+		try {
+			return client.registerWithIdP(a);
+		} catch (DorianInternalFault gie) {
+			throw gie;
 		} catch (InvalidUserPropertyFault f) {
 			throw f;
 		} catch (Exception e) {

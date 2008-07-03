@@ -14,7 +14,7 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
-import org.cagrid.gaards.dorian.client.IdPRegistrationClient;
+import org.cagrid.gaards.dorian.client.LocalUserClient;
 import org.cagrid.gaards.dorian.idp.Application;
 import org.cagrid.gaards.ui.dorian.DorianLookAndFeel;
 import org.cagrid.gaards.ui.dorian.DorianServiceListComboBox;
@@ -736,7 +736,7 @@ public class ApplicationWindow extends ApplicationComponent {
 		Runner runner = new Runner() {
 			public void execute() {
 				try {
-					IdPRegistrationClient client = new IdPRegistrationClient(serviceUrl);
+					LocalUserClient client = new LocalUserClient(serviceUrl);
 					GridApplication.getContext().showMessage(client.register(a));
 					dispose();
 				} catch (Exception e) {
