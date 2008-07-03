@@ -60,7 +60,7 @@ public class AuthenticationManager {
 			InvalidCredentialFault {
 		if (!AuthenticationProfile.isSupported(this.auth
 				.getSupportedAuthenticationProfiles(), credential)) {
-			InvalidCredentialFault fault = new InvalidCredentialFault();
+			CredentialNotSupportedFault fault = new CredentialNotSupportedFault();
 			fault
 					.setFaultString("The credential provided is not accepted by this service.");
 			throw fault;

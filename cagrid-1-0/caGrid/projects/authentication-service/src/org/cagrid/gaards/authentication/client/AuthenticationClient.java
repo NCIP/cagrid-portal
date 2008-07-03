@@ -22,6 +22,7 @@ import org.cagrid.gaards.authentication.AuthenticationProfiles;
 import org.cagrid.gaards.authentication.BasicAuthentication;
 import org.cagrid.gaards.authentication.Credential;
 import org.cagrid.gaards.authentication.faults.AuthenticationProviderFault;
+import org.cagrid.gaards.authentication.faults.CredentialNotSupportedFault;
 import org.cagrid.gaards.authentication.faults.InsufficientAttributeFault;
 import org.cagrid.gaards.authentication.faults.InvalidCredentialFault;
 import org.globus.wsrf.utils.XmlUtils;
@@ -47,11 +48,14 @@ public class AuthenticationClient {
 		this.serviceURI = serviceURI;
 		client = new AuthenticationServiceClient(serviceURI);
 	}
-	
+
 	/**
-	 * This method authenticates with the authentication service using the supplied credential.
+	 * This method authenticates with the authentication service using the
+	 * supplied credential.
 	 * 
-	 * @param cred The credential to use to authenticate with the credential service
+	 * @param cred
+	 *            The credential to use to authenticate with the credential
+	 *            service
 	 * @return A SAMLAssertion asserting successful authentication.
 	 * @throws RemoteException
 	 * @throws InvalidCredentialFault
@@ -60,8 +64,8 @@ public class AuthenticationClient {
 	 */
 
 	public SAMLAssertion authenticate(Credential cred) throws RemoteException,
-			InvalidCredentialFault, InsufficientAttributeFault,
-			AuthenticationProviderFault {
+			CredentialNotSupportedFault, InvalidCredentialFault,
+			InsufficientAttributeFault, AuthenticationProviderFault {
 
 		Set<QName> profiles = null;
 		try {
@@ -105,7 +109,7 @@ public class AuthenticationClient {
 					fault = (AuthenticationProviderFault) fh.getFault();
 					throw fault;
 				} catch (Exception e) {
-					throw new RemoteException(e.getMessage());
+					throw new RemoteException(Utils.getExceptionMessage(e), e);
 				}
 			} else {
 				InvalidCredentialFault f = new InvalidCredentialFault();
@@ -116,6 +120,8 @@ public class AuthenticationClient {
 		} else {
 			try {
 				return client.authenticateUser(cred);
+			} catch (CredentialNotSupportedFault f) {
+				throw f;
 			} catch (InvalidCredentialFault gie) {
 				throw gie;
 			} catch (InsufficientAttributeFault ilf) {
@@ -123,7 +129,7 @@ public class AuthenticationClient {
 			} catch (AuthenticationProviderFault ilf) {
 				throw ilf;
 			} catch (Exception e) {
-				throw new RemoteException(e.getMessage());
+				throw new RemoteException(Utils.getExceptionMessage(e), e);
 			}
 		}
 

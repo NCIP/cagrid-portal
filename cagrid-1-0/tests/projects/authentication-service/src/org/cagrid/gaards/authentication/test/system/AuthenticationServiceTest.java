@@ -23,6 +23,7 @@ import javax.xml.namespace.QName;
 import org.cagrid.gaards.authentication.BasicAuthentication;
 import org.cagrid.gaards.authentication.BasicAuthenticationWithOneTimePassword;
 import org.cagrid.gaards.authentication.common.AuthenticationProfile;
+import org.cagrid.gaards.authentication.faults.CredentialNotSupportedFault;
 import org.cagrid.gaards.authentication.faults.InvalidCredentialFault;
 import org.cagrid.gaards.authentication.test.AuthenticationProperties;
 import org.cagrid.gaards.authentication.test.system.steps.AuthenticationStep;
@@ -130,7 +131,7 @@ public class AuthenticationServiceTest extends ServiceStoryBase {
 							serviceURL,
 							new InvalidAuthentication(
 									"The credential provided is not accepted by this service.",
-									InvalidCredentialFault.class), cred5));
+									CredentialNotSupportedFault.class), cred5));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
