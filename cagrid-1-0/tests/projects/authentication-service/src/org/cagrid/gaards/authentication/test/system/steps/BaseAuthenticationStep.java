@@ -7,6 +7,7 @@ import gov.nih.nci.cagrid.testing.system.haste.Step;
 public abstract class BaseAuthenticationStep extends Step {
 	private String serviceURL;
 	private AuthenticationOutcome outcome;
+	private SAMLAssertion saml;
 
 	public BaseAuthenticationStep(String serviceURL,
 			AuthenticationOutcome outcome) {
@@ -17,10 +18,10 @@ public abstract class BaseAuthenticationStep extends Step {
 	public abstract SAMLAssertion authenticate() throws Exception;
 
 	public final void runStep() throws Throwable {
-		SAMLAssertion saml = null;
 		Exception error = null;
 		try {
-			saml = authenticate();
+			this.saml = null;
+			this.saml = authenticate();
 		} catch (Exception e) {
 			error = e;
 		}
@@ -31,6 +32,8 @@ public abstract class BaseAuthenticationStep extends Step {
 		return serviceURL;
 	}
 
-	
+	public SAMLAssertion getSAML() {
+		return saml;
+	}
 
 }

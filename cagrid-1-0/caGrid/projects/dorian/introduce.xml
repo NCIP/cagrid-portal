@@ -487,50 +487,61 @@
      <ns4:Exceptions>
       <ns4:Exception description="" name="DorianInternalFault" qname="ns119:DorianInternalFault" xmlns:ns119="http://cagrid.nci.nih.gov/Dorian/types"/>
      </ns4:Exceptions>
+     <ns120:MethodSecurity xsi:type="ns120:MethodSecurity" xmlns:ns120="gme://gov.nih.nci.cagrid.introduce/1/Security">
+      <ns120:SecuritySetting xsi:type="ns120:SecuritySetting">Custom</ns120:SecuritySetting>
+      <ns120:TransportLevelSecurity xsi:type="ns120:TransportLevelSecurity">
+       <ns120:CommunicationMethod xsi:type="ns120:CommunicationMethod">Privacy</ns120:CommunicationMethod>
+      </ns120:TransportLevelSecurity>
+      <ns120:RunAsMode xsi:type="ns120:RunAsMode">System</ns120:RunAsMode>
+      <ns120:AnonymousClients xsi:type="ns120:AnonymousCommunication">Yes</ns120:AnonymousClients>
+      <ns120:MethodAuthorization xsi:type="ns120:MethodAuthorization">
+       <ns120:InheritServiceAuthorization xsi:type="ns120:InheritServiceAuthorization"/>
+      </ns120:MethodAuthorization>
+     </ns120:MethodSecurity>
     </ns4:Method>
     <ns4:Method isImported="true" isProvided="true" name="GetMultipleResourceProperties" xsi:type="ns4:MethodType">
      <ns4:Output qName="void" isArray="false"/>
-     <ns4:ImportInformation fromIntroduce="false" inputMessage="ns120:GetMultipleResourcePropertiesRequest" namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" outputMessage="ns120:GetMultipleResourcePropertiesResponse" packageName="org.oasis.wsrf.properties" portTypeName="GetMultipleResourceProperties" wsdlFile="../wsrf/properties/WS-ResourceProperties.wsdl" xmlns:ns120="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl"/>
+     <ns4:ImportInformation fromIntroduce="false" inputMessage="ns121:GetMultipleResourcePropertiesRequest" namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" outputMessage="ns121:GetMultipleResourcePropertiesResponse" packageName="org.oasis.wsrf.properties" portTypeName="GetMultipleResourceProperties" wsdlFile="../wsrf/properties/WS-ResourceProperties.wsdl" xmlns:ns121="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl"/>
      <ns4:ProviderInformation providerClass="GetMRPProvider"/>
     </ns4:Method>
     <ns4:Method isImported="true" isProvided="true" name="GetResourceProperty" xsi:type="ns4:MethodType">
      <ns4:Output qName="void" isArray="false"/>
-     <ns4:ImportInformation fromIntroduce="false" inputMessage="ns121:GetResourcePropertyRequest" namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" outputMessage="ns121:GetResourcePropertyResponse" packageName="org.oasis.wsrf.properties" portTypeName="GetResourceProperty" wsdlFile="../wsrf/properties/WS-ResourceProperties.wsdl" xmlns:ns121="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl"/>
+     <ns4:ImportInformation fromIntroduce="false" inputMessage="ns122:GetResourcePropertyRequest" namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" outputMessage="ns122:GetResourcePropertyResponse" packageName="org.oasis.wsrf.properties" portTypeName="GetResourceProperty" wsdlFile="../wsrf/properties/WS-ResourceProperties.wsdl" xmlns:ns122="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl"/>
      <ns4:ProviderInformation providerClass="GetRPProvider"/>
     </ns4:Method>
     <ns4:Method isImported="true" isProvided="true" name="QueryResourceProperties" xsi:type="ns4:MethodType">
      <ns4:Output qName="void" isArray="false"/>
-     <ns4:ImportInformation fromIntroduce="false" inputMessage="ns122:QueryResourcePropertiesRequest" namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" outputMessage="ns122:QueryResourcePropertiesResponse" packageName="org.oasis.wsrf.properties" portTypeName="QueryResourceProperties" wsdlFile="../wsrf/properties/WS-ResourceProperties.wsdl" xmlns:ns122="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl"/>
+     <ns4:ImportInformation fromIntroduce="false" inputMessage="ns123:QueryResourcePropertiesRequest" namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" outputMessage="ns123:QueryResourcePropertiesResponse" packageName="org.oasis.wsrf.properties" portTypeName="QueryResourceProperties" wsdlFile="../wsrf/properties/WS-ResourceProperties.wsdl" xmlns:ns123="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl"/>
      <ns4:ProviderInformation providerClass="QueryRPProvider"/>
     </ns4:Method>
     <ns4:Method description="This method allows a user with a Dorian IdP account to change their password." isImported="false" isProvided="false" name="changeLocalUserPassword" xsi:type="ns4:MethodType">
      <ns4:Inputs>
-      <ns4:Input qName="ns123:BasicAuthentication" description="" isArray="false" name="credential" xmlns:ns123="http://gaards.cagrid.org/authentication"/>
+      <ns4:Input qName="ns124:BasicAuthentication" description="" isArray="false" name="credential" xmlns:ns124="http://gaards.cagrid.org/authentication"/>
       <ns4:Input qName="xsd:string" description="" isArray="false" name="newPassword" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
      </ns4:Inputs>
      <ns4:Output qName="void" description="" isArray="false"/>
      <ns4:Exceptions>
-      <ns4:Exception description="" name="DorianInternalFault" qname="ns124:DorianInternalFault" xmlns:ns124="http://cagrid.nci.nih.gov/Dorian/types"/>
-      <ns4:Exception description="" name="InvalidUserPropertyFault" qname="ns125:InvalidUserPropertyFault" xmlns:ns125="http://cagrid.nci.nih.gov/Dorian/types"/>
-      <ns4:Exception description="" name="PermissionDeniedFault" qname="ns126:PermissionDeniedFault" xmlns:ns126="http://cagrid.nci.nih.gov/Dorian/types"/>
+      <ns4:Exception description="" name="DorianInternalFault" qname="ns125:DorianInternalFault" xmlns:ns125="http://cagrid.nci.nih.gov/Dorian/types"/>
+      <ns4:Exception description="" name="InvalidUserPropertyFault" qname="ns126:InvalidUserPropertyFault" xmlns:ns126="http://cagrid.nci.nih.gov/Dorian/types"/>
+      <ns4:Exception description="" name="PermissionDeniedFault" qname="ns127:PermissionDeniedFault" xmlns:ns127="http://cagrid.nci.nih.gov/Dorian/types"/>
      </ns4:Exceptions>
     </ns4:Method>
    </ns4:Methods>
-   <ns127:ResourcePropertiesList xsi:type="ns127:ResourcePropertiesListType" xmlns:ns127="gme://gov.nih.nci.cagrid.introduce/1/Resources">
-    <ns127:ResourceProperty qName="ns128:ServiceMetadata" description="" fileLocation="serviceMetadata.xml" populateFromFile="true" register="true" xsi:type="ns127:ResourcePropertyType" xmlns:ns128="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"/>
-    <ns127:ResourceProperty qName="ns129:AuthenticationProfiles" description="" fileLocation="Dorian_authenticationProfiles.xml" populateFromFile="false" register="true" xsi:type="ns127:ResourcePropertyType" xmlns:ns129="http://gaards.cagrid.org/authentication"/>
-   </ns127:ResourcePropertiesList>
-   <ns130:ServiceSecurity xsi:type="ns130:ServiceSecurity" xmlns:ns130="gme://gov.nih.nci.cagrid.introduce/1/Security">
-    <ns130:SecuritySetting xsi:type="ns130:SecuritySetting">Custom</ns130:SecuritySetting>
-    <ns130:TransportLevelSecurity xsi:type="ns130:TransportLevelSecurity">
-     <ns130:CommunicationMethod xsi:type="ns130:CommunicationMethod">Privacy</ns130:CommunicationMethod>
-    </ns130:TransportLevelSecurity>
-    <ns130:RunAsMode xsi:type="ns130:RunAsMode">System</ns130:RunAsMode>
-    <ns130:AnonymousClients xsi:type="ns130:AnonymousCommunication">No</ns130:AnonymousClients>
-    <ns130:ServiceAuthorization xsi:type="ns130:ServiceAuthorization">
-     <ns130:NoAuthorization xsi:type="ns130:NoAuthorization"/>
-    </ns130:ServiceAuthorization>
-   </ns130:ServiceSecurity>
+   <ns128:ResourcePropertiesList xsi:type="ns128:ResourcePropertiesListType" xmlns:ns128="gme://gov.nih.nci.cagrid.introduce/1/Resources">
+    <ns128:ResourceProperty qName="ns129:ServiceMetadata" description="" fileLocation="serviceMetadata.xml" populateFromFile="true" register="true" xsi:type="ns128:ResourcePropertyType" xmlns:ns129="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"/>
+    <ns128:ResourceProperty qName="ns130:AuthenticationProfiles" description="" fileLocation="Dorian_authenticationProfiles.xml" populateFromFile="false" register="true" xsi:type="ns128:ResourcePropertyType" xmlns:ns130="http://gaards.cagrid.org/authentication"/>
+   </ns128:ResourcePropertiesList>
+   <ns131:ServiceSecurity xsi:type="ns131:ServiceSecurity" xmlns:ns131="gme://gov.nih.nci.cagrid.introduce/1/Security">
+    <ns131:SecuritySetting xsi:type="ns131:SecuritySetting">Custom</ns131:SecuritySetting>
+    <ns131:TransportLevelSecurity xsi:type="ns131:TransportLevelSecurity">
+     <ns131:CommunicationMethod xsi:type="ns131:CommunicationMethod">Privacy</ns131:CommunicationMethod>
+    </ns131:TransportLevelSecurity>
+    <ns131:RunAsMode xsi:type="ns131:RunAsMode">System</ns131:RunAsMode>
+    <ns131:AnonymousClients xsi:type="ns131:AnonymousCommunication">No</ns131:AnonymousClients>
+    <ns131:ServiceAuthorization xsi:type="ns131:ServiceAuthorization">
+     <ns131:NoAuthorization xsi:type="ns131:NoAuthorization"/>
+    </ns131:ServiceAuthorization>
+   </ns131:ServiceSecurity>
    <ns3:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">Dorian Grid Service</ns3:description>
    <ns3:ResourceFrameworkOptions xsi:type="ns3:ResourceFrameworkOptions">
     <ns3:Main xsi:type="ns3:Main"/>
@@ -541,11 +552,11 @@
    </ns3:ResourceFrameworkOptions>
   </ns3:Service>
  </ns3:Services>
- <ns131:Extensions xsi:type="ns131:ExtensionsType" xmlns:ns131="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <ns131:Extension name="cagrid_metadata" version="1.2" xsi:type="ns131:ExtensionType"/>
- </ns131:Extensions>
- <ns132:ServiceProperties xmlns:ns132="gme://gov.nih.nci.cagrid.introduce/1/Property">
-  <ns132:Property description="" isFromETC="true" key="dorianConfiguration" value="dorian-configuration.xml"/>
-  <ns132:Property description="" isFromETC="true" key="dorianProperties" value="dorian.properties"/>
- </ns132:ServiceProperties>
+ <ns132:Extensions xsi:type="ns132:ExtensionsType" xmlns:ns132="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ns132:Extension name="cagrid_metadata" version="1.2" xsi:type="ns132:ExtensionType"/>
+ </ns132:Extensions>
+ <ns133:ServiceProperties xmlns:ns133="gme://gov.nih.nci.cagrid.introduce/1/Property">
+  <ns133:Property description="" isFromETC="true" key="dorianConfiguration" value="dorian-configuration.xml"/>
+  <ns133:Property description="" isFromETC="true" key="dorianProperties" value="dorian.properties"/>
+ </ns133:ServiceProperties>
 </ns1:ServiceDescription>
