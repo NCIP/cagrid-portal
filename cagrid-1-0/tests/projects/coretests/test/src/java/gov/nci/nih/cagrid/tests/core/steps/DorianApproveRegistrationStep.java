@@ -6,7 +6,9 @@ package gov.nci.nih.cagrid.tests.core.steps;
 import gov.nci.nih.cagrid.tests.core.GridCredential;
 import gov.nih.nci.cagrid.testing.system.haste.Step;
 
-import org.cagrid.gaards.dorian.client.IdPAdministrationClient;
+import java.util.List;
+
+import org.cagrid.gaards.dorian.client.LocalAdministrationClient;
 import org.cagrid.gaards.dorian.idp.Application;
 import org.cagrid.gaards.dorian.idp.IdPUser;
 import org.cagrid.gaards.dorian.idp.IdPUserFilter;
@@ -38,16 +40,16 @@ public class DorianApproveRegistrationStep extends Step {
 		if (credential != null) {
 			proxy = credential.getCredential();
 		}
-		IdPAdministrationClient client = new IdPAdministrationClient(
+		LocalAdministrationClient client = new LocalAdministrationClient(
 				this.serviceURL, proxy);
 
 		// find users
 		IdPUserFilter filter = new IdPUserFilter();
 		filter.setUserId(this.application.getUserId());
 		filter.setStatus(IdPUserStatus.Pending);
-		IdPUser[] users = client.findUsers(filter);
+		List<IdPUser> users = client.findUsers(filter);
 		assertNotNull(users);
-		assertTrue(users.length > 0);
+		assertTrue(users.size() > 0);
 
 		// find user
 		IdPUser user = findUser(users, this.application);
@@ -58,7 +60,7 @@ public class DorianApproveRegistrationStep extends Step {
 		client.updateUser(user);
 	}
 
-	private IdPUser findUser(IdPUser[] users, Application application) {
+	private IdPUser findUser(List<IdPUser> users, Application application) {
 		for (IdPUser user : users) {
 			if (user.getUserId().equals(application.getUserId())) {
 				return user;

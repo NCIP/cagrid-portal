@@ -19,6 +19,7 @@ import java.io.Writer;
 import java.lang.reflect.Array;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -48,6 +49,14 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 public class Utils {
+
+	public static <T> List<T> asList(T... a) {
+		if (a == null) {
+			return new ArrayList<T>();
+		} else {
+			return Arrays.asList(a);
+		}
+	}
 
 	public static File getCaGridUserHome() {
 		String userHome = System.getProperty("user.home");
@@ -460,7 +469,8 @@ public class Utils {
 				.getClassForQName(qname);
 	}
 
-	public static List<File> recursiveListFiles(File baseDir, final FileFilter filter) {
+	public static List<File> recursiveListFiles(File baseDir,
+			final FileFilter filter) {
 		FileFilter dirFilter = new FileFilter() {
 			public boolean accept(File pathname) {
 				return pathname.isDirectory() || filter.accept(pathname);

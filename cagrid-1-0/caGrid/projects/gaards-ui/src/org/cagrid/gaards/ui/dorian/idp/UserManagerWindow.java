@@ -5,6 +5,7 @@ import gov.nih.nci.cagrid.common.Runner;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -17,7 +18,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.border.TitledBorder;
 
-import org.cagrid.gaards.dorian.client.IdPAdministrationClient;
+import org.cagrid.gaards.dorian.client.LocalAdministrationClient;
 import org.cagrid.gaards.dorian.idp.IdPUser;
 import org.cagrid.gaards.dorian.idp.IdPUserFilter;
 import org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault;
@@ -32,7 +33,7 @@ import org.cagrid.grape.utils.ErrorDialog;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: UserManagerWindow.java,v 1.3 2008-06-17 19:33:10 langella Exp $
+ * @version $Id: UserManagerWindow.java,v 1.4 2008-07-07 18:47:48 langella Exp $
  */
 public class UserManagerWindow extends ApplicationComponent {
 
@@ -845,16 +846,17 @@ public class UserManagerWindow extends ApplicationComponent {
 				f.setEmail(format(getEmail().getText()));
 			}
 
-			IdPAdministrationClient client = getSession().getLocalAdminClient();
-			IdPUser[] users = client.findUsers(f);
+			LocalAdministrationClient client = getSession()
+					.getLocalAdminClient();
+			List<IdPUser> users = client.findUsers(f);
 			if (users != null) {
-				for (int i = 0; i < users.length; i++) {
-					this.getUsersTable().addUser(users[i]);
+				for (int i = 0; i < users.size(); i++) {
+					this.getUsersTable().addUser(users.get(i));
 				}
 			}
 			int length = 0;
 			if (users != null) {
-				length = users.length;
+				length = users.size();
 			}
 			this.updateProgress(false, "Querying Completed [" + length
 					+ " users found]");
@@ -1030,7 +1032,7 @@ public class UserManagerWindow extends ApplicationComponent {
 					+ "...");
 
 			try {
-				IdPAdministrationClient client = getSession()
+				LocalAdministrationClient client = getSession()
 						.getLocalAdminClient();
 				client.removeUser(user.getUserId());
 				getUsersTable().removeRow(row);

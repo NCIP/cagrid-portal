@@ -21,7 +21,7 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
-import org.cagrid.gaards.dorian.client.IFSUserClient;
+import org.cagrid.gaards.dorian.client.GridUserClient;
 import org.cagrid.gaards.dorian.federation.ProxyLifetime;
 import org.globus.gsi.GlobusCredential;
 import org.globus.util.ConfigUtil;
@@ -102,7 +102,7 @@ public class GridProxyInit {
 		AuthenticationClient client = new AuthenticationClient(
 				authenticationServiceURL, cred);
 		SAMLAssertion saml = client.authenticate();
-		IFSUserClient dorian = new IFSUserClient(dorianURL);
+		GridUserClient dorian = new GridUserClient(dorianURL);
 		GlobusCredential proxy = dorian.createProxy(saml, lifetime,
 				delegationPathLength);
 		return proxy;
@@ -238,7 +238,7 @@ public class GridProxyInit {
 			System.out.print("Requesting a proxy from the Dorian "
 					+ authURL.getValue() + ".....");
 
-			IFSUserClient dorian = new IFSUserClient(dorianURL.getValue());
+			GridUserClient dorian = new GridUserClient(dorianURL.getValue());
 			GlobusCredential proxy = dorian.createProxy(saml, lifetime,
 					delegationPathLength);
 			System.out.println("SUCCESSFUL");

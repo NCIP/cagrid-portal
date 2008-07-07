@@ -12,7 +12,7 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import org.cagrid.gaards.dorian.client.DorianCertifcateAuthorityClient;
+import org.cagrid.gaards.dorian.client.GridUserClient;
 import org.cagrid.gaards.ui.common.CertificateInformationComponent;
 import org.cagrid.gaards.ui.dorian.DorianLookAndFeel;
 import org.cagrid.gaards.ui.dorian.DorianServiceListComboBox;
@@ -190,7 +190,7 @@ public class ViewCACertificateWindow extends ApplicationComponent {
 	private void getCACertificate() {
 		try {
 			getViewCAButton().setEnabled(false);
-			DorianCertifcateAuthorityClient client = new DorianCertifcateAuthorityClient((String) ifs.getSelectedItem());
+			GridUserClient client = new GridUserClient((String) ifs.getSelectedItem());
 			X509Certificate cert = client.getCACertificate();
 			dispose();
 			CertificateInformationComponent cic = new CertificateInformationComponent(cert);

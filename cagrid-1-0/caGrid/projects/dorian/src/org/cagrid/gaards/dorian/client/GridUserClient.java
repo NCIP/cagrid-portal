@@ -9,6 +9,7 @@ import java.rmi.RemoteException;
 import java.security.KeyPair;
 import java.security.PublicKey;
 import java.security.cert.X509Certificate;
+import java.util.List;
 
 import org.apache.axis.types.URI.MalformedURIException;
 import org.cagrid.gaards.dorian.common.DorianFault;
@@ -28,20 +29,39 @@ import org.cagrid.gaards.pki.KeyUtil;
 import org.cagrid.gaards.saml.encoding.SAMLUtils;
 import org.globus.gsi.GlobusCredential;
 
-public class IFSUserClient {
+public class GridUserClient {
 
 	private DorianClient client;
 
-	public IFSUserClient(String serviceURI) throws MalformedURIException,
+	public GridUserClient(String serviceURI) throws MalformedURIException,
 			RemoteException {
 		client = new DorianClient(serviceURI);
 	}
 
-	public IFSUserClient(String serviceURI, GlobusCredential cred)
+	public GridUserClient(String serviceURI, GlobusCredential cred)
 			throws MalformedURIException, RemoteException {
 		client = new DorianClient(serviceURI, cred);
 	}
 
+	/**
+	 * Allow a user to request a short term Grid credential from Dorian, which
+	 * they may user to authenticate to Grid service.
+	 * 
+	 * @param saml
+	 *            A signed SAML assertion from an identity provider trusted by
+	 *            Dorian.
+	 * @param lifetime
+	 *            The lifetime of the Grid credential.
+	 * @param delegationPathLength
+	 *            The delegation path length of the Grid credential.
+	 * @return The short term Grid credential.
+	 * @throws DorianFault
+	 * @throws DorianInternalFault
+	 * @throws InvalidAssertionFault
+	 * @throws InvalidProxyFault
+	 * @throws UserPolicyFault
+	 * @throws PermissionDeniedFault
+	 */
 	public GlobusCredential createProxy(SAMLAssertion saml,
 			ProxyLifetime lifetime, int delegationPathLength)
 			throws DorianFault, DorianInternalFault, InvalidAssertionFault,
@@ -84,6 +104,25 @@ public class IFSUserClient {
 		}
 	}
 
+	/**
+	 * This method allow a user to request a host certificate.
+	 * 
+	 * @param hostname
+	 *            The host name of the host.
+	 * @param publicKey
+	 *            The public key to use for the host ceriticate.
+	 * @return The host certificate record for the host certificate, if the host
+	 *         certificate was immediately approved, the signed host certificate
+	 *         will be contained in the record. Otherwise you will have to wait
+	 *         for the host certificate to be approved, once approved the
+	 *         getOwnedHostCertificates method can be used to obtain the signed
+	 *         host certificate.
+	 * @throws DorianFault
+	 * @throws DorianInternalFault
+	 * @throws InvalidHostCertificateRequestFault
+	 * @throws InvalidHostCertificateFault
+	 * @throws PermissionDeniedFault
+	 */
 	public HostCertificateRecord requestHostCertificate(String hostname,
 			PublicKey publicKey) throws DorianFault, DorianInternalFault,
 			InvalidHostCertificateRequestFault, InvalidHostCertificateFault,
@@ -114,10 +153,21 @@ public class IFSUserClient {
 		}
 	}
 
-	public HostCertificateRecord[] getOwnedHostCertificates()
+	/**
+	 * This method returns a list for all the host certificates owned by the
+	 * user.
+	 * 
+	 * @return The list of host certificates owned by the user.
+	 * @throws DorianFault
+	 * @throws DorianInternalFault
+	 * @throws PermissionDeniedFault
+	 */
+	public List<HostCertificateRecord> getOwnedHostCertificates()
 			throws DorianFault, DorianInternalFault, PermissionDeniedFault {
 		try {
-			return client.getOwnedHostCertificates();
+			List<HostCertificateRecord> list = Utils.asList(client
+					.getOwnedHostCertificates());
+			return list;
 		} catch (DorianInternalFault gie) {
 			throw gie;
 		} catch (PermissionDeniedFault f) {
@@ -133,5 +183,27 @@ public class IFSUserClient {
 		}
 
 	}
+	
+	/**
+	 * This method obtains Dorian's CA certificate.
+	 * @return This method obtains Dorian's CA certificate.
+	 * @throws DorianFault
+	 * @throws DorianInternalFault
+	 */
 
+	public X509Certificate getCACertificate() throws DorianFault, DorianInternalFault {
+		try {
+			return CertUtil.loadCertificate(client.getCACertificate().getCertificateAsString());
+		} catch (DorianInternalFault gie) {
+			throw gie;
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			DorianFault fault = new DorianFault();
+			fault.setFaultString(Utils.getExceptionMessage(e));
+			FaultHelper helper = new FaultHelper(fault);
+			helper.addFaultCause(e);
+			fault = (DorianFault) helper.getFault();
+			throw fault;
+		}
+	}
 }

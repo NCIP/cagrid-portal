@@ -6,7 +6,7 @@ import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
 import java.rmi.RemoteException;
 
 import org.apache.axis.types.URI.MalformedURIException;
-import org.cagrid.gaards.dorian.client.IFSUserClient;
+import org.cagrid.gaards.dorian.client.GridUserClient;
 import org.cagrid.gaards.dorian.common.DorianFault;
 import org.cagrid.gaards.dorian.stubs.types.DorianInternalFault;
 import org.cagrid.gaards.dorian.stubs.types.InvalidAssertionFault;
@@ -32,10 +32,10 @@ public class DorianHelperImpl implements DorianHelper
 	{
 		GlobusCredential globusCredential = null;
 		
-		IFSUserClient ifsUserClient = null;
+		GridUserClient ifsUserClient = null;
 		try
 		{
-			ifsUserClient = new IFSUserClient(dorianInformation.getDorianServiceURL());
+			ifsUserClient = new GridUserClient(dorianInformation.getDorianServiceURL());
 		} catch (MalformedURIException e)
 		{
 			throw new AuthenticationConfigurationException("Invalid Dorian Service URL : " + e.getMessage());

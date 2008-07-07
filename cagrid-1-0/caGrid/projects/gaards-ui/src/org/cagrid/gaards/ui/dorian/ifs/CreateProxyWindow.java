@@ -1,8 +1,6 @@
 package org.cagrid.gaards.ui.dorian.ifs;
 
-import gov.nih.nci.cagrid.authentication.bean.BasicAuthenticationCredential;
-import gov.nih.nci.cagrid.authentication.bean.Credential;
-import gov.nih.nci.cagrid.authentication.client.AuthenticationClient;
+
 import gov.nih.nci.cagrid.common.Runner;
 import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
 
@@ -21,7 +19,9 @@ import javax.swing.JProgressBar;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
-import org.cagrid.gaards.dorian.client.IFSUserClient;
+import org.cagrid.gaards.authentication.BasicAuthentication;
+import org.cagrid.gaards.authentication.client.AuthenticationClient;
+import org.cagrid.gaards.dorian.client.GridUserClient;
 import org.cagrid.gaards.dorian.federation.ProxyLifetime;
 import org.cagrid.gaards.ui.common.CredentialManager;
 import org.cagrid.gaards.ui.common.CredentialManagerComponent;
@@ -403,15 +403,14 @@ public class CreateProxyWindow extends ApplicationComponent {
         this.updateProgress(true, "Authenticating with IdP...");
 
         try {
-            Credential credential = new Credential();
-            BasicAuthenticationCredential bac = new BasicAuthenticationCredential();
+            
+            BasicAuthentication bac = new BasicAuthentication();
             bac.setUserId(userId.getText());
             bac.setPassword(new String(password.getPassword()));
-            credential.setBasicAuthenticationCredential(bac);
-            AuthenticationClient client = new AuthenticationClient(idpService, credential);
-            SAMLAssertion saml = client.authenticate();
+            AuthenticationClient client = new AuthenticationClient(idpService);
+            SAMLAssertion saml = client.authenticate(bac);
             this.updateProgress(true, "Creating Proxy...");
-            IFSUserClient c2 = new IFSUserClient(ifsService);
+            GridUserClient c2 = new GridUserClient(ifsService);
             ProxyLifetime lifetime = new ProxyLifetime();
             lifetime.setHours(Integer.valueOf((String) getHours().getSelectedItem()).intValue());
             lifetime.setMinutes(Integer.valueOf((String) getMinutes().getSelectedItem()).intValue());

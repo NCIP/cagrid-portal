@@ -23,7 +23,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
-import org.cagrid.gaards.dorian.client.IFSAdministrationClient;
+import org.cagrid.gaards.dorian.client.GridAdministrationClient;
 import org.cagrid.gaards.dorian.federation.HostCertificateRecord;
 import org.cagrid.gaards.dorian.federation.HostCertificateStatus;
 import org.cagrid.gaards.dorian.federation.HostCertificateUpdate;
@@ -297,7 +297,7 @@ public class HostCertificateWindow extends ApplicationComponent {
             getApprove().setEnabled(false);
             String serviceUrl = getService().getText();
             GlobusCredential c = ((CredentialCaddy) getProxy().getSelectedItem()).getProxy();
-            IFSAdministrationClient client = new IFSAdministrationClient(serviceUrl, c);
+            GridAdministrationClient client = new GridAdministrationClient(serviceUrl, c);
             record = client.approveHostCertificate(record.getId());
             loadRecord();
             JOptionPane.showMessageDialog(this, "The host certificate has been succesfully approved.");
@@ -314,7 +314,7 @@ public class HostCertificateWindow extends ApplicationComponent {
             getRenew().setEnabled(false);
             String serviceUrl = getService().getText();
             GlobusCredential c = ((CredentialCaddy) getProxy().getSelectedItem()).getProxy();
-            IFSAdministrationClient client = new IFSAdministrationClient(serviceUrl, c);
+            GridAdministrationClient client = new GridAdministrationClient(serviceUrl, c);
             record = client.renewHostCertificate(record.getId());
             loadRecord();
             JOptionPane.showMessageDialog(this, "The host certificate has been succesfully renewed.");
@@ -359,7 +359,7 @@ public class HostCertificateWindow extends ApplicationComponent {
             if (performUpdate) {
                 String serviceUrl = getService().getText();
                 GlobusCredential c = ((CredentialCaddy) getProxy().getSelectedItem()).getProxy();
-                IFSAdministrationClient client = new IFSAdministrationClient(serviceUrl, c);
+                GridAdministrationClient client = new GridAdministrationClient(serviceUrl, c);
                 client.updateHostCertificateRecord(certUpdate);
                 if (!record.getStatus().equals(getStatus().getSelectedItem())) {
                     record.setStatus((HostCertificateStatus) getStatus().getSelectedItem());

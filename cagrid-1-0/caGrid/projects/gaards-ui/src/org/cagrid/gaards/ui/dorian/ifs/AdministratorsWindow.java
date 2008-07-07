@@ -4,6 +4,7 @@ import gov.nih.nci.cagrid.common.Runner;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -11,7 +12,7 @@ import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 
-import org.cagrid.gaards.dorian.client.IFSAdministrationClient;
+import org.cagrid.gaards.dorian.client.GridAdministrationClient;
 import org.cagrid.gaards.dorian.federation.IFSUser;
 import org.cagrid.gaards.dorian.federation.IFSUserFilter;
 import org.cagrid.gaards.dorian.federation.TrustedIdP;
@@ -247,20 +248,21 @@ public class AdministratorsWindow extends ApplicationComponent {
 
 	public void showAdmin() {
 		try {
-			IFSAdministrationClient client = getSessionPanel().getAdminClient();
+			GridAdministrationClient client = getSessionPanel()
+					.getAdminClient();
 			IFSUserFilter f = new IFSUserFilter();
 			f.setGridId(getAdminsTable().getSelectedAdmin());
-			IFSUser[] users = client.findUsers(f);
-			if ((users == null) || (users.length == 0)) {
+			List<IFSUser> users = client.findUsers(f);
+			if ((users == null) || (users.size() == 0)) {
 				throw new Exception(
 						"The administrator selected does not have an account with this Dorian.");
 			} else {
-				IFSUser user = users[0];
-				TrustedIdP[] idps = client.getTrustedIdPs();
+				IFSUser user = users.get(0);
+				List<TrustedIdP> idps = client.getTrustedIdPs();
 				TrustedIdP tidp = null;
-				for (int i = 0; i < idps.length; i++) {
-					if (idps[i].getId() == user.getIdPId()) {
-						tidp = idps[i];
+				for (int i = 0; i < idps.size(); i++) {
+					if (idps.get(i).getId() == user.getIdPId()) {
+						tidp = idps.get(i);
 						break;
 					}
 				}
@@ -359,19 +361,15 @@ public class AdministratorsWindow extends ApplicationComponent {
 		this.updateProgress(true, "Finding Administrators...");
 
 		try {
-			IFSAdministrationClient client = getSessionPanel().getAdminClient();
-			String[] admins = client.getAdmins();
+			GridAdministrationClient client = getSessionPanel()
+					.getAdminClient();
+			List<String> admins = client.getAdmins();
 
-			int length = 0;
-			if (admins != null) {
-				length = admins.length;
-				for (int i = 0; i < admins.length; i++) {
-					this.getAdminsTable().addAdmin(admins[i]);
-				}
+			for (int i = 0; i < admins.size(); i++) {
+				this.getAdminsTable().addAdmin(admins.get(i));
 			}
-
 			loaded = true;
-			this.updateProgress(false, "Completed [Found " + length
+			this.updateProgress(false, "Completed [Found " + admins.size()
 					+ " Administrators]");
 
 		} catch (PermissionDeniedFault pdf) {
@@ -462,7 +460,7 @@ public class AdministratorsWindow extends ApplicationComponent {
 
 	private void removeAdmin() {
 		try {
-			IFSAdministrationClient client = getSessionPanel().getAdminClient();
+			GridAdministrationClient client = getSessionPanel().getAdminClient();
 			client.removeAdmin(getAdminsTable().getSelectedAdmin());
 			getAdminsTable().removeSelectedAdmin();
 		} catch (Exception e) {

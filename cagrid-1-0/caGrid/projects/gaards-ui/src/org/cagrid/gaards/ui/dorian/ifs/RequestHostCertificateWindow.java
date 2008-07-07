@@ -21,7 +21,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
-import org.cagrid.gaards.dorian.client.IFSUserClient;
+import org.cagrid.gaards.dorian.client.GridUserClient;
 import org.cagrid.gaards.dorian.federation.HostCertificateRecord;
 import org.cagrid.gaards.pki.KeyUtil;
 import org.cagrid.gaards.ui.dorian.DorianLookAndFeel;
@@ -344,7 +344,7 @@ public class RequestHostCertificateWindow extends ApplicationComponent {
             KeyPair pair = KeyUtil.generateRSAKeyPair(stren);
             getProgress().stopEvent(event, "Successfully generated key pair.");
             event = getProgress().startEvent("Submitting certificate request to Dorian....");
-            IFSUserClient client = getSessionPanel().getUserClientWithCredentials();
+            GridUserClient client = getSessionPanel().getUserClientWithCredentials();
             HostCertificateRecord record = client.requestHostCertificate(getHost().getText(), pair.getPublic());
             getProgress().stopEvent(event, "Successfully sent certificate request to Dorian.");
             GridApplication.getContext().addApplicationComponent(

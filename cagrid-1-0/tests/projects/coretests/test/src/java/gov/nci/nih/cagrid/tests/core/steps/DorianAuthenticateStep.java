@@ -11,7 +11,7 @@ import gov.nih.nci.cagrid.testing.system.haste.Step;
 
 import org.cagrid.gaards.authentication.BasicAuthentication;
 import org.cagrid.gaards.authentication.client.AuthenticationClient;
-import org.cagrid.gaards.dorian.client.IFSUserClient;
+import org.cagrid.gaards.dorian.client.GridUserClient;
 import org.cagrid.gaards.dorian.federation.ProxyLifetime;
 import org.globus.gsi.GlobusCredential;
 
@@ -57,7 +57,7 @@ public class DorianAuthenticateStep extends Step implements GridCredential {
 		AuthenticationClient client = new AuthenticationClient(this.serviceURL);
 		this.saml = client.authenticate(authCred);
 
-		IFSUserClient c2 = new IFSUserClient(this.serviceURL);
+		GridUserClient c2 = new GridUserClient(this.serviceURL);
 		this.credential = c2.createProxy(this.saml, new ProxyLifetime(
 				this.hours, 0, 0), this.delegationPathLength);
 		ProxyUtil.saveProxyAsDefault(this.credential);

@@ -14,7 +14,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import org.cagrid.gaards.dorian.client.IFSAdministrationClient;
+import org.cagrid.gaards.dorian.client.GridAdministrationClient;
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.LookAndFeel;
 import org.cagrid.grape.utils.ErrorDialog;
@@ -209,7 +209,7 @@ public class AddAdminWindow extends JDialog {
 	private void addAdmin() {
 		try {
 			addAdminButton.setEnabled(false);
-			IFSAdministrationClient client = new IFSAdministrationClient(uri, cred);
+			GridAdministrationClient client = new GridAdministrationClient(uri, cred);
 			client.addAdmin(getGridIdentity().getText());
 			dispose();
 		} catch (Exception e) {

@@ -5,6 +5,7 @@ import gov.nih.nci.cagrid.common.FaultUtil;
 import gov.nih.nci.cagrid.common.Utils;
 
 import java.rmi.RemoteException;
+import java.util.List;
 
 import org.apache.axis.types.URI.MalformedURIException;
 import org.cagrid.gaards.dorian.common.DorianFault;
@@ -23,20 +24,31 @@ import org.globus.gsi.GlobusCredential;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public class IdPAdministrationClient {
+public class LocalAdministrationClient {
 
 	private DorianClient client;
 
-	public IdPAdministrationClient(String serviceURI)
+	public LocalAdministrationClient(String serviceURI)
 			throws MalformedURIException, RemoteException {
 		client = new DorianClient(serviceURI);
 	}
 
-	public IdPAdministrationClient(String serviceURI, GlobusCredential proxy)
+	public LocalAdministrationClient(String serviceURI, GlobusCredential proxy)
 			throws MalformedURIException, RemoteException {
 		client = new DorianClient(serviceURI, proxy);
 	}
-
+   
+	/**
+	 * This method allows a client to determine whether or not a user id is
+	 * already registered with the Dorian Identity Provider.
+	 * 
+	 * @param userId
+	 *            The user id to determine whether or not is registered.
+	 * @return True is returned a user with the user id is registered with the
+	 *         Dorian Identity Provider, otherwise False is returned.
+	 * @throws DorianFault
+	 * @throws DorianInternalFault
+	 */
 	public boolean doesUserExist(String userId) throws DorianFault,
 			DorianInternalFault {
 		try {
@@ -54,10 +66,20 @@ public class IdPAdministrationClient {
 		}
 	}
 
-	public IdPUser[] findUsers(IdPUserFilter filter) throws DorianFault,
+	/**
+	 * This methods returns the list of users registered with the Dorian Identity Provider 
+	 * meeting the specified search criteria.
+	 * @param filter The search criteria specifying the users to find.
+	 * @return The list of users found meeting the search criteria.
+	 * @throws DorianFault
+	 * @throws DorianInternalFault
+	 * @throws PermissionDeniedFault
+	 */
+	public List<IdPUser> findUsers(IdPUserFilter filter) throws DorianFault,
 			DorianInternalFault, PermissionDeniedFault {
 		try {
-			return client.findIdPUsers(filter);
+			List<IdPUser> list = Utils.asList(client.findIdPUsers(filter));
+			return list;
 		} catch (DorianInternalFault gie) {
 			throw gie;
 		} catch (PermissionDeniedFault f) {
@@ -73,6 +95,13 @@ public class IdPAdministrationClient {
 		}
 	}
 
+	/**
+	 * This method deletes a user account in the Dorian Identity Provider.
+	 * @param userId The user id of the account to be deleted.
+	 * @throws DorianFault
+	 * @throws DorianInternalFault
+	 * @throws PermissionDeniedFault
+	 */
 	public void removeUser(String userId) throws DorianFault,
 			DorianInternalFault, PermissionDeniedFault {
 		try {
@@ -93,6 +122,15 @@ public class IdPAdministrationClient {
 
 	}
 
+	/**
+	 * This method allows a client to make update(s) to a Dorian Identity Provider user account.
+	 * @param u The updated user.
+	 * @throws DorianFault
+	 * @throws DorianInternalFault
+	 * @throws PermissionDeniedFault
+	 * @throws NoSuchUserFault
+	 * @throws InvalidUserPropertyFault
+	 */
 	public void updateUser(IdPUser u) throws DorianFault, DorianInternalFault,
 			PermissionDeniedFault, NoSuchUserFault, InvalidUserPropertyFault {
 

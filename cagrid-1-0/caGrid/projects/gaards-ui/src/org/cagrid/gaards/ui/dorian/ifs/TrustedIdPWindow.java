@@ -20,7 +20,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
-import org.cagrid.gaards.dorian.client.IFSAdministrationClient;
+import org.cagrid.gaards.dorian.client.GridAdministrationClient;
 import org.cagrid.gaards.dorian.common.SAMLConstants;
 import org.cagrid.gaards.dorian.federation.IFSUserPolicy;
 import org.cagrid.gaards.dorian.federation.SAMLAttributeDescriptor;
@@ -38,25 +38,31 @@ import org.cagrid.grape.LookAndFeel;
 import org.cagrid.grape.utils.ErrorDialog;
 import org.globus.gsi.GlobusCredential;
 
-
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: TrustedIdPWindow.java,v 1.4 2008-06-17 19:33:10 langella Exp $
+ * @version $Id: TrustedIdPWindow.java,v 1.5 2008-07-07 18:47:48 langella Exp $
  */
 public class TrustedIdPWindow extends ApplicationComponent {
-	public static final String PASSWORD = SAMLAuthenticationMethod.value1.getValue();
-	public static final String KERBEROS = SAMLAuthenticationMethod.value2.getValue();
+	public static final String PASSWORD = SAMLAuthenticationMethod.value1
+			.getValue();
+	public static final String KERBEROS = SAMLAuthenticationMethod.value2
+			.getValue();
 	public static final String SRP = SAMLAuthenticationMethod.value3.getValue();
-	public static final String HARDWARE_TOKEN = SAMLAuthenticationMethod.value4.getValue();
+	public static final String HARDWARE_TOKEN = SAMLAuthenticationMethod.value4
+			.getValue();
 	public static final String TLS = SAMLAuthenticationMethod.value5.getValue();
 	public static final String PKI = SAMLAuthenticationMethod.value6.getValue();
 	public static final String PGP = SAMLAuthenticationMethod.value7.getValue();
-	public static final String SPKI = SAMLAuthenticationMethod.value8.getValue();
-	public static final String XKMS = SAMLAuthenticationMethod.value9.getValue();
-	public static final String XML_SIGNATURE = SAMLAuthenticationMethod.value10.getValue();
-	public static final String UNSPECIFIED = SAMLAuthenticationMethod.value11.getValue();
+	public static final String SPKI = SAMLAuthenticationMethod.value8
+			.getValue();
+	public static final String XKMS = SAMLAuthenticationMethod.value9
+			.getValue();
+	public static final String XML_SIGNATURE = SAMLAuthenticationMethod.value10
+			.getValue();
+	public static final String UNSPECIFIED = SAMLAuthenticationMethod.value11
+			.getValue();
 
 	private final static String INFO_PANEL = "IdP Information";
 
@@ -112,7 +118,7 @@ public class TrustedIdPWindow extends ApplicationComponent {
 
 	private TrustedIdPStatusComboBox status = null;
 
-	private IFSUserPolicy[] policies;
+	private List<IFSUserPolicy> policies;
 
 	private JLabel policyLabel = null;
 
@@ -160,8 +166,8 @@ public class TrustedIdPWindow extends ApplicationComponent {
 	private JTextField emailNamespace = null;
 	private JTextField email = null;
 
-
-	public TrustedIdPWindow(TrustedIdPsWindow window, String serviceId, GlobusCredential proxy, IFSUserPolicy[] policies) {
+	public TrustedIdPWindow(TrustedIdPsWindow window, String serviceId,
+			GlobusCredential proxy, List<IFSUserPolicy> policies) {
 		super();
 		this.window = window;
 		this.serviceId = serviceId;
@@ -172,12 +178,11 @@ public class TrustedIdPWindow extends ApplicationComponent {
 		initialize();
 	}
 
-
 	/**
 	 * This is the default constructor
 	 */
-	public TrustedIdPWindow(String serviceId, GlobusCredential proxy, TrustedIdP idp, IFSUserPolicy[] policies)
-		throws Exception {
+	public TrustedIdPWindow(String serviceId, GlobusCredential proxy,
+			TrustedIdP idp, List<IFSUserPolicy> policies) throws Exception {
 		super();
 		this.serviceId = serviceId;
 		this.cred = proxy;
@@ -187,41 +192,35 @@ public class TrustedIdPWindow extends ApplicationComponent {
 		initialize();
 	}
 
-
 	public class UserPolicyCaddy {
 		private IFSUserPolicy policy;
-
 
 		public UserPolicyCaddy(String className) {
 			this.policy = new IFSUserPolicy(className, "");
 		}
 
-
 		public UserPolicyCaddy(IFSUserPolicy policy) {
 			this.policy = policy;
 		}
-
 
 		public IFSUserPolicy getPolicy() {
 			return policy;
 		}
 
-
 		public String toString() {
 			return policy.getName();
 		}
 
-
 		public boolean equals(Object o) {
 			UserPolicyCaddy up = (UserPolicyCaddy) o;
-			if (this.getPolicy().getClassName().equals(up.getPolicy().getClassName())) {
+			if (this.getPolicy().getClassName().equals(
+					up.getPolicy().getClassName())) {
 				return true;
 			} else {
 				return false;
 			}
 		}
 	}
-
 
 	/**
 	 * This method initializes this
@@ -237,7 +236,6 @@ public class TrustedIdPWindow extends ApplicationComponent {
 
 	}
 
-
 	/**
 	 * This method initializes jContentPane
 	 * 
@@ -251,7 +249,6 @@ public class TrustedIdPWindow extends ApplicationComponent {
 		}
 		return jContentPane;
 	}
-
 
 	/**
 	 * This method initializes jPanel
@@ -287,7 +284,6 @@ public class TrustedIdPWindow extends ApplicationComponent {
 		return mainPanel;
 	}
 
-
 	/**
 	 * This method initializes jPanel
 	 * 
@@ -300,7 +296,6 @@ public class TrustedIdPWindow extends ApplicationComponent {
 		}
 		return buttonPanel;
 	}
-
 
 	/**
 	 * This method initializes manageUser
@@ -317,38 +312,41 @@ public class TrustedIdPWindow extends ApplicationComponent {
 				updateTrustedIdP.setText("Update");
 			}
 
-			updateTrustedIdP.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					Runner runner = new Runner() {
-						public void execute() {
-							updateTrustedIdP();
-						}
-					};
-					try {
-						GridApplication.getContext().executeInBackground(runner);
-					} catch (Exception t) {
-						t.getMessage();
-					}
+			updateTrustedIdP
+					.addActionListener(new java.awt.event.ActionListener() {
+						public void actionPerformed(java.awt.event.ActionEvent e) {
+							Runner runner = new Runner() {
+								public void execute() {
+									updateTrustedIdP();
+								}
+							};
+							try {
+								GridApplication.getContext()
+										.executeInBackground(runner);
+							} catch (Exception t) {
+								t.getMessage();
+							}
 
-				}
-			});
+						}
+					});
 			updateTrustedIdP.setIcon(DorianLookAndFeel.getTrustedIdPIcon());
 		}
 		return updateTrustedIdP;
 	}
 
-
 	private synchronized void updateTrustedIdP() {
 
 		try {
 			if (getCredPanel().getCertificate() != null) {
-				idp.setIdPCertificate(CertUtil.writeCertificate(getCredPanel().getCertificate()));
+				idp.setIdPCertificate(CertUtil.writeCertificate(getCredPanel()
+						.getCertificate()));
 			}
 			idp.setName(getIdPName().getText().trim());
 			idp.setStatus(getStatus().getSelectedStatus());
-			idp.setUserPolicyClass(((UserPolicyCaddy) getUserPolicy().getSelectedItem()).getPolicy().getClassName());
+			idp.setUserPolicyClass(((UserPolicyCaddy) getUserPolicy()
+					.getSelectedItem()).getPolicy().getClassName());
 
-			List authMethod = new ArrayList();
+			List<SAMLAuthenticationMethod> authMethod = new ArrayList<SAMLAuthenticationMethod>();
 			if (getPasswordMethod().isSelected()) {
 				authMethod.add(SAMLAuthenticationMethod.fromValue(PASSWORD));
 			}
@@ -362,7 +360,8 @@ public class TrustedIdPWindow extends ApplicationComponent {
 			}
 
 			if (getHardwareTokenMethod().isSelected()) {
-				authMethod.add(SAMLAuthenticationMethod.fromValue(HARDWARE_TOKEN));
+				authMethod.add(SAMLAuthenticationMethod
+						.fromValue(HARDWARE_TOKEN));
 			}
 
 			if (getTlsMethod().isSelected()) {
@@ -383,13 +382,15 @@ public class TrustedIdPWindow extends ApplicationComponent {
 			}
 
 			if (getXmlSignatureMethod().isSelected()) {
-				authMethod.add(SAMLAuthenticationMethod.fromValue(XML_SIGNATURE));
+				authMethod.add(SAMLAuthenticationMethod
+						.fromValue(XML_SIGNATURE));
 			}
 
 			if (getUnspecifiedMethod().isSelected()) {
 				authMethod.add(SAMLAuthenticationMethod.fromValue(UNSPECIFIED));
 			}
-			SAMLAuthenticationMethod[] saml = new SAMLAuthenticationMethod[authMethod.size()];
+			SAMLAuthenticationMethod[] saml = new SAMLAuthenticationMethod[authMethod
+					.size()];
 			for (int i = 0; i < authMethod.size(); i++) {
 				saml[i] = (SAMLAuthenticationMethod) authMethod.get(i);
 			}
@@ -397,34 +398,41 @@ public class TrustedIdPWindow extends ApplicationComponent {
 			idp.setAuthenticationMethod(saml);
 
 			SAMLAttributeDescriptor uidDes = new SAMLAttributeDescriptor();
-			uidDes.setNamespaceURI(Utils.clean(this.getUserIdNamespace().getText()));
+			uidDes.setNamespaceURI(Utils.clean(this.getUserIdNamespace()
+					.getText()));
 			uidDes.setName(Utils.clean(this.getUserIdName().getText()));
 			idp.setUserIdAttributeDescriptor(uidDes);
 
 			SAMLAttributeDescriptor firstNameDes = new SAMLAttributeDescriptor();
-			firstNameDes.setNamespaceURI(Utils.clean(this.getFirstNameNamespace().getText()));
+			firstNameDes.setNamespaceURI(Utils.clean(this
+					.getFirstNameNamespace().getText()));
 			firstNameDes.setName(Utils.clean(this.getFirstName().getText()));
 			idp.setFirstNameAttributeDescriptor(firstNameDes);
 
 			SAMLAttributeDescriptor lastNameDes = new SAMLAttributeDescriptor();
-			lastNameDes.setNamespaceURI(Utils.clean(this.getLastNameNamespace().getText()));
+			lastNameDes.setNamespaceURI(Utils.clean(this.getLastNameNamespace()
+					.getText()));
 			lastNameDes.setName(Utils.clean(this.getLastName().getText()));
 			idp.setLastNameAttributeDescriptor(lastNameDes);
 
 			SAMLAttributeDescriptor emailDes = new SAMLAttributeDescriptor();
-			emailDes.setNamespaceURI(Utils.clean(this.getEmailNamespace().getText()));
+			emailDes.setNamespaceURI(Utils.clean(this.getEmailNamespace()
+					.getText()));
 			emailDes.setName(Utils.clean(this.getEmail().getText()));
 			idp.setEmailAttributeDescriptor(emailDes);
 
 			String serviceUrl = getService().getText();
-			GlobusCredential c = ((CredentialCaddy) getProxy().getSelectedItem()).getProxy();
-			IFSAdministrationClient client = new IFSAdministrationClient(serviceUrl, c);
+			GlobusCredential c = ((CredentialCaddy) getProxy()
+					.getSelectedItem()).getProxy();
+			GridAdministrationClient client = new GridAdministrationClient(
+					serviceUrl, c);
 			if (newTrustedIdP) {
 				window.addTrustedIdP(client.addTrustedIdP(idp));
 				dispose();
 			} else {
 				client.updateTrustedIdP(idp);
-				GridApplication.getContext().showMessage("The Trusted IdP was updated successfully.");
+				GridApplication.getContext().showMessage(
+						"The Trusted IdP was updated successfully.");
 			}
 		} catch (PermissionDeniedFault pdf) {
 			ErrorDialog.showError(pdf);
@@ -434,7 +442,6 @@ public class TrustedIdPWindow extends ApplicationComponent {
 
 	}
 
-
 	/**
 	 * This method initializes jTabbedPane
 	 * 
@@ -443,16 +450,20 @@ public class TrustedIdPWindow extends ApplicationComponent {
 	private JTabbedPane getJTabbedPane() {
 		if (jTabbedPane == null) {
 			jTabbedPane = new JTabbedPane();
-			jTabbedPane.setBorder(BorderFactory.createTitledBorder(null, "Trusted Identity Provider",
-				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, LookAndFeel
-					.getPanelLabelColor()));
-			jTabbedPane.addTab(INFO_PANEL, DorianLookAndFeel.getTrustedIdPIcon(), getInfoPanel(), null);
-			jTabbedPane.addTab(CERTIFICATE_PANEL, DorianLookAndFeel.getCertificateIcon(), getCertificatePanel(), null);
-			jTabbedPane.addTab(ATTRIBUTES_PANEL, DorianLookAndFeel.getAttributesIcon(), getAttributesPanel(), null);
+			jTabbedPane.setBorder(BorderFactory.createTitledBorder(null,
+					"Trusted Identity Provider",
+					TitledBorder.DEFAULT_JUSTIFICATION,
+					TitledBorder.DEFAULT_POSITION, null, LookAndFeel
+							.getPanelLabelColor()));
+			jTabbedPane.addTab(INFO_PANEL, DorianLookAndFeel
+					.getTrustedIdPIcon(), getInfoPanel(), null);
+			jTabbedPane.addTab(CERTIFICATE_PANEL, DorianLookAndFeel
+					.getCertificateIcon(), getCertificatePanel(), null);
+			jTabbedPane.addTab(ATTRIBUTES_PANEL, DorianLookAndFeel
+					.getAttributesIcon(), getAttributesPanel(), null);
 		}
 		return jTabbedPane;
 	}
-
 
 	/**
 	 * This method initializes jPanel1
@@ -546,7 +557,6 @@ public class TrustedIdPWindow extends ApplicationComponent {
 		return jPanel1;
 	}
 
-
 	/**
 	 * This method initializes jPanel2
 	 * 
@@ -586,9 +596,10 @@ public class TrustedIdPWindow extends ApplicationComponent {
 			jLabel14.setText("Service");
 			jPanel2 = new JPanel();
 			jPanel2.setLayout(new GridBagLayout());
-			jPanel2.setBorder(BorderFactory.createTitledBorder(null, "Login Information",
-				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, LookAndFeel
-					.getPanelLabelColor()));
+			jPanel2.setBorder(BorderFactory.createTitledBorder(null,
+					"Login Information", TitledBorder.DEFAULT_JUSTIFICATION,
+					TitledBorder.DEFAULT_POSITION, null, LookAndFeel
+							.getPanelLabelColor()));
 			jPanel2.add(jLabel14, gridBagConstraints31);
 			jPanel2.add(getService(), gridBagConstraints27);
 			jPanel2.add(credentialLabel, gridBagConstraints);
@@ -596,7 +607,6 @@ public class TrustedIdPWindow extends ApplicationComponent {
 		}
 		return jPanel2;
 	}
-
 
 	/**
 	 * This method initializes service1
@@ -612,7 +622,6 @@ public class TrustedIdPWindow extends ApplicationComponent {
 		return service;
 	}
 
-
 	/**
 	 * This method initializes infoPanel
 	 * 
@@ -627,7 +636,6 @@ public class TrustedIdPWindow extends ApplicationComponent {
 		return infoPanel;
 	}
 
-
 	/**
 	 * This method initializes proxy1
 	 * 
@@ -639,7 +647,6 @@ public class TrustedIdPWindow extends ApplicationComponent {
 		}
 		return proxy;
 	}
-
 
 	/**
 	 * This method initializes certificatePanel
@@ -671,7 +678,6 @@ public class TrustedIdPWindow extends ApplicationComponent {
 		return certificatePanel;
 	}
 
-
 	/**
 	 * This method initializes jPanel
 	 * 
@@ -682,7 +688,8 @@ public class TrustedIdPWindow extends ApplicationComponent {
 			try {
 				credPanel = new CertificatePanel();
 				if (idp.getIdPCertificate() != null) {
-					credPanel.setCertificate(CertUtil.loadCertificate(idp.getIdPCertificate()));
+					credPanel.setCertificate(CertUtil.loadCertificate(idp
+							.getIdPCertificate()));
 				}
 				// credPanel.setAllowImport(false);
 			} catch (Exception e) {
@@ -691,7 +698,6 @@ public class TrustedIdPWindow extends ApplicationComponent {
 		}
 		return credPanel;
 	}
-
 
 	/**
 	 * This method initializes idpId
@@ -708,7 +714,6 @@ public class TrustedIdPWindow extends ApplicationComponent {
 		}
 		return idpId;
 	}
-
 
 	/**
 	 * This method initializes idPName
@@ -728,7 +733,6 @@ public class TrustedIdPWindow extends ApplicationComponent {
 		return idpName;
 	}
 
-
 	/**
 	 * This method initializes status
 	 * 
@@ -744,7 +748,6 @@ public class TrustedIdPWindow extends ApplicationComponent {
 		return status;
 	}
 
-
 	/**
 	 * This method initializes userPolicy
 	 * 
@@ -753,12 +756,13 @@ public class TrustedIdPWindow extends ApplicationComponent {
 	private JComboBox getUserPolicy() {
 		if (userPolicy == null) {
 			userPolicy = new JComboBox();
-			for (int i = 0; i < policies.length; i++) {
-				userPolicy.addItem(new UserPolicyCaddy(policies[i]));
+			for (int i = 0; i < policies.size(); i++) {
+				userPolicy.addItem(new UserPolicyCaddy(policies.get(i)));
 
 				if (!newTrustedIdP) {
 
-					if (idp.getUserPolicyClass().equals(policies[i].getClassName())) {
+					if (idp.getUserPolicyClass().equals(
+							policies.get(i).getClassName())) {
 						int count = userPolicy.getItemCount();
 						userPolicy.setSelectedIndex((count - 1));
 					}
@@ -768,7 +772,6 @@ public class TrustedIdPWindow extends ApplicationComponent {
 		}
 		return userPolicy;
 	}
-
 
 	/**
 	 * This method initializes authPanel
@@ -933,16 +936,17 @@ public class TrustedIdPWindow extends ApplicationComponent {
 			authPanel.add(xmlSignatureLabel, gridBagConstraints37);
 			authPanel.add(getUnspecifiedMethod(), gridBagConstraints38);
 			authPanel.add(unspecifiedLabel, gridBagConstraints39);
-			authPanel.setBorder(BorderFactory.createTitledBorder(null, "Accepted Authentication Methods",
-				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, LookAndFeel
-					.getPanelLabelColor()));
+			authPanel.setBorder(BorderFactory.createTitledBorder(null,
+					"Accepted Authentication Methods",
+					TitledBorder.DEFAULT_JUSTIFICATION,
+					TitledBorder.DEFAULT_POSITION, null, LookAndFeel
+							.getPanelLabelColor()));
 			authPanel.add(passwordLabel, gridBagConstraints15);
 			authPanel.add(getPasswordMethod(), gridBagConstraints14);
 
 		}
 		return authPanel;
 	}
-
 
 	/**
 	 * This method initializes passwordMethod
@@ -959,7 +963,6 @@ public class TrustedIdPWindow extends ApplicationComponent {
 		return passwordMethod;
 	}
 
-
 	public boolean idpAcceptsMethod(String method) {
 		SAMLAuthenticationMethod[] methods = idp.getAuthenticationMethod();
 		if (methods != null) {
@@ -972,7 +975,6 @@ public class TrustedIdPWindow extends ApplicationComponent {
 		return false;
 	}
 
-
 	private JCheckBox getKerberosMethod() {
 		if (kerberosMethod == null) {
 			kerberosMethod = new JCheckBox();
@@ -982,7 +984,6 @@ public class TrustedIdPWindow extends ApplicationComponent {
 		}
 		return kerberosMethod;
 	}
-
 
 	private JCheckBox getSrpMethod() {
 		if (srpMethod == null) {
@@ -994,7 +995,6 @@ public class TrustedIdPWindow extends ApplicationComponent {
 		return srpMethod;
 	}
 
-
 	/**
 	 * This method initializes hardwareTokenMethod
 	 * 
@@ -1004,12 +1004,12 @@ public class TrustedIdPWindow extends ApplicationComponent {
 		if (hardwareTokenMethod == null) {
 			hardwareTokenMethod = new JCheckBox();
 			if (!newTrustedIdP) {
-				hardwareTokenMethod.setSelected(idpAcceptsMethod(HARDWARE_TOKEN));
+				hardwareTokenMethod
+						.setSelected(idpAcceptsMethod(HARDWARE_TOKEN));
 			}
 		}
 		return hardwareTokenMethod;
 	}
-
 
 	/**
 	 * This method initializes tlsMethod
@@ -1026,7 +1026,6 @@ public class TrustedIdPWindow extends ApplicationComponent {
 		return tlsMethod;
 	}
 
-
 	/**
 	 * This method initializes pkiMethod
 	 * 
@@ -1041,7 +1040,6 @@ public class TrustedIdPWindow extends ApplicationComponent {
 		}
 		return pkiMethod;
 	}
-
 
 	/**
 	 * This method initializes pgpMethod
@@ -1058,7 +1056,6 @@ public class TrustedIdPWindow extends ApplicationComponent {
 		return pgpMethod;
 	}
 
-
 	/**
 	 * This method initializes spkiMethod
 	 * 
@@ -1073,7 +1070,6 @@ public class TrustedIdPWindow extends ApplicationComponent {
 		}
 		return spkiMethod;
 	}
-
 
 	/**
 	 * This method initializes xkmsMethod
@@ -1090,7 +1086,6 @@ public class TrustedIdPWindow extends ApplicationComponent {
 		return xkmsMethod;
 	}
 
-
 	/**
 	 * This method initializes xmlSignatureLabel
 	 * 
@@ -1105,7 +1100,6 @@ public class TrustedIdPWindow extends ApplicationComponent {
 		}
 		return xmlSignatureMethod;
 	}
-
 
 	/**
 	 * This method initializes unspecifiedMethod
@@ -1122,7 +1116,6 @@ public class TrustedIdPWindow extends ApplicationComponent {
 		return unspecifiedMethod;
 	}
 
-
 	/**
 	 * This method initializes attributesPanel
 	 * 
@@ -1136,7 +1129,6 @@ public class TrustedIdPWindow extends ApplicationComponent {
 		}
 		return attributesPanel;
 	}
-
 
 	/**
 	 * This method initializes jPanel
@@ -1276,13 +1268,14 @@ public class TrustedIdPWindow extends ApplicationComponent {
 			jPanel.add(getLastName(), gridBagConstraints54);
 			jPanel.add(getEmailNamespace(), gridBagConstraints55);
 			jPanel.add(getEmail(), gridBagConstraints56);
-			jPanel.setBorder(BorderFactory.createTitledBorder(null, "SAML Attribute Descriptions",
-				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, LookAndFeel
-					.getPanelLabelColor()));
+			jPanel.setBorder(BorderFactory.createTitledBorder(null,
+					"SAML Attribute Descriptions",
+					TitledBorder.DEFAULT_JUSTIFICATION,
+					TitledBorder.DEFAULT_POSITION, null, LookAndFeel
+							.getPanelLabelColor()));
 		}
 		return jPanel;
 	}
-
 
 	/**
 	 * This method initializes userIdNamespace
@@ -1295,12 +1288,12 @@ public class TrustedIdPWindow extends ApplicationComponent {
 			if (newTrustedIdP) {
 				userIdNamespace.setText(SAMLConstants.UID_ATTRIBUTE_NAMESPACE);
 			} else {
-				userIdNamespace.setText(idp.getUserIdAttributeDescriptor().getNamespaceURI());
+				userIdNamespace.setText(idp.getUserIdAttributeDescriptor()
+						.getNamespaceURI());
 			}
 		}
 		return userIdNamespace;
 	}
-
 
 	/**
 	 * This method initializes userIdName
@@ -1313,12 +1306,12 @@ public class TrustedIdPWindow extends ApplicationComponent {
 			if (newTrustedIdP) {
 				userIdName.setText(SAMLConstants.UID_ATTRIBUTE);
 			} else {
-				userIdName.setText(idp.getUserIdAttributeDescriptor().getName());
+				userIdName
+						.setText(idp.getUserIdAttributeDescriptor().getName());
 			}
 		}
 		return userIdName;
 	}
-
 
 	/**
 	 * This method initializes firstNameNamespace
@@ -1329,14 +1322,15 @@ public class TrustedIdPWindow extends ApplicationComponent {
 		if (firstNameNamespace == null) {
 			firstNameNamespace = new JTextField();
 			if (newTrustedIdP) {
-				firstNameNamespace.setText(SAMLConstants.FIRST_NAME_ATTRIBUTE_NAMESPACE);
+				firstNameNamespace
+						.setText(SAMLConstants.FIRST_NAME_ATTRIBUTE_NAMESPACE);
 			} else {
-				firstNameNamespace.setText(idp.getFirstNameAttributeDescriptor().getNamespaceURI());
+				firstNameNamespace.setText(idp
+						.getFirstNameAttributeDescriptor().getNamespaceURI());
 			}
 		}
 		return firstNameNamespace;
 	}
-
 
 	/**
 	 * This method initializes firstName
@@ -1349,12 +1343,12 @@ public class TrustedIdPWindow extends ApplicationComponent {
 			if (newTrustedIdP) {
 				firstName.setText(SAMLConstants.FIRST_NAME_ATTRIBUTE);
 			} else {
-				firstName.setText(idp.getFirstNameAttributeDescriptor().getName());
+				firstName.setText(idp.getFirstNameAttributeDescriptor()
+						.getName());
 			}
 		}
 		return firstName;
 	}
-
 
 	/**
 	 * This method initializes lastNameNamespace
@@ -1365,14 +1359,15 @@ public class TrustedIdPWindow extends ApplicationComponent {
 		if (lastNameNamespace == null) {
 			lastNameNamespace = new JTextField();
 			if (newTrustedIdP) {
-				lastNameNamespace.setText(SAMLConstants.LAST_NAME_ATTRIBUTE_NAMESPACE);
+				lastNameNamespace
+						.setText(SAMLConstants.LAST_NAME_ATTRIBUTE_NAMESPACE);
 			} else {
-				lastNameNamespace.setText(idp.getLastNameAttributeDescriptor().getNamespaceURI());
+				lastNameNamespace.setText(idp.getLastNameAttributeDescriptor()
+						.getNamespaceURI());
 			}
 		}
 		return lastNameNamespace;
 	}
-
 
 	/**
 	 * This method initializes lastName
@@ -1385,12 +1380,12 @@ public class TrustedIdPWindow extends ApplicationComponent {
 			if (newTrustedIdP) {
 				lastName.setText(SAMLConstants.LAST_NAME_ATTRIBUTE);
 			} else {
-				lastName.setText(idp.getLastNameAttributeDescriptor().getName());
+				lastName
+						.setText(idp.getLastNameAttributeDescriptor().getName());
 			}
 		}
 		return lastName;
 	}
-
 
 	/**
 	 * This method initializes emailNamespace
@@ -1403,12 +1398,12 @@ public class TrustedIdPWindow extends ApplicationComponent {
 			if (newTrustedIdP) {
 				emailNamespace.setText(SAMLConstants.EMAIL_ATTRIBUTE_NAMESPACE);
 			} else {
-				emailNamespace.setText(idp.getEmailAttributeDescriptor().getNamespaceURI());
+				emailNamespace.setText(idp.getEmailAttributeDescriptor()
+						.getNamespaceURI());
 			}
 		}
 		return emailNamespace;
 	}
-
 
 	/**
 	 * This method initializes email

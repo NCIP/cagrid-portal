@@ -9,9 +9,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
 
-import org.cagrid.gaards.dorian.client.IFSAdministrationClient;
-import org.cagrid.gaards.dorian.client.IFSUserClient;
-import org.cagrid.gaards.dorian.client.IdPAdministrationClient;
+import org.cagrid.gaards.dorian.client.GridAdministrationClient;
+import org.cagrid.gaards.dorian.client.GridUserClient;
+import org.cagrid.gaards.dorian.client.LocalAdministrationClient;
 import org.cagrid.gaards.ui.common.CredentialComboBox;
 import org.cagrid.grape.LookAndFeel;
 import org.globus.gsi.GlobusCredential;
@@ -105,25 +105,25 @@ public class SessionPanel extends JPanel {
 		return cred;
 	}
 
-	public IFSAdministrationClient getAdminClient() throws Exception {
+	public GridAdministrationClient getAdminClient() throws Exception {
 		String serviceUrl = getService().getSelectedService();
 		GlobusCredential proxyCred = getCred().getSelectedCredential();
-		IFSAdministrationClient client = new IFSAdministrationClient(
+		GridAdministrationClient client = new GridAdministrationClient(
 				serviceUrl, proxyCred);
 		return client;
 	}
 
-	public IFSUserClient getUserClientWithCredentials() throws Exception {
+	public GridUserClient getUserClientWithCredentials() throws Exception {
 		String serviceUrl = getService().getSelectedService();
 		GlobusCredential proxyCred = getCred().getSelectedCredential();
-		IFSUserClient client = new IFSUserClient(serviceUrl, proxyCred);
+		GridUserClient client = new GridUserClient(serviceUrl, proxyCred);
 		return client;
 	}
 
-	public IdPAdministrationClient getLocalAdminClient() throws Exception {
+	public LocalAdministrationClient getLocalAdminClient() throws Exception {
 		String serviceUrl = getService().getSelectedService();
 		GlobusCredential proxyCred = getCred().getSelectedCredential();
-		IdPAdministrationClient client = new IdPAdministrationClient(
+		LocalAdministrationClient client = new LocalAdministrationClient(
 				serviceUrl, proxyCred);
 		return client;
 	}
