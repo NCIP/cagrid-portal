@@ -80,5 +80,6 @@
 	<classpathentry kind="lib" path="ext/dependencies/service/jars/globus_wsrf_servicegroup_stubs.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/service/jars/globus_wsrf_servicegroup.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/service/jars/jdom-1.0.jar"/>
+	<classpathentry kind="lib" path="lib/caGrid-Introduce-serviceTools-1.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
