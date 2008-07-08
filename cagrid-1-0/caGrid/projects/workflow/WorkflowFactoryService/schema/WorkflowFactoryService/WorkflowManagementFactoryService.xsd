@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://types.workflow.cagrid.nci.nih.gov/WorkflowManagementFactoryService" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/03/addressing" targetNamespace="http://types.workflow.cagrid.nci.nih.gov/WorkflowManagementFactoryService" attributeFormDefault="qualified" elementFormDefault="qualified">
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+	xmlns:tns="http://types.workflow.cagrid.nci.nih.gov/WorkflowManagementFactoryService" 
+	xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/03/addressing" 
+	targetNamespace="http://types.workflow.cagrid.nci.nih.gov/WorkflowManagementFactoryService" 
+	attributeFormDefault="unqualified" elementFormDefault="qualified">
   <xsd:import namespace="http://schemas.xmlsoap.org/ws/2004/03/addressing" schemaLocation="ws_2004_03_addressing.xsd" />
   <xsd:element name="WMSInputElement" type="tns:WMSInputType" />
   <xsd:element name="WMSOutputElement" type="tns:WMSOutputType" />

@@ -139,20 +139,21 @@
     </target>
 
     <target name="defineClasspaths" depends="checkGlobus">
-        <runtarget target="defineExtendedClasspaths" />
-        <path id="base.classpath">
-            <fileset dir="${lib.dir}">
-                <include name="*.jar" />
-            </fileset>
-            <fileset dir="${ext.globus.dir}/lib">
-                <include name="*.jar" />
-                <exclude name="${stubs.jar.name}" />
-                <exclude name="${common.jar.name}" />
-                <exclude name="${client.jar.name}" />
-                <exclude name="${service.jar.name}" />
-            </fileset>
-            <path refid="base.extended.classpath" />
-        </path>
+      <path id="tasks.run.extended.classpath"/>
+      <runtarget target="defineExtendedClasspaths" />
+      <path id="base.classpath">
+        <fileset dir="${lib.dir}">
+          <include name="*.jar" />
+        </fileset>
+        <fileset dir="${ext.globus.dir}/lib">
+          <include name="*.jar" />
+          <exclude name="${stubs.jar.name}" />
+          <exclude name="${common.jar.name}" />
+          <exclude name="${client.jar.name}" />
+          <exclude name="${service.jar.name}" />
+        </fileset>
+        <path refid="base.extended.classpath" />
+      </path>
         <path id="service.build.classpath">
             <pathelement location="${stubs.dest}" />
             <path refid="service.build.extended.classpath" />
@@ -181,6 +182,26 @@
             <path refid="run.extended.classpath" />
             <path refid="service.build.classpath" />
             <pathelement location="${ext.globus.dir}" />
+        </path>
+	<path id="tasks.run.classpath">
+          <path refid="tasks.run.extended.classpath" />
+          <fileset dir="${tools.lib.dir}">
+            <include name="*.jar" />
+          </fileset>
+          <fileset dir="${lib.dir}">
+            <include name="caGrid-*-core.jar" />
+          </fileset>
+          <fileset dir="${ext.globus.dir}/lib">
+            <include name="axis.jar" />
+            <include name="addressing-1.0.jar" />
+            <include name="xercesImpl.jar" />
+            <include name="jaxrpc.jar" />
+            <include name="wsrf_core.jar" />
+            <include name="cog-jglobus.jar" />
+            <include name="saaj.jar" />
+            <include name="commons-discovery.jar" />
+            <include name="wsrf_core_stubs.jar" />
+          </fileset>
         </path>
         <path id="processor.run.classpath">
             <fileset dir="${tools.lib.dir}">
