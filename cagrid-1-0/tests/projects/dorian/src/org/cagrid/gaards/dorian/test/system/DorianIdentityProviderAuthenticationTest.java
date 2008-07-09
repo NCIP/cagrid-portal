@@ -30,6 +30,8 @@ import org.cagrid.gaards.authentication.test.system.steps.DeprecatedAuthenticati
 import org.cagrid.gaards.authentication.test.system.steps.InvalidAuthentication;
 import org.cagrid.gaards.authentication.test.system.steps.SuccessfullAuthentication;
 import org.cagrid.gaards.authentication.test.system.steps.ValidateSupportedAuthenticationProfilesStep;
+import org.cagrid.gaards.dorian.test.system.steps.CleanupDorianStep;
+import org.cagrid.gaards.dorian.test.system.steps.ConfigureGlobusToTrustDorianStep;
 import org.cagrid.gaards.dorian.test.system.steps.CopyConfigurationStep;
 import org.cagrid.gaards.dorian.test.system.steps.GetAsserionSigningCertificateStep;
 
@@ -38,6 +40,7 @@ public class DorianIdentityProviderAuthenticationTest extends ServiceStoryBase {
 	private File configuration;
 	private File properties;
 	private File tempService;
+	private ConfigureGlobusToTrustDorianStep trust;
 
 	public DorianIdentityProviderAuthenticationTest(ServiceContainer container) {
 		this(container, null, null);
@@ -56,11 +59,11 @@ public class DorianIdentityProviderAuthenticationTest extends ServiceStoryBase {
 
 	@Override
 	public String getName() {
-		return "Dorian System Test";
+		return "Dorian Authentication System Test";
 	}
 
 	public String getDescription() {
-		return "Dorian Test";
+		return "Dorian Authentication System Test";
 	}
 
 	protected Vector<Step> steps() {
@@ -72,6 +75,10 @@ public class DorianIdentityProviderAuthenticationTest extends ServiceStoryBase {
 
 			steps.add(new DeployServiceStep(getContainer(), this.tempService
 					.getAbsolutePath()));
+			
+			trust = new ConfigureGlobusToTrustDorianStep(getContainer());
+			steps.add(trust);
+			
 			steps.add(new StartContainerStep(getContainer()));
 			
 			GetAsserionSigningCertificateStep signingCertStep = new GetAsserionSigningCertificateStep(getContainer());
@@ -174,11 +181,20 @@ public class DorianIdentityProviderAuthenticationTest extends ServiceStoryBase {
 		} catch (Throwable e) {
 			e.printStackTrace();
 		}
+		
+		CleanupDorianStep cleanup = new CleanupDorianStep(getContainer(),trust);
+		try {
+			cleanup.runStep();
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}
 		DestroyContainerStep step3 = new DestroyContainerStep(getContainer());
 		try {
 			step3.runStep();
 		} catch (Throwable e) {
 			e.printStackTrace();
 		}
+		
+		
 	}
 }

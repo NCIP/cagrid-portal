@@ -4,17 +4,26 @@ import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainerFactory;
 import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainerType;
 import gov.nih.nci.cagrid.testing.system.haste.StoryBook;
 
+import java.io.File;
 import java.io.IOException;
 
-
 public class DorianSystemTestStoryBook extends StoryBook {
-	
-	
+
+	public static File DORIAN_PROPERTIES_FILE = new File(
+			"resources/dorian.properties");
+
 	protected void stories() {
 		try {
-			this.addStory(new DorianIdentityProviderAuthenticationTest(
+			this
+					.addStory(new DorianIdentityProviderAuthenticationTest(
 							ServiceContainerFactory
-									.createContainer(ServiceContainerType.SECURE_TOMCAT_CONTAINER)));
+									.createContainer(ServiceContainerType.SECURE_TOMCAT_CONTAINER),
+							DORIAN_PROPERTIES_FILE));
+			this
+			.addStory(new DorianLocaIdentityProviderTest(
+					ServiceContainerFactory
+							.createContainer(ServiceContainerType.SECURE_TOMCAT_CONTAINER),
+					DORIAN_PROPERTIES_FILE));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
