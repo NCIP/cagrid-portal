@@ -205,11 +205,35 @@ public class DorianLocaIdentityProviderTest extends ServiceStoryBase {
 				steps.add(gridUser);
 			}
 
+
+			// Test Suspending Accounts Locally
+			
+			for (int i = 0; i < users.size(); i++) {
+				steps.add(new UpdateLocalUserStatusStep(serviceURL, admin,
+						users.get(i).getUserId(), IdPUserStatus.Suspended));
+				steps.add(new FindLocalUserStep(serviceURL, admin,
+						users.get(i), IdPUserStatus.Suspended,
+						IdPUserRole.Non_Administrator));
+				BasicAuthentication auth = new BasicAuthentication();
+				auth.setUserId(users.get(i).getUserId());
+				auth.setPassword(users.get(i).getPassword());
+				steps
+						.add(new AuthenticationStep(
+								serviceURL,
+								new InvalidAuthentication(
+										"The account has been suspended.",
+										InvalidCredentialFault.class), auth));
+				steps.add(new UpdateLocalUserStatusStep(serviceURL, admin,
+						users.get(i).getUserId(), IdPUserStatus.Active));
+				steps.add(new FindLocalUserStep(serviceURL, admin,
+						users.get(i), IdPUserStatus.Active,
+						IdPUserRole.Non_Administrator));
+			}
+			
+
+			// Test suspending grid accounts
+			
 			// Test that the user can change there password
-
-			// Test Suspending Accounts
-
-			// Test that the Account were suspended both locally and on the Grid
 
 		} catch (Exception e) {
 			e.printStackTrace();
