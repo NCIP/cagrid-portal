@@ -178,6 +178,8 @@ public class DorianLocaIdentityProviderTest extends ServiceStoryBase {
 			}
 
 			// Test successful Authentication
+			List<RequestGridCredentialStep> userCredentials = new ArrayList<RequestGridCredentialStep>();
+			
 			for (int i = 0; i < users.size(); i++) {
 				SuccessfullAuthentication sa = new SuccessfullAuthentication(
 						users.get(i).getUserId(), users.get(i).getFirstName(),
@@ -194,6 +196,7 @@ public class DorianLocaIdentityProviderTest extends ServiceStoryBase {
 				RequestGridCredentialStep proxy = new RequestGridCredentialStep(
 						serviceURL, userAuth);
 				steps.add(proxy);
+				userCredentials.add(proxy);
 
 				FindGridUserStep gridUser = new FindGridUserStep(serviceURL,
 						admin, proxy);
