@@ -34,6 +34,7 @@ import org.cagrid.gaards.dorian.test.system.steps.CleanupDorianStep;
 import org.cagrid.gaards.dorian.test.system.steps.ConfigureGlobusToTrustDorianStep;
 import org.cagrid.gaards.dorian.test.system.steps.CopyConfigurationStep;
 import org.cagrid.gaards.dorian.test.system.steps.GetAsserionSigningCertificateStep;
+import org.cagrid.gaards.dorian.test.system.steps.SleepStep;
 
 public class DorianIdentityProviderAuthenticationTest extends ServiceStoryBase {
 
@@ -46,12 +47,13 @@ public class DorianIdentityProviderAuthenticationTest extends ServiceStoryBase {
 		this(container, null, null);
 	}
 
-	public DorianIdentityProviderAuthenticationTest(ServiceContainer container, File properties) {
+	public DorianIdentityProviderAuthenticationTest(ServiceContainer container,
+			File properties) {
 		this(container, null, properties);
 	}
 
-	public DorianIdentityProviderAuthenticationTest(ServiceContainer container, File configuration,
-			File properties) {
+	public DorianIdentityProviderAuthenticationTest(ServiceContainer container,
+			File configuration, File properties) {
 		super(container);
 		this.configuration = configuration;
 		this.properties = properties;
@@ -75,27 +77,29 @@ public class DorianIdentityProviderAuthenticationTest extends ServiceStoryBase {
 
 			steps.add(new DeployServiceStep(getContainer(), this.tempService
 					.getAbsolutePath()));
-			
+
 			trust = new ConfigureGlobusToTrustDorianStep(getContainer());
 			steps.add(trust);
-			
+
 			steps.add(new StartContainerStep(getContainer()));
-			
-			GetAsserionSigningCertificateStep signingCertStep = new GetAsserionSigningCertificateStep(getContainer());
+
+			GetAsserionSigningCertificateStep signingCertStep = new GetAsserionSigningCertificateStep(
+					getContainer());
 			steps.add(signingCertStep);
 
-			String serviceURL = getContainer().getContainerBaseURI().toString()+"cagrid/Dorian";
-			
+			String serviceURL = getContainer().getContainerBaseURI().toString()
+					+ "cagrid/Dorian";
+
 			// Test Get supported authentication types
 
 			Set<QName> expectedProfiles = new HashSet<QName>();
 			expectedProfiles.add(AuthenticationProfile.BASIC_AUTHENTICATION);
-			steps.add(new ValidateSupportedAuthenticationProfilesStep(serviceURL
-					, expectedProfiles));
-			
+			steps.add(new ValidateSupportedAuthenticationProfilesStep(
+					serviceURL, expectedProfiles));
 
 			SuccessfullAuthentication success = new SuccessfullAuthentication(
-					"dorian", "Mr.", "Administrator", "dorian@dorian.org", signingCertStep);
+					"dorian", "Mr.", "Administrator", "dorian@dorian.org",
+					signingCertStep);
 
 			// Test Successful authentication
 			BasicAuthentication cred = new BasicAuthentication();
@@ -113,13 +117,14 @@ public class DorianIdentityProviderAuthenticationTest extends ServiceStoryBase {
 
 			steps.add(new DeprecatedAuthenticationStep(serviceURL, success,
 					cred2));
-			
+
 			// Test invalid authentication, bad password
 			BasicAuthentication cred3 = new BasicAuthentication();
 			cred3.setUserId("dorian");
 			cred3.setPassword("badpassword");
 			steps.add(new AuthenticationStep(serviceURL,
-					new InvalidAuthentication("The uid or password is incorrect.",
+					new InvalidAuthentication(
+							"The uid or password is incorrect.",
 							InvalidCredentialFault.class), cred3));
 
 			// Test invalid deprecated authentication, bad password
@@ -137,19 +142,42 @@ public class DorianIdentityProviderAuthenticationTest extends ServiceStoryBase {
 									gov.nih.nci.cagrid.authentication.stubs.types.InvalidCredentialFault.class),
 							cred4));
 
+			// Test password lockout
+			// One more lockout to get to three
+
+			steps.add(new AuthenticationStep(serviceURL,
+					new InvalidAuthentication(
+							"The uid or password is incorrect.",
+							InvalidCredentialFault.class), cred3));
+
+			// Now it should be locked
+
+			steps
+					.add(new AuthenticationStep(
+							serviceURL,
+							new InvalidAuthentication(
+									"This account has been temporarily locked because the maximum number of consecutive invalid logins has been exceeded.",
+
+									InvalidCredentialFault.class), cred));
+
+			// Sleep till lock expires
+			steps.add(new SleepStep(60));
+
+			// Now should be unlocked
+
+			steps.add(new AuthenticationStep(serviceURL, success, cred));
+
 			// Test invalid authentication, unsupported credential
 			BasicAuthenticationWithOneTimePassword cred5 = new BasicAuthenticationWithOneTimePassword();
 			cred5.setUserId("dorian");
 			cred5.setPassword("password");
 			cred5.setOneTimePassword("oneTimePassword");
-			
-			steps
-					.add(new AuthenticationStep(
-							serviceURL,
-							new InvalidAuthentication(
-									"The credential provided is not supported.",
-									CredentialNotSupportedFault.class), cred5));
-									
+
+			steps.add(new AuthenticationStep(serviceURL,
+					new InvalidAuthentication(
+							"The credential provided is not supported.",
+							CredentialNotSupportedFault.class), cred5));
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -181,8 +209,8 @@ public class DorianIdentityProviderAuthenticationTest extends ServiceStoryBase {
 		} catch (Throwable e) {
 			e.printStackTrace();
 		}
-		
-		CleanupDorianStep cleanup = new CleanupDorianStep(getContainer(),trust);
+
+		CleanupDorianStep cleanup = new CleanupDorianStep(getContainer(), trust);
 		try {
 			cleanup.runStep();
 		} catch (Throwable e) {
@@ -194,7 +222,6 @@ public class DorianIdentityProviderAuthenticationTest extends ServiceStoryBase {
 		} catch (Throwable e) {
 			e.printStackTrace();
 		}
-		
-		
+
 	}
 }
