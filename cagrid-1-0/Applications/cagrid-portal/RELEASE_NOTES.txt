@@ -1,7 +1,7 @@
     
                          caGrid Portal
-                          Version 2.0.2
-                       June 18, 2008
+                          Version 2.0.2.1
+                       July 9, 2008
 
 
 ================================================================
@@ -22,12 +22,11 @@
 ================================================================
 
     This document contains the release notes for the caGrid 
-    Portal 2.0.2 release. This is a minor point release of
-    caGrid Portal 2.0.
+    Portal 2.0.2.1 release. This is a minor bug fix release of
+    caGrid Portal 2.0.2
 
-    This release adds some major features and
-    fixes some bugs with the previous release (2.0.1). Added 
-    features and bug fixes have been listed below.
+    This release fixes some bugs and known issues
+    with the previous release (2.0.2).
 
 
 
@@ -38,21 +37,12 @@
     caGrid Portal 1.1 was released with caGrid 1.1 on 17th December 2007
     caGrid Portal 2.0 was release on December 28 2007
     caGrid Portal 2.0.1 was released on Feb 22 2008
+    caGrid Portal 2.0.2 was released on June 18 2008
      
 
 ================================================================
                       3.0 New Features and Updates
 ================================================================
-
-RFE		Description
-------------------------------------------------------------   
-11569 caGrid Portal Service Status Display on Home - Need Hosting Information
-13232 Portal should delete services that are no longer advertising to the index
-13600 Summary Portlet crashes if there is a service with invalid metadata
-14508 Status Portlet should display timestamp of last aggregation
-14930 Portal should display caBIG Tools and applications
-14931 Portal query builder should support DCQL queries
-14932 Portal should allow service discovery using concept codes from EVS
 
 
  
@@ -62,11 +52,9 @@ RFE		Description
 
 Bug		Description
 ------------------------------------------------------------   
-14152 Icons are misaligned on the Portal map
-13433 Scrolling of service list will lead to previously viewed service details
-
-The complete fixed bug list and additional details can be found on the project Gforge Tracker:
-  http://gforge.nci.nih.gov/tracker/index.php?group_id=25&atid=174
+ [#15099] EVS search throws error in the browser
+ [#14997] Logged in users cannot see FQP results in Portal 2.0.2
+ [14995] Share query button appears for DCQL queries
 
 ================================================================
                      5.0 Known Issues Not Yet Fixed
