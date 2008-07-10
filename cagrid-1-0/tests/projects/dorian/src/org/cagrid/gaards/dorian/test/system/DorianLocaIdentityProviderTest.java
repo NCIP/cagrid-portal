@@ -33,14 +33,19 @@ import org.cagrid.gaards.dorian.idp.CountryCode;
 import org.cagrid.gaards.dorian.idp.IdPUserRole;
 import org.cagrid.gaards.dorian.idp.IdPUserStatus;
 import org.cagrid.gaards.dorian.idp.StateCode;
+import org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault;
+import org.cagrid.gaards.dorian.test.system.steps.ChangeLocalUserPasswordStep;
 import org.cagrid.gaards.dorian.test.system.steps.CleanupDorianStep;
 import org.cagrid.gaards.dorian.test.system.steps.ConfigureGlobusToTrustDorianStep;
 import org.cagrid.gaards.dorian.test.system.steps.CopyConfigurationStep;
 import org.cagrid.gaards.dorian.test.system.steps.FindGridUserStep;
 import org.cagrid.gaards.dorian.test.system.steps.FindLocalUserStep;
 import org.cagrid.gaards.dorian.test.system.steps.GetAsserionSigningCertificateStep;
+import org.cagrid.gaards.dorian.test.system.steps.InvalidGridCredentialRequest;
 import org.cagrid.gaards.dorian.test.system.steps.RegisterUserWithDorianIdentityProviderStep;
-import org.cagrid.gaards.dorian.test.system.steps.RequestGridCredentialStep;
+import org.cagrid.gaards.dorian.test.system.steps.GridCredentialRequestStep;
+import org.cagrid.gaards.dorian.test.system.steps.SuccessfullGridCredentialRequest;
+import org.cagrid.gaards.dorian.test.system.steps.UpdateGridUserStatusStep;
 import org.cagrid.gaards.dorian.test.system.steps.UpdateLocalUserStatusStep;
 
 public class DorianLocaIdentityProviderTest extends ServiceStoryBase {
@@ -118,8 +123,9 @@ public class DorianLocaIdentityProviderTest extends ServiceStoryBase {
 
 			// Get Admin's Grid Credentials
 
-			RequestGridCredentialStep admin = new RequestGridCredentialStep(
-					serviceURL, adminAuth);
+			GridCredentialRequestStep admin = new GridCredentialRequestStep(
+					serviceURL, adminAuth,
+					new SuccessfullGridCredentialRequest());
 			steps.add(admin);
 
 			// Create Users
@@ -178,8 +184,8 @@ public class DorianLocaIdentityProviderTest extends ServiceStoryBase {
 			}
 
 			// Test successful Authentication
-			List<RequestGridCredentialStep> userCredentials = new ArrayList<RequestGridCredentialStep>();
-			
+			List<GridCredentialRequestStep> userCredentials = new ArrayList<GridCredentialRequestStep>();
+
 			for (int i = 0; i < users.size(); i++) {
 				SuccessfullAuthentication sa = new SuccessfullAuthentication(
 						users.get(i).getUserId(), users.get(i).getFirstName(),
@@ -193,8 +199,9 @@ public class DorianLocaIdentityProviderTest extends ServiceStoryBase {
 				AuthenticationStep userAuth = new AuthenticationStep(
 						serviceURL, sa, ba);
 				steps.add(userAuth);
-				RequestGridCredentialStep proxy = new RequestGridCredentialStep(
-						serviceURL, userAuth);
+				GridCredentialRequestStep proxy = new GridCredentialRequestStep(
+						serviceURL, userAuth,
+						new SuccessfullGridCredentialRequest());
 				steps.add(proxy);
 				userCredentials.add(proxy);
 
@@ -208,9 +215,8 @@ public class DorianLocaIdentityProviderTest extends ServiceStoryBase {
 				steps.add(gridUser);
 			}
 
-
 			// Test Suspending Accounts Locally
-			
+
 			for (int i = 0; i < users.size(); i++) {
 				steps.add(new UpdateLocalUserStatusStep(serviceURL, admin,
 						users.get(i).getUserId(), IdPUserStatus.Suspended));
@@ -220,23 +226,68 @@ public class DorianLocaIdentityProviderTest extends ServiceStoryBase {
 				BasicAuthentication auth = new BasicAuthentication();
 				auth.setUserId(users.get(i).getUserId());
 				auth.setPassword(users.get(i).getPassword());
-				steps
-						.add(new AuthenticationStep(
-								serviceURL,
-								new InvalidAuthentication(
-										"The account has been suspended.",
-										InvalidCredentialFault.class), auth));
+				steps.add(new AuthenticationStep(serviceURL,
+						new InvalidAuthentication(
+								"The account has been suspended.",
+								InvalidCredentialFault.class), auth));
 				steps.add(new UpdateLocalUserStatusStep(serviceURL, admin,
 						users.get(i).getUserId(), IdPUserStatus.Active));
 				steps.add(new FindLocalUserStep(serviceURL, admin,
 						users.get(i), IdPUserStatus.Active,
 						IdPUserRole.Non_Administrator));
 			}
-			
 
 			// Test suspending grid accounts
-			
+
+			for (int i = 0; i < users.size(); i++) {
+				steps.add(new UpdateGridUserStatusStep(serviceURL, admin,
+						userCredentials.get(i), IFSUserStatus.Suspended));
+
+				FindGridUserStep gridUser = new FindGridUserStep(serviceURL,
+						admin, userCredentials.get(i));
+				gridUser.setExpectedEmail(users.get(i).getEmail());
+				gridUser.setExpectedFirstName(users.get(i).getFirstName());
+				gridUser.setExpectedLastName(users.get(i).getLastName());
+				gridUser.setExpectedLocalUserId(users.get(i).getUserId());
+				gridUser.setExpectedStatus(IFSUserStatus.Suspended);
+				steps.add(gridUser);
+
+				SuccessfullAuthentication sa = new SuccessfullAuthentication(
+						users.get(i).getUserId(), users.get(i).getFirstName(),
+						users.get(i).getLastName(), users.get(i).getEmail(),
+						signingCertStep);
+				BasicAuthentication ba = new BasicAuthentication();
+				ba.setUserId(users.get(i).getUserId());
+				ba.setPassword(users.get(i).getPassword());
+				AuthenticationStep userAuth = new AuthenticationStep(
+						serviceURL, sa, ba);
+				steps.add(userAuth);
+				GridCredentialRequestStep proxy = new GridCredentialRequestStep(
+						serviceURL, userAuth, new InvalidGridCredentialRequest(
+								"The account has been suspended.",
+								PermissionDeniedFault.class));
+				steps.add(proxy);
+
+				steps.add(new UpdateGridUserStatusStep(serviceURL, admin,
+						userCredentials.get(i), IFSUserStatus.Active));
+
+				FindGridUserStep gridUser2 = new FindGridUserStep(serviceURL,
+						admin, userCredentials.get(i));
+				gridUser2.setExpectedEmail(users.get(i).getEmail());
+				gridUser2.setExpectedFirstName(users.get(i).getFirstName());
+				gridUser2.setExpectedLastName(users.get(i).getLastName());
+				gridUser2.setExpectedLocalUserId(users.get(i).getUserId());
+				gridUser2.setExpectedStatus(IFSUserStatus.Active);
+				steps.add(gridUser2);
+			}
+
 			// Test that the user can change there password
+
+			for (int i = 0; i < users.size(); i++) {
+				String newPassword = "K00lM0N##" + i;
+				steps.add(new ChangeLocalUserPasswordStep(serviceURL, users
+						.get(i), newPassword));
+			}
 
 		} catch (Exception e) {
 			e.printStackTrace();

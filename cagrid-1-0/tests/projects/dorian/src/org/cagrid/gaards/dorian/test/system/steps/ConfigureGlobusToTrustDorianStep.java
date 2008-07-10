@@ -1,19 +1,15 @@
 package org.cagrid.gaards.dorian.test.system.steps;
 
-import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainer;
 import gov.nih.nci.cagrid.testing.system.haste.Step;
 
 import java.io.File;
 import java.security.cert.X509Certificate;
 
-import org.cagrid.gaards.authentication.test.system.steps.SigningCertificateProxy;
-import org.cagrid.gaards.dorian.idp.AssertionCredentialsManager;
 import org.cagrid.gaards.dorian.service.BeanUtils;
 import org.cagrid.gaards.dorian.service.Dorian;
 import org.cagrid.gaards.dorian.service.DorianProperties;
 import org.cagrid.gaards.pki.CertUtil;
-import org.cagrid.tools.database.Database;
 import org.springframework.core.io.FileSystemResource;
 
 public class ConfigureGlobusToTrustDorianStep extends Step {

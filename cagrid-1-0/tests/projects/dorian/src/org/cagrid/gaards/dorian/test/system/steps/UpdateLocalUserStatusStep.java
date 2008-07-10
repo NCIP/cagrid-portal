@@ -1,26 +1,23 @@
 package org.cagrid.gaards.dorian.test.system.steps;
 
-import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.testing.system.haste.Step;
 
 import java.util.List;
 
 import org.cagrid.gaards.dorian.client.LocalAdministrationClient;
-import org.cagrid.gaards.dorian.idp.Application;
 import org.cagrid.gaards.dorian.idp.IdPUser;
 import org.cagrid.gaards.dorian.idp.IdPUserFilter;
-import org.cagrid.gaards.dorian.idp.IdPUserRole;
 import org.cagrid.gaards.dorian.idp.IdPUserStatus;
 
 public class UpdateLocalUserStatusStep extends Step {
 
 	private String serviceURL;
-	private RequestGridCredentialStep admin;
+	private GridCredentialRequestStep admin;
 	private String localUser;
 	private IdPUserStatus status;
 
 	public UpdateLocalUserStatusStep(String serviceURL,
-			RequestGridCredentialStep admin, String uid, IdPUserStatus status) {
+			GridCredentialRequestStep admin, String uid, IdPUserStatus status) {
 		this.serviceURL = serviceURL;
 		this.admin = admin;
 		this.localUser = uid;

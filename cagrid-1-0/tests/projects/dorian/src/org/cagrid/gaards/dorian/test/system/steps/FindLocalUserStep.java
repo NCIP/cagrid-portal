@@ -18,11 +18,11 @@ public class FindLocalUserStep extends Step {
 	private String serviceURL;
 	private IdPUserStatus status;
 	private IdPUserRole role;
-	private RequestGridCredentialStep admin;
+	private GridCredentialRequestStep admin;
 	private IdPUser localUser;
 
 	public FindLocalUserStep(String serviceURL,
-			RequestGridCredentialStep admin, Application app,
+			GridCredentialRequestStep admin, Application app,
 			IdPUserStatus status, IdPUserRole role) {
 		this.serviceURL = serviceURL;
 		this.application = app;
@@ -46,7 +46,8 @@ public class FindLocalUserStep extends Step {
 		assertEquals(this.application.getOrganization(), users.get(0)
 				.getOrganization());
 		assertEquals(this.application.getAddress(), users.get(0).getAddress());
-		assertEquals(Utils.clean(this.application.getAddress2()), Utils.clean(users.get(0).getAddress2()));
+		assertEquals(Utils.clean(this.application.getAddress2()), Utils
+				.clean(users.get(0).getAddress2()));
 		assertEquals(this.application.getCity(), users.get(0).getCity());
 		assertEquals(this.application.getState(), users.get(0).getState());
 		assertEquals(this.application.getZipcode(), users.get(0).getZipcode());
@@ -57,6 +58,10 @@ public class FindLocalUserStep extends Step {
 		assertEquals(this.status, users.get(0).getStatus());
 		assertEquals(this.role, users.get(0).getRole());
 		this.localUser = users.get(0);
+	}
+
+	public IdPUser getLocalUser() {
+		return localUser;
 	}
 
 }

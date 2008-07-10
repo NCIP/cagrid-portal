@@ -13,16 +13,16 @@ public class FindGridUserStep extends Step {
 
 	private String serviceURL;
 	private IFSUserStatus status;
-	private RequestGridCredentialStep admin;
+	private GridCredentialRequestStep admin;
 	private IFSUser gridUser;
 	private String localUserId;
 	private String firstName;
 	private String lastName;
 	private String email;
-	private RequestGridCredentialStep gridCredential;
+	private GridCredentialRequestStep gridCredential;
 
-	public FindGridUserStep(String serviceURL, RequestGridCredentialStep admin,
-			RequestGridCredentialStep user) {
+	public FindGridUserStep(String serviceURL, GridCredentialRequestStep admin,
+			GridCredentialRequestStep user) {
 		this.serviceURL = serviceURL;
 		this.admin = admin;
 		this.gridCredential = user;
