@@ -22,12 +22,12 @@ import org.cagrid.fqp.test.common.steps.UnzipServiceStep;
  * @author David Ervin
  * 
  * @created Jul 9, 2008 11:46:02 AM
- * @version $Id: DataServiceDeploymentStory.java,v 1.1 2008-07-09 21:04:08 dervin Exp $ 
+ * @version $Id: DataServiceDeploymentStory.java,v 1.2 2008-07-10 15:05:37 dervin Exp $ 
  */
-public class DataServiceDeploymentStory extends Story {
+public class DataServiceDeploymentStory extends Story implements DataServiceContainerSource {
     
     private File dataServiceZip;
-    private File tempDir;
+    private File temp;
     
     private ServiceContainer dataServiceContainer;
     private boolean complete;
@@ -50,7 +50,6 @@ public class DataServiceDeploymentStory extends Story {
             ex.printStackTrace();
             return false;
         }
-        File temp = null;
         try {
             temp = File.createTempFile("FQPTestDataService", "Temp", 
                 new File(System.getProperty("java.io.tmpdir")));
@@ -81,9 +80,9 @@ public class DataServiceDeploymentStory extends Story {
     protected Vector steps() {
         Vector<Step> steps = new Vector<Step>();
         steps.add(new UnpackContainerStep(dataServiceContainer));
-        steps.add(new UnzipServiceStep(dataServiceZip, tempDir));
-        steps.add(new DeployServiceStep(dataServiceContainer, tempDir.getAbsolutePath()));
-        steps.add(new DeleteDirectoryStep(tempDir));
+        steps.add(new UnzipServiceStep(dataServiceZip, temp));
+        steps.add(new DeployServiceStep(dataServiceContainer, temp.getAbsolutePath()));
+        steps.add(new DeleteDirectoryStep(temp));
         steps.add(new StartContainerStep(dataServiceContainer));
         return steps;
     }
@@ -91,7 +90,8 @@ public class DataServiceDeploymentStory extends Story {
     
     public ServiceContainer getDataServiceContainer() {
         if (dataServiceContainer == null || !complete) {
-            throw new IllegalStateException("Deployment Story has not completed to create a working service container!");
+            throw new IllegalStateException(
+                "Deployment Story has not completed to create a working service container!");
         }
         return dataServiceContainer;
     }
