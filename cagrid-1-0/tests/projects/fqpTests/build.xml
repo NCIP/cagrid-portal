@@ -14,6 +14,7 @@
 	<property name="project.jarfile" value="${jar.dir}/${project.name}-${project.version}.jar" />
 	<property name="resources.jarfile" value="${jar.dir}/${project.name}-resources-${project.version}.jar" />
 	<property name="ext.lib.dir" value="${basedir}/ext/dependencies/jars" />
+	<property name="lib.dir" value="${basedir}/lib"/>
 	
 	<!-- output directory for JUnit logs -->
 	<property name="junit.results.dir" value="log/junit" />
@@ -52,7 +53,9 @@
 			<fileset dir="${jar.dir}">
 				<include name="**/*.jar"/>
 			</fileset>
-			<!-- any extra libs here -->
+			<fileset dir="${lib.dir}">
+				<include name="**/*.jar"/>
+			</fileset>
 		</path>
 	</target>
 
