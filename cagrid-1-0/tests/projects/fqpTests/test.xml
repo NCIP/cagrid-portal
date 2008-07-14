@@ -12,35 +12,25 @@
 	
 	<target name="prepareClasspaths">
 		<path id="all.test.classpath">
-			<pathelement path="${classes.dir}" />
 			<path refid="test.run.classpath" />
-			<fileset dir="${jar.dir}">
-				<include name="**/*.jar"/>
-			</fileset>
 		</path>
 	</target>
 	
 	
 	<target name="test" description="Runs style tests">
-		<junit dir="${basedir}" printsummary="yes" haltonerror="${halt.on.error}" haltonfailure="${halt.on.error}" errorproperty="@{style.name}.style.test.failed" failureproperty="@{style.name}.style.test.failed" showoutput="true" fork="yes" forkmode="once">
+		<mkdir dir="${junit.results.dir}"/>
+		<junit dir="${basedir}" printsummary="yes" haltonerror="${halt.on.error}" haltonfailure="${halt.on.error}" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="yes" forkmode="once">
 			<sysproperty key="build.dir" value="${test.core.classes.dir}" />
 			<sysproperty key="testing.port.assignment.mode" value="${testing.port.assignment.mode}"/>
 			<classpath refid="all.test.classpath" />
-			<classpath>
-				<pathelement path="${test.core.classes.dir}" />
-			</classpath>
-			<classpath>
-				<pathelement path="${style.test.lib.file}" />
-				<pathelement path="${build.dir}/@{style.name}/classes" />
-			</classpath>
 			<formatter type="xml" />
 			<test if="testcase" name="${testcase}" fork="no" todir="${junit.results.dir}" />
 			<batchtest unless="testcase" fork="yes" todir="${junit.results.dir}">
-				<fileset dir="${src.dir}/@{style.name}">
-					<include name="**/*TestCase.java" />
-					<include name="**/*Story.java" />
+				<fileset dir="${src.dir}">
+					<include name="**/LocalFqpSystemTests.java" />
 				</fileset>
 			</batchtest>
 		</junit>
+		<fail if="${test.failed}" message="Tests failed!  Check logs for details."/>
 	</target>
 </project>

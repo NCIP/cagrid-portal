@@ -49,6 +49,9 @@
 	
 		<path id="test.run.classpath">
 			<path refid="build.classpath"/>
+			<fileset dir="${jar.dir}">
+				<include name="**/*.jar"/>
+			</fileset>
 			<!-- any extra libs here -->
 		</path>
 	</target>
