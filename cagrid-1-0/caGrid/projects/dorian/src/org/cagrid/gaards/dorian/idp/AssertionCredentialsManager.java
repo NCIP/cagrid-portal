@@ -7,6 +7,7 @@ import gov.nih.nci.cagrid.opensaml.SAMLAttributeStatement;
 import gov.nih.nci.cagrid.opensaml.SAMLAuthenticationStatement;
 import gov.nih.nci.cagrid.opensaml.SAMLNameIdentifier;
 import gov.nih.nci.cagrid.opensaml.SAMLSubject;
+import gov.nih.nci.cagrid.opensaml.SAMLSubjectStatement;
 
 import java.io.ByteArrayInputStream;
 import java.security.KeyPair;
@@ -251,27 +252,27 @@ public class AssertionCredentialsManager extends LoggingObject {
 				"urn:oasis:names:tc:SAML:1.0:am:password", new Date(), ipAddress, subjectDNS, null);
 
 			QName quid = new QName(SAMLConstants.UID_ATTRIBUTE_NAMESPACE, SAMLConstants.UID_ATTRIBUTE);
-			List vals1 = new ArrayList();
+			List<String> vals1 = new ArrayList<String>();
 			vals1.add(uid);
 			SAMLAttribute uidAtt = new SAMLAttribute(quid.getLocalPart(), quid.getNamespaceURI(), null, 0, vals1);
 
 			QName qfirst = new QName(SAMLConstants.FIRST_NAME_ATTRIBUTE_NAMESPACE, SAMLConstants.FIRST_NAME_ATTRIBUTE);
-			List vals2 = new ArrayList();
+			List<String> vals2 = new ArrayList<String>();
 			vals2.add(firstName);
 			SAMLAttribute firstNameAtt = new SAMLAttribute(qfirst.getLocalPart(), qfirst.getNamespaceURI(), null, 0,
 				vals2);
 
 			QName qLast = new QName(SAMLConstants.LAST_NAME_ATTRIBUTE_NAMESPACE, SAMLConstants.LAST_NAME_ATTRIBUTE);
-			List vals3 = new ArrayList();
+			List<String> vals3 = new ArrayList<String>();
 			vals3.add(lastName);
 			SAMLAttribute lastNameAtt = new SAMLAttribute(qLast.getLocalPart(), qLast.getNamespaceURI(), null, 0, vals3);
 
 			QName qemail = new QName(SAMLConstants.EMAIL_ATTRIBUTE_NAMESPACE, SAMLConstants.EMAIL_ATTRIBUTE);
-			List vals4 = new ArrayList();
+			List<String> vals4 = new ArrayList<String>();
 			vals4.add(email);
 			SAMLAttribute emailAtt = new SAMLAttribute(qemail.getLocalPart(), qemail.getNamespaceURI(), null, 0, vals4);
 
-			List atts = new ArrayList();
+			List<SAMLAttribute> atts = new ArrayList<SAMLAttribute>();
 			atts.add(uidAtt);
 			atts.add(firstNameAtt);
 			atts.add(lastNameAtt);
@@ -279,12 +280,12 @@ public class AssertionCredentialsManager extends LoggingObject {
 
 			SAMLAttributeStatement attState = new SAMLAttributeStatement(sub2, atts);
 
-			List l = new ArrayList();
+			List<SAMLSubjectStatement> l = new ArrayList<SAMLSubjectStatement>();
 			l.add(auth);
 			l.add(attState);
 
 			SAMLAssertion saml = new SAMLAssertion(issuer, start, end, null, null, l);
-			List a = new ArrayList();
+			List<X509Certificate> a = new ArrayList<X509Certificate>();
 			a.add(cert);
 			saml.sign(XMLSignature.ALGO_ID_SIGNATURE_RSA_SHA1, key, a);
 

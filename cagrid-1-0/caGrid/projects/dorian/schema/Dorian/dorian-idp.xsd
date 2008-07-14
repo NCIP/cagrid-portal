@@ -88,6 +88,8 @@
 				<xsd:element name="ConsecutiveInvalidLogins" minOccurs="1" maxOccurs="1" type="xsd:long"/>
 				<xsd:element name="TotalInvalidLogins" minOccurs="1" maxOccurs="1" type="xsd:long"/>
 				<xsd:element name="LockoutExpiration" minOccurs="1" maxOccurs="1" type="xsd:long"/>
+				<xsd:element name="DigestSalt" minOccurs="1" maxOccurs="1" type="xsd:string"/>
+				<xsd:element name="DigestAlgorithm" minOccurs="1" maxOccurs="1" type="xsd:string"/>
 				<xsd:element name="PasswordStatus" minOccurs="1" maxOccurs="1" type="idp:PasswordStatus"/>
 			</xsd:sequence>
 		</xsd:complexType>

@@ -3,11 +3,10 @@ package org.cagrid.gaards.dorian.idp;
 import gov.nih.nci.cagrid.common.FaultUtil;
 import junit.framework.TestCase;
 
-import org.cagrid.gaards.dorian.service.util.Crypt;
+import org.cagrid.gaards.authentication.BasicAuthentication;
 import org.cagrid.gaards.dorian.stubs.types.NoSuchUserFault;
 import org.cagrid.gaards.dorian.test.Utils;
 import org.cagrid.tools.database.Database;
-
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
@@ -21,7 +20,6 @@ public class TestUserManager extends TestCase {
 	private Database db;
 
 	private int count = 0;
-
 
 	public void testMultipleUsers() {
 		int userCount = 20;
@@ -43,33 +41,44 @@ public class TestUserManager extends TestCase {
 
 			for (int i = 0; i < users.length; i++) {
 				if ((i % 8) == 0) {
-					users[i] = makeUser(IdPUserRole.Non_Administrator, IdPUserStatus.Active);
+					users[i] = makeUser(IdPUserRole.Non_Administrator,
+							IdPUserStatus.Active);
 					activeNA = activeNA + 1;
 				} else if ((i % 8) == 1) {
-					users[i] = makeUser(IdPUserRole.Non_Administrator, IdPUserStatus.Pending);
+					users[i] = makeUser(IdPUserRole.Non_Administrator,
+							IdPUserStatus.Pending);
 					pendingNA = pendingNA + 1;
 				} else if ((i % 8) == 2) {
-					users[i] = makeUser(IdPUserRole.Non_Administrator, IdPUserStatus.Rejected);
+					users[i] = makeUser(IdPUserRole.Non_Administrator,
+							IdPUserStatus.Rejected);
 					rejectedNA = rejectedNA + 1;
 				} else if ((i % 8) == 3) {
-					users[i] = makeUser(IdPUserRole.Non_Administrator, IdPUserStatus.Suspended);
+					users[i] = makeUser(IdPUserRole.Non_Administrator,
+							IdPUserStatus.Suspended);
 					suspendedNA = suspendedNA + 1;
 				} else if ((i % 8) == 4) {
-					users[i] = makeUser(IdPUserRole.Administrator, IdPUserStatus.Active);
+					users[i] = makeUser(IdPUserRole.Administrator,
+							IdPUserStatus.Active);
 					activeA = activeA + 1;
 				} else if ((i % 8) == 5) {
-					users[i] = makeUser(IdPUserRole.Administrator, IdPUserStatus.Pending);
+					users[i] = makeUser(IdPUserRole.Administrator,
+							IdPUserStatus.Pending);
 					pendingA = pendingA + 1;
 				} else if ((i % 8) == 6) {
-					users[i] = makeUser(IdPUserRole.Administrator, IdPUserStatus.Rejected);
+					users[i] = makeUser(IdPUserRole.Administrator,
+							IdPUserStatus.Rejected);
 					rejectedA = rejectedA + 1;
 				} else if ((i % 8) == 7) {
-					users[i] = makeUser(IdPUserRole.Administrator, IdPUserStatus.Suspended);
+					users[i] = makeUser(IdPUserRole.Administrator,
+							IdPUserStatus.Suspended);
 					suspendedA = suspendedA + 1;
 				}
 
 				um.addUser(users[i]);
-				users[i].setPassword(Crypt.crypt(users[i].getPassword()));
+				String salt = um.getPasswordSecurityManager().getEntry(
+						users[i].getUserId()).getDigestSalt();
+				users[i].setPassword(PasswordSecurityManager.encrypt(users[i]
+						.getPassword(), salt));
 				assertTrue(um.userExists(users[i].getUserId()));
 				IdPUser u = um.getUser(users[i].getUserId());
 				assertEquals(users[i], u);
@@ -111,31 +120,41 @@ public class TestUserManager extends TestCase {
 				um.removeUser(users[i].getUserId());
 				numberOfUsers = numberOfUsers - 1;
 				if ((users[i].getStatus().equals(IdPUserStatus.Active))
-					&& (users[i].getRole().equals(IdPUserRole.Non_Administrator))) {
+						&& (users[i].getRole()
+								.equals(IdPUserRole.Non_Administrator))) {
 					activeNA = activeNA - 1;
 				} else if ((users[i].getStatus().equals(IdPUserStatus.Pending))
-					&& (users[i].getRole().equals(IdPUserRole.Non_Administrator))) {
+						&& (users[i].getRole()
+								.equals(IdPUserRole.Non_Administrator))) {
 					pendingNA = pendingNA - 1;
 				}
 				if ((users[i].getStatus().equals(IdPUserStatus.Rejected))
-					&& (users[i].getRole().equals(IdPUserRole.Non_Administrator))) {
+						&& (users[i].getRole()
+								.equals(IdPUserRole.Non_Administrator))) {
 					rejectedNA = rejectedNA - 1;
 				}
 				if ((users[i].getStatus().equals(IdPUserStatus.Suspended))
-					&& (users[i].getRole().equals(IdPUserRole.Non_Administrator))) {
-					users[i] = makeUser(IdPUserRole.Non_Administrator, IdPUserStatus.Suspended);
+						&& (users[i].getRole()
+								.equals(IdPUserRole.Non_Administrator))) {
+					users[i] = makeUser(IdPUserRole.Non_Administrator,
+							IdPUserStatus.Suspended);
 					suspendedNA = suspendedNA - 1;
 				} else if ((users[i].getStatus().equals(IdPUserStatus.Active))
-					&& (users[i].getRole().equals(IdPUserRole.Administrator))) {
+						&& (users[i].getRole()
+								.equals(IdPUserRole.Administrator))) {
 					activeA = activeA - 1;
 				} else if ((users[i].getStatus().equals(IdPUserStatus.Pending))
-					&& (users[i].getRole().equals(IdPUserRole.Administrator))) {
+						&& (users[i].getRole()
+								.equals(IdPUserRole.Administrator))) {
 					pendingA = pendingA - 1;
 				} else if ((users[i].getStatus().equals(IdPUserStatus.Rejected))
-					&& (users[i].getRole().equals(IdPUserRole.Administrator))) {
+						&& (users[i].getRole()
+								.equals(IdPUserRole.Administrator))) {
 					rejectedA = rejectedA - 1;
-				} else if ((users[i].getStatus().equals(IdPUserStatus.Suspended))
-					&& (users[i].getRole().equals(IdPUserRole.Administrator))) {
+				} else if ((users[i].getStatus()
+						.equals(IdPUserStatus.Suspended))
+						&& (users[i].getRole()
+								.equals(IdPUserRole.Administrator))) {
 					suspendedA = suspendedA - 1;
 				}
 				assertFalse(um.userExists(users[i].getEmail()));
@@ -183,7 +202,6 @@ public class TestUserManager extends TestCase {
 		}
 	}
 
-
 	public void testChangeStatus() {
 		UserManager um = null;
 		try {
@@ -194,8 +212,14 @@ public class TestUserManager extends TestCase {
 			assertTrue(um.userExists(u1.getUserId()));
 			u1.setStatus(IdPUserStatus.Suspended);
 			um.updateUser(u1);
-			u1.setPassword(Crypt.crypt(u1.getPassword()));
+
+			String salt = um.getPasswordSecurityManager().getEntry(
+					u1.getUserId()).getDigestSalt();
+			u1.setPassword(PasswordSecurityManager.encrypt(u1.getPassword(),
+					salt));
 			IdPUser u2 = um.getUser(u1.getUserId());
+
+			assertEquals(u1.getPassword(), u2.getPassword());
 			assertEquals(u1, u2);
 
 		} catch (Exception e) {
@@ -211,6 +235,61 @@ public class TestUserManager extends TestCase {
 
 	}
 
+	public void testSystemMaxPasswordLength() {
+		UserManager um = null;
+		try {
+			um = Utils.getIdPUserManager();
+			IdPUser u1 = makeActiveUser();
+			String password = u1.getPassword();
+
+			StringBuffer sb = new StringBuffer();
+			sb.append(password);
+			int size = (UserManager.SYSTEM_MAX_PASSWORD_LENGTH + 1)
+					- sb.length();
+			for (int i = 0; i < size; i++) {
+				sb.append("a");
+			}
+			u1.setPassword(sb.toString());
+			try {
+				um.addUser(u1);
+				fail("Should not be able to add a user that specified a password with a greater length the system max!!!");
+			} catch (Exception e) {
+				if (gov.nih.nci.cagrid.common.Utils.getExceptionMessage(e)
+						.indexOf(UserManager.SYSTEM_MAX_PASSWORD_ERROR_PREFIX) == -1) {
+					fail("Should not be able to add a user that specified a password with a greater length the system max!!!");
+				}
+			}
+			u1.setPassword(password);
+			um.addUser(u1);
+			assertTrue(um.userExists(u1.getUserId()));
+			BasicAuthentication ba = new BasicAuthentication();
+			ba.setUserId(u1.getUserId());
+			ba.setPassword(password);
+			um.authenticateAndVerifyUser(ba);
+
+			ba.setPassword(sb.toString());
+			try {
+				um.authenticateAndVerifyUser(ba);
+				fail("Should not be able to authenticate with a password with a greater length the system max!!!");
+			} catch (Exception e) {
+				if (gov.nih.nci.cagrid.common.Utils.getExceptionMessage(e)
+						.indexOf(UserManager.PASSWORD_ERROR_MESSAGE) == -1) {
+					fail("Should not be able to authenticate with a password with a greater length the system max!!!");
+				}
+			}
+
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			assertTrue(false);
+		} finally {
+			try {
+				um.clearDatabase();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
+	}
 
 	public void testChangeRole() {
 		UserManager um = null;
@@ -222,7 +301,12 @@ public class TestUserManager extends TestCase {
 			assertTrue(um.userExists(u1.getUserId()));
 			u1.setRole(IdPUserRole.Administrator);
 			um.updateUser(u1);
-			u1.setPassword(Crypt.crypt(u1.getPassword()));
+
+			String salt = um.getPasswordSecurityManager().getEntry(
+					u1.getUserId()).getDigestSalt();
+			u1.setPassword(PasswordSecurityManager.encrypt(u1.getPassword(),
+					salt));
+
 			IdPUser u2 = um.getUser(u1.getUserId());
 			assertEquals(u1, u2);
 		} catch (Exception e) {
@@ -236,7 +320,6 @@ public class TestUserManager extends TestCase {
 			}
 		}
 	}
-
 
 	public void testChangePassword() {
 		UserManager um = null;
@@ -248,8 +331,13 @@ public class TestUserManager extends TestCase {
 			assertTrue(um.userExists(u1.getUserId()));
 			u1.setPassword("$W0rdD0ct0R$2");
 			um.updateUser(u1);
+
 			IdPUser u2 = um.getUser(u1.getUserId());
-			u1.setPassword(Crypt.crypt(u1.getPassword()));
+
+			String salt = um.getPasswordSecurityManager().getEntry(
+					u1.getUserId()).getDigestSalt();
+			u1.setPassword(PasswordSecurityManager.encrypt(u1.getPassword(),
+					salt));
 			assertEquals(u1, u2);
 
 		} catch (Exception e) {
@@ -264,7 +352,6 @@ public class TestUserManager extends TestCase {
 		}
 
 	}
-
 
 	public void testUpdateUser() {
 		UserManager um = null;
@@ -289,7 +376,11 @@ public class TestUserManager extends TestCase {
 			u1.setRole(IdPUserRole.Administrator);
 			um.updateUser(u1);
 			IdPUser u2 = um.getUser(u1.getUserId());
-			u1.setPassword(Crypt.crypt(u1.getPassword()));
+
+			String salt = um.getPasswordSecurityManager().getEntry(
+					u1.getUserId()).getDigestSalt();
+			u1.setPassword(PasswordSecurityManager.encrypt(u1.getPassword(),
+					salt));
 			assertEquals(u1, u2);
 
 		} catch (Exception e) {
@@ -305,7 +396,6 @@ public class TestUserManager extends TestCase {
 
 	}
 
-
 	public void testSingleUser() {
 		UserManager um = null;
 		try {
@@ -313,7 +403,10 @@ public class TestUserManager extends TestCase {
 			um = Utils.getIdPUserManager();
 			IdPUser u1 = makeActiveUser();
 			um.addUser(u1);
-			u1.setPassword(Crypt.crypt(u1.getPassword()));
+			String salt = um.getPasswordSecurityManager().getEntry(
+					u1.getUserId()).getDigestSalt();
+			u1.setPassword(PasswordSecurityManager.encrypt(u1.getPassword(),
+					salt));
 			assertTrue(um.userExists(u1.getUserId()));
 			IdPUser u2 = um.getUser(u1.getUserId());
 			assertEquals(u1, u2);
@@ -363,7 +456,6 @@ public class TestUserManager extends TestCase {
 		}
 	}
 
-
 	public void testFindUsers() {
 		UserManager um = null;
 		try {
@@ -372,7 +464,8 @@ public class TestUserManager extends TestCase {
 			int size = 10;
 
 			for (int i = 0; i < size; i++) {
-				um.addUser(makeUser(IdPUserRole.Non_Administrator, IdPUserStatus.Active));
+				um.addUser(makeUser(IdPUserRole.Non_Administrator,
+						IdPUserStatus.Active));
 			}
 			assertEquals(size, um.getUsers(getActiveUserFilter()).length);
 
@@ -528,7 +621,6 @@ public class TestUserManager extends TestCase {
 		}
 	}
 
-
 	public void testForeignUser() {
 		UserManager um = null;
 		try {
@@ -555,7 +647,10 @@ public class TestUserManager extends TestCase {
 			assertTrue(um.userExists(u.getUserId()));
 
 			IdPUser u2 = um.getUser(u.getUserId());
-			u.setPassword(Crypt.crypt(u.getPassword()));
+			String salt = um.getPasswordSecurityManager().getEntry(
+					u.getUserId()).getDigestSalt();
+			u.setPassword(PasswordSecurityManager
+					.encrypt(u.getPassword(), salt));
 			assertEquals(u, u2);
 
 		} catch (Exception e) {
@@ -571,7 +666,6 @@ public class TestUserManager extends TestCase {
 
 	}
 
-
 	private IdPUserFilter getActiveUserFilter() {
 		IdPUserFilter filter = new IdPUserFilter();
 		filter.setStatus(IdPUserStatus.Active);
@@ -579,11 +673,9 @@ public class TestUserManager extends TestCase {
 		return filter;
 	}
 
-
 	private IdPUser makeActiveUser() {
 		return makeUser(IdPUserRole.Non_Administrator, IdPUserStatus.Active);
 	}
-
 
 	private IdPUser makeUser(IdPUserRole role, IdPUserStatus status) {
 		IdPUser u = new IdPUser();
@@ -606,7 +698,6 @@ public class TestUserManager extends TestCase {
 		return u;
 	}
 
-
 	protected void setUp() throws Exception {
 		super.setUp();
 		try {
@@ -618,7 +709,6 @@ public class TestUserManager extends TestCase {
 			assertTrue(false);
 		}
 	}
-
 
 	protected void tearDown() throws Exception {
 		super.setUp();

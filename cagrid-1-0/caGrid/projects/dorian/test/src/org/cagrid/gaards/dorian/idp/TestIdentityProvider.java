@@ -15,7 +15,9 @@ import org.cagrid.gaards.authentication.BasicAuthenticationWithOneTimePassword;
 import org.cagrid.gaards.authentication.faults.CredentialNotSupportedFault;
 import org.cagrid.gaards.authentication.faults.InvalidCredentialFault;
 import org.cagrid.gaards.dorian.ca.CertificateAuthority;
+import org.cagrid.gaards.dorian.common.Lifetime;
 import org.cagrid.gaards.dorian.common.SAMLConstants;
+import org.cagrid.gaards.dorian.stubs.types.DorianInternalFault;
 import org.cagrid.gaards.dorian.stubs.types.InvalidUserPropertyFault;
 import org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault;
 import org.cagrid.gaards.dorian.test.Utils;
@@ -96,6 +98,73 @@ public class TestIdentityProvider extends TestCase {
 				e.printStackTrace();
 			}
 		}
+	}
+
+	public void testAuthenticateBadPermutationsOfPassword() {
+		IdentityProvider idp = null;
+		try {
+			IdentityProviderProperties props = Utils
+					.getIdentityProviderProperties();
+			props.setRegistrationPolicy(new AutomaticRegistrationPolicy());
+			PasswordSecurityPolicy policy = props.getPasswordSecurityPolicy();
+			policy.setConsecutiveInvalidLogins(500);
+			policy.setTotalInvalidLogins(500);
+			policy.getLockout().setHours(0);
+			policy.getLockout().setMinutes(0);
+			policy.getLockout().setSeconds(3);
+			props.setRegistrationPolicy(new AutomaticRegistrationPolicy());
+			idp = new IdentityProvider(props, db, ca);
+			Application a = createApplication();
+			idp.register(a);
+			BasicAuthCredential cred = getAdminCreds();
+			IdPUserFilter uf = new IdPUserFilter();
+			uf.setUserId(a.getUserId());
+			IdPUser[] users = idp.findUsers(cred.getUserId(), uf);
+			assertEquals(1, users.length);
+			assertEquals(IdPUserStatus.Active, users[0].getStatus());
+			assertEquals(IdPUserRole.Non_Administrator, users[0].getRole());
+			verifyAuthentication(idp, a);
+
+			for (int i = 0; i < a.getPassword().length(); i++) {
+				StringBuffer permutation = new StringBuffer();
+				permutation.append(a.getPassword().substring(0, i));
+				permutation.append("s");
+				permutation.append(a.getPassword().substring(i + 1));
+
+				BasicAuthentication credential = new BasicAuthentication();
+				credential.setUserId(a.getUserId());
+				credential.setPassword(permutation.toString());
+				try {
+					idp.authenticate(credential);
+					fail("Should not be able to authenticate!!!");
+				} catch (InvalidCredentialFault e) {
+	
+				}
+
+			}
+
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			assertTrue(false);
+		} finally {
+			try {
+				idp.clearDatabase();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	private PasswordSecurityPolicy getPolicy() throws DorianInternalFault {
+		Lifetime time = new Lifetime();
+		time.setHours(0);
+		time.setMinutes(0);
+		time.setSeconds(3);
+		PasswordSecurityPolicy policy = new PasswordSecurityPolicy();
+		policy.setLockout(time);
+		policy.setConsecutiveInvalidLogins(3);
+		policy.setTotalInvalidLogins(8);
+		return policy;
 	}
 
 	public void testResetLockedPassword() {

@@ -34,6 +34,7 @@ public class TestPasswordSecurityManager extends TestCase {
 			}
 		}
 	}
+	
 
 	public void testSuspendedPassword() {
 		PasswordSecurityManager psm = null;

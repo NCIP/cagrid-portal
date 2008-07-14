@@ -32,6 +32,12 @@ import org.cagrid.tools.database.Database;
  *          Exp $
  */
 public class UserManager extends LoggingObject {
+	
+	public final static String PASSWORD_ERROR_MESSAGE = "The uid or password is incorrect.";
+
+	public final static int SYSTEM_MAX_PASSWORD_LENGTH = 30;
+	
+	public final static String SYSTEM_MAX_PASSWORD_ERROR_PREFIX = "Unacceptable password, the length of the password cannot exceed the maximum system password length of ";
 
 	public static String INVALID_PASSWORD_MESSAGE = "Invalid password, a valid password CANNOT contain a dictionary word and MUST contain at least one upper case letter, at least one lower case letter, at least one number, and at least one symbol (~!@#$%^&*()_-+={}[]|:;<>,.?)";
 
@@ -64,22 +70,63 @@ public class UserManager extends LoggingObject {
 			BasicAuthentication cred = (BasicAuthentication) credential;
 			try {
 				IdPUser u = getUser(cred.getUserId());
+				PasswordSecurity entry = this.passwordSecurityManager
+						.getEntry(u.getUserId());
+				PasswordStatus status = entry.getPasswordStatus();
+				String suppliedPassword = cred.getPassword();
 
-				PasswordStatus status = this.passwordSecurityManager
-						.getPasswordStatus(u.getUserId());
+				if (suppliedPassword.length() > SYSTEM_MAX_PASSWORD_LENGTH) {
+					InvalidCredentialFault fault = new InvalidCredentialFault();
+					fault.setFaultString(PASSWORD_ERROR_MESSAGE);
+					throw fault;
+				}
 
 				if (status.equals(PasswordStatus.Valid)) {
-					if (!u.getPassword()
-							.equals(Crypt.crypt(cred.getPassword()))) {
-						passwordSecurityManager.reportInvalidLoginAttempt(u
-								.getUserId());
+					String digest = null;
+					boolean crypt = false;
+					if (entry.getDigestAlgorithm() == null) {
+						crypt = true;
+						digest = Crypt.crypt(suppliedPassword);
+					} else if (entry.getDigestAlgorithm().equals(
+							PasswordSecurityManager.PASSWORD_DIGEST_ALGORITHM)) {
+						try {
+							digest = PasswordSecurityManager.encrypt(
+									suppliedPassword, entry.getDigestSalt());
+						} catch (Exception e) {
+							log.error(e);
+							DorianInternalFault fault = new DorianInternalFault();
+							fault
+									.setFaultString("Unexpected error calculating password digest!!!");
+							throw fault;
+						}
+					} else {
+						DorianInternalFault fault = new DorianInternalFault();
+						fault
+								.setFaultString("Could not obtain password digest, unknown digest algorithm!!!");
+						throw fault;
+					}
+					if (!u.getPassword().equals(digest)) {
+						this.passwordSecurityManager
+								.reportInvalidLoginAttempt(u.getUserId());
 						InvalidCredentialFault fault = new InvalidCredentialFault();
 						fault
-								.setFaultString("The uid or password is incorrect.");
+								.setFaultString(PASSWORD_ERROR_MESSAGE);
 						throw fault;
 					} else {
-						passwordSecurityManager.reportSuccessfulLoginAttempt(u
-								.getUserId());
+						this.passwordSecurityManager
+								.reportSuccessfulLoginAttempt(u.getUserId());
+						if (crypt) {
+							u.setPassword(suppliedPassword);
+							try {
+								updateUser(u);
+							} catch (Exception e) {
+								log.error(e);
+								DorianInternalFault fault = new DorianInternalFault();
+								fault
+										.setFaultString("Unexpected error upgrading password digest.");
+								throw fault;
+							}
+						}
 					}
 				} else if (status.equals(PasswordStatus.LockedUntilChanged)) {
 					InvalidCredentialFault fault = new InvalidCredentialFault();
@@ -101,9 +148,8 @@ public class UserManager extends LoggingObject {
 					verifyUser(u);
 				} catch (PermissionDeniedFault e) {
 					InvalidCredentialFault fault = new InvalidCredentialFault();
-					fault
-							.setFaultString(e.getFaultString());
-				    throw fault;
+					fault.setFaultString(e.getFaultString());
+					throw fault;
 				}
 				return u;
 			} catch (NoSuchUserFault e) {
@@ -170,9 +216,24 @@ public class UserManager extends LoggingObject {
 	private void validatePassword(IdPUser user) throws DorianInternalFault,
 			InvalidUserPropertyFault {
 		String password = user.getPassword();
-		if ((password == null)
-				|| (conf.getPasswordSecurityPolicy().getMinPasswordLength() > password
-						.length())
+		if (password == null) {
+			InvalidUserPropertyFault fault = new InvalidUserPropertyFault();
+			fault
+					.setFaultString("Unacceptable password, the length of the password must be between "
+							+ conf.getPasswordSecurityPolicy()
+									.getMinPasswordLength()
+							+ " and "
+							+ conf.getPasswordSecurityPolicy()
+									.getMaxPasswordLength() + " characters.");
+			throw fault;
+		} else if (password.length() > SYSTEM_MAX_PASSWORD_LENGTH) {
+			InvalidUserPropertyFault fault = new InvalidUserPropertyFault();
+			fault
+					.setFaultString(SYSTEM_MAX_PASSWORD_ERROR_PREFIX+
+							+ SYSTEM_MAX_PASSWORD_LENGTH + ".");
+			throw fault;
+		} else if ((conf.getPasswordSecurityPolicy().getMinPasswordLength() > password
+				.length())
 				|| (conf.getPasswordSecurityPolicy().getMaxPasswordLength() < password
 						.length())) {
 			InvalidUserPropertyFault fault = new InvalidUserPropertyFault();
@@ -258,6 +319,9 @@ public class UserManager extends LoggingObject {
 		}
 		Connection c = null;
 		try {
+			String passwordSalt = PasswordSecurityManager.getRandomSalt();
+			String passwordDigest = PasswordSecurityManager.encrypt(user
+					.getPassword(), passwordSalt);
 			c = db.getConnection();
 			PreparedStatement ps = c
 					.prepareStatement("INSERT INTO "
@@ -265,7 +329,7 @@ public class UserManager extends LoggingObject {
 							+ " SET UID = ?, EMAIL= ?, PASSWORD= ?, FIRST_NAME= ?, LAST_NAME= ?, ORGANIZATION= ?, ADDRESS= ?, ADDRESS2= ?,CITY= ?, STATE= ?, ZIP_CODE= ?, COUNTRY= ?, PHONE_NUMBER= ?, STATUS= ?, ROLE= ?");
 			ps.setString(1, user.getUserId());
 			ps.setString(2, user.getEmail());
-			ps.setString(3, Crypt.crypt(user.getPassword()));
+			ps.setString(3, passwordDigest);
 			ps.setString(4, user.getFirstName());
 			ps.setString(5, user.getLastName());
 			ps.setString(6, user.getOrganization());
@@ -284,9 +348,22 @@ public class UserManager extends LoggingObject {
 			ps.setString(15, user.getRole().getValue());
 			ps.executeUpdate();
 			ps.close();
+			this.passwordSecurityManager.resetEntry(user.getUserId(),
+					passwordSalt);
 			user.setPasswordSecurity(this.passwordSecurityManager.getEntry(user
 					.getUserId()));
 		} catch (Exception e) {
+
+			try {
+				this.removeUser(user.getUserId());
+			} catch (Exception ex) {
+
+			}
+			try {
+				this.passwordSecurityManager.deleteEntry(user.getUserId());
+			} catch (Exception ex) {
+
+			}
 			logError(e.getMessage(), e);
 			DorianInternalFault fault = new DorianInternalFault();
 			fault.setFaultString("Unexpected Error, Could not add user!!!");
@@ -332,7 +409,7 @@ public class UserManager extends LoggingObject {
 
 		this.buildDatabase();
 		Connection c = null;
-		List users = new ArrayList();
+		List<IdPUser> users = new ArrayList<IdPUser>();
 		try {
 			c = db.getConnection();
 			PreparedStatement ps = null;
@@ -614,15 +691,25 @@ public class UserManager extends LoggingObject {
 					+ u.getUserId() + " does not exist.");
 			throw fault;
 		} else if (userExists(u.getUserId())) {
-
+			String passwordSalt = null;
 			StringBuffer sb = new StringBuffer();
 			sb.append("update " + IDP_USERS_TABLE + " SET ");
 			int changes = 0;
 			IdPUser curr = this.getUser(u.getUserId());
 			boolean passwordChanged = false;
 			if (u.getPassword() != null) {
-
-				String newPass = Crypt.crypt(u.getPassword());
+				String newPass = null;
+				try {
+					passwordSalt = PasswordSecurityManager.getRandomSalt();
+					newPass = PasswordSecurityManager.encrypt(u.getPassword(),
+							passwordSalt);
+				} catch (Exception e) {
+					log.error(e);
+					DorianInternalFault fault = new DorianInternalFault();
+					fault
+							.setFaultString("Could not update user, unexpected error calculating the password digest.");
+					throw fault;
+				}
 				if (!newPass.equals(curr.getPassword())) {
 					validatePassword(u);
 					curr.setPassword(newPass);
@@ -750,7 +837,10 @@ public class UserManager extends LoggingObject {
 				ps.close();
 
 				if (passwordChanged) {
-					this.passwordSecurityManager.deleteEntry(curr.getUserId());
+					this.passwordSecurityManager.resetEntry(curr.getUserId(),
+							passwordSalt);
+					u.setPasswordSecurity(this.passwordSecurityManager
+							.getEntry(curr.getUserId()));
 				}
 			} catch (Exception e) {
 				logError(e.getMessage(), e);
@@ -832,6 +922,10 @@ public class UserManager extends LoggingObject {
 			fault = (DorianInternalFault) helper.getFault();
 			throw fault;
 		}
+	}
+
+	protected PasswordSecurityManager getPasswordSecurityManager() {
+		return passwordSecurityManager;
 	}
 
 }

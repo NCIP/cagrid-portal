@@ -105,9 +105,9 @@ public class DictionaryCheck {
 
 	private static boolean lookForWord(StringBuffer sb, String string) {
 
-		List forwardSubStrings = buildSubStrings(string, MINUMUM_WORD_SEARCH_SIZE);
-		List backwardSubStrings = buildSubStrings(StringUtils.reverse(string), MINUMUM_WORD_SEARCH_SIZE);
-		List fullList = new ArrayList();
+		List<String> forwardSubStrings = buildSubStrings(string, MINUMUM_WORD_SEARCH_SIZE);
+		List<String> backwardSubStrings = buildSubStrings(StringUtils.reverse(string), MINUMUM_WORD_SEARCH_SIZE);
+		List<String> fullList = new ArrayList<String>();
 		fullList.addAll(forwardSubStrings);
 		fullList.addAll(backwardSubStrings);
 
@@ -122,8 +122,8 @@ public class DictionaryCheck {
 	}
 
 
-	public static List buildSubStrings(String string, int minimumLength) {
-		List list = new ArrayList();
+	public static List<String> buildSubStrings(String string, int minimumLength) {
+		List<String> list = new ArrayList<String>();
 
 		if (string.length() >= minimumLength) {
 			for (int i = minimumLength; i <= string.length(); i++) {
