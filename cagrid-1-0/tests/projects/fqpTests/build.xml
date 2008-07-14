@@ -12,6 +12,7 @@
 	<property name="classes.dir" value="${build.dir}/classes" />
 	<property name="jar.dir" value="${build.dir}/lib" />
 	<property name="project.jarfile" value="${jar.dir}/${project.name}-${project.version}.jar" />
+	<property name="resources.jarfile" value="${jar.dir}/${project.name}-resources-${project.version}.jar" />
 	<property name="ext.lib.dir" value="${basedir}/ext/dependencies/jars" />
 	
 	<!-- output directory for JUnit logs -->
@@ -88,13 +89,24 @@
 	<!-- ============================================================== -->
 	<target name="jar" depends="compile" description="Builds the Jar Files">
 		<mkdir dir="${jar.dir}" />
+		<!-- project jarfile (classes and source -->
 		<jar destfile="${project.jarfile}">
 			<fileset dir="${classes.dir}">
 				<include name="**/*.class"/>
 			</fileset>
+			<fileset dir="${src.dir}">
+				<include name="**/*.java"/>
+			</fileset>
 			<manifest>
 				<attribute name="Built-By" value="${user.name}" />
 			</manifest>
+		</jar>
+		<!-- resouces jarfile (queries, wsdd, etc) -->
+		<jar destfile="${resources.jarfile}">
+			<fileset dir="${basedir}">
+				<include name="resources/**"/>
+				<exclude name="resources/services/**"/>
+			</fileset>
 		</jar>
 	</target>
 
