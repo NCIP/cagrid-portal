@@ -9,6 +9,8 @@
 	<property name="failed.message" value="Tests failed! Check test reports." />
 	<!-- tells the service container factories to assign ports in testing mode -->
 	<property name="testing.port.assignment.mode" value="true" />
+	<!-- tells the test containers where to find their zip files -->
+	<property name="testing.containers.dir" value="${basedir}/../testUtils/containers"/>
 	
 	<target name="prepareClasspaths">
 		<path id="all.test.classpath">
@@ -22,6 +24,7 @@
 		<junit dir="${basedir}" printsummary="yes" haltonerror="${halt.on.error}" haltonfailure="${halt.on.error}" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="yes" forkmode="once">
 			<sysproperty key="build.dir" value="${test.core.classes.dir}" />
 			<sysproperty key="testing.port.assignment.mode" value="${testing.port.assignment.mode}"/>
+			<sysproperty key="testing.containers.dir" value="${testing.containers.dir}"/>
 			<classpath refid="all.test.classpath" />
 			<formatter type="xml" />
 			<test if="testcase" name="${testcase}" fork="no" todir="${junit.results.dir}" />
