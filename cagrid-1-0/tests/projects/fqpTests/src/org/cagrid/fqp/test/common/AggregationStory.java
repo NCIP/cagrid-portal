@@ -16,7 +16,7 @@ import org.cagrid.fqp.test.common.steps.AggregationStep;
  * @author David Ervin
  * 
  * @created Jun 30, 2008 12:48:50 PM
- * @version $Id: AggregationStory.java,v 1.1 2008-07-14 21:10:04 dervin Exp $ 
+ * @version $Id: AggregationStory.java,v 1.2 2008-07-15 19:44:13 dervin Exp $ 
  */
 public class AggregationStory extends Story {
     
@@ -25,10 +25,10 @@ public class AggregationStory extends Story {
     
     public static final String SERVICE_NAME_BASE = "cagrid/ExampleSdkService";
     
-    private DataServiceContainerSource[] dataContainers = null;
+    private ServiceContainerSource[] dataContainers = null;
     private FederatedQueryProcessorHelper queryHelper = null;
     
-    public AggregationStory(DataServiceContainerSource[] dataServiceContainers,
+    public AggregationStory(ServiceContainerSource[] dataServiceContainers,
         FederatedQueryProcessorHelper queryHelper) {
         this.dataContainers = dataServiceContainers;
         this.queryHelper = queryHelper;
@@ -45,7 +45,7 @@ public class AggregationStory extends Story {
         // figure out the URLs of the test services
         String[] serviceUrls = new String[dataContainers.length];
         for (int i = 0; i < dataContainers.length; i++) {
-            ServiceContainer container = dataContainers[i].getDataServiceContainer();
+            ServiceContainer container = dataContainers[i].getServiceContainer();
             try {
                 String base = container.getContainerBaseURI().toString();
                 serviceUrls[i] = base + SERVICE_NAME_BASE + String.valueOf(i + 1);

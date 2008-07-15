@@ -11,7 +11,7 @@ import java.io.File;
 import junit.framework.TestResult;
 
 import org.cagrid.fqp.test.common.AggregationStory;
-import org.cagrid.fqp.test.common.DataServiceContainerSource;
+import org.cagrid.fqp.test.common.ServiceContainerSource;
 import org.cagrid.fqp.test.common.DataServiceDeploymentStory;
 import org.cagrid.fqp.test.common.FederatedQueryProcessorHelper;
 
@@ -22,7 +22,7 @@ import org.cagrid.fqp.test.common.FederatedQueryProcessorHelper;
  * @author David Ervin
  * 
  * @created Jul 10, 2008 10:57:40 AM
- * @version $Id: LocalFqpSystemTests.java,v 1.1 2008-07-14 21:10:04 dervin Exp $ 
+ * @version $Id: LocalFqpSystemTests.java,v 1.2 2008-07-15 19:44:14 dervin Exp $ 
  */
 public class LocalFqpSystemTests extends StoryBook {
     
@@ -46,7 +46,7 @@ public class LocalFqpSystemTests extends StoryBook {
         addStory(exampleService2Deployment);
         
         // run the local aggregation queries
-        DataServiceContainerSource[] containerSources = new DataServiceContainerSource[] {
+        ServiceContainerSource[] containerSources = new ServiceContainerSource[] {
             exampleService1Deployment, exampleService2Deployment
         };
         FederatedQueryProcessorHelper queryHelper = new FederatedQueryProcessorHelper(new FederatedQueryEngine());
@@ -69,7 +69,7 @@ public class LocalFqpSystemTests extends StoryBook {
         System.out.println("CLEANING UP TESTING RESOURCES");
         System.out.println("CLEANING UP TESTING RESOURCES");
         for (DataServiceDeploymentStory deployment : deployments) {
-            ServiceContainer container = deployment.getDataServiceContainer();
+            ServiceContainer container = deployment.getServiceContainer();
             try {
                 new StopContainerStep(container).runStep();
                 new DestroyContainerStep(container).runStep();

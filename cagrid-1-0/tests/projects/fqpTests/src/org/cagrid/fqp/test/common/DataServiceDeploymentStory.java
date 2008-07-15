@@ -22,9 +22,9 @@ import org.cagrid.fqp.test.common.steps.UnzipServiceStep;
  * @author David Ervin
  * 
  * @created Jul 9, 2008 11:46:02 AM
- * @version $Id: DataServiceDeploymentStory.java,v 1.2 2008-07-10 15:05:37 dervin Exp $ 
+ * @version $Id: DataServiceDeploymentStory.java,v 1.3 2008-07-15 19:44:14 dervin Exp $ 
  */
-public class DataServiceDeploymentStory extends Story implements DataServiceContainerSource {
+public class DataServiceDeploymentStory extends Story implements ServiceContainerSource {
     
     private File dataServiceZip;
     private File temp;
@@ -88,7 +88,7 @@ public class DataServiceDeploymentStory extends Story implements DataServiceCont
     }
     
     
-    public ServiceContainer getDataServiceContainer() {
+    public ServiceContainer getServiceContainer() {
         if (dataServiceContainer == null || !complete) {
             throw new IllegalStateException(
                 "Deployment Story has not completed to create a working service container!");
