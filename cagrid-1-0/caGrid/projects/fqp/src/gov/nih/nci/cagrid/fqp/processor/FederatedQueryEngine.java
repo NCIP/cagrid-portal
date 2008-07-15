@@ -1,8 +1,6 @@
 package gov.nih.nci.cagrid.fqp.processor;
 
-import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.cqlquery.CQLQuery;
-import gov.nih.nci.cagrid.cqlresultset.CQLObjectResult;
 import gov.nih.nci.cagrid.cqlresultset.CQLQueryResults;
 import gov.nih.nci.cagrid.dcql.DCQLQuery;
 import gov.nih.nci.cagrid.dcqlresult.DCQLQueryResultsCollection;
@@ -89,31 +87,9 @@ public class FederatedQueryEngine {
 
         CQLQuery cqlQuery = processor.processDCQLQuery(dcqlQuery.getTargetObject());
 
-        CQLQueryResults aggregateResults = null;
-        String[] targetServiceURLs = dcqlQuery.getTargetServiceURL();
-        for (int i = 0; i < targetServiceURLs.length; i++) {
-            // aggregate results
-            CQLQueryResults currResults = DataServiceQueryExecutor.queryDataService(cqlQuery, targetServiceURLs[i],
-                this.cred);
-            if (currResults != null) {
-                if (!currResults.getTargetClassname().equals(dcqlQuery.getTargetObject().getName())) {
-                    throw new RemoteDataServiceException("Data service (" + targetServiceURLs[i]
-                        + ") returned results of type (" + currResults.getTargetClassname() + ") when type ("
-                        + dcqlQuery.getTargetObject().getName() + ") was requested!");
-                }
-                if (aggregateResults == null) {
-                    // initialize our return to current result if first time we
-                    // got something
-                    aggregateResults = currResults;
-                } else {
-                    CQLObjectResult[] tmpArr = (CQLObjectResult[]) Utils.concatenateArrays(CQLObjectResult.class,
-                        aggregateResults.getObjectResult(), currResults.getObjectResult());
-
-                    aggregateResults.setObjectResult(tmpArr);
-                }
-            }
-        }
-
+        CQLQueryResults aggregateResults = CQLAggregator.aggregateQueryResults(
+            cqlQuery, dcqlQuery.getTargetServiceURL(), cred);
+        
         return aggregateResults;
     }
 
