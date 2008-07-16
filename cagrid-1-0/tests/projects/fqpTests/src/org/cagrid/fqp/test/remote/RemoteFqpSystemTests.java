@@ -10,6 +10,8 @@ import java.io.File;
 import junit.framework.Assert;
 import junit.framework.TestResult;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.cagrid.fqp.test.common.AggregationStory;
 import org.cagrid.fqp.test.common.DataServiceDeploymentStory;
 import org.cagrid.fqp.test.common.FederatedQueryProcessorHelper;
@@ -22,9 +24,11 @@ import org.cagrid.fqp.test.common.ServiceContainerSource;
  * @author David Ervin
  * 
  * @created Jul 10, 2008 10:57:40 AM
- * @version $Id: RemoteFqpSystemTests.java,v 1.1 2008-07-16 17:02:19 dervin Exp $ 
+ * @version $Id: RemoteFqpSystemTests.java,v 1.2 2008-07-16 19:29:59 dervin Exp $ 
  */
 public class RemoteFqpSystemTests extends StoryBook {
+    
+    public static final Log logger = LogFactory.getLog(RemoteFqpSystemTests.class);
     
     public static final String FQP_DIR_PROPERTY = "fqp.service.dir";
     
@@ -73,18 +77,14 @@ public class RemoteFqpSystemTests extends StoryBook {
     
     
     public void run(TestResult result) {
-        System.out.println("RUNNING TESTS");
-        System.out.println("RUNNING TESTS");
-        System.out.println("RUNNING TESTS");
+        logger.debug("Starting Remote FQP Tests");
         super.run(result);
         cleanUp();
     }
     
     
     private void cleanUp() {
-        System.out.println("CLEANING UP TESTING RESOURCES");
-        System.out.println("CLEANING UP TESTING RESOURCES");
-        System.out.println("CLEANING UP TESTING RESOURCES");
+        logger.debug("Cleaning Up Remote FQP Tests");
         for (DataServiceDeploymentStory deployment : dataServiceDeployments) {
             ServiceContainer container = deployment.getServiceContainer();
             try {

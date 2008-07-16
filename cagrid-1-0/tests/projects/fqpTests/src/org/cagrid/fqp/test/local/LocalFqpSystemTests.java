@@ -10,10 +10,12 @@ import java.io.File;
 
 import junit.framework.TestResult;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.cagrid.fqp.test.common.AggregationStory;
-import org.cagrid.fqp.test.common.ServiceContainerSource;
 import org.cagrid.fqp.test.common.DataServiceDeploymentStory;
 import org.cagrid.fqp.test.common.FederatedQueryProcessorHelper;
+import org.cagrid.fqp.test.common.ServiceContainerSource;
 
 /** 
  *  LocalFqpSystemTests
@@ -22,9 +24,11 @@ import org.cagrid.fqp.test.common.FederatedQueryProcessorHelper;
  * @author David Ervin
  * 
  * @created Jul 10, 2008 10:57:40 AM
- * @version $Id: LocalFqpSystemTests.java,v 1.2 2008-07-15 19:44:14 dervin Exp $ 
+ * @version $Id: LocalFqpSystemTests.java,v 1.3 2008-07-16 19:29:59 dervin Exp $ 
  */
 public class LocalFqpSystemTests extends StoryBook {
+    
+    public static final Log logger = LogFactory.getLog(LocalFqpSystemTests.class);
     
     private DataServiceDeploymentStory[] deployments;
     
@@ -56,18 +60,14 @@ public class LocalFqpSystemTests extends StoryBook {
     
     
     public void run(TestResult result) {
-        System.out.println("RUNNING TESTS");
-        System.out.println("RUNNING TESTS");
-        System.out.println("RUNNING TESTS");
+        logger.debug("Starting Local FQP Tests");
         super.run(result);
         cleanUp();
     }
     
     
     private void cleanUp() {
-        System.out.println("CLEANING UP TESTING RESOURCES");
-        System.out.println("CLEANING UP TESTING RESOURCES");
-        System.out.println("CLEANING UP TESTING RESOURCES");
+        logger.debug("Cleaning Up Local FQP Tests");
         for (DataServiceDeploymentStory deployment : deployments) {
             ServiceContainer container = deployment.getServiceContainer();
             try {
