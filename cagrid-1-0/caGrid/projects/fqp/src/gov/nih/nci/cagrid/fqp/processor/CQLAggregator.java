@@ -17,6 +17,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.globus.gsi.GlobusCredential;
 
 /** 
@@ -26,9 +28,11 @@ import org.globus.gsi.GlobusCredential;
  * @author David Ervin
  * 
  * @created Jun 26, 2008 2:10:45 PM
- * @version $Id: CQLAggregator.java,v 1.1 2008-07-15 15:34:21 dervin Exp $ 
+ * @version $Id: CQLAggregator.java,v 1.2 2008-07-16 20:06:40 dervin Exp $ 
  */
 public class CQLAggregator {
+    
+    private static final Log logger = LogFactory.getLog(CQLAggregator.class);
     
     public static final int DEFAULT_MAX_WORKER_THREADS = 5;
 
@@ -80,6 +84,7 @@ public class CQLAggregator {
         List<CQLObjectResult> objectResults = new LinkedList<CQLObjectResult>();
         
         // create thread pool executor with max of MAX_WORKER_THREADS
+        logger.debug("Creating CQL Aggregation execution thread pool of size " + numThreads);
         ExecutorService executor = Executors.newFixedThreadPool(numThreads);
         Map<String, FutureTask<CQLQueryResults>> workers = 
             new HashMap<String, FutureTask<CQLQueryResults>>();
@@ -113,11 +118,8 @@ public class CQLAggregator {
         } catch (ExecutionException ex) {
             throw new FederatedQueryProcessingException("Error executing aggregation in parallel: " + ex.getMessage(), ex);
         } finally {
-            System.out.println("SHUTTING DOWN EXECUTOR");
-            System.out.flush();
+            logger.debug("Shutting down CQL Aggregation execution thread pool");
             executor.shutdownNow();
-            System.out.println("SHUT DOWN EXECUTOR");
-            System.out.flush();
         }
         
         // generate the aggregate query result
@@ -144,11 +146,9 @@ public class CQLAggregator {
         
         
         public CQLQueryResults call() throws RemoteDataServiceException {
-            System.out.println("Querying " + serviceURL);
-            System.out.flush();
+            logger.debug("CQL Aggregator querying data service " + serviceURL);
             CQLQueryResults results = DataServiceQueryExecutor.queryDataService(query, serviceURL, credential);
-            System.out.println("Done with " + serviceURL);
-            System.out.flush();
+            logger.debug("CQL Aggregator done with " + serviceURL);
             return results;
         }
     }
