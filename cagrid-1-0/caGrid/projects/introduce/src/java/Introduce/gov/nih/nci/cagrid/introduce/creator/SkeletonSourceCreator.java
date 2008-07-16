@@ -2,6 +2,7 @@ package gov.nih.nci.cagrid.introduce.creator;
 
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
+import gov.nih.nci.cagrid.introduce.codegen.services.security.info.AuthorizationTemplateInfoHolder;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.common.SpecificServiceInformation;
@@ -23,6 +24,7 @@ import gov.nih.nci.cagrid.introduce.templates.service.globus.resource.SingletonR
 
 import java.io.File;
 import java.io.FileWriter;
+import java.util.HashMap;
 
 import org.apache.log4j.Logger;
 
@@ -122,8 +124,9 @@ public class SkeletonSourceCreator {
         providerImplFW.write(providerImplS);
         providerImplFW.close();
 
+        AuthorizationTemplateInfoHolder holder = new AuthorizationTemplateInfoHolder(new HashMap<String, String>(), new SpecificServiceInformation(info,service));
         ServiceAuthorizationTemplate authorizationT = new ServiceAuthorizationTemplate();
-        String authorizationS = authorizationT.generate(new SpecificServiceInformation(info, service));
+        String authorizationS = authorizationT.generate(holder);
         File authorizationF = new File(srcDir.getAbsolutePath() + File.separator + CommonTools.getPackageDir(service)
             + File.separator + "service" + File.separator + "globus" + File.separator + service.getName()
             + "Authorization.java");

@@ -16,8 +16,6 @@
     <conf name="skeleton" visibility="private"/>
     <conf name="schema.gridgrouper" visibility="private"/>
     <conf name="schema.grape" visibility="private"/>
-    <conf name="skeleton.gridgrouper" visibility="private"/>
-    <conf name="skeleton.csm" visibility="private"/>
 
     <conf name="impl" visibility="private" extends="default"/>
     <conf name="impl-test" visibility="private"/>
@@ -67,10 +65,6 @@
     <dependency rev="latest.integration" org="caGrid" name="service-security-provider" conf="skeleton->client;core->schemas"/>
     <dependency rev="latest.integration" org="caGrid" name="advertisement" conf="skeleton->default"/>
     <dependency rev="1.0" org="jdom" name="jdom" conf="skeleton->*"/>
-
-    <dependency rev="latest.integration" org="caGrid" name="gridgrouper" conf="skeleton.gridgrouper,core->client;schema.gridgrouper->schemas"/>
-    <dependency rev="latest.integration" org="caGrid" name="authz" conf="skeleton.csm->*"/>
-
 
     <!-- Extenernal Dependencies -->
     <dependency rev="1.0" org="wannheden" name="jetc-task" conf="impl->*"/>

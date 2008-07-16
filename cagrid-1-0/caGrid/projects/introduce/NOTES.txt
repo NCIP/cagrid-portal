@@ -28,6 +28,7 @@ of the method in the introduce.xml when it compares it to the list of methods.
 
 To Do:  
 
+create new icons for the secure methods in the methods tree
 
 finish persistent notification test (need to figure how to manage the container from two different client invocations)
 

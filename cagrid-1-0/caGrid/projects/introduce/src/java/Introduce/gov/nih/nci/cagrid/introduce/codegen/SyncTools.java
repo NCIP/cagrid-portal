@@ -188,7 +188,7 @@ public class SyncTools {
                                 IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME) + File.separator
                             + service.getName() + ".wsdl").getAbsolutePath());
                     } catch (Exception e) {
-                        logger.error(e);
+                        logger.error(e.getMessage(),e);
                     }
                     table = parser.getSymbolTable();
 
@@ -288,7 +288,7 @@ public class SyncTools {
                                         exception.setQname(new QName(service.getNamespace() + "/types", exception
                                             .getName()));
                                     } catch (Exception e) {
-                                       logger.error(e);
+                                       logger.error(e.getMessage(),e);
                                     }
                                 }
                             }
@@ -370,7 +370,7 @@ public class SyncTools {
         } catch (Exception e) {
             String mess = "ERROR: Unable to find all referenced elements in service wsdl and xsd.  Please make sure"
                 + " that if there are imported wsdl or xsd that they all exist and are in the right location and are well formed and valid.";
-            logger.error(e);
+            logger.error(mess,e);
             throw new Exception(mess, e);
         }
 

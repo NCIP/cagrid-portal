@@ -133,7 +133,7 @@
 			<property name="source.stubs.dir" location="${basedir}/schema" />
 			<property name="target.stubs.dir" location="${src.dir}/Introduce" />
 			<property name="wsdl.file" value="beans.wsdl" />
-			<property name="ns.excludes" value="-x http://www.cagrid.org/1/grape -x http://cagrid.nci.nih.gov/1/GridGrouper" />
+			<property name="ns.excludes" value="-x http://www.cagrid.org/1/grape" />
 		</ant>
 		<ant antfile="${build.stubs}" target="generateStubs" inheritall="false">
 			<property name="mapping.file" location="${basedir}/schema/namespace2package.mappings" />

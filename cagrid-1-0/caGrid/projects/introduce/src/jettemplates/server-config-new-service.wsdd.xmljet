@@ -15,4 +15,6 @@
         <parameter name="providers" value=""/>
         <parameter name="loadOnStartup" value="true"/>
         <parameter name="securityMetadata" value="ETC-PATH/<%=service.getName()%>-security-metadata.xml"/>
+        <parameter name="<%=serviceName.toLowerCase() %>-etcDirectoryPath" value="ETC-PATH" />
+        <parameter name="<%=serviceName.toLowerCase() %>-serviceName" value="<%=serviceName %>" />
     </service>

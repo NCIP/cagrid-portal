@@ -66,7 +66,7 @@ public class SkeletonCreator extends Task {
         } catch (Exception e1) {
             BuildException be = new BuildException(e1.getMessage());
             be.setStackTrace(e1.getStackTrace());
-            logger.error(be);
+            logger.error("Deserialization Error",be);
             throw be;
         }
 
@@ -126,7 +126,7 @@ public class SkeletonCreator extends Task {
         } catch (Exception e1) {
             BuildException be = new BuildException(e1.getMessage());
             be.setStackTrace(e1.getStackTrace());
-            logger.error(be);
+            logger.error("Serialization Error", be);
             throw be;
         }
 
@@ -205,7 +205,7 @@ public class SkeletonCreator extends Task {
         } catch (Exception e) {
             BuildException be = new BuildException(e.getMessage());
             be.setStackTrace(e.getStackTrace());
-            logger.error(be);
+            logger.error("Template Error",be);
             throw be;
         }
 
@@ -215,7 +215,7 @@ public class SkeletonCreator extends Task {
         } catch (Exception e) {
             BuildException be = new BuildException(e.getMessage());
             be.setStackTrace(e.getStackTrace());
-            logger.error(be);
+            logger.error("Serialization Error", be);
             throw be;
         }
 

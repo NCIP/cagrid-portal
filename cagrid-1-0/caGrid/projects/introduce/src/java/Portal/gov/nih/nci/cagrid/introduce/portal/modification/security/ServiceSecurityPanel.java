@@ -2,12 +2,14 @@ package gov.nih.nci.cagrid.introduce.portal.modification.security;
 
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.common.security.ProxyUtil;
-import gov.nih.nci.cagrid.gridgrouper.bean.MembershipExpression;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
-import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
+import gov.nih.nci.cagrid.introduce.beans.extension.AuthorizationExtensionDescriptionType;
+import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
+import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionsType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.security.AnonymousCommunication;
 import gov.nih.nci.cagrid.introduce.beans.security.GridMapAuthorization;
+import gov.nih.nci.cagrid.introduce.beans.security.IntroducePDPAuthorization;
 import gov.nih.nci.cagrid.introduce.beans.security.MethodSecurity;
 import gov.nih.nci.cagrid.introduce.beans.security.NoAuthorization;
 import gov.nih.nci.cagrid.introduce.beans.security.ProxyCredential;
@@ -21,8 +23,11 @@ import gov.nih.nci.cagrid.introduce.beans.security.ServiceSecurity;
 import gov.nih.nci.cagrid.introduce.beans.security.TransportLevelSecurity;
 import gov.nih.nci.cagrid.introduce.beans.security.X509Credential;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
-import gov.nih.nci.cagrid.introduce.common.CommonTools;
+import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
+import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
+import gov.nih.nci.cagrid.introduce.portal.extension.AbstractServiceAuthorizationPanel;
+import gov.nih.nci.cagrid.introduce.portal.extension.tools.ExtensionTools;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
@@ -30,7 +35,13 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -45,19 +56,14 @@ import javax.swing.JTabbedPane;
 import org.cagrid.gaards.pki.CertUtil;
 import org.cagrid.gaards.ui.common.CertificatePanel;
 import org.cagrid.gaards.ui.common.CredentialPanel;
-import org.cagrid.gaards.ui.gridgrouper.expressioneditor.GridGrouperExpressionEditor;
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.utils.CompositeErrorDialog;
-import java.awt.Insets;
 
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
- * @created Jun 22, 2005
- * @version $Id: mobiusEclipseCodeTemplates.xml,v 1.2 2005/04/19 14:58:02 oster
- *          Exp $
  */
 public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 
@@ -106,10 +112,6 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
     private final static String NO_AUTHORIZATION = "No Authorization";
 
     private final static String GRID_MAP_AUTHORIZATION = "Gridmap";
-
-    private final static String GRID_GROUPER_AUTHORIZATION = "Grid Grouper";
-
-    private final static String CSM_AUTHORIZATION = "Common Security Module (CSM)";
 
     private final static String CUSTOM_AUTHORIZATION = "Custom PDP Chain Authorization";
 
@@ -181,21 +183,20 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 
     private ServiceType service;
 
-    private GridGrouperExpressionEditor gridGrouper = null;
+    private Map<String, AbstractServiceAuthorizationPanel> authPanels;
 
-    private CSMPanel csmPanel = null;
-
-    private ServiceDescription description;
+    private ServiceInformation info;
 
     private CustomPDPPanel pdpPanel = null;
 
     private String previousAuthSelection;
 
 
-    public ServiceSecurityPanel(ServiceDescription description, ServiceType service) {
+    public ServiceSecurityPanel(ServiceInformation info, ServiceType service) {
         super();
-        this.description = description;
+        this.info = info;
         this.service = service;
+        authPanels = new HashMap<String, AbstractServiceAuthorizationPanel>();
         initialize();
         try {
             if (this.service.getServiceSecurity() != null) {
@@ -376,17 +377,38 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
                 GridMapAuthorization gma = new GridMapAuthorization();
                 gma.setGridMapFileLocation(((GridMapPanel) gridmapPanel).saveGridMapAndGetLocation());
                 sa.setGridMapAuthorization(gma);
-            } else if (authType.equals(GRID_GROUPER_AUTHORIZATION)) {
-                // TODO: Validate the expression
-                MembershipExpression exp = getGridGrouper().getMembershipExpression();
-                sa.setGridGrouperAuthorization(exp);
-            } else if (authType.equals(CSM_AUTHORIZATION)) {
-                CommonTools.setServiceProperty(description, CSMPanel.CSM_CONFIGURATION_FILE, "", false);
-                sa.setCSMAuthorization(getCsmPanel().getAuthorization());
             } else if (authType.equals(CUSTOM_AUTHORIZATION)) {
                 sa.setCustomPDPChainAuthorization(getPdpPanel().getAuthorization());
-            } else {
+            } else if (authType.equals(NO_AUTHORIZATION)) {
                 sa.setNoAuthorization(new NoAuthorization());
+            } else {
+                sa.setIntroducePDPAuthorization(new IntroducePDPAuthorization());
+                AuthorizationExtensionDescriptionType authExt = ExtensionsLoader.getInstance()
+                    .getAuthorizationExtensionByDisplayName(authType);
+                AbstractServiceAuthorizationPanel panel = authPanels.get(authExt.getDisplayName());
+                ExtensionType extensionType = panel.getAuthorizationExtensionData();
+                // need to add this extension type and replace what might have
+                // been there if it was there.
+                List<ExtensionType> newExtensionsList = new ArrayList<ExtensionType>();
+                if (service.getExtensions() != null && service.getExtensions().getExtension() != null) {
+                    for (int i = 0; i < service.getExtensions().getExtension().length; i++) {
+                        ExtensionType ext = service.getExtensions().getExtension(i);
+                        if (!ext.getExtensionType().equals(ExtensionsLoader.AUTHORIZATION_EXTENSION)) {
+                            newExtensionsList.add(ext);
+                        }
+                    }
+                }
+                newExtensionsList.add(extensionType);
+                ExtensionType[] newExtensions = new ExtensionType[newExtensionsList.size()];
+                newExtensionsList.toArray(newExtensions);
+                ExtensionsType extensions = new ExtensionsType();
+                extensions.setExtension(newExtensions);
+                service.setExtensions(extensions);
+
+            }
+            if (sa.getIntroducePDPAuthorization() == null) {
+                // need to remove the authorization extensions
+
             }
             ss.setServiceAuthorization(sa);
             return ss;
@@ -408,11 +430,13 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
                     tlsButton.setSelected(true);
                     tlsPanel.setTransportLevelSecurity(tls);
                 }
+
                 SecureConversation sc = ss.getSecureConversation();
                 if (sc != null) {
                     secureConversationButton.setSelected(true);
                     secureConversationPanel.setSecureConversation(sc);
                 }
+
                 SecureMessage sm = ss.getSecureMessage();
                 if (sm != null) {
                     secureMessageButton.setSelected(true);
@@ -446,15 +470,21 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
                             CompositeErrorDialog.showErrorDialog("No GridMap file specified!!!");
                             authorizationMechanism.setSelectedItem(NO_AUTHORIZATION);
                         }
-                    } else if (sa.getGridGrouperAuthorization() != null) {
-                        this.getGridGrouper().setExpression(sa.getGridGrouperAuthorization());
-                        authorizationMechanism.setSelectedItem(GRID_GROUPER_AUTHORIZATION);
-                    } else if (sa.getCSMAuthorization() != null) {
-                        this.getCsmPanel().setAuthorization(sa.getCSMAuthorization());
-                        authorizationMechanism.setSelectedItem(CSM_AUTHORIZATION);
                     } else if (sa.getCustomPDPChainAuthorization() != null) {
                         this.getPdpPanel().setAuthorization(sa.getCustomPDPChainAuthorization());
                         authorizationMechanism.setSelectedItem(CUSTOM_AUTHORIZATION);
+                    } else if(sa.getIntroducePDPAuthorization()!=null){
+                        //determine which auth extension is present
+                        if(service.getExtensions()!=null && service.getExtensions().getExtension()!=null){
+                            for (int i = 0; i < service.getExtensions().getExtension().length; i++) {
+                                ExtensionType ext = service.getExtensions().getExtension(i);
+                                if(ext.getExtensionType().equals(ExtensionsLoader.AUTHORIZATION_EXTENSION)){
+                                    AuthorizationExtensionDescriptionType extDesc = ExtensionsLoader.getInstance().getAuthorizationExtension(ext.getName());
+                                    authorizationMechanism.setSelectedItem(extDesc.getDisplayName());
+                                }
+                            }
+                        }
+                    
                     } else {
                         authorizationMechanism.setSelectedItem(NO_AUTHORIZATION);
                     }
@@ -550,9 +580,7 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
         if (isSecure()) {
             authorizationMechanism.setEnabled(true);
             String mech = (String) authorizationMechanism.getSelectedItem();
-
             authLayout.show(authPanel, mech);
-
         } else {
             authorizationMechanism.setEnabled(false);
             authLayout.show(authPanel, NO_AUTHORIZATION);
@@ -1137,8 +1165,8 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
                                 if (service.getMethods() != null && service.getMethods().getMethod() != null) {
                                     for (int methodI = 0; methodI < service.getMethods().getMethod().length; methodI++) {
                                         MethodType method = service.getMethods().getMethod(methodI);
-                                        if (!method.getName()
-                                            .equals(IntroduceConstants.SERVICE_SECURITY_METADATA_METHOD)) {
+                                        if (!method.getName().equals(
+                                            IntroduceConstants.SERVICE_SECURITY_METADATA_METHOD)) {
                                             MethodSecurity methodSec = method.getMethodSecurity();
                                             if (methodSec != null) {
                                                 methodSec.setAnonymousClients(null);
@@ -1163,9 +1191,15 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
             });
             authorizationMechanism.addItem(NO_AUTHORIZATION);
             authorizationMechanism.addItem(GRID_MAP_AUTHORIZATION);
-            authorizationMechanism.addItem(GRID_GROUPER_AUTHORIZATION);
-            authorizationMechanism.addItem(CSM_AUTHORIZATION);
             authorizationMechanism.addItem(CUSTOM_AUTHORIZATION);
+
+            List<AuthorizationExtensionDescriptionType> authExtensions = ExtensionsLoader.getInstance()
+                .getAuthorizationExtensions();
+            for (Iterator iterator = authExtensions.iterator(); iterator.hasNext();) {
+                AuthorizationExtensionDescriptionType authorizationExtensionDescriptionType = (AuthorizationExtensionDescriptionType) iterator
+                    .next();
+                authorizationMechanism.addItem(authorizationExtensionDescriptionType.getDisplayName());
+            }
         }
         return authorizationMechanism;
     }
@@ -1183,9 +1217,22 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
             authPanel.setLayout(authLayout);
             authPanel.add(getNoAuthorizationPanel(), getNoAuthorizationPanel().getName());
             authPanel.add(getGridmapPanel(), getGridmapPanel().getName());
-            authPanel.add(getGridGrouper(), getGridGrouper().getName());
-            authPanel.add(getCsmPanel(), getCsmPanel().getName());
             authPanel.add(getPdpPanel(), getPdpPanel().getName());
+            List<AuthorizationExtensionDescriptionType> authExtension = ExtensionsLoader.getInstance()
+                .getAuthorizationExtensions();
+            for (Iterator iterator = authExtension.iterator(); iterator.hasNext();) {
+                AuthorizationExtensionDescriptionType authorizationExtensionDescriptionType = (AuthorizationExtensionDescriptionType) iterator
+                    .next();
+                try {
+                    AbstractServiceAuthorizationPanel newAuthPanel = ExtensionTools.getServiceAuthorizationPanel(
+                        authorizationExtensionDescriptionType.getName(), info, service);
+                    authPanel.add(newAuthPanel, authorizationExtensionDescriptionType.getDisplayName());
+                    authPanels.put(authorizationExtensionDescriptionType.getDisplayName(), newAuthPanel);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
         }
         return authPanel;
     }
@@ -1287,35 +1334,6 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
             jPanel1.add(getAuthorizationMechanism(), gridBagConstraints5);
         }
         return jPanel1;
-    }
-
-
-    /**
-     * This method initializes gridGrouper
-     * 
-     * @return javax.swing.JPanel
-     */
-    private GridGrouperExpressionEditor getGridGrouper() {
-        if (gridGrouper == null) {
-            gridGrouper = new GridGrouperExpressionEditor(GridGrouperURLManager.getGridGroupers(),
-                GridGrouperURLManager.getLoadOnStartup());
-            gridGrouper.setName(GRID_GROUPER_AUTHORIZATION);
-        }
-        return gridGrouper;
-    }
-
-
-    /**
-     * This method initializes csmPanel
-     * 
-     * @return javax.swing.JPanel
-     */
-    private CSMPanel getCsmPanel() {
-        if (csmPanel == null) {
-            csmPanel = new CSMPanel(service.getName());
-            csmPanel.setName(CSM_AUTHORIZATION);
-        }
-        return csmPanel;
     }
 
 

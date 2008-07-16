@@ -1699,8 +1699,7 @@ public class MethodViewer extends javax.swing.JDialog {
 	 */
 	private JPanel getSecurityContainerPanel() {
 		if (securityContainerPanel == null) {
-			securityContainerPanel = new MethodSecurityPanel(info
-					.getServiceDescriptor(), info.getService(), method);
+			securityContainerPanel = new MethodSecurityPanel(info, info.getService(), method);
 			securityContainerPanel.setBorder(BorderFactory.createTitledBorder(
 					null, "Method Level Security Configuration",
 					TitledBorder.DEFAULT_JUSTIFICATION,

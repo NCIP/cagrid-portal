@@ -123,10 +123,12 @@ public class SecurityDescriptorGenerator {
 					usedServiceAuth = true;
 				} else if (auth.getCustomPDPChainAuthorization() !=null) {
 				    xml.append("<authz value=\"" + auth.getCustomPDPChainAuthorization().getPDPChain() + "\" />");
-				} else {
+				} else if (auth.getNoAuthorization()==null){
 					xml.append("<authz value=\"" + service.getName().toLowerCase() + ":" + service.getPackageName()
 						+ ".service.globus." + service.getName() + "Authorization" + "\" />");
 					usedServiceAuth = true;
+				} else {
+				    //dont write an authz method
 				}
 			}
 			if ((ss.getSecuritySetting() != null) && (ss.getSecuritySetting().equals(SecuritySetting.Custom))) {
@@ -154,7 +156,7 @@ public class SecurityDescriptorGenerator {
 				if ((method.getMethodSecurity() != null)
 					&& (method.getMethodSecurity().getMethodAuthorization() != null)) {
 					MethodAuthorization methAuth = method.getMethodSecurity().getMethodAuthorization();
-					if ((methAuth.getCSMAuthorization() != null) || (methAuth.getGridGrouperAuthorization() != null)) {
+					if ((methAuth.getInheritServiceAuthorization()!=null)) {
 						needMethodAuth = true;
 					}
 				}

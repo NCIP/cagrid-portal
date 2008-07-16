@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+
+<ivy-module version="2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="http://incubator.apache.org/ivy/schemas/ivy.xsd">
+
+  <info organisation="caGrid" module="csm-auth-extension" revision="${project.version}">
+    <license name="caGrid" url="http://www.cagrid.org/mwiki/index.php?title=CaGrid:LICENSE-1.1"/>
+    <description>CSM Introduce authorization extension</description>
+  </info>
+
+  <configurations>
+    <conf name="target_grid" visibility="private"/>
+    <conf name="impl" visibility="private" extends="full"/>
+
+    <!-- Public Configurations-->
+    <conf name="base" visibility="public"/>
+
+    <conf name="csmauth" visibility="public" extends="base"/>
+    
+    <conf name="endorsed" visibility="public"/>
+
+    <conf name="full" visibility="public" extends="csmauth"/>
+  </configurations>
+
+
+  <publications>
+    <artifact name="caGrid-${ivy.module}" conf="base" type="jar"/>
+  </publications>
+
+  <dependencies>
+    <dependency rev="${target.grid}" org="caGrid" name="target_grid"
+      conf="target_grid->urls"/>
+
+    <dependency rev="latest.integration" org="caGrid" name="core" conf="base->default"/>
+    <dependency rev="latest.integration" org="caGrid" name="introduce"
+      conf="csmauth->extension,serviceTools"/> 
+    <dependency rev="latest.integration" org="caGrid" name="authz" conf="csmauth->*"/>
+  </dependencies>
+</ivy-module>

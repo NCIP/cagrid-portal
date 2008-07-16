@@ -2,6 +2,7 @@ package gov.nih.nci.cagrid.introduce.codegen.services;
 
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
+import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
 import gov.nih.nci.cagrid.introduce.codegen.common.SyncTool;
 import gov.nih.nci.cagrid.introduce.codegen.common.SynchronizationException;
 import gov.nih.nci.cagrid.introduce.codegen.services.methods.SyncMethods;
@@ -18,6 +19,8 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.StringReader;
 
+import org.apache.log4j.Logger;
+
 
 /**
  * SyncMethodsOnDeployment
@@ -30,6 +33,8 @@ import java.io.StringReader;
  *          Exp $
  */
 public class SyncServices extends SyncTool {
+    
+    private static final Logger logger = Logger.getLogger(SyncServices.class);
 
     public SyncServices(File baseDirectory, ServiceInformation info) {
         super(baseDirectory, info);
@@ -108,6 +113,7 @@ public class SyncServices extends SyncTool {
                         }
                     }
                 } catch (Exception e) {
+                    logger.error(e.getMessage(),e);
                     throw new SynchronizationException(e.getMessage(), e);
                 }
             }

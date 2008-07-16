@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.introduce.portal.extension;
 
 import gov.nih.nci.cagrid.introduce.beans.extension.AuthorizationExtensionDescriptionType;
+import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 
@@ -13,8 +14,6 @@ public abstract class AbstractServiceAuthorizationPanel extends JPanel {
 	private ServiceInformation serviceInfo;
 
 	private ServiceType service;
-	
-	private boolean isUsed;
 
 
 	public AbstractServiceAuthorizationPanel(
@@ -23,17 +22,7 @@ public abstract class AbstractServiceAuthorizationPanel extends JPanel {
 		this.authDesc = authDesc;
 		this.serviceInfo = serviceInfo;
 		this.service = service;
-		this.isUsed = false;
 	}
-	
-	public boolean isUsed() {
-		return isUsed;
-	}
-
-	public void setUsed(boolean isUsed) {
-		this.isUsed = isUsed;
-	}
-
 
 	public AuthorizationExtensionDescriptionType getAuthorizationExtensionDescriptionType() {
 		return authDesc;
@@ -47,5 +36,5 @@ public abstract class AbstractServiceAuthorizationPanel extends JPanel {
 		return service;
 	}
 
-	public abstract void save() throws Exception;
+	public abstract ExtensionType getAuthorizationExtensionData() throws Exception;
 }

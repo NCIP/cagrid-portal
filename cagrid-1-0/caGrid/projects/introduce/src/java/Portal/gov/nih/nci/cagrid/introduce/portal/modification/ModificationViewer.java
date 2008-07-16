@@ -1205,13 +1205,11 @@ public class ModificationViewer extends ApplicationComponent {
                             && (ModificationViewer.this.info.getServices().getService() != null)) {
                             for (int serviceI = 0; serviceI < ModificationViewer.this.info.getServices().getService().length; serviceI++) {
                                 ServiceType service = ModificationViewer.this.info.getServices().getService(serviceI);
-                                copyRequiredJars(service.getServiceSecurity());
                                 if ((service.getMethods() != null) && (service.getMethods().getMethod() != null)) {
                                     List methodNames = new ArrayList();
                                     if ((service.getMethods() != null) && (service.getMethods().getMethod() != null)) {
                                         for (int methodI = 0; methodI < service.getMethods().getMethod().length; methodI++) {
                                             MethodType method = service.getMethods().getMethod(methodI);
-                                            copyRequiredJars(method.getMethodSecurity());
                                             if (method.getName().length() == 0) {
                                                 setErrorMessage("The service " + service.getName()
                                                     + " has a method with no name");
@@ -1376,67 +1374,6 @@ public class ModificationViewer extends ApplicationComponent {
         }
     }
 
-
-    private void copyRequiredJars(ServiceSecurity sec) throws Exception {
-        if (sec != null) {
-            ServiceAuthorization auth = sec.getServiceAuthorization();
-            if (auth != null) {
-                if (auth.getGridGrouperAuthorization() != null) {
-                    copyGridGrouperJars();
-                } else if (auth.getCSMAuthorization() != null) {
-                    copyCSMJars();
-                }
-            }
-        }
-    }
-
-
-    private void copyRequiredJars(MethodSecurity sec) throws Exception {
-        if (sec != null) {
-            MethodAuthorization auth = sec.getMethodAuthorization();
-            if (auth != null) {
-                if (auth.getGridGrouperAuthorization() != null) {
-                    copyGridGrouperJars();
-                } else if (auth.getCSMAuthorization() != null) {
-                    copyCSMJars();
-                }
-            }
-        }
-    }
-
-
-    private void copyGridGrouperJars() throws Exception {
-        File sourceDir = new File("ext" + File.separator + "skeleton" + File.separator + "gridgrouper" + File.separator
-            + "lib");
-        addJarsToService(sourceDir);
-    }
-
-
-    private void copyCSMJars() throws Exception {
-        File src = new File("ext" + File.separator + "skeleton" + File.separator + "csm" + File.separator + "lib");
-        addJarsToService(src);
-    }
-
-
-    private void addJarsToService(File sourceDir) throws Exception {
-        Set existingLibs = new HashSet();
-        Set addedLibs = new HashSet();
-
-        File serviceLibDir = new File(this.info.getBaseDirectory() + File.separator + "lib");
-        existingLibs.addAll(Utils.recursiveListFiles(serviceLibDir, new FileFilters.JarFileFilter()));
-
-        Utils.copyDirectory(sourceDir, serviceLibDir);
-        addedLibs.addAll(Utils.recursiveListFiles(serviceLibDir, new FileFilters.JarFileFilter()));
-
-        // compute the set difference from before and after library copy
-        addedLibs.removeAll(existingLibs);
-
-        // add the new jars to the Eclipse .classpath file
-        File[] addedJars = new File[addedLibs.size()];
-        addedLibs.toArray(addedJars);
-        File classpathFile = new File(this.info.getBaseDirectory().getAbsolutePath() + File.separator + ".classpath");
-        ExtensionUtilities.syncEclipseClasspath(classpathFile, addedJars);
-    }
 
 
     /**

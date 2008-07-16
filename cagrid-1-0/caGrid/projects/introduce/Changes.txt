@@ -6,7 +6,7 @@
 	-- if introduce imports the schema it will only set namespace excludes or type maps for that schema
 	-- if it is desired to do this for the schemas that schema imports than those schemas must be added and handled
 	   appropriately individually.  This is different than in prior versions.
-	-- Prior versions of introduce would simple namespace exclude any namespace that was imported from a schema
+	-- Prior versions of introduce would simple namespace exclude any namespace that were imported from a schema
 	   that was set to generate stubs false.  However this is not always the desired behavior
 -- Added button to enable user to control whether or not stubs will be generated for imported schema.
 -- Removed ETC_LOCATION from generated services JNDI and removed setter from the service configuration.
@@ -15,7 +15,6 @@
 -- Added new extension type called INTRODUCE_GDE which enables adding grape components to the UI through extensions
 -- Added another subscribe method to base clients that takes in a NotificationCallback so that clients do have to 
    overload the deliver method if they want to implement a notification callback on there own or use another.
-   
  
 
 1.1 - 1.2

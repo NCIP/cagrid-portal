@@ -322,12 +322,8 @@ public final class CommonTools {
         } else if (!Utils.equals(ss.getTransportLevelSecurity(), ms.getTransportLevelSecurity())) {
             return false;
         } else if ((!Utils.equals(ss.getServiceAuthorization(), ms.getMethodAuthorization()))
-            && (!Utils.equals(ss.getServiceAuthorization().getGridGrouperAuthorization(), ms.getMethodAuthorization()
-                .getGridGrouperAuthorization()))) {
-            return false;
-        } else if ((!Utils.equals(ss.getServiceAuthorization(), ms.getMethodAuthorization()))
-            && (!Utils.equals(ss.getServiceAuthorization().getCSMAuthorization(), ms.getMethodAuthorization()
-                .getCSMAuthorization()))) {
+            && (!Utils.equals(ss.getServiceAuthorization().getIntroducePDPAuthorization(), ms.getMethodAuthorization()
+                .getIntroducePDPAuthorization()))) {
             return false;
         } else {
             return true;
