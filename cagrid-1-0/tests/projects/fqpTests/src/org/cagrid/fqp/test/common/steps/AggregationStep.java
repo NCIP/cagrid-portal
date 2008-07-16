@@ -26,9 +26,11 @@ import org.cagrid.fqp.test.common.FederatedQueryProcessorHelper;
  * @author David Ervin
  * 
  * @created Jul 10, 2008 12:17:40 PM
- * @version $Id: AggregationStep.java,v 1.3 2008-07-14 21:09:52 dervin Exp $ 
+ * @version $Id: AggregationStep.java,v 1.4 2008-07-16 20:01:19 dervin Exp $ 
  */
 public class AggregationStep extends Step {
+    
+    public static final String CLIENT_WSDD = "/resources/wsdd/client-config.wsdd";
     
     private String queryFilename;
     private String goldFilename;
@@ -89,7 +91,7 @@ public class AggregationStep extends Step {
             fail("Unable to read gold results file " + goldFilename);
         }
         try {
-            InputStream wsddStream = getClass().getResourceAsStream("/resources/wsdd/client-config.wsdd");
+            InputStream wsddStream = getClass().getResourceAsStream(CLIENT_WSDD);
             assertNotNull("Could not locate client-config.wsdd", wsddStream);
             goldResults = (CQLQueryResults) Utils.deserializeObject(
                 new InputStreamReader(fis), CQLQueryResults.class, wsddStream);
@@ -118,9 +120,9 @@ public class AggregationStep extends Step {
     private void verifyObjectResults(CQLQueryResults testResults, CQLQueryResults goldResults) {
         // iterators to extract objects from the results
         CQLQueryResultsIterator testIter = new CQLQueryResultsIterator(
-            testResults, getClass().getResourceAsStream("/resources/wsdd/client-config.wsdd"));
+            testResults, getClass().getResourceAsStream(CLIENT_WSDD));
         CQLQueryResultsIterator goldIter = new CQLQueryResultsIterator(
-            goldResults, getClass().getResourceAsStream("/resources/wsdd/client-config.wsdd"));
+            goldResults, getClass().getResourceAsStream(CLIENT_WSDD));
         
         // turn results into lists
         List testItems = new LinkedList();
