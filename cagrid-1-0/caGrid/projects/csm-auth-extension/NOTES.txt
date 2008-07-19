@@ -1,2 +1,1 @@
-Need to set the default grouper urls in the extension.xml
-Need to validate that the extension data is being used properly
+csmapi jar is not being copied in the ivy resolve?

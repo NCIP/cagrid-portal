@@ -15,6 +15,9 @@
 -- Added new extension type called INTRODUCE_GDE which enables adding grape components to the UI through extensions
 -- Added another subscribe method to base clients that takes in a NotificationCallback so that clients do have to 
    overload the deliver method if they want to implement a notification callback on there own or use another.
+-- Complete refactor of authorization within introduce.  Introduce now has a Authorization Extension that enables 
+   authorization plugins to the Introduce Gernated PDP.  This is much cleaner and removes the hard coded gridgrouper
+   and csm support and now opens the doors to other authorization plugins to be generated rapidly.
  
 
 1.1 - 1.2
