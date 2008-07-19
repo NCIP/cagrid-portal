@@ -118,7 +118,7 @@ public class <%=info.getService().getName()%>Authorization implements PDP {
 		      
 		      %>
 		// authorization using service authorization from the <%=extension.getName() %> extension
-		((AuthorizationExtension)authorizationClassMap.get("<%=extension.getName() %>")).authorizeService(peerSubject,context);
+		((AuthorizationExtension)authorizationClassMap.get("<%=extension.getName() %>")).authorizeService(peerSubject,context,operation);
 		 	  <%
 		      }
 		      
@@ -145,7 +145,7 @@ public class <%=info.getService().getName()%>Authorization implements PDP {
 		      
 		      %>
 		// authorization using service authorization from the <%=extension.getName() %> extension
-		((AuthorizationExtension)authorizationClassMap.get("<%=extension.getName() %>")).authorizeService(peerSubject,context);
+		((AuthorizationExtension)authorizationClassMap.get("<%=extension.getName() %>")).authorizeService(peerSubject,context,operation);
 		 	  <%
 		      }
 		      

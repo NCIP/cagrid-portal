@@ -43,7 +43,7 @@ public interface AuthorizationExtension {
      * @param context
      * @throws RemoteException
      */
-    public void authorizeService(Subject peerSubject, MessageContext context) throws AuthorizationException;
+    public void authorizeService(Subject peerSubject, MessageContext context, QName operation) throws AuthorizationException;
 
     
     /**
