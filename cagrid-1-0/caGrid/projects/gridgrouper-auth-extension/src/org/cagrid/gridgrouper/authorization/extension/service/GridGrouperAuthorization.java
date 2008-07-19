@@ -45,7 +45,7 @@ public class GridGrouperAuthorization implements AuthorizationExtension {
     }
 
 
-    public void authorizeService(Subject subject, MessageContext context) throws AuthorizationException {
+    public void authorizeService(Subject subject, MessageContext context, QName operation) throws AuthorizationException {
         if (authorization.getMembershipExpression() != null) {
             boolean authorized = false;
             try {
