@@ -3,7 +3,7 @@
 <ivy-module version="2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="http://incubator.apache.org/ivy/schemas/ivy.xsd">
 
-	<info organisation="cacore" module="csm" revision="4.1">
+	<info organisation="cacore" module="csm" revision="4.0.1">
 		<license name="CSM License" url="http://ncicb.nci.nih.gov/download/csmlicenseagreement.jsp"/>
 		<description homepage="http://ncicb.nci.nih.gov/NCICB/infrastructure/cacore_overview/csm">
 			By providing a comprehensive solution to common security objectives, the NCICB Common
