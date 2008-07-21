@@ -72,7 +72,7 @@ public class GridGrouperAuthorizationCodegenPostProcessor implements Authorizati
                                 Constants.GRID_GROUPER_EXTENSION_NAME)) {
                             try {
                                 String memexpString = AnyHelper.toSingleString(method.getExtensions()
-                                    .getExtension(i).getExtensionData().get_any());
+                                    .getExtension(j).getExtensionData().get_any());
                                 StringReader reader = new StringReader(memexpString);
                                 MembershipExpression exp = (MembershipExpression) Utils.deserializeObject(reader,
                                     gov.nih.nci.cagrid.gridgrouper.bean.MembershipExpression.class);
