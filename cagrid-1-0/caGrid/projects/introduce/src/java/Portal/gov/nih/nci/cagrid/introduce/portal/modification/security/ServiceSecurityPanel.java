@@ -406,11 +406,27 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
                 service.setExtensions(extensions);
 
             }
+            
+            ss.setServiceAuthorization(sa);
+            
             if (sa.getIntroducePDPAuthorization() == null) {
                 // need to remove the authorization extensions
-
+                List<ExtensionType> newExtensionsList = new ArrayList<ExtensionType>();
+                if (service.getExtensions() != null && service.getExtensions().getExtension() != null) {
+                    for (int i = 0; i < service.getExtensions().getExtension().length; i++) {
+                        ExtensionType ext = service.getExtensions().getExtension(i);
+                        if (!ext.getExtensionType().equals(ExtensionsLoader.AUTHORIZATION_EXTENSION)) {
+                            newExtensionsList.add(ext);
+                        }
+                    }
+                }
+                ExtensionType[] newExtensions = new ExtensionType[newExtensionsList.size()];
+                newExtensionsList.toArray(newExtensions);
+                ExtensionsType extensions = new ExtensionsType();
+                extensions.setExtension(newExtensions);
+                service.setExtensions(extensions);
             }
-            ss.setServiceAuthorization(sa);
+            
             return ss;
         } else {
             return null;

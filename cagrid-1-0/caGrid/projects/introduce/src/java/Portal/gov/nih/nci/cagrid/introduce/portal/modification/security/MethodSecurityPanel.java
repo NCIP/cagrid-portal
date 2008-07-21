@@ -339,7 +339,27 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
                 method.setExtensions(extensions);
 
             }
+            
             ms.setMethodAuthorization(ma);
+            
+            if(ms.getMethodAuthorization().getIntroducePDPAuthorization()==null){
+                //clean out authorization extensions....
+                List<ExtensionType> newExtensionsList = new ArrayList<ExtensionType>();
+                if (method.getExtensions() != null && method.getExtensions().getExtension() != null) {
+                    for (int i = 0; i < method.getExtensions().getExtension().length; i++) {
+                        ExtensionType ext = method.getExtensions().getExtension(i);
+                        if (!ext.getExtensionType().equals(ExtensionsLoader.AUTHORIZATION_EXTENSION)) {
+                            newExtensionsList.add(ext);
+                        }
+                    }
+                }
+                ExtensionType[] newExtensions = new ExtensionType[newExtensionsList.size()];
+                newExtensionsList.toArray(newExtensions);
+                ExtensionsType extensions = new ExtensionsType();
+                extensions.setExtension(newExtensions);
+                method.setExtensions(extensions);
+            }
+            
         }
         if (CommonTools.equals(serviceSecurity, ms)) {
             return null;
