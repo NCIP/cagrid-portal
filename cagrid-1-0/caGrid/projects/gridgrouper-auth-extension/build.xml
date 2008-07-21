@@ -189,14 +189,18 @@ GSBT - Globus Service Build Tools
 
 		<copy overwrite="true" todir="${introduce.extensions.dir}/gridgrouper_auth/lib">
 			<fileset dir="ext/dependencies/impl/jars">
-				<include name="caGrid-gridgrouper*common*.jar" />
-				<include name="caGrid-gridgrouper*client*.jar" />
-				<include name="caGrid-gridgrouper*stubs*.jar" />
+				<include name="*.jar" />
+				<exclude name="*caGrid-Introduce*.jar"/>
+				<exclude name="*caGrid-ServiceSecurity*.jar"/>
+				<exclude name="*caGrid-grape-*.jar"/>
+				<exclude name="*caGrid-gaards-*.jar"/>
+				<exclude name="*caGrid-core-*.jar"/>
 			</fileset>
 		</copy>
 
 		<!-- extension description file -->
 		<copy overwrite="true" todir="${introduce.extensions.dir}/gridgrouper_auth" file="extension/extension.xml" />
+		
 		<!-- libraries -->
 		<copy overwrite="true" todir="${introduce.extensions.dir}/lib">
 			<fileset dir="build/jars">

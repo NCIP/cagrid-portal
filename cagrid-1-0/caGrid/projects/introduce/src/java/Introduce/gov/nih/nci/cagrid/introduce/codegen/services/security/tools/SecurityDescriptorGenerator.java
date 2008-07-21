@@ -156,7 +156,7 @@ public class SecurityDescriptorGenerator {
 				if ((method.getMethodSecurity() != null)
 					&& (method.getMethodSecurity().getMethodAuthorization() != null)) {
 					MethodAuthorization methAuth = method.getMethodSecurity().getMethodAuthorization();
-					if ((methAuth.getInheritServiceAuthorization()!=null)) {
+					if ((methAuth.getIntroducePDPAuthorization()!=null)) {
 						needMethodAuth = true;
 					}
 				}
