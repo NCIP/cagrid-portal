@@ -93,6 +93,5 @@
 	<classpathentry kind="lib" path="ext/dependencies/impl/jars/jta-1.0.1B.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/impl/jars/jtds-1.2.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/impl/jars/mysql-connector-java-3.0.16-ga-bin.jar"/>
-	<classpathentry kind="lib" path="lib/csmapi.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
