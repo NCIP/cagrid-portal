@@ -75,8 +75,8 @@ public class FileHelper
 	{
 		org.w3c.dom.Document document = null;
 		InputStream schemaFileInputStream = getFileAsStream(schemaFileName);
-		URL propertiesFileURL = getFileAsURL(propertiesFileName);
-		
+		//URL propertiesFileURL = getFileAsURL(propertiesFileName);
+		InputStream propertyFileInputStream = getFileAsStream(propertiesFileName);
     	DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
     	documentBuilderFactory.setNamespaceAware(true);
     	documentBuilderFactory.setValidating(true);
@@ -92,7 +92,7 @@ public class FileHelper
 		}
     	try 
     	{
-			document = (org.w3c.dom.Document) documentBuilder.parse(propertiesFileURL.getPath());
+			document = (org.w3c.dom.Document) documentBuilder.parse(propertyFileInputStream);
 		} 
     	catch (SAXException e) 
     	{
