@@ -38,8 +38,9 @@ public class StartSyncGTSServlet extends HttpServlet
 				
 				InputStream fileInputStream = fileHelper.getFileAsStream("sync-description.xml");
 				//Load Sync Description
-				SyncDescription description = (SyncDescription) Utils.deserializeObject(new InputStreamReader(fileInputStream),SyncDescription.class);
-
+				final InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
+				SyncDescription description = (SyncDescription) Utils.deserializeObject(inputStreamReader,SyncDescription.class);
+				inputStreamReader.close();
 				// Sync with the Trust Fabric Once
 				SyncGTS.getInstance().syncAndResyncInBackground(description, false);
 			}

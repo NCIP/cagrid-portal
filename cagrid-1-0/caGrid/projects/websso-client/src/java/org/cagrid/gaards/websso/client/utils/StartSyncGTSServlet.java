@@ -29,7 +29,9 @@ public class StartSyncGTSServlet extends HttpServlet
 		{
 			final ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 			InputStream inputStream = classLoader.getResourceAsStream("sync-description.xml");
-			SyncDescription description = (SyncDescription) Utils.deserializeObject(new InputStreamReader(inputStream),SyncDescription.class);
+			final InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+			SyncDescription description = (SyncDescription) Utils.deserializeObject(inputStreamReader,SyncDescription.class);
+			inputStreamReader.close();
 			SyncGTS.getInstance().syncAndResyncInBackground(description, false);
     	}
 		catch (Exception e) 
