@@ -182,6 +182,7 @@
 		p:centralAuthenticationService-ref="centralAuthenticationService"
 		p:logoutView="casLogoutView"
 		p:warnCookieGenerator-ref="warnCookieGenerator"
+		p:followServiceRedirects="true"
 		p:ticketGrantingTicketCookieGenerator-ref="ticketGrantingTicketCookieGenerator" />
 	
 	<bean id="initialFlowSetupAction" class="org.jasig.cas.web.flow.InitialFlowSetupAction"
