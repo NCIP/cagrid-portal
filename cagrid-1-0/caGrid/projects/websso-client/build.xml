@@ -49,6 +49,7 @@
 				<include name="cryptix-asn1.jar" />
 				<include name="wss4j.jar" />
 				<include name="xalan.jar" />
+				<include name="xmlsec.jar" />
 				<include name="jce-jdk13-125.jar" />
 			</fileset>
 		</copy>
