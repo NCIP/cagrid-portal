@@ -15,11 +15,11 @@ import org.cagrid.gaards.dorian.stubs.types.UserPolicyFault;
  */
 
 public class AutoApprovalPolicy extends AccountPolicy {
-	public void applyPolicy(TrustedIdP idp, IFSUser user) throws DorianInternalFault, UserPolicyFault {
+	public void applyPolicy(TrustedIdP idp, GridUser user) throws DorianInternalFault, UserPolicyFault {
 		UserManager um = getUserManager();
 		// First we approve if the user has not been approved.
-		if (user.getUserStatus().equals(IFSUserStatus.Pending)) {
-			user.setUserStatus(IFSUserStatus.Active);
+		if (user.getUserStatus().equals(GridUserStatus.Pending)) {
+			user.setUserStatus(GridUserStatus.Active);
 			try {
 				um.updateUser(user);
 			} catch (Exception e) {

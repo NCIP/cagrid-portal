@@ -113,29 +113,19 @@
         <ns2:Fault description="Client does not have permission to perform the request." name="PermissionDeniedFault"/>
        </ns2:faultCollection>
       </ns2:Operation>
-      <ns2:Operation description="Obtain a list of grid users accounts within the Dorian, meeting a specified search criteria." name="findIFSUsers">
+      <ns2:Operation description="" name="findGridUsers">
        <ns2:inputParameterCollection>
-        <ns2:InputParameter qName="ns20:IFSUserFilter" dimensionality="1" index="0" isArray="false" isRequired="false" name="filter" xmlns:ns20="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
+        <ns2:InputParameter qName="ns20:GridUserFilter" dimensionality="1" index="0" isArray="false" isRequired="false" name="filter" xmlns:ns20="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
        </ns2:inputParameterCollection>
-       <ns2:Output qName="ns21:IFSUser" dimensionality="1" isArray="true" xmlns:ns21="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
+       <ns2:Output qName="ns21:GridUser" dimensionality="1" isArray="true" xmlns:ns21="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
        <ns2:faultCollection>
         <ns2:Fault description="An unexpected internal Dorian error." name="DorianInternalFault"/>
         <ns2:Fault description="Client does not have permission to perform the request." name="PermissionDeniedFault"/>
        </ns2:faultCollection>
       </ns2:Operation>
-      <ns2:Operation description="" name="updateIFSUser">
+      <ns2:Operation description="" name="updateGridUser">
        <ns2:inputParameterCollection>
-        <ns2:InputParameter qName="ns22:IFSUser" dimensionality="1" index="0" isArray="false" isRequired="false" name="user" xmlns:ns22="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
-       </ns2:inputParameterCollection>
-       <ns2:faultCollection>
-        <ns2:Fault description="An unexpected internal Dorian error." name="DorianInternalFault"/>
-        <ns2:Fault description="Invalid user specified." name="InvalidUserFault"/>
-        <ns2:Fault description="Client does not have permission to perform the request." name="PermissionDeniedFault"/>
-       </ns2:faultCollection>
-      </ns2:Operation>
-      <ns2:Operation description="Removes a grid user account." name="removeIFSUser">
-       <ns2:inputParameterCollection>
-        <ns2:InputParameter qName="ns23:IFSUser" dimensionality="1" index="0" isArray="false" isRequired="false" name="user" xmlns:ns23="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
+        <ns2:InputParameter qName="ns22:GridUser" dimensionality="1" index="0" isArray="false" isRequired="false" name="user" xmlns:ns22="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
        </ns2:inputParameterCollection>
        <ns2:faultCollection>
         <ns2:Fault description="An unexpected internal Dorian error." name="DorianInternalFault"/>
@@ -143,20 +133,30 @@
         <ns2:Fault description="Client does not have permission to perform the request." name="PermissionDeniedFault"/>
        </ns2:faultCollection>
       </ns2:Operation>
-      <ns2:Operation description="Renews a grid user's long term credentials." name="renewIFSUserCredentials">
+      <ns2:Operation description="" name="removeGridUser">
        <ns2:inputParameterCollection>
-        <ns2:InputParameter qName="ns24:IFSUser" dimensionality="1" index="0" isArray="false" isRequired="false" name="user" xmlns:ns24="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
+        <ns2:InputParameter qName="ns23:GridUser" dimensionality="1" index="0" isArray="false" isRequired="false" name="user" xmlns:ns23="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
        </ns2:inputParameterCollection>
-       <ns2:Output qName="ns25:IFSUser" dimensionality="1" isArray="false" xmlns:ns25="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
        <ns2:faultCollection>
         <ns2:Fault description="An unexpected internal Dorian error." name="DorianInternalFault"/>
         <ns2:Fault description="Invalid user specified." name="InvalidUserFault"/>
         <ns2:Fault description="Client does not have permission to perform the request." name="PermissionDeniedFault"/>
        </ns2:faultCollection>
       </ns2:Operation>
-      <ns2:Operation description="Get a list of the Trusted IdP user policies supported by Dorian." name="getIFSUserPolicies">
+      <ns2:Operation description="" name="renewGridUserCredentials">
+       <ns2:inputParameterCollection>
+        <ns2:InputParameter qName="ns24:GridUser" dimensionality="1" index="0" isArray="false" isRequired="false" name="user" xmlns:ns24="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
+       </ns2:inputParameterCollection>
+       <ns2:Output qName="ns25:GridUser" dimensionality="1" isArray="false" xmlns:ns25="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
+       <ns2:faultCollection>
+        <ns2:Fault description="An unexpected internal Dorian error." name="DorianInternalFault"/>
+        <ns2:Fault description="Invalid user specified." name="InvalidUserFault"/>
+        <ns2:Fault description="Client does not have permission to perform the request." name="PermissionDeniedFault"/>
+       </ns2:faultCollection>
+      </ns2:Operation>
+      <ns2:Operation description="" name="getGridUserPolicies">
        <ns2:inputParameterCollection/>
-       <ns2:Output qName="ns26:IFSUserPolicy" dimensionality="1" isArray="true" xmlns:ns26="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
+       <ns2:Output qName="ns26:GridUserPolicy" dimensionality="1" isArray="true" xmlns:ns26="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
        <ns2:faultCollection>
         <ns2:Fault description="An unexpected internal Dorian error." name="DorianInternalFault"/>
         <ns2:Fault description="Client does not have permission to perform the request." name="PermissionDeniedFault"/>

@@ -10,7 +10,7 @@ import org.cagrid.gaards.dorian.ca.CertificateAuthority;
 import org.cagrid.gaards.dorian.ca.CertificateAuthorityProperties;
 import org.cagrid.gaards.dorian.federation.AutoApprovalAutoRenewalPolicy;
 import org.cagrid.gaards.dorian.federation.AutoApprovalPolicy;
-import org.cagrid.gaards.dorian.federation.IFSUserPolicy;
+import org.cagrid.gaards.dorian.federation.GridUserPolicy;
 import org.cagrid.gaards.dorian.federation.IdentityFederationProperties;
 import org.cagrid.gaards.dorian.federation.ManualApprovalAutoRenewalPolicy;
 import org.cagrid.gaards.dorian.federation.ManualApprovalPolicy;
@@ -107,15 +107,15 @@ public class Utils {
 		return getDorianIdPUserId(policy, "Dorian IdP", caSubject, uid);
 	}
 
-	public static IFSUserPolicy[] getUserPolicies() {
-		IFSUserPolicy[] policies = new IFSUserPolicy[4];
-		policies[0] = new IFSUserPolicy(ManualApprovalAutoRenewalPolicy.class
+	public static GridUserPolicy[] getUserPolicies() {
+		GridUserPolicy[] policies = new GridUserPolicy[4];
+		policies[0] = new GridUserPolicy(ManualApprovalAutoRenewalPolicy.class
 				.getName(), "");
-		policies[1] = new IFSUserPolicy(AutoApprovalAutoRenewalPolicy.class
+		policies[1] = new GridUserPolicy(AutoApprovalAutoRenewalPolicy.class
 				.getName(), "");
-		policies[2] = new IFSUserPolicy(ManualApprovalPolicy.class.getName(),
+		policies[2] = new GridUserPolicy(ManualApprovalPolicy.class.getName(),
 				"");
-		policies[3] = new IFSUserPolicy(AutoApprovalPolicy.class.getName(), "");
+		policies[3] = new GridUserPolicy(AutoApprovalPolicy.class.getName(), "");
 		return policies;
 	}
 

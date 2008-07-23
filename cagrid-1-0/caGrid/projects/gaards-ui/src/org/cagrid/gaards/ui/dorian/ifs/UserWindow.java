@@ -18,7 +18,7 @@ import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
 import org.cagrid.gaards.dorian.client.GridAdministrationClient;
-import org.cagrid.gaards.dorian.federation.IFSUser;
+import org.cagrid.gaards.dorian.federation.GridUser;
 import org.cagrid.gaards.dorian.federation.TrustedIdP;
 import org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault;
 import org.cagrid.gaards.pki.CertUtil;
@@ -36,7 +36,7 @@ import org.globus.gsi.GlobusCredential;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: UserWindow.java,v 1.7 2008-07-07 18:47:48 langella Exp $
+ * @version $Id: UserWindow.java,v 1.8 2008-07-23 18:12:37 langella Exp $
  */
 public class UserWindow extends ApplicationComponent {
 
@@ -64,7 +64,7 @@ public class UserWindow extends ApplicationComponent {
 
 	private String serviceId;
 
-	private IFSUser user;
+	private GridUser user;
 
 	private JTextField service = null;
 
@@ -115,7 +115,7 @@ public class UserWindow extends ApplicationComponent {
 	/**
 	 * This is the default constructor
 	 */
-	public UserWindow(String serviceId, GlobusCredential proxy, IFSUser u,
+	public UserWindow(String serviceId, GlobusCredential proxy, GridUser u,
 			TrustedIdP idp) throws Exception {
 		super();
 		this.serviceId = serviceId;

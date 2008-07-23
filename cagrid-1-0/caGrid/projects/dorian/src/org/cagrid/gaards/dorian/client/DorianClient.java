@@ -222,58 +222,58 @@ public class DorianClient extends ServiceSecurityClient implements DorianI {
     }
   }
 
-  public org.cagrid.gaards.dorian.federation.IFSUser[] findIFSUsers(org.cagrid.gaards.dorian.federation.IFSUserFilter filter) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault {
+  public org.cagrid.gaards.dorian.federation.GridUser[] findGridUsers(org.cagrid.gaards.dorian.federation.GridUserFilter filter) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault {
     synchronized(portTypeMutex){
-      configureStubSecurity((Stub)portType,"findIFSUsers");
-    org.cagrid.gaards.dorian.stubs.FindIFSUsersRequest params = new org.cagrid.gaards.dorian.stubs.FindIFSUsersRequest();
-    org.cagrid.gaards.dorian.stubs.FindIFSUsersRequestFilter filterContainer = new org.cagrid.gaards.dorian.stubs.FindIFSUsersRequestFilter();
-    filterContainer.setIFSUserFilter(filter);
+      configureStubSecurity((Stub)portType,"findGridUsers");
+    org.cagrid.gaards.dorian.stubs.FindGridUsersRequest params = new org.cagrid.gaards.dorian.stubs.FindGridUsersRequest();
+    org.cagrid.gaards.dorian.stubs.FindGridUsersRequestFilter filterContainer = new org.cagrid.gaards.dorian.stubs.FindGridUsersRequestFilter();
+    filterContainer.setGridUserFilter(filter);
     params.setFilter(filterContainer);
-    org.cagrid.gaards.dorian.stubs.FindIFSUsersResponse boxedResult = portType.findIFSUsers(params);
-    return boxedResult.getIFSUser();
+    org.cagrid.gaards.dorian.stubs.FindGridUsersResponse boxedResult = portType.findGridUsers(params);
+    return boxedResult.getGridUser();
     }
   }
 
-  public void updateIFSUser(org.cagrid.gaards.dorian.federation.IFSUser user) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.InvalidUserFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault {
+  public void updateGridUser(org.cagrid.gaards.dorian.federation.GridUser user) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.InvalidUserFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault {
     synchronized(portTypeMutex){
-      configureStubSecurity((Stub)portType,"updateIFSUser");
-    org.cagrid.gaards.dorian.stubs.UpdateIFSUserRequest params = new org.cagrid.gaards.dorian.stubs.UpdateIFSUserRequest();
-    org.cagrid.gaards.dorian.stubs.UpdateIFSUserRequestUser userContainer = new org.cagrid.gaards.dorian.stubs.UpdateIFSUserRequestUser();
-    userContainer.setIFSUser(user);
+      configureStubSecurity((Stub)portType,"updateGridUser");
+    org.cagrid.gaards.dorian.stubs.UpdateGridUserRequest params = new org.cagrid.gaards.dorian.stubs.UpdateGridUserRequest();
+    org.cagrid.gaards.dorian.stubs.UpdateGridUserRequestUser userContainer = new org.cagrid.gaards.dorian.stubs.UpdateGridUserRequestUser();
+    userContainer.setGridUser(user);
     params.setUser(userContainer);
-    org.cagrid.gaards.dorian.stubs.UpdateIFSUserResponse boxedResult = portType.updateIFSUser(params);
+    org.cagrid.gaards.dorian.stubs.UpdateGridUserResponse boxedResult = portType.updateGridUser(params);
     }
   }
 
-  public void removeIFSUser(org.cagrid.gaards.dorian.federation.IFSUser user) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.InvalidUserFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault {
+  public void removeGridUser(org.cagrid.gaards.dorian.federation.GridUser user) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.InvalidUserFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault {
     synchronized(portTypeMutex){
-      configureStubSecurity((Stub)portType,"removeIFSUser");
-    org.cagrid.gaards.dorian.stubs.RemoveIFSUserRequest params = new org.cagrid.gaards.dorian.stubs.RemoveIFSUserRequest();
-    org.cagrid.gaards.dorian.stubs.RemoveIFSUserRequestUser userContainer = new org.cagrid.gaards.dorian.stubs.RemoveIFSUserRequestUser();
-    userContainer.setIFSUser(user);
+      configureStubSecurity((Stub)portType,"removeGridUser");
+    org.cagrid.gaards.dorian.stubs.RemoveGridUserRequest params = new org.cagrid.gaards.dorian.stubs.RemoveGridUserRequest();
+    org.cagrid.gaards.dorian.stubs.RemoveGridUserRequestUser userContainer = new org.cagrid.gaards.dorian.stubs.RemoveGridUserRequestUser();
+    userContainer.setGridUser(user);
     params.setUser(userContainer);
-    org.cagrid.gaards.dorian.stubs.RemoveIFSUserResponse boxedResult = portType.removeIFSUser(params);
+    org.cagrid.gaards.dorian.stubs.RemoveGridUserResponse boxedResult = portType.removeGridUser(params);
     }
   }
 
-  public org.cagrid.gaards.dorian.federation.IFSUser renewIFSUserCredentials(org.cagrid.gaards.dorian.federation.IFSUser user) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.InvalidUserFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault {
+  public org.cagrid.gaards.dorian.federation.GridUser renewGridUserCredentials(org.cagrid.gaards.dorian.federation.GridUser user) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.InvalidUserFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault {
     synchronized(portTypeMutex){
-      configureStubSecurity((Stub)portType,"renewIFSUserCredentials");
-    org.cagrid.gaards.dorian.stubs.RenewIFSUserCredentialsRequest params = new org.cagrid.gaards.dorian.stubs.RenewIFSUserCredentialsRequest();
-    org.cagrid.gaards.dorian.stubs.RenewIFSUserCredentialsRequestUser userContainer = new org.cagrid.gaards.dorian.stubs.RenewIFSUserCredentialsRequestUser();
-    userContainer.setIFSUser(user);
+      configureStubSecurity((Stub)portType,"renewGridUserCredentials");
+    org.cagrid.gaards.dorian.stubs.RenewGridUserCredentialsRequest params = new org.cagrid.gaards.dorian.stubs.RenewGridUserCredentialsRequest();
+    org.cagrid.gaards.dorian.stubs.RenewGridUserCredentialsRequestUser userContainer = new org.cagrid.gaards.dorian.stubs.RenewGridUserCredentialsRequestUser();
+    userContainer.setGridUser(user);
     params.setUser(userContainer);
-    org.cagrid.gaards.dorian.stubs.RenewIFSUserCredentialsResponse boxedResult = portType.renewIFSUserCredentials(params);
-    return boxedResult.getIFSUser();
+    org.cagrid.gaards.dorian.stubs.RenewGridUserCredentialsResponse boxedResult = portType.renewGridUserCredentials(params);
+    return boxedResult.getGridUser();
     }
   }
 
-  public org.cagrid.gaards.dorian.federation.IFSUserPolicy[] getIFSUserPolicies() throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault {
+  public org.cagrid.gaards.dorian.federation.GridUserPolicy[] getGridUserPolicies() throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault {
     synchronized(portTypeMutex){
-      configureStubSecurity((Stub)portType,"getIFSUserPolicies");
-    org.cagrid.gaards.dorian.stubs.GetIFSUserPoliciesRequest params = new org.cagrid.gaards.dorian.stubs.GetIFSUserPoliciesRequest();
-    org.cagrid.gaards.dorian.stubs.GetIFSUserPoliciesResponse boxedResult = portType.getIFSUserPolicies(params);
-    return boxedResult.getIFSUserPolicy();
+      configureStubSecurity((Stub)portType,"getGridUserPolicies");
+    org.cagrid.gaards.dorian.stubs.GetGridUserPoliciesRequest params = new org.cagrid.gaards.dorian.stubs.GetGridUserPoliciesRequest();
+    org.cagrid.gaards.dorian.stubs.GetGridUserPoliciesResponse boxedResult = portType.getGridUserPolicies(params);
+    return boxedResult.getGridUserPolicy();
     }
   }
 

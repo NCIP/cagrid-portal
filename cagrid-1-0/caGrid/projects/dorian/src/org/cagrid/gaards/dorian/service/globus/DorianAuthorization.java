@@ -103,27 +103,27 @@ public class DorianAuthorization implements PDP {
 		
 	}
 					
-	public static void authorizeFindIFSUsers() throws RemoteException {
+	public static void authorizeFindGridUsers() throws RemoteException {
 		
 		
 	}
 					
-	public static void authorizeUpdateIFSUser() throws RemoteException {
+	public static void authorizeUpdateGridUser() throws RemoteException {
 		
 		
 	}
 					
-	public static void authorizeRemoveIFSUser() throws RemoteException {
+	public static void authorizeRemoveGridUser() throws RemoteException {
 		
 		
 	}
 					
-	public static void authorizeRenewIFSUserCredentials() throws RemoteException {
+	public static void authorizeRenewGridUserCredentials() throws RemoteException {
 		
 		
 	}
 					
-	public static void authorizeGetIFSUserPolicies() throws RemoteException {
+	public static void authorizeGetGridUserPolicies() throws RemoteException {
 		
 		
 	}
@@ -308,41 +308,41 @@ public class DorianAuthorization implements PDP {
 				e.printStackTrace();
 				return false;
 			}
-		} else if(operation.getLocalPart().equals("findIFSUsers")){
+		} else if(operation.getLocalPart().equals("findGridUsers")){
 			try{
-				authorizeFindIFSUsers();
+				authorizeFindGridUsers();
 				return true;
 			} catch (Exception e){
 				e.printStackTrace();
 				return false;
 			}
-		} else if(operation.getLocalPart().equals("updateIFSUser")){
+		} else if(operation.getLocalPart().equals("updateGridUser")){
 			try{
-				authorizeUpdateIFSUser();
+				authorizeUpdateGridUser();
 				return true;
 			} catch (Exception e){
 				e.printStackTrace();
 				return false;
 			}
-		} else if(operation.getLocalPart().equals("removeIFSUser")){
+		} else if(operation.getLocalPart().equals("removeGridUser")){
 			try{
-				authorizeRemoveIFSUser();
+				authorizeRemoveGridUser();
 				return true;
 			} catch (Exception e){
 				e.printStackTrace();
 				return false;
 			}
-		} else if(operation.getLocalPart().equals("renewIFSUserCredentials")){
+		} else if(operation.getLocalPart().equals("renewGridUserCredentials")){
 			try{
-				authorizeRenewIFSUserCredentials();
+				authorizeRenewGridUserCredentials();
 				return true;
 			} catch (Exception e){
 				e.printStackTrace();
 				return false;
 			}
-		} else if(operation.getLocalPart().equals("getIFSUserPolicies")){
+		} else if(operation.getLocalPart().equals("getGridUserPolicies")){
 			try{
-				authorizeGetIFSUserPolicies();
+				authorizeGetGridUserPolicies();
 				return true;
 			} catch (Exception e){
 				e.printStackTrace();

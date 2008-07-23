@@ -296,7 +296,7 @@
 		<input message="Please enter your username:" addproperty="username.input" />
 		<input message="Please enter your password:" addproperty="password.input" />
 		<input message="Please enter the number of hours the proxy should be valid for [12]:" addproperty="hours.input" defaultvalue="12" />
-		<java classname="gov.nih.nci.cagrid.dorian.tools.GridProxyInit" fork="yes" newenvironment="true" failonerror="true">
+		<java classname="org.cagrid.gaards.dorian.tools.GridProxyInit" fork="yes" newenvironment="true" failonerror="true">
 			<jvmarg value="-Djava.endorsed.dirs=ext/dependencies/endorsed/jars" />
 			<arg value="-a" />
 			<arg value="${auth.input}" />
@@ -316,7 +316,7 @@
 		<input message="Please enter the location to the CA's certificate (PEM Format):" addproperty="cacert.input" />
 		<input message="Please enter the location to the CA's private key (PEM Format):" addproperty="cakey.input" />
 		<input message="Please enter the password to the CA's private key (Enter if None):" addproperty="password.input" />
-		<java classname="gov.nih.nci.cagrid.dorian.service.tools.ImportCA" fork="yes" newenvironment="true" failonerror="true">
+		<java classname="org.cagrid.gaards.dorian.service.tools.ImportCA" fork="yes" newenvironment="true" failonerror="true">
 			<arg value="-conf" />
 			<arg value="etc/dorian-configuration.xml" />
 			<arg value="-properties" />
@@ -333,7 +333,7 @@
 
 
 	<target name="configureGlobusToTrustDorian" description="Configures Globus to trust the Dorian CA." depends="init">
-		<java classname="gov.nih.nci.cagrid.dorian.service.tools.ConfigureGlobusToTrustDorian" fork="yes" newenvironment="true" failonerror="true">
+		<java classname="org.cagrid.gaards.dorian.service.tools.ConfigureGlobusToTrustDorian" fork="yes" newenvironment="true" failonerror="true">
 			<arg value="-conf" />
 			<arg value="etc/dorian-configuration.xml" />
 			<arg value="-properties" />
@@ -345,7 +345,7 @@
 	<target name="createDorianHostCredentials" description="Creates host credentials for the Dorian Service." depends="init">
 		<input message="Please enter the host:" addproperty="host.input" />
 		<input message="Please enter the directory to write out the host credentials:" addproperty="dir.input" />
-		<java classname="gov.nih.nci.cagrid.dorian.service.tools.CreateHostCertificate" fork="yes" newenvironment="true" failonerror="true">
+		<java classname="org.cagrid.gaards.dorian.service.tools.CreateHostCertificate" fork="yes" newenvironment="true" failonerror="true">
 			<arg value="-conf" />
 			<arg value="etc/dorian-configuration.xml" />
 			<arg value="-properties" />
@@ -359,7 +359,7 @@
 	</target>
 
 	<target name="upgrade" description="Upgrades old versions of the Dorian database to the latest version." depends="init">
-		<java classname="gov.nih.nci.cagrid.dorian.service.upgrader.Upgrader" fork="yes" newenvironment="true" failonerror="true">
+		<java classname="org.cagrid.gaards.dorian.service.upgrader.Upgrader" fork="yes" newenvironment="true" failonerror="true">
 			<jvmarg value="-Dlog4j.configuration=file:upgrader-log4j.properties" />
 			<arg value="-conf" />
 			<arg value="etc/dorian-configuration.xml" />
@@ -372,7 +372,7 @@
 	</target>
 
 	<target name="testUpgrade" description="Tests upgrading old versions of the Dorian database to the latest version." depends="init">
-		<java classname="gov.nih.nci.cagrid.dorian.service.upgrader.Upgrader" fork="yes" newenvironment="true" failonerror="true">
+		<java classname="org.cagrid.gaards.dorian.service.upgrader.Upgrader" fork="yes" newenvironment="true" failonerror="true">
 			<jvmarg value="-Dlog4j.configuration=file:upgrader-log4j.properties" />
 			<arg value="-conf" />
 			<arg value="etc/dorian-configuration.xml" />

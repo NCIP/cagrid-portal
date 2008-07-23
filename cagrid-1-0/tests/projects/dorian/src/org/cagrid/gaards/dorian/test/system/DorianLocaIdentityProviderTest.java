@@ -27,7 +27,9 @@ import org.cagrid.gaards.authentication.test.system.steps.AuthenticationStep;
 import org.cagrid.gaards.authentication.test.system.steps.InvalidAuthentication;
 import org.cagrid.gaards.authentication.test.system.steps.SuccessfullAuthentication;
 import org.cagrid.gaards.authentication.test.system.steps.ValidateSupportedAuthenticationProfilesStep;
-import org.cagrid.gaards.dorian.federation.IFSUserStatus;
+import org.cagrid.gaards.dorian.federation.AutoApprovalAutoRenewalPolicy;
+import org.cagrid.gaards.dorian.federation.GridUserStatus;
+import org.cagrid.gaards.dorian.federation.TrustedIdPStatus;
 import org.cagrid.gaards.dorian.idp.Application;
 import org.cagrid.gaards.dorian.idp.CountryCode;
 import org.cagrid.gaards.dorian.idp.IdPUserRole;
@@ -47,6 +49,7 @@ import org.cagrid.gaards.dorian.test.system.steps.GridCredentialRequestStep;
 import org.cagrid.gaards.dorian.test.system.steps.SuccessfullGridCredentialRequest;
 import org.cagrid.gaards.dorian.test.system.steps.UpdateGridUserStatusStep;
 import org.cagrid.gaards.dorian.test.system.steps.UpdateLocalUserStatusStep;
+import org.cagrid.gaards.dorian.test.system.steps.VerifyTrustedIdPStep;
 
 public class DorianLocaIdentityProviderTest extends ServiceStoryBase {
 
@@ -127,6 +130,15 @@ public class DorianLocaIdentityProviderTest extends ServiceStoryBase {
 					serviceURL, adminAuth,
 					new SuccessfullGridCredentialRequest());
 			steps.add(admin);
+			
+			//Test that the Dorian Idp is properly registered.
+			
+			VerifyTrustedIdPStep idp = new VerifyTrustedIdPStep(serviceURL,admin,"Dorian");
+			idp.setDisplayName("Dorian");
+			idp.setStatus(TrustedIdPStatus.Active);
+			idp.setUserPolicyClass(AutoApprovalAutoRenewalPolicy.class.getName());
+			idp.setAuthenticationServiceURL(serviceURL);
+			steps.add(idp);
 
 			// Create Users
 			List<Application> users = new ArrayList<Application>();
@@ -211,7 +223,7 @@ public class DorianLocaIdentityProviderTest extends ServiceStoryBase {
 				gridUser.setExpectedFirstName(users.get(i).getFirstName());
 				gridUser.setExpectedLastName(users.get(i).getLastName());
 				gridUser.setExpectedLocalUserId(users.get(i).getUserId());
-				gridUser.setExpectedStatus(IFSUserStatus.Active);
+				gridUser.setExpectedStatus(GridUserStatus.Active);
 				steps.add(gridUser);
 			}
 
@@ -241,7 +253,7 @@ public class DorianLocaIdentityProviderTest extends ServiceStoryBase {
 
 			for (int i = 0; i < users.size(); i++) {
 				steps.add(new UpdateGridUserStatusStep(serviceURL, admin,
-						userCredentials.get(i), IFSUserStatus.Suspended));
+						userCredentials.get(i), GridUserStatus.Suspended));
 
 				FindGridUserStep gridUser = new FindGridUserStep(serviceURL,
 						admin, userCredentials.get(i));
@@ -249,7 +261,7 @@ public class DorianLocaIdentityProviderTest extends ServiceStoryBase {
 				gridUser.setExpectedFirstName(users.get(i).getFirstName());
 				gridUser.setExpectedLastName(users.get(i).getLastName());
 				gridUser.setExpectedLocalUserId(users.get(i).getUserId());
-				gridUser.setExpectedStatus(IFSUserStatus.Suspended);
+				gridUser.setExpectedStatus(GridUserStatus.Suspended);
 				steps.add(gridUser);
 
 				SuccessfullAuthentication sa = new SuccessfullAuthentication(
@@ -269,7 +281,7 @@ public class DorianLocaIdentityProviderTest extends ServiceStoryBase {
 				steps.add(proxy);
 
 				steps.add(new UpdateGridUserStatusStep(serviceURL, admin,
-						userCredentials.get(i), IFSUserStatus.Active));
+						userCredentials.get(i), GridUserStatus.Active));
 
 				FindGridUserStep gridUser2 = new FindGridUserStep(serviceURL,
 						admin, userCredentials.get(i));
@@ -277,7 +289,7 @@ public class DorianLocaIdentityProviderTest extends ServiceStoryBase {
 				gridUser2.setExpectedFirstName(users.get(i).getFirstName());
 				gridUser2.setExpectedLastName(users.get(i).getLastName());
 				gridUser2.setExpectedLocalUserId(users.get(i).getUserId());
-				gridUser2.setExpectedStatus(IFSUserStatus.Active);
+				gridUser2.setExpectedStatus(GridUserStatus.Active);
 				steps.add(gridUser2);
 			}
 

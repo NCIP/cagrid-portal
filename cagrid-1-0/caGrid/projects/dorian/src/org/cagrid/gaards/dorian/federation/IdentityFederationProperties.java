@@ -10,12 +10,16 @@ public class IdentityFederationProperties {
 
 	public static int MIN_IDP_NAME_LENGTH = 3;
 	public static int MAX_IDP_NAME_LENGTH = 50;
+	public static int DEFAULT_MIN_IDP_DISPLAY_NAME_LENGTH = 3;
+    public static int DEFAULT_MAX_IDP_DISPLAY_NAME_LENGTH = 50;
 	public static int DEFAULT_MIN_IDP_NAME_LENGTH = 3;
 	public static int DEFAULT_MAX_IDP_NAME_LENGTH = 25;
 
 	private String identityAssignmentPolicy;
 	private int minIdPNameLength;
 	private int maxIdPNameLength;
+	private int minIdPDisplayNameLength;
+    private int maxIdPDisplayNameLength;
 	private Lifetime issuedCertificateLifetime;
 	private boolean autoHostCertificateApproval;
 	private Lifetime maxProxyLifetime;
@@ -26,6 +30,8 @@ public class IdentityFederationProperties {
 		this.identityAssignmentPolicy = IdentityAssignmentPolicy.NAME;
 		this.minIdPNameLength = DEFAULT_MIN_IDP_NAME_LENGTH;
 		this.maxIdPNameLength = DEFAULT_MAX_IDP_NAME_LENGTH;
+		this.minIdPDisplayNameLength = DEFAULT_MIN_IDP_DISPLAY_NAME_LENGTH;
+        this.maxIdPDisplayNameLength = DEFAULT_MAX_IDP_DISPLAY_NAME_LENGTH;
 		this.issuedCertificateLifetime = new Lifetime();
 		this.issuedCertificateLifetime.setYears(1);
 		this.autoHostCertificateApproval = false;
@@ -35,8 +41,30 @@ public class IdentityFederationProperties {
 		this.accountPolicies.add(new ManualApprovalPolicy());
 		this.gtsPublishCRLList = new ArrayList<String>();
 	}
+	
 
-	public String getIdentityAssignmentPolicy() {
+	public int getMinIdPDisplayNameLength() {
+        return minIdPDisplayNameLength;
+    }
+
+
+    public void setMinIdPDisplayNameLength(int minIdPDisplayNameLength) {
+        this.minIdPDisplayNameLength = minIdPDisplayNameLength;
+    }
+
+
+    public int getMaxIdPDisplayNameLength() {
+        return maxIdPDisplayNameLength;
+    }
+
+
+    public void setMaxIdPDisplayNameLength(int maxIdPDisplayNameLength) {
+        this.maxIdPDisplayNameLength = maxIdPDisplayNameLength;
+    }
+
+
+
+    public String getIdentityAssignmentPolicy() {
 		return identityAssignmentPolicy;
 	}
 

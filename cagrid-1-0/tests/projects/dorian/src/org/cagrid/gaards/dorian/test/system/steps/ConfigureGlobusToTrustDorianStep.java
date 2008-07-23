@@ -56,9 +56,9 @@ public class ConfigureGlobusToTrustDorianStep extends Step {
 		DorianProperties c = utils.getDorianProperties();
 		c.getIdentityFederationProperties()
 				.setAutoHostCertificateApproval(true);
-		Dorian dorian = new Dorian(c, "localhost", true);
+		Dorian dorian = new Dorian(c, "https://localhost", true);
 		X509Certificate cacert = dorian.getCACertificate();
-		// File dir = Utils.getTrustedCerificatesDirectory();
+	
 		File dir = new File(this.container.getProperties()
 				.getContainerDirectory().getAbsolutePath()
 				+ File.separator + "certificates/ca");

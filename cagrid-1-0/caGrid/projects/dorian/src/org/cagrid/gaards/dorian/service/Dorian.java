@@ -17,14 +17,14 @@ import org.cagrid.gaards.dorian.common.LoggingObject;
 import org.cagrid.gaards.dorian.common.SAMLConstants;
 import org.cagrid.gaards.dorian.federation.AutoApprovalAutoRenewalPolicy;
 import org.cagrid.gaards.dorian.federation.FederationDefaults;
+import org.cagrid.gaards.dorian.federation.GridUser;
+import org.cagrid.gaards.dorian.federation.GridUserFilter;
+import org.cagrid.gaards.dorian.federation.GridUserPolicy;
+import org.cagrid.gaards.dorian.federation.GridUserStatus;
 import org.cagrid.gaards.dorian.federation.HostCertificateFilter;
 import org.cagrid.gaards.dorian.federation.HostCertificateRecord;
 import org.cagrid.gaards.dorian.federation.HostCertificateRequest;
 import org.cagrid.gaards.dorian.federation.HostCertificateUpdate;
-import org.cagrid.gaards.dorian.federation.IFSUser;
-import org.cagrid.gaards.dorian.federation.IFSUserFilter;
-import org.cagrid.gaards.dorian.federation.IFSUserPolicy;
-import org.cagrid.gaards.dorian.federation.IFSUserStatus;
 import org.cagrid.gaards.dorian.federation.IdentityFederationManager;
 import org.cagrid.gaards.dorian.federation.IdentityFederationProperties;
 import org.cagrid.gaards.dorian.federation.ProxyLifetime;
@@ -101,6 +101,7 @@ public class Dorian extends LoggingObject {
 
 			TrustedIdP idp = new TrustedIdP();
 			idp.setName(conf.getIdentityProviderProperties().getName());
+			idp.setDisplayName(conf.getIdentityProviderProperties().getName());
 			SAMLAuthenticationMethod[] methods = new SAMLAuthenticationMethod[1];
 			methods[0] = SAMLAuthenticationMethod
 					.fromString("urn:oasis:names:tc:SAML:1.0:am:password");
@@ -112,6 +113,7 @@ public class Dorian extends LoggingObject {
 							.writeCertificate(this.identityProvider
 									.getIdPCertificate()));
 			idp.setStatus(TrustedIdPStatus.Active);
+			idp.setAuthenticationServiceURL(serviceId);
 			SAMLAttributeDescriptor uid = new SAMLAttributeDescriptor();
 			uid.setNamespaceURI(SAMLConstants.UID_ATTRIBUTE_NAMESPACE);
 			uid.setName(SAMLConstants.UID_ATTRIBUTE);
@@ -134,16 +136,16 @@ public class Dorian extends LoggingObject {
 			email.setName(SAMLConstants.EMAIL_ATTRIBUTE);
 			idp.setEmailAttributeDescriptor(email);
 
-			IFSUser usr = null;
+			GridUser usr = null;
 			try {
 				IdPUser idpUsr = identityProvider.getUser(IDP_ADMIN_USER_ID,
 						IDP_ADMIN_USER_ID);
-				usr = new IFSUser();
+				usr = new GridUser();
 				usr.setUID(idpUsr.getUserId());
 				usr.setFirstName(idpUsr.getFirstName());
 				usr.setLastName(idpUsr.getLastName());
 				usr.setEmail(idpUsr.getEmail());
-				usr.setUserStatus(IFSUserStatus.Active);
+				usr.setUserStatus(GridUserStatus.Active);
 			} catch (Exception e) {
 			}
 
@@ -162,7 +164,6 @@ public class Dorian extends LoggingObject {
 								+ properties.getVersion() + " database.");
 				throw fault;
 			}
-
 		} catch (Exception e) {
 			logError(e.getMessage(), e);
 			DorianInternalFault fault = new DorianInternalFault();
@@ -263,9 +264,9 @@ public class Dorian extends LoggingObject {
 		return this.identityProvider.register(a);
 	}
 
-	/** *************** IFS FUNCTIONS ********************** */
+	/** *************** Federation FUNCTIONS ********************** */
 
-	public IFSUserPolicy[] getIFSUserPolicies(String callerGridIdentity)
+	public GridUserPolicy[] getGridUserPolicies(String callerGridIdentity)
 			throws DorianInternalFault, PermissionDeniedFault {
 		return ifs.getUserPolicies(callerGridIdentity);
 	}
@@ -302,24 +303,24 @@ public class Dorian extends LoggingObject {
 		ifs.removeTrustedIdP(callerGridIdentity, idp.getId());
 	}
 
-	public IFSUser[] findIFSUsers(String callerGridIdentity,
-			IFSUserFilter filter) throws DorianInternalFault,
+	public GridUser[] findGridUsers(String callerGridIdentity,
+			GridUserFilter filter) throws DorianInternalFault,
 			PermissionDeniedFault {
 		return ifs.findUsers(callerGridIdentity, filter);
 	}
 
-	public void updateIFSUser(String callerGridIdentity, IFSUser usr)
+	public void updateGridUser(String callerGridIdentity, GridUser usr)
 			throws DorianInternalFault, InvalidUserFault, PermissionDeniedFault {
 		ifs.updateUser(callerGridIdentity, usr);
 	}
 
-	public void removeIFSUser(String callerGridIdentity, IFSUser usr)
+	public void removeGridUser(String callerGridIdentity, GridUser user)
 			throws DorianInternalFault, InvalidUserFault, PermissionDeniedFault {
-		ifs.removeUser(callerGridIdentity, usr);
+		ifs.removeUser(callerGridIdentity, user);
 	}
 
-	public IFSUser renewIFSUserCredentials(String callerGridIdentity,
-			IFSUser usr) throws DorianInternalFault, InvalidUserFault,
+	public GridUser renewGridUserCredentials(String callerGridIdentity,
+			GridUser usr) throws DorianInternalFault, InvalidUserFault,
 			PermissionDeniedFault {
 		return ifs.renewUserCredentials(callerGridIdentity, usr);
 	}

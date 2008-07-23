@@ -14,9 +14,9 @@ import org.cagrid.gaards.dorian.common.DorianFault;
 import org.cagrid.gaards.dorian.federation.HostCertificateFilter;
 import org.cagrid.gaards.dorian.federation.HostCertificateRecord;
 import org.cagrid.gaards.dorian.federation.HostCertificateUpdate;
-import org.cagrid.gaards.dorian.federation.IFSUser;
-import org.cagrid.gaards.dorian.federation.IFSUserFilter;
-import org.cagrid.gaards.dorian.federation.IFSUserPolicy;
+import org.cagrid.gaards.dorian.federation.GridUser;
+import org.cagrid.gaards.dorian.federation.GridUserFilter;
+import org.cagrid.gaards.dorian.federation.GridUserPolicy;
 import org.cagrid.gaards.dorian.federation.TrustedIdP;
 import org.cagrid.gaards.dorian.stubs.types.DorianInternalFault;
 import org.cagrid.gaards.dorian.stubs.types.InvalidHostCertificateFault;
@@ -154,11 +154,11 @@ public class GridAdministrationClient {
 	 * @throws PermissionDeniedFault
 	 * @throws DorianInternalFault
 	 */
-	public List<IFSUserPolicy> getUserPolicies() throws DorianFault,
+	public List<GridUserPolicy> getUserPolicies() throws DorianFault,
 			PermissionDeniedFault, DorianInternalFault {
 		try {
-			List<IFSUserPolicy> list = Utils.asList(client
-					.getIFSUserPolicies());
+			List<GridUserPolicy> list = Utils.asList(client
+					.getGridUserPolicies());
 			return list;
 		} catch (DorianInternalFault gie) {
 			throw gie;
@@ -175,11 +175,11 @@ public class GridAdministrationClient {
 		}
 	}
 
-	public IFSUser renewUserCredentials(IFSUser usr) throws DorianFault,
+	public GridUser renewUserCredentials(GridUser usr) throws DorianFault,
 			PermissionDeniedFault, InvalidUserFault, DorianInternalFault {
 
 		try {
-			return client.renewIFSUserCredentials(usr);
+			return client.renewGridUserCredentials(usr);
 		} catch (DorianInternalFault gie) {
 			throw gie;
 		} catch (PermissionDeniedFault f) {
@@ -240,11 +240,11 @@ public class GridAdministrationClient {
 	 * @throws PermissionDeniedFault
 	 * @throws DorianInternalFault
 	 */
-	public List<IFSUser> findUsers(IFSUserFilter filter) throws DorianFault,
+	public List<GridUser> findUsers(GridUserFilter filter) throws DorianFault,
 			PermissionDeniedFault, DorianInternalFault {
 
 		try {
-			List<IFSUser> list = Utils.asList(client.findIFSUsers(filter));
+			List<GridUser> list = Utils.asList(client.findGridUsers(filter));
 			return list;
 		} catch (DorianInternalFault gie) {
 			throw gie;
@@ -271,11 +271,11 @@ public class GridAdministrationClient {
 	 * @throws InvalidUserFault
 	 * @throws DorianInternalFault
 	 */
-	public void removeUser(IFSUser usr) throws DorianFault,
+	public void removeUser(GridUser usr) throws DorianFault,
 			PermissionDeniedFault, InvalidUserFault, DorianInternalFault {
 
 		try {
-			client.removeIFSUser(usr);
+			client.removeGridUser(usr);
 		} catch (DorianInternalFault gie) {
 			throw gie;
 		} catch (PermissionDeniedFault f) {
@@ -304,11 +304,11 @@ public class GridAdministrationClient {
 	 * @throws InvalidUserFault
 	 * @throws DorianInternalFault
 	 */
-	public void updateUser(IFSUser usr) throws DorianFault,
+	public void updateUser(GridUser usr) throws DorianFault,
 			PermissionDeniedFault, InvalidUserFault, DorianInternalFault {
 
 		try {
-			client.updateIFSUser(usr);
+			client.updateGridUser(usr);
 		} catch (DorianInternalFault gie) {
 			throw gie;
 		} catch (PermissionDeniedFault f) {

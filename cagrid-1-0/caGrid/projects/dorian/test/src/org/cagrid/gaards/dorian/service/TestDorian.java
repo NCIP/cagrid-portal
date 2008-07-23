@@ -31,9 +31,9 @@ import org.cagrid.gaards.authentication.faults.InvalidCredentialFault;
 import org.cagrid.gaards.dorian.federation.AutoApprovalAutoRenewalPolicy;
 import org.cagrid.gaards.dorian.federation.AutoApprovalPolicy;
 import org.cagrid.gaards.dorian.federation.FederationUtils;
-import org.cagrid.gaards.dorian.federation.IFSUser;
-import org.cagrid.gaards.dorian.federation.IFSUserFilter;
-import org.cagrid.gaards.dorian.federation.IFSUserStatus;
+import org.cagrid.gaards.dorian.federation.GridUser;
+import org.cagrid.gaards.dorian.federation.GridUserFilter;
+import org.cagrid.gaards.dorian.federation.GridUserStatus;
 import org.cagrid.gaards.dorian.federation.ManualApprovalAutoRenewalPolicy;
 import org.cagrid.gaards.dorian.federation.ManualApprovalPolicy;
 import org.cagrid.gaards.dorian.federation.ProxyLifetime;
@@ -93,7 +93,7 @@ public class TestDorian extends TestCase {
 		try {
 			// initialize a Dorian object
 			DorianProperties conf = Utils.getDorianProperties();
-			dorian = new Dorian(conf, "localhost");
+			dorian = new Dorian(conf, "https://localhost");
 			assertNotNull(dorian.getConfiguration());
 			assertNotNull(dorian.getDatabase());
 
@@ -199,7 +199,7 @@ public class TestDorian extends TestCase {
 	public void testFindUpdateRemoveIdPUser() {
 		try {
 			DorianProperties conf = Utils.getDorianProperties();
-			dorian = new Dorian(conf, "localhost");
+			dorian = new Dorian(conf, "https://localhost");
 			assertNotNull(dorian.getConfiguration());
 			assertNotNull(dorian.getDatabase());
 
@@ -305,7 +305,7 @@ public class TestDorian extends TestCase {
 		try {
 			
 			DorianProperties conf = Utils.getDorianProperties();
-			dorian = new Dorian(conf, "localhost");
+			dorian = new Dorian(conf, "https://localhost");
 			assertNotNull(dorian.getConfiguration());
 			assertNotNull(dorian.getDatabase());
 			BasicAuthentication auth = new BasicAuthentication();
@@ -337,16 +337,16 @@ public class TestDorian extends TestCase {
 	public void testRemoveDorianIdPDefaultAdmin() {
 		try {
 			DorianProperties conf = Utils.getDorianProperties();
-			dorian = new Dorian(conf, "localhost");
+			dorian = new Dorian(conf, "https://localhost");
 			assertNotNull(dorian.getConfiguration());
 			assertNotNull(dorian.getDatabase());
 			String gridSubject = getDorianIdPUserId(conf, dorian,
 					Dorian.IDP_ADMIN_USER_ID);
 			String gridId = UserManager.subjectToIdentity(gridSubject);
 
-			IFSUserFilter uf = new IFSUserFilter();
+			GridUserFilter uf = new GridUserFilter();
 			uf.setGridId(gridId);
-			assertEquals(1, dorian.findIFSUsers(gridId, uf).length);
+			assertEquals(1, dorian.findGridUsers(gridId, uf).length);
 
 			Application app = createApplication();
 			dorian.registerWithIdP(app);
@@ -370,15 +370,15 @@ public class TestDorian extends TestCase {
 					pair.getPublic(), lifetime, DELEGATION_LENGTH);
 			createAndCheckProxyLifetime(lifetime, pair.getPrivate(), certs,
 					DELEGATION_LENGTH);
-			IFSUserFilter filter = new IFSUserFilter();
+			GridUserFilter filter = new GridUserFilter();
 			filter.setUID(username);
 			filter.setIdPId(1);
-			IFSUser[] ifsUser = dorian.findIFSUsers(gridId, filter);
-			assertEquals(1, ifsUser.length);
-			String userGridId = ifsUser[0].getGridId();
+			GridUser[] GridUser = dorian.findGridUsers(gridId, filter);
+			assertEquals(1, GridUser.length);
+			String userGridId = GridUser[0].getGridId();
 			dorian.addAdmin(gridId, userGridId);
 
-			assertEquals(2, dorian.findIFSUsers(gridId, null).length);
+			assertEquals(2, dorian.findGridUsers(gridId, null).length);
 			String[] users = dorian.getAdmins(gridId);
 			boolean found1 = false;
 			boolean found2 = false;
@@ -393,10 +393,10 @@ public class TestDorian extends TestCase {
 			assertTrue(found2);
 			dorian.removeIdPUser(userGridId, Dorian.IDP_ADMIN_USER_ID);
 
-			Dorian dorian2 = new Dorian(conf, "localhost");
+			Dorian dorian2 = new Dorian(conf, "http://localhost");
 
-			assertEquals(1, dorian2.findIFSUsers(userGridId, null).length);
-			assertEquals(0, dorian2.findIFSUsers(userGridId, uf).length);
+			assertEquals(1, dorian2.findGridUsers(userGridId, null).length);
+			assertEquals(0, dorian2.findGridUsers(userGridId, uf).length);
 			users = dorian2.getAdmins(userGridId);
 			found1 = false;
 			found2 = false;
@@ -428,16 +428,16 @@ public class TestDorian extends TestCase {
 	public void testSuspendDorianIdPDefaultAdmin() {
 		try {
 			DorianProperties conf = Utils.getDorianProperties();
-			dorian = new Dorian(conf, "localhost");
+			dorian = new Dorian(conf, "https://localhost");
 			assertNotNull(dorian.getConfiguration());
 			assertNotNull(dorian.getDatabase());
 			String gridSubject = getDorianIdPUserId(conf, dorian,
 					Dorian.IDP_ADMIN_USER_ID);
 			String gridId = UserManager.subjectToIdentity(gridSubject);
 
-			IFSUserFilter uf = new IFSUserFilter();
+			GridUserFilter uf = new GridUserFilter();
 			uf.setGridId(gridId);
-			assertEquals(1, dorian.findIFSUsers(gridId, uf).length);
+			assertEquals(1, dorian.findGridUsers(gridId, uf).length);
 			Application app = createApplication();
 			dorian.registerWithIdP(app);
 			IdPUserFilter f = new IdPUserFilter();
@@ -459,14 +459,14 @@ public class TestDorian extends TestCase {
 					pair.getPublic(), lifetime, DELEGATION_LENGTH);
 			createAndCheckProxyLifetime(lifetime, pair.getPrivate(), certs,
 					DELEGATION_LENGTH);
-			IFSUserFilter filter = new IFSUserFilter();
+			GridUserFilter filter = new GridUserFilter();
 			filter.setUID(username);
 			filter.setIdPId(1);
-			IFSUser[] ifsUser = dorian.findIFSUsers(gridId, filter);
-			assertEquals(1, ifsUser.length);
-			String userGridId = ifsUser[0].getGridId();
+			GridUser[] GridUser = dorian.findGridUsers(gridId, filter);
+			assertEquals(1, GridUser.length);
+			String userGridId = GridUser[0].getGridId();
 			dorian.addAdmin(gridId, userGridId);
-			assertEquals(2, dorian.findIFSUsers(gridId, null).length);
+			assertEquals(2, dorian.findGridUsers(gridId, null).length);
 
 			IdPUserFilter f2 = new IdPUserFilter();
 			f2.setUserId(Dorian.IDP_ADMIN_USER_ID);
@@ -476,7 +476,7 @@ public class TestDorian extends TestCase {
 			list2[0].setStatus(IdPUserStatus.Suspended);
 			dorian.updateIdPUser(userGridId, list2[0]);
 
-			Dorian dorian2 = new Dorian(conf, "localhost");
+			Dorian dorian2 = new Dorian(conf, "https://localhost");
 
 			try {
 				dorian2.findIdPUsers(gridId, null);
@@ -491,8 +491,8 @@ public class TestDorian extends TestCase {
 			idpf.setStatus(IdPUserStatus.Active);
 			assertEquals(0, dorian2.findIdPUsers(userGridId, idpf).length);
 
-			assertEquals(2, dorian2.findIFSUsers(userGridId, null).length);
-			assertEquals(1, dorian2.findIFSUsers(userGridId, uf).length);
+			assertEquals(2, dorian2.findGridUsers(userGridId, null).length);
+			assertEquals(1, dorian2.findGridUsers(userGridId, uf).length);
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
@@ -511,7 +511,7 @@ public class TestDorian extends TestCase {
 	public void testMembershipRemovalOnIdPUserRemoval() {
 		try {
 			DorianProperties conf = Utils.getDorianProperties();
-			dorian = new Dorian(conf, "localhost");
+			dorian = new Dorian(conf, "https://localhost");
 			assertNotNull(dorian.getConfiguration());
 			assertNotNull(dorian.getDatabase());
 			String gridSubject = getDorianIdPUserId(conf, dorian,
@@ -538,12 +538,12 @@ public class TestDorian extends TestCase {
 					pair.getPublic(), lifetime, DELEGATION_LENGTH);
 			createAndCheckProxyLifetime(lifetime, pair.getPrivate(), certs,
 					DELEGATION_LENGTH);
-			IFSUserFilter filter = new IFSUserFilter();
+			GridUserFilter filter = new GridUserFilter();
 			filter.setUID(username);
 			filter.setIdPId(1);
-			IFSUser[] ifsUser = dorian.findIFSUsers(gridId, filter);
-			assertEquals(1, ifsUser.length);
-			String userGridId = ifsUser[0].getGridId();
+			GridUser[] GridUser = dorian.findGridUsers(gridId, filter);
+			assertEquals(1, GridUser.length);
+			String userGridId = GridUser[0].getGridId();
 			dorian.addAdmin(gridId, userGridId);
 
 			String[] users = dorian.getAdmins(gridId);
@@ -556,7 +556,7 @@ public class TestDorian extends TestCase {
 			assertTrue(found);
 			dorian.removeIdPUser(gridId, username);
 			assertEquals(0, dorian.findIdPUsers(gridId, f).length);
-			assertEquals(0, dorian.findIFSUsers(gridId, filter).length);
+			assertEquals(0, dorian.findGridUsers(gridId, filter).length);
 
 			users = null;
 			users = dorian.getAdmins(gridId);
@@ -586,7 +586,7 @@ public class TestDorian extends TestCase {
 	public void testMembershipRemovalOnUserRemoval() {
 		try {
 			DorianProperties conf = Utils.getDorianProperties();
-			dorian = new Dorian(conf, "localhost");
+			dorian = new Dorian(conf, "https://localhost");
 			assertNotNull(dorian.getConfiguration());
 			assertNotNull(dorian.getDatabase());
 			String gridSubject = getDorianIdPUserId(conf, dorian,
@@ -603,12 +603,12 @@ public class TestDorian extends TestCase {
 					DELEGATION_LENGTH);
 			createAndCheckProxyLifetime(lifetime, pair.getPrivate(), certs,
 					DELEGATION_LENGTH);
-			IFSUserFilter filter = new IFSUserFilter();
+			GridUserFilter filter = new GridUserFilter();
 			filter.setUID(username);
 			filter.setIdPId(idp.getIdp().getId());
-			IFSUser[] ifsUser = dorian.findIFSUsers(gridId, filter);
-			assertEquals(1, ifsUser.length);
-			String userGridId = ifsUser[0].getGridId();
+			GridUser[] GridUser = dorian.findGridUsers(gridId, filter);
+			assertEquals(1, GridUser.length);
+			String userGridId = GridUser[0].getGridId();
 			dorian.addAdmin(gridId, userGridId);
 
 			String[] users = dorian.getAdmins(gridId);
@@ -619,8 +619,8 @@ public class TestDorian extends TestCase {
 				}
 			}
 			assertTrue(found);
-			dorian.removeIFSUser(gridId, ifsUser[0]);
-			assertEquals(0, dorian.findIFSUsers(gridId, filter).length);
+			dorian.removeGridUser(gridId, GridUser[0]);
+			assertEquals(0, dorian.findGridUsers(gridId, filter).length);
 
 			users = null;
 			users = dorian.getAdmins(gridId);
@@ -650,7 +650,7 @@ public class TestDorian extends TestCase {
 	public void testAutoApprovalAutoRenewal() {
 		try {
 			DorianProperties conf = Utils.getExpiringDorianProperties();
-			dorian = new Dorian(conf, "localhost");
+			dorian = new Dorian(conf, "https://localhost");
 			assertNotNull(dorian.getConfiguration());
 			assertNotNull(dorian.getDatabase());
 
@@ -669,20 +669,20 @@ public class TestDorian extends TestCase {
 			createAndCheckProxyLifetime(lifetime, pair.getPrivate(), certs,
 					DELEGATION_LENGTH);
 
-			IFSUserFilter filter = new IFSUserFilter();
+			GridUserFilter filter = new GridUserFilter();
 			filter.setUID(username);
 			filter.setIdPId(idp.getIdp().getId());
-			IFSUser[] ifsUser = dorian.findIFSUsers(gridId, filter);
-			assertEquals(ifsUser.length, 1);
-			IFSUser before = ifsUser[0];
-			assertEquals(before.getUserStatus(), IFSUserStatus.Active);
+			GridUser[] GridUser = dorian.findGridUsers(gridId, filter);
+			assertEquals(GridUser.length, 1);
+			GridUser before = GridUser[0];
+			assertEquals(before.getUserStatus(), GridUserStatus.Active);
 			Thread.sleep((SHORT_CREDENTIALS_VALID * 1000) + 100);
 			certs = dorian.createProxy(getSAMLAssertion(username, idp), pair
 					.getPublic(), lifetime, DELEGATION_LENGTH);
-			ifsUser = dorian.findIFSUsers(gridId, filter);
-			assertEquals(ifsUser.length, 1);
-			IFSUser after = ifsUser[0];
-			assertEquals(after.getUserStatus(), IFSUserStatus.Active);
+			GridUser = dorian.findGridUsers(gridId, filter);
+			assertEquals(GridUser.length, 1);
+			GridUser after = GridUser[0];
+			assertEquals(after.getUserStatus(), GridUserStatus.Active);
 			if (before.getCertificate().equals(after.getCertificate())) {
 				fail("A problem occured with the renewal of credentials");
 			}
@@ -704,7 +704,7 @@ public class TestDorian extends TestCase {
 	public void testManualApprovalAutoRenewal() {
 		try {
 			DorianProperties conf = Utils.getExpiringDorianProperties();
-			dorian = new Dorian(conf, "localhost");
+			dorian = new Dorian(conf, "https://localhost");
 			assertNotNull(dorian.getConfiguration());
 			assertNotNull(dorian.getDatabase());
 
@@ -728,24 +728,24 @@ public class TestDorian extends TestCase {
 
 			}
 
-			IFSUserFilter filter = new IFSUserFilter();
+			GridUserFilter filter = new GridUserFilter();
 			filter.setUID(username);
 			filter.setIdPId(idp.getIdp().getId());
-			IFSUser[] ifsUser = dorian.findIFSUsers(gridId, filter);
-			assertEquals(ifsUser.length, 1);
-			IFSUser before = ifsUser[0];
-			assertEquals(before.getUserStatus(), IFSUserStatus.Pending);
-			before.setUserStatus(IFSUserStatus.Active);
-			dorian.updateIFSUser(gridId, before);
+			GridUser[] GridUser = dorian.findGridUsers(gridId, filter);
+			assertEquals(GridUser.length, 1);
+			GridUser before = GridUser[0];
+			assertEquals(before.getUserStatus(), GridUserStatus.Pending);
+			before.setUserStatus(GridUserStatus.Active);
+			dorian.updateGridUser(gridId, before);
 			dorian.createProxy(getSAMLAssertion(username, idp), pair
 					.getPublic(), lifetime, DELEGATION_LENGTH);
 			Thread.sleep((SHORT_CREDENTIALS_VALID * 1000) + 100);
 			dorian.createProxy(getSAMLAssertion(username, idp), pair
 					.getPublic(), lifetime, DELEGATION_LENGTH);
-			ifsUser = dorian.findIFSUsers(gridId, filter);
-			assertEquals(ifsUser.length, 1);
-			IFSUser after = ifsUser[0];
-			assertEquals(after.getUserStatus(), IFSUserStatus.Active);
+			GridUser = dorian.findGridUsers(gridId, filter);
+			assertEquals(GridUser.length, 1);
+			GridUser after = GridUser[0];
+			assertEquals(after.getUserStatus(), GridUserStatus.Active);
 			if (before.getCertificate().equals(after.getCertificate())) {
 				fail("A problem occured with the renewal of credentials");
 			}
@@ -768,7 +768,7 @@ public class TestDorian extends TestCase {
 	public void testAutoApprovalManualRenewal() {
 		try {
 			DorianProperties conf = Utils.getExpiringDorianProperties();
-			dorian = new Dorian(conf, "localhost");
+			dorian = new Dorian(conf, "https://localhost");
 			assertNotNull(dorian.getConfiguration());
 			assertNotNull(dorian.getDatabase());
 
@@ -784,13 +784,13 @@ public class TestDorian extends TestCase {
 			dorian.createProxy(getSAMLAssertion(username, idp), pair
 					.getPublic(), lifetime, DELEGATION_LENGTH);
 
-			IFSUserFilter filter = new IFSUserFilter();
+			GridUserFilter filter = new GridUserFilter();
 			filter.setUID(username);
 			filter.setIdPId(idp.getIdp().getId());
-			IFSUser[] ifsUser = dorian.findIFSUsers(gridId, filter);
-			assertEquals(ifsUser.length, 1);
-			IFSUser before = ifsUser[0];
-			assertEquals(before.getUserStatus(), IFSUserStatus.Active);
+			GridUser[] GridUser = dorian.findGridUsers(gridId, filter);
+			assertEquals(GridUser.length, 1);
+			GridUser before = GridUser[0];
+			assertEquals(before.getUserStatus(), GridUserStatus.Active);
 			X509Certificate certBefore = CertUtil.loadCertificate(before
 					.getCertificate().getCertificateAsString());
 
@@ -804,14 +804,14 @@ public class TestDorian extends TestCase {
 			} catch (PermissionDeniedFault f) {
 
 			}
-			dorian.renewIFSUserCredentials(gridId, ifsUser[0]);
+			dorian.renewGridUserCredentials(gridId, GridUser[0]);
 
 			dorian.createProxy(getSAMLAssertion(username, idp), pair
 					.getPublic(), lifetime, DELEGATION_LENGTH);
-			ifsUser = dorian.findIFSUsers(gridId, filter);
-			assertEquals(ifsUser.length, 1);
-			IFSUser after = ifsUser[0];
-			assertEquals(after.getUserStatus(), IFSUserStatus.Active);
+			GridUser = dorian.findGridUsers(gridId, filter);
+			assertEquals(GridUser.length, 1);
+			GridUser after = GridUser[0];
+			assertEquals(after.getUserStatus(), GridUserStatus.Active);
 
 			if (certBefore.equals(after.getCertificate())) {
 				fail("A problem occured with the renewal of credentials");
@@ -834,7 +834,7 @@ public class TestDorian extends TestCase {
 	public void testManualApprovalManualRenewal() {
 		try {
 			DorianProperties conf = Utils.getExpiringDorianProperties();
-			dorian = new Dorian(conf, "localhost");
+			dorian = new Dorian(conf, "https://localhost");
 			assertNotNull(dorian.getConfiguration());
 			assertNotNull(dorian.getDatabase());
 
@@ -857,15 +857,15 @@ public class TestDorian extends TestCase {
 
 			}
 
-			IFSUserFilter filter = new IFSUserFilter();
+			GridUserFilter filter = new GridUserFilter();
 			filter.setUID(username);
 			filter.setIdPId(idp.getIdp().getId());
-			IFSUser[] ifsUser = dorian.findIFSUsers(gridId, filter);
-			assertEquals(ifsUser.length, 1);
-			IFSUser before = ifsUser[0];
-			assertEquals(before.getUserStatus(), IFSUserStatus.Pending);
-			before.setUserStatus(IFSUserStatus.Active);
-			dorian.updateIFSUser(gridId, before);
+			GridUser[] GridUser = dorian.findGridUsers(gridId, filter);
+			assertEquals(GridUser.length, 1);
+			GridUser before = GridUser[0];
+			assertEquals(before.getUserStatus(), GridUserStatus.Pending);
+			before.setUserStatus(GridUserStatus.Active);
+			dorian.updateGridUser(gridId, before);
 			dorian.createProxy(getSAMLAssertion(username, idp), pair
 					.getPublic(), lifetime, DELEGATION_LENGTH);
 			X509Certificate certBefore = CertUtil.loadCertificate(before
@@ -880,14 +880,14 @@ public class TestDorian extends TestCase {
 			} catch (PermissionDeniedFault f) {
 
 			}
-			dorian.renewIFSUserCredentials(gridId, ifsUser[0]);
+			dorian.renewGridUserCredentials(gridId, GridUser[0]);
 
 			dorian.createProxy(getSAMLAssertion(username, idp), pair
 					.getPublic(), lifetime, DELEGATION_LENGTH);
-			ifsUser = dorian.findIFSUsers(gridId, filter);
-			assertEquals(ifsUser.length, 1);
-			IFSUser after = ifsUser[0];
-			assertEquals(after.getUserStatus(), IFSUserStatus.Active);
+			GridUser = dorian.findGridUsers(gridId, filter);
+			assertEquals(GridUser.length, 1);
+			GridUser after = GridUser[0];
+			assertEquals(after.getUserStatus(), GridUserStatus.Active);
 
 			if (certBefore.equals(after.getCertificate())) {
 				fail("A problem occured with the renewal of credentials");
@@ -1158,6 +1158,7 @@ public class TestDorian extends TestCase {
 			throws Exception {
 		TrustedIdP idp = new TrustedIdP();
 		idp.setName(name);
+		idp.setDisplayName(name);
 		idp.setUserPolicyClass(policyClass);
 		idp.setStatus(TrustedIdPStatus.Active);
 		SAMLAttributeDescriptor uid = new SAMLAttributeDescriptor();

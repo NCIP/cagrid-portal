@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://cagrid.nci.nih.gov/Dorian" xmlns:wsrp="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.xsd" xmlns:wsrlw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl" xmlns:wsdlpp="http://www.globus.org/namespaces/2004/10/WSDLPreprocessor" xmlns:gtwsdl1="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ServiceGroup-1.2-draft-01.wsdl" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/03/addressing" xmlns:wsntw="http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.wsdl" xmlns:wsrbfw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.wsdl" xmlns:wsrpw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" xmlns:wns1="http://cagrid.nci.nih.gov/AuthenticationService" xmlns:wns2="http://authentication.gaards.cagrid.org/AuthenticationService" xmlns:wns3="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" xmlns:wns0="http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity" xmlns:ns8="http://gaards.cagrid.org/authentication-faults" xmlns:ns10="http://cagrid.nci.nih.gov/Dorian/types" xmlns:ns5="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata" xmlns:ns1="http://cagrid.nci.nih.gov/1/dorian-ifs" xmlns:ns3="http://cagrid.nci.nih.gov/1/authentication-service" xmlns:ns7="http://gaards.cagrid.org/authentication" xmlns:ns6="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security" xmlns:ns4="http://cagrid.nci.nih.gov/1/dorian-common" xmlns:ns2="http://cagrid.nci.nih.gov/AuthenticationService/types" xmlns:ns12="urn:oasis:names:tc:SAML:1.0:assertion" xmlns:ns11="http://www.w3.org/2000/09/xmldsig#" xmlns:ns9="http://authentication.gaards.cagrid.org/AuthenticationService/types" xmlns:ns0="http://cagrid.nci.nih.gov/1/dorian-idp" name="Dorian" targetNamespace="http://cagrid.nci.nih.gov/Dorian">
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://cagrid.nci.nih.gov/Dorian" xmlns:wsrp="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.xsd" xmlns:wsrlw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl" xmlns:wsdlpp="http://www.globus.org/namespaces/2004/10/WSDLPreprocessor" xmlns:gtwsdl1="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ServiceGroup-1.2-draft-01.wsdl" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/03/addressing" xmlns:wsntw="http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.wsdl" xmlns:wsrbfw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.wsdl" xmlns:wsrpw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" xmlns:wns1="http://cagrid.nci.nih.gov/AuthenticationService" xmlns:wns2="http://authentication.gaards.cagrid.org/AuthenticationService" xmlns:wns3="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" xmlns:wns0="http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity" xmlns:ns8="http://gaards.cagrid.org/authentication-faults" xmlns:ns10="http://cagrid.nci.nih.gov/Dorian/types" xmlns:ns5="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata" xmlns:ns1="http://cagrid.nci.nih.gov/1/dorian-ifs" xmlns:ns4="http://cagrid.nci.nih.gov/1/authentication-service" xmlns:ns7="http://gaards.cagrid.org/authentication" xmlns:ns6="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security" xmlns:ns0="http://cagrid.nci.nih.gov/1/dorian-common" xmlns:ns3="http://cagrid.nci.nih.gov/AuthenticationService/types" xmlns:ns12="urn:oasis:names:tc:SAML:1.0:assertion" xmlns:ns11="http://www.w3.org/2000/09/xmldsig#" xmlns:ns9="http://authentication.gaards.cagrid.org/AuthenticationService/types" xmlns:ns2="http://cagrid.nci.nih.gov/1/dorian-idp" name="Dorian" targetNamespace="http://cagrid.nci.nih.gov/Dorian">
   <import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" location="../wsrf/properties/WS-ResourceProperties.wsdl" />
   <import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.wsdl" location="../wsrf/faults/WS-BaseFaults.wsdl" />
   <import namespace="http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.wsdl" location="../wsrf/notification/WS-BaseN.wsdl" />
@@ -34,7 +34,7 @@
             <element name="application">
               <complexType>
                 <sequence>
-                  <element ref="ns0:Application" minOccurs="1" maxOccurs="1" />
+                  <element ref="ns2:Application" minOccurs="1" maxOccurs="1" />
                 </sequence>
               </complexType>
             </element>
@@ -54,7 +54,7 @@
             <element name="filter">
               <complexType>
                 <sequence>
-                  <element ref="ns0:IdPUserFilter" minOccurs="1" maxOccurs="1" />
+                  <element ref="ns2:IdPUserFilter" minOccurs="1" maxOccurs="1" />
                 </sequence>
               </complexType>
             </element>
@@ -64,7 +64,7 @@
       <element name="FindIdPUsersResponse">
         <complexType>
           <sequence>
-            <element ref="ns0:IdPUser" minOccurs="1" maxOccurs="unbounded" />
+            <element ref="ns2:IdPUser" minOccurs="1" maxOccurs="unbounded" />
           </sequence>
         </complexType>
       </element>
@@ -74,7 +74,7 @@
             <element name="user">
               <complexType>
                 <sequence>
-                  <element ref="ns0:IdPUser" minOccurs="1" maxOccurs="1" />
+                  <element ref="ns2:IdPUser" minOccurs="1" maxOccurs="1" />
                 </sequence>
               </complexType>
             </element>
@@ -104,7 +104,7 @@
             <element name="saml">
               <complexType>
                 <sequence>
-                  <element ref="ns4:SAMLAssertion" minOccurs="1" maxOccurs="1" />
+                  <element ref="ns0:SAMLAssertion" minOccurs="1" maxOccurs="1" />
                 </sequence>
               </complexType>
             </element>
@@ -135,7 +135,7 @@
       <element name="CreateProxyResponse">
         <complexType>
           <sequence>
-            <element ref="ns4:X509Certificate" minOccurs="1" maxOccurs="unbounded" />
+            <element ref="ns0:X509Certificate" minOccurs="1" maxOccurs="unbounded" />
           </sequence>
         </complexType>
       </element>
@@ -147,7 +147,7 @@
       <element name="GetCACertificateResponse">
         <complexType>
           <sequence>
-            <element ref="ns4:X509Certificate" minOccurs="1" maxOccurs="1" />
+            <element ref="ns0:X509Certificate" minOccurs="1" maxOccurs="1" />
           </sequence>
         </complexType>
       </element>
@@ -219,91 +219,91 @@
           <sequence />
         </complexType>
       </element>
-      <element name="FindIFSUsersRequest">
+      <element name="FindGridUsersRequest">
         <complexType>
           <sequence>
             <element name="filter">
               <complexType>
                 <sequence>
-                  <element ref="ns1:IFSUserFilter" minOccurs="1" maxOccurs="1" />
+                  <element ref="ns1:GridUserFilter" minOccurs="1" maxOccurs="1" />
                 </sequence>
               </complexType>
             </element>
           </sequence>
         </complexType>
       </element>
-      <element name="FindIFSUsersResponse">
+      <element name="FindGridUsersResponse">
         <complexType>
           <sequence>
-            <element ref="ns1:IFSUser" minOccurs="1" maxOccurs="unbounded" />
+            <element ref="ns1:GridUser" minOccurs="1" maxOccurs="unbounded" />
           </sequence>
         </complexType>
       </element>
-      <element name="UpdateIFSUserRequest">
+      <element name="UpdateGridUserRequest">
         <complexType>
           <sequence>
             <element name="user">
               <complexType>
                 <sequence>
-                  <element ref="ns1:IFSUser" minOccurs="1" maxOccurs="1" />
+                  <element ref="ns1:GridUser" minOccurs="1" maxOccurs="1" />
                 </sequence>
               </complexType>
             </element>
           </sequence>
         </complexType>
       </element>
-      <element name="UpdateIFSUserResponse">
+      <element name="UpdateGridUserResponse">
         <complexType>
           <sequence />
         </complexType>
       </element>
-      <element name="RemoveIFSUserRequest">
+      <element name="RemoveGridUserRequest">
         <complexType>
           <sequence>
             <element name="user">
               <complexType>
                 <sequence>
-                  <element ref="ns1:IFSUser" minOccurs="1" maxOccurs="1" />
+                  <element ref="ns1:GridUser" minOccurs="1" maxOccurs="1" />
                 </sequence>
               </complexType>
             </element>
           </sequence>
         </complexType>
       </element>
-      <element name="RemoveIFSUserResponse">
+      <element name="RemoveGridUserResponse">
         <complexType>
           <sequence />
         </complexType>
       </element>
-      <element name="RenewIFSUserCredentialsRequest">
+      <element name="RenewGridUserCredentialsRequest">
         <complexType>
           <sequence>
             <element name="user">
               <complexType>
                 <sequence>
-                  <element ref="ns1:IFSUser" minOccurs="1" maxOccurs="1" />
+                  <element ref="ns1:GridUser" minOccurs="1" maxOccurs="1" />
                 </sequence>
               </complexType>
             </element>
           </sequence>
         </complexType>
       </element>
-      <element name="RenewIFSUserCredentialsResponse">
+      <element name="RenewGridUserCredentialsResponse">
         <complexType>
           <sequence>
-            <element ref="ns1:IFSUser" minOccurs="1" maxOccurs="1" />
+            <element ref="ns1:GridUser" minOccurs="1" maxOccurs="1" />
           </sequence>
         </complexType>
       </element>
-      <element name="GetIFSUserPoliciesRequest">
+      <element name="GetGridUserPoliciesRequest">
         <complexType>
           <sequence />
         </complexType>
       </element>
-      <element name="GetIFSUserPoliciesResponse">
+      <element name="GetGridUserPoliciesResponse">
         <complexType>
           <sequence>
-            <element ref="ns1:IFSUserPolicy" minOccurs="1" maxOccurs="unbounded" />
+            <element ref="ns1:GridUserPolicy" minOccurs="1" maxOccurs="unbounded" />
           </sequence>
         </complexType>
       </element>
@@ -447,7 +447,7 @@
             <element name="credential">
               <complexType>
                 <sequence>
-                  <element ref="ns0:BasicAuthCredential" minOccurs="1" maxOccurs="1" />
+                  <element ref="ns2:BasicAuthCredential" minOccurs="1" maxOccurs="1" />
                 </sequence>
               </complexType>
             </element>
@@ -564,35 +564,35 @@
   <message name="RemoveTrustedIdPResponse">
     <part name="parameters" element="tns:RemoveTrustedIdPResponse" />
   </message>
-  <message name="FindIFSUsersRequest">
-    <part name="parameters" element="tns:FindIFSUsersRequest" />
+  <message name="FindGridUsersRequest">
+    <part name="parameters" element="tns:FindGridUsersRequest" />
   </message>
-  <message name="FindIFSUsersResponse">
-    <part name="parameters" element="tns:FindIFSUsersResponse" />
+  <message name="FindGridUsersResponse">
+    <part name="parameters" element="tns:FindGridUsersResponse" />
   </message>
-  <message name="UpdateIFSUserRequest">
-    <part name="parameters" element="tns:UpdateIFSUserRequest" />
+  <message name="UpdateGridUserRequest">
+    <part name="parameters" element="tns:UpdateGridUserRequest" />
   </message>
-  <message name="UpdateIFSUserResponse">
-    <part name="parameters" element="tns:UpdateIFSUserResponse" />
+  <message name="UpdateGridUserResponse">
+    <part name="parameters" element="tns:UpdateGridUserResponse" />
   </message>
-  <message name="RemoveIFSUserRequest">
-    <part name="parameters" element="tns:RemoveIFSUserRequest" />
+  <message name="RemoveGridUserRequest">
+    <part name="parameters" element="tns:RemoveGridUserRequest" />
   </message>
-  <message name="RemoveIFSUserResponse">
-    <part name="parameters" element="tns:RemoveIFSUserResponse" />
+  <message name="RemoveGridUserResponse">
+    <part name="parameters" element="tns:RemoveGridUserResponse" />
   </message>
-  <message name="RenewIFSUserCredentialsRequest">
-    <part name="parameters" element="tns:RenewIFSUserCredentialsRequest" />
+  <message name="RenewGridUserCredentialsRequest">
+    <part name="parameters" element="tns:RenewGridUserCredentialsRequest" />
   </message>
-  <message name="RenewIFSUserCredentialsResponse">
-    <part name="parameters" element="tns:RenewIFSUserCredentialsResponse" />
+  <message name="RenewGridUserCredentialsResponse">
+    <part name="parameters" element="tns:RenewGridUserCredentialsResponse" />
   </message>
-  <message name="GetIFSUserPoliciesRequest">
-    <part name="parameters" element="tns:GetIFSUserPoliciesRequest" />
+  <message name="GetGridUserPoliciesRequest">
+    <part name="parameters" element="tns:GetGridUserPoliciesRequest" />
   </message>
-  <message name="GetIFSUserPoliciesResponse">
-    <part name="parameters" element="tns:GetIFSUserPoliciesResponse" />
+  <message name="GetGridUserPoliciesResponse">
+    <part name="parameters" element="tns:GetGridUserPoliciesResponse" />
   </message>
   <message name="AddAdminRequest">
     <part name="parameters" element="tns:AddAdminRequest" />
@@ -771,36 +771,36 @@
       <fault name="InvalidTrustedIdPFault" message="tns:InvalidTrustedIdPFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/Dorian/InvalidTrustedIdPFaultFaultMessage" />
       <fault name="PermissionDeniedFault" message="tns:PermissionDeniedFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/Dorian/PermissionDeniedFaultFaultMessage" />
     </operation>
-    <operation name="findIFSUsers">
-      <input message="tns:FindIFSUsersRequest" wsa:Action="http://cagrid.nci.nih.gov/Dorian/FindIFSUsersRequest" />
-      <output message="tns:FindIFSUsersResponse" wsa:Action="http://cagrid.nci.nih.gov/Dorian/FindIFSUsersResponse" />
+    <operation name="findGridUsers">
+      <input message="tns:FindGridUsersRequest" wsa:Action="http://cagrid.nci.nih.gov/Dorian/FindGridUsersRequest" />
+      <output message="tns:FindGridUsersResponse" wsa:Action="http://cagrid.nci.nih.gov/Dorian/FindGridUsersResponse" />
       <fault name="DorianInternalFault" message="tns:DorianInternalFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/Dorian/DorianInternalFaultFaultMessage" />
       <fault name="PermissionDeniedFault" message="tns:PermissionDeniedFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/Dorian/PermissionDeniedFaultFaultMessage" />
     </operation>
-    <operation name="updateIFSUser">
-      <input message="tns:UpdateIFSUserRequest" wsa:Action="http://cagrid.nci.nih.gov/Dorian/UpdateIFSUserRequest" />
-      <output message="tns:UpdateIFSUserResponse" wsa:Action="http://cagrid.nci.nih.gov/Dorian/UpdateIFSUserResponse" />
-      <fault name="DorianInternalFault" message="tns:DorianInternalFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/Dorian/DorianInternalFaultFaultMessage" />
-      <fault name="InvalidUserFault" message="tns:InvalidUserFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/Dorian/InvalidUserFaultFaultMessage" />
-      <fault name="PermissionDeniedFault" message="tns:PermissionDeniedFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/Dorian/PermissionDeniedFaultFaultMessage" />
-    </operation>
-    <operation name="removeIFSUser">
-      <input message="tns:RemoveIFSUserRequest" wsa:Action="http://cagrid.nci.nih.gov/Dorian/RemoveIFSUserRequest" />
-      <output message="tns:RemoveIFSUserResponse" wsa:Action="http://cagrid.nci.nih.gov/Dorian/RemoveIFSUserResponse" />
+    <operation name="updateGridUser">
+      <input message="tns:UpdateGridUserRequest" wsa:Action="http://cagrid.nci.nih.gov/Dorian/UpdateGridUserRequest" />
+      <output message="tns:UpdateGridUserResponse" wsa:Action="http://cagrid.nci.nih.gov/Dorian/UpdateGridUserResponse" />
       <fault name="DorianInternalFault" message="tns:DorianInternalFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/Dorian/DorianInternalFaultFaultMessage" />
       <fault name="InvalidUserFault" message="tns:InvalidUserFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/Dorian/InvalidUserFaultFaultMessage" />
       <fault name="PermissionDeniedFault" message="tns:PermissionDeniedFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/Dorian/PermissionDeniedFaultFaultMessage" />
     </operation>
-    <operation name="renewIFSUserCredentials">
-      <input message="tns:RenewIFSUserCredentialsRequest" wsa:Action="http://cagrid.nci.nih.gov/Dorian/RenewIFSUserCredentialsRequest" />
-      <output message="tns:RenewIFSUserCredentialsResponse" wsa:Action="http://cagrid.nci.nih.gov/Dorian/RenewIFSUserCredentialsResponse" />
+    <operation name="removeGridUser">
+      <input message="tns:RemoveGridUserRequest" wsa:Action="http://cagrid.nci.nih.gov/Dorian/RemoveGridUserRequest" />
+      <output message="tns:RemoveGridUserResponse" wsa:Action="http://cagrid.nci.nih.gov/Dorian/RemoveGridUserResponse" />
       <fault name="DorianInternalFault" message="tns:DorianInternalFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/Dorian/DorianInternalFaultFaultMessage" />
       <fault name="InvalidUserFault" message="tns:InvalidUserFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/Dorian/InvalidUserFaultFaultMessage" />
       <fault name="PermissionDeniedFault" message="tns:PermissionDeniedFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/Dorian/PermissionDeniedFaultFaultMessage" />
     </operation>
-    <operation name="getIFSUserPolicies">
-      <input message="tns:GetIFSUserPoliciesRequest" wsa:Action="http://cagrid.nci.nih.gov/Dorian/GetIFSUserPoliciesRequest" />
-      <output message="tns:GetIFSUserPoliciesResponse" wsa:Action="http://cagrid.nci.nih.gov/Dorian/GetIFSUserPoliciesResponse" />
+    <operation name="renewGridUserCredentials">
+      <input message="tns:RenewGridUserCredentialsRequest" wsa:Action="http://cagrid.nci.nih.gov/Dorian/RenewGridUserCredentialsRequest" />
+      <output message="tns:RenewGridUserCredentialsResponse" wsa:Action="http://cagrid.nci.nih.gov/Dorian/RenewGridUserCredentialsResponse" />
+      <fault name="DorianInternalFault" message="tns:DorianInternalFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/Dorian/DorianInternalFaultFaultMessage" />
+      <fault name="InvalidUserFault" message="tns:InvalidUserFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/Dorian/InvalidUserFaultFaultMessage" />
+      <fault name="PermissionDeniedFault" message="tns:PermissionDeniedFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/Dorian/PermissionDeniedFaultFaultMessage" />
+    </operation>
+    <operation name="getGridUserPolicies">
+      <input message="tns:GetGridUserPoliciesRequest" wsa:Action="http://cagrid.nci.nih.gov/Dorian/GetGridUserPoliciesRequest" />
+      <output message="tns:GetGridUserPoliciesResponse" wsa:Action="http://cagrid.nci.nih.gov/Dorian/GetGridUserPoliciesResponse" />
       <fault name="DorianInternalFault" message="tns:DorianInternalFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/Dorian/DorianInternalFaultFaultMessage" />
       <fault name="PermissionDeniedFault" message="tns:PermissionDeniedFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/Dorian/PermissionDeniedFaultFaultMessage" />
     </operation>

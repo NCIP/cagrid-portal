@@ -80,7 +80,7 @@ public class TestUserManager extends TestCase implements Publisher {
 	public void checkSingleUser(UserManager um) {
 		try {
 			// Test adding user
-			IFSUser user = new IFSUser();
+			GridUser user = new GridUser();
 			user.setIdPId(INIT_USER + 1);
 			user.setUID("user");
 			user.setFirstName("John");
@@ -90,7 +90,7 @@ public class TestUserManager extends TestCase implements Publisher {
 			assertNotNull(user.getCertificate());
 			assertNotNull(user.getGridId());
 			assertNotNull(user.getUserStatus());
-			assertEquals(IFSUserStatus.Pending, user.getUserStatus());
+			assertEquals(GridUserStatus.Pending, user.getUserStatus());
 			StringReader ureader = new StringReader(user.getCertificate()
 					.getCertificateAsString());
 			X509Certificate cert = CertUtil.loadCertificate(ureader);
@@ -102,14 +102,14 @@ public class TestUserManager extends TestCase implements Publisher {
 			assertTrue(isUserSerialIdInList(user, um.getDisabledUsers()));
 
 			// Test Querying for users
-			IFSUserFilter f1 = new IFSUserFilter();
-			IFSUser[] l1 = um.getUsers(f1);
+			GridUserFilter f1 = new GridUserFilter();
+			GridUser[] l1 = um.getUsers(f1);
 			assertEquals(1 + INIT_USER, l1.length);
 
 			// Test querying by uid
-			IFSUserFilter f2 = new IFSUserFilter();
+			GridUserFilter f2 = new GridUserFilter();
 			f2.setUID("nobody");
-			IFSUser[] l2 = um.getUsers(f2);
+			GridUser[] l2 = um.getUsers(f2);
 			assertEquals(0, l2.length);
 			f2.setUID("use");
 			l2 = um.getUsers(f2);
@@ -117,9 +117,9 @@ public class TestUserManager extends TestCase implements Publisher {
 			assertEquals(user, l2[0]);
 
 			// Test querying by IdP_Id
-			IFSUserFilter f3 = new IFSUserFilter();
+			GridUserFilter f3 = new GridUserFilter();
 			f3.setIdPId(Long.MAX_VALUE);
-			IFSUser[] l3 = um.getUsers(f3);
+			GridUser[] l3 = um.getUsers(f3);
 			assertEquals(0, l3.length);
 			f3.setIdPId(user.getIdPId());
 			l3 = um.getUsers(f3);
@@ -127,9 +127,9 @@ public class TestUserManager extends TestCase implements Publisher {
 			assertEquals(user, l3[0]);
 
 			// Test querying by GID
-			IFSUserFilter f4 = new IFSUserFilter();
+			GridUserFilter f4 = new GridUserFilter();
 			f4.setGridId("nobody");
-			IFSUser[] l4 = um.getUsers(f4);
+			GridUser[] l4 = um.getUsers(f4);
 			assertEquals(0, l4.length);
 			f4.setGridId(user.getGridId());
 			l4 = um.getUsers(f4);
@@ -137,9 +137,9 @@ public class TestUserManager extends TestCase implements Publisher {
 			assertEquals(user, l4[0]);
 
 			// Test querying by Email
-			IFSUserFilter f5 = new IFSUserFilter();
+			GridUserFilter f5 = new GridUserFilter();
 			f5.setEmail("nobody");
-			IFSUser[] l5 = um.getUsers(f5);
+			GridUser[] l5 = um.getUsers(f5);
 			assertEquals(0, l5.length);
 			f5.setEmail(user.getEmail());
 			l5 = um.getUsers(f5);
@@ -147,9 +147,9 @@ public class TestUserManager extends TestCase implements Publisher {
 			assertEquals(user, l5[0]);
 
 			// Test querying by Status
-			IFSUserFilter f7 = new IFSUserFilter();
-			f7.setUserStatus(IFSUserStatus.Suspended);
-			IFSUser[] l7 = um.getUsers(f7);
+			GridUserFilter f7 = new GridUserFilter();
+			f7.setUserStatus(GridUserStatus.Suspended);
+			GridUser[] l7 = um.getUsers(f7);
 			assertEquals(0, l7.length);
 			f7.setUserStatus(user.getUserStatus());
 			l7 = um.getUsers(f7);
@@ -157,9 +157,9 @@ public class TestUserManager extends TestCase implements Publisher {
 			assertEquals(user, l7[0]);
 
 			// Test querying by First Name
-			IFSUserFilter f8 = new IFSUserFilter();
+			GridUserFilter f8 = new GridUserFilter();
 			f8.setFirstName("nobody");
-			IFSUser[] l8 = um.getUsers(f8);
+			GridUser[] l8 = um.getUsers(f8);
 			assertEquals(0, l8.length);
 			f8.setFirstName(user.getFirstName());
 			l8 = um.getUsers(f8);
@@ -167,9 +167,9 @@ public class TestUserManager extends TestCase implements Publisher {
 			assertEquals(user, l8[0]);
 
 			// Test querying by Last Name
-			IFSUserFilter f9 = new IFSUserFilter();
+			GridUserFilter f9 = new GridUserFilter();
 			f9.setLastName("nobody");
-			IFSUser[] l9 = um.getUsers(f9);
+			GridUser[] l9 = um.getUsers(f9);
 			assertEquals(0, l9.length);
 			f9.setLastName(user.getLastName());
 			l9 = um.getUsers(f9);
@@ -177,7 +177,7 @@ public class TestUserManager extends TestCase implements Publisher {
 			assertEquals(user, l9[0]);
 
 			// Test All
-			IFSUserFilter all = new IFSUserFilter();
+			GridUserFilter all = new GridUserFilter();
 			all.setIdPId(user.getIdPId());
 			all.setUID(user.getUID());
 			all.setGridId(user.getGridId());
@@ -185,31 +185,31 @@ public class TestUserManager extends TestCase implements Publisher {
 			all.setLastName(user.getLastName());
 			all.setEmail(user.getEmail());
 			all.setUserStatus(user.getUserStatus());
-			IFSUser[] allList = um.getUsers(all);
+			GridUser[] allList = um.getUsers(all);
 			assertEquals(1, allList.length);
 
 			// Test Update
-			IFSUser u1 = um.getUser(user.getGridId());
+			GridUser u1 = um.getUser(user.getGridId());
 			u1.setFirstName("newfirst");
 			u1.setLastName("newlast");
 			u1.setEmail("newemail@example.com");
 			um.updateUser(u1);
 			assertEquals(u1, um.getUser(u1.getGridId()));
 
-			IFSUser u3 = um.getUser(user.getGridId());
-			u3.setUserStatus(IFSUserStatus.Active);
+			GridUser u3 = um.getUser(user.getGridId());
+			u3.setUserStatus(GridUserStatus.Active);
 			um.updateUser(u3);
 			assertEquals(u3, um.getUser(u3.getGridId()));
 			assertEquals(0, um.getDisabledUsers().size());
 			assertFalse(isUserSerialIdInList(user, um.getDisabledUsers()));
 
-			IFSUser u4 = um.getUser(user.getGridId());
-			u4.setUserStatus(IFSUserStatus.Suspended);
+			GridUser u4 = um.getUser(user.getGridId());
+			u4.setUserStatus(GridUserStatus.Suspended);
 			u4.setEmail("newemail2@example.com");
 			um.updateUser(u4);
 			assertEquals(u4, um.getUser(u4.getGridId()));
 
-			IFSUser u5 = um.getUser(user.getGridId());
+			GridUser u5 = um.getUser(user.getGridId());
 			u5.setGridId("changed grid id");
 			um.updateUser(u5);
 			assertEquals(u5, um.getUser(u5.getGridId()));
@@ -225,7 +225,7 @@ public class TestUserManager extends TestCase implements Publisher {
 			}
 
 			um.removeUser(u5);
-			assertEquals(INIT_USER, um.getUsers(new IFSUserFilter()).length);
+			assertEquals(INIT_USER, um.getUsers(new GridUserFilter()).length);
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
@@ -238,7 +238,7 @@ public class TestUserManager extends TestCase implements Publisher {
 		}
 	}
 
-	private boolean isUserSerialIdInList(IFSUser usr,
+	private boolean isUserSerialIdInList(GridUser usr,
 			Map<String, DisabledUser> list) throws Exception {
 		if (list.containsKey(usr.getGridId())) {
 			long sn = list.get(usr.getGridId()).getSerialNumber();
@@ -270,7 +270,7 @@ public class TestUserManager extends TestCase implements Publisher {
 				String firstName = firstNamePrefix + i;
 				String lastName = lastNamePrefix + i;
 
-				IFSUser user = new IFSUser();
+				GridUser user = new GridUser();
 
 				user.setIdPId(idpId);
 				user.setUID(uname);
@@ -281,7 +281,7 @@ public class TestUserManager extends TestCase implements Publisher {
 				assertNotNull(user.getCertificate());
 				assertNotNull(user.getGridId());
 				assertNotNull(user.getUserStatus());
-				assertEquals(IFSUserStatus.Pending, user.getUserStatus());
+				assertEquals(GridUserStatus.Pending, user.getUserStatus());
 				StringReader ureader = new StringReader(user.getCertificate()
 						.getCertificateAsString());
 				X509Certificate cert = CertUtil.loadCertificate(ureader);
@@ -293,14 +293,14 @@ public class TestUserManager extends TestCase implements Publisher {
 				assertTrue(isUserSerialIdInList(user, um.getDisabledUsers()));
 
 				// Test Querying for users
-				IFSUserFilter f1 = new IFSUserFilter();
-				IFSUser[] l1 = um.getUsers(f1);
+				GridUserFilter f1 = new GridUserFilter();
+				GridUser[] l1 = um.getUsers(f1);
 				assertEquals((i + 1 + INIT_USER), l1.length);
 
 				// Test querying by uid
-				IFSUserFilter f2 = new IFSUserFilter();
+				GridUserFilter f2 = new GridUserFilter();
 				f2.setUID("nobody");
-				IFSUser[] l2 = um.getUsers(f2);
+				GridUser[] l2 = um.getUsers(f2);
 				assertEquals(0, l2.length);
 				f2.setUID("use");
 				l2 = um.getUsers(f2);
@@ -311,18 +311,18 @@ public class TestUserManager extends TestCase implements Publisher {
 				assertEquals(user, l2[0]);
 
 				// Test querying by IdP_Id
-				IFSUserFilter f3 = new IFSUserFilter();
+				GridUserFilter f3 = new GridUserFilter();
 				f3.setIdPId(Long.MAX_VALUE);
-				IFSUser[] l3 = um.getUsers(f3);
+				GridUser[] l3 = um.getUsers(f3);
 				assertEquals(0, l3.length);
 				f3.setIdPId(user.getIdPId());
 				l3 = um.getUsers(f3);
 				assertEquals(idpCount, l3.length);
 
 				// Test querying by GID
-				IFSUserFilter f4 = new IFSUserFilter();
+				GridUserFilter f4 = new GridUserFilter();
 				f4.setGridId("nobody");
-				IFSUser[] l4 = um.getUsers(f4);
+				GridUser[] l4 = um.getUsers(f4);
 				assertEquals(0, l4.length);
 
 				String temp = user.getGridId();
@@ -337,9 +337,9 @@ public class TestUserManager extends TestCase implements Publisher {
 				assertEquals(user, l4[0]);
 
 				// Test querying by Email
-				IFSUserFilter f5 = new IFSUserFilter();
+				GridUserFilter f5 = new GridUserFilter();
 				f5.setEmail("nobody");
-				IFSUser[] l5 = um.getUsers(f5);
+				GridUser[] l5 = um.getUsers(f5);
 				assertEquals(0, l5.length);
 				f5.setEmail(user.getEmail());
 				l5 = um.getUsers(f5);
@@ -347,9 +347,9 @@ public class TestUserManager extends TestCase implements Publisher {
 				assertEquals(user, l5[0]);
 
 				// Test querying by Status
-				IFSUserFilter f7 = new IFSUserFilter();
-				f7.setUserStatus(IFSUserStatus.Suspended);
-				IFSUser[] l7 = um.getUsers(f7);
+				GridUserFilter f7 = new GridUserFilter();
+				f7.setUserStatus(GridUserStatus.Suspended);
+				GridUser[] l7 = um.getUsers(f7);
 				assertEquals(i, l7.length);
 				f7.setUserStatus(user.getUserStatus());
 				l7 = um.getUsers(f7);
@@ -357,9 +357,9 @@ public class TestUserManager extends TestCase implements Publisher {
 				assertEquals(user, l7[0]);
 
 				// Test querying by First Name
-				IFSUserFilter f8 = new IFSUserFilter();
+				GridUserFilter f8 = new GridUserFilter();
 				f8.setFirstName("nobody");
-				IFSUser[] l8 = um.getUsers(f8);
+				GridUser[] l8 = um.getUsers(f8);
 				assertEquals(0, l8.length);
 				f8.setFirstName(firstNamePrefix);
 				l8 = um.getUsers(f8);
@@ -370,9 +370,9 @@ public class TestUserManager extends TestCase implements Publisher {
 				assertEquals(user, l8[0]);
 
 				// Test querying by Last Name
-				IFSUserFilter f9 = new IFSUserFilter();
+				GridUserFilter f9 = new GridUserFilter();
 				f9.setLastName("nobody");
-				IFSUser[] l9 = um.getUsers(f9);
+				GridUser[] l9 = um.getUsers(f9);
 				assertEquals(0, l9.length);
 				f9.setLastName(lastNamePrefix);
 				l9 = um.getUsers(f9);
@@ -383,7 +383,7 @@ public class TestUserManager extends TestCase implements Publisher {
 				assertEquals(user, l9[0]);
 
 				// Test All
-				IFSUserFilter all = new IFSUserFilter();
+				GridUserFilter all = new GridUserFilter();
 				all.setIdPId(user.getIdPId());
 				all.setUID(user.getUID());
 				all.setGridId(user.getGridId());
@@ -391,34 +391,34 @@ public class TestUserManager extends TestCase implements Publisher {
 				all.setLastName(user.getLastName());
 				all.setEmail(user.getEmail());
 				all.setUserStatus(user.getUserStatus());
-				IFSUser[] lall = um.getUsers(all);
+				GridUser[] lall = um.getUsers(all);
 				assertEquals(1, lall.length);
 
 				// Test Update
-				IFSUser u1 = um.getUser(user.getGridId());
+				GridUser u1 = um.getUser(user.getGridId());
 				u1.setEmail("newemail@example.com");
 				um.updateUser(u1);
 				assertEquals(u1, um.getUser(u1.getGridId()));
 
-				IFSUser u3 = um.getUser(user.getGridId());
-				u3.setUserStatus(IFSUserStatus.Active);
+				GridUser u3 = um.getUser(user.getGridId());
+				u3.setUserStatus(GridUserStatus.Active);
 				um.updateUser(u3);
 				assertEquals(u3, um.getUser(u3.getGridId()));
 				assertEquals(i, um.getDisabledUsers().size());
 				assertFalse(isUserSerialIdInList(user, um.getDisabledUsers()));
-				u3.setUserStatus(IFSUserStatus.Suspended);
+				u3.setUserStatus(GridUserStatus.Suspended);
 				um.updateUser(u3);
 				assertEquals(u3, um.getUser(u3.getGridId()));
 				assertEquals((i + 1), um.getDisabledUsers().size());
 				assertTrue(isUserSerialIdInList(user, um.getDisabledUsers()));
 
-				IFSUser u4 = um.getUser(user.getGridId());
-				u4.setUserStatus(IFSUserStatus.Suspended);
+				GridUser u4 = um.getUser(user.getGridId());
+				u4.setUserStatus(GridUserStatus.Suspended);
 				u4.setEmail("newemail2@example.com");
 				um.updateUser(u4);
 				assertEquals(u4, um.getUser(u4.getGridId()));
 
-				IFSUser u5 = um.getUser(user.getGridId());
+				GridUser u5 = um.getUser(user.getGridId());
 				u5.setGridId("changed grid id");
 				um.updateUser(u5);
 				assertEquals(u5, um.getUser(u5.getGridId()));
@@ -436,16 +436,16 @@ public class TestUserManager extends TestCase implements Publisher {
 			}
 
 			// um.removeUser(u5);
-			IFSUser[] list = um.getUsers(new IFSUserFilter());
+			GridUser[] list = um.getUsers(new GridUserFilter());
 			assertEquals(userCount + INIT_USER, list.length);
 			int count = userCount;
 			for (int i = 0; i < list.length; i++) {
 				count = count - 1;
 				um.removeUser(list[i]);
 				assertEquals(count + INIT_USER, um
-						.getUsers(new IFSUserFilter()).length);
+						.getUsers(new GridUserFilter()).length);
 			}
-			assertEquals(0, um.getUsers(new IFSUserFilter()).length);
+			assertEquals(0, um.getUsers(new GridUserFilter()).length);
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
@@ -468,6 +468,7 @@ public class TestUserManager extends TestCase implements Publisher {
 	private FederationDefaults getDefaults() throws Exception {
 		TrustedIdP idp = new TrustedIdP();
 		idp.setName("Initial IdP");
+		idp.setDisplayName(idp.getName());
 
 		SAMLAttributeDescriptor uid = new SAMLAttributeDescriptor();
 		uid.setNamespaceURI(SAMLConstants.UID_ATTRIBUTE_NAMESPACE);
@@ -502,12 +503,12 @@ public class TestUserManager extends TestCase implements Publisher {
 		assertEquals(cert.getSubjectDN().getName(), subject);
 		idp.setIdPCertificate(CertUtil.writeCertificate(cert));
 		idp.setStatus(TrustedIdPStatus.Active);
-		IFSUser usr = new IFSUser();
+		GridUser usr = new GridUser();
 		usr.setUID("inital_admin");
 		usr.setFirstName("Mr");
 		usr.setLastName("Admin");
 		usr.setEmail("inital_admin@test.com");
-		usr.setUserStatus(IFSUserStatus.Active);
+		usr.setUserStatus(GridUserStatus.Active);
 		return new FederationDefaults(idp, usr);
 	}
 
@@ -560,7 +561,7 @@ public class TestUserManager extends TestCase implements Publisher {
 
 	}
 
-	private TrustedIdP getIdp(IFSUser usr) {
+	private TrustedIdP getIdp(GridUser usr) {
 		TrustedIdP idp = new TrustedIdP();
 		idp.setId(usr.getIdPId());
 		idp.setName(DEFAULT_IDP_NAME + usr.getIdPId());

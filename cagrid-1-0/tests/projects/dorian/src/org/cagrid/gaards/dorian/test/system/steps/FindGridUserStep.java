@@ -5,16 +5,16 @@ import gov.nih.nci.cagrid.testing.system.haste.Step;
 import java.util.List;
 
 import org.cagrid.gaards.dorian.client.GridAdministrationClient;
-import org.cagrid.gaards.dorian.federation.IFSUser;
-import org.cagrid.gaards.dorian.federation.IFSUserFilter;
-import org.cagrid.gaards.dorian.federation.IFSUserStatus;
+import org.cagrid.gaards.dorian.federation.GridUser;
+import org.cagrid.gaards.dorian.federation.GridUserFilter;
+import org.cagrid.gaards.dorian.federation.GridUserStatus;
 
 public class FindGridUserStep extends Step {
 
 	private String serviceURL;
-	private IFSUserStatus status;
+	private GridUserStatus status;
 	private GridCredentialRequestStep admin;
-	private IFSUser gridUser;
+	private GridUser gridUser;
 	private String localUserId;
 	private String firstName;
 	private String lastName;
@@ -28,11 +28,11 @@ public class FindGridUserStep extends Step {
 		this.gridCredential = user;
 	}
 
-	public IFSUser getGridUser() {
+	public GridUser getGridUser() {
 		return gridUser;
 	}
 
-	public void setExpectedStatus(IFSUserStatus status) {
+	public void setExpectedStatus(GridUserStatus status) {
 		this.status = status;
 	}
 
@@ -56,12 +56,12 @@ public class FindGridUserStep extends Step {
 		GridAdministrationClient client = new GridAdministrationClient(
 				serviceURL, this.admin.getGridCredential());
 		assertNotNull(gridCredential.getGridCredential());
-		IFSUserFilter filter = new IFSUserFilter();
+		GridUserFilter filter = new GridUserFilter();
 		filter.setGridId(this.gridCredential.getGridCredential().getIdentity());
-		List<IFSUser> users = client.findUsers(filter);
+		List<GridUser> users = client.findUsers(filter);
 		assertNotNull(users);
 		assertEquals(1, users.size());
-		IFSUser u = users.get(0);
+		GridUser u = users.get(0);
 
 		assertEquals(gridCredential.getGridCredential().getIdentity(), u
 				.getGridId());

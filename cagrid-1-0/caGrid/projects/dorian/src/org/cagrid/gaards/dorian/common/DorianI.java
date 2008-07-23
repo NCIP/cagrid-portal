@@ -146,9 +146,9 @@ public interface DorianI {
    * @throws PermissionDeniedFault
    *	Client does not have permission to perform the request.
    */
-  public org.cagrid.gaards.dorian.federation.IFSUser[] findIFSUsers(org.cagrid.gaards.dorian.federation.IFSUserFilter filter) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault ;
+  public org.cagrid.gaards.dorian.federation.GridUser[] findGridUsers(org.cagrid.gaards.dorian.federation.GridUserFilter filter) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault ;
 
-  public void updateIFSUser(org.cagrid.gaards.dorian.federation.IFSUser user) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.InvalidUserFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault ;
+  public void updateGridUser(org.cagrid.gaards.dorian.federation.GridUser user) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.InvalidUserFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault ;
 
   /**
    * Removes a grid user account.
@@ -161,7 +161,7 @@ public interface DorianI {
    * @throws PermissionDeniedFault
    *	Client does not have permission to perform the request.
    */
-  public void removeIFSUser(org.cagrid.gaards.dorian.federation.IFSUser user) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.InvalidUserFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault ;
+  public void removeGridUser(org.cagrid.gaards.dorian.federation.GridUser user) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.InvalidUserFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault ;
 
   /**
    * Renews a grid user's long term credentials.
@@ -174,7 +174,7 @@ public interface DorianI {
    * @throws PermissionDeniedFault
    *	Client does not have permission to perform the request.
    */
-  public org.cagrid.gaards.dorian.federation.IFSUser renewIFSUserCredentials(org.cagrid.gaards.dorian.federation.IFSUser user) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.InvalidUserFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault ;
+  public org.cagrid.gaards.dorian.federation.GridUser renewGridUserCredentials(org.cagrid.gaards.dorian.federation.GridUser user) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.InvalidUserFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault ;
 
   /**
    * Get a list of the Trusted IdP user policies supported by Dorian.
@@ -184,7 +184,7 @@ public interface DorianI {
    * @throws PermissionDeniedFault
    *	Client does not have permission to perform the request.
    */
-  public org.cagrid.gaards.dorian.federation.IFSUserPolicy[] getIFSUserPolicies() throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault ;
+  public org.cagrid.gaards.dorian.federation.GridUserPolicy[] getGridUserPolicies() throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault ;
 
   /**
    * Authentication Service interface for authenticating with the Dorian IdP.

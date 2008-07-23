@@ -71,7 +71,7 @@ public class ConfigureGlobusToTrustDorian {
 				DorianProperties c = utils.getDorianProperties();
 				c.getIdentityFederationProperties()
 						.setAutoHostCertificateApproval(true);
-				Dorian dorian = new Dorian(c, "localhost", true);
+				Dorian dorian = new Dorian(c, "https://localhost", true);
 				X509Certificate cacert = dorian.getCACertificate();
 
 				File dir = Utils.getTrustedCerificatesDirectory();

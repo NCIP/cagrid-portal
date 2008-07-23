@@ -21,8 +21,8 @@ import javax.swing.SwingUtilities;
 import javax.swing.border.TitledBorder;
 
 import org.cagrid.gaards.dorian.client.GridAdministrationClient;
-import org.cagrid.gaards.dorian.federation.IFSUser;
-import org.cagrid.gaards.dorian.federation.IFSUserFilter;
+import org.cagrid.gaards.dorian.federation.GridUser;
+import org.cagrid.gaards.dorian.federation.GridUserFilter;
 import org.cagrid.gaards.dorian.federation.TrustedIdP;
 import org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault;
 import org.cagrid.gaards.ui.dorian.DorianLookAndFeel;
@@ -36,7 +36,7 @@ import org.globus.gsi.GlobusCredential;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: FindUserDialog.java,v 1.3 2008-07-07 18:47:48 langella Exp $
+ * @version $Id: FindUserDialog.java,v 1.4 2008-07-23 18:12:37 langella Exp $
  */
 public class FindUserDialog extends JDialog {
 
@@ -379,7 +379,7 @@ public class FindUserDialog extends JDialog {
 		this.updateProgress(true, "Querying...");
 
 		try {
-			IFSUserFilter f = new IFSUserFilter();
+			GridUserFilter f = new GridUserFilter();
 
 			Object o = getIdp().getSelectedItem();
 			if (o instanceof TrustedIdPCaddy) {
@@ -396,7 +396,7 @@ public class FindUserDialog extends JDialog {
 					.getSelectedUserStatus());
 
 			GridAdministrationClient client = getSession().getAdminClient();
-			List<IFSUser> users = client.findUsers(f);
+			List<GridUser> users = client.findUsers(f);
 
 			for (int i = 0; i < users.size(); i++) {
 				this.getUsersTable().addUser(users.get(i));

@@ -1,6 +1,6 @@
 package org.cagrid.gaards.ui.dorian.ifs;
 
-import org.cagrid.gaards.dorian.federation.IFSUserStatus;
+import org.cagrid.gaards.dorian.federation.GridUserStatus;
 import org.cagrid.gaards.ui.common.AxisTypeComboBox;
 
 /**
@@ -17,11 +17,11 @@ public class UserStatusComboBox extends AxisTypeComboBox {
 	}
 
 	public UserStatusComboBox(boolean anyState) {
-		super(IFSUserStatus.class, anyState);
+		super(GridUserStatus.class, anyState);
 	}
 
-	public IFSUserStatus getSelectedUserStatus() {
-		return (IFSUserStatus) getSelectedObject();
+	public GridUserStatus getSelectedUserStatus() {
+		return (GridUserStatus) getSelectedObject();
 	}
 
 }

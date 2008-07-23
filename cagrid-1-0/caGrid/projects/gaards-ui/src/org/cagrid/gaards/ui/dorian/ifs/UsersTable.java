@@ -9,7 +9,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
 import org.cagrid.gaards.dorian.client.GridAdministrationClient;
-import org.cagrid.gaards.dorian.federation.IFSUser;
+import org.cagrid.gaards.dorian.federation.GridUser;
 import org.cagrid.gaards.dorian.federation.TrustedIdP;
 import org.cagrid.gaards.ui.dorian.SessionPanel;
 import org.cagrid.grape.GridApplication;
@@ -20,7 +20,7 @@ import org.cagrid.grape.utils.ErrorDialog;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: UsersTable.java,v 1.4 2008-07-07 18:47:48 langella Exp $
+ * @version $Id: UsersTable.java,v 1.5 2008-07-23 18:12:37 langella Exp $
  */
 public class UsersTable extends GrapeBaseTable {
 	public final static String USER = "user";
@@ -74,7 +74,7 @@ public class UsersTable extends GrapeBaseTable {
 
 	}
 
-	public void addUser(final IFSUser u) {
+	public void addUser(final GridUser u) {
 		Vector v = new Vector();
 		v.add(u);
 		v.add(String.valueOf(u.getIdPId()));
@@ -86,10 +86,10 @@ public class UsersTable extends GrapeBaseTable {
 		addRow(v);
 	}
 
-	public synchronized IFSUser getSelectedUser() throws Exception {
+	public synchronized GridUser getSelectedUser() throws Exception {
 		int row = getSelectedRow();
 		if ((row >= 0) && (row < getRowCount())) {
-			return (IFSUser) getValueAt(row, 0);
+			return (GridUser) getValueAt(row, 0);
 		} else {
 			throw new Exception("Please select a user!!!");
 		}
@@ -108,7 +108,7 @@ public class UsersTable extends GrapeBaseTable {
 		Runner runner = new Runner() {
 			public void execute() {
 				try {
-					IFSUser user = getSelectedUser();
+					GridUser user = getSelectedUser();
 					GridAdministrationClient client = session.getAdminClient();
 					List<TrustedIdP> idps = client.getTrustedIdPs();
 					TrustedIdP tidp = null;

@@ -99,7 +99,7 @@ public class CreateHostCertificate {
 				DorianProperties c =utils.getDorianProperties();
 				c.getIdentityFederationProperties()
 						.setAutoHostCertificateApproval(true);
-				Dorian dorian = new Dorian(c, "localhost", true);
+				Dorian dorian = new Dorian(c, "https://localhost", true);
 				boolean interactive = false;
 				if (line.hasOption(INTERACTIVE_MODE_OPT)) {
 					interactive = true;

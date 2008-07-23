@@ -13,8 +13,8 @@ import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 
 import org.cagrid.gaards.dorian.client.GridAdministrationClient;
-import org.cagrid.gaards.dorian.federation.IFSUser;
-import org.cagrid.gaards.dorian.federation.IFSUserFilter;
+import org.cagrid.gaards.dorian.federation.GridUser;
+import org.cagrid.gaards.dorian.federation.GridUserFilter;
 import org.cagrid.gaards.dorian.federation.TrustedIdP;
 import org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault;
 import org.cagrid.gaards.ui.dorian.DorianLookAndFeel;
@@ -250,14 +250,14 @@ public class AdministratorsWindow extends ApplicationComponent {
 		try {
 			GridAdministrationClient client = getSessionPanel()
 					.getAdminClient();
-			IFSUserFilter f = new IFSUserFilter();
+			GridUserFilter f = new GridUserFilter();
 			f.setGridId(getAdminsTable().getSelectedAdmin());
-			List<IFSUser> users = client.findUsers(f);
+			List<GridUser> users = client.findUsers(f);
 			if ((users == null) || (users.size() == 0)) {
 				throw new Exception(
 						"The administrator selected does not have an account with this Dorian.");
 			} else {
-				IFSUser user = users.get(0);
+				GridUser user = users.get(0);
 				List<TrustedIdP> idps = client.getTrustedIdPs();
 				TrustedIdP tidp = null;
 				for (int i = 0; i < idps.size(); i++) {

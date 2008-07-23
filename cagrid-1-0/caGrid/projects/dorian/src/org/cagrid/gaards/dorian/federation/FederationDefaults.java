@@ -2,18 +2,19 @@ package org.cagrid.gaards.dorian.federation;
 
 
 
+
 public class FederationDefaults {
-	private IFSUser defaultUser;
+	private GridUser defaultUser;
 	private TrustedIdP defaultIdP;
 
 
-	public FederationDefaults(TrustedIdP idp, IFSUser user) {
+	public FederationDefaults(TrustedIdP idp, GridUser user) {
 		this.defaultIdP = idp;
 		this.defaultUser = user;
 	}
 
 
-	public IFSUser getDefaultUser() {
+	public GridUser getDefaultUser() {
 		return defaultUser;
 	}
 
@@ -23,7 +24,7 @@ public class FederationDefaults {
 	}
 
 
-	public void setDefaultUser(IFSUser defaultUser) {
+	public void setDefaultUser(GridUser defaultUser) {
 		this.defaultUser = defaultUser;
 	}
 
@@ -31,5 +32,4 @@ public class FederationDefaults {
 	public void setDefaultIdP(TrustedIdP defaultIdP) {
 		this.defaultIdP = defaultIdP;
 	}
-
 }

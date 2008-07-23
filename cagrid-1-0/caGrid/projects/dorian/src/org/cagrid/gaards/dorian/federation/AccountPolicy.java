@@ -24,7 +24,7 @@ public abstract class AccountPolicy {
 	}
 
 
-	public abstract void applyPolicy(TrustedIdP idp, IFSUser user) throws DorianInternalFault, UserPolicyFault;
+	public abstract void applyPolicy(TrustedIdP idp, GridUser user) throws DorianInternalFault, UserPolicyFault;
 
 
 	public IdentityFederationProperties getConfiguration() {

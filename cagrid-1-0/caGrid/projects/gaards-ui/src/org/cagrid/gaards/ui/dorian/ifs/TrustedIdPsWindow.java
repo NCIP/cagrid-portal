@@ -13,7 +13,7 @@ import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 
 import org.cagrid.gaards.dorian.client.GridAdministrationClient;
-import org.cagrid.gaards.dorian.federation.IFSUserPolicy;
+import org.cagrid.gaards.dorian.federation.GridUserPolicy;
 import org.cagrid.gaards.dorian.federation.TrustedIdP;
 import org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault;
 import org.cagrid.gaards.ui.dorian.DorianLookAndFeel;
@@ -27,7 +27,7 @@ import org.cagrid.grape.utils.ErrorDialog;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: TrustedIdPsWindow.java,v 1.5 2008-07-07 18:47:48 langella Exp $
+ * @version $Id: TrustedIdPsWindow.java,v 1.6 2008-07-23 18:12:37 langella Exp $
  */
 public class TrustedIdPsWindow extends ApplicationComponent {
 
@@ -363,7 +363,7 @@ public class TrustedIdPsWindow extends ApplicationComponent {
 
 	}
 
-	private List<IFSUserPolicy> getUserPolicies() throws Exception {
+	private List<GridUserPolicy> getUserPolicies() throws Exception {
 		GridAdministrationClient client = getSession().getAdminClient();
 		return client.getUserPolicies();
 	}

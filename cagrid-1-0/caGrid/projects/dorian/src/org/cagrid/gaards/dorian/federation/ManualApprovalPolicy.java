@@ -12,7 +12,7 @@ import org.cagrid.gaards.dorian.stubs.types.UserPolicyFault;
  */
 
 public class ManualApprovalPolicy extends AccountPolicy {
-	public void applyPolicy(TrustedIdP idp, IFSUser user)
+	public void applyPolicy(TrustedIdP idp, GridUser user)
 			throws DorianInternalFault, UserPolicyFault {
 
 	}

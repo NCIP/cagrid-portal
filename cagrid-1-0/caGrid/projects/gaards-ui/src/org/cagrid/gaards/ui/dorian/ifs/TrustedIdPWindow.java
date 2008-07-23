@@ -22,7 +22,7 @@ import javax.swing.border.TitledBorder;
 
 import org.cagrid.gaards.dorian.client.GridAdministrationClient;
 import org.cagrid.gaards.dorian.common.SAMLConstants;
-import org.cagrid.gaards.dorian.federation.IFSUserPolicy;
+import org.cagrid.gaards.dorian.federation.GridUserPolicy;
 import org.cagrid.gaards.dorian.federation.SAMLAttributeDescriptor;
 import org.cagrid.gaards.dorian.federation.SAMLAuthenticationMethod;
 import org.cagrid.gaards.dorian.federation.TrustedIdP;
@@ -42,7 +42,7 @@ import org.globus.gsi.GlobusCredential;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: TrustedIdPWindow.java,v 1.5 2008-07-07 18:47:48 langella Exp $
+ * @version $Id: TrustedIdPWindow.java,v 1.6 2008-07-23 18:12:37 langella Exp $
  */
 public class TrustedIdPWindow extends ApplicationComponent {
 	public static final String PASSWORD = SAMLAuthenticationMethod.value1
@@ -118,7 +118,7 @@ public class TrustedIdPWindow extends ApplicationComponent {
 
 	private TrustedIdPStatusComboBox status = null;
 
-	private List<IFSUserPolicy> policies;
+	private List<GridUserPolicy> policies;
 
 	private JLabel policyLabel = null;
 
@@ -167,7 +167,7 @@ public class TrustedIdPWindow extends ApplicationComponent {
 	private JTextField email = null;
 
 	public TrustedIdPWindow(TrustedIdPsWindow window, String serviceId,
-			GlobusCredential proxy, List<IFSUserPolicy> policies) {
+			GlobusCredential proxy, List<GridUserPolicy> policies) {
 		super();
 		this.window = window;
 		this.serviceId = serviceId;
@@ -182,7 +182,7 @@ public class TrustedIdPWindow extends ApplicationComponent {
 	 * This is the default constructor
 	 */
 	public TrustedIdPWindow(String serviceId, GlobusCredential proxy,
-			TrustedIdP idp, List<IFSUserPolicy> policies) throws Exception {
+			TrustedIdP idp, List<GridUserPolicy> policies) throws Exception {
 		super();
 		this.serviceId = serviceId;
 		this.cred = proxy;
@@ -193,17 +193,17 @@ public class TrustedIdPWindow extends ApplicationComponent {
 	}
 
 	public class UserPolicyCaddy {
-		private IFSUserPolicy policy;
+		private GridUserPolicy policy;
 
 		public UserPolicyCaddy(String className) {
-			this.policy = new IFSUserPolicy(className, "");
+			this.policy = new GridUserPolicy(className, "");
 		}
 
-		public UserPolicyCaddy(IFSUserPolicy policy) {
+		public UserPolicyCaddy(GridUserPolicy policy) {
 			this.policy = policy;
 		}
 
-		public IFSUserPolicy getPolicy() {
+		public GridUserPolicy getPolicy() {
 			return policy;
 		}
 

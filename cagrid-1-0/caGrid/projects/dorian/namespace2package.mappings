@@ -21,4 +21,5 @@ urn\:oasis\:names\:tc\:SAML\:1.0\:assertion=gov.nih.nci.cagrid.opensaml
 http\://authentication.gaards.cagrid.org/AuthenticationService/types=org.cagrid.gaards.authentication.stubs.types
 http\://cagrid.nci.nih.gov/1/dorian-idp=org.cagrid.gaards.dorian.idp
 gme\://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.service=gov.nih.nci.cagrid.metadata.service
+
 gme\://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common=gov.nih.nci.cagrid.metadata.common

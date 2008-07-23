@@ -85,7 +85,7 @@ public class TestIdentityFederationManager extends TestCase {
 					.getIdentityAssignmentPolicy(), ca.getCACertificate()
 					.getSubjectDN().getName(), idp.getIdp(), INITIAL_ADMIN);
 			String adminGridId = UserManager.subjectToIdentity(adminSubject);
-			IFSUser usr = createUser(ifs, adminGridId, idp, "user");
+			GridUser usr = createUser(ifs, adminGridId, idp, "user");
 			String host = "localhost";
 			HostCertificateRequest req = getHostCertificateRequest(host);
 			HostCertificateRecord record = ifs.requestHostCertificate(usr
@@ -125,7 +125,7 @@ public class TestIdentityFederationManager extends TestCase {
 					.getIdentityAssignmentPolicy(), ca.getCACertificate()
 					.getSubjectDN().getName(), idp.getIdp(), INITIAL_ADMIN);
 			String adminGridId = UserManager.subjectToIdentity(adminSubject);
-			IFSUser usr = createUser(ifs, adminGridId, idp, "user");
+			GridUser usr = createUser(ifs, adminGridId, idp, "user");
 			String host = "localhost";
 			HostCertificateRequest req = getHostCertificateRequest(host);
 			HostCertificateRecord record = ifs.requestHostCertificate(usr
@@ -197,7 +197,7 @@ public class TestIdentityFederationManager extends TestCase {
 					.getIdentityAssignmentPolicy(), ca.getCACertificate()
 					.getSubjectDN().getName(), idp.getIdp(), INITIAL_ADMIN);
 			String adminGridId = UserManager.subjectToIdentity(adminSubject);
-			IFSUser usr = createUser(ifs, adminGridId, idp, "user");
+			GridUser usr = createUser(ifs, adminGridId, idp, "user");
 			String host = "localhost";
 			HostCertificateRequest req = getHostCertificateRequest(host);
 			HostCertificateRecord record = ifs.requestHostCertificate(usr
@@ -235,7 +235,7 @@ public class TestIdentityFederationManager extends TestCase {
 					.getIdentityAssignmentPolicy(), ca.getCACertificate()
 					.getSubjectDN().getName(), idp.getIdp(), INITIAL_ADMIN);
 			String adminGridId = UserManager.subjectToIdentity(adminSubject);
-			IFSUser usr = createUser(ifs, adminGridId, idp, "user");
+			GridUser usr = createUser(ifs, adminGridId, idp, "user");
 			String subjectPrefix = org.cagrid.gaards.dorian.service.util.Utils
 					.getHostCertificateSubjectPrefix(ca.getCACertificate());
 			String hostPrefix = "localhost";
@@ -346,7 +346,7 @@ public class TestIdentityFederationManager extends TestCase {
 					.getIdentityAssignmentPolicy(), ca.getCACertificate()
 					.getSubjectDN().getName(), idp.getIdp(), INITIAL_ADMIN);
 			String adminGridId = UserManager.subjectToIdentity(adminSubject);
-			IFSUser usr = createUser(ifs, adminGridId, idp, "user");
+			GridUser usr = createUser(ifs, adminGridId, idp, "user");
 			String host = "localhost";
 			HostCertificateRequest req = getHostCertificateRequest(host);
 			HostCertificateRecord record = ifs.requestHostCertificate(usr
@@ -426,7 +426,7 @@ public class TestIdentityFederationManager extends TestCase {
 					.getIdentityAssignmentPolicy(), ca.getCACertificate()
 					.getSubjectDN().getName(), idp.getIdp(), INITIAL_ADMIN);
 			String adminGridId = UserManager.subjectToIdentity(adminSubject);
-			IFSUser usr = createUser(ifs, adminGridId, idp, "user");
+			GridUser usr = createUser(ifs, adminGridId, idp, "user");
 			String host = "localhost";
 			HostCertificateRequest req = getHostCertificateRequest(host);
 			HostCertificateRecord record = ifs.requestHostCertificate(usr
@@ -441,8 +441,8 @@ public class TestIdentityFederationManager extends TestCase {
 
 			}
 
-			IFSUser usr2 = createUser(ifs, adminGridId, idp, "user2");
-			usr2.setUserStatus(IFSUserStatus.Suspended);
+			GridUser usr2 = createUser(ifs, adminGridId, idp, "user2");
+			usr2.setUserStatus(GridUserStatus.Suspended);
 			ifs.updateUser(adminGridId, usr2);
 
 			try {
@@ -455,7 +455,7 @@ public class TestIdentityFederationManager extends TestCase {
 
 			}
 
-			usr2.setUserStatus(IFSUserStatus.Active);
+			usr2.setUserStatus(GridUserStatus.Active);
 			ifs.updateUser(adminGridId, usr2);
 
 			HostCertificateUpdate update = new HostCertificateUpdate();
@@ -491,7 +491,7 @@ public class TestIdentityFederationManager extends TestCase {
 					.getIdentityAssignmentPolicy(), ca.getCACertificate()
 					.getSubjectDN().getName(), idp.getIdp(), INITIAL_ADMIN);
 			String adminGridId = UserManager.subjectToIdentity(adminSubject);
-			IFSUser usr = createUser(ifs, adminGridId, idp, "user");
+			GridUser usr = createUser(ifs, adminGridId, idp, "user");
 			String hostPrefix = "localhost";
 			int total = 3;
 
@@ -575,7 +575,7 @@ public class TestIdentityFederationManager extends TestCase {
 					.getIdentityAssignmentPolicy(), ca.getCACertificate()
 					.getSubjectDN().getName(), idp.getIdp(), INITIAL_ADMIN);
 			String adminGridId = UserManager.subjectToIdentity(adminSubject);
-			IFSUser usr = createUser(ifs, adminGridId, idp, "user");
+			GridUser usr = createUser(ifs, adminGridId, idp, "user");
 			String host = "localhost1";
 			HostCertificateRequest req = getHostCertificateRequest(host);
 			HostCertificateRecord record = ifs.requestHostCertificate(usr
@@ -649,16 +649,16 @@ public class TestIdentityFederationManager extends TestCase {
 					DELEGATION_LENGTH);
 			createAndCheckProxyLifetime(lifetime, pair.getPrivate(), certs,
 					DELEGATION_LENGTH);
-			IFSUserFilter f1 = new IFSUserFilter();
+			GridUserFilter f1 = new GridUserFilter();
 			f1.setIdPId(idp.getIdp().getId());
 			f1.setUID(uid);
-			IFSUser[] users = ifs.findUsers(adminGridId, f1);
+			GridUser[] users = ifs.findUsers(adminGridId, f1);
 			assertEquals(1, users.length);
-			IFSUser usr1 = users[0];
+			GridUser usr1 = users[0];
 			String certStr = usr1.getCertificate().getCertificateAsString();
 			X509Certificate cert1 = CertUtil.loadCertificate(certStr);
 			Thread.sleep(1000);
-			IFSUser usr2 = ifs.renewUserCredentials(adminGridId, usr1);
+			GridUser usr2 = ifs.renewUserCredentials(adminGridId, usr1);
 			assertEquals(usr1.getGridId(), usr2.getGridId());
 
 			if (certStr.equals(usr2.getCertificate().getCertificateAsString())) {
@@ -716,10 +716,10 @@ public class TestIdentityFederationManager extends TestCase {
 						idp2), publicKey, lifetime, DELEGATION_LENGTH);
 				createAndCheckProxyLifetime(lifetime, pair.getPrivate(), certs,
 						DELEGATION_LENGTH);
-				IFSUserFilter f1 = new IFSUserFilter();
+				GridUserFilter f1 = new GridUserFilter();
 				f1.setIdPId(idp2.getIdp().getId());
 				f1.setUID(uid);
-				IFSUser[] users = ifs.findUsers(adminGridId, f1);
+				GridUser[] users = ifs.findUsers(adminGridId, f1);
 				assertEquals(1, users.length);
 				UserContainer usr = new UserContainer(users[0]);
 				list.add(usr);
@@ -771,11 +771,11 @@ public class TestIdentityFederationManager extends TestCase {
 			}
 
 			this.validateCRLOnDisabledUserStatus(ifs, list,
-					IFSUserStatus.Suspended, adminGridId, userHostCerts);
+					GridUserStatus.Suspended, adminGridId, userHostCerts);
 			this.validateCRLOnDisabledUserStatus(ifs, list,
-					IFSUserStatus.Rejected, adminGridId, userHostCerts);
+					GridUserStatus.Rejected, adminGridId, userHostCerts);
 			this.validateCRLOnDisabledUserStatus(ifs, list,
-					IFSUserStatus.Expired, adminGridId, userHostCerts);
+					GridUserStatus.Expired, adminGridId, userHostCerts);
 
 			assertTrue(userHostCerts >= 1);
 
@@ -855,37 +855,37 @@ public class TestIdentityFederationManager extends TestCase {
 						i);
 				ucount = ucount + 1;
 				assertEquals(ucount, ifs.findUsers(adminGridId,
-						new IFSUserFilter()).length);
-				IFSUserFilter f1 = new IFSUserFilter();
+						new GridUserFilter()).length);
+				GridUserFilter f1 = new GridUserFilter();
 				f1.setIdPId(idp.getIdp().getId());
 				f1.setUID(uid);
-				IFSUser[] usr = ifs.findUsers(adminGridId, f1);
+				GridUser[] usr = ifs.findUsers(adminGridId, f1);
 				assertEquals(1, usr.length);
 
 				try {
-					ifs.findUsers(usr[0].getGridId(), new IFSUserFilter());
+					ifs.findUsers(usr[0].getGridId(), new GridUserFilter());
 					fail("Should have thrown exception attempting to find users.");
 				} catch (PermissionDeniedFault f) {
 
 				}
 				ifs.addAdmin(adminGridId, usr[0].getGridId());
 				assertEquals(ucount, ifs.findUsers(usr[0].getGridId(),
-						new IFSUserFilter()).length);
+						new GridUserFilter()).length);
 			}
 
 			int rcount = ucount;
 
 			for (int i = 0; i < times; i++) {
 				String uid = uidPrefix + i;
-				IFSUserFilter f1 = new IFSUserFilter();
+				GridUserFilter f1 = new GridUserFilter();
 				f1.setIdPId(idp.getIdp().getId());
 				f1.setUID(uid);
-				IFSUser[] usr = ifs.findUsers(adminGridId, f1);
+				GridUser[] usr = ifs.findUsers(adminGridId, f1);
 				assertEquals(1, usr.length);
 				ifs.removeUser(adminGridId, usr[0]);
 				rcount = rcount - 1;
 				assertEquals(rcount, ifs.findUsers(adminGridId,
-						new IFSUserFilter()).length);
+						new GridUserFilter()).length);
 			}
 
 		} catch (Exception e) {
@@ -990,7 +990,7 @@ public class TestIdentityFederationManager extends TestCase {
 			createAndCheckProxyLifetime(lifetime, pair.getPrivate(), certs,
 					DELEGATION_LENGTH);
 			assertEquals(ifs.getUser(gridId, idp.getIdp().getId(), username)
-					.getUserStatus(), IFSUserStatus.Active);
+					.getUserStatus(), GridUserStatus.Active);
 
 			Thread.sleep((SHORT_CREDENTIALS_VALID * 1000) + 100);
 			try {
@@ -1003,7 +1003,7 @@ public class TestIdentityFederationManager extends TestCase {
 
 			}
 			assertEquals(ifs.getUser(gridId, idp.getIdp().getId(), username)
-					.getUserStatus(), IFSUserStatus.Expired);
+					.getUserStatus(), GridUserStatus.Expired);
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			fail("Exception occured:" + e.getMessage());
@@ -1040,7 +1040,7 @@ public class TestIdentityFederationManager extends TestCase {
 
 			}
 			assertEquals(ifs.getUser(gridId, idp.getIdp().getId(), username)
-					.getUserStatus(), IFSUserStatus.Pending);
+					.getUserStatus(), GridUserStatus.Pending);
 
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
@@ -1083,8 +1083,8 @@ public class TestIdentityFederationManager extends TestCase {
 			createAndCheckProxyLifetime(lifetime, pair.getPrivate(), certs,
 					DELEGATION_LENGTH);
 			assertEquals(ifs.getUser(gridId, idp.getIdp().getId(), username)
-					.getUserStatus(), IFSUserStatus.Active);
-			IFSUser before = ifs
+					.getUserStatus(), GridUserStatus.Active);
+			GridUser before = ifs
 					.getUser(gridId, idp.getIdp().getId(), username);
 			Thread.sleep((SHORT_CREDENTIALS_VALID * 1000) + 100);
 
@@ -1093,8 +1093,8 @@ public class TestIdentityFederationManager extends TestCase {
 			createAndCheckProxyLifetime(lifetime, pair.getPrivate(), certs,
 					DELEGATION_LENGTH);
 			assertEquals(ifs.getUser(gridId, idp.getIdp().getId(), username)
-					.getUserStatus(), IFSUserStatus.Active);
-			IFSUser after = ifs.getUser(gridId, idp.getIdp().getId(), username);
+					.getUserStatus(), GridUserStatus.Active);
+			GridUser after = ifs.getUser(gridId, idp.getIdp().getId(), username);
 			if (before.getCertificate().equals(after.getCertificate())) {
 				fail("Credentials were the same when should have been auto-renewed.");
 			}
@@ -1137,8 +1137,8 @@ public class TestIdentityFederationManager extends TestCase {
 			} catch (PermissionDeniedFault f) {
 
 			}
-			IFSUser usr = ifs.getUser(gridId, idp.getIdp().getId(), username);
-			usr.setUserStatus(IFSUserStatus.Active);
+			GridUser usr = ifs.getUser(gridId, idp.getIdp().getId(), username);
+			usr.setUserStatus(GridUserStatus.Active);
 			ifs.updateUser(gridId, usr);
 			// give a chance for others to run right before we enter timing
 			// sensitive code
@@ -1150,8 +1150,8 @@ public class TestIdentityFederationManager extends TestCase {
 			createAndCheckProxyLifetime(lifetime, pair.getPrivate(), certs,
 					DELEGATION_LENGTH);
 			assertEquals(ifs.getUser(gridId, idp.getIdp().getId(), username)
-					.getUserStatus(), IFSUserStatus.Active);
-			IFSUser before = ifs
+					.getUserStatus(), GridUserStatus.Active);
+			GridUser before = ifs
 					.getUser(gridId, idp.getIdp().getId(), username);
 			Thread.sleep((SHORT_CREDENTIALS_VALID * 1000) + 100);
 			PublicKey publicKey2 = pair2.getPublic();
@@ -1160,8 +1160,8 @@ public class TestIdentityFederationManager extends TestCase {
 			createAndCheckProxyLifetime(lifetime, pair.getPrivate(), certs,
 					DELEGATION_LENGTH);
 			assertEquals(ifs.getUser(gridId, idp.getIdp().getId(), username)
-					.getUserStatus(), IFSUserStatus.Active);
-			IFSUser after = ifs.getUser(gridId, idp.getIdp().getId(), username);
+					.getUserStatus(), GridUserStatus.Active);
+			GridUser after = ifs.getUser(gridId, idp.getIdp().getId(), username);
 			if (before.getCertificate().equals(after.getCertificate())) {
 				fail("Certificate should have been renewed, but was not.");
 			}
@@ -1567,12 +1567,12 @@ public class TestIdentityFederationManager extends TestCase {
 	private FederationDefaults getDefaults() throws Exception {
 		TrustedIdP idp = this.getTrustedIdpAutoApproveAutoRenew("Initial IdP")
 				.getIdp();
-		IFSUser usr = new IFSUser();
+		GridUser usr = new GridUser();
 		usr.setUID(INITIAL_ADMIN);
 		usr.setFirstName("Mr");
 		usr.setLastName("Admin");
 		usr.setEmail(INITIAL_ADMIN + "@test.com");
-		usr.setUserStatus(IFSUserStatus.Active);
+		usr.setUserStatus(GridUserStatus.Active);
 		return new FederationDefaults(idp, usr);
 	}
 
@@ -1716,10 +1716,10 @@ public class TestIdentityFederationManager extends TestCase {
 	}
 
 	private void validateCRLOnDisabledUserStatus(IdentityFederationManager ifs,
-			List<UserContainer> list, IFSUserStatus status, String adminGridId,
+			List<UserContainer> list, GridUserStatus status, String adminGridId,
 			int userHostCerts) throws Exception {
 		for (int i = 0; i < list.size(); i++) {
-			IFSUser usr = list.get(i).getUser();
+			GridUser usr = list.get(i).getUser();
 			usr.setUserStatus(status);
 			ifs.updateUser(adminGridId, usr);
 			X509CRL crl = ifs.getCRL();
@@ -1753,8 +1753,8 @@ public class TestIdentityFederationManager extends TestCase {
 		}
 
 		for (int i = 0; i < list.size(); i++) {
-			IFSUser usr = list.get(i).getUser();
-			usr.setUserStatus(IFSUserStatus.Active);
+			GridUser usr = list.get(i).getUser();
+			usr.setUserStatus(GridUserStatus.Active);
 			ifs.updateUser(adminGridId, usr);
 		}
 		assertEquals(null, ifs.getCRL().getRevokedCertificates());
@@ -1818,6 +1818,7 @@ public class TestIdentityFederationManager extends TestCase {
 			throws Exception {
 		TrustedIdP idp = new TrustedIdP();
 		idp.setName(name);
+		idp.setDisplayName(name);
 		idp.setUserPolicyClass(policyClass);
 		idp.setStatus(TrustedIdPStatus.Active);
 		SAMLAttributeDescriptor uid = new SAMLAttributeDescriptor();
@@ -1854,7 +1855,7 @@ public class TestIdentityFederationManager extends TestCase {
 		return new IdPContainer(idp, cert, cred.getPrivateKey());
 	}
 
-	private IFSUser createUser(IdentityFederationManager ifs,
+	private GridUser createUser(IdentityFederationManager ifs,
 			String adminGridId, IdPContainer idp, String uid) throws Exception {
 		KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 		PublicKey publicKey = pair.getPublic();
@@ -1863,10 +1864,10 @@ public class TestIdentityFederationManager extends TestCase {
 				publicKey, lifetime, DELEGATION_LENGTH);
 		createAndCheckProxyLifetime(lifetime, pair.getPrivate(), certs,
 				DELEGATION_LENGTH);
-		IFSUserFilter f1 = new IFSUserFilter();
+		GridUserFilter f1 = new GridUserFilter();
 		f1.setIdPId(idp.getIdp().getId());
 		f1.setUID(uid);
-		IFSUser[] users = ifs.findUsers(adminGridId, f1);
+		GridUser[] users = ifs.findUsers(adminGridId, f1);
 		assertEquals(1, users.length);
 		return users[0];
 	}
@@ -1990,15 +1991,15 @@ public class TestIdentityFederationManager extends TestCase {
 	}
 
 	public class UserContainer {
-		private IFSUser usr;
+		private GridUser usr;
 		private List<HostCertificateRecord> hostCertificates;
 
-		public UserContainer(IFSUser usr) {
+		public UserContainer(GridUser usr) {
 			this.usr = usr;
 			this.hostCertificates = new ArrayList<HostCertificateRecord>();
 		}
 
-		public IFSUser getUser() {
+		public GridUser getUser() {
 			return usr;
 		}
 

@@ -18,7 +18,7 @@ import org.cagrid.gaards.pki.CertUtil;
  */
 
 public class ManualApprovalAutoRenewalPolicy extends AccountPolicy {
-	public void applyPolicy(TrustedIdP idp, IFSUser user) throws DorianInternalFault, UserPolicyFault {
+	public void applyPolicy(TrustedIdP idp, GridUser user) throws DorianInternalFault, UserPolicyFault {
 		UserManager um = getUserManager();
 		IdentityFederationProperties conf = getConfiguration();
 
