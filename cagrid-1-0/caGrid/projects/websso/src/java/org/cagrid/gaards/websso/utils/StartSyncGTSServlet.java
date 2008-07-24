@@ -13,29 +13,17 @@ import javax.servlet.http.HttpServlet;
 
 import org.cagrid.gaards.websso.beans.WebSSOServerInformation;
 
-
-public class StartSyncGTSServlet extends HttpServlet
-{
-
-	/**
-	 * 
-	 */
+public class StartSyncGTSServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public void init(ServletConfig config) throws ServletException
-	{
-		try
-		{
+	public void init(ServletConfig config) throws ServletException{
+		try{
 			WebSSOProperties webSSOProperties = (WebSSOProperties)ObjectFactory.getObject(WebSSOConstants.WEBSSO_PROPERTIES);
 			WebSSOServerInformation webSSOServerInformation = webSSOProperties.getWebSSOServerInformation();
 
-			if ("yes".equalsIgnoreCase(webSSOServerInformation.getStartAutoSyncGTS()))
-			{
+			if ("yes".equalsIgnoreCase(webSSOServerInformation.getStartAutoSyncGTS())){
 				FileHelper fileHelper = (FileHelper)ObjectFactory.getObject(WebSSOConstants.FILE_HELPER);
-			
-				//String pathToSyncDescription = fileHelper.getFileAsURL("sync-description.xml").getPath();
-				
 				InputStream fileInputStream = fileHelper.getFileAsStream("sync-description.xml");
 				//Load Sync Description
 				final InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
@@ -44,13 +32,10 @@ public class StartSyncGTSServlet extends HttpServlet
 				// Sync with the Trust Fabric Once
 				SyncGTS.getInstance().syncAndResyncInBackground(description, false);
 			}
-		}
-		catch (Exception e) 
-		{
+		} catch (Exception e) {
 			e.printStackTrace();
-			throw new ServletException ("Unable to Start Sync GTS Service.");
+			throw new ServletException("Unable to Start Sync GTS Service.");
 		}
 		super.init(config);
 	}
-	
 }
