@@ -126,8 +126,8 @@ public class IdentityFederationManager extends LoggingObject implements Publishe
                 && (defaults.getDefaultIdP().getAuthenticationServiceURL() != null)) {
                 idp.setAuthenticationServiceURL(defaults.getDefaultIdP().getAuthenticationServiceURL());
                 tm.updateIdP(idp);
-            } else if ((defaults.getDefaultIdP().getAuthenticationServiceURL()!=null)&&(!defaults.getDefaultIdP().getAuthenticationServiceURL()
-                .equals(idp.getAuthenticationServiceURL()))) {
+            } else if ((defaults.getDefaultIdP().getAuthenticationServiceURL() != null)
+                && (!defaults.getDefaultIdP().getAuthenticationServiceURL().equals(idp.getAuthenticationServiceURL()))) {
                 idp.setAuthenticationServiceURL(defaults.getDefaultIdP().getAuthenticationServiceURL());
                 tm.updateIdP(idp);
             }
@@ -297,7 +297,7 @@ public class IdentityFederationManager extends LoggingObject implements Publishe
         } catch (InvalidUserFault e) {
             throw e;
         } catch (GroupException e) {
-           logError(e.getMessage(), e);
+            logError(e.getMessage(), e);
             DorianInternalFault fault = new DorianInternalFault();
             fault.setFaultString("An unexpected error occurred in removing the user from all groups.");
             FaultHelper helper = new FaultHelper(fault);
@@ -336,7 +336,7 @@ public class IdentityFederationManager extends LoggingObject implements Publishe
                 this.administrators.addMember(gridIdentity);
             }
         } catch (GroupException e) {
-           logError(e.getMessage(), e);
+            logError(e.getMessage(), e);
             DorianInternalFault fault = new DorianInternalFault();
             fault.setFaultString("An unexpected error occurred in adding the user to the administrators group.");
             FaultHelper helper = new FaultHelper(fault);
@@ -941,5 +941,10 @@ public class IdentityFederationManager extends LoggingObject implements Publishe
             throw fault;
         }
 
+    }
+
+
+    public TrustedIdPManager getTrustedIdPManager() {
+        return this.tm;
     }
 }

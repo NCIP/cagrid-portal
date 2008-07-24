@@ -320,6 +320,7 @@
      <ns2:contextPropertyCollection>
       <ns2:ContextProperty description="" name="{gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata}ServiceMetadata"/>
       <ns2:ContextProperty description="" name="{http://gaards.cagrid.org/authentication}AuthenticationProfiles"/>
+      <ns2:ContextProperty description="" name="{http://cagrid.nci.nih.gov/1/dorian-ifs}TrustedIdentityProviders"/>
      </ns2:contextPropertyCollection>
     </ns2:ServiceContext>
    </ns2:serviceContextCollection>

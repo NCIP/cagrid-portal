@@ -498,6 +498,7 @@
           <sequence>
             <element ref="ns5:ServiceMetadata" />
             <element ref="ns7:AuthenticationProfiles" />
+            <element ref="ns1:TrustedIdentityProviders" />
           </sequence>
         </complexType>
       </element>

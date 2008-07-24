@@ -35,6 +35,8 @@
 	
 		<agg:ResourcePropertyNames>ns7:AuthenticationProfiles</agg:ResourcePropertyNames>
 	
+		<agg:ResourcePropertyNames>ns1:TrustedIdentityProviders</agg:ResourcePropertyNames>
+	
       </agg:GetMultipleResourcePropertiesPollType>
     </agg:AggregatorConfig>
     <agg:AggregatorData/>

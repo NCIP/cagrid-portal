@@ -89,8 +89,12 @@ public abstract class DorianResourceBase extends ReflectionResource implements R
 		
 	}
 	
+	
+	
+
 
 	    //Getters/Setters for ResourceProperties
+	
 	
 	public gov.nih.nci.cagrid.metadata.ServiceMetadata getServiceMetadata(){
 		return ((DorianResourceProperties) getResourceBean()).getServiceMetadata();
@@ -110,6 +114,17 @@ public abstract class DorianResourceBase extends ReflectionResource implements R
 	public void setAuthenticationProfiles(org.cagrid.gaards.authentication.AuthenticationProfiles authenticationProfiles ) throws ResourceException {
         ResourceProperty prop = getResourcePropertySet().get(DorianConstants.AUTHENTICATIONPROFILES);
 		prop.set(0, authenticationProfiles);
+	}
+	
+	
+	
+	public org.cagrid.gaards.dorian.federation.TrustedIdentityProviders getTrustedIdentityProviders(){
+		return ((DorianResourceProperties) getResourceBean()).getTrustedIdentityProviders();
+	}
+	
+	public void setTrustedIdentityProviders(org.cagrid.gaards.dorian.federation.TrustedIdentityProviders trustedIdentityProviders ) throws ResourceException {
+        ResourceProperty prop = getResourcePropertySet().get(DorianConstants.TRUSTEDIDENTITYPROVIDERS);
+		prop.set(0, trustedIdentityProviders);
 	}
 	
 
