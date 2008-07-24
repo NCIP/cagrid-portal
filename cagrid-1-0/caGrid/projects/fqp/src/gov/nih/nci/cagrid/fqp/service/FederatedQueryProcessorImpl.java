@@ -89,7 +89,7 @@ public class FederatedQueryProcessorImpl extends FederatedQueryProcessorImplBase
     public gov.nih.nci.cagrid.fqp.results.stubs.types.FederatedQueryResultsReference executeAsynchronously(
         gov.nih.nci.cagrid.dcql.DCQLQuery query) throws RemoteException {
 
-        // create a result resource
+        // get FQP result resource home
         FQPResultResourceHome resultHome = null;
         try {
             resultHome = (FQPResultResourceHome) getFederatedQueryResultsResourceHome();
@@ -102,6 +102,7 @@ public class FederatedQueryProcessorImpl extends FederatedQueryProcessorImplBase
             throw helper.getFault();
         }
 
+        // create an FQP result resource
         FQPResultResource fqpResultResource = null;
         ResourceKey key = null;
         try {
@@ -218,7 +219,7 @@ public class FederatedQueryProcessorImpl extends FederatedQueryProcessorImplBase
  * Work implemenation which uses the federated query engine to execute the query
  * and store the results in the provided resource.
  * 
- * TODO: use delegation to execute queries?
+ * TODO: use delegation to execute queries
  * 
  * @author oster
  */
@@ -248,7 +249,6 @@ class QueryExecutionWork implements Work {
             this.resource.setComplete(true);
             this.resource.setProcessingException(e);
         }
-
     }
 
 
