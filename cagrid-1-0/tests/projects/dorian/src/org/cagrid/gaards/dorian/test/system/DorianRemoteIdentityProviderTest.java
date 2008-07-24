@@ -12,9 +12,7 @@ import gov.nih.nci.cagrid.testing.system.deployment.story.ServiceStoryBase;
 import gov.nih.nci.cagrid.testing.system.haste.Step;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.Vector;
 
@@ -22,35 +20,16 @@ import javax.xml.namespace.QName;
 
 import org.cagrid.gaards.authentication.BasicAuthentication;
 import org.cagrid.gaards.authentication.common.AuthenticationProfile;
-import org.cagrid.gaards.authentication.faults.InvalidCredentialFault;
 import org.cagrid.gaards.authentication.test.AuthenticationProperties;
 import org.cagrid.gaards.authentication.test.system.steps.AuthenticationStep;
-import org.cagrid.gaards.authentication.test.system.steps.InvalidAuthentication;
 import org.cagrid.gaards.authentication.test.system.steps.SuccessfullAuthentication;
 import org.cagrid.gaards.authentication.test.system.steps.ValidateSupportedAuthenticationProfilesStep;
-import org.cagrid.gaards.dorian.federation.AutoApprovalAutoRenewalPolicy;
-import org.cagrid.gaards.dorian.federation.GridUserStatus;
-import org.cagrid.gaards.dorian.federation.TrustedIdPStatus;
-import org.cagrid.gaards.dorian.idp.Application;
-import org.cagrid.gaards.dorian.idp.CountryCode;
-import org.cagrid.gaards.dorian.idp.IdPUserRole;
-import org.cagrid.gaards.dorian.idp.IdPUserStatus;
-import org.cagrid.gaards.dorian.idp.StateCode;
-import org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault;
-import org.cagrid.gaards.dorian.test.system.steps.ChangeLocalUserPasswordStep;
 import org.cagrid.gaards.dorian.test.system.steps.CleanupDorianStep;
 import org.cagrid.gaards.dorian.test.system.steps.ConfigureGlobusToTrustDorianStep;
 import org.cagrid.gaards.dorian.test.system.steps.CopyConfigurationStep;
-import org.cagrid.gaards.dorian.test.system.steps.FindGridUserStep;
-import org.cagrid.gaards.dorian.test.system.steps.FindLocalUserStep;
 import org.cagrid.gaards.dorian.test.system.steps.GetAsserionSigningCertificateStep;
-import org.cagrid.gaards.dorian.test.system.steps.InvalidGridCredentialRequest;
-import org.cagrid.gaards.dorian.test.system.steps.RegisterUserWithDorianIdentityProviderStep;
 import org.cagrid.gaards.dorian.test.system.steps.GridCredentialRequestStep;
 import org.cagrid.gaards.dorian.test.system.steps.SuccessfullGridCredentialRequest;
-import org.cagrid.gaards.dorian.test.system.steps.UpdateGridUserStatusStep;
-import org.cagrid.gaards.dorian.test.system.steps.UpdateLocalUserStatusStep;
-import org.cagrid.gaards.dorian.test.system.steps.VerifyTrustedIdPStep;
 
 
 public class DorianRemoteIdentityProviderTest extends ServiceStoryBase {
