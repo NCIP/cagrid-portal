@@ -12,11 +12,13 @@
 	<property name="jar.name" value="${ant.project.name}-${project.version}.jar" />
 
 	<property name="src.java.dir" location="src/java" />
-    <property name="src.resources.dir" location="src/resources" />
+	<property name="src.resources.dir" location="src/resources" />
+	<property name="test.src.dir" location="test/src/java" />
 
 	<property name="build.dir" location="build" />
 	<property name="build.conf.dir" location="build/conf" />
 	<property name="build.classes.dir" location="build/classes" />
+	<property name="test.build.dir" location="build/classes" />
 
 
 	<path id="build.classpath">
@@ -26,6 +28,11 @@
 		<fileset dir="${env.GLOBUS_LOCATION}/lib">
 			<include name="**/*.jar" />
 		</fileset>
+	</path>
+
+	<path id="test.build.classpath">
+		<pathelement location="${build.classes.dir}" />
+		<path refid="build.classpath" />
 	</path>
 
 	<target name="dist">
@@ -72,6 +79,11 @@
 		<mkdir dir="${build.classes.dir}" />
 		<javac srcdir="${src.java.dir}" destdir="${build.classes.dir}" classpathref="build.classpath" debug="true" />
 		<copy file="${src.java.dir}/org/cagrid/gaards/websso/client/filter/client-config.wsdd" todir="${build.classes.dir}/org/cagrid/gaards/websso/client/filter/" />
+	</target>
+
+	<!-- Compile the test implementation classes -->
+	<target name="compileTests" depends="compile">
+		<javac srcdir="${test.src.dir}" classpathref="test.build.classpath" destdir="${test.build.dir}" debug="${java.debug}" deprecation="${deprecation}" />
 	</target>
 
 	<target name="jar" depends="compile,build-jar,dist">
