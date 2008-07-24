@@ -1,6 +1,9 @@
 package org.cagrid.gaards.websso.client.filter;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.StringTokenizer;
 
 import javax.servlet.Filter;
@@ -16,41 +19,53 @@ import org.jasig.cas.authentication.principal.Principal;
 import org.jasig.cas.client.validation.Assertion;
 import org.jasig.cas.client.web.filter.AbstractCasFilter;
 
-public class CaGridWebSSOAttributeLoaderFilter implements Filter
-{
+public class CaGridWebSSOAttributeLoaderFilter implements Filter {
 
 	public static final String IS_SESSION_ATTRIBUTES_LOADED = "IS_SESSION_ATTRIBUTES_LOADED";
 	public static final String ATTRIBUTE_DELIMITER = "$";
 	public static final String KEY_VALUE_PAIR_DELIMITER = "^";
 	
-	public void destroy()
-	{
+	public void destroy() {
 		// do nothing
 	}
 
-	public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain) throws IOException, ServletException
-	{
-		HttpSession session = ((HttpServletRequest)request).getSession();
+	public void doFilter(ServletRequest request, ServletResponse response,FilterChain filterChain) throws IOException, ServletException {
+		HttpSession session = ((HttpServletRequest) request).getSession();
 		Boolean isSessionLoaded = (Boolean) session.getAttribute(IS_SESSION_ATTRIBUTES_LOADED);
-		if (null == isSessionLoaded || isSessionLoaded == Boolean.FALSE)
-		{
-			Assertion assertion = (Assertion)session.getAttribute(AbstractCasFilter.CONST_ASSERTION);
+		if (null == isSessionLoaded || isSessionLoaded == Boolean.FALSE) {
+			Assertion assertion = (Assertion) session.getAttribute(AbstractCasFilter.CONST_ASSERTION);
 			Principal principal = assertion.getPrincipal();
-			String attributesString = principal.getId();
-			
-			StringTokenizer stringTokenizer = new StringTokenizer(attributesString, ATTRIBUTE_DELIMITER);
-			while (stringTokenizer.hasMoreTokens())
-			{
-				String attributeKeyValuePair = stringTokenizer.nextToken();
-				session.setAttribute(attributeKeyValuePair.substring(0, attributeKeyValuePair.indexOf(KEY_VALUE_PAIR_DELIMITER)), attributeKeyValuePair.substring(attributeKeyValuePair.indexOf(KEY_VALUE_PAIR_DELIMITER) + 1, attributeKeyValuePair.length()));
+			String attributesString = principal.getId();			
+			Map<String,String> userAttributesMap=getUserAttributes(attributesString);
+			Iterator<String> iterator = userAttributesMap.keySet().iterator();
+			while (iterator.hasNext()) {
+				String key = (String) iterator.next();
+				String value = userAttributesMap.get(key);
+				session.setAttribute(key, value);
 			}
 			session.setAttribute(IS_SESSION_ATTRIBUTES_LOADED, Boolean.TRUE);			
 		}
 		filterChain.doFilter(request, response);
 	}
 
-	public void init(FilterConfig arg0) throws ServletException
-	{
+	protected Map<String, String> getUserAttributes(String attributeString) throws ServletException {
+		Map<String, String> userAttributes=new HashMap<String, String>();
+ 		StringTokenizer stringTokenizer = new StringTokenizer(attributeString, ATTRIBUTE_DELIMITER);
+		while (stringTokenizer.hasMoreTokens()) {
+			String attributeKeyValuePair = stringTokenizer.nextToken();
+			final int index = attributeKeyValuePair.indexOf(KEY_VALUE_PAIR_DELIMITER);
+			
+			if (index == -1)
+				throw new ServletException("Invalid UserAttributes from WebSSO-Server "+ attributeString);
+			
+			final String key = attributeKeyValuePair.substring(0, index);
+			final String value = attributeKeyValuePair.substring(index + 1,attributeKeyValuePair.length());
+			userAttributes.put(key, value);
+		}
+		return userAttributes;
+	}
+
+	public void init(FilterConfig arg0) throws ServletException {
 		// do nothing
 	}
 }
