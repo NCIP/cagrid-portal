@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.fqp.results.service.globus.resource;
 
 import gov.nih.nci.cagrid.dcqlresult.DCQLQueryResultsCollection;
+import gov.nih.nci.cagrid.fqp.results.common.FederatedQueryResultsConstants;
 
 import java.util.Calendar;
 
@@ -69,7 +70,7 @@ public class FQPResultResource
 		// use a new UUID as the unique identifier for this resource
 		this.id = UUIDGEN.nextUUID();
 
-		this.propSet = new SimpleResourcePropertySet(ResourceConstants.RESOURCE_PROPERY_SET);
+		this.propSet = new SimpleResourcePropertySet(FederatedQueryResultsConstants.RESOURCE_PROPERTY_SET);
 
 		// these are the RPs necessary for resource lifetime management
 		ResourceProperty prop = new ReflectionResourceProperty(SimpleResourcePropertyMetaData.TERMINATION_TIME, this);

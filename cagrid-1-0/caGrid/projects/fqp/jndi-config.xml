@@ -25,7 +25,7 @@
     <resourceLink name="federatedQueryProcessorHome" target="java:comp/env/services/SERVICE-INSTANCE-PREFIX/FederatedQueryProcessor/home" />
   </service>
   <service name="SERVICE-INSTANCE-PREFIX/FederatedQueryProcessor">
-    <resource name="serviceconfiguration" type="gov.nih.nci.cagrid.fqp.service.ServiceConfiguration">
+    <resource name="serviceconfiguration" type="gov.nih.nci.cagrid.fqp.service.FederatedQueryProcessorConfiguration">
       <resourceParams>
         <parameter>
           <name>factory</name>
@@ -41,7 +41,7 @@
         </parameter>
       </resourceParams>
     </resource>
-    <resource name="configuration" type="gov.nih.nci.cagrid.fqp.service.globus.resource.ResourceConfiguration">
+    <resource name="configuration" type="gov.nih.nci.cagrid.fqp.service.globus.resource.FederatedQueryProcessorResourceConfiguration">
       <resourceParams>
         <parameter>
           <name>factory</name>
@@ -64,7 +64,7 @@
         </parameter>
       </resourceParams>
     </resource>
-    <resource name="home" type="gov.nih.nci.cagrid.fqp.service.globus.resource.BaseResourceHome">
+    <resource name="home" type="gov.nih.nci.cagrid.fqp.service.globus.resource.FederatedQueryProcessorResourceHome">
       <resourceParams>
         <parameter>
           <name>factory</name>

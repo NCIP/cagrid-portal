@@ -15,18 +15,6 @@ public interface FederatedQueryResultsI {
     public gov.nih.nci.cagrid.metadata.security.ServiceSecurityMetadata getServiceSecurityMetadata() throws RemoteException ;
 
   /**
-   * Destroys this resource and its corresponding query results (standard ws-lifetime operation).
-   *
-   */
-  public org.oasis.wsrf.lifetime.DestroyResponse destroy(org.oasis.wsrf.lifetime.Destroy params) throws RemoteException ;
-
-  /**
-   * Schedules this destruction of this resource (standard ws-lifetime operation).
-   *
-   */
-  public org.oasis.wsrf.lifetime.SetTerminationTimeResponse setTerminationTime(org.oasis.wsrf.lifetime.SetTerminationTime params) throws RemoteException ;
-
-  /**
    * Returns the results of the query managed by this resource
    *
    * @throws ProcessingNotCompleteFault
@@ -43,6 +31,18 @@ public interface FederatedQueryResultsI {
    *
    */
   public boolean isProcessingComplete() throws RemoteException ;
+
+  /**
+   * Destroys this resource and its corresponding query results (standard ws-lifetime operation).
+   *
+   */
+  public org.oasis.wsrf.lifetime.DestroyResponse destroy(org.oasis.wsrf.lifetime.Destroy params) throws RemoteException ;
+
+  /**
+   * Schedules this destruction of this resource (standard ws-lifetime operation).
+   *
+   */
+  public org.oasis.wsrf.lifetime.SetTerminationTimeResponse setTerminationTime(org.oasis.wsrf.lifetime.SetTerminationTime params) throws RemoteException ;
 
 }
 

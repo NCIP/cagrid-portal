@@ -1,7 +1,7 @@
 package gov.nih.nci.cagrid.fqp.service;
 
 import gov.nih.nci.cagrid.fqp.service.globus.resource.FederatedQueryProcessorResource;
-import gov.nih.nci.cagrid.fqp.service.ServiceConfiguration;
+import  gov.nih.nci.cagrid.fqp.service.FederatedQueryProcessorConfiguration;
 
 import java.rmi.RemoteException;
 
@@ -23,7 +23,7 @@ import org.globus.wsrf.ResourcePropertySet;
  *
  * Provides some simple accessors for the Impl.
  * 
- * @created by Introduce Toolkit version 1.1
+ * @created by Introduce Toolkit version 1.3
  * 
  */
 public abstract class FederatedQueryProcessorImplBase {
@@ -32,14 +32,14 @@ public abstract class FederatedQueryProcessorImplBase {
 	
 	}
 	
-	public ServiceConfiguration getConfiguration() throws Exception {
-		return ServiceConfiguration.getConfiguration();
+	public FederatedQueryProcessorConfiguration getConfiguration() throws Exception {
+		return FederatedQueryProcessorConfiguration.getConfiguration();
 	}
 	
 	
-	public gov.nih.nci.cagrid.fqp.service.globus.resource.BaseResourceHome getResourceHome() throws Exception {
+	public gov.nih.nci.cagrid.fqp.service.globus.resource.FederatedQueryProcessorResourceHome getResourceHome() throws Exception {
 		ResourceHome resource = getResourceHome("home");
-		return (gov.nih.nci.cagrid.fqp.service.globus.resource.BaseResourceHome)resource;
+		return (gov.nih.nci.cagrid.fqp.service.globus.resource.FederatedQueryProcessorResourceHome)resource;
 	}
 
 	
@@ -68,45 +68,6 @@ public abstract class FederatedQueryProcessorImplBase {
 
 		return resourceHome;
 	}
-	
-	
-	
-	
-	protected gov.nih.nci.cagrid.metadata.ServiceMetadata getServiceMetadataValue(){
-		FederatedQueryProcessorResource serviceBaseResource;
-		try {
-			serviceBaseResource = (FederatedQueryProcessorResource)ResourceContext.getResourceContext().getResource();
-		} catch (ResourceContextException e) {
-			return null;
-		} catch (ResourceException e) {
-			return null;
-		}
-		return serviceBaseResource.getServiceMetadataValue();
-	}
-
-		
-	
-	
-	protected Object getMetadata(QName metadataQName) {
-		FederatedQueryProcessorResource serviceBaseResource = null;
-		try {
-			serviceBaseResource = (FederatedQueryProcessorResource) ResourceContext.getResourceContext().getResource();
-		} catch (ResourceContextException e) {
-			return null;
-		} catch (ResourceException e) {
-			return null;
-		}
-		ResourcePropertySet resourcePropertySet = serviceBaseResource.getResourcePropertySet();
-		if (resourcePropertySet != null) {
-			ResourceProperty property = resourcePropertySet.get(metadataQName);
-			if (property != null) {
-				return property.get(0);
-			}
-
-		}
-		return null;
-	}
-	
 
 
 }

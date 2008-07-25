@@ -1,5 +1,7 @@
 package gov.nih.nci.cagrid.fqp.service;
 
+import gov.nih.nci.cagrid.introduce.servicetools.ServiceConfiguration;
+
 import org.globus.wsrf.config.ContainerConfig;
 import java.io.File;
 import javax.naming.InitialContext;
@@ -14,16 +16,16 @@ import org.globus.wsrf.Constants;
  * This class holds all service properties which were defined for the service to have
  * access to.
  * 
- * @created by Introduce Toolkit version 1.1
+ * @created by Introduce Toolkit version 1.3
  * 
  */
-public class ServiceConfiguration {
+public class FederatedQueryProcessorConfiguration implements ServiceConfiguration {
 
-	public static ServiceConfiguration  configuration = null;
+	public static FederatedQueryProcessorConfiguration  configuration = null;
 
-	public static ServiceConfiguration getConfiguration() throws Exception {
-		if (ServiceConfiguration.configuration != null) {
-			return ServiceConfiguration.configuration;
+	public static FederatedQueryProcessorConfiguration getConfiguration() throws Exception {
+		if (FederatedQueryProcessorConfiguration.configuration != null) {
+			return FederatedQueryProcessorConfiguration.configuration;
 		}
 		MessageContext ctx = MessageContext.getCurrentContext();
 
@@ -32,19 +34,25 @@ public class ServiceConfiguration {
 		String jndiName = Constants.JNDI_SERVICES_BASE_NAME + servicePath + "/serviceconfiguration";
 		try {
 			javax.naming.Context initialContext = new InitialContext();
-			ServiceConfiguration.configuration = (ServiceConfiguration) initialContext.lookup(jndiName);
+			FederatedQueryProcessorConfiguration.configuration = (FederatedQueryProcessorConfiguration) initialContext.lookup(jndiName);
 		} catch (Exception e) {
 			throw new Exception("Unable to instantiate service configuration.", e);
 		}
 
-		return ServiceConfiguration.configuration;
+		return FederatedQueryProcessorConfiguration.configuration;
 	}
 	
+
 	
 	private String threadPoolSize;
 	
 	private String initialResultLeaseInMinutes;
 	
+	
+	public String getEtcDirectoryPath() {
+		return ContainerConfig.getBaseDirectory();
+	}
+
 
 	
 	public String getThreadPoolSize() {

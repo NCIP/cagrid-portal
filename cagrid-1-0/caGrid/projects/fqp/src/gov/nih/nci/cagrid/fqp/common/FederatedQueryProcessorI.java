@@ -39,5 +39,11 @@ public interface FederatedQueryProcessorI {
    */
   public gov.nih.nci.cagrid.fqp.results.client.FederatedQueryResultsClient executeAsynchronously(gov.nih.nci.cagrid.dcql.DCQLQuery query) throws RemoteException, org.apache.axis.types.URI.MalformedURIException ;
 
+  public org.oasis.wsrf.properties.GetMultipleResourcePropertiesResponse getMultipleResourceProperties(org.oasis.wsrf.properties.GetMultipleResourceProperties_Element params) throws RemoteException ;
+
+  public org.oasis.wsrf.properties.GetResourcePropertyResponse getResourceProperty(javax.xml.namespace.QName params) throws RemoteException ;
+
+  public org.oasis.wsrf.properties.QueryResourcePropertiesResponse queryResourceProperties(org.oasis.wsrf.properties.QueryResourceProperties_Element params) throws RemoteException ;
+
 }
 

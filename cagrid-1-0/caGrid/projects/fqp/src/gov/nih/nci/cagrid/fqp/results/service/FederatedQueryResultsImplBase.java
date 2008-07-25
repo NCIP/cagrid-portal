@@ -1,6 +1,6 @@
 package gov.nih.nci.cagrid.fqp.results.service;
 
-import gov.nih.nci.cagrid.fqp.service.ServiceConfiguration;
+import  gov.nih.nci.cagrid.fqp.service.FederatedQueryProcessorConfiguration;
 
 import java.rmi.RemoteException;
 
@@ -22,7 +22,7 @@ import org.globus.wsrf.ResourcePropertySet;
  *
  * Provides some simple accessors for the Impl.
  * 
- * @created by Introduce Toolkit version 1.1
+ * @created by Introduce Toolkit version 1.3
  * 
  */
 public abstract class FederatedQueryResultsImplBase {
@@ -31,16 +31,16 @@ public abstract class FederatedQueryResultsImplBase {
 	
 	}
 	
-	public ServiceConfiguration getConfiguration() throws Exception {
-		return ServiceConfiguration.getConfiguration();
+	public FederatedQueryProcessorConfiguration getConfiguration() throws Exception {
+		return FederatedQueryProcessorConfiguration.getConfiguration();
 	}
 	
 	
 	
 	
-	public gov.nih.nci.cagrid.fqp.service.globus.resource.BaseResourceHome getFederatedQueryProcessorResourceHome() throws Exception {
+	public gov.nih.nci.cagrid.fqp.service.globus.resource.FederatedQueryProcessorResourceHome getFederatedQueryProcessorResourceHome() throws Exception {
 		ResourceHome resource = getResourceHome("federatedQueryProcessorHome");
-		return (gov.nih.nci.cagrid.fqp.service.globus.resource.BaseResourceHome)resource;
+		return (gov.nih.nci.cagrid.fqp.service.globus.resource.FederatedQueryProcessorResourceHome)resource;
 	}
 	
 	
@@ -61,10 +61,6 @@ public abstract class FederatedQueryResultsImplBase {
 
 		return resourceHome;
 	}
-	
-		
-	
-	
 
 
 }
