@@ -15,6 +15,7 @@ import java.rmi.RemoteException;
 import java.security.PublicKey;
 import java.security.cert.X509CRL;
 import java.security.cert.X509Certificate;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -944,7 +945,29 @@ public class IdentityFederationManager extends LoggingObject implements Publishe
     }
 
 
-    public TrustedIdPManager getTrustedIdPManager() {
-        return this.tm;
+    public TrustedIdentityProviders getTrustedIdentityProviders() throws DorianInternalFault {
+
+        TrustedIdentityProviders idps = new TrustedIdentityProviders();
+        TrustedIdP[] list1 = this.tm.getTrustedIdPs();
+        if (list1 != null) {
+            List<TrustedIdentityProvider> list2 = new ArrayList<TrustedIdentityProvider>();
+            for (int i = 0; i < list1.length; i++) {
+                if (list1[i].getStatus().equals(TrustedIdPStatus.Active)) {
+                    TrustedIdentityProvider idp = new TrustedIdentityProvider();
+                    idp.setName(list1[i].getName());
+                    idp.setDisplayName(list1[i].getDisplayName());
+                    idp.setAuthenticationServiceURL(list1[i].getAuthenticationServiceURL());
+                    idp.setAuthenticationServiceIdentity(list1[i].getAuthenticationServiceIdentity());
+                    list2.add(idp);
+                }
+            }
+
+            TrustedIdentityProvider[] list3 = new TrustedIdentityProvider[list2.size()];
+            for (int i = 0; i < list2.size(); i++) {
+                list3[i] = list2.get(i);
+            }
+            idps.setTrustedIdentityProvider(list3);
+        }
+        return idps;
     }
 }

@@ -46,30 +46,25 @@ public class DorianImpl extends DorianImplBase {
 
 
     public DorianImpl() throws RemoteException {
-		try {
-			EndpointReferenceType type = AddressingUtils
-					.createEndpointReference(null);
-			String configFile = DorianConfiguration.getConfiguration()
-					.getDorianConfiguration();
-			String propertiesFile = DorianConfiguration.getConfiguration()
-					.getDorianProperties();
-			BeanUtils utils = new BeanUtils(new FileSystemResource(configFile),
-					new FileSystemResource(propertiesFile));
-			DorianProperties conf = utils.getDorianProperties();
-			this.dorian = new Dorian(conf, type.getAddress().toString());
+        try {
+            EndpointReferenceType type = AddressingUtils.createEndpointReference(null);
+            String configFile = DorianConfiguration.getConfiguration().getDorianConfiguration();
+            String propertiesFile = DorianConfiguration.getConfiguration().getDorianProperties();
+            BeanUtils utils = new BeanUtils(new FileSystemResource(configFile), new FileSystemResource(propertiesFile));
+            DorianProperties conf = utils.getDorianProperties();
+            this.dorian = new Dorian(conf, type.getAddress().toString());
 
-			QName[] list = new QName[1];
-			list[0] = AuthenticationProfile.BASIC_AUTHENTICATION;
-			AuthenticationProfiles profiles = new AuthenticationProfiles();
-			profiles.setProfile(list);
-			getResourceHome().getAddressedResource().setAuthenticationProfiles(
-					profiles);
-			getResourceHome().getAddressedResource().setIdentityProviderManager(this.dorian.getTrustedIdPManager());
-		} catch (Exception e) {
-			FaultHelper.printStackTrace(e);
-			throw new RemoteException(Utils.getExceptionMessage(e));
-		}
-	}
+            QName[] list = new QName[1];
+            list[0] = AuthenticationProfile.BASIC_AUTHENTICATION;
+            AuthenticationProfiles profiles = new AuthenticationProfiles();
+            profiles.setProfile(list);
+            getResourceHome().getAddressedResource().setAuthenticationProfiles(profiles);
+            getResourceHome().getAddressedResource().setDorian(this.dorian);
+        } catch (Exception e) {
+            FaultHelper.printStackTrace(e);
+            throw new RemoteException(Utils.getExceptionMessage(e));
+        }
+    }
 
 
     public DorianConfiguration getConfiguration() throws Exception {

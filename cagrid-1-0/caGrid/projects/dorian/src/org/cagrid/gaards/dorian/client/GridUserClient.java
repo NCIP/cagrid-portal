@@ -59,6 +59,7 @@ public class GridUserClient {
     }
 
 
+
     /**
      * Allow a user to request a short term Grid credential from Dorian, which
      * they may user to authenticate to Grid service.
@@ -220,6 +221,7 @@ public class GridUserClient {
             throw fault;
         }
     }
+
 
     /**
      * This method obtains a list of the identity providers trusted by Dorian.

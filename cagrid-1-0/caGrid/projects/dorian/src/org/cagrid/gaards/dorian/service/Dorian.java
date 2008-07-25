@@ -31,8 +31,8 @@ import org.cagrid.gaards.dorian.federation.ProxyLifetime;
 import org.cagrid.gaards.dorian.federation.SAMLAttributeDescriptor;
 import org.cagrid.gaards.dorian.federation.SAMLAuthenticationMethod;
 import org.cagrid.gaards.dorian.federation.TrustedIdP;
-import org.cagrid.gaards.dorian.federation.TrustedIdPManager;
 import org.cagrid.gaards.dorian.federation.TrustedIdPStatus;
+import org.cagrid.gaards.dorian.federation.TrustedIdentityProviders;
 import org.cagrid.gaards.dorian.idp.Application;
 import org.cagrid.gaards.dorian.idp.IdPUser;
 import org.cagrid.gaards.dorian.idp.IdPUserFilter;
@@ -381,8 +381,8 @@ public class Dorian extends LoggingObject {
     }
 
 
-    protected TrustedIdPManager getTrustedIdPManager() {
-        return this.ifs.getTrustedIdPManager();
+    public TrustedIdentityProviders getTrustedIdentityProviders() throws DorianInternalFault {
+        return this.ifs.getTrustedIdentityProviders();
     }
 
 }

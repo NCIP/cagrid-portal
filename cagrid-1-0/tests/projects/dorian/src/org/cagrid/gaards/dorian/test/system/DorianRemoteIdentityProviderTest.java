@@ -40,7 +40,6 @@ import org.cagrid.gaards.dorian.test.system.steps.GetAsserionSigningCertificateS
 import org.cagrid.gaards.dorian.test.system.steps.GridCredentialRequestStep;
 import org.cagrid.gaards.dorian.test.system.steps.InvalidGridCredentialRequest;
 import org.cagrid.gaards.dorian.test.system.steps.SuccessfullGridCredentialRequest;
-import org.cagrid.gaards.dorian.test.system.steps.UpdateLocalUserStatusStep;
 import org.cagrid.gaards.dorian.test.system.steps.UpdateTrustedIdPStatusStep;
 import org.cagrid.gaards.dorian.test.system.steps.VerifyTrustedIdPMetadataStep;
 import org.cagrid.gaards.dorian.test.system.steps.VerifyTrustedIdPStep;

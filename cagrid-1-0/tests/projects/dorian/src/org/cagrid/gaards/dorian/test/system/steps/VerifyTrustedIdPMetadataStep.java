@@ -1,8 +1,8 @@
 package org.cagrid.gaards.dorian.test.system.steps;
 
-import java.util.List;
-
 import gov.nih.nci.cagrid.testing.system.haste.Step;
+
+import java.util.List;
 
 import org.cagrid.gaards.dorian.client.GridUserClient;
 import org.cagrid.gaards.dorian.federation.TrustedIdentityProvider;

@@ -3,10 +3,8 @@ package org.cagrid.gaards.dorian.service.globus.resource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.cagrid.gaards.dorian.common.DorianConstants;
-import org.cagrid.gaards.dorian.federation.TrustedIdP;
-import org.cagrid.gaards.dorian.federation.TrustedIdPManager;
-import org.cagrid.gaards.dorian.federation.TrustedIdentityProvider;
 import org.cagrid.gaards.dorian.federation.TrustedIdentityProviders;
+import org.cagrid.gaards.dorian.service.Dorian;
 import org.cagrid.gaards.dorian.stubs.DorianResourceProperties;
 import org.globus.wsrf.ResourceProperty;
 import org.globus.wsrf.ResourcePropertySet;
@@ -19,7 +17,7 @@ import org.globus.wsrf.ResourcePropertySet;
  */
 public class DorianResource extends DorianResourceBase {
 
-    private TrustedIdPManager identityProviderManager;
+    private Dorian dorian;
     private Log log;
 
 
@@ -43,19 +41,7 @@ public class DorianResource extends DorianResourceBase {
 
     private void updateTrustedIdentityProviders(ResourcePropertySet set) {
         try {
-            TrustedIdentityProviders idps = new TrustedIdentityProviders();
-            TrustedIdP[] list1 = this.identityProviderManager.getTrustedIdPs();
-            if(list1!=null){
-              TrustedIdentityProvider[] list2 = new TrustedIdentityProvider[list1.length];
-              for(int i=0; i<list1.length; i++){
-                  list2[i] = new TrustedIdentityProvider();
-                  list2[i].setName(list1[i].getName());
-                  list2[i].setDisplayName(list1[i].getDisplayName());
-                  list2[i].setAuthenticationServiceURL(list1[i].getAuthenticationServiceURL());
-                  list2[i].setAuthenticationServiceIdentity(list1[i].getAuthenticationServiceIdentity());
-              }
-              idps.setTrustedIdentityProvider(list2);
-            }
+            TrustedIdentityProviders idps = this.dorian.getTrustedIdentityProviders();
             ResourceProperty prop = set.get(DorianConstants.TRUSTEDIDENTITYPROVIDERS);
             prop.set(0, idps);
         } catch (Exception e) {
@@ -64,9 +50,8 @@ public class DorianResource extends DorianResourceBase {
     }
 
 
-    public void setIdentityProviderManager(TrustedIdPManager identityProviderManager) {
-        this.identityProviderManager = identityProviderManager;
+    public void setDorian(Dorian dorian) {
+        this.dorian = dorian;
     }
-    
-    
+
 }
