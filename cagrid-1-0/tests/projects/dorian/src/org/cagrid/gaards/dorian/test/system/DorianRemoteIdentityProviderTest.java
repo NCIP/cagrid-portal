@@ -24,12 +24,28 @@ import org.cagrid.gaards.authentication.test.AuthenticationProperties;
 import org.cagrid.gaards.authentication.test.system.steps.AuthenticationStep;
 import org.cagrid.gaards.authentication.test.system.steps.SuccessfullAuthentication;
 import org.cagrid.gaards.authentication.test.system.steps.ValidateSupportedAuthenticationProfilesStep;
+import org.cagrid.gaards.dorian.federation.AutoApprovalAutoRenewalPolicy;
+import org.cagrid.gaards.dorian.federation.GridUserStatus;
+import org.cagrid.gaards.dorian.federation.SAMLAttributeDescriptor;
+import org.cagrid.gaards.dorian.federation.SAMLAuthenticationMethod;
+import org.cagrid.gaards.dorian.federation.TrustedIdP;
+import org.cagrid.gaards.dorian.federation.TrustedIdPStatus;
+import org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault;
+import org.cagrid.gaards.dorian.test.system.steps.AddTrustedIdPStep;
 import org.cagrid.gaards.dorian.test.system.steps.CleanupDorianStep;
 import org.cagrid.gaards.dorian.test.system.steps.ConfigureGlobusToTrustDorianStep;
 import org.cagrid.gaards.dorian.test.system.steps.CopyConfigurationStep;
+import org.cagrid.gaards.dorian.test.system.steps.FindGridUserStep;
 import org.cagrid.gaards.dorian.test.system.steps.GetAsserionSigningCertificateStep;
 import org.cagrid.gaards.dorian.test.system.steps.GridCredentialRequestStep;
+import org.cagrid.gaards.dorian.test.system.steps.InvalidGridCredentialRequest;
 import org.cagrid.gaards.dorian.test.system.steps.SuccessfullGridCredentialRequest;
+import org.cagrid.gaards.dorian.test.system.steps.UpdateLocalUserStatusStep;
+import org.cagrid.gaards.dorian.test.system.steps.UpdateTrustedIdPStatusStep;
+import org.cagrid.gaards.dorian.test.system.steps.VerifyTrustedIdPMetadataStep;
+import org.cagrid.gaards.dorian.test.system.steps.VerifyTrustedIdPStep;
+import org.cagrid.gaards.pki.CertUtil;
+import org.cagrid.gaards.saml.encoding.SAMLConstants;
 
 
 public class DorianRemoteIdentityProviderTest extends ServiceStoryBase {
@@ -83,9 +99,8 @@ public class DorianRemoteIdentityProviderTest extends ServiceStoryBase {
 
             String dorianURL = getContainer().getContainerBaseURI().toString() + "cagrid/Dorian";
             String asURL = getContainer().getContainerBaseURI().toString() + "cagrid/AuthenticationService";
-            
-            
-            //Test Get supported authentication types
+
+            // Test Get supported authentication types
             Set<QName> dorianExpectedProfiles = new HashSet<QName>();
             dorianExpectedProfiles.add(AuthenticationProfile.BASIC_AUTHENTICATION);
             steps.add(new ValidateSupportedAuthenticationProfilesStep(dorianURL, dorianExpectedProfiles));
@@ -108,18 +123,111 @@ public class DorianRemoteIdentityProviderTest extends ServiceStoryBase {
 
             Set<QName> asExpectedProfiles = new HashSet<QName>();
             asExpectedProfiles.add(AuthenticationProfile.BASIC_AUTHENTICATION);
-            steps.add(new ValidateSupportedAuthenticationProfilesStep(
-                    asURL, asExpectedProfiles));
+            steps.add(new ValidateSupportedAuthenticationProfilesStep(asURL, asExpectedProfiles));
 
-            SuccessfullAuthentication success = new SuccessfullAuthentication(
-                    "jdoe", "John", "Doe", "jdoe@doe.com", authenticationProperties
-                            .getSigningCertificate());
+            SuccessfullAuthentication success = new SuccessfullAuthentication("jdoe", "John", "Doe", "jdoe@doe.com",
+                authenticationProperties.getSigningCertificate());
 
             // Test Successful authentication
             BasicAuthentication asUser = new BasicAuthentication();
             asUser.setUserId("jdoe");
             asUser.setPassword("password");
-            steps.add(new AuthenticationStep(asURL, success, asUser));
+            AuthenticationStep user = new AuthenticationStep(asURL, success, asUser);
+            steps.add(user);
+
+            // Test that the Dorian Idp is properly registered.
+
+            VerifyTrustedIdPStep localIdP = new VerifyTrustedIdPStep(dorianURL, admin, "Dorian");
+            localIdP.setDisplayName("Dorian");
+            localIdP.setStatus(TrustedIdPStatus.Active);
+            localIdP.setUserPolicyClass(AutoApprovalAutoRenewalPolicy.class.getName());
+            localIdP.setAuthenticationServiceURL(dorianURL);
+            steps.add(localIdP);
+
+            VerifyTrustedIdPMetadataStep localIdPMetadata = new VerifyTrustedIdPMetadataStep(dorianURL, "Dorian");
+            localIdPMetadata.setDisplayName("Dorian");
+            localIdPMetadata.setAuthenticationServiceURL(dorianURL);
+            steps.add(localIdP);
+            steps.add(localIdPMetadata);
+
+            TrustedIdP idp = new TrustedIdP();
+            idp.setName("OSU");
+            idp.setDisplayName("Ohio State University");
+            idp.setStatus(TrustedIdPStatus.Active);
+            idp.setUserPolicyClass(AutoApprovalAutoRenewalPolicy.class.getName());
+            idp.setAuthenticationServiceURL(asURL);
+            SAMLAttributeDescriptor uid = new SAMLAttributeDescriptor();
+            uid.setNamespaceURI(SAMLConstants.UID_ATTRIBUTE_NAMESPACE);
+            uid.setName(SAMLConstants.UID_ATTRIBUTE);
+            idp.setUserIdAttributeDescriptor(uid);
+
+            SAMLAttributeDescriptor firstName = new SAMLAttributeDescriptor();
+            firstName.setNamespaceURI(SAMLConstants.FIRST_NAME_ATTRIBUTE_NAMESPACE);
+            firstName.setName(SAMLConstants.FIRST_NAME_ATTRIBUTE);
+            idp.setFirstNameAttributeDescriptor(firstName);
+
+            SAMLAttributeDescriptor lastName = new SAMLAttributeDescriptor();
+            lastName.setNamespaceURI(SAMLConstants.LAST_NAME_ATTRIBUTE_NAMESPACE);
+            lastName.setName(SAMLConstants.LAST_NAME_ATTRIBUTE);
+            idp.setLastNameAttributeDescriptor(lastName);
+
+            SAMLAttributeDescriptor email = new SAMLAttributeDescriptor();
+            email.setNamespaceURI(SAMLConstants.EMAIL_ATTRIBUTE_NAMESPACE);
+            email.setName(SAMLConstants.EMAIL_ATTRIBUTE);
+            idp.setEmailAttributeDescriptor(email);
+
+            idp.setIdPCertificate(CertUtil.writeCertificate(authenticationProperties.getSigningCertificate()));
+            SAMLAuthenticationMethod[] methods = new SAMLAuthenticationMethod[1];
+            methods[0] = SAMLAuthenticationMethod.fromValue("urn:oasis:names:tc:SAML:1.0:am:unspecified");
+            idp.setAuthenticationMethod(methods);
+
+            steps.add(new AddTrustedIdPStep(dorianURL, admin, idp));
+
+            VerifyTrustedIdPStep remoteIdP = new VerifyTrustedIdPStep(dorianURL, admin, idp.getName());
+            remoteIdP.setDisplayName(idp.getDisplayName());
+            remoteIdP.setStatus(TrustedIdPStatus.Active);
+            remoteIdP.setUserPolicyClass(AutoApprovalAutoRenewalPolicy.class.getName());
+            remoteIdP.setAuthenticationServiceURL(asURL);
+            remoteIdP.setAuthenticationServiceIdentity(idp.getAuthenticationServiceIdentity());
+            steps.add(remoteIdP);
+
+            VerifyTrustedIdPMetadataStep remoteIdPMetadata = new VerifyTrustedIdPMetadataStep(dorianURL, idp.getName());
+            remoteIdPMetadata.setDisplayName(idp.getDisplayName());
+            remoteIdPMetadata.setAuthenticationServiceURL(asURL);
+            remoteIdPMetadata.setAuthenticationServiceIdentity(idp.getAuthenticationServiceIdentity());
+            steps.add(remoteIdPMetadata);
+
+            GridCredentialRequestStep remoteUser = new GridCredentialRequestStep(dorianURL, user,
+                new SuccessfullGridCredentialRequest());
+            steps.add(remoteUser);
+
+            FindGridUserStep gridUser = new FindGridUserStep(dorianURL, admin, remoteUser);
+            gridUser.setExpectedEmail(success.getExpectedEmail());
+            gridUser.setExpectedFirstName(success.getExpectedFirstName());
+            gridUser.setExpectedLastName(success.getExpectedLastName());
+            gridUser.setExpectedLocalUserId(success.getExpectedUserId());
+            gridUser.setExpectedStatus(GridUserStatus.Active);
+            steps.add(gridUser);
+
+ 
+            steps.add(new UpdateTrustedIdPStatusStep(dorianURL, admin, idp.getName(), TrustedIdPStatus.Suspended));
+
+            VerifyTrustedIdPStep remoteIdP2 = new VerifyTrustedIdPStep(dorianURL, admin, idp.getName());
+            remoteIdP2.setDisplayName(idp.getDisplayName());
+            remoteIdP2.setStatus(TrustedIdPStatus.Suspended);
+            remoteIdP2.setUserPolicyClass(AutoApprovalAutoRenewalPolicy.class.getName());
+            remoteIdP2.setAuthenticationServiceURL(asURL);
+            remoteIdP2.setAuthenticationServiceIdentity(idp.getAuthenticationServiceIdentity());
+            steps.add(remoteIdP2);
+            
+            steps.add(new VerifyTrustedIdPMetadataStep(dorianURL,idp.getName(),false));
+            steps.add(new GridCredentialRequestStep(dorianURL, user, new InvalidGridCredentialRequest(
+                "Access for your Identity Provider has been suspended!!!", PermissionDeniedFault.class)));
+
+            steps.add(new UpdateTrustedIdPStatusStep(dorianURL, admin, idp.getName(), TrustedIdPStatus.Active));
+
+
+            steps.add(new GridCredentialRequestStep(dorianURL, user, new SuccessfullGridCredentialRequest()));
 
         } catch (Exception e) {
             e.printStackTrace();
