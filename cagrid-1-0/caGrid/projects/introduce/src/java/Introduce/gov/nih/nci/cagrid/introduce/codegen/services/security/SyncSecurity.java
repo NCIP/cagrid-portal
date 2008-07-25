@@ -12,7 +12,7 @@ import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.common.SpecificServiceInformation;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
-import gov.nih.nci.cagrid.introduce.extension.authorization.AuthorizationExtensionCodegenPostProcessor;
+import gov.nih.nci.cagrid.introduce.extension.authorization.AuthorizationExtensionManager;
 import gov.nih.nci.cagrid.introduce.templates.etc.SecurityDescTemplate;
 import gov.nih.nci.cagrid.introduce.templates.service.globus.ServiceAuthorizationTemplate;
 import gov.nih.nci.cagrid.metadata.security.ServiceSecurityMetadata;
@@ -113,7 +113,7 @@ public class SyncSecurity extends SyncTool {
                 String extensionName = (String) iterator.next();
                 AuthorizationExtensionDescriptionType authorizationExtensionDescriptionType = ExtensionsLoader
                     .getInstance().getAuthorizationExtension(extensionName);
-                AuthorizationExtensionCodegenPostProcessor processor = ExtensionTools
+                AuthorizationExtensionManager processor = ExtensionTools
                     .getAuthorizationExtensionCodegenPostProcessor(authorizationExtensionDescriptionType.getName());
                 String authorizationClassname = processor.generateAuthorizationExtension(authorizationExtensionDescriptionType, new SpecificServiceInformation(
                     getServiceInformation(), service));

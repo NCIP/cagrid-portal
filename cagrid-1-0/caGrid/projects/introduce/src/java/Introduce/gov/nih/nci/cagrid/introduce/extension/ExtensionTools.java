@@ -12,7 +12,7 @@ import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionT
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
-import gov.nih.nci.cagrid.introduce.extension.authorization.AuthorizationExtensionCodegenPostProcessor;
+import gov.nih.nci.cagrid.introduce.extension.authorization.AuthorizationExtensionManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -86,15 +86,15 @@ public class ExtensionTools {
      *         <code>null</code> if none is present
      * @throws Exception
      */
-    public static AuthorizationExtensionCodegenPostProcessor getAuthorizationExtensionCodegenPostProcessor(String extensionName)
+    public static AuthorizationExtensionManager getAuthorizationExtensionCodegenPostProcessor(String extensionName)
         throws Exception {
         AuthorizationExtensionDescriptionType extensionDesc = ExtensionsLoader.getInstance().getAuthorizationExtension(
             extensionName);
-        if (extensionDesc != null && extensionDesc.getAuthorizationCodegenPostProcessor() != null
-            && !extensionDesc.getAuthorizationCodegenPostProcessor().equals("")) {
-            Class c = Class.forName(extensionDesc.getAuthorizationCodegenPostProcessor());
+        if (extensionDesc != null && extensionDesc.getAuthorizationExtensionManager() != null
+            && !extensionDesc.getAuthorizationExtensionManager().equals("")) {
+            Class c = Class.forName(extensionDesc.getAuthorizationExtensionManager());
             Object obj = c.newInstance();
-            return (AuthorizationExtensionCodegenPostProcessor) obj;
+            return (AuthorizationExtensionManager) obj;
         }
         return null;
     }
