@@ -16,7 +16,6 @@ public interface AuthorizationExtensionManager {
 	
     /**
      * Should create or configure the class that should be used for this particular auth extensions callback.
-     * Will be called each time the introduce service is saved.
      * 
      * @param desc
      * @param info
@@ -24,15 +23,6 @@ public interface AuthorizationExtensionManager {
      * @throws AuthorizationExtensionException
      */
 	public String generateAuthorizationExtension(AuthorizationExtensionDescriptionType desc, SpecificServiceInformation info) throws AuthorizationExtensionException;
-
-	/**
-	 * Will be called when introduce detects the extension is no longer being used in the specfic service
-	 * 
-	 * @param desc
-	 * @param info
-	 * @return
-	 * @throws AuthorizationExtensionException
-	 */
+	
 	public String removeAuthorizationExtension(AuthorizationExtensionDescriptionType desc, SpecificServiceInformation info) throws AuthorizationExtensionException;
-
 }

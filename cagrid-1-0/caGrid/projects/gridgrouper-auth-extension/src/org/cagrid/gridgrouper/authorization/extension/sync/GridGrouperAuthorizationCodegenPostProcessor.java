@@ -6,8 +6,8 @@ import gov.nih.nci.cagrid.introduce.beans.extension.AuthorizationExtensionDescri
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.common.SpecificServiceInformation;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
-import gov.nih.nci.cagrid.introduce.extension.authorization.AuthorizationExtensionCodegenPostProcessor;
 import gov.nih.nci.cagrid.introduce.extension.authorization.AuthorizationExtensionException;
+import gov.nih.nci.cagrid.introduce.extension.authorization.AuthorizationExtensionManager;
 import gov.nih.nci.cagrid.introduce.extension.utils.ExtensionUtilities;
 
 import java.io.File;
@@ -26,7 +26,7 @@ import org.cagrid.gridgrouper.authorization.extension.common.Constants;
 import org.globus.wsrf.utils.AnyHelper;
 
 
-public class GridGrouperAuthorizationCodegenPostProcessor implements AuthorizationExtensionCodegenPostProcessor {
+public class GridGrouperAuthorizationCodegenPostProcessor implements AuthorizationExtensionManager {
 
     public String generateAuthorizationExtension(AuthorizationExtensionDescriptionType extensionDesc,
         SpecificServiceInformation serviceInfo) throws AuthorizationExtensionException {
@@ -144,6 +144,12 @@ public class GridGrouperAuthorizationCodegenPostProcessor implements Authorizati
 
         // return the grid grouper authorization class
         return "org.cagrid.gridgrouper.authorization.extension.service.GridGrouperAuthorization";
+    }
+
+    public String removeAuthorizationExtension(AuthorizationExtensionDescriptionType arg0,
+        SpecificServiceInformation arg1) throws AuthorizationExtensionException {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }
