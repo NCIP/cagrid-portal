@@ -40,6 +40,7 @@ public class FederatedQueryProcessorImpl extends FederatedQueryProcessorImplBase
     private static final int DEFAULT_POOL_SIZE = 10;
     private static final int DEFAULT_RESULT_LEASE_MINS = 30;
     
+    // TODO: use Java 5 concurrent... this eventually relies on an old concurrent impl
     private WorkManager workManager = null;
 
     protected static Log LOG = LogFactory.getLog(FederatedQueryProcessorImpl.class.getName());
