@@ -119,7 +119,6 @@ public class FederatedQueryResultsClient extends ServiceSecurityClient implement
 
 
     // overloaded to not communicate annonymously if credentials are provided
-    @Override
     protected void configureStubSecurity(Stub stub, String method) throws RemoteException {
 
         boolean https = false;
@@ -306,7 +305,6 @@ public class FederatedQueryResultsClient extends ServiceSecurityClient implement
     }
 
 
-    @Override
     public gov.nih.nci.cagrid.metadata.security.ServiceSecurityMetadata getServiceSecurityMetadata()
         throws RemoteException {
         synchronized (this.portTypeMutex) {
