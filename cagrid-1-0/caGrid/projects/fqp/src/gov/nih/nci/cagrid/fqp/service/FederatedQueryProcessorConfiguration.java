@@ -16,7 +16,7 @@ import org.globus.wsrf.Constants;
  * This class holds all service properties which were defined for the service to have
  * access to.
  * 
- * @created by Introduce Toolkit version 1.3
+ * @created by Introduce Toolkit version 1.2
  * 
  */
 public class FederatedQueryProcessorConfiguration implements ServiceConfiguration {
@@ -42,7 +42,8 @@ public class FederatedQueryProcessorConfiguration implements ServiceConfiguratio
 		return FederatedQueryProcessorConfiguration.configuration;
 	}
 	
-
+	private String etcDirectoryPath;
+	
 	
 	private String threadPoolSize;
 	
@@ -50,9 +51,12 @@ public class FederatedQueryProcessorConfiguration implements ServiceConfiguratio
 	
 	
 	public String getEtcDirectoryPath() {
-		return ContainerConfig.getBaseDirectory();
+		return ContainerConfig.getBaseDirectory() + File.separator + etcDirectoryPath;
 	}
-
+	
+	public void setEtcDirectoryPath(String etcDirectoryPath) {
+		this.etcDirectoryPath = etcDirectoryPath;
+	}
 
 	
 	public String getThreadPoolSize() {

@@ -32,6 +32,10 @@
           <value>org.globus.wsrf.jndi.BeanFactory</value>
         </parameter>
         <parameter>
+          <name>etcDirectoryPath</name>
+          <value>ETC-PATH</value>
+        </parameter>
+        <parameter>
           <name>threadPoolSize</name>
           <value>@threadPoolSize@</value>
         </parameter>

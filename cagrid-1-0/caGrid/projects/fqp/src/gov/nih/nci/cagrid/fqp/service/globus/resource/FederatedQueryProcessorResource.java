@@ -9,7 +9,7 @@ import org.globus.wsrf.ResourceKey;
 /** 
  * The implementation of this FederatedQueryProcessorResource type.
  * 
- * @created by Introduce Toolkit version 1.3
+ * @created by Introduce Toolkit version 1.2
  * 
  */
 public class FederatedQueryProcessorResource extends FederatedQueryProcessorResourceBase {

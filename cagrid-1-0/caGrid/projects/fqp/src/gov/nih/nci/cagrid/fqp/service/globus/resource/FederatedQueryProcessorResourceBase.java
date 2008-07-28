@@ -85,7 +85,7 @@ import org.oasis.wsrf.lifetime.TerminationNotification;
  * of these resource as well as code for registering any properties selected
  * to the index service.
  * 
- * @created by Introduce Toolkit version 1.3
+ * @created by Introduce Toolkit version 1.2
  * 
  */
 public abstract class FederatedQueryProcessorResourceBase extends ReflectionResource implements Resource
@@ -232,7 +232,7 @@ public abstract class FederatedQueryProcessorResourceBase extends ReflectionReso
                 + getConfiguration().getRegistrationTemplateFile());
 
             if (registrationFile.exists() && registrationFile.canRead()) {
-                logger.debug("Loading registration arguments from:" + registrationFile);
+                logger.debug("Loading registration argumentsrmation from:" + registrationFile);
 
                 try {
                     params = ServiceGroupRegistrationClient.readParams(registrationFile.getAbsolutePath());
