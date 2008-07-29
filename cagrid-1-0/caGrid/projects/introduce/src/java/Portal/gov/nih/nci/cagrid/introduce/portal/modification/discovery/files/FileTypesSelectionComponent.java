@@ -9,7 +9,6 @@ import gov.nih.nci.cagrid.introduce.beans.configuration.NamespaceReplacementPoli
 import gov.nih.nci.cagrid.introduce.beans.extension.DiscoveryExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespacesType;
-import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.FileFilters;
 import gov.nih.nci.cagrid.introduce.common.ResourceManager;
@@ -21,6 +20,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -202,7 +202,7 @@ public class FileTypesSelectionComponent extends NamespaceTypeDiscoveryComponent
                 return null;
             }
 
-            Set storedSchemas = new HashSet();
+            List storedSchemas = new LinkedList();
             copySchemas(this.currentFile, schemaDestinationDir, new HashSet(), storedSchemas, replacementPolicy);
 
             Iterator schemaFileIter = storedSchemas.iterator();
@@ -290,7 +290,7 @@ public class FileTypesSelectionComponent extends NamespaceTypeDiscoveryComponent
     }
 
 
-    public void copySchemas(String fileName, File copyToDirectory, Set visitedSchemas, Set storedSchemas,
+    public void copySchemas(String fileName, File copyToDirectory, Set visitedSchemas, List storedSchemas,
         NamespaceReplacementPolicy replacementPolicy) throws Exception {
         File schemaFile = new File(fileName);
         Document schema = XMLUtilities.fileNameToDocument(schemaFile.getCanonicalPath());
