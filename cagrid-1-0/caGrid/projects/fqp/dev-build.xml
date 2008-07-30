@@ -33,6 +33,9 @@
 	<!-- Create any extended Classpaths here                            -->
 	<!-- ============================================================== -->
 	<target name="defineExtendedClasspaths">
+		<echo message="Defining extended classpaths"/>
+		<echo message="Defining extended classpaths"/>
+		<echo message="Defining extended classpaths"/>
 		<path id="base.extended.classpath">
 			<fileset dir="${ext.lib}">
 				<include name="*.jar" />
@@ -50,6 +53,11 @@
 		<path id="test.run.extended.classpath">
 		</path>
 		<path id="run.extended.classpath">
+		</path>
+		<path id="tasks.run.extended.classpath">
+			<fileset dir="${ext.lib}">
+				<include name="*.jar"/>
+			</fileset>
 		</path>
 	</target>
 
