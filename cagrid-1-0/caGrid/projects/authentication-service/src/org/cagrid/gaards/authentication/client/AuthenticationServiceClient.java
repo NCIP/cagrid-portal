@@ -9,7 +9,7 @@ import java.security.cert.X509Certificate;
 import org.apache.axis.client.Stub;
 import org.apache.axis.message.addressing.EndpointReferenceType;
 import org.apache.axis.types.URI.MalformedURIException;
-import org.cagrid.gaards.authentication.BasicAuthenticationWithOneTimePassword;
+import org.cagrid.gaards.authentication.BasicAuthentication;
 import org.cagrid.gaards.authentication.common.AuthenticationServiceI;
 import org.cagrid.gaards.pki.CertUtil;
 import org.cagrid.gaards.saml.encoding.SAMLUtils;
@@ -68,15 +68,11 @@ public class AuthenticationServiceClient extends
 
 			AuthenticationServiceClient client = new AuthenticationServiceClient(
 					"https://localhost:8443/wsrf/services/cagrid/AuthenticationService");
-			/*
+			
 			BasicAuthentication cred = new BasicAuthentication();
 			cred.setUserId("jdoe");
 			cred.setPassword("password");
-			*/
-			BasicAuthenticationWithOneTimePassword cred = new BasicAuthenticationWithOneTimePassword();
-			cred.setUserId("jdoe2");
-			cred.setPassword("password");
-			cred.setOneTimePassword("onetimepassword");
+			
 			
 			SAMLAssertion saml = client.authenticateUser(cred);
 			saml.verify(cert);

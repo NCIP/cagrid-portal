@@ -6,8 +6,8 @@ import java.util.Set;
 import javax.xml.namespace.QName;
 
 import org.cagrid.gaards.authentication.BasicAuthentication;
-import org.cagrid.gaards.authentication.BasicAuthenticationWithOneTimePassword;
 import org.cagrid.gaards.authentication.Credential;
+import org.cagrid.gaards.authentication.OneTimePassword;
 
 public class AuthenticationProfile {
 
@@ -15,7 +15,7 @@ public class AuthenticationProfile {
 			"http://gaards.cagrid.org/authentication", "BasicAuthentication");
 	public static QName BASIC_AUTHENTICATION_WITH_ONE_TIME_PASSWORD = new QName(
 			"http://gaards.cagrid.org/authentication",
-			"BasicAuthenticationWithOneTimePassword");
+			"OneTimePassword");
 
 	public static boolean isValid(QName profile) {
 		if (profile.equals(BASIC_AUTHENTICATION)) {
@@ -53,7 +53,7 @@ public class AuthenticationProfile {
 				return true;
 			} else if ((profile
 					.equals(BASIC_AUTHENTICATION_WITH_ONE_TIME_PASSWORD))
-					&& (c.getClass().equals(BasicAuthenticationWithOneTimePassword.class))) {
+					&& (c.getClass().equals(OneTimePassword.class))) {
 				return true;
 			}
 

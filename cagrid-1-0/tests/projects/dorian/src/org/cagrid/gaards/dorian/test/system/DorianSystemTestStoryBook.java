@@ -16,12 +16,12 @@ public class DorianSystemTestStoryBook extends StoryBook {
     protected void stories() {
         try {
             
-            /*
+            
             this.addStory(new DorianIdentityProviderAuthenticationTest(ServiceContainerFactory
                 .createContainer(ServiceContainerType.SECURE_TOMCAT_CONTAINER), DORIAN_PROPERTIES_FILE));
             this.addStory(new DorianLocaIdentityProviderTest(ServiceContainerFactory
                 .createContainer(ServiceContainerType.SECURE_TOMCAT_CONTAINER), DORIAN_PROPERTIES_FILE));
-*/
+
             this.addStory(new DorianRemoteIdentityProviderTest(ServiceContainerFactory
                 .createContainer(ServiceContainerType.SECURE_TOMCAT_CONTAINER), null, DORIAN_PROPERTIES_FILE, new File(
                 "resources/authentication-config.xml")));

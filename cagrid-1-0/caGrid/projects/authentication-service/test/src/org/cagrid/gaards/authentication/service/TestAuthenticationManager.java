@@ -12,7 +12,7 @@ import javax.xml.namespace.QName;
 import junit.framework.TestCase;
 
 import org.cagrid.gaards.authentication.BasicAuthentication;
-import org.cagrid.gaards.authentication.BasicAuthenticationWithOneTimePassword;
+import org.cagrid.gaards.authentication.OneTimePassword;
 import org.cagrid.gaards.authentication.common.AuthenticationProfile;
 import org.cagrid.gaards.authentication.faults.CredentialNotSupportedFault;
 import org.cagrid.gaards.authentication.faults.InvalidCredentialFault;
@@ -211,9 +211,8 @@ public class TestAuthenticationManager extends TestCase {
 					.contains(AuthenticationProfile.BASIC_AUTHENTICATION));
 
 			// Test acceptable authentication
-			BasicAuthenticationWithOneTimePassword auth = new BasicAuthenticationWithOneTimePassword();
+			OneTimePassword auth = new OneTimePassword();
 			auth.setUserId("jdoe");
-			auth.setPassword("password");
 			auth.setOneTimePassword("onetimepassword");
 			try {
 				manager.authenticate(auth);
@@ -299,9 +298,8 @@ public class TestAuthenticationManager extends TestCase {
 					.contains(AuthenticationProfile.BASIC_AUTHENTICATION_WITH_ONE_TIME_PASSWORD));
 
 			// Test acceptable authentication
-			BasicAuthenticationWithOneTimePassword auth = new BasicAuthenticationWithOneTimePassword();
+			OneTimePassword auth = new OneTimePassword();
 			auth.setUserId("jdoe");
-			auth.setPassword("password");
 			auth.setOneTimePassword("onetimepassword");
 			SAMLAssertion saml = manager.authenticate(auth);
 			saml.verify(properties.getSigningCertificate());

@@ -11,8 +11,8 @@ import java.util.Set;
 
 import javax.security.auth.Subject;
 
-import org.cagrid.gaards.authentication.BasicAuthenticationWithOneTimePassword;
 import org.cagrid.gaards.authentication.Credential;
+import org.cagrid.gaards.authentication.OneTimePassword;
 import org.cagrid.gaards.authentication.common.InvalidCredentialException;
 import org.cagrid.gaards.authentication.service.BasicAuthenticationWithOneTimePasswordSubjectProvider;
 
@@ -27,9 +27,8 @@ public class ExampleSubjectProvider2 extends
 			throws InvalidCredentialException {
 		String userId = null;
 
-		BasicAuthenticationWithOneTimePassword c = (BasicAuthenticationWithOneTimePassword) credential;
-		if ((c.getPassword().equals("password"))
-				&& (c.getOneTimePassword().equals("onetimepassword"))) {
+		OneTimePassword c = (OneTimePassword) credential;
+		if (c.getOneTimePassword().equals("onetimepassword")) {
 			userId = c.getUserId();
 		} else {
 			throw new InvalidCredentialException(
