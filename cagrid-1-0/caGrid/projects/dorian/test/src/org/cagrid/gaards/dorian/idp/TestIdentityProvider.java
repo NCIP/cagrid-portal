@@ -15,9 +15,7 @@ import org.cagrid.gaards.authentication.OneTimePassword;
 import org.cagrid.gaards.authentication.faults.CredentialNotSupportedFault;
 import org.cagrid.gaards.authentication.faults.InvalidCredentialFault;
 import org.cagrid.gaards.dorian.ca.CertificateAuthority;
-import org.cagrid.gaards.dorian.common.Lifetime;
 import org.cagrid.gaards.dorian.common.SAMLConstants;
-import org.cagrid.gaards.dorian.stubs.types.DorianInternalFault;
 import org.cagrid.gaards.dorian.stubs.types.InvalidUserPropertyFault;
 import org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault;
 import org.cagrid.gaards.dorian.test.Utils;
@@ -155,17 +153,6 @@ public class TestIdentityProvider extends TestCase {
 		}
 	}
 	
-	private PasswordSecurityPolicy getPolicy() throws DorianInternalFault {
-		Lifetime time = new Lifetime();
-		time.setHours(0);
-		time.setMinutes(0);
-		time.setSeconds(3);
-		PasswordSecurityPolicy policy = new PasswordSecurityPolicy();
-		policy.setLockout(time);
-		policy.setConsecutiveInvalidLogins(3);
-		policy.setTotalInvalidLogins(8);
-		return policy;
-	}
 
 	public void testResetLockedPassword() {
 		IdentityProvider idp = null;
