@@ -1,5 +1,11 @@
 <ns1:ServiceDescription description="A grid service for the provisioning and management of grid users accounts.  Dorian provides an integration point between external security domains and the grid, allowing accounts managed in external domains to be federated and managed in the grid.   Dorian allows users to use their existing credentials to authenticate to the grid." introduceVersion="1.2" xmlns:ns1="gme://gov.nih.nci.cagrid/1/Introduce">
  <ns2:Namespaces xsi:type="ns2:NamespacesType" xmlns:ns2="gme://gov.nih.nci.cagrid.introduce/1/Namespace" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ns2:Namespace location="./authentication-core-types.xsd" namespace="http://gaards.cagrid.org/authentication" packageName="org.cagrid.gaards.authentication" xsi:type="ns2:NamespaceType">
+   <ns2:SchemaElement type="AuthenticationProfiles" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="BasicAuthentication" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Credential" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="OneTimePassword" xsi:type="ns2:SchemaElementType"/>
+  </ns2:Namespace>
   <ns2:Namespace location="./dorian-common.xsd" namespace="http://cagrid.nci.nih.gov/1/dorian-common" packageName="org.cagrid.gaards.dorian" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="Metadata" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="SAMLAssertion" xsi:type="ns2:SchemaElementType"/>
@@ -50,12 +56,6 @@
    <ns2:SchemaElement type="CommunicationStyle" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="Operation" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="ServiceSecurityMetadata" xsi:type="ns2:SchemaElementType"/>
-  </ns2:Namespace>
-  <ns2:Namespace generateStubs="false" location="./authentication-core-types.xsd" namespace="http://gaards.cagrid.org/authentication" packageName="org.cagrid.gaards.authentication" xsi:type="ns2:NamespaceType">
-   <ns2:SchemaElement type="AuthenticationProfiles" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="BasicAuthentication" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="BasicAuthenticationWithOneTimePassword" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="Credential" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
   <ns2:Namespace generateStubs="false" location="./authentication-faults.xsd" namespace="http://gaards.cagrid.org/authentication-faults" packageName="org.cagrid.gaards.authentication.faults" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="AuthenticationProviderFault" xsi:type="ns2:SchemaElementType"/>
