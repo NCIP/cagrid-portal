@@ -2,7 +2,8 @@
 * Meeting: 	caGrid Portal Status
 * Date: 	2008-07-31
 * Venue:	Teleconference
-* Attendees: 	Ram Chilukuri, John Eisenschmidt, Manav Kher, Joshua Phillips 
+* Attendees: 	Larry Brem, Ram Chilukuri, John Eisenschmidt, Manav Kher, 
+*		Joshua Phillips 
 ****************************************************************************
 
 Agenda

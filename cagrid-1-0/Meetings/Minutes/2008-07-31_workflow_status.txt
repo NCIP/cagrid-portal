@@ -2,7 +2,7 @@
 * Meeting: 	Workflow Status
 * Date: 	2008-07-31
 * Venue:	Teleconference
-* Attendees: 	John Eisenschmidt, Ravi Madduri
+* Attendees: 	Larry Brem, John Eisenschmidt, Ravi Madduri
 ****************************************************************************
 
 Agenda
