@@ -11,7 +11,7 @@ import java.util.Iterator;
 import junit.framework.TestCase;
 
 import org.cagrid.gaards.authentication.BasicAuthentication;
-import org.cagrid.gaards.authentication.BasicAuthenticationWithOneTimePassword;
+import org.cagrid.gaards.authentication.OneTimePassword;
 import org.cagrid.gaards.authentication.faults.CredentialNotSupportedFault;
 import org.cagrid.gaards.authentication.faults.InvalidCredentialFault;
 import org.cagrid.gaards.dorian.ca.CertificateAuthority;
@@ -436,9 +436,8 @@ public class TestIdentityProvider extends TestCase {
 			assertEquals(1, users.length);
 			assertEquals(IdPUserStatus.Active, users[0].getStatus());
 			assertEquals(IdPUserRole.Non_Administrator, users[0].getRole());
-			BasicAuthenticationWithOneTimePassword c = new BasicAuthenticationWithOneTimePassword();
+			OneTimePassword c = new OneTimePassword();
 			c.setUserId(a.getUserId());
-			c.setPassword("$W0rdD0ct0R$2");
 			c.setOneTimePassword("onetimepassword");
 			try {
 				idp.authenticate(c);
