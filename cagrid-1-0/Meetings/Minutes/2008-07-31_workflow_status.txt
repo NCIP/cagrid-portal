@@ -17,8 +17,9 @@ Notes
 1d) Taverna Contract Update
 1e) Projected release: end August/early September. Ravi feels the Tech Preview isn't ready for prime time (UI has issues). caGrid plugin is almost entirely ported to Taverna 2. 
 1f) If ICR is ready, we could move forward with Taverna 1.7 while we wait for Taverna 2. 
-1g) Ravi had a student try and build workflows this summer. He was able to build a workflow of workflows, and 
+1g) Ravi had a student try and build workflows this summer. As a CS student, but with no knowledge of grids, Globus, or Taverna, he was able to successfully build several workflows, including a workflow of workflows. He did come up with a list of issues developing workflows (e.g. no WHILE construct) which should be documented and socialized to developers.
 
 Action Items
 ------------
 1f) John will check with Avinash on building a training module for Taverna.
+1g) Ravi will compile that list of potential issues developing workflows.
