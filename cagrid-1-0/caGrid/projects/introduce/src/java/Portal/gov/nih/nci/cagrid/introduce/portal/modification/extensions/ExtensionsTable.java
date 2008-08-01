@@ -27,7 +27,7 @@ public class ExtensionsTable extends PortalBaseTable {
 
 
 	public boolean isCellEditable(int row, int column) {
-		return true;
+		return false;
 	}
 
 
@@ -172,7 +172,6 @@ public class ExtensionsTable extends PortalBaseTable {
 		public MyDefaultTableModel() {
 			super();
 			addColumn(NAME);
-
 		}
 
 
