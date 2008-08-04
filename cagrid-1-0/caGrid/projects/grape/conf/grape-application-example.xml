@@ -139,15 +139,15 @@
         
         <ConfigurationDescriptors>
         <ConfigurationDescriptor>
-            <DisplayName>Discovery</DisplayName>
-            <SystemName>discovery</SystemName>
-            <ModelClassname>org.cagrid.grape.configuration.GeneralConfiguration</ModelClassname>
+            <DisplayName>Services</DisplayName>
+            <SystemName>services</SystemName>
+            <ModelClassname>org.cagrid.grape.configuration.ServiceConfiguration</ModelClassname>
             <qname>
-                <namespace>http://www.cagrid.org/1/grape-general-configuration</namespace>
-                <name>GeneralConfiguration</name>
+                <namespace>http://www.cagrid.org/1/grape-service-configuration</namespace>
+                <name>ServiceConfiguration</name>
             </qname>
-            <ConfigurationPanel>org.cagrid.grape.GeneralConfigurationEditor</ConfigurationPanel>
-            <DefaultFile>conf/general-configuration-example.xml</DefaultFile>
+            <ConfigurationPanel>org.cagrid.grape.ServiceConfigurationEditor</ConfigurationPanel>
+            <DefaultFile>conf/service-configuration-example.xml</DefaultFile>
         </ConfigurationDescriptor>
         </ConfigurationDescriptors>
     </configuration>

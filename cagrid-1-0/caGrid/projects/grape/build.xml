@@ -4,8 +4,8 @@
 <project name="caGrid-grape" default="all" basedir=".">
 	<!-- Environment -->
 	<property environment="env" />
-    <property file="${basedir}/project.properties" />
-    <property file="${basedir}/build.properties" />
+	<property file="${basedir}/project.properties" />
+	<property file="${basedir}/build.properties" />
 	<property name="globus.location" location="${env.GLOBUS_LOCATION}" />
 
 	<!-- Information -->
@@ -84,6 +84,14 @@
 		<ant antfile="${ant.build.stubs}" target="generateStubs">
 			<property name="source.stubs.dir" location="${schema.dest}" />
 			<property name="wsdl.file" value="GrapeGeneralConfiguration.wsdl" />
+			<property name="target.stubs.dir" location="${stubs.src}" />
+			<property name="ns.excludes" value="${GT4.ns.excludes}" />
+		</ant>
+
+		<!-- GRAPE SERVICE CONFIGURATION SCHEMA -->
+		<ant antfile="${ant.build.stubs}" target="generateStubs">
+			<property name="source.stubs.dir" location="${schema.dest}" />
+			<property name="wsdl.file" value="GrapeServiceConfiguration.wsdl" />
 			<property name="target.stubs.dir" location="${stubs.src}" />
 			<property name="ns.excludes" value="${GT4.ns.excludes}" />
 		</ant>
