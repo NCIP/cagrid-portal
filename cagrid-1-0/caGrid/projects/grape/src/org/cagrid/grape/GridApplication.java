@@ -101,6 +101,7 @@ public class GridApplication extends JFrame {
     public static GridApplication getInstance(Application app) throws Exception {
         if (application == null) {
             application = new GridApplication(app);
+            application.startInitializer();
             return application;
         } else {
             throw new Exception("An instance of the Grid Application has already been created.");
@@ -186,6 +187,13 @@ public class GridApplication extends JFrame {
         }
     }
 
+    private void startInitializer() throws Exception{
+        if (this.app.getInitializerClass() != null) {
+            ApplicationInitializer appInit = (ApplicationInitializer) Class.forName(
+                this.app.getInitializerClass()).newInstance();
+            appInit.intialize(app);
+        }
+    }
 
     private void initialize() throws Exception {
         try {
@@ -196,13 +204,7 @@ public class GridApplication extends JFrame {
 
         configurationManager = new ConfigurationManager(app.getConfiguration());
         
-        // run the initializer if there is one.  The initializer can edit the model before processing
-        if (this.app.getInitializerClass() != null) {
-            ApplicationInitializer appInit = (ApplicationInitializer) Class.forName(
-                this.app.getInitializerClass()).newInstance();
-            appInit.intialize(app);
-        }
-        
+     
        
 
         List<Component> toolbarComponents = new ArrayList<Component>();
