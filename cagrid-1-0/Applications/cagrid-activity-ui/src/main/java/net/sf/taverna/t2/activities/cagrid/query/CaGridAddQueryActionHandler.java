@@ -478,6 +478,19 @@ public class CaGridAddQueryActionHandler extends AddQueryActionHandler {
 		"XTandemScores", "YeastModel", "ZincFingerRegion", "Zone", 
 		"ZoneDefect", "ZoneGroup", "ZoneLayout"
 	};
+	
+	//configure the classloader for the (de) serializer used by CaDSRServiceClient
+	public CaGridAddQueryActionHandler(){
+		
+		try{
+			org.apache.axis.utils.ClassUtils.setDefaultClassLoader(CaDSRServiceClient.class.getClassLoader()) ;	
+		}
+		catch (Exception e) {
+			 e.printStackTrace();
+			 }
+		
+	
+	}
 
 	@Override
 	public void actionPerformed(ActionEvent actionEvent) {
@@ -490,10 +503,15 @@ public class CaGridAddQueryActionHandler extends AddQueryActionHandler {
 			addQuery(query);
 		}
 		*/
+		
 		final JDialog dialog = new JDialog(parentFrame,
                 "Add Your Custom Service Query", true);
+		
         final CaGridIndexQueryDialog cad = new CaGridIndexQueryDialog();
+        dialog.getContentPane().setLocation(30, 30);
+        dialog.validate();
         dialog.getContentPane().add(cad);
+        
         JButton accept = new JButton("Send Service Query");
         JButton cancel = new JButton("Cancel");
         JButton updateCaDSRData = new JButton("Update caDSR Data");
@@ -670,6 +688,7 @@ public class CaGridAddQueryActionHandler extends AddQueryActionHandler {
 					            	for (int i = 0; i<projs.length;i++){
 					            		Project project = projs[i];
 					            		//System.out.println("\n"+ project.getShortName());
+					            		//the bridg and c3pr project always yield error -- don't know why. so simply bypass them
 					            		if(!project.getShortName().equals("BRIDG")&&!project.getShortName().equals("C3PR")){
 					            			try {
 					            				packs = cadsr.findPackagesInProject(project);

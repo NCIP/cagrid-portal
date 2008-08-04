@@ -1,8 +1,7 @@
 package net.sf.taverna.t2.activities.cagrid.query;
 
 /*
- * This file is a component of the Taverna project,
- * and is licensed under the GNU LGPL.
+ * 
  * Author: Wei Tan
  */
 
