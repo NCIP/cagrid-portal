@@ -206,7 +206,7 @@ public class GridApplication extends JFrame {
         
      
        
-
+       
         List<Component> toolbarComponents = new ArrayList<Component>();
         this.setJMenuBar(getJJMenuBar(toolbarComponents));
         this.getContentPane().setLayout(new BorderLayout());
