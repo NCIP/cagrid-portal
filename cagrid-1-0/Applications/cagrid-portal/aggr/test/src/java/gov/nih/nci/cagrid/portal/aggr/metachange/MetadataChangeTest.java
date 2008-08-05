@@ -27,6 +27,8 @@ import java.util.List;
 import junit.framework.TestCase;
 
 import org.springframework.context.ApplicationEvent;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.orm.hibernate3.HibernateTemplate;
 
 /**
@@ -78,7 +80,7 @@ public class MetadataChangeTest extends TestCase {
 		SharedCQLQueryDao sharedCqlQueryDao = (SharedCQLQueryDao) TestDB
 				.getApplicationContext().getBean("sharedCqlQueryDao");
 
-		MetadataChangeListener changeListener = new MetadataChangeListener();
+		MetadataChangeListener changeListener = new TestMetadataListener();
 		changeListener.setCqlQueryInstanceDao(cqlQueryInstanceDao);
 //		changeListener.setDomainModelBuilder(domainModelBuilder);
 		changeListener.setGridServiceDao(gridServiceDao);
@@ -188,7 +190,7 @@ public class MetadataChangeTest extends TestCase {
 		return sb.toString();
 	}
 
-	private static class TestMetadataListener extends AbstractMetadataListener {
+	private static class TestMetadataListener extends MetadataChangeListener {
 
 		public void onApplicationEvent(ApplicationEvent event) {
 
@@ -199,6 +201,12 @@ public class MetadataChangeTest extends TestCase {
 			setMetadata(service, meta);
 		}
 
-	}
+        @Override
+        public ApplicationContext getApplicationContext() {
+             return new ClassPathXmlApplicationContext(
+                new String[]{"applicationContext-aggr.xml","applicationContext-db.xml"});
+//            return TestDB.getApplicationContext();
+        }
+    }
 
 }
