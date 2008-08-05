@@ -21,7 +21,7 @@ import java.util.Vector;
 import javax.xml.namespace.QName;
 
 import org.cagrid.gaards.authentication.BasicAuthentication;
-import org.cagrid.gaards.authentication.BasicAuthenticationWithOneTimePassword;
+import org.cagrid.gaards.authentication.OneTimePassword;
 import org.cagrid.gaards.authentication.common.AuthenticationProfile;
 import org.cagrid.gaards.authentication.faults.CredentialNotSupportedFault;
 import org.cagrid.gaards.authentication.faults.InvalidCredentialFault;
@@ -168,9 +168,8 @@ public class DorianIdentityProviderAuthenticationTest extends ServiceStoryBase {
 			steps.add(new AuthenticationStep(serviceURL, success, cred));
 
 			// Test invalid authentication, unsupported credential
-			BasicAuthenticationWithOneTimePassword cred5 = new BasicAuthenticationWithOneTimePassword();
+			OneTimePassword cred5 = new OneTimePassword();
 			cred5.setUserId("dorian");
-			cred5.setPassword("password");
 			cred5.setOneTimePassword("oneTimePassword");
 
 			steps.add(new AuthenticationStep(serviceURL,
