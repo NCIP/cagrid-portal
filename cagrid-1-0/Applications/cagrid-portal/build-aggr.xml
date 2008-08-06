@@ -54,7 +54,6 @@
         <path refid="aggr.test.compile.cp"/>
         <pathelement location="${aggr.test.classes.dir}"/>
         <pathelement location="${aggr.test.dir}"/>
-        <pathelement location="aggr/test/build/classes"/>
     </path>
 
     <target name="aggr:compile" depends="db:compile">
@@ -75,7 +74,7 @@
 
 
     <target name="aggr:prepare-test-cp"
-            depends="aggr:compile-test">
+            depends="aggr:prepare-run-cp,aggr:compile-test">
 
         <copy todir="${aggr.test.classes.dir}" overwrite="true">
             <fileset dir="${db.dir}/etc">
