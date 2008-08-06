@@ -289,7 +289,7 @@ public class TrustedIdPManager extends LoggingObject {
         if ((Utils.clean(idp.getAuthenticationServiceIdentity()) != null)
             && (!idp.getAuthenticationServiceIdentity().equals(curr.getAuthenticationServiceIdentity()))) {
             needsUpdate = true;
-            authenticationServiceURL = validateAndGetAuthenticationServiceIdentity(idp);
+            authenticationServiceIdentity = validateAndGetAuthenticationServiceIdentity(idp);
         }
 
         String uidNS = curr.getUserIdAttributeDescriptor().getNamespaceURI();

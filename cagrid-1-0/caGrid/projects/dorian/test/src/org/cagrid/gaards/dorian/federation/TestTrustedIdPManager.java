@@ -445,10 +445,15 @@ public class TestTrustedIdPManager extends TestCase {
             assertEquals(idp, tm.getTrustedIdPByDN(cert.getSubjectDN().toString()));
 
             // Test Updates
-
+            String updateDisplayName = "Updated Display Name";
+            String updateServiceURL = "https://localhost.update";
+            String updatedServiceIdentity = "Updated Identity";
             IdPContainer updatedCont = getTrustedIdp(name, true);
             TrustedIdP updateIdp = updatedCont.getIdp();
             updateIdp.setId(idp.getId());
+            updateIdp.setDisplayName(updateDisplayName);
+            updateIdp.setAuthenticationServiceURL(updateServiceURL);
+            updateIdp.setAuthenticationServiceIdentity(updatedServiceIdentity);
             updateIdp.setStatus(TrustedIdPStatus.Suspended);
             tm.updateIdP(updateIdp);
 

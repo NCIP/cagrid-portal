@@ -12,6 +12,7 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
+import org.cagrid.gaards.dorian.ca.CertificateAuthority;
 import org.cagrid.gaards.dorian.service.BeanUtils;
 import org.cagrid.gaards.dorian.service.Dorian;
 import org.cagrid.gaards.dorian.service.DorianProperties;
@@ -68,11 +69,8 @@ public class ConfigureGlobusToTrustDorian {
 				String propertiesFile = line
 						.getOptionValue(PROPERTIES_FILE_OPT);
 				BeanUtils utils = new BeanUtils(new FileSystemResource(configFile), new FileSystemResource(propertiesFile));
-				DorianProperties c = utils.getDorianProperties();
-				c.getIdentityFederationProperties()
-						.setAutoHostCertificateApproval(true);
-				Dorian dorian = new Dorian(c, "https://localhost", true);
-				X509Certificate cacert = dorian.getCACertificate();
+				CertificateAuthority ca = utils.getCertificateAuthority();
+				X509Certificate cacert = ca.getCACertificate();
 
 				File dir = Utils.getTrustedCerificatesDirectory();
 				File caFile = new File(dir.getAbsolutePath() + File.separator
