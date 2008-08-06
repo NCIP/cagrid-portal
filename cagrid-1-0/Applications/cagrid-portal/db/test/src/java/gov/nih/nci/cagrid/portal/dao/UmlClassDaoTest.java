@@ -63,4 +63,9 @@ public class UmlClassDaoTest extends DBTestBase<UMLClassDao> {
         assertEquals(0, getDao().getSemanticalyEquivalentClassesBasedOnAtrributes(uClass).size());
         assertEquals(0, getDao().getClassesWithSameConceptCode(uClass).size());
     }
+
+    @Override
+    protected String getDataSet() throws Exception {
+        return "db/test/data/UMLClassDaoTest.xml";
+    }
 }
