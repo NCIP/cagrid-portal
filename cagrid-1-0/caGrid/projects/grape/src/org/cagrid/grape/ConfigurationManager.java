@@ -37,12 +37,15 @@ public class ConfigurationManager {
 	private Logger log;
 
 	private Configuration configuration;
+	
+	private ConfigurationSynchronizer synchronizer;
 
 
-	public ConfigurationManager(Configuration configuration) throws Exception {
+	public ConfigurationManager(Configuration configuration, ConfigurationSynchronizer synchronizer) throws Exception {
 		confsByName = new HashMap<String, ConfigurationDescriptor>();
 		objectsByName = new HashMap<String, Object>();
 		this.configuration = configuration;
+		this.synchronizer = synchronizer;
 		log = Logger.getLogger(this.getClass().getName());
 		if (configuration != null) {
 			File f = new File(GRAPE_USER_HOME);
@@ -144,18 +147,25 @@ public class ConfigurationManager {
 	public void saveAll() throws Exception {
 		Iterator itr = objectsByName.keySet().iterator();
 		while (itr.hasNext()) {
-			save((String) itr.next());
+			save((String) itr.next(),false);
 		}
+		if(synchronizer!=null){
+            synchronizer.syncronize(); 
+         }
 	}
 
 
-	public void save(String systemName) throws Exception {
+	public void save(String systemName, boolean sync) throws Exception {
 		try {
 			ConfigurationDescriptor des = getConfigurationDescriptor(systemName);
 			Object obj = objectsByName.get(systemName);
 			File conf = new File(GRAPE_USER_HOME + File.separator + des.getSystemName() + "-conf.xml");
 			QName ns = new QName(des.getQname().getNamespace(), des.getQname().getName());
 			Utils.serializeDocument(conf.getAbsolutePath(), obj, ns);
+			
+			if((sync) && (synchronizer!=null)){
+			   synchronizer.syncronize(); 
+			}
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 			throw new Exception("Error saving the configuration " + systemName + ":\n" + e.getMessage());

@@ -201,8 +201,15 @@ public class GridApplication extends JFrame {
         } catch (Exception e) {
             System.out.println("Failed to set system look and feel.");
         }
-
-        configurationManager = new ConfigurationManager(app.getConfiguration());
+        String syncClass = app.getConfigurationSynchronizerClass();
+        
+        
+        ConfigurationSynchronizer cs = null;
+        if(syncClass!=null){
+        cs = (ConfigurationSynchronizer) Class.forName(
+            this.app.getInitializerClass()).newInstance();
+        }
+        configurationManager = new ConfigurationManager(app.getConfiguration(),cs);
         
      
        

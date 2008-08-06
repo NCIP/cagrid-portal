@@ -30,7 +30,7 @@ public class ConfigurationUtil {
             Application app = null;
             app = (Application) Utils.deserializeDocument(IntroducePropertiesManager.getIntroduceConfigurationFile(),
                 Application.class);
-            configurationManager = new ConfigurationManager(app.getConfiguration());
+            configurationManager = new ConfigurationManager(app.getConfiguration(),null);
         }
 
     }
