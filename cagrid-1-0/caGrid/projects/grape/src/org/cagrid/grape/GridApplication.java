@@ -110,7 +110,7 @@ public class GridApplication extends JFrame {
 
 
     public static ApplicationContext getContext() {
-        if(application==null){
+        if (application == null) {
             return null;
         }
         return application.context;
@@ -187,13 +187,15 @@ public class GridApplication extends JFrame {
         }
     }
 
-    private void startInitializer() throws Exception{
+
+    private void startInitializer() throws Exception {
         if (this.app.getInitializerClass() != null) {
-            ApplicationInitializer appInit = (ApplicationInitializer) Class.forName(
-                this.app.getInitializerClass()).newInstance();
+            ApplicationInitializer appInit = (ApplicationInitializer) Class.forName(this.app.getInitializerClass())
+                .newInstance();
             appInit.intialize(app);
         }
     }
+
 
     private void initialize() throws Exception {
         try {
@@ -202,18 +204,13 @@ public class GridApplication extends JFrame {
             System.out.println("Failed to set system look and feel.");
         }
         String syncClass = app.getConfigurationSynchronizerClass();
-        
-        
+
         ConfigurationSynchronizer cs = null;
-        if(syncClass!=null){
-        cs = (ConfigurationSynchronizer) Class.forName(
-            this.app.getInitializerClass()).newInstance();
+        if (syncClass != null) {
+            cs = (ConfigurationSynchronizer) Class.forName(syncClass).newInstance();
         }
-        configurationManager = new ConfigurationManager(app.getConfiguration(),cs);
-        
-     
-       
-       
+        configurationManager = new ConfigurationManager(app.getConfiguration(), cs);
+
         List<Component> toolbarComponents = new ArrayList<Component>();
         this.setJMenuBar(getJJMenuBar(toolbarComponents));
         this.getContentPane().setLayout(new BorderLayout());
@@ -423,7 +420,7 @@ public class GridApplication extends JFrame {
             fileMenu.setText("File");
             fileMenu.setMnemonic(java.awt.event.KeyEvent.VK_F);
             fileMenu.add(getExitMenuItem());
-            
+
         }
         return fileMenu;
     }
