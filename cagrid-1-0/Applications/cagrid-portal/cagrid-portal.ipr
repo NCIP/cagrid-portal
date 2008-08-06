@@ -9,20 +9,6 @@
       <maximumHeapSize value="128" />
       <properties />
     </buildFile>
-    <buildFile url="file:///Users/kherm/dev/cvsroot/cagrid-1-0/caGrid/build.xml">
-      <additionalClassPath />
-      <antReference projectDefault="true" />
-      <customJdkName value="" />
-      <maximumHeapSize value="128" />
-      <properties />
-    </buildFile>
-    <buildFile url="file://$PROJECT_DIR$/tools/bug_fixes/11997/build.xml">
-      <additionalClassPath />
-      <antReference projectDefault="true" />
-      <customJdkName value="" />
-      <maximumHeapSize value="128" />
-      <properties />
-    </buildFile>
   </component>
   <component name="BuildJarProjectSettings">
     <option name="BUILD_JARS_ON_MAKE" value="false" />
@@ -119,6 +105,14 @@
               <file url="file://$PROJECT_DIR$/portlets/build/war/WEB-INF/web.xml" />
             </files>
           </module>
+          <module name="caGrid">
+            <files>
+              <file url="file:///Users/kherm/dev/cvsroot/cagrid-1-0/caGrid/antfiles/jboss/web.xml" />
+              <file url="file:///Users/kherm/dev/cvsroot/cagrid-1-0/caGrid/projects/transfer/webapp/WEB-INF/web.xml" />
+              <file url="file:///Users/kherm/dev/cvsroot/cagrid-1-0/caGrid/projects/websso-client/src/resources/web.xml" />
+              <file url="file:///Users/kherm/dev/cvsroot/cagrid-1-0/caGrid/projects/websso/webcontent/WEB-INF/web.xml" />
+            </files>
+          </module>
         </modules>
       </facet-type>
       <facet-type id="hibernate">
@@ -126,6 +120,12 @@
           <module name="cagrid-portal">
             <files>
               <file url="file://$PROJECT_DIR$/db/tools/hibernatetools/template.hibernate.cfg.xml" />
+            </files>
+          </module>
+          <module name="caGrid">
+            <files>
+              <file url="file:///Users/kherm/dev/cvsroot/cagrid-1-0/caGrid/projects/authentication-service/test/resources/hibernate.cfg.xml" />
+              <file url="file:///Users/kherm/dev/cvsroot/cagrid-1-0/caGrid/projects/authz/test/etc/hibernate.cfg.xml" />
             </files>
           </module>
         </modules>
@@ -136,6 +136,25 @@
             <files>
               <file url="file://$PROJECT_DIR$/aggr/etc/applicationContext-aggr-metachange.xml" />
               <file url="file://$PROJECT_DIR$/aggr/etc/applicationContext-aggr-status.xml" />
+            </files>
+          </module>
+          <module name="caGrid">
+            <files>
+              <file url="file:///Users/kherm/dev/cvsroot/cagrid-1-0/caGrid/projects/authentication-service/resources/authentication-config.xml" />
+              <file url="file:///Users/kherm/dev/cvsroot/cagrid-1-0/caGrid/projects/authentication-service/resources/osu-authentication-config.xml" />
+              <file url="file:///Users/kherm/dev/cvsroot/cagrid-1-0/caGrid/projects/authz/test/etc/pdp-config.xml" />
+              <file url="file:///Users/kherm/dev/cvsroot/cagrid-1-0/caGrid/projects/authz/test/etc/pip-config.xml" />
+              <file url="file:///Users/kherm/dev/cvsroot/cagrid-1-0/caGrid/projects/authz/test/etc/response-filter-config.xml" />
+              <file url="file:///Users/kherm/dev/cvsroot/cagrid-1-0/caGrid/projects/cds/etc/cds-configuration.xml" />
+              <file url="file:///Users/kherm/dev/cvsroot/cagrid-1-0/caGrid/projects/websso-client/src/resources/securityConfiguration.xml" />
+              <file url="file:///Users/kherm/dev/cvsroot/cagrid-1-0/caGrid/projects/websso/src/resources/websso-beans.xml" />
+              <file url="file:///Users/kherm/dev/cvsroot/cagrid-1-0/caGrid/projects/websso/webcontent/WEB-INF/applicationContext.xml" />
+              <file url="file:///Users/kherm/dev/cvsroot/cagrid-1-0/caGrid/projects/websso/webcontent/WEB-INF/auditTrailContext.xml" />
+              <file url="file:///Users/kherm/dev/cvsroot/cagrid-1-0/caGrid/projects/websso/webcontent/WEB-INF/cagrid-deployerConfigContext.xml" />
+              <file url="file:///Users/kherm/dev/cvsroot/cagrid-1-0/caGrid/projects/websso/webcontent/WEB-INF/cas-servlet.xml" />
+              <file url="file:///Users/kherm/dev/cvsroot/cagrid-1-0/caGrid/projects/websso/webcontent/WEB-INF/default-deployerConfigContext.xml" />
+              <file url="file:///Users/kherm/dev/cvsroot/cagrid-1-0/caGrid/projects/websso/webcontent/WEB-INF/remoteServices.xml" />
+              <file url="file:///Users/kherm/dev/cvsroot/cagrid-1-0/caGrid/projects/websso/webcontent/WEB-INF/securityContext.xml" />
             </files>
           </module>
         </modules>
@@ -367,16 +386,12 @@
   <component name="ProjectFileVersion" converted="true" />
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/tools/bug_fixes/bug_fixes.iml" filepath="$PROJECT_DIR$/tools/bug_fixes/bug_fixes.iml" />
-      <module fileurl="file:///Users/kherm/dev/cvsroot/cagrid-1-0/caGrid/caGrid.iml" filepath="/Users/kherm/dev/cvsroot/cagrid-1-0/caGrid/caGrid.iml" />
-      <module fileurl="file:///Users/kherm/dev/cvsroot/cagrid-1-0/caGrid/projects/cadsr/cadsr.iml" filepath="/Users/kherm/dev/cvsroot/cagrid-1-0/caGrid/projects/cadsr/cadsr.iml" />
       <module fileurl="file://$PROJECT_DIR$/cagrid-portal.iml" filepath="$PROJECT_DIR$/cagrid-portal.iml" />
       <module fileurl="file://$PROJECT_DIR$/aggr/cagrid-portal-aggr.iml" filepath="$PROJECT_DIR$/aggr/cagrid-portal-aggr.iml" />
       <module fileurl="file://$PROJECT_DIR$/db/cagrid-portal-db.iml" filepath="$PROJECT_DIR$/db/cagrid-portal-db.iml" />
       <module fileurl="file://$PROJECT_DIR$/portals/cagrid-portal-portals.iml" filepath="$PROJECT_DIR$/portals/cagrid-portal-portals.iml" />
       <module fileurl="file://$PROJECT_DIR$/portlets/cagrid-portal-portlets.iml" filepath="$PROJECT_DIR$/portlets/cagrid-portal-portlets.iml" />
       <module fileurl="file://$PROJECT_DIR$/security/cagrid-portal-security.iml" filepath="$PROJECT_DIR$/security/cagrid-portal-security.iml" />
-      <module fileurl="file:///Users/kherm/dev/cvsroot/cagrid-1-0/caGrid/projects/core/core.iml" filepath="/Users/kherm/dev/cvsroot/cagrid-1-0/caGrid/projects/core/core.iml" />
     </modules>
   </component>
   <component name="ProjectRootConfigurable.UI">

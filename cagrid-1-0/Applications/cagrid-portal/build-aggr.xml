@@ -49,12 +49,12 @@
     </path>
 
     <path id="aggr.test.run.cp">
+        <path refid="db.test.run.cp"/>
         <path refid="aggr.run.cp"/>
         <path refid="aggr.test.compile.cp"/>
         <pathelement location="${aggr.test.classes.dir}"/>
         <pathelement location="${aggr.test.dir}"/>
         <pathelement location="aggr/test/build/classes"/>
-        <path refid="db.test.run.cp"/>
     </path>
 
     <target name="aggr:compile" depends="db:compile">
