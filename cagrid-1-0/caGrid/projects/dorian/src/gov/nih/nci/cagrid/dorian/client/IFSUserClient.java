@@ -27,6 +27,7 @@ import org.cagrid.gaards.pki.CertUtil;
 import org.cagrid.gaards.pki.KeyUtil;
 import org.cagrid.gaards.saml.encoding.SAMLUtils;
 import org.globus.gsi.GlobusCredential;
+import org.globus.wsrf.impl.security.authorization.Authorization;
 
 public class IFSUserClient {
 
@@ -133,5 +134,17 @@ public class IFSUserClient {
 		}
 
 	}
+	
+	/**
+     * This method specifies an authorization policy that the client should use
+     * for authorizing the server that it connects to.
+     * 
+     * @param authorization
+     *            The authorization policy to enforce
+     */
+
+    public void setAuthorization(Authorization authorization) {
+        client.setAuthorization(authorization);
+    }
 
 }

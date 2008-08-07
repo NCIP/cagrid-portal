@@ -12,10 +12,10 @@ import javax.swing.JComboBox;
  */
 public class DorianServiceListComboBox extends JComboBox {
 
-	private static String lastSelectedService;
+	private static DorianHandle lastSelectedService;
 
 	public DorianServiceListComboBox() {
-		List services = DorianUIUtils.getDorianServices();
+		List<DorianHandle> services = ServicesManager.getInstance().getDorianServices();
 		for (int i = 0; i < services.size(); i++) {
 			this.addItem(services.get(i));
 		}
@@ -24,8 +24,6 @@ public class DorianServiceListComboBox extends JComboBox {
 		} else {
 			this.setSelectedItem(lastSelectedService);
 		}
-		this.setEditable(true);
-
 		this.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent e) {
 				lastSelectedService = getSelectedService();
@@ -33,8 +31,8 @@ public class DorianServiceListComboBox extends JComboBox {
 		});
 	}
 
-	public String getSelectedService() {
-		return (String) getSelectedItem();
+	public DorianHandle getSelectedService() {
+		return (DorianHandle) getSelectedItem();
 	}
 
 }

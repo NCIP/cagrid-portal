@@ -16,6 +16,7 @@ import org.cagrid.gaards.dorian.stubs.types.InvalidUserPropertyFault;
 import org.cagrid.gaards.dorian.stubs.types.NoSuchUserFault;
 import org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault;
 import org.globus.gsi.GlobusCredential;
+import org.globus.wsrf.impl.security.authorization.Authorization;
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
@@ -37,6 +38,18 @@ public class LocalAdministrationClient {
 			throws MalformedURIException, RemoteException {
 		client = new DorianClient(serviceURI, proxy);
 	}
+	
+	/**
+     * This method specifies an authorization policy that the client should use
+     * for authorizing the server that it connects to.
+     * 
+     * @param authorization
+     *            The authorization policy to enforce
+     */
+
+    public void setAuthorization(Authorization authorization) {
+        client.setAuthorization(authorization);
+    }
    
 	/**
 	 * This method allows a client to determine whether or not a user id is

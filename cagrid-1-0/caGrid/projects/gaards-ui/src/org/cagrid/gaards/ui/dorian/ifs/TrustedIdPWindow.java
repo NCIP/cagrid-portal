@@ -42,7 +42,7 @@ import org.globus.gsi.GlobusCredential;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: TrustedIdPWindow.java,v 1.6 2008-07-23 18:12:37 langella Exp $
+ * @version $Id: TrustedIdPWindow.java,v 1.7 2008-08-07 17:08:04 langella Exp $
  */
 public class TrustedIdPWindow extends ApplicationComponent {
 	public static final String PASSWORD = SAMLAuthenticationMethod.value1
@@ -64,7 +64,9 @@ public class TrustedIdPWindow extends ApplicationComponent {
 	public static final String UNSPECIFIED = SAMLAuthenticationMethod.value11
 			.getValue();
 
-	private final static String INFO_PANEL = "IdP Information";
+	private final static String INFO_PANEL = "General";
+	
+	private final static String AUTHENTICATION_SERVICE = "Authentication Service";
 
 	private final static String CERTIFICATE_PANEL = "Certificate";
 
@@ -165,6 +167,14 @@ public class TrustedIdPWindow extends ApplicationComponent {
 	private JTextField lastName = null;
 	private JTextField emailNamespace = null;
 	private JTextField email = null;
+	private JPanel authenticationServicePanel = null;
+	private JLabel jLabel8 = null;
+	private JTextField displayName = null;
+	private JPanel jPanel3 = null;
+	private JLabel jLabel9 = null;
+	private JTextField authenticationServiceURL = null;
+	private JLabel jLabel10 = null;
+	private JTextField authenticationServiceIdentity = null;
 
 	public TrustedIdPWindow(TrustedIdPsWindow window, String serviceId,
 			GlobusCredential proxy, List<GridUserPolicy> policies) {
@@ -277,9 +287,10 @@ public class TrustedIdPWindow extends ApplicationComponent {
 			gridBagConstraints2.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints2.anchor = java.awt.GridBagConstraints.SOUTH;
 			gridBagConstraints2.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			mainPanel.add(getButtonPanel(), gridBagConstraints2);
-			mainPanel.add(getJPanel2(), gridBagConstraints1);
 			mainPanel.add(getJTabbedPane(), gridBagConstraints4);
+			mainPanel.add(getJPanel2(), gridBagConstraints1);
+			mainPanel.add(getButtonPanel(), gridBagConstraints2);
+		
 		}
 		return mainPanel;
 	}
@@ -342,10 +353,12 @@ public class TrustedIdPWindow extends ApplicationComponent {
 						.getCertificate()));
 			}
 			idp.setName(getIdPName().getText().trim());
+			idp.setDisplayName(Utils.clean(getDisplayName().getText()));
+			idp.setAuthenticationServiceURL(Utils.clean(getAuthenticationServiceURL().getText()));
+			idp.setAuthenticationServiceIdentity(Utils.clean(getAuthenticationServiceIdentity().getText()));
 			idp.setStatus(getStatus().getSelectedStatus());
 			idp.setUserPolicyClass(((UserPolicyCaddy) getUserPolicy()
 					.getSelectedItem()).getPolicy().getClassName());
-
 			List<SAMLAuthenticationMethod> authMethod = new ArrayList<SAMLAuthenticationMethod>();
 			if (getPasswordMethod().isSelected()) {
 				authMethod.add(SAMLAuthenticationMethod.fromValue(PASSWORD));
@@ -457,6 +470,7 @@ public class TrustedIdPWindow extends ApplicationComponent {
 							.getPanelLabelColor()));
 			jTabbedPane.addTab(INFO_PANEL, DorianLookAndFeel
 					.getTrustedIdPIcon(), getInfoPanel(), null);
+			jTabbedPane.addTab(AUTHENTICATION_SERVICE, DorianLookAndFeel.getAuthenticateIcon(), getAuthenticationServicePanel(), null);
 			jTabbedPane.addTab(CERTIFICATE_PANEL, DorianLookAndFeel
 					.getCertificateIcon(), getCertificatePanel(), null);
 			jTabbedPane.addTab(ATTRIBUTES_PANEL, DorianLookAndFeel
@@ -472,6 +486,20 @@ public class TrustedIdPWindow extends ApplicationComponent {
 	 */
 	private JPanel getJPanel1() {
 		if (jPanel1 == null) {
+			GridBagConstraints gridBagConstraints58 = new GridBagConstraints();
+			gridBagConstraints58.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints58.gridy = 2;
+			gridBagConstraints58.weightx = 1.0;
+			gridBagConstraints58.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints58.anchor = GridBagConstraints.WEST;
+			gridBagConstraints58.gridx = 1;
+			GridBagConstraints gridBagConstraints57 = new GridBagConstraints();
+			gridBagConstraints57.gridx = 0;
+			gridBagConstraints57.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints57.anchor = GridBagConstraints.WEST;
+			gridBagConstraints57.gridy = 2;
+			jLabel8 = new JLabel();
+			jLabel8.setText("Display Name");
 			GridBagConstraints gridBagConstraints13 = new GridBagConstraints();
 			gridBagConstraints13.gridx = 0;
 			gridBagConstraints13.fill = java.awt.GridBagConstraints.BOTH;
@@ -479,10 +507,10 @@ public class TrustedIdPWindow extends ApplicationComponent {
 			gridBagConstraints13.weightx = 1.0D;
 			gridBagConstraints13.weighty = 1.0D;
 			gridBagConstraints13.insets = new java.awt.Insets(5, 5, 5, 5);
-			gridBagConstraints13.gridy = 4;
+			gridBagConstraints13.gridy = 5;
 			GridBagConstraints gridBagConstraints12 = new GridBagConstraints();
 			gridBagConstraints12.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints12.gridy = 3;
+			gridBagConstraints12.gridy = 4;
 			gridBagConstraints12.weightx = 1.0;
 			gridBagConstraints12.anchor = java.awt.GridBagConstraints.WEST;
 			gridBagConstraints12.insets = new java.awt.Insets(2, 2, 2, 2);
@@ -491,12 +519,12 @@ public class TrustedIdPWindow extends ApplicationComponent {
 			gridBagConstraints11.gridx = 0;
 			gridBagConstraints11.anchor = java.awt.GridBagConstraints.WEST;
 			gridBagConstraints11.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints11.gridy = 3;
+			gridBagConstraints11.gridy = 4;
 			policyLabel = new JLabel();
 			policyLabel.setText("User Policy");
 			GridBagConstraints gridBagConstraints10 = new GridBagConstraints();
 			gridBagConstraints10.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints10.gridy = 2;
+			gridBagConstraints10.gridy = 3;
 			gridBagConstraints10.weightx = 1.0;
 			gridBagConstraints10.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints10.anchor = java.awt.GridBagConstraints.WEST;
@@ -505,7 +533,7 @@ public class TrustedIdPWindow extends ApplicationComponent {
 			gridBagConstraints9.gridx = 0;
 			gridBagConstraints9.anchor = java.awt.GridBagConstraints.WEST;
 			gridBagConstraints9.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints9.gridy = 2;
+			gridBagConstraints9.gridy = 3;
 			statusLabel = new JLabel();
 			statusLabel.setText("Status");
 			GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
@@ -542,8 +570,8 @@ public class TrustedIdPWindow extends ApplicationComponent {
 			}
 			jPanel1 = new JPanel();
 			jPanel1.setLayout(new GridBagLayout());
-			jPanel1.add(getStatus(), gridBagConstraints10);
 			jPanel1.setName(INFO_PANEL);
+			jPanel1.add(getStatus(), gridBagConstraints10);
 			jPanel1.add(statusLabel, gridBagConstraints9);
 			jPanel1.add(idLabel, gridBagConstraints5);
 			jPanel1.add(getIdpId(), gridBagConstraints6);
@@ -552,7 +580,8 @@ public class TrustedIdPWindow extends ApplicationComponent {
 			jPanel1.add(policyLabel, gridBagConstraints11);
 			jPanel1.add(getUserPolicy(), gridBagConstraints12);
 			jPanel1.add(getAuthPanel(), gridBagConstraints13);
-
+			jPanel1.add(jLabel8, gridBagConstraints57);
+			jPanel1.add(getDisplayName(), gridBagConstraints58);
 		}
 		return jPanel1;
 	}
@@ -1420,6 +1449,110 @@ public class TrustedIdPWindow extends ApplicationComponent {
 			}
 		}
 		return email;
+	}
+
+	/**
+	 * This method initializes authenticationServicePanel	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getAuthenticationServicePanel() {
+		if (authenticationServicePanel == null) {
+			authenticationServicePanel = new JPanel();
+			authenticationServicePanel.setLayout(new BorderLayout());
+			authenticationServicePanel.add(getJPanel3(), BorderLayout.NORTH);
+		}
+		return authenticationServicePanel;
+	}
+
+	/**
+	 * This method initializes displayName	
+	 * 	
+	 * @return javax.swing.JTextField	
+	 */
+	private JTextField getDisplayName() {
+		if (displayName == null) {
+			displayName = new JTextField();
+			if (!newTrustedIdP) {
+				displayName.setText(idp.getDisplayName());
+			}
+		}
+		return displayName;
+	}
+
+	/**
+	 * This method initializes jPanel3	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getJPanel3() {
+		if (jPanel3 == null) {
+			GridBagConstraints gridBagConstraints62 = new GridBagConstraints();
+			gridBagConstraints62.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints62.gridy = 1;
+			gridBagConstraints62.weightx = 1.0;
+			gridBagConstraints62.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints62.anchor = GridBagConstraints.WEST;
+			gridBagConstraints62.gridx = 1;
+			GridBagConstraints gridBagConstraints61 = new GridBagConstraints();
+			gridBagConstraints61.anchor = GridBagConstraints.WEST;
+			gridBagConstraints61.gridy = 1;
+			gridBagConstraints61.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints61.gridx = 0;
+			jLabel10 = new JLabel();
+			jLabel10.setText("Authentication Service Identity");
+			GridBagConstraints gridBagConstraints60 = new GridBagConstraints();
+			gridBagConstraints60.gridx = 0;
+			gridBagConstraints60.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints60.anchor = GridBagConstraints.WEST;
+			gridBagConstraints60.gridy = 0;
+			GridBagConstraints gridBagConstraints59 = new GridBagConstraints();
+			gridBagConstraints59.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints59.gridx = 1;
+			gridBagConstraints59.gridy = 0;
+			gridBagConstraints59.anchor = GridBagConstraints.WEST;
+			gridBagConstraints59.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints59.weightx = 1.0;
+			jLabel9 = new JLabel();
+			jLabel9.setText("Authentication Service URL");
+			jPanel3 = new JPanel();
+			jPanel3.setLayout(new GridBagLayout());
+			jPanel3.add(jLabel9, gridBagConstraints60);
+			jPanel3.add(getAuthenticationServiceURL(), gridBagConstraints59);
+			jPanel3.add(jLabel10, gridBagConstraints61);
+			jPanel3.add(getAuthenticationServiceIdentity(), gridBagConstraints62);
+		}
+		return jPanel3;
+	}
+
+	/**
+	 * This method initializes authenticationServiceURL	
+	 * 	
+	 * @return javax.swing.JTextField	
+	 */
+	private JTextField getAuthenticationServiceURL() {
+		if (authenticationServiceURL == null) {
+			authenticationServiceURL = new JTextField();
+			if (!newTrustedIdP) {
+				authenticationServiceURL.setText(idp.getAuthenticationServiceURL());
+			}
+		}
+		return authenticationServiceURL;
+	}
+
+	/**
+	 * This method initializes authenticationServiceIdentity	
+	 * 	
+	 * @return javax.swing.JTextField	
+	 */
+	private JTextField getAuthenticationServiceIdentity() {
+		if (authenticationServiceIdentity == null) {
+			authenticationServiceIdentity = new JTextField();
+			if (!newTrustedIdP) {
+				authenticationServiceIdentity.setText(idp.getAuthenticationServiceIdentity());
+			}
+		}
+		return authenticationServiceIdentity;
 	}
 
 }

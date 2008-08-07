@@ -16,6 +16,7 @@ import javax.swing.JTextField;
 
 import org.cagrid.gaards.dorian.client.LocalUserClient;
 import org.cagrid.gaards.dorian.idp.Application;
+import org.cagrid.gaards.ui.dorian.DorianHandle;
 import org.cagrid.gaards.ui.dorian.DorianLookAndFeel;
 import org.cagrid.gaards.ui.dorian.DorianServiceListComboBox;
 import org.cagrid.grape.ApplicationComponent;
@@ -731,12 +732,12 @@ public class ApplicationWindow extends ApplicationComponent {
 		a.setCountry(((CountryListComboBox) this.getCountry()).getSelectedCountry());
 		a.setPhoneNumber(this.getPhoneNumber().getText());
 		a.setEmail(this.getEmail().getText());
-		final String serviceUrl = ((DorianServiceListComboBox) this.getService()).getSelectedService();
+		final DorianHandle handle = ((DorianServiceListComboBox) this.getService()).getSelectedService();
 
 		Runner runner = new Runner() {
 			public void execute() {
 				try {
-					LocalUserClient client = new LocalUserClient(serviceUrl);
+					LocalUserClient client = handle.getLocalUserClient();
 					GridApplication.getContext().showMessage(client.register(a));
 					dispose();
 				} catch (Exception e) {

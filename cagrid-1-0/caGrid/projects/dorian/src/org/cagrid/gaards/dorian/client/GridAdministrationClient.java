@@ -25,6 +25,7 @@ import org.cagrid.gaards.dorian.stubs.types.InvalidUserFault;
 import org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault;
 import org.cagrid.gaards.pki.CertUtil;
 import org.globus.gsi.GlobusCredential;
+import org.globus.wsrf.impl.security.authorization.Authorization;
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
@@ -46,6 +47,18 @@ public class GridAdministrationClient {
 		client = new DorianClient(serviceURI, proxy);
 	}
 
+	/**
+     * This method specifies an authorization policy that the client should use
+     * for authorizing the server that it connects to.
+     * 
+     * @param authorization
+     *            The authorization policy to enforce
+     */
+
+    public void setAuthorization(Authorization authorization) {
+        client.setAuthorization(authorization);
+    }
+	
 	/**
 	 * This method adds an identity provider to Dorian as a trusted identity
 	 * provider.

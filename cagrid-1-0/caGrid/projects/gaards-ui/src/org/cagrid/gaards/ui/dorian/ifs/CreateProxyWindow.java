@@ -1,6 +1,6 @@
 package org.cagrid.gaards.ui.dorian.ifs;
 
-
+import gov.nih.nci.cagrid.common.FaultUtil;
 import gov.nih.nci.cagrid.common.Runner;
 import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
 
@@ -25,9 +25,10 @@ import org.cagrid.gaards.dorian.client.GridUserClient;
 import org.cagrid.gaards.dorian.federation.ProxyLifetime;
 import org.cagrid.gaards.ui.common.CredentialManager;
 import org.cagrid.gaards.ui.common.CredentialManagerComponent;
+import org.cagrid.gaards.ui.dorian.AuthenticationServiceHandle;
+import org.cagrid.gaards.ui.dorian.DorianHandle;
 import org.cagrid.gaards.ui.dorian.DorianLookAndFeel;
 import org.cagrid.gaards.ui.dorian.DorianServiceListComboBox;
-import org.cagrid.gaards.ui.dorian.DorianUIUtils;
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.LookAndFeel;
@@ -53,7 +54,7 @@ public class CreateProxyWindow extends ApplicationComponent {
 
     private JLabel ifsLabel = null;
 
-    private JComboBox ifs = null;
+    private DorianServiceListComboBox dorianService = null;
 
     private JButton authenticateButton = null;
 
@@ -102,14 +103,6 @@ public class CreateProxyWindow extends ApplicationComponent {
     public CreateProxyWindow() {
         super();
         initialize();
-        List services = DorianUIUtils.getAuthenticationServices();
-        for (int i = 0; i < services.size(); i++) {
-            try {
-                this.getIdentityProvider().addItem(services.get(i));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
     }
 
 
@@ -119,7 +112,7 @@ public class CreateProxyWindow extends ApplicationComponent {
     private void initialize() {
         this.setContentPane(getJContentPane());
         this.setFrameIcon(DorianLookAndFeel.getCertificateIcon());
-        this.setTitle("Create Proxy");
+        this.setTitle("Login");
     }
 
 
@@ -176,7 +169,7 @@ public class CreateProxyWindow extends ApplicationComponent {
         if (idpPanel == null) {
             GridBagConstraints gridBagConstraints18 = new GridBagConstraints();
             gridBagConstraints18.fill = GridBagConstraints.HORIZONTAL;
-            gridBagConstraints18.gridy = 2;
+            gridBagConstraints18.gridy = 3;
             gridBagConstraints18.weightx = 1.0;
             gridBagConstraints18.anchor = GridBagConstraints.WEST;
             gridBagConstraints18.insets = new Insets(2, 2, 2, 2);
@@ -185,7 +178,7 @@ public class CreateProxyWindow extends ApplicationComponent {
             gridBagConstraints17.gridx = 0;
             gridBagConstraints17.anchor = GridBagConstraints.WEST;
             gridBagConstraints17.insets = new Insets(2, 2, 2, 2);
-            gridBagConstraints17.gridy = 2;
+            gridBagConstraints17.gridy = 3;
             jLabel = new JLabel();
             jLabel.setText("Delegation Path Length");
             GridBagConstraints gridBagConstraints15 = new GridBagConstraints();
@@ -202,12 +195,12 @@ public class CreateProxyWindow extends ApplicationComponent {
             gridBagConstraints8.weightx = 1.0D;
             gridBagConstraints8.fill = java.awt.GridBagConstraints.HORIZONTAL;
             gridBagConstraints8.insets = new java.awt.Insets(0, 0, 0, 0);
-            gridBagConstraints8.gridy = 1;
+            gridBagConstraints8.gridy = 2;
             GridBagConstraints gridBagConstraints7 = new GridBagConstraints();
             gridBagConstraints7.gridx = 0;
             gridBagConstraints7.anchor = java.awt.GridBagConstraints.WEST;
             gridBagConstraints7.insets = new java.awt.Insets(2, 2, 2, 2);
-            gridBagConstraints7.gridy = 1;
+            gridBagConstraints7.gridy = 2;
             lifetimeLabel = new JLabel();
             lifetimeLabel.setText("Lifetime");
             GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
@@ -223,7 +216,7 @@ public class CreateProxyWindow extends ApplicationComponent {
             gridBagConstraints5.insets = new java.awt.Insets(2, 2, 2, 2);
             gridBagConstraints5.gridx = 0;
             ifsLabel = new JLabel();
-            ifsLabel.setText("Dorian Service");
+            ifsLabel.setText("Dorian");
             GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
             gridBagConstraints4.gridx = 0;
             gridBagConstraints4.gridwidth = 2;
@@ -235,17 +228,17 @@ public class CreateProxyWindow extends ApplicationComponent {
             GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
             gridBagConstraints2.fill = java.awt.GridBagConstraints.HORIZONTAL;
             gridBagConstraints2.gridx = 1;
-            gridBagConstraints2.gridy = 3;
+            gridBagConstraints2.gridy = 1;
             gridBagConstraints2.anchor = java.awt.GridBagConstraints.WEST;
             gridBagConstraints2.insets = new java.awt.Insets(2, 2, 2, 2);
             gridBagConstraints2.weightx = 1.0;
             GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
             gridBagConstraints1.insets = new java.awt.Insets(2, 2, 2, 2);
-            gridBagConstraints1.gridy = 3;
+            gridBagConstraints1.gridy = 1;
             gridBagConstraints1.anchor = java.awt.GridBagConstraints.WEST;
             gridBagConstraints1.gridx = 0;
             idpLabel = new JLabel();
-            idpLabel.setText("Authentication Service");
+            idpLabel.setText("Organization");
             idpPanel = new JPanel();
             idpPanel.setLayout(new GridBagLayout());
             idpPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Create Proxy",
@@ -256,7 +249,7 @@ public class CreateProxyWindow extends ApplicationComponent {
             idpPanel.add(getIdentityProvider(), gridBagConstraints2);
             idpPanel.add(getLoginPanel(), gridBagConstraints4);
             idpPanel.add(ifsLabel, gridBagConstraints5);
-            idpPanel.add(getIfs(), gridBagConstraints6);
+            idpPanel.add(getDorianService(), gridBagConstraints6);
             idpPanel.add(lifetimeLabel, gridBagConstraints7);
             idpPanel.add(getLifetimePanel(), gridBagConstraints8);
             idpPanel.add(jLabel, gridBagConstraints17);
@@ -344,15 +337,39 @@ public class CreateProxyWindow extends ApplicationComponent {
 
 
     /**
-     * This method initializes ifs
+     * This method initializes dorianService
      * 
      * @return javax.swing.JComboBox
      */
-    private JComboBox getIfs() {
-        if (ifs == null) {
-            ifs = new DorianServiceListComboBox();
+    private DorianServiceListComboBox getDorianService() {
+        if (dorianService == null) {
+            dorianService = new DorianServiceListComboBox();
+            dorianService.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                    populateAuthenticationServices();
+                }
+            });
+            populateAuthenticationServices();
         }
-        return ifs;
+        return dorianService;
+    }
+
+
+    private void populateAuthenticationServices() {
+        try {
+            this.getIdentityProvider().removeAllItems();
+            DorianHandle handle = getDorianService().getSelectedService();
+            if (handle != null) {
+                List<AuthenticationServiceHandle> providers = handle.getAuthenticationServices();
+                if (providers != null) {
+                    for (int i = 0; i < providers.size(); i++) {
+                        this.getIdentityProvider().addItem(providers.get(i));
+                    }
+                }
+            }
+        } catch (Exception e) {
+            FaultUtil.printFault(e);
+        }
     }
 
 
@@ -397,20 +414,20 @@ public class CreateProxyWindow extends ApplicationComponent {
         // prevent clicking this button while working
         getAuthenticateButton().setEnabled(false);
 
-        String ifsService = ((DorianServiceListComboBox) this.getIfs()).getSelectedService();
-        String idpService = ((String) getIdentityProvider().getSelectedItem());
+        DorianHandle dorian = ((DorianServiceListComboBox) this.getDorianService()).getSelectedService();
+        AuthenticationServiceHandle as = ((AuthenticationServiceHandle) getIdentityProvider().getSelectedItem());
 
         this.updateProgress(true, "Authenticating with IdP...");
 
         try {
-            
+
             BasicAuthentication bac = new BasicAuthentication();
             bac.setUserId(userId.getText());
             bac.setPassword(new String(password.getPassword()));
-            AuthenticationClient client = new AuthenticationClient(idpService);
+            AuthenticationClient client = as.getAuthenticationClient();
             SAMLAssertion saml = client.authenticate(bac);
             this.updateProgress(true, "Creating Proxy...");
-            GridUserClient c2 = new GridUserClient(ifsService);
+            GridUserClient c2 = dorian.getUserClient();
             ProxyLifetime lifetime = new ProxyLifetime();
             lifetime.setHours(Integer.valueOf((String) getHours().getSelectedItem()).intValue());
             lifetime.setMinutes(Integer.valueOf((String) getMinutes().getSelectedItem()).intValue());

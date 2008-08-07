@@ -16,6 +16,7 @@ import javax.swing.JTextField;
 
 import org.cagrid.gaards.authentication.BasicAuthentication;
 import org.cagrid.gaards.dorian.client.LocalUserClient;
+import org.cagrid.gaards.ui.dorian.DorianHandle;
 import org.cagrid.gaards.ui.dorian.DorianLookAndFeel;
 import org.cagrid.gaards.ui.dorian.DorianServiceListComboBox;
 import org.cagrid.grape.ApplicationComponent;
@@ -347,12 +348,12 @@ public class ChangePasswordWindow extends ApplicationComponent {
 			return;
 		}
 
-		final String serviceUrl = ((DorianServiceListComboBox) this.getService()).getSelectedService();
+		final DorianHandle handle = ((DorianServiceListComboBox) this.getService()).getSelectedService();
 
 		Runner runner = new Runner() {
 			public void execute() {
 				try {
-					LocalUserClient client = new LocalUserClient(serviceUrl);
+					LocalUserClient client = handle.getLocalUserClient();
 					BasicAuthentication cred = new BasicAuthentication();
 					cred.setUserId(getUsername().getText());
 					cred.setPassword(new String(getPassword().getPassword()));

@@ -26,6 +26,7 @@ import org.cagrid.gaards.dorian.idp.BasicAuthCredential;
 import org.cagrid.gaards.dorian.stubs.types.DorianInternalFault;
 import org.cagrid.gaards.dorian.stubs.types.InvalidUserPropertyFault;
 import org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault;
+import org.globus.wsrf.impl.security.authorization.Authorization;
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
@@ -44,6 +45,18 @@ public class LocalUserClient {
 		this.serviceURL = serviceURL;
 		client = new DorianClient(serviceURL);
 	}
+	
+	/**
+     * This method specifies an authorization policy that the client should use
+     * for authorizing the server that it connects to.
+     * 
+     * @param authorization
+     *            The authorization policy to enforce
+     */
+
+    public void setAuthorization(Authorization authorization) {
+        client.setAuthorization(authorization);
+    }
 
 	/**
 	 * This method allows a client to determine whether or not a user id is
@@ -99,6 +112,7 @@ public class LocalUserClient {
 		try {
 			AuthenticationClient auth = new AuthenticationClient(
 					this.serviceURL);
+			auth.setAuthorization(client.getAuthorization());
 			return auth.authenticate(cred);
 		} catch (InvalidCredentialFault f) {
 			throw f;
@@ -197,6 +211,7 @@ public class LocalUserClient {
 	 * that the client is connecting to. The authentication profiles are
 	 * represented by the resource property:
 	 * (http://gaards.cagrid.org/authentication,AuthenticationProfiles).
+	 * Client side authorization is not enforced when calling this method.
 	 * 
 	 * @return If the resource property exists a set is returned containing the
 	 *         QName(s) of the authentication profiles supported. If the

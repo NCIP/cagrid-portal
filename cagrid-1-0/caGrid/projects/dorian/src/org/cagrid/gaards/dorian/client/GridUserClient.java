@@ -38,6 +38,7 @@ import org.cagrid.gaards.pki.CertUtil;
 import org.cagrid.gaards.pki.KeyUtil;
 import org.cagrid.gaards.saml.encoding.SAMLUtils;
 import org.globus.gsi.GlobusCredential;
+import org.globus.wsrf.impl.security.authorization.Authorization;
 import org.globus.wsrf.utils.XmlUtils;
 import org.w3c.dom.Element;
 
@@ -58,6 +59,18 @@ public class GridUserClient {
         client = new DorianClient(serviceURI, cred);
     }
 
+    
+    /**
+     * This method specifies an authorization policy that the client should use
+     * for authorizing the server that it connects to.
+     * 
+     * @param authorization
+     *            The authorization policy to enforce
+     */
+
+    public void setAuthorization(Authorization authorization) {
+        client.setAuthorization(authorization);
+    }
 
 
     /**
@@ -225,6 +238,7 @@ public class GridUserClient {
 
     /**
      * This method obtains a list of the identity providers trusted by Dorian.
+     * Client side authorization is not enforced when calling this method.
      * 
      * @return The list of identity providers trusted by Dorian.
      * @throws ResourcePropertyRetrievalException

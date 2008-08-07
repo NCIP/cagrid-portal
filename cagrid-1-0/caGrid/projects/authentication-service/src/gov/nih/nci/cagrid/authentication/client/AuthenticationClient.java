@@ -11,6 +11,7 @@ import java.rmi.RemoteException;
 import org.apache.axis.types.URI.MalformedURIException;
 import org.cagrid.gaards.authentication.client.AuthenticationServiceClient;
 import org.cagrid.gaards.saml.encoding.SAMLUtils;
+import org.globus.wsrf.impl.security.authorization.Authorization;
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
@@ -30,6 +31,18 @@ public class AuthenticationClient {
 		client = new AuthenticationServiceClient(serviceURI);
 		this.cred = cred;
 	}
+	
+	/**
+     * This method specifies an authorization policy that the client should use
+     * for authorizing the server that it connects to.
+     * 
+     * @param authorization
+     *            The authorization policy to enforce
+     */
+
+    public void setAuthorization(Authorization authorization) {
+        client.setAuthorization(authorization);
+    }
 
 	public SAMLAssertion authenticate() throws RemoteException,
 			InvalidCredentialFault, InsufficientAttributeFault,
