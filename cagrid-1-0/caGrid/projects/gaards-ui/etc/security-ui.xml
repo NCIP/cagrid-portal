@@ -306,7 +306,7 @@
 							<name>ServiceConfiguration</name>
 						</qname>
 						<ConfigurationPanel>org.cagrid.grape.ServiceConfigurationEditor</ConfigurationPanel>
-						<DefaultFile>etc/dorian-services-configuration.xml</DefaultFile>
+						<DefaultFile>ext/target_grid/dorian-services-configuration.xml</DefaultFile>
 					</ConfigurationDescriptor>
 					<ConfigurationDescriptor>
 						<DisplayName>Authentication Service(s)</DisplayName>
@@ -317,7 +317,7 @@
 							<name>ServiceConfiguration</name>
 						</qname>
 						<ConfigurationPanel>org.cagrid.grape.ServiceConfigurationEditor</ConfigurationPanel>
-						<DefaultFile>etc/authentication-services-configuration.xml</DefaultFile>
+						<DefaultFile>ext/target_grid/authentication-services-configuration.xml</DefaultFile>
 					</ConfigurationDescriptor>
 				</ConfigurationDescriptors>
 			</ConfigurationGroup>

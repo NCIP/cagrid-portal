@@ -22,9 +22,10 @@
     <conf name="urls" visibility="public" extends="default"/>
 
     <!--  grape UI configurations-->
-    <conf name="ui" visibility="public" extends="dorian-ui,gridgrouper-ui,gts-ui,cds-ui,workflow-ui"/>
+   <conf name="ui" visibility="public" extends="authentication-services,dorian-services,gridgrouper-ui,gts-ui,cds-ui,workflow-ui"/>
     <conf name="cds-ui" visibility="public" extends="default"/>
-    <conf name="dorian-ui" visibility="public" extends="default"/>
+    <conf name="authentication-services" visibility="public" extends="default"/>
+    <conf name="dorian-services" visibility="public" extends="default"/>
     <conf name="gridgrouper-ui" visibility="public" extends="default"/>
     <conf name="gts-ui" visibility="public" extends="default"/>
     <conf name="workflow-ui" visibility="public" extends="default"/>
