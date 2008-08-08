@@ -5,22 +5,26 @@ import gov.nih.nci.cagrid.common.Runner;
 import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
 
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JPasswordField;
 import javax.swing.JProgressBar;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
+import javax.xml.namespace.QName;
 
-import org.cagrid.gaards.authentication.BasicAuthentication;
 import org.cagrid.gaards.authentication.client.AuthenticationClient;
+import org.cagrid.gaards.authentication.common.AuthenticationProfile;
 import org.cagrid.gaards.dorian.client.GridUserClient;
 import org.cagrid.gaards.dorian.federation.ProxyLifetime;
 import org.cagrid.gaards.ui.common.CredentialManager;
@@ -87,21 +91,19 @@ public class CreateProxyWindow extends ApplicationComponent {
     private JLabel jLabel = null;
 
     private JTextField delegationPathLength = null;
-
-    private JTextField userId = null;
-
-    private JLabel jLabel1 = null;
-
-    private JLabel jLabel2 = null;
-
-    private JPasswordField password = null;
-
+    
+    private CardLayout credentialLayout = null;
+    
+    private CredentialPanel currentCredentialPanel = null;
+    
+    private Map<QName, CredentialPanel> credentialPanels;
 
     /**
      * This is the default constructor
      */
     public CreateProxyWindow() {
         super();
+        this.credentialPanels = new Hashtable<QName, CredentialPanel>();
         initialize();
     }
 
@@ -267,8 +269,28 @@ public class CreateProxyWindow extends ApplicationComponent {
     private JComboBox getIdentityProvider() {
         if (identityProvider == null) {
             identityProvider = new JComboBox();
+            identityProvider.addActionListener(new java.awt.event.ActionListener() {
+            	public void actionPerformed(java.awt.event.ActionEvent e) {
+            		showLoginInformation();
+            	}
+            });
         }
         return identityProvider;
+    }
+    
+    private void showLoginInformation(){
+    	AuthenticationServiceHandle handle = (AuthenticationServiceHandle)getIdentityProvider().getSelectedItem();
+    	if(handle!=null){
+    	Set<QName> profiles = handle.getAuthenticationProfiles();
+    	if((profiles == null) || (profiles.size()<=0)){
+    		this.credentialLayout.show(getLoginPanel(), profileToString(AuthenticationProfile.BASIC_AUTHENTICATION));
+    		this.currentCredentialPanel = this.credentialPanels.get(AuthenticationProfile.BASIC_AUTHENTICATION);
+    	}else{
+    		QName profile = profiles.iterator().next();
+    		this.credentialLayout.show(getLoginPanel(), profileToString(profile));
+    		this.currentCredentialPanel = this.credentialPanels.get(profile);
+    	}
+    	}
     }
 
 
@@ -294,43 +316,20 @@ public class CreateProxyWindow extends ApplicationComponent {
      */
     private JPanel getLoginPanel() {
         if (loginPanel == null) {
-            GridBagConstraints gridBagConstraints22 = new GridBagConstraints();
-            gridBagConstraints22.fill = GridBagConstraints.HORIZONTAL;
-            gridBagConstraints22.gridy = 1;
-            gridBagConstraints22.weightx = 1.0;
-            gridBagConstraints22.anchor = GridBagConstraints.WEST;
-            gridBagConstraints22.insets = new Insets(2, 2, 2, 2);
-            gridBagConstraints22.gridx = 1;
-            GridBagConstraints gridBagConstraints21 = new GridBagConstraints();
-            gridBagConstraints21.anchor = GridBagConstraints.WEST;
-            gridBagConstraints21.gridy = 1;
-            gridBagConstraints21.insets = new Insets(2, 2, 2, 2);
-            gridBagConstraints21.gridx = 0;
-            jLabel2 = new JLabel();
-            jLabel2.setText("Password");
-            GridBagConstraints gridBagConstraints20 = new GridBagConstraints();
-            gridBagConstraints20.gridx = 0;
-            gridBagConstraints20.anchor = GridBagConstraints.WEST;
-            gridBagConstraints20.insets = new Insets(2, 2, 2, 2);
-            gridBagConstraints20.gridy = 0;
-            jLabel1 = new JLabel();
-            jLabel1.setText("User Id");
-            GridBagConstraints gridBagConstraints19 = new GridBagConstraints();
-            gridBagConstraints19.fill = GridBagConstraints.HORIZONTAL;
-            gridBagConstraints19.gridx = 1;
-            gridBagConstraints19.gridy = 0;
-            gridBagConstraints19.anchor = GridBagConstraints.WEST;
-            gridBagConstraints19.insets = new Insets(2, 2, 2, 2);
-            gridBagConstraints19.weightx = 1.0;
             loginPanel = new JPanel();
-            loginPanel.setLayout(new GridBagLayout());
+            credentialLayout = new CardLayout();
+            loginPanel.setLayout(credentialLayout);
             loginPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Login Information",
                 javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
                 javax.swing.border.TitledBorder.DEFAULT_POSITION, null, LookAndFeel.getPanelLabelColor()));
-            loginPanel.add(getUserId(), gridBagConstraints19);
-            loginPanel.add(jLabel1, gridBagConstraints20);
-            loginPanel.add(jLabel2, gridBagConstraints21);
-            loginPanel.add(getPassword(), gridBagConstraints22);
+           
+            CredentialPanel panel1 = new BasicAuthenticationPanel();
+            CredentialPanel panel2 = new OneTimePasswordAuthenticationPanel();
+            this.credentialPanels.put(AuthenticationProfile.BASIC_AUTHENTICATION, panel1);
+            this.credentialPanels.put(AuthenticationProfile.ONE_TIME_PASSWORD, panel2);
+         
+            loginPanel.add(panel1,profileToString(AuthenticationProfile.BASIC_AUTHENTICATION));
+            loginPanel.add(panel2, profileToString(AuthenticationProfile.ONE_TIME_PASSWORD));
         }
         return loginPanel;
     }
@@ -420,12 +419,8 @@ public class CreateProxyWindow extends ApplicationComponent {
         this.updateProgress(true, "Authenticating with IdP...");
 
         try {
-
-            BasicAuthentication bac = new BasicAuthentication();
-            bac.setUserId(userId.getText());
-            bac.setPassword(new String(password.getPassword()));
             AuthenticationClient client = as.getAuthenticationClient();
-            SAMLAssertion saml = client.authenticate(bac);
+            SAMLAssertion saml = client.authenticate(this.currentCredentialPanel.getCredential());
             this.updateProgress(true, "Creating Proxy...");
             GridUserClient c2 = dorian.getUserClient();
             ProxyLifetime lifetime = new ProxyLifetime();
@@ -644,31 +639,9 @@ public class CreateProxyWindow extends ApplicationComponent {
         }
         return delegationPathLength;
     }
-
-
-    /**
-     * This method initializes userId
-     * 
-     * @return javax.swing.JTextField
-     */
-    private JTextField getUserId() {
-        if (userId == null) {
-            userId = new JTextField();
-        }
-        return userId;
-    }
-
-
-    /**
-     * This method initializes password
-     * 
-     * @return javax.swing.JPasswordField
-     */
-    private JPasswordField getPassword() {
-        if (password == null) {
-            password = new JPasswordField();
-        }
-        return password;
+    
+    private String profileToString(QName profile){
+    	return profile.getNamespaceURI()+":"+profile.getLocalPart();
     }
 
 }

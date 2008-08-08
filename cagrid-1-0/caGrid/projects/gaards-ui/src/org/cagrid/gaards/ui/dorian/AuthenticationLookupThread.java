@@ -1,6 +1,7 @@
 package org.cagrid.gaards.ui.dorian;
 
 import gov.nih.nci.cagrid.common.Runner;
+import gov.nih.nci.cagrid.common.RunnerGroup;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,6 +54,13 @@ public class AuthenticationLookupThread extends Runner {
                         }
                     }
                 }
+            }
+            if ((authenticationServices != null) && (authenticationServices.size() > 0)) {
+                RunnerGroup grp = new RunnerGroup();
+                for (int i = 0; i < this.authenticationServices.size(); i++) {
+                       grp.add(new AuthenticationProfilesLookupThread(this.authenticationServices.get(i)));
+                }
+                GridApplication.getContext().getApplication().getThreadManager().executeGroup(grp);
             }
 
         } catch (Throwable e) {

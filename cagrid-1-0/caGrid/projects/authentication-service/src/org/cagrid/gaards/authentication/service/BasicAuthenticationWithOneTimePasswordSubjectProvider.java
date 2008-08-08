@@ -6,7 +6,7 @@ public abstract class BasicAuthenticationWithOneTimePasswordSubjectProvider
 		extends BaseSubjectProvider {
 	public BasicAuthenticationWithOneTimePasswordSubjectProvider() {
 		super();
-		addSupportedProfile(AuthenticationProfile.BASIC_AUTHENTICATION_WITH_ONE_TIME_PASSWORD);
+		addSupportedProfile(AuthenticationProfile.ONE_TIME_PASSWORD);
 	}
 
 }

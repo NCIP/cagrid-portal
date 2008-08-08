@@ -2,12 +2,18 @@ package org.cagrid.gaards.ui.dorian;
 
 import gov.nih.nci.cagrid.common.Utils;
 
+import java.util.Set;
+
+import javax.xml.namespace.QName;
+
 import org.cagrid.gaards.authentication.client.AuthenticationClient;
 import org.cagrid.grape.configuration.ServiceDescriptor;
 import org.globus.wsrf.impl.security.authorization.IdentityAuthorization;
 
 
 public class AuthenticationServiceHandle extends ServiceHandle {
+	
+	private Set<QName> authenticationProfiles;
 
     public AuthenticationServiceHandle(ServiceDescriptor des) {
         super(des);
@@ -21,5 +27,15 @@ public class AuthenticationServiceHandle extends ServiceHandle {
         }
         return client;
     }
+
+	public Set<QName> getAuthenticationProfiles() {
+		return authenticationProfiles;
+	}
+
+	public void setAuthenticationProfiles(Set<QName> authenticationProfiles) {
+		this.authenticationProfiles = authenticationProfiles;
+	}
+    
+    
 
 }

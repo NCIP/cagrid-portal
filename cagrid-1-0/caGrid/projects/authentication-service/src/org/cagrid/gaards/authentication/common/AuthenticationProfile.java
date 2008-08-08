@@ -13,14 +13,14 @@ public class AuthenticationProfile {
 
 	public static QName BASIC_AUTHENTICATION = new QName(
 			"http://gaards.cagrid.org/authentication", "BasicAuthentication");
-	public static QName BASIC_AUTHENTICATION_WITH_ONE_TIME_PASSWORD = new QName(
+	public static QName ONE_TIME_PASSWORD = new QName(
 			"http://gaards.cagrid.org/authentication",
 			"OneTimePassword");
 
 	public static boolean isValid(QName profile) {
 		if (profile.equals(BASIC_AUTHENTICATION)) {
 			return true;
-		} else if (profile.equals(BASIC_AUTHENTICATION_WITH_ONE_TIME_PASSWORD)) {
+		} else if (profile.equals(ONE_TIME_PASSWORD)) {
 			return true;
 		} else {
 			return false;
@@ -52,7 +52,7 @@ public class AuthenticationProfile {
 					&& (c.getClass().equals(BasicAuthentication.class))) {
 				return true;
 			} else if ((profile
-					.equals(BASIC_AUTHENTICATION_WITH_ONE_TIME_PASSWORD))
+					.equals(ONE_TIME_PASSWORD))
 					&& (c.getClass().equals(OneTimePassword.class))) {
 				return true;
 			}

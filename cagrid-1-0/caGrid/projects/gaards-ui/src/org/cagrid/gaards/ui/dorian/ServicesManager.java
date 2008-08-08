@@ -22,8 +22,6 @@ public class ServicesManager extends Runner {
 
     private List<DorianHandle> dorianServices;
 
-    private ThreadManager threadManager;
-
     private Object mutex;
     private boolean firstRun;
 
@@ -31,14 +29,13 @@ public class ServicesManager extends Runner {
     private ServicesManager() {
         this.log = Logger.getLogger(getClass());
         this.dorianServices = new ArrayList<DorianHandle>();
-        this.threadManager = new ThreadManager();
         this.mutex = new Object();
         this.firstRun = true;
     }
     
     private void startup(){
         try {
-            threadManager.executeInBackground(this);
+            GridApplication.getContext().getApplication().getThreadManager().executeInBackground(this);
         } catch (Exception e) {
             log.error(e);
         }
@@ -96,7 +93,7 @@ public class ServicesManager extends Runner {
                         dorians.add(handle);
                         group.add(new AuthenticationLookupThread(handle));
                     }
-                    threadManager.executeGroup(group);
+                    GridApplication.getContext().getApplication().getThreadManager().executeGroup(group);
                 }
             }
         } catch (Throwable e) {

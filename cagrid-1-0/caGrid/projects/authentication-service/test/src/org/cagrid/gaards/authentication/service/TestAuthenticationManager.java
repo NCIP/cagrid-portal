@@ -295,7 +295,7 @@ public class TestAuthenticationManager extends TestCase {
 			assertNotNull(profiles);
 			assertEquals(1, profiles.size());
 			assertTrue(profiles
-					.contains(AuthenticationProfile.BASIC_AUTHENTICATION_WITH_ONE_TIME_PASSWORD));
+					.contains(AuthenticationProfile.ONE_TIME_PASSWORD));
 
 			// Test acceptable authentication
 			OneTimePassword auth = new OneTimePassword();

@@ -3,7 +3,7 @@
 
 <beans>
      
-    <bean id="subjectProvider" class="org.cagrid.gaards.authentication.test.ExampleSubjectProvider1"/>
+    <bean id="subjectProvider" class="org.cagrid.gaards.authentication.test.ExampleSubjectProvider2"/>
      
     <!--  
     <bean id="subjectProvider" class="org.cagrid.gaards.authentication.service.DefaultSubjectProvider">
