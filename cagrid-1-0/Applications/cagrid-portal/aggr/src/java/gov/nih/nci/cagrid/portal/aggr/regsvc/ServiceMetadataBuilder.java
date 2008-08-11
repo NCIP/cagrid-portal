@@ -422,7 +422,8 @@ public class ServiceMetadataBuilder {
 		mapping.setObjectIdentifier(objectIdentifier);
 		mapping.setObjectPath(getPath());
 		mapping.setSemanticMetadata(semMetaOut);
-		handlePersist(mapping);
+        semMetaOut.setSemanticMetadataMapping(mapping);
+        handlePersist(mapping);
 		popPath();
 		return semMetaOut;
 	}
