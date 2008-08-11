@@ -4,10 +4,9 @@
 package gov.nih.nci.cagrid.portal.domain.metadata.common;
 
 import gov.nih.nci.cagrid.portal.domain.AbstractDomainObject;
+import gov.nih.nci.cagrid.portal.domain.SemanticMetadataMapping;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
@@ -29,6 +28,7 @@ public class SemanticMetadata extends AbstractDomainObject {
     private String conceptDefinition;
     private Integer orderLevel;
     private String conceptCode;
+    private SemanticMetadataMapping semanticMetadataMapping;
 
     @Column(name = "sm_ccode")
     public String getConceptCode() {
@@ -73,5 +73,15 @@ public class SemanticMetadata extends AbstractDomainObject {
 
     public void setOrderLevel(Integer orderLevel) {
         this.orderLevel = orderLevel;
+    }
+
+
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "semanticMetadata")
+    public SemanticMetadataMapping getSemanticMetadataMapping() {
+        return semanticMetadataMapping;
+    }
+
+    public void setSemanticMetadataMapping(SemanticMetadataMapping semanticMetadataMapping) {
+        this.semanticMetadataMapping = semanticMetadataMapping;
     }
 }
