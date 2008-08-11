@@ -192,6 +192,8 @@
             <entry key="cabig.tools.remoteView" value="${cabig.tools.remoteView}"/>
             <entry key="fqp.service.url" value="${fqp.service.url}"/>
             <entry key="strict.index.verification" value="${strict.index.verification}"/>
+            <entry key="cagrid.portal.aggr.defaultTimeout" value="${cagrid.portal.aggr.defaultTimeout}"/>
+            <entry key="cagrid.portal.aggr.defaultPeriod" value="${cagrid.portal.aggr.defaultPeriod}"/>
         </propertyfile>
     </target>
 
