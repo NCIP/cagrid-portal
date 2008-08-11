@@ -56,9 +56,7 @@ public class DynamicServiceUrlProvider implements ServiceUrlProvider {
 		
 		EndpointReferenceType[] eprs = t.getEprs();
 		if(eprs != null && eprs.length > 0){
-			logger.debug("Retrieved " + eprs.length + " EPR(s) from '" + indexServiceUrl + "'");
-			
-			for(EndpointReferenceType epr : eprs){
+		 	for(EndpointReferenceType epr : eprs){
 				urls.add(epr.getAddress().toString());
 			}
 			
