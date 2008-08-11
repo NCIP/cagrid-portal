@@ -22,7 +22,7 @@
 				class="gov.nih.nci.cagrid.portal.aggr.geocode.YahooGeocoder">
 				<property name="baseUrl" value="${cagrid.portal.geocoder.yahoo.baseUrl}"/>
 				<property name="yahooAppId" value="${cagrid.portal.geocoder.yahoo.appId}"/>
-				<property name="timeout" value="10000"/>
+				<property name="timeout" ref="defaultTimeout"/>
 			</bean>
 		</property>
 	</bean>

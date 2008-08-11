@@ -44,7 +44,7 @@
     <bean id="checkForNewServicesTask"
           class="org.springframework.scheduling.timer.ScheduledTimerTask">
         <property name="delay" value="3000"/>
-        <property name="period" value="600000"/>
+        <property name="period" ref="defaultPeriod"/>
         <property name="timerTask" ref="checkForNewServices"/>
     </bean>
 
