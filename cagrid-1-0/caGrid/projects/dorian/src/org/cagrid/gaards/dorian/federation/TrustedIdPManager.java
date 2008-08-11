@@ -105,7 +105,7 @@ public class TrustedIdPManager extends LoggingObject {
     }
 
 
-    private void buildDatabase() throws DorianInternalFault {
+    public void buildDatabase() throws DorianInternalFault {
         if (!dbBuilt) {
             try {
                 if (!this.db.tableExists(TRUST_MANAGER_TABLE)) {
