@@ -147,8 +147,11 @@ public class GridGrouperAuthorizationManager implements AuthorizationExtensionMa
     }
 
     public String removeAuthorizationExtension(AuthorizationExtensionDescriptionType arg0,
-        SpecificServiceInformation arg1) throws AuthorizationExtensionException {
+        SpecificServiceInformation serviceInfo) throws AuthorizationExtensionException {
         // TODO Auto-generated method stub
+        File file = new File(serviceInfo.getBaseDirectory().getAbsolutePath() + File.separator
+            + "etc" + File.separator + serviceInfo.getService().getName() + Constants.GRID_GROUPER_AUTH_FILE_SUFFIX);
+        file.delete();
         return null;
     }
 
