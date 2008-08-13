@@ -2,24 +2,28 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	   xmlns:flow="http://www.springframework.org/schema/webflow-config"
-       xmlns:p="http://www.springframework.org/schema/p"
-       xmlns:util="http://www.springframework.org/schema/util"       
+       xmlns:p="http://www.springframework.org/schema/p"       
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
-       http://www.springframework.org/schema/webflow-config http://www.springframework.org/schema/webflow-config/spring-webflow-config-1.0.xsd
-       http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd">
+       http://www.springframework.org/schema/webflow-config http://www.springframework.org/schema/webflow-config/spring-webflow-config-1.0.xsd">
        
 	<bean id="casPropertyPlaceholderConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"
 		p:location="/WEB-INF/cas.properties" />
        
 	<!-- Theme Resolver -->
 	<bean id="themeResolver" class="org.jasig.cas.services.web.ServiceThemeResolver"
-		p:defaultThemeName="default"
+		p:defaultThemeName="${cas.themeResolver.defaultThemeName}"
         p:argumentExtractors-ref="argumentExtractors" />
 
 	<!-- View Resolver -->
 	<bean id="viewResolver" class="org.springframework.web.servlet.view.ResourceBundleViewResolver"
-		p:basename="default_views"
-		p:order="0" />
+		p:order="0">
+		<property name="basenames">
+			<list>
+				<value>${cas.viewResolver.basename}</value>
+				<value>protocol_views</value>
+			</list>
+		</property>
+	</bean>
 	
 	<!-- Locale Resolver -->
 	<bean id="localeResolver" class="org.springframework.web.servlet.i18n.CookieLocaleResolver" />
@@ -181,8 +185,8 @@
 	<bean id="logoutController" class="org.cagrid.gaards.websso.logout.CaGridLogoutController"
 		p:centralAuthenticationService-ref="centralAuthenticationService"
 		p:logoutView="casLogoutView"
-		p:warnCookieGenerator-ref="warnCookieGenerator"
 		p:followServiceRedirects="true"
+		p:warnCookieGenerator-ref="warnCookieGenerator"
 		p:ticketGrantingTicketCookieGenerator-ref="ticketGrantingTicketCookieGenerator" />
 	
 	<bean id="initialFlowSetupAction" class="org.jasig.cas.web.flow.InitialFlowSetupAction"
@@ -200,43 +204,9 @@
 	<bean id="sendTicketGrantingTicketAction" class="org.jasig.cas.web.flow.SendTicketGrantingTicketAction"
 		p:centralAuthenticationService-ref="centralAuthenticationService"
 		p:ticketGrantingTicketCookieGenerator-ref="ticketGrantingTicketCookieGenerator" />
-
-<!--
-	<bean
-		id="x509Check"
-		parent="abstractCasLoginAction"
-		class="org.jasig.cas.adaptors.x509.web.flow.X509CertificateCredentialsNonInteractiveAction" />
- -->
- 
- 	<bean
- 		id="casArgumentExtractor"
- 		class="org.jasig.cas.web.support.CasArgumentExtractor" />
-
- 	<util:list id="argumentExtractors">
-		<ref bean="casArgumentExtractor" />
- 		<ref bean="samlArgumentExtractor" />
- 	</util:list>
- 	
- 	<bean id="samlArgumentExtractor" class="org.jasig.cas.web.support.SamlArgumentExtractor" />
-	
-	<bean id="warnCookieGenerator" class="org.jasig.cas.web.support.CookieRetrievingCookieGenerator"
-		p:cookieSecure="true"
-		p:cookieMaxAge="-1"
-		p:cookieName="CASPRIVACY"
-		p:cookiePath="/cas" />
-	
-	<bean id="ticketGrantingTicketCookieGenerator" class="org.jasig.cas.web.support.CookieRetrievingCookieGenerator"
-		p:cookieSecure="true"
-		p:cookieMaxAge="-1"
-		p:cookieName="CASTGC"
-		p:cookiePath="/cas" />
 	
 	<bean id="dynamicRedirectViewSelector" class="org.jasig.cas.web.flow.DynamicRedirectViewSelector" />
-    
-    <!--
-    <bean id="openIdSingleSignOnAction" class="org.jasig.cas.web.flow.OpenIdSingleSignOnAction"
-    	p:centralAuthenticationService-ref="centralAuthenticationService" />
-	-->
+
 	<bean id="addRegisteredServiceSimpleFormController" class="org.jasig.cas.services.web.RegisteredServiceSimpleFormController"
 		p:formView="addServiceView"
 		p:successView="addServiceView"

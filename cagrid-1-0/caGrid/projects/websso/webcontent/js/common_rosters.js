@@ -1,4 +1,4 @@
-// $Id: common_rosters.js,v 1.1 2007-10-02 17:44:57 oster Exp $
+// $Id: common_rosters.js,v 1.2 2008-08-13 13:52:45 garmillas Exp $
 
 var W3C_DOM = ((typeof document.getElementById != 'undefined') && (typeof document.createElement != 'undefined')) ? true : false;
 

@@ -2,11 +2,11 @@
 	<websso-server-information>
 		<start-auto-syncgts>yes</start-auto-syncgts>
 		<trust-store-path>String</trust-store-path>
-		<host-credential-certificate-file-path>C:/Documents and Settings/MODI/.cagrid/certificates/MODIK_LAP-cert.pem</host-credential-certificate-file-path>
-		<host-credential-key-file-path>C:/Documents and Settings/MODI/.cagrid/certificates/MODIK_LAP-key.pem</host-credential-key-file-path>
+		<host-credential-certificate-file-path>C:/certificates/D39Y4KF1-cert.pem</host-credential-certificate-file-path>
+		<host-credential-key-file-path>C:/certificates/D39Y4KF1-key.pem</host-credential-key-file-path>
 	</websso-server-information>
 	<credential-delegation-service-information>
-		<service-url>https://localhost:8443/wsrf/services/cagrid/CredentialDelegationService</service-url>
+		<service-url>https://cds.training.cagrid.org:8443/wsrf/services/cagrid/CredentialDelegationService</service-url>
 		<delegation-lifetime-hours>8</delegation-lifetime-hours>
 		<delegation-lifetime-minutes>0</delegation-lifetime-minutes>
 		<delegation-lifetime-seconds>0</delegation-lifetime-seconds>
@@ -14,9 +14,9 @@
 	<authentication-service-list>
 		<authentication-service-information>
 			<service-name>caGrid Training</service-name>
-			<service-url>https://dorian.cagrid.org:6443/wsrf/services/cagrid/Dorian</service-url>
+			<service-url>https://dorian.training.cagrid.org:8443/wsrf/services/cagrid/Dorian</service-url>
 			<dorian-information>
-				<service-url>https://dorian.cagrid.org:6443/wsrf/services/cagrid/Dorian</service-url>
+				<service-url>https://dorian.training.cagrid.org:8443/wsrf/services/cagrid/Dorian</service-url>
 				<proxy-lifetime-hours>12</proxy-lifetime-hours>
 				<proxy-lifetime-minutes>0</proxy-lifetime-minutes>
 				<proxy-lifetime-seconds>0</proxy-lifetime-seconds>
@@ -28,8 +28,12 @@
 		<group-name>String</group-name>
 		<delegated-application-list>
 			<delegated-application>
-				<application-name>Laptop</application-name>
-				<host-identity>/O=caBIG/OU=caGrid/OU=Training/OU=Services/CN=host/MODIK_LAP</host-identity>
+				<application-name>webssoclientexample-1.3-dev</application-name>
+				<host-identity>/O=caBIG/OU=caGrid/OU=Training/OU=Services/CN=host/D39Y4KF1</host-identity>
+			</delegated-application>
+			<delegated-application>
+				<application-name>webssoclientexample-1.3-dev</application-name>
+				<host-identity>/O=caBIG/OU=caGrid/OU=Training/OU=Services/CN=host/NCI-GARMILLAS-1</host-identity>
 			</delegated-application>
 		</delegated-application-list>
 	</delegated-applications-group>
