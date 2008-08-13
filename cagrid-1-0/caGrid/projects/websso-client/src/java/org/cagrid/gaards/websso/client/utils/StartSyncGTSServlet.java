@@ -1,10 +1,7 @@
 package org.cagrid.gaards.websso.client.utils;
 
-import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.URI;
-import java.net.URL;
 
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.syncgts.bean.SyncDescription;

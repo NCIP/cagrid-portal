@@ -16,7 +16,6 @@
 	<property name="test.src.dir" location="test/src/java" />
 
 	<property name="build.dir" location="build" />
-	<property name="build.conf.dir" location="build/conf" />
 	<property name="build.classes.dir" location="build/classes" />
 	<property name="test.build.dir" location="build/classes" />
 
@@ -60,16 +59,16 @@
 				<include name="jce-jdk13-125.jar" />
 			</fileset>
 		</copy>
-    	<mkdir dir="${build.conf.dir}" />
-    	<copy todir="${build.conf.dir}" flatten="true" overwrite="true">
-    		<fileset dir="${src.resources.dir}">
-    			<include name="*.*" />
-    		</fileset>
-    	</copy>
 	</target>
 
 	<target name="build-jar">
-		<jar jarfile="${build.dir}/${jar.name}" basedir="${build.classes.dir}" />
+		<jar jarfile="${build.dir}/${jar.name}" basedir="${build.classes.dir}">
+			<fileset dir="${src.resources.dir}">
+				<include name="*.*" />
+				<exclude name="web.xml" />
+				<exclude name="cas-client.properties" />
+			</fileset>
+		</jar>
 		<delete dir="${build.classes.dir}" />
 	</target>
 
@@ -93,8 +92,18 @@
 		<delete dir="${build.dir}" />
 	</target>
 
-	<target name="all">		
- 		<antcall target="clean" />
+	<target name="installcert" depends="compile">
+		<java classname="org.cagrid.gaards.websso.client.utils.InstallCert">
+			<arg value="${websso.server}" />
+			<classpath>
+				<pathelement location="${build.classes.dir}" />
+				<pathelement path="${build.classpath}" />
+			</classpath>
+		</java>
+	</target>
+
+	<target name="all">
+		<antcall target="clean" />
 		<antcall target="jar" />
 	</target>
 </project>

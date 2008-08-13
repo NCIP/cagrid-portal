@@ -15,9 +15,10 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.jasig.cas.authentication.principal.Principal;
+import org.jasig.cas.client.authentication.AttributePrincipal;
+import org.jasig.cas.client.util.AbstractCasFilter;
 import org.jasig.cas.client.validation.Assertion;
-import org.jasig.cas.client.web.filter.AbstractCasFilter;
+
 
 public class CaGridWebSSOAttributeLoaderFilter implements Filter {
 
@@ -33,9 +34,9 @@ public class CaGridWebSSOAttributeLoaderFilter implements Filter {
 		HttpSession session = ((HttpServletRequest) request).getSession();
 		Boolean isSessionLoaded = (Boolean) session.getAttribute(IS_SESSION_ATTRIBUTES_LOADED);
 		if (null == isSessionLoaded || isSessionLoaded == Boolean.FALSE) {
-			Assertion assertion = (Assertion) session.getAttribute(AbstractCasFilter.CONST_ASSERTION);
-			Principal principal = assertion.getPrincipal();
-			String attributesString = principal.getId();			
+			Assertion assertion = (Assertion) session.getAttribute(AbstractCasFilter.CONST_CAS_ASSERTION);
+			AttributePrincipal attributePrincipal = assertion.getPrincipal();
+			String attributesString = attributePrincipal.getName();			
 			Map<String,String> userAttributesMap=getUserAttributes(attributesString);
 			Iterator<String> iterator = userAttributesMap.keySet().iterator();
 			while (iterator.hasNext()) {

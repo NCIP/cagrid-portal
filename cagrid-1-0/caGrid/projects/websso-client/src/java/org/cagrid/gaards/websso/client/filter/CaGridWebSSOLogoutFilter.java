@@ -15,18 +15,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
-import org.springframework.context.ApplicationContext;
-import org.springframework.web.context.support.WebApplicationContextUtils;
+import org.springframework.core.io.ClassPathResource;
+
 
 public class CaGridWebSSOLogoutFilter implements Filter
 {
 
-	private static final String IS_SESSION_ATTRIBUTES_LOADED = "IS_SESSION_ATTRIBUTES_LOADED";
+	public static final String IS_SESSION_ATTRIBUTES_LOADED = "IS_SESSION_ATTRIBUTES_LOADED";
 	private static final String CAGRID_SSO_DELEGATION_SERVICE_EPR = "CAGRID_SSO_DELEGATION_SERVICE_EPR";
 	private static final String LOGOUT_LANDING_URL = "logout-landing-url";
 	
-	private FilterConfig filterConfig = null;
 	private String logoutLandingURL = null;
 	public void destroy()
 	{
@@ -44,7 +42,8 @@ public class CaGridWebSSOLogoutFilter implements Filter
 		else
 		{
 			Properties properties = new Properties();
-			properties.load(filterConfig.getServletContext().getResourceAsStream("/WEB-INF/cas-client.properties"));
+			ClassPathResource casResource=new ClassPathResource("cas-client.properties");
+			properties.load(casResource.getInputStream());
 			String logoutURL = properties.getProperty("cas.server.url") + "logout";
 			String delegationEPR = (String)session.getAttribute(CAGRID_SSO_DELEGATION_SERVICE_EPR);
 			logoutURL = logoutURL + "?service=" + this.logoutLandingURL;
@@ -56,7 +55,6 @@ public class CaGridWebSSOLogoutFilter implements Filter
 
 	public void init(FilterConfig filterConfig) throws ServletException
 	{
-		this.filterConfig = filterConfig;
 		this.logoutLandingURL = filterConfig.getInitParameter(LOGOUT_LANDING_URL);
 	}
 
