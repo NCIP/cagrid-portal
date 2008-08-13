@@ -12,7 +12,7 @@ import javax.xml.namespace.QName;
 
 import junit.framework.TestCase;
 
-public class SoftareUpdateTestCase extends TestCase {
+public class SoftwareUpdateTestCase extends TestCase {
 
 	public void testUpdaterNullUpdates() {
 		UpdateManager manager = null;
@@ -49,6 +49,6 @@ public class SoftareUpdateTestCase extends TestCase {
 	}
 
 	public static void main(String[] args) {
-		junit.textui.TestRunner.run(SoftareUpdateTestCase.class);
+		junit.textui.TestRunner.run(SoftwareUpdateTestCase.class);
 	}
 }
