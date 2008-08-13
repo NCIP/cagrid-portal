@@ -21,15 +21,16 @@
 	<property name="build.classes.dir" location="${build.dir}/classes" />
 	<property name="build.war.dir" location="${build.dir}/war" />
 
-<!--	<path id="xmltaskdef.cp">
+	<path id="xmltaskdef.cp">
 		<fileset dir="${ext.lib.dir}">
 			<include name="xmltask-v1.14.jar" />
 		</fileset>
 	</path>
 
-	<taskdef name="xmltask"
-		classname="com.oopsconsultancy.xmltask.ant.XmlTask" classpathref="xmltaskdef.cp" />
--->
+	<target name="defineXmlTask">
+		<taskdef name="xmltask" classname="com.oopsconsultancy.xmltask.ant.XmlTask" classpathref="xmltaskdef.cp" />
+	</target>
+
 	<path id="build.classpath">
 		<fileset dir="${lib.dir}">
 			<include name="**/*.jar" />
@@ -94,14 +95,14 @@
 		<delete dir="${build.dir}" />
 	</target>
 
-	<target name="deploy-local" depends="war">
+	<target name="deploy-local-tomcat" depends="war">
 		<property name="tomcat.local" value="${tomcat.home}" />
 		<copy todir="${tomcat.local}/webapps/">
 			<fileset file="${build.dir}/${webapp.name}.war" />
 		</copy>
 	</target>
-<!--
-	<target name="insert-tomcat-secure-connector">
+
+	<target name="insert-tomcat-secure-connector" depends="defineXmlTask">
 		<echo  message="modifying server.xml in tomcat home dir ${tomcat.home}">
 		</echo>
 		<xmltask source="${tomcat.home}/conf/server.xml"
@@ -121,18 +122,18 @@
 			</insert>
 		</xmltask>
 	</target>
--->
+
 	<target name="create-tomcat-keystore" description="Generates a Grid Trust Report.">
 		<java classname="gov.nih.nci.cagrid.gridca.commandline.TomcatKeystoreCreator" fork="false" newenvironment="true" failonerror="true">
 			<classpath refid="build.classpath"/>
 		</java>
 	</target>
 
-	<target name="configure-tomcat-endoresedjars" description="Delete jars in tomcat endorsed directory,adds xercesimpl.jar">		
-		<delete includeEmptyDirs="true">			
+	<target name="configure-tomcat-endoresedjars" description="Delete jars in tomcat endorsed directory,adds xercesimpl.jar">
+		<delete includeEmptyDirs="true">
 			<fileset dir="${tomcat.home}/common/endorsed" includes="**/*"/>
 		</delete>
-		
+
 		<copy todir="${tomcat.home}/common/endorsed" overwrite="true">
 			<fileset dir="${endorsed.lib.dir}">
 				<include name="xercesImpl.jar" />
