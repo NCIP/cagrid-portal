@@ -20,7 +20,7 @@ Notes
 
 Action Items
 ------------
-2a) John will talk to Wei at his 1:00pm to oncrease the number of file descriptors 
+2a) John will talk to Wei at his 1:00pm to increase the number of file descriptors 
 2b) Investigate when we think we'll outgrow current Globus index service
 2c) Based on when we think we'll hit a problem, work with Globus team to see we think we'll run out of memory
 3b) John will start discussions of what policy is, and how to enforce it.
