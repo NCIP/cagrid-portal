@@ -42,9 +42,7 @@
             <cvs/>
         </modificationset>
         <schedule interval="60">
-            <ant>
-                <jvmarg arg="-Xmx512m"/>
-            </ant>
+            <ant/>
         </schedule>
         <log>
             <merge dir="${test.lost.dir}/junit"/>
@@ -68,9 +66,7 @@
             <alwaysbuild/>
         </modificationset>
         <schedule interval="300">
-            <ant time="0400" timeout="2000">
-                <jvmarg arg="-Xmx512m"/>
-            </ant>
+            <ant time="0400" timeout="2000"/>
         </schedule>
         <log>
             <merge dir="${test.lost.dir}/junit"/>
@@ -94,9 +90,7 @@
             <cvs/>
         </modificationset>
         <schedule interval="7200">
-            <ant timeout="5400">
-                <jvmarg arg="-Xmx512m"/>
-            </ant>
+            <ant timeout="5400"/>
         </schedule>
         <log>
             <merge dir="${test.lost.dir}/junit"/>
