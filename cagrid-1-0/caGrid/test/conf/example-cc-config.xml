@@ -94,7 +94,7 @@
             <cvs/>
         </modificationset>
         <schedule interval="7200">
-            <ant time="0400" timeout="2000">
+            <ant timeout="5400">
                 <jvmarg arg="-Xmx512m"/>
             </ant>
         </schedule>
