@@ -110,58 +110,7 @@ public class PortletUtils {
 		return parts;
 	}
 
-	public static List<GridService> filterBannedServices(List<GridService> in) {
-		return filterServicesByStatus(in, ServiceStatus.BANNED);
-	}
-
-	public static List<GridService> filterDormantServices(List<GridService> in) {
-		return filterServicesByStatus(in, ServiceStatus.DORMANT);
-
-	}
-
-	public static List<GridService> filterServicesByInvalidMetadata(
-			List<GridService> in) {
-		List<GridService> out = new ArrayList<GridService>();
-		for (GridService svc : in) {
-			boolean filter = false;
-			try {
-				if (svc.getServiceMetadata() == null) {
-					filter = true;
-				} else if (svc.getServiceMetadata().getServiceDescription() == null) {
-					filter = true;
-				} else if (svc.getServiceMetadata().getServiceDescription()
-						.getName() == null) {
-					filter = true;
-				}
-			} catch (Exception e) {
-				filter = true;
-			}
-			if (!filter) {
-				out.add(svc);
-			}
-		}
-		return out;
-	}
-
-	public static List<GridService> filterServicesByStatus(
-			List<GridService> in, ServiceStatus... statuses) {
-		List<GridService> out = new ArrayList<GridService>();
-		for (GridService svc : in) {
-			boolean filter = false;
-			for (ServiceStatus status : statuses) {
-				if (status.equals(svc.getCurrentStatus())) {
-					filter = true;
-					break;
-				}
-			}
-			if (!filter) {
-				out.add(svc);
-			}
-		}
-		return out;
-	}
-
-	public static String getTargetUMLClassName(String cqlQuery) {
+    public static String getTargetUMLClassName(String cqlQuery) {
 		String targetClassName = null;
 		try {
 

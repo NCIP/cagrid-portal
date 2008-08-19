@@ -6,10 +6,10 @@ package gov.nih.nci.cagrid.portal.portlet.status;
 import gov.nih.nci.cagrid.portal.aggr.TrackableMonitor;
 import gov.nih.nci.cagrid.portal.dao.GridServiceDao;
 import gov.nih.nci.cagrid.portal.domain.GridService;
+import gov.nih.nci.cagrid.portal.domain.ServiceInfo;
 import gov.nih.nci.cagrid.portal.portlet.discovery.dir.ParticipantDirectory;
 import gov.nih.nci.cagrid.portal.portlet.discovery.dir.ServiceDirectory;
-import gov.nih.nci.cagrid.portal.portlet.discovery.map.ServiceInfo;
-import gov.nih.nci.cagrid.portal.portlet.util.PortletUtils;
+import gov.nih.nci.cagrid.portal.portlet.discovery.filter.ServiceFilter;
 import org.springframework.beans.factory.annotation.Required;
 
 import java.text.SimpleDateFormat;
@@ -30,6 +30,7 @@ public class StatusBean {
     private int latestServicesLimit = 5;
 
     private TrackableMonitor monitor;
+    private ServiceFilter servicefilter;
 
 
     /**
@@ -53,14 +54,14 @@ public class StatusBean {
         int totalServicesAvailable = getGridServiceDao().getAll().size();
         do {
             List<GridService> latest = getGridServiceDao().getLatestServices(getLatestServicesLimit() + serviceLookupIncrement++);
-            services = PortletUtils.filterServicesByInvalidMetadata(PortletUtils.filterDormantServices(PortletUtils.filterBannedServices(latest)));
+            services = servicefilter.filter(latest);
         }
         //run this loop till we find <latestServicesLimit> number of valid  services
         //But at the same time don't get more than available services
         while (services.size() < getLatestServicesLimit() && (getLatestServicesLimit() + serviceLookupIncrement) <= totalServicesAvailable);
 
         for (GridService service : services) {
-            serviceInfos.add(new ServiceInfo(service));
+            serviceInfos.add(service.getServiceInfo());
         }
         return serviceInfos;
     }
@@ -153,5 +154,12 @@ public class StatusBean {
 
     }
 
+    @Required
+    public ServiceFilter getServicefilter() {
+        return servicefilter;
+    }
 
+    public void setServicefilter(ServiceFilter servicefilter) {
+        this.servicefilter = servicefilter;
+    }
 }

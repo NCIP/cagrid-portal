@@ -4,6 +4,7 @@
 package gov.nih.nci.cagrid.portal.portlet.discovery.map;
 
 import gov.nih.nci.cagrid.portal.domain.ServiceStatus;
+import gov.nih.nci.cagrid.portal.domain.ServiceInfo;
 
 import java.util.ArrayList;
 import java.util.List;

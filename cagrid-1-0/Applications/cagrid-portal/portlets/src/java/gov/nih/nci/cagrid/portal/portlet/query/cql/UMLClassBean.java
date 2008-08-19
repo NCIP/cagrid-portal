@@ -5,7 +5,7 @@ package gov.nih.nci.cagrid.portal.portlet.query.cql;
 
 import gov.nih.nci.cagrid.portal.domain.metadata.common.UMLAttribute;
 import gov.nih.nci.cagrid.portal.domain.metadata.dataservice.UMLClass;
-import gov.nih.nci.cagrid.portal.portlet.discovery.map.ServiceInfo;
+import gov.nih.nci.cagrid.portal.domain.ServiceInfo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +35,7 @@ public class UMLClassBean {
             sorted.put(att.getName(), att);
         }
         getAttributes().addAll(sorted.values());
-        serviceInfo = new ServiceInfo(umlClass.getModel().getService());
+        serviceInfo = umlClass.getModel().getService().getServiceInfo();
     }
 
     public UMLClass getUmlClass() {

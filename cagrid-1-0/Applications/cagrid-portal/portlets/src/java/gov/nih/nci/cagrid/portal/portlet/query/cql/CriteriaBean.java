@@ -4,11 +4,9 @@
 package gov.nih.nci.cagrid.portal.portlet.query.cql;
 
 import gov.nih.nci.cagrid.cqlquery.*;
-import gov.nih.nci.cagrid.portal.domain.metadata.dataservice.SourceUMLAssociationEdge;
-import gov.nih.nci.cagrid.portal.domain.metadata.dataservice.TargetUMLAssociationEdge;
 import gov.nih.nci.cagrid.portal.domain.metadata.dataservice.UMLAssociationEdge;
 import gov.nih.nci.cagrid.portal.domain.metadata.dataservice.UMLClass;
-import gov.nih.nci.cagrid.portal.portlet.discovery.map.ServiceInfo;
+import gov.nih.nci.cagrid.portal.domain.ServiceInfo;
 import gov.nih.nci.cagrid.portal.portlet.query.QueryConstants;
 import gov.nih.nci.cagrid.portal.portlet.query.builder.AggregateTargetsCommand;
 import gov.nih.nci.cagrid.portal.portlet.query.dcql.ForeignUMLClassBean;
@@ -64,7 +62,7 @@ public class CriteriaBean implements ApplicationContextAware {
 
     public void setUmlClass(UMLClass umlClass) {
         this.umlClass = umlClass;
-        setServiceInfo(new ServiceInfo(umlClass.getModel().getService()));
+        setServiceInfo(umlClass.getModel().getService().getServiceInfo());
     }
 
     public Set<CriterionBean> getCriteria() {

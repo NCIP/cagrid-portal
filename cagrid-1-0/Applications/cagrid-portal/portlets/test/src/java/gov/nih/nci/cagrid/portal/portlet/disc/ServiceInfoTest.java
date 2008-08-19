@@ -1,7 +1,7 @@
 package gov.nih.nci.cagrid.portal.portlet.disc;
 
+import gov.nih.nci.cagrid.portal.domain.ServiceInfo;
 import junit.framework.TestCase;
-import gov.nih.nci.cagrid.portal.portlet.discovery.map.ServiceInfo;
 
 /**
  * User: kherm

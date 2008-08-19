@@ -134,8 +134,7 @@ public class MapBean extends AbstractDirectoryBean {
 			if(service.getId() == null){
 				throw new CaGridPortletApplicationException("service '" + service.getUrl() + " has no id");
 			}
-			ServiceInfo info = new ServiceInfo(service);
-			node.getServiceInfos().add(info);
+			node.getServiceInfos().add(service.getServiceInfo());
 		}
 	}
 	

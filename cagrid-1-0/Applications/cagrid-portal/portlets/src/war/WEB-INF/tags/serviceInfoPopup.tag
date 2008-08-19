@@ -4,7 +4,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <%@attribute name="id" required="true" %>
-<%@attribute name="serviceInfo" required="true" type="gov.nih.nci.cagrid.portal.portlet.discovery.map.ServiceInfo" %>
+<%@attribute name="serviceInfo" required="true" type="gov.nih.nci.cagrid.portal.domain.ServiceInfo" %>
 <%@attribute name="link_href" required="false"
              description="Alternate link. Will not use popup image. Requires link_text" %>
 <%@attribute name="link_text" required="false" description="Alternate link text.Required when specifying link_href" %>

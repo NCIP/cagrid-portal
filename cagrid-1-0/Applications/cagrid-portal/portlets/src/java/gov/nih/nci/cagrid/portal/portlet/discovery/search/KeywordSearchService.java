@@ -17,7 +17,8 @@ import gov.nih.nci.cagrid.portal.domain.metadata.service.ServicePointOfContact;
 import gov.nih.nci.cagrid.portal.portlet.CaGridPortletApplicationException;
 import gov.nih.nci.cagrid.portal.portlet.discovery.DiscoveryResults;
 import gov.nih.nci.cagrid.portal.portlet.discovery.DiscoveryType;
-import gov.nih.nci.cagrid.portal.portlet.util.PortletUtils;
+import gov.nih.nci.cagrid.portal.portlet.discovery.filter.ServiceFilter;
+import gov.nih.nci.cagrid.portal.portlet.discovery.filter.BaseServiceFilter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -48,6 +49,7 @@ public class KeywordSearchService {
     private Map<String, List<String>> namedServiceKeywordCriteria;
 
     private ConceptHierarchyNodeDao conceptHierarchyNodeDao;
+    private ServiceFilter servicefilter;
 
     /**
      *
@@ -81,9 +83,9 @@ public class KeywordSearchService {
 
         if (DiscoveryType.CONCEPT.equals(searchBean.getDiscoveryType())) {
             List<GridService> svcs = conceptHierarchyNodeDao.getServicesByCode(searchBean.getKeywords());
-            svcs = PortletUtils.filterServicesByInvalidMetadata(PortletUtils.filterDormantServices(PortletUtils.filterBannedServices(svcs)));
+            svcs = servicefilter.filter(svcs);
             if (searchBean.isActiveServicesOnly()) {
-                svcs = PortletUtils.filterServicesByStatus(svcs, ServiceStatus.INACTIVE, ServiceStatus.UNKNOWN, ServiceStatus.INVALID);
+                svcs = BaseServiceFilter.filterServicesByStatus(svcs, ServiceStatus.INACTIVE, ServiceStatus.UNKNOWN, ServiceStatus.INVALID);
             }
             objects.addAll(svcs);
             searchBean.setDiscoveryType(DiscoveryType.SERVICE);
@@ -161,9 +163,9 @@ public class KeywordSearchService {
                 for (DomainObject obj : objects) {
                     svcs.add((GridService) obj);
                 }
-                svcs = PortletUtils.filterServicesByInvalidMetadata(PortletUtils.filterDormantServices(PortletUtils.filterBannedServices(svcs)));
+                svcs = servicefilter.filter(svcs);
                 if (searchBean.isActiveServicesOnly()) {
-                    svcs = PortletUtils.filterServicesByStatus(svcs, ServiceStatus.INACTIVE, ServiceStatus.UNKNOWN, ServiceStatus.INVALID);
+                    svcs = BaseServiceFilter.filterServicesByStatus(svcs, ServiceStatus.INACTIVE, ServiceStatus.UNKNOWN, ServiceStatus.INVALID);
                 }
                 objects.clear();
                 objects.addAll(svcs);
@@ -223,5 +225,13 @@ public class KeywordSearchService {
 
     public void setConceptHierarchyNodeDao(ConceptHierarchyNodeDao conceptHierarchyNodeDao) {
         this.conceptHierarchyNodeDao = conceptHierarchyNodeDao;
+    }
+
+    public ServiceFilter getServicefilter() {
+        return servicefilter;
+    }
+
+    public void setServicefilter(ServiceFilter servicefilter) {
+        this.servicefilter = servicefilter;
     }
 }

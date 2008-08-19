@@ -8,6 +8,7 @@ import gov.nih.nci.cagrid.portal.domain.ServiceStatus;
 import gov.nih.nci.cagrid.portal.domain.StatusChange;
 import gov.nih.nci.cagrid.portal.domain.metadata.ServiceMetadata;
 import gov.nih.nci.cagrid.portal.domain.metadata.service.Service;
+import gov.nih.nci.cagrid.portal.portlet.discovery.filter.BaseServiceFilter;
 import junit.framework.TestCase;
 
 import java.util.ArrayList;
@@ -16,7 +17,6 @@ import java.util.List;
 
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
- *
  */
 public class PortletUtilsTest extends TestCase {
 
@@ -27,13 +27,13 @@ public class PortletUtilsTest extends TestCase {
 
     }
 
-    
+
     public PortletUtilsTest(String name) {
         super(name);
 
     }
 
-    public void testFilterBannedServices(){
+    public void testFilterBannedServices() {
         GridService svc1 = new GridService();
         svc1.setUrl("http://one");
         StatusChange status = new StatusChange();
@@ -54,13 +54,13 @@ public class PortletUtilsTest extends TestCase {
         svcs.add(svc1);
         svcs.add(svc2);
 
-        svcs = PortletUtils.filterBannedServices(svcs);
+        svcs = BaseServiceFilter.filterBannedServices(svcs);
         assertTrue("Should have only one service in list", svcs.size() == 1);
         GridService svc = svcs.get(0);
         assertEquals("Filtered wrong service", "http://one", svc.getUrl());
     }
 
-    public void testFilterDormantServices(){
+    public void testFilterDormantServices() {
         GridService svc1 = new GridService();
         svc1.setUrl("http://one");
         StatusChange status = new StatusChange();
@@ -81,35 +81,35 @@ public class PortletUtilsTest extends TestCase {
         svcs.add(svc1);
         svcs.add(svc2);
 
-        svcs = PortletUtils.filterDormantServices(svcs);
+        svcs = BaseServiceFilter.filterDormantServices(svcs);
         assertTrue("Should have only one service in list", svcs.size() == 1);
         GridService svc = svcs.get(0);
         assertEquals("Filtered wrong service", "http://one", svc.getUrl());
     }
 
-    public void testFilterInvalidMetadataServices(){
+    public void testFilterInvalidMetadataServices() {
         GridService svc1 = new GridService();
         svc1.setUrl("http://one");
 
         List<GridService> svcs = new ArrayList<GridService>();
         svcs.add(svc1);
 
-        assertTrue(PortletUtils.filterServicesByInvalidMetadata(svcs).size()==0);
+        assertTrue(BaseServiceFilter.filterServicesByInvalidMetadata(svcs).size() == 0);
 
         ServiceMetadata mData = new ServiceMetadata();
         mData.setServiceDescription(null);
         svc1.setServiceMetadata(mData);
 
-        assertTrue(PortletUtils.filterServicesByInvalidMetadata(svcs).size()==0);
+        assertTrue(BaseServiceFilter.filterServicesByInvalidMetadata(svcs).size() == 0);
 
         Service desc = new Service();
         mData.setServiceDescription(desc);
-        assertTrue(PortletUtils.filterServicesByInvalidMetadata(svcs).size()==0);
+        assertTrue(BaseServiceFilter.filterServicesByInvalidMetadata(svcs).size() == 0);
 
         desc.setName("dummyService");
-        assertTrue(PortletUtils.filterServicesByInvalidMetadata(svcs).size()==1);
+        assertTrue(BaseServiceFilter.filterServicesByInvalidMetadata(svcs).size() == 1);
 
     }
 
-    
+
 }
