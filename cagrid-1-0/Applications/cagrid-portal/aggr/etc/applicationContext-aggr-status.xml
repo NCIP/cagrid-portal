@@ -12,33 +12,8 @@
 	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
 	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd">
 
+    <import resource="classpath:applicationContext-aggr-status-beans.xml"/>
     <import resource="classpath:applicationContext-aggr-regsvc.xml"/>
-
-    <bean id="serviceStatusChangeMonitor"
-          class="gov.nih.nci.cagrid.portal.aggr.status.ServiceStatusChangeMonitor">
-        <property name="indexServiceUrls" value="${cagrid.portal.indexServiceUrls}"/>
-        <property name="dynamicServiceStatusProvider">
-            <bean
-                    class="gov.nih.nci.cagrid.portal.aggr.status.IdxDependantDynamicServiceStatusProvider">
-                <property name="indexServiceUrls" value="${cagrid.portal.indexServiceUrls}"/>
-                <property name="dynamicServiceUrlProvider" ref="dynamicServiceUrlProvider"/>
-                <property name="strictIndexVerification" value="${strict.index.verification}"/>
-                <property name="timeout" ref="defaultTimeout"/>
-            </bean>
-        </property>
-        <property name="cachedServiceStatusProvider">
-            <bean
-                    class="gov.nih.nci.cagrid.portal.aggr.status.DBCachedServiceStatusProvider">
-                <property name="gridServiceDao" ref="gridServiceDao"/>
-            </bean>
-        </property>
-        <property name="cachedServiceUrlProvider">
-            <bean
-                    class="gov.nih.nci.cagrid.portal.aggr.regsvc.DBCachedServiceUrlProvider">
-                <property name="gridServiceDao" ref="gridServiceDao"/>
-            </bean>
-        </property>
-    </bean>
 
     <bean id="checkForServiceStatusChanges"
           class="org.springframework.scheduling.timer.MethodInvokingTimerTaskFactoryBean">
@@ -53,27 +28,6 @@
         <property name="timerTask" ref="checkForServiceStatusChanges"/>
     </bean>
 
-    <bean id="serviceStatusChangeListener"
-          class="gov.nih.nci.cagrid.portal.aggr.status.ServiceStatusChangeListener">
-        <property name="gridServiceDao" ref="gridServiceDao"/>
-    </bean>
-
-    <bean id="serviceStatusMonitor"
-          class="gov.nih.nci.cagrid.portal.aggr.status.ServiceStatusMonitor">
-        <property name="indexServiceUrls" value="${cagrid.portal.indexServiceUrls}"/>
-        <property name="cachedServiceUrlProvider">
-            <bean
-                    class="gov.nih.nci.cagrid.portal.aggr.regsvc.DBCachedServiceUrlProvider">
-                <property name="gridServiceDao" ref="gridServiceDao"/>
-            </bean>
-        </property>
-        <property name="gridServiceDao" ref="gridServiceDao"/>
-        <property name="serviceStatusPolicy">
-            <bean class="gov.nih.nci.cagrid.portal.aggr.status.SimpleServiceStatusPolicy">
-                <property name="maxDowntimeHours" value="96"/>
-            </bean>
-        </property>
-    </bean>
 
     <bean id="checkServiceStatus"
           class="org.springframework.scheduling.timer.MethodInvokingTimerTaskFactoryBean">

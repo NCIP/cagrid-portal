@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd">
+
+    <import resource="classpath:applicationContext-aggr.xml"/>
+
+    <bean id="registeredServiceMonitor"
+          class="gov.nih.nci.cagrid.portal.aggr.regsvc.RegisteredServiceMonitor">
+        <property name="indexServiceUrls" value="${cagrid.portal.indexServiceUrls}"/>
+        <property name="dynamicServiceUrlProvider" ref="dynamicServiceUrlProvider"/>
+        <property name="cachedServiceUrlProvider">
+            <bean
+                    class="gov.nih.nci.cagrid.portal.aggr.regsvc.DBCachedServiceUrlProvider">
+                <property name="gridServiceDao" ref="gridServiceDao"/>
+            </bean>
+        </property>
+        <property name="timestampProvider">
+            <bean class="gov.nih.nci.cagrid.portal.util.InMemoryTimestampProvider"/>
+        </property>
+    </bean>
+
+    <bean id="dynamicServiceUrlProvider"
+          class="gov.nih.nci.cagrid.portal.aggr.regsvc.DynamicServiceUrlProvider">
+        <property name="requireMetadataCompliance" value="true"/>
+        <property name="timeout" ref="defaultTimeout"/>
+    </bean>
+
+    <bean id="registeredServiceListener" parent="metadataListenerTemplate"
+          class="gov.nih.nci.cagrid.portal.aggr.regsvc.RegisteredServiceListener">
+        <property name="indexServiceDao" ref="indexServiceDao"/>
+        <property name="gridServiceDao" ref="gridServiceDao"/>
+    </bean>
+
+</beans>
