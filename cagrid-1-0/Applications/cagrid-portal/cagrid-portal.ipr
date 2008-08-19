@@ -7,7 +7,9 @@
       <antReference projectDefault="true" />
       <customJdkName value="" />
       <maximumHeapSize value="128" />
-      <properties />
+      <properties>
+        <property name="aggr:idxServiceURL" value="http://cagrid-index.nci.nih.gov:8080/wsrf/services/DefaultIndexService" />
+      </properties>
     </buildFile>
   </component>
   <component name="BuildJarProjectSettings">
@@ -392,6 +394,7 @@
       <module fileurl="file://$PROJECT_DIR$/portals/cagrid-portal-portals.iml" filepath="$PROJECT_DIR$/portals/cagrid-portal-portals.iml" />
       <module fileurl="file://$PROJECT_DIR$/portlets/cagrid-portal-portlets.iml" filepath="$PROJECT_DIR$/portlets/cagrid-portal-portlets.iml" />
       <module fileurl="file://$PROJECT_DIR$/security/cagrid-portal-security.iml" filepath="$PROJECT_DIR$/security/cagrid-portal-security.iml" />
+      <module fileurl="file:///Users/kherm/dev/utils/liferay-portal-src-4.3.0 /liferay-portal-src-4.3.0.iml" filepath="/Users/kherm/dev/utils/liferay-portal-src-4.3.0 /liferay-portal-src-4.3.0.iml" />
     </modules>
   </component>
   <component name="ProjectRootConfigurable.UI">
@@ -656,6 +659,7 @@
         <root url="jar://$PROJECT_DIR$/aggr/lib/cacore/lgUtility.jar!/" />
         <root url="jar://$PROJECT_DIR$/aggr/lib/cacore/lucene-regex-10-9-06-nightly.jar!/" />
         <root url="jar://$PROJECT_DIR$/aggr/lib/cacore/lbPatch.jar!/" />
+        <root url="jar://$PROJECT_DIR$/aggr/lib/cacore/acegi-security-1.0.3.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
