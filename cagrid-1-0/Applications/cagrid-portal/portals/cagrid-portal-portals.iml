@@ -144,6 +144,12 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="module" module-name="cagrid-portal-db" />
+    <orderEntry type="module" module-name="cagrid-portal-security" />
+    <orderEntry type="library" name="commons" level="project" />
+    <orderEntry type="module" module-name="cagrid-portal-aggr" />
+    <orderEntry type="module" module-name="cagrid-portal-portlets" />
+    <orderEntry type="library" name="hibernate" level="project" />
     <orderEntryProperties />
   </component>
 </module>
