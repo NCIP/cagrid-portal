@@ -110,6 +110,18 @@
         <property name="portalUserRequestAttributeName" value="portalUser"/>
     </bean>
 
+    <bean id="liferayUserInteceptor" class="gov.nih.nci.cagrid.portal.portlet.LiferayUserInteceptor"
+          autowire="byName">
+        <property name="liferayUserRequestAttributeName">
+            <bean class="java.lang.String">
+                <constructor-arg value="liferayUser"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="servicefilter"
+          class="gov.nih.nci.cagrid.portal.portlet.discovery.filter.UserAwareServiceFilter"
+            autowire="byName"/>
 
     <!-- Abstract Default ExceptionHandler -->
     <bean id="defaultExceptionHandlerTemplate" class="gov.nih.nci.cagrid.portal.portlet.util.DefaultExceptionResolver"

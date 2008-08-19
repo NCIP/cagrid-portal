@@ -39,13 +39,12 @@
     </path>
 
     <path id="aggr.run.cp">
-    	<pathelement location="db/test"/>
+        <pathelement location="db/test"/>
         <pathelement location="${aggr.classes.dir}"/>
         <path refid="db.run.cp"/>
         <path refid="aggr.compile.cp"/>
         <pathelement location="portlets/test/lib/acegi-security-1.0.3.jar"/>
         <pathelement location="portlets/src/war/WEB-INF/classes"/>
-        
     </path>
 
     <path id="aggr.test.run.cp">
@@ -126,6 +125,7 @@
             <batchtest todir="${aggr.test.build.dir}/junit-reports">
                 <fileset dir="${aggr.test.src.java.dir}">
                     <include name="**/*Test.java"/>
+                    <exclude name="**/Abstract*.java"/>
                     <exclude name="**/*SystemTest.java"/>
                 </fileset>
             </batchtest>
@@ -141,11 +141,21 @@
     <target name="aggr:run-regsvc" depends="aggr:prepare-run-cp">
         <java classname="gov.nih.nci.cagrid.portal.util.RunRegSvc" classpathref="aggr.run.cp" fork="true"/>
     </target>
-    
+
     <target name="aggr:run-regsvcman" depends="aggr:prepare-run-cp">
         <java classname="gov.nih.nci.cagrid.portal.util.RegisterService" classpathref="aggr.run.cp" fork="true">
-        	<arg value="http://cagrid-index.nci.nih.gov:8080/wsrf/services/DefaultIndexService"/>
-        	<arg value="http://141.161.25.20:8080/wsrf/services/cagrid/GridPIR"/>
+            <arg value="http://cagrid-index.nci.nih.gov:8080/wsrf/services/DefaultIndexService"/>
+            <arg value="http://141.161.25.20:8080/wsrf/services/cagrid/GridPIR"/>
+        </java>
+    </target>
+
+    <target name="aggr:run-inquire-status" depends="aggr:prepare-run-cp">
+        <input message="Enter Grid Service URL:" addproperty="aggr:serviceURL"/>
+        <input message="Enter Index Service URL:" addproperty="aggr:idxServiceURL"/>
+
+        <java classname="gov.nih.nci.cagrid.portal.util.ServiceStatusInfo" classpathref="aggr.run.cp" fork="true">
+            <arg value="${aggr:serviceURL}"/>
+            <arg value="${aggr:idxServiceURL}"/>
         </java>
     </target>
 
@@ -168,7 +178,7 @@
     <target name="aggr:run-xmlschemas" depends="aggr:prepare-run-cp">
         <java classname="gov.nih.nci.cagrid.portal.util.RunXmlSchemas" classpathref="aggr.run.cp" fork="true"/>
     </target>
-    
+
     <target name="aggr:run-concepts" depends="aggr:prepare-run-cp">
         <java classname="gov.nih.nci.cagrid.portal.util.RunConcepts" classpathref="aggr.run.cp" fork="true"/>
     </target>
@@ -195,5 +205,5 @@
             <arg value="${aggr:banOpUrl}"/>
         </java>
     </target>
-	
+
 </project>

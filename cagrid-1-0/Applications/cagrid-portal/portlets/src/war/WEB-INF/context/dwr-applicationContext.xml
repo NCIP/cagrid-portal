@@ -70,4 +70,8 @@
         </property>
     </bean>
 
+    <bean id="serviceStatusManager"
+            class="gov.nih.nci.cagrid.portal.portlet.status.EditServiceStatusManager"
+            autowire="byName"/>
+
 </beans>

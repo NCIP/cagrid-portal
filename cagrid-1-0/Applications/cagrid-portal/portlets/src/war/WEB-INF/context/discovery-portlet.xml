@@ -410,6 +410,7 @@
             <list>
                 <ref bean="parameterMappingInterceptor"/>
                 <ref bean="openSessionInViewInterceptor"/>
+                <ref bean="liferayUserInteceptor"/>
             </list>
         </property>
 

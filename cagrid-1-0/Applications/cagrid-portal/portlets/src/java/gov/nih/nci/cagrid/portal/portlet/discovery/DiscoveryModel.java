@@ -6,6 +6,7 @@ package gov.nih.nci.cagrid.portal.portlet.discovery;
 import gov.nih.nci.cagrid.portal.domain.GridService;
 import gov.nih.nci.cagrid.portal.domain.Participant;
 import gov.nih.nci.cagrid.portal.domain.Person;
+import gov.nih.nci.cagrid.portal.domain.LiferayUser;
 import gov.nih.nci.cagrid.portal.domain.metadata.dataservice.XMLSchema;
 import gov.nih.nci.cagrid.portal.portlet.CaGridPortletApplicationException;
 import gov.nih.nci.cagrid.portal.portlet.discovery.dir.DiscoveryDirectory;
@@ -32,7 +33,9 @@ public class DiscoveryModel {
 	private Person selectedPointOfContact;
 	private XMLSchema selectedXmlSchema;
 
-	/**
+    private LiferayUser liferayUser;
+
+    /**
 	 * 
 	 */
 	public DiscoveryModel() {
@@ -154,5 +157,11 @@ public class DiscoveryModel {
 		this.selectedXmlSchema = selectedXmlSchema;
 	}
 
+    public LiferayUser getLiferayUser() {
+        return liferayUser;
+    }
 
+    public void setLiferayUser(LiferayUser liferayUser) {
+        this.liferayUser = liferayUser;
+    }
 }

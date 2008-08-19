@@ -86,6 +86,7 @@
         <property name="interceptors">
             <list>
                 <ref bean="openSessionInViewInterceptor"/>
+                <ref bean="liferayUserInteceptor"/>
             </list>
         </property>
 
