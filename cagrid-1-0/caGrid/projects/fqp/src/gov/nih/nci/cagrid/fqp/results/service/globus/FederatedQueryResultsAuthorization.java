@@ -48,12 +48,12 @@ public class FederatedQueryResultsAuthorization implements PDP {
 		}
 	}
 					
-	public static void authorizeGetResults() throws RemoteException {
+	public static void authorizeGetServiceSecurityMetadata() throws RemoteException {
 		
 		
 	}
 					
-	public static void authorizeGetServiceSecurityMetadata() throws RemoteException {
+	public static void authorizeGetResults() throws RemoteException {
 		
 		
 	}
@@ -80,17 +80,17 @@ public class FederatedQueryResultsAuthorization implements PDP {
 		if(!operation.getNamespaceURI().equals(getServiceNamespace())){
 		  return false;
 		}
-		if(operation.getLocalPart().equals("getResults")){
+		if(operation.getLocalPart().equals("getServiceSecurityMetadata")){
 			try{
-				authorizeGetResults();
+				authorizeGetServiceSecurityMetadata();
 				return true;
 			} catch (Exception e){
 				e.printStackTrace();
 				return false;
 			}
-		} else if(operation.getLocalPart().equals("getServiceSecurityMetadata")){
+		} else if(operation.getLocalPart().equals("getResults")){
 			try{
-				authorizeGetServiceSecurityMetadata();
+				authorizeGetResults();
 				return true;
 			} catch (Exception e){
 				e.printStackTrace();

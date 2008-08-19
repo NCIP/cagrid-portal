@@ -1,6 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jndiConfig xmlns="http://wsrf.globus.org/jndi/config">
   <service name="SERVICE-INSTANCE-PREFIX/FederatedQueryResults">
+    <resource name="configuration" type="gov.nih.nci.cagrid.fqp.results.service.globus.resource.FederatedQueryResultsResourceConfiguration">
+      <resourceParams>
+        <parameter>
+          <name>factory</name>
+          <value>org.globus.wsrf.jndi.BeanFactory</value>
+        </parameter>
+        <parameter>
+          <name>performRegistration</name>
+          <!-- Set this to false to skip ServiceGroup registration -->
+          <value>PERFORM_REGISTRATION</value>
+        </parameter>
+        <parameter>
+          <name>registrationTemplateFile</name>
+          <!-- Set this to the relative path (from the container root, e.g GLOBUS_LOCATION for globus container) of the registration parameters template file (ignored if performRegistration is false) -->
+          <value>ETC-PATH/FederatedQueryResults_registration.xml</value>
+        </parameter>
+      </resourceParams>
+    </resource>
+    <!-- Federated Query Results service context has a custom resource -->
     <resource name="home" type="gov.nih.nci.cagrid.fqp.results.service.globus.resource.FQPResultResourceHome">
       <resourceParams>
         <parameter>
@@ -23,28 +42,35 @@
     </resource>
     <resourceLink name="serviceconfiguration" target="java:comp/env/services/SERVICE-INSTANCE-PREFIX/FederatedQueryProcessor/serviceconfiguration" />
     <resourceLink name="federatedQueryProcessorHome" target="java:comp/env/services/SERVICE-INSTANCE-PREFIX/FederatedQueryProcessor/home" />
+    <resourceLink name="caGridEnumerationHome" target="java:comp/env/services/SERVICE-INSTANCE-PREFIX/CaGridEnumeration/home" />
   </service>
-  <service name="SERVICE-INSTANCE-PREFIX/FederatedQueryProcessor">
-    <resource name="serviceconfiguration" type="gov.nih.nci.cagrid.fqp.service.FederatedQueryProcessorConfiguration">
+  <service name="SERVICE-INSTANCE-PREFIX/CaGridEnumeration">
+    <resource name="configuration" type="gov.nih.nci.cagrid.enumeration.service.globus.resource.CaGridEnumerationResourceConfiguration">
       <resourceParams>
         <parameter>
           <name>factory</name>
           <value>org.globus.wsrf.jndi.BeanFactory</value>
         </parameter>
         <parameter>
-          <name>etcDirectoryPath</name>
-          <value>ETC-PATH</value>
+          <name>performRegistration</name>
+          <!-- Set this to false to skip ServiceGroup registration -->
+          <value>PERFORM_REGISTRATION</value>
         </parameter>
         <parameter>
-          <name>threadPoolSize</name>
-          <value>@threadPoolSize@</value>
-        </parameter>
-        <parameter>
-          <name>initialResultLeaseInMinutes</name>
-          <value>@initialResultLeaseInMinutes@</value>
+          <name>registrationTemplateFile</name>
+          <!-- Set this to the relative path (from the container root, e.g GLOBUS_LOCATION for globus container) of the registration parameters template file (ignored if performRegistration is false) -->
+          <value>ETC-PATH/CaGridEnumeration_registration.xml</value>
         </parameter>
       </resourceParams>
     </resource>
+    <!-- THIS SERVICE HAS BEEN SET TO HAVE A CUSTOM RESOURCE
+		     PLEASE BE SURE TO ADD IN THE RESOURCE FOR THE SERVICE
+		     HOME  -->
+    <resourceLink name="serviceconfiguration" target="java:comp/env/services/SERVICE-INSTANCE-PREFIX/FederatedQueryProcessor/serviceconfiguration" />
+    <resourceLink name="federatedQueryProcessorHome" target="java:comp/env/services/SERVICE-INSTANCE-PREFIX/FederatedQueryProcessor/home" />
+    <resourceLink name="federatedQueryResultsHome" target="java:comp/env/services/SERVICE-INSTANCE-PREFIX/FederatedQueryResults/home" />
+  </service>
+  <service name="SERVICE-INSTANCE-PREFIX/FederatedQueryProcessor">
     <resource name="configuration" type="gov.nih.nci.cagrid.fqp.service.globus.resource.FederatedQueryProcessorResourceConfiguration">
       <resourceParams>
         <parameter>
@@ -68,6 +94,26 @@
         </parameter>
       </resourceParams>
     </resource>
+    <resource name="serviceconfiguration" type="gov.nih.nci.cagrid.fqp.service.FederatedQueryProcessorConfiguration">
+      <resourceParams>
+        <parameter>
+          <name>factory</name>
+          <value>org.globus.wsrf.jndi.BeanFactory</value>
+        </parameter>
+        <parameter>
+          <name>etcDirectoryPath</name>
+          <value>ETC-PATH</value>
+        </parameter>
+        <parameter>
+          <name>threadPoolSize</name>
+          <value>@threadPoolSize@</value>
+        </parameter>
+        <parameter>
+          <name>initialResultLeaseInMinutes</name>
+          <value>@initialResultLeaseInMinutes@</value>
+        </parameter>
+      </resourceParams>
+    </resource>
     <resource name="home" type="gov.nih.nci.cagrid.fqp.service.globus.resource.FederatedQueryProcessorResourceHome">
       <resourceParams>
         <parameter>
@@ -76,6 +122,7 @@
         </parameter>
       </resourceParams>
     </resource>
+    <resourceLink name="caGridEnumerationHome" target="java:comp/env/services/SERVICE-INSTANCE-PREFIX/CaGridEnumeration/home" />
     <resourceLink name="federatedQueryResultsHome" target="java:comp/env/services/SERVICE-INSTANCE-PREFIX/FederatedQueryResults/home" />
   </service>
 </jndiConfig>

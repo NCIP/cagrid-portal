@@ -45,6 +45,11 @@ public abstract class FederatedQueryProcessorImplBase {
 	
 	
 	
+	public ResourceHome getCaGridEnumerationResourceHome() throws Exception {
+		ResourceHome resource = getResourceHome("caGridEnumerationHome");
+		return resource;
+	}
+	
 	public ResourceHome getFederatedQueryResultsResourceHome() throws Exception {
 		ResourceHome resource = getResourceHome("federatedQueryResultsHome");
 		return resource;

@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.fqp.results.service;
+package gov.nih.nci.cagrid.enumeration.service;
 
 import  gov.nih.nci.cagrid.fqp.service.FederatedQueryProcessorConfiguration;
 
@@ -25,9 +25,9 @@ import org.globus.wsrf.ResourcePropertySet;
  * @created by Introduce Toolkit version 1.2
  * 
  */
-public abstract class FederatedQueryResultsImplBase {
+public abstract class CaGridEnumerationImplBase {
 	
-	public FederatedQueryResultsImplBase() throws RemoteException {
+	public CaGridEnumerationImplBase() throws RemoteException {
 	
 	}
 	
@@ -43,8 +43,8 @@ public abstract class FederatedQueryResultsImplBase {
 		return (gov.nih.nci.cagrid.fqp.service.globus.resource.FederatedQueryProcessorResourceHome)resource;
 	}
 	
-	public ResourceHome getCaGridEnumerationResourceHome() throws Exception {
-		ResourceHome resource = getResourceHome("caGridEnumerationHome");
+	public ResourceHome getFederatedQueryResultsResourceHome() throws Exception {
+		ResourceHome resource = getResourceHome("federatedQueryResultsHome");
 		return resource;
 	}
 	

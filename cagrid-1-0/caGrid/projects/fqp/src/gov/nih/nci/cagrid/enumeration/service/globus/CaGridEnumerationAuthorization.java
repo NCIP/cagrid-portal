@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.fqp.service.globus;
+package gov.nih.nci.cagrid.enumeration.service.globus;
 
 
 import java.rmi.RemoteException;
@@ -27,12 +27,12 @@ import org.w3c.dom.Node;
  * @created by Introduce Toolkit version 1.2
  * 
  */
-public class FederatedQueryProcessorAuthorization implements PDP {
+public class CaGridEnumerationAuthorization implements PDP {
 
-	public static final String SERVICE_NAMESPACE = "http://fqp.cagrid.nci.nih.gov/FederatedQueryProcessor";
+	public static final String SERVICE_NAMESPACE = "http://gov.nih.nci.cagrid.enumeration/CaGridEnumeration";
 	
 	
-	public FederatedQueryProcessorAuthorization() {
+	public CaGridEnumerationAuthorization() {
 	}
 	
 	protected String getServiceNamespace(){
@@ -48,47 +48,27 @@ public class FederatedQueryProcessorAuthorization implements PDP {
 		}
 	}
 					
-	public static void authorizeGetMultipleResourceProperties() throws RemoteException {
+	public static void authorizePullOp() throws RemoteException {
 		
 		
 	}
 					
-	public static void authorizeGetResourceProperty() throws RemoteException {
+	public static void authorizeRenewOp() throws RemoteException {
 		
 		
 	}
 					
-	public static void authorizeQueryResourceProperties() throws RemoteException {
+	public static void authorizeGetStatusOp() throws RemoteException {
+		
+		
+	}
+					
+	public static void authorizeReleaseOp() throws RemoteException {
 		
 		
 	}
 					
 	public static void authorizeGetServiceSecurityMetadata() throws RemoteException {
-		
-		
-	}
-					
-	public static void authorizeExecute() throws RemoteException {
-		
-		
-	}
-					
-	public static void authorizeExecuteAndAggregateResults() throws RemoteException {
-		
-		
-	}
-					
-	public static void authorizeExecuteAndEnumerate() throws RemoteException {
-		
-		
-	}
-					
-	public static void authorizeExecuteAndTransfer() throws RemoteException {
-		
-		
-	}
-					
-	public static void authorizeExecuteAsynchronously() throws RemoteException {
 		
 		
 	}
@@ -100,25 +80,33 @@ public class FederatedQueryProcessorAuthorization implements PDP {
 		if(!operation.getNamespaceURI().equals(getServiceNamespace())){
 		  return false;
 		}
-		if(operation.getLocalPart().equals("getMultipleResourceProperties")){
+		if(operation.getLocalPart().equals("pullOp")){
 			try{
-				authorizeGetMultipleResourceProperties();
+				authorizePullOp();
 				return true;
 			} catch (Exception e){
 				e.printStackTrace();
 				return false;
 			}
-		} else if(operation.getLocalPart().equals("getResourceProperty")){
+		} else if(operation.getLocalPart().equals("renewOp")){
 			try{
-				authorizeGetResourceProperty();
+				authorizeRenewOp();
 				return true;
 			} catch (Exception e){
 				e.printStackTrace();
 				return false;
 			}
-		} else if(operation.getLocalPart().equals("queryResourceProperties")){
+		} else if(operation.getLocalPart().equals("getStatusOp")){
 			try{
-				authorizeQueryResourceProperties();
+				authorizeGetStatusOp();
+				return true;
+			} catch (Exception e){
+				e.printStackTrace();
+				return false;
+			}
+		} else if(operation.getLocalPart().equals("releaseOp")){
+			try{
+				authorizeReleaseOp();
 				return true;
 			} catch (Exception e){
 				e.printStackTrace();
@@ -127,46 +115,6 @@ public class FederatedQueryProcessorAuthorization implements PDP {
 		} else if(operation.getLocalPart().equals("getServiceSecurityMetadata")){
 			try{
 				authorizeGetServiceSecurityMetadata();
-				return true;
-			} catch (Exception e){
-				e.printStackTrace();
-				return false;
-			}
-		} else if(operation.getLocalPart().equals("execute")){
-			try{
-				authorizeExecute();
-				return true;
-			} catch (Exception e){
-				e.printStackTrace();
-				return false;
-			}
-		} else if(operation.getLocalPart().equals("executeAndAggregateResults")){
-			try{
-				authorizeExecuteAndAggregateResults();
-				return true;
-			} catch (Exception e){
-				e.printStackTrace();
-				return false;
-			}
-		} else if(operation.getLocalPart().equals("executeAndEnumerate")){
-			try{
-				authorizeExecuteAndEnumerate();
-				return true;
-			} catch (Exception e){
-				e.printStackTrace();
-				return false;
-			}
-		} else if(operation.getLocalPart().equals("executeAndTransfer")){
-			try{
-				authorizeExecuteAndTransfer();
-				return true;
-			} catch (Exception e){
-				e.printStackTrace();
-				return false;
-			}
-		} else if(operation.getLocalPart().equals("executeAsynchronously")){
-			try{
-				authorizeExecuteAsynchronously();
 				return true;
 			} catch (Exception e){
 				e.printStackTrace();
