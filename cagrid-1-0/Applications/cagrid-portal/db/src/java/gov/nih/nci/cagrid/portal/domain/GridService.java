@@ -15,15 +15,12 @@ import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-import javax.persistence.UniqueConstraint;
 
 import org.hibernate.annotations.ForceDiscriminator;
 import org.hibernate.annotations.GenericGenerator;
@@ -55,7 +52,6 @@ public class GridService extends AbstractDomainObject {
     private List<StatusChange> statusHistory = new ArrayList<StatusChange>();
     private List<SemanticMetadataMapping> semanticMetadataMappings = new ArrayList<SemanticMetadataMapping>();
     private String conceptIndexHash;
-
 
     @OneToMany(mappedBy="service", cascade = CascadeType.ALL)
     public List<ServiceAnnotation> getAnnotations() {
@@ -130,5 +126,8 @@ public class GridService extends AbstractDomainObject {
 		this.conceptIndexHash = conceptIndexHash;
 	}
 
-
+    @Transient
+    public ServiceInfo getServiceInfo() {
+        return new ServiceInfo(this);
+    }
 }
