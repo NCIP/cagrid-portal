@@ -1,5 +1,7 @@
 package gov.nci.nih.cagrid.tests.core.util;
 
+import gov.nih.nci.cagrid.common.StreamGobbler;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -37,7 +39,9 @@ import com.counter.service.CounterServiceAddressingLocator;
 
 public class GlobusHelper {
 
-    private static final int PROCESS_WAIT_TIME = 20;
+    // Time in seconds to wait for Globus to stop
+    private static final int PROCESS_WAIT_TIME = 60;
+    
     private boolean secure;
     private File securityDescriptor;
     private Integer port;
@@ -202,8 +206,8 @@ public class GlobusHelper {
 
         String[] commandArray = command.toArray(new String[command.size()]);
         Process p = Runtime.getRuntime().exec(commandArray, envp, serviceDir);
-        new StdIOThread(p.getInputStream()).start();
-        new StdIOThread(p.getErrorStream()).start();
+        new StreamGobbler(p.getInputStream(), StreamGobbler.TYPE_OUT, System.out).start();
+        new StreamGobbler(p.getErrorStream(), StreamGobbler.TYPE_ERR, System.err).start();
         p.waitFor();
 
         if (p.exitValue() != 0) {
@@ -286,8 +290,8 @@ public class GlobusHelper {
 
         // start globus
         Process p = Runtime.getRuntime().exec(cmd.toArray(new String[0]), envp, this.tmpGlobusLocation);
-        new StdIOThread(p.getInputStream()).start();
-        new StdIOThread(p.getErrorStream()).start();
+        new StreamGobbler(p.getInputStream(), StreamGobbler.TYPE_OUT, System.out).start();
+        new StreamGobbler(p.getErrorStream(), StreamGobbler.TYPE_ERR, System.err).start();
         return p;
     }
 
@@ -403,11 +407,13 @@ public class GlobusHelper {
         // execute the task of waiting for completion and getting the status
         ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.execute(future);
-
+        
         try {
             // try to get the status
             success = future.get(PROCESS_WAIT_TIME, TimeUnit.SECONDS).booleanValue();
         } catch (Exception e) {
+            System.err.println("Globus process failed to stop in allowed time (" 
+                + PROCESS_WAIT_TIME + " " + TimeUnit.SECONDS + ")");
             e.printStackTrace();
         }
 
