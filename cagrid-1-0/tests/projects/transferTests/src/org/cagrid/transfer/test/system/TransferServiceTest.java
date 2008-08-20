@@ -13,6 +13,7 @@ import gov.nih.nci.cagrid.testing.system.deployment.steps.StartContainerStep;
 import gov.nih.nci.cagrid.testing.system.deployment.steps.StopContainerStep;
 import gov.nih.nci.cagrid.testing.system.deployment.steps.UnpackContainerStep;
 import gov.nih.nci.cagrid.testing.system.deployment.story.ServiceStoryBase;
+import gov.nih.nci.cagrid.testing.system.haste.Step;
 
 import java.io.File;
 import java.util.Vector;
@@ -45,10 +46,15 @@ public class TransferServiceTest extends ServiceStoryBase {
             fail("Failed to create container: " + ex.getMessage());
         }
     }
+    
+    
+    public String getName() {
+        return getDescription();
+    }
 
 
     public String getDescription() {
-        if(getContainer().getProperties().isSecure()){
+        if (getContainer().getProperties().isSecure()){
             return "Secure Transfer Service Test";
         }
         return "Transfer Service Test";
@@ -56,7 +62,7 @@ public class TransferServiceTest extends ServiceStoryBase {
 
 
     protected Vector steps() {
-        Vector steps = new Vector();
+        Vector<Step> steps = new Vector<Step>();
         try {
             steps.add(new UnpackContainerStep(getContainer()));
             steps.add(new DeployServiceStep(getContainer(), "../transfer"));
