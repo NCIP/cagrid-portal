@@ -28,6 +28,7 @@ public class DummyEnumIterator implements EnumIterator {
 
     public IterationResult next(IterationConstraints constraints) throws TimeoutException, NoSuchElementException {
         if (!returnedEndOfSequence) {
+            returnedEndOfSequence = true;
             return new IterationResult(new SOAPElement[0], true);
         }
         throw new NoSuchElementException(DummyEnumIterator.class.getName() + " does not return any data!");
