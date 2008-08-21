@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuite errors="0" skipped="3" tests="3" time="0" failures="0" name="net.sf.taverna.wsdl.soap.EncodedBodyBuilderTest">
+  <properties>
+    <property value="Java(TM) 2 Runtime Environment, Standard Edition" name="java.runtime.name"/>
+    <property value="C:\Program Files\Java\jdk1.5.0_09\jre\bin" name="sun.boot.library.path"/>
+    <property value="1.5.0_09-b03" name="java.vm.version"/>
+    <property value="Sun Microsystems Inc." name="java.vm.vendor"/>
+    <property value="http://java.sun.com/" name="java.vendor.url"/>
+    <property value=";" name="path.separator"/>
+    <property value="Java HotSpot(TM) Client VM" name="java.vm.name"/>
+    <property value="sun.io" name="file.encoding.pkg"/>
+    <property value="CN" name="user.country"/>
+    <property value="Service Pack 3" name="sun.os.patch.level"/>
+    <property value="Java Virtual Machine Specification" name="java.vm.specification.name"/>
+    <property value="D:\Eclipse Workspace\wsdl-generic-t2" name="user.dir"/>
+    <property value="1.5.0_09-b03" name="java.runtime.version"/>
+    <property value="sun.awt.Win32GraphicsEnvironment" name="java.awt.graphicsenv"/>
+    <property value="D:\Eclipse Workspace\wsdl-generic-t2" name="basedir"/>
+    <property value="C:\Program Files\Java\jdk1.5.0_09\jre\lib\endorsed" name="java.endorsed.dirs"/>
+    <property value="x86" name="os.arch"/>
+    <property value="C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\" name="java.io.tmpdir"/>
+    <property value="
+" name="line.separator"/>
+    <property value="Sun Microsystems Inc." name="java.vm.specification.vendor"/>
+    <property value="" name="user.variant"/>
+    <property value="Windows XP" name="os.name"/>
+    <property value="GBK" name="sun.jnu.encoding"/>
+    <property value="C:\Program Files\Java\jdk1.5.0_09\bin;.;C:\WINDOWS\system32;C:\WINDOWS;C:\Program Files\ThinkPad\Utilities;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\Notes;C:\Program Files\XLView;C:\lotus\compnent;C:\Utilities;C:\Program Files\ThinkPad\ConnectUtilities;C:\WINDOWS\Downloaded Program Files;C:\PROGRA~1\ATT\Graphviz\bin;d:\Program Files\IDM Computer Solutions\UltraEdit-32;D:\Program Files\apache-ant-1.7.0\bin\;C:\Program Files\Java\jdk1.5.0_09\jre\bin\;C:\Program Files\StormII\Codec;C:\Program Files\StormII" name="java.library.path"/>
+    <property value="D:\Eclipse Workspace\wsdl-generic-t2\target\test-classes;D:\Eclipse Workspace\wsdl-generic-t2\target\classes;C:\Documents and Settings\Administrator\.m2\repository\axis\axis-saaj\1.3\axis-saaj-1.3.jar;C:\Documents and Settings\Administrator\.m2\repository\wsdl4j\wsdl4j\1.5.1\wsdl4j-1.5.1.jar;C:\Documents and Settings\Administrator\.m2\repository\jdom\jdom\1.0\jdom-1.0.jar;C:\Documents and Settings\Administrator\.m2\repository\axis\axis-jaxrpc\1.3\axis-jaxrpc-1.3.jar;C:\Documents and Settings\Administrator\.m2\repository\uk\org\mygrid\resources\axis\1.4-taverna\axis-1.4-taverna.jar;C:\Documents and Settings\Administrator\.m2\repository\commons-logging\commons-logging\1.0.4\commons-logging-1.0.4.jar;C:\Documents and Settings\Administrator\.m2\repository\commons-discovery\commons-discovery\0.2\commons-discovery-0.2.jar;C:\Documents and Settings\Administrator\.m2\repository\javax\activation\activation\1.1\activation-1.1.jar;C:\Documents and Settings\Administrator\.m2\repository\javax\mail\mail\1.4\mail-1.4.jar;C:\Documents and Settings\Administrator\.m2\repository\log4j\log4j\1.2.12\log4j-1.2.12.jar;C:\Documents and Settings\Administrator\.m2\repository\uk\org\mygrid\taverna\scufl\scufl-model\1.7.1.0\scufl-model-1.7.1.0.jar;C:\Program Files\Java\jdk1.5.0_09\jre\..\lib\tools.jar;C:\Documents and Settings\Administrator\.m2\repository\uk\org\mygrid\taverna\baclava\baclava-core\1.7.1.0\baclava-core-1.7.1.0.jar;C:\Documents and Settings\Administrator\.m2\repository\uk\org\mygrid\taverna\taverna-core\1.7.1.0\taverna-core-1.7.1.0.jar;C:\Documents and Settings\Administrator\.m2\repository\uk\org\mygrid\taverna\raven\raven\1.7.1.0\raven-1.7.1.0.jar;C:\Documents and Settings\Administrator\.m2\repository\uk\org\mygrid\taverna\raven\raven-log4j\1.7.1.0\raven-log4j-1.7.1.0.jar;C:\Documents and Settings\Administrator\.m2\repository\uk\org\mygrid\taverna\taverna-bootstrap\1.7.1.0\taverna-bootstrap-1.7.1.0.jar;C:\Documents and Settings\Administrator\.m2\repository\commons-io\commons-io\1.2\commons-io-1.2.jar;C:\Documents and Settings\Administrator\.m2\repository\uk\org\mygrid\resources\freefluo\NO-VERSION\freefluo-NO-VERSION.jar;C:\Documents and Settings\Administrator\.m2\repository\xerces\xmlParserAPIs\2.2.1\xmlParserAPIs-2.2.1.jar;C:\Documents and Settings\Administrator\.m2\repository\junit\junit\4.4\junit-4.4.jar;C:\Documents and Settings\Administrator\.m2\repository\axis\addressing\1.0\addressing-1.0.jar;" name="surefire.test.class.path"/>
+    <property value="Java Platform API Specification" name="java.specification.name"/>
+    <property value="49.0" name="java.class.version"/>
+    <property value="HotSpot Client Compiler" name="sun.management.compiler"/>
+    <property value="5.1" name="os.version"/>
+    <property value="C:\Documents and Settings\Administrator" name="user.home"/>
+    <property value="America/Chicago" name="user.timezone"/>
+    <property value="sun.awt.windows.WPrinterJob" name="java.awt.printerjob"/>
+    <property value="GBK" name="file.encoding"/>
+    <property value="1.5" name="java.specification.version"/>
+    <property value="tanwei" name="user.name"/>
+    <property value="/D:/eclipse/plugins/org.maven.ide.eclipse_0.0.12.20071107-2300/lib/lucene-core-2.2.0.jar;/D:/eclipse/plugins/org.maven.ide.eclipse_0.0.12.20071107-2300/lib/maven-embedder-tycho-2.1.0.v20071107-2251.jar;/D:/eclipse/plugins/org.maven.ide.eclipse_0.0.12.20071107-2300/m2plugin.jar" name="java.class.path"/>
+    <property value="false" name="eclipse.m2.debugOutput"/>
+    <property value="1.0" name="java.vm.specification.version"/>
+    <property value="32" name="sun.arch.data.model"/>
+    <property value="C:\Program Files\Java\jdk1.5.0_09\jre" name="java.home"/>
+    <property value="Sun Microsystems Inc." name="java.specification.vendor"/>
+    <property value="zh" name="user.language"/>
+    <property value="sun.awt.windows.WToolkit" name="awt.toolkit"/>
+    <property value="mixed mode" name="java.vm.info"/>
+    <property value="1.5.0_09" name="java.version"/>
+    <property value="C:\Program Files\Java\jdk1.5.0_09\jre\lib\ext" name="java.ext.dirs"/>
+    <property value="C:\Program Files\Java\jdk1.5.0_09\jre\lib\rt.jar;C:\Program Files\Java\jdk1.5.0_09\jre\lib\i18n.jar;C:\Program Files\Java\jdk1.5.0_09\jre\lib\sunrsasign.jar;C:\Program Files\Java\jdk1.5.0_09\jre\lib\jsse.jar;C:\Program Files\Java\jdk1.5.0_09\jre\lib\jce.jar;C:\Program Files\Java\jdk1.5.0_09\jre\lib\charsets.jar;C:\Program Files\Java\jdk1.5.0_09\jre\classes" name="sun.boot.class.path"/>
+    <property value="Sun Microsystems Inc." name="java.vendor"/>
+    <property value="false" name="eclipse.m2.offline"/>
+    <property value="C:\Documents and Settings\Administrator\.m2\repository" name="localRepository"/>
+    <property value="\" name="file.separator"/>
+    <property value="http://java.sun.com/cgi-bin/bugreport.cgi" name="java.vendor.url.bug"/>
+    <property value="little" name="sun.cpu.endian"/>
+    <property value="UnicodeLittle" name="sun.io.unicode.encoding"/>
+    <property value="windows" name="sun.desktop"/>
+    <property value="pentium_pro+mmx pentium_pro pentium+mmx pentium i486 i386 i86" name="sun.cpu.isalist"/>
+  </properties>
+  <testcase classname="net.sf.taverna.wsdl.soap.EncodedBodyBuilderTest" time="0.062" name="testSimpleCase">
+    <skipped/>
+  </testcase>
+  <testcase classname="net.sf.taverna.wsdl.soap.EncodedBodyBuilderTest" time="0.062" name="testStringArray">
+    <skipped/>
+  </testcase>
+  <testcase classname="net.sf.taverna.wsdl.soap.EncodedBodyBuilderTest" time="0.062" name="testComplexType">
+    <skipped/>
+  </testcase>
+</testsuite>
