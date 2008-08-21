@@ -25,7 +25,6 @@ import org.globus.ws.enumeration.EnumIterator;
 import org.globus.ws.enumeration.IterationConstraints;
 import org.globus.ws.enumeration.IterationResult;
 import org.globus.ws.enumeration.TimeoutException;
-import org.globus.wsrf.encoding.ObjectSerializer;
 import org.globus.wsrf.encoding.SerializationException;
 
 /** 
@@ -35,7 +34,7 @@ import org.globus.wsrf.encoding.SerializationException;
  * @author David Ervin
  * 
  * @created Apr 10, 2007 10:02:57 AM
- * @version $Id: ConcurrenPersistantObjectEnumIterator.java,v 1.3 2007-12-17 19:18:38 dervin Exp $ 
+ * @version $Id: ConcurrenPersistantObjectEnumIterator.java,v 1.4 2008-08-21 15:07:24 dervin Exp $ 
  */
 public class ConcurrenPersistantObjectEnumIterator extends BaseSDKObjectIterator {
     
@@ -201,6 +200,11 @@ public class ConcurrenPersistantObjectEnumIterator extends BaseSDKObjectIterator
                     "Error executing iteration request: " + ex.getMessage());
                 nse.setStackTrace(ex.getStackTrace());
                 throw nse;
+            } catch (IllegalArgumentException ex) {
+                NoSuchElementException nse = new NoSuchElementException(
+                    "An illegal condition was reached while attempting the iteration: " + ex.getMessage());
+                nse.setStackTrace(ex.getStackTrace());
+                throw nse;
             }
         }
         return result;
@@ -217,7 +221,7 @@ public class ConcurrenPersistantObjectEnumIterator extends BaseSDKObjectIterator
                     Iterator<SOAPElement> overflowIter = overflowElements.iterator();
                     while (overflowIter.hasNext() && soapElements.size() < constraints.getMaxElements()) {
                         SOAPElement element = overflowIter.next();
-                        int elemLength = element.getValue().length();
+                        int elemLength = element.toString().length();
                         int currentLength = countSoapElementChars(soapElements);
                         if (elemLength + currentLength >= constraints.getMaxCharacters()) {
                             // save it for later
@@ -234,10 +238,10 @@ public class ConcurrenPersistantObjectEnumIterator extends BaseSDKObjectIterator
                     while (soapElements.size() < constraints.getMaxElements() 
                         && (xml = getNextXmlChunk()) != null) {
                         try {
-                            SOAPElement element = ObjectSerializer.toSOAPElement(xml, getObjectQName());
+                            SOAPElement element = createSOAPElement(xml, getObjectQName());
                             if (constraints.getMaxCharacters() != -1) {
                                 // can the new element fit under the max characters limit?
-                                int elemLength = element.getValue().length();
+                                int elemLength = element.toString().length();
                                 int currentLength = countSoapElementChars(soapElements);
                                 if (elemLength + currentLength >= constraints.getMaxCharacters()) {
                                     // store the too-big element for later and return
@@ -289,7 +293,7 @@ public class ConcurrenPersistantObjectEnumIterator extends BaseSDKObjectIterator
     private int countSoapElementChars(List<SOAPElement> soapElements) {
         int count = 0;
         for (SOAPElement elem : soapElements) {
-            count += elem.getValue().length();
+            count += elem.toString().length();
         }
         return count;
     }

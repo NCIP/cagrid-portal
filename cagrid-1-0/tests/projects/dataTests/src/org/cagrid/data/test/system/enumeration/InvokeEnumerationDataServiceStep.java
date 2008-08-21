@@ -1,5 +1,6 @@
 package org.cagrid.data.test.system.enumeration;
 
+import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.cqlquery.Attribute;
 import gov.nih.nci.cagrid.cqlquery.CQLQuery;
 import gov.nih.nci.cagrid.cqlquery.Group;
@@ -11,16 +12,15 @@ import gov.nih.nci.cagrid.data.faults.QueryProcessingExceptionType;
 import gov.nih.nci.cagrid.enumeration.stubs.response.EnumerationResponseContainer;
 import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainer;
 import gov.nih.nci.cagrid.testing.system.haste.Step;
+import gov.nih.nci.cagrid.wsenum.utils.EnumerationResponseHelper;
 
 import java.io.InputStream;
+import java.io.StringReader;
 import java.rmi.RemoteException;
 import java.util.NoSuchElementException;
 
 import javax.xml.soap.SOAPElement;
 
-import org.apache.axis.EngineConfiguration;
-import org.apache.axis.client.AxisClient;
-import org.apache.axis.configuration.FileProvider;
 import org.apache.axis.message.addressing.EndpointReferenceType;
 import org.apache.axis.types.URI;
 import org.apache.axis.utils.ClassUtils;
@@ -28,7 +28,6 @@ import org.globus.ws.enumeration.ClientEnumIterator;
 import org.projectmobius.bookstore.Book;
 import org.xmlsoap.schemas.ws._2004._09.enumeration.DataSource;
 import org.xmlsoap.schemas.ws._2004._09.enumeration.Release;
-import org.xmlsoap.schemas.ws._2004._09.enumeration.service.EnumerationServiceAddressingLocator;
 
 /** 
  *  InvokeEnumerationDataServiceStep
@@ -36,7 +35,7 @@ import org.xmlsoap.schemas.ws._2004._09.enumeration.service.EnumerationServiceAd
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Nov 23, 2006 
- * @version $Id: InvokeEnumerationDataServiceStep.java,v 1.1 2008-05-16 19:25:25 dervin Exp $ 
+ * @version $Id: InvokeEnumerationDataServiceStep.java,v 1.2 2008-08-21 15:07:25 dervin Exp $ 
  */
 public class InvokeEnumerationDataServiceStep extends Step {
 	
@@ -50,25 +49,9 @@ public class InvokeEnumerationDataServiceStep extends Step {
 	
     
     private static DataSource createDataSource(EndpointReferenceType epr) throws RemoteException {
-
-        EnumerationServiceAddressingLocator locator = new EnumerationServiceAddressingLocator();
-        
-        // attempt to load our context sensitive wsdd file
         InputStream resourceAsStream = ClassUtils.getResourceAsStream(
             InvokeEnumerationDataServiceStep.class, "client-config.wsdd");
-        if (resourceAsStream != null) {
-            // we found it, so tell axis to configure an engine to use it
-            EngineConfiguration engineConfig = new FileProvider(resourceAsStream);
-            // set the engine of the locator
-            locator.setEngine(new AxisClient(engineConfig));
-        }
-        DataSource port = null;
-        try {
-            port = locator.getDataSourcePort(epr);
-        } catch (Exception e) {
-            throw new RemoteException("Unable to locate portType:" + e.getMessage(), e);
-        }
-
+        DataSource port = EnumerationResponseHelper.createDataSource(epr, resourceAsStream);
         return port;
     }
     
@@ -166,24 +149,33 @@ public class InvokeEnumerationDataServiceStep extends Step {
 		 * remote exceptions from the user and throws an empty NoSuchElement exception.
 		 */
 		ClientEnumIterator iter = new ClientEnumIterator(dataSource, enumContainer.getContext());
-		int resultCount = 0;
-		try {
-			while (iter.hasNext()) {
-				SOAPElement elem = (SOAPElement) iter.next();
-				String elemText = elem.toString();
-				// make sure it's a book element
-				int bookIndex = elemText.indexOf("Book");
-				if (bookIndex == -1) {
-					throw new NoSuchElementException("Element returned was not of the type Book!");
-				}
-				resultCount++;
-			}
-		} catch (NoSuchElementException ex) {
-			if (resultCount == 0) {
-				throw ex;
-			}
-		} finally {
-			iter.release();
+        int resultCount = 0;
+        try {
+            while (iter.hasNext()) {
+                SOAPElement elem = (SOAPElement) iter.next();
+                String elemText = elem.toString();
+                // ensure 'Book' at least appears in the text
+                int bookIndex = elemText.indexOf("Book");
+                if (bookIndex == -1) {
+                    throw new NoSuchElementException("Element returned was not of the type Book!");
+                }
+                Object instance = null;
+                try {
+                    instance = Utils.deserializeObject(new StringReader(elemText), Book.class);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    fail("Error deserializing result from enumeration: " + ex.getMessage());
+                }
+                assertTrue("Deserialized object was not an instance of " 
+                    + Book.class.getName(), instance instanceof Book);
+                resultCount++;
+            }
+        } catch (NoSuchElementException ex) {
+            if (resultCount == 0) {
+                throw ex;
+            }
+        } finally {
+            iter.release();
             try {
                 iter.next();
                 fail("Call to next() after release should have failed!");
@@ -193,8 +185,8 @@ public class InvokeEnumerationDataServiceStep extends Step {
                 ex.printStackTrace();
                 fail("Exception other than NoSuchElementException thrown: " + ex.getClass().getName());
             }
-		}
-		assertTrue("No results were returned from the enumeration", resultCount != 0);
+        }
+        assertTrue("No results were returned from the enumeration", resultCount != 0);
 		
 		// this is my own impl to show and handle the exceptions
 		/*

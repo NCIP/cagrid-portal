@@ -20,7 +20,6 @@ import org.globus.ws.enumeration.EnumIterator;
 import org.globus.ws.enumeration.IterationConstraints;
 import org.globus.ws.enumeration.IterationResult;
 import org.globus.ws.enumeration.TimeoutException;
-import org.globus.wsrf.encoding.ObjectSerializer;
 import org.globus.wsrf.encoding.SerializationException;
 
 /** 
@@ -30,13 +29,13 @@ import org.globus.wsrf.encoding.SerializationException;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created Aug 17, 2006 
- * @version $Id: PersistantSDKObjectIterator.java,v 1.2 2007-06-06 16:59:27 dervin Exp $ 
+ * @version $Id: PersistantSDKObjectIterator.java,v 1.3 2008-08-21 15:07:24 dervin Exp $ 
  */
 public class PersistantSDKObjectIterator extends BaseSDKObjectIterator {
 	private static final String THREAD_EXCEPTION = "ThreadException";
 	private static final String MUST_STOP_THREAD = "StopThread";
 	private static final String ITERATION_RESULT = "IterationResult";
-		
+	
 	private PersistantSDKObjectIterator(File file, QName objectQName)
 		throws FileNotFoundException {
 		super(file, objectQName);
@@ -190,11 +189,11 @@ public class PersistantSDKObjectIterator extends BaseSDKObjectIterator {
 					checkForStop(threadCommunicationBuffer);
 					while (soapElements.size() < constraints.getMaxElements() && (xml = getNextXmlChunk()) != null) {
 						try {
-							SOAPElement element = ObjectSerializer.toSOAPElement(xml, getObjectQName());
+							SOAPElement element = createSOAPElement(xml, getObjectQName());
 							if (constraints.getMaxCharacters() != -1) {
 								// check the length of the newly created element can fit
 								// in the iteration result
-								int elemLength = element.getValue().length();
+								int elemLength = element.toString().length();
 								int currentLength = countSoapElementChars(soapElements);
 								if (elemLength + currentLength >= constraints.getMaxCharacters()) {
 									// TODO: store the too-big element for later and return
@@ -302,7 +301,7 @@ public class PersistantSDKObjectIterator extends BaseSDKObjectIterator {
 		int count = 0;
 		for (int i = 0; i < soapElements.size(); i++) {
 			SOAPElement elem = (SOAPElement) soapElements.get(i);
-			count += elem.getValue().length();
+			count += elem.toString().length();
 		}
 		return count;
 	}

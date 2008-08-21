@@ -83,8 +83,9 @@ public class SimpleEnumIterTestCase extends TestCase {
 		assertTrue("Only one result was returned", rawElements.length == 1);
 		// deserialize the result
 		try {
+            String xml = rawElements[0].toString();
             Book b = (Book) deserializeDocumentString(
-				rawElements[0].getValue(), Book.class);
+				xml, Book.class);
 			boolean found = bookInOriginalList(b);
 			assertTrue("Returned book found in original object list", found);
 		} catch (Exception ex) {
@@ -107,7 +108,7 @@ public class SimpleEnumIterTestCase extends TestCase {
 			// deserialize the result
 			try {
                 Book b = (Book) deserializeDocumentString(
-					rawElements[i].getValue(), Book.class);
+					rawElements[i].toString(), Book.class);
 				boolean found = bookInOriginalList(b);
 				assertTrue("Returned book found in original object list", found);
 			} catch (Exception ex) {
@@ -134,7 +135,7 @@ public class SimpleEnumIterTestCase extends TestCase {
 			// deserialize the result
 			try {
                 Book b = (Book) deserializeDocumentString(
-					rawElements[i].getValue(), Book.class);
+					rawElements[i].toString(), Book.class);
 				boolean found = bookInOriginalList(b);
 				assertTrue("Returned book found in original object list", found);
 			} catch (Exception ex) {

@@ -17,9 +17,6 @@ import javax.xml.namespace.QName;
 import javax.xml.soap.SOAPElement;
 
 import junit.framework.TestCase;
-import junit.framework.TestResult;
-import junit.framework.TestSuite;
-import junit.textui.TestRunner;
 
 import org.apache.axis.AxisEngine;
 import org.apache.axis.EngineConfiguration;
@@ -40,7 +37,7 @@ import org.projectmobius.bookstore.Book;
  * @author David Ervin
  * 
  * @created Apr 10, 2007 12:16:58 PM
- * @version $Id: CompleteEnumIteratorBaseTest.java,v 1.2 2007-06-06 16:59:27 dervin Exp $ 
+ * @version $Id: CompleteEnumIteratorBaseTest.java,v 1.3 2008-08-21 15:07:24 dervin Exp $ 
  */
 public abstract class CompleteEnumIteratorBaseTest extends TestCase {
     
@@ -108,8 +105,8 @@ public abstract class CompleteEnumIteratorBaseTest extends TestCase {
         assertEquals("Unexpected number of results returned", 1, rawElements.length);
         // deserialize the result
         try {
-            Book b = (Book) deserializeDocumentString(
-                rawElements[0].getValue(), Book.class);
+            String xml = rawElements[0].toString();
+            Book b = (Book) deserializeDocumentString(xml, Book.class);
             boolean found = bookInOriginalList(b);
             assertTrue("Returned book was not found in original object list", found);
         } catch (Exception ex) {
@@ -129,7 +126,7 @@ public abstract class CompleteEnumIteratorBaseTest extends TestCase {
             // deserialize the result
             try {
                 Book b = (Book) deserializeDocumentString(
-                    rawElements[i].getValue(), Book.class);
+                    rawElements[i].toString(), Book.class);
                 boolean found = bookInOriginalList(b);
                 assertTrue("Returned book not found in original object list", found);
             } catch (Exception ex) {
@@ -153,7 +150,7 @@ public abstract class CompleteEnumIteratorBaseTest extends TestCase {
             // deserialize the result
             try {
                 Book b = (Book) deserializeDocumentString(
-                    rawElements[i].getValue(), Book.class);
+                    rawElements[i].toString(), Book.class);
                 boolean found = bookInOriginalList(b);
                 assertTrue("Returned book not found in original object list", found);
             } catch (Exception ex) {
@@ -192,7 +189,7 @@ public abstract class CompleteEnumIteratorBaseTest extends TestCase {
         try {
             Utils.serializeObject(objectList.get(0), 
                 TestingConstants.BOOK_QNAME, writer);
-            charCount = writer.getBuffer().length();
+            charCount = (writer.getBuffer().length() * 2) - 1;
         } catch (Exception ex) {
             ex.printStackTrace();
             fail("Error determining object char count: " + ex.getMessage());
@@ -202,7 +199,7 @@ public abstract class CompleteEnumIteratorBaseTest extends TestCase {
         IterationResult result = enumIterator.next(cons);
         SOAPElement[] rawResults = result.getItems();
         assertTrue("Enumeration did not return results", rawResults != null);
-        assertFalse("Enumeration returned all results", 
+        assertFalse("Enumeration mistakenly returned all results", 
             rawResults.length == objectList.size());
         assertEquals("Unexpected number of results returned", 1, rawResults.length);
         // verify content
@@ -212,7 +209,7 @@ public abstract class CompleteEnumIteratorBaseTest extends TestCase {
             original = (Book) deserializeDocumentString(
                 writer.getBuffer().toString(), Book.class);
             returned = (Book) deserializeDocumentString(
-                rawResults[0].getValue().toString(), Book.class);
+                rawResults[0].toString(), Book.class);
         } catch (Exception ex) {
             fail("Error deserializing objects: " + ex.getMessage());
         }
@@ -282,13 +279,5 @@ public abstract class CompleteEnumIteratorBaseTest extends TestCase {
             ex.printStackTrace();
             fail("Error slowing down the iterator: " + ex.getMessage());
         }
-    }
-    
-
-    public static void main(String[] args) {
-        TestRunner runner = new TestRunner();
-        TestResult result = runner.doRun(
-            new TestSuite(CompleteEnumIteratorBaseTest.class));
-        System.exit(result.errorCount() + result.failureCount());
     }
 }

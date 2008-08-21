@@ -22,7 +22,6 @@ import org.globus.ws.enumeration.EnumIterator;
 import org.globus.ws.enumeration.IterationConstraints;
 import org.globus.ws.enumeration.IterationResult;
 import org.globus.ws.enumeration.TimeoutException;
-import org.globus.wsrf.encoding.ObjectSerializer;
 import org.globus.wsrf.encoding.SerializationException;
 
 /** 
@@ -34,7 +33,7 @@ import org.globus.wsrf.encoding.SerializationException;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created Aug 17, 2006 
- * @version $Id: SimplePersistantSDKObjectIterator.java,v 1.2 2007-06-06 16:59:27 dervin Exp $ 
+ * @version $Id: SimplePersistantSDKObjectIterator.java,v 1.3 2008-08-21 15:07:24 dervin Exp $ 
  */
 public class SimplePersistantSDKObjectIterator extends BaseSDKObjectIterator {
 	
@@ -167,7 +166,7 @@ public class SimplePersistantSDKObjectIterator extends BaseSDKObjectIterator {
 		try {
 			while (soapElements.size() < constraints.getMaxElements() && (xml = getNextXmlChunk()) != null) {
 				try {
-					SOAPElement element = ObjectSerializer.toSOAPElement(xml, getObjectQName());
+					SOAPElement element = createSOAPElement(xml, getObjectQName());
 					soapElements.add(element);
 				} catch (SerializationException ex) {
 					release();

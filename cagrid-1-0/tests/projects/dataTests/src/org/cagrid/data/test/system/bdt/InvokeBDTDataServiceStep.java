@@ -1,6 +1,7 @@
 package org.cagrid.data.test.system.bdt;
 
 import gov.nih.nci.cagrid.bdt.client.BulkDataHandlerClient;
+import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.common.XMLUtilities;
 import gov.nih.nci.cagrid.cqlquery.CQLQuery;
 import gov.nih.nci.cagrid.data.bdt.client.BDTDataServiceClient;
@@ -10,6 +11,7 @@ import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainer;
 import gov.nih.nci.cagrid.testing.system.haste.Step;
 
 import java.io.InputStream;
+import java.io.StringReader;
 import java.rmi.RemoteException;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -39,7 +41,7 @@ import org.xmlsoap.schemas.ws._2004._09.enumeration.service.EnumerationServiceAd
  * @author David Ervin
  * 
  * @created Mar 14, 2007 2:37:02 PM
- * @version $Id: InvokeBDTDataServiceStep.java,v 1.1 2008-05-16 19:25:25 dervin Exp $ 
+ * @version $Id: InvokeBDTDataServiceStep.java,v 1.2 2008-08-21 15:07:25 dervin Exp $ 
  */
 public class InvokeBDTDataServiceStep extends Step {
 	
@@ -129,11 +131,20 @@ public class InvokeBDTDataServiceStep extends Step {
             while (iter.hasNext()) {
                 SOAPElement elem = (SOAPElement) iter.next();
                 String elemText = elem.toString();
-                // make sure it's a book element
+                // ensure 'Book' at least appears in the text
                 int bookIndex = elemText.indexOf("Book");
                 if (bookIndex == -1) {
                     throw new NoSuchElementException("Element returned was not of the type Book!");
                 }
+                Object instance = null;
+                try {
+                    instance = Utils.deserializeObject(new StringReader(elemText), Book.class);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    fail("Error deserializing result from enumeration: " + ex.getMessage());
+                }
+                assertTrue("Deserialized object was not an instance of " 
+                    + Book.class.getName(), instance instanceof Book);
                 resultCount++;
             }
         } catch (NoSuchElementException ex) {
