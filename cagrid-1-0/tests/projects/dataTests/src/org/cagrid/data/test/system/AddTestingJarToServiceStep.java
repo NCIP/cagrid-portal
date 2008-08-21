@@ -8,6 +8,8 @@ import java.net.URI;
 import java.net.URL;
 import java.net.URLClassLoader;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.cagrid.data.test.creation.DataTestCaseInfo;
 
 /** 
@@ -17,11 +19,13 @@ import org.cagrid.data.test.creation.DataTestCaseInfo;
  * @author David Ervin
  * 
  * @created May 21, 2008 4:07:21 PM
- * @version $Id: AddTestingJarToServiceStep.java,v 1.2 2008-06-04 14:35:30 dervin Exp $ 
+ * @version $Id: AddTestingJarToServiceStep.java,v 1.3 2008-08-21 14:36:25 dervin Exp $ 
  */
 public class AddTestingJarToServiceStep extends Step {
-    
+        
     public static final String DATA_TESTS_JAR_PREFIX = "caGrid-dataTests";
+    
+    private static Log LOGGER = LogFactory.getLog(AddTestingJarToServiceStep.class);
 
     private DataTestCaseInfo info;
     
@@ -34,12 +38,13 @@ public class AddTestingJarToServiceStep extends Step {
         File libDir = new File(info.getDir(), "lib");
         // find the testing jar
         boolean jarsCopied = false;
+        LOGGER.debug("Installing data tests jar to class loader");
         assertTrue("Class loader was not a URLClassLoader", getClass().getClassLoader() instanceof URLClassLoader);
         URLClassLoader currentClassLoader = (URLClassLoader) getClass().getClassLoader();
         URL[] urls = currentClassLoader.getURLs();
         for (URL u : urls) {
             URI uri = u.toURI();
-            System.out.println("CLASSPATH URI: " + uri.toString());
+            LOGGER.debug("CLASSPATH URI: " + uri.toString());
             if (uri.getScheme().equalsIgnoreCase("file")) {
                 // is a file
                 File classpathFile = new File(uri);
