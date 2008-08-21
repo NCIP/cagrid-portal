@@ -150,7 +150,7 @@ public class DomainModelUtils {
                         // if we are only interested in primary concepts, need
                         // to check the order too
                         if (primaryConceptOnly) {
-                            if (sm.getOrder() == 0) {
+                            if (sm.getOrder().intValue() == 0) {
                                 result.add(c);
                                 break;
                             }
