@@ -80,7 +80,7 @@
         </publishers>
     </plugin>
 
-    <plugin name="system.project" classname="net.sourceforge.cruisecontrol.ProjectConfig">
+    <plugin name="system.project" classname="net.sourceforge.cruisecontrol.ProjectConfig" buildafterfailed="true">
         <dateformat format="yyyy-MM-dd'T'HH:mm:ss.SZ"/>
         <listeners>
             <currentbuildstatuslistener/>
