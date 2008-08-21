@@ -4,3 +4,4 @@ bin
 deploy.properties
 *.gar
 resultEPR.xml
+tmp
