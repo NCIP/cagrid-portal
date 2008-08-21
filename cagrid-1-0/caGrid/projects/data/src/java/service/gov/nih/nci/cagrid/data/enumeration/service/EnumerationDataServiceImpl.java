@@ -19,6 +19,7 @@ import gov.nih.nci.cagrid.data.service.ServiceConfigUtil;
 import gov.nih.nci.cagrid.data.utilities.CQLQueryResultsIterator;
 import gov.nih.nci.cagrid.enumeration.stubs.response.EnumerationResponseContainer;
 import gov.nih.nci.cagrid.wsenum.common.WsEnumConstants;
+import gov.nih.nci.cagrid.wsenum.utils.DummyEnumIterator;
 import gov.nih.nci.cagrid.wsenum.utils.EnumIteratorFactory;
 import gov.nih.nci.cagrid.wsenum.utils.IterImplType;
 
@@ -35,6 +36,8 @@ import java.util.List;
 import javax.xml.namespace.QName;
 
 import org.apache.axis.message.addressing.EndpointReferenceType;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.globus.ws.enumeration.EnumIterator;
 import org.globus.ws.enumeration.EnumProvider;
 import org.globus.ws.enumeration.EnumResource;
@@ -53,6 +56,7 @@ import org.xmlsoap.schemas.ws._2004._09.enumeration.EnumerationContextType;
  */
 public class EnumerationDataServiceImpl extends BaseServiceImpl {
 
+    private static Log LOG = LogFactory.getLog(EnumerationDataServiceImpl.class);
 	
 	public EnumerationDataServiceImpl() throws DataServiceInitializationException {
 		super();
@@ -126,6 +130,8 @@ public class EnumerationDataServiceImpl extends BaseServiceImpl {
 		throws gov.nih.nci.cagrid.data.QueryProcessingException, 
 		gov.nih.nci.cagrid.data.MalformedQueryException,
 		FileNotFoundException, IOException {
+        // a placeholder for the enum iterator
+        EnumIterator enumIter = null;
 		// perform the query
 		CQLQueryResults results = processor.processQuery(query);
         // fire off the results auditing
@@ -141,19 +147,26 @@ public class EnumerationDataServiceImpl extends BaseServiceImpl {
 			while (resIter.hasNext()) {
 				resultList.add(resIter.next());
 			}
-			// create the EnumIterator from the objects
-			InputStream wsddStream = new FileInputStream(serverConfigLocation);
-			QName name = Utils.getRegisteredQName(resultList.get(0).getClass());
-            
-            // get the service property for the enum iterator type
-            String enumIterTypeValue = getDataServiceConfig().getProperty(DataServiceConstants.ENUMERATION_ITERATOR_TYPE_PROPERTY);
-            IterImplType implType = IterImplType.valueOf(enumIterTypeValue);
-            
-            EnumIterator enumIter = EnumIteratorFactory.createIterator(implType, resultList, name, wsddStream);
-			return enumIter;
+			if (resultList.size() != 0) {
+			    // create the EnumIterator from the objects
+			    configStream = new FileInputStream(serverConfigLocation);
+			    Class resultClass = resultList.get(0).getClass();
+			    QName name = Utils.getRegisteredQName(resultClass);
+
+			    // get the service property for the enum iterator type
+			    String enumIterTypeValue = getDataServiceConfig().getProperty(DataServiceConstants.ENUMERATION_ITERATOR_TYPE_PROPERTY);
+			    IterImplType implType = IterImplType.valueOf(enumIterTypeValue);
+			    LOG.debug("Using enum iterator of type " + implType);
+
+			    enumIter = EnumIteratorFactory.createIterator(implType, resultList, name, configStream);
+            } else {
+                LOG.debug("No results to enumerate, creating dummy EnumIterator instance");
+                enumIter = new DummyEnumIterator();
+            }
 		} catch (Exception ex) {
 			throw new QueryProcessingException(ex);
 		}
+        return enumIter;
 	}
 	
 	
