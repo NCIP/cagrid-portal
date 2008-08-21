@@ -5,7 +5,7 @@
 	<classpathentry kind="src" path="test/src"/>
 	<classpathentry kind="src" path="build/stubs-AuthenticationService/src"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/addressing-1.0.jar" sourcepath="/GT4_LOCATION/ws-core-4.0.3-src.zip"/>
-	<classpathentry kind="var" path="GT4_LOCATION/lib/axis.jar" sourcepath="/AXIS_HOME"/>
+	<classpathentry kind="var" path="GT4_LOCATION/lib/axis.jar" sourcepath="/GT4_LOCATION/java/lib-src/ws-axis/ws-axis/java/src"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/axis-url.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/bootstrap.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/cog-axis.jar"/>
