@@ -20,7 +20,7 @@ import org.globus.wsrf.utils.AnyHelper;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created Aug 7, 2006 
- * @version $Id: LazyQueryResultEnumIterator.java,v 1.2 2007-12-14 17:10:46 dervin Exp $ 
+ * @version $Id: LazyQueryResultEnumIterator.java,v 1.3 2008-08-21 15:05:49 dervin Exp $ 
  */
 public class LazyQueryResultEnumIterator implements EnumIterator {
 	private boolean hasBeenReleased = false;
@@ -60,6 +60,7 @@ public class LazyQueryResultEnumIterator implements EnumIterator {
 	private int computeCharCount(List soapElements) {
 		int count = 0;
 		for (int i = 0; i < soapElements.size(); i++) {
+            // TODO: do I need to use toString() on the SOAPElement, instead of getValue()?
 			count += ((SOAPElement) soapElements.get(i)).getValue().length();
 		}
 		return count;
