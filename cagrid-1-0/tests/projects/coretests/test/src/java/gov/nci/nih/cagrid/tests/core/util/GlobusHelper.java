@@ -386,7 +386,7 @@ public class GlobusHelper {
         opts.add(shutdown);
 
         // force a JVM kill
-        // opts.add("hard");
+        opts.add("hard");
 
         boolean success = false;
         final Process process = runGlobusCommand("org.globus.wsrf.container.ShutdownClient", opts);
