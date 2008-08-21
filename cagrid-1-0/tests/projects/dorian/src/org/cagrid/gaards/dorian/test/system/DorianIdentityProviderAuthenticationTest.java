@@ -36,191 +36,180 @@ import org.cagrid.gaards.dorian.test.system.steps.CopyConfigurationStep;
 import org.cagrid.gaards.dorian.test.system.steps.GetAsserionSigningCertificateStep;
 import org.cagrid.gaards.dorian.test.system.steps.SleepStep;
 
+
 public class DorianIdentityProviderAuthenticationTest extends ServiceStoryBase {
 
-	private File configuration;
-	private File properties;
-	private File tempService;
-	private ConfigureGlobusToTrustDorianStep trust;
+    private File configuration;
+    private File properties;
+    private File tempService;
+    private ConfigureGlobusToTrustDorianStep trust;
 
-	public DorianIdentityProviderAuthenticationTest(ServiceContainer container) {
-		this(container, null, null);
-	}
 
-	public DorianIdentityProviderAuthenticationTest(ServiceContainer container,
-			File properties) {
-		this(container, null, properties);
-	}
+    public DorianIdentityProviderAuthenticationTest(ServiceContainer container) {
+        this(container, null, null);
+    }
 
-	public DorianIdentityProviderAuthenticationTest(ServiceContainer container,
-			File configuration, File properties) {
-		super(container);
-		this.configuration = configuration;
-		this.properties = properties;
-	}
 
-	@Override
-	public String getName() {
-		return "Dorian Authentication System Test";
-	}
+    public DorianIdentityProviderAuthenticationTest(ServiceContainer container, File properties) {
+        this(container, null, properties);
+    }
 
-	public String getDescription() {
-		return "Dorian Authentication System Test";
-	}
 
-	protected Vector<Step> steps() {
-		Vector<Step> steps = new Vector<Step>();
-		try {
-			steps.add(new UnpackContainerStep(getContainer()));
-			steps.add(new CopyConfigurationStep(tempService,
-					this.configuration, this.properties));
+    public DorianIdentityProviderAuthenticationTest(ServiceContainer container, File configuration, File properties) {
+        super(container);
+        this.configuration = configuration;
+        this.properties = properties;
+    }
 
-			steps.add(new DeployServiceStep(getContainer(), this.tempService
-					.getAbsolutePath()));
 
-			trust = new ConfigureGlobusToTrustDorianStep(getContainer());
-			steps.add(trust);
+    @Override
+    public String getName() {
+        return "Dorian Authentication System Test";
+    }
 
-			steps.add(new StartContainerStep(getContainer()));
 
-			GetAsserionSigningCertificateStep signingCertStep = new GetAsserionSigningCertificateStep(
-					getContainer());
-			steps.add(signingCertStep);
+    public String getDescription() {
+        return "Dorian Authentication System Test";
+    }
 
-			String serviceURL = getContainer().getContainerBaseURI().toString()
-					+ "cagrid/Dorian";
 
-			// Test Get supported authentication types
+    protected Vector<Step> steps() {
+        Vector<Step> steps = new Vector<Step>();
+        try {
+            steps.add(new UnpackContainerStep(getContainer()));
+            steps.add(new CopyConfigurationStep(tempService, this.configuration, this.properties));
 
-			Set<QName> expectedProfiles = new HashSet<QName>();
-			expectedProfiles.add(AuthenticationProfile.BASIC_AUTHENTICATION);
-			steps.add(new ValidateSupportedAuthenticationProfilesStep(
-					serviceURL, expectedProfiles));
+            steps.add(new DeployServiceStep(getContainer(), this.tempService.getAbsolutePath()));
 
-			SuccessfullAuthentication success = new SuccessfullAuthentication(
-					"dorian", "Mr.", "Administrator", "dorian@dorian.org",
-					signingCertStep);
+            trust = new ConfigureGlobusToTrustDorianStep(getContainer());
+            steps.add(trust);
 
-			// Test Successful authentication
-			BasicAuthentication cred = new BasicAuthentication();
-			cred.setUserId("dorian");
-			cred.setPassword("DorianAdmin$1");
-			steps.add(new AuthenticationStep(serviceURL, success, cred));
+            steps.add(new StartContainerStep(getContainer()));
 
-			// Test successful deprecated authentication
+            GetAsserionSigningCertificateStep signingCertStep = new GetAsserionSigningCertificateStep(getContainer());
+            steps.add(signingCertStep);
 
-			Credential cred2 = new Credential();
-			BasicAuthenticationCredential bac = new BasicAuthenticationCredential();
-			bac.setUserId("dorian");
-			bac.setPassword("DorianAdmin$1");
-			cred2.setBasicAuthenticationCredential(bac);
+            String serviceURL = getContainer().getContainerBaseURI().toString() + "cagrid/Dorian";
 
-			steps.add(new DeprecatedAuthenticationStep(serviceURL, success,
-					cred2));
+            // Test Get supported authentication types
 
-			// Test invalid authentication, bad password
-			BasicAuthentication cred3 = new BasicAuthentication();
-			cred3.setUserId("dorian");
-			cred3.setPassword("badpassword");
-			steps.add(new AuthenticationStep(serviceURL,
-					new InvalidAuthentication(
-							"The uid or password is incorrect.",
-							InvalidCredentialFault.class), cred3));
+            Set<QName> expectedProfiles = new HashSet<QName>();
+            expectedProfiles.add(AuthenticationProfile.BASIC_AUTHENTICATION);
+            steps.add(new ValidateSupportedAuthenticationProfilesStep(serviceURL, expectedProfiles));
 
-			// Test invalid deprecated authentication, bad password
+            SuccessfullAuthentication success = new SuccessfullAuthentication("dorian", "Mr.", "Administrator",
+                "dorian@dorian.org", signingCertStep);
 
-			Credential cred4 = new Credential();
-			BasicAuthenticationCredential bac2 = new BasicAuthenticationCredential();
-			bac2.setUserId("dorian");
-			bac2.setPassword("badpassword");
-			cred4.setBasicAuthenticationCredential(bac2);
-			steps
-					.add(new DeprecatedAuthenticationStep(
-							serviceURL,
-							new InvalidAuthentication(
-									"The uid or password is incorrect.",
-									gov.nih.nci.cagrid.authentication.stubs.types.InvalidCredentialFault.class),
-							cred4));
+            // Test Successful authentication
+            BasicAuthentication cred = new BasicAuthentication();
+            cred.setUserId("dorian");
+            cred.setPassword("DorianAdmin$1");
+            steps.add(new AuthenticationStep(serviceURL, success, cred));
 
-			// Test password lockout
-			// One more lockout to get to three
+            // Test successful deprecated authentication
 
-			steps.add(new AuthenticationStep(serviceURL,
-					new InvalidAuthentication(
-							"The uid or password is incorrect.",
-							InvalidCredentialFault.class), cred3));
+            Credential cred2 = new Credential();
+            BasicAuthenticationCredential bac = new BasicAuthenticationCredential();
+            bac.setUserId("dorian");
+            bac.setPassword("DorianAdmin$1");
+            cred2.setBasicAuthenticationCredential(bac);
 
-			// Now it should be locked
+            steps.add(new DeprecatedAuthenticationStep(serviceURL, success, cred2));
 
-			steps
-					.add(new AuthenticationStep(
-							serviceURL,
-							new InvalidAuthentication(
-									"This account has been temporarily locked because the maximum number of consecutive invalid logins has been exceeded.",
+            // Test invalid authentication, bad password
+            BasicAuthentication cred3 = new BasicAuthentication();
+            cred3.setUserId("dorian");
+            cred3.setPassword("badpassword");
+            steps.add(new AuthenticationStep(serviceURL, new InvalidAuthentication("The uid or password is incorrect.",
+                InvalidCredentialFault.class), cred3));
 
-									InvalidCredentialFault.class), cred));
+            // Test invalid deprecated authentication, bad password
 
-			// Sleep till lock expires
-			steps.add(new SleepStep(60));
+            Credential cred4 = new Credential();
+            BasicAuthenticationCredential bac2 = new BasicAuthenticationCredential();
+            bac2.setUserId("dorian");
+            bac2.setPassword("badpassword");
+            cred4.setBasicAuthenticationCredential(bac2);
+            steps.add(new DeprecatedAuthenticationStep(serviceURL, new InvalidAuthentication(
+                "The uid or password is incorrect.",
+                gov.nih.nci.cagrid.authentication.stubs.types.InvalidCredentialFault.class), cred4));
 
-			// Now should be unlocked
+            // Test password lockout
+            // One more lockout to get to three
 
-			steps.add(new AuthenticationStep(serviceURL, success, cred));
+            steps.add(new AuthenticationStep(serviceURL, new InvalidAuthentication("The uid or password is incorrect.",
+                InvalidCredentialFault.class), cred3));
 
-			// Test invalid authentication, unsupported credential
-			OneTimePassword cred5 = new OneTimePassword();
-			cred5.setUserId("dorian");
-			cred5.setOneTimePassword("oneTimePassword");
+            // Now it should be locked
 
-			steps.add(new AuthenticationStep(serviceURL,
-					new InvalidAuthentication(
-							"The credential provided is not supported.",
-							CredentialNotSupportedFault.class), cred5));
+            steps
+                .add(new AuthenticationStep(
+                    serviceURL,
+                    new InvalidAuthentication(
+                        "This account has been temporarily locked because the maximum number of consecutive invalid logins has been exceeded.",
 
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return steps;
-	}
+                        InvalidCredentialFault.class), cred));
 
-	protected boolean storySetUp() throws Throwable {
-		this.tempService = new File("tmp/dorian");
-		File asLocation = new File("../../../caGrid/projects/dorian");
-		CopyServiceStep copyService = new CopyServiceStep(asLocation,
-				tempService);
-		copyService.runStep();
-		// this.tempService = copyService.getServiceDirectory();
-		return true;
-	}
+            // Sleep till lock expires
+            steps.add(new SleepStep(60));
 
-	protected void storyTearDown() throws Throwable {
-		try {
-			if (this.tempService != null) {
-				new DeleteServiceStep(tempService).runStep();
-			}
-		} catch (Throwable e) {
-			e.printStackTrace();
-		}
+            // Now should be unlocked
 
-		StopContainerStep step2 = new StopContainerStep(getContainer());
-		try {
-			step2.runStep();
-		} catch (Throwable e) {
-			e.printStackTrace();
-		}
+            steps.add(new AuthenticationStep(serviceURL, success, cred));
 
-		CleanupDorianStep cleanup = new CleanupDorianStep(getContainer(), trust);
-		try {
-			cleanup.runStep();
-		} catch (Throwable e) {
-			e.printStackTrace();
-		}
-		DestroyContainerStep step3 = new DestroyContainerStep(getContainer());
-		try {
-			step3.runStep();
-		} catch (Throwable e) {
-			e.printStackTrace();
-		}
+            // Test invalid authentication, unsupported credential
+            OneTimePassword cred5 = new OneTimePassword();
+            cred5.setUserId("dorian");
+            cred5.setOneTimePassword("oneTimePassword");
 
-	}
+            steps.add(new AuthenticationStep(serviceURL, new InvalidAuthentication(
+                "The credential provided is not supported.", CredentialNotSupportedFault.class), cred5));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return steps;
+    }
+
+
+    protected boolean storySetUp() throws Throwable {
+        this.tempService = new File("tmp/dorian");
+        File asLocation = new File("../../../caGrid/projects/dorian");
+        CopyServiceStep copyService = new CopyServiceStep(asLocation, tempService);
+        copyService.runStep();
+        // this.tempService = copyService.getServiceDirectory();
+        return true;
+    }
+
+
+    protected void storyTearDown() throws Throwable {
+        try {
+            if (this.tempService != null) {
+                new DeleteServiceStep(tempService).runStep();
+            }
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+
+        StopContainerStep step2 = new StopContainerStep(getContainer());
+        try {
+            step2.runStep();
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+
+        CleanupDorianStep cleanup = new CleanupDorianStep(getContainer(), trust);
+        try {
+            cleanup.runStep();
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+        DestroyContainerStep step3 = new DestroyContainerStep(getContainer());
+        try {
+            step3.runStep();
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+
+    }
 }
