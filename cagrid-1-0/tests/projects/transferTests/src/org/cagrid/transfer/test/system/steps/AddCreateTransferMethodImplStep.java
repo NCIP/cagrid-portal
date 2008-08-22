@@ -22,7 +22,7 @@ public class AddCreateTransferMethodImplStep extends BaseStep {
     public void runStep() throws Throwable {
         System.out.println("Adding a simple methods implementation.");
 
-        File inFileClient = new File(".." + File.separator + ".." + File.separator + ".." + File.separator + ".."
+        File inFileClient = new File(".." + File.separator + ".." + File.separator + ".."
             + File.separator + "tests" + File.separator + "projects" + File.separator + "transferTests"
             + File.separator + "resources" + File.separator + tci.getName() + "Client.java");
         File outFileClient = new File(tci.getDir() + File.separator + "src" + File.separator + tci.getPackageDir()
@@ -30,7 +30,7 @@ public class AddCreateTransferMethodImplStep extends BaseStep {
 
         Utils.copyFile(inFileClient, outFileClient);
 
-        File inFileImpl = new File(".." + File.separator + ".." + File.separator + ".." + File.separator + ".."
+        File inFileImpl = new File(".." + File.separator + ".." + File.separator + ".."
             + File.separator + "tests" + File.separator + "projects" + File.separator + "transferTests"
             + File.separator + "resources" + File.separator + tci.getName() + "Impl.java");
         File outFileImpl = new File(tci.getDir() + File.separator + "src" + File.separator + tci.getPackageDir()
