@@ -22,19 +22,21 @@ public class AddCreateTransferMethodImplStep extends BaseStep {
     public void runStep() throws Throwable {
         System.out.println("Adding a simple methods implementation.");
 
-        File inFileClient = new File(".." + File.separator + "transfer" + File.separator + "test" + File.separator + "resources" + File.separator + tci.getName() + "Client.java");
+        File inFileClient = new File(".." + File.separator + ".." + File.separator + ".." + File.separator + ".."
+            + File.separator + "tests" + File.separator + "projects" + File.separator + "transferTests"
+            + File.separator + "resources" + File.separator + tci.getName() + "Client.java");
         File outFileClient = new File(tci.getDir() + File.separator + "src" + File.separator + tci.getPackageDir()
             + File.separator + "client" + File.separator + tci.getName() + "Client.java");
 
         Utils.copyFile(inFileClient, outFileClient);
-        
 
+        File inFileImpl = new File(".." + File.separator + ".." + File.separator + ".." + File.separator + ".."
+            + File.separator + "tests" + File.separator + "projects" + File.separator + "transferTests"
+            + File.separator + "resources" + File.separator + tci.getName() + "Impl.java");
+        File outFileImpl = new File(tci.getDir() + File.separator + "src" + File.separator + tci.getPackageDir()
+            + File.separator + "service" + File.separator + tci.getName() + "Impl.java");
 
-        File inFileImpl = new File(".." + File.separator + "transfer" + File.separator + "test" + File.separator + "resources" + File.separator + tci.getName() + "Impl.java");
-        File outFileImpl = new File(tci.getDir() + File.separator + "src" + File.separator + tci.getPackageDir() + File.separator + "service" + File.separator  + tci.getName() + "Impl.java");
-        
         SourceUtils.modifyImpl(inFileImpl, outFileImpl, "createTransferMethodStep");
-       
 
         buildStep();
     }
