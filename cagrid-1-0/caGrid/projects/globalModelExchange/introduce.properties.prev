@@ -1,10 +1,10 @@
 #Introduce Properties
-#Thu Jun 26 16:26:21 EDT 2008
+#Mon Aug 25 13:47:38 EDT 2008
 introduce.skeleton.extensions=
 introduce.skeleton.services.list=GlobalModelExchange
 introduce.skeleton.destination.dir=D\:\\projects\\caBIG\\cagrid-1-0\\caGrid\\projects\\globalModelExchange
 introduce.skeleton.namespace.domain=http\://gme.cagrid.org/GlobalModelExchange
-introduce.skeleton.timestamp=1214510451125
+introduce.skeleton.timestamp=1219345796546
 introduce.skeleton.service.name=GlobalModelExchange
 introduce.soap.binding.excludes=\ gme\://gme.cagrid.org/2.0/GlobalModelExchange/domain
 introduce.ns.excludes=\ -x gme\://gme.cagrid.org/2.0/GlobalModelExchange/domain -x gme\://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.service -x gme\://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata -x gme\://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security -x gme\://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common

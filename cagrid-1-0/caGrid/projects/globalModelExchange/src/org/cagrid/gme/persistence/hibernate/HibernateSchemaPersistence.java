@@ -71,7 +71,7 @@ public class HibernateSchemaPersistence implements SchemaPersistenceI {
             if (info == null) {
                 info = new XMLSchemaInformation();
             }
-            // -setSchema XMLSchema on PersistableXMLSchema
+            // -setSchema XMLSchema on XMLSchemaInformation
             info.setSchema(s);
 
             getSchemaInformationDao().save(info);

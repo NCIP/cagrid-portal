@@ -68,7 +68,13 @@
 <!-- START INTRODUCE TYPEMAPPINGS -->
 <ns3:typeMapping encodingStyle="" serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory" deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" type="ns1:org.cagrid.gme.domain.XMLSchema" qname="ns2:XMLSchema" xmlns:ns1="http://xml.apache.org/axis/wsdd/providers/java" xmlns:ns2="gme://gme.cagrid.org/2.0/GlobalModelExchange/domain" xmlns:ns3="http://xml.apache.org/axis/wsdd/"/>
 
+<ns3:typeMapping encodingStyle="" serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory" deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" type="ns1:org.cagrid.gme.domain.XMLSchemaBundle" qname="ns2:XMLSchemaBundle" xmlns:ns1="http://xml.apache.org/axis/wsdd/providers/java" xmlns:ns2="gme://gme.cagrid.org/2.0/GlobalModelExchange/domain" xmlns:ns3="http://xml.apache.org/axis/wsdd/"/>
+
 <ns3:typeMapping encodingStyle="" serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory" deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" type="ns1:org.cagrid.gme.domain.XMLSchemaDocument" qname="ns2:XMLSchemaDocument" xmlns:ns1="http://xml.apache.org/axis/wsdd/providers/java" xmlns:ns2="gme://gme.cagrid.org/2.0/GlobalModelExchange/domain" xmlns:ns3="http://xml.apache.org/axis/wsdd/"/>
+
+<ns3:typeMapping encodingStyle="" serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory" deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" type="ns1:org.cagrid.gme.domain.XMLSchemaImportInformation" qname="ns2:XMLSchemaImportInformation" xmlns:ns1="http://xml.apache.org/axis/wsdd/providers/java" xmlns:ns2="gme://gme.cagrid.org/2.0/GlobalModelExchange/domain" xmlns:ns3="http://xml.apache.org/axis/wsdd/"/>
+
+<ns3:typeMapping encodingStyle="" serializer="gov.nih.nci.cagrid.encoding.SDKSerializerFactory" deserializer="gov.nih.nci.cagrid.encoding.SDKDeserializerFactory" type="ns1:org.cagrid.gme.domain.XMLSchemaNamespace" qname="ns2:XMLSchemaNamespace" xmlns:ns1="http://xml.apache.org/axis/wsdd/providers/java" xmlns:ns2="gme://gme.cagrid.org/2.0/GlobalModelExchange/domain" xmlns:ns3="http://xml.apache.org/axis/wsdd/"/>
 
 
 <!-- END INTRODUCE TYPEMAPPINGS --></deployment>
