@@ -1,18 +1,11 @@
 package org.cagrid.fqp.test.common.steps;
 
-import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.cqlresultset.CQLQueryResults;
 import gov.nih.nci.cagrid.data.utilities.CQLQueryResultsIterator;
 import gov.nih.nci.cagrid.dcql.DCQLQuery;
 import gov.nih.nci.cagrid.fqp.processor.exceptions.FederatedQueryProcessingException;
 import gov.nih.nci.cagrid.fqp.stubs.types.FederatedQueryProcessingFault;
-import gov.nih.nci.cagrid.testing.system.haste.Step;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.rmi.RemoteException;
 import java.util.LinkedList;
 import java.util.List;
@@ -26,21 +19,16 @@ import org.cagrid.fqp.test.common.FederatedQueryProcessorHelper;
  * @author David Ervin
  * 
  * @created Jul 10, 2008 12:17:40 PM
- * @version $Id: AggregationStep.java,v 1.4 2008-07-16 20:01:19 dervin Exp $ 
+ * @version $Id: AggregationStep.java,v 1.5 2008-08-25 16:49:07 dervin Exp $ 
  */
-public class AggregationStep extends Step {
+public class AggregationStep extends BaseQueryExecutionStep {
     
-    public static final String CLIENT_WSDD = "/resources/wsdd/client-config.wsdd";
-    
-    private String queryFilename;
-    private String goldFilename;
     private FederatedQueryProcessorHelper queryProcessor;
     private String[] testServiceUrls;
     
     public AggregationStep(String queryFilename, String goldFilename, 
         FederatedQueryProcessorHelper queryProcessorHelper, String[] testServiceUrls) {
-        this.queryFilename = queryFilename;
-        this.goldFilename = goldFilename;
+        super(queryFilename, goldFilename);
         this.queryProcessor = queryProcessorHelper;
         this.testServiceUrls = testServiceUrls;
     }
@@ -50,64 +38,8 @@ public class AggregationStep extends Step {
         DCQLQuery query = deserializeQuery();
         query.setTargetServiceURL(testServiceUrls);
         CQLQueryResults testResults = performAggregation(query);
-        CQLQueryResults goldResults = loadGoldResults();
+        CQLQueryResults goldResults = loadGoldCqlResults();
         verifyObjectResults(testResults, goldResults);
-    }
-    
-    
-    private DCQLQuery deserializeQuery() {
-        DCQLQuery query = null;
-        FileReader reader = null;
-        try {
-            reader = new FileReader(queryFilename);
-        } catch (FileNotFoundException ex) {
-            ex.printStackTrace();
-            fail("Unable to read query file " + queryFilename);
-        }
-        try {
-            query = (DCQLQuery) Utils.deserializeObject(reader, DCQLQuery.class);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            fail("Unable to deserialize query file " + queryFilename);
-        } finally {
-            try {
-                reader.close();
-            } catch (Exception ex) {
-                ex.printStackTrace();
-                // nothing else to do
-            }
-        }
-        return query;
-    }
-    
-    
-    private CQLQueryResults loadGoldResults() {
-        CQLQueryResults goldResults = null;
-        FileInputStream fis = null;
-        try {
-            fis = new FileInputStream(goldFilename);
-        } catch (FileNotFoundException ex) {
-            ex.printStackTrace();
-            fail("Unable to read gold results file " + goldFilename);
-        }
-        try {
-            InputStream wsddStream = getClass().getResourceAsStream(CLIENT_WSDD);
-            assertNotNull("Could not locate client-config.wsdd", wsddStream);
-            goldResults = (CQLQueryResults) Utils.deserializeObject(
-                new InputStreamReader(fis), CQLQueryResults.class, wsddStream);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            fail("Failed to deserialize gold results " + goldFilename);
-        } finally {
-            try {
-                fis.close();
-            } catch (Exception ex) {
-                ex.printStackTrace();
-                // we tried
-            }
-        }
-        
-        return goldResults;
     }
     
     
