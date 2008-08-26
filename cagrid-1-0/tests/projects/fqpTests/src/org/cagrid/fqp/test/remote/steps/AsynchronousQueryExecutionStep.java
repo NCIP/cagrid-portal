@@ -25,6 +25,12 @@ public class AsynchronousQueryExecutionStep extends BaseQueryExecutionStep {
         "DATA_SERVICE_1", "DATA_SERVICE_2"
     };
     
+    
+    /**
+     * Controled by a property in jndi-config.xml
+     */
+    public static final long RESOURCE_SWEEPER_DELAY = 10000;
+    
     /**
      * Number of times to try the isProcessingComplete() method
      */
@@ -82,15 +88,19 @@ public class AsynchronousQueryExecutionStep extends BaseQueryExecutionStep {
 
         SetTerminationTimeResponse response = resultsClient.setTerminationTime(termTime);
 
-        LOG.debug("Current time " + response.getCurrentTime().getTime());
+		LOG.debug("Current time " + response.getCurrentTime().getTime());
         LOG.debug("Requested termination time " + terminateAt.getTime());
         LOG.debug("Scheduled termination time " + response.getNewTerminationTime().getTime());
         LOG.debug("Should terminate in:"
             + (response.getNewTerminationTime().getTimeInMillis() - Calendar.getInstance().getTimeInMillis()) / 1000
             + " seconds.");
 
-        // wait for it to be expired (twice the termination time delay)
-        Thread.sleep(1000 * terminateAfterSecs * 2);
+        // wait for it to be expired (twice the termination time delay) + resource sweeper interval
+        long sleepTime = (1000 * terminateAfterSecs * 2) + RESOURCE_SWEEPER_DELAY;
+        long currentTime = System.currentTimeMillis();
+        LOG.debug("Sleeping current thread for " + sleepTime + " ms");
+        Thread.sleep(sleepTime);
+        LOG.debug((System.currentTimeMillis() - currentTime) + " ms have passed while this thread slept");
 
         // make sure its gone
         try {
@@ -130,5 +140,6 @@ public class AsynchronousQueryExecutionStep extends BaseQueryExecutionStep {
     
     private void verifyQueryResults(DCQLQueryResultsCollection testResults, DCQLQueryResultsCollection goldResults) {
         LOG.debug("Verifying DCQL query results against gold");
+        // TODO: implement me
     }
 }
