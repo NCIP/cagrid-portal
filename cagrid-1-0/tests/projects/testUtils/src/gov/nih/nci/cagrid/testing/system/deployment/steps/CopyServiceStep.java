@@ -10,11 +10,13 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
- * DeployServiceStep Deploys a caGrid service to the container
+ * CopyServiceStep
+ * Copies a grid service from one directory to another through
+ * a zip / unzip process to prevent 'filename too long' errors in Windows
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A> *
  * @created Nov 8, 2006
- * @version $Id: CopyServiceStep.java,v 1.2 2008-05-22 01:16:24 langella Exp $
+ * @version $Id: CopyServiceStep.java,v 1.3 2008-08-26 15:37:28 dervin Exp $
  */
 public class CopyServiceStep extends Step {
 	private static final Log LOG = LogFactory.getLog(CopyServiceStep.class);
@@ -28,18 +30,18 @@ public class CopyServiceStep extends Step {
 		this.destDir = destParentDir;
 	}
 
+    
 	public void runStep() throws Throwable {
 		LOG.debug("Running step: " + getClass().getName());
-		File zip = new File(new Date().getTime()+".zip");
+		File zip = new File(new Date().getTime() + ".zip");
 		ZipUtilities.zipDirectory(sourceDir, zip);
 		ZipUtilities.unzip(zip, destDir);
 		zip.delete();
-		serviceDirectory = new File(destDir.getAbsolutePath()+File.separator+sourceDir.getName());
+		serviceDirectory = new File(destDir.getAbsolutePath(), sourceDir.getName());
 	}
+    
 
 	public File getServiceDirectory() {
 		return serviceDirectory;
 	}
-	
-	
 }
