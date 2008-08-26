@@ -38,10 +38,10 @@
           <name>resourceKeyType</name>
           <value>java.lang.String</value>
         </parameter>
-        <!-- change the sweeper delay for this resource to run every 10 seconds (default is 60) -->
+        <!-- Sweeper delay defaults to 60 seconds, system tests change this -->
         <parameter>
 	     <name>sweeperDelay</name>
-    	 <value>10000</value>
+    	 <value>60000</value>
 	    </parameter>        
       </resourceParams>
     </resource>
