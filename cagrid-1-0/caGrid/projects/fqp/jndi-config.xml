@@ -38,6 +38,11 @@
           <name>resourceKeyType</name>
           <value>java.lang.String</value>
         </parameter>
+        <!-- change the sweeper delay for this resource to run every 10 seconds (default is 60) -->
+        <parameter>
+	     <name>sweeperDelay</name>
+    	 <value>10000</value>
+	    </parameter>        
       </resourceParams>
     </resource>
     <resourceLink name="serviceconfiguration" target="java:comp/env/services/SERVICE-INSTANCE-PREFIX/FederatedQueryProcessor/serviceconfiguration" />
