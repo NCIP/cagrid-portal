@@ -21,6 +21,7 @@ Notes
 
 Action Items
 ------------
+1) After John updates MPP, beed to schedule a call with OSU to review project plan and assignments.
 2) John will find out whom to work with and liaison. 
 3) John will ask KC to test caGrid 1.2 with future tech stack and verify JUnit 3.8 tests on JUnit 4.4
 4) John will send follow up email to Dan to setup follow up meeting
