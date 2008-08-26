@@ -24,7 +24,7 @@ import org.cagrid.fqp.test.common.ServiceContainerSource;
  * @author David Ervin
  * 
  * @created Jul 10, 2008 10:57:40 AM
- * @version $Id: RemoteFqpSystemTests.java,v 1.2 2008-07-16 19:29:59 dervin Exp $ 
+ * @version $Id: RemoteFqpSystemTests.java,v 1.3 2008-08-26 15:02:16 dervin Exp $ 
  */
 public class RemoteFqpSystemTests extends StoryBook {
     
@@ -52,19 +52,26 @@ public class RemoteFqpSystemTests extends StoryBook {
         addStory(exampleService1Deployment);
         addStory(exampleService2Deployment);
         
-        // deploy the FQP service
-        fqpDeployment = new FQPServiceDeploymentStory(getFqpDir());
-        addStory(fqpDeployment);
-        
-        // run the aggregation queries
+        // sources of data service containers.  This allows stories to grab
+        // service containers after they've been created in the order of execution
         ServiceContainerSource[] containerSources = new ServiceContainerSource[] {
             exampleService1Deployment, exampleService2Deployment
         };
         
+        // deploy the FQP service
+        fqpDeployment = new FQPServiceDeploymentStory(getFqpDir());
+        addStory(fqpDeployment);
         FederatedQueryProcessorHelper queryHelper = 
             new FederatedQueryProcessorHelper(fqpDeployment);
+                
+        // run the aggregation queries
         AggregationStory aggregationTests = new AggregationStory(containerSources, queryHelper);
         addStory(aggregationTests);
+        
+        // run asynchronous queries
+        AsynchronousExecutionStory asynchronousStory = 
+            new AsynchronousExecutionStory(containerSources, fqpDeployment);
+        addStory(asynchronousStory);
     }
     
     
