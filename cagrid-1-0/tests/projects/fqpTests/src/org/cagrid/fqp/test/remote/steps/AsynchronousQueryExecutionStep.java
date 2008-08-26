@@ -29,7 +29,7 @@ public class AsynchronousQueryExecutionStep extends BaseQueryExecutionStep {
     /**
      * Controled by a property in jndi-config.xml
      */
-    public static final long RESOURCE_SWEEPER_DELAY = 10000;
+    public static final long RESOURCE_SWEEPER_DELAY = 2000;
     
     /**
      * Number of times to try the isProcessingComplete() method

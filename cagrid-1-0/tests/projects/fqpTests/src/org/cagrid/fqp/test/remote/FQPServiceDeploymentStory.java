@@ -3,6 +3,7 @@ package org.cagrid.fqp.test.remote;
 import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainer;
 import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainerFactory;
 import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainerType;
+import gov.nih.nci.cagrid.testing.system.deployment.steps.CopyServiceStep;
 import gov.nih.nci.cagrid.testing.system.deployment.steps.DeployServiceStep;
 import gov.nih.nci.cagrid.testing.system.deployment.steps.StartContainerStep;
 import gov.nih.nci.cagrid.testing.system.deployment.steps.UnpackContainerStep;
@@ -13,6 +14,7 @@ import java.io.File;
 import java.util.Vector;
 
 import org.cagrid.fqp.test.common.ServiceContainerSource;
+import org.cagrid.fqp.test.remote.steps.ChangeJndiSweeperDelayStep;
 
 /** 
  *  FQPServiceDeploymentStory
@@ -22,7 +24,7 @@ import org.cagrid.fqp.test.common.ServiceContainerSource;
  * @author David Ervin
  * 
  * @created Jul 15, 2008 12:46:02 PM
- * @version $Id: FQPServiceDeploymentStory.java,v 1.1 2008-07-16 17:02:19 dervin Exp $ 
+ * @version $Id: FQPServiceDeploymentStory.java,v 1.2 2008-08-26 17:54:13 dervin Exp $ 
  */
 public class FQPServiceDeploymentStory extends Story implements ServiceContainerSource {
     
@@ -66,8 +68,11 @@ public class FQPServiceDeploymentStory extends Story implements ServiceContainer
 
     protected Vector steps() {
         Vector<Step> steps = new Vector<Step>();
+        File tempFqpServiceDir = new File("tmp/TempFQP");
         steps.add(new UnpackContainerStep(fqpServiceContainer));
-        steps.add(new DeployServiceStep(fqpServiceContainer, fqpServiceDirectory.getAbsolutePath()));
+        steps.add(new CopyServiceStep(fqpServiceDirectory, tempFqpServiceDir));
+        steps.add(new ChangeJndiSweeperDelayStep(tempFqpServiceDir, 2000));
+        steps.add(new DeployServiceStep(fqpServiceContainer, tempFqpServiceDir.getAbsolutePath()));
         steps.add(new StartContainerStep(fqpServiceContainer));
         return steps;
     }
