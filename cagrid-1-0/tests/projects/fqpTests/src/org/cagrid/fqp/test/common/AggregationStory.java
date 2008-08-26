@@ -16,14 +16,9 @@ import org.cagrid.fqp.test.common.steps.AggregationStep;
  * @author David Ervin
  * 
  * @created Jun 30, 2008 12:48:50 PM
- * @version $Id: AggregationStory.java,v 1.3 2008-07-16 20:01:18 dervin Exp $ 
+ * @version $Id: AggregationStory.java,v 1.4 2008-08-26 20:05:55 dervin Exp $ 
  */
 public class AggregationStory extends Story {
-    
-    public static final String QUERIES_LOCATION = 
-        "resources" + File.separator + "queries" + File.separator;
-    public static final String GOLD_LOCATION = 
-        "resources" + File.separator + "gold" + File.separator + "aggregation" + File.separator;
     
     public static final String SERVICE_NAME_BASE = "cagrid/ExampleSdkService";
     
@@ -57,11 +52,11 @@ public class AggregationStory extends Story {
             }
         }
         
-        steps.add(new AggregationStep(QUERIES_LOCATION + "exampleAggregation1.xml",
-            GOLD_LOCATION + "exampleAggregation1_gold.xml",
+        steps.add(new AggregationStep(FQPTestingConstants.QUERIES_LOCATION + "exampleAggregation1.xml",
+            FQPTestingConstants.GOLD_LOCATION + "aggregation" + File.separator + "exampleAggregation1_gold.xml",
             queryHelper, serviceUrls));
-        steps.add(new AggregationStep(QUERIES_LOCATION + "exampleAggregation2.xml",
-            GOLD_LOCATION + "exampleAggregation2_gold.xml",
+        steps.add(new AggregationStep(FQPTestingConstants.QUERIES_LOCATION + "exampleAggregation2.xml",
+            FQPTestingConstants.GOLD_LOCATION + "aggregation" + File.separator + "exampleAggregation2_gold.xml",
             queryHelper, serviceUrls));
         return steps;
     }

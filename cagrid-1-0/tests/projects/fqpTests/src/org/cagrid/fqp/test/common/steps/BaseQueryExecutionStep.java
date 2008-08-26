@@ -12,9 +12,9 @@ import java.io.FileReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+import org.cagrid.fqp.test.common.FQPTestingConstants;
+
 public abstract class BaseQueryExecutionStep extends Step {
-    
-    public static final String CLIENT_WSDD = "/resources/wsdd/client-config.wsdd";
     
     private String queryFilename;
     private String goldFilename;
@@ -61,7 +61,7 @@ public abstract class BaseQueryExecutionStep extends Step {
             fail("Unable to read gold results file " + goldFilename);
         }
         try {
-            InputStream wsddStream = getClass().getResourceAsStream(CLIENT_WSDD);
+            InputStream wsddStream = getClass().getResourceAsStream(FQPTestingConstants.CLIENT_WSDD);
             assertNotNull("Could not locate client-config.wsdd", wsddStream);
             goldResults = (CQLQueryResults) Utils.deserializeObject(
                 new InputStreamReader(fis), CQLQueryResults.class, wsddStream);
@@ -91,7 +91,7 @@ public abstract class BaseQueryExecutionStep extends Step {
             fail("Unable to read gold results file " + goldFilename);
         }
         try {
-            InputStream wsddStream = getClass().getResourceAsStream(CLIENT_WSDD);
+            InputStream wsddStream = getClass().getResourceAsStream(FQPTestingConstants.CLIENT_WSDD);
             assertNotNull("Could not locate client-config.wsdd", wsddStream);
             goldResults = (DCQLQueryResultsCollection) Utils.deserializeObject(
                 new InputStreamReader(fis), DCQLQueryResultsCollection.class, wsddStream);
