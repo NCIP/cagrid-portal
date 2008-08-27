@@ -15,6 +15,7 @@ import org.apache.commons.logging.LogFactory;
 import org.cagrid.fqp.test.common.QueryResultsVerifier;
 import org.cagrid.fqp.test.common.UrlReplacer;
 import org.cagrid.fqp.test.common.steps.BaseQueryExecutionStep;
+import org.oasis.wsrf.lifetime.Destroy;
 import org.oasis.wsrf.lifetime.SetTerminationTime;
 import org.oasis.wsrf.lifetime.SetTerminationTimeResponse;
 
@@ -103,6 +104,42 @@ public class AsynchronousQueryExecutionStep extends BaseQueryExecutionStep {
         Thread.sleep(sleepTime);
         LOG.debug((System.currentTimeMillis() - currentTime) + " ms have passed while this thread slept");
 
+        // make sure its gone
+        try {
+            resultsClient.isProcessingComplete();
+            fail("DCQL Results resource should have been destroyed, but is still available!");
+        } catch (RemoteException e) {
+            // expected
+        }
+        
+        try {
+            resultsClient.getResults();
+            fail("DCQL Results resource should have been destroyed, but is still available!");
+        } catch (RemoteException ex) {
+            // expected
+        }
+        
+        // run the query again to create a new resource
+        resultsClient = 
+            fqpClient.executeAsynchronously(query);
+        
+        // wait for processing to wrap up
+        retries = 0;
+        processingComplete = false;
+        while (retries < PROCESSING_WAIT_RETRIES && !(processingComplete = resultsClient.isProcessingComplete())) {
+            Thread.sleep(PROCESSING_RETRY_DELAY);
+            System.out.println(".");
+            retries++;
+        }
+        assertTrue("Query processing did not complete after " + PROCESSING_WAIT_RETRIES + 
+            " retries of " + PROCESSING_RETRY_DELAY + "ms", processingComplete);
+        
+        // explicitly destroy the resource
+        resultsClient.destroy(new Destroy());
+        
+        // Sleep the current thread briefly
+        Thread.sleep(RESOURCE_SWEEPER_DELAY * 2);
+        
         // make sure its gone
         try {
             resultsClient.isProcessingComplete();
