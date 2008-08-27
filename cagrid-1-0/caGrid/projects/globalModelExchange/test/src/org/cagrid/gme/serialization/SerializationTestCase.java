@@ -8,7 +8,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.Reader;
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -119,8 +118,7 @@ public class SerializationTestCase extends TestCase {
             Set<XMLSchemaImportInformation> importList = new HashSet<XMLSchemaImportInformation>();
             XMLSchemaImportInformation ii = new XMLSchemaImportInformation();
             ii.setTargetNamespace(new XMLSchemaNamespace(s1.getTargetNamespace()));
-            ArrayList<XMLSchemaNamespace> s1_imports = new ArrayList<XMLSchemaNamespace>();
-            s1_imports.add(new XMLSchemaNamespace(s2.getTargetNamespace()));
+            Set<XMLSchemaNamespace> s1_imports = new HashSet<XMLSchemaNamespace>();
             s1_imports.add(new XMLSchemaNamespace(s2.getTargetNamespace()));
             ii.setImports(s1_imports);
             importList.add(ii);

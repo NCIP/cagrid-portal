@@ -39,7 +39,8 @@
 			<bind-xml name="gme:XMLSchema" location="xmlSchemaCollection" />
 		</field>
 		<field get-method="getImportInformation" set-method="setImportInformation"
-			name="importInformation" collection="set" type="org.cagrid.gme.domain.XMLSchemaImportInformation">
+			name="importInformation" collection="set"
+			type="org.cagrid.gme.domain.XMLSchemaImportInformation">
 			<bind-xml name="gme:XMLSchemaImportInformation" location="importInformationCollection" />
 		</field>
 	</class>
@@ -49,9 +50,9 @@
 			ns-prefix="gme" />
 		<field name="targetNamespace" type="org.cagrid.gme.domain.XMLSchemaNamespace"
 			get-method="getTargetNamespace" set-method="setTargetNamespace">
-			<bind-xml name="gme:XMLSchemaNamespace"/>
+			<bind-xml name="gme:XMLSchemaNamespace" />
 		</field>
-		<field name="imports" collection="arraylist"
+		<field name="imports" collection="set"
 			type="org.cagrid.gme.domain.XMLSchemaNamespace" get-method="getImports"
 			set-method="setImports">
 			<bind-xml name="gme:XMLSchemaNamespace" location="imports" />
