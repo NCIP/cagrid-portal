@@ -36,7 +36,9 @@ public class SerializationTestCase extends TestCase {
 
     public void testSerializeXMLSchema() {
         try {
-
+            // NOTE: These aren't really valid, and are lazily reused, but this
+            // test just tests that serialization is a schema-valid, lossless,
+            // two way process
             XMLSchemaDocument d1 = new XMLSchemaDocument();
             d1.setSchemaText("<xml>This is the d1 schema text</xml>");
             d1.setSystemID("d1");
@@ -82,6 +84,9 @@ public class SerializationTestCase extends TestCase {
     public void testSerializeXMLSchemaBundle() {
         try {
 
+            // NOTE: These aren't really valid, and are lazily reused, but this
+            // test just tests that serialization is a schema-valid, lossless,
+            // two way process
             XMLSchemaDocument d1 = new XMLSchemaDocument();
             d1.setSchemaText("<xml>This is the d1 schema text</xml>");
             d1.setSystemID("d1");
@@ -92,6 +97,10 @@ public class SerializationTestCase extends TestCase {
             d3.setSchemaText("<xml>This is the d3 schema text</xml>");
             d3.setSystemID("d3");
 
+            XMLSchemaDocument d4 = new XMLSchemaDocument();
+            d4.setSchemaText("<xml>This is the d4 schema text</xml>");
+            d4.setSystemID("d4");
+
             XMLSchema s1 = new XMLSchema();
             s1.setRootDocument(d1);
             s1.setTargetNamespace(new URI("gme://d1"));
@@ -101,27 +110,44 @@ public class SerializationTestCase extends TestCase {
             s1.setAdditionalSchemaDocuments(docs);
 
             XMLSchema s2 = new XMLSchema();
-            s2.setRootDocument(d1);
+            s2.setRootDocument(d2);
             s2.setTargetNamespace(new URI("gme://d2"));
             Set<XMLSchemaDocument> docs2 = new HashSet<XMLSchemaDocument>();
-            docs2.add(d2);
             docs2.add(d3);
-            s2.setAdditionalSchemaDocuments(docs);
+            docs2.add(d4);
+            s2.setAdditionalSchemaDocuments(docs2);
+
+            XMLSchema s3 = new XMLSchema();
+            s3.setRootDocument(d3);
+            s3.setTargetNamespace(new URI("gme://d3"));
+            Set<XMLSchemaDocument> docs3 = new HashSet<XMLSchemaDocument>();
+            docs3.add(d4);
+            s3.setAdditionalSchemaDocuments(docs3);
 
             XMLSchemaBundle bundle = new XMLSchemaBundle();
 
             Set<XMLSchema> xmlSchemaCollection = new HashSet<XMLSchema>();
             xmlSchemaCollection.add(s1);
             xmlSchemaCollection.add(s2);
+            xmlSchemaCollection.add(s3);
             bundle.setXMLSchemas(xmlSchemaCollection);
 
             Set<XMLSchemaImportInformation> importList = new HashSet<XMLSchemaImportInformation>();
             XMLSchemaImportInformation ii = new XMLSchemaImportInformation();
+
             ii.setTargetNamespace(new XMLSchemaNamespace(s1.getTargetNamespace()));
             Set<XMLSchemaNamespace> s1_imports = new HashSet<XMLSchemaNamespace>();
             s1_imports.add(new XMLSchemaNamespace(s2.getTargetNamespace()));
+            s1_imports.add(new XMLSchemaNamespace(s3.getTargetNamespace()));
             ii.setImports(s1_imports);
             importList.add(ii);
+
+            XMLSchemaImportInformation ii2 = new XMLSchemaImportInformation();
+            ii2.setTargetNamespace(new XMLSchemaNamespace(s2.getTargetNamespace()));
+            Set<XMLSchemaNamespace> s2_imports = new HashSet<XMLSchemaNamespace>();
+            s2_imports.add(new XMLSchemaNamespace(s3.getTargetNamespace()));
+            ii2.setImports(s2_imports);
+            importList.add(ii2);
 
             bundle.setImportInformation(importList);
 
