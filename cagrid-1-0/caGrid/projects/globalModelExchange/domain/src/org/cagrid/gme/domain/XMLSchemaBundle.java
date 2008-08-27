@@ -22,7 +22,7 @@ public class XMLSchemaBundle {
     // returned by the getters (which doesn't work when I return a new Set as a
     // view of the Map)
     private Set<XMLSchema> xmlSchemaCollection = new HashSet<XMLSchema>();
-    private Set<XMLSchemaImportInformation> importInformation;
+    private Set<XMLSchemaImportInformation> importInformation = new HashSet<XMLSchemaImportInformation>();;
 
 
     /**
@@ -121,13 +121,14 @@ public class XMLSchemaBundle {
      * @param targetNamespace
      *            the targetNamespace of the XMLSchema that is desired
      * @return the XMLSchema with the corresponding targetNamespace, or null, if
-     *         it does not exist in the Set
+     *         it does not exist in the Set (which means there are no imports
+     *         for it)
      */
     public XMLSchemaImportInformation getImportInformationForTargetNamespace(XMLSchemaNamespace targetNamespace) {
         assert this.importInformation != null;
 
         for (XMLSchemaImportInformation ii : this.importInformation) {
-            if (ii.getTargetNamespace().equals(targetNamespace.getURI())) {
+            if (ii.getTargetNamespace().equals(targetNamespace)) {
                 return ii;
             }
         }
