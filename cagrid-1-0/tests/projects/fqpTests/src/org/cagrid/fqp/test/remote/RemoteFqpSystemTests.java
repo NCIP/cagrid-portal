@@ -24,7 +24,7 @@ import org.cagrid.fqp.test.common.ServiceContainerSource;
  * @author David Ervin
  * 
  * @created Jul 10, 2008 10:57:40 AM
- * @version $Id: RemoteFqpSystemTests.java,v 1.3 2008-08-26 15:02:16 dervin Exp $ 
+ * @version $Id: RemoteFqpSystemTests.java,v 1.4 2008-08-27 14:51:03 dervin Exp $ 
  */
 public class RemoteFqpSystemTests extends StoryBook {
     
@@ -37,6 +37,7 @@ public class RemoteFqpSystemTests extends StoryBook {
     
     public RemoteFqpSystemTests() {
         super();
+        setName("Remote Federated Query Service System Tests");
     }
     
 

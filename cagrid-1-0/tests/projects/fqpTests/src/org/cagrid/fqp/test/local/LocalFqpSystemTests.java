@@ -24,7 +24,7 @@ import org.cagrid.fqp.test.common.ServiceContainerSource;
  * @author David Ervin
  * 
  * @created Jul 10, 2008 10:57:40 AM
- * @version $Id: LocalFqpSystemTests.java,v 1.3 2008-07-16 19:29:59 dervin Exp $ 
+ * @version $Id: LocalFqpSystemTests.java,v 1.4 2008-08-27 14:51:03 dervin Exp $ 
  */
 public class LocalFqpSystemTests extends StoryBook {
     
@@ -34,6 +34,7 @@ public class LocalFqpSystemTests extends StoryBook {
     
     public LocalFqpSystemTests() {
         super();
+        setName("Local Federated Query Engine System Tests");
     }
     
 
