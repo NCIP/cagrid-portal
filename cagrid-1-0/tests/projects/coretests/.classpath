@@ -153,9 +153,6 @@
 	<classpathentry kind="lib" path="ext/dependencies/test/jars/caGrid-evs-client-1.3-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/test/jars/caGrid-evs-common-1.3-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/test/jars/caGrid-evs-stubs-1.3-dev.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/test/jars/caGrid-fqp-client-1.3-dev.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/test/jars/caGrid-fqp-common-1.3-dev.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/test/jars/caGrid-fqp-stubs-1.3-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/test/jars/caGrid-gridgrouper-client-1.3-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/test/jars/caGrid-gridgrouper-common-1.3-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/test/jars/caGrid-gridgrouper-resources-1.3-dev.jar"/>
