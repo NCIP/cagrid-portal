@@ -15,6 +15,7 @@ import org.apache.commons.logging.LogFactory;
 import org.cagrid.fqp.test.common.AggregationStory;
 import org.cagrid.fqp.test.common.DataServiceDeploymentStory;
 import org.cagrid.fqp.test.common.FederatedQueryProcessorHelper;
+import org.cagrid.fqp.test.common.QueryStory;
 import org.cagrid.fqp.test.common.ServiceContainerSource;
 
 /** 
@@ -24,7 +25,7 @@ import org.cagrid.fqp.test.common.ServiceContainerSource;
  * @author David Ervin
  * 
  * @created Jul 10, 2008 10:57:40 AM
- * @version $Id: RemoteFqpSystemTests.java,v 1.4 2008-08-27 14:51:03 dervin Exp $ 
+ * @version $Id: RemoteFqpSystemTests.java,v 1.5 2008-08-27 16:16:28 dervin Exp $ 
  */
 public class RemoteFqpSystemTests extends StoryBook {
     
@@ -64,7 +65,7 @@ public class RemoteFqpSystemTests extends StoryBook {
         addStory(fqpDeployment);
         FederatedQueryProcessorHelper queryHelper = 
             new FederatedQueryProcessorHelper(fqpDeployment);
-                
+        
         // run the aggregation queries
         AggregationStory aggregationTests = new AggregationStory(containerSources, queryHelper);
         addStory(aggregationTests);
@@ -73,6 +74,10 @@ public class RemoteFqpSystemTests extends StoryBook {
         AsynchronousExecutionStory asynchronousStory = 
             new AsynchronousExecutionStory(containerSources, fqpDeployment);
         addStory(asynchronousStory);
+        
+        // run local standard queries
+        QueryStory queryTests = new QueryStory(containerSources, queryHelper);
+        addStory(queryTests);
     }
     
     

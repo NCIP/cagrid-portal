@@ -7,6 +7,8 @@ import gov.nih.nci.cagrid.fqp.stubs.types.FederatedQueryProcessingFault;
 
 import java.rmi.RemoteException;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.cagrid.fqp.test.common.FederatedQueryProcessorHelper;
 import org.cagrid.fqp.test.common.QueryResultsVerifier;
 
@@ -17,9 +19,11 @@ import org.cagrid.fqp.test.common.QueryResultsVerifier;
  * @author David Ervin
  * 
  * @created Jul 10, 2008 12:17:40 PM
- * @version $Id: AggregationStep.java,v 1.6 2008-08-26 20:05:55 dervin Exp $ 
+ * @version $Id: AggregationStep.java,v 1.7 2008-08-27 16:16:28 dervin Exp $ 
  */
 public class AggregationStep extends BaseQueryExecutionStep {
+    
+    private static Log LOG = LogFactory.getLog(AggregationStep.class);
     
     private FederatedQueryProcessorHelper queryProcessor;
     private String[] testServiceUrls;
@@ -33,9 +37,11 @@ public class AggregationStep extends BaseQueryExecutionStep {
     
 
     public void runStep() throws Throwable {
+        LOG.debug("Testing with query " + getQueryFilename());
         DCQLQuery query = deserializeQuery();
         query.setTargetServiceURL(testServiceUrls);
         CQLQueryResults testResults = performAggregation(query);
+        LOG.debug("Verifying against " + getGoldFilenname());
         CQLQueryResults goldResults = loadGoldCqlResults();
         QueryResultsVerifier.verifyCqlResults(testResults, goldResults);
     }

@@ -109,4 +109,14 @@ public abstract class BaseQueryExecutionStep extends Step {
         
         return goldResults;
     }
+    
+    
+    protected String getQueryFilename() {
+        return queryFilename;
+    }
+    
+    
+    protected String getGoldFilenname() {
+        return goldFilename;
+    }
 }
