@@ -1,17 +1,30 @@
 package org.cagrid.fqp.test.common;
 
-import java.util.LinkedList;
-import java.util.List;
-
+import gov.nih.nci.cagrid.cqlresultset.CQLObjectResult;
 import gov.nih.nci.cagrid.cqlresultset.CQLQueryResults;
 import gov.nih.nci.cagrid.data.utilities.CQLQueryResultsIterator;
 import gov.nih.nci.cagrid.dcqlresult.DCQLQueryResultsCollection;
+import gov.nih.nci.cagrid.dcqlresult.DCQLResult;
+
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+
 import junit.framework.Assert;
 
 public class QueryResultsVerifier extends Assert {
 
     public static void verifyDcqlResults(DCQLQueryResultsCollection test, DCQLQueryResultsCollection gold) {
+        // check number of DCQL results
+        assertEquals("Unexpected number of DCQL results", 
+            gold.getDCQLResult().length, test.getDCQLResult().length);
         
+        // pile the results all together as CQL query results
+        CQLQueryResults testCqlResults = aggregateDcqlResults(test);
+        CQLQueryResults goldCqlResults = aggregateDcqlResults(gold);
+        
+        // verify them as CQL results
+        verifyCqlResults(testCqlResults, goldCqlResults);
     }
     
     
@@ -42,5 +55,31 @@ public class QueryResultsVerifier extends Assert {
         for (Object goldObject : testItems) {
             assertTrue("Expected Gold data object not found in test data", testItems.contains(goldObject));
         }
+    }
+    
+    
+    private static CQLQueryResults aggregateDcqlResults(DCQLQueryResultsCollection results) {
+        CQLQueryResults cqlResults = new CQLQueryResults();
+        List<CQLObjectResult> allObjectResults = new LinkedList<CQLObjectResult>();
+        String targetName = null;
+        for (DCQLResult result : results.getDCQLResult()) {
+            CQLQueryResults singleCqlResult = result.getCQLQueryResultCollection();
+            if (targetName == null) {
+                targetName = singleCqlResult.getTargetClassname();
+            } else {
+                assertEquals("Unexpected result type found in DCQL", targetName, singleCqlResult.getTargetClassname());
+            }
+            CQLObjectResult[] objectResults = singleCqlResult.getObjectResult();
+            assertNotNull("Data service " + result.getTargetServiceURL() + " returned non-object results!", objectResults);
+            Collections.addAll(allObjectResults, objectResults);
+        }
+        
+        // generate the aggregate query result
+        CQLQueryResults aggregate = new CQLQueryResults();
+        CQLObjectResult[] resultArray = new CQLObjectResult[allObjectResults.size()];
+        allObjectResults.toArray(resultArray);
+        aggregate.setObjectResult(resultArray);
+        aggregate.setTargetClassname(targetName);
+        return cqlResults;
     }
 }

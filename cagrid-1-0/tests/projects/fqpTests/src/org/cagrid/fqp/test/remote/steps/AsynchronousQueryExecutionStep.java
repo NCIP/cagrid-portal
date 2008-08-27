@@ -12,6 +12,7 @@ import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.cagrid.fqp.test.common.QueryResultsVerifier;
 import org.cagrid.fqp.test.common.UrlReplacer;
 import org.cagrid.fqp.test.common.steps.BaseQueryExecutionStep;
 import org.oasis.wsrf.lifetime.SetTerminationTime;
@@ -140,6 +141,6 @@ public class AsynchronousQueryExecutionStep extends BaseQueryExecutionStep {
     
     private void verifyQueryResults(DCQLQueryResultsCollection testResults, DCQLQueryResultsCollection goldResults) {
         LOG.debug("Verifying DCQL query results against gold");
-        // TODO: implement me
+        QueryResultsVerifier.verifyDcqlResults(testResults, goldResults);
     }
 }
