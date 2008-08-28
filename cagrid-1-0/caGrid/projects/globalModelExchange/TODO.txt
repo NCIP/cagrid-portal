@@ -1,7 +1,7 @@
 
 what to return for getNamespaces?
 ideally return java.net.URI in API, but need to make it anyURI in WSDL, and not really a way to remap the standard schema NS to that package (don't want to do it for all types/classes)
---currently planning to use SchemaNamespace[]
+--currently planning to use XMLSchemaNamespace[]
 
 service interface:
 ==========
@@ -11,19 +11,19 @@ publishSchemas(XMLSchema[])
 
 ACCESS
 -----
-XMLSchema getSchema(SchemaNamespace)
-SchemaNamespace[] getSchemaNamespaces()
-?? getSchemaBundle(SchemaNamespace)  (look at creating client utility for building up digraph using this http://jung.sourceforge.net)
+XMLSchema getXMLSchema(XMLSchemaNamespace)
+XMLSchemaNamespace[] getXMLSchemaNamespaces()
+XMLSchemaBundle getXMLSchemaAndDependencies(XMLSchemaNamespace)  (look at creating client utility for building up digraph using this http://jung.sourceforge.net)
 
 DELETE
 -----
-deleteSchemas(SchemaNamespace[])
+deleteXMLSchemas(XMLSchemaNamespace[])
 
 
 OTHER?
 -----
-SchemaNamespace[] getReferencingSchemaNamespaces(SchemaNamespace)
-SchemaNamespace[] getReferencedSchemaNamespaces(SchemaNamespace)
+XMLSchemaNamespace[] getImportedXMLSchemaNamespaces(XMLSchemaNamespace)
+XMLSchemaNamespace[] getImportingXMLSchemaNamespaces(XMLSchemaNamespace)
 
 
 ADMIN
