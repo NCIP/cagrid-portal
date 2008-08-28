@@ -54,6 +54,11 @@
 				<include name="*.jar" />
 			</fileset>
 		</copy>
+		<copy todir="${build.lib.dir}">
+			<fileset dir="${ext.patched.jars.dir}">
+				<include name="cog-jglobus.jar" />
+			</fileset>
+		</copy>
 		<copy overwrite="true" toDir="tmp/etc">
 			<fileset file="${sync.description.file}" />
 		</copy>
