@@ -17,6 +17,7 @@ import gov.nih.nci.system.applicationservice.ApplicationServiceProvider;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -37,7 +38,7 @@ import org.apache.commons.logging.LogFactory;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created May 2, 2006 
- * @version $Id: HQLCoreQueryProcessor.java,v 1.10 2008-04-17 15:25:30 dervin Exp $ 
+ * @version $Id: HQLCoreQueryProcessor.java,v 1.11 2008-08-28 14:07:51 dervin Exp $ 
  */
 public class HQLCoreQueryProcessor extends LazyCQLQueryProcessor {
     // parameter which determines the remote appservice URL
@@ -241,16 +242,16 @@ public class HQLCoreQueryProcessor extends LazyCQLQueryProcessor {
 	
 	private Object accessNamedProperty(Object o, String name) throws Exception {
 		Field namedField = ClassAccessUtilities.getNamedField(o.getClass(), name);
-		if (namedField != null) {
+		if (namedField != null && Modifier.isPublic(namedField.getModifiers())) {
 			return namedField.get(o);
 		}
 		// no named field?  Check for a getter
 		Method getter = ClassAccessUtilities.getNamedGetterMethod(o.getClass(), name);
-		if (getter != null) {
+		if (getter != null && Modifier.isPublic(getter.getModifiers())) {
 			return getter.invoke(o, new Object[] {});
 		}
 		// getting here means the field was not found
-		throw new NoSuchFieldException("No field " + name + " found on " + o.getClass().getName());
+		throw new NoSuchFieldException("No accessable field " + name + " found on " + o.getClass().getName());
 	}
 	
 	

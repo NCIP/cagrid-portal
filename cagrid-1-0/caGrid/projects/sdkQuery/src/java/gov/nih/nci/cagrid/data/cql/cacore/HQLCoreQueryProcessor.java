@@ -18,6 +18,7 @@ import gov.nih.nci.system.comm.client.ClientSession;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -205,17 +206,17 @@ public class HQLCoreQueryProcessor extends CQLQueryProcessor {
 	
 	
 	private Object accessNamedProperty(Object o, String name) throws Exception {
-		Field namedField = ClassAccessUtilities.getNamedField(o.getClass(), name);
-		if (namedField != null) {
-			return namedField.get(o);
-		}
-		// no named field?  Check for a getter
-		Method getter = ClassAccessUtilities.getNamedGetterMethod(o.getClass(), name);
-		if (getter != null) {
-			return getter.invoke(o, new Object[] {});
-		}
-		// getting here means the field was not found
-		throw new NoSuchFieldException("No field " + name + " found on " + o.getClass().getName());
+        Field namedField = ClassAccessUtilities.getNamedField(o.getClass(), name);
+        if (namedField != null && Modifier.isPublic(namedField.getModifiers())) {
+            return namedField.get(o);
+        }
+        // no named field?  Check for a getter
+        Method getter = ClassAccessUtilities.getNamedGetterMethod(o.getClass(), name);
+        if (getter != null && Modifier.isPublic(getter.getModifiers())) {
+            return getter.invoke(o, new Object[] {});
+        }
+        // getting here means the field was not found
+        throw new NoSuchFieldException("No accessable field " + name + " found on " + o.getClass().getName());
 	}
 	
 	
