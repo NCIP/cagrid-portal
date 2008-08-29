@@ -23,7 +23,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
-import java.util.List;
 
 import javax.swing.ButtonModel;
 import javax.swing.JButton;
@@ -37,7 +36,6 @@ import javax.swing.event.DocumentEvent;
 import org.cagrid.grape.utils.CompositeErrorDialog;
 
 import com.jgoodies.validation.Severity;
-import com.jgoodies.validation.ValidationMessage;
 import com.jgoodies.validation.ValidationResult;
 import com.jgoodies.validation.ValidationResultModel;
 import com.jgoodies.validation.message.SimpleValidationMessage;
@@ -52,7 +50,7 @@ import com.jgoodies.validation.view.ValidationComponentUtils;
  * @author David Ervin
  * 
  * @created Nov 27, 2007 4:50:32 PM
- * @version $Id: QueryProcessorConfigurationPanel.java,v 1.13 2008-04-08 15:53:25 dervin Exp $ 
+ * @version $Id: QueryProcessorConfigurationPanel.java,v 1.14 2008-08-29 19:19:33 dervin Exp $ 
  */
 public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
     // keys for validation
@@ -222,9 +220,7 @@ public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
             applicationNameTextField.getDocument().addDocumentListener(documentChangeListener);
             applicationNameTextField.getDocument().addDocumentListener(new DocumentChangeAdapter() {
                 public void documentEdited(DocumentEvent e) {
-                    if (componentIsValid(KEY_APPLICATION_NAME)) {
-                        configurationStep.setApplicationName(getApplicationNameTextField().getText());
-                    }
+                    configurationStep.setApplicationName(getApplicationNameTextField().getText());
                 }
             });
         }
@@ -587,9 +583,7 @@ public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
             hostNameTextField.getDocument().addDocumentListener(documentChangeListener);
             hostNameTextField.getDocument().addDocumentListener(new DocumentChangeAdapter() {
                 public void documentEdited(DocumentEvent e) {
-                    if (componentIsValid(KEY_HOST_NAME)) {
-                        configurationStep.setHostName(getHostNameTextField().getText());
-                    }
+                    configurationStep.setHostName(getHostNameTextField().getText());
                 }
             });
         }
@@ -622,8 +616,10 @@ public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
             portTextField.getDocument().addDocumentListener(documentChangeListener);
             portTextField.getDocument().addDocumentListener(new DocumentChangeAdapter() {
                 public void documentEdited(DocumentEvent e) {
-                    if (componentIsValid(KEY_PORT_NUMBER)) {
+                    try {
                         configurationStep.setHostPort(Integer.valueOf(portTextField.getText()));
+                    } catch (Exception ex) {
+                        // this will happen if the value isn't an integer
                     }
                 }
             });
@@ -1087,24 +1083,6 @@ public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
     private void updateComponentTreeSeverity() {
         ValidationComponentUtils.updateComponentTreeMandatoryAndBlankBackground(this);
         ValidationComponentUtils.updateComponentTreeSeverityBackground(this, validationModel.getResult());
-    }
-    
-    
-    private boolean componentIsValid(String componentKey) {
-        boolean valid = true;
-        if (validationModel.getResult() != null
-            && validationModel.getResult().getMessages() != null) {
-            List<ValidationMessage> messages = validationModel.getResult().getMessages();
-            for (ValidationMessage message : messages) {
-                if (message.key().equals(componentKey)) {
-                    if (!Severity.OK.equals(message.severity())) {
-                        valid = false;
-                        break;
-                    }
-                }
-            }
-        }
-        return valid;
     }
     
     
