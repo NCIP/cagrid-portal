@@ -50,6 +50,8 @@
     <!-- Specific caGrid Service Dependencies -->
     <dependency rev="latest.integration" org="caGrid" name="data" conf="service->utils"/>
     <dependency rev="latest.integration" org="caGrid" name="cql" conf="service->cql,cql-schemas"/>
+    <dependency rev="latest.intrgration" org="caGrid" name="wsEnum" conf="service->default"/>
+    <dependency rev="latest.integration" org="caGrid" name="transfer" conf="service->stubs;service->common;service->service"/>
     
     <!-- Extenernal Dependencies -->
     <dependency rev="1.0" org="jdom" name="jdom" conf="service->*"/>
