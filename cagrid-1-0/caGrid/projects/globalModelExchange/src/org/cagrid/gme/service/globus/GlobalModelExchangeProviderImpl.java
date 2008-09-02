@@ -26,9 +26,45 @@ public class GlobalModelExchangeProviderImpl{
 	}
 	
 
-    public org.cagrid.gme.stubs.PublishSchemasResponse publishSchemas(org.cagrid.gme.stubs.PublishSchemasRequest params) throws RemoteException {
-    org.cagrid.gme.stubs.PublishSchemasResponse boxedResult = new org.cagrid.gme.stubs.PublishSchemasResponse();
-    impl.publishSchemas(params.getSchemas().getXMLSchema());
+    public org.cagrid.gme.stubs.PublishXMLSchemasResponse publishXMLSchemas(org.cagrid.gme.stubs.PublishXMLSchemasRequest params) throws RemoteException {
+    org.cagrid.gme.stubs.PublishXMLSchemasResponse boxedResult = new org.cagrid.gme.stubs.PublishXMLSchemasResponse();
+    impl.publishXMLSchemas(params.getSchemas().getXMLSchema());
+    return boxedResult;
+  }
+
+    public org.cagrid.gme.stubs.GetXMLSchemaResponse getXMLSchema(org.cagrid.gme.stubs.GetXMLSchemaRequest params) throws RemoteException {
+    org.cagrid.gme.stubs.GetXMLSchemaResponse boxedResult = new org.cagrid.gme.stubs.GetXMLSchemaResponse();
+    boxedResult.setXMLSchema(impl.getXMLSchema(params.getTargetNamespace().getXMLSchemaNamespace()));
+    return boxedResult;
+  }
+
+    public org.cagrid.gme.stubs.GetXMLSchemaNamespacesResponse getXMLSchemaNamespaces(org.cagrid.gme.stubs.GetXMLSchemaNamespacesRequest params) throws RemoteException {
+    org.cagrid.gme.stubs.GetXMLSchemaNamespacesResponse boxedResult = new org.cagrid.gme.stubs.GetXMLSchemaNamespacesResponse();
+    boxedResult.setXMLSchemaNamespace(impl.getXMLSchemaNamespaces());
+    return boxedResult;
+  }
+
+    public org.cagrid.gme.stubs.GetXMLSchemaAndDependenciesResponse getXMLSchemaAndDependencies(org.cagrid.gme.stubs.GetXMLSchemaAndDependenciesRequest params) throws RemoteException {
+    org.cagrid.gme.stubs.GetXMLSchemaAndDependenciesResponse boxedResult = new org.cagrid.gme.stubs.GetXMLSchemaAndDependenciesResponse();
+    boxedResult.setXMLSchemaBundle(impl.getXMLSchemaAndDependencies(params.getTargetNamespace().getXMLSchemaNamespace()));
+    return boxedResult;
+  }
+
+    public org.cagrid.gme.stubs.DeleteXMLSchemasResponse deleteXMLSchemas(org.cagrid.gme.stubs.DeleteXMLSchemasRequest params) throws RemoteException {
+    org.cagrid.gme.stubs.DeleteXMLSchemasResponse boxedResult = new org.cagrid.gme.stubs.DeleteXMLSchemasResponse();
+    impl.deleteXMLSchemas(params.getTargetNamespaces().getXMLSchemaNamespace());
+    return boxedResult;
+  }
+
+    public org.cagrid.gme.stubs.GetImportedXMLSchemaNamespacesResponse getImportedXMLSchemaNamespaces(org.cagrid.gme.stubs.GetImportedXMLSchemaNamespacesRequest params) throws RemoteException {
+    org.cagrid.gme.stubs.GetImportedXMLSchemaNamespacesResponse boxedResult = new org.cagrid.gme.stubs.GetImportedXMLSchemaNamespacesResponse();
+    boxedResult.setXMLSchemaNamespace(impl.getImportedXMLSchemaNamespaces(params.getTargetNamespace().getXMLSchemaNamespace()));
+    return boxedResult;
+  }
+
+    public org.cagrid.gme.stubs.GetImportingXMLSchemaNamespacesResponse getImportingXMLSchemaNamespaces(org.cagrid.gme.stubs.GetImportingXMLSchemaNamespacesRequest params) throws RemoteException {
+    org.cagrid.gme.stubs.GetImportingXMLSchemaNamespacesResponse boxedResult = new org.cagrid.gme.stubs.GetImportingXMLSchemaNamespacesResponse();
+    boxedResult.setXMLSchemaNamespace(impl.getImportingXMLSchemaNamespaces(params.getTargetNamespace().getXMLSchemaNamespace()));
     return boxedResult;
   }
 

@@ -1,3 +1,6 @@
+Need to add custom faults (NoSuchSchema, etc)
+
+
 
 what to return for getNamespaces?
 ideally return java.net.URI in API, but need to make it anyURI in WSDL, and not really a way to remap the standard schema NS to that package (don't want to do it for all types/classes)
@@ -7,12 +10,12 @@ service interface:
 ==========
 INSERT/UPDATE
 -----
-publishSchemas(XMLSchema[])
+publishSchemas(XMLSchema[])  (adds schemas which aren't registered, and updates any existing entries)
 
 ACCESS
 -----
-XMLSchema getXMLSchema(XMLSchemaNamespace)
-XMLSchemaNamespace[] getXMLSchemaNamespaces()
+XMLSchema getXMLSchema(XMLSchemaNamespace)  (won't include any imported namespaces, etc)
+XMLSchemaNamespace[] getXMLSchemaNamespaces()  (returns the registered targetNamespaces)
 XMLSchemaBundle getXMLSchemaAndDependencies(XMLSchemaNamespace)  (look at creating client utility for building up digraph using this http://jung.sourceforge.net)
 
 DELETE

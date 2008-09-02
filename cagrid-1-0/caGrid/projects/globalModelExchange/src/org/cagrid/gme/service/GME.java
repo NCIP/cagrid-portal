@@ -29,9 +29,6 @@ import org.cagrid.gme.stubs.types.SchemaAlreadyExists;
 import org.globus.wsrf.utils.FaultHelper;
 
 
-/**
- * @author oster
- */
 public class GME {
     protected static Log LOG = LogFactory.getLog(GME.class.getName());
     protected SchemaPersistenceI schemaPersistence = null;

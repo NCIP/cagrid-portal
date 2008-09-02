@@ -97,17 +97,57 @@
      <ns4:ImportInformation fromIntroduce="false" inputMessage="ns8:QueryResourcePropertiesRequest" namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" outputMessage="ns8:QueryResourcePropertiesResponse" packageName="org.oasis.wsrf.properties" portTypeName="QueryResourceProperties" wsdlFile="../wsrf/properties/WS-ResourceProperties.wsdl" xmlns:ns8="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl"/>
      <ns4:ProviderInformation providerClass="QueryRPProvider"/>
     </ns4:Method>
-    <ns4:Method description="Publishes the provided schemas, replacing existing versions as necessary." isImported="false" isProvided="false" name="publishSchemas" xsi:type="ns4:MethodType">
+    <ns4:Method description="Publishes the provided schemas, replacing existing versions as necessary." isImported="false" isProvided="false" name="publishXMLSchemas" xsi:type="ns4:MethodType">
      <ns4:Inputs>
       <ns4:Input qName="ns9:XMLSchema" description="The schemas to publish" isArray="true" name="schemas" xmlns:ns9="gme://gme.cagrid.org/2.0/GlobalModelExchange/domain"/>
      </ns4:Inputs>
      <ns4:Output qName="void" description="" isArray="false"/>
      <ns4:Exceptions/>
     </ns4:Method>
+    <ns4:Method description="Returns a single XML Schema, not including any referenced (i.e. imported) XML Schemas" isImported="false" isProvided="false" name="getXMLSchema" xsi:type="ns4:MethodType">
+     <ns4:Inputs>
+      <ns4:Input qName="ns10:XMLSchemaNamespace" description="A namespace representing the targetNamespace of the desired XMLSchema" isArray="false" name="targetNamespace" xmlns:ns10="gme://gme.cagrid.org/2.0/GlobalModelExchange/domain"/>
+     </ns4:Inputs>
+     <ns4:Output qName="ns11:XMLSchema" description="The XMLSchema with a targetNamespace equal to the given XMLSchemaNamespace" isArray="false" xmlns:ns11="gme://gme.cagrid.org/2.0/GlobalModelExchange/domain"/>
+     <ns4:Exceptions/>
+    </ns4:Method>
+    <ns4:Method description="Returns the targetNamespaces (represented by XMLSchemaNamespaces) of all published XMLSchemas" isImported="false" isProvided="false" name="getXMLSchemaNamespaces" xsi:type="ns4:MethodType">
+     <ns4:Inputs/>
+     <ns4:Output qName="ns12:XMLSchemaNamespace" description="the targetNamespaces (represented by XMLSchemaNamespaces) of all published XMLSchemas " isArray="false" xmlns:ns12="gme://gme.cagrid.org/2.0/GlobalModelExchange/domain"/>
+     <ns4:Exceptions/>
+    </ns4:Method>
+    <ns4:Method description="Returns an XMLSchemaBundle containing the transitive closure of the XMLSchema with the targetNamespace of the given XMLSchemaNamespace and every XMLSchema it imports (as well as each imported XMLSchema's imports)" isImported="false" isProvided="false" name="getXMLSchemaAndDependencies" xsi:type="ns4:MethodType">
+     <ns4:Inputs>
+      <ns4:Input qName="ns13:XMLSchemaNamespace" description="The targetNamespace of the XMLSchema of interest" isArray="false" name="targetNamespace" xmlns:ns13="gme://gme.cagrid.org/2.0/GlobalModelExchange/domain"/>
+     </ns4:Inputs>
+     <ns4:Output qName="ns14:XMLSchemaBundle" description="an XMLSchemaBundle containing the transitive closure of the XMLSchema with the targetNamespace of the given XMLSchemaNamespace and every XMLSchema it imports (as well as each imported XMLSchema's imports)" isArray="false" xmlns:ns14="gme://gme.cagrid.org/2.0/GlobalModelExchange/domain"/>
+     <ns4:Exceptions/>
+    </ns4:Method>
+    <ns4:Method description="Deletes the XMLSchemas with targetNamespaces identified by the given XMLSchemaNamespace array" isImported="false" isProvided="false" name="deleteXMLSchemas" xsi:type="ns4:MethodType">
+     <ns4:Inputs>
+      <ns4:Input qName="ns15:XMLSchemaNamespace" description="The targetNamespaces of the XMLSchemas to delete" isArray="true" name="targetNamespaces" xmlns:ns15="gme://gme.cagrid.org/2.0/GlobalModelExchange/domain"/>
+     </ns4:Inputs>
+     <ns4:Output qName="void" description="" isArray="false"/>
+     <ns4:Exceptions/>
+    </ns4:Method>
+    <ns4:Method description="Returns the targetNamespaces of all the XMLSchemas which are imported by the given XMLSchema (identififed by its targetNamespace)" isImported="false" isProvided="false" name="getImportedXMLSchemaNamespaces" xsi:type="ns4:MethodType">
+     <ns4:Inputs>
+      <ns4:Input qName="ns16:XMLSchemaNamespace" description="The targetNamespace of the XMLSchema of interest" isArray="false" name="targetNamespace" xmlns:ns16="gme://gme.cagrid.org/2.0/GlobalModelExchange/domain"/>
+     </ns4:Inputs>
+     <ns4:Output qName="ns17:XMLSchemaNamespace" description="The imported XMLSchemas' targetNamespaces" isArray="true" xmlns:ns17="gme://gme.cagrid.org/2.0/GlobalModelExchange/domain"/>
+     <ns4:Exceptions/>
+    </ns4:Method>
+    <ns4:Method description="Returns all the targetNamespaces of the XMLSchemas which import the given XMLSchema, identified its targetNamespace" isImported="false" isProvided="false" name="getImportingXMLSchemaNamespaces" xsi:type="ns4:MethodType">
+     <ns4:Inputs>
+      <ns4:Input qName="ns18:XMLSchemaNamespace" description="The targetNamespace of the XMLSchema of interest" isArray="false" name="targetNamespace" xmlns:ns18="gme://gme.cagrid.org/2.0/GlobalModelExchange/domain"/>
+     </ns4:Inputs>
+     <ns4:Output qName="ns19:XMLSchemaNamespace" description="all the targetNamespaces of the XMLSchemas which import the given XMLSchema, identified its targetNamespace" isArray="true" xmlns:ns19="gme://gme.cagrid.org/2.0/GlobalModelExchange/domain"/>
+     <ns4:Exceptions/>
+    </ns4:Method>
    </ns4:Methods>
-   <ns10:ResourcePropertiesList xsi:type="ns10:ResourcePropertiesListType" xmlns:ns10="gme://gov.nih.nci.cagrid.introduce/1/Resources">
-    <ns10:ResourceProperty qName="ns11:ServiceMetadata" description="caGrid standard Service Metadata" fileLocation="serviceMetadata.xml" populateFromFile="true" register="true" xsi:type="ns10:ResourcePropertyType" xmlns:ns11="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"/>
-   </ns10:ResourcePropertiesList>
+   <ns20:ResourcePropertiesList xsi:type="ns20:ResourcePropertiesListType" xmlns:ns20="gme://gov.nih.nci.cagrid.introduce/1/Resources">
+    <ns20:ResourceProperty qName="ns21:ServiceMetadata" description="caGrid standard Service Metadata" fileLocation="serviceMetadata.xml" populateFromFile="true" register="true" xsi:type="ns20:ResourcePropertyType" xmlns:ns21="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"/>
+   </ns20:ResourcePropertiesList>
    <ns3:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">The Global Model Exchange (GME) acts as an authoritative source
         for XML Schemas, providing a robust type management system for
         use in Grids and other XML-based environments.</ns3:description>
@@ -120,11 +160,11 @@
    </ns3:ResourceFrameworkOptions>
   </ns3:Service>
  </ns3:Services>
- <ns12:Extensions xsi:type="ns12:ExtensionsType" xmlns:ns12="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <ns12:Extension name="cagrid_metadata" version="1.2" xsi:type="ns12:ExtensionType"/>
- </ns12:Extensions>
- <ns13:ServiceProperties xmlns:ns13="gme://gov.nih.nci.cagrid.introduce/1/Property">
-  <ns13:Property description="The location (relative to the service's ETC location) of the XML configuration file" isFromETC="true" key="gmeConfigurationFile" value="applicationContext-gme.xml"/>
-  <ns13:Property description="The location (relative to the service's ETC location) of the properties file containing information about the database and other settings" isFromETC="true" key="gmePropertiesFile" value="gme.properties"/>
- </ns13:ServiceProperties>
+ <ns22:Extensions xsi:type="ns22:ExtensionsType" xmlns:ns22="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ns22:Extension name="cagrid_metadata" version="1.2" xsi:type="ns22:ExtensionType"/>
+ </ns22:Extensions>
+ <ns23:ServiceProperties xmlns:ns23="gme://gov.nih.nci.cagrid.introduce/1/Property">
+  <ns23:Property description="The location (relative to the service's ETC location) of the XML configuration file" isFromETC="true" key="gmeConfigurationFile" value="applicationContext-gme.xml"/>
+  <ns23:Property description="The location (relative to the service's ETC location) of the properties file containing information about the database and other settings" isFromETC="true" key="gmePropertiesFile" value="gme.properties"/>
+ </ns23:ServiceProperties>
 </ns1:ServiceDescription>

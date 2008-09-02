@@ -107,6 +107,85 @@ public class GlobalModelExchangeClient extends ServiceSecurityClient implements 
         }
     }
 
+  public void publishXMLSchemas(org.cagrid.gme.domain.XMLSchema[] schemas) throws RemoteException {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"publishXMLSchemas");
+    org.cagrid.gme.stubs.PublishXMLSchemasRequest params = new org.cagrid.gme.stubs.PublishXMLSchemasRequest();
+    org.cagrid.gme.stubs.PublishXMLSchemasRequestSchemas schemasContainer = new org.cagrid.gme.stubs.PublishXMLSchemasRequestSchemas();
+    schemasContainer.setXMLSchema(schemas);
+    params.setSchemas(schemasContainer);
+    org.cagrid.gme.stubs.PublishXMLSchemasResponse boxedResult = portType.publishXMLSchemas(params);
+    }
+  }
+
+  public org.cagrid.gme.domain.XMLSchema getXMLSchema(org.cagrid.gme.domain.XMLSchemaNamespace targetNamespace) throws RemoteException {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"getXMLSchema");
+    org.cagrid.gme.stubs.GetXMLSchemaRequest params = new org.cagrid.gme.stubs.GetXMLSchemaRequest();
+    org.cagrid.gme.stubs.GetXMLSchemaRequestTargetNamespace targetNamespaceContainer = new org.cagrid.gme.stubs.GetXMLSchemaRequestTargetNamespace();
+    targetNamespaceContainer.setXMLSchemaNamespace(targetNamespace);
+    params.setTargetNamespace(targetNamespaceContainer);
+    org.cagrid.gme.stubs.GetXMLSchemaResponse boxedResult = portType.getXMLSchema(params);
+    return boxedResult.getXMLSchema();
+    }
+  }
+
+  public org.cagrid.gme.domain.XMLSchemaNamespace getXMLSchemaNamespaces() throws RemoteException {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"getXMLSchemaNamespaces");
+    org.cagrid.gme.stubs.GetXMLSchemaNamespacesRequest params = new org.cagrid.gme.stubs.GetXMLSchemaNamespacesRequest();
+    org.cagrid.gme.stubs.GetXMLSchemaNamespacesResponse boxedResult = portType.getXMLSchemaNamespaces(params);
+    return boxedResult.getXMLSchemaNamespace();
+    }
+  }
+
+  public org.cagrid.gme.domain.XMLSchemaBundle getXMLSchemaAndDependencies(org.cagrid.gme.domain.XMLSchemaNamespace targetNamespace) throws RemoteException {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"getXMLSchemaAndDependencies");
+    org.cagrid.gme.stubs.GetXMLSchemaAndDependenciesRequest params = new org.cagrid.gme.stubs.GetXMLSchemaAndDependenciesRequest();
+    org.cagrid.gme.stubs.GetXMLSchemaAndDependenciesRequestTargetNamespace targetNamespaceContainer = new org.cagrid.gme.stubs.GetXMLSchemaAndDependenciesRequestTargetNamespace();
+    targetNamespaceContainer.setXMLSchemaNamespace(targetNamespace);
+    params.setTargetNamespace(targetNamespaceContainer);
+    org.cagrid.gme.stubs.GetXMLSchemaAndDependenciesResponse boxedResult = portType.getXMLSchemaAndDependencies(params);
+    return boxedResult.getXMLSchemaBundle();
+    }
+  }
+
+  public void deleteXMLSchemas(org.cagrid.gme.domain.XMLSchemaNamespace[] targetNamespaces) throws RemoteException {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"deleteXMLSchemas");
+    org.cagrid.gme.stubs.DeleteXMLSchemasRequest params = new org.cagrid.gme.stubs.DeleteXMLSchemasRequest();
+    org.cagrid.gme.stubs.DeleteXMLSchemasRequestTargetNamespaces targetNamespacesContainer = new org.cagrid.gme.stubs.DeleteXMLSchemasRequestTargetNamespaces();
+    targetNamespacesContainer.setXMLSchemaNamespace(targetNamespaces);
+    params.setTargetNamespaces(targetNamespacesContainer);
+    org.cagrid.gme.stubs.DeleteXMLSchemasResponse boxedResult = portType.deleteXMLSchemas(params);
+    }
+  }
+
+  public org.cagrid.gme.domain.XMLSchemaNamespace[] getImportedXMLSchemaNamespaces(org.cagrid.gme.domain.XMLSchemaNamespace targetNamespace) throws RemoteException {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"getImportedXMLSchemaNamespaces");
+    org.cagrid.gme.stubs.GetImportedXMLSchemaNamespacesRequest params = new org.cagrid.gme.stubs.GetImportedXMLSchemaNamespacesRequest();
+    org.cagrid.gme.stubs.GetImportedXMLSchemaNamespacesRequestTargetNamespace targetNamespaceContainer = new org.cagrid.gme.stubs.GetImportedXMLSchemaNamespacesRequestTargetNamespace();
+    targetNamespaceContainer.setXMLSchemaNamespace(targetNamespace);
+    params.setTargetNamespace(targetNamespaceContainer);
+    org.cagrid.gme.stubs.GetImportedXMLSchemaNamespacesResponse boxedResult = portType.getImportedXMLSchemaNamespaces(params);
+    return boxedResult.getXMLSchemaNamespace();
+    }
+  }
+
+  public org.cagrid.gme.domain.XMLSchemaNamespace[] getImportingXMLSchemaNamespaces(org.cagrid.gme.domain.XMLSchemaNamespace targetNamespace) throws RemoteException {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"getImportingXMLSchemaNamespaces");
+    org.cagrid.gme.stubs.GetImportingXMLSchemaNamespacesRequest params = new org.cagrid.gme.stubs.GetImportingXMLSchemaNamespacesRequest();
+    org.cagrid.gme.stubs.GetImportingXMLSchemaNamespacesRequestTargetNamespace targetNamespaceContainer = new org.cagrid.gme.stubs.GetImportingXMLSchemaNamespacesRequestTargetNamespace();
+    targetNamespaceContainer.setXMLSchemaNamespace(targetNamespace);
+    params.setTargetNamespace(targetNamespaceContainer);
+    org.cagrid.gme.stubs.GetImportingXMLSchemaNamespacesResponse boxedResult = portType.getImportingXMLSchemaNamespaces(params);
+    return boxedResult.getXMLSchemaNamespace();
+    }
+  }
+
   public gov.nih.nci.cagrid.metadata.security.ServiceSecurityMetadata getServiceSecurityMetadata() throws RemoteException {
     synchronized(portTypeMutex){
       configureStubSecurity((Stub)portType,"getServiceSecurityMetadata");
@@ -134,17 +213,6 @@ public class GlobalModelExchangeClient extends ServiceSecurityClient implements 
     synchronized(portTypeMutex){
       configureStubSecurity((Stub)portType,"queryResourceProperties");
     return portType.queryResourceProperties(params);
-    }
-  }
-
-  public void publishSchemas(org.cagrid.gme.domain.XMLSchema[] schemas) throws RemoteException {
-    synchronized(portTypeMutex){
-      configureStubSecurity((Stub)portType,"publishSchemas");
-    org.cagrid.gme.stubs.PublishSchemasRequest params = new org.cagrid.gme.stubs.PublishSchemasRequest();
-    org.cagrid.gme.stubs.PublishSchemasRequestSchemas schemasContainer = new org.cagrid.gme.stubs.PublishSchemasRequestSchemas();
-    schemasContainer.setXMLSchema(schemas);
-    params.setSchemas(schemasContainer);
-    org.cagrid.gme.stubs.PublishSchemasResponse boxedResult = portType.publishSchemas(params);
     }
   }
 

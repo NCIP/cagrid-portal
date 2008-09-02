@@ -78,7 +78,37 @@ public class GlobalModelExchangeAuthorization implements PDP {
 		
 	}
 					
-	public static void authorizePublishSchemas() throws RemoteException {
+	public static void authorizePublishXMLSchemas() throws RemoteException {
+		
+		
+	}
+					
+	public static void authorizeGetXMLSchema() throws RemoteException {
+		
+		
+	}
+					
+	public static void authorizeGetXMLSchemaNamespaces() throws RemoteException {
+		
+		
+	}
+					
+	public static void authorizeGetXMLSchemaAndDependencies() throws RemoteException {
+		
+		
+	}
+					
+	public static void authorizeDeleteXMLSchemas() throws RemoteException {
+		
+		
+	}
+					
+	public static void authorizeGetImportedXMLSchemaNamespaces() throws RemoteException {
+		
+		
+	}
+					
+	public static void authorizeGetImportingXMLSchemaNamespaces() throws RemoteException {
 		
 		
 	}
@@ -122,9 +152,57 @@ public class GlobalModelExchangeAuthorization implements PDP {
 				e.printStackTrace();
 				return false;
 			}
-		} else if(operation.getLocalPart().equals("publishSchemas")){
+		} else if(operation.getLocalPart().equals("publishXMLSchemas")){
 			try{
-				authorizePublishSchemas();
+				authorizePublishXMLSchemas();
+				return true;
+			} catch (Exception e){
+				e.printStackTrace();
+				return false;
+			}
+		} else if(operation.getLocalPart().equals("getXMLSchema")){
+			try{
+				authorizeGetXMLSchema();
+				return true;
+			} catch (Exception e){
+				e.printStackTrace();
+				return false;
+			}
+		} else if(operation.getLocalPart().equals("getXMLSchemaNamespaces")){
+			try{
+				authorizeGetXMLSchemaNamespaces();
+				return true;
+			} catch (Exception e){
+				e.printStackTrace();
+				return false;
+			}
+		} else if(operation.getLocalPart().equals("getXMLSchemaAndDependencies")){
+			try{
+				authorizeGetXMLSchemaAndDependencies();
+				return true;
+			} catch (Exception e){
+				e.printStackTrace();
+				return false;
+			}
+		} else if(operation.getLocalPart().equals("deleteXMLSchemas")){
+			try{
+				authorizeDeleteXMLSchemas();
+				return true;
+			} catch (Exception e){
+				e.printStackTrace();
+				return false;
+			}
+		} else if(operation.getLocalPart().equals("getImportedXMLSchemaNamespaces")){
+			try{
+				authorizeGetImportedXMLSchemaNamespaces();
+				return true;
+			} catch (Exception e){
+				e.printStackTrace();
+				return false;
+			}
+		} else if(operation.getLocalPart().equals("getImportingXMLSchemaNamespaces")){
+			try{
+				authorizeGetImportingXMLSchemaNamespaces();
 				return true;
 			} catch (Exception e){
 				e.printStackTrace();
