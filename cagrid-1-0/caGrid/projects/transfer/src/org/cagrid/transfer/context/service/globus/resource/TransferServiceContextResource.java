@@ -16,11 +16,6 @@ import org.cagrid.transfer.descriptor.DataStorageDescriptor;
 import org.cagrid.transfer.descriptor.Status;
 import org.cagrid.transfer.service.TransferServiceConfiguration;
 import org.globus.wsrf.ResourceException;
-import org.globus.wsrf.impl.work.WorkManagerImpl;
-
-import commonj.work.WorkManager;
-
-import sun.tools.jconsole.Worker;
 
 
 /**
