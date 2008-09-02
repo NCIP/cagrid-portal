@@ -34,7 +34,7 @@ import org.globus.wsrf.encoding.SerializationException;
  * @author David Ervin
  * 
  * @created Apr 10, 2007 10:02:57 AM
- * @version $Id: ConcurrenPersistantObjectEnumIterator.java,v 1.4 2008-08-21 15:07:24 dervin Exp $ 
+ * @version $Id: ConcurrenPersistantObjectEnumIterator.java,v 1.5 2008-09-02 20:37:56 dervin Exp $ 
  */
 public class ConcurrenPersistantObjectEnumIterator extends BaseSDKObjectIterator {
     
@@ -234,6 +234,7 @@ public class ConcurrenPersistantObjectEnumIterator extends BaseSDKObjectIterator
                 }
                 // now move on to new elements
                 String xml = null;
+                boolean hasMoreXml = false;
                 try {
                     while (soapElements.size() < constraints.getMaxElements() 
                         && (xml = getNextXmlChunk()) != null) {
@@ -261,6 +262,7 @@ public class ConcurrenPersistantObjectEnumIterator extends BaseSDKObjectIterator
                             nse.setStackTrace(ex.getStackTrace());
                             throw nse;
                         }
+                        hasMoreXml = hasMoreXmlChunks();
                     }
                 } catch (IOException ex) {
                     release();
@@ -275,7 +277,7 @@ public class ConcurrenPersistantObjectEnumIterator extends BaseSDKObjectIterator
                 soapElements.toArray(elements);
                 // iteration has ended iff no overflow elements exist, and
                 // no new XML has been returned from persistance
-                boolean endOfSequence = xml == null && overflowElements.size() == 0;
+                boolean endOfSequence = !hasMoreXml && overflowElements.size() == 0;
                 return new IterationResult(elements, endOfSequence);
             }
         };

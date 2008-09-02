@@ -33,7 +33,7 @@ import org.globus.wsrf.encoding.SerializationException;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created Aug 17, 2006 
- * @version $Id: SimplePersistantSDKObjectIterator.java,v 1.3 2008-08-21 15:07:24 dervin Exp $ 
+ * @version $Id: SimplePersistantSDKObjectIterator.java,v 1.4 2008-09-02 20:37:56 dervin Exp $ 
  */
 public class SimplePersistantSDKObjectIterator extends BaseSDKObjectIterator {
 	
@@ -163,6 +163,7 @@ public class SimplePersistantSDKObjectIterator extends BaseSDKObjectIterator {
 		
 		// start building results
 		String xml = null;
+        boolean hasMoreXml = false;
 		try {
 			while (soapElements.size() < constraints.getMaxElements() && (xml = getNextXmlChunk()) != null) {
 				try {
@@ -174,6 +175,7 @@ public class SimplePersistantSDKObjectIterator extends BaseSDKObjectIterator {
 					nse.setStackTrace(ex.getStackTrace());
 					throw nse;
 				}
+                hasMoreXml = hasMoreXmlChunks();
 			}
 		} catch (IOException ex) {
 			release();
@@ -182,6 +184,6 @@ public class SimplePersistantSDKObjectIterator extends BaseSDKObjectIterator {
 			throw nse;
 		}
 		// if the xml text is null, we're at the end of the iteration
-		return wrapUpElements(soapElements, xml == null);
+		return wrapUpElements(soapElements, !hasMoreXml);
 	}
 }

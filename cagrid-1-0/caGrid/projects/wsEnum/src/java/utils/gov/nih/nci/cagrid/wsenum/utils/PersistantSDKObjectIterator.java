@@ -29,7 +29,7 @@ import org.globus.wsrf.encoding.SerializationException;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created Aug 17, 2006 
- * @version $Id: PersistantSDKObjectIterator.java,v 1.3 2008-08-21 15:07:24 dervin Exp $ 
+ * @version $Id: PersistantSDKObjectIterator.java,v 1.4 2008-09-02 20:37:56 dervin Exp $ 
  */
 public class PersistantSDKObjectIterator extends BaseSDKObjectIterator {
 	private static final String THREAD_EXCEPTION = "ThreadException";
@@ -186,6 +186,7 @@ public class PersistantSDKObjectIterator extends BaseSDKObjectIterator {
 					
 					// start building results
 					String xml = null;
+                    boolean hasMoreXml = false;
 					checkForStop(threadCommunicationBuffer);
 					while (soapElements.size() < constraints.getMaxElements() && (xml = getNextXmlChunk()) != null) {
 						try {
@@ -201,6 +202,7 @@ public class PersistantSDKObjectIterator extends BaseSDKObjectIterator {
 								}
 							}
 							soapElements.add(element);
+                            hasMoreXml = hasMoreXmlChunks();
 						} catch (SerializationException ex) {
 							release();
 							NoSuchElementException nse = new NoSuchElementException("Error serializing element -- " + ex.getMessage());
@@ -211,7 +213,7 @@ public class PersistantSDKObjectIterator extends BaseSDKObjectIterator {
 					}
 					
 					// if the xml text is null, we're at the end of the iteration
-					IterationResult result = wrapUpElements(soapElements, xml == null);
+					IterationResult result = wrapUpElements(soapElements, !hasMoreXml);
 					synchronized (threadCommunicationBuffer) {
 						threadCommunicationBuffer.put(ITERATION_RESULT, result);
 					}

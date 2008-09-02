@@ -36,7 +36,7 @@ import org.xml.sax.SAXException;
  * @author David Ervin
  * 
  * @created Mar 13, 2007 10:42:15 AM
- * @version $Id: BaseSDKObjectIterator.java,v 1.2 2008-08-21 15:07:24 dervin Exp $
+ * @version $Id: BaseSDKObjectIterator.java,v 1.3 2008-09-02 20:37:56 dervin Exp $
  */
 public abstract class BaseSDKObjectIterator implements EnumIterator {
 
@@ -110,6 +110,30 @@ public abstract class BaseSDKObjectIterator implements EnumIterator {
         } else {
             return null;
         }
+    }
+    
+    
+    /**
+     * Attempts to determine if there is more XML text available from the
+     * backing storage file.
+     * @return
+     * @throws IOException
+     */
+    protected synchronized boolean hasMoreXmlChunks() throws IOException {
+        boolean hasMore = false;
+        try {
+            // can read ahead another 1024 chars without losing the mark
+            fileReader.mark(1024);
+            String charCountStr = fileReader.readLine();
+            Integer.parseInt(charCountStr);
+            hasMore = true;
+        } catch (NumberFormatException ex) {
+            hasMore = false;
+        } finally {
+            // reset to before the mark
+            fileReader.reset();
+        }
+        return hasMore;
     }
 
 
