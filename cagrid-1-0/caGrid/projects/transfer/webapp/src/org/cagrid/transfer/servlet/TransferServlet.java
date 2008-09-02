@@ -11,12 +11,13 @@ import java.io.IOException;
 import java.util.Properties;
 
 import javax.servlet.ServletException;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
-import org.cagrid.transfer.context.common.TransferServiceContextConstants;
+import org.cagrid.transfer.context.service.globus.resource.TransferServiceContextResource;
 import org.cagrid.transfer.context.stubs.TransferServiceContextResourceProperties;
 import org.cagrid.transfer.descriptor.DataStorageDescriptor;
 import org.globus.axis.gsi.GSIConstants;
@@ -98,8 +99,7 @@ public class TransferServlet extends HttpServlet {
             logger.info("Data file storing is located at: " + desc.getLocation());
             File outFile = new File(desc.getLocation());
             if (outFile.exists()) {
-                logger.info("File is already staged for resource: " + requestedID + " at file: "
-                    + desc.getLocation());
+                logger.info("File is already staged for resource: " + requestedID + " at file: " + desc.getLocation());
                 resp.sendError(500);
                 return;
             }
@@ -110,11 +110,11 @@ public class TransferServlet extends HttpServlet {
             while ((l = req.getInputStream().read(buffer)) != -1) {
                 fos.write(buffer, 0, l);
             }
-           
+
             fos.close();
         } else {
-            logger.info("Trouble storing data for requested object: " + requestedID + " at file: "
-                + desc.getLocation());
+            logger
+                .info("Trouble storing data for requested object: " + requestedID + " at file: " + desc.getLocation());
             resp.sendError(403);
             return;
         }
@@ -191,10 +191,24 @@ public class TransferServlet extends HttpServlet {
                 // 4 write data to the response
                 logger.info("Data file requested is located at: " + desc.getLocation());
                 FileInputStream fis = new FileInputStream(desc.getLocation());
+                ServletOutputStream os = resp.getOutputStream();
                 int l;
                 byte[] buffer = new byte[blockSize];
+                while (isStaging(desc, persistenceDir, requestedID)) {
+                    // while it's staging, just keep trying to read.
+                    while ((l = fis.read(buffer)) != -1) {
+                        if (l > 0) {
+                            os.write(buffer, 0, l);
+                            os.flush();
+                        }
+                    }
+                }
+                // after done staging, read the rest of the file.
                 while ((l = fis.read(buffer)) != -1) {
-                    resp.getOutputStream().write(buffer, 0, l);
+                    if (l > 0) {
+                        os.write(buffer, 0, l);
+                        os.flush();
+                    }
                 }
                 fis.close();
             } catch (Exception e) {
@@ -209,6 +223,21 @@ public class TransferServlet extends HttpServlet {
             resp.sendError(403);
             return;
         }
+
+    }
+
+
+    private boolean isStaging(DataStorageDescriptor desc, String persistenceDir, String requestedID) {
+        // the staging flag is set when the service creates the resource. so
+        // there
+        // should not be timing problems.
+
+        // TCP: normally would need to reload the desc. here we cheat and use a
+        // file system flag.
+        // the flag is deleted when the staging is done so we don't need to
+        // delete it explicitly.
+        File flag = new File(desc.getLocation() + TransferServiceContextResource.STAGING_FLAG);
+        return flag.exists();
 
     }
 

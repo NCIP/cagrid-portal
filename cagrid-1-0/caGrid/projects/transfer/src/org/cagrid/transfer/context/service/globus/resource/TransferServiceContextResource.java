@@ -3,9 +3,7 @@ package org.cagrid.transfer.context.service.globus.resource;
 import gov.nih.nci.cagrid.introduce.servicetools.security.SecurityUtils;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -18,6 +16,11 @@ import org.cagrid.transfer.descriptor.DataStorageDescriptor;
 import org.cagrid.transfer.descriptor.Status;
 import org.cagrid.transfer.service.TransferServiceConfiguration;
 import org.globus.wsrf.ResourceException;
+import org.globus.wsrf.impl.work.WorkManagerImpl;
+
+import commonj.work.WorkManager;
+
+import sun.tools.jconsole.Worker;
 
 
 /**
@@ -27,6 +30,7 @@ import org.globus.wsrf.ResourceException;
  */
 public class TransferServiceContextResource extends TransferServiceContextResourceBase {
 
+    public static final String STAGING_FLAG = ".staging";
     private DataStagedCallback callback = null;
     private boolean shouldDeleteFileOnDestroyDefault = true;
 
@@ -35,16 +39,8 @@ public class TransferServiceContextResource extends TransferServiceContextResour
     public void initialize(Object resourceBean, QName resourceElementQName, Object id) throws ResourceException {
         super.initialize(resourceBean, resourceElementQName, id);
         Calendar cal = GregorianCalendar.getInstance();
-        try {
-            cal.add(Calendar.MINUTE, Integer.parseInt(TransferServiceConfiguration.getConfiguration()
-                .getDefaultTransferServiceContextTerminationTimeInMinutes()));
-        } catch (NumberFormatException e) {
-            e.printStackTrace();
-            throw new ResourceException(e);
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new ResourceException(e);
-        } 
+        cal.add(Calendar.MINUTE, 30);
+        // default termination time is 30 minutes.
         this.setTerminationTime(cal);
     }
 
@@ -74,7 +70,7 @@ public class TransferServiceContextResource extends TransferServiceContextResour
     public void stage(final byte[] data, final DataDescriptor dd) throws Exception {
 
         DataStorageDescriptor desc = new DataStorageDescriptor();
-        File storageFile = new File(getStorageDirectory().getAbsolutePath() + File.separator + (String) getID()
+        final File storageFile = new File(getStorageDirectory().getAbsolutePath() + File.separator + (String) getID()
             + ".cache");
         desc.setLocation(storageFile.getAbsolutePath());
         if (SecurityUtils.getCallerIdentity() != null) {
@@ -84,13 +80,33 @@ public class TransferServiceContextResource extends TransferServiceContextResour
         desc.setStatus(Status.Staging);
         desc.setDeleteOnDestroy(shouldDeleteFileOnDestroyDefault);
         setDataStorageDescriptor(desc);
+        final File stageFlag = new File(desc.getLocation() + STAGING_FLAG);
+        stageFlag.createNewFile();
 
-        FileOutputStream fw = new FileOutputStream(storageFile);
-        fw.write(data);
-        fw.close();
+        // TCP: create a thread to do the actual writing. leaving the staging
+        // flags
+        // outside the thread ensures that when "stage" is called the flags
+        // are created and thus when the resource is created the staging flag is
+        // set.
+        final DataStorageDescriptor fdesc = desc;
+        new Thread() {
+            @Override
+            public void run() {
+                try {
+                    FileOutputStream fw = new FileOutputStream(storageFile);
+                    fw.write(data);
+                    fw.close();
 
-        desc.setStatus(Status.Staged);
-        setDataStorageDescriptor(desc);
+                    fdesc.setStatus(Status.Staged);
+                    setDataStorageDescriptor(fdesc);
+                    stageFlag.delete();
+                } catch (Exception e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+                super.run();
+            }
+        }.start();
 
     }
 
@@ -98,7 +114,7 @@ public class TransferServiceContextResource extends TransferServiceContextResour
     public void stage(final InputStream is, final DataDescriptor dd) throws Exception {
 
         DataStorageDescriptor desc = new DataStorageDescriptor();
-        File storageFile = new File(getStorageDirectory().getAbsolutePath() + File.separator + (String) getID()
+        final File storageFile = new File(getStorageDirectory().getAbsolutePath() + File.separator + (String) getID()
             + ".cache");
         desc.setLocation(storageFile.getAbsolutePath());
         if (SecurityUtils.getCallerIdentity() != null) {
@@ -108,20 +124,41 @@ public class TransferServiceContextResource extends TransferServiceContextResour
         desc.setStatus(Status.Staging);
         desc.setDeleteOnDestroy(shouldDeleteFileOnDestroyDefault);
         setDataStorageDescriptor(desc);
+        final File stageFlag = new File(desc.getLocation() + STAGING_FLAG);
+        stageFlag.createNewFile();
 
-        FileOutputStream fw = new FileOutputStream(storageFile);
-        byte[] data = new byte[1024];
-        int length = is.read(data);
-        while (length >= 0) {
-            fw.write(data, 0, length);
-            length = is.read(data);
-        }
-        fw.close();
-        is.close();
+        // TCP: create a thread to do the actual writing. leaving the staging
+        // flags
+        // outside the thread ensures that when "stage" is called the flags
+        // are created and thus when the resource is created the staging flag is
+        // set.
+        final DataStorageDescriptor fdesc = desc;
+        new Thread() {
+            @Override
+            public void run() {
+                try {
+                    FileOutputStream fw = new FileOutputStream(storageFile);
+                    byte[] data = new byte[1024];
+                    int length;
+                    while ((length = is.read(data)) != -1) {
+                        if (length > 0) {
+                            fw.write(data, 0, length);
+                            fw.flush();
+                        }
+                    }
+                    fw.close();
 
-        desc.setStatus(Status.Staged);
-        setDataStorageDescriptor(desc);
-
+                    fdesc.setStatus(Status.Staged);
+                    setDataStorageDescriptor(fdesc);
+                    stageFlag.delete();
+                } catch (Exception e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+                super.run();
+            }
+        }.start();
+        
     }
 
 

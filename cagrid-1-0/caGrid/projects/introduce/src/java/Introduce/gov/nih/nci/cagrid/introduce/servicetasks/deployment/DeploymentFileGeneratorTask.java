@@ -25,7 +25,6 @@ public class DeploymentFileGeneratorTask extends Task {
     public void execute() throws BuildException {
         super.execute();
         
-       
 
         Properties properties = new Properties();
         properties.putAll(this.getProject().getProperties());
