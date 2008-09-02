@@ -8,11 +8,11 @@ import gov.nih.nci.cagrid.introduce.test.util.SourceUtils;
 import java.io.File;
 
 
-public class AddCreateTransferMethodImplStep extends BaseStep {
+public class AddCreateStreamingTransferMethodImplStep extends BaseStep {
     private TestCaseInfo tci;
 
 
-    public AddCreateTransferMethodImplStep(TestCaseInfo tci, boolean build) throws Exception {
+    public AddCreateStreamingTransferMethodImplStep(TestCaseInfo tci, boolean build) throws Exception {
         super(tci.getDir(), build);
         this.tci = tci;
 
@@ -24,7 +24,7 @@ public class AddCreateTransferMethodImplStep extends BaseStep {
 
         File inFileClient = new File(".." + File.separator + ".." + File.separator + ".."
             + File.separator + "tests" + File.separator + "projects" + File.separator + "transferTests"
-            + File.separator + "resources" + File.separator  + tci.getName() + "Client.java");
+            + File.separator + "resources" + File.separator + "Streaming"+ tci.getName() + "Client.java");
         File outFileClient = new File(tci.getDir() + File.separator + "src" + File.separator + tci.getPackageDir()
             + File.separator + "client" + File.separator + tci.getName() + "Client.java");
 
@@ -32,11 +32,11 @@ public class AddCreateTransferMethodImplStep extends BaseStep {
 
         File inFileImpl = new File(".." + File.separator + ".." + File.separator + ".."
             + File.separator + "tests" + File.separator + "projects" + File.separator + "transferTests"
-            + File.separator + "resources" + File.separator  + tci.getName() + "Impl.java");
+            + File.separator + "resources" + File.separator + "Streaming"+ tci.getName() + "Impl.java");
         File outFileImpl = new File(tci.getDir() + File.separator + "src" + File.separator + tci.getPackageDir()
             + File.separator + "service" + File.separator + tci.getName() + "Impl.java");
 
-        SourceUtils.modifyImpl(inFileImpl, outFileImpl, "createTransferMethodStep");
+        SourceUtils.modifyImpl(inFileImpl, outFileImpl, "reateStreamingTransferMethodStep");
 
         buildStep();
     }

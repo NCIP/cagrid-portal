@@ -13,12 +13,13 @@ import gov.nih.nci.cagrid.testing.system.deployment.steps.StartContainerStep;
 import gov.nih.nci.cagrid.testing.system.deployment.steps.StopContainerStep;
 import gov.nih.nci.cagrid.testing.system.deployment.steps.UnpackContainerStep;
 import gov.nih.nci.cagrid.testing.system.deployment.story.ServiceStoryBase;
-import gov.nih.nci.cagrid.testing.system.haste.Step;
 
 import java.io.File;
 import java.util.Vector;
 
 import org.apache.log4j.PropertyConfigurator;
+import org.cagrid.transfer.test.system.steps.AddCreateStreamingTransferMethodImplStep;
+import org.cagrid.transfer.test.system.steps.AddCreateStreamingTransferMethodStep;
 import org.cagrid.transfer.test.system.steps.AddCreateTransferMethodImplStep;
 import org.cagrid.transfer.test.system.steps.AddCreateTransferMethodStep;
 import org.cagrid.transfer.test.system.steps.CopyCAStep;
@@ -33,6 +34,7 @@ public class TransferServiceTest extends ServiceStoryBase {
 
     public TransferServiceTest(ServiceContainer container) {
        super(container);
+       PropertyConfigurator.configure("." + File.separator + "conf" + File.separator + "log4j.properties");
     }
     
     public TransferServiceTest() {
@@ -46,15 +48,14 @@ public class TransferServiceTest extends ServiceStoryBase {
             fail("Failed to create container: " + ex.getMessage());
         }
     }
-    
-    
+
+
     public String getName() {
         return getDescription();
     }
 
-
     public String getDescription() {
-        if (getContainer().getProperties().isSecure()){
+        if(getContainer().getProperties().isSecure()){
             return "Secure Transfer Service Test";
         }
         return "Transfer Service Test";
@@ -62,7 +63,7 @@ public class TransferServiceTest extends ServiceStoryBase {
 
 
     protected Vector steps() {
-        Vector<Step> steps = new Vector<Step>();
+        Vector steps = new Vector();
         try {
             steps.add(new UnpackContainerStep(getContainer()));
             steps.add(new DeployServiceStep(getContainer(), "../transfer"));
@@ -78,6 +79,16 @@ public class TransferServiceTest extends ServiceStoryBase {
             steps.add(new StartContainerStep(getContainer()));
 
             steps.add(new InvokeClientStep(getContainer(), tci));
+            
+            steps.add(new StopContainerStep(getContainer()));
+            
+            steps.add(new AddCreateStreamingTransferMethodStep(tci,getContainer(), false));
+            steps.add(new AddCreateStreamingTransferMethodImplStep(tci, false));
+            steps.add(new DeployServiceStep(getContainer(), tci.getDir()));
+            steps.add(new StartContainerStep(getContainer()));
+
+            steps.add(new InvokeClientStep(getContainer(), tci));
+            
 
         } catch (Exception e) {
             e.printStackTrace();
