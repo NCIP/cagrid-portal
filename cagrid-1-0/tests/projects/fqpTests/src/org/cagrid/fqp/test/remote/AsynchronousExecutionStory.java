@@ -19,12 +19,9 @@ import org.cagrid.fqp.test.remote.steps.AsynchronousQueryExecutionStep;
  * @author David Ervin
  * 
  * @created Jun 30, 2008 12:48:50 PM
- * @version $Id: AsynchronousExecutionStory.java,v 1.2 2008-08-26 20:05:55 dervin Exp $ 
+ * @version $Id: AsynchronousExecutionStory.java,v 1.3 2008-09-02 20:41:24 dervin Exp $ 
  */
 public class AsynchronousExecutionStory extends Story {
-    
-    public static final String GOLD_LOCATION = 
-        "resources" + File.separator + "gold" + File.separator;
     
     public static final String SERVICE_NAME_BASE = "cagrid/ExampleSdkService";
     
@@ -74,7 +71,7 @@ public class AsynchronousExecutionStory extends Story {
         }
 
         steps.add(new AsynchronousQueryExecutionStep(FQPTestingConstants.QUERIES_LOCATION + File.separator + "exampleDistributedJoin1.xml",
-            GOLD_LOCATION + File.separator + "exampleDistributedJoin1_gold.xml", 
+            FQPTestingConstants.GOLD_LOCATION + File.separator + "exampleDistributedJoin1_gold.xml", 
             fqpClient, serviceUrls));
         return steps;
     }
