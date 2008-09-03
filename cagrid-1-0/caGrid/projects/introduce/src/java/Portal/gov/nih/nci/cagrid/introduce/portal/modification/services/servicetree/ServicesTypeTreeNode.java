@@ -18,7 +18,7 @@ import javax.swing.tree.DefaultTreeModel;
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster</A>
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella</A>
  * @created Nov 22, 2004
- * @version $Id: ServicesTypeTreeNode.java,v 1.1 2008-02-27 14:46:57 hastings Exp $
+ * @version $Id: ServicesTypeTreeNode.java,v 1.2 2008-09-03 01:20:36 hastings Exp $
  */
 public class ServicesTypeTreeNode extends DefaultMutableTreeNode implements PopupTreeNode {
 
@@ -32,7 +32,6 @@ public class ServicesTypeTreeNode extends DefaultMutableTreeNode implements Popu
 		this.info = info;
 		menu = new ServicesPopUpMenu(this);
 		this.setUserObject("Services");
-
 	}
 
 

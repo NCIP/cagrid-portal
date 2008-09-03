@@ -13,6 +13,7 @@ import java.util.Enumeration;
 import javax.swing.JPanel;
 import javax.swing.JTree;
 import javax.swing.SwingUtilities;
+import javax.swing.ToolTipManager;
 import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeModelListener;
 import javax.swing.event.TreeSelectionEvent;
@@ -45,9 +46,12 @@ public class ServicesJTree extends JTree {
         this.optionsPanel = optionsPanel;
         this.info = info;
         this.tree = this;
+
         this.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
         
         setCellRenderer(new ServicesTreeRenderer());
+        ToolTipManager.sharedInstance().registerComponent(
+            this);
         setServices(info);
 
         this.addTreeSelectionListener(new TreeSelectionListener() {
