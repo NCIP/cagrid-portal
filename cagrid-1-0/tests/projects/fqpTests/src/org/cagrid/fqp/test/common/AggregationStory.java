@@ -16,7 +16,7 @@ import org.cagrid.fqp.test.common.steps.AggregationStep;
  * @author David Ervin
  * 
  * @created Jun 30, 2008 12:48:50 PM
- * @version $Id: AggregationStory.java,v 1.4 2008-08-26 20:05:55 dervin Exp $ 
+ * @version $Id: AggregationStory.java,v 1.5 2008-09-03 17:28:15 dervin Exp $ 
  */
 public class AggregationStory extends Story {
     
@@ -29,6 +29,11 @@ public class AggregationStory extends Story {
         FederatedQueryProcessorHelper queryHelper) {
         this.dataContainers = dataServiceContainers;
         this.queryHelper = queryHelper;
+    }
+    
+    
+    public String getName() {
+        return "FQP Aggregation";
     }
     
 

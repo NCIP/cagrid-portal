@@ -24,7 +24,7 @@ import org.cagrid.fqp.test.remote.steps.ChangeJndiSweeperDelayStep;
  * @author David Ervin
  * 
  * @created Jul 15, 2008 12:46:02 PM
- * @version $Id: FQPServiceDeploymentStory.java,v 1.2 2008-08-26 17:54:13 dervin Exp $ 
+ * @version $Id: FQPServiceDeploymentStory.java,v 1.3 2008-09-03 17:28:16 dervin Exp $ 
  */
 public class FQPServiceDeploymentStory extends Story implements ServiceContainerSource {
     
@@ -36,6 +36,11 @@ public class FQPServiceDeploymentStory extends Story implements ServiceContainer
     public FQPServiceDeploymentStory(File fqpDir) {
         this.fqpServiceDirectory = fqpDir;
         this.complete = false;
+    }
+    
+    
+    public String getName() {
+        return "FQP Service Deployment";
     }
     
 

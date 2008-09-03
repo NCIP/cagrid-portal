@@ -22,7 +22,7 @@ import org.cagrid.fqp.test.common.steps.UnzipServiceStep;
  * @author David Ervin
  * 
  * @created Jul 9, 2008 11:46:02 AM
- * @version $Id: DataServiceDeploymentStory.java,v 1.3 2008-07-15 19:44:14 dervin Exp $ 
+ * @version $Id: DataServiceDeploymentStory.java,v 1.4 2008-09-03 17:28:16 dervin Exp $ 
  */
 public class DataServiceDeploymentStory extends Story implements ServiceContainerSource {
     
@@ -35,6 +35,11 @@ public class DataServiceDeploymentStory extends Story implements ServiceContaine
     public DataServiceDeploymentStory(File dataServiceZip) {
         this.dataServiceZip = dataServiceZip;
         complete = false;
+    }
+    
+    
+    public String getName() {
+        return "Data Service Deployment";
     }
     
 
