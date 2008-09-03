@@ -1,3 +1,17 @@
+
+=================================================================================
+Overview:
+=================================================================================
+GME Client (uses domain)
+
+GME Service (uses domain)
+GME (uses some of domain)
+-----transactional boundary-----
+  -schema loader (Sax Parser; uses SP layer to extract published information)
+  --SchemaPersistence Layer (interface)
+     (hibernate implementation), (in memory implementation), 
+
+
 =================================================================================
 Features/Issues:
 =================================================================================

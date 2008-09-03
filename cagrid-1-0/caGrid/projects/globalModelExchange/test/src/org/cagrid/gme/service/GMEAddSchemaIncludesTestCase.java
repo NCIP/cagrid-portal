@@ -27,9 +27,9 @@ public class GMEAddSchemaIncludesTestCase extends GMETestCaseBase {
     @Override
     protected void onSetUp() throws Exception {
         super.onSetUp();
-        assertNotNull(testSchemaInclude);
-        assertNotNull(testSchemaIncludeCycle);
-        assertNotNull(testSchemaIncludeNoNamespace);
+        assertNotNull(this.testSchemaInclude);
+        assertNotNull(this.testSchemaIncludeCycle);
+        assertNotNull(this.testSchemaIncludeNoNamespace);
     }
 
 
@@ -39,6 +39,7 @@ public class GMEAddSchemaIncludesTestCase extends GMETestCaseBase {
         URI[] namespaces = this.gme.getNamespaces();
         assertEquals(1, namespaces.length);
         assertEquals(this.testSchemaInclude.getTargetNamespace(), namespaces[0]);
+        assertEquals(this.testSchemaInclude, this.gme.getSchema(this.testSchemaInclude.getTargetNamespace()));
     }
 
 
@@ -48,6 +49,7 @@ public class GMEAddSchemaIncludesTestCase extends GMETestCaseBase {
         URI[] namespaces = this.gme.getNamespaces();
         assertEquals(1, namespaces.length);
         assertEquals(this.testSchemaIncludeCycle.getTargetNamespace(), namespaces[0]);
+        assertEquals(this.testSchemaIncludeCycle, this.gme.getSchema(this.testSchemaIncludeCycle.getTargetNamespace()));
     }
 
 
@@ -57,5 +59,7 @@ public class GMEAddSchemaIncludesTestCase extends GMETestCaseBase {
         URI[] namespaces = this.gme.getNamespaces();
         assertEquals(1, namespaces.length);
         assertEquals(this.testSchemaIncludeNoNamespace.getTargetNamespace(), namespaces[0]);
+        assertEquals(this.testSchemaIncludeNoNamespace, this.gme.getSchema(this.testSchemaIncludeNoNamespace
+            .getTargetNamespace()));
     }
 }

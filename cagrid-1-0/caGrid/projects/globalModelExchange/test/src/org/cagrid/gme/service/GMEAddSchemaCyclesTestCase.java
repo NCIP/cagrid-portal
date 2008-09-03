@@ -47,6 +47,8 @@ public class GMEAddSchemaCyclesTestCase extends GMETestCaseBase {
         Arrays.sort(namespaces);
         Arrays.sort(gmenamespaces);
         assertTrue(Arrays.equals(namespaces, gmenamespaces));
+        assertEquals(this.testSchemaCycleA, this.gme.getSchema(this.testSchemaCycleA.getTargetNamespace()));
+        assertEquals(this.testSchemaCycleB, this.gme.getSchema(this.testSchemaCycleB.getTargetNamespace()));
     }
 
 
@@ -59,5 +61,7 @@ public class GMEAddSchemaCyclesTestCase extends GMETestCaseBase {
         Arrays.sort(namespaces);
         Arrays.sort(gmenamespaces);
         assertTrue(Arrays.equals(namespaces, gmenamespaces));
+        assertEquals(this.testSchemaCycleA, this.gme.getSchema(this.testSchemaCycleA.getTargetNamespace()));
+        assertEquals(this.testSchemaCycleB, this.gme.getSchema(this.testSchemaCycleB.getTargetNamespace()));
     }
 }

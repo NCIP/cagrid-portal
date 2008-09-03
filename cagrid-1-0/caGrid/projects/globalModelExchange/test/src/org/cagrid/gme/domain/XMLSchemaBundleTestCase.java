@@ -8,6 +8,10 @@ import java.util.Set;
 import junit.framework.TestCase;
 
 
+/**
+ * Tests the correct functionality of the utility methods of the XMLSchemaBundle
+ * Class
+ */
 public class XMLSchemaBundleTestCase extends TestCase {
 
     private XMLSchemaNamespace nonExistantNamespace;
@@ -48,7 +52,6 @@ public class XMLSchemaBundleTestCase extends TestCase {
 
         assertNull(bundle.getImportedXMLSchemasForTargetNamespace(this.nonExistantNamespace));
         assertNull(bundle.getXMLSchemaForTargetNamespace(this.nonExistantNamespace));
-
     }
 
 

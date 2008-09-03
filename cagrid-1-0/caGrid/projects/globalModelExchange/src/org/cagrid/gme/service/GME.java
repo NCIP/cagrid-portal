@@ -32,6 +32,9 @@ import org.globus.wsrf.utils.FaultHelper;
 public class GME {
     protected static Log LOG = LogFactory.getLog(GME.class.getName());
     protected SchemaPersistenceI schemaPersistence = null;
+
+    // provides coarse grain persistence layer locking, used to ensure integrity
+    // of
     protected ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
 
 
@@ -104,7 +107,7 @@ public class GME {
     }
 
 
-    Map<URI, SchemaGrammar> verifySubmissionAndInitializeProcessedSchemasMap(XMLSchema[] schemas)
+    protected Map<URI, SchemaGrammar> verifySubmissionAndInitializeProcessedSchemasMap(XMLSchema[] schemas)
         throws InvalidSchemaSubmission, SchemaAlreadyExists {
         Map<URI, SchemaGrammar> processedSchemas = new HashMap<URI, SchemaGrammar>();
         for (XMLSchema submittedSchema : schemas) {
@@ -369,6 +372,13 @@ public class GME {
     }
 
 
+    /**
+     * Returns the targetNamespaces (represented by URIs) of all published
+     * XMLSchemas
+     * 
+     * @return the targetNamespaces (represented by URIs) of all published
+     *         XMLSchemas
+     */
     public URI[] getNamespaces() {
         this.lock.readLock().lock();
         try {
@@ -379,4 +389,24 @@ public class GME {
             this.lock.readLock().unlock();
         }
     }
+
+
+    /**
+     * Returns a published XMLSchema with a targetNamespace equal to the given
+     * URI
+     * 
+     * @param uri
+     *            the targetNamespace of the desired XMLSchema
+     * @return a published XMLSchema with a targetNamespace equal to the given
+     *         URI
+     */
+    public XMLSchema getSchema(URI uri) {
+        this.lock.readLock().lock();
+        try {
+            return this.schemaPersistence.getSchema(uri);
+        } finally {
+            this.lock.readLock().unlock();
+        }
+    }
+
 }

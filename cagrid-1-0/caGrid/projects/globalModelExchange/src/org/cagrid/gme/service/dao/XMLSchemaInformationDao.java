@@ -13,7 +13,7 @@ import org.cagrid.gme.service.domain.XMLSchemaInformation;
 public class XMLSchemaInformationDao extends AbstractDao<XMLSchemaInformation> {
 
     @Override
-    public Class domainClass() {
+    public Class<XMLSchemaInformation> domainClass() {
         return XMLSchemaInformation.class;
     }
 
@@ -30,7 +30,7 @@ public class XMLSchemaInformationDao extends AbstractDao<XMLSchemaInformation> {
     public XMLSchemaInformation getByTargetNamespace(URI targetNamespace) {
         XMLSchemaInformation s = null;
 
-        List schemas = getHibernateTemplate().find(
+        List<XMLSchemaInformation> schemas = getHibernateTemplate().find(
             "FROM " + domainClass().getSimpleName() + " s WHERE s.schema.targetNamespace= ?",
             new Object[]{targetNamespace});
 
@@ -38,7 +38,7 @@ public class XMLSchemaInformationDao extends AbstractDao<XMLSchemaInformation> {
             throw new NonUniqueResultException("Found " + schemas.size() + " " + domainClass().getSimpleName()
                 + " objects for URI '" + targetNamespace + "'");
         } else if (schemas.size() == 1) {
-            s = (XMLSchemaInformation) schemas.get(0);
+            s = schemas.get(0);
             // REVISIT: is this necessary?
             // Hibernate.initialize(s.getSchema());
             // Hibernate.initialize(s.getSchema().getAdditionalSchemaDocuments());

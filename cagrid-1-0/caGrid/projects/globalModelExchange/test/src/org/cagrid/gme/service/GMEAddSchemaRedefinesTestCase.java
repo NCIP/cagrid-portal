@@ -31,11 +31,11 @@ public class GMEAddSchemaRedefinesTestCase extends GMETestCaseBase {
     @Override
     protected void onSetUp() throws Exception {
         super.onSetUp();
-        assertNotNull(testSchemaRedefine);
-        assertNotNull(testSchemaRedefined);
-        assertNotNull(testSchemaRedefineNoNamespace);
-        assertNotNull(testInvalidSchemaRedefineWrongNamespace);
-        assertNotNull(testSchemaRedefineWrongNamespaceRedefinedOnly);
+        assertNotNull(this.testSchemaRedefine);
+        assertNotNull(this.testSchemaRedefined);
+        assertNotNull(this.testSchemaRedefineNoNamespace);
+        assertNotNull(this.testInvalidSchemaRedefineWrongNamespace);
+        assertNotNull(this.testSchemaRedefineWrongNamespaceRedefinedOnly);
     }
 
 
@@ -45,6 +45,8 @@ public class GMEAddSchemaRedefinesTestCase extends GMETestCaseBase {
         URI[] namespaces = this.gme.getNamespaces();
         assertEquals(1, namespaces.length);
         assertEquals(this.testSchemaRedefine.getTargetNamespace(), namespaces[0]);
+        assertEquals(this.testSchemaRedefine, this.gme.getSchema(this.testSchemaRedefine.getTargetNamespace()));
+
     }
 
 
@@ -54,6 +56,7 @@ public class GMEAddSchemaRedefinesTestCase extends GMETestCaseBase {
         URI[] namespaces = this.gme.getNamespaces();
         assertEquals(1, namespaces.length);
         assertEquals(this.testSchemaRedefined.getTargetNamespace(), namespaces[0]);
+        assertEquals(this.testSchemaRedefined, this.gme.getSchema(this.testSchemaRedefined.getTargetNamespace()));
     }
 
 
@@ -63,6 +66,8 @@ public class GMEAddSchemaRedefinesTestCase extends GMETestCaseBase {
         URI[] namespaces = this.gme.getNamespaces();
         assertEquals(1, namespaces.length);
         assertEquals(this.testSchemaRedefineNoNamespace.getTargetNamespace(), namespaces[0]);
+        assertEquals(this.testSchemaRedefineNoNamespace, this.gme.getSchema(this.testSchemaRedefineNoNamespace
+            .getTargetNamespace()));
     }
 
 
@@ -72,6 +77,8 @@ public class GMEAddSchemaRedefinesTestCase extends GMETestCaseBase {
         URI[] namespaces = this.gme.getNamespaces();
         assertEquals(1, namespaces.length);
         assertEquals(this.testSchemaRedefineWrongNamespaceRedefinedOnly.getTargetNamespace(), namespaces[0]);
+        assertEquals(this.testSchemaRedefineWrongNamespaceRedefinedOnly, this.gme
+            .getSchema(this.testSchemaRedefineWrongNamespaceRedefinedOnly.getTargetNamespace()));
     }
 
 

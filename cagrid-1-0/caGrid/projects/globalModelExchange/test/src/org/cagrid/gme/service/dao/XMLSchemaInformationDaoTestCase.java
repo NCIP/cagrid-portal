@@ -17,11 +17,12 @@ public class XMLSchemaInformationDaoTestCase extends GMEIntegrationTestCaseBase 
     protected XMLSchemaInformationDao xmlSchemaInformationDao;
 
 
-    public void test() throws URISyntaxException {
+    public void testWithoutDependencies() throws URISyntaxException {
 
         XMLSchemaInformation schemaInfo = new XMLSchemaInformation();
         XMLSchema schema = new XMLSchema();
         schemaInfo.setSchema(schema);
+
         URI namespace = new URI("http://foo");
         schema.setTargetNamespace(namespace);
 
@@ -38,18 +39,16 @@ public class XMLSchemaInformationDaoTestCase extends GMEIntegrationTestCaseBase 
         docSet.add(doc2);
         schema.setAdditionalSchemaDocuments(docSet);
 
-        xmlSchemaInformationDao.save(schemaInfo);
+        this.xmlSchemaInformationDao.save(schemaInfo);
 
-        Collection<URI> allNamespaces = xmlSchemaInformationDao.getAllNamespaces();
-        for (URI uri : allNamespaces) {
-            System.out.println(uri);
-        }
+        Collection<URI> allNamespaces = this.xmlSchemaInformationDao.getAllNamespaces();
+        assertEquals(1, allNamespaces.size());
+        assertTrue(allNamespaces.contains(namespace));
 
-        XMLSchema schemaForURI = xmlSchemaInformationDao.getXMLSchemaByTargetNamespace(namespace);
-        System.out.println(schemaForURI);
-        System.out.println(schemaForURI.getAdditionalSchemaDocuments().size());
+        XMLSchema schemaForURI = this.xmlSchemaInformationDao.getXMLSchemaByTargetNamespace(namespace);
+        assertEquals(schema, schemaForURI);
 
-        Collection<XMLSchemaInformation> dependingSchemas = xmlSchemaInformationDao.getDependingSchemas(namespace);
-        System.out.println(dependingSchemas);
+        Collection<XMLSchemaInformation> dependingSchemas = this.xmlSchemaInformationDao.getDependingSchemas(namespace);
+        assertEquals(0, dependingSchemas.size());
     }
 }
