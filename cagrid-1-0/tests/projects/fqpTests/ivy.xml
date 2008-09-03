@@ -37,6 +37,9 @@
     <!-- FQP -->
     <dependency rev="latest.integration" org="caGrid" name="fqp" conf="default->stubs;default->client;default->common"/>
     
+    <!-- Transfer stubs -->
+    <dependency rev="latest.integration" org="caGrid" name="transfer" conf="default->stubs"/>
+    
     <!-- SDK Query 4 for Serializers/ Deserializers -->
     <dependency transitive="false" rev="latest.integration" org="caGrid" name="sdkQuery4" conf="default->processor"/>
     
