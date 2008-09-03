@@ -17,10 +17,13 @@ import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+
+import org.cagrid.grape.GridApplication;
 
 
 public class ExtensionsManagerPanel extends JPanel {
@@ -179,6 +182,7 @@ public class ExtensionsManagerPanel extends JPanel {
                     }
                     info.getIntroduceServiceProperties().setProperty(IntroduceConstants.INTRODUCE_SKELETON_EXTENSIONS,
                         extS);
+                    JOptionPane.showMessageDialog(GridApplication.getContext().getApplication(), "A save should be performed after removing an extension in order to deactivate the extension");
                 }
             });
         }
@@ -210,6 +214,7 @@ public class ExtensionsManagerPanel extends JPanel {
                         }
                         info.getIntroduceServiceProperties().setProperty(
                             IntroduceConstants.INTRODUCE_SKELETON_EXTENSIONS, extS);
+                        JOptionPane.showMessageDialog(GridApplication.getContext().getApplication(), "After adding a new extension a save should be perfomred in order for the extension to be active.");
                     }
                 }
             });
