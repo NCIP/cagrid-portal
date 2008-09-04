@@ -160,17 +160,19 @@ public class Utils {
 	}
 
 	public static void copyFile(File in, File out) throws IOException {
+        File inCannon = in.getCanonicalFile();
+        File outCannon = out.getCanonicalFile();
 		// avoids copying a file to itself
-		if (in.equals(out)) {
+		if (inCannon.equals(outCannon)) {
 			return;
 		}
 		// ensure the output file location exists
-		out.getCanonicalFile().getParentFile().mkdirs();
+		outCannon.getParentFile().mkdirs();
 
-		BufferedInputStream fis = new BufferedInputStream(new FileInputStream(
-				in));
+		BufferedInputStream fis = new BufferedInputStream(
+            new FileInputStream(inCannon));
 		BufferedOutputStream fos = new BufferedOutputStream(
-				new FileOutputStream(out));
+			new FileOutputStream(outCannon));
 
 		// a temporary buffer to read into
 		byte[] tmpBuffer = new byte[8192];
