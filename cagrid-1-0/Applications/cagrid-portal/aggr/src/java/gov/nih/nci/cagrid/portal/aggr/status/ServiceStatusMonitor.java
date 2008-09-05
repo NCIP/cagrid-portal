@@ -22,6 +22,7 @@ import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
+ * @author <a href="mailto:manav.kher@semanticbits.com">Manav Kher</a>
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
  * 
  */
@@ -76,7 +77,7 @@ public class ServiceStatusMonitor extends AbstractMonitor {
 					if (getServiceStatusPolicy().shouldSetServiceDormant(
 							gridService.getStatusHistory())) {
 						logger.debug("Setting service '" + serviceUrl + "' dormant.");
-						getGridServiceDao().banService(gridService);
+						getGridServiceDao().setServiceDormant(gridService);
 					}
 
 				} catch (Exception ex) {
