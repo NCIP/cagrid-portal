@@ -57,7 +57,21 @@ public class UMLClassDao extends AbstractDao<UMLClass> {
                                 maxResultSize).list();
                     }
                 });
-        return resultSet;
+        List<UMLClass> classes = new ArrayList<UMLClass>();
+
+        try {
+            for (UMLClass kclass : resultSet) {
+                if (kclass.getModel().getService().getCurrentStatus().equals(ServiceStatus.ACTIVE))
+                    classes.add(kclass);
+                if (classes.size() >= maxResultSize)
+                    break;
+            }
+        } catch (Exception e) {
+            logger.error("Error filtering resultset" + e.getMessage());
+        }
+
+        return classes;
+
     }
 
     public List<UMLClass> getClassesWithSameConceptCode(final UMLClass example) {
