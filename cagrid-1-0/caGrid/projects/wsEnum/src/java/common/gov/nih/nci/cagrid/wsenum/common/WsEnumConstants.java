@@ -1,5 +1,7 @@
 package gov.nih.nci.cagrid.wsenum.common;
 
+import gov.nih.nci.cagrid.wsenum.utils.IterImplType;
+
 import javax.xml.namespace.QName;
 
 /** 
@@ -9,7 +11,7 @@ import javax.xml.namespace.QName;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created Aug 15, 2006 
- * @version $Id: WsEnumConstants.java,v 1.1 2007-05-16 15:00:57 dervin Exp $ 
+ * @version $Id: WsEnumConstants.java,v 1.2 2008-09-05 18:32:11 dervin Exp $ 
  */
 public class WsEnumConstants {
 	// Namespace URI for WS-Enumeration
@@ -49,6 +51,10 @@ public class WsEnumConstants {
     public static final QName ENUMERATION_RESPONSE_QNAME = new QName(ENUMERATION_RESPONSE_NAMESPACE, "EnumerationResponseContainer");
     public static final String ENUMERATION_RESPONSE_PACKAGE = "gov.nih.nci.cagrid.enumeration.stubs.response";
     
+    // service property for setting default IterImplType
+    public static final String ENUMERATION_SERVICE_PROPERTY_PREFIX = "caGridWsEnumeration_";
+    public static final String ITER_IMPL_TYPE_PROPERTY = ENUMERATION_SERVICE_PROPERTY_PREFIX + "iterImplType";
+    public static final String DEFAULT_ITER_IMPL_TYPE = IterImplType.CAGRID_CONCURRENT_COMPLETE.name();
     
     private WsEnumConstants() {
         
