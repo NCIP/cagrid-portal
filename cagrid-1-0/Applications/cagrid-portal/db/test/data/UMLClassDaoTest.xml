@@ -5,9 +5,13 @@
     <SEM_META ID="-2" SM_CCODE="codeB"/>
     <SEM_META ID="-3" SM_CCODE="codeC"/>
 
-    <GRID_SERVICES SERVICE_TYPE="GridDataService" ID="-1"/>
-    <GRID_SERVICES SERVICE_TYPE="GridDataService" ID="-2"/>
-    <GRID_SERVICES SERVICE_TYPE="GridDataService" ID="-3"/>
+    <GRID_SERVICES SERVICE_TYPE="GridDataService" URL="http://" ID="-1"/>
+    <GRID_SERVICES SERVICE_TYPE="GridDataService" URL="http://" ID="-2"/>
+    <GRID_SERVICES SERVICE_TYPE="GridDataService" URL="http://" ID="-3"/>
+
+    <STATUS_CHANGE ID="-1" SERVICE_ID="-1" STATUS="ACTIVE"/>
+    <STATUS_CHANGE ID="-2" SERVICE_ID="-1" STATUS="INACTIVE"/>
+    <STATUS_CHANGE ID="-3" SERVICE_ID="-1" STATUS="INACTIVE"/>
 
     <DOMAIN_MODELS id="-1" SERVICE_ID="-1"/>
     <DOMAIN_MODELS id="-2" SERVICE_ID="-2"/>

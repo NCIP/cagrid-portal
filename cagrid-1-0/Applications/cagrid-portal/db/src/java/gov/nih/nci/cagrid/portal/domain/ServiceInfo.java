@@ -37,14 +37,21 @@ public class ServiceInfo {
      * @param service
      */
     public ServiceInfo(GridService service) {
-        setName(service.getServiceMetadata().getServiceDescription().getName());
+        setStatus(service.getCurrentStatus().toString());
+        setUrl(service.getUrl());
+        setId(String.valueOf(service.getId()));
+
+        try {
+            setName(service.getServiceMetadata().getServiceDescription().getName());
+        } catch (Exception e) {
+            logger.warn("Error getting Service Description for service: " + getUrl());
+            setName(formulateNameFromUrl(getUrl()));
+        }
+
         ResearchCenter rc = service.getServiceMetadata().getHostingResearchCenter();
         if (rc != null) {
             setCenter(rc.getShortName());
         }
-        setStatus(service.getCurrentStatus().toString());
-        setUrl(service.getUrl());
-        setId(String.valueOf(service.getId()));
         if (service instanceof GridDataService) {
             setType(ServiceType.DATA);
         } else {
@@ -127,6 +134,18 @@ public class ServiceInfo {
         } catch (MalformedURLException ex) {
             return url.length() > URL_MAX_LENGTH_ALLOWED ? url.substring(0, URL_MAX_LENGTH_ALLOWED) + ".." : url;
         }
+    }
+
+    private String formulateNameFromUrl(String Url){
+        try {
+            if(Url.lastIndexOf("/")>-1){
+            String longName = Url.substring(Url.lastIndexOf("/"));
+                return longName;
+            }
+        } catch (Exception e) {
+            logger.error("Error formulating name from URL");
+        }
+        return getUrlAbbrv();
     }
 
     public boolean isSecure() {
