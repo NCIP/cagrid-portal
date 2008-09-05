@@ -1,7 +1,7 @@
     
                          caGrid Portal
-                          Version 2.0.2.1
-                       July 9, 2008
+                          Version 2.0.2.2
+                       September 5, 2008
 
 
 ================================================================
@@ -22,11 +22,11 @@
 ================================================================
 
     This document contains the release notes for the caGrid 
-    Portal 2.0.2.1 release. This is a minor bug fix release of
+    Portal 2.0.2.2 release. This is a minor bug fix release of
     caGrid Portal 2.0.2
 
     This release fixes some bugs and known issues
-    with the previous release (2.0.2).
+    with the previous release (2.0.2.1).
 
 
 
@@ -38,6 +38,8 @@
     caGrid Portal 2.0 was release on December 28 2007
     caGrid Portal 2.0.1 was released on Feb 22 2008
     caGrid Portal 2.0.2 was released on June 18 2008
+    caGrid Portal 2.0.2.1 was released on July 9 2008
+
      
 
 ================================================================
@@ -52,9 +54,9 @@
 
 Bug		Description
 ------------------------------------------------------------   
- [#15099] EVS search throws error in the browser
- [#14997] Logged in users cannot see FQP results in Portal 2.0.2
- [14995] Share query button appears for DCQL queries
+[#16415] Query portlet crashes due to invalid metadata
+[#16420] Portal is overloading GME service
+[#15824] Problem with RFE 12079 implementation for Portal
 
 ================================================================
                      5.0 Known Issues Not Yet Fixed
@@ -66,8 +68,7 @@ http://gforge.nci.nih.gov/tracker/?group_id=25
 
  * Some Porlets do not mantain strict screen width and can get too wide
  and distort other portlets on the same page
- * Service unbanning operation will sometimes fail for services that have
- been banned for a long time (greater than 4 days).
+ * [#15025] RuntimeException thrown in Portal 2.0.2
  
 
 ================================================================
