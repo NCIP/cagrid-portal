@@ -1,6 +1,5 @@
 package gov.nih.nci.cagrid.introduce.portal.modification;
 
-import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.common.portal.MultiEventProgressBar;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.common.portal.PromptButtonDialog;
@@ -15,19 +14,13 @@ import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespacesType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
-import gov.nih.nci.cagrid.introduce.beans.security.MethodAuthorization;
-import gov.nih.nci.cagrid.introduce.beans.security.MethodSecurity;
-import gov.nih.nci.cagrid.introduce.beans.security.ServiceAuthorization;
-import gov.nih.nci.cagrid.introduce.beans.security.ServiceSecurity;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
 import gov.nih.nci.cagrid.introduce.common.AntTools;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.ConfigurationUtil;
-import gov.nih.nci.cagrid.introduce.common.FileFilters;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
-import gov.nih.nci.cagrid.introduce.extension.utils.ExtensionUtilities;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
 import gov.nih.nci.cagrid.introduce.portal.extension.ServiceModificationUIPanel;
 import gov.nih.nci.cagrid.introduce.portal.modification.discovery.NamespaceTypeDiscoveryComponent;
@@ -45,6 +38,7 @@ import gov.nih.nci.cagrid.introduce.portal.modification.types.NamespaceTypeTreeN
 import gov.nih.nci.cagrid.introduce.portal.modification.types.NamespacesJTree;
 import gov.nih.nci.cagrid.introduce.portal.modification.types.SchemaElementTypeConfigurePanel;
 import gov.nih.nci.cagrid.introduce.portal.modification.types.SchemaElementTypeTreeNode;
+import gov.nih.nci.cagrid.introduce.portal.modification.types.SchemaElementTypeValidator;
 import gov.nih.nci.cagrid.introduce.portal.modification.upgrade.UpgradeStatusView;
 import gov.nih.nci.cagrid.introduce.upgrade.UpgradeManager;
 import gov.nih.nci.cagrid.introduce.upgrade.common.UpgradeStatus;
@@ -101,6 +95,7 @@ import org.cagrid.grape.utils.CompositeErrorDialog;
 import org.cagrid.grape.utils.ErrorDialog;
 
 import com.jgoodies.validation.Severity;
+import com.jgoodies.validation.ValidationMessage;
 import com.jgoodies.validation.ValidationResult;
 import com.jgoodies.validation.ValidationResultModel;
 import com.jgoodies.validation.message.SimpleValidationMessage;
@@ -209,7 +204,7 @@ public class ModificationViewer extends ApplicationComponent {
     private JSplitPane typesSplitPane = null;
 
     private List extensionPanels = null;
-    
+
     private List discoveryPanels = null;
 
     private JCheckBox propertyIsFromETCCheckBox = null;
@@ -275,7 +270,8 @@ public class ModificationViewer extends ApplicationComponent {
             logger.error(e);
         }
         if (beenDisposed) {
-            throw new Exception("Unable to modify service or service modification exited on service at " + this.methodsDirectory.getAbsolutePath());
+            throw new Exception("Unable to modify service or service modification exited on service at "
+                + this.methodsDirectory.getAbsolutePath());
         }
     }
 
@@ -298,11 +294,10 @@ public class ModificationViewer extends ApplicationComponent {
             ServiceModificationUIPanel panel = (ServiceModificationUIPanel) this.extensionPanels.get(i);
             panel.setServiceInfo(this.info);
         }
-        for(int i = 0; i < this.discoveryPanels.size(); i++){
-            NamespaceTypeDiscoveryComponent comp = (NamespaceTypeDiscoveryComponent)this.discoveryPanels.get(i);
+        for (int i = 0; i < this.discoveryPanels.size(); i++) {
+            NamespaceTypeDiscoveryComponent comp = (NamespaceTypeDiscoveryComponent) this.discoveryPanels.get(i);
             comp.setCurrentNamespaces(this.info.getNamespaces());
         }
-        
 
         // repaint the component that was selected before the save
         this.repaint();
@@ -376,7 +371,7 @@ public class ModificationViewer extends ApplicationComponent {
                                 "Open", "Close"}, "Close");
                     GridApplication.getContext().showDialog(diag);
                     String result = diag.getSelection();
-                    
+
                     if (result != null && result.equals("Upgrade")) {
                         try {
                             if (dialog != null) {
@@ -1050,7 +1045,7 @@ public class ModificationViewer extends ApplicationComponent {
                             getSchemaElementTypeConfigurationPanel().setSchemaElementType(
                                 (SchemaElementType) node.getUserObject(), false);
                         } else {
-                            getSchemaElementTypeConfigurationPanel().setHide(false);
+                            getSchemaElementTypeConfigurationPanel().setHide((((NamespaceType)((NamespaceTypeTreeNode)node.getParent()).getUserObject()).getGenerateStubs()==null) || (((NamespaceType)((NamespaceTypeTreeNode)node.getParent()).getUserObject()).getGenerateStubs().booleanValue()));
                             getSchemaElementTypeConfigurationPanel().setSchemaElementType(
                                 (SchemaElementType) node.getUserObject(), true);
                         }
@@ -1099,7 +1094,8 @@ public class ModificationViewer extends ApplicationComponent {
      */
     private NamespaceTypeConfigurePanel getNamespaceTypeConfigurationPanel() {
         if (this.namespaceTypeConfigurationPanel == null) {
-            this.namespaceTypeConfigurationPanel = new NamespaceTypeConfigurePanel(getSchemaElementTypeConfigurationPanel());
+            this.namespaceTypeConfigurationPanel = new NamespaceTypeConfigurePanel(
+                getSchemaElementTypeConfigurationPanel());
             this.namespaceTypeConfigurationPanel.setName("namespaceTypeConfigurationPanel");
         }
         return this.namespaceTypeConfigurationPanel;
@@ -1196,6 +1192,33 @@ public class ModificationViewer extends ApplicationComponent {
                                             return;
                                         }
                                     }
+                                }
+
+                                boolean errors = false;
+                                String em = "The following data type configurations in the " + currentNs.getNamespace()
+                                    + " namespacece have the following errors: \n";
+
+                                // walk through all the types and make sure they
+                                // have valid serialization configurations
+                                if (currentNs.getGenerateStubs()!=null && !currentNs.getGenerateStubs().booleanValue() && currentNs.getSchemaElement() != null) {
+                                    for (int schemaElementI = 0; schemaElementI < currentNs.getSchemaElement().length; schemaElementI++) {
+                                        SchemaElementType type = currentNs.getSchemaElement(schemaElementI);
+                                        ValidationResult result = SchemaElementTypeValidator.validateSchemaElementType(
+                                            type.getClassName(), type.getSerializer(), type.getDeserializer());
+                                        if (result.getErrors() != null && !result.getErrors().isEmpty()) {
+                                            errors = true;
+                                            Iterator it = result.getErrors().iterator();
+                                            while (it.hasNext()) {
+                                                em += type.getType() + " : "
+                                                    + ((ValidationMessage) it.next()).formattedText() + "\n";
+                                            }
+                                        }
+                                    }
+                                }
+
+                                if (errors) {
+                                    setErrorMessage(em);
+                                    return;
                                 }
                             }
                         }
@@ -1373,7 +1396,6 @@ public class ModificationViewer extends ApplicationComponent {
             th.start();
         }
     }
-
 
 
     /**
@@ -1943,7 +1965,8 @@ public class ModificationViewer extends ApplicationComponent {
         NamespaceTypeDiscoveryComponent discoveryComponent = (NamespaceTypeDiscoveryComponent) getDiscoveryTabbedPane()
             .getSelectedComponent();
 
-        NamespaceType[] types = discoveryComponent.createNamespaceType(schemaDir, ConfigurationUtil.getIntroducePortalConfiguration().getNamespaceReplacementPolicy(), progBar);
+        NamespaceType[] types = discoveryComponent.createNamespaceType(schemaDir, ConfigurationUtil
+            .getIntroducePortalConfiguration().getNamespaceReplacementPolicy(), progBar);
 
         List<String> messages = new ArrayList<String>();
         if (types != null) {
