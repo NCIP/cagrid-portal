@@ -10,7 +10,6 @@
          <c:if test="${fn:startsWith(currChildNode.name,'ForeignClass')}">
              <c:if test="${!empty currChildNode.content.serviceInfo}">
                  <tags:serviceInfoPopup id="${currChildNode.path}"
-                                        link_href="${currChildNode.content.serviceInfo.name}"
                                         link_text="(${currChildNode.content.serviceInfo.name})"
                                         serviceInfo="${currChildNode.content.serviceInfo}"/>
              </c:if>

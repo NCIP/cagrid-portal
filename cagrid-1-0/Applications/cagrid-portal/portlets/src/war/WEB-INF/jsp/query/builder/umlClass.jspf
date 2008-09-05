@@ -13,7 +13,6 @@
         <c:if test="${!empty currChildNode.content}">
             <c:if test="${currChildNode.content.class.name == foreignNodeClassname}">
                 <tags:serviceInfoPopup id="${currChildNode.path}"
-                                       link_href="${currChildNode.content.serviceInfo.name}"
                                        link_text="(${currChildNode.content.serviceInfo.name})"
                                        serviceInfo="${currChildNode.content.serviceInfo}"/>
             </c:if>
