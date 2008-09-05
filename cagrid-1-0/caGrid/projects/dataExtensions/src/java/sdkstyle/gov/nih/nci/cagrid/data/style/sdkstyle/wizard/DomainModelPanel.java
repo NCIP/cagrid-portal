@@ -72,7 +72,7 @@ import org.cagrid.grape.utils.CompositeErrorDialog;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created Sep 25, 2006 
- * @version $Id: DomainModelPanel.java,v 1.7 2008-06-10 15:30:25 hastings Exp $ 
+ * @version $Id: DomainModelPanel.java,v 1.8 2008-09-05 16:04:47 dervin Exp $ 
  */
 public class DomainModelPanel extends AbstractWizardPanel {
 	
@@ -179,7 +179,7 @@ public class DomainModelPanel extends AbstractWizardPanel {
 	 * 	
 	 * @return javax.swing.JRadioButton	
 	 */
-	private JRadioButton getNoDomainModelRadioButton() {
+	protected JRadioButton getNoDomainModelRadioButton() {
 		if (noDomainModelRadioButton == null) {
 			noDomainModelRadioButton = new JRadioButton();
 			noDomainModelRadioButton.setText("Use No Domain Model");
@@ -206,7 +206,7 @@ public class DomainModelPanel extends AbstractWizardPanel {
 	 * 	
 	 * @return javax.swing.JRadioButton	
 	 */
-	private JRadioButton getFromFileRadioButton() {
+	protected JRadioButton getFromFileRadioButton() {
 		if (fromFileRadioButton == null) {
 			fromFileRadioButton = new JRadioButton();
 			fromFileRadioButton.setText("Domain Model From File");
@@ -229,7 +229,7 @@ public class DomainModelPanel extends AbstractWizardPanel {
 	 * 	
 	 * @return javax.swing.JRadioButton	
 	 */
-	private JRadioButton getFromCaDsrRadioButton() {
+	protected JRadioButton getFromCaDsrRadioButton() {
 		if (fromCaDsrRadioButton == null) {
 			fromCaDsrRadioButton = new JRadioButton();
 			fromCaDsrRadioButton.setText("Generate From caDSR");
