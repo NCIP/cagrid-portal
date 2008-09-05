@@ -194,6 +194,7 @@
             <entry key="strict.index.verification" value="${strict.index.verification}"/>
             <entry key="cagrid.portal.aggr.defaultTimeout" value="${cagrid.portal.aggr.defaultTimeout}"/>
             <entry key="cagrid.portal.aggr.defaultPeriod" value="${cagrid.portal.aggr.defaultPeriod}"/>
+            <entry key="cagrid.portal.slow.aggr.defaultPeriod" value="${cagrid.portal.slow.aggr.defaultPeriod}"/>
         </propertyfile>
     </target>
 
