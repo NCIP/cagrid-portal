@@ -17,7 +17,6 @@ import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.ConfigurationUtil;
-import gov.nih.nci.cagrid.introduce.common.ResourceManager;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.sdkquery4.processor.SDK4QueryProcessor;
 import gov.nih.nci.cagrid.sdkquery4.style.wizard.config.SchemaMappingConfigurationStep;
@@ -64,7 +63,7 @@ import org.projectmobius.gme.client.GlobusGMEXMLDataModelServiceFactory;
  * @author David Ervin
  * 
  * @created Jan 9, 2008 11:09:22 AM
- * @version $Id: SchemaMappingPanel.java,v 1.4 2008-06-10 15:30:25 hastings Exp $ 
+ * @version $Id: SchemaMappingPanel.java,v 1.5 2008-09-05 15:31:30 dervin Exp $ 
  */
 public class SchemaMappingPanel extends AbstractWizardPanel {
     
