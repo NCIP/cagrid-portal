@@ -8,7 +8,7 @@
 		<CreationWizardPanel classname="gov.nih.nci.cagrid.sdkquery4.style.wizard.SDK4InitializationPanel"/>
 		<CreationWizardPanel classname="gov.nih.nci.cagrid.sdkquery4.style.wizard.QueryProcessorConfigurationPanel"/>
 		<CreationWizardPanel classname="gov.nih.nci.cagrid.sdkquery4.style.wizard.QueryProcessorSecurityPanel"/>
-		<CreationWizardPanel classname="gov.nih.nci.cagrid.data.style.sdkstyle.wizard.DomainModelPanel"/>
+		<CreationWizardPanel classname="gov.nih.nci.cagrid.sdkquery4.style.wizard.SDK4DomainModelPanel"/>
 		<CreationWizardPanel classname="gov.nih.nci.cagrid.sdkquery4.style.wizard.SchemaMappingPanel"/>
 	</CreationWizardPanels>
 	<ModificationUiPanel classname="gov.nih.nci.cagrid.sdkquery4.style.modification.SDK4InformationPanel"/>
