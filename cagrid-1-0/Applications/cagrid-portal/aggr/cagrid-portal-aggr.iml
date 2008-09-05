@@ -27,15 +27,6 @@
     <orderEntry type="library" name="Globus" level="application" />
     <orderEntry type="library" name="Spring" level="project" />
     <orderEntry type="library" name="cagrid" level="project" />
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="file://$MODULE_DIR$/etc" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
     <orderEntry type="library" name="hibernate" level="project" />
     <orderEntryProperties />
   </component>

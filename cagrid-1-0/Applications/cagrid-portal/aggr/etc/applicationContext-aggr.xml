@@ -28,8 +28,12 @@
 	<bean id="defaultPeriod" class="java.lang.Long">
 		<constructor-arg value="${cagrid.portal.aggr.defaultPeriod}"/>
 	</bean>
-	
-	<bean id="gmeUrl" class="java.lang.String">
+
+    <bean id="slowDefaultPeriod" class="java.lang.Long">
+        <constructor-arg value="${cagrid.portal.slow.aggr.defaultPeriod}"/>
+    </bean>
+
+    <bean id="gmeUrl" class="java.lang.String">
 		<constructor-arg value="${cagrid.portal.gmeUrl}"/>
 	</bean>
 	

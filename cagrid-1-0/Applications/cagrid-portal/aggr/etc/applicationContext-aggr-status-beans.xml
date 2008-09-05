@@ -20,15 +20,17 @@
           class="gov.nih.nci.cagrid.portal.aggr.status.DelegatingDynamicServiceStatusProvider">
         <property name="providers">
             <list>
-                <bean id="idxServiceStatusProvider"
-                      class="gov.nih.nci.cagrid.portal.aggr.status.IdxServiceStatusProvider">
-                    <property name="indexServiceUrls" value="${cagrid.portal.indexServiceUrls}"/>
-                    <property name="dynamicServiceUrlProvider" ref="dynamicServiceUrlProvider"/>
-                    <property name="strictIndexVerification" value="${strict.index.verification}"/>
-                </bean>
+                <ref local="idxServiceStatusProvider"/>
                 <ref local="pingServiceStatusProvider"/>
             </list>
         </property>
+    </bean>
+
+    <bean id="idxServiceStatusProvider"
+          class="gov.nih.nci.cagrid.portal.aggr.status.IdxServiceStatusProvider">
+        <property name="indexServiceUrls" value="${cagrid.portal.indexServiceUrls}"/>
+        <property name="dynamicServiceUrlProvider" ref="dynamicServiceUrlProvider"/>
+        <property name="strictIndexVerification" value="${strict.index.verification}"/>
     </bean>
 
     <bean id="pingServiceStatusProvider" class="gov.nih.nci.cagrid.portal.aggr.status.DynamicServiceStatusProvider">

@@ -28,8 +28,8 @@
 
 	<bean id="checkForXmlSchemasTask"
 		class="org.springframework.scheduling.timer.ScheduledTimerTask">
-		<property name="delay" value="20000" />
-		<property name="period" ref="defaultPeriod" />
+		<property name="delay" value="200000" />
+		<property name="period" ref="slowDefaultPeriod" />
 		<property name="timerTask" ref="checkForXmlSchemas" />
 	</bean>
 
