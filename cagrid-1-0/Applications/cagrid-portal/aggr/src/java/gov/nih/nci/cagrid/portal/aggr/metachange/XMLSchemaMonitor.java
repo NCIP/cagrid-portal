@@ -14,26 +14,36 @@ import gov.nih.nci.cagrid.portal.domain.metadata.service.Operation;
 import gov.nih.nci.cagrid.portal.domain.metadata.service.Output;
 import gov.nih.nci.cagrid.portal.domain.metadata.service.ServiceContext;
 import gov.nih.nci.cagrid.portal.util.PortalUtils;
+import gov.nih.nci.cagrid.portal.util.TimestampProvider;
+import gov.nih.nci.cagrid.portal.aggr.TrackableMonitor;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Date;
 
 import org.springframework.orm.hibernate3.HibernateTemplate;
 import org.springframework.transaction.annotation.Transactional;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
  * 
  */
 @Transactional
-public class XMLSchemaMonitor {
+public class XMLSchemaMonitor implements TrackableMonitor {
 
 	private HibernateTemplate hibernateTemplate;
 	private String cadsrUrl;
 	private String gmeUrl;
 
-	/**
+    private static final Log logger = LogFactory
+            .getLog(XMLSchemaMonitor.class);
+
+    private TimestampProvider timestampProvider;
+
+    /**
 	 * 
 	 */
 	public XMLSchemaMonitor() {
@@ -41,7 +51,7 @@ public class XMLSchemaMonitor {
 	}
 
 	public void checkForXMLSchemas() {
-
+        logger.debug("Checking for XML Schemas");
 		List gridServices = getHibernateTemplate().find("from GridService");
 		for (Iterator i = gridServices.iterator(); i.hasNext();) {
 			GridService gridService = (GridService) i.next();
@@ -111,10 +121,21 @@ public class XMLSchemaMonitor {
 			}
 
 		}
+        logger.debug("Finished checking for XML Schemas");
 
-	}
+        timestampProvider.createTimestamp();
 
-	public HibernateTemplate getHibernateTemplate() {
+    }
+
+    public static void main(String[] args) {
+        new XMLSchemaMonitor().checkForXMLSchemas();
+    }
+
+    public Date getLastExecutedOn() throws RuntimeException {
+        return timestampProvider.getTimestamp();
+    }
+
+    public HibernateTemplate getHibernateTemplate() {
 		return hibernateTemplate;
 	}
 
