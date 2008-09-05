@@ -191,6 +191,11 @@
         <java classname="gov.nih.nci.cagrid.portal.util.KillGridServices" classpathref="aggr.run.cp"/>
     </target>
 
+    <target name="aggr:report-banned-svcs" depends="aggr:prepare-run-cp"
+            description="Get a list of Banned services">
+        <java classname="gov.nih.nci.cagrid.portal.util.ReportBannedServices" classpathref="aggr.run.cp"/>
+    </target>
+
     <target name="aggr:load-workspaces" depends="aggr:prepare-run-cp">
         <java classname="gov.nih.nci.cagrid.portal.util.WorkspacesLoader" classpathref="aggr.run.cp" fork="true">
             <arg value="${aggr.dir}/etc/caBIG_Workspaces_participants.xls"/>
