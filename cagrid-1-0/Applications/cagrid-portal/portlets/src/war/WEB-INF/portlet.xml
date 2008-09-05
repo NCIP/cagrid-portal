@@ -94,7 +94,6 @@
 			<short-title>Registration</short-title>
 			<keywords>cagrid,registration</keywords>
 		</portlet-info>
-
 	</portlet>
 
 	<portlet>
@@ -417,6 +416,30 @@
 
         </portlet-preferences>
     </portlet>
+
+
+    <portlet>
+        <description>Diagnostics Portlet</description>
+        <portlet-name>diagnostics</portlet-name>
+        <display-name>Diagnostics Portlet</display-name>
+        <portlet-class>
+            org.springframework.web.portlet.DispatcherPortlet
+        </portlet-class>
+        <init-param>
+            <name>contextConfigLocation</name>
+            <value>/WEB-INF/context/diagnostics-portlet.xml</value>
+        </init-param>
+        <supports>
+            <mime-type>text/html</mime-type>
+            <portlet-mode>view</portlet-mode>
+        </supports>
+        <portlet-info>
+            <title>Diagnostics Portlet</title>
+            <short-title>Diagnostics</short-title>
+            <keywords>cagrid,diagnostics</keywords>
+        </portlet-info>
+    </portlet>
+
 
     <portlet>
         <description>Content introducing the caGrid Portal</description>

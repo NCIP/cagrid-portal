@@ -213,8 +213,24 @@ div.row:after, .autoclear:after {
     visibility: hidden;
 }
 
+div.row div.threeCols{
+    width:33%;
+    float:left;
+}
 
+div.row div.twoCols{
+    width:50%;
+    float:left;
+}
 
+.errorMsg{
+    color:#ff0000;
+    font-style:italic;
+    font-weight:bold;
+}
 
+.hidden{
+    visibility:hidden;
+}
 
 

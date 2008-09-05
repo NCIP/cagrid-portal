@@ -106,7 +106,17 @@
             <param-name>disconnectedTime</param-name>
             <param-value>5000</param-value>
         </init-param>
-
+        <init-param>
+            <param-name>classes</param-name>
+            <param-value>
+                gov.nih.nci.cagrid.portal.portlet.diagnostics.DiagnosticResultStatus,
+                gov.nih.nci.cagrid.portal.portlet.diagnostics.DiagnosticResult,
+                gov.nih.nci.cagrid.portal.portlet.diagnostics.PortalStatusDiagnosticService,
+                gov.nih.nci.cagrid.portal.portlet.diagnostics.PingDiagnosticService,
+                gov.nih.nci.cagrid.portal.portlet.diagnostics.IdxDiagnosticService,
+                gov.nih.nci.cagrid.portal.portlet.diagnostics.MetadataDiagnosticService
+            </param-value>
+        </init-param>
     </servlet>
 
     <servlet-mapping>
