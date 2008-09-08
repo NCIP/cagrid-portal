@@ -18,7 +18,7 @@
         <c:when test="${empty aggregateTargetsCmd.available}">
             <div class="row">
                 <div class="label">
-                    Cannot form aggregate query. No other Service
+                    Cannot form aggregate query. No other Active Service
                     has syntactically equivalent classes.
                 </div>
             </div>
@@ -27,7 +27,7 @@
         <c:otherwise>
             <div class="row">
                 <div class="label">
-                    Following Services have the chosen UML Class. Select services to aggregate
+                    Following Active Services have the chosen UML Class. Select services to aggregate
                     data from.
                 </div>
             </div>
