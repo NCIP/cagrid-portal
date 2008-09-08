@@ -5,6 +5,7 @@ import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.codegen.provider.providers.GetMultipeResourcePropertiesResourceProvider;
 import gov.nih.nci.cagrid.introduce.codegen.provider.providers.GetResourcePropertyProvider;
 import gov.nih.nci.cagrid.introduce.codegen.provider.providers.LifetimeProvider;
+import gov.nih.nci.cagrid.introduce.codegen.provider.providers.ProviderException;
 import gov.nih.nci.cagrid.introduce.codegen.provider.providers.QueryResourcePropertiesResourceProvider;
 import gov.nih.nci.cagrid.introduce.codegen.provider.providers.SubscribeProvider;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;

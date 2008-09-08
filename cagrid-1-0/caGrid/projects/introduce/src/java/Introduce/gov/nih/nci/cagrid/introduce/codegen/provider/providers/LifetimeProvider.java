@@ -8,8 +8,6 @@ import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertyType;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
-import gov.nih.nci.cagrid.introduce.codegen.provider.Provider;
-import gov.nih.nci.cagrid.introduce.codegen.provider.ProviderException;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 

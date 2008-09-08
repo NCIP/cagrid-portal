@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.introduce.codegen.provider;
+package gov.nih.nci.cagrid.introduce.codegen.provider.providers;
 
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;

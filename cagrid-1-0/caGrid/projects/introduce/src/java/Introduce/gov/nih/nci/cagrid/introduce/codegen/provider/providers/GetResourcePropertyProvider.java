@@ -7,8 +7,6 @@ import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeImportInformation;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeProviderInformation;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
-import gov.nih.nci.cagrid.introduce.codegen.provider.Provider;
-import gov.nih.nci.cagrid.introduce.codegen.provider.ProviderException;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 
