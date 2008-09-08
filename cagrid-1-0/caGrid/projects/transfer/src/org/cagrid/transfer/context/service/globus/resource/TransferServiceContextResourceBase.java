@@ -231,9 +231,8 @@ public abstract class TransferServiceContextResourceBase extends ReflectionResou
 		}
 		MessageContext ctx = MessageContext.getCurrentContext();
 
-		String servicePath = ctx.getTargetService();
-		servicePath = servicePath.substring(0,servicePath.lastIndexOf("/"));
-		servicePath+="/TransferServiceContext";
+		//TODO: hardcoded for now to enable no conflicts with using services from other contexts
+		String servicePath = "/cagrid/TransferServiceContext";
 
 		String jndiName = Constants.JNDI_SERVICES_BASE_NAME + servicePath + "/configuration";
 		logger.debug("Will read configuration from jndi name: " + jndiName);

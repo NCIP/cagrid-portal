@@ -6,7 +6,6 @@ import org.cagrid.transfer.context.service.globus.resource.TransferServiceContex
 import org.cagrid.transfer.context.service.helper.DataStagedCallback;
 import org.cagrid.transfer.descriptor.DataStorageDescriptor;
 import org.cagrid.transfer.descriptor.Status;
-import org.globus.ftp.dc.TransferContext;
 
 /**
  * TODO:I am the service side implementation class. IMPLEMENT AND DOCUMENT ME
