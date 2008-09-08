@@ -35,24 +35,6 @@ public class SecurityDescriptorGenerator {
 			StringBuffer xml = new StringBuffer();
 			xml.append("<securityConfig xmlns=\"http://www.globus.org\">");
 
-			xml.append("<method name=\"queryResourceProperties\">\n");
-			xml.append("    <auth-method>\n");
-			xml.append("      <none/>\n");
-			xml.append("    </auth-method>\n");
-			xml.append("</method>\n");
-
-			xml.append("<method name=\"getMultipleResourceProperties\">\n");
-			xml.append("    <auth-method>\n");
-			xml.append("      <none/>\n");
-			xml.append("    </auth-method>\n");
-			xml.append("</method>\n");
-
-			xml.append("<method name=\"getResourceProperty\">\n");
-			xml.append("    <auth-method>\n");
-			xml.append("      <none/>\n");
-			xml.append("    </auth-method>\n");
-			xml.append("</method>\n");
-
 			// Sloppy Jalopy, need to have this accomplished when adding as
 			// provider
 			xml.append("<method name=\"getServiceSecurityMetadata\">\n");
