@@ -3,6 +3,7 @@
 	<ns1:ServiceExtensionDescription displayName="caGrid WS-Enumeration" name="cagrid_wsEnum">
 		<ns1:CreationPostProcessor>gov.nih.nci.cagrid.introduce.extensions.wsenum.creation.WsEnumCreationPostProcessor</ns1:CreationPostProcessor>
 		<ns1:CodegenPostProcessor>gov.nih.nci.cagrid.introduce.extensions.wsenum.codegen.WsEnumCodegenPostProcessor</ns1:CodegenPostProcessor>
+		<ns1:ServiceModificationUIPanel>gov.nih.nci.cagrid.introduce.extensions.wsenum.ui.EnumIteratorSelectionPanel</ns1:ServiceModificationUIPanel>
 		<ns1:Properties/>
 	</ns1:ServiceExtensionDescription>
 	<ns1:UpgradesDescription>

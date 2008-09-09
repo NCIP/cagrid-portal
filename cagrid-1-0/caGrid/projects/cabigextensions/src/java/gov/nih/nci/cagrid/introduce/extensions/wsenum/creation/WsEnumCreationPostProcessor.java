@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.introduce.extensions.wsenum.creation;
 
 import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeImportInformation;
@@ -49,6 +50,8 @@ public class WsEnumCreationPostProcessor implements CreationExtensionPostProcess
         throws CreationExtensionException {
         
         checkServiceNaming(info);
+        
+        setIterImplTypeServiceProperty(info);
         
         try {
             if (!enumerationServiceContextExists(info)) {
@@ -305,6 +308,15 @@ public class WsEnumCreationPostProcessor implements CreationExtensionPostProcess
         provider.setProviderClass(EnumProvider.class.getName());
         method.setImportInformation(info);
         method.setProviderInformation(provider);
+    }
+    
+    
+    private void setIterImplTypeServiceProperty(ServiceInformation info) throws CreationExtensionException {
+        ServiceDescription desc = info.getServiceDescriptor();
+        if (!CommonTools.servicePropertyExists(desc, WsEnumConstants.ITER_IMPL_TYPE_PROPERTY)) {
+            CommonTools.setServiceProperty(desc, WsEnumConstants.ITER_IMPL_TYPE_PROPERTY, 
+                WsEnumConstants.DEFAULT_ITER_IMPL_TYPE, false);
+        }
     }
 
 
