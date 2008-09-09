@@ -5,6 +5,7 @@ import gov.nih.nci.cagrid.portal.domain.metadata.dataservice.DomainModel;
 import gov.nih.nci.cagrid.portal.domain.metadata.dataservice.XMLSchema;
 import static org.mockito.Mockito.mock;
 import org.projectmobius.common.GridServiceResolver;
+import org.projectmobius.common.MobiusException;
 import org.projectmobius.common.Namespace;
 import org.projectmobius.gme.XMLDataModelService;
 import org.projectmobius.gme.client.GlobusGMEXMLDataModelServiceFactory;
@@ -32,14 +33,19 @@ public class PortalUtilsTest extends AbstractTimeSensitiveTest {
         return new Long("2500");
     }
 
-    public void testGME() throws Exception {
+
+    public void testGME() {
 
         GridServiceResolver.getInstance().setDefaultFactory(
                 new GlobusGMEXMLDataModelServiceFactory());
+        try {
+            XMLDataModelService handle = (XMLDataModelService) GridServiceResolver
+                    .getInstance().getGridService(badUrl);
+            SchemaNode schema = handle.getSchema(ns, false);
+        } catch (MobiusException e) {
+            assertNotNull(e);
+        }
 
-        XMLDataModelService handle = (XMLDataModelService) GridServiceResolver
-                .getInstance().getGridService(badUrl);
-        SchemaNode schema = handle.getSchema(ns, false);
 
     }
 
