@@ -23,17 +23,35 @@ import java.util.*;
  * A Story executes an ordered sequence of Steps. Story is the system-test-level
  * analogue of JUnit's TestCase.
  * 
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 
 public abstract class Story extends junit.framework.TestCase {
+
+
+    /** The sequence of executable test steps */
+    Vector mySteps;
+
+    /** The name of the current step */
+    String stepName;
+    
+    /** The success or failure of storySetUp(), called by setUp() */
+    boolean storySetupSuccess;
+    
+    /** The failure from a story step */
+    Throwable stepsFailedThrowable;
+    
     @Override
     protected void setUp() throws Exception {
         // TODO Auto-generated method stub
         super.setUp();
         try {
-            storySetUp();
+            storySetupSuccess = storySetUp();
         } catch (Throwable e) {
+        	// ensure the exception gets printed, JUnit won't always do this
+        	System.err.println("Caught exception during set up. Reason: " 
+	        	+ e.getMessage());
+        	e.printStackTrace();
             throw new Exception(e);
         }
     }
@@ -46,15 +64,13 @@ public abstract class Story extends junit.framework.TestCase {
         try {
             storyTearDown();
         } catch (Throwable e) {
+        	// ensure the exception gets printed, JUnit won't always do this
+        	System.err.println("Caught exception during tear down. Reason: " 
+        		+ e.getMessage());
+        	e.printStackTrace();
             throw new Exception(e);
         }
     }
-
-    /** The sequence of executable test steps */
-    Vector mySteps;
-
-    /** The name of the current step */
-    String stepName;
 
 
     /** Construct a new Story by sequencing the executable tests */
@@ -117,16 +133,34 @@ public abstract class Story extends junit.framework.TestCase {
     public void runBare() throws Throwable {
         System.out.println("\n===============================================");
         System.out.println("STORY: " + getClass().getName());
-        try {
-            if (storySetUp()) {
+        
+        // If setUp fails, exception will be thrown out of the test
+        System.out.println("STORY: " + getClass().getName() + " setting up");
+        setUp();
+
+        if (storySetupSuccess) {
+            try {
                 mySteps = steps();
                 runTest();
-            } else {
-                fail("storySetUp() failed, not running");
+            } catch (Throwable t) {
+                System.err.println("Caught exception while running tests: " + t.getMessage());
+                System.err.println("Stopping testing and tearing down");
+                t.printStackTrace();
+                // mark this story as failed
+                stepsFailedThrowable = t;
+            } finally {
+                System.out.println("STORY: " + getClass().getName() + " COMPLETE. Tearing down");
+                tearDown();
+                if (stepsFailedThrowable != null) {
+                    System.out.println("Failing due to exception during STORY: " + getClass().getName() + 
+                        " due to reason: " + stepsFailedThrowable.getMessage());
+                    fail(stepsFailedThrowable.getMessage());
+                }
             }
-        } finally {
-            storyTearDown();
-        }
+        } else {
+            // TODO: does this need to call tearDown() as well?
+            fail(getClass().getName() + ".storySetUp() failed, not running its steps");
+        }        
     }
 
 
@@ -151,12 +185,23 @@ public abstract class Story extends junit.framework.TestCase {
     // that the test suite will not error out looking for a single test......
     public void testDummy() throws Throwable {
     }
+    
 
+    /**
+     * Override this method to perform any setup operations required for the steps
+     * @return
+     *      True if setup succedes, false if it does not.
+     * @throws Throwable
+     */
     protected boolean storySetUp() throws Throwable {
         return true;
     }
+    
 
+    /**
+     * Override this method to perform any cleanup needed after running the steps
+     * @throws Throwable
+     */
     protected void storyTearDown() throws Throwable {   
     }
-
 }
