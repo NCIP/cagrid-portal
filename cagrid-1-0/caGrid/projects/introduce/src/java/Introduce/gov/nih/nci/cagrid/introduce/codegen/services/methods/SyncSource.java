@@ -299,7 +299,7 @@ public class SyncSource {
                                 + "  for(int i = 0; i < boxedResult.get" + CommonTools.upperCaseFirstCharacter(info.getType().getType()) + "().length; i++){\n";
                             methodString += DOUBLE_TAB + "	   clientArray[i] = new "
                                 + returnTypeEl.getClientHandleClass() + "(boxedResult.get" + CommonTools.upperCaseFirstCharacter(info.getType().getType())
-                                + "(i).getEndpointReference());\n";
+                                + "(i).getEndpointReference(),getProxy());\n";
                             methodString += DOUBLE_TAB + "  }\n";
                             methodString += DOUBLE_TAB + "}\n";
                             methodString += DOUBLE_TAB + "return clientArray;\n";
@@ -308,7 +308,7 @@ public class SyncSource {
                             methodString += CommonTools.upperCaseFirstCharacter(info.getType().getType())
                                 + "().getEndpointReference();\n";
                             methodString += DOUBLE_TAB + "return new " + returnTypeEl.getClientHandleClass()
-                                + "(ref);\n";
+                                + "(ref,getProxy());\n";
                         }
                     } else {
                         methodString += "return boxedResult.get"
