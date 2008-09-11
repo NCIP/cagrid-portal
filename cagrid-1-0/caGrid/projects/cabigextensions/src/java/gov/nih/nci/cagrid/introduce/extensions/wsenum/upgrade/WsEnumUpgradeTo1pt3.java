@@ -19,22 +19,33 @@ public class WsEnumUpgradeTo1pt3 extends WsEnumUpgradeTo1pt2 {
     
     protected void upgrade() throws Exception {
         super.upgrade();
+        System.out.println("UPGRADE TO 1.2 COMPLETE, PROCEDING TO " + UpgraderConstants.ENUMERATION_CURRENT_VERSION);
+        System.out.println("UPGRADE TO 1.2 COMPLETE, PROCEDING TO " + UpgraderConstants.ENUMERATION_CURRENT_VERSION);
+        System.out.println("UPGRADE TO 1.2 COMPLETE, PROCEDING TO " + UpgraderConstants.ENUMERATION_CURRENT_VERSION);
+        System.out.println("UPGRADE TO 1.2 COMPLETE, PROCEDING TO " + UpgraderConstants.ENUMERATION_CURRENT_VERSION);
         if (getStatus().getStatus().equals(StatusBase.UPGRADE_OK)) {
             try {
-                getStatus().addDescriptionLine("Adding service property " + WsEnumConstants.ITER_IMPL_TYPE_PROPERTY);
+                String line = "Adding service property " + WsEnumConstants.ITER_IMPL_TYPE_PROPERTY;
+                System.out.println("ADDING DESCRIPTION LINE:");
+                System.out.println(line);
+                getStatus().addDescriptionLine(line);
                 // only procede if the base upgrade worked
                 String iterTypeName = WsEnumConstants.DEFAULT_ITER_IMPL_TYPE;
                 // if the data service extension has set the enum iterator type, use it
                 ServiceDescription desc = getServiceInformation().getServiceDescriptor();
                 if (CommonTools.servicePropertyExists(desc, DATA_SERVICE_ENUM_PROPERTY)) {
                     iterTypeName = CommonTools.getServicePropertyValue(desc, DATA_SERVICE_ENUM_PROPERTY);
-                    getStatus().addDescriptionLine(
-                        "Using data service ws-enum iter implementation property value of " + iterTypeName);
+                    line = "Using data service ws-enum iter implementation property value of " + iterTypeName;
+                    System.out.println("ADDING DESCRIPTION LINE:");
+                    System.out.println(line);
+                    getStatus().addDescriptionLine(line);
                 }
                 setIterImplTypeServiceProperty(iterTypeName);
-                getStatus().addIssue("New WS-Enumeration IterImplType service property added", 
-                    "If it exists, the data service property for controling the WS-Enumeration IterImplType (" 
-                    + DATA_SERVICE_ENUM_PROPERTY + ") is deprecated.  Use " + WsEnumConstants.ITER_IMPL_TYPE_PROPERTY);
+                System.out.println("ADDING ISSUE:");
+                String issue = "New WS-Enumeration IterImplType service property added";
+                String resolution = "If it exists, the data service property for controling the WS-Enumeration IterImplType (" 
+                    + DATA_SERVICE_ENUM_PROPERTY + ") is deprecated.  Use " + WsEnumConstants.ITER_IMPL_TYPE_PROPERTY; 
+                getStatus().addIssue(issue, resolution);
             } catch (Exception ex) {
                 getStatus().setStatus(StatusBase.UPGRADE_FAIL);
                 throw ex;
