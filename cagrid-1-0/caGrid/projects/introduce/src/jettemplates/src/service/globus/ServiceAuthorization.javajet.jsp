@@ -100,7 +100,7 @@ public class <%=info.getService().getName()%>Authorization implements PDP {
 		      }
 		  } else if(method.getMethodSecurity().getMethodAuthorization().getNoAuthorization()!=null){
 		     
-		  } else if(method.getMethodSecurity().getMethodAuthorization().getInheritServiceAuthorization()!=null && info.getService().getServiceSecurity().getServiceAuthorization().getIntroducePDPAuthorization()!=null){
+		  } else if(method.getMethodSecurity().getMethodAuthorization().getInheritServiceAuthorization()!=null && info.getService().getServiceSecurity()!=null && info.getService().getServiceSecurity().getServiceAuthorization()!=null && info.getService().getServiceSecurity().getServiceAuthorization().getIntroducePDPAuthorization()!=null){
 		      ExtensionType extension = null;
 		      if(info.getService().getExtensions()!=null && info.getService().getExtensions().getExtension()!=null){
 		          for(int extIndex = 0 ; extIndex < info.getService().getExtensions().getExtension().length; extIndex++){
@@ -122,11 +122,7 @@ public class <%=info.getService().getName()%>Authorization implements PDP {
 		 	  <%
 		      }
 		      
-		  } else {
-	          %>
-	 	throw new AuthorizationException("Misconfigured authorization");
-	 		 <%
-		  }
+		  } 
 		  } else if(info.getService().getServiceSecurity()!=null && info.getService().getServiceSecurity().getServiceAuthorization()!=null && info.getService().getServiceSecurity().getServiceAuthorization().getIntroducePDPAuthorization()!=null){
 		      ExtensionType extension = null;
 		      if(info.getService().getExtensions()!=null && info.getService().getExtensions().getExtension()!=null){
