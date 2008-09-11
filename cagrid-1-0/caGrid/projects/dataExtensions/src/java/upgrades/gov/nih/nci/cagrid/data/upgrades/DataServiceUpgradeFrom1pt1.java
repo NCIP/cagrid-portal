@@ -19,12 +19,21 @@ import java.util.List;
 import org.apache.axis.message.MessageElement;
 import org.jdom.Element;
 
-public class DataServiceUpgrade1pt1to1pt2 extends ExtensionUpgraderBase {
+/**
+ * DataServiceUpgradeFrom1pt1 
+ * Utility to upgrade a 1.1 data service to current
+ * 
+ * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A> *
+ * @created Feb 19, 2007
+ * @version $Id: DataServiceUpgradeFrom1pt1.java,v 1.1 2007/02/19 21:52:52
+ *          dervin Exp $
+ */
+public class DataServiceUpgradeFrom1pt1 extends ExtensionUpgraderBase {
 
-	public DataServiceUpgrade1pt1to1pt2(ExtensionType extensionType,
+	public DataServiceUpgradeFrom1pt1(ExtensionType extensionType,
 			ServiceInformation serviceInformation, String servicePath,
 			String fromVersion, String toVersion) {
-		super(DataServiceUpgrade1pt1to1pt2.class.getSimpleName(),
+		super(DataServiceUpgradeFrom1pt1.class.getSimpleName(),
 				extensionType, serviceInformation, servicePath, fromVersion,
 				toVersion);
 	}
@@ -50,18 +59,19 @@ public class DataServiceUpgrade1pt1to1pt2 extends ExtensionUpgraderBase {
 	private void validateUpgrade() throws UpgradeException {
 		if (!"1.1".equals(getFromVersion())) {
 			throw new UpgradeException(getClass().getName()
-					+ " upgrades FROM 1.1 TO 1.2, found FROM = "
-					+ getFromVersion());
+				+ " upgrades FROM 1.1 TO " + UpgraderConstants.DATA_CURRENT_VERSION + 
+                ", found FROM = " + getFromVersion());
 		}
-		if (!getToVersion().equals("1.2")) {
+		if (!getToVersion().equals(UpgraderConstants.DATA_CURRENT_VERSION)) {
 			throw new UpgradeException(getClass().getName()
-					+ " upgrades FROM 1.1 TO 1.2, found TO = " + getToVersion());
+				+ " upgrades FROM 1.1 TO " + UpgraderConstants.DATA_CURRENT_VERSION + 
+                ", found TO = " + getToVersion());
 		}
 		String currentVersion = getExtensionType().getVersion();
 		if (!"1.1".equals(currentVersion)) {
 			throw new UpgradeException(getClass().getName()
-					+ " upgrades FROM 1.1 TO 1.2, current version found is "
-					+ currentVersion);
+				+ " upgrades FROM 1.1 TO " + UpgraderConstants.DATA_CURRENT_VERSION + 
+                ", current version found is " + currentVersion);
 		}
 	}
 	
@@ -84,7 +94,7 @@ public class DataServiceUpgrade1pt1to1pt2 extends ExtensionUpgraderBase {
 	
 	
 	private void setCurrentExtensionVersion() throws UpgradeException {
-        getExtensionType().setVersion("1.2");
+        getExtensionType().setVersion(UpgraderConstants.DATA_CURRENT_VERSION);
     }
 	
 	
@@ -109,7 +119,6 @@ public class DataServiceUpgrade1pt1to1pt2 extends ExtensionUpgraderBase {
         
         if (serviceIsUsingEnumeration(extDataElement)) {
         	getStatus().addDescriptionLine("-- Data Service WS-Enumeration Support Detected");
-            // updateEnumerationLibraries();
         }
         
         if (serviceIsUsingSdkDataSource(extDataElement)) {
@@ -155,7 +164,7 @@ public class DataServiceUpgrade1pt1to1pt2 extends ExtensionUpgraderBase {
                 + File.separator + newLib.getName());
             try {
                 Utils.copyFile(newLib, out);
-                getStatus().addDescriptionLine("caGrid 1.2 library " + newLib.getName() + " added");
+                getStatus().addDescriptionLine("caGrid " + UpgraderConstants.DATA_CURRENT_VERSION + " library " + newLib.getName() + " added");
             } catch (IOException ex) {
                 throw new UpgradeException("Error copying new data service library: " 
                     + ex.getMessage(), ex);
@@ -175,56 +184,7 @@ public class DataServiceUpgrade1pt1to1pt2 extends ExtensionUpgraderBase {
                 + ex.getMessage(), ex);
         }
     }
-
-
-    private void updateEnumerationLibraries() throws UpgradeException {
-        FileFilter enumLibFilter = new FileFilter() {
-            public boolean accept(File name) {
-                String filename = name.getName();
-                return filename.equals("caGrid-1.1-wsEnum.jar");
-            }
-        };
-        FileFilter newEnumLibFilter = new FileFilter() {
-            public boolean accept(File name) {
-                String filename = name.getName();
-                return filename.startsWith("caGrid-wsEnum-1.2") && filename.endsWith(".jar");
-            }
-        };
-        // locate old enumeration libraries in the service
-        File serviceLibDir = new File(getServicePath() + File.separator + "lib");
-        File[] oldEnumLibs = serviceLibDir.listFiles(enumLibFilter);
-        for (File oldLib : oldEnumLibs) {
-            oldLib.delete();
-            getStatus().addDescriptionLine("caGrid 1.1 library " + oldLib.getName() + " removed");
-        }
-        // copy in new libraries
-        File extLibDir = new File(ExtensionsLoader.EXTENSIONS_DIRECTORY + File.separator + "lib");
-        File[] newEnumLibs = extLibDir.listFiles(newEnumLibFilter);
-        File[] outLibs = new File[newEnumLibs.length];
-        for (int i = 0; i < newEnumLibs.length; i++) {
-            File outFile = new File(serviceLibDir.getAbsolutePath() 
-                + File.separator + newEnumLibs[i].getName());
-            try {
-                Utils.copyFile(newEnumLibs[i], outFile);
-                getStatus().addDescriptionLine("caGrid 1.2 library " + newEnumLibs[i].getName() + " added");
-            } catch (IOException ex) {
-                throw new UpgradeException("Error copying new enumeration library: " 
-                    + ex.getMessage(), ex);
-            }
-            outLibs[i] = outFile;
-        }
-        // update the Eclipse .classpath file
-        File classpathFile = new File(getServicePath() + File.separator + ".classpath");
-        try {
-            ExtensionUtilities.syncEclipseClasspath(classpathFile, outLibs);
-            getStatus().addDescriptionLine("Eclipse .classpath file updated");
-        } catch (Exception ex) {
-            throw new UpgradeException("Error updating Eclipse .classpath file: " 
-                + ex.getMessage(), ex);
-        }
-        getStatus().addDescriptionLine("-- WS-Enumeration support upgraded");
-    }
-
+    
 
     private void updateSdkQueryLibraries() throws UpgradeException {
         FileFilter sdkLibFilter = new FileFilter() {
@@ -287,7 +247,7 @@ public class DataServiceUpgrade1pt1to1pt2 extends ExtensionUpgraderBase {
                 + File.separator + newLibs[i].getName());
             try {
                 Utils.copyFile(newLibs[i], output);
-                getStatus().addDescriptionLine("caGrid 1.2 library " + newLibs[i].getName() + " added");
+                getStatus().addDescriptionLine("caGrid " + UpgraderConstants.SDK_3_CURRENT_VERSION + " library " + newLibs[i].getName() + " added");
             } catch (IOException ex) {
                 throw new UpgradeException("Error copying SDK Query Processor library: " 
                     + ex.getMessage(), ex);

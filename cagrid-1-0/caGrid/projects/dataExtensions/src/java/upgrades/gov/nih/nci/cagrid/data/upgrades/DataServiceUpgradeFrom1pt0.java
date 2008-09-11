@@ -19,7 +19,6 @@ import gov.nih.nci.cagrid.introduce.extension.utils.AxisJdomUtils;
 import gov.nih.nci.cagrid.introduce.extension.utils.ExtensionUtilities;
 import gov.nih.nci.cagrid.introduce.upgrade.common.StatusBase;
 import gov.nih.nci.cagrid.introduce.upgrade.one.x.ExtensionUpgraderBase;
-import gov.nih.nci.cagrid.wsenum.utils.IterImplType;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -36,18 +35,19 @@ import org.jdom.JDOMException;
 
 
 /**
- * DataServiceUpgrade1pt0to1pt1 Utility to upgrade a 1.0 data service to 1.2
+ * DataServiceUpgradeFrom1pt0 
+ * Utility to upgrade a 1.0 data service to current
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A> *
  * @created Feb 19, 2007
- * @version $Id: DataServiceUpgrade1pt0to1pt2.java,v 1.1 2007/02/19 21:52:52
+ * @version $Id: DataServiceUpgradeFrom1pt0.java,v 1.1 2007/02/19 21:52:52
  *          dervin Exp $
  */
-public class DataServiceUpgrade1pt0to1pt2 extends ExtensionUpgraderBase {
+public class DataServiceUpgradeFrom1pt0 extends ExtensionUpgraderBase {    
 
-    public DataServiceUpgrade1pt0to1pt2(ExtensionType extensionType, ServiceInformation serviceInformation,
+    public DataServiceUpgradeFrom1pt0(ExtensionType extensionType, ServiceInformation serviceInformation,
         String servicePath, String fromVersion, String toVersion) {
-        super("DataServiceUpgrade1pt0to1pt2", extensionType, serviceInformation,
+        super("DataServiceUpgradeFrom1pt0", extensionType, serviceInformation,
             servicePath, fromVersion, toVersion);
     }
 
@@ -65,8 +65,6 @@ public class DataServiceUpgrade1pt0to1pt2 extends ExtensionUpgraderBase {
             // move the configuration for the CQL query processor into
             // the service properties and remove it from the extension data
             reconfigureCqlQueryProcessor(extensionData);
-            // add selected enum iterator
-            setEnumIteratorSelection(extensionData);
             // update schemas
             updateDataSchemas();
             // change the version number
@@ -91,16 +89,16 @@ public class DataServiceUpgrade1pt0to1pt2 extends ExtensionUpgraderBase {
     private void validateUpgrade() throws UpgradeException {
         if (!((getFromVersion() == null) || getFromVersion().equals("1.0"))) {
             throw new UpgradeException(getClass().getName() 
-                + " upgrades FROM 1.0 TO 1.2, found FROM = " + getFromVersion());
+                + " upgrades FROM 1.0 TO " + UpgraderConstants.DATA_CURRENT_VERSION + ", found FROM = " + getFromVersion());
         }
-        if (!getToVersion().equals("1.2")) {
+        if (!getToVersion().equals(UpgraderConstants.DATA_CURRENT_VERSION)) {
             throw new UpgradeException(getClass().getName() 
-                + " upgrades FROM 1.0 TO 1.2, found TO = " + getToVersion());
+                + " upgrades FROM 1.0 TO " + UpgraderConstants.DATA_CURRENT_VERSION + ", found TO = " + getToVersion());
         }
         String currentVersion = getExtensionType().getVersion();
         if (!((currentVersion == null) || currentVersion.equals("1.0"))) {
             throw new UpgradeException(getClass().getName() 
-                + " upgrades FROM 1.0 TO 1.2, current version found is " + currentVersion);
+                + " upgrades FROM 1.0 TO " + UpgraderConstants.DATA_CURRENT_VERSION+ ", current version found is " + currentVersion);
         }
     }
 
@@ -152,7 +150,7 @@ public class DataServiceUpgrade1pt0to1pt2 extends ExtensionUpgraderBase {
                 + File.separator + newLib.getName());
             try {
                 Utils.copyFile(newLib, out);
-                getStatus().addDescriptionLine("caGrid 1.2 library " + newLib.getName() + " added");
+                getStatus().addDescriptionLine("caGrid " + UpgraderConstants.DATA_CURRENT_VERSION + " library " + newLib.getName() + " added");
             } catch (IOException ex) {
                 throw new UpgradeException("Error copying new data service library: " 
                     + ex.getMessage(), ex);
@@ -184,7 +182,7 @@ public class DataServiceUpgrade1pt0to1pt2 extends ExtensionUpgraderBase {
         FileFilter newEnumLibFilter = new FileFilter() {
             public boolean accept(File name) {
                 String filename = name.getName();
-                return filename.startsWith("caGrid-wsEnum-1.2") && filename.endsWith(".jar");
+                return filename.startsWith("caGrid-wsEnum-") && filename.endsWith(".jar");
             }
         };
         // locate old enumeration libraries in the service
@@ -203,7 +201,8 @@ public class DataServiceUpgrade1pt0to1pt2 extends ExtensionUpgraderBase {
                 + File.separator + newEnumLibs[i].getName());
             try {
                 Utils.copyFile(newEnumLibs[i], outFile);
-                getStatus().addDescriptionLine("caGrid 1.2 library " + newEnumLibs[i].getName() + " added");
+                getStatus().addDescriptionLine("caGrid " + UpgraderConstants.ENUMERATION_CURRENT_VERSION
+                    + " library " + newEnumLibs[i].getName() + " added");
             } catch (IOException ex) {
                 throw new UpgradeException("Error copying new enumeration library: " 
                     + ex.getMessage(), ex);
@@ -284,7 +283,8 @@ public class DataServiceUpgrade1pt0to1pt2 extends ExtensionUpgraderBase {
                 + File.separator + newLibs[i].getName());
             try {
                 Utils.copyFile(newLibs[i], output);
-                getStatus().addDescriptionLine("caGrid 1.2 library " + newLibs[i].getName() + " added");
+                getStatus().addDescriptionLine("caGrid " + UpgraderConstants.SDK_3_CURRENT_VERSION
+                    + " library " + newLibs[i].getName() + " added");
             } catch (IOException ex) {
                 throw new UpgradeException("Error copying SDK Query Processor library: " 
                     + ex.getMessage(), ex);
@@ -388,10 +388,8 @@ public class DataServiceUpgrade1pt0to1pt2 extends ExtensionUpgraderBase {
             CommonTools.removeNamespace(getServiceInformation().getServiceDescriptor(), targetNamespace);
             serviceExtensionDataSchema.delete();
             getStatus().addDescriptionLine("Data Service Extension data schema was not used, " +
-                    "and so was removed from the service");
+                "and so was removed from the service");
         }
-        
-        // if the CQL schema changes, upgrade it here
     }
 
 
@@ -443,7 +441,7 @@ public class DataServiceUpgrade1pt0to1pt2 extends ExtensionUpgraderBase {
 
 
     private void setCurrentExtensionVersion() throws UpgradeException {
-        getExtensionType().setVersion("1.2");
+        getExtensionType().setVersion(UpgraderConstants.DATA_CURRENT_VERSION);
     }
 
 
@@ -458,11 +456,10 @@ public class DataServiceUpgrade1pt0to1pt2 extends ExtensionUpgraderBase {
             while (libsElsIt.hasNext()) {
                 Element nextLib = (Element) libsElsIt.next();
                 String jarName = nextLib.getText();
-                // TODO: change the names from 1.2-dev to 1.2 for the final 1.2 release
                 if (jarName.equals("caGrid-1.0-sdkQuery.jar")) {
-                    nextLib.setText("caGrid-sdkQuery-core-1.2-dev.jar");
+                    nextLib.setText("caGrid-sdkQuery-core-" + UpgraderConstants.SDK_3_CURRENT_VERSION + ".jar");
                 } else if (jarName.equals("caGrid-1.0-sdkQuery32.jar")) {
-                    nextLib.setText("caGrid-sdkQuery32-core-1.2-dev.jar");
+                    nextLib.setText("caGrid-sdkQuery32-core-" + UpgraderConstants.SDK_3_CURRENT_VERSION + ".jar");
                 }
             }
         }
@@ -488,17 +485,6 @@ public class DataServiceUpgrade1pt0to1pt2 extends ExtensionUpgraderBase {
 
         getStatus().addDescriptionLine(
             "CQL Query Processor configuration properties are now managed in service properties");
-    }
-
-
-    private void setEnumIteratorSelection(Element extDataElement) throws UpgradeException {
-        if (serviceIsUsingEnumeration(extDataElement)) {
-            CommonTools.setServiceProperty(getServiceInformation().getServiceDescriptor(),
-                DataServiceConstants.ENUMERATION_ITERATOR_TYPE_PROPERTY, 
-                IterImplType.CAGRID_CONCURRENT_COMPLETE.toString(), false);
-            getStatus().addDescriptionLine("Server side WS-Enumeration implementation upgraded to " 
-                + IterImplType.CAGRID_CONCURRENT_COMPLETE);
-        }
     }
     
 
