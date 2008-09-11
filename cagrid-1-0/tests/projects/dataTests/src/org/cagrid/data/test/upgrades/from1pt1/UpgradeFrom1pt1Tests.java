@@ -1,4 +1,4 @@
-package org.cagrid.data.test.upgrades.from1pt1.enumeration;
+package org.cagrid.data.test.upgrades.from1pt1;
 
 import gov.nih.nci.cagrid.testing.system.haste.Step;
 import gov.nih.nci.cagrid.testing.system.haste.Story;
@@ -12,33 +12,36 @@ import junit.textui.TestRunner;
 import org.cagrid.data.test.creation.DataTestCaseInfo;
 import org.cagrid.data.test.creation.DeleteOldServiceStep;
 import org.cagrid.data.test.upgrades.UnpackOldServiceStep;
+import org.cagrid.data.test.upgrades.UpgradeTestConstants;
 import org.cagrid.data.test.upgrades.from1pt0.BuildUpgradedServiceStep;
 import org.cagrid.data.test.upgrades.from1pt0.UpgradeIntroduceServiceStep;
 
 /** 
- *  UpgradeEnumerationTo1pt2Tests
- *  Tests to upgrade an enumeration data service from 1.1 to 1.2
+ *  UpgradeFrom1pt1Tests
+ *  Tests to upgrade a data service from 1.1 to current
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Feb 20, 2007 
- * @version $Id: UpgradeEnumerationTo1pt2Tests.java,v 1.4 2008-06-02 20:34:18 dervin Exp $ 
+ * @version $Id: UpgradeFrom1pt1Tests.java,v 1.1 2008-09-11 17:47:50 dervin Exp $ 
  */
-public class UpgradeEnumerationTo1pt2Tests extends Story {
-    public static final String SERVICE_ZIP_NAME = "DataServiceWithEnumeration_1-1.zip";
-    public static final String SERVICE_DIR_NAME = "DataServiceWithEnumeration_1-1";
-    public static final String SERVICE_NAME = "DataServiceWithEnumeration";
-    public static final String SERVICE_PACKAGE = "gov.nih.nci.cagrid.data.enumeration";
-    public static final String SERVICE_NAMESPACE = "http://enumeration.data.cagrid.nci.nih.gov/DataServiceWithEnumeration";
+public class UpgradeFrom1pt1Tests extends Story {
+    public static final String SERVICE_ZIP_NAME = "BasicDataService_1-1.zip";
+    public static final String SERVICE_DIR_NAME = "BasicDataService_1-1";
+    public static final String SERVICE_NAME = "BasicDataService";
+    public static final String SERVICE_PACKAGE = "gov.nih.nci.cagrid.basic.data.service";
+    public static final String SERVICE_NAMESPACE = "http://service.data.basic.cagrid.nci.nih.gov/BasicDataService";
     
-    private DataTestCaseInfo testServiceInfo = null;
-	
+	private DataTestCaseInfo testServiceInfo = null;
+    
 	public String getDescription() {
-		return "Tests upgrade of an enumeration data service from version 1.1 to 1.2";
+		return "Tests upgrade of a data service from version 1.1 to " + UpgradeTestConstants.DATA_CURRENT_VERSION;
 	}
     
     
     public String getName() {
-        return "Data Service With Enumeration 1_1 to 1_2 Upgrade Tests";
+        return "Data Service 1_1 to " 
+            + UpgradeTestConstants.DATA_CURRENT_VERSION.replaceAll(".", "_") 
+            + " Upgrade Tests";
     }
     
     
@@ -80,14 +83,14 @@ public class UpgradeEnumerationTo1pt2Tests extends Story {
     
     
     protected void storyTearDown() throws Throwable {
-        Step deleteServiceStep = new DeleteOldServiceStep(testServiceInfo);
-        deleteServiceStep.runStep();
+        Step destroyStep = new DeleteOldServiceStep(testServiceInfo);
+        destroyStep.runStep();
     }
 
 
 	public static void main(String[] args) {
 		TestRunner runner = new TestRunner();
-		TestResult result = runner.doRun(new TestSuite(UpgradeEnumerationTo1pt2Tests.class));
+		TestResult result = runner.doRun(new TestSuite(UpgradeFrom1pt1Tests.class));
 		System.exit(result.errorCount() + result.failureCount());
 	}
 }

@@ -8,14 +8,14 @@ import java.io.File;
 
 /** 
  *  BuildUpgradedServiceStep
- *  Builds the service upgraded from version 1.0 to 1.1
+ *  Builds the upgraded data service
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Feb 21, 2007 
- * @version $Id: BuildUpgradedServiceStep.java,v 1.1 2008-05-16 19:25:25 dervin Exp $ 
+ * @version $Id: BuildUpgradedServiceStep.java,v 1.2 2008-09-11 17:47:50 dervin Exp $ 
  */
 public class BuildUpgradedServiceStep extends Step {
-	
+    
 	private String serviceDir;
 	
 	public BuildUpgradedServiceStep(String serviceDir) {
@@ -39,7 +39,7 @@ public class BuildUpgradedServiceStep extends Step {
 	
 	
 	private void invokeBuildProcess() throws Exception {
-		System.out.println("Building created service...");
+		System.out.println("Building upgraded service...");
 		String cmd = AntTools.getAntAllCommand(serviceDir);
 		Process p = CommonTools.createAndOutputProcess(cmd);
 		p.waitFor();

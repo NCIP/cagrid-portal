@@ -8,8 +8,8 @@ import java.io.File;
 
 
 /**
- * UpgradeIntroduceServiceStep Upgrades introduce managed parts of the service
- * from 1.0 to 1.1
+ * UpgradeIntroduceServiceStep 
+ * Upgrades introduce managed parts of the service
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A> *
  * @created Feb 21, 2007
@@ -28,7 +28,7 @@ public class UpgradeIntroduceServiceStep extends Step {
     public void runStep() throws Throwable {
         // create the introduce upgrade manager
         UpgradeManager upgrader = new UpgradeManager(serviceDir);
-        assertTrue("Introduce service should have required upgrade to 1.2", upgrader.canIntroduceBeUpgraded());
+        assertTrue("Introduce service should have required upgrade to current version", upgrader.canIntroduceBeUpgraded());
         upgrader.upgrade();
 
         try {

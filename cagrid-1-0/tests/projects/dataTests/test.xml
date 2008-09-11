@@ -183,7 +183,7 @@
 			<test if="testcase" name="${testcase}" fork="no" todir="${junit.results.dir}" />
 			<batchtest unless="testcase" fork="yes" todir="${junit.results.dir}">
 				<fileset dir="${src.dir}">
-					<include name="**/from1pt0/**/Upgrade*To1pt2Tests.java" />
+					<include name="**/from1pt0/**/Upgrade*From1pt0Tests.java" />
 				</fileset>
 			</batchtest>
 		</junit>
@@ -211,7 +211,7 @@
 			<test if="testcase" name="${testcase}" fork="no" todir="${junit.results.dir}" />
 			<batchtest unless="testcase" fork="yes" todir="${junit.results.dir}">
 				<fileset dir="${src.dir}">
-					<include name="**/from1pt1/**/Upgrade*To1pt2Tests.java" />
+					<include name="**/from1pt1/**/Upgrade*From1pt1Tests.java" />
 				</fileset>
 			</batchtest>
 		</junit>

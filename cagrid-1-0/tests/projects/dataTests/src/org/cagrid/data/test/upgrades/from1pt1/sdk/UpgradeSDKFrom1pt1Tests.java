@@ -12,18 +12,19 @@ import junit.textui.TestRunner;
 import org.cagrid.data.test.creation.DataTestCaseInfo;
 import org.cagrid.data.test.creation.DeleteOldServiceStep;
 import org.cagrid.data.test.upgrades.UnpackOldServiceStep;
+import org.cagrid.data.test.upgrades.UpgradeTestConstants;
 import org.cagrid.data.test.upgrades.from1pt0.BuildUpgradedServiceStep;
 import org.cagrid.data.test.upgrades.from1pt0.UpgradeIntroduceServiceStep;
 
 /** 
- *  UpgradeSDKTo1pt1Tests
- *  Tests to upgrade a data service backed by caCORE SDK 3.2 from 1.1 to 1.2
+ *  UpgradeSDKFrom1pt1Tests
+ *  Tests to upgrade a data service backed by caCORE SDK 3.2 from 1.1 to current
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Feb 20, 2007 
- * @version $Id: UpgradeSDKTo1pt2Tests.java,v 1.4 2008-06-02 20:34:18 dervin Exp $ 
+ * @version $Id: UpgradeSDKFrom1pt1Tests.java,v 1.1 2008-09-11 17:47:50 dervin Exp $ 
  */
-public class UpgradeSDKTo1pt2Tests extends Story {
+public class UpgradeSDKFrom1pt1Tests extends Story {
 	public static final String SERVICE_ZIP_NAME = "DataServiceWithSdk_1-1.zip";
     public static final String SERVICE_DIR_NAME = "DataServiceWithSdk_1-1";
     public static final String SERVICE_NAME = "DataServiceWithSdk";
@@ -33,12 +34,14 @@ public class UpgradeSDKTo1pt2Tests extends Story {
 	private DataTestCaseInfo testServiceInfo = null;
     
 	public String getDescription() {
-		return "Tests upgrade of a data service backed by the SDK from version 1.1 to 1.2";
+		return "Tests upgrade of a data service backed by the SDK from version 1.1 to " + UpgradeTestConstants.DATA_CURRENT_VERSION;
 	}
     
     
     public String getName() {
-        return "Data Service backed by the SDK from 1_1 to 1_2 Upgrade Tests";
+        return "Data Service backed by the SDK from 1_1 to " 
+            + UpgradeTestConstants.DATA_CURRENT_VERSION.replaceAll(".", "_") 
+            + " Upgrade Tests";
     }
     
     
@@ -87,7 +90,7 @@ public class UpgradeSDKTo1pt2Tests extends Story {
 
 	public static void main(String[] args) {
 		TestRunner runner = new TestRunner();
-		TestResult result = runner.doRun(new TestSuite(UpgradeSDKTo1pt2Tests.class));
+		TestResult result = runner.doRun(new TestSuite(UpgradeSDKFrom1pt1Tests.class));
 		System.exit(result.errorCount() + result.failureCount());
 	}
 }

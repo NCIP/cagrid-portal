@@ -20,7 +20,7 @@ import org.cagrid.data.test.system.EnableValidationStep;
 import org.cagrid.data.test.system.InvokeDataServiceStep;
 import org.cagrid.data.test.system.RebuildServiceStep;
 import org.cagrid.data.test.system.SetQueryProcessorStep;
-import org.cagrid.data.test.upgrades.from1pt0.UpgradeTo1pt2Tests;
+import org.cagrid.data.test.upgrades.from1pt0.UpgradeFrom1pt0Tests;
 
 /** 
  *  UpgradedServiceSystemTest
@@ -28,7 +28,7 @@ import org.cagrid.data.test.upgrades.from1pt0.UpgradeTo1pt2Tests;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Feb 21, 2007 
- * @version $Id: UpgradedServiceSystemTest.java,v 1.2 2008-06-02 20:34:18 dervin Exp $ 
+ * @version $Id: UpgradedServiceSystemTest.java,v 1.3 2008-09-11 17:47:50 dervin Exp $ 
  */
 public class UpgradedServiceSystemTest extends Story {
 	public static final String INTRODUCE_DIR_PROPERTY = "introduce.base.dir";
@@ -47,7 +47,7 @@ public class UpgradedServiceSystemTest extends Story {
     
 	
 	protected boolean storySetUp() {
-        info = new UpgradeTo1pt2Tests.Upgrade1pt0to1pt1TestServiceInfo();
+        info = new UpgradeFrom1pt0Tests.Upgrade1pt0to1pt1TestServiceInfo();
         // obtain a new container instance
         try {
             container = ServiceContainerFactory.createContainer(ServiceContainerType.GLOBUS_CONTAINER);
