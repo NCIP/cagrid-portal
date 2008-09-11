@@ -20,6 +20,7 @@ import gov.nih.nci.cagrid.data.utilities.CQLQueryResultsIterator;
 import gov.nih.nci.cagrid.enumeration.stubs.response.EnumerationResponseContainer;
 import gov.nih.nci.cagrid.wsenum.common.WsEnumConstants;
 import gov.nih.nci.cagrid.wsenum.utils.DummyEnumIterator;
+import gov.nih.nci.cagrid.wsenum.utils.EnumConfigDiscoveryUtil;
 import gov.nih.nci.cagrid.wsenum.utils.EnumIteratorFactory;
 import gov.nih.nci.cagrid.wsenum.utils.IterImplType;
 
@@ -154,8 +155,7 @@ public class EnumerationDataServiceImpl extends BaseServiceImpl {
 			    QName name = Utils.getRegisteredQName(resultClass);
 
 			    // get the service property for the enum iterator type
-			    String enumIterTypeValue = getDataServiceConfig().getProperty(DataServiceConstants.ENUMERATION_ITERATOR_TYPE_PROPERTY);
-			    IterImplType implType = IterImplType.valueOf(enumIterTypeValue);
+			    IterImplType implType = EnumConfigDiscoveryUtil.getConfiguredIterImplType();
 			    LOG.debug("Using enum iterator of type " + implType);
 
 			    enumIter = EnumIteratorFactory.createIterator(implType, resultList, name, configStream);
@@ -189,8 +189,7 @@ public class EnumerationDataServiceImpl extends BaseServiceImpl {
             }
             
             // get the service property for the enum iterator type
-            String enumIterTypeValue = getDataServiceConfig().getProperty(DataServiceConstants.ENUMERATION_ITERATOR_TYPE_PROPERTY);
-            IterImplType implType = IterImplType.valueOf(enumIterTypeValue);
+            IterImplType implType = EnumConfigDiscoveryUtil.getConfiguredIterImplType();
             String serverConfigLocation = ServiceConfigUtil.getConfigProperty(
                 DataServiceConstants.SERVER_CONFIG_LOCATION);
             InputStream wsddStream = new FileInputStream(serverConfigLocation);

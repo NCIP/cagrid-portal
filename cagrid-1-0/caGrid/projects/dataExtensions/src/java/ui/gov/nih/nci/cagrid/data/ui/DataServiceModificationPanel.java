@@ -30,7 +30,7 @@ import org.cagrid.grape.utils.CompositeErrorDialog;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * @created Oct 10, 2006
- * @version $Id: DataServiceModificationPanel.java,v 1.6 2008-04-17 15:16:07 dervin Exp $
+ * @version $Id: DataServiceModificationPanel.java,v 1.7 2008-09-11 17:50:05 dervin Exp $
  */
 public class DataServiceModificationPanel extends ServiceModificationUIPanel {
     
@@ -40,7 +40,6 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 	private JTabbedPane mainTabbedPane = null;
 	private QueryProcessorConfigPanel processorConfigPanel = null;
 	private DetailsConfigurationPanel detailConfigPanel = null;
-	private EnumIteratorSelectionPanel iterSelectionPanel = null;
     private AuditorsConfigurationPanel auditorConfigPanel = null;
 
     private transient ExtensionDataManager dataManager = null;
@@ -146,16 +145,6 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
                 "Selection of packages and classes in domain model");
 			mainTabbedPane.addTab("Query Processor", null, getProcessorConfigPanel(), 
                 "Selection and configuration of the CQL query processor");
-			try {
-			    if (dataManager.isUseBdt() || dataManager.isUseWsEnumeration()) {
-			        mainTabbedPane.addTab("Enumeration", null, getIterSelectionPanel(), 
-			        "Selection of WS-Enumeration implementation");
-			    }
-            } catch (Exception ex) {
-                ex.printStackTrace();
-                CompositeErrorDialog.showErrorDialog(
-                    "Error getting enumeration use status", ex.getMessage(), ex);
-            }
 			mainTabbedPane.addTab("Details", null, getDetailConfigPanel(),
 				"Class to element mapping, serialization, validation");
             mainTabbedPane.addTab("Auditing", null, getAuditorConfigPanel(),
@@ -219,14 +208,6 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 		}
 		return detailConfigPanel;
 	}
-
-
-    private EnumIteratorSelectionPanel getIterSelectionPanel() {
-        if (iterSelectionPanel == null) {
-            iterSelectionPanel = new EnumIteratorSelectionPanel(getServiceInfo(), dataManager);
-        }
-        return iterSelectionPanel;
-    }
     
     
     private AuditorsConfigurationPanel getAuditorConfigPanel() {

@@ -2,6 +2,7 @@ package gov.nih.nci.cagrid.data.creation;
 
 import gov.nih.nci.cagrid.bdt.service.BDTServiceConstants;
 import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.common.XMLUtilities;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionDescription;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
@@ -21,7 +22,6 @@ import gov.nih.nci.cagrid.introduce.extension.CreationExtensionException;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 import gov.nih.nci.cagrid.introduce.extension.utils.ExtensionUtilities;
-import gov.nih.nci.cagrid.wsenum.utils.IterImplType;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -31,8 +31,6 @@ import java.util.List;
 
 import org.jdom.Element;
 
-import gov.nih.nci.cagrid.common.XMLUtilities;
-
 
 /**
  * BDTFeatureCreator Provides implementation, methods, classes, etc for BDT
@@ -40,7 +38,7 @@ import gov.nih.nci.cagrid.common.XMLUtilities;
  * 
  * @author David Ervin
  * @created Apr 4, 2007 9:56:09 AM
- * @version $Id: BDTFeatureCreator.java,v 1.4 2008-02-18 17:18:21 oster Exp $
+ * @version $Id: BDTFeatureCreator.java,v 1.5 2008-09-11 17:50:38 dervin Exp $
  */
 public class BDTFeatureCreator extends FeatureCreator {
 
@@ -53,7 +51,6 @@ public class BDTFeatureCreator extends FeatureCreator {
         ensureBdtExtensionAdded();
         copySchemaAndWsdl();
         copyWsEnumerationLibs();
-        setEnumIteratorImpl();
         addBdtQueryMethod();
         modifyBdtMetadata();
     }
@@ -293,12 +290,5 @@ public class BDTFeatureCreator extends FeatureCreator {
                 break;
             }
         }
-    }
-
-
-    private void setEnumIteratorImpl() {
-        CommonTools.setServiceProperty(getServiceInformation().getServiceDescriptor(),
-            DataServiceConstants.ENUMERATION_ITERATOR_TYPE_PROPERTY,
-            IterImplType.CAGRID_CONCURRENT_COMPLETE.toString(), false);
     }
 }

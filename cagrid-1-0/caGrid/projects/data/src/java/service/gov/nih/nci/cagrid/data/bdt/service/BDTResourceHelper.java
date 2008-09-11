@@ -14,6 +14,7 @@ import gov.nih.nci.cagrid.data.mapping.Mappings;
 import gov.nih.nci.cagrid.data.service.BaseServiceImpl;
 import gov.nih.nci.cagrid.data.service.DataServiceInitializationException;
 import gov.nih.nci.cagrid.data.utilities.CQLQueryResultsIterator;
+import gov.nih.nci.cagrid.wsenum.utils.EnumConfigDiscoveryUtil;
 import gov.nih.nci.cagrid.wsenum.utils.EnumIteratorFactory;
 import gov.nih.nci.cagrid.wsenum.utils.IterImplType;
 
@@ -40,7 +41,7 @@ import org.w3c.dom.Document;
  * @author David Ervin
  * 
  * @created Mar 12, 2007 2:08:57 PM
- * @version $Id: BDTResourceHelper.java,v 1.4 2007-06-11 17:05:34 dervin Exp $ 
+ * @version $Id: BDTResourceHelper.java,v 1.5 2008-09-11 17:49:28 dervin Exp $ 
  */
 public class BDTResourceHelper extends BaseServiceImpl {
 	private CQLQuery query;
@@ -79,8 +80,7 @@ public class BDTResourceHelper extends BaseServiceImpl {
 				// get the qname of the object types
 				QName qName = getQueryTargetQName();
                 // determine the enumerator implementation type
-                String enumeratorTypeValue = getDataServiceConfig().getProperty(DataServiceConstants.ENUMERATION_ITERATOR_TYPE_PROPERTY);
-                IterImplType implType = IterImplType.valueOf(enumeratorTypeValue);
+                IterImplType implType = EnumConfigDiscoveryUtil.getConfiguredIterImplType();
                 // get the enum iterator
                 enumIter = EnumIteratorFactory.createIterator(implType, resultIter, qName, getConsumableInputStream());
 			} catch (gov.nih.nci.cagrid.data.QueryProcessingException ex) {

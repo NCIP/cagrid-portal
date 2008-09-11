@@ -21,7 +21,6 @@ import gov.nih.nci.cagrid.introduce.extension.CreationExtensionException;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 import gov.nih.nci.cagrid.wsenum.common.WsEnumConstants;
-import gov.nih.nci.cagrid.wsenum.utils.IterImplType;
 
 import java.io.File;
 import java.util.List;
@@ -37,7 +36,7 @@ import javax.xml.namespace.QName;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created Aug 22, 2006
- * @version $Id: WsEnumerationFeatureCreator.java,v 1.2 2007-07-18 14:01:47 dervin Exp $
+ * @version $Id: WsEnumerationFeatureCreator.java,v 1.3 2008-09-11 17:50:38 dervin Exp $
  */
 public class WsEnumerationFeatureCreator extends FeatureCreator {
 	public static final String WS_ENUM_EXTENSION_NAME = "cagrid_wsEnum";
@@ -52,7 +51,6 @@ public class WsEnumerationFeatureCreator extends FeatureCreator {
 	        installWsEnumExtension();
 	        copySchemas();
 	        addEnumerationQueryMethod();
-	        setEnumIteratorImpl();
         }
 	}
 
@@ -170,13 +168,6 @@ public class WsEnumerationFeatureCreator extends FeatureCreator {
 	    return getServiceInformation().getBaseDirectory().getAbsolutePath() + File.separator 
             + "schema" + File.separator + getMainService().getName();
 	}
-    
-    
-    private void setEnumIteratorImpl() {
-        CommonTools.setServiceProperty(getServiceInformation().getServiceDescriptor(),
-            DataServiceConstants.ENUMERATION_ITERATOR_TYPE_PROPERTY,
-            IterImplType.CAGRID_CONCURRENT_COMPLETE.toString(), false);
-    }
     
     
     private boolean featureAlreadyCreated() {
