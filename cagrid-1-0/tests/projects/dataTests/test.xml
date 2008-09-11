@@ -43,9 +43,10 @@
 	</target>
 	
 	
-	<target name="testUpgrades" depends="testUpgradeFrom1pt0, testUpgradeFrom1pt1" description="Runs upgrade tests">
+	<target name="testUpgrades" depends="testUpgradeFrom1pt0, testUpgradeFrom1pt1, testUpgradeFrom1pt2" description="Runs upgrade tests">
 		<fail message="Data upgrade from 1.0 ${failed.message}" if="upgrade.1.0.test.failed" />
 		<fail message="Data upgrade from 1.1 ${failed.message}" if="upgrade.1.1.test.failed" />
+		<fail message="Data upgrade from 1.2 ${failed.message}" if="upgrade.1.2.test.failed" />
 	</target>
 	
 	
@@ -216,6 +217,34 @@
 			</batchtest>
 		</junit>
 		<property name="upgrade.1pt1.completed" value="true" />
+	</target>
+
+	
+	<!-- tests upgrading a 1.1 service to current -->
+	<target name="testUpgradeFrom1pt2" depends="setGlobus, prepareClasspaths" description="Tests the ability to upgrade a service from 1.2 to the current version" unless="upgrade.1pt2.completed">
+		<mkdir dir="${junit.results.dir}" />
+		<junit dir="${introduce.dir}" printsummary="yes" haltonerror="${halt.on.error}" haltonfailure="${halt.on.error}" errorproperty="upgrade.1.2.test.failed" failureproperty="upgrade.1.2.test.failed" showoutput="true" fork="yes">
+			<sysproperty key="introduce.base.dir" value="${introduce.dir}" />
+			<sysproperty key="build.dir" value="${classes.dir}" />
+			<sysproperty key="cql.docs.dir" value="${basedir}/docs/cqlExamples" />
+			<sysproperty key="temp.test.service.dir" value="${temp.test.service.dir}"/>
+			<sysproperty key="upgrade.services.zip.dir" value="${testing.upgrade.services.dir}"/>
+			<classpath refid="all.test.classpath" />
+			<!-- also needs the other extensions (such as metadata) to be upgraded, so need their upgraders on the classpath -->
+			<classpath>
+				<fileset dir="${introduce.dir}/extensions/lib">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+			<formatter type="xml" />
+			<test if="testcase" name="${testcase}" fork="no" todir="${junit.results.dir}" />
+			<batchtest unless="testcase" fork="yes" todir="${junit.results.dir}">
+				<fileset dir="${src.dir}">
+					<include name="**/from1pt2/**/Upgrade*From1pt2Tests.java" />
+				</fileset>
+			</batchtest>
+		</junit>
+		<property name="upgrade.1pt2.completed" value="true" />
 	</target>
 
 
