@@ -39,8 +39,31 @@ public class ServiceSecurityClient implements ServiceSecurityI {
 	protected Map operations;
 	protected Authorization authorization;
 	protected String delegationMode;
+	protected boolean anonymousPrefered = true;
 
-	static {
+	
+	/**
+	 * Does this client prefer to contact services anonymously
+	 * where allowed.
+	 * 
+	 * @return true if client will prefer to connect anonymously
+	 */
+	public boolean isAnonymousPrefered() {
+        return anonymousPrefered;
+    }
+
+	/**
+	 * If you want your client to be forced to authenticate then 
+	 * you can set this to false.  The default is true.  If you want
+	 * to switch back to using anonymous if allowed then set it back
+	 * to true
+	 */
+    public void setAnonymousPrefered(boolean anonymousPrefered) {
+        this.anonymousPrefered = anonymousPrefered;
+    }
+
+
+    static {
 		org.globus.axis.util.Util.registerTransport();
 	}
 
@@ -152,7 +175,17 @@ public class ServiceSecurityClient implements ServiceSecurityI {
 		}
 	}
 
-
+	/**
+	 * Method should be and is called each time this client attempts to talk
+	 * the service.  This method will configure the axis stub with the 
+	 * appropriate GSI configuration parameters based on the services
+	 * provided security metadata.  This prevents the client from having
+	 * to brute force or guess the proper way to connect to the server.
+	 * 
+	 * @param stub
+	 * @param method
+	 * @throws RemoteException
+	 */
 	protected void configureStubSecurity(Stub stub, String method) throws RemoteException {
 
 		boolean https = false;
@@ -266,7 +299,7 @@ public class ServiceSecurityClient implements ServiceSecurityI {
 			credentialsAllowed = false;
 		}
 
-		if ((anonymousAllowed) && (mechanism.isAnonymousPermitted())) {
+		if ((anonymousAllowed) && (mechanism.isAnonymousPermitted()) && isAnonymousPrefered()) {
 			stub._setProperty(org.globus.wsrf.security.Constants.GSI_ANONYMOUS, Boolean.TRUE);
 		} else if ((credentialsAllowed) && (proxy != null)) {
 			try {
