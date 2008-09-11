@@ -86,6 +86,7 @@ public class ExtensionsUpgradeManager {
                                 error
                                     .add(extension.getName()
                                         + " extension used on service is older than currently installed and does not appear to have correct upgrade.");
+                                break;
                             }
 
                         }
