@@ -1145,9 +1145,15 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
      */
     private JPanel getAuthorizationTypePanel() {
         if (authorizationTypePanel == null) {
+            GridBagConstraints gridBagConstraints16 = new GridBagConstraints();
+            gridBagConstraints16.insets = new Insets(2, 2, 2, 2);
+            gridBagConstraints16.gridy = 0;
+            gridBagConstraints16.fill = GridBagConstraints.HORIZONTAL;
+            gridBagConstraints16.weightx = 1.0D;
+            gridBagConstraints16.gridx = 0;
             authorizationTypePanel = new JPanel();
-            authorizationTypePanel.setLayout(new FlowLayout());
-            authorizationTypePanel.add(getJPanel1(), null);
+            authorizationTypePanel.setLayout(new GridBagLayout());
+            authorizationTypePanel.add(getJPanel1(), gridBagConstraints16);
         }
         return authorizationTypePanel;
     }
@@ -1318,25 +1324,27 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
     private JPanel getJPanel1() {
         if (jPanel1 == null) {
             credentialsRequired = new JLabel();
-            credentialsRequired.setText("Anonymous Clients");
+            credentialsRequired.setText("Client should connect anonymously?");
+            credentialsRequired.setToolTipText("Adds information to the security metadata telling the client that they should or should not use credintials to connect.");
             authLabel = new JLabel();
             authLabel.setText("Authorization Mechanism");
 
             GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
             gridBagConstraints5.fill = java.awt.GridBagConstraints.HORIZONTAL;
-            gridBagConstraints5.gridx = 3;
-            gridBagConstraints5.gridy = 0;
+            gridBagConstraints5.gridx = 1;
+            gridBagConstraints5.gridy = 1;
             gridBagConstraints5.insets = new java.awt.Insets(2, 2, 2, 2);
             gridBagConstraints5.weightx = 1.0;
             GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
-            gridBagConstraints3.gridx = 2;
+            gridBagConstraints3.gridx = 0;
             gridBagConstraints3.insets = new java.awt.Insets(2, 2, 2, 2);
-            gridBagConstraints3.gridy = 0;
+            gridBagConstraints3.fill = GridBagConstraints.HORIZONTAL;
+            gridBagConstraints3.gridy = 1;
             GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
             gridBagConstraints2.fill = java.awt.GridBagConstraints.HORIZONTAL;
             gridBagConstraints2.gridx = 1;
             gridBagConstraints2.gridy = 0;
-            gridBagConstraints2.insets = new Insets(2, 2, 2, 10);
+            gridBagConstraints2.insets = new Insets(2, 2, 2, 2);
             gridBagConstraints2.weightx = 1.0;
             GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
             gridBagConstraints1.gridx = 0;

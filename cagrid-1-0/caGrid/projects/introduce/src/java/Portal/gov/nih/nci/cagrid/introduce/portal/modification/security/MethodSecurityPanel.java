@@ -858,7 +858,8 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
             gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
             gridBagConstraints.gridy = 0;
             anonClientsLabel = new JLabel();
-            anonClientsLabel.setText("Anonymous Clients");
+            anonClientsLabel.setText("Client should connect anonymously?");
+            anonClientsLabel.setToolTipText("Adds information to the security metadata telling the client that they should or should not use credintials when connecting.");
             GridBagConstraints gridBagConstraints12 = new GridBagConstraints();
             gridBagConstraints12.anchor = java.awt.GridBagConstraints.WEST;
             gridBagConstraints12.insets = new Insets(2, 2, 2, 2);
