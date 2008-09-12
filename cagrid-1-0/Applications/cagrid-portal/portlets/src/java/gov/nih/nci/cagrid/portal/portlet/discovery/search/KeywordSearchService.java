@@ -4,12 +4,7 @@
 package gov.nih.nci.cagrid.portal.portlet.discovery.search;
 
 import gov.nih.nci.cagrid.portal.dao.ConceptHierarchyNodeDao;
-import gov.nih.nci.cagrid.portal.domain.DomainObject;
-import gov.nih.nci.cagrid.portal.domain.GridDataService;
-import gov.nih.nci.cagrid.portal.domain.GridService;
-import gov.nih.nci.cagrid.portal.domain.Participant;
-import gov.nih.nci.cagrid.portal.domain.Person;
-import gov.nih.nci.cagrid.portal.domain.ServiceStatus;
+import gov.nih.nci.cagrid.portal.domain.*;
 import gov.nih.nci.cagrid.portal.domain.dataservice.SharedCQLQuery;
 import gov.nih.nci.cagrid.portal.domain.metadata.common.PointOfContact;
 import gov.nih.nci.cagrid.portal.domain.metadata.common.ResearchCenterPointOfContact;
@@ -17,18 +12,8 @@ import gov.nih.nci.cagrid.portal.domain.metadata.service.ServicePointOfContact;
 import gov.nih.nci.cagrid.portal.portlet.CaGridPortletApplicationException;
 import gov.nih.nci.cagrid.portal.portlet.discovery.DiscoveryResults;
 import gov.nih.nci.cagrid.portal.portlet.discovery.DiscoveryType;
-import gov.nih.nci.cagrid.portal.portlet.discovery.filter.ServiceFilter;
 import gov.nih.nci.cagrid.portal.portlet.discovery.filter.BaseServiceFilter;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.Map.Entry;
-
+import gov.nih.nci.cagrid.portal.portlet.discovery.filter.ServiceFilter;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.Criteria;
@@ -38,12 +23,15 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.orm.hibernate3.HibernateTemplate;
 
+import java.util.*;
+import java.util.Map.Entry;
+
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
  */
 public class KeywordSearchService {
-	
-	private static final Log logger = LogFactory.getLog(KeywordSearchService.class);
+
+    private static final Log logger = LogFactory.getLog(KeywordSearchService.class);
 
     private HibernateTemplate hibernateTemplate;
     private Map<String, List<String>> namedServiceKeywordCriteria;
@@ -128,7 +116,7 @@ public class KeywordSearchService {
                 crit.setProjection(Projections.id());
 
                 if (path.indexOf(".") == -1) {
-                	addCriterion(crit, path, value);
+                    addCriterion(crit, path, value);
                 } else {
                     Criteria currCrit = crit;
                     String[] paths = path.split("\\.");
@@ -137,7 +125,7 @@ public class KeywordSearchService {
                         if (i + 1 < paths.length) {
                             currCrit = currCrit.createCriteria(currPath);
                         } else {
-                        	addCriterion(currCrit, currPath, value);
+                            addCriterion(currCrit, currPath, value);
                         }
                     }
                 }
@@ -180,28 +168,30 @@ public class KeywordSearchService {
     }
 
     private void addCriterion(Criteria crit, String path, String value) {
-    	//TODO: This is a hack.
-    	if(path.endsWith("publicID")){
-    		try{
-    			crit.add(Restrictions.eq(path, Long.parseLong(value.trim())));
-    		}catch(Exception ex){
-    			logger.warn("Couldn't parse publicID value: " + value);
-    		}
-    	}else{
-    		crit.add(Restrictions.like(path, value));
-    	}
-	}
+        //TODO: This is a hack.
+        if (path.endsWith("publicID")) {
+            try {
+                Long _cdeValue = Long.parseLong(value.trim());
+                crit.add(Restrictions.eq(path, _cdeValue));
+            } catch (Exception ex) {
+                logger.warn("Couldn't parse publicID value: " + value);
+                crit.add(Restrictions.eq(path, Long.parseLong("-1")));
+            }
+        } else {
+            crit.add(Restrictions.like(path, value));
+        }
+    }
 
-	private String getKeywordExpression(String criterionName, String keyword) {
-    	String expression = "%" + keyword.trim() + "%";
-		// TODO: This is a hack.
-    	if(criterionName.endsWith("publicID")){
-    		expression = keyword.trim();
-    	}
-		return expression;
-	}
+    private String getKeywordExpression(String criterionName, String keyword) {
+        String expression = "%" + keyword.trim() + "%";
+        // TODO: This is a hack.
+        if (criterionName.endsWith("publicID")) {
+            expression = keyword.trim();
+        }
+        return expression;
+    }
 
-	@Required
+    @Required
     public HibernateTemplate getHibernateTemplate() {
         return hibernateTemplate;
     }
