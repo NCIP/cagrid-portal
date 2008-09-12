@@ -22,7 +22,7 @@ import org.cagrid.data.test.upgrades.from1pt0.UpgradeIntroduceServiceStep;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Feb 20, 2007 
- * @version $Id: UpgradeFrom1pt2Tests.java,v 1.1 2008-09-11 18:37:40 dervin Exp $ 
+ * @version $Id: UpgradeFrom1pt2Tests.java,v 1.2 2008-09-12 14:44:31 dervin Exp $ 
  */
 public class UpgradeFrom1pt2Tests extends Story {
     public static final String SERVICE_ZIP_NAME = "BasicDataService_1-2.zip";
@@ -40,7 +40,7 @@ public class UpgradeFrom1pt2Tests extends Story {
     
     public String getName() {
         return "Data Service 1_2 to " 
-            + UpgradeTestConstants.DATA_CURRENT_VERSION.replaceAll(".", "_") 
+            + UpgradeTestConstants.DATA_CURRENT_VERSION.replace(".", "_") 
             + " Upgrade Tests";
     }
     

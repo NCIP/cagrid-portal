@@ -20,6 +20,7 @@ import org.cagrid.data.test.system.EnableValidationStep;
 import org.cagrid.data.test.system.InvokeDataServiceStep;
 import org.cagrid.data.test.system.RebuildServiceStep;
 import org.cagrid.data.test.system.SetQueryProcessorStep;
+import org.cagrid.data.test.upgrades.UpgradeTestConstants;
 import org.cagrid.data.test.upgrades.from1pt0.UpgradeFrom1pt0Tests;
 
 /** 
@@ -28,7 +29,7 @@ import org.cagrid.data.test.upgrades.from1pt0.UpgradeFrom1pt0Tests;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Feb 21, 2007 
- * @version $Id: UpgradedServiceSystemTest.java,v 1.3 2008-09-11 17:47:50 dervin Exp $ 
+ * @version $Id: UpgradedServiceSystemTest.java,v 1.4 2008-09-12 14:44:31 dervin Exp $ 
  */
 public class UpgradedServiceSystemTest extends Story {
 	public static final String INTRODUCE_DIR_PROPERTY = "introduce.base.dir";
@@ -42,7 +43,9 @@ public class UpgradedServiceSystemTest extends Story {
     
     
     public String getName() {
-        return "Data Service 1_0 to 1_2 Upgraded System Tests";
+        return "Data Service 1_0 to " 
+            + UpgradeTestConstants.DATA_CURRENT_VERSION.replace(".", "_") 
+            + " Upgraded System Tests";
     }
     
 	
