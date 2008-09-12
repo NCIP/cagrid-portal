@@ -233,4 +233,9 @@ div.row div.twoCols{
     visibility:hidden;
 }
 
+.versionStamp{
+    font-size:8px;
+    color:#6f6f6f;
+}
+
 
