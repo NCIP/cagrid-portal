@@ -1,2 +1,0 @@
-Navigator\Commands\Previous\OpenPicture=Images/Theme/ButtonsAndIcons/nav_prev.gif
-Navigator\Commands\Next\OpenPicture=Images/Theme/ButtonsAndIcons/nav_next.gif

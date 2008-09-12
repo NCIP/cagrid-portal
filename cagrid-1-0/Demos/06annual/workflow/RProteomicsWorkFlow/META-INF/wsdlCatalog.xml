@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<wsdlCatalog>
-    <wsdlEntry location="wsdl/WorkFlowClientService.wsdl" classpath="wsdl/WorkFlowClientService.wsdl"/>
-</wsdlCatalog>

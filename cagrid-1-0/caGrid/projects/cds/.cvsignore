@@ -1,6 +1,0 @@
-bin
-build
-ext
-deploy.properties
-cagrid_CredentialDelegationService.gar
-${test.log.dir}
