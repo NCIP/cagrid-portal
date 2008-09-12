@@ -152,7 +152,7 @@ new GLatLng(
 {icon:ctrUp}
 </c:when>
 <c:when test="${svcNode.partiallyActive}">
-{icon:ctrPartial}
+{icon:ctrUp}
 </c:when>
 <c:otherwise>
 {icon:ctrDown}
