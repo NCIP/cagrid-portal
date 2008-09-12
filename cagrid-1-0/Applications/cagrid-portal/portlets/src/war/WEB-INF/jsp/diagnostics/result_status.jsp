@@ -6,10 +6,10 @@
         Status in Portal:
     </div>
     <div id="portalStatusDetailDiv" class="threeCols">
-        ${result.detail}
+        ${result.message}
     </div>
     <div id="portalStatusImgDiv" class="threeCols">
-        <tags:diagnosticStatusFlag status="${result.status}"/>
+        <%@ include file="statusFlag.jspf"%>
     </div>
 </div>
  

@@ -5,9 +5,9 @@
         Index:
     </div>
     <div id="idxDetailDiv" class="threeCols">
-        ${result.detail}
+          ${result.message}
     </div>
     <div id="idxImgDiv" class="threeCols">
-        <tags:diagnosticStatusFlag status="${result.status}"/>
+        <%@ include file="statusFlag.jspf"%>
     </div>
 </div>

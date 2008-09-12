@@ -19,7 +19,8 @@
     </div>
     <div>
         <input id="${prefix}url" type="text" name="url" size="50"/>
-        <input type="button" value="Diagnose" onclick="javascript:${prefix}beginDiagnose()"/>
+        <input type="button" value="Diagnose" onclick="javascript:${prefix}beginDiagnose(true)"/>
+        <tags:infoPopup id="${prefix}diagnosticsInfo" popup_text="Enter URL of caGrid service to run diagnostics on."/>
     </div>
 </div>
 
@@ -37,10 +38,15 @@
                     name="indicator.gif"
                     alt="Please wait"
                 />
-
+      <hr/>
     </div>
-    <hr/>
+
     <div id="resultsDiv">
+        <!---->
+    </div>
+
+    <br/>
+    <div id="${prefix}disclaimerDiv" class="versionStamp" style="float:left;">
         <!---->
     </div>
 
@@ -53,7 +59,7 @@
     var totalTests = 4;
     var counter = 0;
 
-    function ${prefix}beginDiagnose(){
+    function ${prefix}beginDiagnose(validateUrl){
 
     <!--reset the portlet html-->
     $("${prefix}outerDiv").innerHTML = cachedHTML;
@@ -61,11 +67,21 @@
     counter=0;
 
     <!--validate url. Exit on failure-->
-    var url=$("${prefix}url").value.strip();
-    if(!isValidURL(url)){
-    $("${prefix}errorMsg").innerHTML="Invalid URL";
-    return false;
+
+        var url=$("${prefix}url").value.strip();
+    if(validateUrl || url.length<10){
+        if(!isValidURL(url)){
+        $("${prefix}errorMsg").innerHTML="Invalid URL";
+        $("${prefix}errorMsg").innerHTML+=" &nbsp; ";
+        $("${prefix}errorMsg").innerHTML+='<input type="checkbox" onclick="${prefix}beginDiagnose(false)">';
+        $("${prefix}errorMsg").innerHTML+="Ignore Warning!";
+        $("${prefix}errorMsg").innerHTML+="</input>";
+
+
+         return false;
+        }
     }
+
 
     $("${prefix}headerDiv").style.visibility='visible';
 
@@ -75,14 +91,13 @@
     doDiagnose("pingDiagnostic",pingDiagnostic,url);
     doDiagnose("metadataDiagnostic",metadataDiagnostic,url);
     doDiagnose("idxDiagnostic",idxDiagnostic,url);
-    }
+
+   }
 
 
     function doDiagnose(divName,JScript,url){
     JScript.diagnose(url, function(result){
-    document.getElementById("resultsDiv").innerHTML+= "
-    <div id='${prefix}" + divName + "'>" + result + "</div>
-    ";
+    document.getElementById("resultsDiv").innerHTML+="<div id='${prefix}" + divName + "'>" + result + "</div>";
 
     <%--var _div = $("${prefix}"+ divName);--%>
     <%--new Effect.SlideDown(_div);--%>
@@ -93,8 +108,10 @@
     }
 
     function ${prefix}finishDiagnose(){
-    $("statusIndicator").style.visibility='hidden';
-    $("${prefix}diagnosisLabel").innerHTML = 'Diagnostic Results';
+        $("statusIndicator").style.visibility='hidden';
+        $("${prefix}diagnosisLabel").innerHTML = 'Diagnostic Results';
+        $("${prefix}disclaimerDiv").innerHTML="Index service results can be delayed up to 5 minutes.";
+
     }
 
 

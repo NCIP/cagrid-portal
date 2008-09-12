@@ -53,4 +53,25 @@
         </property>
     </bean>
 
+     <!--update the cache of service-->
+    <bean id="regsvcTimerFactory"
+          class="org.springframework.scheduling.timer.TimerFactoryBean">
+        <property name="scheduledTimerTasks">
+            <list>
+                <bean id="updateServicCacheTask"
+                      class="org.springframework.scheduling.timer.ScheduledTimerTask">
+                    <property name="delay" value="12000"/>
+                    <property name="period" ref="fastDefaultPeriod"/>
+                    <property name="timerTask">
+                        <bean id="updateServicCache"
+                              class="org.springframework.scheduling.timer.MethodInvokingTimerTaskFactoryBean">
+                            <property name="targetObject" ref="cacheFirstDynamicServiceStatusProvider"/>
+                            <property name="targetMethod" value="monitorIndex"/>
+                        </bean>
+                    </property>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
 </beans>

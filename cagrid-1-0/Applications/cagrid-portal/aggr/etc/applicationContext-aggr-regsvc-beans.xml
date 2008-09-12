@@ -31,8 +31,12 @@
 
     <bean id="dynamicServiceUrlProvider"
           class="gov.nih.nci.cagrid.portal.aggr.regsvc.DynamicServiceUrlProvider">
-        <property name="requireMetadataCompliance" value="true"/>
+        <property name="requireMetadataCompliance" ref="metadataCompliance"/>
         <property name="timeout" ref="defaultTimeout"/>
+    </bean>
+
+    <bean  id="metadataCompliance" class="java.lang.Boolean">
+        <constructor-arg value="true"/>
     </bean>
 
     <bean id="registeredServiceListener" parent="metadataListenerTemplate"

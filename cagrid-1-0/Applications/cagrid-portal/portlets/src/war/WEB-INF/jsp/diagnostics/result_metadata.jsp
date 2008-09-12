@@ -5,10 +5,10 @@
         Service Metadata:
     </div>
     <div id="metadataDetailDiv" class="threeCols">
-        ${result.detail}
+        ${result.message}
     </div>
     <div id="metadataImgDiv" class="threeCols">
-        <tags:diagnosticStatusFlag status="${result.status}"/>
+        <%@ include file="statusFlag.jspf"%>
     </div>
 </div>
 

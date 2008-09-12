@@ -22,9 +22,9 @@ public class PingDiagnosticService extends StatusDiagnosticService {
         _result.setType(DiagnosticType.PING);
 
         if (_result.getStatus().equals(DiagnosticResultStatus.PASSED))
-            _result.setDetail("Sucessfully pinged service");
+            _result.setMessage("Sucessfully pinged service");
         else
-            _result.setDetail("Failed to PING service");
+            _result.setMessage("Failed to PING service");
 
         return _result;
     }

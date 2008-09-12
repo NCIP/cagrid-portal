@@ -14,8 +14,8 @@ public class DiagnosticResult {
 
     private DiagnosticType type;
     private DiagnosticResultStatus status;
+    private String message;
     private String detail;
-    private String errorDetail;
 
 
     public DiagnosticResult(DiagnosticType type) {
@@ -27,10 +27,10 @@ public class DiagnosticResult {
         this.status = status;
     }
 
-    public DiagnosticResult(DiagnosticType type, DiagnosticResultStatus status, String detail) {
+    public DiagnosticResult(DiagnosticType type, DiagnosticResultStatus status, String message) {
         this.type = type;
         this.status = status;
-        this.detail = detail;
+        this.message = message;
     }
 
     @RemoteProperty
@@ -43,21 +43,12 @@ public class DiagnosticResult {
     }
 
     @RemoteProperty
-    public String getDetail() {
-        return detail;
+    public String getMessage() {
+        return message;
     }
 
-    public void setDetail(String detail) {
-        this.detail = detail;
-    }
-
-    @RemoteProperty
-    public String getErrorDetail() {
-        return errorDetail;
-    }
-
-    public void setErrorDetail(String errorDetail) {
-        this.errorDetail = errorDetail;
+    public void setMessage(String detail) {
+        this.message = detail;
     }
 
     public DiagnosticType getType() {
@@ -66,5 +57,14 @@ public class DiagnosticResult {
 
     public void setType(DiagnosticType type) {
         this.type = type;
+    }
+
+    @RemoteProperty
+    public String getDetail() {
+        return detail;
+    }
+
+    public void setDetail(String detail) {
+        this.detail = detail;
     }
 }

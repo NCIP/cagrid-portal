@@ -6,6 +6,7 @@ import gov.nih.nci.cagrid.portal.portlet.discovery.filter.ServiceFilter;
 import org.directwebremoting.annotations.Param;
 import org.directwebremoting.annotations.RemoteProxy;
 import org.directwebremoting.spring.SpringCreator;
+import org.springframework.beans.factory.annotation.Required;
 
 /**
  * User: kherm
@@ -28,15 +29,17 @@ public class PortalStatusDiagnosticService extends AbstractDiagnosticService {
         try {
             GridService _service = gridServiceDao.getByUrl(Url);
             // this will throw exception if _service is null           
-            _result.setDetail("Service is in " + _service.getCurrentStatus() + " status");
+            _result.setMessage("Service is in " + _service.getCurrentStatus() + " status");
 
-//            if(!serviceFilter.willBeFiltered(_service)){
-            _result.setStatus(DiagnosticResultStatus.PASSED);
-//            }
-
+            if (!serviceFilter.willBeFiltered(_service)) {
+                _result.setStatus(DiagnosticResultStatus.PASSED);
+            } else {
+                _result.setStatus(DiagnosticResultStatus.PROBLEM);
+                _result.setDetail("Service will not be visible in the Portal. Please contact Applicaiton Support for help.");
+            }
 
         } catch (Exception e) {
-            _result.setDetail("Service not in Portal");
+            _result.setMessage("Service not in Portal");
         }
         return _result;
     }
@@ -50,6 +53,7 @@ public class PortalStatusDiagnosticService extends AbstractDiagnosticService {
         this.gridServiceDao = gridServiceDao;
     }
 
+    @Required
     public ServiceFilter getServiceFilter() {
         return serviceFilter;
     }

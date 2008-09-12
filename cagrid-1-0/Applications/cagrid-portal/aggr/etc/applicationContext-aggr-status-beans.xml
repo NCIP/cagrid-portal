@@ -26,10 +26,18 @@
         </property>
     </bean>
 
+    <bean  id="cacheFirstDynamicServiceStatusProvider"
+           class="gov.nih.nci.cagrid.portal.aggr.status.CacheFirstDynamicServiceStatusProvider" scope="singleton">
+        <property name="indexServiceUrls" value="${cagrid.portal.indexServiceUrls}"/>
+        <property name="requireMetadataCompliance"  ref="metadataCompliance"/>
+        <property name="dynamicServiceStatusProvider" ref="dynamicServiceUrlProvider"/>
+        <property name="timeout" ref="defaultTimeout"/>
+    </bean>
+
     <bean id="idxServiceStatusProvider"
           class="gov.nih.nci.cagrid.portal.aggr.status.IdxServiceStatusProvider">
         <property name="indexServiceUrls" value="${cagrid.portal.indexServiceUrls}"/>
-        <property name="dynamicServiceUrlProvider" ref="dynamicServiceUrlProvider"/>
+        <property name="dynamicServiceUrlProvider" ref="cacheFirstDynamicServiceStatusProvider"/>
         <property name="strictIndexVerification" value="${strict.index.verification}"/>
     </bean>
 

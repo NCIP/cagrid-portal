@@ -5,10 +5,10 @@
         Ping Service:
     </div>
     <div id="pingDetailDiv" class="threeCols">
-        Pinging Service
+        ${result.message}
     </div>
     <div id="pingImgDiv" class="threeCols">
-        <tags:diagnosticStatusFlag status="${result.status}"/>
+        <%@ include file="statusFlag.jspf"%>
     </div>
 </div>
 
