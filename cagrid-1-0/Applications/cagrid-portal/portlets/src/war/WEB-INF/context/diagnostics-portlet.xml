@@ -20,8 +20,8 @@
 
     <bean class="org.springframework.beans.factory.annotation.RequiredAnnotationBeanPostProcessor"/>
 
-    
-     <bean
+
+    <bean
             id="viewDiagnosticsController"
             class="gov.nih.nci.cagrid.portal.portlet.diagnostics.ViewDiagnosticsController"
             autowire="byName">
@@ -30,40 +30,26 @@
     </bean>
 
     <bean id="portletModeHandlerMapping"
-		class="org.springframework.web.portlet.handler.PortletModeHandlerMapping">
-		<property name="portletModeMap">
-			<map>
-				<entry key="view">
-					<ref bean="viewDiagnosticsController" />
-				</entry>
-			</map>
-		</property>
-	</bean>
+          class="org.springframework.web.portlet.handler.PortletModeHandlerMapping">
+        <property name="portletModeMap">
+            <map>
+                <entry key="view">
+                    <ref bean="viewDiagnosticsController"/>
+                </entry>
+            </map>
+        </property>
+    </bean>
 
 
     <bean id="viewResolver"
-            class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-          <property name="viewClass"
-                    value="org.springframework.web.servlet.view.JstlView"/>
-          <property name="prefix" value="/WEB-INF/jsp/diagnostics/"/>
-          <property name="suffix" value=".jsp"/>
-      </bean>
+          class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="viewClass"
+                  value="org.springframework.web.servlet.view.JstlView"/>
+        <property name="prefix" value="/WEB-INF/jsp/diagnostics/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
 
-      <bean id="defaultExceptionHandler"
-            parent="defaultExceptionHandlerTemplate"/>
-
-
-    <!--Diagnostics Portlet-->
-        <bean id="portalStatusDiagnosticService" class="gov.nih.nci.cagrid.portal.portlet.diagnostics.PortalStatusDiagnosticService"
-            autowire="byName"/>
-
-        <bean id="metadataDiagnosticService" class="gov.nih.nci.cagrid.portal.portlet.diagnostics.MetadataDiagnosticService"
-            autowire="byName"/>
-
-        <bean id="idxDiagnosticService" class="gov.nih.nci.cagrid.portal.portlet.diagnostics.PortalStatusDiagnosticService"
-            autowire="byName"/>
-
-        <bean id="pingDiagnosticService" class="gov.nih.nci.cagrid.portal.portlet.diagnostics.PortalStatusDiagnosticService"
-            autowire="byName"/>
+    <bean id="defaultExceptionHandler"
+          parent="defaultExceptionHandlerTemplate"/>
 
 </beans>

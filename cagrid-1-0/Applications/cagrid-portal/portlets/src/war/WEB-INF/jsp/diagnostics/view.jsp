@@ -1,5 +1,5 @@
 <%@ include file="/WEB-INF/jsp/include/includes.jspf" %>
-<%@ taglib prefix="tags" tagdir="/WEB-INF/tags"%>
+<%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
 
 <script type="text/javascript" src='<c:url value="/js/script.js"/>'></script>
 
@@ -11,7 +11,7 @@
 <script type="text/javascript" src='<c:url value="/dwr/interface/idxDiagnostic.js"/>'></script>
 <script type="text/javascript" src='<c:url value="/dwr/interface/metadataDiagnostic.js"/>'></script>
 
- <c:set var="prefix"><portlet:namespace/></c:set>
+<c:set var="prefix"><portlet:namespace/></c:set>
 
 <div class="row">
     <div class="label">
@@ -19,7 +19,7 @@
     </div>
     <div>
         <input id="${prefix}url" type="text" name="url" size="50"/>
-        <input  type="button" value="Diagnose" onclick="javascript:${prefix}beginDiagnose()"/>
+        <input type="button" value="Diagnose" onclick="javascript:${prefix}beginDiagnose()"/>
     </div>
 </div>
 
@@ -28,30 +28,37 @@
     </div>
     <br/>
 
-    <div id="${prefix}headerDiv" style="visibility:hidden;">
-        <b>Diagnostics</b>
-        <tags:image   id="statusIndicator"
-                      name="indicator.gif"
-                      alt="Please wait"
-            />
-        <hr/>
-    </div>
+    <div id="${prefix}headerDiv" style="visibility:hidden;font-style:italic;">
+        <span id="${prefix}diagnosisLabel" style="font-weight:bold;">
+            <!---->
+        </span>
 
-    <div id="${prefix}portalStatusDiagnostic" class="hidden"></div>
-    <div id="${prefix}pingDiagnostic" class="hidden"></div>
-    <div id="${prefix}metadataDiagnostic" class="hidden"></div>
-    <div id="${prefix}idxDiagnostic" class="hidden"></div>
+        <tags:image id="statusIndicator"
+                    name="indicator.gif"
+                    alt="Please wait"
+                />
+
+    </div>
+    <hr/>
+    <div id="resultsDiv">
+        <!---->
+    </div>
 
 </div>
 
 <!--has to come after all the html-->
 <script type="text/javascript">
     <!--record in memory the state of the portlet onLoad-->
-    var _html = $("${prefix}outerDiv").innerHTML;
+    var cachedHTML = $("${prefix}outerDiv").innerHTML;
+    var totalTests = 4;
+    var counter = 0;
 
     function ${prefix}beginDiagnose(){
+
     <!--reset the portlet html-->
-    $("${prefix}outerDiv").innerHTML = _html;
+    $("${prefix}outerDiv").innerHTML = cachedHTML;
+    $("${prefix}diagnosisLabel").innerHTML = 'Running Diagnostics';
+    counter=0;
 
     <!--validate url. Exit on failure-->
     var url=$("${prefix}url").value.strip();
@@ -67,28 +74,27 @@
     doDiagnose("portalStatusDiagnostic",portalStatusDiagnostic,url);
     doDiagnose("pingDiagnostic",pingDiagnostic,url);
     doDiagnose("metadataDiagnostic",metadataDiagnostic,url);
-
-    idxDiagnostic.diagnose(url, function(result){
-        var _div =  $("${prefix}idxDiagnostic");
-        _div.innerHTML =  result;
-        _div.style.visibility='visible';
-        new Effect.SlideDown(_div);
-        $("statusIndicator").style.visibility='hidden';
-     });
-
+    doDiagnose("idxDiagnostic",idxDiagnostic,url);
     }
 
 
     function doDiagnose(divName,JScript,url){
     JScript.diagnose(url, function(result){
-     
-            var _div = $("${prefix}"+ divName);
-        _div.innerHTML =  result;
-        new Effect.SlideDown(_div);
-    <!--is causing flickering-->
-    <!--_div.style.visibility =  'visible';-->
-    
+    document.getElementById("resultsDiv").innerHTML+= "
+    <div id='${prefix}" + divName + "'>" + result + "</div>
+    ";
+
+    <%--var _div = $("${prefix}"+ divName);--%>
+    <%--new Effect.SlideDown(_div);--%>
+
+    if(counter++>=totalTests-1)
+    ${prefix}finishDiagnose();
     });
+    }
+
+    function ${prefix}finishDiagnose(){
+    $("statusIndicator").style.visibility='hidden';
+    $("${prefix}diagnosisLabel").innerHTML = 'Diagnostic Results';
     }
 
 

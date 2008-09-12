@@ -11,7 +11,7 @@ import org.directwebremoting.convert.EnumConverter;
 @DataTransferObject(converter = EnumConverter.class)
 public enum DiagnosticResultStatus {
 
-    PASSED("Passed"), FAILED("Failed"), UNDETERMINISTIC("Underterministic");
+    PASSED("Passed"), FAILED("Failed"), PROBLEM("Problem"), UNDETERMINISTIC("Underterministic");
 
     private String strValue;
 

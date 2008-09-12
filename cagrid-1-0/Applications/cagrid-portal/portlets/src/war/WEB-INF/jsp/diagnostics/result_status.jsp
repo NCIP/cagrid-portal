@@ -8,9 +8,8 @@
     <div id="portalStatusDetailDiv" class="threeCols">
         ${result.detail}
     </div>
-    <div id="portalStatusImgDiv" class="threeCols" >
-        <img src='<c:url value="/images/diagnostic_passed_icon.jpg"/>'/>
-        ${result.status}
+    <div id="portalStatusImgDiv" class="threeCols">
+        <tags:diagnosticStatusFlag status="${result.status}"/>
     </div>
 </div>
  
