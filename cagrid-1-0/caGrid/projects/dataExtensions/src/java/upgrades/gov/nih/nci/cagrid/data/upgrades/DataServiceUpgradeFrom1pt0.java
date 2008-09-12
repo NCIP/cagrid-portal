@@ -47,7 +47,8 @@ public class DataServiceUpgradeFrom1pt0 extends ExtensionUpgraderBase {
 
     public DataServiceUpgradeFrom1pt0(ExtensionType extensionType, ServiceInformation serviceInformation,
         String servicePath, String fromVersion, String toVersion) {
-        super("DataServiceUpgradeFrom1pt0", extensionType, serviceInformation,
+        super(DataServiceUpgradeFrom1pt0.class.getSimpleName(),
+            extensionType, serviceInformation,
             servicePath, fromVersion, toVersion);
     }
 
