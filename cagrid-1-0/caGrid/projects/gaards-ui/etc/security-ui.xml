@@ -25,8 +25,8 @@
 					<icon>/login.png</icon>
 					<showOnToolBar>true</showOnToolBar>
 					<dimensions>
-						<width>500</width>
-						<height>400</height>
+						<width>550</width>
+						<height>350</height>
 					</dimensions>
 				</component>
 				<component>

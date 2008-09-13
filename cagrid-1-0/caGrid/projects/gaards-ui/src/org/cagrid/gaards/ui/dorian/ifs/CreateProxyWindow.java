@@ -6,6 +6,7 @@ import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -14,13 +15,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
-import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
+import javax.swing.border.BevelBorder;
 import javax.xml.namespace.QName;
 
 import org.cagrid.gaards.authentication.client.AuthenticationClient;
@@ -29,6 +31,7 @@ import org.cagrid.gaards.dorian.client.GridUserClient;
 import org.cagrid.gaards.dorian.federation.ProxyLifetime;
 import org.cagrid.gaards.ui.common.CredentialManager;
 import org.cagrid.gaards.ui.common.CredentialManagerComponent;
+import org.cagrid.gaards.ui.common.GAARDSLookAndFeel;
 import org.cagrid.gaards.ui.dorian.AuthenticationServiceHandle;
 import org.cagrid.gaards.ui.dorian.DorianHandle;
 import org.cagrid.gaards.ui.dorian.DorianLookAndFeel;
@@ -88,15 +91,17 @@ public class CreateProxyWindow extends ApplicationComponent {
 
     private Object mutex = new Object();
 
-    private JLabel jLabel = null;
-
-    private JTextField delegationPathLength = null;
-    
     private CardLayout credentialLayout = null;
     
     private CredentialPanel currentCredentialPanel = null;
     
     private Map<QName, CredentialPanel> credentialPanels;
+
+	private JPanel titlePanel = null;
+
+	private JLabel icon = null;
+
+	private JLabel jLabel = null;
 
     /**
      * This is the default constructor
@@ -140,23 +145,32 @@ public class CreateProxyWindow extends ApplicationComponent {
      */
     private JPanel getMainPanel() {
         if (mainPanel == null) {
+            GridBagConstraints gridBagConstraints17 = new GridBagConstraints();
+            gridBagConstraints17.gridx = 0;
+            gridBagConstraints17.gridy = 0;
+            gridBagConstraints17.fill = GridBagConstraints.HORIZONTAL;
+            gridBagConstraints17.weightx = 1.0D;
+            gridBagConstraints17.anchor = GridBagConstraints.WEST;
+            gridBagConstraints17.insets = new Insets(2, 2, 2, 2);
             GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
             gridBagConstraints3.gridx = 0;
             gridBagConstraints3.anchor = java.awt.GridBagConstraints.SOUTH;
-            gridBagConstraints3.insets = new java.awt.Insets(2, 2, 2, 2);
-            gridBagConstraints3.fill = java.awt.GridBagConstraints.BOTH;
-            gridBagConstraints3.gridy = 1;
+            gridBagConstraints3.insets = new Insets(0, 0, 0, 0);
+            gridBagConstraints3.fill = GridBagConstraints.HORIZONTAL;
+            gridBagConstraints3.weightx = 1.0D;
+            gridBagConstraints3.gridy = 2;
             GridBagConstraints gridBagConstraints = new GridBagConstraints();
             gridBagConstraints.gridx = 0;
             gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
             gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
             gridBagConstraints.weightx = 1.0D;
             gridBagConstraints.weighty = 1.0D;
-            gridBagConstraints.gridy = 0;
+            gridBagConstraints.gridy = 1;
             mainPanel = new JPanel();
             mainPanel.setLayout(new GridBagLayout());
             mainPanel.add(getIdpPanel(), gridBagConstraints);
             mainPanel.add(getButtonPanel(), gridBagConstraints3);
+            mainPanel.add(getTitlePanel(), gridBagConstraints17);
         }
         return mainPanel;
     }
@@ -169,27 +183,13 @@ public class CreateProxyWindow extends ApplicationComponent {
      */
     private JPanel getIdpPanel() {
         if (idpPanel == null) {
-            GridBagConstraints gridBagConstraints18 = new GridBagConstraints();
-            gridBagConstraints18.fill = GridBagConstraints.HORIZONTAL;
-            gridBagConstraints18.gridy = 3;
-            gridBagConstraints18.weightx = 1.0;
-            gridBagConstraints18.anchor = GridBagConstraints.WEST;
-            gridBagConstraints18.insets = new Insets(2, 2, 2, 2);
-            gridBagConstraints18.gridx = 1;
-            GridBagConstraints gridBagConstraints17 = new GridBagConstraints();
-            gridBagConstraints17.gridx = 0;
-            gridBagConstraints17.anchor = GridBagConstraints.WEST;
-            gridBagConstraints17.insets = new Insets(2, 2, 2, 2);
-            gridBagConstraints17.gridy = 3;
-            jLabel = new JLabel();
-            jLabel.setText("Delegation Path Length");
             GridBagConstraints gridBagConstraints15 = new GridBagConstraints();
             gridBagConstraints15.gridx = 0;
             gridBagConstraints15.insets = new java.awt.Insets(3, 20, 3, 20);
             gridBagConstraints15.fill = java.awt.GridBagConstraints.HORIZONTAL;
             gridBagConstraints15.gridwidth = 2;
             gridBagConstraints15.weightx = 1.0D;
-            gridBagConstraints15.gridy = 5;
+            gridBagConstraints15.gridy = 4;
             GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
             gridBagConstraints8.gridx = 1;
             gridBagConstraints8.anchor = java.awt.GridBagConstraints.WEST;
@@ -218,7 +218,7 @@ public class CreateProxyWindow extends ApplicationComponent {
             gridBagConstraints5.insets = new java.awt.Insets(2, 2, 2, 2);
             gridBagConstraints5.gridx = 0;
             ifsLabel = new JLabel();
-            ifsLabel.setText("Dorian");
+            ifsLabel.setText("Authority");
             GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
             gridBagConstraints4.gridx = 0;
             gridBagConstraints4.gridwidth = 2;
@@ -226,7 +226,7 @@ public class CreateProxyWindow extends ApplicationComponent {
             gridBagConstraints4.weightx = 1.0D;
             gridBagConstraints4.weighty = 1.0D;
             gridBagConstraints4.insets = new java.awt.Insets(2, 2, 2, 2);
-            gridBagConstraints4.gridy = 4;
+            gridBagConstraints4.gridy = 3;
             GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
             gridBagConstraints2.fill = java.awt.GridBagConstraints.HORIZONTAL;
             gridBagConstraints2.gridx = 1;
@@ -243,9 +243,13 @@ public class CreateProxyWindow extends ApplicationComponent {
             idpLabel.setText("Organization");
             idpPanel = new JPanel();
             idpPanel.setLayout(new GridBagLayout());
-            idpPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Create Proxy",
+        
+            //idpPanel.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED));
+            /*
+            idpPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Login",
                 javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
                 javax.swing.border.TitledBorder.DEFAULT_POSITION, null, LookAndFeel.getPanelLabelColor()));
+            */
             idpPanel.add(getProgressPanel(), gridBagConstraints15);
             idpPanel.add(idpLabel, gridBagConstraints1);
             idpPanel.add(getIdentityProvider(), gridBagConstraints2);
@@ -254,8 +258,6 @@ public class CreateProxyWindow extends ApplicationComponent {
             idpPanel.add(getDorianService(), gridBagConstraints6);
             idpPanel.add(lifetimeLabel, gridBagConstraints7);
             idpPanel.add(getLifetimePanel(), gridBagConstraints8);
-            idpPanel.add(jLabel, gridBagConstraints17);
-            idpPanel.add(getDelegationPathLength(), gridBagConstraints18);
         }
         return idpPanel;
     }
@@ -380,7 +382,7 @@ public class CreateProxyWindow extends ApplicationComponent {
     private JButton getAuthenticateButton() {
         if (authenticateButton == null) {
             authenticateButton = new JButton();
-            authenticateButton.setText("Authenticate");
+            authenticateButton.setText("Login");
             authenticateButton.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
                     Runner runner = new Runner() {
@@ -395,7 +397,7 @@ public class CreateProxyWindow extends ApplicationComponent {
                     }
                 }
             });
-            authenticateButton.setIcon(DorianLookAndFeel.getAuthenticateIcon());
+            //authenticateButton.setIcon(DorianLookAndFeel.getAuthenticateIcon());
         }
         return authenticateButton;
     }
@@ -427,14 +429,8 @@ public class CreateProxyWindow extends ApplicationComponent {
             lifetime.setHours(Integer.valueOf((String) getHours().getSelectedItem()).intValue());
             lifetime.setMinutes(Integer.valueOf((String) getMinutes().getSelectedItem()).intValue());
             lifetime.setSeconds(Integer.valueOf((String) getSeconds().getSelectedItem()).intValue());
-            int delegation = 0;
-            try {
-                delegation = Integer.valueOf(delegationPathLength.getText()).intValue();
-            } catch (Exception e) {
-                ErrorDialog.showError("The delegation path length must be an integer.");
-                return;
-            }
-            GlobusCredential cred = c2.createProxy(saml, lifetime, delegation);
+          
+            GlobusCredential cred = c2.createProxy(saml, lifetime, 0);
             this.updateProgress(false, "Proxy Created!!!");
             CredentialManager.getInstance().addCredential(cred);
             GridApplication.getContext().addApplicationComponent(new CredentialManagerComponent(cred), 800, 500);
@@ -456,8 +452,8 @@ public class CreateProxyWindow extends ApplicationComponent {
     private JButton getClose() {
         if (close == null) {
             close = new JButton();
-            close.setText("Close");
-            close.setIcon(LookAndFeel.getCloseIcon());
+            close.setText("Cancel");
+            //close.setIcon(LookAndFeel.getCloseIcon());
             close.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
                     dispose();
@@ -627,21 +623,39 @@ public class CreateProxyWindow extends ApplicationComponent {
     }
 
 
-    /**
-     * This method initializes delegationPathLength
-     * 
-     * @return javax.swing.JTextField
-     */
-    private JTextField getDelegationPathLength() {
-        if (delegationPathLength == null) {
-            delegationPathLength = new JTextField();
-            delegationPathLength.setText("0");
-        }
-        return delegationPathLength;
-    }
-    
     private String profileToString(QName profile){
     	return profile.getNamespaceURI()+":"+profile.getLocalPart();
     }
+
+
+	/**
+	 * This method initializes titlePanel	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getTitlePanel() {
+		if (titlePanel == null) {
+			GridBagConstraints gridBagConstraints19 = new GridBagConstraints();
+			gridBagConstraints19.anchor = GridBagConstraints.WEST;
+			gridBagConstraints19.gridx = 1;
+			gridBagConstraints19.gridy = 0;
+			gridBagConstraints19.weightx = 1.0D;
+			gridBagConstraints19.insets = new Insets(2, 2, 2, 2);
+			GridBagConstraints gridBagConstraints18 = new GridBagConstraints();
+			gridBagConstraints18.gridx = 0;
+			gridBagConstraints18.anchor = GridBagConstraints.WEST;
+			gridBagConstraints18.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints18.gridy = 0;
+			jLabel = new JLabel();
+			jLabel.setText("Login");
+			jLabel.setFont(new Font("Dialog", Font.BOLD, 14));
+			icon = new JLabel(LookAndFeel.getLogoNoText22x22());
+			titlePanel = new JPanel();
+			titlePanel.setLayout(new GridBagLayout());
+			titlePanel.add(icon, gridBagConstraints18);
+			titlePanel.add(jLabel, gridBagConstraints19);
+		}
+		return titlePanel;
+	}
 
 }
