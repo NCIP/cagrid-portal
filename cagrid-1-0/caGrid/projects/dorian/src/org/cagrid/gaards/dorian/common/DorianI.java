@@ -164,19 +164,6 @@ public interface DorianI {
   public void removeGridUser(org.cagrid.gaards.dorian.federation.GridUser user) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.InvalidUserFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault ;
 
   /**
-   * Renews a grid user's long term credentials.
-   *
-   * @param user
-   * @throws DorianInternalFault
-   *	An unexpected internal Dorian error.
-   * @throws InvalidUserFault
-   *	Invalid user specified.
-   * @throws PermissionDeniedFault
-   *	Client does not have permission to perform the request.
-   */
-  public org.cagrid.gaards.dorian.federation.GridUser renewGridUserCredentials(org.cagrid.gaards.dorian.federation.GridUser user) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.InvalidUserFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault ;
-
-  /**
    * Get a list of the Trusted IdP user policies supported by Dorian.
    *
    * @throws DorianInternalFault
@@ -274,6 +261,17 @@ public interface DorianI {
    *	
    */
   public void changeLocalUserPassword(org.cagrid.gaards.authentication.BasicAuthentication credential,java.lang.String newPassword) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.InvalidUserPropertyFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault ;
+
+  /**
+   * This method allows an administrator to update a user certificate record.
+   *
+   * @param update
+   * @throws DorianInternalFault
+   *	
+   * @throws InvalidUserCertificateFault
+   *	
+   */
+  public void updateUserCertificate(org.cagrid.gaards.dorian.federation.UserCertificateUpdate update) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.InvalidUserCertificateFault ;
 
 }
 

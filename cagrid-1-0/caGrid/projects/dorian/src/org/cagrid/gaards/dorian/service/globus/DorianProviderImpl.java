@@ -97,12 +97,6 @@ public class DorianProviderImpl{
     return boxedResult;
   }
 
-    public org.cagrid.gaards.dorian.stubs.RenewGridUserCredentialsResponse renewGridUserCredentials(org.cagrid.gaards.dorian.stubs.RenewGridUserCredentialsRequest params) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.InvalidUserFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault {
-    org.cagrid.gaards.dorian.stubs.RenewGridUserCredentialsResponse boxedResult = new org.cagrid.gaards.dorian.stubs.RenewGridUserCredentialsResponse();
-    boxedResult.setGridUser(impl.renewGridUserCredentials(params.getUser().getGridUser()));
-    return boxedResult;
-  }
-
     public org.cagrid.gaards.dorian.stubs.GetGridUserPoliciesResponse getGridUserPolicies(org.cagrid.gaards.dorian.stubs.GetGridUserPoliciesRequest params) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault {
     org.cagrid.gaards.dorian.stubs.GetGridUserPoliciesResponse boxedResult = new org.cagrid.gaards.dorian.stubs.GetGridUserPoliciesResponse();
     boxedResult.setGridUserPolicy(impl.getGridUserPolicies());
@@ -190,6 +184,12 @@ public class DorianProviderImpl{
     public org.cagrid.gaards.dorian.stubs.ChangeLocalUserPasswordResponse changeLocalUserPassword(org.cagrid.gaards.dorian.stubs.ChangeLocalUserPasswordRequest params) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.InvalidUserPropertyFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault {
     org.cagrid.gaards.dorian.stubs.ChangeLocalUserPasswordResponse boxedResult = new org.cagrid.gaards.dorian.stubs.ChangeLocalUserPasswordResponse();
     impl.changeLocalUserPassword(params.getCredential().getBasicAuthentication(),params.getNewPassword());
+    return boxedResult;
+  }
+
+    public org.cagrid.gaards.dorian.stubs.UpdateUserCertificateResponse updateUserCertificate(org.cagrid.gaards.dorian.stubs.UpdateUserCertificateRequest params) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.InvalidUserCertificateFault {
+    org.cagrid.gaards.dorian.stubs.UpdateUserCertificateResponse boxedResult = new org.cagrid.gaards.dorian.stubs.UpdateUserCertificateResponse();
+    impl.updateUserCertificate(params.getUpdate().getUserCertificateUpdate());
     return boxedResult;
   }
 

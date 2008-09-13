@@ -24,7 +24,7 @@ import org.cagrid.gaards.authentication.test.AuthenticationProperties;
 import org.cagrid.gaards.authentication.test.system.steps.AuthenticationStep;
 import org.cagrid.gaards.authentication.test.system.steps.SuccessfullAuthentication;
 import org.cagrid.gaards.authentication.test.system.steps.ValidateSupportedAuthenticationProfilesStep;
-import org.cagrid.gaards.dorian.federation.AutoApprovalAutoRenewalPolicy;
+import org.cagrid.gaards.dorian.federation.AutoApprovalPolicy;
 import org.cagrid.gaards.dorian.federation.GridUserStatus;
 import org.cagrid.gaards.dorian.federation.SAMLAttributeDescriptor;
 import org.cagrid.gaards.dorian.federation.SAMLAuthenticationMethod;
@@ -139,7 +139,7 @@ public class DorianRemoteIdentityProviderTest extends ServiceStoryBase {
             VerifyTrustedIdPStep localIdP = new VerifyTrustedIdPStep(dorianURL, admin, "Dorian");
             localIdP.setDisplayName("Dorian");
             localIdP.setStatus(TrustedIdPStatus.Active);
-            localIdP.setUserPolicyClass(AutoApprovalAutoRenewalPolicy.class.getName());
+            localIdP.setUserPolicyClass(AutoApprovalPolicy.class.getName());
             localIdP.setAuthenticationServiceURL(dorianURL);
             steps.add(localIdP);
 
@@ -153,7 +153,7 @@ public class DorianRemoteIdentityProviderTest extends ServiceStoryBase {
             idp.setName("OSU");
             idp.setDisplayName("Ohio State University");
             idp.setStatus(TrustedIdPStatus.Active);
-            idp.setUserPolicyClass(AutoApprovalAutoRenewalPolicy.class.getName());
+            idp.setUserPolicyClass(AutoApprovalPolicy.class.getName());
             idp.setAuthenticationServiceURL(asURL);
             SAMLAttributeDescriptor uid = new SAMLAttributeDescriptor();
             uid.setNamespaceURI(SAMLConstants.UID_ATTRIBUTE_NAMESPACE);
@@ -185,7 +185,7 @@ public class DorianRemoteIdentityProviderTest extends ServiceStoryBase {
             VerifyTrustedIdPStep remoteIdP = new VerifyTrustedIdPStep(dorianURL, admin, idp.getName());
             remoteIdP.setDisplayName(idp.getDisplayName());
             remoteIdP.setStatus(TrustedIdPStatus.Active);
-            remoteIdP.setUserPolicyClass(AutoApprovalAutoRenewalPolicy.class.getName());
+            remoteIdP.setUserPolicyClass(AutoApprovalPolicy.class.getName());
             remoteIdP.setAuthenticationServiceURL(asURL);
             remoteIdP.setAuthenticationServiceIdentity(idp.getAuthenticationServiceIdentity());
             steps.add(remoteIdP);
@@ -214,7 +214,7 @@ public class DorianRemoteIdentityProviderTest extends ServiceStoryBase {
             VerifyTrustedIdPStep remoteIdP2 = new VerifyTrustedIdPStep(dorianURL, admin, idp.getName());
             remoteIdP2.setDisplayName(idp.getDisplayName());
             remoteIdP2.setStatus(TrustedIdPStatus.Suspended);
-            remoteIdP2.setUserPolicyClass(AutoApprovalAutoRenewalPolicy.class.getName());
+            remoteIdP2.setUserPolicyClass(AutoApprovalPolicy.class.getName());
             remoteIdP2.setAuthenticationServiceURL(asURL);
             remoteIdP2.setAuthenticationServiceIdentity(idp.getAuthenticationServiceIdentity());
             steps.add(remoteIdP2);

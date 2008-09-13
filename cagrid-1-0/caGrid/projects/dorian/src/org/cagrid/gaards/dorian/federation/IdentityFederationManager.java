@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.bouncycastle.asn1.x509.CRLReason;
 import org.cagrid.gaards.dorian.ca.CertificateAuthority;
@@ -36,6 +37,7 @@ import org.cagrid.gaards.dorian.stubs.types.InvalidHostCertificateFault;
 import org.cagrid.gaards.dorian.stubs.types.InvalidHostCertificateRequestFault;
 import org.cagrid.gaards.dorian.stubs.types.InvalidProxyFault;
 import org.cagrid.gaards.dorian.stubs.types.InvalidTrustedIdPFault;
+import org.cagrid.gaards.dorian.stubs.types.InvalidUserCertificateFault;
 import org.cagrid.gaards.dorian.stubs.types.InvalidUserFault;
 import org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault;
 import org.cagrid.gaards.dorian.stubs.types.UserPolicyFault;
@@ -55,6 +57,8 @@ import org.cagrid.tools.groups.GroupManager;
  *          Exp $
  */
 public class IdentityFederationManager extends LoggingObject implements Publisher {
+
+    private final int CERTIFICATE_START_OFFSET_SECONDS = -10;
 
     private UserManager um;
 
@@ -80,6 +84,8 @@ public class IdentityFederationManager extends LoggingObject implements Publishe
 
     private CertificateBlacklistManager blackList;
 
+    private UserCertificateManager userCertificateManager;
+
 
     public IdentityFederationManager(IdentityFederationProperties conf, Database db, PropertyManager properties,
         CertificateAuthority ca, FederationDefaults defaults) throws DorianInternalFault {
@@ -94,8 +100,9 @@ public class IdentityFederationManager extends LoggingObject implements Publishe
         this.ca = ca;
         threadManager = new ThreadManager();
         this.blackList = new CertificateBlacklistManager(db);
+        this.userCertificateManager = new UserCertificateManager(db, this);
         tm = new TrustedIdPManager(conf, db);
-        um = new UserManager(db, conf, properties, ca, this.blackList, tm, this, defaults);
+        um = new UserManager(db, conf, properties, ca, tm, this, defaults);
         um.buildDatabase();
         this.groupManager = new GroupManager(db);
         try {
@@ -145,6 +152,11 @@ public class IdentityFederationManager extends LoggingObject implements Publishe
             publishCRL = true;
             publishCRL();
         }
+    }
+
+
+    public String getIdentityAssignmentPolicy() {
+        return um.getIdentityAssignmentPolicy();
     }
 
 
@@ -309,22 +321,6 @@ public class IdentityFederationManager extends LoggingObject implements Publishe
     }
 
 
-    public GridUser renewUserCredentials(String callerGridIdentity, GridUser usr) throws DorianInternalFault,
-        InvalidUserFault, PermissionDeniedFault {
-        try {
-            GridUser caller = um.getUser(callerGridIdentity);
-            verifyActiveUser(caller);
-            verifyAdminUser(caller);
-            return um.renewUserCredentials(tm.getTrustedIdPById(usr.getIdPId()), usr);
-        } catch (InvalidTrustedIdPFault f) {
-            logError(f.getFaultString(), f);
-            DorianInternalFault fault = new DorianInternalFault();
-            fault.setFaultString("An unexpected error occurred renewing the user's credentials.");
-            throw fault;
-        }
-    }
-
-
     public void addAdmin(String callerGridIdentity, String gridIdentity) throws RemoteException, DorianInternalFault,
         PermissionDeniedFault {
         GridUser caller = getUser(callerGridIdentity);
@@ -391,9 +387,8 @@ public class IdentityFederationManager extends LoggingObject implements Publishe
     }
 
 
-    public X509Certificate[] createProxy(SAMLAssertion saml, PublicKey publicKey, ProxyLifetime lifetime,
-        int delegationPathLength) throws DorianInternalFault, InvalidAssertionFault, InvalidProxyFault,
-        UserPolicyFault, PermissionDeniedFault {
+    public X509Certificate requestCertificate(SAMLAssertion saml, PublicKey publicKey, ProxyLifetime lifetime)
+        throws DorianInternalFault, InvalidAssertionFault, InvalidProxyFault, UserPolicyFault, PermissionDeniedFault {
 
         if (!saml.isSigned()) {
             InvalidAssertionFault fault = new InvalidAssertionFault();
@@ -526,53 +521,25 @@ public class IdentityFederationManager extends LoggingObject implements Publishe
         // Check to see if authorized
         this.verifyActiveUser(usr);
 
-        // Check to see if the user's credentials are ok, includes checking if
-        // the credentials are expired and if the proxy time is ok in regards to
-        // the credentials time
-
-        X509Certificate cert = null;
+        // create user certificate
 
         try {
-            cert = CertUtil.loadCertificate(usr.getCertificate().getCertificateAsString());
 
+            String caSubject = ca.getCACertificate().getSubjectDN().getName();
+            String sub = um.getUserSubject(caSubject, idp, usr.getUID());
+            Calendar c1 = new GregorianCalendar();
+            c1.add(Calendar.SECOND, CERTIFICATE_START_OFFSET_SECONDS);
+            Date start = c1.getTime();
+            Calendar c2 = new GregorianCalendar();
+            c2.add(Calendar.HOUR, lifetime.getHours());
+            c2.add(Calendar.MINUTE, lifetime.getMinutes());
+            c2.add(Calendar.SECOND, lifetime.getSeconds());
+            Date end = c2.getTime();
+            X509Certificate userCert = ca.signCertificate(sub, publicKey, start, end);
+            userCertificateManager.addUserCertifcate(usr.getGridId(), userCert);
+            return userCert;
         } catch (Exception e) {
-            DorianInternalFault fault = new DorianInternalFault();
-            fault.setFaultString("Error loading the user's credentials.");
-            FaultHelper helper = new FaultHelper(fault);
-            helper.addFaultCause(e);
-            fault = (DorianInternalFault) helper.getFault();
-        }
-
-        if (CertUtil.isExpired(cert)) {
-
-            usr.setUserStatus(GridUserStatus.Expired);
-            try {
-                um.updateUser(usr);
-            } catch (Exception e) {
-                DorianInternalFault fault = new DorianInternalFault();
-                fault.setFaultString("Unexpected Error, updating the user's status");
-                FaultHelper helper = new FaultHelper(fault);
-                helper.addFaultCause(e);
-                fault = (DorianInternalFault) helper.getFault();
-            }
-
-            PermissionDeniedFault fault = new PermissionDeniedFault();
-            fault.setFaultString("The credentials for this account have expired.");
-            throw fault;
-
-        } else if (FederationUtils.getProxyValid(lifetime).after(cert.getNotAfter())) {
-            InvalidProxyFault fault = new InvalidProxyFault();
-            fault.setFaultString("The proxy valid length exceeds the expiration date of the user's certificate.");
-            throw fault;
-        }
-
-        // create the proxy
-
-        try {
-            X509Certificate[] certs = ca.createImpersonationProxyCertificate(um.getCredentialsManagerUID(
-                usr.getIdPId(), usr.getUID()), null, publicKey, lifetime, delegationPathLength);
-            return certs;
-        } catch (Exception e) {
+            // TODO: Change this Exception
             InvalidProxyFault fault = new InvalidProxyFault();
             fault.setFaultString("An unexpected error occurred in creating the user " + usr.getGridId() + "'s proxy.");
             FaultHelper helper = new FaultHelper(fault);
@@ -716,24 +683,35 @@ public class IdentityFederationManager extends LoggingObject implements Publishe
 
 
     public X509CRL getCRL() throws DorianInternalFault {
-
-        Map<String, DisabledUser> users = this.um.getDisabledUsers();
         Map<Long, CRLEntry> list = new HashMap<Long, CRLEntry>();
 
-        Iterator<DisabledUser> itr = users.values().iterator();
+        Set<String> users = this.um.getDisabledUsers();
+        Iterator<String> itr = users.iterator();
         while (itr.hasNext()) {
-            DisabledUser usr = itr.next();
-            Long sn = new Long(usr.getSerialNumber());
-            if (!list.containsKey(sn)) {
-                CRLEntry entry = new CRLEntry(BigInteger.valueOf(sn.longValue()), usr.getCRLReason());
-                list.put(sn, entry);
+            String gid = itr.next();
+            List<BigInteger> userCerts = this.userCertificateManager.getActiveCertificates(gid);
+            for (int i = 0; i < userCerts.size(); i++) {
+                Long sn = userCerts.get(i).longValue();
+                if (!list.containsKey(sn)) {
+                    list.put(sn, new CRLEntry(userCerts.get(i), CRLReason.PRIVILEGE_WITHDRAWN));
+                }
             }
-            List<Long> hostCerts = this.hostManager.getHostCertificateRecordsSerialNumbers(usr.getGridIdentity());
+
+            List<Long> hostCerts = this.hostManager.getHostCertificateRecordsSerialNumbers(gid);
             for (int i = 0; i < hostCerts.size(); i++) {
                 if (!list.containsKey(hostCerts.get(i))) {
-                    CRLEntry entry = new CRLEntry(BigInteger.valueOf(hostCerts.get(i).longValue()), usr.getCRLReason());
+                    CRLEntry entry = new CRLEntry(BigInteger.valueOf(hostCerts.get(i).longValue()),
+                        CRLReason.PRIVILEGE_WITHDRAWN);
                     list.put(hostCerts.get(i), entry);
                 }
+            }
+        }
+
+        List<BigInteger> compromisedUserCerts = this.userCertificateManager.getCompromisedCertificates();
+        for (int i = 0; i < compromisedUserCerts.size(); i++) {
+            Long sn = compromisedUserCerts.get(i).longValue();
+            if (!list.containsKey(sn)) {
+                list.put(sn, new CRLEntry(compromisedUserCerts.get(i), CRLReason.PRIVILEGE_WITHDRAWN));
             }
         }
 
@@ -844,10 +822,6 @@ public class IdentityFederationManager extends LoggingObject implements Publishe
             } else if (usr.getUserStatus().equals(GridUserStatus.Pending)) {
                 PermissionDeniedFault fault = new PermissionDeniedFault();
                 fault.setFaultString("The request for an account has not been reviewed.");
-                throw fault;
-            } else if (usr.getUserStatus().equals(GridUserStatus.Expired)) {
-                PermissionDeniedFault fault = new PermissionDeniedFault();
-                fault.setFaultString("The credentials for this account have expired.");
                 throw fault;
             } else {
                 PermissionDeniedFault fault = new PermissionDeniedFault();
@@ -970,4 +944,14 @@ public class IdentityFederationManager extends LoggingObject implements Publishe
         }
         return idps;
     }
+
+
+    public List<UserCertificateRecord> findUserCertificateRecords(String callerIdentity, UserCertificateFilter f)
+        throws DorianInternalFault, InvalidUserCertificateFault, PermissionDeniedFault {
+        GridUser caller = getUser(callerIdentity);
+        verifyActiveUser(caller);
+        verifyAdminUser(caller);
+        return this.userCertificateManager.findUserCertificateRecords(f);
+    }
+    
 }

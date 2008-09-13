@@ -169,8 +169,7 @@ public class AssertionCredentialsManager extends LoggingObject {
 		KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 		GregorianCalendar cal = new GregorianCalendar();
 		Date start = cal.getTime();
-		ca.deleteCredentials(CERT_DN);
-		X509Certificate cert = ca.signCertificate(CERT_DN, subject, pair.getPublic(), start, cacert.getNotAfter());
+		X509Certificate cert = ca.signCertificate(subject, pair.getPublic(), start, cacert.getNotAfter());
 		storeCredentials(cert, pair.getPrivate());
 	}
 
@@ -375,7 +374,6 @@ public class AssertionCredentialsManager extends LoggingObject {
 			s.setString(1, CERT_DN);
 			s.execute();
 			s.close();
-			ca.deleteCredentials(CERT_DN);
 		} catch (Exception e) {
 			logError(e.getMessage(), e);
 			DorianInternalFault fault = new DorianInternalFault();

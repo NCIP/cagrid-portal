@@ -8,12 +8,12 @@ import java.awt.GridBagLayout;
 import java.security.cert.X509Certificate;
 
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import org.cagrid.gaards.dorian.client.GridUserClient;
 import org.cagrid.gaards.ui.common.CertificateInformationComponent;
+import org.cagrid.gaards.ui.dorian.DorianHandle;
 import org.cagrid.gaards.ui.dorian.DorianLookAndFeel;
 import org.cagrid.gaards.ui.dorian.DorianServiceListComboBox;
 import org.cagrid.grape.ApplicationComponent;
@@ -29,7 +29,7 @@ public class ViewCACertificateWindow extends ApplicationComponent {
 	private JPanel servicePanel = null;
 	private JPanel buttonPanel = null;
 	private JLabel ifsLabel = null;
-	private JComboBox ifs = null;
+	private DorianServiceListComboBox ifs = null;
 	private JButton viewCAButton = null;
 	private JButton close = null;
 
@@ -150,7 +150,7 @@ public class ViewCACertificateWindow extends ApplicationComponent {
 	 * 
 	 * @return javax.swing.JComboBox
 	 */
-	private JComboBox getIfs() {
+	private DorianServiceListComboBox getIfs() {
 		if (ifs == null) {
 			ifs = new DorianServiceListComboBox();
 		}
@@ -190,8 +190,8 @@ public class ViewCACertificateWindow extends ApplicationComponent {
 	private void getCACertificate() {
 		try {
 			getViewCAButton().setEnabled(false);
-			GridUserClient client = new GridUserClient((String) ifs.getSelectedItem());
-			X509Certificate cert = client.getCACertificate();
+			DorianHandle handle = ifs.getSelectedService();
+			X509Certificate cert = handle.getUserClient().getCACertificate();
 			dispose();
 			CertificateInformationComponent cic = new CertificateInformationComponent(cert);
 			GridApplication.getContext().addApplicationComponent(cic, 700, 500);

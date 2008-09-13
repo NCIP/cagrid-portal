@@ -12,27 +12,25 @@
 
     <bean id="identityFederationProperties"
 				class="org.cagrid.gaards.dorian.federation.IdentityFederationProperties">
-        <property name="identityAssignmentPolicy" value="${gaards.dorian.ifs.identity.policy}" />
-        <property name="minIdPNameLength" value="${gaards.dorian.ifs.min.idp.name.length}" />
-        <property name="maxIdPNameLength" value="${gaards.dorian.ifs.max.idp.name.length}" />
-        <property name="minIdPDisplayNameLength" value="${gaards.dorian.ifs.min.idp.display.name.length}" />
-        <property name="maxIdPDisplayNameLength" value="${gaards.dorian.ifs.max.idp.display.name.length}" />
+        <property name="identityAssignmentPolicy" value="${gaards.dorian.federation.identity.policy}" />
+        <property name="minIdPNameLength" value="${gaards.dorian.federation.min.idp.name.length}" />
+        <property name="maxIdPNameLength" value="${gaards.dorian.federation.max.idp.name.length}" />
         <property name="issuedCertificateLifetime">
               <bean class="org.cagrid.gaards.dorian.common.Lifetime">
-                 		<property name="years" value="${gaards.dorian.ifs.certificate.lifetime.years}" />
-                 		<property name="months" value="${gaards.dorian.ifs.certificate.lifetime.months}" />
-                 		<property name="days" value="${gaards.dorian.ifs.certificate.lifetime.days}" />
-                		<property name="hours" value="${gaards.dorian.ifs.certificate.lifetime.hours}" />
-                		<property name="minutes" value="${gaards.dorian.ifs.certificate.lifetime.minutes}" />
-                 		<property name="seconds" value="${gaards.dorian.ifs.certificate.lifetime.seconds}" />
+                 		<property name="years" value="${gaards.dorian.federation.certificate.lifetime.years}" />
+                 		<property name="months" value="${gaards.dorian.federation.certificate.lifetime.months}" />
+                 		<property name="days" value="${gaards.dorian.federation.certificate.lifetime.days}" />
+                		<property name="hours" value="${gaards.dorian.federation.certificate.lifetime.hours}" />
+                		<property name="minutes" value="${gaards.dorian.federation.certificate.lifetime.minutes}" />
+                 		<property name="seconds" value="${gaards.dorian.federation.certificate.lifetime.seconds}" />
 			  </bean>
         </property>
-        <property name="autoHostCertificateApproval" value="${gaards.dorian.ifs.auto.host.certificate.approval}" />
+        <property name="autoHostCertificateApproval" value="${gaards.dorian.federation.auto.host.certificate.approval}" />
 	    <property name="maxProxyLifetime">
               <bean class="org.cagrid.gaards.dorian.common.Lifetime">
-                		<property name="hours" value="${gaards.dorian.ifs.max.proxy.lifetime.hours}" />
-                		<property name="minutes" value="${gaards.dorian.ifs.max.proxy.lifetime.minutes}" />
-                 		<property name="seconds" value="${gaards.dorian.ifs.max.proxy.lifetime.seconds}" />
+                		<property name="hours" value="${gaards.dorian.federation.max.proxy.lifetime.hours}" />
+                		<property name="minutes" value="${gaards.dorian.federation.max.proxy.lifetime.minutes}" />
+                 		<property name="seconds" value="${gaards.dorian.federation.max.proxy.lifetime.seconds}" />
 			  </bean>
         </property>
         <property name="accountPolicies" ref="accountPolicyList"/>
@@ -51,9 +49,7 @@
              <property name="sourceList">
        			<list>
        				<bean class="org.cagrid.gaards.dorian.federation.ManualApprovalPolicy"/>
-       				<bean class="org.cagrid.gaards.dorian.federation.ManualApprovalAutoRenewalPolicy"/>
        				<bean class="org.cagrid.gaards.dorian.federation.AutoApprovalPolicy"/>
-       				<bean class="org.cagrid.gaards.dorian.federation.AutoApprovalAutoRenewalPolicy"/>
                    </list> 
   			</property>
        </bean>    

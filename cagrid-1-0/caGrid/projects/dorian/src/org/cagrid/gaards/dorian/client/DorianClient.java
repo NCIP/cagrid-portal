@@ -251,18 +251,6 @@ public class DorianClient extends ServiceSecurityClient implements DorianI {
     }
   }
 
-  public org.cagrid.gaards.dorian.federation.GridUser renewGridUserCredentials(org.cagrid.gaards.dorian.federation.GridUser user) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.InvalidUserFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault {
-    synchronized(portTypeMutex){
-      configureStubSecurity((Stub)portType,"renewGridUserCredentials");
-    org.cagrid.gaards.dorian.stubs.RenewGridUserCredentialsRequest params = new org.cagrid.gaards.dorian.stubs.RenewGridUserCredentialsRequest();
-    org.cagrid.gaards.dorian.stubs.RenewGridUserCredentialsRequestUser userContainer = new org.cagrid.gaards.dorian.stubs.RenewGridUserCredentialsRequestUser();
-    userContainer.setGridUser(user);
-    params.setUser(userContainer);
-    org.cagrid.gaards.dorian.stubs.RenewGridUserCredentialsResponse boxedResult = portType.renewGridUserCredentials(params);
-    return boxedResult.getGridUser();
-    }
-  }
-
   public org.cagrid.gaards.dorian.federation.GridUserPolicy[] getGridUserPolicies() throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault {
     synchronized(portTypeMutex){
       configureStubSecurity((Stub)portType,"getGridUserPolicies");
@@ -439,6 +427,17 @@ public class DorianClient extends ServiceSecurityClient implements DorianI {
     params.setCredential(credentialContainer);
     params.setNewPassword(newPassword);
     org.cagrid.gaards.dorian.stubs.ChangeLocalUserPasswordResponse boxedResult = portType.changeLocalUserPassword(params);
+    }
+  }
+
+  public void updateUserCertificate(org.cagrid.gaards.dorian.federation.UserCertificateUpdate update) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.InvalidUserCertificateFault {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"updateUserCertificate");
+    org.cagrid.gaards.dorian.stubs.UpdateUserCertificateRequest params = new org.cagrid.gaards.dorian.stubs.UpdateUserCertificateRequest();
+    org.cagrid.gaards.dorian.stubs.UpdateUserCertificateRequestUpdate updateContainer = new org.cagrid.gaards.dorian.stubs.UpdateUserCertificateRequestUpdate();
+    updateContainer.setUserCertificateUpdate(update);
+    params.setUpdate(updateContainer);
+    org.cagrid.gaards.dorian.stubs.UpdateUserCertificateResponse boxedResult = portType.updateUserCertificate(params);
     }
   }
 

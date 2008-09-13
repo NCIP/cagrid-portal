@@ -11,6 +11,6 @@
 	</constructor-arg>
 </bean>
 
-<bean id="Upgrade1_1To1_2" class="gov.nih.nci.cagrid.dorian.service.upgrader.Upgrade1_1To1_2"/>
-<bean id="Upgrade1_2To1_3" class="gov.nih.nci.cagrid.dorian.service.upgrader.Upgrade1_2To1_3"/>
+<bean id="Upgrade1_1To1_2" class="org.cagrid.gaards.dorian.service.upgrader.Upgrade1_1To1_2"/>
+<bean id="Upgrade1_2To1_3" class="org.cagrid.gaards.dorian.service.upgrader.Upgrade1_2To1_3"/>
 </beans>	

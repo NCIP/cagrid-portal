@@ -4,9 +4,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
+import org.cagrid.gaards.dorian.ca.CredentialsManager;
 import org.cagrid.gaards.dorian.ca.DBCertificateAuthority;
 import org.cagrid.gaards.dorian.ca.EracomCertificateAuthority;
-import org.cagrid.gaards.dorian.ca.EracomWrappingCertificateAuthority;
+import org.cagrid.gaards.dorian.federation.AutoApprovalPolicy;
+import org.cagrid.gaards.dorian.federation.ManualApprovalPolicy;
+import org.cagrid.gaards.dorian.federation.TrustedIdP;
 import org.cagrid.gaards.dorian.federation.TrustedIdPManager;
 import org.cagrid.gaards.dorian.idp.PasswordSecurityManager;
 import org.cagrid.gaards.dorian.service.PropertyManager;
@@ -27,7 +30,7 @@ public class Upgrade1_2To1_3 extends Upgrade {
 
     private void upgradeTrustedIdentityProviders(boolean trialRun) throws Exception {
         Database db = getBeanUtils().getDatabase();
-        TrustedIdPManager idp = getBeanUtils().getTrustedIdPManager();
+        TrustedIdPManager idp = new TrustedIdPManager(getBeanUtils().getIdentityFederationProperties(), db);
         if (!trialRun) {
             idp.buildDatabase();
         }
@@ -51,52 +54,113 @@ public class Upgrade1_2To1_3 extends Upgrade {
                 if (rs.getString(1).equals(TrustedIdPManager.AUTHENTICATION_SERVICE_IDENTITY_FIELD)) {
                     hasAuthenticationServiceIdentity = true;
                 }
-
             }
             rs.close();
             s.close();
 
             if (!hasDisplayName) {
                 if (!trialRun) {
+                    System.out.print("Adding " + TrustedIdPManager.DISPLAY_NAME_FIELD
+                        + " field to the TrustedIdP database....");
                     s = c.prepareStatement("ALTER TABLE " + TrustedIdPManager.TRUST_MANAGER_TABLE + " ADD "
                         + TrustedIdPManager.DISPLAY_NAME_FIELD + " TEXT NOT NULL");
                     s.execute();
                     s.close();
+                    System.out.println(" COMPLETED.");
+                } else {
+                    System.out.print("The field " + TrustedIdPManager.DISPLAY_NAME_FIELD
+                        + " needs to be added to the TrustedIdP database.");
                 }
             }
 
             if (!hasAuthenticationServiceURL) {
                 if (!trialRun) {
+                    System.out.print("Adding " + TrustedIdPManager.AUTHENTICATION_SERVICE_URL_FIELD
+                        + " field to the TrustedIdP database....");
                     s = c.prepareStatement("ALTER TABLE " + TrustedIdPManager.TRUST_MANAGER_TABLE + " ADD "
                         + TrustedIdPManager.AUTHENTICATION_SERVICE_URL_FIELD + " TEXT NOT NULL");
                     s.execute();
                     s.close();
+                    System.out.println(" COMPLETED.");
+                } else {
+                    System.out.print("The field " + TrustedIdPManager.AUTHENTICATION_SERVICE_URL_FIELD
+                        + " needs to be added to the TrustedIdP database.");
                 }
             }
 
             if (!hasAuthenticationServiceIdentity) {
                 if (!trialRun) {
+                    System.out.print("Adding " + TrustedIdPManager.AUTHENTICATION_SERVICE_IDENTITY_FIELD
+                        + " field to the TrustedIdP database....");
                     s = c.prepareStatement("ALTER TABLE " + TrustedIdPManager.TRUST_MANAGER_TABLE + " ADD "
                         + TrustedIdPManager.AUTHENTICATION_SERVICE_IDENTITY_FIELD + " TEXT NOT NULL");
                     s.execute();
                     s.close();
+                    System.out.println(" COMPLETED.");
+                } else {
+                    System.out.print("The field " + TrustedIdPManager.AUTHENTICATION_SERVICE_IDENTITY_FIELD
+                        + " needs to be added to the TrustedIdP database.");
                 }
             }
 
             if (!trialRun) {
+                System.out.print("Updating the TrustedIdP field " + TrustedIdPManager.IDP_SUBJECT_FIELD
+                    + " from VARCHAR to TEXT....");
                 s = c.prepareStatement("ALTER TABLE " + TrustedIdPManager.TRUST_MANAGER_TABLE + " MODIFY "
                     + TrustedIdPManager.IDP_SUBJECT_FIELD + " TEXT NOT NULL");
                 s.execute();
                 s.close();
+                System.out.println(" COMPLETED.");
+            } else {
+                System.out.print("The TrustedIdP field " + TrustedIdPManager.POLICY_CLASS_FIELD
+                    + " needs to be updated from from VARCHAR to TEXT.");
             }
-            
+
             if (!trialRun) {
-                s = c.prepareStatement("ALTER TABLE " + TrustedIdPManager.POLICY_CLASS_FIELD + " MODIFY "
+                System.out.print("Updating the TrustedIdP field " + TrustedIdPManager.IDP_SUBJECT_FIELD
+                    + " from VARCHAR to TEXT....");
+
+                s = c.prepareStatement("ALTER TABLE " + TrustedIdPManager.TRUST_MANAGER_TABLE + " MODIFY "
                     + TrustedIdPManager.POLICY_CLASS_FIELD + " TEXT NOT NULL");
                 s.execute();
                 s.close();
+                System.out.println(" COMPLETED.");
+            } else {
+                System.out.print("The TrustedIdP field " + TrustedIdPManager.POLICY_CLASS_FIELD
+                    + " needs to be updated from from VARCHAR to TEXT.");
             }
 
+            if (!trialRun) {
+                System.out.print("Updating the trusted identity provider policies....");
+                s = c.prepareStatement("update " + TrustedIdPManager.TRUST_MANAGER_TABLE + " SET "
+                    + TrustedIdPManager.POLICY_CLASS_FIELD + "='" + AutoApprovalPolicy.class.getName() + "' WHERE "
+                    + TrustedIdPManager.POLICY_CLASS_FIELD
+                    + "='gov.nih.nci.cagrid.dorian.service.ifs.AutoApprovalAutoRenewalPolicy' OR "
+                    + TrustedIdPManager.POLICY_CLASS_FIELD
+                    + "='gov.nih.nci.cagrid.dorian.service.ifs.AutoApprovalPolicy'");
+                s.execute();
+                s.close();
+                s = c.prepareStatement("update " + TrustedIdPManager.TRUST_MANAGER_TABLE + " SET "
+                    + TrustedIdPManager.POLICY_CLASS_FIELD + "='" + ManualApprovalPolicy.class.getName() + "' WHERE "
+                    + TrustedIdPManager.POLICY_CLASS_FIELD
+                    + "='gov.nih.nci.cagrid.dorian.service.ifs.ManualApprovalAutoRenewalPolicy' OR "
+                    + TrustedIdPManager.POLICY_CLASS_FIELD
+                    + "='gov.nih.nci.cagrid.dorian.service.ifs.ManualApprovalPolicy'");
+                s.execute();
+                s.close();
+                System.out.println(" COMPLETED.");
+            } else {
+                System.out.println("The trusted identity provider policies need to be updated.");
+            }
+            if (!trialRun) {
+                TrustedIdP[] list = idp.getTrustedIdPs();
+                if (list != null) {
+                    for (int i = 0; i < list.length; i++) {
+                        list[i].setDisplayName(list[i].getName());
+                        idp.updateIdP(list[i]);
+                    }
+                }
+            }
         } catch (Exception e) {
             throw e;
         } finally {
@@ -135,19 +199,31 @@ public class Upgrade1_2To1_3 extends Upgrade {
 
             if (!hasPasswordSalt) {
                 if (!trialRun) {
+                    System.out.print("Adding " + PasswordSecurityManager.DIGEST_SALT
+                        + " field to the password security database....");
                     s = c.prepareStatement("ALTER TABLE " + PasswordSecurityManager.TABLE + " ADD "
                         + PasswordSecurityManager.DIGEST_SALT + " VARCHAR(255)");
                     s.execute();
                     s.close();
+                    System.out.println(" COMPLETED.");
+                } else {
+                    System.out.println("The " + PasswordSecurityManager.DIGEST_SALT
+                        + " needs to be added to the password security database.");
                 }
             }
 
             if (!hasEncryptionAlgorithm) {
                 if (!trialRun) {
+                    System.out.print("Adding " + PasswordSecurityManager.DIGEST_ALGORITHM
+                        + " field to the password security database....");
                     s = c.prepareStatement("ALTER TABLE " + PasswordSecurityManager.TABLE + " ADD "
                         + PasswordSecurityManager.DIGEST_ALGORITHM + " VARCHAR(25)");
                     s.execute();
                     s.close();
+                    System.out.println(" COMPLETED.");
+                } else {
+                    System.out.println("The " + PasswordSecurityManager.DIGEST_ALGORITHM
+                        + " needs to be added to the password security database.");
                 }
             }
 
@@ -159,24 +235,56 @@ public class Upgrade1_2To1_3 extends Upgrade {
     }
 
 
+    private void clearCertificateAuthority() throws Exception {
+        Database db = getBeanUtils().getDatabase();
+        Connection c = null;
+        try {
+            c = db.getConnection();
+            PreparedStatement s = c.prepareStatement("delete from " + CredentialsManager.CREDENTIALS_TABLE
+                + " where ALIAS <> 'dorianca'");
+            s.execute();
+            s.close();
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            db.releaseConnection(c);
+        }
+    }
+
+
     private void upgradeCertificateAuthority(PropertyManager pm, boolean trialRun) throws Exception {
         String caType = pm.getCertificateAuthorityType();
         String newCAType = null;
+        boolean clearCA = false;
         if (caType.equals("DBCA")) {
             newCAType = DBCertificateAuthority.class.getName();
+            clearCA = true;
         } else if (caType.equals("Eracom")) {
-            newCAType = EracomWrappingCertificateAuthority.class.getName();
+            newCAType = EracomCertificateAuthority.class.getName();
         } else if (caType.equals("EracomHybrid")) {
             newCAType = EracomCertificateAuthority.class.getName();
+            // TODO: DELETE OLD CERTIFICATES
         }
         if (newCAType != null) {
             if (!trialRun) {
+                System.out.print("Updating the CA type from " + caType + " to " + newCAType + "....");
                 pm.setCertificateAuthorityType(newCAType);
+                System.out.println(" COMPLETED.");
+            } else {
+                System.out.println("The CA type needs to be updated from " + caType + " to " + newCAType + ".");
             }
         } else {
             throw new Exception("Could not determine how to upgrade the Certificate Authority Type " + caType + ".");
         }
-
+        if (clearCA) {
+            if (!trialRun) {
+                System.out.print("Deleting long term user credentials from the CA DB....");
+                clearCertificateAuthority();
+                System.out.println(" COMPLETED.");
+            } else {
+                System.out.println("Long term user credentials need to be deleted from the CA DB.");
+            }
+        }
     }
 
 
@@ -186,7 +294,13 @@ public class Upgrade1_2To1_3 extends Upgrade {
         PropertyManager pm = new PropertyManager(db);
         if (pm.getVersion().equals(PropertyManager.DORIAN_VERSION_1_2)) {
             if (!trialRun) {
+                System.out.print("Upgrading version number from " + pm.getVersion() + " to "
+                    + PropertyManager.DORIAN_VERSION_1_3 + "....");
                 pm.setVersion(PropertyManager.DORIAN_VERSION_1_3);
+                System.out.println(" COMPLETED.");
+            } else {
+                System.out.println("The version needs to be upgraded from " + pm.getVersion() + " to "
+                    + PropertyManager.DORIAN_VERSION_1_3 + ".");
             }
             upgradeCertificateAuthority(pm, trialRun);
             upgradePasswordSecurity(trialRun);

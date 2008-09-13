@@ -6,7 +6,6 @@ import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.security.cert.X509Certificate;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -21,7 +20,6 @@ import org.cagrid.gaards.dorian.client.GridAdministrationClient;
 import org.cagrid.gaards.dorian.federation.GridUser;
 import org.cagrid.gaards.dorian.federation.TrustedIdP;
 import org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault;
-import org.cagrid.gaards.pki.CertUtil;
 import org.cagrid.gaards.ui.common.CertificatePanel;
 import org.cagrid.gaards.ui.common.CredentialCaddy;
 import org.cagrid.gaards.ui.common.CredentialComboBox;
@@ -36,7 +34,7 @@ import org.globus.gsi.GlobusCredential;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: UserWindow.java,v 1.8 2008-07-23 18:12:37 langella Exp $
+ * @version $Id: UserWindow.java,v 1.9 2008-09-13 00:59:50 langella Exp $
  */
 public class UserWindow extends ApplicationComponent {
 
@@ -270,27 +268,6 @@ public class UserWindow extends ApplicationComponent {
 
 	}
 
-	private void renewCredentials() {
-		try {
-			String serviceUrl = getService().getText();
-			GlobusCredential c = ((CredentialCaddy) getProxy().getSelectedItem())
-					.getProxy();
-			GridAdministrationClient client = new GridAdministrationClient(
-					serviceUrl, c);
-			user = client.renewUserCredentials(user);
-			X509Certificate cert = CertUtil.loadCertificate(user
-					.getCertificate().getCertificateAsString());
-			this.getCredPanel().setCertificate(cert);
-			GridApplication.getContext().showMessage(
-					"Successfully renewed the credentials for the user "
-							+ user.getGridId() + ".");
-		} catch (PermissionDeniedFault pdf) {
-			ErrorDialog.showError(pdf);
-		} catch (Exception e) {
-			ErrorDialog.showError(e);
-		}
-
-	}
 
 	/**
 	 * This method initializes jTabbedPane
@@ -638,7 +615,7 @@ public class UserWindow extends ApplicationComponent {
 			renewCredentials
 					.addActionListener(new java.awt.event.ActionListener() {
 						public void actionPerformed(java.awt.event.ActionEvent e) {
-							renewCredentials();
+						
 						}
 					});
 			renewCredentials.setIcon(DorianLookAndFeel
@@ -655,8 +632,7 @@ public class UserWindow extends ApplicationComponent {
 	private CertificatePanel getCredPanel() {
 		if (credPanel == null) {
 			try {
-				credPanel = new CertificatePanel(CertUtil.loadCertificate(user
-						.getCertificate().getCertificateAsString()));
+				credPanel = new CertificatePanel(null);
 				credPanel.setAllowImport(false);
 				credPanel.setAllowExport(false);
 			} catch (Exception e) {

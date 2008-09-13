@@ -15,7 +15,7 @@ import org.cagrid.gaards.authentication.faults.InvalidCredentialFault;
 import org.cagrid.gaards.dorian.ca.CertificateAuthority;
 import org.cagrid.gaards.dorian.common.LoggingObject;
 import org.cagrid.gaards.dorian.common.SAMLConstants;
-import org.cagrid.gaards.dorian.federation.AutoApprovalAutoRenewalPolicy;
+import org.cagrid.gaards.dorian.federation.AutoApprovalPolicy;
 import org.cagrid.gaards.dorian.federation.FederationDefaults;
 import org.cagrid.gaards.dorian.federation.GridUser;
 import org.cagrid.gaards.dorian.federation.GridUserFilter;
@@ -106,7 +106,7 @@ public class Dorian extends LoggingObject {
             SAMLAuthenticationMethod[] methods = new SAMLAuthenticationMethod[1];
             methods[0] = SAMLAuthenticationMethod.fromString("urn:oasis:names:tc:SAML:1.0:am:password");
             idp.setAuthenticationMethod(methods);
-            idp.setUserPolicyClass(AutoApprovalAutoRenewalPolicy.class.getName());
+            idp.setUserPolicyClass(AutoApprovalPolicy.class.getName());
             idp.setIdPCertificate(CertUtil.writeCertificate(this.identityProvider.getIdPCertificate()));
             idp.setStatus(TrustedIdPStatus.Active);
             idp.setAuthenticationServiceURL(serviceId);
@@ -260,10 +260,9 @@ public class Dorian extends LoggingObject {
     }
 
 
-    public X509Certificate[] createProxy(SAMLAssertion saml, PublicKey publicKey, ProxyLifetime lifetime,
-        int delegationPathLength) throws DorianInternalFault, InvalidAssertionFault, InvalidProxyFault,
+    public X509Certificate requestCertificate(SAMLAssertion saml, PublicKey publicKey, ProxyLifetime lifetime) throws DorianInternalFault, InvalidAssertionFault, InvalidProxyFault,
         UserPolicyFault, PermissionDeniedFault {
-        return this.ifs.createProxy(saml, publicKey, lifetime, delegationPathLength);
+        return this.ifs.requestCertificate(saml, publicKey, lifetime);
     }
 
 
@@ -306,13 +305,6 @@ public class Dorian extends LoggingObject {
         PermissionDeniedFault {
         ifs.removeUser(callerGridIdentity, user);
     }
-
-
-    public GridUser renewGridUserCredentials(String callerGridIdentity, GridUser usr) throws DorianInternalFault,
-        InvalidUserFault, PermissionDeniedFault {
-        return ifs.renewUserCredentials(callerGridIdentity, usr);
-    }
-
 
     public void addAdmin(String callerGridIdentity, String gridIdentity) throws RemoteException, DorianInternalFault,
         PermissionDeniedFault {

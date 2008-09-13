@@ -27,7 +27,7 @@ import org.cagrid.gaards.authentication.test.system.steps.AuthenticationStep;
 import org.cagrid.gaards.authentication.test.system.steps.InvalidAuthentication;
 import org.cagrid.gaards.authentication.test.system.steps.SuccessfullAuthentication;
 import org.cagrid.gaards.authentication.test.system.steps.ValidateSupportedAuthenticationProfilesStep;
-import org.cagrid.gaards.dorian.federation.AutoApprovalAutoRenewalPolicy;
+import org.cagrid.gaards.dorian.federation.AutoApprovalPolicy;
 import org.cagrid.gaards.dorian.federation.GridUserStatus;
 import org.cagrid.gaards.dorian.federation.TrustedIdPStatus;
 import org.cagrid.gaards.dorian.idp.Application;
@@ -136,7 +136,7 @@ public class DorianLocaIdentityProviderTest extends ServiceStoryBase {
 			VerifyTrustedIdPStep idp = new VerifyTrustedIdPStep(serviceURL,admin,"Dorian");
 			idp.setDisplayName("Dorian");
 			idp.setStatus(TrustedIdPStatus.Active);
-			idp.setUserPolicyClass(AutoApprovalAutoRenewalPolicy.class.getName());
+			idp.setUserPolicyClass(AutoApprovalPolicy.class.getName());
 			idp.setAuthenticationServiceURL(serviceURL);
 			steps.add(idp);
 

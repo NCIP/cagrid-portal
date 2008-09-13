@@ -118,11 +118,6 @@ public class DorianAuthorization implements PDP {
 		
 	}
 					
-	public static void authorizeRenewGridUserCredentials() throws RemoteException {
-		
-		
-	}
-					
 	public static void authorizeGetGridUserPolicies() throws RemoteException {
 		
 		
@@ -209,6 +204,11 @@ public class DorianAuthorization implements PDP {
 	}
 					
 	public static void authorizeChangeLocalUserPassword() throws RemoteException {
+		
+		
+	}
+					
+	public static void authorizeUpdateUserCertificate() throws RemoteException {
 		
 		
 	}
@@ -327,14 +327,6 @@ public class DorianAuthorization implements PDP {
 		} else if(operation.getLocalPart().equals("removeGridUser")){
 			try{
 				authorizeRemoveGridUser();
-				return true;
-			} catch (Exception e){
-				e.printStackTrace();
-				return false;
-			}
-		} else if(operation.getLocalPart().equals("renewGridUserCredentials")){
-			try{
-				authorizeRenewGridUserCredentials();
 				return true;
 			} catch (Exception e){
 				e.printStackTrace();
@@ -479,6 +471,14 @@ public class DorianAuthorization implements PDP {
 		} else if(operation.getLocalPart().equals("changeLocalUserPassword")){
 			try{
 				authorizeChangeLocalUserPassword();
+				return true;
+			} catch (Exception e){
+				e.printStackTrace();
+				return false;
+			}
+		} else if(operation.getLocalPart().equals("updateUserCertificate")){
+			try{
+				authorizeUpdateUserCertificate();
 				return true;
 			} catch (Exception e){
 				e.printStackTrace();

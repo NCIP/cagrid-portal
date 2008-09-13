@@ -188,27 +188,6 @@ public class GridAdministrationClient {
 		}
 	}
 
-	public GridUser renewUserCredentials(GridUser usr) throws DorianFault,
-			PermissionDeniedFault, InvalidUserFault, DorianInternalFault {
-
-		try {
-			return client.renewGridUserCredentials(usr);
-		} catch (DorianInternalFault gie) {
-			throw gie;
-		} catch (PermissionDeniedFault f) {
-			throw f;
-		} catch (InvalidUserFault f) {
-			throw f;
-		} catch (Exception e) {
-			FaultUtil.printFault(e);
-			DorianFault fault = new DorianFault();
-			fault.setFaultString(Utils.getExceptionMessage(e));
-			FaultHelper helper = new FaultHelper(fault);
-			helper.addFaultCause(e);
-			fault = (DorianFault) helper.getFault();
-			throw fault;
-		}
-	}
 
 	/**
 	 * This method returns the list of identity providers trusted by Dorian.

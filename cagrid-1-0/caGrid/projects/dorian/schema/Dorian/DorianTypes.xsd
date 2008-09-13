@@ -88,5 +88,11 @@
       <extension base="wsrbf:BaseFaultType" />
     </complexContent>
   </complexType>
+  <element name="InvalidUserCertificateFault" type="tns:InvalidUserCertificateFault" />
+  <complexType name="InvalidUserCertificateFault">
+    <complexContent>
+      <extension base="wsrbf:BaseFaultType" />
+    </complexContent>
+  </complexType>
 </schema>
 

@@ -171,7 +171,7 @@ public class CreateCACertificate {
 				KeyPair root = KeyUtil.generateRSAKeyPair1024();
 				X509Certificate cert = CertUtil.generateCACertificate(
 						new X509Name(sub), start, end, root);
-				ca.setCACredentials(cert, root.getPrivate());
+				ca.setCACredentials(cert, root.getPrivate(),null);
 				System.out.println("Successfully created the CA cerrtificate:");
 				System.out.println("Subject: " + cert.getSubjectDN());
 				System.out.println("Created: " + cert.getNotBefore());

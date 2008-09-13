@@ -118,8 +118,6 @@ public class HostCertificateManager extends LoggingObject {
 		try {
 			java.security.cert.X509Certificate oldCert = CertUtil.loadCertificate(record.getCertificate().getCertificateAsString());
 			blackList.addCertificateToBlackList(oldCert, CertificateBlacklistManager.CERTIFICATE_RENEWED);
-			
-			ca.deleteCredentials(record.getHost());
 			java.security.PublicKey key = KeyUtil.loadPublicKey(record.getPublicKey().getKeyAsString());
 			Date start = new Date();
 			Lifetime lifetime = this.conf.getIssuedCertificateLifetime();
@@ -127,7 +125,7 @@ public class HostCertificateManager extends LoggingObject {
 			if (end.after(ca.getCACertificate().getNotAfter())) {
 				end = ca.getCACertificate().getNotAfter();
 			}
-			java.security.cert.X509Certificate cert = ca.signHostCertificate(record.getHost(), record.getHost(), key,
+			java.security.cert.X509Certificate cert = ca.signHostCertificate(record.getHost(), key,
 				start, end);
 			record.setSerialNumber(cert.getSerialNumber().longValue());
 			record.setSubject(cert.getSubjectDN().getName());
@@ -174,9 +172,7 @@ public class HostCertificateManager extends LoggingObject {
 		try {
 			java.security.PublicKey key = KeyUtil.loadPublicKey(record.getPublicKey().getKeyAsString());
 			String host = record.getHost();
-			if (ca.hasCredentials(host)) {
-				ca.deleteCredentials(host);
-			}
+
 
 			Date start = new Date();
 			Lifetime lifetime = this.conf.getIssuedCertificateLifetime();
@@ -184,7 +180,7 @@ public class HostCertificateManager extends LoggingObject {
 			if (end.after(ca.getCACertificate().getNotAfter())) {
 				end = ca.getCACertificate().getNotAfter();
 			}
-			java.security.cert.X509Certificate cert = ca.signHostCertificate(host, host, key, start, end);
+			java.security.cert.X509Certificate cert = ca.signHostCertificate(host, key, start, end);
 
 			record.setSerialNumber(cert.getSerialNumber().longValue());
 			record.setSubject(cert.getSubjectDN().getName());

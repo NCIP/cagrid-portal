@@ -167,7 +167,7 @@ public class ImportCA {
 
 				X509Certificate cert = CertUtil.loadCertificate(certFile);
 				PrivateKey pkey = KeyUtil.loadPrivateKey(keyFile, Utils.clean(pass));
-				ca.setCACredentials(cert, pkey);
+				ca.setCACredentials(cert, pkey, Utils.clean(pass));
 
 			}
 		} catch (ParseException exp) {

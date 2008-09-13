@@ -8,11 +8,9 @@ import java.util.Iterator;
 
 import org.cagrid.gaards.dorian.ca.CertificateAuthority;
 import org.cagrid.gaards.dorian.ca.CertificateAuthorityProperties;
-import org.cagrid.gaards.dorian.federation.AutoApprovalAutoRenewalPolicy;
 import org.cagrid.gaards.dorian.federation.AutoApprovalPolicy;
 import org.cagrid.gaards.dorian.federation.GridUserPolicy;
 import org.cagrid.gaards.dorian.federation.IdentityFederationProperties;
-import org.cagrid.gaards.dorian.federation.ManualApprovalAutoRenewalPolicy;
 import org.cagrid.gaards.dorian.federation.ManualApprovalPolicy;
 import org.cagrid.gaards.dorian.federation.TrustedIdP;
 import org.cagrid.gaards.dorian.federation.UserManager;
@@ -108,14 +106,10 @@ public class Utils {
 	}
 
 	public static GridUserPolicy[] getUserPolicies() {
-		GridUserPolicy[] policies = new GridUserPolicy[4];
-		policies[0] = new GridUserPolicy(ManualApprovalAutoRenewalPolicy.class
-				.getName(), "");
-		policies[1] = new GridUserPolicy(AutoApprovalAutoRenewalPolicy.class
-				.getName(), "");
-		policies[2] = new GridUserPolicy(ManualApprovalPolicy.class.getName(),
+		GridUserPolicy[] policies = new GridUserPolicy[2];
+		policies[0] = new GridUserPolicy(ManualApprovalPolicy.class.getName(),
 				"");
-		policies[3] = new GridUserPolicy(AutoApprovalPolicy.class.getName(), "");
+		policies[1] = new GridUserPolicy(AutoApprovalPolicy.class.getName(), "");
 		return policies;
 	}
 
