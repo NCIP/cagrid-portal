@@ -24,5 +24,5 @@ public interface AuthorizationExtensionManager {
      */
 	public String generateAuthorizationExtension(AuthorizationExtensionDescriptionType desc, SpecificServiceInformation info) throws AuthorizationExtensionException;
 	
-	public String removeAuthorizationExtension(AuthorizationExtensionDescriptionType desc, SpecificServiceInformation info) throws AuthorizationExtensionException;
+	public void removeAuthorizationExtension(AuthorizationExtensionDescriptionType desc, SpecificServiceInformation info) throws AuthorizationExtensionException;
 }

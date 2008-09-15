@@ -146,13 +146,11 @@ public class GridGrouperAuthorizationManager implements AuthorizationExtensionMa
         return "org.cagrid.gridgrouper.authorization.extension.service.GridGrouperAuthorization";
     }
 
-    public String removeAuthorizationExtension(AuthorizationExtensionDescriptionType arg0,
+    public void removeAuthorizationExtension(AuthorizationExtensionDescriptionType arg0,
         SpecificServiceInformation serviceInfo) throws AuthorizationExtensionException {
-        // TODO Auto-generated method stub
         File file = new File(serviceInfo.getBaseDirectory().getAbsolutePath() + File.separator
             + "etc" + File.separator + serviceInfo.getService().getName() + Constants.GRID_GROUPER_AUTH_FILE_SUFFIX);
         file.delete();
-        return null;
     }
 
 }

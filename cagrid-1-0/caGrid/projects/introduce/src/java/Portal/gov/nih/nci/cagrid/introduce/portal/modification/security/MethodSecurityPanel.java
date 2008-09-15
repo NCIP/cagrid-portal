@@ -79,17 +79,7 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 
     private JPanel commPanel = null;
 
-    private JLabel noneLabel = null;
-
-    private JLabel customLabel = null;
-
-    private JLabel transportLayerSecurityLabel = null;
-
-    private JLabel secureConversationLabel = null;
-
     private JCheckBox secureMessageButton = null;
-
-    private JLabel secureMessageLabel = null;
 
     private SecureConversationPanel secureConversationPanel = null;
 
@@ -200,6 +190,7 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
         if (noneButton == null) {
             noneButton = new JRadioButton();
             noneButton.setSelected(true);
+            noneButton.setText("None");
             noneButton.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
                     synchronize();
@@ -219,6 +210,7 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
     private JRadioButton getCustomButton() {
         if (customButton == null) {
             customButton = new JRadioButton();
+            customButton.setText("Custom");
             customButton.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
                     synchronize();
@@ -479,22 +471,7 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
 
     private void syncAnonymousCommunication() {
         if (usesTransportSecurity() || usesSecureConversation()) {
-            String authz = (String) this.getAuthorizationMechanism().getSelectedItem();
-            if (authz.equals(NO_AUTHORIZATION)) {
-                anonymousCommunication.setEnabled(true);
-            } else if (authz.equals(INHERIT_SERVICE_AUTHORIZATION)) {
-                if (serviceSecurity == null) {
-                    anonymousCommunication.setEnabled(true);
-                } else if (serviceSecurity.getServiceAuthorization() == null) {
-                    anonymousCommunication.setEnabled(true);
-                } else if (serviceSecurity.getServiceAuthorization().getNoAuthorization() != null) {
-                    anonymousCommunication.setEnabled(true);
-                } else {
-                    anonymousCommunication.setEnabled(false);
-                }
-            } else {
-                anonymousCommunication.setEnabled(false);
-            }
+            anonymousCommunication.setEnabled(true);
         } else {
             anonymousCommunication.setEnabled(false);
         }
@@ -618,6 +595,7 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
     private JCheckBox getTlsButton() {
         if (tlsButton == null) {
             tlsButton = new JCheckBox();
+            tlsButton.setText("Transport Layer Security");
             tlsButton.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
                     synchronize();
@@ -636,6 +614,7 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
     private JCheckBox getSecureConversationButton() {
         if (secureConversationButton == null) {
             secureConversationButton = new JCheckBox();
+            secureConversationButton.setText("Secure Conversation");
             secureConversationButton.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
                     synchronize();
@@ -654,16 +633,10 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
      */
     private JPanel getChoicePanel() {
         if (choicePanel == null) {
-            customLabel = new JLabel();
-            customLabel.setText("Custom");
-            noneLabel = new JLabel();
-            noneLabel.setText("None");
             choicePanel = new JPanel();
             choicePanel.setLayout(new GridBagLayout());
             choicePanel.add(getNoneButton());
-            choicePanel.add(noneLabel);
             choicePanel.add(getCustomButton());
-            choicePanel.add(customLabel);
         }
         return choicePanel;
     }
@@ -676,19 +649,10 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
      */
     private JPanel getCommPanel() {
         if (commPanel == null) {
-            secureMessageLabel = new JLabel();
-            secureMessageLabel.setText("Secure Message");
-            secureConversationLabel = new JLabel();
-            secureConversationLabel.setText("Secure Conversation");
-            transportLayerSecurityLabel = new JLabel();
-            transportLayerSecurityLabel.setText("Transport Layer Security");
             commPanel = new JPanel();
             commPanel.add(getTlsButton(), null);
-            commPanel.add(transportLayerSecurityLabel, null);
             commPanel.add(getSecureConversationButton(), null);
-            commPanel.add(secureConversationLabel, null);
             commPanel.add(getSecureMessageButton(), null);
-            commPanel.add(secureMessageLabel, null);
         }
         return commPanel;
     }
@@ -702,6 +666,7 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
     private JCheckBox getSecureMessageButton() {
         if (secureMessageButton == null) {
             secureMessageButton = new JCheckBox();
+            secureMessageButton.setText("SecureMessage");
             secureMessageButton.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
                     synchronize();

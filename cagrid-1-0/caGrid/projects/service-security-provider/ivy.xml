@@ -13,7 +13,6 @@
     <!-- Public Configurations-->
     <conf name="client" visibility="public"/>
     <conf name="service" visibility="public"/>
-
     <conf name="schemas" visibility="public"/>
   </configurations>
 

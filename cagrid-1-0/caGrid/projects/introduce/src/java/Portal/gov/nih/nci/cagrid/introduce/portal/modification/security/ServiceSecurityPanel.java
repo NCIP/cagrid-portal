@@ -42,6 +42,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -85,17 +86,7 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 
     private JPanel commPanel = null;
 
-    private JLabel jLabel1 = null;
-
-    private JLabel Custom = null;
-
-    private JLabel jLabel2 = null;
-
-    private JLabel jLabel3 = null;
-
     private JCheckBox secureMessageButton = null;
-
-    private JLabel jLabel4 = null;
 
     private SecureConversationPanel secureConversationPanel = null;
 
@@ -115,7 +106,15 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
 
     private final static String CUSTOM_AUTHORIZATION = "Custom PDP Chain Authorization";
 
-    private final static String FILE_SYSTEM_PROXY = "Proxy from file system"; // @jve:decl-index=0:
+    private final static String FILE_SYSTEM_PROXY = "Proxy from file system"; // @
+    // jve
+    // :
+    // decl
+    // -
+    // index
+    // =
+    // 0
+    // :
 
     private final static String FILE_SYSTEM_CERT_KEY = "Certificate/Private Key from file system";
 
@@ -258,6 +257,7 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
     private JRadioButton getNoneButton() {
         if (noneButton == null) {
             noneButton = new JRadioButton();
+            noneButton.setText("None");
             noneButton.setSelected(true);
             noneButton.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -278,6 +278,7 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
     private JRadioButton getCustomButton() {
         if (customButton == null) {
             customButton = new JRadioButton();
+            customButton.setText("Custom");
             customButton.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
                     synchronize();
@@ -387,6 +388,7 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
                     .getAuthorizationExtensionByDisplayName(authType);
                 AbstractServiceAuthorizationPanel panel = authPanels.get(authExt.getDisplayName());
                 ExtensionType extensionType = panel.getAuthorizationExtensionData();
+
                 // need to add this extension type and replace what might have
                 // been there if it was there.
                 List<ExtensionType> newExtensionsList = new ArrayList<ExtensionType>();
@@ -398,6 +400,7 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
                         }
                     }
                 }
+
                 newExtensionsList.add(extensionType);
                 ExtensionType[] newExtensions = new ExtensionType[newExtensionsList.size()];
                 newExtensionsList.toArray(newExtensions);
@@ -406,9 +409,9 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
                 service.setExtensions(extensions);
 
             }
-            
+
             ss.setServiceAuthorization(sa);
-            
+
             if (sa.getIntroducePDPAuthorization() == null) {
                 // need to remove the authorization extensions
                 List<ExtensionType> newExtensionsList = new ArrayList<ExtensionType>();
@@ -426,7 +429,7 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
                 extensions.setExtension(newExtensions);
                 service.setExtensions(extensions);
             }
-            
+
             return ss;
         } else {
             return null;
@@ -489,18 +492,19 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
                     } else if (sa.getCustomPDPChainAuthorization() != null) {
                         this.getPdpPanel().setAuthorization(sa.getCustomPDPChainAuthorization());
                         authorizationMechanism.setSelectedItem(CUSTOM_AUTHORIZATION);
-                    } else if(sa.getIntroducePDPAuthorization()!=null){
-                        //determine which auth extension is present
-                        if(service.getExtensions()!=null && service.getExtensions().getExtension()!=null){
+                    } else if (sa.getIntroducePDPAuthorization() != null) {
+                        // determine which auth extension is present
+                        if (service.getExtensions() != null && service.getExtensions().getExtension() != null) {
                             for (int i = 0; i < service.getExtensions().getExtension().length; i++) {
                                 ExtensionType ext = service.getExtensions().getExtension(i);
-                                if(ext.getExtensionType().equals(ExtensionsLoader.AUTHORIZATION_EXTENSION)){
-                                    AuthorizationExtensionDescriptionType extDesc = ExtensionsLoader.getInstance().getAuthorizationExtension(ext.getName());
+                                if (ext.getExtensionType().equals(ExtensionsLoader.AUTHORIZATION_EXTENSION)) {
+                                    AuthorizationExtensionDescriptionType extDesc = ExtensionsLoader.getInstance()
+                                        .getAuthorizationExtension(ext.getName());
                                     authorizationMechanism.setSelectedItem(extDesc.getDisplayName());
                                 }
                             }
                         }
-                    
+
                     } else {
                         authorizationMechanism.setSelectedItem(NO_AUTHORIZATION);
                     }
@@ -546,11 +550,7 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
     private void syncAnonymousCommunication() {
 
         if (usesTransportSecurity() || usesSecureConversation()) {
-            if (getAuthorizationMechanism().getSelectedItem().equals(NO_AUTHORIZATION)) {
-                anonymousCommunication.setEnabled(true);
-            } else {
-                anonymousCommunication.setEnabled(false);
-            }
+            anonymousCommunication.setEnabled(true);
         } else {
             anonymousCommunication.setEnabled(false);
         }
@@ -660,6 +660,7 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
     private JCheckBox getTlsButton() {
         if (tlsButton == null) {
             tlsButton = new JCheckBox();
+            tlsButton.setText("Transport Layer Security");
             tlsButton.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
                     synchronize();
@@ -678,6 +679,7 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
     private JCheckBox getSecureConversationButton() {
         if (secureConversationButton == null) {
             secureConversationButton = new JCheckBox();
+            secureConversationButton.setText("Secure Conversation");
             secureConversationButton.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
                     synchronize();
@@ -696,32 +698,18 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
      */
     private JPanel getChoicePanel() {
         if (choicePanel == null) {
-            GridBagConstraints gridBagConstraints15 = new GridBagConstraints();
-            gridBagConstraints15.insets = new Insets(0, 0, 0, 0);
-            gridBagConstraints15.gridy = 0;
-            gridBagConstraints15.gridx = 3;
             GridBagConstraints gridBagConstraints14 = new GridBagConstraints();
             gridBagConstraints14.insets = new Insets(0, 5, 0, 0);
             gridBagConstraints14.gridy = 0;
             gridBagConstraints14.gridx = 2;
-            GridBagConstraints gridBagConstraints13 = new GridBagConstraints();
-            gridBagConstraints13.insets = new Insets(0, 0, 0, 5);
-            gridBagConstraints13.gridy = 0;
-            gridBagConstraints13.gridx = 1;
             GridBagConstraints gridBagConstraints9 = new GridBagConstraints();
             gridBagConstraints9.insets = new Insets(0, 0, 0, 0);
             gridBagConstraints9.gridy = 0;
             gridBagConstraints9.gridx = 0;
-            Custom = new JLabel();
-            Custom.setText("Custom");
-            jLabel1 = new JLabel();
-            jLabel1.setText("None");
             choicePanel = new JPanel();
             choicePanel.setLayout(new GridBagLayout());
             choicePanel.add(getNoneButton(), gridBagConstraints9);
-            choicePanel.add(jLabel1, gridBagConstraints13);
             choicePanel.add(getCustomButton(), gridBagConstraints14);
-            choicePanel.add(Custom, gridBagConstraints15);
         }
         return choicePanel;
     }
@@ -734,19 +722,10 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
      */
     private JPanel getCommPanel() {
         if (commPanel == null) {
-            jLabel4 = new JLabel();
-            jLabel4.setText("Secure Message");
-            jLabel3 = new JLabel();
-            jLabel3.setText("Secure Conversation");
-            jLabel2 = new JLabel();
-            jLabel2.setText("Transport Layer Security");
             commPanel = new JPanel();
             commPanel.add(getTlsButton(), null);
-            commPanel.add(jLabel2, null);
             commPanel.add(getSecureConversationButton(), null);
-            commPanel.add(jLabel3, null);
             commPanel.add(getSecureMessageButton(), null);
-            commPanel.add(jLabel4, null);
         }
         return commPanel;
     }
@@ -760,6 +739,7 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
     private JCheckBox getSecureMessageButton() {
         if (secureMessageButton == null) {
             secureMessageButton = new JCheckBox();
+            secureMessageButton.setText("Secure Message");
             secureMessageButton.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
                     synchronize();
@@ -1325,7 +1305,8 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
         if (jPanel1 == null) {
             credentialsRequired = new JLabel();
             credentialsRequired.setText("Client should connect anonymously?");
-            credentialsRequired.setToolTipText("Adds information to the security metadata telling the client that they should or should not use credintials to connect.");
+            credentialsRequired
+                .setToolTipText("Adds information to the security metadata telling the client that they should or should not use credintials to connect.");
             authLabel = new JLabel();
             authLabel.setText("Authorization Mechanism");
 
