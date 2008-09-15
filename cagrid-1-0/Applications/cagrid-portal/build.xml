@@ -256,4 +256,16 @@
         </javadoc>
     </target>
 
+    <target name="update_to_2_1">
+		<sql driver="${liferay.db.driver}"
+             url="${liferay.db.url}"
+             userid="${liferay.db.username}"
+             password="${liferay.db.password}"
+             src="tools/migration/2-0-2_to_2-1/layout_migration.sql">
+            <classpath>
+                <pathelement location="${db.jdbc.driver.jar}"/>
+            </classpath>
+        </sql>
+	</target>
+
 </project>
