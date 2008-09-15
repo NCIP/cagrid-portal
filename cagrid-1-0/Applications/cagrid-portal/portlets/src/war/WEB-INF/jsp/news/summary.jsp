@@ -10,13 +10,13 @@
 <hr/>
 <c:choose>
 	<c:when test="${empty items}">
-	<div style="height:130px">		
+	<div style="height:130px">
 		No news items to display.
 	</div>
 	</c:when>
 	<c:otherwise>
 	
-	<div id="<c:out value="${resizablePrefix}"/>" style="width:100%; height:130px; overflow-y:auto">
+	<div id="<c:out value="${resizablePrefix}"/>" style="width:100%; height:335px; overflow-y:auto">
 	<c:forEach var="item" items="${items}">
 			<portlet:actionURL var="selectItemAction">
 				<portlet:param name="operation" value="selectItemForNews"/>
