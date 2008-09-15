@@ -7,7 +7,7 @@
 
 </style>
 
-<div style="height:270px;">
+<div style="height:220px;">
 
     <div class="row">
     <span class="link-extenal pdf">
