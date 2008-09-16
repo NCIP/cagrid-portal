@@ -11,8 +11,8 @@ import org.apache.xerces.xs.LSInputList;
 import org.apache.xerces.xs.XSModel;
 import org.cagrid.gme.common.XSDUtil;
 import org.cagrid.gme.domain.XMLSchema;
-import org.cagrid.gme.persistence.SchemaPersistenceI;
 import org.cagrid.gme.sax.GMEXMLSchemaLoader;
+import org.cagrid.gme.service.dao.XMLSchemaInformationDao;
 import org.w3c.dom.ls.LSInput;
 
 
@@ -109,7 +109,7 @@ public class XercesSchemaTestCase extends TestCase {
     }
 
 
-    private static final XSModel loadSchemas(final XMLSchema[] schemas, SchemaPersistenceI schemaPersistence)
+    private static final XSModel loadSchemas(final XMLSchema[] schemas, XMLSchemaInformationDao dao)
         throws IllegalArgumentException, XMLParseException {
         if (schemas == null) {
             throw new IllegalArgumentException("Schemas must be non null.");
@@ -129,7 +129,7 @@ public class XercesSchemaTestCase extends TestCase {
             }
         };
 
-        GMEXMLSchemaLoader schemaLoader = new GMEXMLSchemaLoader(schemas, schemaPersistence);
+        GMEXMLSchemaLoader schemaLoader = new GMEXMLSchemaLoader(schemas, dao);
 
         XSModel model = schemaLoader.loadInputList(list);
         if (model == null) {

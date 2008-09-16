@@ -7,8 +7,10 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.Vector;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
@@ -21,30 +23,31 @@ import org.apache.xerces.xs.StringList;
 import org.cagrid.gme.domain.XMLSchema;
 import org.cagrid.gme.domain.XMLSchemaDocument;
 import org.cagrid.gme.persistence.SchemaPersistenceGeneralException;
-import org.cagrid.gme.persistence.SchemaPersistenceI;
 import org.cagrid.gme.sax.GMEErrorHandler;
 import org.cagrid.gme.sax.GMEXMLSchemaLoader;
+import org.cagrid.gme.service.dao.XMLSchemaInformationDao;
+import org.cagrid.gme.service.domain.XMLSchemaInformation;
 import org.cagrid.gme.stubs.types.InvalidSchemaSubmission;
 import org.cagrid.gme.stubs.types.SchemaAlreadyExists;
 import org.globus.wsrf.utils.FaultHelper;
+import org.springframework.transaction.annotation.Transactional;
 
 
+@Transactional
 public class GME {
     protected static Log LOG = LogFactory.getLog(GME.class.getName());
-    protected SchemaPersistenceI schemaPersistence = null;
+    protected XMLSchemaInformationDao schemaDao;
 
     // provides coarse grain persistence layer locking, used to ensure integrity
     // of
     protected ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
 
 
-    public GME(SchemaPersistenceI schemaPersistence) {
-        if (schemaPersistence == null) {
-            throw new IllegalArgumentException("Cannot use a null SchemaPersistenceI!");
+    public void setXMLSchemaInformationDao(XMLSchemaInformationDao schemaDao) {
+        if (schemaDao == null) {
+            throw new IllegalArgumentException("Cannot use a null XMLSchemaInformationDao!");
         }
-        LOG.info("Initializing GME with SchemaPersistenceI implementation class:"
-            + schemaPersistence.getClass().getName());
-        this.schemaPersistence = schemaPersistence;
+        this.schemaDao = schemaDao;
     }
 
 
@@ -74,7 +77,7 @@ public class GME {
             // submission if present, if not in submission load from DB, if not
             // in
             // DB error out)
-            GMEXMLSchemaLoader schemaLoader = new GMEXMLSchemaLoader(schemas, this.schemaPersistence);
+            GMEXMLSchemaLoader schemaLoader = new GMEXMLSchemaLoader(schemas, this.schemaDao);
 
             // 5. Call processSchema() for each schema being uploaded
             for (XMLSchema submittedSchema : schemas) {
@@ -176,7 +179,7 @@ public class GME {
             // published, or are in a state where the contents can be
             // updated ;
             // fail otherwise
-            XMLSchema storedSchema = this.schemaPersistence.getSchema(namespace);
+            XMLSchema storedSchema = this.schemaDao.getXMLSchemaByTargetNamespace(namespace);
             if (storedSchema != null) {
                 // TODO: check that it can be modified before doing this
                 // (right now it is never allowed)
@@ -300,8 +303,71 @@ public class GME {
             toCommit.put(submittedSchema, importList);
         }
 
+        // TODO: replace this call by embedding its logic above
         // commit to database
-        this.schemaPersistence.storeSchemas(toCommit);
+        this.storeSchemas(toCommit);
+    }
+
+
+    // TODO: rewrite this with the caller above to directly make use of the DAO
+    // instead of building up a map and calling this (this is refactor cruft
+    // leftover from removing the SchemaPersitence layer)
+    // TODO: need to add rollBackFor=... to specify exceptions which should
+    // cause rollbacks (does that rollback for subclasses of the specified
+    // exception?)
+    private void storeSchemas(Map<XMLSchema, List<URI>> schemasToStore) {
+        // REVISIT: is there a simpler way to do this
+
+        // this is a list of newly persistent XMLSchemaInformation (for those
+        // which are being saved), and already persistent XMLSchemaInformation
+        // (for those that are being imported and not updated)
+        Map<URI, XMLSchemaInformation> persistedInfos = new HashMap<URI, XMLSchemaInformation>();
+
+        // foreach XMLSchema
+        for (XMLSchema s : schemasToStore.keySet()) {
+            // find PersistableXMLSchema (by URI), create if null, save
+            XMLSchemaInformation info = this.schemaDao.getByTargetNamespace(s.getTargetNamespace());
+            if (info == null) {
+                info = new XMLSchemaInformation();
+            }
+            // -setSchema XMLSchema on XMLSchemaInformation
+            info.setSchema(s);
+
+            this.schemaDao.save(info);
+
+            // -put in hash of URI->XMLSchemaInformation
+            persistedInfos.put(s.getTargetNamespace(), info);
+        }
+        // all new/updated schemas are now in the hash and persistent
+
+        // foreach XMLSchema (make the changes)
+        for (XMLSchema s : schemasToStore.keySet()) {
+            // -get PersistableXMLSchema from hash
+            XMLSchemaInformation info = persistedInfos.get(s.getTargetNamespace());
+
+            Set<XMLSchemaInformation> importSet = new HashSet<XMLSchemaInformation>();
+            List<URI> importList = schemasToStore.get(s);
+            // -foreach URI in import List
+            for (URI importedURI : importList) {
+                // --if not in hash
+                XMLSchemaInformation importedInfo = persistedInfos.get(importedURI);
+                if (importedInfo == null) {
+                    // --- getReference to PersistableXMLSchema, put in hash
+                    importedInfo = this.schemaDao.getByTargetNamespace(s.getTargetNamespace());
+                    // this must either be new and already in the hash (the
+                    // containing if), or existing and therefore in the db
+                    // already
+                    assert importedInfo != null;
+                    persistedInfos.put(s.getTargetNamespace(), importedInfo);
+                }
+                // --add toimportSet
+                importSet.add(importedInfo);
+            }
+
+            // -set importSet on PersistableXMLSchema
+            info.setImports(importSet);
+        }
+
     }
 
 
@@ -354,7 +420,7 @@ public class GME {
 
         // 6.3. Look in the DB for depending schemas (will only be present if
         // schema was already published and is being updated)
-        Collection<XMLSchema> dependingSchemas = this.schemaPersistence.getDependingSchemas(schemaToProcess
+        Collection<XMLSchema> dependingSchemas = this.schemaDao.getDependingXMLSchemas(schemaToProcess
             .getTargetNamespace());
 
         // 6.4. For each depending schema not in the list of "processed schemas"
@@ -379,10 +445,11 @@ public class GME {
      * @return the targetNamespaces (represented by URIs) of all published
      *         XMLSchemas
      */
+    @Transactional(readOnly = true)
     public URI[] getNamespaces() {
         this.lock.readLock().lock();
         try {
-            Collection<URI> nsCol = this.schemaPersistence.getNamespaces();
+            Collection<URI> nsCol = this.schemaDao.getAllNamespaces();
             URI[] nsArr = new URI[nsCol.size()];
             return nsCol.toArray(nsArr);
         } finally {
@@ -400,10 +467,11 @@ public class GME {
      * @return a published XMLSchema with a targetNamespace equal to the given
      *         URI
      */
+    @Transactional(readOnly = true)
     public XMLSchema getSchema(URI uri) {
         this.lock.readLock().lock();
         try {
-            return this.schemaPersistence.getSchema(uri);
+            return this.schemaDao.getXMLSchemaByTargetNamespace(uri);
         } finally {
             this.lock.readLock().unlock();
         }

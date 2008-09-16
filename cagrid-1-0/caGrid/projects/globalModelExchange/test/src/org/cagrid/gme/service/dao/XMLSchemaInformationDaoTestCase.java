@@ -48,7 +48,8 @@ public class XMLSchemaInformationDaoTestCase extends GMEIntegrationTestCaseBase 
         XMLSchema schemaForURI = this.xmlSchemaInformationDao.getXMLSchemaByTargetNamespace(namespace);
         assertEquals(schema, schemaForURI);
 
-        Collection<XMLSchemaInformation> dependingSchemas = this.xmlSchemaInformationDao.getDependingSchemas(namespace);
+        Collection<XMLSchemaInformation> dependingSchemas = this.xmlSchemaInformationDao
+            .getDependingXMLSchemaInformation(namespace);
         assertEquals(0, dependingSchemas.size());
     }
 }

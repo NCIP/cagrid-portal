@@ -63,7 +63,8 @@ add tests which check our use of ns as the basesystemid (i.e., does new URI(ns,s
 add a test which does import of no namespace schema (need to disallow)
 
 
-
+replace GME's manual synchronization with spring's transaction management ( can specify read-only, etc):
+http://static.springframework.org/spring/docs/2.0.6/reference/transaction.html#transaction-declarative
 
 springize GME:
   -[done] schemapersistence

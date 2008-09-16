@@ -2,7 +2,7 @@ package org.cagrid.gme.sax;
 
 import org.apache.xerces.impl.xs.XMLSchemaLoader;
 import org.cagrid.gme.domain.XMLSchema;
-import org.cagrid.gme.persistence.SchemaPersistenceI;
+import org.cagrid.gme.service.dao.XMLSchemaInformationDao;
 
 
 /**
@@ -10,8 +10,8 @@ import org.cagrid.gme.persistence.SchemaPersistenceI;
  */
 public class GMEXMLSchemaLoader extends XMLSchemaLoader {
 
-    public GMEXMLSchemaLoader(XMLSchema[] submissionSchemas, SchemaPersistenceI schemaPersistence) {
-        setEntityResolver(new GMEEntityResolver(submissionSchemas, schemaPersistence));
+    public GMEXMLSchemaLoader(XMLSchema[] submissionSchemas, XMLSchemaInformationDao dao) {
+        setEntityResolver(new GMEEntityResolver(submissionSchemas, dao));
         setErrorHandler(new GMEErrorHandler());
     }
 

@@ -16,7 +16,7 @@ import org.cagrid.gme.common.XSDUtil;
 import org.cagrid.gme.common.exceptions.SchemaParsingException;
 import org.cagrid.gme.domain.XMLSchema;
 import org.cagrid.gme.domain.XMLSchemaDocument;
-import org.cagrid.gme.persistence.SchemaPersistenceI;
+import org.cagrid.gme.service.dao.XMLSchemaInformationDao;
 
 
 /**
@@ -24,20 +24,19 @@ import org.cagrid.gme.persistence.SchemaPersistenceI;
  */
 public class GMEEntityResolver implements XMLEntityResolver {
     protected XMLSchema[] submissionSchemas = null;
-    protected SchemaPersistenceI schemaPersistence = null;
+    protected XMLSchemaInformationDao schemaDao = null;
 
     protected static Log LOG = LogFactory.getLog(GMEEntityResolver.class.getName());
 
 
-    public GMEEntityResolver(XMLSchema[] submissionSchemas, SchemaPersistenceI schemaPersistence) {
+    public GMEEntityResolver(XMLSchema[] submissionSchemas, XMLSchemaInformationDao schemaDao) {
         super();
         this.submissionSchemas = submissionSchemas;
-        this.schemaPersistence = schemaPersistence;
+        this.schemaDao = schemaDao;
         if (submissionSchemas != null) {
-            LOG.debug("Initializing with " + submissionSchemas.length + " submission schemas; SchemaPersistence="
-                + schemaPersistence);
+            LOG.debug("Initializing with " + submissionSchemas.length + " submission schemas.");
         } else {
-            LOG.debug("Initializing with no submission schemas; SchemaPersistence=" + schemaPersistence);
+            LOG.debug("Initializing with no submission schemas.");
         }
     }
 
@@ -85,14 +84,9 @@ public class GMEEntityResolver implements XMLEntityResolver {
 
         // if not in submission load from DB
         if (schema == null) {
-            if (this.schemaPersistence != null) {
+            if (this.schemaDao != null) {
                 // try {
-                schema = this.schemaPersistence.getSchema(namespace);
-                // } catch (SchemaPersistenceGeneralException e) {
-                // LOG.error("Problem trying to load schema from backend.", e);
-                // throw new SchemaParsingException("Problem trying to load
-                // schema from backend:" + e.getMessage());
-                // }
+                schema = this.schemaDao.getXMLSchemaByTargetNamespace(namespace);
             } else {
                 LOG.debug("No SchemaPersistence found, and schema wasn't found in submission.");
             }
