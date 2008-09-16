@@ -46,7 +46,7 @@ public class DorianHelperImpl implements DorianHelper
 		}
 		try
 		{
-			globusCredential = ifsUserClient.createProxy(samlAssertion, dorianInformation.getProxyLifeTime(), dorianInformation.getDelegationPathLength());
+			globusCredential = ifsUserClient.requestUserCertificate(samlAssertion, dorianInformation.getProxyLifeTime());
 		} catch (DorianFault e)
 		{
 			throw new AuthenticationConfigurationException("Error accessing the Dorian Service : " + FaultUtil.printFaultToString(e));

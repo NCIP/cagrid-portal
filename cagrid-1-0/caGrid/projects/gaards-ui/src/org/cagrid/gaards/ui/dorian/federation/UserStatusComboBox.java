@@ -1,4 +1,4 @@
-package org.cagrid.gaards.ui.dorian.ifs;
+package org.cagrid.gaards.ui.dorian.federation;
 
 import org.cagrid.gaards.dorian.federation.GridUserStatus;
 import org.cagrid.gaards.ui.common.AxisTypeComboBox;

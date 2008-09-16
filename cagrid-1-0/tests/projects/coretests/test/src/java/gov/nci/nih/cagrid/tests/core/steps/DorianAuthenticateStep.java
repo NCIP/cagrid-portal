@@ -12,7 +12,7 @@ import gov.nih.nci.cagrid.testing.system.haste.Step;
 import org.cagrid.gaards.authentication.BasicAuthentication;
 import org.cagrid.gaards.authentication.client.AuthenticationClient;
 import org.cagrid.gaards.dorian.client.GridUserClient;
-import org.cagrid.gaards.dorian.federation.ProxyLifetime;
+import org.cagrid.gaards.dorian.federation.CertificateLifetime;
 import org.globus.gsi.GlobusCredential;
 
 /**
@@ -28,7 +28,6 @@ public class DorianAuthenticateStep extends Step implements GridCredential {
 	private int hours;
 	private SAMLAssertion saml;
 	private GlobusCredential credential;
-	private int delegationPathLength;
 
 	public DorianAuthenticateStep(String serviceURL) {
 		this("dorian", Constants.DORIAN_ADMIN_PASSWORD, serviceURL);
@@ -36,17 +35,16 @@ public class DorianAuthenticateStep extends Step implements GridCredential {
 
 	public DorianAuthenticateStep(String userId, String password,
 			String serviceURL) {
-		this(userId, password, serviceURL, 12, 2);
+		this(userId, password, serviceURL, 12);
 	}
 
 	public DorianAuthenticateStep(String userId, String password,
-			String serviceURL, int hours, int delegationPathLength) {
+			String serviceURL, int hours) {
 		super();
 		this.userId = userId;
 		this.password = password;
 		this.serviceURL = serviceURL;
 		this.hours = hours;
-		this.delegationPathLength = delegationPathLength;
 	}
 
 	@Override
@@ -58,8 +56,8 @@ public class DorianAuthenticateStep extends Step implements GridCredential {
 		this.saml = client.authenticate(authCred);
 
 		GridUserClient c2 = new GridUserClient(this.serviceURL);
-		this.credential = c2.createProxy(this.saml, new ProxyLifetime(
-				this.hours, 0, 0), this.delegationPathLength);
+		this.credential = c2.requestUserCertificate(this.saml, new CertificateLifetime(
+				this.hours, 0, 0));
 		ProxyUtil.saveProxyAsDefault(this.credential);
 	}
 

@@ -1,4 +1,4 @@
-package org.cagrid.gaards.ui.dorian.ifs;
+package org.cagrid.gaards.ui.dorian.federation;
 
 import java.util.Vector;
 
@@ -10,7 +10,7 @@ import org.cagrid.grape.table.GrapeBaseTable;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: AdminsTable.java,v 1.1 2007-09-24 19:09:38 langella Exp $
+ * @version $Id: AdminsTable.java,v 1.1 2008-09-16 03:00:07 langella Exp $
  */
 public class AdminsTable extends GrapeBaseTable {
 	public final static String GRID_IDENTITY = "Grid Identity";

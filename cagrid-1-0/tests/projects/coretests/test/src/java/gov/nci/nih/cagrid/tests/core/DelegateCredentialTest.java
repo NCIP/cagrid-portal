@@ -122,7 +122,7 @@ public class DelegateCredentialTest extends Story {
 
 		// successful authenticate
 		DorianAuthenticateStep admin = new DorianAuthenticateStep("dorian",
-				Constants.DORIAN_ADMIN_PASSWORD, dorianURL, 12, 2);
+				Constants.DORIAN_ADMIN_PASSWORD, dorianURL, 12);
 		steps.add(admin);
 		steps.add(new DorianAddTrustedCAStep(this.caFile, dorianURL));
 		steps.add(new DorianDestroyDefaultProxyStep());

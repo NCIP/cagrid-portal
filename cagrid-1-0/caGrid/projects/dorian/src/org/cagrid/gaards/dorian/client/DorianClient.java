@@ -1,22 +1,13 @@
 package org.cagrid.gaards.dorian.client;
 
-import gov.nih.nci.cagrid.introduce.security.client.ServiceSecurityClient;
-
-import java.io.InputStream;
 import java.rmi.RemoteException;
 import java.util.List;
 
-import org.apache.axis.EngineConfiguration;
-import org.apache.axis.client.AxisClient;
 import org.apache.axis.client.Stub;
-import org.apache.axis.configuration.FileProvider;
 import org.apache.axis.message.addressing.EndpointReferenceType;
 import org.apache.axis.types.URI.MalformedURIException;
-import org.apache.axis.utils.ClassUtils;
 import org.cagrid.gaards.dorian.common.DorianI;
 import org.cagrid.gaards.dorian.federation.TrustedIdentityProvider;
-import org.cagrid.gaards.dorian.stubs.DorianPortType;
-import org.cagrid.gaards.dorian.stubs.service.DorianServiceAddressingLocator;
 import org.globus.gsi.GlobusCredential;
 
 /**
@@ -24,9 +15,7 @@ import org.globus.gsi.GlobusCredential;
  * 
  * @created by Introduce Toolkit version 1.0
  */
-public class DorianClient extends ServiceSecurityClient implements DorianI {
-    protected DorianPortType portType;
-    private Object portTypeMutex;
+public class DorianClient extends DorianClientBase implements DorianI {
 
     public DorianClient(String url) throws MalformedURIException, RemoteException {
         this(url, null);
@@ -34,7 +23,6 @@ public class DorianClient extends ServiceSecurityClient implements DorianI {
 
     public DorianClient(String url, GlobusCredential proxy) throws MalformedURIException, RemoteException {
         super(url, proxy);
-        initialize();
     }
 
     public DorianClient(EndpointReferenceType epr) throws MalformedURIException, RemoteException {
@@ -44,35 +32,11 @@ public class DorianClient extends ServiceSecurityClient implements DorianI {
     public DorianClient(EndpointReferenceType epr, GlobusCredential proxy) throws MalformedURIException,
         RemoteException {
         super(epr, proxy);
-        initialize();
     }
 
-    private void initialize() throws RemoteException {
-        this.portTypeMutex = new Object();
-        this.portType = createPortType();
-    }
+ 
 
-    private DorianPortType createPortType() throws RemoteException {
-
-        DorianServiceAddressingLocator locator = new DorianServiceAddressingLocator();
-        // attempt to load our context sensitive wsdd file
-        InputStream resourceAsStream = ClassUtils.getResourceAsStream(getClass(), "client-config.wsdd");
-        if (resourceAsStream != null) {
-            // we found it, so tell axis to configure an engine to use it
-            EngineConfiguration engineConfig = new FileProvider(resourceAsStream);
-            // set the engine of the locator
-            locator.setEngine(new AxisClient(engineConfig));
-        }
-        DorianPortType port = null;
-        try {
-            port = locator.getDorianPortTypePort(getEndpointReference());
-        } catch (Exception e) {
-            throw new RemoteException("Unable to locate portType:" + e.getMessage(), e);
-        }
-
-        return port;
-    }
-
+    
     public static void usage() {
         System.out.println(DorianClient.class.getName() + " -url <service url>");
     }
@@ -275,11 +239,11 @@ public class DorianClient extends ServiceSecurityClient implements DorianI {
   public gov.nih.nci.cagrid.opensaml.SAMLAssertion authenticateUser(org.cagrid.gaards.authentication.Credential credential) throws RemoteException, org.cagrid.gaards.authentication.faults.AuthenticationProviderFault, org.cagrid.gaards.authentication.faults.CredentialNotSupportedFault, org.cagrid.gaards.authentication.faults.InsufficientAttributeFault, org.cagrid.gaards.authentication.faults.InvalidCredentialFault {
     synchronized(portTypeMutex){
       configureStubSecurity((Stub)portType,"authenticateUser");
-    org.cagrid.gaards.authentication.AuthenticateUserRequest params = new org.cagrid.gaards.authentication.AuthenticateUserRequest();
-    org.cagrid.gaards.authentication.AuthenticateUserRequestCredential credentialContainer = new org.cagrid.gaards.authentication.AuthenticateUserRequestCredential();
+    org.cagrid.gaards.authentication.stubs.AuthenticateUserRequest params = new org.cagrid.gaards.authentication.stubs.AuthenticateUserRequest();
+    org.cagrid.gaards.authentication.stubs.AuthenticateUserRequestCredential credentialContainer = new org.cagrid.gaards.authentication.stubs.AuthenticateUserRequestCredential();
     credentialContainer.setCredential(credential);
     params.setCredential(credentialContainer);
-    org.cagrid.gaards.authentication.AuthenticateUserResponse boxedResult = portType.authenticateUser(params);
+    org.cagrid.gaards.authentication.stubs.AuthenticateUserResponse boxedResult = portType.authenticateUser(params);
     return boxedResult.getAssertion();
     }
   }
@@ -438,6 +402,24 @@ public class DorianClient extends ServiceSecurityClient implements DorianI {
     updateContainer.setUserCertificateUpdate(update);
     params.setUpdate(updateContainer);
     org.cagrid.gaards.dorian.stubs.UpdateUserCertificateResponse boxedResult = portType.updateUserCertificate(params);
+    }
+  }
+
+  public org.cagrid.gaards.dorian.X509Certificate requestUserCertificate(gov.nih.nci.cagrid.opensaml.SAMLAssertion saml,org.cagrid.gaards.dorian.federation.PublicKey key,org.cagrid.gaards.dorian.federation.CertificateLifetime lifetime) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.InvalidAssertionFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault, org.cagrid.gaards.dorian.stubs.types.UserPolicyFault {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"requestUserCertificate");
+    org.cagrid.gaards.dorian.stubs.RequestUserCertificateRequest params = new org.cagrid.gaards.dorian.stubs.RequestUserCertificateRequest();
+    org.cagrid.gaards.dorian.stubs.RequestUserCertificateRequestSaml samlContainer = new org.cagrid.gaards.dorian.stubs.RequestUserCertificateRequestSaml();
+    samlContainer.setAssertion(saml);
+    params.setSaml(samlContainer);
+    org.cagrid.gaards.dorian.stubs.RequestUserCertificateRequestKey keyContainer = new org.cagrid.gaards.dorian.stubs.RequestUserCertificateRequestKey();
+    keyContainer.setPublicKey(key);
+    params.setKey(keyContainer);
+    org.cagrid.gaards.dorian.stubs.RequestUserCertificateRequestLifetime lifetimeContainer = new org.cagrid.gaards.dorian.stubs.RequestUserCertificateRequestLifetime();
+    lifetimeContainer.setCertificateLifetime(lifetime);
+    params.setLifetime(lifetimeContainer);
+    org.cagrid.gaards.dorian.stubs.RequestUserCertificateResponse boxedResult = portType.requestUserCertificate(params);
+    return boxedResult.getX509Certificate();
     }
   }
 

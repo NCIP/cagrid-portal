@@ -1,4 +1,4 @@
-package org.cagrid.gaards.ui.dorian.ifs;
+package org.cagrid.gaards.ui.dorian.federation;
 
 import gov.nih.nci.cagrid.common.Runner;
 import gov.nih.nci.cagrid.common.Utils;
@@ -42,7 +42,7 @@ import org.globus.gsi.GlobusCredential;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: TrustedIdPWindow.java,v 1.7 2008-08-07 17:08:04 langella Exp $
+ * @version $Id: TrustedIdPWindow.java,v 1.1 2008-09-16 03:00:07 langella Exp $
  */
 public class TrustedIdPWindow extends ApplicationComponent {
 	public static final String PASSWORD = SAMLAuthenticationMethod.value1

@@ -2,6 +2,9 @@ package org.cagrid.gaards.dorian.common;
 
 import java.rmi.RemoteException;
 
+import org.cagrid.gaards.authentication.faults.CredentialNotSupportedFault;
+import org.cagrid.gaards.dorian.stubs.types.InvalidUserCertificateFault;
+
 /**
  * Dorian Grid Service
  *
@@ -61,7 +64,7 @@ public interface DorianI {
   public void removeIdPUser(java.lang.String userId) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault ;
 
   /**
-   * Create a proxy certificate.
+   * Create a proxy certificate.  (This method is DEPRECATED, please use requestUserCertificate)
    *
    * @param saml
    * @param publicKey
@@ -272,6 +275,23 @@ public interface DorianI {
    *	
    */
   public void updateUserCertificate(org.cagrid.gaards.dorian.federation.UserCertificateUpdate update) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.InvalidUserCertificateFault ;
+
+  /**
+   * This method allow a user to request a short term user certificate.
+   *
+   * @param saml
+   * @param key
+   * @param lifetime
+   * @throws DorianInternalFault
+   *	
+   * @throws InvalidAssertionFault
+   *	
+   * @throws PermissionDeniedFault
+   *	
+   * @throws UserPolicyFault
+   *	
+   */
+  public org.cagrid.gaards.dorian.X509Certificate requestUserCertificate(gov.nih.nci.cagrid.opensaml.SAMLAssertion saml,org.cagrid.gaards.dorian.federation.PublicKey key,org.cagrid.gaards.dorian.federation.CertificateLifetime lifetime) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.InvalidAssertionFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault, org.cagrid.gaards.dorian.stubs.types.UserPolicyFault ;
 
 }
 

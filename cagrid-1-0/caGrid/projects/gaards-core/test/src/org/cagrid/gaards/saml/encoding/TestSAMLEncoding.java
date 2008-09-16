@@ -132,9 +132,9 @@ public class TestSAMLEncoding extends TestCase {
 			}
 
 			String str = Utils.serialize(saml);
+			System.out.println(str);
 			SAMLAssertion saml2 = (SAMLAssertion) Utils.deserialize(str,
 					SAMLAssertion.class);
-			saml2.verify(cert);
 			saml2.verify(cert);
 			try {
 				saml2.verify(c2.getCertificate());

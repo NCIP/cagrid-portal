@@ -109,8 +109,8 @@ public class DorianProviderImpl{
     return boxedResult;
   }
 
-    public org.cagrid.gaards.authentication.AuthenticateUserResponse authenticateUser(org.cagrid.gaards.authentication.AuthenticateUserRequest params) throws RemoteException, org.cagrid.gaards.authentication.faults.AuthenticationProviderFault, org.cagrid.gaards.authentication.faults.CredentialNotSupportedFault, org.cagrid.gaards.authentication.faults.InsufficientAttributeFault, org.cagrid.gaards.authentication.faults.InvalidCredentialFault {
-    org.cagrid.gaards.authentication.AuthenticateUserResponse boxedResult = new org.cagrid.gaards.authentication.AuthenticateUserResponse();
+    public org.cagrid.gaards.authentication.stubs.AuthenticateUserResponse authenticateUser(org.cagrid.gaards.authentication.stubs.AuthenticateUserRequest params) throws RemoteException, org.cagrid.gaards.authentication.faults.AuthenticationProviderFault, org.cagrid.gaards.authentication.faults.CredentialNotSupportedFault, org.cagrid.gaards.authentication.faults.InsufficientAttributeFault, org.cagrid.gaards.authentication.faults.InvalidCredentialFault {
+    org.cagrid.gaards.authentication.stubs.AuthenticateUserResponse boxedResult = new org.cagrid.gaards.authentication.stubs.AuthenticateUserResponse();
     boxedResult.setAssertion(impl.authenticateUser(params.getCredential().getCredential()));
     return boxedResult;
   }
@@ -190,6 +190,12 @@ public class DorianProviderImpl{
     public org.cagrid.gaards.dorian.stubs.UpdateUserCertificateResponse updateUserCertificate(org.cagrid.gaards.dorian.stubs.UpdateUserCertificateRequest params) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.InvalidUserCertificateFault {
     org.cagrid.gaards.dorian.stubs.UpdateUserCertificateResponse boxedResult = new org.cagrid.gaards.dorian.stubs.UpdateUserCertificateResponse();
     impl.updateUserCertificate(params.getUpdate().getUserCertificateUpdate());
+    return boxedResult;
+  }
+
+    public org.cagrid.gaards.dorian.stubs.RequestUserCertificateResponse requestUserCertificate(org.cagrid.gaards.dorian.stubs.RequestUserCertificateRequest params) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.InvalidAssertionFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault, org.cagrid.gaards.dorian.stubs.types.UserPolicyFault {
+    org.cagrid.gaards.dorian.stubs.RequestUserCertificateResponse boxedResult = new org.cagrid.gaards.dorian.stubs.RequestUserCertificateResponse();
+    boxedResult.setX509Certificate(impl.requestUserCertificate(params.getSaml().getAssertion(),params.getKey().getPublicKey(),params.getLifetime().getCertificateLifetime()));
     return boxedResult;
   }
 

@@ -30,12 +30,12 @@ import org.cagrid.gaards.authentication.BasicAuthentication;
 import org.cagrid.gaards.authentication.faults.InvalidCredentialFault;
 import org.cagrid.gaards.dorian.ca.CertificateAuthority;
 import org.cagrid.gaards.dorian.federation.AutoApprovalPolicy;
+import org.cagrid.gaards.dorian.federation.CertificateLifetime;
 import org.cagrid.gaards.dorian.federation.FederationUtils;
 import org.cagrid.gaards.dorian.federation.GridUser;
 import org.cagrid.gaards.dorian.federation.GridUserFilter;
 import org.cagrid.gaards.dorian.federation.GridUserStatus;
 import org.cagrid.gaards.dorian.federation.ManualApprovalPolicy;
-import org.cagrid.gaards.dorian.federation.ProxyLifetime;
 import org.cagrid.gaards.dorian.federation.SAMLAttributeDescriptor;
 import org.cagrid.gaards.dorian.federation.SAMLAuthenticationMethod;
 import org.cagrid.gaards.dorian.federation.TrustedIdP;
@@ -310,8 +310,8 @@ public class TestDorian extends TestCase {
             SAMLAssertion saml = dorian.authenticate(auth);
             KeyPair pair = KeyUtil.generateRSAKeyPair1024();
             PublicKey publicKey = pair.getPublic();
-            ProxyLifetime lifetime = getProxyLifetime();
-            X509Certificate cert = dorian.requestCertificate(saml, publicKey, lifetime);
+            CertificateLifetime lifetime = getLifetime();
+            X509Certificate cert = dorian.requestUserCertificate(saml, publicKey, lifetime);
             String gid = UserManager.subjectToIdentity(getDorianIdPUserId(conf, dorian, Dorian.IDP_ADMIN_USER_ID));
             checkCertificate(gid, lifetime, pair.getPrivate(), cert);
         } catch (Exception e) {
@@ -360,8 +360,8 @@ public class TestDorian extends TestCase {
             cred.setPassword(app.getPassword());
             SAMLAssertion saml = dorian.authenticate(cred);
             KeyPair pair = KeyUtil.generateRSAKeyPair1024();
-            ProxyLifetime lifetime = getProxyLifetime();
-            X509Certificate cert = dorian.requestCertificate(saml, pair.getPublic(), lifetime);
+            CertificateLifetime lifetime = getLifetime();
+            X509Certificate cert = dorian.requestUserCertificate(saml, pair.getPublic(), lifetime);
             String gid = UserManager.subjectToIdentity(getDorianIdPUserId(conf, dorian, username));
             checkCertificate(gid, lifetime, pair.getPrivate(), cert);
             GridUserFilter filter = new GridUserFilter();
@@ -448,8 +448,8 @@ public class TestDorian extends TestCase {
             cred.setPassword(app.getPassword());
             SAMLAssertion saml = dorian.authenticate(cred);
             KeyPair pair = KeyUtil.generateRSAKeyPair1024();
-            ProxyLifetime lifetime = getProxyLifetime();
-            X509Certificate cert = dorian.requestCertificate(saml, pair.getPublic(), lifetime);
+            CertificateLifetime lifetime = getLifetime();
+            X509Certificate cert = dorian.requestUserCertificate(saml, pair.getPublic(), lifetime);
             String gid = UserManager.subjectToIdentity(getDorianIdPUserId(conf, dorian, username));
             checkCertificate(gid, lifetime, pair.getPrivate(), cert);
             GridUserFilter filter = new GridUserFilter();
@@ -526,8 +526,8 @@ public class TestDorian extends TestCase {
             cred.setPassword(app.getPassword());
             SAMLAssertion saml = dorian.authenticate(cred);
             KeyPair pair = KeyUtil.generateRSAKeyPair1024();
-            ProxyLifetime lifetime = getProxyLifetime();
-            X509Certificate cert = dorian.requestCertificate(saml, pair.getPublic(), lifetime);
+            CertificateLifetime lifetime = getLifetime();
+            X509Certificate cert = dorian.requestUserCertificate(saml, pair.getPublic(), lifetime);
             String gid = UserManager.subjectToIdentity(getDorianIdPUserId(conf, dorian, username));
             checkCertificate(gid, lifetime, pair.getPrivate(), cert);
             GridUserFilter filter = new GridUserFilter();
@@ -588,8 +588,8 @@ public class TestDorian extends TestCase {
             idp.getIdp().setId(dorian.addTrustedIdP(gridId, idp.getIdp()).getId());
             String username = "user";
             KeyPair pair = KeyUtil.generateRSAKeyPair1024();
-            ProxyLifetime lifetime = getProxyLifetime();
-            X509Certificate cert = dorian.requestCertificate(getSAMLAssertion(username, idp), pair.getPublic(),
+            CertificateLifetime lifetime = getLifetime();
+            X509Certificate cert = dorian.requestUserCertificate(getSAMLAssertion(username, idp), pair.getPublic(),
                 lifetime);
             String gid = UserManager.subjectToIdentity(getGridIdentity(conf, dorian, idp.getIdp(), username));
             checkCertificate(gid, lifetime, pair.getPrivate(), cert);
@@ -651,8 +651,8 @@ public class TestDorian extends TestCase {
             idp.getIdp().setId(dorian.addTrustedIdP(gridId, idp.getIdp()).getId());
             String username = "user";
             KeyPair pair = KeyUtil.generateRSAKeyPair1024();
-            ProxyLifetime lifetime = getProxyLifetime();
-            X509Certificate cert = dorian.requestCertificate(getSAMLAssertion(username, idp), pair.getPublic(),
+            CertificateLifetime lifetime = getLifetime();
+            X509Certificate cert = dorian.requestUserCertificate(getSAMLAssertion(username, idp), pair.getPublic(),
                 lifetime);
             String gid = UserManager.subjectToIdentity(getGridIdentity(conf, dorian, idp.getIdp(), username));
 
@@ -695,9 +695,9 @@ public class TestDorian extends TestCase {
             idp.getIdp().setId(dorian.addTrustedIdP(gridId, idp.getIdp()).getId());
             String username = "user";
             KeyPair pair = KeyUtil.generateRSAKeyPair1024();
-            ProxyLifetime lifetime = getProxyLifetime();
+            CertificateLifetime lifetime = getLifetime();
             try {
-                dorian.requestCertificate(getSAMLAssertion(username, idp), pair.getPublic(), getProxyLifetimeShort());
+                dorian.requestUserCertificate(getSAMLAssertion(username, idp), pair.getPublic(), getLifetimeShort());
                 fail("Should not be able to create a proxy with an IdP that has not been approved");
             } catch (PermissionDeniedFault f) {
 
@@ -712,7 +712,7 @@ public class TestDorian extends TestCase {
             assertEquals(before.getUserStatus(), GridUserStatus.Pending);
             before.setUserStatus(GridUserStatus.Active);
             dorian.updateGridUser(gridId, before);
-            X509Certificate cert = dorian.requestCertificate(getSAMLAssertion(username, idp), pair.getPublic(),
+            X509Certificate cert = dorian.requestUserCertificate(getSAMLAssertion(username, idp), pair.getPublic(),
                 lifetime);
             String gid = UserManager.subjectToIdentity(getGridIdentity(conf, dorian, idp.getIdp(), username));
 
@@ -901,7 +901,7 @@ public class TestDorian extends TestCase {
     }
 
 
-    private void checkCertificate(String expectedIdentity, ProxyLifetime lifetime, PrivateKey key, X509Certificate cert)
+    private void checkCertificate(String expectedIdentity, CertificateLifetime lifetime, PrivateKey key, X509Certificate cert)
         throws Exception {
         assertNotNull(cert);
 
@@ -926,8 +926,8 @@ public class TestDorian extends TestCase {
     }
 
 
-    private ProxyLifetime getProxyLifetime() {
-        ProxyLifetime valid = new ProxyLifetime();
+    private CertificateLifetime getLifetime() {
+        CertificateLifetime valid = new CertificateLifetime();
         valid.setHours(12);
         valid.setMinutes(0);
         valid.setSeconds(0);
@@ -935,8 +935,8 @@ public class TestDorian extends TestCase {
     }
 
 
-    private ProxyLifetime getProxyLifetimeShort() {
-        ProxyLifetime valid = new ProxyLifetime();
+    private CertificateLifetime getLifetimeShort() {
+        CertificateLifetime valid = new CertificateLifetime();
         valid.setHours(0);
         valid.setMinutes(0);
         valid.setSeconds(SHORT_PROXY_VALID);

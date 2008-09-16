@@ -127,6 +127,18 @@
       <system-identity />
     </run-as>
   </method>
+  <method name="requestUserCertificate">
+    <auth-method>
+      <GSITransport>
+        <protection-level>
+          <privacy />
+        </protection-level>
+      </GSITransport>
+    </auth-method>
+    <run-as>
+      <system-identity />
+    </run-as>
+  </method>
 </securityConfig>
 
 

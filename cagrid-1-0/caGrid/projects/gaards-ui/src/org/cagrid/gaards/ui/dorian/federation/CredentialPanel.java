@@ -1,4 +1,4 @@
-package org.cagrid.gaards.ui.dorian.ifs;
+package org.cagrid.gaards.ui.dorian.federation;
 
 import java.awt.GridBagLayout;
 

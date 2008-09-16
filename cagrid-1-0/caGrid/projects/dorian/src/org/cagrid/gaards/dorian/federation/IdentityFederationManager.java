@@ -35,7 +35,6 @@ import org.cagrid.gaards.dorian.stubs.types.DorianInternalFault;
 import org.cagrid.gaards.dorian.stubs.types.InvalidAssertionFault;
 import org.cagrid.gaards.dorian.stubs.types.InvalidHostCertificateFault;
 import org.cagrid.gaards.dorian.stubs.types.InvalidHostCertificateRequestFault;
-import org.cagrid.gaards.dorian.stubs.types.InvalidProxyFault;
 import org.cagrid.gaards.dorian.stubs.types.InvalidTrustedIdPFault;
 import org.cagrid.gaards.dorian.stubs.types.InvalidUserCertificateFault;
 import org.cagrid.gaards.dorian.stubs.types.InvalidUserFault;
@@ -387,8 +386,8 @@ public class IdentityFederationManager extends LoggingObject implements Publishe
     }
 
 
-    public X509Certificate requestCertificate(SAMLAssertion saml, PublicKey publicKey, ProxyLifetime lifetime)
-        throws DorianInternalFault, InvalidAssertionFault, InvalidProxyFault, UserPolicyFault, PermissionDeniedFault {
+    public X509Certificate requestUserCertificate(SAMLAssertion saml, PublicKey publicKey, CertificateLifetime lifetime)
+        throws DorianInternalFault, InvalidAssertionFault, UserPolicyFault, PermissionDeniedFault {
 
         if (!saml.isSigned()) {
             InvalidAssertionFault fault = new InvalidAssertionFault();
@@ -490,11 +489,11 @@ public class IdentityFederationManager extends LoggingObject implements Publishe
             }
         }
 
-        // Validate that the proxy is of valid length
+        // Validate that the certificate is of valid length
 
         if (FederationUtils.getProxyValid(lifetime).after(FederationUtils.getMaxProxyLifetime(conf))) {
-            InvalidProxyFault fault = new InvalidProxyFault();
-            fault.setFaultString("The proxy valid length exceeds the maximum proxy valid length (hrs="
+           UserPolicyFault fault = new UserPolicyFault();
+            fault.setFaultString("The requested certificate lifetime exceeds the maximum certificate lifetime (hrs="
                 + conf.getMaxProxyLifetime().getHours() + ", mins=" + conf.getMaxProxyLifetime().getMinutes()
                 + ", sec=" + conf.getMaxProxyLifetime().getSeconds() + ")");
             throw fault;
@@ -540,11 +539,11 @@ public class IdentityFederationManager extends LoggingObject implements Publishe
             return userCert;
         } catch (Exception e) {
             // TODO: Change this Exception
-            InvalidProxyFault fault = new InvalidProxyFault();
-            fault.setFaultString("An unexpected error occurred in creating the user " + usr.getGridId() + "'s proxy.");
+            DorianInternalFault fault = new  DorianInternalFault();
+            fault.setFaultString("An unexpected error occurred in creating a certificate for the user " + usr.getGridId() + ".");
             FaultHelper helper = new FaultHelper(fault);
             helper.addFaultCause(e);
-            fault = (InvalidProxyFault) helper.getFault();
+            fault = (DorianInternalFault) helper.getFault();
             throw fault;
         }
 

@@ -32,8 +32,8 @@ import org.cagrid.gaards.dorian.service.PropertyManager;
 import org.cagrid.gaards.dorian.stubs.types.DorianInternalFault;
 import org.cagrid.gaards.dorian.stubs.types.InvalidAssertionFault;
 import org.cagrid.gaards.dorian.stubs.types.InvalidHostCertificateFault;
-import org.cagrid.gaards.dorian.stubs.types.InvalidProxyFault;
 import org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault;
+import org.cagrid.gaards.dorian.stubs.types.UserPolicyFault;
 import org.cagrid.gaards.dorian.test.CA;
 import org.cagrid.gaards.dorian.test.Utils;
 import org.cagrid.gaards.pki.CertUtil;
@@ -623,8 +623,8 @@ public class TestIdentityFederationManager extends TestCase {
                 String uid = "user" + i;
                 KeyPair pair = KeyUtil.generateRSAKeyPair1024();
                 PublicKey publicKey = pair.getPublic();
-                ProxyLifetime lifetime = getProxyLifetime();
-                X509Certificate cert = ifs.requestCertificate(getSAMLAssertion(uid, idp2), publicKey, lifetime);
+                CertificateLifetime lifetime = getLifetime();
+                X509Certificate cert = ifs.requestUserCertificate(getSAMLAssertion(uid, idp2), publicKey, lifetime);
                 String expectedIdentity = UserManager
                     .subjectToIdentity(UserManager.getUserSubject(ifs.getIdentityAssignmentPolicy(), ca
                         .getCACertificate().getSubjectDN().getName(), idp2.getIdp(), uid));
@@ -752,8 +752,8 @@ public class TestIdentityFederationManager extends TestCase {
                 String uid = uidPrefix + i;
                 KeyPair pair = KeyUtil.generateRSAKeyPair1024();
                 PublicKey publicKey = pair.getPublic();
-                ProxyLifetime lifetime = getProxyLifetime();
-                X509Certificate cert = ifs.requestCertificate(getSAMLAssertion(uid, idp), publicKey, lifetime);
+                CertificateLifetime lifetime = getLifetime();
+                X509Certificate cert = ifs.requestUserCertificate(getSAMLAssertion(uid, idp), publicKey, lifetime);
                 String expectedIdentity = UserManager.subjectToIdentity(UserManager.getUserSubject(ifs
                     .getIdentityAssignmentPolicy(), ca.getCACertificate().getSubjectDN().getName(), idp.getIdp(), uid));
 
@@ -815,9 +815,9 @@ public class TestIdentityFederationManager extends TestCase {
             ifs = new IdentityFederationManager(conf, db, props, ca, defaults);
             KeyPair pair = KeyUtil.generateRSAKeyPair1024();
             PublicKey publicKey = pair.getPublic();
-            ProxyLifetime lifetime = getProxyLifetime();
+            CertificateLifetime lifetime = getLifetime();
             String uid = "user";
-            X509Certificate cert = ifs.requestCertificate(getSAMLAssertion(uid, idp), publicKey, lifetime);
+            X509Certificate cert = ifs.requestUserCertificate(getSAMLAssertion(uid, idp), publicKey, lifetime);
             String expectedIdentity = UserManager.subjectToIdentity(UserManager.getUserSubject(ifs
                 .getIdentityAssignmentPolicy(), ca.getCACertificate().getSubjectDN().getName(), idp.getIdp(), uid));
 
@@ -848,9 +848,9 @@ public class TestIdentityFederationManager extends TestCase {
             ifs = new IdentityFederationManager(conf, db, props, ca, defaults);
             KeyPair pair = KeyUtil.generateRSAKeyPair1024();
             PublicKey publicKey = pair.getPublic();
-            ProxyLifetime lifetime = getProxyLifetime();
+            CertificateLifetime lifetime = getLifetime();
             try {
-                ifs.requestCertificate(getSAMLAssertion("user", idp), publicKey, lifetime);
+                ifs.requestUserCertificate(getSAMLAssertion("user", idp), publicKey, lifetime);
                 fail("Should not be able to request a certificate if the IdP is suspended.");
             } catch (PermissionDeniedFault f) {
 
@@ -873,7 +873,7 @@ public class TestIdentityFederationManager extends TestCase {
         IdentityFederationManager ifs = null;
         try {
             KeyPair pair = KeyUtil.generateRSAKeyPair1024();
-            ProxyLifetime lifetime = getProxyLifetimeShort();
+            CertificateLifetime lifetime = getLifetimeShort();
             KeyPair pair2 = KeyUtil.generateRSAKeyPair1024();
             String username = "user";
             IdPContainer idp = this.getTrustedIdpAutoApprove("My IdP");
@@ -887,7 +887,7 @@ public class TestIdentityFederationManager extends TestCase {
 
             // give a chance for others to run right before we enter timing
             // sensitive code
-            X509Certificate cert = ifs.requestCertificate(getSAMLAssertion(username, idp), pair.getPublic(), lifetime);
+            X509Certificate cert = ifs.requestUserCertificate(getSAMLAssertion(username, idp), pair.getPublic(), lifetime);
             String expectedIdentity = UserManager
                 .subjectToIdentity(UserManager.getUserSubject(ifs.getIdentityAssignmentPolicy(), ca.getCACertificate()
                     .getSubjectDN().getName(), idp.getIdp(), username));
@@ -912,7 +912,7 @@ public class TestIdentityFederationManager extends TestCase {
         IdentityFederationManager ifs = null;
         try {
             KeyPair pair = KeyUtil.generateRSAKeyPair1024();
-            ProxyLifetime lifetime = getProxyLifetimeShort();
+            CertificateLifetime lifetime = getLifetimeShort();
             String username = "user";
             IdPContainer idp = this.getTrustedIdpManualApprove("My IdP");
             IdentityFederationProperties conf = getExpiringCredentialsConf();
@@ -924,7 +924,7 @@ public class TestIdentityFederationManager extends TestCase {
                 defaults.getDefaultUser().getUID()));
 
             try {
-                ifs.requestCertificate(getSAMLAssertion(username, idp), pair.getPublic(), lifetime);
+                ifs.requestUserCertificate(getSAMLAssertion(username, idp), pair.getPublic(), lifetime);
                 fail("Should have thrown exception attempting to create proxy.");
             } catch (PermissionDeniedFault fault) {
 
@@ -954,15 +954,15 @@ public class TestIdentityFederationManager extends TestCase {
             ifs = new IdentityFederationManager(conf, db, props, ca, defaults);
             Thread.sleep(500);
             try {
-                ProxyLifetime valid = new ProxyLifetime();
+                CertificateLifetime valid = new CertificateLifetime();
                 valid.setHours(12);
                 valid.setMinutes(0);
                 valid.setSeconds(1);
                 KeyPair pair = KeyUtil.generateRSAKeyPair1024();
                 PublicKey publicKey = pair.getPublic();
-                ifs.requestCertificate(getSAMLAssertion("user", idp), publicKey, valid);
+                ifs.requestUserCertificate(getSAMLAssertion("user", idp), publicKey, valid);
                 fail("Should not be able to request a certificate with an invalid lifetime.");
-            } catch (InvalidProxyFault f) {
+            } catch (UserPolicyFault f) {
 
             }
         } catch (Exception e) {
@@ -989,7 +989,7 @@ public class TestIdentityFederationManager extends TestCase {
             try {
                 KeyPair pair = KeyUtil.generateRSAKeyPair1024();
                 PublicKey publicKey = pair.getPublic();
-                ifs.requestCertificate(getSAMLAssertionUnspecifiedMethod("user", idp), publicKey, getProxyLifetime());
+                ifs.requestUserCertificate(getSAMLAssertionUnspecifiedMethod("user", idp), publicKey, getLifetime());
                 fail("Should not be able to request a certificate with an Invalid Authentication Method.");
             } catch (InvalidAssertionFault f) {
 
@@ -1021,7 +1021,7 @@ public class TestIdentityFederationManager extends TestCase {
             try {
                 KeyPair pair = KeyUtil.generateRSAKeyPair1024();
                 PublicKey publicKey = pair.getPublic();
-                ifs.requestCertificate(getSAMLAssertion("user", idp2), publicKey, getProxyLifetime());
+                ifs.requestUserCertificate(getSAMLAssertion("user", idp2), publicKey, getLifetime());
                 fail("Should not be able to request a certificate when the IdP is not trusted.");
             } catch (InvalidAssertionFault f) {
 
@@ -1050,7 +1050,7 @@ public class TestIdentityFederationManager extends TestCase {
             try {
                 KeyPair pair = KeyUtil.generateRSAKeyPair1024();
                 PublicKey publicKey = pair.getPublic();
-                ifs.requestCertificate(getExpiredSAMLAssertion("user", idp), publicKey, getProxyLifetime());
+                ifs.requestUserCertificate(getExpiredSAMLAssertion("user", idp), publicKey, getLifetime());
                 fail("Should not be able to request a certificate if the SAML Asserion is expired");
             } catch (InvalidAssertionFault f) {
 
@@ -1138,9 +1138,9 @@ public class TestIdentityFederationManager extends TestCase {
             ifs = new IdentityFederationManager(conf, db, props, ca, defaults);
             KeyPair pair = KeyUtil.generateRSAKeyPair1024();
             PublicKey publicKey = pair.getPublic();
-            ProxyLifetime lifetime = getProxyLifetime();
+            CertificateLifetime lifetime = getLifetime();
             String uid = "user";
-            X509Certificate cert = ifs.requestCertificate(getSAMLAssertion(uid, idp), publicKey, lifetime);
+            X509Certificate cert = ifs.requestUserCertificate(getSAMLAssertion(uid, idp), publicKey, lifetime);
             String expectedIdentity = UserManager.subjectToIdentity(UserManager.getUserSubject(ifs
                 .getIdentityAssignmentPolicy(), ca.getCACertificate().getSubjectDN().getName(), idp.getIdp(), uid));
 
@@ -1627,8 +1627,8 @@ public class TestIdentityFederationManager extends TestCase {
         throws Exception {
         KeyPair pair = KeyUtil.generateRSAKeyPair1024();
         PublicKey publicKey = pair.getPublic();
-        ProxyLifetime lifetime = getProxyLifetime();
-        X509Certificate cert = ifs.requestCertificate(getSAMLAssertion(uid, idp), publicKey, lifetime);
+        CertificateLifetime lifetime = getLifetime();
+        X509Certificate cert = ifs.requestUserCertificate(getSAMLAssertion(uid, idp), publicKey, lifetime);
         String expectedIdentity = UserManager.subjectToIdentity(UserManager.getUserSubject(ifs
             .getIdentityAssignmentPolicy(), ca.getCACertificate().getSubjectDN().getName(), idp.getIdp(), uid));
         checkCertificate(expectedIdentity, lifetime, pair.getPrivate(), cert);
@@ -1671,8 +1671,8 @@ public class TestIdentityFederationManager extends TestCase {
     }
 
 
-    private ProxyLifetime getProxyLifetimeShort() {
-        ProxyLifetime valid = new ProxyLifetime();
+    private CertificateLifetime getLifetimeShort() {
+        CertificateLifetime valid = new CertificateLifetime();
         valid.setHours(0);
         valid.setMinutes(0);
         valid.setSeconds(SHORT_PROXY_VALID);
@@ -1680,8 +1680,8 @@ public class TestIdentityFederationManager extends TestCase {
     }
 
 
-    private ProxyLifetime getProxyLifetime() {
-        ProxyLifetime valid = new ProxyLifetime();
+    private CertificateLifetime getLifetime() {
+        CertificateLifetime valid = new CertificateLifetime();
         valid.setHours(12);
         valid.setMinutes(0);
         valid.setSeconds(0);
@@ -1714,7 +1714,7 @@ public class TestIdentityFederationManager extends TestCase {
     }
 
 
-    private void checkCertificate(String expectedIdentity, ProxyLifetime lifetime, PrivateKey key, X509Certificate cert)
+    private void checkCertificate(String expectedIdentity, CertificateLifetime lifetime, PrivateKey key, X509Certificate cert)
         throws Exception {
         assertNotNull(cert);
         GlobusCredential cred = new GlobusCredential(key, new X509Certificate[]{cert});

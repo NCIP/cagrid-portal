@@ -6,7 +6,7 @@ import java.util.GregorianCalendar;
 
 
 public class FederationUtils {
-	public static Date getProxyValid(ProxyLifetime valid) {
+	public static Date getProxyValid(CertificateLifetime valid) {
 		Calendar c = new GregorianCalendar();
 		c.add(Calendar.HOUR_OF_DAY, valid.getHours());
 		c.add(Calendar.MINUTE, valid.getMinutes());
@@ -24,7 +24,7 @@ public class FederationUtils {
 	}
 
 
-	public static long getTimeInSeconds(ProxyLifetime lifetime) {
+	public static long getTimeInSeconds(CertificateLifetime lifetime) {
 		long seconds = lifetime.getSeconds();
 		seconds = seconds + (lifetime.getMinutes() * 60);
 		seconds = seconds + (lifetime.getHours() * 60 * 60);

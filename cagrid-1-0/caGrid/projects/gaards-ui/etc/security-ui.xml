@@ -21,7 +21,7 @@
 				<component>
 					<title>Login</title>
 					<description>Obtain Grid Credentials!!!</description>
-					<classname>org.cagrid.gaards.ui.dorian.ifs.CreateProxyWindow</classname>
+					<classname>org.cagrid.gaards.ui.dorian.federation.LoginWindow</classname>
 					<icon>/login.png</icon>
 					<showOnToolBar>true</showOnToolBar>
 					<dimensions>
@@ -87,7 +87,7 @@
 				<component>
 					<title>Request Host Certificate</title>
 					<description>Allows a user to request a host ceritficate from Dorian.</description>
-					<classname>org.cagrid.gaards.ui.dorian.ifs.RequestHostCertificateWindow</classname>
+					<classname>org.cagrid.gaards.ui.dorian.federation.RequestHostCertificateWindow</classname>
 					<icon>/computer.png</icon>
 					<showOnToolBar>false</showOnToolBar>
 					<dimensions>
@@ -98,14 +98,14 @@
 				<component>
 					<title>My Host Certificates</title>
 					<description>Allows a user to obtain the host certificates in which they own.</description>
-					<classname>org.cagrid.gaards.ui.dorian.ifs.MyHostCertificatesWindow</classname>
+					<classname>org.cagrid.gaards.ui.dorian.federation.MyHostCertificatesWindow</classname>
 					<icon>/computers.png</icon>
 					<showOnToolBar>false</showOnToolBar>
 				</component>
 				<component>
 					<title>Download CA Certificate(s)</title>
 					<description>Download the Dorian CA certificate.</description>
-					<classname>org.cagrid.gaards.ui.dorian.ifs.ViewCACertificateWindow</classname>
+					<classname>org.cagrid.gaards.ui.dorian.federation.ViewCACertificateWindow</classname>
 					<icon>/download.png</icon>
 					<showOnToolBar>false</showOnToolBar>
 					<dimensions>
@@ -128,7 +128,7 @@
 						<component>
 							<title>Grid User Management</title>
 							<description>Manage Grid User Accounts</description>
-							<classname>org.cagrid.gaards.ui.dorian.ifs.UserManagerWindow</classname>
+							<classname>org.cagrid.gaards.ui.dorian.federation.UserManagerWindow</classname>
 							<icon>/users.png</icon>
 							<showOnToolBar>false</showOnToolBar>
 							<dimensions>
@@ -139,7 +139,7 @@
 						<component>
 							<title>Host Certificate Management</title>
 							<description>Manage Host Certificates</description>
-							<classname>org.cagrid.gaards.ui.dorian.ifs.HostCertificatesWindow</classname>
+							<classname>org.cagrid.gaards.ui.dorian.federation.HostCertificatesWindow</classname>
 							<icon>/computers.png</icon>
 							<showOnToolBar>false</showOnToolBar>
 							<dimensions>
@@ -150,14 +150,14 @@
 						<component>
 							<title>Trusted Identity Provider(s)</title>
 							<description>Trusted Identity Provider(s)</description>
-							<classname>org.cagrid.gaards.ui.dorian.ifs.TrustedIdPsWindow</classname>
+							<classname>org.cagrid.gaards.ui.dorian.federation.TrustedIdPsWindow</classname>
 							<icon>/trusted-idp.png</icon>
 							<showOnToolBar>false</showOnToolBar>
 						</component>
 						<component>
 							<title>Account Administrators</title>
 							<description>Account Administrators</description>
-							<classname>org.cagrid.gaards.ui.dorian.ifs.AdministratorsWindow</classname>
+							<classname>org.cagrid.gaards.ui.dorian.federation.AdministratorsWindow</classname>
 							<icon>/preferences-desktop-theme.png</icon>
 							<showOnToolBar>false</showOnToolBar>
 							<dimensions>

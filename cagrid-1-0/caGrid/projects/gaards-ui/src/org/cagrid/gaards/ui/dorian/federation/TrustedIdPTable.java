@@ -1,4 +1,4 @@
-package org.cagrid.gaards.ui.dorian.ifs;
+package org.cagrid.gaards.ui.dorian.federation;
 
 import java.util.Vector;
 
@@ -13,7 +13,7 @@ import org.cagrid.grape.table.GrapeBaseTable;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: TrustedIdPTable.java,v 1.2 2008-06-17 19:33:10 langella Exp $
+ * @version $Id: TrustedIdPTable.java,v 1.1 2008-09-16 03:00:07 langella Exp $
  */
 public class TrustedIdPTable extends GrapeBaseTable {
 	public final static String IDP = "idp";

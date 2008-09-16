@@ -82,6 +82,14 @@
 			<xsd:element name="seconds" type="xsd:int" />
 		</xsd:sequence>
 	</xsd:complexType>
+	<xsd:element name="CertificateLifetime" type="federation:CertificateLifetime" />
+	<xsd:complexType name="CertificateLifetime">
+		<xsd:sequence>
+			<xsd:element name="hours" type="xsd:int" />
+			<xsd:element name="minutes" type="xsd:int" />
+			<xsd:element name="seconds" type="xsd:int" />
+		</xsd:sequence>
+	</xsd:complexType>
 	<xsd:element name="DelegationPathLength" type="federation:DelegationPathLength" />
 	<xsd:complexType name="DelegationPathLength">
 		<xsd:sequence>

@@ -1,4 +1,4 @@
-package org.cagrid.gaards.ui.dorian.ifs;
+package org.cagrid.gaards.ui.dorian.federation;
 
 import gov.nih.nci.cagrid.common.Runner;
 
@@ -34,7 +34,7 @@ import org.globus.gsi.GlobusCredential;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: UserWindow.java,v 1.9 2008-09-13 00:59:50 langella Exp $
+ * @version $Id: UserWindow.java,v 1.1 2008-09-16 03:00:07 langella Exp $
  */
 public class UserWindow extends ApplicationComponent {
 

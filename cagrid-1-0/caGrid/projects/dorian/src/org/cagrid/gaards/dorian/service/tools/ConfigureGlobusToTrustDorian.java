@@ -14,8 +14,6 @@ import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
 import org.cagrid.gaards.dorian.ca.CertificateAuthority;
 import org.cagrid.gaards.dorian.service.BeanUtils;
-import org.cagrid.gaards.dorian.service.Dorian;
-import org.cagrid.gaards.dorian.service.DorianProperties;
 import org.cagrid.gaards.pki.CertUtil;
 import org.springframework.core.io.FileSystemResource;
 
@@ -69,6 +67,7 @@ public class ConfigureGlobusToTrustDorian {
 				String propertiesFile = line
 						.getOptionValue(PROPERTIES_FILE_OPT);
 				BeanUtils utils = new BeanUtils(new FileSystemResource(configFile), new FileSystemResource(propertiesFile));
+				utils.getDatabase().createDatabaseIfNeeded();
 				CertificateAuthority ca = utils.getCertificateAuthority();
 				X509Certificate cacert = ca.getCACertificate();
 

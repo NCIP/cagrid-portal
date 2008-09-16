@@ -21,10 +21,9 @@ import javax.xml.namespace.QName;
 
 import org.apache.axis.types.URI.MalformedURIException;
 import org.cagrid.gaards.dorian.common.DorianFault;
-import org.cagrid.gaards.dorian.federation.DelegationPathLength;
+import org.cagrid.gaards.dorian.federation.CertificateLifetime;
 import org.cagrid.gaards.dorian.federation.HostCertificateRecord;
 import org.cagrid.gaards.dorian.federation.HostCertificateRequest;
-import org.cagrid.gaards.dorian.federation.ProxyLifetime;
 import org.cagrid.gaards.dorian.federation.TrustedIdentityProvider;
 import org.cagrid.gaards.dorian.federation.TrustedIdentityProviders;
 import org.cagrid.gaards.dorian.stubs.types.DorianInternalFault;
@@ -36,7 +35,6 @@ import org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault;
 import org.cagrid.gaards.dorian.stubs.types.UserPolicyFault;
 import org.cagrid.gaards.pki.CertUtil;
 import org.cagrid.gaards.pki.KeyUtil;
-import org.cagrid.gaards.saml.encoding.SAMLUtils;
 import org.globus.gsi.GlobusCredential;
 import org.globus.wsrf.impl.security.authorization.Authorization;
 import org.globus.wsrf.utils.XmlUtils;
@@ -59,7 +57,7 @@ public class GridUserClient {
         client = new DorianClient(serviceURI, cred);
     }
 
-    
+
     /**
      * This method specifies an authorization policy that the client should use
      * for authorizing the server that it connects to.
@@ -82,8 +80,6 @@ public class GridUserClient {
      *            Dorian.
      * @param lifetime
      *            The lifetime of the Grid credential.
-     * @param delegationPathLength
-     *            The delegation path length of the Grid credential.
      * @return The short term Grid credential.
      * @throws DorianFault
      * @throws DorianInternalFault
@@ -92,7 +88,7 @@ public class GridUserClient {
      * @throws UserPolicyFault
      * @throws PermissionDeniedFault
      */
-    public GlobusCredential createProxy(SAMLAssertion saml, ProxyLifetime lifetime, int delegationPathLength)
+    public GlobusCredential requestUserCertificate(SAMLAssertion saml, CertificateLifetime lifetime)
         throws DorianFault, DorianInternalFault, InvalidAssertionFault, InvalidProxyFault, UserPolicyFault,
         PermissionDeniedFault {
 
@@ -101,14 +97,9 @@ public class GridUserClient {
 
             org.cagrid.gaards.dorian.federation.PublicKey key = new org.cagrid.gaards.dorian.federation.PublicKey(
                 KeyUtil.writePublicKey(pair.getPublic()));
-            org.cagrid.gaards.dorian.SAMLAssertion s = new org.cagrid.gaards.dorian.SAMLAssertion(SAMLUtils
-                .samlAssertionToString(saml));
-            org.cagrid.gaards.dorian.X509Certificate list[] = client.createProxy(s, key, lifetime,
-                new DelegationPathLength(delegationPathLength));
-            X509Certificate[] certs = new X509Certificate[list.length];
-            for (int i = 0; i < list.length; i++) {
-                certs[i] = CertUtil.loadCertificate(list[i].getCertificateAsString());
-            }
+            org.cagrid.gaards.dorian.X509Certificate cert = client.requestUserCertificate(saml, key, lifetime);
+            X509Certificate[] certs = new X509Certificate[1];
+            certs[0] = CertUtil.loadCertificate(cert.getCertificateAsString());
             return new GlobusCredential(pair.getPrivate(), certs);
         } catch (DorianInternalFault gie) {
             throw gie;

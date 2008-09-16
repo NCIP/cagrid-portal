@@ -212,6 +212,11 @@ public class DorianAuthorization implements PDP {
 		
 		
 	}
+					
+	public static void authorizeRequestUserCertificate() throws RemoteException {
+		
+		
+	}
 	
 	
 	public boolean isPermitted(Subject peerSubject, MessageContext context, QName operation)
@@ -479,6 +484,14 @@ public class DorianAuthorization implements PDP {
 		} else if(operation.getLocalPart().equals("updateUserCertificate")){
 			try{
 				authorizeUpdateUserCertificate();
+				return true;
+			} catch (Exception e){
+				e.printStackTrace();
+				return false;
+			}
+		} else if(operation.getLocalPart().equals("requestUserCertificate")){
+			try{
+				authorizeRequestUserCertificate();
 				return true;
 			} catch (Exception e){
 				e.printStackTrace();

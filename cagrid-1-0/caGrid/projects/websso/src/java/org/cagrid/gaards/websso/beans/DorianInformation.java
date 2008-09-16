@@ -2,6 +2,7 @@ package org.cagrid.gaards.websso.beans;
 
 import java.io.Serializable;
 
+import org.cagrid.gaards.dorian.federation.CertificateLifetime;
 import org.cagrid.gaards.dorian.federation.ProxyLifetime;
 
 public class DorianInformation implements Serializable
@@ -77,9 +78,9 @@ public class DorianInformation implements Serializable
 		return serialVersionUID;
 	}
 
-	public ProxyLifetime getProxyLifeTime()
+	public CertificateLifetime getProxyLifeTime()
 	{
-		ProxyLifetime proxyLifetime = new ProxyLifetime();
+	    CertificateLifetime proxyLifetime = new CertificateLifetime();
 		proxyLifetime.setHours(this.getProxyLifetimeHours());
 		proxyLifetime.setMinutes(this.getProxyLifetimeMinutes());
 		proxyLifetime.setSeconds(this.getProxyLifetimeSeconds());

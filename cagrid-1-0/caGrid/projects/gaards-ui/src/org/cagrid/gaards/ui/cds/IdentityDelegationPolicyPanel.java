@@ -15,7 +15,7 @@ import javax.swing.JTextField;
 import org.cagrid.gaards.cds.common.AllowedParties;
 import org.cagrid.gaards.cds.common.DelegationPolicy;
 import org.cagrid.gaards.cds.common.IdentityDelegationPolicy;
-import org.cagrid.gaards.ui.dorian.ifs.FindUserDialog;
+import org.cagrid.gaards.ui.dorian.federation.FindUserDialog;
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.LookAndFeel;
 

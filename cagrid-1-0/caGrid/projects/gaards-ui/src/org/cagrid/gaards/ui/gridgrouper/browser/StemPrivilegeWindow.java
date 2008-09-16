@@ -23,7 +23,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
-import org.cagrid.gaards.ui.dorian.ifs.FindUserDialog;
+import org.cagrid.gaards.ui.dorian.federation.FindUserDialog;
 import org.cagrid.gaards.ui.gridgrouper.GridGrouperLookAndFeel;
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;

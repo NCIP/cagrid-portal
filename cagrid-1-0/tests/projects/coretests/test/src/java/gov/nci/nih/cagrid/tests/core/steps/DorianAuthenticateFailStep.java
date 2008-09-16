@@ -19,12 +19,12 @@ public class DorianAuthenticateFailStep extends DorianAuthenticateStep {
 
 	public DorianAuthenticateFailStep(String userId, String password,
 			String serviceURL) {
-		super(userId, password, serviceURL, 12, 2);
+		super(userId, password, serviceURL, 12);
 	}
 
 	public DorianAuthenticateFailStep(String userId, String password,
 			String serviceURL, int hours, int delegationPathLength) {
-		super(userId, password, serviceURL, hours, delegationPathLength);
+		super(userId, password, serviceURL, hours);
 	}
 
 	@Override

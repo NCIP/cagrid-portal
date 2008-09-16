@@ -16,7 +16,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import org.cagrid.gaards.cds.client.DelegationAdminClient;
-import org.cagrid.gaards.ui.dorian.ifs.FindUserDialog;
+import org.cagrid.gaards.ui.dorian.federation.FindUserDialog;
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.LookAndFeel;
 import org.cagrid.grape.utils.ErrorDialog;

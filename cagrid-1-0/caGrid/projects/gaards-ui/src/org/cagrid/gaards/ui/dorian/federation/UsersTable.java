@@ -1,4 +1,4 @@
-package org.cagrid.gaards.ui.dorian.ifs;
+package org.cagrid.gaards.ui.dorian.federation;
 
 import gov.nih.nci.cagrid.common.Runner;
 
@@ -20,7 +20,7 @@ import org.cagrid.grape.utils.ErrorDialog;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: UsersTable.java,v 1.5 2008-07-23 18:12:37 langella Exp $
+ * @version $Id: UsersTable.java,v 1.1 2008-09-16 03:00:07 langella Exp $
  */
 public class UsersTable extends GrapeBaseTable {
 	public final static String USER = "user";

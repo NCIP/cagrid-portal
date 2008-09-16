@@ -22,7 +22,7 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
 import org.cagrid.gaards.dorian.client.GridUserClient;
-import org.cagrid.gaards.dorian.federation.ProxyLifetime;
+import org.cagrid.gaards.dorian.federation.CertificateLifetime;
 import org.globus.gsi.GlobusCredential;
 import org.globus.util.ConfigUtil;
 
@@ -33,8 +33,6 @@ public class GridProxyInit {
 	public static final int DEFAULT_LIFETIME_MINUTES = 0;
 
 	public static final int DEFAULT_LIFETIME_SECONDS = 0;
-
-	public static final int DEFAULT_DELEGATION_PATH_LENGTH = 0;
 
 	public static final String AUTHENTICATION_SERVICE_URL = "a";
 
@@ -78,12 +76,6 @@ public class GridProxyInit {
 
 	public static final String LIFETIME_SECONDS_DESCRIPTION = "The number of seconds the proxy will be valid for. ";
 
-	public static final String DELEGATION_PATH_LENGTH = "l";
-
-	public static final String DELEGATION_PATH_LENGTH_VERBOSE = "delegationPathLength";
-
-	public static final String DELEGATION_PATH_LENGTH_DESCRIPTION = "The delegation path length allowed by the proxy, if this option is not specified a delegation path lenght of  ";
-
 	public static final String OUT = "o";
 
 	public static final String OUT_VERBOSE = "out";
@@ -94,8 +86,8 @@ public class GridProxyInit {
 
 	public static final String HELP_OPT_FULL = "help";
 
-	public static GlobusCredential createProxy(String authenticationServiceURL,
-			String dorianURL, Credential cred, ProxyLifetime lifetime,
+	public static GlobusCredential requestUserCertificate(String authenticationServiceURL,
+			String dorianURL, Credential cred, CertificateLifetime lifetime,
 			int delegationPathLength) throws InvalidCredentialFault,
 			InsufficientAttributeFault, AuthenticationProviderFault,
 			RemoteException, MalformedURIException {
@@ -103,8 +95,7 @@ public class GridProxyInit {
 				authenticationServiceURL, cred);
 		SAMLAssertion saml = client.authenticate();
 		GridUserClient dorian = new GridUserClient(dorianURL);
-		GlobusCredential proxy = dorian.createProxy(saml, lifetime,
-				delegationPathLength);
+		GlobusCredential proxy = dorian.requestUserCertificate(saml, lifetime);
 		return proxy;
 	}
 
@@ -151,12 +142,7 @@ public class GridProxyInit {
 		oseconds.setRequired(false);
 		options.addOption(oseconds);
 
-		Option olength = new Option(DELEGATION_PATH_LENGTH,
-				DELEGATION_PATH_LENGTH_VERBOSE, true,
-				DELEGATION_PATH_LENGTH_DESCRIPTION);
-		olength.setRequired(false);
-		options.addOption(olength);
-
+	
 		Option out = new Option(OUT, OUT_VERBOSE, true, OUT_DESCRIPTION);
 		out.setRequired(false);
 		options.addOption(out);
@@ -212,18 +198,8 @@ public class GridProxyInit {
 				seconds = DEFAULT_LIFETIME_SECONDS;
 			}
 
-			int delegationPathLength = DEFAULT_DELEGATION_PATH_LENGTH;
-
-			if (olength.getValue() != null) {
-				try {
-					delegationPathLength = Integer.valueOf(olength.getValue())
-							.intValue();
-				} catch (Exception e) {
-					throw new Exception(
-							"The delegation path length must be specified as an integer!!!");
-				}
-			}
-			ProxyLifetime lifetime = new ProxyLifetime();
+			
+			CertificateLifetime lifetime = new CertificateLifetime();
 			lifetime.setHours(hours);
 			lifetime.setMinutes(minutes);
 			lifetime.setSeconds(seconds);
@@ -239,8 +215,7 @@ public class GridProxyInit {
 					+ authURL.getValue() + ".....");
 
 			GridUserClient dorian = new GridUserClient(dorianURL.getValue());
-			GlobusCredential proxy = dorian.createProxy(saml, lifetime,
-					delegationPathLength);
+			GlobusCredential proxy = dorian.requestUserCertificate(saml, lifetime);
 			System.out.println("SUCCESSFUL");
 			System.out.println();
 			System.out.println("Grid Proxy Certificate Summary");

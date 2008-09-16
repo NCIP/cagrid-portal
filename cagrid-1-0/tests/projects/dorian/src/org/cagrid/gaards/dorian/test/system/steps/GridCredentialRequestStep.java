@@ -4,7 +4,7 @@ import gov.nih.nci.cagrid.testing.system.haste.Step;
 
 import org.cagrid.gaards.authentication.test.system.steps.AuthenticationStep;
 import org.cagrid.gaards.dorian.client.GridUserClient;
-import org.cagrid.gaards.dorian.federation.ProxyLifetime;
+import org.cagrid.gaards.dorian.federation.CertificateLifetime;
 import org.globus.gsi.GlobusCredential;
 
 public class GridCredentialRequestStep extends Step {
@@ -24,11 +24,11 @@ public class GridCredentialRequestStep extends Step {
 	public void runStep() throws Throwable {
 		Throwable error = null;
 		try {
-			ProxyLifetime lifetime = new ProxyLifetime();
+			CertificateLifetime lifetime = new CertificateLifetime();
 			lifetime.setHours(12);
 			GridUserClient client = new GridUserClient(this.serviceURL);
-			this.gridCredential = client.createProxy(this.auth.getSAML(),
-					lifetime, 0);
+			this.gridCredential = client.requestUserCertificate(this.auth.getSAML(),
+					lifetime);
 		} catch (Throwable e) {
 			error = e;
 		}

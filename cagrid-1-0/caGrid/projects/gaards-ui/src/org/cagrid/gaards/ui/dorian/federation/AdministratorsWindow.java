@@ -1,4 +1,4 @@
-package org.cagrid.gaards.ui.dorian.ifs;
+package org.cagrid.gaards.ui.dorian.federation;
 
 import gov.nih.nci.cagrid.common.Runner;
 
@@ -13,7 +13,8 @@ import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 
 import org.cagrid.gaards.dorian.client.GridAdministrationClient;
-import org.cagrid.gaards.dorian.federation.GridUserPolicy;
+import org.cagrid.gaards.dorian.federation.GridUser;
+import org.cagrid.gaards.dorian.federation.GridUserFilter;
 import org.cagrid.gaards.dorian.federation.TrustedIdP;
 import org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault;
 import org.cagrid.gaards.ui.dorian.DorianLookAndFeel;
@@ -27,9 +28,10 @@ import org.cagrid.grape.utils.ErrorDialog;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: TrustedIdPsWindow.java,v 1.6 2008-07-23 18:12:37 langella Exp $
+ * @version $Id: AdministratorsWindow.java,v 1.1 2007/04/26 18:43:49 langella
+ *          Exp $
  */
-public class TrustedIdPsWindow extends ApplicationComponent {
+public class AdministratorsWindow extends ApplicationComponent {
 
 	private javax.swing.JPanel jContentPane = null;
 
@@ -39,13 +41,13 @@ public class TrustedIdPsWindow extends ApplicationComponent {
 
 	private JPanel buttonPanel = null;
 
-	private TrustedIdPTable trustedIdPTable = null;
+	private AdminsTable adminsTable = null;
 
 	private JScrollPane jScrollPane = null;
 
-	private JButton viewTrustedIdP = null;
+	private JButton viewEditAdmin = null;
 
-	private SessionPanel session = null;
+	private SessionPanel sessionPanel = null;
 
 	private JPanel queryPanel = null;
 
@@ -61,15 +63,17 @@ public class TrustedIdPsWindow extends ApplicationComponent {
 
 	private JButton removeTrustedIdPButton = null;
 
-	private JButton addUser = null;
+	private JButton addAdmin = null;
+
+	private boolean loaded = false;
 
 	/**
 	 * This is the default constructor
 	 */
-	public TrustedIdPsWindow() {
+	public AdministratorsWindow() {
 		super();
 		initialize();
-		this.setFrameIcon(DorianLookAndFeel.getTrustedIdPIcon());
+		this.setFrameIcon(DorianLookAndFeel.getAdminIcon());
 	}
 
 	/**
@@ -135,7 +139,7 @@ public class TrustedIdPsWindow extends ApplicationComponent {
 			gridBagConstraints2.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			mainPanel.add(getButtonPanel(), gridBagConstraints2);
 			mainPanel.add(getContentPanel(), gridBagConstraints1);
-			mainPanel.add(getSession(), gridBagConstraints35);
+			mainPanel.add(getSessionPanel(), gridBagConstraints35);
 			mainPanel.add(getQueryPanel(), gridBagConstraints33);
 			mainPanel.add(getProgressPanel(), gridBagConstraints32);
 		}
@@ -156,7 +160,7 @@ public class TrustedIdPsWindow extends ApplicationComponent {
 					.setBorder(javax.swing.BorderFactory
 							.createTitledBorder(
 									null,
-									"Trusted IdPs",
+									"Administrators",
 									javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
 									javax.swing.border.TitledBorder.DEFAULT_POSITION,
 									null, LookAndFeel.getPanelLabelColor()));
@@ -178,8 +182,8 @@ public class TrustedIdPsWindow extends ApplicationComponent {
 	private JPanel getButtonPanel() {
 		if (buttonPanel == null) {
 			buttonPanel = new JPanel();
-			buttonPanel.add(getAddUser(), null);
-			buttonPanel.add(getViewTrustedIdP(), null);
+			buttonPanel.add(getViewEditAdmin(), null);
+			buttonPanel.add(getAddAdmin(), null);
 			buttonPanel.add(getRemoveTrustedIdPButton(), null);
 		}
 		return buttonPanel;
@@ -190,15 +194,11 @@ public class TrustedIdPsWindow extends ApplicationComponent {
 	 * 
 	 * @return javax.swing.JTable
 	 */
-	private TrustedIdPTable getTrustedIdPTable() {
-		if (trustedIdPTable == null) {
-			trustedIdPTable = new TrustedIdPTable(this);
+	private AdminsTable getAdminsTable() {
+		if (adminsTable == null) {
+			adminsTable = new AdminsTable(this);
 		}
-		return trustedIdPTable;
-	}
-
-	public void addTrustedIdP(TrustedIdP idp) {
-		getTrustedIdPTable().addTrustedIdP(idp);
+		return adminsTable;
 	}
 
 	/**
@@ -209,7 +209,7 @@ public class TrustedIdPsWindow extends ApplicationComponent {
 	private JScrollPane getJScrollPane() {
 		if (jScrollPane == null) {
 			jScrollPane = new JScrollPane();
-			jScrollPane.setViewportView(getTrustedIdPTable());
+			jScrollPane.setViewportView(getAdminsTable());
 		}
 		return jScrollPane;
 	}
@@ -219,17 +219,17 @@ public class TrustedIdPsWindow extends ApplicationComponent {
 	 * 
 	 * @return javax.swing.JButton
 	 */
-	private JButton getViewTrustedIdP() {
-		if (viewTrustedIdP == null) {
-			viewTrustedIdP = new JButton();
-			viewTrustedIdP.setText("View/Edit Trusted IdP");
-			viewTrustedIdP.setIcon(DorianLookAndFeel.getTrustedIdPIcon());
-			viewTrustedIdP
+	private JButton getViewEditAdmin() {
+		if (viewEditAdmin == null) {
+			viewEditAdmin = new JButton();
+			viewEditAdmin.setText("View/Edit Admin");
+			viewEditAdmin.setIcon(DorianLookAndFeel.getAdminIcon());
+			viewEditAdmin
 					.addActionListener(new java.awt.event.ActionListener() {
 						public void actionPerformed(java.awt.event.ActionEvent e) {
 							Runner runner = new Runner() {
 								public void execute() {
-									showTrustedIdP();
+									showAdmin();
 								}
 							};
 							try {
@@ -243,43 +243,62 @@ public class TrustedIdPsWindow extends ApplicationComponent {
 					});
 		}
 
-		return viewTrustedIdP;
+		return viewEditAdmin;
 	}
 
-	public void showTrustedIdP() {
+	public void showAdmin() {
 		try {
-			GridApplication.getContext()
-					.addApplicationComponent(
-							new TrustedIdPWindow(getSession().getServiceURI(),
-									getSession().getCredential(),
-									getTrustedIdPTable()
-											.getSelectedTrustedIdP(),
-									getUserPolicies()), 750, 650);
+			GridAdministrationClient client = getSessionPanel()
+					.getAdminClient();
+			GridUserFilter f = new GridUserFilter();
+			f.setGridId(getAdminsTable().getSelectedAdmin());
+			List<GridUser> users = client.findUsers(f);
+			if ((users == null) || (users.size() == 0)) {
+				throw new Exception(
+						"The administrator selected does not have an account with this Dorian.");
+			} else {
+				GridUser user = users.get(0);
+				List<TrustedIdP> idps = client.getTrustedIdPs();
+				TrustedIdP tidp = null;
+				for (int i = 0; i < idps.size(); i++) {
+					if (idps.get(i).getId() == user.getIdPId()) {
+						tidp = idps.get(i);
+						break;
+					}
+				}
+				GridApplication.getContext().addApplicationComponent(
+						new UserWindow(getSessionPanel().getServiceURI(),
+								getSessionPanel().getCredential(), user, tidp));
+			}
 		} catch (Exception e) {
 			ErrorDialog.showError(e);
 		}
 	}
 
-	public void addTrustedIdP() {
+	public void addAdmin() {
 		try {
-			GridApplication.getContext().addApplicationComponent(
-					new TrustedIdPWindow(this, getSession().getServiceURI(),
-							getSession().getCredential(), getUserPolicies()));
+			AddAdminWindow window = new AddAdminWindow(getSessionPanel()
+					.getServiceURI(), getSessionPanel().getCredential());
+			window.setModal(true);
+			GridApplication.getContext().showDialog(window);
+			if (loaded) {
+				this.listAdmins();
+			}
 		} catch (Exception e) {
 			ErrorDialog.showError(e);
 		}
 	}
 
 	/**
-	 * This method initializes session
+	 * This method initializes sessionPanel
 	 * 
 	 * @return javax.swing.JPanel
 	 */
-	private SessionPanel getSession() {
-		if (session == null) {
-			session = new SessionPanel();
+	private SessionPanel getSessionPanel() {
+		if (sessionPanel == null) {
+			sessionPanel = new SessionPanel();
 		}
-		return session;
+		return sessionPanel;
 	}
 
 	/**
@@ -303,13 +322,13 @@ public class TrustedIdPsWindow extends ApplicationComponent {
 	private JButton getQuery() {
 		if (query == null) {
 			query = new JButton();
-			query.setText("Find Trusted Identity Providers");
+			query.setText("List Administrators");
 			query.setIcon(LookAndFeel.getQueryIcon());
 			query.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					Runner runner = new Runner() {
 						public void execute() {
-							findTrustedIdPs();
+							listAdmins();
 						}
 					};
 					try {
@@ -325,7 +344,7 @@ public class TrustedIdPsWindow extends ApplicationComponent {
 		return query;
 	}
 
-	private void findTrustedIdPs() {
+	private void listAdmins() {
 
 		synchronized (mutex) {
 			if (isQuerying) {
@@ -338,19 +357,20 @@ public class TrustedIdPsWindow extends ApplicationComponent {
 			}
 		}
 
-		this.getTrustedIdPTable().clearTable();
-		this.updateProgress(true, "Finding Trusted IdPs...");
+		this.getAdminsTable().clearTable();
+		this.updateProgress(true, "Finding Administrators...");
 
 		try {
-			GridAdministrationClient client = getSession().getAdminClient();
-			List<TrustedIdP> idps = client.getTrustedIdPs();
+			GridAdministrationClient client = getSessionPanel()
+					.getAdminClient();
+			List<String> admins = client.getAdmins();
 
-			for (int i = 0; i < idps.size(); i++) {
-				this.getTrustedIdPTable().addTrustedIdP(idps.get(i));
+			for (int i = 0; i < admins.size(); i++) {
+				this.getAdminsTable().addAdmin(admins.get(i));
 			}
-
-			this.updateProgress(false, "Completed [Found " + idps.size()
-					+ " IdPs]");
+			loaded = true;
+			this.updateProgress(false, "Completed [Found " + admins.size()
+					+ " Administrators]");
 
 		} catch (PermissionDeniedFault pdf) {
 			ErrorDialog.showError(pdf);
@@ -361,11 +381,6 @@ public class TrustedIdPsWindow extends ApplicationComponent {
 		}
 		isQuerying = false;
 
-	}
-
-	private List<GridUserPolicy> getUserPolicies() throws Exception {
-		GridAdministrationClient client = getSession().getAdminClient();
-		return client.getUserPolicies();
 	}
 
 	/**
@@ -421,13 +436,13 @@ public class TrustedIdPsWindow extends ApplicationComponent {
 	private JButton getRemoveTrustedIdPButton() {
 		if (removeTrustedIdPButton == null) {
 			removeTrustedIdPButton = new JButton();
-			removeTrustedIdPButton.setText("Remove TrustedIdP");
+			removeTrustedIdPButton.setText("Remove Admin");
 			removeTrustedIdPButton
 					.addActionListener(new java.awt.event.ActionListener() {
 						public void actionPerformed(java.awt.event.ActionEvent e) {
 							Runner runner = new Runner() {
 								public void execute() {
-									removeTrustedIdP();
+									removeAdmin();
 								}
 							};
 							try {
@@ -443,31 +458,30 @@ public class TrustedIdPsWindow extends ApplicationComponent {
 		return removeTrustedIdPButton;
 	}
 
-	private void removeTrustedIdP() {
+	private void removeAdmin() {
 		try {
-			GridAdministrationClient client = getSession().getAdminClient();
-			client.removeTrustedIdP(getTrustedIdPTable()
-					.getSelectedTrustedIdP());
-			getTrustedIdPTable().removeSelectedTrustedIdP();
+			GridAdministrationClient client = getSessionPanel().getAdminClient();
+			client.removeAdmin(getAdminsTable().getSelectedAdmin());
+			getAdminsTable().removeSelectedAdmin();
 		} catch (Exception e) {
 			ErrorDialog.showError(e);
 		}
 	}
 
 	/**
-	 * This method initializes addUser
+	 * This method initializes addAdmin
 	 * 
 	 * @return javax.swing.JButton
 	 */
-	private JButton getAddUser() {
-		if (addUser == null) {
-			addUser = new JButton();
-			addUser.setText("Add Trusted IdP");
-			addUser.addActionListener(new java.awt.event.ActionListener() {
+	private JButton getAddAdmin() {
+		if (addAdmin == null) {
+			addAdmin = new JButton();
+			addAdmin.setText("Add Admin");
+			addAdmin.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					Runner runner = new Runner() {
 						public void execute() {
-							addTrustedIdP();
+							addAdmin();
 						}
 					};
 					try {
@@ -479,9 +493,9 @@ public class TrustedIdPsWindow extends ApplicationComponent {
 
 				}
 			});
-			addUser.setIcon(LookAndFeel.getAddIcon());
+			addAdmin.setIcon(LookAndFeel.getAddIcon());
 		}
-		return addUser;
+		return addAdmin;
 	}
 
 }

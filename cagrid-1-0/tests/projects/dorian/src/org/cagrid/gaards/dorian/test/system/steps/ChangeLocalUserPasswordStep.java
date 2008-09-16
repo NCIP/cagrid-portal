@@ -6,7 +6,7 @@ import gov.nih.nci.cagrid.testing.system.haste.Step;
 import org.cagrid.gaards.authentication.BasicAuthentication;
 import org.cagrid.gaards.dorian.client.GridUserClient;
 import org.cagrid.gaards.dorian.client.LocalUserClient;
-import org.cagrid.gaards.dorian.federation.ProxyLifetime;
+import org.cagrid.gaards.dorian.federation.CertificateLifetime;
 import org.cagrid.gaards.dorian.idp.Application;
 import org.globus.gsi.GlobusCredential;
 
@@ -31,11 +31,11 @@ public class ChangeLocalUserPasswordStep extends Step {
 		client.changePassword(ba, newPassword);
 		ba.setPassword(newPassword);
 		SAMLAssertion saml = client.authenticate(ba);
-		ProxyLifetime lifetime = new ProxyLifetime();
+		CertificateLifetime lifetime = new CertificateLifetime();
 		lifetime.setHours(12);
 		GridUserClient client2 = new GridUserClient(this.serviceURL);
 		GlobusCredential gridCredential = client2
-				.createProxy(saml, lifetime, 0);
+				.requestUserCertificate(saml, lifetime);
 		assertNotNull(gridCredential);
 		gridCredential.verify();
 	}

@@ -11,12 +11,12 @@ import java.util.List;
 
 import org.apache.axis.types.URI.MalformedURIException;
 import org.cagrid.gaards.dorian.common.DorianFault;
-import org.cagrid.gaards.dorian.federation.HostCertificateFilter;
-import org.cagrid.gaards.dorian.federation.HostCertificateRecord;
-import org.cagrid.gaards.dorian.federation.HostCertificateUpdate;
 import org.cagrid.gaards.dorian.federation.GridUser;
 import org.cagrid.gaards.dorian.federation.GridUserFilter;
 import org.cagrid.gaards.dorian.federation.GridUserPolicy;
+import org.cagrid.gaards.dorian.federation.HostCertificateFilter;
+import org.cagrid.gaards.dorian.federation.HostCertificateRecord;
+import org.cagrid.gaards.dorian.federation.HostCertificateUpdate;
 import org.cagrid.gaards.dorian.federation.TrustedIdP;
 import org.cagrid.gaards.dorian.stubs.types.DorianInternalFault;
 import org.cagrid.gaards.dorian.stubs.types.InvalidHostCertificateFault;

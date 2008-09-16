@@ -26,7 +26,7 @@ import org.cagrid.gaards.cds.common.DelegationIdentifier;
 import org.cagrid.gaards.cds.common.DelegationRecord;
 import org.cagrid.gaards.cds.common.DelegationRecordFilter;
 import org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault;
-import org.cagrid.gaards.ui.dorian.ifs.FindUserDialog;
+import org.cagrid.gaards.ui.dorian.federation.FindUserDialog;
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.LookAndFeel;

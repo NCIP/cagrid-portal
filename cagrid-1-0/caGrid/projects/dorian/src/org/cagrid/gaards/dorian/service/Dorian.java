@@ -16,6 +16,7 @@ import org.cagrid.gaards.dorian.ca.CertificateAuthority;
 import org.cagrid.gaards.dorian.common.LoggingObject;
 import org.cagrid.gaards.dorian.common.SAMLConstants;
 import org.cagrid.gaards.dorian.federation.AutoApprovalPolicy;
+import org.cagrid.gaards.dorian.federation.CertificateLifetime;
 import org.cagrid.gaards.dorian.federation.FederationDefaults;
 import org.cagrid.gaards.dorian.federation.GridUser;
 import org.cagrid.gaards.dorian.federation.GridUserFilter;
@@ -27,7 +28,6 @@ import org.cagrid.gaards.dorian.federation.HostCertificateRequest;
 import org.cagrid.gaards.dorian.federation.HostCertificateUpdate;
 import org.cagrid.gaards.dorian.federation.IdentityFederationManager;
 import org.cagrid.gaards.dorian.federation.IdentityFederationProperties;
-import org.cagrid.gaards.dorian.federation.ProxyLifetime;
 import org.cagrid.gaards.dorian.federation.SAMLAttributeDescriptor;
 import org.cagrid.gaards.dorian.federation.SAMLAuthenticationMethod;
 import org.cagrid.gaards.dorian.federation.TrustedIdP;
@@ -42,7 +42,6 @@ import org.cagrid.gaards.dorian.stubs.types.DorianInternalFault;
 import org.cagrid.gaards.dorian.stubs.types.InvalidAssertionFault;
 import org.cagrid.gaards.dorian.stubs.types.InvalidHostCertificateFault;
 import org.cagrid.gaards.dorian.stubs.types.InvalidHostCertificateRequestFault;
-import org.cagrid.gaards.dorian.stubs.types.InvalidProxyFault;
 import org.cagrid.gaards.dorian.stubs.types.InvalidTrustedIdPFault;
 import org.cagrid.gaards.dorian.stubs.types.InvalidUserFault;
 import org.cagrid.gaards.dorian.stubs.types.InvalidUserPropertyFault;
@@ -260,9 +259,9 @@ public class Dorian extends LoggingObject {
     }
 
 
-    public X509Certificate requestCertificate(SAMLAssertion saml, PublicKey publicKey, ProxyLifetime lifetime) throws DorianInternalFault, InvalidAssertionFault, InvalidProxyFault,
+    public X509Certificate requestUserCertificate(SAMLAssertion saml, PublicKey publicKey, CertificateLifetime lifetime) throws DorianInternalFault, InvalidAssertionFault,
         UserPolicyFault, PermissionDeniedFault {
-        return this.ifs.requestCertificate(saml, publicKey, lifetime);
+        return this.ifs.requestUserCertificate(saml, publicKey, lifetime);
     }
 
 
