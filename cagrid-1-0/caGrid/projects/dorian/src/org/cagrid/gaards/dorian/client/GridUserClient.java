@@ -4,6 +4,7 @@ import gov.nih.nci.cagrid.common.FaultHelper;
 import gov.nih.nci.cagrid.common.FaultUtil;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.metadata.ResourcePropertyHelper;
+import gov.nih.nci.cagrid.metadata.ServiceMetadata;
 import gov.nih.nci.cagrid.metadata.exceptions.InvalidResourcePropertyException;
 import gov.nih.nci.cagrid.metadata.exceptions.ResourcePropertyRetrievalException;
 import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
@@ -22,8 +23,10 @@ import javax.xml.namespace.QName;
 import org.apache.axis.types.URI.MalformedURIException;
 import org.cagrid.gaards.dorian.common.DorianFault;
 import org.cagrid.gaards.dorian.federation.CertificateLifetime;
+import org.cagrid.gaards.dorian.federation.DelegationPathLength;
 import org.cagrid.gaards.dorian.federation.HostCertificateRecord;
 import org.cagrid.gaards.dorian.federation.HostCertificateRequest;
+import org.cagrid.gaards.dorian.federation.ProxyLifetime;
 import org.cagrid.gaards.dorian.federation.TrustedIdentityProvider;
 import org.cagrid.gaards.dorian.federation.TrustedIdentityProviders;
 import org.cagrid.gaards.dorian.stubs.types.DorianInternalFault;
@@ -35,6 +38,7 @@ import org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault;
 import org.cagrid.gaards.dorian.stubs.types.UserPolicyFault;
 import org.cagrid.gaards.pki.CertUtil;
 import org.cagrid.gaards.pki.KeyUtil;
+import org.cagrid.gaards.saml.encoding.SAMLUtils;
 import org.globus.gsi.GlobusCredential;
 import org.globus.wsrf.impl.security.authorization.Authorization;
 import org.globus.wsrf.utils.XmlUtils;
@@ -43,8 +47,14 @@ import org.w3c.dom.Element;
 
 public class GridUserClient {
 
+    public static final String VERSION_1_0 = "1.0";
+    public static final String VERSION_1_1 = "1.1";
+    public static final String VERSION_1_2 = "1.2";
+
     public static final QName TRUSTED_IDPS_METADATA = new QName("http://cagrid.nci.nih.gov/1/dorian-ifs",
         "TrustedIdentityProviders");
+    public static final QName SERVICE_METADATA = new QName("gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata",
+        "ServiceMetadata");
     private DorianClient client;
 
 
@@ -84,28 +94,52 @@ public class GridUserClient {
      * @throws DorianFault
      * @throws DorianInternalFault
      * @throws InvalidAssertionFault
-     * @throws InvalidProxyFault
      * @throws UserPolicyFault
      * @throws PermissionDeniedFault
      */
     public GlobusCredential requestUserCertificate(SAMLAssertion saml, CertificateLifetime lifetime)
-        throws DorianFault, DorianInternalFault, InvalidAssertionFault, InvalidProxyFault, UserPolicyFault,
-        PermissionDeniedFault {
-
+        throws DorianFault, DorianInternalFault, InvalidAssertionFault, UserPolicyFault, PermissionDeniedFault {
         try {
+            ServiceMetadata sm = getServiceMetadata();
+            String version = sm.getServiceDescription().getService().getVersion();
             KeyPair pair = KeyUtil.generateRSAKeyPair1024();
-
             org.cagrid.gaards.dorian.federation.PublicKey key = new org.cagrid.gaards.dorian.federation.PublicKey(
                 KeyUtil.writePublicKey(pair.getPublic()));
-            org.cagrid.gaards.dorian.X509Certificate cert = client.requestUserCertificate(saml, key, lifetime);
-            X509Certificate[] certs = new X509Certificate[1];
-            certs[0] = CertUtil.loadCertificate(cert.getCertificateAsString());
-            return new GlobusCredential(pair.getPrivate(), certs);
+
+            if (version.equals(VERSION_1_0) || version.equals(VERSION_1_1) || version.equals(VERSION_1_2)) {
+                try {
+                    org.cagrid.gaards.dorian.SAMLAssertion assertion = new org.cagrid.gaards.dorian.SAMLAssertion();
+                    assertion.setXml(SAMLUtils.samlAssertionToString(saml));
+                    DelegationPathLength length = new DelegationPathLength();
+                    length.setLength(0);
+                    ProxyLifetime l = new ProxyLifetime();
+                    l.setHours(lifetime.getHours());
+                    l.setMinutes(lifetime.getMinutes());
+                    l.setSeconds(lifetime.getSeconds());
+                    org.cagrid.gaards.dorian.X509Certificate[] list = client.createProxy(assertion, key, l, length);
+                    X509Certificate[] certs = new X509Certificate[list.length];
+                    for (int i = 0; i < list.length; i++) {
+                        certs[i] = CertUtil.loadCertificate(list[i].getCertificateAsString());
+                    }
+                    return new GlobusCredential(pair.getPrivate(), certs);
+                } catch (InvalidProxyFault e) {
+                    UserPolicyFault f = new UserPolicyFault();
+                    f.setFaultString(e.getFaultString());
+                    FaultHelper helper = new FaultHelper(f);
+                    helper.addFaultCause(e);
+                    f = (UserPolicyFault) helper.getFault();
+                    throw f;
+                }
+            } else {
+
+                org.cagrid.gaards.dorian.X509Certificate cert = client.requestUserCertificate(saml, key, lifetime);
+                X509Certificate[] certs = new X509Certificate[1];
+                certs[0] = CertUtil.loadCertificate(cert.getCertificateAsString());
+                return new GlobusCredential(pair.getPrivate(), certs);
+            }
         } catch (DorianInternalFault gie) {
             throw gie;
         } catch (InvalidAssertionFault f) {
-            throw f;
-        } catch (InvalidProxyFault f) {
             throw f;
         } catch (UserPolicyFault f) {
             throw f;
@@ -258,6 +292,31 @@ public class GridUserClient {
             }
             return idps;
 
+        } catch (Exception e) {
+            throw new ResourcePropertyRetrievalException("Unable to deserailize: " + e.getMessage(), e);
+        }
+    }
+
+
+    /**
+     * This method obtains the service metadata for the service.
+     * 
+     * @return The service metadata.
+     * @throws ResourcePropertyRetrievalException
+     */
+
+    public ServiceMetadata getServiceMetadata() throws InvalidResourcePropertyException,
+        ResourcePropertyRetrievalException {
+        Element resourceProperty = null;
+
+        InputStream wsdd = getClass().getResourceAsStream("client-config.wsdd");
+        resourceProperty = ResourcePropertyHelper.getResourceProperty(client.getEndpointReference(), SERVICE_METADATA,
+            wsdd);
+
+        try {
+            ServiceMetadata result = (ServiceMetadata) Utils.deserializeObject(new StringReader(XmlUtils
+                .toString(resourceProperty)), ServiceMetadata.class);
+            return result;
         } catch (Exception e) {
             throw new ResourcePropertyRetrievalException("Unable to deserailize: " + e.getMessage(), e);
         }

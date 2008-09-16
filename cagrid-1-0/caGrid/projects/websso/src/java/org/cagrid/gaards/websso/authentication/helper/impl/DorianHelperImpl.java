@@ -59,10 +59,6 @@ public class DorianHelperImpl implements DorianHelper
 		{
 			throw new AuthenticationConfigurationException("Invalid SAML Assertion obtained from Authentication Service : " + FaultUtil.printFaultToString(e));
 		} 
-		catch (InvalidProxyFault e)
-		{
-			throw new AuthenticationConfigurationException("Error obtaining Proxy from Dorian : " + FaultUtil.printFaultToString(e));
-		} 
 		catch (UserPolicyFault e)
 		{
 			throw new AuthenticationConfigurationException("Policy Error occured obtaining Proxy from Dorian : " + FaultUtil.printFaultToString(e));
