@@ -256,12 +256,12 @@
         </javadoc>
     </target>
 
-    <target name="update_to_2_1">
-		<sql driver="${liferay.db.driver}"
-             url="${liferay.db.url}"
-             userid="${liferay.db.username}"
-             password="${liferay.db.password}"
-             src="tools/migration/2-0-2_to_2-1/layout_migration.sql">
+    <target name="update_to_2_1" description="Will update the database to portal 2.1 release">
+		<sql driver="${cagrid.portal.db.driver}"
+             url="${cagrid.portal.db.url}"
+             userid="${cagrid.portal.db.username}"
+             password="${cagrid.portal.db.password}"
+             src="tools/migration/2-0-2_to_2-1/clean_orphan_concepts.sql">
             <classpath>
                 <pathelement location="${db.jdbc.driver.jar}"/>
             </classpath>
