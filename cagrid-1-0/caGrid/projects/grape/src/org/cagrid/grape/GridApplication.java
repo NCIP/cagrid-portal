@@ -101,7 +101,7 @@ public class GridApplication extends JFrame {
     public static GridApplication getInstance(Application app) throws Exception {
         if (application == null) {
             application = new GridApplication(app);
-            application.startInitializer();
+            application.startPostInitializer();
             return application;
         } else {
             throw new Exception("An instance of the Grid Application has already been created.");
@@ -188,9 +188,17 @@ public class GridApplication extends JFrame {
     }
 
 
-    private void startInitializer() throws Exception {
-        if (this.app.getInitializerClass() != null) {
-            ApplicationInitializer appInit = (ApplicationInitializer) Class.forName(this.app.getInitializerClass())
+    private void startPostInitializer() throws Exception {
+        if (this.app.getPostInitializerClass() != null) {
+            ApplicationInitializer appInit = (ApplicationInitializer) Class.forName(this.app.getPostInitializerClass())
+                .newInstance();
+            appInit.intialize(app);
+        }
+    }
+    
+    private void startPreInitializer() throws Exception {
+        if (this.app.getPreInitializerClass() != null) {
+            ApplicationInitializer appInit = (ApplicationInitializer) Class.forName(this.app.getPreInitializerClass())
                 .newInstance();
             appInit.intialize(app);
         }
@@ -203,6 +211,7 @@ public class GridApplication extends JFrame {
         } catch (Exception e) {
             System.out.println("Failed to set system look and feel.");
         }
+        startPreInitializer();
         String syncClass = app.getConfigurationSynchronizerClass();
 
         ConfigurationSynchronizer cs = null;

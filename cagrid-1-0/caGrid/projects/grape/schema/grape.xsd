@@ -62,7 +62,9 @@
 				type="xsd:string" />
 			<xsd:element name="dimensions" minOccurs="0" maxOccurs="1"
 				type="grape:dimensions" />
-			<xsd:element name="initializerClass" minOccurs="0"
+			<xsd:element name="PreInitializerClass" minOccurs="0"
+				maxOccurs="1" type="xsd:string" />
+				<xsd:element name="PostInitializerClass" minOccurs="0"
 				maxOccurs="1" type="xsd:string" />
 				<xsd:element name="configurationSynchronizerClass" minOccurs="0"
 				maxOccurs="1" type="xsd:string" />

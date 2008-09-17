@@ -10,7 +10,7 @@
 		<width>1024</width>
 		<height>768</height>
 	</dimensions>
-	 <initializerClass>org.cagrid.gaards.ui.common.GAARDSUIInitializer</initializerClass>
+	 <PostInitializerClass>org.cagrid.gaards.ui.common.GAARDSUIInitializer</PostInitializerClass>
 	 <configurationSynchronizerClass>org.cagrid.gaards.ui.common.GAARDSConfigurationSynchronizer</configurationSynchronizerClass>
 	<menus>
 		<menu>
