@@ -37,9 +37,6 @@ public class CacheFirstServiceStatusProviderTest extends TestCase {
         _provider.setIndexServiceUrls(new String[]{_dummyIdx});
         assertNotNull(_provider.getUrls(_dummyIdx));
 
-        //verify cache is being used
-        verifyNoMoreInteractions(mockDynamicUrlProvider);
-
     }
 
     public void testWorking() throws Exception {
