@@ -14,7 +14,7 @@ public class DiscoveryExamples {
         DiscoveryClient client = null;
         try {
             if (args.length == 1) {
-                client = new DiscoveryClient(args[1]);
+                client = new DiscoveryClient(args[0]);
             } else {
                 client = new DiscoveryClient();
             }
@@ -35,42 +35,52 @@ public class DiscoveryExamples {
 
         try {
             EndpointReferenceType[] services = null;
+            long start;
 
             printHeader("All Services");
+            start = System.currentTimeMillis();
             services = client.getAllServices(false);
-            printResults(services);
+            printResults(services, System.currentTimeMillis() - start);
 
             printHeader("Search String [" + searchString + "]");
+            start = System.currentTimeMillis();
             services = client.discoverServicesBySearchString(searchString);
-            printResults(services);
+            printResults(services, System.currentTimeMillis() - start);
 
             printHeader("Research Center Name [" + center + "]");
+            start = System.currentTimeMillis();
             services = client.discoverServicesByResearchCenter(center);
-            printResults(services);
+            printResults(services, System.currentTimeMillis() - start);
 
             printHeader("POC [" + poc + "]");
+            start = System.currentTimeMillis();
             services = client.discoverServicesByPointOfContact(poc);
-            printResults(services);
+            printResults(services, System.currentTimeMillis() - start);
 
             printHeader("Service name [" + servName + "]");
+            start = System.currentTimeMillis();
             services = client.discoverServicesByName(servName);
-            printResults(services);
+            printResults(services, System.currentTimeMillis() - start);
 
             printHeader("Operation name [" + operName + "]");
+            start = System.currentTimeMillis();
             services = client.discoverServicesByOperationName(operName);
-            printResults(services);
+            printResults(services, System.currentTimeMillis() - start);
 
             printHeader("Operation input [" + umlClass + "]");
+            start = System.currentTimeMillis();
             services = client.discoverServicesByOperationInput(umlClass);
-            printResults(services);
+            printResults(services, System.currentTimeMillis() - start);
 
             printHeader("Operation output [" + umlClass + "]");
+            start = System.currentTimeMillis();
             services = client.discoverServicesByOperationOutput(umlClass);
-            printResults(services);
+            printResults(services, System.currentTimeMillis() - start);
 
             printHeader("Operation class [" + umlClass + "]");
+            start = System.currentTimeMillis();
             services = client.discoverServicesByOperationClass(umlClass);
-            printResults(services);
+            printResults(services, System.currentTimeMillis() - start);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -85,7 +95,7 @@ public class DiscoveryExamples {
     }
 
 
-    private static void printResults(EndpointReferenceType[] types) {
+    private static void printResults(EndpointReferenceType[] types, long time) {
         if (types != null) {
             for (int i = 0; i < types.length; i++) {
                 System.out.println("\t" + i + ")  " + types[i].toString().trim());
@@ -93,6 +103,7 @@ public class DiscoveryExamples {
         } else {
             System.out.println("no results.");
         }
+        System.out.println("Elapsed Seconds: " + time / 1000.0);
         System.out.println("--------------------------------------------------\n\n");
     }
 }
