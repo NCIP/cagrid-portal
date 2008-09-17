@@ -42,14 +42,12 @@ public class Upgrader {
 
 	public static final String TRIAL_OPT_FULL = "trial";
 
-	private Log log;
 	private Map<String, Upgrade> upgradeSet;
 	private BeanUtils beanUtils;
 	private Database db;
 
 	public Upgrader(BeanUtils beanUtils, List<Upgrade> upgrades)
 			throws Exception {
-		this.log = LogFactory.getLog(this.getClass().getName());
 		this.beanUtils = beanUtils;
 		Database db = beanUtils.getDatabase();
 		db.createDatabaseIfNeeded();
@@ -74,11 +72,10 @@ public class Upgrader {
 			List<Upgrade> upgrades = determineUpgrades(properties
 					.getVersion(), new ArrayList<Upgrade>());
 			if (upgrades.size() == 0) {
-				log
-						.info("No upgrades required, Dorian is already upgraded to the latest version ("
+				System.out.println("No upgrades required, Dorian is already upgraded to the latest version ("
 								+ PropertyManager.CURRENT_VERSION + ").");
 			} else {
-				log.info("Attempting to upgrade Dorian from version "
+				System.out.println("Attempting to upgrade Dorian from version "
 						+ properties.getVersion() + " to version "
 						+ PropertyManager.CURRENT_VERSION + ".");
 				for (int i = 0; i < upgrades.size(); i++) {
@@ -94,7 +91,7 @@ public class Upgrader {
 						}
 					}
 
-					log.info("Attempting to run upgrader "
+					System.out.println("Attempting to run upgrader "
 							+ u.getClass().getName()
 							+ " which upgrades from Dorian "
 							+ u.getStartingVersion() + " to Dorian "
@@ -102,7 +99,7 @@ public class Upgrader {
 					u.upgrade(trialRun);
 
 					if (!trialRun) {
-						log.info("Dorian upgraded from version "
+						System.out.println("Dorian upgraded from version "
 								+ u.getStartingVersion() + " to version "
 								+ u.getUpgradedVersion() + ".");
 					}
@@ -110,7 +107,8 @@ public class Upgrader {
 				}
 			}
 		} catch (Exception e) {
-			log.error(e.getMessage(), e);
+			System.out.println(e);
+			e.printStackTrace();
 		}
 
 	}
@@ -158,7 +156,7 @@ public class Upgrader {
 
 		Option uconf = new Option(UPGRADER_CONFIG_FILE_OPT,
 				UPGRADER_CONFIG_FILE_FULL, true,
-				"The config file for the Dorian Upgrader§.");
+				"The config file for the Dorian Upgrader.");
 		uconf.setRequired(true);
 		options.addOption(uconf);
 

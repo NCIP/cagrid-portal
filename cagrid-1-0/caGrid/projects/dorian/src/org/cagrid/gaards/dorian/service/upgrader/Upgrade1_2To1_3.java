@@ -235,7 +235,7 @@ public class Upgrade1_2To1_3 extends Upgrade {
     }
 
 
-    private void clearCertificateAuthority() throws Exception {
+    private void clearDBCertificateAuthority() throws Exception {
         Database db = getBeanUtils().getDatabase();
         Connection c = null;
         try {
@@ -250,20 +250,36 @@ public class Upgrade1_2To1_3 extends Upgrade {
             db.releaseConnection(c);
         }
     }
+    
+    private void clearEracomHybridCertificateAuthority() throws Exception {
+        Database db = getBeanUtils().getDatabase();
+        Connection c = null;
+        try {
+            c = db.getConnection();
+            PreparedStatement s = c.prepareStatement("DROP TABLE IF EXISTS eracom_wrapped_ca");
+            s.execute();
+            s.close();
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            db.releaseConnection(c);
+        }
+    }
 
 
     private void upgradeCertificateAuthority(PropertyManager pm, boolean trialRun) throws Exception {
         String caType = pm.getCertificateAuthorityType();
         String newCAType = null;
-        boolean clearCA = false;
+        boolean clearDBCA = false;
+        boolean clearEracomHybridCA = false;
         if (caType.equals("DBCA")) {
             newCAType = DBCertificateAuthority.class.getName();
-            clearCA = true;
+            clearDBCA = true;
         } else if (caType.equals("Eracom")) {
             newCAType = EracomCertificateAuthority.class.getName();
         } else if (caType.equals("EracomHybrid")) {
             newCAType = EracomCertificateAuthority.class.getName();
-            // TODO: DELETE OLD CERTIFICATES
+            clearEracomHybridCA = true;
         }
         if (newCAType != null) {
             if (!trialRun) {
@@ -276,13 +292,23 @@ public class Upgrade1_2To1_3 extends Upgrade {
         } else {
             throw new Exception("Could not determine how to upgrade the Certificate Authority Type " + caType + ".");
         }
-        if (clearCA) {
+        if (clearDBCA) {
             if (!trialRun) {
-                System.out.print("Deleting long term user credentials from the CA DB....");
-                clearCertificateAuthority();
+                System.out.print("Deleting long term user credentials from the DB CA....");
+                clearDBCertificateAuthority();
                 System.out.println(" COMPLETED.");
             } else {
-                System.out.println("Long term user credentials need to be deleted from the CA DB.");
+                System.out.println("Long term user credentials need to be deleted from the DB CA.");
+            }
+        }
+        
+        if (clearEracomHybridCA) {
+            if (!trialRun) {
+                System.out.print("Deleting long term user credentials from the Eracom Hybrid CA....");
+                clearEracomHybridCertificateAuthority();
+                System.out.println(" COMPLETED.");
+            } else {
+                System.out.println("Long term user credentials need to be deleted from the Eracom Hybird CA.");
             }
         }
     }
