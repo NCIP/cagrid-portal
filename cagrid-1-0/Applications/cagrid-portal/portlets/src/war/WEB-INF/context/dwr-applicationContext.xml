@@ -75,12 +75,14 @@
           autowire="byName"/>
 
     <!--Diagnostics Portlet-->
-    <bean id="portalStatusDiagnosticService" class="gov.nih.nci.cagrid.portal.portlet.diagnostics.PortalStatusDiagnosticService"
+    <bean id="portalStatusDiagnosticService"
+          class="gov.nih.nci.cagrid.portal.portlet.diagnostics.PortalStatusDiagnosticService"
           autowire="byName">
         <property name="serviceFilter" ref="servicefilter"/>
     </bean>
 
-    <bean id="metadataDiagnosticService" class="gov.nih.nci.cagrid.portal.portlet.diagnostics.MetadataDiagnosticService">
+    <bean id="metadataDiagnosticService"
+          class="gov.nih.nci.cagrid.portal.portlet.diagnostics.MetadataDiagnosticService">
         <property name="defaultTimeout" ref="defaultTimeout"/>
         <property name="geocoder" ref="defaultGeocoder"/>
     </bean>
@@ -91,7 +93,7 @@
     </bean>
 
     <bean id="pingDiagnosticService" class="gov.nih.nci.cagrid.portal.portlet.diagnostics.PingDiagnosticService">
-        <property name="serviceStatusProvider" ref="pingServiceStatusProvider"/>
+        <property name="serviceStatusProvider" ref="wsdlServiceStatusProvider"/>
     </bean>
 
 

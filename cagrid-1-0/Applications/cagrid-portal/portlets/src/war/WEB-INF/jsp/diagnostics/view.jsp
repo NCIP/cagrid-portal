@@ -38,14 +38,15 @@
                     name="indicator.gif"
                     alt="Please wait"
                 />
-      <hr/>
+        <hr/>
     </div>
 
-    <div id="resultsDiv">
+    <div id="${prefix}resultsDiv">
         <!---->
     </div>
 
     <br/>
+
     <div id="${prefix}disclaimerDiv" class="versionStamp" style="float:left;">
         <!---->
     </div>
@@ -68,18 +69,18 @@
 
     <!--validate url. Exit on failure-->
 
-        var url=$("${prefix}url").value.strip();
+    var url=$("${prefix}url").value.strip();
     if(validateUrl || url.length<10){
-        if(!isValidURL(url)){
-        $("${prefix}errorMsg").innerHTML="Invalid URL";
-        $("${prefix}errorMsg").innerHTML+=" &nbsp; ";
-        $("${prefix}errorMsg").innerHTML+='<input type="checkbox" onclick="${prefix}beginDiagnose(false)">';
-        $("${prefix}errorMsg").innerHTML+="Ignore Warning!";
-        $("${prefix}errorMsg").innerHTML+="</input>";
+    if(!isValidURL(url)){
+    $("${prefix}errorMsg").innerHTML="Invalid URL";
+    $("${prefix}errorMsg").innerHTML+=" &nbsp; ";
+    $("${prefix}errorMsg").innerHTML+='<input type="checkbox" onclick="${prefix}beginDiagnose(false)">';
+    $("${prefix}errorMsg").innerHTML+="Ignore Warning!";
+    $("${prefix}errorMsg").innerHTML+="</input>";
 
 
-         return false;
-        }
+    return false;
+    }
     }
 
 
@@ -92,15 +93,14 @@
     doDiagnose("metadataDiagnostic",metadataDiagnostic,url);
     doDiagnose("idxDiagnostic",idxDiagnostic,url);
 
-   }
+    }
 
 
     function doDiagnose(divName,JScript,url){
     JScript.diagnose(url, function(result){
-    document.getElementById("resultsDiv").innerHTML+="<div id='${prefix}" + divName + "'>" + result + "</div>";
-
-    <%--var _div = $("${prefix}"+ divName);--%>
-    <%--new Effect.SlideDown(_div);--%>
+    document.getElementById("${prefix}resultsDiv").innerHTML+="
+    <div id='${prefix}" + divName + "'>" + result + "</div>
+    ";
 
     if(counter++>=totalTests-1)
     ${prefix}finishDiagnose();
@@ -108,10 +108,16 @@
     }
 
     function ${prefix}finishDiagnose(){
-        $("statusIndicator").style.visibility='hidden';
-        $("${prefix}diagnosisLabel").innerHTML = 'Diagnostic Results';
-        $("${prefix}disclaimerDiv").innerHTML="Index service results can be delayed up to 5 minutes.";
+    $("statusIndicator").style.visibility='hidden';
+    $("${prefix}diagnosisLabel").innerHTML = 'Diagnostic Results';
+    $("${prefix}disclaimerDiv").innerHTML="Index service results can be delayed up to 5 minutes.";
 
+    document.getElementById("${prefix}resultsDiv").innerHTML+='
+    <hr/>
+    <div>See <a href="http://www.cagrid.org/wiki/CaGrid:How-To:TroubleshootIndexService" target="_blank">this guide</a>
+        to trobleshoot potential problems
+    </div>
+    ';
     }
 
 
