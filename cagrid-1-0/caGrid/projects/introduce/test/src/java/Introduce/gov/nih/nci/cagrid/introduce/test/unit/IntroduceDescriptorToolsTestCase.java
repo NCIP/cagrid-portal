@@ -46,8 +46,7 @@ public class IntroduceDescriptorToolsTestCase extends TestCase {
 						+ "introduceServicesExample.xml").getFile(),
 						ServiceDescription.class);
 
-		File servicePropertiesFile = new File(this.getClass().getResource("/gold/versions/" + File.separator
-				+ "introduceServicesExample.properties").getFile());
+		File servicePropertiesFile = new File(this.getClass().getResource("/gold/versions/" + "introduceServicesExample.properties").getFile());
 		Properties serviceProperties = new Properties();
 		serviceProperties.load(new FileInputStream(servicePropertiesFile));
 		// have to set the service directory in the service properties
