@@ -6,6 +6,7 @@ import gov.nih.nci.cagrid.common.portal.validation.IconFeedbackPanel;
 import gov.nih.nci.cagrid.data.ui.GroupSelectionListener;
 import gov.nih.nci.cagrid.data.ui.NotifyingButtonGroup;
 import gov.nih.nci.cagrid.data.ui.wizard.AbstractWizardPanel;
+import gov.nih.nci.cagrid.data.ui.wizard.OneTimeInfoDialogUtil;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.common.FileFilters;
 import gov.nih.nci.cagrid.introduce.common.ResourceManager;
@@ -50,7 +51,7 @@ import com.jgoodies.validation.view.ValidationComponentUtils;
  * @author David Ervin
  * 
  * @created Nov 27, 2007 4:50:32 PM
- * @version $Id: QueryProcessorConfigurationPanel.java,v 1.14 2008-08-29 19:19:33 dervin Exp $ 
+ * @version $Id: QueryProcessorConfigurationPanel.java,v 1.15 2008-09-18 17:09:23 dervin Exp $ 
  */
 public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
     // keys for validation
@@ -217,6 +218,7 @@ public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
     private JTextField getApplicationNameTextField() {
         if (applicationNameTextField == null) {
             applicationNameTextField = new JTextField();
+            applicationNameTextField.setToolTipText("The name of the caCORE SDK application");
             applicationNameTextField.getDocument().addDocumentListener(documentChangeListener);
             applicationNameTextField.getDocument().addDocumentListener(new DocumentChangeAdapter() {
                 public void documentEdited(DocumentEvent e) {
@@ -251,6 +253,7 @@ public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
         if (beansJarTextField == null) {
             beansJarTextField = new JTextField();
             beansJarTextField.setEditable(false);
+            beansJarTextField.setToolTipText("The domain data type beans jar file");
             beansJarTextField.getDocument().addDocumentListener(documentChangeListener);
         }
         return beansJarTextField;
@@ -268,6 +271,15 @@ public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
             beansBrowseButton.setText("Browse");
             beansBrowseButton.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
+                    String[] message = {
+                        "Select the jar within your caCORE SDK installation which",
+                        "contains the generated domain data type beans.",
+                        "Typically, this jar fill will be",
+                        "output" + File.separator + "<application>" + File.separator + 
+                            "package" + File.separator + "local-client" + File.separator + "<application>-beans.jar"
+                    };
+                    OneTimeInfoDialogUtil.showInfoDialog(
+                        QueryProcessorConfigurationPanel.class, KEY_BEANS_JAR, message);
                     try {
                         String fullFilename = ResourceManager.promptFile(null, FileFilters.JAR_FILTER);
                         if (getBeansJarTextField().getText().length() != 0) {
@@ -314,6 +326,7 @@ public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
         if (localConfigDirTextField == null) {
             localConfigDirTextField = new JTextField();
             localConfigDirTextField.setEditable(false);
+            localConfigDirTextField.setToolTipText("The caCORE SDK local client configiguration directory");
             localConfigDirTextField.getDocument().addDocumentListener(documentChangeListener);
         }
         return localConfigDirTextField;
@@ -331,6 +344,15 @@ public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
             localConfigBrowseButton.setText("Browse");
             localConfigBrowseButton.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
+                    String[] message = {
+                        "Select the directory within your caCORE SDK installation which",
+                        "contains the local application service configuration files.",
+                        "Typically, this directory will be",
+                        "output" + File.separator + "<application>" + File.separator + 
+                            "package" + File.separator + "local-client" + File.separator + "conf"
+                    };
+                    OneTimeInfoDialogUtil.showInfoDialog(
+                        QueryProcessorConfigurationPanel.class, KEY_LOCAL_CONFIG_DIR, message);
                     try {
                         String filename = ResourceManager.promptDir(null);
                         getLocalConfigDirTextField().setText(filename);
@@ -496,6 +518,7 @@ public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
         if (ormJarTextField == null) {
             ormJarTextField = new JTextField();
             ormJarTextField.setEditable(false);
+            ormJarTextField.setToolTipText("The caCORE SDK Object-Relational-Mapping Jar file");
             ormJarTextField.getDocument().addDocumentListener(documentChangeListener);
         }
         return ormJarTextField;
@@ -513,6 +536,15 @@ public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
             ormJarBrowseButton.setText("Browse");
             ormJarBrowseButton.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
+                    String[] message = {
+                        "Select the jar within your caCORE SDK installation which",
+                        "contains the object relational mapping files.",
+                        "Typically, this jar fill will be",
+                        "output" + File.separator + "<application>" + File.separator + 
+                            "package" + File.separator + "local-client" + File.separator + "<application>-orm.jar"
+                    };
+                    OneTimeInfoDialogUtil.showInfoDialog(
+                        QueryProcessorConfigurationPanel.class, KEY_ORM_JAR, message);
                     try {
                         String filename = ResourceManager.promptFile(null, FileFilters.JAR_FILTER);
                         if (getOrmJarTextField().getText().length() != 0) {
@@ -580,6 +612,7 @@ public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
     private JTextField getHostNameTextField() {
         if (hostNameTextField == null) {
             hostNameTextField = new JTextField();
+            hostNameTextField.setToolTipText("The network host name of the caCORE SDK system (eg. http://example.com)");
             hostNameTextField.getDocument().addDocumentListener(documentChangeListener);
             hostNameTextField.getDocument().addDocumentListener(new DocumentChangeAdapter() {
                 public void documentEdited(DocumentEvent e) {
@@ -613,6 +646,7 @@ public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
     private JTextField getPortTextField() {
         if (portTextField == null) {
             portTextField = new JTextField();
+            portTextField.setToolTipText("The network port of the caCORE SDK system (eg. 8080)");
             portTextField.getDocument().addDocumentListener(documentChangeListener);
             portTextField.getDocument().addDocumentListener(new DocumentChangeAdapter() {
                 public void documentEdited(DocumentEvent e) {
@@ -782,6 +816,7 @@ public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
         if (simpleConfigRadioButton == null) {
             simpleConfigRadioButton = new JRadioButton();
             simpleConfigRadioButton.setText("Simple");
+            simpleConfigRadioButton.setToolTipText("Configure most options automatically");
             simpleConfigRadioButton.addItemListener(new ItemListener() {
                 public void itemStateChanged(ItemEvent e) {
                     setSimpleAdvancedComponentsEnabled();
@@ -801,6 +836,7 @@ public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
         if (advancedRadioButton == null) {
             advancedRadioButton = new JRadioButton();
             advancedRadioButton.setText("Advanced");
+            advancedRadioButton.setToolTipText("Configure each option individually");
             advancedRadioButton.addItemListener(new ItemListener() {
                 public void itemStateChanged(ItemEvent e) {
                     setSimpleAdvancedComponentsEnabled();
@@ -965,6 +1001,15 @@ public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
             remoteConfigBrowseButton.setText("Browse");
             remoteConfigBrowseButton.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
+                    String[] message = {
+                        "Select the directory within your caCORE SDK installation which",
+                        "contains the remote application service configuration files.",
+                        "Typically, this directory will be",
+                        "output" + File.separator + "<application>" + File.separator + 
+                            "package" + File.separator + "remote-client" + File.separator + "conf"
+                    };
+                    OneTimeInfoDialogUtil.showInfoDialog(
+                        QueryProcessorConfigurationPanel.class, KEY_REMOTE_CONFIG_DIR, message);
                     try {
                         String filename = ResourceManager.promptDir(null);
                         getRemoteConfigDirTextField().setText(filename);
@@ -1111,10 +1156,22 @@ public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
         
         PortalUtils.setContainerEnabled(getBasicConfigPanel(), !simple);
         PortalUtils.setContainerEnabled(getRemoteApiPanel(), !simple);
+        getOutputDirBrowseButton().setEnabled(simple);
     }
     
     
     private void selectSdkOutputDirectory() throws Exception {
+        String[] infoMessage = {
+            "Select the output directory generated",
+            "by your caCORE SDK installation.",
+            "The wizard will then attempt to locate",
+            "the configuration files and libraries",
+            "generated by the caCORE SDK and fill in",
+            "these values for you."
+        };
+        OneTimeInfoDialogUtil.showInfoDialog(
+            QueryProcessorConfigurationPanel.class, 
+            KEY_OUTPUT_DIRECTORY, infoMessage);
         String selection = ResourceManager.promptDir(null);
         if (selection != null && selection.length() != 0) {
             // selection made
