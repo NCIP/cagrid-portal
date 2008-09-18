@@ -11,7 +11,6 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import org.cagrid.gaards.dorian.client.GridUserClient;
 import org.cagrid.gaards.ui.common.CertificateInformationComponent;
 import org.cagrid.gaards.ui.dorian.DorianHandle;
 import org.cagrid.gaards.ui.dorian.DorianLookAndFeel;

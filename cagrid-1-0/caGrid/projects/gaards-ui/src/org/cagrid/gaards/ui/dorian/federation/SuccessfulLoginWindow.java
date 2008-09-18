@@ -13,7 +13,6 @@ import org.cagrid.gaards.ui.common.GAARDSLookAndFeel;
 import org.cagrid.gaards.ui.dorian.DorianLookAndFeel;
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.LookAndFeel;
-import java.awt.Color;
 
 public class SuccessfulLoginWindow extends ApplicationComponent {
 

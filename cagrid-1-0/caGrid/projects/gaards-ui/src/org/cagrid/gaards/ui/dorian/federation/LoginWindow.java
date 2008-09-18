@@ -251,6 +251,7 @@ public class LoginWindow extends ApplicationComponent {
 		AuthenticationServiceHandle handle = (AuthenticationServiceHandle) getIdentityProvider()
 				.getSelectedItem();
 		if (handle != null) {
+		    getIdentityProvider().setToolTipText(handle.getServiceURL());
 			Set<QName> profiles = handle.getAuthenticationProfiles();
 			if ((profiles == null) || (profiles.size() <= 0)) {
 				this.credentialLayout

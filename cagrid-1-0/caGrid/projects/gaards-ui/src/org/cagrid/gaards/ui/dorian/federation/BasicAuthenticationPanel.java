@@ -2,16 +2,16 @@ package org.cagrid.gaards.ui.dorian.federation;
 
 import gov.nih.nci.cagrid.common.Utils;
 
+import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
+
+import javax.swing.JLabel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
 
 import org.cagrid.gaards.authentication.BasicAuthentication;
 import org.cagrid.gaards.authentication.Credential;
-import org.cagrid.grape.LookAndFeel;
-import javax.swing.JLabel;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
-import javax.swing.JTextField;
-import javax.swing.JPasswordField;
 
 public class BasicAuthenticationPanel extends CredentialPanel {
 

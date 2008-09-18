@@ -21,5 +21,9 @@ public class ServiceHandle {
     public ServiceDescriptor getServiceDescriptor() {
         return des;
     }
+    
+    public String getServiceURL(){
+        return getServiceDescriptor().getServiceURL();
+    }
 
 }

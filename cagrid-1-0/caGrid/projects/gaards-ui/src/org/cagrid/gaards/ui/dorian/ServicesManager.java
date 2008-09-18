@@ -2,7 +2,6 @@ package org.cagrid.gaards.ui.dorian;
 
 import gov.nih.nci.cagrid.common.Runner;
 import gov.nih.nci.cagrid.common.RunnerGroup;
-import gov.nih.nci.cagrid.common.ThreadManager;
 
 import java.util.ArrayList;
 import java.util.List;

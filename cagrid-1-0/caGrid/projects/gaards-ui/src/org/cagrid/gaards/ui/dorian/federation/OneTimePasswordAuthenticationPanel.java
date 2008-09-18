@@ -12,7 +12,6 @@ import javax.swing.JTextField;
 
 import org.cagrid.gaards.authentication.Credential;
 import org.cagrid.gaards.authentication.OneTimePassword;
-import org.cagrid.grape.LookAndFeel;
 
 public class OneTimePasswordAuthenticationPanel extends CredentialPanel {
 
