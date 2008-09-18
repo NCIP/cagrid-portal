@@ -12,17 +12,17 @@
             <description>tools</description>
             <showIcons>true</showIcons>
             <components>
-                <component>
-                    <title>Login</title>
-                    <description>Obtain Grid Credentials!!!</description>
-                    <classname>org.cagrid.gaards.ui.dorian.ifs.CreateProxyWindow</classname>
-                    <icon>/login.png</icon>
-                    <showOnToolBar>false</showOnToolBar>
-                    <dimensions>
-                        <width>700</width>
-                        <height>400</height>
-                    </dimensions>
-                </component>
+              <component>
+					<title>Login</title>
+					<description>Obtain Grid Credentials!!!</description>
+					<classname>org.cagrid.gaards.ui.dorian.federation.LoginWindow</classname>
+					<icon>/login.png</icon>
+					<showOnToolBar>true</showOnToolBar>
+					<dimensions>
+						<width>550</width>
+						<height>350</height>
+					</dimensions>
+				</component>
                 <component>
                     <title>Credential Manager</title>
                     <description>Allows the management of grid proxy credentials.</description>
@@ -84,7 +84,7 @@
                    <component>
                     <title>Request Host Certificate</title>
                     <description>Allows a user to request a host ceritficate from Dorian.</description>
-                    <classname>org.cagrid.gaards.ui.dorian.ifs.RequestHostCertificateWindow</classname>
+                    <classname>org.cagrid.gaards.ui.dorian.federation.RequestHostCertificateWindow</classname>
                     <icon>/computer.png</icon>
                     <showOnToolBar>false</showOnToolBar>
                     <dimensions>
@@ -95,7 +95,7 @@
                  <component>
                     <title>My Host Certificates</title>
                     <description>Allows a user to obtain the host certificates in which they own.</description>
-                    <classname>org.cagrid.gaards.ui.dorian.ifs.MyHostCertificatesWindow</classname>
+                    <classname>org.cagrid.gaards.ui.dorian.federation.MyHostCertificatesWindow</classname>
                     <icon>/computers.png</icon>
                     <showOnToolBar>false</showOnToolBar>
                 </component>
@@ -160,17 +160,33 @@
         <ConfigurationGroup>
         <name>Security</name>
         <ConfigurationDescriptors>
-            <ConfigurationDescriptor>
-                <DisplayName>Grid User Management</DisplayName>
-                <SystemName>dorian</SystemName>
-                <ModelClassname>org.cagrid.grape.configuration.GeneralConfiguration</ModelClassname>
-                <qname>
-                    <namespace>http://www.cagrid.org/1/grape-general-configuration</namespace>
-                    <name>GeneralConfiguration</name>
-                </qname>
-                <ConfigurationPanel>org.cagrid.grape.GeneralConfigurationEditor</ConfigurationPanel>
-                <DefaultFile>extensions/cagrid_gaards_ui/dorian-ui-configuration.xml</DefaultFile>
-            </ConfigurationDescriptor>
+          	<ConfigurationGroup>
+				<name>User Management</name>
+				<ConfigurationDescriptors>
+					<ConfigurationDescriptor>
+						<DisplayName>Dorian</DisplayName>
+						<SystemName>dorian</SystemName>
+						<ModelClassname>org.cagrid.grape.configuration.ServiceConfiguration</ModelClassname>
+						<qname>
+							<namespace>http://www.cagrid.org/1/grape-service-configuration</namespace>
+							<name>ServiceConfiguration</name>
+						</qname>
+						<ConfigurationPanel>org.cagrid.grape.ServiceConfigurationEditor</ConfigurationPanel>
+						<DefaultFile>ext/target_grid/dorian-services-configuration.xml</DefaultFile>
+					</ConfigurationDescriptor>
+					<ConfigurationDescriptor>
+						<DisplayName>Authentication Service(s)</DisplayName>
+						<SystemName>authentication-service</SystemName>
+						<ModelClassname>org.cagrid.grape.configuration.ServiceConfiguration</ModelClassname>
+						<qname>
+							<namespace>http://www.cagrid.org/1/grape-service-configuration</namespace>
+							<name>ServiceConfiguration</name>
+						</qname>
+						<ConfigurationPanel>org.cagrid.grape.ServiceConfigurationEditor</ConfigurationPanel>
+						<DefaultFile>ext/target_grid/authentication-services-configuration.xml</DefaultFile>
+					</ConfigurationDescriptor>
+				</ConfigurationDescriptors>
+			</ConfigurationGroup>
             <ConfigurationDescriptor>
                 <DisplayName>Grid Trust Fabric</DisplayName>
                 <SystemName>gts</SystemName>
