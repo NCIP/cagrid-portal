@@ -15,7 +15,6 @@
     <!-- config file contains all non task beans -->
     <import resource="classpath:applicationContext-aggr-regsvc-beans.xml"/>
 
-
     <bean id="dynamicServiceStatusProvider"
           class="gov.nih.nci.cagrid.portal.aggr.status.DelegatingDynamicServiceStatusProvider">
         <property name="providers">
@@ -24,14 +23,6 @@
                 <ref local="pingServiceStatusProvider"/>
             </list>
         </property>
-    </bean>
-
-    <bean  id="cacheFirstDynamicServiceStatusProvider"
-           class="gov.nih.nci.cagrid.portal.aggr.status.CacheFirstDynamicServiceStatusProvider" scope="singleton">
-        <property name="indexServiceUrls" value="${cagrid.portal.indexServiceUrls}"/>
-        <property name="requireMetadataCompliance"  ref="metadataCompliance"/>
-        <property name="dynamicServiceStatusProvider" ref="dynamicServiceUrlProvider"/>
-        <property name="timeout" ref="defaultTimeout"/>
     </bean>
 
     <bean id="idxServiceStatusProvider"
@@ -49,6 +40,11 @@
            class="gov.nih.nci.cagrid.portal.aggr.status.DBCachedServiceStatusProvider">
         <property name="gridServiceDao" ref="gridServiceDao"/>
     </bean>
+
+    <bean id="wsdlServiceStatusProvider" class="gov.nih.nci.cagrid.portal.aggr.status.WSDLServiceStatusProvider">
+        <property name="timeout" ref="defaultTimeout"/>
+    </bean>
+
 
     <bean id="serviceStatusChangeMonitor"
           class="gov.nih.nci.cagrid.portal.aggr.status.ServiceStatusChangeMonitor" autowire="byName">

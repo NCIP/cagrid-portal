@@ -17,15 +17,18 @@ public class PingDiagnosticService extends StatusDiagnosticService {
 
     @Override
     public DiagnosticResult diagnoseInternal(String Url) throws Exception {
-
         DiagnosticResult _result = super.diagnoseInternal(Url);
         _result.setType(DiagnosticType.PING);
 
         if (_result.getStatus().equals(DiagnosticResultStatus.PASSED))
             _result.setMessage("Sucessfully pinged service");
-        else
+        else {
             _result.setMessage("Failed to PING service");
+            _result.setDetail("Failed to get service WSDL from " + Url + "?wsdl <br/>.Please make sure that the URL is correct and is reachable from the internet.");
+        }
 
         return _result;
     }
+
+
 }
