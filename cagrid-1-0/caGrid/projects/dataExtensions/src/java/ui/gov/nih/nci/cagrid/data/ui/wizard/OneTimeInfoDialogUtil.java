@@ -10,7 +10,9 @@ import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
 
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 import org.cagrid.grape.utils.CompositeErrorDialog;
 
@@ -46,7 +48,13 @@ public class OneTimeInfoDialogUtil {
         Class wizardPanelClass, String messageId, String[] message) {
         String internalId = generateMessageId(wizardPanelClass, messageId);
         if (!messageHasBeenShown(internalId) && !shouldNeverShowMessage(internalId)) {
-            boolean neverShowAgain = OneTimeInfoDialog.showDialog(parent, message);
+            JCheckBox neverAgainCheckBox = new JCheckBox();
+            neverAgainCheckBox.setText("Never show this message again");
+            Object[] messageWithCheck = new Object[message.length + 1];
+            System.arraycopy(message, 0, messageWithCheck, 0, message.length);
+            messageWithCheck[message.length] = neverAgainCheckBox;
+            JOptionPane.showMessageDialog(parent, messageWithCheck);
+            boolean neverShowAgain = neverAgainCheckBox.isSelected();
             shownMessages.add(internalId);
             storeNeverShowValue(internalId, neverShowAgain);
         }
@@ -146,5 +154,15 @@ public class OneTimeInfoDialogUtil {
     
     private OneTimeInfoDialogUtil() {
         // prevents instantiation
+    }
+    
+    
+    public static void main(String[] args) {
+        String[] message = {
+            "I am the very model of a",
+            "modern major",
+            "general"
+        };
+        showInfoDialog(OneTimeInfoDialogUtil.class, "SomeMessage", message);
     }
 }
