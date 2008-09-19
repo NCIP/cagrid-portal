@@ -167,7 +167,7 @@ public class TestCertificateAuthority extends TestCase {
 
             long okMax = hours * 60 * 60;
             // Allow some Buffer
-            long okMin = okMax - 10;
+            long okMin = okMax - 30;
 
             if ((okMin > timeLeft) || (timeLeft > okMax)) {
                 assertTrue(false);
