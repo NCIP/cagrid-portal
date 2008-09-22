@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2005 rel. 3 U (http://www.altova.com) by David W. Ervin (The Ohio State University / Department of Biomedical Informatics) -->
+<xsd:schema xmlns:fqrm="http://fqp.cagrid.nci.nih.gov/FederatedQueryResultsMetadata" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://fqp.cagrid.nci.nih.gov/FederatedQueryResultsMetadata" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xsd:complexType name="DataElementsSource">
+		<xsd:attribute name="serviceURL" type="xsd:anyURI" use="required"/>
+		<xsd:attribute name="startElementIndex" type="xsd:int" use="required"/>
+		<xsd:attribute name="endElementIndex" type="xsd:int" use="required"/>
+	</xsd:complexType>
+	<xsd:simpleType name="ConnectionStatus">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="OK"/>
+			<xsd:enumeration value="CouldNotConnect"/>
+			<xsd:enumeration value="Exception"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:complexType name="DataServiceStatus">
+		<xsd:sequence>
+			<xsd:element name="Exception" minOccurs="0"/>
+		</xsd:sequence>
+		<xsd:attribute name="connectionStatus" type="fqrm:ConnectionStatus" use="required"/>
+	</xsd:complexType>
+	<xsd:element name="FQPResultsMetadata">
+		<xsd:annotation>
+			<xsd:documentation>Metadata describing the results of executing a Federared Query</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:complexType name="FQPResultsMetadata">
+		<xsd:sequence>
+			<xsd:element name="DataElemenstSource" type="fqrm:DataElementsSource"/>
+			<xsd:element name="TargetServicesStatus" type="fqrm:DataServiceStatus" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+</xsd:schema>
