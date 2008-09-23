@@ -30,7 +30,7 @@ public class PortalUtilsTest extends AbstractTimeSensitiveTest {
     }
 
     protected Long getAcceptableTime() {
-        return new Long("2500");
+        return new Long("15000");
     }
 
 
