@@ -37,9 +37,14 @@ public class DiscoveryExamples {
             EndpointReferenceType[] services = null;
             long start;
 
-            printHeader("All Services");
+            printHeader("All Registered Services");
             start = System.currentTimeMillis();
             services = client.getAllServices(false);
+            printResults(services, System.currentTimeMillis() - start);
+
+            printHeader("All Compliant Services");
+            start = System.currentTimeMillis();
+            services = client.getAllServices(true);
             printResults(services, System.currentTimeMillis() - start);
 
             printHeader("Search String [" + searchString + "]");
