@@ -98,9 +98,7 @@
 
     function doDiagnose(divName,JScript,url){
     JScript.diagnose(url, function(result){
-    document.getElementById("${prefix}resultsDiv").innerHTML+="
-    <div id='${prefix}" + divName + "'>" + result + "</div>
-    ";
+    document.getElementById("${prefix}resultsDiv").innerHTML+="<div id='${prefix}" + divName + "'>" + result + "</div>";
 
     if(counter++>=totalTests-1)
     ${prefix}finishDiagnose();
@@ -112,12 +110,10 @@
     $("${prefix}diagnosisLabel").innerHTML = 'Diagnostic Results';
     $("${prefix}disclaimerDiv").innerHTML="Index service results can be delayed up to 5 minutes.";
 
-    document.getElementById("${prefix}resultsDiv").innerHTML+='
-    <hr/>
-    <div>See <a href="http://www.cagrid.org/wiki/CaGrid:How-To:TroubleshootIndexService" target="_blank">this guide</a>
-        to trobleshoot potential problems
-    </div>
-    ';
+    document.getElementById("${prefix}resultsDiv").innerHTML+='<hr/>';
+    document.getElementById("${prefix}resultsDiv").innerHTML+='<div>';
+    document.getElementById("${prefix}resultsDiv").innerHTML+='See <a href="http://www.cagrid.org/wiki/CaGrid:How-To:TroubleshootIndexService" target="_blank">this guide</a> to trobleshoot potential problems';
+    document.getElementById("${prefix}resultsDiv").innerHTML+='</div>';
     }
 
 
