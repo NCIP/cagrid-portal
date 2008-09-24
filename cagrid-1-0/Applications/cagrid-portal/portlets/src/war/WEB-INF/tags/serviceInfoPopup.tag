@@ -26,7 +26,7 @@ onmouseout="$('${id}-infoPopup-content').style.display='none'"
             </c:if>
         </c:when>
         <c:otherwise>
-            <tags:image name="q.gif" height="13"/>
+            <tags:image name="information_icon.png" height="13"/>
         </c:otherwise>
     </c:choose>
     </a>&nbsp;

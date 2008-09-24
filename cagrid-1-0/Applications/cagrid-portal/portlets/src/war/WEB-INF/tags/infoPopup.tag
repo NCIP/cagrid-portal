@@ -19,7 +19,7 @@
                 &nbsp; href='${popup_href}'>${popup_name}
             </c:when>
             <c:otherwise>
-                ><tags:image name="q.gif" height="16"/>
+                ><tags:image name="information_icon.png" height="16"/>
             </c:otherwise>
         </c:choose>
 </a>&nbsp;
