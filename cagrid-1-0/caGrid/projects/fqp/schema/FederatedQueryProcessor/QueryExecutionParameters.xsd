@@ -15,8 +15,30 @@
 		<xsd:annotation>
 			<xsd:documentation>Defines how the FQP engine handles issues related to target data services</xsd:documentation>
 		</xsd:annotation>
-		<xsd:attribute name="failOnError" type="xsd:boolean" use="optional" default="true"/>
-		<xsd:attribute name="retries" type="xsd:int" use="optional" default="0"/>
-		<xsd:attribute name="retryTimeout" type="xsd:int" use="optional" default="5"/>
+		<xsd:attribute name="failOnFirstError" type="xsd:boolean" use="optional" default="true">
+			<xsd:annotation>
+				<xsd:documentation>Specifies if the processor should error out on the first exception thrown when querying target data service(s)</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="retries" use="optional" default="0">
+			<xsd:annotation>
+				<xsd:documentation>The number of times the Federatred Query Processor will retry to contact a target data service which previously threw an exception.  Only has effect if failOnFirstError is false</xsd:documentation>
+			</xsd:annotation>
+			<xsd:simpleType>
+				<xsd:restriction base="xsd:int">
+					<xsd:minInclusive value="0"/>
+				</xsd:restriction>
+			</xsd:simpleType>
+		</xsd:attribute>
+		<xsd:attribute name="timeoutPerRetry" use="optional" default="5">
+			<xsd:annotation>
+				<xsd:documentation>The number of seconds to wait between trying to query a target data service if it has previously thrown an exception.  Only has effect if failOnFirstError is false and retries is greater than zero</xsd:documentation>
+			</xsd:annotation>
+			<xsd:simpleType>
+				<xsd:restriction base="xsd:int">
+					<xsd:minInclusive value="0"/>
+				</xsd:restriction>
+			</xsd:simpleType>
+		</xsd:attribute>
 	</xsd:complexType>
 </xsd:schema>
