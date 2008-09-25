@@ -421,7 +421,7 @@
     <portlet>
         <description>Diagnostics Portlet</description>
         <portlet-name>diagnostics</portlet-name>
-        <display-name>Diagnostics Portlet</display-name>
+        <display-name>Service Diagnostics</display-name>
         <portlet-class>
             org.springframework.web.portlet.DispatcherPortlet
         </portlet-class>
@@ -434,7 +434,7 @@
             <portlet-mode>view</portlet-mode>
         </supports>
         <portlet-info>
-            <title>Diagnostics Portlet</title>
+            <title>Service Diagnostics</title>
             <short-title>Diagnostics</short-title>
             <keywords>cagrid,diagnostics</keywords>
         </portlet-info>
