@@ -131,6 +131,6 @@
 <div style="padding-top:10px;">
     <tags:infoPopup id="<portlet:namespace>diagnosticLnk" popup_href="${servicessAction}"
                     popup_name="Where is my service?"
-                    popup_text="Search for your service in the Discovery Portlet or use the Diagnostics Portlet to get details on your service advertisement"/>
+                    popup_text="Search for your service in the Discovery Portlet or use the Service Diagnostics Portlet to get details on your service advertisement"/>
 </div>
 
