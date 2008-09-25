@@ -4,17 +4,17 @@
 	<xsd:import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd" schemaLocation="../wsrf/faults/WS-BaseFaults.xsd"/>
 	<xsd:simpleType name="ProcessingStatus">
 		<xsd:restriction base="xsd:string">
-			<xsd:enumeration value="Waiting To Begin"/>
-			<xsd:enumeration value="Processing"/>
-			<xsd:enumeration value="Complete"/>
-			<xsd:enumeration value="Complete With Error"/>
+			<xsd:enumeration value="Waiting_To_Begin" id="WAITING"/>
+			<xsd:enumeration value="Processing" id="PROCESSING"/>
+			<xsd:enumeration value="Complete" id="COMPLETE"/>
+			<xsd:enumeration value="Complete_With_Error" id="COMPLETE_WITH_ERROR"/>
 		</xsd:restriction>
 	</xsd:simpleType>
 	<xsd:simpleType name="ServiceConnectionStatus">
 		<xsd:restriction base="xsd:string">
-			<xsd:enumeration value="OK"/>
-			<xsd:enumeration value="Could Not Connect"/>
-			<xsd:enumeration value="Exception"/>
+			<xsd:enumeration value="OK" id="OK"/>
+			<xsd:enumeration value="Could_Not_Connect" id="COULD_NOT_CONNECT"/>
+			<xsd:enumeration value="Exception" id="EXCEPTION"/>
 		</xsd:restriction>
 	</xsd:simpleType>
 	<xsd:complexType name="ResultsRange">
