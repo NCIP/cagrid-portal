@@ -9,6 +9,11 @@
 		<xsd:sequence>
 			<xsd:element ref="qep:TargetDataServiceQueryBehavior" minOccurs="0"/>
 		</xsd:sequence>
+		<xsd:attribute name="alwaysAuthenticate" type="xsd:boolean" use="optional" default="false">
+			<xsd:annotation>
+				<xsd:documentation>Flag to indicate if queries to data services should always be made using autnentication, even if the data service allows anonymous access.</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
 	</xsd:complexType>
 	<xsd:element name="TargetDataServiceQueryBehavior" type="qep:TargetDataServiceQueryBehavior"/>
 	<xsd:complexType name="TargetDataServiceQueryBehavior">
@@ -39,11 +44,6 @@
 					<xsd:minInclusive value="0"/>
 				</xsd:restriction>
 			</xsd:simpleType>
-		</xsd:attribute>
-		<xsd:attribute name="alwaysAuthenticate" type="xsd:boolean" use="optional" default="false">
-			<xsd:annotation>
-				<xsd:documentation>Flag to indicate if queries to data services should always be made using autnentication, even if the data service allows anonymous access.</xsd:documentation>
-			</xsd:annotation>
 		</xsd:attribute>
 	</xsd:complexType>
 </xsd:schema>
