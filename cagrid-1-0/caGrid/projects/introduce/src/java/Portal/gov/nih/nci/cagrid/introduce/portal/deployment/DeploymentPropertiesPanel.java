@@ -2,29 +2,26 @@ package gov.nih.nci.cagrid.introduce.portal.deployment;
 
 import gov.nih.nci.cagrid.common.portal.validation.IconFeedbackPanel;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
-import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
-import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.portal.common.IntroduceLookAndFeel;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.io.File;
-import java.net.URI;
 import java.util.Properties;
 
 import javax.swing.BorderFactory;
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JSlider;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+
+import org.apache.log4j.Logger;
 
 import com.jgoodies.validation.Severity;
 import com.jgoodies.validation.ValidationResult;
@@ -33,16 +30,13 @@ import com.jgoodies.validation.message.SimpleValidationMessage;
 import com.jgoodies.validation.util.DefaultValidationResultModel;
 import com.jgoodies.validation.util.ValidationUtils;
 import com.jgoodies.validation.view.ValidationComponentUtils;
-import javax.swing.JComboBox;
-
-import org.apache.log4j.Logger;
 
 
 public class DeploymentPropertiesPanel extends JPanel {
-    
+
     private static final Logger logger = Logger.getLogger(DeploymentPropertiesPanel.class);
 
-    private ValidationResultModel validationModel = new DefaultValidationResultModel();
+    private final ValidationResultModel validationModel = new DefaultValidationResultModel();
 
     private JPanel contentPanel = null;
 
@@ -66,7 +60,7 @@ public class DeploymentPropertiesPanel extends JPanel {
 
     private JTextField registrationRefreshjTextField = null;
 
-    private Properties deploymentProperties;
+    private final Properties deploymentProperties;
 
     private JComboBox IndexIntervalSelectionComboBox = null;
 
@@ -183,7 +177,7 @@ public class DeploymentPropertiesPanel extends JPanel {
      * @return javax.swing.JPanel
      */
     private JPanel getContentPanel() {
-        if (contentPanel == null) {
+        if (this.contentPanel == null) {
             GridBagConstraints gridBagConstraints10 = new GridBagConstraints();
             gridBagConstraints10.fill = GridBagConstraints.VERTICAL;
             gridBagConstraints10.gridy = 6;
@@ -234,57 +228,61 @@ public class DeploymentPropertiesPanel extends JPanel {
             gridBagConstraints5.fill = GridBagConstraints.HORIZONTAL;
             gridBagConstraints5.insets = new Insets(2, 2, 2, 2);
             gridBagConstraints5.gridy = 6;
-            refreshRegistationLabel = new JLabel();
-            refreshRegistationLabel.setText("Registration Refresh");
-            refreshRegistationLabel.setFont(refreshRegistationLabel.getFont().deriveFont(Font.BOLD));
+            this.refreshRegistationLabel = new JLabel();
+            this.refreshRegistationLabel.setText("Service Registration Refresh Rate");
+            this.refreshRegistationLabel
+                .setToolTipText("This controls how often the service will renew its registration with the Index Service, and is used to set the lifetime of the registration.");
+            this.refreshRegistationLabel.setFont(this.refreshRegistationLabel.getFont().deriveFont(Font.BOLD));
             GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
             gridBagConstraints4.gridx = 0;
             gridBagConstraints4.insets = new Insets(2, 2, 2, 2);
             gridBagConstraints4.fill = GridBagConstraints.HORIZONTAL;
             gridBagConstraints4.gridy = 4;
-            indexRefreshLabel = new JLabel();
-            indexRefreshLabel.setText("Index Service Refresh");
-            indexRefreshLabel.setFont(indexRefreshLabel.getFont().deriveFont(Font.BOLD));
+            this.indexRefreshLabel = new JLabel();
+            this.indexRefreshLabel.setText("Resource Property Update Rate");
+            this.indexRefreshLabel
+                .setToolTipText("This controls how often the Index Service will call back to the service to update the cached values of its resource properites.  Unless you are dynamically changing your resource properties, you don't want to set this to too often.");
+            this.indexRefreshLabel.setFont(this.indexRefreshLabel.getFont().deriveFont(Font.BOLD));
             GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
             gridBagConstraints3.gridx = 0;
             gridBagConstraints3.insets = new Insets(2, 2, 2, 2);
             gridBagConstraints3.fill = GridBagConstraints.HORIZONTAL;
             gridBagConstraints3.gridy = 2;
-            indexServiceURLLabel = new JLabel();
-            indexServiceURLLabel.setText("Index Service URL");
-            indexServiceURLLabel.setFont(indexServiceURLLabel.getFont().deriveFont(Font.BOLD));
+            this.indexServiceURLLabel = new JLabel();
+            this.indexServiceURLLabel.setText("Index Service URL");
+            this.indexServiceURLLabel.setFont(this.indexServiceURLLabel.getFont().deriveFont(Font.BOLD));
             GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
             gridBagConstraints2.gridx = 0;
             gridBagConstraints2.insets = new Insets(2, 2, 2, 2);
             gridBagConstraints2.fill = GridBagConstraints.HORIZONTAL;
             gridBagConstraints2.gridy = 0;
-            deploymentPrefixLabel = new JLabel();
-            deploymentPrefixLabel.setText("Deployment Prefix");
-            deploymentPrefixLabel.setFont(deploymentPrefixLabel.getFont().deriveFont(Font.BOLD));
+            this.deploymentPrefixLabel = new JLabel();
+            this.deploymentPrefixLabel.setText("Deployment Prefix");
+            this.deploymentPrefixLabel.setFont(this.deploymentPrefixLabel.getFont().deriveFont(Font.BOLD));
             GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
             gridBagConstraints1.fill = GridBagConstraints.HORIZONTAL;
             gridBagConstraints1.gridy = 1;
             gridBagConstraints1.insets = new Insets(2, 2, 2, 2);
             gridBagConstraints1.gridx = 0;
-            registrationLabel = new JLabel();
-            registrationLabel.setText("Perform Registration");
-            registrationLabel.setFont(registrationLabel.getFont().deriveFont(Font.BOLD));
-            contentPanel = new JPanel();
-            contentPanel.setLayout(new GridBagLayout());
-            contentPanel.add(registrationLabel, gridBagConstraints1);
-            contentPanel.add(deploymentPrefixLabel, gridBagConstraints2);
-            contentPanel.add(indexServiceURLLabel, gridBagConstraints3);
-            contentPanel.add(indexRefreshLabel, gridBagConstraints4);
-            contentPanel.add(refreshRegistationLabel, gridBagConstraints5);
-            contentPanel.add(getDeploymentPrefixTextField(), gridBagConstraints6);
-            contentPanel.add(getPerformRegistrationCheckBox(), gridBagConstraints7);
-            contentPanel.add(getIndexServiceURLTextField(), gridBagConstraints8);
-            contentPanel.add(getIndexServiceRefreshjTextField(), gridBagConstraints11);
-            contentPanel.add(getRegistrationRefreshjTextField(), gridBagConstraints12);
-            contentPanel.add(getIndexIntervalSelectionComboBox(), gridBagConstraints9);
-            contentPanel.add(getRegistrationIntervalSelectionComboBox(), gridBagConstraints10);
+            this.registrationLabel = new JLabel();
+            this.registrationLabel.setText("Perform Registration");
+            this.registrationLabel.setFont(this.registrationLabel.getFont().deriveFont(Font.BOLD));
+            this.contentPanel = new JPanel();
+            this.contentPanel.setLayout(new GridBagLayout());
+            this.contentPanel.add(this.registrationLabel, gridBagConstraints1);
+            this.contentPanel.add(this.deploymentPrefixLabel, gridBagConstraints2);
+            this.contentPanel.add(this.indexServiceURLLabel, gridBagConstraints3);
+            this.contentPanel.add(this.indexRefreshLabel, gridBagConstraints4);
+            this.contentPanel.add(this.refreshRegistationLabel, gridBagConstraints5);
+            this.contentPanel.add(getDeploymentPrefixTextField(), gridBagConstraints6);
+            this.contentPanel.add(getPerformRegistrationCheckBox(), gridBagConstraints7);
+            this.contentPanel.add(getIndexServiceURLTextField(), gridBagConstraints8);
+            this.contentPanel.add(getIndexServiceRefreshjTextField(), gridBagConstraints11);
+            this.contentPanel.add(getRegistrationRefreshjTextField(), gridBagConstraints12);
+            this.contentPanel.add(getIndexIntervalSelectionComboBox(), gridBagConstraints9);
+            this.contentPanel.add(getRegistrationIntervalSelectionComboBox(), gridBagConstraints10);
         }
-        return contentPanel;
+        return this.contentPanel;
     }
 
 
@@ -294,11 +292,11 @@ public class DeploymentPropertiesPanel extends JPanel {
      * @return javax.swing.JTextField
      */
     private JTextField getDeploymentPrefixTextField() {
-        if (deploymentPrefixTextField == null) {
-            deploymentPrefixTextField = new JTextField();
-            deploymentPrefixTextField.setText(deploymentProperties
+        if (this.deploymentPrefixTextField == null) {
+            this.deploymentPrefixTextField = new JTextField();
+            this.deploymentPrefixTextField.setText(this.deploymentProperties
                 .getProperty(IntroduceConstants.INTRODUCE_DEPLOYMENT_PREFIX_PROPERTY));
-            deploymentPrefixTextField.getDocument().addDocumentListener(new DocumentListener() {
+            this.deploymentPrefixTextField.getDocument().addDocumentListener(new DocumentListener() {
 
                 public void removeUpdate(DocumentEvent e) {
                     validateInput();
@@ -319,7 +317,7 @@ public class DeploymentPropertiesPanel extends JPanel {
 
             });
         }
-        return deploymentPrefixTextField;
+        return this.deploymentPrefixTextField;
     }
 
 
@@ -329,12 +327,12 @@ public class DeploymentPropertiesPanel extends JPanel {
      * @return javax.swing.JCheckBox
      */
     private JCheckBox getPerformRegistrationCheckBox() {
-        if (performRegistrationCheckBox == null) {
-            performRegistrationCheckBox = new JCheckBox();
-            performRegistrationCheckBox.setSelected(new Boolean(deploymentProperties
+        if (this.performRegistrationCheckBox == null) {
+            this.performRegistrationCheckBox = new JCheckBox();
+            this.performRegistrationCheckBox.setSelected(new Boolean(this.deploymentProperties
                 .getProperty(IntroduceConstants.INTRODUCE_DEPLOYMENT_PERFORM_REGISTRATION_PROPERTY)));
         }
-        return performRegistrationCheckBox;
+        return this.performRegistrationCheckBox;
     }
 
 
@@ -344,11 +342,11 @@ public class DeploymentPropertiesPanel extends JPanel {
      * @return javax.swing.JTextField
      */
     private JTextField getIndexServiceURLTextField() {
-        if (indexServiceURLTextField == null) {
-            indexServiceURLTextField = new JTextField();
-            indexServiceURLTextField.setText(deploymentProperties
+        if (this.indexServiceURLTextField == null) {
+            this.indexServiceURLTextField = new JTextField();
+            this.indexServiceURLTextField.setText(this.deploymentProperties
                 .getProperty(IntroduceConstants.INTRODUCE_DEPLOYMENT_INDEX_SERVICE_URL_PROPERTY));
-            indexServiceURLTextField.getDocument().addDocumentListener(new DocumentListener() {
+            this.indexServiceURLTextField.getDocument().addDocumentListener(new DocumentListener() {
 
                 public void removeUpdate(DocumentEvent e) {
                     validateInput();
@@ -369,7 +367,7 @@ public class DeploymentPropertiesPanel extends JPanel {
 
             });
         }
-        return indexServiceURLTextField;
+        return this.indexServiceURLTextField;
     }
 
 
@@ -379,22 +377,22 @@ public class DeploymentPropertiesPanel extends JPanel {
      * @return javax.swing.JTextField
      */
     private JTextField getIndexServiceRefreshjTextField() {
-        if (indexServiceRefreshjTextField == null) {
-            indexServiceRefreshjTextField = new JTextField();
+        if (this.indexServiceRefreshjTextField == null) {
+            this.indexServiceRefreshjTextField = new JTextField();
 
-            int value = Integer.parseInt(deploymentProperties
+            int value = Integer.parseInt(this.deploymentProperties
                 .getProperty(IntroduceConstants.INTRODUCE_DEPLOYMENT_INDEX_REFRESH_PROPERTY));
 
             if (value < 60000) {
-                indexServiceRefreshjTextField.setText(String.valueOf(Integer.parseInt(deploymentProperties
+                this.indexServiceRefreshjTextField.setText(String.valueOf(Integer.parseInt(this.deploymentProperties
                     .getProperty(IntroduceConstants.INTRODUCE_DEPLOYMENT_INDEX_REFRESH_PROPERTY))));
                 getIndexIntervalSelectionComboBox().setSelectedItem("seconds");
             } else {
-                indexServiceRefreshjTextField.setText(String.valueOf(Integer.parseInt(deploymentProperties
+                this.indexServiceRefreshjTextField.setText(String.valueOf(Integer.parseInt(this.deploymentProperties
                     .getProperty(IntroduceConstants.INTRODUCE_DEPLOYMENT_INDEX_REFRESH_PROPERTY)) / 60000));
             }
 
-            indexServiceRefreshjTextField.getDocument().addDocumentListener(new DocumentListener() {
+            this.indexServiceRefreshjTextField.getDocument().addDocumentListener(new DocumentListener() {
 
                 public void removeUpdate(DocumentEvent e) {
                     validateInput();
@@ -414,7 +412,7 @@ public class DeploymentPropertiesPanel extends JPanel {
                 }
             });
         }
-        return indexServiceRefreshjTextField;
+        return this.indexServiceRefreshjTextField;
     }
 
 
@@ -424,13 +422,13 @@ public class DeploymentPropertiesPanel extends JPanel {
      * @return javax.swing.JTextField
      */
     private JTextField getRegistrationRefreshjTextField() {
-        if (registrationRefreshjTextField == null) {
-            registrationRefreshjTextField = new JTextField();
+        if (this.registrationRefreshjTextField == null) {
+            this.registrationRefreshjTextField = new JTextField();
 
-            registrationRefreshjTextField.setText(String.valueOf(Integer.parseInt(deploymentProperties
+            this.registrationRefreshjTextField.setText(String.valueOf(Integer.parseInt(this.deploymentProperties
                 .getProperty(IntroduceConstants.INTRODUCE_DEPLOYMENT_REFRESH_REGISTRATION_PROPERTY)) / 60));
 
-            registrationRefreshjTextField.getDocument().addDocumentListener(new DocumentListener() {
+            this.registrationRefreshjTextField.getDocument().addDocumentListener(new DocumentListener() {
 
                 public void removeUpdate(DocumentEvent e) {
                     validateInput();
@@ -451,7 +449,7 @@ public class DeploymentPropertiesPanel extends JPanel {
 
             });
         }
-        return registrationRefreshjTextField;
+        return this.registrationRefreshjTextField;
     }
 
 
@@ -503,15 +501,15 @@ public class DeploymentPropertiesPanel extends JPanel {
      * @return javax.swing.JComboBox
      */
     private JComboBox getIndexIntervalSelectionComboBox() {
-        if (IndexIntervalSelectionComboBox == null) {
-            IndexIntervalSelectionComboBox = new JComboBox();
-            IndexIntervalSelectionComboBox.addItem("days");
-            IndexIntervalSelectionComboBox.addItem("hours");
-            IndexIntervalSelectionComboBox.addItem("minutes");
-            IndexIntervalSelectionComboBox.addItem("seconds");
-            IndexIntervalSelectionComboBox.setSelectedItem("minutes");
+        if (this.IndexIntervalSelectionComboBox == null) {
+            this.IndexIntervalSelectionComboBox = new JComboBox();
+            this.IndexIntervalSelectionComboBox.addItem("days");
+            this.IndexIntervalSelectionComboBox.addItem("hours");
+            this.IndexIntervalSelectionComboBox.addItem("minutes");
+            this.IndexIntervalSelectionComboBox.addItem("seconds");
+            this.IndexIntervalSelectionComboBox.setSelectedItem("minutes");
         }
-        return IndexIntervalSelectionComboBox;
+        return this.IndexIntervalSelectionComboBox;
     }
 
 
@@ -521,14 +519,14 @@ public class DeploymentPropertiesPanel extends JPanel {
      * @return javax.swing.JComboBox
      */
     private JComboBox getRegistrationIntervalSelectionComboBox() {
-        if (registrationIntervalSelectionComboBox == null) {
-            registrationIntervalSelectionComboBox = new JComboBox();
-            registrationIntervalSelectionComboBox.addItem("days");
-            registrationIntervalSelectionComboBox.addItem("hours");
-            registrationIntervalSelectionComboBox.addItem("minutes");
-            registrationIntervalSelectionComboBox.setSelectedItem("minutes");
+        if (this.registrationIntervalSelectionComboBox == null) {
+            this.registrationIntervalSelectionComboBox = new JComboBox();
+            this.registrationIntervalSelectionComboBox.addItem("days");
+            this.registrationIntervalSelectionComboBox.addItem("hours");
+            this.registrationIntervalSelectionComboBox.addItem("minutes");
+            this.registrationIntervalSelectionComboBox.setSelectedItem("minutes");
         }
-        return registrationIntervalSelectionComboBox;
+        return this.registrationIntervalSelectionComboBox;
     }
 
 } // @jve:decl-index=0:visual-constraint="10,10"
