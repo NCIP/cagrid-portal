@@ -2,6 +2,8 @@ package org.cagrid.gme.xerces;
 
 import java.io.File;
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 
 import junit.framework.TestCase;
 
@@ -20,11 +22,11 @@ public class XercesSchemaTestCase extends TestCase {
 
     public void testNoImports() {
         try {
-            XMLSchema[] schemaArr = new XMLSchema[1];
+            List<XMLSchema> schemas = new ArrayList<XMLSchema>();
             URI ns = new URI("gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common");
-            schemaArr[0] = XSDUtil.createSchema(ns, new File("test/resources/schema/cagrid/common/common.xsd"));
+            schemas.add(XSDUtil.createSchema(ns, new File("test/resources/schema/cagrid/common/common.xsd")));
 
-            XSModel model = loadSchemas(schemaArr, null);
+            XSModel model = loadSchemas(schemas, null);
             assertEquals(2, model.getNamespaceItems().getLength());
         } catch (Exception e) {
             e.printStackTrace();
@@ -69,14 +71,15 @@ public class XercesSchemaTestCase extends TestCase {
 
     public void testImports() {
         try {
-            XMLSchema[] schemaArr = new XMLSchema[2];
+
+            List<XMLSchema> schemas = new ArrayList<XMLSchema>();
             URI ns1 = new URI("gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice");
-            schemaArr[0] = XSDUtil.createSchema(ns1, new File("test/resources/schema/cagrid/data/data.xsd"));
+            schemas.add(XSDUtil.createSchema(ns1, new File("test/resources/schema/cagrid/data/data.xsd")));
 
             URI ns2 = new URI("gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common");
-            schemaArr[1] = XSDUtil.createSchema(ns2, new File("test/resources/schema/cagrid/common/common.xsd"));
+            schemas.add(XSDUtil.createSchema(ns2, new File("test/resources/schema/cagrid/common/common.xsd")));
 
-            XSModel model = loadSchemas(schemaArr, null);
+            XSModel model = loadSchemas(schemas, null);
             // TODO: why is this 4, and not 3? how can we prevent it from
             // processing schemas from imports that we've already processed
             assertEquals(4, model.getNamespaceItems().getLength());
@@ -91,12 +94,12 @@ public class XercesSchemaTestCase extends TestCase {
         assertNotNull("Cannot test a null namespace.", namepace);
         assertNotNull("Cannot test a null location.", location);
         try {
-            XMLSchema[] schemaArr = new XMLSchema[1];
+            List<XMLSchema> schemas = new ArrayList<XMLSchema>();
             URI ns1 = new URI(namepace);
-            schemaArr[0] = XSDUtil.createSchema(ns1, new File(location));
+            schemas.add(XSDUtil.createSchema(ns1, new File(location)));
 
             try {
-                XSModel model = loadSchemas(schemaArr, null);
+                XSModel model = loadSchemas(schemas, null);
                 fail("Parser should have thrown exception due to missing import!");
             } catch (XMLParseException e) {
                 // expected
@@ -109,7 +112,7 @@ public class XercesSchemaTestCase extends TestCase {
     }
 
 
-    private static final XSModel loadSchemas(final XMLSchema[] schemas, XMLSchemaInformationDao dao)
+    private static final XSModel loadSchemas(final List<XMLSchema> schemas, XMLSchemaInformationDao dao)
         throws IllegalArgumentException, XMLParseException {
         if (schemas == null) {
             throw new IllegalArgumentException("Schemas must be non null.");
@@ -118,14 +121,14 @@ public class XercesSchemaTestCase extends TestCase {
         LSInputList list = new LSInputList() {
             public LSInput item(int index) {
                 DOMInputImpl input = new DOMInputImpl();
-                input.setSystemId(schemas[index].getRootDocument().getSystemID());
-                input.setStringData(schemas[index].getRootDocument().getSchemaText());
+                input.setSystemId(schemas.get(index).getRootDocument().getSystemID());
+                input.setStringData(schemas.get(index).getRootDocument().getSchemaText());
                 return input;
             }
 
 
             public int getLength() {
-                return schemas.length;
+                return schemas.size();
             }
         };
 

@@ -113,7 +113,7 @@
     </ns4:Method>
     <ns4:Method description="Returns the targetNamespaces (represented by XMLSchemaNamespaces) of all published XMLSchemas" isImported="false" isProvided="false" name="getXMLSchemaNamespaces" xsi:type="ns4:MethodType">
      <ns4:Inputs/>
-     <ns4:Output qName="ns12:XMLSchemaNamespace" description="the targetNamespaces (represented by XMLSchemaNamespaces) of all published XMLSchemas " isArray="false" xmlns:ns12="gme://gme.cagrid.org/2.0/GlobalModelExchange/domain"/>
+     <ns4:Output qName="ns12:XMLSchemaNamespace" description="the targetNamespaces (represented by XMLSchemaNamespaces) of all published XMLSchemas " isArray="true" xmlns:ns12="gme://gme.cagrid.org/2.0/GlobalModelExchange/domain"/>
      <ns4:Exceptions/>
     </ns4:Method>
     <ns4:Method description="Returns an XMLSchemaBundle containing the transitive closure of the XMLSchema with the targetNamespace of the given XMLSchemaNamespace and every XMLSchema it imports (as well as each imported XMLSchema's imports)" isImported="false" isProvided="false" name="getXMLSchemaAndDependencies" xsi:type="ns4:MethodType">

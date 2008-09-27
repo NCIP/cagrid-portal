@@ -3,6 +3,9 @@ package org.cagrid.gme.service;
 import gov.nih.nci.cagrid.common.Utils;
 
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 import org.cagrid.gme.domain.XMLSchema;
 import org.cagrid.gme.stubs.types.InvalidSchemaSubmission;
@@ -40,43 +43,55 @@ public class GMEAddSchemaRedefinesTestCase extends GMETestCaseBase {
 
 
     public void testSchemaRedefine() throws Exception {
-        XMLSchema[] schemas = new XMLSchema[]{this.testSchemaRedefine};
-        this.gme.addSchema(schemas);
-        URI[] namespaces = this.gme.getNamespaces();
-        assertEquals(1, namespaces.length);
-        assertEquals(this.testSchemaRedefine.getTargetNamespace(), namespaces[0]);
+        List<XMLSchema> schemas = new ArrayList<XMLSchema>();
+        schemas.add(this.testSchemaRedefine);
+        this.gme.publishSchemas(schemas);
+
+        Collection<URI> namespaces = this.gme.getNamespaces();
+        assertEquals(1, namespaces.size());
+        assertEquals(this.testSchemaRedefine.getTargetNamespace(), namespaces.iterator().next());
         assertEquals(this.testSchemaRedefine, this.gme.getSchema(this.testSchemaRedefine.getTargetNamespace()));
 
     }
 
 
     public void testSchemaRedefined() throws Exception {
-        XMLSchema[] schemas = new XMLSchema[]{this.testSchemaRedefined};
-        this.gme.addSchema(schemas);
-        URI[] namespaces = this.gme.getNamespaces();
-        assertEquals(1, namespaces.length);
-        assertEquals(this.testSchemaRedefined.getTargetNamespace(), namespaces[0]);
+        List<XMLSchema> schemas = new ArrayList<XMLSchema>();
+        schemas.add(this.testSchemaRedefined);
+        this.gme.publishSchemas(schemas);
+
+        Collection<URI> namespaces = this.gme.getNamespaces();
+
+        assertEquals(1, namespaces.size());
+        assertEquals(this.testSchemaRedefined.getTargetNamespace(), namespaces.iterator().next());
         assertEquals(this.testSchemaRedefined, this.gme.getSchema(this.testSchemaRedefined.getTargetNamespace()));
     }
 
 
     public void testSchemaRedefineNoNamespace() throws Exception {
-        XMLSchema[] schemas = new XMLSchema[]{this.testSchemaRedefineNoNamespace};
-        this.gme.addSchema(schemas);
-        URI[] namespaces = this.gme.getNamespaces();
-        assertEquals(1, namespaces.length);
-        assertEquals(this.testSchemaRedefineNoNamespace.getTargetNamespace(), namespaces[0]);
+        List<XMLSchema> schemas = new ArrayList<XMLSchema>();
+        schemas.add(this.testSchemaRedefineNoNamespace);
+        this.gme.publishSchemas(schemas);
+
+        Collection<URI> namespaces = this.gme.getNamespaces();
+
+        assertEquals(1, namespaces.size());
+        assertEquals(this.testSchemaRedefineNoNamespace.getTargetNamespace(), namespaces.iterator().next());
         assertEquals(this.testSchemaRedefineNoNamespace, this.gme.getSchema(this.testSchemaRedefineNoNamespace
             .getTargetNamespace()));
     }
 
 
     public void testSchemaRedefineWrongNamespaceRedefinedOnly() throws Exception {
-        XMLSchema[] schemas = new XMLSchema[]{this.testSchemaRedefineWrongNamespaceRedefinedOnly};
-        this.gme.addSchema(schemas);
-        URI[] namespaces = this.gme.getNamespaces();
-        assertEquals(1, namespaces.length);
-        assertEquals(this.testSchemaRedefineWrongNamespaceRedefinedOnly.getTargetNamespace(), namespaces[0]);
+        List<XMLSchema> schemas = new ArrayList<XMLSchema>();
+        schemas.add(this.testSchemaRedefineWrongNamespaceRedefinedOnly);
+        this.gme.publishSchemas(schemas);
+
+        Collection<URI> namespaces = this.gme.getNamespaces();
+
+        assertEquals(1, namespaces.size());
+        assertEquals(this.testSchemaRedefineWrongNamespaceRedefinedOnly.getTargetNamespace(), namespaces.iterator()
+            .next());
         assertEquals(this.testSchemaRedefineWrongNamespaceRedefinedOnly, this.gme
             .getSchema(this.testSchemaRedefineWrongNamespaceRedefinedOnly.getTargetNamespace()));
     }
@@ -84,8 +99,9 @@ public class GMEAddSchemaRedefinesTestCase extends GMETestCaseBase {
 
     @ExpectedException(value = InvalidSchemaSubmission.class)
     public void testInvalidSchemaRedefineWrongNamespace() throws Exception {
-        XMLSchema[] schemas = new XMLSchema[]{this.testInvalidSchemaRedefineWrongNamespace};
-        this.gme.addSchema(schemas);
+        List<XMLSchema> schemas = new ArrayList<XMLSchema>();
+        schemas.add(this.testInvalidSchemaRedefineWrongNamespace);
+        this.gme.publishSchemas(schemas);
     }
 
 }

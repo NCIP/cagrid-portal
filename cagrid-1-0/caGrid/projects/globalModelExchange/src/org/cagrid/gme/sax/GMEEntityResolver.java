@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -23,18 +24,18 @@ import org.cagrid.gme.service.dao.XMLSchemaInformationDao;
  * @author oster
  */
 public class GMEEntityResolver implements XMLEntityResolver {
-    protected XMLSchema[] submissionSchemas = null;
+    protected List<XMLSchema> submissionSchemas = null;
     protected XMLSchemaInformationDao schemaDao = null;
 
     protected static Log LOG = LogFactory.getLog(GMEEntityResolver.class.getName());
 
 
-    public GMEEntityResolver(XMLSchema[] submissionSchemas, XMLSchemaInformationDao schemaDao) {
+    public GMEEntityResolver(List<XMLSchema> submissionSchemas, XMLSchemaInformationDao schemaDao) {
         super();
         this.submissionSchemas = submissionSchemas;
         this.schemaDao = schemaDao;
         if (submissionSchemas != null) {
-            LOG.debug("Initializing with " + submissionSchemas.length + " submission schemas.");
+            LOG.debug("Initializing with " + submissionSchemas.size() + " submission schemas.");
         } else {
             LOG.debug("Initializing with no submission schemas.");
         }
@@ -144,10 +145,9 @@ public class GMEEntityResolver implements XMLEntityResolver {
     protected XMLSchema getSchemaFromSchemas(URI namespace) throws SchemaParsingException {
         XMLSchema result = null;
         if (this.submissionSchemas != null) {
-            for (int i = 0; i < this.submissionSchemas.length; i++) {
-                XMLSchema schema = this.submissionSchemas[i];
+            for (XMLSchema schema : this.submissionSchemas) {
                 if (schema.getTargetNamespace() != null && namespace.equals(schema.getTargetNamespace())) {
-                    LOG.debug("Found desired schema in submission package, at index (" + i + ").");
+                    LOG.debug("Found desired schema in submission package.");
                     if (result == null) {
                         result = schema;
                     } else {

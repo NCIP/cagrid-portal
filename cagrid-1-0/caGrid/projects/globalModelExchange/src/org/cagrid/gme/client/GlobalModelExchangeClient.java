@@ -107,6 +107,36 @@ public class GlobalModelExchangeClient extends ServiceSecurityClient implements 
         }
     }
 
+  public gov.nih.nci.cagrid.metadata.security.ServiceSecurityMetadata getServiceSecurityMetadata() throws RemoteException {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"getServiceSecurityMetadata");
+    gov.nih.nci.cagrid.introduce.security.stubs.GetServiceSecurityMetadataRequest params = new gov.nih.nci.cagrid.introduce.security.stubs.GetServiceSecurityMetadataRequest();
+    gov.nih.nci.cagrid.introduce.security.stubs.GetServiceSecurityMetadataResponse boxedResult = portType.getServiceSecurityMetadata(params);
+    return boxedResult.getServiceSecurityMetadata();
+    }
+  }
+
+  public org.oasis.wsrf.properties.GetMultipleResourcePropertiesResponse getMultipleResourceProperties(org.oasis.wsrf.properties.GetMultipleResourceProperties_Element params) throws RemoteException {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"getMultipleResourceProperties");
+    return portType.getMultipleResourceProperties(params);
+    }
+  }
+
+  public org.oasis.wsrf.properties.GetResourcePropertyResponse getResourceProperty(javax.xml.namespace.QName params) throws RemoteException {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"getResourceProperty");
+    return portType.getResourceProperty(params);
+    }
+  }
+
+  public org.oasis.wsrf.properties.QueryResourcePropertiesResponse queryResourceProperties(org.oasis.wsrf.properties.QueryResourceProperties_Element params) throws RemoteException {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"queryResourceProperties");
+    return portType.queryResourceProperties(params);
+    }
+  }
+
   public void publishXMLSchemas(org.cagrid.gme.domain.XMLSchema[] schemas) throws RemoteException {
     synchronized(portTypeMutex){
       configureStubSecurity((Stub)portType,"publishXMLSchemas");
@@ -130,7 +160,7 @@ public class GlobalModelExchangeClient extends ServiceSecurityClient implements 
     }
   }
 
-  public org.cagrid.gme.domain.XMLSchemaNamespace getXMLSchemaNamespaces() throws RemoteException {
+  public org.cagrid.gme.domain.XMLSchemaNamespace[] getXMLSchemaNamespaces() throws RemoteException {
     synchronized(portTypeMutex){
       configureStubSecurity((Stub)portType,"getXMLSchemaNamespaces");
     org.cagrid.gme.stubs.GetXMLSchemaNamespacesRequest params = new org.cagrid.gme.stubs.GetXMLSchemaNamespacesRequest();
@@ -183,36 +213,6 @@ public class GlobalModelExchangeClient extends ServiceSecurityClient implements 
     params.setTargetNamespace(targetNamespaceContainer);
     org.cagrid.gme.stubs.GetImportingXMLSchemaNamespacesResponse boxedResult = portType.getImportingXMLSchemaNamespaces(params);
     return boxedResult.getXMLSchemaNamespace();
-    }
-  }
-
-  public gov.nih.nci.cagrid.metadata.security.ServiceSecurityMetadata getServiceSecurityMetadata() throws RemoteException {
-    synchronized(portTypeMutex){
-      configureStubSecurity((Stub)portType,"getServiceSecurityMetadata");
-    gov.nih.nci.cagrid.introduce.security.stubs.GetServiceSecurityMetadataRequest params = new gov.nih.nci.cagrid.introduce.security.stubs.GetServiceSecurityMetadataRequest();
-    gov.nih.nci.cagrid.introduce.security.stubs.GetServiceSecurityMetadataResponse boxedResult = portType.getServiceSecurityMetadata(params);
-    return boxedResult.getServiceSecurityMetadata();
-    }
-  }
-
-  public org.oasis.wsrf.properties.GetMultipleResourcePropertiesResponse getMultipleResourceProperties(org.oasis.wsrf.properties.GetMultipleResourceProperties_Element params) throws RemoteException {
-    synchronized(portTypeMutex){
-      configureStubSecurity((Stub)portType,"getMultipleResourceProperties");
-    return portType.getMultipleResourceProperties(params);
-    }
-  }
-
-  public org.oasis.wsrf.properties.GetResourcePropertyResponse getResourceProperty(javax.xml.namespace.QName params) throws RemoteException {
-    synchronized(portTypeMutex){
-      configureStubSecurity((Stub)portType,"getResourceProperty");
-    return portType.getResourceProperty(params);
-    }
-  }
-
-  public org.oasis.wsrf.properties.QueryResourcePropertiesResponse queryResourceProperties(org.oasis.wsrf.properties.QueryResourceProperties_Element params) throws RemoteException {
-    synchronized(portTypeMutex){
-      configureStubSecurity((Stub)portType,"queryResourceProperties");
-    return portType.queryResourceProperties(params);
     }
   }
 

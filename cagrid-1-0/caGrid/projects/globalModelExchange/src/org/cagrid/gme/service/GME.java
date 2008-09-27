@@ -51,10 +51,10 @@ public class GME {
     }
 
 
-    public void addSchema(XMLSchema[] schemas) throws SchemaAlreadyExists, InvalidSchemaSubmission {
+    public void publishSchemas(List<XMLSchema> schemas) throws SchemaAlreadyExists, InvalidSchemaSubmission {
 
         // 0. sanity check submission
-        if (schemas == null || schemas.length == 0) {
+        if (schemas == null || schemas.size() == 0) {
             String message = "No schemas were found in the submission.";
             LOG.error(message);
 
@@ -110,7 +110,7 @@ public class GME {
     }
 
 
-    protected Map<URI, SchemaGrammar> verifySubmissionAndInitializeProcessedSchemasMap(XMLSchema[] schemas)
+    protected Map<URI, SchemaGrammar> verifySubmissionAndInitializeProcessedSchemasMap(List<XMLSchema> schemas)
         throws InvalidSchemaSubmission, SchemaAlreadyExists {
         Map<URI, SchemaGrammar> processedSchemas = new HashMap<URI, SchemaGrammar>();
         for (XMLSchema submittedSchema : schemas) {
@@ -197,7 +197,7 @@ public class GME {
     }
 
 
-    protected void commitSchemas(XMLSchema[] schemas, Map<URI, SchemaGrammar> processedSchemas)
+    protected void commitSchemas(List<XMLSchema> schemas, Map<URI, SchemaGrammar> processedSchemas)
         throws InvalidSchemaSubmission {
 
         // if got here with no error, schemas are ok to persist
@@ -313,7 +313,7 @@ public class GME {
     // instead of building up a map and calling this (this is refactor cruft
     // leftover from removing the SchemaPersitence layer)
     // TODO: need to add rollBackFor=... to specify exceptions which should
-    // cause rollbacks (does that rollback for subclasses of the specified
+    // cause rollbacks (does that rollbackfor subclasses of the specified
     // exception?)
     private void storeSchemas(Map<XMLSchema, List<URI>> schemasToStore) {
         // REVISIT: is there a simpler way to do this
@@ -446,12 +446,10 @@ public class GME {
      *         XMLSchemas
      */
     @Transactional(readOnly = true)
-    public URI[] getNamespaces() {
+    public Collection<URI> getNamespaces() {
         this.lock.readLock().lock();
         try {
-            Collection<URI> nsCol = this.schemaDao.getAllNamespaces();
-            URI[] nsArr = new URI[nsCol.size()];
-            return nsCol.toArray(nsArr);
+            return this.schemaDao.getAllNamespaces();
         } finally {
             this.lock.readLock().unlock();
         }

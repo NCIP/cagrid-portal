@@ -3,7 +3,9 @@ package org.cagrid.gme.service;
 import gov.nih.nci.cagrid.common.Utils;
 
 import java.net.URI;
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 import org.cagrid.gme.domain.XMLSchema;
 import org.cagrid.gme.stubs.types.InvalidSchemaSubmission;
@@ -28,39 +30,55 @@ public class GMEAddSchemaCyclesTestCase extends GMETestCaseBase {
 
     @ExpectedException(InvalidSchemaSubmission.class)
     public void testCycleAMissingDocumentB() throws Exception {
-        this.gme.addSchema(new XMLSchema[]{this.testSchemaCycleA});
+        List<XMLSchema> schemas = new ArrayList<XMLSchema>();
+        schemas.add(this.testSchemaCycleA);
+        this.gme.publishSchemas(schemas);
     }
 
 
     @ExpectedException(InvalidSchemaSubmission.class)
     public void testCycleBMissingDocumentA() throws Exception {
-        this.gme.addSchema(new XMLSchema[]{this.testSchemaCycleB});
+        List<XMLSchema> schemas = new ArrayList<XMLSchema>();
+        schemas.add(this.testSchemaCycleB);
+        this.gme.publishSchemas(schemas);
     }
 
 
     public void testCyclesAFirst() throws Exception {
-        XMLSchema[] schemas = new XMLSchema[]{this.testSchemaCycleA, this.testSchemaCycleB};
-        this.gme.addSchema(schemas);
-        URI[] namespaces = new URI[]{this.testSchemaCycleA.getTargetNamespace(),
-                this.testSchemaCycleB.getTargetNamespace()};
-        URI[] gmenamespaces = this.gme.getNamespaces();
-        Arrays.sort(namespaces);
-        Arrays.sort(gmenamespaces);
-        assertTrue(Arrays.equals(namespaces, gmenamespaces));
+        List<XMLSchema> schemas = new ArrayList<XMLSchema>();
+        schemas.add(this.testSchemaCycleA);
+        schemas.add(this.testSchemaCycleB);
+
+        this.gme.publishSchemas(schemas);
+        Collection<URI> namespaces = new ArrayList<URI>();
+        namespaces.add(this.testSchemaCycleA.getTargetNamespace());
+        namespaces.add(this.testSchemaCycleB.getTargetNamespace());
+
+        Collection<URI> gmenamespaces = this.gme.getNamespaces();
+
+        assertTrue(namespaces.containsAll(gmenamespaces));
+        assertTrue(gmenamespaces.containsAll(namespaces));
+
         assertEquals(this.testSchemaCycleA, this.gme.getSchema(this.testSchemaCycleA.getTargetNamespace()));
         assertEquals(this.testSchemaCycleB, this.gme.getSchema(this.testSchemaCycleB.getTargetNamespace()));
     }
 
 
     public void testCyclesBFirst() throws Exception {
-        XMLSchema[] schemas = new XMLSchema[]{this.testSchemaCycleB, this.testSchemaCycleA};
-        this.gme.addSchema(schemas);
-        URI[] namespaces = new URI[]{this.testSchemaCycleA.getTargetNamespace(),
-                this.testSchemaCycleB.getTargetNamespace()};
-        URI[] gmenamespaces = this.gme.getNamespaces();
-        Arrays.sort(namespaces);
-        Arrays.sort(gmenamespaces);
-        assertTrue(Arrays.equals(namespaces, gmenamespaces));
+        List<XMLSchema> schemas = new ArrayList<XMLSchema>();
+        schemas.add(this.testSchemaCycleB);
+        schemas.add(this.testSchemaCycleA);
+
+        this.gme.publishSchemas(schemas);
+        Collection<URI> namespaces = new ArrayList<URI>();
+        namespaces.add(this.testSchemaCycleA.getTargetNamespace());
+        namespaces.add(this.testSchemaCycleB.getTargetNamespace());
+
+        Collection<URI> gmenamespaces = this.gme.getNamespaces();
+
+        assertTrue(namespaces.containsAll(gmenamespaces));
+        assertTrue(gmenamespaces.containsAll(namespaces));
+
         assertEquals(this.testSchemaCycleA, this.gme.getSchema(this.testSchemaCycleA.getTargetNamespace()));
         assertEquals(this.testSchemaCycleB, this.gme.getSchema(this.testSchemaCycleB.getTargetNamespace()));
     }

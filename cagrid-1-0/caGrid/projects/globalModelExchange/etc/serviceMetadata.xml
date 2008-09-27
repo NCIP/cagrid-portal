@@ -39,7 +39,7 @@
       </ns2:Operation>
       <ns2:Operation description="Returns the targetNamespaces (represented by XMLSchemaNamespaces) of all published XMLSchemas" name="getXMLSchemaNamespaces">
        <ns2:inputParameterCollection/>
-       <ns2:Output qName="ns8:XMLSchemaNamespace" dimensionality="1" isArray="false" xmlns:ns8="gme://gme.cagrid.org/2.0/GlobalModelExchange/domain"/>
+       <ns2:Output qName="ns8:XMLSchemaNamespace" dimensionality="1" isArray="true" xmlns:ns8="gme://gme.cagrid.org/2.0/GlobalModelExchange/domain"/>
        <ns2:faultCollection/>
       </ns2:Operation>
       <ns2:Operation description="Returns an XMLSchemaBundle containing the transitive closure of the XMLSchema with the targetNamespace of the given XMLSchemaNamespace and every XMLSchema it imports (as well as each imported XMLSchema's imports)" name="getXMLSchemaAndDependencies">

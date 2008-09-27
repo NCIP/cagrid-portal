@@ -2,6 +2,9 @@ package org.cagrid.gme.service;
 
 import gov.nih.nci.cagrid.common.Utils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.cagrid.gme.domain.XMLSchema;
 import org.cagrid.gme.stubs.types.InvalidSchemaSubmission;
 import org.cagrid.gme.test.GMETestCaseBase;
@@ -30,60 +33,74 @@ public class GMEAddSchemaErrorsTestCase extends GMETestCaseBase {
     @Override
     protected void onSetUp() throws Exception {
         super.onSetUp();
-        assertNotNull(testSchemaDuplicates);
-        assertNotNull(testSchemaMissingInclude);
-        assertNotNull(testSchemaMissingType);
-        assertNotNull(testSchemaNoNamespace);
-        assertNotNull(testSchemaWrongNamespace);
-        assertNotNull(testSchemaNoImports);
+        assertNotNull(this.testSchemaDuplicates);
+        assertNotNull(this.testSchemaMissingInclude);
+        assertNotNull(this.testSchemaMissingType);
+        assertNotNull(this.testSchemaNoNamespace);
+        assertNotNull(this.testSchemaWrongNamespace);
+        assertNotNull(this.testSchemaNoImports);
     }
 
 
     @ExpectedException(InvalidSchemaSubmission.class)
     public void testEmptySubmission() throws Exception {
-        this.gme.addSchema(new XMLSchema[]{});
+        this.gme.publishSchemas(new ArrayList<XMLSchema>());
     }
 
 
     @ExpectedException(InvalidSchemaSubmission.class)
     public void testNullSubmission() throws Exception {
-        this.gme.addSchema(null);
+        this.gme.publishSchemas(null);
     }
 
 
     @ExpectedException(InvalidSchemaSubmission.class)
     public void testSchemaDuplicates() throws Exception {
-        this.gme.addSchema(new XMLSchema[]{this.testSchemaDuplicates});
+        List<XMLSchema> schemas = new ArrayList<XMLSchema>();
+        schemas.add(this.testSchemaDuplicates);
+        this.gme.publishSchemas(schemas);
     }
 
 
     @ExpectedException(InvalidSchemaSubmission.class)
     public void testSchemaMissingInclude() throws Exception {
-        this.gme.addSchema(new XMLSchema[]{this.testSchemaMissingInclude});
+        List<XMLSchema> schemas = new ArrayList<XMLSchema>();
+        schemas.add(this.testSchemaMissingInclude);
+        this.gme.publishSchemas(schemas);
     }
 
 
     @ExpectedException(InvalidSchemaSubmission.class)
     public void testSchemaMissingType() throws Exception {
-        this.gme.addSchema(new XMLSchema[]{this.testSchemaMissingType});
+        List<XMLSchema> schemas = new ArrayList<XMLSchema>();
+        schemas.add(this.testSchemaMissingType);
+        this.gme.publishSchemas(schemas);
     }
 
 
     @ExpectedException(InvalidSchemaSubmission.class)
     public void testSchemaNoNamespace() throws Exception {
-        this.gme.addSchema(new XMLSchema[]{this.testSchemaNoNamespace});
+        List<XMLSchema> schemas = new ArrayList<XMLSchema>();
+        schemas.add(this.testSchemaNoNamespace);
+        this.gme.publishSchemas(schemas);
     }
 
 
     @ExpectedException(InvalidSchemaSubmission.class)
     public void testSchemaWrongNamespace() throws Exception {
-        this.gme.addSchema(new XMLSchema[]{this.testSchemaWrongNamespace});
+        List<XMLSchema> schemas = new ArrayList<XMLSchema>();
+        schemas.add(this.testSchemaWrongNamespace);
+        this.gme.publishSchemas(schemas);
+
     }
 
 
     @ExpectedException(InvalidSchemaSubmission.class)
     public void testSchemaNoImports() throws Exception {
-        this.gme.addSchema(new XMLSchema[]{this.testSchemaNoImports});
+        List<XMLSchema> schemas = new ArrayList<XMLSchema>();
+        schemas.add(this.testSchemaNoImports);
+        this.gme.publishSchemas(schemas);
+
     }
 
 }

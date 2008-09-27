@@ -63,7 +63,7 @@
       <element name="GetXMLSchemaNamespacesResponse">
         <complexType>
           <sequence>
-            <element ref="ns0:XMLSchemaNamespace" minOccurs="1" maxOccurs="1" />
+            <element ref="ns0:XMLSchemaNamespace" minOccurs="1" maxOccurs="unbounded" />
           </sequence>
         </complexType>
       </element>

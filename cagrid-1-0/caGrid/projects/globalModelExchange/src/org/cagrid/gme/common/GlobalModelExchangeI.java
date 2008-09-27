@@ -18,6 +18,12 @@ public interface GlobalModelExchangeI {
     public gov.nih.nci.cagrid.metadata.security.ServiceSecurityMetadata getServiceSecurityMetadata()
         throws RemoteException;
 
+  public org.oasis.wsrf.properties.GetMultipleResourcePropertiesResponse getMultipleResourceProperties(org.oasis.wsrf.properties.GetMultipleResourceProperties_Element params) throws RemoteException ;
+
+  public org.oasis.wsrf.properties.GetResourcePropertyResponse getResourceProperty(javax.xml.namespace.QName params) throws RemoteException ;
+
+  public org.oasis.wsrf.properties.QueryResourcePropertiesResponse queryResourceProperties(org.oasis.wsrf.properties.QueryResourceProperties_Element params) throws RemoteException ;
+
   /**
    * Publishes the provided schemas, replacing existing versions as necessary.
    *
@@ -40,7 +46,7 @@ public interface GlobalModelExchangeI {
    *
    * @return the targetNamespaces (represented by XMLSchemaNamespaces) of all published XMLSchemas 
    */
-  public org.cagrid.gme.domain.XMLSchemaNamespace getXMLSchemaNamespaces() throws RemoteException ;
+  public org.cagrid.gme.domain.XMLSchemaNamespace[] getXMLSchemaNamespaces() throws RemoteException ;
 
   /**
    * Returns an XMLSchemaBundle containing the transitive closure of the XMLSchema with the targetNamespace of the given XMLSchemaNamespace and every XMLSchema it imports (as well as each imported XMLSchema's imports)
@@ -76,11 +82,5 @@ public interface GlobalModelExchangeI {
    * @return all the targetNamespaces of the XMLSchemas which import the given XMLSchema, identified its targetNamespace
    */
   public org.cagrid.gme.domain.XMLSchemaNamespace[] getImportingXMLSchemaNamespaces(org.cagrid.gme.domain.XMLSchemaNamespace targetNamespace) throws RemoteException ;
-
-  public org.oasis.wsrf.properties.GetMultipleResourcePropertiesResponse getMultipleResourceProperties(org.oasis.wsrf.properties.GetMultipleResourceProperties_Element params) throws RemoteException ;
-
-  public org.oasis.wsrf.properties.GetResourcePropertyResponse getResourceProperty(javax.xml.namespace.QName params) throws RemoteException ;
-
-  public org.oasis.wsrf.properties.QueryResourcePropertiesResponse queryResourceProperties(org.oasis.wsrf.properties.QueryResourceProperties_Element params) throws RemoteException ;
 
 }
