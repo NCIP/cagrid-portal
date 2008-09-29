@@ -82,10 +82,12 @@
 
 
     $("${prefix}diagnoseBtn").disable();
+    $("${prefix}diagnoseBtn").value='Running...';
+    $("${prefix}diagnoseBtn").style.background='#38A6C1';
+
     $("${prefix}diagnosisLabel").innerHTML = 'Running Diagnostics';
     counter=0;
     $("${prefix}headerDiv").style.visibility='visible';
-    $("${prefix}diagnoseBtn").style.background='#38A6C1';
 
 
     <!--start diagnostics-->
@@ -120,6 +122,7 @@
 
     $("${prefix}diagnoseBtn").enable();
     $("${prefix}diagnoseBtn").style.background='#3876C1';
+     $("${prefix}diagnoseBtn").value='Diagnose';
 
 
     }
