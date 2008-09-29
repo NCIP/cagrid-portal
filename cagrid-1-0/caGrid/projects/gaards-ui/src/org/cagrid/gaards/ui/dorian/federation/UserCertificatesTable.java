@@ -1,7 +1,5 @@
 package org.cagrid.gaards.ui.dorian.federation;
 
-import gov.nih.nci.cagrid.common.Runner;
-
 import java.security.cert.X509Certificate;
 import java.util.Vector;
 
@@ -10,7 +8,6 @@ import javax.swing.table.TableColumn;
 
 import org.cagrid.gaards.dorian.federation.UserCertificateRecord;
 import org.cagrid.gaards.pki.CertUtil;
-import org.cagrid.gaards.ui.dorian.DorianHandle;
 import org.cagrid.gaards.ui.dorian.DorianSession;
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.table.GrapeBaseTable;
@@ -20,7 +17,7 @@ import org.cagrid.grape.utils.ErrorDialog;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: UserCertificatesTable.java,v 1.1 2008-09-29 02:17:29 langella Exp $
+ * @version $Id: UserCertificatesTable.java,v 1.2 2008-09-29 02:36:19 langella Exp $
  */
 public class UserCertificatesTable extends GrapeBaseTable {
 	public final static String USER_CERTIFICATE = "user";
@@ -93,7 +90,7 @@ public class UserCertificatesTable extends GrapeBaseTable {
 	public void doubleClick() {
 		try {
 			GridApplication.getContext().addApplicationComponent(
-					new UserCertificateWindow(getSelectedCertificate()), 600,
+					new UserCertificateWindow(this.session,getSelectedCertificate()), 600,
 					450);
 		} catch (Exception e) {
 			ErrorDialog.showError(e);

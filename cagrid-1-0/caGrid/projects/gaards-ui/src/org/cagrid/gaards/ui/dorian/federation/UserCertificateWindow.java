@@ -1,5 +1,10 @@
 package org.cagrid.gaards.ui.dorian.federation;
 
+import gov.nih.nci.cagrid.common.FaultUtil;
+import gov.nih.nci.cagrid.common.Runner;
+import gov.nih.nci.cagrid.common.Utils;
+
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -7,6 +12,7 @@ import java.awt.Insets;
 import java.security.cert.X509Certificate;
 
 import javax.swing.BorderFactory;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -14,24 +20,25 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
+import org.cagrid.gaards.dorian.client.GridAdministrationClient;
 import org.cagrid.gaards.dorian.federation.UserCertificateRecord;
 import org.cagrid.gaards.pki.CertUtil;
 import org.cagrid.gaards.ui.common.CertificateInformationComponent;
 import org.cagrid.gaards.ui.common.GAARDSLookAndFeel;
+import org.cagrid.gaards.ui.dorian.DorianSession;
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.LookAndFeel;
-import javax.swing.JButton;
-import java.awt.FlowLayout;
+import org.cagrid.grape.utils.ErrorDialog;
 
 public class UserCertificateWindow extends ApplicationComponent {
 
 	private static final long serialVersionUID = 1L;
 
 	private JPanel jContentPane = null;
-	
+
 	private UserCertificateRecord record;
-	
+
 	private X509Certificate certificate;
 
 	private JPanel informationPanel = null;
@@ -80,13 +87,18 @@ public class UserCertificateWindow extends ApplicationComponent {
 
 	private JButton viewCertificate = null;
 
+	private DorianSession session;
+
 	/**
 	 * This is the default constructor
 	 */
-	public UserCertificateWindow(UserCertificateRecord record) throws Exception{
+	public UserCertificateWindow(DorianSession session,
+			UserCertificateRecord record) throws Exception {
 		super();
 		this.record = record;
-		this.certificate = CertUtil.loadCertificate(record.getCertificate().getCertificateAsString());
+		this.session = session;
+		this.certificate = CertUtil.loadCertificate(record.getCertificate()
+				.getCertificateAsString());
 		initialize();
 	}
 
@@ -98,7 +110,7 @@ public class UserCertificateWindow extends ApplicationComponent {
 	private void initialize() {
 		this.setSize(500, 350);
 		this.setContentPane(getJContentPane());
-		this.setTitle("User Certificate ("+record.getSerialNumber()+")");
+		this.setTitle("User Certificate (" + record.getSerialNumber() + ")");
 	}
 
 	/**
@@ -148,9 +160,9 @@ public class UserCertificateWindow extends ApplicationComponent {
 	}
 
 	/**
-	 * This method initializes informationPanel	
-	 * 	
-	 * @return javax.swing.JPanel	
+	 * This method initializes informationPanel
+	 * 
+	 * @return javax.swing.JPanel
 	 */
 	private JPanel getInformationPanel() {
 		if (informationPanel == null) {
@@ -257,9 +269,9 @@ public class UserCertificateWindow extends ApplicationComponent {
 	}
 
 	/**
-	 * This method initializes serialNumber	
-	 * 	
-	 * @return javax.swing.JTextField	
+	 * This method initializes serialNumber
+	 * 
+	 * @return javax.swing.JTextField
 	 */
 	private JTextField getSerialNumber() {
 		if (serialNumber == null) {
@@ -271,9 +283,9 @@ public class UserCertificateWindow extends ApplicationComponent {
 	}
 
 	/**
-	 * This method initializes subject	
-	 * 	
-	 * @return javax.swing.JTextField	
+	 * This method initializes subject
+	 * 
+	 * @return javax.swing.JTextField
 	 */
 	private JTextField getSubject() {
 		if (subject == null) {
@@ -285,9 +297,9 @@ public class UserCertificateWindow extends ApplicationComponent {
 	}
 
 	/**
-	 * This method initializes issuer	
-	 * 	
-	 * @return javax.swing.JTextField	
+	 * This method initializes issuer
+	 * 
+	 * @return javax.swing.JTextField
 	 */
 	private JTextField getIssuer() {
 		if (issuer == null) {
@@ -299,9 +311,9 @@ public class UserCertificateWindow extends ApplicationComponent {
 	}
 
 	/**
-	 * This method initializes created	
-	 * 	
-	 * @return javax.swing.JTextField	
+	 * This method initializes created
+	 * 
+	 * @return javax.swing.JTextField
 	 */
 	private JTextField getCreated() {
 		if (created == null) {
@@ -313,9 +325,9 @@ public class UserCertificateWindow extends ApplicationComponent {
 	}
 
 	/**
-	 * This method initializes expires	
-	 * 	
-	 * @return javax.swing.JTextField	
+	 * This method initializes expires
+	 * 
+	 * @return javax.swing.JTextField
 	 */
 	private JTextField getExpires() {
 		if (expires == null) {
@@ -327,9 +339,9 @@ public class UserCertificateWindow extends ApplicationComponent {
 	}
 
 	/**
-	 * This method initializes status	
-	 * 	
-	 * @return javax.swing.JComboBox	
+	 * This method initializes status
+	 * 
+	 * @return javax.swing.JComboBox
 	 */
 	private UserCertificateStatusComboBox getStatus() {
 		if (status == null) {
@@ -340,9 +352,9 @@ public class UserCertificateWindow extends ApplicationComponent {
 	}
 
 	/**
-	 * This method initializes notesPanel	
-	 * 	
-	 * @return javax.swing.JPanel	
+	 * This method initializes notesPanel
+	 * 
+	 * @return javax.swing.JPanel
 	 */
 	private JPanel getNotesPanel() {
 		if (notesPanel == null) {
@@ -356,8 +368,7 @@ public class UserCertificateWindow extends ApplicationComponent {
 			notesPanel = new JPanel();
 			notesPanel.setLayout(new GridBagLayout());
 			notesPanel.setBorder(BorderFactory.createTitledBorder(null,
-					"Notes",
-					TitledBorder.DEFAULT_JUSTIFICATION,
+					"Notes", TitledBorder.DEFAULT_JUSTIFICATION,
 					TitledBorder.DEFAULT_POSITION, null, LookAndFeel
 							.getPanelLabelColor()));
 			notesPanel.add(getJScrollPane(), gridBagConstraints9);
@@ -366,9 +377,9 @@ public class UserCertificateWindow extends ApplicationComponent {
 	}
 
 	/**
-	 * This method initializes jScrollPane	
-	 * 	
-	 * @return javax.swing.JScrollPane	
+	 * This method initializes jScrollPane
+	 * 
+	 * @return javax.swing.JScrollPane
 	 */
 	private JScrollPane getJScrollPane() {
 		if (jScrollPane == null) {
@@ -379,9 +390,9 @@ public class UserCertificateWindow extends ApplicationComponent {
 	}
 
 	/**
-	 * This method initializes notes	
-	 * 	
-	 * @return javax.swing.JTextArea	
+	 * This method initializes notes
+	 * 
+	 * @return javax.swing.JTextArea
 	 */
 	private JTextArea getNotes() {
 		if (notes == null) {
@@ -394,9 +405,9 @@ public class UserCertificateWindow extends ApplicationComponent {
 	}
 
 	/**
-	 * This method initializes titlePanel	
-	 * 	
-	 * @return javax.swing.JPanel	
+	 * This method initializes titlePanel
+	 * 
+	 * @return javax.swing.JPanel
 	 */
 	private JPanel getTitlePanel() {
 		if (titlePanel == null) {
@@ -435,9 +446,9 @@ public class UserCertificateWindow extends ApplicationComponent {
 	}
 
 	/**
-	 * This method initializes buttonPanel	
-	 * 	
-	 * @return javax.swing.JPanel	
+	 * This method initializes buttonPanel
+	 * 
+	 * @return javax.swing.JPanel
 	 */
 	private JPanel getButtonPanel() {
 		if (buttonPanel == null) {
@@ -450,35 +461,70 @@ public class UserCertificateWindow extends ApplicationComponent {
 	}
 
 	/**
-	 * This method initializes update	
-	 * 	
-	 * @return javax.swing.JButton	
+	 * This method initializes update
+	 * 
+	 * @return javax.swing.JButton
 	 */
 	private JButton getUpdate() {
 		if (update == null) {
 			update = new JButton();
 			update.setText("Update");
+			update.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					Runner runner = new Runner() {
+						public void execute() {
+							updateUserCertificate();
+						}
+					};
+					try {
+						GridApplication.getContext()
+								.executeInBackground(runner);
+					} catch (Exception t) {
+						t.getMessage();
+					}
+				}
+			});
 		}
 		return update;
 	}
 
 	/**
-	 * This method initializes viewCertificate	
-	 * 	
-	 * @return javax.swing.JButton	
+	 * This method initializes viewCertificate
+	 * 
+	 * @return javax.swing.JButton
 	 */
 	private JButton getViewCertificate() {
 		if (viewCertificate == null) {
 			viewCertificate = new JButton();
 			viewCertificate.setText("View Certificate");
-			viewCertificate.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					GridApplication.getContext().addApplicationComponent(
-							new CertificateInformationComponent(certificate), 700, 550);
-				}
-			});
+			viewCertificate
+					.addActionListener(new java.awt.event.ActionListener() {
+						public void actionPerformed(java.awt.event.ActionEvent e) {
+							GridApplication
+									.getContext()
+									.addApplicationComponent(
+											new CertificateInformationComponent(
+													certificate), 700, 550);
+						}
+					});
 		}
 		return viewCertificate;
+	}
+
+	private void updateUserCertificate() {
+		try {
+			GridAdministrationClient client = this.session.getAdminClient();
+			client.updateUserCertificateRecord(record.getSerialNumber(),
+					getStatus().getSelectedUserStatus(), Utils.clean(getNotes()
+							.getText()));
+			record.setStatus(getStatus().getSelectedUserStatus());
+			record.setNotes(Utils.clean(getNotes()
+					.getText()));
+			GridApplication.getContext().showMessage("The user certificate was successfully updated!!!");
+		} catch (Exception e) {
+			FaultUtil.printFault(e);
+			ErrorDialog.showError(e);
+		}
 	}
 
 }
