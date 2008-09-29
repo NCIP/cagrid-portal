@@ -127,7 +127,7 @@ public class ServiceSecurityClient implements ServiceSecurityI {
 	}
 
 
-	private ServiceSecurityPortType getPortType() throws RemoteException {
+	protected ServiceSecurityPortType getPortType() throws RemoteException {
 
 		ServiceSecurityServiceAddressingLocator locator = new ServiceSecurityServiceAddressingLocator();
 		// attempt to load our context sensitive wsdd file
