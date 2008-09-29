@@ -8,7 +8,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.cagrid.gme.domain.XMLSchema;
-import org.cagrid.gme.stubs.types.InvalidSchemaSubmission;
+import org.cagrid.gme.stubs.types.InvalidSchemaSubmissionFault;
 import org.cagrid.gme.test.GMETestCaseBase;
 import org.cagrid.gme.test.SpringTestApplicationContextConstants;
 import org.springframework.test.annotation.ExpectedException;
@@ -28,7 +28,7 @@ public class GMEAddSchemaCyclesTestCase extends GMETestCaseBase {
     }
 
 
-    @ExpectedException(InvalidSchemaSubmission.class)
+    @ExpectedException(InvalidSchemaSubmissionFault.class)
     public void testCycleAMissingDocumentB() throws Exception {
         List<XMLSchema> schemas = new ArrayList<XMLSchema>();
         schemas.add(this.testSchemaCycleA);
@@ -36,7 +36,7 @@ public class GMEAddSchemaCyclesTestCase extends GMETestCaseBase {
     }
 
 
-    @ExpectedException(InvalidSchemaSubmission.class)
+    @ExpectedException(InvalidSchemaSubmissionFault.class)
     public void testCycleBMissingDocumentA() throws Exception {
         List<XMLSchema> schemas = new ArrayList<XMLSchema>();
         schemas.add(this.testSchemaCycleB);

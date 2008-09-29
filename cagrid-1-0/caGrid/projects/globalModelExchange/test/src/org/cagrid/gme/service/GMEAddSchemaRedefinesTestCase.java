@@ -8,7 +8,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.cagrid.gme.domain.XMLSchema;
-import org.cagrid.gme.stubs.types.InvalidSchemaSubmission;
+import org.cagrid.gme.stubs.types.InvalidSchemaSubmissionFault;
 import org.cagrid.gme.test.GMETestCaseBase;
 import org.cagrid.gme.test.SpringTestApplicationContextConstants;
 import org.springframework.test.annotation.ExpectedException;
@@ -97,7 +97,7 @@ public class GMEAddSchemaRedefinesTestCase extends GMETestCaseBase {
     }
 
 
-    @ExpectedException(value = InvalidSchemaSubmission.class)
+    @ExpectedException(value = InvalidSchemaSubmissionFault.class)
     public void testInvalidSchemaRedefineWrongNamespace() throws Exception {
         List<XMLSchema> schemas = new ArrayList<XMLSchema>();
         schemas.add(this.testInvalidSchemaRedefineWrongNamespace);

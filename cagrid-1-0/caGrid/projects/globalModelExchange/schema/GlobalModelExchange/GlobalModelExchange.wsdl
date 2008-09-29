@@ -197,6 +197,15 @@
   <message name="GetImportingXMLSchemaNamespacesResponse">
     <part name="parameters" element="tns:GetImportingXMLSchemaNamespacesResponse" />
   </message>
+  <message name="InvalidSchemaSubmissionFaultFaultMessage">
+    <part name="fault" element="ns2:InvalidSchemaSubmissionFault" />
+  </message>
+  <message name="NoSuchNamespaceExistsFaultFaultMessage">
+    <part name="fault" element="ns2:NoSuchNamespaceExistsFault" />
+  </message>
+  <message name="UnableToDeleteSchemaFaultFaultMessage">
+    <part name="fault" element="ns2:UnableToDeleteSchemaFault" />
+  </message>
   <!--============================================================
 
                        P O R T T Y P E
@@ -206,10 +215,12 @@
     <operation name="publishXMLSchemas">
       <input message="tns:PublishXMLSchemasRequest" wsa:Action="http://gme.cagrid.org/GlobalModelExchange/PublishXMLSchemasRequest" />
       <output message="tns:PublishXMLSchemasResponse" wsa:Action="http://gme.cagrid.org/GlobalModelExchange/PublishXMLSchemasResponse" />
+      <fault name="InvalidSchemaSubmissionFault" message="tns:InvalidSchemaSubmissionFaultFaultMessage" wsa:Action="http://gme.cagrid.org/GlobalModelExchange/InvalidSchemaSubmissionFaultFaultMessage" />
     </operation>
     <operation name="getXMLSchema">
       <input message="tns:GetXMLSchemaRequest" wsa:Action="http://gme.cagrid.org/GlobalModelExchange/GetXMLSchemaRequest" />
       <output message="tns:GetXMLSchemaResponse" wsa:Action="http://gme.cagrid.org/GlobalModelExchange/GetXMLSchemaResponse" />
+      <fault name="NoSuchNamespaceExistsFault" message="tns:NoSuchNamespaceExistsFaultFaultMessage" wsa:Action="http://gme.cagrid.org/GlobalModelExchange/NoSuchNamespaceExistsFaultFaultMessage" />
     </operation>
     <operation name="getXMLSchemaNamespaces">
       <input message="tns:GetXMLSchemaNamespacesRequest" wsa:Action="http://gme.cagrid.org/GlobalModelExchange/GetXMLSchemaNamespacesRequest" />
@@ -218,18 +229,23 @@
     <operation name="getXMLSchemaAndDependencies">
       <input message="tns:GetXMLSchemaAndDependenciesRequest" wsa:Action="http://gme.cagrid.org/GlobalModelExchange/GetXMLSchemaAndDependenciesRequest" />
       <output message="tns:GetXMLSchemaAndDependenciesResponse" wsa:Action="http://gme.cagrid.org/GlobalModelExchange/GetXMLSchemaAndDependenciesResponse" />
+      <fault name="NoSuchNamespaceExistsFault" message="tns:NoSuchNamespaceExistsFaultFaultMessage" wsa:Action="http://gme.cagrid.org/GlobalModelExchange/NoSuchNamespaceExistsFaultFaultMessage" />
     </operation>
     <operation name="deleteXMLSchemas">
       <input message="tns:DeleteXMLSchemasRequest" wsa:Action="http://gme.cagrid.org/GlobalModelExchange/DeleteXMLSchemasRequest" />
       <output message="tns:DeleteXMLSchemasResponse" wsa:Action="http://gme.cagrid.org/GlobalModelExchange/DeleteXMLSchemasResponse" />
+      <fault name="NoSuchNamespaceExistsFault" message="tns:NoSuchNamespaceExistsFaultFaultMessage" wsa:Action="http://gme.cagrid.org/GlobalModelExchange/NoSuchNamespaceExistsFaultFaultMessage" />
+      <fault name="UnableToDeleteSchemaFault" message="tns:UnableToDeleteSchemaFaultFaultMessage" wsa:Action="http://gme.cagrid.org/GlobalModelExchange/UnableToDeleteSchemaFaultFaultMessage" />
     </operation>
     <operation name="getImportedXMLSchemaNamespaces">
       <input message="tns:GetImportedXMLSchemaNamespacesRequest" wsa:Action="http://gme.cagrid.org/GlobalModelExchange/GetImportedXMLSchemaNamespacesRequest" />
       <output message="tns:GetImportedXMLSchemaNamespacesResponse" wsa:Action="http://gme.cagrid.org/GlobalModelExchange/GetImportedXMLSchemaNamespacesResponse" />
+      <fault name="NoSuchNamespaceExistsFault" message="tns:NoSuchNamespaceExistsFaultFaultMessage" wsa:Action="http://gme.cagrid.org/GlobalModelExchange/NoSuchNamespaceExistsFaultFaultMessage" />
     </operation>
     <operation name="getImportingXMLSchemaNamespaces">
       <input message="tns:GetImportingXMLSchemaNamespacesRequest" wsa:Action="http://gme.cagrid.org/GlobalModelExchange/GetImportingXMLSchemaNamespacesRequest" />
       <output message="tns:GetImportingXMLSchemaNamespacesResponse" wsa:Action="http://gme.cagrid.org/GlobalModelExchange/GetImportingXMLSchemaNamespacesResponse" />
+      <fault name="NoSuchNamespaceExistsFault" message="tns:NoSuchNamespaceExistsFaultFaultMessage" wsa:Action="http://gme.cagrid.org/GlobalModelExchange/NoSuchNamespaceExistsFaultFaultMessage" />
     </operation>
     <operation name="getServiceSecurityMetadata">
       <input message="wns0:GetServiceSecurityMetadataRequest" wsa:Action="http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity/GetServiceSecurityMetadataRequest" />

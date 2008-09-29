@@ -137,7 +137,7 @@ public class GlobalModelExchangeClient extends ServiceSecurityClient implements 
     }
   }
 
-  public void publishXMLSchemas(org.cagrid.gme.domain.XMLSchema[] schemas) throws RemoteException {
+  public void publishXMLSchemas(org.cagrid.gme.domain.XMLSchema[] schemas) throws RemoteException, org.cagrid.gme.stubs.types.InvalidSchemaSubmissionFault {
     synchronized(portTypeMutex){
       configureStubSecurity((Stub)portType,"publishXMLSchemas");
     org.cagrid.gme.stubs.PublishXMLSchemasRequest params = new org.cagrid.gme.stubs.PublishXMLSchemasRequest();
@@ -148,7 +148,7 @@ public class GlobalModelExchangeClient extends ServiceSecurityClient implements 
     }
   }
 
-  public org.cagrid.gme.domain.XMLSchema getXMLSchema(org.cagrid.gme.domain.XMLSchemaNamespace targetNamespace) throws RemoteException {
+  public org.cagrid.gme.domain.XMLSchema getXMLSchema(org.cagrid.gme.domain.XMLSchemaNamespace targetNamespace) throws RemoteException, org.cagrid.gme.stubs.types.NoSuchNamespaceExistsFault {
     synchronized(portTypeMutex){
       configureStubSecurity((Stub)portType,"getXMLSchema");
     org.cagrid.gme.stubs.GetXMLSchemaRequest params = new org.cagrid.gme.stubs.GetXMLSchemaRequest();
@@ -169,7 +169,7 @@ public class GlobalModelExchangeClient extends ServiceSecurityClient implements 
     }
   }
 
-  public org.cagrid.gme.domain.XMLSchemaBundle getXMLSchemaAndDependencies(org.cagrid.gme.domain.XMLSchemaNamespace targetNamespace) throws RemoteException {
+  public org.cagrid.gme.domain.XMLSchemaBundle getXMLSchemaAndDependencies(org.cagrid.gme.domain.XMLSchemaNamespace targetNamespace) throws RemoteException, org.cagrid.gme.stubs.types.NoSuchNamespaceExistsFault {
     synchronized(portTypeMutex){
       configureStubSecurity((Stub)portType,"getXMLSchemaAndDependencies");
     org.cagrid.gme.stubs.GetXMLSchemaAndDependenciesRequest params = new org.cagrid.gme.stubs.GetXMLSchemaAndDependenciesRequest();
@@ -181,7 +181,7 @@ public class GlobalModelExchangeClient extends ServiceSecurityClient implements 
     }
   }
 
-  public void deleteXMLSchemas(org.cagrid.gme.domain.XMLSchemaNamespace[] targetNamespaces) throws RemoteException {
+  public void deleteXMLSchemas(org.cagrid.gme.domain.XMLSchemaNamespace[] targetNamespaces) throws RemoteException, org.cagrid.gme.stubs.types.NoSuchNamespaceExistsFault, org.cagrid.gme.stubs.types.UnableToDeleteSchemaFault {
     synchronized(portTypeMutex){
       configureStubSecurity((Stub)portType,"deleteXMLSchemas");
     org.cagrid.gme.stubs.DeleteXMLSchemasRequest params = new org.cagrid.gme.stubs.DeleteXMLSchemasRequest();
@@ -192,7 +192,7 @@ public class GlobalModelExchangeClient extends ServiceSecurityClient implements 
     }
   }
 
-  public org.cagrid.gme.domain.XMLSchemaNamespace[] getImportedXMLSchemaNamespaces(org.cagrid.gme.domain.XMLSchemaNamespace targetNamespace) throws RemoteException {
+  public org.cagrid.gme.domain.XMLSchemaNamespace[] getImportedXMLSchemaNamespaces(org.cagrid.gme.domain.XMLSchemaNamespace targetNamespace) throws RemoteException, org.cagrid.gme.stubs.types.NoSuchNamespaceExistsFault {
     synchronized(portTypeMutex){
       configureStubSecurity((Stub)portType,"getImportedXMLSchemaNamespaces");
     org.cagrid.gme.stubs.GetImportedXMLSchemaNamespacesRequest params = new org.cagrid.gme.stubs.GetImportedXMLSchemaNamespacesRequest();
@@ -204,7 +204,7 @@ public class GlobalModelExchangeClient extends ServiceSecurityClient implements 
     }
   }
 
-  public org.cagrid.gme.domain.XMLSchemaNamespace[] getImportingXMLSchemaNamespaces(org.cagrid.gme.domain.XMLSchemaNamespace targetNamespace) throws RemoteException {
+  public org.cagrid.gme.domain.XMLSchemaNamespace[] getImportingXMLSchemaNamespaces(org.cagrid.gme.domain.XMLSchemaNamespace targetNamespace) throws RemoteException, org.cagrid.gme.stubs.types.NoSuchNamespaceExistsFault {
     synchronized(portTypeMutex){
       configureStubSecurity((Stub)portType,"getImportingXMLSchemaNamespaces");
     org.cagrid.gme.stubs.GetImportingXMLSchemaNamespacesRequest params = new org.cagrid.gme.stubs.GetImportingXMLSchemaNamespacesRequest();

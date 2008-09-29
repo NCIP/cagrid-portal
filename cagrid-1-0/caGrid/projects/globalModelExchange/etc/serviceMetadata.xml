@@ -28,14 +28,18 @@
        <ns2:inputParameterCollection>
         <ns2:InputParameter qName="ns5:XMLSchema" dimensionality="1" index="0" isArray="true" isRequired="false" name="schemas" xmlns:ns5="gme://gme.cagrid.org/2.0/GlobalModelExchange/domain"/>
        </ns2:inputParameterCollection>
-       <ns2:faultCollection/>
+       <ns2:faultCollection>
+        <ns2:Fault description="" name="InvalidSchemaSubmissionFault"/>
+       </ns2:faultCollection>
       </ns2:Operation>
       <ns2:Operation description="Returns a single XML Schema, not including any referenced (i.e. imported) XML Schemas" name="getXMLSchema">
        <ns2:inputParameterCollection>
         <ns2:InputParameter qName="ns6:XMLSchemaNamespace" dimensionality="1" index="0" isArray="false" isRequired="false" name="targetNamespace" xmlns:ns6="gme://gme.cagrid.org/2.0/GlobalModelExchange/domain"/>
        </ns2:inputParameterCollection>
        <ns2:Output qName="ns7:XMLSchema" dimensionality="1" isArray="false" xmlns:ns7="gme://gme.cagrid.org/2.0/GlobalModelExchange/domain"/>
-       <ns2:faultCollection/>
+       <ns2:faultCollection>
+        <ns2:Fault description="" name="NoSuchNamespaceExistsFault"/>
+       </ns2:faultCollection>
       </ns2:Operation>
       <ns2:Operation description="Returns the targetNamespaces (represented by XMLSchemaNamespaces) of all published XMLSchemas" name="getXMLSchemaNamespaces">
        <ns2:inputParameterCollection/>
@@ -47,27 +51,36 @@
         <ns2:InputParameter qName="ns9:XMLSchemaNamespace" dimensionality="1" index="0" isArray="false" isRequired="false" name="targetNamespace" xmlns:ns9="gme://gme.cagrid.org/2.0/GlobalModelExchange/domain"/>
        </ns2:inputParameterCollection>
        <ns2:Output qName="ns10:XMLSchemaBundle" dimensionality="1" isArray="false" xmlns:ns10="gme://gme.cagrid.org/2.0/GlobalModelExchange/domain"/>
-       <ns2:faultCollection/>
+       <ns2:faultCollection>
+        <ns2:Fault description="" name="NoSuchNamespaceExistsFault"/>
+       </ns2:faultCollection>
       </ns2:Operation>
-      <ns2:Operation description="Deletes the XMLSchemas with targetNamespaces identified by the given XMLSchemaNamespace array" name="deleteXMLSchemas">
+      <ns2:Operation description="Deletes the XMLSchemas with targetNamespaces identified by the given XMLSchemaNamespace array.  This does NOT cascade, so you must delete any schemas which reference these schemas, or an error will be thrown." name="deleteXMLSchemas">
        <ns2:inputParameterCollection>
         <ns2:InputParameter qName="ns11:XMLSchemaNamespace" dimensionality="1" index="0" isArray="true" isRequired="false" name="targetNamespaces" xmlns:ns11="gme://gme.cagrid.org/2.0/GlobalModelExchange/domain"/>
        </ns2:inputParameterCollection>
-       <ns2:faultCollection/>
+       <ns2:faultCollection>
+        <ns2:Fault description="Thrown if a provided namespace does not correspond to a published XMLSchema" name="NoSuchNamespaceExistsFault"/>
+        <ns2:Fault description="Thrown if a provided namespace corresponds to an XMLSchema which cannot be deleted for policy or integrity reasons (such as another schema references it)" name="UnableToDeleteSchemaFault"/>
+       </ns2:faultCollection>
       </ns2:Operation>
       <ns2:Operation description="Returns the targetNamespaces of all the XMLSchemas which are imported by the given XMLSchema (identififed by its targetNamespace)" name="getImportedXMLSchemaNamespaces">
        <ns2:inputParameterCollection>
         <ns2:InputParameter qName="ns12:XMLSchemaNamespace" dimensionality="1" index="0" isArray="false" isRequired="false" name="targetNamespace" xmlns:ns12="gme://gme.cagrid.org/2.0/GlobalModelExchange/domain"/>
        </ns2:inputParameterCollection>
        <ns2:Output qName="ns13:XMLSchemaNamespace" dimensionality="1" isArray="true" xmlns:ns13="gme://gme.cagrid.org/2.0/GlobalModelExchange/domain"/>
-       <ns2:faultCollection/>
+       <ns2:faultCollection>
+        <ns2:Fault description="" name="NoSuchNamespaceExistsFault"/>
+       </ns2:faultCollection>
       </ns2:Operation>
       <ns2:Operation description="Returns all the targetNamespaces of the XMLSchemas which import the given XMLSchema, identified its targetNamespace" name="getImportingXMLSchemaNamespaces">
        <ns2:inputParameterCollection>
         <ns2:InputParameter qName="ns14:XMLSchemaNamespace" dimensionality="1" index="0" isArray="false" isRequired="false" name="targetNamespace" xmlns:ns14="gme://gme.cagrid.org/2.0/GlobalModelExchange/domain"/>
        </ns2:inputParameterCollection>
        <ns2:Output qName="ns15:XMLSchemaNamespace" dimensionality="1" isArray="true" xmlns:ns15="gme://gme.cagrid.org/2.0/GlobalModelExchange/domain"/>
-       <ns2:faultCollection/>
+       <ns2:faultCollection>
+        <ns2:Fault description="" name="NoSuchNamespaceExistsFault"/>
+       </ns2:faultCollection>
       </ns2:Operation>
      </ns2:operationCollection>
      <ns2:contextPropertyCollection>

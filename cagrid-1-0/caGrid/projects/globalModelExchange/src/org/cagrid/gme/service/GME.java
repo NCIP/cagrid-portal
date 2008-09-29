@@ -27,8 +27,9 @@ import org.cagrid.gme.sax.GMEErrorHandler;
 import org.cagrid.gme.sax.GMEXMLSchemaLoader;
 import org.cagrid.gme.service.dao.XMLSchemaInformationDao;
 import org.cagrid.gme.service.domain.XMLSchemaInformation;
-import org.cagrid.gme.stubs.types.InvalidSchemaSubmission;
-import org.cagrid.gme.stubs.types.SchemaAlreadyExists;
+import org.cagrid.gme.stubs.types.InvalidSchemaSubmissionFault;
+import org.cagrid.gme.stubs.types.NoSuchNamespaceExistsFault;
+import org.cagrid.gme.stubs.types.UnableToDeleteSchemaFault;
 import org.globus.wsrf.utils.FaultHelper;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -51,14 +52,90 @@ public class GME {
     }
 
 
-    public void publishSchemas(List<XMLSchema> schemas) throws SchemaAlreadyExists, InvalidSchemaSubmission {
+    public void deleteSchemas(List<URI> schemaNamespaces) throws NoSuchNamespaceExistsFault, UnableToDeleteSchemaFault {
+
+        // need to get a "lock" on the database here
+        this.lock.writeLock().lock();
+        try {
+
+            Map<URI, XMLSchemaInformation> schemaMap = new HashMap<URI, XMLSchemaInformation>();
+            for (URI ns : schemaNamespaces) {
+                XMLSchemaInformation schema = this.schemaDao.getByTargetNamespace(ns);
+                if (schema == null) {
+                    String description = "No schema is published with given targetNamespace (" + ns + ")";
+
+                    NoSuchNamespaceExistsFault fault = new NoSuchNamespaceExistsFault();
+                    gov.nih.nci.cagrid.common.FaultHelper helper = new gov.nih.nci.cagrid.common.FaultHelper(fault);
+                    helper.setDescription(description);
+                    LOG.debug("Refusing to delete schema: " + description);
+
+                    throw (NoSuchNamespaceExistsFault) helper.getFault();
+                } else {
+                    schemaMap.put(ns, schema);
+                }
+                // TODO: permission check
+                // 1. Check permissions on each schema being deleted; fail if
+                // don't have permissions
+
+                // 2. Check that all schemas being deleted are in a state where
+                // the
+                // contents can be deleted ; fail otherwise
+            }
+
+            for (URI ns : schemaNamespaces) {
+                Collection<XMLSchema> dependingXMLSchemas = this.schemaDao.getDependingXMLSchemas(ns);
+                // get the list of depending schemas for each of the namespace
+
+                // for each, make sure the list is 0, or every depending schema
+                // will
+                // also be deleted (i.e. the namespace is in the provided list
+                // to
+                // delete)
+                for (XMLSchema dependingSchema : dependingXMLSchemas) {
+                    URI dependingTargetNamespace = dependingSchema.getTargetNamespace();
+                    if (!schemaMap.containsKey(dependingTargetNamespace)) {
+                        String description = "Cannot delete XMLSchema (" + ns + ") as it is imported by XMLSchema ("
+                            + dependingTargetNamespace + ").  You must also delete the XMLSchema ("
+                            + dependingTargetNamespace + ") or udpate it to not depend on XMLSchema (" + ns + ")";
+                        // REVIST: should i keep going and build up a list of
+                        // these,
+                        // or just failfast?
+
+                        UnableToDeleteSchemaFault fault = new UnableToDeleteSchemaFault();
+                        gov.nih.nci.cagrid.common.FaultHelper helper = new gov.nih.nci.cagrid.common.FaultHelper(fault);
+                        helper.setDescription(description);
+                        LOG.debug("Refusing to delete schema: " + description);
+                        throw (UnableToDeleteSchemaFault) helper.getFault();
+                    } else {
+                        LOG.debug("So far ok to delete XMLSchema (" + ns
+                            + ") even though it is imported by XMLSchema (" + dependingTargetNamespace
+                            + "), as it is being requested to be deleted as well.");
+                    }
+                }
+
+                // TODO: ok to delete all these schemas now (will it cascade to
+                // all additional documents and imports properly?)
+                for (XMLSchemaInformation schema : schemaMap.values()) {
+                    LOG.info("Deleting schema (" + schema.getSchema().getTargetNamespace() + ").");
+                    this.schemaDao.delete(schema);
+                }
+
+            }
+        } finally {
+            // release database lock
+            this.lock.writeLock().unlock();
+        }
+    }
+
+
+    public void publishSchemas(List<XMLSchema> schemas) throws InvalidSchemaSubmissionFault {
 
         // 0. sanity check submission
         if (schemas == null || schemas.size() == 0) {
             String message = "No schemas were found in the submission.";
             LOG.error(message);
 
-            InvalidSchemaSubmission e = new InvalidSchemaSubmission();
+            InvalidSchemaSubmissionFault e = new InvalidSchemaSubmissionFault();
             e.setFaultString(message);
 
             throw e;
@@ -88,11 +165,11 @@ public class GME {
                         + submittedSchema.getTargetNamespace() + "] was not valid:" + e.getMessage();
                     LOG.error(message, e);
 
-                    InvalidSchemaSubmission fault = new InvalidSchemaSubmission();
+                    InvalidSchemaSubmissionFault fault = new InvalidSchemaSubmissionFault();
                     fault.setFaultString(message);
                     FaultHelper helper = new FaultHelper(fault);
                     helper.addFaultCause(e);
-                    fault = (InvalidSchemaSubmission) helper.getFault();
+                    fault = (InvalidSchemaSubmissionFault) helper.getFault();
 
                     throw fault;
                 }
@@ -111,7 +188,7 @@ public class GME {
 
 
     protected Map<URI, SchemaGrammar> verifySubmissionAndInitializeProcessedSchemasMap(List<XMLSchema> schemas)
-        throws InvalidSchemaSubmission, SchemaAlreadyExists {
+        throws InvalidSchemaSubmissionFault {
         Map<URI, SchemaGrammar> processedSchemas = new HashMap<URI, SchemaGrammar>();
         for (XMLSchema submittedSchema : schemas) {
             // verify the schema's have unique and valid URIs
@@ -120,7 +197,7 @@ public class GME {
                 String message = "The schema submission contained a schema with a null URI.";
                 LOG.error(message);
 
-                InvalidSchemaSubmission e = new InvalidSchemaSubmission();
+                InvalidSchemaSubmissionFault e = new InvalidSchemaSubmissionFault();
                 e.setFaultString(message);
 
                 throw e;
@@ -132,7 +209,7 @@ public class GME {
                     + ").  If you intend to submit schemas with includes, you need to package them as a single Schema with multiple SchemaDocuments.";
                 LOG.error(message);
 
-                InvalidSchemaSubmission e = new InvalidSchemaSubmission();
+                InvalidSchemaSubmissionFault e = new InvalidSchemaSubmissionFault();
                 e.setFaultString(message);
 
                 throw e;
@@ -142,7 +219,7 @@ public class GME {
                         + submittedSchema.getTargetNamespace() + "] without a root schema document.";
                     LOG.error(message);
 
-                    InvalidSchemaSubmission e = new InvalidSchemaSubmission();
+                    InvalidSchemaSubmissionFault e = new InvalidSchemaSubmissionFault();
                     e.setFaultString(message);
 
                     throw e;
@@ -184,10 +261,10 @@ public class GME {
                 // TODO: check that it can be modified before doing this
                 // (right now it is never allowed)
                 // if(storeSchema.getState... != ){
-                String message = "The schema [" + namespace + "] already exists and cannot be mofified.";
+                String message = "The schema [" + namespace + "] already exists and cannot be modified.";
                 LOG.error(message);
 
-                SchemaAlreadyExists e = new SchemaAlreadyExists();
+                InvalidSchemaSubmissionFault e = new InvalidSchemaSubmissionFault();
                 e.setFaultString(message);
 
                 throw e;
@@ -198,7 +275,7 @@ public class GME {
 
 
     protected void commitSchemas(List<XMLSchema> schemas, Map<URI, SchemaGrammar> processedSchemas)
-        throws InvalidSchemaSubmission {
+        throws InvalidSchemaSubmissionFault {
 
         // if got here with no error, schemas are ok to persist
         // build up DB objects to commit
@@ -231,11 +308,11 @@ public class GME {
                         + schemaDocument.getSystemID() + "] whose expanded URI was not valid:" + e.getMessage();
                     LOG.error(message, e);
 
-                    InvalidSchemaSubmission fault = new InvalidSchemaSubmission();
+                    InvalidSchemaSubmissionFault fault = new InvalidSchemaSubmissionFault();
                     fault.setFaultString(message);
                     FaultHelper helper = new FaultHelper(fault);
                     helper.addFaultCause(e);
-                    fault = (InvalidSchemaSubmission) helper.getFault();
+                    fault = (InvalidSchemaSubmissionFault) helper.getFault();
 
                     throw fault;
                 }
@@ -245,10 +322,10 @@ public class GME {
                         + schemaDocument.getSystemID() + "] which was not used by the parsed grammar";
                     LOG.error(message);
 
-                    InvalidSchemaSubmission fault = new InvalidSchemaSubmission();
+                    InvalidSchemaSubmissionFault fault = new InvalidSchemaSubmissionFault();
                     fault.setFaultString(message);
                     FaultHelper helper = new FaultHelper(fault);
-                    fault = (InvalidSchemaSubmission) helper.getFault();
+                    fault = (InvalidSchemaSubmissionFault) helper.getFault();
 
                     throw fault;
                 }
@@ -263,10 +340,10 @@ public class GME {
                     + "].  All SchemaDocuments must be used by the Schema.";
                 LOG.error(message);
 
-                InvalidSchemaSubmission fault = new InvalidSchemaSubmission();
+                InvalidSchemaSubmissionFault fault = new InvalidSchemaSubmissionFault();
                 fault.setFaultString(message);
                 FaultHelper helper = new FaultHelper(fault);
-                fault = (InvalidSchemaSubmission) helper.getFault();
+                fault = (InvalidSchemaSubmissionFault) helper.getFault();
 
                 throw fault;
 
@@ -289,11 +366,11 @@ public class GME {
                             + "] whose URI was not valid:" + e.getMessage();
                         LOG.error(message, e);
 
-                        InvalidSchemaSubmission fault = new InvalidSchemaSubmission();
+                        InvalidSchemaSubmissionFault fault = new InvalidSchemaSubmissionFault();
                         fault.setFaultString(message);
                         FaultHelper helper = new FaultHelper(fault);
                         helper.addFaultCause(e);
-                        fault = (InvalidSchemaSubmission) helper.getFault();
+                        fault = (InvalidSchemaSubmissionFault) helper.getFault();
 
                         throw fault;
                     }
@@ -413,7 +490,7 @@ public class GME {
                 + schemaToProcess.getTargetNamespace() + "] was not valid as its acutal targetURI [" + targetURI
                 + "] did not match.";
             LOG.error(message);
-            InvalidSchemaSubmission fault = new InvalidSchemaSubmission();
+            InvalidSchemaSubmissionFault fault = new InvalidSchemaSubmissionFault();
             fault.setFaultString(message);
             throw fault;
         }

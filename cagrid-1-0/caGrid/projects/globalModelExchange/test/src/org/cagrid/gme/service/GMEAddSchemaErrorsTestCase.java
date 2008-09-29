@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.cagrid.gme.domain.XMLSchema;
-import org.cagrid.gme.stubs.types.InvalidSchemaSubmission;
+import org.cagrid.gme.stubs.types.InvalidSchemaSubmissionFault;
 import org.cagrid.gme.test.GMETestCaseBase;
 import org.cagrid.gme.test.SpringTestApplicationContextConstants;
 import org.springframework.test.annotation.ExpectedException;
@@ -42,19 +42,19 @@ public class GMEAddSchemaErrorsTestCase extends GMETestCaseBase {
     }
 
 
-    @ExpectedException(InvalidSchemaSubmission.class)
+    @ExpectedException(InvalidSchemaSubmissionFault.class)
     public void testEmptySubmission() throws Exception {
         this.gme.publishSchemas(new ArrayList<XMLSchema>());
     }
 
 
-    @ExpectedException(InvalidSchemaSubmission.class)
+    @ExpectedException(InvalidSchemaSubmissionFault.class)
     public void testNullSubmission() throws Exception {
         this.gme.publishSchemas(null);
     }
 
 
-    @ExpectedException(InvalidSchemaSubmission.class)
+    @ExpectedException(InvalidSchemaSubmissionFault.class)
     public void testSchemaDuplicates() throws Exception {
         List<XMLSchema> schemas = new ArrayList<XMLSchema>();
         schemas.add(this.testSchemaDuplicates);
@@ -62,7 +62,7 @@ public class GMEAddSchemaErrorsTestCase extends GMETestCaseBase {
     }
 
 
-    @ExpectedException(InvalidSchemaSubmission.class)
+    @ExpectedException(InvalidSchemaSubmissionFault.class)
     public void testSchemaMissingInclude() throws Exception {
         List<XMLSchema> schemas = new ArrayList<XMLSchema>();
         schemas.add(this.testSchemaMissingInclude);
@@ -70,7 +70,7 @@ public class GMEAddSchemaErrorsTestCase extends GMETestCaseBase {
     }
 
 
-    @ExpectedException(InvalidSchemaSubmission.class)
+    @ExpectedException(InvalidSchemaSubmissionFault.class)
     public void testSchemaMissingType() throws Exception {
         List<XMLSchema> schemas = new ArrayList<XMLSchema>();
         schemas.add(this.testSchemaMissingType);
@@ -78,7 +78,7 @@ public class GMEAddSchemaErrorsTestCase extends GMETestCaseBase {
     }
 
 
-    @ExpectedException(InvalidSchemaSubmission.class)
+    @ExpectedException(InvalidSchemaSubmissionFault.class)
     public void testSchemaNoNamespace() throws Exception {
         List<XMLSchema> schemas = new ArrayList<XMLSchema>();
         schemas.add(this.testSchemaNoNamespace);
@@ -86,7 +86,7 @@ public class GMEAddSchemaErrorsTestCase extends GMETestCaseBase {
     }
 
 
-    @ExpectedException(InvalidSchemaSubmission.class)
+    @ExpectedException(InvalidSchemaSubmissionFault.class)
     public void testSchemaWrongNamespace() throws Exception {
         List<XMLSchema> schemas = new ArrayList<XMLSchema>();
         schemas.add(this.testSchemaWrongNamespace);
@@ -95,7 +95,7 @@ public class GMEAddSchemaErrorsTestCase extends GMETestCaseBase {
     }
 
 
-    @ExpectedException(InvalidSchemaSubmission.class)
+    @ExpectedException(InvalidSchemaSubmissionFault.class)
     public void testSchemaNoImports() throws Exception {
         List<XMLSchema> schemas = new ArrayList<XMLSchema>();
         schemas.add(this.testSchemaNoImports);

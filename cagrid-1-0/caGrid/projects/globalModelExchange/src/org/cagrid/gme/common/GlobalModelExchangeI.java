@@ -29,8 +29,10 @@ public interface GlobalModelExchangeI {
    *
    * @param schemas
    *	The schemas to publish
+   * @throws InvalidSchemaSubmissionFault
+   *	
    */
-  public void publishXMLSchemas(org.cagrid.gme.domain.XMLSchema[] schemas) throws RemoteException ;
+  public void publishXMLSchemas(org.cagrid.gme.domain.XMLSchema[] schemas) throws RemoteException, org.cagrid.gme.stubs.types.InvalidSchemaSubmissionFault ;
 
   /**
    * Returns a single XML Schema, not including any referenced (i.e. imported) XML Schemas
@@ -38,8 +40,10 @@ public interface GlobalModelExchangeI {
    * @param targetNamespace
    *	A namespace representing the targetNamespace of the desired XMLSchema
    * @return The XMLSchema with a targetNamespace equal to the given XMLSchemaNamespace
+   * @throws NoSuchNamespaceExistsFault
+   *	
    */
-  public org.cagrid.gme.domain.XMLSchema getXMLSchema(org.cagrid.gme.domain.XMLSchemaNamespace targetNamespace) throws RemoteException ;
+  public org.cagrid.gme.domain.XMLSchema getXMLSchema(org.cagrid.gme.domain.XMLSchemaNamespace targetNamespace) throws RemoteException, org.cagrid.gme.stubs.types.NoSuchNamespaceExistsFault ;
 
   /**
    * Returns the targetNamespaces (represented by XMLSchemaNamespaces) of all published XMLSchemas
@@ -54,16 +58,22 @@ public interface GlobalModelExchangeI {
    * @param targetNamespace
    *	The targetNamespace of the XMLSchema of interest
    * @return an XMLSchemaBundle containing the transitive closure of the XMLSchema with the targetNamespace of the given XMLSchemaNamespace and every XMLSchema it imports (as well as each imported XMLSchema's imports)
+   * @throws NoSuchNamespaceExistsFault
+   *	
    */
-  public org.cagrid.gme.domain.XMLSchemaBundle getXMLSchemaAndDependencies(org.cagrid.gme.domain.XMLSchemaNamespace targetNamespace) throws RemoteException ;
+  public org.cagrid.gme.domain.XMLSchemaBundle getXMLSchemaAndDependencies(org.cagrid.gme.domain.XMLSchemaNamespace targetNamespace) throws RemoteException, org.cagrid.gme.stubs.types.NoSuchNamespaceExistsFault ;
 
   /**
-   * Deletes the XMLSchemas with targetNamespaces identified by the given XMLSchemaNamespace array
+   * Deletes the XMLSchemas with targetNamespaces identified by the given XMLSchemaNamespace array.  This does NOT cascade, so you must delete any schemas which reference these schemas, or an error will be thrown.
    *
    * @param targetNamespaces
    *	The targetNamespaces of the XMLSchemas to delete
+   * @throws NoSuchNamespaceExistsFault
+   *	Thrown if a provided namespace does not correspond to a published XMLSchema
+   * @throws UnableToDeleteSchemaFault
+   *	Thrown if a provided namespace corresponds to an XMLSchema which cannot be deleted for policy or integrity reasons (such as another schema references it)
    */
-  public void deleteXMLSchemas(org.cagrid.gme.domain.XMLSchemaNamespace[] targetNamespaces) throws RemoteException ;
+  public void deleteXMLSchemas(org.cagrid.gme.domain.XMLSchemaNamespace[] targetNamespaces) throws RemoteException, org.cagrid.gme.stubs.types.NoSuchNamespaceExistsFault, org.cagrid.gme.stubs.types.UnableToDeleteSchemaFault ;
 
   /**
    * Returns the targetNamespaces of all the XMLSchemas which are imported by the given XMLSchema (identififed by its targetNamespace)
@@ -71,8 +81,10 @@ public interface GlobalModelExchangeI {
    * @param targetNamespace
    *	The targetNamespace of the XMLSchema of interest
    * @return The imported XMLSchemas' targetNamespaces
+   * @throws NoSuchNamespaceExistsFault
+   *	
    */
-  public org.cagrid.gme.domain.XMLSchemaNamespace[] getImportedXMLSchemaNamespaces(org.cagrid.gme.domain.XMLSchemaNamespace targetNamespace) throws RemoteException ;
+  public org.cagrid.gme.domain.XMLSchemaNamespace[] getImportedXMLSchemaNamespaces(org.cagrid.gme.domain.XMLSchemaNamespace targetNamespace) throws RemoteException, org.cagrid.gme.stubs.types.NoSuchNamespaceExistsFault ;
 
   /**
    * Returns all the targetNamespaces of the XMLSchemas which import the given XMLSchema, identified its targetNamespace
@@ -80,7 +92,9 @@ public interface GlobalModelExchangeI {
    * @param targetNamespace
    *	The targetNamespace of the XMLSchema of interest
    * @return all the targetNamespaces of the XMLSchemas which import the given XMLSchema, identified its targetNamespace
+   * @throws NoSuchNamespaceExistsFault
+   *	
    */
-  public org.cagrid.gme.domain.XMLSchemaNamespace[] getImportingXMLSchemaNamespaces(org.cagrid.gme.domain.XMLSchemaNamespace targetNamespace) throws RemoteException ;
+  public org.cagrid.gme.domain.XMLSchemaNamespace[] getImportingXMLSchemaNamespaces(org.cagrid.gme.domain.XMLSchemaNamespace targetNamespace) throws RemoteException, org.cagrid.gme.stubs.types.NoSuchNamespaceExistsFault ;
 
 }

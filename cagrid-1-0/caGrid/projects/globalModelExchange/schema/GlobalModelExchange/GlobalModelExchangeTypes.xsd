@@ -7,14 +7,20 @@
       </sequence>
     </complexType>
   </element>
-  <element name="SchemaAlreadyExists" type="tns:SchemaAlreadyExists" />
-  <complexType name="SchemaAlreadyExists">
+  <element name="NoSuchNamespaceExistsFault" type="tns:NoSuchNamespaceExistsFault" />
+  <complexType name="NoSuchNamespaceExistsFault">
     <complexContent>
       <extension base="wsrbf:BaseFaultType" />
     </complexContent>
   </complexType>
-  <element name="InvalidSchemaSubmission" type="tns:InvalidSchemaSubmission" />
-  <complexType name="InvalidSchemaSubmission">
+  <element name="InvalidSchemaSubmissionFault" type="tns:InvalidSchemaSubmissionFault" />
+  <complexType name="InvalidSchemaSubmissionFault">
+    <complexContent>
+      <extension base="wsrbf:BaseFaultType" />
+    </complexContent>
+  </complexType>
+  <element name="UnableToDeleteSchemaFault" type="tns:UnableToDeleteSchemaFault" />
+  <complexType name="UnableToDeleteSchemaFault">
     <complexContent>
       <extension base="wsrbf:BaseFaultType" />
     </complexContent>
