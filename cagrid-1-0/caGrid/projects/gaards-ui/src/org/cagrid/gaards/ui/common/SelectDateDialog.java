@@ -1,4 +1,4 @@
-package org.cagrid.gaards.ui.cds;
+package org.cagrid.gaards.ui.common;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
@@ -27,7 +27,7 @@ import com.greef.ui.calendar.JCalendar;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: SelectDateDialog.java,v 1.1 2008-01-07 20:21:57 langella Exp $
+ * @version $Id: SelectDateDialog.java,v 1.1 2008-09-29 02:17:29 langella Exp $
  */
 public class SelectDateDialog extends JDialog {
 

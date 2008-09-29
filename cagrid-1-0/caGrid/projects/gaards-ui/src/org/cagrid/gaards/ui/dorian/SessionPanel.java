@@ -106,26 +106,24 @@ public class SessionPanel extends JPanel {
         }
         return cred;
     }
+    
+    public DorianSession getSession() throws Exception{
+    	return new DorianSession(getService().getSelectedService(),getCredential());
+    } 
 
 
     public GridAdministrationClient getAdminClient() throws Exception {
-        DorianHandle handle = (DorianHandle) getService().getSelectedService();
-        GlobusCredential proxyCred = getCred().getSelectedCredential();
-        return handle.getAdminClient(proxyCred);
+        return getSession().getAdminClient();
     }
 
 
     public GridUserClient getUserClientWithCredentials() throws Exception {
-        DorianHandle handle = (DorianHandle) getService().getSelectedService();
-        GlobusCredential proxyCred = getCred().getSelectedCredential();
-        return handle.getUserClient(proxyCred);
+        return getSession().getUserClient();
     }
 
 
     public LocalAdministrationClient getLocalAdminClient() throws Exception {
-        DorianHandle handle = (DorianHandle) getService().getSelectedService();
-        GlobusCredential proxyCred = getCred().getSelectedCredential();
-        return handle.getLocalAdminClient(proxyCred);
+       return getSession().getLocalAdminClient();
     }
 
 

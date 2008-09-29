@@ -187,7 +187,7 @@ public class DorianProviderImpl{
     return boxedResult;
   }
 
-    public org.cagrid.gaards.dorian.stubs.UpdateUserCertificateResponse updateUserCertificate(org.cagrid.gaards.dorian.stubs.UpdateUserCertificateRequest params) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.InvalidUserCertificateFault {
+    public org.cagrid.gaards.dorian.stubs.UpdateUserCertificateResponse updateUserCertificate(org.cagrid.gaards.dorian.stubs.UpdateUserCertificateRequest params) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.InvalidUserCertificateFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault {
     org.cagrid.gaards.dorian.stubs.UpdateUserCertificateResponse boxedResult = new org.cagrid.gaards.dorian.stubs.UpdateUserCertificateResponse();
     impl.updateUserCertificate(params.getUpdate().getUserCertificateUpdate());
     return boxedResult;
@@ -196,6 +196,12 @@ public class DorianProviderImpl{
     public org.cagrid.gaards.dorian.stubs.RequestUserCertificateResponse requestUserCertificate(org.cagrid.gaards.dorian.stubs.RequestUserCertificateRequest params) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.InvalidAssertionFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault, org.cagrid.gaards.dorian.stubs.types.UserPolicyFault {
     org.cagrid.gaards.dorian.stubs.RequestUserCertificateResponse boxedResult = new org.cagrid.gaards.dorian.stubs.RequestUserCertificateResponse();
     boxedResult.setX509Certificate(impl.requestUserCertificate(params.getSaml().getAssertion(),params.getKey().getPublicKey(),params.getLifetime().getCertificateLifetime()));
+    return boxedResult;
+  }
+
+    public org.cagrid.gaards.dorian.stubs.FindUserCertificatesResponse findUserCertificates(org.cagrid.gaards.dorian.stubs.FindUserCertificatesRequest params) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.InvalidUserCertificateFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault {
+    org.cagrid.gaards.dorian.stubs.FindUserCertificatesResponse boxedResult = new org.cagrid.gaards.dorian.stubs.FindUserCertificatesResponse();
+    boxedResult.setUserCertificateRecord(impl.findUserCertificates(params.getUserCertificateFilter().getUserCertificateFilter()));
     return boxedResult;
   }
 

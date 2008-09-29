@@ -267,8 +267,7 @@ public class AdministratorsWindow extends ApplicationComponent {
 					}
 				}
 				GridApplication.getContext().addApplicationComponent(
-						new UserWindow(getSessionPanel().getServiceURI(),
-								getSessionPanel().getCredential(), user, tidp));
+						new UserWindow(getSessionPanel().getSession(), user, tidp), 700, 500);
 			}
 		} catch (Exception e) {
 			ErrorDialog.showError(e);

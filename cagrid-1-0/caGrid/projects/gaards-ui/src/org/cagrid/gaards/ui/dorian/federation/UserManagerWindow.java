@@ -36,7 +36,7 @@ import org.globus.gsi.GlobusCredential;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: UserManagerWindow.java,v 1.1 2008-09-16 03:00:07 langella Exp $
+ * @version $Id: UserManagerWindow.java,v 1.2 2008-09-29 02:17:29 langella Exp $
  */
 public class UserManagerWindow extends ApplicationComponent {
 
@@ -243,7 +243,7 @@ public class UserManagerWindow extends ApplicationComponent {
 		if (cancel == null) {
 			cancel = new JButton();
 			cancel.setText("Close");
-			cancel.setIcon(LookAndFeel.getCloseIcon());
+			//cancel.setIcon(LookAndFeel.getCloseIcon());
 			cancel.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					dispose();
@@ -287,7 +287,7 @@ public class UserManagerWindow extends ApplicationComponent {
 		if (manageUser == null) {
 			manageUser = new JButton();
 			manageUser.setText("Manage User");
-			manageUser.setIcon(DorianLookAndFeel.getUserIcon());
+			//manageUser.setIcon(DorianLookAndFeel.getUserIcon());
 			manageUser.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					getUsersTable().doubleClick();
@@ -333,7 +333,7 @@ public class UserManagerWindow extends ApplicationComponent {
 		if (query == null) {
 			query = new JButton();
 			query.setText("Find Users");
-			query.setIcon(LookAndFeel.getQueryIcon());
+			//query.setIcon(LookAndFeel.getQueryIcon());
 			query.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					Runner runner = new Runner() {
@@ -719,8 +719,7 @@ public class UserManagerWindow extends ApplicationComponent {
 		}
 
 		public String toString() {
-			return "[IdP Id: " + trustedIdp.getId() + "] "
-					+ trustedIdp.getName();
+			return trustedIdp.getDisplayName();
 		}
 
 	}
@@ -761,7 +760,7 @@ public class UserManagerWindow extends ApplicationComponent {
 					}
 				}
 			});
-			removeUser.setIcon(LookAndFeel.getRemoveIcon());
+			//removeUser.setIcon(LookAndFeel.getRemoveIcon());
 		}
 		return removeUser;
 	}

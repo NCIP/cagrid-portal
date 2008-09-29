@@ -273,8 +273,10 @@ public interface DorianI {
    *	
    * @throws InvalidUserCertificateFault
    *	
+   * @throws PermissionDeniedFault
+   *	
    */
-  public void updateUserCertificate(org.cagrid.gaards.dorian.federation.UserCertificateUpdate update) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.InvalidUserCertificateFault ;
+  public void updateUserCertificate(org.cagrid.gaards.dorian.federation.UserCertificateUpdate update) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.InvalidUserCertificateFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault ;
 
   /**
    * This method allow a user to request a short term user certificate.
@@ -292,6 +294,19 @@ public interface DorianI {
    *	
    */
   public org.cagrid.gaards.dorian.X509Certificate requestUserCertificate(gov.nih.nci.cagrid.opensaml.SAMLAssertion saml,org.cagrid.gaards.dorian.federation.PublicKey key,org.cagrid.gaards.dorian.federation.CertificateLifetime lifetime) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.InvalidAssertionFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault, org.cagrid.gaards.dorian.stubs.types.UserPolicyFault ;
+
+  /**
+   * This method allows an admin to search for user certificates issued by the Dorian CA.
+   *
+   * @param userCertificateFilter
+   * @throws DorianInternalFault
+   *	
+   * @throws InvalidUserCertificateFault
+   *	
+   * @throws PermissionDeniedFault
+   *	
+   */
+  public org.cagrid.gaards.dorian.federation.UserCertificateRecord[] findUserCertificates(org.cagrid.gaards.dorian.federation.UserCertificateFilter userCertificateFilter) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.InvalidUserCertificateFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault ;
 
 }
 

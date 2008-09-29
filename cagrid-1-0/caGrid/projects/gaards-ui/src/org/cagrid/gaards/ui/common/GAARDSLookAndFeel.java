@@ -33,5 +33,9 @@ public class GAARDSLookAndFeel extends LookAndFeel {
 	public final static ImageIcon getDefaultIcon() {
 		return IconUtils.loadIcon("/go-home.png");
 	}
+	
+	public final static ImageIcon getLogoNoText32x32() {
+		return IconUtils.loadIcon("/caGrid-logo-no-text-32x32.gif");
+	}
 
 }

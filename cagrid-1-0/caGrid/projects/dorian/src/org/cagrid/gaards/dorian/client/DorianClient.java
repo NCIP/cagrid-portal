@@ -394,7 +394,7 @@ public class DorianClient extends DorianClientBase implements DorianI {
     }
   }
 
-  public void updateUserCertificate(org.cagrid.gaards.dorian.federation.UserCertificateUpdate update) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.InvalidUserCertificateFault {
+  public void updateUserCertificate(org.cagrid.gaards.dorian.federation.UserCertificateUpdate update) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.InvalidUserCertificateFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault {
     synchronized(portTypeMutex){
       configureStubSecurity((Stub)portType,"updateUserCertificate");
     org.cagrid.gaards.dorian.stubs.UpdateUserCertificateRequest params = new org.cagrid.gaards.dorian.stubs.UpdateUserCertificateRequest();
@@ -420,6 +420,18 @@ public class DorianClient extends DorianClientBase implements DorianI {
     params.setLifetime(lifetimeContainer);
     org.cagrid.gaards.dorian.stubs.RequestUserCertificateResponse boxedResult = portType.requestUserCertificate(params);
     return boxedResult.getX509Certificate();
+    }
+  }
+
+  public org.cagrid.gaards.dorian.federation.UserCertificateRecord[] findUserCertificates(org.cagrid.gaards.dorian.federation.UserCertificateFilter userCertificateFilter) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.InvalidUserCertificateFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"findUserCertificates");
+    org.cagrid.gaards.dorian.stubs.FindUserCertificatesRequest params = new org.cagrid.gaards.dorian.stubs.FindUserCertificatesRequest();
+    org.cagrid.gaards.dorian.stubs.FindUserCertificatesRequestUserCertificateFilter userCertificateFilterContainer = new org.cagrid.gaards.dorian.stubs.FindUserCertificatesRequestUserCertificateFilter();
+    userCertificateFilterContainer.setUserCertificateFilter(userCertificateFilter);
+    params.setUserCertificateFilter(userCertificateFilterContainer);
+    org.cagrid.gaards.dorian.stubs.FindUserCertificatesResponse boxedResult = portType.findUserCertificates(params);
+    return boxedResult.getUserCertificateRecord();
     }
   }
 

@@ -6,6 +6,7 @@ import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
 import java.rmi.RemoteException;
 import java.security.PublicKey;
 import java.security.cert.X509Certificate;
+import java.util.List;
 
 import org.cagrid.gaards.authentication.BasicAuthentication;
 import org.cagrid.gaards.authentication.Credential;
@@ -33,6 +34,9 @@ import org.cagrid.gaards.dorian.federation.SAMLAuthenticationMethod;
 import org.cagrid.gaards.dorian.federation.TrustedIdP;
 import org.cagrid.gaards.dorian.federation.TrustedIdPStatus;
 import org.cagrid.gaards.dorian.federation.TrustedIdentityProviders;
+import org.cagrid.gaards.dorian.federation.UserCertificateFilter;
+import org.cagrid.gaards.dorian.federation.UserCertificateRecord;
+import org.cagrid.gaards.dorian.federation.UserCertificateUpdate;
 import org.cagrid.gaards.dorian.idp.Application;
 import org.cagrid.gaards.dorian.idp.IdPUser;
 import org.cagrid.gaards.dorian.idp.IdPUserFilter;
@@ -43,6 +47,7 @@ import org.cagrid.gaards.dorian.stubs.types.InvalidAssertionFault;
 import org.cagrid.gaards.dorian.stubs.types.InvalidHostCertificateFault;
 import org.cagrid.gaards.dorian.stubs.types.InvalidHostCertificateRequestFault;
 import org.cagrid.gaards.dorian.stubs.types.InvalidTrustedIdPFault;
+import org.cagrid.gaards.dorian.stubs.types.InvalidUserCertificateFault;
 import org.cagrid.gaards.dorian.stubs.types.InvalidUserFault;
 import org.cagrid.gaards.dorian.stubs.types.InvalidUserPropertyFault;
 import org.cagrid.gaards.dorian.stubs.types.NoSuchUserFault;
@@ -71,7 +76,7 @@ public class Dorian extends LoggingObject {
 
     private IdentityProvider identityProvider;
 
-    private IdentityFederationManager ifs;
+    private IdentityFederationManager ifm;
 
     private IdentityFederationProperties ifsConfiguration;
 
@@ -143,7 +148,7 @@ public class Dorian extends LoggingObject {
 
             ifsConfiguration = configuration.getIdentityFederationProperties();
             FederationDefaults defaults = new FederationDefaults(idp, usr);
-            this.ifs = new IdentityFederationManager(ifsConfiguration, db, properties, ca, defaults, ignoreCRL);
+            this.ifm = new IdentityFederationManager(ifsConfiguration, db, properties, ca, defaults, ignoreCRL);
 
             if (!this.properties.getVersion().equals(PropertyManager.CURRENT_VERSION)) {
                 DorianInternalFault fault = new DorianInternalFault();
@@ -202,7 +207,7 @@ public class Dorian extends LoggingObject {
         PermissionDeniedFault {
         String uid = null;
         try {
-            uid = ifs.getUserIdVerifyTrustedIdP(identityProvider.getIdPCertificate(), gridIdentity);
+            uid = ifm.getUserIdVerifyTrustedIdP(identityProvider.getIdPCertificate(), gridIdentity);
         } catch (Exception e) {
             PermissionDeniedFault fault = new PermissionDeniedFault();
             fault.setFaultString("Invalid IdP User.");
@@ -216,7 +221,7 @@ public class Dorian extends LoggingObject {
         NoSuchUserFault, InvalidUserPropertyFault {
         String uid = null;
         try {
-            uid = ifs.getUserIdVerifyTrustedIdP(identityProvider.getIdPCertificate(), gridIdentity);
+            uid = ifm.getUserIdVerifyTrustedIdP(identityProvider.getIdPCertificate(), gridIdentity);
         } catch (Exception e) {
             PermissionDeniedFault fault = new PermissionDeniedFault();
             fault.setFaultString("Invalid IdP User.");
@@ -229,14 +234,14 @@ public class Dorian extends LoggingObject {
     public void removeIdPUser(String gridIdentity, String userId) throws DorianInternalFault, PermissionDeniedFault {
         String uid = null;
         try {
-            uid = ifs.getUserIdVerifyTrustedIdP(identityProvider.getIdPCertificate(), gridIdentity);
+            uid = ifm.getUserIdVerifyTrustedIdP(identityProvider.getIdPCertificate(), gridIdentity);
         } catch (Exception e) {
             PermissionDeniedFault fault = new PermissionDeniedFault();
             fault.setFaultString("Invalid IdP User.");
             throw fault;
         }
         this.identityProvider.removeUser(uid, userId);
-        this.ifs.removeUserByLocalIdIfExists(identityProvider.getIdPCertificate(), userId);
+        this.ifm.removeUserByLocalIdIfExists(identityProvider.getIdPCertificate(), userId);
     }
 
 
@@ -255,109 +260,110 @@ public class Dorian extends LoggingObject {
 
     public GridUserPolicy[] getGridUserPolicies(String callerGridIdentity) throws DorianInternalFault,
         PermissionDeniedFault {
-        return ifs.getUserPolicies(callerGridIdentity);
+        return ifm.getUserPolicies(callerGridIdentity);
     }
 
 
-    public X509Certificate requestUserCertificate(SAMLAssertion saml, PublicKey publicKey, CertificateLifetime lifetime) throws DorianInternalFault, InvalidAssertionFault,
-        UserPolicyFault, PermissionDeniedFault {
-        return this.ifs.requestUserCertificate(saml, publicKey, lifetime);
+    public X509Certificate requestUserCertificate(SAMLAssertion saml, PublicKey publicKey, CertificateLifetime lifetime)
+        throws DorianInternalFault, InvalidAssertionFault, UserPolicyFault, PermissionDeniedFault {
+        return this.ifm.requestUserCertificate(saml, publicKey, lifetime);
     }
 
 
     public TrustedIdP[] getTrustedIdPs(String callerGridIdentity) throws DorianInternalFault, PermissionDeniedFault {
-        return ifs.getTrustedIdPs(callerGridIdentity);
+        return ifm.getTrustedIdPs(callerGridIdentity);
     }
 
 
     public TrustedIdP addTrustedIdP(String callerGridIdentity, TrustedIdP idp) throws DorianInternalFault,
         InvalidTrustedIdPFault, PermissionDeniedFault {
-        return ifs.addTrustedIdP(callerGridIdentity, idp);
+        return ifm.addTrustedIdP(callerGridIdentity, idp);
     }
 
 
     public void updateTrustedIdP(String callerGridIdentity, TrustedIdP idp) throws DorianInternalFault,
         InvalidTrustedIdPFault, PermissionDeniedFault {
-        ifs.updateTrustedIdP(callerGridIdentity, idp);
+        ifm.updateTrustedIdP(callerGridIdentity, idp);
     }
 
 
     public void removeTrustedIdP(String callerGridIdentity, TrustedIdP idp) throws DorianInternalFault,
         InvalidTrustedIdPFault, PermissionDeniedFault {
-        ifs.removeTrustedIdP(callerGridIdentity, idp.getId());
+        ifm.removeTrustedIdP(callerGridIdentity, idp.getId());
     }
 
 
     public GridUser[] findGridUsers(String callerGridIdentity, GridUserFilter filter) throws DorianInternalFault,
         PermissionDeniedFault {
-        return ifs.findUsers(callerGridIdentity, filter);
+        return ifm.findUsers(callerGridIdentity, filter);
     }
 
 
     public void updateGridUser(String callerGridIdentity, GridUser usr) throws DorianInternalFault, InvalidUserFault,
         PermissionDeniedFault {
-        ifs.updateUser(callerGridIdentity, usr);
+        ifm.updateUser(callerGridIdentity, usr);
     }
 
 
     public void removeGridUser(String callerGridIdentity, GridUser user) throws DorianInternalFault, InvalidUserFault,
         PermissionDeniedFault {
-        ifs.removeUser(callerGridIdentity, user);
+        ifm.removeUser(callerGridIdentity, user);
     }
+
 
     public void addAdmin(String callerGridIdentity, String gridIdentity) throws RemoteException, DorianInternalFault,
         PermissionDeniedFault {
-        ifs.addAdmin(callerGridIdentity, gridIdentity);
+        ifm.addAdmin(callerGridIdentity, gridIdentity);
     }
 
 
     public void removeAdmin(String callerGridIdentity, String gridIdentity) throws RemoteException,
         DorianInternalFault, PermissionDeniedFault {
-        ifs.removeAdmin(callerGridIdentity, gridIdentity);
+        ifm.removeAdmin(callerGridIdentity, gridIdentity);
     }
 
 
     public String[] getAdmins(String callerGridIdentity) throws RemoteException, DorianInternalFault,
         PermissionDeniedFault {
-        return ifs.getAdmins(callerGridIdentity);
+        return ifm.getAdmins(callerGridIdentity);
     }
 
 
     public HostCertificateRecord requestHostCertificate(String callerGridId, HostCertificateRequest req)
         throws DorianInternalFault, InvalidHostCertificateRequestFault, InvalidHostCertificateFault,
         PermissionDeniedFault {
-        return ifs.requestHostCertificate(callerGridId, req);
+        return ifm.requestHostCertificate(callerGridId, req);
     }
 
 
     public HostCertificateRecord[] getOwnedHostCertificates(String callerGridId) throws DorianInternalFault,
         PermissionDeniedFault {
-        return ifs.getHostCertificatesForCaller(callerGridId);
+        return ifm.getHostCertificatesForCaller(callerGridId);
 
     }
 
 
     public HostCertificateRecord approveHostCertificate(String callerGridId, long recordId) throws DorianInternalFault,
         InvalidHostCertificateFault, PermissionDeniedFault {
-        return ifs.approveHostCertificate(callerGridId, recordId);
+        return ifm.approveHostCertificate(callerGridId, recordId);
     }
 
 
     public HostCertificateRecord[] findHostCertificates(String callerGridId, HostCertificateFilter hostCertificateFilter)
         throws DorianInternalFault, PermissionDeniedFault {
-        return ifs.findHostCertificates(callerGridId, hostCertificateFilter);
+        return ifm.findHostCertificates(callerGridId, hostCertificateFilter);
     }
 
 
     public void updateHostCertificateRecord(String callerGridId, HostCertificateUpdate update)
         throws DorianInternalFault, InvalidHostCertificateFault, PermissionDeniedFault {
-        ifs.updateHostCertificateRecord(callerGridId, update);
+        ifm.updateHostCertificateRecord(callerGridId, update);
     }
 
 
     public HostCertificateRecord renewHostCertificate(String callerGridId, long recordId) throws DorianInternalFault,
         InvalidHostCertificateFault, PermissionDeniedFault {
-        return ifs.renewHostCertificate(callerGridId, recordId);
+        return ifm.renewHostCertificate(callerGridId, recordId);
     }
 
 
@@ -368,12 +374,23 @@ public class Dorian extends LoggingObject {
 
     public void clearDatabase() throws DorianInternalFault {
         this.identityProvider.clearDatabase();
-        this.ifs.clearDatabase();
+        this.ifm.clearDatabase();
     }
 
 
     public TrustedIdentityProviders getTrustedIdentityProviders() throws DorianInternalFault {
-        return this.ifs.getTrustedIdentityProviders();
+        return this.ifm.getTrustedIdentityProviders();
+    }
+
+
+    public List<UserCertificateRecord> findUserCertificateRecords(String callerIdentity, UserCertificateFilter f)
+        throws DorianInternalFault, InvalidUserCertificateFault, PermissionDeniedFault {
+        return this.ifm.findUserCertificateRecords(callerIdentity, f);
+    }
+    
+    public void updateUserCertificateRecord(String callerIdentity, UserCertificateUpdate update)
+    throws DorianInternalFault, InvalidUserCertificateFault, PermissionDeniedFault {
+        this.ifm.updateUserCertificateRecord(callerIdentity, update);
     }
 
 }

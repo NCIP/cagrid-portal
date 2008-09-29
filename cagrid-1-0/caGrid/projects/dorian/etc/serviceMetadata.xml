@@ -51,7 +51,7 @@
         <ns2:Fault description="Client does not have permission to perform the request." name="PermissionDeniedFault"/>
        </ns2:faultCollection>
       </ns2:Operation>
-      <ns2:Operation description="Create a proxy certificate." name="createProxy">
+      <ns2:Operation description="Create a proxy certificate.  (This method is DEPRECATED, please use requestUserCertificate)" name="createProxy">
        <ns2:inputParameterCollection>
         <ns2:InputParameter qName="ns9:SAMLAssertion" dimensionality="1" index="0" isArray="false" isRequired="false" name="saml" xmlns:ns9="http://cagrid.nci.nih.gov/1/dorian-common"/>
         <ns2:InputParameter qName="ns10:PublicKey" dimensionality="1" index="1" isArray="false" isRequired="false" name="publicKey" xmlns:ns10="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
@@ -113,7 +113,7 @@
         <ns2:Fault description="Client does not have permission to perform the request." name="PermissionDeniedFault"/>
        </ns2:faultCollection>
       </ns2:Operation>
-      <ns2:Operation description="" name="findGridUsers">
+      <ns2:Operation description="Obtain a list of grid users accounts within the Dorian, meeting a specified search criteria." name="findGridUsers">
        <ns2:inputParameterCollection>
         <ns2:InputParameter qName="ns20:GridUserFilter" dimensionality="1" index="0" isArray="false" isRequired="false" name="filter" xmlns:ns20="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
        </ns2:inputParameterCollection>
@@ -133,7 +133,7 @@
         <ns2:Fault description="Client does not have permission to perform the request." name="PermissionDeniedFault"/>
        </ns2:faultCollection>
       </ns2:Operation>
-      <ns2:Operation description="" name="removeGridUser">
+      <ns2:Operation description="Removes a grid user account." name="removeGridUser">
        <ns2:inputParameterCollection>
         <ns2:InputParameter qName="ns23:GridUser" dimensionality="1" index="0" isArray="false" isRequired="false" name="user" xmlns:ns23="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
        </ns2:inputParameterCollection>
@@ -143,7 +143,7 @@
         <ns2:Fault description="Client does not have permission to perform the request." name="PermissionDeniedFault"/>
        </ns2:faultCollection>
       </ns2:Operation>
-      <ns2:Operation description="" name="getGridUserPolicies">
+      <ns2:Operation description="Get a list of the Trusted IdP user policies supported by Dorian." name="getGridUserPolicies">
        <ns2:inputParameterCollection/>
        <ns2:Output qName="ns24:GridUserPolicy" dimensionality="1" isArray="true" xmlns:ns24="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
        <ns2:faultCollection>
@@ -162,7 +162,7 @@
         <ns2:Fault description="An error occurred in authenticating." name="AuthenticationProviderFault"/>
        </ns2:faultCollection>
       </ns2:Operation>
-      <ns2:Operation description="" name="authenticateUser">
+      <ns2:Operation description="Authentication Service interface for authenticating with the Dorian IdP." name="authenticateUser">
        <ns2:inputParameterCollection>
         <ns2:InputParameter qName="ns27:Credential" dimensionality="1" index="0" isArray="false" isRequired="false" name="credential" xmlns:ns27="http://gaards.cagrid.org/authentication"/>
        </ns2:inputParameterCollection>
@@ -262,7 +262,7 @@
         <ns2:Fault description="" name="PermissionDeniedFault"/>
        </ns2:faultCollection>
       </ns2:Operation>
-      <ns2:Operation description="" name="changeIdPUserPassword">
+      <ns2:Operation description="This method allows a user with a Dorian IdP account to change their password. (This method is DEPRECATED, please use changeLocalUserPassword)" name="changeIdPUserPassword">
        <ns2:inputParameterCollection>
         <ns2:InputParameter qName="ns37:BasicAuthCredential" dimensionality="1" index="0" isArray="false" isRequired="false" name="credential" xmlns:ns37="http://cagrid.nci.nih.gov/1/dorian-idp"/>
         <ns2:InputParameter qName="xsd:string" dimensionality="1" index="1" isArray="false" isRequired="false" name="newPassword" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
@@ -273,7 +273,7 @@
         <ns2:Fault description="" name="InvalidUserPropertyFault"/>
        </ns2:faultCollection>
       </ns2:Operation>
-      <ns2:Operation description="" name="doesLocalUserExist">
+      <ns2:Operation description="This method determines whether or not a IdP user exists." name="doesLocalUserExist">
        <ns2:inputParameterCollection>
         <ns2:InputParameter qName="xsd:string" dimensionality="1" index="0" isArray="false" isRequired="false" name="userId" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
        </ns2:inputParameterCollection>
@@ -294,7 +294,7 @@
        <ns2:inputParameterCollection/>
        <ns2:faultCollection/>
       </ns2:Operation>
-      <ns2:Operation description="" name="changeLocalUserPassword">
+      <ns2:Operation description="This method allows a user with a Dorian IdP account to change their password." name="changeLocalUserPassword">
        <ns2:inputParameterCollection>
         <ns2:InputParameter qName="ns38:BasicAuthentication" dimensionality="1" index="0" isArray="false" isRequired="false" name="credential" xmlns:ns38="http://gaards.cagrid.org/authentication"/>
         <ns2:InputParameter qName="xsd:string" dimensionality="1" index="1" isArray="false" isRequired="false" name="newPassword" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
@@ -305,16 +305,17 @@
         <ns2:Fault description="" name="PermissionDeniedFault"/>
        </ns2:faultCollection>
       </ns2:Operation>
-      <ns2:Operation description="" name="updateUserCertificate">
+      <ns2:Operation description="This method allows an administrator to update a user certificate record." name="updateUserCertificate">
        <ns2:inputParameterCollection>
         <ns2:InputParameter qName="ns39:UserCertificateUpdate" dimensionality="1" index="0" isArray="false" isRequired="false" name="update" xmlns:ns39="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
        </ns2:inputParameterCollection>
        <ns2:faultCollection>
         <ns2:Fault description="" name="DorianInternalFault"/>
         <ns2:Fault description="" name="InvalidUserCertificateFault"/>
+        <ns2:Fault description="" name="PermissionDeniedFault"/>
        </ns2:faultCollection>
       </ns2:Operation>
-      <ns2:Operation description="" name="requestUserCertificate">
+      <ns2:Operation description="This method allow a user to request a short term user certificate." name="requestUserCertificate">
        <ns2:inputParameterCollection>
         <ns2:InputParameter qName="ns40:Assertion" dimensionality="1" index="0" isArray="false" isRequired="false" name="saml" xmlns:ns40="urn:oasis:names:tc:SAML:1.0:assertion"/>
         <ns2:InputParameter qName="ns41:PublicKey" dimensionality="1" index="1" isArray="false" isRequired="false" name="key" xmlns:ns41="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
@@ -328,6 +329,17 @@
         <ns2:Fault description="" name="UserPolicyFault"/>
        </ns2:faultCollection>
       </ns2:Operation>
+      <ns2:Operation description="This method allows an admin to search for user certificates issued by the Dorian CA." name="findUserCertificates">
+       <ns2:inputParameterCollection>
+        <ns2:InputParameter qName="ns44:UserCertificateFilter" dimensionality="1" index="0" isArray="false" isRequired="false" name="userCertificateFilter" xmlns:ns44="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
+       </ns2:inputParameterCollection>
+       <ns2:Output qName="ns45:UserCertificateRecord" dimensionality="1" isArray="true" xmlns:ns45="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
+       <ns2:faultCollection>
+        <ns2:Fault description="" name="DorianInternalFault"/>
+        <ns2:Fault description="" name="InvalidUserCertificateFault"/>
+        <ns2:Fault description="" name="PermissionDeniedFault"/>
+       </ns2:faultCollection>
+      </ns2:Operation>
      </ns2:operationCollection>
      <ns2:contextPropertyCollection>
       <ns2:ContextProperty description="" name="{gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata}ServiceMetadata"/>
@@ -336,16 +348,16 @@
      </ns2:contextPropertyCollection>
     </ns2:ServiceContext>
    </ns2:serviceContextCollection>
-   <ns44:SemanticMetadata conceptCode="C63541" conceptDefinition="A service available on a system that coordinates resources that are not subject to central control, using open, general purpose protocols and interfaces to deliver nontrivial qualities of services." conceptName="Grid Service" order="0" xmlns:ns44="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
-   <ns45:SemanticMetadata conceptCode="C63543" conceptDefinition="A published API which receives data in the form of objects, performs computations based upon the input data, and returns information to a client via caGrid in the form of one or more objects." conceptName="Analytical Grid Service" order="1" xmlns:ns45="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
+   <ns46:SemanticMetadata conceptCode="C63541" conceptDefinition="A service available on a system that coordinates resources that are not subject to central control, using open, general purpose protocols and interfaces to deliver nontrivial qualities of services." conceptName="Grid Service" order="0" xmlns:ns46="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
+   <ns47:SemanticMetadata conceptCode="C63543" conceptDefinition="A published API which receives data in the form of objects, performs computations based upon the input data, and returns information to a client via caGrid in the form of one or more objects." conceptName="Analytical Grid Service" order="1" xmlns:ns47="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
   </ns2:Service>
  </ns1:serviceDescription>
  <ns1:hostingResearchCenter>
-  <ns46:ResearchCenter displayName="" shortName="" xmlns:ns46="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
-   <ns46:Address country="" locality="" postalCode="" stateProvince="" street1="" street2=""/>
-   <ns46:pointOfContactCollection>
-    <ns46:PointOfContact affiliation="" email="" firstName="" lastName="" phoneNumber="" role=""/>
-   </ns46:pointOfContactCollection>
-  </ns46:ResearchCenter>
+  <ns48:ResearchCenter displayName="" shortName="" xmlns:ns48="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+   <ns48:Address country="" locality="" postalCode="" stateProvince="" street1="" street2=""/>
+   <ns48:pointOfContactCollection>
+    <ns48:PointOfContact affiliation="" email="" firstName="" lastName="" phoneNumber="" role=""/>
+   </ns48:pointOfContactCollection>
+  </ns48:ResearchCenter>
  </ns1:hostingResearchCenter>
 </ns1:ServiceMetadata>

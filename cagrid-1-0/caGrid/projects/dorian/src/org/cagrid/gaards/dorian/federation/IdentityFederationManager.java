@@ -492,7 +492,7 @@ public class IdentityFederationManager extends LoggingObject implements Publishe
         // Validate that the certificate is of valid length
 
         if (FederationUtils.getProxyValid(lifetime).after(FederationUtils.getMaxProxyLifetime(conf))) {
-           UserPolicyFault fault = new UserPolicyFault();
+            UserPolicyFault fault = new UserPolicyFault();
             fault.setFaultString("The requested certificate lifetime exceeds the maximum certificate lifetime (hrs="
                 + conf.getMaxProxyLifetime().getHours() + ", mins=" + conf.getMaxProxyLifetime().getMinutes()
                 + ", sec=" + conf.getMaxProxyLifetime().getSeconds() + ")");
@@ -539,8 +539,9 @@ public class IdentityFederationManager extends LoggingObject implements Publishe
             return userCert;
         } catch (Exception e) {
             // TODO: Change this Exception
-            DorianInternalFault fault = new  DorianInternalFault();
-            fault.setFaultString("An unexpected error occurred in creating a certificate for the user " + usr.getGridId() + ".");
+            DorianInternalFault fault = new DorianInternalFault();
+            fault.setFaultString("An unexpected error occurred in creating a certificate for the user "
+                + usr.getGridId() + ".");
             FaultHelper helper = new FaultHelper(fault);
             helper.addFaultCause(e);
             fault = (DorianInternalFault) helper.getFault();
@@ -952,5 +953,13 @@ public class IdentityFederationManager extends LoggingObject implements Publishe
         verifyAdminUser(caller);
         return this.userCertificateManager.findUserCertificateRecords(f);
     }
-    
+
+
+    public void updateUserCertificateRecord(String callerIdentity, UserCertificateUpdate update)
+        throws DorianInternalFault, InvalidUserCertificateFault, PermissionDeniedFault {
+        GridUser caller = getUser(callerIdentity);
+        verifyActiveUser(caller);
+        verifyAdminUser(caller);
+        this.userCertificateManager.updateUserCertificateRecord(update);
+    }
 }
