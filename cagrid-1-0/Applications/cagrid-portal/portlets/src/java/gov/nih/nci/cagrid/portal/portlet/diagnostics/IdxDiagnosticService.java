@@ -5,6 +5,8 @@ import org.directwebremoting.annotations.Param;
 import org.directwebremoting.annotations.RemoteProxy;
 import org.directwebremoting.spring.SpringCreator;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -24,45 +26,54 @@ public class IdxDiagnosticService extends AbstractDiagnosticService {
 
     @Override
     public DiagnosticResult diagnoseInternal(String Url) throws Exception {
-        DiagnosticResult _result = new DiagnosticResult(DiagnosticType.STATUS, DiagnosticResultStatus.FAILED);
+        DiagnosticResult _result = new DiagnosticResult(DiagnosticType.STATUS, DiagnosticResultStatus.FAILED, "Service not found in INDEX");
         _result.setType(DiagnosticType.INDEX);
 
+        List<String> _idxs = new ArrayList<String>();
         for (String indexSvcUrl : indexServiceUrls) {
             Set<String> dynamicSvcUrls = null;
             try {
                 dynamicSvcUrls = getDynamicServiceUrlProvider().getUrls(
                         indexSvcUrl);
+                _idxs.add(indexSvcUrl);
                 if (dynamicSvcUrls.contains(Url)) {
                     _result.setStatus(DiagnosticResultStatus.PASSED);
                     _result.setMessage("Service found in the INDEX");
-                    logger.debug("Found service in Index");
                     break;
                 }
 
             } catch (Exception ex) {
-                //Will happen during high server load
-                //catch and log exception. Status returned will be ACTIVE
-                logger.error("Index service query failed.");
-                _result.setStatus(DiagnosticResultStatus.UNDETERMINISTIC);
-                _result.setMessage("Failed to query the Index");
-                _result.setDetail("Failed to query the index service at: " + indexSvcUrl + ".Please try again");
+                if (_result.getStatus() != DiagnosticResultStatus.UNDETERMINISTIC) {
+                    _result.setDetail("Failed to query the following Index Service(s)");
+                    _result.setStatus(DiagnosticResultStatus.UNDETERMINISTIC);
+                }
+                _result.setDetail(_result.getDetail().concat(getIndexRow(indexSvcUrl)));
             }
         }
 
-        if (_result.getStatus() == DiagnosticResultStatus.FAILED) {
-            _result.setMessage("Service not found in INDEX");
-            _result.setStatus(DiagnosticResultStatus.FAILED);
-            StringBuilder _detailMessage = new StringBuilder("Service was not found in the index(s). Looked in the following index(s) ");
-            for (String _idx : indexServiceUrls) {
-                _detailMessage.append("<br/>");
-                _detailMessage.append(_idx);
-            }
-            _result.setDetail(_detailMessage.substring(0, _detailMessage.length()));
+        if (_result.getStatus() != DiagnosticResultStatus.PASSED) {
+            if (_result.getDetail() != null) _result.setDetail(_result.getDetail() + getFailedMessage(_idxs));
+            else _result.setDetail(getFailedMessage(_idxs));
         }
 
         return _result;
     }
 
+    private String getFailedMessage(List<String> indexes) {
+        StringBuilder _detail = new StringBuilder("Service not found in Index. Looked in the following Index(s):");
+        for (String indexSvcUrl : indexes) {
+            _detail.append(getIndexRow(indexSvcUrl));
+
+        }
+        return _detail.toString();
+    }
+
+    private String getIndexRow(String indexSvcUrl) {
+        StringBuilder _detail = new StringBuilder("<div class='row'>");
+        _detail.append(indexSvcUrl);
+        _detail.append("</div>");
+        return _detail.toString();
+    }
 
     public String[] getIndexServiceUrls() {
         return indexServiceUrls;

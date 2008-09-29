@@ -28,6 +28,7 @@ public class ServiceInfo {
     private String id;
     private ServiceType type;
     private boolean secure;
+    private String version;
 
     //Todo make it admin configurable
     public static final int URL_MAX_LENGTH_ALLOWED = 30;
@@ -40,9 +41,9 @@ public class ServiceInfo {
         setStatus(service.getCurrentStatus().toString());
         setUrl(service.getUrl());
         setId(String.valueOf(service.getId()));
-
         try {
             setName(service.getServiceMetadata().getServiceDescription().getName());
+            setVersion(service.getServiceMetadata().getServiceDescription().getVersion());
         } catch (Exception e) {
             logger.warn("Error getting Service Description for service: " + getUrl());
             setName(formulateNameFromUrl(getUrl()));
@@ -163,5 +164,13 @@ public class ServiceInfo {
 
     public void setNameAbbrv(String nameAbbrv) {
         this.nameAbbrv = nameAbbrv;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
     }
 }
