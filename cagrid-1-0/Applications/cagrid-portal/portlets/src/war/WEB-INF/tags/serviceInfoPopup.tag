@@ -11,13 +11,13 @@
 
 
 <a id="${id}-infoPopup-control"
-class="infoPopupLink"
-onmouseover="$('${id}-infoPopup-content').style.display='inline'"
-onmouseout="$('${id}-infoPopup-content').style.display='none'"
-<c:if test="${not empty link_href}">
-    &nbsp; href='${link_href}'
-    </c:if>
-    >
+   class="infoPopupLink"
+   onmouseover="$('${id}-infoPopup-content').style.display='inline'"
+   onmouseout="$('${id}-infoPopup-content').style.display='none'"
+        <c:if test="${not empty link_href}">
+            &nbsp; href='${link_href}'
+        </c:if>
+        >
     <c:choose>
         <c:when test="${not empty link_text}">
             ${link_text}
@@ -29,79 +29,89 @@ onmouseout="$('${id}-infoPopup-content').style.display='none'"
             <tags:image name="information_icon.png" height="13"/>
         </c:otherwise>
     </c:choose>
-    </a>&nbsp;
+</a>&nbsp;
 
     <span id="${id}-infoPopup-content" class="infoPopup">
     <div>
 
-    <c:if test="${not empty serviceInfo.name}">
-        <div class="row">
-            <div class="label">
-                Name:
+        <c:if test="${not empty serviceInfo.name}">
+            <div class="row">
+                <div class="label">
+                    Name:
+                </div>
+                <div class="infoPopupValue value">
+                        ${serviceInfo.name}
+                </div>
             </div>
-            <div class="infoPopupValue value">
-                    ${serviceInfo.name}
+        </c:if>
+
+        <c:if test="${not empty serviceInfo.version}">
+            <div class="row">
+                <div class="label">
+                    Version:
+                </div>
+                <div class="infoPopupValue value">
+                        ${serviceInfo.version}
+                </div>
             </div>
-        </div>
-    </c:if>
+        </c:if>
+
+        <c:if test="${not empty serviceInfo.type}">
+            <div class="row">
+                <div class="label">
+                    Type:
+                </div>
+                <div class="infoPopupValue value">
+                        ${serviceInfo.type}
+                </div>
+            </div>
+        </c:if>
 
 
-    <c:if test="${not empty serviceInfo.type}">
-        <div class="row">
-            <div class="label">
-                Type:
+        <c:if test="${not empty serviceInfo.status}">
+            <div class="row">
+                <div class="label">
+                    Status:
+                </div>
+                <div class="infoPopupValue value">
+                        ${serviceInfo.status}
+                </div>
             </div>
-            <div class="infoPopupValue value">
-                    ${serviceInfo.type}
-            </div>
-        </div>
-    </c:if>
+        </c:if>
 
 
-    <c:if test="${not empty serviceInfo.status}">
-        <div class="row">
-            <div class="label">
-                Status:
+        <c:if test="${not empty serviceInfo.center}">
+            <div class="row">
+                <div class="label">
+                    Center:
+                </div>
+                <div class="infoPopupValue value">
+                        ${serviceInfo.center}
+                </div>
             </div>
-            <div class="infoPopupValue value">
-                    ${serviceInfo.status}
-            </div>
-        </div>
-    </c:if>
+        </c:if>
 
+        <c:if test="${not empty serviceInfo.url}">
+            <div class="row">
+                <div class="label">
+                    URL:
+                </div>
+                <div class="infoPopupValue value">
+                        ${serviceInfo.urlAbbrv}
+                </div>
+            </div>
+        </c:if>
 
-    <c:if test="${not empty serviceInfo.center}">
-        <div class="row">
-            <div class="label">
-                Center:
+        <c:if test="${not empty serviceInfo.secure}">
+            <div class="row">
+                <div class="label">
+                    Secured:
+                </div>
+                <div class="infoPopupValue value">
+                        ${serviceInfo.secure}
+                </div>
             </div>
-            <div class="infoPopupValue value">
-                    ${serviceInfo.center}
-            </div>
-        </div>
-    </c:if>
-
-    <c:if test="${not empty serviceInfo.url}">
-        <div class="row">
-            <div class="label">
-                URL:
-            </div>
-            <div class="infoPopupValue value">
-                    ${serviceInfo.urlAbbrv}
-            </div>
-        </div>
-    </c:if>
-
-    <c:if test="${not empty serviceInfo.secure}">
-        <div class="row">
-            <div class="label">
-                Secured:
-            </div>
-            <div class="infoPopupValue value">
-                    ${serviceInfo.secure}
-            </div>
-        </div>
-    </c:if>
+        </c:if>
 
     </div>
 

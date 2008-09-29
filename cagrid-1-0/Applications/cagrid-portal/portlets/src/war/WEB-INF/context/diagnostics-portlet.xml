@@ -27,6 +27,13 @@
             autowire="byName">
         <property name="objectName" value="diagnosticsBean"/>
         <property name="successViewName" value="view"/>
+        <property name="interPortletMessageReceiver">
+            <bean class="gov.nih.nci.cagrid.portal.portlet.InterPortletMessageAdapter" autowire="byName">
+                <property name="modePreferenceName" value="serviceSelectMode"/>
+                <property name="inputQueuePreferenceName" value="selectedServiceInputQueueName"/>
+            </bean>
+        </property>
+
     </bean>
 
     <bean id="portletModeHandlerMapping"

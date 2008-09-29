@@ -1,128 +1,128 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
 <portlet-app version="1.0"
-	xmlns="http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd
+             xmlns="http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd
 	                             http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd">
 
-	<portlet>
-		<description>Direct Login</description>
-		<portlet-name>cagriddirectauthn</portlet-name>
-		<display-name>Login</display-name>
-		<portlet-class>
-			org.springframework.web.portlet.DispatcherPortlet
-		</portlet-class>
-		<init-param>
-			<name>contextConfigLocation</name>
-			<value>/WEB-INF/context/directauthn-portlet.xml</value>
-		</init-param>
-		<supports>
-			<mime-type>text/html</mime-type>
-			<portlet-mode>view</portlet-mode>
-		</supports>
-		<portlet-info>
-			<title>Login</title>
-			<short-title>Login</short-title>
-			<keywords>cagrid,authn</keywords>
-		</portlet-info>
-		<portlet-preferences>
-			<preference>
-				<name>loginRedirectUrl</name>
-				<value>/cagridportlets/directlogin/login?redirectUrl=</value>
-			</preference>
-			<preference>
-				<name>logoutUrl</name>
-				<value>/c/portal/logout</value>
-			</preference>
-		</portlet-preferences>
-	</portlet>
+    <portlet>
+        <description>Direct Login</description>
+        <portlet-name>cagriddirectauthn</portlet-name>
+        <display-name>Login</display-name>
+        <portlet-class>
+            org.springframework.web.portlet.DispatcherPortlet
+        </portlet-class>
+        <init-param>
+            <name>contextConfigLocation</name>
+            <value>/WEB-INF/context/directauthn-portlet.xml</value>
+        </init-param>
+        <supports>
+            <mime-type>text/html</mime-type>
+            <portlet-mode>view</portlet-mode>
+        </supports>
+        <portlet-info>
+            <title>Login</title>
+            <short-title>Login</short-title>
+            <keywords>cagrid,authn</keywords>
+        </portlet-info>
+        <portlet-preferences>
+            <preference>
+                <name>loginRedirectUrl</name>
+                <value>/cagridportlets/directlogin/login?redirectUrl=</value>
+            </preference>
+            <preference>
+                <name>logoutUrl</name>
+                <value>/c/portal/logout</value>
+            </preference>
+        </portlet-preferences>
+    </portlet>
 
-	<portlet>
-		<description>Greeting</description>
-		<portlet-name>cagridgreeting</portlet-name>
-		<display-name>Login</display-name>
-		<portlet-class>
-			org.springframework.web.portlet.DispatcherPortlet
-		</portlet-class>
-		<init-param>
-			<name>contextConfigLocation</name>
-			<value>/WEB-INF/context/greeting-portlet.xml</value>
-		</init-param>
-		<supports>
-			<mime-type>text/html</mime-type>
-			<portlet-mode>view</portlet-mode>
-		</supports>
-		<portlet-info>
-			<title>Greeting</title>
-			<short-title>Greeting</short-title>
-			<keywords>cagrid,authn</keywords>
-		</portlet-info>
-		<portlet-preferences>
-			<preference>
-				<name>registerUrl</name>
-				<value>/web/guest/register</value>
-			</preference>
-			<preference>
-				<name>loginUrl</name>
-				<value>/web/guest/login</value>
-			</preference>
-			<preference>
-				<name>logoutUrl</name>
-				<value>/c/portal/logout</value>
-			</preference>
-		</portlet-preferences>
-	</portlet>
+    <portlet>
+        <description>Greeting</description>
+        <portlet-name>cagridgreeting</portlet-name>
+        <display-name>Login</display-name>
+        <portlet-class>
+            org.springframework.web.portlet.DispatcherPortlet
+        </portlet-class>
+        <init-param>
+            <name>contextConfigLocation</name>
+            <value>/WEB-INF/context/greeting-portlet.xml</value>
+        </init-param>
+        <supports>
+            <mime-type>text/html</mime-type>
+            <portlet-mode>view</portlet-mode>
+        </supports>
+        <portlet-info>
+            <title>Greeting</title>
+            <short-title>Greeting</short-title>
+            <keywords>cagrid,authn</keywords>
+        </portlet-info>
+        <portlet-preferences>
+            <preference>
+                <name>registerUrl</name>
+                <value>/web/guest/register</value>
+            </preference>
+            <preference>
+                <name>loginUrl</name>
+                <value>/web/guest/login</value>
+            </preference>
+            <preference>
+                <name>logoutUrl</name>
+                <value>/c/portal/logout</value>
+            </preference>
+        </portlet-preferences>
+    </portlet>
 
-	<portlet>
-		<description>Register</description>
-		<portlet-name>cagridregistration</portlet-name>
-		<display-name>Register</display-name>
-		<portlet-class>
-			org.springframework.web.portlet.DispatcherPortlet
-		</portlet-class>
-		<init-param>
-			<name>contextConfigLocation</name>
-			<value>/WEB-INF/context/register-portlet.xml</value>
-		</init-param>
-		<supports>
-			<mime-type>text/html</mime-type>
-			<portlet-mode>view</portlet-mode>
-		</supports>
-		<portlet-info>
-			<title>Registration</title>
-			<short-title>Registration</short-title>
-			<keywords>cagrid,registration</keywords>
-		</portlet-info>
-	</portlet>
+    <portlet>
+        <description>Register</description>
+        <portlet-name>cagridregistration</portlet-name>
+        <display-name>Register</display-name>
+        <portlet-class>
+            org.springframework.web.portlet.DispatcherPortlet
+        </portlet-class>
+        <init-param>
+            <name>contextConfigLocation</name>
+            <value>/WEB-INF/context/register-portlet.xml</value>
+        </init-param>
+        <supports>
+            <mime-type>text/html</mime-type>
+            <portlet-mode>view</portlet-mode>
+        </supports>
+        <portlet-info>
+            <title>Registration</title>
+            <short-title>Registration</short-title>
+            <keywords>cagrid,registration</keywords>
+        </portlet-info>
+    </portlet>
 
-	<portlet>
-		<description>News Summary</description>
-		<portlet-name>cagridnewssummary</portlet-name>
-		<display-name>caGrid News Summary Portlet</display-name>
-		<portlet-class>
-			org.springframework.web.portlet.DispatcherPortlet
-		</portlet-class>
-		<init-param>
-			<name>contextConfigLocation</name>
-			<value>/WEB-INF/context/newssummary-portlet.xml</value>
-		</init-param>
-		<supports>
-			<mime-type>text/html</mime-type>
-			<portlet-mode>view</portlet-mode>
-		</supports>
-		<portlet-info>
-			<title>News</title>
-			<short-title>News</short-title>
-			<keywords>cagrid,news</keywords>
-		</portlet-info>
+    <portlet>
+        <description>News Summary</description>
+        <portlet-name>cagridnewssummary</portlet-name>
+        <display-name>caGrid News Summary Portlet</display-name>
+        <portlet-class>
+            org.springframework.web.portlet.DispatcherPortlet
+        </portlet-class>
+        <init-param>
+            <name>contextConfigLocation</name>
+            <value>/WEB-INF/context/newssummary-portlet.xml</value>
+        </init-param>
+        <supports>
+            <mime-type>text/html</mime-type>
+            <portlet-mode>view</portlet-mode>
+        </supports>
+        <portlet-info>
+            <title>News</title>
+            <short-title>News</short-title>
+            <keywords>cagrid,news</keywords>
+        </portlet-info>
 
-		<portlet-preferences>
-			<preference>
-				<name>selectItemForNewsRedirectUrl</name>
-				<value>/web/guest/news</value>
-			</preference>
-			<preference>
+        <portlet-preferences>
+            <preference>
+                <name>selectItemForNewsRedirectUrl</name>
+                <value>/web/guest/news</value>
+            </preference>
+            <preference>
                 <name>newsItemSelectMode</name>
                 <value>INTERPORTLET</value>
             </preference>
@@ -134,34 +134,34 @@
                 <name>newssummary:selectedNewsItem</name>
                 <value>news:selectedNewsItem</value>
             </preference>
-		</portlet-preferences>
+        </portlet-preferences>
 
-	</portlet>
+    </portlet>
 
-	<portlet>
-		<description>News</description>
-		<portlet-name>cagridnews</portlet-name>
-		<display-name>News</display-name>
-		<portlet-class>
-			org.springframework.web.portlet.DispatcherPortlet
-		</portlet-class>
-		<init-param>
-			<name>contextConfigLocation</name>
-			<value>/WEB-INF/context/news-portlet.xml</value>
-		</init-param>
-		<supports>
-			<mime-type>text/html</mime-type>
-			<portlet-mode>view</portlet-mode>
-			<portlet-mode>edit</portlet-mode>
-		</supports>
-		<portlet-info>
-			<title>News</title>
-			<short-title>News</short-title>
-			<keywords>cagrid,news</keywords>
-		</portlet-info>
+    <portlet>
+        <description>News</description>
+        <portlet-name>cagridnews</portlet-name>
+        <display-name>News</display-name>
+        <portlet-class>
+            org.springframework.web.portlet.DispatcherPortlet
+        </portlet-class>
+        <init-param>
+            <name>contextConfigLocation</name>
+            <value>/WEB-INF/context/news-portlet.xml</value>
+        </init-param>
+        <supports>
+            <mime-type>text/html</mime-type>
+            <portlet-mode>view</portlet-mode>
+            <portlet-mode>edit</portlet-mode>
+        </supports>
+        <portlet-info>
+            <title>News</title>
+            <short-title>News</short-title>
+            <keywords>cagrid,news</keywords>
+        </portlet-info>
 
-		<portlet-preferences>
-			<preference>
+        <portlet-preferences>
+            <preference>
                 <name>newsItemSelectMode</name>
                 <value>INTERPORTLET</value>
             </preference>
@@ -169,30 +169,30 @@
                 <name>selectedNewsItemInputQueueName</name>
                 <value>news:selectedNewsItem</value>
             </preference>
-		</portlet-preferences>
+        </portlet-preferences>
 
-	</portlet>
+    </portlet>
 
-	<portlet>
-		<description>caGrid Status</description>
-		<portlet-name>cagridstatus</portlet-name>
-		<display-name>caGrid Status</display-name>
-		<portlet-class>
-			org.springframework.web.portlet.DispatcherPortlet
-		</portlet-class>
-		<init-param>
-			<name>contextConfigLocation</name>
-			<value>/WEB-INF/context/status-portlet.xml</value>
-		</init-param>
-		<supports>
-			<mime-type>text/html</mime-type>
-			<portlet-mode>view</portlet-mode>
-		</supports>
-		<portlet-info>
-			<title>caGrid Status</title>
-			<short-title>caGrid Status</short-title>
-			<keywords>cagrid,status</keywords>
-		</portlet-info>
+    <portlet>
+        <description>caGrid Status</description>
+        <portlet-name>cagridstatus</portlet-name>
+        <display-name>caGrid Status</display-name>
+        <portlet-class>
+            org.springframework.web.portlet.DispatcherPortlet
+        </portlet-class>
+        <init-param>
+            <name>contextConfigLocation</name>
+            <value>/WEB-INF/context/status-portlet.xml</value>
+        </init-param>
+        <supports>
+            <mime-type>text/html</mime-type>
+            <portlet-mode>view</portlet-mode>
+        </supports>
+        <portlet-info>
+            <title>caGrid Status</title>
+            <short-title>caGrid Status</short-title>
+            <keywords>cagrid,status</keywords>
+        </portlet-info>
 
         <portlet-preferences>
             <preference>
@@ -369,8 +369,20 @@
                 <value>query:selectedDataServiceId</value>
             </preference>
 
-        </portlet-preferences>
+            <preference>
+                <name>serviceSelectMode</name>
+                <value>INTERPORTLET</value>
+            </preference>
+            <preference>
+                <name>selectedServiceOutputQueueName</name>
+                <value>disc:selectedServiceUrl</value>
+            </preference>
+            <preference>
+                <name>disc:selectedServiceUrl</name>
+                <value>diagnostics:selectedServiceUrl</value>
+            </preference>
 
+        </portlet-preferences>
     </portlet>
 
     <portlet>
@@ -420,7 +432,7 @@
 
     <portlet>
         <description>Diagnostics Portlet</description>
-        <portlet-name>diagnostics</portlet-name>
+        <portlet-name>cagriddiagnostics</portlet-name>
         <display-name>Service Diagnostics</display-name>
         <portlet-class>
             org.springframework.web.portlet.DispatcherPortlet
@@ -438,6 +450,16 @@
             <short-title>Diagnostics</short-title>
             <keywords>cagrid,diagnostics</keywords>
         </portlet-info>
+        <portlet-preferences>
+            <preference>
+                <name>serviceSelectMode</name>
+                <value>INTERPORTLET</value>
+            </preference>
+            <preference>
+                <name>selectedServiceInputQueueName</name>
+                <value>diagnostics:selectedServiceUrl</value>
+            </preference>
+        </portlet-preferences>
     </portlet>
 
 
