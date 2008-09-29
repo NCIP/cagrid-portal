@@ -19,8 +19,7 @@
     </div>
     <div>
         <input id="${prefix}url" type="text" name="url" value="${diagnosticsBean.url}" size="50"/>
-        <input id="${prefix}diagnoseBtn" type="button" value="Diagnose"
-               onclick="javascript:${prefix}beginDiagnose(true)"/>
+        <input id="${prefix}diagnoseBtn" type="button" value="Diagnose" onclick="javascript:${prefix}beginDiagnose(true)" />
         <tags:infoPopup id="${prefix}diagnosticsInfo" popup_text="Enter URL of caGrid service to run diagnostics on."/>
     </div>
 </div>
@@ -100,9 +99,7 @@
 
     function doDiagnose(divName,JScript,url){
     JScript.diagnose(url,function(result){
-    document.getElementById("${prefix}resultsDiv").innerHTML+="
-    <div id='${prefix}" + divName + "'>" + result + "</div>
-    ";
+    document.getElementById("${prefix}resultsDiv").innerHTML+="<div id='${prefix}" + divName + "'>" + result + "</div>";
 
     if(counter++>=totalTests-1)
     ${prefix}finishDiagnose();
@@ -116,17 +113,10 @@
     $("${prefix}diagnosisLabel").innerHTML = 'Diagnostic Results';
     $("${prefix}disclaimerDiv").innerHTML="Index service results can be delayed up to 5 minutes.";
 
-    document.getElementById("${prefix}resultsDiv").innerHTML+='
-    <hr/>
-    ';
-    document.getElementById("${prefix}resultsDiv").innerHTML+='
-    <div>';
-        document.getElementById("${prefix}resultsDiv").innerHTML+='See <a
-            href="http://www.cagrid.org/wiki/CaGrid:How-To:TroubleshootIndexService" target="_blank">this guide</a> to
-        trobleshoot potential problems';
-        document.getElementById("${prefix}resultsDiv").innerHTML+='
-    </div>
-    ';
+    document.getElementById("${prefix}resultsDiv").innerHTML+='<hr/>';
+    document.getElementById("${prefix}resultsDiv").innerHTML+='<div>';
+        document.getElementById("${prefix}resultsDiv").innerHTML+='See <a href="http://www.cagrid.org/wiki/CaGrid:How-To:TroubleshootIndexService" target="_blank">this guide</a> to trobleshoot potential problems';
+        document.getElementById("${prefix}resultsDiv").innerHTML+='</div>';
 
     $("${prefix}diagnoseBtn").enable();
     $("${prefix}diagnoseBtn").style.background='#3876C1';
