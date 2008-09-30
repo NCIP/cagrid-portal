@@ -42,32 +42,35 @@
                 <span id="serviceStatusSpan"
                         <c:choose>
                             <c:when test="${gridService.currentStatus != 'ACTIVE'}">
-                                style="text-align:center;vertical-align:top;color:red">
+                                style="vertical-align:top;color:red">
                                 <c:out value="${gridService.currentStatus}"/>&nbsp;
-
-                                <input type="button"
-                                       onclick="<portlet:namespace/>diagnoseService('<c:out value="${gridService.url}"/>')"
-                                       value="Diagnose"
-                                        />
                             </c:when>
                             <c:otherwise>
                                 > <c:out value="${gridService.currentStatus}"/>&nbsp;
                             </c:otherwise>
                         </c:choose>
-                     <c:if test="${liferayUser.admin}">
-                         <input id="banUnbanBtn" type="button"
-                                 <c:choose>
-                                     <c:when test="${gridService.currentStatus == 'BANNED'}">
-                                         value="Unban Service"
-                                     </c:when>
-                                     <c:otherwise>
-                                         value="Ban Service"
-                                     </c:otherwise>
-                                 </c:choose>
-                                onclick="<portlet:namespace/>submitBanUnbanRequest('<c:out value="${gridService.id}"/>')"
-                                 />
-                     </c:if>
                 </span>
+
+                <c:if test="${gridService.currentStatus != 'ACTIVE'}">
+                    <input type="button"
+                           onclick="<portlet:namespace/>diagnoseService('<c:out value="${gridService.url}"/>')"
+                           value="Diagnose"
+                            />
+                </c:if>
+
+                <c:if test="${liferayUser.admin}">
+                    <input id="banUnbanBtn" type="button"
+                            <c:choose>
+                                <c:when test="${gridService.currentStatus == 'BANNED'}">
+                                    value="Unban Service"
+                                </c:when>
+                                <c:otherwise>
+                                    value="Ban Service"
+                                </c:otherwise>
+                            </c:choose>
+                           onclick="<portlet:namespace/>submitBanUnbanRequest('<c:out value="${gridService.id}"/>')"
+                            />
+                </c:if>
             </td>
         </tr>
         <tr>
