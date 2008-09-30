@@ -434,7 +434,7 @@ public class TestHostCertificateManager extends TestCase implements Publisher {
 
             long id3 = hcm.requestHostCertifcate(OWNER, getHostCertificateRequest("localhost3"));
 
-            hcm.ownerRemovedUpdateHostCertificates(OWNER);
+            hcm.ownerRemovedUpdateHostCertificates(OWNER,true);
             assertEquals(HostCertificateStatus.Compromised, hcm.getHostCertificateRecord(id1).getStatus());
             assertEquals(HostCertificateStatus.Compromised, hcm.getHostCertificateRecord(id2).getStatus());
             assertEquals(HostCertificateStatus.Rejected, hcm.getHostCertificateRecord(id3).getStatus());

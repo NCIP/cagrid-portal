@@ -450,6 +450,10 @@ public class UserManager extends LoggingObject {
                             + "'s status from a post-created account status (" + curr.getUserStatus()
                             + ") to a pre-created account status (" + u.getUserStatus() + ").");
                         throw fault;
+                    } else if (curr.getUserStatus().equals(GridUserStatus.Rejected)) {
+                        InvalidUserFault fault = new InvalidUserFault();
+                        fault.setFaultString("Cannot change the status of account that has been rejected.");
+                        throw fault;
                     }
                     if (curr.getUserStatus().equals(GridUserStatus.Active)) {
                         publishCRL = true;
@@ -497,6 +501,8 @@ public class UserManager extends LoggingObject {
 
     private boolean accountCreated(GridUserStatus status) {
         if (status.equals(GridUserStatus.Pending)) {
+            return false;
+        } else if (status.equals(GridUserStatus.Rejected)) {
             return false;
         } else {
             return true;
@@ -632,7 +638,7 @@ public class UserManager extends LoggingObject {
 
 
     public Set<String> getDisabledUsers() throws DorianInternalFault {
-      Set<String> users = new HashSet<String>();
+        Set<String> users = new HashSet<String>();
         this.buildDatabase();
         Connection c = null;
         try {
@@ -642,11 +648,10 @@ public class UserManager extends LoggingObject {
 
             StringBuffer sql = new StringBuffer();
             sql.append("select GID from " + USERS_TABLE + " WHERE STATUS='" + GridUserStatus.Suspended
-                + "' OR STATUS='" + GridUserStatus.Pending + "' OR STATUS='" + GridUserStatus.Rejected
-                + "'");
+                + "' OR STATUS='" + GridUserStatus.Pending + "' OR STATUS='" + GridUserStatus.Rejected + "'");
             ResultSet rs = s.executeQuery(sql.toString());
             while (rs.next()) {
-               String gid = (rs.getString("GID"));
+                String gid = (rs.getString("GID"));
                 if (!users.contains(gid)) {
                     users.add(gid);
                 }

@@ -435,4 +435,13 @@ public class DorianClient extends DorianClientBase implements DorianI {
     }
   }
 
+  public void removeUserCertificate(java.lang.String serialNumber) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.InvalidUserCertificateFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"removeUserCertificate");
+    org.cagrid.gaards.dorian.stubs.RemoveUserCertificateRequest params = new org.cagrid.gaards.dorian.stubs.RemoveUserCertificateRequest();
+    params.setSerialNumber(serialNumber);
+    org.cagrid.gaards.dorian.stubs.RemoveUserCertificateResponse boxedResult = portType.removeUserCertificate(params);
+    }
+  }
+
 }

@@ -43,13 +43,15 @@ public class UserCertificateManager {
     private boolean dbBuilt = false;
     private Database db;
     private Publisher publisher;
+    private CertificateBlacklistManager blacklist;
     private Log log;
 
 
-    public UserCertificateManager(Database db, Publisher publisher) {
+    public UserCertificateManager(Database db, Publisher publisher, CertificateBlacklistManager blacklist) {
         this.db = db;
         this.log = LogFactory.getLog(this.getClass().getName());
         this.publisher = publisher;
+        this.blacklist = blacklist;
     }
 
 
@@ -220,7 +222,7 @@ public class UserCertificateManager {
         try {
             c = db.getConnection();
             PreparedStatement s = c.prepareStatement("select " + SERIAL + " from " + TABLE + " WHERE " + STATUS
-                + "= ? AND " + NOT_BEFORE + "<= ? AND " + NOT_AFTER + " >= ? AND "+GID +"= ?");
+                + "= ? AND " + NOT_BEFORE + "<= ? AND " + NOT_AFTER + " >= ? AND " + GID + "= ?");
             s.setString(1, UserCertificateStatus.OK.getValue());
             Date time = new Date();
             s.setLong(2, time.getTime());
@@ -330,10 +332,18 @@ public class UserCertificateManager {
                         fault.setFaultString(FIND_INVALID_RANGE_ERROR);
                         throw fault;
                     } else {
-                        select.addClause("((" + NOT_BEFORE + ">=" + range.getStartDate().getTime() + " AND " + NOT_AFTER+ "<=" + range.getEndDate().getTime() + ")"+ 
-                                         " OR ("+ NOT_BEFORE + "<=" + range.getStartDate().getTime() + " AND " + NOT_AFTER + ">=" + range.getEndDate().getTime() +")"+  
-                                         " OR ("+ NOT_BEFORE + ">=" + range.getStartDate().getTime()+" AND "+NOT_BEFORE+"<="+range.getEndDate().getTime() + " AND "+NOT_AFTER+">="+range.getStartDate().getTime()+ " AND " + NOT_AFTER + ">=" + range.getEndDate().getTime() +")"+
-                                         " OR ("+ NOT_BEFORE + "<=" + range.getStartDate().getTime()+" AND "+NOT_BEFORE+"<="+range.getEndDate().getTime() +  " AND " + NOT_AFTER + ">=" + range.getStartDate().getTime() +" AND "+NOT_AFTER+"<="+range.getEndDate().getTime()+"))");
+                        select.addClause("((" + NOT_BEFORE + ">=" + range.getStartDate().getTime() + " AND "
+                            + NOT_AFTER + "<=" + range.getEndDate().getTime() + ")" + " OR (" + NOT_BEFORE + "<="
+                            + range.getStartDate().getTime() + " AND " + NOT_AFTER + ">="
+                            + range.getEndDate().getTime() + ")" + " OR (" + NOT_BEFORE + ">="
+                            + range.getStartDate().getTime() + " AND " + NOT_BEFORE + "<="
+                            + range.getEndDate().getTime() + " AND " + NOT_AFTER + ">="
+                            + range.getStartDate().getTime() + " AND " + NOT_AFTER + ">="
+                            + range.getEndDate().getTime() + ")" + " OR (" + NOT_BEFORE + "<="
+                            + range.getStartDate().getTime() + " AND " + NOT_BEFORE + "<="
+                            + range.getEndDate().getTime() + " AND " + NOT_AFTER + ">="
+                            + range.getStartDate().getTime() + " AND " + NOT_AFTER + "<="
+                            + range.getEndDate().getTime() + "))");
                     }
                 }
             }
@@ -358,7 +368,7 @@ public class UserCertificateManager {
 
         } catch (InvalidUserCertificateFault e) {
             throw e;
-        }catch (Exception e) {
+        } catch (Exception e) {
             log.error(e.getMessage(), e);
             DorianInternalFault fault = new DorianInternalFault();
             fault.setFaultString("An unexpected error occurred.");
@@ -371,6 +381,58 @@ public class UserCertificateManager {
         }
         return certs;
 
+    }
+
+
+    public void removeCertificates(String gridIdentity) throws DorianInternalFault {
+        buildDatabase();
+        Connection c = null;
+        try {
+            c = db.getConnection();
+            PreparedStatement s = c.prepareStatement("select " + SERIAL + " from " + TABLE + " WHERE " + GID + "= ?");
+            s.setString(1, gridIdentity);
+            ResultSet rs = s.executeQuery();
+            while (rs.next()) {
+                removeCertificate(rs.getLong(SERIAL));
+            }
+            rs.close();
+            s.close();
+        } catch (Exception e) {
+            DorianInternalFault fault = new DorianInternalFault();
+            fault.setFaultString("Unexpected Database Error");
+            FaultHelper helper = new FaultHelper(fault);
+            helper.addFaultCause(e);
+            fault = (DorianInternalFault) helper.getFault();
+            throw fault;
+        } finally {
+            db.releaseConnection(c);
+        }
+    }
+
+
+    public void removeCertificate(long recordId) throws DorianInternalFault, InvalidUserCertificateFault {
+        UserCertificateRecord record = getUserCertificateRecord(recordId);
+        buildDatabase();
+        Connection c = null;
+        try {
+            if (record.getStatus().equals(UserCertificateStatus.Compromised)) {
+                X509Certificate cert = CertUtil.loadCertificate(record.getCertificate().getCertificateAsString());
+                blacklist.addCertificateToBlackList(cert, CertificateBlacklistManager.COMPROMISED);
+            }
+            c = db.getConnection();
+            PreparedStatement s = c.prepareStatement("DELETE FROM " + TABLE + " WHERE " + SERIAL + "= ?");
+            s.setLong(1, recordId);
+            s.executeUpdate();
+        } catch (Exception e) {
+            DorianInternalFault fault = new DorianInternalFault();
+            fault.setFaultString("Unexpected Database Error");
+            FaultHelper helper = new FaultHelper(fault);
+            helper.addFaultCause(e);
+            fault = (DorianInternalFault) helper.getFault();
+            throw fault;
+        } finally {
+            db.releaseConnection(c);
+        }
     }
 
 

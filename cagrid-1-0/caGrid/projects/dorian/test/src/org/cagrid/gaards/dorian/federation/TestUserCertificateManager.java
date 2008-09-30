@@ -33,6 +33,7 @@ public class TestUserCertificateManager extends TestCase implements Publisher {
     private int crlPublishCount;
     private List<BigInteger> crl;
     private UserCertificateManager man;
+    private CertificateBlacklistManager blackList;
 
 
     public void testSingleUserCertificate() {
@@ -212,7 +213,7 @@ public class TestUserCertificateManager extends TestCase implements Publisher {
             validateFind(update, expected);
 
             checkCRL(man.getCompromisedCertificates(), 1);
-            
+
             // Test All
             UserCertificateFilter all = new UserCertificateFilter();
             all.setSerialNumber(new Long(r.getSerialNumber()));
@@ -222,6 +223,10 @@ public class TestUserCertificateManager extends TestCase implements Publisher {
             all.setDateRange(insideRange);
             expected.put(new Long(r.getSerialNumber()), r);
             validateFind(all, expected);
+
+            man.removeCertificate(r.getSerialNumber());
+            assertEquals(false, man.determineIfRecordExistBySerialNumber(r.getSerialNumber()));
+            assertTrue(blackList.memberOfBlackList(r.getSerialNumber()));
         } catch (Exception e) {
             FaultUtil.printFault(e);
             fail(e.getMessage());
@@ -231,7 +236,7 @@ public class TestUserCertificateManager extends TestCase implements Publisher {
 
     public void testMultipleUserCertificates() {
         try {
-          
+
             int count = 3;
 
             List<UserCertificateRecord> records = new ArrayList<UserCertificateRecord>();
@@ -241,9 +246,9 @@ public class TestUserCertificateManager extends TestCase implements Publisher {
                 man.addUserCertifcate(UserManager.subjectToIdentity(cert.getSubjectDN().getName()), cert);
                 UserCertificateRecord r = getAndValidateCertificateRecord(cert);
                 records.add(r);
-                
+
                 checkCRL(man.getCompromisedCertificates(), i);
-                
+
                 Map<Long, UserCertificateRecord> expected = new HashMap<Long, UserCertificateRecord>();
 
                 // Test empty filter
@@ -289,8 +294,6 @@ public class TestUserCertificateManager extends TestCase implements Publisher {
                 status.setStatus(UserCertificateStatus.Compromised);
                 validateFind(status, expected);
 
-            
-                
                 // Test end outside date range
                 UserCertificateFilter endOutside = new UserCertificateFilter();
                 DateRange endOutsideRange = new DateRange();
@@ -430,8 +433,8 @@ public class TestUserCertificateManager extends TestCase implements Publisher {
 
                 expected.put(new Long(r.getSerialNumber()), r);
                 validateFind(update, expected);
-                
-                checkCRL(man.getCompromisedCertificates(), (i+1));
+
+                checkCRL(man.getCompromisedCertificates(), (i + 1));
 
                 // Test All
                 UserCertificateFilter all = new UserCertificateFilter();
@@ -444,6 +447,12 @@ public class TestUserCertificateManager extends TestCase implements Publisher {
                 validateFind(all, expected);
 
             }
+            for (int i = 0; i < count; i++) {
+                UserCertificateRecord r = records.get(i);
+                man.removeCertificates(r.getGridIdentity());
+                assertEquals(false, man.determineIfRecordExistBySerialNumber(r.getSerialNumber()));
+                assertTrue(blackList.memberOfBlackList(r.getSerialNumber()));
+            }
         } catch (Exception e) {
             FaultUtil.printFault(e);
             fail(e.getMessage());
@@ -454,7 +463,7 @@ public class TestUserCertificateManager extends TestCase implements Publisher {
     public void testUpdateNonExistingCertificate() {
         try {
             checkCRL(man.getCompromisedCertificates(), 0);
-           UserCertificateUpdate update = new UserCertificateUpdate();
+            UserCertificateUpdate update = new UserCertificateUpdate();
             update.setSerialNumber(1);
             update.setStatus(UserCertificateStatus.Compromised);
             try {
@@ -476,7 +485,7 @@ public class TestUserCertificateManager extends TestCase implements Publisher {
 
     public void testUpdateCompromisedCertificate() {
         try {
-           String uid = "jdoe";
+            String uid = "jdoe";
             X509Certificate cert = getAndValidateCertificate(uid, DEFAULT_SECONDS);
             man.addUserCertifcate(UserManager.subjectToIdentity(cert.getSubjectDN().getName()), cert);
             UserCertificateRecord r = getAndValidateCertificateRecord(cert);
@@ -512,7 +521,7 @@ public class TestUserCertificateManager extends TestCase implements Publisher {
             validateFind(update, expected);
 
             checkCRL(man.getCompromisedCertificates(), 1);
-            
+
             UserCertificateUpdate u2 = new UserCertificateUpdate();
             u2.setSerialNumber(cert.getSerialNumber().longValue());
             u2.setStatus(UserCertificateStatus.OK);
@@ -525,7 +534,7 @@ public class TestUserCertificateManager extends TestCase implements Publisher {
                     fail("Should not be able to change the status of a compromised certificate.");
                 }
             }
-            
+
             checkCRL(man.getCompromisedCertificates(), 1);
         } catch (Exception e) {
             FaultUtil.printFault(e);
@@ -564,7 +573,7 @@ public class TestUserCertificateManager extends TestCase implements Publisher {
             expiredFilter.setDateRange(range);
             expected.clear();
             validateFind(expiredFilter, expected);
-            
+
             checkCRL(man.getCompromisedCertificates(), 0);
 
             // Create expired compromised certificate
@@ -593,7 +602,7 @@ public class TestUserCertificateManager extends TestCase implements Publisher {
             expected.clear();
             expected.put(new Long(expiredCompromised.getSerialNumber()), expiredCompromised);
             validateFind(expiredCompromisedFilter, expected);
-            
+
             checkCRL(man.getCompromisedCertificates(), 1);
 
             // Create Active certificate
@@ -613,7 +622,7 @@ public class TestUserCertificateManager extends TestCase implements Publisher {
             validateFind(activeFilter, expected);
 
             checkCRL(man.getCompromisedCertificates(), 1);
-            
+
             // Create Active certificate of a different user
             String uid2 = "jane";
             X509Certificate activeCert2 = getAndValidateCertificate(uid2, DEFAULT_SECONDS);
@@ -629,7 +638,7 @@ public class TestUserCertificateManager extends TestCase implements Publisher {
             expected.clear();
             expected.put(new Long(active2.getSerialNumber()), active2);
             validateFind(activeFilter2, expected);
-            
+
             checkCRL(man.getCompromisedCertificates(), 1);
 
             // Create Active Compromised Certificate
@@ -657,7 +666,7 @@ public class TestUserCertificateManager extends TestCase implements Publisher {
             expected.clear();
             expected.put(new Long(activeCompromised.getSerialNumber()), activeCompromised);
             validateFind(activeCompromisedFilter, expected);
-            
+
             checkCRL(man.getCompromisedCertificates(), 2);
 
             List<BigInteger> activeResults = man.getActiveCertificates(UserManager
@@ -675,7 +684,7 @@ public class TestUserCertificateManager extends TestCase implements Publisher {
 
     public void testCompromisedCertificates() {
         try {
-      
+
             String uid = "john";
 
             Map<Long, UserCertificateRecord> expected = new HashMap<Long, UserCertificateRecord>();
@@ -703,7 +712,7 @@ public class TestUserCertificateManager extends TestCase implements Publisher {
             expiredFilter.setDateRange(range);
             expected.clear();
             validateFind(expiredFilter, expected);
-            
+
             checkCRL(man.getCompromisedCertificates(), 0);
 
             // Create expired compromised certificate
@@ -732,7 +741,7 @@ public class TestUserCertificateManager extends TestCase implements Publisher {
             expected.clear();
             expected.put(new Long(expiredCompromised.getSerialNumber()), expiredCompromised);
             validateFind(expiredCompromisedFilter, expected);
-            
+
             checkCRL(man.getCompromisedCertificates(), 1);
 
             String uid2 = "jane";
@@ -752,7 +761,7 @@ public class TestUserCertificateManager extends TestCase implements Publisher {
             expected.clear();
             expected.put(new Long(active.getSerialNumber()), active);
             validateFind(activeFilter, expected);
-            
+
             checkCRL(man.getCompromisedCertificates(), 1);
 
             // Create Active Compromised Certificate
@@ -780,7 +789,7 @@ public class TestUserCertificateManager extends TestCase implements Publisher {
             expected.clear();
             expected.put(new Long(activeCompromised.getSerialNumber()), activeCompromised);
             validateFind(activeCompromisedFilter, expected);
-            
+
             checkCRL(man.getCompromisedCertificates(), 2);
 
             List<BigInteger> compromisedResults = man.getCompromisedCertificates();
@@ -798,8 +807,6 @@ public class TestUserCertificateManager extends TestCase implements Publisher {
 
     public void testFindUserCertificatesInvalidRange() {
         try {
-            UserCertificateManager man = new UserCertificateManager(db, this);
-            man.clearDatabase();
             String uid = "jdoe";
             X509Certificate cert = getAndValidateCertificate(uid, DEFAULT_SECONDS);
             man.addUserCertifcate(UserManager.subjectToIdentity(cert.getSubjectDN().getName()), cert);
@@ -923,8 +930,7 @@ public class TestUserCertificateManager extends TestCase implements Publisher {
     }
 
 
-    private void validateFind(UserCertificateFilter f,
-        Map<Long, UserCertificateRecord> expected) throws Exception {
+    private void validateFind(UserCertificateFilter f, Map<Long, UserCertificateRecord> expected) throws Exception {
         List<UserCertificateRecord> results = man.findUserCertificateRecords(f);
         assertEquals(expected.size(), results.size());
         for (int i = 0; i < results.size(); i++) {
@@ -938,8 +944,7 @@ public class TestUserCertificateManager extends TestCase implements Publisher {
     }
 
 
-    private UserCertificateRecord getAndValidateCertificateRecord(X509Certificate cert)
-        throws Exception {
+    private UserCertificateRecord getAndValidateCertificateRecord(X509Certificate cert) throws Exception {
         assertTrue(man.determineIfRecordExistBySerialNumber(cert.getSerialNumber().longValue()));
         UserCertificateRecord record = man.getUserCertificateRecord(cert.getSerialNumber().longValue());
         assertNotNull(record);
@@ -982,8 +987,9 @@ public class TestUserCertificateManager extends TestCase implements Publisher {
         KeyPair pair = KeyUtil.generateRSAKeyPair1024();
         return ca.signCertificate(subject, pair.getPublic(), start, end);
     }
-    
-    public void checkCRL(List<BigInteger> expected, int expectedCount){
+
+
+    public void checkCRL(List<BigInteger> expected, int expectedCount) {
         assertEquals(expectedCount, this.crlPublishCount);
         assertEquals(expected, this.crl);
     }
@@ -1006,7 +1012,9 @@ public class TestUserCertificateManager extends TestCase implements Publisher {
             assertEquals(0, db.getUsedConnectionCount());
             ca = Utils.getCA();
             caSubject = ca.getCACertificate().getSubjectDN().getName();
-            man = new UserCertificateManager(db, this);
+            blackList = new CertificateBlacklistManager(db);
+            blackList.clearDatabase();
+            man = new UserCertificateManager(db, this, blackList);
             man.clearDatabase();
             this.crlPublishCount = 0;
             this.crl = new ArrayList<BigInteger>();
@@ -1021,6 +1029,7 @@ public class TestUserCertificateManager extends TestCase implements Publisher {
         super.setUp();
         try {
             ca.clearCertificateAuthority();
+            blackList.clearDatabase();
             man.clearDatabase();
             this.crlPublishCount = 0;
             this.crl = null;

@@ -11,6 +11,7 @@ import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
@@ -26,6 +27,7 @@ import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.LookAndFeel;
 import org.cagrid.grape.utils.ErrorDialog;
 import org.globus.gsi.GlobusCredential;
+import java.awt.FlowLayout;
 
 public class UserCertificateSearchPanel extends JPanel {
 
@@ -89,6 +91,14 @@ public class UserCertificateSearchPanel extends JPanel {
 
 	private JButton clearButton = null;
 
+	private JPanel actionPanel = null;
+
+	private JButton viewCertificate = null;
+
+	private JButton remove = null;
+
+	private JButton removeAll = null;
+
 	/**
 	 * This is the default constructor
 	 */
@@ -116,6 +126,12 @@ public class UserCertificateSearchPanel extends JPanel {
 	 * @return void
 	 */
 	private void initialize() {
+		GridBagConstraints gridBagConstraints14 = new GridBagConstraints();
+		gridBagConstraints14.gridx = 0;
+		gridBagConstraints14.insets = new Insets(2, 2, 2, 2);
+		gridBagConstraints14.weightx = 1.0D;
+		gridBagConstraints14.fill = GridBagConstraints.HORIZONTAL;
+		gridBagConstraints14.gridy = 2;
 		GridBagConstraints gridBagConstraints12 = new GridBagConstraints();
 		gridBagConstraints12.fill = GridBagConstraints.BOTH;
 		gridBagConstraints12.weighty = 1.0;
@@ -133,7 +149,7 @@ public class UserCertificateSearchPanel extends JPanel {
 		this.setLayout(new GridBagLayout());
 		this.add(getSearchCriteriaPanel(), gridBagConstraints);
 		this.add(getJScrollPane(), gridBagConstraints12);
-		// this.setSize(500, 400);
+		this.add(getActionPanel(), gridBagConstraints14);
 	}
 
 	/**
@@ -596,7 +612,9 @@ public class UserCertificateSearchPanel extends JPanel {
 			search = new JButton();
 			search.setText("Search");
 			search.addActionListener(new java.awt.event.ActionListener() {
+				
 				public void actionPerformed(java.awt.event.ActionEvent e) {
+					disableButtons();
 					Runner runner = new Runner() {
 						public void execute() {
 							findCertificates();
@@ -685,10 +703,10 @@ public class UserCertificateSearchPanel extends JPanel {
 			for (int i = 0; i < records.size(); i++) {
 				getUserCertificates().addUserCertificate(records.get(i));
 			}
-
 		} catch (Exception e) {
 			ErrorDialog.showError(e.getMessage(), e);
 		}
+		enableButtons();
 	}
 
 	/**
@@ -720,4 +738,162 @@ public class UserCertificateSearchPanel extends JPanel {
 		this.getNotes().setText("");
 	}
 
+	/**
+	 * This method initializes actionPanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	private JPanel getActionPanel() {
+		if (actionPanel == null) {
+			actionPanel = new JPanel();
+			actionPanel.setLayout(new FlowLayout());
+			actionPanel.add(getViewCertificate(), null);
+			actionPanel.add(getRemove(), null);
+			actionPanel.add(getRemoveAll(), null);
+		}
+		return actionPanel;
+	}
+
+	/**
+	 * This method initializes viewCertificate
+	 * 
+	 * @return javax.swing.JButton
+	 */
+	private JButton getViewCertificate() {
+		if (viewCertificate == null) {
+			viewCertificate = new JButton();
+			viewCertificate.setText("View");
+			viewCertificate
+					.addActionListener(new java.awt.event.ActionListener() {
+						public void actionPerformed(java.awt.event.ActionEvent e) {
+							getUserCertificates().doubleClick();
+						}
+					});
+		}
+		return viewCertificate;
+	}
+
+	/**
+	 * This method initializes remove
+	 * 
+	 * @return javax.swing.JButton
+	 */
+	private JButton getRemove() {
+		if (remove == null) {
+			remove = new JButton();
+			remove.setText("Delete");
+			remove.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					disableButtons();
+					Runner runner = new Runner() {
+						public void execute() {
+							removeCertificate();
+						}
+					};
+					try {
+						GridApplication.getContext()
+								.executeInBackground(runner);
+					} catch (Exception t) {
+						t.getMessage();
+					}
+				}
+			});
+		}
+		return remove;
+	}
+
+	/**
+	 * This method initializes removeAll
+	 * 
+	 * @return javax.swing.JButton
+	 */
+	private JButton getRemoveAll() {
+		if (removeAll == null) {
+			removeAll = new JButton();
+			removeAll.setText("Delete All");
+			removeAll.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					disableButtons();
+					Runner runner = new Runner() {
+						public void execute() {
+							removeAllCertificates();
+						}
+					};
+					try {
+						GridApplication.getContext()
+								.executeInBackground(runner);
+					} catch (Exception t) {
+						t.getMessage();
+					}
+				}
+			});
+		}
+		return removeAll;
+	}
+
+	private void removeCertificate() {
+		try {
+			int row = getUserCertificates().getSelectedRow();
+
+			if ((row >= 0) && (row < getUserCertificates().getRowCount())) {
+				UserCertificateRecord record = (UserCertificateRecord) getUserCertificates()
+						.getValueAt(row, 0);
+
+				int status = JOptionPane
+						.showConfirmDialog(this,
+								"Are you sure you want to remove the selected certificate?");
+				if (status == JOptionPane.YES_OPTION) {
+					GridAdministrationClient client = session.getAdminClient();
+					client.removeUserCertificate(record.getSerialNumber());
+					getUserCertificates().removeRow(row);
+					GridApplication
+							.getContext()
+							.showMessage(
+									"The selected certificates was successfully removed!!!");
+				}
+			} else {
+				throw new Exception("Please select a certificate!!!");
+			}
+		} catch (Exception e) {
+			ErrorDialog.showError(e);
+		}
+		enableButtons();
+	}
+
+	private void removeAllCertificates() {
+		try {
+			int status = JOptionPane
+					.showConfirmDialog(this,
+							"Are you sure you want to remove all of the listed certificates?");
+			if (status == JOptionPane.YES_OPTION) {
+				GridAdministrationClient client = session.getAdminClient();
+				int rowCount = getUserCertificates().getRowCount();
+				for(int i=0; i<rowCount; i++){
+					UserCertificateRecord record = (UserCertificateRecord) getUserCertificates()
+					.getValueAt(0, 0);
+					client.removeUserCertificate(record.getSerialNumber());
+					getUserCertificates().removeRow(0);
+				}
+				GridApplication.getContext().showMessage(
+						"The listed certificates were successfully removed!!!");
+			}
+		} catch (Exception e) {
+			ErrorDialog.showError(e);
+		}
+		enableButtons();
+	}
+	
+	private void disableButtons(){
+		getClearButton().setEnabled(false);
+		getRemove().setEnabled(false);
+		getRemoveAll().setEnabled(false);
+		getSearch().setEnabled(false);
+	}
+	
+	private void enableButtons(){
+		getClearButton().setEnabled(true);
+		getRemove().setEnabled(true);
+		getRemoveAll().setEnabled(true);
+		getSearch().setEnabled(true);
+	}
 }

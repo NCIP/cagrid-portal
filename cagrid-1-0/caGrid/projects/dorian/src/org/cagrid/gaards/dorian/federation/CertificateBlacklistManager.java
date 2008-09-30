@@ -21,6 +21,7 @@ public class CertificateBlacklistManager {
 
 	public static final String CERTIFICATE_RENEWED = "CERTIFICATE RENEWED";
 	public static final String ACCOUNT_DELETED = "ACCOUNT DELETED";
+	public static final String COMPROMISED = "COMPROMISED";
 	public static final String TABLE = "certificate_blacklist";
 	private static final String SERIAL = "SERIAL_NUMBER";
 	private static final String SUBJECT = "SUBJECT";

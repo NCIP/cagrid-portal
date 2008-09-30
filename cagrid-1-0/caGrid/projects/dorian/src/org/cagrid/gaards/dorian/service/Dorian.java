@@ -387,10 +387,17 @@ public class Dorian extends LoggingObject {
         throws DorianInternalFault, InvalidUserCertificateFault, PermissionDeniedFault {
         return this.ifm.findUserCertificateRecords(callerIdentity, f);
     }
-    
+
+
     public void updateUserCertificateRecord(String callerIdentity, UserCertificateUpdate update)
-    throws DorianInternalFault, InvalidUserCertificateFault, PermissionDeniedFault {
+        throws DorianInternalFault, InvalidUserCertificateFault, PermissionDeniedFault {
         this.ifm.updateUserCertificateRecord(callerIdentity, update);
+    }
+
+
+    public void removeUserCertificate(String callerIdentity, long serialNumber) throws DorianInternalFault,
+        InvalidUserCertificateFault, PermissionDeniedFault {
+        this.ifm.removeUserCertificate(callerIdentity,serialNumber);
     }
 
 }

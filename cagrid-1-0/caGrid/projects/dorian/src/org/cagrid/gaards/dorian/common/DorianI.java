@@ -308,5 +308,18 @@ public interface DorianI {
    */
   public org.cagrid.gaards.dorian.federation.UserCertificateRecord[] findUserCertificates(org.cagrid.gaards.dorian.federation.UserCertificateFilter userCertificateFilter) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.InvalidUserCertificateFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault ;
 
+  /**
+   * This method allows an administrator to remove a user certificate.
+   *
+   * @param serialNumber
+   * @throws DorianInternalFault
+   *	
+   * @throws InvalidUserCertificateFault
+   *	
+   * @throws PermissionDeniedFault
+   *	
+   */
+  public void removeUserCertificate(java.lang.String serialNumber) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.InvalidUserCertificateFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault ;
+
 }
 

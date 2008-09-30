@@ -615,7 +615,7 @@ public class TestIdentityFederationManager extends TestCase {
             int hostCount = 1;
             int totalUsers = 3;
             int userHostCerts = 2;
-            int total = totalUsers + (totalUsers * userHostCerts);
+            int total = (totalUsers) + (totalUsers * userHostCerts);
 
             // Create users and host certificates
             List<UserContainer> list = new ArrayList();
@@ -698,7 +698,6 @@ public class TestIdentityFederationManager extends TestCase {
             }
 
             this.validateCRLOnDisabledUserStatus(ifs, list, GridUserStatus.Suspended, adminGridId, userHostCerts);
-            this.validateCRLOnDisabledUserStatus(ifs, list, GridUserStatus.Rejected, adminGridId, userHostCerts);
 
             assertTrue(userHostCerts >= 1);
 
@@ -709,18 +708,81 @@ public class TestIdentityFederationManager extends TestCase {
             assertEquals(list.get(0).getHostCertificates().get(0).getId(), hcr.getId());
             X509Certificate newHostCert = CertUtil.loadCertificate(hcr.getCertificate().getCertificateAsString());
             crl = ifs.getCRL();
-
+            int alreadyRevokedCertificates = 1;
             assertNotNull(crl.getRevokedCertificate(oldHostCert));
             assertNull(crl.getRevokedCertificate(newHostCert));
 
-            this.validateCRLOnDisabledHostStatus(ifs, list, HostCertificateStatus.Suspended, adminGridId,
-                userHostCerts, 1);
-            this.validateCRLOnDisabledHostStatus(ifs, list, HostCertificateStatus.Compromised, adminGridId,
-                userHostCerts, 1);
+            alreadyRevokedCertificates = this.validateCRLOnDisabledHostStatus(ifs, list,
+                HostCertificateStatus.Suspended, adminGridId, userHostCerts, alreadyRevokedCertificates);
+            alreadyRevokedCertificates = this.validateCRLOnDisabledHostStatus(ifs, list,
+                HostCertificateStatus.Compromised, adminGridId, userHostCerts, alreadyRevokedCertificates);
 
-            assertTrue(totalUsers >= 2);
+            // Test compromising user certificates
+            for (int i = 0; i < list.size(); i++) {
+                UserContainer usr = list.get(i);
+                KeyPair pair = KeyUtil.generateRSAKeyPair1024();
+                PublicKey publicKey = pair.getPublic();
+                CertificateLifetime lifetime = getLifetime();
+                X509Certificate cert = ifs.requestUserCertificate(getSAMLAssertion(usr.getUser().getUID(), idp2),
+                    publicKey, lifetime);
+                String expectedIdentity = UserManager.subjectToIdentity(UserManager.getUserSubject(ifs
+                    .getIdentityAssignmentPolicy(), ca.getCACertificate().getSubjectDN().getName(), idp2.getIdp(), usr
+                    .getUser().getUID()));
 
-            ifs.removeUser(adminGridId, list.get(0).getUser());
+                checkCertificate(expectedIdentity, lifetime, pair.getPrivate(), cert);
+
+                crl = ifs.getCRL();
+                assertEquals(alreadyRevokedCertificates, crl.getRevokedCertificates().size());
+                assertNull(crl.getRevokedCertificate(cert));
+                UserCertificateUpdate u = new UserCertificateUpdate();
+                u.setSerialNumber(cert.getSerialNumber().longValue());
+                u.setStatus(UserCertificateStatus.Compromised);
+                ifs.updateUserCertificateRecord(adminGridId, u);
+                alreadyRevokedCertificates = alreadyRevokedCertificates + 1;
+                crl = ifs.getCRL();
+                assertEquals(alreadyRevokedCertificates, crl.getRevokedCertificates().size());
+                assertNotNull(crl.getRevokedCertificate(cert));
+                UserCertificateFilter f = new UserCertificateFilter();
+                f.setGridIdentity(usr.getUser().getGridId());
+                List<UserCertificateRecord> records = ifs.findUserCertificateRecords(adminGridId, f);
+                assertEquals(2, records.size());
+                for (int j = 0; j < records.size(); j++) {
+                    X509Certificate cert2 = CertUtil.loadCertificate(records.get(j).getCertificate()
+                        .getCertificateAsString());
+                    if (records.get(j).getSerialNumber() == cert.getSerialNumber().longValue()) {
+                        assertNotNull(crl.getRevokedCertificate(cert2));
+                        usr.addCompromisedUserCertificate(cert2);
+                    } else {
+                        assertNull(crl.getRevokedCertificate(cert2));
+                        usr.addUserCertificate(cert2);
+                    }
+                }
+            }
+
+            // Test deleting users
+
+            for (int i = 0; i < list.size(); i++) {
+                UserContainer usr = list.get(i);
+                ifs.removeUser(adminGridId, usr.getUser());
+                crl = ifs.getCRL();
+                List<X509Certificate> compromisedUserCerts = usr.getCompromisedUserCerts();
+                for (int j = 0; j < compromisedUserCerts.size(); j++) {
+                    assertNotNull(crl.getRevokedCertificate(compromisedUserCerts.get(j)));
+                }
+
+                List<X509Certificate> userCerts = usr.getUserCerts();
+                for (int j = 0; j < userCerts.size(); j++) {
+                    assertNull(crl.getRevokedCertificate(userCerts.get(j)));
+                }
+
+                List<HostCertificateRecord> hostCerts = usr.getHostCertificates();
+                for (int j = 0; j < compromisedUserCerts.size(); j++) {
+                    X509Certificate hostCert = CertUtil.loadCertificate(hostCerts.get(j).getCertificate()
+                        .getCertificateAsString());
+                    assertNotNull(crl.getRevokedCertificate(hostCert));
+                }
+            }
+       
         } catch (Exception e) {
             FaultUtil.printFault(e);
             fail("Exception occured:" + e.getMessage());
@@ -887,7 +949,8 @@ public class TestIdentityFederationManager extends TestCase {
 
             // give a chance for others to run right before we enter timing
             // sensitive code
-            X509Certificate cert = ifs.requestUserCertificate(getSAMLAssertion(username, idp), pair.getPublic(), lifetime);
+            X509Certificate cert = ifs.requestUserCertificate(getSAMLAssertion(username, idp), pair.getPublic(),
+                lifetime);
             String expectedIdentity = UserManager
                 .subjectToIdentity(UserManager.getUserSubject(ifs.getIdentityAssignmentPolicy(), ca.getCACertificate()
                     .getSubjectDN().getName(), idp.getIdp(), username));
@@ -1201,7 +1264,6 @@ public class TestIdentityFederationManager extends TestCase {
         } catch (PermissionDeniedFault f) {
 
         }
-        
 
         try {
             ifs.getUser(userId, 0, null);
@@ -1247,6 +1309,27 @@ public class TestIdentityFederationManager extends TestCase {
 
         try {
             ifs.updateUser(userId, null);
+            fail("Should not have permission to execute the operation.");
+        } catch (PermissionDeniedFault f) {
+
+        }
+        
+        try {
+            ifs.findUserCertificateRecords(userId, null);
+            fail("Should not have permission to execute the operation.");
+        } catch (PermissionDeniedFault f) {
+
+        }
+        
+        try {
+            ifs.updateUserCertificateRecord(userId, null);
+            fail("Should not have permission to execute the operation.");
+        } catch (PermissionDeniedFault f) {
+
+        }
+        
+        try {
+            ifs.removeUserCertificate(userId, 0);
             fail("Should not have permission to execute the operation.");
         } catch (PermissionDeniedFault f) {
 
@@ -1472,13 +1555,7 @@ public class TestIdentityFederationManager extends TestCase {
                             .getCertificateAsString());
                         assertNotNull(crl.getRevokedCertificate(cert));
                     }
-                    // TODO: Handle once user certificates are tracked.
-                    /*
-                     * assertNotNull(crl.getRevokedCertificate(CertUtil
-                     * .loadCertificate(curr.getUser().getCertificate()
-                     * .getCertificateAsString())));
-                     */
-                    
+
                     for (int x = 0; x < curr.getHostCertificates().size(); x++) {
                         assertNotNull(crl.getRevokedCertificate(CertUtil.loadCertificate(curr.getHostCertificates()
                             .get(x).getCertificate().getCertificateAsString())));
@@ -1496,12 +1573,7 @@ public class TestIdentityFederationManager extends TestCase {
                             .getCertificateAsString());
                         assertNull(crl.getRevokedCertificate(cert));
                     }
-                    // TODO: Handle once user certificates are tracked.
-                    /*
-                     * assertNull(crl.getRevokedCertificate(CertUtil
-                     * .loadCertificate(curr.getUser().getCertificate()
-                     * .getCertificateAsString())));
-                     */
+
                     for (int x = 0; x < curr.getHostCertificates().size(); x++) {
                         assertNull(crl.getRevokedCertificate(CertUtil.loadCertificate(curr.getHostCertificates().get(x)
                             .getCertificate().getCertificateAsString())));
@@ -1520,8 +1592,9 @@ public class TestIdentityFederationManager extends TestCase {
     }
 
 
-    private void validateCRLOnDisabledHostStatus(IdentityFederationManager ifs, List<UserContainer> list,
+    private int validateCRLOnDisabledHostStatus(IdentityFederationManager ifs, List<UserContainer> list,
         HostCertificateStatus status, String adminGridId, int userHostCerts, int alreadyRevokedCerts) throws Exception {
+        int sum = alreadyRevokedCerts;
         for (int i = 0; i < list.size(); i++) {
             UserContainer usr = list.get(i);
             for (int j = 0; j < usr.getHostCertificates().size(); j++) {
@@ -1531,7 +1604,7 @@ public class TestIdentityFederationManager extends TestCase {
                 ifs.updateHostCertificateRecord(adminGridId, update);
             }
             X509CRL crl = ifs.getCRL();
-            int sum = ((i + 1) * userHostCerts) + alreadyRevokedCerts;
+            sum = ((i + 1) * userHostCerts) + alreadyRevokedCerts;
             assertEquals(sum, crl.getRevokedCertificates().size());
             for (int j = 0; j < list.size(); j++) {
                 UserContainer curr = list.get(j);
@@ -1547,12 +1620,7 @@ public class TestIdentityFederationManager extends TestCase {
                         .getCertificateAsString());
                     assertNull(crl.getRevokedCertificate(cert));
                 }
-                // TODO: Handle once user certificates are tracked.
-                /*
-                 * assertNull(crl.getRevokedCertificate(CertUtil
-                 * .loadCertificate(curr.getUser().getCertificate()
-                 * .getCertificateAsString())));
-                 */
+
                 for (int x = 0; x < curr.getHostCertificates().size(); x++) {
                     if (j <= i) {
                         assertNotNull(crl.getRevokedCertificate(CertUtil.loadCertificate(curr.getHostCertificates()
@@ -1579,6 +1647,9 @@ public class TestIdentityFederationManager extends TestCase {
             } else {
                 assertEquals(null, ifs.getCRL().getRevokedCertificates());
             }
+            return alreadyRevokedCerts;
+        } else {
+            return sum;
         }
     }
 
@@ -1714,8 +1785,8 @@ public class TestIdentityFederationManager extends TestCase {
     }
 
 
-    private void checkCertificate(String expectedIdentity, CertificateLifetime lifetime, PrivateKey key, X509Certificate cert)
-        throws Exception {
+    private void checkCertificate(String expectedIdentity, CertificateLifetime lifetime, PrivateKey key,
+        X509Certificate cert) throws Exception {
         assertNotNull(cert);
         GlobusCredential cred = new GlobusCredential(key, new X509Certificate[]{cert});
         assertNotNull(cred);
@@ -1767,11 +1838,15 @@ public class TestIdentityFederationManager extends TestCase {
     public class UserContainer {
         private GridUser usr;
         private List<HostCertificateRecord> hostCertificates;
+        private List<X509Certificate> compromisedUserCerts;
+        private List<X509Certificate> userCerts;
 
 
         public UserContainer(GridUser usr) {
             this.usr = usr;
             this.hostCertificates = new ArrayList<HostCertificateRecord>();
+            this.compromisedUserCerts = new ArrayList<X509Certificate>();
+            this.userCerts = new ArrayList<X509Certificate>();
         }
 
 
@@ -1787,6 +1862,26 @@ public class TestIdentityFederationManager extends TestCase {
 
         public void addHostCertificate(HostCertificateRecord record) {
             hostCertificates.add(record);
+        }
+
+
+        public void addCompromisedUserCertificate(X509Certificate cert) {
+            compromisedUserCerts.add(cert);
+        }
+
+
+        public void addUserCertificate(X509Certificate cert) {
+            userCerts.add(cert);
+        }
+
+
+        public List<X509Certificate> getCompromisedUserCerts() {
+            return compromisedUserCerts;
+        }
+
+
+        public List<X509Certificate> getUserCerts() {
+            return userCerts;
         }
 
     }

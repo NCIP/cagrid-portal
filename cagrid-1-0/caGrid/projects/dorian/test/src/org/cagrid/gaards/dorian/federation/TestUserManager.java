@@ -426,6 +426,123 @@ public class TestUserManager extends TestCase implements Publisher {
     }
 
 
+    public void testUpdateRejectedUserInvalidStatus() {
+        UserManager um = null;
+        try {
+            um = getUserManagerNameBasedIdentities();
+            GridUser user = new GridUser();
+            user.setIdPId(INIT_USER + 1);
+            user.setUID("user");
+            user.setFirstName("John");
+            user.setLastName("Doe");
+            user.setEmail("user@user.com");
+            user = um.addUser(getIdp(user), user);
+            String expectedGridIdentity = UserManager.subjectToIdentity(UserManager.getUserSubject(um
+                .getIdentityAssignmentPolicy(), ca.getCACertificate().getSubjectDN().getName(), getIdp(user), user
+                .getUID()));
+            assertNotNull(user.getGridId());
+            assertNotNull(user.getUserStatus());
+            assertEquals(GridUserStatus.Pending, user.getUserStatus());
+            assertEquals(expectedGridIdentity, user.getGridId());
+            assertEquals(user, um.getUser(user.getIdPId(), user.getUID()));
+            assertEquals(user, um.getUser(user.getGridId()));
+            user.setUserStatus(GridUserStatus.Rejected);
+            um.updateUser(user);
+            GridUser u1 = um.getUser(user.getGridId());
+            assertEquals(user.getUserStatus(), u1.getUserStatus());
+
+            user.setUserStatus(GridUserStatus.Active);
+
+            try {
+                um.updateUser(user);
+                fail("Should not be able to change the status of a user to an invalid status.");
+            } catch (InvalidUserFault e) {
+
+            }
+
+            user.setUserStatus(GridUserStatus.Suspended);
+            try {
+                um.updateUser(user);
+                fail("Should not be able to change the status of a user to an invalid status.");
+            } catch (InvalidUserFault e) {
+
+            }
+
+        } catch (Exception e) {
+            FaultUtil.printFault(e);
+            assertTrue(false);
+        } finally {
+            if (um != null) {
+                try {
+                    um.clearDatabase();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+    }
+
+
+    public void testUpdateActiveUserInvalidStatus() {
+        UserManager um = null;
+        try {
+            um = getUserManagerNameBasedIdentities();
+            GridUser user = new GridUser();
+            user.setIdPId(INIT_USER + 1);
+            user.setUID("user");
+            user.setFirstName("John");
+            user.setLastName("Doe");
+            user.setEmail("user@user.com");
+            user = um.addUser(getIdp(user), user);
+            String expectedGridIdentity = UserManager.subjectToIdentity(UserManager.getUserSubject(um
+                .getIdentityAssignmentPolicy(), ca.getCACertificate().getSubjectDN().getName(), getIdp(user), user
+                .getUID()));
+            assertNotNull(user.getGridId());
+            assertNotNull(user.getUserStatus());
+            assertEquals(GridUserStatus.Pending, user.getUserStatus());
+            assertEquals(expectedGridIdentity, user.getGridId());
+            assertEquals(user, um.getUser(user.getIdPId(), user.getUID()));
+            assertEquals(user, um.getUser(user.getGridId()));
+            user.setUserStatus(GridUserStatus.Active);
+            um.updateUser(user);
+            GridUser u1 = um.getUser(user.getGridId());
+            assertEquals(user.getUserStatus(), u1.getUserStatus());
+
+            user.setUserStatus(GridUserStatus.Rejected);
+
+            try {
+                um.updateUser(user);
+                fail("Should not be able to change the status of a user to an invalid status.");
+            } catch (InvalidUserFault e) {
+
+            }
+
+            user.setUserStatus(GridUserStatus.Pending);
+
+            try {
+                um.updateUser(user);
+                fail("Should not be able to change the status of a user to an invalid status.");
+            } catch (InvalidUserFault e) {
+
+            }
+
+        } catch (Exception e) {
+            FaultUtil.printFault(e);
+            assertTrue(false);
+        } finally {
+            if (um != null) {
+                try {
+                    um.clearDatabase();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+    }
+
+
     private IdentityFederationProperties getConf(String policy) throws Exception {
         IdentityFederationProperties conf = Utils.getIdentityFederationProperties();
         conf.setIdentityAssignmentPolicy(policy);

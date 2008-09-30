@@ -581,23 +581,34 @@
       <ns4:Exception description="" name="PermissionDeniedFault" qname="ns141:PermissionDeniedFault" xmlns:ns141="http://cagrid.nci.nih.gov/Dorian/types"/>
      </ns4:Exceptions>
     </ns4:Method>
+    <ns4:Method description="This method allows an administrator to remove a user certificate." isImported="false" isProvided="false" name="removeUserCertificate" xsi:type="ns4:MethodType">
+     <ns4:Inputs>
+      <ns4:Input qName="xsd:string" description="" isArray="false" name="serialNumber" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+     </ns4:Inputs>
+     <ns4:Output qName="void" description="" isArray="false"/>
+     <ns4:Exceptions>
+      <ns4:Exception description="" name="DorianInternalFault" qname="ns142:DorianInternalFault" xmlns:ns142="http://cagrid.nci.nih.gov/Dorian/types"/>
+      <ns4:Exception description="" name="InvalidUserCertificateFault" qname="ns143:InvalidUserCertificateFault" xmlns:ns143="http://cagrid.nci.nih.gov/Dorian/types"/>
+      <ns4:Exception description="" name="PermissionDeniedFault" qname="ns144:PermissionDeniedFault" xmlns:ns144="http://cagrid.nci.nih.gov/Dorian/types"/>
+     </ns4:Exceptions>
+    </ns4:Method>
    </ns4:Methods>
-   <ns142:ResourcePropertiesList xsi:type="ns142:ResourcePropertiesListType" xmlns:ns142="gme://gov.nih.nci.cagrid.introduce/1/Resources">
-    <ns142:ResourceProperty qName="ns143:ServiceMetadata" description="" fileLocation="serviceMetadata.xml" populateFromFile="true" register="true" xsi:type="ns142:ResourcePropertyType" xmlns:ns143="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"/>
-    <ns142:ResourceProperty qName="ns144:AuthenticationProfiles" description="" fileLocation="Dorian_authenticationProfiles.xml" populateFromFile="false" register="true" xsi:type="ns142:ResourcePropertyType" xmlns:ns144="http://gaards.cagrid.org/authentication"/>
-    <ns142:ResourceProperty qName="ns145:TrustedIdentityProviders" description="" fileLocation="Dorian_trustedIdentityProviders.xml" populateFromFile="false" register="true" xsi:type="ns142:ResourcePropertyType" xmlns:ns145="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
-   </ns142:ResourcePropertiesList>
-   <ns146:ServiceSecurity xsi:type="ns146:ServiceSecurity" xmlns:ns146="gme://gov.nih.nci.cagrid.introduce/1/Security">
-    <ns146:SecuritySetting xsi:type="ns146:SecuritySetting">Custom</ns146:SecuritySetting>
-    <ns146:TransportLevelSecurity xsi:type="ns146:TransportLevelSecurity">
-     <ns146:CommunicationMethod xsi:type="ns146:CommunicationMethod">Privacy</ns146:CommunicationMethod>
-    </ns146:TransportLevelSecurity>
-    <ns146:RunAsMode xsi:type="ns146:RunAsMode">System</ns146:RunAsMode>
-    <ns146:AnonymousClients xsi:type="ns146:AnonymousCommunication">No</ns146:AnonymousClients>
-    <ns146:ServiceAuthorization xsi:type="ns146:ServiceAuthorization">
-     <ns146:NoAuthorization xsi:type="ns146:NoAuthorization"/>
-    </ns146:ServiceAuthorization>
-   </ns146:ServiceSecurity>
+   <ns145:ResourcePropertiesList xsi:type="ns145:ResourcePropertiesListType" xmlns:ns145="gme://gov.nih.nci.cagrid.introduce/1/Resources">
+    <ns145:ResourceProperty qName="ns146:ServiceMetadata" description="" fileLocation="serviceMetadata.xml" populateFromFile="true" register="true" xsi:type="ns145:ResourcePropertyType" xmlns:ns146="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"/>
+    <ns145:ResourceProperty qName="ns147:AuthenticationProfiles" description="" fileLocation="Dorian_authenticationProfiles.xml" populateFromFile="false" register="true" xsi:type="ns145:ResourcePropertyType" xmlns:ns147="http://gaards.cagrid.org/authentication"/>
+    <ns145:ResourceProperty qName="ns148:TrustedIdentityProviders" description="" fileLocation="Dorian_trustedIdentityProviders.xml" populateFromFile="false" register="true" xsi:type="ns145:ResourcePropertyType" xmlns:ns148="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
+   </ns145:ResourcePropertiesList>
+   <ns149:ServiceSecurity xsi:type="ns149:ServiceSecurity" xmlns:ns149="gme://gov.nih.nci.cagrid.introduce/1/Security">
+    <ns149:SecuritySetting xsi:type="ns149:SecuritySetting">Custom</ns149:SecuritySetting>
+    <ns149:TransportLevelSecurity xsi:type="ns149:TransportLevelSecurity">
+     <ns149:CommunicationMethod xsi:type="ns149:CommunicationMethod">Privacy</ns149:CommunicationMethod>
+    </ns149:TransportLevelSecurity>
+    <ns149:RunAsMode xsi:type="ns149:RunAsMode">System</ns149:RunAsMode>
+    <ns149:AnonymousClients xsi:type="ns149:AnonymousCommunication">No</ns149:AnonymousClients>
+    <ns149:ServiceAuthorization xsi:type="ns149:ServiceAuthorization">
+     <ns149:NoAuthorization xsi:type="ns149:NoAuthorization"/>
+    </ns149:ServiceAuthorization>
+   </ns149:ServiceSecurity>
    <ns3:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">Dorian Grid Service</ns3:description>
    <ns3:ResourceFrameworkOptions xsi:type="ns3:ResourceFrameworkOptions">
     <ns3:Main xsi:type="ns3:Main"/>
@@ -608,11 +619,11 @@
    </ns3:ResourceFrameworkOptions>
   </ns3:Service>
  </ns3:Services>
- <ns147:Extensions xsi:type="ns147:ExtensionsType" xmlns:ns147="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <ns147:Extension name="cagrid_metadata" version="1.2" xsi:type="ns147:ExtensionType"/>
- </ns147:Extensions>
- <ns148:ServiceProperties xmlns:ns148="gme://gov.nih.nci.cagrid.introduce/1/Property">
-  <ns148:Property description="" isFromETC="true" key="dorianConfiguration" value="dorian-configuration.xml"/>
-  <ns148:Property description="" isFromETC="true" key="dorianProperties" value="dorian.properties"/>
- </ns148:ServiceProperties>
+ <ns150:Extensions xsi:type="ns150:ExtensionsType" xmlns:ns150="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ns150:Extension name="cagrid_metadata" version="1.2" xsi:type="ns150:ExtensionType"/>
+ </ns150:Extensions>
+ <ns151:ServiceProperties xmlns:ns151="gme://gov.nih.nci.cagrid.introduce/1/Property">
+  <ns151:Property description="" isFromETC="true" key="dorianConfiguration" value="dorian-configuration.xml"/>
+  <ns151:Property description="" isFromETC="true" key="dorianProperties" value="dorian.properties"/>
+ </ns151:ServiceProperties>
 </ns1:ServiceDescription>

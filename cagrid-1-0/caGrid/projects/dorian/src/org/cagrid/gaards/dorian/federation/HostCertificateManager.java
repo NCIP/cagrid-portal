@@ -69,7 +69,7 @@ public class HostCertificateManager extends LoggingObject {
 	}
 
 
-	public void ownerRemovedUpdateHostCertificates(String owner) throws DorianInternalFault {
+	public boolean ownerRemovedUpdateHostCertificates(String owner, boolean publishCRL) throws DorianInternalFault {
 		try {
 			List<HostCertificateRecord> records = this.getHostCertificateRecords(owner);
 			boolean updateCRL = false;
@@ -89,9 +89,10 @@ public class HostCertificateManager extends LoggingObject {
 					updateHostCertificateRecord(update);
 				}
 			}
-			if (updateCRL) {
+			if (updateCRL && publishCRL) {
 				publisher.publishCRL();
 			}
+			return updateCRL;
 		} catch (Exception e) {
 			logError(e.getMessage(), e);
 			DorianInternalFault fault = new DorianInternalFault();

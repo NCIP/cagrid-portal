@@ -703,4 +703,35 @@ public class GridAdministrationClient {
         DorianInternalFault, InvalidUserCertificateFault, PermissionDeniedFault {
         this.updateUserCertificateRecord(serialNumber, null, notes);
     }
+
+    /**
+     * This method allows an administrator to remove a user certificate.
+     * 
+     * @param serialNumber  The serial number of the user certificate to remove.
+     * @throws RemoteException
+     * @throws DorianInternalFault
+     * @throws InvalidUserCertificateFault
+     * @throws PermissionDeniedFault
+     */
+
+    public void removeUserCertificate(long serialNumber) throws RemoteException, DorianInternalFault,
+        InvalidUserCertificateFault, PermissionDeniedFault {
+        try {
+            client.removeUserCertificate(String.valueOf(serialNumber));
+        } catch (DorianInternalFault gie) {
+            throw gie;
+        } catch (InvalidUserCertificateFault fault) {
+            throw fault;
+        } catch (PermissionDeniedFault fault) {
+            throw fault;
+        } catch (Exception e) {
+            FaultUtil.printFault(e);
+            DorianFault fault = new DorianFault();
+            fault.setFaultString(Utils.getExceptionMessage(e));
+            FaultHelper helper = new FaultHelper(fault);
+            helper.addFaultCause(e);
+            fault = (DorianFault) helper.getFault();
+            throw fault;
+        }
+    }
 }

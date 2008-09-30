@@ -17,7 +17,7 @@ import org.cagrid.grape.utils.ErrorDialog;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: UserCertificatesTable.java,v 1.2 2008-09-29 02:36:19 langella Exp $
+ * @version $Id: UserCertificatesTable.java,v 1.3 2008-09-30 23:26:17 langella Exp $
  */
 public class UserCertificatesTable extends GrapeBaseTable {
 	public final static String USER_CERTIFICATE = "user";
@@ -74,7 +74,7 @@ public class UserCertificatesTable extends GrapeBaseTable {
 		if ((row >= 0) && (row < getRowCount())) {
 			return (UserCertificateRecord) getValueAt(row, 0);
 		} else {
-			throw new Exception("Please select a user!!!");
+			throw new Exception("Please select a certificate!!!");
 		}
 	}
 

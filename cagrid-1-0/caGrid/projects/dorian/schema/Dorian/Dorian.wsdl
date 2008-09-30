@@ -545,6 +545,18 @@
           </sequence>
         </complexType>
       </element>
+      <element name="RemoveUserCertificateRequest">
+        <complexType>
+          <sequence>
+            <element name="serialNumber" type="xs:string" minOccurs="1" maxOccurs="1" />
+          </sequence>
+        </complexType>
+      </element>
+      <element name="RemoveUserCertificateResponse">
+        <complexType>
+          <sequence />
+        </complexType>
+      </element>
       <element name="DorianResourceProperties">
         <complexType>
           <sequence>
@@ -730,6 +742,12 @@
   </message>
   <message name="FindUserCertificatesResponse">
     <part name="parameters" element="tns:FindUserCertificatesResponse" />
+  </message>
+  <message name="RemoveUserCertificateRequest">
+    <part name="parameters" element="tns:RemoveUserCertificateRequest" />
+  </message>
+  <message name="RemoveUserCertificateResponse">
+    <part name="parameters" element="tns:RemoveUserCertificateResponse" />
   </message>
   <message name="DorianInternalFaultFaultMessage">
     <part name="fault" element="ns10:DorianInternalFault" />
@@ -961,6 +979,13 @@
     <operation name="findUserCertificates">
       <input message="tns:FindUserCertificatesRequest" wsa:Action="http://cagrid.nci.nih.gov/Dorian/FindUserCertificatesRequest" />
       <output message="tns:FindUserCertificatesResponse" wsa:Action="http://cagrid.nci.nih.gov/Dorian/FindUserCertificatesResponse" />
+      <fault name="DorianInternalFault" message="tns:DorianInternalFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/Dorian/DorianInternalFaultFaultMessage" />
+      <fault name="InvalidUserCertificateFault" message="tns:InvalidUserCertificateFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/Dorian/InvalidUserCertificateFaultFaultMessage" />
+      <fault name="PermissionDeniedFault" message="tns:PermissionDeniedFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/Dorian/PermissionDeniedFaultFaultMessage" />
+    </operation>
+    <operation name="removeUserCertificate">
+      <input message="tns:RemoveUserCertificateRequest" wsa:Action="http://cagrid.nci.nih.gov/Dorian/RemoveUserCertificateRequest" />
+      <output message="tns:RemoveUserCertificateResponse" wsa:Action="http://cagrid.nci.nih.gov/Dorian/RemoveUserCertificateResponse" />
       <fault name="DorianInternalFault" message="tns:DorianInternalFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/Dorian/DorianInternalFaultFaultMessage" />
       <fault name="InvalidUserCertificateFault" message="tns:InvalidUserCertificateFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/Dorian/InvalidUserCertificateFaultFaultMessage" />
       <fault name="PermissionDeniedFault" message="tns:PermissionDeniedFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/Dorian/PermissionDeniedFaultFaultMessage" />

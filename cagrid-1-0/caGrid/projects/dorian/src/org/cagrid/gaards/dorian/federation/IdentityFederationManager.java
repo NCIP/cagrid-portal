@@ -99,7 +99,7 @@ public class IdentityFederationManager extends LoggingObject implements Publishe
         this.ca = ca;
         threadManager = new ThreadManager();
         this.blackList = new CertificateBlacklistManager(db);
-        this.userCertificateManager = new UserCertificateManager(db, this);
+        this.userCertificateManager = new UserCertificateManager(db, this, this.blackList);
         tm = new TrustedIdPManager(conf, db);
         um = new UserManager(db, conf, properties, ca, tm, this, defaults);
         um.buildDatabase();
@@ -223,9 +223,7 @@ public class IdentityFederationManager extends LoggingObject implements Publishe
         GridUser[] users = um.getUsers(uf);
         for (int i = 0; i < users.length; i++) {
             try {
-                um.removeUser(users[i]);
-                this.hostManager.ownerRemovedUpdateHostCertificates(users[i].getGridId());
-                this.groupManager.removeUserFromAllGroups(users[i].getGridId());
+                removeUser(users[i]);
             } catch (Exception e) {
                 logError(e.getMessage(), e);
             }
@@ -265,7 +263,6 @@ public class IdentityFederationManager extends LoggingObject implements Publishe
         GridUser caller = um.getUser(callerGridIdentity);
         verifyActiveUser(caller);
         verifyAdminUser(caller);
-
         um.updateUser(usr);
     }
 
@@ -274,9 +271,7 @@ public class IdentityFederationManager extends LoggingObject implements Publishe
         try {
             TrustedIdP idp = tm.getTrustedIdPByDN(idpCert.getSubjectDN().getName());
             GridUser usr = um.getUser(idp.getId(), localId);
-            um.removeUser(usr);
-            this.hostManager.ownerRemovedUpdateHostCertificates(usr.getGridId());
-            this.groupManager.removeUserFromAllGroups(usr.getGridId());
+            removeUser(usr);
         } catch (InvalidUserFault e) {
 
         } catch (InvalidTrustedIdPFault f) {
@@ -285,6 +280,22 @@ public class IdentityFederationManager extends LoggingObject implements Publishe
             fault.setFaultString("An unexpected error occurred removing the grid user, the IdP "
                 + idpCert.getSubjectDN().getName() + " could not be resolved!!!");
             throw fault;
+        }
+    }
+
+
+    private void removeUser(GridUser usr) throws DorianInternalFault, InvalidUserFault {
+        try {
+            um.removeUser(usr);
+            this.userCertificateManager.removeCertificates(usr.getGridId());
+            boolean publishCRLNow = this.hostManager.ownerRemovedUpdateHostCertificates(usr.getGridId(), false);
+            this.groupManager.removeUserFromAllGroups(usr.getGridId());
+
+            if (publishCRLNow) {
+                publishCRL();
+            }
+        } catch (InvalidUserFault e) {
+            throw e;
         } catch (GroupException e) {
             logError(e.getMessage(), e);
             DorianInternalFault fault = new DorianInternalFault();
@@ -302,21 +313,7 @@ public class IdentityFederationManager extends LoggingObject implements Publishe
         GridUser caller = um.getUser(callerGridIdentity);
         verifyActiveUser(caller);
         verifyAdminUser(caller);
-        try {
-            um.removeUser(usr);
-            this.hostManager.ownerRemovedUpdateHostCertificates(usr.getGridId());
-            this.groupManager.removeUserFromAllGroups(usr.getGridId());
-        } catch (InvalidUserFault e) {
-            throw e;
-        } catch (GroupException e) {
-            logError(e.getMessage(), e);
-            DorianInternalFault fault = new DorianInternalFault();
-            fault.setFaultString("An unexpected error occurred in removing the user from all groups.");
-            FaultHelper helper = new FaultHelper(fault);
-            helper.addFaultCause(e);
-            fault = (DorianInternalFault) helper.getFault();
-            throw fault;
-        }
+        removeUser(usr);
     }
 
 
@@ -538,7 +535,6 @@ public class IdentityFederationManager extends LoggingObject implements Publishe
             userCertificateManager.addUserCertifcate(usr.getGridId(), userCert);
             return userCert;
         } catch (Exception e) {
-            // TODO: Change this Exception
             DorianInternalFault fault = new DorianInternalFault();
             fault.setFaultString("An unexpected error occurred in creating a certificate for the user "
                 + usr.getGridId() + ".");
@@ -903,6 +899,7 @@ public class IdentityFederationManager extends LoggingObject implements Publishe
             fault = (DorianInternalFault) helper.getFault();
             throw fault;
         }
+        this.userCertificateManager.clearDatabase();
         this.hostManager.clearDatabase();
         this.blackList.clearDatabase();
         try {
@@ -961,5 +958,14 @@ public class IdentityFederationManager extends LoggingObject implements Publishe
         verifyActiveUser(caller);
         verifyAdminUser(caller);
         this.userCertificateManager.updateUserCertificateRecord(update);
+    }
+
+
+    public void removeUserCertificate(String callerIdentity, long serialNumber)
+        throws DorianInternalFault, InvalidUserCertificateFault, PermissionDeniedFault {
+        GridUser caller = getUser(callerIdentity);
+        verifyActiveUser(caller);
+        verifyAdminUser(caller);
+        this.userCertificateManager.removeCertificate(serialNumber);
     }
 }
