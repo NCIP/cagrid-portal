@@ -60,10 +60,13 @@ public class IdxDiagnosticService extends AbstractDiagnosticService {
     }
 
     private String getFailedMessage(List<String> indexes) {
-        StringBuilder _detail = new StringBuilder("Service not found in Index. Looked in the following Index(s):");
-        for (String indexSvcUrl : indexes) {
-            _detail.append(getIndexRow(indexSvcUrl));
+        StringBuilder _detail = new StringBuilder();
+        if (indexes.size() > 0) {
+            _detail.append("Service not found in Index. Looked in the following Index(s):");
+            for (String indexSvcUrl : indexes) {
+                _detail.append(getIndexRow(indexSvcUrl));
 
+            }
         }
         return _detail.toString();
     }
