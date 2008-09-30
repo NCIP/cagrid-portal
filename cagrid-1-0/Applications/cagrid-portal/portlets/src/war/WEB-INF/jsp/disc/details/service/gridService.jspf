@@ -42,7 +42,7 @@
                 <span id="serviceStatusSpan"
                         <c:choose>
                             <c:when test="${gridService.currentStatus != 'ACTIVE'}">
-                                style="vertical-align:top;color:red">
+                                style="text-align:center;vertical-align:top;color:red">
                                 <c:out value="${gridService.currentStatus}"/>&nbsp;
 
                                 <input type="button"
