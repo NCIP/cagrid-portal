@@ -38,4 +38,20 @@ public class GMEGetDependenciesSimpleTestCase extends GMETestCaseWithSimpleModel
 
         this.gme.getImportingNamespaces(new URI("http://invalid"));
     }
+
+
+    @ExpectedException(NoSuchNamespaceExistsFault.class)
+    public void testNullSchemaImports() throws Exception {
+        publishAllSchemas();
+
+        this.gme.getImportedNamespaces(null);
+    }
+
+
+    @ExpectedException(NoSuchNamespaceExistsFault.class)
+    public void testNullSchemaImported() throws Exception {
+        publishAllSchemas();
+
+        this.gme.getImportingNamespaces(null);
+    }
 }

@@ -166,6 +166,18 @@ public class GMEDeletesSchemaSimpleTestCase extends GMETestCaseWithSimpleModel {
     }
 
 
+    public void testDeleteEmpty() throws Exception {
+        List<URI> schemasToDelete = new ArrayList<URI>();
+        this.gme.deleteSchemas(schemasToDelete);
+    }
+
+
+    @ExpectedException(NoSuchNamespaceExistsFault.class)
+    public void testDeleteNullError() throws Exception {
+        this.gme.deleteSchemas(null);
+    }
+
+
     @ExpectedException(NoSuchNamespaceExistsFault.class)
     public void testDeleteBeforePublishError() throws Exception {
         List<URI> schemasToDelete = new ArrayList<URI>();
