@@ -25,7 +25,7 @@ import org.cagrid.fqp.test.common.ServiceContainerSource;
  * @author David Ervin
  * 
  * @created Jul 10, 2008 10:57:40 AM
- * @version $Id: LocalFqpSystemTests.java,v 1.5 2008-08-27 16:16:28 dervin Exp $ 
+ * @version $Id: LocalFqpSystemTests.java,v 1.6 2008-10-01 15:20:38 dervin Exp $ 
  */
 public class LocalFqpSystemTests extends StoryBook {
     
@@ -55,7 +55,7 @@ public class LocalFqpSystemTests extends StoryBook {
             exampleService1Deployment, exampleService2Deployment
         };
         FederatedQueryProcessorHelper queryHelper = 
-            new FederatedQueryProcessorHelper(new FederatedQueryEngine());
+            new FederatedQueryProcessorHelper(new FederatedQueryEngine(null, null));
         
         // run the local aggregation queries
         AggregationStory aggregationTests = new AggregationStory(containerSources, queryHelper);

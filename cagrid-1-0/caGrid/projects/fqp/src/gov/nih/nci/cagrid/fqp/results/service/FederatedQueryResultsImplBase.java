@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.fqp.results.service;
 
+import gov.nih.nci.cagrid.fqp.results.service.globus.resource.FederatedQueryResultsResource;
 import  gov.nih.nci.cagrid.fqp.service.FederatedQueryProcessorConfiguration;
 
 import java.rmi.RemoteException;
@@ -35,6 +36,12 @@ public abstract class FederatedQueryResultsImplBase {
 		return FederatedQueryProcessorConfiguration.getConfiguration();
 	}
 	
+	
+	public gov.nih.nci.cagrid.fqp.results.service.globus.resource.FederatedQueryResultsResourceHome getResourceHome() throws Exception {
+		ResourceHome resource = getResourceHome("home");
+		return (gov.nih.nci.cagrid.fqp.results.service.globus.resource.FederatedQueryResultsResourceHome)resource;
+	}
+
 	
 	
 	

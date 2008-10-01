@@ -59,7 +59,7 @@ public class SecurityUtils {
 
 			List openAuthMethods = new ArrayList();
 			openAuthMethods.add(NoneAuthMethod.getInstance());
-			desc.setMethodAuthMethods(new QName(FQPConstants.NAMESPACE_FQP_RESULTS, "getServiceSecurityMetadata"),
+			desc.setMethodAuthMethods(new QName(FederatedQueryProcessorConstants.NAMESPACE_FQP_RESULTS, "getServiceSecurityMetadata"),
 				openAuthMethods);
 			desc.setAuthMethods(authMethods);
 

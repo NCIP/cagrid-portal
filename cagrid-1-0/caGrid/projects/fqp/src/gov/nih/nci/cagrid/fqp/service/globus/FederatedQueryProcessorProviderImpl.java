@@ -38,21 +38,15 @@ public class FederatedQueryProcessorProviderImpl{
     return boxedResult;
   }
 
-    public gov.nih.nci.cagrid.fqp.stubs.ExecuteAndEnumerateResponse executeAndEnumerate(gov.nih.nci.cagrid.fqp.stubs.ExecuteAndEnumerateRequest params) throws RemoteException, gov.nih.nci.cagrid.fqp.stubs.types.FederatedQueryProcessingFault {
-    gov.nih.nci.cagrid.fqp.stubs.ExecuteAndEnumerateResponse boxedResult = new gov.nih.nci.cagrid.fqp.stubs.ExecuteAndEnumerateResponse();
-    boxedResult.setEnumerationResponseContainer(impl.executeAndEnumerate(params.getQuery().getDCQLQuery()));
-    return boxedResult;
-  }
-
-    public gov.nih.nci.cagrid.fqp.stubs.ExecuteAndTransferResponse executeAndTransfer(gov.nih.nci.cagrid.fqp.stubs.ExecuteAndTransferRequest params) throws RemoteException {
-    gov.nih.nci.cagrid.fqp.stubs.ExecuteAndTransferResponse boxedResult = new gov.nih.nci.cagrid.fqp.stubs.ExecuteAndTransferResponse();
-    boxedResult.setTransferServiceContextReference(impl.executeAndTransfer(params.getQuery().getDCQLQuery()));
-    return boxedResult;
-  }
-
     public gov.nih.nci.cagrid.fqp.stubs.ExecuteAsynchronouslyResponse executeAsynchronously(gov.nih.nci.cagrid.fqp.stubs.ExecuteAsynchronouslyRequest params) throws RemoteException {
     gov.nih.nci.cagrid.fqp.stubs.ExecuteAsynchronouslyResponse boxedResult = new gov.nih.nci.cagrid.fqp.stubs.ExecuteAsynchronouslyResponse();
     boxedResult.setFederatedQueryResultsReference(impl.executeAsynchronously(params.getQuery().getDCQLQuery()));
+    return boxedResult;
+  }
+
+    public gov.nih.nci.cagrid.fqp.stubs.QueryResponse query(gov.nih.nci.cagrid.fqp.stubs.QueryRequest params) throws RemoteException {
+    gov.nih.nci.cagrid.fqp.stubs.QueryResponse boxedResult = new gov.nih.nci.cagrid.fqp.stubs.QueryResponse();
+    boxedResult.setFederatedQueryResultsReference(impl.query(params.getQuery().getDCQLQuery(),params.getDelegatedCredentialReference().getDelegatedCredentialReference(),params.getQueryExecutionParameters().getQueryExecutionParameters()));
     return boxedResult;
   }
 

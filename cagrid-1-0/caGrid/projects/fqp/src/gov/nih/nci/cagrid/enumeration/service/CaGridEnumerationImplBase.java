@@ -43,9 +43,9 @@ public abstract class CaGridEnumerationImplBase {
 		return (gov.nih.nci.cagrid.fqp.service.globus.resource.FederatedQueryProcessorResourceHome)resource;
 	}
 	
-	public ResourceHome getFederatedQueryResultsResourceHome() throws Exception {
+	public gov.nih.nci.cagrid.fqp.results.service.globus.resource.FederatedQueryResultsResourceHome getFederatedQueryResultsResourceHome() throws Exception {
 		ResourceHome resource = getResourceHome("federatedQueryResultsHome");
-		return resource;
+		return (gov.nih.nci.cagrid.fqp.results.service.globus.resource.FederatedQueryResultsResourceHome)resource;
 	}
 	
 	

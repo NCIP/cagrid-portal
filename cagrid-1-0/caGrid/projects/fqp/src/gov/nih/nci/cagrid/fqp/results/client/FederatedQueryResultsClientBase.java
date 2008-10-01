@@ -41,7 +41,7 @@ import gov.nih.nci.cagrid.introduce.security.client.ServiceSecurityClient;
  * 
  * @created by Introduce Toolkit version 1.2
  */
-public abstract class FederatedQueryResultsClientBase extends ServiceSecurityClient {	
+public abstract class FederatedQueryResultsClientBase extends ServiceSecurityClient implements NotifyCallback {	
 	protected FederatedQueryResultsPortType portType;
 	protected Object portTypeMutex;
     protected NotificationConsumerManager consumer = null;
@@ -83,6 +83,63 @@ public abstract class FederatedQueryResultsClientBase extends ServiceSecurityCli
 		return port;
 	}
 	
+	public org.oasis.wsrf.lifetime.DestroyResponse destroy() throws RemoteException {
+        synchronized (portTypeMutex) {
+            org.oasis.wsrf.lifetime.Destroy params = new org.oasis.wsrf.lifetime.Destroy();
+            configureStubSecurity((Stub) portType, "destroy");
+            return portType.destroy(params);
+        }
+    }
+
+
+    public org.oasis.wsrf.lifetime.SetTerminationTimeResponse setTerminationTime(Calendar terminationTime)
+        throws RemoteException {
+        synchronized (portTypeMutex) {
+            configureStubSecurity((Stub) portType, "setTerminationTime");
+            org.oasis.wsrf.lifetime.SetTerminationTime params = new org.oasis.wsrf.lifetime.SetTerminationTime(
+                terminationTime);
+            return portType.setTerminationTime(params);
+
+        }
+    }
     
+    public void unSubscribe(EndpointReferenceType subscriptionEPR) throws Exception {
+        WSResourceLifetimeServiceAddressingLocator locator = new WSResourceLifetimeServiceAddressingLocator();
+        ImmediateResourceTermination port = locator.getImmediateResourceTerminationPort(subscriptionEPR);
+        port.destroy(new org.oasis.wsrf.lifetime.Destroy());
+    }
+
+
+    public org.oasis.wsn.SubscribeResponse subscribe(QName qname) throws RemoteException, ContainerException, MalformedURIException {
+        synchronized (portTypeMutex) {
+            configureStubSecurity((Stub) portType, "subscribe");
+
+            if (consumer == null) {
+                // Create client side notification consumer
+                consumer = org.globus.wsrf.NotificationConsumerManager.getInstance();
+                consumer.startListening();
+                consumerEPR = consumer.createNotificationConsumer(this);
+            }
+
+            org.oasis.wsn.Subscribe params = new org.oasis.wsn.Subscribe();
+            params.setUseNotify(Boolean.TRUE);
+            params.setConsumerReference(consumerEPR);
+            org.oasis.wsn.TopicExpressionType topicExpression = new org.oasis.wsn.TopicExpressionType();
+            topicExpression.setDialect(org.globus.wsrf.WSNConstants.SIMPLE_TOPIC_DIALECT);
+            topicExpression.setValue(qname);
+            params.setTopicExpression(topicExpression);
+            return portType.subscribe(params);
+       }
+    }
+
+
+    public void deliver(List topicPath, EndpointReferenceType producer, Object message) {
+        org.oasis.wsrf.properties.ResourcePropertyValueChangeNotificationType changeMessage = ((org.globus.wsrf.core.notification.ResourcePropertyValueChangeNotificationElementType) message)
+            .getResourcePropertyValueChangeNotification();
+
+        if (changeMessage != null) {
+            System.out.println("Got notification");
+        }
+    }
 
 }

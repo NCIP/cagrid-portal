@@ -37,27 +37,20 @@ public interface FederatedQueryProcessorI {
   public gov.nih.nci.cagrid.cqlresultset.CQLQueryResults executeAndAggregateResults(gov.nih.nci.cagrid.dcql.DCQLQuery query) throws RemoteException, gov.nih.nci.cagrid.fqp.stubs.types.FederatedQueryProcessingFault ;
 
   /**
-   * Executes the DCQL query and returns results via WS-Enumeration
-   *
-   * @param query
-   * @throws FederatedQueryProcessingFault
-   *	Indicates an error occured processing the query.
-   */
-  public gov.nih.nci.cagrid.enumeration.stubs.response.EnumerationResponseContainer executeAndEnumerate(gov.nih.nci.cagrid.dcql.DCQLQuery query) throws RemoteException, gov.nih.nci.cagrid.fqp.stubs.types.FederatedQueryProcessingFault ;
-
-  /**
-   * Executes a DCQL query and returns the results via Transfer
-   *
-   * @param query
-   */
-  public org.cagrid.transfer.context.stubs.types.TransferServiceContextReference executeAndTransfer(gov.nih.nci.cagrid.dcql.DCQLQuery query) throws RemoteException ;
-
-  /**
    * Executes the specified DCQL query, and returns a reference to the query result resource.
    *
    * @param query
    */
   public gov.nih.nci.cagrid.fqp.results.client.FederatedQueryResultsClient executeAsynchronously(gov.nih.nci.cagrid.dcql.DCQLQuery query) throws RemoteException, org.apache.axis.types.URI.MalformedURIException ;
+
+  /**
+   * Performs the DCQL Query and created a FederatedQueryResults resource using the specified parameters.
+   *
+   * @param query
+   * @param delegatedCredentialReference
+   * @param queryExecutionParameters
+   */
+  public gov.nih.nci.cagrid.fqp.results.client.FederatedQueryResultsClient query(gov.nih.nci.cagrid.dcql.DCQLQuery query,org.cagrid.gaards.cds.delegated.stubs.types.DelegatedCredentialReference delegatedCredentialReference,org.cagrid.fqp.execution.QueryExecutionParameters queryExecutionParameters) throws RemoteException, org.apache.axis.types.URI.MalformedURIException ;
 
 }
 

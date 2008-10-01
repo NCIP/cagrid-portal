@@ -38,4 +38,22 @@ public class FederatedQueryResultsProviderImpl{
     return boxedResult;
   }
 
+    public gov.nih.nci.cagrid.fqp.results.stubs.GetAggregateResultsResponse getAggregateResults(gov.nih.nci.cagrid.fqp.results.stubs.GetAggregateResultsRequest params) throws RemoteException, gov.nih.nci.cagrid.fqp.stubs.types.FederatedQueryProcessingFault, gov.nih.nci.cagrid.fqp.results.stubs.types.ProcessingNotCompleteFault, gov.nih.nci.cagrid.fqp.results.stubs.types.InternalErrorFault {
+    gov.nih.nci.cagrid.fqp.results.stubs.GetAggregateResultsResponse boxedResult = new gov.nih.nci.cagrid.fqp.results.stubs.GetAggregateResultsResponse();
+    boxedResult.setCQLQueryResultCollection(impl.getAggregateResults());
+    return boxedResult;
+  }
+
+    public gov.nih.nci.cagrid.fqp.results.stubs.EnumerateResponse enumerate(gov.nih.nci.cagrid.fqp.results.stubs.EnumerateRequest params) throws RemoteException, gov.nih.nci.cagrid.fqp.stubs.types.FederatedQueryProcessingFault, gov.nih.nci.cagrid.fqp.results.stubs.types.ProcessingNotCompleteFault, gov.nih.nci.cagrid.fqp.results.stubs.types.InternalErrorFault {
+    gov.nih.nci.cagrid.fqp.results.stubs.EnumerateResponse boxedResult = new gov.nih.nci.cagrid.fqp.results.stubs.EnumerateResponse();
+    boxedResult.setEnumerationResponseContainer(impl.enumerate());
+    return boxedResult;
+  }
+
+    public gov.nih.nci.cagrid.fqp.results.stubs.TransferResponse transfer(gov.nih.nci.cagrid.fqp.results.stubs.TransferRequest params) throws RemoteException, gov.nih.nci.cagrid.fqp.stubs.types.FederatedQueryProcessingFault, gov.nih.nci.cagrid.fqp.results.stubs.types.ProcessingNotCompleteFault, gov.nih.nci.cagrid.fqp.results.stubs.types.InternalErrorFault {
+    gov.nih.nci.cagrid.fqp.results.stubs.TransferResponse boxedResult = new gov.nih.nci.cagrid.fqp.results.stubs.TransferResponse();
+    boxedResult.setTransferServiceContextReference(impl.transfer());
+    return boxedResult;
+  }
+
 }

@@ -7,6 +7,8 @@ import gov.nih.nci.cagrid.dcqlresult.DCQLQueryResultsCollection;
 import gov.nih.nci.cagrid.dcqlresult.DCQLResult;
 import gov.nih.nci.cagrid.enumeration.stubs.response.EnumerationResponseContainer;
 import gov.nih.nci.cagrid.fqp.client.FederatedQueryProcessorClient;
+import gov.nih.nci.cagrid.fqp.common.FederatedQueryProcessorConstants;
+import gov.nih.nci.cagrid.fqp.results.client.FederatedQueryResultsClient;
 import gov.nih.nci.cagrid.wsenum.utils.EnumerationResponseHelper;
 
 import java.util.ArrayList;
@@ -24,6 +26,12 @@ import org.cagrid.fqp.test.common.QueryResultsVerifier;
 import org.cagrid.fqp.test.common.UrlReplacer;
 import org.cagrid.fqp.test.common.steps.BaseQueryExecutionStep;
 import org.globus.ws.enumeration.ClientEnumIterator;
+import org.globus.wsrf.NotificationConsumerManager;
+import org.globus.wsrf.NotifyCallback;
+import org.globus.wsrf.utils.SubscriptionPersistenceUtils;
+import org.oasis.wsn.Subscribe;
+import org.oasis.wsn.SubscribeResponse;
+import org.oasis.wsn.SubscriptionManager;
 
 /**
  * EnumerationQueryExecutionStep
@@ -56,7 +64,12 @@ public class EnumerationQueryExecutionStep extends BaseQueryExecutionStep {
         DCQLQuery query = getCompletedQuery();
         
         LOG.debug("Executing query with enumeration");
-        EnumerationResponseContainer enumerationResponse = fqpClient.executeAndEnumerate(query);
+        FederatedQueryResultsClient resultsClient = fqpClient.query(query, null, null);
+        // wait for notification that the data is ready
+        SubscribeResponse subscribeResponse = resultsClient.subscribe(FederatedQueryProcessorConstants.RESULTS_METADATA_QNAME);
+        NotificationConsumerManager notificationConsumer = NotificationConsumerManager.getInstance();
+        
+        EnumerationResponseContainer enumerationResponse = resultsClient.enumerate();
         
         LOG.debug("Creating client side enumeration iterator");
         ClientEnumIterator iterator = EnumerationResponseHelper.createClientIterator(enumerationResponse);
