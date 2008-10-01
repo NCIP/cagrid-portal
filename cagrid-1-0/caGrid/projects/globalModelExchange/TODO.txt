@@ -2,18 +2,16 @@
 
 NEXT STEPS:
 ==========
-tests for getimported getimporting (failures, etc)
+
+schemabundle
 
 design how authorization/policy will work.  will i do all checking in authorization code or do i want a separate "policy interface"
 for example, when i add Life Cycle States, will the authorization code check that published schemas aren't being deleted, or will that be a policy thing?
 
+add support for lifecycle and test that "update" works
+
 replace GME's manual synchronization with spring's transaction management ( can specify read-only, etc):
 http://static.springframework.org/spring/docs/2.0.6/reference/transaction.html#transaction-declarative
-
-
-
-
-
 
 
 

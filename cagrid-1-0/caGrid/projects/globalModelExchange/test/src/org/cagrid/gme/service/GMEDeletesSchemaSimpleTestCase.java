@@ -1,87 +1,16 @@
 package org.cagrid.gme.service;
 
-import gov.nih.nci.cagrid.common.Utils;
-
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.cagrid.gme.domain.XMLSchema;
-import org.cagrid.gme.stubs.types.InvalidSchemaSubmissionFault;
 import org.cagrid.gme.stubs.types.NoSuchNamespaceExistsFault;
 import org.cagrid.gme.stubs.types.UnableToDeleteSchemaFault;
-import org.cagrid.gme.test.GMETestCaseBase;
-import org.cagrid.gme.test.SpringTestApplicationContextConstants;
 import org.springframework.test.annotation.ExpectedException;
 
 
-// TODO: need to add assertions that the getImported and getImporting values are
-// correct
-public class GMEDeletesSchemaSimpleTestCase extends GMETestCaseBase {
-
-    // these are loaded by Spring
-    protected XMLSchema testSchemaSimpleA;
-    protected XMLSchema testSchemaSimpleB;
-    protected XMLSchema testSchemaSimpleC;
-    protected XMLSchema testSchemaSimpleD;
-    protected XMLSchema testSchemaSimpleE;
-    protected XMLSchema testSchemaSimpleF;
-
-
-    @Override
-    protected String[] getConfigLocations() {
-        return (String[]) Utils.appendToArray(super.getConfigLocations(),
-            SpringTestApplicationContextConstants.SIMPLE_LOCATION);
-    }
-
-
-    @Override
-    protected void onSetUp() throws Exception {
-        super.onSetUp();
-        assertNotNull(this.testSchemaSimpleA);
-        assertNotNull(this.testSchemaSimpleB);
-        assertNotNull(this.testSchemaSimpleC);
-        assertNotNull(this.testSchemaSimpleD);
-        assertNotNull(this.testSchemaSimpleE);
-        assertNotNull(this.testSchemaSimpleF);
-    }
-
-
-    protected void publishAllSchemas() throws InvalidSchemaSubmissionFault, NoSuchNamespaceExistsFault {
-        List<XMLSchema> schemas = new ArrayList<XMLSchema>();
-        schemas.add(this.testSchemaSimpleA);
-        schemas.add(this.testSchemaSimpleB);
-        schemas.add(this.testSchemaSimpleC);
-        schemas.add(this.testSchemaSimpleD);
-        schemas.add(this.testSchemaSimpleE);
-        schemas.add(this.testSchemaSimpleF);
-        this.gme.publishSchemas(schemas);
-
-        assertPublishedContents(schemas);
-    }
-
-
-    /**
-     * Baseline test to make sure they are all getting added and retrieved
-     * properly
-     * 
-     * @throws Exception
-     */
-    public void testAddAll() throws Exception {
-        publishAllSchemas();
-
-        assertSchemaImportsSchema(this.testSchemaSimpleA, this.testSchemaSimpleB);
-        assertNotImported(this.testSchemaSimpleA);
-        assertSchemaImportsSchema(this.testSchemaSimpleB, this.testSchemaSimpleC);
-        assertNoImports(this.testSchemaSimpleC);
-        assertSchemaImportsSchema(this.testSchemaSimpleD, this.testSchemaSimpleB);
-        assertNotImported(this.testSchemaSimpleD);
-        assertSchemaImportsSchema(this.testSchemaSimpleD, this.testSchemaSimpleE);
-        assertNoImports(this.testSchemaSimpleE);
-        assertNoImports(this.testSchemaSimpleF);
-        assertNotImported(this.testSchemaSimpleF);
-    }
-
+public class GMEDeletesSchemaSimpleTestCase extends GMETestCaseWithSimpleModel {
 
     public void testSingleDelete() throws Exception {
         List<XMLSchema> schemas = new ArrayList<XMLSchema>();
@@ -234,6 +163,14 @@ public class GMEDeletesSchemaSimpleTestCase extends GMETestCaseBase {
         assertNoImports(this.testSchemaSimpleC);
         assertNoImports(this.testSchemaSimpleF);
         assertNotImported(this.testSchemaSimpleF);
+    }
+
+
+    @ExpectedException(NoSuchNamespaceExistsFault.class)
+    public void testDeleteBeforePublishError() throws Exception {
+        List<URI> schemasToDelete = new ArrayList<URI>();
+        schemasToDelete.add(this.testSchemaSimpleF.getTargetNamespace());
+        this.gme.deleteSchemas(schemasToDelete);
     }
 
 
