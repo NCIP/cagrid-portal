@@ -45,6 +45,10 @@ public class FederatedQueryProcessorConfiguration implements ServiceConfiguratio
 	private String etcDirectoryPath;
 	
 	
+	private String initialResultLeaseInMinutes;
+	
+	private String threadPoolSize;
+	
 	
 	public String getEtcDirectoryPath() {
 		return ContainerConfig.getBaseDirectory() + File.separator + etcDirectoryPath;
@@ -52,6 +56,26 @@ public class FederatedQueryProcessorConfiguration implements ServiceConfiguratio
 	
 	public void setEtcDirectoryPath(String etcDirectoryPath) {
 		this.etcDirectoryPath = etcDirectoryPath;
+	}
+
+	
+	public String getInitialResultLeaseInMinutes() {
+		return initialResultLeaseInMinutes;
+	}
+	
+	
+	public void setInitialResultLeaseInMinutes(String initialResultLeaseInMinutes) {
+		this.initialResultLeaseInMinutes = initialResultLeaseInMinutes;
+	}
+
+	
+	public String getThreadPoolSize() {
+		return threadPoolSize;
+	}
+	
+	
+	public void setThreadPoolSize(String threadPoolSize) {
+		this.threadPoolSize = threadPoolSize;
 	}
 
 	

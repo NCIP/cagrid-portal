@@ -103,6 +103,14 @@
           <name>etcDirectoryPath</name>
           <value>ETC-PATH</value>
         </parameter>
+        <parameter>
+          <name>initialResultLeaseInMinutes</name>
+          <value>@initialResultLeaseInMinutes@</value>
+        </parameter>
+        <parameter>
+          <name>threadPoolSize</name>
+          <value>@threadPoolSize@</value>
+        </parameter>
       </resourceParams>
     </resource>
     <resource name="home" type="gov.nih.nci.cagrid.fqp.service.globus.resource.FederatedQueryProcessorResourceHome">

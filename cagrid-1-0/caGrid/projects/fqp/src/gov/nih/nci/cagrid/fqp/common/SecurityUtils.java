@@ -1,5 +1,7 @@
 package gov.nih.nci.cagrid.fqp.common;
 
+import gov.nih.nci.cagrid.fqp.results.common.FederatedQueryResultsConstants;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,10 +61,9 @@ public class SecurityUtils {
 
 			List openAuthMethods = new ArrayList();
 			openAuthMethods.add(NoneAuthMethod.getInstance());
-			desc.setMethodAuthMethods(new QName(FederatedQueryProcessorConstants.NAMESPACE_FQP_RESULTS, "getServiceSecurityMetadata"),
+			desc.setMethodAuthMethods(new QName(FederatedQueryResultsConstants.SERVICE_NS, "getServiceSecurityMetadata"),
 				openAuthMethods);
 			desc.setAuthMethods(authMethods);
-
 		}
 		return desc;
 	}

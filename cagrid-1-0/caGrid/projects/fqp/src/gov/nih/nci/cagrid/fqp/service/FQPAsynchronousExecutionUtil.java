@@ -2,7 +2,7 @@ package gov.nih.nci.cagrid.fqp.service;
 
 import gov.nih.nci.cagrid.common.FaultHelper;
 import gov.nih.nci.cagrid.dcql.DCQLQuery;
-import gov.nih.nci.cagrid.fqp.common.FederatedQueryProcessorConstants;
+import gov.nih.nci.cagrid.fqp.common.FQPConstants;
 import gov.nih.nci.cagrid.fqp.common.SecurityUtils;
 import gov.nih.nci.cagrid.fqp.processor.exceptions.FederatedQueryProcessingException;
 import gov.nih.nci.cagrid.fqp.results.service.globus.resource.FederatedQueryResultsResource;
@@ -119,7 +119,7 @@ public class FQPAsynchronousExecutionUtil {
         MessageContext ctx = MessageContext.getCurrentContext();
         String transportURL = (String) ctx.getProperty(org.apache.axis.MessageContext.TRANS_URL);
         transportURL = transportURL.substring(0, transportURL.lastIndexOf('/') + 1);
-        transportURL += FederatedQueryProcessorConstants.RESULTS_SERVICE_NAME;
+        transportURL += FQPConstants.RESULTS_SERVICE_NAME;
         try {
             EndpointReferenceType epr = AddressingUtils.createEndpointReference(transportURL, key);
             return new FederatedQueryResultsReference(epr);

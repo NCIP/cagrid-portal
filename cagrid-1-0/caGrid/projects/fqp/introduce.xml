@@ -366,4 +366,8 @@
   <ns66:Extension name="caGrid_Transfer" version="1.2" xsi:type="ns66:ExtensionType"/>
   <ns66:Extension name="cagrid_wsEnum" version="1.2" xsi:type="ns66:ExtensionType"/>
  </ns66:Extensions>
+ <ns67:ServiceProperties xmlns:ns67="gme://gov.nih.nci.cagrid.introduce/1/Property">
+  <ns67:Property description="Length of time in minutes a Federated Query Results Resource will live" isFromETC="false" key="initialResultLeaseInMinutes" value="30"/>
+  <ns67:Property description="Number of worker threads for federated query processing execution" isFromETC="false" key="threadPoolSize" value="10"/>
+ </ns67:ServiceProperties>
 </ns1:ServiceDescription>

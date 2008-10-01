@@ -5,7 +5,7 @@ import gov.nih.nci.cagrid.cqlresultset.CQLQueryResults;
 import gov.nih.nci.cagrid.dcql.DCQLQuery;
 import gov.nih.nci.cagrid.dcqlresult.DCQLQueryResultsCollection;
 import gov.nih.nci.cagrid.dcqlresult.DCQLResult;
-import gov.nih.nci.cagrid.fqp.common.FederatedQueryProcessorConstants;
+import gov.nih.nci.cagrid.fqp.common.FQPConstants;
 import gov.nih.nci.cagrid.fqp.common.SerializationUtils;
 import gov.nih.nci.cagrid.fqp.processor.exceptions.FederatedQueryProcessingException;
 import gov.nih.nci.cagrid.fqp.processor.exceptions.RemoteDataServiceException;
@@ -72,7 +72,7 @@ public class FederatedQueryEngine {
     public FederatedQueryEngine(GlobusCredential credential, QueryExecutionParameters executionParameters, WorkManager workManager) {
         this.credential = credential;
         if (executionParameters == null) {
-            this.executionParameters = FederatedQueryProcessorConstants.DEFAULT_QUERY_EXECUTION_PARAMETERS;
+            this.executionParameters = FQPConstants.DEFAULT_QUERY_EXECUTION_PARAMETERS;
         } else {
             this.executionParameters = executionParameters;
         }
@@ -346,11 +346,11 @@ public class FederatedQueryEngine {
             
             int maxRetries = behavior.getRetries() != null ? 
                 behavior.getRetries().intValue() : 
-                FederatedQueryProcessorConstants.DEFAULT_TARGET_QUERY_BEHAVIOR.getRetries().intValue();
+                FQPConstants.DEFAULT_TARGET_QUERY_BEHAVIOR.getRetries().intValue();
             int tryCount = 0;
             long retryTimeout = (behavior.getTimeoutPerRetry() != null ?
                 behavior.getTimeoutPerRetry().intValue() :
-                FederatedQueryProcessorConstants.DEFAULT_TARGET_QUERY_BEHAVIOR.getTimeoutPerRetry().intValue())
+                FQPConstants.DEFAULT_TARGET_QUERY_BEHAVIOR.getTimeoutPerRetry().intValue())
                 * 1000; // miliseconds
             
             do {

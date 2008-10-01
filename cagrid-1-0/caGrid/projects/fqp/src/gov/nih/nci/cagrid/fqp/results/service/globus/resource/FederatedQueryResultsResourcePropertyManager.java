@@ -2,7 +2,7 @@ package gov.nih.nci.cagrid.fqp.results.service.globus.resource;
 
 import gov.nih.nci.cagrid.common.FaultHelper;
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.fqp.common.FederatedQueryProcessorConstants;
+import gov.nih.nci.cagrid.fqp.common.FQPConstants;
 import gov.nih.nci.cagrid.fqp.results.stubs.types.InternalErrorFault;
 import gov.nih.nci.cagrid.fqp.stubs.types.FederatedQueryProcessingFault;
 
@@ -113,7 +113,7 @@ public class FederatedQueryResultsResourcePropertyManager {
     
     
     private void storeExecutionStatus() {
-        ResourceProperty property = resourceProperties.get(FederatedQueryProcessorConstants.RESULTS_METADATA_QNAME);
+        ResourceProperty property = resourceProperties.get(FQPConstants.RESULTS_METADATA_QNAME);
         property.set(0, executionStatus);
         
         // store()?
