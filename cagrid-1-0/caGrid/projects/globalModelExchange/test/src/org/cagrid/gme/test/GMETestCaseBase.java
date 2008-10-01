@@ -39,6 +39,15 @@ public abstract class GMETestCaseBase extends GMEIntegrationTestCaseBase {
     }
 
 
+    protected void assertSchemaImportsSchema(XMLSchema importer, XMLSchema imported) throws NoSuchNamespaceExistsFault {
+        Collection<URI> importedNamespaces = this.gme.getImportedNamespaces(importer.getTargetNamespace());
+        assertTrue(importedNamespaces.contains(imported.getTargetNamespace()));
+
+        Collection<URI> importingNamespaces = this.gme.getImportingNamespaces(imported.getTargetNamespace());
+        assertTrue(importingNamespaces.contains(importer.getTargetNamespace()));
+    }
+
+
     protected void assertNotPublished(XMLSchema schema) throws NoSuchNamespaceExistsFault {
         List<XMLSchema> list = new ArrayList<XMLSchema>(1);
         list.add(schema);
@@ -59,5 +68,15 @@ public abstract class GMETestCaseBase extends GMEIntegrationTestCaseBase {
                 // expected
             }
         }
+    }
+
+
+    protected void assertNoImports(XMLSchema schema) throws NoSuchNamespaceExistsFault {
+        assertEquals(0, this.gme.getImportedNamespaces(schema.getTargetNamespace()).size());
+    }
+
+
+    protected void assertNotImported(XMLSchema schema) throws NoSuchNamespaceExistsFault {
+        assertEquals(0, this.gme.getImportingNamespaces(schema.getTargetNamespace()).size());
     }
 }

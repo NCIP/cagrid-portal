@@ -69,6 +69,17 @@ public class GMEDeletesSchemaSimpleTestCase extends GMETestCaseBase {
      */
     public void testAddAll() throws Exception {
         publishAllSchemas();
+
+        assertSchemaImportsSchema(this.testSchemaSimpleA, this.testSchemaSimpleB);
+        assertNotImported(this.testSchemaSimpleA);
+        assertSchemaImportsSchema(this.testSchemaSimpleB, this.testSchemaSimpleC);
+        assertNoImports(this.testSchemaSimpleC);
+        assertSchemaImportsSchema(this.testSchemaSimpleD, this.testSchemaSimpleB);
+        assertNotImported(this.testSchemaSimpleD);
+        assertSchemaImportsSchema(this.testSchemaSimpleD, this.testSchemaSimpleE);
+        assertNoImports(this.testSchemaSimpleE);
+        assertNoImports(this.testSchemaSimpleF);
+        assertNotImported(this.testSchemaSimpleF);
     }
 
 
@@ -92,6 +103,10 @@ public class GMEDeletesSchemaSimpleTestCase extends GMETestCaseBase {
         this.gme.publishSchemas(schemas);
         assertPublishedContents(schemas);
 
+        assertSchemaImportsSchema(this.testSchemaSimpleB, this.testSchemaSimpleC);
+        assertNoImports(this.testSchemaSimpleF);
+        assertNotImported(this.testSchemaSimpleF);
+
         List<URI> schemasToDelete = new ArrayList<URI>();
         schemasToDelete.add(this.testSchemaSimpleB.getTargetNamespace());
         this.gme.deleteSchemas(schemasToDelete);
@@ -101,6 +116,11 @@ public class GMEDeletesSchemaSimpleTestCase extends GMETestCaseBase {
         expected.add(this.testSchemaSimpleF);
         assertPublishedContents(expected);
         assertNotPublished(this.testSchemaSimpleB);
+
+        assertNoImports(this.testSchemaSimpleC);
+        assertNotImported(this.testSchemaSimpleC);
+        assertNoImports(this.testSchemaSimpleF);
+        assertNotImported(this.testSchemaSimpleF);
     }
 
 
@@ -119,6 +139,15 @@ public class GMEDeletesSchemaSimpleTestCase extends GMETestCaseBase {
         expected.add(this.testSchemaSimpleF);
         assertPublishedContents(expected);
         assertNotPublished(this.testSchemaSimpleA);
+
+        assertSchemaImportsSchema(this.testSchemaSimpleB, this.testSchemaSimpleC);
+        assertNoImports(this.testSchemaSimpleC);
+        assertSchemaImportsSchema(this.testSchemaSimpleD, this.testSchemaSimpleB);
+        assertNotImported(this.testSchemaSimpleD);
+        assertSchemaImportsSchema(this.testSchemaSimpleD, this.testSchemaSimpleE);
+        assertNoImports(this.testSchemaSimpleE);
+        assertNoImports(this.testSchemaSimpleF);
+        assertNotImported(this.testSchemaSimpleF);
     }
 
 
@@ -141,6 +170,13 @@ public class GMEDeletesSchemaSimpleTestCase extends GMETestCaseBase {
         notExpected.add(this.testSchemaSimpleA);
         notExpected.add(this.testSchemaSimpleF);
         assertNotPublished(notExpected);
+
+        assertSchemaImportsSchema(this.testSchemaSimpleB, this.testSchemaSimpleC);
+        assertNoImports(this.testSchemaSimpleC);
+        assertSchemaImportsSchema(this.testSchemaSimpleD, this.testSchemaSimpleB);
+        assertNotImported(this.testSchemaSimpleD);
+        assertSchemaImportsSchema(this.testSchemaSimpleD, this.testSchemaSimpleE);
+        assertNoImports(this.testSchemaSimpleE);
     }
 
 
@@ -164,6 +200,11 @@ public class GMEDeletesSchemaSimpleTestCase extends GMETestCaseBase {
         notExpected.add(this.testSchemaSimpleB);
         notExpected.add(this.testSchemaSimpleD);
         assertNotPublished(notExpected);
+
+        assertNoImports(this.testSchemaSimpleC);
+        assertNoImports(this.testSchemaSimpleE);
+        assertNoImports(this.testSchemaSimpleF);
+
     }
 
 
@@ -186,6 +227,13 @@ public class GMEDeletesSchemaSimpleTestCase extends GMETestCaseBase {
         notExpected.add(this.testSchemaSimpleD);
         notExpected.add(this.testSchemaSimpleE);
         assertNotPublished(notExpected);
+
+        assertSchemaImportsSchema(this.testSchemaSimpleA, this.testSchemaSimpleB);
+        assertNotImported(this.testSchemaSimpleA);
+        assertSchemaImportsSchema(this.testSchemaSimpleB, this.testSchemaSimpleC);
+        assertNoImports(this.testSchemaSimpleC);
+        assertNoImports(this.testSchemaSimpleF);
+        assertNotImported(this.testSchemaSimpleF);
     }
 
 

@@ -566,4 +566,82 @@ public class GME {
         }
     }
 
+
+    /**
+     * Return a Collection of URIs representing the targetNamespaces of the
+     * XMLSchemas which are imported by the XMLSchema identified by the given
+     * targetNamespace
+     * 
+     * @param targetNamespace
+     *            the targetNamespace of the desired XMLSchema
+     * @return a Collection of URIs representing the targetNamespaces of the
+     *         XMLSchemas which are imported by the XMLSchema identified by the
+     *         given targetNamespace
+     * @throws NoSuchNamespaceExistsFault
+     *             if there is no published Schema with a targetNamespace equal
+     *             to the given URI
+     */
+    @Transactional(readOnly = true)
+    public Collection<URI> getImportedNamespaces(URI targetNamespace) throws NoSuchNamespaceExistsFault {
+        XMLSchemaInformation info = this.schemaDao.getByTargetNamespace(targetNamespace);
+        if (info == null) {
+            String description = "No schema is published with given targetNamespace (" + targetNamespace + ")";
+
+            NoSuchNamespaceExistsFault fault = new NoSuchNamespaceExistsFault();
+            gov.nih.nci.cagrid.common.FaultHelper helper = new gov.nih.nci.cagrid.common.FaultHelper(fault);
+            helper.setDescription(description);
+            LOG.debug("Cannot retrieve imported namespaces of schema: " + description);
+
+            throw (NoSuchNamespaceExistsFault) helper.getFault();
+        }
+
+        List<URI> result = new ArrayList<URI>();
+        Set<XMLSchemaInformation> imports = info.getImports();
+        for (XMLSchemaInformation importedInfo : imports) {
+            result.add(importedInfo.getSchema().getTargetNamespace());
+        }
+
+        return result;
+
+    }
+
+
+    /**
+     * Return a Collection of URIs representing the targetNamespaces of the
+     * XMLSchemas which import the XMLSchema identified by the given
+     * targetNamespace
+     * 
+     * @param targetNamespace
+     *            the targetNamespace of the desired XMLSchema
+     * @return a Collection of URIs representing the targetNamespaces of the
+     *         XMLSchemas which import the XMLSchema identified by the given
+     *         targetNamespace
+     * @throws NoSuchNamespaceExistsFault
+     *             if there is no published Schema with a targetNamespace equal
+     *             to the given URI
+     */
+    @Transactional(readOnly = true)
+    public Collection<URI> getImportingNamespaces(URI targetNamespace) throws NoSuchNamespaceExistsFault {
+        XMLSchema schema = this.schemaDao.getXMLSchemaByTargetNamespace(targetNamespace);
+        if (schema == null) {
+            String description = "No schema is published with given targetNamespace (" + targetNamespace + ")";
+
+            NoSuchNamespaceExistsFault fault = new NoSuchNamespaceExistsFault();
+            gov.nih.nci.cagrid.common.FaultHelper helper = new gov.nih.nci.cagrid.common.FaultHelper(fault);
+            helper.setDescription(description);
+            LOG.debug("Cannot retrieve importing namespaces of schema: " + description);
+
+            throw (NoSuchNamespaceExistsFault) helper.getFault();
+        }
+
+        Collection<XMLSchema> dependingXMLSchemas = this.schemaDao.getDependingXMLSchemas(targetNamespace);
+
+        List<URI> result = new ArrayList<URI>();
+        for (XMLSchema importingSchema : dependingXMLSchemas) {
+            result.add(importingSchema.getTargetNamespace());
+        }
+
+        return result;
+    }
+
 }
