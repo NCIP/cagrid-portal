@@ -20,6 +20,9 @@ import org.globus.wsrf.ResourcePropertySet;
  * Utility for managing the status resource property of the
  * Federated Query Processor Results Resource
  * 
+ * TODO: This class needs to call the store() method on the resource to
+ * persist the resource property changes
+ * 
  * @author ervin
  */
 public class FederatedQueryResultsResourcePropertyManager {
