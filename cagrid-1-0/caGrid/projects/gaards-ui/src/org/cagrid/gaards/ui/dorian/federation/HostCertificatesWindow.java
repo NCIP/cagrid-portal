@@ -122,8 +122,8 @@ public class HostCertificatesWindow extends ApplicationComponent implements
 
 	public void viewHostCertificate(HostCertificateRecord record) {
 		try {
-			HostCertificateWindow window = new HostCertificateWindow(
-					getSession().getServiceURI(), getSession().getCredential(),
+			
+			HostCertificateWindow window = new HostCertificateWindow(this.session.getSession(),
 					getHostCertificatesTable().getSelectedHostCertificate(),
 					true);
 			GridApplication.getContext().addApplicationComponent(window, 750,
@@ -276,8 +276,7 @@ public class HostCertificatesWindow extends ApplicationComponent implements
 	private JButton getViewHostCertificate() {
 		if (viewHostCertificate == null) {
 			viewHostCertificate = new JButton();
-			viewHostCertificate.setText("View/Update Host Certificate");
-			viewHostCertificate.setIcon(DorianLookAndFeel.getHostIcon());
+			viewHostCertificate.setText("View Host Certificate");
 			viewHostCertificate
 					.addActionListener(new java.awt.event.ActionListener() {
 						public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -339,7 +338,6 @@ public class HostCertificatesWindow extends ApplicationComponent implements
 		if (query == null) {
 			query = new JButton();
 			query.setText("Find Host Certificates");
-			query.setIcon(LookAndFeel.getQueryIcon());
 			query.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					Runner runner = new Runner() {
@@ -721,7 +719,6 @@ public class HostCertificatesWindow extends ApplicationComponent implements
 		if (findUser == null) {
 			findUser = new JButton();
 			findUser.setText("Find...");
-			findUser.setIcon(DorianLookAndFeel.getUserIcon());
 			findUser.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					FindUserDialog dialog = new FindUserDialog();

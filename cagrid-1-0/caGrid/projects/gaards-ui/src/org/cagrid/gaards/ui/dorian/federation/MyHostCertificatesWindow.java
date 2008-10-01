@@ -81,8 +81,7 @@ public class MyHostCertificatesWindow extends ApplicationComponent implements
 
 	public void viewHostCertificate(HostCertificateRecord record) {
 		try {
-			HostCertificateWindow window = new HostCertificateWindow(
-					getSession().getServiceURI(), getSession().getCredential(),
+			HostCertificateWindow window = new HostCertificateWindow(this.session.getSession(),
 					getHostCertificatesTable().getSelectedHostCertificate(),
 					false);
 			GridApplication.getContext().addApplicationComponent(window, 600,

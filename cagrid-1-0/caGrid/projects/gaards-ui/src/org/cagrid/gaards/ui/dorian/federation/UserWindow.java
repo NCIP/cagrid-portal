@@ -7,39 +7,44 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.util.Calendar;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 
 import org.cagrid.gaards.dorian.client.GridAdministrationClient;
 import org.cagrid.gaards.dorian.federation.GridUser;
+import org.cagrid.gaards.dorian.federation.HostCertificateFilter;
+import org.cagrid.gaards.dorian.federation.HostCertificateRecord;
 import org.cagrid.gaards.dorian.federation.TrustedIdP;
 import org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault;
 import org.cagrid.gaards.ui.common.GAARDSLookAndFeel;
-import org.cagrid.gaards.ui.dorian.DorianHandle;
 import org.cagrid.gaards.ui.dorian.DorianLookAndFeel;
 import org.cagrid.gaards.ui.dorian.DorianSession;
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
+import org.cagrid.grape.LookAndFeel;
 import org.cagrid.grape.utils.ErrorDialog;
-import org.globus.gsi.GlobusCredential;
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: UserWindow.java,v 1.2 2008-09-29 02:17:29 langella Exp $
+ * @version $Id: UserWindow.java,v 1.3 2008-10-01 18:30:30 langella Exp $
  */
-public class UserWindow extends ApplicationComponent {
+public class UserWindow extends ApplicationComponent implements
+		HostCertificateLauncher {
 
 	private final static String INFO_PANEL = "Account Information";
 
 	private final static String USER_CERTIFICATES_PANEL = "User Certificates";
+
+	private final static String HOST_CERTIFICATES_PANEL = "Host Certificates";
 
 	private javax.swing.JPanel jContentPane = null;
 
@@ -95,10 +100,6 @@ public class UserWindow extends ApplicationComponent {
 
 	private JLabel logo = null;
 
-	private Calendar searchStartDate = null;
-
-	private Calendar searchEndDate = null;
-
 	private JPanel buttonPanel = null;
 
 	private JLabel jLabel2 = null;
@@ -110,6 +111,18 @@ public class UserWindow extends ApplicationComponent {
 	private JTextField dorianURL = null;
 
 	private DorianSession session;
+
+	private JPanel hostCertificates = null;
+
+	private JButton findHostCertificates = null;
+
+	private JScrollPane jScrollPane = null;
+
+	private HostCertificatesTable hostCertificateRecords = null;
+
+	private JPanel hostCertificateRecordPanel = null;
+
+	private JButton viewHostCertificate = null;
 
 	/**
 	 * This is the default constructor
@@ -236,6 +249,8 @@ public class UserWindow extends ApplicationComponent {
 			jTabbedPane.addTab(INFO_PANEL, null, getInfoPanel(), null);
 			jTabbedPane.addTab(USER_CERTIFICATES_PANEL, null,
 					getUserCertificatePanel(), null);
+			jTabbedPane.addTab(HOST_CERTIFICATES_PANEL, null,
+					getHostCertificates(), null);
 		}
 		return jTabbedPane;
 	}
@@ -626,6 +641,173 @@ public class UserWindow extends ApplicationComponent {
 			dorianURL.setText(this.session.getHandle().getServiceURL());
 		}
 		return dorianURL;
+	}
+
+	/**
+	 * This method initializes hostCertificates
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	private JPanel getHostCertificates() {
+		if (hostCertificates == null) {
+			GridBagConstraints gridBagConstraints29 = new GridBagConstraints();
+			gridBagConstraints29.gridx = 0;
+			gridBagConstraints29.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints29.gridy = 2;
+			GridBagConstraints gridBagConstraints27 = new GridBagConstraints();
+			gridBagConstraints27.gridx = 0;
+			gridBagConstraints27.weightx = 1.0D;
+			gridBagConstraints27.weighty = 1.0D;
+			gridBagConstraints27.fill = GridBagConstraints.BOTH;
+			gridBagConstraints27.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints27.gridy = 1;
+			GridBagConstraints gridBagConstraints25 = new GridBagConstraints();
+			gridBagConstraints25.gridx = 0;
+			gridBagConstraints25.insets = new Insets(5, 5, 5, 5);
+			gridBagConstraints25.gridy = 0;
+			hostCertificates = new JPanel();
+			hostCertificates.setLayout(new GridBagLayout());
+			hostCertificates.add(getHostCertificateRecordPanel(), gridBagConstraints27);
+			hostCertificates.add(getFindHostCertificates(), gridBagConstraints25);
+			hostCertificates.add(getViewHostCertificate(), gridBagConstraints29);
+		}
+		return hostCertificates;
+	}
+
+	/**
+	 * This method initializes findHostCertificates
+	 * 
+	 * @return javax.swing.JButton
+	 */
+	private JButton getFindHostCertificates() {
+		if (findHostCertificates == null) {
+			findHostCertificates = new JButton();
+			findHostCertificates.setText("List Host Certificates");
+			findHostCertificates
+					.addActionListener(new java.awt.event.ActionListener() {
+						public void actionPerformed(java.awt.event.ActionEvent e) {
+							getFindHostCertificates().setEnabled(false);
+							Runner runner = new Runner() {
+								public void execute() {
+									findHostCertificates();
+								}
+							};
+							try {
+								GridApplication.getContext()
+										.executeInBackground(runner);
+							} catch (Exception t) {
+								t.getMessage();
+							}
+
+						}
+					});
+		}
+		return findHostCertificates;
+	}
+
+	private void findHostCertificates() {
+		try {
+			GridAdministrationClient client = this.session.getAdminClient();
+			getHostCertificateRecords().clearTable();
+			HostCertificateFilter f = new HostCertificateFilter();
+			f.setOwner(this.user.getGridId());
+			List<HostCertificateRecord> records = client
+					.findHostCertificates(f);
+			for (int i = 0; i < records.size(); i++) {
+				getHostCertificateRecords().addHostCertificate(records.get(i));
+			}
+		} catch (Exception e) {
+			ErrorDialog.showError(e);
+		}
+		getFindHostCertificates().setEnabled(true);
+	}
+
+	/**
+	 * This method initializes jScrollPane
+	 * 
+	 * @return javax.swing.JScrollPane
+	 */
+	private JScrollPane getJScrollPane() {
+		if (jScrollPane == null) {
+			jScrollPane = new JScrollPane();
+			jScrollPane.setViewportView(getHostCertificateRecords());
+		}
+		return jScrollPane;
+	}
+
+	/**
+	 * This method initializes hostCertificateRecords
+	 * 
+	 * @return javax.swing.JTable
+	 */
+	private HostCertificatesTable getHostCertificateRecords() {
+		if (hostCertificateRecords == null) {
+			hostCertificateRecords = new HostCertificatesTable(this);
+		}
+		return hostCertificateRecords;
+	}
+
+	public void viewHostCertificate(HostCertificateRecord record) {
+		try {
+			HostCertificateWindow window = new HostCertificateWindow(
+					this.session, getHostCertificateRecords()
+							.getSelectedHostCertificate(), true);
+			GridApplication.getContext().addApplicationComponent(window, 750,
+					650);
+		} catch (Exception e) {
+			ErrorDialog.showError(e);
+		}
+
+	}
+
+	/**
+	 * This method initializes hostCertificateRecordPanel	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getHostCertificateRecordPanel() {
+		if (hostCertificateRecordPanel == null) {
+			GridBagConstraints gridBagConstraints26 = new GridBagConstraints();
+			gridBagConstraints26.fill = GridBagConstraints.BOTH;
+			gridBagConstraints26.gridx = 0;
+			gridBagConstraints26.gridy = 0;
+			gridBagConstraints26.weightx = 1.0;
+			gridBagConstraints26.weighty = 1.0;
+			gridBagConstraints26.insets = new Insets(2, 2, 2, 2);
+			hostCertificateRecordPanel = new JPanel();
+			hostCertificateRecordPanel.setBorder(javax.swing.BorderFactory
+					.createTitledBorder(
+							null,
+							"Host Certificates",
+							javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+							javax.swing.border.TitledBorder.DEFAULT_POSITION,
+							null, LookAndFeel.getPanelLabelColor()));
+			hostCertificateRecordPanel.setLayout(new GridBagLayout());
+			hostCertificateRecordPanel.add(getJScrollPane(), gridBagConstraints26);
+		}
+		return hostCertificateRecordPanel;
+	}
+
+	/**
+	 * This method initializes viewHostCertificate	
+	 * 	
+	 * @return javax.swing.JButton	
+	 */
+	private JButton getViewHostCertificate() {
+		if (viewHostCertificate == null) {
+			viewHostCertificate = new JButton();
+			viewHostCertificate.setText("View Host Certificate");
+			viewHostCertificate.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					try{
+					getHostCertificateRecords().doubleClick();
+					}catch (Exception ex) {
+						ErrorDialog.showError(ex);
+					}
+				}
+			});
+		}
+		return viewHostCertificate;
 	}
 
 }

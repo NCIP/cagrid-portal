@@ -3,6 +3,7 @@ package org.cagrid.gaards.ui.dorian.federation;
 import gov.nih.nci.cagrid.common.Runner;
 import gov.nih.nci.cagrid.common.Utils;
 
+import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -21,13 +22,10 @@ import org.cagrid.gaards.dorian.federation.DateRange;
 import org.cagrid.gaards.dorian.federation.UserCertificateFilter;
 import org.cagrid.gaards.dorian.federation.UserCertificateRecord;
 import org.cagrid.gaards.ui.common.SelectDateDialog;
-import org.cagrid.gaards.ui.dorian.DorianHandle;
 import org.cagrid.gaards.ui.dorian.DorianSession;
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.LookAndFeel;
 import org.cagrid.grape.utils.ErrorDialog;
-import org.globus.gsi.GlobusCredential;
-import java.awt.FlowLayout;
 
 public class UserCertificateSearchPanel extends JPanel {
 
