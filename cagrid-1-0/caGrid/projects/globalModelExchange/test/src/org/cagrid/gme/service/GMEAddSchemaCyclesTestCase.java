@@ -2,9 +2,7 @@ package org.cagrid.gme.service;
 
 import gov.nih.nci.cagrid.common.Utils;
 
-import java.net.URI;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import org.cagrid.gme.domain.XMLSchema;
@@ -50,17 +48,8 @@ public class GMEAddSchemaCyclesTestCase extends GMETestCaseBase {
         schemas.add(this.testSchemaCycleB);
 
         this.gme.publishSchemas(schemas);
-        Collection<URI> namespaces = new ArrayList<URI>();
-        namespaces.add(this.testSchemaCycleA.getTargetNamespace());
-        namespaces.add(this.testSchemaCycleB.getTargetNamespace());
 
-        Collection<URI> gmenamespaces = this.gme.getNamespaces();
-
-        assertTrue(namespaces.containsAll(gmenamespaces));
-        assertTrue(gmenamespaces.containsAll(namespaces));
-
-        assertEquals(this.testSchemaCycleA, this.gme.getSchema(this.testSchemaCycleA.getTargetNamespace()));
-        assertEquals(this.testSchemaCycleB, this.gme.getSchema(this.testSchemaCycleB.getTargetNamespace()));
+        assertPublishedContents(schemas);
     }
 
 
@@ -70,16 +59,7 @@ public class GMEAddSchemaCyclesTestCase extends GMETestCaseBase {
         schemas.add(this.testSchemaCycleA);
 
         this.gme.publishSchemas(schemas);
-        Collection<URI> namespaces = new ArrayList<URI>();
-        namespaces.add(this.testSchemaCycleA.getTargetNamespace());
-        namespaces.add(this.testSchemaCycleB.getTargetNamespace());
 
-        Collection<URI> gmenamespaces = this.gme.getNamespaces();
-
-        assertTrue(namespaces.containsAll(gmenamespaces));
-        assertTrue(gmenamespaces.containsAll(namespaces));
-
-        assertEquals(this.testSchemaCycleA, this.gme.getSchema(this.testSchemaCycleA.getTargetNamespace()));
-        assertEquals(this.testSchemaCycleB, this.gme.getSchema(this.testSchemaCycleB.getTargetNamespace()));
+        assertPublishedContents(schemas);
     }
 }

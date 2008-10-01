@@ -9,7 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 import org.cagrid.gme.domain.XMLSchema;
@@ -28,7 +28,7 @@ public class XMLSchemaInformation {
     @Embedded
     private XMLSchema schema;
 
-    @OneToMany
+    @ManyToMany()
     @JoinTable(name = "xmlschema_imports", joinColumns = {@JoinColumn(name = "importing_xmlschema_id")}, inverseJoinColumns = @JoinColumn(name = "imported_xmlschema_id"))
     private Set<XMLSchemaInformation> imports = new HashSet<XMLSchemaInformation>();
 
@@ -37,7 +37,7 @@ public class XMLSchemaInformation {
      * @return the schema
      */
     public XMLSchema getSchema() {
-        return schema;
+        return this.schema;
     }
 
 
@@ -54,7 +54,7 @@ public class XMLSchemaInformation {
      * @return the imports
      */
     public Set<XMLSchemaInformation> getImports() {
-        return imports;
+        return this.imports;
     }
 
 
@@ -68,7 +68,7 @@ public class XMLSchemaInformation {
 
 
     public Long getId() {
-        return id;
+        return this.id;
     }
 
 

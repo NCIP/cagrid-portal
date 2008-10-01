@@ -32,7 +32,7 @@ public class XMLSchemaInformationDao extends AbstractDao<XMLSchemaInformation> {
         XMLSchemaInformation s = null;
 
         List<XMLSchemaInformation> schemas = getHibernateTemplate().find(
-            "FROM " + domainClass().getSimpleName() + " s WHERE s.schema.targetNamespace= ?",
+            "SELECT s FROM " + domainClass().getName() + " s WHERE s.schema.targetNamespace= ?",
             new Object[]{targetNamespace});
 
         if (schemas.size() > 1) {
@@ -51,9 +51,8 @@ public class XMLSchemaInformationDao extends AbstractDao<XMLSchemaInformation> {
 
     public Collection<XMLSchemaInformation> getDependingXMLSchemaInformation(URI schemaTargetNamespace) {
         return getHibernateTemplate().find(
-            "FROM " + domainClass().getSimpleName()
-                + " s JOIN s.imports as import WHERE import.schema.targetNamespace= ?",
-            new Object[]{schemaTargetNamespace});
+            "SELECT s FROM " + domainClass().getName()
+                + " s JOIN s.imports as import WHERE import.schema.targetNamespace= ?", schemaTargetNamespace);
     }
 
 
@@ -69,8 +68,7 @@ public class XMLSchemaInformationDao extends AbstractDao<XMLSchemaInformation> {
 
 
     public Collection<URI> getAllNamespaces() {
-        return getHibernateTemplate().find(
-            "select s.schema.targetNamespace FROM " + domainClass().getSimpleName() + " s");
+        return getHibernateTemplate().find("SELECT s.schema.targetNamespace FROM " + domainClass().getName() + " s");
     }
 
 }

@@ -52,7 +52,8 @@ public class GME {
     }
 
 
-    public void deleteSchemas(List<URI> schemaNamespaces) throws NoSuchNamespaceExistsFault, UnableToDeleteSchemaFault {
+    public void deleteSchemas(Collection<URI> schemaNamespaces) throws NoSuchNamespaceExistsFault,
+        UnableToDeleteSchemaFault {
 
         // need to get a "lock" on the database here
         this.lock.writeLock().lock();
@@ -112,14 +113,12 @@ public class GME {
                             + "), as it is being requested to be deleted as well.");
                     }
                 }
-
-                // TODO: ok to delete all these schemas now (will it cascade to
-                // all additional documents and imports properly?)
-                for (XMLSchemaInformation schema : schemaMap.values()) {
-                    LOG.info("Deleting schema (" + schema.getSchema().getTargetNamespace() + ").");
-                    this.schemaDao.delete(schema);
-                }
-
+            }
+            // TODO: ok to delete all these schemas now (will it cascade to
+            // all additional documents and imports properly?)
+            for (XMLSchemaInformation schema : schemaMap.values()) {
+                LOG.info("Deleting schema (" + schema.getSchema().getTargetNamespace() + ").");
+                this.schemaDao.delete(schema);
             }
         } finally {
             // release database lock
@@ -444,7 +443,6 @@ public class GME {
             // -set importSet on PersistableXMLSchema
             info.setImports(importSet);
         }
-
     }
 
 
@@ -541,12 +539,28 @@ public class GME {
      *            the targetNamespace of the desired XMLSchema
      * @return a published XMLSchema with a targetNamespace equal to the given
      *         URI
+     * @throws NoSuchNamespaceExistsFault
+     *             if there is no published Schema with a targetNamespace equal
+     *             to the given URI
      */
     @Transactional(readOnly = true)
-    public XMLSchema getSchema(URI uri) {
+    public XMLSchema getSchema(URI uri) throws NoSuchNamespaceExistsFault {
         this.lock.readLock().lock();
         try {
-            return this.schemaDao.getXMLSchemaByTargetNamespace(uri);
+            XMLSchema result = this.schemaDao.getXMLSchemaByTargetNamespace(uri);
+            if (result == null) {
+                String description = "No schema is published with given targetNamespace (" + uri + ")";
+
+                NoSuchNamespaceExistsFault fault = new NoSuchNamespaceExistsFault();
+                gov.nih.nci.cagrid.common.FaultHelper helper = new gov.nih.nci.cagrid.common.FaultHelper(fault);
+                helper.setDescription(description);
+                LOG.debug("Cannot retrieve requested schema: " + description);
+
+                throw (NoSuchNamespaceExistsFault) helper.getFault();
+            } else {
+                return result;
+            }
+
         } finally {
             this.lock.readLock().unlock();
         }

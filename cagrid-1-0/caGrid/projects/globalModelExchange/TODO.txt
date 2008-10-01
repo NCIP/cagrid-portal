@@ -2,7 +2,7 @@
 
 NEXT STEPS:
 ==========
-write tests for schema deletion
+implement getImporting and getImported methods; add tests; and asserts to the other tests which check these
 
 design how authorization/policy will work.  will i do all checking in authorization code or do i want a separate "policy interface"
 for example, when i add Life Cycle States, will the authorization code check that published schemas aren't being deleted, or will that be a policy thing?
@@ -37,7 +37,7 @@ TESTS TO WRITE:
 add deploy system test
   add unsuccessful deploy system test that uses wrong database information and make sure service wont start
 
-add a test for "already defined" schema
+add a test for "already defined" schema which cant be updated
 
 add a test for schema with unused schemadocument (need to disallow)
 

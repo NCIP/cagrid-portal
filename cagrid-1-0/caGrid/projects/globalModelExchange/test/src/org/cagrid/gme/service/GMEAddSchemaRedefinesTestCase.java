@@ -2,9 +2,7 @@ package org.cagrid.gme.service;
 
 import gov.nih.nci.cagrid.common.Utils;
 
-import java.net.URI;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import org.cagrid.gme.domain.XMLSchema;
@@ -47,10 +45,7 @@ public class GMEAddSchemaRedefinesTestCase extends GMETestCaseBase {
         schemas.add(this.testSchemaRedefine);
         this.gme.publishSchemas(schemas);
 
-        Collection<URI> namespaces = this.gme.getNamespaces();
-        assertEquals(1, namespaces.size());
-        assertEquals(this.testSchemaRedefine.getTargetNamespace(), namespaces.iterator().next());
-        assertEquals(this.testSchemaRedefine, this.gme.getSchema(this.testSchemaRedefine.getTargetNamespace()));
+        assertPublishedContents(schemas);
 
     }
 
@@ -60,11 +55,7 @@ public class GMEAddSchemaRedefinesTestCase extends GMETestCaseBase {
         schemas.add(this.testSchemaRedefined);
         this.gme.publishSchemas(schemas);
 
-        Collection<URI> namespaces = this.gme.getNamespaces();
-
-        assertEquals(1, namespaces.size());
-        assertEquals(this.testSchemaRedefined.getTargetNamespace(), namespaces.iterator().next());
-        assertEquals(this.testSchemaRedefined, this.gme.getSchema(this.testSchemaRedefined.getTargetNamespace()));
+        assertPublishedContents(schemas);
     }
 
 
@@ -73,12 +64,7 @@ public class GMEAddSchemaRedefinesTestCase extends GMETestCaseBase {
         schemas.add(this.testSchemaRedefineNoNamespace);
         this.gme.publishSchemas(schemas);
 
-        Collection<URI> namespaces = this.gme.getNamespaces();
-
-        assertEquals(1, namespaces.size());
-        assertEquals(this.testSchemaRedefineNoNamespace.getTargetNamespace(), namespaces.iterator().next());
-        assertEquals(this.testSchemaRedefineNoNamespace, this.gme.getSchema(this.testSchemaRedefineNoNamespace
-            .getTargetNamespace()));
+        assertPublishedContents(schemas);
     }
 
 
@@ -87,13 +73,7 @@ public class GMEAddSchemaRedefinesTestCase extends GMETestCaseBase {
         schemas.add(this.testSchemaRedefineWrongNamespaceRedefinedOnly);
         this.gme.publishSchemas(schemas);
 
-        Collection<URI> namespaces = this.gme.getNamespaces();
-
-        assertEquals(1, namespaces.size());
-        assertEquals(this.testSchemaRedefineWrongNamespaceRedefinedOnly.getTargetNamespace(), namespaces.iterator()
-            .next());
-        assertEquals(this.testSchemaRedefineWrongNamespaceRedefinedOnly, this.gme
-            .getSchema(this.testSchemaRedefineWrongNamespaceRedefinedOnly.getTargetNamespace()));
+        assertPublishedContents(schemas);
     }
 
 
