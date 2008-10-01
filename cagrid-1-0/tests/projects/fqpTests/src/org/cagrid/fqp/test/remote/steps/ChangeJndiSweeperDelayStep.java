@@ -10,12 +10,21 @@ import java.util.Iterator;
 import org.jdom.Attribute;
 import org.jdom.Document;
 import org.jdom.Element;
+import org.jdom.Namespace;
 import org.jdom.filter.Filter;
 
 public class ChangeJndiSweeperDelayStep extends Step {
     
     public static final String RESOURCE_HOME_TYPE_NAME = 
-        "gov.nih.nci.cagrid.fqp.results.service.globus.resource.FQPResultResourceHome";
+        "gov.nih.nci.cagrid.fqp.results.service.globus.resource.FederatedQueryResultsResourceHome";
+    
+    /*
+     *   <!-- Sweeper delay defaults to 60 seconds, system tests change this -->
+     *   <parameter>
+     *    <name>sweeperDelay</name>
+     *   <value>60000</value>
+     *   </parameter>        
+     */
     
     private File fqpServiceDir;
     private long delay;
@@ -61,18 +70,20 @@ public class ChangeJndiSweeperDelayStep extends Step {
         assertFalse("More than one resource home for " + RESOURCE_HOME_TYPE_NAME + " foind in JNDI!", fqpResultResourceElements.hasNext());
         // find and change the sweeper delay value
         Element resourceParamsElement = resourceHomeElement.getChild("resourceParams", resourceHomeElement.getNamespace());
+        // create the sweeper delay parameter element
+        Element delayParameter = createSweeperDelayElement(resourceParamsElement.getNamespace());
+        // throw out the old sweeper delay
         Iterator paramElementIter = resourceParamsElement.getChildren("parameter", resourceParamsElement.getNamespace()).iterator();
-        boolean sweeperDelaySet = false;
-        while (paramElementIter.hasNext() && !sweeperDelaySet) {
+        while (paramElementIter.hasNext()) {
             Element paramElement = (Element) paramElementIter.next();
             Element nameElement = paramElement.getChild("name", paramElement.getNamespace());
             if (nameElement != null && nameElement.getText().equals("sweeperDelay")) {
-                Element valueElement = paramElement.getChild("value", paramElement.getNamespace());
-                valueElement.setText(String.valueOf(delay));
-                sweeperDelaySet = true;
+                resourceParamsElement.removeContent(paramElement);
+                break;
             }
         }
-        assertTrue("Sweeper delay parameter not found in JNDI!", sweeperDelaySet);
+        // insert the delay parameter
+        resourceParamsElement.addContent(delayParameter);
         // write the JNDI back to disk
         try {
             String jndiText = XMLUtilities.documentToString(jndiDocument);
@@ -82,4 +93,23 @@ public class ChangeJndiSweeperDelayStep extends Step {
             fail("Error writing edited JNDI to disk: " + ex.getMessage());
         }
     }
+    
+    
+    private Element createSweeperDelayElement(Namespace namespace) {
+        /*
+         *   <!-- Sweeper delay defaults to 60 seconds, system tests change this -->
+         *   <parameter>
+         *    <name>sweeperDelay</name>
+         *   <value>60000</value>
+         *   </parameter>        
+         */
+        Element parameter = new Element("parameter", namespace);
+        Element name = new Element("name", namespace);
+        name.setText("sweeperDelay");
+        Element value = new Element("value", namespace);
+        value.setText(String.valueOf(delay));
+        parameter.addContent(name);
+        parameter.addContent(value);
+        return parameter;
+    }    
 }
