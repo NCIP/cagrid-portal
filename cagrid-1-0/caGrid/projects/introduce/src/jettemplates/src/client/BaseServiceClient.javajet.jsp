@@ -71,12 +71,12 @@ public abstract class <%=info.getService().getName()%>ClientBase extends Service
 		initialize();
 	}
 	
-	private void initialize() throws RemoteException {
+	protected void initialize() throws RemoteException {
 	    this.portTypeMutex = new Object();
 		this.portType = createPortType();
 	}
 
-	private <%=info.getService().getName()%>PortType createPortType() throws RemoteException {
+	protected <%=info.getService().getName()%>PortType createPortType() throws RemoteException {
 
 		<%=modifiedServiceName%>ServiceAddressingLocator locator = new <%=modifiedServiceName%>ServiceAddressingLocator();
 		// attempt to load our context sensitive wsdd file
