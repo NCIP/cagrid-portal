@@ -53,8 +53,7 @@ public class UMLClassDao extends AbstractDao<UMLClass> {
                                         .getProjectName())).add(
                                 Restrictions.ne("model.id", example.getModel()
                                         .getId())).setResultTransformer(
-                                Criteria.DISTINCT_ROOT_ENTITY).setMaxResults(
-                                maxResultSize).list();
+                                Criteria.DISTINCT_ROOT_ENTITY).list();
                     }
                 });
         List<UMLClass> classes = new ArrayList<UMLClass>();
@@ -63,8 +62,6 @@ public class UMLClassDao extends AbstractDao<UMLClass> {
             for (UMLClass kclass : resultSet) {
                 if (kclass.getModel().getService().getCurrentStatus().equals(ServiceStatus.ACTIVE))
                     classes.add(kclass);
-                if (classes.size() >= maxResultSize)
-                    break;
             }
         } catch (Exception e) {
             logger.error("Error filtering resultset" + e.getMessage());

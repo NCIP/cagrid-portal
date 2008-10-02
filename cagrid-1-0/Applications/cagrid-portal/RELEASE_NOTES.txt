@@ -55,7 +55,8 @@ RFE		Description
       in the Portal
 16001 Utility for help with registration problems
 15952 Service Diagnostics Portlet
-15949 User developed Portlets        
+15949 User developed Portlets
+16896 Portal should by default build against the training tier
 
 The complete RFE list and additional details can be found on the
 project Gforge Tracker:
@@ -72,6 +73,7 @@ Bug		Description
 15253 ConceptHierarchyNode.description field length is too short
 16470 Simple discovery for CDE returns invalid results
 16187 Service details Portlet caches information
+16876 DCQL Aggregate query UI is not showing all services as targets
 
 
 The complete fixed bug list and additional details can be found on
@@ -87,8 +89,9 @@ Update to date bug reports and feature requests can be found on the
 tracker section of the project's gforge site:
 http://gforge.nci.nih.gov/tracker/?group_id=25
 
-At the time of release, there are no known issues.
-
+Portal 2.1 will not support Internet Explorer version 8, since
+IE 8 is still in beta at this time.
+Support might be provided in a future relase of the Portal.
 
 ================================================================
                 	6.0 Bug Reports and Support
