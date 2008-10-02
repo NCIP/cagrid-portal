@@ -358,6 +358,7 @@ public class TestIdentityFederationManager extends TestCase {
             }
         }
     }
+    
 
 
     public void testUpdateHostCertificatesInvalidUser() {
@@ -411,6 +412,16 @@ public class TestIdentityFederationManager extends TestCase {
                 HostCertificateUpdate update = new HostCertificateUpdate();
                 update.setId(record.getId());
                 update.setOwner("invalid user");
+                ifs.updateHostCertificateRecord(adminGridId, update);
+                fail("Should have failed.");
+            } catch (InvalidHostCertificateFault f) {
+
+            }
+            
+            try {
+                HostCertificateUpdate update = new HostCertificateUpdate();
+                update.setId(record.getId());
+                update.setOwner("");
                 ifs.updateHostCertificateRecord(adminGridId, update);
                 fail("Should have failed.");
             } catch (InvalidHostCertificateFault f) {

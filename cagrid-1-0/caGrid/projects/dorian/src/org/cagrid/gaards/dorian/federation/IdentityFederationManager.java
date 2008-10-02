@@ -611,7 +611,7 @@ public class IdentityFederationManager extends LoggingObject implements Publishe
 
         // We need to make sure that if the owner changed, that the owner is an
         // active user.
-        if (Utils.clean(update.getOwner()) != null) {
+        if (update.getOwner() != null) {
             HostCertificateRecord record = hostManager.getHostCertificateRecord(update.getId());
             if (!record.getOwner().equals(update.getOwner())) {
                 try {

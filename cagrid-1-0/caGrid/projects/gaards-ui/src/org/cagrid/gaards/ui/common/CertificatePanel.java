@@ -21,7 +21,7 @@ import org.cagrid.grape.utils.ErrorDialog;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: CertificatePanel.java,v 1.2 2008-04-30 01:50:28 langella Exp $
+ * @version $Id: CertificatePanel.java,v 1.3 2008-10-02 20:46:12 langella Exp $
  */
 public class CertificatePanel extends JPanel {
 
@@ -427,7 +427,6 @@ public class CertificatePanel extends JPanel {
 
 				}
 			});
-			loadButton.setIcon(LookAndFeel.getImportIcon());
 		}
 		return loadButton;
 	}
@@ -476,7 +475,6 @@ public class CertificatePanel extends JPanel {
 	private JButton getSaveButton() {
 		if (saveButton == null) {
 			saveButton = new JButton();
-			saveButton.setIcon(LookAndFeel.getSaveIcon());
 			saveButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					exportCertificate();

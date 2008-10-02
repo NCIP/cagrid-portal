@@ -153,6 +153,10 @@
 							<classname>org.cagrid.gaards.ui.dorian.federation.TrustedIdPsWindow</classname>
 							<icon>/trusted-idp.png</icon>
 							<showOnToolBar>false</showOnToolBar>
+								<dimensions>
+								<width>700</width>
+								<height>500</height>
+							</dimensions>
 						</component>
 						<component>
 							<title>Account Administrators</title>
