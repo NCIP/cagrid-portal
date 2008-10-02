@@ -93,7 +93,7 @@
     </bean>
 
     <bean id="pingDiagnosticService" class="gov.nih.nci.cagrid.portal.portlet.diagnostics.PingDiagnosticService">
-        <property name="serviceStatusProvider" ref="wsdlServiceStatusProvider"/>
+        <property name="serviceStatusProvider" ref="pingServiceStatusProvider"/>
     </bean>
 
 
