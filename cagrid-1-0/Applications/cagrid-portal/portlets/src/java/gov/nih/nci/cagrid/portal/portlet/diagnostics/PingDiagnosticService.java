@@ -15,6 +15,7 @@ import org.directwebremoting.spring.SpringCreator;
                 value = "pingDiagnosticService"))
 public class PingDiagnosticService extends StatusDiagnosticService {
 
+    
     @Override
     public DiagnosticResult diagnoseInternal(String Url) throws Exception {
         DiagnosticResult _result = super.diagnoseInternal(Url);
@@ -24,7 +25,7 @@ public class PingDiagnosticService extends StatusDiagnosticService {
             _result.setMessage("Sucessfully pinged service");
         else {
             _result.setMessage("Failed to PING service");
-            _result.setDetail("Failed to retreive a <b>valid</b> service WSDL from <i><b>" + Url + "?wsdl </i></b><br/> Please make sure that the URL is correct and is reachable from the internet.");
+            _result.setDetail("Could not reach <br><i><b>" + Url + "</i></b><br/> or its not a valid caGrid Service. Please make sure that the URL is correct and is reachable from the internet.");
         }
 
         return _result;
