@@ -3,11 +3,12 @@ package org.cagrid.gaards.ui.common;
 import gov.nih.nci.cagrid.common.Utils;
 
 import java.awt.Font;
-import java.awt.GridBagLayout;
-import javax.swing.JPanel;
-import javax.swing.JLabel;
 import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.Insets;
+
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 public class TitlePanel extends JPanel {
 

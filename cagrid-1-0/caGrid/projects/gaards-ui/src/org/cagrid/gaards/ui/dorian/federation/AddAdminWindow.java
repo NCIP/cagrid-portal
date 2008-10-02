@@ -33,8 +33,6 @@ public class AddAdminWindow extends JDialog {
 
 	private JButton addAdminButton = null;
 
-	private JButton cancelButton = null;
-
 	private JLabel jLabel = null;
 
 	private JTextField serviceURI = null;
@@ -170,7 +168,6 @@ public class AddAdminWindow extends JDialog {
 			buttonPanel = new JPanel();
 			buttonPanel.setLayout(new FlowLayout());
 			buttonPanel.add(getAddAdminButton(), null);
-			buttonPanel.add(getCancelButton(), null);
 		}
 		return buttonPanel;
 	}
@@ -185,7 +182,6 @@ public class AddAdminWindow extends JDialog {
 		if (addAdminButton == null) {
 			addAdminButton = new JButton();
 			addAdminButton.setText("Add Admin");
-			addAdminButton.setIcon(LookAndFeel.getAddIcon());
 			addAdminButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					Runner runner = new Runner() {
@@ -216,26 +212,6 @@ public class AddAdminWindow extends JDialog {
 			ErrorDialog.showError(e);
 			addAdminButton.setEnabled(true);
 		}
-	}
-
-
-	/**
-	 * This method initializes cancelButton
-	 * 
-	 * @return javax.swing.JButton
-	 */
-	private JButton getCancelButton() {
-		if (cancelButton == null) {
-			cancelButton = new JButton();
-			cancelButton.setText("Cancel");
-			cancelButton.setIcon(LookAndFeel.getCloseIcon());
-			cancelButton.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					dispose();
-				}
-			});
-		}
-		return cancelButton;
 	}
 
 
@@ -325,7 +301,6 @@ public class AddAdminWindow extends JDialog {
 		if (findUserButton == null) {
 			findUserButton = new JButton();
 			findUserButton.setText("Find...");
-			findUserButton.setIcon(LookAndFeel.getQueryIcon());
 			findUserButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					FindUserDialog dialog = new FindUserDialog();

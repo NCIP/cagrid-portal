@@ -61,7 +61,7 @@ public class AdministratorsWindow extends ApplicationComponent {
 
 	private JProgressBar progress = null;
 
-	private JButton removeTrustedIdPButton = null;
+	private JButton removeAdmin = null;
 
 	private JButton addAdmin = null;
 
@@ -184,7 +184,7 @@ public class AdministratorsWindow extends ApplicationComponent {
 			buttonPanel = new JPanel();
 			buttonPanel.add(getViewEditAdmin(), null);
 			buttonPanel.add(getAddAdmin(), null);
-			buttonPanel.add(getRemoveTrustedIdPButton(), null);
+			buttonPanel.add(getRemoveAdmin(), null);
 		}
 		return buttonPanel;
 	}
@@ -223,7 +223,6 @@ public class AdministratorsWindow extends ApplicationComponent {
 		if (viewEditAdmin == null) {
 			viewEditAdmin = new JButton();
 			viewEditAdmin.setText("View/Edit Admin");
-			viewEditAdmin.setIcon(DorianLookAndFeel.getAdminIcon());
 			viewEditAdmin
 					.addActionListener(new java.awt.event.ActionListener() {
 						public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -322,7 +321,6 @@ public class AdministratorsWindow extends ApplicationComponent {
 		if (query == null) {
 			query = new JButton();
 			query.setText("List Administrators");
-			query.setIcon(LookAndFeel.getQueryIcon());
 			query.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					Runner runner = new Runner() {
@@ -432,11 +430,11 @@ public class AdministratorsWindow extends ApplicationComponent {
 	 * 
 	 * @return javax.swing.JButton
 	 */
-	private JButton getRemoveTrustedIdPButton() {
-		if (removeTrustedIdPButton == null) {
-			removeTrustedIdPButton = new JButton();
-			removeTrustedIdPButton.setText("Remove Admin");
-			removeTrustedIdPButton
+	private JButton getRemoveAdmin() {
+		if (removeAdmin == null) {
+			removeAdmin = new JButton();
+			removeAdmin.setText("Remove Admin");
+			removeAdmin
 					.addActionListener(new java.awt.event.ActionListener() {
 						public void actionPerformed(java.awt.event.ActionEvent e) {
 							Runner runner = new Runner() {
@@ -452,9 +450,8 @@ public class AdministratorsWindow extends ApplicationComponent {
 							}
 						}
 					});
-			removeTrustedIdPButton.setIcon(LookAndFeel.getRemoveIcon());
 		}
-		return removeTrustedIdPButton;
+		return removeAdmin;
 	}
 
 	private void removeAdmin() {
@@ -492,7 +489,6 @@ public class AdministratorsWindow extends ApplicationComponent {
 
 				}
 			});
-			addAdmin.setIcon(LookAndFeel.getAddIcon());
 		}
 		return addAdmin;
 	}

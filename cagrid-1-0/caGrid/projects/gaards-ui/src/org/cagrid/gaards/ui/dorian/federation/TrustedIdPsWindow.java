@@ -27,7 +27,7 @@ import org.cagrid.grape.utils.ErrorDialog;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: TrustedIdPsWindow.java,v 1.1 2008-09-16 03:00:07 langella Exp $
+ * @version $Id: TrustedIdPsWindow.java,v 1.2 2008-10-02 20:46:12 langella Exp $
  */
 public class TrustedIdPsWindow extends ApplicationComponent {
 
@@ -178,8 +178,8 @@ public class TrustedIdPsWindow extends ApplicationComponent {
 	private JPanel getButtonPanel() {
 		if (buttonPanel == null) {
 			buttonPanel = new JPanel();
-			buttonPanel.add(getAddUser(), null);
 			buttonPanel.add(getViewTrustedIdP(), null);
+			buttonPanel.add(getAddUser(), null);
 			buttonPanel.add(getRemoveTrustedIdPButton(), null);
 		}
 		return buttonPanel;
@@ -222,8 +222,7 @@ public class TrustedIdPsWindow extends ApplicationComponent {
 	private JButton getViewTrustedIdP() {
 		if (viewTrustedIdP == null) {
 			viewTrustedIdP = new JButton();
-			viewTrustedIdP.setText("View/Edit Trusted IdP");
-			viewTrustedIdP.setIcon(DorianLookAndFeel.getTrustedIdPIcon());
+			viewTrustedIdP.setText("View");
 			viewTrustedIdP
 					.addActionListener(new java.awt.event.ActionListener() {
 						public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -250,8 +249,7 @@ public class TrustedIdPsWindow extends ApplicationComponent {
 		try {
 			GridApplication.getContext()
 					.addApplicationComponent(
-							new TrustedIdPWindow(getSession().getServiceURI(),
-									getSession().getCredential(),
+							new TrustedIdPWindow(getSession().getSession(),
 									getTrustedIdPTable()
 											.getSelectedTrustedIdP(),
 									getUserPolicies()), 750, 650);
@@ -263,8 +261,7 @@ public class TrustedIdPsWindow extends ApplicationComponent {
 	public void addTrustedIdP() {
 		try {
 			GridApplication.getContext().addApplicationComponent(
-					new TrustedIdPWindow(this, getSession().getServiceURI(),
-							getSession().getCredential(), getUserPolicies()));
+					new TrustedIdPWindow(getSession().getSession(), this, getUserPolicies()));
 		} catch (Exception e) {
 			ErrorDialog.showError(e);
 		}
@@ -304,7 +301,6 @@ public class TrustedIdPsWindow extends ApplicationComponent {
 		if (query == null) {
 			query = new JButton();
 			query.setText("Find Trusted Identity Providers");
-			query.setIcon(LookAndFeel.getQueryIcon());
 			query.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					Runner runner = new Runner() {
@@ -421,7 +417,7 @@ public class TrustedIdPsWindow extends ApplicationComponent {
 	private JButton getRemoveTrustedIdPButton() {
 		if (removeTrustedIdPButton == null) {
 			removeTrustedIdPButton = new JButton();
-			removeTrustedIdPButton.setText("Remove TrustedIdP");
+			removeTrustedIdPButton.setText("Remove");
 			removeTrustedIdPButton
 					.addActionListener(new java.awt.event.ActionListener() {
 						public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -438,7 +434,6 @@ public class TrustedIdPsWindow extends ApplicationComponent {
 							}
 						}
 					});
-			removeTrustedIdPButton.setIcon(LookAndFeel.getRemoveIcon());
 		}
 		return removeTrustedIdPButton;
 	}
@@ -462,7 +457,7 @@ public class TrustedIdPsWindow extends ApplicationComponent {
 	private JButton getAddUser() {
 		if (addUser == null) {
 			addUser = new JButton();
-			addUser.setText("Add Trusted IdP");
+			addUser.setText("Add");
 			addUser.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					Runner runner = new Runner() {
@@ -479,7 +474,6 @@ public class TrustedIdPsWindow extends ApplicationComponent {
 
 				}
 			});
-			addUser.setIcon(LookAndFeel.getAddIcon());
 		}
 		return addUser;
 	}
