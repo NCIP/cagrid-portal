@@ -2,7 +2,6 @@ package gov.nih.nci.cagrid.fqp.results.service.globus.resource;
 
 import gov.nih.nci.cagrid.common.FaultHelper;
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.fqp.common.FQPConstants;
 import gov.nih.nci.cagrid.fqp.results.stubs.types.InternalErrorFault;
 import gov.nih.nci.cagrid.fqp.stubs.types.FederatedQueryProcessingFault;
 
@@ -13,8 +12,7 @@ import org.cagrid.fqp.results.metadata.ProcessingStatus;
 import org.cagrid.fqp.results.metadata.ResultsRange;
 import org.cagrid.fqp.results.metadata.ServiceConnectionStatus;
 import org.cagrid.fqp.results.metadata.TargetServiceStatus;
-import org.globus.wsrf.ResourceProperty;
-import org.globus.wsrf.ResourcePropertySet;
+import org.globus.wsrf.ResourceException;
 
 /**
  * Utility for managing the status resource property of the
@@ -27,43 +25,42 @@ import org.globus.wsrf.ResourcePropertySet;
  */
 public class FederatedQueryResultsResourcePropertyManager {
 
-    private ResourcePropertySet resourceProperties = null;
-    private FederatedQueryExecutionStatus executionStatus = null;
+    private FederatedQueryResultsResource managedResource = null;
     
-    public FederatedQueryResultsResourcePropertyManager(ResourcePropertySet resourceProperties) {
-        this.resourceProperties = resourceProperties;
-        this.executionStatus = new FederatedQueryExecutionStatus();
-        storeExecutionStatus();
+    public FederatedQueryResultsResourcePropertyManager(FederatedQueryResultsResource resource) {
+        this.managedResource = resource;
     }
     
     
-    public void setExecutionDetailMessage(String message) {
+    public synchronized void setExecutionDetailMessage(String message) throws ResourceException {
+        FederatedQueryExecutionStatus executionStatus = getExecutionStatus();
         executionStatus.setExecutionDetails(message);
-        storeExecutionStatus();
+        storeExecutionStatus(executionStatus);
     }
     
     
-    public void setProcessingStatus(ProcessingStatus status) {
+    public synchronized void setProcessingStatus(ProcessingStatus status) throws ResourceException {
+        FederatedQueryExecutionStatus executionStatus = getExecutionStatus();
         executionStatus.setCurrentStatus(status);
-        storeExecutionStatus();
+        storeExecutionStatus(executionStatus);
     }
     
     
-    public void setTargetServiceConnectionStatusOk(String serviceURL) throws InternalErrorFault {
+    public synchronized void setTargetServiceConnectionStatusOk(String serviceURL) throws InternalErrorFault, ResourceException {
         TargetServiceStatus status = getTargetServiceStatus(serviceURL);
         status.setConnectionStatus(ServiceConnectionStatus.OK);
-        storeExecutionStatus();
+        storeTargetServiceStatus(status);
     }
     
     
-    public void setTargetServiceConnectionStatusRefused(String serviceURL) throws InternalErrorFault {
+    public synchronized void setTargetServiceConnectionStatusRefused(String serviceURL) throws InternalErrorFault, ResourceException {
         TargetServiceStatus status = getTargetServiceStatus(serviceURL);
         status.setConnectionStatus(ServiceConnectionStatus.Could_Not_Connect);
-        storeExecutionStatus();
+        storeTargetServiceStatus(status);
     }
     
     
-    public void setTargetServiceConnectionStatusException(String serviceURL, Exception ex) throws InternalErrorFault {
+    public synchronized void setTargetServiceConnectionStatusException(String serviceURL, Exception ex) throws InternalErrorFault, ResourceException {
         TargetServiceStatus status = getTargetServiceStatus(serviceURL);
         status.setConnectionStatus(ServiceConnectionStatus.Exception);
         FaultHelper helper = new FaultHelper(new FederatedQueryProcessingFault());
@@ -72,19 +69,20 @@ public class FederatedQueryResultsResourcePropertyManager {
         helper.addFaultCause(ex);
         FederatedQueryProcessingFault fqpFault = (FederatedQueryProcessingFault) helper.getFault();
         status.setBaseFault(fqpFault);
-        storeExecutionStatus();
+        storeTargetServiceStatus(status);
     }
     
     
-    public void setTargetServiceResultsRange(String serviceURL, int lowerIndex, int count) throws InternalErrorFault {
+    public synchronized void setTargetServiceResultsRange(String serviceURL, int lowerIndex, int count) throws InternalErrorFault, ResourceException {
         TargetServiceStatus status = getTargetServiceStatus(serviceURL);
         ResultsRange range = new ResultsRange(lowerIndex, lowerIndex + count);
         status.setResultsRange(range);
-        storeExecutionStatus();
+        storeTargetServiceStatus(status);
     }
     
     
-    private TargetServiceStatus getTargetServiceStatus(String serviceURL) throws InternalErrorFault {
+    private TargetServiceStatus getTargetServiceStatus(String serviceURL) throws InternalErrorFault, ResourceException {
+        FederatedQueryExecutionStatus executionStatus = getExecutionStatus();
         TargetServiceStatus status = null;
         if (executionStatus.getTargetServiceStatus() == null) {
             executionStatus.setTargetServiceStatus(new TargetServiceStatus[0]);
@@ -109,16 +107,37 @@ public class FederatedQueryResultsResourcePropertyManager {
             TargetServiceStatus[] statusArray = 
                 (TargetServiceStatus[]) Utils.appendToArray(executionStatus.getTargetServiceStatus(), status);
             executionStatus.setTargetServiceStatus(statusArray);
-            
         }
         return status;
     }
     
     
-    private void storeExecutionStatus() {
-        ResourceProperty property = resourceProperties.get(FQPConstants.RESULTS_METADATA_QNAME);
-        property.set(0, executionStatus);
-        
-        // store()?
+    private void storeTargetServiceStatus(TargetServiceStatus targetStatus) throws ResourceException {
+        FederatedQueryExecutionStatus executionStatus = getExecutionStatus();
+        if (executionStatus.getTargetServiceStatus() == null || executionStatus.getTargetServiceStatus().length == 0) {
+            executionStatus.setTargetServiceStatus(new TargetServiceStatus[] {targetStatus});
+        } else {
+            for (int i = 0; i < executionStatus.getTargetServiceStatus().length; i++) {
+                if (executionStatus.getTargetServiceStatus()[i].getServiceURL().equals(targetStatus.getServiceURL())) {
+                    executionStatus.setTargetServiceStatus(i, targetStatus);
+                }
+            }
+        }
+        storeExecutionStatus(executionStatus);
+    }
+    
+    
+    private FederatedQueryExecutionStatus getExecutionStatus() throws ResourceException {
+        FederatedQueryExecutionStatus status = managedResource.getFederatedQueryExecutionStatus();
+        if (status == null) {
+            status = new FederatedQueryExecutionStatus();
+            storeExecutionStatus(status);
+        }
+        return managedResource.getFederatedQueryExecutionStatus();
+    }
+    
+    
+    private void storeExecutionStatus(FederatedQueryExecutionStatus executionStatus) throws ResourceException {
+        managedResource.setFederatedQueryExecutionStatus(executionStatus);
     }
 }

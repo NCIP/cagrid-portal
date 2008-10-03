@@ -98,6 +98,7 @@
           <sequence>
             <element ref="ns17:CurrentTime" />
             <element ref="ns17:TerminationTime" />
+            <element ref="ns0:FederatedQueryExecutionStatus" />
           </sequence>
         </complexType>
       </element>

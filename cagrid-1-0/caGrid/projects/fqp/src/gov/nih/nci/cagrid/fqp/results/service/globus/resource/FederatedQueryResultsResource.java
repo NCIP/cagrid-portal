@@ -43,7 +43,8 @@ public class FederatedQueryResultsResource extends FederatedQueryResultsResource
     private QueryExecutionParameters executionParameters;
 
     // result values of this resource
-    private String statusMessage;
+    private String statusMessage = null;
+    private Exception processingException = null;
     private DCQLQueryResultsCollection queryResults = null;
     
     public FederatedQueryResultsResource() {
@@ -55,7 +56,7 @@ public class FederatedQueryResultsResource extends FederatedQueryResultsResource
         QName resourceElementQName,
         Object id) throws ResourceException {
         super.initialize(resourceBean, resourceElementQName, id);
-        resourcePropertyManager = new FederatedQueryResultsResourcePropertyManager(getResourcePropertySet());
+        resourcePropertyManager = new FederatedQueryResultsResourcePropertyManager(this);
     }
     
     
@@ -199,17 +200,25 @@ public class FederatedQueryResultsResource extends FederatedQueryResultsResource
     // ----------------------------
     // things I'm changing around via notification and resource properties
     // ----------------------------
+    
+    
+    public void setStatusMessage(String message) {
+        this.statusMessage = message;
+    }
 
 
     public String getStatusMessage() {
         return this.statusMessage;
     }
     
+    
+    public void setProcessingException(Exception ex) {
+        this.processingException = ex;
+    }
+    
 
     public Exception getProcessingException() {
-        // return this.processingException;
-        // TODO: implement something to gracefully handle exceptions
-        return null;
+        return this.processingException;
     }
     
     
@@ -225,7 +234,9 @@ public class FederatedQueryResultsResource extends FederatedQueryResultsResource
                 try {
                     resourcePropertyManager.setTargetServiceConnectionStatusOk(serviceURL);
                 } catch (InternalErrorFault ex) {
-                    handleError(ex);
+                    handleInternalError(ex);
+                } catch (ResourceException ex) {
+                    handleResourceException(ex);
                 }
             }
             
@@ -234,7 +245,9 @@ public class FederatedQueryResultsResource extends FederatedQueryResultsResource
                 try {
                     resourcePropertyManager.setTargetServiceConnectionStatusRefused(serviceURL);
                 } catch (InternalErrorFault ex) {
-                    handleError(ex);
+                    handleInternalError(ex);
+                } catch (ResourceException ex) {
+                    handleResourceException(ex);
                 }
             }
             
@@ -243,7 +256,9 @@ public class FederatedQueryResultsResource extends FederatedQueryResultsResource
                 try {
                     resourcePropertyManager.setTargetServiceConnectionStatusException(serviceURL, exception);
                 } catch (InternalErrorFault ex) {
-                    handleError(ex);
+                    handleInternalError(ex);
+                } catch (ResourceException ex) {
+                    handleResourceException(ex);
                 }
             }
             
@@ -253,14 +268,22 @@ public class FederatedQueryResultsResource extends FederatedQueryResultsResource
                     resourcePropertyManager.setExecutionDetailMessage("Invalid result returned from target data service " + serviceURL);
                     resourcePropertyManager.setTargetServiceConnectionStatusException(serviceURL, exception);
                 } catch (InternalErrorFault ex) {
-                    handleError(ex);
+                    handleInternalError(ex);
+                } catch (ResourceException ex) {
+                    handleResourceException(ex);
                 }
             }
             
             
-            private void handleError(InternalErrorFault ex) {
+            private void handleInternalError(InternalErrorFault ex) {
                 ex.printStackTrace();
-                // TODO: handle exception
+                setProcessingException(ex);
+            }
+            
+            
+            private void handleResourceException(ResourceException ex) {
+                ex.printStackTrace();
+                setProcessingException(ex);
             }
             
             

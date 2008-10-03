@@ -11,5 +11,6 @@ public interface FederatedQueryResultsConstants {
 	//Service level metadata (exposed as resouce properties)
 	public static final QName CURRENTTIME = new QName("http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.xsd", "CurrentTime");
 	public static final QName TERMINATIONTIME = new QName("http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.xsd", "TerminationTime");
+	public static final QName FEDERATEDQUERYEXECUTIONSTATUS = new QName("http://fqp.cagrid.nci.nih.gov/FederatedQueryResultsMetadata", "FederatedQueryExecutionStatus");
 	
 }

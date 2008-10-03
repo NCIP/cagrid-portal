@@ -192,6 +192,19 @@ public abstract class FederatedQueryResultsResourceBase extends ReflectionResour
 
 
 	    //Getters/Setters for ResourceProperties
+	
+	
+	public org.cagrid.fqp.results.metadata.FederatedQueryExecutionStatus getFederatedQueryExecutionStatus(){
+		return ((FederatedQueryResultsResourceProperties) getResourceBean()).getFederatedQueryExecutionStatus();
+	}
+	
+	public void setFederatedQueryExecutionStatus(org.cagrid.fqp.results.metadata.FederatedQueryExecutionStatus federatedQueryExecutionStatus ) throws ResourceException {
+        ResourceProperty prop = getResourcePropertySet().get(FederatedQueryResultsConstants.FEDERATEDQUERYEXECUTIONSTATUS);
+		prop.set(0, federatedQueryExecutionStatus);
+        //call the first store to persist the resource
+        store();
+	}
+	
 
 
 	
