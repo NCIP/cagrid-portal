@@ -17,9 +17,9 @@ public class FederationUtils {
 
 	public static Date getMaxProxyLifetime(IdentityFederationProperties conf) {
 		Calendar c = new GregorianCalendar();
-		c.add(Calendar.HOUR_OF_DAY, conf.getMaxProxyLifetime().getHours());
-		c.add(Calendar.MINUTE, conf.getMaxProxyLifetime().getMinutes());
-		c.add(Calendar.SECOND, conf.getMaxProxyLifetime().getSeconds());
+		c.add(Calendar.HOUR_OF_DAY, conf.getUserCertificateLifetime().getHours());
+		c.add(Calendar.MINUTE, conf.getUserCertificateLifetime().getMinutes());
+		c.add(Calendar.SECOND, conf.getUserCertificateLifetime().getSeconds());
 		return c.getTime();
 	}
 

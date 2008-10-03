@@ -22,7 +22,7 @@ public class IdentityFederationProperties {
     private int maxIdPDisplayNameLength;
 	private Lifetime issuedCertificateLifetime;
 	private boolean autoHostCertificateApproval;
-	private Lifetime maxProxyLifetime;
+	private Lifetime userCertificateLifetime;
 	private List<AccountPolicy> accountPolicies;
 	private List<String> gtsPublishCRLList;
 
@@ -35,8 +35,8 @@ public class IdentityFederationProperties {
 		this.issuedCertificateLifetime = new Lifetime();
 		this.issuedCertificateLifetime.setYears(1);
 		this.autoHostCertificateApproval = false;
-		this.maxProxyLifetime = new Lifetime();
-		this.maxProxyLifetime.setHours(12);
+		this.userCertificateLifetime = new Lifetime();
+		this.userCertificateLifetime.setHours(12);
 		this.accountPolicies = new ArrayList<AccountPolicy>();
 		this.accountPolicies.add(new ManualApprovalPolicy());
 		this.gtsPublishCRLList = new ArrayList<String>();
@@ -126,21 +126,21 @@ public class IdentityFederationProperties {
 		this.autoHostCertificateApproval = autoCertificateApproval;
 	}
 
-	public Lifetime getMaxProxyLifetime() {
-		return maxProxyLifetime;
+	public Lifetime getUserCertificateLifetime() {
+		return userCertificateLifetime;
 	}
 
-	public void setMaxProxyLifetime(Lifetime maxProxyLifetime)
+	public void setUserCertificateLifetime(Lifetime maxProxyLifetime)
 			throws DorianInternalFault {
-		if ((this.maxProxyLifetime.getYears() != 0)
-				|| (this.maxProxyLifetime.getMonths() != 0)
-				|| (this.maxProxyLifetime.getDays() != 0)) {
+		if ((this.userCertificateLifetime.getYears() != 0)
+				|| (this.userCertificateLifetime.getMonths() != 0)
+				|| (this.userCertificateLifetime.getDays() != 0)) {
 			DorianInternalFault f = new DorianInternalFault();
 			f
 					.setFaultString("The max proxy lifetime configuration cannot specify years, months, or days.");
 			throw f;
 		}
-		this.maxProxyLifetime = maxProxyLifetime;
+		this.userCertificateLifetime = maxProxyLifetime;
 	}
 
 	public List<AccountPolicy> getAccountPolicies() {

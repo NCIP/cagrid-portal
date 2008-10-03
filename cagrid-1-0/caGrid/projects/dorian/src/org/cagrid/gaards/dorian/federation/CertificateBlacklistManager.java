@@ -23,10 +23,10 @@ public class CertificateBlacklistManager {
 	public static final String ACCOUNT_DELETED = "ACCOUNT DELETED";
 	public static final String COMPROMISED = "COMPROMISED";
 	public static final String TABLE = "certificate_blacklist";
-	private static final String SERIAL = "SERIAL_NUMBER";
-	private static final String SUBJECT = "SUBJECT";
-	private static final String REASON = "REASON";
-	private static final String CERTIFICATE = "CERTIFICATE";
+	public static final String SERIAL = "SERIAL_NUMBER";
+	public static final String SUBJECT = "SUBJECT";
+	public static final String REASON = "REASON";
+	public static final String CERTIFICATE = "CERTIFICATE";
 
 	private boolean dbBuilt = false;
 	private Database db;
@@ -179,7 +179,7 @@ public class CertificateBlacklistManager {
 
 					String certificates = "CREATE TABLE " + TABLE + " ("
 							+ SERIAL + " BIGINT PRIMARY KEY," + SUBJECT
-							+ " VARCHAR(255)," + REASON
+							+ " TEXT NOT NULL," + REASON
 							+ " VARCHAR(255) NOT NULL," + CERTIFICATE
 							+ " TEXT," + "INDEX document_index (" + SERIAL
 							+ "));";

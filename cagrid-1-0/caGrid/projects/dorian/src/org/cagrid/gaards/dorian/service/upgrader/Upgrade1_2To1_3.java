@@ -8,9 +8,12 @@ import org.cagrid.gaards.dorian.ca.CredentialsManager;
 import org.cagrid.gaards.dorian.ca.DBCertificateAuthority;
 import org.cagrid.gaards.dorian.ca.EracomCertificateAuthority;
 import org.cagrid.gaards.dorian.federation.AutoApprovalPolicy;
+import org.cagrid.gaards.dorian.federation.CertificateBlacklistManager;
+import org.cagrid.gaards.dorian.federation.HostCertificateManager;
 import org.cagrid.gaards.dorian.federation.ManualApprovalPolicy;
 import org.cagrid.gaards.dorian.federation.TrustedIdP;
 import org.cagrid.gaards.dorian.federation.TrustedIdPManager;
+import org.cagrid.gaards.dorian.federation.UserManager;
 import org.cagrid.gaards.dorian.idp.PasswordSecurityManager;
 import org.cagrid.gaards.dorian.service.PropertyManager;
 import org.cagrid.tools.database.Database;
@@ -25,6 +28,105 @@ public class Upgrade1_2To1_3 extends Upgrade {
 
     public String getUpgradedVersion() {
         return PropertyManager.DORIAN_VERSION_1_3;
+    }
+
+
+    private void upgradeBlacklistManager(boolean trialRun) throws Exception {
+        Database db = getBeanUtils().getDatabase();
+        CertificateBlacklistManager bm = new CertificateBlacklistManager(db);
+        if (!trialRun) {
+            bm.buildDatabase();
+        }
+        Connection c = null;
+        try {
+            if (!trialRun) {
+                System.out.print("Updating the Certificate Blacklist field " + CertificateBlacklistManager.SUBJECT
+                    + " from VARCHAR to TEXT....");
+                c = db.getConnection();
+                PreparedStatement s = c.prepareStatement("ALTER TABLE " + CertificateBlacklistManager.SUBJECT
+                    + " MODIFY " + CertificateBlacklistManager.SUBJECT + " TEXT NOT NULL");
+                s.execute();
+                s.close();
+                System.out.println(" COMPLETED.");
+            } else {
+                System.out.print("The Certificate Blacklist field " + CertificateBlacklistManager.SUBJECT
+                    + " needs to be updated from from VARCHAR to TEXT.");
+            }
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            db.releaseConnection(c);
+        }
+    }
+
+    private void upgradeGridUserManager(boolean trialRun) throws Exception {
+        Database db = getBeanUtils().getDatabase();
+        if (db.tableExists(UserManager.USERS_TABLE)) {
+
+            Connection c = null;
+            try {
+                if (!trialRun) {
+                    System.out.print("Updating the grid user field " + UserManager.GID_FIELD
+                        + " from VARCHAR to TEXT....");
+                    c = db.getConnection();
+                    PreparedStatement s = c.prepareStatement("ALTER TABLE " + UserManager.USERS_TABLE
+                        + " MODIFY " +UserManager.GID_FIELD + " TEXT NOT NULL");
+                    s.execute();
+                    s.close();
+                    System.out.println(" COMPLETED.");
+                } else {
+                    System.out.print("The grid user field " + UserManager.GID_FIELD
+                        + " needs to be updated from from VARCHAR to TEXT.");
+                }
+                
+              
+            } catch (Exception e) {
+                throw e;
+            } finally {
+                db.releaseConnection(c);
+            }
+        }
+    }
+
+
+    private void upgradeHostCertificateManager(boolean trialRun) throws Exception {
+        Database db = getBeanUtils().getDatabase();
+        if (db.tableExists(HostCertificateManager.TABLE)) {
+
+            Connection c = null;
+            try {
+                if (!trialRun) {
+                    System.out.print("Updating the host certificate field " + HostCertificateManager.SUBJECT
+                        + " from VARCHAR to TEXT....");
+                    c = db.getConnection();
+                    PreparedStatement s = c.prepareStatement("ALTER TABLE " + HostCertificateManager.TABLE
+                        + " MODIFY " + HostCertificateManager.SUBJECT + " TEXT NOT NULL");
+                    s.execute();
+                    s.close();
+                    System.out.println(" COMPLETED.");
+                } else {
+                    System.out.print("The host certificate field " + HostCertificateManager.SUBJECT
+                        + " needs to be updated from from VARCHAR to TEXT.");
+                }
+                
+                if (!trialRun) {
+                    System.out.print("Updating the host certificate field " + HostCertificateManager.OWNER
+                        + " from VARCHAR to TEXT....");
+                    PreparedStatement s = c.prepareStatement("ALTER TABLE " + HostCertificateManager.TABLE
+                        + " MODIFY " + HostCertificateManager.OWNER + " TEXT NOT NULL");
+                    s.execute();
+                    s.close();
+                    System.out.println(" COMPLETED.");
+                } else {
+                    System.out.print("The host certificate field " + HostCertificateManager.OWNER
+                        + " needs to be updated from from VARCHAR to TEXT.");
+                }
+            } catch (Exception e) {
+                throw e;
+            } finally {
+                db.releaseConnection(c);
+            }
+        }
     }
 
 
@@ -250,7 +352,8 @@ public class Upgrade1_2To1_3 extends Upgrade {
             db.releaseConnection(c);
         }
     }
-    
+
+
     private void clearEracomHybridCertificateAuthority() throws Exception {
         Database db = getBeanUtils().getDatabase();
         Connection c = null;
@@ -301,7 +404,7 @@ public class Upgrade1_2To1_3 extends Upgrade {
                 System.out.println("Long term user credentials need to be deleted from the DB CA.");
             }
         }
-        
+
         if (clearEracomHybridCA) {
             if (!trialRun) {
                 System.out.print("Deleting long term user credentials from the Eracom Hybrid CA....");
@@ -331,6 +434,9 @@ public class Upgrade1_2To1_3 extends Upgrade {
             upgradeCertificateAuthority(pm, trialRun);
             upgradePasswordSecurity(trialRun);
             upgradeTrustedIdentityProviders(trialRun);
+            upgradeBlacklistManager(trialRun);
+            upgradeHostCertificateManager(trialRun);
+            upgradeGridUserManager(trialRun);
         } else {
             if (!trialRun) {
                 throw new Exception("Failed to run upgrader " + getClass().getName()

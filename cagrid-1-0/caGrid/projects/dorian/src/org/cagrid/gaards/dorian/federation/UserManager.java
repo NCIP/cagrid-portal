@@ -35,6 +35,20 @@ public class UserManager extends LoggingObject {
 
     public static final String USERS_TABLE = "ifs_users";
 
+    public static final String GID_FIELD = "GID";
+
+    public static final String IDP_FIELD = "IDP_ID";
+
+    public static final String UID_FIELD = "UID";
+
+    public static final String STATUS_FIELD = "STATUS";
+
+    public static final String FIRST_NAME_FIELD = "FIRST_NAME";
+
+    public static final String LAST_NAME_FIELD = "LAST_NAME";
+
+    public static final String EMAIL_FIELD = "EMAIL";
+
     private Database db;
 
     private boolean dbBuilt = false;
@@ -76,8 +90,8 @@ public class UserManager extends LoggingObject {
         boolean exists = false;
         try {
             c = db.getConnection();
-            PreparedStatement s = c.prepareStatement("select count(*) from " + USERS_TABLE
-                + " WHERE IDP_ID= ? AND UID= ?");
+            PreparedStatement s = c.prepareStatement("select count(*) from " + USERS_TABLE + " WHERE " + IDP_FIELD
+                + "= ? AND " + UID_FIELD + "= ?");
             s.setLong(1, idpId);
             s.setString(2, uid);
 
@@ -131,28 +145,29 @@ public class UserManager extends LoggingObject {
         Connection c = null;
         try {
             c = db.getConnection();
-            PreparedStatement s = c.prepareStatement("select * from " + USERS_TABLE + " WHERE IDP_ID= ? AND UID= ?");
+            PreparedStatement s = c.prepareStatement("select * from " + USERS_TABLE + " WHERE " + IDP_FIELD
+                + "= ? AND " + UID_FIELD + "= ?");
             s.setLong(1, idpId);
             s.setString(2, uid);
             ResultSet rs = s.executeQuery();
             if (rs.next()) {
-                user.setIdPId(rs.getLong("IDP_ID"));
-                user.setUID(rs.getString("UID"));
-                user.setGridId(rs.getString("GID"));
-                String firstName = rs.getString("FIRST_NAME");
+                user.setIdPId(rs.getLong(IDP_FIELD));
+                user.setUID(rs.getString(UID_FIELD));
+                user.setGridId(rs.getString(GID_FIELD));
+                String firstName = rs.getString(FIRST_NAME_FIELD);
                 if ((firstName != null) && (!firstName.equalsIgnoreCase("null"))) {
                     user.setFirstName(firstName);
                 }
 
-                String lastName = rs.getString("LAST_NAME");
+                String lastName = rs.getString(LAST_NAME_FIELD);
                 if ((lastName != null) && (!lastName.equalsIgnoreCase("null"))) {
                     user.setLastName(lastName);
                 }
-                String email = rs.getString("EMAIL");
+                String email = rs.getString(EMAIL_FIELD);
                 if ((email != null) && (!email.equals("null"))) {
                     user.setEmail(email);
                 }
-                user.setUserStatus(GridUserStatus.fromValue(rs.getString("STATUS")));
+                user.setUserStatus(GridUserStatus.fromValue(rs.getString(STATUS_FIELD)));
             } else {
                 InvalidUserFault fault = new InvalidUserFault();
                 fault.setFaultString("No such user " + getCredentialsManagerUID(user.getIdPId(), user.getUID()));
@@ -185,27 +200,27 @@ public class UserManager extends LoggingObject {
         Connection c = null;
         try {
             c = db.getConnection();
-            PreparedStatement s = c.prepareStatement("select * from " + USERS_TABLE + " WHERE GID= ?");
+            PreparedStatement s = c.prepareStatement("select * from " + USERS_TABLE + " WHERE " + GID_FIELD + "= ?");
             s.setString(1, gridId);
             ResultSet rs = s.executeQuery();
             if (rs.next()) {
-                user.setIdPId(rs.getLong("IDP_ID"));
-                user.setUID(rs.getString("UID"));
-                user.setGridId(rs.getString("GID"));
-                String firstName = rs.getString("FIRST_NAME");
+                user.setIdPId(rs.getLong(IDP_FIELD));
+                user.setUID(rs.getString(UID_FIELD));
+                user.setGridId(rs.getString(GID_FIELD));
+                String firstName = rs.getString(FIRST_NAME_FIELD);
                 if ((firstName != null) && (!firstName.equalsIgnoreCase("null"))) {
                     user.setFirstName(firstName);
                 }
 
-                String lastName = rs.getString("LAST_NAME");
+                String lastName = rs.getString(LAST_NAME_FIELD);
                 if ((lastName != null) && (!lastName.equalsIgnoreCase("null"))) {
                     user.setLastName(lastName);
                 }
-                String email = rs.getString("EMAIL");
+                String email = rs.getString(EMAIL_FIELD);
                 if ((email != null) && (!email.equalsIgnoreCase("null"))) {
                     user.setEmail(email);
                 }
-                user.setUserStatus(GridUserStatus.fromValue(rs.getString("STATUS")));
+                user.setUserStatus(GridUserStatus.fromValue(rs.getString(STATUS_FIELD)));
             } else {
                 InvalidUserFault fault = new InvalidUserFault();
                 fault.setFaultString("No such user " + gridId);
@@ -240,10 +255,10 @@ public class UserManager extends LoggingObject {
             c = db.getConnection();
             PreparedStatement s = null;
             if (filter != null) {
-                s = c
-                    .prepareStatement("select * from  "
-                        + USERS_TABLE
-                        + " WHERE IDP_ID>= ? AND IDP_ID<= ? AND UID LIKE ? AND GID LIKE ? AND STATUS LIKE ? AND FIRST_NAME LIKE ? AND LAST_NAME LIKE ? AND EMAIL LIKE ?");
+                s = c.prepareStatement("select * from  " + USERS_TABLE + " WHERE " + IDP_FIELD + ">= ? AND "
+                    + IDP_FIELD + "<= ? AND " + UID_FIELD + " LIKE ? AND " + GID_FIELD + " LIKE ? AND " + STATUS_FIELD
+                    + " LIKE ? AND " + FIRST_NAME_FIELD + " LIKE ? AND " + LAST_NAME_FIELD + " LIKE ? AND "
+                    + EMAIL_FIELD + " LIKE ?");
 
                 if (filter.getIdPId() > 0) {
                     s.setLong(1, filter.getIdPId());
@@ -295,23 +310,23 @@ public class UserManager extends LoggingObject {
             ResultSet rs = s.executeQuery();
             while (rs.next()) {
                 GridUser user = new GridUser();
-                user.setIdPId(rs.getLong("IDP_ID"));
-                user.setUID(rs.getString("UID"));
-                user.setGridId(rs.getString("GID"));
-                String firstName = rs.getString("FIRST_NAME");
+                user.setIdPId(rs.getLong(IDP_FIELD));
+                user.setUID(rs.getString(UID_FIELD));
+                user.setGridId(rs.getString(GID_FIELD));
+                String firstName = rs.getString(FIRST_NAME_FIELD);
                 if ((firstName != null) && (!firstName.equalsIgnoreCase("null"))) {
                     user.setFirstName(firstName);
                 }
 
-                String lastName = rs.getString("LAST_NAME");
+                String lastName = rs.getString(LAST_NAME_FIELD);
                 if ((lastName != null) && (!lastName.equalsIgnoreCase("null"))) {
                     user.setLastName(lastName);
                 }
-                String email = rs.getString("EMAIL");
+                String email = rs.getString(EMAIL_FIELD);
                 if ((email != null) && (!email.equals("null"))) {
                     user.setEmail(email);
                 }
-                user.setUserStatus(GridUserStatus.fromValue(rs.getString("STATUS")));
+                user.setUserStatus(GridUserStatus.fromValue(rs.getString(STATUS_FIELD)));
                 users.add(user);
             }
             rs.close();
@@ -355,12 +370,13 @@ public class UserManager extends LoggingObject {
                     throw fault;
                 }
                 validateSpecifiedField("UID", user.getUID());
-                validateSpecifiedField("Grid Id", user.getGridId());
+                validateSpecifiedField("Grid Id", user.getGridId(), false);
                 validateSpecifiedField("First Name", user.getFirstName());
                 validateSpecifiedField("Last Name", user.getLastName());
                 c = db.getConnection();
-                PreparedStatement s = c.prepareStatement("INSERT INTO " + USERS_TABLE
-                    + " SET IDP_ID= ?,UID= ?,GID= ?, STATUS=?, FIRST_NAME=?, LAST_NAME= ?, EMAIL=?");
+                PreparedStatement s = c.prepareStatement("INSERT INTO " + USERS_TABLE + " SET " + IDP_FIELD + "= ?,"
+                    + UID_FIELD + "= ?," + GID_FIELD + "= ?, " + STATUS_FIELD + "=?, " + FIRST_NAME_FIELD + "=?, "
+                    + LAST_NAME_FIELD + "= ?, EMAIL=?");
                 s.setLong(1, user.getIdPId());
                 s.setString(2, user.getUID());
                 s.setString(3, user.getGridId());
@@ -464,8 +480,9 @@ public class UserManager extends LoggingObject {
                 }
 
                 c = db.getConnection();
-                PreparedStatement s = c.prepareStatement("UPDATE " + USERS_TABLE
-                    + " SET STATUS=?, FIRST_NAME=?, LAST_NAME= ?, EMAIL=? where IDP_ID= ? AND UID= ?");
+                PreparedStatement s = c.prepareStatement("UPDATE " + USERS_TABLE + " SET " + STATUS_FIELD + "=?, "
+                    + FIRST_NAME_FIELD + "=?, " + LAST_NAME_FIELD + "= ?, " + EMAIL_FIELD + "=? where " + IDP_FIELD
+                    + "= ? AND " + UID_FIELD + "= ?");
                 s.setString(1, curr.getUserStatus().getValue());
                 s.setString(2, curr.getFirstName());
                 s.setString(3, curr.getLastName());
@@ -527,7 +544,8 @@ public class UserManager extends LoggingObject {
         Connection c = null;
         try {
             c = db.getConnection();
-            PreparedStatement s = c.prepareStatement("delete from " + USERS_TABLE + " WHERE IDP_ID= ? AND UID= ?");
+            PreparedStatement s = c.prepareStatement("delete from " + USERS_TABLE + " WHERE " + IDP_FIELD + "= ? AND "
+                + UID_FIELD + "= ?");
             s.setLong(1, idpId);
             s.setString(2, uid);
             s.execute();
@@ -545,15 +563,22 @@ public class UserManager extends LoggingObject {
     }
 
 
-    private void validateSpecifiedField(String type, String name) throws InvalidUserFault {
+    private void validateSpecifiedField(String type, String name, boolean validateLength) throws InvalidUserFault {
         name = Utils.clean(name);
         if (name == null) {
             throw new IllegalArgumentException("No " + type + " specified.");
         }
-        if (name.length() > 255) {
-            throw new IllegalArgumentException("The " + type
-                + " specified is too long, it must be less than 255 characters.");
+        if (validateLength) {
+            if (name.length() > 255) {
+                throw new IllegalArgumentException("The " + type
+                    + " specified is too long, it must be less than 255 characters.");
+            }
         }
+    }
+
+
+    private void validateSpecifiedField(String type, String name) throws InvalidUserFault {
+        validateSpecifiedField(type, name, true);
     }
 
 
@@ -578,11 +603,11 @@ public class UserManager extends LoggingObject {
         if (!dbBuilt) {
             try {
                 if (!this.db.tableExists(USERS_TABLE)) {
-                    String users = "CREATE TABLE " + USERS_TABLE + " (" + "IDP_ID INT NOT NULL,"
-                        + "UID VARCHAR(255) NOT NULL," + "FIRST_NAME VARCHAR(255) NOT NULL,"
-                        + "LAST_NAME VARCHAR(255) NOT NULL," + "GID VARCHAR(255) NOT NULL,"
-                        + "STATUS VARCHAR(50) NOT NULL," + "EMAIL VARCHAR(255) NOT NULL, "
-                        + "INDEX document_index (UID));";
+                    String users = "CREATE TABLE " + USERS_TABLE + " (" + IDP_FIELD + " INT NOT NULL," + UID_FIELD
+                        + " VARCHAR(255) NOT NULL," + FIRST_NAME_FIELD + " VARCHAR(255) NOT NULL," + LAST_NAME_FIELD
+                        + " VARCHAR(255) NOT NULL," + GID_FIELD + " TEXT NOT NULL," + STATUS_FIELD
+                        + " VARCHAR(50) NOT NULL," + EMAIL_FIELD + " VARCHAR(255) NOT NULL, "
+                        + "INDEX document_index (" + UID_FIELD + "));";
                     db.update(users);
                     properties.setCurrentVersion();
                     try {
@@ -647,11 +672,12 @@ public class UserManager extends LoggingObject {
             Statement s = c.createStatement();
 
             StringBuffer sql = new StringBuffer();
-            sql.append("select GID from " + USERS_TABLE + " WHERE STATUS='" + GridUserStatus.Suspended
-                + "' OR STATUS='" + GridUserStatus.Pending + "' OR STATUS='" + GridUserStatus.Rejected + "'");
+            sql.append("select " + GID_FIELD + " from " + USERS_TABLE + " WHERE " + STATUS_FIELD + "='"
+                + GridUserStatus.Suspended + "' OR " + STATUS_FIELD + "='" + GridUserStatus.Pending + "' OR "
+                + STATUS_FIELD + "='" + GridUserStatus.Rejected + "'");
             ResultSet rs = s.executeQuery(sql.toString());
             while (rs.next()) {
-                String gid = (rs.getString("GID"));
+                String gid = (rs.getString(GID_FIELD));
                 if (!users.contains(gid)) {
                     users.add(gid);
                 }
@@ -665,10 +691,11 @@ public class UserManager extends LoggingObject {
                 for (int i = 0; i < idp.length; i++) {
                     Statement stmt = c.createStatement();
                     StringBuffer sb = new StringBuffer();
-                    sb.append("select GID from " + USERS_TABLE + " WHERE IDP_ID=" + idp[i].getId());
+                    sb.append("select " + GID_FIELD + " from " + USERS_TABLE + " WHERE " + IDP_FIELD + "="
+                        + idp[i].getId());
                     ResultSet result = stmt.executeQuery(sb.toString());
                     while (result.next()) {
-                        String gid = result.getString("GID");
+                        String gid = result.getString(GID_FIELD);
                         if (!users.contains(gid)) {
                             users.add(gid);
                         }

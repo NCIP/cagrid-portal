@@ -491,8 +491,8 @@ public class IdentityFederationManager extends LoggingObject implements Publishe
         if (FederationUtils.getProxyValid(lifetime).after(FederationUtils.getMaxProxyLifetime(conf))) {
             UserPolicyFault fault = new UserPolicyFault();
             fault.setFaultString("The requested certificate lifetime exceeds the maximum certificate lifetime (hrs="
-                + conf.getMaxProxyLifetime().getHours() + ", mins=" + conf.getMaxProxyLifetime().getMinutes()
-                + ", sec=" + conf.getMaxProxyLifetime().getSeconds() + ")");
+                + conf.getUserCertificateLifetime().getHours() + ", mins=" + conf.getUserCertificateLifetime().getMinutes()
+                + ", sec=" + conf.getUserCertificateLifetime().getSeconds() + ")");
             throw fault;
         }
 

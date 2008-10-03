@@ -29,15 +29,15 @@ import org.cagrid.tools.database.Database;
 public class HostCertificateManager extends LoggingObject {
 
 	public static final String TABLE = "host_certificates";
-	private static final String ID = "ID";
-	private static final String SERIAL = "SERIAL_NUMBER";
-	private static final String HOST = "HOST";
-	private static final String SUBJECT = "SUBJECT";
-	private static final String STATUS = "STATUS";
-	private static final String OWNER = "OWNER";
-	private static final String CERTIFICATE = "CERTIFICATE";
-	private static final String PUBLIC_KEY = "PUBLIC_KEY";
-	private static final String EXPIRATION = "EXPIRATION";
+	public static final String ID = "ID";
+	public static final String SERIAL = "SERIAL_NUMBER";
+	public static final String HOST = "HOST";
+	public static final String SUBJECT = "SUBJECT";
+	public static final String STATUS = "STATUS";
+	public static final String OWNER = "OWNER";
+	public static final String CERTIFICATE = "CERTIFICATE";
+	public static final String PUBLIC_KEY = "PUBLIC_KEY";
+	public static final String EXPIRATION = "EXPIRATION";
 
 	private boolean dbBuilt = false;
 	private Database db;
@@ -733,8 +733,8 @@ public class HostCertificateManager extends LoggingObject {
 
 					String certificates = "CREATE TABLE " + TABLE + " (" + ID
 						+ " INT NOT NULL AUTO_INCREMENT PRIMARY KEY," + SERIAL + " BIGINT," + HOST
-						+ " VARCHAR(255) NOT NULL," + SUBJECT + " VARCHAR(255)," + STATUS + " VARCHAR(15) NOT NULL,"
-						+ OWNER + " VARCHAR(255) NOT NULL," + EXPIRATION + " BIGINT," + CERTIFICATE + " TEXT,"
+						+ " VARCHAR(255) NOT NULL," + SUBJECT + " TEXT," + STATUS + " VARCHAR(15) NOT NULL,"
+						+ OWNER + " TEXT NOT NULL," + EXPIRATION + " BIGINT," + CERTIFICATE + " TEXT,"
 						+ PUBLIC_KEY + " TEXT NOT NULL, " + "INDEX document_index (ID));";
 					db.update(certificates);
 

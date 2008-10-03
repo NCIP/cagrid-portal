@@ -1373,7 +1373,7 @@ public class TestIdentityFederationManager extends TestCase {
         pl.setHours(12);
         pl.setMinutes(0);
         pl.setSeconds(0);
-        conf.setMaxProxyLifetime(pl);
+        conf.setUserCertificateLifetime(pl);
         List<AccountPolicy> policies = new ArrayList<AccountPolicy>();
         policies.add(new ManualApprovalPolicy());
         policies.add(new AutoApprovalPolicy());
@@ -1403,7 +1403,7 @@ public class TestIdentityFederationManager extends TestCase {
         pl.setHours(12);
         pl.setMinutes(0);
         pl.setSeconds(0);
-        conf.setMaxProxyLifetime(pl);
+        conf.setUserCertificateLifetime(pl);
         List<AccountPolicy> policies = new ArrayList<AccountPolicy>();
         policies.add(new ManualApprovalPolicy());
         policies.add(new AutoApprovalPolicy());

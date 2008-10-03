@@ -26,11 +26,11 @@
 			  </bean>
         </property>
         <property name="autoHostCertificateApproval" value="${gaards.dorian.federation.auto.host.certificate.approval}" />
-	    <property name="maxProxyLifetime">
+	    <property name="userCertificateLifetime">
               <bean class="org.cagrid.gaards.dorian.common.Lifetime">
-                		<property name="hours" value="${gaards.dorian.federation.max.proxy.lifetime.hours}" />
-                		<property name="minutes" value="${gaards.dorian.federation.max.proxy.lifetime.minutes}" />
-                 		<property name="seconds" value="${gaards.dorian.federation.max.proxy.lifetime.seconds}" />
+                		<property name="hours" value="${gaards.dorian.federation.user.certificate.lifetime.hours}" />
+                		<property name="minutes" value="${gaards.dorian.federation.user.certificate.lifetime.minutes}" />
+                 		<property name="seconds" value="${gaards.dorian.federation.user.certificate.lifetime.seconds}" />
 			  </bean>
         </property>
         <property name="accountPolicies" ref="accountPolicyList"/>
