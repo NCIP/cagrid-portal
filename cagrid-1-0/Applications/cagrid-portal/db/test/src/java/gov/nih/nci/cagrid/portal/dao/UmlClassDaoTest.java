@@ -59,7 +59,7 @@ public class UmlClassDaoTest extends DBTestBase<UMLClassDao> {
 
         getDao().setMaxResultSize(0);
         assertEquals(0, getDao().getSemanticallyEquivalentClassesBasedOnAssociations(uClass).size());
-        assertEquals(0, getDao().getSameClassesInDifferentModel(uClass).size());
+        assertEquals(1, getDao().getSameClassesInDifferentModel(uClass).size());
         assertEquals(0, getDao().getSemanticalyEquivalentClassesBasedOnAtrributes(uClass).size());
         assertEquals(0, getDao().getClassesWithSameConceptCode(uClass).size());
     }
