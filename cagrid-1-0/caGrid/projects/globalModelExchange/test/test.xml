@@ -13,6 +13,10 @@
 	<target name="test" description="Runs the tests." depends="create_config_files, createTestDatabase">
 		<mkdir dir="${junit.results.dir}" />
 		<junit dir="${basedir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="yes" forkmode="once">
+			<!-- Turn on Java assertions -->
+			<assertions>
+				<enable />
+			</assertions>
 			<jvmarg value="-Dbuild.dir=${build.dest}" />
 			<sysproperty key="build.dir" value="${build.dest}" />
 			<classpath refid="test.run.classpath" />

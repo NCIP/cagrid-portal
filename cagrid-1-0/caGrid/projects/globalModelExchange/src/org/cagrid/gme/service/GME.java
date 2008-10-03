@@ -21,7 +21,10 @@ import org.apache.xerces.xni.XNIException;
 import org.apache.xerces.xni.parser.XMLInputSource;
 import org.apache.xerces.xs.StringList;
 import org.cagrid.gme.domain.XMLSchema;
+import org.cagrid.gme.domain.XMLSchemaBundle;
 import org.cagrid.gme.domain.XMLSchemaDocument;
+import org.cagrid.gme.domain.XMLSchemaImportInformation;
+import org.cagrid.gme.domain.XMLSchemaNamespace;
 import org.cagrid.gme.persistence.SchemaPersistenceGeneralException;
 import org.cagrid.gme.sax.GMEErrorHandler;
 import org.cagrid.gme.sax.GMEXMLSchemaLoader;
@@ -655,4 +658,59 @@ public class GME {
         return result;
     }
 
+
+    @Transactional(readOnly = true)
+    public XMLSchemaBundle getSchemBundle(URI targetNamespace) throws NoSuchNamespaceExistsFault {
+        XMLSchemaInformation info = this.schemaDao.getByTargetNamespace(targetNamespace);
+        if (info == null) {
+            String description = "No schema is published with given targetNamespace (" + targetNamespace + ")";
+
+            NoSuchNamespaceExistsFault fault = new NoSuchNamespaceExistsFault();
+            gov.nih.nci.cagrid.common.FaultHelper helper = new gov.nih.nci.cagrid.common.FaultHelper(fault);
+            helper.setDescription(description);
+            LOG.debug("Cannot retrieve schema and dependencies: " + description);
+
+            throw (NoSuchNamespaceExistsFault) helper.getFault();
+        }
+
+        XMLSchemaBundle bundle = new XMLSchemaBundle();
+        collectSchemasForBundle(bundle, info);
+
+        return bundle;
+
+    }
+
+
+    private void collectSchemasForBundle(XMLSchemaBundle bundle, XMLSchemaInformation info) {
+        // make sure we haven't already processed these schema, such as from
+        // another schemas's import
+        Set<XMLSchema> schemas = bundle.getXMLSchemas();
+        if (schemas.contains(info.getSchema())) {
+            // we've already processed this, so return
+            return;
+        }
+
+        // add this to the bucket
+        schemas.add(info.getSchema());
+
+        // create importinfo for each imported schema (if any)
+        if (info.getImports().size() > 0) {
+            Set<XMLSchemaImportInformation> importInfoSet = bundle.getImportInformation();
+            // make a new importinfo for this schema
+            XMLSchemaImportInformation importInfo = new XMLSchemaImportInformation();
+            importInfo.setTargetNamespace(new XMLSchemaNamespace(info.getSchema().getTargetNamespace()));
+            assert !importInfoSet.contains(importInfo) : "The bundle should not contain import information about XMLSchema ("
+                + info.getSchema().getTargetNamespace() + ") as it did not contain the schema itself.";
+
+            // add the collected import set
+            importInfoSet.add(importInfo);
+
+            // recursively process each of the schemas this schema imports
+            for (XMLSchemaInformation importedInfo : info.getImports()) {
+                importInfo.getImports().add(new XMLSchemaNamespace(importedInfo.getSchema().getTargetNamespace()));
+                collectSchemasForBundle(bundle, importedInfo);
+            }
+        }
+
+    }
 }

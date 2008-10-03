@@ -2,6 +2,7 @@ package org.cagrid.gme.service;
 
 import java.net.URI;
 
+import org.cagrid.gme.domain.XMLSchemaBundle;
 import org.cagrid.gme.stubs.types.NoSuchNamespaceExistsFault;
 import org.springframework.test.annotation.ExpectedException;
 
@@ -53,5 +54,29 @@ public class GMEGetDependenciesSimpleTestCase extends GMETestCaseWithSimpleModel
         publishAllSchemas();
 
         this.gme.getImportingNamespaces(null);
+    }
+
+
+    @ExpectedException(NoSuchNamespaceExistsFault.class)
+    public void testNullBundle() throws Exception {
+        publishAllSchemas();
+
+        this.gme.getSchemBundle(null);
+    }
+
+
+    @ExpectedException(NoSuchNamespaceExistsFault.class)
+    public void testInvalidBundle() throws Exception {
+        publishAllSchemas();
+
+        this.gme.getSchemBundle(new URI("http://invalid"));
+    }
+
+
+    public void testBundle() throws Exception {
+        publishAllSchemas();
+
+        XMLSchemaBundle schemBundle = this.gme.getSchemBundle(this.testSchemaSimpleA.getTargetNamespace());
+        // TODO: make assertions on this
     }
 }
