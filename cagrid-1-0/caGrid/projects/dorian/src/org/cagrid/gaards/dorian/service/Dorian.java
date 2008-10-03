@@ -38,9 +38,9 @@ import org.cagrid.gaards.dorian.federation.UserCertificateFilter;
 import org.cagrid.gaards.dorian.federation.UserCertificateRecord;
 import org.cagrid.gaards.dorian.federation.UserCertificateUpdate;
 import org.cagrid.gaards.dorian.idp.Application;
-import org.cagrid.gaards.dorian.idp.IdPUser;
-import org.cagrid.gaards.dorian.idp.IdPUserFilter;
 import org.cagrid.gaards.dorian.idp.IdentityProvider;
+import org.cagrid.gaards.dorian.idp.LocalUser;
+import org.cagrid.gaards.dorian.idp.LocalUserFilter;
 import org.cagrid.gaards.dorian.idp.UserManager;
 import org.cagrid.gaards.dorian.stubs.types.DorianInternalFault;
 import org.cagrid.gaards.dorian.stubs.types.InvalidAssertionFault;
@@ -136,7 +136,7 @@ public class Dorian extends LoggingObject {
 
             GridUser usr = null;
             try {
-                IdPUser idpUsr = identityProvider.getUser(IDP_ADMIN_USER_ID, IDP_ADMIN_USER_ID);
+                LocalUser idpUsr = identityProvider.getUser(IDP_ADMIN_USER_ID, IDP_ADMIN_USER_ID);
                 usr = new GridUser();
                 usr.setUID(idpUsr.getUserId());
                 usr.setFirstName(idpUsr.getFirstName());
@@ -203,7 +203,7 @@ public class Dorian extends LoggingObject {
     }
 
 
-    public IdPUser[] findIdPUsers(String gridIdentity, IdPUserFilter filter) throws DorianInternalFault,
+    public LocalUser[] findLocalUsers(String gridIdentity, LocalUserFilter filter) throws DorianInternalFault,
         PermissionDeniedFault {
         String uid = null;
         try {
@@ -217,7 +217,7 @@ public class Dorian extends LoggingObject {
     }
 
 
-    public void updateIdPUser(String gridIdentity, IdPUser u) throws DorianInternalFault, PermissionDeniedFault,
+    public void updateLocalUser(String gridIdentity, LocalUser u) throws DorianInternalFault, PermissionDeniedFault,
         NoSuchUserFault, InvalidUserPropertyFault {
         String uid = null;
         try {
@@ -231,7 +231,7 @@ public class Dorian extends LoggingObject {
     }
 
 
-    public void removeIdPUser(String gridIdentity, String userId) throws DorianInternalFault, PermissionDeniedFault {
+    public void removeLocalUser(String gridIdentity, String userId) throws DorianInternalFault, PermissionDeniedFault {
         String uid = null;
         try {
             uid = ifm.getUserIdVerifyTrustedIdP(identityProvider.getIdPCertificate(), gridIdentity);

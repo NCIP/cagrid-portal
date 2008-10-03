@@ -68,17 +68,17 @@ public class DorianAuthorization implements PDP {
 		
 	}
 					
-	public static void authorizeFindIdPUsers() throws RemoteException {
+	public static void authorizeFindLocalUsers() throws RemoteException {
 		
 		
 	}
 					
-	public static void authorizeUpdateIdPUser() throws RemoteException {
+	public static void authorizeUpdateLocalUser() throws RemoteException {
 		
 		
 	}
 					
-	public static void authorizeRemoveIdPUser() throws RemoteException {
+	public static void authorizeRemoveLocalUser() throws RemoteException {
 		
 		
 	}
@@ -261,25 +261,25 @@ public class DorianAuthorization implements PDP {
 				e.printStackTrace();
 				return false;
 			}
-		} else if(operation.getLocalPart().equals("findIdPUsers")){
+		} else if(operation.getLocalPart().equals("findLocalUsers")){
 			try{
-				authorizeFindIdPUsers();
+				authorizeFindLocalUsers();
 				return true;
 			} catch (Exception e){
 				e.printStackTrace();
 				return false;
 			}
-		} else if(operation.getLocalPart().equals("updateIdPUser")){
+		} else if(operation.getLocalPart().equals("updateLocalUser")){
 			try{
-				authorizeUpdateIdPUser();
+				authorizeUpdateLocalUser();
 				return true;
 			} catch (Exception e){
 				e.printStackTrace();
 				return false;
 			}
-		} else if(operation.getLocalPart().equals("removeIdPUser")){
+		} else if(operation.getLocalPart().equals("removeLocalUser")){
 			try{
-				authorizeRemoveIdPUser();
+				authorizeRemoveLocalUser();
 				return true;
 			} catch (Exception e){
 				e.printStackTrace();

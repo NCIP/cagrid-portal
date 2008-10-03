@@ -22,19 +22,19 @@
         <ns2:Fault description="Invalid application submitted." name="InvalidUserPropertyFault"/>
        </ns2:faultCollection>
       </ns2:Operation>
-      <ns2:Operation description="Obtain a list of users accounts within the Dorian IdP, meeting a specified search criteria." name="findIdPUsers">
+      <ns2:Operation description="Obtain a list of users accounts within the Dorian IdP, meeting a specified search criteria." name="findLocalUsers">
        <ns2:inputParameterCollection>
-        <ns2:InputParameter qName="ns6:IdPUserFilter" dimensionality="1" index="0" isArray="false" isRequired="false" name="filter" xmlns:ns6="http://cagrid.nci.nih.gov/1/dorian-idp"/>
+        <ns2:InputParameter qName="ns6:LocalUserFilter" dimensionality="1" index="0" isArray="false" isRequired="false" name="f" xmlns:ns6="http://cagrid.nci.nih.gov/1/dorian-idp"/>
        </ns2:inputParameterCollection>
-       <ns2:Output qName="ns7:IdPUser" dimensionality="1" isArray="true" xmlns:ns7="http://cagrid.nci.nih.gov/1/dorian-idp"/>
+       <ns2:Output qName="ns7:LocalUser" dimensionality="1" isArray="true" xmlns:ns7="http://cagrid.nci.nih.gov/1/dorian-idp"/>
        <ns2:faultCollection>
         <ns2:Fault description="An unexpected internal Dorian error." name="DorianInternalFault"/>
         <ns2:Fault description="Client does not have permission to perform the request." name="PermissionDeniedFault"/>
        </ns2:faultCollection>
       </ns2:Operation>
-      <ns2:Operation description="Update the account information for a Dorian IdP user." name="updateIdPUser">
+      <ns2:Operation description="Update the account information for a Dorian IdP user." name="updateLocalUser">
        <ns2:inputParameterCollection>
-        <ns2:InputParameter qName="ns8:IdPUser" dimensionality="1" index="0" isArray="false" isRequired="false" name="user" xmlns:ns8="http://cagrid.nci.nih.gov/1/dorian-idp"/>
+        <ns2:InputParameter qName="ns8:LocalUser" dimensionality="1" index="0" isArray="false" isRequired="false" name="user" xmlns:ns8="http://cagrid.nci.nih.gov/1/dorian-idp"/>
        </ns2:inputParameterCollection>
        <ns2:faultCollection>
         <ns2:Fault description="An unexpected internal Dorian error." name="DorianInternalFault"/>
@@ -42,7 +42,7 @@
         <ns2:Fault description="Client does not have permission to perform the request." name="PermissionDeniedFault"/>
        </ns2:faultCollection>
       </ns2:Operation>
-      <ns2:Operation description="Remove an IdP user account." name="removeIdPUser">
+      <ns2:Operation description="Remove an IdP user account." name="removeLocalUser">
        <ns2:inputParameterCollection>
         <ns2:InputParameter qName="xsd:string" dimensionality="1" index="0" isArray="false" isRequired="false" name="userId" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
        </ns2:inputParameterCollection>
@@ -123,7 +123,7 @@
         <ns2:Fault description="Client does not have permission to perform the request." name="PermissionDeniedFault"/>
        </ns2:faultCollection>
       </ns2:Operation>
-      <ns2:Operation description="" name="updateGridUser">
+      <ns2:Operation description="This method allows an admin to update the account of a grid user." name="updateGridUser">
        <ns2:inputParameterCollection>
         <ns2:InputParameter qName="ns22:GridUser" dimensionality="1" index="0" isArray="false" isRequired="false" name="user" xmlns:ns22="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
        </ns2:inputParameterCollection>
@@ -174,7 +174,7 @@
         <ns2:Fault description="" name="InvalidCredentialFault"/>
        </ns2:faultCollection>
       </ns2:Operation>
-      <ns2:Operation description="" name="addAdmin">
+      <ns2:Operation description="This method allows an admin to grant user admin privileges to Dorian." name="addAdmin">
        <ns2:inputParameterCollection>
         <ns2:InputParameter qName="xsd:string" dimensionality="1" index="0" isArray="false" isRequired="false" name="gridIdentity" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
        </ns2:inputParameterCollection>
@@ -183,7 +183,7 @@
         <ns2:Fault description="" name="PermissionDeniedFault"/>
        </ns2:faultCollection>
       </ns2:Operation>
-      <ns2:Operation description="" name="removeAdmin">
+      <ns2:Operation description="This method allows and admin to revoke a user's administrative rights to Dorian." name="removeAdmin">
        <ns2:inputParameterCollection>
         <ns2:InputParameter qName="xsd:string" dimensionality="1" index="0" isArray="false" isRequired="false" name="gridIdentity" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
        </ns2:inputParameterCollection>
@@ -192,7 +192,7 @@
         <ns2:Fault description="" name="PermissionDeniedFault"/>
        </ns2:faultCollection>
       </ns2:Operation>
-      <ns2:Operation description="" name="getAdmins">
+      <ns2:Operation description="This method returns a list for users with administrative access to Dorian." name="getAdmins">
        <ns2:inputParameterCollection/>
        <ns2:Output qName="xsd:string" dimensionality="1" isArray="true" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
        <ns2:faultCollection>
@@ -200,7 +200,7 @@
         <ns2:Fault description="" name="PermissionDeniedFault"/>
        </ns2:faultCollection>
       </ns2:Operation>
-      <ns2:Operation description="" name="requestHostCertificate">
+      <ns2:Operation description="This method allows a user to request a host certificate." name="requestHostCertificate">
        <ns2:inputParameterCollection>
         <ns2:InputParameter qName="ns29:HostCertificateRequest" dimensionality="1" index="0" isArray="false" isRequired="false" name="req" xmlns:ns29="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
        </ns2:inputParameterCollection>
@@ -212,7 +212,7 @@
         <ns2:Fault description="" name="PermissionDeniedFault"/>
        </ns2:faultCollection>
       </ns2:Operation>
-      <ns2:Operation description="" name="getOwnedHostCertificates">
+      <ns2:Operation description="This method returns the list of host certificates that are owned by the caller." name="getOwnedHostCertificates">
        <ns2:inputParameterCollection/>
        <ns2:Output qName="ns31:HostCertificateRecord" dimensionality="1" isArray="true" xmlns:ns31="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
        <ns2:faultCollection>
@@ -220,7 +220,7 @@
         <ns2:Fault description="" name="PermissionDeniedFault"/>
        </ns2:faultCollection>
       </ns2:Operation>
-      <ns2:Operation description="" name="approveHostCertificate">
+      <ns2:Operation description="This method allows an administrator to approve a host certificate request." name="approveHostCertificate">
        <ns2:inputParameterCollection>
         <ns2:InputParameter qName="xsd:integer" dimensionality="1" index="0" isArray="false" isRequired="false" name="recordId" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
        </ns2:inputParameterCollection>
@@ -231,7 +231,7 @@
         <ns2:Fault description="" name="PermissionDeniedFault"/>
        </ns2:faultCollection>
       </ns2:Operation>
-      <ns2:Operation description="" name="findHostCertificates">
+      <ns2:Operation description="This method allows one to search for host certificates issued by the Dorian CA." name="findHostCertificates">
        <ns2:inputParameterCollection>
         <ns2:InputParameter qName="ns33:HostCertificateFilter" dimensionality="1" index="0" isArray="false" isRequired="false" name="hostCertificateFilter" xmlns:ns33="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
        </ns2:inputParameterCollection>
@@ -241,7 +241,7 @@
         <ns2:Fault description="" name="PermissionDeniedFault"/>
        </ns2:faultCollection>
       </ns2:Operation>
-      <ns2:Operation description="" name="updateHostCertificateRecord">
+      <ns2:Operation description="This method allows and admin to update a host certificate record." name="updateHostCertificateRecord">
        <ns2:inputParameterCollection>
         <ns2:InputParameter qName="ns35:HostCertificateUpdate" dimensionality="1" index="0" isArray="false" isRequired="false" name="hostCertificateUpdate" xmlns:ns35="http://cagrid.nci.nih.gov/1/dorian-ifs"/>
        </ns2:inputParameterCollection>
@@ -251,7 +251,7 @@
         <ns2:Fault description="" name="PermissionDeniedFault"/>
        </ns2:faultCollection>
       </ns2:Operation>
-      <ns2:Operation description="" name="renewHostCertificate">
+      <ns2:Operation description="This method allows a user to renew a host certificate that was issued to them." name="renewHostCertificate">
        <ns2:inputParameterCollection>
         <ns2:InputParameter qName="xsd:integer" dimensionality="1" index="0" isArray="false" isRequired="false" name="recordId" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
        </ns2:inputParameterCollection>
@@ -273,7 +273,7 @@
         <ns2:Fault description="" name="InvalidUserPropertyFault"/>
        </ns2:faultCollection>
       </ns2:Operation>
-      <ns2:Operation description="This method determines whether or not a IdP user exists." name="doesLocalUserExist">
+      <ns2:Operation description="This method determines whether or not a Local user exists." name="doesLocalUserExist">
        <ns2:inputParameterCollection>
         <ns2:InputParameter qName="xsd:string" dimensionality="1" index="0" isArray="false" isRequired="false" name="userId" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
        </ns2:inputParameterCollection>

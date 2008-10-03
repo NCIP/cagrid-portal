@@ -31,13 +31,13 @@ public interface DorianI {
   /**
    * Obtain a list of users accounts within the Dorian IdP, meeting a specified search criteria.
    *
-   * @param filter
+   * @param f
    * @throws DorianInternalFault
    *	An unexpected internal Dorian error.
    * @throws PermissionDeniedFault
    *	Client does not have permission to perform the request.
    */
-  public org.cagrid.gaards.dorian.idp.IdPUser[] findIdPUsers(org.cagrid.gaards.dorian.idp.IdPUserFilter filter) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault ;
+  public org.cagrid.gaards.dorian.idp.LocalUser[] findLocalUsers(org.cagrid.gaards.dorian.idp.LocalUserFilter f) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault ;
 
   /**
    * Update the account information for a Dorian IdP user.
@@ -50,7 +50,7 @@ public interface DorianI {
    * @throws PermissionDeniedFault
    *	Client does not have permission to perform the request.
    */
-  public void updateIdPUser(org.cagrid.gaards.dorian.idp.IdPUser user) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.NoSuchUserFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault ;
+  public void updateLocalUser(org.cagrid.gaards.dorian.idp.LocalUser user) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.NoSuchUserFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault ;
 
   /**
    * Remove an IdP user account.
@@ -61,7 +61,7 @@ public interface DorianI {
    * @throws PermissionDeniedFault
    *	Client does not have permission to perform the request.
    */
-  public void removeIdPUser(java.lang.String userId) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault ;
+  public void removeLocalUser(java.lang.String userId) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault ;
 
   /**
    * Create a proxy certificate.  (This method is DEPRECATED, please use requestUserCertificate)
@@ -151,6 +151,17 @@ public interface DorianI {
    */
   public org.cagrid.gaards.dorian.federation.GridUser[] findGridUsers(org.cagrid.gaards.dorian.federation.GridUserFilter filter) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault ;
 
+  /**
+   * This method allows an admin to update the account of a grid user.
+   *
+   * @param user
+   * @throws DorianInternalFault
+   *	An unexpected internal Dorian error.
+   * @throws InvalidUserFault
+   *	Invalid user specified.
+   * @throws PermissionDeniedFault
+   *	Client does not have permission to perform the request.
+   */
   public void updateGridUser(org.cagrid.gaards.dorian.federation.GridUser user) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.InvalidUserFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault ;
 
   /**
@@ -204,22 +215,111 @@ public interface DorianI {
    */
   public gov.nih.nci.cagrid.opensaml.SAMLAssertion authenticateUser(org.cagrid.gaards.authentication.Credential credential) throws RemoteException, org.cagrid.gaards.authentication.faults.AuthenticationProviderFault, org.cagrid.gaards.authentication.faults.CredentialNotSupportedFault, org.cagrid.gaards.authentication.faults.InsufficientAttributeFault, org.cagrid.gaards.authentication.faults.InvalidCredentialFault ;
 
+  /**
+   * This method allows an admin to grant user admin privileges to Dorian.
+   *
+   * @param gridIdentity
+   * @throws DorianInternalFault
+   *	
+   * @throws PermissionDeniedFault
+   *	
+   */
   public void addAdmin(java.lang.String gridIdentity) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault ;
 
+  /**
+   * This method allows and admin to revoke a user's administrative rights to Dorian.
+   *
+   * @param gridIdentity
+   * @throws DorianInternalFault
+   *	
+   * @throws PermissionDeniedFault
+   *	
+   */
   public void removeAdmin(java.lang.String gridIdentity) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault ;
 
+  /**
+   * This method returns a list for users with administrative access to Dorian.
+   *
+   * @throws DorianInternalFault
+   *	
+   * @throws PermissionDeniedFault
+   *	
+   */
   public java.lang.String[] getAdmins() throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault ;
 
+  /**
+   * This method allows a user to request a host certificate.
+   *
+   * @param req
+   * @throws DorianInternalFault
+   *	
+   * @throws InvalidHostCertificateRequestFault
+   *	
+   * @throws InvalidHostCertificateFault
+   *	
+   * @throws PermissionDeniedFault
+   *	
+   */
   public org.cagrid.gaards.dorian.federation.HostCertificateRecord requestHostCertificate(org.cagrid.gaards.dorian.federation.HostCertificateRequest req) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.InvalidHostCertificateRequestFault, org.cagrid.gaards.dorian.stubs.types.InvalidHostCertificateFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault ;
 
+  /**
+   * This method returns the list of host certificates that are owned by the caller.
+   *
+   * @throws DorianInternalFault
+   *	
+   * @throws PermissionDeniedFault
+   *	
+   */
   public org.cagrid.gaards.dorian.federation.HostCertificateRecord[] getOwnedHostCertificates() throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault ;
 
+  /**
+   * This method allows an administrator to approve a host certificate request.
+   *
+   * @param recordId
+   * @throws DorianInternalFault
+   *	
+   * @throws InvalidHostCertificateFault
+   *	
+   * @throws PermissionDeniedFault
+   *	
+   */
   public org.cagrid.gaards.dorian.federation.HostCertificateRecord approveHostCertificate(java.math.BigInteger recordId) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.InvalidHostCertificateFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault ;
 
+  /**
+   * This method allows one to search for host certificates issued by the Dorian CA.
+   *
+   * @param hostCertificateFilter
+   * @throws DorianInternalFault
+   *	
+   * @throws PermissionDeniedFault
+   *	
+   */
   public org.cagrid.gaards.dorian.federation.HostCertificateRecord[] findHostCertificates(org.cagrid.gaards.dorian.federation.HostCertificateFilter hostCertificateFilter) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault ;
 
+  /**
+   * This method allows and admin to update a host certificate record.
+   *
+   * @param hostCertificateUpdate
+   * @throws DorianInternalFault
+   *	
+   * @throws InvalidHostCertificateFault
+   *	
+   * @throws PermissionDeniedFault
+   *	
+   */
   public void updateHostCertificateRecord(org.cagrid.gaards.dorian.federation.HostCertificateUpdate hostCertificateUpdate) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.InvalidHostCertificateFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault ;
 
+  /**
+   * This method allows a user to renew a host certificate that was issued to them.
+   *
+   * @param recordId
+   * @throws DorianInternalFault
+   *	
+   * @throws InvalidHostCertificateFault
+   *	
+   * @throws PermissionDeniedFault
+   *	
+   */
   public org.cagrid.gaards.dorian.federation.HostCertificateRecord renewHostCertificate(java.math.BigInteger recordId) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.InvalidHostCertificateFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault ;
 
   /**
@@ -237,7 +337,7 @@ public interface DorianI {
   public void changeIdPUserPassword(org.cagrid.gaards.dorian.idp.BasicAuthCredential credential,java.lang.String newPassword) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault, org.cagrid.gaards.dorian.stubs.types.InvalidUserPropertyFault ;
 
   /**
-   * This method determines whether or not a IdP user exists.
+   * This method determines whether or not a Local user exists.
    *
    * @param userId
    * @throws DorianInternalFault

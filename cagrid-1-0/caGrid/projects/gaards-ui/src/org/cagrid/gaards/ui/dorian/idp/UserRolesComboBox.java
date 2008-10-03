@@ -1,6 +1,6 @@
 package org.cagrid.gaards.ui.dorian.idp;
 
-import org.cagrid.gaards.dorian.idp.IdPUserRole;
+import org.cagrid.gaards.dorian.idp.LocalUserRole;
 import org.cagrid.gaards.ui.common.AxisTypeComboBox;
 
 
@@ -18,11 +18,11 @@ public class UserRolesComboBox extends AxisTypeComboBox {
 	}
 
 	public UserRolesComboBox(boolean anyState) {
-		super(IdPUserRole.class, anyState);
+		super(LocalUserRole.class, anyState);
 	}
 
-	public IdPUserRole getSelectedUserRole() {
-		return (IdPUserRole) getSelectedObject();
+	public LocalUserRole getSelectedUserRole() {
+		return (LocalUserRole) getSelectedObject();
 	}
 
 }

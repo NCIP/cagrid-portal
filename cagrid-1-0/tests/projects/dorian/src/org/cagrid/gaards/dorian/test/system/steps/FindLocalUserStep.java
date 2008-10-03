@@ -7,23 +7,23 @@ import java.util.List;
 
 import org.cagrid.gaards.dorian.client.LocalAdministrationClient;
 import org.cagrid.gaards.dorian.idp.Application;
-import org.cagrid.gaards.dorian.idp.IdPUser;
-import org.cagrid.gaards.dorian.idp.IdPUserFilter;
-import org.cagrid.gaards.dorian.idp.IdPUserRole;
-import org.cagrid.gaards.dorian.idp.IdPUserStatus;
+import org.cagrid.gaards.dorian.idp.LocalUser;
+import org.cagrid.gaards.dorian.idp.LocalUserFilter;
+import org.cagrid.gaards.dorian.idp.LocalUserRole;
+import org.cagrid.gaards.dorian.idp.LocalUserStatus;
 
 public class FindLocalUserStep extends Step {
 
 	private Application application;
 	private String serviceURL;
-	private IdPUserStatus status;
-	private IdPUserRole role;
+	private LocalUserStatus status;
+	private LocalUserRole role;
 	private GridCredentialRequestStep admin;
-	private IdPUser localUser;
+	private LocalUser localUser;
 
 	public FindLocalUserStep(String serviceURL,
 			GridCredentialRequestStep admin, Application app,
-			IdPUserStatus status, IdPUserRole role) {
+			LocalUserStatus status, LocalUserRole role) {
 		this.serviceURL = serviceURL;
 		this.application = app;
 		this.status = status;
@@ -34,9 +34,9 @@ public class FindLocalUserStep extends Step {
 	public void runStep() throws Throwable {
 		LocalAdministrationClient client = new LocalAdministrationClient(
 				serviceURL, this.admin.getGridCredential());
-		IdPUserFilter f = new IdPUserFilter();
+		LocalUserFilter f = new LocalUserFilter();
 		f.setUserId(this.application.getUserId());
-		List<IdPUser> users = client.findUsers(f);
+		List<LocalUser> users = client.findUsers(f);
 		assertNotNull(users);
 		assertEquals(1, users.size());
 		assertEquals(this.application.getUserId(), users.get(0).getUserId());
@@ -60,7 +60,7 @@ public class FindLocalUserStep extends Step {
 		this.localUser = users.get(0);
 	}
 
-	public IdPUser getLocalUser() {
+	public LocalUser getLocalUser() {
 		return localUser;
 	}
 

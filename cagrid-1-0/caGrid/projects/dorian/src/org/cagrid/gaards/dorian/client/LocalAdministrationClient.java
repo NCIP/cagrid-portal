@@ -9,8 +9,8 @@ import java.util.List;
 
 import org.apache.axis.types.URI.MalformedURIException;
 import org.cagrid.gaards.dorian.common.DorianFault;
-import org.cagrid.gaards.dorian.idp.IdPUser;
-import org.cagrid.gaards.dorian.idp.IdPUserFilter;
+import org.cagrid.gaards.dorian.idp.LocalUser;
+import org.cagrid.gaards.dorian.idp.LocalUserFilter;
 import org.cagrid.gaards.dorian.stubs.types.DorianInternalFault;
 import org.cagrid.gaards.dorian.stubs.types.InvalidUserPropertyFault;
 import org.cagrid.gaards.dorian.stubs.types.NoSuchUserFault;
@@ -88,10 +88,10 @@ public class LocalAdministrationClient {
 	 * @throws DorianInternalFault
 	 * @throws PermissionDeniedFault
 	 */
-	public List<IdPUser> findUsers(IdPUserFilter filter) throws DorianFault,
+	public List<LocalUser> findUsers(LocalUserFilter filter) throws DorianFault,
 			DorianInternalFault, PermissionDeniedFault {
 		try {
-			List<IdPUser> list = Utils.asList(client.findIdPUsers(filter));
+			List<LocalUser> list = Utils.asList(client.findLocalUsers(filter));
 			return list;
 		} catch (DorianInternalFault gie) {
 			throw gie;
@@ -118,7 +118,7 @@ public class LocalAdministrationClient {
 	public void removeUser(String userId) throws DorianFault,
 			DorianInternalFault, PermissionDeniedFault {
 		try {
-			client.removeIdPUser(userId);
+			client.removeLocalUser(userId);
 		} catch (DorianInternalFault gie) {
 			throw gie;
 		} catch (PermissionDeniedFault f) {
@@ -144,11 +144,11 @@ public class LocalAdministrationClient {
 	 * @throws NoSuchUserFault
 	 * @throws InvalidUserPropertyFault
 	 */
-	public void updateUser(IdPUser u) throws DorianFault, DorianInternalFault,
+	public void updateUser(LocalUser u) throws DorianFault, DorianInternalFault,
 			PermissionDeniedFault, NoSuchUserFault, InvalidUserPropertyFault {
 
 		try {
-			client.updateIdPUser(u);
+			client.updateLocalUser(u);
 		} catch (DorianInternalFault gie) {
 			throw gie;
 		} catch (PermissionDeniedFault f) {

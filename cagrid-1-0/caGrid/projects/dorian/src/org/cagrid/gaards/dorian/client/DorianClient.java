@@ -76,35 +76,35 @@ public class DorianClient extends DorianClientBase implements DorianI {
     }
   }
 
-  public org.cagrid.gaards.dorian.idp.IdPUser[] findIdPUsers(org.cagrid.gaards.dorian.idp.IdPUserFilter filter) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault {
+  public org.cagrid.gaards.dorian.idp.LocalUser[] findLocalUsers(org.cagrid.gaards.dorian.idp.LocalUserFilter f) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault {
     synchronized(portTypeMutex){
-      configureStubSecurity((Stub)portType,"findIdPUsers");
-    org.cagrid.gaards.dorian.stubs.FindIdPUsersRequest params = new org.cagrid.gaards.dorian.stubs.FindIdPUsersRequest();
-    org.cagrid.gaards.dorian.stubs.FindIdPUsersRequestFilter filterContainer = new org.cagrid.gaards.dorian.stubs.FindIdPUsersRequestFilter();
-    filterContainer.setIdPUserFilter(filter);
-    params.setFilter(filterContainer);
-    org.cagrid.gaards.dorian.stubs.FindIdPUsersResponse boxedResult = portType.findIdPUsers(params);
-    return boxedResult.getIdPUser();
+      configureStubSecurity((Stub)portType,"findLocalUsers");
+    org.cagrid.gaards.dorian.stubs.FindLocalUsersRequest params = new org.cagrid.gaards.dorian.stubs.FindLocalUsersRequest();
+    org.cagrid.gaards.dorian.stubs.FindLocalUsersRequestF fContainer = new org.cagrid.gaards.dorian.stubs.FindLocalUsersRequestF();
+    fContainer.setLocalUserFilter(f);
+    params.setF(fContainer);
+    org.cagrid.gaards.dorian.stubs.FindLocalUsersResponse boxedResult = portType.findLocalUsers(params);
+    return boxedResult.getLocalUser();
     }
   }
 
-  public void updateIdPUser(org.cagrid.gaards.dorian.idp.IdPUser user) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.NoSuchUserFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault {
+  public void updateLocalUser(org.cagrid.gaards.dorian.idp.LocalUser user) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.NoSuchUserFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault {
     synchronized(portTypeMutex){
-      configureStubSecurity((Stub)portType,"updateIdPUser");
-    org.cagrid.gaards.dorian.stubs.UpdateIdPUserRequest params = new org.cagrid.gaards.dorian.stubs.UpdateIdPUserRequest();
-    org.cagrid.gaards.dorian.stubs.UpdateIdPUserRequestUser userContainer = new org.cagrid.gaards.dorian.stubs.UpdateIdPUserRequestUser();
-    userContainer.setIdPUser(user);
+      configureStubSecurity((Stub)portType,"updateLocalUser");
+    org.cagrid.gaards.dorian.stubs.UpdateLocalUserRequest params = new org.cagrid.gaards.dorian.stubs.UpdateLocalUserRequest();
+    org.cagrid.gaards.dorian.stubs.UpdateLocalUserRequestUser userContainer = new org.cagrid.gaards.dorian.stubs.UpdateLocalUserRequestUser();
+    userContainer.setLocalUser(user);
     params.setUser(userContainer);
-    org.cagrid.gaards.dorian.stubs.UpdateIdPUserResponse boxedResult = portType.updateIdPUser(params);
+    org.cagrid.gaards.dorian.stubs.UpdateLocalUserResponse boxedResult = portType.updateLocalUser(params);
     }
   }
 
-  public void removeIdPUser(java.lang.String userId) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault {
+  public void removeLocalUser(java.lang.String userId) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault {
     synchronized(portTypeMutex){
-      configureStubSecurity((Stub)portType,"removeIdPUser");
-    org.cagrid.gaards.dorian.stubs.RemoveIdPUserRequest params = new org.cagrid.gaards.dorian.stubs.RemoveIdPUserRequest();
+      configureStubSecurity((Stub)portType,"removeLocalUser");
+    org.cagrid.gaards.dorian.stubs.RemoveLocalUserRequest params = new org.cagrid.gaards.dorian.stubs.RemoveLocalUserRequest();
     params.setUserId(userId);
-    org.cagrid.gaards.dorian.stubs.RemoveIdPUserResponse boxedResult = portType.removeIdPUser(params);
+    org.cagrid.gaards.dorian.stubs.RemoveLocalUserResponse boxedResult = portType.removeLocalUser(params);
     }
   }
 

@@ -50,12 +50,12 @@ public class TestIdentityProvider extends TestCase {
 			idp.register(a);
 			assertTrue(idp.doesUserExist(a.getUserId()));
 			BasicAuthCredential cred = getAdminCreds();
-			IdPUserFilter uf = new IdPUserFilter();
+			LocalUserFilter uf = new LocalUserFilter();
 			uf.setUserId(a.getUserId());
-			IdPUser[] users = idp.findUsers(cred.getUserId(), uf);
+			LocalUser[] users = idp.findUsers(cred.getUserId(), uf);
 			assertEquals(1, users.length);
-			assertEquals(IdPUserStatus.Active, users[0].getStatus());
-			assertEquals(IdPUserRole.Non_Administrator, users[0].getRole());
+			assertEquals(LocalUserStatus.Active, users[0].getStatus());
+			assertEquals(LocalUserRole.Non_Administrator, users[0].getRole());
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
@@ -78,12 +78,12 @@ public class TestIdentityProvider extends TestCase {
 			Application a = createApplication();
 			idp.register(a);
 			BasicAuthCredential cred = getAdminCreds();
-			IdPUserFilter uf = new IdPUserFilter();
+			LocalUserFilter uf = new LocalUserFilter();
 			uf.setUserId(a.getUserId());
-			IdPUser[] users = idp.findUsers(cred.getUserId(), uf);
+			LocalUser[] users = idp.findUsers(cred.getUserId(), uf);
 			assertEquals(1, users.length);
-			assertEquals(IdPUserStatus.Active, users[0].getStatus());
-			assertEquals(IdPUserRole.Non_Administrator, users[0].getRole());
+			assertEquals(LocalUserStatus.Active, users[0].getStatus());
+			assertEquals(LocalUserRole.Non_Administrator, users[0].getRole());
 			verifyAuthentication(idp, a);
 
 		} catch (Exception e) {
@@ -115,12 +115,12 @@ public class TestIdentityProvider extends TestCase {
 			Application a = createApplication();
 			idp.register(a);
 			BasicAuthCredential cred = getAdminCreds();
-			IdPUserFilter uf = new IdPUserFilter();
+			LocalUserFilter uf = new LocalUserFilter();
 			uf.setUserId(a.getUserId());
-			IdPUser[] users = idp.findUsers(cred.getUserId(), uf);
+			LocalUser[] users = idp.findUsers(cred.getUserId(), uf);
 			assertEquals(1, users.length);
-			assertEquals(IdPUserStatus.Active, users[0].getStatus());
-			assertEquals(IdPUserRole.Non_Administrator, users[0].getRole());
+			assertEquals(LocalUserStatus.Active, users[0].getStatus());
+			assertEquals(LocalUserRole.Non_Administrator, users[0].getRole());
 			verifyAuthentication(idp, a);
 
 			for (int i = 0; i < a.getPassword().length(); i++) {
@@ -172,12 +172,12 @@ public class TestIdentityProvider extends TestCase {
 
 			idp.register(a);
 			BasicAuthCredential cred = getAdminCreds();
-			IdPUserFilter uf = new IdPUserFilter();
+			LocalUserFilter uf = new LocalUserFilter();
 			uf.setUserId(a.getUserId());
-			IdPUser[] users = idp.findUsers(cred.getUserId(), uf);
+			LocalUser[] users = idp.findUsers(cred.getUserId(), uf);
 			assertEquals(1, users.length);
-			assertEquals(IdPUserStatus.Active, users[0].getStatus());
-			assertEquals(IdPUserRole.Non_Administrator, users[0].getRole());
+			assertEquals(LocalUserStatus.Active, users[0].getStatus());
+			assertEquals(LocalUserRole.Non_Administrator, users[0].getRole());
 
 			BasicAuthentication bad = new BasicAuthentication();
 			bad.setUserId(a.getUserId());
@@ -252,12 +252,12 @@ public class TestIdentityProvider extends TestCase {
 
 			idp.register(a);
 			BasicAuthCredential cred = getAdminCreds();
-			IdPUserFilter uf = new IdPUserFilter();
+			LocalUserFilter uf = new LocalUserFilter();
 			uf.setUserId(a.getUserId());
-			IdPUser[] users = idp.findUsers(cred.getUserId(), uf);
+			LocalUser[] users = idp.findUsers(cred.getUserId(), uf);
 			assertEquals(1, users.length);
-			assertEquals(IdPUserStatus.Active, users[0].getStatus());
-			assertEquals(IdPUserRole.Non_Administrator, users[0].getRole());
+			assertEquals(LocalUserStatus.Active, users[0].getStatus());
+			assertEquals(LocalUserRole.Non_Administrator, users[0].getRole());
 
 			BasicAuthentication bad = new BasicAuthentication();
 			bad.setUserId(a.getUserId());
@@ -309,12 +309,12 @@ public class TestIdentityProvider extends TestCase {
 
 				idp.register(a);
 				BasicAuthCredential cred = getAdminCreds();
-				IdPUserFilter uf = new IdPUserFilter();
+				LocalUserFilter uf = new LocalUserFilter();
 				uf.setUserId(a.getUserId());
-				IdPUser[] users = idp.findUsers(cred.getUserId(), uf);
+				LocalUser[] users = idp.findUsers(cred.getUserId(), uf);
 				assertEquals(1, users.length);
-				assertEquals(IdPUserStatus.Active, users[0].getStatus());
-				assertEquals(IdPUserRole.Non_Administrator, users[0].getRole());
+				assertEquals(LocalUserStatus.Active, users[0].getStatus());
+				assertEquals(LocalUserRole.Non_Administrator, users[0].getRole());
 
 				BasicAuthentication bad = new BasicAuthentication();
 				bad.setUserId(a.getUserId());
@@ -381,12 +381,12 @@ public class TestIdentityProvider extends TestCase {
 			Application a = createApplication();
 			idp.register(a);
 			BasicAuthCredential cred = getAdminCreds();
-			IdPUserFilter uf = new IdPUserFilter();
+			LocalUserFilter uf = new LocalUserFilter();
 			uf.setUserId(a.getUserId());
-			IdPUser[] users = idp.findUsers(cred.getUserId(), uf);
+			LocalUser[] users = idp.findUsers(cred.getUserId(), uf);
 			assertEquals(1, users.length);
-			assertEquals(IdPUserStatus.Active, users[0].getStatus());
-			assertEquals(IdPUserRole.Non_Administrator, users[0].getRole());
+			assertEquals(LocalUserStatus.Active, users[0].getStatus());
+			assertEquals(LocalUserRole.Non_Administrator, users[0].getRole());
 			BasicAuthentication c = getCredential(a);
 			c.setPassword("bad password");
 			try {
@@ -417,12 +417,12 @@ public class TestIdentityProvider extends TestCase {
 			Application a = createApplication();
 			idp.register(a);
 			BasicAuthCredential cred = getAdminCreds();
-			IdPUserFilter uf = new IdPUserFilter();
+			LocalUserFilter uf = new LocalUserFilter();
 			uf.setUserId(a.getUserId());
-			IdPUser[] users = idp.findUsers(cred.getUserId(), uf);
+			LocalUser[] users = idp.findUsers(cred.getUserId(), uf);
 			assertEquals(1, users.length);
-			assertEquals(IdPUserStatus.Active, users[0].getStatus());
-			assertEquals(IdPUserRole.Non_Administrator, users[0].getRole());
+			assertEquals(LocalUserStatus.Active, users[0].getStatus());
+			assertEquals(LocalUserRole.Non_Administrator, users[0].getRole());
 			OneTimePassword c = new OneTimePassword();
 			c.setUserId(a.getUserId());
 			c.setOneTimePassword("onetimepassword");
@@ -454,12 +454,12 @@ public class TestIdentityProvider extends TestCase {
 			Application a = createApplication();
 			idp.register(a);
 			BasicAuthCredential cred = getAdminCreds();
-			IdPUserFilter uf = new IdPUserFilter();
+			LocalUserFilter uf = new LocalUserFilter();
 			uf.setUserId(a.getUserId());
-			IdPUser[] users = idp.findUsers(cred.getUserId(), uf);
+			LocalUser[] users = idp.findUsers(cred.getUserId(), uf);
 			assertEquals(1, users.length);
-			assertEquals(IdPUserStatus.Active, users[0].getStatus());
-			assertEquals(IdPUserRole.Non_Administrator, users[0].getRole());
+			assertEquals(LocalUserStatus.Active, users[0].getStatus());
+			assertEquals(LocalUserRole.Non_Administrator, users[0].getRole());
 			verifyAuthentication(idp, a);
 			BasicAuthentication c = getCredential(a);
 			String newPassword = "$W0rdD0ct0R$2";
@@ -495,12 +495,12 @@ public class TestIdentityProvider extends TestCase {
 			Application a = createApplication();
 			idp.register(a);
 			BasicAuthCredential cred = getAdminCreds();
-			IdPUserFilter uf = new IdPUserFilter();
+			LocalUserFilter uf = new LocalUserFilter();
 			uf.setUserId(a.getUserId());
-			IdPUser[] users = idp.findUsers(cred.getUserId(), uf);
+			LocalUser[] users = idp.findUsers(cred.getUserId(), uf);
 			assertEquals(1, users.length);
-			assertEquals(IdPUserStatus.Active, users[0].getStatus());
-			assertEquals(IdPUserRole.Non_Administrator, users[0].getRole());
+			assertEquals(LocalUserStatus.Active, users[0].getStatus());
+			assertEquals(LocalUserRole.Non_Administrator, users[0].getRole());
 			verifyAuthentication(idp, a);
 			try {
 				idp.changePassword(getCredential(a), "short");
@@ -537,12 +537,12 @@ public class TestIdentityProvider extends TestCase {
 			a.setAddress2(null);
 			idp.register(a);
 			BasicAuthCredential cred = getAdminCreds();
-			IdPUserFilter uf = new IdPUserFilter();
+			LocalUserFilter uf = new LocalUserFilter();
 			uf.setUserId(a.getUserId());
-			IdPUser[] users = idp.findUsers(cred.getUserId(), uf);
+			LocalUser[] users = idp.findUsers(cred.getUserId(), uf);
 			assertEquals(1, users.length);
-			assertEquals(IdPUserStatus.Active, users[0].getStatus());
-			assertEquals(IdPUserRole.Non_Administrator, users[0].getRole());
+			assertEquals(LocalUserStatus.Active, users[0].getStatus());
+			assertEquals(LocalUserRole.Non_Administrator, users[0].getRole());
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
@@ -568,17 +568,17 @@ public class TestIdentityProvider extends TestCase {
 			idp.register(a);
 			assertTrue(idp.doesUserExist(a.getUserId()));
 			BasicAuthCredential cred = getAdminCreds();
-			IdPUserFilter uf = new IdPUserFilter();
+			LocalUserFilter uf = new LocalUserFilter();
 			uf.setUserId(a.getUserId());
-			IdPUser[] users = idp.findUsers(cred.getUserId(), uf);
+			LocalUser[] users = idp.findUsers(cred.getUserId(), uf);
 			assertEquals(1, users.length);
-			assertEquals(IdPUserStatus.Pending, users[0].getStatus());
-			assertEquals(IdPUserRole.Non_Administrator, users[0].getRole());
-			users[0].setStatus(IdPUserStatus.Active);
+			assertEquals(LocalUserStatus.Pending, users[0].getStatus());
+			assertEquals(LocalUserRole.Non_Administrator, users[0].getRole());
+			users[0].setStatus(LocalUserStatus.Active);
 			idp.updateUser(cred.getUserId(), users[0]);
 			users = idp.findUsers(cred.getUserId(), uf);
 			assertEquals(1, users.length);
-			assertEquals(IdPUserStatus.Active, users[0].getStatus());
+			assertEquals(LocalUserStatus.Active, users[0].getStatus());
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			assertTrue(false);
@@ -678,15 +678,15 @@ public class TestIdentityProvider extends TestCase {
 			Application a = createApplication();
 			idp.register(a);
 			BasicAuthCredential cred = getAdminCreds();
-			IdPUserFilter uf = new IdPUserFilter();
-			IdPUser[] us = idp.findUsers(cred.getUserId(), uf);
+			LocalUserFilter uf = new LocalUserFilter();
+			LocalUser[] us = idp.findUsers(cred.getUserId(), uf);
 			assertEquals(2, us.length);
 
 			// create a userId that does not exist
 			String userId = "No_SUCH_USER";
 			idp.removeUser(cred.getUserId(), userId);
-			IdPUserFilter f = new IdPUserFilter();
-			IdPUser[] users = idp.findUsers(cred.getUserId(), f);
+			LocalUserFilter f = new LocalUserFilter();
+			LocalUser[] users = idp.findUsers(cred.getUserId(), f);
 			assertEquals(2, users.length);
 		} catch (PermissionDeniedFault pdf) {
 		} catch (Exception e) {
@@ -737,17 +737,17 @@ public class TestIdentityProvider extends TestCase {
 				Application a = createApplication();
 				idp.register(a);
 
-				IdPUserFilter uf = new IdPUserFilter();
+				LocalUserFilter uf = new LocalUserFilter();
 				uf.setUserId(a.getUserId());
-				IdPUser[] users = idp.findUsers(cred.getUserId(), uf);
+				LocalUser[] users = idp.findUsers(cred.getUserId(), uf);
 				assertEquals(1, users.length);
-				assertEquals(IdPUserStatus.Pending, users[0].getStatus());
-				assertEquals(IdPUserRole.Non_Administrator, users[0].getRole());
-				users[0].setStatus(IdPUserStatus.Active);
+				assertEquals(LocalUserStatus.Pending, users[0].getStatus());
+				assertEquals(LocalUserRole.Non_Administrator, users[0].getRole());
+				users[0].setStatus(LocalUserStatus.Active);
 				idp.updateUser(cred.getUserId(), users[0]);
 				users = idp.findUsers(cred.getUserId(), uf);
 				assertEquals(1, users.length);
-				assertEquals(IdPUserStatus.Active, users[0].getStatus());
+				assertEquals(LocalUserStatus.Active, users[0].getStatus());
 				uf.setUserId("user");
 				users = idp.findUsers(cred.getUserId(), uf);
 				assertEquals(i + 1, users.length);
@@ -760,17 +760,17 @@ public class TestIdentityProvider extends TestCase {
 				this.verifySAMLAssertion(saml, idp, a);
 			}
 
-			IdPUserFilter uf = new IdPUserFilter();
-			IdPUser[] users = idp.findUsers(cred.getUserId(), uf);
+			LocalUserFilter uf = new LocalUserFilter();
+			LocalUser[] users = idp.findUsers(cred.getUserId(), uf);
 			assertEquals(times + 1, users.length);
 			for (int i = 0; i < users.length; i++) {
-				IdPUserFilter f = new IdPUserFilter();
+				LocalUserFilter f = new LocalUserFilter();
 				f.setUserId(users[i].getUserId());
-				IdPUser[] us = idp.findUsers(cred.getUserId(), f);
+				LocalUser[] us = idp.findUsers(cred.getUserId(), f);
 				assertEquals(1, us.length);
 				us[0].setFirstName("NEW NAME");
 				idp.updateUser(cred.getUserId(), us[0]);
-				IdPUser[] us2 = idp.findUsers(cred.getUserId(), f);
+				LocalUser[] us2 = idp.findUsers(cred.getUserId(), f);
 				assertEquals(1, us2.length);
 				assertEquals(us[0], us2[0]);
 				if (!users[i].getUserId().equals(cred.getUserId())) {

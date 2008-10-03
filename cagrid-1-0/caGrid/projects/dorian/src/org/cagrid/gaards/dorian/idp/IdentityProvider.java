@@ -56,7 +56,7 @@ public class IdentityProvider extends LoggingObject {
 	public SAMLAssertion authenticate(Credential credential)
 			throws AuthenticationProviderFault, InvalidCredentialFault,
 			CredentialNotSupportedFault {
-		IdPUser requestor = userManager.authenticateAndVerifyUser(credential);
+		LocalUser requestor = userManager.authenticateAndVerifyUser(credential);
 		try {
 			return assertionManager.getAuthenticationAssertion(requestor
 					.getUserId(), requestor.getFirstName(), requestor
@@ -76,7 +76,7 @@ public class IdentityProvider extends LoggingObject {
 			String newPassword) throws DorianInternalFault,
 			PermissionDeniedFault, InvalidUserPropertyFault {
 		try {
-			IdPUser requestor = userManager
+			LocalUser requestor = userManager
 					.authenticateAndVerifyUser(credential);
 			requestor.setPassword(newPassword);
 			try {
@@ -116,21 +116,21 @@ public class IdentityProvider extends LoggingObject {
 	public String register(Application a) throws DorianInternalFault,
 			InvalidUserPropertyFault {
 		ApplicationReview ar = this.registrationPolicy.register(a);
-		IdPUserStatus status = ar.getStatus();
-		IdPUserRole role = ar.getRole();
+		LocalUserStatus status = ar.getStatus();
+		LocalUserRole role = ar.getRole();
 		String message = ar.getMessage();
 		if (status == null) {
-			status = IdPUserStatus.Pending;
+			status = LocalUserStatus.Pending;
 		}
 
 		if (role == null) {
-			role = IdPUserRole.Non_Administrator;
+			role = LocalUserRole.Non_Administrator;
 		}
 		if (message == null) {
 			message = "None";
 		}
 
-		IdPUser u = new IdPUser();
+		LocalUser u = new LocalUser();
 		u.setUserId(a.getUserId());
 		u.setEmail(a.getEmail());
 		u.setPassword(a.getPassword());
@@ -150,40 +150,40 @@ public class IdentityProvider extends LoggingObject {
 		return message;
 	}
 
-	public IdPUser getUser(String requestorUID, String uid)
+	public LocalUser getUser(String requestorUID, String uid)
 			throws DorianInternalFault, PermissionDeniedFault, NoSuchUserFault {
-		IdPUser requestor = verifyUser(requestorUID);
+		LocalUser requestor = verifyUser(requestorUID);
 		verifyAdministrator(requestor);
 		return this.userManager.getUser(uid);
 	}
 
-	public IdPUser[] findUsers(String requestorUID, IdPUserFilter filter)
+	public LocalUser[] findUsers(String requestorUID, LocalUserFilter filter)
 			throws DorianInternalFault, PermissionDeniedFault {
-		IdPUser requestor = verifyUser(requestorUID);
+		LocalUser requestor = verifyUser(requestorUID);
 		verifyAdministrator(requestor);
 		return this.userManager.getUsers(filter, false);
 	}
 
-	public void updateUser(String requestorUID, IdPUser u)
+	public void updateUser(String requestorUID, LocalUser u)
 			throws DorianInternalFault, PermissionDeniedFault, NoSuchUserFault,
 			InvalidUserPropertyFault {
-		IdPUser requestor = verifyUser(requestorUID);
+		LocalUser requestor = verifyUser(requestorUID);
 		verifyAdministrator(requestor);
 		this.userManager.updateUser(u);
 	}
 
-	private void verifyAdministrator(IdPUser u) throws PermissionDeniedFault {
-		if (!u.getRole().equals(IdPUserRole.Administrator)) {
+	private void verifyAdministrator(LocalUser u) throws PermissionDeniedFault {
+		if (!u.getRole().equals(LocalUserRole.Administrator)) {
 			PermissionDeniedFault fault = new PermissionDeniedFault();
 			fault.setFaultString("You are NOT an administrator.");
 			throw fault;
 		}
 	}
 
-	private IdPUser verifyUser(String uid) throws DorianInternalFault,
+	private LocalUser verifyUser(String uid) throws DorianInternalFault,
 			PermissionDeniedFault {
 		try {
-			IdPUser u = this.userManager.getUser(uid);
+			LocalUser u = this.userManager.getUser(uid);
 			userManager.verifyUser(u);
 			return u;
 		} catch (NoSuchUserFault e) {
@@ -195,7 +195,7 @@ public class IdentityProvider extends LoggingObject {
 
 	public void removeUser(String requestorUID, String userId)
 			throws DorianInternalFault, PermissionDeniedFault {
-		IdPUser requestor = verifyUser(requestorUID);
+		LocalUser requestor = verifyUser(requestorUID);
 		verifyAdministrator(requestor);
 		userManager.removeUser(userId);
 	}

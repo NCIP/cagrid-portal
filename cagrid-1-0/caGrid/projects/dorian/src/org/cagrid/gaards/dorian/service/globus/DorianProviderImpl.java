@@ -25,21 +25,21 @@ public class DorianProviderImpl{
     return boxedResult;
   }
 
-    public org.cagrid.gaards.dorian.stubs.FindIdPUsersResponse findIdPUsers(org.cagrid.gaards.dorian.stubs.FindIdPUsersRequest params) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault {
-    org.cagrid.gaards.dorian.stubs.FindIdPUsersResponse boxedResult = new org.cagrid.gaards.dorian.stubs.FindIdPUsersResponse();
-    boxedResult.setIdPUser(impl.findIdPUsers(params.getFilter().getIdPUserFilter()));
+    public org.cagrid.gaards.dorian.stubs.FindLocalUsersResponse findLocalUsers(org.cagrid.gaards.dorian.stubs.FindLocalUsersRequest params) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault {
+    org.cagrid.gaards.dorian.stubs.FindLocalUsersResponse boxedResult = new org.cagrid.gaards.dorian.stubs.FindLocalUsersResponse();
+    boxedResult.setLocalUser(impl.findLocalUsers(params.getF().getLocalUserFilter()));
     return boxedResult;
   }
 
-    public org.cagrid.gaards.dorian.stubs.UpdateIdPUserResponse updateIdPUser(org.cagrid.gaards.dorian.stubs.UpdateIdPUserRequest params) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.NoSuchUserFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault {
-    org.cagrid.gaards.dorian.stubs.UpdateIdPUserResponse boxedResult = new org.cagrid.gaards.dorian.stubs.UpdateIdPUserResponse();
-    impl.updateIdPUser(params.getUser().getIdPUser());
+    public org.cagrid.gaards.dorian.stubs.UpdateLocalUserResponse updateLocalUser(org.cagrid.gaards.dorian.stubs.UpdateLocalUserRequest params) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.NoSuchUserFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault {
+    org.cagrid.gaards.dorian.stubs.UpdateLocalUserResponse boxedResult = new org.cagrid.gaards.dorian.stubs.UpdateLocalUserResponse();
+    impl.updateLocalUser(params.getUser().getLocalUser());
     return boxedResult;
   }
 
-    public org.cagrid.gaards.dorian.stubs.RemoveIdPUserResponse removeIdPUser(org.cagrid.gaards.dorian.stubs.RemoveIdPUserRequest params) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault {
-    org.cagrid.gaards.dorian.stubs.RemoveIdPUserResponse boxedResult = new org.cagrid.gaards.dorian.stubs.RemoveIdPUserResponse();
-    impl.removeIdPUser(params.getUserId());
+    public org.cagrid.gaards.dorian.stubs.RemoveLocalUserResponse removeLocalUser(org.cagrid.gaards.dorian.stubs.RemoveLocalUserRequest params) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault {
+    org.cagrid.gaards.dorian.stubs.RemoveLocalUserResponse boxedResult = new org.cagrid.gaards.dorian.stubs.RemoveLocalUserResponse();
+    impl.removeLocalUser(params.getUserId());
     return boxedResult;
   }
 

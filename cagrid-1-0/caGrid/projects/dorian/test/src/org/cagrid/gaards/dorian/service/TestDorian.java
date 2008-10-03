@@ -43,10 +43,10 @@ import org.cagrid.gaards.dorian.federation.TrustedIdPStatus;
 import org.cagrid.gaards.dorian.federation.UserManager;
 import org.cagrid.gaards.dorian.idp.Application;
 import org.cagrid.gaards.dorian.idp.CountryCode;
-import org.cagrid.gaards.dorian.idp.IdPUser;
-import org.cagrid.gaards.dorian.idp.IdPUserFilter;
-import org.cagrid.gaards.dorian.idp.IdPUserRole;
-import org.cagrid.gaards.dorian.idp.IdPUserStatus;
+import org.cagrid.gaards.dorian.idp.LocalUser;
+import org.cagrid.gaards.dorian.idp.LocalUserFilter;
+import org.cagrid.gaards.dorian.idp.LocalUserRole;
+import org.cagrid.gaards.dorian.idp.LocalUserStatus;
 import org.cagrid.gaards.dorian.idp.StateCode;
 import org.cagrid.gaards.dorian.stubs.types.DorianInternalFault;
 import org.cagrid.gaards.dorian.stubs.types.InvalidAssertionFault;
@@ -101,17 +101,17 @@ public class TestDorian extends TestCase {
             assertFalse(dorian.doesLocalUserExist(a.getUserId()));
             dorian.registerWithIdP(a);
             assertTrue(dorian.doesLocalUserExist(a.getUserId()));
-            IdPUserFilter uf = new IdPUserFilter();
+            LocalUserFilter uf = new LocalUserFilter();
             uf.setUserId(a.getUserId());
-            IdPUser[] users = dorian.findIdPUsers(gridId, uf);
+            LocalUser[] users = dorian.findLocalUsers(gridId, uf);
             assertEquals(1, users.length);
-            assertEquals(IdPUserStatus.Pending, users[0].getStatus());
-            assertEquals(IdPUserRole.Non_Administrator, users[0].getRole());
-            users[0].setStatus(IdPUserStatus.Active);
-            dorian.updateIdPUser(gridId, users[0]);
-            users = dorian.findIdPUsers(gridId, uf);
+            assertEquals(LocalUserStatus.Pending, users[0].getStatus());
+            assertEquals(LocalUserRole.Non_Administrator, users[0].getRole());
+            users[0].setStatus(LocalUserStatus.Active);
+            dorian.updateLocalUser(gridId, users[0]);
+            users = dorian.findLocalUsers(gridId, uf);
             assertEquals(1, users.length);
-            assertEquals(IdPUserStatus.Active, users[0].getStatus());
+            assertEquals(LocalUserStatus.Active, users[0].getStatus());
             BasicAuthentication auth = new BasicAuthentication();
             auth.setUserId(a.getUserId());
             auth.setPassword(a.getPassword());
@@ -122,12 +122,12 @@ public class TestDorian extends TestCase {
             // test authentication with a status pending user
             Application b = createApplication();
             dorian.registerWithIdP(b);
-            uf = new IdPUserFilter();
+            uf = new LocalUserFilter();
             uf.setUserId(b.getUserId());
-            users = dorian.findIdPUsers(gridId, uf);
+            users = dorian.findLocalUsers(gridId, uf);
             assertEquals(1, users.length);
-            assertEquals(IdPUserStatus.Pending, users[0].getStatus());
-            assertEquals(IdPUserRole.Non_Administrator, users[0].getRole());
+            assertEquals(LocalUserStatus.Pending, users[0].getStatus());
+            assertEquals(LocalUserRole.Non_Administrator, users[0].getRole());
             auth = new BasicAuthentication();
             auth.setUserId(b.getUserId());
             auth.setPassword(b.getPassword());
@@ -140,14 +140,14 @@ public class TestDorian extends TestCase {
             // test authentication with a status rejected user
             Application c = createApplication();
             dorian.registerWithIdP(c);
-            uf = new IdPUserFilter();
+            uf = new LocalUserFilter();
             uf.setUserId(c.getUserId());
-            users = dorian.findIdPUsers(gridId, uf);
+            users = dorian.findLocalUsers(gridId, uf);
             assertEquals(1, users.length);
-            assertEquals(IdPUserStatus.Pending, users[0].getStatus());
-            assertEquals(IdPUserRole.Non_Administrator, users[0].getRole());
-            users[0].setStatus(IdPUserStatus.Rejected);
-            dorian.updateIdPUser(gridId, users[0]);
+            assertEquals(LocalUserStatus.Pending, users[0].getStatus());
+            assertEquals(LocalUserRole.Non_Administrator, users[0].getRole());
+            users[0].setStatus(LocalUserStatus.Rejected);
+            dorian.updateLocalUser(gridId, users[0]);
             auth = new BasicAuthentication();
             auth.setUserId(c.getUserId());
             auth.setPassword(c.getPassword());
@@ -160,14 +160,14 @@ public class TestDorian extends TestCase {
             // test authentication with a status suspended user
             Application d = createApplication();
             dorian.registerWithIdP(d);
-            uf = new IdPUserFilter();
+            uf = new LocalUserFilter();
             uf.setUserId(d.getUserId());
-            users = dorian.findIdPUsers(gridId, uf);
+            users = dorian.findLocalUsers(gridId, uf);
             assertEquals(1, users.length);
-            assertEquals(IdPUserStatus.Pending, users[0].getStatus());
-            assertEquals(IdPUserRole.Non_Administrator, users[0].getRole());
-            users[0].setStatus(IdPUserStatus.Suspended);
-            dorian.updateIdPUser(gridId, users[0]);
+            assertEquals(LocalUserStatus.Pending, users[0].getStatus());
+            assertEquals(LocalUserRole.Non_Administrator, users[0].getRole());
+            users[0].setStatus(LocalUserStatus.Suspended);
+            dorian.updateLocalUser(gridId, users[0]);
             auth = new BasicAuthentication();
             auth.setUserId(d.getUserId());
             auth.setPassword(d.getPassword());
@@ -204,27 +204,27 @@ public class TestDorian extends TestCase {
 
             Application a = createApplication();
             dorian.registerWithIdP(a);
-            IdPUserFilter uf = new IdPUserFilter();
+            LocalUserFilter uf = new LocalUserFilter();
             uf.setUserId(a.getUserId());
 
             // test findIdPUsers with an invalid gridId
             try {
                 String invalidGridId = "ThisIsInvalid";
-                dorian.findIdPUsers(invalidGridId, uf);
+                dorian.findLocalUsers(invalidGridId, uf);
                 fail("Invoker should not be able to invoke.");
             } catch (PermissionDeniedFault pdf) {
             }
 
             // try to update a user that does not exist
             try {
-                IdPUser u = new IdPUser();
+                LocalUser u = new LocalUser();
                 u.setUserId("No_SUCH_USER");
-                dorian.updateIdPUser(gridId, u);
+                dorian.updateLocalUser(gridId, u);
                 fail("Should not be able to update no such user.");
             } catch (NoSuchUserFault nsuf) {
             }
 
-            IdPUser[] us = dorian.findIdPUsers(gridId, uf);
+            LocalUser[] us = dorian.findLocalUsers(gridId, uf);
             assertEquals(1, us.length);
             String address = us[0].getAddress();
             us[0].setAddress("New_Address");
@@ -237,17 +237,17 @@ public class TestDorian extends TestCase {
             us[0].setOrganization("New_Organization");
             us[0].setPassword("$W0rdD0ct0R$");
             us[0].setPhoneNumber("012-345-6789");
-            us[0].setRole(IdPUserRole.Non_Administrator);
+            us[0].setRole(LocalUserRole.Non_Administrator);
             us[0].setState(StateCode.AK);
-            us[0].setStatus(IdPUserStatus.Active);
+            us[0].setStatus(LocalUserStatus.Active);
             us[0].setZipcode("11111");
 
-            dorian.updateIdPUser(gridId, us[0]);
+            dorian.updateLocalUser(gridId, us[0]);
             uf.setAddress(address);
-            us = dorian.findIdPUsers(gridId, uf);
+            us = dorian.findLocalUsers(gridId, uf);
             assertEquals(0, us.length);
             uf.setAddress("New_Address");
-            us = dorian.findIdPUsers(gridId, uf);
+            us = dorian.findLocalUsers(gridId, uf);
             assertEquals(1, us.length);
             assertEquals("New_Address", us[0].getAddress());
             assertEquals("New_Address2", us[0].getAddress2());
@@ -258,22 +258,22 @@ public class TestDorian extends TestCase {
             assertEquals("New_Last_Name", us[0].getLastName());
             assertEquals("New_Organization", us[0].getOrganization());
             assertEquals("012-345-6789", us[0].getPhoneNumber());
-            assertEquals(IdPUserRole.Non_Administrator, us[0].getRole());
+            assertEquals(LocalUserRole.Non_Administrator, us[0].getRole());
             assertEquals(StateCode.AK, us[0].getState());
-            assertEquals(IdPUserStatus.Active, us[0].getStatus());
+            assertEquals(LocalUserStatus.Active, us[0].getStatus());
             assertEquals("11111", us[0].getZipcode());
 
             // create an invalid Grid Id and try to removeIdPUser
             try {
                 String invalidGridId = "ThisIsInvalid";
-                dorian.removeIdPUser(invalidGridId, us[0].getUserId());
+                dorian.removeLocalUser(invalidGridId, us[0].getUserId());
                 fail("Should not be able to Remove User with invalid Grid Id");
             } catch (PermissionDeniedFault pdf) {
             }
 
             // remove the user
-            dorian.removeIdPUser(gridId, us[0].getUserId());
-            us = dorian.findIdPUsers(gridId, uf);
+            dorian.removeLocalUser(gridId, us[0].getUserId());
+            us = dorian.findLocalUsers(gridId, uf);
             assertEquals(0, us.length);
 
         } catch (Exception e) {
@@ -346,14 +346,14 @@ public class TestDorian extends TestCase {
             Application app = createApplication();
             dorian.registerWithIdP(app);
 
-            IdPUserFilter f = new IdPUserFilter();
+            LocalUserFilter f = new LocalUserFilter();
             f.setUserId(app.getUserId());
-            IdPUser[] list = dorian.findIdPUsers(gridId, f);
+            LocalUser[] list = dorian.findLocalUsers(gridId, f);
             assertEquals(1, list.length);
             assertEquals(app.getUserId(), list[0].getUserId());
-            list[0].setStatus(IdPUserStatus.Active);
-            list[0].setRole(IdPUserRole.Administrator);
-            dorian.updateIdPUser(gridId, list[0]);
+            list[0].setStatus(LocalUserStatus.Active);
+            list[0].setRole(LocalUserRole.Administrator);
+            dorian.updateLocalUser(gridId, list[0]);
             String username = list[0].getUserId();
             BasicAuthentication cred = new BasicAuthentication();
             cred.setUserId(username);
@@ -385,7 +385,7 @@ public class TestDorian extends TestCase {
             }
             assertTrue(found1);
             assertTrue(found2);
-            dorian.removeIdPUser(userGridId, Dorian.IDP_ADMIN_USER_ID);
+            dorian.removeLocalUser(userGridId, Dorian.IDP_ADMIN_USER_ID);
 
             Dorian dorian2 = new Dorian(conf, "http://localhost");
 
@@ -434,14 +434,14 @@ public class TestDorian extends TestCase {
             assertEquals(1, dorian.findGridUsers(gridId, uf).length);
             Application app = createApplication();
             dorian.registerWithIdP(app);
-            IdPUserFilter f = new IdPUserFilter();
+            LocalUserFilter f = new LocalUserFilter();
             f.setUserId(app.getUserId());
-            IdPUser[] list = dorian.findIdPUsers(gridId, f);
+            LocalUser[] list = dorian.findLocalUsers(gridId, f);
             assertEquals(1, list.length);
             assertEquals(app.getUserId(), list[0].getUserId());
-            list[0].setStatus(IdPUserStatus.Active);
-            list[0].setRole(IdPUserRole.Administrator);
-            dorian.updateIdPUser(gridId, list[0]);
+            list[0].setStatus(LocalUserStatus.Active);
+            list[0].setRole(LocalUserRole.Administrator);
+            dorian.updateLocalUser(gridId, list[0]);
             String username = list[0].getUserId();
             BasicAuthentication cred = new BasicAuthentication();
             cred.setUserId(username);
@@ -461,28 +461,28 @@ public class TestDorian extends TestCase {
             dorian.addAdmin(gridId, userGridId);
             assertEquals(2, dorian.findGridUsers(gridId, null).length);
 
-            IdPUserFilter f2 = new IdPUserFilter();
+            LocalUserFilter f2 = new LocalUserFilter();
             f2.setUserId(Dorian.IDP_ADMIN_USER_ID);
-            IdPUser[] list2 = dorian.findIdPUsers(gridId, f2);
+            LocalUser[] list2 = dorian.findLocalUsers(gridId, f2);
             assertEquals(1, list2.length);
             assertEquals(Dorian.IDP_ADMIN_USER_ID, list2[0].getUserId());
-            list2[0].setStatus(IdPUserStatus.Suspended);
-            dorian.updateIdPUser(userGridId, list2[0]);
+            list2[0].setStatus(LocalUserStatus.Suspended);
+            dorian.updateLocalUser(userGridId, list2[0]);
 
             Dorian dorian2 = new Dorian(conf, "https://localhost");
 
             try {
-                dorian2.findIdPUsers(gridId, null);
+                dorian2.findLocalUsers(gridId, null);
                 fail("Should not have permission to execute.");
             } catch (PermissionDeniedFault pdf) {
 
             }
-            IdPUserFilter idpf = new IdPUserFilter();
+            LocalUserFilter idpf = new LocalUserFilter();
             idpf.setUserId(Dorian.IDP_ADMIN_USER_ID);
-            idpf.setStatus(IdPUserStatus.Suspended);
-            assertEquals(1, dorian2.findIdPUsers(userGridId, idpf).length);
-            idpf.setStatus(IdPUserStatus.Active);
-            assertEquals(0, dorian2.findIdPUsers(userGridId, idpf).length);
+            idpf.setStatus(LocalUserStatus.Suspended);
+            assertEquals(1, dorian2.findLocalUsers(userGridId, idpf).length);
+            idpf.setStatus(LocalUserStatus.Active);
+            assertEquals(0, dorian2.findLocalUsers(userGridId, idpf).length);
 
             assertEquals(2, dorian2.findGridUsers(userGridId, null).length);
             assertEquals(1, dorian2.findGridUsers(userGridId, uf).length);
@@ -513,13 +513,13 @@ public class TestDorian extends TestCase {
             Application app = createApplication();
             dorian.registerWithIdP(app);
 
-            IdPUserFilter f = new IdPUserFilter();
+            LocalUserFilter f = new LocalUserFilter();
             f.setUserId(app.getUserId());
-            IdPUser[] list = dorian.findIdPUsers(gridId, f);
+            LocalUser[] list = dorian.findLocalUsers(gridId, f);
             assertEquals(1, list.length);
             assertEquals(app.getUserId(), list[0].getUserId());
-            list[0].setStatus(IdPUserStatus.Active);
-            dorian.updateIdPUser(gridId, list[0]);
+            list[0].setStatus(LocalUserStatus.Active);
+            dorian.updateLocalUser(gridId, list[0]);
             String username = list[0].getUserId();
             BasicAuthentication cred = new BasicAuthentication();
             cred.setUserId(username);
@@ -546,8 +546,8 @@ public class TestDorian extends TestCase {
                 }
             }
             assertTrue(found);
-            dorian.removeIdPUser(gridId, username);
-            assertEquals(0, dorian.findIdPUsers(gridId, f).length);
+            dorian.removeLocalUser(gridId, username);
+            assertEquals(0, dorian.findLocalUsers(gridId, f).length);
             assertEquals(0, dorian.findGridUsers(gridId, filter).length);
 
             users = null;

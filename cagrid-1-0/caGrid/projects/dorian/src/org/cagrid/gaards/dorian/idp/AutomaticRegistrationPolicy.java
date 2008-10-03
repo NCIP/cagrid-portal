@@ -23,9 +23,9 @@ public class AutomaticRegistrationPolicy implements IdPRegistrationPolicy{
 
 	public ApplicationReview register(Application a) throws DorianInternalFault, InvalidUserPropertyFault {
 		ApplicationReview ar = new ApplicationReview();
-		ar.setStatus(IdPUserStatus.Active);
-		ar.setRole(IdPUserRole.Non_Administrator);
-		ar.setMessage("Your account was approved, your current account status is " + IdPUserStatus.Active + ".");
+		ar.setStatus(LocalUserStatus.Active);
+		ar.setRole(LocalUserRole.Non_Administrator);
+		ar.setMessage("Your account was approved, your current account status is " + LocalUserStatus.Active + ".");
 		return ar;
 	}
 

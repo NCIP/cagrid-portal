@@ -24,8 +24,8 @@ public class ManualRegistrationPolicy implements IdPRegistrationPolicy {
 	public ApplicationReview register(Application a) throws DorianInternalFault,
 			InvalidUserPropertyFault {
 		ApplicationReview ar = new ApplicationReview();
-		ar.setStatus(IdPUserStatus.Pending);
-		ar.setRole(IdPUserRole.Non_Administrator);
+		ar.setStatus(LocalUserStatus.Pending);
+		ar.setRole(LocalUserRole.Non_Administrator);
 		ar
 				.setMessage("Your application will be reviewed by an administrator.");
 		return ar;

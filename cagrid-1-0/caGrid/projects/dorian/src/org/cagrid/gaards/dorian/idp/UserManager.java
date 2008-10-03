@@ -63,13 +63,13 @@ public class UserManager extends LoggingObject {
 				.getPasswordSecurityPolicy());
 	}
 
-	public IdPUser authenticateAndVerifyUser(Credential credential)
+	public LocalUser authenticateAndVerifyUser(Credential credential)
 			throws AuthenticationProviderFault, InvalidCredentialFault,
 			CredentialNotSupportedFault {
 		if (credential.getClass().equals(BasicAuthentication.class)) {
 			BasicAuthentication cred = (BasicAuthentication) credential;
 			try {
-				IdPUser u = getUser(cred.getUserId());
+				LocalUser u = getUser(cred.getUserId());
 				PasswordSecurity entry = this.passwordSecurityManager
 						.getEntry(u.getUserId());
 				PasswordStatus status = entry.getPasswordStatus();
@@ -173,22 +173,22 @@ public class UserManager extends LoggingObject {
 
 	}
 
-	public void verifyUser(IdPUser u) throws DorianInternalFault,
+	public void verifyUser(LocalUser u) throws DorianInternalFault,
 			PermissionDeniedFault {
 
-		if (!u.getStatus().equals(IdPUserStatus.Active)) {
-			if (u.getStatus().equals(IdPUserStatus.Suspended)) {
+		if (!u.getStatus().equals(LocalUserStatus.Active)) {
+			if (u.getStatus().equals(LocalUserStatus.Suspended)) {
 				PermissionDeniedFault fault = new PermissionDeniedFault();
 				fault.setFaultString("The account has been suspended.");
 				throw fault;
 
-			} else if (u.getStatus().equals(IdPUserStatus.Rejected)) {
+			} else if (u.getStatus().equals(LocalUserStatus.Rejected)) {
 				PermissionDeniedFault fault = new PermissionDeniedFault();
 				fault
 						.setFaultString("The application for the account was rejected.");
 				throw fault;
 
-			} else if (u.getStatus().equals(IdPUserStatus.Pending)) {
+			} else if (u.getStatus().equals(LocalUserStatus.Pending)) {
 				PermissionDeniedFault fault = new PermissionDeniedFault();
 				fault
 						.setFaultString("The application for this account has not yet been reviewed.");
@@ -213,7 +213,7 @@ public class UserManager extends LoggingObject {
 		}
 	}
 
-	private void validatePassword(IdPUser user) throws DorianInternalFault,
+	private void validatePassword(LocalUser user) throws DorianInternalFault,
 			InvalidUserPropertyFault {
 		String password = user.getPassword();
 		if (password == null) {
@@ -272,7 +272,7 @@ public class UserManager extends LoggingObject {
 
 	}
 
-	private void validateUserId(IdPUser user) throws InvalidUserPropertyFault {
+	private void validateUserId(LocalUser user) throws InvalidUserPropertyFault {
 		String uid = user.getUserId();
 		if ((uid == null) || (conf.getMinUserIdLength() > uid.length())
 				|| (conf.getMaxUserIdLength() < uid.length())) {
@@ -286,7 +286,7 @@ public class UserManager extends LoggingObject {
 		}
 	}
 
-	private void validateUser(IdPUser user) throws DorianInternalFault,
+	private void validateUser(LocalUser user) throws DorianInternalFault,
 			InvalidUserPropertyFault {
 		validateUserId(user);
 		validatePassword(user);
@@ -307,7 +307,7 @@ public class UserManager extends LoggingObject {
 		}
 	}
 
-	public synchronized void addUser(IdPUser user) throws DorianInternalFault,
+	public synchronized void addUser(LocalUser user) throws DorianInternalFault,
 			InvalidUserPropertyFault {
 		this.buildDatabase();
 		this.validateUser(user);
@@ -400,16 +400,16 @@ public class UserManager extends LoggingObject {
 		}
 	}
 
-	public IdPUser[] getUsers(IdPUserFilter filter) throws DorianInternalFault {
+	public LocalUser[] getUsers(LocalUserFilter filter) throws DorianInternalFault {
 		return getUsers(filter, true);
 	}
 
-	public IdPUser[] getUsers(IdPUserFilter filter, boolean includePassword)
+	public LocalUser[] getUsers(LocalUserFilter filter, boolean includePassword)
 			throws DorianInternalFault {
 
 		this.buildDatabase();
 		Connection c = null;
-		List<IdPUser> users = new ArrayList<IdPUser>();
+		List<LocalUser> users = new ArrayList<LocalUser>();
 		try {
 			c = db.getConnection();
 			PreparedStatement ps = null;
@@ -508,7 +508,7 @@ public class UserManager extends LoggingObject {
 			// System.out.println(ps.toString());
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
-				IdPUser user = new IdPUser();
+				LocalUser user = new LocalUser();
 				user.setUserId(rs.getString("UID"));
 				user.setEmail(rs.getString("EMAIL"));
 				if (includePassword) {
@@ -524,8 +524,8 @@ public class UserManager extends LoggingObject {
 				user.setZipcode(rs.getString("ZIP_CODE"));
 				user.setCountry(CountryCode.fromValue(rs.getString("COUNTRY")));
 				user.setPhoneNumber(rs.getString("PHONE_NUMBER"));
-				user.setStatus(IdPUserStatus.fromValue(rs.getString("STATUS")));
-				user.setRole(IdPUserRole.fromValue(rs.getString("ROLE")));
+				user.setStatus(LocalUserStatus.fromValue(rs.getString("STATUS")));
+				user.setRole(LocalUserRole.fromValue(rs.getString("ROLE")));
 				user.setPasswordSecurity(this.passwordSecurityManager
 						.getEntry(user.getUserId()));
 				users.add(user);
@@ -533,9 +533,9 @@ public class UserManager extends LoggingObject {
 			rs.close();
 			ps.close();
 
-			IdPUser[] list = new IdPUser[users.size()];
+			LocalUser[] list = new LocalUser[users.size()];
 			for (int i = 0; i < list.length; i++) {
-				list[i] = (IdPUser) users.get(i);
+				list[i] = (LocalUser) users.get(i);
 			}
 			return list;
 
@@ -553,15 +553,15 @@ public class UserManager extends LoggingObject {
 		}
 	}
 
-	public IdPUser getUser(String uid) throws DorianInternalFault,
+	public LocalUser getUser(String uid) throws DorianInternalFault,
 			NoSuchUserFault {
 		return this.getUser(uid, true);
 	}
 
-	public IdPUser getUser(String uid, boolean includePassword)
+	public LocalUser getUser(String uid, boolean includePassword)
 			throws DorianInternalFault, NoSuchUserFault {
 		this.buildDatabase();
-		IdPUser user = new IdPUser();
+		LocalUser user = new LocalUser();
 		Connection c = null;
 		try {
 			c = db.getConnection();
@@ -585,8 +585,8 @@ public class UserManager extends LoggingObject {
 				user.setZipcode(rs.getString("ZIP_CODE"));
 				user.setCountry(CountryCode.fromValue(rs.getString("COUNTRY")));
 				user.setPhoneNumber(rs.getString("PHONE_NUMBER"));
-				user.setStatus(IdPUserStatus.fromValue(rs.getString("STATUS")));
-				user.setRole(IdPUserRole.fromValue(rs.getString("ROLE")));
+				user.setStatus(LocalUserStatus.fromValue(rs.getString("STATUS")));
+				user.setRole(LocalUserRole.fromValue(rs.getString("ROLE")));
 				user.setPasswordSecurity(this.passwordSecurityManager
 						.getEntry(uid));
 			} else {
@@ -638,7 +638,7 @@ public class UserManager extends LoggingObject {
 							+ "INDEX document_index (EMAIL));";
 					db.update(applications);
 					try {
-						IdPUser u = new IdPUser();
+						LocalUser u = new LocalUser();
 						u.setUserId(ADMIN_USER_ID);
 						u.setPassword(ADMIN_PASSWORD);
 						u.setEmail("dorian@dorian.org");
@@ -652,8 +652,8 @@ public class UserManager extends LoggingObject {
 						u.setZipcode("43210");
 						u.setCountry(CountryCode.US);
 						u.setPhoneNumber("555-555-5555");
-						u.setStatus(IdPUserStatus.Active);
-						u.setRole(IdPUserRole.Administrator);
+						u.setStatus(LocalUserStatus.Active);
+						u.setRole(LocalUserRole.Administrator);
 						this.addUser(u);
 					} catch (Exception e) {
 						logError(e.getMessage(), e);
@@ -682,7 +682,7 @@ public class UserManager extends LoggingObject {
 		}
 	}
 
-	public synchronized void updateUser(IdPUser u) throws DorianInternalFault,
+	public synchronized void updateUser(LocalUser u) throws DorianInternalFault,
 			NoSuchUserFault, InvalidUserPropertyFault {
 		this.buildDatabase();
 		if (u.getUserId() == null) {
@@ -695,7 +695,7 @@ public class UserManager extends LoggingObject {
 			StringBuffer sb = new StringBuffer();
 			sb.append("update " + IDP_USERS_TABLE + " SET ");
 			int changes = 0;
-			IdPUser curr = this.getUser(u.getUserId());
+			LocalUser curr = this.getUser(u.getUserId());
 			boolean passwordChanged = false;
 			if (u.getPassword() != null) {
 				String newPass = null;
@@ -863,10 +863,10 @@ public class UserManager extends LoggingObject {
 		}
 	}
 
-	private boolean accountCreated(IdPUserStatus status) {
-		if (status.equals(IdPUserStatus.Suspended)) {
+	private boolean accountCreated(LocalUserStatus status) {
+		if (status.equals(LocalUserStatus.Suspended)) {
 			return true;
-		} else if (status.equals(IdPUserStatus.Active)) {
+		} else if (status.equals(LocalUserStatus.Active)) {
 			return true;
 		} else {
 			return false;

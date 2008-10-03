@@ -32,8 +32,8 @@ import org.cagrid.gaards.dorian.federation.GridUserStatus;
 import org.cagrid.gaards.dorian.federation.TrustedIdPStatus;
 import org.cagrid.gaards.dorian.idp.Application;
 import org.cagrid.gaards.dorian.idp.CountryCode;
-import org.cagrid.gaards.dorian.idp.IdPUserRole;
-import org.cagrid.gaards.dorian.idp.IdPUserStatus;
+import org.cagrid.gaards.dorian.idp.LocalUserRole;
+import org.cagrid.gaards.dorian.idp.LocalUserStatus;
 import org.cagrid.gaards.dorian.idp.StateCode;
 import org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault;
 import org.cagrid.gaards.dorian.test.system.steps.ChangeLocalUserPasswordStep;
@@ -51,300 +51,276 @@ import org.cagrid.gaards.dorian.test.system.steps.UpdateGridUserStatusStep;
 import org.cagrid.gaards.dorian.test.system.steps.UpdateLocalUserStatusStep;
 import org.cagrid.gaards.dorian.test.system.steps.VerifyTrustedIdPStep;
 
+
 public class DorianLocaIdentityProviderTest extends ServiceStoryBase {
 
-	private File configuration;
-	private File properties;
-	private File tempService;
-	private ConfigureGlobusToTrustDorianStep trust;
+    private File configuration;
+    private File properties;
+    private File tempService;
+    private ConfigureGlobusToTrustDorianStep trust;
 
-	public DorianLocaIdentityProviderTest(ServiceContainer container) {
-		this(container, null, null);
-	}
 
-	public DorianLocaIdentityProviderTest(ServiceContainer container,
-			File properties) {
-		this(container, null, properties);
-	}
+    public DorianLocaIdentityProviderTest(ServiceContainer container) {
+        this(container, null, null);
+    }
 
-	public DorianLocaIdentityProviderTest(ServiceContainer container,
-			File configuration, File properties) {
-		super(container);
-		this.configuration = configuration;
-		this.properties = properties;
-	}
 
-	@Override
-	public String getName() {
-		return "Dorian Local Identity Provider System Test";
-	}
+    public DorianLocaIdentityProviderTest(ServiceContainer container, File properties) {
+        this(container, null, properties);
+    }
 
-	public String getDescription() {
-		return "Dorian Local Identity Provider System Test";
-	}
 
-	protected Vector<Step> steps() {
-		Vector<Step> steps = new Vector<Step>();
-		try {
-			steps.add(new UnpackContainerStep(getContainer()));
-			steps.add(new CopyConfigurationStep(tempService,
-					this.configuration, this.properties));
+    public DorianLocaIdentityProviderTest(ServiceContainer container, File configuration, File properties) {
+        super(container);
+        this.configuration = configuration;
+        this.properties = properties;
+    }
 
-			steps.add(new DeployServiceStep(getContainer(), this.tempService
-					.getAbsolutePath()));
 
-			trust = new ConfigureGlobusToTrustDorianStep(getContainer());
-			steps.add(trust);
+    @Override
+    public String getName() {
+        return "Dorian Local Identity Provider System Test";
+    }
 
-			steps.add(new StartContainerStep(getContainer()));
 
-			GetAsserionSigningCertificateStep signingCertStep = new GetAsserionSigningCertificateStep(
-					getContainer());
-			steps.add(signingCertStep);
+    public String getDescription() {
+        return "Dorian Local Identity Provider System Test";
+    }
 
-			String serviceURL = getContainer().getContainerBaseURI().toString()
-					+ "cagrid/Dorian";
 
-			// Test Get supported authentication types
+    protected Vector<Step> steps() {
+        Vector<Step> steps = new Vector<Step>();
+        try {
+            steps.add(new UnpackContainerStep(getContainer()));
+            steps.add(new CopyConfigurationStep(tempService, this.configuration, this.properties));
 
-			Set<QName> expectedProfiles = new HashSet<QName>();
-			expectedProfiles.add(AuthenticationProfile.BASIC_AUTHENTICATION);
-			steps.add(new ValidateSupportedAuthenticationProfilesStep(
-					serviceURL, expectedProfiles));
+            steps.add(new DeployServiceStep(getContainer(), this.tempService.getAbsolutePath()));
 
-			SuccessfullAuthentication success = new SuccessfullAuthentication(
-					"dorian", "Mr.", "Administrator", "dorian@dorian.org",
-					signingCertStep);
+            trust = new ConfigureGlobusToTrustDorianStep(getContainer());
+            steps.add(trust);
 
-			// Test Successful authentication
-			BasicAuthentication cred = new BasicAuthentication();
-			cred.setUserId("dorian");
-			cred.setPassword("DorianAdmin$1");
-			AuthenticationStep adminAuth = new AuthenticationStep(serviceURL,
-					success, cred);
-			steps.add(adminAuth);
+            steps.add(new StartContainerStep(getContainer()));
 
-			// Get Admin's Grid Credentials
+            GetAsserionSigningCertificateStep signingCertStep = new GetAsserionSigningCertificateStep(getContainer());
+            steps.add(signingCertStep);
 
-			GridCredentialRequestStep admin = new GridCredentialRequestStep(
-					serviceURL, adminAuth,
-					new SuccessfullGridCredentialRequest());
-			steps.add(admin);
-			
-			//Test that the Dorian Idp is properly registered.
-			
-			VerifyTrustedIdPStep idp = new VerifyTrustedIdPStep(serviceURL,admin,"Dorian");
-			idp.setDisplayName("Dorian");
-			idp.setStatus(TrustedIdPStatus.Active);
-			idp.setUserPolicyClass(AutoApprovalPolicy.class.getName());
-			idp.setAuthenticationServiceURL(serviceURL);
-			steps.add(idp);
+            String serviceURL = getContainer().getContainerBaseURI().toString() + "cagrid/Dorian";
 
-			// Create Users
-			List<Application> users = new ArrayList<Application>();
-			for (int i = 0; i < 3; i++) {
-				Application a = new Application();
-				a.setUserId("jdoe" + i);
-				a.setPassword("K00lM0N$$" + i);
-				a.setFirstName("John" + i);
-				a.setLastName("Doe" + i);
-				a.setEmail(a.getUserId() + "@cagrid.org");
-				a.setOrganization("cagrid.org");
-				a.setAddress("123" + i + " Grid Way");
-				a.setCity("Columbus");
-				a.setState(StateCode.OH);
-				a.setCountry(CountryCode.US);
-				a.setZipcode("43210");
-				a.setPhoneNumber("(555) 555-555" + i);
-				users.add(a);
-				steps.add(new RegisterUserWithDorianIdentityProviderStep(
-						serviceURL, a));
-			}
+            // Test Get supported authentication types
 
-			// Test that the user accounts were create correctly
-			for (int i = 0; i < 3; i++) {
-				steps.add(new FindLocalUserStep(serviceURL, admin,
-						users.get(i), IdPUserStatus.Pending,
-						IdPUserRole.Non_Administrator));
-			}
+            Set<QName> expectedProfiles = new HashSet<QName>();
+            expectedProfiles.add(AuthenticationProfile.BASIC_AUTHENTICATION);
+            steps.add(new ValidateSupportedAuthenticationProfilesStep(serviceURL, expectedProfiles));
 
-			// Test that the users cannot authenticate until they are approved.
-			for (int i = 0; i < users.size(); i++) {
-				BasicAuthentication auth = new BasicAuthentication();
-				auth.setUserId(users.get(i).getUserId());
-				auth.setPassword(users.get(i).getPassword());
-				steps
-						.add(new AuthenticationStep(
-								serviceURL,
-								new InvalidAuthentication(
-										"The application for this account has not yet been reviewed.",
-										InvalidCredentialFault.class), auth));
-			}
+            SuccessfullAuthentication success = new SuccessfullAuthentication("dorian", "Mr.", "Administrator",
+                "dorian@dorian.org", signingCertStep);
 
-			// Approve the user accounts
+            // Test Successful authentication
+            BasicAuthentication cred = new BasicAuthentication();
+            cred.setUserId("dorian");
+            cred.setPassword("DorianAdmin$1");
+            AuthenticationStep adminAuth = new AuthenticationStep(serviceURL, success, cred);
+            steps.add(adminAuth);
 
-			for (int i = 0; i < users.size(); i++) {
-				steps.add(new UpdateLocalUserStatusStep(serviceURL, admin,
-						users.get(i).getUserId(), IdPUserStatus.Active));
-			}
+            // Get Admin's Grid Credentials
 
-			// Test that the user accounts were approved correctly
-			for (int i = 0; i < users.size(); i++) {
-				steps.add(new FindLocalUserStep(serviceURL, admin,
-						users.get(i), IdPUserStatus.Active,
-						IdPUserRole.Non_Administrator));
-			}
+            GridCredentialRequestStep admin = new GridCredentialRequestStep(serviceURL, adminAuth,
+                new SuccessfullGridCredentialRequest());
+            steps.add(admin);
 
-			// Test successful Authentication
-			List<GridCredentialRequestStep> userCredentials = new ArrayList<GridCredentialRequestStep>();
+            // Test that the Dorian Idp is properly registered.
 
-			for (int i = 0; i < users.size(); i++) {
-				SuccessfullAuthentication sa = new SuccessfullAuthentication(
-						users.get(i).getUserId(), users.get(i).getFirstName(),
-						users.get(i).getLastName(), users.get(i).getEmail(),
-						signingCertStep);
+            VerifyTrustedIdPStep idp = new VerifyTrustedIdPStep(serviceURL, admin, "Dorian");
+            idp.setDisplayName("Dorian");
+            idp.setStatus(TrustedIdPStatus.Active);
+            idp.setUserPolicyClass(AutoApprovalPolicy.class.getName());
+            idp.setAuthenticationServiceURL(serviceURL);
+            steps.add(idp);
 
-				// Test Successful authentication
-				BasicAuthentication ba = new BasicAuthentication();
-				ba.setUserId(users.get(i).getUserId());
-				ba.setPassword(users.get(i).getPassword());
-				AuthenticationStep userAuth = new AuthenticationStep(
-						serviceURL, sa, ba);
-				steps.add(userAuth);
-				GridCredentialRequestStep proxy = new GridCredentialRequestStep(
-						serviceURL, userAuth,
-						new SuccessfullGridCredentialRequest());
-				steps.add(proxy);
-				userCredentials.add(proxy);
+            // Create Users
+            List<Application> users = new ArrayList<Application>();
+            for (int i = 0; i < 3; i++) {
+                Application a = new Application();
+                a.setUserId("jdoe" + i);
+                a.setPassword("K00lM0N$$" + i);
+                a.setFirstName("John" + i);
+                a.setLastName("Doe" + i);
+                a.setEmail(a.getUserId() + "@cagrid.org");
+                a.setOrganization("cagrid.org");
+                a.setAddress("123" + i + " Grid Way");
+                a.setCity("Columbus");
+                a.setState(StateCode.OH);
+                a.setCountry(CountryCode.US);
+                a.setZipcode("43210");
+                a.setPhoneNumber("(555) 555-555" + i);
+                users.add(a);
+                steps.add(new RegisterUserWithDorianIdentityProviderStep(serviceURL, a));
+            }
 
-				FindGridUserStep gridUser = new FindGridUserStep(serviceURL,
-						admin, proxy);
-				gridUser.setExpectedEmail(users.get(i).getEmail());
-				gridUser.setExpectedFirstName(users.get(i).getFirstName());
-				gridUser.setExpectedLastName(users.get(i).getLastName());
-				gridUser.setExpectedLocalUserId(users.get(i).getUserId());
-				gridUser.setExpectedStatus(GridUserStatus.Active);
-				steps.add(gridUser);
-			}
+            // Test that the user accounts were create correctly
+            for (int i = 0; i < 3; i++) {
+                steps.add(new FindLocalUserStep(serviceURL, admin, users.get(i), LocalUserStatus.Pending,
+                    LocalUserRole.Non_Administrator));
+            }
 
-			// Test Suspending Accounts Locally
+            // Test that the users cannot authenticate until they are approved.
+            for (int i = 0; i < users.size(); i++) {
+                BasicAuthentication auth = new BasicAuthentication();
+                auth.setUserId(users.get(i).getUserId());
+                auth.setPassword(users.get(i).getPassword());
+                steps
+                    .add(new AuthenticationStep(serviceURL, new InvalidAuthentication(
+                        "The application for this account has not yet been reviewed.", InvalidCredentialFault.class),
+                        auth));
+            }
 
-			for (int i = 0; i < users.size(); i++) {
-				steps.add(new UpdateLocalUserStatusStep(serviceURL, admin,
-						users.get(i).getUserId(), IdPUserStatus.Suspended));
-				steps.add(new FindLocalUserStep(serviceURL, admin,
-						users.get(i), IdPUserStatus.Suspended,
-						IdPUserRole.Non_Administrator));
-				BasicAuthentication auth = new BasicAuthentication();
-				auth.setUserId(users.get(i).getUserId());
-				auth.setPassword(users.get(i).getPassword());
-				steps.add(new AuthenticationStep(serviceURL,
-						new InvalidAuthentication(
-								"The account has been suspended.",
-								InvalidCredentialFault.class), auth));
-				steps.add(new UpdateLocalUserStatusStep(serviceURL, admin,
-						users.get(i).getUserId(), IdPUserStatus.Active));
-				steps.add(new FindLocalUserStep(serviceURL, admin,
-						users.get(i), IdPUserStatus.Active,
-						IdPUserRole.Non_Administrator));
-			}
+            // Approve the user accounts
 
-			// Test suspending grid accounts
+            for (int i = 0; i < users.size(); i++) {
+                steps.add(new UpdateLocalUserStatusStep(serviceURL, admin, users.get(i).getUserId(),
+                    LocalUserStatus.Active));
+            }
 
-			for (int i = 0; i < users.size(); i++) {
-				steps.add(new UpdateGridUserStatusStep(serviceURL, admin,
-						userCredentials.get(i), GridUserStatus.Suspended));
+            // Test that the user accounts were approved correctly
+            for (int i = 0; i < users.size(); i++) {
+                steps.add(new FindLocalUserStep(serviceURL, admin, users.get(i), LocalUserStatus.Active,
+                    LocalUserRole.Non_Administrator));
+            }
 
-				FindGridUserStep gridUser = new FindGridUserStep(serviceURL,
-						admin, userCredentials.get(i));
-				gridUser.setExpectedEmail(users.get(i).getEmail());
-				gridUser.setExpectedFirstName(users.get(i).getFirstName());
-				gridUser.setExpectedLastName(users.get(i).getLastName());
-				gridUser.setExpectedLocalUserId(users.get(i).getUserId());
-				gridUser.setExpectedStatus(GridUserStatus.Suspended);
-				steps.add(gridUser);
+            // Test successful Authentication
+            List<GridCredentialRequestStep> userCredentials = new ArrayList<GridCredentialRequestStep>();
 
-				SuccessfullAuthentication sa = new SuccessfullAuthentication(
-						users.get(i).getUserId(), users.get(i).getFirstName(),
-						users.get(i).getLastName(), users.get(i).getEmail(),
-						signingCertStep);
-				BasicAuthentication ba = new BasicAuthentication();
-				ba.setUserId(users.get(i).getUserId());
-				ba.setPassword(users.get(i).getPassword());
-				AuthenticationStep userAuth = new AuthenticationStep(
-						serviceURL, sa, ba);
-				steps.add(userAuth);
-				GridCredentialRequestStep proxy = new GridCredentialRequestStep(
-						serviceURL, userAuth, new InvalidGridCredentialRequest(
-								"The account has been suspended.",
-								PermissionDeniedFault.class));
-				steps.add(proxy);
+            for (int i = 0; i < users.size(); i++) {
+                SuccessfullAuthentication sa = new SuccessfullAuthentication(users.get(i).getUserId(), users.get(i)
+                    .getFirstName(), users.get(i).getLastName(), users.get(i).getEmail(), signingCertStep);
 
-				steps.add(new UpdateGridUserStatusStep(serviceURL, admin,
-						userCredentials.get(i), GridUserStatus.Active));
+                // Test Successful authentication
+                BasicAuthentication ba = new BasicAuthentication();
+                ba.setUserId(users.get(i).getUserId());
+                ba.setPassword(users.get(i).getPassword());
+                AuthenticationStep userAuth = new AuthenticationStep(serviceURL, sa, ba);
+                steps.add(userAuth);
+                GridCredentialRequestStep proxy = new GridCredentialRequestStep(serviceURL, userAuth,
+                    new SuccessfullGridCredentialRequest());
+                steps.add(proxy);
+                userCredentials.add(proxy);
 
-				FindGridUserStep gridUser2 = new FindGridUserStep(serviceURL,
-						admin, userCredentials.get(i));
-				gridUser2.setExpectedEmail(users.get(i).getEmail());
-				gridUser2.setExpectedFirstName(users.get(i).getFirstName());
-				gridUser2.setExpectedLastName(users.get(i).getLastName());
-				gridUser2.setExpectedLocalUserId(users.get(i).getUserId());
-				gridUser2.setExpectedStatus(GridUserStatus.Active);
-				steps.add(gridUser2);
-			}
+                FindGridUserStep gridUser = new FindGridUserStep(serviceURL, admin, proxy);
+                gridUser.setExpectedEmail(users.get(i).getEmail());
+                gridUser.setExpectedFirstName(users.get(i).getFirstName());
+                gridUser.setExpectedLastName(users.get(i).getLastName());
+                gridUser.setExpectedLocalUserId(users.get(i).getUserId());
+                gridUser.setExpectedStatus(GridUserStatus.Active);
+                steps.add(gridUser);
+            }
 
-			// Test that the user can change there password
+            // Test Suspending Accounts Locally
 
-			for (int i = 0; i < users.size(); i++) {
-				String newPassword = "K00lM0N##" + i;
-				steps.add(new ChangeLocalUserPasswordStep(serviceURL, users
-						.get(i), newPassword));
-			}
+            for (int i = 0; i < users.size(); i++) {
+                steps.add(new UpdateLocalUserStatusStep(serviceURL, admin, users.get(i).getUserId(),
+                    LocalUserStatus.Suspended));
+                steps.add(new FindLocalUserStep(serviceURL, admin, users.get(i), LocalUserStatus.Suspended,
+                    LocalUserRole.Non_Administrator));
+                BasicAuthentication auth = new BasicAuthentication();
+                auth.setUserId(users.get(i).getUserId());
+                auth.setPassword(users.get(i).getPassword());
+                steps.add(new AuthenticationStep(serviceURL, new InvalidAuthentication(
+                    "The account has been suspended.", InvalidCredentialFault.class), auth));
+                steps.add(new UpdateLocalUserStatusStep(serviceURL, admin, users.get(i).getUserId(),
+                    LocalUserStatus.Active));
+                steps.add(new FindLocalUserStep(serviceURL, admin, users.get(i), LocalUserStatus.Active,
+                    LocalUserRole.Non_Administrator));
+            }
 
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return steps;
-	}
+            // Test suspending grid accounts
 
-	protected boolean storySetUp() throws Throwable {
-		this.tempService = new File("tmp/dorian");
-		File asLocation = new File("../../../caGrid/projects/dorian");
-		CopyServiceStep copyService = new CopyServiceStep(asLocation,
-				tempService);
-		copyService.runStep();
-		// this.tempService = copyService.getServiceDirectory();
-		return true;
-	}
+            for (int i = 0; i < users.size(); i++) {
+                steps.add(new UpdateGridUserStatusStep(serviceURL, admin, userCredentials.get(i),
+                    GridUserStatus.Suspended));
 
-	protected void storyTearDown() throws Throwable {
-		try {
-			if (this.tempService != null) {
-				new DeleteServiceStep(tempService).runStep();
-			}
-		} catch (Throwable e) {
-			e.printStackTrace();
-		}
+                FindGridUserStep gridUser = new FindGridUserStep(serviceURL, admin, userCredentials.get(i));
+                gridUser.setExpectedEmail(users.get(i).getEmail());
+                gridUser.setExpectedFirstName(users.get(i).getFirstName());
+                gridUser.setExpectedLastName(users.get(i).getLastName());
+                gridUser.setExpectedLocalUserId(users.get(i).getUserId());
+                gridUser.setExpectedStatus(GridUserStatus.Suspended);
+                steps.add(gridUser);
 
-		StopContainerStep step2 = new StopContainerStep(getContainer());
-		try {
-			step2.runStep();
-		} catch (Throwable e) {
-			e.printStackTrace();
-		}
+                SuccessfullAuthentication sa = new SuccessfullAuthentication(users.get(i).getUserId(), users.get(i)
+                    .getFirstName(), users.get(i).getLastName(), users.get(i).getEmail(), signingCertStep);
+                BasicAuthentication ba = new BasicAuthentication();
+                ba.setUserId(users.get(i).getUserId());
+                ba.setPassword(users.get(i).getPassword());
+                AuthenticationStep userAuth = new AuthenticationStep(serviceURL, sa, ba);
+                steps.add(userAuth);
+                GridCredentialRequestStep proxy = new GridCredentialRequestStep(serviceURL, userAuth,
+                    new InvalidGridCredentialRequest("The account has been suspended.", PermissionDeniedFault.class));
+                steps.add(proxy);
 
-		CleanupDorianStep cleanup = new CleanupDorianStep(getContainer(), trust);
-		try {
-			cleanup.runStep();
-		} catch (Throwable e) {
-			e.printStackTrace();
-		}
+                steps
+                    .add(new UpdateGridUserStatusStep(serviceURL, admin, userCredentials.get(i), GridUserStatus.Active));
 
-		DestroyContainerStep step3 = new DestroyContainerStep(getContainer());
-		try {
-			step3.runStep();
-		} catch (Throwable e) {
-			e.printStackTrace();
-		}
-	}
+                FindGridUserStep gridUser2 = new FindGridUserStep(serviceURL, admin, userCredentials.get(i));
+                gridUser2.setExpectedEmail(users.get(i).getEmail());
+                gridUser2.setExpectedFirstName(users.get(i).getFirstName());
+                gridUser2.setExpectedLastName(users.get(i).getLastName());
+                gridUser2.setExpectedLocalUserId(users.get(i).getUserId());
+                gridUser2.setExpectedStatus(GridUserStatus.Active);
+                steps.add(gridUser2);
+            }
+
+            // Test that the user can change there password
+
+            for (int i = 0; i < users.size(); i++) {
+                String newPassword = "K00lM0N##" + i;
+                steps.add(new ChangeLocalUserPasswordStep(serviceURL, users.get(i), newPassword));
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return steps;
+    }
+
+
+    protected boolean storySetUp() throws Throwable {
+        this.tempService = new File("tmp/dorian");
+        File asLocation = new File("../../../caGrid/projects/dorian");
+        CopyServiceStep copyService = new CopyServiceStep(asLocation, tempService);
+        copyService.runStep();
+        // this.tempService = copyService.getServiceDirectory();
+        return true;
+    }
+
+
+    protected void storyTearDown() throws Throwable {
+        try {
+            if (this.tempService != null) {
+                new DeleteServiceStep(tempService).runStep();
+            }
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+
+        StopContainerStep step2 = new StopContainerStep(getContainer());
+        try {
+            step2.runStep();
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+
+        CleanupDorianStep cleanup = new CleanupDorianStep(getContainer(), trust);
+        try {
+            cleanup.runStep();
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+
+        DestroyContainerStep step3 = new DestroyContainerStep(getContainer());
+        try {
+            step3.runStep();
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+    }
 }

@@ -5,14 +5,14 @@ import java.util.Vector;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
-import org.cagrid.gaards.dorian.idp.IdPUser;
+import org.cagrid.gaards.dorian.idp.LocalUser;
 import org.cagrid.grape.table.GrapeBaseTable;
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: UsersTable.java,v 1.2 2008-06-17 19:33:10 langella Exp $
+ * @version $Id: UsersTable.java,v 1.3 2008-10-03 20:53:41 langella Exp $
  */
 public class UsersTable extends GrapeBaseTable {
 	public final static String USER = "user";
@@ -59,7 +59,7 @@ public class UsersTable extends GrapeBaseTable {
 
 	}
 
-	public void addUser(final IdPUser u) {
+	public void addUser(final LocalUser u) {
 		Vector v = new Vector();
 		v.add(u);
 		v.add(u.getUserId());
@@ -72,10 +72,10 @@ public class UsersTable extends GrapeBaseTable {
 		addRow(v);
 	}
 
-	public synchronized IdPUser getSelectedUser() {
+	public synchronized LocalUser getSelectedUser() {
 		int row = getSelectedRow();
 		if ((row >= 0) && (row < getRowCount())) {
-			return (IdPUser) getValueAt(row, 0);
+			return (LocalUser) getValueAt(row, 0);
 		} else {
 			return null;
 		}

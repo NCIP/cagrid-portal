@@ -19,7 +19,7 @@ import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
 import org.cagrid.gaards.dorian.client.LocalAdministrationClient;
-import org.cagrid.gaards.dorian.idp.IdPUser;
+import org.cagrid.gaards.dorian.idp.LocalUser;
 import org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault;
 import org.cagrid.gaards.ui.dorian.DorianLookAndFeel;
 import org.cagrid.grape.ApplicationComponent;
@@ -32,7 +32,7 @@ import org.globus.gsi.GlobusCredential;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: UserWindow.java,v 1.3 2008-07-07 18:47:48 langella Exp $
+ * @version $Id: UserWindow.java,v 1.4 2008-10-03 20:53:41 langella Exp $
  */
 public class UserWindow extends ApplicationComponent {
 
@@ -112,7 +112,7 @@ public class UserWindow extends ApplicationComponent {
 
 	private String serviceId;
 
-	private IdPUser user;
+	private LocalUser user;
 
 	private JTextField service = null;
 
@@ -161,7 +161,7 @@ public class UserWindow extends ApplicationComponent {
 	/**
 	 * This is the default constructor
 	 */
-	public UserWindow(String serviceId, GlobusCredential proxy, IdPUser u) {
+	public UserWindow(String serviceId, GlobusCredential proxy, LocalUser u) {
 		super();
 		this.serviceId = serviceId;
 		this.proxy = proxy;

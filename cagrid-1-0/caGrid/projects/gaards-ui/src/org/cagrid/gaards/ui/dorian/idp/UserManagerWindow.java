@@ -19,8 +19,8 @@ import javax.swing.SwingUtilities;
 import javax.swing.border.TitledBorder;
 
 import org.cagrid.gaards.dorian.client.LocalAdministrationClient;
-import org.cagrid.gaards.dorian.idp.IdPUser;
-import org.cagrid.gaards.dorian.idp.IdPUserFilter;
+import org.cagrid.gaards.dorian.idp.LocalUser;
+import org.cagrid.gaards.dorian.idp.LocalUserFilter;
 import org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault;
 import org.cagrid.gaards.ui.dorian.DorianLookAndFeel;
 import org.cagrid.gaards.ui.dorian.SessionPanel;
@@ -33,7 +33,7 @@ import org.cagrid.grape.utils.ErrorDialog;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: UserManagerWindow.java,v 1.4 2008-07-07 18:47:48 langella Exp $
+ * @version $Id: UserManagerWindow.java,v 1.5 2008-10-03 20:53:41 langella Exp $
  */
 public class UserManagerWindow extends ApplicationComponent {
 
@@ -330,7 +330,7 @@ public class UserManagerWindow extends ApplicationComponent {
 		if ((row >= 0) && (row < getUsersTable().getRowCount())) {
 			Runner runner = new Runner() {
 				public void execute() {
-					IdPUser user = (IdPUser) getUsersTable().getValueAt(row, 0);
+					LocalUser user = (LocalUser) getUsersTable().getValueAt(row, 0);
 					try {
 						GridApplication.getContext().addApplicationComponent(
 								new UserWindow(getSession().getServiceURI(),
@@ -824,7 +824,7 @@ public class UserManagerWindow extends ApplicationComponent {
 		this.updateProgress(true, "Querying...");
 
 		try {
-			IdPUserFilter f = new IdPUserFilter();
+			LocalUserFilter f = new LocalUserFilter();
 			JPanel panel = (JPanel) this.getJTabbedPane()
 					.getSelectedComponent();
 			if (panel.getName().equals(ROLE_PANEL)) {
@@ -848,7 +848,7 @@ public class UserManagerWindow extends ApplicationComponent {
 
 			LocalAdministrationClient client = getSession()
 					.getLocalAdminClient();
-			List<IdPUser> users = client.findUsers(f);
+			List<LocalUser> users = client.findUsers(f);
 			if (users != null) {
 				for (int i = 0; i < users.size(); i++) {
 					this.getUsersTable().addUser(users.get(i));
@@ -1027,7 +1027,7 @@ public class UserManagerWindow extends ApplicationComponent {
 		final int row = getUsersTable().getSelectedRow();
 
 		if ((row >= 0) && (row < getUsersTable().getRowCount())) {
-			IdPUser user = (IdPUser) getUsersTable().getValueAt(row, 0);
+			LocalUser user = (LocalUser) getUsersTable().getValueAt(row, 0);
 			this.updateProgress(true, "Removing the user " + user.getUserId()
 					+ "...");
 

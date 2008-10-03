@@ -10,9 +10,9 @@ import java.util.List;
 
 import org.cagrid.gaards.dorian.client.LocalAdministrationClient;
 import org.cagrid.gaards.dorian.idp.Application;
-import org.cagrid.gaards.dorian.idp.IdPUser;
-import org.cagrid.gaards.dorian.idp.IdPUserFilter;
-import org.cagrid.gaards.dorian.idp.IdPUserStatus;
+import org.cagrid.gaards.dorian.idp.LocalUser;
+import org.cagrid.gaards.dorian.idp.LocalUserFilter;
+import org.cagrid.gaards.dorian.idp.LocalUserStatus;
 import org.globus.gsi.GlobusCredential;
 
 /**
@@ -44,24 +44,24 @@ public class DorianApproveRegistrationStep extends Step {
 				this.serviceURL, proxy);
 
 		// find users
-		IdPUserFilter filter = new IdPUserFilter();
+		LocalUserFilter filter = new LocalUserFilter();
 		filter.setUserId(this.application.getUserId());
-		filter.setStatus(IdPUserStatus.Pending);
-		List<IdPUser> users = client.findUsers(filter);
+		filter.setStatus(LocalUserStatus.Pending);
+		List<LocalUser> users = client.findUsers(filter);
 		assertNotNull(users);
 		assertTrue(users.size() > 0);
 
 		// find user
-		IdPUser user = findUser(users, this.application);
+		LocalUser user = findUser(users, this.application);
 		assertNotNull(user);
 
 		// accept application
-		user.setStatus(IdPUserStatus.Active);
+		user.setStatus(LocalUserStatus.Active);
 		client.updateUser(user);
 	}
 
-	private IdPUser findUser(List<IdPUser> users, Application application) {
-		for (IdPUser user : users) {
+	private LocalUser findUser(List<LocalUser> users, Application application) {
+		for (LocalUser user : users) {
 			if (user.getUserId().equals(application.getUserId())) {
 				return user;
 			}

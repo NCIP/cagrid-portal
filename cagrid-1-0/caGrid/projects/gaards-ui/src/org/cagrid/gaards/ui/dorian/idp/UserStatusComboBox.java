@@ -1,6 +1,6 @@
 package org.cagrid.gaards.ui.dorian.idp;
 
-import org.cagrid.gaards.dorian.idp.IdPUserStatus;
+import org.cagrid.gaards.dorian.idp.LocalUserStatus;
 import org.cagrid.gaards.ui.common.AxisTypeComboBox;
 
 
@@ -18,11 +18,11 @@ public class UserStatusComboBox extends AxisTypeComboBox {
 	}
 
 	public UserStatusComboBox(boolean anyState) {
-		super(IdPUserStatus.class, anyState);
+		super(LocalUserStatus.class, anyState);
 	}
 
-	public IdPUserStatus getSelectedUserStatus() {
-		return (IdPUserStatus) getSelectedObject();
+	public LocalUserStatus getSelectedUserStatus() {
+		return (LocalUserStatus) getSelectedObject();
 	}
 
 }
