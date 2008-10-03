@@ -193,6 +193,7 @@
             <entry key="fqp.service.url" value="${fqp.service.url}"/>
             <entry key="strict.index.verification" value="${strict.index.verification}"/>
             <entry key="cagrid.portal.aggr.defaultTimeout" value="${cagrid.portal.aggr.defaultTimeout}"/>
+            <entry key="cagrid.portal.aggr.long.defaultTimeout" value="${cagrid.portal.aggr.long.defaultTimeout}"/>
             <entry key="cagrid.portal.aggr.defaultPeriod" value="${cagrid.portal.aggr.defaultPeriod}"/>
             <entry key="cagrid.portal.slow.aggr.defaultPeriod" value="${cagrid.portal.slow.aggr.defaultPeriod}"/>
             <entry key="cagrid.portal.fast.aggr.defaultPeriod" value="${cagrid.portal.fast.aggr.defaultPeriod}"/>

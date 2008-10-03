@@ -80,7 +80,6 @@
     }
     }
 
-
     $("${prefix}diagnoseBtn").disable();
     $("${prefix}diagnoseBtn").value='Running...';
     $("${prefix}diagnoseBtn").style.background='#38A6C1';
@@ -90,14 +89,21 @@
     $("${prefix}headerDiv").style.visibility='visible';
 
 
+    dwr.engine.setErrorHandler(${prefix}failedDiagnosis);
+    <!--setting timeout to 2 minutes-->
+    DWREngine.setTimeout(120000);
+
     <!--start diagnostics-->
+    doDiagnose("idxDiagnostic",idxDiagnostic,url);
     doDiagnose("portalStatusDiagnostic",portalStatusDiagnostic,url);
     doDiagnose("pingDiagnostic",pingDiagnostic,url);
     doDiagnose("metadataDiagnostic",metadataDiagnostic,url);
-    doDiagnose("idxDiagnostic",idxDiagnostic,url);
-
     }
 
+    function ${prefix}failedDiagnosis(){
+        $("${prefix}errorMsg").innerHTML="Encountered error running diagnosis. Please retry";
+        ${prefix}resetBtns()
+    }
 
     function doDiagnose(divName,JScript,url){
     JScript.diagnose(url,function(result){
@@ -111,20 +117,23 @@
     }
 
     function ${prefix}finishDiagnose(){
-    $("statusIndicator").style.visibility='hidden';
-    $("${prefix}diagnosisLabel").innerHTML = 'Diagnostic Results';
-    $("${prefix}disclaimerDiv").innerHTML="Index service results can be delayed up to 5 minutes.";
+        ${prefix}resetBtns();
 
-    document.getElementById("${prefix}resultsDiv").innerHTML+='<hr/>';
-    document.getElementById("${prefix}resultsDiv").innerHTML+='<div>';
+        $("${prefix}disclaimerDiv").innerHTML="Index service results can be delayed up to 5 minutes.";
+        $("${prefix}diagnosisLabel").innerHTML = 'Diagnostic Results';    
+
+        document.getElementById("${prefix}resultsDiv").innerHTML+='<hr/>';
+        document.getElementById("${prefix}resultsDiv").innerHTML+='<div>';
         document.getElementById("${prefix}resultsDiv").innerHTML+='See <a href="http://www.cagrid.org/wiki/CaGrid:How-To:TroubleshootIndexService" target="_blank">this guide</a> to trobleshoot potential problems';
         document.getElementById("${prefix}resultsDiv").innerHTML+='</div>';
+    }
 
-    $("${prefix}diagnoseBtn").enable();
-    $("${prefix}diagnoseBtn").style.background='#3876C1';
-     $("${prefix}diagnoseBtn").value='Diagnose';
+    function ${prefix}resetBtns(){
+        $("statusIndicator").style.visibility='hidden';
 
-
+        $("${prefix}diagnoseBtn").enable();
+        $("${prefix}diagnoseBtn").style.background='#3876C1';
+        $("${prefix}diagnoseBtn").value='Diagnose';
     }
 
 

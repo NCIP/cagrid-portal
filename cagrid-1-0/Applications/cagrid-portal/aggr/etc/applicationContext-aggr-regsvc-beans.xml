@@ -32,7 +32,7 @@
     <bean id="dynamicServiceUrlProvider"
           class="gov.nih.nci.cagrid.portal.aggr.regsvc.DynamicServiceUrlProvider">
         <property name="requireMetadataCompliance" ref="metadataCompliance"/>
-        <property name="timeout" ref="defaultTimeout"/>
+        <property name="timeout" ref="defaultLongTimeout"/>
     </bean>
 
     <bean  id="metadataCompliance" class="java.lang.Boolean">

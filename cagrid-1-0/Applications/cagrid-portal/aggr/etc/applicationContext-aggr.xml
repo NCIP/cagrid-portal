@@ -25,6 +25,10 @@
         <constructor-arg value="${cagrid.portal.aggr.defaultTimeout}"/>
     </bean>
 
+    <bean id="defaultLongTimeout" class="java.lang.Long">
+        <constructor-arg value="${cagrid.portal.aggr.long.defaultTimeout}"/>
+    </bean>
+
     <bean id="defaultPeriod" class="java.lang.Long">
         <constructor-arg value="${cagrid.portal.aggr.defaultPeriod}"/>
     </bean>
