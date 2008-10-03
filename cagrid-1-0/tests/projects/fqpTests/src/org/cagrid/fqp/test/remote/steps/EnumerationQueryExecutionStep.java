@@ -1,5 +1,6 @@
 package org.cagrid.fqp.test.remote.steps;
 
+import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.cqlresultset.CQLObjectResult;
 import gov.nih.nci.cagrid.cqlresultset.CQLQueryResults;
 import gov.nih.nci.cagrid.dcql.DCQLQuery;
@@ -7,10 +8,12 @@ import gov.nih.nci.cagrid.dcqlresult.DCQLQueryResultsCollection;
 import gov.nih.nci.cagrid.dcqlresult.DCQLResult;
 import gov.nih.nci.cagrid.enumeration.stubs.response.EnumerationResponseContainer;
 import gov.nih.nci.cagrid.fqp.client.FederatedQueryProcessorClient;
-import gov.nih.nci.cagrid.fqp.common.FQPConstants;
 import gov.nih.nci.cagrid.fqp.results.client.FederatedQueryResultsClient;
+import gov.nih.nci.cagrid.fqp.results.common.FederatedQueryResultsConstants;
 import gov.nih.nci.cagrid.wsenum.utils.EnumerationResponseHelper;
 
+import java.io.StringReader;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -22,12 +25,14 @@ import javax.xml.soap.SOAPElement;
 import org.apache.axis.message.MessageElement;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.cagrid.fqp.results.metadata.FederatedQueryExecutionStatus;
+import org.cagrid.fqp.results.metadata.ProcessingStatus;
 import org.cagrid.fqp.test.common.QueryResultsVerifier;
 import org.cagrid.fqp.test.common.UrlReplacer;
 import org.cagrid.fqp.test.common.steps.BaseQueryExecutionStep;
 import org.globus.ws.enumeration.ClientEnumIterator;
-import org.globus.wsrf.NotificationConsumerManager;
-import org.oasis.wsn.SubscribeResponse;
+import org.globus.wsrf.utils.AnyHelper;
+import org.oasis.wsrf.properties.ResourcePropertyValueChangeNotificationType;
 
 /**
  * EnumerationQueryExecutionStep
@@ -62,10 +67,24 @@ public class EnumerationQueryExecutionStep extends BaseQueryExecutionStep {
         LOG.debug("Executing query with enumeration");
         FederatedQueryResultsClient resultsClient = fqpClient.query(query, null, null);
         // wait for notification that the data is ready
-        SubscribeResponse subscribeResponse = resultsClient.subscribe(FQPConstants.RESULTS_METADATA_QNAME);
-        NotificationConsumerManager notificationConsumer = NotificationConsumerManager.getInstance();
+        LOG.debug("Waiting for success notification");
+        InfoHolder info = new InfoHolder();
+        NotificationWaiter waiter = new NotificationWaiter(resultsClient, info);
+        waiter.start();
+        waiter.join();
         
-        EnumerationResponseContainer enumerationResponse = resultsClient.enumerate();
+        // if successfull, grab the response
+        EnumerationResponseContainer enumerationResponse = null;
+        if (info.success.booleanValue()) {
+            enumerationResponse = resultsClient.enumerate();
+        } else {
+            String failMessage = "Failed to successfully query";
+            if (info.exception != null) {
+                failMessage += ": " + info.exception.getMessage();
+                info.exception.printStackTrace();
+            }
+            fail(failMessage);
+        }
         
         LOG.debug("Creating client side enumeration iterator");
         ClientEnumIterator iterator = EnumerationResponseHelper.createClientIterator(enumerationResponse);
@@ -139,5 +158,55 @@ public class EnumerationQueryExecutionStep extends BaseQueryExecutionStep {
         testResults.setDCQLResult(new DCQLResult[] {testResult});
         
         QueryResultsVerifier.verifyDcqlResults(testResults, goldResults);
+    }
+    
+    
+    private static class NotificationWaiter extends Thread {
+        private Object client = null;
+        private InfoHolder info = null;
+        
+        public NotificationWaiter(FederatedQueryResultsClient resultsClient, InfoHolder info) {
+            this.client = resultsClient;
+            this.info = info;
+            this.info.success = Boolean.FALSE;
+        }
+        
+        
+        public void run() {
+            try {
+                SubscriptionHelper subscriptionHelper = new SubscriptionHelper();
+                subscriptionHelper.subscribe(client, FederatedQueryResultsConstants.FEDERATEDQUERYEXECUTIONSTATUS, new SubscriptionListener() {
+                    public void subscriptionValueChanged(ResourcePropertyValueChangeNotificationType notification) {
+                        try {
+                            String newMetadataDocument = AnyHelper.toSingleString(notification.getNewValue().get_any());
+                            FederatedQueryExecutionStatus status = (FederatedQueryExecutionStatus) Utils.deserializeObject(
+                                new StringReader(newMetadataDocument), FederatedQueryExecutionStatus.class);
+                            StringWriter writer = new StringWriter();
+                            Utils.serializeObject(status, FederatedQueryResultsConstants.FEDERATEDQUERYEXECUTIONSTATUS, writer);
+                            System.out.println("GOT NOTIFICATION:");
+                            System.out.println(writer.getBuffer().toString());
+                            if (status.getCurrentStatus().equals(ProcessingStatus.Complete)) {
+                                info.success = Boolean.TRUE;
+                                Thread.currentThread().notifyAll();
+                            }
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                            info.success = Boolean.FALSE;
+                            info.exception = ex;
+                        }
+                    }
+                });
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                info.success = Boolean.FALSE;
+                info.exception = ex;
+            }
+        }
+    }
+    
+    
+    private static class InfoHolder {
+        public Boolean success;
+        public Exception exception;
     }
 }
