@@ -6,6 +6,9 @@ import java.util.Collection;
 import java.util.List;
 
 import org.cagrid.gme.domain.XMLSchema;
+import org.cagrid.gme.domain.XMLSchemaBundle;
+import org.cagrid.gme.domain.XMLSchemaImportInformation;
+import org.cagrid.gme.domain.XMLSchemaNamespace;
 import org.cagrid.gme.service.GME;
 import org.cagrid.gme.stubs.types.NoSuchNamespaceExistsFault;
 
@@ -45,6 +48,11 @@ public abstract class GMETestCaseBase extends GMEIntegrationTestCaseBase {
 
         Collection<URI> importingNamespaces = this.gme.getImportingNamespaces(imported.getTargetNamespace());
         assertTrue(importingNamespaces.contains(importer.getTargetNamespace()));
+
+        XMLSchemaBundle schemaBundle = this.gme.getSchemBundle(importer.getTargetNamespace());
+        XMLSchemaImportInformation ii = schemaBundle.getImportInformationForTargetNamespace(new XMLSchemaNamespace(
+            importer.getTargetNamespace()));
+        assertTrue(ii.getImports().contains(new XMLSchemaNamespace(imported.getTargetNamespace())));
     }
 
 
