@@ -1,5 +1,5 @@
 For the latest version of this information, see here:
-   http://www.cagrid.org/mwiki/index.php?title=CaGrid:How-To:Install_caGrid_Portal_2.0
+  http://www.cagrid.org/wiki/Portal:2.1:Installation_Guide
 
 ############
 # Contents #
@@ -27,8 +27,10 @@ You can use the following settings to check out the source code:
 If you are using a commandline CVS client, you could use this command:
 
    export CVS_RSH=ssh
-   cvs -d :ext:anonymous@cbiocvs2.nci.nih.gov:/share/content/gforge/cagrid-1-0 co \
-      cagrid-1-0/Applications/cagrid-portal
+    cvs -d :ext:anonymous@cbiocvs2.nci.nih.gov:/share/content/gforge/cagrid-1-0 co \
+    -r cagrid-portal-2-1_release \
+    -d cagrid-portal cagrid-1-0/Applications/cagrid-portal
+
 
 After checkout, the caGrid Portal source code directory (referred to henceforth as $SRC) 
 will be located under ./cagrid-1-0/Applications/cagrid-portal.
@@ -110,11 +112,12 @@ The caGrid Portal uses GAARDS to authenticate users, so the caGrid trust fabric 
 configured on the machine that will host the portal. The portal itself will use the 
 GTS client to maintain the trust fabric, but the trust fabric must be bootstrapped.
 
-By default, the portal will use the nci_prod as the target grid. If you are using this
+By default, the portal will use the training as the target grid. If you are using this
 grid, you don't need to do anything. 
 
 If you are using one of the following grids:
- - nci_dev, nci_stage, osu_dev, training
+ - nci_dev, nci_stage, osu_dev, nci_prod
+ 
 Then the trust synchronization configuration has already been provided. You will just
 need to create a corresponding build.properties file. Look at build-nci_qa.properties
 as an example. When you run the installation script, you'll have to specify the name
