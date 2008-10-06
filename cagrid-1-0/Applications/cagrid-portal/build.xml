@@ -257,7 +257,7 @@
         </javadoc>
     </target>
 
-    <target name="update_to_2_1" description="Will update the database to portal 2.1 release">
+    <target name="update_from_2_0_2_to_2_1" description="Will update the database from 2.0.2 release to the 2.1 release">
 		<sql driver="${cagrid.portal.db.driver}"
              url="${cagrid.portal.db.url}"
              userid="${cagrid.portal.db.username}"
