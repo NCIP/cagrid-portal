@@ -10,6 +10,7 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.cagrid.gme.domain.XMLSchema;
 import org.cagrid.gme.domain.XMLSchemaNamespace;
 import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 import org.springframework.beans.factory.xml.XmlBeanFactory;
@@ -55,15 +56,28 @@ public class GlobalModelExchangeImpl extends GlobalModelExchangeImplBase {
     }
 
 
+    public GlobalModelExchangeImpl(GME gme) throws RemoteException {
+        this.gme = gme;
+    }
+
+
     public void publishXMLSchemas(org.cagrid.gme.domain.XMLSchema[] schemas) throws RemoteException,
         org.cagrid.gme.stubs.types.InvalidSchemaSubmissionFault {
-        this.gme.publishSchemas(Arrays.asList(schemas));
+        List<XMLSchema> list = null;
+        if (schemas != null) {
+            list = Arrays.asList(schemas);
+        }
+        this.gme.publishSchemas(list);
     }
 
 
     public org.cagrid.gme.domain.XMLSchema getXMLSchema(org.cagrid.gme.domain.XMLSchemaNamespace targetNamespace)
         throws RemoteException, org.cagrid.gme.stubs.types.NoSuchNamespaceExistsFault {
-        return this.gme.getSchema(targetNamespace.getURI());
+        URI uri = null;
+        if (targetNamespace != null) {
+            uri = targetNamespace.getURI();
+        }
+        return this.gme.getSchema(uri);
     }
 
 
@@ -93,16 +107,25 @@ public class GlobalModelExchangeImpl extends GlobalModelExchangeImplBase {
     public org.cagrid.gme.domain.XMLSchemaBundle getXMLSchemaAndDependencies(
         org.cagrid.gme.domain.XMLSchemaNamespace targetNamespace) throws RemoteException,
         org.cagrid.gme.stubs.types.NoSuchNamespaceExistsFault {
-        return this.gme.getSchemBundle(targetNamespace.getURI());
+
+        URI uri = null;
+        if (targetNamespace != null) {
+            uri = targetNamespace.getURI();
+        }
+        return this.gme.getSchemBundle(uri);
     }
 
 
     public org.cagrid.gme.domain.XMLSchemaNamespace[] getImportedXMLSchemaNamespaces(
         org.cagrid.gme.domain.XMLSchemaNamespace targetNamespace) throws RemoteException,
         org.cagrid.gme.stubs.types.NoSuchNamespaceExistsFault {
+        URI uri = null;
+        if (targetNamespace != null) {
+            uri = targetNamespace.getURI();
+        }
 
         XMLSchemaNamespace[] result = null;
-        Collection<URI> importedNamespaces = this.gme.getImportedNamespaces(targetNamespace.getURI());
+        Collection<URI> importedNamespaces = this.gme.getImportedNamespaces(uri);
 
         if (importedNamespaces != null) {
             result = new XMLSchemaNamespace[importedNamespaces.size()];
@@ -120,8 +143,13 @@ public class GlobalModelExchangeImpl extends GlobalModelExchangeImplBase {
         org.cagrid.gme.domain.XMLSchemaNamespace targetNamespace) throws RemoteException,
         org.cagrid.gme.stubs.types.NoSuchNamespaceExistsFault {
 
+        URI uri = null;
+        if (targetNamespace != null) {
+            uri = targetNamespace.getURI();
+        }
+
         XMLSchemaNamespace[] result = null;
-        Collection<URI> importingNamespaces = this.gme.getImportingNamespaces(targetNamespace.getURI());
+        Collection<URI> importingNamespaces = this.gme.getImportingNamespaces(uri);
 
         if (importingNamespaces != null) {
             result = new XMLSchemaNamespace[importingNamespaces.size()];

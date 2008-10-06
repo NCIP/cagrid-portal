@@ -58,8 +58,8 @@ public class GME {
     public void deleteSchemas(Collection<URI> schemaNamespaces) throws NoSuchNamespaceExistsFault,
         UnableToDeleteSchemaFault {
 
-        if (schemaNamespaces == null) {
-            String description = "null is not a valid collection of namespaces to delete.";
+        if (schemaNamespaces == null || schemaNamespaces.size() == 0) {
+            String description = "null or empty set is not a valid collection of namespaces to delete.";
 
             NoSuchNamespaceExistsFault fault = new NoSuchNamespaceExistsFault();
             gov.nih.nci.cagrid.common.FaultHelper helper = new gov.nih.nci.cagrid.common.FaultHelper(fault);
@@ -128,8 +128,7 @@ public class GME {
                     }
                 }
             }
-            // TODO: ok to delete all these schemas now (will it cascade to
-            // all additional documents and imports properly?)
+            // ok to delete all these schemas now
             for (XMLSchemaInformation schema : schemaMap.values()) {
                 LOG.info("Deleting schema (" + schema.getSchema().getTargetNamespace() + ").");
                 this.schemaDao.delete(schema);

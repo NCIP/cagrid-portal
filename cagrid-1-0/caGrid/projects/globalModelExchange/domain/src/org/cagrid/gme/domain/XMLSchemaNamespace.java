@@ -20,6 +20,7 @@ public class XMLSchemaNamespace {
     private URI uri;
 
 
+    // Needed for Castor to work
     public XMLSchemaNamespace() {
 
     }
@@ -36,7 +37,7 @@ public class XMLSchemaNamespace {
 
 
     public URI getURI() {
-        return uri;
+        return this.uri;
     }
 
 
@@ -55,7 +56,7 @@ public class XMLSchemaNamespace {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((uri == null) ? 0 : uri.hashCode());
+        result = prime * result + ((this.uri == null) ? 0 : this.uri.hashCode());
         return result;
     }
 
@@ -72,11 +73,11 @@ public class XMLSchemaNamespace {
             return false;
         }
         final XMLSchemaNamespace other = (XMLSchemaNamespace) obj;
-        if (uri == null) {
+        if (this.uri == null) {
             if (other.uri != null) {
                 return false;
             }
-        } else if (!uri.equals(other.uri)) {
+        } else if (!this.uri.equals(other.uri)) {
             return false;
         }
         return true;
