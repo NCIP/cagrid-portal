@@ -269,4 +269,28 @@
         </sql>
 	</target>
 
+
+    <target name="insert-news" description="Will add news items for 2.1">
+            <input message="Host and port:" defaultvalue="localhost:8080" addproperty="host"/>
+            <copy file="tools/migration/2-0-2_to_2-1/news.sql.template"
+                tofile="tools/migration/2-0-2_to_2-1/news.sql"
+                overwrite="true">
+                <filterset>
+                    <filter token="HOST_AND_PORT"
+                            value="${host}"/>
+                </filterset>
+            </copy>
+            <sql driver="${cagrid.portal.db.driver}"
+                 url="${cagrid.portal.db.url}"
+                 userid="${cagrid.portal.db.username}"
+                 password="${cagrid.portal.db.password}"
+                 src="tools/migration/2-0-2_to_2-1/news.sql">
+                <classpath>
+                    <pathelement location="${db.jdbc.driver.jar}"/>
+                </classpath>
+            </sql>
+        <delete file="tools/migration/2-0-2_to_2-1/news.sql" failonerror="false"/>
+        </target>
+
+
 </project>

@@ -470,7 +470,8 @@
 		<portlet id="cagridnews_WAR_cagridportlets" />
 		<portlet id="cagridstatus_WAR_cagridportlets" />
 		<portlet id="cagridmap_WAR_cagridportlets" />
-		<portlet id="cagriddiscovery_WAR_cagridportlets" />
+		<portlet id="cagriddiagnostics_WAR_cagridportlets" />
+	    <portlet id="cagriddiscovery_WAR_cagridportlets" />
 		<portlet id="cabigtools_WAR_cagridportlets" />
 		<portlet id="cagridquery_WAR_cagridportlets" />
 		<portlet id="WelcomeToCaGridPortal_WAR_cagridportlets" />

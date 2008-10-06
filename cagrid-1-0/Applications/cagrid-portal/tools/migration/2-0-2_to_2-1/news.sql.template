@@ -1,6 +1,6 @@
 insert into newsitems
 (id, description, height, link, pubDate, title, width, channel_id)
 values
-(-1, 'caGrid Portal 2.1 has been released.', '250px',
+(-2, 'caGrid Portal 2.1 has been released.', '250px',
 'http://@HOST_AND_PORT@/cagridportlets/content/caGridPortal_2-1_Released.html',
 '2008-10-12 18:37:20', 'caGrid Portal 2.1 Released', '100%', 1);
