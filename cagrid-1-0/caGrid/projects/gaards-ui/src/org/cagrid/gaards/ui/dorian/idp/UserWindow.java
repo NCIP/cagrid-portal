@@ -21,18 +21,19 @@ import javax.swing.border.TitledBorder;
 import org.cagrid.gaards.dorian.client.LocalAdministrationClient;
 import org.cagrid.gaards.dorian.idp.LocalUser;
 import org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault;
+import org.cagrid.gaards.ui.common.TitlePanel;
 import org.cagrid.gaards.ui.dorian.DorianLookAndFeel;
+import org.cagrid.gaards.ui.dorian.DorianSession;
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.LookAndFeel;
 import org.cagrid.grape.utils.ErrorDialog;
-import org.globus.gsi.GlobusCredential;
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: UserWindow.java,v 1.4 2008-10-03 20:53:41 langella Exp $
+ * @version $Id: UserWindow.java,v 1.5 2008-10-06 17:36:36 langella Exp $
  */
 public class UserWindow extends ApplicationComponent {
 
@@ -49,8 +50,6 @@ public class UserWindow extends ApplicationComponent {
 	private JPanel mainPanel = null;
 
 	private JPanel buttonPanel = null;
-
-	private JButton cancel = null;
 
 	private JButton updateUser = null;
 
@@ -106,15 +105,9 @@ public class UserWindow extends ApplicationComponent {
 
 	private JTextField username = null;
 
-	private JPanel jPanel2 = null;
-
-	private JLabel jLabel14 = null;
-
-	private String serviceId;
+	private JPanel titlePanel = null;
 
 	private LocalUser user;
-
-	private JTextField service = null;
 
 	private JPanel infoPanel = null;
 
@@ -138,8 +131,6 @@ public class UserWindow extends ApplicationComponent {
 
 	private JPasswordField verifyPassword = null;
 
-	private GlobusCredential proxy;
-
 	private JPanel passwordSecurityPanel = null;
 
 	private JLabel jLabel12 = null;
@@ -157,14 +148,19 @@ public class UserWindow extends ApplicationComponent {
 	private JLabel jLabel16 = null;
 
 	private JTextField lockoutExpiration = null;
+	
+	private DorianSession session;
+
+	private JLabel jLabel14 = null;
+
+	private JTextField digestAlgorithm = null;
 
 	/**
 	 * This is the default constructor
 	 */
-	public UserWindow(String serviceId, GlobusCredential proxy, LocalUser u) {
+	public UserWindow(DorianSession session, LocalUser u) {
 		super();
-		this.serviceId = serviceId;
-		this.proxy = proxy;
+		this.session = session;
 		this.user = u;
 		initialize();
 		this.setFrameIcon(DorianLookAndFeel.getUserIcon());
@@ -212,6 +208,7 @@ public class UserWindow extends ApplicationComponent {
 			gridBagConstraints1.gridy = 0;
 			gridBagConstraints1.weightx = 1.0D;
 			gridBagConstraints1.anchor = java.awt.GridBagConstraints.NORTH;
+			gridBagConstraints1.insets = new Insets(5, 5, 5, 5);
 			gridBagConstraints1.gridx = 0;
 			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
 			mainPanel = new JPanel();
@@ -222,7 +219,7 @@ public class UserWindow extends ApplicationComponent {
 			gridBagConstraints2.anchor = java.awt.GridBagConstraints.SOUTH;
 			gridBagConstraints2.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			mainPanel.add(getButtonPanel(), gridBagConstraints2);
-			mainPanel.add(getJPanel2(), gridBagConstraints1);
+			mainPanel.add(getTitlePanel(), gridBagConstraints1);
 			mainPanel.add(getJTabbedPane(), gridBagConstraints4);
 		}
 		return mainPanel;
@@ -237,28 +234,8 @@ public class UserWindow extends ApplicationComponent {
 		if (buttonPanel == null) {
 			buttonPanel = new JPanel();
 			buttonPanel.add(getUpdateUser(), null);
-			buttonPanel.add(getCancel(), null);
 		}
 		return buttonPanel;
-	}
-
-	/**
-	 * This method initializes jButton1
-	 * 
-	 * @return javax.swing.JButton
-	 */
-	private JButton getCancel() {
-		if (cancel == null) {
-			cancel = new JButton();
-			cancel.setText("Close");
-			cancel.setIcon(LookAndFeel.getCloseIcon());
-			cancel.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					dispose();
-				}
-			});
-		}
-		return cancel;
 	}
 
 	/**
@@ -286,7 +263,6 @@ public class UserWindow extends ApplicationComponent {
 
 				}
 			});
-			updateUser.setIcon(DorianLookAndFeel.getUserIcon());
 		}
 		return updateUser;
 	}
@@ -337,10 +313,7 @@ public class UserWindow extends ApplicationComponent {
 		user.setEmail(getEmail().getText());
 
 		try {
-			String serviceName = getService().getText();
-
-			LocalAdministrationClient client = new LocalAdministrationClient(
-					serviceName, proxy);
+			LocalAdministrationClient client = session.getLocalAdminClient();
 			client.updateUser(user);
 
 			GridApplication.getContext().showMessage(
@@ -739,54 +712,15 @@ public class UserWindow extends ApplicationComponent {
 	}
 
 	/**
-	 * This method initializes jPanel2
+	 * This method initializes titlePanel
 	 * 
 	 * @return javax.swing.JPanel
 	 */
-	private JPanel getJPanel2() {
-		if (jPanel2 == null) {
-			GridBagConstraints gridBagConstraints27 = new GridBagConstraints();
-			gridBagConstraints27.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints27.weightx = 1.0;
-			GridBagConstraints gridBagConstraints28 = new GridBagConstraints();
-			gridBagConstraints28.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints28.gridx = 1;
-			gridBagConstraints28.gridy = 0;
-			gridBagConstraints28.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints28.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints28.weightx = 1.0;
-			GridBagConstraints gridBagConstraints31 = new GridBagConstraints();
-			gridBagConstraints31.anchor = GridBagConstraints.WEST;
-			gridBagConstraints31.gridwidth = 1;
-			gridBagConstraints31.gridx = 0;
-			gridBagConstraints31.gridy = 0;
-			gridBagConstraints31.insets = new Insets(2, 2, 2, 2);
-			jLabel14 = new JLabel();
-			jLabel14.setText("Service");
-			jPanel2 = new JPanel();
-			jPanel2.setLayout(new GridBagLayout());
-			jPanel2.setBorder(BorderFactory.createTitledBorder(null,
-					"Login Information", TitledBorder.DEFAULT_JUSTIFICATION,
-					TitledBorder.DEFAULT_POSITION, null, LookAndFeel
-							.getPanelLabelColor()));
-			jPanel2.add(jLabel14, gridBagConstraints31);
-			jPanel2.add(getService(), gridBagConstraints27);
+	private JPanel getTitlePanel() {
+		if (titlePanel == null) {
+			titlePanel = new TitlePanel(this.user.getFirstName()+" "+this.user.getLastName(),this.user.getEmail());
 		}
-		return jPanel2;
-	}
-
-	/**
-	 * This method initializes service1
-	 * 
-	 * @return javax.swing.JTextField
-	 */
-	private JTextField getService() {
-		if (service == null) {
-			service = new JTextField();
-			service.setText(serviceId);
-			service.setEditable(false);
-		}
-		return service;
+		return titlePanel;
 	}
 
 	/**
@@ -950,9 +884,23 @@ public class UserWindow extends ApplicationComponent {
 	 */
 	private JPanel getPasswordSecurityPanel() {
 		if (passwordSecurityPanel == null) {
+			GridBagConstraints gridBagConstraints28 = new GridBagConstraints();
+			gridBagConstraints28.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints28.gridy = 0;
+			gridBagConstraints28.weightx = 1.0;
+			gridBagConstraints28.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints28.anchor = GridBagConstraints.WEST;
+			gridBagConstraints28.gridx = 1;
+			GridBagConstraints gridBagConstraints27 = new GridBagConstraints();
+			gridBagConstraints27.anchor = GridBagConstraints.WEST;
+			gridBagConstraints27.gridx = 0;
+			gridBagConstraints27.gridy = 0;
+			gridBagConstraints27.insets = new Insets(2, 2, 2, 2);
+			jLabel14 = new JLabel();
+			jLabel14.setText("Digest Algorithm");
 			GridBagConstraints gridBagConstraints45 = new GridBagConstraints();
 			gridBagConstraints45.fill = GridBagConstraints.HORIZONTAL;
-			gridBagConstraints45.gridy = 3;
+			gridBagConstraints45.gridy = 4;
 			gridBagConstraints45.weightx = 1.0;
 			gridBagConstraints45.anchor = GridBagConstraints.WEST;
 			gridBagConstraints45.insets = new Insets(2, 2, 2, 2);
@@ -961,12 +909,12 @@ public class UserWindow extends ApplicationComponent {
 			gridBagConstraints44.gridx = 0;
 			gridBagConstraints44.anchor = GridBagConstraints.WEST;
 			gridBagConstraints44.insets = new Insets(2, 2, 2, 2);
-			gridBagConstraints44.gridy = 3;
+			gridBagConstraints44.gridy = 4;
 			jLabel16 = new JLabel();
 			jLabel16.setText("Lockout Expiration");
 			GridBagConstraints gridBagConstraints43 = new GridBagConstraints();
 			gridBagConstraints43.fill = GridBagConstraints.HORIZONTAL;
-			gridBagConstraints43.gridy = 2;
+			gridBagConstraints43.gridy = 3;
 			gridBagConstraints43.weightx = 1.0;
 			gridBagConstraints43.anchor = GridBagConstraints.WEST;
 			gridBagConstraints43.insets = new Insets(2, 2, 2, 2);
@@ -975,12 +923,12 @@ public class UserWindow extends ApplicationComponent {
 			gridBagConstraints42.gridx = 0;
 			gridBagConstraints42.anchor = GridBagConstraints.WEST;
 			gridBagConstraints42.insets = new Insets(2, 2, 2, 2);
-			gridBagConstraints42.gridy = 2;
+			gridBagConstraints42.gridy = 3;
 			jLabel15 = new JLabel();
 			jLabel15.setText("Total Invalid Logins");
 			GridBagConstraints gridBagConstraints41 = new GridBagConstraints();
 			gridBagConstraints41.fill = GridBagConstraints.HORIZONTAL;
-			gridBagConstraints41.gridy = 1;
+			gridBagConstraints41.gridy = 2;
 			gridBagConstraints41.weightx = 1.0;
 			gridBagConstraints41.anchor = GridBagConstraints.WEST;
 			gridBagConstraints41.insets = new Insets(2, 2, 2, 2);
@@ -989,19 +937,19 @@ public class UserWindow extends ApplicationComponent {
 			gridBagConstraints40.gridx = 0;
 			gridBagConstraints40.anchor = GridBagConstraints.WEST;
 			gridBagConstraints40.insets = new Insets(2, 2, 2, 2);
-			gridBagConstraints40.gridy = 1;
+			gridBagConstraints40.gridy = 2;
 			jLabel13 = new JLabel();
 			jLabel13.setText("Consecutive Invalid Logins");
 			GridBagConstraints gridBagConstraints39 = new GridBagConstraints();
 			gridBagConstraints39.anchor = GridBagConstraints.WEST;
-			gridBagConstraints39.gridy = 0;
+			gridBagConstraints39.gridy = 1;
 			gridBagConstraints39.insets = new Insets(2, 2, 2, 2);
 			gridBagConstraints39.gridx = 0;
 			GridBagConstraints gridBagConstraints38 = new GridBagConstraints();
 			gridBagConstraints38.fill = GridBagConstraints.HORIZONTAL;
 			gridBagConstraints38.anchor = GridBagConstraints.WEST;
 			gridBagConstraints38.gridx = 1;
-			gridBagConstraints38.gridy = 0;
+			gridBagConstraints38.gridy = 1;
 			gridBagConstraints38.insets = new Insets(2, 2, 2, 2);
 			gridBagConstraints38.weightx = 1.0;
 			jLabel12 = new JLabel();
@@ -1009,17 +957,15 @@ public class UserWindow extends ApplicationComponent {
 			passwordSecurityPanel = new JPanel();
 			passwordSecurityPanel.setLayout(new GridBagLayout());
 			passwordSecurityPanel.add(jLabel12, gridBagConstraints39);
-			passwordSecurityPanel
-					.add(getPasswordStatus(), gridBagConstraints38);
+			passwordSecurityPanel.add(getPasswordStatus(), gridBagConstraints38);
 			passwordSecurityPanel.add(jLabel13, gridBagConstraints40);
-			passwordSecurityPanel.add(getConsecutiveInvalidLogins(),
-					gridBagConstraints41);
+			passwordSecurityPanel.add(getConsecutiveInvalidLogins(), gridBagConstraints41);
 			passwordSecurityPanel.add(jLabel15, gridBagConstraints42);
-			passwordSecurityPanel.add(getTotalInvalidLogins(),
-					gridBagConstraints43);
+			passwordSecurityPanel.add(getTotalInvalidLogins(), gridBagConstraints43);
 			passwordSecurityPanel.add(jLabel16, gridBagConstraints44);
-			passwordSecurityPanel.add(getLockoutExpiration(),
-					gridBagConstraints45);
+			passwordSecurityPanel.add(getLockoutExpiration(), gridBagConstraints45);
+			passwordSecurityPanel.add(jLabel14, gridBagConstraints27);
+			passwordSecurityPanel.add(getDigestAlgorithm(), gridBagConstraints28);
 		}
 		return passwordSecurityPanel;
 	}
@@ -1087,6 +1033,20 @@ public class UserWindow extends ApplicationComponent {
 			}
 		}
 		return lockoutExpiration;
+	}
+
+	/**
+	 * This method initializes digestAlgorithm	
+	 * 	
+	 * @return javax.swing.JTextField	
+	 */
+	private JTextField getDigestAlgorithm() {
+		if (digestAlgorithm == null) {
+			digestAlgorithm = new JTextField();
+			digestAlgorithm.setEditable(false);
+			digestAlgorithm.setText(user.getPasswordSecurity().getDigestAlgorithm());
+		}
+		return digestAlgorithm;
 	}
 
 } // @jve:decl-index=0:visual-constraint="10,10"

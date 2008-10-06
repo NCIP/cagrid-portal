@@ -102,8 +102,6 @@ public class ApplicationWindow extends ApplicationComponent {
 
 	private JButton applyButton = null;
 
-	private JButton cancel = null;
-
 	private JLabel countryLabel = null;
 
 	private JComboBox country = null;
@@ -466,7 +464,6 @@ public class ApplicationWindow extends ApplicationComponent {
 		if (buttonPanel == null) {
 			buttonPanel = new JPanel();
 			buttonPanel.add(getApplyButton(), null);
-			buttonPanel.add(getCancel(), null);
 		}
 		return buttonPanel;
 	}
@@ -669,29 +666,8 @@ public class ApplicationWindow extends ApplicationComponent {
 
 				}
 			});
-			applyButton.setIcon(LookAndFeel.getSelectIcon());
 		}
 		return applyButton;
-	}
-
-
-	/**
-	 * This method initializes cancel
-	 * 
-	 * @return javax.swing.JButton
-	 */
-	private JButton getCancel() {
-		if (cancel == null) {
-			cancel = new JButton();
-			cancel.setText("Cancel");
-			cancel.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					dispose();
-				}
-			});
-			cancel.setIcon(LookAndFeel.getCloseIcon());
-		}
-		return cancel;
 	}
 
 

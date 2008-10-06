@@ -60,8 +60,6 @@ public class ChangePasswordWindow extends ApplicationComponent {
 
 	private JButton resetPassword = null;
 
-	private JButton cancel = null;
-
 	private JLabel jLabel = null;
 
 	private JPasswordField newPassword = null;
@@ -239,7 +237,6 @@ public class ChangePasswordWindow extends ApplicationComponent {
 		if (buttonPanel == null) {
 			buttonPanel = new JPanel();
 			buttonPanel.add(getResetPassword(), null);
-			buttonPanel.add(getCancel(), null);
 		}
 		return buttonPanel;
 	}
@@ -312,29 +309,8 @@ public class ChangePasswordWindow extends ApplicationComponent {
 
 				}
 			});
-			resetPassword.setIcon(DorianLookAndFeel.getPasswordIcon());
 		}
 		return resetPassword;
-	}
-
-
-	/**
-	 * This method initializes cancel
-	 * 
-	 * @return javax.swing.JButton
-	 */
-	private JButton getCancel() {
-		if (cancel == null) {
-			cancel = new JButton();
-			cancel.setText("Cancel");
-			cancel.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					dispose();
-				}
-			});
-			cancel.setIcon(LookAndFeel.getCloseIcon());
-		}
-		return cancel;
 	}
 
 

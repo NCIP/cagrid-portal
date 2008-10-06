@@ -33,7 +33,7 @@ import org.cagrid.grape.utils.ErrorDialog;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: UserManagerWindow.java,v 1.5 2008-10-03 20:53:41 langella Exp $
+ * @version $Id: UserManagerWindow.java,v 1.6 2008-10-06 17:36:36 langella Exp $
  */
 public class UserManagerWindow extends ApplicationComponent {
 
@@ -50,8 +50,6 @@ public class UserManagerWindow extends ApplicationComponent {
 	private JPanel contentPanel = null;
 
 	private JPanel buttonPanel = null;
-
-	private JButton cancel = null;
 
 	private UsersTable usersTable = null;
 
@@ -255,28 +253,8 @@ public class UserManagerWindow extends ApplicationComponent {
 			buttonPanel = new JPanel();
 			buttonPanel.add(getManageUser(), null);
 			buttonPanel.add(getRemoveUser(), null);
-			buttonPanel.add(getCancel(), null);
 		}
 		return buttonPanel;
-	}
-
-	/**
-	 * This method initializes jButton1
-	 * 
-	 * @return javax.swing.JButton
-	 */
-	private JButton getCancel() {
-		if (cancel == null) {
-			cancel = new JButton();
-			cancel.setText("Close");
-			cancel.setIcon(LookAndFeel.getCloseIcon());
-			cancel.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					dispose();
-				}
-			});
-		}
-		return cancel;
 	}
 
 	/**
@@ -313,7 +291,6 @@ public class UserManagerWindow extends ApplicationComponent {
 		if (manageUser == null) {
 			manageUser = new JButton();
 			manageUser.setText("Manage User");
-			manageUser.setIcon(DorianLookAndFeel.getUserIcon());
 			manageUser.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					showUser();
@@ -333,8 +310,7 @@ public class UserManagerWindow extends ApplicationComponent {
 					LocalUser user = (LocalUser) getUsersTable().getValueAt(row, 0);
 					try {
 						GridApplication.getContext().addApplicationComponent(
-								new UserWindow(getSession().getServiceURI(),
-										getSession().getCredential(), user));
+								new UserWindow(getSession().getSession(), user),700,400);
 					} catch (Exception e) {
 						ErrorDialog.showError(e);
 					}
@@ -389,8 +365,9 @@ public class UserManagerWindow extends ApplicationComponent {
 					"Search Criteria", TitledBorder.DEFAULT_JUSTIFICATION,
 					TitledBorder.DEFAULT_POSITION, null, LookAndFeel
 							.getPanelLabelColor()));
-			jTabbedPane.addTab(STATUS_PANEL, null, getStatus(), null);
+			
 			jTabbedPane.addTab(INFO_PANEL, null, getJPanel1(), null);
+			jTabbedPane.addTab(STATUS_PANEL, null, getStatus(), null);
 			jTabbedPane.addTab(ROLE_PANEL, null, getRole(), null);
 		}
 		return jTabbedPane;
@@ -786,7 +763,6 @@ public class UserManagerWindow extends ApplicationComponent {
 		if (query == null) {
 			query = new JButton();
 			query.setText("Find Users");
-			query.setIcon(LookAndFeel.getQueryIcon());
 			query.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					Runner runner = new Runner() {
@@ -1007,7 +983,6 @@ public class UserManagerWindow extends ApplicationComponent {
 
 				}
 			});
-			removeUser.setIcon(LookAndFeel.getRemoveIcon());
 		}
 		return removeUser;
 	}
