@@ -8,12 +8,12 @@
 
 1.0 caGrid Portal Introduction
 2.0 Release History
-3.0 New Features and Updates
-4.0 Bug fixes since last release
-5.0 Known Issues/Defects
+3.0 Enhancements Since Last Release
+4.0 Bug Fixes Since Last Release
+5.0 Known Issues
 6.0 Bug Reports and Support
 7.0 Documentation
-8.0 References
+8.0 Resources
 
 ================================================================
 		1.0 caGrid Portal Introduction
@@ -76,11 +76,11 @@ Bug		Description
        https://gforge.nci.nih.gov/tracker/?atid=174&group_id=25&func=browse
 
 ================================================================
-		5.0 Known Issues Not Yet Fixed
+		5.0 Known Issues
 ================================================================
 
      Portal 2.1 will not support Internet Explorer version 8,
-     since IE 8 is still in beta and it is not included in the
+     since IE 8 is still in beta, and is not included in the
      approved CBIIT Technology Stack.
      Support for IE 8 may be provided in a future release.
 
@@ -128,21 +128,21 @@ Bug		Description
 
 
 ================================================================
-		8.0 References
+		8.0 Resources
 ================================================================
 
     The following URLs access web pages relevant to caGrid:
 
     caBIG(r) Home Page
-       http://cabig.nci.nih.gov/
-
-    NCICBIIT Download Center
-       http://ncicb.nci.nih.gov/download/
+       https://cabig.nci.nih.gov/
 
     caGrid
        http://www.cagrid.org
-       https://cabig.nci.nih.gov/workspaces/Architecture/caGrid1-0/
        http://gforge.nci.nih.gov/projects/cagrid-1-0/
+       https://cabig.nci.nih.gov/workspaces/Architecture/caGrid1-0/
 
     caGrid Knowledge Center
        https://cabig-kc.nci.nih.gov/CaGrid/KC/
+
+    NCI CBIIT Download Center
+       http://ncicb.nci.nih.gov/download/
