@@ -15,6 +15,7 @@
 	<!-- src dirs -->
 	<property name="src.dir" location="${basedir}/src/java" />
 	<property name="validator.src.dir" location="${src.dir}/validator" />
+	<property name="notification.src.dir" location="${src.dir}/notification"/>
 
 	<!-- testing dirs -->
 	<property name="test.src.dir" location="${basedir}/test/src/java" />
@@ -25,12 +26,14 @@
 	<property name="build.lib.dir" location="${build.dir}/lib" />
 	<property name="classes.dir" location="${build.dir}/classes" />
 	<property name="validator.classes.dir" location="${classes.dir}/validator" />
+	<property name="notification.classes.dir" location="${classes.dir}/notification" />
 	<property name="build.stubs.src" location="${build.dir}/stubs/src" />
 	<property name="build.stubs.classes" location="${build.dir}/stubs/classes" />
 	<property name="test.classes.dir" location="${classes.dir}/test" />
 
 	<!-- jars -->
 	<property name="validator.jarfile" location="${build.lib.dir}/${project.name}-validator-${project.version}.jar" />
+	<property name="notification.jarfile" location="${build.lib.dir}/${project.name}-notification-${project.version}.jar" />
 	<property name="project.stubs.jarfile" location="${build.lib.dir}/${project.name}-stubs-${project.version}.jar" />
 	<property name="test.jarfile" location="${build.lib.dir}/${project.name}-test-${project.version}.jar" />
 
@@ -73,6 +76,7 @@
 			<include name="**/*.jar" />
 		</fileset>
 		<path location="${validator.classes.dir}" />
+		<path location="${notification.classes.dir}" />
 		<path location="${build.stubs.classes}" />
 		<fileset dir="${globus.dir}/lib">
 			<include name="**/*.jar" />
@@ -178,6 +182,11 @@
 				<pathelement location="${build.stubs.classes}" />
 			</classpath>
 		</javac>
+		<!-- notification -->
+		<mkdir dir="${notification.classes.dir}" />
+		<javac srcdir="${notification.src.dir}" destdir="${notification.classes.dir}" debug="${java.debug}" source="${java.source}">
+			<classpath refid="build.classpath" />
+		</javac>	
 	</target>
 
 
@@ -209,12 +218,22 @@
 		<jar jarfile="${validator.jarfile}">
 			<manifest>
 				<attribute name="Built-By" value="${user.name}" />
-				<attribute name="Main-Class" value="${main.class}" />
 			</manifest>
 			<fileset dir="${validator.classes.dir}">
 				<include name="**/*" />
 			</fileset>
 			<fileset dir="${validator.src.dir}">
+				<include name="**/*.java" />
+			</fileset>
+		</jar>
+		<jar destfile="${notification.jarfile}">
+			<manifest>
+				<attribute name="Built-By" value="${user.name}" />
+			</manifest>
+			<fileset dir="${notification.classes.dir}">
+				<include name="**/*" />
+			</fileset>
+			<fileset dir="${notification.src.dir}">
 				<include name="**/*.java" />
 			</fileset>
 		</jar>
