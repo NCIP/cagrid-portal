@@ -63,6 +63,11 @@ public class FederatedQueryResultsImpl extends FederatedQueryResultsImplBase {
         gov.nih.nci.cagrid.fqp.results.stubs.types.ProcessingNotCompleteFault,
         gov.nih.nci.cagrid.fqp.results.stubs.types.InternalErrorFault {
         FederatedQueryResultsResource resource = getResource();
+        if (!resource.isComplete()) {
+            FaultHelper helper = new FaultHelper(new ProcessingNotCompleteFault());
+            helper.addDescription("Query processing not complete!");
+            throw (ProcessingNotCompleteFault) helper.getFault();
+        }
         DCQLQueryResultsCollection dcqlResults = resource.getResults();
         CQLQueryResults cqlResults = DCQLAggregator.aggregateDCQLResults(
             dcqlResults, resource.getQuery().getTargetObject().getName());
