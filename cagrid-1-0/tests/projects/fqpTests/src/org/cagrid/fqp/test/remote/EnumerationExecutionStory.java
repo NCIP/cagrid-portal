@@ -10,6 +10,7 @@ import java.util.Vector;
 import org.cagrid.fqp.test.common.FQPTestingConstants;
 import org.cagrid.fqp.test.common.ServiceContainerSource;
 import org.cagrid.fqp.test.remote.steps.EnumerationQueryExecutionStep;
+import org.cagrid.fqp.test.remote.steps.NotificationClientSetupStep;
 
 /** 
  *  EnumerationExecutionStory
@@ -18,7 +19,7 @@ import org.cagrid.fqp.test.remote.steps.EnumerationQueryExecutionStep;
  * @author David Ervin
  * 
  * @created Jun 30, 2008 12:48:50 PM
- * @version $Id: EnumerationExecutionStory.java,v 1.1 2008-09-03 17:47:37 dervin Exp $ 
+ * @version $Id: EnumerationExecutionStory.java,v 1.2 2008-10-07 17:33:49 dervin Exp $ 
  */
 public class EnumerationExecutionStory extends Story {
     
@@ -68,6 +69,9 @@ public class EnumerationExecutionStory extends Story {
             ex.printStackTrace();
             fail("Error creating FQP client: " + ex.getMessage());
         }
+        
+        // set up for notification
+        steps.add(new NotificationClientSetupStep());
         
         // run some queries
         steps.add(new EnumerationQueryExecutionStep(FQPTestingConstants.QUERIES_LOCATION + "exampleDistributedJoin1.xml",
