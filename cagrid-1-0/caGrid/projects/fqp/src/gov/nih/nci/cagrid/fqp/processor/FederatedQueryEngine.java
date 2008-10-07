@@ -232,6 +232,7 @@ public class FederatedQueryEngine {
     
     
     protected synchronized void fireStatusOk(String serviceURL) {
+        LOG.debug("Fire status OK");
         for (FQPProcessingStatusListener listener : statusListeners) {
             listener.targetServiceOk(serviceURL);
         }
@@ -239,6 +240,7 @@ public class FederatedQueryEngine {
     
     
     protected synchronized void fireConnectionRefused(String serviceURL) {
+        LOG.debug("Fire connection refused");
         for (FQPProcessingStatusListener listener : statusListeners) {
             listener.targetServiceConnectionRefused(serviceURL);
         }
@@ -246,6 +248,7 @@ public class FederatedQueryEngine {
     
     
     protected synchronized void fireServiceExeption(String serviceURL, Exception ex) {
+        LOG.debug("Fire service exception");
         for (FQPProcessingStatusListener listener : statusListeners) {
             listener.targetServiceThrowsException(serviceURL, ex);
         }
@@ -253,6 +256,7 @@ public class FederatedQueryEngine {
     
     
     protected synchronized void fireInvalidResult(String serviceURL, FederatedQueryProcessingException ex) {
+        LOG.debug("Fire invalid result");
         for (FQPProcessingStatusListener listener : statusListeners) {
             listener.targetServiceReturnedInvalidResult(serviceURL, ex);
         }
@@ -350,8 +354,8 @@ public class FederatedQueryEngine {
             int tryCount = 0;
             long retryTimeout = (behavior.getTimeoutPerRetry() != null ?
                 behavior.getTimeoutPerRetry().intValue() :
-                FQPConstants.DEFAULT_TARGET_QUERY_BEHAVIOR.getTimeoutPerRetry().intValue())
-                * 1000; // miliseconds
+                    FQPConstants.DEFAULT_TARGET_QUERY_BEHAVIOR.getTimeoutPerRetry().intValue())
+                    * 1000; // miliseconds
             
             do {
                 tryCount++;
