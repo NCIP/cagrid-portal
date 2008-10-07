@@ -137,6 +137,13 @@ public class FederatedQueryResultsResourcePropertyManager {
     }
     
     
+    /**
+     * Every time this is called, a notification event will go out to all subscribers
+     * to the FederatedQueryExecutionStatus type.
+     * 
+     * @param executionStatus
+     * @throws ResourceException
+     */
     private void storeExecutionStatus(FederatedQueryExecutionStatus executionStatus) throws ResourceException {
         managedResource.setFederatedQueryExecutionStatus(executionStatus);
     }

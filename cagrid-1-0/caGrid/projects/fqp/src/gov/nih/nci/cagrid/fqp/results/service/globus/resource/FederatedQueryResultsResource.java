@@ -294,7 +294,7 @@ public class FederatedQueryResultsResource extends FederatedQueryResultsResource
             
             public void queryProcessingException(FederatedQueryProcessingException ex) {
                 ex.printStackTrace();
-                // TODO: handle exception (same as handleError???)
+                setProcessingException(ex);
             }
         };
         return listener;
