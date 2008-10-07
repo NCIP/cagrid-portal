@@ -3,9 +3,12 @@ package org.cagrid.introduce.test.system;
 import gov.nih.nci.cagrid.introduce.test.TestCaseInfo;
 import gov.nih.nci.cagrid.introduce.test.TestCaseInfoMain;
 import gov.nih.nci.cagrid.introduce.test.steps.RemoveSkeletonStep;
+import gov.nih.nci.cagrid.introduce.test.steps.UnzipOldServiceStep;
+import gov.nih.nci.cagrid.introduce.test.steps.UpgradesStep;
 import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainer;
 import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainerFactory;
 import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainerType;
+import gov.nih.nci.cagrid.testing.system.deployment.steps.DeployServiceStep;
 import gov.nih.nci.cagrid.testing.system.deployment.steps.DestroyContainerStep;
 import gov.nih.nci.cagrid.testing.system.deployment.steps.StartContainerStep;
 import gov.nih.nci.cagrid.testing.system.deployment.steps.StopContainerStep;
@@ -20,6 +23,7 @@ import junit.framework.TestSuite;
 import junit.textui.TestRunner;
 
 import org.apache.log4j.PropertyConfigurator;
+import org.cagrid.introduce.test.system.steps.InvokeClientStep;
 
 
 public class Upgrade_1_2_Test extends Story {
@@ -48,15 +52,15 @@ public class Upgrade_1_2_Test extends Story {
         Vector steps = new Vector();
 
         try {
-            steps.add(new UnpackContainerStep(container));
-            // steps.add(new UnzipOldServiceStep("." + File.separator + "test" +
-            // File.separator + "resources"
-            // + File.separator + "serviceVersions" + File.separator +
-            // "IntroduceTestService-1_1.zip", this.tci1));
-            // steps.add(new UpgradesStep(this.tci1, true));
-            // steps.add(new DeployServiceStep(container, this.tci1.getDir()));
-            steps.add(new StartContainerStep(container));
-            // steps.add(new InvokeClientStep(container, this.tci1));
+//            steps.add(new UnpackContainerStep(container));
+//             steps.add(new UnzipOldServiceStep("." + File.separator + "test" +
+//             File.separator + "resources"
+//             + File.separator + "serviceVersions" + File.separator +
+//             "IntroduceTestService-1_1.zip", this.tci1));
+//            steps.add(new UpgradesStep(this.tci1, true));
+//            steps.add(new DeployServiceStep(container, this.tci1.getDir()));
+//            steps.add(new StartContainerStep(container));
+//            steps.add(new InvokeClientStep(container, this.tci1));
         } catch (Exception e) {
             e.printStackTrace();
             fail();
