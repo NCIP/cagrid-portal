@@ -125,7 +125,6 @@
 
 		<path id="test.classpath">
 			<pathelement path="${classes.dir}" />
-			<pathelement path="${test.dir}/resources" />
 			<fileset dir="${test.lib.dir}">
 				<include name="**/*.jar" />
 			</fileset>
