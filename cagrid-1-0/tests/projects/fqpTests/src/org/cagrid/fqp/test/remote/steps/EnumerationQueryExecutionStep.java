@@ -30,6 +30,8 @@ import org.cagrid.fqp.results.metadata.ProcessingStatus;
 import org.cagrid.fqp.test.common.QueryResultsVerifier;
 import org.cagrid.fqp.test.common.UrlReplacer;
 import org.cagrid.fqp.test.common.steps.BaseQueryExecutionStep;
+import org.cagrid.notification.SubscriptionHelper;
+import org.cagrid.notification.SubscriptionListener;
 import org.globus.ws.enumeration.ClientEnumIterator;
 import org.globus.wsrf.utils.AnyHelper;
 import org.oasis.wsrf.properties.ResourcePropertyValueChangeNotificationType;
