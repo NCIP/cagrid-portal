@@ -13,6 +13,7 @@ import gov.nih.nci.cagrid.testing.system.deployment.steps.DestroyContainerStep;
 import gov.nih.nci.cagrid.testing.system.deployment.steps.StartContainerStep;
 import gov.nih.nci.cagrid.testing.system.deployment.steps.StopContainerStep;
 import gov.nih.nci.cagrid.testing.system.deployment.steps.UnpackContainerStep;
+import gov.nih.nci.cagrid.testing.system.haste.Step;
 import gov.nih.nci.cagrid.testing.system.haste.Story;
 
 import java.io.File;
@@ -48,19 +49,17 @@ public class Upgrade_1_2_Test extends Story {
     }
 
 
-    protected Vector steps() {
-        Vector steps = new Vector();
+    protected Vector<Step> steps() {
+        Vector<Step> steps = new Vector<Step>();
 
         try {
-//            steps.add(new UnpackContainerStep(container));
-//             steps.add(new UnzipOldServiceStep("." + File.separator + "test" +
-//             File.separator + "resources"
-//             + File.separator + "serviceVersions" + File.separator +
-//             "IntroduceTestService-1_1.zip", this.tci1));
-//            steps.add(new UpgradesStep(this.tci1, true));
-//            steps.add(new DeployServiceStep(container, this.tci1.getDir()));
-//            steps.add(new StartContainerStep(container));
-//            steps.add(new InvokeClientStep(container, this.tci1));
+            steps.add(new UnpackContainerStep(container));
+            steps.add(new UnzipOldServiceStep(this.getClass().getResource(
+                "/gold/serviceVersions/" + "IntroduceTestService-1_3.zip").getFile(), this.tci1));
+            steps.add(new UpgradesStep(this.tci1, true));
+            steps.add(new DeployServiceStep(container, this.tci1.getDir()));
+            steps.add(new StartContainerStep(container));
+            steps.add(new InvokeClientStep(container, this.tci1));
         } catch (Exception e) {
             e.printStackTrace();
             fail();
