@@ -96,5 +96,6 @@
 	<classpathentry kind="lib" path="ext/dependencies/service/jars/caGrid-cds-client-1.3-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/service/jars/caGrid-cds-common-1.3-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/service/jars/caGrid-cds-stubs-1.3-dev.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/service/jars/caGrid-tools-notification-1.3-dev.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
