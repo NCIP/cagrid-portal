@@ -9,6 +9,8 @@
   </info>
 
   <configurations>
+  	<conf name="impl" visibility="private" extends="stubs,validator,notification"/>
+  
     <!-- Public Configurations-->
     <conf name="stubs" visibility="public"/>
     <conf name="validator" visibility="public" extends="stubs"/>
@@ -21,7 +23,7 @@
   <publications>
     <artifact name="caGrid-${ivy.module}-stubs" conf="stubs" type="jar"/>
     <artifact name="caGrid-${ivy.module}-validator" conf="validator" type="jar"/>
-    <artifact name="caGrid-${ivy.module}-notification" conf="validator" type="jar"/>
+    <artifact name="caGrid-${ivy.module}-notification" conf="notification" type="jar"/>
     <artifact name="caGrid-${ivy.module}-test" conf="test" type="jar"/>
   </publications>
 
