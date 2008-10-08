@@ -13,6 +13,7 @@ import org.cagrid.fqp.results.metadata.FederatedQueryExecutionStatus;
 import org.cagrid.fqp.results.metadata.ProcessingStatus;
 import org.cagrid.notification.SubscriptionHelper;
 import org.cagrid.notification.SubscriptionListener;
+import org.globus.wsrf.impl.notification.SubscriptionCreationException;
 import org.globus.wsrf.utils.AnyHelper;
 import org.oasis.wsrf.properties.ResourcePropertyValueChangeNotificationType;
 
@@ -31,7 +32,11 @@ public class QueryWithNotification {
             DCQLQuery query = (DCQLQuery) Utils.deserializeDocument("exampleDistributedJoin1.xml", DCQLQuery.class);
             
             final FederatedQueryResultsClient resultsClient = fqpClient.query(query, null, null);
+            
+            // basic subscribe
+            resultsClient.subscribe(FederatedQueryResultsConstants.FEDERATEDQUERYEXECUTIONSTATUS);
 
+            // advanced subscribe
             SubscriptionHelper subscriptionHelper = new SubscriptionHelper();
             SubscriptionListener listener = new SubscriptionListener() {
                 public void subscriptionValueChanged(ResourcePropertyValueChangeNotificationType notification) {
@@ -53,7 +58,14 @@ public class QueryWithNotification {
                     }
                 }
             };
-            subscriptionHelper.subscribe(resultsClient, FederatedQueryResultsConstants.FEDERATEDQUERYEXECUTIONSTATUS, listener);
+            try {
+                subscriptionHelper.subscribe(resultsClient, FederatedQueryResultsConstants.FEDERATEDQUERYEXECUTIONSTATUS, listener);
+            } catch (SubscriptionCreationException ex) {
+                System.out.println("UNABLE TO SUBSCRIBE: " + ex.getMessage());
+                ex.printStackTrace();
+            }
+            
+            System.out.println("Subscribed; waiting for processing to complete");
             while (!resultsClient.isProcessingComplete()) {
                 Thread.sleep(200);
             }
@@ -65,8 +77,9 @@ public class QueryWithNotification {
                 System.out.println(iterator.next());
                 System.out.println("=====END RESULT=====\n\n");
             }
-            System.exit(0);
             System.out.println("DONE");
+            // gives the notification listener time to recieve and process the events
+            Thread.sleep(5000);
         } catch (Throwable ex) {
             ex.printStackTrace();
         }
