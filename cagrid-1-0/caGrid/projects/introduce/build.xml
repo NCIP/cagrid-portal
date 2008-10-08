@@ -170,6 +170,7 @@
 		<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/src/client/client-config.wsdd.xmljet" />
 		<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/src/common/ServiceI.javajet" />
 		<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/src/common/ServiceConstants.javajet" />
+		<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/src/common/ServiceConstantsBase.javajet" />
 		<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/src/service/ServiceImplBase.javajet" />
 		<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/src/service/ServiceImpl.javajet" />
 		<jetc destdir="${src.dir}/Introduce" template="${templates.src.dir}/src/service/ServiceConfiguration.javajet" />

@@ -11,6 +11,7 @@ import gov.nih.nci.cagrid.introduce.codegen.services.methods.SyncSource;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.common.SpecificServiceInformation;
+import gov.nih.nci.cagrid.introduce.templates.common.ServiceConstantsBaseTemplate;
 import gov.nih.nci.cagrid.introduce.templates.common.ServiceConstantsTemplate;
 import gov.nih.nci.cagrid.introduce.templates.service.globus.ServiceConfigurationTemplate;
 import gov.nih.nci.cagrid.introduce.templates.service.globus.resource.ResourceBaseTemplate;
@@ -126,6 +127,16 @@ public class Introduce_1_1__1_3_Upgrader extends IntroduceUpgraderBase {
             FileWriter resourceContanstsFW = new FileWriter(resourceContanstsF);
             resourceContanstsFW.write(resourceContanstsS);
             resourceContanstsFW.close();
+            
+            ServiceConstantsBaseTemplate resourcebContanstsT = new ServiceConstantsBaseTemplate();
+            String resourcebContanstsS = resourcebContanstsT.generate(new SpecificServiceInformation(getServiceInformation(), service));
+            File resourcebContanstsF = new File(srcDir.getAbsolutePath() + File.separator
+                + CommonTools.getPackageDir(service) + File.separator + "common" + File.separator + service.getName() + "ConstantsBase.java");
+
+            FileWriter resourcebContanstsFW = new FileWriter(resourcebContanstsF);
+            resourcebContanstsFW.write(resourcebContanstsS);
+            resourcebContanstsFW.close();
+
 
             if (service.getResourceFrameworkOptions().getMain() != null) {
 

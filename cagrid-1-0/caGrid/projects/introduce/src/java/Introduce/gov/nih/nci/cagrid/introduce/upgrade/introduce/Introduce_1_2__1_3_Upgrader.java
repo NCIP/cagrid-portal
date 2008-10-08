@@ -5,6 +5,9 @@ import gov.nih.nci.cagrid.common.XMLUtilities;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
+import gov.nih.nci.cagrid.introduce.common.SpecificServiceInformation;
+import gov.nih.nci.cagrid.introduce.templates.common.ServiceConstantsBaseTemplate;
+import gov.nih.nci.cagrid.introduce.templates.common.ServiceConstantsTemplate;
 import gov.nih.nci.cagrid.introduce.upgrade.common.IntroduceUpgradeStatus;
 import gov.nih.nci.cagrid.introduce.upgrade.common.StatusBase;
 import gov.nih.nci.cagrid.introduce.upgrade.one.x.IntroduceUpgraderBase;
@@ -14,7 +17,6 @@ import java.io.FileFilter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
-import java.util.StringTokenizer;
 
 import org.jdom.Document;
 import org.jdom.Element;
@@ -68,9 +70,37 @@ public class Introduce_1_2__1_3_Upgrader extends IntroduceUpgraderBase {
     protected void upgrade() throws Exception {
 
         upgradeJars();
+        fixConstants();
         fixWSDD();
 
         getStatus().setStatus(StatusBase.UPGRADE_OK);
+    }
+    
+    protected void fixConstants() throws Exception {
+        File srcDir = new File(getServiceInformation().getBaseDirectory().getAbsolutePath() + File.separator + "src");
+        for(int serviceI = 0; serviceI < getServiceInformation().getServices().getService().length; serviceI++){
+            ServiceType service = getServiceInformation().getServices().getService(serviceI);
+            //add new constants base class and new constants class
+            ServiceConstantsTemplate resourceContanstsT = new ServiceConstantsTemplate();
+            String resourceContanstsS = resourceContanstsT.generate(new SpecificServiceInformation(
+                getServiceInformation(), service));
+            File resourceContanstsF = new File(srcDir.getAbsolutePath() + File.separator
+                + CommonTools.getPackageDir(service) + File.separator + "common" + File.separator + File.separator
+                + service.getName() + "Constants.java");
+
+            FileWriter resourceContanstsFW = new FileWriter(resourceContanstsF);
+            resourceContanstsFW.write(resourceContanstsS);
+            resourceContanstsFW.close();
+            
+            ServiceConstantsBaseTemplate resourcebContanstsT = new ServiceConstantsBaseTemplate();
+            String resourcebContanstsS = resourcebContanstsT.generate(new SpecificServiceInformation(getServiceInformation(), service));
+            File resourcebContanstsF = new File(srcDir.getAbsolutePath() + File.separator
+                + CommonTools.getPackageDir(service) + File.separator + "common" + File.separator + service.getName() + "ConstantsBase.java");
+
+            FileWriter resourcebContanstsFW = new FileWriter(resourcebContanstsF);
+            resourcebContanstsFW.write(resourcebContanstsS);
+            resourcebContanstsFW.close(); 
+        }
     }
 
 

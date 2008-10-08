@@ -1,7 +1,6 @@
 package gov.nih.nci.cagrid.introduce.creator;
 
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
-import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
 import gov.nih.nci.cagrid.introduce.codegen.services.security.info.AuthorizationTemplateInfoHolder;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
@@ -9,6 +8,7 @@ import gov.nih.nci.cagrid.introduce.common.SpecificServiceInformation;
 import gov.nih.nci.cagrid.introduce.templates.client.ClientConfigTemplate;
 import gov.nih.nci.cagrid.introduce.templates.client.ServiceClientBaseTemplate;
 import gov.nih.nci.cagrid.introduce.templates.client.ServiceClientTemplate;
+import gov.nih.nci.cagrid.introduce.templates.common.ServiceConstantsBaseTemplate;
 import gov.nih.nci.cagrid.introduce.templates.common.ServiceConstantsTemplate;
 import gov.nih.nci.cagrid.introduce.templates.common.ServiceITemplate;
 import gov.nih.nci.cagrid.introduce.templates.service.ServiceImplBaseTemplate;
@@ -166,6 +166,15 @@ public class SkeletonSourceCreator {
             FileWriter resourceContanstsFW = new FileWriter(resourceContanstsF);
             resourceContanstsFW.write(resourceContanstsS);
             resourceContanstsFW.close();
+            
+            ServiceConstantsBaseTemplate resourcebContanstsT = new ServiceConstantsBaseTemplate();
+            String resourcebContanstsS = resourcebContanstsT.generate(new SpecificServiceInformation(info, service));
+            File resourcebContanstsF = new File(srcDir.getAbsolutePath() + File.separator
+                + CommonTools.getPackageDir(service) + File.separator + "common" + File.separator + service.getName() + "ConstantsBase.java");
+
+            FileWriter resourcebContanstsFW = new FileWriter(resourcebContanstsF);
+            resourcebContanstsFW.write(resourcebContanstsS);
+            resourcebContanstsFW.close();
 
             ResourceBaseTemplate baseResourceBaseT = new ResourceBaseTemplate();
             String baseResourceBaseS = baseResourceBaseT.generate(new SpecificServiceInformation(info, service));
