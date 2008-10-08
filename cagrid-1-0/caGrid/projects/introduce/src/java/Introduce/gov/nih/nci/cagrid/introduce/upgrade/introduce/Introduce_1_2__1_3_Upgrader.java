@@ -101,6 +101,8 @@ public class Introduce_1_2__1_3_Upgrader extends IntroduceUpgraderBase {
             resourcebContanstsFW.write(resourcebContanstsS);
             resourcebContanstsFW.close(); 
         }
+        
+        getStatus().addDescriptionLine("Refactored Constants file to now be developer editable");
     }
 
 
@@ -131,6 +133,8 @@ public class Introduce_1_2__1_3_Upgrader extends IntroduceUpgraderBase {
             + "server-config.wsdd");
         fw.write(XMLUtilities.formatXML(XMLUtilities.documentToString(doc)));
         fw.close();
+        
+        getStatus().addDescriptionLine("Regenerated service-config.wsdd");
     }
 
 
@@ -175,14 +179,6 @@ public class Introduce_1_2__1_3_Upgrader extends IntroduceUpgraderBase {
                 throw new Exception("Error copying library (" + skeletonLibs[i] + ") to service: " + ex.getMessage(),
                     ex);
             }
-        }
-
-        if (oldDkeletonLibFilter.hadGridGrouperJars) {
-            // TODO
-        }
-
-        if (oldDkeletonLibFilter.hadCSMJars) {
-            // TODO
         }
 
     }
