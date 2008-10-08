@@ -129,7 +129,7 @@
 		</java>
 	</target>
 
-	<target name="configure-tomcat-endoresedjars" description="Delete jars in tomcat endorsed directory,adds xercesimpl.jar">
+	<target name="configure-tomcat-endorsedjars" description="Delete jars in tomcat endorsed directory,adds xercesimpl.jar">
 		<delete includeEmptyDirs="true">
 			<fileset dir="${tomcat.home}/common/endorsed" includes="**/*"/>
 		</delete>
