@@ -17,19 +17,19 @@ public class WebSSOConstants
 
 	public static final String WEBSSO_BEAN_CONFIG_FILE = "websso-beans.xml";
 	
-	public static final String FILE_HELPER = "FileHelper";
+	public static final String FILE_HELPER = "fileHelper";
 	
-	public static final String WEBSSO_PROPERTIES = "WebSSOProperties";
+	public static final String WEBSSO_PROPERTIES = "webSSOProperties";
 
-	public static final String AUTHENTICATION_SERVICE_HELPER = "AuthenticationServiceHelper";
+	public static final String AUTHENTICATION_SERVICE_HELPER = "authenticationServiceHelper";
 
-	public static final String DORIAN_HELPER = "DorianHelper";
+	public static final String DORIAN_HELPER = "dorianHelper";
 	
-	public static final String PROXY_VALIDATOR = "ProxyValidator";
+	public static final String PROXY_VALIDATOR = "proxyValidator";
 	
-	public static final String GRID_CREDENTIAL_DELEGATOR = "GridCredentialDelegator";
+	public static final String GRID_CREDENTIAL_DELEGATOR = "gridCredentialDelegator";
 	
-	public static final String SAML_TO_ATTRIBUTE_MAPPER = "SAMLToAttributeMapper";
+	public static final String SAML_TO_ATTRIBUTE_MAPPER = "samlToAttributeMapper";
 
 	public static final String ATTRIBUTE_DELIMITER = "$";
 	

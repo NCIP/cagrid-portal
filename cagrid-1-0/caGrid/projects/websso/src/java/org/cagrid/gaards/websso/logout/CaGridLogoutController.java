@@ -16,7 +16,6 @@ import org.cagrid.gaards.cds.stubs.types.CDSInternalFault;
 import org.cagrid.gaards.cds.stubs.types.DelegationFault;
 import org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault;
 import org.cagrid.gaards.websso.beans.WebSSOServerInformation;
-import org.cagrid.gaards.websso.utils.ObjectFactory;
 import org.cagrid.gaards.websso.utils.WebSSOConstants;
 import org.cagrid.gaards.websso.utils.WebSSOProperties;
 import org.globus.gsi.GlobusCredential;
@@ -25,11 +24,13 @@ import org.globus.wsrf.encoding.DeserializationException;
 import org.jasig.cas.CentralAuthenticationService;
 import org.jasig.cas.web.LogoutController;
 import org.jasig.cas.web.support.CookieRetrievingCookieGenerator;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.AbstractController;
 
 public class CaGridLogoutController extends AbstractController
-{
+{	
 	LogoutController logoutController = new LogoutController();
 	
     protected ModelAndView handleRequestInternal( final HttpServletRequest request, final HttpServletResponse response) throws Exception 
@@ -37,7 +38,9 @@ public class CaGridLogoutController extends AbstractController
 		String delegationEPR = request.getParameter(WebSSOConstants.CAGRID_SSO_DELEGATION_SERVICE_EPR);
 		if (delegationEPR != null && delegationEPR.trim().length() != 0)
 		{
-			WebSSOProperties webSSOProperties = (WebSSOProperties)ObjectFactory.getObject(WebSSOConstants.WEBSSO_PROPERTIES);
+			WebApplicationContext ctx =
+				WebApplicationContextUtils.getRequiredWebApplicationContext(this.getServletContext());
+			WebSSOProperties webSSOProperties = (WebSSOProperties)ctx.getBean(WebSSOConstants.WEBSSO_PROPERTIES);
 			WebSSOServerInformation webSSOServerInformation = webSSOProperties.getWebSSOServerInformation(); 
 			GlobusCredential webSSOServerHostCredential;
 			try
@@ -118,6 +121,4 @@ public class CaGridLogoutController extends AbstractController
     {
     	logoutController.setLogoutView(logoutView);
     }
-
-
 }

@@ -12,6 +12,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 
 import org.cagrid.gaards.websso.beans.WebSSOServerInformation;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 public class StartSyncGTSServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -19,11 +21,13 @@ public class StartSyncGTSServlet extends HttpServlet {
 	@Override
 	public void init(ServletConfig config) throws ServletException{
 		try{
-			WebSSOProperties webSSOProperties = (WebSSOProperties)ObjectFactory.getObject(WebSSOConstants.WEBSSO_PROPERTIES);
+			WebApplicationContext ctx =
+				WebApplicationContextUtils.getRequiredWebApplicationContext(this.getServletContext());
+			WebSSOProperties webSSOProperties = (WebSSOProperties)ctx.getBean(WebSSOConstants.WEBSSO_PROPERTIES);
 			WebSSOServerInformation webSSOServerInformation = webSSOProperties.getWebSSOServerInformation();
 
 			if ("yes".equalsIgnoreCase(webSSOServerInformation.getStartAutoSyncGTS())){
-				FileHelper fileHelper = (FileHelper)ObjectFactory.getObject(WebSSOConstants.FILE_HELPER);
+				FileHelper fileHelper = (FileHelper)ctx.getBean(WebSSOConstants.FILE_HELPER);
 				InputStream fileInputStream = fileHelper.getFileAsStream("sync-description.xml");
 				//Load Sync Description
 				final InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
