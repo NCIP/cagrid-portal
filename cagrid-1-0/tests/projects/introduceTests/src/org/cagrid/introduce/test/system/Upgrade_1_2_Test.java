@@ -55,7 +55,7 @@ public class Upgrade_1_2_Test extends Story {
         try {
             steps.add(new UnpackContainerStep(container));
             steps.add(new UnzipOldServiceStep(this.getClass().getResource(
-                "/gold/serviceVersions/" + "IntroduceTestService-1_3.zip").getFile(), this.tci1));
+                "/gold/serviceVersions/" + "IntroduceTestService-1_2.zip").getFile(), this.tci1));
             steps.add(new UpgradesStep(this.tci1, true));
             steps.add(new DeployServiceStep(container, this.tci1.getDir()));
             steps.add(new StartContainerStep(container));

@@ -1,6 +1,9 @@
 package gov.nih.nci.cagrid.introduce.upgrade.introduce;
 
 import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.common.XMLUtilities;
+import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
+import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.upgrade.common.IntroduceUpgradeStatus;
 import gov.nih.nci.cagrid.introduce.upgrade.common.StatusBase;
@@ -8,7 +11,14 @@ import gov.nih.nci.cagrid.introduce.upgrade.one.x.IntroduceUpgraderBase;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.util.List;
+import java.util.StringTokenizer;
+
+import org.jdom.Document;
+import org.jdom.Element;
+import org.jdom.Namespace;
 
 
 public class Introduce_1_2__1_3_Upgrader extends IntroduceUpgraderBase {
@@ -17,6 +27,7 @@ public class Introduce_1_2__1_3_Upgrader extends IntroduceUpgraderBase {
         String servicePath) throws Exception {
         super(status, serviceInformation, servicePath, "1.2", "1.3");
     }
+
 
     private final class OldJarsFilter implements FileFilter {
         boolean hadGridGrouperJars = false;
@@ -31,7 +42,7 @@ public class Introduce_1_2__1_3_Upgrader extends IntroduceUpgraderBase {
             boolean security = (filename.startsWith("caGrid-ServiceSecurityProvider") || filename
                 .startsWith("caGrid-metadata-security"))
                 && filename.endsWith(".jar");
-           
+
             boolean gridGrouper = (filename.startsWith("caGrid-gridgrouper")) && filename.endsWith(".jar");
             if (gridGrouper) {
                 hadGridGrouperJars = true;
@@ -41,8 +52,7 @@ public class Introduce_1_2__1_3_Upgrader extends IntroduceUpgraderBase {
                 hadCSMJars = true;
             }
 
-            boolean otherSecurityJarsNotNeeded = (filename.startsWith("caGrid-gridca"))
-                && filename.endsWith(".jar");
+            boolean otherSecurityJarsNotNeeded = (filename.startsWith("caGrid-gridca")) && filename.endsWith(".jar");
 
             boolean wsrf = (filename.startsWith("globus_wsrf_mds") || filename.startsWith("globus_wsrf_servicegroup"))
                 && filename.endsWith(".jar");
@@ -58,12 +68,42 @@ public class Introduce_1_2__1_3_Upgrader extends IntroduceUpgraderBase {
     protected void upgrade() throws Exception {
 
         upgradeJars();
-        
+        fixWSDD();
+
         getStatus().setStatus(StatusBase.UPGRADE_OK);
     }
 
 
-    
+    protected void fixWSDD() throws Exception {
+        Document doc = XMLUtilities.fileNameToDocument(getServiceInformation().getBaseDirectory() + File.separator
+            + "server-config.wsdd");
+        List servicesEls = doc.getRootElement().getChildren("service",
+            Namespace.getNamespace("http://xml.apache.org/axis/wsdd/"));
+        for (int serviceI = 0; serviceI < servicesEls.size(); serviceI++) {
+            Element serviceEl = (Element) servicesEls.get(serviceI);
+            ServiceType service = CommonTools.getService(getServiceInformation().getServices(), serviceEl.getAttributeValue("name").substring(serviceEl.getAttributeValue("name").lastIndexOf("/")+1));
+
+            // need to add the service name att and the etc path att for each service
+            Element serviceName = new Element("parameter",Namespace.getNamespace("http://xml.apache.org/axis/wsdd/"));
+            serviceName.setAttribute("name",service.getName().toLowerCase()+"-serviceName");
+            serviceName.setAttribute("value",service.getName());
+            
+            Element serviceETC = new Element("parameter",Namespace.getNamespace("http://xml.apache.org/axis/wsdd/"));
+            serviceETC.setAttribute("name",service.getName().toLowerCase() +"-etcDirectoryPath");
+            serviceETC.setAttribute("value","ETC-PATH");
+            
+            serviceEl.addContent(serviceName);
+            serviceEl.addContent(serviceETC);
+
+        }
+
+        FileWriter fw = new FileWriter(getServiceInformation().getBaseDirectory() + File.separator
+            + "server-config.wsdd");
+        fw.write(XMLUtilities.formatXML(XMLUtilities.documentToString(doc)));
+        fw.close();
+    }
+
+
     private void upgradeJars() throws Exception {
 
         OldJarsFilter oldDkeletonLibFilter = new OldJarsFilter();
@@ -108,11 +148,11 @@ public class Introduce_1_2__1_3_Upgrader extends IntroduceUpgraderBase {
         }
 
         if (oldDkeletonLibFilter.hadGridGrouperJars) {
-            //TODO
+            // TODO
         }
 
         if (oldDkeletonLibFilter.hadCSMJars) {
-            //TODO
+            // TODO
         }
 
     }
