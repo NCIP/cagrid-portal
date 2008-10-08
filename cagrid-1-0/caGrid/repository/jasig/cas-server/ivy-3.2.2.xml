@@ -14,7 +14,6 @@
 		<conf name="default" visibility="public"/>
 	</configurations>
 
-
 	<publications>
 		<artifact name="cas-server-core" type="jar"/>
 	</publications>
@@ -40,9 +39,9 @@
 		<dependency rev="1.0.5" org="springframework" name="webflow"/>
 		<dependency rev="1.2.1" org="springframework" name="ldap"/>
 		<dependency rev="2.0.1" org="springframework" name="security"/>
-		<dependency rev="1.0.4" org="acegisecurity" name="acegisecurity"/>		
+		<dependency rev="1.0.7" org="acegisecurity" name="acegisecurity"/>		
 
-		<dependency rev="1.2.3" org="ehcache" name="ehcache"/>
+		<dependency rev="1.2.4" org="ehcache" name="ehcache"/>
 		<dependency rev="1.0" org="jdom" name="jdom"/>
 		<dependency rev="2.6.9" org="ognl" name="ognl"/>
 		<dependency rev="1.1b" org="internet2" name="opensaml"/>

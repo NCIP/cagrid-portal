@@ -20,5 +20,6 @@
 		<artifact name="spring" conf="full" type="jar"/>
 		<artifact name="spring-webmvc" conf="webmvc" type="jar"/>
 		<artifact name="spring-context" conf="context" type="jar"/>		
+		<artifact name="spring-test" type="jar"/>		
 	</publications>
 </ivy-module>
