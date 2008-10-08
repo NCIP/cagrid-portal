@@ -4,10 +4,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+
 import org.cagrid.gaards.websso.beans.AuthenticationServiceInformation;
 import org.cagrid.gaards.websso.beans.CredentialDelegationServiceInformation;
-import org.cagrid.gaards.websso.beans.DorianInformation;
 import org.cagrid.gaards.websso.beans.DelegatedApplicationInformation;
+import org.cagrid.gaards.websso.beans.DorianInformation;
 import org.cagrid.gaards.websso.beans.WebSSOServerInformation;
 import org.cagrid.gaards.websso.exception.AuthenticationConfigurationException;
 import org.jdom.Document;
@@ -147,6 +148,7 @@ public class WebSSOProperties
 		credentialDelegationServiceInformation.setDelegationLifetimeHours(Integer.parseInt(this.getDelegationLifeTimeHours(credentialDelegationServiceInformationElement)));
 		credentialDelegationServiceInformation.setDelegationLifetimeMinutes(Integer.parseInt(this.getDelegationLifeTimeMinutes(credentialDelegationServiceInformationElement)));
 		credentialDelegationServiceInformation.setDelegationLifetimeSeconds(Integer.parseInt(this.getDelegationLifeTimeSeconds(credentialDelegationServiceInformationElement)));
+		credentialDelegationServiceInformation.setIssuedCredentialPathLength(Integer.parseInt(this.getIssuedCredentialPathLength(credentialDelegationServiceInformationElement)));
 		return credentialDelegationServiceInformation;
 	}
 	
@@ -175,8 +177,12 @@ public class WebSSOProperties
 		return delegationLifetimeSeconds.getText().trim();
 	}
 
-	private WebSSOServerInformation loadWebSSOServerInformation()
-	{
+	private String getIssuedCredentialPathLength(Element credentialDelegationServiceInformationElement) {
+		Element issuedCredentialPathLength = credentialDelegationServiceInformationElement.getChild("issued-credential-path-length");
+		return issuedCredentialPathLength.getText().trim();
+	}
+	
+	private WebSSOServerInformation loadWebSSOServerInformation() {
 		Element webssoProperties = propertiesFile.getRootElement();
 		Element webSSOServerInformationElement = webssoProperties.getChild("websso-server-information");
 		WebSSOServerInformation webSSOServerInformation = new WebSSOServerInformation();

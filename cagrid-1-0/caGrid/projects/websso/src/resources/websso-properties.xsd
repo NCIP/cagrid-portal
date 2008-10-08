@@ -60,6 +60,7 @@
 				<xs:element ref="delegation-lifetime-hours"/>
 				<xs:element ref="delegation-lifetime-minutes"/>
 				<xs:element ref="delegation-lifetime-seconds"/>
+				<xs:element ref="issued-credential-path-length"/>
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
@@ -88,6 +89,7 @@
 	<xs:element name="delegation-lifetime-hours" type="xs:integer"/>
 	<xs:element name="delegation-lifetime-minutes" type="xs:integer"/>
 	<xs:element name="delegation-lifetime-seconds" type="xs:integer"/>
+	<xs:element name="issued-credential-path-length" type="xs:integer"/>
 	<xs:element name="websso-properties">
 		<xs:complexType>
 			<xs:sequence>

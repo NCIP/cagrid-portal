@@ -14,6 +14,8 @@ public class CredentialDelegationServiceInformation implements Serializable
 	private int delegationLifetimeMinutes = 0;
 
 	private int delegationLifetimeSeconds = 0;
+	
+	private int issuedCredentialPathLength = 0;
 
 	public String getServiceURL()
 	{
@@ -60,4 +62,11 @@ public class CredentialDelegationServiceInformation implements Serializable
 		return serialVersionUID;
 	}
 
+	public void setIssuedCredentialPathLength(int issuedCredentialPathLength) {
+		this.issuedCredentialPathLength = issuedCredentialPathLength;
+	}
+
+	public int getIssuedCredentialPathLength() {
+		return issuedCredentialPathLength;
+	}
 }
