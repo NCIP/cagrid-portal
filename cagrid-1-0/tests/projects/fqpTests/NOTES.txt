@@ -10,3 +10,4 @@ Tests needed:
 	-- Query against > 1 target data service; have one fail
 	-- Verify notification behaves as expected
 	-- Verify results from working target data service are returned
+	.. Test exists, currently fails since ProcessingStatus isn't set correctly
