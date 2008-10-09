@@ -45,11 +45,9 @@ class QueryExecutionTask implements Work {
         if (statusListener != null) {
             engine.addStatusListener(statusListener);
         }
-        statusListener.processingStatusChanged(ProcessingStatus.Processing, "Processing Query");
         DCQLQueryResultsCollection results = null;
         try {
-            results = engine.execute(query);
-            statusListener.processingStatusChanged(ProcessingStatus.Complete, "Query processing complete");
+            results = engine.execute(query);            
         } catch (FederatedQueryProcessingException ex) {
             ex.printStackTrace();
             statusListener.processingStatusChanged(ProcessingStatus.Complete_With_Error, "Error processing query: " + ex.getMessage());

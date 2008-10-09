@@ -21,6 +21,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.cagrid.fqp.execution.QueryExecutionParameters;
 import org.cagrid.fqp.execution.TargetDataServiceQueryBehavior;
+import org.cagrid.fqp.results.metadata.ProcessingStatus;
 import org.globus.gsi.GlobusCredential;
 import org.globus.wsrf.impl.work.WorkManagerImpl;
 
@@ -95,6 +96,7 @@ public class FederatedQueryEngine {
      * @throws FederatedQueryProcessingException
      */
     public DCQLQueryResultsCollection execute(DCQLQuery dcqlQuery) throws FederatedQueryProcessingException {
+        fireProcessingStatusChanged(ProcessingStatus.Processing, "Processing Query");
         // create a new processor instance and debug the query
         FederatedQueryProcessor processor = new FederatedQueryProcessor(credential);
         debugDCQLQuery("Beginning processing of DCQL", dcqlQuery);
@@ -114,12 +116,15 @@ public class FederatedQueryEngine {
                 WorkItem workItem = workManager.schedule(executor);
                 workExecution.put(workItem, executionContext);
             } catch (WorkException ex) {
+                // TODO: should I fire processing status change here?
                 throw new FederatedQueryProcessingException(
                     "Error scheduling query aggregation work: " + ex.getMessage(), ex);
             }
         }
         
         LOG.debug("Work scheduled, waiting for completion");
+        fireProcessingStatusChanged(
+            ProcessingStatus.Processing, "Broadcasting final CQL Query to all target data services");
         workManager.waitForAll(workExecution.keySet(), WorkManager.INDEFINITE);
         LOG.debug("Work completed");
         
@@ -129,12 +134,12 @@ public class FederatedQueryEngine {
             failFast =
                 executionParameters.getTargetDataServiceQueryBehavior().getFailOnFirstError().booleanValue();
         }
+        boolean targetServiceError = false;
         List<DCQLResult> dcqlResults = new LinkedList<DCQLResult>();
         for (WorkItem worker : workExecution.keySet()) {
             QueryExecutionContext context = workExecution.get(worker);
             LOG.debug("Analyizing results from " + context.getServiceURL());
             CQLQueryResults results = context.getResults();
-            Exception processingException = context.getProcessingException();
             if (results != null) {
                 LOG.debug("Query returned non-null results");
                 // ensure the query results are of the correct data type
@@ -157,11 +162,25 @@ public class FederatedQueryEngine {
                         throw ex;
                     }
                 }
-            } else if (processingException != null && failFast) {
-                throw new FederatedQueryProcessingException(
-                    "Data service " + context.getServiceURL() + 
-                    " threw a query processing exception: " + processingException.getMessage(), 
-                    processingException);
+            } else {
+                // no results... what gives??
+                targetServiceError = true;
+                Exception processingException = context.getProcessingException();
+                FederatedQueryProcessingException exception = null;
+                if (processingException == null) {
+                    exception = new FederatedQueryProcessingException(
+                        "Data service " + context.getServiceURL() + 
+                        " returned no results, but no exception was recieved");
+                } else {
+                    exception = new FederatedQueryProcessingException(
+                        "Data service " + context.getServiceURL() + 
+                        " threw a query processing exception: " + processingException.getMessage(), 
+                        processingException);
+                }
+                fireInvalidResult(context.getServiceURL(), exception);
+                if (failFast) {
+                    throw exception;
+                }
             }
         }
         
@@ -170,6 +189,10 @@ public class FederatedQueryEngine {
         DCQLResult[] resultArray = new DCQLResult[dcqlResults.size()];
         dcqlResults.toArray(resultArray);
         resultsCollection.setDCQLResult(resultArray);
+        
+        ProcessingStatus status = targetServiceError ? ProcessingStatus.Complete_With_Error : ProcessingStatus.Complete;
+        fireProcessingStatusChanged(status, "Query processing complete");
+        
         return resultsCollection;
     }
 
@@ -259,6 +282,14 @@ public class FederatedQueryEngine {
         LOG.debug("Fire invalid result");
         for (FQPProcessingStatusListener listener : statusListeners) {
             listener.targetServiceReturnedInvalidResult(serviceURL, ex);
+        }
+    }
+    
+    
+    protected synchronized void fireProcessingStatusChanged(ProcessingStatus status, String message) {
+        LOG.debug("Fire processing status changed");
+        for (FQPProcessingStatusListener listener : statusListeners) {
+            listener.processingStatusChanged(status, message);
         }
     }
     
@@ -368,6 +399,7 @@ public class FederatedQueryEngine {
                     if (ex instanceof ConnectException && tryCount < maxRetries) {
                         // connection refused, so we'll come back later
                         try {
+                            LOG.debug("Waiting " + retryTimeout + "ms and trying again...");
                             Thread.sleep(retryTimeout);
                         } catch (InterruptedException iex) {
                             // these things happen
