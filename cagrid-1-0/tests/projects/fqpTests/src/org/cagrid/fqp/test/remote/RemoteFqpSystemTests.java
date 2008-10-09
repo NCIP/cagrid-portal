@@ -25,7 +25,7 @@ import org.cagrid.fqp.test.common.ServiceContainerSource;
  * @author David Ervin
  * 
  * @created Jul 10, 2008 10:57:40 AM
- * @version $Id: RemoteFqpSystemTests.java,v 1.6 2008-09-03 17:47:37 dervin Exp $ 
+ * @version $Id: RemoteFqpSystemTests.java,v 1.7 2008-10-09 18:29:24 dervin Exp $ 
  */
 public class RemoteFqpSystemTests extends StoryBook {
     
@@ -83,6 +83,10 @@ public class RemoteFqpSystemTests extends StoryBook {
         EnumerationExecutionStory enumerationStory = 
             new EnumerationExecutionStory(containerSources, fqpDeployment);
         addStory(enumerationStory);
+        
+        PartialResultsStory partialResultsStory = 
+            new PartialResultsStory(containerSources, fqpDeployment);
+        addStory(partialResultsStory);
     }
     
     
