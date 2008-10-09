@@ -1,3 +1,5 @@
+import org.cagrid.fqp.results.metadata.ProcessingStatus;
+
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.cqlresultset.CQLQueryResults;
 import gov.nih.nci.cagrid.data.utilities.CQLQueryResultsIterator;
@@ -39,6 +41,10 @@ public class RunQueryService {
     
     
     public static class Listener implements FQPProcessingStatusListener {
+        public void processingStatusChanged(ProcessingStatus status, String message) {
+            System.out.println("Processing status changed to " + status.getValue());
+            System.out.println("\tMessage: " + message);
+        }
 
         public void targetServiceConnectionRefused(String serviceURL) {
             System.out.println("Connection refused by " + serviceURL);            

@@ -6,6 +6,7 @@ import gov.nih.nci.cagrid.fqp.processor.FederatedQueryEngine;
 import gov.nih.nci.cagrid.fqp.processor.exceptions.FederatedQueryProcessingException;
 
 import org.cagrid.fqp.execution.QueryExecutionParameters;
+import org.cagrid.fqp.results.metadata.ProcessingStatus;
 import org.globus.gsi.GlobusCredential;
 
 import commonj.work.Work;
@@ -38,16 +39,20 @@ class QueryExecutionTask implements Work {
     
     
     public void run() {
+        statusListener.processingStatusChanged(ProcessingStatus.Waiting_To_Begin, "Initializing Federated Query Engine");
         FederatedQueryEngine engine =
             new FederatedQueryEngine(credential, executionParameters, workManager);
         if (statusListener != null) {
             engine.addStatusListener(statusListener);
         }
+        statusListener.processingStatusChanged(ProcessingStatus.Processing, "Processing Query");
         DCQLQueryResultsCollection results = null;
         try {
             results = engine.execute(query);
+            statusListener.processingStatusChanged(ProcessingStatus.Complete, "Query processing complete");
         } catch (FederatedQueryProcessingException ex) {
             ex.printStackTrace();
+            statusListener.processingStatusChanged(ProcessingStatus.Complete_With_Error, "Error processing query: " + ex.getMessage());
             statusListener.queryProcessingException(ex);
         }
         statusListener.queryResultsGenerated(results);

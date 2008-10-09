@@ -11,6 +11,7 @@ import javax.xml.namespace.QName;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.cagrid.fqp.execution.QueryExecutionParameters;
+import org.cagrid.fqp.results.metadata.ProcessingStatus;
 import org.cagrid.gaards.cds.client.DelegatedCredentialUserClient;
 import org.cagrid.gaards.cds.delegated.stubs.types.DelegatedCredentialReference;
 import org.globus.gsi.GlobusCredential;
@@ -130,9 +131,10 @@ public class FederatedQueryResultsResource extends FederatedQueryResultsResource
         Work queryTask = 
             new QueryExecutionTask(query, userCredential, executionParameters, workManager, listener);
         try {
-            // TODO: Pass along a WorkListener???
+            listener.processingStatusChanged(ProcessingStatus.Waiting_To_Begin, "Scheduling query for execution");
             workManager.schedule(queryTask);
         } catch (WorkException ex) {
+            listener.processingStatusChanged(ProcessingStatus.Complete_With_Error, "Error scheduling query: " + ex.getMessage());
             throw new FederatedQueryProcessingException(
                 "Error scheduling query execution: " + ex.getMessage(), ex);
         }
@@ -229,6 +231,16 @@ public class FederatedQueryResultsResource extends FederatedQueryResultsResource
     
     private AsynchronousFQPProcessingStatusListener getStatusListener() {
         AsynchronousFQPProcessingStatusListener listener = new AsynchronousFQPProcessingStatusListener() {
+            
+            public void processingStatusChanged(ProcessingStatus status, String message) {
+                try {
+                    resourcePropertyManager.setProcessingStatus(status);
+                    resourcePropertyManager.setExecutionDetailMessage(message);
+                } catch (ResourceException ex) {
+                    handleResourceException(ex);
+                }
+            }
+            
             
             public void targetServiceOk(String serviceURL) {
                 try {
