@@ -14,6 +14,7 @@ import gov.nih.nci.cagrid.wsenum.utils.EnumerationResponseHelper;
 
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -33,6 +34,7 @@ import org.cagrid.fqp.test.common.steps.BaseQueryExecutionStep;
 import org.cagrid.notification.SubscriptionHelper;
 import org.cagrid.notification.SubscriptionListener;
 import org.globus.ws.enumeration.ClientEnumIterator;
+import org.globus.wsrf.impl.notification.SubscriptionCreationException;
 import org.globus.wsrf.utils.AnyHelper;
 import org.oasis.wsrf.properties.ResourcePropertyValueChangeNotificationType;
 
@@ -50,6 +52,9 @@ public class EnumerationQueryExecutionStep extends BaseQueryExecutionStep {
         "DATA_SERVICE_1", "DATA_SERVICE_2"
     };
     
+    // TODO: make this configurable, or implement some kind of 
+    // wait which continues once processing success == true
+    public static final int WAIT_TIME = 30; // secconds
     public static final int MAX_NO_SUCH_ELEMENT = 5;
     
     private FederatedQueryProcessorClient fqpClient;
@@ -66,30 +71,79 @@ public class EnumerationQueryExecutionStep extends BaseQueryExecutionStep {
     public void runStep() throws Throwable {
         DCQLQuery query = getCompletedQuery();
         
-        LOG.debug("Executing query with enumeration");
-        FederatedQueryResultsClient resultsClient = fqpClient.query(query, null, null);
-        // wait for notification that the data is ready
-        LOG.debug("Waiting for success notification");
-        InfoHolder info = new InfoHolder();
-        NotificationWaiter waiter = new NotificationWaiter(resultsClient, info);
-        waiter.start();
-        waiter.join();
+        LOG.debug("Begining non-blocking query");
+        final FederatedQueryResultsClient resultsClient = fqpClient.query(query, null, null);
+        final InfoHolder info = new InfoHolder();
         
+        Thread worker = new Thread() {
+            public void run() {
+                SubscriptionListener listener = createSubscriptionListener(resultsClient, info);
+                SubscriptionHelper subscriptionHelper = new SubscriptionHelper();
+                try {
+                    subscriptionHelper.subscribe(
+                        resultsClient, FederatedQueryResultsConstants.FEDERATEDQUERYEXECUTIONSTATUS, listener);
+                } catch (SubscriptionCreationException ex) {
+                    ex.printStackTrace();
+                    fail("Error subscribing to notifications: " + ex.getMessage());
+                }
+            }
+        };
+        worker.start();
+        
+        // wait for notification that the data is ready
+        LOG.debug("Waiting for success notification...");
+        Thread.sleep(WAIT_TIME * 1000);
+        
+        assertTrue("Federated Query Processing was not successful", info.success != null && info.success.booleanValue());
+    }
+    
+    
+    private SubscriptionListener createSubscriptionListener(
+        final FederatedQueryResultsClient resultsClient, final InfoHolder info) {
+        SubscriptionListener listener = new SubscriptionListener() {
+            public void subscriptionValueChanged(ResourcePropertyValueChangeNotificationType notification) {
+                try {
+                    String newMetadataDocument = AnyHelper.toSingleString(notification.getNewValue().get_any());
+                    FederatedQueryExecutionStatus status = (FederatedQueryExecutionStatus) Utils.deserializeObject(
+                        new StringReader(newMetadataDocument), FederatedQueryExecutionStatus.class);
+                    StringWriter writer = new StringWriter();
+                    Utils.serializeObject(status, FederatedQueryResultsConstants.FEDERATEDQUERYEXECUTIONSTATUS, writer);
+                    LOG.debug("GOT NOTIFICATION:");
+                    LOG.debug(writer.getBuffer().toString());
+                    if (ProcessingStatus.Complete.equals(status.getCurrentStatus())) {
+                        enumerateAndVerify(resultsClient);
+                        LOG.debug("SETTING SUCCESS STATUS TO TRUE");
+                        info.success = Boolean.TRUE;
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    info.success = Boolean.FALSE;
+                    info.exception = ex;
+                }
+            }
+        };
+        return listener;
+    }
+    
+    
+    private void enumerateAndVerify(FederatedQueryResultsClient resultsClient) {
         // if successfull, grab the response
         EnumerationResponseContainer enumerationResponse = null;
-        if (info.success.booleanValue()) {
+        try {
             enumerationResponse = resultsClient.enumerate();
-        } else {
-            String failMessage = "Failed to successfully query";
-            if (info.exception != null) {
-                failMessage += ": " + info.exception.getMessage();
-                info.exception.printStackTrace();
-            }
-            fail(failMessage);
-        }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            fail("Error starting enumeration: " + ex.getMessage());
+        } 
         
         LOG.debug("Creating client side enumeration iterator");
-        ClientEnumIterator iterator = EnumerationResponseHelper.createClientIterator(enumerationResponse);
+        ClientEnumIterator iterator = null;
+        try {
+            iterator = EnumerationResponseHelper.createClientIterator(enumerationResponse);
+        } catch (RemoteException ex) {
+            ex.printStackTrace();
+            fail("Error creating client side enumeration: " + ex.getMessage());
+        }
         
         List<SOAPElement> resultElements = new ArrayList<SOAPElement>();
         int noSuchElementCount = 0;
@@ -160,50 +214,6 @@ public class EnumerationQueryExecutionStep extends BaseQueryExecutionStep {
         testResults.setDCQLResult(new DCQLResult[] {testResult});
         
         QueryResultsVerifier.verifyDcqlResults(testResults, goldResults);
-    }
-    
-    
-    private static class NotificationWaiter extends Thread {
-        private Object client = null;
-        private InfoHolder info = null;
-        
-        public NotificationWaiter(FederatedQueryResultsClient resultsClient, InfoHolder info) {
-            this.client = resultsClient;
-            this.info = info;
-            this.info.success = Boolean.FALSE;
-        }
-        
-        
-        public void run() {
-            try {
-                SubscriptionHelper subscriptionHelper = new SubscriptionHelper();
-                subscriptionHelper.subscribe(client, FederatedQueryResultsConstants.FEDERATEDQUERYEXECUTIONSTATUS, new SubscriptionListener() {
-                    public void subscriptionValueChanged(ResourcePropertyValueChangeNotificationType notification) {
-                        try {
-                            String newMetadataDocument = AnyHelper.toSingleString(notification.getNewValue().get_any());
-                            FederatedQueryExecutionStatus status = (FederatedQueryExecutionStatus) Utils.deserializeObject(
-                                new StringReader(newMetadataDocument), FederatedQueryExecutionStatus.class);
-                            StringWriter writer = new StringWriter();
-                            Utils.serializeObject(status, FederatedQueryResultsConstants.FEDERATEDQUERYEXECUTIONSTATUS, writer);
-                            System.out.println("GOT NOTIFICATION:");
-                            System.out.println(writer.getBuffer().toString());
-                            if (status.getCurrentStatus().equals(ProcessingStatus.Complete)) {
-                                info.success = Boolean.TRUE;
-                                Thread.currentThread().notifyAll();
-                            }
-                        } catch (Exception ex) {
-                            ex.printStackTrace();
-                            info.success = Boolean.FALSE;
-                            info.exception = ex;
-                        }
-                    }
-                });
-            } catch (Exception ex) {
-                ex.printStackTrace();
-                info.success = Boolean.FALSE;
-                info.exception = ex;
-            }
-        }
     }
     
     
