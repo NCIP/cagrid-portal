@@ -1,0 +1,12 @@
+Tests needed:
+
+1) Query w/ caGrid Transfer retrieval
+2) Query w/ Delegated Credential
+	-- stand up a CDS, delegate a credential, use it
+	** Negative testing:
+		-- delegate a credential to NON-fqp, try to use it, expect failure
+		-- delegate a credential, authenticate as anonymous, try to use it, expect failure
+3) Query w/ Partial Results
+	-- Query against > 1 target data service; have one fail
+	-- Verify notification behaves as expected
+	-- Verify results from working target data service are returned
