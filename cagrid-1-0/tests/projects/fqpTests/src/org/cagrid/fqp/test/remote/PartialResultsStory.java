@@ -73,8 +73,10 @@ public class PartialResultsStory extends Story {
             }
         }
         
-        // array of URLs with a non-connecting one at the end
+        // array of all URLs involved in the query
         String[] serviceUrlsNonConnect = (String[]) Utils.appendToArray(serviceUrls, NON_CONNECT_SERVICE);
+        // array of URLs of target data services
+        String[] targetUrlsNonConnect = new String[] {serviceUrls[0], NON_CONNECT_SERVICE};
         
         // ProcessingStatus nonConnectExpectedStatus = ProcessingStatus.Complete_With_Error;
         TargetServiceStatus okStatus = new TargetServiceStatus();
@@ -84,7 +86,7 @@ public class PartialResultsStory extends Story {
         
         steps.add(new PartialResultsQueryStep(FQPTestingConstants.QUERIES_LOCATION + File.separator + "exampleDistributedJoin1_partial.xml",
             FQPTestingConstants.GOLD_LOCATION + File.separator + "exampleDistributedJoin1_gold.xml", 
-            fqpClient, serviceUrlsNonConnect, 
+            fqpClient, serviceUrlsNonConnect, targetUrlsNonConnect,
             ProcessingStatus.Complete_With_Error, new TargetServiceStatus[] {okStatus, nonConnectStatus}));
         
         return steps;

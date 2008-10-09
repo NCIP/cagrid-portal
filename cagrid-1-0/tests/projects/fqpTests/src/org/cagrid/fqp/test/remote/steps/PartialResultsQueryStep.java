@@ -38,19 +38,28 @@ public class PartialResultsQueryStep extends BaseQueryExecutionStep {
 
     private static final Log LOG = LogFactory.getLog(PartialResultsQueryStep.class);
 
-    public static final String[] QUERY_URL_PLACEHOLDERS = 
-        {"DATA_SERVICE_1", "DATA_SERVICE_2", "DATA_SERVICE_BAD"};
+    public static final String[] QUERY_URL_PLACEHOLDERS = { 
+        "DATA_SERVICE_1", "DATA_SERVICE_2", "DATA_SERVICE_BAD"
+    };
+    
+    public static final String[] TARGET_URL_PLACEHOLDERS = {
+        "DATA_SERVICE_1", "DATA_SERVICE_2"
+    };
+    
 
     private FederatedQueryProcessorClient fqpClient = null;
-    private String[] serviceUrls = null;
+    private String[] queryServiceUrls = null;
+    private String[] targetServiceUrls = null;
     private ProcessingStatus expectedStatus = null;
     private TargetServiceStatus[] expectedTargetStatuses = null;
 
     public PartialResultsQueryStep(String queryFilename, String goldFilename, FederatedQueryProcessorClient fqpClient,
-        String[] dataServiceUrls, ProcessingStatus expectedStatus, TargetServiceStatus[] expectedConnections) {
+        String[] queryServiceUrls, String[] targetServiceUrls, 
+        ProcessingStatus expectedStatus, TargetServiceStatus[] expectedConnections) {
         super(queryFilename, goldFilename);
         this.fqpClient = fqpClient;
-        this.serviceUrls = dataServiceUrls;
+        this.queryServiceUrls = queryServiceUrls;
+        this.targetServiceUrls = targetServiceUrls;
         this.expectedStatus = expectedStatus;
         this.expectedTargetStatuses = expectedConnections;
     }
@@ -159,12 +168,12 @@ public class PartialResultsQueryStep extends BaseQueryExecutionStep {
 
 
     private DCQLQuery getCompletedQuery() {
-        assertEquals("Unexpected number of service urls", QUERY_URL_PLACEHOLDERS.length, serviceUrls.length);
+        assertEquals("Unexpected number of service urls", QUERY_URL_PLACEHOLDERS.length, queryServiceUrls.length);
         LOG.debug("Filling placeholder URLs with real ones");
         DCQLQuery original = deserializeQuery();
         Map<String, String> urlReplacements = new HashMap<String, String>();
         for (int i = 0; i < QUERY_URL_PLACEHOLDERS.length; i++) {
-            urlReplacements.put(QUERY_URL_PLACEHOLDERS[i], serviceUrls[i]);
+            urlReplacements.put(QUERY_URL_PLACEHOLDERS[i], queryServiceUrls[i]);
         }
         DCQLQuery replaced = null;
         try {
@@ -178,11 +187,12 @@ public class PartialResultsQueryStep extends BaseQueryExecutionStep {
     
     
     private TargetServiceStatus[] getCompletedTargetStatuses() {
-        assertEquals("Unexpected number of target statuses", QUERY_URL_PLACEHOLDERS.length, expectedTargetStatuses.length);
+        assertEquals("Unexpected number of target statuses", 
+            TARGET_URL_PLACEHOLDERS.length, expectedTargetStatuses.length);
         LOG.debug("Filling target status URLs with real ones");
         try {
-            for (int i = 0; i < serviceUrls.length; i++) {
-                expectedTargetStatuses[i].setServiceURL(new URI(serviceUrls[i]));
+            for (int i = 0; i < targetServiceUrls.length; i++) {
+                expectedTargetStatuses[i].setServiceURL(new URI(targetServiceUrls[i]));
             }
         } catch (Exception ex) {
             ex.printStackTrace();
