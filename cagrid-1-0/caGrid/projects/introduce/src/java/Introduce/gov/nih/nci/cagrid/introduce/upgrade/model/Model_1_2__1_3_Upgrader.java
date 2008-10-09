@@ -51,7 +51,7 @@ public class Model_1_2__1_3_Upgrader extends ModelUpgraderBase {
             Element serviceSecurity = service.getChild("ServiceSecurity", Namespace
                 .getNamespace("gme://gov.nih.nci.cagrid.introduce/1/Security"));
             if (serviceSecurity != null) {
-                Element serviceAuthorization = serviceSecurity.getChild("MethodAuthorization", Namespace
+                Element serviceAuthorization = serviceSecurity.getChild("Service meAuthorization", Namespace
                     .getNamespace("gme://gov.nih.nci.cagrid.introduce/1/Security"));
                 if (serviceAuthorization != null) {
                     Element gridGrouperElement = serviceAuthorization.getChild("GridGrouperAuthorization", Namespace

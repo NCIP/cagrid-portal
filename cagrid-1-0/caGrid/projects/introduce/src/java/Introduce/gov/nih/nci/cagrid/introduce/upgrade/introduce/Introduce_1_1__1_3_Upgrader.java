@@ -82,7 +82,7 @@ public class Introduce_1_1__1_3_Upgrader extends IntroduceUpgraderBase {
         String addition = "\n\n" + "\t<!-- ============================================================== -->\n"
             + "\t<!-- Post Undeploy Tomcat                                           -->\n"
             + "\t<!-- ============================================================== -->\n"
-            + "\t<target name=\"postUndeployyTomcat\">\n" + "\t</target>\n\n"
+            + "\t<target name=\"postUndeployTomcat\">\n" + "\t</target>\n\n"
             + "\t<!-- ============================================================== -->\n"
             + "\t<!-- Post Undeploy Globus                                           -->\n"
             + "\t<!-- ============================================================== -->\n"
@@ -323,6 +323,11 @@ public class Introduce_1_1__1_3_Upgrader extends IntroduceUpgraderBase {
             throw new Exception("Cannot find service tasks jar to copy into the service");
         }
 
+        
+        fixConstants();
+        fixWSDD();
+        
+        
         getStatus().setStatus(StatusBase.UPGRADE_OK);
     }
 
@@ -496,7 +501,71 @@ public class Introduce_1_1__1_3_Upgrader extends IntroduceUpgraderBase {
                 syncsource.removeClientImpl(methods[j]);
             }
         }
+        
+        
 
     }
+    
+    protected void fixConstants() throws Exception {
+        File srcDir = new File(getServiceInformation().getBaseDirectory().getAbsolutePath() + File.separator + "src");
+        for(int serviceI = 0; serviceI < getServiceInformation().getServices().getService().length; serviceI++){
+            ServiceType service = getServiceInformation().getServices().getService(serviceI);
+            //add new constants base class and new constants class
+            ServiceConstantsTemplate resourceContanstsT = new ServiceConstantsTemplate();
+            String resourceContanstsS = resourceContanstsT.generate(new SpecificServiceInformation(
+                getServiceInformation(), service));
+            File resourceContanstsF = new File(srcDir.getAbsolutePath() + File.separator
+                + CommonTools.getPackageDir(service) + File.separator + "common" + File.separator + File.separator
+                + service.getName() + "Constants.java");
+
+            FileWriter resourceContanstsFW = new FileWriter(resourceContanstsF);
+            resourceContanstsFW.write(resourceContanstsS);
+            resourceContanstsFW.close();
+            
+            ServiceConstantsBaseTemplate resourcebContanstsT = new ServiceConstantsBaseTemplate();
+            String resourcebContanstsS = resourcebContanstsT.generate(new SpecificServiceInformation(getServiceInformation(), service));
+            File resourcebContanstsF = new File(srcDir.getAbsolutePath() + File.separator
+                + CommonTools.getPackageDir(service) + File.separator + "common" + File.separator + service.getName() + "ConstantsBase.java");
+
+            FileWriter resourcebContanstsFW = new FileWriter(resourcebContanstsF);
+            resourcebContanstsFW.write(resourcebContanstsS);
+            resourcebContanstsFW.close(); 
+        }
+        
+        getStatus().addDescriptionLine("Refactored Constants file to now be developer editable");
+    }
+
+
+    protected void fixWSDD() throws Exception {
+        Document doc = XMLUtilities.fileNameToDocument(getServiceInformation().getBaseDirectory() + File.separator
+            + "server-config.wsdd");
+        List servicesEls = doc.getRootElement().getChildren("service",
+            Namespace.getNamespace("http://xml.apache.org/axis/wsdd/"));
+        for (int serviceI = 0; serviceI < servicesEls.size(); serviceI++) {
+            Element serviceEl = (Element) servicesEls.get(serviceI);
+            ServiceType service = CommonTools.getService(getServiceInformation().getServices(), serviceEl.getAttributeValue("name").substring(serviceEl.getAttributeValue("name").lastIndexOf("/")+1));
+
+            // need to add the service name att and the etc path att for each service
+            Element serviceName = new Element("parameter",Namespace.getNamespace("http://xml.apache.org/axis/wsdd/"));
+            serviceName.setAttribute("name",service.getName().toLowerCase()+"-serviceName");
+            serviceName.setAttribute("value",service.getName());
+            
+            Element serviceETC = new Element("parameter",Namespace.getNamespace("http://xml.apache.org/axis/wsdd/"));
+            serviceETC.setAttribute("name",service.getName().toLowerCase() +"-etcDirectoryPath");
+            serviceETC.setAttribute("value","ETC-PATH");
+            
+            serviceEl.addContent(serviceName);
+            serviceEl.addContent(serviceETC);
+
+        }
+
+        FileWriter fw = new FileWriter(getServiceInformation().getBaseDirectory() + File.separator
+            + "server-config.wsdd");
+        fw.write(XMLUtilities.formatXML(XMLUtilities.documentToString(doc)));
+        fw.close();
+        
+        getStatus().addDescriptionLine("Regenerated service-config.wsdd");
+    }
+
 
 }
