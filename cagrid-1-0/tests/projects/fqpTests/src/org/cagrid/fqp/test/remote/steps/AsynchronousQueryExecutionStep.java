@@ -12,6 +12,7 @@ import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.cagrid.fqp.test.common.FQPTestingConstants;
 import org.cagrid.fqp.test.common.QueryResultsVerifier;
 import org.cagrid.fqp.test.common.UrlReplacer;
 import org.cagrid.fqp.test.common.steps.BaseQueryExecutionStep;
@@ -26,22 +27,6 @@ public class AsynchronousQueryExecutionStep extends BaseQueryExecutionStep {
     public static final String[] QUERY_URL_PLACEHOLDERS = {
         "DATA_SERVICE_1", "DATA_SERVICE_2"
     };
-    
-    
-    /**
-     * Controled by a property in jndi-config.xml
-     */
-    public static final long RESOURCE_SWEEPER_DELAY = 2000;
-    
-    /**
-     * Number of times to try the isProcessingComplete() method
-     */
-    public static final int PROCESSING_WAIT_RETRIES = 20;
-    
-    /**
-     * ms delay between successive calls to isProcessingComplete()
-     */
-    public static final long PROCESSING_RETRY_DELAY = 500;
     
     
     private FederatedQueryProcessorClient fqpClient;
@@ -66,13 +51,15 @@ public class AsynchronousQueryExecutionStep extends BaseQueryExecutionStep {
         // wait for processing to wrap up
         int retries = 0;
         boolean processingComplete = false;
-        while (retries < PROCESSING_WAIT_RETRIES && !(processingComplete = resultsClient.isProcessingComplete())) {
-            Thread.sleep(PROCESSING_RETRY_DELAY);
-            System.out.println(".");
+        System.out.print("Waiting for query to complete: ");
+        while (retries < FQPTestingConstants.PROCESSING_WAIT_RETRIES && !(processingComplete = resultsClient.isProcessingComplete())) {
+            Thread.sleep(FQPTestingConstants.PROCESSING_RETRY_DELAY);
+            System.out.print(".");
             retries++;
         }
-        assertTrue("Query processing did not complete after " + PROCESSING_WAIT_RETRIES + 
-            " retries of " + PROCESSING_RETRY_DELAY + "ms", processingComplete);
+        System.out.println();
+        assertTrue("Query processing did not complete after " + FQPTestingConstants.PROCESSING_WAIT_RETRIES + 
+            " retries of " + FQPTestingConstants.PROCESSING_RETRY_DELAY + "ms", processingComplete);
         
         // get the results
         LOG.debug("Retrieving results");
@@ -98,7 +85,7 @@ public class AsynchronousQueryExecutionStep extends BaseQueryExecutionStep {
             + " seconds.");
 
         // wait for it to be expired (twice the termination time delay) + resource sweeper interval
-        long sleepTime = (1000 * terminateAfterSecs * 2) + RESOURCE_SWEEPER_DELAY;
+        long sleepTime = (1000 * terminateAfterSecs * 2) + FQPTestingConstants.RESOURCE_SWEEPER_DELAY;
         long currentTime = System.currentTimeMillis();
         LOG.debug("Sleeping current thread for " + sleepTime + " ms");
         Thread.sleep(sleepTime);
@@ -126,19 +113,19 @@ public class AsynchronousQueryExecutionStep extends BaseQueryExecutionStep {
         // wait for processing to wrap up
         retries = 0;
         processingComplete = false;
-        while (retries < PROCESSING_WAIT_RETRIES && !(processingComplete = resultsClient.isProcessingComplete())) {
-            Thread.sleep(PROCESSING_RETRY_DELAY);
+        while (retries < FQPTestingConstants.PROCESSING_WAIT_RETRIES && !(processingComplete = resultsClient.isProcessingComplete())) {
+            Thread.sleep(FQPTestingConstants.PROCESSING_RETRY_DELAY);
             System.out.println(".");
             retries++;
         }
-        assertTrue("Query processing did not complete after " + PROCESSING_WAIT_RETRIES + 
-            " retries of " + PROCESSING_RETRY_DELAY + "ms", processingComplete);
+        assertTrue("Query processing did not complete after " + FQPTestingConstants.PROCESSING_WAIT_RETRIES + 
+            " retries of " + FQPTestingConstants.PROCESSING_RETRY_DELAY + "ms", processingComplete);
         
         // explicitly destroy the resource
         resultsClient.destroy(new Destroy());
         
         // Sleep the current thread briefly
-        Thread.sleep(RESOURCE_SWEEPER_DELAY * 2);
+        Thread.sleep(FQPTestingConstants.RESOURCE_SWEEPER_DELAY * 2);
         
         // make sure its gone
         try {
