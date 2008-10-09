@@ -60,7 +60,7 @@
       </ns2:Operation>
      </ns2:operationCollection>
      <ns2:contextPropertyCollection>
-      <ns2:ContextProperty description="" name="{gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata}ServiceMetadata"/>
+      <ns2:ContextProperty description="caGrid standard service metadata" name="{gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata}ServiceMetadata"/>
      </ns2:contextPropertyCollection>
     </ns2:ServiceContext>
     <ns2:ServiceContext description="" name="CaGridEnumeration">
@@ -174,9 +174,9 @@
       </ns2:Operation>
      </ns2:operationCollection>
      <ns2:contextPropertyCollection>
-      <ns2:ContextProperty description="" name="{http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.xsd}CurrentTime"/>
-      <ns2:ContextProperty description="" name="{http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.xsd}TerminationTime"/>
-      <ns2:ContextProperty description="" name="{http://fqp.cagrid.nci.nih.gov/FederatedQueryResultsMetadata}FederatedQueryExecutionStatus"/>
+      <ns2:ContextProperty description="The current time as believed by this service; should be consulted before setting a termnination time (standard ws-lifetime property)." name="{http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.xsd}CurrentTime"/>
+      <ns2:ContextProperty description="The scheduled termination time of this resource (standard ws-lifetime property)" name="{http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.xsd}TerminationTime"/>
+      <ns2:ContextProperty description="The current status of Federated Query execution.  May be subscribed to via ws-notification for updates." name="{http://fqp.cagrid.nci.nih.gov/FederatedQueryResultsMetadata}FederatedQueryExecutionStatus"/>
      </ns2:contextPropertyCollection>
     </ns2:ServiceContext>
    </ns2:serviceContextCollection>

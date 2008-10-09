@@ -202,7 +202,7 @@
     </ns4:Method>
    </ns4:Methods>
    <ns22:ResourcePropertiesList xsi:type="ns22:ResourcePropertiesListType" xmlns:ns22="gme://gov.nih.nci.cagrid.introduce/1/Resources">
-    <ns22:ResourceProperty qName="ns23:ServiceMetadata" fileLocation="serviceMetadata.xml" populateFromFile="true" register="true" xsi:type="ns22:ResourcePropertyType" xmlns:ns23="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"/>
+    <ns22:ResourceProperty qName="ns23:ServiceMetadata" description="caGrid standard service metadata" fileLocation="serviceMetadata.xml" populateFromFile="true" register="true" xsi:type="ns22:ResourcePropertyType" xmlns:ns23="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"/>
    </ns22:ResourcePropertiesList>
    <ns3:ResourceFrameworkOptions xsi:type="ns3:ResourceFrameworkOptions">
     <ns3:Main xsi:type="ns3:Main"/>
@@ -347,9 +347,9 @@
     </ns38:Method>
    </ns38:Methods>
    <ns63:ResourcePropertiesList xsi:type="ns63:ResourcePropertiesListType" xmlns:ns63="gme://gov.nih.nci.cagrid.introduce/1/Resources">
-    <ns63:ResourceProperty qName="ns64:CurrentTime" description="" populateFromFile="false" register="false" xsi:type="ns63:ResourcePropertyType" xmlns:ns64="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.xsd"/>
-    <ns63:ResourceProperty qName="ns65:TerminationTime" description="" populateFromFile="false" register="false" xsi:type="ns63:ResourcePropertyType" xmlns:ns65="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.xsd"/>
-    <ns63:ResourceProperty qName="ns66:FederatedQueryExecutionStatus" description="" fileLocation="FederatedQueryResults_federatedQueryExecutionStatus.xml" populateFromFile="false" register="false" xsi:type="ns63:ResourcePropertyType" xmlns:ns66="http://fqp.cagrid.nci.nih.gov/FederatedQueryResultsMetadata"/>
+    <ns63:ResourceProperty qName="ns64:CurrentTime" description="The current time as believed by this service; should be consulted before setting a termnination time (standard ws-lifetime property)." populateFromFile="false" register="false" xsi:type="ns63:ResourcePropertyType" xmlns:ns64="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.xsd"/>
+    <ns63:ResourceProperty qName="ns65:TerminationTime" description="The scheduled termination time of this resource (standard ws-lifetime property)" populateFromFile="false" register="false" xsi:type="ns63:ResourcePropertyType" xmlns:ns65="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.xsd"/>
+    <ns63:ResourceProperty qName="ns66:FederatedQueryExecutionStatus" description="The current status of Federated Query execution.  May be subscribed to via ws-notification for updates." fileLocation="FederatedQueryResults_federatedQueryExecutionStatus.xml" populateFromFile="false" register="false" xsi:type="ns63:ResourcePropertyType" xmlns:ns66="http://fqp.cagrid.nci.nih.gov/FederatedQueryResultsMetadata"/>
    </ns63:ResourcePropertiesList>
    <ns3:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">The resource-qualified results service</ns3:description>
    <ns3:ResourceFrameworkOptions xsi:type="ns3:ResourceFrameworkOptions">
