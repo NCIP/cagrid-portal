@@ -11,7 +11,6 @@ import java.util.Vector;
 import org.cagrid.fqp.test.common.FQPTestingConstants;
 import org.cagrid.fqp.test.common.ServiceContainerSource;
 import org.cagrid.fqp.test.remote.steps.AsynchronousQueryExecutionStep;
-import org.cagrid.fqp.test.remote.steps.NotificationClientSetupStep;
 
 /** 
  *  AsynchronousExecutionStory
@@ -20,7 +19,7 @@ import org.cagrid.fqp.test.remote.steps.NotificationClientSetupStep;
  * @author David Ervin
  * 
  * @created Jun 30, 2008 12:48:50 PM
- * @version $Id: AsynchronousExecutionStory.java,v 1.4 2008-10-07 17:33:49 dervin Exp $ 
+ * @version $Id: AsynchronousExecutionStory.java,v 1.5 2008-10-10 18:49:05 dervin Exp $ 
  */
 public class AsynchronousExecutionStory extends Story {
     
@@ -71,9 +70,6 @@ public class AsynchronousExecutionStory extends Story {
             fail("Error creating FQP client: " + ex.getMessage());
         }
         
-        // set up for notification
-        steps.add(new NotificationClientSetupStep());
-
         // asynchronous execution
         steps.add(new AsynchronousQueryExecutionStep(FQPTestingConstants.QUERIES_LOCATION + File.separator + "exampleDistributedJoin1.xml",
             FQPTestingConstants.GOLD_LOCATION + File.separator + "exampleDistributedJoin1_gold.xml", 

@@ -94,7 +94,12 @@ public class EnumerationQueryExecutionStep extends BaseQueryExecutionStep {
         LOG.debug("Waiting for success notification...");
         Thread.sleep(WAIT_TIME * 1000);
         
-        assertTrue("Federated Query Processing was not successful", info.success != null && info.success.booleanValue());
+        // release the results resource
+        resultsClient.destroy();
+        
+        // check for success...
+        assertTrue("Federated Query Processing status is unknown", info.success != null);
+        assertTrue("Federated Query Processing was not successful", info.success.booleanValue());
     }
     
     
@@ -110,7 +115,7 @@ public class EnumerationQueryExecutionStep extends BaseQueryExecutionStep {
                     Utils.serializeObject(status, FederatedQueryResultsConstants.FEDERATEDQUERYEXECUTIONSTATUS, writer);
                     LOG.debug("GOT NOTIFICATION:");
                     LOG.debug(writer.getBuffer().toString());
-                    if (ProcessingStatus.Complete.equals(status.getCurrentStatus())) {
+                    if ((info.success == null || !info.success.booleanValue()) && ProcessingStatus.Complete.equals(status.getCurrentStatus())) {
                         enumerateAndVerify(resultsClient);
                         LOG.debug("SETTING SUCCESS STATUS TO TRUE");
                         info.success = Boolean.TRUE;
