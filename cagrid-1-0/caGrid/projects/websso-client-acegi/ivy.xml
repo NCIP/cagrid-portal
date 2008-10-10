@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<ivy-module version="2.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="http://incubator.apache.org/ivy/schemas/ivy.xsd">
+	<info organisation="caGrid" module="websso-client-acegi" revision="${project.version}">
+		<license name="caGrid"
+			url="http://www.cagrid.org/mwiki/index.php?title=CaGrid:LICENSE-1.1" />
+		<description
+			homepage="http://www.cagrid.org/mwiki/index.php?title=WebSSO:Web_Single_Sign_On">caGrid Web Single Sign On: The WebSSO framework provides a comprehensive, Single Sign On
+      solution for web application using caGrid’s GAARDS Framework. Users may navigate between
+      participating applications without being challenged to provide login credentials. Likewise,
+      WebSSO establishes a grid session for the user, allowing them access to other grid services
+      unchallenged. This component represents the server aspect of websso. This is the client
+      component.</description>
+	</info>
+	<configurations>
+    <!-- Public Configurations-->
+		<conf name="default" visibility="public" />
+	</configurations>
+	<publications>
+		<artifact name="caGrid-websso-client-acegi" conf="default" type="jar" />
+	</publications>
+	<dependencies>	
+		<dependency rev="latest.integration" org="caGrid" name="cds" conf="default->client" />
+		<dependency rev="latest.integration" org="caGrid" name="syncgts" conf="default->client" />
+		<dependency rev="latest.integration" org="caGrid" name="websso-common" conf="default" />
+
+    	<!-- External Dependencies -->
+		<dependency rev="2.1.1" org="jasig" name="casclient" conf="default->default" />	
+		<dependency rev="0.7.0" org="inspektr" name="inspektr" conf="default->default" />	
+		<dependency rev="syncgts-patched-4.0.3" org="globus" name="jcog" conf="default->default" />
+	</dependencies>
+</ivy-module>
