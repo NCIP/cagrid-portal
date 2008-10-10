@@ -19,7 +19,6 @@
 	<property name="build.classes.dir" location="build/classes" />
 	<property name="test.build.dir" location="build/classes" />
 
-
 	<path id="build.classpath">
 		<fileset dir="${ext.lib.dir}">
 			<include name="*.jar" />
@@ -62,13 +61,7 @@
 	</target>
 
 	<target name="build-jar">
-		<jar jarfile="${build.dir}/${jar.name}" basedir="${build.classes.dir}">
-			<fileset dir="${src.resources.dir}">
-				<include name="*.*" />
-				<exclude name="web.xml" />
-				<exclude name="cas-client.properties" />
-			</fileset>
-		</jar>
+		<jar jarfile="${build.dir}/${jar.name}" basedir="${build.classes.dir}"/>
 		<delete dir="${build.classes.dir}" />
 	</target>
 
@@ -77,7 +70,7 @@
 		<mkdir dir="${build.dir}" />
 		<mkdir dir="${build.classes.dir}" />
 		<javac srcdir="${src.java.dir}" destdir="${build.classes.dir}" classpathref="build.classpath" debug="true" />
-		<copy file="${src.java.dir}/org/cagrid/gaards/websso/client/filter/client-config.wsdd" todir="${build.classes.dir}/org/cagrid/gaards/websso/client/filter/" />
+		<!--<copy file="${src.java.dir}/org/cagrid/gaards/websso/client/filter/client-config.wsdd" todir="${build.classes.dir}/org/cagrid/gaards/websso/client/filter/" />-->
 	</target>
 
 	<!-- Compile the test implementation classes -->
