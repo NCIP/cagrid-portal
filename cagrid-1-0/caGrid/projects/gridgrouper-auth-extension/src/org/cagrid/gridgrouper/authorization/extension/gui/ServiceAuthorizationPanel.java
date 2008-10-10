@@ -70,6 +70,8 @@ public class ServiceAuthorizationPanel extends AbstractServiceAuthorizationPanel
         extension.setName(getAuthorizationExtensionDescriptionType().getName());  
         MembershipExpression expression = getGridgrouperExpressionEditor().getMembershipExpression();
         
+        MembershipExpressionValidator.validateMembeshipExpression(expression);
+        
         StringWriter sw = new StringWriter();
         Utils.serializeObject(expression, MembershipExpression.getTypeDesc().getXmlType(), sw);
         Document doc = XMLUtilities.stringToDocument(sw.toString());
@@ -129,5 +131,6 @@ public class ServiceAuthorizationPanel extends AbstractServiceAuthorizationPanel
         }
         return gridgrouperExpressionEditor;
     }
+
 
 }  //  @jve:decl-index=0:visual-constraint="10,10"

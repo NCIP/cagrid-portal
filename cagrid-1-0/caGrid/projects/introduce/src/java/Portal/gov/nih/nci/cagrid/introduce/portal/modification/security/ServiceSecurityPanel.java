@@ -387,6 +387,7 @@ public class ServiceSecurityPanel extends JPanel implements PanelSynchronizer {
                 AuthorizationExtensionDescriptionType authExt = ExtensionsLoader.getInstance()
                     .getAuthorizationExtensionByDisplayName(authType);
                 AbstractServiceAuthorizationPanel panel = authPanels.get(authExt.getDisplayName());
+                
                 ExtensionType extensionType = panel.getAuthorizationExtensionData();
 
                 // need to add this extension type and replace what might have

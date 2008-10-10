@@ -74,6 +74,8 @@ public class MethodAuthorizationPanel extends AbstractMethodAuthorizationPanel {
         extension.setName(getAuthorizationExtensionDescriptionType().getName());
         MembershipExpression expression = getGridgrouperExpressionEditor().getMembershipExpression();
         
+        MembershipExpressionValidator.validateMembeshipExpression(expression);
+        
         StringWriter sw = new StringWriter();
         Utils.serializeObject(expression, MembershipExpression.getTypeDesc().getXmlType(), sw);
         Document doc = XMLUtilities.stringToDocument(sw.toString());

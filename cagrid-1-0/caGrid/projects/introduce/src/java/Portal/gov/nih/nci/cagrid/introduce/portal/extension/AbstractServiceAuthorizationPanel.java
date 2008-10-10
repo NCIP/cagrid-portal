@@ -37,4 +37,5 @@ public abstract class AbstractServiceAuthorizationPanel extends JPanel {
 	}
 
 	public abstract ExtensionType getAuthorizationExtensionData() throws Exception;
+
 }

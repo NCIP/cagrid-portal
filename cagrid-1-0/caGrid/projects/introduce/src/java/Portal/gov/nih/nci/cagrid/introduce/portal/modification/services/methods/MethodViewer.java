@@ -815,9 +815,14 @@ public class MethodViewer extends javax.swing.JDialog {
 						method.setDescription(getDescriptionTextField()
 								.getText());
 
-						method
-								.setMethodSecurity(((MethodSecurityPanel) securityContainerPanel)
-										.getMethodSecurity(method.getName()));
+						try {
+                            method
+                            		.setMethodSecurity(((MethodSecurityPanel) securityContainerPanel)
+                            				.getMethodSecurity(method.getName()));
+                        } catch (Exception e2) {
+                           valid = false;
+                           message = e2.getMessage();
+                        }
 
 						if (!getIsImportedCheckBox().isSelected()) {
 

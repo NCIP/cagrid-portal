@@ -47,4 +47,5 @@ public class ServiceAuthorizationPanel extends AbstractServiceAuthorizationPanel
         return extension;
     }
 
+
 }  //  @jve:decl-index=0:visual-constraint="10,10"

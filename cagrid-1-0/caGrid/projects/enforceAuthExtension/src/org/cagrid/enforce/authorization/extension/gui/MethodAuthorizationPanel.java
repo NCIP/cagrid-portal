@@ -54,4 +54,5 @@ public class MethodAuthorizationPanel extends AbstractMethodAuthorizationPanel {
     }
 
 
+
 }  //  @jve:decl-index=0:visual-constraint="10,10"

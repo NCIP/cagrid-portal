@@ -311,6 +311,7 @@ public class MethodSecurityPanel extends JPanel implements PanelSynchronizer {
                 AuthorizationExtensionDescriptionType authExt = ExtensionsLoader.getInstance()
                     .getAuthorizationExtensionByDisplayName(authType);
                 AbstractMethodAuthorizationPanel panel = authPanels.get(authExt.getDisplayName());
+               
                 ExtensionType extensionType = panel.getAuthorizationExtensionData();
                 // need to add this extension type and replace what might have
                 // been there if it was there.
