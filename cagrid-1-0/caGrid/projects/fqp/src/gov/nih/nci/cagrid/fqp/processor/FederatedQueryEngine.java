@@ -97,6 +97,14 @@ public class FederatedQueryEngine {
      */
     public DCQLQueryResultsCollection execute(DCQLQuery dcqlQuery) throws FederatedQueryProcessingException {
         fireProcessingStatusChanged(ProcessingStatus.Processing, "Processing Query");
+        
+        // determine if errors cause immediate failure
+        boolean failFast = true;
+        if (executionParameters.getTargetDataServiceQueryBehavior().getFailOnFirstError() != null) {
+            failFast =
+                executionParameters.getTargetDataServiceQueryBehavior().getFailOnFirstError().booleanValue();
+        }
+        
         // create a new processor instance and debug the query
         FederatedQueryProcessor processor = new FederatedQueryProcessor(credential);
         debugDCQLQuery("Beginning processing of DCQL", dcqlQuery);
@@ -129,11 +137,6 @@ public class FederatedQueryEngine {
         LOG.debug("Work completed");
         
         // compile results from all workers
-        boolean failFast = true;
-        if (executionParameters.getTargetDataServiceQueryBehavior().getFailOnFirstError() != null) {
-            failFast =
-                executionParameters.getTargetDataServiceQueryBehavior().getFailOnFirstError().booleanValue();
-        }
         boolean targetServiceError = false;
         List<DCQLResult> dcqlResults = new LinkedList<DCQLResult>();
         for (WorkItem worker : workExecution.keySet()) {
@@ -148,20 +151,11 @@ public class FederatedQueryEngine {
                         + ") returned results of type (" + results.getTargetClassname() 
                         + ") when type (" + cqlQuery.getTarget().getName() + ") was requested!");
                 }
-                if (results.getObjectResult() != null) {
-                    // results are good!
-                    DCQLResult dcqlResult = new DCQLResult();
-                    dcqlResult.setTargetServiceURL(context.getServiceURL());
-                    dcqlResult.setCQLQueryResultCollection(results);
-                    dcqlResults.add(dcqlResult);
-                } else {
-                    FederatedQueryProcessingException ex = new FederatedQueryProcessingException(
-                        "Data service " + context.getServiceURL() + " returned non-object results for the query!");
-                    fireInvalidResult(context.getServiceURL(), ex);
-                    if (failFast) {
-                        throw ex;
-                    }
-                }
+                // can assume object results are present because QueryExecutor checks that
+                DCQLResult dcqlResult = new DCQLResult();
+                dcqlResult.setTargetServiceURL(context.getServiceURL());
+                dcqlResult.setCQLQueryResultCollection(results);
+                dcqlResults.add(dcqlResult);
             } else {
                 // no results... what gives??
                 targetServiceError = true;
@@ -177,7 +171,6 @@ public class FederatedQueryEngine {
                         " threw a query processing exception: " + processingException.getMessage(), 
                         processingException);
                 }
-                fireInvalidResult(context.getServiceURL(), exception);
                 if (failFast) {
                     throw exception;
                 }
@@ -376,12 +369,19 @@ public class FederatedQueryEngine {
             LOG.debug("Querying target data service " + queryContext.getServiceURL());
             TargetDataServiceQueryBehavior behavior = 
                 queryContext.getExecutionParameters().getTargetDataServiceQueryBehavior();
+            boolean failFast = true;
+            if (behavior.getFailOnFirstError() != null) {
+                failFast = behavior.getFailOnFirstError().booleanValue();
+            }
             CQLQueryResults results = null;
-            Exception queryException = null;
+            RemoteDataServiceException queryException = null;
             
-            int maxRetries = behavior.getRetries() != null ? 
+            int maxRetries = 0;
+            if (!failFast) {
+                maxRetries = behavior.getRetries() != null ?
                 behavior.getRetries().intValue() : 
                 FQPConstants.DEFAULT_TARGET_QUERY_BEHAVIOR.getRetries().intValue();
+            }
             int tryCount = 0;
             long retryTimeout = (behavior.getTimeoutPerRetry() != null ?
                 behavior.getTimeoutPerRetry().intValue() :
@@ -393,10 +393,10 @@ public class FederatedQueryEngine {
                 try {
                     results = DataServiceQueryExecutor.queryDataService(
                         queryContext.getQuery(), queryContext.getServiceURL(), queryContext.getCredential());
-                } catch (Exception ex) {
+                } catch (RemoteDataServiceException ex) {
                     LOG.warn("Query failed to execute: " + ex.getMessage());
                     queryException = ex;
-                    if (ex instanceof ConnectException && tryCount < maxRetries) {
+                    if (ex.getCause().getCause() instanceof ConnectException && tryCount < maxRetries) {
                         // connection refused, so we'll come back later
                         try {
                             LOG.debug("Waiting " + retryTimeout + "ms and trying again...");
@@ -410,20 +410,40 @@ public class FederatedQueryEngine {
             
             LOG.debug("Done querying data service " + queryContext.getServiceURL());
             
-            if (results != null) {
+            if (results != null && results.getObjectResult() != null) {
                 queryContext.setResults(results);
                 fireStatusOk(queryContext.getServiceURL());
             } else if (queryException != null) {
                 queryContext.setProcessingException(queryException);
-                if (queryException instanceof ConnectException) {
+                if (queryException.getCause().getCause() instanceof ConnectException) {
                     fireConnectionRefused(queryContext.getServiceURL());
                 } else {
                     fireServiceExeption(queryContext.getServiceURL(), queryException);
                 }
+                if (failFast) {
+                    failEverything(queryException);
+                }
             } else {
-                fireInvalidResult(queryContext.getServiceURL(), 
-                    new FederatedQueryProcessingException("Service returned no results!"));
+                // no exception, but also no results
+                FederatedQueryProcessingException exception = null;
+                if (results != null) {
+                    // must mean no object results...
+                    exception = new FederatedQueryProcessingException("Data service returned non-object results!");
+                } else {
+                    // no results at all!
+                    exception = new FederatedQueryProcessingException("Data service did not return any results!");
+                }
+                fireInvalidResult(queryContext.getServiceURL(), exception);
+                if (failFast) {
+                    failEverything(exception);
+                }
             }
+        }
+        
+        
+        private void failEverything(Exception ex) {
+            // TODO: stop ALL query distribution and fail immediatly
+            // TODO: need to switch over to Java5 concurrent to make this happen
         }
     }
 }
