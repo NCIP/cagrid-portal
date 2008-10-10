@@ -1,20 +1,18 @@
-package org.cagrid.gaards.websso.client.filter;
+package org.cagrid.websso.client.filter;
 
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import javax.servlet.ServletException;
+import org.cagrid.websso.common.WebSSOClientHelper;
 
 import junit.framework.TestCase;
 
 public class CaGridWebSSOAttributeLoaderFilterTest extends TestCase {
 	
-	private CaGridWebSSOAttributeLoaderFilter webSSOAttributeLoaderFilter=null;
 	private Map<String, String> expectedUserAttributes=new HashMap<String, String>();
 	@Override
 	protected void setUp() throws Exception {
-		webSSOAttributeLoaderFilter=new CaGridWebSSOAttributeLoaderFilter();
 		expectedUserAttributes.put("CAGRID_SSO_FIRST_NAME", "user");
 		expectedUserAttributes.put("CAGRID_SSO_GRID_IDENTITY", "/O=caBIG/OU=caGrid/OU=Training/OU=Dorian/CN=userid");
 		expectedUserAttributes.put("CAGRID_SSO_LAST_NAME", "lastname");
@@ -23,7 +21,7 @@ public class CaGridWebSSOAttributeLoaderFilterTest extends TestCase {
 	}
 
 	public void testValidateSuccessUserAttributes() throws Exception {
-		Map<String, String> userAttributes = webSSOAttributeLoaderFilter.getUserAttributes(attributeString);
+		Map<String, String> userAttributes =WebSSOClientHelper.getUserAttributes(attributeString);
 		Iterator<String> iterator = userAttributes.keySet().iterator();
 		while (iterator.hasNext()) {
 			String key = (String) iterator.next();
@@ -33,10 +31,10 @@ public class CaGridWebSSOAttributeLoaderFilterTest extends TestCase {
 
 	public void testValidateFailureUserAttributes() {
 		try {
-			webSSOAttributeLoaderFilter.getUserAttributes("failure");
+			WebSSOClientHelper.getUserAttributes("failure");
 			fail("must throw servlet exception");
-		} catch (ServletException e) {
-			assertEquals("Invalid UserAttributes from WebSSO-Server failure", e.getMessage());
+		} catch (RuntimeException e) {
+			assertEquals("Invalid UserAttributes from WebSSO-Server ", e.getMessage());
 		}
 	}
 

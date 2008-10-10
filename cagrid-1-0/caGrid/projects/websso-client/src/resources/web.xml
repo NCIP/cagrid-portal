@@ -5,13 +5,18 @@
 
 	<servlet>
 		<servlet-name>Start Auto Sync GTS</servlet-name>
-		<servlet-class>org.cagrid.gaards.websso.client.utils.StartSyncGTSServlet</servlet-class>
-		<load-on-startup>1</load-on-startup>
+		<servlet-class>org.cagrid.websso.common.StartSyncGTSServlet</servlet-class>
+		<init-param>
+			<description></description>
+			<param-name>start-auto-syncgts</param-name>
+			<param-value>no</param-value>			
+		</init-param>
+		<load-on-startup>1</load-on-startup>		
 	</servlet>
 
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
-		<param-value>classpath:applicationContext.xml</param-value>
+		<param-value>/WEB-INF/applicationContext.xml</param-value>
 	</context-param>
 
 	<!--
@@ -20,7 +25,7 @@
 	-->
 	<context-param>
 		<param-name>log4jConfigLocation</param-name>
-		<param-value>classpath:log4j.properties</param-value>
+		<param-value>/WEB-INF/classes/log4j.properties</param-value>
 	</context-param>
 
 	<context-param>
@@ -63,12 +68,12 @@
 
 	<filter>
 		<filter-name>caGRID WebSSO Attribute Loader Filter</filter-name>
-		<filter-class>org.cagrid.gaards.websso.client.filter.CaGridWebSSOAttributeLoaderFilter</filter-class>
+		<filter-class>org.cagrid.websso.client.filter.CaGridWebSSOAttributeLoaderFilter</filter-class>
 	</filter>
 
 	<filter>
 		<filter-name>caGRID WebSSO Delegation Lookup Filter</filter-name>
-		<filter-class>org.cagrid.gaards.websso.client.filter.CaGridWebSSODelegationLookupFilter</filter-class>
+		<filter-class>org.cagrid.websso.client.filter.CaGridWebSSODelegationLookupFilter</filter-class>
 		<init-param>
 			<param-name>certificate-file-path</param-name>
 			<param-value>C:/certificates/D39Y4KF1-cert.pem</param-value>
@@ -81,7 +86,7 @@
 
 	<filter>
 		<filter-name>caGRID WebSSO Logout Filter</filter-name>
-		<filter-class>org.cagrid.gaards.websso.client.filter.CaGridWebSSOLogoutFilter</filter-class>
+		<filter-class>org.cagrid.websso.client.filter.CaGridWebSSOLogoutFilter</filter-class>
 		<init-param>
 			<param-name>logout-landing-url</param-name>
 			<param-value>http://www.google.com</param-value>

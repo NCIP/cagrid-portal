@@ -5,7 +5,7 @@
 
 	<bean id="propertyPlaceholderConfigurer"
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-		<property name="location" value="classpath:cas-client.properties" />
+		<property name="location" value="/WEB-INF/cas-client.properties" />
 	</bean>
 
 	<bean name="casAuthenticationFilter" class="org.jasig.cas.client.authentication.AuthenticationFilter"
@@ -25,10 +25,9 @@
 		<property name="targetMethod" value="setDefaultHostnameVerifier" />
 		<property name="arguments">
 			<list>
-				<bean class="org.cagrid.gaards.websso.client.filter.WebssoHostNameVerifier" />
+				<bean class="org.cagrid.websso.common.WebSSOHostNameVerifier" />
 			</list>
 		</property>
 	</bean>
-
 </beans>
 
