@@ -53,6 +53,7 @@ RFE		Description
 15952 Service Diagnostics Portlet
 15949 User developed Portlets
 16896 Portal should by default build against the training tier
+17067 Increase data size limit in the portal
 
      The complete RFE list and additional details can be found
      on the project Gforge Tracker:
