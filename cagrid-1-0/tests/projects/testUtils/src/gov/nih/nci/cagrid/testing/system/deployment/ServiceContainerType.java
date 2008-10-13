@@ -10,13 +10,13 @@ import java.util.GregorianCalendar;
  * @author David Ervin
  * 
  * @created Oct 16, 2007 12:01:50 PM
- * @version $Id: ServiceContainerType.java,v 1.1 2008-05-14 17:17:42 hastings Exp $ 
+ * @version $Id: ServiceContainerType.java,v 1.2 2008-10-13 20:42:35 oster Exp $ 
  */
 public enum ServiceContainerType {
     GLOBUS_CONTAINER, TOMCAT_CONTAINER, JBOSS_CONTAINER, SECURE_TOMCAT_CONTAINER;
     
     public static final String CONTAINER_DIR_PROPERTY = "testing.containers.dir";
-    public static final String DEFAULT_CONTAINER_DIR = "../testing/resources/containers";
+    public static final String DEFAULT_CONTAINER_DIR = "../testUtils/containers";
     
     public String getZip() {
         String base = getContainerBaseDir();
