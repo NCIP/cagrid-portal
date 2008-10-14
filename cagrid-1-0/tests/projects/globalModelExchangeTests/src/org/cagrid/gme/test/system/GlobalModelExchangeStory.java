@@ -19,17 +19,17 @@ import org.cagrid.gme.test.system.steps.CreateDatabaseStep;
 import org.cagrid.gme.test.system.steps.SetDatabasePropertiesStep;
 
 
-public class GlobalModelExchangeTest extends ServiceStoryBase {
+public class GlobalModelExchangeStory extends ServiceStoryBase {
 
     public static final String GME_DIR_PROPERTY = "gme.service.dir";
 
 
-    public GlobalModelExchangeTest(ServiceContainer container) {
+    public GlobalModelExchangeStory(ServiceContainer container) {
         super(container);
     }
 
 
-    public GlobalModelExchangeTest() {
+    public GlobalModelExchangeStory() {
 
         // init the container
         try {
