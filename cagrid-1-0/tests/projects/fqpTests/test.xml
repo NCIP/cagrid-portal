@@ -11,8 +11,10 @@
 	<property name="testing.port.assignment.mode" value="true" />
 	<!-- tells the test containers where to find their zip files -->
 	<property name="testing.containers.dir" value="${basedir}/../testUtils/containers"/>
-	<!-- tells the remote test where the FQP service lives -->
-	<property name="fqp.service.dir" value="${basedir}/../../../caGrid/projects/fqp"/>
+	<!-- tells the remote test where the FQP and Transfer services live -->
+	<property name="cagrid.projects.dir" value="${basedir}/../../../caGrid/projects"/>
+	<property name="fqp.service.dir" value="${cagrid.projects.dir}/fqp"/>
+	<property name="transfer.service.dir" value="${cagrid.projects.dir}/transfer"/>
 	
 	<target name="prepareClasspaths">
 		<path id="all.test.classpath">
