@@ -18,6 +18,7 @@ import org.globus.wsrf.impl.work.WorkManagerImpl;
 
 import commonj.work.WorkManager;
 
+
 /**
  * TODO:I am the service side implementation class. IMPLEMENT AND DOCUMENT ME
  * 
@@ -28,15 +29,18 @@ public class FederatedQueryProcessorImpl extends FederatedQueryProcessorImplBase
     private static final int DEFAULT_POOL_SIZE = 10;
 
     protected static Log LOG = LogFactory.getLog(FederatedQueryProcessorImpl.class.getName());
-    
+
     private FQPAsynchronousExecutionUtil asynchronousExecutor = null;
     private WorkManager workManager = null;
+
 
     public FederatedQueryProcessorImpl() throws RemoteException {
         super();
     }
 
-  public gov.nih.nci.cagrid.dcqlresult.DCQLQueryResultsCollection execute(gov.nih.nci.cagrid.dcql.DCQLQuery query) throws RemoteException, gov.nih.nci.cagrid.fqp.stubs.types.FederatedQueryProcessingFault {
+
+    public gov.nih.nci.cagrid.dcqlresult.DCQLQueryResultsCollection execute(gov.nih.nci.cagrid.dcql.DCQLQuery query)
+        throws RemoteException, gov.nih.nci.cagrid.fqp.stubs.types.FederatedQueryProcessingFault {
         FederatedQueryEngine engine = new FederatedQueryEngine(null, null);
         DCQLQueryResultsCollection results = null;
         try {
@@ -48,11 +52,14 @@ public class FederatedQueryProcessorImpl extends FederatedQueryProcessorImplBase
             FaultHelper helper = new FaultHelper(fault);
             helper.addFaultCause(e);
             throw helper.getFault();
-    }
+        }
         return results;
     }
 
-  public gov.nih.nci.cagrid.cqlresultset.CQLQueryResults executeAndAggregateResults(gov.nih.nci.cagrid.dcql.DCQLQuery query) throws RemoteException, gov.nih.nci.cagrid.fqp.stubs.types.FederatedQueryProcessingFault {
+
+    public gov.nih.nci.cagrid.cqlresultset.CQLQueryResults executeAndAggregateResults(
+        gov.nih.nci.cagrid.dcql.DCQLQuery query) throws RemoteException,
+        gov.nih.nci.cagrid.fqp.stubs.types.FederatedQueryProcessingFault {
         FederatedQueryEngine engine = new FederatedQueryEngine(null, null);
         CQLQueryResults results = null;
         try {
@@ -68,7 +75,9 @@ public class FederatedQueryProcessorImpl extends FederatedQueryProcessorImplBase
         return results;
     }
 
-  public gov.nih.nci.cagrid.fqp.results.stubs.types.FederatedQueryResultsReference executeAsynchronously(gov.nih.nci.cagrid.dcql.DCQLQuery query) throws RemoteException {
+
+    public gov.nih.nci.cagrid.fqp.results.stubs.types.FederatedQueryResultsReference executeAsynchronously(
+        gov.nih.nci.cagrid.dcql.DCQLQuery query) throws RemoteException {
         FederatedQueryResultsReference ref = null;
         try {
             ref = getAsynchronousExecutor().executeAsynchronousQuery(query, null, null);
@@ -78,18 +87,22 @@ public class FederatedQueryProcessorImpl extends FederatedQueryProcessorImplBase
         return ref;
     }
 
-  public gov.nih.nci.cagrid.fqp.results.stubs.types.FederatedQueryResultsReference query(gov.nih.nci.cagrid.dcql.DCQLQuery query,org.cagrid.gaards.cds.delegated.stubs.types.DelegatedCredentialReference delegatedCredentialReference,org.cagrid.fqp.execution.QueryExecutionParameters queryExecutionParameters) throws RemoteException {
+
+    public gov.nih.nci.cagrid.fqp.results.stubs.types.FederatedQueryResultsReference query(
+        gov.nih.nci.cagrid.dcql.DCQLQuery query,
+        org.cagrid.gaards.cds.delegated.stubs.types.DelegatedCredentialReference delegatedCredentialReference,
+        org.cagrid.fqp.execution.QueryExecutionParameters queryExecutionParameters) throws RemoteException {
         FederatedQueryResultsReference ref = null;
         try {
-            ref = getAsynchronousExecutor().executeAsynchronousQuery(
-                query, delegatedCredentialReference, queryExecutionParameters);
+            ref = getAsynchronousExecutor().executeAsynchronousQuery(query, delegatedCredentialReference,
+                queryExecutionParameters);
         } catch (FederatedQueryProcessingException ex) {
             throw new RemoteException("Error setting up resource: " + ex.getMessage(), ex);
         }
         return ref;
     }
-    
-    
+
+
     public synchronized WorkManager getWorkManager() {
         if (this.workManager == null) {
             int poolSize = DEFAULT_POOL_SIZE;
@@ -106,11 +119,12 @@ public class FederatedQueryProcessorImpl extends FederatedQueryProcessorImplBase
         return this.workManager;
     }
 
+
     public synchronized void setWorkManager(WorkManager workManager) {
         this.workManager = workManager;
     }
 
-    
+
     private synchronized FQPAsynchronousExecutionUtil getAsynchronousExecutor() throws InternalErrorFault {
         if (asynchronousExecutor == null) {
             // get FQP result resource home
@@ -146,4 +160,3 @@ public class FederatedQueryProcessorImpl extends FederatedQueryProcessorImplBase
         return asynchronousExecutor;
     }
 }
-
