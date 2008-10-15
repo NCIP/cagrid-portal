@@ -13,15 +13,31 @@ import gov.nih.nci.cagrid.testing.system.deployment.story.ServiceStoryBase;
 import gov.nih.nci.cagrid.testing.system.haste.Step;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Vector;
 
+import org.apache.axis.message.addressing.EndpointReferenceType;
+import org.apache.axis.types.URI.MalformedURIException;
+import org.cagrid.gme.domain.XMLSchema;
+import org.cagrid.gme.domain.XMLSchemaImportInformation;
+import org.cagrid.gme.domain.XMLSchemaNamespace;
+import org.cagrid.gme.test.system.steps.CheckGetSchemaBundlesStep;
+import org.cagrid.gme.test.system.steps.CheckGetSchemasStep;
+import org.cagrid.gme.test.system.steps.CheckPublishedNamespacesStep;
 import org.cagrid.gme.test.system.steps.CreateDatabaseStep;
+import org.cagrid.gme.test.system.steps.DeleteSchemasStep;
+import org.cagrid.gme.test.system.steps.PublishSchemasStep;
 import org.cagrid.gme.test.system.steps.SetDatabasePropertiesStep;
 
 
 public class GlobalModelExchangeStory extends ServiceStoryBase {
 
+    private static final String SERVICE_TEMP_PATH = "tmp/TempGME";
+    private static final String GME_URL_PATH = "cagrid/GlobalModelExchange";
+    private static final String PATH_TO_GME_PROJECT = "../../../caGrid/projects/globalModelExchange";
     public static final String GME_DIR_PROPERTY = "gme.service.dir";
+    private static final File CAARRAY_TEST_CASE_DIR = new File("resources/schemas/caarray");
 
 
     public GlobalModelExchangeStory(ServiceContainer container) {
@@ -54,7 +70,7 @@ public class GlobalModelExchangeStory extends ServiceStoryBase {
 
 
     protected File getGMEDir() {
-        String value = System.getProperty(GME_DIR_PROPERTY, "../../../caGrid/projects/globalModelExchange");
+        String value = System.getProperty(GME_DIR_PROPERTY, PATH_TO_GME_PROJECT);
         assertNotNull("System property " + GME_DIR_PROPERTY + " was not set!", value);
         File dir = new File(value);
         return dir;
@@ -64,7 +80,7 @@ public class GlobalModelExchangeStory extends ServiceStoryBase {
     @Override
     protected Vector<Step> steps() {
         Vector<Step> steps = new Vector<Step>();
-        File tempGMEServiceDir = new File("tmp/TempGME");
+        File tempGMEServiceDir = new File(SERVICE_TEMP_PATH);
 
         // SETUP
         steps.add(new UnpackContainerStep(getContainer()));
@@ -78,7 +94,50 @@ public class GlobalModelExchangeStory extends ServiceStoryBase {
         steps.add(new DeployServiceStep(getContainer(), tempGMEServiceDir.getAbsolutePath()));
         steps.add(new StartContainerStep(getContainer()));
 
+        EndpointReferenceType epr = null;
+        try {
+            epr = getContainer().getServiceEPR(GME_URL_PATH);
+        } catch (MalformedURIException e) {
+            e.printStackTrace();
+            fail("Error constructing client:" + e.getMessage());
+        }
+
         // TEST
+
+        // get namespaces
+        steps.add(new CheckPublishedNamespacesStep(epr, new ArrayList<XMLSchemaNamespace>()));
+
+        TestCaseInfo caArrayTestCaseInfo = null;
+        Collection<XMLSchema> caArraySchemas = null;
+        Collection<XMLSchemaNamespace> caArrayNamespaces = null;
+        Collection<XMLSchemaImportInformation> caArrayIIs = null;
+
+        // upload some schemas
+        try {
+            caArrayTestCaseInfo = new TestCaseInfo(CAARRAY_TEST_CASE_DIR);
+            caArraySchemas = caArrayTestCaseInfo.getSchemas();
+            caArrayNamespaces = caArrayTestCaseInfo.getNamespaces();
+            caArrayIIs = caArrayTestCaseInfo.getImportInformation();
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail("Unable to construct test case information");
+        }
+        steps.add(new PublishSchemasStep(epr, caArraySchemas));
+
+        // check the namespaces
+        steps.add(new CheckPublishedNamespacesStep(epr, caArrayNamespaces));
+
+        // retrieve them
+        steps.add(new CheckGetSchemasStep(epr, caArraySchemas));
+
+        // check the imports
+        steps.add(new CheckGetSchemaBundlesStep(epr, caArrayIIs));
+
+        // delete
+        steps.add(new DeleteSchemasStep(epr, caArrayNamespaces));
+        steps.add(new CheckPublishedNamespacesStep(epr, new ArrayList<XMLSchemaNamespace>()));
+
+        // retrieve failures
 
         return steps;
     }

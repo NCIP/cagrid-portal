@@ -8,6 +8,7 @@ import java.io.Writer;
 import org.cagrid.gme.client.GlobalModelExchangeClient;
 import org.cagrid.gme.domain.XMLSchema;
 import org.cagrid.gme.domain.XMLSchemaBundle;
+import org.cagrid.gme.domain.XMLSchemaImportInformation;
 
 
 public class SerializationUtils {
@@ -45,6 +46,44 @@ public class SerializationUtils {
         }
         return (XMLSchema) Utils.deserializeObject(xmlReader, XMLSchema.class, GlobalModelExchangeClient.class
             .getResourceAsStream("client-config.wsdd"));
+    }
+
+
+    /**
+     * Write the XML representation of the specified XMLSchemaImportInformation
+     * to the specified writer. If either are null, an IllegalArgumentException
+     * will be thrown.
+     * 
+     * @param importInfo
+     * @param writer
+     * @throws Exception
+     */
+    public static void serializeXMLSchemaImportInformation(XMLSchemaImportInformation importInfo, Writer writer)
+        throws Exception {
+        if (importInfo == null || writer == null) {
+            throw new IllegalArgumentException("Null is not a valid argument");
+        }
+        Utils.serializeObject(importInfo, Constants.XML_SCHEMA_IMPORT_INFO_QNAME, writer,
+            GlobalModelExchangeClient.class.getResourceAsStream("client-config.wsdd"));
+    }
+
+
+    /**
+     * Create an instance of the XMLSchemaImportInformation from the specified
+     * reader. The reader must point to a stream that contains an XML
+     * representation of the XMLSchemaImportInformation. If the reader is null,
+     * an IllegalArgumentException will be thrown.
+     * 
+     * @param xmlReader
+     * @return The deserialized XMLSchemaImportInformation
+     * @throws Exception
+     */
+    public static XMLSchemaImportInformation deserializeXMLSchemaImportInformation(Reader xmlReader) throws Exception {
+        if (xmlReader == null) {
+            throw new IllegalArgumentException("Null is not a valid argument");
+        }
+        return (XMLSchemaImportInformation) Utils.deserializeObject(xmlReader, XMLSchemaImportInformation.class,
+            GlobalModelExchangeClient.class.getResourceAsStream("client-config.wsdd"));
     }
 
 

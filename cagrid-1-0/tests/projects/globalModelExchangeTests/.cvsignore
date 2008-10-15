@@ -4,4 +4,3 @@ build
 log
 tmp
 junit*.properties
-resources
