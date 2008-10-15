@@ -7,100 +7,102 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+import org.apache.axis.message.addressing.Address;
+import org.apache.axis.message.addressing.EndpointReferenceType;
 import org.apache.axis.types.URI;
 import org.apache.axis.types.URI.MalformedURIException;
 
-/** 
- *  ServiceContainer
- *  Performs operations on a service container
+
+/**
+ * ServiceContainer Performs operations on a service container
  * 
  * @author David Ervin
- * 
  * @created Oct 12, 2007 9:37:44 AM
- * @version $Id: ServiceContainer.java,v 1.1 2008-05-14 17:17:42 hastings Exp $ 
+ * @version $Id: ServiceContainer.java,v 1.2 2008-10-15 15:53:56 oster Exp $
  */
 public abstract class ServiceContainer {
-    
+
     protected ContainerProperties properties = null;
-    
-    protected boolean unpacked = false;    
+
+    protected boolean unpacked = false;
     protected boolean started = false;
-    
+
+
     public ServiceContainer(ContainerProperties properties) {
         this.properties = properties;
     }
-    
-    
+
+
     public void unpackContainer() throws ContainerException {
         try {
-            ZipUtilities.unzip(properties.getContainerZip(), properties.getContainerDirectory());
+            ZipUtilities.unzip(this.properties.getContainerZip(), this.properties.getContainerDirectory());
         } catch (IOException ex) {
             throw new ContainerException("Error unziping container: " + ex.getMessage(), ex);
         }
-        unpacked = true;
+        this.unpacked = true;
     }
-    
-    
+
+
     public void deleteContainer() throws ContainerException {
-        if (started) {
+        if (this.started) {
             throw new ContainerException("Cannot delete running container");
         }
-        Utils.deleteDir(properties.getContainerDirectory());
+        Utils.deleteDir(this.properties.getContainerDirectory());
     }
-    
-    
+
+
     public void startContainer() throws ContainerException {
-        if (started) {
+        if (this.started) {
             throw new ContainerException("Container is already started");
         }
-        if (!unpacked) {
+        if (!this.unpacked) {
             throw new ContainerException("Container has not been unpacked");
         }
         startup();
-        started = true;
+        this.started = true;
     }
-    
-    
+
+
     public void stopContainer() throws ContainerException {
-        if (!unpacked) {
+        if (!this.unpacked) {
             throw new ContainerException("Container has not been unpacked");
         }
         shutdown();
-        started = false;
+        this.started = false;
     }
-    
-    
+
+
     public void deployService(File serviceDir) throws Exception {
         deployService(serviceDir, null);
     }
-    
-    
+
+
     public void deployService(File serviceDir, List<String> deployArgs) throws Exception {
-        if (started) {
+        if (this.started) {
             throw new ContainerException("Container has already been started");
         }
-        if (!unpacked) {
+        if (!this.unpacked) {
             throw new ContainerException("Container has not been unpacked");
         }
         deploy(serviceDir, deployArgs);
     }
-    
-    
+
+
     public boolean isStarted() {
-        return started;
+        return this.started;
     }
-    
-    
+
+
     public boolean isUnpacked() {
-        return unpacked;
+        return this.unpacked;
     }
-    
-    
+
+
     public ContainerProperties getProperties() {
-        return properties;
+        return this.properties;
     }
-    
-    
+
+
     public synchronized URI getContainerBaseURI() throws MalformedURIException {
         String url = "";
         try {
@@ -115,13 +117,23 @@ public abstract class ServiceContainer {
         }
         return new URI(url);
     }
-    
-        
+
+
+    public synchronized EndpointReferenceType getServiceEPR(String servicePath) throws MalformedURIException {
+        EndpointReferenceType epr = null;
+
+        String url = getContainerBaseURI().toString() + servicePath;
+        epr = new EndpointReferenceType(new Address(url));
+
+        return epr;
+    }
+
+
     protected abstract void startup() throws ContainerException;
-    
-    
+
+
     protected abstract void shutdown() throws ContainerException;
-    
-    
+
+
     protected abstract void deploy(File serviceDir, List<String> deployArgs) throws ContainerException;
 }
