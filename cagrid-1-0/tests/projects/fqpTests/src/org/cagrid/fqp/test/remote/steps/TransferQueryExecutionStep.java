@@ -1,11 +1,9 @@
 package org.cagrid.fqp.test.remote.steps;
 
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.cqlresultset.CQLQueryResults;
 import gov.nih.nci.cagrid.dcql.DCQLQuery;
 import gov.nih.nci.cagrid.dcqlresult.DCQLQueryResultsCollection;
 import gov.nih.nci.cagrid.fqp.client.FederatedQueryProcessorClient;
-import gov.nih.nci.cagrid.fqp.processor.DCQLAggregator;
 import gov.nih.nci.cagrid.fqp.results.client.FederatedQueryResultsClient;
 import gov.nih.nci.cagrid.fqp.results.common.FederatedQueryResultsConstants;
 
@@ -220,9 +218,9 @@ public class TransferQueryExecutionStep extends BaseQueryExecutionStep {
         LOG.debug("Deserializing text from transfer service to CQL Query Results");
         
         StringReader xmlReader = new StringReader(xml);
-        CQLQueryResults results = null;
+        DCQLQueryResultsCollection results = null;
         try {
-            results = (CQLQueryResults) Utils.deserializeObject(xmlReader, CQLQueryResults.class);
+            results = (DCQLQueryResultsCollection) Utils.deserializeObject(xmlReader, DCQLQueryResultsCollection.class);
         } catch (Exception ex) {
             ex.printStackTrace();
             fail("Error deserializing CQL query results: " + ex.getMessage());
@@ -230,10 +228,8 @@ public class TransferQueryExecutionStep extends BaseQueryExecutionStep {
         
         // validate
         LOG.debug("VALIDATING RESULTS");
-        String targetClassname = getCompletedQuery().getTargetObject().getName();
         DCQLQueryResultsCollection dcqlGoldResults = loadGoldDcqlResults();
-        CQLQueryResults cqlGoldResults = DCQLAggregator.aggregateDCQLResults(dcqlGoldResults, targetClassname);
-        QueryResultsVerifier.verifyCqlResults(results, cqlGoldResults);
+        QueryResultsVerifier.verifyDcqlResults(results, dcqlGoldResults);
         
         // release the transfer resource
         try {

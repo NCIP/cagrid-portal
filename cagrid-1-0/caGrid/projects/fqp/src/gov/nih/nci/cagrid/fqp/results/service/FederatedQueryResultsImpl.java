@@ -6,6 +6,7 @@ import gov.nih.nci.cagrid.cqlresultset.CQLQueryResults;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.dcqlresult.DCQLQueryResultsCollection;
 import gov.nih.nci.cagrid.enumeration.stubs.response.EnumerationResponseContainer;
+import gov.nih.nci.cagrid.fqp.common.DCQLConstants;
 import gov.nih.nci.cagrid.fqp.processor.DCQLAggregator;
 import gov.nih.nci.cagrid.fqp.processor.exceptions.FederatedQueryProcessingException;
 import gov.nih.nci.cagrid.fqp.results.common.FederatedQueryResultsConstants;
@@ -127,13 +128,11 @@ public class FederatedQueryResultsImpl extends FederatedQueryResultsImplBase {
         // get the resource and its results
         FederatedQueryResultsResource resource = getResource();
         DCQLQueryResultsCollection dcqlResults = resource.getResults();
-        CQLQueryResults cqlResults = DCQLAggregator.aggregateDCQLResults(
-            dcqlResults, resource.getQuery().getTargetObject().getName());
         
         // serialize the results
         StringWriter writer = new StringWriter();
         try {
-            Utils.serializeObject(cqlResults, DataServiceConstants.CQL_RESULT_SET_QNAME, writer);
+            Utils.serializeObject(dcqlResults, DCQLConstants.DCQL_RESULTS_QNAME, writer);
         } catch (Exception ex) {
             FaultHelper helper = new FaultHelper(new InternalErrorFault());
             helper.addFaultCause(ex);
@@ -149,10 +148,10 @@ public class FederatedQueryResultsImpl extends FederatedQueryResultsImplBase {
         
         // create a data descriptor for the results
         DataDescriptor descriptor = new DataDescriptor();
-        descriptor.setName(DataServiceConstants.CQL_RESULT_SET_QNAME.toString());
+        descriptor.setName(DCQLConstants.DCQL_RESULTS_QNAME.toString());
         // This causes no deserializer found exception on the client?!?! 
         // descriptor.setMetadata(getResource().getFederatedQueryExecutionStatus());
-        /* and THIS causes no deserializer found for anyType (WTF?!?!?)
+        /* and THIS causes no deserializer found for anyType
         try {
             MessageElement metadataElement = getMetadataAsElement();
             descriptor.setMetadata(metadataElement);

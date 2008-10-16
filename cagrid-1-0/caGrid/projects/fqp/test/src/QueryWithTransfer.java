@@ -1,14 +1,13 @@
-import java.io.IOException;
+import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.dcql.DCQLQuery;
+import gov.nih.nci.cagrid.dcqlresult.DCQLQueryResultsCollection;
+import gov.nih.nci.cagrid.fqp.client.FederatedQueryProcessorClient;
+import gov.nih.nci.cagrid.fqp.results.client.FederatedQueryResultsClient;
+
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.io.StringWriter;
-
-import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.cqlresultset.CQLQueryResults;
-import gov.nih.nci.cagrid.dcql.DCQLQuery;
-import gov.nih.nci.cagrid.fqp.client.FederatedQueryProcessorClient;
-import gov.nih.nci.cagrid.fqp.results.client.FederatedQueryResultsClient;
 
 import org.cagrid.transfer.context.client.TransferServiceContextClient;
 import org.cagrid.transfer.context.client.helper.TransferClientHelper;
@@ -59,9 +58,9 @@ public class QueryWithTransfer {
             System.out.println(xml);
             
             StringReader xmlReader = new StringReader(xml);
-            CQLQueryResults results = null;
-            results = (CQLQueryResults) Utils.deserializeObject(xmlReader, CQLQueryResults.class);
-            System.out.println("Done, got CQL results!");
+            DCQLQueryResultsCollection results = null;
+            results = (DCQLQueryResultsCollection) Utils.deserializeObject(xmlReader, DCQLQueryResultsCollection.class);
+            System.out.println("Done, got DCQL results!");
         } catch (Throwable ex) {
             ex.printStackTrace();
         }
