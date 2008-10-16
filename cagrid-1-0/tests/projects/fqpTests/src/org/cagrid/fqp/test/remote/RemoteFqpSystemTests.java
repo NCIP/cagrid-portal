@@ -25,13 +25,14 @@ import org.cagrid.fqp.test.common.ServiceContainerSource;
  * @author David Ervin
  * 
  * @created Jul 10, 2008 10:57:40 AM
- * @version $Id: RemoteFqpSystemTests.java,v 1.8 2008-10-10 18:49:05 dervin Exp $ 
+ * @version $Id: RemoteFqpSystemTests.java,v 1.9 2008-10-16 15:32:27 dervin Exp $ 
  */
 public class RemoteFqpSystemTests extends StoryBook {
     
     public static final Log logger = LogFactory.getLog(RemoteFqpSystemTests.class);
     
     public static final String FQP_DIR_PROPERTY = "fqp.service.dir";
+    public static final String TRANSFER_SERVICE_DIR_PROPERTY = "transfer.service.dir";
     
     private DataServiceDeploymentStory[] dataServiceDeployments;
     private FQPServiceDeploymentStory fqpDeployment;
@@ -88,12 +89,30 @@ public class RemoteFqpSystemTests extends StoryBook {
         PartialResultsStory partialResultsStory = 
             new PartialResultsStory(containerSources, fqpDeployment);
         addStory(partialResultsStory);
+        
+        // deploy transfer to the FQP container
+        TransferServiceDeploymentStory transferDeployStory = 
+            new TransferServiceDeploymentStory(getTransferDir(), fqpDeployment);
+        addStory(transferDeployStory);
+        
+        // run transfer queries
+        TransferExecutionStory transferStory = 
+            new TransferExecutionStory(containerSources, fqpDeployment);
+        addStory(transferStory);
     }
     
     
     private File getFqpDir() {
         String value = System.getProperty(FQP_DIR_PROPERTY);
         Assert.assertNotNull("System property " + FQP_DIR_PROPERTY + " was not set!", value);
+        File dir = new File(value);
+        return dir;
+    }
+    
+    
+    private File getTransferDir() {
+        String value = System.getProperty(TRANSFER_SERVICE_DIR_PROPERTY);
+        Assert.assertNotNull("System property " + TRANSFER_SERVICE_DIR_PROPERTY + " was not set!", value);
         File dir = new File(value);
         return dir;
     }

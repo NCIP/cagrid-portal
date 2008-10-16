@@ -24,7 +24,7 @@ import org.cagrid.fqp.test.remote.steps.ChangeJndiSweeperDelayStep;
  * @author David Ervin
  * 
  * @created Jul 15, 2008 12:46:02 PM
- * @version $Id: FQPServiceDeploymentStory.java,v 1.3 2008-09-03 17:28:16 dervin Exp $ 
+ * @version $Id: FQPServiceDeploymentStory.java,v 1.4 2008-10-16 15:32:27 dervin Exp $ 
  */
 public class FQPServiceDeploymentStory extends Story implements ServiceContainerSource {
     
@@ -51,8 +51,9 @@ public class FQPServiceDeploymentStory extends Story implements ServiceContainer
     
     public boolean storySetUp() {
         try {
+            // must be tomcat container for transfer to work
             fqpServiceContainer = 
-                ServiceContainerFactory.createContainer(ServiceContainerType.GLOBUS_CONTAINER);
+                ServiceContainerFactory.createContainer(ServiceContainerType.TOMCAT_CONTAINER);
         } catch (Exception ex) {
             ex.printStackTrace();
             return false;
