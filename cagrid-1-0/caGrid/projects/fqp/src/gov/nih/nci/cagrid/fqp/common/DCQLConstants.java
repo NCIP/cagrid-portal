@@ -21,5 +21,9 @@ public class DCQLConstants {
 	public static final String DCQL_QUERY_URI = "http://caGrid.caBIG/1.0/gov.nih.nci.cagrid.dcql";
 	public static final String DCQL_QUERY_NAME = "DCQLQuery";
 	public static final QName DCQL_QUERY_QNAME = new QName(DCQL_QUERY_URI, DCQL_QUERY_NAME);
+    
+    public static final String DCQL_RESULTS_URI = "http://caGrid.caBIG/1.0/gov.nih.nci.cagrid.dcqlresult";
+    public static final String DCQL_RESULTS_NAME = "DCQLQueryResultsCollection";
+    public static final QName DCQL_RESULTS_QNAME = new QName(DCQL_RESULTS_URI, DCQL_RESULTS_NAME);
 
 }
