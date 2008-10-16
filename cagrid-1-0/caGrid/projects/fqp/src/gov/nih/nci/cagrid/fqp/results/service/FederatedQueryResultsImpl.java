@@ -8,6 +8,7 @@ import gov.nih.nci.cagrid.dcqlresult.DCQLQueryResultsCollection;
 import gov.nih.nci.cagrid.enumeration.stubs.response.EnumerationResponseContainer;
 import gov.nih.nci.cagrid.fqp.processor.DCQLAggregator;
 import gov.nih.nci.cagrid.fqp.processor.exceptions.FederatedQueryProcessingException;
+import gov.nih.nci.cagrid.fqp.results.common.FederatedQueryResultsConstants;
 import gov.nih.nci.cagrid.fqp.results.service.globus.resource.FederatedQueryResultsResource;
 import gov.nih.nci.cagrid.fqp.results.stubs.types.InternalErrorFault;
 import gov.nih.nci.cagrid.fqp.results.stubs.types.ProcessingNotCompleteFault;
@@ -15,15 +16,29 @@ import gov.nih.nci.cagrid.fqp.results.utils.FQPEnumerationExecutionUtil;
 import gov.nih.nci.cagrid.fqp.stubs.types.FederatedQueryProcessingFault;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.StringReader;
 import java.io.StringWriter;
 import java.rmi.RemoteException;
 
+import javax.xml.namespace.QName;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.soap.SOAPElement;
+
+import org.apache.axis.message.MessageElement;
+import org.cagrid.fqp.results.metadata.FederatedQueryExecutionStatus;
 import org.cagrid.transfer.context.service.helper.TransferServiceHelper;
 import org.cagrid.transfer.context.stubs.types.TransferServiceContextReference;
 import org.cagrid.transfer.descriptor.DataDescriptor;
 import org.globus.wsrf.ResourceContext;
 import org.globus.wsrf.ResourceContextException;
 import org.globus.wsrf.ResourceException;
+import org.globus.wsrf.encoding.SerializationException;
+import org.globus.wsrf.utils.AnyHelper;
+import org.globus.wsrf.utils.XmlUtils;
+import org.w3c.dom.Document;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 
 /**
@@ -135,7 +150,20 @@ public class FederatedQueryResultsImpl extends FederatedQueryResultsImplBase {
         // create a data descriptor for the results
         DataDescriptor descriptor = new DataDescriptor();
         descriptor.setName(DataServiceConstants.CQL_RESULT_SET_QNAME.toString());
-        descriptor.setMetadata(getResource().getFederatedQueryExecutionStatus());
+        // This causes no deserializer found exception on the client?!?! 
+        // descriptor.setMetadata(getResource().getFederatedQueryExecutionStatus());
+        /* and THIS causes no deserializer found for anyType (WTF?!?!?)
+        try {
+            MessageElement metadataElement = getMetadataAsElement();
+            descriptor.setMetadata(metadataElement);
+        } catch (Exception ex) {
+            FaultHelper helper = new FaultHelper(new InternalErrorFault());
+            helper.addFaultCause(ex);
+            helper.addDescription("Error serializing metadata for data descriptor");
+            helper.addDescription(ex.getMessage());
+            throw (InternalErrorFault) helper.getFault();
+        }
+        */
         
         TransferServiceContextReference transferReference = null;
         try {
@@ -156,5 +184,25 @@ public class FederatedQueryResultsImpl extends FederatedQueryResultsImplBase {
         FederatedQueryResultsResource resource = 
             (FederatedQueryResultsResource) ResourceContext.getResourceContext().getResource();
         return resource;
+    }
+    
+    
+    private MessageElement getMetadataAsElement() throws Exception {
+        FederatedQueryExecutionStatus status = getResource().getFederatedQueryExecutionStatus();
+        StringWriter writer = new StringWriter();
+        Utils.serializeObject(status, FederatedQueryResultsConstants.FEDERATEDQUERYEXECUTIONSTATUS, writer);
+        MessageElement element = null;
+        try {
+            Document doc = XmlUtils.newDocument(new InputSource(new StringReader(writer.getBuffer().toString())));
+            element = new MessageElement(doc.getDocumentElement());
+            element.setQName(FederatedQueryResultsConstants.FEDERATEDQUERYEXECUTIONSTATUS);
+        } catch (ParserConfigurationException ex) {
+            throw new SerializationException("Error in XML parser: " + ex.getMessage(), ex);
+        } catch (SAXException ex) {
+            throw new SerializationException("Error parsing XML document into an element: " + ex.getMessage(), ex);
+        } catch (IOException ex) {
+            throw new SerializationException("Error handling XML: " + ex.getMessage(), ex);
+        }
+        return element;
     }
 }
