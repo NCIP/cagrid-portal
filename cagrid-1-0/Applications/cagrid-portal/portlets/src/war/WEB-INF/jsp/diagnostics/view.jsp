@@ -126,7 +126,7 @@
         document.getElementById("${prefix}resultsDiv").innerHTML+="<br/>";
         document.getElementById("${prefix}resultsDiv").innerHTML+="<hr/>";
         document.getElementById("${prefix}resultsDiv").innerHTML+="<div>";
-        document.getElementById("${prefix}resultsDiv").innerHTML+="See <a href='http://www.cagrid.org/wiki/CaGrid:How-To:TroubleshootIndexService' target='_blank'>this guide</a> to trobleshoot potential problems";
+        document.getElementById("${prefix}resultsDiv").innerHTML+="See <a href='http://www.cagrid.org/wiki/CaGrid:How-To:TroubleshootIndexService' target='_blank'>this guide</a> to troubleshoot potential problems";
         document.getElementById("${prefix}resultsDiv").innerHTML+="</div>";
     }
 
