@@ -167,7 +167,7 @@ public class WebSSOProperties {
 	@SuppressWarnings("unchecked")
 	private List<DorianInformation> loadDoriansInformation() {
 		Element webssoProperties = propertiesFile.getRootElement();
-		Element dorianServiceElement = webssoProperties.getChild("dorian-service-information");
+		Element dorianServiceElement = webssoProperties.getChild("dorian-services-information");
 		List<Element> serviceDescriptors = dorianServiceElement.getChildren("dorian-service-descriptor");
 
 		List<DorianInformation> dorians = new ArrayList<DorianInformation>();

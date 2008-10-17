@@ -41,6 +41,11 @@
 	<bean name="samlToAttributeMapper"
 		class="org.cagrid.gaards.websso.authentication.helper.impl.SAMLToAttributeMapperImpl" />
 
+	<bean id="serviceManager" class="org.cagrid.gaards.websso.authentication.AuthenticationProfileServiceManager"
+		factory-method="getInstance" scope="singleton">
+		<property name="webSSOProperties" ref="webSSOProperties" />
+	</bean>
+
 	<!--
 		If you want provide specific trust store and CRL paths use the entry
 		below
