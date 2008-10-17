@@ -3,7 +3,6 @@ package org.cagrid.gaards.websso.authentication;
 import javax.servlet.ServletContext;
 
 import org.cagrid.gaards.websso.utils.WebSSOConstants;
-import org.cagrid.gaards.websso.utils.WebSSOProperties;
 import org.jasig.cas.web.flow.AuthenticationViaFormAction;
 import org.jasig.cas.web.support.WebUtils;
 import org.springframework.web.context.WebApplicationContext;
@@ -20,8 +19,8 @@ public class CaGridWebSSOAuthenticationViaFormAction extends AuthenticationViaFo
 				.getSession().getServletContext();
 		WebApplicationContext ctx =
 			WebApplicationContextUtils.getRequiredWebApplicationContext(servletContext);
-		WebSSOProperties webSSOProperties=(WebSSOProperties)ctx.getBean(WebSSOConstants.WEBSSO_PROPERTIES);
-		context.getRequestScope().put("authenticationServiceInformationList",webSSOProperties.getAuthenticationServiceInformationList());
+		AuthenticationProfileServiceManager serviceManager=(AuthenticationProfileServiceManager)ctx.getBean(WebSSOConstants.SERVICE_MANAGER);
+		context.getRequestScope().put("authenticationServiceInformationList",serviceManager.getAuthenticationServiceInformationList());
 		return super.referenceData(context);
 	}
 

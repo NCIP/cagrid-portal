@@ -30,6 +30,8 @@ public class WebSSOConstants
 	public static final String GRID_CREDENTIAL_DELEGATOR = "gridCredentialDelegator";
 	
 	public static final String SAML_TO_ATTRIBUTE_MAPPER = "samlToAttributeMapper";
+	
+	public static final String SERVICE_MANAGER = "serviceManager";
 
 	public static final String ATTRIBUTE_DELIMITER = "$";
 	

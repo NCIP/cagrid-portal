@@ -12,7 +12,6 @@ import org.cagrid.gaards.websso.authentication.helper.DorianHelper;
 import org.cagrid.gaards.websso.authentication.helper.GridCredentialDelegator;
 import org.cagrid.gaards.websso.authentication.helper.ProxyValidator;
 import org.cagrid.gaards.websso.authentication.helper.SAMLToAttributeMapper;
-import org.cagrid.gaards.websso.beans.AuthenticationServiceInformation;
 import org.cagrid.gaards.websso.beans.DelegatedApplicationInformation;
 import org.cagrid.gaards.websso.beans.DorianInformation;
 import org.cagrid.gaards.websso.beans.WebSSOServerInformation;
@@ -30,6 +29,7 @@ import org.jasig.cas.authentication.principal.Principal;
 import org.jasig.cas.authentication.principal.SimplePrincipal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 /**
  * CaGridAuthenticationManager
@@ -70,45 +70,54 @@ public class CaGridAuthenticationManager implements AuthenticationManager {
 		this.webSSOProperties = webSSOProperties;
 	}
 	
+	/**
+	 * Authenticate the user credentials and retrieve samlAssertion for authentication Service
+	 * Obtain the GlobusCredential for the Authenticated User from Dorian
+	 * Validate the Proxy or GlobusCredential
+	 * Delegate the Globus Credentials
+	 * Adding the serialized Delegated Credentials Reference and Grid Identity to the attributes map
+	 * Create the Principal from the grid identity
+	 * Create a new Authentication Object using the Principal
+	 */
 	public Authentication authenticate(Credentials credentials)
 			throws AuthenticationException {
 		if (null == webSSOProperties) {
 			throw new AuthenticationConfigurationException(
 					"Error Initializing Authentication Manager properties");
 		}
-		// Authenticate the user credentials and retrieve 
-		SAMLAssertion samlAssertion = authenticationServiceHelper.authenticate( ((UsernamePasswordAuthenticationServiceURLCredentials)credentials).getAuthenticationServiceURL() , ((UsernamePasswordAuthenticationServiceURLCredentials)credentials).getUsername(), ((UsernamePasswordAuthenticationServiceURLCredentials)credentials).getPassword());
-		// Obtained the GlobusCredential for the Authenticated User
-		GlobusCredential globusCredential = dorianHelper.obtainProxy(samlAssertion, this.getDorianInformation(((UsernamePasswordAuthenticationServiceURLCredentials)credentials).getAuthenticationServiceURL()));
-		// Validate the Proxy
+		UsernamePasswordAuthenticationServiceURLCredentials userNameCredentials=(UsernamePasswordAuthenticationServiceURLCredentials)credentials;
+		SAMLAssertion samlAssertion = authenticationServiceHelper.authenticate(
+				userNameCredentials.getAuthenticationServiceURL(),
+				userNameCredentials.getUsername(), userNameCredentials.getPassword());
+
+		DorianInformation dorianInformation = this.getDorianInformation(userNameCredentials.getAuthenticationServiceURL());
+		GlobusCredential globusCredential = dorianHelper.obtainProxy(samlAssertion, dorianInformation);
 		proxyValidator.validate(globusCredential);
-		// Delegate the Globus Credentials
-		String serializedDelegatedCredentialReference = gridCredentialDelegator.delegateGridCredential(globusCredential, this.getHostIdentities());
+		String serializedDelegatedCredentialReference = gridCredentialDelegator
+														.delegateGridCredential(globusCredential, this.getHostIdentities());
 
 		HashMap<String, String> attributesMap = samlToAttributeMapper.convertSAMLtoHashMap(samlAssertion);
-
-		// Adding the serialed Delegated Credentials Reference and Grid Identity to the 
 		attributesMap.put(WebSSOConstants.CAGRID_SSO_DELEGATION_SERVICE_EPR, serializedDelegatedCredentialReference);
 		attributesMap.put(WebSSOConstants.CAGRID_SSO_GRID_IDENTITY, globusCredential.getIdentity());
 		
-		// Creating the Principal from the grid identity
 		Principal p = new SimplePrincipal(this.constructPrincipal(attributesMap));
-
-		// Create a new Authentication Object using the Principal
 		MutableAuthentication mutableAuthentication = new MutableAuthentication(p);
 		return mutableAuthentication;
 	}
 	
 	private DorianInformation getDorianInformation(
-			String authenticationServiceURL) throws AuthenticationConfigurationException {
-		AuthenticationServiceInformation authenticationServiceInformation = new AuthenticationServiceInformation();
-		authenticationServiceInformation
-				.setAuthenticationServiceURL(authenticationServiceURL);
-		List<AuthenticationServiceInformation> authenticationServiceInformationList = webSSOProperties
-				.getAuthenticationServiceInformationList();
-		AuthenticationServiceInformation authenticationServiceInformationMatched = authenticationServiceInformationList
-				.get(authenticationServiceInformationList.indexOf(authenticationServiceInformation));
-		return authenticationServiceInformationMatched.getDorianInformation();
+			String dorianServiceURL) throws AuthenticationConfigurationException {
+		Assert.notNull(dorianServiceURL,"dorian service URL cannot be empty");
+		List<DorianInformation> dorians = webSSOProperties.getDoriansInformation();
+
+		DorianInformation dorianInformation = null;
+		for (DorianInformation tempDorianInformation : dorians) {
+			if (dorianServiceURL.equals(tempDorianInformation.getDorianServiceURL())) {
+				dorianInformation = tempDorianInformation;
+				break;
+			}
+		}
+		return dorianInformation;
 	}
 	
 	private List<String> getHostIdentities()

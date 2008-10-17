@@ -1,62 +1,61 @@
 package org.cagrid.gaards.websso.beans;
 
 import java.io.Serializable;
+import java.util.Set;
 
-public class AuthenticationServiceInformation implements Serializable
-{
+import javax.xml.namespace.QName;
+
+public class AuthenticationServiceInformation implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	private String authenticationServiceName = null;
-	
 	private String authenticationServiceURL = null;
+	private String authenticationServiceIdentity = null;
+	private Set<QName> authenticationServiceProfiles;
+
 	
-	private DorianInformation dorianInformation = null;
-
-	public String getAuthenticationServiceName()
-	{
-		return authenticationServiceName;
-	}
-
-	public void setAuthenticationServiceName(String authenticationServiceName)
-	{
+	public AuthenticationServiceInformation(String authenticationServiceName,
+			String authenticationServiceURL,
+			String authenticationServiceIdentity) {
+		super();
+		this.authenticationServiceIdentity = authenticationServiceIdentity;
 		this.authenticationServiceName = authenticationServiceName;
-	}
-
-	public String getAuthenticationServiceURL()
-	{
-		return authenticationServiceURL;
-	}
-
-	public void setAuthenticationServiceURL(String authenticationServiceURL)
-	{
 		this.authenticationServiceURL = authenticationServiceURL;
 	}
 
-	public DorianInformation getDorianInformation()
-	{
-		return dorianInformation;
+	public Set<QName> getAuthenticationServiceProfiles() {
+		return authenticationServiceProfiles;
 	}
 
-	public void setDorianInformation(DorianInformation dorianInformation)
-	{
-		this.dorianInformation = dorianInformation;
+	public void setAuthenticationServiceProfiles(
+			Set<QName> authenticationServiceProfiles) {
+		this.authenticationServiceProfiles = authenticationServiceProfiles;
 	}
 
-	public static long getSerialVersionUID()
-	{
+	public String getAuthenticationServiceName() {
+		return authenticationServiceName;
+	}
+
+	public String getAuthenticationServiceURL() {
+		return authenticationServiceURL;
+	}
+
+	public String getAuthenticationServiceIdentity() {
+		return authenticationServiceIdentity;
+	}
+	
+	public static long getSerialVersionUID() {
 		return serialVersionUID;
 	}
 
 	@Override
-	public boolean equals(Object arg0)
-	{
-		if (arg0 instanceof AuthenticationServiceInformation)
-		{
-			if (this.authenticationServiceURL.equals(((AuthenticationServiceInformation)arg0).getAuthenticationServiceURL()))
+	public boolean equals(Object arg0) {
+		if (arg0 instanceof AuthenticationServiceInformation) {
+			if (this.authenticationServiceURL
+					.equals(((AuthenticationServiceInformation) arg0).getAuthenticationServiceURL()))
 				return true;
 		}
 		return false;
 	}
-
 }
