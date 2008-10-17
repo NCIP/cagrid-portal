@@ -32,8 +32,8 @@ public class MetadataDiagnosticService extends AbstractDiagnosticService {
             _meta = PortalUtils.getMetadata(Url, defaultTimeout);
 
             _result.setStatus(DiagnosticResultStatus.PASSED);
-            logger.debug("Retreived metadata sucessfully for " + Url);
-            _result.setMessage("Service Metadata retreived sucessfully");
+            logger.debug("Retrieved metadata sucessfully for " + Url);
+            _result.setMessage("Service Metadata retrieved sucessfully");
             try {
                 ServiceMetadata _sMeta = _meta.smeta;
                 Address _address = new Address();

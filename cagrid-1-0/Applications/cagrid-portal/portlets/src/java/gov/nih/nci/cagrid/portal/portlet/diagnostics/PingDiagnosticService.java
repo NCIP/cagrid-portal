@@ -22,10 +22,10 @@ public class PingDiagnosticService extends StatusDiagnosticService {
         _result.setType(DiagnosticType.PING);
 
         if (_result.getStatus().equals(DiagnosticResultStatus.PASSED))
-            _result.setMessage("Sucessfully pinged service");
+            _result.setMessage("Successfully pinged service");
         else {
             _result.setMessage("Failed to PING service");
-            _result.setDetail("Could not reach <br><i><b>" + Url + "</i></b><br/> or its not a valid caGrid Service. Please make sure that the URL is correct and is reachable from the internet.");
+            _result.setDetail("Could not reach <br><i><b>" + Url + "</i></b><br/> or its not a valid caGrid Service. Please make sure that the URL is correct and is reachable from the Internet.");
         }
 
         return _result;
