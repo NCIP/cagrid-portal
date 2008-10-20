@@ -13,6 +13,7 @@ import gov.nih.nci.cagrid.fqp.stubs.types.FederatedQueryProcessingFault;
 import java.rmi.RemoteException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -112,7 +113,18 @@ public class FederatedQueryProcessorImpl extends FederatedQueryProcessorImplBase
             } catch (Exception e) {
                 LOG.error("Problem determing pool size, using default(" + poolSize + ").", e);
             }
-            this.workManager = Executors.newFixedThreadPool(poolSize);
+            // thread factory creates daemon threads so the executor shuts down with the JVM
+            ThreadFactory threadFactory = new ThreadFactory() {
+                ThreadFactory base = Executors.defaultThreadFactory();
+                
+                public Thread newThread(Runnable runnable) {
+                    Thread t = base.newThread(runnable);
+                    t.setDaemon(true);
+                    return t;
+                }
+            };
+            this.workManager = Executors.newFixedThreadPool(poolSize, threadFactory);
+            // adds shutdown hook to the JVM to force work manager shutdown
             LOG.debug("Adding JVM shutdown hook to terminate federated query execution thread pool");
             Runtime.getRuntime().addShutdownHook(new Thread() {
                 public void run() {
