@@ -26,7 +26,7 @@ public class QueryWithNotification {
     public static void main(String[] args) {
         String globusEnv = System.getenv("GLOBUS_LOCATION");
         // MUST POINT TO $GLOBUS_LOCATION
-        System.setProperty("GLOBUS_LOCATION", globusEnv != null ? globusEnv : "c:/caGrid/ws-core-4.0.3");
+        System.setProperty("GLOBUS_LOCATION", globusEnv != null ? globusEnv : "w:/Projects/dev-lib/ws-core-4.0.3");
         try {
             FederatedQueryProcessorClient fqpClient = new FederatedQueryProcessorClient("http://localhost:8080/wsrf/services/cagrid/FederatedQueryProcessor");
             DCQLQuery query = (DCQLQuery) Utils.deserializeDocument("exampleDistributedJoin1.xml", DCQLQuery.class);

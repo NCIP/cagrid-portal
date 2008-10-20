@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.fqp.processor;
 
 import org.cagrid.fqp.results.metadata.ProcessingStatus;
+import org.cagrid.fqp.results.metadata.ResultsRange;
 
 import gov.nih.nci.cagrid.fqp.processor.exceptions.FederatedQueryProcessingException;
 
@@ -28,6 +29,15 @@ public interface FQPProcessingStatusListener {
      * @param serviceURL
      */
     public void targetServiceOk(String serviceURL);
+    
+    
+    /**
+     * Indicates that the target service returned results, and when aggregated,
+     * they're in the given range of indices.
+     * @param serviceURL
+     * @param range
+     */
+    public void targetServiceReturnedResults(String serviceURL, ResultsRange range);
     
     
     /**

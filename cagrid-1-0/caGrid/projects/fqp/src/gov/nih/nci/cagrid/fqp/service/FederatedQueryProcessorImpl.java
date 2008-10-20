@@ -11,12 +11,11 @@ import gov.nih.nci.cagrid.fqp.results.stubs.types.InternalErrorFault;
 import gov.nih.nci.cagrid.fqp.stubs.types.FederatedQueryProcessingFault;
 
 import java.rmi.RemoteException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.globus.wsrf.impl.work.WorkManagerImpl;
-
-import commonj.work.WorkManager;
 
 
 /**
@@ -31,7 +30,7 @@ public class FederatedQueryProcessorImpl extends FederatedQueryProcessorImplBase
     protected static Log LOG = LogFactory.getLog(FederatedQueryProcessorImpl.class.getName());
 
     private FQPAsynchronousExecutionUtil asynchronousExecutor = null;
-    private WorkManager workManager = null;
+    private ExecutorService workManager = null;
 
 
     public FederatedQueryProcessorImpl() throws RemoteException {
@@ -103,7 +102,7 @@ public class FederatedQueryProcessorImpl extends FederatedQueryProcessorImplBase
     }
 
 
-    public synchronized WorkManager getWorkManager() {
+    public synchronized ExecutorService getWorkExecutorService() {
         if (this.workManager == null) {
             int poolSize = DEFAULT_POOL_SIZE;
             try {
@@ -113,15 +112,18 @@ public class FederatedQueryProcessorImpl extends FederatedQueryProcessorImplBase
             } catch (Exception e) {
                 LOG.error("Problem determing pool size, using default(" + poolSize + ").", e);
             }
-            this.workManager = new WorkManagerImpl(poolSize);
+            this.workManager = Executors.newFixedThreadPool(poolSize);
+            LOG.debug("Adding JVM shutdown hook to terminate federated query execution thread pool");
+            Runtime.getRuntime().addShutdownHook(new Thread() {
+                public void run() {
+                    LOG.info("Running FQP execution shutdown hook.");
+                    workManager.shutdownNow();
+                    LOG.error("FQP execution pool has been shut down.");
+                }
+            });
         }
 
         return this.workManager;
-    }
-
-
-    public synchronized void setWorkManager(WorkManager workManager) {
-        this.workManager = workManager;
     }
 
 
@@ -152,9 +154,9 @@ public class FederatedQueryProcessorImpl extends FederatedQueryProcessorImplBase
 
             // create the executor instance
             if (leaseMinutes == -1) {
-                asynchronousExecutor = new FQPAsynchronousExecutionUtil(resultHome, getWorkManager());
+                asynchronousExecutor = new FQPAsynchronousExecutionUtil(resultHome, getWorkExecutorService());
             } else {
-                asynchronousExecutor = new FQPAsynchronousExecutionUtil(resultHome, getWorkManager());
+                asynchronousExecutor = new FQPAsynchronousExecutionUtil(resultHome, getWorkExecutorService(), leaseMinutes);
             }
         }
         return asynchronousExecutor;

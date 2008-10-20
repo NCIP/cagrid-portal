@@ -11,6 +11,7 @@ import gov.nih.nci.cagrid.fqp.results.stubs.types.FederatedQueryResultsReference
 import gov.nih.nci.cagrid.fqp.results.stubs.types.InternalErrorFault;
 
 import java.util.Calendar;
+import java.util.concurrent.ExecutorService;
 
 import org.apache.axis.MessageContext;
 import org.apache.axis.message.addressing.EndpointReferenceType;
@@ -21,8 +22,6 @@ import org.cagrid.gaards.cds.delegated.stubs.types.DelegatedCredentialReference;
 import org.globus.wsrf.ResourceKey;
 import org.globus.wsrf.security.SecurityManager;
 import org.globus.wsrf.utils.AddressingUtils;
-
-import commonj.work.WorkManager;
 
 /**
  * FQPAsynchronousExecutionUtil
@@ -39,16 +38,16 @@ public class FQPAsynchronousExecutionUtil {
 
     private FederatedQueryResultsResourceHome resourceHome;
     private int leaseDurration = DEFAULT_RESULT_LEASE_MINS;
-    private WorkManager workManager = null;
+    private ExecutorService workExecutor = null;
     
-    public FQPAsynchronousExecutionUtil(FederatedQueryResultsResourceHome resourceHome, WorkManager workManager) {
-        this(resourceHome, workManager, DEFAULT_RESULT_LEASE_MINS);
+    public FQPAsynchronousExecutionUtil(FederatedQueryResultsResourceHome resourceHome, ExecutorService workExecutor) {
+        this(resourceHome, workExecutor, DEFAULT_RESULT_LEASE_MINS);
     }
     
     
-    public FQPAsynchronousExecutionUtil(FederatedQueryResultsResourceHome resourceHome, WorkManager workManager, int leaseDurration) {
+    public FQPAsynchronousExecutionUtil(FederatedQueryResultsResourceHome resourceHome, ExecutorService workExecutor, int leaseDurration) {
         this.resourceHome = resourceHome;
-        this.workManager = workManager;
+        this.workExecutor = workExecutor;
         this.leaseDurration = leaseDurration;
     }
 
@@ -104,7 +103,7 @@ public class FQPAsynchronousExecutionUtil {
         fqpResultResource.setQueryExecutionParameters(executionParameters);
         
         // set the work manager for tasks the resource needs to do
-        fqpResultResource.setWorkManager(workManager);
+        fqpResultResource.setWorkExecutor(workExecutor);
         
         // start the resource working on the query
         fqpResultResource.beginQueryProcessing();

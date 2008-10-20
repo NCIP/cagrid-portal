@@ -1,10 +1,12 @@
 import org.cagrid.fqp.results.metadata.ProcessingStatus;
+import org.cagrid.fqp.results.metadata.ResultsRange;
 
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.cqlresultset.CQLQueryResults;
 import gov.nih.nci.cagrid.data.utilities.CQLQueryResultsIterator;
 import gov.nih.nci.cagrid.dcql.DCQLQuery;
 import gov.nih.nci.cagrid.fqp.processor.FQPProcessingStatusListener;
+import gov.nih.nci.cagrid.fqp.processor.FederatedQueryEngine;
 import gov.nih.nci.cagrid.fqp.processor.FederatedQueryEngine;
 import gov.nih.nci.cagrid.fqp.processor.exceptions.FederatedQueryProcessingException;
 
@@ -47,19 +49,26 @@ public class RunQueryEngine {
             System.out.println("Connection refused by " + serviceURL);            
         }
 
+        
         public void targetServiceOk(String serviceURL) {
             System.out.println("Service OK: " + serviceURL);
         }
+        
+        
+        public void targetServiceReturnedResults(String serviceURL, ResultsRange range) {
+            System.out.println("Service " + serviceURL + " returned range: " + range.getStartElementIndex() + " to " + range.getEndElementIndex());
+        }
+        
 
         public void targetServiceReturnedInvalidResult(String serviceURL, FederatedQueryProcessingException ex) {
             System.err.println("Invalid Result: " + serviceURL);
             ex.printStackTrace();
         }
 
+        
         public void targetServiceThrowsException(String serviceURL, Exception ex) {
             System.err.println("Service Exception: " + serviceURL);
             ex.printStackTrace();
         }
-        
     }
 }

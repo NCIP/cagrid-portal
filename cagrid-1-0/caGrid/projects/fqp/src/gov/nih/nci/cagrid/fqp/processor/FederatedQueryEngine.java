@@ -12,28 +12,28 @@ import gov.nih.nci.cagrid.fqp.processor.exceptions.RemoteDataServiceException;
 
 import java.io.StringWriter;
 import java.net.ConnectException;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.cagrid.fqp.execution.QueryExecutionParameters;
 import org.cagrid.fqp.execution.TargetDataServiceQueryBehavior;
 import org.cagrid.fqp.results.metadata.ProcessingStatus;
+import org.cagrid.fqp.results.metadata.ResultsRange;
 import org.globus.gsi.GlobusCredential;
-import org.globus.wsrf.impl.work.WorkManagerImpl;
-
-import commonj.work.Work;
-import commonj.work.WorkException;
-import commonj.work.WorkItem;
-import commonj.work.WorkManager;
 
 
 /**
- * @author Srini Akkala
- * @author Scott Oster
+ * FederatedQueryEngineMarkII
+ * Performs federated query processing, broadcasting, and aggregation
+ * 
  * @author David Ervin
  */
 public class FederatedQueryEngine {
@@ -44,9 +44,8 @@ public class FederatedQueryEngine {
     
     private GlobusCredential credential = null;
     private QueryExecutionParameters executionParameters = null;
-    private WorkManager workManager = null;
+    private ExecutorService workExecutor = null;
     private List<FQPProcessingStatusListener> statusListeners = null;
-
 
     /**
      * Creates a new federated query engine instance.  Either or both parameters
@@ -67,20 +66,20 @@ public class FederatedQueryEngine {
      *      The globus credential to be used when making queries against data services (may be null)
      * @param executionParameters
      *      The query execution parameters (may be null)
-     * @param workManager
-     *      The work manager instance which will handle scheduling and execution of query processing tasks
+     * @param workExecutor
+     *      The executor instance which will handle scheduling and execution of query processing tasks
      */
-    public FederatedQueryEngine(GlobusCredential credential, QueryExecutionParameters executionParameters, WorkManager workManager) {
+    public FederatedQueryEngine(GlobusCredential credential, QueryExecutionParameters executionParameters, ExecutorService workExecutor) {
         this.credential = credential;
         if (executionParameters == null) {
             this.executionParameters = FQPConstants.DEFAULT_QUERY_EXECUTION_PARAMETERS;
         } else {
             this.executionParameters = executionParameters;
         }
-        if (workManager == null) {
-            this.workManager = new WorkManagerImpl(DEFAULT_POOL_SIZE);
+        if (workExecutor == null) {
+            this.workExecutor = Executors.newFixedThreadPool(DEFAULT_POOL_SIZE);
         } else {
-            this.workManager = workManager;
+            this.workExecutor = workExecutor;
         }
         this.statusListeners = new LinkedList<FQPProcessingStatusListener>();
     }
@@ -96,14 +95,14 @@ public class FederatedQueryEngine {
      * @throws FederatedQueryProcessingException
      */
     public DCQLQueryResultsCollection execute(DCQLQuery dcqlQuery) throws FederatedQueryProcessingException {
-        fireProcessingStatusChanged(ProcessingStatus.Processing, "Processing Query");
-        
         // determine if errors cause immediate failure
         boolean failFast = true;
         if (executionParameters.getTargetDataServiceQueryBehavior().getFailOnFirstError() != null) {
             failFast =
                 executionParameters.getTargetDataServiceQueryBehavior().getFailOnFirstError().booleanValue();
         }
+        
+        fireProcessingStatusChanged(ProcessingStatus.Processing, "Begining query processing");
         
         // create a new processor instance and debug the query
         FederatedQueryProcessor processor = new FederatedQueryProcessor(credential);
@@ -112,67 +111,58 @@ public class FederatedQueryEngine {
         // allow the processor to convert the DCQL into a CQL query
         LOG.debug("Processing DCQL to single CQL query");
         CQLQuery cqlQuery = processor.processDCQLQuery(dcqlQuery.getTargetObject());
-
-        LOG.debug("Creating work items for each target data service");
-        Map<WorkItem, QueryExecutionContext> workExecution = 
-            new HashMap<WorkItem, QueryExecutionContext>();
-        for (String url : dcqlQuery.getTargetServiceURL()) {
-            QueryExecutionContext executionContext = 
-                new QueryExecutionContext(cqlQuery, url, credential, executionParameters);
-            Work executor = new QueryExecutor(executionContext);
-            try {
-                WorkItem workItem = workManager.schedule(executor);
-                workExecution.put(workItem, executionContext);
-            } catch (WorkException ex) {
-                // TODO: should I fire processing status change here?
-                throw new FederatedQueryProcessingException(
-                    "Error scheduling query aggregation work: " + ex.getMessage(), ex);
-            }
+        
+        fireProcessingStatusChanged(ProcessingStatus.Processing, "Broadcasting final CQL to target data services");
+        
+        // create tasks for each target data service
+        FutureGroupFailureListener failureListener = new FutureGroupFailureListener();
+        List<Callable<CQLQueryResults>> queryTasks = new ArrayList<Callable<CQLQueryResults>>();
+        for (String serviceURL : dcqlQuery.getTargetServiceURL()) {
+            QueryExecutionTask task = new QueryExecutionTask(serviceURL, cqlQuery, credential, executionParameters, failureListener);
+            queryTasks.add(task);
         }
+        // invoke all query tasks and wait for their completion
+        LOG.debug("Invoking query tasks, awaiting completion");
+        List<Future<CQLQueryResults>> queryFutures = null;
+        try {
+            queryFutures = workExecutor.invokeAll(queryTasks);
+            for (Future queryFuture : queryFutures) {
+                failureListener.addFuture(queryFuture);
+            }
+        } catch (InterruptedException ex) {
+            throw new FederatedQueryProcessingException("Unable to schedule query tasks: " + ex.getMessage(), ex);
+        }
+        LOG.debug("Work scheduled");
         
-        LOG.debug("Work scheduled, waiting for completion");
-        fireProcessingStatusChanged(
-            ProcessingStatus.Processing, "Broadcasting final CQL Query to all target data services");
-        workManager.waitForAll(workExecution.keySet(), WorkManager.INDEFINITE);
-        LOG.debug("Work completed");
-        
-        // compile results from all workers
+        // compile results from all the workers
         boolean targetServiceError = false;
+        int totalObjectResults = 0;
         List<DCQLResult> dcqlResults = new LinkedList<DCQLResult>();
-        for (WorkItem worker : workExecution.keySet()) {
-            QueryExecutionContext context = workExecution.get(worker);
-            LOG.debug("Analyizing results from " + context.getServiceURL());
-            CQLQueryResults results = context.getResults();
-            if (results != null) {
-                LOG.debug("Query returned non-null results");
-                // ensure the query results are of the correct data type
-                if (!results.getTargetClassname().equals(cqlQuery.getTarget().getName())) {
-                    throw new RemoteDataServiceException("Data service (" + context.getServiceURL()
-                        + ") returned results of type (" + results.getTargetClassname() 
-                        + ") when type (" + cqlQuery.getTarget().getName() + ") was requested!");
-                }
-                // can assume object results are present because QueryExecutor checks that
+        for (int i = 0; i < queryFutures.size(); i++) {
+            Future<CQLQueryResults> future = queryFutures.get(i);
+            String serviceURL = dcqlQuery.getTargetServiceURL(i);
+            CQLQueryResults results = null;
+            try {
+                results = future.get();
+                // if results are null, it means some exception was thrown by the 
                 DCQLResult dcqlResult = new DCQLResult();
-                dcqlResult.setTargetServiceURL(context.getServiceURL());
+                dcqlResult.setTargetServiceURL(serviceURL);
                 dcqlResult.setCQLQueryResultCollection(results);
                 dcqlResults.add(dcqlResult);
-            } else {
-                // no results... what gives??
+                int resultsCount = results.getObjectResult().length;
+                // fire results range for target service
+                ResultsRange range = new ResultsRange();
+                range.setEndElementIndex(totalObjectResults);
+                range.setStartElementIndex(totalObjectResults + resultsCount);
+                fireServiceResultsRange(serviceURL, range);
+                totalObjectResults += resultsCount;
+            } catch (InterruptedException ex) {
+                // should only be thrown because some query task died with failFast == true
+                throw new FederatedQueryProcessingException(ex);
+            } catch (ExecutionException ex) {
                 targetServiceError = true;
-                Exception processingException = context.getProcessingException();
-                FederatedQueryProcessingException exception = null;
-                if (processingException == null) {
-                    exception = new FederatedQueryProcessingException(
-                        "Data service " + context.getServiceURL() + 
-                        " returned no results, but no exception was recieved");
-                } else {
-                    exception = new FederatedQueryProcessingException(
-                        "Data service " + context.getServiceURL() + 
-                        " threw a query processing exception: " + processingException.getMessage(), 
-                        processingException);
-                }
                 if (failFast) {
-                    throw exception;
+                    throw new FederatedQueryProcessingException(ex);
                 }
             }
         }
@@ -255,6 +245,14 @@ public class FederatedQueryEngine {
     }
     
     
+    protected synchronized void fireServiceResultsRange(String serviceURL, ResultsRange range) {
+        LOG.debug("Fire service results range");
+        for (FQPProcessingStatusListener listener: statusListeners) {
+            listener.targetServiceReturnedResults(serviceURL, range);
+        }
+    }
+    
+    
     protected synchronized void fireConnectionRefused(String serviceURL) {
         LOG.debug("Fire connection refused");
         for (FQPProcessingStatusListener listener : statusListeners) {
@@ -287,95 +285,40 @@ public class FederatedQueryEngine {
     }
     
     
-    private static class QueryExecutionContext {
-        private CQLQuery query = null;
+    // ---------------------
+    // query execution magic
+    // ---------------------
+    
+    
+    private class QueryExecutionTask implements Callable<CQLQueryResults> {
+        
         private String serviceURL = null;
+        private CQLQuery query = null;
+        private GlobusCredential clientCredential = null;
+        private QueryExecutionParameters queryParameters = null;
         
-        private GlobusCredential credential = null;
-        private QueryExecutionParameters executionParameters = null;
+        private FutureGroupFailureListener failListener = null;
         
-        private CQLQueryResults results = null;
-        private Exception processingException = null;
-        
-        public QueryExecutionContext(CQLQuery query, String serviceURL, GlobusCredential credential, QueryExecutionParameters executionParameters) {
+        public QueryExecutionTask(String serviceUrl, CQLQuery query, GlobusCredential clientCredential, 
+            QueryExecutionParameters queryParameters, FutureGroupFailureListener failListener) {
+            this.serviceURL = serviceUrl;
             this.query = query;
-            this.serviceURL = serviceURL;
-            this.credential = credential;
-            this.executionParameters = executionParameters;
+            this.clientCredential = clientCredential;
+            this.queryParameters = queryParameters;
+            this.failListener = failListener;
         }
 
 
-        public GlobusCredential getCredential() {
-            return credential;
-        }
-        
-        
-        public QueryExecutionParameters getExecutionParameters() {
-            return executionParameters;
-        }
-        
-
-        public Exception getProcessingException() {
-            return processingException;
-        }
-
-
-        public void setProcessingException(Exception processingException) {
-            this.processingException = processingException;
-        }
-
-
-        public CQLQuery getQuery() {
-            return query;
-        }
-
-
-        public CQLQueryResults getResults() {
-            return results;
-        }
-
-
-        public void setResults(CQLQueryResults results) {
-            this.results = results;
-        }
-
-
-        public String getServiceURL() {
-            return serviceURL;
-        }
-    }
-    
-    
-    // NON-STATIC so it can call the fire..() methods to immediatly update status
-    private class QueryExecutor implements Work {
-        private QueryExecutionContext queryContext = null;
-        
-        public QueryExecutor(QueryExecutionContext queryContext) {
-            this.queryContext = queryContext;
-        }
-        
-        
-        public boolean isDaemon() {
-            return false;
-        }
-        
-        
-        public void release() {
-            // nothing to release
-        }
-        
-        
-        public void run() {
-            LOG.debug("Querying target data service " + queryContext.getServiceURL());
+        public CQLQueryResults call() throws FederatedQueryProcessingException {
+            // get the target service query behavior
             TargetDataServiceQueryBehavior behavior = 
-                queryContext.getExecutionParameters().getTargetDataServiceQueryBehavior();
+                queryParameters.getTargetDataServiceQueryBehavior();
             boolean failFast = true;
             if (behavior.getFailOnFirstError() != null) {
                 failFast = behavior.getFailOnFirstError().booleanValue();
             }
-            CQLQueryResults results = null;
-            RemoteDataServiceException queryException = null;
             
+            // prepare the retry counters
             int maxRetries = 0;
             if (!failFast) {
                 maxRetries = behavior.getRetries() != null ?
@@ -388,11 +331,18 @@ public class FederatedQueryEngine {
                     FQPConstants.DEFAULT_TARGET_QUERY_BEHAVIOR.getTimeoutPerRetry().intValue())
                     * 1000; // miliseconds
             
+            // run the query, accounting for the max number of retries
+            CQLQueryResults results = null;
+            RemoteDataServiceException queryException = null;
             do {
                 tryCount++;
                 try {
                     results = DataServiceQueryExecutor.queryDataService(
-                        queryContext.getQuery(), queryContext.getServiceURL(), queryContext.getCredential());
+                        query, serviceURL, clientCredential);
+                    // clear any previous exception state.  
+                    // If this query succeeded and a previous one failed, 
+                    // the exception is erronious
+                    queryException = null;
                 } catch (RemoteDataServiceException ex) {
                     LOG.warn("Query failed to execute: " + ex.getMessage());
                     queryException = ex;
@@ -408,42 +358,75 @@ public class FederatedQueryEngine {
                 }
             } while (results == null && tryCount < maxRetries);
             
-            LOG.debug("Done querying data service " + queryContext.getServiceURL());
+            // verify we have Object results
+            boolean invalidQueryResponse = false;
+            if (results != null) {
+                if (results.getObjectResult() == null) {
+                    invalidQueryResponse = true;
+                    queryException = new RemoteDataServiceException(
+                        "Remote data service " + serviceURL + " returned non-object results");
+                } else {
+                    // verify the results type
+                    if (!results.getTargetClassname().equals(query.getTarget().getName())) {
+                        invalidQueryResponse = true;
+                        queryException = new RemoteDataServiceException("Data service (" + serviceURL
+                            + ") returned results of type (" + results.getTargetClassname() 
+                            + ") when type (" + query.getTarget().getName() + ") was requested!");
+                    } else {
+                        // all is well
+                        fireStatusOk(serviceURL);
+                    }
+                }
+            } else if (queryException == null) {
+                // not sure how we could have no results AND no exception, but...
+                invalidQueryResponse = true;
+                queryException = new RemoteDataServiceException(
+                    "Remote data service " + serviceURL + " returned no results at all");
+            }
             
-            if (results != null && results.getObjectResult() != null) {
-                queryContext.setResults(results);
-                fireStatusOk(queryContext.getServiceURL());
-            } else if (queryException != null) {
-                queryContext.setProcessingException(queryException);
+            if (queryException != null) {
                 if (queryException.getCause().getCause() instanceof ConnectException) {
-                    fireConnectionRefused(queryContext.getServiceURL());
+                    // connect exception is a special case
+                    fireConnectionRefused(serviceURL);
+                } else if (invalidQueryResponse) {
+                    // data service did something REALLY unexpected
+                    fireInvalidResult(serviceURL, queryException);
                 } else {
-                    fireServiceExeption(queryContext.getServiceURL(), queryException);
+                    // non-specific query failure...
+                    fireServiceExeption(serviceURL, queryException);
                 }
-                if (failFast) {
-                    failEverything(queryException);
-                }
-            } else {
-                // no exception, but also no results
-                FederatedQueryProcessingException exception = null;
-                if (results != null) {
-                    // must mean no object results...
-                    exception = new FederatedQueryProcessingException("Data service returned non-object results!");
-                } else {
-                    // no results at all!
-                    exception = new FederatedQueryProcessingException("Data service did not return any results!");
-                }
-                fireInvalidResult(queryContext.getServiceURL(), exception);
-                if (failFast) {
-                    failEverything(exception);
+                try {
+                    throw queryException;
+                } finally {
+                    if (failFast) {
+                        LOG.error("Failing entire query...");
+                        failListener.failAllFutures();
+                    }
                 }
             }
+            
+            return results;
+        }
+    }
+    
+    
+    private static class FutureGroupFailureListener {
+        private List<Future> futures = null;
+        
+        public FutureGroupFailureListener() {
+            this.futures = new LinkedList<Future>();
         }
         
         
-        private void failEverything(Exception ex) {
-            // TODO: stop ALL query distribution and fail immediatly
-            // TODO: need to switch over to Java5 concurrent to make this happen
+        public synchronized void addFuture(Future f) {
+            this.futures.add(f);
+        }
+        
+        
+        public synchronized void failAllFutures() {
+            for (Future future : futures) {
+                future.cancel(true);
+            }
         }
     }
 }

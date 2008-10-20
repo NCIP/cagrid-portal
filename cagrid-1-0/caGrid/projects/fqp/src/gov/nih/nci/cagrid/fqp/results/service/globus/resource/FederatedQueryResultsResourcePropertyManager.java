@@ -53,6 +53,13 @@ public class FederatedQueryResultsResourcePropertyManager {
     }
     
     
+    public synchronized void setServiceResultsRange(String serviceURL, ResultsRange range) throws InternalErrorFault, ResourceException {
+        TargetServiceStatus status = getTargetServiceStatus(serviceURL);
+        status.setResultsRange(range);
+        storeTargetServiceStatus(status);
+    }
+    
+    
     public synchronized void setTargetServiceConnectionStatusRefused(String serviceURL) throws InternalErrorFault, ResourceException {
         TargetServiceStatus status = getTargetServiceStatus(serviceURL);
         status.setConnectionStatus(ServiceConnectionStatus.Could_Not_Connect);

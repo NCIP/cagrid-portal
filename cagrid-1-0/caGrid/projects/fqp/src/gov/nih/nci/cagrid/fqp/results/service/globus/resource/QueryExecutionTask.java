@@ -5,12 +5,10 @@ import gov.nih.nci.cagrid.dcqlresult.DCQLQueryResultsCollection;
 import gov.nih.nci.cagrid.fqp.processor.FederatedQueryEngine;
 import gov.nih.nci.cagrid.fqp.processor.exceptions.FederatedQueryProcessingException;
 
-import org.cagrid.fqp.execution.QueryExecutionParameters;
-import org.cagrid.fqp.results.metadata.ProcessingStatus;
-import org.globus.gsi.GlobusCredential;
+import java.util.concurrent.ExecutorService;
 
-import commonj.work.Work;
-import commonj.work.WorkManager;
+import org.cagrid.fqp.execution.QueryExecutionParameters;
+import org.globus.gsi.GlobusCredential;
 
 /**
  * Encapsulates execution of a DCQL query in a thread so that
@@ -19,50 +17,34 @@ import commonj.work.WorkManager;
  * 
  * @author ervin
  */
-class QueryExecutionTask implements Work {
+class QueryExecutionTask implements Runnable {
     private DCQLQuery query = null;
     private GlobusCredential credential = null;
     private QueryExecutionParameters executionParameters = null;
-    private WorkManager workManager = null;
+    private ExecutorService workExecutor = null;
     private AsynchronousFQPProcessingStatusListener statusListener = null;
     
     public QueryExecutionTask(
         DCQLQuery query, GlobusCredential credential, 
-        QueryExecutionParameters executionParameters, WorkManager workManager,
+        QueryExecutionParameters executionParameters, ExecutorService workManager,
         AsynchronousFQPProcessingStatusListener statusListener) {
         this.query = query;
         this.credential = credential;
         this.executionParameters = executionParameters;
-        this.workManager = workManager;
+        this.workExecutor = workManager;
         this.statusListener = statusListener;
     }
     
     
     public void run() {
-        statusListener.processingStatusChanged(ProcessingStatus.Waiting_To_Begin, "Initializing Federated Query Engine");
         FederatedQueryEngine engine =
-            new FederatedQueryEngine(credential, executionParameters, workManager);
-        if (statusListener != null) {
-            engine.addStatusListener(statusListener);
-        }
-        DCQLQueryResultsCollection results = null;
+            new FederatedQueryEngine(credential, executionParameters, workExecutor);
+        engine.addStatusListener(statusListener);
         try {
-            results = engine.execute(query);            
+            DCQLQueryResultsCollection results = engine.execute(query);
+            statusListener.queryResultsGenerated(results);
         } catch (FederatedQueryProcessingException ex) {
-            ex.printStackTrace();
-            statusListener.processingStatusChanged(ProcessingStatus.Complete_With_Error, "Error processing query: " + ex.getMessage());
             statusListener.queryProcessingException(ex);
         }
-        statusListener.queryResultsGenerated(results);
-    }
-    
-    
-    public void release() {
-        // TODO: implement me (is there anything to do?)
-    }
-    
-    
-    public boolean isDaemon() {
-        return false;
     }
 }

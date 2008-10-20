@@ -6,20 +6,20 @@ import gov.nih.nci.cagrid.dcqlresult.DCQLQueryResultsCollection;
 import gov.nih.nci.cagrid.fqp.processor.exceptions.FederatedQueryProcessingException;
 import gov.nih.nci.cagrid.fqp.results.stubs.types.InternalErrorFault;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.RejectedExecutionException;
+
 import javax.xml.namespace.QName;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.cagrid.fqp.execution.QueryExecutionParameters;
 import org.cagrid.fqp.results.metadata.ProcessingStatus;
+import org.cagrid.fqp.results.metadata.ResultsRange;
 import org.cagrid.gaards.cds.client.DelegatedCredentialUserClient;
 import org.cagrid.gaards.cds.delegated.stubs.types.DelegatedCredentialReference;
 import org.globus.gsi.GlobusCredential;
 import org.globus.wsrf.ResourceException;
-
-import commonj.work.Work;
-import commonj.work.WorkException;
-import commonj.work.WorkManager;
 
 
 /** 
@@ -39,7 +39,7 @@ public class FederatedQueryResultsResource extends FederatedQueryResultsResource
     
     // initialization values of this resource
     private DCQLQuery query;
-    private WorkManager workManager;
+    private ExecutorService workExecutor;
     private DelegatedCredentialReference delegatedCredentialReference;
     private QueryExecutionParameters executionParameters;
 
@@ -75,12 +75,12 @@ public class FederatedQueryResultsResource extends FederatedQueryResultsResource
     
     
     /**
-     * Sets the Work Manger instance which will handle the threaded
+     * Sets the ExecutionService instance which will handle the threaded
      * execution of the query
-     * @param workManager
+     * @param workExecutor
      */
-    public void setWorkManager(WorkManager workManager) {
-        this.workManager = workManager;
+    public void setWorkExecutor(ExecutorService workExecutor) {
+        this.workExecutor = workExecutor;
     }
     
     
@@ -111,13 +111,15 @@ public class FederatedQueryResultsResource extends FederatedQueryResultsResource
     
     
     public void beginQueryProcessing() throws FederatedQueryProcessingException {
-        LOG.debug("Verifying proper state for query processing");
+        // the set up for this needs to run synchronously so we can report
+        // misconfigurations and setup problems back to the caller
+        setStatusMessage("Verifying proper state for query processing");
         // verify the resource is in a state where it can run the query
         if (query == null) {
             throw new IllegalStateException(
                 "DCQL query was not set before begining query processing!");
         }
-        if (workManager == null) {
+        if (workExecutor == null) {
             throw new IllegalStateException(
                 "No work manager set to handle query processing tasks!");
         }
@@ -128,15 +130,17 @@ public class FederatedQueryResultsResource extends FederatedQueryResultsResource
         // set up a query processing listener to change resource property status
         AsynchronousFQPProcessingStatusListener listener = getStatusListener();
         
-        Work queryTask = 
-            new QueryExecutionTask(query, userCredential, executionParameters, workManager, listener);
+        Runnable queryWork = 
+            new QueryExecutionTask(query, userCredential, executionParameters, workExecutor, listener);
         try {
             listener.processingStatusChanged(ProcessingStatus.Waiting_To_Begin, "Scheduling query for execution");
-            workManager.schedule(queryTask);
-        } catch (WorkException ex) {
-            listener.processingStatusChanged(ProcessingStatus.Complete_With_Error, "Error scheduling query: " + ex.getMessage());
-            throw new FederatedQueryProcessingException(
-                "Error scheduling query execution: " + ex.getMessage(), ex);
+            workExecutor.execute(queryWork);
+        } catch (RejectedExecutionException ex) {
+            String message = "Error scheduling query: " + ex.getMessage();
+            listener.processingStatusChanged(ProcessingStatus.Complete_With_Error, message);
+            FederatedQueryProcessingException fqpException = new FederatedQueryProcessingException(message, ex);
+            setProcessingException(fqpException);
+            throw fqpException;
         }
     }
     
@@ -177,12 +181,13 @@ public class FederatedQueryResultsResource extends FederatedQueryResultsResource
     private GlobusCredential getDelegatedCredential() throws FederatedQueryProcessingException {
         GlobusCredential userCredential = null;
         if (delegatedCredentialReference != null) {
-            LOG.debug("Retrieving delegated credential");
+            setStatusMessage("Retrieving delegated credential");
             GlobusCredential serviceCredential = null;
             try {
                 serviceCredential = ProxyUtil.getDefaultProxy();
             } catch (Exception ex) {
                 // wish this were more specific...
+                setProcessingException(ex);
                 throw new FederatedQueryProcessingException(
                     "Error obtaining default service credential: " + ex.getMessage(), ex);
             }
@@ -191,31 +196,45 @@ public class FederatedQueryResultsResource extends FederatedQueryResultsResource
                     new DelegatedCredentialUserClient(delegatedCredentialReference, serviceCredential);
                 userCredential = credentialClient.getDelegatedCredential();
             } catch (Exception ex) {
+                setProcessingException(ex);
                 throw new FederatedQueryProcessingException(
                     "Error obtaining delegated credential from CDS: " + ex.getMessage(), ex);
             }
         }
         return userCredential;
     }
+    
+    
+    // ---------------------------------------
+    // logging, debugging, and error reporting
+    // ---------------------------------------
+    
+    
+    private void setStatusMessage(String message) {
+        LOG.debug(message);
+        this.statusMessage = message;
+        try {
+            resourcePropertyManager.setExecutionDetailMessage(message);
+        } catch (ResourceException ex) {
+            LOG.warn("Error setting execution detail message on resource property: "
+                + ex.getMessage(), ex);
+        }
+    }
+    
+    
+    private void setProcessingException(Exception ex) {
+        LOG.error("Error during federated query processing: " + ex.getMessage(), ex);
+        this.processingException = ex;
+    }
 
 
     // ----------------------------
     // things I'm changing around via notification and resource properties
     // ----------------------------
-    
-    
-    public void setStatusMessage(String message) {
-        this.statusMessage = message;
-    }
 
 
     public String getStatusMessage() {
         return this.statusMessage;
-    }
-    
-    
-    public void setProcessingException(Exception ex) {
-        this.processingException = ex;
     }
     
 
@@ -225,7 +244,7 @@ public class FederatedQueryResultsResource extends FederatedQueryResultsResource
     
     
     // --------------------------------------
-    // accessors for the query execution task
+    // listens for status changes and updates the resource properties
     // --------------------------------------
     
     
@@ -245,6 +264,17 @@ public class FederatedQueryResultsResource extends FederatedQueryResultsResource
             public void targetServiceOk(String serviceURL) {
                 try {
                     resourcePropertyManager.setTargetServiceConnectionStatusOk(serviceURL);
+                } catch (InternalErrorFault ex) {
+                    handleInternalError(ex);
+                } catch (ResourceException ex) {
+                    handleResourceException(ex);
+                }
+            }
+            
+            
+            public void targetServiceReturnedResults(String serviceURL, ResultsRange range) {
+                try {
+                    resourcePropertyManager.setServiceResultsRange(serviceURL, range);
                 } catch (InternalErrorFault ex) {
                     handleInternalError(ex);
                 } catch (ResourceException ex) {
@@ -305,15 +335,9 @@ public class FederatedQueryResultsResource extends FederatedQueryResultsResource
             
             
             public void queryProcessingException(FederatedQueryProcessingException ex) {
-                ex.printStackTrace();
                 setProcessingException(ex);
             }
         };
         return listener;
-    }
-    
-    
-    void setDcqlResults(DCQLQueryResultsCollection dcqlResults) {
-        this.queryResults = dcqlResults;
     }
 }
