@@ -25,7 +25,7 @@ import org.cagrid.fqp.test.common.ServiceContainerSource;
  * @author David Ervin
  * 
  * @created Jul 10, 2008 10:57:40 AM
- * @version $Id: RemoteFqpSystemTests.java,v 1.10 2008-10-21 15:54:58 dervin Exp $ 
+ * @version $Id: RemoteFqpSystemTests.java,v 1.11 2008-10-21 20:04:04 dervin Exp $ 
  */
 public class RemoteFqpSystemTests extends StoryBook {
     
@@ -46,9 +46,9 @@ public class RemoteFqpSystemTests extends StoryBook {
     protected void stories() {
         // deploy two example SDK data services which pull from slightly different data
         DataServiceDeploymentStory exampleService1Deployment = 
-            new DataServiceDeploymentStory(new File("resources/services/ExampleSdkService1.zip"));
+            new DataServiceDeploymentStory(new File("resources/services/ExampleSdkService1.zip"), false);
         DataServiceDeploymentStory exampleService2Deployment =
-            new DataServiceDeploymentStory(new File("resources/services/ExampleSdkService2.zip"));
+            new DataServiceDeploymentStory(new File("resources/services/ExampleSdkService2.zip"), false);
         dataServiceDeployments = new DataServiceDeploymentStory[] {
             exampleService1Deployment, exampleService2Deployment
         };
@@ -62,7 +62,7 @@ public class RemoteFqpSystemTests extends StoryBook {
         };
         
         // deploy the FQP service
-        fqpDeployment = new FQPServiceDeploymentStory(getFqpDir());
+        fqpDeployment = new FQPServiceDeploymentStory(getFqpDir(), false);
         addStory(fqpDeployment);
         FederatedQueryProcessorHelper queryHelper = 
             new FederatedQueryProcessorHelper(fqpDeployment);

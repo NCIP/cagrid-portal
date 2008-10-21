@@ -24,36 +24,40 @@ import org.cagrid.fqp.test.remote.steps.ChangeJndiSweeperDelayStep;
  * @author David Ervin
  * 
  * @created Jul 15, 2008 12:46:02 PM
- * @version $Id: FQPServiceDeploymentStory.java,v 1.4 2008-10-16 15:32:27 dervin Exp $ 
+ * @version $Id: FQPServiceDeploymentStory.java,v 1.5 2008-10-21 20:04:04 dervin Exp $ 
  */
 public class FQPServiceDeploymentStory extends Story implements ServiceContainerSource {
     
     private File fqpServiceDirectory;
     
     private ServiceContainer fqpServiceContainer;
+    private boolean secureDeployment;
     private boolean complete;
     
-    public FQPServiceDeploymentStory(File fqpDir) {
+    public FQPServiceDeploymentStory(File fqpDir, boolean secureDeployment) {
         this.fqpServiceDirectory = fqpDir;
+        this.secureDeployment = secureDeployment;
         this.complete = false;
     }
     
     
     public String getName() {
-        return "FQP Service Deployment";
+        return (secureDeployment ? "Secure " : "") + "FQP Service Deployment";
     }
     
 
     public String getDescription() {
-        return "Deploys the FQP service to a local service container and starts it";
+        return "Deploys the FQP service to a " + (secureDeployment ? "secure " : "") +
+                "local service container and starts it";
     }
     
     
     public boolean storySetUp() {
         try {
             // must be tomcat container for transfer to work
-            fqpServiceContainer = 
-                ServiceContainerFactory.createContainer(ServiceContainerType.TOMCAT_CONTAINER);
+            ServiceContainerType containerType = 
+                secureDeployment ? ServiceContainerType.SECURE_TOMCAT_CONTAINER : ServiceContainerType.TOMCAT_CONTAINER;
+            fqpServiceContainer = ServiceContainerFactory.createContainer(containerType);
         } catch (Exception ex) {
             ex.printStackTrace();
             return false;

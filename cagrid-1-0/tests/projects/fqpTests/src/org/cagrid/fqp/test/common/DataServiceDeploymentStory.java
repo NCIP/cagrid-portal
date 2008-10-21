@@ -22,7 +22,7 @@ import org.cagrid.fqp.test.common.steps.UnzipServiceStep;
  * @author David Ervin
  * 
  * @created Jul 9, 2008 11:46:02 AM
- * @version $Id: DataServiceDeploymentStory.java,v 1.4 2008-09-03 17:28:16 dervin Exp $ 
+ * @version $Id: DataServiceDeploymentStory.java,v 1.5 2008-10-21 20:04:04 dervin Exp $ 
  */
 public class DataServiceDeploymentStory extends Story implements ServiceContainerSource {
     
@@ -30,27 +30,36 @@ public class DataServiceDeploymentStory extends Story implements ServiceContaine
     private File temp;
     
     private ServiceContainer dataServiceContainer;
+    private boolean secureDeployment;
     private boolean complete;
     
-    public DataServiceDeploymentStory(File dataServiceZip) {
+    /**
+     * @param dataServiceZip
+     *      The zip file containing the data service to be deployed
+     * @param secureDeployment
+     *      Flag indicates if the service should be deployed to a secure container
+     */
+    public DataServiceDeploymentStory(File dataServiceZip, boolean secureDeployment) {
         this.dataServiceZip = dataServiceZip;
-        complete = false;
+        this.secureDeployment = secureDeployment;
+        this.complete = false;
     }
     
     
     public String getName() {
-        return "Data Service Deployment";
+        return (secureDeployment ? "Secure " : "") + "Data Service Deployment";
     }
     
 
     public String getDescription() {
-        return "Deploys a data service to a local service container and starts it up";
+        return "Deploys a " + (secureDeployment ? "secure " : "") + "data service to a local service container and starts it up";
     }
     
     
     public boolean storySetUp() {
         try {
-            dataServiceContainer = ServiceContainerFactory.createContainer(ServiceContainerType.GLOBUS_CONTAINER);
+            ServiceContainerType containerType = secureDeployment ? ServiceContainerType.SECURE_TOMCAT_CONTAINER : ServiceContainerType.TOMCAT_CONTAINER;
+            dataServiceContainer = ServiceContainerFactory.createContainer(containerType);
         } catch (Exception ex) {
             ex.printStackTrace();
             return false;

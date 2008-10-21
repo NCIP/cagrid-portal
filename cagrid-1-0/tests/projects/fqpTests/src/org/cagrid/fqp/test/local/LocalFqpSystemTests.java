@@ -25,7 +25,7 @@ import org.cagrid.fqp.test.common.ServiceContainerSource;
  * @author David Ervin
  * 
  * @created Jul 10, 2008 10:57:40 AM
- * @version $Id: LocalFqpSystemTests.java,v 1.6 2008-10-01 15:20:38 dervin Exp $ 
+ * @version $Id: LocalFqpSystemTests.java,v 1.7 2008-10-21 20:04:04 dervin Exp $ 
  */
 public class LocalFqpSystemTests extends StoryBook {
     
@@ -42,9 +42,9 @@ public class LocalFqpSystemTests extends StoryBook {
     protected void stories() {
         // deploy two example SDK data services which pull from slightly different data
         DataServiceDeploymentStory exampleService1Deployment = 
-            new DataServiceDeploymentStory(new File("resources/services/ExampleSdkService1.zip"));
+            new DataServiceDeploymentStory(new File("resources/services/ExampleSdkService1.zip"), false);
         DataServiceDeploymentStory exampleService2Deployment =
-            new DataServiceDeploymentStory(new File("resources/services/ExampleSdkService2.zip"));
+            new DataServiceDeploymentStory(new File("resources/services/ExampleSdkService2.zip"), false);
         deployments = new DataServiceDeploymentStory[] {
             exampleService1Deployment, exampleService2Deployment
         };
