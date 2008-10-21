@@ -17,10 +17,7 @@ GSBT - Globus Service Build Tools
 	<!-- Important directories and files -->
 	<property name="src.dir" value="src" />
 	<property name="templates.src.dir" value="templates" />
-	<property name="images.dir" value="resources/images" />
-	<property name="common.images" value="${images.dir}/common" />
-	<property name="gridgrouper.images" value="${images.dir}/gridgrouper" />
-
+	
 	<property name="ext.dir" location="${basedir}/ext" />
 	<property name="ext.grid.dir" location="${ext.dir}/target_grid" />
 	<property name="endorsed.lib.dir" location="${ext.dir}/dependencies/endorsed/jars" />

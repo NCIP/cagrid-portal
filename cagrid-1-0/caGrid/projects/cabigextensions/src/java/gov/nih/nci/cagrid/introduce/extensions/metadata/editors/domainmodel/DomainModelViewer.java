@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.introduce.extensions.metadata.editors.domainmodel;
 
 import gov.nih.nci.cagrid.graph.uml.UMLDiagram;
+import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertyType;
 import gov.nih.nci.cagrid.introduce.portal.extension.ResourcePropertyEditorPanel;
 import gov.nih.nci.cagrid.metadata.MetadataUtils;
 import gov.nih.nci.cagrid.metadata.common.UMLAttribute;
@@ -35,8 +36,8 @@ public class DomainModelViewer extends ResourcePropertyEditorPanel {
     private JLabel projectDescLabel = null;
 
 
-    public DomainModelViewer(String doc, File schemaFile, File schemaDir) {
-        super(doc, schemaFile, schemaDir);
+    public DomainModelViewer(ResourcePropertyType type, String doc, File schemaFile, File schemaDir) {
+        super(type, doc, schemaFile, schemaDir);
         if (doc != null) {
             try {
                 setDomainModel(MetadataUtils.deserializeDomainModel(new StringReader(doc)));
@@ -253,13 +254,6 @@ public class DomainModelViewer extends ResourcePropertyEditorPanel {
 
     }
 
-
-    @Override
-    public boolean save() {
-        return false;
-    }
-
-
     @Override
     public String getResultRPString() {
         return getRPString();
@@ -268,7 +262,7 @@ public class DomainModelViewer extends ResourcePropertyEditorPanel {
     
     public static void main(String[] args) {
         JFrame f = new JFrame();
-        DomainModelViewer viewer = new DomainModelViewer(null, null, null);
+        DomainModelViewer viewer = new DomainModelViewer(null, null, null, null);
 
         try {
             JFileChooser fc = new JFileChooser(".");
@@ -284,5 +278,12 @@ public class DomainModelViewer extends ResourcePropertyEditorPanel {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+
+    @Override
+    public void validateResourceProperty() throws Exception {
+        // TODO Auto-generated method stub
+        
     }
 }

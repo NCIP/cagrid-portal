@@ -4,6 +4,7 @@ import gov.nih.nci.cadsr.domain.Organization;
 import gov.nih.nci.cadsr.domain.Person;
 import gov.nih.nci.cagrid.common.SchemaValidationException;
 import gov.nih.nci.cagrid.common.SchemaValidator;
+import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertyType;
 import gov.nih.nci.cagrid.introduce.portal.extension.ResourcePropertyEditorPanel;
 import gov.nih.nci.cagrid.metadata.MetadataUtils;
 import gov.nih.nci.cagrid.metadata.ServiceMetadata;
@@ -85,8 +86,8 @@ public class ServiceMetadataEditor extends ResourcePropertyEditorPanel {
     private JButton searchCenterButton;
 
 
-    public ServiceMetadataEditor(String doc, File schemaFile, File schemaDir) {
-        super(doc, schemaFile, schemaDir);
+    public ServiceMetadataEditor(ResourcePropertyType type, String doc, File schemaFile, File schemaDir) {
+        super(type, doc, schemaFile, schemaDir);
         if (doc != null) {
             try {
                 setServiceMetadata(MetadataUtils.deserializeServiceMetadata(new StringReader(doc)));
@@ -122,6 +123,7 @@ public class ServiceMetadataEditor extends ResourcePropertyEditorPanel {
         }
         return this.metadataTabbedPane;
     }
+
 
 
     /**
@@ -600,7 +602,7 @@ public class ServiceMetadataEditor extends ResourcePropertyEditorPanel {
                 System.exit(0);
             }
 
-            final ServiceMetadataEditor viewer = new ServiceMetadataEditor(null, new File(
+            final ServiceMetadataEditor viewer = new ServiceMetadataEditor(null,null, new File(
                 "../metadata/schema/cagrid/types/caGridMetadata.xsd"), null);
             ServiceMetadata model = MetadataUtils.deserializeServiceMetadata(new FileReader(fc.getSelectedFile()));
             viewer.setServiceMetadata(model);
@@ -609,11 +611,9 @@ public class ServiceMetadataEditor extends ResourcePropertyEditorPanel {
             JButton saveButton = new JButton("Save");
             saveButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                    if (viewer.save()) {
+                   
                         System.out.println(viewer.getResultRPString());
-                    } else {
-                        System.out.println("Save returned false.");
-                    }
+                   
                 }
             });
 
@@ -744,11 +744,10 @@ public class ServiceMetadataEditor extends ResourcePropertyEditorPanel {
 
 
     @Override
-    public boolean save() {
+    public void validateResourceProperty() throws Exception {
         this.result = null;
         if (this.serviceMetadata == null) {
-            ErrorDialog.showError("Cannot save a null ServiceMetadata instance!");
-            return false;
+            throw new Exception("Cannot save a null ServiceMetadata instance!");
         }
 
         // make sure we have the proper containers
@@ -764,14 +763,14 @@ public class ServiceMetadataEditor extends ResourcePropertyEditorPanel {
 
         // save the center (we create if not there yet)
         if (!saveCenter(this.serviceMetadata.getHostingResearchCenter().getResearchCenter())) {
-            return false;
+            throw new Exception();
         }
 
         // save the service (we DON'T create if not there yet)
         Service service = this.serviceMetadata.getServiceDescription().getService();
         if (service != null) {
             if (!saveService(service)) {
-                return false;
+                throw new Exception();
             }
         }
 
@@ -780,8 +779,7 @@ public class ServiceMetadataEditor extends ResourcePropertyEditorPanel {
             MetadataUtils.serializeServiceMetadata(this.serviceMetadata, writer);
             this.result = writer.toString();
         } catch (Exception e) {
-            ErrorDialog.showError("Problem saving ServiceMetadata instance: " + e.getMessage(), e);
-            return false;
+            throw new Exception("Problem saving ServiceMetadata instance: " + e.getMessage(), e);
         }
 
         // should we validate?
@@ -791,13 +789,10 @@ public class ServiceMetadataEditor extends ResourcePropertyEditorPanel {
                 SchemaValidator validator = new SchemaValidator(getSchemaFile().getAbsolutePath());
                 validator.validate(this.result);
             } catch (SchemaValidationException e) {
-                ErrorDialog.showError("Problem validating result:" + e.getMessage()
-                    + " Correct the error and save again.", e);
-                return false;
+                throw new Exception("Problem validating result:" + e.getMessage()
+                    + " Correct the error and save again.",e);
             }
         }
-
-        return true;
     }
 
 
@@ -860,4 +855,5 @@ public class ServiceMetadataEditor extends ResourcePropertyEditorPanel {
         return true;
 
     }
+
 } // @jve:decl-index=0:visual-constraint="10,10"
