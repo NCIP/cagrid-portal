@@ -7,8 +7,7 @@
 %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<%@page import="org.cagrid.gaards.websso.client.filter.CaGridWebSSOLogoutFilter"%>
-<html>
+<%@page import="org.cagrid.websso.common.WebSSOConstants;"%><html>
 <head>
 <title>Home</title>
 <link rel="stylesheet" type="text/css" href="css/styleSheet.css" />
@@ -41,7 +40,7 @@
 								<td height="50" align="left"><a href="#"><img src="images/appLogo.gif" alt="Application Logo" hspace="10" border="0"></a></td>
 							</tr>
 								<%
-									Boolean isSessionLoaded = (Boolean) session.getAttribute(CaGridWebSSOLogoutFilter.IS_SESSION_ATTRIBUTES_LOADED);
+									Boolean isSessionLoaded = (Boolean) session.getAttribute(WebSSOConstants.IS_SESSION_ATTRIBUTES_LOADED);
 									if (isSessionLoaded != null && isSessionLoaded == Boolean.TRUE) {
 										String firstName = (String) request.getSession().getAttribute("CAGRID_SSO_FIRST_NAME");
 										String lastName = (String) request.getSession().getAttribute("CAGRID_SSO_LAST_NAME");

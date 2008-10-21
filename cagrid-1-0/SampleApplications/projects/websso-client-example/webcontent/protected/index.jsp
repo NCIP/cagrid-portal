@@ -7,9 +7,7 @@
 	
 %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<%@page import="org.jasig.cas.client.util.AbstractCasFilter"%>
-<%@page import="org.jasig.cas.client.validation.Assertion"%>
-<%@page import="org.jasig.cas.client.util.AssertionHolder"%>
+
 <html>
 <head>
 <title>Content</title>
@@ -55,14 +53,14 @@
 					</tr>
 					<tr>
 						<% String firstName=(String)request.getSession().getAttribute("CAGRID_SSO_FIRST_NAME"); 
-						       String lastName=(String)request.getSession().getAttribute("CAGRID_SSO_LAST_NAME");%> 
+						   String lastName=(String)request.getSession().getAttribute("CAGRID_SSO_LAST_NAME");%> 
 						<td class="welcomeContent" height="2" valign="top" align="right">
 							<label class="h3">Login User:</label><font class="h3"><%=firstName+" "+lastName %></font>
                         </td>
 					</tr>
 					<tr>
 						<td class="welcomeContent" height="2" valign="top" align="right"> 
-							<a href="<%= request.getContextPath() %>/logout/"><font class="h3">logout</font></a>
+							<a href="<%= request.getContextPath() %>/logout"><font class="h3">logout</font></a>
                         </td>
 					</tr>
 				</table>

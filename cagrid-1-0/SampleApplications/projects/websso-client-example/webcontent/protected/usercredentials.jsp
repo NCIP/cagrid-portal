@@ -23,7 +23,7 @@
 				</th>
 			</tr>
 			<tr class="dataRowLight">
-				<td class="dataCellText"><%=request.getSession().getAttribute("CAGRID_SSO_GRID_IDENTITY")%></td>
+	 			<td class="dataCellText"><%=request.getSession().getAttribute("CAGRID_SSO_GRID_IDENTITY")%></td>
 				<td class="dataCellText"><%=request.getSession().getAttribute("CAGRID_SSO_FIRST_NAME")%></td>
 				<td class="dataCellText"><%=request.getSession().getAttribute("CAGRID_SSO_LAST_NAME")%></td>
 				<td class="dataCellText"><%=request.getSession().getAttribute("CAGRID_SSO_DELEGATION_SERVICE_EPR")%></td>
