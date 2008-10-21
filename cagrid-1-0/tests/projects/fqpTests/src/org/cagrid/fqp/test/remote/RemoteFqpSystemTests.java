@@ -25,7 +25,7 @@ import org.cagrid.fqp.test.common.ServiceContainerSource;
  * @author David Ervin
  * 
  * @created Jul 10, 2008 10:57:40 AM
- * @version $Id: RemoteFqpSystemTests.java,v 1.9 2008-10-16 15:32:27 dervin Exp $ 
+ * @version $Id: RemoteFqpSystemTests.java,v 1.10 2008-10-21 15:54:58 dervin Exp $ 
  */
 public class RemoteFqpSystemTests extends StoryBook {
     
@@ -66,6 +66,10 @@ public class RemoteFqpSystemTests extends StoryBook {
         addStory(fqpDeployment);
         FederatedQueryProcessorHelper queryHelper = 
             new FederatedQueryProcessorHelper(fqpDeployment);
+        
+        // initialize ws-notification client side
+        NotificationClientSetupStory notificationSetupStory = new NotificationClientSetupStory();
+        addStory(notificationSetupStory);
         
         // run standard queries
         QueryStory queryTests = new QueryStory(containerSources, queryHelper);
