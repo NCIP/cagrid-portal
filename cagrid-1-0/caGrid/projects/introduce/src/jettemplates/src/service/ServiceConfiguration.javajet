@@ -32,7 +32,8 @@ import org.globus.wsrf.Constants;
 public class <%=arguments.getService().getName()%>Configuration implements ServiceConfiguration {
 
 	public static <%=arguments.getService().getName()%>Configuration  configuration = null;
-
+    public String etcDirectoryPath;
+    	
 	public static <%=arguments.getService().getName()%>Configuration getConfiguration() throws Exception {
 		if (<%=arguments.getService().getName()%>Configuration.configuration != null) {
 			return <%=arguments.getService().getName()%>Configuration.configuration;
@@ -64,8 +65,12 @@ public class <%=arguments.getService().getName()%>Configuration implements Servi
 	}
 	%>
 	
-	public String getEtcDirectoryPath() {
-		return ContainerConfig.getBaseDirectory();
+    public String getEtcDirectoryPath() {
+		return ContainerConfig.getBaseDirectory() + File.separator + etcDirectoryPath;
+	}
+	
+	public void setEtcDirectoryPath(String etcDirectoryPath) {
+		this.etcDirectoryPath = etcDirectoryPath;
 	}
 
 

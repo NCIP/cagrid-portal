@@ -43,5 +43,5 @@ public abstract class DeploymentUIPanel extends JPanel {
 
 	public abstract void resetGUI();
 	
-	public abstract void preDeploy();
+	public abstract void preDeploy() throws Exception;
 }

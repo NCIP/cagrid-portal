@@ -34,7 +34,7 @@ public class UndeployServiceHelper {
 
     private Deployment undeployService = null;
 
-    private Map<String, Deployment> otherDeployedServices = new HashMap<String, Deployment>();
+    private Map otherDeployedServices = new HashMap();
 
 
     public UndeployServiceHelper(String webAppDeployLocation, String webAppDeployLibLocation,
@@ -153,11 +153,11 @@ public class UndeployServiceHelper {
 
 
     private boolean canRemoveSchemaDir() {
-        Collection<Deployment> col = otherDeployedServices.values();
+        Collection col = otherDeployedServices.values();
         boolean found = false;
-        Iterator<Deployment> it = col.iterator();
+        Iterator it = col.iterator();
         while (it.hasNext() && !found) {
-            Deployment serviceD = it.next();
+            Deployment serviceD = (Deployment)it.next();
             if (serviceD.getServiceName().equals(undeployService.getServiceName())) {
                 found = true;
                 break;
@@ -169,11 +169,11 @@ public class UndeployServiceHelper {
 
 
     private boolean canRemoveJar(Jar currentJar) {
-        Collection<Deployment> col = otherDeployedServices.values();
+        Collection col = otherDeployedServices.values();
         boolean found = false;
-        Iterator<Deployment> it = col.iterator();
+        Iterator it = col.iterator();
         while (it.hasNext() && !found) {
-            Deployment serviceD = it.next();
+            Deployment serviceD = (Deployment)it.next();
             if (serviceD.getJars() != null && serviceD.getJars().getJar() != null) {
                 Iterator jarIt = new ArrayIterator(serviceD.getJars().getJar());
                 while (jarIt.hasNext() && !found) {
@@ -190,9 +190,9 @@ public class UndeployServiceHelper {
     }
 
 
-    public static Map<String, Deployment> loadIntroduceServices(String webAppEtcDeployLocation) throws Exception {
+    public static Map loadIntroduceServices(String webAppEtcDeployLocation) throws Exception {
 
-        Map<String, Deployment> deployedServices = new HashMap<String, Deployment>();
+        Map deployedServices = new HashMap();
         File etcDir = new File(webAppEtcDeployLocation);
         if (!etcDir.exists() || !etcDir.canRead()) {
             throw new Exception("Cannot read the web app etc dir: " + etcDir.getAbsolutePath());

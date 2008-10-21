@@ -14,6 +14,7 @@ import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespacesType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
+import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertyType;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
@@ -136,15 +137,15 @@ public class ExtensionTools {
     }
 
 
-    public static ResourcePropertyEditorPanel getMetadataEditorComponent(String extensionName, String rpData,
+    public static ResourcePropertyEditorPanel getMetadataEditorComponent(String extensionName, ResourcePropertyType prop, String rpData,
         File schemaFile, File schemaDir) throws Exception {
         ResourcePropertyEditorExtensionDescriptionType extensionDesc = ExtensionsLoader.getInstance()
             .getResourcePropertyEditorExtension(extensionName);
         if ((extensionDesc != null) && (extensionDesc.getResourcePropertyEditorPanel() != null)
             && !extensionDesc.getResourcePropertyEditorPanel().equals("")) {
             Class c = Class.forName(extensionDesc.getResourcePropertyEditorPanel());
-            Constructor con = c.getConstructor(new Class[]{String.class, File.class, File.class});
-            Object obj = con.newInstance(new Object[]{rpData, schemaFile, schemaDir});
+            Constructor con = c.getConstructor(new Class[]{ResourcePropertyType.class, String.class, File.class, File.class});
+            Object obj = con.newInstance(new Object[]{prop, rpData, schemaFile, schemaDir});
 
             return (ResourcePropertyEditorPanel) obj;
         }

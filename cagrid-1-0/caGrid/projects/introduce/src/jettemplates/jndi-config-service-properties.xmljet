@@ -17,6 +17,10 @@ imports="gov.nih.nci.cagrid.introduce.* gov.nih.nci.cagrid.introduce.beans.servi
 					<name>factory</name>
 					<value>org.globus.wsrf.jndi.BeanFactory</value>
 				</parameter>
+				<parameter>
+					<name>etcDirectoryPath</name>
+					<value>ETC-PATH</value>
+				</parameter>
 				<%if(properties!=null && properties.getProperty()!=null){
 			for (int i = 0; i < properties.getProperty().length; i++) {
 				ServicePropertiesProperty prop = properties.getProperty(i);%>

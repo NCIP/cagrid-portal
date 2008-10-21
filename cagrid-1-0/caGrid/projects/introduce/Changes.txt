@@ -9,7 +9,6 @@
 	-- Prior versions of introduce would simple namespace exclude any namespace that were imported from a schema
 	   that was set to generate stubs false.  However this is not always the desired behavior
 -- Added button to enable user to control whether or not stubs will be generated for imported schema.
--- Removed ETC_LOCATION from generated services JNDI and removed setter from the service configuration.
 -- Added to introduce model so that services and methods can have extension data added to them
 -- Added an introduce log viewer component to the GUI.
 -- Added new extension type called INTRODUCE_GDE which enables adding grape components to the UI through extensions

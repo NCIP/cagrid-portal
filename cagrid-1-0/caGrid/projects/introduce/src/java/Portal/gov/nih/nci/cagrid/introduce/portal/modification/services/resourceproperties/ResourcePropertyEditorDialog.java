@@ -118,8 +118,8 @@ public class ResourcePropertyEditorDialog extends JDialog {
 			doneButton.setText("Done");
 			doneButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					if (component.save()) {
-						
+					try{
+					    component.validateResourceProperty(); 
 
 						// write the xml file back out for this
 						// properties
@@ -137,6 +137,8 @@ public class ResourcePropertyEditorDialog extends JDialog {
 
 						dispose();
 
+					} catch (Exception ex) {
+					    ErrorDialog.showError(ex.getMessage(), ex);
 					}
 				}
 			});

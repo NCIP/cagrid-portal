@@ -43,7 +43,7 @@ public abstract class ServiceDeploymentUIPanel extends JPanel {
 	public abstract void resetGUI();
 	
 	
-	public abstract void preDeploy();
+	public abstract void preDeploy() throws Exception;
 
 
 	public ExtensionTypeExtensionData getExtensionTypeExtensionData() {

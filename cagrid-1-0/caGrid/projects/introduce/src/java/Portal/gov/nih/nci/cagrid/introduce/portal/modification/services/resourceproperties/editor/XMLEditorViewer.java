@@ -2,6 +2,7 @@ package gov.nih.nci.cagrid.introduce.portal.modification.services.resourceproper
 
 import gov.nih.nci.cagrid.common.XMLUtilities;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
+import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertyType;
 import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
 import gov.nih.nci.cagrid.introduce.portal.common.jedit.JEditTextArea;
 import gov.nih.nci.cagrid.introduce.portal.common.jedit.XMLTokenMarker;
@@ -40,8 +41,8 @@ public class XMLEditorViewer extends ResourcePropertyEditorPanel {
     /**
      * This method initializes
      */
-    public XMLEditorViewer(String data, File schemaFile, File schemaDir) {
-        super(data, schemaFile, schemaDir);
+    public XMLEditorViewer(ResourcePropertyType prop, String data, File schemaFile, File schemaDir) {
+        super(prop, data, schemaFile, schemaDir);
         this.xml = getRPString();
         initialize();
         logger.debug("SCHEMA FILE: " + schemaFile.getAbsolutePath());
@@ -115,7 +116,7 @@ public class XMLEditorViewer extends ResourcePropertyEditorPanel {
      * 
      * @return javax.swing.JButton
      */
-    public boolean save() {
+    public void validateResourceProperty() throws Exception {
         xml = getXMLTextPane().getText();
         try {
             XMLUtilities.stringToDocument(xml);
@@ -124,11 +125,9 @@ public class XMLEditorViewer extends ResourcePropertyEditorPanel {
             logger.error(e);
         }
         if (xml == null) {
-            ErrorDialog.showError("ERROR: Invalid XML Document");
-        } else {
-            return true;
+            throw new Exception("ERROR: Invalid XML Document");
+            
         }
-        return false;
     }
 
 

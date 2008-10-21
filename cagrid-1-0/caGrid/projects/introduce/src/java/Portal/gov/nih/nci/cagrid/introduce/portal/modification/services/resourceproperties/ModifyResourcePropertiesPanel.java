@@ -464,13 +464,6 @@ public class ModifyResourcePropertiesPanel extends JPanel {
                 // file has not been created yet, we will
                 // create it, set the path to file, and then
                 // call the editor
-                int i = 0;
-                for (i = 0; i < info.getService().getResourcePropertiesList().getResourceProperty().length; i++) {
-                    if (type.equals(info.getService().getResourcePropertiesList()
-                        .getResourceProperty(i))) {
-                        break;
-                    }
-                }
                 logger.debug("Creating a new resource properties file");
                 boolean created = resourcePropertyFile.createNewFile();
                 if (!created) {
@@ -488,12 +481,12 @@ public class ModifyResourcePropertiesPanel extends JPanel {
             ResourcePropertyEditorPanel mdec = null;
 
             if (mde != null) {
-                mdec = ExtensionTools.getMetadataEditorComponent(mde.getName(), rpData, new File(
+                mdec = ExtensionTools.getMetadataEditorComponent(mde.getName(), type, rpData, new File(
                    schemaDir.getAbsolutePath() + File.separator
                         + nsType.getLocation()), schemaDir);
             } else {
                 // use the default editor....
-                mdec = new XMLEditorViewer(rpData, new File(
+                mdec = new XMLEditorViewer(type,rpData, new File(
                     schemaDir.getAbsolutePath() + File.separator
                         + nsType.getLocation()), schemaDir);
             }

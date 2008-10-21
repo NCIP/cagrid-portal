@@ -20,7 +20,7 @@ public class DeploymentLauncher {
         promptAndInitialize();
         if (serviceDirectory != null && !error) {
             DeploymentViewer viewer = new DeploymentViewer(serviceDirectory);
-            Dimensions dim = new Dimensions(300, 600);
+            Dimensions dim = new Dimensions(500, 700);
             RenderOptions ro = new RenderOptions();
             ro.setCentered(true);
             GridApplication.getContext().addApplicationComponent(viewer, dim, ro);

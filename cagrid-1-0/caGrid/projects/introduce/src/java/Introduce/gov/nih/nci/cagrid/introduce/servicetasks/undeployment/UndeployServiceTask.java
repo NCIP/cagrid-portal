@@ -41,7 +41,7 @@ public class UndeployServiceTask extends Task {
 
     private Deployment undeployService = null;
 
-    private Map<String, Deployment> otherDeployedServices = new HashMap<String, Deployment>();
+    private Map otherDeployedServices = new HashMap();
 
 
     public void execute() throws BuildException {
