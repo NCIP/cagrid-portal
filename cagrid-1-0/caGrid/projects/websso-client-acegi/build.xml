@@ -70,7 +70,6 @@
 		<mkdir dir="${build.dir}" />
 		<mkdir dir="${build.classes.dir}" />
 		<javac srcdir="${src.java.dir}" destdir="${build.classes.dir}" classpathref="build.classpath" debug="true" />
-		<!--<copy file="${src.java.dir}/org/cagrid/gaards/websso/client/utils/client-config.wsdd" todir="${build.classes.dir}/org/cagrid/gaards/websso/client/utils/" />-->
 	</target>
 
 	<target name="jar" depends="compile,build-jar,dist">
@@ -81,12 +80,8 @@
 	</target>
 
 	<target name="installcert" depends="compile">
-		<java classname="org.cagrid.websso.common.InstallCert">
+		<java classname="org.cagrid.websso.common.InstallCert" classpathref="build.classpath">
 			<arg value="${websso.server}" />
-			<classpath>
-				<pathelement location="${build.classes.dir}" />
-				<pathelement path="${build.classpath}" />
-			</classpath>
 		</java>
 	</target>
 
