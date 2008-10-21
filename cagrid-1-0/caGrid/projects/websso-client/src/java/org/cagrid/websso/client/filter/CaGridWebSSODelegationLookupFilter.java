@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.cagrid.websso.common.WebSSOConstants;
-import org.cagrid.websso.common.WebSSOClientException;
 import org.cagrid.websso.common.WebSSOClientHelper;
 import org.globus.gsi.GlobusCredential;
 
