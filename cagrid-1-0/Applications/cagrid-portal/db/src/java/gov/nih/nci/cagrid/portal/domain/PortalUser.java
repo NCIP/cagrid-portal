@@ -9,14 +9,7 @@ import gov.nih.nci.cagrid.portal.domain.dataservice.SharedCQLQuery;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OrderBy;
-import javax.persistence.Table;
-import javax.persistence.Transient;
+import javax.persistence.*;
 
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
@@ -70,7 +63,7 @@ public class PortalUser extends AbstractDomainObject {
 		this.portalId = portalId;
 	}
 
-	@OneToMany(mappedBy = "portalUser")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "portalUser")
 	@OrderBy("startTime desc")
 	public List<QueryInstance> getQueryInstances() {
 		return queryInstances;
@@ -88,7 +81,7 @@ public class PortalUser extends AbstractDomainObject {
 		this.gridIdentity = gridIdentity;
 	}
 
-	@OneToMany(mappedBy = "owner")
+	@OneToMany(cascade = CascadeType.ALL,mappedBy = "owner")
 	@OrderBy("shareDate desc")
 	public List<SharedCQLQuery> getSharedQueries() {
 		return sharedQueries;

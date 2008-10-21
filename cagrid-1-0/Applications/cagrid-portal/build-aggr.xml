@@ -214,4 +214,14 @@
         </java>
     </target>
 
+
+    <target name="aggr:delete-user" depends="aggr:prepare-run-cp">
+        <input message="Enter Grid Identitity of User:" addproperty="aggr:userGridIdentity"/>
+
+        <java classname="gov.nih.nci.cagrid.portal.util.DeleteUserUtil" classpathref="aggr.run.cp" fork="true">
+            <arg value="${aggr:userGridIdentity}"/>
+        </java>
+
+    </target>
+
 </project>
