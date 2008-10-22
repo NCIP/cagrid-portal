@@ -5,7 +5,7 @@
 
 	<bean id="propertyPlaceholderConfigurer"
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-		<property name="location" value="/WEB-INF/cas-client.properties" />
+		<property name="location" value="/WEB-INF/classes/cas-client.properties" />
 	</bean>
 
 	<bean name="casAuthenticationFilter" class="org.jasig.cas.client.authentication.AuthenticationFilter"

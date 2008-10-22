@@ -1,6 +1,7 @@
 package org.cagrid.websso.client.filter;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 
 import javax.servlet.Filter;
@@ -15,19 +16,17 @@ import javax.servlet.http.HttpSession;
 
 import org.cagrid.websso.common.WebSSOConstants;
 import org.cagrid.websso.common.WebSSOClientHelper;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.util.Assert;
 
 public class CaGridWebSSOLogoutFilter implements Filter {
 
-	private static final String LOGOUT_LANDING_URL = "logout-landing-url";
+	private static final String CAS_CLIENT_PROPERTY_FILE = "cas-client-property-file";
 
-	private String logoutLandingURL = null;
-
-	private Resource casClientResource;
-	
-	public void setCasClientResource(Resource casClientResource) {
-		this.casClientResource = casClientResource;
-	}
+	private String casClientPropertyFile;
 	
 	public void destroy() {
 		// do nothing
@@ -40,16 +39,28 @@ public class CaGridWebSSOLogoutFilter implements Filter {
 		if (null == isSessionLoaded || isSessionLoaded == Boolean.FALSE) {
 			throw new ServletException("WebSSO Attributes are not loaded in the Session");
 		} else {
-			Properties properties = new Properties();
-			properties.load(casClientResource.getInputStream());
 			String delegationEPR = (String) session.getAttribute(WebSSOConstants.CAGRID_SSO_DELEGATION_SERVICE_EPR);
-			String logoutURL = WebSSOClientHelper.getLogoutURL(properties,delegationEPR,logoutLandingURL);
+			String logoutURL = WebSSOClientHelper.getLogoutURL(getCasClientPropertyResource(),delegationEPR);
 			session.invalidate();
 			((HttpServletResponse) response).sendRedirect(logoutURL);
 		}
 	}
+	
+	private Properties getCasClientPropertyResource(){
+		Properties properties = new Properties();
+		try {
+			Resource classPathResource=new ClassPathResource(casClientPropertyFile);
+			properties.load(classPathResource.getInputStream());
+		} catch (IOException e) {
+			throw new RuntimeException(casClientPropertyFile +" not found in WEB-INF/classes folder ", e);
+		}
+		return properties;
+	}
 
 	public void init(FilterConfig filterConfig) throws ServletException {
-		this.logoutLandingURL = filterConfig.getInitParameter(LOGOUT_LANDING_URL);
+		this.casClientPropertyFile = filterConfig.getInitParameter(CAS_CLIENT_PROPERTY_FILE);
+		Assert
+				.notNull(
+						casClientPropertyFile,"init-param value for cas-client-property-file was not specified for caGRID WebSSO Logout Filter in web.xml ");
 	}
 }

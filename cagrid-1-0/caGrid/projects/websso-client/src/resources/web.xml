@@ -76,11 +76,11 @@
 		<filter-class>org.cagrid.websso.client.filter.CaGridWebSSODelegationLookupFilter</filter-class>
 		<init-param>
 			<param-name>certificate-file-path</param-name>
-			<param-value>C:/certificates/D39Y4KF1-cert.pem</param-value>
+			<param-value>C:/Documents and Settings/Garmillas/.cagrid/certificates/NCI-GARMILLAS-1-cert.pem</param-value>
 		</init-param>
 		<init-param>
 			<param-name>key-file-path</param-name>
-			<param-value>C:/certificates/D39Y4KF1-key.pem</param-value>
+			<param-value>C:/Documents and Settings/Garmillas/.cagrid/certificates/NCI-GARMILLAS-1-key.pem</param-value>
 		</init-param>
 	</filter>
 
@@ -88,8 +88,8 @@
 		<filter-name>caGRID WebSSO Logout Filter</filter-name>
 		<filter-class>org.cagrid.websso.client.filter.CaGridWebSSOLogoutFilter</filter-class>
 		<init-param>
-			<param-name>logout-landing-url</param-name>
-			<param-value>http://www.google.com</param-value>
+			<param-name>cas-client-property-file</param-name>
+			<param-value>cas-client.properties</param-value>
 		</init-param>
 	</filter>
 

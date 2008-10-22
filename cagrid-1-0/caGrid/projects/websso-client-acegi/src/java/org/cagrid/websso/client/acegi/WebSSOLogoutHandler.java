@@ -16,12 +16,10 @@ import org.springframework.core.io.Resource;
 public class WebSSOLogoutHandler implements LogoutHandler  {
 	
 	private Resource casClientResource;
-	private String logoutLandingURL;	
 	private String logoutURL;
 	
-	public WebSSOLogoutHandler(Resource casClientResource,String logoutLandingURL) {
+	public WebSSOLogoutHandler(Resource casClientResource) {
 		this.casClientResource = casClientResource;
-		this.logoutLandingURL = logoutLandingURL;
 	}
 	
 	public void logout(HttpServletRequest request,
@@ -31,7 +29,7 @@ public class WebSSOLogoutHandler implements LogoutHandler  {
 			properties.load(casClientResource.getInputStream());
 			WebSSOUser webssoUser = (WebSSOUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			String delegationEPR = webssoUser.getDelegatedEPR();
-			this.logoutURL = WebSSOClientHelper.getLogoutURL(properties,delegationEPR, logoutLandingURL);			
+			this.logoutURL = WebSSOClientHelper.getLogoutURL(properties,delegationEPR);			
 		} catch (IOException e) {
 			throw new RuntimeException("error occured handling logout " + e);
 		}

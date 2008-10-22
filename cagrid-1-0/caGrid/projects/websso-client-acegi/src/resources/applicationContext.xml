@@ -7,14 +7,14 @@
   -
   - Only used by "cas" artifact.
   -
-  - $Id: applicationContext.xml,v 1.1 2008-10-10 13:58:53 garmillas Exp $
+  - $Id: applicationContext.xml,v 1.2 2008-10-22 17:27:16 garmillas Exp $
   -->
 
 <beans>
 
 	<bean id="propertyPlaceholderConfigurer"
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-		<property name="location" value="/WEB-INF/cas-client.properties" />
+		<property name="location" value="/WEB-INF/classes/cas-client.properties" />
 	</bean>
 	
    <!-- ======================== FILTER CHAIN ======================= -->
@@ -107,8 +107,7 @@
 		<constructor-arg index="1">
 			<list>
 				<bean class="org.cagrid.websso.client.acegi.WebSSOLogoutHandler">
-					<constructor-arg index="0" value="/WEB-INF/cas-client.properties" />
-					<constructor-arg index="1" value="www.google.com" />
+					<constructor-arg index="0" value="/WEB-INF/classes/cas-client.properties" />
 				</bean>
 				<bean class="org.acegisecurity.ui.logout.SecurityContextLogoutHandler" />
 			</list>

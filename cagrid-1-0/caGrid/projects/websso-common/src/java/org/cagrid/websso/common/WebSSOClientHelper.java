@@ -115,8 +115,9 @@ public class WebSSOClientHelper {
 		return hostCredential;
 	}
 	
-	public static String getLogoutURL(Properties properties, String delegationEPR,String logoutLandingURL) {
+	public static String getLogoutURL(Properties properties, String delegationEPR) {
 		String logoutURL = properties.getProperty("cas.server.url")+ "/logout";
+		String logoutLandingURL=properties.getProperty("logout.landing.url");
 		logoutURL = logoutURL + "?service=" + logoutLandingURL;
 		logoutURL = logoutURL + "&" + WebSSOConstants.CAGRID_SSO_DELEGATION_SERVICE_EPR+ "=" + delegationEPR;
 		return logoutURL;
