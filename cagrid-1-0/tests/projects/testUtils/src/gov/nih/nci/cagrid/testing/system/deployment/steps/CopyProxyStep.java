@@ -18,7 +18,7 @@ public class CopyProxyStep extends Step {
     private SecureContainer container;
 
 
-    public CopyProxyStep(SecureContainer container, File serviceDir) throws Exception {
+    public CopyProxyStep(SecureContainer container, File serviceDir) {
         this.container = container;
         this.serviceDir = serviceDir;
     }

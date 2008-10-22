@@ -18,7 +18,7 @@ public class CopyCAStep extends Step {
     private SecureContainer container;
 
 
-    public CopyCAStep(SecureContainer container, File serviceDir) throws Exception {
+    public CopyCAStep(SecureContainer container, File serviceDir) {
         this.container = container;
         this.serviceDir = serviceDir;
     }
