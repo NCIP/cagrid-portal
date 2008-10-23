@@ -23,17 +23,32 @@
 
     <bean id="checkForNewServicesTask"
           class="org.springframework.scheduling.timer.ScheduledTimerTask">
-        <property name="delay" value="3000"/>
+        <property name="delay" value="40000"/>
         <property name="period" ref="defaultPeriod"/>
         <property name="timerTask" ref="checkForNewServices"/>
     </bean>
 
+
+    <!--Will update the Cache of services from Index-->
+    <bean id="updateServiceCacheTask"
+          class="org.springframework.scheduling.timer.ScheduledTimerTask">
+        <property name="delay" value="2000"/>
+        <property name="period" ref="fastDefaultPeriod"/>
+        <property name="timerTask">
+            <bean id="updateServicCache"
+                  class="org.springframework.scheduling.timer.MethodInvokingTimerTaskFactoryBean">
+                <property name="targetObject" ref="cacheFirstDynamicServiceStatusProvider"/>
+                <property name="targetMethod" value="monitorIndex"/>
+            </bean>
+        </property>
+    </bean>
+
     <bean id="regsvcTimerFactory"
           class="org.springframework.scheduling.timer.TimerFactoryBean">
-
         <property name="scheduledTimerTasks">
             <list>
                 <ref bean="checkForNewServicesTask"/>
+                <ref bean="updateServiceCacheTask"/>
             </list>
         </property>
     </bean>

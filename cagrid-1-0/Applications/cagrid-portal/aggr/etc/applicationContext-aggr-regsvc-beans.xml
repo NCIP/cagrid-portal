@@ -17,7 +17,7 @@
     <bean id="registeredServiceMonitor"
           class="gov.nih.nci.cagrid.portal.aggr.regsvc.RegisteredServiceMonitor">
         <property name="indexServiceUrls" value="${cagrid.portal.indexServiceUrls}"/>
-        <property name="dynamicServiceUrlProvider" ref="dynamicServiceUrlProvider"/>
+        <property name="dynamicServiceUrlProvider" ref="cacheFirstDynamicServiceStatusProvider"/>
         <property name="cachedServiceUrlProvider">
             <bean
                     class="gov.nih.nci.cagrid.portal.aggr.regsvc.DBCachedServiceUrlProvider">
@@ -32,7 +32,7 @@
     <bean id="dynamicServiceUrlProvider"
           class="gov.nih.nci.cagrid.portal.aggr.regsvc.DynamicServiceUrlProvider">
         <property name="requireMetadataCompliance" ref="metadataCompliance"/>
-        <property name="timeout" ref="defaultTimeout"/>
+        <property name="timeout" ref="defaultLongTimeout"/>
     </bean>
 
     <bean  id="metadataCompliance" class="java.lang.Boolean">
@@ -44,5 +44,13 @@
         <property name="indexServiceDao" ref="indexServiceDao"/>
         <property name="gridServiceDao" ref="gridServiceDao"/>
     </bean>
+
+    <bean  id="cacheFirstDynamicServiceStatusProvider"
+              class="gov.nih.nci.cagrid.portal.aggr.status.CacheFirstDynamicServiceStatusProvider" scope="singleton">
+           <property name="indexServiceUrls" value="${cagrid.portal.indexServiceUrls}"/>
+           <property name="requireMetadataCompliance"  ref="metadataCompliance"/>
+           <property name="dynamicServiceStatusProvider" ref="dynamicServiceUrlProvider"/>
+           <property name="timeout" ref="defaultTimeout"/>
+       </bean>
 
 </beans>

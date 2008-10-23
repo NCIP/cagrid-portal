@@ -116,9 +116,8 @@
 </div>
 
 
-<br/>
 <c:if test="${not empty statusBean.lastUpdated}">
-<div>
+<div style="padding-top:10px;">
     <div>
         <tags:infoPopup id="<portlet:namespace>status" popup_href="javascript:void();"
                         popup_name="Last Updated:"
@@ -128,3 +127,10 @@
     </div>
 </div>
 </c:if>
+
+<div style="padding-top:10px;">
+    <tags:infoPopup id="<portlet:namespace>diagnosticLnk" popup_href="${servicessAction}"
+                    popup_name="Where is my service?"
+                    popup_text="Search for your service in the Discovery Portlet or use the Service Diagnostics Portlet to get details on your service advertisement"/>
+</div>
+

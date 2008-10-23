@@ -3,12 +3,13 @@
     font-size: 9px;
     display: none;
     position: absolute;
-    width: 160px;
+    width: 170px;
     margin-left: 2px;
     padding: 3px 2px 3px 4px;
     border: 1px solid #c93;
     opacity: 1.0;
     z-index: 30;
+    word-wrap: break-word;
     background: #ffc url( ../images/pointer.gif ) no-repeat -10px 5px;
 }
 

@@ -197,8 +197,11 @@
     </target>
 
     <target name="aggr:load-workspaces" depends="aggr:prepare-run-cp">
+        <input message="Enter Path for participant list (.xls file):" addproperty="aggr:participant-list"
+               defaultvalue="${aggr.dir}/etc/caBIG_Workspaces_participants.xls"/>
+
         <java classname="gov.nih.nci.cagrid.portal.util.WorkspacesLoader" classpathref="aggr.run.cp" fork="true">
-            <arg value="${aggr.dir}/etc/caBIG_Workspaces_participants.xls"/>
+            <arg value="${aggr:participant-list}"/>
         </java>
     </target>
 
@@ -209,6 +212,16 @@
             <arg value="${aggr:banOp}"/>
             <arg value="${aggr:banOpUrl}"/>
         </java>
+    </target>
+
+
+    <target name="aggr:delete-user" depends="aggr:prepare-run-cp">
+        <input message="Enter Grid Identitity of User:" addproperty="aggr:userGridIdentity"/>
+
+        <java classname="gov.nih.nci.cagrid.portal.util.DeleteUserUtil" classpathref="aggr.run.cp" fork="true">
+            <arg value="${aggr:userGridIdentity}"/>
+        </java>
+
     </target>
 
 </project>

@@ -4,6 +4,7 @@
 div.auto_complete {
     width: 450px;
     background-color: #dcedad;
+    z-index:100;
 }
 
 div.auto_complete ul {

@@ -61,7 +61,7 @@ public class CacheFirstDynamicServiceStatusProvider implements ServiceUrlProvide
                 if (eprs != null && eprs.size() > 0) {
                     _urls.clear();
                     _urls.addAll(eprs);
-                    logger.debug("Added " + _urls.size() + " services to cache");
+                    logger.info("Added " + _urls.size() + " services to cache");
                 }
             }
         }
@@ -77,7 +77,7 @@ public class CacheFirstDynamicServiceStatusProvider implements ServiceUrlProvide
                 cache.put(indexServiceUrl, Collections.synchronizedSet(new HashSet<String>()));
             }
         }
-        logger.debug("Initialized index cache with " + cache.size() + " indexes");
+        logger.info("Initialized index cache with " + cache.size() + " indexes");
     }
 
     public long getTimeout() {

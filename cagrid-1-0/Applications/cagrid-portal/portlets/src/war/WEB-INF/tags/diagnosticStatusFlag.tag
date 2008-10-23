@@ -16,12 +16,12 @@
         <img src="<c:url value="/images/diagnostic_problem_icon.png"/>"
     </c:otherwise>
 </c:choose>
-    <c:if test="${not empty result.message}">
-        alt="${result.message}"
-    </c:if>
-  />
-    <c:if test="${not empty result.detail}">
-       <tags:infoPopup id="dunno" popup_text="${result.detail}"/>
-    </c:if>
+<c:if test="${not empty result.message}">
+    alt="${result.message}"
+</c:if>
+/>
+<c:if test="${not empty result.detail}">
+    <tags:infoPopup id="${result.type}" popup_text="${result.detail}"/>
+</c:if>
 
 

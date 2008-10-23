@@ -173,6 +173,26 @@
     </bean>
 
     <bean
+            id="selectServiceForDiagnosisController"
+            class="gov.nih.nci.cagrid.portal.portlet.discovery.details.SelectServiceForDiagnosisController"
+            autowire="byName">
+        <property name="commandName" value="selectServiceForDiagnosis"/>
+        <property name="commandClass" value="gov.nih.nci.cagrid.portal.portlet.discovery.details.SelectDetailsCommand"/>
+        <property name="interPortletMessageSender">
+            <bean class="gov.nih.nci.cagrid.portal.portlet.InterPortletMessageAdapter" autowire="byName">
+                <property name="modePreferenceName" value="serviceSelectMode"/>
+                <property name="outputQueuePreferenceName" value="selectedServiceOutputQueueName"/>
+            </bean>
+        </property>
+        <property name="actionResponseHandler">
+            <bean class="gov.nih.nci.cagrid.portal.portlet.tab.TabActionResponseHandler">
+                <property name="tabControlConfig" ref="discoveryTabControlConfig"/>
+                <property name="newTabPath" value="/details/service/tree"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean
             id="selectParticipantController"
             class="gov.nih.nci.cagrid.portal.portlet.discovery.details.SelectParticipantController"
             autowire="byName">
@@ -340,6 +360,8 @@
                         <entry key="selectService"
                                value-ref="selectServiceController"/>
                         <entry key="selectServiceForQuery" value-ref="selectServiceForQueryController"/>
+                        <entry key="selectServiceForDiagnosis" value-ref="selectServiceForDiagnosisController"/>
+
 
                         <entry key="selectParticipant"
                                value-ref="selectParticipantController"/>
