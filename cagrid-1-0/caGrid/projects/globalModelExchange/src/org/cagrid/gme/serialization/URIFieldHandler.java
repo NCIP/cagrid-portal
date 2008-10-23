@@ -32,7 +32,7 @@ public class URIFieldHandler extends GeneralizedFieldHandler {
 
 
     @Override
-    public Class getFieldType() {
+    public Class<URI> getFieldType() {
         return URI.class;
     }
 

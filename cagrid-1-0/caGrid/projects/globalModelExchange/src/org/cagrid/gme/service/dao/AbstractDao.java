@@ -58,6 +58,11 @@ public abstract class AbstractDao<T> extends HibernateDaoSupport {
     }
 
 
+    public void save(Collection<T> domainObjects) {
+        getHibernateTemplate().saveOrUpdateAll(domainObjects);
+    }
+
+
     public void save(T domainObject) {
         getHibernateTemplate().saveOrUpdate(domainObject);
     }

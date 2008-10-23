@@ -455,7 +455,7 @@ public class GME {
             info.setImports(importSet);
 
             // TODO: I don't think I should have to do this... shouldn't the
-            // DAO-returned objects still be peristent and notice the changes?
+            // DAO-returned objects still be persistent and notice the changes?
             this.schemaDao.save(info);
         }
     }
@@ -469,10 +469,6 @@ public class GME {
         // callbacks to the entity resolver for all imports (loading all
         // dependency schemas, and their dependency schemas, etc)
         String ns = schemaToProcess.getTargetNamespace().toString();
-
-        // TODO: need to check the schema is actually valid (1..n
-        // schemadocuemnts exist, and the namespace of all is what is specified
-        // by the schema... but can only do that after parse time)
 
         XMLSchemaDocument rootSD = schemaToProcess.getRootDocument();
 
@@ -691,7 +687,7 @@ public class GME {
             return;
         }
 
-        // add this to the bucket
+        // add this to the bucket and make sure it is populated
         this.schemaDao.materializeXMLSchemaInformation(info);
         schemas.add(info.getSchema());
 

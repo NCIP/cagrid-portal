@@ -3,18 +3,16 @@ package org.cagrid.gme.common.exceptions;
 import java.io.IOException;
 
 
-/**
- * @author oster
- */
+@SuppressWarnings("serial")
 public class SchemaParsingException extends IOException {
 
-	public SchemaParsingException() {
-		super();
-	}
+    public SchemaParsingException() {
+        super();
+    }
 
 
-	public SchemaParsingException(String s) {
-		super(s);
-	}
+    public SchemaParsingException(String s) {
+        super(s);
+    }
 
 }
