@@ -134,6 +134,19 @@ public class PointsOfContactEditorPanel extends JPanel implements ListSelectionL
             getPocList().setBackground(ValidationComponentUtils.getErrorBackground());
         } else {
             getPocList().setBackground(Color.WHITE);
+            for (int i = 0; i < getPointsOfContact().size(); i++) {
+                PointOfContact poc = (PointOfContact) getPointsOfContact().get(i);
+                if ((poc.getFirstName() == null || poc.getFirstName().trim().length() <= 0)
+                    || (poc.getLastName() == null || poc.getLastName().trim().length() <= 0)
+                    || (poc.getEmail() == null || poc.getEmail().trim().length() <= 0)
+                    || (poc.getAffiliation() == null || poc.getAffiliation().trim().length() <= 0)
+                    || (poc.getRole() == null || poc.getRole().trim().length() <= 0)) {
+                    validationResult.add(new SimpleValidationMessage("Point of contacts must be properly populated.",
+                        Severity.ERROR, "pocs-list"));
+                    getPocList().setBackground(ValidationComponentUtils.getErrorBackground());
+                }
+            }
+            
         }
 
         if (this.getDetailPanel().isEnabled()) {
@@ -142,7 +155,7 @@ public class PointsOfContactEditorPanel extends JPanel implements ListSelectionL
                 validationResult.add(new SimpleValidationMessage("First name must not be blank.", Severity.ERROR,
                     "first-name"));
             }
-            if (ValidationUtils.isAlphaSpace(getFnameTextField().getText())) {
+            if (!ValidationUtils.isAlphaSpace(getFnameTextField().getText())) {
                 validationResult.add(new SimpleValidationMessage("First name must be be alpha characters.",
                     Severity.ERROR, "first-name"));
             }
@@ -151,7 +164,7 @@ public class PointsOfContactEditorPanel extends JPanel implements ListSelectionL
                 validationResult.add(new SimpleValidationMessage("Last name must not be blank.", Severity.ERROR,
                     "last-name"));
             }
-            if (ValidationUtils.isAlphaSpace(getLnameTextField().getText())) {
+            if (!ValidationUtils.isAlphaSpace(getLnameTextField().getText())) {
                 validationResult.add(new SimpleValidationMessage("Last name must be be alpha characters.",
                     Severity.ERROR, "last-name"));
             }
@@ -463,7 +476,7 @@ public class PointsOfContactEditorPanel extends JPanel implements ListSelectionL
 
         this.pointsOfContact.add(poc);
         updateView();
-        this.getPocList().setSelectedIndex(getPocList().getModel().getSize()-1);
+        this.getPocList().setSelectedIndex(getPocList().getModel().getSize() - 1);
     }
 
 
@@ -491,9 +504,9 @@ public class PointsOfContactEditorPanel extends JPanel implements ListSelectionL
         int selectedIndex = getPocList().getSelectedIndex();
         if (selectedIndex != -1) {
             this.pointsOfContact.remove(selectedIndex);
-            if(getPocList().getModel().getSize()>=0){
-                if(selectedIndex>0){
-                    getPocList().setSelectedIndex(selectedIndex-1);
+            if (getPocList().getModel().getSize() >= 0) {
+                if (selectedIndex > 0) {
+                    getPocList().setSelectedIndex(selectedIndex - 1);
                 } else {
                     getPocList().setSelectedIndex(0);
                 }
