@@ -117,6 +117,9 @@ public class CaGridAuthenticationManager implements AuthenticationManager {
 				break;
 			}
 		}
+		if(dorianInformation==null){
+			throw new AuthenticationConfigurationException("no matching dorian service url "+dorianServiceURL+" found in websso-properties.xml");
+		}
 		return dorianInformation;
 	}
 	
