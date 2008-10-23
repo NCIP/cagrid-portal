@@ -1,41 +1,31 @@
-package org.cagrid.websso.client.acegi;
+package org.cagrid.websso.client.acegi.logout;
 
 import java.io.IOException;
 import java.util.Properties;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.acegisecurity.Authentication;
 import org.acegisecurity.context.SecurityContextHolder;
-import org.acegisecurity.ui.logout.LogoutHandler;
+import org.cagrid.websso.client.acegi.WebSSOUser;
 import org.cagrid.websso.common.WebSSOClientHelper;
 
 import org.springframework.core.io.Resource;
 
-public class WebSSOLogoutHandler implements LogoutHandler  {
+public class WebSSOLogoutHelper{
 	
 	private Resource casClientResource;
-	private String logoutURL;
 	
-	public WebSSOLogoutHandler(Resource casClientResource) {
+	public WebSSOLogoutHelper(Resource casClientResource) {
 		this.casClientResource = casClientResource;
 	}
 	
-	public void logout(HttpServletRequest request,
-			HttpServletResponse response, Authentication authentication) {
+	public String getLogoutURL() {
 		Properties properties = new Properties();
 		try {
 			properties.load(casClientResource.getInputStream());
 			WebSSOUser webssoUser = (WebSSOUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			String delegationEPR = webssoUser.getDelegatedEPR();
-			this.logoutURL = WebSSOClientHelper.getLogoutURL(properties,delegationEPR);			
+			return WebSSOClientHelper.getLogoutURL(properties,delegationEPR);			
 		} catch (IOException e) {
 			throw new RuntimeException("error occured handling logout " + e);
 		}
-	}
-	
-	public String getLogoutURL() {
-		return logoutURL;
-	}
+	}	
 }

@@ -7,7 +7,7 @@
   -
   - Only used by "cas" artifact.
   -
-  - $Id: applicationContext.xml,v 1.2 2008-10-22 17:27:16 garmillas Exp $
+  - $Id: applicationContext.xml,v 1.3 2008-10-23 17:00:39 garmillas Exp $
   -->
 
 <beans>
@@ -17,14 +17,15 @@
 		<property name="location" value="/WEB-INF/classes/cas-client.properties" />
 	</bean>
 	
-   <!-- ======================== FILTER CHAIN ======================= -->
-
+   <!-- ======================== FILTER CHAIN =======================
+   	   always casLogoutCallbackFilter must be precedent than channelProcessingFilter
+   -->
   <bean id="filterChainProxy" class="org.acegisecurity.util.FilterChainProxy">
     <property name="filterInvocationDefinitionSource">
       <value>
         CONVERT_URL_TO_LOWERCASE_BEFORE_COMPARISON
         PATTERN_TYPE_APACHE_ANT
-        /**=channelProcessingFilter,httpSessionContextIntegrationFilter,logoutFilter,casProcessingFilter,basicProcessingFilter,exceptionTranslationFilter,filterInvocationInterceptor
+        /**=casLogoutCallbackFilter,channelProcessingFilter,httpSessionContextIntegrationFilter,casLogoutFilter,casProcessingFilter,basicProcessingFilter,exceptionTranslationFilter,filterInvocationInterceptor
   	 </value>
     </property>
   </bean>
@@ -100,22 +101,6 @@
 		<property name="sendRenew" value="false"/>
 	</bean>
 
-	<!-- note logout has little impact, due to CAS re authentication functionality (it will cause a refresh of the authentication though) -->
-	<bean id="logoutFilter"
-		class="org.cagrid.websso.client.acegi.WebSSOAcegiLogoutFilter">
-		<constructor-arg index="0" value="/index.jsp" /> <!-- URL redirected to after logout -->
-		<constructor-arg index="1">
-			<list>
-				<bean class="org.cagrid.websso.client.acegi.WebSSOLogoutHandler">
-					<constructor-arg index="0" value="/WEB-INF/classes/cas-client.properties" />
-				</bean>
-				<bean class="org.acegisecurity.ui.logout.SecurityContextLogoutHandler" />
-			</list>
-		</constructor-arg>
-		<constructor-arg index="2" value="false" />
-		<property name="filterProcessesUrl" value="/logout"></property>
-	</bean>
-
 	<!-- ===================== HTTP CHANNEL REQUIREMENTS ==================== -->
 
 	<!-- Enabled by default for CAS, as a CAS deployment uses HTTPS -->
@@ -151,8 +136,8 @@
 				<entry key="8080">
 					<value>8443</value>
 				</entry>
-				<entry key="48080">
-					<value>48443</value>
+				<entry key="28080">
+					<value>28443</value>
 				</entry>
 			</map>
 		</property>
@@ -207,7 +192,53 @@
 			</value>
 		</property>
 	</bean>
+
+	<bean id="webssoLogoutHelper" class="org.cagrid.websso.client.acegi.logout.WebSSOLogoutHelper">
+		<constructor-arg index="0"
+			value="/WEB-INF/classes/cas-client.properties" />
+	</bean>
 	
+	<bean id="casLogoutFilter" class="org.cagrid.websso.client.acegi.logout.WebSSOLogoutFilter">
+		<property name="filterProcessesUrl" value="/logout"></property>
+		<property name="logoutHandlers">
+			<list>
+				<bean class="org.acegisecurity.ui.logout.SecurityContextLogoutHandler">
+					<property name="invalidateHttpSession">
+						<value>true</value>
+					</property>
+				</bean>
+			</list>
+		</property>
+		<property name="expiredTicketCache">
+			<ref local="expiredTicketCache" />
+		</property>
+		<property name="webssoLogoutHelper">
+			<ref local="webssoLogoutHelper" />
+		</property>
+	</bean>
+	
+	<bean id="casLogoutCallbackFilter" class="org.cagrid.websso.client.acegi.logout.WebSSOLogoutCallbackFilter">
+		<property name="filterProcessesUrl">
+			<value>/j_acegi_cas_security_check</value>
+		</property>
+		<property name="expiredTicketCache">
+			<ref local="expiredTicketCache" />
+		</property>
+	</bean>
+
+	<bean id="expiredTicketCache" class="org.cagrid.websso.client.acegi.logout.EhCacheBasedExpiredTicketCache">
+		<property name="cache">
+			<bean class="org.springframework.cache.ehcache.EhCacheFactoryBean">
+				<property name="cacheManager">
+					<ref bean="cacheManager" />
+				</property>
+				<property name="cacheName">
+					<value>expiredTicketCache</value>
+				</property>
+			</bean>
+		</property>
+	</bean>
+		
 	<bean
 		class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
 		<property name="targetClass"
@@ -219,28 +250,5 @@
 					class="org.cagrid.websso.common.WebSSOHostNameVerifier" />
 			</list>
 		</property>
-	</bean>
-	
-	<!-- BASIC Regular Expression Syntax (for beginners):
-
-	     \A means the start of the string (ie the beginning of the URL)
-	     \Z means the end of the string (ie the end of the URL)
-	     .  means any single character
-	     *  means null or any number of repetitions of the last expression (so .* means zero or more characters)
-
-	     Some examples:
-
-	     Expression:   \A/my/directory/.*\Z
-	     Would match:    /my/directory/
-	                     /my/directory/hello.html
-
-	     Expression:   \A/.*\Z
-	     Would match:    /hello.html
-	                     /
-
-	     Expression:   \A/.*/secret.html\Z
-	     Would match:    /some/directory/secret.html
-	                     /another/secret.html
-	     Not match:      /anothersecret.html (missing required /)
-	-->
+	</bean>	
 </beans>

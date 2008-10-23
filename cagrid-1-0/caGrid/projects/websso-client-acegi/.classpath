@@ -41,7 +41,7 @@
 	<classpathentry kind="lib" path="ext/dependencies/default/jars/caGrid-syncgts-common-1.3-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/default/jars/caGrid-syncgts-stubs-1.3-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/default/jars/cas-server-core-3.2.2.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/default/jars/casclient-2.1.1.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/default/jars/casclient-2.1.1.jar" sourcepath="C:/dev-examples/cas-client-java-2.1.0"/>
 	<classpathentry kind="lib" path="ext/dependencies/default/jars/castor-0.9.9.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/default/jars/cog-jglobus.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/default/jars/commons-codec-1.3.jar"/>
