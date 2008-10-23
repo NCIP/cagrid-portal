@@ -96,6 +96,6 @@
 	<classpathentry kind="lib" path="ext/dependencies/service/jars/commons-dbcp-1.2.2.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/commons-collections-3.0.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/service/jars/commons-pool-1.2.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/test/jars/spring-mock.jar""/>
+	<classpathentry kind="lib" path="ext/dependencies/test/jars/spring-mock.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
