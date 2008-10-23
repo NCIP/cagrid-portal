@@ -4,6 +4,7 @@ import gov.nih.nci.cadsr.domain.Organization;
 import gov.nih.nci.cadsr.domain.Person;
 import gov.nih.nci.cagrid.common.SchemaValidationException;
 import gov.nih.nci.cagrid.common.SchemaValidator;
+import gov.nih.nci.cagrid.common.portal.validation.IconFeedbackPanel;
 import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertyType;
 import gov.nih.nci.cagrid.introduce.portal.extension.ResourcePropertyEditorPanel;
 import gov.nih.nci.cagrid.metadata.MetadataUtils;
@@ -43,8 +44,16 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
-import org.cagrid.grape.utils.ErrorDialog;
+import com.jgoodies.validation.Severity;
+import com.jgoodies.validation.ValidationResult;
+import com.jgoodies.validation.ValidationResultModel;
+import com.jgoodies.validation.message.SimpleValidationMessage;
+import com.jgoodies.validation.util.DefaultValidationResultModel;
+import com.jgoodies.validation.util.ValidationUtils;
+import com.jgoodies.validation.view.ValidationComponentUtils;
 
 
 /**
@@ -54,6 +63,9 @@ public class ServiceMetadataEditor extends ResourcePropertyEditorPanel {
     private static final int MAXIMUM_CONTACTS = 10;
     private static final String HOSTING_CENTER_TAB_NAME = "Hosting Center";
     private static final String SERVICE_INFORMATION_TAB_NAME = "Service Information";
+
+    private ValidationResultModel validationModel = new DefaultValidationResultModel();
+    private ValidationResult validationResult = null;
 
     private ServiceMetadata serviceMetadata = null;
     private JTabbedPane metadataTabbedPane = null;
@@ -105,6 +117,69 @@ public class ServiceMetadataEditor extends ResourcePropertyEditorPanel {
         setLayout(gridLayout);
         add(getMetadataTabbedPane(), null);
 
+        initValidation();
+        validateInput();
+
+    }
+
+
+    public final class TextBoxListener implements DocumentListener {
+
+        public void changedUpdate(DocumentEvent e) {
+            validateInput();
+        }
+
+
+        public void insertUpdate(DocumentEvent e) {
+            validateInput();
+        }
+
+
+        public void removeUpdate(DocumentEvent e) {
+            validateInput();
+        }
+
+    }
+
+
+    private void initValidation() {
+        ValidationComponentUtils.setMessageKey(getCenterDisplayNameTextField(), "service-display-name");
+        ValidationComponentUtils.setMessageKey(getCenterShortNameTextField(), "service-short-name");
+
+        validateInput();
+    }
+
+
+    private void validateInput() {
+        validationResult = new ValidationResult();
+        if (ValidationUtils.isBlank(getCenterDisplayNameTextField().getText())) {
+            validationResult.add(new SimpleValidationMessage("Center Display Name must not be blank", Severity.ERROR,
+                "service-display-name"));
+        }
+        if (ValidationUtils.isBlank(getCenterShortNameTextField().getText())) {
+            validationResult.add(new SimpleValidationMessage("Center Short Name must not be blank", Severity.ERROR,
+                "service-short-name"));
+        }
+
+        this.validationModel.setResult(validationResult);
+        updateComponentTreeSeverity();
+    }
+
+
+    private void updateComponentTreeSeverity() {
+        ValidationComponentUtils.updateComponentTreeMandatoryAndBlankBackground(this);
+        ValidationComponentUtils.updateComponentTreeSeverityBackground(this, this.validationModel.getResult());
+    }
+
+
+    private boolean validatePanel() {
+        if ((validationResult != null && validationResult.hasErrors())
+            || !getCenterAddressEditorPanel().validatePanel() || !getCenterPointsOfContactEditorPanel().validatePanel()
+            || !getServicePointsOfContactEditorPanel().validatePanel()) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
 
@@ -116,14 +191,13 @@ public class ServiceMetadataEditor extends ResourcePropertyEditorPanel {
     private JTabbedPane getMetadataTabbedPane() {
         if (this.metadataTabbedPane == null) {
             this.metadataTabbedPane = new JTabbedPane();
-            this.metadataTabbedPane.addTab(HOSTING_CENTER_TAB_NAME, null, getCenterPanel(),
-                "Information on the Hosting Research Center");
+            this.metadataTabbedPane.addTab(HOSTING_CENTER_TAB_NAME, null, new IconFeedbackPanel(this.validationModel,
+                getCenterPanel()), "Information on the Hosting Research Center");
             this.metadataTabbedPane.addTab(SERVICE_INFORMATION_TAB_NAME, null, getServicePanel(),
                 "Information about the service itself");
         }
         return this.metadataTabbedPane;
     }
-
 
 
     /**
@@ -478,6 +552,7 @@ public class ServiceMetadataEditor extends ResourcePropertyEditorPanel {
         if (this.centerDisplayNameTextField == null) {
             this.centerDisplayNameTextField = new JTextField();
             this.centerDisplayNameTextField.setColumns(10);
+            this.centerDisplayNameTextField.getDocument().addDocumentListener(new TextBoxListener());
         }
         return this.centerDisplayNameTextField;
     }
@@ -492,6 +567,7 @@ public class ServiceMetadataEditor extends ResourcePropertyEditorPanel {
         if (this.centerShortNameTextField == null) {
             this.centerShortNameTextField = new JTextField();
             this.centerShortNameTextField.setColumns(10);
+            this.centerShortNameTextField.getDocument().addDocumentListener(new TextBoxListener());
         }
         return this.centerShortNameTextField;
     }
@@ -500,7 +576,9 @@ public class ServiceMetadataEditor extends ResourcePropertyEditorPanel {
     /**
      * This method initializes centerAddressEditorPanel
      * 
-     * @return gov.nih.nci.cagrid.introduce.extensions.metadata.editors.servicemetdata.AddressEditorPanel
+     * @return 
+     *         gov.nih.nci.cagrid.introduce.extensions.metadata.editors.servicemetdata
+     *         .AddressEditorPanel
      */
     private AddressEditorPanel getCenterAddressEditorPanel() {
         if (this.centerAddressEditorPanel == null) {
@@ -513,7 +591,9 @@ public class ServiceMetadataEditor extends ResourcePropertyEditorPanel {
     /**
      * This method initializes centerPointsOfContactEditorPanel
      * 
-     * @return gov.nih.nci.cagrid.introduce.extensions.metadata.editors.servicemetdata.PointsOfContactEditorPanel
+     * @return 
+     *         gov.nih.nci.cagrid.introduce.extensions.metadata.editors.servicemetdata
+     *         .PointsOfContactEditorPanel
      */
     private PointsOfContactEditorPanel getCenterPointsOfContactEditorPanel() {
         if (this.centerPointsOfContactEditorPanel == null) {
@@ -526,7 +606,9 @@ public class ServiceMetadataEditor extends ResourcePropertyEditorPanel {
     /**
      * This method initializes servicePointsOfContactEditorPanel
      * 
-     * @return gov.nih.nci.cagrid.introduce.extensions.metadata.editors.servicemetdata.PointsOfContactEditorPanel
+     * @return 
+     *         gov.nih.nci.cagrid.introduce.extensions.metadata.editors.servicemetdata
+     *         .PointsOfContactEditorPanel
      */
     private PointsOfContactEditorPanel getServicePointsOfContactEditorPanel() {
         if (this.servicePointsOfContactEditorPanel == null) {
@@ -602,7 +684,7 @@ public class ServiceMetadataEditor extends ResourcePropertyEditorPanel {
                 System.exit(0);
             }
 
-            final ServiceMetadataEditor viewer = new ServiceMetadataEditor(null,null, new File(
+            final ServiceMetadataEditor viewer = new ServiceMetadataEditor(null, null, new File(
                 "../metadata/schema/cagrid/types/caGridMetadata.xsd"), null);
             ServiceMetadata model = MetadataUtils.deserializeServiceMetadata(new FileReader(fc.getSelectedFile()));
             viewer.setServiceMetadata(model);
@@ -611,9 +693,9 @@ public class ServiceMetadataEditor extends ResourcePropertyEditorPanel {
             JButton saveButton = new JButton("Save");
             saveButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                   
-                        System.out.println(viewer.getResultRPString());
-                   
+
+                    System.out.println(viewer.getResultRPString());
+
                 }
             });
 
@@ -790,8 +872,12 @@ public class ServiceMetadataEditor extends ResourcePropertyEditorPanel {
                 validator.validate(this.result);
             } catch (SchemaValidationException e) {
                 throw new Exception("Problem validating result:" + e.getMessage()
-                    + " Correct the error and save again.",e);
+                    + " Correct the error and save again.", e);
             }
+        }
+
+        if (!validatePanel()) {
+            throw new Exception("CaBIG Service Metadata is not properly populated.");
         }
     }
 
