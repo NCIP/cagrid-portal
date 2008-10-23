@@ -208,7 +208,7 @@ public class DeploymentViewer extends ApplicationComponent {
                                 mdec = new XMLEditorViewer(type, rpData, new File(schemaDir.getAbsolutePath()
                                     + File.separator + nsType.getLocation()), schemaDir);
                             }
-                            mainPanel.addTab(mde.getDisplayName(), mdec);
+                            mainPanel.addTab(mde.getDisplayName() + " (" + type.getQName().getLocalPart() + ")", mdec);
                         }
                     } catch (Exception e) {
                         logger.error(e.getMessage(), e);
