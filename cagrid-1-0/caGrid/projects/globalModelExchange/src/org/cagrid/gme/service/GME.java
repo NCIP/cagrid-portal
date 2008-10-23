@@ -129,10 +129,8 @@ public class GME {
                 }
             }
             // ok to delete all these schemas now
-            for (XMLSchemaInformation schema : schemaMap.values()) {
-                LOG.info("Deleting schema (" + schema.getSchema().getTargetNamespace() + ").");
-                this.schemaDao.delete(schema);
-            }
+            this.schemaDao.delete(schemaMap.values());
+
         } finally {
             // release database lock
             this.lock.writeLock().unlock();
@@ -455,6 +453,10 @@ public class GME {
 
             // -set importSet on PersistableXMLSchema
             info.setImports(importSet);
+
+            // TODO: I don't think I should have to do this... shouldn't the
+            // DAO-returned objects still be peristent and notice the changes?
+            this.schemaDao.save(info);
         }
     }
 
@@ -560,7 +562,7 @@ public class GME {
     public XMLSchema getSchema(URI uri) throws NoSuchNamespaceExistsFault {
         this.lock.readLock().lock();
         try {
-            XMLSchema result = this.schemaDao.getXMLSchemaByTargetNamespace(uri);
+            XMLSchema result = this.schemaDao.getMaterializedXMLSchemaByTargetNamespace(uri);
             if (result == null) {
                 String description = "No schema is published with given targetNamespace (" + uri + ")";
 
@@ -690,6 +692,7 @@ public class GME {
         }
 
         // add this to the bucket
+        this.schemaDao.materializeXMLSchemaInformation(info);
         schemas.add(info.getSchema());
 
         // create importinfo for each imported schema (if any)

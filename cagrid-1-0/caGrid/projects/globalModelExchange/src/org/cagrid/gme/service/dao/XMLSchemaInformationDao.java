@@ -1,6 +1,7 @@
 package org.cagrid.gme.service.dao;
 
 import java.net.URI;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -9,6 +10,11 @@ import javax.persistence.NonUniqueResultException;
 
 import org.cagrid.gme.domain.XMLSchema;
 import org.cagrid.gme.service.domain.XMLSchemaInformation;
+import org.hibernate.Hibernate;
+import org.hibernate.HibernateException;
+import org.hibernate.LockMode;
+import org.hibernate.Session;
+import org.springframework.orm.hibernate3.HibernateCallback;
 
 
 public class XMLSchemaInformationDao extends AbstractDao<XMLSchemaInformation> {
@@ -19,11 +25,24 @@ public class XMLSchemaInformationDao extends AbstractDao<XMLSchemaInformation> {
     }
 
 
+    public XMLSchema getMaterializedXMLSchemaByTargetNamespace(URI targetNamespace) {
+        XMLSchemaInformation info = getByTargetNamespace(targetNamespace);
+        if (info == null) {
+            return null;
+        }
+
+        materializeXMLSchemaInformation(info);
+        return info.getSchema();
+
+    }
+
+
     public XMLSchema getXMLSchemaByTargetNamespace(URI targetNamespace) {
         XMLSchemaInformation info = getByTargetNamespace(targetNamespace);
         if (info == null) {
             return null;
         }
+
         return info.getSchema();
     }
 
@@ -40,10 +59,6 @@ public class XMLSchemaInformationDao extends AbstractDao<XMLSchemaInformation> {
                 + " objects for URI '" + targetNamespace + "'");
         } else if (schemas.size() == 1) {
             s = schemas.get(0);
-            // REVISIT: is this necessary?
-            // Hibernate.initialize(s.getSchema());
-            //Hibernate.initialize(s.getSchema().getAdditionalSchemaDocuments())
-            // ;
         }
         return s;
     }
@@ -71,4 +86,19 @@ public class XMLSchemaInformationDao extends AbstractDao<XMLSchemaInformation> {
         return getHibernateTemplate().find("SELECT s.schema.targetNamespace FROM " + domainClass().getName() + " s");
     }
 
+
+    // REVISIT: this is necessary unless I leave the session open until
+    // after serialization
+    public void materializeXMLSchemaInformation(final XMLSchemaInformation s) {
+        getHibernateTemplate().execute(new HibernateCallback() {
+            public Object doInHibernate(Session session) throws HibernateException, SQLException {
+                session.lock(s, LockMode.READ);
+                Hibernate.initialize(s.getSchema());
+                Hibernate.initialize(s.getImports());
+                Hibernate.initialize(s.getSchema().getAdditionalSchemaDocuments());
+                return null;
+            }
+        });
+
+    }
 }

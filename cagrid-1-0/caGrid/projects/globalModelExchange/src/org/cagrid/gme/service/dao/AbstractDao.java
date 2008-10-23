@@ -1,6 +1,7 @@
 package org.cagrid.gme.service.dao;
 
 import java.sql.SQLException;
+import java.util.Collection;
 import java.util.List;
 
 import javax.persistence.NonUniqueResultException;
@@ -42,8 +43,9 @@ public abstract class AbstractDao<T> extends HibernateDaoSupport {
         return (List<T>) getHibernateTemplate().execute(new HibernateCallback() {
             public Object doInHibernate(Session session) throws HibernateException, SQLException {
                 Example example = Example.create(sample).excludeZeroes();
-                if (inexactMatches)
+                if (inexactMatches) {
                     example.ignoreCase().enableLike(MatchMode.ANYWHERE);
+                }
 
                 return session.createCriteria(domainClass()).add(example).list();
             }
@@ -61,12 +63,18 @@ public abstract class AbstractDao<T> extends HibernateDaoSupport {
     }
 
 
-    // public void update(T domainObject){
-    // getHibernateTemplate().update(domainObject);
-    // }
+    public void update(T domainObject) {
+        getHibernateTemplate().update(domainObject);
+    }
+
 
     public void delete(T domainObject) {
         getHibernateTemplate().delete(domainObject);
+    }
+
+
+    public void delete(Collection<T> domainObjects) {
+        getHibernateTemplate().deleteAll(domainObjects);
     }
 
 

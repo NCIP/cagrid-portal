@@ -35,8 +35,15 @@ public class CheckGetSchemaBundlesStep extends Step {
         for (XMLSchemaImportInformation ii : this.iis) {
             XMLSchemaBundle retrievedSchemaBundle = gme.getXMLSchemaAndDependencies(ii.getTargetNamespace());
 
-            assertEquals("The retrieved schema bundle did contain the expected schema import information.", ii,
-                retrievedSchemaBundle.getImportInformationForTargetNamespace(ii.getTargetNamespace()));
+            XMLSchemaImportInformation retrievedII = retrievedSchemaBundle.getImportInformationForTargetNamespace(ii
+                .getTargetNamespace());
+            if (ii.getImports().size() == 0) {
+                assertNull("The retrieved schema bundle unexpectedly contained schema import information ("
+                    + ii.getTargetNamespace() + ").", retrievedII);
+            } else {
+                assertEquals("The retrieved schema bundle did not contain the expected schema import information ("
+                    + ii.getTargetNamespace() + ").", ii, retrievedII);
+            }
         }
     }
 }
