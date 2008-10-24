@@ -4,6 +4,7 @@ import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.common.XMLUtilities;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
+import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionDescription;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
@@ -37,6 +38,8 @@ import gov.nih.nci.cagrid.introduce.extension.CreationExtensionPostProcessor;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionTools;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 import gov.nih.nci.cagrid.introduce.extension.ServiceExtensionRemover;
+import gov.nih.nci.cagrid.introduce.servicetasks.beans.deployment.validator.DeploymentValidatorDescriptor;
+import gov.nih.nci.cagrid.introduce.servicetasks.beans.deployment.validator.ValidatorDescriptor;
 import gov.nih.nci.cagrid.introduce.templates.NamespaceMappingsTemplate;
 import gov.nih.nci.cagrid.introduce.templates.NewServerConfigTemplate;
 import gov.nih.nci.cagrid.introduce.templates.NewServiceJNDIConfigTemplate;
@@ -89,7 +92,8 @@ import com.ibm.wsdl.PartImpl;
  *          Exp $
  */
 public class SyncTools {
-
+    public static final String DEPLOYMENT_VALIDATOR_FILE = "deploymentValidator.xml";
+    
     private static final Logger logger = Logger.getLogger(SyncTools.class);
 
 
@@ -407,6 +411,8 @@ public class SyncTools {
 
         table = null;
         System.gc();
+        
+        generateDeploymentValidatorList(info);
 
         // make a copy of the model to compate with next time
         Utils.copyFile(new File(baseDirectory.getAbsolutePath() + File.separator
@@ -417,6 +423,33 @@ public class SyncTools {
         Utils.copyFile(new File(baseDirectory.getAbsolutePath() + File.separator
             + IntroduceConstants.INTRODUCE_PROPERTIES_FILE), new File(baseDirectory.getAbsolutePath() + File.separator
             + IntroduceConstants.INTRODUCE_PROPERTIES_FILE + ".prev"));
+    }
+    
+    
+    private void generateDeploymentValidatorList(ServiceInformation info) throws Exception{
+        DeploymentValidatorDescriptor desc = new DeploymentValidatorDescriptor();
+        List descs = new ArrayList();
+        if(info.getExtensions()!=null && info.getExtensions().getExtension()!=null){
+            for(int i =0; i < info.getExtensions().getExtension().length; i ++){
+                ExtensionType ext = info.getExtensions().getExtension(i);
+                ServiceExtensionDescriptionType extDesc = ExtensionsLoader.getInstance().getServiceExtension(ext.getName());
+                if(extDesc.getServiceDeploymentValidator()!=null){
+                    ValidatorDescriptor vdesc = new ValidatorDescriptor(extDesc.getServiceDeploymentValidator());
+                    descs.add(vdesc);
+                }
+            }
+        }
+        ValidatorDescriptor[] vdescs = new ValidatorDescriptor[descs.size()];
+        descs.toArray(vdescs);
+        desc.setValidatorDescriptor(vdescs);
+        
+        try {
+            Utils.serializeDocument(info.getBaseDirectory() + File.separator + "tools" + File.separator + DEPLOYMENT_VALIDATOR_FILE , desc, DeploymentValidatorDescriptor.getTypeDesc().getXmlType());
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+      
     }
 
 

@@ -190,19 +190,10 @@
 				<include name="*.jar" />
 			</fileset>
 			<fileset dir="${lib.dir}">
-				<include name="caGrid-core*.jar" />
-				<include name="jdom*.jar"/>
+				<include name="*.jar" />
 			</fileset>
 			<fileset dir="${ext.globus.dir}/lib">
-				<include name="axis.jar" />
-				<include name="addressing-1.0.jar" />
-				<include name="xercesImpl.jar" />
-				<include name="jaxrpc.jar" />
-				<include name="wsrf_core.jar" />
-				<include name="cog-jglobus.jar" />
-				<include name="saaj.jar" />
-				<include name="commons-discovery.jar" />
-				<include name="wsrf_core_stubs.jar" />
+				<include name="*.jar" />
 			</fileset>
 		</path>
 	</target>

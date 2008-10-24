@@ -144,7 +144,10 @@ public class ServiceMetadataCreationPostProcessor implements CreationExtensionPo
     private String getServiceLibDir(Properties props) {
         return props.getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR) + File.separator + "lib";
     }
-
+    
+    private String getServiceToolsLibDir(Properties props) {
+        return props.getProperty(IntroduceConstants.INTRODUCE_SKELETON_DESTINATION_DIR) + File.separator + "tools" + File.separator + "lib";
+    }
 
     private void copySchema(String schemaName, String outputDir) throws Exception {
         File schemaFile = new File(ExtensionsLoader.EXTENSIONS_DIRECTORY + File.separator
@@ -167,7 +170,7 @@ public class ServiceMetadataCreationPostProcessor implements CreationExtensionPo
         File[] libs = libDir.listFiles(new FileFilter() {
             public boolean accept(File pathname) {
                 String name = pathname.getName();
-                return (name.endsWith(".jar") && (name.startsWith(MetadataConstants.METADATA_JAR_PREFIX)));
+                return (name.endsWith(".jar") && (name.startsWith(MetadataConstants.METADATA_JAR_PREFIX)) && !name.contains("validator"));
             }
         });
 
@@ -179,6 +182,30 @@ public class ServiceMetadataCreationPostProcessor implements CreationExtensionPo
                 Utils.copyFile(libs[i], outFile);
             }
             modifyClasspathFile(copiedLibs, props);
+        }
+        
+        
+        String toToolsDir = getServiceToolsLibDir(props);
+        File toolsdirectory = new File(toToolsDir);
+        if (!toolsdirectory.exists()) {
+            toolsdirectory.mkdirs();
+        }
+        // from the extension lib directory to the tools lib directory
+        File toolslibDir = new File(ExtensionsLoader.EXTENSIONS_DIRECTORY + File.separator + MetadataConstants.EXTENSION_NAME + File.separator + "lib");
+        File[] toolslibs = toolslibDir.listFiles(new FileFilter() {
+            public boolean accept(File pathname) {
+                String name = pathname.getName();
+                return (name.endsWith(".jar"));
+            }
+        });
+
+        if (toolslibs != null) {
+            File[] copiedLibs = new File[toolslibs.length];
+            for (int i = 0; i < toolslibs.length; i++) {
+                File outFile = new File(toToolsDir + File.separator + toolslibs[i].getName());
+                copiedLibs[i] = outFile;
+                Utils.copyFile(toolslibs[i], outFile);
+            }
         }
 
     }

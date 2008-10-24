@@ -170,6 +170,12 @@
 					<xs:documentation>Class to implement for removing the extension from a service. Must extend the ServiceExtensionRemover interface.</xs:documentation>
 				</xs:annotation>
 			</xs:element>
+			<xs:element name="ServiceDeploymentValidator" type="xs:string" minOccurs="0"
+				maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>Class that implements the DeploymentValidator interface.  This class should attempt to not depend on many jars and be light weight so that it can be deployed into the service so that it can be invoked when the service is deployed.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 			<xs:element ref="Properties"/>
 		</xs:sequence>
 		<xs:attribute name="displayName" type="xs:string" use="required"/>

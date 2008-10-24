@@ -30,6 +30,7 @@
     
     <conf name="extension" visibility="public"/>
    	<conf name="serviceTools" visibility="public" />
+    <conf name="serviceTasks" visibility="public" />
     <conf name="extension-test" visibility="public" extends="extension,impl-test"/>
     
   </configurations>
@@ -44,7 +45,7 @@
     <artifact name="caGrid-Introduce-updater-tests" conf="test" type="jar"/>
 
     <artifact name="caGrid-Introduce-serviceTools" conf="serviceTools" type="jar"/>
-    <artifact name="caGrid-Introduce-serviceTasks" conf="default" type="jar"/>
+    <artifact name="caGrid-Introduce-serviceTasks" conf="serviceTasks" type="jar"/>
     <artifact name="caGrid-Introduce-updater" conf="default" type="jar"/>
   </publications>
 

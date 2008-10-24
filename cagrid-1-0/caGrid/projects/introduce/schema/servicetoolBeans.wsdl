@@ -7,6 +7,8 @@
             xmlns="http://www.w3.org/2001/XMLSchema">
             <import namespace="gme://gov.nih.nci.cagrid.introduce/1/Deployment"
                 schemaLocation="./Deployment.xsd"/>
+                <import namespace="gme://gov.nih.nci.cagrid.introduce/1/DeploymentValidator"
+                schemaLocation="./DeploymentValidator.xsd"/>
         </schema>
     </types>
 </definitions>

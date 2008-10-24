@@ -8,5 +8,6 @@ gme\://gov.nih.nci.cagrid.introduce/1/Property=gov.nih.nci.cagrid.introduce.bean
 gme\://gov.nih.nci.cagrid.introduce/1/Services=gov.nih.nci.cagrid.introduce.beans.service
 gme\://gov.nih.nci.cagrid.introduce/1/Software=gov.nih.nci.cagrid.introduce.beans.software
 gme\://gov.nih.nci.cagrid.introduce/1/Deployment=gov.nih.nci.cagrid.introduce.servicetasks.beans.deployment
+gme\://gov.nih.nci.cagrid.introduce/1/DeploymentValidator=gov.nih.nci.cagrid.introduce.servicetasks.beans.deployment.validator
 http\://www.cagrid.org/1/grape=org.cagrid.grape.model
 gme\://gov.nih.nci.cagrid.introduce/1/Configuration=gov.nih.nci.cagrid.introduce.beans.configuration

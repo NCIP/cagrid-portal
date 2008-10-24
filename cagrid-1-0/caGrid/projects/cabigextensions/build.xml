@@ -23,7 +23,8 @@
 	<property name="stubs.classes.dir" value="${build.dir}/stubs/classes" />
 	<property name="jar.dir" value="${build.dir}/jars" />
 	<property name="project.jarfile" value="${jar.dir}/${project.jar.prefix}core${project.jar.suffix}" />
-	<property name="stubs.jarfile" value="${jar.dir}/${project.jar.prefix}stubs${project.jar.suffix}" />
+	<property name="project.validator.jarfile" value="${jar.dir}/${project.jar.prefix}validator${project.jar.suffix}" />
+    <property name="stubs.jarfile" value="${jar.dir}/${project.jar.prefix}stubs${project.jar.suffix}" />
 	<property name="lib.dir" value="${basedir}/lib" />
 	<property name="ext.lib.dir" value="${basedir}/ext/dependencies/jars" />
 	<property name="ext.targetgrid.dir" value="${basedir}/ext/target_grid" />
@@ -238,6 +239,11 @@
 				<attribute name="Main-Class" value="${main.class}" />
 			</manifest>
 		</jar>
+		<jar jarfile="${project.validator.jarfile}" basedir="${classes.dir}" includes="gov/nih/nci/cagrid/introduce/extensions/metadata/deployment/validator/**/*" defaultExcludes="false" update="no">
+			<manifest>
+				<attribute name="Created-By" value="${user.name}" />
+			</manifest>
+		</jar>
 	</target>
 
 
@@ -323,6 +329,13 @@
 				<installExtension extension.name="@{extension.name}" />
 			</sequential>
 		</for>
+		
+		<mkdir dir="${introduce.extensions.dir}/cagrid_metadata/lib"/>
+		<copy todir="${introduce.extensions.dir}/cagrid_metadata/lib">
+			<fileset dir="${jar.dir}">
+				<include name="**/*validator*.jar" />
+			</fileset>
+		</copy>
 	</target>
 
 
