@@ -15,17 +15,15 @@
 
   <configurations>
     <!-- Private Configurations-->
-    <conf name="endorsed" visibility="public"/>
-
+     <conf name="target_grid" visibility="private"/>
     <!-- Public Configurations-->
+    <conf name="endorsed" visibility="public"/>
     <conf name="default" visibility="public"/>
     <conf name="war" visibility="public" extends="default"/>
   </configurations>
 
-
   <publications>
     <artifact name="webssoserver" conf="war" type="war"/>
-    <!-- TODO: add jars when websso build supports them-->
   </publications>
 
   <dependencies>
@@ -33,6 +31,7 @@
     <dependency rev="latest.integration" org="caGrid" name="cds" conf="default->client"/>
     <dependency rev="latest.integration" org="caGrid" name="syncgts" conf="default->client"/>
     <dependency rev="latest.integration" org="caGrid" name="gridca" conf="default->default"/>
+    <dependency rev="${target.grid}" org="caGrid" name="target_grid" conf="target_grid->urls,trust,syncdesc" />
 
     <!-- External Dependencies -->
     <dependency rev="3.2.2" org="jasig" name="cas-server" conf="default->default"/>
