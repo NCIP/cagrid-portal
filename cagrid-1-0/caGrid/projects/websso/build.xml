@@ -6,6 +6,7 @@
 	<property file="${basedir}/build.properties" />
 
 	<property name="ext.dir" location="ext" />
+	<property environment="env"/>
 
 	<property name="lib.dir" location="lib" />
 	<property name="ext.lib.dir" location="${ext.dir}/dependencies/default/jars" />
@@ -43,7 +44,19 @@
 		</fileset>
 	</path>
 
-	<target name="build-war">
+	<target name="replace-tokens">
+		<replace dir="${src.resources.dir}" value="${user.home}">
+			<include name="**/*.xml" />
+			<replacetoken>@USER.HOME@</replacetoken>
+		</replace>
+		<property name="env.COMPUTERNAME" value="${env.HOSTNAME}" />
+		<replace dir="${webcontent.dir}/WEB-INF" value="${env.COMPUTERNAME}">
+			<include name="cas.properties" />
+			<replacetoken>@WEBSSO.SERVER@</replacetoken>
+		</replace>
+	</target>
+
+	<target name="build-war" depends="replace-tokens">
 		<jar destfile="${build.war.dir}/WEB-INF/lib/${ant.project.name}-conf-${project.version}.jar" basedir="${src.resources.dir}" />
 		<copy todir="${build.war.dir}/WEB-INF/lib"  overwrite="true">
 			<!-- TODO: make these includes only include what is necessary... and handle version conflicts -->
@@ -158,4 +171,5 @@
 		<antcall target="clean" />
 		<antcall target="war" />
 	</target>
+	
 </project>
