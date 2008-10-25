@@ -6,6 +6,8 @@ import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.common.SpecificServiceInformation;
+import gov.nih.nci.cagrid.introduce.templates.client.ClientConfigTemplate;
+import gov.nih.nci.cagrid.introduce.templates.client.ServiceClientBaseTemplate;
 import gov.nih.nci.cagrid.introduce.templates.common.ServiceConstantsBaseTemplate;
 import gov.nih.nci.cagrid.introduce.templates.common.ServiceConstantsTemplate;
 import gov.nih.nci.cagrid.introduce.upgrade.common.IntroduceUpgradeStatus;
@@ -69,17 +71,47 @@ public class Introduce_1_2__1_3_Upgrader extends IntroduceUpgraderBase {
 
     protected void upgrade() throws Exception {
 
+        // need to replace the build.xml
+        Utils.copyFile(new File(getServicePath() + File.separator + "build.xml"), new File(getServicePath()
+            + File.separator + "build.xml.OLD"));
+        Utils.copyFile(new File(getServicePath() + File.separator + "build-deploy.xml"), new File(getServicePath()
+            + File.separator + "build-deploy.xml.OLD"));
+        Utils.copyFile(new File("." + File.separator + "skeleton" + File.separator + "build.xml"), new File(
+            getServicePath() + File.separator + "build.xml"));
+        Utils.copyFile(new File("." + File.separator + "skeleton" + File.separator + "build-deploy.xml"), new File(
+            getServicePath() + File.separator + "build-deploy.xml"));
+        getStatus().addDescriptionLine("replaced build.xml and build-deploy.xml with new version");
+
+        
         upgradeJars();
-        fixConstants();
+        fixSource();
         fixWSDD();
 
         getStatus().setStatus(StatusBase.UPGRADE_OK);
     }
     
-    protected void fixConstants() throws Exception {
+    protected void fixSource() throws Exception {
         File srcDir = new File(getServiceInformation().getBaseDirectory().getAbsolutePath() + File.separator + "src");
         for(int serviceI = 0; serviceI < getServiceInformation().getServices().getService().length; serviceI++){
             ServiceType service = getServiceInformation().getServices().getService(serviceI);
+            
+            ServiceClientBaseTemplate clientBaseT = new ServiceClientBaseTemplate();
+            String clientBaseS = clientBaseT.generate(new SpecificServiceInformation(getServiceInformation(), service));
+            File clientBaseF = new File(srcDir.getAbsolutePath() + File.separator + CommonTools.getPackageDir(service)
+                + File.separator + "client" + File.separator + service.getName() + "ClientBase.java");
+
+            FileWriter clientBaseFW = new FileWriter(clientBaseF);
+            clientBaseFW.write(clientBaseS);
+            clientBaseFW.close();
+
+            ClientConfigTemplate clientConfigT = new ClientConfigTemplate();
+            String clientConfigS = clientConfigT.generate(new SpecificServiceInformation(getServiceInformation(), service));
+            File clientConfigF = new File(srcDir.getAbsolutePath() + File.separator + CommonTools.getPackageDir(service)
+                + File.separator + "client" + File.separator + "client-config.wsdd");
+            FileWriter clientConfigFW = new FileWriter(clientConfigF);
+            clientConfigFW.write(clientConfigS);
+            clientConfigFW.close();
+            
             //add new constants base class and new constants class
             ServiceConstantsTemplate resourceContanstsT = new ServiceConstantsTemplate();
             String resourceContanstsS = resourceContanstsT.generate(new SpecificServiceInformation(

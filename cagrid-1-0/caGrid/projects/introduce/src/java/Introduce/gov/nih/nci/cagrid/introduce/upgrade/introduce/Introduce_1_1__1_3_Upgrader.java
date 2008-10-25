@@ -11,6 +11,8 @@ import gov.nih.nci.cagrid.introduce.codegen.services.methods.SyncSource;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.common.SpecificServiceInformation;
+import gov.nih.nci.cagrid.introduce.templates.client.ClientConfigTemplate;
+import gov.nih.nci.cagrid.introduce.templates.client.ServiceClientBaseTemplate;
 import gov.nih.nci.cagrid.introduce.templates.common.ServiceConstantsBaseTemplate;
 import gov.nih.nci.cagrid.introduce.templates.common.ServiceConstantsTemplate;
 import gov.nih.nci.cagrid.introduce.templates.service.globus.ServiceConfigurationTemplate;
@@ -112,6 +114,23 @@ public class Introduce_1_1__1_3_Upgrader extends IntroduceUpgraderBase {
         for (int i = 0; i < getServiceInformation().getServices().getService().length; i++) {
             ServiceType service = getServiceInformation().getServices().getService(i);
 
+            ServiceClientBaseTemplate clientBaseT = new ServiceClientBaseTemplate();
+            String clientBaseS = clientBaseT.generate(new SpecificServiceInformation(getServiceInformation(), service));
+            File clientBaseF = new File(srcDir.getAbsolutePath() + File.separator + CommonTools.getPackageDir(service)
+                + File.separator + "client" + File.separator + service.getName() + "ClientBase.java");
+
+            FileWriter clientBaseFW = new FileWriter(clientBaseF);
+            clientBaseFW.write(clientBaseS);
+            clientBaseFW.close();
+
+            ClientConfigTemplate clientConfigT = new ClientConfigTemplate();
+            String clientConfigS = clientConfigT.generate(new SpecificServiceInformation(getServiceInformation(), service));
+            File clientConfigF = new File(srcDir.getAbsolutePath() + File.separator + CommonTools.getPackageDir(service)
+                + File.separator + "client" + File.separator + "client-config.wsdd");
+            FileWriter clientConfigFW = new FileWriter(clientConfigF);
+            clientConfigFW.write(clientConfigS);
+            clientConfigFW.close();
+            
             File oldConstantsFile = new File(srcDir.getAbsolutePath() + File.separator
                 + CommonTools.getPackageDir(service) + File.separator + "service" + File.separator + "globus"
                 + File.separator + "resource" + File.separator + "ResourceConstants.java");
