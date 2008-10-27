@@ -8,6 +8,7 @@ import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.common.SpecificServiceInformation;
 import gov.nih.nci.cagrid.introduce.templates.client.ClientConfigTemplate;
 import gov.nih.nci.cagrid.introduce.templates.client.ServiceClientBaseTemplate;
+import gov.nih.nci.cagrid.introduce.templates.client.ServiceClientTemplate;
 import gov.nih.nci.cagrid.introduce.templates.common.ServiceConstantsBaseTemplate;
 import gov.nih.nci.cagrid.introduce.templates.common.ServiceConstantsTemplate;
 import gov.nih.nci.cagrid.introduce.upgrade.common.IntroduceUpgradeStatus;
@@ -42,6 +43,7 @@ public class Introduce_1_2__1_3_Upgrader extends IntroduceUpgraderBase {
             String filename = name.getName();
             boolean core = filename.startsWith("caGrid-core") && filename.endsWith(".jar");
             boolean advertisement = filename.startsWith("caGrid-advertisement") && filename.endsWith(".jar");
+            boolean metadata = filename.startsWith("caGrid-metadata-common") && filename.endsWith(".jar");
             boolean introduce = filename.startsWith("caGrid-Introduce") && filename.endsWith(".jar");
             boolean security = (filename.startsWith("caGrid-ServiceSecurityProvider") || filename
                 .startsWith("caGrid-metadata-security"))
@@ -62,7 +64,7 @@ public class Introduce_1_2__1_3_Upgrader extends IntroduceUpgraderBase {
                 && filename.endsWith(".jar");
             boolean mobius = filename.startsWith("mobius") && filename.endsWith(".jar");
 
-            return core || advertisement || introduce || security || gridGrouper || csm || wsrf || mobius
+            return core || advertisement || metadata || introduce || security || gridGrouper || csm || wsrf || mobius
                 || otherSecurityJarsNotNeeded;
         }
 
@@ -94,6 +96,16 @@ public class Introduce_1_2__1_3_Upgrader extends IntroduceUpgraderBase {
         File srcDir = new File(getServiceInformation().getBaseDirectory().getAbsolutePath() + File.separator + "src");
         for(int serviceI = 0; serviceI < getServiceInformation().getServices().getService().length; serviceI++){
             ServiceType service = getServiceInformation().getServices().getService(serviceI);
+            
+            
+            ServiceClientTemplate clientT = new ServiceClientTemplate();
+            String clientS = clientT.generate(new SpecificServiceInformation(getServiceInformation(), service));
+            File clientF = new File(srcDir.getAbsolutePath() + File.separator + CommonTools.getPackageDir(service)
+                + File.separator + "client" + File.separator + service.getName() + "Client.java");
+
+            FileWriter clientFW = new FileWriter(clientF);
+            clientFW.write(clientS);
+            clientFW.close();
             
             ServiceClientBaseTemplate clientBaseT = new ServiceClientBaseTemplate();
             String clientBaseS = clientBaseT.generate(new SpecificServiceInformation(getServiceInformation(), service));
@@ -134,7 +146,7 @@ public class Introduce_1_2__1_3_Upgrader extends IntroduceUpgraderBase {
             resourcebContanstsFW.close(); 
         }
         
-        getStatus().addDescriptionLine("Refactored Constants file to now be developer editable");
+        getStatus().addDescriptionLine("Updated many source files to be better editable and extendable");
     }
 
 
@@ -172,11 +184,12 @@ public class Introduce_1_2__1_3_Upgrader extends IntroduceUpgraderBase {
 
     private void upgradeJars() throws Exception {
 
-        OldJarsFilter oldDkeletonLibFilter = new OldJarsFilter();
+        OldJarsFilter oldDskeletonLibFilter = new OldJarsFilter();
 
         // locate the old libs in the service
         File serviceLibDir = new File(getServicePath() + File.separator + "lib");
-        File[] serviceLibs = serviceLibDir.listFiles(oldDkeletonLibFilter);
+        
+        File[] serviceLibs = serviceLibDir.listFiles(oldDskeletonLibFilter);
         // delete the old libraries
         for (int i = 0; i < serviceLibs.length; i++) {
             boolean deleted = serviceLibs[i].delete();
@@ -187,6 +200,7 @@ public class Introduce_1_2__1_3_Upgrader extends IntroduceUpgraderBase {
             }
         }
 
+       
         FileFilter srcSkeletonLibFilter = new FileFilter() {
             public boolean accept(File name) {
                 String filename = name.getName();
@@ -205,6 +219,34 @@ public class Introduce_1_2__1_3_Upgrader extends IntroduceUpgraderBase {
                 getStatus().addDescriptionLine(skeletonLibs[i].getName() + " added");
             } catch (IOException ex) {
                 throw new Exception("Error copying library (" + skeletonLibs[i] + ") to service: " + ex.getMessage(),
+                    ex);
+            }
+        }
+        
+        
+        //remove the old introduce tools jar from 1.2
+        File serviceToolsLibDir = new File(getServicePath() + File.separator + "tools" + File.separator + "lib");
+        File skeletonToolsLibDir = new File("skeleton" + File.separator + "tools" + File.separator + "lib");
+        File serviceTasksJar = new File(serviceToolsLibDir.getAbsolutePath() + File.separator + "caGrid-Introduce-serviceTasks-1.2.jar");
+        serviceTasksJar.delete();
+        
+        
+        FileFilter srcSkeletonToolsLibFilter = new FileFilter() {
+            public boolean accept(File name) {
+                String filename = name.getName();
+                return filename.endsWith(".jar");
+            }
+        };
+        // copy new libraries into tools (every thing in skeleton/tool/lib)
+       
+        File[] skeletonToolsLibs = skeletonToolsLibDir.listFiles(srcSkeletonToolsLibFilter);
+        for (int i = 0; i < skeletonToolsLibs.length; i++) {
+            File out = new File(serviceToolsLibDir.getAbsolutePath() + File.separator + skeletonToolsLibs[i].getName());
+            try {
+                Utils.copyFile(skeletonToolsLibs[i], out);
+                getStatus().addDescriptionLine(skeletonToolsLibs[i].getName() + " added");
+            } catch (IOException ex) {
+                throw new Exception("Error copying library (" + skeletonToolsLibs[i] + ") to service: " + ex.getMessage(),
                     ex);
             }
         }

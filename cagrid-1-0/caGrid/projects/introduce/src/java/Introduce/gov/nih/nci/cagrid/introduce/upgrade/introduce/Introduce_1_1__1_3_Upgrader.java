@@ -267,7 +267,7 @@ public class Introduce_1_1__1_3_Upgrader extends IntroduceUpgraderBase {
 
                 }
 
-                getStatus().addDescriptionLine("replaced resource source files for service: " + service.getName());
+                getStatus().addDescriptionLine("Updated many source files to be better editable and extendable");
             }
         }
 
@@ -327,29 +327,25 @@ public class Introduce_1_1__1_3_Upgrader extends IntroduceUpgraderBase {
             throw new Exception("Cannot remove old soap fix jar: " + oldSoapJar.delete());
         }
 
-        // need to add the service tasks .jar to the tools lib directory
-        FileFilter serviceTasksFilter = new FileFilter() {
+        FileFilter srcSkeletonToolsLibFilter = new FileFilter() {
             public boolean accept(File name) {
                 String filename = name.getName();
-                return filename.matches("caGrid.*Introduce.*serviceTasks.*jar");
+                return filename.endsWith(".jar");
             }
         };
-        File serviceTasksJardir = new File("." + File.separator + "skeleton" + File.separator + "tools"
-            + File.separator + "lib");
-        File[] serviceTasksCandidates = serviceTasksJardir.listFiles(serviceTasksFilter);
-        if (serviceTasksCandidates.length == 1) {
-            File serviceTasksJar = serviceTasksCandidates[0];
-            if (serviceTasksJar.exists() && serviceTasksJar.canRead()) {
-                Utils.copyFile(serviceTasksJar, new File(getServicePath() + File.separator + "tools" + File.separator
-                    + "lib" + File.separator + serviceTasksJar.getName()));
-                getStatus().addDescriptionLine(
-                    "added service tasks jar to enable patching the soap bindings that get generated for custom beans");
-            } else {
-                throw new Exception("Cannot find or cannot read service tasks jar to copy into the service: "
-                    + serviceTasksJar.getAbsolutePath());
+        // copy new libraries into tools (every thing in skeleton/tool/lib)
+        File serviceToolsLibDir = new File(getServicePath() + File.separator + "tools" + File.separator + "lib");
+        File skeletonToolsLibDir = new File("skeleton" + File.separator + "tools" + File.separator + "lib");
+        File[] skeletonToolsLibs = skeletonToolsLibDir.listFiles(srcSkeletonToolsLibFilter);
+        for (int i = 0; i < skeletonToolsLibs.length; i++) {
+            File out = new File(serviceToolsLibDir.getAbsolutePath() + File.separator + skeletonToolsLibs[i].getName());
+            try {
+                Utils.copyFile(skeletonToolsLibs[i], out);
+                getStatus().addDescriptionLine(skeletonToolsLibs[i].getName() + " added");
+            } catch (IOException ex) {
+                throw new Exception("Error copying library (" + skeletonToolsLibs[i] + ") to service: " + ex.getMessage(),
+                    ex);
             }
-        } else {
-            throw new Exception("Cannot find service tasks jar to copy into the service");
         }
 
         
@@ -370,6 +366,7 @@ public class Introduce_1_1__1_3_Upgrader extends IntroduceUpgraderBase {
             String filename = name.getName();
             boolean core = filename.startsWith("caGrid-1.1-core") && filename.endsWith(".jar");
             boolean advertisement = filename.startsWith("caGrid-1.1-advertisement") && filename.endsWith(".jar");
+            boolean metadata = filename.startsWith("caGrid-1.1-metadata-common") && filename.endsWith(".jar");
             boolean introduce = filename.startsWith("caGrid-1.1-Introduce") && filename.endsWith(".jar");
             boolean security = (filename.startsWith("caGrid-1.1-ServiceSecurityProvider") || filename
                 .startsWith("caGrid-1.1-metadata-security"))
@@ -390,7 +387,7 @@ public class Introduce_1_1__1_3_Upgrader extends IntroduceUpgraderBase {
                 && filename.endsWith(".jar");
             boolean mobius = filename.startsWith("mobius") && filename.endsWith(".jar");
 
-            return core || advertisement || introduce || security || gridGrouper || csm || wsrf || mobius
+            return core || advertisement || metadata || introduce || security || gridGrouper || csm || wsrf || mobius
                 || otherSecurityJarsNotNeeded;
         }
 
