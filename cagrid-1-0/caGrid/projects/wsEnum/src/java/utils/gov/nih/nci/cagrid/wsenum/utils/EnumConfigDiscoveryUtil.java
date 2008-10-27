@@ -31,7 +31,7 @@ public class EnumConfigDiscoveryUtil {
         } catch (Exception ex) {
             String message = "Error determining configured IterImplType; using default";
             System.err.println(message);
-            LOG.error(message, ex);
+            LOG.info(message, ex);
         } finally {
             if (implType == null) {
                 // use default
