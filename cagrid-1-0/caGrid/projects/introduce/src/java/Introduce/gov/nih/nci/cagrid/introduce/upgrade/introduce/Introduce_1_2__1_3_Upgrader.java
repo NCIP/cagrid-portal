@@ -195,10 +195,6 @@ public class Introduce_1_2__1_3_Upgrader extends IntroduceUpgraderBase {
         };
 
         File skeletonLibDir = new File("skeleton" + File.separator + "lib");
-        // File extLibDir = new File("ext" + File.separator + "lib");
-        File csmLibDir = new File("ext" + File.separator + "skeleton" + File.separator + "csm" + File.separator + "lib");
-        File grouperLibDir = new File("ext" + File.separator + "skeleton" + File.separator + "gridgrouper"
-            + File.separator + "lib");
 
         // copy new libraries in (every thing in skeleton/lib)
         File[] skeletonLibs = skeletonLibDir.listFiles(srcSkeletonLibFilter);

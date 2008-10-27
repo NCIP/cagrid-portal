@@ -13,6 +13,7 @@ import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.common.SpecificServiceInformation;
 import gov.nih.nci.cagrid.introduce.templates.client.ClientConfigTemplate;
 import gov.nih.nci.cagrid.introduce.templates.client.ServiceClientBaseTemplate;
+import gov.nih.nci.cagrid.introduce.templates.client.ServiceClientTemplate;
 import gov.nih.nci.cagrid.introduce.templates.common.ServiceConstantsBaseTemplate;
 import gov.nih.nci.cagrid.introduce.templates.common.ServiceConstantsTemplate;
 import gov.nih.nci.cagrid.introduce.templates.service.globus.ServiceConfigurationTemplate;
@@ -114,6 +115,15 @@ public class Introduce_1_1__1_3_Upgrader extends IntroduceUpgraderBase {
         for (int i = 0; i < getServiceInformation().getServices().getService().length; i++) {
             ServiceType service = getServiceInformation().getServices().getService(i);
 
+            ServiceClientTemplate clientT = new ServiceClientTemplate();
+            String clientS = clientT.generate(new SpecificServiceInformation(getServiceInformation(), service));
+            File clientF = new File(srcDir.getAbsolutePath() + File.separator + CommonTools.getPackageDir(service)
+                + File.separator + "client" + File.separator + service.getName() + "Client.java");
+
+            FileWriter clientFW = new FileWriter(clientF);
+            clientFW.write(clientS);
+            clientFW.close();
+            
             ServiceClientBaseTemplate clientBaseT = new ServiceClientBaseTemplate();
             String clientBaseS = clientBaseT.generate(new SpecificServiceInformation(getServiceInformation(), service));
             File clientBaseF = new File(srcDir.getAbsolutePath() + File.separator + CommonTools.getPackageDir(service)
@@ -412,10 +422,6 @@ public class Introduce_1_1__1_3_Upgrader extends IntroduceUpgraderBase {
         };
 
         File skeletonLibDir = new File("skeleton" + File.separator + "lib");
-        // File extLibDir = new File("ext" + File.separator + "lib");
-        File csmLibDir = new File("ext" + File.separator + "skeleton" + File.separator + "csm" + File.separator + "lib");
-        File grouperLibDir = new File("ext" + File.separator + "skeleton" + File.separator + "gridgrouper"
-            + File.separator + "lib");
 
         // copy new libraries in (every thing in skeleton/lib)
         File[] skeletonLibs = skeletonLibDir.listFiles(srcSkeletonLibFilter);
@@ -430,36 +436,7 @@ public class Introduce_1_1__1_3_Upgrader extends IntroduceUpgraderBase {
             }
         }
 
-        if (oldDkeletonLibFilter.hadGridGrouperJars) {
-            // need to add in the optional grouper security jars
-            File[] gridGrouperLibs = grouperLibDir.listFiles();
-            for (int i = 0; i < gridGrouperLibs.length; i++) {
-                File out = new File(serviceLibDir.getAbsolutePath() + File.separator + gridGrouperLibs[i].getName());
-                try {
-                    Utils.copyFile(gridGrouperLibs[i], out);
-                    getStatus().addDescriptionLine(gridGrouperLibs[i].getName() + " added");
-                } catch (IOException ex) {
-                    throw new Exception("Error copying library (" + gridGrouperLibs[i] + ") to service: "
-                        + ex.getMessage(), ex);
-                }
-            }
-        }
-
-        if (oldDkeletonLibFilter.hadCSMJars) {
-            // need to add in the CSM security jars
-            File[] gridCSMLibs = csmLibDir.listFiles();
-            for (int i = 0; i < gridCSMLibs.length; i++) {
-                File out = new File(serviceLibDir.getAbsolutePath() + File.separator + gridCSMLibs[i].getName());
-                try {
-                    Utils.copyFile(gridCSMLibs[i], out);
-                    getStatus().addDescriptionLine(gridCSMLibs[i].getName() + " added");
-                } catch (IOException ex) {
-                    throw new Exception(
-                        "Error copying library (" + gridCSMLibs[i] + ") to service: " + ex.getMessage(), ex);
-                }
-            }
-        }
-
+        
     }
 
 
