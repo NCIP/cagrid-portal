@@ -8,6 +8,7 @@ import gov.nih.nci.cagrid.dcql.DCQLQuery;
 import gov.nih.nci.cagrid.dcqlresult.DCQLQueryResultsCollection;
 
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.Writer;
 
 import org.apache.axis.utils.XMLUtils;
@@ -131,6 +132,49 @@ public class SerializationUtils {
     
     
     /**
+     * Create an instance of CQLQuery from the specified input stream. The stream
+     * must contain an XML representation of the CQLQuery. If the reader is
+     * null, an IllegalArgumentException will be thown.
+     * 
+     * @param xmlStream
+     * @return an instance of CQLQueryResults from the specified input stream.
+     * @throws Exception
+     *             on null argument or deserialization failure
+     */
+    public static CQLQueryResults deserializeCQLQueryResults(InputStream xmlStream) throws Exception {
+        return deserializeCQLQueryResults(xmlStream, null);
+    }
+    
+    
+    /**
+     * Create an instance of CQLQueryResults from the specified input stream, 
+     * using the configuration supplied by the WSDD stream. The xml stream
+     * must contain an XML representation of the CQLQueryResults. If the reader is
+     * null, an IllegalArgumentException will be thown.
+     * 
+     * @param xmlStream
+     * @param wsddStream
+     * @return an instance of CQLQueryResuls from the specified input stream.
+     * @throws Exception
+     *             on null argument or deserialization failure
+     */
+    public static CQLQueryResults deserializeCQLQueryResults(InputStream xmlStream, InputStream wsddStream) throws Exception {
+        if (xmlStream == null) {
+            throw new IllegalArgumentException("Null is not a valid argument");
+        }
+        
+        InputStreamReader reader = new InputStreamReader(xmlStream);
+        CQLQueryResults results = null;
+        if (wsddStream == null) {
+            results = (CQLQueryResults) Utils.deserializeObject(reader, CQLQueryResults.class);
+        } else {
+            results = (CQLQueryResults) Utils.deserializeObject(reader, CQLQueryResults.class, wsddStream);
+        }
+        return results;
+    }
+    
+    
+    /**
      * Write the XML representation of the specified query results to the specified
      * writer. If either are null, an IllegalArgumentException will be thown.
      * 
@@ -162,5 +206,50 @@ public class SerializationUtils {
         } else {
             Utils.serializeObject(results, DCQLConstants.DCQL_RESULTS_QNAME, writer, wsddStream);
         }
+    }
+    
+    
+    /**
+     * Create an instance of DCQLQueryResultsCollection from the specified input stream. 
+     * The stream must contain an XML representation of the DCQLQueryResultsCollection.
+     * If the reader is null, an IllegalArgumentException will be thown.
+     * 
+     * @param xmlStream
+     * @return an instance of DCQLQueryResultsCollection from the specified input stream.
+     * @throws Exception
+     *             on null argument or deserialization failure
+     */
+    public static DCQLQueryResultsCollection deserializeDCQLQueryResults(InputStream xmlStream) throws Exception {
+        return deserializeDCQLQueryResults(xmlStream, null);
+    }
+    
+    
+    /**
+     * Create an instance of DCQLQueryResultsCollection from the specified input stream,
+     * using the configuration supplied by the WSDD stream.  The xml stream
+     * must contain an XML representation of the DCQLQueryResultsCollection.
+     * If the reader is null, an IllegalArgumentException will be thown.
+     * 
+     * @param xmlStream
+     * @param wsddStream
+     * @return an instance of DCQLQueryResultsCollection from the specified input stream.
+     * @throws Exception
+     *             on null argument or deserialization failure
+     */
+    public static DCQLQueryResultsCollection deserializeDCQLQueryResults(InputStream xmlStream, InputStream wsddStream) throws Exception {
+        if (xmlStream == null) {
+            throw new IllegalArgumentException("Null is not a valid argument");
+        }
+        
+        InputStreamReader reader = new InputStreamReader(xmlStream);
+        DCQLQueryResultsCollection results = null;
+        if (wsddStream == null) {
+            results = (DCQLQueryResultsCollection) Utils.deserializeObject(
+                reader, DCQLQueryResultsCollection.class);
+        } else {
+            results = (DCQLQueryResultsCollection) Utils.deserializeObject(
+                reader, DCQLQueryResultsCollection.class, wsddStream);
+        }
+        return results;
     }
 }
