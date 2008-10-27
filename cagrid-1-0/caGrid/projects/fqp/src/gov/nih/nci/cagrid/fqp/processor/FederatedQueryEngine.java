@@ -31,7 +31,7 @@ import org.globus.gsi.GlobusCredential;
 
 
 /**
- * FederatedQueryEngineMarkII
+ * FederatedQueryEngine
  * Performs federated query processing, broadcasting, and aggregation
  * 
  * @author David Ervin
@@ -77,6 +77,7 @@ public class FederatedQueryEngine {
             this.executionParameters = executionParameters;
         }
         if (workExecutor == null) {
+            LOG.debug("Creating threaded work executor with " + DEFAULT_POOL_SIZE + " threads");
             this.workExecutor = Executors.newFixedThreadPool(DEFAULT_POOL_SIZE);
         } else {
             this.workExecutor = workExecutor;
@@ -152,8 +153,8 @@ public class FederatedQueryEngine {
                 int resultsCount = results.getObjectResult().length;
                 // fire results range for target service
                 ResultsRange range = new ResultsRange();
-                range.setEndElementIndex(totalObjectResults);
-                range.setStartElementIndex(totalObjectResults + resultsCount);
+                range.setStartElementIndex(totalObjectResults);
+                range.setEndElementIndex(totalObjectResults + resultsCount);
                 fireServiceResultsRange(serviceURL, range);
                 totalObjectResults += resultsCount;
             } catch (InterruptedException ex) {
