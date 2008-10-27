@@ -1,6 +1,8 @@
 package org.cagrid.fqp.test.remote;
 
 import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.dcqlresult.DCQLQueryResultsCollection;
+import gov.nih.nci.cagrid.dcqlresult.DCQLResult;
 import gov.nih.nci.cagrid.fqp.client.FederatedQueryProcessorClient;
 import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainer;
 import gov.nih.nci.cagrid.testing.system.haste.Step;
@@ -10,6 +12,7 @@ import java.io.File;
 import java.util.Vector;
 
 import org.cagrid.fqp.results.metadata.ProcessingStatus;
+import org.cagrid.fqp.results.metadata.ResultsRange;
 import org.cagrid.fqp.results.metadata.ServiceConnectionStatus;
 import org.cagrid.fqp.results.metadata.TargetServiceStatus;
 import org.cagrid.fqp.test.common.FQPTestingConstants;
@@ -78,9 +81,11 @@ public class PartialResultsStory extends Story {
         // array of URLs of target data services
         String[] targetUrlsNonConnect = new String[] {serviceUrls[0], NON_CONNECT_SERVICE};
         
-        // ProcessingStatus nonConnectExpectedStatus = ProcessingStatus.Complete_With_Error;
         TargetServiceStatus okStatus = new TargetServiceStatus();
         okStatus.setConnectionStatus(ServiceConnectionStatus.OK);
+        int resultsCount = getResultsCount(FQPTestingConstants.GOLD_LOCATION + File.separator + "exampleDistributedJoin1_gold.xml");
+        ResultsRange range = new ResultsRange(resultsCount - 1, 0);
+        okStatus.setResultsRange(range);
         TargetServiceStatus nonConnectStatus = new TargetServiceStatus();
         nonConnectStatus.setConnectionStatus(ServiceConnectionStatus.Could_Not_Connect);
         
@@ -90,5 +95,22 @@ public class PartialResultsStory extends Story {
             ProcessingStatus.Complete_With_Error, new TargetServiceStatus[] {okStatus, nonConnectStatus}));
         
         return steps;
+    }
+    
+    
+    private int getResultsCount(String dcqlResultsFilename) {
+        DCQLQueryResultsCollection results = null;
+        try {
+            results = (DCQLQueryResultsCollection) Utils.deserializeDocument(
+                dcqlResultsFilename, DCQLQueryResultsCollection.class);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            fail("Error deserializing DCQL gold query results: " + ex.getMessage());
+        }
+        int count = 0;
+        for (DCQLResult result : results.getDCQLResult()) {
+            count += result.getCQLQueryResultCollection().getObjectResult().length;
+        }
+        return count;
     }
 }
