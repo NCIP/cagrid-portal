@@ -22,6 +22,7 @@ import org.apache.axis.types.URI.MalformedURIException;
 import org.cagrid.gme.domain.XMLSchema;
 import org.cagrid.gme.domain.XMLSchemaImportInformation;
 import org.cagrid.gme.domain.XMLSchemaNamespace;
+import org.cagrid.gme.test.system.steps.CheckCacheSchemasStep;
 import org.cagrid.gme.test.system.steps.CheckGetSchemaBundlesStep;
 import org.cagrid.gme.test.system.steps.CheckGetSchemasStep;
 import org.cagrid.gme.test.system.steps.CheckPublishedNamespacesStep;
@@ -34,6 +35,7 @@ import org.cagrid.gme.test.system.steps.SetDatabasePropertiesStep;
 public class GlobalModelExchangeStory extends ServiceStoryBase {
 
     private static final String SERVICE_TEMP_PATH = "tmp/TempGME";
+    private static final String RESULTS_TEMP_PATH = "tmp/results";
     private static final String GME_URL_PATH = "cagrid/GlobalModelExchange";
     private static final String PATH_TO_GME_PROJECT = "../../../caGrid/projects/globalModelExchange";
     public static final String GME_DIR_PROPERTY = "gme.service.dir";
@@ -132,6 +134,10 @@ public class GlobalModelExchangeStory extends ServiceStoryBase {
 
         // check the imports
         steps.add(new CheckGetSchemaBundlesStep(epr, caArrayIIs));
+
+        for (XMLSchemaImportInformation ii : caArrayIIs) {
+            steps.add(new CheckCacheSchemasStep(epr, ii.getTargetNamespace(), new File(RESULTS_TEMP_PATH)));
+        }
 
         // delete
         steps.add(new DeleteSchemasStep(epr, caArrayNamespaces));

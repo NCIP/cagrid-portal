@@ -81,7 +81,7 @@ probably should allow even published/deprecated schemas to be removed
   - because we are not making this distributed we can support this, we can even
     be sure to only do it if there is no one referencing it and warn if there is
 
-need to work out algorithm for submission (depends on how we impl the db layer):
+[DONE]need to work out algorithm for submission (depends on how we impl the db layer):
 -see GME_submission.doc in docs dir
    
 could support a GME "Context" as a basic container for everything
@@ -100,6 +100,11 @@ what query styles to we want to support?  may effect what XSOM information we st
 - free text on the schema
 - look into supporting xpointer for pointing inside schemas:
     - e.g. #xpointer(xs:schema/xs:element[@name="person"]) 
+
+consistent with the schema specification, the GME server ignores schemaLocation "hints" and
+resolves schema references via its rules.  To address potential issues with using the 
+schemas outside of the context of the GME, the client API has utilities for rewritting schemaLocation
+"hints" to be consistent with the file system 
 
 =================================================================================
 GME RESTRICTIONS FROM SCHEMA SPECIFICATION:
