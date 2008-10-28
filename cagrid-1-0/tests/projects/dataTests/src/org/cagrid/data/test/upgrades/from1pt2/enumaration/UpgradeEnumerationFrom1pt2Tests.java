@@ -1,4 +1,4 @@
-package org.cagrid.data.test.upgrades.from1pt1.sdk;
+package org.cagrid.data.test.upgrades.from1pt2.enumaration;
 
 import gov.nih.nci.cagrid.testing.system.haste.Step;
 import gov.nih.nci.cagrid.testing.system.haste.Story;
@@ -17,36 +17,36 @@ import org.cagrid.data.test.upgrades.UpgradeIntroduceServiceStep;
 import org.cagrid.data.test.upgrades.UpgradeTestConstants;
 
 /** 
- *  UpgradeSDKFrom1pt1Tests
- *  Tests to upgrade a data service backed by caCORE SDK 3.2 from 1.1 to current
+ *  UpgradeEnumerationFrom1pt2Tests
+ *  Tests to upgrade an enumeration data service from 1.2 to current
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Feb 20, 2007 
- * @version $Id: UpgradeSDKFrom1pt1Tests.java,v 1.4 2008-10-28 15:55:16 dervin Exp $ 
+ * @version $Id: UpgradeEnumerationFrom1pt2Tests.java,v 1.1 2008-10-28 15:55:16 dervin Exp $ 
  */
-public class UpgradeSDKFrom1pt1Tests extends Story {
-	public static final String SERVICE_ZIP_NAME = "DataServiceWithSdk_1-1.zip";
-    public static final String SERVICE_DIR_NAME = "DataServiceWithSdk_1-1";
-    public static final String SERVICE_NAME = "DataServiceWithSdk";
-    public static final String SERVICE_PACKAGE = "gov.nih.nci.cagrid.data.sdk";
-    public static final String SERVICE_NAMESPACE = "http://sdk.data.cagrid.nci.nih.gov/DataServiceWithSdk";
+public class UpgradeEnumerationFrom1pt2Tests extends Story {
+    public static final String SERVICE_ZIP_NAME = "DataServiceWithEnumeration_1-2.zip";
+    public static final String SERVICE_DIR_NAME = "DataServiceWithEnumeration_1-2";
+    public static final String SERVICE_NAME = "DataServiceWithEnumeration";
+    public static final String SERVICE_PACKAGE = "org.cagrid.test.data.with.enumeration";
+    public static final String SERVICE_NAMESPACE = "http://enumeration.with.data.test.cagrid.org/DataServiceWithEnumeration";
     
-	private DataTestCaseInfo testServiceInfo = null;
-    
+    private DataTestCaseInfo testServiceInfo = null;
+	
 	public String getDescription() {
-		return "Tests upgrade of a data service backed by the SDK 3.2 from version 1.1 to " + UpgradeTestConstants.DATA_CURRENT_VERSION;
+		return "Tests upgrade of an enumeration data service from version 1.2 to " + UpgradeTestConstants.DATA_CURRENT_VERSION;
 	}
     
     
     public String getName() {
-        return "Data Service backed by the SDK 3.2 from 1_1 to " 
+        return "Data Service With Enumeration 1_2 to " 
             + UpgradeTestConstants.DATA_CURRENT_VERSION.replace(".", "_") 
             + " Upgrade Tests";
     }
     
     
     public boolean storySetUp() {
-        this.testServiceInfo =  new DataTestCaseInfo() {
+        this.testServiceInfo = new DataTestCaseInfo() {
             public String getServiceDirName() {
                 return SERVICE_DIR_NAME;
             }
@@ -86,11 +86,11 @@ public class UpgradeSDKFrom1pt1Tests extends Story {
         Step deleteServiceStep = new DeleteOldServiceStep(testServiceInfo);
         deleteServiceStep.runStep();
     }
-    
+
 
 	public static void main(String[] args) {
 		TestRunner runner = new TestRunner();
-		TestResult result = runner.doRun(new TestSuite(UpgradeSDKFrom1pt1Tests.class));
+		TestResult result = runner.doRun(new TestSuite(UpgradeEnumerationFrom1pt2Tests.class));
 		System.exit(result.errorCount() + result.failureCount());
 	}
 }
