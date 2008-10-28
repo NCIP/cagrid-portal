@@ -93,19 +93,19 @@ public class DataServiceUpgradeFrom1pt2 extends ExtensionUpgraderBase {
     }
 	
 	
-	private void setCurrentExtensionVersion() throws UpgradeException {
+	private void setCurrentExtensionVersion() {
         getExtensionType().setVersion(UpgraderConstants.DATA_CURRENT_VERSION);
     }
 	
 	
-	private boolean serviceIsUsingEnumeration(Element extDataElement) throws UpgradeException {
+	private boolean serviceIsUsingEnumeration(Element extDataElement) {
         Element serviceFeaturesElement = extDataElement.getChild("ServiceFeatures", extDataElement.getNamespace());
         String useEnumValue = serviceFeaturesElement.getAttributeValue("useWsEnumeration");
         return Boolean.valueOf(useEnumValue).booleanValue();
     }
 
 
-    private boolean serviceIsUsingSdkDataSource(Element extDataElement) throws UpgradeException {
+    private boolean serviceIsUsingSdkDataSource(Element extDataElement) {
         Element serviceFeaturesElement = extDataElement.getChild("ServiceFeatures", extDataElement.getNamespace());
         String useSdkValue = serviceFeaturesElement.getAttributeValue("useSdkDataSource");
         return Boolean.valueOf(useSdkValue).booleanValue();
