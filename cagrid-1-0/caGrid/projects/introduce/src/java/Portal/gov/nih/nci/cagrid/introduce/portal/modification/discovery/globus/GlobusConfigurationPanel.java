@@ -14,130 +14,108 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import org.cagrid.grape.utils.ErrorDialog;
-import org.projectmobius.common.Namespace;
 
 
 public class GlobusConfigurationPanel extends JPanel {
 
-	public String currentNamespace = null;
+    public String currentNamespace = null;
 
-	public File currentSchemaFile = null;
+    public File currentSchemaFile = null;
 
-	protected File schemaDir;
+    protected File schemaDir;
 
-	private JComboBox namespaceComboBox = null;
+    private JComboBox namespaceComboBox = null;
 
-	private JLabel namespaceLabel = null;
+    private JLabel namespaceLabel = null;
 
-	public String filterType = null;
-
-
-	/**
-	 * This method initializes
-	 */
-	public GlobusConfigurationPanel() {
-		super();
-		initialize();
-	}
+    public String filterType = null;
 
 
-	/**
-	 * This method initializes this
-	 */
-	private void initialize() {
-		GridBagConstraints gridBagConstraints9 = new GridBagConstraints();
-		gridBagConstraints9.anchor = java.awt.GridBagConstraints.WEST;
-		gridBagConstraints9.gridy = 0;
-		gridBagConstraints9.insets = new java.awt.Insets(2, 2, 2, 2);
-		gridBagConstraints9.gridx = 0;
-		namespaceLabel = new JLabel();
-		namespaceLabel.setText("Schema");
-		GridBagConstraints gridBagConstraints7 = new GridBagConstraints();
-		gridBagConstraints7.fill = GridBagConstraints.HORIZONTAL;
-		gridBagConstraints7.gridy = 0;
-		gridBagConstraints7.weightx = 1.0;
-		gridBagConstraints7.anchor = java.awt.GridBagConstraints.WEST;
-		gridBagConstraints7.insets = new java.awt.Insets(2, 2, 2, 2);
-		gridBagConstraints7.weighty = 1.0D;
-		gridBagConstraints7.gridx = 1;
-		this.setLayout(new GridBagLayout());
-		this.add(getNamespaceComboBox(), gridBagConstraints7);
-		this.add(namespaceLabel, gridBagConstraints9);
-	}
+    /**
+     * This method initializes
+     */
+    public GlobusConfigurationPanel() {
+        super();
+        initialize();
+    }
 
 
-	public void discoverFromGlobus() {
-		List namespaces = null;
+    /**
+     * This method initializes this
+     */
+    private void initialize() {
+        GridBagConstraints gridBagConstraints9 = new GridBagConstraints();
+        gridBagConstraints9.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints9.gridy = 0;
+        gridBagConstraints9.insets = new java.awt.Insets(2, 2, 2, 2);
+        gridBagConstraints9.gridx = 0;
+        this.namespaceLabel = new JLabel();
+        this.namespaceLabel.setText("Schema");
+        GridBagConstraints gridBagConstraints7 = new GridBagConstraints();
+        gridBagConstraints7.fill = GridBagConstraints.HORIZONTAL;
+        gridBagConstraints7.gridy = 0;
+        gridBagConstraints7.weightx = 1.0;
+        gridBagConstraints7.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints7.insets = new java.awt.Insets(2, 2, 2, 2);
+        gridBagConstraints7.weighty = 1.0D;
+        gridBagConstraints7.gridx = 1;
+        this.setLayout(new GridBagLayout());
+        this.add(getNamespaceComboBox(), gridBagConstraints7);
+        this.add(this.namespaceLabel, gridBagConstraints9);
+    }
 
-		namespaces = IntroduceConstants.GLOBUS_NAMESPACES;
 
-		getNamespaceComboBox().removeAllItems();
-		for (int i = 0; i < namespaces.size(); i++) {
-			getNamespaceComboBox().addItem(namespaces.get(i));
-		}
-	}
+    public void discoverFromGlobus() {
+        List namespaces = IntroduceConstants.GLOBUS_NAMESPACES;
+
+        getNamespaceComboBox().removeAllItems();
+        for (int i = 0; i < namespaces.size(); i++) {
+            getNamespaceComboBox().addItem(namespaces.get(i));
+        }
+    }
 
 
-	/**
-	 * This method initializes jComboBox
-	 * 
-	 * @return javax.swing.JComboBox
-	 */
-	public JComboBox getNamespaceComboBox() {
-		if (namespaceComboBox == null) {
-			namespaceComboBox = new JComboBox();
-			namespaceComboBox.addItemListener(new java.awt.event.ItemListener() {
-				public void itemStateChanged(java.awt.event.ItemEvent e) {
-					if (e.getStateChange() == ItemEvent.SELECTED) {
-						String schemaNamespace = (String) namespaceComboBox.getSelectedItem();
-						currentNamespace = schemaNamespace;
-						try {
-							if (new File(CommonTools.getGlobusLocation())
-								.exists()) {
+    /**
+     * This method initializes jComboBox
+     * 
+     * @return javax.swing.JComboBox
+     */
+    public JComboBox getNamespaceComboBox() {
+        if (this.namespaceComboBox == null) {
+            this.namespaceComboBox = new JComboBox();
+            this.namespaceComboBox.addItemListener(new java.awt.event.ItemListener() {
+                public void itemStateChanged(java.awt.event.ItemEvent e) {
+                    if (e.getStateChange() == ItemEvent.SELECTED) {
+                        String schemaNamespace = (String) GlobusConfigurationPanel.this.namespaceComboBox
+                            .getSelectedItem();
+                        GlobusConfigurationPanel.this.currentNamespace = schemaNamespace;
+                        try {
+                            if (new File(CommonTools.getGlobusLocation()).exists()) {
 
-								File schemasDir = new File(CommonTools.getGlobusLocation()
-									+ File.separator + "share" + File.separator + "schema");
-								try {
-									currentSchemaFile = CommonTools.findSchema(schemaNamespace, schemasDir);
+                                File schemasDir = new File(CommonTools.getGlobusLocation() + File.separator + "share"
+                                    + File.separator + "schema");
+                                try {
+                                    GlobusConfigurationPanel.this.currentSchemaFile = CommonTools.findSchema(
+                                        schemaNamespace, schemasDir);
 
-								} catch (Exception ex) {
-									ErrorDialog
-										.showError("Globus Location seems to be wrong or corrupted:  Please check setting in the Preferences Menu!");
-								}
+                                } catch (Exception ex) {
+                                    ErrorDialog
+                                        .showError("Globus Location seems to be wrong or corrupted:  Please check setting in the Preferences Menu!");
+                                }
 
-							} else {
-							    ErrorDialog
+                            } else {
+                                ErrorDialog
+                                    .showError("Globus Location cannot be found:  Please check setting in the Preferences Menu!");
+                            }
+                        } catch (Exception ex) {
+                            ErrorDialog
                                 .showError("Globus Location cannot be found:  Please check setting in the Preferences Menu!");
-							}
-						} catch (Exception ex) {
-						    ErrorDialog
-                            .showError("Globus Location cannot be found:  Please check setting in the Preferences Menu!");
-						}
-					}
-				}
-			});
-		}
-		return namespaceComboBox;
-	}
-
-
-	class SchemaWrapper {
-		Namespace ns;
-
-
-		public Namespace getNamespace() {
-			return ns;
-		}
-
-
-		public SchemaWrapper(Namespace ns) {
-			this.ns = ns;
-		}
-
-
-		public String toString() {
-			return ns.getName();
-		}
-	}
+                        }
+                    }
+                }
+            });
+        }
+        return this.namespaceComboBox;
+    }
 
 } // @jve:decl-index=0:visual-constraint="10,10"
