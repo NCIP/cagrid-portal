@@ -25,6 +25,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Date;
 import java.util.Map;
 
@@ -38,6 +40,7 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
+import javax.swing.JTabbedPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
@@ -54,25 +57,18 @@ import net.sf.taverna.t2.facade.WorkflowInstanceFacade;
 import net.sf.taverna.t2.reference.ReferenceService;
 import net.sf.taverna.t2.reference.T2Reference;
 import net.sf.taverna.t2.workbench.reference.config.ReferenceConfiguration;
+import net.sf.taverna.t2.workbench.run.DataflowRun;
 import net.sf.taverna.t2.workbench.ui.zaria.UIComponentSPI;
 import net.sf.taverna.t2.workflowmodel.InvalidDataflowException;
 import net.sf.taverna.t2.workbench.icons.WorkbenchIcons;
 
-public class CaGridComponent extends JPanel implements UIComponentSPI {
+public class CaGridComponent extends JPanel implements UIComponentSPI, ActionListener {
 
 	private static final long serialVersionUID = 1L;
 	
 	private static CaGridComponent singletonInstance;
 	
-	 
-      
       private static Logger logger = Logger.getLogger(CaGridComponent.class);
-      
-     
-      
-     // private LogPanel uiLog = new LogPanel();
-      
-      //public JobsPanel jobs = new JobsPanel(uiLog);
       
       public JComboBox services;
            
@@ -81,18 +77,22 @@ public class CaGridComponent extends JPanel implements UIComponentSPI {
       private JButton runButton;
       
       private JButton refreshButton;
-      
-      private JButton editButton;
-      
+        
       private JButton inputButton;
-      
-      private JButton removeButton;
-      
+     
       private JButton testButton;
      
       private JList runList;
       
       private DefaultListModel runListModel;
+      
+      //result panel is divided into two parts
+      //left part is a list of run
+      //right part is a tabbed pane showing results of each run
+      
+      private JSplitPane resultPanel;
+      private JPanel runListPanel;
+      private JTabbedPane outputPanel;
 	
 	private CaGridComponent() {
 		  super(new GridBagLayout());
@@ -101,10 +101,6 @@ public class CaGridComponent extends JPanel implements UIComponentSPI {
           addRunButton();
           addInputButton();
           addRefreshButton();
-          //addJobs();
-       
-          //addLogs();
-          
           checkButtons();
           addResultPanel();
 		
@@ -118,14 +114,16 @@ public class CaGridComponent extends JPanel implements UIComponentSPI {
            c.weighty = 0.01;
            c.anchor = GridBagConstraints.SOUTHEAST;
            c.gridwidth = GridBagConstraints.REMAINDER;
-		   JSplitPane resultPanel = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
+		    resultPanel = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
 			resultPanel.setDividerLocation(200);
 			resultPanel.setBorder(null);
 			runListModel = new DefaultListModel();
 			runList = new JList(runListModel);
 			runList.setBorder(new EmptyBorder(5,5,5,5));
 			runList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-			JPanel runListPanel = new JPanel(new BorderLayout());
+		
+			
+			runListPanel = new JPanel(new BorderLayout());
 			runListPanel.setBorder(LineBorder.createGrayLineBorder());
 			
 			JLabel worklflowRunsLabel = new JLabel("Workflow Runs");
@@ -137,12 +135,17 @@ public class CaGridComponent extends JPanel implements UIComponentSPI {
 			runListPanel.add(scrollPane, BorderLayout.CENTER);		
 
 			resultPanel.setTopComponent(runListPanel);
-			JPanel outputPanel = new JPanel(new BorderLayout());
+			//TODO outputPanel should be a tabbed pane?
+			//each output should be a (xml) string
+			outputPanel = new JTabbedPane();
+			
+			//outputPanel = new JPanel(new BorderLayout());
 			outputPanel.setBorder(LineBorder.createGrayLineBorder());
 			outputPanel.setBackground(Color.WHITE);
 			outputPanel.add(new JLabel("Workflow Execution Outputs shows here.", JLabel.CENTER), BorderLayout.CENTER);
 			resultPanel.setBottomComponent(outputPanel);
 			add(resultPanel,c);
+			
 		
 	}
 	protected void addHeader() {
@@ -180,6 +183,8 @@ public class CaGridComponent extends JPanel implements UIComponentSPI {
    
            //Action connectService = new ConnectServiceAction();
            testButton = new JButton("Test Service", WorkbenchIcons.updateIcon);
+           testButton.setActionCommand("test");
+           testButton.addActionListener(this);
            add(testButton,c);
            
            //Action addService = new NewServiceAction();
@@ -222,7 +227,8 @@ public class CaGridComponent extends JPanel implements UIComponentSPI {
        inputButton = new JButton("Add Input", WorkbenchIcons.inputIcon);
        inputButton.setEnabled(false);
        add(inputButton, c);
-       //TODO add a button here? -- configure input files
+       //TODO add a tabbed dialog to configure the input?
+       //each input is either a file or a string
 }
    
    private void addRefreshButton() {
@@ -233,56 +239,32 @@ public class CaGridComponent extends JPanel implements UIComponentSPI {
            refreshButton = new JButton("Refresh Results", WorkbenchIcons.refreshIcon);
            refreshButton.setEnabled(false);
            add(refreshButton, c);
-           //TODO add a button here? -- configure input files
+          
    }
    
    
-   protected void addJobs() {
-           GridBagConstraints c = new GridBagConstraints();
-           c.gridx = 0;
-           c.gridwidth = GridBagConstraints.REMAINDER;
-           c.gridy = ++row;
-           c.fill = GridBagConstraints.BOTH;
-           c.weightx = 0.1;
-           c.weighty = 0.1;
-           JScrollPane scrollPane = new JScrollPane();
-           //JScrollPane scrollPane = new JScrollPane(jobs);
-           add(scrollPane, c);
-   }
-   
-   protected void addFiller() {
-           GridBagConstraints c = new GridBagConstraints();
-           c.gridx = 0;
-           c.gridy = ++row;
-           c.fill = GridBagConstraints.BOTH;
-           c.weightx = 0.01;
-           c.weighty = 0.01;
-           c.anchor = GridBagConstraints.SOUTHEAST;
-           c.gridwidth = GridBagConstraints.REMAINDER;
-           add(new JPanel(), c);
-   }
-   
-   protected void addLogs() {
-           GridBagConstraints c = new GridBagConstraints();
-           c.anchor = GridBagConstraints.CENTER;
-           c.fill = GridBagConstraints.BOTH;
-           c.weightx = 0.1;
-           c.weighty = 0.0;
-           c.gridwidth = GridBagConstraints.REMAINDER;
-           c.gridx = 0;
-           c.gridy = ++row;
-           JScrollPane scrollPane = new JScrollPane();
-           //JScrollPane scrollPane = new JScrollPane(uiLog);
-           scrollPane.setMinimumSize(new Dimension(0, 100));
-           add(scrollPane, c);
-   }
-	
+ 
+   public void runWorkflow() {
+		CaGridRun runComponent = new CaGridRun();
+		runListModel.add(0, runComponent);
+		runList.setSelectedIndex(0);	
+		
+	}
 	public static CaGridComponent getInstance() {
 		if (singletonInstance == null) {
 			singletonInstance = new CaGridComponent();
 		}
 		return singletonInstance;
 	}
+	
+	 public void actionPerformed(ActionEvent e) {
+	        if("test".equals(e.getActionCommand())){
+	        	//TODO test whether the caGrid execution service is online
+	        	System.out.println("testing caGrid services......successful!");
+	        	      	
+	        }
+	    }
+
 	
 	public ImageIcon getIcon() {
 		// TODO Auto-generated method stub
