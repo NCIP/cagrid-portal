@@ -9,6 +9,7 @@ import org.cagrid.gaards.dorian.idp.IdentityProvider;
 import org.cagrid.gaards.dorian.idp.IdentityProviderProperties;
 import org.cagrid.gaards.dorian.stubs.types.DorianInternalFault;
 import org.cagrid.tools.database.Database;
+import org.cagrid.tools.events.EventManager;
 import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 import org.springframework.beans.factory.xml.XmlBeanFactory;
 import org.springframework.core.io.AbstractResource;
@@ -42,6 +43,10 @@ public class BeanUtils {
 
     public IdentityProvider getIdentityProvider() throws Exception {
         return (IdentityProvider) factory.getBean(ConfigurationConstants.IDP_BEAN);
+    }
+    
+    public EventManager getEventManager() throws Exception {
+        return (EventManager) factory.getBean(ConfigurationConstants.EVENT_MANAGER_BEAN);
     }
 
 

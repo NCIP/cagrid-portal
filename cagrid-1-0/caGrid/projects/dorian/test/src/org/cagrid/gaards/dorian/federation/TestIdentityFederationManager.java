@@ -27,6 +27,7 @@ import junit.framework.TestCase;
 
 import org.apache.xml.security.signature.XMLSignature;
 import org.cagrid.gaards.dorian.ca.CertificateAuthority;
+import org.cagrid.gaards.dorian.common.EventConstants;
 import org.cagrid.gaards.dorian.common.Lifetime;
 import org.cagrid.gaards.dorian.service.PropertyManager;
 import org.cagrid.gaards.dorian.stubs.types.DorianInternalFault;
@@ -41,6 +42,8 @@ import org.cagrid.gaards.pki.Credential;
 import org.cagrid.gaards.pki.KeyUtil;
 import org.cagrid.gaards.saml.encoding.SAMLConstants;
 import org.cagrid.tools.database.Database;
+import org.cagrid.tools.events.Event;
+import org.cagrid.tools.events.EventManager;
 import org.globus.gsi.GlobusCredential;
 
 
@@ -70,6 +73,8 @@ public class TestIdentityFederationManager extends TestCase {
     private CA memoryCA;
 
     private PropertyManager props;
+    
+    private EventManager eventManager;
 
 
     public void testRequestHostCertificateManualApproval() {
@@ -79,7 +84,7 @@ public class TestIdentityFederationManager extends TestCase {
             IdentityFederationProperties conf = getConf(false);
             FederationDefaults defaults = getDefaults();
             defaults.setDefaultIdP(idp.getIdp());
-            ifs = new IdentityFederationManager(conf, db, props, ca, defaults);
+            ifs = new IdentityFederationManager(conf, db, props, ca, eventManager, defaults);
             String adminSubject = UserManager.getUserSubject(conf.getIdentityAssignmentPolicy(), ca.getCACertificate()
                 .getSubjectDN().getName(), idp.getIdp(), INITIAL_ADMIN);
             String adminGridId = UserManager.subjectToIdentity(adminSubject);
@@ -116,7 +121,7 @@ public class TestIdentityFederationManager extends TestCase {
             IdentityFederationProperties conf = getConf(true);
             FederationDefaults defaults = getDefaults();
             defaults.setDefaultIdP(idp.getIdp());
-            ifs = new IdentityFederationManager(conf, db, props, ca, defaults);
+            ifs = new IdentityFederationManager(conf, db, props, ca, eventManager, defaults);
             String adminSubject = UserManager.getUserSubject(conf.getIdentityAssignmentPolicy(), ca.getCACertificate()
                 .getSubjectDN().getName(), idp.getIdp(), INITIAL_ADMIN);
             String adminGridId = UserManager.subjectToIdentity(adminSubject);
@@ -150,7 +155,7 @@ public class TestIdentityFederationManager extends TestCase {
             IdentityFederationProperties conf = getConf(false);
             FederationDefaults defaults = getDefaults();
             defaults.setDefaultIdP(idp.getIdp());
-            ifs = new IdentityFederationManager(conf, db, props, ca, defaults);
+            ifs = new IdentityFederationManager(conf, db, props, ca, eventManager, defaults);
             String adminSubject = UserManager.getUserSubject(conf.getIdentityAssignmentPolicy(), ca.getCACertificate()
                 .getSubjectDN().getName(), idp.getIdp(), INITIAL_ADMIN);
             String adminGridId = UserManager.subjectToIdentity(adminSubject);
@@ -185,7 +190,7 @@ public class TestIdentityFederationManager extends TestCase {
             IdentityFederationProperties conf = getConf(false);
             FederationDefaults defaults = getDefaults();
             defaults.setDefaultIdP(idp.getIdp());
-            ifs = new IdentityFederationManager(conf, db, props, ca, defaults);
+            ifs = new IdentityFederationManager(conf, db, props, ca, eventManager, defaults);
             String adminSubject = UserManager.getUserSubject(conf.getIdentityAssignmentPolicy(), ca.getCACertificate()
                 .getSubjectDN().getName(), idp.getIdp(), INITIAL_ADMIN);
             String adminGridId = UserManager.subjectToIdentity(adminSubject);
@@ -222,7 +227,7 @@ public class TestIdentityFederationManager extends TestCase {
             IdentityFederationProperties conf = getConf(true);
             FederationDefaults defaults = getDefaults();
             defaults.setDefaultIdP(idp.getIdp());
-            ifs = new IdentityFederationManager(conf, db, props, ca, defaults);
+            ifs = new IdentityFederationManager(conf, db, props, ca, eventManager, defaults);
             String adminSubject = UserManager.getUserSubject(conf.getIdentityAssignmentPolicy(), ca.getCACertificate()
                 .getSubjectDN().getName(), idp.getIdp(), INITIAL_ADMIN);
             String adminGridId = UserManager.subjectToIdentity(adminSubject);
@@ -292,7 +297,7 @@ public class TestIdentityFederationManager extends TestCase {
             IdentityFederationProperties conf = getConf(false);
             FederationDefaults defaults = getDefaults();
             defaults.setDefaultIdP(idp.getIdp());
-            ifs = new IdentityFederationManager(conf, db, props, ca, defaults);
+            ifs = new IdentityFederationManager(conf, db, props, ca, eventManager, defaults);
             String adminSubject = UserManager.getUserSubject(conf.getIdentityAssignmentPolicy(), ca.getCACertificate()
                 .getSubjectDN().getName(), idp.getIdp(), INITIAL_ADMIN);
             String adminGridId = UserManager.subjectToIdentity(adminSubject);
@@ -324,7 +329,7 @@ public class TestIdentityFederationManager extends TestCase {
             IdentityFederationProperties conf = getConf(true);
             FederationDefaults defaults = getDefaults();
             defaults.setDefaultIdP(idp.getIdp());
-            ifs = new IdentityFederationManager(conf, db, props, ca, defaults);
+            ifs = new IdentityFederationManager(conf, db, props, ca, eventManager, defaults);
             String adminSubject = UserManager.getUserSubject(conf.getIdentityAssignmentPolicy(), ca.getCACertificate()
                 .getSubjectDN().getName(), idp.getIdp(), INITIAL_ADMIN);
             String adminGridId = UserManager.subjectToIdentity(adminSubject);
@@ -368,7 +373,7 @@ public class TestIdentityFederationManager extends TestCase {
             IdentityFederationProperties conf = getConf(false);
             FederationDefaults defaults = getDefaults();
             defaults.setDefaultIdP(idp.getIdp());
-            ifs = new IdentityFederationManager(conf, db, props, ca, defaults);
+            ifs = new IdentityFederationManager(conf, db, props, ca, eventManager, defaults);
             String adminSubject = UserManager.getUserSubject(conf.getIdentityAssignmentPolicy(), ca.getCACertificate()
                 .getSubjectDN().getName(), idp.getIdp(), INITIAL_ADMIN);
             String adminGridId = UserManager.subjectToIdentity(adminSubject);
@@ -400,7 +405,7 @@ public class TestIdentityFederationManager extends TestCase {
             IdentityFederationProperties conf = getConf(false);
             FederationDefaults defaults = getDefaults();
             defaults.setDefaultIdP(idp.getIdp());
-            ifs = new IdentityFederationManager(conf, db, props, ca, defaults);
+            ifs = new IdentityFederationManager(conf, db, props, ca, eventManager, defaults);
             String adminSubject = UserManager.getUserSubject(conf.getIdentityAssignmentPolicy(), ca.getCACertificate()
                 .getSubjectDN().getName(), idp.getIdp(), INITIAL_ADMIN);
             String adminGridId = UserManager.subjectToIdentity(adminSubject);
@@ -473,7 +478,7 @@ public class TestIdentityFederationManager extends TestCase {
             IdentityFederationProperties conf = getConf(true);
             FederationDefaults defaults = getDefaults();
             defaults.setDefaultIdP(idp.getIdp());
-            ifs = new IdentityFederationManager(conf, db, props, ca, defaults);
+            ifs = new IdentityFederationManager(conf, db, props, ca, eventManager, defaults);
             String adminSubject = UserManager.getUserSubject(conf.getIdentityAssignmentPolicy(), ca.getCACertificate()
                 .getSubjectDN().getName(), idp.getIdp(), INITIAL_ADMIN);
             String adminGridId = UserManager.subjectToIdentity(adminSubject);
@@ -523,7 +528,7 @@ public class TestIdentityFederationManager extends TestCase {
             IdentityFederationProperties conf = getConf(false);
             FederationDefaults defaults = getDefaults();
             defaults.setDefaultIdP(idp.getIdp());
-            ifs = new IdentityFederationManager(conf, db, props, ca, defaults);
+            ifs = new IdentityFederationManager(conf, db, props, ca, eventManager, defaults);
             String adminSubject = UserManager.getUserSubject(conf.getIdentityAssignmentPolicy(), ca.getCACertificate()
                 .getSubjectDN().getName(), idp.getIdp(), INITIAL_ADMIN);
             String adminGridId = UserManager.subjectToIdentity(adminSubject);
@@ -555,7 +560,7 @@ public class TestIdentityFederationManager extends TestCase {
             IdentityFederationProperties conf = getConf(false);
             FederationDefaults defaults = getDefaults();
             defaults.setDefaultIdP(idp.getIdp());
-            ifs = new IdentityFederationManager(conf, db, props, ca, defaults);
+            ifs = new IdentityFederationManager(conf, db, props, ca, eventManager, defaults);
             String adminSubject = UserManager.getUserSubject(conf.getIdentityAssignmentPolicy(), ca.getCACertificate()
                 .getSubjectDN().getName(), idp.getIdp(), INITIAL_ADMIN);
             String adminGridId = UserManager.subjectToIdentity(adminSubject);
@@ -614,7 +619,7 @@ public class TestIdentityFederationManager extends TestCase {
             IdentityFederationProperties conf = getConf();
             FederationDefaults defaults = getDefaults();
             defaults.setDefaultIdP(idp.getIdp());
-            ifs = new IdentityFederationManager(conf, db, props, ca, defaults);
+            ifs = new IdentityFederationManager(conf, db, props, ca, eventManager, defaults);
 
             String adminSubject = UserManager.getUserSubject(conf.getIdentityAssignmentPolicy(), ca.getCACertificate()
                 .getSubjectDN().getName(), idp.getIdp(), INITIAL_ADMIN);
@@ -815,7 +820,7 @@ public class TestIdentityFederationManager extends TestCase {
             IdentityFederationProperties conf = getConf();
             FederationDefaults defaults = getDefaults();
             defaults.setDefaultIdP(idp.getIdp());
-            ifs = new IdentityFederationManager(conf, db, props, ca, defaults);
+            ifs = new IdentityFederationManager(conf, db, props, ca, eventManager, defaults);
             String uidPrefix = "user";
             String adminSubject = UserManager.getUserSubject(conf.getIdentityAssignmentPolicy(), ca.getCACertificate()
                 .getSubjectDN().getName(), idp.getIdp(), INITIAL_ADMIN);
@@ -885,7 +890,7 @@ public class TestIdentityFederationManager extends TestCase {
             IdentityFederationProperties conf = getConf();
             FederationDefaults defaults = getDefaults();
             defaults.setDefaultIdP(idp.getIdp());
-            ifs = new IdentityFederationManager(conf, db, props, ca, defaults);
+            ifs = new IdentityFederationManager(conf, db, props, ca, eventManager, defaults);
             KeyPair pair = KeyUtil.generateRSAKeyPair1024();
             PublicKey publicKey = pair.getPublic();
             CertificateLifetime lifetime = getLifetime();
@@ -918,7 +923,7 @@ public class TestIdentityFederationManager extends TestCase {
             IdentityFederationProperties conf = getConf();
             FederationDefaults defaults = getDefaults();
             defaults.setDefaultIdP(idp.getIdp());
-            ifs = new IdentityFederationManager(conf, db, props, ca, defaults);
+            ifs = new IdentityFederationManager(conf, db, props, ca, eventManager, defaults);
             KeyPair pair = KeyUtil.generateRSAKeyPair1024();
             PublicKey publicKey = pair.getPublic();
             CertificateLifetime lifetime = getLifetime();
@@ -953,7 +958,7 @@ public class TestIdentityFederationManager extends TestCase {
             IdentityFederationProperties conf = getExpiringCredentialsConf();
             FederationDefaults defaults = getDefaults();
             defaults.setDefaultIdP(idp.getIdp());
-            ifs = new IdentityFederationManager(conf, db, props, ca, defaults);
+            ifs = new IdentityFederationManager(conf, db, props, ca, eventManager, defaults);
             String gridId = UserManager.subjectToIdentity(UserManager.getUserSubject(
                 conf.getIdentityAssignmentPolicy(), ca.getCACertificate().getSubjectDN().getName(), idp.getIdp(),
                 INITIAL_ADMIN));
@@ -992,7 +997,7 @@ public class TestIdentityFederationManager extends TestCase {
             IdentityFederationProperties conf = getExpiringCredentialsConf();
             FederationDefaults defaults = getDefaults();
             defaults.setDefaultIdP(idp.getIdp());
-            ifs = new IdentityFederationManager(conf, db, props, ca, defaults);
+            ifs = new IdentityFederationManager(conf, db, props, ca, eventManager, defaults);
             String gridId = UserManager.subjectToIdentity(UserManager.getUserSubject(
                 conf.getIdentityAssignmentPolicy(), ca.getCACertificate().getSubjectDN().getName(), idp.getIdp(),
                 defaults.getDefaultUser().getUID()));
@@ -1025,7 +1030,7 @@ public class TestIdentityFederationManager extends TestCase {
             IdentityFederationProperties conf = getConf();
             FederationDefaults defaults = getDefaults();
             defaults.setDefaultIdP(idp.getIdp());
-            ifs = new IdentityFederationManager(conf, db, props, ca, defaults);
+            ifs = new IdentityFederationManager(conf, db, props, ca, eventManager, defaults);
             Thread.sleep(500);
             try {
                 CertificateLifetime valid = new CertificateLifetime();
@@ -1059,7 +1064,7 @@ public class TestIdentityFederationManager extends TestCase {
             IdentityFederationProperties conf = getConf();
             FederationDefaults defaults = getDefaults();
             defaults.setDefaultIdP(idp.getIdp());
-            ifs = new IdentityFederationManager(conf, db, props, ca, defaults);
+            ifs = new IdentityFederationManager(conf, db, props, ca, eventManager, defaults);
             try {
                 KeyPair pair = KeyUtil.generateRSAKeyPair1024();
                 PublicKey publicKey = pair.getPublic();
@@ -1090,7 +1095,7 @@ public class TestIdentityFederationManager extends TestCase {
             IdentityFederationProperties conf = getConf();
             FederationDefaults defaults = getDefaults();
             defaults.setDefaultIdP(idp.getIdp());
-            ifs = new IdentityFederationManager(conf, db, props, ca, defaults);
+            ifs = new IdentityFederationManager(conf, db, props, ca, eventManager, defaults);
 
             try {
                 KeyPair pair = KeyUtil.generateRSAKeyPair1024();
@@ -1120,7 +1125,7 @@ public class TestIdentityFederationManager extends TestCase {
             IdentityFederationProperties conf = getConf();
             FederationDefaults defaults = getDefaults();
             defaults.setDefaultIdP(idp.getIdp());
-            ifs = new IdentityFederationManager(conf, db, props, ca, defaults);
+            ifs = new IdentityFederationManager(conf, db, props, ca, eventManager, defaults);
             try {
                 KeyPair pair = KeyUtil.generateRSAKeyPair1024();
                 PublicKey publicKey = pair.getPublic();
@@ -1149,7 +1154,7 @@ public class TestIdentityFederationManager extends TestCase {
             IdentityFederationProperties conf = getExpiringCredentialsConf();
             FederationDefaults defaults = getDefaults();
             defaults.setDefaultIdP(idp0.getIdp());
-            ifs = new IdentityFederationManager(conf, db, props, ca, defaults);
+            ifs = new IdentityFederationManager(conf, db, props, ca, eventManager, defaults);
             String gridId = UserManager.subjectToIdentity(UserManager.getUserSubject(
                 conf.getIdentityAssignmentPolicy(), ca.getCACertificate().getSubjectDN().getName(), idp0.getIdp(),
                 defaults.getDefaultUser().getUID()));
@@ -1209,7 +1214,7 @@ public class TestIdentityFederationManager extends TestCase {
             IdentityFederationProperties conf = getConf();
             FederationDefaults defaults = getDefaults();
             defaults.setDefaultIdP(idp.getIdp());
-            ifs = new IdentityFederationManager(conf, db, props, ca, defaults);
+            ifs = new IdentityFederationManager(conf, db, props, ca, eventManager, defaults);
             KeyPair pair = KeyUtil.generateRSAKeyPair1024();
             PublicKey publicKey = pair.getPublic();
             CertificateLifetime lifetime = getLifetime();
@@ -1714,12 +1719,35 @@ public class TestIdentityFederationManager extends TestCase {
         String expectedIdentity = UserManager.subjectToIdentity(UserManager.getUserSubject(ifs
             .getIdentityAssignmentPolicy(), ca.getCACertificate().getSubjectDN().getName(), idp.getIdp(), uid));
         checkCertificate(expectedIdentity, lifetime, pair.getPrivate(), cert);
+        printAuditingResults(ifs.searchAuditLogs(adminGridId, getAccountCreatedAuditingFilter(expectedIdentity)));
         GridUserFilter f1 = new GridUserFilter();
         f1.setIdPId(idp.getIdp().getId());
         f1.setUID(uid);
         GridUser[] users = ifs.findUsers(adminGridId, f1);
         assertEquals(1, users.length);
         return users[0];
+    }
+    
+    private FederationAuditFilter getAccountCreatedAuditingFilter(String gid){
+        FederationAuditFilter f = new FederationAuditFilter();
+        f.setTargetId(gid);
+        f.setReportingPartyId(EventConstants.SYSTEM_ID);
+        f.setAuditingType(FederationAuditing.AccountCreated);
+        return f;
+    }
+    
+    private void printAuditingResults(List<FederationAuditRecord> results){
+        for(int i=0; i<results.size(); i++){
+            FederationAuditRecord e = results.get(i);
+            System.out.println();
+            System.out.println("*****************************************************************************");
+            System.out.println("Target Party:    "+e.getTargetId());
+            System.out.println("Reporting Party: "+e.getReportingPartyId());
+            System.out.println("Event Type:      "+e.getAuditingType().getValue());
+            System.out.println("Event Message  : "+e.getAuditingMessage());
+            System.out.println("*****************************************************************************");
+            System.out.println();
+        }
     }
 
 
@@ -1731,6 +1759,8 @@ public class TestIdentityFederationManager extends TestCase {
             ca = Utils.getCA();
             memoryCA = new CA(Utils.getCASubject());
             props = new PropertyManager(db);
+            eventManager = Utils.getEventManager();
+            eventManager.clearHandlers();
         } catch (Exception e) {
             FaultUtil.printFault(e);
             fail("Exception occured:" + e.getMessage());
@@ -1741,6 +1771,7 @@ public class TestIdentityFederationManager extends TestCase {
     protected void tearDown() throws Exception {
         super.setUp();
         try {
+            eventManager.clearHandlers();
             assertEquals(0, db.getUsedConnectionCount());
             assertEquals(0, db.getRootUsedConnectionCount());
         } catch (Exception e) {

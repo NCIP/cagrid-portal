@@ -11,4 +11,5 @@ public class ConfigurationConstants {
 	public static final String IDENTITY_FEDERATION_PROPERTIES_BEAN = "identityFederationProperties";
 	public static final String TRUSTED_IDP_MANAGER_BEAN = "trustedIdPManager";
 	public static final String DORIAN_PROPERTIES_BEAN = "dorianProperties";
+	public static final String EVENT_MANAGER_BEAN = "eventManager";
 }

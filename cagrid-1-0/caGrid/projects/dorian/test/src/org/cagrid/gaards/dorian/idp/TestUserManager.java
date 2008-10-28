@@ -75,6 +75,7 @@ public class TestUserManager extends TestCase {
 				}
 
 				um.addUser(users[i]);
+				assertNull(users[i].getPasswordSecurity().getDigestSalt());
 				String salt = um.getPasswordSecurityManager().getEntry(
 						users[i].getUserId()).getDigestSalt();
 				users[i].setPassword(PasswordSecurityManager.encrypt(users[i]
@@ -82,6 +83,7 @@ public class TestUserManager extends TestCase {
 				assertTrue(um.userExists(users[i].getUserId()));
 				LocalUser u = um.getUser(users[i].getUserId());
 				assertEquals(users[i], u);
+				assertNull(u.getPasswordSecurity().getDigestSalt());
 
 				LocalUser[] list = um.getUsers(null);
 				assertEquals(i + 2, list.length);
@@ -262,6 +264,7 @@ public class TestUserManager extends TestCase {
 			u1.setPassword(password);
 			um.addUser(u1);
 			assertTrue(um.userExists(u1.getUserId()));
+			assertNull(u1.getPasswordSecurity().getDigestSalt());
 			BasicAuthentication ba = new BasicAuthentication();
 			ba.setUserId(u1.getUserId());
 			ba.setPassword(password);

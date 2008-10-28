@@ -13,8 +13,6 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.cagrid.gaards.dorian.service.BeanUtils;
 import org.cagrid.gaards.dorian.service.PropertyManager;
 import org.cagrid.tools.database.Database;

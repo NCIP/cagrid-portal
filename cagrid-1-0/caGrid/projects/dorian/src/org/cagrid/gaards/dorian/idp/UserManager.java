@@ -71,7 +71,7 @@ public class UserManager extends LoggingObject {
 			try {
 				LocalUser u = getUser(cred.getUserId());
 				PasswordSecurity entry = this.passwordSecurityManager
-						.getEntry(u.getUserId());
+						.getEntry(u.getUserId(),true);
 				PasswordStatus status = entry.getPasswordStatus();
 				String suppliedPassword = cred.getPassword();
 
@@ -351,7 +351,7 @@ public class UserManager extends LoggingObject {
 			this.passwordSecurityManager.resetEntry(user.getUserId(),
 					passwordSalt);
 			user.setPasswordSecurity(this.passwordSecurityManager.getEntry(user
-					.getUserId()));
+					.getUserId(),false));
 		} catch (Exception e) {
 
 			try {
@@ -527,7 +527,7 @@ public class UserManager extends LoggingObject {
 				user.setStatus(LocalUserStatus.fromValue(rs.getString("STATUS")));
 				user.setRole(LocalUserRole.fromValue(rs.getString("ROLE")));
 				user.setPasswordSecurity(this.passwordSecurityManager
-						.getEntry(user.getUserId()));
+						.getEntry(user.getUserId(),false));
 				users.add(user);
 			}
 			rs.close();
@@ -588,7 +588,7 @@ public class UserManager extends LoggingObject {
 				user.setStatus(LocalUserStatus.fromValue(rs.getString("STATUS")));
 				user.setRole(LocalUserRole.fromValue(rs.getString("ROLE")));
 				user.setPasswordSecurity(this.passwordSecurityManager
-						.getEntry(uid));
+						.getEntry(uid,false));
 			} else {
 				NoSuchUserFault fault = new NoSuchUserFault();
 				fault.setFaultString("The user " + uid + " does not exist.");
@@ -840,13 +840,12 @@ public class UserManager extends LoggingObject {
 					this.passwordSecurityManager.resetEntry(curr.getUserId(),
 							passwordSalt);
 					u.setPasswordSecurity(this.passwordSecurityManager
-							.getEntry(curr.getUserId()));
+							.getEntry(curr.getUserId(),false));
 				}
 			} catch (Exception e) {
 				logError(e.getMessage(), e);
 				DorianInternalFault fault = new DorianInternalFault();
-				fault
-						.setFaultString("Unexpected Error, Could not update user!!!");
+				fault.setFaultString("Unexpected Error, Could not update user!!!");
 				FaultHelper helper = new FaultHelper(fault);
 				helper.addFaultCause(e);
 				fault = (DorianInternalFault) helper.getFault();

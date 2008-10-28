@@ -386,7 +386,6 @@ public class TestDorian extends TestCase {
             assertTrue(found1);
             assertTrue(found2);
             dorian.removeLocalUser(userGridId, Dorian.IDP_ADMIN_USER_ID);
-
             Dorian dorian2 = new Dorian(conf, "http://localhost");
 
             assertEquals(1, dorian2.findGridUsers(userGridId, null).length);

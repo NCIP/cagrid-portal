@@ -174,38 +174,53 @@
 	<xsd:element name="UserCertificateFilter" type="federation:UserCertificateFilter" />
 	<xsd:complexType name="UserCertificateFilter">
 		<xsd:sequence>
-			<xsd:element name="SerialNumber" type="xsd:long" minOccurs="0" maxOccurs="1"/>
-			<xsd:element name="GridIdentity" type="xsd:string" minOccurs="0" maxOccurs="1"/>
-			<xsd:element name="Status" type="federation:UserCertificateStatus" minOccurs="0" maxOccurs="1"/>
-			<xsd:element name="DateRange" type="federation:DateRange" minOccurs="0" maxOccurs="1"/>
-			<xsd:element name="Notes" type="xsd:string" minOccurs="0" maxOccurs="1"/>
-		</xsd:sequence>
-		</xsd:complexType>
-		<xsd:element name="DateRange" type="federation:DateRange" />
-		<xsd:complexType name="DateRange">
-		<xsd:sequence>
-			<xsd:element name="StartDate" type="xsd:date" minOccurs="1" maxOccurs="1"/>
-			<xsd:element name="EndDate" type="xsd:date" minOccurs="1" maxOccurs="1"/>
+			<xsd:element name="SerialNumber" type="xsd:long"
+				minOccurs="0" maxOccurs="1" />
+			<xsd:element name="GridIdentity" type="xsd:string"
+				minOccurs="0" maxOccurs="1" />
+			<xsd:element name="Status" type="federation:UserCertificateStatus"
+				minOccurs="0" maxOccurs="1" />
+			<xsd:element name="DateRange" type="federation:DateRange"
+				minOccurs="0" maxOccurs="1" />
+			<xsd:element name="Notes" type="xsd:string" minOccurs="0"
+				maxOccurs="1" />
 		</xsd:sequence>
 	</xsd:complexType>
-	
+	<xsd:element name="DateRange" type="federation:DateRange" />
+	<xsd:complexType name="DateRange">
+		<xsd:sequence>
+			<xsd:element name="StartDate" type="xsd:date" minOccurs="0"
+				maxOccurs="1" />
+			<xsd:element name="EndDate" type="xsd:date" minOccurs="0"
+				maxOccurs="1" />
+		</xsd:sequence>
+	</xsd:complexType>
 	<xsd:element name="UserCertificateUpdate" type="federation:UserCertificateUpdate" />
 	<xsd:complexType name="UserCertificateUpdate">
 		<xsd:sequence>
-			<xsd:element name="SerialNumber" type="xsd:long" minOccurs="1" maxOccurs="1"/>
-			<xsd:element name="Status" type="federation:UserCertificateStatus" minOccurs="0" maxOccurs="1"/>
-			<xsd:element name="Notes" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+			<xsd:element name="SerialNumber" type="xsd:long"
+				minOccurs="1" maxOccurs="1" />
+			<xsd:element name="Status" type="federation:UserCertificateStatus"
+				minOccurs="0" maxOccurs="1" />
+			<xsd:element name="Notes" type="xsd:string" minOccurs="0"
+				maxOccurs="1" />
 		</xsd:sequence>
 	</xsd:complexType>
 	<xsd:element name="HostCertificateFilter" type="federation:HostCertificateFilter" />
 	<xsd:complexType name="HostCertificateFilter">
 		<xsd:sequence>
-			<xsd:element name="Id" type="xsd:integer" minOccurs="0" maxOccurs="1"/>
-			<xsd:element name="SerialNumber" type="xsd:integer" minOccurs="0" maxOccurs="1"/>
-			<xsd:element name="Host" type="xsd:string" minOccurs="0" maxOccurs="1"/>
-			<xsd:element name="Subject" type="xsd:string" minOccurs="0" maxOccurs="1"/>
-			<xsd:element name="Owner" type="xsd:string" minOccurs="0" maxOccurs="1"/>
-			<xsd:element name="Status" type="federation:HostCertificateStatus" minOccurs="0" maxOccurs="1"/>
+			<xsd:element name="Id" type="xsd:integer" minOccurs="0"
+				maxOccurs="1" />
+			<xsd:element name="SerialNumber" type="xsd:integer"
+				minOccurs="0" maxOccurs="1" />
+			<xsd:element name="Host" type="xsd:string" minOccurs="0"
+				maxOccurs="1" />
+			<xsd:element name="Subject" type="xsd:string" minOccurs="0"
+				maxOccurs="1" />
+			<xsd:element name="Owner" type="xsd:string" minOccurs="0"
+				maxOccurs="1" />
+			<xsd:element name="Status" type="federation:HostCertificateStatus"
+				minOccurs="0" maxOccurs="1" />
 			<xsd:element name="IsExpired" minOccurs="0" maxOccurs="1"
 				type="xsd:boolean" />
 		</xsd:sequence>
@@ -213,9 +228,12 @@
 	<xsd:element name="HostCertificateUpdate" type="federation:HostCertificateUpdate" />
 	<xsd:complexType name="HostCertificateUpdate">
 		<xsd:sequence>
-			<xsd:element name="Id" type="xsd:long" minOccurs="1" maxOccurs="1" />
-			<xsd:element name="Owner" type="xsd:string" minOccurs="0" maxOccurs="1"/>
-			<xsd:element name="Status" type="federation:HostCertificateStatus" minOccurs="0" maxOccurs="1"/>
+			<xsd:element name="Id" type="xsd:long" minOccurs="1"
+				maxOccurs="1" />
+			<xsd:element name="Owner" type="xsd:string" minOccurs="0"
+				maxOccurs="1" />
+			<xsd:element name="Status" type="federation:HostCertificateStatus"
+				minOccurs="0" maxOccurs="1" />
 		</xsd:sequence>
 	</xsd:complexType>
 	<xsd:simpleType name="HostCertificateStatus">
@@ -231,6 +249,62 @@
 		<xsd:restriction base="xsd:string">
 			<xsd:enumeration value="OK" />
 			<xsd:enumeration value="Compromised" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:element name="FederationAuditRecord" type="federation:FederationAuditRecord" />
+	<xsd:complexType name="FederationAuditRecord">
+		<xsd:sequence>
+			<xsd:element name="targetId" type="xsd:string" minOccurs="0"
+				maxOccurs="1" />
+			<xsd:element name="reportingPartyId" type="xsd:string"
+				minOccurs="1" maxOccurs="1" />
+			<xsd:element name="auditingType" type="federation:FederationAuditing"
+				minOccurs="1" maxOccurs="1" />
+			<xsd:element name="occurredAt" type="xsd:date" minOccurs="1"
+				maxOccurs="1" />
+			<xsd:element name="AuditingMessage" type="xsd:string"
+				minOccurs="1" maxOccurs="1" />
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="FederationAuditFilter" type="federation:FederationAuditFilter" />
+	<xsd:complexType name="FederationAuditFilter">
+		<xsd:sequence>
+			<xsd:element name="targetId" type="xsd:string" minOccurs="0"
+				maxOccurs="1" />
+			<xsd:element name="reportingPartyId" type="xsd:string"
+				minOccurs="0" maxOccurs="1" />
+			<xsd:element name="auditingType" type="federation:FederationAuditing"
+				minOccurs="0" maxOccurs="1" />
+			<xsd:element name="DateRange" type="federation:DateRange"
+				minOccurs="0" maxOccurs="1" />
+			<xsd:element name="AuditingMessage" type="xsd:string"
+				minOccurs="0" maxOccurs="1" />
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="FederationAuditing" type="federation:FederationAuditing" />
+	<xsd:simpleType name="FederationAuditing">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="IdPAdded" />
+			<xsd:enumeration value="IdPUpdated" />
+			<xsd:enumeration value="IdPRemoved" />
+			<xsd:enumeration value="AdminAdded" />
+			<xsd:enumeration value="AdminRemoved" />
+			<xsd:enumeration value="CRLPublished" />
+			<xsd:enumeration value="AccountCreated" />
+			<xsd:enumeration value="AccountUpdated" />
+			<xsd:enumeration value="AccountRemoved" />
+			<xsd:enumeration value="SuccessfulUserCertificateRequest" />
+			<xsd:enumeration value="InvalidUserCertificateRequest" />
+			<xsd:enumeration value="HostCertificateRequested" />
+			<xsd:enumeration value="HostCertificateApproved" />
+			<xsd:enumeration value="HostCertificateUpdated" />
+			<xsd:enumeration value="HostCertificateRemoved" />
+			<xsd:enumeration value="HostCertificateRenewed" />
+			<xsd:enumeration value="UserCertificateSigned" />
+			<xsd:enumeration value="UserCertificateUpdated" />
+			<xsd:enumeration value="UserCertificateRemoved" />
+			<xsd:enumeration value="SystemStartup" />
+			<xsd:enumeration value="InternalError" />
 		</xsd:restriction>
 	</xsd:simpleType>
 </xsd:schema>

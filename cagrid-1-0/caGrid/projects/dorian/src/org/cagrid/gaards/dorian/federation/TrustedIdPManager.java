@@ -152,6 +152,7 @@ public class TrustedIdPManager extends LoggingObject {
             s.execute();
             s.close();
         } catch (Exception e) {
+            log.error(e);
             DorianInternalFault fault = new DorianInternalFault();
             fault.setFaultString("Unexpected Database Error");
             FaultHelper helper = new FaultHelper(fault);
@@ -229,7 +230,6 @@ public class TrustedIdPManager extends LoggingObject {
 
 
     public synchronized void updateIdP(TrustedIdP idp) throws DorianInternalFault, InvalidTrustedIdPFault {
-
         TrustedIdP curr = this.getTrustedIdPById(idp.getId());
         boolean needsUpdate = false;
         String name = curr.getName();
@@ -394,6 +394,13 @@ public class TrustedIdPManager extends LoggingObject {
 
 
     public TrustedIdP getTrustedIdP(SAMLAssertion saml) throws DorianInternalFault, InvalidAssertionFault {
+
+        if (!saml.isSigned()) {
+            String mess = "The assertion specified is invalid, it MUST be signed by a Trusted IdP";
+            InvalidAssertionFault fault = new InvalidAssertionFault();
+            fault.setFaultString(mess);
+            throw fault;
+        }
         TrustedIdP[] idps = getTrustedIdPs();
         for (int i = 0; i < idps.length; i++) {
             try {

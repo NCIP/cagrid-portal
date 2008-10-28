@@ -55,6 +55,7 @@ import org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault;
 import org.cagrid.gaards.dorian.stubs.types.UserPolicyFault;
 import org.cagrid.gaards.pki.CertUtil;
 import org.cagrid.tools.database.Database;
+import org.cagrid.tools.events.EventManager;
 
 
 /**
@@ -84,6 +85,8 @@ public class Dorian extends LoggingObject {
 
     private PropertyManager properties;
 
+    private EventManager eventManager;
+
 
     public Dorian(DorianProperties conf, String serviceId) throws DorianInternalFault {
         this(conf, serviceId, false);
@@ -94,6 +97,7 @@ public class Dorian extends LoggingObject {
         try {
 
             this.configuration = conf;
+            this.eventManager = this.configuration.getEventManager();
             UserManager.ADMIN_USER_ID = IDP_ADMIN_USER_ID;
             UserManager.ADMIN_PASSWORD = IDP_ADMIN_PASSWORD;
             this.db = this.configuration.getDatabase();
@@ -148,7 +152,8 @@ public class Dorian extends LoggingObject {
 
             ifsConfiguration = configuration.getIdentityFederationProperties();
             FederationDefaults defaults = new FederationDefaults(idp, usr);
-            this.ifm = new IdentityFederationManager(ifsConfiguration, db, properties, ca, defaults, ignoreCRL);
+            this.ifm = new IdentityFederationManager(ifsConfiguration, db, properties, ca, this.eventManager, defaults,
+                ignoreCRL);
 
             if (!this.properties.getVersion().equals(PropertyManager.CURRENT_VERSION)) {
                 DorianInternalFault fault = new DorianInternalFault();
@@ -397,7 +402,7 @@ public class Dorian extends LoggingObject {
 
     public void removeUserCertificate(String callerIdentity, long serialNumber) throws DorianInternalFault,
         InvalidUserCertificateFault, PermissionDeniedFault {
-        this.ifm.removeUserCertificate(callerIdentity,serialNumber);
+        this.ifm.removeUserCertificate(callerIdentity, serialNumber);
     }
 
 }
