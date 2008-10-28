@@ -22,7 +22,7 @@
 
     <!-- Public Configurations-->
     <conf name="default" visibility="public" extends="ui"/>
-    <conf name="core" visibility="public" extends="extension"/>
+    <conf name="core" visibility="public" extends="extension,serviceTasks"/>
     <conf name="ui" visibility="public" extends="core"/>
     <conf name="core-test" visibility="public" extends="core,impl-test"/>
     <conf name="ui-test" visibility="public" extends="ui,impl-test"/>
