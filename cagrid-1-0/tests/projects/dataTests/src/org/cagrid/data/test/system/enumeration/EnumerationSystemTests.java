@@ -12,19 +12,19 @@ import gov.nih.nci.cagrid.testing.system.haste.Step;
 
 import java.util.Vector;
 
+import junit.framework.TestResult;
+import junit.framework.TestSuite;
+import junit.textui.TestRunner;
+
 import org.cagrid.data.test.creation.DataTestCaseInfo;
 import org.cagrid.data.test.creation.DeleteOldServiceStep;
 import org.cagrid.data.test.creation.enumeration.CreateEnumerationTests;
 import org.cagrid.data.test.system.AddBookstoreStep;
 import org.cagrid.data.test.system.AddTestingJarToServiceStep;
 import org.cagrid.data.test.system.BaseSystemTest;
-import org.cagrid.data.test.system.EnableValidationStep;
 import org.cagrid.data.test.system.RebuildServiceStep;
+import org.cagrid.data.test.system.SetCqlValidationStep;
 import org.cagrid.data.test.system.SetQueryProcessorStep;
-
-import junit.framework.TestResult;
-import junit.framework.TestSuite;
-import junit.textui.TestRunner;
 
 
 /**
@@ -83,21 +83,21 @@ public class EnumerationSystemTests extends BaseSystemTest {
         Vector<Step> steps = new Vector<Step>();
 		// an enumeration supporting data service is presumed to have been
 		// created by a previous testing process
-        // 1) Add the data tests jar to the service lib
+        // Add the data tests jar to the service lib
         steps.add(new AddTestingJarToServiceStep(info));
-		// 2) Add the bookstore schema to the data service
+		// Add the bookstore schema to the data service
 		steps.add(new AddBookstoreStep(info));
-		// 3) change out query processor
+		// change out query processor
 		steps.add(new SetQueryProcessorStep(info.getDir()));
-		// 4) Turn on query validation
-		steps.add(new EnableValidationStep(info.getDir()));
-		// 5) Rebuild the service to pick up the bookstore beans
+		// Rebuild the service to pick up the bookstore beans
 		steps.add(new RebuildServiceStep(info, getIntroduceBaseDir()));
-		// 6) deploy data service
+        // Turn on query validation, turn off model validation
+        steps.add(new SetCqlValidationStep(info, true, false));
+		// deploy data service
 		steps.add(new DeployServiceStep(container, info.getDir()));
-		// 7) start container
+		// start container
 		steps.add(new StartContainerStep(container));
-		// 8) test data service
+		// test data service
 		steps.add(new InvokeEnumerationDataServiceStep(container, info.getName()));
 		return steps;
 	}
@@ -105,21 +105,21 @@ public class EnumerationSystemTests extends BaseSystemTest {
 
 	protected void storyTearDown() throws Throwable {
 		super.storyTearDown();
-		// 9) stop globus
+		// stop globus
 		Step stopStep = new StopContainerStep(container);
 		try {
 			stopStep.runStep();
 		} catch (Throwable ex) {
 			ex.printStackTrace();
 		}
-		// 10) throw away globus
+		// throw away globus
 		Step destroyStep = new DestroyContainerStep(container);
 		try {
 			destroyStep.runStep();
 		} catch (Throwable ex) {
 			ex.printStackTrace();
 		}
-        // 11) throw away service
+        // throw away service
         Step deleteServiceStep = new DeleteOldServiceStep(info);
         try {
             deleteServiceStep.runStep();

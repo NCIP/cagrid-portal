@@ -18,7 +18,7 @@ import org.cagrid.data.test.creation.DeleteOldServiceStep;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Nov 30, 2006 
- * @version $Id: CreateEnumerationTests.java,v 1.3 2008-06-02 18:30:46 dervin Exp $ 
+ * @version $Id: CreateEnumerationTests.java,v 1.4 2008-10-28 22:50:57 dervin Exp $ 
  */
 public class CreateEnumerationTests extends Story {
 	public static final String INTRODUCE_DIR_PROPERTY = "introduce.base.dir";
@@ -39,9 +39,9 @@ public class CreateEnumerationTests extends Story {
 	protected Vector steps() {
         DataTestCaseInfo info = new TestEnumerationDataServiceInfo();
 		Vector<Step> steps = new Vector<Step>();
-		// 1. delete any existing enumeration data service directory
+		// delete any existing enumeration data service directory
 		steps.add(new DeleteOldServiceStep(info));
-		// 2. create a new enumeration data service
+		// create a new enumeration data service
 		steps.add(new CreateEnumerationDataServiceStep(info, getIntroduceBaseDir()));
 		return steps;
 	}

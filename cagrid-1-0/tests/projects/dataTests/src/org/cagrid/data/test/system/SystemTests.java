@@ -30,7 +30,7 @@ import org.cagrid.data.test.creation.DeleteOldServiceStep;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A> *
  * @created Nov 7, 2006
- * @version $Id: SystemTests.java,v 1.3 2008-06-02 20:34:18 dervin Exp $
+ * @version $Id: SystemTests.java,v 1.4 2008-10-28 22:50:57 dervin Exp $
  */
 public class SystemTests extends BaseSystemTest {
     
@@ -68,7 +68,7 @@ public class SystemTests extends BaseSystemTest {
             fail("Failed to create container: " + ex.getMessage());
         }
         
-        // 1) set up a clean, temporary service container
+        // set up a clean, temporary service container
         Step step = new UnpackContainerStep(container);
         try {
             step.runStep();
@@ -84,25 +84,25 @@ public class SystemTests extends BaseSystemTest {
         Vector<Step> steps = new Vector<Step>();
         // data service presumed to have been created
         // by the data service creation tests
-        // 2) Add the data tests jar to the service lib
+        // Add the data tests jar to the service lib
         steps.add(new AddTestingJarToServiceStep(info));
-        // 3) Add the bookstore schema to the data service
+        // Add the bookstore schema to the data service
         steps.add(new AddBookstoreStep(info));
-        // 4) change out query processor
+        // change out query processor
         steps.add(new SetQueryProcessorStep(info.getDir()));
-        // 5) Turn on query validation
-        steps.add(new EnableValidationStep(info.getDir()));
-        // 6) Turn on and configure auditing
+        // Turn on and configure auditing
         steps.add(new AddFileSystemAuditorStep(info.getDir(), auditorLogFile.getAbsolutePath()));
-        // 7) Rebuild the service to pick up the bookstore beans
+        // Rebuild the service to pick up the bookstore beans
         steps.add(new RebuildServiceStep(info, getIntroduceBaseDir()));
-        // 8) deploy data service
+        // Enable CQL validation, disable model validation
+        steps.add(new SetCqlValidationStep(info, true, false));
+        // deploy data service
         steps.add(new DeployServiceStep(container, info.getDir()));
-        // 9) start globus
+        // start globus
         steps.add(new StartContainerStep(container));
-        // 10) test data service
+        // test data service
         steps.add(new InvokeDataServiceStep(container, info.getName()));
-        // 11) verify the audit log
+        // verify the audit log
         steps.add(new VerifyAuditLogStep(auditorLogFile.getAbsolutePath()));
         return steps;
     }
@@ -111,25 +111,25 @@ public class SystemTests extends BaseSystemTest {
     protected void storyTearDown() throws Throwable {
         super.storyTearDown();
         List<Throwable> exceptions = new ArrayList<Throwable>();
-        // 12) stop globus
+        // stop globus
         Step stopStep = new StopContainerStep(container);
         try {
             stopStep.runStep();
         } catch (Throwable ex) {
             exceptions.add(ex);
         }
-        // 13) throw away auditor log
+        // throw away auditor log
         if (auditorLogFile.exists()) {
             auditorLogFile.deleteOnExit();
         }
-        // 14) throw away globus
+        // throw away globus
         Step destroyStep = new DestroyContainerStep(container);
         try {
             destroyStep.runStep();
         } catch (Throwable ex) {
             exceptions.add(ex);
         }
-        // 15) Delete the old service
+        // Delete the old service
         Step deleteServiceStep = new DeleteOldServiceStep(info);
         try {
             deleteServiceStep.runStep();

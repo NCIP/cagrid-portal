@@ -16,7 +16,7 @@ import junit.textui.TestRunner;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created Aug 22, 2006 
- * @version $Id: CreationTests.java,v 1.3 2008-06-02 18:30:46 dervin Exp $ 
+ * @version $Id: CreationTests.java,v 1.4 2008-10-28 22:50:57 dervin Exp $ 
  */
 public class CreationTests extends Story {
 	public static final String INTRODUCE_DIR_PROPERTY = "introduce.base.dir";
@@ -47,7 +47,7 @@ public class CreationTests extends Story {
 		// delete any existing service dirs
 		steps.add(new DeleteOldServiceStep(info));
         steps.add(new DeleteOldServiceStep(plainInfo));
-		// create a new data service
+		// create new data services
 		steps.add(new CreationStep(info, getIntroduceBaseDir()));
         steps.add(new CreationStep(plainInfo, getIntroduceBaseDir()));
 		return steps;
