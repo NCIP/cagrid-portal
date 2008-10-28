@@ -1,4 +1,4 @@
-package org.cagrid.data.test.upgrades.from1pt0;
+package org.cagrid.data.test.upgrades;
 
 import gov.nih.nci.cagrid.introduce.common.AntTools;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
@@ -12,7 +12,7 @@ import java.io.File;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Feb 21, 2007 
- * @version $Id: BuildUpgradedServiceStep.java,v 1.2 2008-09-11 17:47:50 dervin Exp $ 
+ * @version $Id: BuildUpgradedServiceStep.java,v 1.1 2008-10-28 13:51:36 dervin Exp $ 
  */
 public class BuildUpgradedServiceStep extends Step {
     

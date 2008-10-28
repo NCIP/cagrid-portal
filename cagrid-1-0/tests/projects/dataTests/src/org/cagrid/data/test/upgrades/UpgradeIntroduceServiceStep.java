@@ -1,4 +1,4 @@
-package org.cagrid.data.test.upgrades.from1pt0;
+package org.cagrid.data.test.upgrades;
 
 import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
 import gov.nih.nci.cagrid.introduce.upgrade.UpgradeManager;

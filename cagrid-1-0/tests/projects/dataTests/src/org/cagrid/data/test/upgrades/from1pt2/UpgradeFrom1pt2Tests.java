@@ -11,10 +11,10 @@ import junit.textui.TestRunner;
 
 import org.cagrid.data.test.creation.DataTestCaseInfo;
 import org.cagrid.data.test.creation.DeleteOldServiceStep;
+import org.cagrid.data.test.upgrades.BuildUpgradedServiceStep;
 import org.cagrid.data.test.upgrades.UnpackOldServiceStep;
+import org.cagrid.data.test.upgrades.UpgradeIntroduceServiceStep;
 import org.cagrid.data.test.upgrades.UpgradeTestConstants;
-import org.cagrid.data.test.upgrades.from1pt0.BuildUpgradedServiceStep;
-import org.cagrid.data.test.upgrades.from1pt0.UpgradeIntroduceServiceStep;
 
 /** 
  *  UpgradeFrom1pt2Tests
@@ -22,7 +22,7 @@ import org.cagrid.data.test.upgrades.from1pt0.UpgradeIntroduceServiceStep;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Feb 20, 2007 
- * @version $Id: UpgradeFrom1pt2Tests.java,v 1.2 2008-09-12 14:44:31 dervin Exp $ 
+ * @version $Id: UpgradeFrom1pt2Tests.java,v 1.3 2008-10-28 13:51:36 dervin Exp $ 
  */
 public class UpgradeFrom1pt2Tests extends Story {
     public static final String SERVICE_ZIP_NAME = "BasicDataService_1-2.zip";
