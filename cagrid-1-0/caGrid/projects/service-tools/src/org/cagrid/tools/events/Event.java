@@ -7,7 +7,7 @@
 
 package org.cagrid.tools.events;
 
-public class Event  implements java.io.Serializable {
+public class Event implements java.io.Serializable {
     private long eventId;
     private java.lang.String targetId;
     private java.lang.String reportingPartyId;
