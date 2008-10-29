@@ -14,7 +14,6 @@
     <!-- Introduce currently places lots of dependencies in different locations, so I need these 
       different private configurations to use to retrieve to those locations-->
     <conf name="skeleton" visibility="private"/>
-    <conf name="schema.gridgrouper" visibility="private"/>
     <conf name="schema.grape" visibility="private"/>
 
     <conf name="impl" visibility="private" extends="default"/>
@@ -62,7 +61,7 @@
     <dependency rev="latest.integration" org="caGrid" name="grape" conf="ui->default;schema.grape->schemas"/>
     <dependency rev="latest.integration" org="caGrid" name="testing" conf="impl-test->system"/>
 
-    <dependency rev="latest.integration" org="caGrid" name="gaards-ui" conf="ui->gridgrouper"/>
+    <dependency rev="latest.integration" org="caGrid" name="gaards-ui" conf="ui->base"/>
     <dependency rev="latest.integration" org="caGrid" name="service-security-provider" conf="skeleton->client;core->schemas"/>
     <dependency rev="latest.integration" org="caGrid" name="advertisement" conf="skeleton->default"/>
     <dependency rev="1.0" org="jdom" name="jdom" conf="skeleton->*"/>
