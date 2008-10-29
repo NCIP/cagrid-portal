@@ -28,6 +28,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.globus.wsrf.Resource;
 import org.globus.wsrf.ResourceContext;
 import org.globus.wsrf.security.SecurityManager;
@@ -43,6 +45,9 @@ import org.oasis.wsrf.faults.BaseFaultType;
  * @version $Id$ 
  */
 public abstract class BaseServiceImpl {
+    
+    private static Log LOG = LogFactory.getLog(BaseServiceImpl.class);
+    
 	private Properties dataServiceConfig = null;
 	private Properties cqlQueryProcessorConfig = null;
 	private Properties resourceProperties = null;
@@ -74,9 +79,10 @@ public abstract class BaseServiceImpl {
     
 	
 	protected void preProcess(CQLQuery cqlQuery) throws QueryProcessingException, MalformedQueryException {
-		// validation for cql structure
+        // validation for cql structure
 		if (shouldValidateCqlStructure()) {
-			CqlStructureValidator validator = getCqlStructureValidator();  
+		    CqlStructureValidator validator = getCqlStructureValidator();
+            LOG.debug("Validating CQL structure");
 			try {
 				validator.validateCqlStructure(cqlQuery);
 			} catch (gov.nih.nci.cagrid.data.MalformedQueryException ex) {
@@ -87,10 +93,15 @@ public abstract class BaseServiceImpl {
 		
 		// validation for domain model
 		if (shouldValidateDomainModel()) {
-			CqlDomainValidator validator = getCqlDomainValidator();			
+			CqlDomainValidator validator = getCqlDomainValidator();
+            LOG.debug("Validating CQL against domain model");
 			try {
 				DomainModel model = getDomainModel();
-				validator.validateDomainModel(cqlQuery, model);
+                if (model != null) {
+                    validator.validateDomainModel(cqlQuery, model);
+                } else {
+                    LOG.warn("Domain model validation enabled, but no domain model was found!");
+                }
 			} catch (gov.nih.nci.cagrid.data.MalformedQueryException ex) {
                 fireAuditValidationFailure(cqlQuery, null, ex);
 				throw ex;
@@ -119,6 +130,7 @@ public abstract class BaseServiceImpl {
 		if (cqlStructureValidator == null) {
 			try {
 				String validatorClassName = getDataServiceConfig().getProperty(DataServiceConstants.CQL_VALIDATOR_CLASS);
+				LOG.debug("Loading CQL structure validator class " + validatorClassName);
 				Class validatorClass = Class.forName(validatorClassName);
 				cqlStructureValidator = (CqlStructureValidator) validatorClass.newInstance();
 			} catch (Exception ex) {
@@ -133,6 +145,7 @@ public abstract class BaseServiceImpl {
 		if (cqlDomainValidator == null) {
 			try {
 				String validatorClassName = getDataServiceConfig().getProperty(DataServiceConstants.DOMAIN_MODEL_VALIDATOR_CLASS);
+                LOG.debug("Loading CQL Domain Model validator class " + validatorClassName);
 				Class validatorClass = Class.forName(validatorClassName);
 				cqlDomainValidator = (CqlDomainValidator) validatorClass.newInstance();
 			} catch (Exception ex) {
@@ -145,8 +158,9 @@ public abstract class BaseServiceImpl {
 	
 	protected Properties getDataServiceConfig() throws QueryProcessingException {
 		if (dataServiceConfig == null) {
+            LOG.debug("Loading data service configuration properties");
 			try {
-				dataServiceConfig = ServiceConfigUtil.getDataServiceParams();
+                dataServiceConfig = ServiceConfigUtil.getDataServiceParams();
 			} catch (Exception ex) {
 				throw new QueryProcessingException(
                     "Error getting data service configuration parameters: " + ex.getMessage(), ex);
@@ -169,6 +183,7 @@ public abstract class BaseServiceImpl {
      */
 	protected Properties getCqlQueryProcessorConfig() throws QueryProcessingException {
 		if (cqlQueryProcessorConfig == null) {
+            LOG.debug("Loading CQL query processor configuration properties");
 			try {
                 cqlQueryProcessorConfig = ServiceConfigUtil.getQueryProcessorConfigurationParameters();
 			} catch (Exception ex) {
@@ -191,6 +206,7 @@ public abstract class BaseServiceImpl {
 	
 	protected Properties getResourceProperties() throws QueryProcessingException {
 		if (resourceProperties == null) {
+            LOG.debug("Loading resource properties");
 			try {
 				resourceProperties = ResourcePropertiesUtil.getResourceProperties();
 			} catch (Exception ex) {
@@ -203,10 +219,12 @@ public abstract class BaseServiceImpl {
 	
 	protected CQLQueryProcessor getCqlQueryProcessorInstance() throws QueryProcessingException {
 	    if (queryProcessorInstance == null) {
+            LOG.debug("Instantiating CQL query processor");
 	        // get the query processor's class
 	        String qpClassName = null;
             try {
                 qpClassName = ServiceConfigUtil.getCqlQueryProcessorClassName();
+                LOG.debug("CQL Query Processor class name is " + qpClassName);
             } catch (Exception ex) {
                 throw new QueryProcessingException(
                     "Error determining query processor class name: " + ex.getMessage(), ex);
@@ -226,6 +244,7 @@ public abstract class BaseServiceImpl {
                     "Error creating query processor instance: " + ex.getMessage(), ex);
             }
 	        // configure the instance
+            LOG.debug("Configuring CQL query processor");
             try {
                 String serverConfigLocation = ServiceConfigUtil.getConfigProperty(
                     DataServiceConstants.SERVER_CONFIG_LOCATION);
@@ -255,6 +274,7 @@ public abstract class BaseServiceImpl {
 	
 	protected DomainModel getDomainModel() throws Exception {
 		if (domainModel == null && !domainModelSearchedFor) {
+            LOG.debug("Loading Domain Model");
 			Resource serviceBaseResource = ResourceContext.getResourceContext().getResource();
 			Method[] resourceMethods = serviceBaseResource.getClass().getMethods();
 			for (int i = 0; i < resourceMethods.length; i++) {
@@ -264,6 +284,7 @@ public abstract class BaseServiceImpl {
 					break;
 				}
 			}
+            LOG.debug("Domain Model " + domainModel != null ? "found" : "NOT found");
 			domainModelSearchedFor = true;
 		}
 		return domainModel;
@@ -283,24 +304,21 @@ public abstract class BaseServiceImpl {
     // ----------
     
     
-    private synchronized void initializeAuditors() throws RemoteException {
+    private synchronized void initializeAuditors() throws Exception {
         if (auditors == null) {
+            LOG.debug("Initializing data service auditors");
             auditors = new LinkedList<DataServiceAuditor>();
-            try {
-                String configFileName = getDataServiceConfig().getProperty(
-                    DataServiceConstants.DATA_SERVICE_AUDITORS_CONFIG_FILE_PROPERTY);
-                if (configFileName != null) {
-                    DataServiceAuditors auditorConfig = (DataServiceAuditors) 
-                        Utils.deserializeDocument(configFileName, DataServiceAuditors.class);
-                    if (auditorConfig.getAuditorConfiguration() != null) {
-                        for (AuditorConfiguration config : auditorConfig.getAuditorConfiguration()) {
-                            DataServiceAuditor auditor = createAuditor(config);
-                            auditors.add(auditor);
-                        }
+            String configFileName = getDataServiceConfig().getProperty(
+                DataServiceConstants.DATA_SERVICE_AUDITORS_CONFIG_FILE_PROPERTY);
+            if (configFileName != null) {
+                DataServiceAuditors auditorConfig = (DataServiceAuditors) 
+                Utils.deserializeDocument(configFileName, DataServiceAuditors.class);
+                if (auditorConfig.getAuditorConfiguration() != null) {
+                    for (AuditorConfiguration config : auditorConfig.getAuditorConfiguration()) {
+                        DataServiceAuditor auditor = createAuditor(config);
+                        auditors.add(auditor);
                     }
                 }
-            } catch (Exception ex) {
-                throw new RemoteException(ex.getMessage(), ex);
             }
         }
     }
@@ -321,8 +339,7 @@ public abstract class BaseServiceImpl {
      * @param query
      * @throws RemoteException
      */
-    protected void fireAuditQueryBegins(CQLQuery query) throws RemoteException {
-        initializeAuditors();
+    protected void fireAuditQueryBegins(CQLQuery query) {
         if (auditors.size() != 0) {
             String callerIdentity = SecurityManager.getManager().getCaller();
             QueryBeginAuditingEvent event = new QueryBeginAuditingEvent(query, callerIdentity);
