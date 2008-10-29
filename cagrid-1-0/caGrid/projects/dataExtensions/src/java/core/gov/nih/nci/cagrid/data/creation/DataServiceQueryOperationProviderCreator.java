@@ -226,7 +226,7 @@ public class DataServiceQueryOperationProviderCreator implements CreationExtensi
     }
 
 
-    private void addQueryMethod(ServiceType service) throws CreationExtensionException {
+    private void addQueryMethod(ServiceType service) {
         MethodType queryMethod = createQueryMethodType();
         // add the query method to the service
         CommonTools.addMethod(service, queryMethod);
@@ -324,9 +324,9 @@ public class DataServiceQueryOperationProviderCreator implements CreationExtensi
         CommonTools.setServiceProperty(desc, DataServiceConstants.DOMAIN_MODEL_VALIDATOR_CLASS,
             DEFAULT_DOMAIN_MODEL_VALIDATOR, false,
             "The name of the class to use for CQL validation against a domain model");
-        CommonTools.setServiceProperty(desc, DataServiceConstants.VALIDATE_CQL_FLAG, String.valueOf(false), false,
-            "A flag to indicate that CQL should be validated for structural correctness");
-        CommonTools.setServiceProperty(desc, DataServiceConstants.VALIDATE_DOMAIN_MODEL_FLAG, String.valueOf(false),
+        CommonTools.setServiceProperty(desc, DataServiceConstants.VALIDATE_CQL_FLAG, DataServiceConstants.DEFAULT_VALIDATE_CQL_FLAG,
+            false, "A flag to indicate that CQL should be validated for structural correctness");
+        CommonTools.setServiceProperty(desc, DataServiceConstants.VALIDATE_DOMAIN_MODEL_FLAG, DataServiceConstants.DEFAULT_VALIDATE_DOMAIN_MODEL_FLAG,
             false, "A flag to indicate that CQL should be validated for correctness against the domain model");
         // filename of class to qname mapping property
         CommonTools.setServiceProperty(desc, DataServiceConstants.CLASS_MAPPINGS_FILENAME,

@@ -96,6 +96,8 @@ public class DataServiceConstants {
 	public static final String DOMAIN_MODEL_VALIDATOR_CLASS = DATA_SERVICE_PARAMS_PREFIX + "_domainModelValidatorClass";
 	public static final String VALIDATE_CQL_FLAG = DATA_SERVICE_PARAMS_PREFIX + "_validateCqlFlag";
 	public static final String VALIDATE_DOMAIN_MODEL_FLAG = DATA_SERVICE_PARAMS_PREFIX + "_validateDomainModelFlag";
+    public static final String DEFAULT_VALIDATE_CQL_FLAG = Boolean.TRUE.toString();
+    public static final String DEFAULT_VALIDATE_DOMAIN_MODEL_FLAG = Boolean.TRUE.toString();
 	
 	// DomainModel QName
 	public static final QName DOMAIN_MODEL_QNAME = new QName("gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice", "DomainModel");
