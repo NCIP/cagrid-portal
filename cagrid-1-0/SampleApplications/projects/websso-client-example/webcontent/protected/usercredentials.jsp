@@ -1,6 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 
+<%@page import="org.acegisecurity.context.SecurityContextHolder"%>
+<%@page import="org.acegisecurity.Authentication"%>
+<%@page import="org.cagrid.websso.client.acegi.WebSSOUser;"%>
 <table summary="" cellpadding="0" cellspacing="0" border="0">
 	<tr>
 		<td class="dataTablePrimaryLabel" height="20">Single Sign On User Data</td>
@@ -23,11 +26,15 @@
 				</th>
 			</tr>
 			<tr class="dataRowLight">
-	 			<td class="dataCellText"><%=request.getSession().getAttribute("CAGRID_SSO_GRID_IDENTITY")%></td>
-				<td class="dataCellText"><%=request.getSession().getAttribute("CAGRID_SSO_FIRST_NAME")%></td>
-				<td class="dataCellText"><%=request.getSession().getAttribute("CAGRID_SSO_LAST_NAME")%></td>
-				<td class="dataCellText"><%=request.getSession().getAttribute("CAGRID_SSO_DELEGATION_SERVICE_EPR")%></td>
-				<td class="dataCellText"><%=request.getSession().getAttribute("CAGRID_SSO_EMAIL_ID")%></td>
+				<% WebSSOUser webSSOUser=(WebSSOUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+				   if(webSSOUser!=null){			
+				%>
+				<td class="dataCellText"><%=webSSOUser.getGridId()%></td>
+				<td class="dataCellText"><%=webSSOUser.getFirstName()%></td>
+				<td class="dataCellText"><%=webSSOUser.getLastName()%></td>
+				<td class="dataCellText"><%=webSSOUser.getDelegatedEPR()%></td>
+				<td class="dataCellText"><%=webSSOUser.getEmailId()%></td>
+				<% } %>
 			</tr>
 		</table>
 		</td>

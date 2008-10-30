@@ -8,7 +8,8 @@
 %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 
-<html>
+<%@page import="org.acegisecurity.context.SecurityContextHolder"%>
+<%@page import="org.cagrid.websso.client.acegi.WebSSOUser;"%><html>
 <head>
 <title>Content</title>
 <link rel="stylesheet" type="text/css" href="../css/styleSheet.css" />
@@ -52,8 +53,10 @@
 						<td height="50" align="left"><a href="#"><img src="../images/appLogo.gif" alt="Application Logo" hspace="10" border="0"></a></td>
 					</tr>
 					<tr>
-						<% String firstName=(String)request.getSession().getAttribute("CAGRID_SSO_FIRST_NAME"); 
-						   String lastName=(String)request.getSession().getAttribute("CAGRID_SSO_LAST_NAME");%> 
+						<% WebSSOUser webSSOUser=(WebSSOUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+						   String firstName=webSSOUser.getFirstName();
+						   String lastName=webSSOUser.getLastName();
+						%> 
 						<td class="welcomeContent" height="2" valign="top" align="right">
 							<label class="h3">Login User:</label><font class="h3"><%=firstName+" "+lastName %></font>
                         </td>

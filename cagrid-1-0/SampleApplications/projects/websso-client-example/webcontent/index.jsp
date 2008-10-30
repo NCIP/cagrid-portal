@@ -7,7 +7,8 @@
 %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<%@page import="org.cagrid.websso.common.WebSSOConstants;"%><html>
+<%@page import="org.acegisecurity.context.SecurityContextHolder"%>
+<%@page import="org.cagrid.websso.client.acegi.WebSSOUser"%><html>
 <head>
 <title>Home</title>
 <link rel="stylesheet" type="text/css" href="css/styleSheet.css" />
@@ -39,20 +40,20 @@
 							<tr>
 								<td height="50" align="left"><a href="#"><img src="images/appLogo.gif" alt="Application Logo" hspace="10" border="0"></a></td>
 							</tr>
-								<%
-									Boolean isSessionLoaded = (Boolean) session.getAttribute(WebSSOConstants.IS_SESSION_ATTRIBUTES_LOADED);
-									if (isSessionLoaded != null && isSessionLoaded == Boolean.TRUE) {
-										String firstName = (String) request.getSession().getAttribute("CAGRID_SSO_FIRST_NAME");
-										String lastName = (String) request.getSession().getAttribute("CAGRID_SSO_LAST_NAME");
+								<%WebSSOUser webSSOUser =null;
+									if(SecurityContextHolder.getContext().getAuthentication()!=null){									
+										webSSOUser = (WebSSOUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+								     	String firstName = webSSOUser.getFirstName();
+										String lastName = webSSOUser.getLastName();
 								%>
 							<tr>
 								<td class="welcomeContent" height="2" valign="top" align="right">
-								<label class="h3">Login User:</label><font class="h3"><%=firstName +" "+lastName%></font>
+								<label class="h3">Login User:</label><font class="h3"><%=firstName + " " + lastName%></font>
 								</td>
 							</tr>
 							<tr>
 								<td class="welcomeContent" height="4" valign="top" align="right">
-								<a href="<%= request.getContextPath() %>/logout/"><b>logout</b></a>
+								<a href="<%=request.getContextPath()%>/logout"><b>logout</b></a>
 							</tr>
 								<%
 									}
@@ -79,7 +80,7 @@
 		                      </td>
 		                      <td><img src="images/mainMenuSeparator.gif" width="1" height="16" alt="" /></td>
 							  <td height="20" class="mainMenuItemOver" onmouseover="changeMenuStyle(this,'mainMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'mainMenuItemOver'),hideCursor()" onclick="document.location.href='index.jsp'">
-		                        <a class="mainMenuLink" href="<%= request.getContextPath() %>/protected/">PROTECTED AREA</a>
+		                        <a class="mainMenuLink" href="<%=request.getContextPath()%>/protected/">PROTECTED AREA</a>
 		                      </td>
 		                      <!-- link 1 ends -->
 		                      <td><img src="images/mainMenuSeparator.gif" width="1" height="16" alt="" /></td>
@@ -126,7 +127,7 @@
                               <!-- welcome ends -->                            
                            </td>
 					     <%
-					     	if (isSessionLoaded == null || isSessionLoaded == Boolean.FALSE) {
+					     	if (webSSOUser == null) {
 					     %> 
                             <td valign="top" width="30%">
                                <!-- sidebar begins -->
