@@ -547,8 +547,8 @@ public class Introduce_1_1__1_3_Upgrader extends IntroduceUpgraderBase {
             serviceETC.setAttribute("name",service.getName().toLowerCase() +"-etcDirectoryPath");
             serviceETC.setAttribute("value","ETC-PATH");
             
-            serviceEl.addContent(serviceName);
             serviceEl.addContent(serviceETC);
+            serviceEl.addContent(serviceName); 
 
         }
 

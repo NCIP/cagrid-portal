@@ -3,6 +3,7 @@ package gov.nih.nci.cagrid.introduce.upgrade.introduce;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.common.XMLUtilities;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
+import gov.nih.nci.cagrid.introduce.codegen.provider.ProviderTools;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.common.SpecificServiceInformation;
@@ -84,20 +85,32 @@ public class Introduce_1_2__1_3_Upgrader extends IntroduceUpgraderBase {
             getServicePath() + File.separator + "build-deploy.xml"));
         getStatus().addDescriptionLine("replaced build.xml and build-deploy.xml with new version");
 
-        
         upgradeJars();
         fixSource();
         fixWSDD();
+        fixSecurityOnMetadataAccessProviders();
 
         getStatus().setStatus(StatusBase.UPGRADE_OK);
     }
-    
+
+
+    protected void fixSecurityOnMetadataAccessProviders() {
+        for (int i = 0; i < getServiceInformation().getServices().getService().length; i++) {
+            ServiceType service = getServiceInformation().getServices().getService(i);
+            if (service.getResourceFrameworkOptions().getResourcePropertyManagement() != null) {
+                ProviderTools.removeResourcePropertiesManagementResourceFrameworkOption(service,
+                    getServiceInformation());
+                ProviderTools.addResourcePropertiesManagementResourceFrameworkOption(service, getServiceInformation());
+            }
+        }
+    }
+
+
     protected void fixSource() throws Exception {
         File srcDir = new File(getServiceInformation().getBaseDirectory().getAbsolutePath() + File.separator + "src");
-        for(int serviceI = 0; serviceI < getServiceInformation().getServices().getService().length; serviceI++){
+        for (int serviceI = 0; serviceI < getServiceInformation().getServices().getService().length; serviceI++) {
             ServiceType service = getServiceInformation().getServices().getService(serviceI);
-            
-            
+
             ServiceClientTemplate clientT = new ServiceClientTemplate();
             String clientS = clientT.generate(new SpecificServiceInformation(getServiceInformation(), service));
             File clientF = new File(srcDir.getAbsolutePath() + File.separator + CommonTools.getPackageDir(service)
@@ -106,7 +119,7 @@ public class Introduce_1_2__1_3_Upgrader extends IntroduceUpgraderBase {
             FileWriter clientFW = new FileWriter(clientF);
             clientFW.write(clientS);
             clientFW.close();
-            
+
             ServiceClientBaseTemplate clientBaseT = new ServiceClientBaseTemplate();
             String clientBaseS = clientBaseT.generate(new SpecificServiceInformation(getServiceInformation(), service));
             File clientBaseF = new File(srcDir.getAbsolutePath() + File.separator + CommonTools.getPackageDir(service)
@@ -117,14 +130,16 @@ public class Introduce_1_2__1_3_Upgrader extends IntroduceUpgraderBase {
             clientBaseFW.close();
 
             ClientConfigTemplate clientConfigT = new ClientConfigTemplate();
-            String clientConfigS = clientConfigT.generate(new SpecificServiceInformation(getServiceInformation(), service));
-            File clientConfigF = new File(srcDir.getAbsolutePath() + File.separator + CommonTools.getPackageDir(service)
-                + File.separator + "client" + File.separator + "client-config.wsdd");
+            String clientConfigS = clientConfigT.generate(new SpecificServiceInformation(getServiceInformation(),
+                service));
+            File clientConfigF = new File(srcDir.getAbsolutePath() + File.separator
+                + CommonTools.getPackageDir(service) + File.separator + "client" + File.separator
+                + "client-config.wsdd");
             FileWriter clientConfigFW = new FileWriter(clientConfigF);
             clientConfigFW.write(clientConfigS);
             clientConfigFW.close();
-            
-            //add new constants base class and new constants class
+
+            // add new constants base class and new constants class
             ServiceConstantsTemplate resourceContanstsT = new ServiceConstantsTemplate();
             String resourceContanstsS = resourceContanstsT.generate(new SpecificServiceInformation(
                 getServiceInformation(), service));
@@ -135,17 +150,19 @@ public class Introduce_1_2__1_3_Upgrader extends IntroduceUpgraderBase {
             FileWriter resourceContanstsFW = new FileWriter(resourceContanstsF);
             resourceContanstsFW.write(resourceContanstsS);
             resourceContanstsFW.close();
-            
+
             ServiceConstantsBaseTemplate resourcebContanstsT = new ServiceConstantsBaseTemplate();
-            String resourcebContanstsS = resourcebContanstsT.generate(new SpecificServiceInformation(getServiceInformation(), service));
+            String resourcebContanstsS = resourcebContanstsT.generate(new SpecificServiceInformation(
+                getServiceInformation(), service));
             File resourcebContanstsF = new File(srcDir.getAbsolutePath() + File.separator
-                + CommonTools.getPackageDir(service) + File.separator + "common" + File.separator + service.getName() + "ConstantsBase.java");
+                + CommonTools.getPackageDir(service) + File.separator + "common" + File.separator + service.getName()
+                + "ConstantsBase.java");
 
             FileWriter resourcebContanstsFW = new FileWriter(resourcebContanstsF);
             resourcebContanstsFW.write(resourcebContanstsS);
-            resourcebContanstsFW.close(); 
+            resourcebContanstsFW.close();
         }
-        
+
         getStatus().addDescriptionLine("Updated many source files to be better editable and extendable");
     }
 
@@ -157,19 +174,21 @@ public class Introduce_1_2__1_3_Upgrader extends IntroduceUpgraderBase {
             Namespace.getNamespace("http://xml.apache.org/axis/wsdd/"));
         for (int serviceI = 0; serviceI < servicesEls.size(); serviceI++) {
             Element serviceEl = (Element) servicesEls.get(serviceI);
-            ServiceType service = CommonTools.getService(getServiceInformation().getServices(), serviceEl.getAttributeValue("name").substring(serviceEl.getAttributeValue("name").lastIndexOf("/")+1));
+            ServiceType service = CommonTools.getService(getServiceInformation().getServices(), serviceEl
+                .getAttributeValue("name").substring(serviceEl.getAttributeValue("name").lastIndexOf("/") + 1));
 
-            // need to add the service name att and the etc path att for each service
-            Element serviceName = new Element("parameter",Namespace.getNamespace("http://xml.apache.org/axis/wsdd/"));
-            serviceName.setAttribute("name",service.getName().toLowerCase()+"-serviceName");
-            serviceName.setAttribute("value",service.getName());
-            
-            Element serviceETC = new Element("parameter",Namespace.getNamespace("http://xml.apache.org/axis/wsdd/"));
-            serviceETC.setAttribute("name",service.getName().toLowerCase() +"-etcDirectoryPath");
-            serviceETC.setAttribute("value","ETC-PATH");
-            
-            serviceEl.addContent(serviceName);
+            // need to add the service name att and the etc path att for each
+            // service
+            Element serviceName = new Element("parameter", Namespace.getNamespace("http://xml.apache.org/axis/wsdd/"));
+            serviceName.setAttribute("name", service.getName().toLowerCase() + "-serviceName");
+            serviceName.setAttribute("value", service.getName());
+
+            Element serviceETC = new Element("parameter", Namespace.getNamespace("http://xml.apache.org/axis/wsdd/"));
+            serviceETC.setAttribute("name", service.getName().toLowerCase() + "-etcDirectoryPath");
+            serviceETC.setAttribute("value", "ETC-PATH");
+
             serviceEl.addContent(serviceETC);
+            serviceEl.addContent(serviceName);
 
         }
 
@@ -177,7 +196,7 @@ public class Introduce_1_2__1_3_Upgrader extends IntroduceUpgraderBase {
             + "server-config.wsdd");
         fw.write(XMLUtilities.formatXML(XMLUtilities.documentToString(doc)));
         fw.close();
-        
+
         getStatus().addDescriptionLine("Regenerated service-config.wsdd");
     }
 
@@ -188,7 +207,7 @@ public class Introduce_1_2__1_3_Upgrader extends IntroduceUpgraderBase {
 
         // locate the old libs in the service
         File serviceLibDir = new File(getServicePath() + File.separator + "lib");
-        
+
         File[] serviceLibs = serviceLibDir.listFiles(oldDskeletonLibFilter);
         // delete the old libraries
         for (int i = 0; i < serviceLibs.length; i++) {
@@ -200,7 +219,6 @@ public class Introduce_1_2__1_3_Upgrader extends IntroduceUpgraderBase {
             }
         }
 
-       
         FileFilter srcSkeletonLibFilter = new FileFilter() {
             public boolean accept(File name) {
                 String filename = name.getName();
@@ -222,15 +240,14 @@ public class Introduce_1_2__1_3_Upgrader extends IntroduceUpgraderBase {
                     ex);
             }
         }
-        
-        
-        //remove the old introduce tools jar from 1.2
+
+        // remove the old introduce tools jar from 1.2
         File serviceToolsLibDir = new File(getServicePath() + File.separator + "tools" + File.separator + "lib");
         File skeletonToolsLibDir = new File("skeleton" + File.separator + "tools" + File.separator + "lib");
-        File serviceTasksJar = new File(serviceToolsLibDir.getAbsolutePath() + File.separator + "caGrid-Introduce-serviceTasks-1.2.jar");
+        File serviceTasksJar = new File(serviceToolsLibDir.getAbsolutePath() + File.separator
+            + "caGrid-Introduce-serviceTasks-1.2.jar");
         serviceTasksJar.delete();
-        
-        
+
         FileFilter srcSkeletonToolsLibFilter = new FileFilter() {
             public boolean accept(File name) {
                 String filename = name.getName();
@@ -238,7 +255,7 @@ public class Introduce_1_2__1_3_Upgrader extends IntroduceUpgraderBase {
             }
         };
         // copy new libraries into tools (every thing in skeleton/tool/lib)
-       
+
         File[] skeletonToolsLibs = skeletonToolsLibDir.listFiles(srcSkeletonToolsLibFilter);
         for (int i = 0; i < skeletonToolsLibs.length; i++) {
             File out = new File(serviceToolsLibDir.getAbsolutePath() + File.separator + skeletonToolsLibs[i].getName());
@@ -246,8 +263,8 @@ public class Introduce_1_2__1_3_Upgrader extends IntroduceUpgraderBase {
                 Utils.copyFile(skeletonToolsLibs[i], out);
                 getStatus().addDescriptionLine(skeletonToolsLibs[i].getName() + " added");
             } catch (IOException ex) {
-                throw new Exception("Error copying library (" + skeletonToolsLibs[i] + ") to service: " + ex.getMessage(),
-                    ex);
+                throw new Exception("Error copying library (" + skeletonToolsLibs[i] + ") to service: "
+                    + ex.getMessage(), ex);
             }
         }
 
