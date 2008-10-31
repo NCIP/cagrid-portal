@@ -418,32 +418,6 @@ public class TestHostCertificateManager extends TestCase implements Publisher {
     }
 
 
-    public void testOwnerRemovedUpdateHostCertificates() {
-        try {
-            HostCertificateManager hcm = new HostCertificateManager(db, getConf(), ca, this, blackList);
-            hcm.clearDatabase();
-            long id1 = hcm.requestHostCertifcate(OWNER, getHostCertificateRequest("localhost1"));
-            hcm.approveHostCertifcate(id1);
-            HostCertificateUpdate update1 = new HostCertificateUpdate();
-            update1.setId(id1);
-            update1.setStatus(HostCertificateStatus.Suspended);
-            hcm.updateHostCertificateRecord(update1);
-
-            long id2 = hcm.requestHostCertifcate(OWNER, getHostCertificateRequest("localhost2"));
-            hcm.approveHostCertifcate(id2);
-
-            long id3 = hcm.requestHostCertifcate(OWNER, getHostCertificateRequest("localhost3"));
-
-            hcm.ownerRemovedUpdateHostCertificates(OWNER,true);
-            assertEquals(HostCertificateStatus.Compromised, hcm.getHostCertificateRecord(id1).getStatus());
-            assertEquals(HostCertificateStatus.Compromised, hcm.getHostCertificateRecord(id2).getStatus());
-            assertEquals(HostCertificateStatus.Rejected, hcm.getHostCertificateRecord(id3).getStatus());
-        } catch (Exception e) {
-            FaultUtil.printFault(e);
-            fail(e.getMessage());
-        }
-    }
-
 
     public void testApproveActiveHostCertificate() {
         try {

@@ -98,6 +98,7 @@ public class IdentityFederationManager extends LoggingObject implements Publishe
     private EventAuditor federationAuditor;
     private EventAuditor gridAccountAuditor;
     private EventAuditor hostAuditor;
+    private EventAuditor userCertificateAuditor;
 
 
     public IdentityFederationManager(IdentityFederationProperties conf, Database db, PropertyManager properties,
@@ -208,6 +209,14 @@ public class IdentityFederationManager extends LoggingObject implements Publishe
                     AuditingConstants.HOST_AUDITOR_DB);
                 this.eventManager.registerHandler(this.hostAuditor);
             }
+            
+            if (this.eventManager.isHandlerRegistered(AuditingConstants.USER_CERTIFICATE_AUDITOR)) {
+                this.userCertificateAuditor = (EventAuditor) this.eventManager.getEventHandler(AuditingConstants.USER_CERTIFICATE_AUDITOR);
+            } else {
+                this.userCertificateAuditor = new EventAuditor(AuditingConstants.USER_CERTIFICATE_AUDITOR, this.db,
+                    AuditingConstants.USER_CERTIFICATE_AUDITOR_DB);
+                this.eventManager.registerHandler(this.userCertificateAuditor);
+            }
 
             this.eventManager.registerEventWithHandler(new EventToHandlerMapping(FederationAuditing.SystemStartup
                 .getValue(), AuditingConstants.FEDERATION_AUDITOR));
@@ -226,23 +235,33 @@ public class IdentityFederationManager extends LoggingObject implements Publishe
             this.eventManager.registerEventWithHandler(new EventToHandlerMapping(FederationAuditing.CRLPublished
                 .getValue(), AuditingConstants.FEDERATION_AUDITOR));
             this.eventManager.registerEventWithHandler(new EventToHandlerMapping(FederationAuditing.AccountCreated
-                .getValue(), AuditingConstants.FEDERATION_AUDITOR));
+                .getValue(), AuditingConstants.GRID_ACCOUNT_AUDITOR));
             this.eventManager.registerEventWithHandler(new EventToHandlerMapping(FederationAuditing.AccountUpdated
-                .getValue(), AuditingConstants.FEDERATION_AUDITOR));
+                .getValue(), AuditingConstants.GRID_ACCOUNT_AUDITOR));
             this.eventManager.registerEventWithHandler(new EventToHandlerMapping(FederationAuditing.AccountRemoved
-                .getValue(), AuditingConstants.FEDERATION_AUDITOR));
+                .getValue(), AuditingConstants.GRID_ACCOUNT_AUDITOR));
+            this.eventManager
+                .registerEventWithHandler(new EventToHandlerMapping(FederationAuditing.SuccessfulUserCertificateRequest
+                    .getValue(), AuditingConstants.GRID_ACCOUNT_AUDITOR));
             this.eventManager.registerEventWithHandler(new EventToHandlerMapping(
-                FederationAuditing.SuccessfulUserCertificateRequest.getValue(), AuditingConstants.FEDERATION_AUDITOR));
+                FederationAuditing.InvalidUserCertificateRequest.getValue(), AuditingConstants.GRID_ACCOUNT_AUDITOR));
             this.eventManager.registerEventWithHandler(new EventToHandlerMapping(
-                FederationAuditing.InvalidUserCertificateRequest.getValue(), AuditingConstants.FEDERATION_AUDITOR));
+                FederationAuditing.HostCertificateRequested.getValue(), AuditingConstants.HOST_AUDITOR));
             this.eventManager.registerEventWithHandler(new EventToHandlerMapping(
-                FederationAuditing.HostCertificateRequested.getValue(), AuditingConstants.FEDERATION_AUDITOR));
+                FederationAuditing.HostCertificateApproved.getValue(), AuditingConstants.HOST_AUDITOR));
             this.eventManager.registerEventWithHandler(new EventToHandlerMapping(
-                FederationAuditing.HostCertificateUpdated.getValue(), AuditingConstants.FEDERATION_AUDITOR));
+                FederationAuditing.HostCertificateUpdated.getValue(), AuditingConstants.HOST_AUDITOR));
             this.eventManager.registerEventWithHandler(new EventToHandlerMapping(
-                FederationAuditing.HostCertificateRemoved.getValue(), AuditingConstants.FEDERATION_AUDITOR));
+                FederationAuditing.HostCertificateRemoved.getValue(), AuditingConstants.HOST_AUDITOR));
             this.eventManager.registerEventWithHandler(new EventToHandlerMapping(
-                FederationAuditing.HostCertificateRenewed.getValue(), AuditingConstants.FEDERATION_AUDITOR));
+                FederationAuditing.HostCertificateRenewed.getValue(), AuditingConstants.HOST_AUDITOR));
+            
+            this.eventManager.registerEventWithHandler(new EventToHandlerMapping(
+                FederationAuditing.UserCertificateSigned.getValue(), AuditingConstants.USER_CERTIFICATE_AUDITOR));
+            this.eventManager.registerEventWithHandler(new EventToHandlerMapping(
+                FederationAuditing.UserCertificateUpdated.getValue(), AuditingConstants.USER_CERTIFICATE_AUDITOR));
+            this.eventManager.registerEventWithHandler(new EventToHandlerMapping(
+                FederationAuditing.UserCertificateRemoved.getValue(), AuditingConstants.USER_CERTIFICATE_AUDITOR));
         } catch (Exception e) {
             logError(Utils.getExceptionMessage(e), e);
             String mess = "An unexpected error occurred initializing the auditing system:\n"
@@ -296,7 +315,7 @@ public class IdentityFederationManager extends LoggingObject implements Publishe
         verifyAdminUser(caller);
         idp = tm.addTrustedIdP(idp);
         this.eventManager.logEvent(idp.getName(), callerGridIdentity, FederationAuditing.IdPAdded.getValue(),
-            "The Trusted Identity Provider " + idp.getName() + " (" + idp.getId() + ") by " + callerGridIdentity + ".");
+            "The Trusted Identity Provider " + idp.getName() + " (" + idp.getId() + ") was added by " + callerGridIdentity + ".");
         return idp;
     }
 
@@ -424,10 +443,47 @@ public class IdentityFederationManager extends LoggingObject implements Publishe
         try {
             um.removeUser(usr);
             this.userCertificateManager.removeCertificates(usr.getGridId());
-            boolean publishCRLNow = this.hostManager.ownerRemovedUpdateHostCertificates(usr.getGridId(), false);
+
+            List<HostCertificateRecord> records = this.hostManager.getHostCertificateRecords(usr.getGridId());
+            boolean updateCRL = false;
+            for (int i = 0; i < records.size(); i++) {
+                HostCertificateRecord r = records.get(i);
+                if ((r.getStatus().equals(HostCertificateStatus.Active))
+                    || (r.getStatus().equals(HostCertificateStatus.Suspended))) {
+                    HostCertificateUpdate update = new HostCertificateUpdate();
+                    update.setId(r.getId());
+                    update.setStatus(HostCertificateStatus.Compromised);
+                    this.hostManager.updateHostCertificateRecord(update);
+                    this.eventManager.logEvent(String.valueOf(r.getId()), EventConstants.SYSTEM_ID,
+                        FederationAuditing.HostCertificateUpdated.getValue(),
+                        "The status of the certificate for the host " + r.getHost() + " (" + r.getId()
+                            + "), was changed from " + r.getStatus().getValue() + " to "
+                            + HostCertificateStatus.Compromised.getValue() + ", because its owner's (" + r.getOwner()
+                            + ") account was removed.");
+                    updateCRL = true;
+                } else if (r.getStatus().equals(HostCertificateStatus.Pending)) {
+                    HostCertificateUpdate update = new HostCertificateUpdate();
+                    update.setId(r.getId());
+                    update.setStatus(HostCertificateStatus.Rejected);
+                    this.hostManager.updateHostCertificateRecord(update);
+                    this.eventManager.logEvent(String.valueOf(r.getId()), EventConstants.SYSTEM_ID,
+                        FederationAuditing.HostCertificateUpdated.getValue(),
+                        "The status of the certificate for the host " + r.getHost() + " (" + r.getId()
+                            + "), was changed from " + r.getStatus().getValue() + " to "
+                            + HostCertificateStatus.Rejected.getValue() + ", because its owner's (" + r.getOwner()
+                            + ") account was removed.");
+                }
+            }
+
+            if (this.administrators.isMember(usr.getGridId())) {
+                this.administrators.removeMember(usr.getGridId());
+                this.eventManager.logEvent(usr.getGridId(), EventConstants.SYSTEM_ID, FederationAuditing.AdminRemoved
+                    .getValue(), "Administrative privileges were revoked for the user " + usr.getGridId()
+                    + " because the account was removed.");
+            }
             this.groupManager.removeUserFromAllGroups(usr.getGridId());
 
-            if (publishCRLNow) {
+            if (updateCRL) {
                 publishCRL();
             }
         } catch (InvalidUserFault e) {
@@ -436,6 +492,14 @@ public class IdentityFederationManager extends LoggingObject implements Publishe
             logError(e.getMessage(), e);
             DorianInternalFault fault = new DorianInternalFault();
             fault.setFaultString("An unexpected error occurred in removing the user from all groups.");
+            FaultHelper helper = new FaultHelper(fault);
+            helper.addFaultCause(e);
+            fault = (DorianInternalFault) helper.getFault();
+            throw fault;
+        } catch (InvalidHostCertificateFault e) {
+            logError(e.getMessage(), e);
+            DorianInternalFault fault = new DorianInternalFault();
+            fault.setFaultString("An unexpected error occurred.");
             FaultHelper helper = new FaultHelper(fault);
             helper.addFaultCause(e);
             fault = (DorianInternalFault) helper.getFault();
@@ -467,7 +531,7 @@ public class IdentityFederationManager extends LoggingObject implements Publishe
                 verifyActiveUser(admin);
                 this.administrators.addMember(gridIdentity);
                 this.eventManager.logEvent(gridIdentity, callerGridIdentity, FederationAuditing.AdminAdded.getValue(),
-                    "The user " + gridIdentity + " was granted federation administrator privileges by "
+                    "The user " + gridIdentity + " was granted administrator privileges by "
                         + callerGridIdentity + ".");
             }
         } catch (GroupException e) {
@@ -490,7 +554,7 @@ public class IdentityFederationManager extends LoggingObject implements Publishe
         try {
             this.administrators.removeMember(gridIdentity);
             this.eventManager.logEvent(gridIdentity, callerGridIdentity, FederationAuditing.AdminRemoved.getValue(),
-                "The user " + gridIdentity + " federation administrator privileges were revoked by "
+                "The administrative privileges for the user, " + gridIdentity + " were revoked by "
                     + callerGridIdentity + ".");
         } catch (GroupException e) {
             logError(e.getMessage(), e);
@@ -1171,6 +1235,7 @@ public class IdentityFederationManager extends LoggingObject implements Publishe
             this.gridAccountAuditor.clear();
             this.federationAuditor.clear();
             this.hostAuditor.clear();
+            this.userCertificateAuditor.clear();
         } catch (Exception e) {
             logError(e.getMessage(), e);
             DorianInternalFault fault = new DorianInternalFault();
@@ -1239,7 +1304,7 @@ public class IdentityFederationManager extends LoggingObject implements Publishe
         verifyAdminUser(caller);
         this.userCertificateManager.removeCertificate(serialNumber);
         this.eventManager.logEvent(String.valueOf(serialNumber), callerIdentity,
-            FederationAuditing.UserCertificateSigned.getValue(), "User certificate (" + serialNumber + ") removed by "
+            FederationAuditing.UserCertificateRemoved.getValue(), "User certificate (" + serialNumber + ") removed by "
                 + callerIdentity + ".");
     }
 
@@ -1253,6 +1318,7 @@ public class IdentityFederationManager extends LoggingObject implements Publishe
         handlers.add(this.federationAuditor);
         handlers.add(this.hostAuditor);
         handlers.add(this.gridAccountAuditor);
+        handlers.add(this.userCertificateAuditor);
         List<FederationAuditRecord> list = new ArrayList<FederationAuditRecord>();
         for (int i = 0; i < handlers.size(); i++) {
             EventAuditor eh = handlers.get(i);
@@ -1260,8 +1326,8 @@ public class IdentityFederationManager extends LoggingObject implements Publishe
                 f = new FederationAuditFilter();
             }
             String eventType = null;
-            if (f.getAuditingType() != null) {
-                eventType = f.getAuditingType().getValue();
+            if (f.getAuditType() != null) {
+                eventType = f.getAuditType().getValue();
             }
 
             Date start = null;
@@ -1281,9 +1347,9 @@ public class IdentityFederationManager extends LoggingObject implements Publishe
                     FederationAuditRecord r = new FederationAuditRecord();
                     r.setTargetId(e.getTargetId());
                     r.setReportingPartyId(e.getReportingPartyId());
-                    r.setAuditingType(FederationAuditing.fromValue(e.getEventType()));
+                    r.setAuditType(FederationAuditing.fromValue(e.getEventType()));
                     r.setOccurredAt(new Date(e.getOccurredAt()));
-                    r.setAuditingMessage(e.getMessage());
+                    r.setAuditMessage(e.getMessage());
                     list.add(r);
                 }
             } catch (Exception e) {

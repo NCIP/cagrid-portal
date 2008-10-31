@@ -69,42 +69,6 @@ public class HostCertificateManager extends LoggingObject {
 	}
 
 
-	public boolean ownerRemovedUpdateHostCertificates(String owner, boolean publishCRL) throws DorianInternalFault {
-		try {
-			List<HostCertificateRecord> records = this.getHostCertificateRecords(owner);
-			boolean updateCRL = false;
-			for (int i = 0; i < records.size(); i++) {
-				HostCertificateRecord r = records.get(i);
-				if ((r.getStatus().equals(HostCertificateStatus.Active))
-					|| (r.getStatus().equals(HostCertificateStatus.Suspended))) {
-					HostCertificateUpdate update = new HostCertificateUpdate();
-					update.setId(r.getId());
-					update.setStatus(HostCertificateStatus.Compromised);
-					updateHostCertificateRecord(update);
-					updateCRL = true;
-				} else if (r.getStatus().equals(HostCertificateStatus.Pending)) {
-					HostCertificateUpdate update = new HostCertificateUpdate();
-					update.setId(r.getId());
-					update.setStatus(HostCertificateStatus.Rejected);
-					updateHostCertificateRecord(update);
-				}
-			}
-			if (updateCRL && publishCRL) {
-				publisher.publishCRL();
-			}
-			return updateCRL;
-		} catch (Exception e) {
-			logError(e.getMessage(), e);
-			DorianInternalFault fault = new DorianInternalFault();
-			fault.setFaultString("An unexpected error occurred.");
-			FaultHelper helper = new FaultHelper(fault);
-			helper.addFaultCause(e);
-			fault = (DorianInternalFault) helper.getFault();
-			throw fault;
-		}
-	}
-
-
 	public synchronized HostCertificateRecord renewHostCertificate(long id) throws DorianInternalFault,
 		InvalidHostCertificateFault {
 		HostCertificateRecord record = this.getHostCertificateRecord(id);
