@@ -30,11 +30,11 @@ import org.cagrid.data.test.creation.DeleteOldServiceStep;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A> *
  * @created Nov 7, 2006
- * @version $Id: SystemTests.java,v 1.4 2008-10-28 22:50:57 dervin Exp $
+ * @version $Id: SystemTests.java,v 1.5 2008-10-31 14:30:27 dervin Exp $
  */
 public class SystemTests extends BaseSystemTest {
     
-    private static File auditorLogFile = new File("./dataServiceAuditing.log").getAbsoluteFile();
+    private File auditorLogFile = null;
     
     private DataTestCaseInfo info;
     private ServiceContainer container;
@@ -57,6 +57,14 @@ public class SystemTests extends BaseSystemTest {
 
 
     protected boolean storySetUp() {
+        // init the log file
+        try {
+            auditorLogFile = new File("./dataServiceAuditing.log").getCanonicalFile();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            fail("Error identifying auditor log file: " + ex.getMessage());
+        }
+    
         // init the test info
         info = new CreationTests.TestDataServiceInfo();
         
