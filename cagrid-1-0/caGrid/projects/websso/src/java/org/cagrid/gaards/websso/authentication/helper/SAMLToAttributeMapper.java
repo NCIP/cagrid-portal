@@ -6,9 +6,9 @@ import java.util.HashMap;
 
 import org.cagrid.gaards.websso.exception.AuthenticationConfigurationException;
 
-public interface SAMLToAttributeMapper
-{
-	
-	public HashMap<String, String> convertSAMLtoHashMap(SAMLAssertion samlAssertion) throws AuthenticationConfigurationException;
-	
+public interface SAMLToAttributeMapper {
+
+	public HashMap<String, String> convertSAMLtoHashMap(
+			SAMLAssertion samlAssertion)
+			throws AuthenticationConfigurationException;
 }

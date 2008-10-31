@@ -8,10 +8,10 @@ import org.globus.gsi.GlobusCredential;
 
 /**
  * @author modik [Kunal Modi - Ekagra Software Technologies Ltd.]
- *
+ * 
  */
 public interface ProxyValidator {
-	
-	public boolean validate(GlobusCredential proxy) throws AuthenticationConfigurationException;
 
+	public boolean validate(GlobusCredential proxy)
+			throws AuthenticationConfigurationException;
 }

@@ -16,98 +16,97 @@ import org.globus.gsi.proxy.ProxyPathValidatorException;
 
 /**
  * @author MODI
- *
+ * 
  */
 public class ProxyValidatorImpl implements ProxyValidator {
 
 	private String trustStorePath = null;
-	
+
 	private String certificateRevocationListPath = null;
-	
-	public ProxyValidatorImpl()
-	{
+
+	public ProxyValidatorImpl() {
 		super();
 	}
-	
-	public ProxyValidatorImpl(String trustStorePath, String certificateRevocationListPath)
-	{
+
+	public ProxyValidatorImpl(String trustStorePath,
+			String certificateRevocationListPath) {
 		super();
 		this.trustStorePath = trustStorePath.trim();
-		this.certificateRevocationListPath = certificateRevocationListPath.trim();
+		this.certificateRevocationListPath = certificateRevocationListPath
+				.trim();
 	}
 
-	/* (non-Javadoc)
-	 * @see org.cagrid.gaards.websso.authentication.helper.CaGridProxyValidator#validate(org.globus.gsi.GlobusCredential)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.cagrid.gaards.websso.authentication.helper.CaGridProxyValidator#validate
+	 * (org.globus.gsi.GlobusCredential)
 	 */
-	public boolean validate(GlobusCredential globusCredential) throws AuthenticationConfigurationException
-	{
-		
-		if (null == globusCredential)
-		{
-			throw new AuthenticationConfigurationException("No proxy certificate found");
+	public boolean validate(GlobusCredential globusCredential)
+			throws AuthenticationConfigurationException {
+
+		if (null == globusCredential) {
+			throw new AuthenticationConfigurationException(
+					"No proxy certificate found");
 		}
-    	try
-		{
+		try {
 			globusCredential.verify();
-		} catch (GlobusCredentialException e)
-		{
-			throw new AuthenticationConfigurationException("Error verifying the proxy certificate : " + e.getMessage(), e);
+		} catch (GlobusCredentialException e) {
+			throw new AuthenticationConfigurationException(
+					"Error verifying the proxy certificate : " + e.getMessage(),
+					e);
 		}
 
-        X509Certificate[] proxyChain = globusCredential.getCertificateChain();
-        X509Certificate[] trustedCerts = null;
-        CertificateRevocationLists crls = null;
+		X509Certificate[] proxyChain = globusCredential.getCertificateChain();
+		X509Certificate[] trustedCerts = null;
+		CertificateRevocationLists crls = null;
 
-        String trustStoreLocation = getTrustStorePath();
-        if (trustStoreLocation != null && trustStoreLocation.length() != 0 ) 
-        {
-            trustedCerts = TrustedCertificates.loadCertificates(trustStoreLocation);
-        } 
-        else 
-        {
-            trustedCerts = TrustedCertificates.getDefaultTrustedCertificates().getCertificates();
-        }
+		String trustStoreLocation = getTrustStorePath();
+		if (trustStoreLocation != null && trustStoreLocation.length() != 0) {
+			trustedCerts = TrustedCertificates
+					.loadCertificates(trustStoreLocation);
+		} else {
+			trustedCerts = TrustedCertificates.getDefaultTrustedCertificates()
+					.getCertificates();
+		}
 
-        String certificateRevocationListLocation = getCertificateRevocationListPath();
-        if (certificateRevocationListLocation != null && certificateRevocationListLocation.length() != 0 ) 
-        {
-            crls = CertificateRevocationLists.getCertificateRevocationLists(certificateRevocationListLocation);
-        } 
-        else 
-        {
-            crls = CertificateRevocationLists.getDefaultCertificateRevocationLists();
-        }
+		String certificateRevocationListLocation = getCertificateRevocationListPath();
+		if (certificateRevocationListLocation != null
+				&& certificateRevocationListLocation.length() != 0) {
+			crls = CertificateRevocationLists
+					.getCertificateRevocationLists(certificateRevocationListLocation);
+		} else {
+			crls = CertificateRevocationLists
+					.getDefaultCertificateRevocationLists();
+		}
 
-        ProxyPathValidator proxyPathValidator = new ProxyPathValidator();
-        try
-		{
+		ProxyPathValidator proxyPathValidator = new ProxyPathValidator();
+		try {
 			proxyPathValidator.validate(proxyChain, trustedCerts, crls);
-		} catch (ProxyPathValidatorException e)
-		{
-			throw new AuthenticationConfigurationException("Error validating the Proxy Certificate : " + e.getMessage(), e);
+		} catch (ProxyPathValidatorException e) {
+			throw new AuthenticationConfigurationException(
+					"Error validating the Proxy Certificate : "
+							+ e.getMessage(), e);
 		}
 
-        return true;
+		return true;
 	}
 
-	public String getTrustStorePath()
-	{
+	public String getTrustStorePath() {
 		return trustStorePath;
 	}
 
-	public void setTrustStorePath(String trustStorePath)
-	{
+	public void setTrustStorePath(String trustStorePath) {
 		this.trustStorePath = trustStorePath;
 	}
 
-	public String getCertificateRevocationListPath()
-	{
+	public String getCertificateRevocationListPath() {
 		return certificateRevocationListPath;
 	}
 
-	public void setCertificateRevocationListPath(String certificateRevocationListPath)
-	{
+	public void setCertificateRevocationListPath(
+			String certificateRevocationListPath) {
 		this.certificateRevocationListPath = certificateRevocationListPath;
 	}
-
 }

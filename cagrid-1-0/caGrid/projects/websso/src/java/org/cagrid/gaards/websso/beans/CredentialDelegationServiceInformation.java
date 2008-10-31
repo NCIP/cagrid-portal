@@ -2,63 +2,53 @@ package org.cagrid.gaards.websso.beans;
 
 import java.io.Serializable;
 
-public class CredentialDelegationServiceInformation implements Serializable
-{
-	
+public class CredentialDelegationServiceInformation implements Serializable {
+
 	private static final long serialVersionUID = 1L;
 
 	private String serviceURL = null;
-	
+
 	private int delegationLifetimeHours = 12;
 
 	private int delegationLifetimeMinutes = 0;
 
 	private int delegationLifetimeSeconds = 0;
-	
+
 	private int issuedCredentialPathLength = 0;
 
-	public String getServiceURL()
-	{
+	public String getServiceURL() {
 		return serviceURL;
 	}
 
-	public void setServiceURL(String serviceURL)
-	{
+	public void setServiceURL(String serviceURL) {
 		this.serviceURL = serviceURL;
 	}
 
-	public int getDelegationLifetimeHours()
-	{
+	public int getDelegationLifetimeHours() {
 		return delegationLifetimeHours;
 	}
 
-	public void setDelegationLifetimeHours(int delegationLifetimeHours)
-	{
+	public void setDelegationLifetimeHours(int delegationLifetimeHours) {
 		this.delegationLifetimeHours = delegationLifetimeHours;
 	}
 
-	public int getDelegationLifetimeMinutes()
-	{
+	public int getDelegationLifetimeMinutes() {
 		return delegationLifetimeMinutes;
 	}
 
-	public void setDelegationLifetimeMinutes(int delegationLifetimeMinutes)
-	{
+	public void setDelegationLifetimeMinutes(int delegationLifetimeMinutes) {
 		this.delegationLifetimeMinutes = delegationLifetimeMinutes;
 	}
 
-	public int getDelegationLifetimeSeconds()
-	{
+	public int getDelegationLifetimeSeconds() {
 		return delegationLifetimeSeconds;
 	}
 
-	public void setDelegationLifetimeSeconds(int delegationLifetimeSeconds)
-	{
+	public void setDelegationLifetimeSeconds(int delegationLifetimeSeconds) {
 		this.delegationLifetimeSeconds = delegationLifetimeSeconds;
 	}
 
-	public static long getSerialVersionUID()
-	{
+	public static long getSerialVersionUID() {
 		return serialVersionUID;
 	}
 

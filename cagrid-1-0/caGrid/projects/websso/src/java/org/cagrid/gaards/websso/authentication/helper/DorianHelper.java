@@ -7,9 +7,10 @@ import org.cagrid.gaards.websso.exception.AuthenticationConfigurationException;
 import org.cagrid.gaards.websso.exception.AuthenticationErrorException;
 import org.globus.gsi.GlobusCredential;
 
-public interface DorianHelper
-{
-	
-	public GlobusCredential obtainProxy(SAMLAssertion samlAssertion, DorianInformation dorianInformation) throws AuthenticationConfigurationException, AuthenticationErrorException;
+public interface DorianHelper {
 
+	public GlobusCredential obtainProxy(SAMLAssertion samlAssertion,
+			DorianInformation dorianInformation)
+			throws AuthenticationConfigurationException,
+			AuthenticationErrorException;
 }

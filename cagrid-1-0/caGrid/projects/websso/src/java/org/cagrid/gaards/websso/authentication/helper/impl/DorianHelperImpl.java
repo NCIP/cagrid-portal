@@ -10,7 +10,6 @@ import org.cagrid.gaards.dorian.client.GridUserClient;
 import org.cagrid.gaards.dorian.common.DorianFault;
 import org.cagrid.gaards.dorian.stubs.types.DorianInternalFault;
 import org.cagrid.gaards.dorian.stubs.types.InvalidAssertionFault;
-import org.cagrid.gaards.dorian.stubs.types.InvalidProxyFault;
 import org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault;
 import org.cagrid.gaards.dorian.stubs.types.UserPolicyFault;
 import org.cagrid.gaards.websso.authentication.helper.DorianHelper;
@@ -19,57 +18,54 @@ import org.cagrid.gaards.websso.exception.AuthenticationConfigurationException;
 import org.cagrid.gaards.websso.exception.AuthenticationErrorException;
 import org.globus.gsi.GlobusCredential;
 
-public class DorianHelperImpl implements DorianHelper
-{
-		
-	public DorianHelperImpl()
-	{
+public class DorianHelperImpl implements DorianHelper {
+
+	public DorianHelperImpl() {
 		super();
 	}
 
-	
-	public GlobusCredential obtainProxy(SAMLAssertion samlAssertion, DorianInformation dorianInformation) throws AuthenticationConfigurationException, AuthenticationErrorException
-	{
+	public GlobusCredential obtainProxy(SAMLAssertion samlAssertion,
+			DorianInformation dorianInformation)
+			throws AuthenticationConfigurationException,
+			AuthenticationErrorException {
 		GlobusCredential globusCredential = null;
-		
+
 		GridUserClient ifsUserClient = null;
-		try
-		{
-			ifsUserClient = new GridUserClient(dorianInformation.getDorianServiceURL());
-		} catch (MalformedURIException e)
-		{
-			throw new AuthenticationConfigurationException("Invalid Dorian Service URL : " + e.getMessage());
-		} 
-		catch (RemoteException e)
-		{
-			throw new AuthenticationConfigurationException("Error accessing the Dorian Service : " + e.getMessage());
+		try {
+			ifsUserClient = new GridUserClient(dorianInformation
+					.getDorianServiceURL());
+		} catch (MalformedURIException e) {
+			throw new AuthenticationConfigurationException(
+					"Invalid Dorian Service URL : " + e.getMessage());
+		} catch (RemoteException e) {
+			throw new AuthenticationConfigurationException(
+					"Error accessing the Dorian Service : " + e.getMessage());
 		}
-		try
-		{
-			globusCredential = ifsUserClient.requestUserCertificate(samlAssertion, dorianInformation.getProxyLifeTime());
-		} catch (DorianFault e)
-		{
-			throw new AuthenticationConfigurationException("Error accessing the Dorian Service : " + FaultUtil.printFaultToString(e));
-		} 
-		catch (DorianInternalFault e)
-		{
-			throw new AuthenticationConfigurationException("Error accessing the Dorian Service : " + FaultUtil.printFaultToString(e));
-		} 
-		catch (InvalidAssertionFault e)
-		{
-			throw new AuthenticationConfigurationException("Invalid SAML Assertion obtained from Authentication Service : " + FaultUtil.printFaultToString(e));
-		} 
-		catch (UserPolicyFault e)
-		{
-			throw new AuthenticationConfigurationException("Policy Error occured obtaining Proxy from Dorian : " + FaultUtil.printFaultToString(e));
-		} 
-		catch (PermissionDeniedFault e)
-		{
-			throw new AuthenticationErrorException("Permission denied while obtaining Proxy from Dorian : " + FaultUtil.printFaultToString(e));
+		try {
+			globusCredential = ifsUserClient.requestUserCertificate(
+					samlAssertion, dorianInformation.getProxyLifeTime());
+		} catch (DorianFault e) {
+			throw new AuthenticationConfigurationException(
+					"Error accessing the Dorian Service : "
+							+ FaultUtil.printFaultToString(e));
+		} catch (DorianInternalFault e) {
+			throw new AuthenticationConfigurationException(
+					"Error accessing the Dorian Service : "
+							+ FaultUtil.printFaultToString(e));
+		} catch (InvalidAssertionFault e) {
+			throw new AuthenticationConfigurationException(
+					"Invalid SAML Assertion obtained from Authentication Service : "
+							+ FaultUtil.printFaultToString(e));
+		} catch (UserPolicyFault e) {
+			throw new AuthenticationConfigurationException(
+					"Policy Error occured obtaining Proxy from Dorian : "
+							+ FaultUtil.printFaultToString(e));
+		} catch (PermissionDeniedFault e) {
+			throw new AuthenticationErrorException(
+					"Permission denied while obtaining Proxy from Dorian : "
+							+ FaultUtil.printFaultToString(e));
 		}
 
 		return globusCredential;
-
 	}
-
 }

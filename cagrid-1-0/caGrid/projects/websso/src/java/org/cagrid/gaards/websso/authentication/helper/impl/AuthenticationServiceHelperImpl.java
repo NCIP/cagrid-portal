@@ -16,57 +16,54 @@ import org.cagrid.gaards.websso.authentication.helper.AuthenticationServiceHelpe
 import org.cagrid.gaards.websso.exception.AuthenticationErrorException;
 import org.cagrid.gaards.websso.exception.AuthenticationConfigurationException;
 
-public class AuthenticationServiceHelperImpl implements AuthenticationServiceHelper
-{
+public class AuthenticationServiceHelperImpl implements
+		AuthenticationServiceHelper {
 
-	public AuthenticationServiceHelperImpl()
-	{
+	public AuthenticationServiceHelperImpl() {
 		super();
 	}
 
-	public SAMLAssertion authenticate(String authenticationServiceURL, String userName, String password) throws AuthenticationErrorException, AuthenticationConfigurationException
-	{
+	public SAMLAssertion authenticate(String authenticationServiceURL,
+			String userName, String password)
+			throws AuthenticationErrorException,
+			AuthenticationConfigurationException {
 		SAMLAssertion samlAssertion = null;
 		BasicAuthenticationCredential basicAuthenticationCredential = new BasicAuthenticationCredential();
 		basicAuthenticationCredential.setUserId(userName);
 		basicAuthenticationCredential.setPassword(password);
 		Credential credential = new Credential();
-		credential.setBasicAuthenticationCredential(basicAuthenticationCredential);
+		credential
+				.setBasicAuthenticationCredential(basicAuthenticationCredential);
 
 		AuthenticationClient authenticationClient;
-		try
-		{
-			authenticationClient = new AuthenticationClient(authenticationServiceURL, credential);
-		} 
-		catch (MalformedURIException e)
-		{
-			throw new AuthenticationConfigurationException("Invalid Authentication Service URL : " + e.getMessage());
-		} 
-		catch (RemoteException e)
-		{
-			throw new AuthenticationConfigurationException("Error accessing the Authentication Service : " + e.getMessage());
+		try {
+			authenticationClient = new AuthenticationClient(
+					authenticationServiceURL, credential);
+		} catch (MalformedURIException e) {
+			throw new AuthenticationConfigurationException(
+					"Invalid Authentication Service URL : " + e.getMessage());
+		} catch (RemoteException e) {
+			throw new AuthenticationConfigurationException(
+					"Error accessing the Authentication Service : "+ e.getMessage());
 		}
-		try
-		{
+		try {
 			samlAssertion = authenticationClient.authenticate();
-		} 
-		catch (InvalidCredentialFault e)
-		{
-			throw new AuthenticationErrorException("Invalid Credentials : " + FaultUtil.printFaultToString(e));
-		} 
-		catch (InsufficientAttributeFault e)
-		{
-			throw new AuthenticationConfigurationException("Insufficient Attribute configured for the Authentication Service : " + FaultUtil.printFaultToString(e));
-		} 
-		catch (AuthenticationProviderFault e)
-		{
-			throw new AuthenticationConfigurationException("Error accessing the Authentication Provider : " + FaultUtil.printFaultToString(e));
-		} 
-		catch (RemoteException e)
-		{
-			throw new AuthenticationConfigurationException("Error accessing the Authentication Service : " + e.getMessage());
+		} catch (InvalidCredentialFault e) {
+			throw new AuthenticationErrorException("Invalid Credentials : "
+					+ FaultUtil.printFaultToString(e));
+		} catch (InsufficientAttributeFault e) {
+			throw new AuthenticationConfigurationException(
+					"Insufficient Attribute configured for the Authentication Service : "
+							+ FaultUtil.printFaultToString(e));
+		} catch (AuthenticationProviderFault e) {
+			throw new AuthenticationConfigurationException(
+					"Error accessing the Authentication Provider : "
+							+ FaultUtil.printFaultToString(e));
+		} catch (RemoteException e) {
+			throw new AuthenticationConfigurationException(
+					"Error accessing the Authentication Service : "
+							+ e.getMessage());
 		}
 		return samlAssertion;
 	}
-
 }

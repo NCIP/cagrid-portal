@@ -29,96 +29,105 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.AbstractController;
 
-public class CaGridLogoutController extends AbstractController
-{	
+public class CaGridLogoutController extends AbstractController {
 	LogoutController logoutController = new LogoutController();
-	
-    protected ModelAndView handleRequestInternal( final HttpServletRequest request, final HttpServletResponse response) throws Exception 
-    {
-		String delegationEPR = request.getParameter(WebSSOConstants.CAGRID_SSO_DELEGATION_SERVICE_EPR);
-		if (delegationEPR != null && delegationEPR.trim().length() != 0)
-		{
-			WebApplicationContext ctx =
-				WebApplicationContextUtils.getRequiredWebApplicationContext(this.getServletContext());
-			WebSSOProperties webSSOProperties = (WebSSOProperties)ctx.getBean(WebSSOConstants.WEBSSO_PROPERTIES);
-			WebSSOServerInformation webSSOServerInformation = webSSOProperties.getWebSSOServerInformation(); 
+
+	protected ModelAndView handleRequestInternal(
+			final HttpServletRequest request, final HttpServletResponse response)
+			throws Exception {
+		String delegationEPR = request
+				.getParameter(WebSSOConstants.CAGRID_SSO_DELEGATION_SERVICE_EPR);
+		if (delegationEPR != null && delegationEPR.trim().length() != 0) {
+			WebApplicationContext ctx = WebApplicationContextUtils
+					.getRequiredWebApplicationContext(this.getServletContext());
+			WebSSOProperties webSSOProperties = (WebSSOProperties) ctx
+					.getBean(WebSSOConstants.WEBSSO_PROPERTIES);
+			WebSSOServerInformation webSSOServerInformation = webSSOProperties
+					.getWebSSOServerInformation();
 			GlobusCredential webSSOServerHostCredential;
-			try
-			{
-				webSSOServerHostCredential = new GlobusCredential(webSSOServerInformation.getHostCredentialCertificateFilePath(),webSSOServerInformation.getHostCredentialKeyFilePath());
-			}
-			catch (GlobusCredentialException e)
-			{
-				throw new Exception("Unable to create Host Credentials from the Certificate and Key File : " + e.getMessage(), e);
+			try {
+				webSSOServerHostCredential = new GlobusCredential(
+						webSSOServerInformation.getHostCredentialCertificateFilePath(),
+						webSSOServerInformation.getHostCredentialKeyFilePath());
+			} catch (GlobusCredentialException e) {
+				throw new Exception(
+						"Unable to create Host Credentials from the Certificate and Key File : "
+								+ e.getMessage(), e);
 			}
 			DelegatedCredentialReference delegatedCredentialReference = null;
-			try
-			{
-				delegatedCredentialReference = (DelegatedCredentialReference) Utils.deserializeObject(new StringReader(delegationEPR), DelegatedCredentialReference.class, DelegationUserClient.class.getResourceAsStream("client-config.wsdd"));
+			try {
+				delegatedCredentialReference = (DelegatedCredentialReference) Utils
+						.deserializeObject(
+								new StringReader(delegationEPR),
+								DelegatedCredentialReference.class,
+								DelegationUserClient.class
+										.getResourceAsStream("client-config.wsdd"));
+			} catch (DeserializationException e) {
+				throw new ServletException(
+						"Unable to deserialize the Delegation Reference : "
+								+ e.getMessage(), e);
 			}
-			catch (DeserializationException e)
-			{
-				throw new ServletException("Unable to deserialize the Delegation Reference : " + e.getMessage(), e);
-			}			
 			DelegatedCredentialUserClient delegatedCredentialUserClient = null;
-			try
-			{
-				delegatedCredentialUserClient = new DelegatedCredentialUserClient(delegatedCredentialReference, webSSOServerHostCredential);
+			try {
+				delegatedCredentialUserClient = new DelegatedCredentialUserClient(
+						delegatedCredentialReference,
+						webSSOServerHostCredential);
+			} catch (Exception e) {
+				throw new ServletException(
+						"Unable to Initialize the Delegation Lookup Client : "
+								+ e.getMessage(), e);
 			}
-			catch (Exception e)
-			{
-				throw new ServletException("Unable to Initialize the Delegation Lookup Client : " + e.getMessage(), e);
-			}
-			GlobusCredential userCredential = delegatedCredentialUserClient.getDelegatedCredential();
-			
-			DelegatedCredentialUserClient delegatedCredentialUserClientForUser = new DelegatedCredentialUserClient(delegatedCredentialReference, userCredential);
-			try
-			{
+			GlobusCredential userCredential = delegatedCredentialUserClient
+					.getDelegatedCredential();
+
+			DelegatedCredentialUserClient delegatedCredentialUserClientForUser = new DelegatedCredentialUserClient(
+					delegatedCredentialReference, userCredential);
+			try {
 				delegatedCredentialUserClientForUser.suspend();
+			} catch (CDSInternalFault e) {
+				throw new Exception(
+						"Error retrieving the Delegated Credentials : "
+								+ FaultUtil.printFaultToString(e));
+			} catch (DelegationFault e) {
+				throw new Exception(
+						"Error retrieving the Delegated Credentials : "
+								+ FaultUtil.printFaultToString(e));
+			} catch (PermissionDeniedFault e) {
+				throw new Exception(
+						"Permission Denied to retrieve Delegated Credentials : "
+								+ FaultUtil.printFaultToString(e));
 			}
-			catch (CDSInternalFault e)
-			{
-				throw new Exception("Error retrieving the Delegated Credentials : " + FaultUtil.printFaultToString(e));
-			}
-			catch (DelegationFault e)
-			{
-				throw new Exception("Error retrieving the Delegated Credentials : " + FaultUtil.printFaultToString(e));
-			}
-			catch (PermissionDeniedFault e)
-			{
-				throw new Exception("Permission Denied to retrieve Delegated Credentials : " + FaultUtil.printFaultToString(e));
-			}
-			
+
 		}
-    	return logoutController.handleRequest(request, response);
-    }
+		return logoutController.handleRequest(request, response);
+	}
 
-    public void setTicketGrantingTicketCookieGenerator(final CookieRetrievingCookieGenerator ticketGrantingTicketCookieGenerator) 
-    {
-    	logoutController.setTicketGrantingTicketCookieGenerator(ticketGrantingTicketCookieGenerator);
-    }
+	public void setTicketGrantingTicketCookieGenerator(
+			final CookieRetrievingCookieGenerator ticketGrantingTicketCookieGenerator) {
+		logoutController
+				.setTicketGrantingTicketCookieGenerator(ticketGrantingTicketCookieGenerator);
+	}
 
-    public void setWarnCookieGenerator(final CookieRetrievingCookieGenerator warnCookieGenerator) 
-    {
-        logoutController.setWarnCookieGenerator(warnCookieGenerator);
-    }
+	public void setWarnCookieGenerator(
+			final CookieRetrievingCookieGenerator warnCookieGenerator) {
+		logoutController.setWarnCookieGenerator(warnCookieGenerator);
+	}
 
-    /**
-     * @param centralAuthenticationService The centralAuthenticationService to
-     * set.
-     */
-    public void setCentralAuthenticationService(final CentralAuthenticationService centralAuthenticationService) 
-    {
-    	logoutController.setCentralAuthenticationService(centralAuthenticationService);
-    }
+	/**
+	 * @param centralAuthenticationService
+	 *            The centralAuthenticationService to set.
+	 */
+	public void setCentralAuthenticationService(
+			final CentralAuthenticationService centralAuthenticationService) {
+		logoutController
+				.setCentralAuthenticationService(centralAuthenticationService);
+	}
 
-    public void setFollowServiceRedirects(final boolean followServiceRedirects) 
-    {
-    	logoutController.setFollowServiceRedirects(followServiceRedirects);
-    }
+	public void setFollowServiceRedirects(final boolean followServiceRedirects) {
+		logoutController.setFollowServiceRedirects(followServiceRedirects);
+	}
 
-    public void setLogoutView(final String logoutView) 
-    {
-    	logoutController.setLogoutView(logoutView);
-    }
+	public void setLogoutView(final String logoutView) {
+		logoutController.setLogoutView(logoutView);
+	}
 }
