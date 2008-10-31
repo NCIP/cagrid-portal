@@ -61,9 +61,6 @@
 	<classpathentry kind="lib" path="ext/dependencies/service/jars/caGrid-grape-1.3-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/service/jars/caGrid-grape-resources-1.3-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/service/jars/caGrid-graph-1.3-dev.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/service/jars/caGrid-gridgrouper-client-1.3-dev.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/service/jars/caGrid-gridgrouper-common-1.3-dev.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/service/jars/caGrid-gridgrouper-stubs-1.3-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/service/jars/caGrid-Introduce-core-1.3-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/service/jars/caGrid-Introduce-portal-1.3-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/service/jars/caGrid-Introduce-updater-1.3-dev.jar"/>
@@ -85,7 +82,6 @@
 	<classpathentry kind="lib" path="ext/dependencies/service/jars/globus_wsrf_mds_aggregator.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/service/jars/globus_wsrf_servicegroup_stubs.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/service/jars/globus_wsrf_servicegroup.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/service/jars/grouper.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/service/jars/hibernate3.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/service/jars/jasciidammit-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/service/jars/jaxen-1.1.jar"/>
@@ -101,7 +97,6 @@
 	<classpathentry kind="lib" path="ext/dependencies/service/jars/mysql-connector-java-3.0.16-ga-bin.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/service/jars/relaxngDatatype.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/service/jars/spring.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/service/jars/subject-0.2.1.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/service/jars/validation-2.0.0.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/service/jars/wizard-0.1.12.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/service/jars/xsom14.jar"/>
