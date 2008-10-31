@@ -9,19 +9,15 @@ import org.cagrid.websso.common.WebSSOConstants;
 import org.cagrid.websso.common.WebSSOClientHelper;
 import org.springframework.dao.DataAccessException;
 
-public class WebSSOUserDetailsService implements UserDetailsService {
+public abstract class BaseUserDetailsService implements UserDetailsService {
 
 	/**
-	 * override by application specific UserDetailsServices to load from user
+	 * implement by application specific UserDetailsServices to load from user
 	 * details from CSM.
 	 * @param userName
 	 * @return
 	 */
-	protected WebSSOUser loadUser(String userName) {
-		DefaultGrantedAuthority [] grantedAuthorities=new DefaultGrantedAuthority[]{new DefaultGrantedAuthority("ROLE_WEBSSO_GRANTED_ACCESS")};
-		WebSSOUser user=new WebSSOUser(userName, "default",true,true,true,true,grantedAuthorities);
-		return user;
-	}
+	abstract protected WebSSOUser loadUser(String userName);
 
 	public UserDetails loadUserByUsername(String casUserId)
 			throws UsernameNotFoundException, DataAccessException {
