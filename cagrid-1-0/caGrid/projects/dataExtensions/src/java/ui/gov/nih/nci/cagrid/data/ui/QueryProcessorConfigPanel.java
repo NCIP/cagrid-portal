@@ -43,7 +43,7 @@ import org.cagrid.grape.utils.CompositeErrorDialog;
  * @author David Ervin
  * 
  * @created Jun 27, 2007 8:58:22 AM
- * @version $Id: QueryProcessorConfigPanel.java,v 1.7 2008-11-03 17:35:38 dervin Exp $ 
+ * @version $Id: QueryProcessorConfigPanel.java,v 1.8 2008-11-03 18:19:36 dervin Exp $ 
  */
 public class QueryProcessorConfigPanel extends DataServiceModificationSubPanel {
     
@@ -78,7 +78,7 @@ public class QueryProcessorConfigPanel extends DataServiceModificationSubPanel {
         // repopulate qp params table based on service property values
         try {
             getQpParamsTable().populateProperties();
-        } catch (Exception ex) {
+        } catch (Throwable ex) {
             ex.printStackTrace();
             CompositeErrorDialog.showErrorDialog("Error updating displayed properties", ex.getMessage(), ex);
         }

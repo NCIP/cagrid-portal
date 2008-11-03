@@ -46,7 +46,7 @@ public class QueryProcessorParametersTable extends JTable {
         setDefaultEditor(Object.class, new DefaultCellEditor(getEditorTextField()));
         try {
             populateProperties();
-        } catch (Exception ex) {
+        } catch (Throwable ex) {
             ex.printStackTrace();
             CompositeErrorDialog.showErrorDialog("Error populating query processor properties", 
                 ex.getMessage(), ex);
@@ -74,7 +74,7 @@ public class QueryProcessorParametersTable extends JTable {
     }
     
     
-    public void populateProperties() throws Exception {
+    public void populateProperties() throws Throwable {
         clearTable();
         // get the selected class
         Class selected = getQueryProcessorClass();
@@ -126,9 +126,9 @@ public class QueryProcessorParametersTable extends JTable {
             populateProperties();
             // commit the displayed properties to the service model
             storeProperties();
-        } catch (Exception ex) {
+        } catch (Throwable ex) {
             ex.printStackTrace();
-            CompositeErrorDialog.showErrorDialog("Error loading query processor", ex.getMessage(), ex);
+            CompositeErrorDialog.showErrorDialog("Error loading selected query processor", ex.getMessage(), ex);
         }
     }
 
