@@ -31,6 +31,7 @@ import java.util.Properties;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
 
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.utils.CompositeErrorDialog;
@@ -42,7 +43,7 @@ import org.cagrid.grape.utils.CompositeErrorDialog;
  * @author David Ervin
  * 
  * @created Jun 27, 2007 8:58:22 AM
- * @version $Id: QueryProcessorConfigPanel.java,v 1.6 2007-12-18 19:11:40 dervin Exp $ 
+ * @version $Id: QueryProcessorConfigPanel.java,v 1.7 2008-11-03 17:35:38 dervin Exp $ 
  */
 public class QueryProcessorConfigPanel extends DataServiceModificationSubPanel {
     
@@ -51,6 +52,7 @@ public class QueryProcessorConfigPanel extends DataServiceModificationSubPanel {
     private JScrollPane qpParamsScrollPane = null;
     private JButton launchProcessorConfigButton = null;
     private QueryProcessorParametersTable qpParamsTable = null;
+    private JSplitPane configPartsSplitPane = null;
 
     public QueryProcessorConfigPanel(ServiceInformation serviceInfo, ExtensionDataManager dataManager) {
         super(serviceInfo, dataManager);
@@ -59,20 +61,14 @@ public class QueryProcessorConfigPanel extends DataServiceModificationSubPanel {
     
     
     private void initialize() {
-        GridBagConstraints gridBagConstraints22 = new GridBagConstraints();
-        gridBagConstraints22.gridx = 0;
-        gridBagConstraints22.gridy = 1;
-        gridBagConstraints22.fill = GridBagConstraints.BOTH;
-        gridBagConstraints22.weightx = 1.0D;
-        gridBagConstraints22.weighty = 1.0D;
-        GridBagConstraints gridBagConstraints16 = new GridBagConstraints();
-        gridBagConstraints16.gridx = 0;
-        gridBagConstraints16.weightx = 1.0D;
-        gridBagConstraints16.gridy = 0;
-        gridBagConstraints16.fill = GridBagConstraints.HORIZONTAL;
         setLayout(new GridBagLayout());
-        add(getClassBrowserPanel(), gridBagConstraints16);
-        add(getProcessorConfigurationPanel(), gridBagConstraints22);
+        GridBagConstraints cons = new GridBagConstraints();
+        cons.gridx = 0;
+        cons.gridy = 0;
+        cons.fill = GridBagConstraints.BOTH;
+        cons.weightx = 1.0D;
+        cons.weighty = 1.0D;
+        add(getConfigPartsSplitPane(), cons);
     }
     
     
@@ -198,6 +194,19 @@ public class QueryProcessorConfigPanel extends DataServiceModificationSubPanel {
             // qpParamsTable = new QueryProcessorParametersTable(null, null);
         }
         return qpParamsTable;
+    }
+    
+    
+    private JSplitPane getConfigPartsSplitPane() {
+        if (configPartsSplitPane == null) {
+            configPartsSplitPane = new JSplitPane();
+            configPartsSplitPane.setOrientation(JSplitPane.VERTICAL_SPLIT);
+            configPartsSplitPane.setTopComponent(getClassBrowserPanel());
+            configPartsSplitPane.setBottomComponent(getProcessorConfigurationPanel());
+            configPartsSplitPane.setOneTouchExpandable(false);
+            configPartsSplitPane.setDividerLocation(0.5);
+        }
+        return configPartsSplitPane;
     }
     
     
