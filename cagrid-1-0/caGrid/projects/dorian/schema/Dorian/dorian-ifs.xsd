@@ -298,7 +298,6 @@
 			<xsd:enumeration value="HostCertificateRequested" />
 			<xsd:enumeration value="HostCertificateApproved" />
 			<xsd:enumeration value="HostCertificateUpdated" />
-			<xsd:enumeration value="HostCertificateRemoved" />
 			<xsd:enumeration value="HostCertificateRenewed" />
 			<xsd:enumeration value="UserCertificateSigned" />
 			<xsd:enumeration value="UserCertificateUpdated" />

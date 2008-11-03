@@ -18,6 +18,8 @@ import org.cagrid.gaards.dorian.common.LoggingObject;
 import org.cagrid.gaards.dorian.common.SAMLConstants;
 import org.cagrid.gaards.dorian.federation.AutoApprovalPolicy;
 import org.cagrid.gaards.dorian.federation.CertificateLifetime;
+import org.cagrid.gaards.dorian.federation.FederationAuditFilter;
+import org.cagrid.gaards.dorian.federation.FederationAuditRecord;
 import org.cagrid.gaards.dorian.federation.FederationDefaults;
 import org.cagrid.gaards.dorian.federation.GridUser;
 import org.cagrid.gaards.dorian.federation.GridUserFilter;
@@ -403,6 +405,12 @@ public class Dorian extends LoggingObject {
     public void removeUserCertificate(String callerIdentity, long serialNumber) throws DorianInternalFault,
         InvalidUserCertificateFault, PermissionDeniedFault {
         this.ifm.removeUserCertificate(callerIdentity, serialNumber);
+    }
+
+
+    public List<FederationAuditRecord> auditSearch(String callerIdentity, FederationAuditFilter f)
+        throws DorianInternalFault, PermissionDeniedFault {
+        return this.ifm.auditSearch(callerIdentity, f);
     }
 
 }
