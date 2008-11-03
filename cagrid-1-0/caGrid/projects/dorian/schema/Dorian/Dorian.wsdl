@@ -557,6 +557,26 @@
           <sequence />
         </complexType>
       </element>
+      <element name="PerformFederationAuditRequest">
+        <complexType>
+          <sequence>
+            <element name="f">
+              <complexType>
+                <sequence>
+                  <element ref="ns1:FederationAuditFilter" minOccurs="1" maxOccurs="1" />
+                </sequence>
+              </complexType>
+            </element>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="PerformFederationAuditResponse">
+        <complexType>
+          <sequence>
+            <element ref="ns1:FederationAuditRecord" minOccurs="1" maxOccurs="unbounded" />
+          </sequence>
+        </complexType>
+      </element>
       <element name="DorianResourceProperties">
         <complexType>
           <sequence>
@@ -748,6 +768,12 @@
   </message>
   <message name="RemoveUserCertificateResponse">
     <part name="parameters" element="tns:RemoveUserCertificateResponse" />
+  </message>
+  <message name="PerformFederationAuditRequest">
+    <part name="parameters" element="tns:PerformFederationAuditRequest" />
+  </message>
+  <message name="PerformFederationAuditResponse">
+    <part name="parameters" element="tns:PerformFederationAuditResponse" />
   </message>
   <message name="DorianInternalFaultFaultMessage">
     <part name="fault" element="ns10:DorianInternalFault" />
@@ -988,6 +1014,12 @@
       <output message="tns:RemoveUserCertificateResponse" wsa:Action="http://cagrid.nci.nih.gov/Dorian/RemoveUserCertificateResponse" />
       <fault name="DorianInternalFault" message="tns:DorianInternalFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/Dorian/DorianInternalFaultFaultMessage" />
       <fault name="InvalidUserCertificateFault" message="tns:InvalidUserCertificateFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/Dorian/InvalidUserCertificateFaultFaultMessage" />
+      <fault name="PermissionDeniedFault" message="tns:PermissionDeniedFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/Dorian/PermissionDeniedFaultFaultMessage" />
+    </operation>
+    <operation name="performFederationAudit">
+      <input message="tns:PerformFederationAuditRequest" wsa:Action="http://cagrid.nci.nih.gov/Dorian/PerformFederationAuditRequest" />
+      <output message="tns:PerformFederationAuditResponse" wsa:Action="http://cagrid.nci.nih.gov/Dorian/PerformFederationAuditResponse" />
+      <fault name="DorianInternalFault" message="tns:DorianInternalFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/Dorian/DorianInternalFaultFaultMessage" />
       <fault name="PermissionDeniedFault" message="tns:PermissionDeniedFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/Dorian/PermissionDeniedFaultFaultMessage" />
     </operation>
     <operation name="getServiceSecurityMetadata">

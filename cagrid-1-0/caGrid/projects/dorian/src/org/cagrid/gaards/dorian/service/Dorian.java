@@ -408,9 +408,9 @@ public class Dorian extends LoggingObject {
     }
 
 
-    public List<FederationAuditRecord> auditSearch(String callerIdentity, FederationAuditFilter f)
+    public List<FederationAuditRecord> performFederationAudit(String callerIdentity, FederationAuditFilter f)
         throws DorianInternalFault, PermissionDeniedFault {
-        return this.ifm.auditSearch(callerIdentity, f);
+        return this.ifm.performAudit(callerIdentity, f);
     }
 
 }

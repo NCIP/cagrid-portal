@@ -237,6 +237,11 @@ public class DorianAuthorization implements PDP {
 		
 		
 	}
+					
+	public static void authorizePerformFederationAudit() throws RemoteException {
+		
+		
+	}
 	
 	
 	public boolean isPermitted(Subject peerSubject, MessageContext context, QName operation)
@@ -528,6 +533,14 @@ public class DorianAuthorization implements PDP {
 		} else if(operation.getLocalPart().equals("removeUserCertificate")){
 			try{
 				authorizeRemoveUserCertificate();
+				return true;
+			} catch (Exception e){
+				e.printStackTrace();
+				return false;
+			}
+		} else if(operation.getLocalPart().equals("performFederationAudit")){
+			try{
+				authorizePerformFederationAudit();
 				return true;
 			} catch (Exception e){
 				e.printStackTrace();

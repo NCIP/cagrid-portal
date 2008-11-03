@@ -1311,7 +1311,7 @@ public class IdentityFederationManager extends LoggingObject implements Publishe
     }
 
 
-    public List<FederationAuditRecord> auditSearch(String callerIdentity, FederationAuditFilter f)
+    public List<FederationAuditRecord> performAudit(String callerIdentity, FederationAuditFilter f)
         throws DorianInternalFault, PermissionDeniedFault {
         GridUser caller = getUser(callerIdentity);
         verifyActiveUser(caller);

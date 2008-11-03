@@ -227,7 +227,7 @@ public class TestIdentityFederationManager extends TestCase {
             } catch (PermissionDeniedFault f) {
 
             }
-            assertEquals(0, ifs.auditSearch(adminGridId,
+            assertEquals(0, ifs.performAudit(adminGridId,
                 getHostCertificatedApprovedAuditingFilter(hostId, usr.getGridId())).size());
         } catch (Exception e) {
             FaultUtil.printFault(e);
@@ -1999,7 +1999,7 @@ public class TestIdentityFederationManager extends TestCase {
         f.setTargetId(target);
         f.setReportingPartyId(reportingParty);
         f.setAuditType(type);
-        List<FederationAuditRecord> results = ifm.auditSearch(adminId, f);
+        List<FederationAuditRecord> results = ifm.performAudit(adminId, f);
         assertEquals(1, results.size());
         // printAuditingResults(results);
         validateAuditingResult(results.get(0), target, reportingParty, type);

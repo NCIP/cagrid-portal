@@ -11,6 +11,8 @@ import java.util.List;
 
 import org.apache.axis.types.URI.MalformedURIException;
 import org.cagrid.gaards.dorian.common.DorianFault;
+import org.cagrid.gaards.dorian.federation.FederationAuditFilter;
+import org.cagrid.gaards.dorian.federation.FederationAuditRecord;
 import org.cagrid.gaards.dorian.federation.GridUser;
 import org.cagrid.gaards.dorian.federation.GridUserFilter;
 import org.cagrid.gaards.dorian.federation.GridUserPolicy;
@@ -704,10 +706,12 @@ public class GridAdministrationClient {
         this.updateUserCertificateRecord(serialNumber, null, notes);
     }
 
+
     /**
      * This method allows an administrator to remove a user certificate.
      * 
-     * @param serialNumber  The serial number of the user certificate to remove.
+     * @param serialNumber
+     *            The serial number of the user certificate to remove.
      * @throws RemoteException
      * @throws DorianInternalFault
      * @throws InvalidUserCertificateFault
@@ -733,5 +737,40 @@ public class GridAdministrationClient {
             fault = (DorianFault) helper.getFault();
             throw fault;
         }
+    }
+
+
+    /**
+     * This method allows an administrator to perform an audit on
+     * Federation/Grid transactions with Dorian.
+     * 
+     * @param f
+     *            The audit search criteria
+     * @return The list of audit records that meet the search criteria
+     *         specified.
+     * @throws DorianFault
+     * @throws DorianInternalFault
+     * @throws PermissionDeniedFault
+     */
+
+    public List<FederationAuditRecord> performAudit(FederationAuditFilter f) throws DorianFault, DorianInternalFault,
+        PermissionDeniedFault {
+        try {
+            List<FederationAuditRecord> list = Utils.asList(client.performFederationAudit(f));
+            return list;
+        } catch (DorianInternalFault gie) {
+            throw gie;
+        } catch (PermissionDeniedFault fault) {
+            throw fault;
+        } catch (Exception e) {
+            FaultUtil.printFault(e);
+            DorianFault fault = new DorianFault();
+            fault.setFaultString(Utils.getExceptionMessage(e));
+            FaultHelper helper = new FaultHelper(fault);
+            helper.addFaultCause(e);
+            fault = (DorianFault) helper.getFault();
+            throw fault;
+        }
+
     }
 }
