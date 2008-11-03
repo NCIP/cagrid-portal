@@ -23,17 +23,16 @@ import org.hibernate.QueryException;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created Sep 19, 2006 
- * @version $Id: SubclassCheckCache.java,v 1.2 2007-01-12 16:29:37 dervin Exp $ 
+ * @version $Id: SubclassCheckCache.java,v 1.3 2008-11-03 20:45:44 dervin Exp $ 
  */
 public class SubclassCheckCache {
 	public static final String CABIO_URL = "http://cabio.nci.nih.gov/cacore32/http/remoteService";
-	public static final String KRAMER_URL = "http://kramer:8080/example/http/remoteService";
 	
 	public static final String CLASS_PROPERTY_NOT_FOUND_ERROR = "could not resolve property: class of: ";
 	
 	public static final int MAX_EXCEPTION_UNROLL = 7;// levels, causes to follow
 
-	private static Map cache = null;
+	private static Map<String, Boolean> cache = null;
 	
 	/**
 	 * Executes a test query against the application service to see if the specified
@@ -55,15 +54,16 @@ public class SubclassCheckCache {
 	 */
 	public static boolean hasClassProperty(String className, ApplicationService queryService) throws QueryProcessingException {
 		if (cache == null) {
-			cache = Collections.synchronizedMap(new HashMap());
+			cache = Collections.synchronizedMap(new HashMap<String, Boolean>());
 		}
-		Boolean flag = (Boolean) cache.get(className);
+		Boolean flag = cache.get(className);
 		if (flag == null) {
-			String testHql = "From " + className + " as c where c.class = " + className;
+            // query that will never return results, but forces Hibernate to check for the presence of the class attribute
+			String testHql = "From " + className + " as c where c.class = " + className + " and 1 = 0";
 			// try the query and catch application exceptions
 			try {
 				queryService.query(new HQLCriteria(testHql), className);
-				flag = Boolean.TRUE;
+                flag = Boolean.TRUE;
 			} catch (ApplicationException ex) {
 				// check the exception message for the magical words from Hibernate...
 				if (isClassPropertyNotFound(ex)) {
@@ -99,9 +99,9 @@ public class SubclassCheckCache {
 	public static void main(String[] args) {
 		ApplicationService service = ApplicationService.getRemoteInstance(CABIO_URL);
 		try {
-			System.out.println(Gene.class.getName() + ": " + hasClassProperty(Gene.class.getName(), service));
-			System.out.println(ValueDomain.class.getName() + ": " + hasClassProperty(ValueDomain.class.getName(), service));
-			System.out.println(Address.class.getName() + ": " + hasClassProperty(Address.class.getName(), service));
+			System.out.println(Gene.class.getName() + ": " + hasClassProperty(Gene.class.getName(), service) + " (should be false)");
+			System.out.println(ValueDomain.class.getName() + ": " + hasClassProperty(ValueDomain.class.getName(), service) + " (should be true)");
+			System.out.println(Address.class.getName() + ": " + hasClassProperty(Address.class.getName(), service) + " (should be false)");
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
