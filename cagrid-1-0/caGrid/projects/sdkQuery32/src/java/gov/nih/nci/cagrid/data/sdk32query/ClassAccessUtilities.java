@@ -21,7 +21,7 @@ import java.util.Set;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created Oct 3, 2006 
- * @version $Id: ClassAccessUtilities.java,v 1.3 2007-04-02 14:13:44 dervin Exp $ 
+ * @version $Id: ClassAccessUtilities.java,v 1.4 2008-11-03 20:46:53 dervin Exp $ 
  */
 public class ClassAccessUtilities {	
 	/**
@@ -98,7 +98,7 @@ public class ClassAccessUtilities {
 			Collections.addAll(allFields, classFields);
 			checkClass = checkClass.getSuperclass();
 		}
-		List namedFields = new ArrayList();
+		List<Field> namedFields = new ArrayList<Field>();
 		Iterator fieldIter = allFields.iterator();
 		while (fieldIter.hasNext()) {
 			Field field = (Field) fieldIter.next();

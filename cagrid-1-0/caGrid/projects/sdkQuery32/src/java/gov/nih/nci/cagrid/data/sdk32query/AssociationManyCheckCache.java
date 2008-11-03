@@ -18,10 +18,10 @@ import java.util.Map;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created Oct 3, 2006 
- * @version $Id: AssociationManyCheckCache.java,v 1.2 2006-11-09 14:58:12 dervin Exp $ 
+ * @version $Id: AssociationManyCheckCache.java,v 1.3 2008-11-03 20:46:53 dervin Exp $ 
  */
 public class AssociationManyCheckCache {
-	private static Map manyCache = null;
+	private static Map<String, Boolean> manyCache = null;
 
 	/**
 	 * Returns true if the association from parent to target is a many 
@@ -34,11 +34,11 @@ public class AssociationManyCheckCache {
 	 */
 	public static boolean isManyAssociation(Object parent, Association target) throws QueryProcessingException {
 		if (manyCache == null) {
-			manyCache = new HashMap();
+			manyCache = new HashMap<String, Boolean>();
 		}
 		// see if the association's status has been cached
 		String fullAssociationName = getFullAssociationName(parent, target);
-		Boolean isMany = (Boolean) manyCache.get(fullAssociationName);
+		Boolean isMany = manyCache.get(fullAssociationName);
 		if (isMany == null) {
 			try {
 				// get the class of the parent object

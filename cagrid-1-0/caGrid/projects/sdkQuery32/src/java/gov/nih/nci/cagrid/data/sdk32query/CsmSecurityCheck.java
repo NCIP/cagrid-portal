@@ -19,7 +19,7 @@ import java.util.List;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created Oct 26, 2006 
- * @version $Id: CsmSecurityCheck.java,v 1.2 2007-03-29 13:24:27 dervin Exp $ 
+ * @version $Id: CsmSecurityCheck.java,v 1.3 2008-11-03 20:46:53 dervin Exp $ 
  */
 public class CsmSecurityCheck {
 
@@ -36,7 +36,7 @@ public class CsmSecurityCheck {
 			System.setProperty(CSM_CONFIG_PROPERTY, csmConfigFile);
 		}
 		GridAuthorizationManager mgr = new CSMGridAuthorizationManager(csmContextName);
-		List authObjects = new LinkedList();
+		List<String> authObjects = new LinkedList<String>();
 		populateObjectsToAuthorize(query.getTarget(), authObjects);
 		Iterator authObjectIter = authObjects.iterator();
 		while (authObjectIter.hasNext()) {
@@ -51,7 +51,7 @@ public class CsmSecurityCheck {
 	}
 	
 	
-	private static void populateObjectsToAuthorize(Object queryObject, List objects) {
+	private static void populateObjectsToAuthorize(Object queryObject, List<String> objects) {
 		objects.add(queryObject.getName());
 		if (queryObject.getAssociation() != null) {
 			populateObjectsToAuthorize(queryObject.getAssociation(), objects);

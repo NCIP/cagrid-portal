@@ -20,12 +20,12 @@ import java.util.Map;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created Jul 19, 2006 
- * @version $Id: CQL2HQL.java,v 1.2 2006-11-07 18:53:31 dervin Exp $ 
+ * @version $Id: CQL2HQL.java,v 1.3 2008-11-03 20:46:53 dervin Exp $ 
  */
 public class CQL2HQL {
 	public static final String TARGET_ALIAS = "xxTargetAliasxx";
 	
-	private static Map predicateValues;
+	private static Map<Predicate, String> predicateValues;
 
 	/**
 	 * Translates a CQL query into an HQL string.  This translation process assumes the
@@ -400,7 +400,7 @@ public class CQL2HQL {
 	 */
 	private static String convertPredicate(Predicate p) {
 		if (predicateValues == null) {
-			predicateValues = new HashMap();
+			predicateValues = new HashMap<Predicate, String>();
 			predicateValues.put(Predicate.EQUAL_TO, "=");
 			predicateValues.put(Predicate.GREATER_THAN, ">");
 			predicateValues.put(Predicate.GREATER_THAN_EQUAL_TO, ">=");
@@ -409,7 +409,7 @@ public class CQL2HQL {
 			predicateValues.put(Predicate.LIKE, "LIKE");
 			predicateValues.put(Predicate.NOT_EQUAL_TO, "!=");
 		}
-		return (String) predicateValues.get(p);
+		return predicateValues.get(p);
 	}
 	
 	

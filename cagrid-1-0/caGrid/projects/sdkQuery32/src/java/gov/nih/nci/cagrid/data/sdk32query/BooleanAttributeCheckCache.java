@@ -13,15 +13,15 @@ import java.util.Map;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created Nov 2, 2006 
- * @version $Id: BooleanAttributeCheckCache.java,v 1.3 2006-11-09 14:58:12 dervin Exp $ 
+ * @version $Id: BooleanAttributeCheckCache.java,v 1.4 2008-11-03 20:46:53 dervin Exp $ 
  */
 public class BooleanAttributeCheckCache {
 
-	private static Map booleanFlags = new HashMap();
+	private static Map<String, Boolean> booleanFlags = new HashMap<String, Boolean>();
 	
 	public static boolean isFieldBoolean(String objClassName, String fieldName) throws QueryProcessingException {
 		String key = objClassName + "." + fieldName;
-		Boolean isBool = (Boolean) booleanFlags.get(key);
+		Boolean isBool = booleanFlags.get(key);
 		if (isBool == null) {
 			try {
 				Class objClass = Class.forName(objClassName);
