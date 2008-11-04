@@ -57,8 +57,10 @@ import net.sf.taverna.t2.facade.WorkflowInstanceFacade;
 import net.sf.taverna.t2.reference.ReferenceService;
 import net.sf.taverna.t2.reference.T2Reference;
 import net.sf.taverna.t2.workbench.reference.config.ReferenceConfiguration;
-import net.sf.taverna.t2.workbench.run.DataflowRun;
+
 import net.sf.taverna.t2.workbench.ui.zaria.UIComponentSPI;
+import net.sf.taverna.t2.workflowmodel.DataflowInputPort;
+import net.sf.taverna.t2.workflowmodel.DataflowOutputPort;
 import net.sf.taverna.t2.workflowmodel.InvalidDataflowException;
 import net.sf.taverna.t2.workbench.icons.WorkbenchIcons;
 
@@ -69,6 +71,10 @@ public class CaGridComponent extends JPanel implements UIComponentSPI, ActionLis
 	private static CaGridComponent singletonInstance;
 	
       private static Logger logger = Logger.getLogger(CaGridComponent.class);
+      
+	private ReferenceService referenceService;
+	
+	private String referenceContext;
       
       public JComboBox services;
            
@@ -103,6 +109,8 @@ public class CaGridComponent extends JPanel implements UIComponentSPI, ActionLis
           addRefreshButton();
           checkButtons();
           addResultPanel();
+        //force reference service to be constructed now rather than at first workflow run
+  		getReferenceService();
 		
 	}
 	   private void addResultPanel() {
@@ -203,9 +211,9 @@ public class CaGridComponent extends JPanel implements UIComponentSPI, ActionLis
            GridBagConstraints c = new GridBagConstraints();
            c.gridx = 0;
            c.gridy = ++row;
-           runButton = new JButton("Run Workflow", WorkbenchIcons.runIcon);
-           //runButton = new JButton("new RunWorkflowAction()");
-           runButton.setEnabled(false);
+           //runButton = new JButton("Run Workflow", WorkbenchIcons.runIcon);
+           runButton = new JButton(new RunAsCaGridServiceAction());
+           runButton.setEnabled(true);
            add(runButton, c);
    }
    
@@ -244,10 +252,21 @@ public class CaGridComponent extends JPanel implements UIComponentSPI, ActionLis
    
    
  
-   public void runWorkflow() {
+   public void runWorkflow(WorkflowInstanceFacade facade, Map<String, T2Reference> inputs) {
+	   //TODO invoke caGrid workflow execution service
 		CaGridRun runComponent = new CaGridRun();
 		runListModel.add(0, runComponent);
 		runList.setSelectedIndex(0);	
+		//TODO print out the information of the workflow
+		System.out.println("Workflow is running.");
+		DataflowInputPort ip = facade.getDataflow().getInputPorts().get(0);
+		
+		System.out.println(ip.getName());
+         DataflowOutputPort op = facade.getDataflow().getOutputPorts().get(0);
+		
+		System.out.println(op.getName());
+		T2Reference inputRef = (T2Reference) inputs.get("i");
+		System.out.println(inputRef.toString());
 		
 	}
 	public static CaGridComponent getInstance() {
@@ -264,6 +283,19 @@ public class CaGridComponent extends JPanel implements UIComponentSPI, ActionLis
 	        	      	
 	        }
 	    }
+		public ReferenceService getReferenceService() {
+			String context = ReferenceConfiguration.getInstance().getProperty(
+					ReferenceConfiguration.REFERENCE_SERVICE_CONTEXT);
+			if (!context.equals(referenceContext)) {
+				referenceContext = context;
+				ApplicationContext appContext = new RavenAwareClassPathXmlApplicationContext(
+						context);
+				referenceService = (ReferenceService) appContext
+						.getBean("t2reference.service.referenceService");
+			}
+			return referenceService;
+
+		}
 
 	
 	public ImageIcon getIcon() {
