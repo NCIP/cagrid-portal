@@ -82,30 +82,6 @@ public class ConfigurationUtil {
     }
 
 
-    public static void addGlobalExtensionProperty(PropertiesProperty prop) throws Exception {
-        getInstance();
-        if (getGlobalExtensionProperties() != null && getGlobalExtensionProperties().getProperty() != null) {
-            for(int i = 0; i < getGlobalExtensionProperties().getProperty().length; i++){
-                PropertiesProperty checkProp = getGlobalExtensionProperties().getProperty(i);
-                if(checkProp.getKey().equals(prop.getKey())){
-                    return;
-                }
-            }
-            PropertiesProperty[] props = new PropertiesProperty[getGlobalExtensionProperties().getProperty().length + 1];
-            System.arraycopy(getGlobalExtensionProperties().getProperty(), 0, props, 0, getGlobalExtensionProperties()
-                .getProperty().length);
-            props[getGlobalExtensionProperties().getProperty().length] = prop;
-            getGlobalExtensionProperties().setProperty(props);
-        } else if (getGlobalExtensionProperties() != null) {
-            PropertiesProperty[] props = new PropertiesProperty[1];
-            props[0] = prop;
-            getGlobalExtensionProperties().setProperty(props);
-        }
-        getInstance().configurationManager.saveAll();
-
-    }
-
-
     public static PropertiesProperty getGlobalExtensionProperty(String key) throws Exception {
         getInstance();
         if (getGlobalExtensionProperties() != null && getGlobalExtensionProperties().getProperty() != null) {

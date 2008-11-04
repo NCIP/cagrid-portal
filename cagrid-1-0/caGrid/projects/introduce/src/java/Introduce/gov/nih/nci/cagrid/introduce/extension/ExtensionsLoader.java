@@ -10,13 +10,15 @@ import gov.nih.nci.cagrid.introduce.beans.extension.Properties;
 import gov.nih.nci.cagrid.introduce.beans.extension.PropertiesProperty;
 import gov.nih.nci.cagrid.introduce.beans.extension.ResourcePropertyEditorExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
-import gov.nih.nci.cagrid.introduce.common.ConfigurationUtil;
+import gov.nih.nci.cagrid.introduce.common.IntroducePropertiesManager;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.cagrid.grape.ConfigurationManager;
+import org.cagrid.grape.model.Application;
 
 
 public class ExtensionsLoader {
@@ -143,13 +145,40 @@ public class ExtensionsLoader {
     }
 
 
-    private void processExtensionProperties(Properties properties) {
+    private void processExtensionProperties(Properties properties) throws Exception {
+        Application app = null;
+        app = (Application) Utils.deserializeDocument(IntroducePropertiesManager.getIntroduceConfigurationFile(),
+            Application.class);
+        ConfigurationManager configurationManager = new ConfigurationManager(app.getConfiguration(),null);
+        Properties globalExtensionProperties = (Properties) configurationManager
+        .getConfigurationObject("introduceGlobalExtensionProperties");
+        
         if (properties != null && properties.getProperty() != null) {
             for (int i = 0; i < properties.getProperty().length; i++) {
                 PropertiesProperty prop = properties.getProperty(i);
                 try {
                     if (prop != null && prop.getMakeGlobal() != null && prop.getMakeGlobal().booleanValue()) {
-                        ConfigurationUtil.addGlobalExtensionProperty(prop);
+                        
+                        
+                        if (globalExtensionProperties != null && globalExtensionProperties.getProperty() != null) {
+                            for(int propi = 0; propi < globalExtensionProperties.getProperty().length; propi++){
+                                PropertiesProperty checkProp = globalExtensionProperties.getProperty(propi);
+                                if(checkProp.getKey().equals(prop.getKey())){
+                                    return;
+                                }
+                            }
+                            PropertiesProperty[] props = new PropertiesProperty[globalExtensionProperties.getProperty().length + 1];
+                            System.arraycopy(globalExtensionProperties.getProperty(), 0, props, 0,globalExtensionProperties
+                                .getProperty().length);
+                            props[globalExtensionProperties.getProperty().length] = prop;
+                            globalExtensionProperties.setProperty(props);
+                        } else if (globalExtensionProperties != null) {
+                            PropertiesProperty[] props = new PropertiesProperty[1];
+                            props[0] = prop;
+                            globalExtensionProperties.setProperty(props);
+                        }
+                        configurationManager.saveAll();
+                        
                     }
                 } catch (Exception e) {
                     logger.warn("WARNING: extension property " + prop.getKey() + " could not be processed");

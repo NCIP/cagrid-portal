@@ -13,7 +13,7 @@ import org.cagrid.grape.ApplicationComponent;
 
 
 /**
- * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
+ * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings</A>
  */
 public class GenericPropertiesPanel extends JPanel {
 
