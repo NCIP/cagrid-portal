@@ -3,6 +3,7 @@ package gov.nih.nci.cagrid.introduce.upgrade.introduce;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.common.XMLUtilities;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
+import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.service.ResourcePropertyManagement;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.codegen.common.SynchronizationException;
@@ -11,11 +12,13 @@ import gov.nih.nci.cagrid.introduce.codegen.services.methods.SyncSource;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.common.SpecificServiceInformation;
+import gov.nih.nci.cagrid.introduce.creator.SkeletonSecurityOperationProviderCreator;
 import gov.nih.nci.cagrid.introduce.templates.client.ClientConfigTemplate;
 import gov.nih.nci.cagrid.introduce.templates.client.ServiceClientBaseTemplate;
 import gov.nih.nci.cagrid.introduce.templates.client.ServiceClientTemplate;
 import gov.nih.nci.cagrid.introduce.templates.common.ServiceConstantsBaseTemplate;
 import gov.nih.nci.cagrid.introduce.templates.common.ServiceConstantsTemplate;
+import gov.nih.nci.cagrid.introduce.templates.schema.service.ServiceWSDLTemplate;
 import gov.nih.nci.cagrid.introduce.templates.service.globus.ServiceConfigurationTemplate;
 import gov.nih.nci.cagrid.introduce.templates.service.globus.resource.ResourceBaseTemplate;
 import gov.nih.nci.cagrid.introduce.templates.service.globus.resource.ResourceHomeTemplate;
@@ -42,6 +45,8 @@ import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.Namespace;
 
+import sun.security.action.GetBooleanAction;
+
 
 public class Introduce_1_1__1_3_Upgrader extends IntroduceUpgraderBase {
 
@@ -55,18 +60,17 @@ public class Introduce_1_1__1_3_Upgrader extends IntroduceUpgraderBase {
         // need to make sure to save a copy of hte introduce.xml to a prev file
         // so that the
         // sync tools can pick up any service changes i make here.....
-        // make a copy of the model to compate with next time
+        // make a copy of the model to compae with next time
         Utils.copyFile(new File(getServicePath() + File.separator + IntroduceConstants.INTRODUCE_XML_FILE), new File(
             getServicePath() + File.separator + IntroduceConstants.INTRODUCE_XML_FILE + ".prev"));
 
-        // make a copy of the properties to compate with next time
+        // make a copy of the properties to compare with next time
         Utils.copyFile(new File(getServicePath() + File.separator + IntroduceConstants.INTRODUCE_PROPERTIES_FILE),
             new File(getServicePath() + File.separator + IntroduceConstants.INTRODUCE_PROPERTIES_FILE + ".prev"));
 
         // add the resource property management to the main service
         ServiceType mainService = getServiceInformation().getServices().getService(0);
         mainService.getResourceFrameworkOptions().setResourcePropertyManagement(new ResourcePropertyManagement());
-
 
         // need to replace the build.xml
         Utils.copyFile(new File(getServicePath() + File.separator + "build.xml"), new File(getServicePath()
@@ -105,16 +109,39 @@ public class Introduce_1_1__1_3_Upgrader extends IntroduceUpgraderBase {
             getServicePath() + File.separator + "build-stubs.xml"));
         getStatus().addDescriptionLine("added build-stubs.xml");
 
-        // clean the config
-        removeResourcePropertyProvidersFromConfig();
-        // remove rp methods
-        removeGetResourcePropertyMethods();
+        // Copy over the new ServiceSecurity.wsdl
+        File newWLocation = new File("ext" + File.separator + "dependencies" + File.separator + "wsdl" + File.separator + "ServiceSecurity.wsdl");
+        File oldWLocation = new File(getServiceInformation().getBaseDirectory().getAbsolutePath() + File.separator
+            + "schema" + File.separator + getServiceInformation().getServices().getService(0).getName() + File.separator + "ServiceSecurity.wsdl");
+        Utils.copyFile(newWLocation, oldWLocation);
+        
+        // change the location of the services security.xsd
+        NamespaceType nsType = CommonTools.getNamespaceType(getServiceInformation().getNamespaces(),
+            "gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security");
+        nsType.setLocation("./xsd/cagrid/types/security/security.xsd");
+        // move to this new location
+        File newLocation = new File(getServiceInformation().getBaseDirectory().getAbsolutePath() + File.separator
+            + "schema" + File.separator + getServiceInformation().getServices().getService(0).getName()
+            + File.separator + "xsd" + File.separator + "cagrid" + File.separator + "types" + File.separator
+            + "security" + File.separator + "security.xsd");
+        File oldLocation = new File(getServiceInformation().getBaseDirectory().getAbsolutePath() + File.separator
+            + "schema" + File.separator + getServiceInformation().getServices().getService(0).getName()
+            + File.separator + "xsd" + File.separator + "security.xsd");
+        Utils.copyFile(oldLocation, newLocation);
+        oldLocation.delete();
 
-        // foreach service need to replace the resource files.....
+        // foreach service.....
         File srcDir = new File(getServiceInformation().getBaseDirectory().getAbsolutePath() + File.separator + "src");
         for (int i = 0; i < getServiceInformation().getServices().getService().length; i++) {
             ServiceType service = getServiceInformation().getServices().getService(i);
 
+            // replace the get service security metadata method in the
+            // introduce.xml
+            CommonTools.removeMethod(service.getMethods(), CommonTools.getMethod(service.getMethods(),
+                "getServiceSecurityMetadata"));
+            SkeletonSecurityOperationProviderCreator secCreator = new SkeletonSecurityOperationProviderCreator();
+            secCreator.createSkeleton(new SpecificServiceInformation(getServiceInformation(), service));
+            
             ServiceClientTemplate clientT = new ServiceClientTemplate();
             String clientS = clientT.generate(new SpecificServiceInformation(getServiceInformation(), service));
             File clientF = new File(srcDir.getAbsolutePath() + File.separator + CommonTools.getPackageDir(service)
@@ -123,7 +150,8 @@ public class Introduce_1_1__1_3_Upgrader extends IntroduceUpgraderBase {
             FileWriter clientFW = new FileWriter(clientF);
             clientFW.write(clientS);
             clientFW.close();
-            
+
+
             ServiceClientBaseTemplate clientBaseT = new ServiceClientBaseTemplate();
             String clientBaseS = clientBaseT.generate(new SpecificServiceInformation(getServiceInformation(), service));
             File clientBaseF = new File(srcDir.getAbsolutePath() + File.separator + CommonTools.getPackageDir(service)
@@ -134,13 +162,15 @@ public class Introduce_1_1__1_3_Upgrader extends IntroduceUpgraderBase {
             clientBaseFW.close();
 
             ClientConfigTemplate clientConfigT = new ClientConfigTemplate();
-            String clientConfigS = clientConfigT.generate(new SpecificServiceInformation(getServiceInformation(), service));
-            File clientConfigF = new File(srcDir.getAbsolutePath() + File.separator + CommonTools.getPackageDir(service)
-                + File.separator + "client" + File.separator + "client-config.wsdd");
+            String clientConfigS = clientConfigT.generate(new SpecificServiceInformation(getServiceInformation(),
+                service));
+            File clientConfigF = new File(srcDir.getAbsolutePath() + File.separator
+                + CommonTools.getPackageDir(service) + File.separator + "client" + File.separator
+                + "client-config.wsdd");
             FileWriter clientConfigFW = new FileWriter(clientConfigF);
             clientConfigFW.write(clientConfigS);
             clientConfigFW.close();
-            
+
             File oldConstantsFile = new File(srcDir.getAbsolutePath() + File.separator
                 + CommonTools.getPackageDir(service) + File.separator + "service" + File.separator + "globus"
                 + File.separator + "resource" + File.separator + "ResourceConstants.java");
@@ -156,16 +186,17 @@ public class Introduce_1_1__1_3_Upgrader extends IntroduceUpgraderBase {
             FileWriter resourceContanstsFW = new FileWriter(resourceContanstsF);
             resourceContanstsFW.write(resourceContanstsS);
             resourceContanstsFW.close();
-            
+
             ServiceConstantsBaseTemplate resourcebContanstsT = new ServiceConstantsBaseTemplate();
-            String resourcebContanstsS = resourcebContanstsT.generate(new SpecificServiceInformation(getServiceInformation(), service));
+            String resourcebContanstsS = resourcebContanstsT.generate(new SpecificServiceInformation(
+                getServiceInformation(), service));
             File resourcebContanstsF = new File(srcDir.getAbsolutePath() + File.separator
-                + CommonTools.getPackageDir(service) + File.separator + "common" + File.separator + service.getName() + "ConstantsBase.java");
+                + CommonTools.getPackageDir(service) + File.separator + "common" + File.separator + service.getName()
+                + "ConstantsBase.java");
 
             FileWriter resourcebContanstsFW = new FileWriter(resourcebContanstsF);
             resourcebContanstsFW.write(resourcebContanstsS);
             resourcebContanstsFW.close();
-
 
             if (service.getResourceFrameworkOptions().getMain() != null) {
 
@@ -187,21 +218,18 @@ public class Introduce_1_1__1_3_Upgrader extends IntroduceUpgraderBase {
 
             if (service.getResourceFrameworkOptions().getCustom() == null) {
                 // delete the old base resource
-                File oldbaseResourceF = new File(srcDir.getAbsolutePath()
-                        + File.separator + CommonTools.getPackageDir(service)
-                        + File.separator + "service" + File.separator
-                        + "globus" + File.separator + "resource"
-                        + File.separator + service.getName() + "Resource.java");
-                File oldbaseResourceFRename = new File(srcDir.getAbsolutePath()
-                    + File.separator + CommonTools.getPackageDir(service)
-                    + File.separator + "service" + File.separator
-                    + "globus" + File.separator + "resource"
-                    + File.separator + service.getName()
-                    + "ResourceOLD.java.txt");
+                File oldbaseResourceF = new File(srcDir.getAbsolutePath() + File.separator
+                    + CommonTools.getPackageDir(service) + File.separator + "service" + File.separator + "globus"
+                    + File.separator + "resource" + File.separator + service.getName() + "Resource.java");
+                File oldbaseResourceFRename = new File(srcDir.getAbsolutePath() + File.separator
+                    + CommonTools.getPackageDir(service) + File.separator + "service" + File.separator + "globus"
+                    + File.separator + "resource" + File.separator + service.getName() + "ResourceOLD.java.txt");
                 Utils.copyFile(oldbaseResourceF, oldbaseResourceFRename);
                 oldbaseResourceF.delete();
-                getStatus().addIssue("Generated a new Resource implementation", "The old resource implementation has been written to " + oldbaseResourceFRename.getAbsolutePath() + ". Be sure to copy back over any modified code back into the new file.");
-                
+                getStatus().addIssue(
+                    "Generated a new Resource implementation",
+                    "The old resource implementation has been written to " + oldbaseResourceFRename.getAbsolutePath()
+                        + ". Be sure to copy back over any modified code back into the new file.");
 
                 File oldDaseResourceHomeF = new File(srcDir.getAbsolutePath() + File.separator
                     + CommonTools.getPackageDir(service) + File.separator + "service" + File.separator + "globus"
@@ -271,9 +299,57 @@ public class Introduce_1_1__1_3_Upgrader extends IntroduceUpgraderBase {
             }
         }
 
+        fixTypesSchemas();
         upgradeJars();
-        getStatus().addDescriptionLine("updating service with the new version of the jars");
+        fixJNDI();
+        fixConstants();
+        fixWSDD();
 
+        getStatus().setStatus(StatusBase.UPGRADE_OK);
+    }
+    
+    
+    private void fixTypesSchemas() throws Exception{
+        for(int i = 0; i < getServiceInformation().getServices().getService().length; i++){
+            ServiceType service = getServiceInformation().getServices().getService(i);
+            File typesFile = new File(getServiceInformation().getBaseDirectory()+ File.separator + "schema" + File.separator + getServiceInformation().getServices().getService(0).getName() + File.separator + service.getName() + "Types.xsd" );
+            Document doc = XMLUtilities.fileNameToDocument(typesFile.getAbsolutePath());
+            boolean needtoAddFaultsImports = true;
+            boolean needtoAddAdressingImports = true;
+            List imports = doc.getRootElement().getChildren("import", Namespace.XML_NAMESPACE);
+            if(imports!=null && imports.size()>0){
+                Iterator it = imports.iterator();
+                while(it.hasNext()){
+                    Element el = (Element)it.next();
+                    if(el.getAttributeValue("namespace")!=null && el.getAttributeValue("namespace").equals("http://schemas.xmlsoap.org/ws/2004/03/addressing")){
+                        needtoAddAdressingImports = false;
+                    } else if(el.getAttributeValue("namespace")!=null && el.getAttributeValue("namespace").equals("http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd")){
+                        needtoAddFaultsImports = false;
+                    }
+                }
+            }
+            if(needtoAddAdressingImports){
+                Element addressingImport = new Element("import",Namespace.XML_NAMESPACE);
+                addressingImport.setAttribute("namespace", "http://schemas.xmlsoap.org/ws/2004/03/addressing");
+                addressingImport.setAttribute("schemaLocation","../ws/addressing/WS-Addressing.xsd");
+                doc.getRootElement().addContent(0,addressingImport);
+            }
+            if(needtoAddFaultsImports){
+                Element faultImport = new Element("import",Namespace.XML_NAMESPACE);
+                faultImport.setAttribute("namespace", "http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd");
+                faultImport.setAttribute("schemaLocation","../wsrf/faults/WS-BaseFaults.xsd");
+                doc.getRootElement().addContent(0,faultImport);
+            }
+            
+            FileWriter writer = new FileWriter(typesFile);
+            writer.write(XMLUtilities.formatXML(XMLUtilities.documentToString(doc)));
+            writer.close();
+        }
+    }
+    
+
+    private void fixJNDI() throws Exception {
+        
         // change the jndi to use the new classes names for resource home and
         // resource configuration and service configuration
         Document jndiDoc = XMLUtilities.fileNameToDocument(getServicePath() + File.separator + "jndi-config.xml");
@@ -318,42 +394,6 @@ public class Introduce_1_1__1_3_Upgrader extends IntroduceUpgraderBase {
         getStatus().addDescriptionLine(
             "changed jndi file to use new names of the resource home and configureation classes");
 
-        // replacing the soap fix jar with the new service tasks jar
-        File oldSoapJar = new File(getServicePath() + File.separator + "tools" + File.separator + "lib"
-            + File.separator + "caGrid-1.1-Introduce-1.1-soapBindingFix.jar");
-        if (oldSoapJar.exists() && oldSoapJar.canRead()) {
-            oldSoapJar.delete();
-        } else {
-            throw new Exception("Cannot remove old soap fix jar: " + oldSoapJar.delete());
-        }
-
-        FileFilter srcSkeletonToolsLibFilter = new FileFilter() {
-            public boolean accept(File name) {
-                String filename = name.getName();
-                return filename.endsWith(".jar");
-            }
-        };
-        // copy new libraries into tools (every thing in skeleton/tool/lib)
-        File serviceToolsLibDir = new File(getServicePath() + File.separator + "tools" + File.separator + "lib");
-        File skeletonToolsLibDir = new File("skeleton" + File.separator + "tools" + File.separator + "lib");
-        File[] skeletonToolsLibs = skeletonToolsLibDir.listFiles(srcSkeletonToolsLibFilter);
-        for (int i = 0; i < skeletonToolsLibs.length; i++) {
-            File out = new File(serviceToolsLibDir.getAbsolutePath() + File.separator + skeletonToolsLibs[i].getName());
-            try {
-                Utils.copyFile(skeletonToolsLibs[i], out);
-                getStatus().addDescriptionLine(skeletonToolsLibs[i].getName() + " added");
-            } catch (IOException ex) {
-                throw new Exception("Error copying library (" + skeletonToolsLibs[i] + ") to service: " + ex.getMessage(),
-                    ex);
-            }
-        }
-
-        
-        fixConstants();
-        fixWSDD();
-        
-        
-        getStatus().setStatus(StatusBase.UPGRADE_OK);
     }
 
 
@@ -432,78 +472,48 @@ public class Introduce_1_1__1_3_Upgrader extends IntroduceUpgraderBase {
                     ex);
             }
         }
-
         
-    }
+        getStatus().addDescriptionLine("updating service with the new version of the jars");
 
 
-    private void removeResourcePropertyProvidersFromConfig() throws Exception {
-        for (int i = 0; i < getServiceInformation().getServices().getService().length; i++) {
-            ServiceType service = getServiceInformation().getServices().getService(i);
-            ProviderTools.removeProviderFromServiceConfig(service, "GetRPProvider", getServiceInformation());
-            ProviderTools.removeProviderFromServiceConfig(service, "GetMRPProvider", getServiceInformation());
-            ProviderTools.removeProviderFromServiceConfig(service, "QueryRPProvider", getServiceInformation());
+        // replacing the soap fix jar with the new service tasks jar
+        File oldSoapJar = new File(getServicePath() + File.separator + "tools" + File.separator + "lib"
+            + File.separator + "caGrid-1.1-Introduce-1.1-soapBindingFix.jar");
+        if (oldSoapJar.exists() && oldSoapJar.canRead()) {
+            oldSoapJar.delete();
+        } else {
+            throw new Exception("Cannot remove old soap fix jar: " + oldSoapJar.delete());
         }
-    }
 
-
-    private void removeGetResourcePropertyMethods() throws Exception {
-        // foreach service need to replace the resource files.....
-        // File srcDir = new
-        // File(getServiceInformation().getBaseDirectory().getAbsolutePath() +
-        // File.separator + "src");
-        for (int i = 0; i < getServiceInformation().getServices().getService().length; i++) {
-            ServiceType service = getServiceInformation().getServices().getService(i);
-            SyncSource syncsource = new SyncSource(getServiceInformation().getBaseDirectory(), getServiceInformation(),
-                service);
-
-            JavaSourceFactory jsf;
-            JavaParser jp;
-
-            jsf = new JavaSourceFactory();
-            jp = new JavaParser(jsf);
-
-            String serviceClient = getServiceInformation().getBaseDirectory().getAbsolutePath() + File.separator
-                + "src" + File.separator + CommonTools.getPackageDir(service) + File.separator + "client"
-                + File.separator + service.getName() + "Client.java";
-
+        FileFilter srcSkeletonToolsLibFilter = new FileFilter() {
+            public boolean accept(File name) {
+                String filename = name.getName();
+                return filename.endsWith(".jar");
+            }
+        };
+        // copy new libraries into tools (every thing in skeleton/tool/lib)
+        File serviceToolsLibDir = new File(getServicePath() + File.separator + "tools" + File.separator + "lib");
+        File skeletonToolsLibDir = new File("skeleton" + File.separator + "tools" + File.separator + "lib");
+        File[] skeletonToolsLibs = skeletonToolsLibDir.listFiles(srcSkeletonToolsLibFilter);
+        for (int i = 0; i < skeletonToolsLibs.length; i++) {
+            File out = new File(serviceToolsLibDir.getAbsolutePath() + File.separator + skeletonToolsLibs[i].getName());
             try {
-                jp.parse(new File(serviceClient));
-
-            } catch (Exception e) {
-                throw new SynchronizationException("Error parsing service interface:" + e.getMessage(), e);
-            }
-            Iterator it = jsf.getJavaSources();
-            JavaSource source = (JavaSource) it.next();
-            source.setForcingFullyQualifiedName(true);
-
-            JavaMethod[] methods = source.getMethods();
-            int j = 0;
-            boolean found = false;
-            for (j = 0; j < methods.length; j++) {
-                if (methods[j].getName().equals("getResourceProperty")) {
-                    found = true;
-                    break;
-                }
-            }
-
-            if (found) {
-                JavaQName qname = JavaQNameImpl.getInstance("GetResourcePropertyResponse");
-
-                methods[j].setType(qname);
-                syncsource.removeClientImpl(methods[j]);
+                Utils.copyFile(skeletonToolsLibs[i], out);
+                getStatus().addDescriptionLine(skeletonToolsLibs[i].getName() + " added");
+            } catch (IOException ex) {
+                throw new Exception("Error copying library (" + skeletonToolsLibs[i] + ") to service: "
+                    + ex.getMessage(), ex);
             }
         }
-        
-        
 
     }
-    
+
+
     protected void fixConstants() throws Exception {
         File srcDir = new File(getServiceInformation().getBaseDirectory().getAbsolutePath() + File.separator + "src");
-        for(int serviceI = 0; serviceI < getServiceInformation().getServices().getService().length; serviceI++){
+        for (int serviceI = 0; serviceI < getServiceInformation().getServices().getService().length; serviceI++) {
             ServiceType service = getServiceInformation().getServices().getService(serviceI);
-            //add new constants base class and new constants class
+            // add new constants base class and new constants class
             ServiceConstantsTemplate resourceContanstsT = new ServiceConstantsTemplate();
             String resourceContanstsS = resourceContanstsT.generate(new SpecificServiceInformation(
                 getServiceInformation(), service));
@@ -514,17 +524,19 @@ public class Introduce_1_1__1_3_Upgrader extends IntroduceUpgraderBase {
             FileWriter resourceContanstsFW = new FileWriter(resourceContanstsF);
             resourceContanstsFW.write(resourceContanstsS);
             resourceContanstsFW.close();
-            
+
             ServiceConstantsBaseTemplate resourcebContanstsT = new ServiceConstantsBaseTemplate();
-            String resourcebContanstsS = resourcebContanstsT.generate(new SpecificServiceInformation(getServiceInformation(), service));
+            String resourcebContanstsS = resourcebContanstsT.generate(new SpecificServiceInformation(
+                getServiceInformation(), service));
             File resourcebContanstsF = new File(srcDir.getAbsolutePath() + File.separator
-                + CommonTools.getPackageDir(service) + File.separator + "common" + File.separator + service.getName() + "ConstantsBase.java");
+                + CommonTools.getPackageDir(service) + File.separator + "common" + File.separator + service.getName()
+                + "ConstantsBase.java");
 
             FileWriter resourcebContanstsFW = new FileWriter(resourcebContanstsF);
             resourcebContanstsFW.write(resourcebContanstsS);
-            resourcebContanstsFW.close(); 
+            resourcebContanstsFW.close();
         }
-        
+
         getStatus().addDescriptionLine("Refactored Constants file to now be developer editable");
     }
 
@@ -536,19 +548,21 @@ public class Introduce_1_1__1_3_Upgrader extends IntroduceUpgraderBase {
             Namespace.getNamespace("http://xml.apache.org/axis/wsdd/"));
         for (int serviceI = 0; serviceI < servicesEls.size(); serviceI++) {
             Element serviceEl = (Element) servicesEls.get(serviceI);
-            ServiceType service = CommonTools.getService(getServiceInformation().getServices(), serviceEl.getAttributeValue("name").substring(serviceEl.getAttributeValue("name").lastIndexOf("/")+1));
+            ServiceType service = CommonTools.getService(getServiceInformation().getServices(), serviceEl
+                .getAttributeValue("name").substring(serviceEl.getAttributeValue("name").lastIndexOf("/") + 1));
 
-            // need to add the service name att and the etc path att for each service
-            Element serviceName = new Element("parameter",Namespace.getNamespace("http://xml.apache.org/axis/wsdd/"));
-            serviceName.setAttribute("name",service.getName().toLowerCase()+"-serviceName");
-            serviceName.setAttribute("value",service.getName());
-            
-            Element serviceETC = new Element("parameter",Namespace.getNamespace("http://xml.apache.org/axis/wsdd/"));
-            serviceETC.setAttribute("name",service.getName().toLowerCase() +"-etcDirectoryPath");
-            serviceETC.setAttribute("value","ETC-PATH");
-            
+            // need to add the service name att and the etc path att for each
+            // service
+            Element serviceName = new Element("parameter", Namespace.getNamespace("http://xml.apache.org/axis/wsdd/"));
+            serviceName.setAttribute("name", service.getName().toLowerCase() + "-serviceName");
+            serviceName.setAttribute("value", service.getName());
+
+            Element serviceETC = new Element("parameter", Namespace.getNamespace("http://xml.apache.org/axis/wsdd/"));
+            serviceETC.setAttribute("name", service.getName().toLowerCase() + "-etcDirectoryPath");
+            serviceETC.setAttribute("value", "ETC-PATH");
+
             serviceEl.addContent(serviceETC);
-            serviceEl.addContent(serviceName); 
+            serviceEl.addContent(serviceName);
 
         }
 
@@ -556,9 +570,8 @@ public class Introduce_1_1__1_3_Upgrader extends IntroduceUpgraderBase {
             + "server-config.wsdd");
         fw.write(XMLUtilities.formatXML(XMLUtilities.documentToString(doc)));
         fw.close();
-        
+
         getStatus().addDescriptionLine("Regenerated service-config.wsdd");
     }
-
 
 }

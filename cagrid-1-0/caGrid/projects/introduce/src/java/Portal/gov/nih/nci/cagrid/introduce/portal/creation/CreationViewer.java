@@ -149,6 +149,7 @@ public class CreationViewer extends CreationViewerBaseComponent {
         this.setTitle("Create a Grid Service");
 
         initValidation();
+        
     }
 
 
