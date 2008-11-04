@@ -24,7 +24,7 @@ import org.cagrid.data.test.creation.DataTestCaseInfo;
  * @author David Ervin
  * 
  * @created Jul 18, 2007 2:53:54 PM
- * @version $Id: CreateSDK32StyleServiceStep.java,v 1.2 2008-06-03 18:24:26 dervin Exp $ 
+ * @version $Id: CreateSDK32StyleServiceStep.java,v 1.3 2008-11-04 14:56:34 dervin Exp $ 
  */
 public class CreateSDK32StyleServiceStep extends CreationStep {
 
@@ -37,7 +37,7 @@ public class CreateSDK32StyleServiceStep extends CreationStep {
     
     
     /**
-     * Extended to turn on the cacore31 style in the service model
+     * Extended to turn on the cacore32 style in the service model
      */
     protected void postSkeletonCreation() throws Throwable {
         setServiceStyle();
