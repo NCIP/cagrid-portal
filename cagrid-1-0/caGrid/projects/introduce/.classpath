@@ -91,7 +91,6 @@
 	<classpathentry kind="lib" path="ext/dependencies/jars/caGrid-ServiceSecurityProvider-stubs-1.3-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/jars/concurrent-1.3.4.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/jars/GlobalModelExchange.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/jars/grouper.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/jars/jaxen-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/jars/jcalendar.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/jars/jhall.jar"/>
@@ -102,7 +101,6 @@
 	<classpathentry kind="lib" path="ext/dependencies/jars/mobius-castor-0.9.4.3-xml.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/jars/mysql-connector-java-3.0.16-ga-bin.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/jars/relaxngDatatype.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/jars/subject-0.2.1.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/jars/validation-2.0.0.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/jars/wizard-0.1.12.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/jars/xsom14.jar"/>
