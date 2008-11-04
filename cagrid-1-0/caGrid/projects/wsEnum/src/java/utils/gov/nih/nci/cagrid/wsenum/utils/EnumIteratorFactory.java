@@ -21,7 +21,7 @@ import org.globus.wsrf.utils.io.IndexedObjectFileUtils;
  * @author David Ervin
  * 
  * @created Apr 30, 2007 12:18:15 PM
- * @version $Id: EnumIteratorFactory.java,v 1.5 2008-03-25 13:27:40 dervin Exp $ 
+ * @version $Id: EnumIteratorFactory.java,v 1.6 2008-11-04 15:27:15 dervin Exp $ 
  */
 public class EnumIteratorFactory {
 
@@ -32,9 +32,9 @@ public class EnumIteratorFactory {
             case GLOBUS_INDEXED_FILE:
                 return getGlobusIndexedFileIterator(objects, objectQName, null);
             case CAGRID_SIMPLE:
-                return SimplePersistantSDKObjectIterator.createIterator(objects, objectQName, wsddInput);
+                return SimplePersistantObjectIterator.createIterator(objects, objectQName, wsddInput);
             case CAGRID_THREADED_COMPLETE:
-                return PersistantSDKObjectIterator.createIterator(objects, objectQName, wsddInput);
+                return PersistantObjectIterator.createIterator(objects, objectQName, wsddInput);
             case CAGRID_CONCURRENT_COMPLETE:
                 return ConcurrenPersistantObjectEnumIterator.createIterator(objects, objectQName, wsddInput);
         }
@@ -43,17 +43,17 @@ public class EnumIteratorFactory {
     
     
     /**
-     * Serializes a List of caCORE SDK generated objects to a temp file on
+     * Serializes a List of serialiable objects to a temp file on
      * the local disk, then creates an EnumIterator which can return
      * those objects.
      * 
      * <b><i>NOTE:</b></i> The temp file is created in the current user's 
-     * home directory /.cagrid/SDKEnumIterator directory.  For security
+     * home directory /.cagrid/<i>Iterator Class</i> directory.  For security
      * reasons, access to this location must be controlled in a production
      * data environment. 
      * 
      * @param objectIter
-     *      An iterator to a collection of caCORE SDK objects to be enumerated
+     *      An iterator to a collection of data objects to be enumerated
      * @param objectQName
      *      The QName of the objects
      * @param wsddInput
@@ -69,9 +69,9 @@ public class EnumIteratorFactory {
             case GLOBUS_INDEXED_FILE:
                 return getGlobusIndexedFileIterator(iteratorToList(objectIter), objectQName, null);
             case CAGRID_SIMPLE:
-                return SimplePersistantSDKObjectIterator.createIterator(iteratorToList(objectIter), objectQName, wsddInput);
+                return SimplePersistantObjectIterator.createIterator(iteratorToList(objectIter), objectQName, wsddInput);
             case CAGRID_THREADED_COMPLETE:
-                return PersistantSDKObjectIterator.createIterator(objectIter, objectQName, wsddInput);
+                return PersistantObjectIterator.createIterator(objectIter, objectQName, wsddInput);
             case CAGRID_CONCURRENT_COMPLETE:
                 return ConcurrenPersistantObjectEnumIterator.createIterator(objectIter, objectQName, wsddInput);
         }
@@ -80,12 +80,12 @@ public class EnumIteratorFactory {
     
     
     /**
-     * Serializes a List of caCORE SDK generated objects to a specified file on
+     * Serializes a List of serializable objects to a specified file on
      * the local disk, then creates an EnumIterator which can return
      * those objects.
      * 
      * @param objects
-     *      The list of caCORE SDK objects to be enumerated
+     *      The list of data objects to be enumerated
      * @param objectQName
      *      The QName of the objects
      * @param tempFilename
@@ -105,9 +105,9 @@ public class EnumIteratorFactory {
             case GLOBUS_INDEXED_FILE:
                 return getGlobusIndexedFileIterator(objects, objectQName, tempFilename);
             case CAGRID_SIMPLE:
-                return SimplePersistantSDKObjectIterator.createIterator(objects, objectQName, wsddInput, tempFilename);
+                return SimplePersistantObjectIterator.createIterator(objects, objectQName, wsddInput, tempFilename);
             case CAGRID_THREADED_COMPLETE:
-                return PersistantSDKObjectIterator.createIterator(objects, objectQName, wsddInput, tempFilename);
+                return PersistantObjectIterator.createIterator(objects, objectQName, wsddInput, tempFilename);
             case CAGRID_CONCURRENT_COMPLETE:
                 return ConcurrenPersistantObjectEnumIterator.createIterator(objects, objectQName, wsddInput, tempFilename);
         }
@@ -116,12 +116,12 @@ public class EnumIteratorFactory {
     
     
     /**
-     * Serializes a List of caCORE SDK generated objects to a specified file on
+     * Serializes a List of serializable objects to a specified file on
      * the local disk, then creates an EnumIterator which can return
      * those objects.
      * 
      * @param objectIter
-     *      An iterator to a collection of caCORE SDK objects to be enumerated
+     *      An iterator to a collection of data objects to be enumerated
      * @param objectQName
      *      The QName of the objects
      * @param tempFilename
@@ -141,9 +141,9 @@ public class EnumIteratorFactory {
             case GLOBUS_INDEXED_FILE:
                 return getGlobusIndexedFileIterator(iteratorToList(objectIter), objectQName, tempFilename);
             case CAGRID_SIMPLE:
-                return SimplePersistantSDKObjectIterator.createIterator(iteratorToList(objectIter), objectQName, wsddInput, tempFilename);
+                return SimplePersistantObjectIterator.createIterator(iteratorToList(objectIter), objectQName, wsddInput, tempFilename);
             case CAGRID_THREADED_COMPLETE:
-                return PersistantSDKObjectIterator.createIterator(objectIter, objectQName, wsddInput, tempFilename);
+                return PersistantObjectIterator.createIterator(objectIter, objectQName, wsddInput, tempFilename);
             case CAGRID_CONCURRENT_COMPLETE:
                 return ConcurrenPersistantObjectEnumIterator.createIterator(objectIter, objectQName, wsddInput, tempFilename);
         }

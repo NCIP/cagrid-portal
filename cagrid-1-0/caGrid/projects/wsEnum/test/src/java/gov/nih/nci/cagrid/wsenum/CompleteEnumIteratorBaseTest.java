@@ -37,7 +37,7 @@ import org.projectmobius.bookstore.Book;
  * @author David Ervin
  * 
  * @created Apr 10, 2007 12:16:58 PM
- * @version $Id: CompleteEnumIteratorBaseTest.java,v 1.3 2008-08-21 15:07:24 dervin Exp $ 
+ * @version $Id: CompleteEnumIteratorBaseTest.java,v 1.4 2008-11-04 15:27:15 dervin Exp $ 
  */
 public abstract class CompleteEnumIteratorBaseTest extends TestCase {
     
@@ -62,7 +62,7 @@ public abstract class CompleteEnumIteratorBaseTest extends TestCase {
     
 
     public void setUp() {
-        // need a list of SDK objects
+        // need a list of data objects
         objectList = new ArrayList<Object>();
         for (int i = 0; i < 10; i++) {
             Book b = new Book();
@@ -79,7 +79,7 @@ public abstract class CompleteEnumIteratorBaseTest extends TestCase {
             enumIterator = (EnumIterator) createIteratorMethod.invoke(null, args);
         } catch (Exception ex) {
             ex.printStackTrace();
-            fail("Error initializing the Concurrent SDK Iterator: " + ex.getMessage());
+            fail("Error initializing the Concurrent Iterator: " + ex.getMessage());
         }           
     }
     

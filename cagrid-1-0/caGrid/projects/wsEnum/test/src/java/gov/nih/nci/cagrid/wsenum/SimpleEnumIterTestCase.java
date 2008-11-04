@@ -1,7 +1,7 @@
 package gov.nih.nci.cagrid.wsenum;
 
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.wsenum.utils.SimplePersistantSDKObjectIterator;
+import gov.nih.nci.cagrid.wsenum.utils.SimplePersistantObjectIterator;
 
 import java.io.StringReader;
 import java.util.ArrayList;
@@ -41,7 +41,7 @@ public class SimpleEnumIterTestCase extends TestCase {
 	
 	
 	public void setUp() {
-		// need a list of SDK objects
+		// need a list of data objects
 		objectList = new ArrayList<Object>();
 		for (int i = 0; i < 10; i++) {
 			Book b = new Book();
@@ -51,11 +51,11 @@ public class SimpleEnumIterTestCase extends TestCase {
 		}
 		// set up the enum iterator
 		try {
-			enumIterator = SimplePersistantSDKObjectIterator.createIterator(
+			enumIterator = SimplePersistantObjectIterator.createIterator(
                 objectList, TestingConstants.BOOK_QNAME, null);
 		} catch (Exception ex) {
 			ex.printStackTrace();
-			fail("Error initializing the Simple SDK Iterator: " + ex.getMessage());
+			fail("Error initializing the Simple Iterator: " + ex.getMessage());
 		}			
 	}
 	

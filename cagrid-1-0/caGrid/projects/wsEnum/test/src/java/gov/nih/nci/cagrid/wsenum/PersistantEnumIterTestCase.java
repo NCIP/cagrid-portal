@@ -1,6 +1,6 @@
 package gov.nih.nci.cagrid.wsenum;
 
-import gov.nih.nci.cagrid.wsenum.utils.PersistantSDKObjectIterator;
+import gov.nih.nci.cagrid.wsenum.utils.PersistantObjectIterator;
 
 /** 
  *  PersistantEnumIterTestCase
@@ -14,6 +14,6 @@ import gov.nih.nci.cagrid.wsenum.utils.PersistantSDKObjectIterator;
 public class PersistantEnumIterTestCase extends CompleteEnumIteratorBaseTest {
 	
 	public PersistantEnumIterTestCase() {
-		super(PersistantSDKObjectIterator.class.getName());
+		super(PersistantObjectIterator.class.getName());
 	}
 }

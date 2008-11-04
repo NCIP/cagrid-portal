@@ -23,20 +23,24 @@ import org.globus.ws.enumeration.TimeoutException;
 import org.globus.wsrf.encoding.SerializationException;
 
 /** 
- *  PersistantSDKObjectIterator
- *  Enumeration iterator which provides for persisting caCORE SDK objects to disk
+ *  PersistantObjectIterator
+ *  Enumeration iterator which provides for persisting serializable objects to disk
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created Aug 17, 2006 
- * @version $Id: PersistantSDKObjectIterator.java,v 1.4 2008-09-02 20:37:56 dervin Exp $ 
+ * @version $Id: PersistantObjectIterator.java,v 1.1 2008-11-04 15:27:15 dervin Exp $ 
  */
-public class PersistantSDKObjectIterator extends BaseSDKObjectIterator {
+public class PersistantObjectIterator extends BaseSerializedObjectIterator {
+    public static final String SERIALIZATION_DIRECTORY = PersistantObjectIterator.class.getSimpleName();
+    public static final String PERSISTANCE_FILE_NAME_PREFIX = "EnumIteration";
+    public static final String PERSISTANCE_FILE_EXTENSION = ".serialized";
+    
 	private static final String THREAD_EXCEPTION = "ThreadException";
 	private static final String MUST_STOP_THREAD = "StopThread";
 	private static final String ITERATION_RESULT = "IterationResult";
 	
-	private PersistantSDKObjectIterator(File file, QName objectQName)
+	private PersistantObjectIterator(File file, QName objectQName)
 		throws FileNotFoundException {
 		super(file, objectQName);
 	}
@@ -48,17 +52,17 @@ public class PersistantSDKObjectIterator extends BaseSDKObjectIterator {
     
 	
 	/**
-	 * Serializes a List of caCORE SDK generated objects to a temp file on
+	 * Serializes a List of serializable objects to a temp file on
 	 * the local disk, then creates an EnumIterator which can return
 	 * those objects.
 	 * 
 	 * <b><i>NOTE:</b></i> The temp file is created in the current user's 
-	 * home directory /.cagrid/SDKEnumIterator directory.  For security
+	 * home directory /.cagrid/PersistantObjectIterator directory.  For security
 	 * reasons, access to this location must be controlled in a production
 	 * data environment. 
 	 * 
 	 * @param objects
-	 * 		The list of caCORE SDK objects to be enumerated
+	 * 		The list of data objects to be enumerated
 	 * @param objectQName
 	 * 		The QName of the objects
 	 * @param wsddInput
@@ -73,17 +77,17 @@ public class PersistantSDKObjectIterator extends BaseSDKObjectIterator {
 	
 	
 	/**
-	 * Serializes a List of caCORE SDK generated objects to a temp file on
+	 * Serializes a List of serializable objects to a temp file on
 	 * the local disk, then creates an EnumIterator which can return
 	 * those objects.
 	 * 
 	 * <b><i>NOTE:</b></i> The temp file is created in the current user's 
-	 * home directory /.cagrid/SDKEnumIterator directory.  For security
+	 * home directory /.cagrid/PersistantObjectIterator directory.  For security
 	 * reasons, access to this location must be controlled in a production
 	 * data environment. 
 	 * 
 	 * @param objectIter
-	 * 		An iterator to a collection of caCORE SDK objects to be enumerated
+	 * 		An iterator to a collection of data objects to be enumerated
 	 * @param objectQName
 	 * 		The QName of the objects
 	 * @param wsddInput
@@ -93,23 +97,22 @@ public class PersistantSDKObjectIterator extends BaseSDKObjectIterator {
 	 * @throws Exception
 	 */
 	public static EnumIterator createIterator(Iterator objectIter, QName objectQName, InputStream wsddInput) throws Exception {
-		File tempSerializationDir = new File(Utils.getCaGridUserHome().getAbsolutePath() 
-			+ File.separator + "SDKEnumIterator");
+		File tempSerializationDir = new File(Utils.getCaGridUserHome().getAbsolutePath(), SERIALIZATION_DIRECTORY);
 		if (!tempSerializationDir.exists()) {
 			tempSerializationDir.mkdirs();
 		}
 		return createIterator(objectIter, objectQName, wsddInput, 
-			File.createTempFile("EnumIteration", ".serialized", tempSerializationDir).getAbsolutePath());
+			File.createTempFile(PERSISTANCE_FILE_NAME_PREFIX, PERSISTANCE_FILE_EXTENSION, tempSerializationDir).getAbsolutePath());
 	}
 	
 	
 	/**
-	 * Serializes a List of caCORE SDK generated objects to a specified file on
+	 * Serializes a List of serializable objects to a specified file on
 	 * the local disk, then creates an EnumIterator which can return
 	 * those objects.
 	 * 
 	 * @param objects
-	 * 		The list of caCORE SDK objects to be enumerated
+	 * 		The list of data objects to be enumerated
 	 * @param objectQName
 	 * 		The QName of the objects
 	 * @param tempFilename
@@ -128,12 +131,12 @@ public class PersistantSDKObjectIterator extends BaseSDKObjectIterator {
 	
 	
 	/**
-	 * Serializes a List of caCORE SDK generated objects to a specified file on
+	 * Serializes a List of serializable objects to a specified file on
 	 * the local disk, then creates an EnumIterator which can return
 	 * those objects.
 	 * 
 	 * @param objectIter
-	 * 		An iterator to a collection of caCORE SDK objects to be enumerated
+	 * 		An iterator to a collection of data objects to be enumerated
 	 * @param objectQName
 	 * 		The QName of the objects
 	 * @param tempFilename
@@ -148,8 +151,8 @@ public class PersistantSDKObjectIterator extends BaseSDKObjectIterator {
 	 */
 	public static EnumIterator createIterator(Iterator objectIter, QName objectQName, InputStream wsddInput, String tempFilename) throws Exception {
 		StringBuffer wsddContents = wsddInput != null ? Utils.inputStreamToStringBuffer(wsddInput) : null;
-		writeSdkObjects(objectIter, objectQName, tempFilename, wsddContents);
-		return new PersistantSDKObjectIterator(new File(tempFilename), objectQName);
+		writeOutObjects(objectIter, objectQName, tempFilename, wsddContents);
+		return new PersistantObjectIterator(new File(tempFilename), objectQName);
 	}
 	
 

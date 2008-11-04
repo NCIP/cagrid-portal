@@ -2,16 +2,11 @@ package gov.nih.nci.cagrid.wsenum.utils;
 
 import gov.nih.nci.cagrid.common.Utils;
 
-import java.io.BufferedWriter;
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.StringWriter;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -25,19 +20,22 @@ import org.globus.ws.enumeration.TimeoutException;
 import org.globus.wsrf.encoding.SerializationException;
 
 /** 
- *  PersistantSDKObjectIterator
- *  Enumeration iterator which provides for persisting caCORE SDK objects to disk.
- *  This iterator makes no attempt to respect any IterationConstraints except
- *  for maxElements.
+ *  SimplePersistantObjectIterator
+ *  Enumeration iterator which provides for persisting serializable objects to disk.
+ *  <b>Like Globus' provided iterator implementations, this iterator makes no 
+ *  attempt to respect any IterationConstraints except for maxElements.</b>
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created Aug 17, 2006 
- * @version $Id: SimplePersistantSDKObjectIterator.java,v 1.4 2008-09-02 20:37:56 dervin Exp $ 
+ * @version $Id: SimplePersistantObjectIterator.java,v 1.1 2008-11-04 15:27:15 dervin Exp $ 
  */
-public class SimplePersistantSDKObjectIterator extends BaseSDKObjectIterator {
+public class SimplePersistantObjectIterator extends BaseSerializedObjectIterator {
+    public static final String SERIALIZATION_DIRECTORY = SimplePersistantObjectIterator.class.getSimpleName();
+    public static final String PERSISTANCE_FILE_NAME_PREFIX = "EnumIteration";
+    public static final String PERSISTANCE_FILE_EXTENSION = ".serialized";
 	
-	private SimplePersistantSDKObjectIterator(File file, QName objectQName) throws FileNotFoundException {
+	private SimplePersistantObjectIterator(File file, QName objectQName) throws FileNotFoundException {
 		super(file, objectQName);
 	}
 	
@@ -47,17 +45,17 @@ public class SimplePersistantSDKObjectIterator extends BaseSDKObjectIterator {
     }
 	
 	/**
-	 * Serializes a List of caCORE SDK generated objects to a temp file on
+	 * Serializes a List of serializable objects to a temp file on
 	 * the local disk, then creates an EnumIterator which can return
 	 * those objects.
 	 * 
 	 * <b><i>NOTE:</b></i> The temp file is created in the current user's 
-	 * home directory /.cagrid/SDKEnumIterator directory.  For security
-	 * reasons, access to this location must be controlled in a production
-	 * data environment. 
+	 * home directory /.cagrid/SimplePersistantObjectIterator directory.  
+     * For security reasons, access to this location must be controlled 
+     * in a production data environment. 
 	 * 
 	 * @param objects
-	 * 		The list of caCORE SDK objects to be enumerated
+	 * 		The list of data objects to be enumerated
 	 * @param objectQName
 	 * 		The QName of the objects
 	 * @param wsddInput
@@ -67,23 +65,22 @@ public class SimplePersistantSDKObjectIterator extends BaseSDKObjectIterator {
 	 * @throws Exception
 	 */
 	public static EnumIterator createIterator(List objects, QName objectQName, InputStream wsddInput) throws Exception {
-		File tempSerializationDir = new File(Utils.getCaGridUserHome().getAbsolutePath() 
-			+ File.separator + "SDKEnumIterator");
+		File tempSerializationDir = new File(Utils.getCaGridUserHome().getAbsolutePath(), SERIALIZATION_DIRECTORY);
 		if (!tempSerializationDir.exists()) {
 			tempSerializationDir.mkdirs();
 		}
 		return createIterator(objects, objectQName, wsddInput, 
-			File.createTempFile("EnumIteration", ".serialized", tempSerializationDir).getAbsolutePath());
+			File.createTempFile(PERSISTANCE_FILE_NAME_PREFIX, PERSISTANCE_FILE_EXTENSION, tempSerializationDir).getAbsolutePath());
 	}
 	
 	
 	/**
-	 * Serializes a List of caCORE SDK generated objects to a specified file on
+	 * Serializes a List of serializable objects to a specified file on
 	 * the local disk, then creates an EnumIterator which can return
 	 * those objects.
 	 * 
 	 * @param objects
-	 * 		The list of caCORE SDK objects to be enumerated
+	 * 		The list of data objects to be enumerated
 	 * @param objectQName
 	 * 		The QName of the objects
 	 * @param filename
@@ -98,45 +95,8 @@ public class SimplePersistantSDKObjectIterator extends BaseSDKObjectIterator {
 	 */
 	public static EnumIterator createIterator(List objects, QName objectQName, InputStream wsddInput, String filename) throws Exception {
 		StringBuffer wsddContents = wsddInput != null ? Utils.inputStreamToStringBuffer(wsddInput) : null;
-		writeSdkObjects(objects, objectQName, filename, wsddContents);
-		return new SimplePersistantSDKObjectIterator(new File(filename), objectQName);
-	}
-	
-	
-	/**
-	 * Writes the SDK serializable objects to disk
-	 * 
-	 * @param objects
-	 * 		The list of objects to write out
-	 * @param name
-	 * 		The QName of the objects
-	 * @param filename
-	 * 		The filename to store the objects into
-	 * @param configFileContents
-	 * 		The contents of the WSDD config document
-	 * @throws Exception
-	 */
-	private static void writeSdkObjects(List objects, QName name, String filename, StringBuffer configFileContents) throws Exception {
-		BufferedWriter fileWriter = new BufferedWriter(new FileWriter(filename));
-		Iterator objIter = objects.iterator();
-		byte[] configBytes = null;
-		if (configFileContents != null) {
-			configBytes = configFileContents.toString().getBytes();
-		}
-		while (objIter.hasNext()) {
-			StringWriter writer = new StringWriter();
-			if (configBytes != null) {
-				Utils.serializeObject(objIter.next(), name, writer, 
-					new ByteArrayInputStream(configBytes));
-			} else {
-				Utils.serializeObject(objIter.next(), name, writer);
-			}
-			String xml = writer.toString().trim();
-			fileWriter.write(String.valueOf(xml.length()) + "\n");
-			fileWriter.write(xml);
-		}
-		fileWriter.flush();
-		fileWriter.close();
+		writeOutObjects(objects.iterator(), objectQName, filename, wsddContents);
+		return new SimplePersistantObjectIterator(new File(filename), objectQName);
 	}
 	
 

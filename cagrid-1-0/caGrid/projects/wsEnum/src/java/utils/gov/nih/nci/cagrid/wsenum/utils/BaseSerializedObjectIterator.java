@@ -30,15 +30,16 @@ import org.xml.sax.SAXException;
 
 
 /**
- * BaseSDKObjectIterator Base class to consolidate some functionality of SDK
- * object enum iterators
+ * BaseSerializedObjectIterator 
+ * Base class to consolidate some functionality of ws-enum iterator
+ * implementations which cache items to disk
  * 
  * @author David Ervin
  * 
  * @created Mar 13, 2007 10:42:15 AM
- * @version $Id: BaseSDKObjectIterator.java,v 1.3 2008-09-02 20:37:56 dervin Exp $
+ * @version $Id: BaseSerializedObjectIterator.java,v 1.1 2008-11-04 15:27:15 dervin Exp $
  */
-public abstract class BaseSDKObjectIterator implements EnumIterator {
+public abstract class BaseSerializedObjectIterator implements EnumIterator {
 
     private File file;
     private QName objectQName;
@@ -46,7 +47,7 @@ public abstract class BaseSDKObjectIterator implements EnumIterator {
     private boolean isReleased;
 
 
-    protected BaseSDKObjectIterator(File file, QName objectQName) throws FileNotFoundException {
+    protected BaseSerializedObjectIterator(File file, QName objectQName) throws FileNotFoundException {
         this.file = file;
         this.objectQName = objectQName;
         this.fileReader = new BufferedReader(new FileReader(file));
@@ -55,7 +56,7 @@ public abstract class BaseSDKObjectIterator implements EnumIterator {
 
 
     /**
-     * Writes the SDK serializable objects to disk
+     * Writes the serializable objects to disk
      * 
      * @param objects
      *            The list of objects to write out
@@ -67,7 +68,7 @@ public abstract class BaseSDKObjectIterator implements EnumIterator {
      *            The contents of the WSDD configuration file
      * @throws Exception
      */
-    protected static void writeSdkObjects(Iterator objIter, QName name, String filename, StringBuffer wsddContents)
+    protected static void writeOutObjects(Iterator objIter, QName name, String filename, StringBuffer wsddContents)
         throws Exception {
         BufferedWriter fileWriter = new BufferedWriter(new FileWriter(filename));
         byte[] configBytes = null;
