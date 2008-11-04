@@ -5,7 +5,6 @@ import org.apache.axis.encoding.DeserializationContext;
 import org.apache.axis.encoding.Deserializer;
 import org.apache.axis.message.EnvelopeHandler;
 import org.apache.axis.message.SOAPHandler;
-import org.globus.wsrf.encoding.DeserializationException;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
@@ -24,8 +23,7 @@ public class ConfigurableObjectDeserializationContext extends DeserializationCon
 	private Object value = null;
 
 	public ConfigurableObjectDeserializationContext(
-		MessageContext context, InputSource source, Class clazz) 
-		throws DeserializationException {
+		MessageContext context, InputSource source, Class clazz) {
 		super(context, new SOAPHandler());
 		this.inputSource = source;
 		this.objectClass = clazz;

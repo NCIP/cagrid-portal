@@ -7,7 +7,6 @@ import org.apache.axis.EngineConfiguration;
 import org.apache.axis.MessageContext;
 import org.apache.axis.client.AxisClient;
 import org.apache.axis.configuration.FileProvider;
-import org.globus.wsrf.encoding.DeserializationException;
 import org.globus.wsrf.encoding.ObjectDeserializer;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -24,7 +23,7 @@ import org.xml.sax.SAXException;
 public class ConfigurableObjectDeserializer extends ObjectDeserializer {
 	
 	public static Object toObject(InputSource source, Class javaClass, InputStream wsdd)
-	throws DeserializationException, SAXException {
+	    throws SAXException {
 		// create a message context for the wsdd
 		EngineConfiguration engineConfig = new FileProvider(wsdd);
 		AxisClient axisClient = new AxisClient(engineConfig);
