@@ -316,7 +316,7 @@ public class Introduce_1_1__1_3_Upgrader extends IntroduceUpgraderBase {
             Document doc = XMLUtilities.fileNameToDocument(typesFile.getAbsolutePath());
             boolean needtoAddFaultsImports = true;
             boolean needtoAddAdressingImports = true;
-            List imports = doc.getRootElement().getChildren("import", Namespace.XML_NAMESPACE);
+            List imports = doc.getRootElement().getChildren("import", Namespace.getNamespace(IntroduceConstants.W3CNAMESPACE));
             if(imports!=null && imports.size()>0){
                 Iterator it = imports.iterator();
                 while(it.hasNext()){
@@ -329,13 +329,13 @@ public class Introduce_1_1__1_3_Upgrader extends IntroduceUpgraderBase {
                 }
             }
             if(needtoAddAdressingImports){
-                Element addressingImport = new Element("import",Namespace.XML_NAMESPACE);
+                Element addressingImport = new Element("import",Namespace.getNamespace(IntroduceConstants.W3CNAMESPACE));
                 addressingImport.setAttribute("namespace", "http://schemas.xmlsoap.org/ws/2004/03/addressing");
                 addressingImport.setAttribute("schemaLocation","../ws/addressing/WS-Addressing.xsd");
                 doc.getRootElement().addContent(0,addressingImport);
             }
             if(needtoAddFaultsImports){
-                Element faultImport = new Element("import",Namespace.XML_NAMESPACE);
+                Element faultImport = new Element("import",Namespace.getNamespace(IntroduceConstants.W3CNAMESPACE));
                 faultImport.setAttribute("namespace", "http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd");
                 faultImport.setAttribute("schemaLocation","../wsrf/faults/WS-BaseFaults.xsd");
                 doc.getRootElement().addContent(0,faultImport);
