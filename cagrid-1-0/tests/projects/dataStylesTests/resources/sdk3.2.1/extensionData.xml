@@ -1,0 +1,41 @@
+    <ns16:Data xsi:type="ns16:Data" xmlns:ns16="http://CQL.caBIG/1/gov.nih.nci.cagrid.data.extension">
+             <ns16:AdditionalLibraries xsi:type="ns16:AdditionalLibraries">
+              <ns16:JarName xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">caGrid-sdkQuery32-core-1.3-dev.jar</ns16:JarName>
+
+
+     </ns16:AdditionalLibraries>
+
+
+             <ns16:CadsrInformation noDomainModel="false" projectVersion="3.2.1" useSuppliedModel="true" xsi:type="ns16:CadsrInformation">
+              <ns16:Packages mappedNamespace="gme://caCORE.caCORE/3.2/gov.nih.nci.cabio.domain" name="gov.nih.nci.cabio.domain" xsi:type="ns16:CadsrPackage">
+               <ns16:CadsrClass className="Gene" elementName="Gene" selected="true" targetable="true" xsi:type="ns16:ClassMapping"/>
+
+
+               <ns16:CadsrClass className="Chromosome" elementName="Chromosome" selected="true" targetable="true" xsi:type="ns16:ClassMapping"/>
+
+
+               <ns16:CadsrClass className="Taxon" elementName="Taxon" selected="true" targetable="true" xsi:type="ns16:ClassMapping"/>
+
+
+               <ns16:CadsrClass className="Library" elementName="Library" selected="true" targetable="true" xsi:type="ns16:ClassMapping"/>
+
+
+               <ns16:CadsrClass className="Clone" elementName="Clone" selected="true" targetable="true" xsi:type="ns16:ClassMapping"/>
+
+
+               <ns16:CadsrClass className="Sequence" elementName="Sequence" selected="true" targetable="true" xsi:type="ns16:ClassMapping"/>
+
+
+               <ns16:CadsrClass className="Target" elementName="Target" selected="true" targetable="true" xsi:type="ns16:ClassMapping"/>
+
+
+      </ns16:Packages>
+
+
+     </ns16:CadsrInformation>
+
+
+             <ns16:ServiceFeatures serviceStyle="caCORE SDK v 3.2(.1)" useBdt="false" useGridIdeitifiers="false" useWsEnumeration="false" xsi:type="ns16:ServiceFeatures"/>
+
+
+    </ns16:Data>
