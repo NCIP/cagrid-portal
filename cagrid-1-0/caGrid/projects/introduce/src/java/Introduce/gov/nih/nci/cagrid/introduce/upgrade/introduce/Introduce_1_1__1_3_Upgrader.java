@@ -6,9 +6,6 @@ import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.service.ResourcePropertyManagement;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
-import gov.nih.nci.cagrid.introduce.codegen.common.SynchronizationException;
-import gov.nih.nci.cagrid.introduce.codegen.provider.ProviderTools;
-import gov.nih.nci.cagrid.introduce.codegen.services.methods.SyncSource;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.common.SpecificServiceInformation;
@@ -18,7 +15,6 @@ import gov.nih.nci.cagrid.introduce.templates.client.ServiceClientBaseTemplate;
 import gov.nih.nci.cagrid.introduce.templates.client.ServiceClientTemplate;
 import gov.nih.nci.cagrid.introduce.templates.common.ServiceConstantsBaseTemplate;
 import gov.nih.nci.cagrid.introduce.templates.common.ServiceConstantsTemplate;
-import gov.nih.nci.cagrid.introduce.templates.schema.service.ServiceWSDLTemplate;
 import gov.nih.nci.cagrid.introduce.templates.service.globus.ServiceConfigurationTemplate;
 import gov.nih.nci.cagrid.introduce.templates.service.globus.resource.ResourceBaseTemplate;
 import gov.nih.nci.cagrid.introduce.templates.service.globus.resource.ResourceHomeTemplate;
@@ -35,17 +31,9 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.ws.jaxme.js.JavaMethod;
-import org.apache.ws.jaxme.js.JavaQName;
-import org.apache.ws.jaxme.js.JavaQNameImpl;
-import org.apache.ws.jaxme.js.JavaSource;
-import org.apache.ws.jaxme.js.JavaSourceFactory;
-import org.apache.ws.jaxme.js.util.JavaParser;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.Namespace;
-
-import sun.security.action.GetBooleanAction;
 
 
 public class Introduce_1_1__1_3_Upgrader extends IntroduceUpgraderBase {
@@ -56,6 +44,7 @@ public class Introduce_1_1__1_3_Upgrader extends IntroduceUpgraderBase {
     }
 
 
+    @Override
     protected void upgrade() throws Exception {
         // need to make sure to save a copy of hte introduce.xml to a prev file
         // so that the
@@ -110,11 +99,13 @@ public class Introduce_1_1__1_3_Upgrader extends IntroduceUpgraderBase {
         getStatus().addDescriptionLine("added build-stubs.xml");
 
         // Copy over the new ServiceSecurity.wsdl
-        File newWLocation = new File("ext" + File.separator + "dependencies" + File.separator + "wsdl" + File.separator + "ServiceSecurity.wsdl");
+        File newWLocation = new File("ext" + File.separator + "dependencies" + File.separator + "wsdl" + File.separator
+            + "ServiceSecurity.wsdl");
         File oldWLocation = new File(getServiceInformation().getBaseDirectory().getAbsolutePath() + File.separator
-            + "schema" + File.separator + getServiceInformation().getServices().getService(0).getName() + File.separator + "ServiceSecurity.wsdl");
+            + "schema" + File.separator + getServiceInformation().getServices().getService(0).getName()
+            + File.separator + "ServiceSecurity.wsdl");
         Utils.copyFile(newWLocation, oldWLocation);
-        
+
         // change the location of the services security.xsd
         NamespaceType nsType = CommonTools.getNamespaceType(getServiceInformation().getNamespaces(),
             "gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security");
@@ -141,7 +132,7 @@ public class Introduce_1_1__1_3_Upgrader extends IntroduceUpgraderBase {
                 "getServiceSecurityMetadata"));
             SkeletonSecurityOperationProviderCreator secCreator = new SkeletonSecurityOperationProviderCreator();
             secCreator.createSkeleton(new SpecificServiceInformation(getServiceInformation(), service));
-            
+
             ServiceClientTemplate clientT = new ServiceClientTemplate();
             String clientS = clientT.generate(new SpecificServiceInformation(getServiceInformation(), service));
             File clientF = new File(srcDir.getAbsolutePath() + File.separator + CommonTools.getPackageDir(service)
@@ -150,7 +141,6 @@ public class Introduce_1_1__1_3_Upgrader extends IntroduceUpgraderBase {
             FileWriter clientFW = new FileWriter(clientF);
             clientFW.write(clientS);
             clientFW.close();
-
 
             ServiceClientBaseTemplate clientBaseT = new ServiceClientBaseTemplate();
             String clientBaseS = clientBaseT.generate(new SpecificServiceInformation(getServiceInformation(), service));
@@ -307,49 +297,57 @@ public class Introduce_1_1__1_3_Upgrader extends IntroduceUpgraderBase {
 
         getStatus().setStatus(StatusBase.UPGRADE_OK);
     }
-    
-    
-    private void fixTypesSchemas() throws Exception{
-        for(int i = 0; i < getServiceInformation().getServices().getService().length; i++){
+
+
+    private void fixTypesSchemas() throws Exception {
+        for (int i = 0; i < getServiceInformation().getServices().getService().length; i++) {
             ServiceType service = getServiceInformation().getServices().getService(i);
-            File typesFile = new File(getServiceInformation().getBaseDirectory()+ File.separator + "schema" + File.separator + getServiceInformation().getServices().getService(0).getName() + File.separator + service.getName() + "Types.xsd" );
+            File typesFile = new File(getServiceInformation().getBaseDirectory() + File.separator + "schema"
+                + File.separator + getServiceInformation().getServices().getService(0).getName() + File.separator
+                + service.getName() + "Types.xsd");
             Document doc = XMLUtilities.fileNameToDocument(typesFile.getAbsolutePath());
             boolean needtoAddFaultsImports = true;
             boolean needtoAddAdressingImports = true;
-            List imports = doc.getRootElement().getChildren("import", Namespace.getNamespace(IntroduceConstants.W3CNAMESPACE));
-            if(imports!=null && imports.size()>0){
+            List imports = doc.getRootElement().getChildren("import",
+                Namespace.getNamespace(IntroduceConstants.W3CNAMESPACE));
+            if (imports != null && imports.size() > 0) {
                 Iterator it = imports.iterator();
-                while(it.hasNext()){
-                    Element el = (Element)it.next();
-                    if(el.getAttributeValue("namespace")!=null && el.getAttributeValue("namespace").equals("http://schemas.xmlsoap.org/ws/2004/03/addressing")){
+                while (it.hasNext()) {
+                    Element el = (Element) it.next();
+                    if (el.getAttributeValue("namespace") != null
+                        && el.getAttributeValue("namespace").equals("http://schemas.xmlsoap.org/ws/2004/03/addressing")) {
                         needtoAddAdressingImports = false;
-                    } else if(el.getAttributeValue("namespace")!=null && el.getAttributeValue("namespace").equals("http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd")){
+                    } else if (el.getAttributeValue("namespace") != null
+                        && el.getAttributeValue("namespace").equals(
+                            "http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd")) {
                         needtoAddFaultsImports = false;
                     }
                 }
             }
-            if(needtoAddAdressingImports){
-                Element addressingImport = new Element("import",Namespace.getNamespace(IntroduceConstants.W3CNAMESPACE));
+            if (needtoAddAdressingImports) {
+                Element addressingImport = new Element("import", Namespace
+                    .getNamespace(IntroduceConstants.W3CNAMESPACE));
                 addressingImport.setAttribute("namespace", "http://schemas.xmlsoap.org/ws/2004/03/addressing");
-                addressingImport.setAttribute("schemaLocation","../ws/addressing/WS-Addressing.xsd");
-                doc.getRootElement().addContent(0,addressingImport);
+                addressingImport.setAttribute("schemaLocation", "../ws/addressing/WS-Addressing.xsd");
+                doc.getRootElement().addContent(0, addressingImport);
             }
-            if(needtoAddFaultsImports){
-                Element faultImport = new Element("import",Namespace.getNamespace(IntroduceConstants.W3CNAMESPACE));
-                faultImport.setAttribute("namespace", "http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd");
-                faultImport.setAttribute("schemaLocation","../wsrf/faults/WS-BaseFaults.xsd");
-                doc.getRootElement().addContent(0,faultImport);
+            if (needtoAddFaultsImports) {
+                Element faultImport = new Element("import", Namespace.getNamespace(IntroduceConstants.W3CNAMESPACE));
+                faultImport.setAttribute("namespace",
+                    "http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd");
+                faultImport.setAttribute("schemaLocation", "../wsrf/faults/WS-BaseFaults.xsd");
+                doc.getRootElement().addContent(0, faultImport);
             }
-            
+
             FileWriter writer = new FileWriter(typesFile);
             writer.write(XMLUtilities.formatXML(XMLUtilities.documentToString(doc)));
             writer.close();
         }
     }
-    
+
 
     private void fixJNDI() throws Exception {
-        
+
         // change the jndi to use the new classes names for resource home and
         // resource configuration and service configuration
         Document jndiDoc = XMLUtilities.fileNameToDocument(getServicePath() + File.separator + "jndi-config.xml");
@@ -413,11 +411,11 @@ public class Introduce_1_1__1_3_Upgrader extends IntroduceUpgraderBase {
                 && filename.endsWith(".jar");
             boolean gridGrouper = (filename.startsWith("caGrid-1.1-gridgrouper")) && filename.endsWith(".jar");
             if (gridGrouper) {
-                hadGridGrouperJars = true;
+                this.hadGridGrouperJars = true;
             }
             boolean csm = (filename.startsWith("caGrid-1.1-authz-common")) && filename.endsWith(".jar");
             if (csm) {
-                hadCSMJars = true;
+                this.hadCSMJars = true;
             }
 
             boolean otherSecurityJarsNotNeeded = (filename.startsWith("caGrid-1.1-gridca"))
@@ -442,12 +440,12 @@ public class Introduce_1_1__1_3_Upgrader extends IntroduceUpgraderBase {
         File serviceLibDir = new File(getServicePath() + File.separator + "lib");
         File[] serviceLibs = serviceLibDir.listFiles(oldDkeletonLibFilter);
         // delete the old libraries
-        for (int i = 0; i < serviceLibs.length; i++) {
-            boolean deleted = serviceLibs[i].delete();
+        for (File serviceLib : serviceLibs) {
+            boolean deleted = serviceLib.delete();
             if (deleted) {
-                getStatus().addDescriptionLine(serviceLibs[i].getName() + " removed");
+                getStatus().addDescriptionLine(serviceLib.getName() + " removed");
             } else {
-                getStatus().addDescriptionLine(serviceLibs[i].getName() + " could not be removed");
+                getStatus().addDescriptionLine(serviceLib.getName() + " could not be removed");
             }
         }
 
@@ -462,19 +460,17 @@ public class Introduce_1_1__1_3_Upgrader extends IntroduceUpgraderBase {
 
         // copy new libraries in (every thing in skeleton/lib)
         File[] skeletonLibs = skeletonLibDir.listFiles(srcSkeletonLibFilter);
-        for (int i = 0; i < skeletonLibs.length; i++) {
-            File out = new File(serviceLibDir.getAbsolutePath() + File.separator + skeletonLibs[i].getName());
+        for (File skeletonLib : skeletonLibs) {
+            File out = new File(serviceLibDir.getAbsolutePath() + File.separator + skeletonLib.getName());
             try {
-                Utils.copyFile(skeletonLibs[i], out);
-                getStatus().addDescriptionLine(skeletonLibs[i].getName() + " added");
+                Utils.copyFile(skeletonLib, out);
+                getStatus().addDescriptionLine(skeletonLib.getName() + " added");
             } catch (IOException ex) {
-                throw new Exception("Error copying library (" + skeletonLibs[i] + ") to service: " + ex.getMessage(),
-                    ex);
+                throw new Exception("Error copying library (" + skeletonLib + ") to service: " + ex.getMessage(), ex);
             }
         }
-        
-        getStatus().addDescriptionLine("updating service with the new version of the jars");
 
+        getStatus().addDescriptionLine("updating service with the new version of the jars");
 
         // replacing the soap fix jar with the new service tasks jar
         File oldSoapJar = new File(getServicePath() + File.separator + "tools" + File.separator + "lib"
@@ -495,14 +491,14 @@ public class Introduce_1_1__1_3_Upgrader extends IntroduceUpgraderBase {
         File serviceToolsLibDir = new File(getServicePath() + File.separator + "tools" + File.separator + "lib");
         File skeletonToolsLibDir = new File("skeleton" + File.separator + "tools" + File.separator + "lib");
         File[] skeletonToolsLibs = skeletonToolsLibDir.listFiles(srcSkeletonToolsLibFilter);
-        for (int i = 0; i < skeletonToolsLibs.length; i++) {
-            File out = new File(serviceToolsLibDir.getAbsolutePath() + File.separator + skeletonToolsLibs[i].getName());
+        for (File skeletonToolsLib : skeletonToolsLibs) {
+            File out = new File(serviceToolsLibDir.getAbsolutePath() + File.separator + skeletonToolsLib.getName());
             try {
-                Utils.copyFile(skeletonToolsLibs[i], out);
-                getStatus().addDescriptionLine(skeletonToolsLibs[i].getName() + " added");
+                Utils.copyFile(skeletonToolsLib, out);
+                getStatus().addDescriptionLine(skeletonToolsLib.getName() + " added");
             } catch (IOException ex) {
-                throw new Exception("Error copying library (" + skeletonToolsLibs[i] + ") to service: "
-                    + ex.getMessage(), ex);
+                throw new Exception("Error copying library (" + skeletonToolsLib + ") to service: " + ex.getMessage(),
+                    ex);
             }
         }
 

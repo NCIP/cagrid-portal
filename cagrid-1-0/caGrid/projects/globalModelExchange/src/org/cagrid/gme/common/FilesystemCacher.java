@@ -1,10 +1,8 @@
 package org.cagrid.gme.common;
 
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.common.XMLUtilities;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -19,17 +17,9 @@ import org.cagrid.gme.domain.XMLSchemaDocument;
 import org.jdom.Attribute;
 import org.jdom.Document;
 import org.jdom.Element;
-import org.jdom.Namespace;
 
 
-public class FilesystemCacher {
-
-    protected static final Namespace XSD_NAMESPACE = Namespace.getNamespace("xsd", "http://www.w3.org/XMLSchema/2001");
-    protected static final String XSD_NAMESPACE_ATTRIBUTE_NAME = "namespace";
-    protected static final String XSD_SCHEMALOCATION_ATTRIBUTE_NAME = "schemaLocation";
-    protected static final String XSD_REDEFINE_ATTRIBUTE_NAME = "redefine";
-    protected static final String XSD_INCLUDE_ATTRIBUTE_NAME = "include";
-    protected static final String XSD_IMPORT_ATTRIBUTE_NAME = "include";
+public class FilesystemCacher extends FilesystemProcessor {
 
     private final XMLSchemaBundle bundle;
     private final File directory;
@@ -98,7 +88,7 @@ public class FilesystemCacher {
             doc.systemID = s.getRootDocument().getSystemID();
 
             // create a unique filename for the schema's root document
-            File file = createUniqueFileName(this.fNameMap, doc);
+            File file = createUniqueFileName(doc);
             // save it
             this.fNameMap.put(doc, file);
             // save the root document file as the location to use for imports of
@@ -112,7 +102,7 @@ public class FilesystemCacher {
                 doc.systemID = d.getSystemID();
 
                 // create a unique filename
-                file = createUniqueFileName(this.fNameMap, doc);
+                file = createUniqueFileName(doc);
                 // save it
                 this.fNameMap.put(doc, file);
             }
@@ -121,12 +111,12 @@ public class FilesystemCacher {
     }
 
 
-    protected File createUniqueFileName(Map<XSDDocument, File> fNameMap, XSDDocument doc) {
+    protected File createUniqueFileName(XSDDocument doc) {
         File docFile = new File(this.directory, doc.systemID);
         int i = 0;
         // while the file exists on the file system, or we already plan to use
         // it, come up with a new name and check again
-        while (docFile.exists() || fNameMap.containsValue(docFile)) {
+        while (docFile.exists() || this.fNameMap.containsValue(docFile)) {
             docFile = new File(this.directory, doc.systemID + "_" + i);
         }
         return docFile;
@@ -155,21 +145,12 @@ public class FilesystemCacher {
 
     protected void fixAndWriteDocument(URI namespace, String text, File file) throws IOException {
 
-        Document schemaDoc = null;
-
-        try {
-            schemaDoc = XMLUtilities.stringToDocument(text);
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new SchemaParsingException(e.getMessage());
-        }
-
-        Element root = schemaDoc.getRootElement();
+        Document schemaDoc = createDocumentFromText(text);
 
         // fix the import elements
-        List<Element> imports = root.getChildren(this.XSD_IMPORT_ATTRIBUTE_NAME, this.XSD_NAMESPACE);
+        List<Element> imports = getImportElements(schemaDoc);
         for (Element elm : imports) {
-            Attribute namespaceAtt = elm.getAttribute(this.XSD_NAMESPACE_ATTRIBUTE_NAME);
+            Attribute namespaceAtt = elm.getAttribute(FilesystemProcessor.XSD_NAMESPACE_ATTRIBUTE_NAME);
             URI ns = null;
             try {
                 ns = new URI(namespaceAtt.getValue());
@@ -182,13 +163,13 @@ public class FilesystemCacher {
             String relativePath = Utils.getRelativePath(this.directory, f);
             // this attribute may not exist, so let's just always set a new one
             // (replacing any existing)
-            elm.setAttribute(this.XSD_SCHEMALOCATION_ATTRIBUTE_NAME, relativePath);
+            elm.setAttribute(FilesystemProcessor.XSD_SCHEMALOCATION_ATTRIBUTE_NAME, relativePath);
         }
 
         // fix the includes
-        List<Element> includes = root.getChildren(this.XSD_INCLUDE_ATTRIBUTE_NAME, this.XSD_NAMESPACE);
+        List<Element> includes = getIncludeElements(schemaDoc);
         for (Element elm : includes) {
-            Attribute locationAtt = elm.getAttribute(this.XSD_SCHEMALOCATION_ATTRIBUTE_NAME);
+            Attribute locationAtt = elm.getAttribute(FilesystemProcessor.XSD_SCHEMALOCATION_ATTRIBUTE_NAME);
             String currLocation = locationAtt.getValue();
             XSDDocument doc = new XSDDocument();
             doc.namespace = namespace;
@@ -200,9 +181,9 @@ public class FilesystemCacher {
         }
 
         // fix the redefines
-        List<Element> redefines = root.getChildren(this.XSD_REDEFINE_ATTRIBUTE_NAME, this.XSD_NAMESPACE);
+        List<Element> redefines = getRedefineElements(schemaDoc);
         for (Element elm : redefines) {
-            Attribute locationAtt = elm.getAttribute(this.XSD_SCHEMALOCATION_ATTRIBUTE_NAME);
+            Attribute locationAtt = elm.getAttribute(FilesystemProcessor.XSD_SCHEMALOCATION_ATTRIBUTE_NAME);
             String currLocation = locationAtt.getValue();
             XSDDocument doc = new XSDDocument();
             doc.namespace = namespace;
@@ -213,61 +194,8 @@ public class FilesystemCacher {
             locationAtt.setValue(relativePath);
         }
 
-        try {
-            FileWriter fw = new FileWriter(file);
-            fw.write(XMLUtilities.formatXML(XMLUtilities.documentToString(schemaDoc)));
-            fw.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new IOException(e.getMessage());
-        }
+        writeDocumentToFile(file, schemaDoc);
 
     }
 
-
-    protected class XSDDocument {
-        URI namespace;
-        String systemID;
-
-
-        @Override
-        public int hashCode() {
-            final int prime = 31;
-            int result = 1;
-            result = prime * result + ((this.namespace == null) ? 0 : this.namespace.hashCode());
-            result = prime * result + ((this.systemID == null) ? 0 : this.systemID.hashCode());
-            return result;
-        }
-
-
-        @Override
-        public boolean equals(Object obj) {
-            if (this == obj) {
-                return true;
-            }
-            if (obj == null) {
-                return false;
-            }
-            if (getClass() != obj.getClass()) {
-                return false;
-            }
-            XSDDocument other = (XSDDocument) obj;
-            if (this.namespace == null) {
-                if (other.namespace != null) {
-                    return false;
-                }
-            } else if (!this.namespace.equals(other.namespace)) {
-                return false;
-            }
-            if (this.systemID == null) {
-                if (other.systemID != null) {
-                    return false;
-                }
-            } else if (!this.systemID.equals(other.systemID)) {
-                return false;
-            }
-            return true;
-        }
-
-    }
 }
