@@ -37,7 +37,7 @@ import com.jgoodies.validation.view.ValidationComponentUtils;
  * @author oster
  */
 public class PointsOfContactEditorPanel extends JPanel implements ListSelectionListener {
-    private ValidationResultModel validationModel = new DefaultValidationResultModel();
+    private final ValidationResultModel validationModel = new DefaultValidationResultModel();
     private ValidationResult validationResult = null; // @jve:decl-index=0:
 
     private List<PointOfContact> pointsOfContact; // @jve:decl-index=0:
@@ -66,7 +66,8 @@ public class PointsOfContactEditorPanel extends JPanel implements ListSelectionL
     public PointsOfContactEditorPanel() {
         super();
 
-        pocErrorLabel = new JTextField("Must have at least one contact.");
+        this.pocErrorLabel = new JTextField("Must have at least one contact.");
+        this.pocErrorLabel.setEditable(false);
 
         initialize();
     }
@@ -86,7 +87,7 @@ public class PointsOfContactEditorPanel extends JPanel implements ListSelectionL
         gridBagConstraints20.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints20.gridy = 0;
 
-        this.add(IconFeedbackPanel.getWrappedComponentTree(validationModel, getMainPanel()), gridBagConstraints20);
+        this.add(IconFeedbackPanel.getWrappedComponentTree(this.validationModel, getMainPanel()), gridBagConstraints20);
 
         this.initValidation();
         this.validateInput();
@@ -114,7 +115,7 @@ public class PointsOfContactEditorPanel extends JPanel implements ListSelectionL
 
 
     private void initValidation() {
-        ValidationComponentUtils.setMessageKey(pocErrorLabel, "pocs-list");
+        ValidationComponentUtils.setMessageKey(this.pocErrorLabel, "pocs-list");
         ValidationComponentUtils.setMessageKey(getFnameTextField(), "first-name");
         ValidationComponentUtils.setMessageKey(getLnameTextField(), "last-name");
         ValidationComponentUtils.setMessageKey(getEmailTextField(), "email");
@@ -129,61 +130,63 @@ public class PointsOfContactEditorPanel extends JPanel implements ListSelectionL
         this.validationResult = new ValidationResult();
 
         if (this.getPointsOfContact() == null || this.getPointsOfContact().isEmpty()) {
-            validationResult.add(new SimpleValidationMessage("Must have at least one point of contact", Severity.ERROR,
-                "pocs-list"));
+            this.validationResult.add(new SimpleValidationMessage("Must have at least one point of contact",
+                Severity.ERROR, "pocs-list"));
             getPocList().setBackground(ValidationComponentUtils.getErrorBackground());
         } else {
             getPocList().setBackground(Color.WHITE);
             for (int i = 0; i < getPointsOfContact().size(); i++) {
-                PointOfContact poc = (PointOfContact) getPointsOfContact().get(i);
+                PointOfContact poc = getPointsOfContact().get(i);
                 if ((poc.getFirstName() == null || poc.getFirstName().trim().length() <= 0)
                     || (poc.getLastName() == null || poc.getLastName().trim().length() <= 0)
                     || (poc.getEmail() == null || poc.getEmail().trim().length() <= 0)
                     || (poc.getAffiliation() == null || poc.getAffiliation().trim().length() <= 0)
                     || (poc.getRole() == null || poc.getRole().trim().length() <= 0)) {
-                    validationResult.add(new SimpleValidationMessage("Point of contacts must be properly populated.",
-                        Severity.ERROR, "pocs-list"));
+                    this.validationResult.add(new SimpleValidationMessage(
+                        "Point of contacts must be properly populated.", Severity.ERROR, "pocs-list"));
                     getPocList().setBackground(ValidationComponentUtils.getErrorBackground());
                 }
             }
-            
+
         }
 
         if (this.getDetailPanel().isEnabled()) {
 
             if (ValidationUtils.isBlank(getFnameTextField().getText())) {
-                validationResult.add(new SimpleValidationMessage("First name must not be blank.", Severity.ERROR,
+                this.validationResult.add(new SimpleValidationMessage("First name must not be blank.", Severity.ERROR,
                     "first-name"));
             }
             if (!ValidationUtils.isAlphaSpace(getFnameTextField().getText())) {
-                validationResult.add(new SimpleValidationMessage("First name must be be alpha characters.",
+                this.validationResult.add(new SimpleValidationMessage("First name must be be alpha characters.",
                     Severity.ERROR, "first-name"));
             }
 
             if (ValidationUtils.isBlank(getLnameTextField().getText())) {
-                validationResult.add(new SimpleValidationMessage("Last name must not be blank.", Severity.ERROR,
+                this.validationResult.add(new SimpleValidationMessage("Last name must not be blank.", Severity.ERROR,
                     "last-name"));
             }
             if (!ValidationUtils.isAlphaSpace(getLnameTextField().getText())) {
-                validationResult.add(new SimpleValidationMessage("Last name must be be alpha characters.",
+                this.validationResult.add(new SimpleValidationMessage("Last name must be be alpha characters.",
                     Severity.ERROR, "last-name"));
             }
 
             if (ValidationUtils.isBlank(getEmailTextField().getText())) {
-                validationResult.add(new SimpleValidationMessage("Email must not be blank.", Severity.ERROR, "email"));
+                this.validationResult.add(new SimpleValidationMessage("Email must not be blank.", Severity.ERROR,
+                    "email"));
             }
 
             if (ValidationUtils.isBlank(getAffiliationTextField().getText())) {
-                validationResult.add(new SimpleValidationMessage("Affiliation must not be blank.", Severity.ERROR,
+                this.validationResult.add(new SimpleValidationMessage("Affiliation must not be blank.", Severity.ERROR,
                     "affiliation"));
             }
 
             if (ValidationUtils.isBlank((String) getRoleComboBox().getSelectedItem())) {
-                validationResult.add(new SimpleValidationMessage("Role must not be blank.", Severity.ERROR, "role"));
+                this.validationResult
+                    .add(new SimpleValidationMessage("Role must not be blank.", Severity.ERROR, "role"));
             }
         }
 
-        this.validationModel.setResult(validationResult);
+        this.validationModel.setResult(this.validationResult);
 
         updateComponentTreeSeverity();
     }
@@ -197,7 +200,7 @@ public class PointsOfContactEditorPanel extends JPanel implements ListSelectionL
 
 
     protected boolean validatePanel() {
-        if (validationResult != null && validationResult.hasErrors()) {
+        if (this.validationResult != null && this.validationResult.hasErrors()) {
             return false;
         } else {
             return true;
@@ -220,9 +223,9 @@ public class PointsOfContactEditorPanel extends JPanel implements ListSelectionL
             gridBagConstraints.weighty = 1.0;
             gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
             gridBagConstraints.gridx = 0;
-            mainPanel = new JPanel(new GridBagLayout());
-            mainPanel.add(getPocListPanel(), gridBagConstraints);
-            mainPanel.add(getDetailPanel(), gridBagConstraints1);
+            this.mainPanel = new JPanel(new GridBagLayout());
+            this.mainPanel.add(getPocListPanel(), gridBagConstraints);
+            this.mainPanel.add(getDetailPanel(), gridBagConstraints1);
         }
         return this.mainPanel;
     }
