@@ -2,3 +2,4 @@ build
 bin
 ext
 *.zip
+extension.xml
