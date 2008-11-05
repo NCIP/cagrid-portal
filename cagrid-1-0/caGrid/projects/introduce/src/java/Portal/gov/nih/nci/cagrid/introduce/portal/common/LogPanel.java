@@ -103,7 +103,7 @@ public class LogPanel extends JPanel {
                                     final int oldLength = LogPanel.this.logTextArea.getText().length();
 
                                     LogPanel.this.logTextArea.insert(finalLine + "\n", oldLength + 1);
-                                    LogPanel.this.logTextArea.setCaretPosition(oldLength + 1);
+                                    LogPanel.this.logTextArea.setCaretPosition(LogPanel.this.logTextArea.getText().length());
                                 } else {
                                     try {
                                         Thread.sleep(500);
