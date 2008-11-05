@@ -19,12 +19,6 @@ public class DorianProviderImpl{
 	}
 	
 
-    public org.cagrid.gaards.dorian.stubs.PerformFederationAuditResponse performFederationAudit(org.cagrid.gaards.dorian.stubs.PerformFederationAuditRequest params) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault {
-    org.cagrid.gaards.dorian.stubs.PerformFederationAuditResponse boxedResult = new org.cagrid.gaards.dorian.stubs.PerformFederationAuditResponse();
-    boxedResult.setFederationAuditRecord(impl.performFederationAudit(params.getF().getFederationAuditFilter()));
-    return boxedResult;
-  }
-
     public org.cagrid.gaards.dorian.stubs.RegisterWithIdPResponse registerWithIdP(org.cagrid.gaards.dorian.stubs.RegisterWithIdPRequest params) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.InvalidUserPropertyFault {
     org.cagrid.gaards.dorian.stubs.RegisterWithIdPResponse boxedResult = new org.cagrid.gaards.dorian.stubs.RegisterWithIdPResponse();
     boxedResult.setResponse(impl.registerWithIdP(params.getApplication().getApplication()));
@@ -214,6 +208,12 @@ public class DorianProviderImpl{
     public org.cagrid.gaards.dorian.stubs.RemoveUserCertificateResponse removeUserCertificate(org.cagrid.gaards.dorian.stubs.RemoveUserCertificateRequest params) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.InvalidUserCertificateFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault {
     org.cagrid.gaards.dorian.stubs.RemoveUserCertificateResponse boxedResult = new org.cagrid.gaards.dorian.stubs.RemoveUserCertificateResponse();
     impl.removeUserCertificate(params.getSerialNumber());
+    return boxedResult;
+  }
+
+    public org.cagrid.gaards.dorian.stubs.PerformFederationAuditResponse performFederationAudit(org.cagrid.gaards.dorian.stubs.PerformFederationAuditRequest params) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault {
+    org.cagrid.gaards.dorian.stubs.PerformFederationAuditResponse boxedResult = new org.cagrid.gaards.dorian.stubs.PerformFederationAuditResponse();
+    boxedResult.setFederationAuditRecord(impl.performFederationAudit(params.getF().getFederationAuditFilter()));
     return boxedResult;
   }
 

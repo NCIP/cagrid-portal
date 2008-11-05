@@ -275,8 +275,10 @@
 				minOccurs="0" maxOccurs="1" />
 			<xsd:element name="AuditType" type="federation:FederationAuditing"
 				minOccurs="0" maxOccurs="1" />
-			<xsd:element name="DateRange" type="federation:DateRange"
-				minOccurs="0" maxOccurs="1" />
+			<xsd:element name="StartDate" type="xsd:date" minOccurs="0"
+				maxOccurs="1" />
+			<xsd:element name="EndDate" type="xsd:date" minOccurs="0"
+				maxOccurs="1" />
 			<xsd:element name="AuditMessage" type="xsd:string"
 				minOccurs="0" maxOccurs="1" />
 		</xsd:sequence>

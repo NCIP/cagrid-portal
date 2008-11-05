@@ -81,7 +81,7 @@ public class AdministratorsWindow extends ApplicationComponent {
 	 */
 	private void initialize() {
 		this.setContentPane(getJContentPane());
-		this.setTitle("Trusted Identity Provider Management");
+		this.setTitle("Administrators Window");
 
 	}
 

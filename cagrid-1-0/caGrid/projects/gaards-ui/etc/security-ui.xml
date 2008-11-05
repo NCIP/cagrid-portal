@@ -158,6 +158,13 @@
 								<height>500</height>
 							</dimensions>
 						</component>
+							<component>
+							<title>Auditing</title>
+							<description>Perform Audit</description>
+							<classname>org.cagrid.gaards.ui.dorian.federation.FederationAuditSearchWindow</classname>
+							<icon>/trusted-idp.png</icon>
+							<showOnToolBar>false</showOnToolBar>
+						</component>
 						<component>
 							<title>Account Administrators</title>
 							<description>Account Administrators</description>

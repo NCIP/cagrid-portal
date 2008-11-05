@@ -179,8 +179,8 @@ public class IdentityFederationManager extends LoggingObject implements Publishe
             publishCRL = true;
             publishCRL();
         }
-        this.eventManager.logEvent(AuditConstants.SYSTEM_ID, AuditConstants.SYSTEM_ID,
-            FederationAuditing.SystemStartup.getValue(), "System successfully started!!!");
+        this.eventManager.logEvent(AuditConstants.SYSTEM_ID, AuditConstants.SYSTEM_ID, FederationAuditing.SystemStartup
+            .getValue(), "System successfully started!!!");
     }
 
 
@@ -1334,14 +1334,14 @@ public class IdentityFederationManager extends LoggingObject implements Publishe
 
             Date start = null;
             Date end = null;
-            if (f.getDateRange() != null) {
-                if (f.getDateRange().getStartDate() != null) {
-                    start = f.getDateRange().getStartDate();
-                }
-                if (f.getDateRange().getEndDate() != null) {
-                    end = f.getDateRange().getEndDate();
-                }
+
+            if (f.getStartDate() != null) {
+                start = f.getStartDate();
             }
+            if (f.getEndDate() != null) {
+                end = f.getEndDate();
+            }
+
             try {
                 List<Event> events = eh.findEvents(f.getTargetId(), f.getReportingPartyId(), eventType, start, end);
                 for (int j = 0; j < events.size(); j++) {

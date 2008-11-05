@@ -55,18 +55,6 @@ public class DorianClient extends DorianClientBase implements DorianI {
         }
     }
 
-  public org.cagrid.gaards.dorian.federation.FederationAuditRecord[] performFederationAudit(org.cagrid.gaards.dorian.federation.FederationAuditFilter f) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault {
-    synchronized(portTypeMutex){
-      configureStubSecurity((Stub)portType,"performFederationAudit");
-    org.cagrid.gaards.dorian.stubs.PerformFederationAuditRequest params = new org.cagrid.gaards.dorian.stubs.PerformFederationAuditRequest();
-    org.cagrid.gaards.dorian.stubs.PerformFederationAuditRequestF fContainer = new org.cagrid.gaards.dorian.stubs.PerformFederationAuditRequestF();
-    fContainer.setFederationAuditFilter(f);
-    params.setF(fContainer);
-    org.cagrid.gaards.dorian.stubs.PerformFederationAuditResponse boxedResult = portType.performFederationAudit(params);
-    return boxedResult.getFederationAuditRecord();
-    }
-  }
-
   public gov.nih.nci.cagrid.metadata.security.ServiceSecurityMetadata getServiceSecurityMetadata() throws RemoteException {
     synchronized(portTypeMutex){
       configureStubSecurity((Stub)portType,"getServiceSecurityMetadata");
@@ -453,6 +441,18 @@ public class DorianClient extends DorianClientBase implements DorianI {
     org.cagrid.gaards.dorian.stubs.RemoveUserCertificateRequest params = new org.cagrid.gaards.dorian.stubs.RemoveUserCertificateRequest();
     params.setSerialNumber(serialNumber);
     org.cagrid.gaards.dorian.stubs.RemoveUserCertificateResponse boxedResult = portType.removeUserCertificate(params);
+    }
+  }
+
+  public org.cagrid.gaards.dorian.federation.FederationAuditRecord[] performFederationAudit(org.cagrid.gaards.dorian.federation.FederationAuditFilter f) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"performFederationAudit");
+    org.cagrid.gaards.dorian.stubs.PerformFederationAuditRequest params = new org.cagrid.gaards.dorian.stubs.PerformFederationAuditRequest();
+    org.cagrid.gaards.dorian.stubs.PerformFederationAuditRequestF fContainer = new org.cagrid.gaards.dorian.stubs.PerformFederationAuditRequestF();
+    fContainer.setFederationAuditFilter(f);
+    params.setF(fContainer);
+    org.cagrid.gaards.dorian.stubs.PerformFederationAuditResponse boxedResult = portType.performFederationAudit(params);
+    return boxedResult.getFederationAuditRecord();
     }
   }
 
