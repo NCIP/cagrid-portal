@@ -146,19 +146,18 @@ public class ExtensionsLoader {
 
 
     private void processExtensionProperties(Properties properties) throws Exception {
-        Application app = null;
-        app = (Application) Utils.deserializeDocument(IntroducePropertiesManager.getIntroduceConfigurationFile(),
-            Application.class);
-        ConfigurationManager configurationManager = new ConfigurationManager(app.getConfiguration(),null);
-        Properties globalExtensionProperties = (Properties) configurationManager
-        .getConfigurationObject("introduceGlobalExtensionProperties");
-        
+
         if (properties != null && properties.getProperty() != null) {
             for (int i = 0; i < properties.getProperty().length; i++) {
                 PropertiesProperty prop = properties.getProperty(i);
                 try {
                     if (prop != null && prop.getMakeGlobal() != null && prop.getMakeGlobal().booleanValue()) {
-                        
+                        Application app = null;
+                        app = (Application) Utils.deserializeDocument(IntroducePropertiesManager.getIntroduceConfigurationFile(),
+                            Application.class);
+                        ConfigurationManager configurationManager = new ConfigurationManager(app.getConfiguration(),null);
+                        Properties globalExtensionProperties = (Properties) configurationManager
+                        .getConfigurationObject("introduceGlobalExtensionProperties");
                         
                         if (globalExtensionProperties != null && globalExtensionProperties.getProperty() != null) {
                             for(int propi = 0; propi < globalExtensionProperties.getProperty().length; propi++){
