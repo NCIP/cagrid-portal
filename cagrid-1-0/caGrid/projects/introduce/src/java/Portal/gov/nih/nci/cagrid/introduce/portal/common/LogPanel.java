@@ -1,39 +1,39 @@
 package gov.nih.nci.cagrid.introduce.portal.common;
 
-import gov.nih.nci.cagrid.common.XMLUtilities;
-
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-import javax.swing.SwingUtilities;
 
 import org.apache.log4j.Logger;
-import java.awt.Dimension;
-import java.awt.Font;
-import javax.swing.JScrollPane;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
 
 
 public class LogPanel extends JPanel {
 
-    private static final Logger logger = Logger.getLogger(LogPanel.class); // @jve:decl-index=0:
+    private static final Logger logger = Logger.getLogger(LogPanel.class); //@jve
+    // :
+    // decl
+    // -
+    // index
+    // =
+    // 0:
 
     private JTextArea logTextArea = null;
 
     private String fileName = null;
 
     private JScrollPane textScrollPane = null;
-    
+
     private Thread th = null;
-    
+
     private boolean cancel = false;
 
 
@@ -62,8 +62,9 @@ public class LogPanel extends JPanel {
         this.add(getTextScrollPane(), gridBagConstraints);
 
     }
-    
-    public void cancel(){
+
+
+    public void cancel() {
         this.cancel = true;
     }
 
@@ -74,34 +75,35 @@ public class LogPanel extends JPanel {
      * @return javax.swing.JTextArea
      */
     private synchronized JTextArea getLogTextArea() {
-        if (logTextArea == null) {
-            logTextArea = new JTextArea();
-            logTextArea.setEditable(false);
-            logTextArea.setFont(new Font("Lucida Console", Font.PLAIN, 10));
-            // logTextArea.setLineWrap(true);
+        if (this.logTextArea == null) {
+            this.logTextArea = new JTextArea();
+            this.logTextArea.setEditable(false);
+            this.logTextArea.setFont(new Font("Lucida Console", Font.PLAIN, 10));
             try {
-                final String contents = XMLUtilities.streamToString(new FileInputStream(new File(fileName)));
-                logTextArea.insert(contents,0);
-                logTextArea.setCaretPosition(contents.length());
-                
+
+                final BufferedReader in = new BufferedReader(new FileReader(LogPanel.this.fileName));
+                StringBuffer sb = new StringBuffer();
+                for (String s = null; (s = in.readLine()) != null;) {
+                    sb.append(s + "\n");
+                }
+                final String contents = sb.toString();
+
+                this.logTextArea.insert(contents, 0);
+                this.logTextArea.setCaretPosition(this.logTextArea.getText().length());
+
                 Runnable reader = new Runnable() {
 
                     public void run() {
                         try {
-                            BufferedReader in = new BufferedReader(new FileReader(fileName));
-                            in.skip(contents.length());
-                            boolean execute = true;
                             String line;
-                            while (execute) {
+                            while (true) {
                                 line = in.readLine();
                                 if (line != null) {
-
                                     final String finalLine = line;
-                                    final int oldLength = logTextArea.getText().length();
+                                    final int oldLength = LogPanel.this.logTextArea.getText().length();
 
-                                    logTextArea.insert(finalLine + "\n", oldLength + 1);
-                                    logTextArea.setCaretPosition(oldLength + 1);
-
+                                    LogPanel.this.logTextArea.insert(finalLine + "\n", oldLength + 1);
+                                    LogPanel.this.logTextArea.setCaretPosition(oldLength + 1);
                                 } else {
                                     try {
                                         Thread.sleep(500);
@@ -109,8 +111,9 @@ public class LogPanel extends JPanel {
                                         t.printStackTrace();
                                     }
                                 }
-                                
-                                if(cancel){
+
+                                if (LogPanel.this.cancel) {
+                                    in.close();
                                     return;
                                 }
                             }
@@ -122,17 +125,16 @@ public class LogPanel extends JPanel {
                     }
 
                 };
-                th = new Thread(reader);
-                th.start();
+                this.th = new Thread(reader);
+                this.th.start();
             } catch (FileNotFoundException e1) {
                 e1.printStackTrace();
             } catch (Exception e1) {
                 e1.printStackTrace();
             }
-            
 
         }
-        return logTextArea;
+        return this.logTextArea;
     }
 
 
@@ -142,13 +144,13 @@ public class LogPanel extends JPanel {
      * @return javax.swing.JScrollPane
      */
     private JScrollPane getTextScrollPane() {
-        if (textScrollPane == null) {
-            textScrollPane = new JScrollPane();
-            textScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-            textScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-            textScrollPane.setViewportView(getLogTextArea());
+        if (this.textScrollPane == null) {
+            this.textScrollPane = new JScrollPane();
+            this.textScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+            this.textScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+            this.textScrollPane.setViewportView(getLogTextArea());
         }
-        return textScrollPane;
+        return this.textScrollPane;
     }
 
 }

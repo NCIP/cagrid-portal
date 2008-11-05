@@ -1,87 +1,54 @@
 package gov.nih.nci.cagrid.introduce.portal.common;
 
-import org.cagrid.grape.ApplicationComponent;
-import java.awt.Dimension;
-import java.awt.GridBagLayout;
 import java.io.File;
 
+import javax.swing.event.InternalFrameAdapter;
 import javax.swing.event.InternalFrameEvent;
-import javax.swing.event.InternalFrameListener;
+
+import org.cagrid.grape.ApplicationComponent;
+
 
 public class LogViewer extends ApplicationComponent {
 
     private LogPanel logPanel = null;
 
+
     /**
-     * This method initializes 
-     * 
+     * This method initializes
      */
     public LogViewer() {
-    	super();
-    	initialize();
-    	this.addInternalFrameListener(new InternalFrameListener() {
-        
-            public void internalFrameOpened(InternalFrameEvent e) {
-                // TODO Auto-generated method stub
-        
-            }
-        
-        
-            public void internalFrameIconified(InternalFrameEvent e) {
-                // TODO Auto-generated method stub
-        
-            }
-        
-        
-            public void internalFrameDeiconified(InternalFrameEvent e) {
-                // TODO Auto-generated method stub
-        
-            }
-        
-        
-            public void internalFrameDeactivated(InternalFrameEvent e) {
-                // TODO Auto-generated method stub
-        
-            }
-        
-        
+        super();
+        initialize();
+        this.addInternalFrameListener(new InternalFrameAdapter() {
+
+            @Override
             public void internalFrameClosing(InternalFrameEvent e) {
-                logPanel.cancel();
+                LogViewer.this.logPanel.cancel();
             }
-        
-        
-            public void internalFrameClosed(InternalFrameEvent e) {
-                // TODO Auto-generated method stub
-        
-            }
-        
-        
-            public void internalFrameActivated(InternalFrameEvent e) {
-                // TODO Auto-generated method stub
-        
-            }
+
         });
     }
 
+
     /**
      * This method initializes this
-     * 
      */
     private void initialize() {
         this.setContentPane(getLogPanel());
-    		
+
     }
+
 
     /**
-     * This method initializes logPanel	
-     * 	
-     * @return javax.swing.JPanel	
+     * This method initializes logPanel
+     * 
+     * @return javax.swing.JPanel
      */
     private LogPanel getLogPanel() {
-        if (logPanel == null) {
-            logPanel = new LogPanel("log" + File.separator + "introduce.log");
+        if (this.logPanel == null) {
+            this.logPanel = new LogPanel("log" + File.separator + "introduce.log");
         }
-        return logPanel;
+        return this.logPanel;
     }
 
-}  //  @jve:decl-index=0:visual-constraint="10,10"
+} // @jve:decl-index=0:visual-constraint="10,10"
