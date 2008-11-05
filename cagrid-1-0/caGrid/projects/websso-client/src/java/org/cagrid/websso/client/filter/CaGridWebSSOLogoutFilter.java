@@ -1,7 +1,6 @@
 package org.cagrid.websso.client.filter;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Properties;
 
 import javax.servlet.Filter;
@@ -17,9 +16,7 @@ import javax.servlet.http.HttpSession;
 import org.cagrid.websso.common.WebSSOConstants;
 import org.cagrid.websso.common.WebSSOClientHelper;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
 import org.springframework.util.Assert;
 
 public class CaGridWebSSOLogoutFilter implements Filter {
@@ -59,8 +56,7 @@ public class CaGridWebSSOLogoutFilter implements Filter {
 
 	public void init(FilterConfig filterConfig) throws ServletException {
 		this.casClientPropertyFile = filterConfig.getInitParameter(CAS_CLIENT_PROPERTY_FILE);
-		Assert
-				.notNull(
+		Assert.notNull(
 						casClientPropertyFile,"init-param value for cas-client-property-file was not specified for caGRID WebSSO Logout Filter in web.xml ");
 	}
 }
