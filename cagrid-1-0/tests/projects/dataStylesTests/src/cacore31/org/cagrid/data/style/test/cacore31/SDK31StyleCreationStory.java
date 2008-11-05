@@ -15,7 +15,7 @@ import org.cagrid.data.test.creation.DeleteOldServiceStep;
  * @author David Ervin
  * 
  * @created Jul 18, 2007 2:35:15 PM
- * @version $Id: SDK31StyleCreationStory.java,v 1.3 2008-06-03 20:28:03 dervin Exp $ 
+ * @version $Id: SDK31StyleCreationStory.java,v 1.4 2008-11-05 21:02:55 dervin Exp $ 
  */
 public class SDK31StyleCreationStory extends Story {
     public static final String INTRODUCE_DIR_PROPERTY = "introduce.base.dir";
@@ -73,7 +73,7 @@ public class SDK31StyleCreationStory extends Story {
     
 
     protected Vector steps() {
-        Vector<Step> steps = new Vector();
+        Vector<Step> steps = new Vector<Step>();
         steps.add(new DeleteOldServiceStep(tci));
         steps.add(new CreateSDK31StyleServiceStep(
             tci, getIntroduceBaseDir()));
