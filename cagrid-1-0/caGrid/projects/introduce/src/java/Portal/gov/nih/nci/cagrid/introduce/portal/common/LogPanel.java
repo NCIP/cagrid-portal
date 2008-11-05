@@ -1,6 +1,10 @@
 package gov.nih.nci.cagrid.introduce.portal.common;
 
+import gov.nih.nci.cagrid.common.XMLUtilities;
+
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -27,6 +31,10 @@ public class LogPanel extends JPanel {
     private String fileName = null;
 
     private JScrollPane textScrollPane = null;
+    
+    private Thread th = null;
+    
+    private boolean cancel = false;
 
 
     /**
@@ -54,6 +62,10 @@ public class LogPanel extends JPanel {
         this.add(getTextScrollPane(), gridBagConstraints);
 
     }
+    
+    public void cancel(){
+        this.cancel = true;
+    }
 
 
     /**
@@ -67,41 +79,57 @@ public class LogPanel extends JPanel {
             logTextArea.setEditable(false);
             logTextArea.setFont(new Font("Lucida Console", Font.PLAIN, 10));
             // logTextArea.setLineWrap(true);
-            Runnable reader = new Runnable() {
+            try {
+                final String contents = XMLUtilities.streamToString(new FileInputStream(new File(fileName)));
+                logTextArea.insert(contents,0);
+                logTextArea.setCaretPosition(contents.length());
+                
+                Runnable reader = new Runnable() {
 
-                public void run() {
-                    try {
-                        BufferedReader in = new BufferedReader(new FileReader(fileName));
-                        boolean execute = true;
-                        String line;
-                        while (execute) {
-                            line = in.readLine();
-                            if (line != null) {
+                    public void run() {
+                        try {
+                            BufferedReader in = new BufferedReader(new FileReader(fileName));
+                            in.skip(contents.length());
+                            boolean execute = true;
+                            String line;
+                            while (execute) {
+                                line = in.readLine();
+                                if (line != null) {
 
-                                final String finalLine = line;
-                                final int oldLength = logTextArea.getText().length();
+                                    final String finalLine = line;
+                                    final int oldLength = logTextArea.getText().length();
 
-                                logTextArea.insert(finalLine + "\n", oldLength + 1);
-                                logTextArea.setCaretPosition(oldLength + 1);
+                                    logTextArea.insert(finalLine + "\n", oldLength + 1);
+                                    logTextArea.setCaretPosition(oldLength + 1);
 
-                            } else {
-                                try {
-                                    Thread.sleep(500);
-                                } catch (Throwable t) {
-                                    t.printStackTrace();
+                                } else {
+                                    try {
+                                        Thread.sleep(500);
+                                    } catch (Throwable t) {
+                                        t.printStackTrace();
+                                    }
+                                }
+                                
+                                if(cancel){
+                                    return;
                                 }
                             }
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
                         }
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
                     }
-                }
 
-            };
-            Thread th = new Thread(reader);
-            th.start();
+                };
+                th = new Thread(reader);
+                th.start();
+            } catch (FileNotFoundException e1) {
+                e1.printStackTrace();
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
+            
 
         }
         return logTextArea;
