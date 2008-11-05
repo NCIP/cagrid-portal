@@ -15,7 +15,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class WebSSOLogoutCallbackFilter implements Filter, InitializingBean {
+public class SingleSignoutCallbackFilter implements Filter, InitializingBean {
 	private String filterProcessesUrl;
 	private ExpiredTicketCache expiredTicketCache;
 
