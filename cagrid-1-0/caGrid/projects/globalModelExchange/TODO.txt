@@ -3,6 +3,9 @@
 NEXT STEPS:
 ==========
 
+How to deal with redefine?  May need to not support, as if A redefines B and B is already published, uploading A would basically replace B, thus making the redefine useless (as A and B need to have the same namespace)
+-- it is currently supported, but you can only redefine a SchemaDocument; it doesn't allow one to redefine an existing published namespace (which is arguably the only use case for redefine)
+
 tests for deletes with includes (make sure the docs are cleaned up)
 
 design how authorization/policy will work.  will i do all checking in authorization code or do i want a separate "policy interface"
