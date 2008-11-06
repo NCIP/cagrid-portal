@@ -29,7 +29,7 @@
     
     <!-- Data -->
     <dependency rev="latest.integration" org="caGrid" name="data" 
-    	conf="default->stubs;default->common;default->service;default->processors;default->tools;default->utils;default->validation"/>
+    	conf="default->stubs;default->common;default->service;default->processors;default->tools;default->utils;default->validation;default->cql-examples"/>
     
     <!-- Data Tests -->
     <dependency rev="latest.integration" org="caGrid" name="dataTests" conf="default->default"/>
