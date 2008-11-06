@@ -88,11 +88,11 @@ public class TestUserCertificateManager extends TestCase implements Publisher {
             Calendar endOutsideStart = new GregorianCalendar();
             endOutsideStart.setTime(cert.getNotBefore());
             endOutsideStart.add(Calendar.SECOND, (DEFAULT_SECONDS_OFFSET));
-            endOutsideRange.setStartDate(endOutsideStart.getTime());
+            endOutsideRange.setStartDate(endOutsideStart);
             Calendar endOutsideEnd = new GregorianCalendar();
             endOutsideEnd.setTime(cert.getNotAfter());
             endOutsideEnd.add(Calendar.SECOND, (DEFAULT_SECONDS_OFFSET));
-            endOutsideRange.setEndDate(endOutsideEnd.getTime());
+            endOutsideRange.setEndDate(endOutsideEnd);
             endOutside.setDateRange(endOutsideRange);
             expected.clear();
             expected.put(new Long(r.getSerialNumber()), r);
@@ -104,11 +104,11 @@ public class TestUserCertificateManager extends TestCase implements Publisher {
             Calendar startOutsideStart = new GregorianCalendar();
             startOutsideStart.setTime(cert.getNotBefore());
             startOutsideStart.add(Calendar.SECOND, (DEFAULT_SECONDS_OFFSET * -1));
-            startOutsideRange.setStartDate(startOutsideStart.getTime());
+            startOutsideRange.setStartDate(startOutsideStart);
             Calendar startOutsideEnd = new GregorianCalendar();
             startOutsideEnd.setTime(cert.getNotAfter());
             startOutsideEnd.add(Calendar.SECOND, (DEFAULT_SECONDS_OFFSET * -1));
-            startOutsideRange.setEndDate(startOutsideEnd.getTime());
+            startOutsideRange.setEndDate(startOutsideEnd);
             startOutside.setDateRange(startOutsideRange);
             expected.clear();
             expected.put(new Long(r.getSerialNumber()), r);
@@ -120,11 +120,11 @@ public class TestUserCertificateManager extends TestCase implements Publisher {
             Calendar outsideStart = new GregorianCalendar();
             outsideStart.setTime(cert.getNotBefore());
             outsideStart.add(Calendar.SECOND, (DEFAULT_SECONDS_OFFSET * -1));
-            outsideRange.setStartDate(outsideStart.getTime());
+            outsideRange.setStartDate(outsideStart);
             Calendar outsideEnd = new GregorianCalendar();
             outsideEnd.setTime(cert.getNotAfter());
             outsideEnd.add(Calendar.SECOND, (DEFAULT_SECONDS_OFFSET));
-            outsideRange.setEndDate(outsideEnd.getTime());
+            outsideRange.setEndDate(outsideEnd);
             outside.setDateRange(outsideRange);
             expected.clear();
             expected.put(new Long(r.getSerialNumber()), r);
@@ -136,11 +136,11 @@ public class TestUserCertificateManager extends TestCase implements Publisher {
             Calendar insideStart = new GregorianCalendar();
             insideStart.setTime(cert.getNotBefore());
             insideStart.add(Calendar.SECOND, DEFAULT_SECONDS_OFFSET);
-            insideRange.setStartDate(insideStart.getTime());
+            insideRange.setStartDate(insideStart);
             Calendar insideEnd = new GregorianCalendar();
             insideEnd.setTime(cert.getNotAfter());
             insideEnd.add(Calendar.SECOND, (DEFAULT_SECONDS_OFFSET * -1));
-            insideRange.setEndDate(insideEnd.getTime());
+            insideRange.setEndDate(insideEnd);
             inside.setDateRange(insideRange);
             expected.clear();
             expected.put(new Long(r.getSerialNumber()), r);
@@ -149,8 +149,12 @@ public class TestUserCertificateManager extends TestCase implements Publisher {
             // Test exact date range
             UserCertificateFilter exactDates = new UserCertificateFilter();
             DateRange range = new DateRange();
-            range.setStartDate(cert.getNotBefore());
-            range.setEndDate(cert.getNotAfter());
+            GregorianCalendar start = new GregorianCalendar();
+            start.setTime(cert.getNotBefore());
+            range.setStartDate(start);
+            GregorianCalendar end = new GregorianCalendar();
+            end.setTime(cert.getNotAfter());
+            range.setEndDate(end);
             exactDates.setDateRange(range);
             expected.clear();
             expected.put(new Long(r.getSerialNumber()), r);
@@ -163,11 +167,11 @@ public class TestUserCertificateManager extends TestCase implements Publisher {
             Calendar startInvalidStart = new GregorianCalendar();
             startInvalidStart.setTime(cert.getNotBefore());
             startInvalidStart.add(Calendar.SECOND, (DEFAULT_SECONDS_OFFSET * -2));
-            startInvalidRange.setStartDate(startInvalidStart.getTime());
+            startInvalidRange.setStartDate(startInvalidStart);
             Calendar startInvalidEnd = new GregorianCalendar();
             startInvalidEnd.setTime(cert.getNotAfter());
             startInvalidEnd.add(Calendar.SECOND, ((DEFAULT_SECONDS + DEFAULT_SECONDS_OFFSET) * -1));
-            startInvalidRange.setEndDate(startInvalidEnd.getTime());
+            startInvalidRange.setEndDate(startInvalidEnd);
             startInvalid.setDateRange(startInvalidRange);
             expected.clear();
             validateFind(startInvalid, expected);
@@ -179,11 +183,11 @@ public class TestUserCertificateManager extends TestCase implements Publisher {
             Calendar endInvalidStart = new GregorianCalendar();
             endInvalidStart.setTime(cert.getNotBefore());
             endInvalidStart.add(Calendar.SECOND, ((DEFAULT_SECONDS + DEFAULT_SECONDS_OFFSET) * 1));
-            endInvalidRange.setStartDate(endInvalidStart.getTime());
+            endInvalidRange.setStartDate(endInvalidStart);
             Calendar endInvalidEnd = new GregorianCalendar();
             endInvalidEnd.setTime(cert.getNotAfter());
             endInvalidEnd.add(Calendar.SECOND, (DEFAULT_SECONDS_OFFSET * 2));
-            endInvalidRange.setEndDate(endInvalidEnd.getTime());
+            endInvalidRange.setEndDate(endInvalidEnd);
             endInvalid.setDateRange(endInvalidRange);
             expected.clear();
             validateFind(endInvalid, expected);
@@ -300,11 +304,11 @@ public class TestUserCertificateManager extends TestCase implements Publisher {
                 Calendar endOutsideStart = new GregorianCalendar();
                 endOutsideStart.setTime(cert.getNotBefore());
                 endOutsideStart.add(Calendar.SECOND, (DEFAULT_SECONDS_OFFSET));
-                endOutsideRange.setStartDate(endOutsideStart.getTime());
+                endOutsideRange.setStartDate(endOutsideStart);
                 Calendar endOutsideEnd = new GregorianCalendar();
                 endOutsideEnd.setTime(cert.getNotAfter());
                 endOutsideEnd.add(Calendar.SECOND, (DEFAULT_SECONDS_OFFSET));
-                endOutsideRange.setEndDate(endOutsideEnd.getTime());
+                endOutsideRange.setEndDate(endOutsideEnd);
                 endOutside.setDateRange(endOutsideRange);
                 expected.clear();
                 for (int j = 0; j < records.size(); j++) {
@@ -318,11 +322,11 @@ public class TestUserCertificateManager extends TestCase implements Publisher {
                 Calendar startOutsideStart = new GregorianCalendar();
                 startOutsideStart.setTime(cert.getNotBefore());
                 startOutsideStart.add(Calendar.SECOND, (DEFAULT_SECONDS_OFFSET * -1));
-                startOutsideRange.setStartDate(startOutsideStart.getTime());
+                startOutsideRange.setStartDate(startOutsideStart);
                 Calendar startOutsideEnd = new GregorianCalendar();
                 startOutsideEnd.setTime(cert.getNotAfter());
                 startOutsideEnd.add(Calendar.SECOND, (DEFAULT_SECONDS_OFFSET * -1));
-                startOutsideRange.setEndDate(startOutsideEnd.getTime());
+                startOutsideRange.setEndDate(startOutsideEnd);
                 startOutside.setDateRange(startOutsideRange);
                 expected.clear();
                 for (int j = 0; j < records.size(); j++) {
@@ -336,11 +340,11 @@ public class TestUserCertificateManager extends TestCase implements Publisher {
                 Calendar outsideStart = new GregorianCalendar();
                 outsideStart.setTime(cert.getNotBefore());
                 outsideStart.add(Calendar.SECOND, (DEFAULT_SECONDS_OFFSET * -1));
-                outsideRange.setStartDate(outsideStart.getTime());
+                outsideRange.setStartDate(outsideStart);
                 Calendar outsideEnd = new GregorianCalendar();
                 outsideEnd.setTime(cert.getNotAfter());
                 outsideEnd.add(Calendar.SECOND, (DEFAULT_SECONDS_OFFSET));
-                outsideRange.setEndDate(outsideEnd.getTime());
+                outsideRange.setEndDate(outsideEnd);
                 outside.setDateRange(outsideRange);
                 expected.clear();
                 for (int j = 0; j < records.size(); j++) {
@@ -354,11 +358,11 @@ public class TestUserCertificateManager extends TestCase implements Publisher {
                 Calendar insideStart = new GregorianCalendar();
                 insideStart.setTime(cert.getNotBefore());
                 insideStart.add(Calendar.SECOND, DEFAULT_SECONDS_OFFSET);
-                insideRange.setStartDate(insideStart.getTime());
+                insideRange.setStartDate(insideStart);
                 Calendar insideEnd = new GregorianCalendar();
                 insideEnd.setTime(cert.getNotAfter());
                 insideEnd.add(Calendar.SECOND, (DEFAULT_SECONDS_OFFSET * -1));
-                insideRange.setEndDate(insideEnd.getTime());
+                insideRange.setEndDate(insideEnd);
                 inside.setDateRange(insideRange);
                 expected.clear();
                 for (int j = 0; j < records.size(); j++) {
@@ -369,8 +373,12 @@ public class TestUserCertificateManager extends TestCase implements Publisher {
                 // Test exact date range
                 UserCertificateFilter exactDates = new UserCertificateFilter();
                 DateRange range = new DateRange();
-                range.setStartDate(cert.getNotBefore());
-                range.setEndDate(cert.getNotAfter());
+                GregorianCalendar start = new GregorianCalendar();
+                start.setTime(cert.getNotBefore());
+                range.setStartDate(start);
+                GregorianCalendar end = new GregorianCalendar();
+                end.setTime(cert.getNotAfter());
+                range.setEndDate(end);
                 exactDates.setDateRange(range);
                 expected.clear();
                 for (int j = 0; j < records.size(); j++) {
@@ -385,11 +393,11 @@ public class TestUserCertificateManager extends TestCase implements Publisher {
                 Calendar startInvalidStart = new GregorianCalendar();
                 startInvalidStart.setTime(cert.getNotBefore());
                 startInvalidStart.add(Calendar.SECOND, (DEFAULT_SECONDS_OFFSET * -2));
-                startInvalidRange.setStartDate(startInvalidStart.getTime());
+                startInvalidRange.setStartDate(startInvalidStart);
                 Calendar startInvalidEnd = new GregorianCalendar();
                 startInvalidEnd.setTime(cert.getNotAfter());
                 startInvalidEnd.add(Calendar.SECOND, ((DEFAULT_SECONDS + DEFAULT_SECONDS_OFFSET) * -1));
-                startInvalidRange.setEndDate(startInvalidEnd.getTime());
+                startInvalidRange.setEndDate(startInvalidEnd);
                 startInvalid.setDateRange(startInvalidRange);
                 expected.clear();
                 validateFind(startInvalid, expected);
@@ -401,11 +409,11 @@ public class TestUserCertificateManager extends TestCase implements Publisher {
                 Calendar endInvalidStart = new GregorianCalendar();
                 endInvalidStart.setTime(cert.getNotBefore());
                 endInvalidStart.add(Calendar.SECOND, ((DEFAULT_SECONDS + DEFAULT_SECONDS_OFFSET) * 1));
-                endInvalidRange.setStartDate(endInvalidStart.getTime());
+                endInvalidRange.setStartDate(endInvalidStart);
                 Calendar endInvalidEnd = new GregorianCalendar();
                 endInvalidEnd.setTime(cert.getNotAfter());
                 endInvalidEnd.add(Calendar.SECOND, (DEFAULT_SECONDS_OFFSET * 2));
-                endInvalidRange.setEndDate(endInvalidEnd.getTime());
+                endInvalidRange.setEndDate(endInvalidEnd);
                 endInvalid.setDateRange(endInvalidRange);
                 expected.clear();
                 validateFind(endInvalid, expected);
@@ -550,11 +558,9 @@ public class TestUserCertificateManager extends TestCase implements Publisher {
 
             Map<Long, UserCertificateRecord> expected = new HashMap<Long, UserCertificateRecord>();
 
-            Date now = new Date();
-            Calendar c = new GregorianCalendar();
-            c.setTime(now);
-            c.add(Calendar.YEAR, 5);
-            Date end = c.getTime();
+            GregorianCalendar now = new GregorianCalendar();
+            Calendar end = new GregorianCalendar();
+            end.add(Calendar.YEAR, 5);
             DateRange range = new DateRange();
             range.setStartDate(now);
             range.setEndDate(end);
@@ -689,11 +695,9 @@ public class TestUserCertificateManager extends TestCase implements Publisher {
 
             Map<Long, UserCertificateRecord> expected = new HashMap<Long, UserCertificateRecord>();
 
-            Date now = new Date();
-            Calendar c = new GregorianCalendar();
-            c.setTime(now);
-            c.add(Calendar.YEAR, 5);
-            Date end = c.getTime();
+            GregorianCalendar now = new GregorianCalendar();
+            Calendar end = new GregorianCalendar();
+            end.add(Calendar.YEAR, 5);
             DateRange range = new DateRange();
             range.setStartDate(now);
             range.setEndDate(end);
@@ -827,6 +831,11 @@ public class TestUserCertificateManager extends TestCase implements Publisher {
             UserCertificateFilter exactDates = new UserCertificateFilter();
             DateRange range = new DateRange();
             exactDates.setDateRange(range);
+            
+            GregorianCalendar start = new GregorianCalendar();
+            start.setTime(cert.getNotBefore());
+            GregorianCalendar end = new GregorianCalendar();
+            end.setTime(cert.getNotAfter());
 
             try {
                 man.findUserCertificateRecords(exactDates);
@@ -838,7 +847,7 @@ public class TestUserCertificateManager extends TestCase implements Publisher {
                 }
             }
 
-            range.setStartDate(cert.getNotBefore());
+            range.setStartDate(start);
             range.setEndDate(null);
             try {
                 man.findUserCertificateRecords(exactDates);
@@ -851,7 +860,7 @@ public class TestUserCertificateManager extends TestCase implements Publisher {
             }
 
             range.setStartDate(null);
-            range.setEndDate(cert.getNotAfter());
+            range.setEndDate(end);
             try {
                 man.findUserCertificateRecords(exactDates);
                 fail("Should not be able to find user certificate records with an invalid range.");
@@ -862,8 +871,8 @@ public class TestUserCertificateManager extends TestCase implements Publisher {
                 }
             }
 
-            range.setStartDate(cert.getNotAfter());
-            range.setEndDate(cert.getNotBefore());
+            range.setStartDate(end);
+            range.setEndDate(start);
             try {
                 man.findUserCertificateRecords(exactDates);
                 fail("Should not be able to find user certificate records with an invalid range.");
@@ -874,8 +883,8 @@ public class TestUserCertificateManager extends TestCase implements Publisher {
                 }
             }
 
-            range.setStartDate(cert.getNotBefore());
-            range.setEndDate(cert.getNotAfter());
+            range.setStartDate(start);
+            range.setEndDate(end);
             expected.clear();
             expected.put(new Long(r.getSerialNumber()), r);
             validateFind(exactDates, expected);

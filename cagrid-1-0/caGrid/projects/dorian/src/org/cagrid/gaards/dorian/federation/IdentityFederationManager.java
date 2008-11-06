@@ -1336,10 +1336,10 @@ public class IdentityFederationManager extends LoggingObject implements Publishe
             Date end = null;
 
             if (f.getStartDate() != null) {
-                start = f.getStartDate();
+                start = f.getStartDate().getTime();
             }
             if (f.getEndDate() != null) {
-                end = f.getEndDate();
+                end = f.getEndDate().getTime();
             }
 
             try {
@@ -1350,7 +1350,9 @@ public class IdentityFederationManager extends LoggingObject implements Publishe
                     r.setTargetId(e.getTargetId());
                     r.setReportingPartyId(e.getReportingPartyId());
                     r.setAuditType(FederationAuditing.fromValue(e.getEventType()));
-                    r.setOccurredAt(new Date(e.getOccurredAt()));
+                    Calendar c = new GregorianCalendar();
+                    c.setTimeInMillis(e.getOccurredAt());
+                    r.setOccurredAt(c);
                     r.setAuditMessage(e.getMessage());
                     list.add(r);
                 }

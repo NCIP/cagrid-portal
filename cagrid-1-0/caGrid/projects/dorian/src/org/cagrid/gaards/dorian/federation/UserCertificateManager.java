@@ -332,18 +332,18 @@ public class UserCertificateManager {
                         fault.setFaultString(FIND_INVALID_RANGE_ERROR);
                         throw fault;
                     } else {
-                        select.addClause("((" + NOT_BEFORE + ">=" + range.getStartDate().getTime() + " AND "
-                            + NOT_AFTER + "<=" + range.getEndDate().getTime() + ")" + " OR (" + NOT_BEFORE + "<="
-                            + range.getStartDate().getTime() + " AND " + NOT_AFTER + ">="
-                            + range.getEndDate().getTime() + ")" + " OR (" + NOT_BEFORE + ">="
-                            + range.getStartDate().getTime() + " AND " + NOT_BEFORE + "<="
-                            + range.getEndDate().getTime() + " AND " + NOT_AFTER + ">="
-                            + range.getStartDate().getTime() + " AND " + NOT_AFTER + ">="
-                            + range.getEndDate().getTime() + ")" + " OR (" + NOT_BEFORE + "<="
-                            + range.getStartDate().getTime() + " AND " + NOT_BEFORE + "<="
-                            + range.getEndDate().getTime() + " AND " + NOT_AFTER + ">="
-                            + range.getStartDate().getTime() + " AND " + NOT_AFTER + "<="
-                            + range.getEndDate().getTime() + "))");
+                        select.addClause("((" + NOT_BEFORE + ">=" + range.getStartDate().getTimeInMillis() + " AND "
+                            + NOT_AFTER + "<=" + range.getEndDate().getTimeInMillis() + ")" + " OR (" + NOT_BEFORE + "<="
+                            + range.getStartDate().getTimeInMillis() + " AND " + NOT_AFTER + ">="
+                            + range.getEndDate().getTimeInMillis() + ")" + " OR (" + NOT_BEFORE + ">="
+                            + range.getStartDate().getTimeInMillis() + " AND " + NOT_BEFORE + "<="
+                            + range.getEndDate().getTimeInMillis() + " AND " + NOT_AFTER + ">="
+                            + range.getStartDate().getTimeInMillis() + " AND " + NOT_AFTER + ">="
+                            + range.getEndDate().getTimeInMillis() + ")" + " OR (" + NOT_BEFORE + "<="
+                            + range.getStartDate().getTimeInMillis() + " AND " + NOT_BEFORE + "<="
+                            + range.getEndDate().getTimeInMillis() + " AND " + NOT_AFTER + ">="
+                            + range.getStartDate().getTimeInMillis() + " AND " + NOT_AFTER + "<="
+                            + range.getEndDate().getTimeInMillis() + "))");
                     }
                 }
             }

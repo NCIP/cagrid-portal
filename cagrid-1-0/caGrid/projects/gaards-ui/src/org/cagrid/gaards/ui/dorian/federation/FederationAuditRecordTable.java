@@ -73,7 +73,7 @@ public class FederationAuditRecordTable extends GrapeBaseTable {
 			v.add(r.getTargetId());
 			v.add(r.getReportingPartyId());
 			v.add(r.getAuditType().getValue());
-			v.add(r.getOccurredAt().toString());
+			v.add(r.getOccurredAt().getTime().toString());
 			addRow(v);
 		}
 	}

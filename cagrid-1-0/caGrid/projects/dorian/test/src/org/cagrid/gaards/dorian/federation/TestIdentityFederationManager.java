@@ -791,8 +791,8 @@ public class TestIdentityFederationManager extends TestCase {
                 UserCertificateFilter f = new UserCertificateFilter();
                 f.setGridIdentity(list.get(i).getUser().getGridId());
                 DateRange now = new DateRange();
-                now.setStartDate(new Date());
-                now.setEndDate(new Date());
+                now.setStartDate(new GregorianCalendar());
+                now.setEndDate(new GregorianCalendar());
                 f.setDateRange(now);
                 List<UserCertificateRecord> records = ifs.findUserCertificateRecords(adminGridId, f);
                 for (int j = 0; j < records.size(); j++) {
@@ -816,8 +816,8 @@ public class TestIdentityFederationManager extends TestCase {
                 UserCertificateFilter f = new UserCertificateFilter();
                 f.setGridIdentity(list.get(i).getUser().getGridId());
                 DateRange now = new DateRange();
-                now.setStartDate(new Date());
-                now.setEndDate(new Date());
+                now.setStartDate(new GregorianCalendar());
+                now.setEndDate(new GregorianCalendar());
                 f.setDateRange(now);
                 List<UserCertificateRecord> records = ifs.findUserCertificateRecords(adminGridId, f);
                 for (int j = 0; j < records.size(); j++) {
@@ -1812,8 +1812,8 @@ public class TestIdentityFederationManager extends TestCase {
                     UserCertificateFilter f = new UserCertificateFilter();
                     f.setGridIdentity(curr.getUser().getGridId());
                     DateRange now = new DateRange();
-                    now.setStartDate(new Date());
-                    now.setEndDate(new Date());
+                    now.setStartDate(new GregorianCalendar());
+                    now.setEndDate(new GregorianCalendar());
                     f.setDateRange(now);
                     List<UserCertificateRecord> records = ifs.findUserCertificateRecords(adminGridId, f);
                     for (int x = 0; x < records.size(); x++) {
@@ -1830,8 +1830,8 @@ public class TestIdentityFederationManager extends TestCase {
                     UserCertificateFilter f = new UserCertificateFilter();
                     f.setGridIdentity(curr.getUser().getGridId());
                     DateRange now = new DateRange();
-                    now.setStartDate(new Date());
-                    now.setEndDate(new Date());
+                    now.setStartDate(new GregorianCalendar());
+                    now.setEndDate(new GregorianCalendar());
                     f.setDateRange(now);
                     List<UserCertificateRecord> records = ifs.findUserCertificateRecords(adminGridId, f);
                     for (int x = 0; x < records.size(); x++) {
@@ -1877,8 +1877,8 @@ public class TestIdentityFederationManager extends TestCase {
                 UserCertificateFilter f = new UserCertificateFilter();
                 f.setGridIdentity(curr.getUser().getGridId());
                 DateRange now = new DateRange();
-                now.setStartDate(new Date());
-                now.setEndDate(new Date());
+                now.setStartDate(new GregorianCalendar());
+                now.setEndDate(new GregorianCalendar());
                 f.setDateRange(now);
                 List<UserCertificateRecord> records = ifs.findUserCertificateRecords(adminGridId, f);
                 for (int x = 0; x < records.size(); x++) {

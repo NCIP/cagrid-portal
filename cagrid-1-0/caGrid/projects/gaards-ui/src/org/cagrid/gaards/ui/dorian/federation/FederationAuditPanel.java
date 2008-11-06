@@ -138,11 +138,11 @@ public class FederationAuditPanel extends JPanel {
 			f.setAuditType(getAuditType().getSelectedAuditType());
 
 			if (searchStartDate != null) {
-				f.setStartDate(searchStartDate.getTime());
+				f.setStartDate(searchStartDate);
 			}
 
 			if (searchEndDate != null) {
-				f.setEndDate(searchEndDate.getTime());
+				f.setEndDate(searchEndDate);
 			}
 
 			GridAdministrationClient client = this.session.getSession()

@@ -679,8 +679,8 @@ public class UserCertificateSearchPanel extends JPanel {
 					return;
 				} else {
 					DateRange r = new DateRange();
-					r.setStartDate(searchStartDate.getTime());
-					r.setEndDate(searchEndDate.getTime());
+					r.setStartDate(searchStartDate);
+					r.setEndDate(searchEndDate);
 					f.setDateRange(r);
 				}
 			} else if ((searchStartDate == null) && (searchEndDate != null)) {
