@@ -34,15 +34,5 @@
     <dependency rev="latest.integration" org="caGrid" name="authz" conf="authz->default"/>
 
     <dependency rev="3.1.3" org="hibernate" name="hibernate" conf="default->full"/>
-
-    <!--
-      NOTE: these are what the project used to compile against, but they aren't really used.
-      
-      <dependency rev="1.5.3" org="objectweb" name="asm" conf="default->default"/>
-      <dependency rev="2.1_3" org="cglib" name="cglib" conf="default->default"/>       
-      <dependency rev="3.1.3" org="hibernate" name="hibernate" conf="default->full"/>
-      <dependency rev="1.2.7" org="springframework" name="spring" conf="default->full"/>
-    -->
-
   </dependencies>
 </ivy-module>
