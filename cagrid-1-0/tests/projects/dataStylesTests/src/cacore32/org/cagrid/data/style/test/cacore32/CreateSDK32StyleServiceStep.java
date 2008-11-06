@@ -1,5 +1,6 @@
 package org.cagrid.data.style.test.cacore32;
 
+import gov.nih.nci.cagrid.common.JarUtilities;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.data.ExtensionDataUtils;
 import gov.nih.nci.cagrid.data.common.CastorMappingUtil;
@@ -10,9 +11,14 @@ import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
+import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 
 import java.io.File;
-import java.io.InputStream;
+import java.io.FileFilter;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.Properties;
+import java.util.jar.JarFile;
 
 import org.cagrid.data.test.creation.CreationStep;
 import org.cagrid.data.test.creation.DataTestCaseInfo;
@@ -24,15 +30,24 @@ import org.cagrid.data.test.creation.DataTestCaseInfo;
  * @author David Ervin
  * 
  * @created Jul 18, 2007 2:53:54 PM
- * @version $Id: CreateSDK32StyleServiceStep.java,v 1.3 2008-11-04 14:56:34 dervin Exp $ 
+ * @version $Id: CreateSDK32StyleServiceStep.java,v 1.4 2008-11-06 16:32:15 dervin Exp $ 
  */
 public class CreateSDK32StyleServiceStep extends CreationStep {
+    
+    // directory for SDK query processor libraries
+    public static final String SDK_32_LIB_DIR = ExtensionsLoader.getInstance().getExtensionsDir().getAbsolutePath() 
+        + File.separator + "data" + File.separator + "sdk32" + File.separator + "lib";
+    
+    // make use of the Ivy properties file to find the SDK 32 Query lib
+    public static final String SDK_32_QUERY_LIB_PROPERTY = "sdk32.needs.sdkQuery32.caGrid-sdkQuery32-core";
+    public static final String IVY_PROPERTIES_FILE = "sdk32-jars.properties";
+ 
+    
+    private File sdkPackageDir = null;
 
-    public static final String STYLE_NAME = "caCORE SDK v 3.2(.1)";
-
-
-    public CreateSDK32StyleServiceStep(DataTestCaseInfo serviceInfo, String introduceDir) {
+    public CreateSDK32StyleServiceStep(DataTestCaseInfo serviceInfo, String introduceDir, File sdkPackageDir) {
         super(serviceInfo, introduceDir);
+        this.sdkPackageDir = sdkPackageDir;
     }
     
     
@@ -42,6 +57,7 @@ public class CreateSDK32StyleServiceStep extends CreationStep {
     protected void postSkeletonCreation() throws Throwable {
         setServiceStyle();
         extractCastorMappingFiles();
+        addQueryProcessorJar();
     }
     
     
@@ -52,26 +68,62 @@ public class CreateSDK32StyleServiceStep extends CreationStep {
             features = new ServiceFeatures();
             extensionData.setServiceFeatures(features);
         }
-        features.setServiceStyle(STYLE_NAME);
+        features.setServiceStyle(Sdk32TestConstants.STYLE_NAME);
         storeExtensionData(extensionData);
+    }
+    
+    
+    private void addQueryProcessorJar() {
+        File processorJar = null;
+        File libDir = new File(SDK_32_LIB_DIR);
+        Properties ivyProps = new Properties();
+        try {
+            File propsFile = new File(libDir, IVY_PROPERTIES_FILE);
+            assertTrue("No IVY properties file found (" + propsFile.getAbsolutePath() + ")", propsFile.exists());
+            FileInputStream propsInput = new FileInputStream(propsFile);
+            ivyProps.load(propsInput);
+            propsInput.close();
+            String jarName = ivyProps.getProperty(SDK_32_QUERY_LIB_PROPERTY);
+            assertNotNull("No property " + SDK_32_QUERY_LIB_PROPERTY + " found!", jarName);
+            processorJar = new File(libDir, jarName);
+            assertTrue("SDK query processor jar not found!", processorJar.exists());
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            fail("Error locating SDK 3.2 query processor library" + ex.getMessage());
+        }
+        
+        File jarDestination = new File(serviceInfo.getDir(), "lib" + File.separator + processorJar.getName());
+        try {
+            Utils.copyFile(processorJar, jarDestination);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            fail("Error copying SDK query processor jar: " + ex.getMessage());
+        }
     }
     
     
     private void extractCastorMappingFiles() throws Throwable {
         ServiceInformation info = new ServiceInformation(new File(serviceInfo.getDir()));
-        String marshallingMapping = CastorMappingUtil.getMarshallingCastorMappingFileName(info);
-        String unmarshallingMapping = CastorMappingUtil.getUnmarshallingCastorMappingFileName(info);
-        // copy the resource xml-mapping.xml file to the castor mapping location
-        InputStream inStream = getClass().getResourceAsStream("resources/xml-mapping.xml");
-        assertNotNull("Original xml-mapping.xml file could not be loaded", inStream);
-        StringBuffer contents = Utils.inputStreamToStringBuffer(inStream);
-        inStream.close();
-        Utils.stringBufferToFile(contents, marshallingMapping);
-        // again for unmarshalling
-        inStream = getClass().getResourceAsStream("resources/unmarshaller-xml-mapping.xml");
-        contents = Utils.inputStreamToStringBuffer(inStream);
-        inStream.close();
-        Utils.stringBufferToFile(contents, unmarshallingMapping);
+        String marshallingMappingDestination = CastorMappingUtil.getMarshallingCastorMappingFileName(info);
+        String unmarshallingMappingDestination = CastorMappingUtil.getUnmarshallingCastorMappingFileName(info);
+        
+        // find the client SDK jar
+        File clientLibDir = new File(sdkPackageDir, "sdk3.2.1" + File.separator + "client" + File.separator + "lib");
+        File[] clientJars = clientLibDir.listFiles(new FileFilter() {
+            public boolean accept (File path) {
+                return path.getName().endsWith("-client.jar");
+            }
+        });
+        assertEquals("Unexpected number of client jars found in SDK package", 1, clientJars.length);
+        
+        // grab the contents of the mapping files
+        JarFile clientJar = new JarFile(clientJars[0]);
+        StringBuffer marshallingContents = JarUtilities.getFileContents(clientJar, CastorMappingUtil.CASTOR_MARSHALLING_MAPPING_FILE);
+        StringBuffer unmarshallingContents = JarUtilities.getFileContents(clientJar, CastorMappingUtil.CASTOR_UNMARSHALLING_MAPPING_FILE);
+        
+        // write the mappings out to disk
+        Utils.stringBufferToFile(marshallingContents, marshallingMappingDestination);
+        Utils.stringBufferToFile(unmarshallingContents, unmarshallingMappingDestination);
     }
     
     

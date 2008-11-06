@@ -54,6 +54,8 @@
 					<sysproperty key="introduce.base.dir" value="${introduce.dir}" />
 					<sysproperty key="build.dir" value="${test.core.classes.dir}" />
 					<sysproperty key="temp.test.service.dir" value="${temp.test.service.dir}"/>
+					<sysproperty key="test.resources.dir" value="${basedir}/resources"/>
+					<sysproperty key="sdk.32.application.url" value="http://sdkexamples.bmi.ohio-state.edu:8321/example321/http/remoteService"/>
 					<classpath refid="all.test.classpath" />
 					<classpath>
 						<pathelement path="${test.core.classes.dir}" />
