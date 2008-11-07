@@ -1,7 +1,6 @@
 package gov.nih.nci.cagrid.fqp.service;
 
 import gov.nih.nci.cagrid.common.FaultHelper;
-import gov.nih.nci.cagrid.common.security.ProxyUtil;
 import gov.nih.nci.cagrid.dcql.DCQLQuery;
 import gov.nih.nci.cagrid.fqp.common.FQPConstants;
 import gov.nih.nci.cagrid.fqp.common.SecurityUtils;
@@ -143,20 +142,9 @@ public class FQPAsynchronousExecutionUtil {
     private GlobusCredential getDelegatedCredential(DelegatedCredentialReference reference) throws InternalErrorFault {
         GlobusCredential userCredential = null;
         LOG.info("Retrieving delegated credential");
-        GlobusCredential serviceCredential = null;
-        try {
-            serviceCredential = ProxyUtil.getDefaultProxy();
-        } catch (Exception ex) {
-            // wish this were more specific...
-            FaultHelper helper = new FaultHelper(new InternalErrorFault());
-            helper.addDescription("Error obtaining default service credential");
-            helper.addDescription(ex.getMessage());
-            helper.addFaultCause(ex);
-            throw (InternalErrorFault) helper.getFault();
-        }
         try {
             DelegatedCredentialUserClient credentialClient = 
-                new DelegatedCredentialUserClient(reference, serviceCredential);
+                new DelegatedCredentialUserClient(reference);
             userCredential = credentialClient.getDelegatedCredential();
         } catch (Exception ex) {
             // this too...
