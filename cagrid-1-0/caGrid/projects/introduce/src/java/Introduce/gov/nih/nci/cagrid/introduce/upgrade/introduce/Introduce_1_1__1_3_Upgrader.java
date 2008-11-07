@@ -109,17 +109,26 @@ public class Introduce_1_1__1_3_Upgrader extends IntroduceUpgraderBase {
         // change the location of the services security.xsd
         NamespaceType nsType = CommonTools.getNamespaceType(getServiceInformation().getNamespaces(),
             "gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security");
-        nsType.setLocation("./xsd/cagrid/types/security/security.xsd");
-        // move to this new location
-        File newLocation = new File(getServiceInformation().getBaseDirectory().getAbsolutePath() + File.separator
-            + "schema" + File.separator + getServiceInformation().getServices().getService(0).getName()
-            + File.separator + "xsd" + File.separator + "cagrid" + File.separator + "types" + File.separator
-            + "security" + File.separator + "security.xsd");
-        File oldLocation = new File(getServiceInformation().getBaseDirectory().getAbsolutePath() + File.separator
-            + "schema" + File.separator + getServiceInformation().getServices().getService(0).getName()
-            + File.separator + "xsd" + File.separator + "security.xsd");
-        Utils.copyFile(oldLocation, newLocation);
-        oldLocation.delete();
+        String oldLocation = nsType.getLocation();
+        String newLocation = "./xsd/cagrid/types/security/security.xsd";
+
+        if (!oldLocation.equals(newLocation)) {
+            nsType.setLocation(newLocation);
+            // move to this new location
+            File newLocationF = new File(getServiceInformation().getBaseDirectory().getAbsolutePath() + File.separator
+                + "schema" + File.separator + getServiceInformation().getServices().getService(0).getName()
+                + File.separator + "xsd" + File.separator + "cagrid" + File.separator + "types" + File.separator
+                + "security" + File.separator + "security.xsd");
+            File oldLocationF = new File(getServiceInformation().getBaseDirectory().getAbsolutePath() + File.separator
+                + "schema" + File.separator + getServiceInformation().getServices().getService(0).getName()
+                + File.separator + "xsd" + File.separator + "security.xsd");
+            Utils.copyFile(oldLocationF, newLocationF);
+            oldLocationF.delete();
+            getStatus()
+                .addIssue(
+                    "Moved security.xsd to new location xsd/cagrid/types/security/security.xsd",
+                    "Please make sure that if you are importing this schema in any other location that you make sure to edit the imports and use the new security.xsd location in xsd/cagrid/types/security/security.xsd.");
+        }
 
         // foreach service.....
         File srcDir = new File(getServiceInformation().getBaseDirectory().getAbsolutePath() + File.separator + "src");
