@@ -159,7 +159,7 @@ public class DelegatedCredentialManager {
 				end = new Date(f.getEndDate().longValue());
 			}
 			List<Event> events = this.delegationAuditor.findEvents(targetId, f
-					.getSourceGridIdentity(), eventType, start, end);
+					.getSourceGridIdentity(), eventType, start, end, null);
 			DelegatedCredentialAuditRecord[] records = new DelegatedCredentialAuditRecord[events
 					.size()];
 			for (int i = 0; i < events.size(); i++) {
@@ -876,7 +876,7 @@ public class DelegatedCredentialManager {
 		}
 		try {
 			List<Event> list = this.delegationAuditor.findEvents(String
-					.valueOf(delegationId), null, null, null, null);
+					.valueOf(delegationId), null, null, null, null, null);
 			for (int i = 0; i < list.size(); i++) {
 				this.delegationAuditor.deleteEvent(list.get(i).getEventId());
 			}

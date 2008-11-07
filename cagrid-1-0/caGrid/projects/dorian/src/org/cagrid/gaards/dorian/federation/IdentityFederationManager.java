@@ -1343,7 +1343,7 @@ public class IdentityFederationManager extends LoggingObject implements Publishe
             }
 
             try {
-                List<Event> events = eh.findEvents(f.getTargetId(), f.getReportingPartyId(), eventType, start, end);
+                List<Event> events = eh.findEvents(f.getTargetId(), f.getReportingPartyId(), eventType, start, end, f.getAuditMessage());
                 for (int j = 0; j < events.size(); j++) {
                     Event e = events.get(j);
                     FederationAuditRecord r = new FederationAuditRecord();

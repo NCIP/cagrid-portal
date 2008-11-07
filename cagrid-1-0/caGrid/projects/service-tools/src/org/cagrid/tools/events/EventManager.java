@@ -184,7 +184,7 @@ public class EventManager {
     }
 
 
-    public List<Event> findEvents(String targetId, String reportingPartyId, String eventType, Date start, Date end)
+    public List<Event> findEvents(String targetId, String reportingPartyId, String eventType, Date start, Date end, String message)
         throws EventAuditingException {
         Set<EventHandler> temp = null;
         if (eventType != null) {
@@ -198,7 +198,7 @@ public class EventManager {
             EventHandler eh = itr.next();
             if (eh instanceof Auditor) {
                 Auditor a = (Auditor) eh;
-                list.addAll(a.findEvents(targetId, reportingPartyId, eventType, start, end));
+                list.addAll(a.findEvents(targetId, reportingPartyId, eventType, start, end, message));
             }
         }
         return list;

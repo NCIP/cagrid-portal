@@ -23,7 +23,7 @@ public class FederationAuditSearchWindow extends ApplicationComponent {
 
 	private SessionPanel sessionPanel = null;
 
-	private JPanel auditPanel = null;
+	private FederationAuditPanel auditPanel = null;
 
 	/**
 	 * This is the default constructor
@@ -100,9 +100,10 @@ public class FederationAuditSearchWindow extends ApplicationComponent {
 	 * 
 	 * @return javax.swing.JPanel
 	 */
-	private JPanel getAuditPanel() {
+	private FederationAuditPanel getAuditPanel() {
 		if (auditPanel == null) {
 			auditPanel = new FederationAuditPanel(getSessionPanel());
+			auditPanel.setSearchButtonAsDefault(this.getRootPane());
 		}
 		return auditPanel;
 	}

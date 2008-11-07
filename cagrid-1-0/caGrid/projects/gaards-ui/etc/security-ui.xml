@@ -162,7 +162,7 @@
 							<title>Auditing</title>
 							<description>Perform Audit</description>
 							<classname>org.cagrid.gaards.ui.dorian.federation.FederationAuditSearchWindow</classname>
-							<icon>/trusted-idp.png</icon>
+							<icon>/auditing.png</icon>
 							<showOnToolBar>false</showOnToolBar>
 						</component>
 						<component>

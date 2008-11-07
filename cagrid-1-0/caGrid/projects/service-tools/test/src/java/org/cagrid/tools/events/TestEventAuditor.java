@@ -73,23 +73,27 @@ public class TestEventAuditor extends TestCase {
 			Event e2 = auditor.getEvent(e.getEventId());
 			assertEquals(e, e2);
 			assertEquals(1, auditor
-					.findEvents(targetId, null, null, null, null).size());
+					.findEvents(targetId, null, null, null, null,null).size());
+			assertEquals(1, auditor
+                .findEvents(null, null, null, null, null,message).size());
+			assertEquals(1, auditor
+                .findEvents(null, null, null, null, null,targetId).size());
 			assertEquals((i + 1), auditor.findEvents(null, reportingParty,
-					null, null, null).size());
+					null, null, null,null).size());
 			assertEquals((i + 1), auditor.findEvents(null, null, eventType,
-					null, null).size());
+					null, null,null).size());
 			assertEquals((i + 1), auditor.findEvents(null, null, null, start,
-					null).size());
+					null,null).size());
 			assertEquals((i + 1), auditor.findEvents(null, null, null, null,
-					end).size());
+					end,null).size());
 			assertEquals((i + 1), auditor.findEvents(null, null, null, start,
-					end).size());
-			assertEquals(0, auditor.findEvents(null, null, null, null, start).size());
-			assertEquals(0, auditor.findEvents(null, null, null, end, null)
+					end,null).size());
+			assertEquals(0, auditor.findEvents(null, null, null, null, start,null).size());
+			assertEquals(0, auditor.findEvents(null, null, null, end, null,null)
 					.size());
 
 			assertEquals(1, auditor.findEvents(targetId, reportingParty,
-					eventType, start, end).size());
+					eventType, start, end,message).size());
 		}
 
 		for (int i = 0; i < events; i++) {

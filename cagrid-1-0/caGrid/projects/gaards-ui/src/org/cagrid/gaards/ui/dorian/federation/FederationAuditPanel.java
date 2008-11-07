@@ -16,6 +16,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JRootPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
@@ -87,11 +88,13 @@ public class FederationAuditPanel extends JPanel {
 
 	private FederationAuditRecordTable auditRecords = null;
 
-	private JLabel jLabel42 = null;
-
 	private DorianSessionProvider session;
 
 	private List<FederationAuditing> auditTypes; // @jve:decl-index=0:
+
+	private JPanel messagePanel = null;
+
+	private JLabel jLabel4 = null;
 
 	/**
 	 * This is the default constructor
@@ -232,9 +235,14 @@ public class FederationAuditPanel extends JPanel {
 	 */
 	private JPanel getSearchCriteria() {
 		if (searchCriteria == null) {
+			GridBagConstraints gridBagConstraints22 = new GridBagConstraints();
+			gridBagConstraints22.gridx = 0;
+			gridBagConstraints22.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints22.weightx = 1.0D;
+			gridBagConstraints22.gridy = 2;
 			GridBagConstraints gridBagConstraints19 = new GridBagConstraints();
 			gridBagConstraints19.gridx = 0;
-			gridBagConstraints19.gridy = 2;
+			gridBagConstraints19.gridy = 3;
 			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
 			gridBagConstraints2.anchor = GridBagConstraints.WEST;
 			gridBagConstraints2.gridy = 1;
@@ -258,6 +266,7 @@ public class FederationAuditPanel extends JPanel {
 							.getPanelLabelColor()));
 			searchCriteria.add(getDatePanel(), gridBagConstraints2);
 			searchCriteria.add(getButtonPanel(), gridBagConstraints19);
+			searchCriteria.add(getMessagePanel(), gridBagConstraints22);
 		}
 		return searchCriteria;
 	}
@@ -269,13 +278,6 @@ public class FederationAuditPanel extends JPanel {
 	 */
 	private JPanel getTargetPanel() {
 		if (targetPanel == null) {
-			GridBagConstraints gridBagConstraints21 = new GridBagConstraints();
-			gridBagConstraints21.gridx = 0;
-			gridBagConstraints21.anchor = GridBagConstraints.WEST;
-			gridBagConstraints21.insets = new Insets(2, 2, 2, 2);
-			gridBagConstraints21.gridy = 3;
-			jLabel42 = new JLabel();
-			jLabel42.setText("Message");
 			GridBagConstraints gridBagConstraints20 = new GridBagConstraints();
 			gridBagConstraints20.gridx = 0;
 			gridBagConstraints20.anchor = GridBagConstraints.WEST;
@@ -291,14 +293,6 @@ public class FederationAuditPanel extends JPanel {
 			gridBagConstraints17.gridwidth = 2;
 			gridBagConstraints17.insets = new Insets(2, 2, 2, 2);
 			gridBagConstraints17.gridx = 1;
-			GridBagConstraints gridBagConstraints18 = new GridBagConstraints();
-			gridBagConstraints18.fill = GridBagConstraints.HORIZONTAL;
-			gridBagConstraints18.gridwidth = 2;
-			gridBagConstraints18.gridx = 1;
-			gridBagConstraints18.gridy = 3;
-			gridBagConstraints18.weightx = 1.0;
-			gridBagConstraints18.insets = new Insets(2, 2, 2, 2);
-
 			GridBagConstraints gridBagConstraints15 = new GridBagConstraints();
 			gridBagConstraints15.anchor = GridBagConstraints.WEST;
 			gridBagConstraints15.gridx = 0;
@@ -355,10 +349,8 @@ public class FederationAuditPanel extends JPanel {
 			targetPanel.add(jLabel1, gridBagConstraints6);
 			targetPanel.add(getReportingParty(), gridBagConstraints7);
 			targetPanel.add(getFindReportingParty(), gridBagConstraints8);
-			targetPanel.add(getMessage(), gridBagConstraints18);
 			targetPanel.add(getAuditType(), gridBagConstraints17);
 			targetPanel.add(jLabel41, gridBagConstraints20);
-			targetPanel.add(jLabel42, gridBagConstraints21);
 		}
 		return targetPanel;
 	}
@@ -648,6 +640,7 @@ public class FederationAuditPanel extends JPanel {
 		if (search == null) {
 			search = new JButton();
 			search.setText("Search");
+			//getRootPane().setDefaultButton(search);
 			search.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					Runner runner = new Runner() {
@@ -667,6 +660,11 @@ public class FederationAuditPanel extends JPanel {
 		}
 
 		return search;
+	}
+	
+	
+	public void setSearchButtonAsDefault(JRootPane root){
+	    root.setDefaultButton(getSearch());
 	}
 
 	/**
@@ -714,6 +712,36 @@ public class FederationAuditPanel extends JPanel {
 			auditRecords = new FederationAuditRecordTable();
 		}
 		return auditRecords;
+	}
+
+	/**
+	 * This method initializes messagePanel	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getMessagePanel() {
+		if (messagePanel == null) {
+			GridBagConstraints gridBagConstraints18 = new GridBagConstraints();
+			gridBagConstraints18.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints18.gridwidth = 2;
+			gridBagConstraints18.gridx = 1;
+			gridBagConstraints18.gridy = 0;
+			gridBagConstraints18.weightx = 1.0;
+			gridBagConstraints18.anchor = GridBagConstraints.WEST;
+			gridBagConstraints18.insets = new Insets(2, 2, 2, 2);
+			GridBagConstraints gridBagConstraints23 = new GridBagConstraints();
+			gridBagConstraints23.gridx = 0;
+			gridBagConstraints23.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints23.anchor = GridBagConstraints.WEST;
+			gridBagConstraints23.gridy = 0;
+			jLabel4 = new JLabel();
+			jLabel4.setText("Message");
+			messagePanel = new JPanel();
+			messagePanel.setLayout(new GridBagLayout());
+			messagePanel.add(jLabel4, gridBagConstraints23);
+			messagePanel.add(getMessage(), gridBagConstraints18);
+		}
+		return messagePanel;
 	}
 
 }

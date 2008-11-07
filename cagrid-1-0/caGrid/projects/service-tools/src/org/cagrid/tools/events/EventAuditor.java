@@ -122,7 +122,7 @@ public class EventAuditor extends BaseEventHandler implements Auditor {
     }
 
 
-    public List<Event> findEvents(String targetId, String reportingPartyId, String eventType, Date start, Date end)
+    public List<Event> findEvents(String targetId, String reportingPartyId, String eventType, Date start, Date end, String message)
         throws EventAuditingException {
         try {
             buildDatabase();
@@ -158,6 +158,10 @@ public class EventAuditor extends BaseEventHandler implements Auditor {
             if (end != null) {
                 whereAppended = appendToSQLBuffer(sql, whereAppended, OCCURRED_AT, "<=");
             }
+            
+            if (message != null) {
+                whereAppended = appendToSQLBuffer(sql, whereAppended, MESSAGE, "LIKE");
+            }
 
             PreparedStatement s = c.prepareStatement(sql.toString());
             int count = 1;
@@ -184,6 +188,11 @@ public class EventAuditor extends BaseEventHandler implements Auditor {
 
             if (end != null) {
                 s.setLong(count, end.getTime());
+                count = count + 1;
+            }
+            
+            if (message != null) {
+                s.setString(count, "%"+message+"%");
                 count = count + 1;
             }
 
