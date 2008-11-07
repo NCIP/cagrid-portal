@@ -2,13 +2,12 @@ package org.cagrid.testing.test;
 
 
 import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainer;
-import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainerFactory;
-import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainerType;
 import gov.nih.nci.cagrid.testing.system.deployment.steps.DestroyContainerStep;
 import gov.nih.nci.cagrid.testing.system.deployment.steps.StartContainerStep;
 import gov.nih.nci.cagrid.testing.system.deployment.steps.StopContainerStep;
 import gov.nih.nci.cagrid.testing.system.deployment.steps.UnpackContainerStep;
 import gov.nih.nci.cagrid.testing.system.deployment.story.ServiceStoryBase;
+import gov.nih.nci.cagrid.testing.system.haste.Step;
 
 import java.util.Vector;
 
@@ -16,48 +15,35 @@ import java.util.Vector;
 
 public class ContainerTest extends ServiceStoryBase {
 
-   
 
     public ContainerTest(ServiceContainer container) {
        super(container);
     }
     
-    public ContainerTest() {
-       
-        try {
-            this.setContainer(ServiceContainerFactory.createContainer(ServiceContainerType.SECURE_TOMCAT_CONTAINER));
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            fail("Failed to create container: " + ex.getMessage());
-        }
+    
+    public String getName() {
+        return getDescription();
     }
 
 
     public String getDescription() {
-        if(getContainer().getProperties().isSecure()){
-            return "Secure Transfer Service Test";
+        String desc = "Service Container Test";
+        if (getContainer().getProperties().isSecure()){
+            desc = "Secure " + desc;
         }
-        return "Transfer Service Test";
+        return getContainer().getClass().getSimpleName() + " " + desc;
     }
 
 
     protected Vector steps() {
-        Vector steps = new Vector();
-        try {
-            steps.add(new UnpackContainerStep(getContainer()));
-            
-            steps.add(new StartContainerStep(getContainer()));
-
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        Vector<Step> steps = new Vector<Step>();
+        steps.add(new UnpackContainerStep(getContainer()));
+        steps.add(new StartContainerStep(getContainer()));
         return steps;
     }
 
 
     protected boolean storySetUp() throws Throwable {
-
         return true;
     }
 
