@@ -1,6 +1,5 @@
 package gov.nih.nci.cagrid.fqp.results.service.globus.resource;
 
-import gov.nih.nci.cagrid.common.security.ProxyUtil;
 import gov.nih.nci.cagrid.dcql.DCQLQuery;
 import gov.nih.nci.cagrid.dcqlresult.DCQLQueryResultsCollection;
 import gov.nih.nci.cagrid.fqp.processor.exceptions.FederatedQueryProcessingException;
@@ -16,8 +15,6 @@ import org.apache.commons.logging.LogFactory;
 import org.cagrid.fqp.execution.QueryExecutionParameters;
 import org.cagrid.fqp.results.metadata.ProcessingStatus;
 import org.cagrid.fqp.results.metadata.ResultsRange;
-import org.cagrid.gaards.cds.client.DelegatedCredentialUserClient;
-import org.cagrid.gaards.cds.delegated.stubs.types.DelegatedCredentialReference;
 import org.globus.gsi.GlobusCredential;
 import org.globus.wsrf.ResourceException;
 
@@ -40,7 +37,7 @@ public class FederatedQueryResultsResource extends FederatedQueryResultsResource
     // initialization values of this resource
     private DCQLQuery query;
     private ExecutorService workExecutor;
-    private DelegatedCredentialReference delegatedCredentialReference;
+    private GlobusCredential delegatedCredential;
     private QueryExecutionParameters executionParameters;
 
     // result values of this resource
@@ -86,12 +83,12 @@ public class FederatedQueryResultsResource extends FederatedQueryResultsResource
     
     /**
      * <b>OPTIONAL</b>
-     * Sets a reference to a delegated credential.  If supplied, the referenced credential
+     * Sets the (delegated) client credential credential.  If supplied, the credential
      * will be used to execute queries against the data services referenced in the query
      * @param credentialRef
      */
-    public void setDelegatedCredentialReference(DelegatedCredentialReference credentialRef) {
-        this.delegatedCredentialReference = credentialRef;
+    public void setDelegatedCredential(GlobusCredential clientCredential) {
+        this.delegatedCredential = clientCredential;
     }
     
     
@@ -124,14 +121,11 @@ public class FederatedQueryResultsResource extends FederatedQueryResultsResource
                 "No work manager set to handle query processing tasks!");
         }
         
-        // grab the user's credential (if any, may be null)
-        GlobusCredential userCredential = getDelegatedCredential();
-        
         // set up a query processing listener to change resource property status
         AsynchronousFQPProcessingStatusListener listener = getStatusListener();
         
         Runnable queryWork = 
-            new QueryExecutionTask(query, userCredential, executionParameters, workExecutor, listener);
+            new QueryExecutionTask(query, delegatedCredential, executionParameters, workExecutor, listener);
         try {
             listener.processingStatusChanged(ProcessingStatus.Waiting_To_Begin, "Scheduling query for execution");
             workExecutor.execute(queryWork);
@@ -175,33 +169,6 @@ public class FederatedQueryResultsResource extends FederatedQueryResultsResource
     
     public DCQLQuery getQuery() {
         return query;
-    }
-    
-    
-    private GlobusCredential getDelegatedCredential() throws FederatedQueryProcessingException {
-        GlobusCredential userCredential = null;
-        if (delegatedCredentialReference != null) {
-            setStatusMessage("Retrieving delegated credential");
-            GlobusCredential serviceCredential = null;
-            try {
-                serviceCredential = ProxyUtil.getDefaultProxy();
-            } catch (Exception ex) {
-                // wish this were more specific...
-                setProcessingException(ex);
-                throw new FederatedQueryProcessingException(
-                    "Error obtaining default service credential: " + ex.getMessage(), ex);
-            }
-            try {
-                DelegatedCredentialUserClient credentialClient = 
-                    new DelegatedCredentialUserClient(delegatedCredentialReference, serviceCredential);
-                userCredential = credentialClient.getDelegatedCredential();
-            } catch (Exception ex) {
-                setProcessingException(ex);
-                throw new FederatedQueryProcessingException(
-                    "Error obtaining delegated credential from CDS: " + ex.getMessage(), ex);
-            }
-        }
-        return userCredential;
     }
     
     
