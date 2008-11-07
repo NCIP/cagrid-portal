@@ -24,6 +24,9 @@ public class EditServiceDescriptionStep extends Step {
     public static final String APPSERVICE_CONFIG_PROPERTY = "cqlQueryProcessorConfig_appserviceUrl";
     public static final String SDK_32_URL_SYSTEM_PROPETY = "sdk.32.application.url";
     
+    // the query processor class name
+    public static final String SDK_32_QUERY_PROCESSOR = "gov.nih.nci.cagrid.data.sdk32query.HQLCoreQueryProcessor";
+    
     private DataTestCaseInfo testInfo = null;
     
     public EditServiceDescriptionStep(DataTestCaseInfo testInfo) {
@@ -60,6 +63,7 @@ public class EditServiceDescriptionStep extends Step {
         // set service properties
         CommonTools.setServiceProperty(serviceDescription, APPSERVICE_CONFIG_PROPERTY, getSdkUrl(), false);
         CommonTools.setServiceProperty(serviceDescription, CLASS_MAPPINGS_PROPERTY, Sdk32TestConstants.CLASS_TO_QNAME_FILENAME, false);
+        CommonTools.setServiceProperty(serviceDescription, DataServiceConstants.QUERY_PROCESSOR_CLASS_PROPERTY, SDK_32_QUERY_PROCESSOR, false);
         
         // set up the domain model resource property
         ServiceType service = CommonTools.getService(serviceDescription.getServices(), testInfo.getName());

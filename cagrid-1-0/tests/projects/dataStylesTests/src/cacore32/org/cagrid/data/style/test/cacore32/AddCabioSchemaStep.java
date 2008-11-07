@@ -19,7 +19,7 @@ public class AddCabioSchemaStep extends Step {
     
     private static final String CABIO_PACKAGE_NAME = "gov.nih.nci.cabio.domain";
     private static final String SDK_32_SERIALIZER = "gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory";
-    private static final String SDK_32_DESERIALIZER = "gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeerializerFactory";
+    private static final String SDK_32_DESERIALIZER = "gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory";
     
     private DataTestCaseInfo testInfo = null;
     private File sdkPackageDir = null;

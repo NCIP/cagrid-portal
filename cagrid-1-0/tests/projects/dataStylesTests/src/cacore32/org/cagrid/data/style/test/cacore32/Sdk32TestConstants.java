@@ -5,9 +5,11 @@ import java.io.File;
 public abstract class Sdk32TestConstants {
     
     public static String RESOURCES_DIR;
+    public static String QUERIES_DIR;
     
     static {
         RESOURCES_DIR = System.getProperty("test.resources.dir") + File.separator + "sdk3.2.1";
+        QUERIES_DIR = System.getProperty("test.queries.dir");
     }
     
     public static final String SDK_PACKAGE_ZIP = RESOURCES_DIR + File.separator + "sdk_321_package.zip";
