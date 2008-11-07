@@ -35,7 +35,6 @@ public abstract class BaseEracomCertificateAuthority extends CertificateAuthorit
 		try {
 			isInit = false;
 			int slot = properties.getSlot();
-
 			provider = (Provider) Class.forName("au.com.eracom.crypto.provider.slot" + slot + ".ERACOMProvider")
 				.newInstance();
 			Security.addProvider(provider);

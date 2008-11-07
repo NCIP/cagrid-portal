@@ -8,6 +8,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
 import org.cagrid.gaards.dorian.federation.FederationAuditRecord;
+import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.table.GrapeBaseTable;
 import org.cagrid.grape.utils.ErrorDialog;
 
@@ -56,7 +57,8 @@ public class FederationAuditRecordTable extends GrapeBaseTable {
 		for (int i = 0; i < list.size(); i++) {
 			boolean inserted = false;
 			for (int j = 0; j < sorted.size(); j++) {
-				if (list.get(i).getOccurredAt().after(sorted.get(j).getOccurredAt())) {
+				if (list.get(i).getOccurredAt().after(
+						sorted.get(j).getOccurredAt())) {
 					sorted.add(j, list.get(i));
 					inserted = true;
 					break;
@@ -99,11 +101,9 @@ public class FederationAuditRecordTable extends GrapeBaseTable {
 
 	public void doubleClick() throws Exception {
 		try {
-			/*
-			 * GridApplication.getContext().addApplicationComponent( new
-			 * DelegatedCredentialAuditRecordWindow( getSelectedRecord()), 500,
-			 * 300);
-			 */
+			GridApplication.getContext().addApplicationComponent(
+					new FederationAuditRecordWindow(getSelectedRecord()), 600,
+					400);
 		} catch (Exception ex) {
 			ErrorDialog.showError(ex.getMessage(), ex);
 		}

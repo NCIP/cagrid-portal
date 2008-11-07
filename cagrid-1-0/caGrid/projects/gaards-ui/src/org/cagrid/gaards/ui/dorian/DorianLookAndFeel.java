@@ -65,5 +65,9 @@ public class DorianLookAndFeel extends GAARDSLookAndFeel {
 	public final static ImageIcon getHostsIcon() {
 		return IconUtils.loadIcon("/computers.png");
 	}
+	
+	public final static ImageIcon getAuditingIcon() {
+		return IconUtils.loadIcon("/auditing.png");
+	}
 
 }
