@@ -7,8 +7,10 @@ import gov.nih.nci.cagrid.fqp.client.FederatedQueryProcessorClient;
 import gov.nih.nci.cagrid.fqp.processor.FederatedQueryEngine;
 import gov.nih.nci.cagrid.fqp.processor.exceptions.FederatedQueryProcessingException;
 import gov.nih.nci.cagrid.fqp.stubs.types.FederatedQueryProcessingFault;
+import gov.nih.nci.cagrid.testing.system.deployment.SecureContainer;
 import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainer;
 
+import java.io.File;
 import java.rmi.RemoteException;
 
 import org.apache.axis.types.URI.MalformedURIException;
@@ -20,7 +22,7 @@ import org.apache.axis.types.URI.MalformedURIException;
  * @author David Ervin
  * 
  * @created Jul 10, 2008 1:33:38 PM
- * @version $Id: FederatedQueryProcessorHelper.java,v 1.2 2008-07-16 17:02:19 dervin Exp $ 
+ * @version $Id: FederatedQueryProcessorHelper.java,v 1.3 2008-11-07 20:34:56 dervin Exp $ 
  */
 public class FederatedQueryProcessorHelper {
 
@@ -43,10 +45,14 @@ public class FederatedQueryProcessorHelper {
     }
     
     
-    public DCQLQueryResultsCollection execute(DCQLQuery query) throws RemoteException, 
+    public synchronized DCQLQueryResultsCollection execute(DCQLQuery query) throws RemoteException, 
         FederatedQueryProcessingFault, FederatedQueryProcessingException {
         if (fqpClient == null && fqpContainerSource != null) {
             createClientFromContainer();
+        }
+        
+        if (fqpContainerSource != null && fqpContainerSource.getServiceContainer() instanceof SecureContainer) {
+            configureCaDirectory();
         }
         
         DCQLQueryResultsCollection results = null;
@@ -62,10 +68,14 @@ public class FederatedQueryProcessorHelper {
     }
     
     
-    public CQLQueryResults executeAndAggregateResults(DCQLQuery query) throws RemoteException,
+    public synchronized CQLQueryResults executeAndAggregateResults(DCQLQuery query) throws RemoteException,
         FederatedQueryProcessingFault, FederatedQueryProcessingException {
         if (fqpClient == null && fqpContainerSource != null) {
             createClientFromContainer();
+        }
+        
+        if (fqpContainerSource != null && fqpContainerSource.getServiceContainer() instanceof SecureContainer) {
+            configureCaDirectory();
         }
         
         CQLQueryResults results = null;
@@ -90,5 +100,20 @@ public class FederatedQueryProcessorHelper {
         } catch (MalformedURIException ex) {
             throw new RemoteException("Error creating FQP client URL: " + ex.getMessage(), ex);
         }
+    }
+    
+    
+    private synchronized void configureCaDirectory() throws RemoteException {
+        File caCertsDir = null;
+        try {
+            File certsDir = ((SecureContainer) fqpContainerSource.getServiceContainer()).getCertificatesDirectory();
+            caCertsDir = new File(certsDir, "ca");
+        } catch (Exception ex) {
+            throw new RemoteException("Error obtaining CA certificates directory from service container: " + ex.getMessage(), ex);
+        }
+        org.globus.common.CoGProperties properties = org.globus.common.CoGProperties.getDefault();
+        properties.setCaCertLocations(caCertsDir.getAbsolutePath());
+        org.globus.common.CoGProperties.setDefault(properties);
+        System.out.println("SET CERTS DIRECTORY TO " + caCertsDir.getAbsolutePath());
     }
 }

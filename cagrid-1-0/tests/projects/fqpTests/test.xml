@@ -38,6 +38,7 @@
 				<fileset dir="${src.dir}">
 					<include name="**/LocalFqpSystemTests.java" />
 					<include name="**/RemoteFqpSystemTests.java" />
+					<include name="**/SecureRemoteFqpSystemTests.java" />
 				</fileset>
 			</batchtest>
 		</junit>

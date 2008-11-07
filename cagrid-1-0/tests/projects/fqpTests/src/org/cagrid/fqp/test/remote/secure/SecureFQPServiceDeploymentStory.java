@@ -62,6 +62,16 @@ public class SecureFQPServiceDeploymentStory extends Story implements ServiceCon
         }
         return true;
     }
+        
+    
+    /**
+     * Overridden to run tests, and on successful completion set 
+     * the 'complete' flag to true so the service container can be returned
+     */
+    protected void runTest() throws Throwable {
+        super.runTest();
+        complete = true;
+    }
 
 
     protected Vector steps() {
