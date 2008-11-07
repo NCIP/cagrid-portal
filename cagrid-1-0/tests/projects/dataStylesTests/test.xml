@@ -9,6 +9,8 @@
 	<property name="failed.message" value="Tests failed! Check test reports." />
 	<!-- tells the service container factories to assign ports in testing mode -->
 	<property name="testing.port.assignment.mode" value="true" />
+	<!-- tells system tests where to find the service containers -->
+	<property name="testing.containers.dir" value="${basedir}/ext/dependencies/resources/containers"/>
 	<!-- tells data tests the base directory in which to create data services -->
 	<property name="temp.test.service.dir" value="${basedir}/test_services"/>
 	
@@ -55,7 +57,10 @@
 					<sysproperty key="build.dir" value="${test.core.classes.dir}" />
 					<sysproperty key="temp.test.service.dir" value="${temp.test.service.dir}"/>
 					<sysproperty key="test.resources.dir" value="${basedir}/resources"/>
+					<sysproperty key="test.queries.dir" value="${basedir}/ext/dependencies/test/xml"/>
 					<sysproperty key="sdk.32.application.url" value="http://sdkexamples.bmi.ohio-state.edu:8321/example321/http/remoteService"/>
+					<sysproperty key="use.testing.port.assignment" value="${testing.port.assignment.mode}" />
+					<sysproperty key="testing.containers.dir" value="${testing.containers.dir}"/>
 					<classpath refid="all.test.classpath" />
 					<classpath>
 						<pathelement path="${test.core.classes.dir}" />
