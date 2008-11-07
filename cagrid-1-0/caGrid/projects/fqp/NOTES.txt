@@ -1,4 +1,3 @@
-
 CAVEATS:
 ==============================
 DCQL Foriegn Predicate values must be a subset of CQL Predicate values, as the former is used to contruct the later in the engine.
@@ -10,21 +9,33 @@ ISSUES:
 
 FUTURE WORK:
 ==============================
+service property to limit max retries, timeouts, target services, etc.  prevent malicious client from overwhelming the service
+
 add properties to main service to track number of active resources?
 
-add topic notification to query completion status
-
-security (useless without delegation)?
-
 should we add query return modifiers to DCQL? (not trivial, as they have to work "in code" against aggregate results... can't be pushed to backend)
-
-add unit and system tests    
+	-- CQL 2 will support new query modifiers, so DCQL 2 can as well.  CQL 2 currently in tech preview, dcql 2 to follow
 
 add DCQL XSD validation?
 
 
+IN PROGRESS WORK:
+==============================
+(75%) add unit and system tests
+
+
 COMPLETED WORK:
 ==============================
+(DONE) query w/ caGrid transfer of results
+	-- server side needs refinement for efficiency
+
+(DONE) query w/ ws-enumeration of results
+	-- server side needs refinement for efficiency
+
+(DONE) security with delegation!
+
+(DONE) add topic notification to query completion status
+
 (DONE) change build to create client-usable engine (outside of service)
 
 (DONE) unify FQEngine code that uses processor to reuse better
