@@ -51,7 +51,7 @@ public class TomcatServiceContainer extends ServiceContainer {
 
 	private static final Log LOG = LogFactory.getLog(ServiceContainer.class);
 
-	public static final int DEFAULT_STARTUP_WAIT_TIME = 10; // seconds
+	public static final int DEFAULT_STARTUP_WAIT_TIME = 60; // seconds
 	public static final int DEFAULT_SHUTDOWN_WAIT_TIME = 10; // seconds
 
 	public static final String ENV_ANT_HOME = "ANT_HOME";
@@ -67,47 +67,47 @@ public class TomcatServiceContainer extends ServiceContainer {
 		super(properties);
 	}
 
+    
 	@Override
 	public void unpackContainer() throws ContainerException {
 		// TODO Auto-generated method stub
 		super.unpackContainer();
-		List<String> command = new ArrayList<String>();
-		command.add("chmod");
-		command.add("a+rwx");
-		command.add("catalina.50.sh");
-		command.add("digest.sh");
-		command.add("catalina.sh");
-		command.add("setclasspath.sh");
-		command.add("shutdown-using-launcher.sh");
-		command.add("shutdown.sh");
-		command.add("startup-using-launcher.sh");
-		command.add("startup.sh");
-		command.add("tool-wrapper-using-launcher.sh");
-		command.add("tool-wrapper.sh");
-		command.add("version.sh");
-		
-		//command.add("*");
 		if (!System.getProperty("os.name").toLowerCase().contains("win")) {
+            // make files in /bin directory executable if not on windows platform
+		    List<String> command = new ArrayList<String>();
+		    command.add("chmod");
+		    command.add("a+rwx");
+		    command.add("catalina.50.sh");
+		    command.add("digest.sh");
+		    command.add("catalina.sh");
+		    command.add("setclasspath.sh");
+		    command.add("shutdown-using-launcher.sh");
+		    command.add("shutdown.sh");
+		    command.add("startup-using-launcher.sh");
+		    command.add("startup.sh");
+		    command.add("tool-wrapper-using-launcher.sh");
+		    command.add("tool-wrapper.sh");
+		    command.add("version.sh");
+
 			String[] commandArray = command.toArray(new String[command.size()]);
-			Process deployProcess = null;
+			Process chmodProcess = null;
 			try {
-				deployProcess = Runtime.getRuntime().exec(
+				chmodProcess = Runtime.getRuntime().exec(
 						commandArray,
 						null,
-						new File(getProperties().getContainerDirectory()
-								+ File.separator + "bin"));
-				new StreamGobbler(deployProcess.getInputStream(),
+						new File(getProperties().getContainerDirectory(), "bin"));
+				new StreamGobbler(chmodProcess.getInputStream(),
 						StreamGobbler.TYPE_OUT,System.out).start();
-				new StreamGobbler(deployProcess.getErrorStream(),
+				new StreamGobbler(chmodProcess.getErrorStream(),
 						StreamGobbler.TYPE_OUT,System.err).start();
-				deployProcess.waitFor();
+				chmodProcess.waitFor();
 			} catch (Exception ex) {
-				throw new ContainerException("Error invoking deploy process: "
+				throw new ContainerException("Error invoking chmod process: "
 						+ ex.getMessage(), ex);
 			}
 		}
-
 	}
+    
 
 	protected void deploy(File serviceDir, List<String> deployArgs)
 			throws ContainerException {
@@ -164,9 +164,9 @@ public class TomcatServiceContainer extends ServiceContainer {
 			throw new ContainerException("deployService ant command failed: "
 					+ deployProcess.exitValue());
 		}
-
 	}
 
+    
 	protected void shutdown() throws ContainerException {
 		if (catalinaProcess == null) {
 			// no tomcat, no problem
@@ -258,6 +258,7 @@ public class TomcatServiceContainer extends ServiceContainer {
 					+ finalShutdownProcess.exitValue());
 		}
 	}
+    
 
 	protected void startup() throws ContainerException {
 		try {
@@ -312,10 +313,6 @@ public class TomcatServiceContainer extends ServiceContainer {
 		try {
 			catalinaProcess = Runtime.getRuntime().exec(commandArray,
 					editedEnvironment, getProperties().getContainerDirectory());
-			// new StreamGobbler(catalinaProcess.getInputStream(),
-			// StreamGobbler.TYPE_OUT, LOG, Level.DEBUG).start();
-			// new StreamGobbler(catalinaProcess.getErrorStream(),
-			// StreamGobbler.TYPE_OUT, LOG, Level.ERROR).start();
 			new StreamGobbler(catalinaProcess.getInputStream(),
 					StreamGobbler.TYPE_OUT, System.out).start();
 			new StreamGobbler(catalinaProcess.getErrorStream(),
@@ -333,8 +330,12 @@ public class TomcatServiceContainer extends ServiceContainer {
 		if (getProperties().getMaxStartupWaitTime() != null) {
 			wait = getProperties().getMaxStartupWaitTime().intValue();
 		}
-		for (int i = 0; !running && i < wait; i++) {
-			LOG.debug("Connection attempt " + (i + 1));
+        long waitMs = wait * 1000;
+        long totalTime = 0;
+        int attempt = 1;
+        while (!running && totalTime < waitMs) {
+            long start = System.currentTimeMillis();
+			LOG.debug("Connection attempt " + (attempt));
 			try {
 				running = isGlobusRunningCounter();
 			} catch (Exception ex) {
@@ -342,6 +343,8 @@ public class TomcatServiceContainer extends ServiceContainer {
 				ex.printStackTrace();
 			}
 			sleep(5000);
+            attempt++;
+            totalTime += (System.currentTimeMillis() - start);
 		}
 		if (!running) {
 			if (testException != null) {
@@ -353,11 +356,13 @@ public class TomcatServiceContainer extends ServiceContainer {
 			}
 		}
 	}
+    
 
 	// ---------------
 	// Helpers
 	// ---------------
 
+    
 	private String[] editEnvironment(String[] edits) {
 		Map<String, String> envm = new HashMap<String, String>(System.getenv());
 		for (String element : edits) {
@@ -373,6 +378,7 @@ public class TomcatServiceContainer extends ServiceContainer {
 		}
 		return environment;
 	}
+    
 
 	private void sleep(long ms) {
 		try {
@@ -381,6 +387,7 @@ public class TomcatServiceContainer extends ServiceContainer {
 			ex.printStackTrace();
 		}
 	}
+    
 
 	/**
 	 * Checks that Globus is running by hitting the counter service
@@ -420,6 +427,7 @@ public class TomcatServiceContainer extends ServiceContainer {
 		return true;
 	}
 
+    
 	private static void setAnonymous(Stub stub) {
 		stub._setProperty(org.globus.wsrf.security.Constants.GSI_ANONYMOUS,
 				Boolean.TRUE);
@@ -428,6 +436,7 @@ public class TomcatServiceContainer extends ServiceContainer {
 		stub._setProperty(GSIConstants.GSI_AUTHORIZATION,
 				org.globus.gsi.gssapi.auth.NoAuthorization.getInstance());
 	}
+    
 
 	private void setServerPort() throws Exception {
         // get the server's listen port
@@ -516,6 +525,5 @@ public class TomcatServiceContainer extends ServiceContainer {
 				.elementToString(webappConfigRoot));
 		Utils.stringBufferToFile(new StringBuffer(webappxml), webappConfigFile
 				.getAbsolutePath());
-
 	}
 }
