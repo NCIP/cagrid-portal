@@ -232,7 +232,7 @@ class FederatedQueryProcessor {
         CQLQueryResults cqlResults = DataServiceQueryExecutor.queryDataService(cqlQuery, targetServiceURL, this.cred);
 
         // process the resulting values
-        List remoteAttributeValues = new ArrayList();
+        List<String> remoteAttributeValues = new ArrayList<String>();
         if (cqlResults != null && cqlResults.getAttributeResult() != null) {
             CQLAttributeResult[] attributeResult = cqlResults.getAttributeResult();
             for (int i = 0; i < attributeResult.length; i++) {

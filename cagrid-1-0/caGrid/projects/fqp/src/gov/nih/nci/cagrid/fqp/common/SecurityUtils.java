@@ -36,8 +36,8 @@ public class SecurityUtils {
 	 * @throws SecurityException
 	 * @throws SecurityDescriptorException
 	 */
-	public static ResourceSecurityDescriptor createResultsResourceSecurityDescriptor() throws 
-		SecurityException, SecurityDescriptorException {
+	public static ResourceSecurityDescriptor createResultsResourceSecurityDescriptor() 
+        throws SecurityDescriptorException {
 		ResourceSecurityDescriptor desc = null;
 
 		String peer = SecurityManager.getManager().getCaller();
@@ -54,12 +54,12 @@ public class SecurityUtils {
 			desc.setAuthz(Authorization.AUTHZ_GRIDMAP);
 
 			// add in any secure authentication method
-			List authMethods = new ArrayList();
+			List<Object> authMethods = new ArrayList<Object>();
 			authMethods.add(GSISecureMsgAuthMethod.BOTH);
 			authMethods.add(GSITransportAuthMethod.BOTH);
 			authMethods.add(GSISecureConvAuthMethod.BOTH);
 
-			List openAuthMethods = new ArrayList();
+			List<Object> openAuthMethods = new ArrayList<Object>();
 			openAuthMethods.add(NoneAuthMethod.getInstance());
 			desc.setMethodAuthMethods(new QName(FederatedQueryResultsConstants.SERVICE_NS, "getServiceSecurityMetadata"),
 				openAuthMethods);
