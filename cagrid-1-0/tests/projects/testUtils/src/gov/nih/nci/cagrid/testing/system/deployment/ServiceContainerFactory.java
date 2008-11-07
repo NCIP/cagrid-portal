@@ -12,7 +12,7 @@ import java.io.IOException;
  * @author David Ervin
  * 
  * @created Oct 16, 2007 12:09:02 PM
- * @version $Id: ServiceContainerFactory.java,v 1.2 2008-05-19 14:09:37 hastings Exp $ 
+ * @version $Id: ServiceContainerFactory.java,v 1.3 2008-11-07 19:02:47 dervin Exp $ 
  */
 public class ServiceContainerFactory {
 
@@ -66,14 +66,12 @@ public class ServiceContainerFactory {
                 container = new TomcatSecureServiceContainer(props);
                 break;
             case JBOSS_CONTAINER:
-                
-                break;
+                throw new UnsupportedOperationException(ServiceContainerType.JBOSS_CONTAINER + " is not yet supported");
             default:
                 throw new AssertionError("Service container type: " + type + " is not valid");
         }
         return container;
     }
-
     
     
     private static File getTempDirectory(ServiceContainerType type) throws IOException {
@@ -88,4 +86,35 @@ public class ServiceContainerFactory {
         return tempContainerDir;
     }
     
+    
+    public static void main(String[] args) {
+        ServiceContainerType type = ServiceContainerType.valueOf(args[0]);
+        File containerOutDir = new File(args[1]);
+        File containerZip = new File(type.getZip());
+        try {
+            ContainerPorts ports = PortFactory.getContainerPorts();
+            ContainerProperties props = new ContainerProperties(containerOutDir, containerZip, ports, false, null, null, null);
+            ServiceContainer container = null;
+            switch (type) {
+                case GLOBUS_CONTAINER:
+                    container = new GlobusServiceContainer(props);
+                    break;
+                case TOMCAT_CONTAINER:
+                    container = new TomcatServiceContainer(props);
+                    break;
+                case SECURE_TOMCAT_CONTAINER:
+                    props.setSecure(true);
+                    container = new TomcatSecureServiceContainer(props);
+                    break;
+                case JBOSS_CONTAINER:
+                    throw new UnsupportedOperationException(ServiceContainerType.JBOSS_CONTAINER + " is not yet supported");
+                default:
+                    throw new AssertionError("Service container type: " + type + " is not valid");
+            }
+            container.unpackContainer();
+        } catch (Exception ex) {
+            System.err.println("Error setting up container: " + ex.getMessage());
+            ex.printStackTrace();
+        }
+    }
 }
