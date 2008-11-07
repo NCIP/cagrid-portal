@@ -3,7 +3,6 @@ package gov.nih.nci.cagrid.fqp.results.service;
 import gov.nih.nci.cagrid.common.FaultHelper;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.cqlresultset.CQLQueryResults;
-import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.dcqlresult.DCQLQueryResultsCollection;
 import gov.nih.nci.cagrid.enumeration.stubs.response.EnumerationResponseContainer;
 import gov.nih.nci.cagrid.fqp.common.DCQLConstants;
@@ -22,9 +21,7 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.rmi.RemoteException;
 
-import javax.xml.namespace.QName;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.soap.SOAPElement;
 
 import org.apache.axis.message.MessageElement;
 import org.cagrid.fqp.results.metadata.FederatedQueryExecutionStatus;
@@ -35,7 +32,6 @@ import org.globus.wsrf.ResourceContext;
 import org.globus.wsrf.ResourceContextException;
 import org.globus.wsrf.ResourceException;
 import org.globus.wsrf.encoding.SerializationException;
-import org.globus.wsrf.utils.AnyHelper;
 import org.globus.wsrf.utils.XmlUtils;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;

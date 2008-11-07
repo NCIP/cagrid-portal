@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.fqp.service;
 
 import gov.nih.nci.cagrid.common.FaultHelper;
+import gov.nih.nci.cagrid.common.security.ProxyUtil;
 import gov.nih.nci.cagrid.dcql.DCQLQuery;
 import gov.nih.nci.cagrid.fqp.common.FQPConstants;
 import gov.nih.nci.cagrid.fqp.common.SecurityUtils;
@@ -18,7 +19,9 @@ import org.apache.axis.message.addressing.EndpointReferenceType;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.cagrid.fqp.execution.QueryExecutionParameters;
+import org.cagrid.gaards.cds.client.DelegatedCredentialUserClient;
 import org.cagrid.gaards.cds.delegated.stubs.types.DelegatedCredentialReference;
+import org.globus.gsi.GlobusCredential;
 import org.globus.wsrf.ResourceKey;
 import org.globus.wsrf.security.SecurityManager;
 import org.globus.wsrf.utils.AddressingUtils;
@@ -52,7 +55,7 @@ public class FQPAsynchronousExecutionUtil {
     }
 
 
-    public FederatedQueryResultsReference executeAsynchronousQuery(
+    public synchronized FederatedQueryResultsReference executeAsynchronousQuery(
         DCQLQuery query, DelegatedCredentialReference delegatedCredential, QueryExecutionParameters executionParameters) 
         throws InternalErrorFault, FederatedQueryProcessingException {
         // use the resource home to create an FQP result resource
@@ -97,7 +100,10 @@ public class FQPAsynchronousExecutionUtil {
         fqpResultResource.setQuery(query);
         
         // set the credential (if any)
-        fqpResultResource.setDelegatedCredentialReference(delegatedCredential);
+        if (delegatedCredential != null) {
+            GlobusCredential clientCredential = validateAndRetrieveDelegatedCredential(delegatedCredential);
+            fqpResultResource.setDelegatedCredential(clientCredential);
+        }
         
         // set the query execution parameters
         fqpResultResource.setQueryExecutionParameters(executionParameters);
@@ -111,6 +117,66 @@ public class FQPAsynchronousExecutionUtil {
         // return handle to resource
         FederatedQueryResultsReference resultsReference = createEPR(key);
         return resultsReference;
+    }
+    
+    
+    private synchronized GlobusCredential validateAndRetrieveDelegatedCredential(DelegatedCredentialReference reference) throws InternalErrorFault {
+        // get the caller's ID
+        String callerID = getCallerIdentity();
+        if (callerID == null) {
+            // no null IDs with delegated credentials!
+            FaultHelper helper = new FaultHelper(new InternalErrorFault());
+            helper.setDescription("Caller Identity found to be null while using a delegated credential!");
+            throw (InternalErrorFault) helper.getFault();
+        }
+        GlobusCredential clientCredential = getDelegatedCredential(reference);
+        // validate the caller's ID is the same as the credential they've delegated
+        boolean valid = clientCredential.getIdentity().equals(callerID);
+        if (!valid) {
+            FaultHelper helper = new FaultHelper(new InternalErrorFault());
+            helper.addDescription("Caller's identity and delegated credential identity did not match");
+        }
+        return clientCredential;
+    }
+    
+    
+    private GlobusCredential getDelegatedCredential(DelegatedCredentialReference reference) throws InternalErrorFault {
+        GlobusCredential userCredential = null;
+        LOG.info("Retrieving delegated credential");
+        GlobusCredential serviceCredential = null;
+        try {
+            serviceCredential = ProxyUtil.getDefaultProxy();
+        } catch (Exception ex) {
+            // wish this were more specific...
+            FaultHelper helper = new FaultHelper(new InternalErrorFault());
+            helper.addDescription("Error obtaining default service credential");
+            helper.addDescription(ex.getMessage());
+            helper.addFaultCause(ex);
+            throw (InternalErrorFault) helper.getFault();
+        }
+        try {
+            DelegatedCredentialUserClient credentialClient = 
+                new DelegatedCredentialUserClient(reference, serviceCredential);
+            userCredential = credentialClient.getDelegatedCredential();
+        } catch (Exception ex) {
+            // this too...
+            FaultHelper helper = new FaultHelper(new InternalErrorFault());
+            helper.addDescription("Error obtaining delegated credential from CDS");
+            helper.addDescription(ex.getMessage());
+            helper.addFaultCause(ex);
+            throw (InternalErrorFault) helper.getFault();
+        }
+        return userCredential;
+    }
+    
+    
+    public synchronized static String getCallerIdentity() {
+        String caller = org.globus.wsrf.security.SecurityManager.getManager().getCaller();
+        if ((caller == null) || (caller.equals("<anonymous>"))) {
+            return null;
+        } else {
+            return caller;
+        }
     }
     
 
