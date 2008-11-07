@@ -12,7 +12,7 @@ import java.io.IOException;
  * @author David Ervin
  * 
  * @created Oct 16, 2007 12:09:02 PM
- * @version $Id: ServiceContainerFactory.java,v 1.3 2008-11-07 19:02:47 dervin Exp $ 
+ * @version $Id: ServiceContainerFactory.java,v 1.4 2008-11-07 19:13:02 dervin Exp $ 
  */
 public class ServiceContainerFactory {
 
@@ -112,6 +112,7 @@ public class ServiceContainerFactory {
                     throw new AssertionError("Service container type: " + type + " is not valid");
             }
             container.unpackContainer();
+            System.out.println("Container listens on port " + ports.getPort() + "\t\tShutdown on port " + ports.getShutdownPort());
         } catch (Exception ex) {
             System.err.println("Error setting up container: " + ex.getMessage());
             ex.printStackTrace();
