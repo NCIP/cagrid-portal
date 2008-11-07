@@ -14,7 +14,7 @@ import java.util.List;
  * 
  * @author David Ervin
  * @created Nov 5, 2007 10:13:07 AM
- * @version $Id: PortFactory.java,v 1.3 2008-05-21 17:43:35 dervin Exp $
+ * @version $Id: PortFactory.java,v 1.4 2008-11-07 17:59:14 dervin Exp $
  */
 public class PortFactory {
     private static List<Integer> assignedPortNumbers = null;
@@ -82,7 +82,7 @@ public class PortFactory {
     }
 
 
-    private static Integer getPort() {
+    private static Integer getPort() throws NoAvailablePortException {
         int range = TestingConstants.TEST_PORT_UPPER_BOUND.intValue()
             - TestingConstants.TEST_PORT_LOWER_BOUND.intValue();
         boolean used = true;
@@ -93,6 +93,10 @@ public class PortFactory {
             testPort = Integer.valueOf(TestingConstants.TEST_PORT_LOWER_BOUND.intValue() + offset);
             used = assignedPortNumbers.contains(testPort) && isPortAvailable(testPort.intValue());
             count++;
+        }
+        if (used) {
+            throw new NoAvailablePortException("Could not obtain a network port in the range [" 
+                + TestingConstants.TEST_PORT_LOWER_BOUND + ", " + TestingConstants.TEST_PORT_UPPER_BOUND + ")");
         }
         return testPort;
     }

@@ -18,7 +18,7 @@ import org.apache.axis.types.URI.MalformedURIException;
  * 
  * @author David Ervin
  * @created Oct 12, 2007 9:37:44 AM
- * @version $Id: ServiceContainer.java,v 1.2 2008-10-15 15:53:56 oster Exp $
+ * @version $Id: ServiceContainer.java,v 1.3 2008-11-07 17:59:14 dervin Exp $
  */
 public abstract class ServiceContainer {
 
@@ -105,16 +105,12 @@ public abstract class ServiceContainer {
 
     public synchronized URI getContainerBaseURI() throws MalformedURIException {
         String url = "";
-        try {
-            if (getProperties().isSecure()) {
-                url += "https://";
-            } else {
-                url += "http://";
-            }
-            url += "localhost:" + getProperties().getPortPreference().getPort() + "/wsrf/services/";
-        } catch (NoAvailablePortException e) {
-            throw new MalformedURIException("Problem getting port:" + e.getMessage());
+        if (getProperties().isSecure()) {
+            url += "https://";
+        } else {
+            url += "http://";
         }
+        url += "localhost:" + getProperties().getPortPreference().getPort() + "/wsrf/services/";
         return new URI(url);
     }
 

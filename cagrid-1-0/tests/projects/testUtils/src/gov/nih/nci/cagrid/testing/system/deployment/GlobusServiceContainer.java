@@ -205,12 +205,7 @@ public class GlobusServiceContainer extends ServiceContainer {
     protected synchronized void startup() throws ContainerException {
         // set globus options
         ArrayList<String> opts = new ArrayList<String>();
-        Integer port = null;
-        try {
-            port = getProperties().getPortPreference().getPort();
-        } catch (NoAvailablePortException ex) {
-            throw new ContainerException("Unable to obtain TCP port: " + ex.getMessage(), ex);
-        }
+        Integer port = getProperties().getPortPreference().getPort();
         if (port != null) {
             opts.add("-p");
             opts.add(String.valueOf(port));

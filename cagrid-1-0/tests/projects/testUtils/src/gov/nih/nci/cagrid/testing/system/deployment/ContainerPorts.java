@@ -4,7 +4,7 @@ import java.net.ServerSocket;
 
 
 /**
- * PortPreference
+ * ContainerPorts
  * 
  * @author oster
  * @author ervin
@@ -25,23 +25,29 @@ public class ContainerPorts {
 
 
     /**
-     * If specificPort is specified, that is returned. Otherwise, will search
-     * the port range (inclusive) and find a port that can be bound to, which is
-     * not listed in the portExcludes.
+     * Gets the port number the container listens for connections on
      * 
      * @return The port number
-     * @throws NoAvailablePortException
      */
-    public Integer getPort() throws NoAvailablePortException {
+    public Integer getPort() {
         return port;
     }
 
 
-    public Integer getShutdownPort() throws NoAvailablePortException {
+    /**
+     * Gets the port number the container listens for shutdown requests on 
+     * 
+     * @return
+     */
+    public Integer getShutdownPort() {
         return shutdownPort;
     }
 
 
+    /**
+     * Determines if the port is available or not
+     * @return
+     */
     public boolean isPortAvailable() {
         boolean available = false;
         ServerSocket sock = null;
