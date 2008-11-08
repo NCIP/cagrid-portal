@@ -361,9 +361,16 @@ public final class CommonTools {
         namespaceType.setPackageName(packageName);
 
         namespaceType.setNamespace(rawNamespace);
-
+        
+        processSchema(namespaceType, schemaDoc, new File(xsdFilename).getParentFile());
+        
+        return namespaceType;
+    }
+    
+    private static void processSchema(NamespaceType namespaceType, Document schemaDoc, File dir) throws Exception {
         List elementTypes = schemaDoc.getRootElement()
-            .getChildren("element", schemaDoc.getRootElement().getNamespace());
+        .getChildren("element", schemaDoc.getRootElement().getNamespace());
+
         SchemaElementType[] schemaTypes = new SchemaElementType[elementTypes.size()];
         for (int i = 0; i < elementTypes.size(); i++) {
             Element element = (Element) elementTypes.get(i);
@@ -374,8 +381,29 @@ public final class CommonTools {
             type.setType(element.getAttributeValue("name"));
             schemaTypes[i] = type;
         }
-        namespaceType.setSchemaElement(schemaTypes);
-        return namespaceType;
+        
+        if(namespaceType.getSchemaElement()!=null){
+            SchemaElementType[] newSchemaTypes = new SchemaElementType[schemaTypes.length + namespaceType.getSchemaElement().length];
+            System.arraycopy(namespaceType.getSchemaElement(), 0, newSchemaTypes, 0, namespaceType.getSchemaElement().length);
+            System.arraycopy(schemaTypes, 0, newSchemaTypes, namespaceType.getSchemaElement().length, schemaTypes.length);
+            namespaceType.setSchemaElement(newSchemaTypes);
+        } else {
+            namespaceType.setSchemaElement(schemaTypes);
+        }
+        
+        List includeTypes = schemaDoc.getRootElement()
+        .getChildren("include", schemaDoc.getRootElement().getNamespace());
+        for(int i = 0; i < includeTypes.size(); i++){
+            Element element = (Element) includeTypes.get(i);
+            File xsdFile = new File(dir.getAbsolutePath() + File.separator + element.getAttributeValue("schemaLocation"));
+            Document includeSchemaDoc = XMLUtilities.fileNameToDocument(xsdFile.getAbsolutePath());
+            String rawNamespace = schemaDoc.getRootElement().getAttributeValue("targetNamespace");
+            
+            processSchema(namespaceType, includeSchemaDoc, xsdFile.getParentFile());
+            
+        }
+        
+       
     }
 
 
