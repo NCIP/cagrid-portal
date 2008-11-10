@@ -12,39 +12,37 @@ import java.util.List;
 import org.cagrid.gme.common.exceptions.SchemaParsingException;
 import org.jdom.Document;
 import org.jdom.Element;
-import org.jdom.Namespace;
 
 
 public class FilesystemProcessor {
-
-    protected static final Namespace XSD_NAMESPACE = Namespace.getNamespace("xsd", "http://www.w3.org/XMLSchema/2001");
     protected static final String XSD_NAMESPACE_ATTRIBUTE_NAME = "namespace";
     protected static final String XSD_TARGET_NAMESPACE_ATTRIBUTE_NAME = "targetNamespace";
 
     protected static final String XSD_SCHEMALOCATION_ATTRIBUTE_NAME = "schemaLocation";
 
-    protected static final String XSD_REDEFINE_ATTRIBUTE_NAME = "redefine";
-    protected static final String XSD_INCLUDE_ATTRIBUTE_NAME = "include";
-    protected static final String XSD_IMPORT_ATTRIBUTE_NAME = "include";
+    protected static final String XSD_REDEFINE_ELEMENT_NAME = "redefine";
+    protected static final String XSD_INCLUDE_ELEMENT_NAME = "include";
+    protected static final String XSD_IMPORT_ELEMENT_NAME = "import";
 
 
     protected List<Element> getImportElements(Document doc) {
-        List<Element> imports = doc.getRootElement().getChildren(FilesystemProcessor.XSD_IMPORT_ATTRIBUTE_NAME,
-            FilesystemProcessor.XSD_NAMESPACE);
+        List<Element> imports = doc.getRootElement().getChildren(FilesystemProcessor.XSD_IMPORT_ELEMENT_NAME,
+            doc.getRootElement().getNamespace());
         return imports;
     }
 
 
     protected List<Element> getIncludeElements(Document doc) {
-        List<Element> includes = doc.getRootElement().getChildren(FilesystemProcessor.XSD_INCLUDE_ATTRIBUTE_NAME,
-            FilesystemProcessor.XSD_NAMESPACE);
+        doc.getRootElement().getChildren();
+        List<Element> includes = doc.getRootElement().getChildren(FilesystemProcessor.XSD_INCLUDE_ELEMENT_NAME,
+            doc.getRootElement().getNamespace());
         return includes;
     }
 
 
     protected List<Element> getRedefineElements(Document doc) {
-        List<Element> redefines = doc.getRootElement().getChildren(FilesystemProcessor.XSD_REDEFINE_ATTRIBUTE_NAME,
-            FilesystemProcessor.XSD_NAMESPACE);
+        List<Element> redefines = doc.getRootElement().getChildren(FilesystemProcessor.XSD_REDEFINE_ELEMENT_NAME,
+            doc.getRootElement().getNamespace());
         return redefines;
     }
 

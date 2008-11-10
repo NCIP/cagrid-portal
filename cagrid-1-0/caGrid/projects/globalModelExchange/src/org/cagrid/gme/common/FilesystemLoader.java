@@ -70,21 +70,8 @@ public class FilesystemLoader extends FilesystemProcessor {
             List<File> docs = new ArrayList<File>();
             docs.add(f);
 
-            // add any included documents
-            List<Element> includeElements = this.getIncludeElements(schemaDoc);
-            for (Element includeElement : includeElements) {
-                String loc = includeElement.getAttributeValue(FilesystemProcessor.XSD_SCHEMALOCATION_ATTRIBUTE_NAME);
-                File includedFile = new File(loc);
-                docs.add(includedFile);
-            }
-
-            // add any redefined documents
-            List<Element> redefineElements = this.getRedefineElements(schemaDoc);
-            for (Element redefineElement : redefineElements) {
-                String loc = redefineElement.getAttributeValue(FilesystemProcessor.XSD_SCHEMALOCATION_ATTRIBUTE_NAME);
-                File redefinedFile = new File(loc);
-                docs.add(redefinedFile);
-            }
+            // this need to recursively process (A includes B includes C)
+            processAdditionalDocuments(f.getParentFile(), schemaDoc, docs);
 
             XMLSchema createdSchema = XSDUtil.createSchema(targetNamespace, docs);
             schemas.add(createdSchema);
@@ -95,12 +82,45 @@ public class FilesystemLoader extends FilesystemProcessor {
     }
 
 
+    // recursively look for new files through includes and redefines
+    private void processAdditionalDocuments(File directory, Document schemaDoc, List<File> docs)
+        throws SchemaParsingException {
+        List<Element> includeElements = this.getIncludeElements(schemaDoc);
+        for (Element includeElement : includeElements) {
+            String loc = includeElement.getAttributeValue(FilesystemProcessor.XSD_SCHEMALOCATION_ATTRIBUTE_NAME);
+            File includedFile = new File(loc);
+            if (!includedFile.isAbsolute()) {
+                includedFile = new File(directory, loc);
+            }
+            if (!docs.contains(includedFile)) {
+                processAdditionalDocuments(includedFile.getParentFile(), this.createDocumentFromFile(includedFile),
+                    docs);
+            }
+            docs.add(includedFile);
+        }
+
+        // add any redefined documents
+        List<Element> redefineElements = this.getRedefineElements(schemaDoc);
+        for (Element redefineElement : redefineElements) {
+            String loc = redefineElement.getAttributeValue(FilesystemProcessor.XSD_SCHEMALOCATION_ATTRIBUTE_NAME);
+            File redefinedFile = new File(loc);
+            if (!redefinedFile.isAbsolute()) {
+                redefinedFile = new File(directory, loc);
+            }
+            if (!docs.contains(redefinedFile)) {
+                processAdditionalDocuments(redefinedFile.getParentFile(), this.createDocumentFromFile(redefinedFile),
+                    docs);
+            }
+            docs.add(redefinedFile);
+        }
+    }
+
+
     public static void main(String[] args) throws FileNotFoundException, IOException {
         File dir = new File(args[0]);
         File[] listFiles = dir.listFiles(new FilenameFilter() {
-
             public boolean accept(File dir, String name) {
-                return name.endsWith(".xsd");
+                return name.endsWith("Includer.xsd");
             }
         });
         List<File> files = new ArrayList<File>(listFiles.length);
