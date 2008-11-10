@@ -24,7 +24,7 @@ import org.cagrid.fqp.test.remote.steps.ChangeJndiSweeperDelayStep;
  * @author David Ervin
  * 
  * @created Jul 15, 2008 12:46:02 PM
- * @version $Id: FQPServiceDeploymentStory.java,v 1.5 2008-10-21 20:04:04 dervin Exp $ 
+ * @version $Id: FQPServiceDeploymentStory.java,v 1.6 2008-11-10 21:00:13 dervin Exp $ 
  */
 public class FQPServiceDeploymentStory extends Story implements ServiceContainerSource {
     
@@ -78,7 +78,7 @@ public class FQPServiceDeploymentStory extends Story implements ServiceContainer
 
     protected Vector steps() {
         Vector<Step> steps = new Vector<Step>();
-        File tempFqpServiceDir = new File("tmp/TempFQP");
+        File tempFqpServiceDir = new File("tmp/Temp" + (secureDeployment ? "Secure" : "") + "FQP");
         steps.add(new UnpackContainerStep(fqpServiceContainer));
         steps.add(new CopyServiceStep(fqpServiceDirectory, tempFqpServiceDir));
         steps.add(new ChangeJndiSweeperDelayStep(tempFqpServiceDir, 2000));

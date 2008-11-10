@@ -9,6 +9,7 @@ import junit.framework.Assert;
 import org.cagrid.fqp.test.common.DataServiceDeploymentStory;
 import org.cagrid.fqp.test.common.FederatedQueryProcessorHelper;
 import org.cagrid.fqp.test.common.QueryStory;
+import org.cagrid.fqp.test.remote.FQPServiceDeploymentStory;
 import org.cagrid.fqp.test.remote.TransferServiceDeploymentStory;
 
 /**
@@ -24,7 +25,7 @@ public class SecureRemoteFqpSystemTests extends StoryBook {
     public static final String TRANSFER_SERVICE_DIR_PROPERTY = "transfer.service.dir";
     
     private DataServiceDeploymentStory[] dataServiceDeployments;
-    private SecureFQPServiceDeploymentStory fqpDeployment;
+    private FQPServiceDeploymentStory fqpDeployment;
     
     public SecureRemoteFqpSystemTests() {
         super();
@@ -48,7 +49,7 @@ public class SecureRemoteFqpSystemTests extends StoryBook {
         addStory(exampleService2Deployment);
         
         // deploy the secure FQP service
-        fqpDeployment = new SecureFQPServiceDeploymentStory(getFqpDir(), dataServiceDeployments);
+        fqpDeployment = new FQPServiceDeploymentStory(getFqpDir(), true);
         addStory(fqpDeployment);
         FederatedQueryProcessorHelper queryHelper = 
             new FederatedQueryProcessorHelper(fqpDeployment);
