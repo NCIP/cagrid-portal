@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.introduce.portal.modification.discovery.gme;
+package org.cagrid.gme.discoverytools;
 
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.common.XMLUtilities;
@@ -21,9 +21,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.cagrid.gme.client.GlobalModelExchangeClient;
-import org.cagrid.gme.discoverytools.GMESchemaLocatorPanel;
 import org.cagrid.gme.domain.XMLSchemaNamespace;
 import org.jdom.Document;
 import org.jdom.Element;
@@ -33,7 +33,7 @@ import org.jdom.Namespace;
 @SuppressWarnings("serial")
 public class GMETypeSelectionComponent extends NamespaceTypeDiscoveryComponent {
 
-    private static final Logger logger = Logger.getLogger(GMETypeSelectionComponent.class);
+    private static final Log logger = LogFactory.getLog(GMETypeSelectionComponent.class);
 
     public static String GME_URL = "GME_URL";
     public static String TYPE = "GME";
@@ -72,7 +72,7 @@ public class GMETypeSelectionComponent extends NamespaceTypeDiscoveryComponent {
      */
     private GMESchemaLocatorPanel getGmePanel() {
         if (this.gmePanel == null) {
-            this.gmePanel = new GMESchemaLocatorPanel(false);
+            this.gmePanel = new GMESchemaLocatorPanel();
         }
         return this.gmePanel;
     }

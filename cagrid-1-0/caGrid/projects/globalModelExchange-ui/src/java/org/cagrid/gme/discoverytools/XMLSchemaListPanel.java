@@ -5,7 +5,6 @@ import gov.nih.nci.cagrid.introduce.common.FileFilters;
 import gov.nih.nci.cagrid.introduce.common.ResourceManager;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -20,10 +19,12 @@ import java.util.Map;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -32,6 +33,7 @@ import javax.swing.event.ListSelectionListener;
 
 import org.cagrid.gme.common.FilesystemLoader;
 import org.cagrid.gme.domain.XMLSchema;
+import org.cagrid.gme.domain.XMLSchemaDocument;
 import org.cagrid.grape.utils.CompositeErrorDialog;
 
 import com.jgoodies.validation.Severity;
@@ -40,16 +42,19 @@ import com.jgoodies.validation.ValidationResultModel;
 import com.jgoodies.validation.message.SimpleValidationMessage;
 import com.jgoodies.validation.util.DefaultValidationResultModel;
 import com.jgoodies.validation.view.ValidationComponentUtils;
+import com.jgoodies.validation.view.ValidationResultViewFactory;
 
 
 public class XMLSchemaListPanel extends JPanel implements ListSelectionListener {
+    private static final String NO_SCHEMAS_ERROR_MESSAGE = "Must add at least one xml schema.";
+
     private static final String XSD_LIST = "xsd-list";
 
     private final ValidationResultModel validationModel = new DefaultValidationResultModel();
 
     private ValidationResult validationResult = null; // @jve:decl-index=0:
 
-    private List<XMLSchema> xmlSchemas = new ArrayList<XMLSchema>();
+    private List<XMLSchema> xmlSchemas = new ArrayList<XMLSchema>(); //@jve:decl
     private JPanel mainPanel = null;
 
     private JPanel xsdListPanel = null;
@@ -66,12 +71,41 @@ public class XMLSchemaListPanel extends JPanel implements ListSelectionListener 
 
     private JTextField xsdErrorLabel = null;
 
-	private JScrollPane xsdScrollPane = null;
+    private JScrollPane xsdScrollPane = null;
+
+    private JScrollPane documentsScrollPane = null;
+
+    private JList docsList = null;
+
+    private DefaultListModel docsmodel = null;
+
+    private final List<ValidationStatusChangeListener> validationListeners = new ArrayList<ValidationStatusChangeListener>();
+    private final List<XMLSchemaDocumentSelectionListener> documentListeners = new ArrayList<XMLSchemaDocumentSelectionListener>();
+
+
+    public boolean addValidationStatusChangeListener(ValidationStatusChangeListener o) {
+        return this.validationListeners.add(o);
+    }
+
+
+    public boolean removeValidationStatusChangeListener(ValidationStatusChangeListener o) {
+        return this.validationListeners.remove(o);
+    }
+
+
+    public boolean addXMLSchemaDocumentSelectionListener(XMLSchemaDocumentSelectionListener o) {
+        return this.documentListeners.add(o);
+    }
+
+
+    public boolean removeXMLSchemaDocumentSelectionListener(XMLSchemaDocumentSelectionListener o) {
+        return this.documentListeners.remove(o);
+    }
 
 
     public XMLSchemaListPanel() {
         super();
-        this.xsdErrorLabel = new JTextField("Must have at least one xml schema.");
+        this.xsdErrorLabel = new JTextField(NO_SCHEMAS_ERROR_MESSAGE);
         initialize();
     }
 
@@ -81,7 +115,7 @@ public class XMLSchemaListPanel extends JPanel implements ListSelectionListener 
      */
     private void initialize() {
 
-        this.setLayout(new GridLayout(1,1));
+        this.setLayout(new GridLayout(1, 1));
         this.add(IconFeedbackPanel.getWrappedComponentTree(this.validationModel, getMainPanel()));
 
         this.initValidation();
@@ -120,8 +154,7 @@ public class XMLSchemaListPanel extends JPanel implements ListSelectionListener 
         this.validationResult = new ValidationResult();
 
         if (this.getXMLSchemas() == null || this.getXMLSchemas().isEmpty()) {
-            this.validationResult.add(new SimpleValidationMessage("Must have at least one schema.", Severity.ERROR,
-                XSD_LIST));
+            this.validationResult.add(new SimpleValidationMessage(NO_SCHEMAS_ERROR_MESSAGE, Severity.ERROR, XSD_LIST));
             getXMLSchemaList().setBackground(ValidationComponentUtils.getErrorBackground());
         } else {
             getXMLSchemaList().setBackground(Color.WHITE);
@@ -160,8 +193,11 @@ public class XMLSchemaListPanel extends JPanel implements ListSelectionListener 
         }
 
         this.validationModel.setResult(this.validationResult);
-
         updateComponentTreeSeverity();
+        // tell our listeners
+        for (ValidationStatusChangeListener listner : this.validationListeners) {
+            listner.validationStatusChanged(this.validationResult);
+        }
     }
 
 
@@ -188,14 +224,23 @@ public class XMLSchemaListPanel extends JPanel implements ListSelectionListener 
             gridBagConstraints1.weightx = 1.0;
             gridBagConstraints1.weighty = 1.0;
             gridBagConstraints1.fill = java.awt.GridBagConstraints.BOTH;
-            gridBagConstraints1.gridy = 1;
+            gridBagConstraints1.gridy = 2;
             GridBagConstraints gridBagConstraints = new GridBagConstraints();
-            gridBagConstraints.gridy = 0;
+            gridBagConstraints.gridy = 1;
             gridBagConstraints.weightx = 1.0;
             gridBagConstraints.weighty = 1.0;
             gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
             gridBagConstraints.gridx = 0;
+
+            GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
+            gridBagConstraints2.gridy = 0;
+            gridBagConstraints2.weightx = 1.0;
+            gridBagConstraints2.weighty = 1.0;
+            gridBagConstraints2.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints2.gridx = 0;
+
             this.mainPanel = new JPanel(new GridBagLayout());
+            this.mainPanel.add(getValidationResultList(), gridBagConstraints2);
             this.mainPanel.add(getXSDListPanel(), gridBagConstraints);
             this.mainPanel.add(getDetailPanel(), gridBagConstraints1);
         }
@@ -215,19 +260,21 @@ public class XMLSchemaListPanel extends JPanel implements ListSelectionListener 
 
 
     protected void updateView() {
-        int index = getXMLSchemaList().getSelectedIndex();
-        DefaultListModel model = new DefaultListModel();
+        DefaultListModel xsdModel = new DefaultListModel();
+        int xsdIndex = getXMLSchemaList().getSelectedIndex();
 
         if (this.xmlSchemas != null && !this.xmlSchemas.isEmpty()) {
             for (XMLSchema xsd : this.xmlSchemas) {
-                model.addElement(new XMLSchemaDisplay(xsd));
+                xsdModel.addElement(new XMLSchemaDisplay(xsd));
             }
+
         } else {
-            model.addElement("At least one schema is required!");
+            xsdModel.addElement("At least one schema is required!");
         }
 
-        getXMLSchemaList().setModel(model);
-        getXMLSchemaList().setSelectedIndex(index);
+        getXMLSchemaList().setModel(xsdModel);
+        getXMLSchemaList().setSelectedIndex(xsdIndex);
+
         updateXMLSchemaView();
 
     }
@@ -260,13 +307,15 @@ public class XMLSchemaListPanel extends JPanel implements ListSelectionListener 
             gridBagConstraints2.weightx = 1.0D;
             gridBagConstraints2.insets = new Insets(2, 2, 2, 2);
             gridBagConstraints2.weighty = 1.0D;
+
             this.xsdListPanel = new JPanel();
             this.xsdListPanel.setLayout(new GridBagLayout());
-            this.xsdListPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Schemas to Publish",
+            this.xsdListPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "XML Schemas",
                 javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
                 javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
             this.xsdListPanel.add(getControlPanel(), gridBagConstraints3);
-            xsdListPanel.add(getXsdScrollPane(), gridBagConstraints6);
+            this.xsdListPanel.add(getXsdScrollPane(), gridBagConstraints6);
+
         }
         return this.xsdListPanel;
     }
@@ -280,11 +329,16 @@ public class XMLSchemaListPanel extends JPanel implements ListSelectionListener 
     private JPanel getDetailPanel() {
         if (this.detailPanel == null) {
 
+            GridBagConstraints gridBagConstraints7 = new GridBagConstraints();
+            gridBagConstraints7.fill = GridBagConstraints.BOTH;
+            gridBagConstraints7.weighty = 1.0;
+            gridBagConstraints7.weightx = 1.0;
             this.detailPanel = new JPanel();
             this.detailPanel.setLayout(new GridBagLayout());
             this.detailPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null,
                 "Documents comprising selected Schema", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
                 javax.swing.border.TitledBorder.DEFAULT_POSITION, null, null));
+            this.detailPanel.add(getDocumentsScrollPane(), gridBagConstraints7);
         }
         return this.detailPanel;
     }
@@ -315,22 +369,28 @@ public class XMLSchemaListPanel extends JPanel implements ListSelectionListener 
      */
     private JPanel getControlPanel() {
         if (this.controlPanel == null) {
-            GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
-            gridBagConstraints5.insets = new java.awt.Insets(5, 5, 5, 5);
-            gridBagConstraints5.gridy = 1;
-            gridBagConstraints5.fill = java.awt.GridBagConstraints.HORIZONTAL;
-            gridBagConstraints5.gridx = 0;
+
             GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
             gridBagConstraints4.insets = new java.awt.Insets(5, 5, 5, 5);
             gridBagConstraints4.gridy = 0;
             gridBagConstraints4.fill = java.awt.GridBagConstraints.HORIZONTAL;
             gridBagConstraints4.gridx = 0;
+            GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
+            gridBagConstraints5.insets = new java.awt.Insets(5, 5, 5, 5);
+            gridBagConstraints5.gridy = 1;
+            gridBagConstraints5.fill = java.awt.GridBagConstraints.HORIZONTAL;
+            gridBagConstraints5.gridx = 0;
             this.controlPanel = new JPanel();
             this.controlPanel.setLayout(new GridBagLayout());
             this.controlPanel.add(getAddButton(), gridBagConstraints4);
             this.controlPanel.add(getRemoveButton(), gridBagConstraints5);
         }
         return this.controlPanel;
+    }
+
+
+    private JComponent getValidationResultList() {
+        return ValidationResultViewFactory.createReportList(this.validationModel);
     }
 
 
@@ -376,6 +436,7 @@ public class XMLSchemaListPanel extends JPanel implements ListSelectionListener 
         this.xmlSchemas.addAll(xsds);
         updateView();
         this.getXMLSchemaList().setSelectedIndex(getXMLSchemaList().getModel().getSize() - 1);
+
     }
 
 
@@ -383,6 +444,7 @@ public class XMLSchemaListPanel extends JPanel implements ListSelectionListener 
         this.xmlSchemas.add(xsd);
         updateView();
         this.getXMLSchemaList().setSelectedIndex(getXMLSchemaList().getModel().getSize() - 1);
+
     }
 
 
@@ -394,7 +456,7 @@ public class XMLSchemaListPanel extends JPanel implements ListSelectionListener 
     private JButton getRemoveButton() {
         if (this.removeButton == null) {
             this.removeButton = new JButton();
-            this.removeButton.setText("Remove Selected Schemas");
+            this.removeButton.setText("Remove Selected Schema");
             this.removeButton.setEnabled(false);
             this.removeButton.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -422,18 +484,6 @@ public class XMLSchemaListPanel extends JPanel implements ListSelectionListener 
     }
 
 
-    protected void updateXSDModel() {
-        XMLSchemaDisplay xsdD = (XMLSchemaDisplay) getXMLSchemaList().getSelectedValue();
-        if (xsdD == null) {
-            return;
-        }
-        XMLSchema xsd = xsdD.getXMLSchema();
-        // xsd.setFirstName(getFnameTextField().getText());
-
-        validateInput();
-    }
-
-
     protected class XMLSchemaDisplay {
         XMLSchema schema;
 
@@ -449,7 +499,9 @@ public class XMLSchemaListPanel extends JPanel implements ListSelectionListener 
                 return "null";
             }
 
-            return this.schema.getRootDocument().getSystemID() + " - " + this.schema.getTargetNamespace().toString();
+            // return this.schema.getRootDocument().getSystemID() + " - " +
+            // this.schema.getTargetNamespace().toString();
+            return this.schema.getTargetNamespace().toString();
         }
 
 
@@ -458,70 +510,148 @@ public class XMLSchemaListPanel extends JPanel implements ListSelectionListener 
         }
 
 
-        public void setXMLSchema(XMLSchema poc) {
-            this.schema = poc;
+        public void setXMLSchema(XMLSchema xsd) {
+            this.schema = xsd;
+        }
+    }
+
+
+    protected class XMLSchemaDocumentDisplay {
+        XMLSchemaDocument doc;
+
+
+        public XMLSchemaDocumentDisplay(XMLSchemaDocument doc) {
+            this.doc = doc;
+        }
+
+
+        @Override
+        public String toString() {
+            if (this.doc == null) {
+                return "null";
+            }
+
+            return this.doc.getSystemID();
+        }
+
+
+        public XMLSchemaDocument getXMLSchemaDocument() {
+            return this.doc;
+        }
+
+
+        public void setXMLSchemaDocument(XMLSchemaDocument doc) {
+            this.doc = doc;
         }
     }
 
 
     public void valueChanged(ListSelectionEvent e) {
         if (e.getValueIsAdjusting() == false) {
-            updateXMLSchemaView();
+            if (e.getSource().equals(getXMLSchemaList())) {
+                updateXMLSchemaView();
+            } else if (e.getSource().equals(getDocsList())) {
+                XMLSchemaDocument doc = null;
+                if ((XMLSchemaDocumentDisplay) getDocsList().getSelectedValue() != null) {
+                    doc = ((XMLSchemaDocumentDisplay) getDocsList().getSelectedValue()).getXMLSchemaDocument();
+                }
+                for (XMLSchemaDocumentSelectionListener listener : this.documentListeners) {
+                    listener.documentSelected(doc);
+                }
+            }
         }
     }
 
 
     private void setInfoFieldsEnabled(boolean enabled) {
-        getDetailPanel().setEnabled(enabled);
-        for (Component c : getDetailPanel().getComponents()) {
-            c.setEnabled(enabled);
-        }
+        getDocsList().setEnabled(enabled);
+
         validateInput();
     }
 
 
     private void updateXMLSchemaView() {
-        if (getXMLSchemaList().getSelectedValue() instanceof XMLSchemaDisplay) {
-            XMLSchemaDisplay xsdD = (XMLSchemaDisplay) getXMLSchemaList().getSelectedValue();
-            XMLSchema xsd = null;
-            if (xsdD != null) {
-                xsd = xsdD.getXMLSchema();
-            }
-            String fname = null;
+        XMLSchema xsd = null;
+        if (getXMLSchemaList().getSelectedValue() instanceof XMLSchemaDisplay
+            && getXMLSchemaList().getSelectedValue() != null) {
+            xsd = ((XMLSchemaDisplay) getXMLSchemaList().getSelectedValue()).getXMLSchema();
+        }
 
-            if (xsd == null) {
-                getRemoveButton().setEnabled(false);
-                setInfoFieldsEnabled(false);
-
-            } else {
-                getRemoveButton().setEnabled(true);
-                setInfoFieldsEnabled(true);
-
-                // get the values to use
-                // fname = xsd.getFirstName();
-
-            }
-
-            // getFnameTextField().setText(fname);
-
-        } else {
+        if (xsd == null) {
+            getRemoveButton().setEnabled(false);
             setInfoFieldsEnabled(false);
+            getDocsList().setModel(new DefaultListModel());
+        } else {
+            getRemoveButton().setEnabled(true);
+            setInfoFieldsEnabled(true);
+
+            DefaultListModel docsModel = new DefaultListModel();
+
+            docsModel.addElement(new XMLSchemaDocumentDisplay(xsd.getRootDocument()));
+            for (XMLSchemaDocument doc : xsd.getAdditionalSchemaDocuments()) {
+                docsModel.addElement(new XMLSchemaDocumentDisplay(doc));
+            }
+            getDocsList().setModel(docsModel);
+            getDocsList().setSelectedIndex(0);
         }
 
         validateInput();
     }
 
 
-	/**
-	 * This method initializes xsdScrollPane	
-	 * 	
-	 * @return javax.swing.JScrollPane	
-	 */
-	private JScrollPane getXsdScrollPane() {
-		if (xsdScrollPane == null) {
-			xsdScrollPane = new JScrollPane();
-			xsdScrollPane.setViewportView(getXMLSchemaList());
-		}
-		return xsdScrollPane;
-	}
+    /**
+     * This method initializes xsdScrollPane
+     * 
+     * @return javax.swing.JScrollPane
+     */
+    private JScrollPane getXsdScrollPane() {
+        if (this.xsdScrollPane == null) {
+            this.xsdScrollPane = new JScrollPane();
+            this.xsdScrollPane.setViewportView(getXMLSchemaList());
+        }
+        return this.xsdScrollPane;
+    }
+
+
+    /**
+     * This method initializes documentsScrollPane
+     * 
+     * @return javax.swing.JScrollPane
+     */
+    private JScrollPane getDocumentsScrollPane() {
+        if (this.documentsScrollPane == null) {
+            this.documentsScrollPane = new JScrollPane();
+            this.documentsScrollPane.setViewportView(getDocsList());
+        }
+        return this.documentsScrollPane;
+    }
+
+
+    /**
+     * This method initializes docsmodel
+     * 
+     * @return javax.swing.DefaultListModel
+     */
+    private DefaultListModel getDocsmodel() {
+        if (this.docsmodel == null) {
+            this.docsmodel = new DefaultListModel();
+        }
+        return this.docsmodel;
+    }
+
+
+    /**
+     * This method initializes docsList
+     * 
+     * @return javax.swing.JList
+     */
+    private JList getDocsList() {
+        if (this.docsList == null) {
+            this.docsList = new JList(getDocsmodel());
+            this.docsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+            this.docsList.addListSelectionListener(this);
+            this.docsList.setVisibleRowCount(8);
+        }
+        return this.docsList;
+    }
 } // @jve:decl-index=0:visual-constraint="10,10"

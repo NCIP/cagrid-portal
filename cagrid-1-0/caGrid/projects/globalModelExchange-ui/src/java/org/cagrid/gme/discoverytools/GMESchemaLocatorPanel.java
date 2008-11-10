@@ -2,12 +2,9 @@ package org.cagrid.gme.discoverytools;
 
 import gov.nih.nci.cagrid.introduce.common.ConfigurationUtil;
 
-import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.io.File;
 import java.util.ArrayList;
@@ -18,11 +15,11 @@ import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.cagrid.gme.client.GlobalModelExchangeClient;
 import org.cagrid.gme.domain.XMLSchema;
 import org.cagrid.gme.domain.XMLSchemaNamespace;
@@ -31,10 +28,9 @@ import org.cagrid.grape.utils.CompositeErrorDialog;
 
 public class GMESchemaLocatorPanel extends JPanel {
 
-    private static final Logger logger = Logger.getLogger(GMESchemaLocatorPanel.class);
+    private static final Log logger = LogFactory.getLog(GMESchemaLocatorPanel.class);
 
     public static String GME_URL = "GME_URL";
-    public static String TYPE = "gme_discovery";
 
     private JPanel mainPanel = null;
     private JButton queryButton = null;
@@ -44,7 +40,6 @@ public class GMESchemaLocatorPanel extends JPanel {
     private JLabel namespaceLabel = null;
 
     private Object modificationMutex = null;
-    private final boolean showGMESelection;
 
     protected XMLSchema currentSchema;
 
@@ -52,9 +47,8 @@ public class GMESchemaLocatorPanel extends JPanel {
     /**
      * This method initializes
      */
-    public GMESchemaLocatorPanel(boolean showGMESelection) {
+    public GMESchemaLocatorPanel() {
         super();
-        this.showGMESelection = showGMESelection;
         this.modificationMutex = new Object();
         initialize();
     }
@@ -86,8 +80,6 @@ public class GMESchemaLocatorPanel extends JPanel {
         if (this.mainPanel == null) {
             this.mainPanel = new JPanel();
             this.mainPanel.setLayout(new GridBagLayout());
-            if (this.showGMESelection) {
-            }
         }
         return this.mainPanel;
     }
@@ -137,7 +129,7 @@ public class GMESchemaLocatorPanel extends JPanel {
      */
     public JButton getQueryButton() {
         if (this.queryButton == null) {
-            this.queryButton = new JButton("Reload from Service");
+            this.queryButton = new JButton("Refresh");
             this.queryButton.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
                     discoverFromGME();
@@ -224,27 +216,6 @@ public class GMESchemaLocatorPanel extends JPanel {
 
     private synchronized void makeCombosEnabled(boolean enabled) {
         getSchemaComboBox().setEnabled(enabled);
-    }
-
-
-    public static void main(String[] args) {
-        final GMESchemaLocatorPanel panel = new GMESchemaLocatorPanel(true);
-        JFrame frame = new JFrame();
-        JPanel mainPanel = new JPanel();
-        mainPanel.setLayout(new BorderLayout());
-        JButton getNamespaceButton = new JButton("get namespace");
-        getNamespaceButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                XMLSchemaNamespace ns = panel.getSelectedSchemaNamespace();
-                System.out.println(ns);
-            }
-        });
-        mainPanel.add(panel, BorderLayout.CENTER);
-        mainPanel.add(getNamespaceButton, BorderLayout.SOUTH);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setContentPane(mainPanel);
-        frame.pack();
-        frame.setVisible(true);
     }
 
 

@@ -14,22 +14,29 @@ import gov.nih.nci.cagrid.introduce.portal.discoverytools.NamespaceTypeToolsComp
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.List;
+import java.util.Map;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+import javax.swing.SwingUtilities;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.cagrid.gme.client.GlobalModelExchangeClient;
+import org.cagrid.gme.domain.XMLSchema;
+import org.cagrid.gme.domain.XMLSchemaDocument;
 import org.cagrid.gme.domain.XMLSchemaNamespace;
 import org.cagrid.grape.utils.CompositeErrorDialog;
-import java.awt.Dimension;
+
+import com.jgoodies.validation.Severity;
+import com.jgoodies.validation.ValidationResult;
 
 
 /**
@@ -42,9 +49,12 @@ import java.awt.Dimension;
  * @version $Id: mobiusEclipseCodeTemplates.xml,v 1.2 2005/04/19 14:58:02 oster
  *          Exp $
  */
-public class GMEViewer extends NamespaceTypeToolsComponent {
+public class GMEViewer extends NamespaceTypeToolsComponent
+    implements
+        ValidationStatusChangeListener,
+        XMLSchemaDocumentSelectionListener {
 
-    private static final Logger logger = Logger.getLogger(GMEViewer.class);
+    private static final Log logger = LogFactory.getLog(GMEViewer.class);
 
     private JPanel mainPanel = null;
 
@@ -144,7 +154,7 @@ public class GMEViewer extends NamespaceTypeToolsComponent {
      */
     private JPanel getSchemaUploadPanel() {
         if (this.schemaUploadPanel == null) {
-        	
+
             GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
             gridBagConstraints5.gridx = 0;
             gridBagConstraints5.gridy = 0;
@@ -158,16 +168,13 @@ public class GMEViewer extends NamespaceTypeToolsComponent {
             gridBagConstraints7.weightx = 1.0;
             gridBagConstraints7.weighty = 1.0;
 
-            
             GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
             gridBagConstraints8.gridx = 0;
             gridBagConstraints8.fill = java.awt.GridBagConstraints.BOTH;
             gridBagConstraints8.gridy = 2;
             gridBagConstraints8.weightx = .5;
             gridBagConstraints8.weighty = .5;
-            
 
-            
             this.schemaUploadPanel = new JPanel();
             this.schemaUploadPanel.setLayout(new GridBagLayout());
             this.schemaUploadPanel.add(getUploadUploadButton(), gridBagConstraints7);
@@ -268,7 +275,7 @@ public class GMEViewer extends NamespaceTypeToolsComponent {
      */
     private GMESchemaLocatorPanel getGmeSchemaLocatorPanel() {
         if (this.gmeSchemaLocatorPanel == null) {
-            this.gmeSchemaLocatorPanel = new GMESchemaLocatorPanel(false);
+            this.gmeSchemaLocatorPanel = new GMESchemaLocatorPanel();
             this.gmeSchemaLocatorPanel.getSchemaComboBox().addActionListener(new ActionListener() {
 
                 public void actionPerformed(ActionEvent e) {
@@ -297,41 +304,23 @@ public class GMEViewer extends NamespaceTypeToolsComponent {
     private JButton getUploadUploadButton() {
         if (this.uploadUploadButton == null) {
             this.uploadUploadButton = new JButton();
-            this.uploadUploadButton.setText("Upload");
+            this.uploadUploadButton.setEnabled(false);
+            this.uploadUploadButton.setText("Publish Schemas");
             this.uploadUploadButton.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
-                    if (GMEViewer.this.uploadSchemaTextPane.getText().length() <= 0) {
-                        JOptionPane.showMessageDialog(GMEViewer.this, "Please select a schema");
-                        return;
-                    }
 
                     try {
                         GlobalModelExchangeClient gme = new GlobalModelExchangeClient(ConfigurationUtil
                             .getGlobalExtensionProperty(GMESchemaLocatorPanel.GME_URL).getValue());
 
-                        // get the target namespace of the schema and
-                        // make sure
-                        // that it is acceptable by the GME
+                        List<XMLSchema> schemas = getXmlSchemaListPanel().getXMLSchemas();
+                        XMLSchema schemaArray[] = new XMLSchema[schemas.size()];
 
-                        // Load the schema into the schema object
-                        // TODO: replace this with a GME utility
-                        // SchemaReader sr = new SchemaReader(new
-                        // InputSource(new StringInputStream(
-                        // GMEViewer.this.uploadSchemaTextPane.getText())));
-                        // sr.setValidation(false);
-                        // Schema schema = sr.read();
-                        // Namespace schemaTargetNamespace = new
-                        // Namespace(schema.getTargetNamespace());
-                        // try {
-                        // handle.addNamespaceDomain(schemaTargetNamespace.
-                        // getDomain());
-                        // } catch (NamespaceExistsException ex) {
-                        // // should be ok here do nothing.........
-                        // }
-                        // handle.publishSchema(GMEViewer.this.
-                        // uploadSchemaTextPane.getText());
-                        // JOptionPane.showMessageDialog(GMEViewer.this,
-                        // "Schema was successfully uploaded.");
+                        gme.publishXMLSchemas(schemas.toArray(schemaArray));
+
+                        String successMessage = "Successfully published (" + schemas.size() + ") schemas.";
+                        JOptionPane.showMessageDialog(SwingUtilities.getRootPane(GMEViewer.this), successMessage);
+
                     } catch (Exception e1) {
                         e1.printStackTrace();
                         CompositeErrorDialog.showErrorDialog("Error contacting GME", e1);
@@ -362,7 +351,7 @@ public class GMEViewer extends NamespaceTypeToolsComponent {
             this.uploadSchemaViewPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Schema Preview",
                 javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
                 javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
-            uploadSchemaViewPanel.add(getUploadSchemaTextPane(), gridBagConstraints9);
+            this.uploadSchemaViewPanel.add(getUploadSchemaTextPane(), gridBagConstraints9);
         }
         return this.uploadSchemaViewPanel;
     }
@@ -404,8 +393,15 @@ public class GMEViewer extends NamespaceTypeToolsComponent {
                             GlobalModelExchangeClient gme = new GlobalModelExchangeClient(ConfigurationUtil
                                 .getGlobalExtensionProperty(GMESchemaLocatorPanel.GME_URL).getValue());
                             if (GMEViewer.this.gmeSchemaLocatorPanel.getSchemaComboBox().getSelectedItem() != null) {
-                                gme.cacheSchemas(((XMLSchemaNamespace) GMEViewer.this.gmeSchemaLocatorPanel
-                                    .getSchemaComboBox().getSelectedItem()), new File(location));
+                                Map<XMLSchemaNamespace, File> cacheSchemas = gme.cacheSchemas(
+                                    ((XMLSchemaNamespace) GMEViewer.this.gmeSchemaLocatorPanel.getSchemaComboBox()
+                                        .getSelectedItem()), new File(location));
+                                String successMessage = "Successfully saved (" + cacheSchemas.size()
+                                    + ") root schema files to the filesystem.";
+
+                                JOptionPane.showMessageDialog(SwingUtilities.getRootPane(GMEViewer.this),
+                                    successMessage);
+
                             }
                         } catch (Exception e1) {
                             e1.printStackTrace();
@@ -456,6 +452,8 @@ public class GMEViewer extends NamespaceTypeToolsComponent {
     private XMLSchemaListPanel getXmlSchemaListPanel() {
         if (this.xmlSchemaListPanel == null) {
             this.xmlSchemaListPanel = new XMLSchemaListPanel();
+            this.xmlSchemaListPanel.addValidationStatusChangeListener(this);
+            this.xmlSchemaListPanel.addXMLSchemaDocumentSelectionListener(this);
         }
         return this.xmlSchemaListPanel;
     }
@@ -475,7 +473,27 @@ public class GMEViewer extends NamespaceTypeToolsComponent {
             frame.pack();
             frame.setVisible(true);
         } catch (Exception e) {
+            e.printStackTrace();
             logger.error(e);
         }
     }
-}  //  @jve:decl-index=0:visual-constraint="10,10"
+
+
+    public void validationStatusChanged(ValidationResult validationResult) {
+        if (validationResult.getSeverity().equals(Severity.ERROR)) {
+            getUploadUploadButton().setEnabled(false);
+        } else {
+            getUploadUploadButton().setEnabled(true);
+        }
+
+    }
+
+
+    public void documentSelected(XMLSchemaDocument document) {
+        String text = "";
+        if (document != null) {
+            text = document.getSchemaText();
+        }
+        getUploadSchemaTextPane().setText(text);
+    }
+} // @jve:decl-index=0:visual-constraint="10,10"

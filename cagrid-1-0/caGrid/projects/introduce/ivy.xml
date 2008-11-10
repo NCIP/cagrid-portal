@@ -50,29 +50,25 @@
 
   <dependencies>
     <!-- Configure Dependencies -->
-    <dependency rev="${target.grid}" org="caGrid" name="target_grid"
-      conf="target_grid->urls,introduce"/>
+    <dependency rev="${target.grid}" org="caGrid" name="target_grid" conf="target_grid->urls,introduce"/>
 
     <!-- caGrid Dependencies -->
     <dependency rev="latest.integration" org="caGrid" name="core" conf="extension->default;impl-test->test;ui->ui"/>
     <dependency rev="latest.integration" org="caGrid" name="metadata" conf="core->schemas"/>
     <dependency rev="latest.integration" org="caGrid" name="gaards-core" conf="core->default"/>
-    <dependency rev="latest.integration" org="caGrid" name="gme" conf="core->client"/>
     <dependency rev="latest.integration" org="caGrid" name="grape" conf="ui->default;schema.grape->schemas"/>
     <dependency rev="latest.integration" org="caGrid" name="testing" conf="impl-test->system"/>
 
     <dependency rev="latest.integration" org="caGrid" name="gaards-ui" conf="ui->base"/>
-    <dependency rev="latest.integration" org="caGrid" name="service-security-provider" conf="skeleton->client;core->schemas"/>
+    <dependency rev="latest.integration" org="caGrid" name="service-security-provider" conf="skeleton->client;core->schemas,client"/>
     <dependency rev="latest.integration" org="caGrid" name="advertisement" conf="skeleton->default"/>
     <dependency rev="1.0" org="jdom" name="jdom" conf="skeleton->*"/>
 
-    <!-- Extenernal Dependencies -->
+    <!-- External Dependencies -->
     <dependency rev="1.0" org="wannheden" name="jetc-task" conf="impl->*"/>
 
     <dependency rev="0.5.2-patched" org="jaxme" name="jaxmejs" conf="extension->*"/>
     <dependency rev="1.1" org="codehaus" name="jaxen" conf="core->*"/>
-    <!-- GMEViewer uses the SchemaReader which comes in the common server-->
-    <dependency rev="1.1" org="mobius" name="mobius" conf="core->common-server"/>
     <dependency rev="1.0" org="jdom" name="jdom" conf="extension->*"/>
 
     <dependency rev="0.1.12" org="wizard-framework" name="wizard-framework" conf="ui->*"/>
