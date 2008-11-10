@@ -43,6 +43,5 @@
     <dependency rev="3.0" org="backport-util-concurrent" name="backport-util-concurrent" conf="default->default"/>
     <dependency rev="0.7.0" org="inspektr" name="inspektr" conf="default->default"/>
     <dependency rev="1.0" org="jsr107cache" name="jsr107cache" conf="default->default"/>
-    <dependency rev="1.14" org="oopsconsultancy" name="xmltask"/>
   </dependencies>
 </ivy-module>
