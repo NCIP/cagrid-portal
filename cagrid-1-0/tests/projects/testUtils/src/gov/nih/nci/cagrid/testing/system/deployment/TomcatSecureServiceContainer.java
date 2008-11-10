@@ -47,9 +47,9 @@ public class TomcatSecureServiceContainer extends TomcatServiceContainer impleme
         Element securityConfigElement = descriptorDocument.getRootElement();
         Element credentialElement = securityConfigElement.getChild("credential", securityConfigElement.getNamespace());
         Element keyFileElement = credentialElement.getChild("key-file", credentialElement.getNamespace());
-        keyFileElement.setAttribute("value", getCertificatesDirectory().getAbsolutePath() + File.separator + "ca" + File.separator + "testing_ca_key.pem");
+        keyFileElement.setAttribute("value", getCertificatesDirectory().getAbsolutePath() + File.separator + "localhost_key.pem");
         Element certFileElement = credentialElement.getChild("cert-file", credentialElement.getNamespace());
-        certFileElement.setAttribute("value", getCertificatesDirectory().getAbsolutePath() + File.separator + "ca" + File.separator + "testing_ca_cert.pem");
+        certFileElement.setAttribute("value", getCertificatesDirectory().getAbsolutePath() + File.separator + "localhost_cert.pem");
         // write the config back to disk
         try {
             String fixedConfig = XMLUtilities.formatXML(XMLUtilities.documentToString(descriptorDocument));
