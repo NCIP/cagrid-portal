@@ -12,6 +12,7 @@
 	<property name="lib.dir" location="lib" />
 	<property name="ext.lib.dir" location="${ext.dir}/dependencies/default/jars" />
 	<property name="endorsed.lib.dir" location="${ext.dir}/dependencies/endorsed/jars" />
+	<property name="tools.lib.dir" location="tools/lib" />
 
 	<property name="webapp.name" value="webssoserver" />
 	<property name="webcontent.dir" location="webcontent" />
@@ -23,14 +24,16 @@
 	<property name="build.classes.dir" location="${build.dir}/classes" />
 	<property name="build.war.dir" location="${build.dir}/war" />
 
-	<path id="xmltaskdef.cp">
-		<fileset dir="${ext.lib.dir}">
+	<path id="taskdef.cp">
+		<fileset dir="${tools.lib.dir}">
 			<include name="xmltask-v1.14.jar" />
+			<include name="ant-contrib*.jar" />
 		</fileset>
 	</path>
 
-	<target name="defineXmlTask">
-		<taskdef name="xmltask" classname="com.oopsconsultancy.xmltask.ant.XmlTask" classpathref="xmltaskdef.cp" />
+	<target name="defineAntTask">
+		<taskdef name="xmltask" classname="com.oopsconsultancy.xmltask.ant.XmlTask" classpathref="taskdef.cp" />
+		<taskdef resource="net/sf/antcontrib/antlib.xml" classpathref="taskdef.cp" />
 	</target>
 
 	<path id="build.classpath">
@@ -45,18 +48,7 @@
 		</fileset>
 	</path>
 
-	<target name="replace-tokens">
-		<replace dir="${src.resources.dir}" value="${user.home}">
-			<include name="**/*.xml" />
-			<replacetoken>@USER.HOME@</replacetoken>
-		</replace>
-		<property name="env.COMPUTERNAME" value="${env.HOSTNAME}" />
-		<replace dir="${webcontent.dir}/WEB-INF" value="${env.COMPUTERNAME}">
-			<include name="cas.properties" />
-			<replacetoken>@WEBSSO.SERVER@</replacetoken>
-		</replace>
-	</target>
-	
+	<!-- ant configure must be executed before ant all target -->
 	<target name="websso-config-jar" depends="replace-tokens">
 		<jar destfile="${build.war.dir}/WEB-INF/lib/${ant.project.name}-conf-${project.version}.jar">
 			<fileset dir="${ext.targetgrid.dir}">
@@ -68,7 +60,7 @@
 		</jar>
 	</target>
 
-	<target name="build-war" depends="websso-config-jar">		
+	<target name="build-war" depends="websso-config-jar">
 		<copy todir="${build.war.dir}/WEB-INF/lib"  overwrite="true">
 			<fileset dir="${lib.dir}">
 				<include name="*.jar" />
@@ -125,7 +117,7 @@
 		</copy>
 	</target>
 
-	<target name="insert-tomcat-secure-connector" depends="defineXmlTask">
+	<target name="insert-tomcat-secure-connector" depends="defineAntTask">
 		<echo  message="modifying server.xml in tomcat home dir ${tomcat.home}">
 		</echo>
 		<xmltask source="${tomcat.home}/conf/server.xml"
@@ -177,7 +169,7 @@
 		</java>
 	</target>
 
-	<target name="configure" description="Configures the project based on settings.">
+	<target name="configure" description="Configures the project based on settings." depends="defineAntTask">
 		<!-- These are the template files we are copying from -->
 		<fileset id="templates.fileset" dir="${basedir}">
 			<include name="*.template" />
@@ -224,6 +216,67 @@
 			</sequential>
 		</outofdate>
 	</target>
+	
+	<target name="replace-tokens" depends="defineAntTask">
+		<property name="env.COMPUTERNAME" value="${env.HOSTNAME}" />
+		<filterset id="WEBSSO_SERVER" begintoken="@" endtoken="@">
+			<filter token="WEBSSO.SERVER" value="${env.COMPUTERNAME}" />
+		</filterset>
+		<filterset id="USER_NAME" begintoken="@" endtoken="@">
+			<filter token="USER.HOME" value="${user.home}" />
+		</filterset>
+		<antcall target="replacetoken-webcontent-templates" />
+		<antcall target="replace-token-src-resources-templates" />
+	</target>
+	
+	<target name="replacetoken-webcontent-templates">
+		<copy todir="${webcontent.dir}" filtering="true">
+			<fileset dir="${webcontent.dir}"/>
+			<globmapper from="*-template.properties" to="*.properties"/>
+			<filterset refid="WEBSSO_SERVER"/>
+		</copy>
+
+		<outofdate>
+			<sourcefiles>
+				<fileset dir="${webcontent.dir}" includes="**/*-template.properties" />
+			</sourcefiles>
+			<targetfiles>
+				<fileset dir="${webcontent.dir}" includes="**/*.properties" />
+			</targetfiles>
+			<sequential>
+				<copy todir="${webcontent.dir}" overwrite="true">
+					<fileset dir="${webcontent.dir}" />
+					<globmapper from="*-template.properties" to="*.properties" />
+					<filterset refid="WEBSSO_SERVER" />
+				</copy>
+			</sequential>
+		</outofdate>
+	</target>
+
+	<target name="replace-token-src-resources-templates">
+		<copy todir="${src.resources.dir}" filtering="true">
+			<fileset dir="${src.resources.dir}"/>
+			<globmapper from="*-template.xml" to="*.xml"/>
+			<filterset refid="USER_NAME"/>
+		</copy>
+
+		<outofdate>
+			<sourcefiles>
+				<fileset dir="${src.resources.dir}" includes="**/*-template.xml" />
+			</sourcefiles>
+			<targetfiles>
+				<fileset dir="${src.resources.dir}" includes="**/*.xml" />
+			</targetfiles>
+			<sequential>
+				<copy todir="${src.resources.dir}" overwrite="true">
+					<fileset dir="${src.resources.dir}" />
+					<globmapper from="*-template.xml" to="*.xml" />
+					<filterset refid="USER_NAME" />
+				</copy>
+			</sequential>
+		</outofdate>
+	</target>
+
 
 	<target name="all">
 		<antcall target="clean" />
