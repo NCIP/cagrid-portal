@@ -3,12 +3,12 @@ package gov.nih.nci.cagrid.fqp.service;
 import gov.nih.nci.cagrid.common.FaultHelper;
 import gov.nih.nci.cagrid.dcql.DCQLQuery;
 import gov.nih.nci.cagrid.fqp.common.FQPConstants;
-import gov.nih.nci.cagrid.fqp.common.SecurityUtils;
 import gov.nih.nci.cagrid.fqp.processor.exceptions.FederatedQueryProcessingException;
 import gov.nih.nci.cagrid.fqp.results.service.globus.resource.FederatedQueryResultsResource;
 import gov.nih.nci.cagrid.fqp.results.service.globus.resource.FederatedQueryResultsResourceHome;
 import gov.nih.nci.cagrid.fqp.results.stubs.types.FederatedQueryResultsReference;
 import gov.nih.nci.cagrid.fqp.results.stubs.types.InternalErrorFault;
+import gov.nih.nci.cagrid.introduce.servicetools.security.SecurityUtils;
 
 import java.util.Calendar;
 import java.util.concurrent.ExecutorService;
@@ -77,7 +77,7 @@ public class FQPAsynchronousExecutionUtil {
         // resource (whoever is executing this method) can operate on it
         try {
             // may be null if no current caller
-            fqpResultResource.setSecurityDescriptor(SecurityUtils.createResultsResourceSecurityDescriptor());
+            fqpResultResource.setSecurityDescriptor(SecurityUtils.createCreatorOnlyResourceSecurityDescriptor());
         } catch (Exception e) {
             String message = "Problem configuring caller-only security on resource: " + e.getMessage();
             LOG.error(message, e);
@@ -121,7 +121,17 @@ public class FQPAsynchronousExecutionUtil {
     
     private synchronized GlobusCredential validateAndRetrieveDelegatedCredential(DelegatedCredentialReference reference) throws InternalErrorFault {
         // get the caller's ID
-        String callerID = getCallerIdentity();
+        String callerID = null;
+        try {
+            callerID = SecurityUtils.getCallerIdentity();
+        } catch (Exception ex) {
+            LOG.error("Error obtaining caller identity: " + ex.getMessage(), ex);
+            FaultHelper helper = new FaultHelper(new InternalErrorFault());
+            helper.addDescription("Error obtaining caller identity");
+            helper.addDescription(ex.getMessage());
+            helper.addFaultCause(ex);
+            throw (InternalErrorFault) helper.getFault();
+        }
         if (callerID == null) {
             // no null IDs with delegated credentials!
             FaultHelper helper = new FaultHelper(new InternalErrorFault());
@@ -134,6 +144,7 @@ public class FQPAsynchronousExecutionUtil {
         if (!valid) {
             FaultHelper helper = new FaultHelper(new InternalErrorFault());
             helper.addDescription("Caller's identity and delegated credential identity did not match");
+            throw (InternalErrorFault) helper.getFault();
         }
         return clientCredential;
     }
@@ -155,16 +166,6 @@ public class FQPAsynchronousExecutionUtil {
             throw (InternalErrorFault) helper.getFault();
         }
         return userCredential;
-    }
-    
-    
-    public synchronized static String getCallerIdentity() {
-        String caller = org.globus.wsrf.security.SecurityManager.getManager().getCaller();
-        if ((caller == null) || (caller.equals("<anonymous>"))) {
-            return null;
-        } else {
-            return caller;
-        }
     }
     
 
