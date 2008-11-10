@@ -93,10 +93,11 @@ public class FilesystemLoader extends FilesystemProcessor {
                 includedFile = new File(directory, loc);
             }
             if (!docs.contains(includedFile)) {
+                docs.add(includedFile);
                 processAdditionalDocuments(includedFile.getParentFile(), this.createDocumentFromFile(includedFile),
                     docs);
             }
-            docs.add(includedFile);
+
         }
 
         // add any redefined documents
@@ -108,10 +109,11 @@ public class FilesystemLoader extends FilesystemProcessor {
                 redefinedFile = new File(directory, loc);
             }
             if (!docs.contains(redefinedFile)) {
+                docs.add(redefinedFile);
                 processAdditionalDocuments(redefinedFile.getParentFile(), this.createDocumentFromFile(redefinedFile),
                     docs);
             }
-            docs.add(redefinedFile);
+
         }
     }
 
@@ -120,7 +122,7 @@ public class FilesystemLoader extends FilesystemProcessor {
         File dir = new File(args[0]);
         File[] listFiles = dir.listFiles(new FilenameFilter() {
             public boolean accept(File dir, String name) {
-                return name.endsWith("Includer.xsd");
+                return name.endsWith("Includer_cycle.xsd");
             }
         });
         List<File> files = new ArrayList<File>(listFiles.length);
