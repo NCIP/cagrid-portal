@@ -1,5 +1,6 @@
 package gov.nih.nci.cagrid.introduce.portal.updater;
 
+import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.introduce.beans.software.IntroduceRevType;
 import gov.nih.nci.cagrid.introduce.beans.software.IntroduceType;
 import gov.nih.nci.cagrid.introduce.beans.software.SoftwareType;
@@ -61,5 +62,14 @@ public class UptodateChecker {
         }
         // nothing new that pertains to introduce
         return true;
+    }
+    
+    public static void main(String [] args){
+        try {
+            introduceUptodate();
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 }

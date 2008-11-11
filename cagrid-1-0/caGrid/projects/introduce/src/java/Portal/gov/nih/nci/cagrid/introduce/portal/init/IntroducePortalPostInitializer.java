@@ -24,7 +24,7 @@ public class IntroducePortalPostInitializer implements ApplicationInitializer {
             }
         }
         } catch (Exception e){
-            logger.error("Unable to check for updates:, " + e.getMessage());
+            logger.error("Unable to check for updates:, " + e.getMessage(),e);
         }
 
     }
