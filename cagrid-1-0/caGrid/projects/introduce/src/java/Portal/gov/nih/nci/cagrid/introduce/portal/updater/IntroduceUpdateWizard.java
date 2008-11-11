@@ -9,8 +9,13 @@ public class IntroduceUpdateWizard {
         showUpdateWizard();
     }
     
-	public static void showUpdateWizard(){
-		UpdatePath paths = new UpdatePath();
+    
+    public static void showUpdateWizard(){
+        showUpdateWizard(false);
+    }
+    
+	public static void showUpdateWizard(boolean autoCheck){
+		UpdatePath paths = new UpdatePath(autoCheck);
 		UpdateWizardModel model = new UpdateWizardModel(paths);
 		Wizard wizard = new Wizard(model);
 		wizard.setOverviewVisible(true);

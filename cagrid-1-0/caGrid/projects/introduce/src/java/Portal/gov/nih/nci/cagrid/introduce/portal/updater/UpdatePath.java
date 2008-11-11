@@ -8,9 +8,9 @@ import org.pietschy.wizard.models.SimplePath;
 
 public class UpdatePath extends SimplePath {
 
-	public UpdatePath(){
+	public UpdatePath(boolean autoCheck){
 		
-		CheckForUpdatesStep selectStep = new CheckForUpdatesStep();
+		CheckForUpdatesStep selectStep = new CheckForUpdatesStep(autoCheck);
 		DownloadsUpdatesStep downloadStep = new DownloadsUpdatesStep(selectStep);
 		FinishedStep finishedStep = new FinishedStep();
 		this.addStep(selectStep);

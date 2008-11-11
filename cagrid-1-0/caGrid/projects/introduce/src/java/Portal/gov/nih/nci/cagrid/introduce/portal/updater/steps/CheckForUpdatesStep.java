@@ -59,9 +59,12 @@ public class CheckForUpdatesStep extends PanelWizardStep {
     /**
      * This method initializes
      */
-    public CheckForUpdatesStep() {
+    public CheckForUpdatesStep(boolean autocheck) {
         super("Check For Updates", "Looking for update on the Introduce project server.");
         initialize();
+        if(autocheck){
+            checkForUpdatesGraphically();
+        }
     }
 
 
@@ -200,6 +203,44 @@ public class CheckForUpdatesStep extends PanelWizardStep {
         }
         return busyProgressBar;
     }
+    
+    
+    private void checkForUpdatesGraphically(){
+        getStartButton().setEnabled(false);
+        Thread th = new Thread(new Runnable() {
+
+            public void run() {
+                SwingUtilities.invokeLater(new Runnable() {
+                    public void run() {
+                        getBusyProgressBar().setIndeterminate(true);
+                    }
+                });
+
+                setComplete(true);
+                statusLabel.setText("Updates found.  Press Next to view and select updates.");
+                try {
+                    checkForUpdates();
+                } catch (MalformedURLException ex) {
+                    statusLabel.setText("ERROR: Malformed update site URL!");
+                    ex.printStackTrace();
+                } catch (IOException ex) {
+                    statusLabel.setText("ERROR: Unable to connect or read from update site!");
+                    ex.printStackTrace();
+                } catch (Exception ex) {
+                    statusLabel.setText("ERROR: Update site information is corupt");
+                    ex.printStackTrace();
+                }
+                SwingUtilities.invokeLater(new Runnable() {
+                    public void run() {
+                        getBusyProgressBar().setIndeterminate(false);
+                        getStartButton().setEnabled(true);
+                    }
+                });
+            }
+
+        });
+        th.start();
+    }
 
 
     /**
@@ -215,39 +256,7 @@ public class CheckForUpdatesStep extends PanelWizardStep {
             startButton.setFont(new Font("Dialog", Font.BOLD, 10));
             startButton.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
-                    getStartButton().setEnabled(false);
-                    Thread th = new Thread(new Runnable() {
-
-                        public void run() {
-                            SwingUtilities.invokeLater(new Runnable() {
-                                public void run() {
-                                    getBusyProgressBar().setIndeterminate(true);
-                                }
-                            });
-
-                            setComplete(true);
-                            statusLabel.setText("Updates found.  Press Next to view and select updates.");
-                            try {
-                                checkForUpdates();
-                            } catch (MalformedURLException ex) {
-                                statusLabel.setText("ERROR: Malformed update site URL!");
-                                ex.printStackTrace();
-                            } catch (IOException ex) {
-                                statusLabel.setText("ERROR: Unable to connect or read from update site!");
-                                ex.printStackTrace();
-                            } catch (Exception ex) {
-                                statusLabel.setText("ERROR: Update site information is corupt");
-                                ex.printStackTrace();
-                            }
-                            SwingUtilities.invokeLater(new Runnable() {
-                                public void run() {
-                                    getBusyProgressBar().setIndeterminate(false);
-                                }
-                            });
-                        }
-
-                    });
-                    th.start();
+                    checkForUpdatesGraphically();
                 }
             });
         }

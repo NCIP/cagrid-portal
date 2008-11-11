@@ -17,7 +17,7 @@ public class IntroducePortalPostInitializer implements ApplicationInitializer {
     public void intialize(Application app)  {
         
         try{
-        if(UptodateChecker.introduceUptodate()){
+        if(!UptodateChecker.introduceUptodate()){
             int option = JOptionPane.showOptionDialog(GridApplication.getContext().getApplication(), "Updates are available.\nWould you like to view them now?", "Introduce Updates Avaiable", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, IntroduceLookAndFeel.getUpdateIcon(), null, null) ;
             if(option == JOptionPane.YES_OPTION){
                 IntroduceUpdateWizard.showUpdateWizard(true);
