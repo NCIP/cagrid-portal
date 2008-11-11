@@ -10,23 +10,27 @@ import org.cagrid.gaards.authentication.client.AuthenticationClient;
 import org.cagrid.grape.configuration.ServiceDescriptor;
 import org.globus.wsrf.impl.security.authorization.IdentityAuthorization;
 
-
 public class AuthenticationServiceHandle extends ServiceHandle {
-	
+
 	private Set<QName> authenticationProfiles;
 
-    public AuthenticationServiceHandle(ServiceDescriptor des) {
-        super(des);
-    }
+	public AuthenticationServiceHandle(ServiceDescriptor des) {
+		super(des);
+	}
 
-    public AuthenticationClient getAuthenticationClient() throws Exception {
-        AuthenticationClient client = new AuthenticationClient(getServiceDescriptor().getServiceURL());
-        if(Utils.clean(getServiceDescriptor().getServiceIdentity())!=null){
-            IdentityAuthorization auth = new IdentityAuthorization(getServiceDescriptor().getServiceIdentity());
-            client.setAuthorization(auth);
-        }
-        return client;
-    }
+	public AuthenticationClient getAuthenticationClient() throws Exception {
+		if (getServiceDescriptor().getServiceURL() != null) {
+			AuthenticationClient client = new AuthenticationClient(
+					getServiceDescriptor().getServiceURL());
+			if (Utils.clean(getServiceDescriptor().getServiceIdentity()) != null) {
+				IdentityAuthorization auth = new IdentityAuthorization(
+						getServiceDescriptor().getServiceIdentity());
+				client.setAuthorization(auth);
+			}
+			return client;
+		}
+		return null;
+	}
 
 	public Set<QName> getAuthenticationProfiles() {
 		return authenticationProfiles;
@@ -35,7 +39,5 @@ public class AuthenticationServiceHandle extends ServiceHandle {
 	public void setAuthenticationProfiles(Set<QName> authenticationProfiles) {
 		this.authenticationProfiles = authenticationProfiles;
 	}
-    
-    
 
 }

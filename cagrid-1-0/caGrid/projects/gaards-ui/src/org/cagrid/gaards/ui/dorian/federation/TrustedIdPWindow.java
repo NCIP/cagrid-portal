@@ -32,6 +32,7 @@ import org.cagrid.gaards.ui.common.CertificatePanel;
 import org.cagrid.gaards.ui.common.TitlePanel;
 import org.cagrid.gaards.ui.dorian.DorianLookAndFeel;
 import org.cagrid.gaards.ui.dorian.DorianSession;
+import org.cagrid.gaards.ui.dorian.DorianSessionProvider;
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.LookAndFeel;
@@ -41,9 +42,10 @@ import org.cagrid.grape.utils.ErrorDialog;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: TrustedIdPWindow.java,v 1.2 2008-10-02 20:46:12 langella Exp $
+ * @version $Id: TrustedIdPWindow.java,v 1.3 2008-11-11 16:32:09 langella Exp $
  */
-public class TrustedIdPWindow extends ApplicationComponent {
+public class TrustedIdPWindow extends ApplicationComponent implements
+		DorianSessionProvider {
 	public static final String PASSWORD = SAMLAuthenticationMethod.value1
 			.getValue();
 
@@ -80,6 +82,8 @@ public class TrustedIdPWindow extends ApplicationComponent {
 	private final static String CERTIFICATE_PANEL = "Certificate";
 
 	private final static String ATTRIBUTES_PANEL = "Attributes";
+
+	private final static String AUDIT_PANEL = "Audit";
 
 	private javax.swing.JPanel jContentPane = null;
 
@@ -229,6 +233,8 @@ public class TrustedIdPWindow extends ApplicationComponent {
 
 	private String subtitleStr = null;
 
+	private JPanel auditPanel = null;
+
 	public TrustedIdPWindow(DorianSession session, TrustedIdPsWindow window,
 			List<GridUserPolicy> policies) {
 		super();
@@ -259,6 +265,10 @@ public class TrustedIdPWindow extends ApplicationComponent {
 		this.newTrustedIdP = false;
 		this.policies = policies;
 		initialize();
+	}
+
+	public DorianSession getSession() throws Exception {
+		return this.session;
 	}
 
 	public class UserPolicyCaddy {
@@ -519,10 +529,13 @@ public class TrustedIdPWindow extends ApplicationComponent {
 		if (jTabbedPane == null) {
 			jTabbedPane = new JTabbedPane();
 			jTabbedPane.addTab(INFO_PANEL, null, getInfoPanel());
-			jTabbedPane.addTab(AUTHENTICATION_SERVICE, null, getAuthenticationServicePanel(),
+			jTabbedPane.addTab(AUTHENTICATION_SERVICE, null,
+					getAuthenticationServicePanel(), null);
+			jTabbedPane.addTab(CERTIFICATE_PANEL, null, getCertificatePanel(),
 					null);
-			jTabbedPane.addTab(CERTIFICATE_PANEL, null, getCertificatePanel(), null);
-			jTabbedPane.addTab(ATTRIBUTES_PANEL, null, getAttributesPanel(), null);
+			jTabbedPane.addTab(ATTRIBUTES_PANEL, null, getAttributesPanel(),
+					null);
+			jTabbedPane.addTab(AUDIT_PANEL, null, getAuditPanel(), null);
 		}
 		return jTabbedPane;
 	}
@@ -691,7 +704,7 @@ public class TrustedIdPWindow extends ApplicationComponent {
 					credPanel.setCertificate(CertUtil.loadCertificate(idp
 							.getIdPCertificate()));
 				}
-			 
+
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -1539,6 +1552,18 @@ public class TrustedIdPWindow extends ApplicationComponent {
 			titlePanel = new TitlePanel(titleStr, subtitleStr);
 		}
 		return titlePanel;
+	}
+
+	/**
+	 * This method initializes auditPanel	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getAuditPanel() {
+		if (auditPanel == null) {
+			auditPanel = new FederationAuditPanel(this,FederationAuditPanel.IDP_MODE,this.idp.getName());
+		}
+		return auditPanel;
 	}
 
 }

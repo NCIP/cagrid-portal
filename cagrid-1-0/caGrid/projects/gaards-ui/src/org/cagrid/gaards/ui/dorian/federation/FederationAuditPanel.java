@@ -36,6 +36,10 @@ public class FederationAuditPanel extends JPanel {
 
 	public static int GRID_ACCOUNT_MODE = 2;
 
+	public static int IDP_MODE = 3;
+
+	public static int HOST_MODE = 4;
+
 	private static final long serialVersionUID = 1L;
 
 	private JPanel searchCriteria = null;
@@ -136,7 +140,7 @@ public class FederationAuditPanel extends JPanel {
 			}
 			FederationAuditFilter f = new FederationAuditFilter();
 			f.setTargetId(Utils.clean(getTarget().getText()));
-			f.setReportingPartyId(Utils.clean(getTarget().getText()));
+			f.setReportingPartyId(Utils.clean(getReportingParty().getText()));
 			f.setAuditMessage(Utils.clean(getMessage().getText()));
 			f.setAuditType(getAuditType().getSelectedAuditType());
 
@@ -186,6 +190,15 @@ public class FederationAuditPanel extends JPanel {
 			this.auditTypes
 					.add(FederationAuditing.InvalidUserCertificateRequest);
 
+		} else if (mode == IDP_MODE) {
+			this.auditTypes.add(FederationAuditing.IdPAdded);
+			this.auditTypes.add(FederationAuditing.IdPRemoved);
+			this.auditTypes.add(FederationAuditing.IdPUpdated);
+		} else if (mode == HOST_MODE) {
+			this.auditTypes.add(FederationAuditing.HostCertificateRequested);
+			this.auditTypes.add(FederationAuditing.HostCertificateApproved);
+			this.auditTypes.add(FederationAuditing.HostCertificateRenewed);
+			this.auditTypes.add(FederationAuditing.HostCertificateUpdated);
 		} else {
 			Class c = FederationAuditing.class;
 			Field[] fields = FederationAuditing.class.getFields();
@@ -640,7 +653,7 @@ public class FederationAuditPanel extends JPanel {
 		if (search == null) {
 			search = new JButton();
 			search.setText("Search");
-			//getRootPane().setDefaultButton(search);
+			// getRootPane().setDefaultButton(search);
 			search.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					Runner runner = new Runner() {
@@ -661,10 +674,9 @@ public class FederationAuditPanel extends JPanel {
 
 		return search;
 	}
-	
-	
-	public void setSearchButtonAsDefault(JRootPane root){
-	    root.setDefaultButton(getSearch());
+
+	public void setSearchButtonAsDefault(JRootPane root) {
+		root.setDefaultButton(getSearch());
 	}
 
 	/**
@@ -715,9 +727,9 @@ public class FederationAuditPanel extends JPanel {
 	}
 
 	/**
-	 * This method initializes messagePanel	
-	 * 	
-	 * @return javax.swing.JPanel	
+	 * This method initializes messagePanel
+	 * 
+	 * @return javax.swing.JPanel
 	 */
 	private JPanel getMessagePanel() {
 		if (messagePanel == null) {

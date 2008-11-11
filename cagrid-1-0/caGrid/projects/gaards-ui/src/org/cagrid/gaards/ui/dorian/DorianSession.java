@@ -6,7 +6,7 @@ import org.cagrid.gaards.dorian.client.LocalAdministrationClient;
 import org.cagrid.gaards.dorian.client.LocalUserClient;
 import org.globus.gsi.GlobusCredential;
 
-public class DorianSession {
+public class DorianSession{
 	private DorianHandle handle;
 
 	private GlobusCredential credential;

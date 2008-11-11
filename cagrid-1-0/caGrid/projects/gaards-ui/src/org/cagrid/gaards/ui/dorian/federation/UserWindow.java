@@ -26,6 +26,7 @@ import org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault;
 import org.cagrid.gaards.ui.common.GAARDSLookAndFeel;
 import org.cagrid.gaards.ui.dorian.DorianLookAndFeel;
 import org.cagrid.gaards.ui.dorian.DorianSession;
+import org.cagrid.gaards.ui.dorian.DorianSessionProvider;
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.LookAndFeel;
@@ -35,16 +36,18 @@ import org.cagrid.grape.utils.ErrorDialog;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: UserWindow.java,v 1.3 2008-10-01 18:30:30 langella Exp $
+ * @version $Id: UserWindow.java,v 1.4 2008-11-11 16:32:09 langella Exp $
  */
 public class UserWindow extends ApplicationComponent implements
-		HostCertificateLauncher {
+		HostCertificateLauncher, DorianSessionProvider {
 
 	private final static String INFO_PANEL = "Account Information";
 
 	private final static String USER_CERTIFICATES_PANEL = "User Certificates";
 
 	private final static String HOST_CERTIFICATES_PANEL = "Host Certificates";
+	
+	private final static String AUDIT_PANEL = "Audit";
 
 	private javax.swing.JPanel jContentPane = null;
 
@@ -123,6 +126,8 @@ public class UserWindow extends ApplicationComponent implements
 	private JPanel hostCertificateRecordPanel = null;
 
 	private JButton viewHostCertificate = null;
+
+	private FederationAuditPanel auditPanel = null;
 
 	/**
 	 * This is the default constructor
@@ -251,6 +256,7 @@ public class UserWindow extends ApplicationComponent implements
 					getUserCertificatePanel(), null);
 			jTabbedPane.addTab(HOST_CERTIFICATES_PANEL, null,
 					getHostCertificates(), null);
+			jTabbedPane.addTab(AUDIT_PANEL, null, getAuditPanel(), null);
 		}
 		return jTabbedPane;
 	}
@@ -809,5 +815,23 @@ public class UserWindow extends ApplicationComponent implements
 		}
 		return viewHostCertificate;
 	}
+
+	/**
+	 * This method initializes auditPanel	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getAuditPanel() {
+		if (auditPanel == null) {
+			auditPanel = new FederationAuditPanel(this,FederationAuditPanel.GRID_ACCOUNT_MODE,this.user.getGridId());
+		}
+		return auditPanel;
+	}
+
+	public DorianSession getSession() throws Exception {
+		return this.session;
+	}
+	
+	
 
 }

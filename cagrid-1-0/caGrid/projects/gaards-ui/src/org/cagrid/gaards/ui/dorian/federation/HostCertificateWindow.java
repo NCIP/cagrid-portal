@@ -31,6 +31,7 @@ import org.cagrid.gaards.ui.common.CertificatePanel;
 import org.cagrid.gaards.ui.common.GAARDSLookAndFeel;
 import org.cagrid.gaards.ui.dorian.DorianLookAndFeel;
 import org.cagrid.gaards.ui.dorian.DorianSession;
+import org.cagrid.gaards.ui.dorian.DorianSessionProvider;
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.utils.ErrorDialog;
@@ -42,11 +43,13 @@ import org.cagrid.grape.utils.ErrorDialog;
  * @version $Id: HostCertificateWindow.java,v 1.1 2007/06/06 20:55:45 langella
  *          Exp $
  */
-public class HostCertificateWindow extends ApplicationComponent {
+public class HostCertificateWindow extends ApplicationComponent implements DorianSessionProvider{
 
 	private final static String INFO_PANEL = "Summary";
 
 	private final static String CERTIFICATE_PANEL = "Certificate";
+	
+	private final static String AUDIT_PANEL = "Audit";
 
 	private javax.swing.JPanel jContentPane = null;
 
@@ -113,6 +116,8 @@ public class HostCertificateWindow extends ApplicationComponent {
 	private JLabel hostname = null;
 
 	private JLabel hostIdentity = null;
+
+	private JPanel auditPanel = null;
 
 	/**
 	 * This is the default constructor
@@ -191,6 +196,12 @@ public class HostCertificateWindow extends ApplicationComponent {
 	private void initialize() {
 		this.setContentPane(getJContentPane());
 		this.setTitle("Host Certificate [" + record.getHost() + "]");
+	}
+	
+	
+
+	public DorianSession getSession() throws Exception {
+		return this.session;
 	}
 
 	/**
@@ -355,6 +366,7 @@ public class HostCertificateWindow extends ApplicationComponent {
 			jTabbedPane.addTab(INFO_PANEL, null, getInfoPanel(), null);
 			jTabbedPane.addTab(CERTIFICATE_PANEL, null, getCertificatePanel(),
 					null);
+			jTabbedPane.addTab(AUDIT_PANEL, null, getAuditPanel(), null);
 		}
 		return jTabbedPane;
 	}
@@ -850,6 +862,18 @@ public class HostCertificateWindow extends ApplicationComponent {
 			titlePanel.add(hostIdentity, gridBagConstraints19);
 		}
 		return titlePanel;
+	}
+
+	/**
+	 * This method initializes auditPanel	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getAuditPanel() {
+		if (auditPanel == null) {
+			auditPanel = new FederationAuditPanel(this,FederationAuditPanel.HOST_MODE,String.valueOf(this.record.getId()));
+		}
+		return auditPanel;
 	}
 
 }

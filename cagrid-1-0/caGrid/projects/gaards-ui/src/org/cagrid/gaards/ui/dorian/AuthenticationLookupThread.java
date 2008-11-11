@@ -36,15 +36,20 @@ public class AuthenticationLookupThread extends Runner {
 			if (idps != null) {
 				for (int i = 0; i < idps.size(); i++) {
 					ServiceDescriptor des = new ServiceDescriptor();
-					des.setDisplayName(idps.get(i).getDisplayName());
-					des
-							.setServiceURL(idps.get(i)
-									.getAuthenticationServiceURL());
-					des.setServiceIdentity(idps.get(i)
-							.getAuthenticationServiceIdentity());
-					AuthenticationServiceHandle as = new AuthenticationServiceHandle(
-							des);
-					authenticationServices.add(as);
+					TrustedIdentityProvider idp = idps.get(i);
+					String displayName = idp.getName();
+					if (idp.getDisplayName() != null) {
+						displayName = idp.getDisplayName();
+					}
+					if (idp.getAuthenticationServiceURL() != null) {
+						des.setDisplayName(displayName);
+						des.setServiceURL(idp.getAuthenticationServiceURL());
+						des.setServiceIdentity(idp
+								.getAuthenticationServiceIdentity());
+						AuthenticationServiceHandle as = new AuthenticationServiceHandle(
+								des);
+						authenticationServices.add(as);
+					}
 				}
 			} else {
 				ServiceConfiguration conf = (ServiceConfiguration) GridApplication
