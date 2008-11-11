@@ -9,8 +9,6 @@ public class IntroduceUpdateWizard {
         showUpdateWizard();
     }
     
-    
-	
 	public static void showUpdateWizard(){
 		UpdatePath paths = new UpdatePath();
 		UpdateWizardModel model = new UpdateWizardModel(paths);

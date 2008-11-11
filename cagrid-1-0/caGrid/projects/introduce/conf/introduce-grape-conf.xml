@@ -10,7 +10,8 @@
         <width>1200</width>
         <height>900</height>
     </dimensions>
-    <PreInitializerClass>gov.nih.nci.cagrid.introduce.portal.init.IntroducePortalInitializer</PreInitializerClass>
+    <PreInitializerClass>gov.nih.nci.cagrid.introduce.portal.init.IntroducePortalPreInitializer</PreInitializerClass>
+    <PostInitializerClass>gov.nih.nci.cagrid.introduce.portal.init.IntroducePortalPostInitializer</PostInitializerClass>
     <menus>
            <menu>
             <title>File</title>

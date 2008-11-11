@@ -3,9 +3,9 @@ package gov.nih.nci.cagrid.introduce.portal.updater.steps.updatetree;
 import gov.nih.nci.cagrid.introduce.beans.software.IntroduceType;
 import gov.nih.nci.cagrid.introduce.beans.software.SoftwareType;
 import gov.nih.nci.cagrid.introduce.common.IntroducePropertiesManager;
+import gov.nih.nci.cagrid.introduce.portal.updater.common.SoftwareUpdateTools;
 
 import java.awt.Font;
-import java.util.StringTokenizer;
 
 import javax.swing.tree.DefaultTreeModel;
 
@@ -28,7 +28,7 @@ public class MainUpdateTreeNode extends UpdateTypeTreeNode {
 			if (introduceVersions != null) {
 				for (int i = 0; i < introduceVersions.length; i++) {
 					IntroduceType introduce = introduceVersions[i];
-					if (!isOlderVersion(IntroducePropertiesManager.getIntroduceVersion(),
+					if (!SoftwareUpdateTools.isOlderVersion(IntroducePropertiesManager.getIntroduceVersion(),
 							introduce.getVersion())
 							&& !IntroducePropertiesManager.getIntroduceVersion().equals(
 									introduce.getVersion())) {
@@ -62,29 +62,6 @@ public class MainUpdateTreeNode extends UpdateTypeTreeNode {
 				}
 			}
 		}
-	}
-
-	public boolean isOlderVersion(String currentVersion, String proposedVersion) {
-		StringTokenizer currentTokes = new StringTokenizer(currentVersion, ".",
-				false);
-		StringTokenizer proposedTokes = new StringTokenizer(proposedVersion,
-				".", false);
-		while (proposedTokes.hasMoreElements()) {
-			if (!currentTokes.hasMoreElements()) {
-				return false;
-			}
-			int proposedPartVersion = Integer
-					.valueOf(proposedTokes.nextToken()).intValue();
-			int currentPartVersion = Integer.valueOf(currentTokes.nextToken())
-					.intValue();
-			if (proposedPartVersion > currentPartVersion) {
-				return false;
-			}
-			if (proposedPartVersion < currentPartVersion) {
-				return true;
-			}
-		}
-		return false;
 	}
 
 }

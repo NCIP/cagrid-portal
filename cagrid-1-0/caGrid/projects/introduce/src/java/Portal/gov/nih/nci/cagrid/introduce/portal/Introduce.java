@@ -2,18 +2,10 @@ package gov.nih.nci.cagrid.introduce.portal;
 
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.common.portal.SplashScreen;
-import gov.nih.nci.cagrid.introduce.IntroduceConstants;
-import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
 import gov.nih.nci.cagrid.introduce.common.IntroducePropertiesManager;
 
 import java.awt.Dimension;
 import java.awt.EventQueue;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.Properties;
 
 import javax.swing.JFrame;
 
@@ -46,82 +38,8 @@ public final class Introduce {
     }
 
 
-    private static void checkForUpdatePatchBugFix() {
-
-        File patchPropertiesFile = new File("patch.properties");
-        if (patchPropertiesFile.exists()) {
-            FileInputStream fis = null;
-            try {
-                fis = new FileInputStream(patchPropertiesFile);
-            } catch (FileNotFoundException e2) {
-                // TODO Auto-generated catch block
-                e2.printStackTrace();
-            }
-            Properties patchProperties = new Properties();
-            try {
-                patchProperties.load(fis);
-            } catch (FileNotFoundException e1) {
-                // TODO Auto-generated catch block
-                e1.printStackTrace();
-            } catch (IOException e1) {
-                // TODO Auto-generated catch block
-                e1.printStackTrace();
-            }
-
-            if (patchProperties.containsKey(IntroduceConstants.INTRODUCE_PATCH_VERSION_PROPERTY)) {
-                // need to set the patch version in the
-                // introduce.engine.properties file
-                File engineProps = new File("." + File.separator + "conf" + File.separator
-                    + "introduce.engine.properties");
-                Properties props = new Properties();
-
-                try {
-                    props.load(new FileInputStream(engineProps));
-                    props.setProperty("introduce.patch.version", String.valueOf(patchProperties
-                        .get(IntroduceConstants.INTRODUCE_PATCH_VERSION_PROPERTY)));
-                    FileOutputStream fos = new FileOutputStream(engineProps);
-                    props.store(fos, "Introduce Engine Properties");
-                    fos.close();
-                } catch (FileNotFoundException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-                File enginePropsT = new File("." + File.separator + "conf" + File.separator
-                    + "introduce.properties.template");
-                Properties propsT = new Properties();
-                try {
-                    propsT.load(new FileInputStream(enginePropsT));
-                    propsT.setProperty("introduce.patch.version", String.valueOf(patchProperties
-                        .get(IntroduceConstants.INTRODUCE_PATCH_VERSION_PROPERTY)));
-                    FileOutputStream fos = new FileOutputStream(enginePropsT);
-                    propsT.store(fos, "Introduce Engine Properties");
-                    fos.close();
-                } catch (FileNotFoundException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-            }
-            patchProperties.clear();
-            try {
-                fis.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        patchPropertiesFile.delete();
-
-    }
-
-
     private static void showGridPortal(String confFile) {
         try {
-            checkForUpdatePatchBugFix();
             initialize();
             showIntroduceSplash();
 

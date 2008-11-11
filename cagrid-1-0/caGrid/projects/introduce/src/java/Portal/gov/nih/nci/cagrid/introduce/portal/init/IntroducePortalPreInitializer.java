@@ -1,13 +1,9 @@
 package gov.nih.nci.cagrid.introduce.portal.init;
 
-import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.extension.IntroduceGDEExtensionDescriptionType;
-import gov.nih.nci.cagrid.introduce.common.ResourceManager;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
-import gov.nih.nci.cagrid.introduce.portal.modification.discovery.NamespaceTypeDiscoveryComponent;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
@@ -23,12 +19,12 @@ import org.cagrid.grape.model.Menu;
 import org.cagrid.grape.model.Menus;
 
 
-public class IntroducePortalInitializer implements ApplicationInitializer {
+public class IntroducePortalPreInitializer implements ApplicationInitializer {
     private static final int HELP_MENU = 4;
 
     private static final int CONFIG_MENU = 3;
 
-    private static final Logger logger = Logger.getLogger(IntroducePortalInitializer.class);
+    private static final Logger logger = Logger.getLogger(IntroducePortalPreInitializer.class);
     
     public void intialize(Application app) throws Exception {
         PropertyConfigurator.configure("." + File.separator + "conf" + File.separator

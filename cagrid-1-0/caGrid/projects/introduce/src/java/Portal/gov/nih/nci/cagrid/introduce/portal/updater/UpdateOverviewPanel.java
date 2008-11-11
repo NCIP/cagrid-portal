@@ -17,9 +17,7 @@ public class UpdateOverviewPanel extends JPanel {
 	 * 
 	 */
 	private void initialize() {
-       // jLabel = new JLabel(new ImageIcon("./resources/image.jpg"));
-       // this.add(jLabel, null);
-			
+
 	}
 
 }  //  @jve:decl-index=0:visual-constraint="10,10"

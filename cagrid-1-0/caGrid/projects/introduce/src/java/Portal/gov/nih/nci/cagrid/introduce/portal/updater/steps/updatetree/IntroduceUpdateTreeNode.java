@@ -5,10 +5,9 @@ import gov.nih.nci.cagrid.introduce.beans.software.IntroduceRevType;
 import gov.nih.nci.cagrid.introduce.beans.software.IntroduceType;
 import gov.nih.nci.cagrid.introduce.beans.software.SoftwareType;
 import gov.nih.nci.cagrid.introduce.common.IntroducePropertiesManager;
-import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
+import gov.nih.nci.cagrid.introduce.portal.updater.common.SoftwareUpdateTools;
 
 import java.awt.Font;
-import java.util.StringTokenizer;
 
 import javax.swing.JCheckBox;
 import javax.swing.tree.DefaultTreeModel;
@@ -101,8 +100,8 @@ public class IntroduceUpdateTreeNode extends UpdateTypeTreeNode {
             for (int j = 0; j < extensionVersions.length; j++) {
                 ExtensionType extension = extensionVersions[j];
                 if (extension.getCompatibleIntroduceVersions() != null) {
-                    if (isCompatibleExtension(extension.getCompatibleIntroduceVersions())
-                        && isInstalledOrExtensionNewer(extension)) {
+                    if (SoftwareUpdateTools.isCompatibleExtension(introduce, extension.getCompatibleIntroduceVersions())
+                        && SoftwareUpdateTools.isInstalledOrExtensionNewer(extension)) {
                         ExtensionUpdateTreeNode node = null;
                         if (extension.getVersion() != null) {
                             node = new ExtensionUpdateTreeNode(extension.getDisplayName() + " ("
@@ -111,7 +110,7 @@ public class IntroduceUpdateTreeNode extends UpdateTypeTreeNode {
                             node = new ExtensionUpdateTreeNode(extension.getDisplayName() + " (" + "initial version"
                                 + ")", getModel(), extension);
                         }
-                        if (isExtensionInstalled(extension)) {
+                        if (SoftwareUpdateTools.isExtensionInstalled(extension)) {
                             node.getCheckBox().setEnabled(false);
                             node.getCheckBox().setSelected(false);
                             node.setInstalled(true);
@@ -123,83 +122,6 @@ public class IntroduceUpdateTreeNode extends UpdateTypeTreeNode {
                 }
             }
         }
-    }
-
-
-    private boolean isExtensionInstalled(ExtensionType extension) {
-        boolean extensionInstalled = false;
-
-        if (ExtensionsLoader.getInstance().getExtension(extension.getName()) != null) {
-            if (extension.getVersion() == null) {
-                if (ExtensionsLoader.getInstance().getExtension(extension.getName()).getVersion() == null) {
-                    extensionInstalled = true;
-                }
-            } else {
-                if (ExtensionsLoader.getInstance().getExtension(extension.getName()).getVersion() != null
-                    && ExtensionsLoader.getInstance().getExtension(extension.getName()).getVersion().equals(
-                        extension.getVersion())) {
-                    extensionInstalled = true;
-                }
-            }
-        }
-        return extensionInstalled;
-    }
-
-
-    private boolean isInstalledOrExtensionNewer(ExtensionType extension) {
-        boolean newer = false;
-        if (ExtensionsLoader.getInstance().getExtension(extension.getName()) != null) {
-            String installedVersion = ExtensionsLoader.getInstance().getExtension(extension.getName()).getVersion();
-            if (installedVersion == null && extension.getVersion() != null) {
-                newer = true;
-            } else if (installedVersion != null && extension.getVersion() != null) {
-                if (!isOlderVersion(installedVersion, extension.getVersion()) || isExtensionInstalled(extension)) {
-                    newer = true;
-                }
-            } else if ((installedVersion == null && extension.getVersion() == null)
-                || (installedVersion != null && extension.getVersion() != null && installedVersion.equals(extension
-                    .getVersion()))) {
-                newer = true;
-            } else {
-                newer = false;
-            }
-        } else {
-            newer = true;
-        }
-        return newer;
-    }
-
-
-    private boolean isOlderVersion(String currentVersion, String proposedVersion) {
-        StringTokenizer currentTokes = new StringTokenizer(currentVersion, ".", false);
-        StringTokenizer proposedTokes = new StringTokenizer(proposedVersion, ".", false);
-        while (proposedTokes.hasMoreElements()) {
-            if (!currentTokes.hasMoreElements()) {
-                return false;
-            }
-            int proposedPartVersion = Integer.valueOf(proposedTokes.nextToken()).intValue();
-            int currentPartVersion = Integer.valueOf(currentTokes.nextToken()).intValue();
-            if (proposedPartVersion > currentPartVersion) {
-                return false;
-            }
-            if (proposedPartVersion < currentPartVersion) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-
-    private boolean isCompatibleExtension(String extensionIntroduceVersions) {
-        StringTokenizer strtok = new StringTokenizer(extensionIntroduceVersions, ",", false);
-        while (strtok.hasMoreElements()) {
-            String extensionIntroduceVersion = strtok.nextToken();
-            if (extensionIntroduceVersion.equals(introduce.getVersion())) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
 
