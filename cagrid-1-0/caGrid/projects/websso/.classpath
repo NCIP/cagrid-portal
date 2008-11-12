@@ -4,12 +4,12 @@
 	<classpathentry kind="src" path="src/resources"/>
 	<classpathentry kind="src" path="test/src/java"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="var" path="GT4_LOCATION/lib/addressing-1.0.jar" />
-	<classpathentry kind="var" path="GT4_LOCATION/lib/axis.jar" />
+	<classpathentry kind="var" path="GT4_LOCATION/lib/addressing-1.0.jar"/>
+	<classpathentry kind="var" path="GT4_LOCATION/lib/axis.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/axis-url.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/bootstrap.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/cog-axis.jar"/>
-	<classpathentry kind="var" path="GT4_LOCATION/lib/cog-jglobus.jar" />
+	<classpathentry kind="var" path="GT4_LOCATION/lib/cog-jglobus.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/cog-tomcat.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/cog-url.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/commonj.jar"/>
@@ -35,7 +35,7 @@
 	<classpathentry kind="var" path="GT4_LOCATION/lib/jaxrpc.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/jce-jdk13-125.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/jgss.jar"/>
-	<classpathentry kind="var" path="GT4_LOCATION/lib/junit.jar" />
+	<classpathentry kind="var" path="GT4_LOCATION/lib/junit.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/log4j-1.2.8.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/naming-common.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/naming-factory.jar"/>
@@ -57,17 +57,17 @@
 	<classpathentry kind="var" path="GT4_LOCATION/lib/wsrf_core_samples_mgmt_stubs.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/wsrf_core_samples_mgmt.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/wsrf_core_stubs.jar"/>
-	<classpathentry kind="var" path="GT4_LOCATION/lib/wsrf_core.jar" />
+	<classpathentry kind="var" path="GT4_LOCATION/lib/wsrf_core.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/wsrf_provider_jce.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/wsrf_test_interop_stubs.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/wsrf_test_interop.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/wsrf_test_unit_stubs.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/wsrf_test_unit.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/wsrf_test.jar"/>
-	<classpathentry kind="var" path="GT4_LOCATION/lib/wsrf_tools.jar" />
+	<classpathentry kind="var" path="GT4_LOCATION/lib/wsrf_tools.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/wss4j.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xalan.jar"/>
-	<classpathentry kind="var" path="GT4_LOCATION/lib/xercesImpl.jar" />
+	<classpathentry kind="var" path="GT4_LOCATION/lib/xercesImpl.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xml-apis.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xmlsec.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/default/jars/aopalliance-1.0.jar"/>
@@ -76,7 +76,7 @@
 	<classpathentry kind="lib" path="ext/dependencies/default/jars/backport-util-concurrent-3.0.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/default/jars/caGrid-ServiceSecurityProvider-common-1.3-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/default/jars/cas-client-core-3.1.3.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/default/jars/cas-server-core-3.2.2.jar" />
+	<classpathentry kind="lib" path="ext/dependencies/default/jars/cas-server-core-3.2.2.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/default/jars/castor-0.9.9.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/default/jars/cog-jglobus.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/default/jars/commons-codec-1.3.jar"/>
@@ -109,11 +109,10 @@
 	<classpathentry kind="lib" path="ext/dependencies/default/jars/spring-test.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/default/jars/spring-webflow-1.0.5.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/default/jars/spring-webmvc.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/default/jars/spring.jar" />
+	<classpathentry kind="lib" path="ext/dependencies/default/jars/spring.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/default/jars/standard-1.1.2.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/default/jars/xmldsig-1.0.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/default/jars/xmlsec-1.4.0.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/default/jars/xmltask-v1.14.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/default/jars/ehcache-1.2.4.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/default/jars/acegi-security-1.0.7.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/default/jars/caGrid-authentication-service-client-1.3-dev.jar"/>
@@ -126,7 +125,7 @@
 	<classpathentry kind="lib" path="ext/dependencies/default/jars/caGrid-dorian-client-1.3-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/default/jars/caGrid-dorian-common-1.3-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/default/jars/caGrid-dorian-stubs-1.2.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/default/jars/caGrid-dorian-stubs-1.3-dev.jar" />
+	<classpathentry kind="lib" path="ext/dependencies/default/jars/caGrid-dorian-stubs-1.3-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/default/jars/caGrid-gaards-core-1.3-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/default/jars/caGrid-gridca-1.3-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/default/jars/caGrid-gts-client-1.3-dev.jar"/>
@@ -139,7 +138,7 @@
 	<classpathentry kind="lib" path="ext/dependencies/default/jars/caGrid-opensaml-1.3-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/default/jars/caGrid-ServiceSecurityProvider-client-1.3-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/default/jars/caGrid-ServiceSecurityProvider-service-1.3-dev.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/default/jars/caGrid-ServiceSecurityProvider-stubs-1.3-dev.jar" />
+	<classpathentry kind="lib" path="ext/dependencies/default/jars/caGrid-ServiceSecurityProvider-stubs-1.3-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/default/jars/caGrid-syncgts-client-1.3-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/default/jars/caGrid-syncgts-common-1.3-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/default/jars/caGrid-syncgts-stubs-1.3-dev.jar"/>
