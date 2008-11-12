@@ -39,7 +39,6 @@ public class FederationAuditPanel extends JPanel {
 	public static int IDP_MODE = 3;
 
 	public static int HOST_MODE = 4;
-	
 
 	private static final long serialVersionUID = 1L;
 
