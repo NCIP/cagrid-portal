@@ -4,9 +4,12 @@ import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.common.XMLUtilities;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.Iterator;
 
 import org.jdom.Document;
 import org.jdom.Element;
+import org.jdom.filter.Filter;
 
 
 /**
@@ -43,13 +46,21 @@ public class TomcatSecureServiceContainer extends TomcatServiceContainer impleme
         } catch (Exception ex) {
             throw new ContainerException("Error loading global security descriptor: " + ex.getMessage(), ex);
         }
+        // locate certificates
+        File hostKey = new File(getCertificatesDirectory(), "localhost_key.pem");
+        File hostCert = new File(getCertificatesDirectory(), "localhost_cert.pem");
+        File caCertDir = new File(getCertificatesDirectory(), "ca");
         // fix the security configuration
         Element securityConfigElement = descriptorDocument.getRootElement();
         Element credentialElement = securityConfigElement.getChild("credential", securityConfigElement.getNamespace());
         Element keyFileElement = credentialElement.getChild("key-file", credentialElement.getNamespace());
-        keyFileElement.setAttribute("value", getCertificatesDirectory().getAbsolutePath() + File.separator + "localhost_key.pem");
         Element certFileElement = credentialElement.getChild("cert-file", credentialElement.getNamespace());
-        certFileElement.setAttribute("value", getCertificatesDirectory().getAbsolutePath() + File.separator + "localhost_cert.pem");
+        try {
+            keyFileElement.setAttribute("value", hostKey.getCanonicalPath());
+            certFileElement.setAttribute("value", hostCert.getCanonicalPath());
+        } catch (IOException ex) {
+            throw new ContainerException("Error setting host key and cert paths: " + ex.getMessage(), ex);
+        }
         // write the config back to disk
         try {
             String fixedConfig = XMLUtilities.formatXML(XMLUtilities.documentToString(descriptorDocument));
@@ -70,6 +81,55 @@ public class TomcatSecureServiceContainer extends TomcatServiceContainer impleme
             Utils.stringBufferToFile(wsddContents, serverWsdd.getCanonicalPath());
         } catch (Exception ex) {
             throw new ContainerException("Error editing server-config.wsdd for editing");
+        }
+        
+        // edit the conf/server.xml to set the key, cert, and CA dirs for the https connector
+        File serverConfFile = new File(getProperties().getContainerDirectory(), "conf" + File.separator + "server.xml");
+        Document confDocument = null;
+        try {
+            confDocument = XMLUtilities.fileNameToDocument(serverConfFile.getCanonicalPath());
+        } catch (Exception ex) {
+            throw new ContainerException("Error loading server configuration document for editing: " + ex.getMessage(), ex);
+        }
+        // locate the https connector element
+        Element serverElement = confDocument.getRootElement();
+        Iterator httpsConnectorElements = serverElement.getDescendants(new Filter() {
+            public boolean matches(Object o) {
+                if (o instanceof Element) {
+                    Element e = (Element) o;
+                    if (e.getName().equals("Connector")) {
+                        // className="org.globus.tomcat.coyote.net.HTTPSConnector"
+                        String classNameValue = e.getAttributeValue("className");
+                        if ("org.globus.tomcat.coyote.net.HTTPSConnector".equals(classNameValue)) {
+                            return true;
+                        }
+                    }
+                }
+                return false;
+            }
+        });
+        // verify there is only one connector
+        if (!httpsConnectorElements.hasNext()) {
+            throw new ContainerException("No HTTPS connector could be located in the server configuration!");
+        }
+        Element connector = (Element) httpsConnectorElements.next();
+        if (httpsConnectorElements.hasNext()) {
+            throw new ContainerException("More than one HTTPS connector was found in the server configuration!");
+        }
+        // set up cert, key, cacertdir paths
+        try {
+            connector.setAttribute("cert", hostCert.getCanonicalPath());
+            connector.setAttribute("key", hostKey.getCanonicalPath());
+            connector.setAttribute("cacertdir", caCertDir.getCanonicalPath());
+        } catch (IOException ex) {
+            throw new ContainerException("Error configuring HTTPS connector: " + ex.getMessage(), ex);
+        }
+        // write the config back to disk
+        String confXml = XMLUtilities.documentToString(confDocument);
+        try {
+            Utils.stringBufferToFile(new StringBuffer(confXml), serverConfFile.getCanonicalPath());
+        } catch (Exception ex) {
+            throw new ContainerException("Error writing server configuration file back to disk: " + ex.getMessage(), ex);
         }
     }
 
