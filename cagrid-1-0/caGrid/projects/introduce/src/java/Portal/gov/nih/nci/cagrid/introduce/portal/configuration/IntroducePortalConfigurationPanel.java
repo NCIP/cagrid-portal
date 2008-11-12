@@ -15,6 +15,8 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -22,6 +24,7 @@ import org.apache.log4j.Logger;
 import org.cagrid.grape.ConfigurationBasePanel;
 import org.cagrid.grape.ConfigurationDescriptorTreeNode;
 import org.cagrid.grape.LookAndFeel;
+import javax.swing.JCheckBox;
 
 public class IntroducePortalConfigurationPanel extends ConfigurationBasePanel {
 
@@ -44,6 +47,10 @@ public class IntroducePortalConfigurationPanel extends ConfigurationBasePanel {
     private JTextField softwareUpdateSiteURLTextField = null;
     
     private IntroducePortalConfiguration iConf = null;
+
+    private JLabel checkForUpdatesLabel = null;
+
+    private JCheckBox checkForUpdatesCheckBox = null;
 
     /**
      * This is the default constructor
@@ -126,6 +133,17 @@ public class IntroducePortalConfigurationPanel extends ConfigurationBasePanel {
      */
     private JPanel getConfigurationPanel() {
         if (configurationPanel == null) {
+            GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
+            gridBagConstraints4.gridx = 1;
+            gridBagConstraints4.anchor = GridBagConstraints.WEST;
+            gridBagConstraints4.gridy = 3;
+            GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
+            gridBagConstraints3.gridx = 0;
+            gridBagConstraints3.insets = new Insets(2, 2, 2, 2);
+            gridBagConstraints3.fill = GridBagConstraints.BOTH;
+            gridBagConstraints3.gridy = 3;
+            checkForUpdatesLabel = new JLabel();
+            checkForUpdatesLabel.setText("Check For Updates On Startup");
             GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
             gridBagConstraints8.fill = GridBagConstraints.BOTH;
             gridBagConstraints8.gridy = 2;
@@ -161,6 +179,8 @@ public class IntroducePortalConfigurationPanel extends ConfigurationBasePanel {
             configurationPanel.add(getNamespaceReplacementPolicyComboBox(), gridBagConstraints6);
             configurationPanel.add(softwareUpdateSiteURLLabel, gridBagConstraints7);
             configurationPanel.add(getSoftwareUpdateSiteURLTextField(), gridBagConstraints8);
+            configurationPanel.add(checkForUpdatesLabel, gridBagConstraints3);
+            configurationPanel.add(getCheckForUpdatesCheckBox(), gridBagConstraints4);
         }
         return configurationPanel;
     }
@@ -226,6 +246,26 @@ public class IntroducePortalConfigurationPanel extends ConfigurationBasePanel {
             });
         }
         return softwareUpdateSiteURLTextField;
+    }
+
+    /**
+     * This method initializes checkForUpdatesCheckBox	
+     * 	
+     * @return javax.swing.JCheckBox	
+     */
+    private JCheckBox getCheckForUpdatesCheckBox() {
+        if (checkForUpdatesCheckBox == null) {
+            checkForUpdatesCheckBox = new JCheckBox();
+            checkForUpdatesCheckBox.setSelected(getIntroducePortalConfiguration().isCheckForUpdatesOnStartup());
+            checkForUpdatesCheckBox.addChangeListener(new ChangeListener() {
+            
+                public void stateChanged(ChangeEvent e) {
+                   getIntroducePortalConfiguration().setCheckForUpdatesOnStartup(getCheckForUpdatesCheckBox().isSelected());
+            
+                }
+            });
+        }
+        return checkForUpdatesCheckBox;
     }
 
 }

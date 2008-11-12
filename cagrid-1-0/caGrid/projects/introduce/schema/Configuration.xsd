@@ -8,6 +8,7 @@
 		<xs:sequence>
 			<xs:element ref="tns:NamespaceReplacementPolicy"></xs:element>
 			<xs:element ref="tns:UpdateSiteURL"></xs:element>
+			<xs:element ref="tns:CheckForUpdatesOnStartup"></xs:element>
 		</xs:sequence>
 	</xs:complexType>
 	
@@ -32,6 +33,7 @@
 	</xs:simpleType>
 	
 	<xs:element name="UpdateSiteURL" type="xs:string"></xs:element>
+	<xs:element name="CheckForUpdatesOnStartup" type="xs:boolean"></xs:element>
 	
 	<xs:element name="ServiceName" type="xs:string"></xs:element>
 	<xs:element name="ServiceNamespace" type="xs:string"></xs:element>
