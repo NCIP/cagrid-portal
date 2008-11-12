@@ -7,7 +7,6 @@ import java.util.List;
 import javax.swing.JComboBox;
 
 import org.cagrid.gaards.dorian.federation.FederationAuditing;
-import org.cagrid.gaards.dorian.federation.GridUserStatus;
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>

@@ -1,6 +1,7 @@
 package org.cagrid.gaards.ui.dorian.federation;
 
 import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -17,7 +18,6 @@ import org.cagrid.gaards.ui.common.TitlePanel;
 import org.cagrid.gaards.ui.dorian.DorianLookAndFeel;
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.LookAndFeel;
-import java.awt.FlowLayout;
 
 public class FederationAuditRecordWindow extends ApplicationComponent {
 

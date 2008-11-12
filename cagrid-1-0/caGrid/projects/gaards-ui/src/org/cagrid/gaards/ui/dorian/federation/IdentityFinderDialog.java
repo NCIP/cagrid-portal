@@ -1,18 +1,16 @@
 package org.cagrid.gaards.ui.dorian.federation;
 
-import javax.swing.JPanel;
-import java.awt.Frame;
-import java.awt.BorderLayout;
-import javax.swing.JDialog;
-import java.awt.GridBagLayout;
-import javax.swing.JCheckBox;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
 import java.awt.FlowLayout;
+import java.awt.Frame;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
+import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
 
 import org.cagrid.gaards.dorian.common.AuditConstants;

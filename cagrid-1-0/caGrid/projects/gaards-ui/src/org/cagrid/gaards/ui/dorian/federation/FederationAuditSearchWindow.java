@@ -2,13 +2,13 @@ package org.cagrid.gaards.ui.dorian.federation;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 
 import javax.swing.JPanel;
 
 import org.cagrid.gaards.ui.common.TitlePanel;
 import org.cagrid.gaards.ui.dorian.SessionPanel;
 import org.cagrid.grape.ApplicationComponent;
-import java.awt.Insets;
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>

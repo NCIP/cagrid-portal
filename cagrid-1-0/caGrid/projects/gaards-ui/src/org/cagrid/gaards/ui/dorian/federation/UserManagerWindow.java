@@ -14,10 +14,8 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
 import javax.swing.border.TitledBorder;
 
 import org.cagrid.gaards.dorian.client.GridAdministrationClient;
@@ -39,7 +37,7 @@ import org.globus.gsi.GlobusCredential;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: UserManagerWindow.java,v 1.3 2008-11-12 19:26:46 langella Exp $
+ * @version $Id: UserManagerWindow.java,v 1.4 2008-11-12 19:36:52 langella Exp $
  */
 public class UserManagerWindow extends ApplicationComponent {
 

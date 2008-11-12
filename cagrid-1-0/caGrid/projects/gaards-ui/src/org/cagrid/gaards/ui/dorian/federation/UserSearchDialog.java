@@ -4,6 +4,7 @@ import gov.nih.nci.cagrid.common.Runner;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.util.List;
@@ -26,20 +27,18 @@ import org.cagrid.gaards.dorian.federation.GridUserFilter;
 import org.cagrid.gaards.dorian.federation.TrustedIdP;
 import org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault;
 import org.cagrid.gaards.ui.common.TitlePanel;
-import org.cagrid.gaards.ui.dorian.DorianLookAndFeel;
 import org.cagrid.gaards.ui.dorian.DorianSessionProvider;
 import org.cagrid.gaards.ui.dorian.SessionPanel;
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.LookAndFeel;
 import org.cagrid.grape.utils.ErrorDialog;
 import org.globus.gsi.GlobusCredential;
-import java.awt.Insets;
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: UserSearchDialog.java,v 1.1 2008-11-12 19:26:46 langella Exp $
+ * @version $Id: UserSearchDialog.java,v 1.2 2008-11-12 19:36:52 langella Exp $
  */
 public class UserSearchDialog extends JDialog {
 

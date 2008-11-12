@@ -1,15 +1,15 @@
 package org.cagrid.gaards.ui.common;
 
-import java.awt.GridBagLayout;
-import javax.swing.JPanel;
-import javax.swing.JLabel;
-import javax.swing.SwingUtilities;
-
-import java.awt.GridBagConstraints;
-import javax.swing.JProgressBar;
-import java.awt.Insets;
-import java.awt.Font;
 import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JProgressBar;
+import javax.swing.SwingUtilities;
 
 public class ProgressPanel extends JPanel {
 

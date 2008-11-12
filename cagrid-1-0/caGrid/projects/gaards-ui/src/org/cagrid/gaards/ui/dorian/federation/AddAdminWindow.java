@@ -3,21 +3,18 @@ package org.cagrid.gaards.ui.dorian.federation;
 import gov.nih.nci.cagrid.common.Runner;
 
 import java.awt.FlowLayout;
-import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import org.cagrid.gaards.dorian.client.GridAdministrationClient;
 import org.cagrid.gaards.ui.common.TitlePanel;
 import org.cagrid.grape.GridApplication;
-import org.cagrid.grape.LookAndFeel;
 import org.cagrid.grape.utils.ErrorDialog;
 import org.globus.gsi.GlobusCredential;
 

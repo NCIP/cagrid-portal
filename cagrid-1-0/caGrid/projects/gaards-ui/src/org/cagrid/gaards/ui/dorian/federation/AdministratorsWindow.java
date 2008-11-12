@@ -4,6 +4,7 @@ import gov.nih.nci.cagrid.common.Runner;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -24,7 +25,6 @@ import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.LookAndFeel;
 import org.cagrid.grape.utils.ErrorDialog;
-import java.awt.Insets;
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
