@@ -30,7 +30,6 @@ public class ServiceHelper {
     protected EndpointReferenceType endpoint;
     protected ServiceCreateStep createServiceStep;
     protected File metadataFile;
-    protected File gmeServiceDir;
     protected File cadsrServiceDir;
 
 
@@ -90,9 +89,7 @@ public class ServiceHelper {
         this.metadataFile = new File(this.testDir, "etc" + File.separator
             + IntroduceServiceInfo.INTRODUCE_SERVICEMETADATA_FILENAME);
 
-        // set gme and cadsr service dirs
-        this.gmeServiceDir = new File(System.getProperty("gme.dir", ".." + File.separator + ".." + File.separator
-            + ".." + File.separator + "caGrid" + File.separator + "projects" + File.separator + "gme"));
+       
         this.cadsrServiceDir = new File(System.getProperty("cadsr.dir", ".." + File.separator + ".." + File.separator
             + ".." + File.separator + "caGrid" + File.separator + "projects" + File.separator + "cadsr"));
     }
@@ -187,11 +184,6 @@ public class ServiceHelper {
 
     public GlobusHelper getGlobus() {
         return this.globus;
-    }
-
-
-    public File getGmeServiceDir() {
-        return this.gmeServiceDir;
     }
 
 
