@@ -52,7 +52,7 @@ public class TomcatServiceContainer extends ServiceContainer {
 	private static final Log LOG = LogFactory.getLog(ServiceContainer.class);
 
 	public static final int DEFAULT_STARTUP_WAIT_TIME = 60; // seconds
-	public static final int DEFAULT_SHUTDOWN_WAIT_TIME = 10; // seconds
+	public static final int DEFAULT_SHUTDOWN_WAIT_TIME = 60; // seconds
 
 	public static final String ENV_ANT_HOME = "ANT_HOME";
 	public static final String ENV_CATALINA_HOME = "CATALINA_HOME";
@@ -173,23 +173,24 @@ public class TomcatServiceContainer extends ServiceContainer {
 			return;
 		}
 
-		String shutdown = getProperties().getContainerDirectory()
+        // locate the shutdown script
+		String shutdownExecutable = getProperties().getContainerDirectory()
 				.getAbsolutePath()
 				+ File.separator + "bin" + File.separator + "catalina";
 
+        // build the command line to call
 		List<String> command = new ArrayList<String>();
-
-		// executable to call
 		if (System.getProperty("os.name").toLowerCase().contains("win")) {
 			command.add("cmd");
 			command.add("/c");
-			command.add(shutdown + ".bat");
+			command.add(shutdownExecutable + ".bat");
 			command.add("stop");
 		} else {
-			command.add(shutdown + ".sh");
+			command.add(shutdownExecutable + ".sh");
 			command.add("stop");
 		}
 
+        // set up the environment variables
 		String[] locationEnvironment = new String[] { ENV_CATALINA_HOME + "="
 				+ getProperties().getContainerDirectory().getAbsolutePath() };
 		String[] editedEnvironment = editEnvironment(locationEnvironment);
@@ -199,6 +200,7 @@ public class TomcatServiceContainer extends ServiceContainer {
 			LOG.debug(e);
 		}
 
+        // fork and execute a process
 		String[] commandArray = command.toArray(new String[command.size()]);
 		Process shutdownProcess = null;
 		try {
@@ -209,25 +211,24 @@ public class TomcatServiceContainer extends ServiceContainer {
 			new StreamGobbler(shutdownProcess.getErrorStream(),
 					StreamGobbler.TYPE_OUT, LOG, LogPriority.ERROR).start();
 		} catch (Exception ex) {
-			throw new ContainerException("Error invoking startup process: "
+			throw new ContainerException("Error invoking shutdown process: "
 					+ ex.getMessage(), ex);
 		}
 
+        // wait for the shutdown process to complete
 		final Process finalShutdownProcess = shutdownProcess;
-
 		FutureTask<Boolean> future = new FutureTask<Boolean>(
-				new Callable<Boolean>() {
-					public Boolean call() throws Exception {
-						LOG.debug("Waiting for shutdown process");
-						finalShutdownProcess.waitFor();
-						LOG.debug("Waiting for catalina process");
-						catalinaProcess.waitFor();
-						LOG.debug("Done waiting");
+		    new Callable<Boolean>() {
+		        public Boolean call() throws Exception {
+		            LOG.debug("Waiting for shutdown process to complete");
+		            finalShutdownProcess.waitFor();
+		            LOG.debug("Waiting for catalina process to terminate");
+		            catalinaProcess.waitFor();
+		            LOG.debug("Done waiting for catalina process to terminate");
 
-						return Boolean
-								.valueOf(finalShutdownProcess.exitValue() == 0);
-					}
-				});
+		            return Boolean.valueOf(finalShutdownProcess.exitValue() == 0);
+		        }
+		    });
 
 		ExecutorService executor = Executors.newSingleThreadExecutor();
 		executor.execute(future);
@@ -254,8 +255,9 @@ public class TomcatServiceContainer extends ServiceContainer {
 		catalinaProcess = null;
 
 		if (!success) {
-			throw new ContainerException("Shutdown command failed: "
-					+ finalShutdownProcess.exitValue());
+			throw new ContainerException("Shutdown command failed: " +
+			    "(process exited with value of " + 
+                finalShutdownProcess.exitValue() + ")");
 		}
 	}
     
