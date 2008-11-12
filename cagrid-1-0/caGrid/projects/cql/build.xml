@@ -128,6 +128,7 @@
 			<classpath>
 				<fileset dir="${globus.dir}/lib">
 					<include name="*.jar" />
+                    <exclude name="junit.jar"/>
 				</fileset>
 			</classpath>
 		</javac>
@@ -136,6 +137,7 @@
 			<classpath>
 				<fileset dir="${globus.dir}/lib">
 					<include name="*.jar" />
+                    <exclude name="junit.jar"/>
 				</fileset>
 			</classpath>
 		</javac>
@@ -149,6 +151,7 @@
 			<classpath>
 				<fileset dir="${globus.dir}/lib">
 					<include name="**/*.jar" />
+                    <exclude name="junit.jar"/>
 				</fileset>
 				<fileset dir="${ext.test.lib.dir}">
 					<include name="**/*.jar" />

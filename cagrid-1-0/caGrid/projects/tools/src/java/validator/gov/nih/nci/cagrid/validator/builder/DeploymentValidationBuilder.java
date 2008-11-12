@@ -3,7 +3,7 @@ package gov.nih.nci.cagrid.validator.builder;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.introduce.common.FileFilters;
-import gov.nih.nci.cagrid.testing.system.haste.StoryBook;
+import gov.nih.nci.cagrid.testing.system.haste.Story;
 import gov.nih.nci.cagrid.tests.core.beans.validation.Schedule;
 import gov.nih.nci.cagrid.tests.core.beans.validation.ServiceDescription;
 import gov.nih.nci.cagrid.tests.core.beans.validation.ServiceType;
@@ -19,6 +19,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileWriter;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -33,7 +34,8 @@ import javax.swing.JScrollPane;
 import javax.swing.UIManager;
 import javax.swing.border.TitledBorder;
 
-import junit.swingui.TestRunner;
+import junit.framework.TestResult;
+import junit.textui.TestRunner;
 
 import org.apache.axis.types.URI.MalformedURIException;
 
@@ -44,7 +46,7 @@ import org.apache.axis.types.URI.MalformedURIException;
  * @author David Ervin
  * 
  * @created Aug 28, 2007 12:14:58 PM
- * @version $Id: DeploymentValidationBuilder.java,v 1.1 2008-03-25 14:20:30 dervin Exp $ 
+ * @version $Id: DeploymentValidationBuilder.java,v 1.2 2008-11-12 23:36:16 jpermar Exp $ 
  */
 public class DeploymentValidationBuilder extends JFrame {
     // -XX:MaxPermSize=256m
@@ -237,7 +239,7 @@ public class DeploymentValidationBuilder extends JFrame {
                         JOptionPane.showMessageDialog(
                             DeploymentValidationBuilder.this, "Error preparing tests: " + ex.getMessage());
                     }
-                    UsefulTestRunner runner = new UsefulTestRunner(testPackage.getValidationStoryBook());
+                    UsefulTestRunner runner = new UsefulTestRunner(testPackage.getValidationStories());
                     runner.go();
                 }
             });
@@ -501,23 +503,19 @@ public class DeploymentValidationBuilder extends JFrame {
     
     private static class UsefulTestRunner extends TestRunner {
         
-        StoryBook storyBook = null;
+        List<Story> stories = null;
         
-        public UsefulTestRunner(StoryBook tests) {
+        public UsefulTestRunner(List<Story> stories) {
             super();
-            this.storyBook = tests;
+            this.stories = stories;
         }
         
         
         public void go() {
-            String suiteName = storyBook.getName();
-            fFrame = createUI(suiteName);
-            fFrame.pack();
+            for (Story s : this.stories) {
+            	TestResult result = this.doRun(s);
+            }
             
-            setSuite(suiteName);
-            runTest(storyBook);
-            
-            fFrame.setVisible(true);
         }
     }
 }

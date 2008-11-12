@@ -81,7 +81,7 @@
 		<property file="${test.dir}/resources/gme.test.properties" />
 		<property name="root.db.username" value="${cagrid.gme.db.username}" />
 		<property name="root.db.password" value="${cagrid.gme.db.password}" />
-		<property name="root.db.url" value="jdbc:mysql://localhost:3306/" />
+		<property name="root.db.url" value="jdbc:mysql://localhost:3306/?autoReconnect=true" />
 		<sql driver="${cagrid.gme.db.driver}" url="${root.db.url}" userid="${root.db.username}" password="${root.db.password}">
 			<classpath refid="test.run.classpath" />
 			DROP DATABASE IF EXISTS ${cagrid.gme.db.name};

@@ -2,6 +2,9 @@ package gov.nih.nci.cagrid.testing.system.haste;
 
 import java.util.*;
 
+import org.junit.Test;
+import org.junit.internal.runners.JUnit38ClassRunner;
+import org.junit.runner.RunWith;
 
 /*
  * HASTE - High-level Automated System Test Environment Copyright (C) 2002
@@ -23,9 +26,9 @@ import java.util.*;
  * A Story executes an ordered sequence of Steps. Story is the system-test-level
  * analogue of JUnit's TestCase.
  * 
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
-
+@RunWith(JUnit38ClassRunner.class)
 public abstract class Story extends junit.framework.TestCase {
 
 
@@ -130,6 +133,7 @@ public abstract class Story extends junit.framework.TestCase {
      * @exception Throwable
      *                if any exception is thrown
      */
+    @Test
     public void runBare() throws Throwable {
         System.out.println("\n===============================================");
         System.out.println("STORY: " + getClass().getName());

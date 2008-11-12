@@ -28,5 +28,6 @@
     <dependency org="caGrid" name="core" rev="latest.integration" conf="core->default;test->test"/>
 
     <dependency rev="1.0" org="jdom" name="jdom" conf="core->*"/>
+    <dependency rev="4.4" org="junit" name="junit" conf="impl->default"/>
   </dependencies>
 </ivy-module>

@@ -59,6 +59,9 @@ public class DorianLocaIdentityProviderTest extends ServiceStoryBase {
     private File tempService;
     private ConfigureGlobusToTrustDorianStep trust;
 
+	public DorianLocaIdentityProviderTest() {
+		super();
+	}
 
     public DorianLocaIdentityProviderTest(ServiceContainer container) {
         this(container, null, null);

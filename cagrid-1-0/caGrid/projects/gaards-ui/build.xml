@@ -68,6 +68,7 @@ GSBT - Globus Service Build Tools
 			</fileset>
 			<fileset dir="${globus.location}/lib">
 				<include name="*.jar" />
+                <exclude name="junit.jar"/>
 				<!-- Exclude UI and client jars -->
 				<exclude name="caGrid-*-Dorian-*stubs.jar" />
 				<exclude name="caGrid-*-Dorian-*common.jar" />

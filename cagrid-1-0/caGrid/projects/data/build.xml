@@ -103,6 +103,7 @@
 		</fileset>
 		<fileset dir="${globus.dir}/lib">
 			<include name="*.jar" />
+            <exclude name="junit.jar"/>
 		</fileset>
 	</path>
 
@@ -121,6 +122,7 @@
 		</fileset>
 		<fileset dir="${globus.dir}/lib">
 			<include name="**/*.jar" />
+            <exclude name="junit.jar"/>
 		</fileset>
 	</path>
 
@@ -271,6 +273,7 @@
 				<path refid="base.classpath" />
 				<fileset dir="${globus.dir}/lib">
 					<include name="*.jar" />
+                    <exclude name="junit.jar"/>
 				</fileset>
 			</classpath>
 		</javac>
@@ -280,6 +283,7 @@
 				<path refid="base.classpath" />
 				<fileset dir="${globus.dir}/lib">
 					<include name="*.jar" />
+                    <exclude name="junit.jar"/>
 				</fileset>
 			</classpath>
 		</javac>
@@ -294,6 +298,7 @@
 				<pathelement location="${stubs.dest}" />
 				<fileset dir="${globus.dir}/lib">
 					<include name="*.jar" />
+                    <exclude name="junit.jar"/>
 				</fileset>
 			</classpath>
 		</javac>
@@ -309,6 +314,7 @@
 				<pathelement location="${build.common.dest}" />
 				<fileset dir="${globus.dir}/lib">
 					<include name="*.jar" />
+                    <exclude name="junit.jar"/>
 				</fileset>
 			</classpath>
 			<include name="**/*.java" />
@@ -328,6 +334,7 @@
 				<pathelement location="${build.cql.dest}" />
 				<fileset dir="${globus.dir}/lib">
 					<include name="*.jar" />
+                    <exclude name="junit.jar"/>
 				</fileset>
 			</classpath>
 		</javac>
@@ -344,6 +351,7 @@
 				<pathelement location="${build.utils.dest}" />
 				<fileset dir="${globus.dir}/lib">
 					<include name="*.jar" />
+                    <exclude name="junit.jar"/>
 				</fileset>
 			</classpath>
 		</javac>
@@ -359,6 +367,7 @@
 				<pathelement location="${build.common.dest}" />
 				<fileset dir="${globus.dir}/lib">
 					<include name="*.jar" />
+                    <exclude name="junit.jar"/>
 				</fileset>
 			</classpath>
 		</javac>
@@ -377,6 +386,7 @@
 				<pathelement location="${build.validation.dest}" />
 				<fileset dir="${globus.dir}/lib">
 					<include name="*.jar" />
+                    <exclude name="junit.jar"/>
 				</fileset>
 			</classpath>
 		</javac>
@@ -531,6 +541,7 @@
 				</fileset>
 				<fileset dir="${globus.dir}/lib">
 					<include name="*.jar" />
+                    <exclude name="junit.jar"/>
 				</fileset>
 				<pathelement location="ext/resources/portal/introduce" />
 				<pathelement location="ext/resources/portal/common" />
@@ -554,6 +565,7 @@
 				</fileset>
 				<fileset dir="${globus.dir}/lib">
 					<include name="*.jar" />
+                    <exclude name="junit.jar"/>
 				</fileset>
 				<pathelement location="ext/resources/portal/introduce" />
 				<pathelement location="ext/resources/portal/common" />
@@ -579,6 +591,7 @@
 				</fileset>
 				<fileset dir="${globus.dir}/lib">
 					<include name="*.jar" />
+                    <exclude name="junit.jar"/>
 				</fileset>
 			</classpath>
 		</java>

@@ -53,6 +53,7 @@
 			</fileset>
 			<fileset dir="${ext.globus.location}/lib">
 				<include name="*.jar"/>
+                <exclude name="junit.jar"/>
 			</fileset>
 		</classpath>
 	</taskdef>
@@ -76,6 +77,7 @@
 			</fileset>
 			<fileset dir="${ext.globus.location}/lib">
 				<include name="*.jar"/>
+                <exclude name="junit.jar"/>
 			</fileset>
 		</classpath>
 	</taskdef>

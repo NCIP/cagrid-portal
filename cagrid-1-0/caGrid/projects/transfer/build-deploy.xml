@@ -215,6 +215,7 @@
 			<classpath>
 				<fileset dir="${ext.globus.dir}/lib">
 					<include name="*.jar" />
+                    <exclude name="junit.jar"/>
 				</fileset>
 				<fileset dir="${ant.library.dir}">
 					<include name="*.jar" />

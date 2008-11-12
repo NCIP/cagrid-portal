@@ -1,22 +1,15 @@
 package org.cagrid.fqp.test.remote.secure;
 
-import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainer;
-import gov.nih.nci.cagrid.testing.system.deployment.steps.DestroyContainerStep;
-import gov.nih.nci.cagrid.testing.system.deployment.steps.StopContainerStep;
-import gov.nih.nci.cagrid.testing.system.haste.StoryBook;
-
 import java.io.File;
+import java.io.IOException;
 
 import junit.framework.Assert;
-import junit.framework.TestResult;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.cagrid.fqp.test.common.DataServiceDeploymentStory;
 import org.cagrid.fqp.test.common.FederatedQueryProcessorHelper;
 import org.cagrid.fqp.test.common.QueryStory;
-import org.cagrid.fqp.test.remote.FQPServiceDeploymentStory;
 import org.cagrid.fqp.test.remote.TransferServiceDeploymentStory;
+import org.junit.Test;
 
 /**
  * SecureRemoteFqpSystemTests
@@ -25,33 +18,16 @@ import org.cagrid.fqp.test.remote.TransferServiceDeploymentStory;
  * 
  * @author David
  */
-public class SecureRemoteFqpSystemTests extends StoryBook {
-    
-    private Log logger = LogFactory.getLog(SecureRemoteFqpSystemTests.class);
+public class SecureRemoteFqpSystemTests {
         
     public static final String FQP_DIR_PROPERTY = "fqp.service.dir";
     public static final String TRANSFER_SERVICE_DIR_PROPERTY = "transfer.service.dir";
     
     private DataServiceDeploymentStory[] dataServiceDeployments;
-    private FQPServiceDeploymentStory fqpDeployment;
+    private SecureFQPServiceDeploymentStory fqpDeployment;
     
-    public SecureRemoteFqpSystemTests() {
-        super();
-        setName("Secure Remote Federated Query Service System Tests");
-    }
-    
-    
-    /**
-     * Overridden to call cleanUp when stories are finished running
-     */
-    public void run(TestResult result) {
-        logger.debug("Starting Secure Remote FQP Tests");
-        super.run(result);
-        cleanUp();
-    }
-    
-
-    protected void stories() {
+    @Test
+    public void testSecureRemoteFqpSystemTests() {
         // deploy two example SDK data services with security enabled
         // which pull from slightly different data
         DataServiceDeploymentStory exampleService1Deployment = 
@@ -63,42 +39,23 @@ public class SecureRemoteFqpSystemTests extends StoryBook {
         dataServiceDeployments = new DataServiceDeploymentStory[] {
             exampleService1Deployment, exampleService2Deployment
         };
-        addStory(exampleService1Deployment);
-        addStory(exampleService2Deployment);
+        
+        exampleService1Deployment.run();
+        exampleService2Deployment.run();
         
         // deploy the secure FQP service
-        fqpDeployment = new FQPServiceDeploymentStory(getFqpDir(), true);
-        addStory(fqpDeployment);
+        fqpDeployment = new SecureFQPServiceDeploymentStory(getFqpDir(), dataServiceDeployments);
+        fqpDeployment.run();
         FederatedQueryProcessorHelper queryHelper = 
             new FederatedQueryProcessorHelper(fqpDeployment);
         
         // deploy caGrid transfer to the same container as FQP
-        addStory(new TransferServiceDeploymentStory(getTransferDir(), fqpDeployment));
+        TransferServiceDeploymentStory transferStory = new TransferServiceDeploymentStory(getTransferDir(), fqpDeployment);
+        transferStory.run();
         
         // run standard queries against the secure FQP and data services
         QueryStory queryStory = new QueryStory(dataServiceDeployments, queryHelper);
-        addStory(queryStory);
-    }
-    
-    
-    private void cleanUp() {
-        logger.debug("Cleaning Up Secure Remote FQP Tests");
-        for (DataServiceDeploymentStory deployment : dataServiceDeployments) {
-            ServiceContainer container = deployment.getServiceContainer();
-            try {
-                new StopContainerStep(container).runStep();
-                new DestroyContainerStep(container).runStep();
-            } catch (Throwable ex) {
-                ex.printStackTrace();
-            }
-        }
-        try {
-            ServiceContainer fqpContainer = fqpDeployment.getServiceContainer();
-            new StopContainerStep(fqpContainer).runStep();
-            new DestroyContainerStep(fqpContainer).runStep();
-        } catch (Throwable ex) {
-            ex.printStackTrace();
-        }
+        queryStory.run();
     }
     
     

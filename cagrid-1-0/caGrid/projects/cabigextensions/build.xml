@@ -107,6 +107,7 @@
 			</fileset>
 			<fileset dir="${globus.dir}/lib">
 				<include name="**/*.jar" />
+                <exclude name="junit.jar"/>
 			</fileset>
 		</path>
 
@@ -120,6 +121,7 @@
 			</fileset>
 			<fileset dir="${globus.dir}/lib">
 				<include name="**/*.jar" />
+                <exclude name="junit.jar"/>
 			</fileset>
 			<pathelement location="${ext.globus.dir}" />
 		</path>
@@ -140,6 +142,7 @@
 			</fileset>
 			<fileset dir="${globus.dir}/lib">
 				<include name="**/*.jar" />
+                <exclude name="junit.jar"/>
 			</fileset>
 			<pathelement location="${ext.globus.dir}" />
 		</path>

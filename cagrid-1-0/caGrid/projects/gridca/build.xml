@@ -58,6 +58,7 @@
 
 			<fileset dir="${globus.location}/lib">
 				<include name="*.jar" />
+                <exclude name="junit.jar"/>
 				<exclude name="${jar.name}" />
 				<exclude name="xml-apis.jar" />
 				<exclude name="xercesImpl.jar" />

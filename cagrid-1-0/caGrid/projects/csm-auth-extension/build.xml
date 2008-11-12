@@ -76,6 +76,7 @@ GSBT - Globus Service Build Tools
 			</fileset>
 			<fileset dir="${globus.location}/lib">
 				<include name="*.jar" />
+                <exclude name="junit.jar"/>
 			</fileset>
 		</path>
 		<path id="run.classpath">

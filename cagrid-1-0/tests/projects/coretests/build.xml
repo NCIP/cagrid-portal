@@ -48,8 +48,12 @@
 		<fileset dir="${ext.lib.dir}">
 			<include name="**/*.jar" />
 		</fileset>
+		<fileset dir="${test.ext.lib.dir}">
+			<include name="**/junit-4.4.jar" />
+		</fileset>
 		<fileset dir="${globus.dir}/lib">
 			<include name="**/*.jar" />
+            <exclude name="junit.jar"/>
 		</fileset>
 	</path>
 
@@ -67,6 +71,7 @@
 		<path location="${build.stubs.classes}" />
 		<fileset dir="${globus.dir}/lib">
 			<include name="**/*.jar" />
+            <exclude name="junit.jar"/>
 		</fileset>
 	</path>
 
@@ -85,6 +90,7 @@
 		<path location="${build.stubs.classes}" />
 		<fileset dir="${globus.dir}/lib">
 			<include name="**/*.jar" />
+            <exclude name="junit.jar"/>
 		</fileset>
 	</path>
 

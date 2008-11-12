@@ -1,12 +1,14 @@
 package gov.nih.nci.cagrid.validator;
 
-import gov.nih.nci.cagrid.testing.system.haste.StoryBook;
+import gov.nih.nci.cagrid.testing.system.haste.Story;
 import gov.nih.nci.cagrid.tests.core.beans.validation.Interval;
 
 import java.io.FileInputStream;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -22,7 +24,7 @@ import org.apache.axis.types.Time;
  * @author David Ervin
  * 
  * @created Aug 29, 2007 1:17:37 PM
- * @version $Id: ValidationRunner.java,v 1.2 2008-03-25 20:04:01 dervin Exp $ 
+ * @version $Id: ValidationRunner.java,v 1.3 2008-11-12 23:36:16 jpermar Exp $ 
  */
 public class ValidationRunner {
     
@@ -35,10 +37,15 @@ public class ValidationRunner {
     }
 
 
-    public TestResult testNow() {
-        StoryBook validationStory = pack.getValidationStoryBook();
+    public List<TestResult> testNow() {
+        List<Story> validationStories = pack.getValidationStories();
         TestRunner runner = new TestRunner();
-        TestResult results = runner.doRun(validationStory);
+        //run each story and collect results
+        List<TestResult> results = new ArrayList<TestResult>();
+        for (Story s : validationStories) {
+        	TestResult result = runner.doRun(s);
+        	results.add(result);
+        }
         System.out.flush();
         return results;
     }
@@ -50,10 +57,13 @@ public class ValidationRunner {
             // a timer task to execute the tests
             TimerTask task = new TimerTask() {
                 public void run() {
-                    StoryBook validationStory = pack.getValidationStoryBook();
+                    //StoryBook validationStory = pack.getValidationStoryBook();
+                	List<Story> validationStories = pack.getValidationStories();
                     TestRunner runner = new TestRunner();
                     // TODO: something else with output here?
-                    runner.doRun(validationStory);
+                    for (Story s : validationStories) {
+                    	runner.doRun(s);
+                    }
                     System.out.flush();
                 }
             };
@@ -109,8 +119,13 @@ public class ValidationRunner {
             ValidationPackage pack = GridDeploymentValidationLoader.loadValidationPackage(in);
             in.close();
             ValidationRunner runner = new ValidationRunner(pack);
-            TestResult result = runner.testNow();
-            System.exit(result.errorCount() + result.failureCount());
+            List<TestResult> results = runner.testNow();
+            int count = 0;
+            for (TestResult result : results) {
+            	count += result.errorCount();
+            	count += result.failureCount();
+            }
+            System.exit(count);
         } catch (Exception ex) {
             ex.printStackTrace();
             System.exit(1);

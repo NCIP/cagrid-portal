@@ -22,6 +22,7 @@
 	<property name="test.lib.dir" location="${basedir}/test/lib" />
 	<property name="ext.lib.dir" location="${basedir}/ext/dependencies/jars" />
 	<property name="test.ext.lib.dir" location="${basedir}/ext/dependencies/test/lib" />
+	<property name="test.ext.jars.dir" location="${basedir}/ext/dependencies/test/jars" />
 	<property name="test.log.dir" value="${basedir}/test/logs" />
 	<property name="javadoc.dir" location="${build.dir}/javadoc" />
 
@@ -44,6 +45,7 @@
 		</fileset>
 		<fileset dir="${globus.dir}/lib">
 			<include name="**/*.jar" />
+            <exclude name="junit.jar"/>
 		</fileset>
 	</path>
 
@@ -60,9 +62,13 @@
 		<fileset dir="${ext.lib.dir}">
 			<include name="**/*.jar" />
 		</fileset>
+		<fileset dir="${test.ext.jars.dir}">
+			<include name="**/*.jar" />
+		</fileset>
 		<path location="${classes.dir}" />
 		<fileset dir="${globus.dir}/lib">
 			<include name="**/*.jar" />
+            <exclude name="junit.jar"/>
 		</fileset>
 	</path>
 
@@ -82,10 +88,14 @@
 		<fileset dir="${test.ext.lib.dir}">
 			<include name="**/*.jar" />
 		</fileset>
+		<fileset dir="${test.ext.jars.dir}">
+			<include name="**/*.jar" />
+		</fileset>
 		<path location="${test.classes.dir}" />
 		<path location="${classes.dir}" />
 		<fileset dir="${globus.dir}/lib">
 			<include name="**/*.jar" />
+            <exclude name="junit.jar"/>
 		</fileset>
 	</path>
 

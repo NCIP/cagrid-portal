@@ -72,6 +72,7 @@
 		</fileset>
 		<fileset dir="${globus.dir}/lib">
 			<include name="**/*.jar" />
+			<exclude name="junit.jar"/>
 		</fileset>
 	</path>
 

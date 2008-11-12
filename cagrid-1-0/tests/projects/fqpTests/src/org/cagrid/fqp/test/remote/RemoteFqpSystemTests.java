@@ -3,12 +3,10 @@ package org.cagrid.fqp.test.remote;
 import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainer;
 import gov.nih.nci.cagrid.testing.system.deployment.steps.DestroyContainerStep;
 import gov.nih.nci.cagrid.testing.system.deployment.steps.StopContainerStep;
-import gov.nih.nci.cagrid.testing.system.haste.StoryBook;
 
 import java.io.File;
 
 import junit.framework.Assert;
-import junit.framework.TestResult;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -17,6 +15,8 @@ import org.cagrid.fqp.test.common.DataServiceDeploymentStory;
 import org.cagrid.fqp.test.common.FederatedQueryProcessorHelper;
 import org.cagrid.fqp.test.common.QueryStory;
 import org.cagrid.fqp.test.common.ServiceContainerSource;
+import org.junit.After;
+import org.junit.Test;
 
 /** 
  *  RemoteFqpSystemTests
@@ -25,9 +25,9 @@ import org.cagrid.fqp.test.common.ServiceContainerSource;
  * @author David Ervin
  * 
  * @created Jul 10, 2008 10:57:40 AM
- * @version $Id: RemoteFqpSystemTests.java,v 1.12 2008-11-12 18:48:16 dervin Exp $ 
+ * @version $Id: RemoteFqpSystemTests.java,v 1.13 2008-11-12 23:36:11 jpermar Exp $ 
  */
-public class RemoteFqpSystemTests extends StoryBook {
+public class RemoteFqpSystemTests {
     
     public static final Log logger = LogFactory.getLog(RemoteFqpSystemTests.class);
     
@@ -37,13 +37,16 @@ public class RemoteFqpSystemTests extends StoryBook {
     private DataServiceDeploymentStory[] dataServiceDeployments;
     private FQPServiceDeploymentStory fqpDeployment;
     
+    /*
     public RemoteFqpSystemTests() {
         super();
         setName("Remote Federated Query Service System Tests");
     }
+    */
     
-
-    protected void stories() {
+    
+    @Test
+    public void remoteFqpSystemTests() {
         // deploy two example SDK data services which pull from slightly different data
         DataServiceDeploymentStory exampleService1Deployment = 
             new DataServiceDeploymentStory(new File("resources/services/ExampleSdkService1.zip"), false);
@@ -52,8 +55,9 @@ public class RemoteFqpSystemTests extends StoryBook {
         dataServiceDeployments = new DataServiceDeploymentStory[] {
             exampleService1Deployment, exampleService2Deployment
         };
-        addStory(exampleService1Deployment);
-        addStory(exampleService2Deployment);
+        
+        exampleService1Deployment.run();
+        exampleService2Deployment.run();
         
         // sources of data service containers.  This allows stories to grab
         // service containers after they've been created in the order of execution
@@ -63,46 +67,49 @@ public class RemoteFqpSystemTests extends StoryBook {
         
         // deploy the FQP service
         fqpDeployment = new FQPServiceDeploymentStory(getFqpDir(), false);
-        addStory(fqpDeployment);
+        
+        fqpDeployment.run();
+        
         FederatedQueryProcessorHelper queryHelper = 
             new FederatedQueryProcessorHelper(fqpDeployment);
         
         // initialize ws-notification client side
         NotificationClientSetupStory notificationSetupStory = new NotificationClientSetupStory();
-        addStory(notificationSetupStory);
+        notificationSetupStory.run();
         
         // run standard queries
         QueryStory queryTests = new QueryStory(containerSources, queryHelper);
-        addStory(queryTests);
+        queryTests.run();
         
         // run the aggregation queries
         AggregationStory aggregationTests = new AggregationStory(containerSources, queryHelper);
-        addStory(aggregationTests);
+        aggregationTests.run();
         
         // run asynchronous queries
         AsynchronousExecutionStory asynchronousStory = 
             new AsynchronousExecutionStory(containerSources, fqpDeployment);
-        addStory(asynchronousStory);
-        
+        asynchronousStory.run();
+
         // run enumeration queries
         EnumerationExecutionStory enumerationStory = 
             new EnumerationExecutionStory(containerSources, fqpDeployment);
-        addStory(enumerationStory);
-        
+        enumerationStory.run();
+
         // run partial results queries
         PartialResultsStory partialResultsStory = 
             new PartialResultsStory(containerSources, fqpDeployment);
-        addStory(partialResultsStory);
+        partialResultsStory.run();
         
         // deploy transfer to the FQP container
         TransferServiceDeploymentStory transferDeployStory = 
             new TransferServiceDeploymentStory(getTransferDir(), fqpDeployment);
-        addStory(transferDeployStory);
+        transferDeployStory.run();
         
         // run transfer queries
         TransferExecutionStory transferStory = 
             new TransferExecutionStory(containerSources, fqpDeployment);
-        addStory(transferStory);
+		transferStory.run();
+        
     }
     
     
@@ -113,7 +120,6 @@ public class RemoteFqpSystemTests extends StoryBook {
         return dir;
     }
     
-    
     private File getTransferDir() {
         String value = System.getProperty(TRANSFER_SERVICE_DIR_PROPERTY);
         Assert.assertNotNull("System property " + TRANSFER_SERVICE_DIR_PROPERTY + " was not set!", value);
@@ -121,17 +127,7 @@ public class RemoteFqpSystemTests extends StoryBook {
         return dir;
     }
     
-    
-    /**
-     * Overridden to call cleanUp when stories are finished running
-     */
-    public void run(TestResult result) {
-        logger.debug("Starting Remote FQP Tests");
-        super.run(result);
-        cleanUp();
-    }
-    
-    
+    @After
     private void cleanUp() {
         logger.debug("Cleaning Up Remote FQP Tests");
         for (DataServiceDeploymentStory deployment : dataServiceDeployments) {

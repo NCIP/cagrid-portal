@@ -45,6 +45,11 @@ public class DorianIdentityProviderAuthenticationTest extends ServiceStoryBase {
     private ConfigureGlobusToTrustDorianStep trust;
 
 
+    public DorianIdentityProviderAuthenticationTest() {
+    	super();
+    }
+    
+    
     public DorianIdentityProviderAuthenticationTest(ServiceContainer container) {
         this(container, null, null);
     }

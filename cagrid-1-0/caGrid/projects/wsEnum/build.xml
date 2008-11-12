@@ -88,6 +88,7 @@
 		</fileset>
 		<fileset dir="${globus.dir}/lib">
 			<include name="**/*.jar" />
+            <exclude name="junit.jar"/>
 		</fileset>
 	</path>
 
@@ -200,6 +201,7 @@
 				</fileset>
 				<fileset dir="${globus.dir}/lib">
 					<include name="*.jar" />
+                    <exclude name="junit.jar"/>
 				</fileset>
 			</classpath>
 			<include name="**/*.java" />
@@ -211,6 +213,7 @@
 				</fileset>
 				<fileset dir="${globus.dir}/lib">
 					<include name="*.jar" />
+                    <exclude name="junit.jar"/>
 				</fileset>
 			</classpath>
 		</javac>
@@ -226,6 +229,7 @@
 				</fileset>
 				<fileset dir="${globus.dir}/lib">
 					<include name="*.jar" />
+                    <exclude name="junit.jar"/>
 				</fileset>
 			</classpath>
 		</javac>

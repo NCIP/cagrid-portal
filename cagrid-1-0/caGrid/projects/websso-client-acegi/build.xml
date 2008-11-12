@@ -24,6 +24,7 @@
 		</fileset>
 		<fileset dir="${env.GLOBUS_LOCATION}/lib">
 			<include name="**/*.jar" />
+			<exclude name="junit.jar"/>
 		</fileset>
 	</path>
 

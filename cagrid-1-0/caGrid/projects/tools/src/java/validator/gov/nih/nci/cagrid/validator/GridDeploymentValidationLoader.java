@@ -3,7 +3,6 @@ package gov.nih.nci.cagrid.validator;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.testing.system.haste.Step;
 import gov.nih.nci.cagrid.testing.system.haste.Story;
-import gov.nih.nci.cagrid.testing.system.haste.StoryBook;
 import gov.nih.nci.cagrid.tests.core.beans.validation.ServiceDescription;
 import gov.nih.nci.cagrid.tests.core.beans.validation.ServiceTestStep;
 import gov.nih.nci.cagrid.tests.core.beans.validation.ServiceTestStepConfigurationProperty;
@@ -35,7 +34,7 @@ import javax.xml.namespace.QName;
  * @author David Ervin
  * 
  * @created Aug 27, 2007 3:04:08 PM
- * @version $Id: GridDeploymentValidationLoader.java,v 1.4 2008-03-31 19:18:13 dervin Exp $ 
+ * @version $Id: GridDeploymentValidationLoader.java,v 1.5 2008-11-12 23:36:16 jpermar Exp $ 
  */
 public class GridDeploymentValidationLoader {
     
@@ -64,15 +63,7 @@ public class GridDeploymentValidationLoader {
             serviceStories.add(serviceStory);
         }
         
-        StoryBook validationStoryBook = new StoryBook() {
-            protected void stories() {
-                for (Story story : serviceStories) {
-                    addStory(story);
-                }
-            }
-        };
-        
-        return new ValidationPackage(validationStoryBook, desc.getSchedule());
+        return new ValidationPackage(serviceStories, desc.getSchedule());
     }
     
     

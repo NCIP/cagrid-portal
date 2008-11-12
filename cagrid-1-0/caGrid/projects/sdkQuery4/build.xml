@@ -97,6 +97,7 @@
 		</fileset>
 		<fileset dir="${globus.dir}/lib">
 			<include name="**/*.jar" />
+            <exclude name="junit.jar"/>
 		</fileset>
 
 		<pathelement location="${build.beans.dest}" />
@@ -126,6 +127,7 @@
 		</fileset>
 		<fileset dir="${globus.dir}/lib">
 			<include name="**/*.jar" />
+            <exclude name="junit.jar"/>
 		</fileset>
 		<pathelement location="${test.resources.jar}" />
 		<pathelement location="${build.beans.dest}" />
@@ -206,6 +208,7 @@
 			<classpath>
 				<fileset dir="${globus.dir}/lib">
 					<include name="*.jar" />
+                    <exclude name="junit.jar"/>
 				</fileset>
 			</classpath>
 		</javac>
@@ -254,6 +257,7 @@
 				</fileset>
 				<fileset dir="${globus.dir}/lib">
 					<include name="*.jar" />
+                    <exclude name="junit.jar"/>
 				</fileset>
 			</classpath>
 			<include name="**/*.java" />

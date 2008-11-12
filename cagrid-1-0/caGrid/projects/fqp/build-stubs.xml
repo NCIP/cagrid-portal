@@ -127,6 +127,7 @@
         <pathelement location="${java.home}/../lib/tools.jar"/>
         <fileset dir="${abs.deploy.dir}/lib">
             <include name="*.jar"/>
+            <exclude name="junit.jar"/>
         </fileset>
         <pathelement path="${java.class.path}"/>
     </path>
@@ -136,6 +137,7 @@
         <fileset dir="${abs.deploy.dir}/lib">
             <include name="common/*.jar"/>
             <include name="*.jar"/>
+            <exclude name="junit.jar"/>
         </fileset>
     </path>
 

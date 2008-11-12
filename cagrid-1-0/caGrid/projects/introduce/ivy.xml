@@ -75,5 +75,6 @@
     <dependency rev="1.1" org="codehaus" name="jaxen" conf="extension->*"/>
     <dependency rev="2.0.0" org="jgoodies" name="validation" conf="ui->*"/>
     <dependency rev="2.0_02" org="sun" name="jhall" conf="ui->*"/>
+    <dependency rev="4.4" org="junit" name="junit" conf="impl-test->default"/>
   </dependencies>
 </ivy-module>

@@ -57,6 +57,9 @@ public class DorianRemoteIdentityProviderTest extends ServiceStoryBase {
     private File dorianTempService;
     private ConfigureGlobusToTrustDorianStep trust;
 
+    public DorianRemoteIdentityProviderTest() {
+    	super();
+    }
 
     public DorianRemoteIdentityProviderTest(ServiceContainer container, File dorianConfiguration,
         File dorianProperties, File authenticationServiceConfiguration) {

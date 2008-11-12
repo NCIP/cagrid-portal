@@ -53,6 +53,7 @@
 			</fileset>
 			<fileset dir="${globus.location}/lib">
 				<include name="*.jar" />
+                <exclude name="junit.jar"/>
 				<!-- Exclude UI and client jars -->
 				<exclude name="caGrid-.jar" />
 			</fileset>
