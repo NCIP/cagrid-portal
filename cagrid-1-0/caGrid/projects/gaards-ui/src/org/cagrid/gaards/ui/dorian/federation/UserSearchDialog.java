@@ -25,20 +25,23 @@ import org.cagrid.gaards.dorian.federation.GridUser;
 import org.cagrid.gaards.dorian.federation.GridUserFilter;
 import org.cagrid.gaards.dorian.federation.TrustedIdP;
 import org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault;
+import org.cagrid.gaards.ui.common.TitlePanel;
 import org.cagrid.gaards.ui.dorian.DorianLookAndFeel;
+import org.cagrid.gaards.ui.dorian.DorianSessionProvider;
 import org.cagrid.gaards.ui.dorian.SessionPanel;
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.LookAndFeel;
 import org.cagrid.grape.utils.ErrorDialog;
 import org.globus.gsi.GlobusCredential;
+import java.awt.Insets;
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: FindUserDialog.java,v 1.1 2008-09-16 03:00:07 langella Exp $
+ * @version $Id: UserSearchDialog.java,v 1.1 2008-11-12 19:26:46 langella Exp $
  */
-public class FindUserDialog extends JDialog {
+public class UserSearchDialog extends JDialog {
 
 	private javax.swing.JPanel jContentPane = null;
 
@@ -106,12 +109,29 @@ public class FindUserDialog extends JDialog {
 
 	private String selectedUser = null;
 
+	private DorianSessionProvider sessionProvider;
+
+	private JPanel titlePanel = null;
+
 	/**
 	 * This is the default constructor
 	 */
-	public FindUserDialog() {
+	public UserSearchDialog() {
+		this(null);
+	}
+
+	public UserSearchDialog(DorianSessionProvider provider) {
 		super(GridApplication.getContext().getApplication());
+		if (provider != null) {
+			this.sessionProvider = provider;
+		}
 		initialize();
+		if (provider != null) {
+			setSize(700, 600);
+		} else {
+			setSize(700, 700);
+		}
+		
 	}
 
 	/**
@@ -120,8 +140,6 @@ public class FindUserDialog extends JDialog {
 	private void initialize() {
 		this.setContentPane(getJContentPane());
 		this.setTitle("Find Users");
-		setSize(700, 600);
-
 	}
 
 	/**
@@ -145,49 +163,59 @@ public class FindUserDialog extends JDialog {
 	 */
 	private JPanel getMainPanel() {
 		if (mainPanel == null) {
+			GridBagConstraints gridBagConstraints13 = new GridBagConstraints();
+			gridBagConstraints13.gridx = 0;
+			gridBagConstraints13.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints13.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints13.weightx = 1.0D;
+			gridBagConstraints13.gridy = 0;
 			GridBagConstraints gridBagConstraints = new GridBagConstraints();
 			gridBagConstraints.gridx = 0;
 			gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints.weightx = 1.0D;
 			gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints.gridy = 1;
+			gridBagConstraints.gridy = 2;
 			GridBagConstraints gridBagConstraints32 = new GridBagConstraints();
 			gridBagConstraints32.gridx = 0;
 			gridBagConstraints32.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints32.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints32.weightx = 1.0D;
-			gridBagConstraints32.gridy = 4;
+			gridBagConstraints32.gridy = 5;
 			GridBagConstraints gridBagConstraints33 = new GridBagConstraints();
 			gridBagConstraints33.gridx = 0;
-			gridBagConstraints33.gridy = 3;
+			gridBagConstraints33.gridy = 4;
 			GridBagConstraints gridBagConstraints35 = new GridBagConstraints();
 			gridBagConstraints35.gridx = 0;
 			gridBagConstraints35.weightx = 1.0D;
 			gridBagConstraints35.fill = java.awt.GridBagConstraints.BOTH;
-			gridBagConstraints35.gridy = 0;
+			gridBagConstraints35.gridy = 1;
 
 			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
 			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
 			mainPanel = new JPanel();
 			mainPanel.setLayout(new GridBagLayout());
 			gridBagConstraints1.gridx = 0;
-			gridBagConstraints1.gridy = 5;
+			gridBagConstraints1.gridy = 6;
 			gridBagConstraints1.ipadx = 0;
 			gridBagConstraints1.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints1.weightx = 1.0D;
 			gridBagConstraints1.fill = java.awt.GridBagConstraints.BOTH;
 			gridBagConstraints1.weighty = 1.0D;
 			gridBagConstraints2.gridx = 0;
-			gridBagConstraints2.gridy = 6;
+			gridBagConstraints2.gridy = 7;
 			gridBagConstraints2.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints2.anchor = java.awt.GridBagConstraints.SOUTH;
 			gridBagConstraints2.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			if (sessionProvider == null) {
+				sessionProvider = getSession();
+				mainPanel.add(getSession(), gridBagConstraints35);
+			}
+			mainPanel.add(getQueryPanel(), gridBagConstraints33);
 			mainPanel.add(getButtonPanel(), gridBagConstraints2);
 			mainPanel.add(getContentPanel(), gridBagConstraints1);
-			mainPanel.add(getSession(), gridBagConstraints35);
-			mainPanel.add(getQueryPanel(), gridBagConstraints33);
 			mainPanel.add(getProgressPanel(), gridBagConstraints32);
 			mainPanel.add(getFilterPanel(), gridBagConstraints);
+			mainPanel.add(getTitlePanel(), gridBagConstraints13);
 		}
 		return mainPanel;
 	}
@@ -241,7 +269,6 @@ public class FindUserDialog extends JDialog {
 		if (cancel == null) {
 			cancel = new JButton();
 			cancel.setText("Cancel");
-			cancel.setIcon(LookAndFeel.getCloseIcon());
 			cancel.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					dispose();
@@ -285,7 +312,6 @@ public class FindUserDialog extends JDialog {
 		if (select == null) {
 			select = new JButton();
 			select.setText("Select User");
-			select.setIcon(DorianLookAndFeel.getUserIcon());
 			select.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					try {
@@ -341,7 +367,7 @@ public class FindUserDialog extends JDialog {
 		if (query == null) {
 			query = new JButton();
 			query.setText("Find Users");
-			query.setIcon(LookAndFeel.getQueryIcon());
+			getRootPane().setDefaultButton(query);
 			query.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					Runner runner = new Runner() {
@@ -395,7 +421,8 @@ public class FindUserDialog extends JDialog {
 			f.setUserStatus(((UserStatusComboBox) this.getUserStatus())
 					.getSelectedUserStatus());
 
-			GridAdministrationClient client = getSession().getAdminClient();
+			GridAdministrationClient client = this.sessionProvider.getSession()
+					.getAdminClient();
 			List<GridUser> users = client.findUsers(f);
 
 			for (int i = 0; i < users.size(); i++) {
@@ -528,7 +555,7 @@ public class FindUserDialog extends JDialog {
 			gridBagConstraints10.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			GridBagConstraints gridBagConstraints15 = new GridBagConstraints();
 			gridBagConstraints15.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints15.gridy = 1;
+			gridBagConstraints15.gridy = 2;
 			gridBagConstraints15.weightx = 1.0;
 			gridBagConstraints15.anchor = java.awt.GridBagConstraints.WEST;
 			gridBagConstraints15.insets = new java.awt.Insets(2, 2, 2, 2);
@@ -537,7 +564,7 @@ public class FindUserDialog extends JDialog {
 			gridBagConstraints14.gridx = 0;
 			gridBagConstraints14.anchor = java.awt.GridBagConstraints.WEST;
 			gridBagConstraints14.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints14.gridy = 1;
+			gridBagConstraints14.gridy = 2;
 			uidLabel = new JLabel();
 			uidLabel.setText("User Id");
 			GridBagConstraints gridBagConstraints9 = new GridBagConstraints();
@@ -556,7 +583,7 @@ public class FindUserDialog extends JDialog {
 			emailLabel.setText("Email");
 			GridBagConstraints gridBagConstraints7 = new GridBagConstraints();
 			gridBagConstraints7.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints7.gridy = 2;
+			gridBagConstraints7.gridy = 0;
 			gridBagConstraints7.weightx = 1.0;
 			gridBagConstraints7.anchor = java.awt.GridBagConstraints.WEST;
 			gridBagConstraints7.insets = new java.awt.Insets(2, 2, 2, 2);
@@ -565,13 +592,13 @@ public class FindUserDialog extends JDialog {
 			gridBagConstraints6.gridx = 0;
 			gridBagConstraints6.anchor = java.awt.GridBagConstraints.WEST;
 			gridBagConstraints6.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints6.gridy = 2;
+			gridBagConstraints6.gridy = 0;
 			gidLabel = new JLabel();
 			gidLabel.setText("Grid Identity");
 			GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
 			gridBagConstraints5.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints5.gridx = 1;
-			gridBagConstraints5.gridy = 0;
+			gridBagConstraints5.gridy = 1;
 			gridBagConstraints5.anchor = java.awt.GridBagConstraints.WEST;
 			gridBagConstraints5.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints5.weightx = 1.0;
@@ -579,7 +606,7 @@ public class FindUserDialog extends JDialog {
 			gridBagConstraints3.gridx = 0;
 			gridBagConstraints3.anchor = java.awt.GridBagConstraints.WEST;
 			gridBagConstraints3.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints3.gridy = 0;
+			gridBagConstraints3.gridy = 1;
 			idpLabel = new JLabel();
 			idpLabel.setText("Identity Provider");
 			filterPanel = new JPanel();
@@ -767,6 +794,19 @@ public class FindUserDialog extends JDialog {
 			lastName = new JTextField();
 		}
 		return lastName;
+	}
+
+	/**
+	 * This method initializes titlePanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	private JPanel getTitlePanel() {
+		if (titlePanel == null) {
+			titlePanel = new TitlePanel("User Search",
+					"Search for and select a user in the federation.");
+		}
+		return titlePanel;
 	}
 
 }

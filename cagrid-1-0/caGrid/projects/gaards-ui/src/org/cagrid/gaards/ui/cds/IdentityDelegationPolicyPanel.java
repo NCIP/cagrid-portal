@@ -15,7 +15,7 @@ import javax.swing.JTextField;
 import org.cagrid.gaards.cds.common.AllowedParties;
 import org.cagrid.gaards.cds.common.DelegationPolicy;
 import org.cagrid.gaards.cds.common.IdentityDelegationPolicy;
-import org.cagrid.gaards.ui.dorian.federation.FindUserDialog;
+import org.cagrid.gaards.ui.dorian.federation.UserSearchDialog;
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.LookAndFeel;
 
@@ -197,7 +197,7 @@ public class IdentityDelegationPolicyPanel extends DelegationPolicyPanel {
 			findButton.setText("Find...");
 			findButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					FindUserDialog dialog = new FindUserDialog();
+					UserSearchDialog dialog = new UserSearchDialog();
 					dialog.setModal(true);
 					GridApplication.getContext().showDialog(dialog);
 					if (dialog.getSelectedUser() != null) {

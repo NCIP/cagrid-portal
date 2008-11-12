@@ -444,8 +444,23 @@ public class FederationAuditPanel extends JPanel {
 		if (findTarget == null) {
 			findTarget = new JButton();
 			findTarget.setText("Find");
+			findTarget.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					String id = findIdentity();
+					if(id!=null){
+						getTarget().setText(id);
+					}
+					
+				}
+			});
 		}
 		return findTarget;
+	}
+	
+	private String findIdentity(){
+		IdentityFinderDialog ifd = new IdentityFinderDialog(this.session, GridApplication.getContext().getApplication());
+		GridApplication.getContext().showDialog(ifd);
+		return ifd.getIdentity();
 	}
 
 	/**
@@ -469,6 +484,15 @@ public class FederationAuditPanel extends JPanel {
 		if (findReportingParty == null) {
 			findReportingParty = new JButton();
 			findReportingParty.setText("Find");
+			findReportingParty.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					String id = findIdentity();
+					if(id!=null){
+						getReportingParty().setText(id);
+					}
+					
+				}
+			});
 		}
 		return findReportingParty;
 	}

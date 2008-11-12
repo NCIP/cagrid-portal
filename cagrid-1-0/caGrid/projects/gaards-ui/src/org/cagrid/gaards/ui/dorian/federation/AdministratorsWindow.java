@@ -17,12 +17,14 @@ import org.cagrid.gaards.dorian.federation.GridUser;
 import org.cagrid.gaards.dorian.federation.GridUserFilter;
 import org.cagrid.gaards.dorian.federation.TrustedIdP;
 import org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault;
+import org.cagrid.gaards.ui.common.TitlePanel;
 import org.cagrid.gaards.ui.dorian.DorianLookAndFeel;
 import org.cagrid.gaards.ui.dorian.SessionPanel;
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.LookAndFeel;
 import org.cagrid.grape.utils.ErrorDialog;
+import java.awt.Insets;
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
@@ -67,6 +69,8 @@ public class AdministratorsWindow extends ApplicationComponent {
 
 	private boolean loaded = false;
 
+	private JPanel titlePanel = null;
+
 	/**
 	 * This is the default constructor
 	 */
@@ -106,34 +110,40 @@ public class AdministratorsWindow extends ApplicationComponent {
 	 */
 	private JPanel getMainPanel() {
 		if (mainPanel == null) {
+			GridBagConstraints gridBagConstraints = new GridBagConstraints();
+			gridBagConstraints.gridx = 0;
+			gridBagConstraints.gridy = 0;
+			gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints.weightx = 1.0D;
+			gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
 			GridBagConstraints gridBagConstraints32 = new GridBagConstraints();
 			gridBagConstraints32.gridx = 0;
 			gridBagConstraints32.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints32.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints32.weightx = 1.0D;
-			gridBagConstraints32.gridy = 2;
+			gridBagConstraints32.gridy = 3;
 			GridBagConstraints gridBagConstraints33 = new GridBagConstraints();
 			gridBagConstraints33.gridx = 0;
-			gridBagConstraints33.gridy = 1;
+			gridBagConstraints33.gridy = 2;
 			GridBagConstraints gridBagConstraints35 = new GridBagConstraints();
 			gridBagConstraints35.gridx = 0;
 			gridBagConstraints35.weightx = 1.0D;
 			gridBagConstraints35.fill = java.awt.GridBagConstraints.BOTH;
-			gridBagConstraints35.gridy = 0;
+			gridBagConstraints35.gridy = 1;
 
 			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
 			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
 			mainPanel = new JPanel();
 			mainPanel.setLayout(new GridBagLayout());
 			gridBagConstraints1.gridx = 0;
-			gridBagConstraints1.gridy = 3;
+			gridBagConstraints1.gridy = 4;
 			gridBagConstraints1.ipadx = 0;
 			gridBagConstraints1.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints1.weightx = 1.0D;
 			gridBagConstraints1.fill = java.awt.GridBagConstraints.BOTH;
 			gridBagConstraints1.weighty = 1.0D;
 			gridBagConstraints2.gridx = 0;
-			gridBagConstraints2.gridy = 6;
+			gridBagConstraints2.gridy = 5;
 			gridBagConstraints2.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints2.anchor = java.awt.GridBagConstraints.SOUTH;
 			gridBagConstraints2.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -142,6 +152,7 @@ public class AdministratorsWindow extends ApplicationComponent {
 			mainPanel.add(getSessionPanel(), gridBagConstraints35);
 			mainPanel.add(getQueryPanel(), gridBagConstraints33);
 			mainPanel.add(getProgressPanel(), gridBagConstraints32);
+			mainPanel.add(getTitlePanel(), gridBagConstraints);
 		}
 		return mainPanel;
 	}
@@ -222,7 +233,7 @@ public class AdministratorsWindow extends ApplicationComponent {
 	private JButton getViewEditAdmin() {
 		if (viewEditAdmin == null) {
 			viewEditAdmin = new JButton();
-			viewEditAdmin.setText("View/Edit Admin");
+			viewEditAdmin.setText("View");
 			viewEditAdmin
 					.addActionListener(new java.awt.event.ActionListener() {
 						public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -266,7 +277,8 @@ public class AdministratorsWindow extends ApplicationComponent {
 					}
 				}
 				GridApplication.getContext().addApplicationComponent(
-						new UserWindow(getSessionPanel().getSession(), user, tidp), 700, 500);
+						new UserWindow(getSessionPanel().getSession(), user,
+								tidp), 700, 500);
 			}
 		} catch (Exception e) {
 			ErrorDialog.showError(e);
@@ -294,7 +306,7 @@ public class AdministratorsWindow extends ApplicationComponent {
 	 */
 	private SessionPanel getSessionPanel() {
 		if (sessionPanel == null) {
-			sessionPanel = new SessionPanel();
+			sessionPanel = new SessionPanel(false);
 		}
 		return sessionPanel;
 	}
@@ -320,9 +332,11 @@ public class AdministratorsWindow extends ApplicationComponent {
 	private JButton getQuery() {
 		if (query == null) {
 			query = new JButton();
-			query.setText("List Administrators");
+			query.setText("Search");
+			getRootPane().setDefaultButton(query);
 			query.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
+					disableAllButtons();
 					Runner runner = new Runner() {
 						public void execute() {
 							listAdmins();
@@ -342,18 +356,6 @@ public class AdministratorsWindow extends ApplicationComponent {
 	}
 
 	private void listAdmins() {
-
-		synchronized (mutex) {
-			if (isQuerying) {
-				ErrorDialog
-						.showError("Query Already in Progress",
-								"Please wait until the current query is finished before executing another.");
-				return;
-			} else {
-				isQuerying = true;
-			}
-		}
-
 		this.getAdminsTable().clearTable();
 		this.updateProgress(true, "Finding Administrators...");
 
@@ -375,9 +377,9 @@ public class AdministratorsWindow extends ApplicationComponent {
 		} catch (Exception e) {
 			ErrorDialog.showError(e);
 			this.updateProgress(false, "Error");
+		} finally {
+			enableAllButtons();
 		}
-		isQuerying = false;
-
 	}
 
 	/**
@@ -433,30 +435,30 @@ public class AdministratorsWindow extends ApplicationComponent {
 	private JButton getRemoveAdmin() {
 		if (removeAdmin == null) {
 			removeAdmin = new JButton();
-			removeAdmin.setText("Remove Admin");
-			removeAdmin
-					.addActionListener(new java.awt.event.ActionListener() {
-						public void actionPerformed(java.awt.event.ActionEvent e) {
-							Runner runner = new Runner() {
-								public void execute() {
-									removeAdmin();
-								}
-							};
-							try {
-								GridApplication.getContext()
-										.executeInBackground(runner);
-							} catch (Exception t) {
-								t.getMessage();
-							}
+			removeAdmin.setText("Remove");
+			removeAdmin.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					Runner runner = new Runner() {
+						public void execute() {
+							removeAdmin();
 						}
-					});
+					};
+					try {
+						GridApplication.getContext()
+								.executeInBackground(runner);
+					} catch (Exception t) {
+						t.getMessage();
+					}
+				}
+			});
 		}
 		return removeAdmin;
 	}
 
 	private void removeAdmin() {
 		try {
-			GridAdministrationClient client = getSessionPanel().getAdminClient();
+			GridAdministrationClient client = getSessionPanel()
+					.getAdminClient();
 			client.removeAdmin(getAdminsTable().getSelectedAdmin());
 			getAdminsTable().removeSelectedAdmin();
 		} catch (Exception e) {
@@ -472,7 +474,7 @@ public class AdministratorsWindow extends ApplicationComponent {
 	private JButton getAddAdmin() {
 		if (addAdmin == null) {
 			addAdmin = new JButton();
-			addAdmin.setText("Add Admin");
+			addAdmin.setText("Add");
 			addAdmin.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					Runner runner = new Runner() {
@@ -491,6 +493,33 @@ public class AdministratorsWindow extends ApplicationComponent {
 			});
 		}
 		return addAdmin;
+	}
+
+	/**
+	 * This method initializes titlePanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	private JPanel getTitlePanel() {
+		if (titlePanel == null) {
+			titlePanel = new TitlePanel("Administrator(s)",
+					"Manage the administrators of the federation.");
+		}
+		return titlePanel;
+	}
+
+	private void disableAllButtons() {
+		getQuery().setEnabled(false);
+		getViewEditAdmin().setEnabled(false);
+		getAddAdmin().setEnabled(false);
+		getRemoveAdmin().setEnabled(false);
+	}
+
+	private void enableAllButtons() {
+		getQuery().setEnabled(true);
+		getViewEditAdmin().setEnabled(true);
+		getAddAdmin().setEnabled(true);
+		getRemoveAdmin().setEnabled(true);
 	}
 
 }

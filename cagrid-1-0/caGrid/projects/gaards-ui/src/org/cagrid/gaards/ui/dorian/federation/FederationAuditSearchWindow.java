@@ -5,8 +5,10 @@ import java.awt.GridBagLayout;
 
 import javax.swing.JPanel;
 
+import org.cagrid.gaards.ui.common.TitlePanel;
 import org.cagrid.gaards.ui.dorian.SessionPanel;
 import org.cagrid.grape.ApplicationComponent;
+import java.awt.Insets;
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
@@ -25,6 +27,8 @@ public class FederationAuditSearchWindow extends ApplicationComponent {
 
 	private FederationAuditPanel auditPanel = null;
 
+	private JPanel titlePanel = null;
+
 	/**
 	 * This is the default constructor
 	 */
@@ -38,8 +42,7 @@ public class FederationAuditSearchWindow extends ApplicationComponent {
 	 */
 	private void initialize() {
 		this.setContentPane(getJContentPane());
-		this.setTitle("Administrators Window");
-
+		this.setTitle("Audit Search");
 	}
 
 	/**
@@ -63,22 +66,31 @@ public class FederationAuditSearchWindow extends ApplicationComponent {
 	 */
 	private JPanel getMainPanel() {
 		if (mainPanel == null) {
+			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
+			gridBagConstraints2.gridx = 0;
+			gridBagConstraints2.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints2.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints2.weightx = 1.0D;
+			gridBagConstraints2.anchor = GridBagConstraints.WEST;
+			gridBagConstraints2.gridy = 0;
 			GridBagConstraints gridBagConstraints = new GridBagConstraints();
 			gridBagConstraints.gridx = 0;
 			gridBagConstraints.weightx = 1.0D;
 			gridBagConstraints.weighty = 1.0D;
 			gridBagConstraints.fill = GridBagConstraints.BOTH;
-			gridBagConstraints.gridy = 1;
+			gridBagConstraints.gridy = 2;
 			GridBagConstraints gridBagConstraints35 = new GridBagConstraints();
 			gridBagConstraints35.gridx = 0;
 			gridBagConstraints35.weightx = 1.0D;
-			gridBagConstraints35.fill = java.awt.GridBagConstraints.BOTH;
-			gridBagConstraints35.gridy = 0;
+			gridBagConstraints35.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints35.gridy = 1;
 
 			mainPanel = new JPanel();
 			mainPanel.setLayout(new GridBagLayout());
+			mainPanel.add(getTitlePanel(), gridBagConstraints2);
 			mainPanel.add(getSessionPanel(), gridBagConstraints35);
 			mainPanel.add(getAuditPanel(), gridBagConstraints);
+			
 		}
 		return mainPanel;
 	}
@@ -106,6 +118,18 @@ public class FederationAuditSearchWindow extends ApplicationComponent {
 			auditPanel.setSearchButtonAsDefault(this.getRootPane());
 		}
 		return auditPanel;
+	}
+
+	/**
+	 * This method initializes titlePanel	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getTitlePanel() {
+		if (titlePanel == null) {
+			titlePanel = new TitlePanel("Audit Search","Perform a search on the federation audit records.");
+		}
+		return titlePanel;
 	}
 
 }

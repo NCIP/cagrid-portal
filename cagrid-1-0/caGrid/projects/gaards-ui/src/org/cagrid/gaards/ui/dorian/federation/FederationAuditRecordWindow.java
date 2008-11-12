@@ -13,6 +13,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import org.cagrid.gaards.dorian.federation.FederationAuditRecord;
+import org.cagrid.gaards.ui.common.TitlePanel;
 import org.cagrid.gaards.ui.dorian.DorianLookAndFeel;
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.LookAndFeel;
@@ -54,11 +55,16 @@ public class FederationAuditRecordWindow extends ApplicationComponent {
 
 	private JButton close = null;
 
+	private JPanel titlePanel = null;
+	
+	private FederationAuditRecord record;
+
 	/**
 	 * This is the default constructor
 	 */
 	public FederationAuditRecordWindow(FederationAuditRecord r) {
 		super();
+		this.record = r;
 		initialize();
 		getTargetId().setText(r.getTargetId());
 		getReportingParty().setText(r.getReportingPartyId());
@@ -100,19 +106,26 @@ public class FederationAuditRecordWindow extends ApplicationComponent {
 	 */
 	private JPanel getMainPanel() {
 		if (mainPanel == null) {
+			GridBagConstraints gridBagConstraints12 = new GridBagConstraints();
+			gridBagConstraints12.gridx = 0;
+			gridBagConstraints12.anchor = GridBagConstraints.NORTH;
+			gridBagConstraints12.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints12.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints12.weightx = 1.0D;
+			gridBagConstraints12.gridy = 0;
 			GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
 			gridBagConstraints11.gridx = 0;
 			gridBagConstraints11.insets = new Insets(2, 2, 2, 2);
 			gridBagConstraints11.fill = GridBagConstraints.HORIZONTAL;
 			gridBagConstraints11.weightx = 1.0D;
-			gridBagConstraints11.gridy = 2;
+			gridBagConstraints11.gridy = 3;
 			GridBagConstraints gridBagConstraints21 = new GridBagConstraints();
 			gridBagConstraints21.gridx = 0;
 			gridBagConstraints21.insets = new Insets(2, 2, 2, 2);
 			gridBagConstraints21.weightx = 1.0D;
 			gridBagConstraints21.weighty = 1.0D;
 			gridBagConstraints21.fill = GridBagConstraints.BOTH;
-			gridBagConstraints21.gridy = 1;
+			gridBagConstraints21.gridy = 2;
 			jLabel3 = new JLabel();
 			jLabel3.setText("Occurred At");
 			GridBagConstraints gridBagConstraints = new GridBagConstraints();
@@ -121,19 +134,13 @@ public class FederationAuditRecordWindow extends ApplicationComponent {
 			gridBagConstraints.anchor = GridBagConstraints.NORTH;
 			gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
 			gridBagConstraints.weightx = 1.0D;
-			gridBagConstraints.gridy = 0;
+			gridBagConstraints.gridy = 1;
 			mainPanel = new JPanel();
 			mainPanel.setLayout(new GridBagLayout());
-			mainPanel.setBorder(javax.swing.BorderFactory
-					.createTitledBorder(
-							null,
-							"Audit Record",
-							javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-							javax.swing.border.TitledBorder.DEFAULT_POSITION,
-							null, LookAndFeel.getPanelLabelColor()));
 			mainPanel.add(getContentPanel(), gridBagConstraints);
 			mainPanel.add(getMessagePanel(), gridBagConstraints21);
 			mainPanel.add(getButtonPanel(), gridBagConstraints11);
+			mainPanel.add(getTitlePanel(), gridBagConstraints12);
 		}
 		return mainPanel;
 	}
@@ -353,6 +360,18 @@ public class FederationAuditRecordWindow extends ApplicationComponent {
 			});
 		}
 		return close;
+	}
+
+	/**
+	 * This method initializes titlePanel	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getTitlePanel() {
+		if (titlePanel == null) {
+			titlePanel = new TitlePanel("Audit Record","Audit Record for "+this.record.getTargetId());
+		}
+		return titlePanel;
 	}
 
 }

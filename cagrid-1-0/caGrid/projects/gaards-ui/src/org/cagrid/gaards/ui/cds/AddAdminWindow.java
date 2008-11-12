@@ -16,7 +16,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import org.cagrid.gaards.cds.client.DelegationAdminClient;
-import org.cagrid.gaards.ui.dorian.federation.FindUserDialog;
+import org.cagrid.gaards.ui.dorian.federation.UserSearchDialog;
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.LookAndFeel;
 import org.cagrid.grape.utils.ErrorDialog;
@@ -325,7 +325,7 @@ public class AddAdminWindow extends JDialog {
 			findUserButton
 					.addActionListener(new java.awt.event.ActionListener() {
 						public void actionPerformed(java.awt.event.ActionEvent e) {
-							FindUserDialog dialog = new FindUserDialog();
+							UserSearchDialog dialog = new UserSearchDialog();
 							dialog.setModal(true);
 							GridApplication.getContext().showDialog(dialog);
 							if (dialog.getSelectedUser() != null) {

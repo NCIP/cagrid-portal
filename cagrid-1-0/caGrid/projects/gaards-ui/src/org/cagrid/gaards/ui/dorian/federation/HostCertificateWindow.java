@@ -628,7 +628,7 @@ public class HostCertificateWindow extends ApplicationComponent implements Doria
 			} else {
 				findUser.addActionListener(new java.awt.event.ActionListener() {
 					public void actionPerformed(java.awt.event.ActionEvent e) {
-						FindUserDialog dialog = new FindUserDialog();
+						UserSearchDialog dialog = new UserSearchDialog();
 						dialog.setModal(true);
 						GridApplication.getContext().showDialog(dialog);
 						if (dialog.getSelectedUser() != null) {

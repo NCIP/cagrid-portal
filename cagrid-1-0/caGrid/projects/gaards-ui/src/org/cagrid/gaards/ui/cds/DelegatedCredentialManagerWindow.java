@@ -26,7 +26,7 @@ import org.cagrid.gaards.cds.common.DelegationIdentifier;
 import org.cagrid.gaards.cds.common.DelegationRecord;
 import org.cagrid.gaards.cds.common.DelegationRecordFilter;
 import org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault;
-import org.cagrid.gaards.ui.dorian.federation.FindUserDialog;
+import org.cagrid.gaards.ui.dorian.federation.UserSearchDialog;
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.LookAndFeel;
@@ -663,7 +663,7 @@ public class DelegatedCredentialManagerWindow extends ApplicationComponent {
 			findButton.setText("Find...");
 			findButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					FindUserDialog dialog = new FindUserDialog();
+					UserSearchDialog dialog = new UserSearchDialog();
 					dialog.setModal(true);
 					GridApplication.getContext().showDialog(dialog);
 					if (dialog.getSelectedUser() != null) {

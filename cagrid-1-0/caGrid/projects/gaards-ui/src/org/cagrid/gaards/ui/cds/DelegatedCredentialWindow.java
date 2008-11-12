@@ -27,7 +27,7 @@ import org.cagrid.gaards.cds.common.DelegatedCredentialAuditFilter;
 import org.cagrid.gaards.cds.common.DelegationRecord;
 import org.cagrid.gaards.ui.common.CredentialComboBox;
 import org.cagrid.gaards.ui.common.SelectDateDialog;
-import org.cagrid.gaards.ui.dorian.federation.FindUserDialog;
+import org.cagrid.gaards.ui.dorian.federation.UserSearchDialog;
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.LookAndFeel;
@@ -1083,7 +1083,7 @@ public class DelegatedCredentialWindow extends ApplicationComponent {
 			findSource.setIcon(LookAndFeel.getQueryIcon());
 			findSource.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					FindUserDialog dialog = new FindUserDialog();
+					UserSearchDialog dialog = new UserSearchDialog();
 					dialog.setModal(true);
 					GridApplication.getContext().showDialog(dialog);
 					if (dialog.getSelectedUser() != null) {

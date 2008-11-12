@@ -23,7 +23,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
-import org.cagrid.gaards.ui.dorian.federation.FindUserDialog;
+import org.cagrid.gaards.ui.dorian.federation.UserSearchDialog;
 import org.cagrid.gaards.ui.gridgrouper.GridGrouperLookAndFeel;
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
@@ -419,7 +419,7 @@ public class StemPrivilegeWindow extends ApplicationComponent {
 			find.setIcon(LookAndFeel.getQueryIcon());
 			find.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					FindUserDialog dialog = new FindUserDialog();
+					UserSearchDialog dialog = new UserSearchDialog();
 					dialog.setModal(true);
 					GridApplication.getContext().showDialog(dialog);
 					if (dialog.getSelectedUser() != null) {

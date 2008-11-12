@@ -4,6 +4,7 @@ import gov.nih.nci.cagrid.common.Runner;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -16,6 +17,7 @@ import org.cagrid.gaards.dorian.client.GridAdministrationClient;
 import org.cagrid.gaards.dorian.federation.GridUserPolicy;
 import org.cagrid.gaards.dorian.federation.TrustedIdP;
 import org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault;
+import org.cagrid.gaards.ui.common.TitlePanel;
 import org.cagrid.gaards.ui.dorian.DorianLookAndFeel;
 import org.cagrid.gaards.ui.dorian.SessionPanel;
 import org.cagrid.grape.ApplicationComponent;
@@ -27,7 +29,7 @@ import org.cagrid.grape.utils.ErrorDialog;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: TrustedIdPsWindow.java,v 1.2 2008-10-02 20:46:12 langella Exp $
+ * @version $Id: TrustedIdPsWindow.java,v 1.3 2008-11-12 19:26:46 langella Exp $
  */
 public class TrustedIdPsWindow extends ApplicationComponent {
 
@@ -51,10 +53,6 @@ public class TrustedIdPsWindow extends ApplicationComponent {
 
 	private JButton query = null;
 
-	private boolean isQuerying = false;
-
-	private Object mutex = new Object();
-
 	private JPanel progressPanel = null;
 
 	private JProgressBar progress = null;
@@ -62,6 +60,8 @@ public class TrustedIdPsWindow extends ApplicationComponent {
 	private JButton removeTrustedIdPButton = null;
 
 	private JButton addUser = null;
+
+	private JPanel titlePanel = null;
 
 	/**
 	 * This is the default constructor
@@ -102,34 +102,46 @@ public class TrustedIdPsWindow extends ApplicationComponent {
 	 */
 	private JPanel getMainPanel() {
 		if (mainPanel == null) {
+			GridBagConstraints gridBagConstraints = new GridBagConstraints();
+			gridBagConstraints.gridx = 0;
+			gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints.weightx = 1.0D;
+			gridBagConstraints.gridy = 0;
 			GridBagConstraints gridBagConstraints32 = new GridBagConstraints();
 			gridBagConstraints32.gridx = 0;
 			gridBagConstraints32.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints32.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints32.weightx = 1.0D;
-			gridBagConstraints32.gridy = 2;
+			gridBagConstraints32.gridy = 3;
 			GridBagConstraints gridBagConstraints33 = new GridBagConstraints();
 			gridBagConstraints33.gridx = 0;
-			gridBagConstraints33.gridy = 1;
+			gridBagConstraints33.gridy = 2;
 			GridBagConstraints gridBagConstraints35 = new GridBagConstraints();
 			gridBagConstraints35.gridx = 0;
 			gridBagConstraints35.weightx = 1.0D;
-			gridBagConstraints35.fill = java.awt.GridBagConstraints.BOTH;
-			gridBagConstraints35.gridy = 0;
+			gridBagConstraints35.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints35.gridheight = 1;
+			gridBagConstraints35.gridwidth = 1;
+			gridBagConstraints35.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints35.weighty = 0.0D;
+			gridBagConstraints35.ipadx = 0;
+			gridBagConstraints35.ipady = 0;
+			gridBagConstraints35.gridy = 1;
 
 			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
 			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
 			mainPanel = new JPanel();
 			mainPanel.setLayout(new GridBagLayout());
 			gridBagConstraints1.gridx = 0;
-			gridBagConstraints1.gridy = 3;
+			gridBagConstraints1.gridy = 4;
 			gridBagConstraints1.ipadx = 0;
 			gridBagConstraints1.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints1.weightx = 1.0D;
 			gridBagConstraints1.fill = java.awt.GridBagConstraints.BOTH;
 			gridBagConstraints1.weighty = 1.0D;
 			gridBagConstraints2.gridx = 0;
-			gridBagConstraints2.gridy = 6;
+			gridBagConstraints2.gridy = 5;
 			gridBagConstraints2.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints2.anchor = java.awt.GridBagConstraints.SOUTH;
 			gridBagConstraints2.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -138,6 +150,7 @@ public class TrustedIdPsWindow extends ApplicationComponent {
 			mainPanel.add(getSession(), gridBagConstraints35);
 			mainPanel.add(getQueryPanel(), gridBagConstraints33);
 			mainPanel.add(getProgressPanel(), gridBagConstraints32);
+			mainPanel.add(getTitlePanel(), gridBagConstraints);
 		}
 		return mainPanel;
 	}
@@ -274,7 +287,7 @@ public class TrustedIdPsWindow extends ApplicationComponent {
 	 */
 	private SessionPanel getSession() {
 		if (session == null) {
-			session = new SessionPanel();
+			session = new SessionPanel(false);
 		}
 		return session;
 	}
@@ -300,9 +313,10 @@ public class TrustedIdPsWindow extends ApplicationComponent {
 	private JButton getQuery() {
 		if (query == null) {
 			query = new JButton();
-			query.setText("Find Trusted Identity Providers");
+			query.setText("Search");
 			query.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
+					disableAllButtons();
 					Runner runner = new Runner() {
 						public void execute() {
 							findTrustedIdPs();
@@ -322,18 +336,6 @@ public class TrustedIdPsWindow extends ApplicationComponent {
 	}
 
 	private void findTrustedIdPs() {
-
-		synchronized (mutex) {
-			if (isQuerying) {
-				ErrorDialog
-						.showError("Query Already in Progress",
-								"Please wait until the current query is finished before executing another.");
-				return;
-			} else {
-				isQuerying = true;
-			}
-		}
-
 		this.getTrustedIdPTable().clearTable();
 		this.updateProgress(true, "Finding Trusted IdPs...");
 
@@ -354,9 +356,9 @@ public class TrustedIdPsWindow extends ApplicationComponent {
 		} catch (Exception e) {
 			ErrorDialog.showError(e);
 			this.updateProgress(false, "Error");
+		}finally{
+			enableAllButtons();
 		}
-		isQuerying = false;
-
 	}
 
 	private List<GridUserPolicy> getUserPolicies() throws Exception {
@@ -476,6 +478,33 @@ public class TrustedIdPsWindow extends ApplicationComponent {
 			});
 		}
 		return addUser;
+	}
+
+	/**
+	 * This method initializes titlePanel	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getTitlePanel() {
+		if (titlePanel == null) {
+			titlePanel = new TitlePanel("Identity Provider(s)","Manage the Identity Provider(s) trusted by the federation.");
+		}
+		return titlePanel;
+	}
+	
+	private void disableAllButtons(){
+		getAddUser().setEnabled(false);
+		getViewTrustedIdP().setEnabled(false);
+		getRemoveTrustedIdPButton().setEnabled(false);
+		getQuery().setEnabled(false);
+	}
+	
+	private void enableAllButtons(){
+		getAddUser().setEnabled(true);
+		getViewTrustedIdP().setEnabled(true);
+		getRemoveTrustedIdPButton().setEnabled(true);
+		getQuery().setEnabled(true);
+		
 	}
 
 }
