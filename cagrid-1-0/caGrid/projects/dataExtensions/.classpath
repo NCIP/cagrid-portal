@@ -99,7 +99,7 @@
 	<classpathentry kind="lib" path="ext/dependencies/impl/jars/caGrid-grape-1.3-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/impl/jars/caGrid-grape-resources-1.3-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/impl/jars/caGrid-graph-1.3-dev.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/impl/jars/caGrid-Introduce-core-1.3-dev.jar" sourcepath="/caGrid-introduce"/>
+	<classpathentry kind="lib" path="ext/dependencies/impl/jars/caGrid-Introduce-core-1.3-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/impl/jars/caGrid-Introduce-portal-1.3-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/impl/jars/caGrid-Introduce-updater-1.3-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/impl/jars/caGrid-metadata-common-1.3-dev.jar"/>
@@ -130,10 +130,7 @@
 	<classpathentry kind="lib" path="ext/dependencies/impl/jars/jhall.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/impl/jars/jprov.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/impl/jars/mobius_common_client-1.1.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/impl/jars/mobius_common_server-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/impl/jars/mobius_gme_client-1.1.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/impl/jars/mobius-castor-0.9.4.3-xml.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/impl/jars/mysql-connector-java-3.0.16-ga-bin.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/impl/jars/osgi.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/impl/jars/relaxngDatatype.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/impl/jars/resources.jar"/>
