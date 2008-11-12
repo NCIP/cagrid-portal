@@ -20,7 +20,6 @@ public class WSDLServiceStatusProviderTest extends TestCase {
         WSDLServiceStatusProvider _provider = new WSDLServiceStatusProvider();
         assertEquals("Should not get wsdl from this url", ServiceStatus.INACTIVE, _provider.getStatus(_nonCagridService));
         assertEquals("Should get wsdl from URL", ServiceStatus.ACTIVE, _provider.getStatus(_cagridservice));
-        assertEquals("Should get wsdl from URL", ServiceStatus.ACTIVE, _provider.getStatus("https://cagrid-skinspore.med.yale.edu:8443/wsrf/services/cagrid/GridGrouper"));
 
         assertEquals(ServiceStatus.INACTIVE, _provider.getStatus("http://wsdl"));
         assertEquals(ServiceStatus.INACTIVE, _provider.getStatus("http://"));
