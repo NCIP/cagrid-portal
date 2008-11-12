@@ -25,7 +25,7 @@ import org.cagrid.fqp.test.common.ServiceContainerSource;
  * @author David Ervin
  * 
  * @created Jul 10, 2008 10:57:40 AM
- * @version $Id: RemoteFqpSystemTests.java,v 1.11 2008-10-21 20:04:04 dervin Exp $ 
+ * @version $Id: RemoteFqpSystemTests.java,v 1.12 2008-11-12 18:48:16 dervin Exp $ 
  */
 public class RemoteFqpSystemTests extends StoryBook {
     
@@ -122,6 +122,9 @@ public class RemoteFqpSystemTests extends StoryBook {
     }
     
     
+    /**
+     * Overridden to call cleanUp when stories are finished running
+     */
     public void run(TestResult result) {
         logger.debug("Starting Remote FQP Tests");
         super.run(result);

@@ -1,11 +1,17 @@
 package org.cagrid.fqp.test.remote.secure;
 
+import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainer;
+import gov.nih.nci.cagrid.testing.system.deployment.steps.DestroyContainerStep;
+import gov.nih.nci.cagrid.testing.system.deployment.steps.StopContainerStep;
 import gov.nih.nci.cagrid.testing.system.haste.StoryBook;
 
 import java.io.File;
 
 import junit.framework.Assert;
+import junit.framework.TestResult;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.cagrid.fqp.test.common.DataServiceDeploymentStory;
 import org.cagrid.fqp.test.common.FederatedQueryProcessorHelper;
 import org.cagrid.fqp.test.common.QueryStory;
@@ -20,6 +26,8 @@ import org.cagrid.fqp.test.remote.TransferServiceDeploymentStory;
  * @author David
  */
 public class SecureRemoteFqpSystemTests extends StoryBook {
+    
+    private Log logger = LogFactory.getLog(SecureRemoteFqpSystemTests.class);
         
     public static final String FQP_DIR_PROPERTY = "fqp.service.dir";
     public static final String TRANSFER_SERVICE_DIR_PROPERTY = "transfer.service.dir";
@@ -30,6 +38,16 @@ public class SecureRemoteFqpSystemTests extends StoryBook {
     public SecureRemoteFqpSystemTests() {
         super();
         setName("Secure Remote Federated Query Service System Tests");
+    }
+    
+    
+    /**
+     * Overridden to call cleanUp when stories are finished running
+     */
+    public void run(TestResult result) {
+        logger.debug("Starting Secure Remote FQP Tests");
+        super.run(result);
+        cleanUp();
     }
     
 
@@ -60,6 +78,27 @@ public class SecureRemoteFqpSystemTests extends StoryBook {
         // run standard queries against the secure FQP and data services
         QueryStory queryStory = new QueryStory(dataServiceDeployments, queryHelper);
         addStory(queryStory);
+    }
+    
+    
+    private void cleanUp() {
+        logger.debug("Cleaning Up Secure Remote FQP Tests");
+        for (DataServiceDeploymentStory deployment : dataServiceDeployments) {
+            ServiceContainer container = deployment.getServiceContainer();
+            try {
+                new StopContainerStep(container).runStep();
+                new DestroyContainerStep(container).runStep();
+            } catch (Throwable ex) {
+                ex.printStackTrace();
+            }
+        }
+        try {
+            ServiceContainer fqpContainer = fqpDeployment.getServiceContainer();
+            new StopContainerStep(fqpContainer).runStep();
+            new DestroyContainerStep(fqpContainer).runStep();
+        } catch (Throwable ex) {
+            ex.printStackTrace();
+        }
     }
     
     
