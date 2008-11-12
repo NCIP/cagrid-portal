@@ -21,7 +21,7 @@ public class DorianSystemTestStoryBook {
     }
 
     @Test
-    public void dorianLoca;IdentityProviderTest() throws IOException {
+    public void dorianLocalIdentityProviderTest() throws IOException {
     	Story test = new DorianLocaIdentityProviderTest(ServiceContainerFactory
             .createContainer(ServiceContainerType.SECURE_TOMCAT_CONTAINER), DORIAN_PROPERTIES_FILE);
     	test.run();
