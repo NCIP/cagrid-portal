@@ -9,11 +9,11 @@ import org.cagrid.websso.common.WebSSOClientHelper;
 
 import org.springframework.core.io.Resource;
 
-public class WebSSOLogoutHelper{
+public class SingleSignoutHelper{
 	
 	private Resource casClientResource;
 	
-	public WebSSOLogoutHelper(Resource casClientResource) {
+	public SingleSignoutHelper(Resource casClientResource) {
 		this.casClientResource = casClientResource;
 	}
 	

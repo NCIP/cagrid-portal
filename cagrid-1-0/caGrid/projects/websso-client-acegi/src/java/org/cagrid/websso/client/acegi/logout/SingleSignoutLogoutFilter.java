@@ -22,7 +22,7 @@ public class SingleSignoutLogoutFilter implements Filter, InitializingBean {
 	private String filterProcessesUrl;
 	private LogoutHandler[] logoutHandlers;
 	private ExpiredTicketCache expiredTicketCache;
-	private WebSSOLogoutHelper webssoLogoutHelper;
+	private SingleSignoutHelper webssoLogoutHelper;
 
 	/**
 	 * The "magic" URL that triggers a CAS logout
@@ -45,7 +45,7 @@ public class SingleSignoutLogoutFilter implements Filter, InitializingBean {
 		this.expiredTicketCache = cache;
 	}
 	
-	public void setWebssoLogoutHelper(WebSSOLogoutHelper webssoLogoutHelper) {
+	public void setWebssoLogoutHelper(SingleSignoutHelper webssoLogoutHelper) {
 		this.webssoLogoutHelper = webssoLogoutHelper;
 	}
 
