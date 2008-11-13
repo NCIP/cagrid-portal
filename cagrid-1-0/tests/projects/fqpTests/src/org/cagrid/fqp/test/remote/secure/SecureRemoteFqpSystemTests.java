@@ -1,14 +1,22 @@
 package org.cagrid.fqp.test.remote.secure;
 
+import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainer;
+import gov.nih.nci.cagrid.testing.system.deployment.steps.DestroyContainerStep;
+import gov.nih.nci.cagrid.testing.system.deployment.steps.StopContainerStep;
+
 import java.io.File;
-import java.io.IOException;
 
 import junit.framework.Assert;
+import junit.framework.TestResult;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.cagrid.fqp.test.common.DataServiceDeploymentStory;
 import org.cagrid.fqp.test.common.FederatedQueryProcessorHelper;
 import org.cagrid.fqp.test.common.QueryStory;
+import org.cagrid.fqp.test.remote.FQPServiceDeploymentStory;
 import org.cagrid.fqp.test.remote.TransferServiceDeploymentStory;
+import org.junit.After;
 import org.junit.Test;
 
 /**
@@ -19,12 +27,14 @@ import org.junit.Test;
  * @author David
  */
 public class SecureRemoteFqpSystemTests {
+    
+    private Log logger = LogFactory.getLog(SecureRemoteFqpSystemTests.class);
         
     public static final String FQP_DIR_PROPERTY = "fqp.service.dir";
     public static final String TRANSFER_SERVICE_DIR_PROPERTY = "transfer.service.dir";
     
     private DataServiceDeploymentStory[] dataServiceDeployments;
-    private SecureFQPServiceDeploymentStory fqpDeployment;
+    private FQPServiceDeploymentStory fqpDeployment;
     
     @Test
     public void testSecureRemoteFqpSystemTests() {
@@ -44,7 +54,7 @@ public class SecureRemoteFqpSystemTests {
         exampleService2Deployment.run();
         
         // deploy the secure FQP service
-        fqpDeployment = new SecureFQPServiceDeploymentStory(getFqpDir(), dataServiceDeployments);
+        fqpDeployment = new FQPServiceDeploymentStory(getFqpDir(), true);
         fqpDeployment.run();
         FederatedQueryProcessorHelper queryHelper = 
             new FederatedQueryProcessorHelper(fqpDeployment);
@@ -56,6 +66,28 @@ public class SecureRemoteFqpSystemTests {
         // run standard queries against the secure FQP and data services
         QueryStory queryStory = new QueryStory(dataServiceDeployments, queryHelper);
         queryStory.run();
+    }
+    
+    
+    @After
+    private void cleanUp() {
+        logger.debug("Cleaning Up Secure Remote FQP Tests");
+        for (DataServiceDeploymentStory deployment : dataServiceDeployments) {
+            ServiceContainer container = deployment.getServiceContainer();
+            try {
+                new StopContainerStep(container).runStep();
+                new DestroyContainerStep(container).runStep();
+            } catch (Throwable ex) {
+                ex.printStackTrace();
+            }
+        }
+        try {
+            ServiceContainer fqpContainer = fqpDeployment.getServiceContainer();
+            new StopContainerStep(fqpContainer).runStep();
+            new DestroyContainerStep(fqpContainer).runStep();
+        } catch (Throwable ex) {
+            ex.printStackTrace();
+        }
     }
     
     
