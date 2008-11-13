@@ -18,7 +18,7 @@
 		<artifact name="webssoclientexample" conf="war" type="war" />
 	</publications>
 	<dependencies>
-		<dependency rev="latest.integration" org="caGrid" name="websso-client-jasig" conf="default->default" />
+		<dependency rev="latest.integration" org="caGrid" name="websso-client" conf="default->default" />
 		<dependency rev="latest.integration" org="caGrid" name="websso-client-acegi" conf="default->default" />
 	</dependencies>
 </ivy-module>
