@@ -4,7 +4,7 @@
 	<classpathentry kind="src" path="test/src/java"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/addressing-1.0.jar"/>
-	<classpathentry kind="var" path="GT4_LOCATION/lib/axis.jar" sourcepath="/GT4_LOCATION/ws-axis-src.zip"/>
+	<classpathentry kind="var" path="GT4_LOCATION/lib/axis.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/axis-url.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/bootstrap.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/cog-axis.jar"/>
@@ -48,11 +48,10 @@
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xercesImpl.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xml-apis.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xmlsec.jar"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/3"/>
 	<classpathentry kind="lib" path="ext/dependencies/jars/castor-0.9.9.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/jars/jdom-1.0.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/jars/validation-2.0.0.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/test/jars/jdepend-2.7.jar"/>
-	<classpathentry kind="var" path="ANT_HOME/lib/junit.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
