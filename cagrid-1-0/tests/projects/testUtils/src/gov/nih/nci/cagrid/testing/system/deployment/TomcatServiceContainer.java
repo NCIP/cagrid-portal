@@ -58,6 +58,9 @@ public class TomcatServiceContainer extends ServiceContainer {
 	public static final String ENV_CATALINA_HOME = "CATALINA_HOME";
 	public static final String ENV_CATALINA_OPTS = "CATALINA_OPTS";
 	public static final String ENV_GLOBUS_LOCATION = "GLOBUS_LOCATION";
+    public static final String ENV_JAVA_OPTS = "JAVA_OPTS";
+    
+    public static final String CACERTS_DIR_PROPERTY = "X509_CERT_DIR";
 
 	public static final String DEPLOY_ANT_TARGET = "deployTomcat";
 
@@ -136,9 +139,14 @@ public class TomcatServiceContainer extends ServiceContainer {
 		// target to execute
 		command.add(DEPLOY_ANT_TARGET);
 
-		String[] locationEnvironment = new String[] { ENV_CATALINA_HOME + "="
-				+ getProperties().getContainerDirectory().getAbsolutePath() };
-		String[] editedEnvironment = editEnvironment(locationEnvironment);
+        // environment variables
+        List<String> additionalEnvironment = new ArrayList<String>();
+        
+        // set catalina home
+        additionalEnvironment.add(ENV_CATALINA_HOME + "="
+            + getProperties().getContainerDirectory().getAbsolutePath());
+		String[] editedEnvironment = editEnvironment(additionalEnvironment);
+        
 
 		LOG.debug("Command environment:\n");
 		for (String e : editedEnvironment) {
@@ -191,9 +199,10 @@ public class TomcatServiceContainer extends ServiceContainer {
 		}
 
         // set up the environment variables
-		String[] locationEnvironment = new String[] { ENV_CATALINA_HOME + "="
-				+ getProperties().getContainerDirectory().getAbsolutePath() };
-		String[] editedEnvironment = editEnvironment(locationEnvironment);
+        List<String> additionalEnvironment = new ArrayList<String>();
+		additionalEnvironment.add(ENV_CATALINA_HOME + "="
+				+ getProperties().getContainerDirectory().getAbsolutePath());
+		String[] editedEnvironment = editEnvironment(additionalEnvironment);
 
 		LOG.debug("Command environment:\n");
 		for (String e : editedEnvironment) {
@@ -286,31 +295,45 @@ public class TomcatServiceContainer extends ServiceContainer {
 			command.add(startup + ".sh");
 			command.add("run");
 		}
+        
+        // if container is secure, set the system property X509_CERT_DIR to the certificates directory
+        List<String> additionalEnvironment = new ArrayList<String>();
+        if (getProperties().isSecure()) {
+            try {
+                File certsDir = ((SecureContainer) this).getCertificatesDirectory();
+                String caCertsDir = new File(certsDir, "ca").getCanonicalPath();
+                String x509CertsEnv = ENV_JAVA_OPTS + "=-D" + CACERTS_DIR_PROPERTY + "=" + caCertsDir;
+                additionalEnvironment.add(x509CertsEnv);
+            } catch (Exception ex) {
+                throw new ContainerException("Error setting ca certificates directory!");
+            }
+        }
 
-		// edit the environment
-		List<String> edits = new ArrayList<String>();
-		edits.add(ENV_CATALINA_HOME + "="
+		// set catalina home
+        additionalEnvironment.add(ENV_CATALINA_HOME + "="
 				+ getProperties().getContainerDirectory().getAbsolutePath());
+        
+        // set heap size
 		if (getProperties().getHeapSizeInMegabytes() != null) {
 			String currentCatalinaOpts = System.getenv(ENV_CATALINA_OPTS);
 			if (currentCatalinaOpts != null) {
-				edits.add(ENV_CATALINA_OPTS + "=\"" + currentCatalinaOpts
+                additionalEnvironment.add(ENV_CATALINA_OPTS + "=\"" + currentCatalinaOpts
 						+ " -Xmx" + getProperties().getHeapSizeInMegabytes()
 						+ "m\"");
 			} else {
-				edits.add(ENV_CATALINA_OPTS + "=\"-Xmx"
+                additionalEnvironment.add(ENV_CATALINA_OPTS + "=\"-Xmx"
 						+ getProperties().getHeapSizeInMegabytes() + "m\"");
 			}
 		}
-		String[] editedEnvironment = editEnvironment(edits
-				.toArray(new String[0]));
+		String[] editedEnvironment = editEnvironment(additionalEnvironment);
 
 		LOG.debug("Command environment:\n");
+        System.out.println("Command environment:\n");
 		for (String e : editedEnvironment) {
 			LOG.debug(e);
 			System.out.println(e);
 		}
-
+        
 		String[] commandArray = command.toArray(new String[command.size()]);
 		try {
 			catalinaProcess = Runtime.getRuntime().exec(commandArray,
@@ -365,18 +388,21 @@ public class TomcatServiceContainer extends ServiceContainer {
 	// ---------------
 
     
-	private String[] editEnvironment(String[] edits) {
-		Map<String, String> envm = new HashMap<String, String>(System.getenv());
+	private String[] editEnvironment(List<String> edits) {
+		Map<String, String> systemEnvironment = new HashMap<String, String>(System.getenv());
 		for (String element : edits) {
-			String[] envVar = element.split("=");
-			envm.put(envVar[0], envVar[1]);
+            int splitIndex = element.indexOf('=');
+            String[] envVar = new String[2];
+            envVar[0] = element.substring(0, splitIndex);
+            envVar[1] = element.substring(splitIndex + 1);
+			systemEnvironment.put(envVar[0], envVar[1]);
 		}
-		String[] environment = new String[envm.size()];
-		Iterator<String> keys = envm.keySet().iterator();
+		String[] environment = new String[systemEnvironment.size()];
+		Iterator<String> keys = systemEnvironment.keySet().iterator();
 		int i = 0;
 		while (keys.hasNext()) {
 			String key = keys.next();
-			environment[i++] = key + "=" + envm.get(key);
+			environment[i++] = key + "=" + systemEnvironment.get(key);
 		}
 		return environment;
 	}
@@ -397,7 +423,7 @@ public class TomcatServiceContainer extends ServiceContainer {
 	 * @return true if the container service could be contacted
 	 */
 	protected synchronized boolean isGlobusRunningCounter() throws IOException,
-			ServiceException {
+			ServiceException, ContainerException {
 		org.globus.axis.util.Util.registerTransport();
 		CounterServiceAddressingLocator locator = new CounterServiceAddressingLocator();
 		String globusLocation = System.getenv(ENV_GLOBUS_LOCATION);
@@ -414,9 +440,18 @@ public class TomcatServiceContainer extends ServiceContainer {
 						url)));
 		setAnonymous((Stub) counter);
 		
-		CoGProperties cogProperties = CoGProperties.getDefault();
-		cogProperties.setCaCertLocations(getProperties().getContainerDirectory() + File.separator + "certificates" + File.separator + "ca");
-		CoGProperties.setDefault(cogProperties);
+        if (getProperties().isSecure()) {
+            File caCertsDir = null;
+            try {
+                caCertsDir = new File(((SecureContainer) this).getCertificatesDirectory(), "ca");
+            } catch (Exception ex) {
+                throw new ContainerException("Error obtaining ca certs directory: " + ex.getMessage(), ex);
+            }
+            CoGProperties cogProperties = CoGProperties.getDefault();
+            cogProperties.setCaCertLocations(caCertsDir.getAbsolutePath());
+            CoGProperties.setDefault(cogProperties);
+        }
+		
 
 		CreateCounterResponse response = counter
 				.createCounter(new CreateCounter());
