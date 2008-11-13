@@ -7,6 +7,8 @@ import gov.nih.nci.cagrid.introduce.portal.updater.UptodateChecker;
 
 import javax.swing.JOptionPane;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.cagrid.grape.ApplicationInitializer;
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.model.Application;
@@ -14,7 +16,7 @@ import org.cagrid.grape.model.Application;
 
 public class IntroducePortalPostInitializer implements ApplicationInitializer {
 
-    org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(ApplicationInitializer.class.getName());
+    Log logger = LogFactory.getLog(ApplicationInitializer.class.getName());
 
 
     public void intialize(Application app) {
