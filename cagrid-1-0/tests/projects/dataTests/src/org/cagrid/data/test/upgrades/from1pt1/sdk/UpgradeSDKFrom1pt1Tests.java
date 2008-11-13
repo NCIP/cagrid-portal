@@ -22,7 +22,7 @@ import org.cagrid.data.test.upgrades.UpgradeTestConstants;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>  * 
  * @created Feb 20, 2007 
- * @version $Id: UpgradeSDKFrom1pt1Tests.java,v 1.4 2008-10-28 15:55:16 dervin Exp $ 
+ * @version $Id: UpgradeSDKFrom1pt1Tests.java,v 1.5 2008-11-13 16:15:29 dervin Exp $ 
  */
 public class UpgradeSDKFrom1pt1Tests extends Story {
 	public static final String SERVICE_ZIP_NAME = "DataServiceWithSdk_1-1.zip";
@@ -39,7 +39,7 @@ public class UpgradeSDKFrom1pt1Tests extends Story {
     
     
     public String getName() {
-        return "Data Service backed by the SDK 3.2 from 1_1 to " 
+        return "Data Service backed by the SDK 3_2 from 1_1 to " 
             + UpgradeTestConstants.DATA_CURRENT_VERSION.replace(".", "_") 
             + " Upgrade Tests";
     }
