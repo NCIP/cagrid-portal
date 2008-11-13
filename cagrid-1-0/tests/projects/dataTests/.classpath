@@ -34,7 +34,6 @@
 	<classpathentry kind="var" path="GT4_LOCATION/lib/jaxrpc.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/jce-jdk13-125.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/jgss.jar"/>
-	<classpathentry kind="var" path="GT4_LOCATION/lib/junit.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/log4j-1.2.8.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/naming-common.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/naming-factory.jar"/>
@@ -69,37 +68,6 @@
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xercesImpl.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xml-apis.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xmlsec.jar"/>
-	<classpathentry kind="var" path="ANT_HOME/lib/ant.jar"/>
-	<classpathentry kind="var" path="ANT_HOME/lib/ant-antlr.jar"/>
-	<classpathentry kind="var" path="ANT_HOME/lib/ant-apache-bcel.jar"/>
-	<classpathentry kind="var" path="ANT_HOME/lib/ant-apache-bsf.jar"/>
-	<classpathentry kind="var" path="ANT_HOME/lib/ant-apache-log4j.jar"/>
-	<classpathentry kind="var" path="ANT_HOME/lib/ant-apache-oro.jar"/>
-	<classpathentry kind="var" path="ANT_HOME/lib/ant-apache-regexp.jar"/>
-	<classpathentry kind="var" path="ANT_HOME/lib/ant-apache-resolver.jar"/>
-	<classpathentry kind="var" path="ANT_HOME/lib/ant-commons-logging.jar"/>
-	<classpathentry kind="var" path="ANT_HOME/lib/ant-commons-net.jar"/>
-	<classpathentry kind="var" path="ANT_HOME/lib/ant-icontract.jar"/>
-	<classpathentry kind="var" path="ANT_HOME/lib/ant-jai.jar"/>
-	<classpathentry kind="var" path="ANT_HOME/lib/ant-javamail.jar"/>
-	<classpathentry kind="var" path="ANT_HOME/lib/ant-jdepend.jar"/>
-	<classpathentry kind="var" path="ANT_HOME/lib/ant-jmf.jar"/>
-	<classpathentry kind="var" path="ANT_HOME/lib/ant-jsch.jar"/>
-	<classpathentry kind="var" path="ANT_HOME/lib/ant-junit.jar"/>
-	<classpathentry kind="var" path="ANT_HOME/lib/ant-launcher.jar"/>
-	<classpathentry kind="var" path="ANT_HOME/lib/ant-netrexx.jar"/>
-	<classpathentry kind="var" path="ANT_HOME/lib/ant-nodeps.jar"/>
-	<classpathentry kind="var" path="ANT_HOME/lib/ant-starteam.jar"/>
-	<classpathentry kind="var" path="ANT_HOME/lib/ant-stylebook.jar"/>
-	<classpathentry kind="var" path="ANT_HOME/lib/ant-swing.jar"/>
-	<classpathentry kind="var" path="ANT_HOME/lib/ant-trax.jar"/>
-	<classpathentry kind="var" path="ANT_HOME/lib/ant-vaj.jar"/>
-	<classpathentry kind="var" path="ANT_HOME/lib/ant-weblogic.jar"/>
-	<classpathentry kind="var" path="ANT_HOME/lib/ant-xalan1.jar"/>
-	<classpathentry kind="var" path="ANT_HOME/lib/ant-xslp.jar"/>
-	<classpathentry kind="var" path="ANT_HOME/lib/junit.jar"/>
-	<classpathentry kind="var" path="ANT_HOME/lib/xercesImpl.jar"/>
-	<classpathentry kind="var" path="ANT_HOME/lib/xml-apis.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/jars/antlr-2.7.6rc1.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/jars/caGrid-BulkDataHandler-client-1.3-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/jars/caGrid-BulkDataHandler-common-1.3-dev.jar"/>
@@ -138,5 +106,6 @@
 	<classpathentry kind="lib" path="ext/dependencies/jars/caGrid-wsEnum-1.3-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/jars/caGrid-wsEnum-stubs-1.3-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/jars/caGrid-testUtils-1.3-dev.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

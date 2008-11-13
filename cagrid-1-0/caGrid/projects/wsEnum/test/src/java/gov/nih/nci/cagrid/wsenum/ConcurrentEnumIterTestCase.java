@@ -7,10 +7,6 @@ import java.io.StringWriter;
 
 import javax.xml.soap.SOAPElement;
 
-import junit.framework.TestResult;
-import junit.framework.TestSuite;
-import junit.textui.TestRunner;
-
 import org.globus.ws.enumeration.IterationConstraints;
 import org.globus.ws.enumeration.IterationResult;
 import org.projectmobius.bookstore.Book;
@@ -23,7 +19,7 @@ import org.projectmobius.bookstore.Book;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created Nov 3, 2006 
- * @version $Id: ConcurrentEnumIterTestCase.java,v 1.6 2008-08-21 15:07:24 dervin Exp $ 
+ * @version $Id: ConcurrentEnumIterTestCase.java,v 1.7 2008-11-13 16:03:16 dervin Exp $ 
  */
 public class ConcurrentEnumIterTestCase extends CompleteEnumIteratorBaseTest {
 	
@@ -96,13 +92,5 @@ public class ConcurrentEnumIterTestCase extends CompleteEnumIteratorBaseTest {
         equal = original.getAuthor().equals(returned.getAuthor()) 
             && original.getISBN().equals(returned.getISBN());
         assertTrue("Expected book and returned book do not match", equal);
-    }
-        
-
-    public static void main(String[] args) {
-        TestRunner runner = new TestRunner();
-        TestResult result = runner.doRun(
-            new TestSuite(ConcurrenPersistantObjectEnumIterator.class));
-        System.exit(result.errorCount() + result.failureCount());
     }
 }

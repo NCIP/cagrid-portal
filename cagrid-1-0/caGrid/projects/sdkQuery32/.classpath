@@ -77,9 +77,9 @@
 	<classpathentry kind="lib" path="ext/dependencies/impl/jars/jasciidammit-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/impl/jars/jdom-1.0.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/test/jars/caGrid-core-tests-1.3-dev.jar"/>
-	<classpathentry kind="var" path="ANT_HOME/lib/junit.jar"/>
 	<classpathentry kind="lib" path="lib/cacore32-client.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/authz/jars/caGrid-authz-common-1.3-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/authz/jars/csmapi.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
