@@ -24,7 +24,6 @@
 		<delete dir="${beans.created.src.dir}" />
 		<delete dir="${servicetasks.beans.created.src.dir}" />
 		<delete dir="${updates.dir}" />
-		<delete file="${service.tools.jar}" />
 		<delete>
 			<fileset dir="${skeleton.tools.lib.dir}">
 				<include name="caGrid-*.jar"/>
@@ -246,11 +245,6 @@
 			</manifest>
 		</jar>
 		<copy file="${jars.prefix}serviceTasks${jars.suffix}" todir="${skeleton.tools.lib.dir}"/>
-		<jar jarfile="${service.tools.jar}" basedir="${introduce.classes.dir}" includes="gov/nih/nci/cagrid/introduce/servicetools/**/*" defaultExcludes="false" update="no">
-			<manifest>
-				<attribute name="Created-By" value="${user.name}" />
-			</manifest>
-		</jar>
 		<copy todir="${updater.classes.dir}">
 			<fileset dir="${introduce.classes.dir}" includes="gov/nih/nci/cagrid/introduce/beans/software/*.class" />
 		</copy>
