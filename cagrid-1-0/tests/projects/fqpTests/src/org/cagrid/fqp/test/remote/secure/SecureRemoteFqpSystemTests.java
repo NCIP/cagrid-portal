@@ -70,7 +70,7 @@ public class SecureRemoteFqpSystemTests {
     
     
     @After
-    private void cleanUp() {
+    public void cleanUp() {
         logger.debug("Cleaning Up Secure Remote FQP Tests");
         for (DataServiceDeploymentStory deployment : dataServiceDeployments) {
             ServiceContainer container = deployment.getServiceContainer();

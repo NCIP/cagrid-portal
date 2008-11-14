@@ -25,7 +25,7 @@ import org.junit.Test;
  * @author David Ervin
  * 
  * @created Jul 10, 2008 10:57:40 AM
- * @version $Id: RemoteFqpSystemTests.java,v 1.13 2008-11-12 23:36:11 jpermar Exp $ 
+ * @version $Id: RemoteFqpSystemTests.java,v 1.14 2008-11-14 14:55:54 jpermar Exp $ 
  */
 public class RemoteFqpSystemTests {
     
@@ -128,7 +128,7 @@ public class RemoteFqpSystemTests {
     }
     
     @After
-    private void cleanUp() {
+    public void cleanUp() {
         logger.debug("Cleaning Up Remote FQP Tests");
         for (DataServiceDeploymentStory deployment : dataServiceDeployments) {
             ServiceContainer container = deployment.getServiceContainer();
