@@ -8,12 +8,11 @@ import javax.swing.table.TableColumn;
 import org.cagrid.gaards.dorian.federation.TrustedIdP;
 import org.cagrid.grape.table.GrapeBaseTable;
 
-
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: TrustedIdPTable.java,v 1.1 2008-09-16 03:00:07 langella Exp $
+ * @version $Id: TrustedIdPTable.java,v 1.2 2008-11-14 17:29:23 langella Exp $
  */
 public class TrustedIdPTable extends GrapeBaseTable {
 	public final static String IDP = "idp";
@@ -26,6 +25,9 @@ public class TrustedIdPTable extends GrapeBaseTable {
 
 	TrustedIdPsWindow window;
 
+	public TrustedIdPTable() {
+		this(null);
+	}
 
 	public TrustedIdPTable(TrustedIdPsWindow window) {
 		super(createTableModel());
@@ -45,9 +47,7 @@ public class TrustedIdPTable extends GrapeBaseTable {
 		c.setMinWidth(100);
 
 		this.clearTable();
-
 	}
-
 
 	public static DefaultTableModel createTableModel() {
 		DefaultTableModel model = new DefaultTableModel();
@@ -59,7 +59,6 @@ public class TrustedIdPTable extends GrapeBaseTable {
 
 	}
 
-
 	public void addTrustedIdP(final TrustedIdP idp) {
 		Vector v = new Vector();
 		v.add(idp);
@@ -68,7 +67,6 @@ public class TrustedIdPTable extends GrapeBaseTable {
 		v.add(idp.getStatus().getValue());
 		addRow(v);
 	}
-
 
 	public synchronized TrustedIdP getSelectedTrustedIdP() throws Exception {
 		int row = getSelectedRow();
@@ -79,7 +77,6 @@ public class TrustedIdPTable extends GrapeBaseTable {
 		}
 	}
 
-
 	public synchronized void removeSelectedTrustedIdP() throws Exception {
 		int row = getSelectedRow();
 		if ((row >= 0) && (row < getRowCount())) {
@@ -89,17 +86,16 @@ public class TrustedIdPTable extends GrapeBaseTable {
 		}
 	}
 
-
 	public void doubleClick() throws Exception {
-		int row = getSelectedRow();
-		if ((row >= 0) && (row < getRowCount())) {
-			window.showTrustedIdP();
-		} else {
-			throw new Exception("Please select an Identity Provider!!!");
+		if (window != null) {
+			int row = getSelectedRow();
+			if ((row >= 0) && (row < getRowCount())) {
+				window.showTrustedIdP();
+			} else {
+				throw new Exception("Please select an Identity Provider!!!");
+			}
 		}
-
 	}
-
 
 	public void singleClick() throws Exception {
 		// TODO Auto-generated method stub

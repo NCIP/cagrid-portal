@@ -109,6 +109,8 @@ public class AdministratorsWindow extends ApplicationComponent {
 		if (mainPanel == null) {
 			GridBagConstraints gridBagConstraints41 = new GridBagConstraints();
 			gridBagConstraints41.gridx = 0;
+			gridBagConstraints41.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints41.weightx = 1.0D;
 			gridBagConstraints41.gridy = 5;
 			GridBagConstraints gridBagConstraints = new GridBagConstraints();
 			gridBagConstraints.gridx = 0;

@@ -20,10 +20,10 @@ import org.cagrid.grape.LookAndFeel;
 
 public class IdentityFinderDialog extends JDialog {
 
-	private static final String SYSTEM = "System"; // @jve:decl-index=0:
-	private static final String USER = "User"; // @jve:decl-index=0:
+	private static final String SYSTEM = "System";
+	private static final String USER = "User"; 
 	private static final String HOST = "Host";
-	private static final String IDENTITY_PROVIDER = "Identity Provider";
+	private static final String IDENTITY_PROVIDER = "Identity Provider";  //  @jve:decl-index=0:
 	private static final long serialVersionUID = 1L;
 	private JPanel jContentPane = null;
 	private JPanel identityPanel = null;
@@ -152,6 +152,12 @@ public class IdentityFinderDialog extends JDialog {
 					}else if(selected.equals(HOST)){
 						
 					}else if(selected.equals(IDENTITY_PROVIDER)){
+						IdentityProviderSearchDialog dialog = new IdentityProviderSearchDialog(session);
+						dialog.setModal(true);
+						GridApplication.getContext().showDialog(dialog);
+						if (dialog.getSelectedIdP() != null) {
+							identity = dialog.getSelectedIdP().getName();
+						}
 						
 					}
 					dispose();

@@ -15,10 +15,8 @@ import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
 import javax.swing.border.TitledBorder;
 
 import org.cagrid.gaards.dorian.client.GridAdministrationClient;
@@ -26,6 +24,7 @@ import org.cagrid.gaards.dorian.federation.GridUser;
 import org.cagrid.gaards.dorian.federation.GridUserFilter;
 import org.cagrid.gaards.dorian.federation.TrustedIdP;
 import org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault;
+import org.cagrid.gaards.ui.common.ProgressPanel;
 import org.cagrid.gaards.ui.common.TitlePanel;
 import org.cagrid.gaards.ui.dorian.DorianSessionProvider;
 import org.cagrid.gaards.ui.dorian.SessionPanel;
@@ -38,7 +37,7 @@ import org.globus.gsi.GlobusCredential;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: UserSearchDialog.java,v 1.2 2008-11-12 19:36:52 langella Exp $
+ * @version $Id: UserSearchDialog.java,v 1.3 2008-11-14 17:29:23 langella Exp $
  */
 public class UserSearchDialog extends JDialog {
 
@@ -64,13 +63,7 @@ public class UserSearchDialog extends JDialog {
 
 	private JButton query = null;
 
-	private boolean isQuerying = false;
-
-	private Object mutex = new Object();
-
-	private JPanel progressPanel = null;
-
-	private JProgressBar progress = null;
+	private ProgressPanel progressPanel = null;
 
 	private JPanel filterPanel = null;
 
@@ -177,9 +170,9 @@ public class UserSearchDialog extends JDialog {
 			GridBagConstraints gridBagConstraints32 = new GridBagConstraints();
 			gridBagConstraints32.gridx = 0;
 			gridBagConstraints32.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints32.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints32.insets = new Insets(0, 0, 0, 0);
 			gridBagConstraints32.weightx = 1.0D;
-			gridBagConstraints32.gridy = 5;
+			gridBagConstraints32.gridy = 7;
 			GridBagConstraints gridBagConstraints33 = new GridBagConstraints();
 			gridBagConstraints33.gridx = 0;
 			gridBagConstraints33.gridy = 4;
@@ -194,15 +187,15 @@ public class UserSearchDialog extends JDialog {
 			mainPanel = new JPanel();
 			mainPanel.setLayout(new GridBagLayout());
 			gridBagConstraints1.gridx = 0;
-			gridBagConstraints1.gridy = 6;
+			gridBagConstraints1.gridy = 5;
 			gridBagConstraints1.ipadx = 0;
 			gridBagConstraints1.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints1.weightx = 1.0D;
 			gridBagConstraints1.fill = java.awt.GridBagConstraints.BOTH;
 			gridBagConstraints1.weighty = 1.0D;
 			gridBagConstraints2.gridx = 0;
-			gridBagConstraints2.gridy = 7;
-			gridBagConstraints2.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints2.gridy = 6;
+			gridBagConstraints2.insets = new Insets(0, 0, 0, 0);
 			gridBagConstraints2.anchor = java.awt.GridBagConstraints.SOUTH;
 			gridBagConstraints2.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			if (sessionProvider == null) {
@@ -310,7 +303,7 @@ public class UserSearchDialog extends JDialog {
 	private JButton getSelect() {
 		if (select == null) {
 			select = new JButton();
-			select.setText("Select User");
+			select.setText("Select");
 			select.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					try {
@@ -365,10 +358,11 @@ public class UserSearchDialog extends JDialog {
 	private JButton getQuery() {
 		if (query == null) {
 			query = new JButton();
-			query.setText("Find Users");
+			query.setText("Search");
 			getRootPane().setDefaultButton(query);
 			query.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
+					query.setEnabled(false);
 					Runner runner = new Runner() {
 						public void execute() {
 							findUsers();
@@ -388,20 +382,8 @@ public class UserSearchDialog extends JDialog {
 	}
 
 	private void findUsers() {
-
-		synchronized (mutex) {
-			if (isQuerying) {
-				ErrorDialog
-						.showError("Query Already in Progress",
-								"Please wait until the current query is finished before executing another.");
-				return;
-			} else {
-				isQuerying = true;
-			}
-		}
-
 		this.getUsersTable().clearTable();
-		this.updateProgress(true, "Querying...");
+		getProgressPanel().showProgress("Searching...");
 
 		try {
 			GridUserFilter f = new GridUserFilter();
@@ -427,18 +409,17 @@ public class UserSearchDialog extends JDialog {
 			for (int i = 0; i < users.size(); i++) {
 				this.getUsersTable().addUser(users.get(i));
 			}
-
-			this.updateProgress(false, "Querying Completed [" + users.size()
-					+ " users found]");
+			getProgressPanel().stopProgress(users.size()+" user(s) found.");
 
 		} catch (PermissionDeniedFault pdf) {
 			ErrorDialog.showError(pdf);
-			this.updateProgress(false, "Error");
+			getProgressPanel().stopProgress("Error");
 		} catch (Exception e) {
 			ErrorDialog.showError(e);
-			this.updateProgress(false, "Error");
+			getProgressPanel().stopProgress("Error");
+		}finally{
+			query.setEnabled(true);
 		}
-		isQuerying = false;
 
 	}
 
@@ -455,44 +436,11 @@ public class UserSearchDialog extends JDialog {
 	 * 
 	 * @return javax.swing.JPanel
 	 */
-	private JPanel getProgressPanel() {
+	private ProgressPanel getProgressPanel() {
 		if (progressPanel == null) {
-			GridBagConstraints gridBagConstraints36 = new GridBagConstraints();
-			gridBagConstraints36.insets = new java.awt.Insets(2, 20, 2, 20);
-			gridBagConstraints36.gridy = 0;
-			gridBagConstraints36.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints36.weightx = 1.0D;
-			gridBagConstraints36.gridx = 0;
-			progressPanel = new JPanel();
-			progressPanel.setLayout(new GridBagLayout());
-			progressPanel.add(getProgress(), gridBagConstraints36);
+			progressPanel = new ProgressPanel();
 		}
 		return progressPanel;
-	}
-
-	/**
-	 * This method initializes progress
-	 * 
-	 * @return javax.swing.JProgressBar
-	 */
-	private JProgressBar getProgress() {
-		if (progress == null) {
-			progress = new JProgressBar();
-			progress.setForeground(LookAndFeel.getPanelLabelColor());
-			progress.setString("");
-			progress.setStringPainted(true);
-		}
-		return progress;
-	}
-
-	public void updateProgress(final boolean working, final String s) {
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				getProgress().setString(s);
-				getProgress().setIndeterminate(working);
-			}
-		});
-
 	}
 
 	/**
@@ -657,7 +605,7 @@ public class UserSearchDialog extends JDialog {
 
 	private void updateIdPs(String serviceUrl, GlobusCredential cred) {
 		try {
-			this.updateProgress(true, "Seaching for Trusted IdPs");
+			getProgressPanel().showProgress("Searching...");
 			this.getIdp().removeAllItems();
 			GridAdministrationClient client = new GridAdministrationClient(
 					serviceUrl, cred);
@@ -667,16 +615,17 @@ public class UserSearchDialog extends JDialog {
 			for (int i = 0; i < idps.size(); i++) {
 				getIdp().addItem(new TrustedIdPCaddy(idps.get(i)));
 			}
-			this.updateProgress(false, "Found " + idps.size() + " IdP(s)");
+			getProgressPanel().stopProgress(idps.size() + " identity provider(s) found.");
 			getIdp().showPopup();
 		} catch (Exception e) {
-			this.updateProgress(false, "Error");
+			getProgressPanel().stopProgress("Error");
 			ErrorDialog.showError(e);
 		}
 	}
 
 	private void checkUpdateIdPs() {
 		try {
+			query.setEnabled(false);
 			getIdp().hidePopup();
 			final String serviceUrl = getSession().getServiceURI();
 			final GlobusCredential cred = getSession().getCredential();
@@ -702,6 +651,8 @@ public class UserSearchDialog extends JDialog {
 			}
 		} catch (Exception e) {
 			ErrorDialog.showError(e);
+		}finally{
+			query.setEnabled(true);
 		}
 	}
 
