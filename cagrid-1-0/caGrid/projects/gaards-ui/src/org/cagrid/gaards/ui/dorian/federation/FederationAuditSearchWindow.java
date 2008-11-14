@@ -6,6 +6,7 @@ import java.awt.Insets;
 
 import javax.swing.JPanel;
 
+import org.cagrid.gaards.ui.common.ProgressPanel;
 import org.cagrid.gaards.ui.common.TitlePanel;
 import org.cagrid.gaards.ui.dorian.SessionPanel;
 import org.cagrid.grape.ApplicationComponent;
@@ -28,6 +29,8 @@ public class FederationAuditSearchWindow extends ApplicationComponent {
 	private FederationAuditPanel auditPanel = null;
 
 	private JPanel titlePanel = null;
+
+	private ProgressPanel progressPanel = null;
 
 	/**
 	 * This is the default constructor
@@ -66,6 +69,11 @@ public class FederationAuditSearchWindow extends ApplicationComponent {
 	 */
 	private JPanel getMainPanel() {
 		if (mainPanel == null) {
+			GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
+			gridBagConstraints3.gridx = 0;
+			gridBagConstraints3.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints3.weightx = 1.0D;
+			gridBagConstraints3.gridy = 3;
 			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
 			gridBagConstraints2.gridx = 0;
 			gridBagConstraints2.fill = GridBagConstraints.HORIZONTAL;
@@ -90,6 +98,7 @@ public class FederationAuditSearchWindow extends ApplicationComponent {
 			mainPanel.add(getTitlePanel(), gridBagConstraints2);
 			mainPanel.add(getSessionPanel(), gridBagConstraints35);
 			mainPanel.add(getAuditPanel(), gridBagConstraints);
+			mainPanel.add(getProgressPanel(), gridBagConstraints3);
 			
 		}
 		return mainPanel;
@@ -102,7 +111,7 @@ public class FederationAuditSearchWindow extends ApplicationComponent {
 	 */
 	private SessionPanel getSessionPanel() {
 		if (sessionPanel == null) {
-			sessionPanel = new SessionPanel();
+			sessionPanel = new SessionPanel(false);
 		}
 		return sessionPanel;
 	}
@@ -116,6 +125,7 @@ public class FederationAuditSearchWindow extends ApplicationComponent {
 		if (auditPanel == null) {
 			auditPanel = new FederationAuditPanel(getSessionPanel());
 			auditPanel.setSearchButtonAsDefault(this.getRootPane());
+			auditPanel.setProgess(getProgressPanel());
 		}
 		return auditPanel;
 	}
@@ -130,6 +140,18 @@ public class FederationAuditSearchWindow extends ApplicationComponent {
 			titlePanel = new TitlePanel("Audit Search","Perform a search on the federation audit records.");
 		}
 		return titlePanel;
+	}
+
+	/**
+	 * This method initializes progressPanel	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private ProgressPanel getProgressPanel() {
+		if (progressPanel == null) {
+			progressPanel = new ProgressPanel();
+		}
+		return progressPanel;
 	}
 
 }
