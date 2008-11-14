@@ -36,8 +36,8 @@ public class QueryResultsVerifier extends Assert {
             gold, QueryResultsVerifier.class.getResourceAsStream(FQPTestingConstants.CLIENT_WSDD));
         
         // turn results into lists
-        List testItems = new LinkedList();
-        List goldItems = new LinkedList();
+        List<Object> testItems = new LinkedList<Object>();
+        List<Object> goldItems = new LinkedList<Object>();
         while (testIter.hasNext()) {
             testItems.add(testIter.next());
         }
