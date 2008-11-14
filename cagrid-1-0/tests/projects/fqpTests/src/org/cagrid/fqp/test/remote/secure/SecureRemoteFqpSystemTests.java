@@ -6,16 +6,15 @@ import gov.nih.nci.cagrid.testing.system.deployment.steps.StopContainerStep;
 
 import java.io.File;
 
-import junit.framework.Assert;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.cagrid.fqp.test.common.DataServiceDeploymentStory;
+import org.cagrid.fqp.test.common.FQPTestingConstants;
 import org.cagrid.fqp.test.common.FederatedQueryProcessorHelper;
 import org.cagrid.fqp.test.common.QueryStory;
 import org.cagrid.fqp.test.remote.FQPServiceDeploymentStory;
-import org.cagrid.fqp.test.remote.TransferServiceDeploymentStory;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Test;
 
 /**
@@ -29,9 +28,6 @@ public class SecureRemoteFqpSystemTests {
     
     private Log logger = LogFactory.getLog(SecureRemoteFqpSystemTests.class);
         
-    public static final String FQP_DIR_PROPERTY = "fqp.service.dir";
-    public static final String TRANSFER_SERVICE_DIR_PROPERTY = "transfer.service.dir";
-    
     private DataServiceDeploymentStory[] dataServiceDeployments;
     private FQPServiceDeploymentStory fqpDeployment;
     
@@ -57,10 +53,6 @@ public class SecureRemoteFqpSystemTests {
         fqpDeployment.run();
         FederatedQueryProcessorHelper queryHelper = 
             new FederatedQueryProcessorHelper(fqpDeployment);
-        
-        // deploy caGrid transfer to the same container as FQP
-        // TransferServiceDeploymentStory transferStory = new TransferServiceDeploymentStory(getTransferDir(), fqpDeployment);
-        // transferStory.run();
         
         // run standard queries against the secure FQP and data services
         QueryStory queryStory = new QueryStory(dataServiceDeployments, queryHelper);
@@ -91,16 +83,16 @@ public class SecureRemoteFqpSystemTests {
     
     
     private File getFqpDir() {
-        String value = System.getProperty(FQP_DIR_PROPERTY);
-        Assert.assertNotNull("System property " + FQP_DIR_PROPERTY + " was not set!", value);
+        String value = System.getProperty(FQPTestingConstants.FQP_DIR_PROPERTY);
+        Assert.assertNotNull("System property " + FQPTestingConstants.FQP_DIR_PROPERTY + " was not set!", value);
         File dir = new File(value);
         return dir;
     }
     
     
-    private File getTransferDir() {
-        String value = System.getProperty(TRANSFER_SERVICE_DIR_PROPERTY);
-        Assert.assertNotNull("System property " + TRANSFER_SERVICE_DIR_PROPERTY + " was not set!", value);
+    private File getCdsDir() {
+        String value = System.getProperty(FQPTestingConstants.CDS_SERVICE_DIR_PROPERTY);
+        Assert.assertNotNull("System property " + FQPTestingConstants.CDS_SERVICE_DIR_PROPERTY + " was not set!", value);
         File dir = new File(value);
         return dir;
     }

@@ -24,5 +24,19 @@ public interface FQPTestingConstants {
      * ms delay between successive calls to isProcessingComplete()
      */
     public static final long PROCESSING_RETRY_DELAY = 500;
-
+    
+    /**
+     * System property which points to the FQP service directory
+     */
+    public static final String FQP_DIR_PROPERTY = "fqp.service.dir";
+    
+    /**
+     * System property which points to the Trnsfer service directory
+     */
+    public static final String TRANSFER_SERVICE_DIR_PROPERTY = "transfer.service.dir";
+    
+    /**
+     * System property which points to the CDS service directory
+     */
+    public static final String CDS_SERVICE_DIR_PROPERTY = "cds.service.dir";
 }

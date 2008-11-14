@@ -15,6 +15,7 @@
 	<property name="cagrid.projects.dir" value="${basedir}/../../../caGrid/projects"/>
 	<property name="fqp.service.dir" value="${cagrid.projects.dir}/fqp"/>
 	<property name="transfer.service.dir" value="${cagrid.projects.dir}/transfer"/>
+	<property name="cds.service.dir" value="${cagrid.projects.dir}/cds"/>
 	
 	<target name="prepareClasspaths">
 		<path id="all.test.classpath">
@@ -31,6 +32,7 @@
 			<sysproperty key="testing.containers.dir" value="${testing.containers.dir}"/>
 			<sysproperty key="fqp.service.dir" value="${fqp.service.dir}"/>
 			<sysproperty key="transfer.service.dir" value="${transfer.service.dir}"/>
+			<sysproperty key="cds.service.dir" value="${cds.service.dir}"/>
 			<classpath refid="all.test.classpath" />
 			<formatter type="xml" />
 			<test if="testcase" name="${testcase}" fork="no" todir="${junit.results.dir}" />
