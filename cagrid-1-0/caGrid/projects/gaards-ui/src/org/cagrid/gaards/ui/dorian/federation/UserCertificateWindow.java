@@ -25,6 +25,7 @@ import org.cagrid.gaards.dorian.federation.UserCertificateRecord;
 import org.cagrid.gaards.pki.CertUtil;
 import org.cagrid.gaards.ui.common.CertificateInformationComponent;
 import org.cagrid.gaards.ui.common.GAARDSLookAndFeel;
+import org.cagrid.gaards.ui.common.ProgressPanel;
 import org.cagrid.gaards.ui.dorian.DorianSession;
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
@@ -89,6 +90,8 @@ public class UserCertificateWindow extends ApplicationComponent {
 
 	private DorianSession session;
 
+	private ProgressPanel progressPanel = null;
+
 	/**
 	 * This is the default constructor
 	 */
@@ -120,6 +123,11 @@ public class UserCertificateWindow extends ApplicationComponent {
 	 */
 	private JPanel getJContentPane() {
 		if (jContentPane == null) {
+			GridBagConstraints gridBagConstraints20 = new GridBagConstraints();
+			gridBagConstraints20.gridx = 0;
+			gridBagConstraints20.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints20.weightx = 1.0D;
+			gridBagConstraints20.gridy = 4;
 			GridBagConstraints gridBagConstraints19 = new GridBagConstraints();
 			gridBagConstraints19.gridx = 0;
 			gridBagConstraints19.insets = new Insets(2, 2, 2, 2);
@@ -155,6 +163,7 @@ public class UserCertificateWindow extends ApplicationComponent {
 			jContentPane.add(getNotesPanel(), gridBagConstraints8);
 			jContentPane.add(getTitlePanel(), gridBagConstraints15);
 			jContentPane.add(getButtonPanel(), gridBagConstraints19);
+			jContentPane.add(getProgressPanel(), gridBagConstraints20);
 		}
 		return jContentPane;
 	}
@@ -513,6 +522,9 @@ public class UserCertificateWindow extends ApplicationComponent {
 
 	private void updateUserCertificate() {
 		try {
+			getUpdate().setEnabled(false);
+			getViewCertificate().setEnabled(false);
+			getProgressPanel().showProgress("Updating...");
 			GridAdministrationClient client = this.session.getAdminClient();
 			client.updateUserCertificateRecord(record.getSerialNumber(),
 					getStatus().getSelectedUserStatus(), Utils.clean(getNotes()
@@ -520,11 +532,27 @@ public class UserCertificateWindow extends ApplicationComponent {
 			record.setStatus(getStatus().getSelectedUserStatus());
 			record.setNotes(Utils.clean(getNotes()
 					.getText()));
-			GridApplication.getContext().showMessage("The user certificate was successfully updated!!!");
+			getProgressPanel().stopProgress("Certificate successfully updated.");
 		} catch (Exception e) {
+			getProgressPanel().stopProgress("Error");
 			FaultUtil.printFault(e);
 			ErrorDialog.showError(e);
+		}finally{
+			getUpdate().setEnabled(true);
+			getViewCertificate().setEnabled(true);
 		}
+	}
+
+	/**
+	 * This method initializes progressPanel	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private ProgressPanel getProgressPanel() {
+		if (progressPanel == null) {
+			progressPanel = new ProgressPanel();
+		}
+		return progressPanel;
 	}
 
 }

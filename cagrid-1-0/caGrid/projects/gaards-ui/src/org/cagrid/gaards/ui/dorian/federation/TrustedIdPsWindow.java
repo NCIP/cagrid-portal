@@ -9,14 +9,13 @@ import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
-import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
-import javax.swing.SwingUtilities;
 
 import org.cagrid.gaards.dorian.client.GridAdministrationClient;
 import org.cagrid.gaards.dorian.federation.GridUserPolicy;
 import org.cagrid.gaards.dorian.federation.TrustedIdP;
 import org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault;
+import org.cagrid.gaards.ui.common.ProgressPanel;
 import org.cagrid.gaards.ui.common.TitlePanel;
 import org.cagrid.gaards.ui.dorian.DorianLookAndFeel;
 import org.cagrid.gaards.ui.dorian.SessionPanel;
@@ -29,7 +28,7 @@ import org.cagrid.grape.utils.ErrorDialog;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: TrustedIdPsWindow.java,v 1.3 2008-11-12 19:26:46 langella Exp $
+ * @version $Id: TrustedIdPsWindow.java,v 1.4 2008-11-14 02:44:10 langella Exp $
  */
 public class TrustedIdPsWindow extends ApplicationComponent {
 
@@ -53,15 +52,13 @@ public class TrustedIdPsWindow extends ApplicationComponent {
 
 	private JButton query = null;
 
-	private JPanel progressPanel = null;
-
-	private JProgressBar progress = null;
-
 	private JButton removeTrustedIdPButton = null;
 
 	private JButton addUser = null;
 
 	private JPanel titlePanel = null;
+
+	private ProgressPanel progressPanel = null;
 
 	/**
 	 * This is the default constructor
@@ -102,18 +99,17 @@ public class TrustedIdPsWindow extends ApplicationComponent {
 	 */
 	private JPanel getMainPanel() {
 		if (mainPanel == null) {
+			GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
+			gridBagConstraints11.gridx = 0;
+			gridBagConstraints11.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints11.weightx = 1.0D;
+			gridBagConstraints11.gridy = 5;
 			GridBagConstraints gridBagConstraints = new GridBagConstraints();
 			gridBagConstraints.gridx = 0;
 			gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
 			gridBagConstraints.insets = new Insets(2, 2, 2, 2);
 			gridBagConstraints.weightx = 1.0D;
 			gridBagConstraints.gridy = 0;
-			GridBagConstraints gridBagConstraints32 = new GridBagConstraints();
-			gridBagConstraints32.gridx = 0;
-			gridBagConstraints32.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints32.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints32.weightx = 1.0D;
-			gridBagConstraints32.gridy = 3;
 			GridBagConstraints gridBagConstraints33 = new GridBagConstraints();
 			gridBagConstraints33.gridx = 0;
 			gridBagConstraints33.gridy = 2;
@@ -134,14 +130,14 @@ public class TrustedIdPsWindow extends ApplicationComponent {
 			mainPanel = new JPanel();
 			mainPanel.setLayout(new GridBagLayout());
 			gridBagConstraints1.gridx = 0;
-			gridBagConstraints1.gridy = 4;
+			gridBagConstraints1.gridy = 3;
 			gridBagConstraints1.ipadx = 0;
 			gridBagConstraints1.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints1.weightx = 1.0D;
 			gridBagConstraints1.fill = java.awt.GridBagConstraints.BOTH;
 			gridBagConstraints1.weighty = 1.0D;
 			gridBagConstraints2.gridx = 0;
-			gridBagConstraints2.gridy = 5;
+			gridBagConstraints2.gridy = 4;
 			gridBagConstraints2.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints2.anchor = java.awt.GridBagConstraints.SOUTH;
 			gridBagConstraints2.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -149,8 +145,8 @@ public class TrustedIdPsWindow extends ApplicationComponent {
 			mainPanel.add(getContentPanel(), gridBagConstraints1);
 			mainPanel.add(getSession(), gridBagConstraints35);
 			mainPanel.add(getQueryPanel(), gridBagConstraints33);
-			mainPanel.add(getProgressPanel(), gridBagConstraints32);
 			mainPanel.add(getTitlePanel(), gridBagConstraints);
+			mainPanel.add(getProgressPanel(), gridBagConstraints11);
 		}
 		return mainPanel;
 	}
@@ -314,6 +310,7 @@ public class TrustedIdPsWindow extends ApplicationComponent {
 		if (query == null) {
 			query = new JButton();
 			query.setText("Search");
+			getRootPane().setDefaultButton(query);
 			query.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					disableAllButtons();
@@ -337,7 +334,7 @@ public class TrustedIdPsWindow extends ApplicationComponent {
 
 	private void findTrustedIdPs() {
 		this.getTrustedIdPTable().clearTable();
-		this.updateProgress(true, "Finding Trusted IdPs...");
+		getProgressPanel().showProgress("Searching...");
 
 		try {
 			GridAdministrationClient client = getSession().getAdminClient();
@@ -347,15 +344,14 @@ public class TrustedIdPsWindow extends ApplicationComponent {
 				this.getTrustedIdPTable().addTrustedIdP(idps.get(i));
 			}
 
-			this.updateProgress(false, "Completed [Found " + idps.size()
-					+ " IdPs]");
+			getProgressPanel().stopProgress(idps.size()+" Identity Provider(s) found.");
 
 		} catch (PermissionDeniedFault pdf) {
 			ErrorDialog.showError(pdf);
-			this.updateProgress(false, "Error");
+			getProgressPanel().stopProgress("Error");
 		} catch (Exception e) {
 			ErrorDialog.showError(e);
-			this.updateProgress(false, "Error");
+			getProgressPanel().stopProgress("Error");
 		}finally{
 			enableAllButtons();
 		}
@@ -366,50 +362,6 @@ public class TrustedIdPsWindow extends ApplicationComponent {
 		return client.getUserPolicies();
 	}
 
-	/**
-	 * This method initializes progressPanel
-	 * 
-	 * @return javax.swing.JPanel
-	 */
-	private JPanel getProgressPanel() {
-		if (progressPanel == null) {
-			GridBagConstraints gridBagConstraints36 = new GridBagConstraints();
-			gridBagConstraints36.insets = new java.awt.Insets(2, 20, 2, 20);
-			gridBagConstraints36.gridy = 0;
-			gridBagConstraints36.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints36.weightx = 1.0D;
-			gridBagConstraints36.gridx = 0;
-			progressPanel = new JPanel();
-			progressPanel.setLayout(new GridBagLayout());
-			progressPanel.add(getProgress(), gridBagConstraints36);
-		}
-		return progressPanel;
-	}
-
-	/**
-	 * This method initializes progress
-	 * 
-	 * @return javax.swing.JProgressBar
-	 */
-	private JProgressBar getProgress() {
-		if (progress == null) {
-			progress = new JProgressBar();
-			progress.setForeground(LookAndFeel.getPanelLabelColor());
-			progress.setString("");
-			progress.setStringPainted(true);
-		}
-		return progress;
-	}
-
-	public void updateProgress(final boolean working, final String s) {
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				getProgress().setString(s);
-				getProgress().setIndeterminate(working);
-			}
-		});
-
-	}
 
 	/**
 	 * This method initializes removeUser
@@ -505,6 +457,18 @@ public class TrustedIdPsWindow extends ApplicationComponent {
 		getRemoveTrustedIdPButton().setEnabled(true);
 		getQuery().setEnabled(true);
 		
+	}
+
+	/**
+	 * This method initializes progressPanel	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private ProgressPanel getProgressPanel() {
+		if (progressPanel == null) {
+			progressPanel = new ProgressPanel();
+		}
+		return progressPanel;
 	}
 
 }

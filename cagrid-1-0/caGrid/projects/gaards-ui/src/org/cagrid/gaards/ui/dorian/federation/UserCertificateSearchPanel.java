@@ -21,6 +21,7 @@ import org.cagrid.gaards.dorian.client.GridAdministrationClient;
 import org.cagrid.gaards.dorian.federation.DateRange;
 import org.cagrid.gaards.dorian.federation.UserCertificateFilter;
 import org.cagrid.gaards.dorian.federation.UserCertificateRecord;
+import org.cagrid.gaards.ui.common.ProgressPanel;
 import org.cagrid.gaards.ui.common.SelectDateDialog;
 import org.cagrid.gaards.ui.dorian.DorianSession;
 import org.cagrid.grape.GridApplication;
@@ -96,6 +97,8 @@ public class UserCertificateSearchPanel extends JPanel {
 	private JButton remove = null;
 
 	private JButton removeAll = null;
+
+	private ProgressPanel progess;
 
 	/**
 	 * This is the default constructor
@@ -610,7 +613,7 @@ public class UserCertificateSearchPanel extends JPanel {
 			search = new JButton();
 			search.setText("Search");
 			search.addActionListener(new java.awt.event.ActionListener() {
-				
+
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					disableButtons();
 					Runner runner = new Runner() {
@@ -657,6 +660,7 @@ public class UserCertificateSearchPanel extends JPanel {
 
 	private void findCertificates() {
 		try {
+			showProgess("Searching...");
 			getUserCertificates().clearTable();
 			UserCertificateFilter f = new UserCertificateFilter();
 			f.setGridIdentity(Utils.clean(getGridIdentity().getText()));
@@ -667,6 +671,8 @@ public class UserCertificateSearchPanel extends JPanel {
 									.clean(getUserCertificateSerialNumber()
 											.getText())));
 				} catch (NumberFormatException e) {
+					stopProgess("Error");
+					enableButtons();
 					ErrorDialog
 							.showError("The serial number must be an integer.");
 					return;
@@ -674,6 +680,8 @@ public class UserCertificateSearchPanel extends JPanel {
 			}
 			if ((searchStartDate != null) && (searchEndDate != null)) {
 				if (searchStartDate.after(searchEndDate)) {
+					stopProgess("Error");
+					enableButtons();
 					ErrorDialog
 							.showError("The start date cannot be after the end date.");
 					return;
@@ -684,9 +692,13 @@ public class UserCertificateSearchPanel extends JPanel {
 					f.setDateRange(r);
 				}
 			} else if ((searchStartDate == null) && (searchEndDate != null)) {
+				stopProgess("Error");
+				enableButtons();
 				ErrorDialog.showError("You must specify a start date!!!");
 				return;
 			} else if ((searchStartDate != null) && (searchEndDate == null)) {
+				stopProgess("Error");
+				enableButtons();
 				ErrorDialog.showError("You must specify an end date!!!");
 				return;
 			}
@@ -701,7 +713,9 @@ public class UserCertificateSearchPanel extends JPanel {
 			for (int i = 0; i < records.size(); i++) {
 				getUserCertificates().addUserCertificate(records.get(i));
 			}
+			stopProgess(records.size()+" user certificate(s) found.");
 		} catch (Exception e) {
+			stopProgess("Error");
 			ErrorDialog.showError(e.getMessage(), e);
 		}
 		enableButtons();
@@ -831,6 +845,7 @@ public class UserCertificateSearchPanel extends JPanel {
 
 	private void removeCertificate() {
 		try {
+			
 			int row = getUserCertificates().getSelectedRow();
 
 			if ((row >= 0) && (row < getUserCertificates().getRowCount())) {
@@ -841,6 +856,7 @@ public class UserCertificateSearchPanel extends JPanel {
 						.showConfirmDialog(this,
 								"Are you sure you want to remove the selected certificate?");
 				if (status == JOptionPane.YES_OPTION) {
+					showProgess("Removing certificate...");
 					GridAdministrationClient client = session.getAdminClient();
 					client.removeUserCertificate(record.getSerialNumber());
 					getUserCertificates().removeRow(row);
@@ -848,50 +864,72 @@ public class UserCertificateSearchPanel extends JPanel {
 							.getContext()
 							.showMessage(
 									"The selected certificates was successfully removed!!!");
+					stopProgess("Certificate successfully removed.");
 				}
 			} else {
 				throw new Exception("Please select a certificate!!!");
 			}
 		} catch (Exception e) {
 			ErrorDialog.showError(e);
+			stopProgess("Error");
 		}
 		enableButtons();
 	}
 
 	private void removeAllCertificates() {
 		try {
+			
 			int status = JOptionPane
 					.showConfirmDialog(this,
 							"Are you sure you want to remove all of the listed certificates?");
 			if (status == JOptionPane.YES_OPTION) {
 				GridAdministrationClient client = session.getAdminClient();
 				int rowCount = getUserCertificates().getRowCount();
-				for(int i=0; i<rowCount; i++){
+				for (int i = 0; i < rowCount; i++) {
+					showProgess("Removing certificates...");
 					UserCertificateRecord record = (UserCertificateRecord) getUserCertificates()
-					.getValueAt(0, 0);
+							.getValueAt(0, 0);
 					client.removeUserCertificate(record.getSerialNumber());
 					getUserCertificates().removeRow(0);
 				}
+				stopProgess(rowCount+" certificate(s) removed.");
 				GridApplication.getContext().showMessage(
 						"The listed certificates were successfully removed!!!");
 			}
 		} catch (Exception e) {
+			stopProgess("Error");
 			ErrorDialog.showError(e);
 		}
 		enableButtons();
 	}
-	
-	private void disableButtons(){
+
+	private void disableButtons() {
 		getClearButton().setEnabled(false);
 		getRemove().setEnabled(false);
 		getRemoveAll().setEnabled(false);
 		getSearch().setEnabled(false);
 	}
-	
-	private void enableButtons(){
+
+	private void enableButtons() {
 		getClearButton().setEnabled(true);
 		getRemove().setEnabled(true);
 		getRemoveAll().setEnabled(true);
 		getSearch().setEnabled(true);
+	}
+
+	private void showProgess(String s) {
+		if (this.progess != null) {
+			this.progess.showProgress(s);
+		}
+	}
+
+	private void stopProgess(String s) {
+		if (this.progess != null) {
+			this.progess.stopProgress(s);
+		}
+	}
+
+	public void setProgess(ProgressPanel progess) {
+		this.progess = progess;
 	}
 }

@@ -37,7 +37,7 @@ import org.globus.gsi.GlobusCredential;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: UserManagerWindow.java,v 1.4 2008-11-12 19:36:52 langella Exp $
+ * @version $Id: UserManagerWindow.java,v 1.5 2008-11-14 02:44:10 langella Exp $
  */
 public class UserManagerWindow extends ApplicationComponent {
 
@@ -366,15 +366,16 @@ public class UserManagerWindow extends ApplicationComponent {
 				this.getUsersTable().addUser(users.get(i));
 			}
 
-		
+			getProgressPanel().stopProgress(users.size()+" user(s) found.");
 
 		} catch (PermissionDeniedFault pdf) {
 			ErrorDialog.showError(pdf);
+			getProgressPanel().stopProgress("Error");
 		} catch (Exception e) {
 			ErrorDialog.showError(e);
+			getProgressPanel().stopProgress("Error");
 		}finally{
 			enableAllButtons();
-			getProgressPanel().stopProgress();
 		}
 
 	}
@@ -676,7 +677,6 @@ public class UserManagerWindow extends ApplicationComponent {
 			removeUser.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					disableAllButtons();
-					getProgressPanel().showProgress("Removing user account...");
 					Runner runner = new Runner() {
 						public void execute() {
 							removeUser();
@@ -697,14 +697,17 @@ public class UserManagerWindow extends ApplicationComponent {
 
 	private void removeUser() {
 		try {
+			getProgressPanel().showProgress("Removing user account...");
 			GridAdministrationClient client = getSession().getAdminClient();
 			GridUser usr = this.getUsersTable().getSelectedUser();
 			client.removeUser(usr);
 			this.getUsersTable().removeSelectedUser();
+			getProgressPanel().stopProgress("User account successfully removed.");
 		} catch (Exception e) {
 			ErrorDialog.showError(e);
+			getProgressPanel().stopProgress("Error");
 		}finally{
-			getProgressPanel().stopProgress();
+			
 			enableAllButtons();
 		}
 

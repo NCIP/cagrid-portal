@@ -23,7 +23,9 @@ import javax.swing.border.TitledBorder;
 
 import org.cagrid.gaards.dorian.client.GridAdministrationClient;
 import org.cagrid.gaards.dorian.federation.FederationAuditFilter;
+import org.cagrid.gaards.dorian.federation.FederationAuditRecord;
 import org.cagrid.gaards.dorian.federation.FederationAuditing;
+import org.cagrid.gaards.ui.common.ProgressPanel;
 import org.cagrid.gaards.ui.common.SelectDateDialog;
 import org.cagrid.gaards.ui.dorian.DorianSessionProvider;
 import org.cagrid.grape.GridApplication;
@@ -99,6 +101,8 @@ public class FederationAuditPanel extends JPanel {
 	private JPanel messagePanel = null;
 
 	private JLabel jLabel4 = null;
+	
+	private ProgressPanel progess;
 
 	/**
 	 * This is the default constructor
@@ -138,6 +142,7 @@ public class FederationAuditPanel extends JPanel {
 					return;
 				}
 			}
+			showProgess("Searching...");
 			FederationAuditFilter f = new FederationAuditFilter();
 			f.setTargetId(Utils.clean(getTarget().getText()));
 			f.setReportingPartyId(Utils.clean(getReportingParty().getText()));
@@ -154,8 +159,11 @@ public class FederationAuditPanel extends JPanel {
 
 			GridAdministrationClient client = this.session.getSession()
 					.getAdminClient();
-			this.getAuditRecords().addRecords(client.performAudit(f));
+			List<FederationAuditRecord> records = client.performAudit(f);
+			this.getAuditRecords().addRecords(records);
+			stopProgess(records.size()+" audit record(s) found.");
 		} catch (Exception f) {
+			stopProgess("Error");
 			ErrorDialog.showError(f);
 			return;
 		} finally {
@@ -677,7 +685,7 @@ public class FederationAuditPanel extends JPanel {
 		if (search == null) {
 			search = new JButton();
 			search.setText("Search");
-			// getRootPane().setDefaultButton(search);
+			
 			search.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					Runner runner = new Runner() {
@@ -779,5 +787,23 @@ public class FederationAuditPanel extends JPanel {
 		}
 		return messagePanel;
 	}
+
+	private void showProgess(String s) {
+		if(this.progess!=null){
+			this.progess.showProgress(s);
+		}
+	}
+	
+	private void stopProgess(String s) {
+		if(this.progess!=null){
+			this.progess.stopProgress(s);
+		}
+	}
+
+	public void setProgess(ProgressPanel progess) {
+		this.progess = progess;
+	}
+	
+	
 
 }

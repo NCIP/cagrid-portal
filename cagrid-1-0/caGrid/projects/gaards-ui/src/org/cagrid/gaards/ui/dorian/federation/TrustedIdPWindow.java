@@ -29,6 +29,7 @@ import org.cagrid.gaards.dorian.federation.TrustedIdP;
 import org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault;
 import org.cagrid.gaards.pki.CertUtil;
 import org.cagrid.gaards.ui.common.CertificatePanel;
+import org.cagrid.gaards.ui.common.ProgressPanel;
 import org.cagrid.gaards.ui.common.TitlePanel;
 import org.cagrid.gaards.ui.dorian.DorianLookAndFeel;
 import org.cagrid.gaards.ui.dorian.DorianSession;
@@ -42,7 +43,7 @@ import org.cagrid.grape.utils.ErrorDialog;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: TrustedIdPWindow.java,v 1.3 2008-11-11 16:32:09 langella Exp $
+ * @version $Id: TrustedIdPWindow.java,v 1.4 2008-11-14 02:44:10 langella Exp $
  */
 public class TrustedIdPWindow extends ApplicationComponent implements
 		DorianSessionProvider {
@@ -235,6 +236,8 @@ public class TrustedIdPWindow extends ApplicationComponent implements
 
 	private JPanel auditPanel = null;
 
+	private ProgressPanel progressPanel = null;
+
 	public TrustedIdPWindow(DorianSession session, TrustedIdPsWindow window,
 			List<GridUserPolicy> policies) {
 		super();
@@ -336,6 +339,11 @@ public class TrustedIdPWindow extends ApplicationComponent implements
 	 */
 	private JPanel getMainPanel() {
 		if (mainPanel == null) {
+			GridBagConstraints gridBagConstraints27 = new GridBagConstraints();
+			gridBagConstraints27.gridx = 0;
+			gridBagConstraints27.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints27.weightx = 1.0D;
+			gridBagConstraints27.gridy = 3;
 			GridBagConstraints gridBagConstraints = new GridBagConstraints();
 			gridBagConstraints.gridx = 0;
 			gridBagConstraints.weightx = 1.0D;
@@ -359,6 +367,7 @@ public class TrustedIdPWindow extends ApplicationComponent implements
 			mainPanel.add(getJTabbedPane(), gridBagConstraints4);
 			mainPanel.add(getButtonPanel(), gridBagConstraints2);
 			mainPanel.add(getTitlePanel(), gridBagConstraints);
+			mainPanel.add(getProgressPanel(), gridBagConstraints27);
 		}
 		return mainPanel;
 	}
@@ -394,6 +403,7 @@ public class TrustedIdPWindow extends ApplicationComponent implements
 			updateTrustedIdP
 					.addActionListener(new java.awt.event.ActionListener() {
 						public void actionPerformed(java.awt.event.ActionEvent e) {
+							getUpdateTrustedIdP().setEnabled(false);
 							Runner runner = new Runner() {
 								public void execute() {
 									updateTrustedIdP();
@@ -413,6 +423,11 @@ public class TrustedIdPWindow extends ApplicationComponent implements
 	}
 
 	private synchronized void updateTrustedIdP() {
+		if (newTrustedIdP) {
+			getProgressPanel().showProgress("Adding IdP...");
+		} else {
+			getProgressPanel().showProgress("Updating IdP...");
+		}
 
 		try {
 			if (getCredPanel().getCertificate() != null) {
@@ -506,16 +521,20 @@ public class TrustedIdPWindow extends ApplicationComponent implements
 			GridAdministrationClient client = this.session.getAdminClient();
 			if (newTrustedIdP) {
 				window.addTrustedIdP(client.addTrustedIdP(idp));
+				getProgressPanel().stopProgress("Successfully added IdP.");
 				dispose();
 			} else {
 				client.updateTrustedIdP(idp);
-				GridApplication.getContext().showMessage(
-						"The Trusted IdP was updated successfully.");
+				getProgressPanel().stopProgress("Successfully updated IdP.");
 			}
 		} catch (PermissionDeniedFault pdf) {
 			ErrorDialog.showError(pdf);
+			getProgressPanel().stopProgress("Error");
 		} catch (Exception e) {
 			ErrorDialog.showError(e);
+			getProgressPanel().stopProgress("Error");
+		}finally{
+			getUpdateTrustedIdP().setEnabled(true);
 		}
 
 	}
@@ -1564,6 +1583,18 @@ public class TrustedIdPWindow extends ApplicationComponent implements
 			auditPanel = new FederationAuditPanel(this,FederationAuditPanel.IDP_MODE,this.idp.getName());
 		}
 		return auditPanel;
+	}
+
+	/**
+	 * This method initializes progressPanel	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private ProgressPanel getProgressPanel() {
+		if (progressPanel == null) {
+			progressPanel = new ProgressPanel();
+		}
+		return progressPanel;
 	}
 
 }

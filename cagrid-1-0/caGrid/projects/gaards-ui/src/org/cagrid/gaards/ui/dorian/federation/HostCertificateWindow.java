@@ -16,7 +16,6 @@ import java.security.interfaces.RSAPublicKey;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
@@ -27,8 +26,9 @@ import org.cagrid.gaards.dorian.federation.HostCertificateStatus;
 import org.cagrid.gaards.dorian.federation.HostCertificateUpdate;
 import org.cagrid.gaards.pki.CertUtil;
 import org.cagrid.gaards.pki.KeyUtil;
-import org.cagrid.gaards.ui.common.CertificatePanel;
+import org.cagrid.gaards.ui.common.CertificateInformationComponent;
 import org.cagrid.gaards.ui.common.GAARDSLookAndFeel;
+import org.cagrid.gaards.ui.common.ProgressPanel;
 import org.cagrid.gaards.ui.dorian.DorianLookAndFeel;
 import org.cagrid.gaards.ui.dorian.DorianSession;
 import org.cagrid.gaards.ui.dorian.DorianSessionProvider;
@@ -43,12 +43,11 @@ import org.cagrid.grape.utils.ErrorDialog;
  * @version $Id: HostCertificateWindow.java,v 1.1 2007/06/06 20:55:45 langella
  *          Exp $
  */
-public class HostCertificateWindow extends ApplicationComponent implements DorianSessionProvider{
+public class HostCertificateWindow extends ApplicationComponent implements
+		DorianSessionProvider {
 
 	private final static String INFO_PANEL = "Summary";
 
-	private final static String CERTIFICATE_PANEL = "Certificate";
-	
 	private final static String AUDIT_PANEL = "Audit";
 
 	private javax.swing.JPanel jContentPane = null;
@@ -62,10 +61,6 @@ public class HostCertificateWindow extends ApplicationComponent implements Doria
 	private JPanel jPanel1 = null;
 
 	private JPanel infoPanel = null;
-
-	private JPanel certificatePanel = null;
-
-	private CertificatePanel credPanel = null;
 
 	private HostCertificateRecord record;
 
@@ -117,7 +112,25 @@ public class HostCertificateWindow extends ApplicationComponent implements Doria
 
 	private JLabel hostIdentity = null;
 
-	private JPanel auditPanel = null;
+	private FederationAuditPanel auditPanel = null;
+
+	private JLabel jLabel5 = null;
+
+	private JTextField subject = null;
+
+	private JLabel jLabel7 = null;
+
+	private JLabel jLabel8 = null;
+
+	private JTextField notBefore = null;
+
+	private JTextField notAfter = null;
+
+	private JButton view = null;
+
+	private ProgressPanel progressPanel = null;
+
+	private X509Certificate cert;
 
 	/**
 	 * This is the default constructor
@@ -157,16 +170,23 @@ public class HostCertificateWindow extends ApplicationComponent implements Doria
 			if ((record.getCertificate() != null)
 					&& (Utils.clean(record.getCertificate()
 							.getCertificateAsString()) != null)) {
-				X509Certificate cert = CertUtil.loadCertificate(record
-						.getCertificate().getCertificateAsString());
-				getCredPanel().setCertificate(cert);
+				cert = CertUtil.loadCertificate(record.getCertificate()
+						.getCertificateAsString());
 				hostGridIdentity.setText(CertUtil.subjectToIdentity(cert
 						.getSubjectDN().getName()));
+				hostIdentity.setText(hostGridIdentity.getText());
+				getSubject().setText(cert.getSubjectDN().getName());
+				notBefore.setText(cert.getNotBefore().toString());
+				notAfter.setText(cert.getNotAfter().toString());
 				getSave().setEnabled(true);
 				getSave().setVisible(true);
+				getView().setEnabled(true);
+				getView().setVisible(true);
 			} else {
 				getSave().setEnabled(false);
 				getSave().setVisible(false);
+				getView().setEnabled(false);
+				getView().setVisible(false);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -197,8 +217,6 @@ public class HostCertificateWindow extends ApplicationComponent implements Doria
 		this.setContentPane(getJContentPane());
 		this.setTitle("Host Certificate [" + record.getHost() + "]");
 	}
-	
-	
 
 	public DorianSession getSession() throws Exception {
 		return this.session;
@@ -225,6 +243,12 @@ public class HostCertificateWindow extends ApplicationComponent implements Doria
 	 */
 	private JPanel getMainPanel() {
 		if (mainPanel == null) {
+			GridBagConstraints gridBagConstraints17 = new GridBagConstraints();
+			gridBagConstraints17.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints17.gridy = 2;
+			gridBagConstraints17.weightx = 1.0D;
+			gridBagConstraints17.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints17.gridx = 0;
 			GridBagConstraints gridBagConstraints = new GridBagConstraints();
 			gridBagConstraints.gridx = 0;
 			gridBagConstraints.insets = new Insets(5, 5, 5, 5);
@@ -238,17 +262,11 @@ public class HostCertificateWindow extends ApplicationComponent implements Doria
 			gridBagConstraints4.weightx = 1.0;
 			gridBagConstraints4.weighty = 1.0D;
 			gridBagConstraints4.gridx = 0;
-			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
 			mainPanel = new JPanel();
 			mainPanel.setLayout(new GridBagLayout());
-			gridBagConstraints2.gridx = 0;
-			gridBagConstraints2.gridy = 2;
-			gridBagConstraints2.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints2.anchor = java.awt.GridBagConstraints.SOUTH;
-			gridBagConstraints2.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			mainPanel.add(getButtonPanel(), gridBagConstraints2);
 			mainPanel.add(getJTabbedPane(), gridBagConstraints4);
 			mainPanel.add(getTitlePanel(), gridBagConstraints);
+			mainPanel.add(getProgressPanel(), gridBagConstraints17);
 		}
 		return mainPanel;
 	}
@@ -265,6 +283,7 @@ public class HostCertificateWindow extends ApplicationComponent implements Doria
 			buttonPanel.add(getUpdate(), null);
 			buttonPanel.add(getRenew(), null);
 			buttonPanel.add(getSave(), null);
+			buttonPanel.add(getView(), null);
 		}
 		return buttonPanel;
 	}
@@ -272,14 +291,16 @@ public class HostCertificateWindow extends ApplicationComponent implements Doria
 	private void approveHostCertificate() {
 		try {
 			getApprove().setEnabled(false);
+			getProgressPanel().showProgress("Approving certificate...");
 			GridAdministrationClient client = this.session.getAdminClient();
 			record = client.approveHostCertificate(record.getId());
 			loadRecord();
-			JOptionPane.showMessageDialog(this,
-					"The host certificate has been succesfully approved.");
+			getProgressPanel().stopProgress(
+					"Certificate successfully approved.");
 		} catch (Exception e) {
 			ErrorDialog.showError(e);
 			getApprove().setEnabled(true);
+			getProgressPanel().stopProgress("Error");
 		}
 
 	}
@@ -287,14 +308,16 @@ public class HostCertificateWindow extends ApplicationComponent implements Doria
 	private void renewHostCertificate() {
 		try {
 			getRenew().setEnabled(false);
+			getProgressPanel().showProgress("Renewing certificate...");
 			GridAdministrationClient client = this.session.getAdminClient();
 			record = client.renewHostCertificate(record.getId());
 			loadRecord();
-			JOptionPane.showMessageDialog(this,
-					"The host certificate has been succesfully renewed.");
+			getProgressPanel()
+					.stopProgress("Certificate renewed successfully.");
 		} catch (Exception e) {
 			ErrorDialog.showError(e);
 			getRenew().setEnabled(true);
+			getProgressPanel().stopProgress("Error");
 		}
 
 	}
@@ -314,7 +337,7 @@ public class HostCertificateWindow extends ApplicationComponent implements Doria
 	private void updateHostCertificate() {
 		try {
 			getUpdate().setEnabled(false);
-
+			getProgressPanel().showProgress("Updating certificate...");
 			boolean performUpdate = false;
 			HostCertificateUpdate certUpdate = new HostCertificateUpdate();
 			certUpdate.setId(record.getId());
@@ -341,16 +364,16 @@ public class HostCertificateWindow extends ApplicationComponent implements Doria
 					record.setOwner(getOwner().getText());
 				}
 				loadRecord();
-				JOptionPane.showMessageDialog(this,
-						"The host certificate has been succesfully updated.");
+				getProgressPanel().stopProgress(
+						"Certificate successfully updated.");
 			} else {
-				JOptionPane.showMessageDialog(this,
-						"There are no changes to update.");
+				getProgressPanel().stopProgress("Certificate up to date.");
 			}
 
 		} catch (Exception e) {
 			ErrorDialog.showError(e);
 			getUpdate().setEnabled(true);
+			getProgressPanel().stopProgress("Error");
 		}
 
 	}
@@ -364,8 +387,6 @@ public class HostCertificateWindow extends ApplicationComponent implements Doria
 		if (jTabbedPane == null) {
 			jTabbedPane = new JTabbedPane();
 			jTabbedPane.addTab(INFO_PANEL, null, getInfoPanel(), null);
-			jTabbedPane.addTab(CERTIFICATE_PANEL, null, getCertificatePanel(),
-					null);
 			jTabbedPane.addTab(AUDIT_PANEL, null, getAuditPanel(), null);
 		}
 		return jTabbedPane;
@@ -378,6 +399,48 @@ public class HostCertificateWindow extends ApplicationComponent implements Doria
 	 */
 	private JPanel getJPanel1() {
 		if (jPanel1 == null) {
+			GridBagConstraints gridBagConstraints27 = new GridBagConstraints();
+			gridBagConstraints27.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints27.gridy = 8;
+			gridBagConstraints27.weightx = 1.0;
+			gridBagConstraints27.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints27.anchor = GridBagConstraints.WEST;
+			gridBagConstraints27.gridx = 1;
+			GridBagConstraints gridBagConstraints26 = new GridBagConstraints();
+			gridBagConstraints26.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints26.gridy = 7;
+			gridBagConstraints26.weightx = 1.0;
+			gridBagConstraints26.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints26.anchor = GridBagConstraints.WEST;
+			gridBagConstraints26.gridx = 1;
+			GridBagConstraints gridBagConstraints25 = new GridBagConstraints();
+			gridBagConstraints25.gridx = 0;
+			gridBagConstraints25.anchor = GridBagConstraints.WEST;
+			gridBagConstraints25.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints25.gridy = 8;
+			jLabel8 = new JLabel();
+			jLabel8.setText("Expires");
+			GridBagConstraints gridBagConstraints24 = new GridBagConstraints();
+			gridBagConstraints24.gridx = 0;
+			gridBagConstraints24.anchor = GridBagConstraints.WEST;
+			gridBagConstraints24.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints24.gridy = 7;
+			jLabel7 = new JLabel();
+			jLabel7.setText("Start");
+			GridBagConstraints gridBagConstraints23 = new GridBagConstraints();
+			gridBagConstraints23.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints23.gridy = 6;
+			gridBagConstraints23.weightx = 1.0;
+			gridBagConstraints23.anchor = GridBagConstraints.WEST;
+			gridBagConstraints23.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints23.gridx = 1;
+			GridBagConstraints gridBagConstraints20 = new GridBagConstraints();
+			gridBagConstraints20.gridx = 0;
+			gridBagConstraints20.anchor = GridBagConstraints.WEST;
+			gridBagConstraints20.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints20.gridy = 6;
+			jLabel5 = new JLabel();
+			jLabel5.setText("Subject");
 			GridBagConstraints gridBagConstraints18 = new GridBagConstraints();
 			gridBagConstraints18.fill = GridBagConstraints.HORIZONTAL;
 			gridBagConstraints18.gridy = 5;
@@ -481,6 +544,12 @@ public class HostCertificateWindow extends ApplicationComponent implements Doria
 			jPanel1.add(getStrength(), gridBagConstraints22);
 			jPanel1.add(jLabel4, gridBagConstraints15);
 			jPanel1.add(getHostGridIdentity(), gridBagConstraints18);
+			jPanel1.add(jLabel5, gridBagConstraints20);
+			jPanel1.add(getSubject(), gridBagConstraints23);
+			jPanel1.add(jLabel7, gridBagConstraints24);
+			jPanel1.add(jLabel8, gridBagConstraints25);
+			jPanel1.add(getNotBefore(), gridBagConstraints26);
+			jPanel1.add(getNotAfter(), gridBagConstraints27);
 		}
 		return jPanel1;
 	}
@@ -497,47 +566,9 @@ public class HostCertificateWindow extends ApplicationComponent implements Doria
 			infoPanel = new JPanel();
 			infoPanel.setLayout(new BorderLayout());
 			infoPanel.add(getJPanel1(), java.awt.BorderLayout.NORTH);
+			infoPanel.add(getButtonPanel(), BorderLayout.SOUTH);
 		}
 		return infoPanel;
-	}
-
-	/**
-	 * This method initializes certificatePanel
-	 * 
-	 * @return javax.swing.JPanel
-	 */
-	private JPanel getCertificatePanel() {
-		if (certificatePanel == null) {
-			GridBagConstraints gridBagConstraints17 = new GridBagConstraints();
-			gridBagConstraints17.anchor = java.awt.GridBagConstraints.NORTH;
-			gridBagConstraints17.gridy = 0;
-			gridBagConstraints17.weightx = 1.0D;
-			gridBagConstraints17.weighty = 1.0D;
-			gridBagConstraints17.fill = java.awt.GridBagConstraints.BOTH;
-			gridBagConstraints17.gridx = 0;
-			certificatePanel = new JPanel();
-			certificatePanel.setLayout(new GridBagLayout());
-			certificatePanel.add(getCredPanel(), gridBagConstraints17);
-		}
-		return certificatePanel;
-	}
-
-	/**
-	 * This method initializes credPanel
-	 * 
-	 * @return javax.swing.JPanel
-	 */
-	private CertificatePanel getCredPanel() {
-		if (credPanel == null) {
-			try {
-				credPanel = new CertificatePanel();
-				credPanel.setAllowImport(false);
-				credPanel.setAllowExport(false);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-		return credPanel;
 	}
 
 	/**
@@ -865,15 +896,91 @@ public class HostCertificateWindow extends ApplicationComponent implements Doria
 	}
 
 	/**
-	 * This method initializes auditPanel	
-	 * 	
-	 * @return javax.swing.JPanel	
+	 * This method initializes auditPanel
+	 * 
+	 * @return javax.swing.JPanel
 	 */
-	private JPanel getAuditPanel() {
+	private FederationAuditPanel getAuditPanel() {
 		if (auditPanel == null) {
-			auditPanel = new FederationAuditPanel(this,FederationAuditPanel.HOST_MODE,String.valueOf(this.record.getId()));
+			auditPanel = new FederationAuditPanel(this,
+					FederationAuditPanel.HOST_MODE, String.valueOf(this.record
+							.getId()));
+			auditPanel.setProgess(getProgressPanel());
 		}
 		return auditPanel;
+	}
+
+	/**
+	 * This method initializes subject
+	 * 
+	 * @return javax.swing.JTextField
+	 */
+	private JTextField getSubject() {
+		if (subject == null) {
+			subject = new JTextField();
+			subject.setEditable(false);
+		}
+		return subject;
+	}
+
+	/**
+	 * This method initializes notBefore
+	 * 
+	 * @return javax.swing.JTextField
+	 */
+	private JTextField getNotBefore() {
+		if (notBefore == null) {
+			notBefore = new JTextField();
+			notBefore.setEditable(false);
+		}
+		return notBefore;
+	}
+
+	/**
+	 * This method initializes notAfter
+	 * 
+	 * @return javax.swing.JTextField
+	 */
+	private JTextField getNotAfter() {
+		if (notAfter == null) {
+			notAfter = new JTextField();
+			notAfter.setEditable(false);
+		}
+		return notAfter;
+	}
+
+	/**
+	 * This method initializes view
+	 * 
+	 * @return javax.swing.JButton
+	 */
+	private JButton getView() {
+		if (view == null) {
+			view = new JButton();
+			view.setText("View Certificate");
+			view.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					if (cert != null) {
+						GridApplication.getContext().addApplicationComponent(
+								new CertificateInformationComponent(cert), 700,
+								550);
+					}
+				}
+			});
+		}
+		return view;
+	}
+
+	/**
+	 * This method initializes progressPanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	private ProgressPanel getProgressPanel() {
+		if (progressPanel == null) {
+			progressPanel = new ProgressPanel();
+		}
+		return progressPanel;
 	}
 
 }

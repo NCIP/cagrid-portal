@@ -24,6 +24,7 @@ import org.cagrid.gaards.dorian.federation.HostCertificateRecord;
 import org.cagrid.gaards.dorian.federation.TrustedIdP;
 import org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault;
 import org.cagrid.gaards.ui.common.GAARDSLookAndFeel;
+import org.cagrid.gaards.ui.common.ProgressPanel;
 import org.cagrid.gaards.ui.dorian.DorianLookAndFeel;
 import org.cagrid.gaards.ui.dorian.DorianSession;
 import org.cagrid.gaards.ui.dorian.DorianSessionProvider;
@@ -36,7 +37,7 @@ import org.cagrid.grape.utils.ErrorDialog;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: UserWindow.java,v 1.4 2008-11-11 16:32:09 langella Exp $
+ * @version $Id: UserWindow.java,v 1.5 2008-11-14 02:44:10 langella Exp $
  */
 public class UserWindow extends ApplicationComponent implements
 		HostCertificateLauncher, DorianSessionProvider {
@@ -46,7 +47,7 @@ public class UserWindow extends ApplicationComponent implements
 	private final static String USER_CERTIFICATES_PANEL = "User Certificates";
 
 	private final static String HOST_CERTIFICATES_PANEL = "Host Certificates";
-	
+
 	private final static String AUDIT_PANEL = "Audit";
 
 	private javax.swing.JPanel jContentPane = null;
@@ -87,7 +88,7 @@ public class UserWindow extends ApplicationComponent implements
 
 	private JComboBox userStatus = null;
 
-	private JPanel userCertificatePanel = null;
+	private UserCertificateSearchPanel userCertificatePanel = null;
 
 	private JLabel jLabel = null;
 
@@ -128,6 +129,8 @@ public class UserWindow extends ApplicationComponent implements
 	private JButton viewHostCertificate = null;
 
 	private FederationAuditPanel auditPanel = null;
+
+	private ProgressPanel progressPanel = null;
 
 	/**
 	 * This is the default constructor
@@ -173,6 +176,11 @@ public class UserWindow extends ApplicationComponent implements
 	 */
 	private JPanel getMainPanel() {
 		if (mainPanel == null) {
+			GridBagConstraints gridBagConstraints30 = new GridBagConstraints();
+			gridBagConstraints30.gridx = 0;
+			gridBagConstraints30.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints30.weightx = 1.0D;
+			gridBagConstraints30.gridy = 2;
 			GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
 			gridBagConstraints4.fill = GridBagConstraints.BOTH;
 			gridBagConstraints4.gridy = 1;
@@ -190,6 +198,7 @@ public class UserWindow extends ApplicationComponent implements
 			mainPanel.setLayout(new GridBagLayout());
 			mainPanel.add(getJPanel2(), gridBagConstraints1);
 			mainPanel.add(getJTabbedPane(), gridBagConstraints4);
+			mainPanel.add(getProgressPanel(), gridBagConstraints30);
 		}
 		return mainPanel;
 	}
@@ -205,6 +214,7 @@ public class UserWindow extends ApplicationComponent implements
 			updateUser.setText("Update Account");
 			updateUser.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
+					getUpdateUser().setEnabled(false);
 					Runner runner = new Runner() {
 						public void execute() {
 							updateUser();
@@ -225,20 +235,23 @@ public class UserWindow extends ApplicationComponent implements
 	}
 
 	private synchronized void updateUser() {
+		this.getProgressPanel().showProgress("Updating account...");
 		user.setUserStatus(((UserStatusComboBox) this.getUserStatus())
 				.getSelectedUserStatus());
 
 		try {
 			GridAdministrationClient client = this.session.getAdminClient();
 			client.updateUser(user);
-
-			GridApplication.getContext().showMessage(
-					"User " + user.getGridId() + " update successfully.");
-
+			this.getProgressPanel().stopProgress("Account successfully updated.");
 		} catch (PermissionDeniedFault pdf) {
 			ErrorDialog.showError(pdf);
+			this.getProgressPanel().stopProgress("Error");
 		} catch (Exception e) {
 			ErrorDialog.showError(e);
+			this.getProgressPanel().stopProgress("Error");
+		} finally {
+			updateUser.setEnabled(true);
+			
 		}
 
 	}
@@ -570,6 +583,7 @@ public class UserWindow extends ApplicationComponent implements
 		if (userCertificatePanel == null) {
 			userCertificatePanel = new UserCertificateSearchPanel(this.session,
 					this.user.getGridId());
+			userCertificatePanel.setProgess(getProgressPanel());
 		}
 		return userCertificatePanel;
 	}
@@ -673,9 +687,12 @@ public class UserWindow extends ApplicationComponent implements
 			gridBagConstraints25.gridy = 0;
 			hostCertificates = new JPanel();
 			hostCertificates.setLayout(new GridBagLayout());
-			hostCertificates.add(getHostCertificateRecordPanel(), gridBagConstraints27);
-			hostCertificates.add(getFindHostCertificates(), gridBagConstraints25);
-			hostCertificates.add(getViewHostCertificate(), gridBagConstraints29);
+			hostCertificates.add(getHostCertificateRecordPanel(),
+					gridBagConstraints27);
+			hostCertificates.add(getFindHostCertificates(),
+					gridBagConstraints25);
+			hostCertificates
+					.add(getViewHostCertificate(), gridBagConstraints29);
 		}
 		return hostCertificates;
 	}
@@ -688,11 +705,12 @@ public class UserWindow extends ApplicationComponent implements
 	private JButton getFindHostCertificates() {
 		if (findHostCertificates == null) {
 			findHostCertificates = new JButton();
-			findHostCertificates.setText("List Host Certificates");
+			findHostCertificates.setText("List");
 			findHostCertificates
 					.addActionListener(new java.awt.event.ActionListener() {
 						public void actionPerformed(java.awt.event.ActionEvent e) {
 							getFindHostCertificates().setEnabled(false);
+							getViewHostCertificate().setEnabled(false);
 							Runner runner = new Runner() {
 								public void execute() {
 									findHostCertificates();
@@ -713,6 +731,7 @@ public class UserWindow extends ApplicationComponent implements
 
 	private void findHostCertificates() {
 		try {
+			getProgressPanel().showProgress("Searching...");
 			GridAdministrationClient client = this.session.getAdminClient();
 			getHostCertificateRecords().clearTable();
 			HostCertificateFilter f = new HostCertificateFilter();
@@ -722,10 +741,14 @@ public class UserWindow extends ApplicationComponent implements
 			for (int i = 0; i < records.size(); i++) {
 				getHostCertificateRecords().addHostCertificate(records.get(i));
 			}
+			getProgressPanel().stopProgress(records.size()+" host certificate(s) found.");
 		} catch (Exception e) {
 			ErrorDialog.showError(e);
+			getProgressPanel().stopProgress("Error");
+		} finally {
+			getFindHostCertificates().setEnabled(true);
+			getViewHostCertificate().setEnabled(true);
 		}
-		getFindHostCertificates().setEnabled(true);
 	}
 
 	/**
@@ -759,7 +782,7 @@ public class UserWindow extends ApplicationComponent implements
 					this.session, getHostCertificateRecords()
 							.getSelectedHostCertificate(), true);
 			GridApplication.getContext().addApplicationComponent(window, 750,
-					650);
+					500);
 		} catch (Exception e) {
 			ErrorDialog.showError(e);
 		}
@@ -767,9 +790,9 @@ public class UserWindow extends ApplicationComponent implements
 	}
 
 	/**
-	 * This method initializes hostCertificateRecordPanel	
-	 * 	
-	 * @return javax.swing.JPanel	
+	 * This method initializes hostCertificateRecordPanel
+	 * 
+	 * @return javax.swing.JPanel
 	 */
 	private JPanel getHostCertificateRecordPanel() {
 		if (hostCertificateRecordPanel == null) {
@@ -781,49 +804,55 @@ public class UserWindow extends ApplicationComponent implements
 			gridBagConstraints26.weighty = 1.0;
 			gridBagConstraints26.insets = new Insets(2, 2, 2, 2);
 			hostCertificateRecordPanel = new JPanel();
-			hostCertificateRecordPanel.setBorder(javax.swing.BorderFactory
-					.createTitledBorder(
-							null,
-							"Host Certificates",
-							javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-							javax.swing.border.TitledBorder.DEFAULT_POSITION,
-							null, LookAndFeel.getPanelLabelColor()));
+			hostCertificateRecordPanel
+					.setBorder(javax.swing.BorderFactory
+							.createTitledBorder(
+									null,
+									"Host Certificates",
+									javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+									javax.swing.border.TitledBorder.DEFAULT_POSITION,
+									null, LookAndFeel.getPanelLabelColor()));
 			hostCertificateRecordPanel.setLayout(new GridBagLayout());
-			hostCertificateRecordPanel.add(getJScrollPane(), gridBagConstraints26);
+			hostCertificateRecordPanel.add(getJScrollPane(),
+					gridBagConstraints26);
 		}
 		return hostCertificateRecordPanel;
 	}
 
 	/**
-	 * This method initializes viewHostCertificate	
-	 * 	
-	 * @return javax.swing.JButton	
+	 * This method initializes viewHostCertificate
+	 * 
+	 * @return javax.swing.JButton
 	 */
 	private JButton getViewHostCertificate() {
 		if (viewHostCertificate == null) {
 			viewHostCertificate = new JButton();
-			viewHostCertificate.setText("View Host Certificate");
-			viewHostCertificate.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					try{
-					getHostCertificateRecords().doubleClick();
-					}catch (Exception ex) {
-						ErrorDialog.showError(ex);
-					}
-				}
-			});
+			viewHostCertificate.setText("View");
+			viewHostCertificate
+					.addActionListener(new java.awt.event.ActionListener() {
+						public void actionPerformed(java.awt.event.ActionEvent e) {
+							try {
+								getHostCertificateRecords().doubleClick();
+							} catch (Exception ex) {
+								ErrorDialog.showError(ex);
+							}
+						}
+					});
 		}
 		return viewHostCertificate;
 	}
 
 	/**
-	 * This method initializes auditPanel	
-	 * 	
-	 * @return javax.swing.JPanel	
+	 * This method initializes auditPanel
+	 * 
+	 * @return javax.swing.JPanel
 	 */
 	private JPanel getAuditPanel() {
 		if (auditPanel == null) {
-			auditPanel = new FederationAuditPanel(this,FederationAuditPanel.GRID_ACCOUNT_MODE,this.user.getGridId());
+			auditPanel = new FederationAuditPanel(this,
+					FederationAuditPanel.GRID_ACCOUNT_MODE, this.user
+							.getGridId());
+			auditPanel.setProgess(getProgressPanel());
 		}
 		return auditPanel;
 	}
@@ -831,7 +860,17 @@ public class UserWindow extends ApplicationComponent implements
 	public DorianSession getSession() throws Exception {
 		return this.session;
 	}
-	
-	
+
+	/**
+	 * This method initializes progressPanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	private ProgressPanel getProgressPanel() {
+		if (progressPanel == null) {
+			progressPanel = new ProgressPanel();
+		}
+		return progressPanel;
+	}
 
 }

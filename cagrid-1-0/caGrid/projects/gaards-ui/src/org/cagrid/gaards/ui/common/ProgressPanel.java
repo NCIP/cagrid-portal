@@ -17,6 +17,7 @@ public class ProgressPanel extends JPanel {
 	private JLabel display = null;
 	private JProgressBar progress = null;
 	private JLabel title = null;
+
 	/**
 	 * This is the default constructor
 	 */
@@ -89,6 +90,7 @@ public class ProgressPanel extends JPanel {
 	public void showProgress(final String s) {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
+				title.setText("    ");
 				getDisplay().setVisible(true);
 				getProgress().setVisible(true);
 				getDisplay().setText(s);
@@ -97,12 +99,22 @@ public class ProgressPanel extends JPanel {
 		});
 
 	}
+
 	public void stopProgress() {
+		stopProgress(null);
+	}
+
+	public void stopProgress(final String s) {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				getDisplay().setVisible(false);
+				if (s == null) {
+					getDisplay().setVisible(false);
+					getDisplay().setText("");
+				} else {
+					getDisplay().setText(s+"   ");
+					getDisplay().setVisible(true);
+				}
 				getProgress().setVisible(false);
-				getDisplay().setText("");
 				getProgress().setIndeterminate(false);
 			}
 		});
