@@ -6,7 +6,6 @@ import gov.nih.nci.cagrid.common.security.ProxyUtil;
 import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
 
 import java.awt.CardLayout;
-import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -30,6 +29,8 @@ import org.cagrid.gaards.authentication.common.AuthenticationProfile;
 import org.cagrid.gaards.dorian.client.GridUserClient;
 import org.cagrid.gaards.dorian.federation.CertificateLifetime;
 import org.cagrid.gaards.ui.common.CredentialManager;
+import org.cagrid.gaards.ui.common.ProgressPanel;
+import org.cagrid.gaards.ui.common.TitlePanel;
 import org.cagrid.gaards.ui.dorian.AuthenticationServiceHandle;
 import org.cagrid.gaards.ui.dorian.DorianHandle;
 import org.cagrid.gaards.ui.dorian.DorianLookAndFeel;
@@ -78,10 +79,6 @@ public class LoginWindow extends ApplicationComponent {
 
 	private JLabel secondsLabel = null;
 
-	private JPanel progressPanel = null;
-
-	private JProgressBar progress = null;
-
 	private boolean isCreating = false;
 
 	private Object mutex = new Object();
@@ -94,10 +91,6 @@ public class LoginWindow extends ApplicationComponent {
 
 	private JPanel titlePanel = null;
 
-	private JLabel icon = null;
-
-	private JLabel jLabel = null;
-
 	private JTabbedPane jTabbedPane = null;
 
 	private JPanel advancedPanel = null;
@@ -105,6 +98,8 @@ public class LoginWindow extends ApplicationComponent {
 	private JLabel jLabel1 = null;
 
 	private JCheckBox setDefault = null;
+
+	private ProgressPanel progressPanel = null;
 
 	/**
 	 * This is the default constructor
@@ -131,17 +126,18 @@ public class LoginWindow extends ApplicationComponent {
 	 */
 	private JPanel getJContentPane() {
 		if (jContentPane == null) {
-			GridBagConstraints gridBagConstraints17 = new GridBagConstraints();
-			gridBagConstraints17.gridx = 0;
-			gridBagConstraints17.fill = GridBagConstraints.HORIZONTAL;
-			gridBagConstraints17.weightx = 10.0D;
-			gridBagConstraints17.gridy = 2;
+			GridBagConstraints gridBagConstraints16 = new GridBagConstraints();
+			gridBagConstraints16.gridx = 0;
+			gridBagConstraints16.insets = new Insets(0, 0, 0, 0);
+			gridBagConstraints16.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints16.weightx = 1.0D;
+			gridBagConstraints16.gridy = 3;
 			GridBagConstraints gridBagConstraints15 = new GridBagConstraints();
 			gridBagConstraints15.gridx = 0;
 			gridBagConstraints15.ipadx = 120;
 			gridBagConstraints15.fill = GridBagConstraints.HORIZONTAL;
 			gridBagConstraints15.weightx = 1.0D;
-			gridBagConstraints15.gridy = 3;
+			gridBagConstraints15.gridy = 2;
 			GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
 			gridBagConstraints8.gridx = 0;
 			gridBagConstraints8.ipadx = 222;
@@ -160,7 +156,7 @@ public class LoginWindow extends ApplicationComponent {
 			jContentPane.add(getJTabbedPane(), gridBagConstraints7);
 			jContentPane.add(getTitlePanel(), gridBagConstraints8);
 			jContentPane.add(getButtonPanel(), gridBagConstraints15);
-			jContentPane.add(getProgressPanel(), gridBagConstraints17);
+			jContentPane.add(getProgressPanel(), gridBagConstraints16);
 		}
 		return jContentPane;
 	}
@@ -215,8 +211,8 @@ public class LoginWindow extends ApplicationComponent {
 
 			// idpPanel.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED));
 			/*
-			 * idpPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null,
-			 * "Login", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+			 * idpPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null
+			 * , "Login", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
 			 * javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
 			 * LookAndFeel.getPanelLabelColor()));
 			 */
@@ -251,7 +247,7 @@ public class LoginWindow extends ApplicationComponent {
 		AuthenticationServiceHandle handle = (AuthenticationServiceHandle) getIdentityProvider()
 				.getSelectedItem();
 		if (handle != null) {
-		    getIdentityProvider().setToolTipText(handle.getServiceURL());
+			getIdentityProvider().setToolTipText(handle.getServiceURL());
 			Set<QName> profiles = handle.getAuthenticationProfiles();
 			if ((profiles == null) || (profiles.size() <= 0)) {
 				this.credentialLayout
@@ -403,13 +399,14 @@ public class LoginWindow extends ApplicationComponent {
 		AuthenticationServiceHandle as = ((AuthenticationServiceHandle) getIdentityProvider()
 				.getSelectedItem());
 
-		this.updateProgress(true, "Authenticating with IdP...");
+		getProgressPanel().showProgress(
+				"Authenticating with identity provider...");
 
 		try {
 			AuthenticationClient client = as.getAuthenticationClient();
 			SAMLAssertion saml = client
 					.authenticate(this.currentCredentialPanel.getCredential());
-			this.updateProgress(true, "Creating Proxy...");
+			getProgressPanel().showProgress("Requesting grid credential...");
 			GridUserClient c2 = dorian.getUserClient();
 			CertificateLifetime lifetime = new CertificateLifetime();
 			lifetime.setHours(Integer.valueOf(
@@ -420,11 +417,12 @@ public class LoginWindow extends ApplicationComponent {
 					(String) getSeconds().getSelectedItem()).intValue());
 
 			GlobusCredential cred = c2.requestUserCertificate(saml, lifetime);
-			this.updateProgress(false, "Login Successful!!!");
+
 			CredentialManager.getInstance().addCredential(cred);
 			if (getSetDefault().isSelected()) {
 				ProxyUtil.saveProxyAsDefault(cred);
 			}
+			getProgressPanel().stopProgress("Login Successful");
 			GridApplication.getContext().addApplicationComponent(
 					new SuccessfulLoginWindow(cred.getIdentity()), 550, 200);
 
@@ -433,7 +431,7 @@ public class LoginWindow extends ApplicationComponent {
 
 			dispose();
 		} catch (Throwable e) {
-			this.updateProgress(false, "Error");
+			getProgressPanel().stopProgress("Error");
 			ErrorDialog.showError(e);
 			getAuthenticateButton().setEnabled(true);
 		}
@@ -562,51 +560,6 @@ public class LoginWindow extends ApplicationComponent {
 		return seconds;
 	}
 
-	/**
-	 * This method initializes progressPanel
-	 * 
-	 * @return javax.swing.JPanel
-	 */
-	private JPanel getProgressPanel() {
-		if (progressPanel == null) {
-			GridBagConstraints gridBagConstraints16 = new GridBagConstraints();
-			gridBagConstraints16.insets = new Insets(3, 20, 3, 20);
-			gridBagConstraints16.gridy = 0;
-			gridBagConstraints16.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints16.weightx = 1.0D;
-			gridBagConstraints16.gridx = 0;
-			progressPanel = new JPanel();
-			progressPanel.setLayout(new GridBagLayout());
-			progressPanel.add(getProgress(), gridBagConstraints16);
-		}
-		return progressPanel;
-	}
-
-	/**
-	 * This method initializes progress
-	 * 
-	 * @return javax.swing.JProgressBar
-	 */
-	private JProgressBar getProgress() {
-		if (progress == null) {
-			progress = new JProgressBar();
-			progress.setForeground(LookAndFeel.getPanelLabelColor());
-			progress.setString("");
-			progress.setStringPainted(true);
-		}
-		return progress;
-	}
-
-	public void updateProgress(final boolean working, final String s) {
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				getProgress().setString(s);
-				getProgress().setIndeterminate(working);
-			}
-		});
-
-	}
-
 	private String profileToString(QName profile) {
 		return profile.getNamespaceURI() + ":" + profile.getLocalPart();
 	}
@@ -618,25 +571,8 @@ public class LoginWindow extends ApplicationComponent {
 	 */
 	private JPanel getTitlePanel() {
 		if (titlePanel == null) {
-			GridBagConstraints gridBagConstraints19 = new GridBagConstraints();
-			gridBagConstraints19.anchor = GridBagConstraints.WEST;
-			gridBagConstraints19.gridx = 1;
-			gridBagConstraints19.gridy = 0;
-			gridBagConstraints19.weightx = 1.0D;
-			gridBagConstraints19.insets = new Insets(2, 2, 2, 2);
-			GridBagConstraints gridBagConstraints18 = new GridBagConstraints();
-			gridBagConstraints18.gridx = 0;
-			gridBagConstraints18.anchor = GridBagConstraints.WEST;
-			gridBagConstraints18.insets = new Insets(2, 2, 2, 2);
-			gridBagConstraints18.gridy = 0;
-			jLabel = new JLabel();
-			jLabel.setText("Login");
-			jLabel.setFont(new Font("Helvetica", Font.PLAIN, 20));
-			icon = new JLabel(LookAndFeel.getLogoNoText22x22());
-			titlePanel = new JPanel();
-			titlePanel.setLayout(new GridBagLayout());
-			titlePanel.add(icon, gridBagConstraints18);
-			titlePanel.add(jLabel, gridBagConstraints19);
+			titlePanel = new TitlePanel("Login",
+					"Obtain a grid credential required for authenticating with grid services.");
 		}
 		return titlePanel;
 	}
@@ -709,6 +645,18 @@ public class LoginWindow extends ApplicationComponent {
 			setDefault.setSelected(true);
 		}
 		return setDefault;
+	}
+
+	/**
+	 * This method initializes progressPanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	private ProgressPanel getProgressPanel() {
+		if (progressPanel == null) {
+			progressPanel = new ProgressPanel();
+		}
+		return progressPanel;
 	}
 
 }
