@@ -374,7 +374,6 @@ public class LoginWindow extends ApplicationComponent {
 							}
 						}
 					});
-			// authenticateButton.setIcon(DorianLookAndFeel.getAuthenticateIcon());
 		}
 		return authenticateButton;
 	}
