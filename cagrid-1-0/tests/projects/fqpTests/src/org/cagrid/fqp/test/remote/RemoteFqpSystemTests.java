@@ -6,8 +6,6 @@ import gov.nih.nci.cagrid.testing.system.deployment.steps.StopContainerStep;
 
 import java.io.File;
 
-import junit.framework.Assert;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.cagrid.fqp.test.common.AggregationStory;
@@ -16,6 +14,7 @@ import org.cagrid.fqp.test.common.FederatedQueryProcessorHelper;
 import org.cagrid.fqp.test.common.QueryStory;
 import org.cagrid.fqp.test.common.ServiceContainerSource;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Test;
 
 /** 
@@ -25,7 +24,7 @@ import org.junit.Test;
  * @author David Ervin
  * 
  * @created Jul 10, 2008 10:57:40 AM
- * @version $Id: RemoteFqpSystemTests.java,v 1.15 2008-11-14 16:23:24 dervin Exp $ 
+ * @version $Id: RemoteFqpSystemTests.java,v 1.16 2008-11-14 17:30:33 dervin Exp $ 
  */
 public class RemoteFqpSystemTests {
     
