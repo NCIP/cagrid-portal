@@ -29,7 +29,7 @@ public class SecureLocalFQPSystemTests {
     private DataServiceDeploymentStory[] dataServiceDeployments;
     
     @Test
-    protected void secureLocalFQPSystemTests() {
+    public void secureLocalFQPSystemTests() {
         // deploy two example SDK data services with security enabled
         // which pull from slightly different data
         DataServiceDeploymentStory exampleService1Deployment = 
