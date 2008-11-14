@@ -6,7 +6,6 @@ import gov.nih.nci.cagrid.testing.system.deployment.steps.DestroyContainerStep;
 import gov.nih.nci.cagrid.testing.system.deployment.steps.StopContainerStep;
 
 import java.io.File;
-import java.io.IOException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -25,7 +24,7 @@ import org.junit.Test;
  * @author David Ervin
  * 
  * @created Jul 10, 2008 10:57:40 AM
- * @version $Id: LocalFqpSystemTests.java,v 1.9 2008-11-14 14:55:54 jpermar Exp $ 
+ * @version $Id: LocalFqpSystemTests.java,v 1.10 2008-11-14 16:23:24 dervin Exp $ 
  */
 public class LocalFqpSystemTests {
     
@@ -33,16 +32,8 @@ public class LocalFqpSystemTests {
     
     private DataServiceDeploymentStory[] deployments;
 
-    /*
-    public LocalFqpSystemTests() {
-        super();
-        setName("Local Federated Query Engine System Tests");
-    }
-    */
-    
-
     @Test
-    public void localFqpSystemTests() throws IOException {
+    public void localFqpSystemTests() {
         // deploy two example SDK data services which pull from slightly different data
         DataServiceDeploymentStory exampleService1Deployment = 
             new DataServiceDeploymentStory(new File("resources/services/ExampleSdkService1.zip"), false);

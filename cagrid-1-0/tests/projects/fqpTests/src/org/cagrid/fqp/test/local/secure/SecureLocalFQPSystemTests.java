@@ -28,13 +28,6 @@ public class SecureLocalFQPSystemTests {
        
     private DataServiceDeploymentStory[] dataServiceDeployments;
     
-    /*
-    public SecureLocalFQPSystemTests() {
-        super();
-        setName("Secure Local FQP System Tests");
-    }
-    */
-    
     @Test
     protected void secureLocalFQPSystemTests() {
         // deploy two example SDK data services with security enabled
@@ -58,14 +51,6 @@ public class SecureLocalFQPSystemTests {
         queryStory.run();
     }
     
-
-    /*
-    public void run(TestResult result) {
-        logger.debug("Starting Secure Local FQP Tests");
-        super.run(result);
-        cleanUp();
-    }
-    */
     
     @After
     public void cleanUp() {

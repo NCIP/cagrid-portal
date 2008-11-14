@@ -25,7 +25,7 @@ import org.junit.Test;
  * @author David Ervin
  * 
  * @created Jul 10, 2008 10:57:40 AM
- * @version $Id: RemoteFqpSystemTests.java,v 1.14 2008-11-14 14:55:54 jpermar Exp $ 
+ * @version $Id: RemoteFqpSystemTests.java,v 1.15 2008-11-14 16:23:24 dervin Exp $ 
  */
 public class RemoteFqpSystemTests {
     
@@ -36,13 +36,6 @@ public class RemoteFqpSystemTests {
     
     private DataServiceDeploymentStory[] dataServiceDeployments;
     private FQPServiceDeploymentStory fqpDeployment;
-    
-    /*
-    public RemoteFqpSystemTests() {
-        super();
-        setName("Remote Federated Query Service System Tests");
-    }
-    */
     
     
     @Test
@@ -120,12 +113,14 @@ public class RemoteFqpSystemTests {
         return dir;
     }
     
+    
     private File getTransferDir() {
         String value = System.getProperty(TRANSFER_SERVICE_DIR_PROPERTY);
         Assert.assertNotNull("System property " + TRANSFER_SERVICE_DIR_PROPERTY + " was not set!", value);
         File dir = new File(value);
         return dir;
     }
+    
     
     @After
     public void cleanUp() {

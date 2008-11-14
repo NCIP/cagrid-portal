@@ -7,7 +7,6 @@ import gov.nih.nci.cagrid.testing.system.deployment.steps.StopContainerStep;
 import java.io.File;
 
 import junit.framework.Assert;
-import junit.framework.TestResult;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -60,8 +59,8 @@ public class SecureRemoteFqpSystemTests {
             new FederatedQueryProcessorHelper(fqpDeployment);
         
         // deploy caGrid transfer to the same container as FQP
-        TransferServiceDeploymentStory transferStory = new TransferServiceDeploymentStory(getTransferDir(), fqpDeployment);
-        transferStory.run();
+        // TransferServiceDeploymentStory transferStory = new TransferServiceDeploymentStory(getTransferDir(), fqpDeployment);
+        // transferStory.run();
         
         // run standard queries against the secure FQP and data services
         QueryStory queryStory = new QueryStory(dataServiceDeployments, queryHelper);
