@@ -10,6 +10,8 @@ import gov.nci.nih.cagrid.tests.core.steps.GlobusStartStep;
 import gov.nci.nih.cagrid.tests.core.steps.GlobusStopStep;
 import gov.nci.nih.cagrid.tests.core.steps.ServiceCheckMetadataStep;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 
 import junit.framework.TestResult;
@@ -44,7 +46,11 @@ public class BasicAnalyticalServiceWithMetadataTest extends AbstractServiceTest 
         Vector steps = new Vector();
         steps.add(getCreateServiceStep());
         steps.add(new GlobusCreateStep(getGlobus()));
-        steps.add(new GlobusDeployServiceStep(getGlobus(), getCreateServiceStep().getServiceDir()));
+        List args = new ArrayList();
+        args.add("-Dno.deployment.validation=true");
+        GlobusDeployServiceStep deployStep = new GlobusDeployServiceStep(getGlobus(),getCreateServiceStep().getServiceDir());
+        deployStep.setArgs(args);
+        steps.add(deployStep);
         steps.add(new GlobusStartStep(getGlobus()));
         try {
             addInvokeSteps(steps);

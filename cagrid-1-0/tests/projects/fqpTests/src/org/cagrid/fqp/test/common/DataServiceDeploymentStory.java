@@ -10,6 +10,8 @@ import gov.nih.nci.cagrid.testing.system.haste.Step;
 import gov.nih.nci.cagrid.testing.system.haste.Story;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 
 import org.cagrid.fqp.test.common.steps.DeleteDirectoryStep;
@@ -22,7 +24,7 @@ import org.cagrid.fqp.test.common.steps.UnzipServiceStep;
  * @author David Ervin
  * 
  * @created Jul 9, 2008 11:46:02 AM
- * @version $Id: DataServiceDeploymentStory.java,v 1.5 2008-10-21 20:04:04 dervin Exp $ 
+ * @version $Id: DataServiceDeploymentStory.java,v 1.6 2008-11-16 02:06:01 hastings Exp $ 
  */
 public class DataServiceDeploymentStory extends Story implements ServiceContainerSource {
     
@@ -95,7 +97,9 @@ public class DataServiceDeploymentStory extends Story implements ServiceContaine
         Vector<Step> steps = new Vector<Step>();
         steps.add(new UnpackContainerStep(dataServiceContainer));
         steps.add(new UnzipServiceStep(dataServiceZip, temp));
-        steps.add(new DeployServiceStep(dataServiceContainer, temp.getAbsolutePath()));
+        List args = new ArrayList();
+        args.add("-Dno.deployment.validation=true");
+        steps.add(new DeployServiceStep(dataServiceContainer, temp.getAbsolutePath(),args));
         steps.add(new DeleteDirectoryStep(temp));
         steps.add(new StartContainerStep(dataServiceContainer));
         return steps;
