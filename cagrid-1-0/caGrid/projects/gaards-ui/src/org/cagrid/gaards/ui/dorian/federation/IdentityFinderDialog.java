@@ -21,7 +21,7 @@ public class IdentityFinderDialog extends JDialog {
 	private static final String SYSTEM = "System";
 	private static final String USER = "User";
 	private static final String HOST = "Host";
-	private static final String IDENTITY_PROVIDER = "Identity Provider"; // @jve:decl-index=0:
+	private static final String IDENTITY_PROVIDER = "Identity Provider"; 
 	private static final long serialVersionUID = 1L;
 	private JPanel jContentPane = null;
 	private JPanel identityPanel = null;
