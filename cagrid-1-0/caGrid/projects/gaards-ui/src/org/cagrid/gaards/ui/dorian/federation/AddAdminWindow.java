@@ -14,9 +14,9 @@ import javax.swing.JTextField;
 
 import org.cagrid.gaards.dorian.client.GridAdministrationClient;
 import org.cagrid.gaards.ui.common.TitlePanel;
+import org.cagrid.gaards.ui.dorian.DorianSessionProvider;
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.utils.ErrorDialog;
-import org.globus.gsi.GlobusCredential;
 
 
 public class AddAdminWindow extends JDialog {
@@ -31,7 +31,7 @@ public class AddAdminWindow extends JDialog {
 
 	private String uri;
 
-	private GlobusCredential cred;
+	private DorianSessionProvider session;
 
 	private JPanel userPanel = null;
 
@@ -45,10 +45,9 @@ public class AddAdminWindow extends JDialog {
 	/**
 	 * This is the default constructor
 	 */
-	public AddAdminWindow(String uri, GlobusCredential cred) {
+	public AddAdminWindow(DorianSessionProvider session) {
 		super(GridApplication.getContext().getApplication());
-		this.uri = uri;
-		this.cred = cred;
+		this.session = session;
 		initialize();
 	}
 
@@ -146,7 +145,7 @@ public class AddAdminWindow extends JDialog {
 	private void addAdmin() {
 		try {
 			addAdminButton.setEnabled(false);
-			GridAdministrationClient client = new GridAdministrationClient(uri, cred);
+			GridAdministrationClient client = session.getSession().getAdminClient();
 			client.addAdmin(getGridIdentity().getText());
 			dispose();
 		} catch (Exception e) {
@@ -205,7 +204,7 @@ public class AddAdminWindow extends JDialog {
 			findUserButton.setText("Find...");
 			findUserButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					UserSearchDialog dialog = new UserSearchDialog();
+					UserSearchDialog dialog = new UserSearchDialog(session);
 					dialog.setModal(true);
 					GridApplication.getContext().showDialog(dialog);
 					if (dialog.getSelectedUser() != null) {

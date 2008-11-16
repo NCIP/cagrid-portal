@@ -14,6 +14,7 @@ import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
 
 import org.cagrid.gaards.dorian.common.AuditConstants;
+import org.cagrid.gaards.ui.common.TitlePanel;
 import org.cagrid.gaards.ui.dorian.DorianSessionProvider;
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.LookAndFeel;
@@ -21,9 +22,9 @@ import org.cagrid.grape.LookAndFeel;
 public class IdentityFinderDialog extends JDialog {
 
 	private static final String SYSTEM = "System";
-	private static final String USER = "User"; 
+	private static final String USER = "User";
 	private static final String HOST = "Host";
-	private static final String IDENTITY_PROVIDER = "Identity Provider";  //  @jve:decl-index=0:
+	private static final String IDENTITY_PROVIDER = "Identity Provider"; // @jve:decl-index=0:
 	private static final long serialVersionUID = 1L;
 	private JPanel jContentPane = null;
 	private JPanel identityPanel = null;
@@ -33,6 +34,7 @@ public class IdentityFinderDialog extends JDialog {
 	private JComboBox identityType = null;
 	private String identity;
 	private DorianSessionProvider session;
+	private JPanel titlePanel = null;
 
 	/**
 	 * @param owner
@@ -51,7 +53,7 @@ public class IdentityFinderDialog extends JDialog {
 	 * @return void
 	 */
 	private void initialize() {
-		this.setSize(200, 150);
+		this.setSize(350, 175);
 		this.setContentPane(getJContentPane());
 	}
 
@@ -62,9 +64,15 @@ public class IdentityFinderDialog extends JDialog {
 	 */
 	private JPanel getJContentPane() {
 		if (jContentPane == null) {
+			GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
+			gridBagConstraints11.anchor = GridBagConstraints.NORTH;
+			gridBagConstraints11.gridx = 0;
+			gridBagConstraints11.gridy = 0;
+			gridBagConstraints11.weightx = 1.0D;
+			gridBagConstraints11.fill = GridBagConstraints.HORIZONTAL;
 			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
 			gridBagConstraints1.gridwidth = 1;
-			gridBagConstraints1.gridy = 1;
+			gridBagConstraints1.gridy = 2;
 			gridBagConstraints1.ipady = 0;
 			gridBagConstraints1.fill = GridBagConstraints.HORIZONTAL;
 			gridBagConstraints1.insets = new Insets(2, 2, 2, 2);
@@ -72,7 +80,7 @@ public class IdentityFinderDialog extends JDialog {
 			gridBagConstraints1.gridx = 0;
 			GridBagConstraints gridBagConstraints = new GridBagConstraints();
 			gridBagConstraints.gridheight = 1;
-			gridBagConstraints.gridy = 0;
+			gridBagConstraints.gridy = 1;
 			gridBagConstraints.ipadx = 0;
 			gridBagConstraints.fill = GridBagConstraints.BOTH;
 			gridBagConstraints.insets = new Insets(2, 2, 2, 2);
@@ -83,6 +91,7 @@ public class IdentityFinderDialog extends JDialog {
 			jContentPane.setLayout(new GridBagLayout());
 			jContentPane.add(getIdentityPanel(), gridBagConstraints);
 			jContentPane.add(getButtonPanel(), gridBagConstraints1);
+			jContentPane.add(getTitlePanel(), gridBagConstraints11);
 		}
 		return jContentPane;
 	}
@@ -103,10 +112,6 @@ public class IdentityFinderDialog extends JDialog {
 			identityPanel = new JPanel();
 			identityPanel.setLayout(new GridBagLayout());
 			identityPanel.add(getIdentityType(), gridBagConstraints2);
-			identityPanel.setBorder(BorderFactory.createTitledBorder(null,
-					"Select Identity Type", TitledBorder.DEFAULT_JUSTIFICATION,
-					TitledBorder.DEFAULT_POSITION, null, LookAndFeel
-							.getPanelLabelColor()));
 		}
 		return identityPanel;
 	}
@@ -137,10 +142,11 @@ public class IdentityFinderDialog extends JDialog {
 			select.setText("Select");
 			select.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					String selected = (String)getIdentityType().getSelectedItem();
-					if(selected.equals(SYSTEM)){
+					String selected = (String) getIdentityType()
+							.getSelectedItem();
+					if (selected.equals(SYSTEM)) {
 						identity = AuditConstants.SYSTEM_ID;
-					}else if(selected.equals(USER)){
+					} else if (selected.equals(USER)) {
 						UserSearchDialog dialog = new UserSearchDialog(session);
 						dialog.setModal(true);
 						GridApplication.getContext().showDialog(dialog);
@@ -148,17 +154,24 @@ public class IdentityFinderDialog extends JDialog {
 							identity = dialog.getSelectedUser();
 						}
 
-						
-					}else if(selected.equals(HOST)){
-						
-					}else if(selected.equals(IDENTITY_PROVIDER)){
-						IdentityProviderSearchDialog dialog = new IdentityProviderSearchDialog(session);
+					} else if (selected.equals(HOST)) {
+						HostCertificateSearchDialogue dialog = new HostCertificateSearchDialogue(
+								session);
+						GridApplication.getContext().showDialog(dialog);
+						if (dialog.getSelectedHostCertificate() != null) {
+							identity = String.valueOf(dialog
+									.getSelectedHostCertificate().getId());
+						}
+
+					} else if (selected.equals(IDENTITY_PROVIDER)) {
+						IdentityProviderSearchDialog dialog = new IdentityProviderSearchDialog(
+								session);
 						dialog.setModal(true);
 						GridApplication.getContext().showDialog(dialog);
 						if (dialog.getSelectedIdP() != null) {
 							identity = dialog.getSelectedIdP().getName();
 						}
-						
+
 					}
 					dispose();
 				}
@@ -204,6 +217,18 @@ public class IdentityFinderDialog extends JDialog {
 
 	public String getIdentity() {
 		return identity;
+	}
+
+	/**
+	 * This method initializes titlePanel	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getTitlePanel() {
+		if (titlePanel == null) {
+			titlePanel = new TitlePanel("Identity Search","Please select the type of identity you wish to search for.");
+		}
+		return titlePanel;
 	}
 
 }

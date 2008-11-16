@@ -54,10 +54,6 @@ public class AdministratorsWindow extends ApplicationComponent {
 
 	private JButton query = null;
 
-	private boolean isQuerying = false;
-
-	private Object mutex = new Object();
-
 	private JButton removeAdmin = null;
 
 	private JButton addAdmin = null;
@@ -283,8 +279,7 @@ public class AdministratorsWindow extends ApplicationComponent {
 
 	public void addAdmin() {
 		try {
-			AddAdminWindow window = new AddAdminWindow(getSessionPanel()
-					.getServiceURI(), getSessionPanel().getCredential());
+			AddAdminWindow window = new AddAdminWindow(getSessionPanel());
 			window.setModal(true);
 			GridApplication.getContext().showDialog(window);
 			if (loaded) {

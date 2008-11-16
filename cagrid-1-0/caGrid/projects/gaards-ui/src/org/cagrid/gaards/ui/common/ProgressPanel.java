@@ -81,8 +81,7 @@ public class ProgressPanel extends JPanel {
 		if (progress == null) {
 			progress = new JProgressBar();
 			progress.setMaximum(100);
-			progress.setPreferredSize(new Dimension(100, 10));
-			progress.setFont(new Font("Lucida Grande", Font.PLAIN, 10));
+			progress.setPreferredSize(new Dimension(100, 8));
 		}
 		return progress;
 	}
