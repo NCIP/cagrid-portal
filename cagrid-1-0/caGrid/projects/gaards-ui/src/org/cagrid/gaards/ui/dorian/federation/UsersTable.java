@@ -11,7 +11,7 @@ import javax.swing.table.TableColumn;
 import org.cagrid.gaards.dorian.client.GridAdministrationClient;
 import org.cagrid.gaards.dorian.federation.GridUser;
 import org.cagrid.gaards.dorian.federation.TrustedIdP;
-import org.cagrid.gaards.ui.dorian.SessionPanel;
+import org.cagrid.gaards.ui.dorian.DorianSessionProvider;
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.table.GrapeBaseTable;
 import org.cagrid.grape.utils.ErrorDialog;
@@ -20,7 +20,7 @@ import org.cagrid.grape.utils.ErrorDialog;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: UsersTable.java,v 1.2 2008-09-29 02:17:29 langella Exp $
+ * @version $Id: UsersTable.java,v 1.3 2008-11-16 00:52:18 langella Exp $
  */
 public class UsersTable extends GrapeBaseTable {
 	public final static String USER = "user";
@@ -37,9 +37,13 @@ public class UsersTable extends GrapeBaseTable {
 
 	public final static String LAST_NAME = "Last Name";
 
-	SessionPanel session;
+	DorianSessionProvider session;
 
-	public UsersTable(SessionPanel session) {
+	public UsersTable() {
+		this(null);
+	}
+
+	public UsersTable(DorianSessionProvider session) {
 		super(createTableModel());
 		this.session = session;
 		TableColumn c = this.getColumn(USER);
@@ -105,32 +109,36 @@ public class UsersTable extends GrapeBaseTable {
 	}
 
 	public void doubleClick() {
-		Runner runner = new Runner() {
-			public void execute() {
-				try {
-					GridUser user = getSelectedUser();
-					GridAdministrationClient client = session.getAdminClient();
-					List<TrustedIdP> idps = client.getTrustedIdPs();
-					TrustedIdP tidp = null;
-					for (int i = 0; i < idps.size(); i++) {
-						if (idps.get(i).getId() == user.getIdPId()) {
-							tidp = idps.get(i);
-							break;
+		if (session != null) {
+			Runner runner = new Runner() {
+				public void execute() {
+					try {
+						GridUser user = getSelectedUser();
+						GridAdministrationClient client = session.getSession()
+								.getAdminClient();
+						List<TrustedIdP> idps = client.getTrustedIdPs();
+						TrustedIdP tidp = null;
+						for (int i = 0; i < idps.size(); i++) {
+							if (idps.get(i).getId() == user.getIdPId()) {
+								tidp = idps.get(i);
+								break;
+							}
 						}
+						GridApplication.getContext()
+								.addApplicationComponent(
+										new UserWindow(session.getSession(),
+												user, tidp), 700, 500);
+					} catch (Exception e) {
+						ErrorDialog.showError(e);
 					}
-					GridApplication.getContext().addApplicationComponent(
-							new UserWindow(session.getSession(), user, tidp),700,500);
-				} catch (Exception e) {
-					ErrorDialog.showError(e);
 				}
+			};
+			try {
+				GridApplication.getContext().executeInBackground(runner);
+			} catch (Exception t) {
+				t.getMessage();
 			}
-		};
-		try {
-			GridApplication.getContext().executeInBackground(runner);
-		} catch (Exception t) {
-			t.getMessage();
 		}
-
 	}
 
 	public void singleClick() throws Exception {

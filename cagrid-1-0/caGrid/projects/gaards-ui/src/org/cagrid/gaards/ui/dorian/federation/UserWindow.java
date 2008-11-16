@@ -37,7 +37,7 @@ import org.cagrid.grape.utils.ErrorDialog;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: UserWindow.java,v 1.5 2008-11-14 02:44:10 langella Exp $
+ * @version $Id: UserWindow.java,v 1.6 2008-11-16 00:52:18 langella Exp $
  */
 public class UserWindow extends ApplicationComponent implements
 		HostCertificateLauncher, DorianSessionProvider {
@@ -776,7 +776,7 @@ public class UserWindow extends ApplicationComponent implements
 		return hostCertificateRecords;
 	}
 
-	public void viewHostCertificate(HostCertificateRecord record) {
+	public void selectHostCertificate(HostCertificateRecord record) {
 		try {
 			HostCertificateWindow window = new HostCertificateWindow(
 					this.session, getHostCertificateRecords()

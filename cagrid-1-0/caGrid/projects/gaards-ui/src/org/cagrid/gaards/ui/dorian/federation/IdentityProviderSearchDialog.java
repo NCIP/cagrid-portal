@@ -26,7 +26,7 @@ import org.cagrid.grape.utils.ErrorDialog;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: IdentityProviderSearchDialog.java,v 1.1 2008-11-14 17:29:23 langella Exp $
+ * @version $Id: IdentityProviderSearchDialog.java,v 1.2 2008-11-16 00:52:18 langella Exp $
  */
 public class IdentityProviderSearchDialog extends JDialog {
 
@@ -62,7 +62,7 @@ public class IdentityProviderSearchDialog extends JDialog {
 		super(GridApplication.getContext().getApplication());
 		this.session = sessionProvider;
 		initialize();
-		setSize(600, 400);
+		setSize(400, 300);
 	}
 
 	/**

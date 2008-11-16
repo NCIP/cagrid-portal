@@ -37,7 +37,7 @@ import org.globus.gsi.GlobusCredential;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: UserSearchDialog.java,v 1.3 2008-11-14 17:29:23 langella Exp $
+ * @version $Id: UserSearchDialog.java,v 1.4 2008-11-16 00:52:18 langella Exp $
  */
 public class UserSearchDialog extends JDialog {
 
@@ -119,11 +119,11 @@ public class UserSearchDialog extends JDialog {
 		}
 		initialize();
 		if (provider != null) {
-			setSize(700, 600);
+			setSize(700, 550);
 		} else {
-			setSize(700, 700);
+			setSize(700, 650);
 		}
-		
+
 	}
 
 	/**
@@ -179,7 +179,13 @@ public class UserSearchDialog extends JDialog {
 			GridBagConstraints gridBagConstraints35 = new GridBagConstraints();
 			gridBagConstraints35.gridx = 0;
 			gridBagConstraints35.weightx = 1.0D;
-			gridBagConstraints35.fill = java.awt.GridBagConstraints.BOTH;
+			gridBagConstraints35.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints35.gridheight = 1;
+			gridBagConstraints35.gridwidth = 1;
+			gridBagConstraints35.insets = new Insets(0, 0, 0, 0);
+			gridBagConstraints35.weighty = 0.0D;
+			gridBagConstraints35.ipadx = 0;
+			gridBagConstraints35.ipady = 0;
 			gridBagConstraints35.gridy = 1;
 
 			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
@@ -277,7 +283,7 @@ public class UserSearchDialog extends JDialog {
 	 */
 	private UsersTable getUsersTable() {
 		if (usersTable == null) {
-			usersTable = new UsersTable(getSession());
+			usersTable = new UsersTable(this.sessionProvider);
 		}
 		return usersTable;
 	}
@@ -409,7 +415,7 @@ public class UserSearchDialog extends JDialog {
 			for (int i = 0; i < users.size(); i++) {
 				this.getUsersTable().addUser(users.get(i));
 			}
-			getProgressPanel().stopProgress(users.size()+" user(s) found.");
+			getProgressPanel().stopProgress(users.size() + " user(s) found.");
 
 		} catch (PermissionDeniedFault pdf) {
 			ErrorDialog.showError(pdf);
@@ -417,7 +423,7 @@ public class UserSearchDialog extends JDialog {
 		} catch (Exception e) {
 			ErrorDialog.showError(e);
 			getProgressPanel().stopProgress("Error");
-		}finally{
+		} finally {
 			query.setEnabled(true);
 		}
 
@@ -615,7 +621,8 @@ public class UserSearchDialog extends JDialog {
 			for (int i = 0; i < idps.size(); i++) {
 				getIdp().addItem(new TrustedIdPCaddy(idps.get(i)));
 			}
-			getProgressPanel().stopProgress(idps.size() + " identity provider(s) found.");
+			getProgressPanel().stopProgress(
+					idps.size() + " identity provider(s) found.");
 			getIdp().showPopup();
 		} catch (Exception e) {
 			getProgressPanel().stopProgress("Error");
@@ -651,7 +658,7 @@ public class UserSearchDialog extends JDialog {
 			}
 		} catch (Exception e) {
 			ErrorDialog.showError(e);
-		}finally{
+		} finally {
 			query.setEnabled(true);
 		}
 	}

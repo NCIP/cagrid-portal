@@ -79,7 +79,7 @@ public class MyHostCertificatesWindow extends ApplicationComponent implements
 
 	}
 
-	public void viewHostCertificate(HostCertificateRecord record) {
+	public void selectHostCertificate(HostCertificateRecord record) {
 		try {
 			HostCertificateWindow window = new HostCertificateWindow(this.session.getSession(),
 					getHostCertificatesTable().getSelectedHostCertificate(),
@@ -235,7 +235,7 @@ public class MyHostCertificatesWindow extends ApplicationComponent implements
 							Runner runner = new Runner() {
 								public void execute() {
 									try {
-										viewHostCertificate(getHostCertificatesTable()
+										selectHostCertificate(getHostCertificatesTable()
 												.getSelectedHostCertificate());
 									} catch (Exception ex) {
 										ErrorDialog.showError(ex);

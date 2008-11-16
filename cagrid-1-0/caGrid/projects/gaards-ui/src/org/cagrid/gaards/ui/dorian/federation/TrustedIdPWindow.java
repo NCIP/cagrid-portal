@@ -43,7 +43,7 @@ import org.cagrid.grape.utils.ErrorDialog;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: TrustedIdPWindow.java,v 1.4 2008-11-14 02:44:10 langella Exp $
+ * @version $Id: TrustedIdPWindow.java,v 1.5 2008-11-16 00:52:18 langella Exp $
  */
 public class TrustedIdPWindow extends ApplicationComponent implements
 		DorianSessionProvider {
@@ -234,7 +234,7 @@ public class TrustedIdPWindow extends ApplicationComponent implements
 
 	private String subtitleStr = null;
 
-	private JPanel auditPanel = null;
+	private FederationAuditPanel auditPanel = null;
 
 	private ProgressPanel progressPanel = null;
 
@@ -343,6 +343,8 @@ public class TrustedIdPWindow extends ApplicationComponent implements
 			gridBagConstraints27.gridx = 0;
 			gridBagConstraints27.fill = GridBagConstraints.HORIZONTAL;
 			gridBagConstraints27.weightx = 1.0D;
+			gridBagConstraints27.weighty = 0.0D;
+			gridBagConstraints27.anchor = GridBagConstraints.SOUTH;
 			gridBagConstraints27.gridy = 3;
 			GridBagConstraints gridBagConstraints = new GridBagConstraints();
 			gridBagConstraints.gridx = 0;
@@ -360,6 +362,7 @@ public class TrustedIdPWindow extends ApplicationComponent implements
 			mainPanel = new JPanel();
 			mainPanel.setLayout(new GridBagLayout());
 			gridBagConstraints2.gridx = 0;
+			gridBagConstraints2.weightx = 1.0D;
 			gridBagConstraints2.gridy = 2;
 			gridBagConstraints2.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints2.anchor = java.awt.GridBagConstraints.SOUTH;
@@ -1578,9 +1581,10 @@ public class TrustedIdPWindow extends ApplicationComponent implements
 	 * 	
 	 * @return javax.swing.JPanel	
 	 */
-	private JPanel getAuditPanel() {
+	private FederationAuditPanel getAuditPanel() {
 		if (auditPanel == null) {
 			auditPanel = new FederationAuditPanel(this,FederationAuditPanel.IDP_MODE,this.idp.getName());
+			auditPanel.setProgess(getProgressPanel());
 		}
 		return auditPanel;
 	}
