@@ -13,7 +13,7 @@
     <conf name="impl-test" visibility="private"/>
     <!-- Public Configurations-->
     <conf name="default" visibility="public"/>
-    <conf name="test" visibility="public" extends="default"/>
+    <conf name="test" visibility="public" extends="impl-test,default"/>
   </configurations>
 
 
