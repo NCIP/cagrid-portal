@@ -9,8 +9,8 @@
 	<property name="failed.message" value="Tests failed! Check test reports." />
 	<!-- tells the service container factories to assign ports in testing mode -->
 	<property name="testing.port.assignment.mode" value="true" />
-	<!-- tells data tests the base directory in which to create data services -->
-	<property name="temp.test.service.dir" value="${basedir}/test_services"/>
+	<!-- tells data tests the base directory in which to create testing services -->
+	<property name="temp.test.service.dir" value="${basedir}/temp"/>
 	<!-- tells the test containers where to find their zip files -->
 	<property name="testing.containers.dir" value="${basedir}/../testUtils/containers"/>
 	
@@ -33,6 +33,9 @@
 			<sysproperty key="build.dirs" value="${test.classes.dir}" />
 			<sysproperty key="build.dir" value="${test.classes.dir}" />
 			<sysproperty key="introduce.base.dir" value="${introduce.dir}" />
+			<sysproperty key="testing.port.assignment.mode" value="${testing.port.assignment.mode}"/>
+			<sysproperty key="testing.containers.dir" value="${testing.containers.dir}"/>
+			<sysproperty key="temp.test.service.dir" value="${temp.test.service.dir}"/>
 			<classpath refid="all.test.classpath" />
 			<classpath>
 				<pathelement path="${classes.dir}" />
@@ -44,6 +47,7 @@
 				</fileset>
 			</batchtest>
 		</junit>
+		<delete dir="${temp.test.service.dir}"/>
 		<fail message="Tests failed! Check test reports." if="test.failed" />
 	</target>
 </project>
