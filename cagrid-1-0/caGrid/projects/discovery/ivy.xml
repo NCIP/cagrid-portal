@@ -10,6 +10,7 @@
 
   <configurations>
     <conf name="target_grid" visibility="private"/>
+    <conf name="impl-test" visibility="private"/>
     <!-- Public Configurations-->
     <conf name="default" visibility="public"/>
     <conf name="test" visibility="public" extends="default"/>
@@ -22,11 +23,12 @@
   </publications>
 
   <dependencies>
-    <dependency rev="latest.integration" org="caGrid" name="core" conf="default->default;test->test"/>
+    <dependency rev="latest.integration" org="caGrid" name="core" conf="default->default;impl-test->test"/>
 
     <dependency rev="latest.integration" org="caGrid" name="metadatautils" conf="default->default"/>
-    <dependency rev="latest.integration" org="caGrid" name="metadata" conf="test->schemas"/>
+    <dependency rev="latest.integration" org="caGrid" name="metadata" conf="impl-test->schemas"/>
 
     <dependency rev="${target.grid}" org="caGrid" name="target_grid" conf="target_grid->urls"/>
+    <dependency rev="4.4" org="junit" name="junit" conf="impl-test->default"/>
   </dependencies>
 </ivy-module>

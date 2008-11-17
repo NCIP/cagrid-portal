@@ -9,9 +9,10 @@
   </info>
 
   <configurations>
+    <conf name="impl-test" visibility="private"/>
     <!-- Public Configurations-->
     <conf name="default" visibility="public"/>
-    <conf name="test" visibility="public" extends="default"/>
+    <conf name="test" visibility="public" extends="impl-test,default"/>
   </configurations>
 
 
@@ -21,11 +22,12 @@
   </publications>
 
   <dependencies>
-    <dependency org="caGrid" name="core" rev="latest.integration" conf="default->default;test->test"/>
+    <dependency org="caGrid" name="core" rev="latest.integration" conf="default->default;impl-test->test"/>
     <dependency org="caGrid" name="metadata" rev="latest.integration" conf="default->jars"/>
-    <dependency org="caGrid" name="testing" rev="latest.integration" conf="test->system"/>    
+    <dependency org="caGrid" name="testing" rev="latest.integration" conf="impl-test->system"/>    
 
     <dependency org="jasciidammit" name="jasciidammit" rev="1.1" conf="default->default"/>
-    <dependency rev="3.2.1" org="cacore" name="sdk" conf="test->default"/>
+    <dependency rev="3.2.1" org="cacore" name="sdk" conf="impl-test->default"/>
+    <dependency rev="4.4" org="junit" name="junit" conf="impl-test->default"/>
   </dependencies>
 </ivy-module>

@@ -11,7 +11,8 @@
   <configurations>
     <!-- Public Configurations-->
     <conf name="default" visibility="public"/>
-    <conf name="test" visibility="public" extends="default"/>
+    <conf name="impl-test" visibility="private"/>
+    <conf name="test" visibility="public" extends="default,impl-test"/>
   </configurations>
 
 
@@ -21,7 +22,8 @@
   </publications>
 
   <dependencies>
-    <dependency rev="latest.integration" org="caGrid" name="core" conf="*->default;test->test"/>
+    <dependency rev="latest.integration" org="caGrid" name="core" conf="*->default;impl-test->test"/>
     <dependency rev="4.0.+" org="globus" name="mds" conf="default->jars"/>
+    <dependency rev="4.4" org="junit" name="junit" conf="impl-test->default"/>
   </dependencies>
 </ivy-module>

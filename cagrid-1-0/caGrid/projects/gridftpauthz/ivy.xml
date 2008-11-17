@@ -9,9 +9,10 @@
   </info>
 
   <configurations>
+    <conf name="impl-test" visibility="private"/>
     <!-- Public Configurations-->
     <conf name="default" visibility="public"/>
-    <conf name="test" visibility="public" extends="default"/>
+    <conf name="test" visibility="public" extends="impl-test"/>
   </configurations>
 
 
@@ -27,6 +28,7 @@
 
     <!-- External Dependencies -->
     <dependency rev="1.0" org="mcsl" name="gridftpauthz" conf="default->default"/>
+    <dependency rev="4.4" org="junit" name="junit" conf="impl-test->default"/>
 
   </dependencies>
 </ivy-module>

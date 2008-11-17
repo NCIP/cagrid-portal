@@ -10,6 +10,7 @@
 
   <configurations>
     <conf name="target_grid" visibility="private"/>
+    <conf name="impl-test" visibility="private"/>
     <conf name="impl" visibility="private" extends="base"/>
 
     <!-- Public Configurations-->
@@ -28,5 +29,7 @@
     <dependency rev="latest.integration" org="caGrid" name="introduce" conf="base->extension,serviceTools"/> 
     <dependency rev="latest.integration" org="caGrid" name="metadata"
       conf="base->security.jars;"/>
+    <dependency rev="4.4" org="junit" name="junit" conf="impl-test->default"/>
+
   </dependencies>
 </ivy-module>

@@ -39,5 +39,8 @@
     <dependency rev="latest.integration" org="caGrid" name="dataExtensions" conf="style->default"/>
 
     <dependency rev="latest.integration" org="caGrid" name="introduce" conf="style->core"/>
+
+	<!-- external dependencies -->
+    <dependency rev="4.4" org="junit" name="junit" conf="impl-test->default"/>
   </dependencies>
 </ivy-module>

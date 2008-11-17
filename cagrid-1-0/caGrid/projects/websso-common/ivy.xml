@@ -14,6 +14,7 @@
 	</info>
   
   <configurations>
+    <conf name="impl-test" visibility="private"/>
     <!-- Public Configurations-->
     <conf name="target_grid" visibility="private"/>
     <conf name="default" visibility="public" />    
@@ -34,5 +35,6 @@
     <dependency rev="0.7.0" org="inspektr" name="inspektr" conf="default->default"/>
     <dependency rev="2.5.5" org="springframework" name="spring" conf="default->full"/>
     <dependency rev="syncgts-patched-4.0.3" org="globus" name="jcog" conf="default->default"/>
+    <dependency rev="4.4" org="junit" name="junit" conf="impl-test->default"/>
   </dependencies>
 </ivy-module>

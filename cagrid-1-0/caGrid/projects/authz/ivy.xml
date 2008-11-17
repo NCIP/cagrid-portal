@@ -29,5 +29,6 @@
 
     <dependency rev="3.2" org="cacore" name="csm" conf="default->default"/>
     <dependency rev="1.2.7" org="springframework" name="spring" conf="default->full"/>
+    <dependency rev="4.4" org="junit" name="junit" conf="impl-test->default"/>
   </dependencies>
 </ivy-module>

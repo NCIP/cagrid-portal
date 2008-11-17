@@ -9,6 +9,7 @@
   </info>
 
   <configurations>
+    <conf name="impl-test" visibility="private"/>
     <!-- Public Configurations-->
     <!-- Jars -->
     <conf name="jars" visibility="public" extends="cql,cql2"/>
@@ -20,7 +21,8 @@
     <conf name="cql-schemas" visibility="public"/>
     <conf name="cql2-schemas" visibility="public"/>
 
-    <conf name="test" visibility="public"/>
+	<!-- testing -->
+    <conf name="test" visibility="public" extends="impl-test"/>
   </configurations>
 
 
@@ -42,6 +44,8 @@
   </publications>
 
   <dependencies>
-    <dependency org="caGrid" name="core" rev="latest.integration" conf="test->test"/>
+    <dependency org="caGrid" name="core" rev="latest.integration" conf="impl-test->test"/>
+    <dependency rev="4.4" org="junit" name="junit" conf="impl-test->default"/>
+
   </dependencies>
 </ivy-module>

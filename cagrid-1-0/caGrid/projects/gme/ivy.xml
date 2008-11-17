@@ -13,6 +13,7 @@
     <conf name="target_grid" visibility="private"/>
 
     <conf name="impl" visibility="private" extends="service"/>
+    <conf name="impl-test" visibility="private"/>
     
     <!-- Public Configurations-->
     <conf name="stubs" visibility="public"/>
@@ -45,6 +46,7 @@
 
     <!-- Extenernal Dependencies -->
     <dependency rev="1.1" org="mobius" name="mobius" conf="service->gme-server,tools,factory-base;client->gme-client,gme-grid-connector"/>
+    <dependency rev="4.4" org="junit" name="junit" conf="impl-test->default"/>
 
 
   </dependencies>

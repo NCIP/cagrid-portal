@@ -11,6 +11,7 @@
 
   <configurations>
     <!-- Private Configurations-->
+    <conf name="impl-test" visibility="private"/>
     <conf name="compile" visibility="private"/>
 
     <!-- Public Configurations-->
@@ -32,5 +33,6 @@
     <dependency rev="2.2" org="apache" name="tomcat-servlet" conf="compile,http->*"/>
 
     <dependency rev="2.7.1" org="apache" name="xerces2-j" conf="endorsed->*"/>
+    <dependency rev="4.4" org="junit" name="junit" conf="impl-test->default"/>
   </dependencies>
 </ivy-module>

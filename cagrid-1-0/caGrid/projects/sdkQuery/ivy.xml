@@ -31,5 +31,6 @@
 
     <!-- Extenernal Dependencies -->
     <dependency rev="3.1" org="cacore" name="api" conf="default->*"/>
+    <dependency rev="4.4" org="junit" name="junit" conf="impl-test->default"/>
   </dependencies>
 </ivy-module>

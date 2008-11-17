@@ -9,13 +9,12 @@
   </info>
 
   <configurations>
-    <conf name="impl" visibility="private" extends="system"/>
-    
+    <conf name="impl-test" visibility="private"/>
     <!-- Public Configurations-->
     <conf name="core" visibility="public"/>
     <conf name="system" visibility="public" extends="core"/>
 
-    <conf name="test" visibility="public" extends="system"/>
+    <conf name="test" visibility="public" extends="impl-test,system"/>
   </configurations>
 
 
@@ -25,9 +24,9 @@
   </publications>
 
   <dependencies>
-    <dependency org="caGrid" name="core" rev="latest.integration" conf="core->default;test->test"/>
+    <dependency org="caGrid" name="core" rev="latest.integration" conf="core->default;impl-test->test"/>
 
     <dependency rev="1.0" org="jdom" name="jdom" conf="core->*"/>
-    <dependency rev="4.4" org="junit" name="junit" conf="impl->default"/>
+    <dependency rev="4.4" org="junit" name="junit" conf="impl-test->default"/>
   </dependencies>
 </ivy-module>

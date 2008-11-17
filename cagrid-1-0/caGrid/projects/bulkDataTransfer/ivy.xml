@@ -60,5 +60,6 @@
     
     <dependency rev="1.0" org="jdom" name="jdom" conf="service->*"/>
     <dependency rev="0.5.2-patched" org="jaxme" name="jaxmejs" conf="extension->*"/>
+    <dependency rev="4.4" org="junit" name="junit" conf="impl-test->default"/>
   </dependencies>
 </ivy-module>

@@ -10,6 +10,7 @@
   </info>
 
   <configurations>
+    <conf name="impl-test" visibility="private"/>
     <!-- Public Configurations-->
     <conf name="default" visibility="public"/>
   </configurations>
@@ -19,5 +20,7 @@
     <artifact name="caGrid-${ivy.module}" conf="default" type="jar"/>
   </publications>
 
-  <dependencies/>
+  <dependencies>
+    <dependency rev="4.4" org="junit" name="junit" conf="impl-test->default"/>
+  </dependencies>
 </ivy-module>

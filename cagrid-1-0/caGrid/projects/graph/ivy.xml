@@ -10,6 +10,7 @@
   </info>
 
   <configurations>
+    <conf name="impl-test" visibility="private"/>
     <!-- Public Configurations-->
     <conf name="default" visibility="public"/>
   </configurations>
@@ -21,5 +22,6 @@
 
   <dependencies>
     <dependency rev="cagrid_modified" org="tigris" name="gef"/>
+    <dependency rev="4.4" org="junit" name="junit" conf="impl-test->default"/>
   </dependencies>
 </ivy-module>
