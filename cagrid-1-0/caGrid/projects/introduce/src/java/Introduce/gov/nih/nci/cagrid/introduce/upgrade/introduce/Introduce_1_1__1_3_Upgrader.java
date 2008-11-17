@@ -198,7 +198,7 @@ public class Introduce_1_1__1_3_Upgrader extends IntroduceUpgraderBase {
             resourcebContanstsFW.close();
 
             if (service.getResourceFrameworkOptions().getMain() != null) {
-
+                
                 File oldServiceConfF = new File(srcDir.getAbsolutePath() + File.separator
                     + CommonTools.getPackageDir(service) + File.separator + "service" + File.separator
                     + "ServiceConfiguration.java");
@@ -210,6 +210,9 @@ public class Introduce_1_1__1_3_Upgrader extends IntroduceUpgraderBase {
                 File serviceConfF = new File(srcDir.getAbsolutePath() + File.separator
                     + CommonTools.getPackageDir(service) + File.separator + "service" + File.separator
                     + service.getName() + "Configuration.java");
+                if(serviceConfF.exists()){
+                    throw new Exception("Introduce is trying to create the class " + serviceConfF.getAbsolutePath() +  " but this file already exists.  You will need to rename the existing class to something else before you try to update to this new version.");
+                }
                 FileWriter serviceConfFW = new FileWriter(serviceConfF);
                 serviceConfFW.write(serviceConfS);
                 serviceConfFW.close();
