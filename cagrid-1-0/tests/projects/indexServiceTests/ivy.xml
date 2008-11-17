@@ -29,6 +29,9 @@
     
     <!-- Data system tests for creation of a data service -->
     <dependency rev="latest.integration" org="caGrid" name="dataTests" conf="default->default"/>
+    
+    <!-- Discovery tools -->
+    <dependency rev="latest.integration" org="caGrid" name="discovery" conf="default->default"/>
         
     <!-- Apache Commons Logging-->
     <dependency rev="1.1" org="apache" name="commons-logging" conf="default"/>
