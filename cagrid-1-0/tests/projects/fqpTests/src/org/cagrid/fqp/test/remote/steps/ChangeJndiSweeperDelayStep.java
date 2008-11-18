@@ -67,7 +67,7 @@ public class ChangeJndiSweeperDelayStep extends Step {
         });
         assertTrue("No resource home for " + RESOURCE_HOME_TYPE_NAME + " found in JNDI!", fqpResultResourceElements.hasNext());
         Element resourceHomeElement = (Element) fqpResultResourceElements.next();
-        assertFalse("More than one resource home for " + RESOURCE_HOME_TYPE_NAME + " foind in JNDI!", fqpResultResourceElements.hasNext());
+        assertFalse("More than one resource home for " + RESOURCE_HOME_TYPE_NAME + " found in JNDI!", fqpResultResourceElements.hasNext());
         // find and change the sweeper delay value
         Element resourceParamsElement = resourceHomeElement.getChild("resourceParams", resourceHomeElement.getNamespace());
         // create the sweeper delay parameter element
