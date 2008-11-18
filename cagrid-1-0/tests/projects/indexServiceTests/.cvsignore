@@ -3,3 +3,4 @@ build
 logs
 log
 tmp
+junit*.properties

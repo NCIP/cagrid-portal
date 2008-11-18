@@ -28,13 +28,12 @@ import org.cagrid.index.tests.steps.ChangeIndexSweeperDelayStep;
 import org.cagrid.index.tests.steps.DeployIndexServiceStep;
 import org.cagrid.index.tests.steps.ServiceDiscoveryStep;
 import org.cagrid.index.tests.steps.SetAdvertisementUrlStep;
-import org.cagrid.index.tests.steps.SetServiceMetadataStep;
+import org.cagrid.index.tests.steps.SetMetadataHostingResearchCenterStep;
 
 public class IndexServiceSystemTest extends Story {
     
     private static Log log = LogFactory.getLog(IndexServiceSystemTest.class);
     
-    public static final String INTRODUCE_SERVICEMETADATA_FILENAME = "serviceMetadata.xml";
     public static final String INDEX_SERVICE_DIR_PROPERTY = "index.dir";
     public static final String INTRODUCE_DIR_PROPERTY = "introduce.base.dir";
     public static final String DEFAULT_INDEX_SERVICE_DIR = ".." + File.separator + ".." + File.separator
@@ -64,7 +63,7 @@ public class IndexServiceSystemTest extends Story {
         // set up the index service container
         try {
             log.debug("Creating container for index service");
-            indexServiceContainer = ServiceContainerFactory.createContainer(ServiceContainerType.SECURE_TOMCAT_CONTAINER);
+            indexServiceContainer = ServiceContainerFactory.createContainer(ServiceContainerType.TOMCAT_CONTAINER);
             new UnpackContainerStep(indexServiceContainer).runStep();
         } catch (Throwable ex) {
             String message = "Error creating container for index service: " + ex.getMessage();
@@ -75,7 +74,7 @@ public class IndexServiceSystemTest extends Story {
         // set up a data service container
         try {
             log.debug("Creating container for data service");
-            dataServiceContainer = ServiceContainerFactory.createContainer(ServiceContainerType.SECURE_TOMCAT_CONTAINER);
+            dataServiceContainer = ServiceContainerFactory.createContainer(ServiceContainerType.TOMCAT_CONTAINER);
             new UnpackContainerStep(dataServiceContainer).runStep();
         } catch (Throwable ex) {
             String message = "Error creating container for data service: " + ex.getMessage();
@@ -88,6 +87,9 @@ public class IndexServiceSystemTest extends Story {
 
     protected Vector steps() {
         Vector<Step> steps = new Vector<Step>();
+        
+        // the directory of the testing data service
+        File testServiceDir = new File(testDataServiceInfo.getDir());
         
         // get the EPR of the Index service
         EndpointReferenceType indexEPR = null;
@@ -102,10 +104,10 @@ public class IndexServiceSystemTest extends Story {
         // create a data service
         steps.add(new CreationStep(testDataServiceInfo, getIntroduceBaseDir()));
         // set the service's expected metadata
-        StringBuffer testMetadata = getTestingServiceMetadata();
-        steps.add(new SetServiceMetadataStep(new File(testDataServiceInfo.getDir()), testMetadata));
+        StringBuffer testMetadata = getTestingResearchCenterInfo();
+        steps.add(new SetMetadataHostingResearchCenterStep(testServiceDir, testMetadata));
         // make that service register to our testing index service
-        steps.add(new SetAdvertisementUrlStep(new File(testDataServiceInfo.getDir()), indexEPR));
+        steps.add(new SetAdvertisementUrlStep(testServiceDir, indexEPR));
         
         // deploy the index service
         String indexServiceLocation = System.getProperty(INDEX_SERVICE_DIR_PROPERTY, DEFAULT_INDEX_SERVICE_DIR);
@@ -117,7 +119,7 @@ public class IndexServiceSystemTest extends Story {
         steps.add(new StartContainerStep(indexServiceContainer));
         
         // deploy the data service
-        steps.add(new DeployServiceStep(dataServiceContainer, new TestDataServiceInfo().getDir()));
+        steps.add(new DeployServiceStep(dataServiceContainer, testServiceDir.getAbsolutePath()));
         // start the data service
         steps.add(new StartContainerStep(dataServiceContainer));
         
@@ -135,18 +137,18 @@ public class IndexServiceSystemTest extends Story {
         }
         
         // find the data service in the index service
-        steps.add(new ServiceDiscoveryStep(indexEPR, dataEPR, testMetadata, true));
+        steps.add(new ServiceDiscoveryStep(indexEPR, dataEPR, testServiceDir, true));
         
         // make sure the sweeper has run and its still there
         steps.add(new SleepStep(ChangeIndexSweeperDelayStep.DEFAULT_SWEEPER_DELAY * 2));
-        steps.add(new ServiceDiscoveryStep(indexEPR, dataEPR, testMetadata, true));
+        steps.add(new ServiceDiscoveryStep(indexEPR, dataEPR, testServiceDir, true));
         
         // shut down the data service
         steps.add(new StopContainerStep(dataServiceContainer));
         
         // make sure the sweeper has run and the service is gone
         steps.add(new SleepStep(ChangeIndexSweeperDelayStep.DEFAULT_SWEEPER_DELAY * 2));
-        steps.add(new ServiceDiscoveryStep(indexEPR, dataEPR, testMetadata, false));
+        steps.add(new ServiceDiscoveryStep(indexEPR, dataEPR, testServiceDir, false));
         
         return steps;
     }
@@ -163,14 +165,14 @@ public class IndexServiceSystemTest extends Story {
     }
     
     
-    private StringBuffer getTestingServiceMetadata() {
-        InputStream metadataInput = getClass().getResourceAsStream("/" + INTRODUCE_SERVICEMETADATA_FILENAME);
+    private StringBuffer getTestingResearchCenterInfo() {
+        InputStream metadataInput = getClass().getResourceAsStream("/researchCenter.xml");
         StringBuffer metadata = null;
         try {
             metadata = Utils.inputStreamToStringBuffer(metadataInput);
             metadataInput.close();
         } catch (IOException ex) {
-            String message = "Error reading default metadata document: " + ex.getMessage();
+            String message = "Error reading default research center metadata document: " + ex.getMessage();
             log.error(message, ex);
             fail(message);
         }
@@ -205,6 +207,11 @@ public class IndexServiceSystemTest extends Story {
 
         public String getPackageName() {
             return PACKAGE_NAME;
+        }
+        
+        
+        public String getExtensions() {
+            return super.getExtensions() + ",cagrid_metadata";
         }
     }
     

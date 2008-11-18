@@ -7,6 +7,7 @@ import gov.nih.nci.cagrid.testing.system.haste.Step;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.List;
 
 import org.jdom.Document;
@@ -72,6 +73,16 @@ public class ChangeIndexSweeperDelayStep extends Step {
                     if (resourceEl.getAttributeValue("name").equals("configuration")) {
                         // get the params
                         Element params = resourceEl.getChild("resourceParams", resourceEl.getNamespace());
+                        List parameters = params.getChildren("parameter", params.getNamespace());
+                        Iterator parameterIterator = parameters.iterator();
+                        while (parameterIterator.hasNext()) {
+                            Element param = (Element) parameterIterator.next();
+                            Element nameElement = param.getChild("name", param.getNamespace());
+                            if (nameElement != null && nameElement.getText() != null && nameElement.getText().equals(SWEEPER_DELAY)) {
+                                params.removeContent(param);
+                                break;
+                            }
+                        }
                         // make a new param
                         Element param = new Element("parameter", params.getNamespace());
                         // make the name

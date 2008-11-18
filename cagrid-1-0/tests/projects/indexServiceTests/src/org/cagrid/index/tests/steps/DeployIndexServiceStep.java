@@ -1,7 +1,6 @@
 package org.cagrid.index.tests.steps;
 
 import gov.nih.nci.cagrid.common.StreamGobbler;
-import gov.nih.nci.cagrid.common.StreamGobbler.LogPriority;
 import gov.nih.nci.cagrid.testing.system.deployment.ContainerException;
 import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainer;
 import gov.nih.nci.cagrid.testing.system.deployment.TomcatSecureServiceContainer;
@@ -33,7 +32,7 @@ public class DeployIndexServiceStep extends Step {
     
 
     public void runStep() throws Throwable {
-        assertTrue("Testing Index service can only be deployed to secure tomcat", container instanceof TomcatSecureServiceContainer);
+        // assertTrue("Testing Index service can only be deployed to secure tomcat", container instanceof TomcatSecureServiceContainer);
         String antHome = System.getenv(TomcatSecureServiceContainer.ENV_ANT_HOME);
         if (antHome == null || antHome.equals("")) {
             throw new ContainerException(TomcatSecureServiceContainer.ENV_ANT_HOME + " not set");
@@ -60,8 +59,7 @@ public class DeployIndexServiceStep extends Step {
         // set catalina home
         additionalEnvironment.add(TomcatSecureServiceContainer.ENV_CATALINA_HOME + "="
             + container.getProperties().getContainerDirectory().getAbsolutePath());
-        String[] editedEnvironment = editEnvironment(additionalEnvironment);
-        
+        String[] editedEnvironment = editEnvironment(additionalEnvironment);        
 
         LOG.debug("Command environment:\n");
         for (String e : editedEnvironment) {
@@ -74,9 +72,9 @@ public class DeployIndexServiceStep extends Step {
             deployProcess = Runtime.getRuntime().exec(commandArray,
                     editedEnvironment, indexServiceDir);
             new StreamGobbler(deployProcess.getInputStream(),
-                    StreamGobbler.TYPE_OUT, LOG, LogPriority.DEBUG).start();
+                    StreamGobbler.TYPE_OUT, System.out).start();
             new StreamGobbler(deployProcess.getErrorStream(),
-                    StreamGobbler.TYPE_OUT, LOG, LogPriority.ERROR).start();
+                    StreamGobbler.TYPE_OUT, System.err).start();
             deployProcess.waitFor();
         } catch (Exception ex) {
             throw new ContainerException("Error invoking deploy process: "
