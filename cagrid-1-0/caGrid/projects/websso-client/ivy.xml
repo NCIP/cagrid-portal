@@ -16,13 +16,16 @@
 
   <configurations>
     <conf name="impl-test" visibility="private"/>
-    <!-- Public Configurations-->
     <conf name="default" visibility="public"/>
+    <conf name="resources" visibility="public"/>
   </configurations>
 
 
   <publications>
     <artifact name="caGrid-websso-client" conf="default" type="jar"/>
+    <artifact name="applicationContext" conf="resources" type="xml"/>
+    <artifact name="cas-client" conf="resources" type="properties"/>
+    <artifact name="web" conf="resources" type="xml"/>
   </publications>
 
   <dependencies>

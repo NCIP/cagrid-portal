@@ -34,33 +34,6 @@
 		<path refid="build.classpath" />
 	</path>
 
-	<target name="dist">
-		<copy todir="${build.dir}" flatten="true" overwrite="true">
-			<fileset dir="${ext.lib.dir}">
-				<include name="*.jar" />
-			</fileset>
-			<fileset dir="${env.GLOBUS_LOCATION}/lib">
-				<include name="axis.jar" />
-				<include name="wsrf_core_stubs.jar" />
-				<include name="jaxrpc.jar" />
-				<include name="addressing-1.0.jar" />
-				<include name="cog-axis.jar" />
-				<include name="saaj.jar" />
-				<include name="commons-discovery.jar" />
-				<include name="wsdl4j.jar" />
-				<include name="wsrf_core.jar" />
-				<include name="puretls.jar" />
-				<include name="cryptix.jar" />
-				<include name="cryptix32.jar" />
-				<include name="cryptix-asn1.jar" />
-				<include name="wss4j.jar" />
-				<include name="xalan.jar" />
-				<include name="xmlsec.jar" />
-				<include name="jce-jdk13-125.jar" />
-			</fileset>
-		</copy>
-	</target>
-
 	<target name="build-jar">
 		<jar jarfile="${build.dir}/${jar.name}" basedir="${build.classes.dir}"/>
 		<delete dir="${build.classes.dir}" />
@@ -71,7 +44,6 @@
 		<mkdir dir="${build.dir}" />
 		<mkdir dir="${build.classes.dir}" />
 		<javac srcdir="${src.java.dir}" destdir="${build.classes.dir}" classpathref="build.classpath" debug="true" />
-		<!--<copy file="${src.java.dir}/org/cagrid/gaards/websso/client/filter/client-config.wsdd" todir="${build.classes.dir}/org/cagrid/gaards/websso/client/filter/" />-->
 	</target>
 
 	<!-- Compile the test implementation classes -->
@@ -79,7 +51,13 @@
 		<javac srcdir="${test.src.dir}" classpathref="test.build.classpath" destdir="${test.build.dir}" debug="${java.debug}" deprecation="${deprecation}" />
 	</target>
 
-	<target name="jar" depends="compile,build-jar,dist">
+	<target name="jar" depends="compile,build-jar">
+	</target>
+
+	<target name="copy-configuration-files">
+		<copy file="${src.resources.dir}/applicationContext.xml" tofile="${build.dir}/applicationContext-${project.version}.xml" />
+		<copy file="${src.resources.dir}/web.xml" tofile="${build.dir}/web-${project.version}.xml" />
+		<copy file="${src.resources.dir}/cas-client.properties" tofile="${build.dir}/cas-client-${project.version}.properties" />
 	</target>
 
 	<target name="clean">
@@ -95,5 +73,7 @@
 	<target name="all">
 		<antcall target="clean" />
 		<antcall target="jar" />
+		<antcall target="copy-configuration-files" />
 	</target>
+
 </project>
