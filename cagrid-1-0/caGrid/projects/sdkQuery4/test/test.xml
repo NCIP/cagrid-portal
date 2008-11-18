@@ -5,13 +5,6 @@
 	<property name="junit.results.dir" value="${test.logs.dir}/junit" />
 	<property name="introduce.dir" location="../introduce" />
 
-	<!-- properties for caCORE SDK application's location -->
-	<!-- TODO: MOVE TO A MORE PERMANENT LOCATION -->
-	<property name="remote.sdk.host.name" value="http://kramer.bmi.ohio-state.edu" />
-	<property name="remote.sdk.host.port" value="8080" />
-
-
-
 	<target name="prepareClasspaths">
 		<path id="Introduce.test.classpath">
 			<fileset dir="${introduce.dir}/lib">
