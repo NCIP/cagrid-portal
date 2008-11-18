@@ -31,7 +31,7 @@
     <dependency rev="latest.integration" org="caGrid" name="dorian" conf="default->client;endorsed->endorsed"/>
     <dependency rev="latest.integration" org="caGrid" name="cds" conf="default->client"/>
     <dependency rev="latest.integration" org="caGrid" name="syncgts" conf="default->client"/>
-    <dependency rev="latest.integration" org="caGrid" name="gridca" conf="default->default"/>
+    <dependency rev="latest.integration" org="caGrid" name="gaards-core" conf="default->default"/>
     <dependency rev="${target.grid}" org="caGrid" name="target_grid" conf="target_grid->urls,trust,syncdesc" />
 
     <!-- External Dependencies -->

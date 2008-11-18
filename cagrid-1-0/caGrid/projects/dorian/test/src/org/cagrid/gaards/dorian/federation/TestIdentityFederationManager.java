@@ -961,8 +961,6 @@ public class TestIdentityFederationManager extends TestCase {
                     FederationAuditing.AccountCreated);
                 performAndValidateSingleAudit(ifs, adminGridId, expectedIdentity, AuditConstants.SYSTEM_ID,
                     FederationAuditing.SuccessfulUserCertificateRequest);
-                performAndValidateSingleAudit(ifs, adminGridId, String.valueOf(cert.getSerialNumber()),
-                    AuditConstants.SYSTEM_ID, FederationAuditing.UserCertificateSigned);
                 ucount = ucount + 1;
                 assertEquals(ucount, ifs.findUsers(adminGridId, new GridUserFilter()).length);
                 GridUserFilter f1 = new GridUserFilter();
@@ -1055,8 +1053,6 @@ public class TestIdentityFederationManager extends TestCase {
                 FederationAuditing.AccountCreated);
             performAndValidateSingleAudit(ifs, adminGridId, expectedIdentity, AuditConstants.SYSTEM_ID,
                 FederationAuditing.SuccessfulUserCertificateRequest);
-            performAndValidateSingleAudit(ifs, adminGridId, String.valueOf(cert.getSerialNumber()),
-                AuditConstants.SYSTEM_ID, FederationAuditing.UserCertificateSigned);
         } catch (Exception e) {
             FaultUtil.printFault(e);
             fail("Exception occured:" + e.getMessage());
@@ -1135,8 +1131,6 @@ public class TestIdentityFederationManager extends TestCase {
             performAndValidateSingleAudit(ifs, gridId, expectedIdentity, AuditConstants.SYSTEM_ID,
                 FederationAuditing.SuccessfulUserCertificateRequest);
             assertEquals(ifs.getUser(gridId, idp.getIdp().getId(), username).getUserStatus(), GridUserStatus.Active);
-            performAndValidateSingleAudit(ifs, gridId, String.valueOf(cert.getSerialNumber()),
-                AuditConstants.SYSTEM_ID, FederationAuditing.UserCertificateSigned);
 
         } catch (Exception e) {
             FaultUtil.printFault(e);
@@ -1468,8 +1462,6 @@ public class TestIdentityFederationManager extends TestCase {
                 FederationAuditing.AccountCreated);
             performAndValidateSingleAudit(ifs, adminGridId, expectedIdentity, AuditConstants.SYSTEM_ID,
                 FederationAuditing.SuccessfulUserCertificateRequest);
-            performAndValidateSingleAudit(ifs, adminGridId, String.valueOf(cert.getSerialNumber()),
-                AuditConstants.SYSTEM_ID, FederationAuditing.UserCertificateSigned);
 
             String userId = UserManager.subjectToIdentity(cert.getSubjectDN().toString());
             // Check that the user cannot call any admin methods
@@ -1973,8 +1965,6 @@ public class TestIdentityFederationManager extends TestCase {
             FederationAuditing.AccountCreated);
         performAndValidateSingleAudit(ifs, adminGridId, expectedIdentity, AuditConstants.SYSTEM_ID,
             FederationAuditing.SuccessfulUserCertificateRequest);
-        performAndValidateSingleAudit(ifs, adminGridId, String.valueOf(cert.getSerialNumber()),
-            AuditConstants.SYSTEM_ID, FederationAuditing.UserCertificateSigned);
         GridUserFilter f1 = new GridUserFilter();
         f1.setIdPId(idp.getIdp().getId());
         f1.setUID(uid);

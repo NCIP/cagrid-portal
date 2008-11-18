@@ -189,10 +189,10 @@
 	<xsd:element name="DateRange" type="federation:DateRange" />
 	<xsd:complexType name="DateRange">
 		<xsd:sequence>
-			<xsd:element name="StartDate" type="xsd:dateTime" minOccurs="0"
-				maxOccurs="1" />
-			<xsd:element name="EndDate" type="xsd:dateTime" minOccurs="0"
-				maxOccurs="1" />
+			<xsd:element name="StartDate" type="xsd:dateTime"
+				minOccurs="0" maxOccurs="1" />
+			<xsd:element name="EndDate" type="xsd:dateTime"
+				minOccurs="0" maxOccurs="1" />
 		</xsd:sequence>
 	</xsd:complexType>
 	<xsd:element name="UserCertificateUpdate" type="federation:UserCertificateUpdate" />
@@ -260,8 +260,8 @@
 				minOccurs="1" maxOccurs="1" />
 			<xsd:element name="AuditType" type="federation:FederationAuditing"
 				minOccurs="1" maxOccurs="1" />
-			<xsd:element name="OccurredAt" type="xsd:dateTime" minOccurs="1"
-				maxOccurs="1" />
+			<xsd:element name="OccurredAt" type="xsd:dateTime"
+				minOccurs="1" maxOccurs="1" />
 			<xsd:element name="AuditMessage" type="xsd:string"
 				minOccurs="1" maxOccurs="1" />
 		</xsd:sequence>
@@ -275,10 +275,10 @@
 				minOccurs="0" maxOccurs="1" />
 			<xsd:element name="AuditType" type="federation:FederationAuditing"
 				minOccurs="0" maxOccurs="1" />
-			<xsd:element name="StartDate" type="xsd:dateTime" minOccurs="0"
-				maxOccurs="1" />
-			<xsd:element name="EndDate" type="xsd:dateTime" minOccurs="0"
-				maxOccurs="1" />
+			<xsd:element name="StartDate" type="xsd:dateTime"
+				minOccurs="0" maxOccurs="1" />
+			<xsd:element name="EndDate" type="xsd:dateTime"
+				minOccurs="0" maxOccurs="1" />
 			<xsd:element name="AuditMessage" type="xsd:string"
 				minOccurs="0" maxOccurs="1" />
 		</xsd:sequence>
@@ -301,7 +301,6 @@
 			<xsd:enumeration value="HostCertificateApproved" />
 			<xsd:enumeration value="HostCertificateUpdated" />
 			<xsd:enumeration value="HostCertificateRenewed" />
-			<xsd:enumeration value="UserCertificateSigned" />
 			<xsd:enumeration value="UserCertificateUpdated" />
 			<xsd:enumeration value="UserCertificateRemoved" />
 			<xsd:enumeration value="SystemStartup" />
