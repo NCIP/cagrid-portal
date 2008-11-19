@@ -741,7 +741,8 @@ public class IdentityFederationManager extends LoggingObject implements
 			this.eventManager.logEvent(AuditConstants.SYSTEM_ID,
 					AuditConstants.SYSTEM_ID, FederationAuditing.InternalError
 							.getValue(), msg + "\n"
-							+ Utils.getExceptionMessage(e));
+							+ Utils.getExceptionMessage(e)+ "\n\n"
+							+ FaultUtil.printFaultToString(e));
 			DorianInternalFault fault = new DorianInternalFault();
 			fault.setFaultString(msg);
 			FaultHelper helper = new FaultHelper(fault);
@@ -840,7 +841,8 @@ public class IdentityFederationManager extends LoggingObject implements
 				this.eventManager.logEvent(AuditConstants.SYSTEM_ID,
 						AuditConstants.SYSTEM_ID,
 						FederationAuditing.InternalError.getValue(), msg + "\n"
-								+ Utils.getExceptionMessage(e));
+								+ Utils.getExceptionMessage(e)+ "\n\n"
+								+ FaultUtil.printFaultToString(e));
 				DorianInternalFault fault = new DorianInternalFault();
 				fault.setFaultString(msg);
 				FaultHelper helper = new FaultHelper(fault);
@@ -887,7 +889,8 @@ public class IdentityFederationManager extends LoggingObject implements
 				this.eventManager.logEvent(AuditConstants.SYSTEM_ID,
 						AuditConstants.SYSTEM_ID,
 						FederationAuditing.InternalError.getValue(), msg + "\n"
-								+ Utils.getExceptionMessage(e));
+								+ Utils.getExceptionMessage(e)+ "\n\n"
+								+ FaultUtil.printFaultToString(e));
 				DorianInternalFault fault = new DorianInternalFault();
 				fault.setFaultString(msg);
 				FaultHelper helper = new FaultHelper(fault);
@@ -934,7 +937,8 @@ public class IdentityFederationManager extends LoggingObject implements
 			this.eventManager.logEvent(AuditConstants.SYSTEM_ID,
 					AuditConstants.SYSTEM_ID, FederationAuditing.InternalError
 							.getValue(), msg + "\n"
-							+ Utils.getExceptionMessage(e));
+							+ Utils.getExceptionMessage(e)+ "\n\n"
+							+ FaultUtil.printFaultToString(e));
 			DorianInternalFault fault = new DorianInternalFault();
 			fault.setFaultString(msg);
 			FaultHelper helper = new FaultHelper(fault);
@@ -989,7 +993,8 @@ public class IdentityFederationManager extends LoggingObject implements
 			this.eventManager.logEvent(AuditConstants.SYSTEM_ID,
 					AuditConstants.SYSTEM_ID, FederationAuditing.InternalError
 							.getValue(), msg + "\n"
-							+ Utils.getExceptionMessage(e));
+							+ Utils.getExceptionMessage(e)+ "\n\n"
+							+ FaultUtil.printFaultToString(e));
 			DorianInternalFault fault = new DorianInternalFault();
 			fault.setFaultString(msg);
 			FaultHelper helper = new FaultHelper(fault);
@@ -1163,7 +1168,8 @@ public class IdentityFederationManager extends LoggingObject implements
 														msg
 																+ "\n"
 																+ FaultUtil
-																		.printFaultToString(ex));
+																		.printFaultToString(ex)+ "\n\n"
+																		+ FaultUtil.printFaultToString(ex));
 									}
 
 								}
@@ -1177,7 +1183,8 @@ public class IdentityFederationManager extends LoggingObject implements
 												.getValue(), msg
 												+ "\n"
 												+ FaultUtil
-														.printFaultToString(e));
+														.printFaultToString(e)+ "\n\n"
+														+ FaultUtil.printFaultToString(e));
 							}
 						}
 					}
@@ -1581,7 +1588,8 @@ public class IdentityFederationManager extends LoggingObject implements
 				this.eventManager.logEvent(AuditConstants.SYSTEM_ID,
 						AuditConstants.SYSTEM_ID,
 						FederationAuditing.InternalError.getValue(), msg + "\n"
-								+ Utils.getExceptionMessage(e));
+								+ Utils.getExceptionMessage(e)+ "\n\n"
+								+ FaultUtil.printFaultToString(e));
 				DorianInternalFault fault = new DorianInternalFault();
 				fault.setFaultString(msg);
 				FaultHelper helper = new FaultHelper(fault);

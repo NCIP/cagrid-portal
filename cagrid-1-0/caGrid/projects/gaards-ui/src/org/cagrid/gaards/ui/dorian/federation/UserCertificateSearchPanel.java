@@ -710,10 +710,8 @@ public class UserCertificateSearchPanel extends JPanel {
 			GridAdministrationClient client = this.session.getAdminClient();
 			List<UserCertificateRecord> records = client
 					.findUserCertificateRecords(f);
-			for (int i = 0; i < records.size(); i++) {
-				getUserCertificates().addUserCertificate(records.get(i));
-			}
-			stopProgess(records.size()+" user certificate(s) found.");
+			getUserCertificates().addUserCertificates(records);
+			stopProgess(records.size() + " user certificate(s) found.");
 		} catch (Exception e) {
 			stopProgess("Error");
 			ErrorDialog.showError(e.getMessage(), e);
@@ -845,7 +843,7 @@ public class UserCertificateSearchPanel extends JPanel {
 
 	private void removeCertificate() {
 		try {
-			
+
 			int row = getUserCertificates().getSelectedRow();
 
 			if ((row >= 0) && (row < getUserCertificates().getRowCount())) {
@@ -878,7 +876,7 @@ public class UserCertificateSearchPanel extends JPanel {
 
 	private void removeAllCertificates() {
 		try {
-			
+
 			int status = JOptionPane
 					.showConfirmDialog(this,
 							"Are you sure you want to remove all of the listed certificates?");
@@ -892,7 +890,7 @@ public class UserCertificateSearchPanel extends JPanel {
 					client.removeUserCertificate(record.getSerialNumber());
 					getUserCertificates().removeRow(0);
 				}
-				stopProgess(rowCount+" certificate(s) removed.");
+				stopProgess(rowCount + " certificate(s) removed.");
 				GridApplication.getContext().showMessage(
 						"The listed certificates were successfully removed!!!");
 			}

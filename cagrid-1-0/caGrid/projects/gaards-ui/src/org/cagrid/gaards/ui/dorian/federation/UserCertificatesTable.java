@@ -1,6 +1,9 @@
 package org.cagrid.gaards.ui.dorian.federation;
 
 import java.security.cert.X509Certificate;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.Vector;
 
 import javax.swing.table.DefaultTableModel;
@@ -17,7 +20,8 @@ import org.cagrid.grape.utils.ErrorDialog;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: UserCertificatesTable.java,v 1.3 2008-09-30 23:26:17 langella Exp $
+ * @version $Id: UserCertificatesTable.java,v 1.3 2008/09/30 23:26:17 langella
+ *          Exp $
  */
 public class UserCertificatesTable extends GrapeBaseTable {
 	public final static String USER_CERTIFICATE = "user";
@@ -55,17 +59,48 @@ public class UserCertificatesTable extends GrapeBaseTable {
 
 	}
 
-	public void addUserCertificate(final UserCertificateRecord r)
+	public void addUserCertificates(List<UserCertificateRecord> records)
 			throws Exception {
-		X509Certificate cert = CertUtil.loadCertificate(r.getCertificate()
-				.getCertificateAsString());
-		Vector v = new Vector();
-		v.add(r);
-		v.add(String.valueOf(r.getSerialNumber()));
-		v.add(r.getStatus().getValue());
-		v.add(cert.getNotBefore());
-		v.add(cert.getNotAfter());
-		addRow(v);
+
+		List<Vector> sorted = new ArrayList<Vector>();
+
+		for (int i = 0; i < records.size(); i++) {
+			UserCertificateRecord r = records.get(i);
+			X509Certificate cert = CertUtil.loadCertificate(r.getCertificate()
+					.getCertificateAsString());
+			int index = -1;
+			for (int j = 0; j < sorted.size(); j++) {
+				Vector temp = sorted.get(j);
+				Date start = (Date) temp.get(3);
+				if (start.before(cert.getNotBefore())) {
+					index = j;
+					break;
+				}
+			}
+			Vector v = new Vector();
+			v.add(r);
+			v.add(String.valueOf(r.getSerialNumber()));
+			v.add(r.getStatus().getValue());
+			v.add(cert.getNotBefore());
+			v.add(cert.getNotAfter());
+			if (index != -1) {
+				sorted.add(index, v);
+			} else {
+				sorted.add(v);
+			}
+		}
+
+		if (sorted.size() == records.size()) {
+			System.out.println("SIZES MATCH");
+		} else {
+			System.out.println("SIZES DONT MATCH " + sorted.size() + " != "
+					+ records.size());
+		}
+
+		for (int i = 0; i < sorted.size(); i++) {
+			addRow(sorted.get(i));
+		}
+
 	}
 
 	public synchronized UserCertificateRecord getSelectedCertificate()
@@ -90,8 +125,8 @@ public class UserCertificatesTable extends GrapeBaseTable {
 	public void doubleClick() {
 		try {
 			GridApplication.getContext().addApplicationComponent(
-					new UserCertificateWindow(this.session,getSelectedCertificate()), 600,
-					450);
+					new UserCertificateWindow(this.session,
+							getSelectedCertificate()), 650, 550);
 		} catch (Exception e) {
 			ErrorDialog.showError(e);
 		}

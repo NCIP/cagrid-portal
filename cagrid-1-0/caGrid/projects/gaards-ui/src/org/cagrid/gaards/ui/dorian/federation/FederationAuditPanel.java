@@ -42,6 +42,8 @@ public class FederationAuditPanel extends JPanel {
 
 	public static int HOST_MODE = 4;
 
+	public static int USER_CERTIFICATE_MODE = 5;
+
 	private static final long serialVersionUID = 1L;
 
 	private JPanel searchCriteria = null;
@@ -101,7 +103,7 @@ public class FederationAuditPanel extends JPanel {
 	private JPanel messagePanel = null;
 
 	private JLabel jLabel4 = null;
-	
+
 	private ProgressPanel progess;
 
 	/**
@@ -161,7 +163,7 @@ public class FederationAuditPanel extends JPanel {
 					.getAdminClient();
 			List<FederationAuditRecord> records = client.performAudit(f);
 			this.getAuditRecords().addRecords(records);
-			stopProgess(records.size()+" audit record(s) found.");
+			stopProgess(records.size() + " audit record(s) found.");
 		} catch (Exception f) {
 			stopProgess("Error");
 			ErrorDialog.showError(f);
@@ -207,6 +209,9 @@ public class FederationAuditPanel extends JPanel {
 			this.auditTypes.add(FederationAuditing.HostCertificateApproved);
 			this.auditTypes.add(FederationAuditing.HostCertificateRenewed);
 			this.auditTypes.add(FederationAuditing.HostCertificateUpdated);
+		} else if (mode == USER_CERTIFICATE_MODE) {
+			this.auditTypes.add(FederationAuditing.UserCertificateUpdated);
+			this.auditTypes.add(FederationAuditing.UserCertificateRemoved);
 		} else {
 			Class c = FederationAuditing.class;
 			Field[] fields = FederationAuditing.class.getFields();
@@ -455,18 +460,19 @@ public class FederationAuditPanel extends JPanel {
 			findTarget.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					String id = findIdentity();
-					if(id!=null){
+					if (id != null) {
 						getTarget().setText(id);
 					}
-					
+
 				}
 			});
 		}
 		return findTarget;
 	}
-	
-	private String findIdentity(){
-		IdentityFinderDialog ifd = new IdentityFinderDialog(this.session, GridApplication.getContext().getApplication());
+
+	private String findIdentity() {
+		IdentityFinderDialog ifd = new IdentityFinderDialog(this.session,
+				GridApplication.getContext().getApplication());
 		GridApplication.getContext().showDialog(ifd);
 		return ifd.getIdentity();
 	}
@@ -492,15 +498,16 @@ public class FederationAuditPanel extends JPanel {
 		if (findReportingParty == null) {
 			findReportingParty = new JButton();
 			findReportingParty.setText("Find");
-			findReportingParty.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					String id = findIdentity();
-					if(id!=null){
-						getReportingParty().setText(id);
-					}
-					
-				}
-			});
+			findReportingParty
+					.addActionListener(new java.awt.event.ActionListener() {
+						public void actionPerformed(java.awt.event.ActionEvent e) {
+							String id = findIdentity();
+							if (id != null) {
+								getReportingParty().setText(id);
+							}
+
+						}
+					});
 		}
 		return findReportingParty;
 	}
@@ -685,7 +692,7 @@ public class FederationAuditPanel extends JPanel {
 		if (search == null) {
 			search = new JButton();
 			search.setText("Search");
-			
+
 			search.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					Runner runner = new Runner() {
@@ -789,13 +796,13 @@ public class FederationAuditPanel extends JPanel {
 	}
 
 	private void showProgess(String s) {
-		if(this.progess!=null){
+		if (this.progess != null) {
 			this.progess.showProgress(s);
 		}
 	}
-	
+
 	private void stopProgess(String s) {
-		if(this.progess!=null){
+		if (this.progess != null) {
 			this.progess.stopProgress(s);
 		}
 	}
@@ -803,7 +810,5 @@ public class FederationAuditPanel extends JPanel {
 	public void setProgess(ProgressPanel progess) {
 		this.progess = progess;
 	}
-	
-	
 
 }

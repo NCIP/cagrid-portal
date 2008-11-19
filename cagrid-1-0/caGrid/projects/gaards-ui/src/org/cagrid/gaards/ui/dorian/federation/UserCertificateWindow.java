@@ -27,12 +27,19 @@ import org.cagrid.gaards.ui.common.CertificateInformationComponent;
 import org.cagrid.gaards.ui.common.GAARDSLookAndFeel;
 import org.cagrid.gaards.ui.common.ProgressPanel;
 import org.cagrid.gaards.ui.dorian.DorianSession;
+import org.cagrid.gaards.ui.dorian.DorianSessionProvider;
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.LookAndFeel;
 import org.cagrid.grape.utils.ErrorDialog;
+import javax.swing.JTabbedPane;
 
-public class UserCertificateWindow extends ApplicationComponent {
+public class UserCertificateWindow extends ApplicationComponent implements
+		DorianSessionProvider {
+
+	private final static String DETAILS_PANEL = "Details"; // @jve:decl-index=0:
+
+	private final static String AUDIT_PANEL = "Audit";
 
 	private static final long serialVersionUID = 1L;
 
@@ -92,6 +99,12 @@ public class UserCertificateWindow extends ApplicationComponent {
 
 	private ProgressPanel progressPanel = null;
 
+	private JTabbedPane content = null;
+
+	private JPanel details = null;
+
+	private FederationAuditPanel auditPanel = null;
+
 	/**
 	 * This is the default constructor
 	 */
@@ -123,17 +136,18 @@ public class UserCertificateWindow extends ApplicationComponent {
 	 */
 	private JPanel getJContentPane() {
 		if (jContentPane == null) {
+			GridBagConstraints gridBagConstraints21 = new GridBagConstraints();
+			gridBagConstraints21.fill = GridBagConstraints.BOTH;
+			gridBagConstraints21.weighty = 1.0;
+			gridBagConstraints21.gridx = 0;
+			gridBagConstraints21.gridy = 1;
+			gridBagConstraints21.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints21.weightx = 1.0;
 			GridBagConstraints gridBagConstraints20 = new GridBagConstraints();
 			gridBagConstraints20.gridx = 0;
 			gridBagConstraints20.fill = GridBagConstraints.HORIZONTAL;
 			gridBagConstraints20.weightx = 1.0D;
-			gridBagConstraints20.gridy = 4;
-			GridBagConstraints gridBagConstraints19 = new GridBagConstraints();
-			gridBagConstraints19.gridx = 0;
-			gridBagConstraints19.insets = new Insets(2, 2, 2, 2);
-			gridBagConstraints19.weightx = 1.0D;
-			gridBagConstraints19.fill = GridBagConstraints.HORIZONTAL;
-			gridBagConstraints19.gridy = 3;
+			gridBagConstraints20.gridy = 2;
 			GridBagConstraints gridBagConstraints15 = new GridBagConstraints();
 			gridBagConstraints15.gridx = 0;
 			gridBagConstraints15.weightx = 1.0D;
@@ -141,29 +155,12 @@ public class UserCertificateWindow extends ApplicationComponent {
 			gridBagConstraints15.fill = GridBagConstraints.HORIZONTAL;
 			gridBagConstraints15.anchor = GridBagConstraints.CENTER;
 			gridBagConstraints15.gridy = 0;
-			GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
-			gridBagConstraints8.gridwidth = 0;
-			gridBagConstraints8.gridy = 2;
-			gridBagConstraints8.ipady = 0;
-			gridBagConstraints8.weightx = 1.0D;
-			gridBagConstraints8.weighty = 1.0D;
-			gridBagConstraints8.insets = new Insets(2, 2, 2, 2);
-			gridBagConstraints8.fill = GridBagConstraints.BOTH;
-			gridBagConstraints8.gridx = 0;
-			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
-			gridBagConstraints1.gridx = 0;
-			gridBagConstraints1.ipadx = 0;
-			gridBagConstraints1.weightx = 1.0D;
-			gridBagConstraints1.fill = GridBagConstraints.HORIZONTAL;
-			gridBagConstraints1.insets = new Insets(2, 2, 2, 2);
-			gridBagConstraints1.gridy = 1;
 			jContentPane = new JPanel();
 			jContentPane.setLayout(new GridBagLayout());
-			jContentPane.add(getInformationPanel(), gridBagConstraints1);
-			jContentPane.add(getNotesPanel(), gridBagConstraints8);
 			jContentPane.add(getTitlePanel(), gridBagConstraints15);
-			jContentPane.add(getButtonPanel(), gridBagConstraints19);
+			jContentPane.add(getContent(), gridBagConstraints21);
 			jContentPane.add(getProgressPanel(), gridBagConstraints20);
+
 		}
 		return jContentPane;
 	}
@@ -530,29 +527,100 @@ public class UserCertificateWindow extends ApplicationComponent {
 					getStatus().getSelectedUserStatus(), Utils.clean(getNotes()
 							.getText()));
 			record.setStatus(getStatus().getSelectedUserStatus());
-			record.setNotes(Utils.clean(getNotes()
-					.getText()));
-			getProgressPanel().stopProgress("Certificate successfully updated.");
+			record.setNotes(Utils.clean(getNotes().getText()));
+			getProgressPanel()
+					.stopProgress("Certificate successfully updated.");
 		} catch (Exception e) {
 			getProgressPanel().stopProgress("Error");
 			FaultUtil.printFault(e);
 			ErrorDialog.showError(e);
-		}finally{
+		} finally {
 			getUpdate().setEnabled(true);
 			getViewCertificate().setEnabled(true);
 		}
 	}
 
 	/**
-	 * This method initializes progressPanel	
-	 * 	
-	 * @return javax.swing.JPanel	
+	 * This method initializes progressPanel
+	 * 
+	 * @return javax.swing.JPanel
 	 */
 	private ProgressPanel getProgressPanel() {
 		if (progressPanel == null) {
 			progressPanel = new ProgressPanel();
 		}
 		return progressPanel;
+	}
+
+	/**
+	 * This method initializes content
+	 * 
+	 * @return javax.swing.JTabbedPane
+	 */
+	private JTabbedPane getContent() {
+		if (content == null) {
+			content = new JTabbedPane();
+			content.addTab(DETAILS_PANEL, null, getDetails(), null);
+			content.addTab(AUDIT_PANEL, null, getAuditPanel(), null);
+		}
+		return content;
+	}
+
+	/**
+	 * This method initializes details
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	private JPanel getDetails() {
+		if (details == null) {
+			GridBagConstraints gridBagConstraints19 = new GridBagConstraints();
+			gridBagConstraints19.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints19.gridx = 0;
+			gridBagConstraints19.gridy = 2;
+			gridBagConstraints19.weightx = 1.0D;
+			gridBagConstraints19.insets = new Insets(2, 2, 2, 2);
+			GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
+			gridBagConstraints8.fill = GridBagConstraints.BOTH;
+			gridBagConstraints8.gridwidth = 0;
+			gridBagConstraints8.gridx = 0;
+			gridBagConstraints8.gridy = 1;
+			gridBagConstraints8.ipady = 0;
+			gridBagConstraints8.weightx = 1.0D;
+			gridBagConstraints8.weighty = 1.0D;
+			gridBagConstraints8.insets = new Insets(2, 2, 2, 2);
+			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
+			gridBagConstraints1.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints1.gridx = 0;
+			gridBagConstraints1.gridy = 0;
+			gridBagConstraints1.ipadx = 0;
+			gridBagConstraints1.weightx = 1.0D;
+			gridBagConstraints1.insets = new Insets(2, 2, 2, 2);
+			details = new JPanel();
+			details.setLayout(new GridBagLayout());
+			details.add(getInformationPanel(), gridBagConstraints1);
+			details.add(getNotesPanel(), gridBagConstraints8);
+			details.add(getButtonPanel(), gridBagConstraints19);
+		}
+		return details;
+	}
+
+	/**
+	 * This method initializes auditPanel
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	private FederationAuditPanel getAuditPanel() {
+		if (auditPanel == null) {
+			auditPanel = new FederationAuditPanel(this,
+					FederationAuditPanel.USER_CERTIFICATE_MODE, String
+							.valueOf(record.getSerialNumber()));
+			auditPanel.setProgess(getProgressPanel());
+		}
+		return auditPanel;
+	}
+
+	public DorianSession getSession() throws Exception {
+		return this.session;
 	}
 
 }
