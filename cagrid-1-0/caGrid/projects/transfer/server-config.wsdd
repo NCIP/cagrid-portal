@@ -10,6 +10,8 @@
     <parameter name="providers" value=" gov.nih.nci.cagrid.introduce.security.service.globus.ServiceSecurityProviderImpl DestroyProvider SetTerminationTimeProvider SubscribeProvider" />
     <parameter name="loadOnStartup" value="true" />
     <parameter name="securityMetadata" value="ETC-PATH/TransferServiceContext-security-metadata.xml" />
+    <parameter name="transferservicecontext-etcDirectoryPath" value="ETC-PATH" />
+    <parameter name="transferservicecontext-serviceName" value="TransferServiceContext" />
   </service>
   <service name="SERVICE-INSTANCE-PREFIX/TransferService" provider="Handler" use="literal" style="document">
     <parameter name="className" value="org.cagrid.transfer.service.globus.TransferServiceProviderImpl" />
@@ -21,6 +23,8 @@
     <parameter name="providers" value=" gov.nih.nci.cagrid.introduce.security.service.globus.ServiceSecurityProviderImpl" />
     <parameter name="loadOnStartup" value="true" />
     <parameter name="securityMetadata" value="ETC-PATH/TransferService-security-metadata.xml" />
+    <parameter name="transferservice-etcDirectoryPath" value="ETC-PATH" />
+    <parameter name="transferservice-serviceName" value="TransferService" />
   </service>
   <typeMapping name="AggregatorContent" qname="aggr:AggregatorContent" type="java:org.globus.mds.aggregator.types.AggregatorContent" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="" />
 </deployment>

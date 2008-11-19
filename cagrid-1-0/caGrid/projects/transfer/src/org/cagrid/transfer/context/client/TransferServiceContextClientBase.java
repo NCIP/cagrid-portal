@@ -39,7 +39,7 @@ import gov.nih.nci.cagrid.introduce.security.client.ServiceSecurityClient;
  * On construction the class instance will contact the remote service and retrieve it's security
  * metadata description which it will use to configure the Stub specifically for each method call.
  * 
- * @created by Introduce Toolkit version 1.2
+ * @created by Introduce Toolkit version 1.3
  */
 public abstract class TransferServiceContextClientBase extends ServiceSecurityClient implements NotifyCallback {	
 	protected TransferServiceContextPortType portType;
@@ -57,12 +57,12 @@ public abstract class TransferServiceContextClientBase extends ServiceSecurityCl
 		initialize();
 	}
 	
-	private void initialize() throws RemoteException {
+	protected void initialize() throws RemoteException {
 	    this.portTypeMutex = new Object();
 		this.portType = createPortType();
 	}
 
-	private TransferServiceContextPortType createPortType() throws RemoteException {
+	protected TransferServiceContextPortType createPortType() throws RemoteException {
 
 		TransferServiceContextServiceAddressingLocator locator = new TransferServiceContextServiceAddressingLocator();
 		// attempt to load our context sensitive wsdd file
@@ -110,7 +110,20 @@ public abstract class TransferServiceContextClientBase extends ServiceSecurityCl
     }
 
 
+    /**
+    * Call this method if you want to subscribe and have the callbacks come back to the 
+    * client class.  You will want to overload the deliver method if this is the case.
+    */
     public org.oasis.wsn.SubscribeResponse subscribe(QName qname) throws RemoteException, ContainerException, MalformedURIException {
+        return subscribe(qname,this);
+    }
+    
+    
+    /**
+    * Call this method if you want to subscribe and provide a NotifyCallback to handle the
+    * messages
+    */
+    public org.oasis.wsn.SubscribeResponse subscribe(QName qname, NotifyCallback callback) throws RemoteException, ContainerException, MalformedURIException {
         synchronized (portTypeMutex) {
             configureStubSecurity((Stub) portType, "subscribe");
 
@@ -118,7 +131,7 @@ public abstract class TransferServiceContextClientBase extends ServiceSecurityCl
                 // Create client side notification consumer
                 consumer = org.globus.wsrf.NotificationConsumerManager.getInstance();
                 consumer.startListening();
-                consumerEPR = consumer.createNotificationConsumer(this);
+                consumerEPR = consumer.createNotificationConsumer(callback);
             }
 
             org.oasis.wsn.Subscribe params = new org.oasis.wsn.Subscribe();

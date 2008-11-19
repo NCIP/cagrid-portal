@@ -1,6 +1,8 @@
 package org.cagrid.transfer.context.client;
 
 import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
 import java.rmi.RemoteException;
 
 import javax.xml.namespace.QName;
@@ -11,14 +13,24 @@ import org.apache.axis.client.Stub;
 import org.apache.axis.configuration.FileProvider;
 import org.apache.axis.message.addressing.EndpointReferenceType;
 import org.apache.axis.types.URI.MalformedURIException;
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.methods.InputStreamRequestEntity;
+import org.apache.commons.httpclient.methods.PostMethod;
 
 import org.oasis.wsrf.properties.GetResourcePropertyResponse;
 
+import org.globus.axis.gsi.GSIConstants;
 import org.globus.gsi.GlobusCredential;
+import org.globus.gsi.gssapi.GlobusGSSCredentialImpl;
+import org.globus.net.GSIHttpURLConnection;
+import org.ietf.jgss.GSSCredential;
 
 import org.cagrid.transfer.context.stubs.TransferServiceContextPortType;
 import org.cagrid.transfer.context.stubs.service.TransferServiceContextServiceAddressingLocator;
+import org.cagrid.transfer.context.client.helper.TransferClientHelper;
 import org.cagrid.transfer.context.common.TransferServiceContextI;
+import org.cagrid.transfer.descriptor.DataTransferDescriptor;
+
 import gov.nih.nci.cagrid.introduce.security.client.ServiceSecurityClient;
 
 /**
@@ -30,7 +42,7 @@ import gov.nih.nci.cagrid.introduce.security.client.ServiceSecurityClient;
  * On construction the class instance will contact the remote service and retrieve it's security
  * metadata description which it will use to configure the Stub specifically for each method call.
  * 
- * @created by Introduce Toolkit version 1.2
+ * @created by Introduce Toolkit version 1.3
  */
 public class TransferServiceContextClient extends TransferServiceContextClientBase implements TransferServiceContextI {	
 
@@ -75,6 +87,33 @@ public class TransferServiceContextClient extends TransferServiceContextClientBa
 			System.exit(1);
 		}
 	}
+	
+    /**
+     * Returns a handle to the input stream of the socket which is returning the
+     * data referred to by the descriptor. This method can make an https
+     * connection if desired using the credentials exist in this client.
+     * 
+     * @return
+     * @throws Exception
+     */
+    public InputStream getData() throws Exception {
+        return TransferClientHelper.getData(getDataTransferDescriptor(), getProxy());
+    }
+
+    /**
+     * Reads from the input stream to put the data to the server. Be sure to close the stream when
+     * done writing the data. This method can use http and https if the
+     * credentials exist in this client.  This is a blocking call. Will return with the entire data has been transmitted.
+     * 
+     * @param is                input stream providing the data
+     * @param contentLength     number of bytes in the input stream to be read
+     * @return
+     * @throws Exception
+     */
+    public void putData(InputStream is, long contentLength) throws Exception {
+        TransferClientHelper.putData(is, contentLength, getDataTransferDescriptor(), getProxy());
+    }
+
 
   public org.oasis.wsrf.lifetime.DestroyResponse destroy(org.oasis.wsrf.lifetime.Destroy params) throws RemoteException {
     synchronized(portTypeMutex){

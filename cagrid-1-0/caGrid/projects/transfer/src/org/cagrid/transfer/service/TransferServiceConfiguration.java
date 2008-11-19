@@ -16,13 +16,14 @@ import org.globus.wsrf.Constants;
  * This class holds all service properties which were defined for the service to have
  * access to.
  * 
- * @created by Introduce Toolkit version 1.2
+ * @created by Introduce Toolkit version 1.3
  * 
  */
 public class TransferServiceConfiguration implements ServiceConfiguration {
 
 	public static TransferServiceConfiguration  configuration = null;
-
+    public String etcDirectoryPath;
+    	
 	public static TransferServiceConfiguration getConfiguration() throws Exception {
 		if (TransferServiceConfiguration.configuration != null) {
 			return TransferServiceConfiguration.configuration;
@@ -42,8 +43,7 @@ public class TransferServiceConfiguration implements ServiceConfiguration {
 		return TransferServiceConfiguration.configuration;
 	}
 	
-	private String etcDirectoryPath;
-	
+
 	
 	private String transferServletPathName;
 	
@@ -52,13 +52,14 @@ public class TransferServiceConfiguration implements ServiceConfiguration {
 	private String defaultTransferServiceContextTerminationTimeInMinutes;
 	
 	
-	public String getEtcDirectoryPath() {
+    public String getEtcDirectoryPath() {
 		return ContainerConfig.getBaseDirectory() + File.separator + etcDirectoryPath;
 	}
 	
 	public void setEtcDirectoryPath(String etcDirectoryPath) {
 		this.etcDirectoryPath = etcDirectoryPath;
 	}
+
 
 	
 	public String getTransferServletPathName() {

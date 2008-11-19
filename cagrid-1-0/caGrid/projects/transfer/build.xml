@@ -141,13 +141,13 @@
 
 	<target name="defineClasspaths" depends="checkGlobus">
 		<runtarget target="defineExtendedClasspaths" />
+		<path id="tasks.run.extended.classpath"/>
 		<path id="base.classpath">
 			<fileset dir="${lib.dir}">
 				<include name="*.jar" />
 			</fileset>
 			<fileset dir="${ext.globus.dir}/lib">
 				<include name="*.jar" />
-                <exclude name="junit.jar"/>
 				<exclude name="${stubs.jar.name}" />
 				<exclude name="${common.jar.name}" />
 				<exclude name="${client.jar.name}" />
@@ -190,18 +190,10 @@
 				<include name="*.jar" />
 			</fileset>
 			<fileset dir="${lib.dir}">
-				<include name="caGrid-*-core.jar" />
+				<include name="*.jar" />
 			</fileset>
 			<fileset dir="${ext.globus.dir}/lib">
-				<include name="axis.jar" />
-				<include name="addressing-1.0.jar" />
-				<include name="xercesImpl.jar" />
-				<include name="jaxrpc.jar" />
-				<include name="wsrf_core.jar" />
-				<include name="cog-jglobus.jar" />
-				<include name="saaj.jar" />
-				<include name="commons-discovery.jar" />
-				<include name="wsrf_core_stubs.jar" />
+				<include name="*.jar" />
 			</fileset>
 		</path>
 	</target>
@@ -255,7 +247,8 @@
 	</target>
 
 	<target name="stubGenerationPostProcessor">
-		<taskdef name="fixSoapBindingStubs" classname="gov.nih.nci.cagrid.introduce.servicetasks.axis.FixSoapBindingStub" classpathref="tasks.run.classpath"/>
+		<taskdef name="fixSoapBindingStubs" classname="gov.nih.nci.cagrid.introduce.servicetasks.axis.FixSoapBindingStub" classpathref="tasks.run.classpath">
+		</taskdef>
 		<fixSoapBindingStubs />
 	</target>
 
