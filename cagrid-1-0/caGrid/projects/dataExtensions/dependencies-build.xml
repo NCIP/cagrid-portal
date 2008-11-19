@@ -12,7 +12,7 @@
 
 	<target name="do.resolve-dependencies" depends="pre.resolve-dependencies">
 		<ivy:retrieve conf="impl" pattern="${ivy.resolved.artifacts.dir}/dependencies/impl/[type]s/[originalname](.[ext])" sync="true" type="jar" />
-		<ivy:retrieve conf="impl-test" pattern="${ivy.resolved.artifacts.dir}/dependencies/test/[type]s/[originalname](.[ext])" sync="true" type="jar" />
+		<ivy:retrieve conf="impl-test" pattern="${ivy.resolved.artifacts.dir}/dependencies/test/[type]s/[originalname](.[ext])" sync="true" type="*"/>
 
 		<ivy:retrieve conf="sdk31" pattern="${ivy.resolved.artifacts.dir}/dependencies/sdk31/[type]s/[originalname](.[ext])" sync="true" type="jar" />
 		<ivy:retrieve conf="sdk32" pattern="${ivy.resolved.artifacts.dir}/dependencies/sdk32/[type]s/[originalname](.[ext])" sync="true" type="jar" />
