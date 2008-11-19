@@ -58,7 +58,7 @@ public class <%=info.getService().getName()%>Authorization implements PDP {
 	
 	public static String getCallerIdentity() {
 		String caller = org.globus.wsrf.security.SecurityManager.getManager().getCaller();
-		if ((caller == null) || (caller.equals("<<anonymous>"))) {
+		if ((caller == null) || (caller.equals("<anonymous>"))) {
 			return null;
 		} else {
 			return caller;
