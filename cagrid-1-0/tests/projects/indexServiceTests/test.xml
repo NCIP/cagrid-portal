@@ -27,7 +27,7 @@
 	<target name="test" depends="jar, prepareClasspaths" description="Runs the creation tests.">
 		<mkdir dir="${junit.results.dir}" />
 		<junit dir="${introduce.dir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" fork="yes" forkmode="once">
-			<!-- is this needed any more? -->
+			<sysproperty key="basedir" value="${introduce.dir}"/>
 			<sysproperty key="build.dirs" value="${test.classes.dir}" />
 			<sysproperty key="build.dir" value="${test.classes.dir}" />
 			<sysproperty key="introduce.base.dir" value="${introduce.dir}" />

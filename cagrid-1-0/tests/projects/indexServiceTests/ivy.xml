@@ -27,8 +27,9 @@
     <!-- Introduce testing -->
     <dependency rev="latest.integration" org="caGrid" name="introduce" conf="default->extension-test"/>
     
-    <!-- Data system tests for creation of a data service -->
+    <!-- Data system tests for creation of a data service 
     <dependency rev="latest.integration" org="caGrid" name="dataTests" conf="default->default"/>
+    -->
     
     <!-- Discovery tools -->
     <dependency rev="latest.integration" org="caGrid" name="discovery" conf="default->default"/>

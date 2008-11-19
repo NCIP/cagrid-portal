@@ -1,6 +1,10 @@
 package org.cagrid.index.tests;
 
 import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.introduce.IntroduceConstants;
+import gov.nih.nci.cagrid.introduce.test.TestCaseInfo;
+import gov.nih.nci.cagrid.introduce.test.steps.CreateSkeletonStep;
+import gov.nih.nci.cagrid.introduce.test.steps.RemoveSkeletonStep;
 import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainer;
 import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainerFactory;
 import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainerType;
@@ -21,9 +25,6 @@ import org.apache.axis.message.addressing.EndpointReferenceType;
 import org.apache.axis.types.URI.MalformedURIException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.cagrid.data.test.creation.CreationStep;
-import org.cagrid.data.test.creation.DataTestCaseInfo;
-import org.cagrid.data.test.creation.DeleteOldServiceStep;
 import org.cagrid.index.tests.steps.ChangeIndexSweeperDelayStep;
 import org.cagrid.index.tests.steps.DeployIndexServiceStep;
 import org.cagrid.index.tests.steps.ServiceDiscoveryStep;
@@ -38,13 +39,13 @@ public class IndexServiceSystemTest extends Story {
     public static final String INTRODUCE_DIR_PROPERTY = "introduce.base.dir";
     public static final String DEFAULT_INDEX_SERVICE_DIR = ".." + File.separator + ".." + File.separator
             + ".." + File.separator + "caGrid" + File.separator + "projects" + File.separator + "index";
-    public static final String SERVICE_NAME = "TestDataService";
-    public static final String PACKAGE_NAME = "gov.nih.nci.cagrid.testds";
+    public static final String SERVICE_NAME = "TestService";
+    public static final String PACKAGE_NAME = "gov.nih.nci.cagrid.testing.service";
     public static final String SERVICE_NAMESPACE = "http://" + PACKAGE_NAME + "/" + SERVICE_NAME;
     
     private ServiceContainer indexServiceContainer = null;
-    private ServiceContainer dataServiceContainer = null;
-    private TestDataServiceInfo testDataServiceInfo = null;
+    private ServiceContainer helloWorldServiceContainer = null;
+    private TestCaseInfo helloWorldServiceInfo = null;
     
     
     public String getName() {
@@ -58,7 +59,7 @@ public class IndexServiceSystemTest extends Story {
     
     
     public boolean storySetUp() {
-        testDataServiceInfo = new TestDataServiceInfo();
+        helloWorldServiceInfo = new TestHelloWorldServiceInfo();
         
         // set up the index service container
         try {
@@ -73,9 +74,9 @@ public class IndexServiceSystemTest extends Story {
         
         // set up a data service container
         try {
-            log.debug("Creating container for data service");
-            dataServiceContainer = ServiceContainerFactory.createContainer(ServiceContainerType.TOMCAT_CONTAINER);
-            new UnpackContainerStep(dataServiceContainer).runStep();
+            log.debug("Creating container for Hello World service");
+            helloWorldServiceContainer = ServiceContainerFactory.createContainer(ServiceContainerType.TOMCAT_CONTAINER);
+            new UnpackContainerStep(helloWorldServiceContainer).runStep();
         } catch (Throwable ex) {
             String message = "Error creating container for data service: " + ex.getMessage();
             log.error(message, ex);
@@ -89,7 +90,7 @@ public class IndexServiceSystemTest extends Story {
         Vector<Step> steps = new Vector<Step>();
         
         // the directory of the testing data service
-        File testServiceDir = new File(testDataServiceInfo.getDir());
+        File testServiceDir = new File(helloWorldServiceInfo.getDir());
         
         // get the EPR of the Index service
         EndpointReferenceType indexEPR = null;
@@ -101,8 +102,14 @@ public class IndexServiceSystemTest extends Story {
             fail(message);
         }
         
-        // create a data service
-        steps.add(new CreationStep(testDataServiceInfo, getIntroduceBaseDir()));
+        // create a hello world grid service
+        try {
+            steps.add(new CreateSkeletonStep(helloWorldServiceInfo, true));
+        } catch (Exception ex) {
+            String message = "Error setting up service creation step: " + ex.getMessage();
+            log.error(message, ex);
+            fail(message);
+        }
         // set the service's expected metadata
         StringBuffer testMetadata = getTestingResearchCenterInfo();
         steps.add(new SetMetadataHostingResearchCenterStep(testServiceDir, testMetadata));
@@ -118,50 +125,50 @@ public class IndexServiceSystemTest extends Story {
         // start the index service
         steps.add(new StartContainerStep(indexServiceContainer));
         
-        // deploy the data service
-        steps.add(new DeployServiceStep(dataServiceContainer, testServiceDir.getAbsolutePath()));
-        // start the data service
-        steps.add(new StartContainerStep(dataServiceContainer));
+        // deploy the hello world service
+        steps.add(new DeployServiceStep(helloWorldServiceContainer, testServiceDir.getAbsolutePath()));
+        // start the hello worldservice
+        steps.add(new StartContainerStep(helloWorldServiceContainer));
         
-        // sleep long enough to allow the data service to register itself
+        // sleep long enough to allow the hello world service to register itself
         steps.add(new SleepStep(ChangeIndexSweeperDelayStep.DEFAULT_SWEEPER_DELAY * 5));
         
-        // get the EPR of the data service
-        EndpointReferenceType dataEPR = null;
+        // get the EPR of the hello world service
+        EndpointReferenceType helloEPR = null;
         try {
-            dataEPR = dataServiceContainer.getServiceEPR("cagrid/" + testDataServiceInfo.getName());
+            helloEPR = helloWorldServiceContainer.getServiceEPR("cagrid/" + helloWorldServiceInfo.getName());
         } catch (MalformedURIException ex) {
-            String message = "Error obtaining EPR of data service: " + ex.getMessage();
+            String message = "Error obtaining EPR of hello world service: " + ex.getMessage();
             log.error(message, ex);
             fail(message);
         }
         
         // find the data service in the index service
-        steps.add(new ServiceDiscoveryStep(indexEPR, dataEPR, testServiceDir, true));
+        steps.add(new ServiceDiscoveryStep(indexEPR, helloEPR, testServiceDir, true));
         
         // make sure the sweeper has run and its still there
         steps.add(new SleepStep(ChangeIndexSweeperDelayStep.DEFAULT_SWEEPER_DELAY * 2));
-        steps.add(new ServiceDiscoveryStep(indexEPR, dataEPR, testServiceDir, true));
+        steps.add(new ServiceDiscoveryStep(indexEPR, helloEPR, testServiceDir, true));
         
         // shut down the data service
-        steps.add(new StopContainerStep(dataServiceContainer));
+        steps.add(new StopContainerStep(helloWorldServiceContainer));
         
         // make sure the sweeper has run and the service is gone
         steps.add(new SleepStep(ChangeIndexSweeperDelayStep.DEFAULT_SWEEPER_DELAY * 2));
-        steps.add(new ServiceDiscoveryStep(indexEPR, dataEPR, testServiceDir, false));
+        steps.add(new ServiceDiscoveryStep(indexEPR, helloEPR, testServiceDir, false));
         
         return steps;
     }
     
     
     public void storyTearDown() throws Throwable {
-        if (dataServiceContainer.isStarted()) {
-            new StopContainerStep(dataServiceContainer).runStep();
+        if (helloWorldServiceContainer.isStarted()) {
+            new StopContainerStep(helloWorldServiceContainer).runStep();
         }
-        new DestroyContainerStep(dataServiceContainer).runStep();
+        new DestroyContainerStep(helloWorldServiceContainer).runStep();
         new StopContainerStep(indexServiceContainer).runStep();
         new DestroyContainerStep(indexServiceContainer).runStep();
-        new DeleteOldServiceStep(testDataServiceInfo);
+        new RemoveSkeletonStep(helloWorldServiceInfo);
     }
     
     
@@ -180,23 +187,24 @@ public class IndexServiceSystemTest extends Story {
     }
     
     
-    private String getIntroduceBaseDir() {
-        String dir = System.getProperty(INTRODUCE_DIR_PROPERTY);
-        if (dir == null) {
-            fail("Introduce base dir environment variable " + INTRODUCE_DIR_PROPERTY + " is required");
-        }
-        return dir;
-    }
-    
-    
-    private static class TestDataServiceInfo extends DataTestCaseInfo {
+    private static class TestHelloWorldServiceInfo extends TestCaseInfo {
         public String getName() {
             return SERVICE_NAME;
         }
+        
+        
+        public String getDir() {
+            return getName();
+        }
+        
+        
+        public String getPackageDir() {
+            return getPackageName().replace('.', File.separatorChar);
+        }
+        
 
-
-        public String getServiceDirName() {
-            return SERVICE_NAME;
+        public String getResourceFrameworkType() {
+            return IntroduceConstants.INTRODUCE_MAIN_RESOURCE + "," + IntroduceConstants.INTRODUCE_SINGLETON_RESOURCE + "," + IntroduceConstants.INTRODUCE_IDENTIFIABLE_RESOURCE;
         }
 
 
@@ -210,8 +218,11 @@ public class IndexServiceSystemTest extends Story {
         }
         
         
+        /**
+         * Overridden to only use the cagrid metadata extension and not create a data service
+         */
         public String getExtensions() {
-            return super.getExtensions() + ",cagrid_metadata";
+            return "cagrid_metadata";
         }
     }
     
