@@ -33,6 +33,7 @@
 					<exclude name="**/WorkflowTest.java" />
 					<!-- <exclude name="**/BasicDataServiceTest.java" />-->
 					<include name="**/${test.pattern}.java" />
+					<exclude name="**/IndexServiceTest.java"/>
 					<!-- <include name="**/*TestCase.java" /> -->
 				</fileset>
 			</batchtest>
