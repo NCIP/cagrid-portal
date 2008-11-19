@@ -15,13 +15,15 @@ import org.cagrid.gaards.dorian.common.AuditConstants;
 import org.cagrid.gaards.ui.common.TitlePanel;
 import org.cagrid.gaards.ui.dorian.DorianSessionProvider;
 import org.cagrid.grape.GridApplication;
+import org.cagrid.grape.utils.ErrorDialog;
 
 public class IdentityFinderDialog extends JDialog {
 
 	private static final String SYSTEM = "System";
 	private static final String USER = "User";
 	private static final String HOST = "Host";
-	private static final String IDENTITY_PROVIDER = "Identity Provider"; 
+	private static final String IDENTITY_PROVIDER = "Identity Provider";
+	private static final String USER_CERTIFICATE = "User Certificate";
 	private static final long serialVersionUID = 1L;
 	private JPanel jContentPane = null;
 	private JPanel identityPanel = null;
@@ -154,6 +156,7 @@ public class IdentityFinderDialog extends JDialog {
 					} else if (selected.equals(HOST)) {
 						HostCertificateSearchDialogue dialog = new HostCertificateSearchDialogue(
 								session);
+						dialog.setModal(true);
 						GridApplication.getContext().showDialog(dialog);
 						if (dialog.getSelectedHostCertificate() != null) {
 							identity = String.valueOf(dialog
@@ -169,6 +172,20 @@ public class IdentityFinderDialog extends JDialog {
 							identity = dialog.getSelectedIdP().getName();
 						}
 
+					} else if (selected.equals(USER_CERTIFICATE)) {
+						try {
+							UserCertificateSearchDialog dialog = new UserCertificateSearchDialog(
+									session);
+							dialog.setModal(true);
+							GridApplication.getContext().showDialog(dialog);
+							if (dialog.getSelectedCertificate() != null) {
+								identity = String.valueOf(dialog
+										.getSelectedCertificate()
+										.getSerialNumber());
+							}
+						} catch (Exception ex) {
+							ErrorDialog.showError(ex);
+						}
 					}
 					dispose();
 				}
@@ -208,6 +225,7 @@ public class IdentityFinderDialog extends JDialog {
 			identityType.addItem(HOST);
 			identityType.addItem(SYSTEM);
 			identityType.addItem(USER);
+			identityType.addItem(USER_CERTIFICATE);
 		}
 		return identityType;
 	}
@@ -217,13 +235,14 @@ public class IdentityFinderDialog extends JDialog {
 	}
 
 	/**
-	 * This method initializes titlePanel	
-	 * 	
-	 * @return javax.swing.JPanel	
+	 * This method initializes titlePanel
+	 * 
+	 * @return javax.swing.JPanel
 	 */
 	private JPanel getTitlePanel() {
 		if (titlePanel == null) {
-			titlePanel = new TitlePanel("Identity Search","Please select the type of identity you wish to search for.");
+			titlePanel = new TitlePanel("Identity Search",
+					"Please select the type of identity you wish to search for.");
 		}
 		return titlePanel;
 	}

@@ -90,13 +90,6 @@ public class UserCertificatesTable extends GrapeBaseTable {
 			}
 		}
 
-		if (sorted.size() == records.size()) {
-			System.out.println("SIZES MATCH");
-		} else {
-			System.out.println("SIZES DONT MATCH " + sorted.size() + " != "
-					+ records.size());
-		}
-
 		for (int i = 0; i < sorted.size(); i++) {
 			addRow(sorted.get(i));
 		}

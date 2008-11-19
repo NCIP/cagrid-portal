@@ -24,11 +24,12 @@ import org.cagrid.gaards.dorian.federation.UserCertificateRecord;
 import org.cagrid.gaards.ui.common.ProgressPanel;
 import org.cagrid.gaards.ui.common.SelectDateDialog;
 import org.cagrid.gaards.ui.dorian.DorianSession;
+import org.cagrid.gaards.ui.dorian.DorianSessionProvider;
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.LookAndFeel;
 import org.cagrid.grape.utils.ErrorDialog;
 
-public class UserCertificateSearchPanel extends JPanel {
+public class UserCertificateSearchPanel extends JPanel implements DorianSessionProvider{
 
 	private static final long serialVersionUID = 1L;
 
@@ -103,11 +104,13 @@ public class UserCertificateSearchPanel extends JPanel {
 	/**
 	 * This is the default constructor
 	 */
-	public UserCertificateSearchPanel(DorianSession session) {
-		this(session, null);
+	public UserCertificateSearchPanel(DorianSession session,
+			boolean administratorMode) {
+		this(session, null, administratorMode);
 	}
 
-	public UserCertificateSearchPanel(DorianSession session, String gridId) {
+	public UserCertificateSearchPanel(DorianSession session, String gridId,
+			boolean administratorMode) {
 		super();
 		this.session = session;
 		if (gridId == null) {
@@ -119,6 +122,17 @@ public class UserCertificateSearchPanel extends JPanel {
 		if (gridId != null) {
 			getGridIdentity().setText(gridId);
 		}
+
+		if (!administratorMode) {
+			getViewCertificate().setVisible(false);
+			getRemove().setVisible(false);
+			getRemoveAll().setVisible(false);
+		}
+	}
+
+	
+	public DorianSession getSession() throws Exception {
+		return this.session;
 	}
 
 	/**
@@ -525,9 +539,10 @@ public class UserCertificateSearchPanel extends JPanel {
 		if (findUser == null) {
 			findUser = new JButton();
 			findUser.setText("Find");
+			final UserCertificateSearchPanel thisPanel = this;
 			findUser.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					UserSearchDialog dialog = new UserSearchDialog();
+					UserSearchDialog dialog = new UserSearchDialog(thisPanel);
 					dialog.setModal(true);
 					GridApplication.getContext().showDialog(dialog);
 					if (dialog.getSelectedUser() != null) {
@@ -714,7 +729,7 @@ public class UserCertificateSearchPanel extends JPanel {
 			stopProgess(records.size() + " user certificate(s) found.");
 		} catch (Exception e) {
 			stopProgess("Error");
-			ErrorDialog.showError(e.getMessage(), e);
+			ErrorDialog.showError(Utils.getExceptionMessage(e), e);
 		}
 		enableButtons();
 	}
@@ -929,5 +944,9 @@ public class UserCertificateSearchPanel extends JPanel {
 
 	public void setProgess(ProgressPanel progess) {
 		this.progess = progess;
+	}
+
+	public UserCertificateRecord getSelectedCertificate() throws Exception {
+		return getUserCertificates().getSelectedCertificate();
 	}
 }

@@ -101,11 +101,10 @@ public class HostCertificateSearchDialogue extends JDialog implements
 	 * This is the default constructor
 	 */
 	public HostCertificateSearchDialogue(DorianSessionProvider session) {
-		super();
+		super(GridApplication.getContext().getApplication());
 		this.session = session;
 		initialize();
-		setModal(true);
-
+		setSize(500, 550);
 	}
 
 	/**
@@ -114,8 +113,6 @@ public class HostCertificateSearchDialogue extends JDialog implements
 	private void initialize() {
 		this.setContentPane(getJContentPane());
 		this.setTitle("Host Certificate Management");
-		setSize(500, 550);
-
 	}
 
 	public void selectHostCertificate(HostCertificateRecord record) {
@@ -346,7 +343,6 @@ public class HostCertificateSearchDialogue extends JDialog implements
 	private void findHostCertificates() {
 		getProgressPanel().showProgress("Searching...");
 		this.getHostCertificatesTable().clearTable();
-
 		try {
 			HostCertificateFilter filter = new HostCertificateFilter();
 
@@ -404,8 +400,8 @@ public class HostCertificateSearchDialogue extends JDialog implements
 					certs.size() + " host certificate(s) found.");
 
 		} catch (Exception e) {
-			ErrorDialog.showError(e);
 			getProgressPanel().stopProgress("Error");
+			ErrorDialog.showError(Utils.getExceptionMessage(e),e);
 		} finally {
 			this.getQuery().setEnabled(true);
 			getSelect().setEnabled(true);
