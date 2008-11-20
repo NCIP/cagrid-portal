@@ -23,7 +23,7 @@
 
   <dependencies>
     <dependency rev="latest.integration" org="caGrid" name="core"
-      conf="default->default;test->test"/>
+      conf="default->default;impl-test->test"/>
     <dependency rev="latest.integration" org="caGrid" name="gridgrouper" conf="default->client,schemas"/>
 
     <!-- External Dependencies -->

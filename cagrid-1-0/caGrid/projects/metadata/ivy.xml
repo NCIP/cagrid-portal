@@ -9,7 +9,6 @@
   </info>
 
   <configurations>
-    <conf name="impl-test" visibility="private"/>
     <!-- Public Configurations-->
     <!-- Jars -->
     <conf name="jars" visibility="public" description="All metadata jars"
@@ -41,6 +40,5 @@
   </publications>
 
   <dependencies>
-      <dependency rev="4.4" org="junit" name="junit" conf="impl-test->default"/>
   </dependencies>
 </ivy-module>
