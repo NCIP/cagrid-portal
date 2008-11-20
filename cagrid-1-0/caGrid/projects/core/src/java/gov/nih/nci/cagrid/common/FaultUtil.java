@@ -29,7 +29,7 @@ public class FaultUtil {
 		PrintWriter printWriter = new PrintWriter(writer);
 		if (e instanceof BaseFaultType) {
 			BaseFaultType fault = (BaseFaultType) e;
-			printWriter.println(fault.getFaultString());
+			printWriter.println(Utils.getExceptionMessage(fault));
 			FaultHelper helper = new FaultHelper(fault);
 			helper.printStackTrace(printWriter);
 		} else {
