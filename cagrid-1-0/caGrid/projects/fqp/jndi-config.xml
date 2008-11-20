@@ -111,6 +111,18 @@
           <name>threadPoolSize</name>
           <value>@threadPoolSize@</value>
         </parameter>
+        <parameter>
+          <name>maxRetries</name>
+          <value>@maxRetries@</value>
+        </parameter>
+        <parameter>
+          <name>maxRetryTimeout</name>
+          <value>@maxRetryTimeout@</value>
+        </parameter>
+        <parameter>
+          <name>maxTargetServicesPerQuery</name>
+          <value>@maxTargetServicesPerQuery@</value>
+        </parameter>
       </resourceParams>
     </resource>
     <resource name="home" type="gov.nih.nci.cagrid.fqp.service.globus.resource.FederatedQueryProcessorResourceHome">

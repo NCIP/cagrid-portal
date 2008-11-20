@@ -9,8 +9,6 @@ ISSUES:
 
 FUTURE WORK:
 ==============================
-service property to limit max retries, timeouts, target services, etc.  prevent malicious client from overwhelming the service
-
 add properties to main service to track number of active resources?
 
 should we add query return modifiers to DCQL? (not trivial, as they have to work "in code" against aggregate results... can't be pushed to backend)
@@ -21,8 +19,10 @@ add DCQL XSD validation?
 
 IN PROGRESS WORK:
 ==============================
-(75%) add unit and system tests
+(85%) add unit and system tests
+	-- would be 100% if they all passed!
 
+service properties to limit max retries, timeouts, target services, etc.  prevent malicious client from overwhelming the service
 
 COMPLETED WORK:
 ==============================

@@ -49,6 +49,12 @@ public class FederatedQueryProcessorConfiguration implements ServiceConfiguratio
 	
 	private String threadPoolSize;
 	
+	private String maxRetries;
+	
+	private String maxRetryTimeout;
+	
+	private String maxTargetServicesPerQuery;
+	
 	
 	public String getEtcDirectoryPath() {
 		return ContainerConfig.getBaseDirectory() + File.separator + etcDirectoryPath;
@@ -76,6 +82,36 @@ public class FederatedQueryProcessorConfiguration implements ServiceConfiguratio
 	
 	public void setThreadPoolSize(String threadPoolSize) {
 		this.threadPoolSize = threadPoolSize;
+	}
+
+	
+	public String getMaxRetries() {
+		return maxRetries;
+	}
+	
+	
+	public void setMaxRetries(String maxRetries) {
+		this.maxRetries = maxRetries;
+	}
+
+	
+	public String getMaxRetryTimeout() {
+		return maxRetryTimeout;
+	}
+	
+	
+	public void setMaxRetryTimeout(String maxRetryTimeout) {
+		this.maxRetryTimeout = maxRetryTimeout;
+	}
+
+	
+	public String getMaxTargetServicesPerQuery() {
+		return maxTargetServicesPerQuery;
+	}
+	
+	
+	public void setMaxTargetServicesPerQuery(String maxTargetServicesPerQuery) {
+		this.maxTargetServicesPerQuery = maxTargetServicesPerQuery;
 	}
 
 	
