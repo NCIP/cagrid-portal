@@ -196,6 +196,7 @@ public class FederationAuditPanel extends JPanel {
 			this.auditTypes.add(FederationAuditing.AccountUpdated);
 			this.auditTypes.add(FederationAuditing.AdminAdded);
 			this.auditTypes.add(FederationAuditing.AdminRemoved);
+			this.auditTypes.add(FederationAuditing.PermissionDenied);
 			this.auditTypes
 					.add(FederationAuditing.SuccessfulUserCertificateRequest);
 			this.auditTypes
