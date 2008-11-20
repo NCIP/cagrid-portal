@@ -87,7 +87,6 @@
 	<classpathentry kind="lib" path="ext/dependencies/jars/junit-4.4.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/jars/relaxngDatatype.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/jars/xsom14.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/jars/caGrid-dataTests-1.3-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/jars/caGrid-metadata-common-1.3-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/jars/caGrid-metadata-data-1.3-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/jars/caGrid-discovery-1.3-dev.jar"/>
