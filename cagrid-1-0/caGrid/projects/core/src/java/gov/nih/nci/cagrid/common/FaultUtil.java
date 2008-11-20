@@ -5,7 +5,6 @@ import java.io.StringWriter;
 
 import org.oasis.wsrf.faults.BaseFaultType;
 
-
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
@@ -30,7 +29,7 @@ public class FaultUtil {
 		PrintWriter printWriter = new PrintWriter(writer);
 		if (e instanceof BaseFaultType) {
 			BaseFaultType fault = (BaseFaultType) e;
-			System.err.println(fault.getFaultString());
+			printWriter.println(fault.getFaultString());
 			FaultHelper helper = new FaultHelper(fault);
 			helper.printStackTrace(printWriter);
 		} else {
