@@ -35,6 +35,8 @@ import org.globus.gsi.GlobusCredential;
  *          langella Exp $
  */
 public class PermissionManagerWindow extends ApplicationComponent implements PermissionRefresher {
+	
+	private static final long serialVersionUID = 1L;
 
 	private javax.swing.JPanel jContentPane = null;
 

@@ -10,9 +10,12 @@ import org.cagrid.grape.table.GrapeBaseTable;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: GridIdentityTable.java,v 1.1 2007-11-19 14:39:56 langella Exp $
+ * @version $Id: GridIdentityTable.java,v 1.2 2008-11-20 15:29:42 langella Exp $
  */
 public class GridIdentityTable extends GrapeBaseTable {
+	
+	private static final long serialVersionUID = 1L;
+	
 	public final static String GRID_IDENTITY = "Grid Identity";
 
 	public GridIdentityTable() {

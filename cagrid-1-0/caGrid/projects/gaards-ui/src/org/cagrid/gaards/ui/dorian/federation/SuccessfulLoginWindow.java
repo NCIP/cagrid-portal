@@ -15,6 +15,8 @@ import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.LookAndFeel;
 
 public class SuccessfulLoginWindow extends ApplicationComponent {
+	
+	private static final long serialVersionUID = 1L;
 
 	private JPanel jContentPane = null;
 

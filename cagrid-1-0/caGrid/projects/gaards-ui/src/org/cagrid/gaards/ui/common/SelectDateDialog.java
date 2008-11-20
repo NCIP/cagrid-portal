@@ -27,9 +27,11 @@ import com.greef.ui.calendar.JCalendar;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: SelectDateDialog.java,v 1.1 2008-09-29 02:17:29 langella Exp $
+ * @version $Id: SelectDateDialog.java,v 1.2 2008-11-20 15:29:42 langella Exp $
  */
 public class SelectDateDialog extends JDialog {
+	
+	private static final long serialVersionUID = 1L;
 
 	private javax.swing.JPanel jContentPane = null;
 

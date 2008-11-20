@@ -19,6 +19,8 @@ import javax.swing.tree.DefaultMutableTreeNode;
  *          Exp $
  */
 public class ExpressionTreeEventListener extends MouseAdapter {
+	
+	private static final long serialVersionUID = 1L;
 
 	private ExpressionTree tree;
 

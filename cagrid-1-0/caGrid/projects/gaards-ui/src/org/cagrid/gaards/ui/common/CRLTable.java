@@ -15,9 +15,12 @@ import org.cagrid.grape.table.GrapeBaseTable;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: CRLTable.java,v 1.1 2007-09-24 19:09:38 langella Exp $
+ * @version $Id: CRLTable.java,v 1.2 2008-11-20 15:29:42 langella Exp $
  */
 public class CRLTable extends GrapeBaseTable {
+	
+	private static final long serialVersionUID = 1L;
+	
 	public final static String SERIAL_NUMBER = "Serial Number";
 
 	public final static String REVOKE = "Revocation Date";

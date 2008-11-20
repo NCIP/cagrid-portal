@@ -11,6 +11,9 @@ import org.cagrid.gaards.ui.gridgrouper.tree.GridGrouperTree;
  *          Exp $
  */
 public class GroupNodeMenu extends GridGrouperTreeNodeMenu {
+	
+	private static final long serialVersionUID = 1L;
+	
 	public GroupNodeMenu(GridGrouperExpressionEditor editor, GridGrouperTree tree) {
 		super(editor, tree);
 	}

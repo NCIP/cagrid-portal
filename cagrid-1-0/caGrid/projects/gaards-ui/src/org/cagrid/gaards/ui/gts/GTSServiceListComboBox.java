@@ -13,6 +13,8 @@ import javax.swing.JComboBox;
  *          Exp $
  */
 public class GTSServiceListComboBox extends JComboBox {
+	
+	private static final long serialVersionUID = 1L;
 
 	private static String lastSelectedService;
 

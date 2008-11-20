@@ -13,7 +13,7 @@ import org.cagrid.grape.configuration.Values;
 
 public class GridGrouperUIUtils {
 
-	private static Logger log = Logger.getLogger(GridGrouperUIUtils.class);;
+	private static Logger log = Logger.getLogger(GridGrouperUIUtils.class);
 
 
 	public static List getGridGrouperServices() {

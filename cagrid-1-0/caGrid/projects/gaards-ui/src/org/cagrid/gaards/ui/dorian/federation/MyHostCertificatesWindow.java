@@ -4,16 +4,17 @@ import gov.nih.nci.cagrid.common.Runner;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
-import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
-import javax.swing.SwingUtilities;
 
 import org.cagrid.gaards.dorian.client.GridUserClient;
 import org.cagrid.gaards.dorian.federation.HostCertificateRecord;
+import org.cagrid.gaards.ui.common.ProgressPanel;
+import org.cagrid.gaards.ui.common.TitlePanel;
 import org.cagrid.gaards.ui.dorian.DorianLookAndFeel;
 import org.cagrid.gaards.ui.dorian.SessionPanel;
 import org.cagrid.grape.ApplicationComponent;
@@ -30,6 +31,8 @@ import org.cagrid.grape.utils.ErrorDialog;
  */
 public class MyHostCertificatesWindow extends ApplicationComponent implements
 		HostCertificateLauncher {
+	
+	private static final long serialVersionUID = 1L;
 
 	private javax.swing.JPanel jContentPane = null;
 
@@ -51,13 +54,9 @@ public class MyHostCertificatesWindow extends ApplicationComponent implements
 
 	private JButton query = null;
 
-	private boolean isQuerying = false;
+	private ProgressPanel progressPanel = null;
 
-	private Object mutex = new Object();
-
-	private JPanel progressPanel = null;
-
-	private JProgressBar progress = null;
+	private JPanel titlePanel = null;
 
 	/**
 	 * This is the default constructor
@@ -84,7 +83,7 @@ public class MyHostCertificatesWindow extends ApplicationComponent implements
 			HostCertificateWindow window = new HostCertificateWindow(this.session.getSession(),
 					getHostCertificatesTable().getSelectedHostCertificate(),
 					false);
-			GridApplication.getContext().addApplicationComponent(window, 600,
+			GridApplication.getContext().addApplicationComponent(window, 700,
 					500);
 		} catch (Exception e) {
 			ErrorDialog.showError(e);
@@ -113,34 +112,41 @@ public class MyHostCertificatesWindow extends ApplicationComponent implements
 	 */
 	private JPanel getMainPanel() {
 		if (mainPanel == null) {
+			GridBagConstraints gridBagConstraints = new GridBagConstraints();
+			gridBagConstraints.gridx = 0;
+			gridBagConstraints.weightx = 1.0D;
+			gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints.gridy = 0;
 			GridBagConstraints gridBagConstraints32 = new GridBagConstraints();
 			gridBagConstraints32.gridx = 0;
 			gridBagConstraints32.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints32.insets = new java.awt.Insets(2, 2, 2, 2);
+			gridBagConstraints32.insets = new Insets(0, 0, 0, 0);
 			gridBagConstraints32.weightx = 1.0D;
-			gridBagConstraints32.gridy = 3;
+			gridBagConstraints32.gridy = 5;
 			GridBagConstraints gridBagConstraints33 = new GridBagConstraints();
 			gridBagConstraints33.gridx = 0;
 			gridBagConstraints33.gridy = 2;
 			GridBagConstraints gridBagConstraints35 = new GridBagConstraints();
 			gridBagConstraints35.gridx = 0;
 			gridBagConstraints35.weightx = 1.0D;
-			gridBagConstraints35.fill = java.awt.GridBagConstraints.BOTH;
-			gridBagConstraints35.gridy = 0;
+			gridBagConstraints35.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints35.gridy = 1;
+			gridBagConstraints32.insets = new Insets(2, 2, 2, 2);
 
 			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
 			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
 			mainPanel = new JPanel();
 			mainPanel.setLayout(new GridBagLayout());
 			gridBagConstraints1.gridx = 0;
-			gridBagConstraints1.gridy = 4;
+			gridBagConstraints1.gridy = 3;
 			gridBagConstraints1.ipadx = 0;
 			gridBagConstraints1.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints1.weightx = 1.0D;
 			gridBagConstraints1.fill = java.awt.GridBagConstraints.BOTH;
 			gridBagConstraints1.weighty = 1.0D;
 			gridBagConstraints2.gridx = 0;
-			gridBagConstraints2.gridy = 5;
+			gridBagConstraints2.gridy = 4;
 			gridBagConstraints2.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints2.anchor = java.awt.GridBagConstraints.SOUTH;
 			gridBagConstraints2.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -149,6 +155,7 @@ public class MyHostCertificatesWindow extends ApplicationComponent implements
 			mainPanel.add(getSession(), gridBagConstraints35);
 			mainPanel.add(getQueryPanel(), gridBagConstraints33);
 			mainPanel.add(getProgressPanel(), gridBagConstraints32);
+			mainPanel.add(getTitlePanel(), gridBagConstraints);
 		}
 		return mainPanel;
 	}
@@ -227,8 +234,7 @@ public class MyHostCertificatesWindow extends ApplicationComponent implements
 	private JButton getViewHostCertificate() {
 		if (viewHostCertificate == null) {
 			viewHostCertificate = new JButton();
-			viewHostCertificate.setText("View Host Certificate");
-			viewHostCertificate.setIcon(DorianLookAndFeel.getHostIcon());
+			viewHostCertificate.setText("View");
 			viewHostCertificate
 					.addActionListener(new java.awt.event.ActionListener() {
 						public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -263,7 +269,7 @@ public class MyHostCertificatesWindow extends ApplicationComponent implements
 	 */
 	private SessionPanel getSession() {
 		if (session == null) {
-			session = new SessionPanel();
+			session = new SessionPanel(false);
 		}
 		return session;
 	}
@@ -289,10 +295,11 @@ public class MyHostCertificatesWindow extends ApplicationComponent implements
 	private JButton getQuery() {
 		if (query == null) {
 			query = new JButton();
-			query.setText("Find Host Certificates");
-			query.setIcon(LookAndFeel.getQueryIcon());
+			query.setText("Search");
+			getRootPane().setDefaultButton(query);
 			query.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
+					getQuery().setEnabled(false);
 					Runner runner = new Runner() {
 						public void execute() {
 							findHostCertificates();
@@ -312,20 +319,10 @@ public class MyHostCertificatesWindow extends ApplicationComponent implements
 	}
 
 	private void findHostCertificates() {
-		this.getQuery().setEnabled(false);
-		synchronized (mutex) {
-			if (isQuerying) {
-				ErrorDialog
-						.showError("Query Already in Progress",
-								"Please wait until the current query is finished before executing another.");
-				return;
-			} else {
-				isQuerying = true;
-			}
-		}
+		
 
 		this.getHostCertificatesTable().clearTable();
-		this.updateProgress(true, "Finding Host Certificates...");
+		this.getProgressPanel().showProgress("Searching...");
 
 		try {
 
@@ -338,17 +335,13 @@ public class MyHostCertificatesWindow extends ApplicationComponent implements
 						.addHostCertificate(certs.get(i));
 			}
 
-			this.updateProgress(false, "Completed [Found " + certs.size()
-					+ " host certificates]");
-
+			this.getProgressPanel().stopProgress(certs.size()+" host certificates found.");
 		} catch (Exception e) {
 			ErrorDialog.showError(e);
-			this.updateProgress(false, "Error");
+			this.getProgressPanel().stopProgress("Error");
 		} finally {
 			this.getQuery().setEnabled(true);
 		}
-		isQuerying = false;
-
 	}
 
 	/**
@@ -356,43 +349,24 @@ public class MyHostCertificatesWindow extends ApplicationComponent implements
 	 * 
 	 * @return javax.swing.JPanel
 	 */
-	private JPanel getProgressPanel() {
+	private ProgressPanel getProgressPanel() {
 		if (progressPanel == null) {
-			GridBagConstraints gridBagConstraints36 = new GridBagConstraints();
-			gridBagConstraints36.insets = new java.awt.Insets(2, 20, 2, 20);
-			gridBagConstraints36.gridy = 0;
-			gridBagConstraints36.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints36.weightx = 1.0D;
-			gridBagConstraints36.gridx = 0;
-			progressPanel = new JPanel();
-			progressPanel.setLayout(new GridBagLayout());
-			progressPanel.add(getProgress(), gridBagConstraints36);
+			progressPanel = new ProgressPanel();
 		}
 		return progressPanel;
 	}
 
+
+
 	/**
-	 * This method initializes progress
-	 * 
-	 * @return javax.swing.JProgressBar
+	 * This method initializes titlePanel	
+	 * 	
+	 * @return javax.swing.JPanel	
 	 */
-	private JProgressBar getProgress() {
-		if (progress == null) {
-			progress = new JProgressBar();
-			progress.setForeground(LookAndFeel.getPanelLabelColor());
-			progress.setString("");
-			progress.setStringPainted(true);
+	private JPanel getTitlePanel() {
+		if (titlePanel == null) {
+			titlePanel = new TitlePanel("My Host Certificates","View the host certificates that are associated with your account.");
 		}
-		return progress;
-	}
-
-	public void updateProgress(final boolean working, final String s) {
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				getProgress().setString(s);
-				getProgress().setIndeterminate(working);
-			}
-		});
-
+		return titlePanel;
 	}
 }

@@ -17,6 +17,8 @@ import org.cagrid.gaards.dorian.federation.FederationAuditing;
  */
 public class FederationAuditComboBox extends JComboBox {
 
+	private static final long serialVersionUID = 1L;
+	
 	public static String ANY = "Any";
 
 	private List<FederationAuditing> list;

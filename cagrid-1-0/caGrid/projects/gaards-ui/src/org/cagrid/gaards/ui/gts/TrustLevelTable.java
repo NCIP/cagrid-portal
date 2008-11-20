@@ -18,6 +18,9 @@ import org.cagrid.grape.table.GrapeBaseTable;
  *          Exp $
  */
 public class TrustLevelTable extends GrapeBaseTable {
+	
+	private static final long serialVersionUID = 1L;
+	
 	public final static String TRUST_LEVEL = "trust-level";
 
 	public final static String NAME = "Name";

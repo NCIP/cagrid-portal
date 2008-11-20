@@ -33,6 +33,8 @@ import org.cagrid.grape.utils.ErrorDialog;
  *          Exp $
  */
 public class ApplicationWindow extends ApplicationComponent {
+	
+	private static final long serialVersionUID = 1L;
 
 	private JPanel jContentPane = null;
 

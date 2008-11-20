@@ -43,6 +43,8 @@ import org.globus.gsi.GlobusCredential;
  *          langella Exp $
  */
 public class DelegatedCredentialWindow extends ApplicationComponent {
+	
+	private static final long serialVersionUID = 1L;
 
 	private final static String INFO_PANEL = "General Information";
 

@@ -23,6 +23,9 @@ import org.cagrid.grape.utils.ErrorDialog;
  *          Exp $
  */
 public class CertificateChainTable extends GrapeBaseTable {
+	
+	private static final long serialVersionUID = 1L;
+	
 	public final static String certificate = "certificate";
 
 	public final static String CERTIFICATE_SUBJECT = "Subject";

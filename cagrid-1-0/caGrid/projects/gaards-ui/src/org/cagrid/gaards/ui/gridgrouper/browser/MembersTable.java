@@ -19,6 +19,9 @@ import org.cagrid.grape.table.GrapeBaseTable;
  *          Exp $
  */
 public class MembersTable extends GrapeBaseTable {
+	
+	private static final long serialVersionUID = 1L;
+	
 	public final static String MEMBER = "Member";
 
 	public final static String MEMBER_NAME = "Member Name";

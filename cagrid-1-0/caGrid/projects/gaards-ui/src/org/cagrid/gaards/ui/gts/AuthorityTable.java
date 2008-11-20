@@ -20,6 +20,9 @@ import org.cagrid.grape.table.GrapeBaseTable;
  *          Exp $
  */
 public class AuthorityTable extends GrapeBaseTable {
+	
+	private static final long serialVersionUID = 1L;
+	
 	public final static String AUTHORITY = "authority";
 
 	public final static String SERVICE_URI = "GTS URI";

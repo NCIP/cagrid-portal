@@ -19,6 +19,8 @@ import org.cagrid.gaards.ui.gridgrouper.GridGrouperLookAndFeel;
  */
 public class QueryNode extends ExpressionBaseTreeNode {
 
+	private static final long serialVersionUID = 1L;
+	
 	private MembershipQuery query;
 
 	public QueryNode(GridGrouperExpressionEditor editor, MembershipQuery query) {

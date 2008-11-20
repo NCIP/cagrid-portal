@@ -26,6 +26,8 @@ import org.globus.gsi.GlobusCredential;
  *          langella Exp $
  */
 public class CredentialPanel extends JPanel {
+	
+	private static final long serialVersionUID = 1L;
 
 	private JPanel jPanel = null;
 	private JLabel jLabel = null;

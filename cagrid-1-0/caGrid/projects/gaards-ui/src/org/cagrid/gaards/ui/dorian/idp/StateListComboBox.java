@@ -12,6 +12,8 @@ import org.cagrid.gaards.ui.common.AxisTypeComboBox;
  *          Exp $
  */
 public class StateListComboBox extends AxisTypeComboBox {
+	
+	private static final long serialVersionUID = 1L;
 
 	public StateListComboBox() {
 		this(false);

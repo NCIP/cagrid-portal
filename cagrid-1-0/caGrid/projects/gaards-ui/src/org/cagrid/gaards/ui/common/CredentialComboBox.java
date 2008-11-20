@@ -16,6 +16,8 @@ import org.globus.gsi.GlobusCredential;
  *          Exp $
  */
 public class CredentialComboBox extends JComboBox {
+	
+	private static final long serialVersionUID = 1L;
 
 	private static final String DEFAULT_PROXY = "Globus Default Proxy";
 

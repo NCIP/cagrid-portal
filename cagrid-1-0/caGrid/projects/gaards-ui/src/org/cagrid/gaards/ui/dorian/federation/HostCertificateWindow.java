@@ -46,6 +46,8 @@ import org.cagrid.grape.utils.ErrorDialog;
 public class HostCertificateWindow extends ApplicationComponent implements
 		DorianSessionProvider {
 
+	private static final long serialVersionUID = 1L;
+	
 	private final static String INFO_PANEL = "Summary";
 
 	private final static String AUDIT_PANEL = "Audit";

@@ -37,10 +37,12 @@ import org.cagrid.grape.utils.ErrorDialog;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: UserWindow.java,v 1.7 2008-11-19 19:11:17 langella Exp $
+ * @version $Id: UserWindow.java,v 1.8 2008-11-20 15:29:42 langella Exp $
  */
 public class UserWindow extends ApplicationComponent implements
 		HostCertificateLauncher, DorianSessionProvider {
+	
+	private static final long serialVersionUID = 1L;
 
 	private final static String INFO_PANEL = "Account Information";
 

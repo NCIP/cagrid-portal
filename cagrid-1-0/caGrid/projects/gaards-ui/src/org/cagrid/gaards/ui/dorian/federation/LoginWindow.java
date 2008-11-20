@@ -40,6 +40,8 @@ import org.cagrid.grape.utils.ErrorDialog;
 import org.globus.gsi.GlobusCredential;
 
 public class LoginWindow extends ApplicationComponent {
+	
+	private static final long serialVersionUID = 1L;
 
 	private JPanel jContentPane = null;
 

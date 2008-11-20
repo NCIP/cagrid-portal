@@ -12,9 +12,12 @@ import org.cagrid.grape.table.GrapeBaseTable;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: HostCertificatesTable.java,v 1.2 2008-11-16 00:52:18 langella Exp $
+ * @version $Id: HostCertificatesTable.java,v 1.3 2008-11-20 15:29:42 langella Exp $
  */
 public class HostCertificatesTable extends GrapeBaseTable {
+	
+	private static final long serialVersionUID = 1L;
+	
 	public final static String HOST_CERTIFICATE_RECORD = "record";
 
 	public final static String ID = "Id";

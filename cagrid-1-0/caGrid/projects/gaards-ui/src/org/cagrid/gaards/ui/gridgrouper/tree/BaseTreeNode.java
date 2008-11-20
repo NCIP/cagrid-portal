@@ -15,6 +15,8 @@ import javax.swing.tree.DefaultMutableTreeNode;
  */
 
 public abstract class BaseTreeNode extends DefaultMutableTreeNode {
+	
+	private static final long serialVersionUID = 1L;
 
 	private GridGrouperTree tree;
 

@@ -14,6 +14,8 @@ import javax.swing.ImageIcon;
  */
 
 public abstract class ExpressionBaseTreeNode extends BaseTreeNode {
+	
+	private static final long serialVersionUID = 1L;
 
 	private ExpressionTree tree;
 

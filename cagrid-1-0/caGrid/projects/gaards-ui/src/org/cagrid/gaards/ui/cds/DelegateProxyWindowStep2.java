@@ -26,6 +26,8 @@ import org.cagrid.grape.utils.ErrorDialog;
  *          Exp $
  */
 public class DelegateProxyWindowStep2 extends ApplicationComponent {
+	
+	private static final long serialVersionUID = 1L;
 
 	private JPanel jContentPane = null;
 

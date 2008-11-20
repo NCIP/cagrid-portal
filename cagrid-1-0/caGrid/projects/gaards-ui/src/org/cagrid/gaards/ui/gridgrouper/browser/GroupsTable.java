@@ -18,6 +18,9 @@ import org.cagrid.grape.table.GrapeBaseTable;
  *          Exp $
  */
 public class GroupsTable extends GrapeBaseTable {
+	
+	private static final long serialVersionUID = 1L;
+	
 	public final static String GROUP = "Groups";
 
 	public final static String NAME = "Name";

@@ -24,13 +24,14 @@ import javax.swing.border.TitledBorder;
 import org.cagrid.gaards.dorian.client.GridUserClient;
 import org.cagrid.gaards.dorian.federation.HostCertificateRecord;
 import org.cagrid.gaards.pki.KeyUtil;
+import org.cagrid.gaards.ui.common.ProgressPanel;
+import org.cagrid.gaards.ui.common.TitlePanel;
 import org.cagrid.gaards.ui.dorian.DorianLookAndFeel;
 import org.cagrid.gaards.ui.dorian.SessionPanel;
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.LookAndFeel;
 import org.cagrid.grape.utils.ErrorDialog;
-import org.cagrid.grape.utils.MultiEventProgressBar;
 
 
 public class RequestHostCertificateWindow extends ApplicationComponent {
@@ -53,9 +54,7 @@ public class RequestHostCertificateWindow extends ApplicationComponent {
 
     private JComboBox strength = null;
 
-    private JPanel progressPanel = null;
-
-    private MultiEventProgressBar progress = null;
+    private ProgressPanel progressPanel = null;
 
     private JPanel buttonPanel = null;
 
@@ -68,6 +67,8 @@ public class RequestHostCertificateWindow extends ApplicationComponent {
     private JTextField directory = null;
 
     private JButton browse = null;
+
+	private JPanel titlePanel = null;
 
 
     /**
@@ -113,6 +114,12 @@ public class RequestHostCertificateWindow extends ApplicationComponent {
      */
     private JPanel getMainPanel() {
         if (mainPanel == null) {
+            GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
+            gridBagConstraints11.gridx = 0;
+            gridBagConstraints11.fill = GridBagConstraints.HORIZONTAL;
+            gridBagConstraints11.weightx = 1.0D;
+            gridBagConstraints11.insets = new Insets(2, 2, 2, 2);
+            gridBagConstraints11.gridy = 0;
             GridBagConstraints gridBagConstraints51 = new GridBagConstraints();
             gridBagConstraints51.gridx = 0;
             gridBagConstraints51.fill = GridBagConstraints.HORIZONTAL;
@@ -121,7 +128,7 @@ public class RequestHostCertificateWindow extends ApplicationComponent {
             gridBagConstraints41.gridx = 0;
             gridBagConstraints41.fill = GridBagConstraints.HORIZONTAL;
             gridBagConstraints41.weightx = 1.0D;
-            gridBagConstraints41.gridy = 1;
+            gridBagConstraints41.gridy = 4;
             GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
             gridBagConstraints3.fill = GridBagConstraints.BOTH;
             gridBagConstraints3.gridy = 2;
@@ -136,13 +143,14 @@ public class RequestHostCertificateWindow extends ApplicationComponent {
             gridBagConstraints.weightx = 1.0D;
             gridBagConstraints.weighty = 0.0D;
             gridBagConstraints.anchor = GridBagConstraints.NORTH;
-            gridBagConstraints.gridy = 0;
+            gridBagConstraints.gridy = 1;
             mainPanel = new JPanel();
             mainPanel.setLayout(new GridBagLayout());
             mainPanel.add(getSessionPanel(), gridBagConstraints);
             mainPanel.add(getRequestPanel(), gridBagConstraints3);
             mainPanel.add(getProgressPanel(), gridBagConstraints41);
             mainPanel.add(getButtonPanel(), gridBagConstraints51);
+            mainPanel.add(getTitlePanel(), gridBagConstraints11);
         }
         return mainPanel;
     }
@@ -155,7 +163,7 @@ public class RequestHostCertificateWindow extends ApplicationComponent {
      */
     private SessionPanel getSessionPanel() {
         if (sessionPanel == null) {
-            sessionPanel = new SessionPanel();
+            sessionPanel = new SessionPanel(false);
         }
         return sessionPanel;
     }
@@ -258,35 +266,11 @@ public class RequestHostCertificateWindow extends ApplicationComponent {
      * 
      * @return javax.swing.JPanel
      */
-    private JPanel getProgressPanel() {
+    private ProgressPanel getProgressPanel() {
         if (progressPanel == null) {
-            GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
-            gridBagConstraints6.insets = new Insets(2, 20, 2, 20);
-            gridBagConstraints6.gridy = 0;
-            gridBagConstraints6.weightx = 1.0D;
-            gridBagConstraints6.fill = GridBagConstraints.HORIZONTAL;
-            gridBagConstraints6.gridx = 0;
-            progressPanel = new JPanel();
-            progressPanel.setLayout(new GridBagLayout());
-            progressPanel.add(getProgress(), gridBagConstraints6);
+            progressPanel = new ProgressPanel();
         }
         return progressPanel;
-    }
-
-
-    /**
-     * This method initializes progress
-     * 
-     * @return javax.swing.JProgressBar
-     */
-    private MultiEventProgressBar getProgress() {
-        if (progress == null) {
-            progress = new MultiEventProgressBar(false);
-            progress.setForeground(LookAndFeel.getPanelLabelColor());
-            progress.setString("");
-            progress.setStringPainted(true);
-        }
-        return progress;
     }
 
 
@@ -340,20 +324,19 @@ public class RequestHostCertificateWindow extends ApplicationComponent {
                 throw new Exception("You must specify a host.");
             }
             int stren = Integer.parseInt((String) getStrength().getSelectedItem());
-            int event = getProgress().startEvent("Generating key pair.....");
+            getProgressPanel().showProgress("Generating key pair.....");
             KeyPair pair = KeyUtil.generateRSAKeyPair(stren);
-            getProgress().stopEvent(event, "Successfully generated key pair.");
-            event = getProgress().startEvent("Submitting certificate request to Dorian....");
+            getProgressPanel().showProgress("Submitting certificate request to Dorian....");
             GridUserClient client = getSessionPanel().getUserClientWithCredentials();
             HostCertificateRecord record = client.requestHostCertificate(getHost().getText(), pair.getPublic());
-            getProgress().stopEvent(event, "Successfully sent certificate request to Dorian.");
+            getProgressPanel().stopProgress("Successfully sent certificate request to Dorian.");
             GridApplication.getContext().addApplicationComponent(
                 new RequestHostCertificateResponseWindow(record, pair.getPrivate(), new File(directory.getText())),
                 500, 300);
             dispose();
 
         } catch (Exception e) {
-            getProgress().stopAll("Error");
+        	getProgressPanel().stopProgress("Error");
             ErrorDialog.showError(e);
             this.getRequest().setEnabled(true);
         }
@@ -439,4 +422,17 @@ public class RequestHostCertificateWindow extends ApplicationComponent {
         }
         return browse;
     }
+
+
+	/**
+	 * This method initializes titlePanel	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getTitlePanel() {
+		if (titlePanel == null) {
+			titlePanel = new TitlePanel("Request Host Certificate","Request a host certificate for securing grid services.");
+		}
+		return titlePanel;
+	}
 }

@@ -37,9 +37,11 @@ import org.globus.gsi.GlobusCredential;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: UserManagerWindow.java,v 1.5 2008-11-14 02:44:10 langella Exp $
+ * @version $Id: UserManagerWindow.java,v 1.6 2008-11-20 15:29:42 langella Exp $
  */
 public class UserManagerWindow extends ApplicationComponent {
+	
+	private static final long serialVersionUID = 1L;
 
 	private javax.swing.JPanel jContentPane = null;
 

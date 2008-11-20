@@ -23,6 +23,8 @@ import org.cagrid.gaards.ui.gridgrouper.GridGrouperLookAndFeel;
  *          Exp $
  */
 public class ExpressionNode extends ExpressionBaseTreeNode {
+	
+	private static final long serialVersionUID = 1L;
 
 	private MembershipExpression expression;
 

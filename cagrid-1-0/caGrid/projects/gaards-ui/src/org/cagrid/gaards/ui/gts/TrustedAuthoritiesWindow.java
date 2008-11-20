@@ -40,6 +40,8 @@ import org.globus.gsi.GlobusCredential;
  *          langella Exp $
  */
 public class TrustedAuthoritiesWindow extends ApplicationComponent implements TrustedAuthorityRefresher {
+	
+	private static final long serialVersionUID = 1L;
 
 	private final static String ANY = "Any";
 

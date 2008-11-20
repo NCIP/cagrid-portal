@@ -12,9 +12,12 @@ import org.cagrid.grape.table.GrapeBaseTable;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: UsersTable.java,v 1.3 2008-10-03 20:53:41 langella Exp $
+ * @version $Id: UsersTable.java,v 1.4 2008-11-20 15:29:42 langella Exp $
  */
 public class UsersTable extends GrapeBaseTable {
+	
+	private static final long serialVersionUID = 1L;
+	
 	public final static String USER = "user";
 
 	public final static String USERNAME = "Username";

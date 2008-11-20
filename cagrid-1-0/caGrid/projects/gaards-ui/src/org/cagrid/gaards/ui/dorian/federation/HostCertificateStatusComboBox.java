@@ -5,6 +5,9 @@ import javax.swing.JComboBox;
 import org.cagrid.gaards.dorian.federation.HostCertificateStatus;
 
 public class HostCertificateStatusComboBox extends JComboBox {
+	
+	private static final long serialVersionUID = 1L;
+	
 	public HostCertificateStatusComboBox(boolean includeBlank) {
 		if (includeBlank) {
 			this.addItem("");

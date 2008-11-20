@@ -20,6 +20,9 @@ import org.cagrid.grape.table.GrapeBaseTable;
  *          Exp $
  */
 public class DelegationDescriptorTable extends GrapeBaseTable {
+	
+	private static final long serialVersionUID = 1L;
+	
 	public final static String DESCRIPTOR = "Descriptor";
 
 	public final static String IDENTITY = "Identity";

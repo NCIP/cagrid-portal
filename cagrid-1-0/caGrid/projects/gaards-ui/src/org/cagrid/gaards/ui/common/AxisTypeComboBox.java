@@ -15,6 +15,8 @@ import javax.swing.JComboBox;
  */
 public abstract class AxisTypeComboBox extends JComboBox {
 	
+	private static final long serialVersionUID = 1L;
+	
 	public static String ANY = "Any";
 
 	private List list;

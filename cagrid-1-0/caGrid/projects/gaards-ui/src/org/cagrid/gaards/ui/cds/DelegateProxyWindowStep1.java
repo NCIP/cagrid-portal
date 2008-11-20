@@ -30,6 +30,8 @@ import org.globus.gsi.bc.BouncyCastleUtil;
  */
 public class DelegateProxyWindowStep1 extends ApplicationComponent implements
 		ProxyLifetimeListener {
+	
+	private static final long serialVersionUID = 1L;
 
 	private static final int SECONDS_OFFSET = 120;
 

@@ -5,6 +5,9 @@ import javax.swing.JPanel;
 import org.cagrid.grape.utils.MultiEventProgressBar;
 
 public class BaseBrowserPanel extends JPanel {
+	
+	private static final long serialVersionUID = 1L;
+	
 	private MultiEventProgressBar progress;
 
 	public int startEvent(String message) {

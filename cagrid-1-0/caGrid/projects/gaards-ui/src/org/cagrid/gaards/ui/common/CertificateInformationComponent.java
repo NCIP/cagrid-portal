@@ -16,6 +16,8 @@ import org.cagrid.grape.ApplicationComponent;
  *          langella Exp $
  */
 public class CertificateInformationComponent extends ApplicationComponent {
+	
+	private static final long serialVersionUID = 1L;
 
 	private javax.swing.JPanel jContentPane = null;
 	private JPanel mainPanel = null;

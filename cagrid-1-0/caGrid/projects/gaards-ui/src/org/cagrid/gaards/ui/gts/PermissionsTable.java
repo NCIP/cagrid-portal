@@ -18,6 +18,9 @@ import org.cagrid.grape.table.GrapeBaseTable;
  *          Exp $
  */
 public class PermissionsTable extends GrapeBaseTable {
+	
+	private static final long serialVersionUID = 1L;
+	
 	public final static String PERMISSION = "permission";
 
 	public final static String GRID_IDENTITY = "Grid Identity";

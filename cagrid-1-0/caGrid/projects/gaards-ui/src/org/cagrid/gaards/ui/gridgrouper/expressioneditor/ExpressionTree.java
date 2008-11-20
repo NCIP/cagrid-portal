@@ -25,6 +25,8 @@ import org.cagrid.gaards.ui.gridgrouper.tree.TreeRenderer;
  *          Exp $
  */
 public class ExpressionTree extends JTree {
+	
+	private static final long serialVersionUID = 1L;
 
 	private ExpressionNode rootNode;
 

@@ -11,6 +11,8 @@ import javax.swing.JComboBox;
  *          Exp $
  */
 public class DorianServiceListComboBox extends JComboBox {
+	
+	private static final long serialVersionUID = 1L;
 
 	private static DorianHandle lastSelectedService;
 

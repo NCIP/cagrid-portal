@@ -30,6 +30,8 @@ import org.globus.gsi.GlobusCredential;
  *          Exp $
  */
 public class AddPermissionWindow extends ApplicationComponent {
+	
+	private static final long serialVersionUID = 1L;
 
 	private JPanel jContentPane = null;
 

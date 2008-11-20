@@ -43,10 +43,13 @@ import org.cagrid.grape.utils.ErrorDialog;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: TrustedIdPWindow.java,v 1.5 2008-11-16 00:52:18 langella Exp $
+ * @version $Id: TrustedIdPWindow.java,v 1.6 2008-11-20 15:29:42 langella Exp $
  */
 public class TrustedIdPWindow extends ApplicationComponent implements
 		DorianSessionProvider {
+	
+	private static final long serialVersionUID = 1L;
+	
 	public static final String PASSWORD = SAMLAuthenticationMethod.value1
 			.getValue();
 

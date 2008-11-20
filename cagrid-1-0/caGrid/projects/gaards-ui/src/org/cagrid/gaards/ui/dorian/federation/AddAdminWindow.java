@@ -29,8 +29,6 @@ public class AddAdminWindow extends JDialog {
 
 	private JButton addAdminButton = null;
 
-	private String uri;
-
 	private DorianSessionProvider session;
 
 	private JPanel userPanel = null;

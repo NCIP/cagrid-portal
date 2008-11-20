@@ -29,6 +29,8 @@ import org.globus.gsi.GlobusCredential;
  *          Exp $
  */
 public class GridGrouperTree extends JTree {
+	
+	private static final long serialVersionUID = 1L;
 
 	private GridGroupersTreeNode rootNode;
 

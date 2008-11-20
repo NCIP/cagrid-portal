@@ -19,6 +19,9 @@ import org.cagrid.gaards.ui.gridgrouper.tree.GridGrouperTree;
  *          Exp $
  */
 public abstract class GridGrouperTreeNodeMenu extends JPopupMenu {
+	
+	private static final long serialVersionUID = 1L;
+	
 	private GridGrouperExpressionEditor editor;
 
 	private GridGrouperTree tree;

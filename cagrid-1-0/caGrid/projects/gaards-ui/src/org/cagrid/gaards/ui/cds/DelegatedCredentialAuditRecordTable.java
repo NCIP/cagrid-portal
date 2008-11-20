@@ -21,6 +21,8 @@ import org.cagrid.grape.utils.ErrorDialog;
  *          20:21:57 langella Exp $
  */
 public class DelegatedCredentialAuditRecordTable extends GrapeBaseTable {
+	
+	private static final long serialVersionUID = 1L;
 
 	public final static String RECORD = "Record";
 

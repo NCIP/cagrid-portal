@@ -34,6 +34,7 @@ import org.cagrid.grape.utils.ErrorDialog;
 
 public class FederationAuditPanel extends JPanel {
 
+
 	public static int FULL_MODE = 1;
 
 	public static int GRID_ACCOUNT_MODE = 2;

@@ -25,7 +25,6 @@ import org.cagrid.grape.LookAndFeel;
 import org.cagrid.grape.utils.ErrorDialog;
 import org.globus.gsi.GlobusCredential;
 
-
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
@@ -34,6 +33,8 @@ import org.globus.gsi.GlobusCredential;
  *          Exp $
  */
 public class TrustLevelWindow extends ApplicationComponent {
+
+	private static final long serialVersionUID = 1L;
 
 	private JPanel jContentPane = null;
 
@@ -91,16 +92,16 @@ public class TrustLevelWindow extends ApplicationComponent {
 
 	private int state;
 
-
 	/**
 	 * This is the default constructor
 	 */
-	public TrustLevelWindow(String service, GlobusCredential cred, TrustLevelRefresher refresher) {
+	public TrustLevelWindow(String service, GlobusCredential cred,
+			TrustLevelRefresher refresher) {
 		this(service, cred, null, refresher);
 	}
 
-
-	public TrustLevelWindow(String service, GlobusCredential cred, TrustLevel level, TrustLevelRefresher refresher) {
+	public TrustLevelWindow(String service, GlobusCredential cred,
+			TrustLevel level, TrustLevelRefresher refresher) {
 		super();
 		this.refresher = refresher;
 		if (level != null) {
@@ -138,7 +139,6 @@ public class TrustLevelWindow extends ApplicationComponent {
 		}
 	}
 
-
 	/**
 	 * This method initializes this
 	 * 
@@ -157,7 +157,6 @@ public class TrustLevelWindow extends ApplicationComponent {
 			this.setFrameIcon(GTSLookAndFeel.getTrustLevelIcon());
 		}
 	}
-
 
 	/**
 	 * This method initializes jContentPane
@@ -192,7 +191,6 @@ public class TrustLevelWindow extends ApplicationComponent {
 		}
 		return jContentPane;
 	}
-
 
 	/**
 	 * This method initializes topPanel
@@ -230,10 +228,11 @@ public class TrustLevelWindow extends ApplicationComponent {
 			jLabel = new JLabel();
 			jLabel.setText("Grid Trust Service (GTS)");
 			topPanel = new JPanel();
-			topPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Service/Login Information",
-				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, 
-                LookAndFeel.getPanelLabelColor()));
+			topPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(
+					null, "Service/Login Information",
+					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+					javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
+					LookAndFeel.getPanelLabelColor()));
 			topPanel.setLayout(new GridBagLayout());
 			topPanel.add(jLabel, gridBagConstraints2);
 			topPanel.add(getGts(), gridBagConstraints3);
@@ -242,7 +241,6 @@ public class TrustLevelWindow extends ApplicationComponent {
 		}
 		return topPanel;
 	}
-
 
 	/**
 	 * This method initializes gts
@@ -256,7 +254,6 @@ public class TrustLevelWindow extends ApplicationComponent {
 		return gts;
 	}
 
-
 	/**
 	 * This method initializes proxy
 	 * 
@@ -268,7 +265,6 @@ public class TrustLevelWindow extends ApplicationComponent {
 		}
 		return proxy;
 	}
-
 
 	/**
 	 * This method initializes buttonPanel
@@ -285,7 +281,6 @@ public class TrustLevelWindow extends ApplicationComponent {
 		}
 		return buttonPanel;
 	}
-
 
 	/**
 	 * This method initializes addButton
@@ -310,7 +305,8 @@ public class TrustLevelWindow extends ApplicationComponent {
 						}
 					};
 					try {
-						GridApplication.getContext().executeInBackground(runner);
+						GridApplication.getContext()
+								.executeInBackground(runner);
 					} catch (Exception t) {
 						t.getMessage();
 					}
@@ -321,7 +317,6 @@ public class TrustLevelWindow extends ApplicationComponent {
 
 		return addButton;
 	}
-
 
 	/**
 	 * This method initializes cancelButton
@@ -342,12 +337,13 @@ public class TrustLevelWindow extends ApplicationComponent {
 		return cancelButton;
 	}
 
-
 	private void addUpdateTrustLevel() {
 		try {
 			getAddButton().setEnabled(false);
-			GlobusCredential selectedProxy = ((CredentialComboBox) getProxy()).getSelectedCredential();
-			String service = ((GTSServiceListComboBox) getGts()).getSelectedService();
+			GlobusCredential selectedProxy = ((CredentialComboBox) getProxy())
+					.getSelectedCredential();
+			String service = ((GTSServiceListComboBox) getGts())
+					.getSelectedService();
 			TrustLevel level = new TrustLevel();
 			level.setName(getTrustLevelName().getText().trim());
 			level.setDescription(getDescription().getText().trim());
@@ -361,10 +357,12 @@ public class TrustLevelWindow extends ApplicationComponent {
 			dispose();
 			if (state == UPDATE) {
 				GridApplication.getContext().showMessage(
-					"Successfully added the level of assurance, " + level.getName() + "!!!");
+						"Successfully added the level of assurance, "
+								+ level.getName() + "!!!");
 			} else if (state == ADD) {
 				GridApplication.getContext().showMessage(
-					"Successfully updated the level of assurance, " + level.getName() + "!!!");
+						"Successfully updated the level of assurance, "
+								+ level.getName() + "!!!");
 			}
 		} catch (Exception e) {
 			getAddButton().setEnabled(true);
@@ -372,7 +370,6 @@ public class TrustLevelWindow extends ApplicationComponent {
 		}
 
 	}
-
 
 	/**
 	 * This method initializes trustLevelPanel
@@ -468,10 +465,14 @@ public class TrustLevelWindow extends ApplicationComponent {
 			jLabel2.setText("Name");
 			trustLevelPanel = new JPanel();
 			trustLevelPanel.setLayout(new GridBagLayout());
-			trustLevelPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Level of Assurance",
-				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, 
-                LookAndFeel.getPanelLabelColor()));
+			trustLevelPanel
+					.setBorder(javax.swing.BorderFactory
+							.createTitledBorder(
+									null,
+									"Level of Assurance",
+									javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+									javax.swing.border.TitledBorder.DEFAULT_POSITION,
+									null, LookAndFeel.getPanelLabelColor()));
 			trustLevelPanel.add(jLabel2, gridBagConstraints1);
 			trustLevelPanel.add(getTrustLevelName(), gridBagConstraints6);
 			trustLevelPanel.add(jLabel3, gridBagConstraints7);
@@ -490,7 +491,6 @@ public class TrustLevelWindow extends ApplicationComponent {
 		return trustLevelPanel;
 	}
 
-
 	/**
 	 * This method initializes name
 	 * 
@@ -502,7 +502,6 @@ public class TrustLevelWindow extends ApplicationComponent {
 		}
 		return trustLevelName;
 	}
-
 
 	/**
 	 * This method initializes description
@@ -517,7 +516,6 @@ public class TrustLevelWindow extends ApplicationComponent {
 		return description;
 	}
 
-
 	/**
 	 * This method initializes jScrollPane
 	 * 
@@ -530,7 +528,6 @@ public class TrustLevelWindow extends ApplicationComponent {
 		}
 		return jScrollPane;
 	}
-
 
 	/**
 	 * This method initializes isAuthority
@@ -545,7 +542,6 @@ public class TrustLevelWindow extends ApplicationComponent {
 		return isAuthority;
 	}
 
-
 	/**
 	 * This method initializes authorityGTS
 	 * 
@@ -559,7 +555,6 @@ public class TrustLevelWindow extends ApplicationComponent {
 		return authorityGTS;
 	}
 
-
 	/**
 	 * This method initializes sourceGTS
 	 * 
@@ -572,7 +567,6 @@ public class TrustLevelWindow extends ApplicationComponent {
 		}
 		return sourceGTS;
 	}
-
 
 	/**
 	 * This method initializes lastUpdated

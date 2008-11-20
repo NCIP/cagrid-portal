@@ -20,6 +20,8 @@ import org.cagrid.grape.table.GrapeBaseTable;
  *          langella Exp $
  */
 public class CertificateExtensionsTable extends GrapeBaseTable {
+	
+	private static final long serialVersionUID = 1L;
 
 	public final static String OID = "OID";
 	public final static String NAME = "NAME";

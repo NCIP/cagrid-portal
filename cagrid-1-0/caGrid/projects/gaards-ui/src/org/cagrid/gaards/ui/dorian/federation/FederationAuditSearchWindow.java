@@ -19,6 +19,8 @@ import org.cagrid.grape.ApplicationComponent;
  *          Exp $
  */
 public class FederationAuditSearchWindow extends ApplicationComponent {
+	
+	private static final long serialVersionUID = 1L;
 
 	private javax.swing.JPanel jContentPane = null;
 

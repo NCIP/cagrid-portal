@@ -11,6 +11,9 @@ import javax.swing.JComboBox;
  *          Exp $
  */
 public class IsAuthorityComboBox extends JComboBox {
+	
+	private static final long serialVersionUID = 1L;
+	
 	private static final String ANY = "Any";
 
 

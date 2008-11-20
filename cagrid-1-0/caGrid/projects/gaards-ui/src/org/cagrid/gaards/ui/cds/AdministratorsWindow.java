@@ -27,6 +27,8 @@ import org.cagrid.grape.utils.ErrorDialog;
  *          Exp $
  */
 public class AdministratorsWindow extends ApplicationComponent {
+	
+	private static final long serialVersionUID = 1L;
 
 	private javax.swing.JPanel jContentPane = null;
 

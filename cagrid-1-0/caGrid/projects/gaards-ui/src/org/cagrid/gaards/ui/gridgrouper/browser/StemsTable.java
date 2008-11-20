@@ -18,6 +18,9 @@ import org.cagrid.grape.table.GrapeBaseTable;
  *          Exp $
  */
 public class StemsTable extends GrapeBaseTable {
+	
+	private static final long serialVersionUID = 1L;
+	
 	public final static String STEM = "Stem";
 
 	public final static String NAME = "Name";

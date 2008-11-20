@@ -22,6 +22,8 @@ import org.globus.gsi.GlobusCredential;
  *          Exp $
  */
 public class CredentialManager {
+	
+	private static final long serialVersionUID = 1L;
 
 	private static CredentialManager instance;
 

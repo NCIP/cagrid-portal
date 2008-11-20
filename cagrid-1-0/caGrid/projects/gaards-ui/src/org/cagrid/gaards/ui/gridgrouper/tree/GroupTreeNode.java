@@ -19,6 +19,8 @@ import org.cagrid.grape.utils.ErrorDialog;
  *          Exp $
  */
 public class GroupTreeNode extends GridGrouperBaseTreeNode {
+	
+	private static final long serialVersionUID = 1L;
 
 	private Group group;
 

@@ -22,6 +22,9 @@ import org.cagrid.grape.utils.ErrorDialog;
  *          Exp $
  */
 public class DelegationRecordsTable extends GrapeBaseTable {
+	
+	private static final long serialVersionUID = 1L;
+	
 	public final static String RECORD = "record";
 
 	public final static String GRID_IDENTITY = "Grid Identity";

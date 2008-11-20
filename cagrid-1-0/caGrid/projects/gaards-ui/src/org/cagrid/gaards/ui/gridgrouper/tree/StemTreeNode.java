@@ -25,6 +25,8 @@ import org.cagrid.grape.utils.ErrorDialog;
  *          Exp $
  */
 public class StemTreeNode extends GridGrouperBaseTreeNode {
+	
+	private static final long serialVersionUID = 1L;
 
 	private Stem stem;
 

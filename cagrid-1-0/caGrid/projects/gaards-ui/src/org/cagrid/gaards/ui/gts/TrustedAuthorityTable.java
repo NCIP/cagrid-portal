@@ -18,6 +18,9 @@ import org.cagrid.grape.table.GrapeBaseTable;
  *          Exp $
  */
 public class TrustedAuthorityTable extends GrapeBaseTable {
+	
+	private static final long serialVersionUID = 1L;
+	
 	public final static String TRUSTED_AUTHORITY = "ta";
 
 	public final static String NAME = "Trust Authority Name";

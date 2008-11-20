@@ -15,9 +15,12 @@ import javax.swing.JTextField;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: CRLPanel.java,v 1.1 2007-09-24 19:09:38 langella Exp $
+ * @version $Id: CRLPanel.java,v 1.2 2008-11-20 15:29:42 langella Exp $
  */
 public class CRLPanel extends JPanel {
+	
+	private static final long serialVersionUID = 1L;
+	
 	private JPanel infoPanel = null;
 	private JLabel jLabel = null;
 	private JTextField issuer = null;

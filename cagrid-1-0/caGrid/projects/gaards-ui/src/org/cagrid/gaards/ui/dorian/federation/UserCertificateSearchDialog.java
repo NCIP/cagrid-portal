@@ -20,9 +20,11 @@ import org.cagrid.grape.utils.ErrorDialog;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: UserCertificateSearchDialog.java,v 1.1 2008-11-19 19:11:17 langella Exp $
+ * @version $Id: UserCertificateSearchDialog.java,v 1.2 2008-11-20 15:29:42 langella Exp $
  */
 public class UserCertificateSearchDialog extends JDialog {
+	
+	private static final long serialVersionUID = 1L;
 
 	private javax.swing.JPanel jContentPane = null;
 

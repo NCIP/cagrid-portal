@@ -15,6 +15,8 @@ import javax.swing.ImageIcon;
  */
 
 public abstract class GridGrouperBaseTreeNode extends BaseTreeNode {
+	
+	private static final long serialVersionUID = 1L;
 
 	public GridGrouperBaseTreeNode(GridGrouperTree tree) {
 		super(tree);

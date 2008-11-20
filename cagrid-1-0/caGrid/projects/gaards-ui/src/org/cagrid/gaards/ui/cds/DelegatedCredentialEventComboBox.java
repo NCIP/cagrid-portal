@@ -11,6 +11,8 @@ import org.cagrid.gaards.ui.common.AxisTypeComboBox;
  *          Exp $
  */
 public class DelegatedCredentialEventComboBox extends AxisTypeComboBox {
+	
+	private static final long serialVersionUID = 1L;
 
 	public DelegatedCredentialEventComboBox() {
 		super(DelegatedCredentialEvent.class, true);

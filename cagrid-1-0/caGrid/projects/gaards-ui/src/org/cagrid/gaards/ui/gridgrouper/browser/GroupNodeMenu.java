@@ -15,6 +15,8 @@ import org.cagrid.grape.utils.ErrorDialog;
  *          Exp $
  */
 public class GroupNodeMenu extends GridGrouperTreeNodeMenu {
+	
+	private static final long serialVersionUID = 1L;
 
 	public GroupNodeMenu(GroupManagementBrowser browser, GridGrouperTree tree) {
 		super(browser, tree);

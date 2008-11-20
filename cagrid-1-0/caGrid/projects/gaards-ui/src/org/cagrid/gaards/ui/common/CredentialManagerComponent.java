@@ -4,6 +4,7 @@ import gov.nih.nci.cagrid.common.security.ProxyUtil;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -13,7 +14,6 @@ import javax.swing.JPanel;
 
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
-import org.cagrid.grape.LookAndFeel;
 import org.cagrid.grape.utils.ErrorDialog;
 import org.globus.gsi.GlobusCredential;
 
@@ -25,6 +25,8 @@ import org.globus.gsi.GlobusCredential;
  *          langella Exp $
  */
 public class CredentialManagerComponent extends ApplicationComponent {
+	
+	private static final long serialVersionUID = 1L;
 
 	private javax.swing.JPanel jContentPane = null;
 
@@ -51,6 +53,8 @@ public class CredentialManagerComponent extends ApplicationComponent {
 	private CredentialPanel proxyInfoPanel = null;
 
 	private JButton importCredential = null;
+
+	private JPanel titlePanel = null;
 
 	/**
 	 * This is the default constructor
@@ -102,29 +106,35 @@ public class CredentialManagerComponent extends ApplicationComponent {
 	 */
 	private JPanel getMainPanel() {
 		if (mainPanel == null) {
+			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
+			gridBagConstraints1.gridx = 0;
+			gridBagConstraints1.gridy = 0;
+			gridBagConstraints1.weightx = 1.0D;
+			gridBagConstraints1.fill = GridBagConstraints.HORIZONTAL;
 			GridBagConstraints gridBagConstraints = new GridBagConstraints();
 			gridBagConstraints.gridx = 0;
 			gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
 			gridBagConstraints.weightx = 1.0D;
 			gridBagConstraints.weighty = 1.0D;
-			gridBagConstraints.gridy = 1;
+			gridBagConstraints.gridy = 2;
 			GridBagConstraints gridBagConstraints14 = new GridBagConstraints();
 			gridBagConstraints14.gridx = 0;
-			gridBagConstraints14.insets = new java.awt.Insets(5, 5, 5, 5);
+			gridBagConstraints14.insets = new Insets(2, 2, 2, 2);
 			gridBagConstraints14.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints14.weightx = 1.0D;
-			gridBagConstraints14.gridy = 0;
+			gridBagConstraints14.gridy = 1;
 			GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
 			mainPanel = new JPanel();
 			mainPanel.setLayout(new GridBagLayout());
 			gridBagConstraints4.anchor = java.awt.GridBagConstraints.SOUTH;
 			gridBagConstraints4.gridx = 0;
-			gridBagConstraints4.gridy = 2;
-			gridBagConstraints4.insets = new java.awt.Insets(5, 5, 5, 5);
+			gridBagConstraints4.gridy = 3;
+			gridBagConstraints4.insets = new Insets(2, 2, 2, 2);
 			mainPanel.add(getButtonPanel(), gridBagConstraints4);
 			mainPanel.add(getProxyPanel(), gridBagConstraints14);
 			mainPanel.add(getProxyInfoPanel(), gridBagConstraints);
+			mainPanel.add(getTitlePanel(), gridBagConstraints1);
 		}
 		return mainPanel;
 	}
@@ -167,7 +177,7 @@ public class CredentialManagerComponent extends ApplicationComponent {
 			gridBagConstraints15.insets = new java.awt.Insets(2, 2, 2, 2);
 			proxyPanel = new JPanel();
 			proxyPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(
-					null, "Select Proxy",
+					null, "Select Credential",
 					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
 					javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
 					org.cagrid.grape.LookAndFeel.getPanelLabelColor()));
@@ -221,8 +231,6 @@ public class CredentialManagerComponent extends ApplicationComponent {
 		if (viewCertificateButton == null) {
 			viewCertificateButton = new JButton();
 			viewCertificateButton.setText("View Certificate");
-			viewCertificateButton.setIcon(GAARDSLookAndFeel
-					.getCertificateIcon());
 			viewCertificateButton
 					.addActionListener(new java.awt.event.ActionListener() {
 
@@ -257,8 +265,6 @@ public class CredentialManagerComponent extends ApplicationComponent {
 
 						}
 					});
-			saveCredentialButton.setIcon(org.cagrid.grape.LookAndFeel
-					.getSaveIcon());
 		}
 		return saveCredentialButton;
 	}
@@ -308,7 +314,6 @@ public class CredentialManagerComponent extends ApplicationComponent {
 							}
 						}
 					});
-			setDefaultProxyButton.setIcon(GAARDSLookAndFeel.getDefaultIcon());
 		}
 		return setDefaultProxyButton;
 	}
@@ -322,8 +327,6 @@ public class CredentialManagerComponent extends ApplicationComponent {
 		if (deleteCredentialButton == null) {
 			deleteCredentialButton = new JButton();
 			deleteCredentialButton.setText("Delete Credential");
-			deleteCredentialButton.setIcon(org.cagrid.grape.LookAndFeel
-					.getRemoveIcon());
 			deleteCredentialButton
 					.addActionListener(new java.awt.event.ActionListener() {
 						public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -368,7 +371,6 @@ public class CredentialManagerComponent extends ApplicationComponent {
 		if (importCredential == null) {
 			importCredential = new JButton();
 			importCredential.setText("Import Credential");
-			importCredential.setIcon(LookAndFeel.getImportIcon());
 			importCredential
 					.addActionListener(new java.awt.event.ActionListener() {
 						public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -397,5 +399,17 @@ public class CredentialManagerComponent extends ApplicationComponent {
 					});
 		}
 		return importCredential;
+	}
+
+	/**
+	 * This method initializes titlePanel	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getTitlePanel() {
+		if (titlePanel == null) {
+			titlePanel = new TitlePanel("Credential Manager","View, import, and export grid credentials.");
+		}
+		return titlePanel;
 	}
 }

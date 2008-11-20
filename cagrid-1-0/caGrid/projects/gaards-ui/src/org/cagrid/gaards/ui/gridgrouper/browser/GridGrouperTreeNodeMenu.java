@@ -20,6 +20,9 @@ import org.cagrid.grape.LookAndFeel;
  *          Exp $
  */
 public abstract class GridGrouperTreeNodeMenu extends JPopupMenu {
+	
+	private static final long serialVersionUID = 1L;
+	
 	private GroupManagementBrowser browser;
 
 	private GridGrouperTree tree;

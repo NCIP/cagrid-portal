@@ -22,6 +22,9 @@ import org.cagrid.grape.utils.ErrorDialog;
  *          Exp $
  */
 public class MyGroupsTable extends GrapeBaseTable {
+	
+	private static final long serialVersionUID = 1L;
+	
 	public final static String GROUP = "Groups";
 
 	public final static String GRIDGROUPER_URI = "Grid Grouper";

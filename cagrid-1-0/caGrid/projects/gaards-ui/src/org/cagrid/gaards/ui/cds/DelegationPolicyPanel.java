@@ -6,6 +6,8 @@ import org.cagrid.gaards.cds.common.DelegationPolicy;
 
 public abstract class DelegationPolicyPanel extends JPanel {
 	
+	private static final long serialVersionUID = 1L;
+	
 	private boolean editMode;
 	
 	public DelegationPolicyPanel(boolean editMode) {

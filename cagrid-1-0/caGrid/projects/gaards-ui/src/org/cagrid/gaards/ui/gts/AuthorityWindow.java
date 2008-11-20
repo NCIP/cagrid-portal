@@ -23,7 +23,6 @@ import org.cagrid.grape.LookAndFeel;
 import org.cagrid.grape.utils.ErrorDialog;
 import org.globus.gsi.GlobusCredential;
 
-
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
@@ -32,6 +31,8 @@ import org.globus.gsi.GlobusCredential;
  *          Exp $
  */
 public class AuthorityWindow extends ApplicationComponent {
+
+	private static final long serialVersionUID = 1L;
 
 	private JPanel jContentPane = null;
 
@@ -93,16 +94,16 @@ public class AuthorityWindow extends ApplicationComponent {
 
 	private AuthorityRefresher refresher;
 
-
 	/**
 	 * This is the default constructor
 	 */
-	public AuthorityWindow(String service, GlobusCredential cred, AuthorityRefresher refresher) {
+	public AuthorityWindow(String service, GlobusCredential cred,
+			AuthorityRefresher refresher) {
 		this(service, cred, null, refresher);
 	}
 
-
-	public AuthorityWindow(String service, GlobusCredential cred, AuthorityGTS auth, AuthorityRefresher refresher) {
+	public AuthorityWindow(String service, GlobusCredential cred,
+			AuthorityGTS auth, AuthorityRefresher refresher) {
 		super();
 		this.refresher = refresher;
 		if (auth != null) {
@@ -119,19 +120,24 @@ public class AuthorityWindow extends ApplicationComponent {
 			this.getGtsURI().setText(auth.getServiceURI());
 			this.getPriority().setSelectedItem(new Integer(auth.getPriority()));
 			this.getPriority().setEnabled(false);
-			this.getSynchronizeTrustLevels().setSelectedItem(new Boolean(auth.isSyncTrustLevels()));
-			this.getPerformAuthorization().setSelectedItem(new Boolean(auth.isPerformAuthorization()));
+			this.getSynchronizeTrustLevels().setSelectedItem(
+					new Boolean(auth.isSyncTrustLevels()));
+			this.getPerformAuthorization().setSelectedItem(
+					new Boolean(auth.isPerformAuthorization()));
 			this.getAuthorizationIdentity().setText(auth.getServiceIdentity());
-			this.getHours().setSelectedItem(new Integer(auth.getTimeToLive().getHours()));
-			this.getMinutes().setSelectedItem(new Integer(auth.getTimeToLive().getMinutes()));
-			this.getSeconds().setSelectedItem(new Integer(auth.getTimeToLive().getSeconds()));
+			this.getHours().setSelectedItem(
+					new Integer(auth.getTimeToLive().getHours()));
+			this.getMinutes().setSelectedItem(
+					new Integer(auth.getTimeToLive().getMinutes()));
+			this.getSeconds().setSelectedItem(
+					new Integer(auth.getTimeToLive().getSeconds()));
 		}
 	}
 
-
 	private void syncPriorities() {
 		try {
-			GTSPublicClient client = new GTSPublicClient((String) this.getGts().getSelectedItem());
+			GTSPublicClient client = new GTSPublicClient((String) this.getGts()
+					.getSelectedItem());
 			AuthorityGTS[] auths = client.getAuthorities();
 			int count = 0;
 			if (auths != null) {
@@ -148,7 +154,6 @@ public class AuthorityWindow extends ApplicationComponent {
 		}
 	}
 
-
 	/**
 	 * This method initializes this
 	 * 
@@ -164,7 +169,6 @@ public class AuthorityWindow extends ApplicationComponent {
 			this.setFrameIcon(GTSLookAndFeel.getAddIcon());
 		}
 	}
-
 
 	/**
 	 * This method initializes jContentPane
@@ -199,7 +203,6 @@ public class AuthorityWindow extends ApplicationComponent {
 		}
 		return jContentPane;
 	}
-
 
 	/**
 	 * This method initializes topPanel
@@ -237,9 +240,11 @@ public class AuthorityWindow extends ApplicationComponent {
 			jLabel = new JLabel();
 			jLabel.setText("Grid Trust Service (GTS)");
 			topPanel = new JPanel();
-			topPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Service/Login Information",
-				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, LookAndFeel.getPanelLabelColor()));
+			topPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(
+					null, "Service/Login Information",
+					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+					javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
+					LookAndFeel.getPanelLabelColor()));
 			topPanel.setLayout(new GridBagLayout());
 			topPanel.add(jLabel, gridBagConstraints2);
 			topPanel.add(getGts(), gridBagConstraints3);
@@ -248,7 +253,6 @@ public class AuthorityWindow extends ApplicationComponent {
 		}
 		return topPanel;
 	}
-
 
 	/**
 	 * This method initializes gts
@@ -262,7 +266,6 @@ public class AuthorityWindow extends ApplicationComponent {
 		return gts;
 	}
 
-
 	/**
 	 * This method initializes proxy
 	 * 
@@ -274,7 +277,6 @@ public class AuthorityWindow extends ApplicationComponent {
 		}
 		return proxy;
 	}
-
 
 	/**
 	 * This method initializes buttonPanel
@@ -289,7 +291,6 @@ public class AuthorityWindow extends ApplicationComponent {
 		}
 		return buttonPanel;
 	}
-
 
 	/**
 	 * This method initializes addButton
@@ -314,7 +315,8 @@ public class AuthorityWindow extends ApplicationComponent {
 						}
 					};
 					try {
-						GridApplication.getContext().executeInBackground(runner);
+						GridApplication.getContext()
+								.executeInBackground(runner);
 					} catch (Exception t) {
 						t.getMessage();
 					}
@@ -325,7 +327,6 @@ public class AuthorityWindow extends ApplicationComponent {
 
 		return addButton;
 	}
-
 
 	/**
 	 * This method initializes cancelButton
@@ -346,25 +347,32 @@ public class AuthorityWindow extends ApplicationComponent {
 		return cancelButton;
 	}
 
-
 	private void addUpdateAuthority() {
 
 		try {
 			getAddButton().setEnabled(false);
-			GlobusCredential selectedProxy = ((CredentialComboBox) getProxy()).getSelectedCredential();
-			String service = ((GTSServiceListComboBox) getGts()).getSelectedService();
+			GlobusCredential selectedProxy = ((CredentialComboBox) getProxy())
+					.getSelectedCredential();
+			String service = ((GTSServiceListComboBox) getGts())
+					.getSelectedService();
 			AuthorityGTS auth = new AuthorityGTS();
 			auth.setServiceURI(getGtsURI().getText().trim());
-			auth.setPriority(((Integer) getPriority().getSelectedItem()).intValue());
-			auth.setSyncTrustLevels(((Boolean) getSynchronizeTrustLevels().getSelectedItem()).booleanValue());
-			auth.setPerformAuthorization(((Boolean) getPerformAuthorization().getSelectedItem()).booleanValue());
+			auth.setPriority(((Integer) getPriority().getSelectedItem())
+					.intValue());
+			auth.setSyncTrustLevels(((Boolean) getSynchronizeTrustLevels()
+					.getSelectedItem()).booleanValue());
+			auth.setPerformAuthorization(((Boolean) getPerformAuthorization()
+					.getSelectedItem()).booleanValue());
 			if (auth.isPerformAuthorization()) {
-				auth.setServiceIdentity(getAuthorizationIdentity().getText().trim());
+				auth.setServiceIdentity(getAuthorizationIdentity().getText()
+						.trim());
 			}
 			TimeToLive ttl = new TimeToLive();
 			ttl.setHours(((Integer) getHours().getSelectedItem()).intValue());
-			ttl.setMinutes(((Integer) getMinutes().getSelectedItem()).intValue());
-			ttl.setSeconds(((Integer) getSeconds().getSelectedItem()).intValue());
+			ttl.setMinutes(((Integer) getMinutes().getSelectedItem())
+					.intValue());
+			ttl.setSeconds(((Integer) getSeconds().getSelectedItem())
+					.intValue());
 			auth.setTimeToLive(ttl);
 
 			GTSAdminClient client = new GTSAdminClient(service, selectedProxy);
@@ -377,10 +385,12 @@ public class AuthorityWindow extends ApplicationComponent {
 			dispose();
 			if (update) {
 				GridApplication.getContext().showMessage(
-					"The Authority " + auth.getServiceURI() + " was updated successfully!!!");
+						"The Authority " + auth.getServiceURI()
+								+ " was updated successfully!!!");
 			} else {
 				GridApplication.getContext().showMessage(
-					"The Authority " + auth.getServiceURI() + " was added successfully!!!");
+						"The Authority " + auth.getServiceURI()
+								+ " was added successfully!!!");
 			}
 
 		} catch (Exception e) {
@@ -389,7 +399,6 @@ public class AuthorityWindow extends ApplicationComponent {
 		}
 
 	}
-
 
 	/**
 	 * This method initializes trustLevelPanel
@@ -484,25 +493,31 @@ public class AuthorityWindow extends ApplicationComponent {
 			jLabel2.setText("GTS URI");
 			authorityPanel = new JPanel();
 			authorityPanel.setLayout(new GridBagLayout());
-			authorityPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Authority GTS",
-				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, LookAndFeel.getPanelLabelColor()));
+			authorityPanel
+					.setBorder(javax.swing.BorderFactory
+							.createTitledBorder(
+									null,
+									"Authority GTS",
+									javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+									javax.swing.border.TitledBorder.DEFAULT_POSITION,
+									null, LookAndFeel.getPanelLabelColor()));
 			authorityPanel.add(jLabel2, gridBagConstraints1);
 			authorityPanel.add(getGtsURI(), gridBagConstraints6);
 			authorityPanel.add(Priority, gridBagConstraints7);
 			authorityPanel.add(getPriority(), gridBagConstraints8);
 			authorityPanel.add(jLabel3, gridBagConstraints9);
-			authorityPanel.add(getSynchronizeTrustLevels(), gridBagConstraints10);
+			authorityPanel.add(getSynchronizeTrustLevels(),
+					gridBagConstraints10);
 			authorityPanel.add(jLabel4, gridBagConstraints11);
 			authorityPanel.add(getPerformAuthorization(), gridBagConstraints13);
 			authorityPanel.add(jLabel5, gridBagConstraints14);
-			authorityPanel.add(getAuthorizationIdentity(), gridBagConstraints15);
+			authorityPanel
+					.add(getAuthorizationIdentity(), gridBagConstraints15);
 			authorityPanel.add(getJPanel(), gridBagConstraints16);
 			authorityPanel.add(jLabel6, gridBagConstraints17);
 		}
 		return authorityPanel;
 	}
-
 
 	/**
 	 * This method initializes name
@@ -515,7 +530,6 @@ public class AuthorityWindow extends ApplicationComponent {
 		}
 		return gtsURI;
 	}
-
 
 	/**
 	 * This method initializes priority
@@ -535,7 +549,6 @@ public class AuthorityWindow extends ApplicationComponent {
 		return priority;
 	}
 
-
 	/**
 	 * This method initializes synchronizeTrustLevels
 	 * 
@@ -550,7 +563,6 @@ public class AuthorityWindow extends ApplicationComponent {
 		return synchronizeTrustLevels;
 	}
 
-
 	/**
 	 * This method initializes performAuthorization
 	 * 
@@ -562,16 +574,16 @@ public class AuthorityWindow extends ApplicationComponent {
 			performAuthorization.addItem(Boolean.FALSE);
 			performAuthorization.addItem(Boolean.TRUE);
 			syncAuthorization();
-			performAuthorization.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					syncAuthorization();
-				}
-			});
+			performAuthorization
+					.addActionListener(new java.awt.event.ActionListener() {
+						public void actionPerformed(java.awt.event.ActionEvent e) {
+							syncAuthorization();
+						}
+					});
 
 		}
 		return performAuthorization;
 	}
-
 
 	private void syncAuthorization() {
 		Boolean val = (Boolean) getPerformAuthorization().getSelectedItem();
@@ -582,7 +594,6 @@ public class AuthorityWindow extends ApplicationComponent {
 			getAuthorizationIdentity().setEnabled(true);
 		}
 	}
-
 
 	/**
 	 * This method initializes authorizationIdentity
@@ -595,7 +606,6 @@ public class AuthorityWindow extends ApplicationComponent {
 		}
 		return authorizationIdentity;
 	}
-
 
 	/**
 	 * This method initializes jPanel
@@ -621,7 +631,6 @@ public class AuthorityWindow extends ApplicationComponent {
 		return jPanel;
 	}
 
-
 	/**
 	 * This method initializes hours
 	 * 
@@ -637,7 +646,6 @@ public class AuthorityWindow extends ApplicationComponent {
 		return hours;
 	}
 
-
 	/**
 	 * This method initializes minutes
 	 * 
@@ -652,7 +660,6 @@ public class AuthorityWindow extends ApplicationComponent {
 		}
 		return minutes;
 	}
-
 
 	/**
 	 * This method initializes seconds

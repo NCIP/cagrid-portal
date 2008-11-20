@@ -26,9 +26,11 @@ import org.cagrid.grape.utils.ErrorDialog;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: IdentityProviderSearchDialog.java,v 1.2 2008-11-16 00:52:18 langella Exp $
+ * @version $Id: IdentityProviderSearchDialog.java,v 1.3 2008-11-20 15:29:42 langella Exp $
  */
 public class IdentityProviderSearchDialog extends JDialog {
+	
+	private static final long serialVersionUID = 1L;
 
 	private javax.swing.JPanel jContentPane = null;
 
