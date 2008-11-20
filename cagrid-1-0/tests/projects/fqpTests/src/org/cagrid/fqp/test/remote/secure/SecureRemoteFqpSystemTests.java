@@ -30,6 +30,7 @@ public class SecureRemoteFqpSystemTests {
         
     private DataServiceDeploymentStory[] dataServiceDeployments;
     private FQPServiceDeploymentStory fqpDeployment;
+    private CDSDeploymentStory cdsDeployment;
     
     @Test
     public void testSecureRemoteFqpSystemTests() {
@@ -54,9 +55,18 @@ public class SecureRemoteFqpSystemTests {
         FederatedQueryProcessorHelper queryHelper = 
             new FederatedQueryProcessorHelper(fqpDeployment);
         
+        // deploy the CDS service
+        cdsDeployment = new CDSDeploymentStory(getCdsDir());
+        cdsDeployment.run();
+        
         // run standard queries against the secure FQP and data services
         QueryStory queryStory = new QueryStory(dataServiceDeployments, queryHelper);
         queryStory.run();
+        
+        // secure query w/ CDS
+        SecureQueryStory secureQueryStory = 
+            new SecureQueryStory(dataServiceDeployments, cdsDeployment, fqpDeployment);
+        secureQueryStory.run();
     }
     
     
@@ -69,6 +79,7 @@ public class SecureRemoteFqpSystemTests {
                 new StopContainerStep(container).runStep();
                 new DestroyContainerStep(container).runStep();
             } catch (Throwable ex) {
+                logger.error("Error cleaning up data service container: " + ex.getMessage(), ex);
                 ex.printStackTrace();
             }
         }
@@ -77,6 +88,15 @@ public class SecureRemoteFqpSystemTests {
             new StopContainerStep(fqpContainer).runStep();
             new DestroyContainerStep(fqpContainer).runStep();
         } catch (Throwable ex) {
+            logger.error("Error cleaning up FQP service container: " + ex.getMessage(), ex);
+            ex.printStackTrace();
+        }
+        try {
+            ServiceContainer cdsContainer = cdsDeployment.getServiceContainer();
+            new StopContainerStep(cdsContainer).runStep();
+            new DestroyContainerStep(cdsContainer).runStep();
+        } catch (Throwable ex) {
+            logger.error("Error cleaning up CDS service container: " + ex.getMessage(), ex);
             ex.printStackTrace();
         }
     }
