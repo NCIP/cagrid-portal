@@ -22,7 +22,7 @@ IN PROGRESS WORK:
 (85%) add unit and system tests
 	-- would be 100% if they all passed!
 
-(25%) service properties to limit max retries, timeouts, target services, etc.  prevent malicious client from overwhelming the service
+(40%) service properties to limit max retries, timeouts, target services, etc.  prevent malicious client from overwhelming the service
 	-- properties exist, nothing uses them
 	-- what are sane defaults for these values?  I picked some that I think make sense, but they probably should be reviewed
 
