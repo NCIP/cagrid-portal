@@ -55,9 +55,9 @@
 	</target>
 
 	<target name="copy-configuration-files">
-		<copy file="${src.resources.dir}/applicationContext.xml" tofile="${build.dir}/applicationContext-${project.version}.xml" />
-		<copy file="${src.resources.dir}/web.xml" tofile="${build.dir}/web-${project.version}.xml" />
-		<copy file="${src.resources.dir}/cas-client.properties" tofile="${build.dir}/cas-client-${project.version}.properties" />
+		<copy file="${src.resources.dir}/applicationContext.xml" tofile="${build.dir}/applicationContext-jasig-${project.version}.xml" />
+		<copy file="${src.resources.dir}/web.xml" tofile="${build.dir}/web-jasig-${project.version}.xml" />
+		<copy file="${src.resources.dir}/cas-client.properties" tofile="${build.dir}/cas-client-jasig-${project.version}.properties" />
 	</target>
 
 	<target name="clean">

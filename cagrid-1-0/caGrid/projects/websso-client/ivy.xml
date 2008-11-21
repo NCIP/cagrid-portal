@@ -20,12 +20,11 @@
     <conf name="resources" visibility="public"/>
   </configurations>
 
-
   <publications>
     <artifact name="caGrid-websso-client" conf="default" type="jar"/>
-    <artifact name="applicationContext" conf="resources" type="xml"/>
-    <artifact name="cas-client" conf="resources" type="properties"/>
-    <artifact name="web" conf="resources" type="xml"/>
+    <artifact name="applicationContext-jasig" conf="resources" type="xml"/>
+    <artifact name="cas-client-jasig" conf="resources" type="properties"/>
+    <artifact name="web-jasig" conf="resources" type="xml"/>
   </publications>
 
   <dependencies>

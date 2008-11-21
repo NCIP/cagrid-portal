@@ -16,10 +16,14 @@
 	<configurations>
 	  <conf name="impl-test"/>
     <!-- Public Configurations-->
-		<conf name="default" visibility="public" />
+		<conf name="resources" visibility="public" />
+		<conf name="default" visibility="public" />		
 	</configurations>
 	<publications>
 		<artifact name="caGrid-websso-client-acegi" conf="default" type="jar" />
+		<artifact name="applicationContext-acegi" conf="resources" type="xml" />
+		<artifact name="cas-client-acegi" conf="resources" type="properties" />
+		<artifact name="web-acegi" conf="resources" type="xml" />
 	</publications>
 	<dependencies>	
 		<dependency rev="latest.integration" org="caGrid" name="cds" conf="default->client" />

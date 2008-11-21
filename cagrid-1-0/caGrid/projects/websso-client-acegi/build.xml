@@ -76,6 +76,12 @@
 	<target name="jar" depends="compile,build-jar,dist">
 	</target>
 
+	<target name="copy-configuration-files">
+		<copy file="${src.resources.dir}/applicationContext.xml" tofile="${build.dir}/applicationContext-acegi-${project.version}.xml" />
+		<copy file="${src.resources.dir}/web.xml" tofile="${build.dir}/web-acegi-${project.version}.xml" />
+		<copy file="${src.resources.dir}/cas-client.properties" tofile="${build.dir}/cas-client-acegi-${project.version}.properties" />
+	</target>
+	
 	<target name="clean">
 		<delete dir="${build.dir}" />
 	</target>
@@ -89,5 +95,6 @@
 	<target name="all">
 		<antcall target="clean" />
 		<antcall target="jar" />
+		<antcall target="copy-configuration-files" />
 	</target>
 </project>
