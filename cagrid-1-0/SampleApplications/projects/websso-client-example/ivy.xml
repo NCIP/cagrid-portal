@@ -9,16 +9,11 @@
 	</info>
 
 	<configurations>
-		<!-- Public Configurations-->
 		<conf name="default" visibility="public" />
-		<conf name="war" visibility="public" extends="default" />
 	</configurations>
 
-	<publications>
-		<artifact name="webssoclientexample" conf="war" type="war" />
-	</publications>
 	<dependencies>
-		<dependency rev="latest.integration" org="caGrid" name="websso-client" conf="default->default" />
-		<dependency rev="latest.integration" org="caGrid" name="websso-client-acegi" conf="default->default" />
+		<dependency rev="latest.integration" org="caGrid" name="websso-client" conf="default->default;default->resources" />
+		<dependency rev="latest.integration" org="caGrid" name="websso-client-acegi" conf="default->default;default->resources" />		
 	</dependencies>
 </ivy-module>

@@ -8,7 +8,9 @@
 	<property name="ivy-shared-targets.file" location="${basedir}/../../../caGrid/antfiles/ivy/ivy-shared-targets.xml" />
 	<import file="${ivy-shared-targets.file}" />
 	<target name="do.resolve-dependencies" depends="pre.resolve-dependencies">
-		<ivy:retrieve conf="default" pattern="${ivy.resolved.artifacts.dir}/dependencies/[type]s/[originalname](.[ext])" sync="true" type="jar" />
+		<ivy:retrieve conf="default" pattern="${ivy.resolved.artifacts.dir}/dependencies/[type]s/[originalname](.[ext])"  type="jar" />
+		<ivy:retrieve conf="default" pattern="${ivy.resolved.artifacts.dir}/dependencies-xml-resources/[type]s/[originalname](.[ext])"  type="xml" />
+		<ivy:retrieve conf="default" pattern="${ivy.resolved.artifacts.dir}/dependencies-properties/[type]/[originalname](.[ext])"  type="properties" />		
 	</target>
 	
 </project>
