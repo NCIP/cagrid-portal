@@ -5,3 +5,7 @@ Unfortunatly, I'm somewhat stuck until the SDK team gets this fixed:
 2)
 SDK's internal CQL query handling returns instances of subclasses of the data type you queried for.  This obviously breaks CQL spec, but some clients may want this behavior.
 	Added a configurable parameter to use strict CQL processing or not.  Defaults to 'true'
+3)
+Use information already provided by the SDK to assign schema element name / Java classname mappings
+	The castor mapping file at least has this.
+	Better approach than making the assumption that Classname == Element Name
