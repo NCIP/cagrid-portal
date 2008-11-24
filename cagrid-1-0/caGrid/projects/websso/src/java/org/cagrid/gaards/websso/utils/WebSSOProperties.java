@@ -232,17 +232,4 @@ public class WebSSOProperties {
 				.getChild("host-credential-key-file-path");
 		return hostCredentialKeyFilePath.getText().trim();
 	}
-
-
-	private String getServiceURL(Element serviceDescriptorElement) {
-		Element serviceGroupDesc = serviceDescriptorElement
-				.getChild("service-url");
-		return serviceGroupDesc.getText().trim();
-	}
-
-	private String getServiceDisplayName(Element serviceDescriptorElement) {
-		Element serviceDisplayName = serviceDescriptorElement
-				.getChild("display-name");
-		return serviceDisplayName.getText().trim();
-	}
 }
