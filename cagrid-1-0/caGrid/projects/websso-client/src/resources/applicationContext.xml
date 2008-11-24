@@ -9,7 +9,7 @@
 	</bean>
 
 	<bean name="casAuthenticationFilter" class="org.jasig.cas.client.authentication.AuthenticationFilter"
-		p:casServerLoginUrl="${cas.server.url}" p:renew="false" p:gateway="false" p:service="${cas.client.service}" />
+		p:casServerLoginUrl="${cas.server.url}" p:renew="${cas.server.renew}" p:gateway="${cas.server.gateway}" p:service="${cas.client.service}" />
 
 	<bean name="casValidationFilter" class="org.jasig.cas.client.validation.Cas20ProxyReceivingTicketValidationFilter"
 		p:service="${cas.client.service}">
