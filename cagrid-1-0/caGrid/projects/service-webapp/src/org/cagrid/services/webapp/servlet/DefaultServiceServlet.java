@@ -72,36 +72,8 @@ public class DefaultServiceServlet extends HttpServlet {
             writer.print(desc.getName());
             writer.println("</DT>");
             writer.println("<DD>");
-            writer.println("<UL>");
-            writer.println("<LI>");
-            writer.println("<DL>");
-            writer.print("<DT>");
-            writer.println("Inputs");
-            writer.println("</DT>");
-            writer.println("<DD>");
-            if(desc.getAllInParams()!=null){
-                writer.println("<UL>");
-                Iterator paramsIt = desc.getAllInParams().iterator();
-                if(paramsIt!=null && paramsIt.hasNext()){
-                    writer.println("<LI>");
-                    writer.println(((ParameterDesc)paramsIt.next()).getQName());
-                    writer.println("</LI>");
-                }
-                writer.println("</UL>");
-            }
             writer.println("</DD>");
-            writer.println("</DL>");
-            writer.println("</LI>");
-            writer.println("<LI>");
-            writer.print("<DT>");
-            writer.println("Output");
-            writer.println("</DT>");
-            writer.println("<DD>");
-            writer.println(desc.getReturnQName());
-            writer.println("</DD>");
-            writer.println("</LI>");
-            writer.println("</UL>");
-            writer.println("</DD>");
+            
         }
         writer.println("</DL>");
 
