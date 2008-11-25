@@ -24,10 +24,6 @@ GSBT - Globus Service Build Tools
 
 	<property name="etc.dir" value="etc" />
 
-
-
-	<!-- Build directories -->
-
 	<!-- Auxiliary directory where all the intermediate files will be placed -->
 	<property name="build.dir" location="build" />
 	<!-- Directory for compiled service classes -->
@@ -128,9 +124,6 @@ GSBT - Globus Service Build Tools
 
 	</target>
 
-
-
-
 	<!-- Clean up all the intermediate files -->
 	<target name="clean">
 		<delete dir="tmp" />
@@ -163,7 +156,7 @@ GSBT - Globus Service Build Tools
 		</copy>
 	</target>
 
-	<target name="deployHelper">
+	<target name="deployHelper" if="webapp.deploy.dir,webapp.deploy.lib.dir">
 		<copy overwrite="true" toDir="${webapp.deploy.dir}">
 			<fileset dir="conf">
 				<include name="web.xml" />
