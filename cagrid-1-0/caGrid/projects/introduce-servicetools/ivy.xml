@@ -4,18 +4,19 @@
   xsi:noNamespaceSchemaLocation="http://incubator.apache.org/ivy/schemas/ivy.xsd">
 
   <info organisation="caGrid" module="introduce-servicetools" revision="${project.version}">
-    <license name="caGrid" url="http://www.cagrid.org/mwiki/index.php?title=CaGrid:LICENSE-1.1"/>
+    <license name="caGrid" url="http://www.cagrid.org/mwiki/index.php?title=CaGrid:LICENSE-1.1" />
     <description>Introduce Service Tools</description>
   </info>
 
   <configurations>
+    <conf name="impl" visibility="private" extends="default" />
     <!-- Public Configurations-->
-    <conf name="impl" visibility="public"/>
+    <conf name="default" visibility="public" />
   </configurations>
 
 
   <publications>
-    <artifact name="caGrid-Introduce-serviceTools" conf="impl" type="jar"/>
+    <artifact name="caGrid-Introduce-serviceTools" conf="default" type="jar" />
   </publications>
 
   <dependencies>
