@@ -41,7 +41,7 @@ public class WebAppExtensionCreationPostProcessor implements CreationExtensionPo
                 // each service
                 Element servletEl = new Element("parameter", Namespace.getNamespace("http://xml.apache.org/axis/wsdd/"));
                 servletEl.setAttribute("name", "servletClass");
-                servletEl.setAttribute("value", "org.cagrid.services.webapp.servlet.DefaultServiceServlet");
+                servletEl.setAttribute("value", "org.cagrid.services.webapp.servlet.service.DefaultServiceServlet");
 
                 serviceEl.addContent(servletEl);
 
@@ -51,30 +51,7 @@ public class WebAppExtensionCreationPostProcessor implements CreationExtensionPo
             fw.write(XMLUtilities.formatXML(XMLUtilities.documentToString(doc)));
             fw.close();
 
-            // copy over the jar containing the default servlet
-            // copy in the required jars
-            FileFilter filter = new FileFilter() {
-
-                public boolean accept(File pathname) {
-                    return !pathname.isDirectory() && pathname.getName().endsWith(".jar");
-                }
-
-            };
-
-            File extensionLib = new File("extensions" + File.separator + EXTENSION_NAME + File.separator + "lib");
-            File[] jars = extensionLib.listFiles(filter);
-            for (int i = 0; i < jars.length; i++) {
-                File in = jars[i];
-                File out = new File(info.getBaseDirectory().getAbsolutePath() + File.separator + "lib" + File.separator
-                    + in.getName());
-
-                Utils.copyFile(in, out);
-
-            }
-
-            ExtensionUtilities.resyncWithLibDir(new File(info.getBaseDirectory().getAbsolutePath() + File.separator
-                + ".classpath"));
-
+            
         } catch (Exception e) {
             throw new CreationExtensionException(e.getMessage(), e);
         }

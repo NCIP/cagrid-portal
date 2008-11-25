@@ -1,4 +1,4 @@
-package org.cagrid.services.webapp.servlet;
+package org.cagrid.services.webapp.servlet.service;
 
 import java.io.IOException;
 import java.io.PrintWriter;

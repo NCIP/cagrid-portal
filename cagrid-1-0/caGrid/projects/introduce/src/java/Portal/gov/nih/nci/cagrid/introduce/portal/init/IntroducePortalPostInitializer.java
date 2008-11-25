@@ -20,22 +20,31 @@ public class IntroducePortalPostInitializer implements ApplicationInitializer {
 
 
     public void intialize(Application app) {
-
-        try {
-            if (ConfigurationUtil.getIntroducePortalConfiguration().isCheckForUpdatesOnStartup()) {
-                if (!UptodateChecker.introduceUptodate()) {
-                    int option = JOptionPane.showOptionDialog(GridApplication.getContext().getApplication(),
-                        "Updates are available.\nWould you like to view them now?", "Introduce Updates Avaiable",
-                        JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, IntroduceLookAndFeel.getUpdateIcon(),
-                        null, null);
-                    if (option == JOptionPane.YES_OPTION) {
-                        IntroduceUpdateWizard.showUpdateWizard(true);
+        Runnable r = new Runnable() {
+        
+            public void run() {
+                try {
+                    if (ConfigurationUtil.getIntroducePortalConfiguration().isCheckForUpdatesOnStartup()) {
+                        if (!UptodateChecker.introduceUptodate()) {
+                            int option = JOptionPane.showOptionDialog(GridApplication.getContext().getApplication(),
+                                "Updates are available.\nWould you like to view them now?", "Introduce Updates Avaiable",
+                                JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, IntroduceLookAndFeel.getUpdateIcon(),
+                                null, null);
+                            if (option == JOptionPane.YES_OPTION) {
+                                IntroduceUpdateWizard.showUpdateWizard(true);
+                            }
+                        }
                     }
+                } catch (Exception e) {
+                    logger.error("Unable to check for updates:, " + e.getMessage(), e);
                 }
+        
             }
-        } catch (Exception e) {
-            logger.error("Unable to check for updates:, " + e.getMessage(), e);
-        }
+        };
+        
+        Thread th = new Thread(r);
+        th.start();
+        
     }
 
 }

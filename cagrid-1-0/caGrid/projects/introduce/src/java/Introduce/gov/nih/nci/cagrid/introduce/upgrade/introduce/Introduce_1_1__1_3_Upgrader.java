@@ -198,7 +198,7 @@ public class Introduce_1_1__1_3_Upgrader extends IntroduceUpgraderBase {
             resourcebContanstsFW.close();
 
             if (service.getResourceFrameworkOptions().getMain() != null) {
-                
+
                 File oldServiceConfF = new File(srcDir.getAbsolutePath() + File.separator
                     + CommonTools.getPackageDir(service) + File.separator + "service" + File.separator
                     + "ServiceConfiguration.java");
@@ -210,8 +210,11 @@ public class Introduce_1_1__1_3_Upgrader extends IntroduceUpgraderBase {
                 File serviceConfF = new File(srcDir.getAbsolutePath() + File.separator
                     + CommonTools.getPackageDir(service) + File.separator + "service" + File.separator
                     + service.getName() + "Configuration.java");
-                if(serviceConfF.exists()){
-                    throw new Exception("Introduce is trying to create the class " + serviceConfF.getAbsolutePath() +  " but this file already exists.  You will need to rename the existing class to something else before you try to update to this new version.");
+                if (serviceConfF.exists()) {
+                    throw new Exception(
+                        "Introduce is trying to create the class "
+                            + serviceConfF.getAbsolutePath()
+                            + " but this file already exists.  You will need to rename the existing class to something else before you try to update to this new version.");
                 }
                 FileWriter serviceConfFW = new FileWriter(serviceConfF);
                 serviceConfFW.write(serviceConfS);
@@ -320,10 +323,10 @@ public class Introduce_1_1__1_3_Upgrader extends IntroduceUpgraderBase {
             Document doc = XMLUtilities.fileNameToDocument(typesFile.getAbsolutePath());
             boolean needtoAddFaultsImports = true;
             boolean needtoAddAdressingImports = true;
-            List imports = doc.getRootElement().getChildren("import",
+            List importsl = doc.getRootElement().getChildren("import",
                 Namespace.getNamespace(IntroduceConstants.W3CNAMESPACE));
-            if (imports != null && imports.size() > 0) {
-                Iterator it = imports.iterator();
+            if (importsl != null && importsl.size() > 0) {
+                Iterator it = importsl.iterator();
                 while (it.hasNext()) {
                     Element el = (Element) it.next();
                     if (el.getAttributeValue("namespace") != null

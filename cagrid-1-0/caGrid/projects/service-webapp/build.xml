@@ -12,16 +12,16 @@ GSBT - Globus Service Build Tools
 	<property name="globus.location" location="${env.GLOBUS_LOCATION}" />
 
 	<property name="jar.name" value="caGrid-service-webapp-extension-${project.version}.jar" />
-	
+
 	<!-- Important directories and files -->
 	<property name="src.dir" value="src" />
 	<property name="templates.src.dir" value="templates" />
-	
+
 	<property name="ext.dir" location="${basedir}/ext" />
 	<property name="ext.grid.dir" location="${ext.dir}/target_grid" />
 	<property name="endorsed.lib.dir" location="${ext.dir}/dependencies/endorsed/jars" />
 	<property name="ext.lib.dir" location="${ext.dir}/dependencies/impl/jars" />
-	
+
 	<property name="etc.dir" value="etc" />
 
 
@@ -60,7 +60,7 @@ GSBT - Globus Service Build Tools
 			</fileset>
 			<fileset dir="${globus.location}/lib">
 				<include name="*.jar" />
-                <exclude name="junit.jar"/>
+				<exclude name="junit.jar" />
 			</fileset>
 		</path>
 		<path id="run.classpath">
@@ -145,27 +145,13 @@ GSBT - Globus Service Build Tools
 
 	<target name="installIntroduceExtensions">
 
-		<delete dir="${introduce.extensions.dir}/service-webapp" />
-		<mkdir dir="${introduce.extensions.dir}/service-webapp" />
-		<mkdir dir="${introduce.extensions.dir}/service-webapp/lib" />
-
-		<copy overwrite="true" todir="${introduce.extensions.dir}/service-webapp/lib">
-			<fileset dir="build/jars">
-				<include name="${service.jar.name}" />
-			</fileset>
-		</copy>
-
-		<copy overwrite="true" todir="${introduce.extensions.dir}/service-webapp/lib">
-			<fileset dir="ext/dependencies/impl/jars">
-				<include name="*.jar" />
-				<exclude name="*caGrid-Introduce*.jar"/>
-				<exclude name="*caGrid-ServiceSecurity*.jar"/>
-			</fileset>
-		</copy>
+		<delete dir="${introduce.extensions.dir}/service_webapp" />
+		<mkdir dir="${introduce.extensions.dir}/service_webapp" />
+		<mkdir dir="${introduce.extensions.dir}/service_webapp/lib" />
 
 		<!-- extension description file -->
-		<copy overwrite="true" todir="${introduce.extensions.dir}/service-webapp" file="extension/extension.xml" />
-		
+		<copy overwrite="true" todir="${introduce.extensions.dir}/service_webapp" file="extension/extension.xml" />
+
 		<!-- libraries -->
 		<copy overwrite="true" todir="${introduce.extensions.dir}/lib">
 			<fileset dir="build/jars">
