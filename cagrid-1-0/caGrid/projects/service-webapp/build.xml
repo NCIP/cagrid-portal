@@ -163,5 +163,38 @@ GSBT - Globus Service Build Tools
 		</copy>
 	</target>
 
+	<target name="deployHelper">
+		<copy overwrite="true" toDir="${webapp.deploy.dir}">
+			<fileset dir="conf">
+				<include name="web.xml" />
+			</fileset>
+		</copy>
+
+		<copy overwrite="true" toDir="${webapp.deploy.lib.dir}">
+			<fileset dir="build/jars">
+				<include name="*.jar" />
+			</fileset>
+			<fileset dir="ext/dependencies/impl/jars">
+				<include name="*.jar" />
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="deployTomcat">
+		<property name="tomcat.dir" value="${env.CATALINA_HOME}" />
+		<property name="globus.webapp" value="wsrf" />
+		<property name="webapp.deploy.dir" value="${tomcat.dir}/webapps/${globus.webapp}" />
+		<property name="webapp.deploy.lib.dir" value="${webapp.deploy.dir}/WEB-INF/lib" />
+		<runtarget target="deployHelper" />
+	</target>
+
+	<target name="deployJBoss">
+		<property name="jboss.dir" value="${env.JBOSS_HOME}" />
+		<property name="globus.webapp" value="wsrf" />
+		<property name="webapp.deploy.dir" value="${jboss.dir}/server/default/deploy/${globus.webapp}.war" />
+		<property name="webapp.deploy.lib.dir" value="${webapp.deploy.dir}/WEB-INF/lib" />
+		<runtarget target="deployHelper" />
+	</target>
+
 
 </project>
