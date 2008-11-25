@@ -16,7 +16,8 @@ GSBT - Globus Service Build Tools
 	<!-- Important directories and files -->
 	<property name="src.dir" value="src" />
 	<property name="templates.src.dir" value="templates" />
-
+	<property name="tools.lib.dir" location="${basedir}/tools/lib" />
+	
 	<property name="ext.dir" location="${basedir}/ext" />
 	<property name="ext.grid.dir" location="${ext.dir}/target_grid" />
 	<property name="endorsed.lib.dir" location="${ext.dir}/dependencies/endorsed/jars" />
@@ -41,6 +42,15 @@ GSBT - Globus Service Build Tools
 	<property name="sep" value="${file.separator}" />
 	<!-- We want detailed error messages -->
 	<property name="java.debug" value="on" />
+
+
+	<!-- using ant contrib for contidionals, looping , and runtarget -->
+	<taskdef resource="net/sf/antcontrib/antlib.xml">
+		<classpath>
+			<pathelement location="${tools.lib.dir}/ant-contrib.jar" />
+		</classpath>
+	</taskdef>
+
 
 	<!-- Sets up the build directory structure -->
 	<target name="init" depends="checkGlobus">
