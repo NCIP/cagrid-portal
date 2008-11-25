@@ -18,6 +18,7 @@ import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.UIManager;
 import javax.swing.border.TitledBorder;
 
 /** 
@@ -27,7 +28,7 @@ import javax.swing.border.TitledBorder;
  * @author David Ervin
  * 
  * @created Mar 19, 2008 11:13:47 AM
- * @version $Id: DomainModelVisualizer.java,v 1.1 2008-04-16 13:54:20 dervin Exp $ 
+ * @version $Id: DomainModelVisualizer.java,v 1.2 2008-11-25 15:55:20 dervin Exp $ 
  */
 public class DomainModelVisualizer extends JFrame {
     
@@ -160,6 +161,11 @@ public class DomainModelVisualizer extends JFrame {
 
 
     public static void main(String[] args) {
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception ex) {
+            System.err.println("Error setting system look and feel: " + ex.getMessage());
+        }
         DomainModelVisualizer viz = new DomainModelVisualizer();
         viz.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         viz.setVisible(true);
