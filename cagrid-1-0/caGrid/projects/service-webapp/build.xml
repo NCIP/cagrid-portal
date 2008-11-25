@@ -166,7 +166,7 @@ GSBT - Globus Service Build Tools
 		</copy>
 	</target>
 
-	<target name="deployHelper" if="webapp.deploy.dir,webapp.deploy.lib.dir">
+	<target name="deployHelper">
 		<copy overwrite="true" toDir="${webapp.deploy.dir}">
 			<fileset dir="conf">
 				<include name="web.xml" />
