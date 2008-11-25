@@ -56,7 +56,10 @@
         <ns2:InputParameter qName="ns13:QueryExecutionParameters" dimensionality="1" index="2" isArray="false" isRequired="false" name="queryExecutionParameters" xmlns:ns13="http://fqp.cagrid.nci.nih.gov/QueryExecutionParameters"/>
        </ns2:inputParameterCollection>
        <ns2:Output qName="ns14:FederatedQueryResultsReference" dimensionality="1" isArray="false" xmlns:ns14="http://fqp.cagrid.nci.nih.gov/FederatedResults/types"/>
-       <ns2:faultCollection/>
+       <ns2:faultCollection>
+        <ns2:Fault description="" name="FederatedQueryProcessingFault"/>
+        <ns2:Fault description="" name="InternalErrorFault"/>
+       </ns2:faultCollection>
       </ns2:Operation>
      </ns2:operationCollection>
      <ns2:contextPropertyCollection>

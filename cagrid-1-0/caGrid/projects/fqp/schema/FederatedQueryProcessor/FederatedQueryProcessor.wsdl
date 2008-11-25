@@ -162,6 +162,9 @@
   <message name="FederatedQueryProcessingFaultFaultMessage">
     <part name="fault" element="ns7:FederatedQueryProcessingFault" />
   </message>
+  <message name="InternalErrorFaultFaultMessage">
+    <part name="fault" element="ns16:InternalErrorFault" />
+  </message>
   <!--============================================================
 
                        P O R T T Y P E
@@ -185,6 +188,8 @@
     <operation name="query">
       <input message="tns:QueryRequest" wsa:Action="http://fqp.cagrid.nci.nih.gov/FederatedQueryProcessor/QueryRequest" />
       <output message="tns:QueryResponse" wsa:Action="http://fqp.cagrid.nci.nih.gov/FederatedQueryProcessor/QueryResponse" />
+      <fault name="FederatedQueryProcessingFault" message="tns:FederatedQueryProcessingFaultFaultMessage" wsa:Action="http://fqp.cagrid.nci.nih.gov/FederatedQueryProcessor/FederatedQueryProcessingFaultFaultMessage" />
+      <fault name="InternalErrorFault" message="tns:InternalErrorFaultFaultMessage" wsa:Action="http://fqp.cagrid.nci.nih.gov/FederatedQueryProcessor/InternalErrorFaultFaultMessage" />
     </operation>
     <wsdl:operation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="GetMultipleResourceProperties">
       <wsdl:input name="GetMultipleResourcePropertiesRequest" message="wsrpw:GetMultipleResourcePropertiesRequest" wsa:Action="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties/GetMultipleResourceProperties" />

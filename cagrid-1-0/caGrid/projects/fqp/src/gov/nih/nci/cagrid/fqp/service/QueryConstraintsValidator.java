@@ -1,8 +1,7 @@
-package gov.nih.nci.cagrid.fqp.results.utils;
+package gov.nih.nci.cagrid.fqp.service;
 
 import gov.nih.nci.cagrid.dcql.DCQLQuery;
 import gov.nih.nci.cagrid.fqp.processor.exceptions.FederatedQueryProcessingException;
-import gov.nih.nci.cagrid.fqp.service.FederatedQueryProcessorConfiguration;
 
 import java.rmi.RemoteException;
 

@@ -134,7 +134,7 @@ public class FederatedQueryProcessorClient extends FederatedQueryProcessorClient
     }
   }
 
-  public gov.nih.nci.cagrid.fqp.results.client.FederatedQueryResultsClient query(gov.nih.nci.cagrid.dcql.DCQLQuery query,org.cagrid.gaards.cds.delegated.stubs.types.DelegatedCredentialReference delegatedCredentialReference,org.cagrid.fqp.execution.QueryExecutionParameters queryExecutionParameters) throws RemoteException, org.apache.axis.types.URI.MalformedURIException {
+  public gov.nih.nci.cagrid.fqp.results.client.FederatedQueryResultsClient query(gov.nih.nci.cagrid.dcql.DCQLQuery query,org.cagrid.gaards.cds.delegated.stubs.types.DelegatedCredentialReference delegatedCredentialReference,org.cagrid.fqp.execution.QueryExecutionParameters queryExecutionParameters) throws RemoteException, org.apache.axis.types.URI.MalformedURIException, gov.nih.nci.cagrid.fqp.stubs.types.FederatedQueryProcessingFault, gov.nih.nci.cagrid.fqp.results.stubs.types.InternalErrorFault {
     synchronized(portTypeMutex){
       configureStubSecurity((Stub)portType,"query");
     gov.nih.nci.cagrid.fqp.stubs.QueryRequest params = new gov.nih.nci.cagrid.fqp.stubs.QueryRequest();

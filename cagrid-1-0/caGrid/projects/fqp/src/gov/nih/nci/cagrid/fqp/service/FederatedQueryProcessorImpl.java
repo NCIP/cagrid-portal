@@ -32,10 +32,19 @@ public class FederatedQueryProcessorImpl extends FederatedQueryProcessorImplBase
 
     private FQPAsynchronousExecutionUtil asynchronousExecutor = null;
     private ExecutorService workManager = null;
+    private QueryConstraintsValidator queryConstraintsValidator = null;
 
 
     public FederatedQueryProcessorImpl() throws RemoteException {
         super();
+        FederatedQueryProcessorConfiguration fqpConfig = null;
+        try {
+            fqpConfig = getConfiguration();
+        } catch (Exception ex) {
+            throw new RemoteException("Error initializing federated query processor configuration object: "
+                + ex.getMessage());
+        }
+        queryConstraintsValidator = new QueryConstraintsValidator(fqpConfig);
     }
 
 
@@ -91,11 +100,24 @@ public class FederatedQueryProcessorImpl extends FederatedQueryProcessorImplBase
     public gov.nih.nci.cagrid.fqp.results.stubs.types.FederatedQueryResultsReference query(
         gov.nih.nci.cagrid.dcql.DCQLQuery query,
         org.cagrid.gaards.cds.delegated.stubs.types.DelegatedCredentialReference delegatedCredentialReference,
-        org.cagrid.fqp.execution.QueryExecutionParameters queryExecutionParameters) throws RemoteException {
+        org.cagrid.fqp.execution.QueryExecutionParameters queryExecutionParameters) throws RemoteException,
+        gov.nih.nci.cagrid.fqp.stubs.types.FederatedQueryProcessingFault,
+        gov.nih.nci.cagrid.fqp.results.stubs.types.InternalErrorFault {
+        // validate the query constraints before trying to do anything else
+        try {
+            queryConstraintsValidator.validateAgainstConstraints(query, queryExecutionParameters);
+        } catch (FederatedQueryProcessingException ex) {
+            FaultHelper helper = new FaultHelper(new FederatedQueryProcessingFault());
+            helper.addDescription("Query or query execution parameters violate this service's query constraints");
+            helper.addDescription(ex.getMessage());
+            helper.addFaultCause(ex);
+            throw (FederatedQueryProcessingFault) helper.getFault();
+        }
+        // execute the query
         FederatedQueryResultsReference ref = null;
         try {
-            ref = getAsynchronousExecutor().executeAsynchronousQuery(query, delegatedCredentialReference,
-                queryExecutionParameters);
+            ref = getAsynchronousExecutor().executeAsynchronousQuery(
+                query, delegatedCredentialReference, queryExecutionParameters);
         } catch (FederatedQueryProcessingException ex) {
             throw new RemoteException("Error setting up resource: " + ex.getMessage(), ex);
         }
@@ -113,10 +135,12 @@ public class FederatedQueryProcessorImpl extends FederatedQueryProcessorImplBase
             } catch (Exception e) {
                 LOG.error("Problem determing pool size, using default(" + poolSize + ").", e);
             }
-            // thread factory creates daemon threads so the executor shuts down with the JVM
+            // thread factory creates daemon threads so the executor shuts down
+            // with the JVM
             ThreadFactory threadFactory = new ThreadFactory() {
                 ThreadFactory base = Executors.defaultThreadFactory();
-                
+
+
                 public Thread newThread(Runnable runnable) {
                     Thread t = base.newThread(runnable);
                     t.setDaemon(true);
@@ -166,9 +190,11 @@ public class FederatedQueryProcessorImpl extends FederatedQueryProcessorImplBase
 
             // create the executor instance
             if (leaseMinutes == -1) {
-                asynchronousExecutor = new FQPAsynchronousExecutionUtil(resultHome, getWorkExecutorService());
+                asynchronousExecutor = new FQPAsynchronousExecutionUtil(
+                    resultHome, getWorkExecutorService());
             } else {
-                asynchronousExecutor = new FQPAsynchronousExecutionUtil(resultHome, getWorkExecutorService(), leaseMinutes);
+                asynchronousExecutor = new FQPAsynchronousExecutionUtil(
+                    resultHome, getWorkExecutorService(), leaseMinutes);
             }
         }
         return asynchronousExecutor;
