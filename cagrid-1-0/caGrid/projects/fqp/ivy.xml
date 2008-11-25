@@ -45,8 +45,8 @@
     	conf="client->client;service->service"/>
     <dependency rev="latest.integration" org="caGrid" name="advertisement" 
     	conf="service->default"/>
-    <dependency rev="latest.integration" org="caGrid" name="tools" 
-    	conf="impl->notification"/>
+    <dependency rev="latest.integration" org="caGrid" name="introduce-clienttools" 
+    	conf="impl->default"/>
 
     <dependency rev="${target.grid}" org="caGrid" name="target_grid" conf="target_grid->urls"/>
 
