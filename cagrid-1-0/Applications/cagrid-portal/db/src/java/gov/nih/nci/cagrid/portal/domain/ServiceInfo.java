@@ -105,10 +105,6 @@ public class ServiceInfo {
         this.id = id;
     }
 
-    public static enum ServiceType {
-        DATA, ANALYTICAL;
-    }
-
     public ServiceType getType() {
         return type;
     }

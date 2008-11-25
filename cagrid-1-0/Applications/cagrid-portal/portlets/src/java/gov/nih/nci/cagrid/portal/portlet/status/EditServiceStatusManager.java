@@ -30,16 +30,16 @@ public class EditServiceStatusManager {
         GridService service = gridServiceDao.getById(serviceId);
 
         //Should be an aspect        
-//        if(discoveryModel.getLiferayUser()!=null){
-        logger.debug("Found admin user. Will change service status");
-        if (service.getCurrentStatus().equals(ServiceStatus.BANNED)) {
-            logger.debug("Service is in Banned state. Will unban " + service.getUrl());
-            gridServiceDao.unbanService(service);
-        } else {
-            logger.debug("Will Ban Service " + service.getUrl());
-            gridServiceDao.banService(service);
+        if(discoveryModel.getLiferayUser()!=null){
+            logger.debug("Found admin user. Will change service status");
+            if (service.getCurrentStatus().equals(ServiceStatus.BANNED)) {
+                logger.debug("Service is in Banned state. Will unban " + service.getUrl());
+                gridServiceDao.unbanService(service);
+            } else {
+                logger.debug("Will Ban Service " + service.getUrl());
+                gridServiceDao.banService(service);
+            }
         }
-//        }
         return service.getCurrentStatus();
     }
 

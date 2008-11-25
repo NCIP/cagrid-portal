@@ -27,16 +27,7 @@ public class BaseServiceFilter {
         List<GridService> out = new ArrayList<GridService>();
         for (GridService svc : in) {
             boolean filter = false;
-            try {
-                if (svc.getServiceMetadata() == null) {
-                    filter = true;
-                } else if (svc.getServiceMetadata().getServiceDescription() == null) {
-                    filter = true;
-                } else if (svc.getServiceMetadata().getServiceDescription()
-                        .getName() == null) {
-                    filter = true;
-                }
-            } catch (Exception e) {
+            if (svc.getServiceMetadata() == null) {
                 filter = true;
             }
             if (!filter) {
@@ -44,8 +35,8 @@ public class BaseServiceFilter {
             }
         }
         return out;
-    }//ToDo has to be made protected
-
+    }
+    
     public static List<GridService> filterServicesByStatus(
             List<GridService> in, ServiceStatus... statuses) {
         List<GridService> out = new ArrayList<GridService>();

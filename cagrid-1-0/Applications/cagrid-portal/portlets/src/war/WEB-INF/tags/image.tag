@@ -5,6 +5,7 @@
 <%@attribute name="id" required="false"%>
 <%@attribute name="height" required="false"%>
 <%@attribute name="alt" required="false"%>
+<%@attribute name="title" required="false"%>
 <%@attribute name="cssClass" required="false"%>
 <%@attribute name="cssStyle" required="false"%>
 
@@ -14,10 +15,13 @@
         </c:if>
         src="<c:url value="/images/${name}"/>"
         <c:if test="${!empty height}">
-            height="${height}" 
+            height="${height}"
         </c:if>
         <c:if test="${!empty alt}">
             alt="${alt}"
+        </c:if>
+          <c:if test="${!empty title}">
+            title="${title}"
         </c:if>
          <c:if test="${!empty cssClass}">
             class="${cssClass}"

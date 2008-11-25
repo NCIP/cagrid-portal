@@ -29,7 +29,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
- * 
+ * @author <a href="mailto:manav.kher@semanticbits.com">Manav Kher</a>
+ *
  */
 @Transactional
 public class MapBean extends AbstractDirectoryBean {
@@ -105,6 +106,13 @@ public class MapBean extends AbstractDirectoryBean {
 		participantNodes.addAll(pNodes.values());
 		return participantNodes;
 	}
+
+    public List<PointOfContactMapNode> getPointOfContactNodes() {
+            List<PointOfContactMapNode> pointOfContactNodes = new ArrayList<PointOfContactMapNode>();
+            pointOfContactNodes.addAll(pocNodes.values());
+            return pointOfContactNodes;
+        }
+
 
 	public int getZoomLevel() {
 		return zoomLevel;

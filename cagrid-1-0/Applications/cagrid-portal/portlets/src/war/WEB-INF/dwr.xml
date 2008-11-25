@@ -1,23 +1,8 @@
-<!DOCTYPE dwr PUBLIC 
+<!DOCTYPE dwr PUBLIC
         "-//GetAhead Limited//DTD Direct Web Remoting 2.0//EN"
         "http://getahead.org/dwr//dwr20.dtd">
 <dwr>
     <allow>
-
-        <create creator="spring" javascript="QueryHistoryFacade">
-            <param name="beanName" value="cqlQueryHistoryFacade"/>
-        </create>
-
-        <convert converter="enum" match="gov.nih.nci.cagrid.portal.domain.dataservice.QueryInstanceState"/>
-
-        <convert converter="bean" match="gov.nih.nci.cagrid.portal.domain.dataservice.CQLQueryInstance">
-            <param name="include" value="id, finishTime, startTime, state, type"/>
-        </convert>
-        
-        <convert converter="bean" match="gov.nih.nci.cagrid.portal.domain.dataservice.DCQLQueryInstance">
-            <param name="include" value="id, finishTime, startTime, state, type"/>
-        </convert>
-        
 
         <create creator="spring" javascript="ServiceDetailsTreeFacade">
             <param name="beanName" value="serviceDetailsTreeFacade"/>
@@ -33,15 +18,34 @@
 
         <create creator="spring" javascript="EVSAutomcompleter">
             <param name="beanName" value="evsAutoCompleter"/>
+            <include method="autoCompleteConcept"/>
+            <include method="resultCount"/>
         </create>
-
-        <convert converter="bean" match="gov.nih.nci.cagrid.portal.portlet.discovery.evs.EVSConceptDTO"/>
 
         <create creator="spring" javascript="ServiceStatusManager">
             <param name="beanName" value="serviceStatusManager"/>
+            <include method="banUnbanService"/>
         </create>
 
+        <!--converters-->
+        <create creator="spring" javascript="QueryHistoryFacade">
+            <param name="beanName" value="cqlQueryHistoryFacade"/>
+        </create>
+
+        <convert converter="enum" match="gov.nih.nci.cagrid.portal.domain.dataservice.QueryInstanceState"/>
+
+        <convert converter="bean" match="gov.nih.nci.cagrid.portal.domain.dataservice.CQLQueryInstance">
+            <param name="include" value="id, finishTime, startTime, state, type"/>
+        </convert>
+
+        <convert converter="bean" match="gov.nih.nci.cagrid.portal.domain.dataservice.DCQLQueryInstance">
+            <param name="include" value="id, finishTime, startTime, state, type"/>
+        </convert>
+
+        <convert converter="bean" match="gov.nih.nci.cagrid.portal.portlet.discovery.evs.EVSConceptDTO"/>
         <convert converter="enum" match="gov.nih.nci.cagrid.portal.domain.ServiceStatus"/>
-        
+        <convert converter="bean" match="gov.nih.nci.cagrid.portal.domain.ServiceInfo"/>
+        <convert converter="enum" match="gov.nih.nci.cagrid.portal.domain.ServiceType"/>
+
     </allow>
 </dwr>

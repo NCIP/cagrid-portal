@@ -1,89 +1,20 @@
-<script
-        src="<c:out value="
-${mapBean.baseUrl}" escapeXml="false"/><c:out value="${mapBean.apiKey}" escapeXml="false"/>"
-type="text/javascript"></script>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
-<c:set var="mapNodeId"><portlet:namespace/>-gmap</c:set>
 <style type="text/css">
-    <!--
-#<c:out value="${mapNodeId}"/> {
-border: 4px solid #5C5C5C;
-margin-left: auto;
-margin-right: auto;
-width: 95%;
-height: 300px;
-}
+<!--
+<%@ include file="/css/map.css" %>
 -->
 </style>
-<div id="<c:out value="${mapNodeId}"/>"><!-- for ie --></div>
 
-<!-- #fix IE6 issue -->
-<script type="text/javascript">
-
-var bName = navigator.appName;
-var appVer = navigator.appVersion.toLowerCase();
-var iePos = appVer.indexOf('msie');
-if (iePos !=-1) {
-is_minor = parseFloat(appVer.substring(iePos+5,appVer.indexOf(';',iePos)))
-is_major = parseInt(is_minor);
-}
-
-if (bName == "Microsoft Internet Explorer" &&
-is_major <=6)
-{
-document.getElementById('${mapNodeId}').style.width="600px";
-document.getElementById('${mapNodeId}').style.height="350px";
-}
-
-</script>
+<c:set var="mapNodeId">namespace-gmap</c:set>
 
 <script type="text/javascript">
 //<![CDATA[
 jQuery(document).ready(function() {
 
-var baseIcon = new GIcon();
-baseIcon.iconSize = new GSize(34, 24);
-baseIcon.shadowSize = new GSize(34, 24);
-baseIcon.iconAnchor = new GPoint(17, 12);
-baseIcon.infoWindowAnchor = new GPoint(9, 2);
-baseIcon.infoShadowAnchor = new GPoint(18, 25);
-baseIcon.shadow = "<c:url value="/images/shadow.png"/>";
-
-var aSvcUp = new GIcon(baseIcon);
-aSvcUp.image = "<c:url value="/images/analytical_services.gif"/>";
-var aSvcDown = new GIcon(baseIcon);
-aSvcDown.image = "<c:url value="/images/analytical_services-inactive.gif"/>";
-
-var dSvcUp = new GIcon(baseIcon);
-dSvcUp.image = "<c:url value="/images/data-services.gif"/>";
-var dSvcDown = new GIcon(baseIcon);
-dSvcDown.image = "<c:url value="/images/data-services-inactive.gif"/>";
-
-var ctrUp = new GIcon(baseIcon);
-ctrUp.image = "<c:url value="/images/hosting-research-center.gif"/>";
-var ctrPartial = new GIcon(baseIcon);
-ctrPartial.image = "<c:url value="/images/hosting-research-center-partial.gif"/>";
-var ctrDown = new GIcon(baseIcon);
-ctrDown.image = "<c:url value="/images/hosting-research-center-inactive.gif"/>";
-
-var partCtr = new GIcon(baseIcon);
-partCtr.image = "<c:url value="/images/participant_institute.gif"/>";
-
-var partPoc = new GIcon(baseIcon);
-partPoc.image = "<c:url value="/images/participant_POC.gif"/>";
-
 
 if (GBrowserIsCompatible()) {
-var map = new GMap2(document.getElementById("<c:out value="${mapNodeId}"/>"));
-map.setCenter(
-new GLatLng(
-<c:out value="${mapBean.centerLatitude}"/>,
-<c:out value="${mapBean.centerLongitude}"/>
-), <c:out value="${mapBean.zoomLevel}"/>);
-
-map.enableDoubleClickZoom();
-map.addControl(new GSmallMapControl());
-
 
 <c:if test="${!empty mapBean.participantNodes}">
 <c:forEach
@@ -106,12 +37,12 @@ GEvent.addListener(
 function() {
 <c:out value="${markerId}"/>
 .openInfoWindowHtml(
-"<div style=\"font-size: 0.9em;\">" +
+"<div class=\"mapInfoPopup\">" +
 
 <c:choose>
 <c:when test="${fn:length(pNode.participants) eq 1}">
 <c:set var="participant" value="${pNode.participants[0]}"/>
-"<a href=\"<portlet:actionURL><portlet:param name="operation" value="${selectItemOperationName}"/><portlet:param name="selectedId" value="${participant.id}"/><portlet:param name="type" value="PARTICIPANT"/></portlet:actionURL>\" " +
+"<a href=\"javascript:selectItemForDiscovery(${participant.id},'PARTICIPANT');\" " +
 "><c:out value="${participant.name}"/></a><br/>" +
 "<b>Homepage:</b> <a target=\"_blank\" href=\"<c:out value="${participant.homepageUrl}"/>\"><c:out value="${participant.homepageUrl}"/></a>" +
 </c:when>
@@ -119,7 +50,7 @@ function() {
 <c:set var="numParticipants" value="${fn:length(pNode.participants)}"/>
 <c:set var="participantIds"><c:forEach var="participant" items="${pNode.participants}" varStatus="status"><c:out value="${participant.id}"/><c:if test="${status.count lt numParticipants}">,</c:if></c:forEach></c:set>
 "<c:out value="There are <b>${numParticipants}"/></b> participants at this location. " +
-"<a href=\"<portlet:actionURL><portlet:param name="operation" value="${selectItemsOperationName}"/><portlet:param name="selectedIds" value="${participantIds}"/><portlet:param name="type" value="PARTICIPANT"/></portlet:actionURL>\" " +
+"<a href=\"javascript:selectItemsForDiscovery(${participantIds},'PARTICIPANT');\" " +
 ">View...</a><br/>" +
 </c:otherwise>
 </c:choose>
@@ -192,12 +123,12 @@ GEvent.addListener(
 function() {
 <c:out value="${markerId}"/>
 .openInfoWindowHtml(
-"<div style=\"font-size: 0.9em;\">" +
+"<div class=\"mapInfoPopup\">" +
 
 <c:choose>
 <c:when test="${numSvcs eq 1}">
 <c:set var="svcInfo" value="${svcNode.serviceInfos[0]}"/>
-"<a href=\"<portlet:actionURL><portlet:param name="operation" value="${selectItemOperationName}"/><portlet:param name="selectedId" value="${svcInfo.id}"/><portlet:param name="type" value="SERVICE"/></portlet:actionURL>\" " +
+"<a href=\"javascript:selectItemForDiscovery(${svcInfo.id},'SERVICE');\" " +
 "><c:out value="${svcInfo.name}"/></a><br/>" +
 "<b>Center:</b> <c:out value="${svcInfo.center}"/><br/>" +
 "<b>Status:</b> <c:out value="${svcInfo.status}"/><br/>" +
@@ -205,7 +136,7 @@ function() {
 <c:otherwise>
 <c:set var="serviceIds"><c:forEach var="svcInfo" items="${svcNode.serviceInfos}" varStatus="status"><c:out value="${svcInfo.id}"/><c:if test="${status.count lt numSvcs}">,</c:if></c:forEach></c:set>
 "<c:out value="There are <b>${numSvcs}"/></b> services at this location. " +
-"<a href=\"<portlet:actionURL><portlet:param name="operation" value="${selectItemsOperationName}"/><portlet:param name="selectedIds" value="${serviceIds}"/><portlet:param name="type" value="SERVICE"/></portlet:actionURL>\" " +
+"<a href=\"javascript:selectItemsForDiscovery(${serviceIds},'SERVICE');\" " +
 ">View...</a>" +
 </c:otherwise>
 </c:choose>
@@ -217,7 +148,8 @@ map.addOverlay(<c:out value="${markerId}"/>);
 </c:forEach>
 </c:if>
 
-     <c:if test="${!empty mapBean.pointOfContactNodes}">
+
+ <c:if test="${!empty mapBean.pointOfContactNodes}">
 <c:forEach
 items="${mapBean.pointOfContactNodes}"
 var="pocNode"
@@ -243,7 +175,7 @@ function() {
 <c:choose>
 <c:when test="${fn:length(pocNode.pointOfContacts) eq 1}">
 <c:set var="poc" value="${pocNode.pointOfContacts[0]}"/>
-"<a href=\"<portlet:actionURL><portlet:param name="operation" value="${selectItemOperationName}"/><portlet:param name="selectedId" value="${poc.id}"/><portlet:param name="type" value="POC"/></portlet:actionURL>\" " +
+"<a href=\"javascript:selectItemForDiscovery(${poc.id},'POC');\" " +
 "><c:out value="${poc.firstName}"/><c:out value="${poc.lastName}"/></a><br/>" +
 "<b>Email:</b> <a target=\"_blank\" href=\"mailto:<c:out value="${poc.emailAddress}"/>\"><c:out value="${poc.emailAddress}"/></a><br/>" +
 "<b>Phone:</b><c:out value="${poc.phoneNumber}"/><br/>" +
@@ -252,7 +184,7 @@ function() {
 <c:set var="numPocs" value="${fn:length(pocNode.pointOfContacts)}"/>
 <c:set var="pocIds"><c:forEach var="poc" items="${pocNode.pointOfContacts}" varStatus="status"><c:out value="${poc.id}"/><c:if test="${status.count lt numPocs}">,</c:if></c:forEach></c:set>
 "<c:out value="There are <b>${numPocs}"/></b> Points of Contact at this location. " +
-"<a href=\"<portlet:actionURL><portlet:param name="operation" value="${selectItemsOperationName}"/><portlet:param name="selectedIds" value="${pocIds}"/><portlet:param name="type" value="POC"/></portlet:actionURL>\" " +
+"<a href=\"javascript:selectItemsForDiscovery(${pocIds},'POC');\" " +
 ">View...</a><br/>" +
 </c:otherwise>
 </c:choose>
@@ -263,7 +195,6 @@ function() {
 map.addOverlay(<c:out value="${markerId}"/>);
 </c:forEach>
 </c:if>
-
 }
 });
 //]]>

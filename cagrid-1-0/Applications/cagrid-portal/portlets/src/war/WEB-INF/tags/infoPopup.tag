@@ -7,6 +7,7 @@
 <%@attribute name="popup_href" required="false" description="Hyperlink for the popup" %>
 <%@attribute name="popup_name" required="false" description="Text to display for the popup" %>
 <%@attribute name="popup_text" required="true" description="Information appearing in the popup" %>
+<%@attribute name="icon_image" required="false" description="Icon image appearing in the popup" %>
 
 
 
@@ -19,7 +20,15 @@
                 &nbsp; href='${popup_href}'>${popup_name}
             </c:when>
             <c:otherwise>
-                ><tags:image name="information_icon.png" height="16"/>
+                >
+                <c:choose>
+                <c:when test="${not empty icon_image}">
+                    <tags:image name="${icon_image}" height="16"/>
+                </c:when>
+                <c:otherwise>
+                    <tags:image name="information_icon.png" height="16"/>
+                </c:otherwise>
+                </c:choose>
             </c:otherwise>
         </c:choose>
 </a>&nbsp;
