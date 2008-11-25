@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="gme://caGrid.caBIG/1.0/org.cagrid.mms.domain"
+  xmlns:tns="gme://caGrid.caBIG/1.0/org.cagrid.mms.domain" targetNamespace="gme://caGrid.caBIG/1.0/org.cagrid.mms.domain"
+  elementFormDefault="qualified">
+
+  <xs:element name="UMLAssociationExclude" type="UMLAssociationExclude" />
+  <xs:complexType name="UMLAssociationExclude">
+    <xs:annotation>
+      <xs:documentation>
+        Used to identify a particular pattern of associations to exclude. The
+        wildcard "*" is supported, otherwise an exact string match is performed.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:attribute name="sourceRoleName" type="xs:string" default="*" />
+    <xs:attribute name="sourceClassName" type="xs:string" default="*" />
+    <xs:attribute name="targetRoleName" type="xs:string" default="*" />
+    <xs:attribute name="targetClassName" type="xs:string" default="*" />
+  </xs:complexType>
+
+
+  <xs:element name="UMLProjectIdentifer" type="UMLProjectIdentifer" />
+  <xs:complexType name="UMLProjectIdentifer">
+    <xs:sequence>
+      <xs:element name="AdditionalSourceProperty" type="tns:Property" minOccurs="0"
+        maxOccurs="unbounded">
+        <xs:annotation>
+          <xs:documentation>
+            Zero or more properties which are source-specific to be used to help
+            identify the Project of interest. The specific keys can be found by examining the
+            properties of the source's metadata.
+              </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="identifier" type="xs:string" />
+    <xs:attribute name="version" type="xs:string" use="optional" />
+    <xs:attribute name="sourceIdentifier" type="xs:string" use="optional" />
+  </xs:complexType>
+
+
+  <xs:complexType name="Property">
+    <xs:annotation>
+      <xs:documentation>
+        A name-value pair of string used to capture general information. The name
+        attribute is the key, and the value is the textual content.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute name="name" use="required" type="xs:string" />
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+</xs:schema>
