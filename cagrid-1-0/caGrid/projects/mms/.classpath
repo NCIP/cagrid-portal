@@ -95,5 +95,7 @@
 	<classpathentry kind="lib" path="ext/dependencies/test/jars/caGrid-core-tests-1.3-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/test/jars/jdepend-2.7.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/test/jars/junit-4.4.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/service/jars/caGrid-metadatautils-1.3-dev.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/service/jars/jasciidammit-1.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

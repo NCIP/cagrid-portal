@@ -11,7 +11,7 @@ really need to use the uml2xml binding lookup and have some way to pass namespac
 -probably annotateServiceMetadata(ServiceMetadata, (optional) Map<URI,Source>)
 -- when no map is provided, the service's "default" source should be used.
 
-
+how to handle the packaging of the application-config-client.xml
 
 Source Requirements:
 -identify "projects" by id and optional version

@@ -4,3 +4,4 @@ bin
 deploy.properties
 *.gar
 tmp
+*_DomainModel.xml
