@@ -48,7 +48,8 @@
     <dependency transitive="false" rev="latest.integration" org="caGrid" name="sdkQuery4" conf="default->processor"/>
     
     <!-- Tools for subscription helpers -->
-    <dependency rev="latest.integration" org="caGrid" name="tools" conf="default->notification"/>
+    <dependency rev="latest.integration" org="caGrid" name="introduce-clienttools" 
+    	conf="default->default"/>
     
     <!-- Core and core test -->
     <dependency rev="latest.integration" org="caGrid" name="core"
