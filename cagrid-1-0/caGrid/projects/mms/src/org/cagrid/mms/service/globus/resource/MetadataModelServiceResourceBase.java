@@ -139,6 +139,17 @@ public abstract class MetadataModelServiceResourceBase extends ReflectionResourc
 		prop.set(0, serviceMetadata);
 	}
 	
+	
+	
+	public org.cagrid.mms.domain.ModelSourceMetadata getModelSourceMetadata(){
+		return ((MetadataModelServiceResourceProperties) getResourceBean()).getModelSourceMetadata();
+	}
+	
+	public void setModelSourceMetadata(org.cagrid.mms.domain.ModelSourceMetadata modelSourceMetadata ) throws ResourceException {
+        ResourceProperty prop = getResourcePropertySet().get(MetadataModelServiceConstants.MODELSOURCEMETADATA);
+		prop.set(0, modelSourceMetadata);
+	}
+	
 
 
 	  
@@ -329,8 +340,7 @@ public abstract class MetadataModelServiceResourceBase extends ReflectionResourc
     }
     
     
-    
-    	private void populateResourceProperties() {
+    protected void populateResourceProperties() {
 	
 		loadServiceMetadataFromFile();
 	
@@ -338,7 +348,7 @@ public abstract class MetadataModelServiceResourceBase extends ReflectionResourc
 
 
 		
-	private void loadServiceMetadataFromFile() {
+    protected void loadServiceMetadataFromFile() {
       if(getServiceMetadata()==null){
 		try {
 			File dataFile = new File(ContainerConfig.getBaseDirectory() + File.separator

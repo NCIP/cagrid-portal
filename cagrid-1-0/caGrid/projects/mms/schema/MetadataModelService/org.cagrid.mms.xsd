@@ -8,7 +8,8 @@
     <xs:annotation>
       <xs:documentation>
         Used to identify a particular pattern of associations to exclude. The
-        wildcard "*" is supported, otherwise an exact string match is performed.
+        single
+        character wildcard "*" is supported, otherwise an exact string match is performed.
       </xs:documentation>
     </xs:annotation>
     <xs:attribute name="sourceRoleName" type="xs:string" default="*" />
@@ -16,7 +17,6 @@
     <xs:attribute name="targetRoleName" type="xs:string" default="*" />
     <xs:attribute name="targetClassName" type="xs:string" default="*" />
   </xs:complexType>
-
 
   <xs:element name="UMLProjectIdentifer" type="tns:UMLProjectIdentifer" />
   <xs:complexType name="UMLProjectIdentifer">
@@ -50,6 +50,52 @@
     </xs:sequence>
     <xs:attribute name="namespaceURI" use="required" type="xs:anyURI" />
   </xs:complexType>
+
+  <xs:element name="ModelSourceMetadata" type="tns:ModelSourceMetadata" />
+  <xs:complexType name="ModelSourceMetadata">
+    <xs:sequence>
+      <xs:element name="SupportedModelSources">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="Source" type="tns:SourceDescriptor" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="defaultSourceIdentifier" type="xs:string" use="optional" />
+  </xs:complexType>
+
+  <xs:complexType name="SourceDescriptor">
+    <xs:annotation>
+      <xs:documentation>
+        Identifies a particular model source and its characteristics
+      </xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="SupportedProjectProperties">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="tns:PropertyDescriptor" minOccurs="0" maxOccurs="unbounded" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="identifier" type="xs:string" />
+    <xs:attribute name="description" type="xs:string" />
+  </xs:complexType>
+
+  <xs:element name="PropertyDescriptor" type="tns:PropertyDescriptor" />
+  <xs:complexType name="PropertyDescriptor">
+    <xs:annotation>
+      <xs:documentation>
+        Describes a type of Property supported by a particular source.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:attribute name="name" type="xs:string" />
+    <xs:attribute name="description" type="xs:string" />
+    <xs:attribute name="required" type="xs:boolean" />
+  </xs:complexType>
+
 
   <xs:complexType name="Property">
     <xs:annotation>

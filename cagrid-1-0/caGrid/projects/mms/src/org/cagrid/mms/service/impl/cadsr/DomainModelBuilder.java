@@ -1,4 +1,4 @@
-package org.cagrid.mms.service.cadsrimpl;
+package org.cagrid.mms.service.impl.cadsr;
 
 import gov.nih.nci.cadsr.umlproject.domain.Project;
 import gov.nih.nci.cadsr.umlproject.domain.UMLAssociationMetadata;
@@ -50,7 +50,7 @@ import commonj.work.WorkManager;
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster</A>
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * @created Jun 1, 2006
- * @version $Id: DomainModelBuilder.java,v 1.1 2008-11-25 22:04:54 oster Exp $
+ * @version $Id: DomainModelBuilder.java,v 1.1 2008-11-26 21:04:20 oster Exp $
  */
 public class DomainModelBuilder {
     private static final String EXCLUDE_WILDCARD = "*";

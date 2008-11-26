@@ -46,13 +46,19 @@ public class MetadataModelServiceProviderImpl{
 
     public org.cagrid.mms.stubs.GenerateDomainModelForClassesWithExcludesResponse generateDomainModelForClassesWithExcludes(org.cagrid.mms.stubs.GenerateDomainModelForClassesWithExcludesRequest params) throws RemoteException {
     org.cagrid.mms.stubs.GenerateDomainModelForClassesWithExcludesResponse boxedResult = new org.cagrid.mms.stubs.GenerateDomainModelForClassesWithExcludesResponse();
-    boxedResult.setDomainModel(impl.generateDomainModelForClassesWithExcludes(params.getUmlProjectIdentifer().getUMLProjectIdentifer(),params.getFullyQualifiiedClassNames(),params.getUMLAssociationExclude().getUMLAssociationExclude()));
+    boxedResult.setDomainModel(impl.generateDomainModelForClassesWithExcludes(params.getUmlProjectIdentifer().getUMLProjectIdentifer(),params.getFullyQualifiiedClassNames(),params.getUmlAssociationExclude().getUMLAssociationExclude()));
     return boxedResult;
   }
 
     public org.cagrid.mms.stubs.AnnotateServiceMetadataResponse annotateServiceMetadata(org.cagrid.mms.stubs.AnnotateServiceMetadataRequest params) throws RemoteException {
     org.cagrid.mms.stubs.AnnotateServiceMetadataResponse boxedResult = new org.cagrid.mms.stubs.AnnotateServiceMetadataResponse();
     boxedResult.setSemanticMetadata(impl.annotateServiceMetadata(params.getServiceMetadata().getServiceMetadata(),params.getNamespaceToProjectMappings().getNamespaceToProjectMapping()));
+    return boxedResult;
+  }
+
+    public org.cagrid.mms.stubs.GetModelSourceMetadataResponse getModelSourceMetadata(org.cagrid.mms.stubs.GetModelSourceMetadataRequest params) throws RemoteException {
+    org.cagrid.mms.stubs.GetModelSourceMetadataResponse boxedResult = new org.cagrid.mms.stubs.GetModelSourceMetadataResponse();
+    boxedResult.setModelSourceMetadata(impl.getModelSourceMetadata());
     return boxedResult;
   }
 

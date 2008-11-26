@@ -1,4 +1,4 @@
-package org.cagrid.mms.service.cadsrimpl;
+package org.cagrid.mms.service.impl.cadsr;
 
 import gov.nih.nci.cadsr.domain.DataElement;
 import gov.nih.nci.cadsr.domain.ValueDomain;

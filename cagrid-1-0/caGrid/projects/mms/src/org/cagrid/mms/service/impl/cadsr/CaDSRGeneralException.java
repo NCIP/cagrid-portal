@@ -1,4 +1,4 @@
-package org.cagrid.mms.service.cadsrimpl;
+package org.cagrid.mms.service.impl.cadsr;
 
 /**
  * @author oster

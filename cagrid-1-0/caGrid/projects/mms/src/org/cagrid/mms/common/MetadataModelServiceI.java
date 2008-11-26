@@ -12,6 +12,12 @@ import java.rmi.RemoteException;
  */
 public interface MetadataModelServiceI {
 
+  public org.oasis.wsrf.properties.GetMultipleResourcePropertiesResponse getMultipleResourceProperties(org.oasis.wsrf.properties.GetMultipleResourceProperties_Element params) throws RemoteException ;
+
+  public org.oasis.wsrf.properties.GetResourcePropertyResponse getResourceProperty(javax.xml.namespace.QName params) throws RemoteException ;
+
+  public org.oasis.wsrf.properties.QueryResourcePropertiesResponse queryResourceProperties(org.oasis.wsrf.properties.QueryResourceProperties_Element params) throws RemoteException ;
+
   /**
    * Generates a complete DomainModel for the specified Project
    *
@@ -47,10 +53,10 @@ public interface MetadataModelServiceI {
    *	The project to generate a DomainModel for
    * @param fullyQualifiiedClassNames
    *	The fully qualified Class names to include in the model
-   * @param uMLAssociationExclude
+   * @param umlAssociationExclude
    *	A collection of UML Associations to exclude from the model
    */
-  public gov.nih.nci.cagrid.metadata.dataservice.DomainModel generateDomainModelForClassesWithExcludes(org.cagrid.mms.domain.UMLProjectIdentifer umlProjectIdentifer,java.lang.String[] fullyQualifiiedClassNames,org.cagrid.mms.domain.UMLAssociationExclude[] uMLAssociationExclude) throws RemoteException ;
+  public gov.nih.nci.cagrid.metadata.dataservice.DomainModel generateDomainModelForClassesWithExcludes(org.cagrid.mms.domain.UMLProjectIdentifer umlProjectIdentifer,java.lang.String[] fullyQualifiiedClassNames,org.cagrid.mms.domain.UMLAssociationExclude[] umlAssociationExclude) throws RemoteException ;
 
   /**
    * Annotates the specified ServiceMetadata model with semantic information from the specified model, by mapping QNames to UMLClasses
@@ -62,11 +68,11 @@ public interface MetadataModelServiceI {
    */
   public gov.nih.nci.cagrid.metadata.common.SemanticMetadata annotateServiceMetadata(gov.nih.nci.cagrid.metadata.ServiceMetadata serviceMetadata,org.cagrid.mms.domain.NamespaceToProjectMapping[] namespaceToProjectMappings) throws RemoteException ;
 
-  public org.oasis.wsrf.properties.GetMultipleResourcePropertiesResponse getMultipleResourceProperties(org.oasis.wsrf.properties.GetMultipleResourceProperties_Element params) throws RemoteException ;
-
-  public org.oasis.wsrf.properties.GetResourcePropertyResponse getResourceProperty(javax.xml.namespace.QName params) throws RemoteException ;
-
-  public org.oasis.wsrf.properties.QueryResourcePropertiesResponse queryResourceProperties(org.oasis.wsrf.properties.QueryResourceProperties_Element params) throws RemoteException ;
+  /**
+   * Returns the metadata detailing the supported Model sources and their characteristics
+   *
+   */
+  public org.cagrid.mms.domain.ModelSourceMetadata getModelSourceMetadata() throws RemoteException ;
 
 }
 

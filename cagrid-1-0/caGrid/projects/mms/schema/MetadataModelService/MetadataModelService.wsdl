@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://mms.cagrid.org/MetadataModelService" xmlns:wsrp="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.xsd" xmlns:wsrlw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl" xmlns:wsdlpp="http://www.globus.org/namespaces/2004/10/WSDLPreprocessor" xmlns:gtwsdl1="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ServiceGroup-1.2-draft-01.wsdl" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/03/addressing" xmlns:wsntw="http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.wsdl" xmlns:wsrbfw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.wsdl" xmlns:wsrpw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" xmlns:wns0="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" xmlns:wns1="http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity" xmlns:ns6="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.service" xmlns:ns5="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata" xmlns:ns0="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice" xmlns:ns3="http://mms.cagrid.org/MetadataModelService/types" xmlns:ns4="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security" xmlns:ns2="gme://caGrid.caBIG/1.0/org.cagrid.mms.domain" xmlns:ns1="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common" name="MetadataModelService" targetNamespace="http://mms.cagrid.org/MetadataModelService">
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://mms.cagrid.org/MetadataModelService" xmlns:wsrp="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.xsd" xmlns:wsrlw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl" xmlns:wsdlpp="http://www.globus.org/namespaces/2004/10/WSDLPreprocessor" xmlns:gtwsdl1="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ServiceGroup-1.2-draft-01.wsdl" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/03/addressing" xmlns:wsntw="http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.wsdl" xmlns:wsrbfw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.wsdl" xmlns:wsrpw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" xmlns:wns0="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" xmlns:wns1="http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity" xmlns:ns6="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.service" xmlns:ns5="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata" xmlns:ns1="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice" xmlns:ns3="http://mms.cagrid.org/MetadataModelService/types" xmlns:ns4="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security" xmlns:ns0="gme://caGrid.caBIG/1.0/org.cagrid.mms.domain" xmlns:ns2="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common" name="MetadataModelService" targetNamespace="http://mms.cagrid.org/MetadataModelService">
   <import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" location="../wsrf/properties/WS-ResourceProperties.wsdl" />
   <import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.wsdl" location="../wsrf/faults/WS-BaseFaults.wsdl" />
   <import namespace="http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.wsdl" location="../wsrf/notification/WS-BaseN.wsdl" />
@@ -26,7 +26,7 @@
             <element name="umlProjectIdentifer">
               <complexType>
                 <sequence>
-                  <element ref="ns2:UMLProjectIdentifer" minOccurs="1" maxOccurs="1" />
+                  <element ref="ns0:UMLProjectIdentifer" minOccurs="1" maxOccurs="1" />
                 </sequence>
               </complexType>
             </element>
@@ -36,7 +36,7 @@
       <element name="GenerateDomainModelForProjectResponse">
         <complexType>
           <sequence>
-            <element ref="ns0:DomainModel" minOccurs="1" maxOccurs="1" />
+            <element ref="ns1:DomainModel" minOccurs="1" maxOccurs="1" />
           </sequence>
         </complexType>
       </element>
@@ -46,7 +46,7 @@
             <element name="umlProjectIdentifer">
               <complexType>
                 <sequence>
-                  <element ref="ns2:UMLProjectIdentifer" minOccurs="1" maxOccurs="1" />
+                  <element ref="ns0:UMLProjectIdentifer" minOccurs="1" maxOccurs="1" />
                 </sequence>
               </complexType>
             </element>
@@ -57,7 +57,7 @@
       <element name="GenerateDomainModelForPackagesResponse">
         <complexType>
           <sequence>
-            <element ref="ns0:DomainModel" minOccurs="1" maxOccurs="1" />
+            <element ref="ns1:DomainModel" minOccurs="1" maxOccurs="1" />
           </sequence>
         </complexType>
       </element>
@@ -67,7 +67,7 @@
             <element name="umlProjectIdentifer">
               <complexType>
                 <sequence>
-                  <element ref="ns2:UMLProjectIdentifer" minOccurs="1" maxOccurs="1" />
+                  <element ref="ns0:UMLProjectIdentifer" minOccurs="1" maxOccurs="1" />
                 </sequence>
               </complexType>
             </element>
@@ -78,7 +78,7 @@
       <element name="GenerateDomainModelForClassesResponse">
         <complexType>
           <sequence>
-            <element ref="ns0:DomainModel" minOccurs="1" maxOccurs="1" />
+            <element ref="ns1:DomainModel" minOccurs="1" maxOccurs="1" />
           </sequence>
         </complexType>
       </element>
@@ -88,15 +88,15 @@
             <element name="umlProjectIdentifer">
               <complexType>
                 <sequence>
-                  <element ref="ns2:UMLProjectIdentifer" minOccurs="1" maxOccurs="1" />
+                  <element ref="ns0:UMLProjectIdentifer" minOccurs="1" maxOccurs="1" />
                 </sequence>
               </complexType>
             </element>
             <element name="fullyQualifiiedClassNames" type="xs:string" minOccurs="1" maxOccurs="unbounded" />
-            <element name="uMLAssociationExclude">
+            <element name="umlAssociationExclude">
               <complexType>
                 <sequence>
-                  <element ref="ns2:UMLAssociationExclude" minOccurs="1" maxOccurs="unbounded" />
+                  <element ref="ns0:UMLAssociationExclude" minOccurs="1" maxOccurs="unbounded" />
                 </sequence>
               </complexType>
             </element>
@@ -106,7 +106,7 @@
       <element name="GenerateDomainModelForClassesWithExcludesResponse">
         <complexType>
           <sequence>
-            <element ref="ns0:DomainModel" minOccurs="1" maxOccurs="1" />
+            <element ref="ns1:DomainModel" minOccurs="1" maxOccurs="1" />
           </sequence>
         </complexType>
       </element>
@@ -123,7 +123,7 @@
             <element name="namespaceToProjectMappings">
               <complexType>
                 <sequence>
-                  <element ref="ns2:NamespaceToProjectMapping" minOccurs="1" maxOccurs="unbounded" />
+                  <element ref="ns0:NamespaceToProjectMapping" minOccurs="1" maxOccurs="unbounded" />
                 </sequence>
               </complexType>
             </element>
@@ -133,7 +133,19 @@
       <element name="AnnotateServiceMetadataResponse">
         <complexType>
           <sequence>
-            <element ref="ns1:SemanticMetadata" minOccurs="1" maxOccurs="1" />
+            <element ref="ns2:SemanticMetadata" minOccurs="1" maxOccurs="1" />
+          </sequence>
+        </complexType>
+      </element>
+      <element name="GetModelSourceMetadataRequest">
+        <complexType>
+          <sequence />
+        </complexType>
+      </element>
+      <element name="GetModelSourceMetadataResponse">
+        <complexType>
+          <sequence>
+            <element ref="ns0:ModelSourceMetadata" minOccurs="1" maxOccurs="1" />
           </sequence>
         </complexType>
       </element>
@@ -141,6 +153,7 @@
         <complexType>
           <sequence>
             <element ref="ns5:ServiceMetadata" />
+            <element ref="ns0:ModelSourceMetadata" />
           </sequence>
         </complexType>
       </element>
@@ -177,6 +190,12 @@
   <message name="AnnotateServiceMetadataResponse">
     <part name="parameters" element="tns:AnnotateServiceMetadataResponse" />
   </message>
+  <message name="GetModelSourceMetadataRequest">
+    <part name="parameters" element="tns:GetModelSourceMetadataRequest" />
+  </message>
+  <message name="GetModelSourceMetadataResponse">
+    <part name="parameters" element="tns:GetModelSourceMetadataResponse" />
+  </message>
   <!--============================================================
 
                        P O R T T Y P E
@@ -202,6 +221,10 @@
     <operation name="annotateServiceMetadata">
       <input message="tns:AnnotateServiceMetadataRequest" wsa:Action="http://mms.cagrid.org/MetadataModelService/AnnotateServiceMetadataRequest" />
       <output message="tns:AnnotateServiceMetadataResponse" wsa:Action="http://mms.cagrid.org/MetadataModelService/AnnotateServiceMetadataResponse" />
+    </operation>
+    <operation name="getModelSourceMetadata">
+      <input message="tns:GetModelSourceMetadataRequest" wsa:Action="http://mms.cagrid.org/MetadataModelService/GetModelSourceMetadataRequest" />
+      <output message="tns:GetModelSourceMetadataResponse" wsa:Action="http://mms.cagrid.org/MetadataModelService/GetModelSourceMetadataResponse" />
     </operation>
     <wsdl:operation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="GetMultipleResourceProperties">
       <wsdl:input name="GetMultipleResourcePropertiesRequest" message="wsrpw:GetMultipleResourcePropertiesRequest" wsa:Action="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties/GetMultipleResourceProperties" />

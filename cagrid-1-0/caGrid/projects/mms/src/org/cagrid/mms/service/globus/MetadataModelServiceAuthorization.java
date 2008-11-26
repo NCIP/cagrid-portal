@@ -90,6 +90,10 @@ public class MetadataModelServiceAuthorization implements PDP {
 	public void authorizeAnnotateServiceMetadata(Subject peerSubject, MessageContext context, QName operation) throws AuthorizationException {
 		
 	}
+	   				
+	public void authorizeGetModelSourceMetadata(Subject peerSubject, MessageContext context, QName operation) throws AuthorizationException {
+		
+	}
 	   
 	
 	public boolean isPermitted(Subject peerSubject, MessageContext context, QName operation)
@@ -124,6 +128,9 @@ public class MetadataModelServiceAuthorization implements PDP {
 			return true;
 		} else if(operation.getLocalPart().equals("annotateServiceMetadata")){
 			authorizeAnnotateServiceMetadata(peerSubject, context, operation);
+			return true;
+		} else if(operation.getLocalPart().equals("getModelSourceMetadata")){
+			authorizeGetModelSourceMetadata(peerSubject, context, operation);
 			return true;
 		} 		
 		return false;

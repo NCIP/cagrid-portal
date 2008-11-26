@@ -12,7 +12,7 @@ import gov.nih.nci.system.client.ApplicationServiceProvider;
 import java.io.FileWriter;
 import java.io.Writer;
 
-import org.cagrid.mms.service.cadsrimpl.DomainModelBuilder;
+import org.cagrid.mms.service.impl.cadsr.DomainModelBuilder;
 
 
 public class DomainModelGenerationExample {

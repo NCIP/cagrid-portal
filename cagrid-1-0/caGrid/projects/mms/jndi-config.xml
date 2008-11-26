@@ -34,6 +34,10 @@
           <name>etcDirectoryPath</name>
           <value>ETC-PATH</value>
         </parameter>
+        <parameter>
+          <name>mmsConfigurationFile</name>
+          <value>ETC-PATH/@mmsConfigurationFile@</value>
+        </parameter>
       </resourceParams>
     </resource>
     <resource name="home" type="org.cagrid.mms.service.globus.resource.MetadataModelServiceResourceHome">

@@ -76,6 +76,27 @@ public class MetadataModelServiceClient extends MetadataModelServiceClientBase i
 		}
 	}
 
+  public org.oasis.wsrf.properties.GetMultipleResourcePropertiesResponse getMultipleResourceProperties(org.oasis.wsrf.properties.GetMultipleResourceProperties_Element params) throws RemoteException {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"getMultipleResourceProperties");
+    return portType.getMultipleResourceProperties(params);
+    }
+  }
+
+  public org.oasis.wsrf.properties.GetResourcePropertyResponse getResourceProperty(javax.xml.namespace.QName params) throws RemoteException {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"getResourceProperty");
+    return portType.getResourceProperty(params);
+    }
+  }
+
+  public org.oasis.wsrf.properties.QueryResourcePropertiesResponse queryResourceProperties(org.oasis.wsrf.properties.QueryResourceProperties_Element params) throws RemoteException {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"queryResourceProperties");
+    return portType.queryResourceProperties(params);
+    }
+  }
+
   public gov.nih.nci.cagrid.metadata.dataservice.DomainModel generateDomainModelForProject(org.cagrid.mms.domain.UMLProjectIdentifer umlProjectIdentifer) throws RemoteException {
     synchronized(portTypeMutex){
       configureStubSecurity((Stub)portType,"generateDomainModelForProject");
@@ -114,7 +135,7 @@ public class MetadataModelServiceClient extends MetadataModelServiceClientBase i
     }
   }
 
-  public gov.nih.nci.cagrid.metadata.dataservice.DomainModel generateDomainModelForClassesWithExcludes(org.cagrid.mms.domain.UMLProjectIdentifer umlProjectIdentifer,java.lang.String[] fullyQualifiiedClassNames,org.cagrid.mms.domain.UMLAssociationExclude[] uMLAssociationExclude) throws RemoteException {
+  public gov.nih.nci.cagrid.metadata.dataservice.DomainModel generateDomainModelForClassesWithExcludes(org.cagrid.mms.domain.UMLProjectIdentifer umlProjectIdentifer,java.lang.String[] fullyQualifiiedClassNames,org.cagrid.mms.domain.UMLAssociationExclude[] umlAssociationExclude) throws RemoteException {
     synchronized(portTypeMutex){
       configureStubSecurity((Stub)portType,"generateDomainModelForClassesWithExcludes");
     org.cagrid.mms.stubs.GenerateDomainModelForClassesWithExcludesRequest params = new org.cagrid.mms.stubs.GenerateDomainModelForClassesWithExcludesRequest();
@@ -122,9 +143,9 @@ public class MetadataModelServiceClient extends MetadataModelServiceClientBase i
     umlProjectIdentiferContainer.setUMLProjectIdentifer(umlProjectIdentifer);
     params.setUmlProjectIdentifer(umlProjectIdentiferContainer);
     params.setFullyQualifiiedClassNames(fullyQualifiiedClassNames);
-    org.cagrid.mms.stubs.GenerateDomainModelForClassesWithExcludesRequestUMLAssociationExclude uMLAssociationExcludeContainer = new org.cagrid.mms.stubs.GenerateDomainModelForClassesWithExcludesRequestUMLAssociationExclude();
-    uMLAssociationExcludeContainer.setUMLAssociationExclude(uMLAssociationExclude);
-    params.setUMLAssociationExclude(uMLAssociationExcludeContainer);
+    org.cagrid.mms.stubs.GenerateDomainModelForClassesWithExcludesRequestUmlAssociationExclude umlAssociationExcludeContainer = new org.cagrid.mms.stubs.GenerateDomainModelForClassesWithExcludesRequestUmlAssociationExclude();
+    umlAssociationExcludeContainer.setUMLAssociationExclude(umlAssociationExclude);
+    params.setUmlAssociationExclude(umlAssociationExcludeContainer);
     org.cagrid.mms.stubs.GenerateDomainModelForClassesWithExcludesResponse boxedResult = portType.generateDomainModelForClassesWithExcludes(params);
     return boxedResult.getDomainModel();
     }
@@ -145,24 +166,12 @@ public class MetadataModelServiceClient extends MetadataModelServiceClientBase i
     }
   }
 
-  public org.oasis.wsrf.properties.GetMultipleResourcePropertiesResponse getMultipleResourceProperties(org.oasis.wsrf.properties.GetMultipleResourceProperties_Element params) throws RemoteException {
+  public org.cagrid.mms.domain.ModelSourceMetadata getModelSourceMetadata() throws RemoteException {
     synchronized(portTypeMutex){
-      configureStubSecurity((Stub)portType,"getMultipleResourceProperties");
-    return portType.getMultipleResourceProperties(params);
-    }
-  }
-
-  public org.oasis.wsrf.properties.GetResourcePropertyResponse getResourceProperty(javax.xml.namespace.QName params) throws RemoteException {
-    synchronized(portTypeMutex){
-      configureStubSecurity((Stub)portType,"getResourceProperty");
-    return portType.getResourceProperty(params);
-    }
-  }
-
-  public org.oasis.wsrf.properties.QueryResourcePropertiesResponse queryResourceProperties(org.oasis.wsrf.properties.QueryResourceProperties_Element params) throws RemoteException {
-    synchronized(portTypeMutex){
-      configureStubSecurity((Stub)portType,"queryResourceProperties");
-    return portType.queryResourceProperties(params);
+      configureStubSecurity((Stub)portType,"getModelSourceMetadata");
+    org.cagrid.mms.stubs.GetModelSourceMetadataRequest params = new org.cagrid.mms.stubs.GetModelSourceMetadataRequest();
+    org.cagrid.mms.stubs.GetModelSourceMetadataResponse boxedResult = portType.getModelSourceMetadata(params);
+    return boxedResult.getModelSourceMetadata();
     }
   }
 
