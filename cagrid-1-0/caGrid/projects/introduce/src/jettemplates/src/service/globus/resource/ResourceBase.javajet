@@ -553,7 +553,7 @@ if(arguments.getService().getResourceFrameworkOptions().getPersistent()!=null){
 if(arguments.getService().getResourceFrameworkOptions().getMain()!=null){
 %>
     
-    	private void populateResourceProperties() {
+    	protected void populateResourceProperties() {
 	<%	if(metadataList!=null && metadataList.getResourceProperty()!=null){
 		for (int i = 0; i < metadataList.getResourceProperty().length; i++) {
 			ResourcePropertyType metadata = metadataList.getResourceProperty()[i];
