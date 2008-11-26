@@ -70,6 +70,26 @@ public class MetadataModelServiceAuthorization implements PDP {
 	public void authorizeGetServiceSecurityMetadata(Subject peerSubject, MessageContext context, QName operation) throws AuthorizationException {
 		
 	}
+	   				
+	public void authorizeGenerateDomainModelForProject(Subject peerSubject, MessageContext context, QName operation) throws AuthorizationException {
+		
+	}
+	   				
+	public void authorizeGenerateDomainModelForPackages(Subject peerSubject, MessageContext context, QName operation) throws AuthorizationException {
+		
+	}
+	   				
+	public void authorizeGenerateDomainModelForClasses(Subject peerSubject, MessageContext context, QName operation) throws AuthorizationException {
+		
+	}
+	   				
+	public void authorizeGenerateDomainModelForClassesWithExcludes(Subject peerSubject, MessageContext context, QName operation) throws AuthorizationException {
+		
+	}
+	   				
+	public void authorizeAnnotateServiceMetadata(Subject peerSubject, MessageContext context, QName operation) throws AuthorizationException {
+		
+	}
 	   
 	
 	public boolean isPermitted(Subject peerSubject, MessageContext context, QName operation)
@@ -89,6 +109,21 @@ public class MetadataModelServiceAuthorization implements PDP {
 			return true;
 		} else if(operation.getLocalPart().equals("getServiceSecurityMetadata")){
 			authorizeGetServiceSecurityMetadata(peerSubject, context, operation);
+			return true;
+		} else if(operation.getLocalPart().equals("generateDomainModelForProject")){
+			authorizeGenerateDomainModelForProject(peerSubject, context, operation);
+			return true;
+		} else if(operation.getLocalPart().equals("generateDomainModelForPackages")){
+			authorizeGenerateDomainModelForPackages(peerSubject, context, operation);
+			return true;
+		} else if(operation.getLocalPart().equals("generateDomainModelForClasses")){
+			authorizeGenerateDomainModelForClasses(peerSubject, context, operation);
+			return true;
+		} else if(operation.getLocalPart().equals("generateDomainModelForClassesWithExcludes")){
+			authorizeGenerateDomainModelForClassesWithExcludes(peerSubject, context, operation);
+			return true;
+		} else if(operation.getLocalPart().equals("annotateServiceMetadata")){
+			authorizeAnnotateServiceMetadata(peerSubject, context, operation);
 			return true;
 		} 		
 		return false;

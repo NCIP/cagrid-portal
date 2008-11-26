@@ -1,10 +1,30 @@
 <ns1:ServiceDescription introduceVersion="1.3" xmlns:ns1="gme://gov.nih.nci.cagrid/1/Introduce">
  <ns2:Namespaces xsi:type="ns2:NamespacesType" xmlns:ns2="gme://gov.nih.nci.cagrid.introduce/1/Namespace" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ns2:Namespace generateStubs="false" location="./xsd/cagrid/types/data/data.xsd" namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice" packageName="gov.nih.nci.cagrid.metadata.dataservice" xsi:type="ns2:NamespaceType">
+   <ns2:SchemaElement type="DomainModel" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="UMLAssociation" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="UMLAssociationEdge" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="UMLClass" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="UMLClassReference" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="UMLGeneralization" xsi:type="ns2:SchemaElementType"/>
+  </ns2:Namespace>
+  <ns2:Namespace generateStubs="false" location="./xsd/cagrid/types/common/common.xsd" namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common" packageName="gov.nih.nci.cagrid.metadata.common" xsi:type="ns2:NamespaceType">
+   <ns2:SchemaElement type="Address" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Enumeration" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="PointOfContact" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ResearchCenter" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ResearchCenterDescription" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="SemanticMetadata" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="UMLAttribute" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="UMLClass" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ValueDomain" xsi:type="ns2:SchemaElementType"/>
+  </ns2:Namespace>
   <ns2:Namespace location="./org.cagrid.mms.xsd" namespace="gme://caGrid.caBIG/1.0/org.cagrid.mms.domain" packageName="org.cagrid.mms.domain" xsi:type="ns2:NamespaceType">
+   <ns2:SchemaElement type="NamespaceToProjectMapping" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="UMLAssociationExclude" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="UMLProjectIdentifer" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
-  <ns2:Namespace generateStubs="false" namespace="http://www.w3.org/2001/XMLSchema" xsi:type="ns2:NamespaceType">
+  <ns2:Namespace generateStubs="false" location="" namespace="http://www.w3.org/2001/XMLSchema" packageName="" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="anySimpleType" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="anyType" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="anyURI" xsi:type="ns2:SchemaElementType"/>
@@ -78,17 +98,6 @@
    <ns2:SchemaElement type="Service" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="ServiceContext" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
-  <ns2:Namespace generateStubs="false" location="./xsd/cagrid/types/common/common.xsd" namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common" packageName="gov.nih.nci.cagrid.metadata.common" xsi:type="ns2:NamespaceType">
-   <ns2:SchemaElement type="Address" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="Enumeration" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="PointOfContact" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="ResearchCenter" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="ResearchCenterDescription" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="SemanticMetadata" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="UMLAttribute" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="UMLClass" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="ValueDomain" xsi:type="ns2:SchemaElementType"/>
-  </ns2:Namespace>
  </ns2:Namespaces>
  <ns3:Services xsi:type="ns3:ServicesType" xmlns:ns3="gme://gov.nih.nci.cagrid.introduce/1/Services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <ns3:Service name="MetadataModelService" namespace="http://mms.cagrid.org/MetadataModelService" packageName="org.cagrid.mms" xsi:type="ns3:ServiceType">
@@ -128,10 +137,50 @@
      <ns4:ImportInformation namespace="http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity" packageName="gov.nih.nci.cagrid.introduce.security.stubs" portTypeName="ServiceSecurityPortType" wsdlFile="ServiceSecurity.wsdl"/>
      <ns4:ProviderInformation providerClass="gov.nih.nci.cagrid.introduce.security.service.globus.ServiceSecurityProviderImpl"/>
     </ns4:Method>
+    <ns4:Method description="Generates a complete DomainModel for the specified Project" isImported="false" isProvided="false" name="generateDomainModelForProject" xsi:type="ns4:MethodType">
+     <ns4:Inputs>
+      <ns4:Input qName="ns13:UMLProjectIdentifer" description="The project to generate a DomainModel for." isArray="false" name="umlProjectIdentifer" xmlns:ns13="gme://caGrid.caBIG/1.0/org.cagrid.mms.domain"/>
+     </ns4:Inputs>
+     <ns4:Output qName="ns14:DomainModel" description="" isArray="false" xmlns:ns14="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice"/>
+     <ns4:Exceptions/>
+    </ns4:Method>
+    <ns4:Method description="Generates a DomainModel for the specified Project, including only the specified packages" isImported="false" isProvided="false" name="generateDomainModelForPackages" xsi:type="ns4:MethodType">
+     <ns4:Inputs>
+      <ns4:Input qName="ns15:UMLProjectIdentifer" description="The project to generate a DomainModel for" isArray="false" name="umlProjectIdentifer" xmlns:ns15="gme://caGrid.caBIG/1.0/org.cagrid.mms.domain"/>
+      <ns4:Input qName="xsd:string" description="The package names to include" isArray="true" name="packageNames" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+     </ns4:Inputs>
+     <ns4:Output qName="ns16:DomainModel" description="" isArray="false" xmlns:ns16="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice"/>
+     <ns4:Exceptions/>
+    </ns4:Method>
+    <ns4:Method description="Generates a complete DomainModel for the specified Project, including only the identified Classes" isImported="false" isProvided="false" name="generateDomainModelForClasses" xsi:type="ns4:MethodType">
+     <ns4:Inputs>
+      <ns4:Input qName="ns17:UMLProjectIdentifer" description="The project to generate a DomainModel for" isArray="false" name="umlProjectIdentifer" xmlns:ns17="gme://caGrid.caBIG/1.0/org.cagrid.mms.domain"/>
+      <ns4:Input qName="xsd:string" description="The fully qualified classnames to include in the model" isArray="true" name="fullyQualifiedClassNames" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+     </ns4:Inputs>
+     <ns4:Output qName="ns18:DomainModel" description="" isArray="false" xmlns:ns18="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice"/>
+     <ns4:Exceptions/>
+    </ns4:Method>
+    <ns4:Method description="Generates a  DomainModel for the specified Project, including only the specified Classes, but excluding the specified Associations" isImported="false" isProvided="false" name="generateDomainModelForClassesWithExcludes" xsi:type="ns4:MethodType">
+     <ns4:Inputs>
+      <ns4:Input qName="ns19:UMLProjectIdentifer" description="The project to generate a DomainModel for" isArray="false" name="umlProjectIdentifer" xmlns:ns19="gme://caGrid.caBIG/1.0/org.cagrid.mms.domain"/>
+      <ns4:Input qName="xsd:string" description="The fully qualified Class names to include in the model" isArray="true" name="fullyQualifiiedClassNames" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+      <ns4:Input qName="ns20:UMLAssociationExclude" description="A collection of UML Associations to exclude from the model" isArray="true" name="uMLAssociationExclude" xmlns:ns20="gme://caGrid.caBIG/1.0/org.cagrid.mms.domain"/>
+     </ns4:Inputs>
+     <ns4:Output qName="ns21:DomainModel" description="" isArray="false" xmlns:ns21="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice"/>
+     <ns4:Exceptions/>
+    </ns4:Method>
+    <ns4:Method description="Annotates the specified ServiceMetadata model with semantic information from the specified model, by mapping QNames to UMLClasses" isImported="false" isProvided="false" name="annotateServiceMetadata" xsi:type="ns4:MethodType">
+     <ns4:Inputs>
+      <ns4:Input qName="ns22:ServiceMetadata" description="The unannotated ServiceMetadata model" isArray="false" name="serviceMetadata" xmlns:ns22="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"/>
+      <ns4:Input qName="ns23:NamespaceToProjectMapping" description="An optional collection of mappings from URI Namespace to UMLProjects" isArray="true" name="namespaceToProjectMappings" xmlns:ns23="gme://caGrid.caBIG/1.0/org.cagrid.mms.domain"/>
+     </ns4:Inputs>
+     <ns4:Output qName="ns24:SemanticMetadata" description="" isArray="false" xmlns:ns24="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
+     <ns4:Exceptions/>
+    </ns4:Method>
    </ns4:Methods>
-   <ns13:ResourcePropertiesList xsi:type="ns13:ResourcePropertiesListType" xmlns:ns13="gme://gov.nih.nci.cagrid.introduce/1/Resources">
-    <ns13:ResourceProperty qName="ns14:ServiceMetadata" fileLocation="serviceMetadata.xml" populateFromFile="true" register="true" xsi:type="ns13:ResourcePropertyType" xmlns:ns14="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"/>
-   </ns13:ResourcePropertiesList>
+   <ns25:ResourcePropertiesList xsi:type="ns25:ResourcePropertiesListType" xmlns:ns25="gme://gov.nih.nci.cagrid.introduce/1/Resources">
+    <ns25:ResourceProperty qName="ns26:ServiceMetadata" fileLocation="serviceMetadata.xml" populateFromFile="true" register="true" xsi:type="ns25:ResourcePropertyType" xmlns:ns26="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"/>
+   </ns25:ResourcePropertiesList>
    <ns3:ResourceFrameworkOptions xsi:type="ns3:ResourceFrameworkOptions">
     <ns3:Main xsi:type="ns3:Main"/>
     <ns3:Singleton xsi:type="ns3:Singleton"/>
@@ -140,7 +189,7 @@
    </ns3:ResourceFrameworkOptions>
   </ns3:Service>
  </ns3:Services>
- <ns15:Extensions xsi:type="ns15:ExtensionsType" xmlns:ns15="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <ns15:Extension name="cagrid_metadata" version="1.3" xsi:type="ns15:ExtensionType"/>
- </ns15:Extensions>
+ <ns27:Extensions xsi:type="ns27:ExtensionsType" xmlns:ns27="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ns27:Extension name="cagrid_metadata" version="1.3" xsi:type="ns27:ExtensionType"/>
+ </ns27:Extensions>
 </ns1:ServiceDescription>

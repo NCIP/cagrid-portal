@@ -3,7 +3,7 @@
   xmlns:tns="gme://caGrid.caBIG/1.0/org.cagrid.mms.domain" targetNamespace="gme://caGrid.caBIG/1.0/org.cagrid.mms.domain"
   elementFormDefault="qualified">
 
-  <xs:element name="UMLAssociationExclude" type="UMLAssociationExclude" />
+  <xs:element name="UMLAssociationExclude" type="tns:UMLAssociationExclude" />
   <xs:complexType name="UMLAssociationExclude">
     <xs:annotation>
       <xs:documentation>
@@ -18,7 +18,7 @@
   </xs:complexType>
 
 
-  <xs:element name="UMLProjectIdentifer" type="UMLProjectIdentifer" />
+  <xs:element name="UMLProjectIdentifer" type="tns:UMLProjectIdentifer" />
   <xs:complexType name="UMLProjectIdentifer">
     <xs:sequence>
       <xs:element name="AdditionalSourceProperty" type="tns:Property" minOccurs="0"
@@ -26,7 +26,7 @@
         <xs:annotation>
           <xs:documentation>
             Zero or more properties which are source-specific to be used to help
-            identify the Project of interest. The specific keys can be found by examining the
+            identify the Projects of interest. The specific keys can be found by examining the
             properties of the source's metadata.
               </xs:documentation>
         </xs:annotation>
@@ -37,6 +37,19 @@
     <xs:attribute name="sourceIdentifier" type="xs:string" use="optional" />
   </xs:complexType>
 
+  <xs:element name="NamespaceToProjectMapping" type="tns:NamespaceToProjectMapping" />
+  <xs:complexType name="NamespaceToProjectMapping">
+    <xs:annotation>
+      <xs:documentation>
+        Used to identify a mapping from a Namespace to a Project, for the purposes
+        of locating types.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element ref="tns:UMLProjectIdentifer" minOccurs="1" maxOccurs="1" />
+    </xs:sequence>
+    <xs:attribute name="namespaceURI" use="required" type="xs:anyURI" />
+  </xs:complexType>
 
   <xs:complexType name="Property">
     <xs:annotation>

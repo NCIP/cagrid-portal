@@ -76,6 +76,75 @@ public class MetadataModelServiceClient extends MetadataModelServiceClientBase i
 		}
 	}
 
+  public gov.nih.nci.cagrid.metadata.dataservice.DomainModel generateDomainModelForProject(org.cagrid.mms.domain.UMLProjectIdentifer umlProjectIdentifer) throws RemoteException {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"generateDomainModelForProject");
+    org.cagrid.mms.stubs.GenerateDomainModelForProjectRequest params = new org.cagrid.mms.stubs.GenerateDomainModelForProjectRequest();
+    org.cagrid.mms.stubs.GenerateDomainModelForProjectRequestUmlProjectIdentifer umlProjectIdentiferContainer = new org.cagrid.mms.stubs.GenerateDomainModelForProjectRequestUmlProjectIdentifer();
+    umlProjectIdentiferContainer.setUMLProjectIdentifer(umlProjectIdentifer);
+    params.setUmlProjectIdentifer(umlProjectIdentiferContainer);
+    org.cagrid.mms.stubs.GenerateDomainModelForProjectResponse boxedResult = portType.generateDomainModelForProject(params);
+    return boxedResult.getDomainModel();
+    }
+  }
+
+  public gov.nih.nci.cagrid.metadata.dataservice.DomainModel generateDomainModelForPackages(org.cagrid.mms.domain.UMLProjectIdentifer umlProjectIdentifer,java.lang.String[] packageNames) throws RemoteException {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"generateDomainModelForPackages");
+    org.cagrid.mms.stubs.GenerateDomainModelForPackagesRequest params = new org.cagrid.mms.stubs.GenerateDomainModelForPackagesRequest();
+    org.cagrid.mms.stubs.GenerateDomainModelForPackagesRequestUmlProjectIdentifer umlProjectIdentiferContainer = new org.cagrid.mms.stubs.GenerateDomainModelForPackagesRequestUmlProjectIdentifer();
+    umlProjectIdentiferContainer.setUMLProjectIdentifer(umlProjectIdentifer);
+    params.setUmlProjectIdentifer(umlProjectIdentiferContainer);
+    params.setPackageNames(packageNames);
+    org.cagrid.mms.stubs.GenerateDomainModelForPackagesResponse boxedResult = portType.generateDomainModelForPackages(params);
+    return boxedResult.getDomainModel();
+    }
+  }
+
+  public gov.nih.nci.cagrid.metadata.dataservice.DomainModel generateDomainModelForClasses(org.cagrid.mms.domain.UMLProjectIdentifer umlProjectIdentifer,java.lang.String[] fullyQualifiedClassNames) throws RemoteException {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"generateDomainModelForClasses");
+    org.cagrid.mms.stubs.GenerateDomainModelForClassesRequest params = new org.cagrid.mms.stubs.GenerateDomainModelForClassesRequest();
+    org.cagrid.mms.stubs.GenerateDomainModelForClassesRequestUmlProjectIdentifer umlProjectIdentiferContainer = new org.cagrid.mms.stubs.GenerateDomainModelForClassesRequestUmlProjectIdentifer();
+    umlProjectIdentiferContainer.setUMLProjectIdentifer(umlProjectIdentifer);
+    params.setUmlProjectIdentifer(umlProjectIdentiferContainer);
+    params.setFullyQualifiedClassNames(fullyQualifiedClassNames);
+    org.cagrid.mms.stubs.GenerateDomainModelForClassesResponse boxedResult = portType.generateDomainModelForClasses(params);
+    return boxedResult.getDomainModel();
+    }
+  }
+
+  public gov.nih.nci.cagrid.metadata.dataservice.DomainModel generateDomainModelForClassesWithExcludes(org.cagrid.mms.domain.UMLProjectIdentifer umlProjectIdentifer,java.lang.String[] fullyQualifiiedClassNames,org.cagrid.mms.domain.UMLAssociationExclude[] uMLAssociationExclude) throws RemoteException {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"generateDomainModelForClassesWithExcludes");
+    org.cagrid.mms.stubs.GenerateDomainModelForClassesWithExcludesRequest params = new org.cagrid.mms.stubs.GenerateDomainModelForClassesWithExcludesRequest();
+    org.cagrid.mms.stubs.GenerateDomainModelForClassesWithExcludesRequestUmlProjectIdentifer umlProjectIdentiferContainer = new org.cagrid.mms.stubs.GenerateDomainModelForClassesWithExcludesRequestUmlProjectIdentifer();
+    umlProjectIdentiferContainer.setUMLProjectIdentifer(umlProjectIdentifer);
+    params.setUmlProjectIdentifer(umlProjectIdentiferContainer);
+    params.setFullyQualifiiedClassNames(fullyQualifiiedClassNames);
+    org.cagrid.mms.stubs.GenerateDomainModelForClassesWithExcludesRequestUMLAssociationExclude uMLAssociationExcludeContainer = new org.cagrid.mms.stubs.GenerateDomainModelForClassesWithExcludesRequestUMLAssociationExclude();
+    uMLAssociationExcludeContainer.setUMLAssociationExclude(uMLAssociationExclude);
+    params.setUMLAssociationExclude(uMLAssociationExcludeContainer);
+    org.cagrid.mms.stubs.GenerateDomainModelForClassesWithExcludesResponse boxedResult = portType.generateDomainModelForClassesWithExcludes(params);
+    return boxedResult.getDomainModel();
+    }
+  }
+
+  public gov.nih.nci.cagrid.metadata.common.SemanticMetadata annotateServiceMetadata(gov.nih.nci.cagrid.metadata.ServiceMetadata serviceMetadata,org.cagrid.mms.domain.NamespaceToProjectMapping[] namespaceToProjectMappings) throws RemoteException {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"annotateServiceMetadata");
+    org.cagrid.mms.stubs.AnnotateServiceMetadataRequest params = new org.cagrid.mms.stubs.AnnotateServiceMetadataRequest();
+    org.cagrid.mms.stubs.AnnotateServiceMetadataRequestServiceMetadata serviceMetadataContainer = new org.cagrid.mms.stubs.AnnotateServiceMetadataRequestServiceMetadata();
+    serviceMetadataContainer.setServiceMetadata(serviceMetadata);
+    params.setServiceMetadata(serviceMetadataContainer);
+    org.cagrid.mms.stubs.AnnotateServiceMetadataRequestNamespaceToProjectMappings namespaceToProjectMappingsContainer = new org.cagrid.mms.stubs.AnnotateServiceMetadataRequestNamespaceToProjectMappings();
+    namespaceToProjectMappingsContainer.setNamespaceToProjectMapping(namespaceToProjectMappings);
+    params.setNamespaceToProjectMappings(namespaceToProjectMappingsContainer);
+    org.cagrid.mms.stubs.AnnotateServiceMetadataResponse boxedResult = portType.annotateServiceMetadata(params);
+    return boxedResult.getSemanticMetadata();
+    }
+  }
+
   public org.oasis.wsrf.properties.GetMultipleResourcePropertiesResponse getMultipleResourceProperties(org.oasis.wsrf.properties.GetMultipleResourceProperties_Element params) throws RemoteException {
     synchronized(portTypeMutex){
       configureStubSecurity((Stub)portType,"getMultipleResourceProperties");
