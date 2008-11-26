@@ -42,15 +42,15 @@ function() {
 <c:choose>
 <c:when test="${fn:length(pNode.participants) eq 1}">
 <c:set var="participant" value="${pNode.participants[0]}"/>
-"<a href=\"javascript:selectItemForDiscovery(${participant.id},'PARTICIPANT');\" " +
+"<a href=\"javascript:selectItemForDiscovery('${participant.id}','PARTICIPANT');\" " +
 "><c:out value="${participant.name}"/></a><br/>" +
 "<b>Homepage:</b> <a target=\"_blank\" href=\"<c:out value="${participant.homepageUrl}"/>\"><c:out value="${participant.homepageUrl}"/></a>" +
 </c:when>
 <c:otherwise>
 <c:set var="numParticipants" value="${fn:length(pNode.participants)}"/>
 <c:set var="participantIds"><c:forEach var="participant" items="${pNode.participants}" varStatus="status"><c:out value="${participant.id}"/><c:if test="${status.count lt numParticipants}">,</c:if></c:forEach></c:set>
-"<c:out value="There are <b>${numParticipants}"/></b> participants at this location. " +
-"<a href=\"javascript:selectItemsForDiscovery(${participantIds},'PARTICIPANT');\" " +
+"There are <b>" + "<c:out value="${numParticipants}"/></b> participants at this location. " +
+"<a href=\"javascript:selectItemsForDiscovery('${participantIds}','PARTICIPANT');\" " +
 ">View...</a><br/>" +
 </c:otherwise>
 </c:choose>
@@ -128,15 +128,15 @@ function() {
 <c:choose>
 <c:when test="${numSvcs eq 1}">
 <c:set var="svcInfo" value="${svcNode.serviceInfos[0]}"/>
-"<a href=\"javascript:selectItemForDiscovery(${svcInfo.id},'SERVICE');\" " +
+"<a href=\"javascript:selectItemForDiscovery('${svcInfo.id}','SERVICE');\" " +
 "><c:out value="${svcInfo.name}"/></a><br/>" +
 "<b>Center:</b> <c:out value="${svcInfo.center}"/><br/>" +
 "<b>Status:</b> <c:out value="${svcInfo.status}"/><br/>" +
 </c:when>
 <c:otherwise>
 <c:set var="serviceIds"><c:forEach var="svcInfo" items="${svcNode.serviceInfos}" varStatus="status"><c:out value="${svcInfo.id}"/><c:if test="${status.count lt numSvcs}">,</c:if></c:forEach></c:set>
-"<c:out value="There are <b>${numSvcs}"/></b> services at this location. " +
-"<a href=\"javascript:selectItemsForDiscovery(${serviceIds},'SERVICE');\" " +
+"There are <b>" + "<c:out value="${numSvcs}"/></b> services at this location. " +
+"<a href=\"javascript:selectItemsForDiscovery('${serviceIds}','SERVICE');\" " +
 ">View...</a>" +
 </c:otherwise>
 </c:choose>
@@ -175,7 +175,7 @@ function() {
 <c:choose>
 <c:when test="${fn:length(pocNode.pointOfContacts) eq 1}">
 <c:set var="poc" value="${pocNode.pointOfContacts[0]}"/>
-"<a href=\"javascript:selectItemForDiscovery(${poc.id},'POC');\" " +
+"<a href=\"javascript:selectItemForDiscovery('${poc.id}','POC');\" " +
 "><c:out value="${poc.firstName}"/><c:out value="${poc.lastName}"/></a><br/>" +
 "<b>Email:</b> <a target=\"_blank\" href=\"mailto:<c:out value="${poc.emailAddress}"/>\"><c:out value="${poc.emailAddress}"/></a><br/>" +
 "<b>Phone:</b><c:out value="${poc.phoneNumber}"/><br/>" +
@@ -183,8 +183,8 @@ function() {
 <c:otherwise>
 <c:set var="numPocs" value="${fn:length(pocNode.pointOfContacts)}"/>
 <c:set var="pocIds"><c:forEach var="poc" items="${pocNode.pointOfContacts}" varStatus="status"><c:out value="${poc.id}"/><c:if test="${status.count lt numPocs}">,</c:if></c:forEach></c:set>
-"<c:out value="There are <b>${numPocs}"/></b> Points of Contact at this location. " +
-"<a href=\"javascript:selectItemsForDiscovery(${pocIds},'POC');\" " +
+"There are <b>" + "<c:out value="${numPocs}"/></b> Points of Contact at this location. " +
+"<a href=\"javascript:selectItemsForDiscovery('${pocIds}','POC');\" " +
 ">View...</a><br/>" +
 </c:otherwise>
 </c:choose>

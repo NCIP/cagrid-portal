@@ -23,6 +23,7 @@ public class ServiceInfo {
     private String name;
     private String nameAbbrv;
     private String center;
+    private String centerAbbrv;
     private String status;
     private String url;
     private String id;
@@ -71,6 +72,7 @@ public class ServiceInfo {
 
     public void setCenter(String center) {
         this.center = center;
+        setCenterAbbrv(abbreviate(center,NAME_MAX_LENGTH_ALLOWED));
     }
 
     public String getName() {
@@ -79,6 +81,7 @@ public class ServiceInfo {
 
     public void setName(String name) {
         this.name = name;
+        setNameAbbrv(abbreviate(name,NAME_MAX_LENGTH_ALLOWED));
     }
 
     public String getStatus() {
@@ -136,8 +139,7 @@ public class ServiceInfo {
     private String formulateNameFromUrl(String Url){
         try {
             if(Url.lastIndexOf("/")>-1){
-            String longName = Url.substring(Url.lastIndexOf("/"));
-                return longName;
+                return Url.substring(Url.lastIndexOf("/"));
             }
         } catch (Exception e) {
             logger.error("Error formulating name from URL");
@@ -154,12 +156,19 @@ public class ServiceInfo {
     }
 
     public String getNameAbbrv() {
-        nameAbbrv = name.length() > NAME_MAX_LENGTH_ALLOWED ? name.substring(0, NAME_MAX_LENGTH_ALLOWED) + ".." : name;
         return nameAbbrv;
     }
 
     public void setNameAbbrv(String nameAbbrv) {
         this.nameAbbrv = nameAbbrv;
+    }
+
+    public String getCenterAbbrv() {
+        return centerAbbrv;
+    }
+
+    public void setCenterAbbrv(String centerAbbrv) {
+        this.centerAbbrv = centerAbbrv;
     }
 
     public String getVersion() {
@@ -168,5 +177,10 @@ public class ServiceInfo {
 
     public void setVersion(String version) {
         this.version = version;
+    }
+
+    private String abbreviate(String longStr,int maxLength){
+        return longStr.length() > maxLength ? longStr.substring(0, maxLength) + ".." : longStr;
+
     }
 }

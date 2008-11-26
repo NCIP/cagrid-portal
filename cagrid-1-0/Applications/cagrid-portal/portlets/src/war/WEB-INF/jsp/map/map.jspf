@@ -118,7 +118,7 @@ function() {
 <c:otherwise>
 <c:set var="numParticipants" value="${fn:length(pNode.participants)}"/>
 <c:set var="participantIds"><c:forEach var="participant" items="${pNode.participants}" varStatus="status"><c:out value="${participant.id}"/><c:if test="${status.count lt numParticipants}">,</c:if></c:forEach></c:set>
-"<c:out value="There are <b>${numParticipants}"/></b> participants at this location. " +
+"There are <b>" + "<c:out value="${numParticipants}"/></b> participants at this location. " +
 "<a href=\"<portlet:actionURL><portlet:param name="operation" value="${selectItemsOperationName}"/><portlet:param name="selectedIds" value="${participantIds}"/><portlet:param name="type" value="PARTICIPANT"/></portlet:actionURL>\" " +
 ">View...</a><br/>" +
 </c:otherwise>
@@ -204,7 +204,7 @@ function() {
 </c:when>
 <c:otherwise>
 <c:set var="serviceIds"><c:forEach var="svcInfo" items="${svcNode.serviceInfos}" varStatus="status"><c:out value="${svcInfo.id}"/><c:if test="${status.count lt numSvcs}">,</c:if></c:forEach></c:set>
-"<c:out value="There are <b>${numSvcs}"/></b> services at this location. " +
+"There are <b>" + "<c:out value="${numSvcs}"/></b> services at this location. " +
 "<a href=\"<portlet:actionURL><portlet:param name="operation" value="${selectItemsOperationName}"/><portlet:param name="selectedIds" value="${serviceIds}"/><portlet:param name="type" value="SERVICE"/></portlet:actionURL>\" " +
 ">View...</a>" +
 </c:otherwise>
@@ -251,7 +251,7 @@ function() {
 <c:otherwise>
 <c:set var="numPocs" value="${fn:length(pocNode.pointOfContacts)}"/>
 <c:set var="pocIds"><c:forEach var="poc" items="${pocNode.pointOfContacts}" varStatus="status"><c:out value="${poc.id}"/><c:if test="${status.count lt numPocs}">,</c:if></c:forEach></c:set>
-"<c:out value="There are <b>${numPocs}"/></b> Points of Contact at this location. " +
+"There are <b>"<c:out value="${numPocs}"/></b> Points of Contact at this location. " +
 "<a href=\"<portlet:actionURL><portlet:param name="operation" value="${selectItemsOperationName}"/><portlet:param name="selectedIds" value="${pocIds}"/><portlet:param name="type" value="POC"/></portlet:actionURL>\" " +
 ">View...</a><br/>" +
 </c:otherwise>

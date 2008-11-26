@@ -13,6 +13,9 @@
 
 <c:set var="prefix"><portlet:namespace/></c:set>
 <c:set var="mapNodeId">${prefix}-gmap</c:set>
+<c:set var="selectItemOperationName" value="selectItemForDiscovery"/>
+<c:set var="selectItemsOperationName" value="selectItemsForDiscovery"/>
+
 <portlet:actionURL var="action"/>
 
 <%@ include file="/WEB-INF/jsp/map/mapDirectory.jspf" %>
@@ -146,17 +149,17 @@
 
 <script type="text/javascript">
     function selectItemForDiscovery(id,type){
-        $('${prefix}mapNodeForm').operation.value = 'selectItemForDiscovery';
+        $('${prefix}mapNodeForm').operation.value = "${selectItemOperationName}";
         $('${prefix}mapNodeForm').selectedId.value = id;
         $('${prefix}mapNodeForm').type.value = type;
         $('${prefix}mapNodeForm').submit();
     }
 
     function selectItemsForDiscovery(ids,type){
-        $('${prefix}mapNodeForm').operation.value = 'selectItemForDiscovery';
+        $('${prefix}mapNodeForm').operation.value = "${selectItemsOperationName}";
         $('${prefix}mapNodeForm').selectedIds.value = ids;
         $('${prefix}mapNodeForm').type.value = type;
-        $('${prefix}serviceDetailsForm').submit();
+        $('${prefix}mapNodeForm').submit();
     }
 
 </script>
