@@ -1,15 +1,9 @@
-springize imlementation? (load the cadsr implementation)?
+define MMS interfaces and call into delegate implementations from service
 
-define metadata for "source" and "source properties" to expose (could use a "load from file" or ideally ask the springized impl for its metadata on what it supports)
---need a "default" source to be used when client doesn't specify otherwise
+find away around package cycles for configuration class
 
-use gme pattern to load impl via deploy property
+finish caDSR implementation
 
-
-ideally anotateServiceMetadata could take something like UMLProjectIdentifier, but every type could come from a different project/source so 
-really need to use the uml2xml binding lookup and have some way to pass namespace=>source mapping information
--probably annotateServiceMetadata(ServiceMetadata, (optional) Map<URI,Source>)
--- when no map is provided, the service's "default" source should be used.
 
 how to handle the packaging of the application-config-client.xml
 
@@ -19,4 +13,4 @@ Source Requirements:
 -map QName of element to its corresponding UMLClass 
 
 
-Future metadata model probably needs a way to identify the "source" the information came from 
+Future cagrid metadata model probably needs a way to identify the "source" the information came from 
