@@ -70,7 +70,7 @@
 	<classpathentry kind="lib" path="ext/dependencies/service/jars/caGrid-ServiceSecurityProvider-service-1.3-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/service/jars/caGrid-ServiceSecurityProvider-stubs-1.3-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/service/jars/caGrid-service-tools-db-1.3-dev.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/service/jars/caGrid-service-tools-events-1.3-dev.jar" sourcepath="/caGrid-service-tools"/>
+	<classpathentry kind="lib" path="ext/dependencies/service/jars/caGrid-service-tools-events-1.3-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/service/jars/caGrid-service-tools-groups-1.3-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/service/jars/castor-0.9.9.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/service/jars/commons-codec-1.3.jar"/>
