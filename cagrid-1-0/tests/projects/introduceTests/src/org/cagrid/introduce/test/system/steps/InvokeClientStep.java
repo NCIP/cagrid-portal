@@ -38,8 +38,6 @@ public class InvokeClientStep extends BaseStep {
 		p.waitFor();
 		
 		assertTrue(p.exitValue()==0);
-		
-		buildStep();
 	}
 
 }

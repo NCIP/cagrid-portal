@@ -82,7 +82,6 @@ public class SecurityTestsClient extends SecurityTestsClientBase implements Secu
                     // GlobusCredential creds =
                     // GlobusCredential.getDefaultCredential();
 
-                    String anonString = "<anonymous>";
                     String credsString = creds.getIdentity();
 
                     SecurityTestsClient credsclient = new SecurityTestsClient(args[1], creds);
@@ -90,7 +89,7 @@ public class SecurityTestsClient extends SecurityTestsClientBase implements Secu
                     String result = null;
 
                     result = credsclient.anonPrefered();
-                    if (!result.equals(anonString)) {
+                    if (result!=null) {
                         throw new Exception("Authorization configuration error");
                     }
 
@@ -102,7 +101,7 @@ public class SecurityTestsClient extends SecurityTestsClientBase implements Secu
 
                     credsclient.setAnonymousPrefered(true);
                     result = credsclient.anonPrefered();
-                    if (!result.equals(anonString)) {
+                    if (result!=null) {
                         throw new Exception("Authorization configuration error");
                     }
 
@@ -124,7 +123,7 @@ public class SecurityTestsClient extends SecurityTestsClientBase implements Secu
                     }
 
                     result = nocredsclient.anonPrefered();
-                    if (!result.equals(anonString)) {
+                    if (result!=null) {
                         throw new Exception("Authorization configuration error");
                     }
 
@@ -141,7 +140,7 @@ public class SecurityTestsClient extends SecurityTestsClientBase implements Secu
 
                     nocredsclient.setAnonymousPrefered(true);
                     result = nocredsclient.anonPrefered();
-                    if (!result.equals(anonString)) {
+                    if (result!=null) {
                         throw new Exception("Authorization configuration error");
                     }
 
