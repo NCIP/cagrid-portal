@@ -20,7 +20,7 @@
 	<property name="introduce.dir" value="../../../caGrid/projects/introduce" />
 	
 	<!-- output directory for JUnit logs -->
-	<property name="junit.results.dir" value="log/junit" />
+	<property name="junit.results.dir" value="${basedir}/log/junit" />
 
 	<!-- build with debugging information -->
 	<property name="java.debug" value="on" />
