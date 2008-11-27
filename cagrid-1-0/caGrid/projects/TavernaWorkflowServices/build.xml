@@ -289,11 +289,12 @@
 
 	<!-- Compile the test implementation classes (service, resource, etc.) -->
 	<target name="compileTests" depends="compile">
+        <!--
 		<runtarget target="preCompileTests" />
 		<javac srcdir="${test.src.dir}" classpathref="test.build.classpath" destdir="${test.build.dest}" debug="${java.debug}" deprecation="${deprecation}" />
 		<runtarget target="postCompileTests" />
+-->
 	</target>
-
 
 	<!-- Create a JAR file with the implementation classes -->
 	<target name="jar" depends="compile">
