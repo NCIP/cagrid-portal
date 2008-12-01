@@ -4,7 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.axis.MessageContext;
@@ -28,7 +28,7 @@ public class SDK40EncodingUtils {
 
 	// maps <mapping location> to bytes of the Mapping file
 	// using Hashtable for synchronization correctness
-	protected static Map<String, byte[]> mappingCacheMap = new Hashtable();
+	protected static Map<String, byte[]> mappingCacheMap = new HashMap<String, byte[]>();
     
     public static Mapping getMarshallerMapping(MessageContext context) {
         return getMapping(context, CASTOR_MARSHALLER_PROPERTY);
