@@ -1,15 +1,15 @@
 package org.cagrid.data.sdkquery41.style.wizard;
 
-import java.io.File;
-
-import org.cagrid.data.sdkquery41.processor.SDK41QueryProcessor;
-import org.cagrid.data.sdkquery41.style.wizard.config.SDK41InitialConfigurationStep;
-import org.cagrid.grape.utils.CompositeErrorDialog;
-
 import gov.nih.nci.cagrid.data.style.sdkstyle.wizard.CoreDsIntroPanel;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
-import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
+
+import java.io.File;
+
+import org.cagrid.data.sdkquery41.processor.SDK41QueryProcessor;
+import org.cagrid.data.sdkquery41.style.common.SDK41StyleConstants;
+import org.cagrid.data.sdkquery41.style.wizard.config.SDK41InitialConfigurationStep;
+import org.cagrid.grape.utils.CompositeErrorDialog;
 
 
 /**
@@ -34,8 +34,7 @@ public class SDK41InitializationPanel extends CoreDsIntroPanel {
     protected void setLibrariesAndProcessor() {
         // set the query processor and style lib dir on the configuration
         this.configuration.setQueryProcessorClassName(QUERY_PROCESSOR_CLASSNAME);
-        File styleLibDir = new File(ExtensionsLoader.getInstance().getExtensionsDir().getAbsolutePath()
-            + File.separator + "data" + File.separator + "styles" + File.separator + "cacore4" + File.separator + "lib");
+        File styleLibDir = new File(SDK41StyleConstants.STYLE_DIR, "lib");
         this.configuration.setStyleLibDirectory(styleLibDir);
     }
 
