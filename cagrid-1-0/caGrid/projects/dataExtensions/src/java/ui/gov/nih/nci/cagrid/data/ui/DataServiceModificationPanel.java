@@ -30,7 +30,7 @@ import org.cagrid.grape.utils.CompositeErrorDialog;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * @created Oct 10, 2006
- * @version $Id: DataServiceModificationPanel.java,v 1.7 2008-09-11 17:50:05 dervin Exp $
+ * @version $Id: DataServiceModificationPanel.java,v 1.8 2008-12-01 19:11:59 dervin Exp $
  */
 public class DataServiceModificationPanel extends ServiceModificationUIPanel {
     
@@ -159,7 +159,8 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
                         String[] message = {
                             "This service specifies the " + styleName + " service style,",
                             "but the style could not be loaded.  Please check that it is ",
-                            "installed and properly configured."
+                            "installed, properly configured, and compatible with this ",
+                            "version of the Introduce toolkit."
                         };
                         CompositeErrorDialog.showErrorDialog("Service style " + styleName + " not found", message);
                     } else {

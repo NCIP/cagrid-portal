@@ -7,6 +7,7 @@ import gov.nih.nci.cagrid.data.style.StyleCodegenPostProcessor;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.extension.CodegenExtensionException;
+import gov.nih.nci.cagrid.introduce.extension.CreationExtensionException;
 
 
 /**
@@ -15,7 +16,7 @@ import gov.nih.nci.cagrid.introduce.extension.CodegenExtensionException;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * @created Mar 29, 2006
- * @version $Id: DataServiceOperationProviderCodegenPostProcessor.java,v 1.2 2007-08-24 14:14:50 dervin Exp $
+ * @version $Id: DataServiceOperationProviderCodegenPostProcessor.java,v 1.3 2008-12-01 19:11:59 dervin Exp $
  */
 public class DataServiceOperationProviderCodegenPostProcessor extends BaseCodegenPostProcessorExtension {
 
@@ -56,6 +57,9 @@ public class DataServiceOperationProviderCodegenPostProcessor extends BaseCodege
             if (styleName != null) {
                 try {
                     ServiceStyleContainer styleContainer = ServiceStyleLoader.getStyle(styleName);
+                    if (styleContainer == null) {
+                        throw new CreationExtensionException("Could not load service style " + styleName);
+                    }
                     StyleCodegenPostProcessor stylePostProcessor = styleContainer.loadCodegenPostProcessor();
                     if (stylePostProcessor != null) {
                         stylePostProcessor.codegenPostProcessStyle(desc, info);

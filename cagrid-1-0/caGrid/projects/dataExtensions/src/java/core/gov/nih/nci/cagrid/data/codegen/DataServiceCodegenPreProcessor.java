@@ -38,7 +38,7 @@ import org.apache.commons.logging.LogFactory;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * @created May 11, 2006
- * @version $Id: DataServiceCodegenPreProcessor.java,v 1.4 2008-04-17 15:15:56 dervin Exp $
+ * @version $Id: DataServiceCodegenPreProcessor.java,v 1.5 2008-12-01 19:11:59 dervin Exp $
  */
 public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProcessor {
 
@@ -68,6 +68,9 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
         if (features != null && features.getServiceStyle() != null) {
             try {
                 ServiceStyleContainer container = ServiceStyleLoader.getStyle(features.getServiceStyle());
+                if (container == null) {
+                    throw new CodegenExtensionException("Could not load service style " + features.getServiceStyle());
+                }
                 StyleCodegenPreProcessor preProcessor = container.loadCodegenPreProcessor();
                 if (preProcessor != null) {
                     preProcessor.codegenPreProcessStyle(desc, info);
