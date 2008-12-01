@@ -86,7 +86,7 @@
 	<classpathentry kind="lib" path="ext/dependencies/service/jars/odmg-3.0.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/service/jars/subject-0.2.1.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/test/jars/caGrid-core-tests-1.3-dev.jar"/>
-	<classpathentry kind="var" path="ANT_HOME/lib/junit.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/service/jars/caGrid-gaards-core-1.3-dev.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/test/jars/junit-4.4.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -126,7 +126,6 @@
 	<classpathentry kind="lib" path="ext/dependencies/default/jars/caGrid-dorian-stubs-1.2.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/default/jars/caGrid-dorian-stubs-1.3-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/default/jars/caGrid-gaards-core-1.3-dev.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/default/jars/caGrid-gridca-1.3-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/default/jars/caGrid-gts-client-1.3-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/default/jars/caGrid-gts-common-1.3-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/default/jars/caGrid-gts-stubs-1.3-dev.jar"/>
@@ -141,5 +140,6 @@
 	<classpathentry kind="lib" path="ext/dependencies/default/jars/caGrid-syncgts-client-1.3-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/default/jars/caGrid-syncgts-common-1.3-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/default/jars/caGrid-syncgts-stubs-1.3-dev.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/test/jars/junit-4.4.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
