@@ -14,10 +14,16 @@ import gov.nih.nci.cagrid.metadata.common.PointOfContact;
 
 public class MetadataDeploymentValidator extends DeploymentValidator {
 
+    public MetadataDeploymentValidator(String baseDir) {
+        super(baseDir);
+    }
+
     @Override
     public void validate() throws Exception {
         List messages = new ArrayList();
-        ServiceMetadata metadata = MetadataUtils.deserializeServiceMetadata(new FileReader("etc" + File.separator
+        
+        
+        ServiceMetadata metadata = MetadataUtils.deserializeServiceMetadata(new FileReader(getBaseDir() + File.separator + "etc" + File.separator
             + "serviceMetadata.xml"));
 
         if (metadata.getServiceDescription() != null && metadata.getServiceDescription().getService() != null) {

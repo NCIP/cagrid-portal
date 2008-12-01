@@ -6,6 +6,7 @@ import gov.nih.nci.cagrid.introduce.servicetasks.beans.deployment.validator.Vali
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.lang.reflect.Constructor;
 import java.util.Properties;
 
 import javax.xml.namespace.QName;
@@ -50,8 +51,8 @@ public class DeploymentValidatorTask extends Task {
 
             DeploymentValidatorDescriptor deploymentValidatorDescriptor = null;
             try {
-                deploymentValidatorDescriptor = (DeploymentValidatorDescriptor) ObjectDeserializer
-                    .deserialize(is, DeploymentValidatorDescriptor.class);
+                deploymentValidatorDescriptor = (DeploymentValidatorDescriptor) ObjectDeserializer.deserialize(is,
+                    DeploymentValidatorDescriptor.class);
 
             } catch (DeserializationException e) {
                 throw new Exception("Cannot deserialize deployment validator descriptor: " + deploymentDescriptor, e);
@@ -63,8 +64,10 @@ public class DeploymentValidatorTask extends Task {
                     for (int i = 0; i < deploymentValidatorDescriptor.getValidatorDescriptor().length; i++) {
                         ValidatorDescriptor desc = deploymentValidatorDescriptor.getValidatorDescriptor(i);
                         if (desc.getValidationClass() != null) {
-                            DeploymentValidator validator = (DeploymentValidator) Class.forName(
-                                desc.getValidationClass()).newInstance();
+                            Class clazz = Class.forName(desc.getValidationClass());
+                            Constructor con = clazz.getConstructor(new Class[]{String.class});
+                            DeploymentValidator validator = (DeploymentValidator) con
+                                .newInstance(new Object[]{baseDir});
                             validator.validate();
                         }
                     }
