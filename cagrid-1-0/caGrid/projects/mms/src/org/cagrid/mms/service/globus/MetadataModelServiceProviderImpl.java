@@ -52,7 +52,7 @@ public class MetadataModelServiceProviderImpl{
 
     public org.cagrid.mms.stubs.AnnotateServiceMetadataResponse annotateServiceMetadata(org.cagrid.mms.stubs.AnnotateServiceMetadataRequest params) throws RemoteException {
     org.cagrid.mms.stubs.AnnotateServiceMetadataResponse boxedResult = new org.cagrid.mms.stubs.AnnotateServiceMetadataResponse();
-    boxedResult.setSemanticMetadata(impl.annotateServiceMetadata(params.getServiceMetadata().getServiceMetadata(),params.getNamespaceToProjectMappings().getNamespaceToProjectMapping()));
+    boxedResult.setServiceMetadata(impl.annotateServiceMetadata(params.getServiceMetadata().getServiceMetadata(),params.getNamespaceToProjectMappings().getNamespaceToProjectMapping()));
     return boxedResult;
   }
 

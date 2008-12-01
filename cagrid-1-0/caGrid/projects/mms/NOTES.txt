@@ -1,0 +1,3 @@
+In order to pass a parameter into the main resource, I manually edited the jndi for the resourceconfiguration to point
+to a class that I created, which extends the Introduce generated resource configuration, and added a property to it (to specify the spring file to use).
+

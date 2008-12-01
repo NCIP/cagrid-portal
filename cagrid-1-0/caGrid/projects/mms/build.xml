@@ -140,8 +140,8 @@
 	</target>
 
 	<target name="defineClasspaths" depends="checkGlobus">
+        <path id="tasks.run.extended.classpath"/>
 		<runtarget target="defineExtendedClasspaths" />
-		<path id="tasks.run.extended.classpath"/>
 		<path id="base.classpath">
 			<fileset dir="${lib.dir}">
 				<include name="*.jar" />

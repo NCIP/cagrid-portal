@@ -29,7 +29,7 @@
 	<target name="deploymentValidator"  unless="no.deployment.validation" depends="defineClasspaths">
 		<taskdef name="deploymentValidatorTask" classname="gov.nih.nci.cagrid.introduce.servicetasks.deployment.validator.DeploymentValidatorTask" classpathref="tasks.run.classpath">
 		</taskdef>
-		<deploymentValidatorTask />
+		<deploymentValidatorTask/>
 	</target>
 	
 	

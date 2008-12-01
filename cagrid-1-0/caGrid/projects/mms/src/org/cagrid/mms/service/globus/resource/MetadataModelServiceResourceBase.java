@@ -340,7 +340,8 @@ public abstract class MetadataModelServiceResourceBase extends ReflectionResourc
     }
     
     
-    protected void populateResourceProperties() {
+    
+    	protected void populateResourceProperties() {
 	
 		loadServiceMetadataFromFile();
 	
@@ -348,7 +349,7 @@ public abstract class MetadataModelServiceResourceBase extends ReflectionResourc
 
 
 		
-    protected void loadServiceMetadataFromFile() {
+	private void loadServiceMetadataFromFile() {
       if(getServiceMetadata()==null){
 		try {
 			File dataFile = new File(ContainerConfig.getBaseDirectory() + File.separator

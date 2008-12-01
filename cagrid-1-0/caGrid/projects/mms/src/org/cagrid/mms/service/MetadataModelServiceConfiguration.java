@@ -45,8 +45,6 @@ public class MetadataModelServiceConfiguration implements ServiceConfiguration {
 	
 
 	
-	private String mmsConfigurationFile;
-	
 	
     public String getEtcDirectoryPath() {
 		return ContainerConfig.getBaseDirectory() + File.separator + etcDirectoryPath;
@@ -56,16 +54,6 @@ public class MetadataModelServiceConfiguration implements ServiceConfiguration {
 		this.etcDirectoryPath = etcDirectoryPath;
 	}
 
-
-	
-	public String getMmsConfigurationFile() {
-		return ContainerConfig.getBaseDirectory() + File.separator + mmsConfigurationFile;
-	}
-	
-	
-	public void setMmsConfigurationFile(String mmsConfigurationFile) {
-		this.mmsConfigurationFile = mmsConfigurationFile;
-	}
 
 	
 }

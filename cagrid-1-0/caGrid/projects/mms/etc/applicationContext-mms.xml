@@ -4,5 +4,6 @@
   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
 
   <bean id="mms" class="org.cagrid.mms.service.impl.cadsr.CaDSRMMSImpl">
+    <property name="caDSRApplicationServiceURL" value="http://cadsrapi-prod2.nci.nih.gov/cadsrapi40/" />
   </bean>
 </beans>

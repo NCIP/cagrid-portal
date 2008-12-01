@@ -51,12 +51,12 @@ public interface MetadataModelServiceI {
    *
    * @param umlProjectIdentifer
    *	The project to generate a DomainModel for
-   * @param fullyQualifiiedClassNames
+   * @param fullyQualifiedClassNames
    *	The fully qualified Class names to include in the model
    * @param umlAssociationExclude
    *	A collection of UML Associations to exclude from the model
    */
-  public gov.nih.nci.cagrid.metadata.dataservice.DomainModel generateDomainModelForClassesWithExcludes(org.cagrid.mms.domain.UMLProjectIdentifer umlProjectIdentifer,java.lang.String[] fullyQualifiiedClassNames,org.cagrid.mms.domain.UMLAssociationExclude[] umlAssociationExclude) throws RemoteException ;
+  public gov.nih.nci.cagrid.metadata.dataservice.DomainModel generateDomainModelForClassesWithExcludes(org.cagrid.mms.domain.UMLProjectIdentifer umlProjectIdentifer,java.lang.String[] fullyQualifiedClassNames,org.cagrid.mms.domain.UMLAssociationExclude[] umlAssociationExclude) throws RemoteException ;
 
   /**
    * Annotates the specified ServiceMetadata model with semantic information from the specified model, by mapping QNames to UMLClasses
@@ -66,7 +66,7 @@ public interface MetadataModelServiceI {
    * @param namespaceToProjectMappings
    *	An optional collection of mappings from URI Namespace to UMLProjects
    */
-  public gov.nih.nci.cagrid.metadata.common.SemanticMetadata annotateServiceMetadata(gov.nih.nci.cagrid.metadata.ServiceMetadata serviceMetadata,org.cagrid.mms.domain.NamespaceToProjectMapping[] namespaceToProjectMappings) throws RemoteException ;
+  public gov.nih.nci.cagrid.metadata.ServiceMetadata annotateServiceMetadata(gov.nih.nci.cagrid.metadata.ServiceMetadata serviceMetadata,org.cagrid.mms.domain.NamespaceToProjectMapping[] namespaceToProjectMappings) throws RemoteException ;
 
   /**
    * Returns the metadata detailing the supported Model sources and their characteristics

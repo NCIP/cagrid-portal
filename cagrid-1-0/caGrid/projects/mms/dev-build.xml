@@ -55,7 +55,7 @@
 		</path>
 		<path id="tasks.run.extended.classpath">
 			<fileset dir="${ext.lib.dir}">
-				<include name="caGrid-core*.jar" />
+				<include name="caGrid-*.jar" />
 				<include name="jdom*.jar" />
 			</fileset>
 		</path>

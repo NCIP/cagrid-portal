@@ -133,7 +133,7 @@
       <element name="AnnotateServiceMetadataResponse">
         <complexType>
           <sequence>
-            <element ref="ns2:SemanticMetadata" minOccurs="1" maxOccurs="1" />
+            <element ref="ns5:ServiceMetadata" minOccurs="1" maxOccurs="1" />
           </sequence>
         </complexType>
       </element>

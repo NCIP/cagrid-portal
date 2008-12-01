@@ -45,6 +45,7 @@ public class ServiceMetadataAnnotator {
 	}
 
 
+	//TODO: deal with Project lookups and namespacetoproject mappings
 //	public ServiceMetadataAnnotator(ApplicationService cadsr, String uml2xmlImplClassname) {
 //		this.cadsr = cadsr;
 //		this.uml2xmlImplClassname = uml2xmlImplClassname;

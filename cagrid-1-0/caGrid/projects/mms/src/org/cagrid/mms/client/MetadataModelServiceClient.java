@@ -135,14 +135,14 @@ public class MetadataModelServiceClient extends MetadataModelServiceClientBase i
     }
   }
 
-  public gov.nih.nci.cagrid.metadata.dataservice.DomainModel generateDomainModelForClassesWithExcludes(org.cagrid.mms.domain.UMLProjectIdentifer umlProjectIdentifer,java.lang.String[] fullyQualifiiedClassNames,org.cagrid.mms.domain.UMLAssociationExclude[] umlAssociationExclude) throws RemoteException {
+  public gov.nih.nci.cagrid.metadata.dataservice.DomainModel generateDomainModelForClassesWithExcludes(org.cagrid.mms.domain.UMLProjectIdentifer umlProjectIdentifer,java.lang.String[] fullyQualifiedClassNames,org.cagrid.mms.domain.UMLAssociationExclude[] umlAssociationExclude) throws RemoteException {
     synchronized(portTypeMutex){
       configureStubSecurity((Stub)portType,"generateDomainModelForClassesWithExcludes");
     org.cagrid.mms.stubs.GenerateDomainModelForClassesWithExcludesRequest params = new org.cagrid.mms.stubs.GenerateDomainModelForClassesWithExcludesRequest();
     org.cagrid.mms.stubs.GenerateDomainModelForClassesWithExcludesRequestUmlProjectIdentifer umlProjectIdentiferContainer = new org.cagrid.mms.stubs.GenerateDomainModelForClassesWithExcludesRequestUmlProjectIdentifer();
     umlProjectIdentiferContainer.setUMLProjectIdentifer(umlProjectIdentifer);
     params.setUmlProjectIdentifer(umlProjectIdentiferContainer);
-    params.setFullyQualifiiedClassNames(fullyQualifiiedClassNames);
+    params.setFullyQualifiiedClassNames(fullyQualifiedClassNames);
     org.cagrid.mms.stubs.GenerateDomainModelForClassesWithExcludesRequestUmlAssociationExclude umlAssociationExcludeContainer = new org.cagrid.mms.stubs.GenerateDomainModelForClassesWithExcludesRequestUmlAssociationExclude();
     umlAssociationExcludeContainer.setUMLAssociationExclude(umlAssociationExclude);
     params.setUmlAssociationExclude(umlAssociationExcludeContainer);
@@ -151,7 +151,7 @@ public class MetadataModelServiceClient extends MetadataModelServiceClientBase i
     }
   }
 
-  public gov.nih.nci.cagrid.metadata.common.SemanticMetadata annotateServiceMetadata(gov.nih.nci.cagrid.metadata.ServiceMetadata serviceMetadata,org.cagrid.mms.domain.NamespaceToProjectMapping[] namespaceToProjectMappings) throws RemoteException {
+  public gov.nih.nci.cagrid.metadata.ServiceMetadata annotateServiceMetadata(gov.nih.nci.cagrid.metadata.ServiceMetadata serviceMetadata,org.cagrid.mms.domain.NamespaceToProjectMapping[] namespaceToProjectMappings) throws RemoteException {
     synchronized(portTypeMutex){
       configureStubSecurity((Stub)portType,"annotateServiceMetadata");
     org.cagrid.mms.stubs.AnnotateServiceMetadataRequest params = new org.cagrid.mms.stubs.AnnotateServiceMetadataRequest();
@@ -162,7 +162,7 @@ public class MetadataModelServiceClient extends MetadataModelServiceClientBase i
     namespaceToProjectMappingsContainer.setNamespaceToProjectMapping(namespaceToProjectMappings);
     params.setNamespaceToProjectMappings(namespaceToProjectMappingsContainer);
     org.cagrid.mms.stubs.AnnotateServiceMetadataResponse boxedResult = portType.annotateServiceMetadata(params);
-    return boxedResult.getSemanticMetadata();
+    return boxedResult.getServiceMetadata();
     }
   }
 

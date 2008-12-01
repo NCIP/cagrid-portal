@@ -165,7 +165,7 @@
     <ns4:Method description="Generates a  DomainModel for the specified Project, including only the specified Classes, but excluding the specified Associations" isImported="false" isProvided="false" name="generateDomainModelForClassesWithExcludes" xsi:type="ns4:MethodType">
      <ns4:Inputs>
       <ns4:Input qName="ns19:UMLProjectIdentifer" description="The project to generate a DomainModel for" isArray="false" name="umlProjectIdentifer" xmlns:ns19="gme://caGrid.caBIG/1.0/org.cagrid.mms.domain"/>
-      <ns4:Input qName="xsd:string" description="The fully qualified Class names to include in the model" isArray="true" name="fullyQualifiiedClassNames" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+      <ns4:Input qName="xsd:string" description="The fully qualified Class names to include in the model" isArray="true" name="fullyQualifiedClassNames" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
       <ns4:Input qName="ns20:UMLAssociationExclude" description="A collection of UML Associations to exclude from the model" isArray="true" name="umlAssociationExclude" xmlns:ns20="gme://caGrid.caBIG/1.0/org.cagrid.mms.domain"/>
      </ns4:Inputs>
      <ns4:Output qName="ns21:DomainModel" description="" isArray="false" xmlns:ns21="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice"/>
@@ -176,7 +176,7 @@
       <ns4:Input qName="ns22:ServiceMetadata" description="The unannotated ServiceMetadata model" isArray="false" name="serviceMetadata" xmlns:ns22="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"/>
       <ns4:Input qName="ns23:NamespaceToProjectMapping" description="An optional collection of mappings from URI Namespace to UMLProjects" isArray="true" name="namespaceToProjectMappings" xmlns:ns23="gme://caGrid.caBIG/1.0/org.cagrid.mms.domain"/>
      </ns4:Inputs>
-     <ns4:Output qName="ns24:SemanticMetadata" description="" isArray="false" xmlns:ns24="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
+     <ns4:Output qName="ns24:ServiceMetadata" description="" isArray="false" xmlns:ns24="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"/>
      <ns4:Exceptions/>
     </ns4:Method>
     <ns4:Method description="Returns the metadata detailing the supported Model sources and their characteristics" isImported="false" isProvided="false" name="getModelSourceMetadata" xsi:type="ns4:MethodType">
@@ -200,7 +200,5 @@
  <ns29:Extensions xsi:type="ns29:ExtensionsType" xmlns:ns29="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <ns29:Extension name="cagrid_metadata" version="1.3" xsi:type="ns29:ExtensionType"/>
  </ns29:Extensions>
- <ns30:ServiceProperties xmlns:ns30="gme://gov.nih.nci.cagrid.introduce/1/Property">
-  <ns30:Property description="The spring-based XML configuration file used to load the MMS implementation" isFromETC="true" key="mmsConfigurationFile" value="applicationContext-mms.xml"/>
- </ns30:ServiceProperties>
+ <ns30:ServiceProperties xmlns:ns30="gme://gov.nih.nci.cagrid.introduce/1/Property"/>
 </ns1:ServiceDescription>
