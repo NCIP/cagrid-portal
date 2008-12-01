@@ -13,7 +13,8 @@ import org.cagrid.grape.utils.CompositeErrorDialog;
 
 
 /**
- * SDK41InitializationPanel First wizard panel to create a caGrid data service
+ * SDK41InitializationPanel 
+ * First wizard panel to create a caGrid data service
  * backed by caCORE SDK 4.1
  * 
  * @author David
