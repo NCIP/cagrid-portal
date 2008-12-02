@@ -15,7 +15,6 @@
 <c:set var="mapNodeId">${prefix}-gmap</c:set>
 <c:set var="selectItemOperationName" value="selectItemForDiscovery"/>
 <c:set var="selectItemsOperationName" value="selectItemsForDiscovery"/>
-
 <portlet:actionURL var="action"/>
 
 <%@ include file="/WEB-INF/jsp/map/mapDirectory.jspf" %>
@@ -36,75 +35,6 @@
 
     //<![CDATA[
     var map;
-
-    if (GBrowserIsCompatible()) {
-
-        map= new GMap2(document.getElementById("${prefix}-gmap"));
-        map.setCenter(
-                new GLatLng(
-                        <c:out value="${mapBean.centerLatitude}"/>,
-                        <c:out value="${mapBean.centerLongitude}"/>
-                        ), <c:out value="${mapBean.zoomLevel}"/>);
-
-        map.enableDoubleClickZoom();
-        map.addControl(new GSmallMapControl());
-
-        function LoadingControl(){}
-        LoadingControl.prototype = new GControl();
-
-        LoadingControl.prototype.initialize = function(map) {
-            var container = document.getElementById('${prefix}loadingDiv');
-            map.getContainer().appendChild(container);
-            return container;
-        }
-
-        LoadingControl.prototype.getDefaultPosition = function() {
-            return new GControlPosition(G_ANCHOR_TOP_LEFT, new GSize(42, 5));
-        }
-
-        map.addControl(new LoadingControl());
-        loadMap();
-    }
-
-    function loadMap(){
-        if (GBrowserIsCompatible()) {
-            map.clearOverlays();
-            document.getElementById('${prefix}loadingDiv').innerHTML='Loading Map...';
-
-            dwr.engine.beginBatch({timeout:30000});
-            MapService.getMap($('${prefix}directory').value, function(result){
-                document.getElementById('${prefix}loadingDiv').innerHTML='';
-                $('${prefix}mapDiv').innerHTML=result;
-                var x = $('${prefix}mapDiv').getElementsByTagName("script");
-                for(var i=0;i<x.length;i++)
-                {
-                    eval(x[i].text);
-                }
-            });
-
-            dwr.engine.endBatch({
-                async:true,
-                errorHandler:function(errorString, exception) {
-                    $('${prefix}loadingDiv').innerHTML='Server Error. Please refresh the page'}
-            });
-
-            var bName = navigator.appName;
-            var appVer = navigator.appVersion.toLowerCase();
-            var iePos = appVer.indexOf('msie');
-            if (iePos !=-1) {
-                is_minor = parseFloat(appVer.substring(iePos+5,appVer.indexOf(';',iePos)))
-                is_major = parseInt(is_minor);
-            }
-
-            if (bName == "Microsoft Internet Explorer" &&
-                is_major <=6)
-            {
-                document.getElementById('${mapNodeId}').style.width="600px";
-                document.getElementById('${mapNodeId}').style.height="350px";
-            }
-        }
-    }
-
     var baseIcon = new GIcon();
     baseIcon.iconSize = new GSize(34, 24);
     baseIcon.shadowSize = new GSize(34, 24);
@@ -135,6 +65,73 @@
 
     var partPoc = new GIcon(baseIcon);
     partPoc.image = "<c:url value="/images/participant_POC.gif"/>";
+
+
+jQuery(document).ready(function() {
+
+        if (GBrowserIsCompatible()) {
+
+            map= new GMap2(document.getElementById("${prefix}-gmap"));
+            map.setCenter(
+                    new GLatLng(
+                            <c:out value="${mapBean.centerLatitude}"/>,
+                            <c:out value="${mapBean.centerLongitude}"/>
+                            ), <c:out value="${mapBean.zoomLevel}"/>);
+
+            map.enableDoubleClickZoom();
+            map.addControl(new GSmallMapControl());
+
+            function LoadingControl(){}
+            LoadingControl.prototype = new GControl();
+
+            LoadingControl.prototype.initialize = function(map) {
+                var container = document.getElementById('${prefix}loadingDiv');
+                map.getContainer().appendChild(container);
+                return container;
+            }
+
+            LoadingControl.prototype.getDefaultPosition = function() {
+                return new GControlPosition(G_ANCHOR_TOP_LEFT, new GSize(42, 5));
+            }
+
+            map.addControl(new LoadingControl());
+            loadMap();
+        }
+});
+
+    function loadMap(){
+            map.clearOverlays();
+            document.getElementById('${prefix}loadingDiv').innerHTML='Loading Map...';
+
+            dwr.engine.beginBatch({timeout:30000});
+            MapService.getMap($('${prefix}directory').value, function(result){
+                document.getElementById('${prefix}loadingDiv').innerHTML='';
+                var myScripts = result.evalScripts();
+
+            });
+
+            dwr.engine.endBatch({
+                async:true,
+                errorHandler:function(errorString, exception) {
+                    $('${prefix}loadingDiv').innerHTML='Server Error. Please refresh the page'}
+            });
+
+            var bName = navigator.appName;
+            var appVer = navigator.appVersion.toLowerCase();
+            var iePos = appVer.indexOf('msie');
+            if (iePos !=-1) {
+                is_minor = parseFloat(appVer.substring(iePos+5,appVer.indexOf(';',iePos)))
+                is_major = parseInt(is_minor);
+            }
+
+            if (bName == "Microsoft Internet Explorer" &&
+                is_major <=6)
+            {
+                document.getElementById('${mapNodeId}').style.width="600px";
+                document.getElementById('${mapNodeId}').style.height="350px";
+            }
+    }
+
 
 </script>
 

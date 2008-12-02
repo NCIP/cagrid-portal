@@ -11,10 +11,6 @@
 
 <script type="text/javascript">
 //<![CDATA[
-jQuery(document).ready(function() {
-
-
-if (GBrowserIsCompatible()) {
 
 <c:if test="${!empty mapBean.participantNodes}">
 <c:forEach
@@ -195,7 +191,6 @@ function() {
 map.addOverlay(<c:out value="${markerId}"/>);
 </c:forEach>
 </c:if>
-}
-});
+ 
 //]]>
 </script>
