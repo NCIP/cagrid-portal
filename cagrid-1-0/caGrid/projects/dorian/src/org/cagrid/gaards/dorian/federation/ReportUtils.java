@@ -1,8 +1,8 @@
 package org.cagrid.gaards.dorian.federation;
 
-import java.util.Arrays;
-
 import gov.nih.nci.cagrid.common.Utils;
+
+import java.util.Arrays;
 
 public class ReportUtils {
 

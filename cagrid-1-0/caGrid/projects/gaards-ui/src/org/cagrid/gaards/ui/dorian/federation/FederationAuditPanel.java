@@ -24,7 +24,7 @@ import javax.swing.border.TitledBorder;
 import org.cagrid.gaards.dorian.client.GridAdministrationClient;
 import org.cagrid.gaards.dorian.federation.FederationAuditFilter;
 import org.cagrid.gaards.dorian.federation.FederationAuditRecord;
-import org.cagrid.gaards.dorian.federation.FederationAuditing;
+import org.cagrid.gaards.dorian.federation.FederationAudit;
 import org.cagrid.gaards.ui.common.ProgressPanel;
 import org.cagrid.gaards.ui.common.SelectDateDialog;
 import org.cagrid.gaards.ui.dorian.DorianSessionProvider;
@@ -99,7 +99,7 @@ public class FederationAuditPanel extends JPanel {
 
 	private DorianSessionProvider session;
 
-	private List<FederationAuditing> auditTypes; // @jve:decl-index=0:
+	private List<FederationAudit> auditTypes; // @jve:decl-index=0:
 
 	private JPanel messagePanel = null;
 
@@ -189,39 +189,39 @@ public class FederationAuditPanel extends JPanel {
 	}
 
 	private void setupAuditTypes(int mode) {
-		this.auditTypes = new ArrayList<FederationAuditing>();
+		this.auditTypes = new ArrayList<FederationAudit>();
 		if (mode == GRID_ACCOUNT_MODE) {
-			this.auditTypes.add(FederationAuditing.AccountCreated);
-			this.auditTypes.add(FederationAuditing.AccountRemoved);
-			this.auditTypes.add(FederationAuditing.AccountUpdated);
-			this.auditTypes.add(FederationAuditing.AdminAdded);
-			this.auditTypes.add(FederationAuditing.AdminRemoved);
-			this.auditTypes.add(FederationAuditing.PermissionDenied);
+			this.auditTypes.add(FederationAudit.AccountCreated);
+			this.auditTypes.add(FederationAudit.AccountRemoved);
+			this.auditTypes.add(FederationAudit.AccountUpdated);
+			this.auditTypes.add(FederationAudit.AdminAdded);
+			this.auditTypes.add(FederationAudit.AdminRemoved);
+			this.auditTypes.add(FederationAudit.PermissionDenied);
 			this.auditTypes
-					.add(FederationAuditing.SuccessfulUserCertificateRequest);
+					.add(FederationAudit.SuccessfulUserCertificateRequest);
 			this.auditTypes
-					.add(FederationAuditing.InvalidUserCertificateRequest);
+					.add(FederationAudit.InvalidUserCertificateRequest);
 
 		} else if (mode == IDP_MODE) {
-			this.auditTypes.add(FederationAuditing.IdPAdded);
-			this.auditTypes.add(FederationAuditing.IdPRemoved);
-			this.auditTypes.add(FederationAuditing.IdPUpdated);
+			this.auditTypes.add(FederationAudit.IdPAdded);
+			this.auditTypes.add(FederationAudit.IdPRemoved);
+			this.auditTypes.add(FederationAudit.IdPUpdated);
 		} else if (mode == HOST_MODE) {
-			this.auditTypes.add(FederationAuditing.HostCertificateRequested);
-			this.auditTypes.add(FederationAuditing.HostCertificateApproved);
-			this.auditTypes.add(FederationAuditing.HostCertificateRenewed);
-			this.auditTypes.add(FederationAuditing.HostCertificateUpdated);
+			this.auditTypes.add(FederationAudit.HostCertificateRequested);
+			this.auditTypes.add(FederationAudit.HostCertificateApproved);
+			this.auditTypes.add(FederationAudit.HostCertificateRenewed);
+			this.auditTypes.add(FederationAudit.HostCertificateUpdated);
 		} else if (mode == USER_CERTIFICATE_MODE) {
-			this.auditTypes.add(FederationAuditing.UserCertificateUpdated);
-			this.auditTypes.add(FederationAuditing.UserCertificateRemoved);
+			this.auditTypes.add(FederationAudit.UserCertificateUpdated);
+			this.auditTypes.add(FederationAudit.UserCertificateRemoved);
 		} else {
-			Class c = FederationAuditing.class;
-			Field[] fields = FederationAuditing.class.getFields();
+			Class c = FederationAudit.class;
+			Field[] fields = FederationAudit.class.getFields();
 			for (int i = 0; i < fields.length; i++) {
-				if (FederationAuditing.class.isAssignableFrom(fields[i]
+				if (FederationAudit.class.isAssignableFrom(fields[i]
 						.getType())) {
 					try {
-						FederationAuditing o = (FederationAuditing) fields[i]
+						FederationAudit o = (FederationAudit) fields[i]
 								.get(null);
 						this.auditTypes.add(o);
 					} catch (Exception e) {

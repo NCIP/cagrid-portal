@@ -6,7 +6,7 @@ import java.util.List;
 
 import javax.swing.JComboBox;
 
-import org.cagrid.gaards.dorian.federation.FederationAuditing;
+import org.cagrid.gaards.dorian.federation.FederationAudit;
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
@@ -21,18 +21,18 @@ public class FederationAuditComboBox extends JComboBox {
 	
 	public static String ANY = "Any";
 
-	private List<FederationAuditing> list;
+	private List<FederationAudit> list;
 
 	public FederationAuditComboBox() {
-		list = new ArrayList<FederationAuditing>();
-		Class c = FederationAuditing.class;
+		list = new ArrayList<FederationAudit>();
+		Class c = FederationAudit.class;
 
-		Field[] fields = FederationAuditing.class.getFields();
+		Field[] fields = FederationAudit.class.getFields();
 
 		for (int i = 0; i < fields.length; i++) {
-			if (FederationAuditing.class.isAssignableFrom(fields[i].getType())) {
+			if (FederationAudit.class.isAssignableFrom(fields[i].getType())) {
 				try {
-					FederationAuditing o = (FederationAuditing) fields[i]
+					FederationAudit o = (FederationAudit) fields[i]
 							.get(null);
 					list.add(o);
 				} catch (Exception e) {
@@ -47,7 +47,7 @@ public class FederationAuditComboBox extends JComboBox {
 		this.setSelectedItem(ANY);
 	}
 
-	public FederationAuditComboBox(List<FederationAuditing> list) {
+	public FederationAuditComboBox(List<FederationAudit> list) {
 		this.addItem(ANY);
 		for (int i = 0; i < list.size(); i++) {
 			this.addItem(list.get(i));
@@ -59,10 +59,10 @@ public class FederationAuditComboBox extends JComboBox {
 		setSelectedItem(ANY);
 	}
 
-	public FederationAuditing getSelectedAuditType() {
+	public FederationAudit getSelectedAuditType() {
 		if (getSelectedItem().getClass().isAssignableFrom(
-				FederationAuditing.class)) {
-			return (FederationAuditing) getSelectedItem();
+				FederationAudit.class)) {
+			return (FederationAudit) getSelectedItem();
 		} else {
 			return null;
 		}

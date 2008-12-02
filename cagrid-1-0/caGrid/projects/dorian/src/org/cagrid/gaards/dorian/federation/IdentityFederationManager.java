@@ -138,7 +138,7 @@ public class IdentityFederationManager extends LoggingObject implements
 					logWarning(mess);
 					this.eventManager.logEvent(AuditConstants.SYSTEM_ID,
 							AuditConstants.SYSTEM_ID,
-							FederationAuditing.InternalError.getValue(), mess);
+							FederationAudit.InternalError.getValue(), mess);
 				}
 			} else {
 				this.administrators = this.groupManager
@@ -148,7 +148,7 @@ public class IdentityFederationManager extends LoggingObject implements
 			logError(e.getMessage(), e);
 			String mess = "An unexpected error occurred in setting up the administrators group.";
 			this.eventManager.logEvent(AuditConstants.SYSTEM_ID,
-					AuditConstants.SYSTEM_ID, FederationAuditing.InternalError
+					AuditConstants.SYSTEM_ID, FederationAudit.InternalError
 							.getValue(), mess + "\n\n"
 							+ FaultUtil.printFaultToString(e));
 			DorianInternalFault fault = new DorianInternalFault();
@@ -180,7 +180,7 @@ public class IdentityFederationManager extends LoggingObject implements
 			logError(e.getMessage(), e);
 			String mess = "An unexpected error occurred in ensuring the integrity of the Dorian IdP.";
 			this.eventManager.logEvent(AuditConstants.SYSTEM_ID,
-					AuditConstants.SYSTEM_ID, FederationAuditing.InternalError
+					AuditConstants.SYSTEM_ID, FederationAudit.InternalError
 							.getValue(), mess + "\n\n"
 							+ FaultUtil.printFaultToString(e));
 			DorianInternalFault fault = new DorianInternalFault();
@@ -244,89 +244,87 @@ public class IdentityFederationManager extends LoggingObject implements
 
 			this.eventManager
 					.registerEventWithHandler(new EventToHandlerMapping(
-							FederationAuditing.SystemStartup.getValue(),
+							FederationAudit.SystemStartup.getValue(),
 							AuditingConstants.FEDERATION_AUDITOR));
 			this.eventManager
 					.registerEventWithHandler(new EventToHandlerMapping(
-							FederationAuditing.InternalError.getValue(),
-							AuditingConstants.FEDERATION_AUDITOR));
-
-			this.eventManager
-					.registerEventWithHandler(new EventToHandlerMapping(
-							FederationAuditing.PermissionDenied.getValue(),
+							FederationAudit.InternalError.getValue(),
 							AuditingConstants.FEDERATION_AUDITOR));
 
 			this.eventManager
 					.registerEventWithHandler(new EventToHandlerMapping(
-							FederationAuditing.IdPAdded.getValue(),
+							FederationAudit.PermissionDenied.getValue(),
+							AuditingConstants.FEDERATION_AUDITOR));
+
+			this.eventManager
+					.registerEventWithHandler(new EventToHandlerMapping(
+							FederationAudit.IdPAdded.getValue(),
 							AuditingConstants.FEDERATION_AUDITOR));
 			this.eventManager
 					.registerEventWithHandler(new EventToHandlerMapping(
-							FederationAuditing.IdPUpdated.getValue(),
+							FederationAudit.IdPUpdated.getValue(),
 							AuditingConstants.FEDERATION_AUDITOR));
 			this.eventManager
 					.registerEventWithHandler(new EventToHandlerMapping(
-							FederationAuditing.IdPRemoved.getValue(),
+							FederationAudit.IdPRemoved.getValue(),
 							AuditingConstants.FEDERATION_AUDITOR));
 			this.eventManager
 					.registerEventWithHandler(new EventToHandlerMapping(
-							FederationAuditing.AdminAdded.getValue(),
+							FederationAudit.AdminAdded.getValue(),
 							AuditingConstants.FEDERATION_AUDITOR));
 			this.eventManager
 					.registerEventWithHandler(new EventToHandlerMapping(
-							FederationAuditing.AdminRemoved.getValue(),
+							FederationAudit.AdminRemoved.getValue(),
 							AuditingConstants.FEDERATION_AUDITOR));
 			this.eventManager
 					.registerEventWithHandler(new EventToHandlerMapping(
-							FederationAuditing.CRLPublished.getValue(),
+							FederationAudit.CRLPublished.getValue(),
 							AuditingConstants.FEDERATION_AUDITOR));
 			this.eventManager
 					.registerEventWithHandler(new EventToHandlerMapping(
-							FederationAuditing.AccountCreated.getValue(),
+							FederationAudit.AccountCreated.getValue(),
 							AuditingConstants.GRID_ACCOUNT_AUDITOR));
 			this.eventManager
 					.registerEventWithHandler(new EventToHandlerMapping(
-							FederationAuditing.AccountUpdated.getValue(),
+							FederationAudit.AccountUpdated.getValue(),
 							AuditingConstants.GRID_ACCOUNT_AUDITOR));
 			this.eventManager
 					.registerEventWithHandler(new EventToHandlerMapping(
-							FederationAuditing.AccountRemoved.getValue(),
+							FederationAudit.AccountRemoved.getValue(),
 							AuditingConstants.GRID_ACCOUNT_AUDITOR));
 			this.eventManager
 					.registerEventWithHandler(new EventToHandlerMapping(
-							FederationAuditing.SuccessfulUserCertificateRequest
+							FederationAudit.SuccessfulUserCertificateRequest
 									.getValue(),
 							AuditingConstants.GRID_ACCOUNT_AUDITOR));
 			this.eventManager
 					.registerEventWithHandler(new EventToHandlerMapping(
-							FederationAuditing.InvalidUserCertificateRequest
+							FederationAudit.InvalidUserCertificateRequest
 									.getValue(),
 							AuditingConstants.GRID_ACCOUNT_AUDITOR));
 			this.eventManager
 					.registerEventWithHandler(new EventToHandlerMapping(
-							FederationAuditing.HostCertificateRequested
-									.getValue(), AuditingConstants.HOST_AUDITOR));
+							FederationAudit.HostCertificateRequested.getValue(),
+							AuditingConstants.HOST_AUDITOR));
 			this.eventManager
 					.registerEventWithHandler(new EventToHandlerMapping(
-							FederationAuditing.HostCertificateApproved
-									.getValue(), AuditingConstants.HOST_AUDITOR));
+							FederationAudit.HostCertificateApproved.getValue(),
+							AuditingConstants.HOST_AUDITOR));
 			this.eventManager
 					.registerEventWithHandler(new EventToHandlerMapping(
-							FederationAuditing.HostCertificateUpdated
-									.getValue(), AuditingConstants.HOST_AUDITOR));
+							FederationAudit.HostCertificateUpdated.getValue(),
+							AuditingConstants.HOST_AUDITOR));
 			this.eventManager
 					.registerEventWithHandler(new EventToHandlerMapping(
-							FederationAuditing.HostCertificateRenewed
-									.getValue(), AuditingConstants.HOST_AUDITOR));
+							FederationAudit.HostCertificateRenewed.getValue(),
+							AuditingConstants.HOST_AUDITOR));
 			this.eventManager
 					.registerEventWithHandler(new EventToHandlerMapping(
-							FederationAuditing.UserCertificateUpdated
-									.getValue(),
+							FederationAudit.UserCertificateUpdated.getValue(),
 							AuditingConstants.USER_CERTIFICATE_AUDITOR));
 			this.eventManager
 					.registerEventWithHandler(new EventToHandlerMapping(
-							FederationAuditing.UserCertificateRemoved
-									.getValue(),
+							FederationAudit.UserCertificateRemoved.getValue(),
 							AuditingConstants.USER_CERTIFICATE_AUDITOR));
 		} catch (Exception e) {
 			logError(Utils.getExceptionMessage(e), e);
@@ -355,16 +353,16 @@ public class IdentityFederationManager extends LoggingObject implements
 		} catch (DorianInternalFault e) {
 			String mess = "An unexpected error occurred obtaining the supported user polcies.";
 			this.eventManager.logEvent(AuditConstants.SYSTEM_ID,
-					AuditConstants.SYSTEM_ID, FederationAuditing.InternalError
+					AuditConstants.SYSTEM_ID, FederationAudit.InternalError
 							.getValue(), mess + "\n\n"
 							+ FaultUtil.printFaultToString(e));
 			throw e;
 		} catch (PermissionDeniedFault e) {
 			String mess = "Permission denied to obtaining supported user policies:";
 			this.eventManager.logEvent(callerGridIdentity,
-					AuditConstants.SYSTEM_ID,
-					FederationAuditing.PermissionDenied.getValue(), mess
-							+ "\n\n" + Utils.getExceptionMessage(e));
+					AuditConstants.SYSTEM_ID, FederationAudit.PermissionDenied
+							.getValue(), mess + "\n\n"
+							+ Utils.getExceptionMessage(e));
 			throw e;
 		}
 	}
@@ -398,7 +396,7 @@ public class IdentityFederationManager extends LoggingObject implements
 			verifyAdminUser(caller);
 			idp = tm.addTrustedIdP(idp);
 			this.eventManager.logEvent(idp.getName(), callerGridIdentity,
-					FederationAuditing.IdPAdded.getValue(),
+					FederationAudit.IdPAdded.getValue(),
 					"The Trusted Identity Provider " + idp.getName() + " ("
 							+ idp.getId() + ") was added by "
 							+ callerGridIdentity + ".");
@@ -406,16 +404,16 @@ public class IdentityFederationManager extends LoggingObject implements
 		} catch (DorianInternalFault e) {
 			String mess = "An unexpected error occurred in adding a trusted identity provider.";
 			this.eventManager.logEvent(AuditConstants.SYSTEM_ID,
-					AuditConstants.SYSTEM_ID, FederationAuditing.InternalError
+					AuditConstants.SYSTEM_ID, FederationAudit.InternalError
 							.getValue(), mess + "\n\n"
 							+ FaultUtil.printFaultToString(e));
 			throw e;
 		} catch (PermissionDeniedFault e) {
 			String mess = "Caller not permitted to add a trusted identity provider:";
 			this.eventManager.logEvent(callerGridIdentity,
-					AuditConstants.SYSTEM_ID,
-					FederationAuditing.PermissionDenied.getValue(), mess
-							+ "\n\n" + Utils.getExceptionMessage(e));
+					AuditConstants.SYSTEM_ID, FederationAudit.PermissionDenied
+							.getValue(), mess + "\n\n"
+							+ Utils.getExceptionMessage(e));
 			throw e;
 		}
 	}
@@ -439,22 +437,22 @@ public class IdentityFederationManager extends LoggingObject implements
 				publishCRL();
 			}
 			this.eventManager.logEvent(idp.getName(), callerGridIdentity,
-					FederationAuditing.IdPUpdated.getValue(), ReportUtils
+					FederationAudit.IdPUpdated.getValue(), ReportUtils
 							.generateReport(curr, idp));
 		} catch (DorianInternalFault e) {
 			String mess = "An unexpected error occurred in updating the identity provider "
 					+ idp.getName() + " (" + idp.getId() + "):";
 			this.eventManager.logEvent(AuditConstants.SYSTEM_ID,
-					AuditConstants.SYSTEM_ID, FederationAuditing.InternalError
+					AuditConstants.SYSTEM_ID, FederationAudit.InternalError
 							.getValue(), mess + "\n\n"
 							+ FaultUtil.printFaultToString(e));
 			throw e;
 		} catch (PermissionDeniedFault e) {
 			String mess = "Caller not permitted to update a trusted identity provider:";
 			this.eventManager.logEvent(callerGridIdentity,
-					AuditConstants.SYSTEM_ID,
-					FederationAuditing.PermissionDenied.getValue(), mess
-							+ "\n\n" + Utils.getExceptionMessage(e));
+					AuditConstants.SYSTEM_ID, FederationAudit.PermissionDenied
+							.getValue(), mess + "\n\n"
+							+ Utils.getExceptionMessage(e));
 			throw e;
 		}
 	}
@@ -469,7 +467,7 @@ public class IdentityFederationManager extends LoggingObject implements
 			TrustedIdP idp = tm.getTrustedIdPById(idpId);
 			tm.removeTrustedIdP(idpId);
 			this.eventManager.logEvent(idp.getName(), callerGridIdentity,
-					FederationAuditing.IdPRemoved.getValue(),
+					FederationAudit.IdPRemoved.getValue(),
 					"The Identity Provider " + idp.getName() + " ("
 							+ idp.getId() + ") was removed by "
 							+ callerGridIdentity + ".");
@@ -480,9 +478,8 @@ public class IdentityFederationManager extends LoggingObject implements
 				try {
 					removeUser(users[i]);
 					this.eventManager.logEvent(users[i].getGridId(),
-							callerGridIdentity,
-							FederationAuditing.AccountRemoved.getValue(),
-							users[i].getFirstName() + " "
+							callerGridIdentity, FederationAudit.AccountRemoved
+									.getValue(), users[i].getFirstName() + " "
 									+ users[i].getLastName()
 									+ "'s account was removed because the IdP "
 									+ idp.getName() + " (" + idp.getId()
@@ -494,7 +491,7 @@ public class IdentityFederationManager extends LoggingObject implements
 							.logEvent(
 									AuditConstants.SYSTEM_ID,
 									AuditConstants.SYSTEM_ID,
-									FederationAuditing.InternalError.getValue(),
+									FederationAudit.InternalError.getValue(),
 									"In removing the Trusted IdP "
 											+ idp.getName()
 											+ " ("
@@ -510,16 +507,16 @@ public class IdentityFederationManager extends LoggingObject implements
 			String mess = "An unexpected error occurred in removing the identity provider "
 					+ idpId + ":";
 			this.eventManager.logEvent(AuditConstants.SYSTEM_ID,
-					AuditConstants.SYSTEM_ID, FederationAuditing.InternalError
+					AuditConstants.SYSTEM_ID, FederationAudit.InternalError
 							.getValue(), mess + "\n\n"
 							+ FaultUtil.printFaultToString(e));
 			throw e;
 		} catch (PermissionDeniedFault e) {
 			String mess = "Caller not permitted to remove a identity provider:";
 			this.eventManager.logEvent(callerGridIdentity,
-					AuditConstants.SYSTEM_ID,
-					FederationAuditing.PermissionDenied.getValue(), mess
-							+ "\n\n" + Utils.getExceptionMessage(e));
+					AuditConstants.SYSTEM_ID, FederationAudit.PermissionDenied
+							.getValue(), mess + "\n\n"
+							+ Utils.getExceptionMessage(e));
 			throw e;
 		}
 	}
@@ -534,16 +531,16 @@ public class IdentityFederationManager extends LoggingObject implements
 		} catch (DorianInternalFault e) {
 			String mess = "An unexpected error occurred in listing the trusted identity providers.";
 			this.eventManager.logEvent(AuditConstants.SYSTEM_ID,
-					AuditConstants.SYSTEM_ID, FederationAuditing.InternalError
+					AuditConstants.SYSTEM_ID, FederationAudit.InternalError
 							.getValue(), mess + "\n\n"
 							+ FaultUtil.printFaultToString(e));
 			throw e;
 		} catch (PermissionDeniedFault e) {
 			String mess = "Caller not permitted to list trusted identity providers:";
 			this.eventManager.logEvent(callerGridIdentity,
-					AuditConstants.SYSTEM_ID,
-					FederationAuditing.PermissionDenied.getValue(), mess
-							+ "\n\n" + Utils.getExceptionMessage(e));
+					AuditConstants.SYSTEM_ID, FederationAudit.PermissionDenied
+							.getValue(), mess + "\n\n"
+							+ Utils.getExceptionMessage(e));
 			throw e;
 		}
 	}
@@ -558,16 +555,16 @@ public class IdentityFederationManager extends LoggingObject implements
 		} catch (DorianInternalFault e) {
 			String mess = "An unexpected error occurred in loading a user account.";
 			this.eventManager.logEvent(AuditConstants.SYSTEM_ID,
-					AuditConstants.SYSTEM_ID, FederationAuditing.InternalError
+					AuditConstants.SYSTEM_ID, FederationAudit.InternalError
 							.getValue(), mess + "\n\n"
 							+ FaultUtil.printFaultToString(e));
 			throw e;
 		} catch (PermissionDeniedFault e) {
 			String mess = "Caller not permitted to load grid user accounts:";
 			this.eventManager.logEvent(callerGridIdentity,
-					AuditConstants.SYSTEM_ID,
-					FederationAuditing.PermissionDenied.getValue(), mess
-							+ "\n\n" + Utils.getExceptionMessage(e));
+					AuditConstants.SYSTEM_ID, FederationAudit.PermissionDenied
+							.getValue(), mess + "\n\n"
+							+ Utils.getExceptionMessage(e));
 			throw e;
 		}
 	}
@@ -583,16 +580,16 @@ public class IdentityFederationManager extends LoggingObject implements
 		} catch (DorianInternalFault e) {
 			String mess = "An unexpected error occurred in searching for grid user accounts.";
 			this.eventManager.logEvent(AuditConstants.SYSTEM_ID,
-					AuditConstants.SYSTEM_ID, FederationAuditing.InternalError
+					AuditConstants.SYSTEM_ID, FederationAudit.InternalError
 							.getValue(), mess + "\n\n"
 							+ FaultUtil.printFaultToString(e));
 			throw e;
 		} catch (PermissionDeniedFault e) {
 			String mess = "Caller not permitted to search for grid user accounts:";
 			this.eventManager.logEvent(callerGridIdentity,
-					AuditConstants.SYSTEM_ID,
-					FederationAuditing.PermissionDenied.getValue(), mess
-							+ "\n\n" + Utils.getExceptionMessage(e));
+					AuditConstants.SYSTEM_ID, FederationAudit.PermissionDenied
+							.getValue(), mess + "\n\n"
+							+ Utils.getExceptionMessage(e));
 			throw e;
 		}
 	}
@@ -606,22 +603,22 @@ public class IdentityFederationManager extends LoggingObject implements
 			GridUser curr = um.getUser(usr.getIdPId(), usr.getUID());
 			um.updateUser(usr);
 			this.eventManager.logEvent(curr.getGridId(), callerGridIdentity,
-					FederationAuditing.AccountUpdated.getValue(), ReportUtils
+					FederationAudit.AccountUpdated.getValue(), ReportUtils
 							.generateReport(curr, usr));
 		} catch (DorianInternalFault e) {
 			String mess = "An unexpected error occurred in updating the grid user account "
 					+ usr.getGridId() + ":";
 			this.eventManager.logEvent(AuditConstants.SYSTEM_ID,
-					AuditConstants.SYSTEM_ID, FederationAuditing.InternalError
+					AuditConstants.SYSTEM_ID, FederationAudit.InternalError
 							.getValue(), mess + "\n\n"
 							+ FaultUtil.printFaultToString(e));
 			throw e;
 		} catch (PermissionDeniedFault e) {
 			String mess = "Caller not permitted to update grid user accounts:";
 			this.eventManager.logEvent(callerGridIdentity,
-					AuditConstants.SYSTEM_ID,
-					FederationAuditing.PermissionDenied.getValue(), mess
-							+ "\n\n" + Utils.getExceptionMessage(e));
+					AuditConstants.SYSTEM_ID, FederationAudit.PermissionDenied
+							.getValue(), mess + "\n\n"
+							+ Utils.getExceptionMessage(e));
 			throw e;
 		}
 	}
@@ -637,7 +634,7 @@ public class IdentityFederationManager extends LoggingObject implements
 					.logEvent(
 							usr.getGridId(),
 							AuditConstants.SYSTEM_ID,
-							FederationAuditing.AccountRemoved.getValue(),
+							FederationAudit.AccountRemoved.getValue(),
 							usr.getFirstName()
 									+ " "
 									+ usr.getLastName()
@@ -677,8 +674,7 @@ public class IdentityFederationManager extends LoggingObject implements
 					this.hostManager.updateHostCertificateRecord(update);
 					this.eventManager.logEvent(String.valueOf(r.getId()),
 							AuditConstants.SYSTEM_ID,
-							FederationAuditing.HostCertificateUpdated
-									.getValue(),
+							FederationAudit.HostCertificateUpdated.getValue(),
 							"The status of the certificate for the host "
 									+ r.getHost()
 									+ " ("
@@ -698,8 +694,7 @@ public class IdentityFederationManager extends LoggingObject implements
 					this.hostManager.updateHostCertificateRecord(update);
 					this.eventManager.logEvent(String.valueOf(r.getId()),
 							AuditConstants.SYSTEM_ID,
-							FederationAuditing.HostCertificateUpdated
-									.getValue(),
+							FederationAudit.HostCertificateUpdated.getValue(),
 							"The status of the certificate for the host "
 									+ r.getHost() + " (" + r.getId()
 									+ "), was changed from "
@@ -713,8 +708,8 @@ public class IdentityFederationManager extends LoggingObject implements
 			if (this.administrators.isMember(usr.getGridId())) {
 				this.administrators.removeMember(usr.getGridId());
 				this.eventManager.logEvent(usr.getGridId(),
-						AuditConstants.SYSTEM_ID,
-						FederationAuditing.AdminRemoved.getValue(),
+						AuditConstants.SYSTEM_ID, FederationAudit.AdminRemoved
+								.getValue(),
 						"Administrative privileges were revoked for the user "
 								+ usr.getGridId()
 								+ " because the account was removed.");
@@ -754,7 +749,7 @@ public class IdentityFederationManager extends LoggingObject implements
 			verifyAdminUser(caller);
 			removeUser(usr);
 			this.eventManager.logEvent(usr.getGridId(), callerGridIdentity,
-					FederationAuditing.AccountRemoved.getValue(), usr
+					FederationAudit.AccountRemoved.getValue(), usr
 							.getFirstName()
 							+ " "
 							+ usr.getLastName()
@@ -764,16 +759,16 @@ public class IdentityFederationManager extends LoggingObject implements
 			String mess = "An unexpected error occurred in removing the grid user account "
 					+ usr.getGridId() + ": ";
 			this.eventManager.logEvent(AuditConstants.SYSTEM_ID,
-					AuditConstants.SYSTEM_ID, FederationAuditing.InternalError
+					AuditConstants.SYSTEM_ID, FederationAudit.InternalError
 							.getValue(), mess + "\n\n"
 							+ FaultUtil.printFaultToString(e));
 			throw e;
 		} catch (PermissionDeniedFault e) {
 			String mess = "Caller not permitted to remove grid user accounts:";
 			this.eventManager.logEvent(callerGridIdentity,
-					AuditConstants.SYSTEM_ID,
-					FederationAuditing.PermissionDenied.getValue(), mess
-							+ "\n\n" + Utils.getExceptionMessage(e));
+					AuditConstants.SYSTEM_ID, FederationAudit.PermissionDenied
+							.getValue(), mess + "\n\n"
+							+ Utils.getExceptionMessage(e));
 			throw e;
 		}
 	}
@@ -793,7 +788,7 @@ public class IdentityFederationManager extends LoggingObject implements
 							.logEvent(
 									gridIdentity,
 									callerGridIdentity,
-									FederationAuditing.AdminAdded.getValue(),
+									FederationAudit.AdminAdded.getValue(),
 									"The user "
 											+ gridIdentity
 											+ " was granted administrator privileges by "
@@ -814,16 +809,16 @@ public class IdentityFederationManager extends LoggingObject implements
 			String mess = "An unexpected error occurred in granting administrative privileges to "
 					+ gridIdentity + ":";
 			this.eventManager.logEvent(AuditConstants.SYSTEM_ID,
-					AuditConstants.SYSTEM_ID, FederationAuditing.InternalError
+					AuditConstants.SYSTEM_ID, FederationAudit.InternalError
 							.getValue(), mess + "\n\n"
 							+ FaultUtil.printFaultToString(e));
 			throw e;
 		} catch (PermissionDeniedFault e) {
 			String mess = "Caller not permitted to grant administrative privileges:";
 			this.eventManager.logEvent(callerGridIdentity,
-					AuditConstants.SYSTEM_ID,
-					FederationAuditing.PermissionDenied.getValue(), mess
-							+ "\n\n" + Utils.getExceptionMessage(e));
+					AuditConstants.SYSTEM_ID, FederationAudit.PermissionDenied
+							.getValue(), mess + "\n\n"
+							+ Utils.getExceptionMessage(e));
 			throw e;
 		}
 	}
@@ -837,7 +832,7 @@ public class IdentityFederationManager extends LoggingObject implements
 			try {
 				this.administrators.removeMember(gridIdentity);
 				this.eventManager.logEvent(gridIdentity, callerGridIdentity,
-						FederationAuditing.AdminRemoved.getValue(),
+						FederationAudit.AdminRemoved.getValue(),
 						"The administrative privileges for the user, "
 								+ gridIdentity + " were revoked by "
 								+ callerGridIdentity + ".");
@@ -856,16 +851,16 @@ public class IdentityFederationManager extends LoggingObject implements
 			String mess = "An unexpected error occurred in revoking administrative privileges from "
 					+ gridIdentity + ":";
 			this.eventManager.logEvent(AuditConstants.SYSTEM_ID,
-					AuditConstants.SYSTEM_ID, FederationAuditing.InternalError
+					AuditConstants.SYSTEM_ID, FederationAudit.InternalError
 							.getValue(), mess + "\n\n"
 							+ FaultUtil.printFaultToString(e));
 			throw e;
 		} catch (PermissionDeniedFault e) {
 			String mess = "Caller not permitted to revoke administrative privileges:";
 			this.eventManager.logEvent(callerGridIdentity,
-					AuditConstants.SYSTEM_ID,
-					FederationAuditing.PermissionDenied.getValue(), mess
-							+ "\n\n" + Utils.getExceptionMessage(e));
+					AuditConstants.SYSTEM_ID, FederationAudit.PermissionDenied
+							.getValue(), mess + "\n\n"
+							+ Utils.getExceptionMessage(e));
 			throw e;
 		}
 	}
@@ -896,16 +891,16 @@ public class IdentityFederationManager extends LoggingObject implements
 		} catch (DorianInternalFault e) {
 			String mess = "An unexpected error occurred in listing users with administrative privileges:";
 			this.eventManager.logEvent(AuditConstants.SYSTEM_ID,
-					AuditConstants.SYSTEM_ID, FederationAuditing.InternalError
+					AuditConstants.SYSTEM_ID, FederationAudit.InternalError
 							.getValue(), mess + "\n\n"
 							+ FaultUtil.printFaultToString(e));
 			throw e;
 		} catch (PermissionDeniedFault e) {
 			String mess = "Caller not permitted to list users with administrative privileges:";
 			this.eventManager.logEvent(callerGridIdentity,
-					AuditConstants.SYSTEM_ID,
-					FederationAuditing.PermissionDenied.getValue(), mess
-							+ "\n\n" + Utils.getExceptionMessage(e));
+					AuditConstants.SYSTEM_ID, FederationAudit.PermissionDenied
+							.getValue(), mess + "\n\n"
+							+ Utils.getExceptionMessage(e));
 			throw e;
 		}
 	}
@@ -918,11 +913,10 @@ public class IdentityFederationManager extends LoggingObject implements
 		try {
 			idp = tm.getTrustedIdP(saml);
 		} catch (InvalidAssertionFault e) {
-			this.eventManager
-					.logEvent(AuditConstants.SYSTEM_ID,
-							AuditConstants.SYSTEM_ID,
-							FederationAuditing.InvalidUserCertificateRequest
-									.getValue(), Utils.getExceptionMessage(e));
+			this.eventManager.logEvent(AuditConstants.SYSTEM_ID,
+					AuditConstants.SYSTEM_ID,
+					FederationAudit.InvalidUserCertificateRequest.getValue(),
+					Utils.getExceptionMessage(e));
 			throw e;
 		}
 
@@ -932,11 +926,10 @@ public class IdentityFederationManager extends LoggingObject implements
 					.getNamespaceURI(), idp.getUserIdAttributeDescriptor()
 					.getName());
 		} catch (InvalidAssertionFault e) {
-			this.eventManager
-					.logEvent(AuditConstants.SYSTEM_ID,
-							AuditConstants.SYSTEM_ID,
-							FederationAuditing.InvalidUserCertificateRequest
-									.getValue(), Utils.getExceptionMessage(e));
+			this.eventManager.logEvent(AuditConstants.SYSTEM_ID,
+					AuditConstants.SYSTEM_ID,
+					FederationAudit.InvalidUserCertificateRequest.getValue(),
+					Utils.getExceptionMessage(e));
 			throw e;
 		}
 
@@ -950,7 +943,7 @@ public class IdentityFederationManager extends LoggingObject implements
 		} catch (Exception e) {
 			String msg = "An unexpected error occurred in determining the grid identity for the user.";
 			this.eventManager.logEvent(AuditConstants.SYSTEM_ID,
-					AuditConstants.SYSTEM_ID, FederationAuditing.InternalError
+					AuditConstants.SYSTEM_ID, FederationAudit.InternalError
 							.getValue(), msg + "\n"
 							+ Utils.getExceptionMessage(e) + "\n\n"
 							+ FaultUtil.printFaultToString(e));
@@ -970,10 +963,9 @@ public class IdentityFederationManager extends LoggingObject implements
 			String msg = "The Assertion is not valid at " + now
 					+ ", the assertion is valid from " + saml.getNotBefore()
 					+ " to " + saml.getNotOnOrAfter() + ".";
-			this.eventManager
-					.logEvent(gid, AuditConstants.SYSTEM_ID,
-							FederationAuditing.InvalidUserCertificateRequest
-									.getValue(), msg);
+			this.eventManager.logEvent(gid, AuditConstants.SYSTEM_ID,
+					FederationAudit.InvalidUserCertificateRequest.getValue(),
+					msg);
 			InvalidAssertionFault fault = new InvalidAssertionFault();
 			fault.setFaultString(msg);
 			throw fault;
@@ -994,10 +986,9 @@ public class IdentityFederationManager extends LoggingObject implements
 		if (!allowed) {
 			String msg = "The authentication method " + auth.getAuthMethod()
 					+ " is not acceptable for the IdP " + idp.getName() + ".";
-			this.eventManager
-					.logEvent(gid, AuditConstants.SYSTEM_ID,
-							FederationAuditing.InvalidUserCertificateRequest
-									.getValue(), msg);
+			this.eventManager.logEvent(gid, AuditConstants.SYSTEM_ID,
+					FederationAudit.InvalidUserCertificateRequest.getValue(),
+					msg);
 			InvalidAssertionFault fault = new InvalidAssertionFault();
 			fault.setFaultString(msg);
 			throw fault;
@@ -1019,10 +1010,9 @@ public class IdentityFederationManager extends LoggingObject implements
 					.getLastNameAttributeDescriptor().getName());
 			AddressValidator.validateEmail(email);
 		} catch (InvalidAssertionFault e) {
-			this.eventManager
-					.logEvent(gid, AuditConstants.SYSTEM_ID,
-							FederationAuditing.InvalidUserCertificateRequest
-									.getValue(), Utils.getExceptionMessage(e));
+			this.eventManager.logEvent(gid, AuditConstants.SYSTEM_ID,
+					FederationAudit.InvalidUserCertificateRequest.getValue(),
+					Utils.getExceptionMessage(e));
 			throw e;
 		}
 
@@ -1039,19 +1029,19 @@ public class IdentityFederationManager extends LoggingObject implements
 				usr.setUserStatus(GridUserStatus.Pending);
 				usr = um.addUser(idp, usr);
 				this.eventManager.logEvent(gid, AuditConstants.SYSTEM_ID,
-						FederationAuditing.AccountCreated.getValue(),
+						FederationAudit.AccountCreated.getValue(),
 						"User Account Created!!!");
 			} catch (Exception e) {
 				logError(e.getMessage(), e);
 				String msg = "An unexpected error occurred in adding the user "
 						+ usr.getUID() + " from the IdP " + idp.getName() + ".";
 				this.eventManager.logEvent(gid, AuditConstants.SYSTEM_ID,
-						FederationAuditing.InvalidUserCertificateRequest
+						FederationAudit.InvalidUserCertificateRequest
 								.getValue(), msg + "\n"
 								+ FaultUtil.printFaultToString(e));
 				this.eventManager.logEvent(AuditConstants.SYSTEM_ID,
-						AuditConstants.SYSTEM_ID,
-						FederationAuditing.InternalError.getValue(), msg + "\n"
+						AuditConstants.SYSTEM_ID, FederationAudit.InternalError
+								.getValue(), msg + "\n"
 								+ Utils.getExceptionMessage(e) + "\n\n"
 								+ FaultUtil.printFaultToString(e));
 				DorianInternalFault fault = new DorianInternalFault();
@@ -1085,7 +1075,7 @@ public class IdentityFederationManager extends LoggingObject implements
 					um.updateUser(usr);
 					this.eventManager.logEvent(usr.getGridId(),
 							AuditConstants.SYSTEM_ID,
-							FederationAuditing.AccountUpdated.getValue(),
+							FederationAudit.AccountUpdated.getValue(),
 							ReportUtils.generateReport(orig, usr));
 				}
 
@@ -1094,12 +1084,12 @@ public class IdentityFederationManager extends LoggingObject implements
 				String msg = "An unexpected error occurred in obtaining/updating the user "
 						+ usr.getUID() + " from the IdP " + idp.getName() + ".";
 				this.eventManager.logEvent(gid, AuditConstants.SYSTEM_ID,
-						FederationAuditing.InvalidUserCertificateRequest
+						FederationAudit.InvalidUserCertificateRequest
 								.getValue(), msg + "\n"
 								+ FaultUtil.printFaultToString(e));
 				this.eventManager.logEvent(AuditConstants.SYSTEM_ID,
-						AuditConstants.SYSTEM_ID,
-						FederationAuditing.InternalError.getValue(), msg + "\n"
+						AuditConstants.SYSTEM_ID, FederationAudit.InternalError
+								.getValue(), msg + "\n"
 								+ Utils.getExceptionMessage(e) + "\n\n"
 								+ FaultUtil.printFaultToString(e));
 				DorianInternalFault fault = new DorianInternalFault();
@@ -1121,10 +1111,10 @@ public class IdentityFederationManager extends LoggingObject implements
 					+ conf.getUserCertificateLifetime().getMinutes()
 					+ ", sec="
 					+ conf.getUserCertificateLifetime().getSeconds() + ")";
-			this.eventManager
-					.logEvent(usr.getGridId(), AuditConstants.SYSTEM_ID,
-							FederationAuditing.InvalidUserCertificateRequest
-									.getValue(), msg);
+			this.eventManager.logEvent(usr.getGridId(),
+					AuditConstants.SYSTEM_ID,
+					FederationAudit.InvalidUserCertificateRequest.getValue(),
+					msg);
 			UserPolicyFault fault = new UserPolicyFault();
 			fault.setFaultString(msg);
 			throw fault;
@@ -1140,13 +1130,12 @@ public class IdentityFederationManager extends LoggingObject implements
 		} catch (Exception e) {
 			String msg = "An unexpected error occurred in creating an instance of the user policy "
 					+ idp.getUserPolicyClass() + ".";
-			this.eventManager
-					.logEvent(usr.getGridId(), AuditConstants.SYSTEM_ID,
-							FederationAuditing.InvalidUserCertificateRequest
-									.getValue(), msg + "\n"
-									+ FaultUtil.printFaultToString(e));
+			this.eventManager.logEvent(usr.getGridId(),
+					AuditConstants.SYSTEM_ID,
+					FederationAudit.InvalidUserCertificateRequest.getValue(),
+					msg + "\n" + FaultUtil.printFaultToString(e));
 			this.eventManager.logEvent(AuditConstants.SYSTEM_ID,
-					AuditConstants.SYSTEM_ID, FederationAuditing.InternalError
+					AuditConstants.SYSTEM_ID, FederationAudit.InternalError
 							.getValue(), msg + "\n"
 							+ Utils.getExceptionMessage(e) + "\n\n"
 							+ FaultUtil.printFaultToString(e));
@@ -1163,10 +1152,10 @@ public class IdentityFederationManager extends LoggingObject implements
 		try {
 			this.verifyActiveUser(usr);
 		} catch (PermissionDeniedFault e) {
-			this.eventManager
-					.logEvent(usr.getGridId(), AuditConstants.SYSTEM_ID,
-							FederationAuditing.InvalidUserCertificateRequest
-									.getValue(), Utils.getExceptionMessage(e));
+			this.eventManager.logEvent(usr.getGridId(),
+					AuditConstants.SYSTEM_ID,
+					FederationAudit.InvalidUserCertificateRequest.getValue(),
+					Utils.getExceptionMessage(e));
 			throw e;
 		}
 
@@ -1185,24 +1174,23 @@ public class IdentityFederationManager extends LoggingObject implements
 			X509Certificate userCert = ca.signCertificate(sub, publicKey,
 					start, end);
 			userCertificateManager.addUserCertifcate(usr.getGridId(), userCert);
-			this.eventManager.logEvent(usr.getGridId(),
-					AuditConstants.SYSTEM_ID,
-					FederationAuditing.SuccessfulUserCertificateRequest
-							.getValue(), "User certificate ("
-							+ userCert.getSerialNumber()
-							+ ") successfully issued for " + usr.getGridId()
-							+ ".");
+			this.eventManager
+					.logEvent(usr.getGridId(), AuditConstants.SYSTEM_ID,
+							FederationAudit.SuccessfulUserCertificateRequest
+									.getValue(), "User certificate ("
+									+ userCert.getSerialNumber()
+									+ ") successfully issued for "
+									+ usr.getGridId() + ".");
 			return userCert;
 		} catch (Exception e) {
 			String msg = "An unexpected error occurred in creating a certificate for the user "
 					+ usr.getGridId() + ".";
-			this.eventManager
-					.logEvent(usr.getGridId(), AuditConstants.SYSTEM_ID,
-							FederationAuditing.InvalidUserCertificateRequest
-									.getValue(), msg + "\n"
-									+ FaultUtil.printFaultToString(e));
+			this.eventManager.logEvent(usr.getGridId(),
+					AuditConstants.SYSTEM_ID,
+					FederationAudit.InvalidUserCertificateRequest.getValue(),
+					msg + "\n" + FaultUtil.printFaultToString(e));
 			this.eventManager.logEvent(AuditConstants.SYSTEM_ID,
-					AuditConstants.SYSTEM_ID, FederationAuditing.InternalError
+					AuditConstants.SYSTEM_ID, FederationAudit.InternalError
 							.getValue(), msg + "\n"
 							+ Utils.getExceptionMessage(e) + "\n\n"
 							+ FaultUtil.printFaultToString(e));
@@ -1228,9 +1216,10 @@ public class IdentityFederationManager extends LoggingObject implements
 			verifyActiveUser(caller);
 			long id = hostManager.requestHostCertifcate(callerGridId, req);
 			this.eventManager
-					.logEvent(String.valueOf(id), callerGridId,
-							FederationAuditing.HostCertificateRequested
-									.getValue(),
+					.logEvent(
+							String.valueOf(id),
+							callerGridId,
+							FederationAudit.HostCertificateRequested.getValue(),
 							"Host certificate requested for "
 									+ req.getHostname() + ".");
 			HostCertificateRecord record = null;
@@ -1238,7 +1227,7 @@ public class IdentityFederationManager extends LoggingObject implements
 				record = hostManager.approveHostCertifcate(id);
 				this.eventManager.logEvent(String.valueOf(id),
 						AuditConstants.SYSTEM_ID,
-						FederationAuditing.HostCertificateApproved.getValue(),
+						FederationAudit.HostCertificateApproved.getValue(),
 						"The host certificate for the host "
 								+ req.getHostname()
 								+ " was automatically approved.");
@@ -1251,15 +1240,15 @@ public class IdentityFederationManager extends LoggingObject implements
 			String mess = "An unexpected error occurred in requesting a host certificate for the host "
 					+ req.getHostname() + ":";
 			this.eventManager.logEvent(AuditConstants.SYSTEM_ID,
-					AuditConstants.SYSTEM_ID, FederationAuditing.InternalError
+					AuditConstants.SYSTEM_ID, FederationAudit.InternalError
 							.getValue(), mess + "\n\n"
 							+ FaultUtil.printFaultToString(e));
 			throw e;
 		} catch (PermissionDeniedFault e) {
 			String mess = "Caller not permitted to request a certificate:";
 			this.eventManager.logEvent(callerGridId, AuditConstants.SYSTEM_ID,
-					FederationAuditing.PermissionDenied.getValue(), mess
-							+ "\n\n" + Utils.getExceptionMessage(e));
+					FederationAudit.PermissionDenied.getValue(), mess + "\n\n"
+							+ Utils.getExceptionMessage(e));
 			throw e;
 		}
 	}
@@ -1284,15 +1273,15 @@ public class IdentityFederationManager extends LoggingObject implements
 			String mess = "An unexpected error occurred in obtaining the host certificates owned by "
 					+ callerGridId + ":";
 			this.eventManager.logEvent(AuditConstants.SYSTEM_ID,
-					AuditConstants.SYSTEM_ID, FederationAuditing.InternalError
+					AuditConstants.SYSTEM_ID, FederationAudit.InternalError
 							.getValue(), mess + "\n\n"
 							+ FaultUtil.printFaultToString(e));
 			throw e;
 		} catch (PermissionDeniedFault e) {
 			String mess = "Caller not permitted to obtain a list of host certificates:";
 			this.eventManager.logEvent(callerGridId, AuditConstants.SYSTEM_ID,
-					FederationAuditing.PermissionDenied.getValue(), mess
-							+ "\n\n" + Utils.getExceptionMessage(e));
+					FederationAudit.PermissionDenied.getValue(), mess + "\n\n"
+							+ Utils.getExceptionMessage(e));
 			throw e;
 		}
 	}
@@ -1307,7 +1296,7 @@ public class IdentityFederationManager extends LoggingObject implements
 			HostCertificateRecord record = hostManager
 					.approveHostCertifcate(recordId);
 			this.eventManager.logEvent(String.valueOf(recordId), callerGridId,
-					FederationAuditing.HostCertificateApproved.getValue(),
+					FederationAudit.HostCertificateApproved.getValue(),
 					"The host certificate for the host " + record.getHost()
 							+ " was approved by " + callerGridId + ".");
 			return record;
@@ -1315,15 +1304,15 @@ public class IdentityFederationManager extends LoggingObject implements
 			String mess = "An unexpected error occurred in approving the host certificate "
 					+ recordId + ":";
 			this.eventManager.logEvent(AuditConstants.SYSTEM_ID,
-					AuditConstants.SYSTEM_ID, FederationAuditing.InternalError
+					AuditConstants.SYSTEM_ID, FederationAudit.InternalError
 							.getValue(), mess + "\n\n"
 							+ FaultUtil.printFaultToString(e));
 			throw e;
 		} catch (PermissionDeniedFault e) {
 			String mess = "Caller not permitted to approve host certificates:";
 			this.eventManager.logEvent(callerGridId, AuditConstants.SYSTEM_ID,
-					FederationAuditing.PermissionDenied.getValue(), mess
-							+ "\n\n" + Utils.getExceptionMessage(e));
+					FederationAudit.PermissionDenied.getValue(), mess + "\n\n"
+							+ Utils.getExceptionMessage(e));
 			throw e;
 		}
 	}
@@ -1346,15 +1335,15 @@ public class IdentityFederationManager extends LoggingObject implements
 		} catch (DorianInternalFault e) {
 			String mess = "An unexpected error occurred in searching for host certificates:";
 			this.eventManager.logEvent(AuditConstants.SYSTEM_ID,
-					AuditConstants.SYSTEM_ID, FederationAuditing.InternalError
+					AuditConstants.SYSTEM_ID, FederationAudit.InternalError
 							.getValue(), mess + "\n\n"
 							+ FaultUtil.printFaultToString(e));
 			throw e;
 		} catch (PermissionDeniedFault e) {
 			String mess = "Caller not permitted to search for host certificates:";
 			this.eventManager.logEvent(callerGridId, AuditConstants.SYSTEM_ID,
-					FederationAuditing.PermissionDenied.getValue(), mess
-							+ "\n\n" + Utils.getExceptionMessage(e));
+					FederationAudit.PermissionDenied.getValue(), mess + "\n\n"
+							+ Utils.getExceptionMessage(e));
 			throw e;
 		}
 	}
@@ -1387,21 +1376,21 @@ public class IdentityFederationManager extends LoggingObject implements
 			HostCertificateRecord updated = hostManager
 					.getHostCertificateRecord(update.getId());
 			this.eventManager.logEvent(String.valueOf(record.getId()),
-					callerGridId, FederationAuditing.HostCertificateUpdated
+					callerGridId, FederationAudit.HostCertificateUpdated
 							.getValue(), ReportUtils.generateReport(record,
 							updated));
 		} catch (DorianInternalFault e) {
 			String mess = "An unexpected error occurred in updating a host certificate:";
 			this.eventManager.logEvent(AuditConstants.SYSTEM_ID,
-					AuditConstants.SYSTEM_ID, FederationAuditing.InternalError
+					AuditConstants.SYSTEM_ID, FederationAudit.InternalError
 							.getValue(), mess + "\n\n"
 							+ FaultUtil.printFaultToString(e));
 			throw e;
 		} catch (PermissionDeniedFault e) {
 			String mess = "Caller not permitted to update host certificates:";
 			this.eventManager.logEvent(callerGridId, AuditConstants.SYSTEM_ID,
-					FederationAuditing.PermissionDenied.getValue(), mess
-							+ "\n\n" + Utils.getExceptionMessage(e));
+					FederationAudit.PermissionDenied.getValue(), mess + "\n\n"
+							+ Utils.getExceptionMessage(e));
 			throw e;
 		}
 	}
@@ -1416,7 +1405,7 @@ public class IdentityFederationManager extends LoggingObject implements
 			HostCertificateRecord record = hostManager
 					.renewHostCertificate(recordId);
 			this.eventManager.logEvent(String.valueOf(recordId), callerGridId,
-					FederationAuditing.HostCertificateRenewed.getValue(),
+					FederationAudit.HostCertificateRenewed.getValue(),
 					"The host certificate for the host " + record.getHost()
 							+ " was renewed by " + callerGridId + ".");
 			return record;
@@ -1424,7 +1413,7 @@ public class IdentityFederationManager extends LoggingObject implements
 			String mess = "An unexpected error occurred in renewing the host certificate "
 					+ recordId + ":";
 			this.eventManager.logEvent(AuditConstants.SYSTEM_ID,
-					AuditConstants.SYSTEM_ID, FederationAuditing.InternalError
+					AuditConstants.SYSTEM_ID, FederationAudit.InternalError
 							.getValue(), mess + "\n\n"
 							+ FaultUtil.printFaultToString(e));
 			throw e;
@@ -1432,8 +1421,8 @@ public class IdentityFederationManager extends LoggingObject implements
 			String mess = "Caller not permitted to renew the host certificates "
 					+ recordId + ":";
 			this.eventManager.logEvent(callerGridId, AuditConstants.SYSTEM_ID,
-					FederationAuditing.PermissionDenied.getValue(), mess
-							+ "\n\n" + Utils.getExceptionMessage(e));
+					FederationAudit.PermissionDenied.getValue(), mess + "\n\n"
+							+ Utils.getExceptionMessage(e));
 			throw e;
 		}
 	}
@@ -1466,7 +1455,7 @@ public class IdentityFederationManager extends LoggingObject implements
 										eventManager.logEvent(
 												AuditConstants.SYSTEM_ID,
 												AuditConstants.SYSTEM_ID,
-												FederationAuditing.CRLPublished
+												FederationAudit.CRLPublished
 														.getValue(),
 												"Published CRL to the GTS "
 														+ uri + ".");
@@ -1478,7 +1467,7 @@ public class IdentityFederationManager extends LoggingObject implements
 												.logEvent(
 														AuditConstants.SYSTEM_ID,
 														AuditConstants.SYSTEM_ID,
-														FederationAuditing.InternalError
+														FederationAudit.InternalError
 																.getValue(),
 														msg
 																+ "\n"
@@ -1496,7 +1485,7 @@ public class IdentityFederationManager extends LoggingObject implements
 								getLog().error(msg, e);
 								eventManager.logEvent(AuditConstants.SYSTEM_ID,
 										AuditConstants.SYSTEM_ID,
-										FederationAuditing.InternalError
+										FederationAudit.InternalError
 												.getValue(), msg
 												+ "\n"
 												+ FaultUtil
@@ -1814,7 +1803,7 @@ public class IdentityFederationManager extends LoggingObject implements
 		} catch (DorianInternalFault e) {
 			String mess = "An unexpected error occurred in obtaining a list of trusted identity providers :";
 			this.eventManager.logEvent(AuditConstants.SYSTEM_ID,
-					AuditConstants.SYSTEM_ID, FederationAuditing.InternalError
+					AuditConstants.SYSTEM_ID, FederationAudit.InternalError
 							.getValue(), mess + "\n\n"
 							+ FaultUtil.printFaultToString(e));
 			throw e;
@@ -1834,16 +1823,16 @@ public class IdentityFederationManager extends LoggingObject implements
 			String mess = "An unexpected error occurred in searching for user certificates:";
 
 			this.eventManager.logEvent(AuditConstants.SYSTEM_ID,
-					AuditConstants.SYSTEM_ID, FederationAuditing.InternalError
+					AuditConstants.SYSTEM_ID, FederationAudit.InternalError
 							.getValue(), mess + "\n\n"
 							+ FaultUtil.printFaultToString(e));
 			throw e;
 		} catch (PermissionDeniedFault e) {
 			String mess = "Caller not permitted to search for user certificates:";
 			this.eventManager.logEvent(callerIdentity,
-					AuditConstants.SYSTEM_ID,
-					FederationAuditing.PermissionDenied.getValue(), mess
-							+ "\n\n" + Utils.getExceptionMessage(e));
+					AuditConstants.SYSTEM_ID, FederationAudit.PermissionDenied
+							.getValue(), mess + "\n\n"
+							+ Utils.getExceptionMessage(e));
 			throw e;
 		}
 	}
@@ -1862,21 +1851,21 @@ public class IdentityFederationManager extends LoggingObject implements
 					.getUserCertificateRecord(update.getSerialNumber());
 			this.eventManager.logEvent(String.valueOf(original
 					.getSerialNumber()), callerIdentity,
-					FederationAuditing.UserCertificateUpdated.getValue(),
+					FederationAudit.UserCertificateUpdated.getValue(),
 					ReportUtils.generateReport(original, updated));
 		} catch (DorianInternalFault e) {
 			String mess = "An unexpected error occurred in updating a user certificate:";
 			this.eventManager.logEvent(AuditConstants.SYSTEM_ID,
-					AuditConstants.SYSTEM_ID, FederationAuditing.InternalError
+					AuditConstants.SYSTEM_ID, FederationAudit.InternalError
 							.getValue(), mess + "\n\n"
 							+ FaultUtil.printFaultToString(e));
 			throw e;
 		} catch (PermissionDeniedFault e) {
 			String mess = "Caller not permitted to update user certificates:";
 			this.eventManager.logEvent(callerIdentity,
-					AuditConstants.SYSTEM_ID,
-					FederationAuditing.PermissionDenied.getValue(), mess
-							+ "\n\n" + Utils.getExceptionMessage(e));
+					AuditConstants.SYSTEM_ID, FederationAudit.PermissionDenied
+							.getValue(), mess + "\n\n"
+							+ Utils.getExceptionMessage(e));
 			throw e;
 		}
 	}
@@ -1890,23 +1879,23 @@ public class IdentityFederationManager extends LoggingObject implements
 			verifyAdminUser(caller);
 			this.userCertificateManager.removeCertificate(serialNumber);
 			this.eventManager.logEvent(String.valueOf(serialNumber),
-					callerIdentity, FederationAuditing.UserCertificateRemoved
+					callerIdentity, FederationAudit.UserCertificateRemoved
 							.getValue(), "User certificate (" + serialNumber
 							+ ") removed by " + callerIdentity + ".");
 		} catch (DorianInternalFault e) {
 			String mess = "An unexpected error occurred in removing the host certificate "
 					+ serialNumber + ":";
 			this.eventManager.logEvent(AuditConstants.SYSTEM_ID,
-					AuditConstants.SYSTEM_ID, FederationAuditing.InternalError
+					AuditConstants.SYSTEM_ID, FederationAudit.InternalError
 							.getValue(), mess + "\n\n"
 							+ FaultUtil.printFaultToString(e));
 			throw e;
 		} catch (PermissionDeniedFault e) {
 			String mess = "Caller not permitted to remove host certificates:";
 			this.eventManager.logEvent(callerIdentity,
-					AuditConstants.SYSTEM_ID,
-					FederationAuditing.PermissionDenied.getValue(), mess
-							+ "\n\n" + Utils.getExceptionMessage(e));
+					AuditConstants.SYSTEM_ID, FederationAudit.PermissionDenied
+							.getValue(), mess + "\n\n"
+							+ Utils.getExceptionMessage(e));
 			throw e;
 		}
 	}
@@ -1953,7 +1942,7 @@ public class IdentityFederationManager extends LoggingObject implements
 						FederationAuditRecord r = new FederationAuditRecord();
 						r.setTargetId(e.getTargetId());
 						r.setReportingPartyId(e.getReportingPartyId());
-						r.setAuditType(FederationAuditing.fromValue(e
+						r.setAuditType(FederationAudit.fromValue(e
 								.getEventType()));
 						Calendar c = new GregorianCalendar();
 						c.setTimeInMillis(e.getOccurredAt());
@@ -1966,7 +1955,7 @@ public class IdentityFederationManager extends LoggingObject implements
 					String msg = "An unexpected error occurred in searching the auditing logs.";
 					this.eventManager.logEvent(AuditConstants.SYSTEM_ID,
 							AuditConstants.SYSTEM_ID,
-							FederationAuditing.InternalError.getValue(), msg
+							FederationAudit.InternalError.getValue(), msg
 									+ "\n" + Utils.getExceptionMessage(e)
 									+ "\n\n" + FaultUtil.printFaultToString(e));
 					DorianInternalFault fault = new DorianInternalFault();
@@ -1982,16 +1971,16 @@ public class IdentityFederationManager extends LoggingObject implements
 		} catch (DorianInternalFault e) {
 			String mess = "An unexpected error occurred in performing an audit:";
 			this.eventManager.logEvent(AuditConstants.SYSTEM_ID,
-					AuditConstants.SYSTEM_ID, FederationAuditing.InternalError
+					AuditConstants.SYSTEM_ID, FederationAudit.InternalError
 							.getValue(), mess + "\n\n"
 							+ FaultUtil.printFaultToString(e));
 			throw e;
 		} catch (PermissionDeniedFault e) {
 			String mess = "Caller not permitted to perform audits:";
 			this.eventManager.logEvent(callerIdentity,
-					AuditConstants.SYSTEM_ID,
-					FederationAuditing.PermissionDenied.getValue(), mess
-							+ "\n\n" + Utils.getExceptionMessage(e));
+					AuditConstants.SYSTEM_ID, FederationAudit.PermissionDenied
+							.getValue(), mess + "\n\n"
+							+ Utils.getExceptionMessage(e));
 			throw e;
 		}
 	}

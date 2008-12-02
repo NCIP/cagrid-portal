@@ -107,7 +107,7 @@ public class Dorian extends LoggingObject {
 
 			this.ca = this.configuration.getCertificateAuthority();
 			this.identityProvider = new IdentityProvider(configuration
-					.getIdentityProviderProperties(), db, ca);
+					.getIdentityProviderProperties(), db, ca, this.eventManager);
 
 			TrustedIdP idp = new TrustedIdP();
 			idp.setName(conf.getIdentityProviderProperties().getName());

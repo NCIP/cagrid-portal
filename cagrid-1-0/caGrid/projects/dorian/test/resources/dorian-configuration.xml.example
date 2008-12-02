@@ -66,6 +66,7 @@
 		<constructor-arg index="0" ref="identityProviderProperties" />
 		<constructor-arg index="1" ref="database" />
 		<constructor-arg index="2" ref="certificateAuthority" />
+		<constructor-arg index="3" ref="eventManager" />
 	</bean>
 	<bean id="idpUserManager" class="org.cagrid.gaards.dorian.idp.UserManager">
 		<constructor-arg index="0" ref="database" />

@@ -96,7 +96,7 @@ public class TestIdentityFederationManager extends TestCase {
 			assertEquals(null, record.getCertificate());
 			String hostId = String.valueOf(record.getId());
 			performAndValidateSingleAudit(ifs, adminGridId, hostId, usr
-					.getGridId(), FederationAuditing.HostCertificateRequested);
+					.getGridId(), FederationAudit.HostCertificateRequested);
 
 			String subject = org.cagrid.gaards.dorian.service.util.Utils
 					.getHostCertificateSubject(ca.getCACertificate(), host);
@@ -108,7 +108,7 @@ public class TestIdentityFederationManager extends TestCase {
 					record.getCertificate().getCertificateAsString())
 					.getSubjectDN().getName());
 			performAndValidateSingleAudit(ifs, adminGridId, hostId,
-					adminGridId, FederationAuditing.HostCertificateApproved);
+					adminGridId, FederationAudit.HostCertificateApproved);
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			fail("Exception occured:" + e.getMessage());
@@ -149,10 +149,10 @@ public class TestIdentityFederationManager extends TestCase {
 					.getSubjectDN().getName());
 			String hostId = String.valueOf(record.getId());
 			performAndValidateSingleAudit(ifs, adminGridId, hostId, usr
-					.getGridId(), FederationAuditing.HostCertificateRequested);
+					.getGridId(), FederationAudit.HostCertificateRequested);
 			performAndValidateSingleAudit(ifs, adminGridId, hostId,
 					AuditConstants.SYSTEM_ID,
-					FederationAuditing.HostCertificateApproved);
+					FederationAudit.HostCertificateApproved);
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			fail("Exception occured:" + e.getMessage());
@@ -188,8 +188,7 @@ public class TestIdentityFederationManager extends TestCase {
 
 			}
 			performAndValidateSingleAudit(ifs, adminGridId, "bad user",
-					AuditConstants.SYSTEM_ID,
-					FederationAuditing.PermissionDenied);
+					AuditConstants.SYSTEM_ID, FederationAudit.PermissionDenied);
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			fail("Exception occured:" + e.getMessage());
@@ -226,7 +225,7 @@ public class TestIdentityFederationManager extends TestCase {
 
 			String hostId = String.valueOf(record.getId());
 			performAndValidateSingleAudit(ifs, adminGridId, hostId, usr
-					.getGridId(), FederationAuditing.HostCertificateRequested);
+					.getGridId(), FederationAudit.HostCertificateRequested);
 
 			try {
 				ifs.approveHostCertificate("bad subject", record.getId());
@@ -235,8 +234,7 @@ public class TestIdentityFederationManager extends TestCase {
 			}
 
 			performAndValidateSingleAudit(ifs, adminGridId, "bad subject",
-					AuditConstants.SYSTEM_ID,
-					FederationAuditing.PermissionDenied);
+					AuditConstants.SYSTEM_ID, FederationAudit.PermissionDenied);
 			assertEquals(0, ifs.performAudit(
 					adminGridId,
 					getHostCertificatedApprovedAuditingFilter(hostId, usr
@@ -278,11 +276,10 @@ public class TestIdentityFederationManager extends TestCase {
 				String hostId = String.valueOf(ifs.requestHostCertificate(
 						usr.getGridId(), req).getId());
 				performAndValidateSingleAudit(ifs, adminGridId, hostId, usr
-						.getGridId(),
-						FederationAuditing.HostCertificateRequested);
+						.getGridId(), FederationAudit.HostCertificateRequested);
 				performAndValidateSingleAudit(ifs, adminGridId, hostId,
 						AuditConstants.SYSTEM_ID,
-						FederationAuditing.HostCertificateApproved);
+						FederationAudit.HostCertificateApproved);
 			}
 
 			// Find by Subject;
@@ -362,8 +359,7 @@ public class TestIdentityFederationManager extends TestCase {
 			}
 
 			performAndValidateSingleAudit(ifs, adminGridId, "bad user",
-					AuditConstants.SYSTEM_ID,
-					FederationAuditing.PermissionDenied);
+					AuditConstants.SYSTEM_ID, FederationAudit.PermissionDenied);
 
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
@@ -405,10 +401,10 @@ public class TestIdentityFederationManager extends TestCase {
 					.getSubjectDN().getName());
 			String hostId = String.valueOf(record.getId());
 			performAndValidateSingleAudit(ifs, adminGridId, hostId, usr
-					.getGridId(), FederationAuditing.HostCertificateRequested);
+					.getGridId(), FederationAudit.HostCertificateRequested);
 			performAndValidateSingleAudit(ifs, adminGridId, hostId,
 					AuditConstants.SYSTEM_ID,
-					FederationAuditing.HostCertificateApproved);
+					FederationAudit.HostCertificateApproved);
 
 			HostCertificateUpdate update = new HostCertificateUpdate();
 			update.setId(record.getId());
@@ -421,7 +417,7 @@ public class TestIdentityFederationManager extends TestCase {
 			assertEquals(1, r.length);
 			assertEquals(HostCertificateStatus.Suspended, r[0].getStatus());
 			performAndValidateSingleAudit(ifs, adminGridId, hostId,
-					adminGridId, FederationAuditing.HostCertificateUpdated);
+					adminGridId, FederationAudit.HostCertificateUpdated);
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			fail("Exception occured:" + e.getMessage());
@@ -457,8 +453,7 @@ public class TestIdentityFederationManager extends TestCase {
 			}
 
 			performAndValidateSingleAudit(ifs, adminGridId, "bad user",
-					AuditConstants.SYSTEM_ID,
-					FederationAuditing.PermissionDenied);
+					AuditConstants.SYSTEM_ID, FederationAudit.PermissionDenied);
 
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
@@ -492,7 +487,7 @@ public class TestIdentityFederationManager extends TestCase {
 					.getGridId(), req);
 			String hostId = String.valueOf(record.getId());
 			performAndValidateSingleAudit(ifs, adminGridId, hostId, usr
-					.getGridId(), FederationAuditing.HostCertificateRequested);
+					.getGridId(), FederationAudit.HostCertificateRequested);
 			try {
 				HostCertificateUpdate update = new HostCertificateUpdate();
 				update.setId(record.getId());
@@ -539,7 +534,7 @@ public class TestIdentityFederationManager extends TestCase {
 			assertEquals(usr2.getGridId(), ifs.findHostCertificates(
 					adminGridId, f)[0].getOwner());
 			performAndValidateSingleAudit(ifs, adminGridId, hostId,
-					adminGridId, FederationAuditing.HostCertificateUpdated);
+					adminGridId, FederationAudit.HostCertificateUpdated);
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			fail("Exception occured:" + e.getMessage());
@@ -575,11 +570,10 @@ public class TestIdentityFederationManager extends TestCase {
 				String hostId = String.valueOf(ifs.requestHostCertificate(
 						usr.getGridId(), req).getId());
 				performAndValidateSingleAudit(ifs, adminGridId, hostId, usr
-						.getGridId(),
-						FederationAuditing.HostCertificateRequested);
+						.getGridId(), FederationAudit.HostCertificateRequested);
 				performAndValidateSingleAudit(ifs, adminGridId, hostId,
 						AuditConstants.SYSTEM_ID,
-						FederationAuditing.HostCertificateApproved);
+						FederationAudit.HostCertificateApproved);
 			}
 
 			HostCertificateRecord[] r = ifs.getHostCertificatesForCaller(usr
@@ -633,8 +627,7 @@ public class TestIdentityFederationManager extends TestCase {
 
 			}
 			performAndValidateSingleAudit(ifs, adminGridId, "bad user",
-					AuditConstants.SYSTEM_ID,
-					FederationAuditing.PermissionDenied);
+					AuditConstants.SYSTEM_ID, FederationAudit.PermissionDenied);
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			fail("Exception occured:" + e.getMessage());
@@ -672,7 +665,7 @@ public class TestIdentityFederationManager extends TestCase {
 					.getHostCertificateSubject(ca.getCACertificate(), host);
 
 			performAndValidateSingleAudit(ifs, adminGridId, hostId, usr
-					.getGridId(), FederationAuditing.HostCertificateRequested);
+					.getGridId(), FederationAudit.HostCertificateRequested);
 
 			record = ifs.approveHostCertificate(adminGridId, record.getId());
 
@@ -683,7 +676,7 @@ public class TestIdentityFederationManager extends TestCase {
 					.getSubjectDN().getName());
 
 			performAndValidateSingleAudit(ifs, adminGridId, hostId,
-					adminGridId, FederationAuditing.HostCertificateApproved);
+					adminGridId, FederationAudit.HostCertificateApproved);
 
 			String host2 = "localhost2";
 			HostCertificateRequest req2 = getHostCertificateRequest(host2);
@@ -693,12 +686,12 @@ public class TestIdentityFederationManager extends TestCase {
 			assertEquals(null, record2.getCertificate());
 			String hostId2 = String.valueOf(record.getId());
 			performAndValidateSingleAudit(ifs, adminGridId, hostId2, usr
-					.getGridId(), FederationAuditing.HostCertificateRequested);
+					.getGridId(), FederationAudit.HostCertificateRequested);
 
 			ifs.removeUser(adminGridId, usr);
 
 			performAndValidateSingleAudit(ifs, adminGridId, usr.getGridId(),
-					adminGridId, FederationAuditing.AccountRemoved);
+					adminGridId, FederationAudit.AccountRemoved);
 
 			HostCertificateFilter f = new HostCertificateFilter();
 			f.setId(BigInteger.valueOf(record.getId()));
@@ -710,7 +703,7 @@ public class TestIdentityFederationManager extends TestCase {
 
 			performAndValidateSingleAudit(ifs, adminGridId, hostId,
 					AuditConstants.SYSTEM_ID,
-					FederationAuditing.HostCertificateUpdated);
+					FederationAudit.HostCertificateUpdated);
 
 			f.setId(BigInteger.valueOf(record2.getId()));
 			HostCertificateRecord[] r2 = ifs.findHostCertificates(adminGridId,
@@ -720,7 +713,7 @@ public class TestIdentityFederationManager extends TestCase {
 
 			performAndValidateSingleAudit(ifs, adminGridId, hostId2,
 					AuditConstants.SYSTEM_ID,
-					FederationAuditing.HostCertificateUpdated);
+					FederationAudit.HostCertificateUpdated);
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			fail("Exception occured:" + e.getMessage());
@@ -752,15 +745,15 @@ public class TestIdentityFederationManager extends TestCase {
 			ifs.addAdmin(adminGridId, usr.getGridId());
 
 			performAndValidateSingleAudit(ifs, adminGridId, usr.getGridId(),
-					adminGridId, FederationAuditing.AdminAdded);
+					adminGridId, FederationAudit.AdminAdded);
 
 			ifs.removeUser(adminGridId, usr);
 
 			performAndValidateSingleAudit(ifs, adminGridId, usr.getGridId(),
-					adminGridId, FederationAuditing.AccountRemoved);
+					adminGridId, FederationAudit.AccountRemoved);
 
 			performAndValidateSingleAudit(ifs, adminGridId, usr.getGridId(),
-					AuditConstants.SYSTEM_ID, FederationAuditing.AdminRemoved);
+					AuditConstants.SYSTEM_ID, FederationAudit.AdminRemoved);
 
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
@@ -798,7 +791,7 @@ public class TestIdentityFederationManager extends TestCase {
 			int total = (totalUsers) + (totalUsers * userHostCerts);
 
 			// Create users and host certificates
-			List<UserContainer> list = new ArrayList();
+			List<UserContainer> list = new ArrayList<UserContainer>();
 			for (int i = 0; i < totalUsers; i++) {
 				String uid = "user" + i;
 				KeyPair pair = KeyUtil.generateRSAKeyPair1024();
@@ -1037,10 +1030,10 @@ public class TestIdentityFederationManager extends TestCase {
 						cert);
 				performAndValidateSingleAudit(ifs, adminGridId,
 						expectedIdentity, AuditConstants.SYSTEM_ID,
-						FederationAuditing.AccountCreated);
+						FederationAudit.AccountCreated);
 				performAndValidateSingleAudit(ifs, adminGridId,
 						expectedIdentity, AuditConstants.SYSTEM_ID,
-						FederationAuditing.SuccessfulUserCertificateRequest);
+						FederationAudit.SuccessfulUserCertificateRequest);
 				ucount = ucount + 1;
 				assertEquals(ucount, ifs.findUsers(adminGridId,
 						new GridUserFilter()).length);
@@ -1059,12 +1052,12 @@ public class TestIdentityFederationManager extends TestCase {
 
 				performAndValidateSingleAudit(ifs, adminGridId, usr[0]
 						.getGridId(), AuditConstants.SYSTEM_ID,
-						FederationAuditing.PermissionDenied);
+						FederationAudit.PermissionDenied);
 
 				ifs.addAdmin(adminGridId, usr[0].getGridId());
 				performAndValidateSingleAudit(ifs, adminGridId,
 						expectedIdentity, adminGridId,
-						FederationAuditing.AdminAdded);
+						FederationAudit.AdminAdded);
 				assertEquals(ucount, ifs.findUsers(usr[0].getGridId(),
 						new GridUserFilter()).length);
 			}
@@ -1080,7 +1073,7 @@ public class TestIdentityFederationManager extends TestCase {
 				ifs.updateUser(adminGridId, usr[0]);
 				performAndValidateSingleAudit(ifs, adminGridId, usr[0]
 						.getGridId(), adminGridId,
-						FederationAuditing.AccountUpdated);
+						FederationAudit.AccountUpdated);
 			}
 
 			int rcount = ucount;
@@ -1095,10 +1088,10 @@ public class TestIdentityFederationManager extends TestCase {
 				ifs.removeUser(adminGridId, usr[0]);
 				performAndValidateSingleAudit(ifs, adminGridId, usr[0]
 						.getGridId(), adminGridId,
-						FederationAuditing.AccountRemoved);
+						FederationAudit.AccountRemoved);
 				performAndValidateSingleAudit(ifs, adminGridId, usr[0]
 						.getGridId(), AuditConstants.SYSTEM_ID,
-						FederationAuditing.AdminRemoved);
+						FederationAudit.AdminRemoved);
 				rcount = rcount - 1;
 				assertEquals(rcount, ifs.findUsers(adminGridId,
 						new GridUserFilter()).length);
@@ -1145,10 +1138,10 @@ public class TestIdentityFederationManager extends TestCase {
 			checkCertificate(expectedIdentity, lifetime, pair.getPrivate(),
 					cert);
 			performAndValidateSingleAudit(ifs, adminGridId, expectedIdentity,
-					AuditConstants.SYSTEM_ID, FederationAuditing.AccountCreated);
+					AuditConstants.SYSTEM_ID, FederationAudit.AccountCreated);
 			performAndValidateSingleAudit(ifs, adminGridId, expectedIdentity,
 					AuditConstants.SYSTEM_ID,
-					FederationAuditing.SuccessfulUserCertificateRequest);
+					FederationAudit.SuccessfulUserCertificateRequest);
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			fail("Exception occured:" + e.getMessage());
@@ -1201,7 +1194,6 @@ public class TestIdentityFederationManager extends TestCase {
 		try {
 			KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 			CertificateLifetime lifetime = getLifetimeShort();
-			KeyPair pair2 = KeyUtil.generateRSAKeyPair1024();
 			String username = "user";
 			IdPContainer idp = this.getTrustedIdpAutoApprove("My IdP");
 			IdentityFederationProperties conf = getExpiringCredentialsConf();
@@ -1225,10 +1217,10 @@ public class TestIdentityFederationManager extends TestCase {
 			checkCertificate(expectedIdentity, lifetime, pair.getPrivate(),
 					cert);
 			performAndValidateSingleAudit(ifs, gridId, expectedIdentity,
-					AuditConstants.SYSTEM_ID, FederationAuditing.AccountCreated);
+					AuditConstants.SYSTEM_ID, FederationAudit.AccountCreated);
 			performAndValidateSingleAudit(ifs, gridId, expectedIdentity,
 					AuditConstants.SYSTEM_ID,
-					FederationAuditing.SuccessfulUserCertificateRequest);
+					FederationAudit.SuccessfulUserCertificateRequest);
 			assertEquals(ifs.getUser(gridId, idp.getIdp().getId(), username)
 					.getUserStatus(), GridUserStatus.Active);
 
@@ -1275,10 +1267,10 @@ public class TestIdentityFederationManager extends TestCase {
 							.getIdp(), username));
 
 			performAndValidateSingleAudit(ifs, gridId, expectedIdentity,
-					AuditConstants.SYSTEM_ID, FederationAuditing.AccountCreated);
+					AuditConstants.SYSTEM_ID, FederationAudit.AccountCreated);
 			performAndValidateSingleAudit(ifs, gridId, expectedIdentity,
 					AuditConstants.SYSTEM_ID,
-					FederationAuditing.InvalidUserCertificateRequest);
+					FederationAudit.InvalidUserCertificateRequest);
 			assertEquals(ifs.getUser(gridId, idp.getIdp().getId(), username)
 					.getUserStatus(), GridUserStatus.Pending);
 
@@ -1330,10 +1322,10 @@ public class TestIdentityFederationManager extends TestCase {
 							.getIdp(), username));
 
 			performAndValidateSingleAudit(ifs, gridId, expectedIdentity,
-					AuditConstants.SYSTEM_ID, FederationAuditing.AccountCreated);
+					AuditConstants.SYSTEM_ID, FederationAudit.AccountCreated);
 			performAndValidateSingleAudit(ifs, gridId, expectedIdentity,
 					AuditConstants.SYSTEM_ID,
-					FederationAuditing.InvalidUserCertificateRequest);
+					FederationAudit.InvalidUserCertificateRequest);
 			assertEquals(ifs.getUser(gridId, idp.getIdp().getId(), username)
 					.getUserStatus(), GridUserStatus.Pending);
 
@@ -1380,7 +1372,7 @@ public class TestIdentityFederationManager extends TestCase {
 
 			performAndValidateSingleAudit(ifs, gridId, expectedIdentity,
 					AuditConstants.SYSTEM_ID,
-					FederationAuditing.InvalidUserCertificateRequest);
+					FederationAudit.InvalidUserCertificateRequest);
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			fail("Exception occured:" + e.getMessage());
@@ -1422,7 +1414,7 @@ public class TestIdentityFederationManager extends TestCase {
 
 			performAndValidateSingleAudit(ifs, gridId,
 					AuditConstants.SYSTEM_ID, AuditConstants.SYSTEM_ID,
-					FederationAuditing.InvalidUserCertificateRequest);
+					FederationAudit.InvalidUserCertificateRequest);
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			fail("Exception occured:" + e.getMessage());
@@ -1466,7 +1458,7 @@ public class TestIdentityFederationManager extends TestCase {
 
 			performAndValidateSingleAudit(ifs, gridId, expectedIdentity,
 					AuditConstants.SYSTEM_ID,
-					FederationAuditing.InvalidUserCertificateRequest);
+					FederationAudit.InvalidUserCertificateRequest);
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			fail("Exception occured:" + e.getMessage());
@@ -1505,7 +1497,7 @@ public class TestIdentityFederationManager extends TestCase {
 				idp = ifs.addTrustedIdP(gridId, idp);
 				assertEquals(count, ifs.getTrustedIdPs(gridId).length);
 				performAndValidateSingleAudit(ifs, gridId, idp.getName(),
-						gridId, FederationAuditing.IdPAdded);
+						gridId, FederationAudit.IdPAdded);
 
 				// Test Updates
 				IdPContainer updateCont = getTrustedIdpManualApprove(name);
@@ -1514,7 +1506,7 @@ public class TestIdentityFederationManager extends TestCase {
 				ifs.updateTrustedIdP(gridId, updateIdp);
 				assertEquals(count, ifs.getTrustedIdPs(gridId).length);
 				performAndValidateSingleAudit(ifs, gridId, idp.getName(),
-						gridId, FederationAuditing.IdPUpdated);
+						gridId, FederationAudit.IdPUpdated);
 			}
 
 			TrustedIdP[] idps = ifs.getTrustedIdPs(gridId);
@@ -1526,7 +1518,7 @@ public class TestIdentityFederationManager extends TestCase {
 					ifs.removeTrustedIdP(gridId, idps[i].getId());
 					assertEquals(count, ifs.getTrustedIdPs(gridId).length);
 					performAndValidateSingleAudit(ifs, gridId, idps[i]
-							.getName(), gridId, FederationAuditing.IdPRemoved);
+							.getName(), gridId, FederationAudit.IdPRemoved);
 				}
 			}
 
@@ -1571,10 +1563,10 @@ public class TestIdentityFederationManager extends TestCase {
 			String adminGridId = defaults.getDefaultUser().getGridId();
 
 			performAndValidateSingleAudit(ifs, adminGridId, expectedIdentity,
-					AuditConstants.SYSTEM_ID, FederationAuditing.AccountCreated);
+					AuditConstants.SYSTEM_ID, FederationAudit.AccountCreated);
 			performAndValidateSingleAudit(ifs, adminGridId, expectedIdentity,
 					AuditConstants.SYSTEM_ID,
-					FederationAuditing.SuccessfulUserCertificateRequest);
+					FederationAudit.SuccessfulUserCertificateRequest);
 
 			String userId = UserManager.subjectToIdentity(cert.getSubjectDN()
 					.toString());
@@ -1584,11 +1576,11 @@ public class TestIdentityFederationManager extends TestCase {
 			assertEquals(2, ifs.findUsers(userId, null).length);
 
 			performAndValidateSingleAudit(ifs, adminGridId, userId,
-					adminGridId, FederationAuditing.AdminAdded);
+					adminGridId, FederationAudit.AdminAdded);
 			ifs.removeAdmin(userId, userId);
 			validateAccessControl(ifs, adminGridId, userId, count);
 			performAndValidateSingleAudit(ifs, adminGridId, userId, userId,
-					FederationAuditing.AdminRemoved);
+					FederationAudit.AdminRemoved);
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
 			fail("Exception occured:" + e.getMessage());
@@ -1613,7 +1605,7 @@ public class TestIdentityFederationManager extends TestCase {
 		}
 		count = count + 1;
 		performAndValidateMultipleAudit(ifs, adminId, userId,
-				AuditConstants.SYSTEM_ID, FederationAuditing.PermissionDenied,
+				AuditConstants.SYSTEM_ID, FederationAudit.PermissionDenied,
 				count);
 
 		try {
@@ -1625,7 +1617,7 @@ public class TestIdentityFederationManager extends TestCase {
 
 		count = count + 1;
 		performAndValidateMultipleAudit(ifs, adminId, userId,
-				AuditConstants.SYSTEM_ID, FederationAuditing.PermissionDenied,
+				AuditConstants.SYSTEM_ID, FederationAudit.PermissionDenied,
 				count);
 
 		try {
@@ -1637,7 +1629,7 @@ public class TestIdentityFederationManager extends TestCase {
 
 		count = count + 1;
 		performAndValidateMultipleAudit(ifs, adminId, userId,
-				AuditConstants.SYSTEM_ID, FederationAuditing.PermissionDenied,
+				AuditConstants.SYSTEM_ID, FederationAudit.PermissionDenied,
 				count);
 
 		try {
@@ -1649,7 +1641,7 @@ public class TestIdentityFederationManager extends TestCase {
 
 		count = count + 1;
 		performAndValidateMultipleAudit(ifs, adminId, userId,
-				AuditConstants.SYSTEM_ID, FederationAuditing.PermissionDenied,
+				AuditConstants.SYSTEM_ID, FederationAudit.PermissionDenied,
 				count);
 
 		try {
@@ -1661,7 +1653,7 @@ public class TestIdentityFederationManager extends TestCase {
 
 		count = count + 1;
 		performAndValidateMultipleAudit(ifs, adminId, userId,
-				AuditConstants.SYSTEM_ID, FederationAuditing.PermissionDenied,
+				AuditConstants.SYSTEM_ID, FederationAudit.PermissionDenied,
 				count);
 
 		try {
@@ -1673,7 +1665,7 @@ public class TestIdentityFederationManager extends TestCase {
 
 		count = count + 1;
 		performAndValidateMultipleAudit(ifs, adminId, userId,
-				AuditConstants.SYSTEM_ID, FederationAuditing.PermissionDenied,
+				AuditConstants.SYSTEM_ID, FederationAudit.PermissionDenied,
 				count);
 
 		try {
@@ -1685,7 +1677,7 @@ public class TestIdentityFederationManager extends TestCase {
 
 		count = count + 1;
 		performAndValidateMultipleAudit(ifs, adminId, userId,
-				AuditConstants.SYSTEM_ID, FederationAuditing.PermissionDenied,
+				AuditConstants.SYSTEM_ID, FederationAudit.PermissionDenied,
 				count);
 
 		try {
@@ -1697,7 +1689,7 @@ public class TestIdentityFederationManager extends TestCase {
 
 		count = count + 1;
 		performAndValidateMultipleAudit(ifs, adminId, userId,
-				AuditConstants.SYSTEM_ID, FederationAuditing.PermissionDenied,
+				AuditConstants.SYSTEM_ID, FederationAudit.PermissionDenied,
 				count);
 
 		try {
@@ -1709,7 +1701,7 @@ public class TestIdentityFederationManager extends TestCase {
 
 		count = count + 1;
 		performAndValidateMultipleAudit(ifs, adminId, userId,
-				AuditConstants.SYSTEM_ID, FederationAuditing.PermissionDenied,
+				AuditConstants.SYSTEM_ID, FederationAudit.PermissionDenied,
 				count);
 
 		try {
@@ -1721,7 +1713,7 @@ public class TestIdentityFederationManager extends TestCase {
 
 		count = count + 1;
 		performAndValidateMultipleAudit(ifs, adminId, userId,
-				AuditConstants.SYSTEM_ID, FederationAuditing.PermissionDenied,
+				AuditConstants.SYSTEM_ID, FederationAudit.PermissionDenied,
 				count);
 
 		try {
@@ -1733,7 +1725,7 @@ public class TestIdentityFederationManager extends TestCase {
 
 		count = count + 1;
 		performAndValidateMultipleAudit(ifs, adminId, userId,
-				AuditConstants.SYSTEM_ID, FederationAuditing.PermissionDenied,
+				AuditConstants.SYSTEM_ID, FederationAudit.PermissionDenied,
 				count);
 
 		try {
@@ -1745,7 +1737,7 @@ public class TestIdentityFederationManager extends TestCase {
 
 		count = count + 1;
 		performAndValidateMultipleAudit(ifs, adminId, userId,
-				AuditConstants.SYSTEM_ID, FederationAuditing.PermissionDenied,
+				AuditConstants.SYSTEM_ID, FederationAudit.PermissionDenied,
 				count);
 
 		try {
@@ -1757,7 +1749,7 @@ public class TestIdentityFederationManager extends TestCase {
 
 		count = count + 1;
 		performAndValidateMultipleAudit(ifs, adminId, userId,
-				AuditConstants.SYSTEM_ID, FederationAuditing.PermissionDenied,
+				AuditConstants.SYSTEM_ID, FederationAudit.PermissionDenied,
 				count);
 
 		try {
@@ -1769,7 +1761,7 @@ public class TestIdentityFederationManager extends TestCase {
 
 		count = count + 1;
 		performAndValidateMultipleAudit(ifs, adminId, userId,
-				AuditConstants.SYSTEM_ID, FederationAuditing.PermissionDenied,
+				AuditConstants.SYSTEM_ID, FederationAudit.PermissionDenied,
 				count);
 
 		try {
@@ -1781,7 +1773,7 @@ public class TestIdentityFederationManager extends TestCase {
 
 		count = count + 1;
 		performAndValidateMultipleAudit(ifs, adminId, userId,
-				AuditConstants.SYSTEM_ID, FederationAuditing.PermissionDenied,
+				AuditConstants.SYSTEM_ID, FederationAudit.PermissionDenied,
 				count);
 
 		try {
@@ -1793,7 +1785,7 @@ public class TestIdentityFederationManager extends TestCase {
 
 		count = count + 1;
 		performAndValidateMultipleAudit(ifs, adminId, userId,
-				AuditConstants.SYSTEM_ID, FederationAuditing.PermissionDenied,
+				AuditConstants.SYSTEM_ID, FederationAudit.PermissionDenied,
 				count);
 
 		return count;
@@ -2194,10 +2186,10 @@ public class TestIdentityFederationManager extends TestCase {
 						.getIdp(), uid));
 		checkCertificate(expectedIdentity, lifetime, pair.getPrivate(), cert);
 		performAndValidateSingleAudit(ifs, adminGridId, expectedIdentity,
-				AuditConstants.SYSTEM_ID, FederationAuditing.AccountCreated);
+				AuditConstants.SYSTEM_ID, FederationAudit.AccountCreated);
 		performAndValidateSingleAudit(ifs, adminGridId, expectedIdentity,
 				AuditConstants.SYSTEM_ID,
-				FederationAuditing.SuccessfulUserCertificateRequest);
+				FederationAudit.SuccessfulUserCertificateRequest);
 		GridUserFilter f1 = new GridUserFilter();
 		f1.setIdPId(idp.getIdp().getId());
 		f1.setUID(uid);
@@ -2211,13 +2203,13 @@ public class TestIdentityFederationManager extends TestCase {
 		FederationAuditFilter f = new FederationAuditFilter();
 		f.setTargetId(target);
 		f.setReportingPartyId(reporter);
-		f.setAuditType(FederationAuditing.HostCertificateApproved);
+		f.setAuditType(FederationAudit.HostCertificateApproved);
 		return f;
 	}
 
 	private void performAndValidateMultipleAudit(IdentityFederationManager ifm,
 			String adminId, String target, String reportingParty,
-			FederationAuditing type, int count) throws Exception {
+			FederationAudit type, int count) throws Exception {
 		FederationAuditFilter f = new FederationAuditFilter();
 		f.setTargetId(target);
 		f.setReportingPartyId(reportingParty);
@@ -2228,7 +2220,7 @@ public class TestIdentityFederationManager extends TestCase {
 
 	private void performAndValidateSingleAudit(IdentityFederationManager ifm,
 			String adminId, String target, String reportingParty,
-			FederationAuditing type) throws Exception {
+			FederationAudit type) throws Exception {
 		FederationAuditFilter f = new FederationAuditFilter();
 		f.setTargetId(target);
 		f.setReportingPartyId(reportingParty);
@@ -2240,27 +2232,10 @@ public class TestIdentityFederationManager extends TestCase {
 	}
 
 	private void validateAuditingResult(FederationAuditRecord a, String target,
-			String reportingParty, FederationAuditing type) {
+			String reportingParty, FederationAudit type) {
 		assertEquals(target, a.getTargetId());
 		assertEquals(reportingParty, a.getReportingPartyId());
 		assertEquals(type, a.getAuditType());
-	}
-
-	private void printAuditingResults(List<FederationAuditRecord> results) {
-		for (int i = 0; i < results.size(); i++) {
-			FederationAuditRecord e = results.get(i);
-			System.out.println();
-			System.out
-					.println("*****************************************************************************");
-			System.out.println("Target Party:    " + e.getTargetId());
-			System.out.println("Reporting Party: " + e.getReportingPartyId());
-			System.out.println("Event Type:      "
-					+ e.getAuditType().getValue());
-			System.out.println("Event Message  : " + e.getAuditMessage());
-			System.out
-					.println("*****************************************************************************");
-			System.out.println();
-		}
 	}
 
 	protected void setUp() throws Exception {

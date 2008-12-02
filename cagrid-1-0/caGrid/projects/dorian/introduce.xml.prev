@@ -1,5 +1,15 @@
 <ns1:ServiceDescription description="A grid service for the provisioning and management of grid users accounts.  Dorian provides an integration point between external security domains and the grid, allowing accounts managed in external domains to be federated and managed in the grid.   Dorian allows users to use their existing credentials to authenticate to the grid." introduceVersion="1.2" xmlns:ns1="gme://gov.nih.nci.cagrid/1/Introduce">
  <ns2:Namespaces xsi:type="ns2:NamespacesType" xmlns:ns2="gme://gov.nih.nci.cagrid.introduce/1/Namespace" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ns2:Namespace location="./dorian-idp.xsd" namespace="http://cagrid.nci.nih.gov/1/dorian-idp" packageName="org.cagrid.gaards.dorian.idp" xsi:type="ns2:NamespaceType">
+   <ns2:SchemaElement type="Application" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ApplicationReview" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="BasicAuthCredential" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="LocalIdentityProviderAudit" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="LocalIdentityProviderAuditFilter" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="LocalIdentityProviderAuditRecord" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="LocalUser" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="LocalUserFilter" xsi:type="ns2:SchemaElementType"/>
+  </ns2:Namespace>
   <ns2:Namespace location="./dorian-common.xsd" namespace="http://cagrid.nci.nih.gov/1/dorian-common" packageName="org.cagrid.gaards.dorian" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="Metadata" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="SAMLAssertion" xsi:type="ns2:SchemaElementType"/>
@@ -9,8 +19,8 @@
    <ns2:SchemaElement type="CertificateLifetime" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="DateRange" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="DelegationPathLength" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="FederationAudit" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="FederationAuditFilter" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="FederationAuditing" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="FederationAuditRecord" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="GridUser" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="GridUserFilter" xsi:type="ns2:SchemaElementType"/>
@@ -27,13 +37,6 @@
    <ns2:SchemaElement type="UserCertificateFilter" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="UserCertificateRecord" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="UserCertificateUpdate" xsi:type="ns2:SchemaElementType"/>
-  </ns2:Namespace>
-  <ns2:Namespace location="./dorian-idp.xsd" namespace="http://cagrid.nci.nih.gov/1/dorian-idp" packageName="org.cagrid.gaards.dorian.idp" xsi:type="ns2:NamespaceType">
-   <ns2:SchemaElement type="Application" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="ApplicationReview" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="BasicAuthCredential" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="LocalUser" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="LocalUserFilter" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
   <ns2:Namespace location="./authentication-core-types.xsd" namespace="http://gaards.cagrid.org/authentication" packageName="org.cagrid.gaards.authentication" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="AuthenticationProfiles" xsi:type="ns2:SchemaElementType"/>

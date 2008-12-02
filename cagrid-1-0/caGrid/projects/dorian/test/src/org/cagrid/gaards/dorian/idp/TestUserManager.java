@@ -75,7 +75,6 @@ public class TestUserManager extends TestCase {
 				}
 
 				um.addUser(users[i]);
-				assertNull(users[i].getPasswordSecurity().getDigestSalt());
 				String salt = um.getPasswordSecurityManager().getEntry(
 						users[i].getUserId()).getDigestSalt();
 				users[i].setPassword(PasswordSecurityManager.encrypt(users[i]
@@ -83,7 +82,6 @@ public class TestUserManager extends TestCase {
 				assertTrue(um.userExists(users[i].getUserId()));
 				LocalUser u = um.getUser(users[i].getUserId());
 				assertEquals(users[i], u);
-				assertNull(u.getPasswordSecurity().getDigestSalt());
 
 				LocalUser[] list = um.getUsers(null);
 				assertEquals(i + 2, list.length);
@@ -264,15 +262,14 @@ public class TestUserManager extends TestCase {
 			u1.setPassword(password);
 			um.addUser(u1);
 			assertTrue(um.userExists(u1.getUserId()));
-			assertNull(u1.getPasswordSecurity().getDigestSalt());
 			BasicAuthentication ba = new BasicAuthentication();
 			ba.setUserId(u1.getUserId());
 			ba.setPassword(password);
-			um.authenticateAndVerifyUser(ba);
+			um.authenticateAndVerifyUser(ba,null);
 
 			ba.setPassword(sb.toString());
 			try {
-				um.authenticateAndVerifyUser(ba);
+				um.authenticateAndVerifyUser(ba,null);
 				fail("Should not be able to authenticate with a password with a greater length the system max!!!");
 			} catch (Exception e) {
 				if (gov.nih.nci.cagrid.common.Utils.getExceptionMessage(e)
@@ -341,7 +338,7 @@ public class TestUserManager extends TestCase {
 					u1.getUserId()).getDigestSalt();
 			u1.setPassword(PasswordSecurityManager.encrypt(u1.getPassword(),
 					salt));
-			assertEquals(u1, u2);
+			assertEquals(u1.getPassword(), u2.getPassword());
 
 		} catch (Exception e) {
 			FaultUtil.printFault(e);
@@ -364,7 +361,8 @@ public class TestUserManager extends TestCase {
 			LocalUser u1 = makeActiveUser();
 			um.addUser(u1);
 			assertTrue(um.userExists(u1.getUserId()));
-			u1.setPassword("$W0rdD0ct0R$");
+			String password = u1.getPassword();
+			u1.setPassword(null);
 			u1.setFirstName("changedfirst");
 			u1.setLastName("changedlast");
 			u1.setAddress("changedaddress");
@@ -378,12 +376,9 @@ public class TestUserManager extends TestCase {
 			u1.setStatus(LocalUserStatus.Suspended);
 			u1.setRole(LocalUserRole.Administrator);
 			um.updateUser(u1);
-			LocalUser u2 = um.getUser(u1.getUserId());
-
-			String salt = um.getPasswordSecurityManager().getEntry(
-					u1.getUserId()).getDigestSalt();
-			u1.setPassword(PasswordSecurityManager.encrypt(u1.getPassword(),
-					salt));
+			u1.getPasswordSecurity().setDigestSalt(null);
+			LocalUser u2 = um.getUser(u1.getUserId(),false);
+			
 			assertEquals(u1, u2);
 
 		} catch (Exception e) {
