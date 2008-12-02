@@ -6,6 +6,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.swing.text.Document;
+
+import org.jdom.Element;
+
+import gov.nih.nci.cagrid.common.XMLUtilities;
 import gov.nih.nci.cagrid.introduce.servicetasks.deployment.validator.DeploymentValidator;
 import gov.nih.nci.cagrid.metadata.MetadataUtils;
 import gov.nih.nci.cagrid.metadata.ServiceMetadata;
@@ -22,6 +27,16 @@ public class MetadataDeploymentValidator extends DeploymentValidator {
     public void validate() throws Exception {
         List messages = new ArrayList();
         
+//        org.jdom.Document introduceDoc = XMLUtilities.fileNameToDocument(getBaseDir() + File.separator + "introduce.xml");
+//        Element servicesEl = introduceDoc.getRootElement().getChild("Services");
+//        Element serviceEl = (Element)servicesEl.getChildren("Service").get(0);
+//        Element rpEls = serviceEl.getChild("ResourcePropertiesList");
+//        List rps = serviceEl.getChildren("ResourceProperty");
+//        Iterator its = rps.iterator();
+//        while(its.hasNext()){
+//            Element epEl = (Element)its.next();
+//          
+//        }
         
         ServiceMetadata metadata = MetadataUtils.deserializeServiceMetadata(new FileReader(getBaseDir() + File.separator + "etc" + File.separator
             + "serviceMetadata.xml"));

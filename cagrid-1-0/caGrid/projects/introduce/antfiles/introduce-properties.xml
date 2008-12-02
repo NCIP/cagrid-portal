@@ -19,7 +19,6 @@
 	<property name="templates.src.dir" location="${basedir}/src/jettemplates" />
 	<property name="templates.created.src.dir" location="${basedir}/src/java/Introduce/gov/nih/nci/cagrid/introduce/templates" />
 	<property name="beans.created.src.dir" location="${basedir}/src/java/Introduce/gov/nih/nci/cagrid/introduce/beans" />
-	<property name="servicetasks.beans.created.src.dir" location="${basedir}/src/java/Introduce/gov/nih/nci/cagrid/introduce/servicetasks/beans" />
 	<property name="lib.dir" location="${basedir}/lib" />
 	<property name="ext.lib.dir" location="${ext.dir}/dependencies/jars" />
 	<property name="schema.dir" location="${basedir}/schema" />
@@ -47,8 +46,6 @@
 	<property name="skeleton.dir" value="${basedir}/skeleton" />
 	<property name="skeleton.lib.dir" value="${skeleton.dir}/lib" />
 	<property name="skeleton.tools.lib.dir" value="${skeleton.dir}/tools/lib" />
-	<property name="service.tasks.jar" value="${skeleton.tools.lib.dir}/${jars.prefixname}serviceTasks${jars.suffix}" />
-	<property name="service.tools.jar" value="${skeleton.lib.dir}/${jars.prefixname}serviceTools${jars.suffix}" />
 
 	<property name="java.source" value="1.5" />
 

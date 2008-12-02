@@ -24,12 +24,6 @@
 		<delete dir="${beans.created.src.dir}" />
 		<delete dir="${servicetasks.beans.created.src.dir}" />
 		<delete dir="${updates.dir}" />
-		<delete>
-			<fileset dir="${skeleton.tools.lib.dir}">
-				<include name="caGrid-*.jar"/>
-			</fileset>
-		</delete>
-
 	</target>
 
 
@@ -134,13 +128,6 @@
 			<property name="wsdl.file" value="beans.wsdl" />
 			<property name="ns.excludes" value="-x http://www.cagrid.org/1/grape" />
 		</ant>
-		<ant antfile="${build.stubs}" target="generateStubs" inheritall="false">
-			<property name="mapping.file" location="${basedir}/schema/namespace2package.mappings" />
-			<property name="source.stubs.dir" location="${basedir}/schema" />
-			<property name="target.stubs.dir" location="${src.dir}/Introduce" />
-			<property name="wsdl.file" value="servicetoolBeans.wsdl" />
-			<property name="ns.excludes" value="" />
-		</ant>
 	</target>
 
 
@@ -239,12 +226,6 @@
 				<attribute name="Created-By" value="${user.name}" />
 			</manifest>
 		</jar>
-		<jar jarfile="${jars.prefix}serviceTasks${jars.suffix}" basedir="${introduce.classes.dir}" includes="gov/nih/nci/cagrid/introduce/servicetasks/**/*" defaultExcludes="false" update="no">
-			<manifest>
-				<attribute name="Created-By" value="${user.name}" />
-			</manifest>
-		</jar>
-		<copy file="${jars.prefix}serviceTasks${jars.suffix}" todir="${skeleton.tools.lib.dir}"/>
 		<copy todir="${updater.classes.dir}">
 			<fileset dir="${introduce.classes.dir}" includes="gov/nih/nci/cagrid/introduce/beans/software/*.class" />
 		</copy>
