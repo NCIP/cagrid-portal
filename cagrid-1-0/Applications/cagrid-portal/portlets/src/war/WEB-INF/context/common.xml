@@ -7,7 +7,6 @@
        xmlns:util="http://www.springframework.org/schema/util"
        xsi:schemaLocation="
 	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
-	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
 	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
 	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
 	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd">
@@ -200,9 +199,9 @@
 
         <property name="baseUrl" value="${cagrid.portal.map.google.baseUrl}"/>
         <property name="apiKey" value="${cagrid.portal.map.google.apiKey}"/>
-        <property name="centerLatitude" value="40"/>
-        <property name="centerLongitude" value="-95"/>
-        <property name="zoomLevel" value="4"/>
+        <property name="centerLatitude" value="35"/>
+        <property name="centerLongitude" value="-99"/>
+        <property name="zoomLevel" value="3"/>
 
     </bean>
 

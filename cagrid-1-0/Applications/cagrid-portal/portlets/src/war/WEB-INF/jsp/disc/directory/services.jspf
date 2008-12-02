@@ -9,69 +9,66 @@
         type="text/javascript"></script>
 
 
-	<table border="0" class="contentInnerTable">
-		<thead>
-			<tr class="contentTableHeader">
-				<th>Name</th>
-				<th>Type</th>
-				<th>Status</th>
-				<th></th>
-                <th></th>
-            </tr>
-		</thead>
-		<tbody>
-			<c:forEach items="${listCommand.scroller.page}" var="service" varStatus="rowStatus">
-			
-				<c:choose>
-					<c:when test="${rowStatus.index % 2 == 0}">
-						<c:set var="rowClass" value="dataRowDark"/>
-					</c:when>
-					<c:otherwise>
-						<c:set var="rowClass" value="dataRowLight"/>
-					</c:otherwise>
-				</c:choose>
-				
-				<c:choose>
-					<c:when test="${service.class.simpleName == 'GridDataService' && !empty service.domainModel}">
-						<c:set var="isData" value="${true}"/>
-					</c:when>
-					<c:otherwise>
-						<c:set var="isData" value="${false}"/>
-					</c:otherwise>
-				</c:choose>
-			
-			<tr class="<c:out value="${rowClass}"/>">
-				<td class="dataCellText">
-                     <c:set var="serviceDetailsURL"><portlet:actionURL><portlet:param name="operation" value="selectService"/><portlet:param name="selectedId" value="${service.id}"/></portlet:actionURL></c:set>
-                    <tags:serviceInfoPopup  id="${service.id}"
-                                            link_href='${serviceDetailsURL}'
-                                            link_text="${service.serviceInfo.nameAbbrv}"
-                                            serviceInfo="${service.serviceInfo}"/>
-				</td>
-				<td class="dataCellText">
-					<c:choose>
-						<c:when test="${isData}">
-							DATA
-						</c:when>
-						<c:otherwise>
-							ANALYTICAL
-						</c:otherwise>
-					</c:choose>
-				</td>
-				<td class="dataCellText"><c:out value="${service.currentStatus}"/></td>
-				<td>
-					<a alt="More Details..." href="${serviceDetailsURL}">
-						More Details...
-					</a>
-				</td>
-				<td>
-					<c:if test="${isData}">
-						<a alt="Query..." href="<portlet:actionURL><portlet:param name="operation" value="selectServiceForQuery"/><portlet:param name="selectedId" value="${service.id}"/></portlet:actionURL>">
-							Query...
-						</a>
-					</c:if>
-				</td>
-			</tr>
-			</c:forEach>
-		</tbody>
-	</table>
+<table border="0" class="contentInnerTable">
+    <thead>
+    <tr class="contentTableHeader">
+        <th>Name</th>
+        <th>Center</th>
+        <th>Type</th>
+        <th>Status</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <c:forEach items="${listCommand.scroller.page}" var="service" varStatus="rowStatus">
+
+        <c:choose>
+            <c:when test="${rowStatus.index % 2 == 0}">
+                <c:set var="rowClass" value="dataRowDark"/>
+            </c:when>
+            <c:otherwise>
+                <c:set var="rowClass" value="dataRowLight"/>
+            </c:otherwise>
+        </c:choose>
+
+        <c:choose>
+            <c:when test="${service.class.simpleName == 'GridDataService' && !empty service.domainModel}">
+                <c:set var="isData" value="${true}"/>
+            </c:when>
+            <c:otherwise>
+                <c:set var="isData" value="${false}"/>
+            </c:otherwise>
+        </c:choose>
+
+        <tr class="<c:out value="${rowClass}"/>">
+            <td class="dataCellText">
+                <c:set var="serviceDetailsURL"><portlet:actionURL><portlet:param name="operation" value="selectService"/><portlet:param name="selectedId" value="${service.id}"/></portlet:actionURL></c:set>
+                <tags:serviceInfoPopup  id="${service.id}"
+                                        link_href='${serviceDetailsURL}'
+                                        link_text="${service.serviceInfo.nameAbbrv}"
+                                        serviceInfo="${service.serviceInfo}"/>
+            </td>
+            <td class="dataCellText"><c:out value="${service.serviceInfo.centerAbbrv}"/></td>
+
+            <td class="dataCellText">
+                <c:choose>
+                    <c:when test="${isData}">
+                        DATA
+                    </c:when>
+                    <c:otherwise>
+                        ANALYTICAL
+                    </c:otherwise>
+                </c:choose>
+            </td>
+            <td class="dataCellText"><c:out value="${service.currentStatus}"/></td>
+            <td>
+                <c:if test="${isData}">
+                    <a alt="Query..." href="<portlet:actionURL><portlet:param name="operation" value="selectServiceForQuery"/><portlet:param name="selectedId" value="${service.id}"/></portlet:actionURL>">
+                        Query...
+                    </a>
+                </c:if>
+            </td>
+        </tr>
+    </c:forEach>
+    </tbody>
+</table>

@@ -25,17 +25,19 @@ import javax.persistence.Transient;
 import org.hibernate.annotations.ForceDiscriminator;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
+import org.hibernate.annotations.LazyCollection;
 
 /**
  * @author <a href="joshua.phillips@semanticbits.com">Joshua Phillips</a>
+ * @author <a href="mailto:manav.kher@semanticbits.com">Manav Kher</a>
  *
  */
 @Entity
 @Table(name = "grid_services")
 @GenericGenerator(name="id-generator", strategy = "native",
         parameters = {
-        @Parameter(name="sequence", value="seq_grid_services")
-                }
+                @Parameter(name="sequence", value="seq_grid_services")
+        }
 )
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "service_type", discriminatorType = DiscriminatorType.STRING)
@@ -95,6 +97,9 @@ public class GridService extends AbstractDomainObject {
     }
 
     @OneToMany(mappedBy="service", cascade = CascadeType.ALL)
+    @LazyCollection(
+            org.hibernate.annotations.LazyCollectionOption.EXTRA
+    )
     @OrderBy("time")
     public List<StatusChange> getStatusHistory() {
         return statusHistory;
@@ -110,7 +115,7 @@ public class GridService extends AbstractDomainObject {
             return ServiceStatus.UNKNOWN;
         return history.get(history.size() - 1).getStatus();
     }
-	
+
 	@OneToMany(mappedBy = "gridService")
 	public List<SemanticMetadataMapping> getSemanticMetadataMappings() {
 		return semanticMetadataMappings;

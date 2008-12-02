@@ -15,7 +15,7 @@
 
 <div class="row">
     <div class="label">
-        URL:&nbsp;
+        Service URL:&nbsp;
     </div>
     <div>
         <input id="${prefix}url" type="text" name="url" value="${diagnosticsBean.url}" size="50"/>

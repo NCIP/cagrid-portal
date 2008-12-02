@@ -27,6 +27,8 @@
 
     <patternset id="db.compile.jars">
         <include name="spring/spring.jar"/>
+        <include name="spring/spring-aspects.jar"/>
+
         <include name="hibernate/core/commons-logging-1.0.4.jar"/>
         <include
                 name="hibernate/annotations/hibernate-commons-annotations.jar"/>
@@ -34,15 +36,13 @@
         <include name="hibernate/annotations/ejb3-persistence.jar"/>
         <include name="hibernate/core/hibernate3.jar"/>
         <include name="jakarta-commons/commons-lang.jar"/>
+        <include name="aspectj/aspectjrt.jar"/>
+        <include name="aspectj/aspectjweaver.jar"/>
     </patternset>
 
     <patternset id="db.run.jars">
-        <include name="aspectj/aspectjrt.jar"/>
-        <include name="aspectj/aspectjweaver.jar"/>
 
         <include name="hibernate/core/*.jar"/>
-
-
         <include name="jakarta-commons/commons-dbcp.jar"/>
         <include name="jakarta-commons/commons-pool.jar"/>
 

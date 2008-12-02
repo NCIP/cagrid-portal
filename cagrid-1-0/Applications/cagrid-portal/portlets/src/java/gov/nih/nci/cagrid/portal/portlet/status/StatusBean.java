@@ -40,31 +40,7 @@ public class StatusBean {
 
     }
 
-    /**
-     * Will find latest x number of valid services where
-     * x is defined by the latestServicesLimit
-     *
-     * @return
-     */
-    public List<ServiceInfo> getLatestServices() {
-        List<ServiceInfo> serviceInfos = new ArrayList<ServiceInfo>();
 
-        List<GridService> services;
-        int serviceLookupIncrement = 0;
-        int totalServicesAvailable = getGridServiceDao().getAll().size();
-        do {
-            List<GridService> latest = getGridServiceDao().getLatestServices(getLatestServicesLimit() + serviceLookupIncrement++);
-            services = servicefilter.filter(latest);
-        }
-        //run this loop till we find <latestServicesLimit> number of valid  services
-        //But at the same time don't get more than available services
-        while (services.size() < getLatestServicesLimit() && (getLatestServicesLimit() + serviceLookupIncrement) <= totalServicesAvailable);
-
-        for (GridService service : services) {
-            serviceInfos.add(service.getServiceInfo());
-        }
-        return serviceInfos;
-    }
 
     @Required
     public ParticipantDirectory getParticipantsDirectory() {
@@ -84,30 +60,30 @@ public class StatusBean {
         this.servicesDirectory = servicesDirectory;
     }
 
-    @Required
     public ServiceDirectory getAnalyticalServicesDirectory() {
         return analyticalServicesDirectory;
     }
 
+    @Required
     public void setAnalyticalServicesDirectory(
             ServiceDirectory analyticalServicesDirectory) {
         this.analyticalServicesDirectory = analyticalServicesDirectory;
     }
 
-    @Required
     public ServiceDirectory getDataServicesDirectory() {
         return dataServicesDirectory;
     }
 
+    @Required
     public void setDataServicesDirectory(ServiceDirectory dataServicesDirectory) {
         this.dataServicesDirectory = dataServicesDirectory;
     }
 
-    @Required
     public GridServiceDao getGridServiceDao() {
         return gridServiceDao;
     }
 
+    @Required
     public void setGridServiceDao(GridServiceDao gridServiceDao) {
         this.gridServiceDao = gridServiceDao;
     }

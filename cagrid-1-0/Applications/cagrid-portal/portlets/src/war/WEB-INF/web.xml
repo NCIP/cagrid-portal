@@ -114,7 +114,9 @@
                 gov.nih.nci.cagrid.portal.portlet.diagnostics.PortalStatusDiagnosticService,
                 gov.nih.nci.cagrid.portal.portlet.diagnostics.PingDiagnosticService,
                 gov.nih.nci.cagrid.portal.portlet.diagnostics.IdxDiagnosticService,
-                gov.nih.nci.cagrid.portal.portlet.diagnostics.MetadataDiagnosticService
+                gov.nih.nci.cagrid.portal.portlet.diagnostics.MetadataDiagnosticService,
+                gov.nih.nci.cagrid.portal.portlet.status.AjaxStatusService,
+                gov.nih.nci.cagrid.portal.portlet.map.AjaxMapService
             </param-value>
         </init-param>
     </servlet>

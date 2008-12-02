@@ -10,18 +10,20 @@
 	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
 	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd">
 
+
     <bean id="propertyConfigurer"
           class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
         <property name="location"
                   value="classpath:cagridportal.properties"/>
     </bean>
-
+    
     <bean id="dataSource"
           class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close"
           p:driverClassName="${cagrid.portal.db.driver}"
-          p:maxActive="5" p:maxIdle="2" p:maxWait="180000"
-          p:removeAbandoned="true" p:removeAbandonedTimeout="300"
-          p:logAbandoned="true" p:testWhileIdle="true" p:testOnReturn="true"
+          p:maxActive="20" p:maxIdle="5" p:maxWait="180000"
+          p:removeAbandoned="true"
+          p:removeAbandonedTimeout="300"
+          p:logAbandoned="true"
           p:timeBetweenEvictionRunsMillis="300000"
           p:minEvictableIdleTimeMillis="600000"
           p:url="${cagrid.portal.db.url}"
@@ -196,10 +198,10 @@
 
     <bean id="conceptHierarchyNodeDao" parent="daoTemplate"
           class="gov.nih.nci.cagrid.portal.dao.ConceptHierarchyNodeDao"/>
-          
+
     <bean id="domainModelDao" parent="daoTemplate"
           class="gov.nih.nci.cagrid.portal.dao.DomainModelDao"/>
-          
+
     <bean id="semanticMetadataMappingDao" parent="daoTemplate"
           class="gov.nih.nci.cagrid.portal.dao.SemanticMetadataMappingDao"/>
 
