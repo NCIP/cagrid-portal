@@ -14,6 +14,7 @@
     <!-- Introduce currently places lots of dependencies in different locations, so I need these 
       different private configurations to use to retrieve to those locations-->
     <conf name="skeleton" visibility="private"/>
+    <conf name="skeletonTools" visibility="private"/>
     <conf name="schema.grape" visibility="private"/>
 
     <conf name="impl" visibility="private" extends="default"/>
@@ -21,7 +22,7 @@
 
     <!-- Public Configurations-->
     <conf name="default" visibility="public" extends="ui"/>
-    <conf name="core" visibility="public" extends="extension,serviceTasks"/>
+    <conf name="core" visibility="public" extends="extension"/>
     <conf name="ui" visibility="public" extends="core"/>
     <conf name="core-test" visibility="public" extends="core,impl-test"/>
     <conf name="ui-test" visibility="public" extends="ui,impl-test"/>
@@ -29,7 +30,7 @@
     
     <conf name="extension" visibility="public"/>
     <conf name="serviceTools" visibility="public" />
-    <conf name="serviceTasks" visibility="public" />
+    <conf name="buildTools" visibility="public" />
     <conf name="extension-test" visibility="public" extends="extension,impl-test"/>
     
   </configurations>
@@ -42,8 +43,6 @@
     <artifact name="caGrid-Introduce-portal-tests" conf="extension-test" type="jar"/>
     <artifact name="caGrid-Introduce-updater" conf="core" type="jar"/>
     <artifact name="caGrid-Introduce-updater-tests" conf="test" type="jar"/>
-
-    <artifact name="caGrid-Introduce-serviceTasks" conf="serviceTasks" type="jar"/>
     <artifact name="caGrid-Introduce-updater" conf="default" type="jar"/>
   </publications>
 
@@ -53,7 +52,8 @@
 
     <!-- caGrid Dependencies -->
     <dependency rev="latest.integration" org="caGrid" name="core" conf="extension->default;impl-test->test;ui->ui"/>
-    <dependency rev="latest.integration" org="caGrid" name="introduce-servicetools" conf="core,skeleton,serviceTools->default"/>
+    <dependency rev="latest.integration" org="caGrid" name="introduce-servicetools" conf="skeleton,serviceTools->default"/>
+    <dependency rev="latest.integration" org="caGrid" name="introduce-buildtools" conf="skeletonTools,buildTools,core->default"/>
     <dependency rev="latest.integration" org="caGrid" name="metadata" conf="core->schemas"/>
     <dependency rev="latest.integration" org="caGrid" name="gaards-core" conf="core->default"/>
     <dependency rev="latest.integration" org="caGrid" name="grape" conf="ui->default;schema.grape->schemas"/>
@@ -62,17 +62,16 @@
     <dependency rev="latest.integration" org="caGrid" name="gaards-ui" conf="ui->base"/>
     <dependency rev="latest.integration" org="caGrid" name="service-security-provider" conf="skeleton->client;core->schemas,client"/>
     <dependency rev="latest.integration" org="caGrid" name="advertisement" conf="skeleton->default"/>
-    <dependency rev="1.0" org="jdom" name="jdom" conf="skeleton->*"/>
 
     <!-- External Dependencies -->
+    <dependency rev="1.0" org="jdom" name="jdom" conf="skeleton,extension->*"/>
+    <dependency rev="1.0b3" org="ant-contrib" name="ant-contrib" conf="skeletonTools->*"/>
     <dependency rev="1.0" org="wannheden" name="jetc-task" conf="impl->*"/>
 
     <dependency rev="0.5.2-patched" org="jaxme" name="jaxmejs" conf="extension->*"/>
-    <dependency rev="1.1" org="codehaus" name="jaxen" conf="core->*"/>
-    <dependency rev="1.0" org="jdom" name="jdom" conf="extension->*"/>
+    <dependency rev="1.1" org="codehaus" name="jaxen" conf="core,extension->*"/>
 
     <dependency rev="0.1.12" org="wizard-framework" name="wizard-framework" conf="ui->*"/>
-    <dependency rev="1.1" org="codehaus" name="jaxen" conf="extension->*"/>
     <dependency rev="2.0.0" org="jgoodies" name="validation" conf="ui->*"/>
     <dependency rev="2.0_02" org="sun" name="jhall" conf="ui->*"/>
     <dependency rev="4.4" org="junit" name="junit" conf="impl-test->default"/>

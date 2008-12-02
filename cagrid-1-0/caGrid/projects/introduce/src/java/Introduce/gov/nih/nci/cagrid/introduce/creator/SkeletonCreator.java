@@ -20,7 +20,6 @@ import gov.nih.nci.cagrid.introduce.codegen.provider.ProviderTools;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.common.SpecificServiceInformation;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
-import gov.nih.nci.cagrid.introduce.servicetools.XmlPersistenceHelper;
 
 import java.io.File;
 import java.util.Properties;
