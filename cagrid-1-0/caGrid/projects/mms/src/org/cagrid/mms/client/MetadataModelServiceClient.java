@@ -97,7 +97,7 @@ public class MetadataModelServiceClient extends MetadataModelServiceClientBase i
     }
   }
 
-  public gov.nih.nci.cagrid.metadata.dataservice.DomainModel generateDomainModelForProject(org.cagrid.mms.domain.UMLProjectIdentifer umlProjectIdentifer) throws RemoteException {
+  public gov.nih.nci.cagrid.metadata.dataservice.DomainModel generateDomainModelForProject(org.cagrid.mms.domain.UMLProjectIdentifer umlProjectIdentifer) throws RemoteException, org.cagrid.mms.stubs.types.InvalidUMLProjectIndentifier {
     synchronized(portTypeMutex){
       configureStubSecurity((Stub)portType,"generateDomainModelForProject");
     org.cagrid.mms.stubs.GenerateDomainModelForProjectRequest params = new org.cagrid.mms.stubs.GenerateDomainModelForProjectRequest();
@@ -109,7 +109,7 @@ public class MetadataModelServiceClient extends MetadataModelServiceClientBase i
     }
   }
 
-  public gov.nih.nci.cagrid.metadata.dataservice.DomainModel generateDomainModelForPackages(org.cagrid.mms.domain.UMLProjectIdentifer umlProjectIdentifer,java.lang.String[] packageNames) throws RemoteException {
+  public gov.nih.nci.cagrid.metadata.dataservice.DomainModel generateDomainModelForPackages(org.cagrid.mms.domain.UMLProjectIdentifer umlProjectIdentifer,java.lang.String[] packageNames) throws RemoteException, org.cagrid.mms.stubs.types.InvalidUMLProjectIndentifier {
     synchronized(portTypeMutex){
       configureStubSecurity((Stub)portType,"generateDomainModelForPackages");
     org.cagrid.mms.stubs.GenerateDomainModelForPackagesRequest params = new org.cagrid.mms.stubs.GenerateDomainModelForPackagesRequest();
@@ -122,7 +122,7 @@ public class MetadataModelServiceClient extends MetadataModelServiceClientBase i
     }
   }
 
-  public gov.nih.nci.cagrid.metadata.dataservice.DomainModel generateDomainModelForClasses(org.cagrid.mms.domain.UMLProjectIdentifer umlProjectIdentifer,java.lang.String[] fullyQualifiedClassNames) throws RemoteException {
+  public gov.nih.nci.cagrid.metadata.dataservice.DomainModel generateDomainModelForClasses(org.cagrid.mms.domain.UMLProjectIdentifer umlProjectIdentifer,java.lang.String[] fullyQualifiedClassNames) throws RemoteException, org.cagrid.mms.stubs.types.InvalidUMLProjectIndentifier {
     synchronized(portTypeMutex){
       configureStubSecurity((Stub)portType,"generateDomainModelForClasses");
     org.cagrid.mms.stubs.GenerateDomainModelForClassesRequest params = new org.cagrid.mms.stubs.GenerateDomainModelForClassesRequest();
@@ -135,14 +135,14 @@ public class MetadataModelServiceClient extends MetadataModelServiceClientBase i
     }
   }
 
-  public gov.nih.nci.cagrid.metadata.dataservice.DomainModel generateDomainModelForClassesWithExcludes(org.cagrid.mms.domain.UMLProjectIdentifer umlProjectIdentifer,java.lang.String[] fullyQualifiedClassNames,org.cagrid.mms.domain.UMLAssociationExclude[] umlAssociationExclude) throws RemoteException {
+  public gov.nih.nci.cagrid.metadata.dataservice.DomainModel generateDomainModelForClassesWithExcludes(org.cagrid.mms.domain.UMLProjectIdentifer umlProjectIdentifer,java.lang.String[] fullyQualifiedClassNames,org.cagrid.mms.domain.UMLAssociationExclude[] umlAssociationExclude) throws RemoteException, org.cagrid.mms.stubs.types.InvalidUMLProjectIndentifier {
     synchronized(portTypeMutex){
       configureStubSecurity((Stub)portType,"generateDomainModelForClassesWithExcludes");
     org.cagrid.mms.stubs.GenerateDomainModelForClassesWithExcludesRequest params = new org.cagrid.mms.stubs.GenerateDomainModelForClassesWithExcludesRequest();
     org.cagrid.mms.stubs.GenerateDomainModelForClassesWithExcludesRequestUmlProjectIdentifer umlProjectIdentiferContainer = new org.cagrid.mms.stubs.GenerateDomainModelForClassesWithExcludesRequestUmlProjectIdentifer();
     umlProjectIdentiferContainer.setUMLProjectIdentifer(umlProjectIdentifer);
     params.setUmlProjectIdentifer(umlProjectIdentiferContainer);
-    params.setFullyQualifiiedClassNames(fullyQualifiedClassNames);
+    params.setFullyQualifiedClassNames(fullyQualifiedClassNames);
     org.cagrid.mms.stubs.GenerateDomainModelForClassesWithExcludesRequestUmlAssociationExclude umlAssociationExcludeContainer = new org.cagrid.mms.stubs.GenerateDomainModelForClassesWithExcludesRequestUmlAssociationExclude();
     umlAssociationExcludeContainer.setUMLAssociationExclude(umlAssociationExclude);
     params.setUmlAssociationExclude(umlAssociationExcludeContainer);
@@ -151,7 +151,7 @@ public class MetadataModelServiceClient extends MetadataModelServiceClientBase i
     }
   }
 
-  public gov.nih.nci.cagrid.metadata.ServiceMetadata annotateServiceMetadata(gov.nih.nci.cagrid.metadata.ServiceMetadata serviceMetadata,org.cagrid.mms.domain.NamespaceToProjectMapping[] namespaceToProjectMappings) throws RemoteException {
+  public gov.nih.nci.cagrid.metadata.ServiceMetadata annotateServiceMetadata(gov.nih.nci.cagrid.metadata.ServiceMetadata serviceMetadata,org.cagrid.mms.domain.NamespaceToProjectMapping[] namespaceToProjectMappings) throws RemoteException, org.cagrid.mms.stubs.types.InvalidUMLProjectIndentifier {
     synchronized(portTypeMutex){
       configureStubSecurity((Stub)portType,"annotateServiceMetadata");
     org.cagrid.mms.stubs.AnnotateServiceMetadataRequest params = new org.cagrid.mms.stubs.AnnotateServiceMetadataRequest();

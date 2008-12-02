@@ -26,31 +26,31 @@ public class MetadataModelServiceProviderImpl{
 	}
 	
 
-    public org.cagrid.mms.stubs.GenerateDomainModelForProjectResponse generateDomainModelForProject(org.cagrid.mms.stubs.GenerateDomainModelForProjectRequest params) throws RemoteException {
+    public org.cagrid.mms.stubs.GenerateDomainModelForProjectResponse generateDomainModelForProject(org.cagrid.mms.stubs.GenerateDomainModelForProjectRequest params) throws RemoteException, org.cagrid.mms.stubs.types.InvalidUMLProjectIndentifier {
     org.cagrid.mms.stubs.GenerateDomainModelForProjectResponse boxedResult = new org.cagrid.mms.stubs.GenerateDomainModelForProjectResponse();
     boxedResult.setDomainModel(impl.generateDomainModelForProject(params.getUmlProjectIdentifer().getUMLProjectIdentifer()));
     return boxedResult;
   }
 
-    public org.cagrid.mms.stubs.GenerateDomainModelForPackagesResponse generateDomainModelForPackages(org.cagrid.mms.stubs.GenerateDomainModelForPackagesRequest params) throws RemoteException {
+    public org.cagrid.mms.stubs.GenerateDomainModelForPackagesResponse generateDomainModelForPackages(org.cagrid.mms.stubs.GenerateDomainModelForPackagesRequest params) throws RemoteException, org.cagrid.mms.stubs.types.InvalidUMLProjectIndentifier {
     org.cagrid.mms.stubs.GenerateDomainModelForPackagesResponse boxedResult = new org.cagrid.mms.stubs.GenerateDomainModelForPackagesResponse();
     boxedResult.setDomainModel(impl.generateDomainModelForPackages(params.getUmlProjectIdentifer().getUMLProjectIdentifer(),params.getPackageNames()));
     return boxedResult;
   }
 
-    public org.cagrid.mms.stubs.GenerateDomainModelForClassesResponse generateDomainModelForClasses(org.cagrid.mms.stubs.GenerateDomainModelForClassesRequest params) throws RemoteException {
+    public org.cagrid.mms.stubs.GenerateDomainModelForClassesResponse generateDomainModelForClasses(org.cagrid.mms.stubs.GenerateDomainModelForClassesRequest params) throws RemoteException, org.cagrid.mms.stubs.types.InvalidUMLProjectIndentifier {
     org.cagrid.mms.stubs.GenerateDomainModelForClassesResponse boxedResult = new org.cagrid.mms.stubs.GenerateDomainModelForClassesResponse();
     boxedResult.setDomainModel(impl.generateDomainModelForClasses(params.getUmlProjectIdentifer().getUMLProjectIdentifer(),params.getFullyQualifiedClassNames()));
     return boxedResult;
   }
 
-    public org.cagrid.mms.stubs.GenerateDomainModelForClassesWithExcludesResponse generateDomainModelForClassesWithExcludes(org.cagrid.mms.stubs.GenerateDomainModelForClassesWithExcludesRequest params) throws RemoteException {
+    public org.cagrid.mms.stubs.GenerateDomainModelForClassesWithExcludesResponse generateDomainModelForClassesWithExcludes(org.cagrid.mms.stubs.GenerateDomainModelForClassesWithExcludesRequest params) throws RemoteException, org.cagrid.mms.stubs.types.InvalidUMLProjectIndentifier {
     org.cagrid.mms.stubs.GenerateDomainModelForClassesWithExcludesResponse boxedResult = new org.cagrid.mms.stubs.GenerateDomainModelForClassesWithExcludesResponse();
-    boxedResult.setDomainModel(impl.generateDomainModelForClassesWithExcludes(params.getUmlProjectIdentifer().getUMLProjectIdentifer(),params.getFullyQualifiiedClassNames(),params.getUmlAssociationExclude().getUMLAssociationExclude()));
+    boxedResult.setDomainModel(impl.generateDomainModelForClassesWithExcludes(params.getUmlProjectIdentifer().getUMLProjectIdentifer(),params.getFullyQualifiedClassNames(),params.getUmlAssociationExclude().getUMLAssociationExclude()));
     return boxedResult;
   }
 
-    public org.cagrid.mms.stubs.AnnotateServiceMetadataResponse annotateServiceMetadata(org.cagrid.mms.stubs.AnnotateServiceMetadataRequest params) throws RemoteException {
+    public org.cagrid.mms.stubs.AnnotateServiceMetadataResponse annotateServiceMetadata(org.cagrid.mms.stubs.AnnotateServiceMetadataRequest params) throws RemoteException, org.cagrid.mms.stubs.types.InvalidUMLProjectIndentifier {
     org.cagrid.mms.stubs.AnnotateServiceMetadataResponse boxedResult = new org.cagrid.mms.stubs.AnnotateServiceMetadataResponse();
     boxedResult.setServiceMetadata(impl.annotateServiceMetadata(params.getServiceMetadata().getServiceMetadata(),params.getNamespaceToProjectMappings().getNamespaceToProjectMapping()));
     return boxedResult;

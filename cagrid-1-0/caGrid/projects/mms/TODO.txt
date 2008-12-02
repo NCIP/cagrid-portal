@@ -1,11 +1,21 @@
-define MMS interfaces and call into delegate implementations from service
 
-find away around package cycles for configuration class
 
 finish caDSR implementation
 
 
 how to handle the packaging of the application-config-client.xml
+--currently bundled in commmon jar... SDK doesnt give a way to put elsewhere, so atleast put it in a different jar
+--probably want to refactor the packages for MMS and impls, and put each impl in its own jar (otherwise ppl using alternate impls will have the cadsr stuff in their mms service jar)
+
+
+caDSR source properties:
+publicid
+gmeNamespace
+longName
+id -->shortName
+version -->version
+
+
 
 Source Requirements:
 -identify "projects" by id and optional version

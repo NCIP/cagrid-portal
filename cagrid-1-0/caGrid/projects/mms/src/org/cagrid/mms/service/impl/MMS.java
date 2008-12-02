@@ -10,6 +10,7 @@ import java.util.Map;
 import org.cagrid.mms.domain.ModelSourceMetadata;
 import org.cagrid.mms.domain.UMLAssociationExclude;
 import org.cagrid.mms.domain.UMLProjectIdentifer;
+import org.cagrid.mms.stubs.types.InvalidUMLProjectIndentifier;
 
 
 public interface MMS {
@@ -18,23 +19,23 @@ public interface MMS {
 
 
     public DomainModel generateDomainModelForProject(UMLProjectIdentifer umlProjectIdentifer)
-        throws MMSGeneralException;
+        throws MMSGeneralException, InvalidUMLProjectIndentifier;
 
 
     public DomainModel generateDomainModelForPackages(UMLProjectIdentifer umlProjectIdentifer,
-        Collection<String> packageNames) throws MMSGeneralException;
+        Collection<String> packageNames) throws MMSGeneralException, InvalidUMLProjectIndentifier;
 
 
     public DomainModel generateDomainModelForClasses(UMLProjectIdentifer umlProjectIdentifer,
-        Collection<String> fullyQualifiedClassNames) throws MMSGeneralException;
+        Collection<String> fullyQualifiedClassNames) throws MMSGeneralException, InvalidUMLProjectIndentifier;
 
 
     public DomainModel generateDomainModelForClassesWithExcludes(UMLProjectIdentifer umlProjectIdentifer,
         Collection<String> fullyQualifiiedClassNames, Collection<UMLAssociationExclude> umlAssociationExclude)
-        throws MMSGeneralException;
+        throws MMSGeneralException, InvalidUMLProjectIndentifier;
 
 
     public ServiceMetadata annotateServiceMetadata(ServiceMetadata serviceMetadata,
-        Map<URI, UMLProjectIdentifer> namespaceToProjectMappings) throws MMSGeneralException;
+        Map<URI, UMLProjectIdentifer> namespaceToProjectMappings) throws MMSGeneralException, InvalidUMLProjectIndentifier;
 
 }

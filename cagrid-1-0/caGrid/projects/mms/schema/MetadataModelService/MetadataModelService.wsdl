@@ -92,7 +92,7 @@
                 </sequence>
               </complexType>
             </element>
-            <element name="fullyQualifiiedClassNames" type="xs:string" minOccurs="1" maxOccurs="unbounded" />
+            <element name="fullyQualifiedClassNames" type="xs:string" minOccurs="1" maxOccurs="unbounded" />
             <element name="umlAssociationExclude">
               <complexType>
                 <sequence>
@@ -196,6 +196,9 @@
   <message name="GetModelSourceMetadataResponse">
     <part name="parameters" element="tns:GetModelSourceMetadataResponse" />
   </message>
+  <message name="InvalidUMLProjectIndentifierFaultMessage">
+    <part name="fault" element="ns3:InvalidUMLProjectIndentifier" />
+  </message>
   <!--============================================================
 
                        P O R T T Y P E
@@ -205,22 +208,27 @@
     <operation name="generateDomainModelForProject">
       <input message="tns:GenerateDomainModelForProjectRequest" wsa:Action="http://mms.cagrid.org/MetadataModelService/GenerateDomainModelForProjectRequest" />
       <output message="tns:GenerateDomainModelForProjectResponse" wsa:Action="http://mms.cagrid.org/MetadataModelService/GenerateDomainModelForProjectResponse" />
+      <fault name="InvalidUMLProjectIndentifier" message="tns:InvalidUMLProjectIndentifierFaultMessage" wsa:Action="http://mms.cagrid.org/MetadataModelService/InvalidUMLProjectIndentifierFaultMessage" />
     </operation>
     <operation name="generateDomainModelForPackages">
       <input message="tns:GenerateDomainModelForPackagesRequest" wsa:Action="http://mms.cagrid.org/MetadataModelService/GenerateDomainModelForPackagesRequest" />
       <output message="tns:GenerateDomainModelForPackagesResponse" wsa:Action="http://mms.cagrid.org/MetadataModelService/GenerateDomainModelForPackagesResponse" />
+      <fault name="InvalidUMLProjectIndentifier" message="tns:InvalidUMLProjectIndentifierFaultMessage" wsa:Action="http://mms.cagrid.org/MetadataModelService/InvalidUMLProjectIndentifierFaultMessage" />
     </operation>
     <operation name="generateDomainModelForClasses">
       <input message="tns:GenerateDomainModelForClassesRequest" wsa:Action="http://mms.cagrid.org/MetadataModelService/GenerateDomainModelForClassesRequest" />
       <output message="tns:GenerateDomainModelForClassesResponse" wsa:Action="http://mms.cagrid.org/MetadataModelService/GenerateDomainModelForClassesResponse" />
+      <fault name="InvalidUMLProjectIndentifier" message="tns:InvalidUMLProjectIndentifierFaultMessage" wsa:Action="http://mms.cagrid.org/MetadataModelService/InvalidUMLProjectIndentifierFaultMessage" />
     </operation>
     <operation name="generateDomainModelForClassesWithExcludes">
       <input message="tns:GenerateDomainModelForClassesWithExcludesRequest" wsa:Action="http://mms.cagrid.org/MetadataModelService/GenerateDomainModelForClassesWithExcludesRequest" />
       <output message="tns:GenerateDomainModelForClassesWithExcludesResponse" wsa:Action="http://mms.cagrid.org/MetadataModelService/GenerateDomainModelForClassesWithExcludesResponse" />
+      <fault name="InvalidUMLProjectIndentifier" message="tns:InvalidUMLProjectIndentifierFaultMessage" wsa:Action="http://mms.cagrid.org/MetadataModelService/InvalidUMLProjectIndentifierFaultMessage" />
     </operation>
     <operation name="annotateServiceMetadata">
       <input message="tns:AnnotateServiceMetadataRequest" wsa:Action="http://mms.cagrid.org/MetadataModelService/AnnotateServiceMetadataRequest" />
       <output message="tns:AnnotateServiceMetadataResponse" wsa:Action="http://mms.cagrid.org/MetadataModelService/AnnotateServiceMetadataResponse" />
+      <fault name="InvalidUMLProjectIndentifier" message="tns:InvalidUMLProjectIndentifierFaultMessage" wsa:Action="http://mms.cagrid.org/MetadataModelService/InvalidUMLProjectIndentifierFaultMessage" />
     </operation>
     <operation name="getModelSourceMetadata">
       <input message="tns:GetModelSourceMetadataRequest" wsa:Action="http://mms.cagrid.org/MetadataModelService/GetModelSourceMetadataRequest" />

@@ -17,6 +17,8 @@ public class ApplicationServiceExample {
             for (Iterator resultsIterator = rList.iterator(); resultsIterator.hasNext();) {
                 Project project = (Project) resultsIterator.next();
                 System.out.println(project.getShortName());
+                System.out.println(project.getVersion());
+
             }
         } catch (Exception ex) {
             ex.printStackTrace();

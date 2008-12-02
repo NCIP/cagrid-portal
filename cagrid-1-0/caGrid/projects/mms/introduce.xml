@@ -76,6 +76,7 @@
   </ns2:Namespace>
   <ns2:Namespace location="./MetadataModelServiceTypes.xsd" namespace="http://mms.cagrid.org/MetadataModelService/types" packageName="org.cagrid.mms.stubs.types" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="MetadataModelServiceReference" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="InvalidUMLProjectIndentifier" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
   <ns2:Namespace generateStubs="false" location="./xsd/cagrid/types/security/security.xsd" namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security" packageName="gov.nih.nci.cagrid.metadata.security" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="CommunicationMechanism" xsi:type="ns2:SchemaElementType"/>
@@ -144,51 +145,61 @@
       <ns4:Input qName="ns13:UMLProjectIdentifer" description="The project to generate a DomainModel for." isArray="false" name="umlProjectIdentifer" xmlns:ns13="gme://caGrid.caBIG/1.0/org.cagrid.mms.domain"/>
      </ns4:Inputs>
      <ns4:Output qName="ns14:DomainModel" description="" isArray="false" xmlns:ns14="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice"/>
-     <ns4:Exceptions/>
+     <ns4:Exceptions>
+      <ns4:Exception description="" name="InvalidUMLProjectIndentifier" qname="ns15:InvalidUMLProjectIndentifier" xmlns:ns15="http://mms.cagrid.org/MetadataModelService/types"/>
+     </ns4:Exceptions>
     </ns4:Method>
     <ns4:Method description="Generates a DomainModel for the specified Project, including only the specified packages" isImported="false" isProvided="false" name="generateDomainModelForPackages" xsi:type="ns4:MethodType">
      <ns4:Inputs>
-      <ns4:Input qName="ns15:UMLProjectIdentifer" description="The project to generate a DomainModel for" isArray="false" name="umlProjectIdentifer" xmlns:ns15="gme://caGrid.caBIG/1.0/org.cagrid.mms.domain"/>
+      <ns4:Input qName="ns16:UMLProjectIdentifer" description="The project to generate a DomainModel for" isArray="false" name="umlProjectIdentifer" xmlns:ns16="gme://caGrid.caBIG/1.0/org.cagrid.mms.domain"/>
       <ns4:Input qName="xsd:string" description="The package names to include" isArray="true" name="packageNames" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
      </ns4:Inputs>
-     <ns4:Output qName="ns16:DomainModel" description="" isArray="false" xmlns:ns16="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice"/>
-     <ns4:Exceptions/>
+     <ns4:Output qName="ns17:DomainModel" description="" isArray="false" xmlns:ns17="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice"/>
+     <ns4:Exceptions>
+      <ns4:Exception description="" name="InvalidUMLProjectIndentifier" qname="ns18:InvalidUMLProjectIndentifier" xmlns:ns18="http://mms.cagrid.org/MetadataModelService/types"/>
+     </ns4:Exceptions>
     </ns4:Method>
     <ns4:Method description="Generates a complete DomainModel for the specified Project, including only the identified Classes" isImported="false" isProvided="false" name="generateDomainModelForClasses" xsi:type="ns4:MethodType">
      <ns4:Inputs>
-      <ns4:Input qName="ns17:UMLProjectIdentifer" description="The project to generate a DomainModel for" isArray="false" name="umlProjectIdentifer" xmlns:ns17="gme://caGrid.caBIG/1.0/org.cagrid.mms.domain"/>
+      <ns4:Input qName="ns19:UMLProjectIdentifer" description="The project to generate a DomainModel for" isArray="false" name="umlProjectIdentifer" xmlns:ns19="gme://caGrid.caBIG/1.0/org.cagrid.mms.domain"/>
       <ns4:Input qName="xsd:string" description="The fully qualified classnames to include in the model" isArray="true" name="fullyQualifiedClassNames" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
      </ns4:Inputs>
-     <ns4:Output qName="ns18:DomainModel" description="" isArray="false" xmlns:ns18="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice"/>
-     <ns4:Exceptions/>
+     <ns4:Output qName="ns20:DomainModel" description="" isArray="false" xmlns:ns20="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice"/>
+     <ns4:Exceptions>
+      <ns4:Exception description="" name="InvalidUMLProjectIndentifier" qname="ns21:InvalidUMLProjectIndentifier" xmlns:ns21="http://mms.cagrid.org/MetadataModelService/types"/>
+     </ns4:Exceptions>
     </ns4:Method>
     <ns4:Method description="Generates a  DomainModel for the specified Project, including only the specified Classes, but excluding the specified Associations" isImported="false" isProvided="false" name="generateDomainModelForClassesWithExcludes" xsi:type="ns4:MethodType">
      <ns4:Inputs>
-      <ns4:Input qName="ns19:UMLProjectIdentifer" description="The project to generate a DomainModel for" isArray="false" name="umlProjectIdentifer" xmlns:ns19="gme://caGrid.caBIG/1.0/org.cagrid.mms.domain"/>
+      <ns4:Input qName="ns22:UMLProjectIdentifer" description="The project to generate a DomainModel for" isArray="false" name="umlProjectIdentifer" xmlns:ns22="gme://caGrid.caBIG/1.0/org.cagrid.mms.domain"/>
       <ns4:Input qName="xsd:string" description="The fully qualified Class names to include in the model" isArray="true" name="fullyQualifiedClassNames" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
-      <ns4:Input qName="ns20:UMLAssociationExclude" description="A collection of UML Associations to exclude from the model" isArray="true" name="umlAssociationExclude" xmlns:ns20="gme://caGrid.caBIG/1.0/org.cagrid.mms.domain"/>
+      <ns4:Input qName="ns23:UMLAssociationExclude" description="A collection of UML Associations to exclude from the model" isArray="true" name="umlAssociationExclude" xmlns:ns23="gme://caGrid.caBIG/1.0/org.cagrid.mms.domain"/>
      </ns4:Inputs>
-     <ns4:Output qName="ns21:DomainModel" description="" isArray="false" xmlns:ns21="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice"/>
-     <ns4:Exceptions/>
+     <ns4:Output qName="ns24:DomainModel" description="" isArray="false" xmlns:ns24="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice"/>
+     <ns4:Exceptions>
+      <ns4:Exception description="" name="InvalidUMLProjectIndentifier" qname="ns25:InvalidUMLProjectIndentifier" xmlns:ns25="http://mms.cagrid.org/MetadataModelService/types"/>
+     </ns4:Exceptions>
     </ns4:Method>
     <ns4:Method description="Annotates the specified ServiceMetadata model with semantic information from the specified model, by mapping QNames to UMLClasses" isImported="false" isProvided="false" name="annotateServiceMetadata" xsi:type="ns4:MethodType">
      <ns4:Inputs>
-      <ns4:Input qName="ns22:ServiceMetadata" description="The unannotated ServiceMetadata model" isArray="false" name="serviceMetadata" xmlns:ns22="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"/>
-      <ns4:Input qName="ns23:NamespaceToProjectMapping" description="An optional collection of mappings from URI Namespace to UMLProjects" isArray="true" name="namespaceToProjectMappings" xmlns:ns23="gme://caGrid.caBIG/1.0/org.cagrid.mms.domain"/>
+      <ns4:Input qName="ns26:ServiceMetadata" description="The unannotated ServiceMetadata model" isArray="false" name="serviceMetadata" xmlns:ns26="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"/>
+      <ns4:Input qName="ns27:NamespaceToProjectMapping" description="An optional collection of mappings from URI Namespace to UMLProjects" isArray="true" name="namespaceToProjectMappings" xmlns:ns27="gme://caGrid.caBIG/1.0/org.cagrid.mms.domain"/>
      </ns4:Inputs>
-     <ns4:Output qName="ns24:ServiceMetadata" description="" isArray="false" xmlns:ns24="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"/>
-     <ns4:Exceptions/>
+     <ns4:Output qName="ns28:ServiceMetadata" description="" isArray="false" xmlns:ns28="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"/>
+     <ns4:Exceptions>
+      <ns4:Exception description="Thrown if the identifier is null or contains invalid properties." name="InvalidUMLProjectIndentifier" qname="ns29:InvalidUMLProjectIndentifier" xmlns:ns29="http://mms.cagrid.org/MetadataModelService/types"/>
+     </ns4:Exceptions>
     </ns4:Method>
     <ns4:Method description="Returns the metadata detailing the supported Model sources and their characteristics" isImported="false" isProvided="false" name="getModelSourceMetadata" xsi:type="ns4:MethodType">
      <ns4:Inputs/>
-     <ns4:Output qName="ns25:ModelSourceMetadata" description="" isArray="false" xmlns:ns25="gme://caGrid.caBIG/1.0/org.cagrid.mms.domain"/>
+     <ns4:Output qName="ns30:ModelSourceMetadata" description="" isArray="false" xmlns:ns30="gme://caGrid.caBIG/1.0/org.cagrid.mms.domain"/>
      <ns4:Exceptions/>
     </ns4:Method>
    </ns4:Methods>
-   <ns26:ResourcePropertiesList xsi:type="ns26:ResourcePropertiesListType" xmlns:ns26="gme://gov.nih.nci.cagrid.introduce/1/Resources">
-    <ns26:ResourceProperty qName="ns27:ServiceMetadata" description="Standard caGrid Metadata" fileLocation="serviceMetadata.xml" populateFromFile="true" register="true" xsi:type="ns26:ResourcePropertyType" xmlns:ns27="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"/>
-    <ns26:ResourceProperty qName="ns28:ModelSourceMetadata" description="Metadata Model Service Metadata detailing the supported Model Sources" fileLocation="MetadataModelService_modelSourceMetadata.xml" populateFromFile="false" register="true" xsi:type="ns26:ResourcePropertyType" xmlns:ns28="gme://caGrid.caBIG/1.0/org.cagrid.mms.domain"/>
-   </ns26:ResourcePropertiesList>
+   <ns31:ResourcePropertiesList xsi:type="ns31:ResourcePropertiesListType" xmlns:ns31="gme://gov.nih.nci.cagrid.introduce/1/Resources">
+    <ns31:ResourceProperty qName="ns32:ServiceMetadata" description="Standard caGrid Metadata" fileLocation="serviceMetadata.xml" populateFromFile="true" register="true" xsi:type="ns31:ResourcePropertyType" xmlns:ns32="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"/>
+    <ns31:ResourceProperty qName="ns33:ModelSourceMetadata" description="Metadata Model Service Metadata detailing the supported Model Sources" fileLocation="MetadataModelService_modelSourceMetadata.xml" populateFromFile="false" register="true" xsi:type="ns31:ResourcePropertyType" xmlns:ns33="gme://caGrid.caBIG/1.0/org.cagrid.mms.domain"/>
+   </ns31:ResourcePropertiesList>
    <ns3:ResourceFrameworkOptions xsi:type="ns3:ResourceFrameworkOptions">
     <ns3:Main xsi:type="ns3:Main"/>
     <ns3:Singleton xsi:type="ns3:Singleton"/>
@@ -197,8 +208,8 @@
    </ns3:ResourceFrameworkOptions>
   </ns3:Service>
  </ns3:Services>
- <ns29:Extensions xsi:type="ns29:ExtensionsType" xmlns:ns29="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <ns29:Extension name="cagrid_metadata" version="1.3" xsi:type="ns29:ExtensionType"/>
- </ns29:Extensions>
- <ns30:ServiceProperties xmlns:ns30="gme://gov.nih.nci.cagrid.introduce/1/Property"/>
+ <ns34:Extensions xsi:type="ns34:ExtensionsType" xmlns:ns34="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ns34:Extension name="cagrid_metadata" version="1.3" xsi:type="ns34:ExtensionType"/>
+ </ns34:Extensions>
+ <ns35:ServiceProperties xmlns:ns35="gme://gov.nih.nci.cagrid.introduce/1/Property"/>
 </ns1:ServiceDescription>

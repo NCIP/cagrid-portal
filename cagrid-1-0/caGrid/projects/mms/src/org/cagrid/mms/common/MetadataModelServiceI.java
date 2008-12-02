@@ -23,8 +23,10 @@ public interface MetadataModelServiceI {
    *
    * @param umlProjectIdentifer
    *	The project to generate a DomainModel for.
+   * @throws InvalidUMLProjectIndentifier
+   *	
    */
-  public gov.nih.nci.cagrid.metadata.dataservice.DomainModel generateDomainModelForProject(org.cagrid.mms.domain.UMLProjectIdentifer umlProjectIdentifer) throws RemoteException ;
+  public gov.nih.nci.cagrid.metadata.dataservice.DomainModel generateDomainModelForProject(org.cagrid.mms.domain.UMLProjectIdentifer umlProjectIdentifer) throws RemoteException, org.cagrid.mms.stubs.types.InvalidUMLProjectIndentifier ;
 
   /**
    * Generates a DomainModel for the specified Project, including only the specified packages
@@ -33,8 +35,10 @@ public interface MetadataModelServiceI {
    *	The project to generate a DomainModel for
    * @param packageNames
    *	The package names to include
+   * @throws InvalidUMLProjectIndentifier
+   *	
    */
-  public gov.nih.nci.cagrid.metadata.dataservice.DomainModel generateDomainModelForPackages(org.cagrid.mms.domain.UMLProjectIdentifer umlProjectIdentifer,java.lang.String[] packageNames) throws RemoteException ;
+  public gov.nih.nci.cagrid.metadata.dataservice.DomainModel generateDomainModelForPackages(org.cagrid.mms.domain.UMLProjectIdentifer umlProjectIdentifer,java.lang.String[] packageNames) throws RemoteException, org.cagrid.mms.stubs.types.InvalidUMLProjectIndentifier ;
 
   /**
    * Generates a complete DomainModel for the specified Project, including only the identified Classes
@@ -43,8 +47,10 @@ public interface MetadataModelServiceI {
    *	The project to generate a DomainModel for
    * @param fullyQualifiedClassNames
    *	The fully qualified classnames to include in the model
+   * @throws InvalidUMLProjectIndentifier
+   *	
    */
-  public gov.nih.nci.cagrid.metadata.dataservice.DomainModel generateDomainModelForClasses(org.cagrid.mms.domain.UMLProjectIdentifer umlProjectIdentifer,java.lang.String[] fullyQualifiedClassNames) throws RemoteException ;
+  public gov.nih.nci.cagrid.metadata.dataservice.DomainModel generateDomainModelForClasses(org.cagrid.mms.domain.UMLProjectIdentifer umlProjectIdentifer,java.lang.String[] fullyQualifiedClassNames) throws RemoteException, org.cagrid.mms.stubs.types.InvalidUMLProjectIndentifier ;
 
   /**
    * Generates a  DomainModel for the specified Project, including only the specified Classes, but excluding the specified Associations
@@ -55,8 +61,10 @@ public interface MetadataModelServiceI {
    *	The fully qualified Class names to include in the model
    * @param umlAssociationExclude
    *	A collection of UML Associations to exclude from the model
+   * @throws InvalidUMLProjectIndentifier
+   *	
    */
-  public gov.nih.nci.cagrid.metadata.dataservice.DomainModel generateDomainModelForClassesWithExcludes(org.cagrid.mms.domain.UMLProjectIdentifer umlProjectIdentifer,java.lang.String[] fullyQualifiedClassNames,org.cagrid.mms.domain.UMLAssociationExclude[] umlAssociationExclude) throws RemoteException ;
+  public gov.nih.nci.cagrid.metadata.dataservice.DomainModel generateDomainModelForClassesWithExcludes(org.cagrid.mms.domain.UMLProjectIdentifer umlProjectIdentifer,java.lang.String[] fullyQualifiedClassNames,org.cagrid.mms.domain.UMLAssociationExclude[] umlAssociationExclude) throws RemoteException, org.cagrid.mms.stubs.types.InvalidUMLProjectIndentifier ;
 
   /**
    * Annotates the specified ServiceMetadata model with semantic information from the specified model, by mapping QNames to UMLClasses
@@ -65,8 +73,10 @@ public interface MetadataModelServiceI {
    *	The unannotated ServiceMetadata model
    * @param namespaceToProjectMappings
    *	An optional collection of mappings from URI Namespace to UMLProjects
+   * @throws InvalidUMLProjectIndentifier
+   *	Thrown if the identifier is null or contains invalid properties.
    */
-  public gov.nih.nci.cagrid.metadata.ServiceMetadata annotateServiceMetadata(gov.nih.nci.cagrid.metadata.ServiceMetadata serviceMetadata,org.cagrid.mms.domain.NamespaceToProjectMapping[] namespaceToProjectMappings) throws RemoteException ;
+  public gov.nih.nci.cagrid.metadata.ServiceMetadata annotateServiceMetadata(gov.nih.nci.cagrid.metadata.ServiceMetadata serviceMetadata,org.cagrid.mms.domain.NamespaceToProjectMapping[] namespaceToProjectMappings) throws RemoteException, org.cagrid.mms.stubs.types.InvalidUMLProjectIndentifier ;
 
   /**
    * Returns the metadata detailing the supported Model sources and their characteristics
