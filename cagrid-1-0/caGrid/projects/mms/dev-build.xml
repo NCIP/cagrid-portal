@@ -28,6 +28,11 @@
 	<property name="ext.targetgrid.dir" location="${ext.dir}/target_grid" />
 	<property name="ext.lib.dir" location="${ext.dependencies.dir}/service/jars" />
 	<property name="ext.test.lib.dir" value="${ext.dependencies.dir}/test/jars" />
+	<property name="ext.tools.lib.dir" location="${ext.dependencies.dir}/tools/jars" />
+
+
+	<!-- overide the introduce location of this which is suposed to be in tools/lib -->
+	<property name="ant.contrib.location" value="${ext.tools.lib.dir}/ant-contrib-1.0b3.jar" />
 
 	<import file="test/test.xml" />
 
@@ -54,9 +59,8 @@
 		<path id="run.extended.classpath">
 		</path>
 		<path id="tasks.run.extended.classpath">
-			<fileset dir="${ext.lib.dir}">
-				<include name="caGrid-*.jar" />
-				<include name="jdom*.jar" />
+			<fileset dir="${ext.tools.lib.dir}">
+				<include name="*.jar" />
 			</fileset>
 		</path>
 	</target>

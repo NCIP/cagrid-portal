@@ -16,6 +16,8 @@
 
     <conf name="impl" visibility="private" extends="service" />
     <conf name="impl-test" visibility="private" />
+    <conf name="serviceTools" visibility="private" />
+
 
     <!-- Public Configurations-->
     <conf name="stubs" visibility="public" />
@@ -53,11 +55,20 @@
     <!-- Specific caGrid Service Dependencies -->
     <dependency rev="latest.integration" org="caGrid" name="metadatautils" conf="service->default" />
 
+    <!--  Build file dependencies -->
+    <dependency rev="latest.integration" org="caGrid" name="introduce-buildtools" conf="serviceTools->default" />
+    <dependency rev="1.0b3" org="ant-contrib" name="ant-contrib" conf="serviceTools->*" />
+    <!--
+      This is non-transitive, because we already have all the extension jars in the service, and the
+      deploy time validation which uses this uses the service's classpath too.
+    -->
+    <dependency rev="latest.integration" org="caGrid" name="cabigextensions" conf="serviceTools->validator"
+      transitive="false" />
 
     <!-- External Dependencies -->
     <dependency rev="1.0" org="jdom" name="jdom" conf="service->*" />
     <dependency rev="4.4" org="junit" name="junit" conf="impl-test->default" />
-     <!-- TODO: change to newer version? and don't use full -->
+    <!-- TODO: change to newer version? and don't use full -->
     <dependency rev="2.0.+" org="springframework" name="spring" conf="service->full;impl-test->mock" />
     <!--  Used for the caDSR Implementation -->
     <dependency rev="4.0" org="cacore" name="cadsr-api" conf="service->*" />
