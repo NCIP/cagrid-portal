@@ -51,7 +51,7 @@ import com.jgoodies.validation.view.ValidationComponentUtils;
  * @author David Ervin
  * 
  * @created Nov 27, 2007 4:50:32 PM
- * @version $Id: QueryProcessorConfigurationPanel.java,v 1.16 2008-10-27 22:10:05 dervin Exp $ 
+ * @version $Id: QueryProcessorConfigurationPanel.java,v 1.17 2008-12-03 17:06:02 dervin Exp $ 
  */
 public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
     // keys for validation
@@ -1224,7 +1224,8 @@ public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
     
     private void throwExceptionIfNotDirectory(File checkMe) throws FileNotFoundException {
         if (checkMe == null || !checkMe.exists() || !checkMe.isDirectory()) {
-            throw new FileNotFoundException("Unable to locate directory " + checkMe.getName());
+            throw new FileNotFoundException("Unable to locate directory " + 
+                (checkMe == null ? "<null>" : checkMe.getAbsolutePath()));
         }
     }
 }
