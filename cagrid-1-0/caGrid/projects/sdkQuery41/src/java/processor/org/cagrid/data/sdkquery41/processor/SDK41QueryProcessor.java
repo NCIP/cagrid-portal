@@ -46,7 +46,6 @@ public class SDK41QueryProcessor extends CQLQueryProcessor {
     public static final String PROPERTY_USE_GRID_IDENTITY_LOGIN = "useGridIdentityLogin";
     public static final String PROPERTY_STATIC_LOGIN_USERNAME = "staticLoginUsername";
     public static final String PROPERTY_STATIC_LOGIN_PASSWORD = "staticLoginPassword";
-    public static final String PROPERTY_STRICT_CQL_PROCESSING = "strictCQLProcessing";
     
     // default values for properties
     public static final String DEFAULT_USE_LOCAL_API = String.valueOf(false);
@@ -88,7 +87,6 @@ public class SDK41QueryProcessor extends CQLQueryProcessor {
         props.setProperty(PROPERTY_USE_GRID_IDENTITY_LOGIN, DEFAULT_USE_GRID_IDENTITY_LOGIN);
         props.setProperty(PROPERTY_STATIC_LOGIN_USERNAME, "");
         props.setProperty(PROPERTY_STATIC_LOGIN_PASSWORD, "");
-        props.setProperty(PROPERTY_STRICT_CQL_PROCESSING, DEFAULT_STRICT_CQL_PROCESSING);
         return props;
     }
     
@@ -202,16 +200,6 @@ public class SDK41QueryProcessor extends CQLQueryProcessor {
             return !Boolean.parseBoolean(useGridIdentLogin);
         } catch (Exception ex) {
             throw new QueryProcessingException("Error determining use of static login: " + ex.getMessage(), ex);
-        }
-    }
-    
-    
-    private boolean useStrictCQLProcessing() throws QueryProcessingException {
-        String useStrictValue = getConfiguredParameters().getProperty(PROPERTY_STRICT_CQL_PROCESSING);
-        try {
-            return Boolean.parseBoolean(useStrictValue);
-        } catch (Exception ex) {
-            throw new QueryProcessingException("Error determining use of strict CQL processing: " + ex.getMessage(), ex);
         }
     }
     
