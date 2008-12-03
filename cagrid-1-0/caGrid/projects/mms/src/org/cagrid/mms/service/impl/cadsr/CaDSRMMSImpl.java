@@ -12,8 +12,11 @@ import java.util.Collection;
 import java.util.Map;
 
 import org.cagrid.mms.domain.ModelSourceMetadata;
+import org.cagrid.mms.domain.ModelSourceMetadataSupportedModelSources;
 import org.cagrid.mms.domain.Property;
+import org.cagrid.mms.domain.PropertyDescriptor;
 import org.cagrid.mms.domain.SourceDescriptor;
+import org.cagrid.mms.domain.SourceDescriptorSupportedProjectProperties;
 import org.cagrid.mms.domain.UMLAssociationExclude;
 import org.cagrid.mms.domain.UMLProjectIdentifer;
 import org.cagrid.mms.service.impl.MMS;
@@ -27,7 +30,12 @@ public class CaDSRMMSImpl implements MMS {
     public static final String SOURCE_PROPERTY_LONG_NAME = "longName";
     public static final String SOURCE_PROPERTY_GME_NAMESPACE = "gmeNamespace";
 
+    public static final String DEFAULT_SOURCE_IDENTIFIER = "caDSR Production";
+    public static final String DEFAULT_SOURCE_DESCRIPTION = "The production instance of the National Cancer Institutes's Cancer Data Standards Repository (caDSR).";
+
     private String caDSRApplicationServiceURL;
+
+    private ModelSourceMetadata metadata;
 
 
     public String getCaDSRApplicationServiceURL() {
@@ -40,9 +48,47 @@ public class CaDSRMMSImpl implements MMS {
     }
 
 
-    public ModelSourceMetadata getModelSourceMetadata() {
-        // TODO: needs to specify the caDSR Source
-        return null;
+    public synchronized ModelSourceMetadata getModelSourceMetadata() {
+        if (metadata == null) {
+            // TODO: load this from spring
+            metadata = new ModelSourceMetadata();
+            metadata.setDefaultSourceIdentifier(DEFAULT_SOURCE_IDENTIFIER);
+            ModelSourceMetadataSupportedModelSources supportedModelSources = new ModelSourceMetadataSupportedModelSources();;
+            metadata.setSupportedModelSources(supportedModelSources);
+
+            SourceDescriptor[] sources = new SourceDescriptor[1];
+            supportedModelSources.setSource(sources);
+
+            sources[0] = new SourceDescriptor();
+            sources[0].setIdentifier(DEFAULT_SOURCE_IDENTIFIER);
+            sources[0].setDescription(DEFAULT_SOURCE_DESCRIPTION);
+
+            SourceDescriptorSupportedProjectProperties supportedProjectProperties = new SourceDescriptorSupportedProjectProperties();
+            sources[0].setSupportedProjectProperties(supportedProjectProperties);
+
+            PropertyDescriptor[] propertyDescriptors = new PropertyDescriptor[3];
+            supportedProjectProperties.setPropertyDescriptor(propertyDescriptors);
+
+            propertyDescriptors[0] = new PropertyDescriptor();
+            propertyDescriptors[0].setName(SOURCE_PROPERTY_GME_NAMESPACE);
+            propertyDescriptors[0].setDescription("The " + SOURCE_PROPERTY_GME_NAMESPACE
+                + " attribute of the caDSR Project.");
+            propertyDescriptors[0].setRequired(false);
+
+            propertyDescriptors[1] = new PropertyDescriptor();
+            propertyDescriptors[1].setName(SOURCE_PROPERTY_LONG_NAME);
+            propertyDescriptors[1].setDescription("The " + SOURCE_PROPERTY_LONG_NAME
+                + " attribute of the caDSR Project.");
+            propertyDescriptors[1].setRequired(false);
+
+            propertyDescriptors[2] = new PropertyDescriptor();
+            propertyDescriptors[2].setName(SOURCE_PROPERTY_PUBLIC_ID);
+            propertyDescriptors[2].setDescription("The " + SOURCE_PROPERTY_PUBLIC_ID
+                + " attribute of the caDSR Project.");
+            propertyDescriptors[2].setRequired(false);
+        }
+
+        return metadata;
     }
 
 

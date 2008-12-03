@@ -75,8 +75,8 @@
    <ns2:SchemaElement type="unsignedShort" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
   <ns2:Namespace location="./MetadataModelServiceTypes.xsd" namespace="http://mms.cagrid.org/MetadataModelService/types" packageName="org.cagrid.mms.stubs.types" xsi:type="ns2:NamespaceType">
-   <ns2:SchemaElement type="MetadataModelServiceReference" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="InvalidUMLProjectIndentifier" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="MetadataModelServiceReference" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
   <ns2:Namespace generateStubs="false" location="./xsd/cagrid/types/security/security.xsd" namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security" packageName="gov.nih.nci.cagrid.metadata.security" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="CommunicationMechanism" xsi:type="ns2:SchemaElementType"/>
@@ -211,5 +211,7 @@
  <ns34:Extensions xsi:type="ns34:ExtensionsType" xmlns:ns34="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <ns34:Extension name="cagrid_metadata" version="1.3" xsi:type="ns34:ExtensionType"/>
  </ns34:Extensions>
- <ns35:ServiceProperties xmlns:ns35="gme://gov.nih.nci.cagrid.introduce/1/Property"/>
+ <ns35:ServiceProperties xmlns:ns35="gme://gov.nih.nci.cagrid.introduce/1/Property">
+  <ns35:Property description="The Spring-based MMS configuration file" isFromETC="true" key="mmsConfigurationFile" value="applicationContext-mms.xml"/>
+ </ns35:ServiceProperties>
 </ns1:ServiceDescription>
