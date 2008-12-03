@@ -13,6 +13,10 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.io.File;
 import java.io.IOException;
+import java.util.Iterator;
+import java.util.Properties;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -83,6 +87,7 @@ public class GeneralConfigurationPanel extends AbstractWizardPanel {
         // This method is (mostly) blank, since it's the first panel to run, 
         // and no other panel changes the values used by this panel
         validateInput();
+        populatePropertiesTable();
     }
     
     
@@ -175,6 +180,7 @@ public class GeneralConfigurationPanel extends AbstractWizardPanel {
                 public void documentEdited(DocumentEvent e) {
                     configuration.setSdkDirectory(new File(getSdkDirTextField().getText()));
                     validateInput();
+                    populatePropertiesTable();
                 }
             });
         }
@@ -269,6 +275,43 @@ public class GeneralConfigurationPanel extends AbstractWizardPanel {
                 TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51)));
         }
         return propertiesTableScrollPane;
+    }
+    
+    
+    // --------
+    // helpers
+    // --------
+    
+    
+    private synchronized void populatePropertiesTable() {
+        // clear the properties table
+        DefaultTableModel propertiesModel = (DefaultTableModel) getPropertiesTable().getModel();
+        while (propertiesModel.getRowCount() != 0) {
+            propertiesModel.removeRow(0);
+        }
+        // see if there's anything to add
+        if (!validationModel.hasErrors()) {
+            try {
+                Properties props = configuration.getDeployPropertiesFromSdkDir();
+                
+                // sort the property keys alphabetically
+                SortedSet<String> keys = new TreeSet<String>();
+                Iterator keyIter = props.keySet().iterator();
+                while (keyIter.hasNext()) {
+                    keys.add((String) keyIter.next());
+                }
+                
+                // put keys and their values in the table
+                for (String key : keys) {
+                    String value = props.getProperty(key);
+                    propertiesModel.addRow(new String[] {key, value});
+                }
+            } catch (IOException ex) {
+                String message = "Error loading deploy properties: " + ex.getMessage();
+                LOG.error(message, ex);
+                CompositeErrorDialog.showErrorDialog(message, ex);
+            }
+        }
     }
     
     

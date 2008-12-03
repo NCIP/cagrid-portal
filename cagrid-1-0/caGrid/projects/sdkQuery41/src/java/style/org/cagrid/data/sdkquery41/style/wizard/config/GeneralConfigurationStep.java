@@ -37,8 +37,10 @@ public class GeneralConfigurationStep extends AbstractStyleConfigurationStep {
     
 
     public void applyConfiguration() throws Exception {
-        // TODO Auto-generated method stub
+        // just in case...
+        validateSdkDirectory();
 
+        
     }
     
     
@@ -48,7 +50,7 @@ public class GeneralConfigurationStep extends AbstractStyleConfigurationStep {
             throw new NullPointerException("No SDK directory has been set");
         }
         
-        // does the directory exist, and is it a directory
+        // does the directory exist, and is it a directory?
         if (!sdkDirectory.exists()) {
             throw new FileNotFoundException("Selected SDK directory ( " + sdkDirectory.getAbsolutePath() + ") does not exist");
         }
