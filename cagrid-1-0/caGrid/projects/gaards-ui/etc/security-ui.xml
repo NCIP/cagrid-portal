@@ -245,6 +245,13 @@
 								<height>650</height>
 							</dimensions>
 						</component>
+						<component>
+							<title>Auditing</title>
+							<description>Perform Audit</description>
+							<classname>org.cagrid.gaards.ui.dorian.idp.IdentityProviderAuditSearchWindow</classname>
+							<icon>/auditing.png</icon>
+							<showOnToolBar>false</showOnToolBar>
+						</component>
 					</components>
 				</menu>
 			</submenus>
