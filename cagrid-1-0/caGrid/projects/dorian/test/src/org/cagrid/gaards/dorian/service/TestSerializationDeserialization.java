@@ -39,9 +39,8 @@ import org.cagrid.gaards.saml.encoding.SAMLConstants;
 
 
 public class TestSerializationDeserialization extends TestCase {
-    
-    
-    public void testRequestUserCertificateRequest(){
+
+    public void testRequestUserCertificateRequest() {
         try {
             CA ca = new CA();
             Credential c = ca.createIdentityCertificate("some signer");
@@ -141,7 +140,8 @@ public class TestSerializationDeserialization extends TestCase {
             lReq.setCertificateLifetime(cl);
             req.setLifetime(lReq);
             String str = Utils.serialize(req);
-            RequestUserCertificateRequest req2 = ( RequestUserCertificateRequest) Utils.deserialize(str, RequestUserCertificateRequest.class);
+            RequestUserCertificateRequest req2 = (RequestUserCertificateRequest) Utils.deserialize(str,
+                RequestUserCertificateRequest.class);
             SAMLAssertion saml2 = req2.getSaml().getAssertion();
             saml2.verify(cert);
             try {
@@ -155,7 +155,7 @@ public class TestSerializationDeserialization extends TestCase {
         } catch (Exception e) {
             FaultUtil.printFault(e);
             fail(e.getMessage());
-        } 
+        }
     }
 
 

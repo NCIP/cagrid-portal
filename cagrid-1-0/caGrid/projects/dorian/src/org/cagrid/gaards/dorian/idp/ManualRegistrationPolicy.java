@@ -13,22 +13,22 @@ import org.cagrid.gaards.dorian.stubs.types.InvalidUserPropertyFault;
  */
 public class ManualRegistrationPolicy implements IdPRegistrationPolicy {
 
-	public String getDescription() {
-		return "This policy requires registering users, to be manually approved my an administrator";
-	}
+    public String getDescription() {
+        return "This policy requires registering users, to be manually approved my an administrator";
+    }
 
-	public String getName() {
-		return "Manual Registration";
-	}
 
-	public ApplicationReview register(Application a) throws DorianInternalFault,
-			InvalidUserPropertyFault {
-		ApplicationReview ar = new ApplicationReview();
-		ar.setStatus(LocalUserStatus.Pending);
-		ar.setRole(LocalUserRole.Non_Administrator);
-		ar
-				.setMessage("Your application will be reviewed by an administrator.");
-		return ar;
-	}
+    public String getName() {
+        return "Manual Registration";
+    }
+
+
+    public ApplicationReview register(Application a) throws DorianInternalFault, InvalidUserPropertyFault {
+        ApplicationReview ar = new ApplicationReview();
+        ar.setStatus(LocalUserStatus.Pending);
+        ar.setRole(LocalUserRole.Non_Administrator);
+        ar.setMessage("Your application will be reviewed by an administrator.");
+        return ar;
+    }
 
 }

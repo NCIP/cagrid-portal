@@ -25,9 +25,11 @@ public class DorianProperties {
         this.eventManager = eventManager;
     }
 
+
     public EventManager getEventManager() {
         return eventManager;
     }
+
 
     public IdentityProviderProperties getIdentityProviderProperties() {
         return identityProviderProperties;

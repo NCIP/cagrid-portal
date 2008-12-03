@@ -831,7 +831,7 @@ public class TestUserCertificateManager extends TestCase implements Publisher {
             UserCertificateFilter exactDates = new UserCertificateFilter();
             DateRange range = new DateRange();
             exactDates.setDateRange(range);
-            
+
             GregorianCalendar start = new GregorianCalendar();
             start.setTime(cert.getNotBefore());
             GregorianCalendar end = new GregorianCalendar();

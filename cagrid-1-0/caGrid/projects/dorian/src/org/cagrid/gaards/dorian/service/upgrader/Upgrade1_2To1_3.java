@@ -59,6 +59,7 @@ public class Upgrade1_2To1_3 extends Upgrade {
         }
     }
 
+
     private void upgradeGridUserManager(boolean trialRun) throws Exception {
         Database db = getBeanUtils().getDatabase();
         if (db.tableExists(UserManager.USERS_TABLE)) {
@@ -69,8 +70,8 @@ public class Upgrade1_2To1_3 extends Upgrade {
                     System.out.print("Updating the grid user field " + UserManager.GID_FIELD
                         + " from VARCHAR to TEXT....");
                     c = db.getConnection();
-                    PreparedStatement s = c.prepareStatement("ALTER TABLE " + UserManager.USERS_TABLE
-                        + " MODIFY " +UserManager.GID_FIELD + " TEXT NOT NULL");
+                    PreparedStatement s = c.prepareStatement("ALTER TABLE " + UserManager.USERS_TABLE + " MODIFY "
+                        + UserManager.GID_FIELD + " TEXT NOT NULL");
                     s.execute();
                     s.close();
                     System.out.println(" COMPLETED.");
@@ -78,8 +79,7 @@ public class Upgrade1_2To1_3 extends Upgrade {
                     System.out.print("The grid user field " + UserManager.GID_FIELD
                         + " needs to be updated from from VARCHAR to TEXT.");
                 }
-                
-              
+
             } catch (Exception e) {
                 throw e;
             } finally {
@@ -99,8 +99,8 @@ public class Upgrade1_2To1_3 extends Upgrade {
                     System.out.print("Updating the host certificate field " + HostCertificateManager.SUBJECT
                         + " from VARCHAR to TEXT....");
                     c = db.getConnection();
-                    PreparedStatement s = c.prepareStatement("ALTER TABLE " + HostCertificateManager.TABLE
-                        + " MODIFY " + HostCertificateManager.SUBJECT + " TEXT NOT NULL");
+                    PreparedStatement s = c.prepareStatement("ALTER TABLE " + HostCertificateManager.TABLE + " MODIFY "
+                        + HostCertificateManager.SUBJECT + " TEXT NOT NULL");
                     s.execute();
                     s.close();
                     System.out.println(" COMPLETED.");
@@ -108,12 +108,12 @@ public class Upgrade1_2To1_3 extends Upgrade {
                     System.out.print("The host certificate field " + HostCertificateManager.SUBJECT
                         + " needs to be updated from from VARCHAR to TEXT.");
                 }
-                
+
                 if (!trialRun) {
                     System.out.print("Updating the host certificate field " + HostCertificateManager.OWNER
                         + " from VARCHAR to TEXT....");
-                    PreparedStatement s = c.prepareStatement("ALTER TABLE " + HostCertificateManager.TABLE
-                        + " MODIFY " + HostCertificateManager.OWNER + " TEXT NOT NULL");
+                    PreparedStatement s = c.prepareStatement("ALTER TABLE " + HostCertificateManager.TABLE + " MODIFY "
+                        + HostCertificateManager.OWNER + " TEXT NOT NULL");
                     s.execute();
                     s.close();
                     System.out.println(" COMPLETED.");

@@ -3,6 +3,7 @@ package org.cagrid.gaards.dorian.federation;
 import org.cagrid.gaards.dorian.stubs.types.DorianInternalFault;
 import org.cagrid.gaards.dorian.stubs.types.UserPolicyFault;
 
+
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
@@ -12,12 +13,12 @@ import org.cagrid.gaards.dorian.stubs.types.UserPolicyFault;
  */
 
 public class ManualApprovalPolicy extends AccountPolicy {
-	public void applyPolicy(TrustedIdP idp, GridUser user)
-			throws DorianInternalFault, UserPolicyFault {
+    public void applyPolicy(TrustedIdP idp, GridUser user) throws DorianInternalFault, UserPolicyFault {
 
-	}
+    }
 
-	public String getDisplayName() {
-		return "Manual Approval / Manual Renewal";
-	}
+
+    public String getDisplayName() {
+        return "Manual Approval / Manual Renewal";
+    }
 }

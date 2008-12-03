@@ -483,14 +483,14 @@
 		</xsd:restriction>
 	</xsd:simpleType>
 
-<xsd:element name="LocalIdentityProviderAuditRecord" type="idp:LocalIdentityProviderAuditRecord" />
-	<xsd:complexType name="LocalIdentityProviderAuditRecord">
+<xsd:element name="IdentityProviderAuditRecord" type="idp:IdentityProviderAuditRecord" />
+	<xsd:complexType name="IdentityProviderAuditRecord">
 		<xsd:sequence>
 			<xsd:element name="TargetId" type="xsd:string" minOccurs="0"
 				maxOccurs="1" />
 			<xsd:element name="ReportingPartyId" type="xsd:string"
 				minOccurs="1" maxOccurs="1" />
-			<xsd:element name="AuditType" type="idp:LocalIdentityProviderAudit"
+			<xsd:element name="AuditType" type="idp:IdentityProviderAudit"
 				minOccurs="1" maxOccurs="1" />
 			<xsd:element name="OccurredAt" type="xsd:dateTime"
 				minOccurs="1" maxOccurs="1" />
@@ -498,14 +498,14 @@
 				minOccurs="1" maxOccurs="1" />
 		</xsd:sequence>
 	</xsd:complexType>
-	<xsd:element name="LocalIdentityProviderAuditFilter" type="idp:LocalIdentityProviderAuditFilter" />
-	<xsd:complexType name="LocalIdentityProviderAuditFilter">
+	<xsd:element name="IdentityProviderAuditFilter" type="idp:IdentityProviderAuditFilter" />
+	<xsd:complexType name="IdentityProviderAuditFilter">
 		<xsd:sequence>
 			<xsd:element name="TargetId" type="xsd:string" minOccurs="0"
 				maxOccurs="1" />
 			<xsd:element name="ReportingPartyId" type="xsd:string"
 				minOccurs="0" maxOccurs="1" />
-			<xsd:element name="AuditType" type="idp:LocalIdentityProviderAudit"
+			<xsd:element name="AuditType" type="idp:IdentityProviderAudit"
 				minOccurs="0" maxOccurs="1" />
 			<xsd:element name="StartDate" type="xsd:dateTime"
 				minOccurs="0" maxOccurs="1" />
@@ -516,8 +516,8 @@
 		</xsd:sequence>
 	</xsd:complexType>
 
-	<xsd:element name="LocalIdentityProviderAudit" type="idp:LocalIdentityProviderAudit" />
-	<xsd:simpleType name="LocalIdentityProviderAudit">
+	<xsd:element name="IdentityProviderAudit" type="idp:IdentityProviderAudit" />
+	<xsd:simpleType name="IdentityProviderAudit">
 		<xsd:restriction base="xsd:string">
 			<xsd:enumeration value="Registration" />
 			<xsd:enumeration value="AccountUpdated" />
@@ -526,7 +526,7 @@
 			<xsd:enumeration value="PasswordChanged" />
 			<xsd:enumeration value="SuccessfulLogin" />
 			<xsd:enumeration value="InvalidLogin" />
-			<xsd:enumeration value="PermissionDenied" />
+			<xsd:enumeration value="LocalAccessDenied" />
 		</xsd:restriction>
 	</xsd:simpleType>
 </xsd:schema>

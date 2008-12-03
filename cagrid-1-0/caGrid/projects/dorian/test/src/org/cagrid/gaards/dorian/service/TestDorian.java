@@ -900,8 +900,8 @@ public class TestDorian extends TestCase {
     }
 
 
-    private void checkCertificate(String expectedIdentity, CertificateLifetime lifetime, PrivateKey key, X509Certificate cert)
-        throws Exception {
+    private void checkCertificate(String expectedIdentity, CertificateLifetime lifetime, PrivateKey key,
+        X509Certificate cert) throws Exception {
         assertNotNull(cert);
 
         GlobusCredential cred = new GlobusCredential(key, new X509Certificate[]{cert});

@@ -418,7 +418,6 @@ public class TestHostCertificateManager extends TestCase implements Publisher {
     }
 
 
-
     public void testApproveActiveHostCertificate() {
         try {
             HostCertificateManager hcm = new HostCertificateManager(db, getConf(), ca, this, blackList);

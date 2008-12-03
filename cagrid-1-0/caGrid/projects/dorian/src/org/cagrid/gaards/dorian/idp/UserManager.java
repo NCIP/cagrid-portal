@@ -109,7 +109,7 @@ public class UserManager extends LoggingObject {
                             Date unlock = new Date(ps.getLockoutExpiration());
                             if (eventManager != null) {
                                 eventManager.logEvent(u.getUserId(), AuditConstants.SYSTEM_ID,
-                                    LocalIdentityProviderAudit.AccountLocked.getValue(),
+                                    IdentityProviderAudit.AccountLocked.getValue(),
                                     "Account locked because of to many consecutive invalid logins ("
                                         + conf.getPasswordSecurityPolicy().getConsecutiveInvalidLogins()
                                         + ").  The lock will expire on " + unlock.toString() + ".");
@@ -120,7 +120,7 @@ public class UserManager extends LoggingObject {
                                     .logEvent(
                                         u.getUserId(),
                                         AuditConstants.SYSTEM_ID,
-                                        LocalIdentityProviderAudit.AccountLocked.getValue(),
+                                        IdentityProviderAudit.AccountLocked.getValue(),
                                         "Account locked because of to many total invalid logins ("
                                             + conf.getPasswordSecurityPolicy().getTotalInvalidLogins()
                                             + ").  The lock will not expire until the account password is reset by an administrator.");
@@ -138,7 +138,7 @@ public class UserManager extends LoggingObject {
                                 updateUser(u);
                                 if (eventManager != null) {
                                     eventManager.logEvent(u.getUserId(), AuditConstants.SYSTEM_ID,
-                                        LocalIdentityProviderAudit.AccountUpdated.getValue(),
+                                        IdentityProviderAudit.AccountUpdated.getValue(),
                                         "Password encryption algorithm updated from crypt to "
                                             + PasswordSecurityManager.PASSWORD_DIGEST_ALGORITHM + ".");
                                 }
@@ -526,7 +526,7 @@ public class UserManager extends LoggingObject {
                 user.setRole(LocalUserRole.fromValue(rs.getString("ROLE")));
                 if (includePassword) {
                     user.setPasswordSecurity(this.passwordSecurityManager.getEntry(user.getUserId(), true));
-                }else{
+                } else {
                     user.setPasswordSecurity(this.passwordSecurityManager.getEntry(user.getUserId(), false));
                 }
                 users.add(user);

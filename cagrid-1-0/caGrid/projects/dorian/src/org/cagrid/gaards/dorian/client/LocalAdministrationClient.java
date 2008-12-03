@@ -9,6 +9,8 @@ import java.util.List;
 
 import org.apache.axis.types.URI.MalformedURIException;
 import org.cagrid.gaards.dorian.common.DorianFault;
+import org.cagrid.gaards.dorian.idp.IdentityProviderAuditFilter;
+import org.cagrid.gaards.dorian.idp.IdentityProviderAuditRecord;
 import org.cagrid.gaards.dorian.idp.LocalUser;
 import org.cagrid.gaards.dorian.idp.LocalUserFilter;
 import org.cagrid.gaards.dorian.stubs.types.DorianInternalFault;
@@ -168,4 +170,37 @@ public class LocalAdministrationClient {
 		}
 
 	}
+	
+	 /**
+     * This method allows an administrator to perform an audit on the Dorian Identity Provider.
+     * 
+     * @param f
+     *            The audit search criteria
+     * @return The list of audit records that meet the search criteria
+     *         specified.
+     * @throws DorianFault
+     * @throws DorianInternalFault
+     * @throws PermissionDeniedFault
+     */
+
+    public List<IdentityProviderAuditRecord> performAudit(IdentityProviderAuditFilter f) throws DorianFault, DorianInternalFault,
+        PermissionDeniedFault {
+        try {
+            List<IdentityProviderAuditRecord> list = Utils.asList(client.performIdentityProviderAudit(f));
+            return list;
+        } catch (DorianInternalFault gie) {
+            throw gie;
+        } catch (PermissionDeniedFault fault) {
+            throw fault;
+        } catch (Exception e) {
+            FaultUtil.printFault(e);
+            DorianFault fault = new DorianFault();
+            fault.setFaultString(Utils.getExceptionMessage(e));
+            FaultHelper helper = new FaultHelper(fault);
+            helper.addFaultCause(e);
+            fault = (DorianFault) helper.getFault();
+            throw fault;
+        }
+
+    }
 }

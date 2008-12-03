@@ -127,9 +127,9 @@ public class TestTrustedIdPManager extends TestCase {
                     fail("Unexpected error message received when trying to validate that a trusted idp could not be added with an invalid display name.");
                 }
             }
-            
+
             StringBuffer sb = new StringBuffer();
-            for(int i=0; i<100; i++){
+            for (int i = 0; i < 100; i++) {
                 sb.append("t");
             }
             idp1.setDisplayName(sb.toString());
@@ -145,15 +145,15 @@ public class TestTrustedIdPManager extends TestCase {
             idp1.setDisplayName(idp1.getName());
             idp1 = tm.addTrustedIdP(idp1);
             assertEquals(1, tm.getTrustedIdPs().length);
-            
+
         } catch (Exception e) {
             FaultUtil.printFault(e);
             assertTrue(false);
         }
 
     }
-    
-    
+
+
     public void testInvalidAuthenticationServiceURL() {
         try {
             String name = "Test IdP";
@@ -168,11 +168,11 @@ public class TestTrustedIdPManager extends TestCase {
                     fail("Unexpected error message received when trying to validate that a trusted idp could not be added with an invalid authentication service URL.");
                 }
             }
-         
+
             idp1.setAuthenticationServiceURL("https://localhost");
             idp1 = tm.addTrustedIdP(idp1);
             assertEquals(1, tm.getTrustedIdPs().length);
-            
+
         } catch (Exception e) {
             FaultUtil.printFault(e);
             assertTrue(false);

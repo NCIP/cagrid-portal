@@ -90,24 +90,24 @@ public class IdentityProvider extends LoggingObject {
                 this.eventManager.registerHandler(this.identityProviderAuditor);
             }
 
-            this.eventManager.registerEventWithHandler(new EventToHandlerMapping(
-                LocalIdentityProviderAudit.AccountLocked.getValue(), AuditingConstants.IDENTITY_PROVIDER_AUDITOR));
+            this.eventManager.registerEventWithHandler(new EventToHandlerMapping(IdentityProviderAudit.AccountLocked
+                .getValue(), AuditingConstants.IDENTITY_PROVIDER_AUDITOR));
 
-            this.eventManager.registerEventWithHandler(new EventToHandlerMapping(
-                LocalIdentityProviderAudit.AccountRemoved.getValue(), AuditingConstants.IDENTITY_PROVIDER_AUDITOR));
-            this.eventManager.registerEventWithHandler(new EventToHandlerMapping(
-                LocalIdentityProviderAudit.AccountUpdated.getValue(), AuditingConstants.IDENTITY_PROVIDER_AUDITOR));
+            this.eventManager.registerEventWithHandler(new EventToHandlerMapping(IdentityProviderAudit.AccountRemoved
+                .getValue(), AuditingConstants.IDENTITY_PROVIDER_AUDITOR));
+            this.eventManager.registerEventWithHandler(new EventToHandlerMapping(IdentityProviderAudit.AccountUpdated
+                .getValue(), AuditingConstants.IDENTITY_PROVIDER_AUDITOR));
 
+            this.eventManager.registerEventWithHandler(new EventToHandlerMapping(IdentityProviderAudit.InvalidLogin
+                .getValue(), AuditingConstants.IDENTITY_PROVIDER_AUDITOR));
+            this.eventManager.registerEventWithHandler(new EventToHandlerMapping(IdentityProviderAudit.PasswordChanged
+                .getValue(), AuditingConstants.IDENTITY_PROVIDER_AUDITOR));
             this.eventManager.registerEventWithHandler(new EventToHandlerMapping(
-                LocalIdentityProviderAudit.InvalidLogin.getValue(), AuditingConstants.IDENTITY_PROVIDER_AUDITOR));
-            this.eventManager.registerEventWithHandler(new EventToHandlerMapping(
-                LocalIdentityProviderAudit.PasswordChanged.getValue(), AuditingConstants.IDENTITY_PROVIDER_AUDITOR));
-            this.eventManager.registerEventWithHandler(new EventToHandlerMapping(
-                LocalIdentityProviderAudit.PermissionDenied.getValue(), AuditingConstants.IDENTITY_PROVIDER_AUDITOR));
-            this.eventManager.registerEventWithHandler(new EventToHandlerMapping(
-                LocalIdentityProviderAudit.Registration.getValue(), AuditingConstants.IDENTITY_PROVIDER_AUDITOR));
-            this.eventManager.registerEventWithHandler(new EventToHandlerMapping(
-                LocalIdentityProviderAudit.SuccessfulLogin.getValue(), AuditingConstants.IDENTITY_PROVIDER_AUDITOR));
+                IdentityProviderAudit.LocalAccessDenied.getValue(), AuditingConstants.IDENTITY_PROVIDER_AUDITOR));
+            this.eventManager.registerEventWithHandler(new EventToHandlerMapping(IdentityProviderAudit.Registration
+                .getValue(), AuditingConstants.IDENTITY_PROVIDER_AUDITOR));
+            this.eventManager.registerEventWithHandler(new EventToHandlerMapping(IdentityProviderAudit.SuccessfulLogin
+                .getValue(), AuditingConstants.IDENTITY_PROVIDER_AUDITOR));
         } catch (Exception e) {
             logError(Utils.getExceptionMessage(e), e);
             String mess = "An unexpected error occurred initializing the auditing system:\n"
@@ -135,16 +135,16 @@ public class IdentityProvider extends LoggingObject {
             SAMLAssertion saml = assertionManager.getAuthenticationAssertion(requestor.getUserId(), requestor
                 .getFirstName(), requestor.getLastName(), requestor.getEmail());
             this.eventManager.logEvent(requestor.getUserId(), AuditConstants.SYSTEM_ID,
-                LocalIdentityProviderAudit.SuccessfulLogin.getValue(), "Successful login using "
+                IdentityProviderAudit.SuccessfulLogin.getValue(), "Successful login using "
                     + credential.getClass().getName() + ".");
             return saml;
         } catch (InvalidCredentialFault e) {
-            this.eventManager.logEvent(uid, AuditConstants.SYSTEM_ID, LocalIdentityProviderAudit.InvalidLogin
-                .getValue(), "Authentication Failed:\n\n" + FaultUtil.printFaultToString(e));
+            this.eventManager.logEvent(uid, AuditConstants.SYSTEM_ID, IdentityProviderAudit.InvalidLogin.getValue(),
+                "Authentication Failed:\n\n" + FaultUtil.printFaultToString(e));
             throw e;
         } catch (CredentialNotSupportedFault e) {
-            this.eventManager.logEvent(uid, AuditConstants.SYSTEM_ID, LocalIdentityProviderAudit.InvalidLogin
-                .getValue(), "Authentication Failed:\n\n" + FaultUtil.printFaultToString(e));
+            this.eventManager.logEvent(uid, AuditConstants.SYSTEM_ID, IdentityProviderAudit.InvalidLogin.getValue(),
+                "Authentication Failed:\n\n" + FaultUtil.printFaultToString(e));
             throw e;
         } catch (DorianInternalFault e) {
             logError(e.getMessage(), e);
@@ -191,7 +191,7 @@ public class IdentityProvider extends LoggingObject {
                 requestor.setPassword(newPassword);
                 this.userManager.updateUser(requestor);
                 this.eventManager.logEvent(requestor.getUserId(), AuditConstants.SYSTEM_ID,
-                    LocalIdentityProviderAudit.PasswordChanged.getValue(), "Password changed by user.");
+                    IdentityProviderAudit.PasswordChanged.getValue(), "Password changed by user.");
             } catch (NoSuchUserFault e) {
                 logError(e.getMessage(), e);
                 String message = "An unexpected error occurred in trying to changing the password for the user "
@@ -208,14 +208,14 @@ public class IdentityProvider extends LoggingObject {
         } catch (CredentialNotSupportedFault e) {
             String message = "Permission to change the " + credential.getUserId() + " password was denied.";
             this.eventManager.logEvent(AuditConstants.SYSTEM_ID, AuditConstants.SYSTEM_ID,
-                FederationAudit.PermissionDenied.getValue(), message + "\n\n" + FaultUtil.printFaultToString(e));
+                IdentityProviderAudit.LocalAccessDenied.getValue(), message + "\n\n" + FaultUtil.printFaultToString(e));
             PermissionDeniedFault fault = new PermissionDeniedFault();
             fault.setFaultString(e.getFaultString());
             throw fault;
         } catch (InvalidCredentialFault e) {
             String message = "Permission to change the " + credential.getUserId() + " password was denied.";
             this.eventManager.logEvent(AuditConstants.SYSTEM_ID, AuditConstants.SYSTEM_ID,
-                FederationAudit.PermissionDenied.getValue(), message + "\n\n" + FaultUtil.printFaultToString(e));
+                IdentityProviderAudit.LocalAccessDenied.getValue(), message + "\n\n" + FaultUtil.printFaultToString(e));
 
             PermissionDeniedFault fault = new PermissionDeniedFault();
             fault.setFaultString(e.getFaultString());
@@ -263,7 +263,7 @@ public class IdentityProvider extends LoggingObject {
             u.setRole(role);
             u.setStatus(status);
             userManager.addUser(u);
-            this.eventManager.logEvent(u.getUserId(), AuditConstants.SYSTEM_ID, LocalIdentityProviderAudit.Registration
+            this.eventManager.logEvent(u.getUserId(), AuditConstants.SYSTEM_ID, IdentityProviderAudit.Registration
                 .getValue(), "User registered with the initial satus: " + status.getValue());
             return message;
         } catch (DorianInternalFault e) {
@@ -288,7 +288,7 @@ public class IdentityProvider extends LoggingObject {
             throw e;
         } catch (PermissionDeniedFault e) {
             String message = "Permission to obtain information on the  user, " + uid + " was denied:";
-            this.eventManager.logEvent(requestorUID, AuditConstants.SYSTEM_ID, FederationAudit.PermissionDenied
+            this.eventManager.logEvent(requestorUID, AuditConstants.SYSTEM_ID, IdentityProviderAudit.LocalAccessDenied
                 .getValue(), message + "\n\n" + Utils.getExceptionMessage(e));
             throw e;
         }
@@ -308,7 +308,7 @@ public class IdentityProvider extends LoggingObject {
             throw e;
         } catch (PermissionDeniedFault e) {
             String message = "Permission to search for users was denied.";
-            this.eventManager.logEvent(requestorUID, AuditConstants.SYSTEM_ID, FederationAudit.PermissionDenied
+            this.eventManager.logEvent(requestorUID, AuditConstants.SYSTEM_ID, IdentityProviderAudit.LocalAccessDenied
                 .getValue(), message + "\n\n" + Utils.getExceptionMessage(e));
             throw e;
         }
@@ -323,11 +323,11 @@ public class IdentityProvider extends LoggingObject {
             LocalUser beforeUpdate = this.userManager.getUser(u.getUserId());
             this.userManager.updateUser(u);
             if (u.getPassword() != null) {
-                this.eventManager.logEvent(u.getUserId(), requestorUID, LocalIdentityProviderAudit.PasswordChanged
+                this.eventManager.logEvent(u.getUserId(), requestorUID, IdentityProviderAudit.PasswordChanged
                     .getValue(), "Password changed by " + u.getUserId() + ".");
             }
-            this.eventManager.logEvent(u.getUserId(), requestorUID, LocalIdentityProviderAudit.AccountUpdated
-                .getValue(), ReportUtils.generateReport(beforeUpdate, this.userManager.getUser(u.getUserId())));
+            this.eventManager.logEvent(u.getUserId(), requestorUID, IdentityProviderAudit.AccountUpdated.getValue(),
+                ReportUtils.generateReport(beforeUpdate, this.userManager.getUser(u.getUserId())));
         } catch (DorianInternalFault e) {
             String message = "An unexpected error occurred while trying to update the user " + u.getUserId() + ": ";
             this.eventManager.logEvent(AuditConstants.SYSTEM_ID, AuditConstants.SYSTEM_ID,
@@ -335,7 +335,7 @@ public class IdentityProvider extends LoggingObject {
             throw e;
         } catch (PermissionDeniedFault e) {
             String message = "Permission to update the user " + u.getUserId() + " was denied.";
-            this.eventManager.logEvent(requestorUID, AuditConstants.SYSTEM_ID, FederationAudit.PermissionDenied
+            this.eventManager.logEvent(requestorUID, AuditConstants.SYSTEM_ID, IdentityProviderAudit.LocalAccessDenied
                 .getValue(), message + "\n\n" + Utils.getExceptionMessage(e));
             throw e;
         }
@@ -369,7 +369,7 @@ public class IdentityProvider extends LoggingObject {
             LocalUser requestor = verifyUser(requestorUID);
             verifyAdministrator(requestor);
             userManager.removeUser(userId);
-            this.eventManager.logEvent(userId, requestorUID, LocalIdentityProviderAudit.AccountRemoved.getValue(),
+            this.eventManager.logEvent(userId, requestorUID, IdentityProviderAudit.AccountRemoved.getValue(),
                 "The user account for " + userId + " was removed by " + requestorUID + ".");
         } catch (DorianInternalFault e) {
             String message = "An unexpected error occurred while trying to remove the user " + userId + ": ";
@@ -378,7 +378,7 @@ public class IdentityProvider extends LoggingObject {
             throw e;
         } catch (PermissionDeniedFault e) {
             String message = "Permission to remove the user " + userId + " was denied.";
-            this.eventManager.logEvent(requestorUID, AuditConstants.SYSTEM_ID, FederationAudit.PermissionDenied
+            this.eventManager.logEvent(requestorUID, AuditConstants.SYSTEM_ID, IdentityProviderAudit.LocalAccessDenied
                 .getValue(), message + "\n\n" + Utils.getExceptionMessage(e));
             throw e;
         }
@@ -407,18 +407,18 @@ public class IdentityProvider extends LoggingObject {
     }
 
 
-    public List<LocalIdentityProviderAuditRecord> performAudit(String requestorUID, LocalIdentityProviderAuditFilter f)
+    public List<IdentityProviderAuditRecord> performAudit(String requestorUID, IdentityProviderAuditFilter f)
         throws DorianInternalFault, PermissionDeniedFault {
         try {
             LocalUser requestor = verifyUser(requestorUID);
             verifyAdministrator(requestor);
             List<EventAuditor> handlers = new ArrayList<EventAuditor>();
             handlers.add(this.identityProviderAuditor);
-            List<LocalIdentityProviderAuditRecord> list = new ArrayList<LocalIdentityProviderAuditRecord>();
+            List<IdentityProviderAuditRecord> list = new ArrayList<IdentityProviderAuditRecord>();
             for (int i = 0; i < handlers.size(); i++) {
                 EventAuditor eh = handlers.get(i);
                 if (f == null) {
-                    f = new LocalIdentityProviderAuditFilter();
+                    f = new IdentityProviderAuditFilter();
                 }
                 String eventType = null;
                 if (f.getAuditType() != null) {
@@ -440,10 +440,10 @@ public class IdentityProvider extends LoggingObject {
                         f.getAuditMessage());
                     for (int j = 0; j < events.size(); j++) {
                         Event e = events.get(j);
-                        LocalIdentityProviderAuditRecord r = new LocalIdentityProviderAuditRecord();
+                        IdentityProviderAuditRecord r = new IdentityProviderAuditRecord();
                         r.setTargetId(e.getTargetId());
                         r.setReportingPartyId(e.getReportingPartyId());
-                        r.setAuditType(LocalIdentityProviderAudit.fromValue(e.getEventType()));
+                        r.setAuditType(IdentityProviderAudit.fromValue(e.getEventType()));
                         Calendar c = new GregorianCalendar();
                         c.setTimeInMillis(e.getOccurredAt());
                         r.setOccurredAt(c);
@@ -473,8 +473,8 @@ public class IdentityProvider extends LoggingObject {
             throw e;
         } catch (PermissionDeniedFault e) {
             String mess = "Caller not permitted to perform audits:";
-            this.eventManager.logEvent(requestorUID, AuditConstants.SYSTEM_ID,
-                LocalIdentityProviderAudit.PermissionDenied.getValue(), mess + "\n\n" + Utils.getExceptionMessage(e));
+            this.eventManager.logEvent(requestorUID, AuditConstants.SYSTEM_ID, IdentityProviderAudit.LocalAccessDenied
+                .getValue(), mess + "\n\n" + Utils.getExceptionMessage(e));
             throw e;
         }
     }

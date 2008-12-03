@@ -194,7 +194,7 @@ public abstract class CertificateAuthority extends LoggingObject {
             return cert;
         } catch (CertificateAuthorityFault e) {
             throw e;
-        }catch (Exception e) {
+        } catch (Exception e) {
             logError(e.getMessage(), e);
             CertificateAuthorityFault fault = new CertificateAuthorityFault();
             fault.setFaultString("Unexpected Error, could not sign certificate.");

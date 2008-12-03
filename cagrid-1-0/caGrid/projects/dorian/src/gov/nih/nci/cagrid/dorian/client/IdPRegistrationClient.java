@@ -21,16 +21,17 @@ import org.globus.wsrf.impl.security.authorization.Authorization;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public class IdPRegistrationClient{
+public class IdPRegistrationClient {
 
-	private DorianClient client;
+    private DorianClient client;
 
 
-	public IdPRegistrationClient(String serviceURI) throws MalformedURIException, RemoteException {
-		client = new DorianClient(serviceURI);
-	}
+    public IdPRegistrationClient(String serviceURI) throws MalformedURIException, RemoteException {
+        client = new DorianClient(serviceURI);
+    }
 
-	/**
+
+    /**
      * This method specifies an authorization policy that the client should use
      * for authorizing the server that it connects to.
      * 
@@ -42,23 +43,23 @@ public class IdPRegistrationClient{
         client.setAuthorization(authorization);
     }
 
-	public String register(Application a) throws DorianFault, DorianInternalFault, InvalidUserPropertyFault {
-		try {
-			return client.registerWithIdP(a);
-		} catch (DorianInternalFault gie) {
-			throw gie;
-		} catch (InvalidUserPropertyFault f) {
-			throw f;
-		} catch (Exception e) {
-			FaultUtil.printFault(e);
-			DorianFault fault = new DorianFault();
-			fault.setFaultString(Utils.getExceptionMessage(e));
-			FaultHelper helper = new FaultHelper(fault);
-			helper.addFaultCause(e);
-			fault = (DorianFault) helper.getFault();
-			throw fault;
-		}
-	}
-	
-	
+
+    public String register(Application a) throws DorianFault, DorianInternalFault, InvalidUserPropertyFault {
+        try {
+            return client.registerWithIdP(a);
+        } catch (DorianInternalFault gie) {
+            throw gie;
+        } catch (InvalidUserPropertyFault f) {
+            throw f;
+        } catch (Exception e) {
+            FaultUtil.printFault(e);
+            DorianFault fault = new DorianFault();
+            fault.setFaultString(Utils.getExceptionMessage(e));
+            FaultHelper helper = new FaultHelper(fault);
+            helper.addFaultCause(e);
+            fault = (DorianFault) helper.getFault();
+            throw fault;
+        }
+    }
+
 }

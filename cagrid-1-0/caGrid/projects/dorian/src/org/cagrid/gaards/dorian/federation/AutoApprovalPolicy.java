@@ -15,25 +15,26 @@ import org.cagrid.gaards.dorian.stubs.types.UserPolicyFault;
  */
 
 public class AutoApprovalPolicy extends AccountPolicy {
-	public void applyPolicy(TrustedIdP idp, GridUser user) throws DorianInternalFault, UserPolicyFault {
-		UserManager um = getUserManager();
-		// First we approve if the user has not been approved.
-		if (user.getUserStatus().equals(GridUserStatus.Pending)) {
-			user.setUserStatus(GridUserStatus.Active);
-			try {
-				um.updateUser(user);
-			} catch (Exception e) {
-				DorianInternalFault fault = new DorianInternalFault();
-				fault.setFaultString("Error updating the status of the user " + user.getGridId());
-				FaultHelper helper = new FaultHelper(fault);
-				helper.addFaultCause(e);
-				fault = (DorianInternalFault) helper.getFault();
-				throw fault;
-			}
-		}
-	}
+    public void applyPolicy(TrustedIdP idp, GridUser user) throws DorianInternalFault, UserPolicyFault {
+        UserManager um = getUserManager();
+        // First we approve if the user has not been approved.
+        if (user.getUserStatus().equals(GridUserStatus.Pending)) {
+            user.setUserStatus(GridUserStatus.Active);
+            try {
+                um.updateUser(user);
+            } catch (Exception e) {
+                DorianInternalFault fault = new DorianInternalFault();
+                fault.setFaultString("Error updating the status of the user " + user.getGridId());
+                FaultHelper helper = new FaultHelper(fault);
+                helper.addFaultCause(e);
+                fault = (DorianInternalFault) helper.getFault();
+                throw fault;
+            }
+        }
+    }
 
-	public String getDisplayName() {
-		return "Auto Approval / Manual Renewal";
-	}	
+
+    public String getDisplayName() {
+        return "Auto Approval / Manual Renewal";
+    }
 }

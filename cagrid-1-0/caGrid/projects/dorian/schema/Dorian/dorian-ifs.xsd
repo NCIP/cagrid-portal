@@ -303,7 +303,7 @@
 			<xsd:enumeration value="HostCertificateRenewed" />
 			<xsd:enumeration value="UserCertificateUpdated" />
 			<xsd:enumeration value="UserCertificateRemoved" />
-			<xsd:enumeration value="PermissionDenied" />
+			<xsd:enumeration value="AccessDenied" />
 			<xsd:enumeration value="SystemStartup" />
 			<xsd:enumeration value="InternalError" />
 		</xsd:restriction>

@@ -333,8 +333,8 @@ public class UserCertificateManager {
                         throw fault;
                     } else {
                         select.addClause("((" + NOT_BEFORE + ">=" + range.getStartDate().getTimeInMillis() + " AND "
-                            + NOT_AFTER + "<=" + range.getEndDate().getTimeInMillis() + ")" + " OR (" + NOT_BEFORE + "<="
-                            + range.getStartDate().getTimeInMillis() + " AND " + NOT_AFTER + ">="
+                            + NOT_AFTER + "<=" + range.getEndDate().getTimeInMillis() + ")" + " OR (" + NOT_BEFORE
+                            + "<=" + range.getStartDate().getTimeInMillis() + " AND " + NOT_AFTER + ">="
                             + range.getEndDate().getTimeInMillis() + ")" + " OR (" + NOT_BEFORE + ">="
                             + range.getStartDate().getTimeInMillis() + " AND " + NOT_BEFORE + "<="
                             + range.getEndDate().getTimeInMillis() + " AND " + NOT_AFTER + ">="

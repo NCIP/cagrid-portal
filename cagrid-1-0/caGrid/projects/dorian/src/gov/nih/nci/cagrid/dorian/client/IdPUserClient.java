@@ -22,7 +22,6 @@ import org.globus.wsrf.impl.security.authorization.Authorization;
 
 
 /**
- * 
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A href="mailto:hastings@bmi.osu.edu">Shannon Hastings </A>
@@ -31,81 +30,82 @@ import org.globus.wsrf.impl.security.authorization.Authorization;
  */
 public class IdPUserClient {
 
-	private DorianClient client;
+    private DorianClient client;
 
 
-	public IdPUserClient(String serviceURI) throws MalformedURIException, RemoteException {
-		client = new DorianClient(serviceURI);
-	}
+    public IdPUserClient(String serviceURI) throws MalformedURIException, RemoteException {
+        client = new DorianClient(serviceURI);
+    }
 
 
-	public SAMLAssertion authenticate(Credential cred) throws DorianFault, InvalidCredentialFault,
-		InsufficientAttributeFault, AuthenticationProviderFault {
+    public SAMLAssertion authenticate(Credential cred) throws DorianFault, InvalidCredentialFault,
+        InsufficientAttributeFault, AuthenticationProviderFault {
 
-		try {
-			String xml = client.authenticate(cred).getXml();
-			return SAMLUtils.stringToSAMLAssertion(xml);
-		} catch (InvalidCredentialFault f) {
-			throw f;
-		} catch (InsufficientAttributeFault f) {
-			throw f;
-		} catch (AuthenticationProviderFault f) {
-			throw f;
-		} catch (Exception e) {
-			FaultUtil.printFault(e);
-			DorianFault fault = new DorianFault();
-			fault.setFaultString(Utils.getExceptionMessage(e));
-			FaultHelper helper = new FaultHelper(fault);
-			helper.addFaultCause(e);
-			fault = (DorianFault) helper.getFault();
-			throw fault;
-		}
-	}
-
-
-	public SAMLAssertion authenticate(BasicAuthCredential cred) throws DorianFault, DorianInternalFault,
-		PermissionDeniedFault {
-		try {
-			String xml = client.authenticateWithIdP(cred).getXml();
-			return SAMLUtils.stringToSAMLAssertion(xml);
-		} catch (DorianInternalFault f) {
-			throw f;
-		} catch (PermissionDeniedFault f) {
-			throw f;
-		} catch (Exception e) {
-			FaultUtil.printFault(e);
-			DorianFault fault = new DorianFault();
-			fault.setFaultString(Utils.getExceptionMessage(e));
-			FaultHelper helper = new FaultHelper(fault);
-			helper.addFaultCause(e);
-			fault = (DorianFault) helper.getFault();
-			throw fault;
-		}
-	}
+        try {
+            String xml = client.authenticate(cred).getXml();
+            return SAMLUtils.stringToSAMLAssertion(xml);
+        } catch (InvalidCredentialFault f) {
+            throw f;
+        } catch (InsufficientAttributeFault f) {
+            throw f;
+        } catch (AuthenticationProviderFault f) {
+            throw f;
+        } catch (Exception e) {
+            FaultUtil.printFault(e);
+            DorianFault fault = new DorianFault();
+            fault.setFaultString(Utils.getExceptionMessage(e));
+            FaultHelper helper = new FaultHelper(fault);
+            helper.addFaultCause(e);
+            fault = (DorianFault) helper.getFault();
+            throw fault;
+        }
+    }
 
 
-	public void changePassword(BasicAuthCredential cred, String newPassword) throws DorianFault, DorianInternalFault,
-		PermissionDeniedFault, InvalidUserPropertyFault {
-		try {
-			client.changeIdPUserPassword(cred, newPassword);
-		} catch (DorianInternalFault f) {
-			throw f;
-		} catch (PermissionDeniedFault f) {
-			throw f;
-		} catch (InvalidUserPropertyFault f) {
-			throw f;
-		} catch (Exception e) {
-			FaultUtil.printFault(e);
-			DorianFault fault = new DorianFault();
-			fault.setFaultString(Utils.getExceptionMessage(e));
-			FaultHelper helper = new FaultHelper(fault);
-			helper.addFaultCause(e);
-			fault = (DorianFault) helper.getFault();
-			throw fault;
-		}
-	}
-	
-	/**
+    public SAMLAssertion authenticate(BasicAuthCredential cred) throws DorianFault, DorianInternalFault,
+        PermissionDeniedFault {
+        try {
+            String xml = client.authenticateWithIdP(cred).getXml();
+            return SAMLUtils.stringToSAMLAssertion(xml);
+        } catch (DorianInternalFault f) {
+            throw f;
+        } catch (PermissionDeniedFault f) {
+            throw f;
+        } catch (Exception e) {
+            FaultUtil.printFault(e);
+            DorianFault fault = new DorianFault();
+            fault.setFaultString(Utils.getExceptionMessage(e));
+            FaultHelper helper = new FaultHelper(fault);
+            helper.addFaultCause(e);
+            fault = (DorianFault) helper.getFault();
+            throw fault;
+        }
+    }
+
+
+    public void changePassword(BasicAuthCredential cred, String newPassword) throws DorianFault, DorianInternalFault,
+        PermissionDeniedFault, InvalidUserPropertyFault {
+        try {
+            client.changeIdPUserPassword(cred, newPassword);
+        } catch (DorianInternalFault f) {
+            throw f;
+        } catch (PermissionDeniedFault f) {
+            throw f;
+        } catch (InvalidUserPropertyFault f) {
+            throw f;
+        } catch (Exception e) {
+            FaultUtil.printFault(e);
+            DorianFault fault = new DorianFault();
+            fault.setFaultString(Utils.getExceptionMessage(e));
+            FaultHelper helper = new FaultHelper(fault);
+            helper.addFaultCause(e);
+            fault = (DorianFault) helper.getFault();
+            throw fault;
+        }
+    }
+
+
+    /**
      * This method specifies an authorization policy that the client should use
      * for authorizing the server that it connects to.
      * 

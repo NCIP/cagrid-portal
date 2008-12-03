@@ -13,28 +13,29 @@ import org.cagrid.gaards.dorian.stubs.types.UserPolicyFault;
  */
 public abstract class AccountPolicy {
 
-	private IdentityFederationProperties configuration;
+    private IdentityFederationProperties configuration;
 
-	private UserManager userManager;
-
-
-	public void configure(IdentityFederationProperties conf, UserManager um) {
-		this.configuration = conf;
-		this.userManager = um;
-	}
+    private UserManager userManager;
 
 
-	public abstract void applyPolicy(TrustedIdP idp, GridUser user) throws DorianInternalFault, UserPolicyFault;
+    public void configure(IdentityFederationProperties conf, UserManager um) {
+        this.configuration = conf;
+        this.userManager = um;
+    }
 
 
-	public IdentityFederationProperties getConfiguration() {
-		return configuration;
-	}
+    public abstract void applyPolicy(TrustedIdP idp, GridUser user) throws DorianInternalFault, UserPolicyFault;
 
 
-	public UserManager getUserManager() {
-		return userManager;
-	}
-	
-	public abstract String getDisplayName();
+    public IdentityFederationProperties getConfiguration() {
+        return configuration;
+    }
+
+
+    public UserManager getUserManager() {
+        return userManager;
+    }
+
+
+    public abstract String getDisplayName();
 }

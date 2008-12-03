@@ -13,89 +13,85 @@ import org.apache.commons.logging.LogFactory;
  */
 public abstract class LoggingObject {
 
-	protected Log log;
-	protected boolean loggerLookup = false;
+    protected Log log;
+    protected boolean loggerLookup = false;
 
 
-	private void initLogger() {
-		if (!loggerLookup) {
-			log = LogFactory.getLog(this.getClass().getName());
-			loggerLookup = true;
-		}
-	}
+    private void initLogger() {
+        if (!loggerLookup) {
+            log = LogFactory.getLog(this.getClass().getName());
+            loggerLookup = true;
+        }
+    }
 
 
-	public void debug(String s) {
-		initLogger();
-		if (log != null) {
-			log.debug(s);
-		}
-	}
+    public void debug(String s) {
+        initLogger();
+        if (log != null) {
+            log.debug(s);
+        }
+    }
 
 
-	public void info(String s) {
-		initLogger();
-		if (log != null) {
-			log.info(s);
-		}
-	}
+    public void info(String s) {
+        initLogger();
+        if (log != null) {
+            log.info(s);
+        }
+    }
 
 
-	public void logWarning(String s) {
-		initLogger();
-		if (log != null) {
-			log.warn(s);
-		}
-	}
+    public void logWarning(String s) {
+        initLogger();
+        if (log != null) {
+            log.warn(s);
+        }
+    }
 
 
-	public void logWarning(String s, Throwable thrown) {
-		initLogger();
-		if (log != null) {
-			log.warn(s, thrown);
-		}
-	}
+    public void logWarning(String s, Throwable thrown) {
+        initLogger();
+        if (log != null) {
+            log.warn(s, thrown);
+        }
+    }
 
 
-	public void logError(String s) {
-		initLogger();
-		if (log != null) {
-			log.error(s);
-		}
-	}
+    public void logError(String s) {
+        initLogger();
+        if (log != null) {
+            log.error(s);
+        }
+    }
 
 
-	public void logError(String s, Throwable thrown) {
-		initLogger();
-		if (log != null) {
-			log.error(s, thrown);
-		}
-	}
+    public void logError(String s, Throwable thrown) {
+        initLogger();
+        if (log != null) {
+            log.error(s, thrown);
+        }
+    }
 
 
+    public void logFatalError(String s) {
+        initLogger();
+        if (log != null) {
+            log.fatal(s);
+        }
+    }
 
 
-	public void logFatalError(String s) {
-		initLogger();
-		if (log != null) {
-			log.fatal(s);
-		}
-	}
+    public void logFatalError(String s, Throwable thrown) {
+        initLogger();
+        if (log != null) {
+            log.fatal(s, thrown);
+        }
+    }
 
 
-	public void logFatalError(String s, Throwable thrown) {
-		initLogger();
-		if (log != null) {
-			log.fatal(s, thrown);
-		}
-	}
-
-
-	public Log getLog() {
-		initLogger();
-		return log;
-	}
-	
-	
+    public Log getLog() {
+        initLogger();
+        return log;
+    }
 
 }

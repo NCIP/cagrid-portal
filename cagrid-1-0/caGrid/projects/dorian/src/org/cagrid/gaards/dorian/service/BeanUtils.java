@@ -44,7 +44,8 @@ public class BeanUtils {
     public IdentityProvider getIdentityProvider() throws Exception {
         return (IdentityProvider) factory.getBean(ConfigurationConstants.IDP_BEAN);
     }
-    
+
+
     public EventManager getEventManager() throws Exception {
         return (EventManager) factory.getBean(ConfigurationConstants.EVENT_MANAGER_BEAN);
     }

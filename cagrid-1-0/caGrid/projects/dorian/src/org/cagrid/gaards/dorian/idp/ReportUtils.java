@@ -1,7 +1,5 @@
 package org.cagrid.gaards.dorian.idp;
 
-
-
 public class ReportUtils {
 
     public static String generateReport(LocalUser original, LocalUser updated) {
