@@ -11,11 +11,11 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.io.File;
 import java.io.IOException;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -24,11 +24,12 @@ import javax.swing.border.TitledBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.table.DefaultTableModel;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.cagrid.data.sdkquery41.style.wizard.config.GeneralConfigurationStep;
 import org.cagrid.grape.utils.CompositeErrorDialog;
 
 import com.jgoodies.validation.Severity;
-import com.jgoodies.validation.ValidationMessage;
 import com.jgoodies.validation.ValidationResult;
 import com.jgoodies.validation.ValidationResultModel;
 import com.jgoodies.validation.message.SimpleValidationMessage;
@@ -45,11 +46,12 @@ import com.jgoodies.validation.view.ValidationComponentUtils;
  */
 public class GeneralConfigurationPanel extends AbstractWizardPanel {
     
+    private static Log LOG = LogFactory.getLog(GeneralConfigurationPanel.class);
+    
     private static final String KEY_SDK_DIRECTORY = "caCORE SDK Directory";
     
     private ValidationResultModel validationModel = null;
     private GeneralConfigurationStep configuration = null;
-    private DocumentChangeAdapter documentChangeListener = null;
     
     private JLabel sdkDirLabel = null;
     private JTextField sdkDirTextField = null;
@@ -63,11 +65,6 @@ public class GeneralConfigurationPanel extends AbstractWizardPanel {
         super(extensionDescription, info);
         this.validationModel = new DefaultValidationResultModel();
         this.configuration = new GeneralConfigurationStep(info);
-        this.documentChangeListener = new DocumentChangeAdapter() {
-            public void documentEdited(DocumentEvent e) {
-                validateInput();
-            }
-        };
         initialize();
     }
 
@@ -174,7 +171,12 @@ public class GeneralConfigurationPanel extends AbstractWizardPanel {
             sdkDirTextField = new JTextField();
             sdkDirTextField.setToolTipText("The directory in which the caCORE SDK 4.1 resides");
             sdkDirTextField.setEditable(false);
-            sdkDirTextField.getDocument().addDocumentListener(documentChangeListener);
+            sdkDirTextField.getDocument().addDocumentListener(new DocumentChangeAdapter() {
+                public void documentEdited(DocumentEvent e) {
+                    configuration.setSdkDirectory(new File(getSdkDirTextField().getText()));
+                    validateInput();
+                }
+            });
         }
         return sdkDirTextField;
     }
@@ -288,7 +290,15 @@ public class GeneralConfigurationPanel extends AbstractWizardPanel {
         
         // verify there's an SDK directory selected
         if (ValidationUtils.isNotBlank(getSdkDirTextField().getText())) {
-            result.add(validateSdkDirSelection());
+            try {
+                configuration.validateSdkDirectory();
+                result.add(new SimpleValidationMessage(KEY_SDK_DIRECTORY + " appears to be valid", 
+                    Severity.OK, KEY_SDK_DIRECTORY));
+            } catch (Exception ex) {
+                LOG.debug("Error validating selected SDK directory", ex);
+                result.add(new SimpleValidationMessage(KEY_SDK_DIRECTORY + " is not valid: " + ex.getMessage(), 
+                    Severity.ERROR, KEY_SDK_DIRECTORY));
+            }
         } else {
             result.add(new SimpleValidationMessage(KEY_SDK_DIRECTORY + " cannot be empty", 
                 Severity.ERROR, KEY_SDK_DIRECTORY));
@@ -297,6 +307,7 @@ public class GeneralConfigurationPanel extends AbstractWizardPanel {
         validationModel.setResult(result);
         
         updateComponentTreeSeverity();
+        
         // update next button enabled
         setNextEnabled(!validationModel.hasErrors());
     }
@@ -305,11 +316,5 @@ public class GeneralConfigurationPanel extends AbstractWizardPanel {
     private void updateComponentTreeSeverity() {
         ValidationComponentUtils.updateComponentTreeMandatoryAndBlankBackground(this);
         ValidationComponentUtils.updateComponentTreeSeverityBackground(this, validationModel.getResult());
-    }
-    
-    
-    private ValidationMessage validateSdkDirSelection() {
-        // TODO: implement me
-        return new SimpleValidationMessage("Not yet implemented", Severity.WARNING, KEY_SDK_DIRECTORY);
     }
 }
