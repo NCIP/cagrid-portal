@@ -15,6 +15,7 @@
 
     <conf name="impl" visibility="private" extends="service"/>
     <conf name="impl-test" visibility="private"/>
+    <conf name="serviceTools" visibility="private"/>
 
     <!-- Public Configurations-->
     <conf name="stubs" visibility="public"/>
@@ -57,6 +58,8 @@
     <!-- Specific caGrid Service Dependencies -->
     <dependency rev="latest.integration" org="caGrid" name="introduce" conf="extension->extension;service->serviceTools;impl-test->test"/>
     <dependency rev="latest.integration" org="caGrid" name="testing" conf="impl-test->system"/>
+    <dependency rev="latest.integration" org="caGrid" name="introduce-buildtools" conf="serviceTools->default"/>
+    <dependency rev="1.0b3" org="ant-contrib" name="ant-contrib" conf="serviceTools->*"/>
     
     <!-- External Dependencies -->
     <dependency rev="1.0" org="jdom" name="jdom" conf="service->*"/>
