@@ -16,12 +16,13 @@ import javax.swing.JTextField;
 
 import org.cagrid.gaards.authentication.BasicAuthentication;
 import org.cagrid.gaards.dorian.client.LocalUserClient;
+import org.cagrid.gaards.ui.common.ProgressPanel;
+import org.cagrid.gaards.ui.common.TitlePanel;
 import org.cagrid.gaards.ui.dorian.DorianHandle;
 import org.cagrid.gaards.ui.dorian.DorianLookAndFeel;
 import org.cagrid.gaards.ui.dorian.DorianServiceListComboBox;
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
-import org.cagrid.grape.LookAndFeel;
 import org.cagrid.grape.utils.ErrorDialog;
 
 
@@ -66,6 +67,10 @@ public class ChangePasswordWindow extends ApplicationComponent {
 
 	private JPasswordField newPassword = null;
 
+    private JPanel titlePanel = null;
+
+    private ProgressPanel progressPanel = null;
+
 
 	/**
 	 * This is the default constructor
@@ -108,6 +113,17 @@ public class ChangePasswordWindow extends ApplicationComponent {
 	 */
 	private JPanel getMainPanel() {
 		if (mainPanel == null) {
+			GridBagConstraints gridBagConstraints41 = new GridBagConstraints();
+			gridBagConstraints41.gridx = 0;
+			gridBagConstraints41.weightx = 1.0D;
+			gridBagConstraints41.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints41.gridy = 3;
+			GridBagConstraints gridBagConstraints31 = new GridBagConstraints();
+			gridBagConstraints31.gridx = 0;
+			gridBagConstraints31.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints31.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints31.weightx = 1.0D;
+			gridBagConstraints31.gridy = 0;
 			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
 			gridBagConstraints2.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints2.gridy = 2;
@@ -117,7 +133,7 @@ public class ChangePasswordWindow extends ApplicationComponent {
 			gridBagConstraints2.gridx = 0;
 			GridBagConstraints gridBagConstraints = new GridBagConstraints();
 			gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints.gridy = 0;
+			gridBagConstraints.gridy = 1;
 			gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
 			gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
 			gridBagConstraints.weightx = 1.0D;
@@ -127,6 +143,8 @@ public class ChangePasswordWindow extends ApplicationComponent {
 			mainPanel.setLayout(new GridBagLayout());
 			mainPanel.add(getAuthPanel(), gridBagConstraints);
 			mainPanel.add(getButtonPanel(), gridBagConstraints2);
+			mainPanel.add(getTitlePanel(), gridBagConstraints31);
+			mainPanel.add(getProgressPanel(), gridBagConstraints41);
 		}
 		return mainPanel;
 	}
@@ -212,9 +230,6 @@ public class ChangePasswordWindow extends ApplicationComponent {
 			serviceLabel.setText("Service");
 			authPanel = new JPanel();
 			authPanel.setLayout(new GridBagLayout());
-			authPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Login Information",
-				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, LookAndFeel.getPanelLabelColor()));
 			authPanel.add(serviceLabel, gridBagConstraints3);
 			authPanel.add(getService(), gridBagConstraints4);
 			authPanel.add(usernameLabel, gridBagConstraints5);
@@ -364,4 +379,30 @@ public class ChangePasswordWindow extends ApplicationComponent {
 		}
 		return newPassword;
 	}
+
+
+    /**
+     * This method initializes titlePanel	
+     * 	
+     * @return javax.swing.JPanel	
+     */
+    private JPanel getTitlePanel() {
+        if (titlePanel == null) {
+            titlePanel = new TitlePanel("Change Password","Change your account password with the Dorian identity provider");
+        }
+        return titlePanel;
+    }
+
+
+    /**
+     * This method initializes progressPanel	
+     * 	
+     * @return javax.swing.JPanel	
+     */
+    private ProgressPanel getProgressPanel() {
+        if (progressPanel == null) {
+            progressPanel = new ProgressPanel();
+        }
+        return progressPanel;
+    }
 }
