@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Required;
 
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
+ * @author <a href="mailto:manav.kher@semanticbits.com">Manav Kher</a>
  * 
  */
 public class DiscoveryModel {
@@ -105,12 +106,8 @@ public class DiscoveryModel {
 	}
 
 	public void selectResults(String id) {
-		DiscoveryResults res = getResults(id);
-		if (res == null) {
-			throw new CaGridPortletApplicationException("No such results '"
-					+ id + "'.");
-		}
-		setSelectedResults(res);
+        // maybe null. But it is gracefully handled
+		setSelectedResults(getResults(id));
 		setSelectedDirectory(null);
 	}
 
