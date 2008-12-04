@@ -36,7 +36,7 @@
 				<include name="*.jar" />
 			</fileset>
 		</delete>
-		<ivy:retrieve conf="skeleton" pattern="${basedir}/skeleton/lib/[originalname](.[ext])" sync="true" type="jar" />
+		<ivy:retrieve conf="skeleton" pattern="${basedir}/skeleton/lib/[originalname](.[ext])" type="jar" />
 		<ivy:retrieve conf="skeletonTools" pattern="${basedir}/skeleton/tools/lib/[originalname](.[ext])" type="jar" />
 		<ivy:retrieve conf="schema.grape" pattern="${ivy.resolved.artifacts.dir}/dependencies/xsd/grape/[type]/[artifact](.[ext])" sync="true" type="xsd" />
 		
