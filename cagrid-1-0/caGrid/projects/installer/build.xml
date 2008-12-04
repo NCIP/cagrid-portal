@@ -150,7 +150,6 @@
 			<filterset>
 				<filter token="CAGRID_VERSION" value="${cagrid.version}" />
 				<filter token="CAGRID_DOWNLOAD_URL" value="${cagrid.download.url}" />
-				<filter token="PORTAL_DOWNLOAD_URL" value="${portal.download.url}" />
 			</filterset>
 		</copy>
 	</target>

@@ -3,7 +3,7 @@
  */
 package org.cagrid.installer.syncgts;
 
-import org.cagrid.installer.CaGridComponentInstaller;
+import org.cagrid.installer.component.CaGridComponentInstaller;
 import org.cagrid.installer.model.CaGridInstallerModel;
 import org.cagrid.installer.steps.Constants;
 import org.cagrid.installer.steps.DeployPropertiesFileEditorStep;
@@ -80,38 +80,6 @@ public class SyncGTSComponentInstaller implements CaGridComponentInstaller {
 			}
 		});
 
-		PropertyConfigurationStep checkReplaceDefaultGTSCAStep = new PropertyConfigurationStep(
-				model.getMessage("check.replace.default.gts.ca.title"), model
-						.getMessage("check.replace.default.gts.ca.desc"));
-		checkReplaceDefaultGTSCAStep.getOptions().add(
-				new BooleanPropertyConfigurationOption(
-						Constants.REPLACE_DEFAULT_GTS_CA, model
-								.getMessage("yes"), false, false));
-		model.add(checkReplaceDefaultGTSCAStep, new Condition() {
-			public boolean evaluate(WizardModel m) {
-				CaGridInstallerModel model = (CaGridInstallerModel) m;
-				return model.isTrue(Constants.INSTALL_SYNC_GTS);
-			}
-		});
-
-		ReplaceDefaultGTSCAStep specifyDefaultGTSCAStep = new ReplaceDefaultGTSCAStep(
-				model.getMessage("specify.default.gts.ca.title"), model
-						.getMessage("specify.default.gts.ca.desc"));
-		FilePropertyConfigurationOption repCaPath = new FilePropertyConfigurationOption(
-				Constants.REPLACEMENT_GTS_CA_CERT_PATH, model
-						.getMessage("replacement.gts.ca.cert.path"),
-				model.getProperty(Constants.REPLACEMENT_GTS_CA_CERT_PATH, ""),
-				true);
-		repCaPath.setBrowseLabel(model.getMessage("browse"));
-		repCaPath.setDirectoriesOnly(false);
-		specifyDefaultGTSCAStep.getOptions().add(repCaPath);
-		model.add(specifyDefaultGTSCAStep, new Condition() {
-			public boolean evaluate(WizardModel m) {
-				CaGridInstallerModel model = (CaGridInstallerModel) m;
-				return model.isTrue(Constants.INSTALL_SYNC_GTS)
-						&& model.isTrue(Constants.REPLACE_DEFAULT_GTS_CA);
-			}
-		});
 	}
 
 }

@@ -3,22 +3,24 @@
  */
 package org.cagrid.installer.util;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.cagrid.installer.model.CaGridInstallerModel;
-import org.cagrid.installer.steps.Constants;
-import org.cagrid.installer.steps.PropertyConfigurationStep;
-import org.cagrid.installer.steps.options.FilePropertyConfigurationOption;
-import org.cagrid.installer.steps.options.ListPropertyConfigurationOption;
-import org.cagrid.installer.steps.options.PasswordPropertyConfigurationOption;
-import org.cagrid.installer.steps.options.TextPropertyConfigurationOption;
-import org.cagrid.installer.validator.KeyAccessValidator;
-import org.cagrid.installer.validator.MySqlDBConnectionValidator;
-import org.cagrid.installer.validator.PathExistsValidator;
-import org.pietschy.wizard.InvalidStateException;
-import org.w3c.dom.Node;
+import java.awt.Component;
+import java.awt.GridBagConstraints;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.StringWriter;
+import java.lang.reflect.Method;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.util.Map;
 
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.xml.transform.Result;
@@ -27,13 +29,12 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import java.awt.*;
-import java.io.*;
-import java.lang.reflect.Method;
-import java.net.URL;
-import java.net.URLClassLoader;
-import java.sql.Connection;
-import java.sql.DriverManager;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.cagrid.installer.steps.Constants;
+import org.w3c.dom.Node;
+
 
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
@@ -86,25 +87,6 @@ public class InstallerUtils {
     }
 
 
-    public static boolean checkGenerateCA(CaGridInstallerModel model) {
-        return model.isTrue(Constants.USE_SECURE_CONTAINER) && !model.isTrue(Constants.SERVICE_CERT_PRESENT)
-            && !model.isTrue(Constants.CA_CERT_PRESENT);
-    }
-
-
-    public static void copyCACertToTrustStore(String certPath) throws IOException {
-        copyCACertToTrustStore(certPath, "CA.0");
-    }
-
-
-    public static void copyCACertToTrustStore(String certPath, String caFileName) throws IOException {
-
-        File trustDir = new File(System.getProperty("user.home") + "/.globus/certificates");
-        copyFile(certPath, trustDir.getAbsolutePath() + "/" + caFileName);
-
-    }
-
-
     public static void copyFile(String from, String to) throws IOException {
         BufferedReader in = new BufferedReader(new FileReader(from));
         File toFile = new File(to);
@@ -137,17 +119,6 @@ public class InstallerUtils {
         t.transform(s, r);
         return w.getBuffer().toString();
     }
-
-
-//    public static String getInstallerTempDir() {
-//        return getInstallerDir() + "/tmp";
-//
-//    }
-//
-//
-//    public static String getInstallerDir() {
-//        return System.getProperty("user.home") + "/.cagrid/installer";
-//    }
 
 
     public static boolean isEmpty(String value) {
@@ -338,6 +309,14 @@ public class InstallerUtils {
         return correctVersion;
 
     }
+    
+    
+    public static boolean checkJBossVersion(String home) {
+        boolean correctVersion = false;
+        
+        return correctVersion;
+
+    }
 
 
     public static boolean checkGlobusVersion(String home) {
@@ -361,152 +340,11 @@ public class InstallerUtils {
             StringBuffer stdout = new StringBuffer();
             new IOThread(p.getInputStream(), System.out, stdout).start();
             p.waitFor();
-            correctVersion = stdout.toString().indexOf("Apache Ant version 1.6.5") != -1;
+            correctVersion = stdout.toString().indexOf("Apache Ant version 1.7.0") != -1;
         } catch (Exception ex) {
             logger.warn("Error checking Ant version: " + ex.getMessage(), ex);
         }
         return correctVersion;
-    }
-
-
-    public static boolean checkActiveBPELVersion(String home) {
-        // TODO: improve this check
-        return new File(home).exists();
-    }
-
-
-    public static void addDBConfigPropertyOptions(CaGridInstallerModel model, PropertyConfigurationStep step,
-        String propPrefix, String dbIdDefault) {
-        step.getOptions().add(
-            new TextPropertyConfigurationOption(propPrefix + "db.host", model.getMessage(propPrefix + "db.host"), model
-                .getProperty(propPrefix + "db.host", "localhost"), true));
-        step.getOptions().add(
-            new TextPropertyConfigurationOption(propPrefix + "db.port", model.getMessage(propPrefix + "db.port"), model
-                .getProperty(propPrefix + "db.port", "3306"), true));
-        step.getOptions().add(
-            new TextPropertyConfigurationOption(propPrefix + "db.id", model.getMessage(propPrefix + "db.id"), model
-                .getProperty(propPrefix + "db.id", dbIdDefault), true));
-        step.getOptions().add(
-            new TextPropertyConfigurationOption(propPrefix + "db.username", model
-                .getMessage(propPrefix + "db.username"), model.getProperty(propPrefix + "db.username", "root"), true));
-        step.getOptions().add(
-            new PasswordPropertyConfigurationOption(propPrefix + "db.password", model.getMessage(propPrefix
-                + "db.password"), model.getProperty(propPrefix + "db.password"), false));
-        step.getValidators().add(
-            new MySqlDBConnectionValidator(propPrefix + "db.host", propPrefix + "db.port", propPrefix + "db.username",
-                propPrefix + "db.password", "select 1", model.getMessage("db.validation.failed")));
-    }
-
-
-    public static void addCommonDorianCAConfigFields(CaGridInstallerModel model, PropertyConfigurationStep step) {
-
-        step.getOptions().add(
-            new PasswordPropertyConfigurationOption(Constants.DORIAN_CA_KEY_PWD, model
-                .getMessage("dorian.ca.cert.info.key.pwd"), model.getProperty(Constants.DORIAN_CA_KEY_PWD), true));
-        step.getOptions().add(
-            new TextPropertyConfigurationOption(Constants.DORIAN_CA_OID, model.getMessage("dorian.ca.cert.info.oid"),
-                model.getProperty(Constants.DORIAN_CA_OID), false));
-        step.getOptions().add(
-            new ListPropertyConfigurationOption(Constants.DORIAN_CA_USERKEY_SIZE, model
-                .getMessage("dorian.ca.cert.info.userkey.size"), new String[]{String.valueOf(1024),
-                    String.valueOf(2048), String.valueOf(512)}, true));
-        step.getOptions().add(
-            new TextPropertyConfigurationOption(Constants.DORIAN_CA_AUTORENEW_YEARS, model
-                .getMessage("dorian.ca.cert.info.autorenew.years"), model.getProperty(
-                Constants.DORIAN_CA_AUTORENEW_YEARS, "1"), true));
-        step.getOptions().add(
-            new TextPropertyConfigurationOption(Constants.DORIAN_CA_AUTORENEW_MONTHS, model
-                .getMessage("dorian.ca.cert.info.autorenew.months"), model.getProperty(
-                Constants.DORIAN_CA_AUTORENEW_MONTHS, "0"), true));
-        step.getOptions().add(
-            new TextPropertyConfigurationOption(Constants.DORIAN_CA_AUTORENEW_DAYS, model
-                .getMessage("dorian.ca.cert.info.autorenew.days"), model.getProperty(
-                Constants.DORIAN_CA_AUTORENEW_DAYS, "0"), true));
-        step.getOptions().add(
-            new TextPropertyConfigurationOption(Constants.DORIAN_CA_AUTORENEW_HOURS, model
-                .getMessage("dorian.ca.cert.info.autorenew.hours"), model.getProperty(
-                Constants.DORIAN_CA_AUTORENEW_HOURS, "0"), true));
-        step.getOptions().add(
-            new TextPropertyConfigurationOption(Constants.DORIAN_CA_AUTORENEW_MINUTES, model
-                .getMessage("dorian.ca.cert.info.autorenew.minutes"), model.getProperty(
-                Constants.DORIAN_CA_AUTORENEW_MINUTES, "0"), true));
-        step.getOptions().add(
-            new TextPropertyConfigurationOption(Constants.DORIAN_CA_AUTORENEW_SECONDS, model
-                .getMessage("dorian.ca.cert.info.autorenew.seconds"), model.getProperty(
-                Constants.DORIAN_CA_AUTORENEW_SECONDS, "0"), true));
-
-    }
-
-
-    public static void addCommonCACertFields(CaGridInstallerModel model, PropertyConfigurationStep step,
-        String caCertPathProp, String caKeyPathProp, String caKeyPwdProp, boolean validate) {
-
-        FilePropertyConfigurationOption caCertPathOption = new FilePropertyConfigurationOption(caCertPathProp, model
-            .getMessage("ca.cert.info.cert.path"), model.getProperty(caCertPathProp, model.getInstallerDir()
-            + "/certs/ca.cert"), true);
-        caCertPathOption.setDirectoriesOnly(false);
-        caCertPathOption.setBrowseLabel(model.getMessage("browse"));
-        step.getOptions().add(caCertPathOption);
-
-        FilePropertyConfigurationOption caKeyPathOption = new FilePropertyConfigurationOption(caKeyPathProp, model
-            .getMessage("ca.cert.info.key.path"), model.getProperty(caKeyPathProp, model.getInstallerDir()
-            + "/certs/ca.key"), true);
-        caKeyPathOption.setDirectoriesOnly(false);
-        caKeyPathOption.setBrowseLabel(model.getMessage("browse"));
-        step.getOptions().add(caKeyPathOption);
-
-        step.getOptions().add(
-            new PasswordPropertyConfigurationOption(caKeyPwdProp, model.getMessage("ca.cert.info.key.pwd"), model
-                .getProperty(caKeyPwdProp), true));
-
-        if (validate) {
-            step.getValidators().add(
-                new PathExistsValidator(caCertPathProp, model.getMessage("error.cert.file.not.found")));
-            step.getValidators().add(
-                new PathExistsValidator(caKeyPathProp, model.getMessage("error.key.file.not.found")));
-            step.getValidators().add(
-                new KeyAccessValidator(caKeyPathProp, caKeyPwdProp, model.getMessage("error.key.no.access")));
-        }
-    }
-
-
-    public static void addCommonNewCACertFields(CaGridInstallerModel model, PropertyConfigurationStep step,
-        String caCertPathProp, String caKeyPathProp, String caKeyPwdProp, String caDnProp, String caDaysValidProp) {
-
-        addCommonCACertFields(model, step, caCertPathProp, caKeyPathProp, caKeyPwdProp, false);
-
-        step.getOptions().add(
-            new TextPropertyConfigurationOption(caDnProp, model.getMessage("ca.cert.info.dn"), model.getProperty(
-                caDnProp, "O=org,OU=unit,CN=name"), true));
-        step.getOptions().add(
-            new TextPropertyConfigurationOption(caDaysValidProp, model.getMessage("ca.cert.info.days.valid"), model
-                .getProperty(caDaysValidProp, "1000"), true));
-    }
-
-
-    public static void addCommonCertFields(CaGridInstallerModel model, PropertyConfigurationStep step,
-        String certPathProp, String keyPathProp, String keyPwdProp) {
-        FilePropertyConfigurationOption escpOption = new FilePropertyConfigurationOption(certPathProp, model
-            .getMessage("service.cert.info.cert.path"), model
-            .getProperty(certPathProp, System.getProperty("user.home")), true);
-        escpOption.setDirectoriesOnly(false);
-        escpOption.setBrowseLabel(model.getMessage("browse"));
-        step.getOptions().add(escpOption);
-        FilePropertyConfigurationOption eskpOption = new FilePropertyConfigurationOption(keyPathProp, model
-            .getMessage("service.cert.info.key.path"), model.getProperty(keyPathProp, System.getProperty("user.home")),
-            true);
-        eskpOption.setDirectoriesOnly(false);
-        eskpOption.setBrowseLabel(model.getMessage("browse"));
-        step.getOptions().add(eskpOption);
-        if (keyPwdProp != null) {
-            step.getOptions().add(
-                new PasswordPropertyConfigurationOption(keyPwdProp, model.getMessage("service.cert.info.key.pwd"),
-                    model.getProperty(keyPwdProp, ""), false));
-        }
-        step.getValidators().add(new PathExistsValidator(certPathProp, model.getMessage("error.cert.file.not.found")));
-        step.getValidators().add(new PathExistsValidator(keyPathProp, model.getMessage("error.key.file.not.found")));
-        step.getValidators().add(
-            new KeyAccessValidator(keyPathProp, keyPwdProp, model.getMessage("error.key.no.access")));
     }
 
 
@@ -519,91 +357,50 @@ public class InstallerUtils {
     }
 
 
-    public static Connection getDatabaseConnection(String driver, String dbUrl, String username, String password)
-        throws InvalidStateException {
-
-        if (driver != null) {
-            try {
-                Class.forName(driver);
-            } catch (Exception ex) {
-                throw new InvalidStateException("Error loading driver '" + driver + "': " + ex.getMessage(), ex);
-            }
-        }
-
-        ConnectThread t = new ConnectThread(dbUrl, username, password);
-        t.start();
-        try {
-            t.join(Constants.CONNECT_TIMEOUT);
-        } catch (InterruptedException ex) {
-            logger.warn("Connection interrupted: " + ex.getMessage(), ex);
-        }
-
-        if (t.getEx() != null) {
-            throw new InvalidStateException("Error connecting to " + dbUrl + ": " + t.getEx().getMessage(), t.getEx());
-        }
-        if (!t.isFinished()) {
-            throw new InvalidStateException("Connection to " + dbUrl + " timed out.");
-        }
-        Connection conn = t.getConnection();
-        if (conn == null) {
-            throw new InvalidStateException("Couldn't get connection to " + dbUrl + ". Connection is null.");
-        }
-        return conn;
+    public static String getInstallerDirBase() {
+        return System.getProperty("user.home") + "/.cagrid/installer";
     }
 
 
-    private static class ConnectThread extends Thread {
-
-        private boolean finished;
-        private Connection conn;
-        private String dbUrl;
-        private String username;
-        private String password;
-        private Exception ex;
-
-
-        ConnectThread(String dbUrl, String username, String password) {
-            this.dbUrl = dbUrl;
-            this.username = username;
-            this.password = password;
-            this.setDaemon(true);
-        }
-
-
-        public void run() {
-            try {
-                this.conn = DriverManager.getConnection(this.dbUrl, this.username, this.password);
-                this.finished = true;
-            } catch (Exception ex) {
-                this.ex = ex;
-            }
-        }
-
-
-        public Connection getConnection() {
-            return conn;
-        }
-
-
-        public Exception getEx() {
-            return ex;
-        }
-
-
-        public boolean isFinished() {
-            return finished;
-        }
-
+    public static String buildInstallerDirPath(String cagridVersion) {
+        return InstallerUtils.getInstallerDirBase() + "-" + cagridVersion;
     }
 
 
-	public static String getInstallerDirBase() {
-		return System.getProperty("user.home") + "/.cagrid/installer";
+    public static void handleException(String msg, Exception ex) {
+    
+        String htmlMsg = "";
+        if (!isEmpty(msg)) {
+            htmlMsg = "<html><body>" + msg.replaceAll("\n", "<br>") + "</body></html>";
         }
+    
+        JLabel msgLabel = new JLabel(htmlMsg);
+    
+        JOptionPane.showMessageDialog(null, msgLabel, "Error", JOptionPane.ERROR_MESSAGE);
+        if (ex != null) {
+            logger.error(msg, ex);
+            throw new RuntimeException(msg, ex);
+        } else {
+            logger.error(msg);
+            throw new RuntimeException(msg);
+        }
+    }
 
 
-	public static String buildInstallerDirPath(String cagridVersion) {
-		return InstallerUtils.getInstallerDirBase() + "-" + cagridVersion;
+    public static void assertCorrectJavaVersion(Map<String, String> defaultState) throws Exception {
+        String versionPattern = defaultState.get(Constants.JAVA_VERSION_PATTERN);
+        if (versionPattern == null) {
+            throw new Exception("Couldn't find version pattern property.");
+        }
+        String home = getJavaHomePath();
+        String version = getJavaVersion();
+        logger.info("At '" + home + "', found Java version: " + version);
+        if (!version.matches(versionPattern)) {
+            throw new Exception("The version of Java found at '" + home + "' is not correct. Found '" + version
+                + "'. Expected version to match '" + versionPattern + "'.\n"
+                + "Set the JAVA_HOME environment variable to"
+                + " point to where you have installed the correct version of" + " Java before running the installer.");
+        }
     }
 
 }

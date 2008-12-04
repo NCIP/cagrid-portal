@@ -40,7 +40,6 @@ public class SelectComponentStep extends PropertyConfigurationStep {
 	 */
 	public SelectComponentStep(String name, String description, Icon icon) {
 		super(name, description, icon);
-
 	}
 	
 	protected void checkComplete(){

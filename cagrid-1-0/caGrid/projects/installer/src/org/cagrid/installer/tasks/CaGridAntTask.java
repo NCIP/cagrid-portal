@@ -41,8 +41,6 @@ public abstract class CaGridAntTask extends BasicTask {
         env.put("CATALINA_HOME", model.getProperty(Constants.TOMCAT_HOME));
         Properties sysProps = new Properties();
         sysProps.setProperty(Constants.SERVICE_DEST_DIR, model.getServiceDestDir());
-        sysProps.setProperty(Constants.GRIDCA_BUILD_FILE_PATH, model.getProperty(Constants.CAGRID_HOME)
-            + "/projects/gridca/build.xml");
         sysProps.setProperty("env.GLOBUS_LOCATION", model.getProperty(Constants.GLOBUS_HOME));
 
         model.setProperty(Constants.BUILD_FILE_PATH, getBuildFilePath(model));

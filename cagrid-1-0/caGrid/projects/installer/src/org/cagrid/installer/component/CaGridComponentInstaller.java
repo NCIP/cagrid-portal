@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.cagrid.installer;
+package org.cagrid.installer.component;
 
 import org.cagrid.installer.model.CaGridInstallerModel;
 import org.cagrid.installer.steps.RunTasksStep;

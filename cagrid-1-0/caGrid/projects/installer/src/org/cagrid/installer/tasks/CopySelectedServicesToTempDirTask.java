@@ -28,48 +28,8 @@ public class CopySelectedServicesToTempDirTask extends CaGridInstallerAntTask {
         throws Exception {
         List<String> selectedServices = new ArrayList<String>();
 
-        if (model.isTrue(Constants.INSTALL_DORIAN)) {
-            selectedServices.add("dorian");
-        }
-        if (model.isTrue(Constants.INSTALL_GTS)) {
-            selectedServices.add("gts");
-        }
-        if (model.isTrue(Constants.INSTALL_CDS)) {
-            selectedServices.add("cds");
-        }
-        if (model.isTrue(Constants.INSTALL_AUTHN_SVC)) {
-            selectedServices.add("authentication-service");
-        }
-        if (model.isTrue(Constants.INSTALL_GRID_GROUPER)) {
-            selectedServices.add("gridgrouper");
-        }
-        if (model.isTrue(Constants.INSTALL_INDEX_SVC)) {
-            selectedServices.add("index");
-        }
-        if (model.isTrue(Constants.INSTALL_GME)) {
-            selectedServices.add("gme");
-        }
-        if (model.isTrue(Constants.INSTALL_EVS)) {
-            selectedServices.add("evs");
-        }
-        if (model.isTrue(Constants.INSTALL_FQP)) {
-            selectedServices.add("fqp");
-        }
-        if (model.isTrue(Constants.INSTALL_CADSR)) {
-            selectedServices.add("cadsr");
-        }
-        if (model.isTrue(Constants.INSTALL_TRANSFER)) {
-            selectedServices.add("transfer");
-        }
-        if (model.isTrue(Constants.INSTALL_WORKFLOW)) {
-            selectedServices.add("workflow");
-        }
         if (model.isTrue(Constants.INSTALL_SYNC_GTS)) {
             selectedServices.add("syncgts");
-        }
-
-        if (model.isTrue(Constants.INSTALL_PORTAL)) {
-            selectedServices.add("portal");
         }
 
         StringBuilder sb = new StringBuilder();

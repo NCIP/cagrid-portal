@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.cagrid.installer;
+package org.cagrid.installer.component;
 
 import org.cagrid.installer.model.CaGridInstallerModel;
 import org.cagrid.installer.steps.Constants;
@@ -12,13 +12,13 @@ import org.pietschy.wizard.models.Condition;
  * @author <a href="joshua.phillips@semanticbits.com">Joshua Phillips</a>
  * 
  */
-public class TomcatComponentInstaller extends
+public class JBossComponentInstaller extends
 		AbstractDownloadedComponentInstaller {
 
 	/**
 	 * 
 	 */
-	public TomcatComponentInstaller() {
+	public JBossComponentInstaller() {
 
 	}
 
@@ -29,7 +29,7 @@ public class TomcatComponentInstaller extends
 	 */
 	@Override
 	protected String getComponentId() {
-		return "tomcat";
+		return "jboss";
 	}
 
 	/*
@@ -42,7 +42,7 @@ public class TomcatComponentInstaller extends
 		return new Condition() {
 			public boolean evaluate(WizardModel m) {
 				CaGridInstallerModel model = (CaGridInstallerModel) m;
-				return model.isTomcatContainer() && model.isTomcatInstalled();
+				return model.isJBossContainer() && model.isJBossInstalled();
 			}
 		};
 	}
@@ -51,9 +51,9 @@ public class TomcatComponentInstaller extends
 		return new Condition() {
 			public boolean evaluate(WizardModel m) {
 				CaGridInstallerModel model = (CaGridInstallerModel) m;
-				return model.isTomcatContainer()
-						&& (!model.isTomcatInstalled() || model
-								.isTrue(Constants.INSTALL_TOMCAT));
+				return model.isJBossContainer()
+						&& (!model.isJBossInstalled() || model
+								.isTrue(Constants.INSTALL_JBOSS));
 			}
 		};
 	}

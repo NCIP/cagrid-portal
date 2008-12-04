@@ -3,24 +3,28 @@
  */
 package org.cagrid.installer.model;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.cagrid.installer.steps.Constants;
-import org.cagrid.installer.steps.RunTasksStep;
-import org.cagrid.installer.util.InstallerUtils;
-import org.cagrid.installer.validator.PathExistsValidator;
-import org.pietschy.wizard.models.DynamicModel;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
+import java.io.File;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Locale;
+import java.util.Map;
+import java.util.ResourceBundle;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathFactory;
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
-import java.io.File;
-import java.util.*;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.cagrid.installer.steps.Constants;
+import org.cagrid.installer.steps.RunTasksStep;
+import org.cagrid.installer.util.InstallerUtils;
+import org.pietschy.wizard.models.DynamicModel;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
@@ -36,10 +40,10 @@ CaGridInstallerModel {
     private ResourceBundle messages;
 
     private Boolean tomcatInstalled = null;
+    
+    private Boolean jbossInstalled = null;
 
     private Boolean globusInstalled = null;
-
-    private Boolean activeBpelInstalled = null;
 
     private Boolean antInstalled = null;
 
@@ -94,6 +98,11 @@ CaGridInstallerModel {
         if (isTomcatInstalled()) {
             setProperty(Constants.TOMCAT_HOME, getHomeDir(Constants.TOMCAT_HOME, "CATALINA_HOME"));
         }
+        
+        // Look for jboss
+        if (isTomcatInstalled()) {
+            setProperty(Constants.JBOSS_HOME, getHomeDir(Constants.JBOSS_HOME, "JBOSS_HOME"));
+        }
 
         // Look for globus
         if (isGlobusInstalled()) {
@@ -103,15 +112,6 @@ CaGridInstallerModel {
         // Look for cagrid
         if (isCaGridInstalled()) {
             setProperty(Constants.CAGRID_HOME, getHomeDir(Constants.CAGRID_HOME, null));
-        }
-
-        // Look for activebpel
-        if (isActiveBPELInstalled()) {
-            setProperty(Constants.ACTIVEBPEL_HOME, getHomeDir(Constants.ACTIVEBPEL_HOME, null));
-        }
-
-        if (isPortalInstalled()) {
-            setProperty(Constants.PORTAL_HOME, getHomeDir(Constants.PORTAL_HOME, null));
         }
 
     }
@@ -167,12 +167,11 @@ CaGridInstallerModel {
     }
 
 
-    public boolean isTomcatConfigurationRequired() {
+    public boolean isContainerConfigurationRequired() {
         return isTomcatContainer() && (isTrue(Constants.REDEPLOY_GLOBUS) || !isGlobusDeployed());
 
     }
-
-
+    
     public boolean isTrue(String propName) {
         return Constants.TRUE.equals(getProperty(propName));
     }
@@ -181,7 +180,11 @@ CaGridInstallerModel {
     public boolean isTomcatContainer() {
         return getMessage("container.type.tomcat").equals(getProperty(Constants.CONTAINER_TYPE));
     }
-
+    
+    
+    public boolean isJBossContainer() {
+        return getMessage("container.type.jboss").equals(getProperty(Constants.CONTAINER_TYPE));
+    }
 
     public boolean isGlobusContainer() {
         return getMessage("container.type.globus").equals(getProperty(Constants.CONTAINER_TYPE));
@@ -196,8 +199,8 @@ CaGridInstallerModel {
     // TODO: remove the RECONFIGURE_GLOBUS condition, it's not used any more
     public boolean isSecurityConfigurationRequired() {
         return isTrue(Constants.USE_SECURE_CONTAINER)
-            && (isTrue(Constants.RECONFIGURE_GLOBUS) || isTrue(Constants.REDEPLOY_GLOBUS) || isTomcatContainer()
-                && !isGlobusDeployed() || !isTomcatContainer() && !isGlobusConfigured());
+            && (isTrue(Constants.RECONFIGURE_GLOBUS) || isTrue(Constants.REDEPLOY_GLOBUS) || (isTomcatContainer() || isGlobusContainer())
+                && !isGlobusDeployed() || (!isTomcatContainer() || !isGlobusContainer()) && !isGlobusConfigured());
     }
 
 
@@ -208,19 +211,6 @@ CaGridInstallerModel {
 
     public boolean isEmpty(String value) {
         return value == null || value.trim().length() == 0;
-    }
-
-
-    public boolean isCAGenerationRequired() {
-        return isSecurityConfigurationRequired() && !isTrue(Constants.INSTALL_DORIAN)
-            && !isTrue(Constants.SERVICE_CERT_PRESENT) && !isTrue(Constants.CA_CERT_PRESENT);
-    }
-
-
-    public boolean isServiceCertGenerationRequired() {
-        return isSecurityConfigurationRequired() && !isTrue(Constants.INSTALL_DORIAN)
-            && !isTrue(Constants.SERVICE_CERT_PRESENT);
-
     }
 
 
@@ -277,8 +267,7 @@ CaGridInstallerModel {
 
 
     public boolean isSecureContainerRequired() {
-        return isTrue(Constants.INSTALL_DORIAN) || isTrue(Constants.INSTALL_GTS) || isTrue(Constants.INSTALL_CDS)
-            || isTrue(Constants.INSTALL_AUTHN_SVC) || isTrue(Constants.INSTALL_GRID_GROUPER);
+        return false;
     }
 
 
@@ -291,14 +280,7 @@ CaGridInstallerModel {
         return isTrue(Constants.CONFIGURE_CONTAINER) || isTrue(Constants.INSTALL_SERVICES);
     }
 
-
-    public boolean isSyncGTSInstalled() {
-        // TODO: handle different webapp names and prefixes.
-        File syncDescFile = new File(getProperty(Constants.TOMCAT_HOME)
-            + "/webapps/wsrf/WEB-INF/etc/cagrid_SyncGTS/sync-description.xml");
-        return syncDescFile.exists();
-    }
-
+    
 
     public boolean isAntInstalled() {
         if (antInstalled == null) {
@@ -339,6 +321,14 @@ CaGridInstallerModel {
         return tomcatInstalled;
     }
 
+    
+    public boolean isJBossInstalled() {
+        if (jbossInstalled == null) {
+            String homeDir = getHomeDir(Constants.JBOSS_HOME, "JBOSS_HOME");
+            jbossInstalled = homeDir != null && InstallerUtils.checkJBossVersion(homeDir);
+        }
+        return jbossInstalled;
+    }
 
     public boolean isGlobusInstalled() {
         if (globusInstalled == null) {
@@ -357,16 +347,6 @@ CaGridInstallerModel {
         return cagridInstalled;
     }
 
-
-    public boolean isActiveBPELInstalled() {
-
-        if (activeBpelInstalled == null) {
-            String homeDir = getHomeDir(Constants.ACTIVEBPEL_HOME, null);
-            activeBpelInstalled = homeDir != null && InstallerUtils.checkActiveBPELVersion(homeDir);
-        }
-        return activeBpelInstalled;
-
-    }
 
 
     public boolean isGlobusConfigured() {
@@ -415,41 +395,22 @@ CaGridInstallerModel {
         if (globusDeployed == null) {
             globusDeployed = false;
             if (isTomcatInstalled()) {
-                // TODO: handle different webapp names
                 File wsrfDir = new File((String) getProperty(Constants.TOMCAT_HOME) + "/webapps/wsrf");
+                globusDeployed = wsrfDir.exists();
+            } else if(isJBossInstalled()){
+                File wsrfDir = new File((String) getProperty(Constants.JBOSS_HOME) + "/webapps/wsrf");
                 globusDeployed = wsrfDir.exists();
             }
         }
         if (isTrue(Constants.INSTALL_TOMCAT)) {
             globusDeployed = false;
         }
+        if (isTrue(Constants.INSTALL_JBOSS)) {
+            globusDeployed = false;
+        }
         return globusDeployed;
     }
 
-
-    public boolean isPortalInstalled() {
-        boolean installed = false;
-        String homeDir = getHomeDir(Constants.PORTAL_HOME, null);
-        if (homeDir != null) {
-            installed = true;
-        }
-        return installed;
-    }
-
-
-    public boolean isAuthnSvcServiceCredentialsPresent() {
-
-        boolean present = false;
-        try {
-            new PathExistsValidator(Constants.SERVICE_CERT_PATH, "Couldn't find service certificate")
-                .validate(getStateMap());
-            new PathExistsValidator(Constants.SERVICE_KEY_PATH, "Couldn't find service key").validate(getStateMap());
-            present = true;
-        } catch (Exception ex) {
-            logger.warn(ex.getMessage(), ex);
-        }
-        return present;
-    }
     
     public String getInstallerDir(){
     	return InstallerUtils.buildInstallerDirPath(getProperty(Constants.CAGRID_VERSION));

@@ -3,85 +3,106 @@
  */
 package org.cagrid.installer.model;
 
+import java.util.Map;
+
 import org.pietschy.wizard.WizardModel;
 import org.pietschy.wizard.WizardStep;
 import org.pietschy.wizard.models.Condition;
 
-import java.util.Map;
 
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
- *
  */
 public interface CaGridInstallerModel extends WizardModel {
 
-//	Map getState();
-	
-	void add(WizardStep step);
-	
-	void add(WizardStep step, Condition condition);
-	
-	Map<String,String> getStateMap();
-	
-	void unsetProperty(String propName);
-	
-	void setProperty(String propName, String propValue);
-	
-	String getProperty(String propName);
-	
-	String getProperty(String propName, String defaultValue);	
-	
-	String getMessage(String key);
+    // Map getState();
 
-	boolean isTomcatConfigurationRequired();
+    void add(WizardStep step);
 
-	boolean isSecurityConfigurationRequired();
 
-	boolean isTrue(String propName);
+    void add(WizardStep step, Condition condition);
 
-	boolean isTomcatContainer();
-	
-	boolean isGlobusContainer();
 
-	boolean isSet(String propName);
+    Map<String, String> getStateMap();
 
-	boolean isCAGenerationRequired();
 
-	boolean isServiceCertGenerationRequired();
+    void unsetProperty(String propName);
 
-	boolean isEqual(String value, String propName2);
 
-	boolean isConfigureGlobusRequired();
+    void setProperty(String propName, String propValue);
 
-	boolean isDeployGlobusRequired();
 
-	void setDeactivatePrevious(boolean b);
-	
-	String getServiceDestDir();
+    String getProperty(String propName);
 
-	boolean isSecureContainerRequired();
 
-	boolean isConfigureContainerSelected();
+    String getProperty(String propName, String defaultValue);
 
-	boolean isSyncGTSInstalled();
-	
-	boolean isAntInstalled();
 
-	boolean isTomcatInstalled();
+    String getMessage(String key);
 
-	boolean isGlobusInstalled();
 
-	boolean isCaGridInstalled();
+    boolean isContainerConfigurationRequired();
 
-	boolean isActiveBPELInstalled();
-	
-	boolean isGlobusConfigured();
-	
-	boolean isGlobusDeployed();
 
-    boolean isPortalInstalled();
+    boolean isSecurityConfigurationRequired();
 
-    boolean isAuthnSvcServiceCredentialsPresent();
-    
+
+    boolean isTrue(String propName);
+
+
+    boolean isTomcatContainer();
+
+
+    boolean isJBossContainer();
+
+
+    boolean isGlobusContainer();
+
+
+    boolean isSet(String propName);
+
+
+    boolean isEqual(String value, String propName2);
+
+
+    boolean isConfigureGlobusRequired();
+
+
+    boolean isDeployGlobusRequired();
+
+
+    void setDeactivatePrevious(boolean b);
+
+
+    String getServiceDestDir();
+
+
+    boolean isConfigureContainerSelected();
+
+
+    boolean isAntInstalled();
+
+
+    boolean isTomcatInstalled();
+
+
+    boolean isJBossInstalled();
+
+
+    boolean isGlobusInstalled();
+
+
+    boolean isSecureContainerRequired();
+
+
+    boolean isCaGridInstalled();
+
+
+    boolean isGlobusConfigured();
+
+
+    boolean isGlobusDeployed();
+
+
     String getInstallerDir();
 }

@@ -25,10 +25,10 @@ import org.w3c.dom.NodeList;
  * @author <a href="joshua.phillips@semanticbits.com">Joshua Phillips</a>
  * 
  */
-public class SpecifyTomcatPortsStep extends PropertyConfigurationStep {
+public class SpecifyPortsStep extends PropertyConfigurationStep {
 
 	private static final Log logger = LogFactory
-			.getLog(SpecifyTomcatPortsStep.class);
+			.getLog(SpecifyPortsStep.class);
 
 	private Document doc;
 
@@ -41,7 +41,7 @@ public class SpecifyTomcatPortsStep extends PropertyConfigurationStep {
 	/**
 	 * 
 	 */
-	public SpecifyTomcatPortsStep() {
+	public SpecifyPortsStep() {
 
 	}
 
@@ -49,7 +49,7 @@ public class SpecifyTomcatPortsStep extends PropertyConfigurationStep {
 	 * @param name
 	 * @param description
 	 */
-	public SpecifyTomcatPortsStep(String name, String description) {
+	public SpecifyPortsStep(String name, String description) {
 		super(name, description);
 	}
 
@@ -58,16 +58,16 @@ public class SpecifyTomcatPortsStep extends PropertyConfigurationStep {
 	 * @param description
 	 * @param icon
 	 */
-	public SpecifyTomcatPortsStep(String name, String description, Icon icon) {
+	public SpecifyPortsStep(String name, String description, Icon icon) {
 		super(name, description, icon);
 	}
 
 	public void prepare() {
-		JTextField httpsPortField = (JTextField) getOption(Constants.TOMCAT_HTTPS_PORT);
-		JLabel httpsPortLabel = getLabel(Constants.TOMCAT_HTTPS_PORT);
+		JTextField httpsPortField = (JTextField) getOption(Constants.HTTPS_PORT);
+		JLabel httpsPortLabel = getLabel(Constants.HTTPS_PORT);
 
-		JTextField httpPortField = (JTextField) getOption(Constants.TOMCAT_HTTP_PORT);
-		JLabel httpPortLabel = getLabel(Constants.TOMCAT_HTTP_PORT);
+		JTextField httpPortField = (JTextField) getOption(Constants.HTTP_PORT);
+		JLabel httpPortLabel = getLabel(Constants.HTTP_PORT);
 		if (!this.model.isTrue(Constants.USE_SECURE_CONTAINER)) {
 			httpPortField.setVisible(true);
 			httpPortLabel.setVisible(true);
@@ -118,7 +118,7 @@ public class SpecifyTomcatPortsStep extends PropertyConfigurationStep {
 
 		httpPortField.setText(httpPort);
 		httpsPortField.setText(httpsPort);
-		JTextField shutdownPortField = (JTextField) getOption(Constants.TOMCAT_SHUTDOWN_PORT);
+		JTextField shutdownPortField = (JTextField) getOption(Constants.SHUTDOWN_PORT);
 		shutdownPortField.setText(shutdownPort);
 	}
 
@@ -160,35 +160,35 @@ public class SpecifyTomcatPortsStep extends PropertyConfigurationStep {
 	public void applyState() throws InvalidStateException {
 
 		String oldTomcatHttpPort = this.model.getProperty(
-				Constants.TOMCAT_HTTP_PORT);
+				Constants.HTTP_PORT);
 		if (oldTomcatHttpPort == null) {
 			oldTomcatHttpPort = "8080";
 		}
-		this.model.setProperty(Constants.TOMCAT_OLD_HTTP_PORT,
+		this.model.setProperty(Constants.OLD_HTTP_PORT,
 				oldTomcatHttpPort);
 
 		String oldTomcatHttpsPort = this.model.getProperty(
-				Constants.TOMCAT_HTTPS_PORT);
+				Constants.HTTPS_PORT);
 		if (oldTomcatHttpsPort == null) {
 			oldTomcatHttpsPort = "8443";
 		}
-		this.model.setProperty(Constants.TOMCAT_OLD_HTTPS_PORT,
+		this.model.setProperty(Constants.OLD_HTTPS_PORT,
 				oldTomcatHttpsPort);
 
-		JTextField shutdownPortField = (JTextField) getOption(Constants.TOMCAT_SHUTDOWN_PORT);
-		JTextField httpPortField = (JTextField) getOption(Constants.TOMCAT_HTTP_PORT);
-		JTextField httpsPortField = (JTextField) getOption(Constants.TOMCAT_HTTPS_PORT);
+		JTextField shutdownPortField = (JTextField) getOption(Constants.SHUTDOWN_PORT);
+		JTextField httpPortField = (JTextField) getOption(Constants.HTTP_PORT);
+		JTextField httpsPortField = (JTextField) getOption(Constants.HTTPS_PORT);
 
 		assertIsInteger(shutdownPortField.getText(),
-				"Tomcat Shutdown Port must be an integer.");
+				"Shutdown Port must be an integer.");
 		boolean isSecure = this.model.isTrue(
 				Constants.USE_SECURE_CONTAINER);
 		if (isSecure) {
 			assertIsInteger(httpsPortField.getText(),
-					"Tomcat HTTPS Port must be an integer.");
+					"HTTPS Port must be an integer.");
 		} else {
 			assertIsInteger(httpsPortField.getText(),
-					"Tomcat HTTP Port must be an integer.");
+					"HTTP Port must be an integer.");
 		}
 
 		try {

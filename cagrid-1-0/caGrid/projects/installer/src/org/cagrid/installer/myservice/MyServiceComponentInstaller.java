@@ -3,7 +3,7 @@
  */
 package org.cagrid.installer.myservice;
 
-import org.cagrid.installer.CaGridComponentInstaller;
+import org.cagrid.installer.component.CaGridComponentInstaller;
 import org.cagrid.installer.model.CaGridInstallerModel;
 import org.cagrid.installer.steps.ConfigureServiceMetadataStep;
 import org.cagrid.installer.steps.Constants;

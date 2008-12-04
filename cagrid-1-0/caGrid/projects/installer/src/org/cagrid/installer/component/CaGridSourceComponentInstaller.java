@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.cagrid.installer;
+package org.cagrid.installer.component;
 
 import java.util.Map;
 import java.util.MissingResourceException;
