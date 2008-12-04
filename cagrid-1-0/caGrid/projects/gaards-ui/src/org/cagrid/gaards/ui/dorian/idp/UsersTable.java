@@ -15,7 +15,7 @@ import org.cagrid.grape.table.GrapeBaseTable;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: UsersTable.java,v 1.5 2008-12-03 19:52:29 langella Exp $
+ * @version $Id: UsersTable.java,v 1.6 2008-12-04 20:46:04 langella Exp $
  */
 public class UsersTable extends GrapeBaseTable {
 
@@ -96,7 +96,7 @@ public class UsersTable extends GrapeBaseTable {
         int row = getSelectedRow();
         if ((row >= 0) && (row < getRowCount())) {
             GridApplication.getContext().addApplicationComponent(
-                new UserWindow(this.session.getSession(), getSelectedUser()), 700, 400);
+                new UserWindow(this.session, getSelectedUser()), 700, 500);
         } else {
             throw new Exception("No user selected, please select a user!!!");
         }
