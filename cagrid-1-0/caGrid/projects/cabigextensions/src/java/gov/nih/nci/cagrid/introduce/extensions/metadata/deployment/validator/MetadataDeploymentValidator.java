@@ -1,20 +1,20 @@
 package gov.nih.nci.cagrid.introduce.extensions.metadata.deployment.validator;
 
+import gov.nih.nci.cagrid.common.XMLUtilities;
+import gov.nih.nci.cagrid.introduce.servicetasks.deployment.validator.DeploymentValidator;
+import gov.nih.nci.cagrid.metadata.MetadataUtils;
+import gov.nih.nci.cagrid.metadata.ServiceMetadata;
+import gov.nih.nci.cagrid.metadata.common.PointOfContact;
+
 import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.swing.text.Document;
-
+import org.jdom.Document;
 import org.jdom.Element;
-
-import gov.nih.nci.cagrid.common.XMLUtilities;
-import gov.nih.nci.cagrid.introduce.servicetasks.deployment.validator.DeploymentValidator;
-import gov.nih.nci.cagrid.metadata.MetadataUtils;
-import gov.nih.nci.cagrid.metadata.ServiceMetadata;
-import gov.nih.nci.cagrid.metadata.common.PointOfContact;
+import org.jdom.Namespace;
 
 
 public class MetadataDeploymentValidator extends DeploymentValidator {
@@ -23,23 +23,37 @@ public class MetadataDeploymentValidator extends DeploymentValidator {
         super(baseDir);
     }
 
+
     @Override
     public void validate() throws Exception {
         List messages = new ArrayList();
-        
-//        org.jdom.Document introduceDoc = XMLUtilities.fileNameToDocument(getBaseDir() + File.separator + "introduce.xml");
-//        Element servicesEl = introduceDoc.getRootElement().getChild("Services");
-//        Element serviceEl = (Element)servicesEl.getChildren("Service").get(0);
-//        Element rpEls = serviceEl.getChild("ResourcePropertiesList");
-//        List rps = serviceEl.getChildren("ResourceProperty");
-//        Iterator its = rps.iterator();
-//        while(its.hasNext()){
-//            Element epEl = (Element)its.next();
-//          
-//        }
-        
-        ServiceMetadata metadata = MetadataUtils.deserializeServiceMetadata(new FileReader(getBaseDir() + File.separator + "etc" + File.separator
-            + "serviceMetadata.xml"));
+
+        Document introduceDoc = XMLUtilities.fileNameToDocument(getBaseDir() + File.separator + "introduce.xml");
+        Element servicesEl = introduceDoc.getRootElement().getChild("Services",
+            Namespace.getNamespace("gme://gov.nih.nci.cagrid.introduce/1/Services"));
+        Element serviceEl = (Element) servicesEl.getChildren("Service",
+            Namespace.getNamespace("gme://gov.nih.nci.cagrid.introduce/1/Services")).get(0);
+        Element rpEls = serviceEl.getChild("ResourcePropertiesList", Namespace
+            .getNamespace("gme://gov.nih.nci.cagrid.introduce/1/Resources"));
+        List rps = rpEls.getChildren("ResourceProperty", Namespace
+            .getNamespace("gme://gov.nih.nci.cagrid.introduce/1/Resources"));
+        Iterator its = rps.iterator();
+        String fileLocation = null;
+        while (its.hasNext()) {
+            Element rpEl = (Element) its.next();
+            String qname = rpEl.getAttributeValue("qName");
+            if (qname != null) {
+                String prefix = qname.substring(0, qname.indexOf(":"));
+                String name = qname.substring(qname.indexOf(":") + 1);
+                if (rpEl.getNamespace(prefix).getURI().equals("gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata")
+                    && name.equals("ServiceMetadata")) {
+                    fileLocation = rpEl.getAttributeValue("fileLocation");
+                }
+            }
+        }
+
+        ServiceMetadata metadata = MetadataUtils.deserializeServiceMetadata(new FileReader(getBaseDir()
+            + File.separator + "etc" + File.separator + fileLocation));
 
         if (metadata.getServiceDescription() != null && metadata.getServiceDescription().getService() != null) {
             if (metadata.getServiceDescription().getService().getPointOfContactCollection() != null
@@ -158,5 +172,4 @@ public class MetadataDeploymentValidator extends DeploymentValidator {
                     + "\n  In order to fix these problems either edit the etc/serviceMetadata.xml file or open the service with Introduce to edit the service metadata resource property.\n  To skip deployment validation simply set the no.deployment.validation property when calling ant.  (ant -Dno.deployment.validation=true deployTomcat)");
         }
     }
-
 }
