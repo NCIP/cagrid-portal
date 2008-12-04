@@ -7,7 +7,7 @@ public class ReportUtils {
         sb.append("The following changes were made to the local user, " + original.getUserId() + ": \n");
         int count = 0;
 
-        if (updated.getPassword() != null) {
+        if (!original.getPassword().equals(updated.getPassword())) {
             count = count + 1;
             sb.append(count + ". Password changed.\n");
         }
