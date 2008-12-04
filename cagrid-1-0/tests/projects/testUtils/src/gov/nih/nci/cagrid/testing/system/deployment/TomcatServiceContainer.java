@@ -73,7 +73,6 @@ public class TomcatServiceContainer extends ServiceContainer {
     
 	@Override
 	public void unpackContainer() throws ContainerException {
-		// TODO Auto-generated method stub
 		super.unpackContainer();
 		if (!System.getProperty("os.name").toLowerCase().contains("win")) {
             // make files in /bin directory executable if not on windows platform
@@ -248,20 +247,19 @@ public class TomcatServiceContainer extends ServiceContainer {
 			if (getProperties().getMaxShutdownWaitTime() != null) {
 				wait = getProperties().getMaxShutdownWaitTime().intValue();
 			}
+            LOG.debug("WAITING " + wait + " seconds to shut down");
 			success = future.get(wait, TimeUnit.SECONDS).booleanValue();
 		} catch (Exception ex) {
 			throw new ContainerException("Error shutting down container: "
 					+ ex.getMessage(), ex);
 		} finally {
-			LOG.debug("Shutdown task complete, destroying processes");
+            LOG.debug("Shutdown task complete, destroying processes");
 			future.cancel(true);
 			executor.shutdownNow();
 			shutdownProcess.destroy();
 			catalinaProcess.destroy();
+            LOG.debug("Processes destroyed");
 		}
-
-		shutdownProcess = null;
-		catalinaProcess = null;
 
 		if (!success) {
 			throw new ContainerException("Shutdown command failed: " +
