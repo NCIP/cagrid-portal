@@ -35,7 +35,7 @@
 	<property name="project.resources.jarfile" value="${jar.dir}/${project.name}-resources-${project.version}.jar" />
 
 	<property name="extension.dir" location="${basedir}/extension" />
-	<property name="extension.name" value="gme_discovery" />
+	<property name="extension.name" value="gme-discovery" />
 
 	<property name="extension.description.file" value="${extension.dir}/extension.xml" />
 	<property name="introduce.extensions.dir" location="../introduce/extensions" />

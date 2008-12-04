@@ -465,7 +465,7 @@ public class GMEViewer extends NamespaceTypeToolsComponent
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
             ExtensionDescription ext = (ExtensionDescription) Utils.deserializeDocument("extensions" + File.separator
-                + "gme_discovery" + File.separator + "extension.xml", ExtensionDescription.class);
+                + "gme-discovery" + File.separator + "extension.xml", ExtensionDescription.class);
             final GMEViewer panel = new GMEViewer(ext.getDiscoveryExtensionDescription());
             frame.getContentPane().setLayout(new BorderLayout());
             frame.getContentPane().add(panel, BorderLayout.CENTER);
