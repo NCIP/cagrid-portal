@@ -16,7 +16,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.cagrid.transfer.context.service.globus.resource.TransferServiceContextResource;
 import org.cagrid.transfer.context.stubs.TransferServiceContextResourceProperties;
 import org.cagrid.transfer.descriptor.DataStorageDescriptor;
@@ -24,7 +25,7 @@ import org.globus.axis.gsi.GSIConstants;
 
 
 public class TransferServlet extends HttpServlet {
-    private static final Logger logger = Logger.getLogger(TransferServlet.class);
+    private static final Log logger = LogFactory.getLog(TransferServlet.class);
 
     private Properties props = null;
     String persistenceDir = null;
