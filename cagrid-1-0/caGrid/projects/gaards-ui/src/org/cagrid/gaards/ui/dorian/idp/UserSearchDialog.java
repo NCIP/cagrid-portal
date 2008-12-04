@@ -33,7 +33,7 @@ import org.cagrid.grape.utils.ErrorDialog;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: UserSearchDialog.java,v 1.1 2008-12-03 19:52:29 langella Exp $
+ * @version $Id: UserSearchDialog.java,v 1.2 2008-12-04 20:46:04 langella Exp $
  */
 public class UserSearchDialog extends JDialog {
 
@@ -86,6 +86,10 @@ public class UserSearchDialog extends JDialog {
     private DorianSessionProvider sessionProvider;
 
     private JPanel titlePanel = null;
+
+    private JLabel jLabel2 = null;
+
+    private JTextField organization = null;
 
 
     /**
@@ -387,6 +391,7 @@ public class UserSearchDialog extends JDialog {
             f.setUserId(format(getUserId().getText()));
             f.setFirstName(format(this.firstName.getText()));
             f.setLastName(format(this.lastName.getText()));
+            f.setOrganization(format(getOrganization().getText()));
             f.setEmail(format(getEmail().getText()));
 
             LocalAdministrationClient client = this.sessionProvider.getSession().getLocalAdminClient();
@@ -439,6 +444,19 @@ public class UserSearchDialog extends JDialog {
      */
     private JPanel getFilterPanel() {
         if (filterPanel == null) {
+            GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
+            gridBagConstraints5.fill = GridBagConstraints.HORIZONTAL;
+            gridBagConstraints5.gridy = 3;
+            gridBagConstraints5.weightx = 1.0;
+            gridBagConstraints5.insets = new Insets(2, 2, 2, 2);
+            gridBagConstraints5.gridx = 1;
+            GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
+            gridBagConstraints3.gridx = 0;
+            gridBagConstraints3.insets = new Insets(2, 2, 2, 2);
+            gridBagConstraints3.anchor = GridBagConstraints.WEST;
+            gridBagConstraints3.gridy = 3;
+            jLabel2 = new JLabel();
+            jLabel2.setText("Organization");
             GridBagConstraints gridBagConstraints19 = new GridBagConstraints();
             gridBagConstraints19.fill = java.awt.GridBagConstraints.HORIZONTAL;
             gridBagConstraints19.gridy = 2;
@@ -491,7 +509,7 @@ public class UserSearchDialog extends JDialog {
             uidLabel.setText("User Id");
             GridBagConstraints gridBagConstraints9 = new GridBagConstraints();
             gridBagConstraints9.fill = java.awt.GridBagConstraints.HORIZONTAL;
-            gridBagConstraints9.gridy = 3;
+            gridBagConstraints9.gridy = 4;
             gridBagConstraints9.weightx = 1.0;
             gridBagConstraints9.anchor = java.awt.GridBagConstraints.WEST;
             gridBagConstraints9.insets = new java.awt.Insets(2, 2, 2, 2);
@@ -500,7 +518,7 @@ public class UserSearchDialog extends JDialog {
             gridBagConstraints8.gridx = 0;
             gridBagConstraints8.anchor = java.awt.GridBagConstraints.WEST;
             gridBagConstraints8.insets = new java.awt.Insets(2, 2, 2, 2);
-            gridBagConstraints8.gridy = 3;
+            gridBagConstraints8.gridy = 4;
             emailLabel = new JLabel();
             emailLabel.setText("Email");
             filterPanel = new JPanel();
@@ -516,6 +534,8 @@ public class UserSearchDialog extends JDialog {
             filterPanel.add(jLabel1, gridBagConstraints17);
             filterPanel.add(getFirstName(), gridBagConstraints18);
             filterPanel.add(getLastName(), gridBagConstraints19);
+            filterPanel.add(jLabel2, gridBagConstraints3);
+            filterPanel.add(getOrganization(), gridBagConstraints5);
         }
         return filterPanel;
     }
@@ -583,6 +603,19 @@ public class UserSearchDialog extends JDialog {
             titlePanel = new TitlePanel("User Search", "Search for and select a user in the federation.");
         }
         return titlePanel;
+    }
+
+
+    /**
+     * This method initializes organization	
+     * 	
+     * @return javax.swing.JTextField	
+     */
+    private JTextField getOrganization() {
+        if (organization == null) {
+            organization = new JTextField();
+        }
+        return organization;
     }
 
 }

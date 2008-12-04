@@ -11,17 +11,17 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
 import javax.swing.border.TitledBorder;
 
 import org.cagrid.gaards.dorian.client.LocalAdministrationClient;
 import org.cagrid.gaards.dorian.idp.LocalUser;
 import org.cagrid.gaards.dorian.idp.LocalUserFilter;
 import org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault;
+import org.cagrid.gaards.ui.common.ProgressPanel;
+import org.cagrid.gaards.ui.common.TitlePanel;
 import org.cagrid.gaards.ui.dorian.DorianLookAndFeel;
 import org.cagrid.gaards.ui.dorian.SessionPanel;
 import org.cagrid.grape.ApplicationComponent;
@@ -34,7 +34,7 @@ import org.cagrid.grape.utils.ErrorDialog;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Langella </A>
- * @version $Id: UserManagerWindow.java,v 1.8 2008-12-03 19:52:29 langella Exp $
+ * @version $Id: UserManagerWindow.java,v 1.9 2008-12-04 20:46:04 langella Exp $
  */
 public class UserManagerWindow extends ApplicationComponent {
 
@@ -132,15 +132,11 @@ public class UserManagerWindow extends ApplicationComponent {
 
     private UserStatusComboBox userStatus = null;
 
-    private boolean isQuerying = false;
-
-    private Object mutex = new Object();
-
-    private JPanel progressPanel = null;
-
-    private JProgressBar progress = null;
-
     private JButton removeUser = null;
+
+    private JPanel titlePanel = null;
+
+    private ProgressPanel progressPanel = null;
 
 
     /**
@@ -158,7 +154,8 @@ public class UserManagerWindow extends ApplicationComponent {
      */
     private void initialize() {
         this.setContentPane(getJContentPane());
-        this.setTitle("Manage Users");
+        this.setTitle("Local User Search");
+        this.setSize(500, 500);
 
     }
 
@@ -185,20 +182,25 @@ public class UserManagerWindow extends ApplicationComponent {
      */
     private JPanel getMainPanel() {
         if (mainPanel == null) {
-            GridBagConstraints gridBagConstraints32 = new GridBagConstraints();
-            gridBagConstraints32.gridx = 0;
-            gridBagConstraints32.fill = java.awt.GridBagConstraints.HORIZONTAL;
-            gridBagConstraints32.insets = new java.awt.Insets(2, 2, 2, 2);
-            gridBagConstraints32.weightx = 1.0D;
-            gridBagConstraints32.gridy = 2;
+            GridBagConstraints gridBagConstraints29 = new GridBagConstraints();
+            gridBagConstraints29.gridx = 0;
+            gridBagConstraints29.gridy = 5;
+            gridBagConstraints29.weightx = 1.0D;
+            gridBagConstraints29.fill = GridBagConstraints.HORIZONTAL;
+            GridBagConstraints gridBagConstraints28 = new GridBagConstraints();
+            gridBagConstraints28.gridx = 0;
+            gridBagConstraints28.insets = new Insets(2, 2, 2, 2);
+            gridBagConstraints28.weightx = 1.0D;
+            gridBagConstraints28.fill = GridBagConstraints.HORIZONTAL;
+            gridBagConstraints28.gridy = 0;
             GridBagConstraints gridBagConstraints33 = new GridBagConstraints();
             gridBagConstraints33.gridx = 0;
-            gridBagConstraints33.gridy = 1;
+            gridBagConstraints33.gridy = 2;
             GridBagConstraints gridBagConstraints35 = new GridBagConstraints();
             gridBagConstraints35.gridx = 0;
             gridBagConstraints35.weightx = 1.0D;
             gridBagConstraints35.fill = java.awt.GridBagConstraints.BOTH;
-            gridBagConstraints35.gridy = 0;
+            gridBagConstraints35.gridy = 1;
             GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
             GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
             mainPanel = new JPanel();
@@ -219,7 +221,8 @@ public class UserManagerWindow extends ApplicationComponent {
             mainPanel.add(getButtonPanel(), gridBagConstraints2);
             mainPanel.add(getJPanel(), gridBagConstraints35);
             mainPanel.add(getQueryPanel(), gridBagConstraints33);
-            mainPanel.add(getProgressPanel(), gridBagConstraints32);
+            mainPanel.add(getTitlePanel(), gridBagConstraints28);
+            mainPanel.add(getProgressPanel(), gridBagConstraints29);
         }
         return mainPanel;
     }
@@ -736,7 +739,7 @@ public class UserManagerWindow extends ApplicationComponent {
      */
     private SessionPanel getSession() {
         if (session == null) {
-            session = new SessionPanel();
+            session = new SessionPanel(false);
         }
         return session;
     }
@@ -765,6 +768,7 @@ public class UserManagerWindow extends ApplicationComponent {
         if (query == null) {
             query = new JButton();
             query.setText("Find Users");
+            getRootPane().setDefaultButton(query);
             query.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
                     Runner runner = new Runner() {
@@ -786,20 +790,9 @@ public class UserManagerWindow extends ApplicationComponent {
 
 
     private void findUsers() {
-
-        synchronized (mutex) {
-            if (isQuerying) {
-                ErrorDialog.showError("Query Already in Progress",
-                    "Please wait until the current query is finished before executing another.");
-                return;
-            } else {
-                isQuerying = true;
-            }
-        }
-
+        disableButtons();
         this.getUsersTable().clearTable();
-        this.updateProgress(true, "Querying...");
-
+        this.getProgressPanel().showProgress("Querying...");
         try {
             LocalUserFilter f = new LocalUserFilter();
             JPanel panel = (JPanel) this.getJTabbedPane().getSelectedComponent();
@@ -829,20 +822,16 @@ public class UserManagerWindow extends ApplicationComponent {
                     this.getUsersTable().addUser(users.get(i));
                 }
             }
-            int length = 0;
-            if (users != null) {
-                length = users.size();
-            }
-            this.updateProgress(false, "Querying Completed [" + length + " users found]");
+
+            this.getProgressPanel().stopProgress(users.size() + " user(s) found.");
         } catch (PermissionDeniedFault pdf) {
             ErrorDialog.showError(pdf);
-            this.updateProgress(false, "Error");
+            this.getProgressPanel().stopProgress("Error.");
         } catch (Exception e) {
-            e.printStackTrace();
             ErrorDialog.showError(e);
-            this.updateProgress(false, "Error");
+            this.getProgressPanel().stopProgress("Error.");
         }
-        isQuerying = false;
+        enableButtons();
     }
 
 
@@ -918,54 +907,6 @@ public class UserManagerWindow extends ApplicationComponent {
 
 
     /**
-     * This method initializes progressPanel
-     * 
-     * @return javax.swing.JPanel
-     */
-    private JPanel getProgressPanel() {
-        if (progressPanel == null) {
-            GridBagConstraints gridBagConstraints36 = new GridBagConstraints();
-            gridBagConstraints36.insets = new java.awt.Insets(2, 20, 2, 20);
-            gridBagConstraints36.gridy = 0;
-            gridBagConstraints36.fill = java.awt.GridBagConstraints.HORIZONTAL;
-            gridBagConstraints36.weightx = 1.0D;
-            gridBagConstraints36.gridx = 0;
-            progressPanel = new JPanel();
-            progressPanel.setLayout(new GridBagLayout());
-            progressPanel.add(getProgress(), gridBagConstraints36);
-        }
-        return progressPanel;
-    }
-
-
-    /**
-     * This method initializes progress
-     * 
-     * @return javax.swing.JProgressBar
-     */
-    private JProgressBar getProgress() {
-        if (progress == null) {
-            progress = new JProgressBar();
-            progress.setForeground(LookAndFeel.getPanelLabelColor());
-            progress.setString("");
-            progress.setStringPainted(true);
-        }
-        return progress;
-    }
-
-
-    public void updateProgress(final boolean working, final String s) {
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                getProgress().setString(s);
-                getProgress().setIndeterminate(working);
-            }
-        });
-
-    }
-
-
-    /**
      * This method initializes removeUser
      * 
      * @return javax.swing.JButton
@@ -995,38 +936,69 @@ public class UserManagerWindow extends ApplicationComponent {
 
 
     private synchronized void removeUser() {
-        synchronized (mutex) {
-            if (isQuerying) {
-                ErrorDialog.showError("Action in Progress",
-                    "Please wait until the current action is finished before executing another.");
-                return;
-            } else {
-                isQuerying = true;
-            }
-        }
-
+        disableButtons();
         final int row = getUsersTable().getSelectedRow();
 
         if ((row >= 0) && (row < getUsersTable().getRowCount())) {
             LocalUser user = (LocalUser) getUsersTable().getValueAt(row, 0);
-            this.updateProgress(true, "Removing the user " + user.getUserId() + "...");
+            getProgressPanel().showProgress("Removing the user " + user.getUserId() + "...");
 
             try {
                 LocalAdministrationClient client = getSession().getLocalAdminClient();
                 client.removeUser(user.getUserId());
                 getUsersTable().removeRow(row);
-                this.updateProgress(false, "Successfully removed the user " + user.getUserId() + "!!!");
+                getProgressPanel().stopProgress("Successfully removed the user " + user.getUserId() + "!!!");
             } catch (PermissionDeniedFault pdf) {
                 ErrorDialog.showError(pdf);
-                this.updateProgress(false, "Error removing the user " + user.getUserId() + "!!!");
+                getProgressPanel().stopProgress("Error.");
             } catch (Exception e) {
                 ErrorDialog.showError(e);
-                this.updateProgress(false, "Error removing the user " + user.getUserId() + "!!!");
+                getProgressPanel().stopProgress("Error.");
             }
         } else {
             ErrorDialog.showError("Please select a user to remove!!!");
         }
-        isQuerying = false;
+        enableButtons();
+    }
+
+
+    /**
+     * This method initializes titlePanel
+     * 
+     * @return javax.swing.JPanel
+     */
+    private JPanel getTitlePanel() {
+        if (titlePanel == null) {
+            titlePanel = new TitlePanel("User Search", "Search the Dorian identity provider for registered users.");
+        }
+        return titlePanel;
+    }
+
+
+    /**
+     * This method initializes progressPanel
+     * 
+     * @return javax.swing.JPanel
+     */
+    private ProgressPanel getProgressPanel() {
+        if (progressPanel == null) {
+            progressPanel = new ProgressPanel();
+        }
+        return progressPanel;
+    }
+
+
+    private void disableButtons() {
+        getRemoveUser().setEnabled(false);
+        getQuery().setEnabled(false);
+        getManageUser().setEnabled(false);
+    }
+
+
+    private void enableButtons() {
+        getRemoveUser().setEnabled(true);
+        getQuery().setEnabled(true);
+        getManageUser().setEnabled(true);
     }
 
 }
