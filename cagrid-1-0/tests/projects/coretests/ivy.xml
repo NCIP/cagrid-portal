@@ -41,7 +41,6 @@
     <dependency rev="latest.integration" org="caGrid" name="cadsr" conf="default->client"/>
     <dependency rev="latest.integration" org="caGrid" name="gridgrouper" conf="impl-test->test"/>
     <dependency rev="latest.integration" org="caGrid" name="cds" conf="impl-test->client"/>
-    <dependency rev="latest.integration" org="caGrid" name="evs" conf="impl-test->client"/>
 
     <!-- External Dependencies -->
     <dependency rev="0.5.2-patched" org="jaxme" name="jaxmejs" conf="default->default"/>
