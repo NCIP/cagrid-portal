@@ -2,10 +2,11 @@
 <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
 
 <beans>
-     
+  
+  <!--    
     <bean id="subjectProvider" class="org.cagrid.gaards.authentication.test.ExampleSubjectProvider2"/>
-     
-    <!--  
+      -->
+    
     <bean id="subjectProvider" class="org.cagrid.gaards.authentication.service.DefaultSubjectProvider">
         <constructor-arg value="${gaards.authentication.csm.truststore}"/>
         <property name="authenticationManager">
@@ -14,7 +15,7 @@
             </bean>
         </property>
     </bean>
-     -->
+     
     
     <bean id="samlProvider" class="org.cagrid.gaards.authentication.service.DefaultSAMLProvider" 
         init-method="loadCertificates">
