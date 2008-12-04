@@ -9,6 +9,7 @@ import gov.nih.nci.system.client.ApplicationServiceProvider;
 
 import java.net.URI;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.cagrid.mms.domain.ModelSourceMetadata;
@@ -93,17 +94,28 @@ public class CaDSRMMSImpl implements MMS {
 
 
     public ServiceMetadata annotateServiceMetadata(ServiceMetadata serviceMetadata,
-        Map<URI, UMLProjectIdentifer> namespaceToProjectMappings) throws MMSGeneralException {
-        // TODO: deal with namespaceToProjectMappings
-        // ServiceMetadataAnnotator annotator = new
-        // ServiceMetadataAnnotator(getApplicationService());
-        // try {
-        // annotator.annotateServiceMetadata(serviceMetadata);
-        // } catch (CaDSRGeneralException e) {
-        // throw new MMSGeneralException("Problem from remote caDSR (" +
-        // getCaDSRApplicationServiceURL() + "):"
-        // + e.getMessage(), e);
-        // }
+        Map<URI, UMLProjectIdentifer> namespaceToProjectMappings) throws MMSGeneralException,
+        InvalidUMLProjectIndentifier {
+
+        Map<String, QualifiedProject> uriToProjectMap = new HashMap<String, QualifiedProject>();
+        if (namespaceToProjectMappings != null) {
+            for (URI namespace : namespaceToProjectMappings.keySet()) {
+                UMLProjectIdentifer projId = namespaceToProjectMappings.get(namespace);
+                QualifiedProject proj = new QualifiedProject(getApplicationServiceForUMLProjectIdentifier(projId),
+                    createProjectPrototypeFromIdentifier(projId));
+                uriToProjectMap.put(namespace.toString(), proj);
+            }
+        }
+
+        ServiceMetadataAnnotator annotator = new ServiceMetadataAnnotator(uriToProjectMap,
+            getApplicationService(DEFAULT_SOURCE_IDENTIFIER));
+
+        try {
+            annotator.annotateServiceMetadata(serviceMetadata);
+        } catch (CaDSRGeneralException e) {
+            throw new MMSGeneralException("Problem from remote caDSR (" + getCaDSRApplicationServiceURL() + "):"
+                + e.getMessage(), e);
+        }
         return serviceMetadata;
     }
 
