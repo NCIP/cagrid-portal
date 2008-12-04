@@ -1,12 +1,13 @@
 package com.cagrid.liferay.websso.client;
 
-
-import com.liferay.portal.NoSuchUserException;
+import com.liferay.portal.NoSuchUserIdMapperException;
 import com.liferay.portal.PortalException;
 import com.liferay.portal.SystemException;
 import com.liferay.portal.model.User;
+import com.liferay.portal.model.UserIdMapper;
 import com.liferay.portal.security.auth.AutoLogin;
 import com.liferay.portal.security.auth.AutoLoginException;
+import com.liferay.portal.service.UserIdMapperLocalServiceUtil;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.service.UserServiceUtil;
 import com.liferay.portal.util.PortalUtil;
@@ -14,6 +15,7 @@ import com.liferay.portal.util.PrefsPropsUtil;
 import com.liferay.portal.util.PropsUtil;
 
 import java.rmi.RemoteException;
+import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -32,77 +34,81 @@ import org.cagrid.websso.client.acegi.WebSSOUser;
  */
 public class CaGridLiferayCASAutoLoginHook implements AutoLogin {
 
+	private static Log _log = LogFactory.getLog(CaGridLiferayCASAutoLoginHook.class);
 	public String[] login(HttpServletRequest req, HttpServletResponse res)
 		throws AutoLoginException {
-
 		try {
 			String[] credentials = null;
-
 			long companyId = PortalUtil.getCompanyId(req);
-
-			if (!PrefsPropsUtil.getBoolean(
-					companyId, PropsUtil.CAS_AUTH_ENABLED)) {
+			if (!PrefsPropsUtil.getBoolean(companyId,PropsUtil.CAS_AUTH_ENABLED)) {
 				return credentials;
 			}
 			WebSSOUser webssoUser = (WebSSOUser) SecurityContextHolder
-									.getContext().getAuthentication().getPrincipal();
-			String screenName=webssoUser.getUsername(); 
-			if (screenName != null) {
-				User user = null;
-				try {
-					user = UserLocalServiceUtil.getUserByScreenName(companyId,
-							screenName);
-				} catch (NoSuchUserException nsue) {
-					user = addUser(companyId, webssoUser);
-				}
-				credentials = new String[3];
-				credentials[0] = String.valueOf(user.getUserId());
-				credentials[1] = user.getPassword();
-				credentials[2] = Boolean.TRUE.toString();
+					.getContext().getAuthentication().getPrincipal();
+			User user = null;
+			try {
+				_log.debug("Users Company Id "+companyId+"  GridId "+webssoUser.getGridId());
+				UserIdMapper userIdMapper = UserIdMapperLocalServiceUtil
+						.getUserIdMapperByExternalUserId("", webssoUser.getGridId());				
+				user = UserLocalServiceUtil.getUserById(userIdMapper.getUserId());
+			} catch (NoSuchUserIdMapperException nusime) {
+				_log.debug(nusime.getMessage());
+				user = addUser(companyId, webssoUser);
+				UserIdMapperLocalServiceUtil.updateUserIdMapper(user
+						.getUserId(), null, null, webssoUser.getGridId());
 			}
+			credentials = new String[3];
+			credentials[0] = String.valueOf(user.getUserId());
+			credentials[1] = user.getPassword();
+			credentials[2] = Boolean.TRUE.toString();
 			return credentials;
 		} catch (Exception e) {
 			throw new AutoLoginException(e);
 		}
 	}
 	
-	//username is unique for companyId
-	protected User addUser(long companyId, WebSSOUser webssoUser)
+	/**
+	 * Assumptions creating Grid User:
+	 * GridId is always unique, Create UserIdMapper 
+	 * Always screen name generator must be Auto generated.
+	 * Allow Duplicate email Ids can be present for a particular company Id for a particular user
+	 */
+	protected User addUser(long paramCompanyId, WebSSOUser webssoUser)
 		throws PortalException, SystemException {
 		
-		//autoPassword ? true ------ generate passwords
-		//password1 ? dummy passwords
-		//password2 ? dummy passwords
-		//autoScreenName ? true
-		//screenName ? -- cagrid user name - unique for each user
-		//emailAddress ?  ?????????????
-		//locale ?
-		//firstName ?  ????????
-		//middleName ?  ????????? null
-		//lastName ?  ???????????
-		//prefixId ?               null
-		//suffixId ?               null 
-		//male ?    ??????         null 
-		//birthdayMonth ?  ?????   null
-		//birthdayDay ?   ???????  null
-		//birthdayYear ?   ??????? null
-		//jobTitle ?
-		//organizationId ?
-		//locationId ?
-		//sendEmail ?			  true	
+		long companyId=paramCompanyId;
+		boolean autoPassword=true;
+		String password1=null;
+		String password2=null;
+		boolean autoScreenName=true; // always must be true;
+		String screenName="";
+		String emailAdress=webssoUser.getEmailId();
+		Locale locale=Locale.US;
+		String firstName=webssoUser.getFirstName();
+		String middleName=null;
+		String lastName=webssoUser.getLastName();
+		int prefix=0;
+		int suffix=0;
+		boolean male=true;
+		int birthMonth=1;
+		int birthDay=1;
+		int birthYear=1900;
+		String jobTitle=null;
+		int organizationId=0;
+		int locationId=0;
+		boolean sendEmail=false;
 
 		User user=null;
 		try {
-		 user=UserServiceUtil.addUser(companyId, true, null, null,
-					false, webssoUser.getGridId(), webssoUser.getEmailId(), null, webssoUser.getFirstName(),
-					null, webssoUser.getLastName(), 0,0,true,1,
-					1, 1970, null, 1,1, false);
+		 user = UserServiceUtil.addUser(companyId, autoPassword, password1,
+					password2, autoScreenName, screenName, emailAdress, locale,
+					firstName, middleName, lastName, prefix, suffix, male,
+					birthMonth, birthDay, birthYear, jobTitle, organizationId,
+					locationId, sendEmail);
 			
 		} catch (RemoteException e) {
 			throw new SystemException(e);
 		}
 		return user;
-	}
-	private static Log _log = LogFactory.getLog(CaGridLiferayCASAutoLoginHook.class);
-
+	}	
 }
