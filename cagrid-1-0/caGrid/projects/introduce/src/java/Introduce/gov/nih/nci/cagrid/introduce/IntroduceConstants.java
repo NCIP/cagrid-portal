@@ -99,6 +99,15 @@ public abstract class IntroduceConstants {
 	public static final String INTRODUCE_DEPLOYMENT_INDEX_SERVICE_URL_PROPERTY = "index.service.url";
 	public static final String INTRODUCE_DEPLOYMENT_PREFIX_PROPERTY = "service.deployment.prefix";
 	public static final String INTRODUCE_DEPLOYMENT_REFRESH_REGISTRATION_PROPERTY = "index.service.registration.refresh_seconds";
+    
+    // deployment task properties
+    public static final String WEBAPP_DEPLOY_LOCATION = "webapp.deploy.dir";
+    public static final String WEBAPP_DEPLOY_LIB_LOCATION = "webapp.deploy.lib.dir";
+    public static final String WEBAPP_DEPLOY_SCHEMA_LOCATION = "webapp.deploy.schema.dir";
+    public static final String WEBAPP_DEPLOY_ETC_LOCATION = "webapp.deploy.etc.dir";
+    public static final String SERVICE_DEPLOYMENT_DIR_NAME = "service.deployment.dir.name";
+    public static final String SERVICE_DEPLOYMENT_PREFIX = "service.deployment.prefix";
+    public static final String SERVICE_DEPLOYMENT_NAME = "service.name";
 
 	// w3c namespaces
 	public static final String W3CNAMESPACE = "http://www.w3.org/2001/XMLSchema";
