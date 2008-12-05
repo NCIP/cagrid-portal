@@ -168,6 +168,8 @@ public abstract class TransferServiceContextResourceBase extends ReflectionResou
 	 * @see org.globus.wsrf.ResourceLifetime#setTerminationTime(java.util.Calendar)
 	 */
 	public void setTerminationTime(Calendar time) {	
+	    super.setTerminationTime(time);
+	    
 		Topic terminationTopic = ((Topic)getResourcePropertySet().get(TransferServiceContextConstants.TERMINATIONTIME));
         if (terminationTopic != null) {
             TerminationNotification terminationNotification =
@@ -180,7 +182,6 @@ public abstract class TransferServiceContextResourceBase extends ReflectionResou
             }
         }	
         
-		super.setTerminationTime(time);
         //call the first store to persist the resource
         try {
             store();

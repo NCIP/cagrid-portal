@@ -239,6 +239,7 @@ if(arguments.getService().getResourceFrameworkOptions().getPersistent()!=null){
 	 * @see org.globus.wsrf.ResourceLifetime#setTerminationTime(java.util.Calendar)
 	 */
 	public void setTerminationTime(Calendar time) {
+	    super.setTerminationTime(time);
 <%    
     if(arguments.getService().getResourceFrameworkOptions().getNotification()!=null){
 %>	
@@ -257,7 +258,6 @@ if(arguments.getService().getResourceFrameworkOptions().getPersistent()!=null){
     }
 %>	
         
-		super.setTerminationTime(time);
 <%
 if(arguments.getService().getResourceFrameworkOptions().getPersistent()!=null){
 %>
