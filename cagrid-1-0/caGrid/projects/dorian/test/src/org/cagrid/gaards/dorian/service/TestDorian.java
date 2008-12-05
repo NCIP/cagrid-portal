@@ -99,7 +99,7 @@ public class TestDorian extends TestCase {
             // test authentication with an active user
             Application a = createApplication();
             assertFalse(dorian.doesLocalUserExist(a.getUserId()));
-            dorian.registerWithIdP(a);
+            dorian.registerLocalUser(a);
             assertTrue(dorian.doesLocalUserExist(a.getUserId()));
             LocalUserFilter uf = new LocalUserFilter();
             uf.setUserId(a.getUserId());
@@ -121,7 +121,7 @@ public class TestDorian extends TestCase {
 
             // test authentication with a status pending user
             Application b = createApplication();
-            dorian.registerWithIdP(b);
+            dorian.registerLocalUser(b);
             uf = new LocalUserFilter();
             uf.setUserId(b.getUserId());
             users = dorian.findLocalUsers(gridId, uf);
@@ -139,7 +139,7 @@ public class TestDorian extends TestCase {
 
             // test authentication with a status rejected user
             Application c = createApplication();
-            dorian.registerWithIdP(c);
+            dorian.registerLocalUser(c);
             uf = new LocalUserFilter();
             uf.setUserId(c.getUserId());
             users = dorian.findLocalUsers(gridId, uf);
@@ -159,7 +159,7 @@ public class TestDorian extends TestCase {
 
             // test authentication with a status suspended user
             Application d = createApplication();
-            dorian.registerWithIdP(d);
+            dorian.registerLocalUser(d);
             uf = new LocalUserFilter();
             uf.setUserId(d.getUserId());
             users = dorian.findLocalUsers(gridId, uf);
@@ -203,7 +203,7 @@ public class TestDorian extends TestCase {
             String gridId = UserManager.subjectToIdentity(gridSubject);
 
             Application a = createApplication();
-            dorian.registerWithIdP(a);
+            dorian.registerLocalUser(a);
             LocalUserFilter uf = new LocalUserFilter();
             uf.setUserId(a.getUserId());
 
@@ -344,7 +344,7 @@ public class TestDorian extends TestCase {
             assertEquals(1, dorian.findGridUsers(gridId, uf).length);
 
             Application app = createApplication();
-            dorian.registerWithIdP(app);
+            dorian.registerLocalUser(app);
 
             LocalUserFilter f = new LocalUserFilter();
             f.setUserId(app.getUserId());
@@ -432,7 +432,7 @@ public class TestDorian extends TestCase {
             uf.setGridId(gridId);
             assertEquals(1, dorian.findGridUsers(gridId, uf).length);
             Application app = createApplication();
-            dorian.registerWithIdP(app);
+            dorian.registerLocalUser(app);
             LocalUserFilter f = new LocalUserFilter();
             f.setUserId(app.getUserId());
             LocalUser[] list = dorian.findLocalUsers(gridId, f);
@@ -510,7 +510,7 @@ public class TestDorian extends TestCase {
             String gridSubject = getDorianIdPUserId(conf, dorian, Dorian.IDP_ADMIN_USER_ID);
             String gridId = UserManager.subjectToIdentity(gridSubject);
             Application app = createApplication();
-            dorian.registerWithIdP(app);
+            dorian.registerLocalUser(app);
 
             LocalUserFilter f = new LocalUserFilter();
             f.setUserId(app.getUserId());

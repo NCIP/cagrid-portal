@@ -26,7 +26,6 @@ import org.cagrid.gaards.dorian.idp.BasicAuthCredential;
 import org.cagrid.gaards.dorian.stubs.types.DorianInternalFault;
 import org.cagrid.gaards.dorian.stubs.types.InvalidUserPropertyFault;
 import org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault;
-import org.globus.wsrf.impl.security.authorization.Authorization;
 
 
 /**
@@ -36,28 +35,10 @@ import org.globus.wsrf.impl.security.authorization.Authorization;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public class LocalUserClient {
-
-    private DorianClient client;
-    private String serviceURL;
-
+public class LocalUserClient extends DorianBaseClient {
 
     public LocalUserClient(String serviceURL) throws MalformedURIException, RemoteException {
-        this.serviceURL = serviceURL;
-        client = new DorianClient(serviceURL);
-    }
-
-
-    /**
-     * This method specifies an authorization policy that the client should use
-     * for authorizing the server that it connects to.
-     * 
-     * @param authorization
-     *            The authorization policy to enforce
-     */
-
-    public void setAuthorization(Authorization authorization) {
-        client.setAuthorization(authorization);
+        super(serviceURL);
     }
 
 
@@ -75,7 +56,7 @@ public class LocalUserClient {
 
     public boolean doesUserExist(String userId) throws DorianFault, DorianInternalFault {
         try {
-            return client.doesLocalUserExist(userId);
+            return getClient().doesLocalUserExist(userId);
         } catch (DorianInternalFault f) {
             throw f;
         } catch (Exception e) {
@@ -112,8 +93,8 @@ public class LocalUserClient {
         InvalidCredentialFault, CredentialNotSupportedFault, AuthenticationProviderFault {
 
         try {
-            AuthenticationClient auth = new AuthenticationClient(this.serviceURL);
-            auth.setAuthorization(client.getAuthorization());
+            AuthenticationClient auth = new AuthenticationClient(getServiceURL());
+            auth.setAuthorization(getClient().getAuthorization());
             return auth.authenticate(cred);
         } catch (InvalidCredentialFault f) {
             throw f;
@@ -150,14 +131,14 @@ public class LocalUserClient {
     public void changePassword(BasicAuthentication cred, String newPassword) throws DorianFault, DorianInternalFault,
         PermissionDeniedFault, InvalidUserPropertyFault {
         try {
-            AuthenticationClient auth = new AuthenticationClient(this.serviceURL);
-            if (auth.getSupportedAuthenticationProfiles() == null) {
+            String version = getServiceVersion();
+            if (version.equals(VERSION_1_0) || version.equals(VERSION_1_1) || version.equals(VERSION_1_2)) {
                 BasicAuthCredential bac = new BasicAuthCredential();
                 bac.setUserId(cred.getUserId());
                 bac.setPassword(cred.getPassword());
-                client.changeIdPUserPassword(bac, newPassword);
+                getClient().changeIdPUserPassword(bac, newPassword);
             } else {
-                client.changeLocalUserPassword(cred, newPassword);
+                getClient().changeLocalUserPassword(cred, newPassword);
             }
         } catch (DorianInternalFault f) {
             throw f;
@@ -190,7 +171,12 @@ public class LocalUserClient {
      */
     public String register(Application a) throws DorianFault, DorianInternalFault, InvalidUserPropertyFault {
         try {
-            return client.registerWithIdP(a);
+            String version = getServiceVersion();
+            if (version.equals(VERSION_1_0) || version.equals(VERSION_1_1) || version.equals(VERSION_1_2)) {
+                return getClient().registerWithIdP(a);
+            } else {
+                return getClient().registerLocalUser(a);
+            }
         } catch (DorianInternalFault gie) {
             throw gie;
         } catch (InvalidUserPropertyFault f) {
@@ -224,7 +210,7 @@ public class LocalUserClient {
     public Set<QName> getSupportedAuthenticationProfiles() throws ResourcePropertyRetrievalException {
         AuthenticationClient auth = null;
         try {
-            auth = new AuthenticationClient(this.serviceURL);
+            auth = new AuthenticationClient(getServiceURL());
         } catch (Exception e) {
             throw new ResourcePropertyRetrievalException("Unexpected error retrieving authentication profiles: "
                 + Utils.getExceptionMessage(e), e);

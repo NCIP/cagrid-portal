@@ -4,7 +4,6 @@ import gov.nih.nci.cagrid.common.FaultHelper;
 import gov.nih.nci.cagrid.common.FaultUtil;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.metadata.ResourcePropertyHelper;
-import gov.nih.nci.cagrid.metadata.ServiceMetadata;
 import gov.nih.nci.cagrid.metadata.exceptions.InvalidResourcePropertyException;
 import gov.nih.nci.cagrid.metadata.exceptions.ResourcePropertyRetrievalException;
 import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
@@ -40,44 +39,23 @@ import org.cagrid.gaards.pki.CertUtil;
 import org.cagrid.gaards.pki.KeyUtil;
 import org.cagrid.gaards.saml.encoding.SAMLUtils;
 import org.globus.gsi.GlobusCredential;
-import org.globus.wsrf.impl.security.authorization.Authorization;
 import org.globus.wsrf.utils.XmlUtils;
 import org.w3c.dom.Element;
 
 
-public class GridUserClient {
-
-    public static final String VERSION_1_0 = "1.0";
-    public static final String VERSION_1_1 = "1.1";
-    public static final String VERSION_1_2 = "1.2";
+public class GridUserClient extends DorianBaseClient {
 
     public static final QName TRUSTED_IDPS_METADATA = new QName("http://cagrid.nci.nih.gov/1/dorian-ifs",
         "TrustedIdentityProviders");
-    public static final QName SERVICE_METADATA = new QName("gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata",
-        "ServiceMetadata");
-    private DorianClient client;
 
 
     public GridUserClient(String serviceURI) throws MalformedURIException, RemoteException {
-        client = new DorianClient(serviceURI);
+        super(serviceURI);
     }
 
 
     public GridUserClient(String serviceURI, GlobusCredential cred) throws MalformedURIException, RemoteException {
-        client = new DorianClient(serviceURI, cred);
-    }
-
-
-    /**
-     * This method specifies an authorization policy that the client should use
-     * for authorizing the server that it connects to.
-     * 
-     * @param authorization
-     *            The authorization policy to enforce
-     */
-
-    public void setAuthorization(Authorization authorization) {
-        client.setAuthorization(authorization);
+        super(serviceURI, cred);
     }
 
 
@@ -100,8 +78,7 @@ public class GridUserClient {
     public GlobusCredential requestUserCertificate(SAMLAssertion saml, CertificateLifetime lifetime)
         throws DorianFault, DorianInternalFault, InvalidAssertionFault, UserPolicyFault, PermissionDeniedFault {
         try {
-            ServiceMetadata sm = getServiceMetadata();
-            String version = sm.getServiceDescription().getService().getVersion();
+            String version = getServiceVersion();
             KeyPair pair = KeyUtil.generateRSAKeyPair1024();
             org.cagrid.gaards.dorian.federation.PublicKey key = new org.cagrid.gaards.dorian.federation.PublicKey(
                 KeyUtil.writePublicKey(pair.getPublic()));
@@ -116,7 +93,7 @@ public class GridUserClient {
                     l.setHours(lifetime.getHours());
                     l.setMinutes(lifetime.getMinutes());
                     l.setSeconds(lifetime.getSeconds());
-                    org.cagrid.gaards.dorian.X509Certificate[] list = client.createProxy(assertion, key, l, length);
+                    org.cagrid.gaards.dorian.X509Certificate[] list =getClient().createProxy(assertion, key, l, length);
                     X509Certificate[] certs = new X509Certificate[list.length];
                     for (int i = 0; i < list.length; i++) {
                         certs[i] = CertUtil.loadCertificate(list[i].getCertificateAsString());
@@ -132,7 +109,7 @@ public class GridUserClient {
                 }
             } else {
 
-                org.cagrid.gaards.dorian.X509Certificate cert = client.requestUserCertificate(saml, key, lifetime);
+                org.cagrid.gaards.dorian.X509Certificate cert = getClient().requestUserCertificate(saml, key, lifetime);
                 X509Certificate[] certs = new X509Certificate[1];
                 certs[0] = CertUtil.loadCertificate(cert.getCertificateAsString());
                 return new GlobusCredential(pair.getPrivate(), certs);
@@ -184,7 +161,7 @@ public class GridUserClient {
             org.cagrid.gaards.dorian.federation.PublicKey key = new org.cagrid.gaards.dorian.federation.PublicKey();
             key.setKeyAsString(KeyUtil.writePublicKey(publicKey));
             req.setPublicKey(key);
-            return client.requestHostCertificate(req);
+            return getClient().requestHostCertificate(req);
         } catch (DorianInternalFault gie) {
             throw gie;
         } catch (InvalidHostCertificateRequestFault f) {
@@ -217,7 +194,7 @@ public class GridUserClient {
     public List<HostCertificateRecord> getOwnedHostCertificates() throws DorianFault, DorianInternalFault,
         PermissionDeniedFault {
         try {
-            List<HostCertificateRecord> list = Utils.asList(client.getOwnedHostCertificates());
+            List<HostCertificateRecord> list = Utils.asList(getClient().getOwnedHostCertificates());
             return list;
         } catch (DorianInternalFault gie) {
             throw gie;
@@ -246,7 +223,7 @@ public class GridUserClient {
 
     public X509Certificate getCACertificate() throws DorianFault, DorianInternalFault {
         try {
-            return CertUtil.loadCertificate(client.getCACertificate().getCertificateAsString());
+            return CertUtil.loadCertificate(getClient().getCACertificate().getCertificateAsString());
         } catch (DorianInternalFault gie) {
             throw gie;
         } catch (Exception e) {
@@ -273,7 +250,7 @@ public class GridUserClient {
         Element resourceProperty = null;
         try {
             InputStream wsdd = getClass().getResourceAsStream("client-config.wsdd");
-            resourceProperty = ResourcePropertyHelper.getResourceProperty(client.getEndpointReference(),
+            resourceProperty = ResourcePropertyHelper.getResourceProperty(getClient().getEndpointReference(),
                 TRUSTED_IDPS_METADATA, wsdd);
         } catch (InvalidResourcePropertyException e) {
             return null;
@@ -292,31 +269,6 @@ public class GridUserClient {
             }
             return idps;
 
-        } catch (Exception e) {
-            throw new ResourcePropertyRetrievalException("Unable to deserailize: " + e.getMessage(), e);
-        }
-    }
-
-
-    /**
-     * This method obtains the service metadata for the service.
-     * 
-     * @return The service metadata.
-     * @throws ResourcePropertyRetrievalException
-     */
-
-    public ServiceMetadata getServiceMetadata() throws InvalidResourcePropertyException,
-        ResourcePropertyRetrievalException {
-        Element resourceProperty = null;
-
-        InputStream wsdd = getClass().getResourceAsStream("client-config.wsdd");
-        resourceProperty = ResourcePropertyHelper.getResourceProperty(client.getEndpointReference(), SERVICE_METADATA,
-            wsdd);
-
-        try {
-            ServiceMetadata result = (ServiceMetadata) Utils.deserializeObject(new StringReader(XmlUtils
-                .toString(resourceProperty)), ServiceMetadata.class);
-            return result;
         } catch (Exception e) {
             throw new ResourcePropertyRetrievalException("Unable to deserailize: " + e.getMessage(), e);
         }

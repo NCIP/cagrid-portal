@@ -32,7 +32,6 @@ import org.cagrid.gaards.dorian.stubs.types.InvalidUserFault;
 import org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault;
 import org.cagrid.gaards.pki.CertUtil;
 import org.globus.gsi.GlobusCredential;
-import org.globus.wsrf.impl.security.authorization.Authorization;
 
 
 /**
@@ -42,31 +41,16 @@ import org.globus.wsrf.impl.security.authorization.Authorization;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public class GridAdministrationClient {
-    private DorianClient client;
-
+public class GridAdministrationClient extends DorianBaseClient {
 
     public GridAdministrationClient(String serviceURI) throws MalformedURIException, RemoteException {
-        client = new DorianClient(serviceURI);
+        super(serviceURI);
     }
 
 
-    public GridAdministrationClient(String serviceURI, GlobusCredential proxy) throws MalformedURIException,
+    public GridAdministrationClient(String serviceURI, GlobusCredential credential) throws MalformedURIException,
         RemoteException {
-        client = new DorianClient(serviceURI, proxy);
-    }
-
-
-    /**
-     * This method specifies an authorization policy that the client should use
-     * for authorizing the server that it connects to.
-     * 
-     * @param authorization
-     *            The authorization policy to enforce
-     */
-
-    public void setAuthorization(Authorization authorization) {
-        client.setAuthorization(authorization);
+        super(serviceURI, credential);
     }
 
 
@@ -86,7 +70,7 @@ public class GridAdministrationClient {
     public TrustedIdP addTrustedIdP(TrustedIdP idp) throws DorianFault, PermissionDeniedFault, InvalidTrustedIdPFault,
         DorianInternalFault {
         try {
-            return client.addTrustedIdP(idp);
+            return getClient().addTrustedIdP(idp);
         } catch (DorianInternalFault gie) {
             throw gie;
         } catch (PermissionDeniedFault f) {
@@ -120,7 +104,7 @@ public class GridAdministrationClient {
     public void removeTrustedIdP(TrustedIdP idp) throws DorianFault, PermissionDeniedFault, InvalidTrustedIdPFault,
         DorianInternalFault {
         try {
-            client.removeTrustedIdP(idp);
+            getClient().removeTrustedIdP(idp);
         } catch (DorianInternalFault gie) {
             throw gie;
         } catch (PermissionDeniedFault f) {
@@ -153,7 +137,7 @@ public class GridAdministrationClient {
     public void updateTrustedIdP(TrustedIdP idp) throws DorianFault, PermissionDeniedFault, InvalidTrustedIdPFault,
         DorianInternalFault {
         try {
-            client.updateTrustedIdP(idp);
+            getClient().updateTrustedIdP(idp);
         } catch (DorianInternalFault gie) {
             throw gie;
         } catch (PermissionDeniedFault f) {
@@ -183,7 +167,7 @@ public class GridAdministrationClient {
      */
     public List<GridUserPolicy> getUserPolicies() throws DorianFault, PermissionDeniedFault, DorianInternalFault {
         try {
-            List<GridUserPolicy> list = Utils.asList(client.getGridUserPolicies());
+            List<GridUserPolicy> list = Utils.asList(getClient().getGridUserPolicies());
             return list;
         } catch (DorianInternalFault gie) {
             throw gie;
@@ -214,7 +198,7 @@ public class GridAdministrationClient {
         DorianInternalFault {
 
         try {
-            List<TrustedIdP> list = Utils.asList(client.getTrustedIdPs());
+            List<TrustedIdP> list = Utils.asList(getClient().getTrustedIdPs());
             return list;
         } catch (DorianInternalFault gie) {
             throw gie;
@@ -249,7 +233,7 @@ public class GridAdministrationClient {
         DorianInternalFault {
 
         try {
-            List<GridUser> list = Utils.asList(client.findGridUsers(filter));
+            List<GridUser> list = Utils.asList(getClient().findGridUsers(filter));
             return list;
         } catch (DorianInternalFault gie) {
             throw gie;
@@ -281,7 +265,7 @@ public class GridAdministrationClient {
         DorianInternalFault {
 
         try {
-            client.removeGridUser(usr);
+            getClient().removeGridUser(usr);
         } catch (DorianInternalFault gie) {
             throw gie;
         } catch (PermissionDeniedFault f) {
@@ -313,9 +297,8 @@ public class GridAdministrationClient {
      */
     public void updateUser(GridUser usr) throws DorianFault, PermissionDeniedFault, InvalidUserFault,
         DorianInternalFault {
-
         try {
-            client.updateGridUser(usr);
+            getClient().updateGridUser(usr);
         } catch (DorianInternalFault gie) {
             throw gie;
         } catch (PermissionDeniedFault f) {
@@ -347,7 +330,7 @@ public class GridAdministrationClient {
      */
     public void addAdmin(java.lang.String gridIdentity) throws DorianFault, DorianInternalFault, PermissionDeniedFault {
         try {
-            client.addAdmin(gridIdentity);
+            getClient().addAdmin(gridIdentity);
         } catch (DorianInternalFault gie) {
             throw gie;
         } catch (PermissionDeniedFault f) {
@@ -377,7 +360,7 @@ public class GridAdministrationClient {
     public void removeAdmin(java.lang.String gridIdentity) throws DorianFault, DorianInternalFault,
         PermissionDeniedFault {
         try {
-            client.removeAdmin(gridIdentity);
+            getClient().removeAdmin(gridIdentity);
         } catch (DorianInternalFault gie) {
             throw gie;
         } catch (PermissionDeniedFault f) {
@@ -408,7 +391,7 @@ public class GridAdministrationClient {
 
     public List<String> getAdmins() throws DorianFault, DorianInternalFault, PermissionDeniedFault {
         try {
-            List<String> list = Utils.asList(client.getAdmins());
+            List<String> list = Utils.asList(getClient().getAdmins());
             return list;
         } catch (DorianInternalFault gie) {
             throw gie;
@@ -441,7 +424,7 @@ public class GridAdministrationClient {
     public List<HostCertificateRecord> findHostCertificates(HostCertificateFilter filter) throws DorianFault,
         DorianInternalFault, PermissionDeniedFault {
         try {
-            List<HostCertificateRecord> list = Utils.asList(client.findHostCertificates(filter));
+            List<HostCertificateRecord> list = Utils.asList(getClient().findHostCertificates(filter));
             return list;
         } catch (DorianInternalFault gie) {
             throw gie;
@@ -474,7 +457,7 @@ public class GridAdministrationClient {
     public HostCertificateRecord approveHostCertificate(long recordId) throws DorianFault, DorianInternalFault,
         InvalidHostCertificateFault, PermissionDeniedFault {
         try {
-            return client.approveHostCertificate(BigInteger.valueOf(recordId));
+            return getClient().approveHostCertificate(BigInteger.valueOf(recordId));
         } catch (DorianInternalFault gie) {
             throw gie;
         } catch (InvalidHostCertificateFault gie) {
@@ -508,7 +491,7 @@ public class GridAdministrationClient {
     public void updateHostCertificateRecord(HostCertificateUpdate update) throws DorianFault, DorianInternalFault,
         InvalidHostCertificateFault, PermissionDeniedFault {
         try {
-            client.updateHostCertificateRecord(update);
+            getClient().updateHostCertificateRecord(update);
         } catch (DorianInternalFault gie) {
             throw gie;
         } catch (InvalidHostCertificateFault gie) {
@@ -542,7 +525,7 @@ public class GridAdministrationClient {
     public HostCertificateRecord renewHostCertificate(long recordId) throws DorianFault, DorianInternalFault,
         InvalidHostCertificateFault, PermissionDeniedFault {
         try {
-            return client.renewHostCertificate(BigInteger.valueOf(recordId));
+            return getClient().renewHostCertificate(BigInteger.valueOf(recordId));
         } catch (DorianInternalFault gie) {
             throw gie;
         } catch (InvalidHostCertificateFault gie) {
@@ -571,7 +554,7 @@ public class GridAdministrationClient {
 
     public X509Certificate getCACertificate() throws DorianFault, DorianInternalFault {
         try {
-            return CertUtil.loadCertificate(client.getCACertificate().getCertificateAsString());
+            return CertUtil.loadCertificate(getClient().getCACertificate().getCertificateAsString());
         } catch (DorianInternalFault gie) {
             throw gie;
         } catch (Exception e) {
@@ -603,7 +586,7 @@ public class GridAdministrationClient {
     public List<UserCertificateRecord> findUserCertificateRecords(UserCertificateFilter f) throws DorianFault,
         DorianInternalFault, InvalidUserCertificateFault, PermissionDeniedFault {
         try {
-            List<UserCertificateRecord> list = Utils.asList(client.findUserCertificates(f));
+            List<UserCertificateRecord> list = Utils.asList(getClient().findUserCertificates(f));
             return list;
         } catch (DorianInternalFault gie) {
             throw gie;
@@ -648,7 +631,7 @@ public class GridAdministrationClient {
             update.setSerialNumber(serialNumber);
             update.setStatus(status);
             update.setNotes(notes);
-            client.updateUserCertificate(update);
+            getClient().updateUserCertificate(update);
         } catch (DorianInternalFault gie) {
             throw gie;
         } catch (InvalidUserCertificateFault fault) {
@@ -721,7 +704,7 @@ public class GridAdministrationClient {
     public void removeUserCertificate(long serialNumber) throws RemoteException, DorianInternalFault,
         InvalidUserCertificateFault, PermissionDeniedFault {
         try {
-            client.removeUserCertificate(String.valueOf(serialNumber));
+            getClient().removeUserCertificate(String.valueOf(serialNumber));
         } catch (DorianInternalFault gie) {
             throw gie;
         } catch (InvalidUserCertificateFault fault) {
@@ -756,7 +739,7 @@ public class GridAdministrationClient {
     public List<FederationAuditRecord> performAudit(FederationAuditFilter f) throws DorianFault, DorianInternalFault,
         PermissionDeniedFault {
         try {
-            List<FederationAuditRecord> list = Utils.asList(client.performFederationAudit(f));
+            List<FederationAuditRecord> list = Utils.asList(getClient().performFederationAudit(f));
             return list;
         } catch (DorianInternalFault gie) {
             throw gie;

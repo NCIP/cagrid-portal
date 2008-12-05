@@ -18,18 +18,7 @@ public interface DorianI {
     public gov.nih.nci.cagrid.metadata.security.ServiceSecurityMetadata getServiceSecurityMetadata() throws RemoteException ;
 
   /**
-   * This method allow an identity provider administrator to perform an audit on the Dorian Identity Provider.
-   *
-   * @param f
-   * @throws DorianInternalFault
-   *	
-   * @throws PermissionDeniedFault
-   *	
-   */
-  public org.cagrid.gaards.dorian.idp.IdentityProviderAuditRecord[] performIdentityProviderAudit(org.cagrid.gaards.dorian.idp.IdentityProviderAuditFilter f) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault ;
-
-  /**
-   * Submits an application for an account with a the Dorian Identity Provider.
+   * Submits an application for an account with a the Dorian Identity Provider.  (This method is DEPRECATED, please use registerLocalUser)
    *
    * @param application
    * @throws DorianInternalFault
@@ -442,6 +431,28 @@ public interface DorianI {
    *	
    */
   public org.cagrid.gaards.dorian.federation.FederationAuditRecord[] performFederationAudit(org.cagrid.gaards.dorian.federation.FederationAuditFilter f) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault ;
+
+  /**
+   * This method allow an identity provider administrator to perform an audit on the Dorian Identity Provider.
+   *
+   * @param f
+   * @throws DorianInternalFault
+   *	
+   * @throws PermissionDeniedFault
+   *	
+   */
+  public org.cagrid.gaards.dorian.idp.IdentityProviderAuditRecord[] performIdentityProviderAudit(org.cagrid.gaards.dorian.idp.IdentityProviderAuditFilter f) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.PermissionDeniedFault ;
+
+  /**
+   * Allows a user to register for an account with the Dorian Identity Provider.
+   *
+   * @param a
+   * @throws DorianInternalFault
+   *	
+   * @throws InvalidUserPropertyFault
+   *	
+   */
+  public java.lang.String registerLocalUser(org.cagrid.gaards.dorian.idp.Application a) throws RemoteException, org.cagrid.gaards.dorian.stubs.types.DorianInternalFault, org.cagrid.gaards.dorian.stubs.types.InvalidUserPropertyFault ;
 
 }
 

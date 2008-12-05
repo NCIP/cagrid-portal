@@ -288,7 +288,7 @@ public class Dorian extends LoggingObject {
     }
 
 
-    public String registerWithIdP(Application a) throws DorianInternalFault, InvalidUserPropertyFault {
+    public String registerLocalUser(Application a) throws DorianInternalFault, InvalidUserPropertyFault {
         return this.identityProvider.register(a);
     }
 

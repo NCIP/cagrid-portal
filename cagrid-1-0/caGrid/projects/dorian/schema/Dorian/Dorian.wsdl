@@ -597,6 +597,26 @@
           </sequence>
         </complexType>
       </element>
+      <element name="RegisterLocalUserRequest">
+        <complexType>
+          <sequence>
+            <element name="a">
+              <complexType>
+                <sequence>
+                  <element ref="ns2:Application" minOccurs="1" maxOccurs="1" />
+                </sequence>
+              </complexType>
+            </element>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="RegisterLocalUserResponse">
+        <complexType>
+          <sequence>
+            <element name="response" type="xs:string" minOccurs="1" maxOccurs="1" />
+          </sequence>
+        </complexType>
+      </element>
       <element name="DorianResourceProperties">
         <complexType>
           <sequence>
@@ -800,6 +820,12 @@
   </message>
   <message name="PerformIdentityProviderAuditResponse">
     <part name="parameters" element="tns:PerformIdentityProviderAuditResponse" />
+  </message>
+  <message name="RegisterLocalUserRequest">
+    <part name="parameters" element="tns:RegisterLocalUserRequest" />
+  </message>
+  <message name="RegisterLocalUserResponse">
+    <part name="parameters" element="tns:RegisterLocalUserResponse" />
   </message>
   <message name="DorianInternalFaultFaultMessage">
     <part name="fault" element="ns10:DorianInternalFault" />
@@ -1053,6 +1079,12 @@
       <output message="tns:PerformIdentityProviderAuditResponse" wsa:Action="http://cagrid.nci.nih.gov/Dorian/PerformIdentityProviderAuditResponse" />
       <fault name="DorianInternalFault" message="tns:DorianInternalFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/Dorian/DorianInternalFaultFaultMessage" />
       <fault name="PermissionDeniedFault" message="tns:PermissionDeniedFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/Dorian/PermissionDeniedFaultFaultMessage" />
+    </operation>
+    <operation name="registerLocalUser">
+      <input message="tns:RegisterLocalUserRequest" wsa:Action="http://cagrid.nci.nih.gov/Dorian/RegisterLocalUserRequest" />
+      <output message="tns:RegisterLocalUserResponse" wsa:Action="http://cagrid.nci.nih.gov/Dorian/RegisterLocalUserResponse" />
+      <fault name="DorianInternalFault" message="tns:DorianInternalFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/Dorian/DorianInternalFaultFaultMessage" />
+      <fault name="InvalidUserPropertyFault" message="tns:InvalidUserPropertyFaultFaultMessage" wsa:Action="http://cagrid.nci.nih.gov/Dorian/InvalidUserPropertyFaultFaultMessage" />
     </operation>
     <operation name="getServiceSecurityMetadata">
       <input message="wns0:GetServiceSecurityMetadataRequest" wsa:Action="http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity/GetServiceSecurityMetadataRequest" />
