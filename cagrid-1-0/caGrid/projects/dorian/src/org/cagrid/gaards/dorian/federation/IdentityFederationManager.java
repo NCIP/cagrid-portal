@@ -1173,11 +1173,11 @@ public class IdentityFederationManager extends LoggingObject implements Publishe
 
     public void publishCRL() {
         if (publishCRL) {
-            if ((conf.getGtsPublishCRLList() != null) && (conf.getGtsPublishCRLList().size() > 0)) {
+            if ((conf.getCRLPublishingList() != null) && (conf.getCRLPublishingList().size() > 0)) {
                 Runner runner = new Runner() {
                     public void execute() {
                         synchronized (mutex) {
-                            List<String> services = conf.getGtsPublishCRLList();
+                            List<String> services = conf.getCRLPublishingList();
                             try {
                                 X509CRL crl = getCRL();
                                 gov.nih.nci.cagrid.gts.bean.X509CRL x509 = new gov.nih.nci.cagrid.gts.bean.X509CRL();

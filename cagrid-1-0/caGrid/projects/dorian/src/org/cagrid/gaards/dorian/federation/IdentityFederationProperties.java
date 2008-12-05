@@ -2,6 +2,7 @@ package org.cagrid.gaards.dorian.federation;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringTokenizer;
 
 import org.cagrid.gaards.dorian.common.Lifetime;
 import org.cagrid.gaards.dorian.stubs.types.DorianInternalFault;
@@ -158,13 +159,16 @@ public class IdentityFederationProperties {
     }
 
 
-    public List<String> getGtsPublishCRLList() {
+    public List<String> getCRLPublishingList() {
         return gtsPublishCRLList;
     }
 
 
-    public void setGtsPublishCRLList(List<String> gtsPublishCRLList) {
-        this.gtsPublishCRLList = gtsPublishCRLList;
+    public void setCRLPublishList(String list) {
+        StringTokenizer st = new StringTokenizer(list, ",");
+        while (st.hasMoreTokens()) {
+            this.gtsPublishCRLList.add(st.nextToken());
+        }
     }
 
 }

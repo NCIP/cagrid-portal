@@ -44,14 +44,7 @@
 			</bean>
 		</property>
 		<property name="accountPolicies" ref="accountPolicyList" />
-		<property name="gtsPublishCRLList" ref="gtsPublishList" />
-	</bean>
-	<bean id="gtsPublishList"
-		class="org.springframework.beans.factory.config.ListFactoryBean">
-		<property name="sourceList">
-			<list>
-			</list>
-		</property>
+		<property name="CRLPublishList" value="${gaards.dorian.federation.crl.publish}" />
 	</bean>
 	<bean id="accountPolicyList"
 		class="org.springframework.beans.factory.config.ListFactoryBean">
@@ -188,27 +181,6 @@
 		<constructor-arg index="4" value="${gaards.dorian.name}" />
 	</bean>
 	
-	<!-- SPECIFY EVENT MANAGER HERE -->
-	<bean id="systemAuditor" class="org.cagrid.tools.events.EventAuditor">
-		<constructor-arg index="0" value="systemAuditor" />
-		<constructor-arg index="1" ref="database" />
-		<constructor-arg index="2" value="SYSTEM_AUDITOR" />
-	</bean>
-	<bean id="gridAccountAuditor" class="org.cagrid.tools.events.EventAuditor">
-		<constructor-arg index="0" value="gridAccountAuditor" />
-		<constructor-arg index="1" ref="database" />
-		<constructor-arg index="2" value="GRID_ACCOUNT_AUDITOR" />
-	</bean>
-	<bean id="hostAuditor" class="org.cagrid.tools.events.EventAuditor">
-		<constructor-arg index="0" value="hostAuditor" />
-		<constructor-arg index="1" ref="database" />
-		<constructor-arg index="2" value="HOST_AUDITOR" />
-	</bean>
-	<bean id="federationAuditor" class="org.cagrid.tools.events.EventAuditor">
-		<constructor-arg index="0" value="federationAuditor" />
-		<constructor-arg index="1" ref="database" />
-		<constructor-arg index="2" value="FEDERATION_AUDITOR" />
-	</bean>
 	<bean id="eventManager" class="org.cagrid.tools.events.EventManager">
 		<constructor-arg index="0">
 			<list>

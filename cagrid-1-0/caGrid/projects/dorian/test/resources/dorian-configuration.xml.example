@@ -44,14 +44,7 @@
 			</bean>
 		</property>
 		<property name="accountPolicies" ref="accountPolicyList" />
-		<property name="gtsPublishCRLList" ref="gtsPublishList" />
-	</bean>
-	<bean id="gtsPublishList"
-		class="org.springframework.beans.factory.config.ListFactoryBean">
-		<property name="sourceList">
-			<list>
-			</list>
-		</property>
+		<property name="CRLPublishList" value="${gaards.dorian.federation.crl.publish}" />
 	</bean>
 	<bean id="accountPolicyList"
 		class="org.springframework.beans.factory.config.ListFactoryBean">
