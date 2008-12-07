@@ -28,7 +28,7 @@ public class Utils {
         String caSubject = cacert.getSubjectDN().getName();
         int caindex = caSubject.lastIndexOf(",");
         String caPreSub = caSubject.substring(0, caindex);
-        return caPreSub + ",OU=Services,CN=host/";
+        return caPreSub + ",OU=Services,CN=";
     }
 
 
