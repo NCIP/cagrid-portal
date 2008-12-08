@@ -1,4 +1,4 @@
-package org.cagrid.gaards.ui.dorian;
+package org.cagrid.gaards.ui.common;
 
 import org.cagrid.grape.configuration.ServiceDescriptor;
 

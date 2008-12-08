@@ -8,6 +8,7 @@ import org.cagrid.gaards.dorian.client.GridAdministrationClient;
 import org.cagrid.gaards.dorian.client.GridUserClient;
 import org.cagrid.gaards.dorian.client.LocalAdministrationClient;
 import org.cagrid.gaards.dorian.client.LocalUserClient;
+import org.cagrid.gaards.ui.common.ServiceHandle;
 import org.cagrid.grape.configuration.ServiceDescriptor;
 import org.globus.gsi.GlobusCredential;
 import org.globus.wsrf.impl.security.authorization.IdentityAuthorization;

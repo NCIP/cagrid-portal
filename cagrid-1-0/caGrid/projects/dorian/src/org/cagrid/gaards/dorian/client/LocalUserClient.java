@@ -132,7 +132,8 @@ public class LocalUserClient extends DorianBaseClient {
         PermissionDeniedFault, InvalidUserPropertyFault {
         try {
             String version = getServiceVersion();
-            if (version.equals(VERSION_1_0) || version.equals(VERSION_1_1) || version.equals(VERSION_1_2)) {
+            if (version.equals(VERSION_1_0) || version.equals(VERSION_1_1) || version.equals(VERSION_1_2)
+                || version.equals(VERSION_UNKOWN)) {
                 BasicAuthCredential bac = new BasicAuthCredential();
                 bac.setUserId(cred.getUserId());
                 bac.setPassword(cred.getPassword());
@@ -172,7 +173,8 @@ public class LocalUserClient extends DorianBaseClient {
     public String register(Application a) throws DorianFault, DorianInternalFault, InvalidUserPropertyFault {
         try {
             String version = getServiceVersion();
-            if (version.equals(VERSION_1_0) || version.equals(VERSION_1_1) || version.equals(VERSION_1_2)) {
+            if (version.equals(VERSION_1_0) || version.equals(VERSION_1_1) || version.equals(VERSION_1_2)
+                || version.equals(VERSION_UNKOWN)) {
                 return getClient().registerWithIdP(a);
             } else {
                 return getClient().registerLocalUser(a);

@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.swing.JComboBox;
 
+
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
@@ -12,32 +13,34 @@ import javax.swing.JComboBox;
  *          Exp $
  */
 public class CDSListComboBox extends JComboBox {
-	
-	private static final long serialVersionUID = 1L;
 
-	private static String lastSelectedService;
+    private static final long serialVersionUID = 1L;
 
-	public CDSListComboBox() {
-		List<String> services = CDSUIUtils.getCDSServices();
-		for (int i = 0; i < services.size(); i++) {
-			this.addItem(services.get(i));
-		}
-		if (lastSelectedService == null) {
-			lastSelectedService = getSelectedService();
-		} else {
-			this.setSelectedItem(lastSelectedService);
-		}
-		this.setEditable(true);
+    private static CDSHandle lastSelectedService;
 
-		this.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent e) {
-				lastSelectedService = getSelectedService();
-			}
-		});
-	}
 
-	public String getSelectedService() {
-		return (String) getSelectedItem();
-	}
+    public CDSListComboBox() {
+        List<CDSHandle> services = CDSUIUtils.getCDSServices();
+        for (int i = 0; i < services.size(); i++) {
+            this.addItem(services.get(i));
+        }
+        if (lastSelectedService == null) {
+            lastSelectedService = getSelectedService();
+        } else {
+            this.setSelectedItem(lastSelectedService);
+        }
+        this.setEditable(true);
+
+        this.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent e) {
+                lastSelectedService = getSelectedService();
+            }
+        });
+    }
+
+
+    public CDSHandle getSelectedService() {
+        return (CDSHandle) getSelectedItem();
+    }
 
 }

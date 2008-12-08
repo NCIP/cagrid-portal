@@ -7,6 +7,7 @@ import java.util.Set;
 import javax.xml.namespace.QName;
 
 import org.cagrid.gaards.authentication.client.AuthenticationClient;
+import org.cagrid.gaards.ui.common.ServiceHandle;
 import org.cagrid.grape.configuration.ServiceDescriptor;
 import org.globus.wsrf.impl.security.authorization.IdentityAuthorization;
 

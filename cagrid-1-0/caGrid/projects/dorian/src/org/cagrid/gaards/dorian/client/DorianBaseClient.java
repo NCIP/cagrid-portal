@@ -91,12 +91,33 @@ public abstract class DorianBaseClient {
     }
 
 
+    /**
+     * This method returns the version of the Grid Service
+     * 
+     * @return The version of the grid service.
+     * @throws InvalidResourcePropertyException
+     * @throws ResourcePropertyRetrievalException
+     */
+
     public String getServiceVersion() throws InvalidResourcePropertyException, ResourcePropertyRetrievalException {
         ServiceMetadata sm = getServiceMetadata();
         if (sm == null) {
             return VERSION_UNKOWN;
         } else {
-            return sm.getServiceDescription().getService().getVersion();
+            if (sm.getServiceDescription() != null) {
+                if (sm.getServiceDescription().getService() != null) {
+                    if (sm.getServiceDescription().getService().getVersion() != null) {
+                        return sm.getServiceDescription().getService().getVersion();
+                    } else {
+                        return VERSION_UNKOWN;
+                    }
+                } else {
+                    return VERSION_UNKOWN;
+                }
+            } else {
+                return VERSION_UNKOWN;
+            }
+
         }
     }
 

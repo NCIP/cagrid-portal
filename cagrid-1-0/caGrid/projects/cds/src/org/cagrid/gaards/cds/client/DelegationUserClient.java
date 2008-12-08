@@ -34,6 +34,7 @@ import org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault;
 import org.cagrid.gaards.pki.KeyUtil;
 import org.cagrid.gaards.pki.ProxyCreator;
 import org.globus.gsi.GlobusCredential;
+import org.globus.wsrf.impl.security.authorization.Authorization;
 
 public class DelegationUserClient {
 
@@ -49,6 +50,19 @@ public class DelegationUserClient {
 		this.cred = cred;
 		this.client = new CredentialDelegationServiceClient(url, cred);
 	}
+	
+	
+	/**
+     * This method specifies an authorization policy that the client should use
+     * for authorizing the server that it connects to.
+     * 
+     * @param authorization
+     *            The authorization policy to enforce
+     */
+
+    public void setAuthorization(Authorization authorization) {
+        client.setAuthorization(authorization);
+    }
 
 	/**
 	 * This method allows a user to delegated their credential to the Credential

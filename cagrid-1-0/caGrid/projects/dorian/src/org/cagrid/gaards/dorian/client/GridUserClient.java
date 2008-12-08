@@ -83,7 +83,8 @@ public class GridUserClient extends DorianBaseClient {
             org.cagrid.gaards.dorian.federation.PublicKey key = new org.cagrid.gaards.dorian.federation.PublicKey(
                 KeyUtil.writePublicKey(pair.getPublic()));
 
-            if (version.equals(VERSION_1_0) || version.equals(VERSION_1_1) || version.equals(VERSION_1_2)) {
+            if (version.equals(VERSION_1_0) || version.equals(VERSION_1_1) || version.equals(VERSION_1_2)
+                || version.equals(VERSION_UNKOWN)) {
                 try {
                     org.cagrid.gaards.dorian.SAMLAssertion assertion = new org.cagrid.gaards.dorian.SAMLAssertion();
                     assertion.setXml(SAMLUtils.samlAssertionToString(saml));
@@ -93,7 +94,8 @@ public class GridUserClient extends DorianBaseClient {
                     l.setHours(lifetime.getHours());
                     l.setMinutes(lifetime.getMinutes());
                     l.setSeconds(lifetime.getSeconds());
-                    org.cagrid.gaards.dorian.X509Certificate[] list =getClient().createProxy(assertion, key, l, length);
+                    org.cagrid.gaards.dorian.X509Certificate[] list = getClient()
+                        .createProxy(assertion, key, l, length);
                     X509Certificate[] certs = new X509Certificate[list.length];
                     for (int i = 0; i < list.length; i++) {
                         certs[i] = CertUtil.loadCertificate(list[i].getCertificateAsString());
