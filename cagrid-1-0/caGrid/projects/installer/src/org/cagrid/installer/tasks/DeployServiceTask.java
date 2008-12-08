@@ -32,7 +32,7 @@ public class DeployServiceTask extends CaGridAntTask {
 		if (!model.isTomcatContainer()) {
 			antTarget = getDeployGlobusTarget();
 		}
-		new AntTask("", "", antTarget, env, sysProps).execute(model);
+		new AntTask("", "", getBuildFilePath(model), antTarget, env, sysProps).execute(model);
 
 		return null;
 	}
