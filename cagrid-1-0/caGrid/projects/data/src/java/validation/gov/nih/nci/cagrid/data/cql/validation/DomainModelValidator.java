@@ -19,7 +19,6 @@ import gov.nih.nci.cagrid.metadata.dataservice.UMLAssociation;
 
 import java.io.FileReader;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -130,36 +129,34 @@ public class DomainModelValidator implements CqlDomainValidator {
 		// determine if an association exists between the current
 		// and association object
 		String roleName = assoc.getRoleName();
-		// UMLAssociation[] associations = getUmlAssociations(current.getName(), model);
-		UMLAssociation[] associations = getAllAssociationsFromSource(current.getName(), model);
+		Set<SimplifiedUmlAssociation> associations = getAllAssociationsInvolvingClass(current.getName(), model);
 		boolean associationFound = false;
-		for (int i = 0; i < associations.length; i++) {
-			UMLAssociation assocMd = associations[i];
-			UMLClass targetClassMd = DomainModelUtils.getReferencedUMLClass(model, assocMd
-				.getTargetUMLAssociationEdge().getUMLAssociationEdge().getUMLClassReference());
-			if (targetClassMd != null) {
-				String targetClassName = targetClassMd.getPackageName() + "." + targetClassMd.getClassName();
-				if (targetClassName.equals(assoc.getName())) {
-					if (associationFound) {
-						// no role name, and already found an association
-						// of the same type
-						throw new MalformedQueryException("The association from " + current.getName() + " to "
-							+ assoc.getName() + " is ambiguous without a role name");
-					}
-					if (roleName != null
-						&& assocMd.getTargetUMLAssociationEdge().getUMLAssociationEdge().getRoleName().equals(roleName)) {
-						// association found with specidied role name
-						associationFound = true;
-						break;
-					} else if (roleName == null) {
-						// an association of the right type found, but no role
-						// name to compare
-						// so association is found, but must check for ambiguity
-						associationFound = true;
-					}
-				}
-			}
-		}
+        for (SimplifiedUmlAssociation association : associations) {
+            if (roleName == null && associationFound) {
+                // no role name, and already found an association of the same type
+                throw new MalformedQueryException("The association from " 
+                    + current.getName() + " to " + assoc.getName() 
+                    + " is ambiguous without a role name");
+            }
+            
+            // verify both ends of the association are right
+            // starting with source to target
+            if (current.getName().equals(association.getSourceClass()) &&
+                assoc.getName().equals(association.getTargetClass()) && 
+                !associationFound) {
+                // ensure either the role name matches, or there wasn't one to match anyway
+                associationFound = association.getTargetRoleName().equals(roleName) || roleName == null;
+            } else if (association.isBidirectional() && !associationFound) {
+                // if bidirectional and we've not already found the association, try the reverse
+                if (assoc.getName().equals(association.getSourceClass()) &&
+                    current.getName().equals(association.getTargetClass()) &&
+                    !associationFound) {
+                    associationFound = association.getSourceRoleName().equals(roleName) || roleName == null;
+                }
+            }
+        }
+        
+        // fail if the association was never found
 		if (!associationFound) {
 			throw new MalformedQueryException("No association from " + current.getName() + " to " + assoc.getName()
 				+ " with role name " + assoc.getRoleName());
@@ -219,18 +216,16 @@ public class DomainModelValidator implements CqlDomainValidator {
 		}
 		return null;
 	}
-
-
-	private UMLAssociation[] getAllAssociationsFromSource(String sourceClass, DomainModel model) {
-		String[] classNames = getClassHierarchy(sourceClass, model);
-		Set<UMLAssociation> associations = new HashSet<UMLAssociation>();
-		for (int i = 0; i < classNames.length; i++) {
-			Collections.addAll(associations, getUmlAssociations(classNames[i], model));
-		}
-		UMLAssociation[] assocArray = new UMLAssociation[associations.size()];
-		associations.toArray(assocArray);
-		return assocArray;
-	}
+    
+    
+    private Set<SimplifiedUmlAssociation> getAllAssociationsInvolvingClass(String involvedClass, DomainModel model) {
+        String[] searchClassNames = getClassHierarchy(involvedClass, model);
+        Set<SimplifiedUmlAssociation> associations = new HashSet<SimplifiedUmlAssociation>();
+        for (String className : searchClassNames) {
+            associations.addAll(getUmlAssociations(className, model));
+        }
+        return associations;
+    }
 
 
 	private String[] getClassHierarchy(String className, DomainModel model) {
@@ -244,27 +239,97 @@ public class DomainModelValidator implements CqlDomainValidator {
 	}
 
 
-	private UMLAssociation[] getUmlAssociations(String sourceClass, DomainModel model) {
-		List<UMLAssociation> associations = new ArrayList<UMLAssociation>();
+	private List<SimplifiedUmlAssociation> getUmlAssociations(String testClass, DomainModel model) {
+		List<SimplifiedUmlAssociation> associations = new ArrayList<SimplifiedUmlAssociation>();
 		if (model.getExposedUMLAssociationCollection() != null
 			&& model.getExposedUMLAssociationCollection().getUMLAssociation() != null) {
-			for (int i = 0; i < model.getExposedUMLAssociationCollection().getUMLAssociation().length; i++) {
-				UMLAssociation assoc = model.getExposedUMLAssociationCollection().getUMLAssociation(i);
-
-				UMLClass referencedUMLClass = DomainModelUtils.getReferencedUMLClass(model, assoc
-					.getSourceUMLAssociationEdge().getUMLAssociationEdge().getUMLClassReference());
-				if (referencedUMLClass != null) {
-					String refClassName = referencedUMLClass.getPackageName() + "." + referencedUMLClass.getClassName();
-					if (refClassName.equals(sourceClass)) {
-						associations.add(assoc);
-					}
+            for (UMLAssociation assoc : model.getExposedUMLAssociationCollection().getUMLAssociation()) {
+				UMLClass sourceClassReference = DomainModelUtils.getReferencedUMLClass(model, 
+                    assoc.getSourceUMLAssociationEdge().getUMLAssociationEdge().getUMLClassReference());
+                UMLClass targetClassReference = DomainModelUtils.getReferencedUMLClass(model, 
+                    assoc.getTargetUMLAssociationEdge().getUMLAssociationEdge().getUMLClassReference());
+                if (sourceClassReference != null && targetClassReference != null) {
+					String sourceClassName = sourceClassReference.getPackageName() + "." + sourceClassReference.getClassName();
+					String targetClassName = targetClassReference.getPackageName() + "." + targetClassReference.getClassName();
+                    if (testClass.equals(sourceClassName) || testClass.equals(targetClassName)) {
+                        SimplifiedUmlAssociation simple = new SimplifiedUmlAssociation(
+                            sourceClassName, targetClassName, 
+                            assoc.getSourceUMLAssociationEdge().getUMLAssociationEdge().getRoleName(),
+                            assoc.getTargetUMLAssociationEdge().getUMLAssociationEdge().getRoleName(),
+                            assoc.isBidirectional());
+                        associations.add(simple);
+                    }
 				}
 			}
 		}
-		UMLAssociation[] array = new UMLAssociation[associations.size()];
-		associations.toArray(array);
-		return array;
+        return associations;
 	}
+    
+    
+    private static class SimplifiedUmlAssociation {
+        private String sourceClass;
+        private String targetClass;
+        private String sourceRoleName;
+        private String targetRoleName;
+        private boolean bidirectional;
+        
+        public SimplifiedUmlAssociation(String sourceClass, String targetClass, 
+            String sourceRoleName, String targetRoleName, boolean bidirectional) {
+            super();
+            this.sourceClass = sourceClass;
+            this.targetClass = targetClass;
+            this.sourceRoleName = sourceRoleName;
+            this.targetRoleName = targetRoleName;
+            this.bidirectional = bidirectional;
+        }
+
+        
+        public boolean isBidirectional() {
+            return bidirectional;
+        }
+        
+
+        public String getSourceClass() {
+            return sourceClass;
+        }
+
+        
+        public String getSourceRoleName() {
+            return sourceRoleName;
+        }
+        
+
+        public String getTargetClass() {
+            return targetClass;
+        }
+        
+
+        public String getTargetRoleName() {
+            return targetRoleName;
+        }
+        
+        
+        public String toString() {
+            StringBuffer buff = new StringBuffer();
+            buff.append("source class: ").append(sourceClass).append(" via ").append(sourceRoleName).append("\n");
+            buff.append("target class: ").append(targetClass).append(" via ").append(targetRoleName).append("\n");
+            buff.append("bidirectional = ").append(bidirectional);
+            return buff.toString();
+        }
+        
+        
+        public int hashCode() {
+            return toString().hashCode();
+        }
+        
+        
+        public boolean equals(java.lang.Object o) {
+            if (o != null && o instanceof SimplifiedUmlAssociation) {
+                return toString().equals(o.toString());
+            }
+            return false;
+        }
+    }
 	
 	
 	public static void main(String[] args) {
