@@ -49,7 +49,9 @@ public class SyncUtils {
 					if (ntype.getNamespace().equals(IntroduceConstants.W3CNAMESPACE)) {
 						map.put(ntype.getNamespace(), new NamespaceInformation(ntype,
 							IntroduceConstants.W3CNAMESPACE_PREFIX));
-					} else {
+					} else if(ntype.getNamespace().equals("http://www.w3.org/XML/1998/namespace")){
+					    map.put(ntype.getNamespace(), new NamespaceInformation(ntype, "xml"));
+					}
 						map.put(ntype.getNamespace(), new NamespaceInformation(ntype, "ns" + namespaceCount++));
 					}
 				}
