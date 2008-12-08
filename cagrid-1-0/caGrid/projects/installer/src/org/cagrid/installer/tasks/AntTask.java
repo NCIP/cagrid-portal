@@ -34,15 +34,18 @@ public class AntTask extends BasicTask {
 	private Map<String, String> environment;
 
 	private Properties systemProperties;
+	
+	private String buildFilePath;
 
-	public AntTask(String name, String description, String target) {
-		this(name, description, target, new HashMap<String, String>(),
+	public AntTask(String name, String description, String buildFilePath, String target) {
+		this(name, description, buildFilePath, target, new HashMap<String, String>(),
 				new Properties());
 	}
 
-	public AntTask(String name, String description, String target,
+	public AntTask(String name, String description, String buildFilePath, String target,
 			Map<String, String> environment, Properties systemProperties) {
 		super(name, description);
+		this.buildFilePath = buildFilePath;
 		this.target = target;
 		this.environment = environment;
 		this.systemProperties = systemProperties;
@@ -50,7 +53,7 @@ public class AntTask extends BasicTask {
 
 	protected Object internalExecute(CaGridInstallerModel model)
 			throws Exception {
-		String buildFilePath = model.getProperty(Constants.BUILD_FILE_PATH);
+		
 		String tempDirPath = model.getProperty(Constants.TEMP_DIR_PATH);
 
 		try {

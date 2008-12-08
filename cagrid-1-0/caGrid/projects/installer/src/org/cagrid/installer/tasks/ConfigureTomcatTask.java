@@ -31,24 +31,24 @@ public class ConfigureTomcatTask extends CaGridInstallerAntTask {
 
 		if (!secure) {
 			setStepCount(3);
-			new AntTask("", "", "fix-web-xml", env, sysProps).execute(model);
+			new AntTask("", "", getBuildFilePath(), "fix-web-xml", env, sysProps).execute(model);
 			setLastStep(1);
-			new AntTask("", "", "configure-tomcat-server-config", env, sysProps)
+			new AntTask("", "", getBuildFilePath(), "configure-tomcat-server-config", env, sysProps)
 			.execute(model);
 		} else {
 			setStepCount(5);
-			new AntTask("", "", "insert-secure-connector", env, sysProps)
+			new AntTask("", "", getBuildFilePath(), "insert-secure-connector", env, sysProps)
 					.execute(model);
 			setLastStep(1);
-			new AntTask("", "", "insert-valve", env, sysProps).execute(model);
+			new AntTask("", "", getBuildFilePath(), "insert-valve", env, sysProps).execute(model);
 			setLastStep(2);
-			new AntTask("", "", "set-global-cert-and-key-paths", env, sysProps)
+			new AntTask("", "", getBuildFilePath(), "set-global-cert-and-key-paths", env, sysProps)
 					.execute(model);
 			setLastStep(3);
-			new AntTask("", "", "fix-secure-web-xml", env, sysProps)
+			new AntTask("", "", getBuildFilePath(), "fix-secure-web-xml", env, sysProps)
 					.execute(model);
 			setLastStep(4);
-			new AntTask("", "", "configure-tomcat-server-config", env, sysProps)
+			new AntTask("", "", getBuildFilePath(), "configure-tomcat-server-config", env, sysProps)
 					.execute(model);
 		}
 		

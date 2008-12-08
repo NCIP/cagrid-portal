@@ -24,13 +24,9 @@ public class ConfigureTargetGridTask extends CaGridAntTask {
 		super(name, description, "configure");
 	}
 	
-	protected String getBuildFilePath(CaGridInstallerModel model){
-		return model.getProperty(Constants.CAGRID_HOME) + "/build.xml";
-	}
-
 	@Override
 	protected Object runAntTask(CaGridInstallerModel model, String target, Map<String, String> env, Properties sysProps) throws Exception {
-		return new AntTask("", "", target, env, sysProps).execute(model);
+		return new AntTask("", "", model.getProperty(Constants.CAGRID_HOME) + "/build.xml",target, env, sysProps).execute(model);
 	}
 
 }

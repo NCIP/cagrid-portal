@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Properties;
 
 import org.cagrid.installer.model.CaGridInstallerModel;
+import org.cagrid.installer.steps.Constants;
 import org.cagrid.installer.util.InstallerUtils;
 
 /**
@@ -25,13 +26,12 @@ public class CaGridInstallerAntTask extends CaGridAntTask {
 		super(name, description, targetName);
 	}
 
-	@Override
-	protected String getBuildFilePath(CaGridInstallerModel model) {
+	protected String getBuildFilePath() {
 		return InstallerUtils.getScriptsBuildFilePath();
 	}
 	
 	protected Object runAntTask(CaGridInstallerModel model, String target, Map<String,String> env,
 			Properties sysProps) throws Exception {
-		return new AntTask("", "", target, env, sysProps).execute(model);
+		return new AntTask("", "", getBuildFilePath(),target, env, sysProps).execute(model);
 	}
 }

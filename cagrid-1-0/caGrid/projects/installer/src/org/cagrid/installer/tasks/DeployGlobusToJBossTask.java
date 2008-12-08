@@ -13,12 +13,12 @@ import org.cagrid.installer.steps.Constants;
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
  * 
  */
-public class DeployGlobusToTomcatTask extends CaGridInstallerAntTask {
+public class DeployGlobusToJBossTask extends CaGridAntTask {
 
 	/**
 	 * 
 	 */
-	public DeployGlobusToTomcatTask(String name, String description) {
+	public DeployGlobusToJBossTask(String name, String description) {
 		super(name, description, null);
 	}
 
@@ -26,13 +26,14 @@ public class DeployGlobusToTomcatTask extends CaGridInstallerAntTask {
 			Properties sysProps) throws Exception {
 
 		boolean secure = model.isTrue(Constants.USE_SECURE_CONTAINER);
-
+		sysProps.put("jboss.dir", model.getProperty(Constants.JBOSS_HOME));
+		
 		setStepCount(1);
 		if (!secure) {
-			new AntTask("", "", getBuildFilePath(), "globus-deploy-tomcat", env, sysProps)
+			new AntTask("", "", model.getProperty(Constants.CAGRID_HOME) + "/share/jboss/jboss.xml", "deployJBoss", env, sysProps)
 					.execute(model);
 		} else {
-			new AntTask("", "", getBuildFilePath(), "globus-deploy-secure-tomcat", env, sysProps)
+			new AntTask("", "", model.getProperty(Constants.CAGRID_HOME) + "/share/jboss/jboss.xml", "deploySecureJBoss", env, sysProps)
 					.execute(model);
 		}
 		

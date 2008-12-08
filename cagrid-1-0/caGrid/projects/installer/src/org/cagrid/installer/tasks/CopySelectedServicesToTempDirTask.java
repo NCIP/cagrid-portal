@@ -41,7 +41,7 @@ public class CopySelectedServicesToTempDirTask extends CaGridInstallerAntTask {
         }
         sysProps.setProperty("selected.services", sb.toString());
 
-        new AntTask("", "", target, env, sysProps).execute(model);
+        new AntTask("", "", getBuildFilePath(), target, env, sysProps).execute(model);
 
         return null;
     }

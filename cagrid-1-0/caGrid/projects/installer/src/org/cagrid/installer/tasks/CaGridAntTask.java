@@ -39,11 +39,10 @@ public abstract class CaGridAntTask extends BasicTask {
         Map<String, String> env = new HashMap<String, String>();
         env.put("GLOBUS_LOCATION", model.getProperty(Constants.GLOBUS_HOME));
         env.put("CATALINA_HOME", model.getProperty(Constants.TOMCAT_HOME));
+        env.put("JBOSS_HOME", model.getProperty(Constants.JBOSS_HOME));
         Properties sysProps = new Properties();
         sysProps.setProperty(Constants.SERVICE_DEST_DIR, model.getServiceDestDir());
         sysProps.setProperty("env.GLOBUS_LOCATION", model.getProperty(Constants.GLOBUS_HOME));
-
-        model.setProperty(Constants.BUILD_FILE_PATH, getBuildFilePath(model));
 
         return runAntTask(model, this.targetName, env, sysProps);
 
@@ -53,7 +52,5 @@ public abstract class CaGridAntTask extends BasicTask {
     protected abstract Object runAntTask(CaGridInstallerModel model, String target, Map<String, String> env,
         Properties sysProps) throws Exception;
 
-
-    protected abstract String getBuildFilePath(CaGridInstallerModel model);
 
 }
