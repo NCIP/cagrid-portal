@@ -6,7 +6,7 @@ import org.globus.gsi.GlobusCredential;
 
 public class DelegationRequestCache {
 
-	private String delegationURL;
+	private CDSHandle cds;
 
 	private GlobusCredential credential;
 
@@ -36,12 +36,12 @@ public class DelegationRequestCache {
 		this.delegationPathLength = delegationPathLength;
 	}
 
-	public String getDelegationURL() {
-		return delegationURL;
+	public CDSHandle getDelegationHandle() {
+		return this.cds;
 	}
 
-	public void setDelegationURL(String delegationURL) {
-		this.delegationURL = delegationURL;
+	public void setDelegationHandle(CDSHandle cds) {
+		this.cds = cds;
 	}
 
 	public ProxyLifetime getIssuedCredentialLifetime() {

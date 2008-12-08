@@ -1,6 +1,7 @@
 package org.cagrid.gaards.ui.dorian;
 
 import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.dorian.client.IFSUserClient;
 
 import java.util.List;
 
@@ -27,7 +28,7 @@ public class DorianHandle extends ServiceHandle {
     public GridAdministrationClient getAdminClient(GlobusCredential credential) throws Exception {
         GridAdministrationClient client = new GridAdministrationClient(getServiceDescriptor().getServiceURL(),
             credential);
-        if(Utils.clean(getServiceDescriptor().getServiceIdentity())!=null){
+        if (Utils.clean(getServiceDescriptor().getServiceIdentity()) != null) {
             IdentityAuthorization auth = new IdentityAuthorization(getServiceDescriptor().getServiceIdentity());
             client.setAuthorization(auth);
         }
@@ -37,7 +38,7 @@ public class DorianHandle extends ServiceHandle {
 
     public GridUserClient getUserClient(GlobusCredential credential) throws Exception {
         GridUserClient client = new GridUserClient(getServiceDescriptor().getServiceURL(), credential);
-        if(Utils.clean(getServiceDescriptor().getServiceIdentity())!=null){
+        if (Utils.clean(getServiceDescriptor().getServiceIdentity()) != null) {
             IdentityAuthorization auth = new IdentityAuthorization(getServiceDescriptor().getServiceIdentity());
             client.setAuthorization(auth);
         }
@@ -47,7 +48,7 @@ public class DorianHandle extends ServiceHandle {
 
     public GridUserClient getUserClient() throws Exception {
         GridUserClient client = new GridUserClient(getServiceDescriptor().getServiceURL());
-        if(Utils.clean(getServiceDescriptor().getServiceIdentity())!=null){
+        if (Utils.clean(getServiceDescriptor().getServiceIdentity()) != null) {
             IdentityAuthorization auth = new IdentityAuthorization(getServiceDescriptor().getServiceIdentity());
             client.setAuthorization(auth);
         }
@@ -58,7 +59,17 @@ public class DorianHandle extends ServiceHandle {
     public LocalAdministrationClient getLocalAdminClient(GlobusCredential credential) throws Exception {
         LocalAdministrationClient client = new LocalAdministrationClient(getServiceDescriptor().getServiceURL(),
             credential);
-        if(Utils.clean(getServiceDescriptor().getServiceIdentity())!=null){
+        if (Utils.clean(getServiceDescriptor().getServiceIdentity()) != null) {
+            IdentityAuthorization auth = new IdentityAuthorization(getServiceDescriptor().getServiceIdentity());
+            client.setAuthorization(auth);
+        }
+        return client;
+    }
+
+
+    public IFSUserClient getOldUserClient() throws Exception {
+        IFSUserClient client = new IFSUserClient(getServiceDescriptor().getServiceURL());
+        if (Utils.clean(getServiceDescriptor().getServiceIdentity()) != null) {
             IdentityAuthorization auth = new IdentityAuthorization(getServiceDescriptor().getServiceIdentity());
             client.setAuthorization(auth);
         }
@@ -68,11 +79,16 @@ public class DorianHandle extends ServiceHandle {
 
     public LocalUserClient getLocalUserClient() throws Exception {
         LocalUserClient client = new LocalUserClient(getServiceDescriptor().getServiceURL());
-        if(Utils.clean(getServiceDescriptor().getServiceIdentity())!=null){
+        if (Utils.clean(getServiceDescriptor().getServiceIdentity()) != null) {
             IdentityAuthorization auth = new IdentityAuthorization(getServiceDescriptor().getServiceIdentity());
             client.setAuthorization(auth);
         }
         return client;
+    }
+
+
+    public String getServiceVersion() throws Exception {
+        return getLocalUserClient().getServiceVersion();
     }
 
 

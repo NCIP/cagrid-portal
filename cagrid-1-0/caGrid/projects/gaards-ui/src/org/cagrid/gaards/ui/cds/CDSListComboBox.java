@@ -29,7 +29,7 @@ public class CDSListComboBox extends JComboBox {
         } else {
             this.setSelectedItem(lastSelectedService);
         }
-        this.setEditable(true);
+        this.setEditable(false);
 
         this.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent e) {

@@ -13,9 +13,10 @@ import javax.swing.JTextField;
 
 import org.cagrid.gaards.cds.client.ClientConstants;
 import org.cagrid.gaards.cds.client.DelegationUserClient;
+import org.cagrid.gaards.ui.common.ProgressPanel;
+import org.cagrid.gaards.ui.common.TitlePanel;
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
-import org.cagrid.grape.LookAndFeel;
 import org.cagrid.grape.utils.ErrorDialog;
 
 /**
@@ -53,6 +54,10 @@ public class DelegateProxyWindowStep2 extends ApplicationComponent {
 
 	private String policyType;
 
+    private JPanel titlePanel = null;
+
+    private ProgressPanel progressPanel = null;
+
 	/**
 	 * This is the default constructor
 	 */
@@ -62,7 +67,7 @@ public class DelegateProxyWindowStep2 extends ApplicationComponent {
 		this.policyType = policyType;
 		this.cache = cache;
 		initialize();
-		this.getDelegationService().setText(cache.getDelegationURL());
+		this.getDelegationService().setText(cache.getDelegationHandle().getServiceDescriptor().getDisplayName());
 		this.getCredential().setText(cache.getCredential().getIdentity());
 	}
 
@@ -84,17 +89,29 @@ public class DelegateProxyWindowStep2 extends ApplicationComponent {
 	 */
 	private JPanel getJContentPane() {
 		if (jContentPane == null) {
+			GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
+			gridBagConstraints6.gridx = 0;
+			gridBagConstraints6.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints6.weightx = 1.0D;
+			gridBagConstraints6.gridy = 4;
+			GridBagConstraints gridBagConstraints51 = new GridBagConstraints();
+			gridBagConstraints51.gridx = 0;
+			gridBagConstraints51.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints51.anchor = GridBagConstraints.WEST;
+			gridBagConstraints51.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints51.weightx = 1.0D;
+			gridBagConstraints51.gridy = 0;
 			GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
 			gridBagConstraints11.gridx = 0;
 			gridBagConstraints11.fill = GridBagConstraints.BOTH;
 			gridBagConstraints11.insets = new Insets(2, 2, 2, 2);
 			gridBagConstraints11.weightx = 1.0D;
 			gridBagConstraints11.weighty = 1.0D;
-			gridBagConstraints11.gridy = 1;
+			gridBagConstraints11.gridy = 2;
 			GridBagConstraints gridBagConstraints12 = new GridBagConstraints();
 			gridBagConstraints12.gridx = 0;
 			gridBagConstraints12.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints12.gridy = 2;
+			gridBagConstraints12.gridy = 3;
 			GridBagConstraints gridBagConstraints = new GridBagConstraints();
 			gridBagConstraints.gridx = 0;
 			gridBagConstraints.ipadx = 0;
@@ -103,12 +120,14 @@ public class DelegateProxyWindowStep2 extends ApplicationComponent {
 			gridBagConstraints.weightx = 1.0D;
 			gridBagConstraints.weighty = 0.0D;
 			gridBagConstraints.anchor = GridBagConstraints.NORTH;
-			gridBagConstraints.gridy = 0;
+			gridBagConstraints.gridy = 1;
 			jContentPane = new JPanel();
 			jContentPane.setLayout(new GridBagLayout());
 			jContentPane.add(getTopPanel(), gridBagConstraints);
 			jContentPane.add(getButtonPanel(), gridBagConstraints12);
 			jContentPane.add(getPolicyPanel(), gridBagConstraints11);
+			jContentPane.add(getTitlePanel(), gridBagConstraints51);
+			jContentPane.add(getProgressPanel(), gridBagConstraints6);
 		}
 		return jContentPane;
 	}
@@ -155,11 +174,6 @@ public class DelegateProxyWindowStep2 extends ApplicationComponent {
 			jLabel = new JLabel();
 			jLabel.setText("Delegation Service");
 			topPanel = new JPanel();
-			topPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(
-					null, "Delegate Credential",
-					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-					javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
-					LookAndFeel.getPanelLabelColor()));
 			topPanel.setLayout(new GridBagLayout());
 			topPanel.add(jLabel, gridBagConstraints2);
 			topPanel.add(jLabel1, gridBagConstraints4);
@@ -191,9 +205,8 @@ public class DelegateProxyWindowStep2 extends ApplicationComponent {
 	private JButton getDelegateCredentialButton() {
 		if (delegateCredentialButton == null) {
 			delegateCredentialButton = new JButton();
-			delegateCredentialButton.setText("Delegate Credential");
-			delegateCredentialButton.setIcon(CDSLookAndFeel
-					.getDelegateCredentialIcon());
+			delegateCredentialButton.setText("Delegate");
+			getRootPane().setDefaultButton(delegateCredentialButton);
 			delegateCredentialButton
 					.addActionListener(new java.awt.event.ActionListener() {
 						public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -230,7 +243,6 @@ public class DelegateProxyWindowStep2 extends ApplicationComponent {
 					dispose();
 				}
 			});
-			cancelButton.setIcon(LookAndFeel.getCloseIcon());
 		}
 		return cancelButton;
 	}
@@ -240,26 +252,28 @@ public class DelegateProxyWindowStep2 extends ApplicationComponent {
 		return cache;
 	}
 
-	private synchronized void delegateCredential() {
+	private void delegateCredential() {
 		try {
 			getDelegateCredentialButton().setEnabled(false);
+			getCancelButton().setEnabled(false);
+			getProgressPanel().showProgress("Delegating credential...");
 			DelegationRequestCache c = getDelegationCache();
-			DelegationUserClient client = new DelegationUserClient(c
-					.getDelegationURL(), c.getCredential());
+			DelegationUserClient client = c.getDelegationHandle().getUserClient(c.getCredential());
 			client.delegateCredential(c.getDelegationLifetime(), c
 					.getDelegationPathLength(), c.getPolicy(), c
 					.getIssuedCredentialLifetime(), c
 					.getIssuedCredentialPathLength(),
 					ClientConstants.DEFAULT_KEY_SIZE);
+			getProgressPanel().stopProgress("Credential successfully delegated.");
+			getDelegateCredentialButton().setEnabled(true);
+            getCancelButton().setEnabled(true);
 			dispose();
-			GridApplication.getContext().showMessage(
-					"Succesfully delegated the credential for "
-							+ c.getCredential().getIdentity() + ".");
-
+			GridApplication.getContext().showMessage("Credential successfully delegated!!!");
 		} catch (Exception e) {
 			ErrorDialog.showError(e);
-		} finally {
+			getProgressPanel().stopProgress("Error");
 			getDelegateCredentialButton().setEnabled(true);
+            getCancelButton().setEnabled(true);
 		}
 
 	}
@@ -301,5 +315,29 @@ public class DelegateProxyWindowStep2 extends ApplicationComponent {
 		}
 		return policyPanel;
 	}
+
+    /**
+     * This method initializes titlePanel	
+     * 	
+     * @return javax.swing.JPanel	
+     */
+    private JPanel getTitlePanel() {
+        if (titlePanel == null) {
+            titlePanel = new TitlePanel("Delegate Credential","Delegate your credential to another party such that they may act on your behalf.");
+        }
+        return titlePanel;
+    }
+
+    /**
+     * This method initializes progressPanel	
+     * 	
+     * @return javax.swing.JPanel	
+     */
+    private ProgressPanel getProgressPanel() {
+        if (progressPanel == null) {
+            progressPanel = new ProgressPanel();
+        }
+        return progressPanel;
+    }
 
 }

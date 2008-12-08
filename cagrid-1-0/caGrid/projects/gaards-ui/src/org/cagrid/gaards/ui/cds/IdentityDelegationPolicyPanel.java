@@ -193,7 +193,6 @@ public class IdentityDelegationPolicyPanel extends DelegationPolicyPanel {
 	private JButton getFindButton() {
 		if (findButton == null) {
 			findButton = new JButton();
-			findButton.setIcon(CDSLookAndFeel.getQueryIcon());
 			findButton.setText("Find...");
 			findButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -244,7 +243,6 @@ public class IdentityDelegationPolicyPanel extends DelegationPolicyPanel {
 		if (addButton == null) {
 			addButton = new JButton();
 			addButton.setText("Add");
-			addButton.setIcon(CDSLookAndFeel.getAddIcon());
 			addButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					String gridId = Utils.clean(getGridIdentity().getText());
@@ -269,7 +267,6 @@ public class IdentityDelegationPolicyPanel extends DelegationPolicyPanel {
 		if (removeButton == null) {
 			removeButton = new JButton();
 			removeButton.setText("Remove");
-			removeButton.setIcon(CDSLookAndFeel.getRemoveIcon());
 			removeButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					try {

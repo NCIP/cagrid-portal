@@ -15,9 +15,9 @@ import javax.swing.JPanel;
 import org.cagrid.gaards.cds.common.ProxyLifetime;
 import org.cagrid.gaards.pki.CertificateExtensionsUtil;
 import org.cagrid.gaards.ui.common.CredentialComboBox;
+import org.cagrid.gaards.ui.common.TitlePanel;
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
-import org.cagrid.grape.LookAndFeel;
 import org.cagrid.grape.utils.ErrorDialog;
 import org.globus.gsi.bc.BouncyCastleUtil;
 
@@ -33,7 +33,7 @@ public class DelegateProxyWindowStep1 extends ApplicationComponent implements
 	
 	private static final long serialVersionUID = 1L;
 
-	private static final int SECONDS_OFFSET = 120;
+	private static final int SECONDS_OFFSET = 60;
 
 	private JPanel jContentPane = null;
 
@@ -76,6 +76,8 @@ public class DelegateProxyWindowStep1 extends ApplicationComponent implements
 	private boolean firstProxyLifetimeChange = true;
 	
 	private static final int DEFAULT_MAX_PATH_LENGTH = 10;
+
+    private JPanel titlePanel = null;
 	
 
 	/**
@@ -104,6 +106,12 @@ public class DelegateProxyWindowStep1 extends ApplicationComponent implements
 	 */
 	private JPanel getJContentPane() {
 		if (jContentPane == null) {
+			GridBagConstraints gridBagConstraints17 = new GridBagConstraints();
+			gridBagConstraints17.gridx = 0;
+			gridBagConstraints17.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints17.weightx = 1.0D;
+			gridBagConstraints17.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints17.gridy = 0;
 			GridBagConstraints gridBagConstraints12 = new GridBagConstraints();
 			gridBagConstraints12.gridx = 0;
 			gridBagConstraints12.insets = new java.awt.Insets(2, 2, 2, 2);
@@ -115,11 +123,12 @@ public class DelegateProxyWindowStep1 extends ApplicationComponent implements
 			gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
 			gridBagConstraints.weightx = 1.0D;
 			gridBagConstraints.weighty = 1.0D;
-			gridBagConstraints.gridy = 0;
+			gridBagConstraints.gridy = 1;
 			jContentPane = new JPanel();
 			jContentPane.setLayout(new GridBagLayout());
 			jContentPane.add(getMainPanel(), gridBagConstraints);
 			jContentPane.add(getButtonPanel(), gridBagConstraints12);
+			jContentPane.add(getTitlePanel(), gridBagConstraints17);
 		}
 		return jContentPane;
 	}
@@ -249,11 +258,6 @@ public class DelegateProxyWindowStep1 extends ApplicationComponent implements
 			jLabel = new JLabel();
 			jLabel.setText("Delegation Service");
 			mainPanel = new JPanel();
-			mainPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(
-					null, "Delegate Credential",
-					javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-					javax.swing.border.TitledBorder.DEFAULT_POSITION, null,
-					LookAndFeel.getPanelLabelColor()));
 			mainPanel.setLayout(new GridBagLayout());
 			mainPanel.add(jLabel, gridBagConstraints2);
 			mainPanel.add(jLabel1, gridBagConstraints4);
@@ -314,8 +318,8 @@ public class DelegateProxyWindowStep1 extends ApplicationComponent implements
 	private JButton getAddButton() {
 		if (addButton == null) {
 			addButton = new JButton();
-			addButton.setText("Delegate Credential");
-			addButton.setIcon(CDSLookAndFeel.getDelegateCredentialIcon());
+			addButton.setText("Delegate");
+			getRootPane().setDefaultButton(addButton);
 			addButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					Runner runner = new Runner() {
@@ -351,7 +355,6 @@ public class DelegateProxyWindowStep1 extends ApplicationComponent implements
 					dispose();
 				}
 			});
-			cancelButton.setIcon(LookAndFeel.getCloseIcon());
 		}
 		return cancelButton;
 	}
@@ -359,7 +362,7 @@ public class DelegateProxyWindowStep1 extends ApplicationComponent implements
 	private void delegateCredential() {
 		try {
 			DelegationRequestCache cache = new DelegationRequestCache();
-			cache.setDelegationURL((String) getCds().getSelectedItem());
+			cache.setDelegationHandle(getCds().getSelectedService());
 			cache.setCredential(getProxy().getSelectedCredential());
 			cache.setDelegationLifetime(getDelegationLifetime()
 					.getProxyLifetime());
@@ -535,5 +538,17 @@ public class DelegateProxyWindowStep1 extends ApplicationComponent implements
 		}
 		getIssuedCredentialLifetime().setLifetime(seconds);
 	}
+
+    /**
+     * This method initializes titlePanel	
+     * 	
+     * @return javax.swing.JPanel	
+     */
+    private JPanel getTitlePanel() {
+        if (titlePanel == null) {
+            titlePanel = new TitlePanel("Delegate Credential","Delegate your credential to another party such that they may act on your behalf.");
+        }
+        return titlePanel;
+    }
 
 }

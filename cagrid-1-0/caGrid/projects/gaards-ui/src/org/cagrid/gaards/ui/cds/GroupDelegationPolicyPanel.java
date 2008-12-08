@@ -145,7 +145,6 @@ public class GroupDelegationPolicyPanel extends DelegationPolicyPanel {
 		if (searchButton == null) {
 			searchButton = new JButton();
 			searchButton.setText("Browse Groups....");
-			searchButton.setIcon(LookAndFeel.getQueryIcon());
 			if(!isEditMode()){
 				searchButton.setEnabled(false);
 				searchButton.setVisible(false);

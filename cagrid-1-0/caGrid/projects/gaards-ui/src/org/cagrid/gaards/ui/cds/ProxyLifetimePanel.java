@@ -101,11 +101,25 @@ public class ProxyLifetimePanel extends JPanel {
 		if (lifetimeSeconds < 0) {
 			lifetimeSeconds = 0;
 		}
-		long lhours = (lifetimeSeconds / 60) / 60;
-		long hoursInSeconds = lhours * 60 * 60;
-		long lminutes = (lifetimeSeconds - hoursInSeconds) / 60;
-		long minutesInSeconds = lminutes * 60;
-		long lseconds = lifetimeSeconds - hoursInSeconds - minutesInSeconds;
+		long lseconds = 0;
+		long lminutes = 0; 
+		long lhours = 0;
+	    if(lifetimeSeconds >= 59){
+	        lseconds = 59;
+	        long temp1 = (lifetimeSeconds/60);
+	        if(temp1>=59){
+	            lminutes = 59;
+	            lhours = ((lifetimeSeconds/60)/60);
+	        }else{
+	            lminutes = temp1;
+	            lhours = 0;
+	        }
+	    }else{
+	        lseconds = lifetimeSeconds;
+	        lminutes = 0;
+	        lhours = 0;
+	    }
+
 		for (int i = 0; i <= lhours; i++) {
 			hours.addItem(new Integer(i));
 		}

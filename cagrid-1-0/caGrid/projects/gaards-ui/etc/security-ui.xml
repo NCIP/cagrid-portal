@@ -58,7 +58,7 @@
 					<icon>/delegate-credential.png</icon>
 					<showOnToolBar>false</showOnToolBar>
 					<dimensions>
-						<width>600</width>
+						<width>625</width>
 						<height>350</height>
 					</dimensions>
 				</component>
