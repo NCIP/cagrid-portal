@@ -12,12 +12,12 @@ import gov.nih.nci.cagrid.testing.system.haste.Step;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Set;
+import java.util.List;
 
 import org.apache.axis.types.URI;
 import org.apache.axis.types.URI.MalformedURIException;
@@ -33,7 +33,7 @@ import org.cagrid.data.test.creation.DataTestCaseInfo;
  * @author David Ervin
  * 
  * @created Feb 1, 2008 9:02:20 AM
- * @version $Id: InvokeSDK4DataServiceStep.java,v 1.3 2008-12-09 15:53:25 dervin Exp $ 
+ * @version $Id: InvokeSDK4DataServiceStep.java,v 1.4 2008-12-09 16:54:35 dervin Exp $ 
  */
 public class InvokeSDK4DataServiceStep extends Step {
     public static final String TEST_RESOURCES_DIR = "/resources/";
@@ -325,8 +325,8 @@ public class InvokeSDK4DataServiceStep extends Step {
     
     
     private void compareResults(CQLQueryResults gold, CQLQueryResults test) {
-        Set<Object> goldObjects = new HashSet<Object>();
-        Set<Object> testObjects = new HashSet<Object>();
+        List<Object> goldObjects = new ArrayList<Object>();
+        List<Object> testObjects = new ArrayList<Object>();
         
         boolean goldIsAttributes = false;
         CQLQueryResultsIterator goldIter = new CQLQueryResultsIterator(gold, getClientConfigStream());
@@ -348,12 +348,12 @@ public class InvokeSDK4DataServiceStep extends Step {
             testObjects.add(o);
         }
         
-        assertEquals("Result count differed from expected", goldObjects.size(), testObjects.size());
+        assertEquals("Number of results differed from expected", goldObjects.size(), testObjects.size());
         assertEquals("Test results as attributes differed from expected", goldIsAttributes, testIsAttributes);
         
         if (goldIsAttributes) {
-            Set<TargetAttribute[]> goldAttributes = recastSet(goldObjects);
-            Set<TargetAttribute[]> testAttributes = recastSet(testObjects);
+            List<TargetAttribute[]> goldAttributes = recastList(goldObjects);
+            List<TargetAttribute[]> testAttributes = recastList(testObjects);
             compareTargetAttributes(goldAttributes, testAttributes);
         } else {
             // assertTrue("Gold and Test contained different objects", goldObjects.containsAll(testObjects));
@@ -362,16 +362,16 @@ public class InvokeSDK4DataServiceStep extends Step {
     }
     
     
-    private void compareObjects(Set<Object> gold, Set<Object> test) {
+    private void compareObjects(List<Object> gold, List<Object> test) {
         if (!gold.containsAll(test)) {
             // fail, but why?
-            Set<Object> tempGold = new HashSet<Object>();
+            List<Object> tempGold = new ArrayList<Object>();
             tempGold.addAll(gold);
             tempGold.removeAll(test);
             StringBuffer errors = new StringBuffer();
             errors.append("The following objects were expected but not found\n");
             dumpGetters(tempGold, errors);
-            Set<Object> tempTest = new HashSet<Object>();
+            List<Object> tempTest = new ArrayList<Object>();
             tempTest.addAll(test);
             tempTest.removeAll(gold);
             errors.append("\n\nThe following objects were found, but not expected\n");
@@ -402,29 +402,38 @@ public class InvokeSDK4DataServiceStep extends Step {
     }
     
     
-    private void compareTargetAttributes(Set<TargetAttribute[]> gold, Set<TargetAttribute[]> test) {
-        // assumes sizes of both sets are equal
-        
+    /**
+     * assumes sizes of both lists are equal
+     */
+    private void compareTargetAttributes(List<TargetAttribute[]> gold, List<TargetAttribute[]> test) {
         // Must find each array of gold attributes (in any order) 
-        // in the test attributes set
-        Set<TargetAttribute[]> tempTestAttributes = new HashSet<TargetAttribute[]>();
-        tempTestAttributes.addAll(test);
+        // in the test attributes list
+        
+        // sorts attributes for consistency of comparison
         Comparator<TargetAttribute> attributeSorter = new Comparator<TargetAttribute>() {
             public int compare(TargetAttribute o1, TargetAttribute o2) {
-                return o1.getName().compareTo(o2.getName());
+                String att1String = o1.getName() + "=" + o1.getValue();
+                String att2String = o2.getName() + "=" + o2.getValue();
+                return att1String.compareTo(att2String);
             }
         };
-        Iterator<TargetAttribute[]> goldIter = gold.iterator();
-        while (goldIter.hasNext()) {
-            TargetAttribute[] goldAttributes = goldIter.next();
+        
+        // walk the gold attribute arrays
+        for (TargetAttribute[] goldAttributes : gold) {
+            // sort that array
             Arrays.sort(goldAttributes, attributeSorter);
+            
             // find a matching array of attributes in the test set
-            Iterator<TargetAttribute[]> testIter = tempTestAttributes.iterator();
+            Iterator<TargetAttribute[]> testIter = test.iterator();
             while (testIter.hasNext()) {
                 TargetAttribute[] testAttributes = testIter.next();
+                
+                // sort them out
                 Arrays.sort(testAttributes, attributeSorter);
+                
                 // veriy the same number of attributes.  This should be true for every array
                 assertEquals("Number of attributes differed from expected", goldAttributes.length, testAttributes.length);
+                
                 // check that the current goldAttribute[] matches the test[]
                 boolean matching = true;
                 for (int i = 0; i < goldAttributes.length && matching; i++) {
@@ -442,10 +451,11 @@ public class InvokeSDK4DataServiceStep extends Step {
                 }
             }
         }
-        if (tempTestAttributes.size() != 0) {
+        
+        if (test.size() != 0) {
             StringBuffer errors = new StringBuffer();
             errors.append("The following attribute arrays were not expected in the test results:");
-            for (TargetAttribute[] atts : tempTestAttributes) {
+            for (TargetAttribute[] atts : test) {
                 errors.append("---------\n");
                 for (TargetAttribute ta : atts) {
                     errors.append("Attribute: ").append(ta.getName()).append("\t\tValue: ")
@@ -457,8 +467,8 @@ public class InvokeSDK4DataServiceStep extends Step {
     }
     
     
-    private <T> Set<T> recastSet(Set<?> set) {
-        Set<T> returnme = new HashSet<T>();
+    private <T> List<T> recastList(List<?> set) {
+        List<T> returnme = new ArrayList<T>();
         for (Object o : set) {
             returnme.add((T) o);
         }
