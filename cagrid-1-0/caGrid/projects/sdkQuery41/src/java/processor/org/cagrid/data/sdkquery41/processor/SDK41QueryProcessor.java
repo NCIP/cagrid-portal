@@ -40,7 +40,6 @@ public class SDK41QueryProcessor extends CQLQueryProcessor {
     public static final String PROPERTY_ORM_JAR_NAME = "ormJarName"; // only for local
     public static final String PROPERTY_HOST_NAME = "applicationHostName"; // only for remote
     public static final String PROPERTY_HOST_PORT = "applicationHostPort"; // only for remote
-    public static final String PROPERTY_CASE_INSENSITIVE_QUERYING = "queryCaseInsensitive";
     public static final String PROPERTY_DOMAIN_TYPES_INFO_FILENAME = "domainTypesInfoFilename";
     public static final String PROPERTY_USE_LOGIN = "useServiceLogin";
     public static final String PROPERTY_USE_GRID_IDENTITY_LOGIN = "useGridIdentityLogin";
@@ -49,11 +48,9 @@ public class SDK41QueryProcessor extends CQLQueryProcessor {
     
     // default values for properties
     public static final String DEFAULT_USE_LOCAL_API = String.valueOf(false);
-    public static final String DEFAULT_CASE_INSENSITIVE_QUERYING = String.valueOf(false);
     public static final String DEFAULT_USE_LOGIN = String.valueOf(false);
     public static final String DEFAULT_USE_GRID_IDENTITY_LOGIN = String.valueOf(false);
-    public static final String DEFAULT_STRICT_CQL_PROCESSING = String.valueOf(true);
-
+    
     public SDK41QueryProcessor() {
         super();
     }
@@ -77,7 +74,6 @@ public class SDK41QueryProcessor extends CQLQueryProcessor {
     public Properties getRequiredParameters() {
         Properties props = new Properties();
         props.setProperty(PROPERTY_APPLICATION_NAME, "");
-        props.setProperty(PROPERTY_CASE_INSENSITIVE_QUERYING, DEFAULT_CASE_INSENSITIVE_QUERYING);
         props.setProperty(PROPERTY_DOMAIN_TYPES_INFO_FILENAME , "");
         props.setProperty(PROPERTY_HOST_NAME, "");
         props.setProperty(PROPERTY_HOST_PORT, "");
@@ -161,16 +157,6 @@ public class SDK41QueryProcessor extends CQLQueryProcessor {
         urlPart += "/";
         urlPart += getConfiguredParameters().getProperty(PROPERTY_APPLICATION_NAME);
         return urlPart;
-    }
-    
-    
-    private boolean useCaseInsensitiveQueries() throws QueryProcessingException {
-        String caseInsensitiveValue = getConfiguredParameters().getProperty(PROPERTY_CASE_INSENSITIVE_QUERYING);
-        try {
-            return Boolean.parseBoolean(caseInsensitiveValue);
-        } catch (Exception ex) {
-            throw new QueryProcessingException("Error determining case insensitivity: " + ex.getMessage(), ex);
-        }
     }
     
     
