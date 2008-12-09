@@ -6,7 +6,6 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.util.Date;
 
-import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -14,6 +13,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import org.cagrid.gaards.cds.common.DelegatedCredentialAuditRecord;
+import org.cagrid.gaards.ui.common.TitlePanel;
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.LookAndFeel;
 
@@ -45,13 +45,11 @@ public class DelegatedCredentialAuditRecordWindow extends ApplicationComponent {
 
 	private JPanel messagePanel = null;
 
-	private JPanel buttonPanel = null;
-
-	private JButton closeButton = null;
-
 	private JTextArea message = null;
 
 	private JScrollPane jScrollPane = null;
+
+    private JPanel titlePanel = null;
 
 	/**
 	 * This is the default constructor
@@ -101,19 +99,19 @@ public class DelegatedCredentialAuditRecordWindow extends ApplicationComponent {
 	 */
 	private JPanel getMainPanel() {
 		if (mainPanel == null) {
-			GridBagConstraints gridBagConstraints31 = new GridBagConstraints();
-			gridBagConstraints31.gridx = 0;
-			gridBagConstraints31.insets = new Insets(2, 2, 2, 2);
-			gridBagConstraints31.weightx = 1.0D;
-			gridBagConstraints31.fill = GridBagConstraints.HORIZONTAL;
-			gridBagConstraints31.gridy = 2;
+			GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
+			gridBagConstraints11.gridx = 0;
+			gridBagConstraints11.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints11.weightx = 1.0D;
+			gridBagConstraints11.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints11.gridy = 0;
 			GridBagConstraints gridBagConstraints21 = new GridBagConstraints();
 			gridBagConstraints21.gridx = 0;
 			gridBagConstraints21.insets = new Insets(2, 2, 2, 2);
 			gridBagConstraints21.weightx = 1.0D;
 			gridBagConstraints21.weighty = 1.0D;
 			gridBagConstraints21.fill = GridBagConstraints.BOTH;
-			gridBagConstraints21.gridy = 1;
+			gridBagConstraints21.gridy = 2;
 			jLabel3 = new JLabel();
 			jLabel3.setText("Occurred At");
 			GridBagConstraints gridBagConstraints = new GridBagConstraints();
@@ -122,19 +120,12 @@ public class DelegatedCredentialAuditRecordWindow extends ApplicationComponent {
 			gridBagConstraints.anchor = GridBagConstraints.NORTH;
 			gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
 			gridBagConstraints.weightx = 1.0D;
-			gridBagConstraints.gridy = 0;
+			gridBagConstraints.gridy = 1;
 			mainPanel = new JPanel();
 			mainPanel.setLayout(new GridBagLayout());
-			mainPanel.setBorder(javax.swing.BorderFactory
-					.createTitledBorder(
-							null,
-							"Audit Record",
-							javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-							javax.swing.border.TitledBorder.DEFAULT_POSITION,
-							null, LookAndFeel.getPanelLabelColor()));
 			mainPanel.add(getContentPanel(), gridBagConstraints);
 			mainPanel.add(getMessagePanel(), gridBagConstraints21);
-			mainPanel.add(getButtonPanel(), gridBagConstraints31);
+			mainPanel.add(getTitlePanel(), gridBagConstraints11);
 		}
 		return mainPanel;
 	}
@@ -297,39 +288,6 @@ public class DelegatedCredentialAuditRecordWindow extends ApplicationComponent {
 	}
 
 	/**
-	 * This method initializes buttonPanel
-	 * 
-	 * @return javax.swing.JPanel
-	 */
-	private JPanel getButtonPanel() {
-		if (buttonPanel == null) {
-			buttonPanel = new JPanel();
-			buttonPanel.setLayout(new GridBagLayout());
-			buttonPanel.add(getCloseButton(), new GridBagConstraints());
-		}
-		return buttonPanel;
-	}
-
-	/**
-	 * This method initializes closeButton
-	 * 
-	 * @return javax.swing.JButton
-	 */
-	private JButton getCloseButton() {
-		if (closeButton == null) {
-			closeButton = new JButton();
-			closeButton.setText("Close");
-			closeButton.setIcon(LookAndFeel.getCloseIcon());
-			closeButton.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					dispose();
-				}
-			});
-		}
-		return closeButton;
-	}
-
-	/**
 	 * This method initializes message
 	 * 
 	 * @return javax.swing.JTextArea
@@ -356,5 +314,17 @@ public class DelegatedCredentialAuditRecordWindow extends ApplicationComponent {
 		}
 		return jScrollPane;
 	}
+
+    /**
+     * This method initializes titlePanel	
+     * 	
+     * @return javax.swing.JPanel	
+     */
+    private JPanel getTitlePanel() {
+        if (titlePanel == null) {
+            titlePanel = new TitlePanel("Audit Record","Audit record for a delegated credential.");
+        }
+        return titlePanel;
+    }
 
 }

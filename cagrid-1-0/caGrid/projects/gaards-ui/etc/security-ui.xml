@@ -184,7 +184,7 @@
 					<showIcons>true</showIcons>
 					<components>
 						<component>
-							<title>Find Delegated Credentials</title>
+							<title>Manage Delegated Credentials</title>
 							<description>Allows one to view delegated credentials.</description>
 							<classname>org.cagrid.gaards.ui.cds.FindDelegatedCredentialsWindow</classname>
 							<icon>/delegate-credentials.png</icon>

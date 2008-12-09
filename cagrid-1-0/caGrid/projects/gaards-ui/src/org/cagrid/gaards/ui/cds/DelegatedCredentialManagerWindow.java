@@ -14,10 +14,8 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
 import javax.swing.border.TitledBorder;
 
 import org.cagrid.gaards.cds.client.DelegationAdminClient;
@@ -26,6 +24,8 @@ import org.cagrid.gaards.cds.common.DelegationIdentifier;
 import org.cagrid.gaards.cds.common.DelegationRecord;
 import org.cagrid.gaards.cds.common.DelegationRecordFilter;
 import org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault;
+import org.cagrid.gaards.ui.common.ProgressPanel;
+import org.cagrid.gaards.ui.common.TitlePanel;
 import org.cagrid.gaards.ui.dorian.federation.UserSearchDialog;
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
@@ -51,8 +51,6 @@ public class DelegatedCredentialManagerWindow extends ApplicationComponent {
 
 	private JPanel buttonPanel = null;
 
-	private JButton cancel = null;
-
 	private DelegationRecordsTable delegatedCredentialsTable = null;
 
 	private JScrollPane jScrollPane = null;
@@ -65,9 +63,7 @@ public class DelegatedCredentialManagerWindow extends ApplicationComponent {
 
 	private JButton query = null;
 
-	private JPanel progressPanel = null;
-
-	private JProgressBar progress = null;
+	private ProgressPanel progressPanel = null;
 
 	private JPanel filterPanel = null;
 
@@ -96,6 +92,8 @@ public class DelegatedCredentialManagerWindow extends ApplicationComponent {
 	private JButton deleteButton = null;
 
 	private JButton deleteAll = null;
+
+    private JPanel titlePanel = null;
 
 	/**
 	 * This is the default constructor
@@ -141,26 +139,32 @@ public class DelegatedCredentialManagerWindow extends ApplicationComponent {
 	 */
 	private JPanel getMainPanel() {
 		if (mainPanel == null) {
+			GridBagConstraints gridBagConstraints15 = new GridBagConstraints();
+			gridBagConstraints15.gridx = 0;
+			gridBagConstraints15.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints15.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints15.weightx = 1.0D;
+			gridBagConstraints15.gridy = 0;
 			GridBagConstraints gridBagConstraints = new GridBagConstraints();
 			gridBagConstraints.gridx = 0;
 			gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints.weightx = 1.0D;
 			gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints.gridy = 1;
+			gridBagConstraints.gridy = 2;
 			GridBagConstraints gridBagConstraints32 = new GridBagConstraints();
 			gridBagConstraints32.gridx = 0;
 			gridBagConstraints32.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			gridBagConstraints32.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints32.weightx = 1.0D;
-			gridBagConstraints32.gridy = 4;
+			gridBagConstraints32.gridy = 7;
 			GridBagConstraints gridBagConstraints33 = new GridBagConstraints();
 			gridBagConstraints33.gridx = 0;
-			gridBagConstraints33.gridy = 3;
+			gridBagConstraints33.gridy = 4;
 			GridBagConstraints gridBagConstraints35 = new GridBagConstraints();
 			gridBagConstraints35.gridx = 0;
 			gridBagConstraints35.weightx = 1.0D;
 			gridBagConstraints35.fill = java.awt.GridBagConstraints.BOTH;
-			gridBagConstraints35.gridy = 0;
+			gridBagConstraints35.gridy = 1;
 
 			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
 			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
@@ -184,6 +188,7 @@ public class DelegatedCredentialManagerWindow extends ApplicationComponent {
 			mainPanel.add(getQueryPanel(), gridBagConstraints33);
 			mainPanel.add(getProgressPanel(), gridBagConstraints32);
 			mainPanel.add(getFilterPanel(), gridBagConstraints);
+			mainPanel.add(getTitlePanel(), gridBagConstraints15);
 		}
 		return mainPanel;
 	}
@@ -225,28 +230,8 @@ public class DelegatedCredentialManagerWindow extends ApplicationComponent {
 			buttonPanel.add(getManageDelegatedCredential(), null);
 			buttonPanel.add(getDeleteButton(), null);
 			buttonPanel.add(getDeleteAll(), null);
-			buttonPanel.add(getCancel(), null);
 		}
 		return buttonPanel;
-	}
-
-	/**
-	 * This method initializes jButton1
-	 * 
-	 * @return javax.swing.JButton
-	 */
-	private JButton getCancel() {
-		if (cancel == null) {
-			cancel = new JButton();
-			cancel.setText("Close");
-			cancel.setIcon(LookAndFeel.getCloseIcon());
-			cancel.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					dispose();
-				}
-			});
-		}
-		return cancel;
 	}
 
 	/**
@@ -282,9 +267,7 @@ public class DelegatedCredentialManagerWindow extends ApplicationComponent {
 	private JButton getManageDelegatedCredential() {
 		if (manageDelegatedCredential == null) {
 			manageDelegatedCredential = new JButton();
-			manageDelegatedCredential.setText("View Record");
-			manageDelegatedCredential.setIcon(CDSLookAndFeel
-					.getDelegateCredentialIcon());
+			manageDelegatedCredential.setText("View");
 			manageDelegatedCredential
 					.addActionListener(new java.awt.event.ActionListener() {
 						public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -332,8 +315,8 @@ public class DelegatedCredentialManagerWindow extends ApplicationComponent {
 	private JButton getQuery() {
 		if (query == null) {
 			query = new JButton();
-			query.setText("Find Delegated Credentials");
-			query.setIcon(LookAndFeel.getQueryIcon());
+			query.setText("Search");
+			getRootPane().setDefaultButton(query);
 			query.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					Runner runner = new Runner() {
@@ -354,12 +337,12 @@ public class DelegatedCredentialManagerWindow extends ApplicationComponent {
 		return query;
 	}
 
-	private synchronized void findDelegatedCredentials() {
+	private void findDelegatedCredentials() {
 
 		disableButtons();
 
 		this.getDelegatedCredentialsTable().clearTable();
-		this.updateProgress(true, "Querying...");
+		getProgressPanel().showProgress("Searching...");
 
 		try {
 			DelegationRecordFilter f = new DelegationRecordFilter();
@@ -371,7 +354,7 @@ public class DelegatedCredentialManagerWindow extends ApplicationComponent {
 					id.setDelegationId(Integer.valueOf(idStr).intValue());
 					f.setDelegationIdentifier(id);
 				} catch (Exception e) {
-					this.updateProgress(false, "Error");
+					getProgressPanel().stopProgress("Error");
 					ErrorDialog
 							.showError("A Delegation Identifier must be an integer.");
 					return;
@@ -407,15 +390,14 @@ public class DelegatedCredentialManagerWindow extends ApplicationComponent {
 				this.getDelegatedCredentialsTable().addRecord(records.get(i));
 			}
 
-			this.updateProgress(false, "Querying Completed [" + records.size()
-					+ " records found]");
+			getProgressPanel().stopProgress(records.size()+" credential(s) found,");
 
 		} catch (PermissionDeniedFault pdf) {
 			ErrorDialog.showError(pdf);
-			this.updateProgress(false, "Error");
+			getProgressPanel().stopProgress("Error");
 		} catch (Exception e) {
 			ErrorDialog.showError(e);
-			this.updateProgress(false, "Error");
+			getProgressPanel().stopProgress("Error");
 		} finally {
 			enableButtons();
 		}
@@ -427,45 +409,14 @@ public class DelegatedCredentialManagerWindow extends ApplicationComponent {
 	 * 
 	 * @return javax.swing.JPanel
 	 */
-	private JPanel getProgressPanel() {
+	private ProgressPanel getProgressPanel() {
 		if (progressPanel == null) {
-			GridBagConstraints gridBagConstraints36 = new GridBagConstraints();
-			gridBagConstraints36.insets = new java.awt.Insets(2, 20, 2, 20);
-			gridBagConstraints36.gridy = 0;
-			gridBagConstraints36.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints36.weightx = 1.0D;
-			gridBagConstraints36.gridx = 0;
-			progressPanel = new JPanel();
-			progressPanel.setLayout(new GridBagLayout());
-			progressPanel.add(getProgress(), gridBagConstraints36);
+			progressPanel = new ProgressPanel();
 		}
 		return progressPanel;
 	}
 
-	/**
-	 * This method initializes progress
-	 * 
-	 * @return javax.swing.JProgressBar
-	 */
-	private JProgressBar getProgress() {
-		if (progress == null) {
-			progress = new JProgressBar();
-			progress.setForeground(LookAndFeel.getPanelLabelColor());
-			progress.setString("");
-			progress.setStringPainted(true);
-		}
-		return progress;
-	}
 
-	public void updateProgress(final boolean working, final String s) {
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				getProgress().setString(s);
-				getProgress().setIndeterminate(working);
-			}
-		});
-
-	}
 
 	/**
 	 * This method initializes filterPanel
@@ -661,7 +612,6 @@ public class DelegatedCredentialManagerWindow extends ApplicationComponent {
 	private JButton getFindButton() {
 		if (findButton == null) {
 			findButton = new JButton();
-			findButton.setIcon(CDSLookAndFeel.getQueryIcon());
 			findButton.setText("Find...");
 			findButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -693,7 +643,6 @@ public class DelegatedCredentialManagerWindow extends ApplicationComponent {
 		if (deleteButton == null) {
 			deleteButton = new JButton();
 			deleteButton.setText("Delete");
-			deleteButton.setIcon(CDSLookAndFeel.getRemoveIcon());
 
 			if (!adminMode) {
 				deleteButton.setVisible(false);
@@ -744,7 +693,6 @@ public class DelegatedCredentialManagerWindow extends ApplicationComponent {
 	private void disableButtons() {
 		getManageDelegatedCredential().setEnabled(false);
 		getFindButton().setEnabled(false);
-		getCancel().setEnabled(false);
 		getDeleteButton().setEnabled(false);
 		getDeleteAll().setEnabled(false);
 	}
@@ -752,7 +700,6 @@ public class DelegatedCredentialManagerWindow extends ApplicationComponent {
 	private void enableButtons() {
 		getManageDelegatedCredential().setEnabled(true);
 		getFindButton().setEnabled(true);
-		getCancel().setEnabled(true);
 		if (adminMode) {
 			getDeleteButton().setEnabled(true);
 			getDeleteAll().setEnabled(true);
@@ -768,7 +715,6 @@ public class DelegatedCredentialManagerWindow extends ApplicationComponent {
 		if (deleteAll == null) {
 			deleteAll = new JButton();
 			deleteAll.setText("Delete All");
-			deleteAll.setIcon(CDSLookAndFeel.getRemoveIcon());
 			if (!adminMode) {
 				deleteAll.setVisible(false);
 				deleteAll.setEnabled(false);
@@ -837,5 +783,17 @@ public class DelegatedCredentialManagerWindow extends ApplicationComponent {
 		}
 		return deleteAll;
 	}
+
+    /**
+     * This method initializes titlePanel	
+     * 	
+     * @return javax.swing.JPanel	
+     */
+    private JPanel getTitlePanel() {
+        if (titlePanel == null) {
+            titlePanel = new TitlePanel("Delegated Credential Search","Search for and manage delegated credentials.");
+        }
+        return titlePanel;
+    }
 
 }

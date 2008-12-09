@@ -126,9 +126,8 @@ public class DelegationRecordsTable extends GrapeBaseTable {
 			public void execute() {
 				try {
 					GridApplication.getContext().addApplicationComponent(
-							new DelegatedCredentialWindow(session
-									.getServiceURI(), session.getCredential(),
-									getSelectedRecord()));
+							new DelegatedCredentialWindow(session.getSession(),
+									getSelectedRecord()), 700, 500);
 				} catch (Exception e) {
 					ErrorDialog.showError(e);
 				}

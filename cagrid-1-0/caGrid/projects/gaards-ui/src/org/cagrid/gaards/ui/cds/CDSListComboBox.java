@@ -31,9 +31,11 @@ public class CDSListComboBox extends JComboBox {
         }
         this.setEditable(false);
 
+        setToolTipText(getSelectedService().getServiceURL());
         this.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent e) {
                 lastSelectedService = getSelectedService();
+                setToolTipText(getSelectedService().getServiceURL());
             }
         });
     }

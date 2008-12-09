@@ -4,15 +4,12 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 
-import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.border.TitledBorder;
 
 import org.cagrid.gaards.cds.client.DelegationAdminClient;
 import org.cagrid.gaards.cds.client.DelegationUserClient;
 import org.cagrid.gaards.ui.common.CredentialComboBox;
-import org.cagrid.grape.LookAndFeel;
 import org.globus.gsi.GlobusCredential;
 
 
@@ -72,8 +69,6 @@ public class SessionPanel extends JPanel {
         jLabel.setText("Service URI");
         this.setSize(300, 200);
         this.setLayout(new GridBagLayout());
-        this.setBorder(BorderFactory.createTitledBorder(null, "Session Information",
-            TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, LookAndFeel.getPanelLabelColor()));
         this.add(jLabel, gridBagConstraints1);
         this.add(getService(), gridBagConstraints);
         this.add(jLabel1, gridBagConstraints2);
@@ -118,6 +113,11 @@ public class SessionPanel extends JPanel {
         CDSHandle handle = getService().getSelectedService();
         GlobusCredential proxyCred = getCred().getSelectedCredential();
         return handle.getUserClient(proxyCred);
+    }
+
+
+    public CDSSession getSession() throws Exception {
+        return new CDSSession(getService().getSelectedService(), getCred().getSelectedCredential());
     }
 
 

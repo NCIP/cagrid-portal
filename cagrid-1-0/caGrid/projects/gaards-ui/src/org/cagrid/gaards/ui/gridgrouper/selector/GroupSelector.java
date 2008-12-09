@@ -15,6 +15,7 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+import org.cagrid.gaards.ui.common.TitlePanel;
 import org.cagrid.gaards.ui.gridgrouper.GridGrouperLookAndFeel;
 import org.cagrid.gaards.ui.gridgrouper.GridGrouperServiceList;
 import org.cagrid.gaards.ui.gridgrouper.tree.GridGrouperTree;
@@ -48,6 +49,8 @@ public class GroupSelector extends JDialog {
 	private Group selectedGroup;
 
 	private MultiEventProgressBar progress = null;
+
+    private JPanel titlePanel = null;
 
 	/**
 	 * @param owner
@@ -90,26 +93,32 @@ public class GroupSelector extends JDialog {
 	 */
 	private JPanel getMainPanel() {
 		if (mainPanel == null) {
+			GridBagConstraints gridBagConstraints22 = new GridBagConstraints();
+			gridBagConstraints22.gridx = 0;
+			gridBagConstraints22.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints22.weightx = 1.0D;
+			gridBagConstraints22.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints22.gridy = 0;
 			GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
 			gridBagConstraints3.gridx = 0;
 			gridBagConstraints3.insets = new Insets(5, 25, 5, 25);
 			gridBagConstraints3.weightx = 1.0D;
 			gridBagConstraints3.fill = GridBagConstraints.HORIZONTAL;
-			gridBagConstraints3.gridy = 1;
+			gridBagConstraints3.gridy = 2;
 			GridBagConstraints gridBagConstraints21 = new GridBagConstraints();
 			gridBagConstraints21.gridx = 0;
 			gridBagConstraints21.insets = new Insets(2, 2, 2, 2);
 			gridBagConstraints21.weightx = 1.0D;
 			gridBagConstraints21.weighty = 1.0D;
 			gridBagConstraints21.fill = GridBagConstraints.BOTH;
-			gridBagConstraints21.gridy = 2;
+			gridBagConstraints21.gridy = 3;
 			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
 			gridBagConstraints2.gridx = 0;
 			gridBagConstraints2.insets = new Insets(2, 2, 2, 2);
-			gridBagConstraints2.gridy = 3;
+			gridBagConstraints2.gridy = 4;
 			GridBagConstraints gridBagConstraints = new GridBagConstraints();
 			gridBagConstraints.anchor = GridBagConstraints.NORTH;
-			gridBagConstraints.gridy = 0;
+			gridBagConstraints.gridy = 1;
 			gridBagConstraints.insets = new Insets(2, 2, 2, 2);
 			gridBagConstraints.weightx = 1.0D;
 			gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
@@ -120,6 +129,7 @@ public class GroupSelector extends JDialog {
 			mainPanel.add(getSelect(), gridBagConstraints2);
 			mainPanel.add(getGroupPanel(), gridBagConstraints21);
 			mainPanel.add(getProgress(), gridBagConstraints3);
+			mainPanel.add(getTitlePanel(), gridBagConstraints22);
 		}
 		return mainPanel;
 	}
@@ -145,7 +155,7 @@ public class GroupSelector extends JDialog {
 					.setBorder(javax.swing.BorderFactory
 							.createTitledBorder(
 									null,
-									"Select Grid Grouper",
+									"Grid Grouper",
 									javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
 									javax.swing.border.TitledBorder.DEFAULT_POSITION,
 									null, LookAndFeel.getPanelLabelColor()));
@@ -188,7 +198,7 @@ public class GroupSelector extends JDialog {
 		if (select == null) {
 			select = new JButton();
 			select.setText("Select Group");
-			select.setIcon(GridGrouperLookAndFeel.getGroupIcon22x22());
+			getRootPane().setDefaultButton(this.select);
 			select.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					GroupTreeNode node = getGroupTree().getSelectedGroup();
@@ -285,5 +295,17 @@ public class GroupSelector extends JDialog {
 		}
 		return progress;
 	}
+
+    /**
+     * This method initializes titlePanel	
+     * 	
+     * @return javax.swing.JPanel	
+     */
+    private JPanel getTitlePanel() {
+        if (titlePanel == null) {
+            titlePanel = new TitlePanel("Select Group","Discover and select a group managed by Grid Grouper.");
+        }
+        return titlePanel;
+    }
 
 }

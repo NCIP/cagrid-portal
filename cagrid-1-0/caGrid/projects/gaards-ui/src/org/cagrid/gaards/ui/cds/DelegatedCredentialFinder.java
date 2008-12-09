@@ -16,15 +16,15 @@ import org.globus.gsi.GlobusCredential;
  */
 public class DelegatedCredentialFinder extends Runner {
 
-	private String cdsURI;
+	private CDSHandle cds;
 	private GlobusCredential proxy;
 	private DelegationDescriptorTable table;
 	private boolean isSuccessful = false;
 	private String error = null;
 
-	public DelegatedCredentialFinder(String cdsURI, GlobusCredential proxy,
+	public DelegatedCredentialFinder(CDSHandle handle, GlobusCredential proxy,
 			DelegationDescriptorTable table) {
-		this.cdsURI = cdsURI;
+		this.cds = handle;
 		this.proxy = proxy;
 		this.table = table;
 
@@ -32,8 +32,7 @@ public class DelegatedCredentialFinder extends Runner {
 
 	public void execute() {
 		try {
-			DelegationUserClient client = new DelegationUserClient(cdsURI,
-					proxy);
+			DelegationUserClient client = cds.getUserClient(proxy);
 			table.addDelegationDescriptors(client
 					.findCredentialsDelegatedToClient());
 			isSuccessful = true;
@@ -43,7 +42,7 @@ public class DelegatedCredentialFinder extends Runner {
 	}
 
 	public String getDelegationURI() {
-		return cdsURI;
+		return cds.getServiceURL();
 	}
 
 	public boolean isSuccessful() {

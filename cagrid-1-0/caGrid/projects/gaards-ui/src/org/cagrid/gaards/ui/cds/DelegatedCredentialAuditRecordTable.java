@@ -105,7 +105,7 @@ public class DelegatedCredentialAuditRecordTable extends GrapeBaseTable {
 		try {
 			GridApplication.getContext().addApplicationComponent(
 					new DelegatedCredentialAuditRecordWindow(
-							getSelectedRecord()), 500, 300);
+							getSelectedRecord()), 600, 350);
 		} catch (Exception ex) {
 			ErrorDialog.showError(ex.getMessage(), ex);
 		}
