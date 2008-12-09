@@ -33,7 +33,7 @@ import org.cagrid.data.test.creation.DataTestCaseInfo;
  * @author David Ervin
  * 
  * @created Feb 1, 2008 9:02:20 AM
- * @version $Id: InvokeSDK4DataServiceStep.java,v 1.2 2008-06-06 16:55:51 dervin Exp $ 
+ * @version $Id: InvokeSDK4DataServiceStep.java,v 1.3 2008-12-09 15:53:25 dervin Exp $ 
  */
 public class InvokeSDK4DataServiceStep extends Step {
     public static final String TEST_RESOURCES_DIR = "/resources/";
@@ -57,6 +57,7 @@ public class InvokeSDK4DataServiceStep extends Step {
         testAllPayments();
         testDistinctAttributeFromCash();
         testAssociationNotNull();
+        testCountAssociationNotNull();
         testAssociationWithAttributeEqual();
         testGroupOfAttributesUsingAnd();
         testGroupOfAttributesUsingOr();
@@ -169,6 +170,14 @@ public class InvokeSDK4DataServiceStep extends Step {
         LOG.debug("testAssociationWithGroup");
         CQLQuery query = loadQuery("associationWithGroup.xml");
         CQLQueryResults results = loadQueryResults("goldAssociationWithGroup.xml");
+        invokeValidQueryValidResults(query, results);
+    }
+    
+    
+    private void testCountAssociationNotNull() {
+        LOG.debug("testCountAssociationNotNull");
+        CQLQuery query = loadQuery("countAssociationNotNull.xml");
+        CQLQueryResults results = loadQueryResults("goldCountAssociationNotNull.xml");
         invokeValidQueryValidResults(query, results);
     }
     
