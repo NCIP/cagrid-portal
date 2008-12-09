@@ -13,7 +13,7 @@ import gov.nih.nci.cagrid.testing.system.haste.Step;
 import gov.nih.nci.cagrid.testing.system.haste.Story;
 
 import java.io.File;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Vector;
@@ -29,7 +29,7 @@ import org.cagrid.data.test.creation.DataTestCaseInfo;
  * @author David Ervin
  * 
  * @created Feb 1, 2008 7:49:44 AM
- * @version $Id: SDK4ServiceStyleInvocationTest.java,v 1.3 2008-11-16 02:01:28 hastings Exp $ 
+ * @version $Id: SDK4ServiceStyleInvocationTest.java,v 1.4 2008-12-09 14:12:36 dervin Exp $ 
  */
 public class SDK4ServiceStyleInvocationTest extends Story {
     
@@ -68,9 +68,9 @@ public class SDK4ServiceStyleInvocationTest extends Story {
         Vector<Step> steps = new Vector<Step>();
         steps.add(new SDK4StyleCreationStep(serviceTestInfo, getIntroduceBaseDir()));
         steps.add(new UnpackContainerStep(container));
-        List args = new ArrayList();
-        args.add("-Dno.deployment.validation=true");
-        steps.add(new DeployServiceStep(container, serviceTestInfo.getDir(),args));
+        List<String> deploymentArgs = 
+            Arrays.asList(new String[] {"-Dno.deployment.validation=true"});
+        steps.add(new DeployServiceStep(container, serviceTestInfo.getDir(), deploymentArgs));
         steps.add(new StartContainerStep(container));
         steps.add(new InvokeSDK4DataServiceStep(container, serviceTestInfo));
         return steps;
