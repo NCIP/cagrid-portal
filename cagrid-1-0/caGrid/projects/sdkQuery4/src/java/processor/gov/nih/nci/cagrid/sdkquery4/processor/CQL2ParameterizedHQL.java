@@ -11,7 +11,6 @@ import gov.nih.nci.cagrid.cqlquery.QueryModifier;
 import gov.nih.nci.cagrid.data.QueryProcessingException;
 import gov.nih.nci.cagrid.sdkquery4.beans.domaininfo.DomainTypesInformation;
 
-import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -35,7 +34,7 @@ import org.apache.commons.logging.LogFactory;
  * @author David Ervin
  * 
  * @created Mar 2, 2007 10:26:47 AM
- * @version $Id: CQL2ParameterizedHQL.java,v 1.10 2008-04-17 15:26:12 dervin Exp $ 
+ * @version $Id: CQL2ParameterizedHQL.java,v 1.11 2008-12-09 16:03:44 dervin Exp $ 
  */
 public class CQL2ParameterizedHQL {
     public static final String TARGET_ALIAS = "__TargetAlias__";
@@ -51,7 +50,7 @@ public class CQL2ParameterizedHQL {
     
     
     public CQL2ParameterizedHQL(DomainTypesInformation typesInfo, 
-        RoleNameResolver roleNameResolver, boolean caseInsensitive) throws IOException, ClassNotFoundException {
+        RoleNameResolver roleNameResolver, boolean caseInsensitive) {
         this.typesInfoUtil = new DomainTypesInformationUtil(typesInfo);
         this.roleNameResolver = roleNameResolver;
         this.caseInsensitive = caseInsensitive;
@@ -102,7 +101,10 @@ public class CQL2ParameterizedHQL {
         // apply query modifiers
 		if (query.getQueryModifier() != null) {
 			handleQueryModifier(query.getQueryModifier(), rawHql);
-		}
+		} else {
+		    // select only unique objects
+            rawHql.insert(0, "Select distinct (" + TARGET_ALIAS + ") ");      
+        }
         
         // build the final query object
         ParameterizedHqlQuery hqlQuery = new ParameterizedHqlQuery(rawHql.toString(), parameters);
@@ -125,7 +127,7 @@ public class CQL2ParameterizedHQL {
 			if (mods.getDistinctAttribute() != null) {
 				prepend.append("distinct ").append(mods.getDistinctAttribute());
 			} else {
-				prepend.append('*');
+				prepend.append("distinct " + TARGET_ALIAS);
 			}
 			prepend.append(')');
 		} else {
