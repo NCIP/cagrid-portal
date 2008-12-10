@@ -1,26 +1,19 @@
 package org.cagrid.data.sdkquery41.processor;
 
-import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.cqlquery.CQLQuery;
 import gov.nih.nci.cagrid.cqlresultset.CQLQueryResults;
 import gov.nih.nci.cagrid.data.MalformedQueryException;
 import gov.nih.nci.cagrid.data.QueryProcessingException;
 import gov.nih.nci.cagrid.data.cql.CQLQueryProcessor;
-import gov.nih.nci.cagrid.data.mapping.Mappings;
-import gov.nih.nci.cagrid.data.service.ServiceConfigUtil;
-import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
 import gov.nih.nci.system.applicationservice.ApplicationException;
 import gov.nih.nci.system.applicationservice.ApplicationService;
 import gov.nih.nci.system.client.ApplicationServiceProvider;
 
-import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Properties;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.globus.wsrf.Resource;
-import org.globus.wsrf.ResourceContext;
 import org.globus.wsrf.security.SecurityManager;
 
 /**
@@ -33,18 +26,23 @@ public class SDK41QueryProcessor extends CQLQueryProcessor {
     
     public static final Log logger = LogFactory.getLog(SDK41QueryProcessor.class);
     
-    // configuration property keys
+    // general configuration options
     public static final String PROPERTY_APPLICATION_NAME = "applicationName";
     public static final String PROPERTY_USE_LOCAL_API = "useLocalApiFlag";
-    public static final String PROPERTY_ORM_JAR_NAME = "ormJarName"; // only for local
-    public static final String PROPERTY_HOST_NAME = "applicationHostName"; // only for remote
-    public static final String PROPERTY_HOST_PORT = "applicationHostPort"; // only for remote
+    
+    // remote service configuration properties
+    public static final String PROPERTY_HOST_NAME = "applicationHostName";
+    public static final String PROPERTY_HOST_PORT = "applicationHostPort";
+    public static final String PROPERTY_HOST_HTTPS = "useHttpsUrl";
+    
+    // security configuration properties
     public static final String PROPERTY_USE_LOGIN = "useServiceLogin";
     public static final String PROPERTY_USE_GRID_IDENTITY_LOGIN = "useGridIdentityLogin";
     public static final String PROPERTY_STATIC_LOGIN_USERNAME = "staticLoginUsername";
     public static final String PROPERTY_STATIC_LOGIN_PASSWORD = "staticLoginPassword";
     
     // default values for properties
+    public static final String DEFAULT_HOST_HTTPS = String.valueOf(false);
     public static final String DEFAULT_USE_LOCAL_API = String.valueOf(false);
     public static final String DEFAULT_USE_LOGIN = String.valueOf(false);
     public static final String DEFAULT_USE_GRID_IDENTITY_LOGIN = String.valueOf(false);
@@ -74,7 +72,7 @@ public class SDK41QueryProcessor extends CQLQueryProcessor {
         props.setProperty(PROPERTY_APPLICATION_NAME, "");
         props.setProperty(PROPERTY_HOST_NAME, "");
         props.setProperty(PROPERTY_HOST_PORT, "");
-        props.setProperty(PROPERTY_ORM_JAR_NAME, "");
+        props.setProperty(PROPERTY_HOST_HTTPS, DEFAULT_HOST_HTTPS);
         props.setProperty(PROPERTY_USE_LOCAL_API, DEFAULT_USE_LOCAL_API);
         props.setProperty(PROPERTY_USE_LOGIN, DEFAULT_USE_LOGIN);
         props.setProperty(PROPERTY_USE_GRID_IDENTITY_LOGIN, DEFAULT_USE_GRID_IDENTITY_LOGIN);
@@ -132,21 +130,31 @@ public class SDK41QueryProcessor extends CQLQueryProcessor {
     }
     
     
-    private String getRemoteApplicationUrl() {
-        String hostname = getConfiguredParameters().getProperty(PROPERTY_HOST_NAME);
-        /*
-        if (!hostname.startsWith("http://") || !hostname.startsWith("https://")) {
-            hostname = "http://" + hostname;
+    private String getRemoteApplicationUrl() throws QueryProcessingException {
+        StringBuffer url = new StringBuffer();
+        if (useHttpsUrl()) {
+            url.append("https://");
+        } else {
+            url.append("http://");
         }
-        */
-        String port = getConfiguredParameters().getProperty(PROPERTY_HOST_PORT);
-        while (hostname.endsWith("/")) {
-            hostname = hostname.substring(0, hostname.length() - 1);
+        url.append(getConfiguredParameters().getProperty(PROPERTY_HOST_NAME));
+        url.append(":");
+        url.append(getConfiguredParameters().getProperty(PROPERTY_HOST_PORT));
+        url.append("/");
+        url.append(getConfiguredParameters().getProperty(PROPERTY_APPLICATION_NAME));
+        String completedUrl = url.toString();
+        logger.debug("Application Service remote URL determined to be: " + completedUrl);
+        return completedUrl;
+    }
+    
+    
+    private boolean useHttpsUrl() throws QueryProcessingException {
+        String useHttpsValue = getConfiguredParameters().getProperty(PROPERTY_HOST_HTTPS);
+        try {
+            return Boolean.parseBoolean(useHttpsValue);
+        } catch (Exception ex) {
+            throw new QueryProcessingException("Error determining HTTPS use: " + ex.getMessage(), ex);
         }
-        String urlPart = hostname + ":" + port;
-        urlPart += "/";
-        urlPart += getConfiguredParameters().getProperty(PROPERTY_APPLICATION_NAME);
-        return urlPart;
     }
     
     
@@ -177,29 +185,5 @@ public class SDK41QueryProcessor extends CQLQueryProcessor {
         } catch (Exception ex) {
             throw new QueryProcessingException("Error determining use of static login: " + ex.getMessage(), ex);
         }
-    }
-    
-    
-    private Mappings getClassToQnameMappings() throws Exception {
-        // get the mapping file name
-        String filename = ServiceConfigUtil.getClassToQnameMappingsFile();
-        // String filename = "mapping.xml";
-        Mappings mappings = (Mappings) Utils.deserializeDocument(filename, Mappings.class);
-        return mappings;
-    }
-    
-    
-    private DomainModel getDomainModel() throws Exception {
-        DomainModel domainModel = null;
-        Resource serviceBaseResource = ResourceContext.getResourceContext().getResource();
-        Method[] resourceMethods = serviceBaseResource.getClass().getMethods();
-        for (int i = 0; i < resourceMethods.length; i++) {
-            if (resourceMethods[i].getReturnType() != null 
-                && resourceMethods[i].getReturnType().equals(DomainModel.class)) {
-                domainModel = (DomainModel) resourceMethods[i].invoke(serviceBaseResource, new Object[] {});
-                break;
-            }
-        }
-        return domainModel;
     }
 }
