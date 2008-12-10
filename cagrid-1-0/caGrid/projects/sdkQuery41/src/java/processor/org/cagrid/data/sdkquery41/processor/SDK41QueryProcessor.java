@@ -16,7 +16,6 @@ import gov.nih.nci.system.client.ApplicationServiceProvider;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Properties;
-import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -40,7 +39,6 @@ public class SDK41QueryProcessor extends CQLQueryProcessor {
     public static final String PROPERTY_ORM_JAR_NAME = "ormJarName"; // only for local
     public static final String PROPERTY_HOST_NAME = "applicationHostName"; // only for remote
     public static final String PROPERTY_HOST_PORT = "applicationHostPort"; // only for remote
-    public static final String PROPERTY_DOMAIN_TYPES_INFO_FILENAME = "domainTypesInfoFilename";
     public static final String PROPERTY_USE_LOGIN = "useServiceLogin";
     public static final String PROPERTY_USE_GRID_IDENTITY_LOGIN = "useGridIdentityLogin";
     public static final String PROPERTY_STATIC_LOGIN_USERNAME = "staticLoginUsername";
@@ -74,7 +72,6 @@ public class SDK41QueryProcessor extends CQLQueryProcessor {
     public Properties getRequiredParameters() {
         Properties props = new Properties();
         props.setProperty(PROPERTY_APPLICATION_NAME, "");
-        props.setProperty(PROPERTY_DOMAIN_TYPES_INFO_FILENAME , "");
         props.setProperty(PROPERTY_HOST_NAME, "");
         props.setProperty(PROPERTY_HOST_PORT, "");
         props.setProperty(PROPERTY_ORM_JAR_NAME, "");
@@ -84,13 +81,6 @@ public class SDK41QueryProcessor extends CQLQueryProcessor {
         props.setProperty(PROPERTY_STATIC_LOGIN_USERNAME, "");
         props.setProperty(PROPERTY_STATIC_LOGIN_PASSWORD, "");
         return props;
-    }
-    
-    
-    public Set<String> getPropertiesFromEtc() {
-        Set<String> required = super.getPropertiesFromEtc();
-        required.add(PROPERTY_DOMAIN_TYPES_INFO_FILENAME);
-        return required;
     }
     
     
