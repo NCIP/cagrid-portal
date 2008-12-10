@@ -37,7 +37,7 @@ public class APITypePanel extends AbstractWizardPanel {
     private ValidationResultModel validationModel = null;
     private IconFeedbackPanel validationOverlayPanel = null;
     
-    private JPanel mainPanel = null;  //  @jve:decl-index=0:visual-constraint="52,23"
+    private JPanel mainPanel = null;
     private JRadioButton localApiRadioButton = null;
     private JRadioButton remoteApiRadioButton = null;
     private JLabel hostnameLabel = null;
