@@ -1,28 +1,43 @@
 package org.cagrid.data.sdkquery41.style.wizard;
 
+import gov.nih.nci.cagrid.common.portal.DocumentChangeAdapter;
 import gov.nih.nci.cagrid.common.portal.validation.IconFeedbackPanel;
+import gov.nih.nci.cagrid.data.ui.GroupSelectionListener;
+import gov.nih.nci.cagrid.data.ui.NotifyingButtonGroup;
 import gov.nih.nci.cagrid.data.ui.wizard.AbstractWizardPanel;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 
-import com.jgoodies.validation.ValidationResult;
-import com.jgoodies.validation.ValidationResultModel;
-import com.jgoodies.validation.util.DefaultValidationResultModel;
-import com.jgoodies.validation.view.ValidationComponentUtils;
-import javax.swing.JPanel;
-import java.awt.GridBagLayout;
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.Insets;
+
+import javax.swing.BorderFactory;
+import javax.swing.ButtonModel;
+import javax.swing.JCheckBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
-import javax.swing.JLabel;
-import javax.swing.JCheckBox;
-import java.awt.GridLayout;
-import javax.swing.BorderFactory;
 import javax.swing.border.TitledBorder;
-import java.awt.Font;
-import java.awt.Color;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.DocumentEvent;
+
+import org.cagrid.data.sdkquery41.style.wizard.config.APITypeConfigurationStep;
+import org.cagrid.data.sdkquery41.style.wizard.config.APITypeConfigurationStep.ApiType;
+
+import com.jgoodies.validation.Severity;
+import com.jgoodies.validation.ValidationResult;
+import com.jgoodies.validation.ValidationResultModel;
+import com.jgoodies.validation.message.SimpleValidationMessage;
+import com.jgoodies.validation.util.DefaultValidationResultModel;
+import com.jgoodies.validation.util.ValidationUtils;
+import com.jgoodies.validation.view.ValidationComponentUtils;
 
 /**
  * APITypePanel
@@ -33,6 +48,13 @@ import java.awt.Insets;
  * @author David
  */
 public class APITypePanel extends AbstractWizardPanel {
+    
+    private static final int MIN_PORT_NUMBER = 0;
+    private static final int MAX_PORT_NUMBER = 65535;
+    
+    // keys for validation
+    public static final String KEY_HOSTNAME = "Hostname";
+    public static final String KEY_PORT = "Port number";
 
     private ValidationResultModel validationModel = null;
     private IconFeedbackPanel validationOverlayPanel = null;
@@ -48,9 +70,12 @@ public class APITypePanel extends AbstractWizardPanel {
     private JPanel apiTypePanel = null;
     private JPanel remoteInfoPanel = null;
     
+    private APITypeConfigurationStep configuration = null;
+    
     public APITypePanel(ServiceExtensionDescriptionType extensionDescription, ServiceInformation info) {
         super(extensionDescription, info);
         this.validationModel = new DefaultValidationResultModel();
+        this.configuration = new APITypeConfigurationStep(info);
         initialize();
     }
 
@@ -66,11 +91,26 @@ public class APITypePanel extends AbstractWizardPanel {
 
 
     public void update() {
+        // load values from the config to the GUI
+        ApiType apiType = configuration.getApiType();
+        boolean remoteApi = ApiType.LOCAL_API.equals(apiType);
+        getRemoteApiRadioButton().setSelected(remoteApi);
+        getLocalApiRadioButton().setSelected(!remoteApi);
+        String hostname = configuration.getHostname();
+        getHostnameTextField().setText(hostname != null ? hostname : "");
+        getHostnameTextField().setEnabled(remoteApi);
+        Integer port = configuration.getPortNumber();
+        getPortNumberTextField().setText(port != null ? port.toString() : "");
+        getPortNumberTextField().setEnabled(remoteApi);
+        Boolean useHttps = configuration.getUseHttps();
+        getUseHttpsCheckBox().setSelected(useHttps != null && useHttps.booleanValue());
+        getUseHttpsCheckBox().setEnabled(remoteApi);
         validateInput();
     }
     
     
     private void initialize() {
+        initRadioButtonGroup();
         configureValidation();
         setLayout(new GridLayout());
         add(getValidationOverlayPanel());
@@ -82,6 +122,22 @@ public class APITypePanel extends AbstractWizardPanel {
             validationOverlayPanel = new IconFeedbackPanel(validationModel, getMainPanel());
         }
         return validationOverlayPanel;
+    }
+    
+    
+    private void initRadioButtonGroup() {
+        NotifyingButtonGroup apiTypeGroup = new NotifyingButtonGroup();
+        apiTypeGroup.addGroupSelectionListener(new GroupSelectionListener() {
+            public void selectionChanged(final ButtonModel previousSelection, final ButtonModel currentSelection) {
+                ApiType api = currentSelection == getLocalApiRadioButton().getModel() 
+                    ? ApiType.LOCAL_API : ApiType.REMOTE_API;
+                configuration.setApiType(api);
+                validateInput();
+            }
+        });
+        apiTypeGroup.add(getLocalApiRadioButton());
+        apiTypeGroup.add(getRemoteApiRadioButton());
+        apiTypeGroup.setSelected(getRemoteApiRadioButton().getModel(), true);
     }
     
     
@@ -178,6 +234,11 @@ public class APITypePanel extends AbstractWizardPanel {
         if (useHttpsCheckBox == null) {
             useHttpsCheckBox = new JCheckBox();
             useHttpsCheckBox.setText("Use HTTPS");
+            useHttpsCheckBox.addChangeListener(new ChangeListener() {
+                public void stateChanged(ChangeEvent e) {
+                    configuration.setUseHttps(Boolean.valueOf(getUseHttpsCheckBox().isSelected()));
+                }
+            });
         }
         return useHttpsCheckBox;
     }
@@ -191,6 +252,12 @@ public class APITypePanel extends AbstractWizardPanel {
     private JTextField getHostnameTextField() {
         if (hostnameTextField == null) {
             hostnameTextField = new JTextField();
+            hostnameTextField.getDocument().addDocumentListener(new DocumentChangeAdapter() {
+                public void documentEdited(DocumentEvent e) {
+                    validateInput();
+                    configuration.setHostname(getHostnameTextField().getText());
+                }
+            });
         }
         return hostnameTextField;
     }
@@ -204,6 +271,17 @@ public class APITypePanel extends AbstractWizardPanel {
     private JTextField getPortNumberTextField() {
         if (portNumberTextField == null) {
             portNumberTextField = new JTextField();
+            portNumberTextField.getDocument().addDocumentListener(new DocumentChangeAdapter() {
+                public void documentEdited(DocumentEvent e) {
+                    validateInput();
+                    try {
+                        Integer port = Integer.valueOf(getPortNumberTextField().getText());
+                        configuration.setPortNumber(port);
+                    } catch (Exception ex) {
+                        // not an integer!
+                    }
+                }
+            });
         }
         return portNumberTextField;
     }
@@ -287,7 +365,8 @@ public class APITypePanel extends AbstractWizardPanel {
     
     
     private void configureValidation() {
-        // ValidationComponentUtils.setMessageKey(getSdkDirTextField(), KEY_SDK_DIRECTORY);
+        ValidationComponentUtils.setMessageKey(getHostnameTextField(), KEY_HOSTNAME);
+        ValidationComponentUtils.setMessageKey(getPortNumberTextField(), KEY_PORT);
         
         validateInput();
         updateComponentTreeSeverity();
@@ -297,7 +376,26 @@ public class APITypePanel extends AbstractWizardPanel {
     private void validateInput() {
         ValidationResult result = new ValidationResult();
         
-        // TODO: validation goes here
+        // only have work to do if using the remote API
+        if (getRemoteApiRadioButton().isSelected()) {
+            if (ValidationUtils.isBlank(getHostnameTextField().getText())) {
+                result.add(new SimpleValidationMessage("Hostname cannot be blank!", Severity.ERROR, KEY_HOSTNAME));
+            }
+            if (ValidationUtils.isBlank(getPortNumberTextField().getText())) {
+                result.add(new SimpleValidationMessage("Port number cannot be blank!", Severity.ERROR, KEY_PORT));
+            } else {
+                try {
+                    int value = Integer.parseInt(getPortNumberTextField().getText());
+                    if (value < MIN_PORT_NUMBER || value > MAX_PORT_NUMBER) {
+                        result.add(new SimpleValidationMessage("Port number must be in the range [" 
+                            + MIN_PORT_NUMBER + ", " + MAX_PORT_NUMBER + "]", Severity.ERROR, KEY_PORT));
+                    }
+                } catch (NumberFormatException ex) {
+                    result.add(new SimpleValidationMessage("Port number must be a valid integer!", 
+                        Severity.ERROR, KEY_PORT));
+                }
+            }
+        }
         
         validationModel.setResult(result);
         
@@ -312,5 +410,4 @@ public class APITypePanel extends AbstractWizardPanel {
         ValidationComponentUtils.updateComponentTreeMandatoryAndBlankBackground(this);
         ValidationComponentUtils.updateComponentTreeSeverityBackground(this, validationModel.getResult());
     }
-
 }

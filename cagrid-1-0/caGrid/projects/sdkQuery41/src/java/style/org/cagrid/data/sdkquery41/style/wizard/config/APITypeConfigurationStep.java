@@ -11,8 +11,8 @@ public class APITypeConfigurationStep extends AbstractStyleConfigurationStep {
     
     private ApiType apiType;
     private String hostname;
-    private int portNumber;
-    private boolean useHttps;
+    private Integer portNumber;
+    private Boolean useHttps;
 
     public APITypeConfigurationStep(ServiceInformation serviceInfo) {
         super(serviceInfo);
@@ -40,20 +40,40 @@ public class APITypeConfigurationStep extends AbstractStyleConfigurationStep {
     public void setApiType(ApiType apiType) {
         this.apiType = apiType;
     }
+    
+    
+    public ApiType getApiType() {
+        return apiType;
+    }
 
 
     public void setHostname(String hostname) {
         this.hostname = hostname;
     }
-
-
-    public void setPortNumber(int portNumber) {
-        this.portNumber = portNumber;
+    
+    
+    public String getHostname() {
+        return hostname;
     }
 
 
-    public void setUseHttps(boolean useHttps) {
+    public void setPortNumber(Integer portNumber) {
+        this.portNumber = portNumber;
+    }
+    
+    
+    public Integer getPortNumber() {
+        return portNumber;
+    }
+
+
+    public void setUseHttps(Boolean useHttps) {
         this.useHttps = useHttps;
+    }
+    
+    
+    public Boolean getUseHttps() {
+        return useHttps;
     }
     
     
