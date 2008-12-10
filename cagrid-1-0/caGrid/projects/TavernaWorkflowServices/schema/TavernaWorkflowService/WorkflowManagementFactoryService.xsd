@@ -32,7 +32,7 @@
     <!--
       <xsd:element name="inputArgs" type="tns:WorkflowInputType" maxOccurs="1" />
     -->
-      <xsd:element name="inputArgs" type="xsd:string" maxOccurs="1" />
+      <xsd:element name="inputArgs" type="xsd:string" maxOccurs="unbounded" />
     </xsd:sequence>
   </xsd:complexType>
   
@@ -75,7 +75,7 @@
     <!--
       <xsd:any maxOccurs="1" />
     -->
-      <xsd:element name="outputFile" type="xsd:string" maxOccurs="1" />    
+      <xsd:element name="outputFile" type="xsd:string" maxOccurs="unbounded" />    
     </xsd:sequence>
   </xsd:complexType>
   

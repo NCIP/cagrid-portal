@@ -1,5 +1,14 @@
 <ns1:ServiceDescription introduceVersion="1.2" xmlns:ns1="gme://gov.nih.nci.cagrid/1/Introduce">
  <ns2:Namespaces xsi:type="ns2:NamespacesType" xmlns:ns2="gme://gov.nih.nci.cagrid.introduce/1/Namespace" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ns2:Namespace location="./WorkflowManagementFactoryService.xsd" namespace="http://types.workflow.cagrid.nci.nih.gov/WorkflowManagementFactoryService" packageName="workflowmanagementfactoryservice" xsi:type="ns2:NamespaceType">
+   <ns2:SchemaElement type="DetailedStatusOutputElement" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="StartInputElement" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="StatusOutputElement" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="WMSInputElement" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="WMSOutputElement" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="WorkflowOutputElement" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="WorkflowStatusElement" xsi:type="ns2:SchemaElementType"/>
+  </ns2:Namespace>
   <ns2:Namespace location="./ws_2004_03_addressing.xsd" namespace="http://schemas.xmlsoap.org/ws/2004/03/addressing" packageName="addressing" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="Action" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="EndpointReference" xsi:type="ns2:SchemaElementType"/>
@@ -10,15 +19,6 @@
    <ns2:SchemaElement type="ReplyAfter" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="ReplyTo" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="To" xsi:type="ns2:SchemaElementType"/>
-  </ns2:Namespace>
-  <ns2:Namespace location="./WorkflowManagementFactoryService.xsd" namespace="http://types.workflow.cagrid.nci.nih.gov/WorkflowManagementFactoryService" packageName="workflowmanagementfactoryservice" xsi:type="ns2:NamespaceType">
-   <ns2:SchemaElement type="DetailedStatusOutputElement" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="StartInputElement" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="StatusOutputElement" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="WMSInputElement" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="WMSOutputElement" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="WorkflowOutputElement" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="WorkflowStatusElement" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
   <ns2:Namespace namespace="http://www.w3.org/2001/XMLSchema" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="anySimpleType" xsi:type="ns2:SchemaElementType"/>
@@ -253,5 +253,6 @@
  <ns41:Extensions xsi:type="ns41:ExtensionsType" xmlns:ns41="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
  <ns42:ServiceProperties xmlns:ns42="gme://gov.nih.nci.cagrid.introduce/1/Property">
   <ns42:Property description="This points to the Taverna repository." isFromETC="false" key="baseRepositoryDir" value="$home/Library/Application Support/Taverna-1.7.1/repository/"/>
+  <ns42:Property description="This points to the Taverna installation directory containing a lib directory within. This will be used to add the classpath variable for ProcessBuilder to launch the workflow." isFromETC="false" key="tavernaDir" value="null"/>
  </ns42:ServiceProperties>
 </ns1:ServiceDescription>

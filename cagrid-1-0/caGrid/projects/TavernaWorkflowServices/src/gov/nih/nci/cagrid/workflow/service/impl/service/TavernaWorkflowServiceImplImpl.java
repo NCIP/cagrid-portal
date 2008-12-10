@@ -10,7 +10,6 @@ import org.globus.wsrf.ResourceKey;
 import org.globus.wsrf.ResourceContextException;
 import org.globus.wsrf.ResourceException;
 
-
 //import src.gov.nih.nci.cagrid.workflow.context.service.ResourceContextException;
 //import src.gov.nih.nci.cagrid.workflow.context.service.ResourceException;
 //import src.gov.nih.nci.cagrid.workflow.context.service.WorkflowResource;

@@ -47,6 +47,8 @@ public class TavernaWorkflowServiceConfiguration implements ServiceConfiguration
 	
 	private String baseRepositoryDir;
 	
+	private String tavernaDir;
+	
 	
 	public String getEtcDirectoryPath() {
 		return ContainerConfig.getBaseDirectory() + File.separator + etcDirectoryPath;
@@ -64,6 +66,16 @@ public class TavernaWorkflowServiceConfiguration implements ServiceConfiguration
 	
 	public void setBaseRepositoryDir(String baseRepositoryDir) {
 		this.baseRepositoryDir = baseRepositoryDir;
+	}
+
+	
+	public String getTavernaDir() {
+		return tavernaDir;
+	}
+	
+	
+	public void setTavernaDir(String tavernaDir) {
+		this.tavernaDir = tavernaDir;
 	}
 
 	

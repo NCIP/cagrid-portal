@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://service.workflow.cagrid.nci.nih.gov/TavernaWorkflowService/ServiceImpl" xmlns:wsrp="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.xsd" xmlns:wsrlw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl" xmlns:wsdlpp="http://www.globus.org/namespaces/2004/10/WSDLPreprocessor" xmlns:gtwsdl1="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ServiceGroup-1.2-draft-01.wsdl" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/03/addressing" xmlns:wsntw="http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.wsdl" xmlns:wsrbfw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.wsdl" xmlns:wsrpw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" xmlns:wns1="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl" xmlns:wns2="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" xmlns:wns0="http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity" xmlns:ns4="http://service.workflow.cagrid.nci.nih.gov/TavernaWorkflowService/ServiceImpl/types" xmlns:ns2="http://factory.workflow.cagrid.nci.nih.gov/TavernaWorkflowService/types" xmlns:ns1="http://types.workflow.cagrid.nci.nih.gov/WorkflowManagementFactoryService" xmlns:ns3="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security" xmlns:ns0="http://schemas.xmlsoap.org/ws/2004/03/addressing" xmlns:ns5="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.xsd" name="TavernaWorkflowServiceImpl" targetNamespace="http://service.workflow.cagrid.nci.nih.gov/TavernaWorkflowService/ServiceImpl">
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://service.workflow.cagrid.nci.nih.gov/TavernaWorkflowService/ServiceImpl" xmlns:wsrp="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.xsd" xmlns:wsrlw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl" xmlns:wsdlpp="http://www.globus.org/namespaces/2004/10/WSDLPreprocessor" xmlns:gtwsdl1="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ServiceGroup-1.2-draft-01.wsdl" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/03/addressing" xmlns:wsntw="http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.wsdl" xmlns:wsrbfw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.wsdl" xmlns:wsrpw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" xmlns:wns1="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl" xmlns:wns2="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" xmlns:wns0="http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity" xmlns:ns4="http://service.workflow.cagrid.nci.nih.gov/TavernaWorkflowService/ServiceImpl/types" xmlns:ns2="http://factory.workflow.cagrid.nci.nih.gov/TavernaWorkflowService/types" xmlns:ns0="http://types.workflow.cagrid.nci.nih.gov/WorkflowManagementFactoryService" xmlns:ns3="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security" xmlns:ns1="http://schemas.xmlsoap.org/ws/2004/03/addressing" xmlns:ns5="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.xsd" name="TavernaWorkflowServiceImpl" targetNamespace="http://service.workflow.cagrid.nci.nih.gov/TavernaWorkflowService/ServiceImpl">
   <import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" location="../wsrf/properties/WS-ResourceProperties.wsdl" />
   <import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.wsdl" location="../wsrf/faults/WS-BaseFaults.wsdl" />
   <import namespace="http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.wsdl" location="../wsrf/notification/WS-BaseN.wsdl" />
@@ -38,7 +38,7 @@
       <element name="GetDetailedStatusResponse">
         <complexType>
           <sequence>
-            <element ref="ns1:DetailedStatusOutputElement" minOccurs="1" maxOccurs="unbounded" />
+            <element ref="ns0:DetailedStatusOutputElement" minOccurs="1" maxOccurs="unbounded" />
           </sequence>
         </complexType>
       </element>
@@ -50,7 +50,7 @@
       <element name="GetStatusResponse">
         <complexType>
           <sequence>
-            <element ref="ns1:WorkflowStatusElement" minOccurs="1" maxOccurs="1" />
+            <element ref="ns0:WorkflowStatusElement" minOccurs="1" maxOccurs="1" />
           </sequence>
         </complexType>
       </element>
@@ -62,7 +62,7 @@
       <element name="GetWorkflowOutputResponse">
         <complexType>
           <sequence>
-            <element ref="ns1:WorkflowOutputElement" minOccurs="1" maxOccurs="1" />
+            <element ref="ns0:WorkflowOutputElement" minOccurs="1" maxOccurs="1" />
           </sequence>
         </complexType>
       </element>
@@ -74,7 +74,7 @@
       <element name="PauseResponse">
         <complexType>
           <sequence>
-            <element ref="ns1:WorkflowStatusElement" minOccurs="1" maxOccurs="1" />
+            <element ref="ns0:WorkflowStatusElement" minOccurs="1" maxOccurs="1" />
           </sequence>
         </complexType>
       </element>
@@ -86,7 +86,7 @@
       <element name="ResumeResponse">
         <complexType>
           <sequence>
-            <element ref="ns1:WorkflowStatusElement" minOccurs="1" maxOccurs="1" />
+            <element ref="ns0:WorkflowStatusElement" minOccurs="1" maxOccurs="1" />
           </sequence>
         </complexType>
       </element>
@@ -96,7 +96,7 @@
             <element name="startInputElement">
               <complexType>
                 <sequence>
-                  <element ref="ns1:StartInputElement" minOccurs="1" maxOccurs="1" />
+                  <element ref="ns0:StartInputElement" minOccurs="1" maxOccurs="1" />
                 </sequence>
               </complexType>
             </element>
@@ -106,7 +106,7 @@
       <element name="StartResponse">
         <complexType>
           <sequence>
-            <element ref="ns1:WorkflowStatusElement" minOccurs="1" maxOccurs="1" />
+            <element ref="ns0:WorkflowStatusElement" minOccurs="1" maxOccurs="1" />
           </sequence>
         </complexType>
       </element>
@@ -115,7 +115,7 @@
           <sequence>
             <element ref="ns5:CurrentTime" />
             <element ref="ns5:TerminationTime" />
-            <element ref="ns1:WorkflowStatusElement" />
+            <element ref="ns0:WorkflowStatusElement" />
           </sequence>
         </complexType>
       </element>
