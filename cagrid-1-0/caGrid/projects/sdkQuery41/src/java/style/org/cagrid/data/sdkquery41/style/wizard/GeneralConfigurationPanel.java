@@ -1,6 +1,7 @@
 package org.cagrid.data.sdkquery41.style.wizard;
 
 import gov.nih.nci.cagrid.common.portal.DocumentChangeAdapter;
+import gov.nih.nci.cagrid.common.portal.validation.IconFeedbackPanel;
 import gov.nih.nci.cagrid.data.ui.wizard.AbstractWizardPanel;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.common.ResourceManager;
@@ -10,6 +11,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.Insets;
 import java.io.File;
 import java.io.IOException;
@@ -21,6 +23,7 @@ import java.util.TreeSet;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -54,9 +57,11 @@ public class GeneralConfigurationPanel extends AbstractWizardPanel {
     
     private static final String KEY_SDK_DIRECTORY = "caCORE SDK Directory";
     
+    private IconFeedbackPanel validationOverlayPanel = null;
     private ValidationResultModel validationModel = null;
     private GeneralConfigurationStep configuration = null;
     
+    private JPanel mainPanel = null;
     private JLabel sdkDirLabel = null;
     private JTextField sdkDirTextField = null;
     private JButton sdkDirBrowseButton = null;
@@ -106,49 +111,67 @@ public class GeneralConfigurationPanel extends AbstractWizardPanel {
     
     private void initialize() {
         configureValidation();
-        GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
-        gridBagConstraints5.fill = GridBagConstraints.BOTH;
-        gridBagConstraints5.gridy = 2;
-        gridBagConstraints5.weightx = 1.0;
-        gridBagConstraints5.weighty = 1.0;
-        gridBagConstraints5.gridwidth = 3;
-        gridBagConstraints5.insets = new Insets(2, 2, 2, 2);
-        gridBagConstraints5.gridx = 0;
-        GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
-        gridBagConstraints4.fill = GridBagConstraints.HORIZONTAL;
-        gridBagConstraints4.gridy = 1;
-        gridBagConstraints4.weightx = 1.0;
-        gridBagConstraints4.insets = new Insets(2, 2, 2, 2);
-        gridBagConstraints4.gridwidth = 2;
-        gridBagConstraints4.gridx = 1;
-        GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
-        gridBagConstraints3.gridx = 0;
-        gridBagConstraints3.anchor = GridBagConstraints.WEST;
-        gridBagConstraints3.fill = GridBagConstraints.HORIZONTAL;
-        gridBagConstraints3.gridy = 1;
-        GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
-        gridBagConstraints2.gridx = 2;
-        gridBagConstraints2.insets = new Insets(2, 2, 2, 2);
-        gridBagConstraints2.gridy = 0;
-        GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
-        gridBagConstraints1.fill = GridBagConstraints.HORIZONTAL;
-        gridBagConstraints1.gridy = 0;
-        gridBagConstraints1.weightx = 1.0;
-        gridBagConstraints1.insets = new Insets(2, 2, 2, 2);
-        gridBagConstraints1.gridx = 1;
-        GridBagConstraints gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
-        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.gridy = 0;
-        this.setLayout(new GridBagLayout());
-        this.add(getSdkDirLabel(), gridBagConstraints);
-        this.add(getSdkDirTextField(), gridBagConstraints1);
-        this.add(getSdkDirBrowseButton(), gridBagConstraints2);
-        this.add(getPropertiesFileLabel(), gridBagConstraints3);
-        this.add(getPropertiesFileTextField(), gridBagConstraints4);
-        this.add(getPropertiesTableScrollPane(), gridBagConstraints5);        
+        this.setLayout(new GridLayout());
+        this.add(getValidationOverlayPanel());      
+    }
+    
+    
+    private IconFeedbackPanel getValidationOverlayPanel() {
+        if (validationOverlayPanel == null) {
+            validationOverlayPanel = new IconFeedbackPanel(validationModel, getMainPanel());
+        }
+        return validationOverlayPanel;
+    }
+    
+    
+    private JPanel getMainPanel() {
+        if (mainPanel == null) {
+            mainPanel = new JPanel();
+            GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
+            gridBagConstraints5.fill = GridBagConstraints.BOTH;
+            gridBagConstraints5.gridy = 2;
+            gridBagConstraints5.weightx = 1.0;
+            gridBagConstraints5.weighty = 1.0;
+            gridBagConstraints5.gridwidth = 3;
+            gridBagConstraints5.insets = new Insets(2, 2, 2, 2);
+            gridBagConstraints5.gridx = 0;
+            GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
+            gridBagConstraints4.fill = GridBagConstraints.HORIZONTAL;
+            gridBagConstraints4.gridy = 1;
+            gridBagConstraints4.weightx = 1.0;
+            gridBagConstraints4.insets = new Insets(2, 2, 2, 2);
+            gridBagConstraints4.gridwidth = 2;
+            gridBagConstraints4.gridx = 1;
+            GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
+            gridBagConstraints3.gridx = 0;
+            gridBagConstraints3.anchor = GridBagConstraints.WEST;
+            gridBagConstraints3.fill = GridBagConstraints.HORIZONTAL;
+            gridBagConstraints3.gridy = 1;
+            GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
+            gridBagConstraints2.gridx = 2;
+            gridBagConstraints2.insets = new Insets(2, 2, 2, 2);
+            gridBagConstraints2.gridy = 0;
+            GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
+            gridBagConstraints1.fill = GridBagConstraints.HORIZONTAL;
+            gridBagConstraints1.gridy = 0;
+            gridBagConstraints1.weightx = 1.0;
+            gridBagConstraints1.insets = new Insets(2, 2, 2, 2);
+            gridBagConstraints1.gridx = 1;
+            GridBagConstraints gridBagConstraints = new GridBagConstraints();
+            gridBagConstraints.gridx = 0;
+            gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+            gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+            gridBagConstraints.anchor = GridBagConstraints.WEST;
+            gridBagConstraints.gridy = 0;
+            mainPanel.setLayout(new GridBagLayout());
+            mainPanel.add(getSdkDirLabel(), gridBagConstraints);
+            mainPanel.add(getSdkDirTextField(), gridBagConstraints1);
+            mainPanel.add(getSdkDirBrowseButton(), gridBagConstraints2);
+            mainPanel.add(getPropertiesFileLabel(), gridBagConstraints3);
+            mainPanel.add(getPropertiesFileTextField(), gridBagConstraints4);
+            mainPanel.add(getPropertiesTableScrollPane(), gridBagConstraints5);  
+        }
+        return mainPanel;
     }
 
 

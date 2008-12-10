@@ -1,5 +1,9 @@
 package org.cagrid.data.sdkquery41.style.wizard.config;
 
+import gov.nih.nci.cagrid.common.JarUtilities;
+import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.data.common.CastorMappingUtil;
+import gov.nih.nci.cagrid.introduce.common.FileFilters;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 
 import java.io.File;
@@ -11,6 +15,7 @@ import java.util.Properties;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.cagrid.data.sdkquery41.style.common.SDK41StyleConstants;
+import org.cagrid.grape.utils.CompositeErrorDialog;
 
 public class GeneralConfigurationStep extends AbstractStyleConfigurationStep {
     
@@ -37,10 +42,56 @@ public class GeneralConfigurationStep extends AbstractStyleConfigurationStep {
     
 
     public void applyConfiguration() throws Exception {
+        LOG.debug("Applying configuration");
         // just in case...
         validateSdkDirectory();
-
         
+        // new data service's lib directory
+        File libOutDir = new File(getServiceInformation().getBaseDirectory(), "lib");
+        
+        String projectName = getDeployPropertiesFromSdkDir().getProperty(
+            SDK41StyleConstants.DeployProperties.PROJECT_NAME);
+        File remoteClientDir = new File(sdkDirectory, 
+            "output" + File.separator + projectName + File.separator + 
+            "package" + File.separator + "remote-client");
+        File localClientDir = new File(sdkDirectory, 
+            "output" + File.separator + projectName + File.separator + 
+            "package" + File.separator + "local-client");
+        
+        // wrap up the remote-client config files as a jar file so it'll be on the classpath
+        LOG.debug("Creating a jar to contain the remote configuration of the caCORE SDK system");
+        File remoteConfigDir = new File(remoteClientDir, "conf");
+        String configJarName = projectName + "-config.jar";
+        File configJar = new File(libOutDir, configJarName);
+        JarUtilities.jarDirectory(remoteConfigDir, configJar);
+        // TODO: if user wants to use the local API, we have to include the local-client/conf files in the config jar
+        
+        // TODO: local / remote API detection, lib dir, etc
+        // copy in libraries from the remote or local lib dir, depending on if user wants local or remote API
+        LOG.debug("Copying libraries from remote client directory");
+        File[] remoteLibs = new File(remoteClientDir, "lib").listFiles(new FileFilters.JarFileFilter());
+        for (File lib : remoteLibs) {
+            File libOutput = new File(libOutDir, lib.getName());
+            Utils.copyFile(lib, libOutput);
+        }
+        
+        // grab the castor marshalling and unmarshalling xml mapping files
+        // from the config dir and copy them into the service's package structure
+        try {
+            LOG.debug("Extracting castor marshalling and unmarshalling files");
+            StringBuffer marshallingMappingFile = Utils.fileToStringBuffer(
+                new File(remoteConfigDir, CastorMappingUtil.CASTOR_MARSHALLING_MAPPING_FILE));
+            StringBuffer unmarshallingMappingFile = Utils.fileToStringBuffer(
+                new File(remoteConfigDir, CastorMappingUtil.CASTOR_UNMARSHALLING_MAPPING_FILE));
+            // copy the mapping files to the service's source dir + base package name
+            String marshallOut = CastorMappingUtil.getMarshallingCastorMappingFileName(getServiceInformation());
+            String unmarshallOut = CastorMappingUtil.getUnmarshallingCastorMappingFileName(getServiceInformation());
+            Utils.stringBufferToFile(marshallingMappingFile, marshallOut);
+            Utils.stringBufferToFile(unmarshallingMappingFile, unmarshallOut);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            CompositeErrorDialog.showErrorDialog("Error extracting castor mapping files", ex.getMessage(), ex);
+        }
     }
     
     
@@ -52,10 +103,12 @@ public class GeneralConfigurationStep extends AbstractStyleConfigurationStep {
         
         // does the directory exist, and is it a directory?
         if (!sdkDirectory.exists()) {
-            throw new FileNotFoundException("Selected SDK directory ( " + sdkDirectory.getAbsolutePath() + ") does not exist");
+            throw new FileNotFoundException("Selected SDK directory ( " 
+                + sdkDirectory.getAbsolutePath() + ") does not exist");
         }
         if (!sdkDirectory.isDirectory()) {
-            throw new FileNotFoundException("Selected SDK directory ( " + sdkDirectory.getAbsolutePath() + ") is not actually a directory");
+            throw new FileNotFoundException("Selected SDK directory ( " 
+                + sdkDirectory.getAbsolutePath() + ") is not actually a directory");
         }
         
         // the deploy.properties file
@@ -63,7 +116,8 @@ public class GeneralConfigurationStep extends AbstractStyleConfigurationStep {
         try {
             sdkProperties = getDeployPropertiesFromSdkDir();
         } catch (IOException ex) {
-            IOException exception = new IOException("Error loading deploy.properties file from the selected SDK directory: " 
+            IOException exception = new IOException(
+                "Error loading deploy.properties file from the selected SDK directory: " 
                 + ex.getMessage());
             exception.initCause(ex);
             throw exception;
