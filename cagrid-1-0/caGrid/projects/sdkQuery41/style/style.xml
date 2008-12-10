@@ -6,12 +6,7 @@
 	<CreationWizardPanels>
 		<CreationWizardPanel classname="org.cagrid.data.sdkquery41.style.wizard.SDK41InitializationPanel"/>
 		<CreationWizardPanel classname="org.cagrid.data.sdkquery41.style.wizard.GeneralConfigurationPanel"/>
-		<!-- change these as they get created -->
-		<CreationWizardPanel classname="gov.nih.nci.cagrid.sdkquery4.style.wizard.QueryProcessorConfigurationPanel"/>
-		<CreationWizardPanel classname="gov.nih.nci.cagrid.sdkquery4.style.wizard.QueryProcessorSecurityPanel"/>
-		<CreationWizardPanel classname="gov.nih.nci.cagrid.sdkquery4.style.wizard.SDK4DomainModelPanel"/>
-		<CreationWizardPanel classname="gov.nih.nci.cagrid.sdkquery4.style.wizard.SchemaMappingPanel"/>
-		-->
+		<CreationWizardPanel classname="org.cagrid.data.sdkquery41.style.wizard.APITypePanel"/>
 	</CreationWizardPanels>
 	<!-- change these as they get created
 	<ModificationUiPanel classname="gov.nih.nci.cagrid.sdkquery4.style.modification.SDK4InformationPanel"/>
