@@ -92,6 +92,11 @@ public class GeneralConfigurationStep extends AbstractStyleConfigurationStep {
             ex.printStackTrace();
             CompositeErrorDialog.showErrorDialog("Error extracting castor mapping files", ex.getMessage(), ex);
         }
+        
+        // set up the shared configuration
+        SharedConfiguration.getInstance().setSdkDirectory(getSdkDirectory());
+        SharedConfiguration.getInstance().setServiceInfo(getServiceInformation());
+        SharedConfiguration.getInstance().setSdkDeployProperties(getDeployPropertiesFromSdkDir());
     }
     
     
