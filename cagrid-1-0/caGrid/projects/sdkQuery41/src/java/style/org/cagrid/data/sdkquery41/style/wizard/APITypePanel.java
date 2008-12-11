@@ -30,6 +30,7 @@ import javax.swing.event.DocumentEvent;
 
 import org.cagrid.data.sdkquery41.style.wizard.config.APITypeConfigurationStep;
 import org.cagrid.data.sdkquery41.style.wizard.config.APITypeConfigurationStep.ApiType;
+import org.cagrid.grape.utils.CompositeErrorDialog;
 
 import com.jgoodies.validation.Severity;
 import com.jgoodies.validation.ValidationResult;
@@ -106,6 +107,16 @@ public class APITypePanel extends AbstractWizardPanel {
         getUseHttpsCheckBox().setSelected(useHttps != null && useHttps.booleanValue());
         getUseHttpsCheckBox().setEnabled(remoteApi);
         validateInput();
+    }
+    
+    
+    public void movingNext() {
+        try {
+            configuration.applyConfiguration();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            CompositeErrorDialog.showErrorDialog("Error applying API type configuration", ex.getMessage(), ex);
+        }
     }
     
     
