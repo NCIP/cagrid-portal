@@ -110,7 +110,7 @@ public class SpecifyPortsStep extends PropertyConfigurationStep {
                 httpsPort = httpsEl.getAttribute("port");
                 logger.info("Found HTTPS port: " + httpsPort);
             } else {
-                logger.info("Did not HTTPS port: " + serverConfigPath);
+                logger.info("Did not find HTTPS port: " + serverConfigPath);
             }
 
         } catch (Exception ex) {

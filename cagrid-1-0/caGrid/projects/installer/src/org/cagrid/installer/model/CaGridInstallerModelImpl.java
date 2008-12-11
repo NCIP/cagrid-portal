@@ -234,7 +234,7 @@ CaGridInstallerModel {
 
 
     public boolean isDeployGlobusRequired() {
-        return isTomcatContainer() && (isTrue(Constants.REDEPLOY_GLOBUS) || !isGlobusDeployed());
+        return (isTomcatContainer() || isJBossContainer()) && (isTrue(Constants.REDEPLOY_GLOBUS) || !isGlobusDeployed());
     }
 
 

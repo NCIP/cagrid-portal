@@ -421,13 +421,13 @@ public class Installer {
             this.model.getMessage("specify.ports.desc"));
         tomcatPortsStep.getOptions().add(
             new TextPropertyConfigurationOption(Constants.SHUTDOWN_PORT, this.model.getMessage("shutdown.port"),
-                this.model.getProperty(Constants.SHUTDOWN_PORT, "8005"), true));
+                this.model.getProperty(Constants.SHUTDOWN_PORT, "8005"), false));
         tomcatPortsStep.getOptions().add(
             new TextPropertyConfigurationOption(Constants.HTTP_PORT, this.model.getMessage("http.port"), this.model
-                .getProperty(Constants.HTTP_PORT, "8080"), true));
+                .getProperty(Constants.HTTP_PORT, "8080"),  model.isTrue(Constants.USE_SECURE_CONTAINER)));
         tomcatPortsStep.getOptions().add(
             new TextPropertyConfigurationOption(Constants.HTTPS_PORT, this.model.getMessage("https.port"), this.model
-                .getProperty(Constants.HTTPS_PORT, "8443"), true));
+                .getProperty(Constants.HTTPS_PORT, "8443"), model.isTrue(Constants.USE_SECURE_CONTAINER)));
         // TODO: add validation
         this.model.add(tomcatPortsStep, new Condition() {
             public boolean evaluate(WizardModel m) {

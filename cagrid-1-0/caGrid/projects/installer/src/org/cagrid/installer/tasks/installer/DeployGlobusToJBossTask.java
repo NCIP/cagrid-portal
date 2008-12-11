@@ -28,10 +28,10 @@ public class DeployGlobusToJBossTask extends CaGridInstallerAntTask {
 		
 		setStepCount(1);
 		if (!secure) {
-			new AntExecutionTask("", "", model.getProperty(Constants.CAGRID_HOME) + "/share/jboss/jboss.xml", "deployJBoss", env, sysProps)
+			new AntExecutionTask("", "", model.getProperty(Constants.CAGRID_HOME) + "/antfiles/jboss/jboss.xml", "deployJBoss", env, sysProps)
 					.execute(model);
 		} else {
-			new AntExecutionTask("", "", model.getProperty(Constants.CAGRID_HOME) + "/share/jboss/jboss.xml", "deploySecureJBoss", env, sysProps)
+			new AntExecutionTask("", "", model.getProperty(Constants.CAGRID_HOME) + "/antfiles/jboss/jboss.xml", "deploySecureJBoss", env, sysProps)
 					.execute(model);
 		}
 		

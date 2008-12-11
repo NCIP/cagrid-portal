@@ -32,17 +32,6 @@
 			publicId="-//SPRING//DTD BEAN//EN"
 			location="./resources/spring-beans.dtd"/>
 	</xmlcatalog>
-	
-
-
-	<target name="deployEndorsedJars">
-		<copy todir="${tomcat.home}/common/endorsed" overwrite="true">
-			<fileset
-				dir="${service.dest.dir}/${service.name}/ext/dependencies/endorsed/jars">
-				<include name="*.jar" />
-			</fileset>
-		</copy>
-	</target>
 
 	
 	<target name="globus-deploy-tomcat">
@@ -77,13 +66,13 @@
 	<target name="fix-secure-web-xml">
 		<antcall target="fix-web-xml">
 			<param name="scheme" value="https" />
-			<param name="http.port" value="${https.port}" />
+			<param name="port" value="${https.port}" />
 		</antcall>
 	</target>
 
 	<target name="fix-web-xml">
 		<property name="scheme" value="http" />
-		<property name="http.port" value="8080" />
+		<property name="port" value="${http.port}" />
 		<property name="web.xml.file"
 			value="${tomcat.home}/webapps/wsrf/WEB-INF/web.xml" />
 		<xmltask source="${web.xml.file}" dest="${web.xml.file}">
@@ -104,7 +93,7 @@
 			</init-param>
 			<init-param>
 				<param-name>defaultPort</param-name>
-				<param-value>${http.port}</param-value>
+				<param-value>${port}</param-value>
 			</init-param>
 				]]>
 			</insert>
