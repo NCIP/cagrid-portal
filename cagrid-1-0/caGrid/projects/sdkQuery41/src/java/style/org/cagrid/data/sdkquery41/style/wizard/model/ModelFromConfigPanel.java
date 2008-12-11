@@ -3,6 +3,8 @@ package org.cagrid.data.sdkquery41.style.wizard.model;
 import gov.nih.nci.cagrid.common.portal.DocumentChangeAdapter;
 import gov.nih.nci.cagrid.common.portal.validation.IconFeedbackPanel;
 import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
+import gov.nih.nci.cagrid.metadata.xmi.XMIParser;
+import gov.nih.nci.cagrid.metadata.xmi.XmiFileType;
 
 import java.awt.Component;
 import java.awt.Dimension;
@@ -21,6 +23,8 @@ import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.cagrid.data.sdkquery41.style.common.SDK41StyleConstants;
 import org.cagrid.data.sdkquery41.style.wizard.DomainModelSourcePanel;
 import org.cagrid.data.sdkquery41.style.wizard.config.SharedConfiguration;
@@ -36,6 +40,8 @@ import com.jgoodies.validation.util.ValidationUtils;
 import com.jgoodies.validation.view.ValidationComponentUtils;
 
 public class ModelFromConfigPanel extends DomainModelSourcePanel {
+    
+    private static Log logger = LogFactory.getLog(ModelFromConfigPanel.class);
     
     public static final String KEY_PROJECT_NAME = "Project name";
     public static final String KEY_PROJECT_VERSION = "Project version";
@@ -319,7 +325,35 @@ public class ModelFromConfigPanel extends DomainModelSourcePanel {
                 }
                 throw new IllegalStateException(errors.toString());
             }
-            // TODO: implement me
+            
+            String projectName = getProjectNameTextField().getText();
+            String projectVersion = getProjectVersionTextField().getText();
+            
+            File xmiFile = new File(getXmiFileTextField().getText());
+            
+            XmiFileType xmiType = null;
+            String xmiTypeString = getXmiTypeTextField().getText();
+            if (SDK41StyleConstants.DeployProperties.MODEL_TYPE_ARGO.equals(xmiTypeString)) {
+                xmiType = XmiFileType.SDK_40_ARGO;
+            } else if (SDK41StyleConstants.DeployProperties.MODEL_TYPE_EA.equals(xmiTypeString)) {
+                xmiType = XmiFileType.SDK_40_EA;
+            } else {
+                xmiType = XmiFileType.SDK_40_EA;
+                logger.warn("Unable to determine XMI type for " + xmiTypeString + ", using default of " + xmiType.toString());
+            }
+            logger.debug("XMI Type determined to be " + xmiType.toString());
+            
+            XMIParser parser = new XMIParser(projectName, projectVersion);
+            
+            try {
+                logger.info("Parsing domain model from XMI...");
+                domainModel = parser.parse(xmiFile, xmiType);
+                logger.info("Parsing complete");
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                CompositeErrorDialog.showErrorDialog(
+                    "Error parsing XMI to domain model", ex.getMessage(), ex);
+            }
         }
         return domainModel;
     }
