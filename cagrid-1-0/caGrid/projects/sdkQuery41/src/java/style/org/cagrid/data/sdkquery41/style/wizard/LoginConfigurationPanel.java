@@ -1,0 +1,251 @@
+package org.cagrid.data.sdkquery41.style.wizard;
+
+import gov.nih.nci.cagrid.common.portal.validation.IconFeedbackPanel;
+import gov.nih.nci.cagrid.data.ui.wizard.AbstractWizardPanel;
+import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
+import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
+
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.Insets;
+
+import javax.swing.JCheckBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
+
+import org.cagrid.grape.utils.CompositeErrorDialog;
+
+import com.jgoodies.validation.ValidationResultModel;
+import com.jgoodies.validation.util.DefaultValidationResultModel;
+
+/**
+ * LoginConfigurationPanel
+ * Wizard panel which allows the service developer to specify
+ * an optional login to use with the caCORE SDK Application Service
+ * 
+ * @author David
+ */
+public class LoginConfigurationPanel extends AbstractWizardPanel {
+    
+    public static final String KEY_USERNAME = "Username";
+    public static final String KEY_PASSWORD = "Password";
+    public static final String KEY_REPEAT_PASSWORD = "Repeat password";
+    
+    private ValidationResultModel validationModel = null;
+    private IconFeedbackPanel validationOverlayPanel = null;
+    
+    private JPanel mainPanel = null;
+    private JCheckBox useLoginCheckBox = null;
+    private JLabel usernameLabel = null;
+    private JLabel passwordLabel = null;
+    private JLabel repeatPasswordLabel = null;
+    private JTextField usernameTextField = null;
+    private JPasswordField mainPasswordField = null;
+    private JPasswordField repeatPasswordField = null;
+    
+    public LoginConfigurationPanel(ServiceExtensionDescriptionType extensionDescription, ServiceInformation info) {
+        super(extensionDescription, info);
+        validationModel = new DefaultValidationResultModel();
+        initialize();
+    }
+
+
+    public String getPanelShortName() {
+        return "Login";
+    }
+
+
+    public String getPanelTitle() {
+        return "Optional Application Service login";
+    }
+
+
+    public void update() {
+        
+    }
+    
+    
+    public void movingNext() {
+        try {
+            // configuration.applyConfiguration();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            CompositeErrorDialog.showErrorDialog("Error applying login configuration", ex.getMessage(), ex);
+        }
+    }
+    
+    
+    private void initialize() {
+        // TODO: configure validation
+        setLayout(new GridLayout());
+        add(getValidationOverlayPanel());
+    }
+    
+    
+    private IconFeedbackPanel getValidationOverlayPanel() {
+        if (validationOverlayPanel == null) {
+            validationOverlayPanel = new IconFeedbackPanel(validationModel, getMainPanel());
+        }
+        return validationOverlayPanel;
+    }
+    
+    
+    private JPanel getMainPanel() {
+        if (mainPanel == null) {
+            GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
+            gridBagConstraints6.fill = GridBagConstraints.HORIZONTAL;
+            gridBagConstraints6.gridy = 3;
+            gridBagConstraints6.weightx = 1.0;
+            gridBagConstraints6.insets = new Insets(2, 2, 2, 2);
+            gridBagConstraints6.gridx = 1;
+            GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
+            gridBagConstraints5.fill = GridBagConstraints.HORIZONTAL;
+            gridBagConstraints5.gridy = 2;
+            gridBagConstraints5.weightx = 1.0;
+            gridBagConstraints5.insets = new Insets(2, 2, 2, 2);
+            gridBagConstraints5.gridx = 1;
+            GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
+            gridBagConstraints4.fill = GridBagConstraints.HORIZONTAL;
+            gridBagConstraints4.gridy = 1;
+            gridBagConstraints4.weightx = 1.0;
+            gridBagConstraints4.insets = new Insets(2, 2, 2, 2);
+            gridBagConstraints4.gridx = 1;
+            GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
+            gridBagConstraints3.gridx = 0;
+            gridBagConstraints3.fill = GridBagConstraints.HORIZONTAL;
+            gridBagConstraints3.insets = new Insets(2, 2, 2, 2);
+            gridBagConstraints3.gridy = 3;
+            GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
+            gridBagConstraints2.gridx = 0;
+            gridBagConstraints2.fill = GridBagConstraints.HORIZONTAL;
+            gridBagConstraints2.insets = new Insets(2, 2, 2, 2);
+            gridBagConstraints2.gridy = 2;
+            GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
+            gridBagConstraints1.gridx = 0;
+            gridBagConstraints1.fill = GridBagConstraints.HORIZONTAL;
+            gridBagConstraints1.insets = new Insets(2, 2, 2, 2);
+            gridBagConstraints1.gridy = 1;
+            GridBagConstraints gridBagConstraints = new GridBagConstraints();
+            gridBagConstraints.gridx = 0;
+            gridBagConstraints.gridwidth = 2;
+            gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+            gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+            gridBagConstraints.gridy = 0;
+            mainPanel = new JPanel();
+            mainPanel.setLayout(new GridBagLayout());
+            mainPanel.setSize(new Dimension(439, 139));
+            mainPanel.add(getUseLoginCheckBox(), gridBagConstraints);
+            mainPanel.add(getUsernameLabel(), gridBagConstraints1);
+            mainPanel.add(getPasswordLabel(), gridBagConstraints2);
+            mainPanel.add(getRepeatPasswordLabel(), gridBagConstraints3);
+            mainPanel.add(getUsernameTextField(), gridBagConstraints4);
+            mainPanel.add(getMainPasswordField(), gridBagConstraints5);
+            mainPanel.add(getRepeatPasswordField(), gridBagConstraints6);
+        }
+        return mainPanel;
+    }
+
+
+    /**
+     * This method initializes useLoginCheckBox	
+     * 	
+     * @return javax.swing.JCheckBox	
+     */
+    private JCheckBox getUseLoginCheckBox() {
+        if (useLoginCheckBox == null) {
+            useLoginCheckBox = new JCheckBox();
+            useLoginCheckBox.setText("Use Login");
+            useLoginCheckBox.addItemListener(new java.awt.event.ItemListener() {
+                public void itemStateChanged(java.awt.event.ItemEvent e) {
+                    System.out.println("itemStateChanged()"); // TODO Auto-generated Event stub itemStateChanged()
+                }
+            });
+        }
+        return useLoginCheckBox;
+    }
+
+
+    /**
+     * This method initializes usernameLabel	
+     * 	
+     * @return javax.swing.JLabel	
+     */
+    private JLabel getUsernameLabel() {
+        if (usernameLabel == null) {
+            usernameLabel = new JLabel();
+            usernameLabel.setText("Username:");
+        }
+        return usernameLabel;
+    }
+
+
+    /**
+     * This method initializes passwordLabel	
+     * 	
+     * @return javax.swing.JLabel	
+     */
+    private JLabel getPasswordLabel() {
+        if (passwordLabel == null) {
+            passwordLabel = new JLabel();
+            passwordLabel.setText("Password:");
+        }
+        return passwordLabel;
+    }
+
+
+    /**
+     * This method initializes repeatPasswordLabel	
+     * 	
+     * @return javax.swing.JLabel	
+     */
+    private JLabel getRepeatPasswordLabel() {
+        if (repeatPasswordLabel == null) {
+            repeatPasswordLabel = new JLabel();
+            repeatPasswordLabel.setText("Repeat Password:");
+        }
+        return repeatPasswordLabel;
+    }
+
+
+    /**
+     * This method initializes usernameTextField	
+     * 	
+     * @return javax.swing.JTextField	
+     */
+    private JTextField getUsernameTextField() {
+        if (usernameTextField == null) {
+            usernameTextField = new JTextField();
+        }
+        return usernameTextField;
+    }
+
+
+    /**
+     * This method initializes mainPasswordField	
+     * 	
+     * @return javax.swing.JPasswordField	
+     */
+    private JPasswordField getMainPasswordField() {
+        if (mainPasswordField == null) {
+            mainPasswordField = new JPasswordField();
+        }
+        return mainPasswordField;
+    }
+
+
+    /**
+     * This method initializes repeatPasswordField	
+     * 	
+     * @return javax.swing.JPasswordField	
+     */
+    private JPasswordField getRepeatPasswordField() {
+        if (repeatPasswordField == null) {
+            repeatPasswordField = new JPasswordField();
+        }
+        return repeatPasswordField;
+    }
+}
