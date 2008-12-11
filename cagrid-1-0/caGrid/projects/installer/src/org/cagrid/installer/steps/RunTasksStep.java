@@ -199,7 +199,7 @@ public class RunTasksStep extends PanelWizardStep implements PropertyChangeListe
             gridBagConstraints5.gridy = 0;
             GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
             gridBagConstraints4.gridx = 0;
-            gridBagConstraints4.insets = new Insets(0, 0, 0, 10);
+            gridBagConstraints4.insets = new Insets(0, 10, 0, 10);
             gridBagConstraints4.gridy = 0;
             busyPanel = new JPanel();
             busyPanel.setLayout(new GridBagLayout());
@@ -237,7 +237,6 @@ public class RunTasksStep extends PanelWizardStep implements PropertyChangeListe
         if (startButton == null) {
             startButton = new JButton();
             startButton.setText("Start");
-            startButton.setPreferredSize(new Dimension(57, 16));
             startButton.setFont(new Font("Dialog", Font.BOLD, 10));
             final String workingLabel = this.model.getMessage("working");
             startButton.addActionListener(new java.awt.event.ActionListener() {
