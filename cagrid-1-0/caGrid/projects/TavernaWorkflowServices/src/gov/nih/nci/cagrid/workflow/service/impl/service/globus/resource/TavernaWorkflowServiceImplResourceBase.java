@@ -85,7 +85,7 @@ import org.oasis.wsrf.lifetime.TerminationNotification;
  * of these resource as well as code for registering any properties selected
  * to the index service.
  * 
- * @created by Introduce Toolkit version 1.2
+ * @created by Introduce Toolkit version 1.3
  * 
  */
 public abstract class TavernaWorkflowServiceImplResourceBase extends ReflectionResource implements Resource
@@ -142,9 +142,9 @@ public abstract class TavernaWorkflowServiceImplResourceBase extends ReflectionR
 	 * 
 	 * @see org.globus.wsrf.ResourceLifetime#setTerminationTime(java.util.Calendar)
 	 */
-	public void setTerminationTime(Calendar time) {	
-        
-		super.setTerminationTime(time);
+	public void setTerminationTime(Calendar time) {
+	    super.setTerminationTime(time);	
+
         //call the first store to persist the resource
         try {
             store();
@@ -375,6 +375,22 @@ public abstract class TavernaWorkflowServiceImplResourceBase extends ReflectionR
     }
 
 
+
+    /**
+     * Should be overloaded by developer in order to recover the objects they
+     * they wrote the persistence file when storeResource was called. Remember
+     * that the objects must be read in the same order they were written.
+     * 
+     * @param resourceKey
+     * @param ois
+     * @throws Exception
+     */
+    public void loadResource(ResourceKey resourceKey, ObjectInputStream ois) throws Exception {
+
+    }
+
+
+
     public void load(ResourceKey resourceKey) throws ResourceException, NoSuchResourceException, InvalidResourceKeyException {
 	  beingLoaded = true;
        //first we will recover the resource properties and initialize the resource
@@ -392,6 +408,7 @@ public abstract class TavernaWorkflowServiceImplResourceBase extends ReflectionR
         try {
             fis = new FileInputStream(file);
             ObjectInputStream ois = new ObjectInputStream(fis);
+			loadResource(resourceKey,ois);
         } catch (Exception e) {
             beingLoaded = false;
             throw new ResourceException("Failed to load resource", e);
@@ -402,6 +419,22 @@ public abstract class TavernaWorkflowServiceImplResourceBase extends ReflectionR
         } 
        
        beingLoaded = false;
+    }
+
+
+
+    /**
+     * This method should be overloaded by the developer in the Resource class
+     * if they want to persist extra information from there implementation in
+     * the persistence file that the base resource is using to persist itself.
+     * 
+     * @param oos
+     *            Object output stream that can be written to. Make sure to read
+     *            back in the same order
+     * @throws ResourceException
+     */
+    public void storeResource(ObjectOutputStream oos) throws ResourceException {
+
     }
 
 
@@ -419,6 +452,7 @@ public abstract class TavernaWorkflowServiceImplResourceBase extends ReflectionR
                 resourcePersistenceHelper.getStorageDirectory());
             fos = new FileOutputStream(tmpFile);
             ObjectOutputStream oos = new ObjectOutputStream(fos);
+			storeResource(oos);
         } catch (Exception e) {
             if (tmpFile != null) {
                 tmpFile.delete();

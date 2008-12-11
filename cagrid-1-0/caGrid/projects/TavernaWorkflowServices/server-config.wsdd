@@ -10,6 +10,8 @@
     <parameter name="providers" value=" gov.nih.nci.cagrid.introduce.security.service.globus.ServiceSecurityProviderImpl DestroyProvider SetTerminationTimeProvider GetMRPProvider GetRPProvider QueryRPProvider" />
     <parameter name="loadOnStartup" value="true" />
     <parameter name="securityMetadata" value="ETC-PATH/TavernaWorkflowServiceImpl-security-metadata.xml" />
+    <parameter name="tavernaworkflowserviceimpl-etcDirectoryPath" value="ETC-PATH" />
+    <parameter name="tavernaworkflowserviceimpl-serviceName" value="TavernaWorkflowServiceImpl" />
   </service>
   <service name="SERVICE-INSTANCE-PREFIX/TavernaWorkflowService" provider="Handler" use="literal" style="document">
     <parameter name="className" value="gov.nih.nci.cagrid.workflow.factory.service.globus.TavernaWorkflowServiceProviderImpl" />
@@ -21,6 +23,8 @@
     <parameter name="providers" value=" GetMRPProvider GetRPProvider QueryRPProvider gov.nih.nci.cagrid.introduce.security.service.globus.ServiceSecurityProviderImpl" />
     <parameter name="loadOnStartup" value="true" />
     <parameter name="securityMetadata" value="ETC-PATH/TavernaWorkflowService-security-metadata.xml" />
+    <parameter name="tavernaworkflowservice-etcDirectoryPath" value="ETC-PATH" />
+    <parameter name="tavernaworkflowservice-serviceName" value="TavernaWorkflowService" />
   </service>
   <typeMapping name="AggregatorContent" qname="aggr:AggregatorContent" type="java:org.globus.mds.aggregator.types.AggregatorContent" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="" />
 </deployment>

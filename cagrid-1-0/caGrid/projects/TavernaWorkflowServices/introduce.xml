@@ -1,4 +1,4 @@
-<ns1:ServiceDescription introduceVersion="1.2" xmlns:ns1="gme://gov.nih.nci.cagrid/1/Introduce">
+<ns1:ServiceDescription introduceVersion="1.3" xmlns:ns1="gme://gov.nih.nci.cagrid/1/Introduce">
  <ns2:Namespaces xsi:type="ns2:NamespacesType" xmlns:ns2="gme://gov.nih.nci.cagrid.introduce/1/Namespace" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <ns2:Namespace location="./WorkflowManagementFactoryService.xsd" namespace="http://types.workflow.cagrid.nci.nih.gov/WorkflowManagementFactoryService" packageName="workflowmanagementfactoryservice" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="DetailedStatusOutputElement" xsi:type="ns2:SchemaElementType"/>
@@ -100,40 +100,49 @@
  <ns3:Services xsi:type="ns3:ServicesType" xmlns:ns3="gme://gov.nih.nci.cagrid.introduce/1/Services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <ns3:Service name="TavernaWorkflowService" namespace="http://factory.workflow.cagrid.nci.nih.gov/TavernaWorkflowService" packageName="gov.nih.nci.cagrid.workflow.factory" xsi:type="ns3:ServiceType">
    <ns4:Methods xsi:type="ns4:MethodsType" xmlns:ns4="gme://gov.nih.nci.cagrid.introduce/1/Methods">
-    <ns4:Method isImported="true" isProvided="true" name="GetMultipleResourceProperties" xsi:type="ns4:MethodType">
-     <ns4:Output qName="void" isArray="false"/>
-     <ns4:ImportInformation fromIntroduce="false" inputMessage="ns5:GetMultipleResourcePropertiesRequest" namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" outputMessage="ns5:GetMultipleResourcePropertiesResponse" packageName="org.oasis.wsrf.properties" portTypeName="GetMultipleResourceProperties" wsdlFile="../wsrf/properties/WS-ResourceProperties.wsdl" xmlns:ns5="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl"/>
-     <ns4:ProviderInformation providerClass="GetMRPProvider"/>
-    </ns4:Method>
-    <ns4:Method isImported="true" isProvided="true" name="GetResourceProperty" xsi:type="ns4:MethodType">
-     <ns4:Output qName="void" isArray="false"/>
-     <ns4:ImportInformation fromIntroduce="false" inputMessage="ns6:GetResourcePropertyRequest" namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" outputMessage="ns6:GetResourcePropertyResponse" packageName="org.oasis.wsrf.properties" portTypeName="GetResourceProperty" wsdlFile="../wsrf/properties/WS-ResourceProperties.wsdl" xmlns:ns6="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl"/>
-     <ns4:ProviderInformation providerClass="GetRPProvider"/>
-    </ns4:Method>
-    <ns4:Method isImported="true" isProvided="true" name="QueryResourceProperties" xsi:type="ns4:MethodType">
-     <ns4:Output qName="void" isArray="false"/>
-     <ns4:ImportInformation fromIntroduce="false" inputMessage="ns7:QueryResourcePropertiesRequest" namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" outputMessage="ns7:QueryResourcePropertiesResponse" packageName="org.oasis.wsrf.properties" portTypeName="QueryResourceProperties" wsdlFile="../wsrf/properties/WS-ResourceProperties.wsdl" xmlns:ns7="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl"/>
-     <ns4:ProviderInformation providerClass="QueryRPProvider"/>
-    </ns4:Method>
     <ns4:Method isImported="true" isProvided="true" name="getServiceSecurityMetadata" xsi:type="ns4:MethodType">
-     <ns4:Output qName="ns8:ServiceSecurityMetadata" isArray="false" isClientHandle="false" xmlns:ns8="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security"/>
-     <ns9:MethodSecurity xsi:type="ns9:MethodSecurity" xmlns:ns9="gme://gov.nih.nci.cagrid.introduce/1/Security">
-      <ns9:SecuritySetting xsi:type="ns9:SecuritySetting">None</ns9:SecuritySetting>
-      <ns9:MethodAuthorization xsi:type="ns9:MethodAuthorization">
-       <ns9:NoAuthorization xsi:type="ns9:NoAuthorization"/>
-      </ns9:MethodAuthorization>
-     </ns9:MethodSecurity>
+     <ns4:Output qName="ns5:ServiceSecurityMetadata" isArray="false" isClientHandle="false" xmlns:ns5="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security"/>
+     <ns6:MethodSecurity xsi:type="ns6:MethodSecurity" xmlns:ns6="gme://gov.nih.nci.cagrid.introduce/1/Security">
+      <ns6:SecuritySetting xsi:type="ns6:SecuritySetting">None</ns6:SecuritySetting>
+      <ns6:MethodAuthorization xsi:type="ns6:MethodAuthorization">
+       <ns6:NoAuthorization xsi:type="ns6:NoAuthorization"/>
+      </ns6:MethodAuthorization>
+     </ns6:MethodSecurity>
      <ns4:ImportInformation namespace="http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity" packageName="gov.nih.nci.cagrid.introduce.security.stubs" portTypeName="ServiceSecurityPortType" wsdlFile="ServiceSecurity.wsdl"/>
      <ns4:ProviderInformation providerClass="gov.nih.nci.cagrid.introduce.security.service.globus.ServiceSecurityProviderImpl"/>
     </ns4:Method>
     <ns4:Method description="Creates a resource to handle a workflow for a given scufl document." isImported="false" isProvided="false" name="createWorkflow" xsi:type="ns4:MethodType">
      <ns4:Inputs>
-      <ns4:Input qName="ns10:WMSInputElement" description="" isArray="false" name="wMSInputElement" xmlns:ns10="http://types.workflow.cagrid.nci.nih.gov/WorkflowManagementFactoryService"/>
+      <ns4:Input qName="ns7:WMSInputElement" description="" isArray="false" name="wMSInputElement" xmlns:ns7="http://types.workflow.cagrid.nci.nih.gov/WorkflowManagementFactoryService"/>
      </ns4:Inputs>
-     <ns4:Output qName="ns11:WMSOutputElement" description="" isArray="false" xmlns:ns11="http://types.workflow.cagrid.nci.nih.gov/WorkflowManagementFactoryService"/>
+     <ns4:Output qName="ns8:WMSOutputElement" description="" isArray="false" xmlns:ns8="http://types.workflow.cagrid.nci.nih.gov/WorkflowManagementFactoryService"/>
      <ns4:Exceptions>
-      <ns4:Exception description="" name="WorkflowException" qname="ns12:WorkflowException" xmlns:ns12="http://factory.workflow.cagrid.nci.nih.gov/TavernaWorkflowService/types"/>
+      <ns4:Exception description="" name="WorkflowException" qname="ns9:WorkflowException" xmlns:ns9="http://factory.workflow.cagrid.nci.nih.gov/TavernaWorkflowService/types"/>
      </ns4:Exceptions>
+    </ns4:Method>
+    <ns4:Method isImported="true" isProvided="true" name="GetMultipleResourceProperties" xsi:type="ns4:MethodType">
+     <ns4:Output qName="void" isArray="false"/>
+     <ns10:MethodSecurity xsi:type="ns10:MethodSecurity" xmlns:ns10="gme://gov.nih.nci.cagrid.introduce/1/Security">
+      <ns10:SecuritySetting xsi:type="ns10:SecuritySetting">None</ns10:SecuritySetting>
+     </ns10:MethodSecurity>
+     <ns4:ImportInformation fromIntroduce="false" inputMessage="ns11:GetMultipleResourcePropertiesRequest" namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" outputMessage="ns11:GetMultipleResourcePropertiesResponse" packageName="org.oasis.wsrf.properties" portTypeName="GetMultipleResourceProperties" wsdlFile="../wsrf/properties/WS-ResourceProperties.wsdl" xmlns:ns11="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl"/>
+     <ns4:ProviderInformation providerClass="GetMRPProvider"/>
+    </ns4:Method>
+    <ns4:Method isImported="true" isProvided="true" name="GetResourceProperty" xsi:type="ns4:MethodType">
+     <ns4:Output qName="void" isArray="false"/>
+     <ns12:MethodSecurity xsi:type="ns12:MethodSecurity" xmlns:ns12="gme://gov.nih.nci.cagrid.introduce/1/Security">
+      <ns12:SecuritySetting xsi:type="ns12:SecuritySetting">None</ns12:SecuritySetting>
+     </ns12:MethodSecurity>
+     <ns4:ImportInformation fromIntroduce="false" inputMessage="ns13:GetResourcePropertyRequest" namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" outputMessage="ns13:GetResourcePropertyResponse" packageName="org.oasis.wsrf.properties" portTypeName="GetResourceProperty" wsdlFile="../wsrf/properties/WS-ResourceProperties.wsdl" xmlns:ns13="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl"/>
+     <ns4:ProviderInformation providerClass="GetRPProvider"/>
+    </ns4:Method>
+    <ns4:Method isImported="true" isProvided="true" name="QueryResourceProperties" xsi:type="ns4:MethodType">
+     <ns4:Output qName="void" isArray="false"/>
+     <ns14:MethodSecurity xsi:type="ns14:MethodSecurity" xmlns:ns14="gme://gov.nih.nci.cagrid.introduce/1/Security">
+      <ns14:SecuritySetting xsi:type="ns14:SecuritySetting">None</ns14:SecuritySetting>
+     </ns14:MethodSecurity>
+     <ns4:ImportInformation fromIntroduce="false" inputMessage="ns15:QueryResourcePropertiesRequest" namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" outputMessage="ns15:QueryResourcePropertiesResponse" packageName="org.oasis.wsrf.properties" portTypeName="QueryResourceProperties" wsdlFile="../wsrf/properties/WS-ResourceProperties.wsdl" xmlns:ns15="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl"/>
+     <ns4:ProviderInformation providerClass="QueryRPProvider"/>
     </ns4:Method>
    </ns4:Methods>
    <ns3:ResourceFrameworkOptions xsi:type="ns3:ResourceFrameworkOptions">
@@ -145,102 +154,111 @@
    </ns3:ResourceFrameworkOptions>
   </ns3:Service>
   <ns3:Service name="TavernaWorkflowServiceImpl" namespace="http://service.workflow.cagrid.nci.nih.gov/TavernaWorkflowService/ServiceImpl" packageName="gov.nih.nci.cagrid.workflow.service.impl" xsi:type="ns3:ServiceType">
-   <ns13:Methods xsi:type="ns13:MethodsType" xmlns:ns13="gme://gov.nih.nci.cagrid.introduce/1/Methods">
-    <ns13:Method isImported="true" isProvided="true" name="getServiceSecurityMetadata" xsi:type="ns13:MethodType">
-     <ns13:Output qName="ns14:ServiceSecurityMetadata" isArray="false" isClientHandle="false" xmlns:ns14="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security"/>
-     <ns15:MethodSecurity xsi:type="ns15:MethodSecurity" xmlns:ns15="gme://gov.nih.nci.cagrid.introduce/1/Security">
-      <ns15:SecuritySetting xsi:type="ns15:SecuritySetting">None</ns15:SecuritySetting>
-      <ns15:MethodAuthorization xsi:type="ns15:MethodAuthorization">
-       <ns15:NoAuthorization xsi:type="ns15:NoAuthorization"/>
-      </ns15:MethodAuthorization>
-     </ns15:MethodSecurity>
-     <ns13:ImportInformation namespace="http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity" packageName="gov.nih.nci.cagrid.introduce.security.stubs" portTypeName="ServiceSecurityPortType" wsdlFile="ServiceSecurity.wsdl"/>
-     <ns13:ProviderInformation providerClass="gov.nih.nci.cagrid.introduce.security.service.globus.ServiceSecurityProviderImpl"/>
-    </ns13:Method>
-    <ns13:Method isImported="true" isProvided="true" name="Destroy" xsi:type="ns13:MethodType">
-     <ns13:Output qName="void" isArray="false"/>
-     <ns13:ImportInformation fromIntroduce="false" inputMessage="ns16:DestroyRequest" namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl" outputMessage="ns16:DestroyResponse" packageName="org.oasis.wsrf.lifetime" portTypeName="ImmediateResourceTermination" wsdlFile="../wsrf/lifetime/WS-ResourceLifetime.wsdl" xmlns:ns16="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl"/>
-     <ns13:ProviderInformation providerClass="DestroyProvider"/>
-    </ns13:Method>
-    <ns13:Method isImported="true" isProvided="true" name="SetTerminationTime" xsi:type="ns13:MethodType">
-     <ns13:Output qName="void" isArray="false"/>
-     <ns13:ImportInformation fromIntroduce="false" inputMessage="ns17:SetTerminationTimeRequest" namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl" outputMessage="ns17:SetTerminationTimeResponse" packageName="org.oasis.wsrf.lifetime" portTypeName="ScheduledResourceTermination" wsdlFile="../wsrf/lifetime/WS-ResourceLifetime.wsdl" xmlns:ns17="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl"/>
-     <ns13:ProviderInformation providerClass="SetTerminationTimeProvider"/>
-    </ns13:Method>
-    <ns13:Method isImported="true" isProvided="true" name="GetMultipleResourceProperties" xsi:type="ns13:MethodType">
-     <ns13:Output qName="void" isArray="false"/>
-     <ns13:ImportInformation fromIntroduce="false" inputMessage="ns18:GetMultipleResourcePropertiesRequest" namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" outputMessage="ns18:GetMultipleResourcePropertiesResponse" packageName="org.oasis.wsrf.properties" portTypeName="GetMultipleResourceProperties" wsdlFile="../wsrf/properties/WS-ResourceProperties.wsdl" xmlns:ns18="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl"/>
-     <ns13:ProviderInformation providerClass="GetMRPProvider"/>
-    </ns13:Method>
-    <ns13:Method isImported="true" isProvided="true" name="GetResourceProperty" xsi:type="ns13:MethodType">
-     <ns13:Output qName="void" isArray="false"/>
-     <ns13:ImportInformation fromIntroduce="false" inputMessage="ns19:GetResourcePropertyRequest" namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" outputMessage="ns19:GetResourcePropertyResponse" packageName="org.oasis.wsrf.properties" portTypeName="GetResourceProperty" wsdlFile="../wsrf/properties/WS-ResourceProperties.wsdl" xmlns:ns19="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl"/>
-     <ns13:ProviderInformation providerClass="GetRPProvider"/>
-    </ns13:Method>
-    <ns13:Method isImported="true" isProvided="true" name="QueryResourceProperties" xsi:type="ns13:MethodType">
-     <ns13:Output qName="void" isArray="false"/>
-     <ns13:ImportInformation fromIntroduce="false" inputMessage="ns20:QueryResourcePropertiesRequest" namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" outputMessage="ns20:QueryResourcePropertiesResponse" packageName="org.oasis.wsrf.properties" portTypeName="QueryResourceProperties" wsdlFile="../wsrf/properties/WS-ResourceProperties.wsdl" xmlns:ns20="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl"/>
-     <ns13:ProviderInformation providerClass="QueryRPProvider"/>
-    </ns13:Method>
-    <ns13:Method description="Cancels the execution of a workflow" isImported="false" isProvided="false" name="cancel" xsi:type="ns13:MethodType">
-     <ns13:Inputs/>
-     <ns13:Output qName="void" description="" isArray="false"/>
-     <ns13:Exceptions>
-      <ns13:Exception description="" name="CannotCancelWorkflowFault" qname="ns21:CannotCancelWorkflowFault" xmlns:ns21="http://service.workflow.cagrid.nci.nih.gov/TavernaWorkflowService/ServiceImpl/types"/>
-     </ns13:Exceptions>
-    </ns13:Method>
-    <ns13:Method description="Gives a detailed status of the workflow" isImported="false" isProvided="false" name="getDetailedStatus" xsi:type="ns13:MethodType">
-     <ns13:Inputs/>
-     <ns13:Output qName="ns22:DetailedStatusOutputElement" description="" isArray="true" xmlns:ns22="http://types.workflow.cagrid.nci.nih.gov/WorkflowManagementFactoryService"/>
-     <ns13:Exceptions>
-      <ns13:Exception description="" name="WorkflowException" qname="ns23:WorkflowException" xmlns:ns23="http://service.workflow.cagrid.nci.nih.gov/TavernaWorkflowService/ServiceImpl/types"/>
-     </ns13:Exceptions>
-    </ns13:Method>
-    <ns13:Method description="Returns status of the workflow" isImported="false" isProvided="false" name="getStatus" xsi:type="ns13:MethodType">
-     <ns13:Inputs/>
-     <ns13:Output qName="ns24:WorkflowStatusElement" description="" isArray="false" xmlns:ns24="http://types.workflow.cagrid.nci.nih.gov/WorkflowManagementFactoryService"/>
-     <ns13:Exceptions>
-      <ns13:Exception description="" name="WorkflowException" qname="ns25:WorkflowException" xmlns:ns25="http://service.workflow.cagrid.nci.nih.gov/TavernaWorkflowService/ServiceImpl/types"/>
-     </ns13:Exceptions>
-    </ns13:Method>
-    <ns13:Method description="Returns the output of the workflow" isImported="false" isProvided="false" name="getWorkflowOutput" xsi:type="ns13:MethodType">
-     <ns13:Inputs/>
-     <ns13:Output qName="ns26:WorkflowOutputElement" description="" isArray="false" xmlns:ns26="http://types.workflow.cagrid.nci.nih.gov/WorkflowManagementFactoryService"/>
-     <ns13:Exceptions>
-      <ns13:Exception description="" name="WorkflowException" qname="ns27:WorkflowException" xmlns:ns27="http://service.workflow.cagrid.nci.nih.gov/TavernaWorkflowService/ServiceImpl/types"/>
-     </ns13:Exceptions>
-    </ns13:Method>
-    <ns13:Method description="Pause the workflow execution" isImported="false" isProvided="false" name="pause" xsi:type="ns13:MethodType">
-     <ns13:Inputs/>
-     <ns13:Output qName="ns28:WorkflowStatusElement" description="" isArray="false" xmlns:ns28="http://types.workflow.cagrid.nci.nih.gov/WorkflowManagementFactoryService"/>
-     <ns13:Exceptions>
-      <ns13:Exception description="" name="WorkflowException" qname="ns29:WorkflowException" xmlns:ns29="http://service.workflow.cagrid.nci.nih.gov/TavernaWorkflowService/ServiceImpl/types"/>
-      <ns13:Exception description="" name="CannotPauseWorkflowFault" qname="ns30:CannotPauseWorkflowFault" xmlns:ns30="http://service.workflow.cagrid.nci.nih.gov/TavernaWorkflowService/ServiceImpl/types"/>
-     </ns13:Exceptions>
-    </ns13:Method>
-    <ns13:Method description="Resumes a paused workflow" isImported="false" isProvided="false" name="resume" xsi:type="ns13:MethodType">
-     <ns13:Inputs/>
-     <ns13:Output qName="ns31:WorkflowStatusElement" description="" isArray="false" xmlns:ns31="http://types.workflow.cagrid.nci.nih.gov/WorkflowManagementFactoryService"/>
-     <ns13:Exceptions>
-      <ns13:Exception description="" name="WorkflowException" qname="ns32:WorkflowException" xmlns:ns32="http://service.workflow.cagrid.nci.nih.gov/TavernaWorkflowService/ServiceImpl/types"/>
-      <ns13:Exception description="" name="CannotResumeWorkflowFault" qname="ns33:CannotResumeWorkflowFault" xmlns:ns33="http://service.workflow.cagrid.nci.nih.gov/TavernaWorkflowService/ServiceImpl/types"/>
-     </ns13:Exceptions>
-    </ns13:Method>
-    <ns13:Method description="starts the workflow" isImported="false" isProvided="false" name="start" xsi:type="ns13:MethodType">
-     <ns13:Inputs>
-      <ns13:Input qName="ns34:StartInputElement" description="" isArray="false" name="startInputElement" xmlns:ns34="http://types.workflow.cagrid.nci.nih.gov/WorkflowManagementFactoryService"/>
-     </ns13:Inputs>
-     <ns13:Output qName="ns35:WorkflowStatusElement" description="" isArray="false" xmlns:ns35="http://types.workflow.cagrid.nci.nih.gov/WorkflowManagementFactoryService"/>
-     <ns13:Exceptions>
-      <ns13:Exception description="" name="CannotStartWorkflowFault" qname="ns36:CannotStartWorkflowFault" xmlns:ns36="http://service.workflow.cagrid.nci.nih.gov/TavernaWorkflowService/ServiceImpl/types"/>
-     </ns13:Exceptions>
-    </ns13:Method>
-   </ns13:Methods>
-   <ns37:ResourcePropertiesList xsi:type="ns37:ResourcePropertiesListType" xmlns:ns37="gme://gov.nih.nci.cagrid.introduce/1/Resources">
-    <ns37:ResourceProperty qName="ns38:CurrentTime" description="" populateFromFile="false" register="false" xsi:type="ns37:ResourcePropertyType" xmlns:ns38="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.xsd"/>
-    <ns37:ResourceProperty qName="ns39:TerminationTime" description="" populateFromFile="false" register="false" xsi:type="ns37:ResourcePropertyType" xmlns:ns39="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.xsd"/>
-    <ns37:ResourceProperty qName="ns40:WorkflowStatusElement" description="" fileLocation="TavernaWorkflowServiceImpl_workflowStatusElement.xml" populateFromFile="false" register="false" xsi:type="ns37:ResourcePropertyType" xmlns:ns40="http://types.workflow.cagrid.nci.nih.gov/WorkflowManagementFactoryService"/>
-   </ns37:ResourcePropertiesList>
+   <ns16:Methods xsi:type="ns16:MethodsType" xmlns:ns16="gme://gov.nih.nci.cagrid.introduce/1/Methods">
+    <ns16:Method isImported="true" isProvided="true" name="getServiceSecurityMetadata" xsi:type="ns16:MethodType">
+     <ns16:Output qName="ns17:ServiceSecurityMetadata" isArray="false" isClientHandle="false" xmlns:ns17="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security"/>
+     <ns18:MethodSecurity xsi:type="ns18:MethodSecurity" xmlns:ns18="gme://gov.nih.nci.cagrid.introduce/1/Security">
+      <ns18:SecuritySetting xsi:type="ns18:SecuritySetting">None</ns18:SecuritySetting>
+      <ns18:MethodAuthorization xsi:type="ns18:MethodAuthorization">
+       <ns18:NoAuthorization xsi:type="ns18:NoAuthorization"/>
+      </ns18:MethodAuthorization>
+     </ns18:MethodSecurity>
+     <ns16:ImportInformation namespace="http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity" packageName="gov.nih.nci.cagrid.introduce.security.stubs" portTypeName="ServiceSecurityPortType" wsdlFile="ServiceSecurity.wsdl"/>
+     <ns16:ProviderInformation providerClass="gov.nih.nci.cagrid.introduce.security.service.globus.ServiceSecurityProviderImpl"/>
+    </ns16:Method>
+    <ns16:Method isImported="true" isProvided="true" name="Destroy" xsi:type="ns16:MethodType">
+     <ns16:Output qName="void" isArray="false"/>
+     <ns16:ImportInformation fromIntroduce="false" inputMessage="ns19:DestroyRequest" namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl" outputMessage="ns19:DestroyResponse" packageName="org.oasis.wsrf.lifetime" portTypeName="ImmediateResourceTermination" wsdlFile="../wsrf/lifetime/WS-ResourceLifetime.wsdl" xmlns:ns19="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl"/>
+     <ns16:ProviderInformation providerClass="DestroyProvider"/>
+    </ns16:Method>
+    <ns16:Method isImported="true" isProvided="true" name="SetTerminationTime" xsi:type="ns16:MethodType">
+     <ns16:Output qName="void" isArray="false"/>
+     <ns16:ImportInformation fromIntroduce="false" inputMessage="ns20:SetTerminationTimeRequest" namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl" outputMessage="ns20:SetTerminationTimeResponse" packageName="org.oasis.wsrf.lifetime" portTypeName="ScheduledResourceTermination" wsdlFile="../wsrf/lifetime/WS-ResourceLifetime.wsdl" xmlns:ns20="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl"/>
+     <ns16:ProviderInformation providerClass="SetTerminationTimeProvider"/>
+    </ns16:Method>
+    <ns16:Method description="Cancels the execution of a workflow" isImported="false" isProvided="false" name="cancel" xsi:type="ns16:MethodType">
+     <ns16:Inputs/>
+     <ns16:Output qName="void" description="" isArray="false"/>
+     <ns16:Exceptions>
+      <ns16:Exception description="" name="CannotCancelWorkflowFault" qname="ns21:CannotCancelWorkflowFault" xmlns:ns21="http://service.workflow.cagrid.nci.nih.gov/TavernaWorkflowService/ServiceImpl/types"/>
+     </ns16:Exceptions>
+    </ns16:Method>
+    <ns16:Method description="Gives a detailed status of the workflow" isImported="false" isProvided="false" name="getDetailedStatus" xsi:type="ns16:MethodType">
+     <ns16:Inputs/>
+     <ns16:Output qName="ns22:DetailedStatusOutputElement" description="" isArray="true" xmlns:ns22="http://types.workflow.cagrid.nci.nih.gov/WorkflowManagementFactoryService"/>
+     <ns16:Exceptions>
+      <ns16:Exception description="" name="WorkflowException" qname="ns23:WorkflowException" xmlns:ns23="http://service.workflow.cagrid.nci.nih.gov/TavernaWorkflowService/ServiceImpl/types"/>
+     </ns16:Exceptions>
+    </ns16:Method>
+    <ns16:Method description="Returns status of the workflow" isImported="false" isProvided="false" name="getStatus" xsi:type="ns16:MethodType">
+     <ns16:Inputs/>
+     <ns16:Output qName="ns24:WorkflowStatusElement" description="" isArray="false" xmlns:ns24="http://types.workflow.cagrid.nci.nih.gov/WorkflowManagementFactoryService"/>
+     <ns16:Exceptions>
+      <ns16:Exception description="" name="WorkflowException" qname="ns25:WorkflowException" xmlns:ns25="http://service.workflow.cagrid.nci.nih.gov/TavernaWorkflowService/ServiceImpl/types"/>
+     </ns16:Exceptions>
+    </ns16:Method>
+    <ns16:Method description="Returns the output of the workflow" isImported="false" isProvided="false" name="getWorkflowOutput" xsi:type="ns16:MethodType">
+     <ns16:Inputs/>
+     <ns16:Output qName="ns26:WorkflowOutputElement" description="" isArray="false" xmlns:ns26="http://types.workflow.cagrid.nci.nih.gov/WorkflowManagementFactoryService"/>
+     <ns16:Exceptions>
+      <ns16:Exception description="" name="WorkflowException" qname="ns27:WorkflowException" xmlns:ns27="http://service.workflow.cagrid.nci.nih.gov/TavernaWorkflowService/ServiceImpl/types"/>
+     </ns16:Exceptions>
+    </ns16:Method>
+    <ns16:Method description="Pause the workflow execution" isImported="false" isProvided="false" name="pause" xsi:type="ns16:MethodType">
+     <ns16:Inputs/>
+     <ns16:Output qName="ns28:WorkflowStatusElement" description="" isArray="false" xmlns:ns28="http://types.workflow.cagrid.nci.nih.gov/WorkflowManagementFactoryService"/>
+     <ns16:Exceptions>
+      <ns16:Exception description="" name="WorkflowException" qname="ns29:WorkflowException" xmlns:ns29="http://service.workflow.cagrid.nci.nih.gov/TavernaWorkflowService/ServiceImpl/types"/>
+      <ns16:Exception description="" name="CannotPauseWorkflowFault" qname="ns30:CannotPauseWorkflowFault" xmlns:ns30="http://service.workflow.cagrid.nci.nih.gov/TavernaWorkflowService/ServiceImpl/types"/>
+     </ns16:Exceptions>
+    </ns16:Method>
+    <ns16:Method description="Resumes a paused workflow" isImported="false" isProvided="false" name="resume" xsi:type="ns16:MethodType">
+     <ns16:Inputs/>
+     <ns16:Output qName="ns31:WorkflowStatusElement" description="" isArray="false" xmlns:ns31="http://types.workflow.cagrid.nci.nih.gov/WorkflowManagementFactoryService"/>
+     <ns16:Exceptions>
+      <ns16:Exception description="" name="WorkflowException" qname="ns32:WorkflowException" xmlns:ns32="http://service.workflow.cagrid.nci.nih.gov/TavernaWorkflowService/ServiceImpl/types"/>
+      <ns16:Exception description="" name="CannotResumeWorkflowFault" qname="ns33:CannotResumeWorkflowFault" xmlns:ns33="http://service.workflow.cagrid.nci.nih.gov/TavernaWorkflowService/ServiceImpl/types"/>
+     </ns16:Exceptions>
+    </ns16:Method>
+    <ns16:Method description="starts the workflow" isImported="false" isProvided="false" name="start" xsi:type="ns16:MethodType">
+     <ns16:Inputs>
+      <ns16:Input qName="ns34:StartInputElement" description="" isArray="false" name="startInputElement" xmlns:ns34="http://types.workflow.cagrid.nci.nih.gov/WorkflowManagementFactoryService"/>
+     </ns16:Inputs>
+     <ns16:Output qName="ns35:WorkflowStatusElement" description="" isArray="false" xmlns:ns35="http://types.workflow.cagrid.nci.nih.gov/WorkflowManagementFactoryService"/>
+     <ns16:Exceptions>
+      <ns16:Exception description="" name="CannotStartWorkflowFault" qname="ns36:CannotStartWorkflowFault" xmlns:ns36="http://service.workflow.cagrid.nci.nih.gov/TavernaWorkflowService/ServiceImpl/types"/>
+     </ns16:Exceptions>
+    </ns16:Method>
+    <ns16:Method isImported="true" isProvided="true" name="GetMultipleResourceProperties" xsi:type="ns16:MethodType">
+     <ns16:Output qName="void" isArray="false"/>
+     <ns37:MethodSecurity xsi:type="ns37:MethodSecurity" xmlns:ns37="gme://gov.nih.nci.cagrid.introduce/1/Security">
+      <ns37:SecuritySetting xsi:type="ns37:SecuritySetting">None</ns37:SecuritySetting>
+     </ns37:MethodSecurity>
+     <ns16:ImportInformation fromIntroduce="false" inputMessage="ns38:GetMultipleResourcePropertiesRequest" namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" outputMessage="ns38:GetMultipleResourcePropertiesResponse" packageName="org.oasis.wsrf.properties" portTypeName="GetMultipleResourceProperties" wsdlFile="../wsrf/properties/WS-ResourceProperties.wsdl" xmlns:ns38="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl"/>
+     <ns16:ProviderInformation providerClass="GetMRPProvider"/>
+    </ns16:Method>
+    <ns16:Method isImported="true" isProvided="true" name="GetResourceProperty" xsi:type="ns16:MethodType">
+     <ns16:Output qName="void" isArray="false"/>
+     <ns39:MethodSecurity xsi:type="ns39:MethodSecurity" xmlns:ns39="gme://gov.nih.nci.cagrid.introduce/1/Security">
+      <ns39:SecuritySetting xsi:type="ns39:SecuritySetting">None</ns39:SecuritySetting>
+     </ns39:MethodSecurity>
+     <ns16:ImportInformation fromIntroduce="false" inputMessage="ns40:GetResourcePropertyRequest" namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" outputMessage="ns40:GetResourcePropertyResponse" packageName="org.oasis.wsrf.properties" portTypeName="GetResourceProperty" wsdlFile="../wsrf/properties/WS-ResourceProperties.wsdl" xmlns:ns40="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl"/>
+     <ns16:ProviderInformation providerClass="GetRPProvider"/>
+    </ns16:Method>
+    <ns16:Method isImported="true" isProvided="true" name="QueryResourceProperties" xsi:type="ns16:MethodType">
+     <ns16:Output qName="void" isArray="false"/>
+     <ns41:MethodSecurity xsi:type="ns41:MethodSecurity" xmlns:ns41="gme://gov.nih.nci.cagrid.introduce/1/Security">
+      <ns41:SecuritySetting xsi:type="ns41:SecuritySetting">None</ns41:SecuritySetting>
+     </ns41:MethodSecurity>
+     <ns16:ImportInformation fromIntroduce="false" inputMessage="ns42:QueryResourcePropertiesRequest" namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" outputMessage="ns42:QueryResourcePropertiesResponse" packageName="org.oasis.wsrf.properties" portTypeName="QueryResourceProperties" wsdlFile="../wsrf/properties/WS-ResourceProperties.wsdl" xmlns:ns42="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl"/>
+     <ns16:ProviderInformation providerClass="QueryRPProvider"/>
+    </ns16:Method>
+   </ns16:Methods>
+   <ns43:ResourcePropertiesList xsi:type="ns43:ResourcePropertiesListType" xmlns:ns43="gme://gov.nih.nci.cagrid.introduce/1/Resources">
+    <ns43:ResourceProperty qName="ns44:CurrentTime" description="" populateFromFile="false" register="false" xsi:type="ns43:ResourcePropertyType" xmlns:ns44="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.xsd"/>
+    <ns43:ResourceProperty qName="ns45:TerminationTime" description="" populateFromFile="false" register="false" xsi:type="ns43:ResourcePropertyType" xmlns:ns45="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.xsd"/>
+    <ns43:ResourceProperty qName="ns46:WorkflowStatusElement" description="" fileLocation="TavernaWorkflowServiceImpl_workflowStatusElement.xml" populateFromFile="false" register="false" xsi:type="ns43:ResourcePropertyType" xmlns:ns46="http://types.workflow.cagrid.nci.nih.gov/WorkflowManagementFactoryService"/>
+   </ns43:ResourcePropertiesList>
    <ns3:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema"></ns3:description>
    <ns3:ResourceFrameworkOptions xsi:type="ns3:ResourceFrameworkOptions">
     <ns3:Lifetime xsi:type="ns3:Lifetime"/>
@@ -250,9 +268,9 @@
    </ns3:ResourceFrameworkOptions>
   </ns3:Service>
  </ns3:Services>
- <ns41:Extensions xsi:type="ns41:ExtensionsType" xmlns:ns41="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
- <ns42:ServiceProperties xmlns:ns42="gme://gov.nih.nci.cagrid.introduce/1/Property">
-  <ns42:Property description="This points to the Taverna repository." isFromETC="false" key="baseRepositoryDir" value="$home/Library/Application Support/Taverna-1.7.1/repository/"/>
-  <ns42:Property description="This points to the Taverna installation directory containing a lib directory within. This will be used to add the classpath variable for ProcessBuilder to launch the workflow." isFromETC="false" key="tavernaDir" value="null"/>
- </ns42:ServiceProperties>
+ <ns47:Extensions xsi:type="ns47:ExtensionsType" xmlns:ns47="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+ <ns48:ServiceProperties xmlns:ns48="gme://gov.nih.nci.cagrid.introduce/1/Property">
+  <ns48:Property description="This points to the Taverna repository." isFromETC="false" key="baseRepositoryDir" value="$home/Library/Application Support/Taverna-1.7.1/repository/"/>
+  <ns48:Property description="This points to the Taverna installation directory containing a lib directory within. This will be used to add the classpath variable for ProcessBuilder to launch the workflow." isFromETC="false" key="tavernaDir" value="null"/>
+ </ns48:ServiceProperties>
 </ns1:ServiceDescription>

@@ -16,13 +16,14 @@ import org.globus.wsrf.Constants;
  * This class holds all service properties which were defined for the service to have
  * access to.
  * 
- * @created by Introduce Toolkit version 1.2
+ * @created by Introduce Toolkit version 1.3
  * 
  */
 public class TavernaWorkflowServiceConfiguration implements ServiceConfiguration {
 
 	public static TavernaWorkflowServiceConfiguration  configuration = null;
-
+    public String etcDirectoryPath;
+    	
 	public static TavernaWorkflowServiceConfiguration getConfiguration() throws Exception {
 		if (TavernaWorkflowServiceConfiguration.configuration != null) {
 			return TavernaWorkflowServiceConfiguration.configuration;
@@ -42,21 +43,21 @@ public class TavernaWorkflowServiceConfiguration implements ServiceConfiguration
 		return TavernaWorkflowServiceConfiguration.configuration;
 	}
 	
-	private String etcDirectoryPath;
-	
+
 	
 	private String baseRepositoryDir;
 	
 	private String tavernaDir;
 	
 	
-	public String getEtcDirectoryPath() {
+    public String getEtcDirectoryPath() {
 		return ContainerConfig.getBaseDirectory() + File.separator + etcDirectoryPath;
 	}
 	
 	public void setEtcDirectoryPath(String etcDirectoryPath) {
 		this.etcDirectoryPath = etcDirectoryPath;
 	}
+
 
 	
 	public String getBaseRepositoryDir() {
