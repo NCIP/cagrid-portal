@@ -31,7 +31,6 @@ import org.cagrid.installer.steps.InstallationCompleteStep;
 import org.cagrid.installer.steps.PresentLicenseStep;
 import org.cagrid.installer.steps.PropertyConfigurationStep;
 import org.cagrid.installer.steps.RunTasksStep;
-import org.cagrid.installer.steps.SelectComponentStep;
 import org.cagrid.installer.steps.SelectInstallationTypeStep;
 import org.cagrid.installer.steps.SpecifyPortsStep;
 import org.cagrid.installer.steps.options.BooleanPropertyConfigurationOption;
@@ -244,28 +243,12 @@ public class Installer {
         selectInstallStep.getOptions().add(
             new BooleanPropertyConfigurationOption(Constants.CONFIGURE_CONTAINER, this.model
                 .getMessage("select.install.configure.container"), false, true));
-        selectInstallStep.getOptions().add(
-            new BooleanPropertyConfigurationOption(Constants.INSTALL_SERVICES, this.model
-                .getMessage("select.install.install.services"), true, true));
 
         this.model.add(selectInstallStep);
 
         incrementProgress();
 
-        // Presents list of services that can be installed
-        SelectComponentStep selectServicesStep = new SelectComponentStep(
-            this.model.getMessage("select.services.title"), this.model.getMessage("select.services.desc"));
-        selectServicesStep.getOptions().add(
-            new BooleanPropertyConfigurationOption(Constants.INSTALL_SYNC_GTS, "SyncGTS", false, true));
-        this.model.add(selectServicesStep, new Condition() {
-
-            public boolean evaluate(WizardModel m) {
-                CaGridInstallerModel model = (CaGridInstallerModel) m;
-                return model.isTrue(Constants.INSTALL_SERVICES);
-            }
-
-        });
-        incrementProgress();
+       
 
         PropertyConfigurationStep selectContainerStep = new PropertyConfigurationStep(this.model
             .getMessage("select.container.title"), this.model.getMessage("select.container.desc"));

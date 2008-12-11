@@ -264,11 +264,6 @@ CaGridInstallerModel {
     }
 
 
-    public boolean isSecureContainerRequired() {
-        return false;
-    }
-
-
     public Map<String, String> getStateMap() {
         return new HashMap<String, String>(this.state);
     }

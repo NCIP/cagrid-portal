@@ -6,6 +6,8 @@ package org.cagrid.installer.steps;
 import javax.swing.Icon;
 import javax.swing.JCheckBox;
 
+import org.pietschy.wizard.InvalidStateException;
+
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
  * 
@@ -36,13 +38,15 @@ public class CheckSecureContainerStep extends PropertyConfigurationStep {
 		super(name, description, icon);
 	}
 
-	public void prepare() {
-		if (this.model.isSecureContainerRequired()) {
 
-			JCheckBox checkBox = (JCheckBox) getOption(Constants.USE_SECURE_CONTAINER);
-			checkBox.setSelected(true);
-			checkBox.setEnabled(false);
-		}
-	}
+    @Override
+    public void applyState() throws InvalidStateException {
+        // TODO Auto-generated method stub
+        super.applyState();
+        this.model.setProperty(Constants.INSTALL_SYNC_GTS, "true");
+        
+    }
+	
+	
 
 }
