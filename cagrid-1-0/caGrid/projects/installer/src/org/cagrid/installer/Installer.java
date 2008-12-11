@@ -254,8 +254,8 @@ public class Installer {
                 new String[]{this.model.getMessage("container.type.tomcat"),
                         this.model.getMessage("container.type.jboss")}, true));
         selectContainerStep.getOptions().add(
-            new BooleanPropertyConfigurationOption(Constants.USE_SECURE_CONTAINER, this.model.getMessage("globus.check.secure.desc"), false,
-                false));
+            new BooleanPropertyConfigurationOption(Constants.USE_SECURE_CONTAINER, this.model
+                .getMessage("globus.check.secure.desc"), false, false));
 
         this.model.add(selectContainerStep, new Condition() {
             public boolean evaluate(WizardModel m) {
@@ -323,8 +323,7 @@ public class Installer {
 
                     public boolean evaluate(WizardModel m) {
                         CaGridInstallerModel model = (CaGridInstallerModel) m;
-                        return model.isTomcatInstalled() && model.isContainerConfigurationRequired()
-                            && model.isConfigureContainerSelected();
+                        return model.isTomcatInstalled() && model.isConfigureContainerSelected();
                     }
 
                 }));
@@ -348,8 +347,7 @@ public class Installer {
 
                     public boolean evaluate(WizardModel m) {
                         CaGridInstallerModel model = (CaGridInstallerModel) m;
-                        return model.isJBossInstalled() && model.isContainerConfigurationRequired()
-                            && model.isConfigureContainerSelected();
+                        return model.isJBossInstalled() && model.isConfigureContainerSelected();
                     }
 
                 }));
@@ -395,11 +393,11 @@ public class Installer {
 
             public boolean evaluate(WizardModel m) {
                 CaGridInstallerModel model = (CaGridInstallerModel) m;
-                return (model.isTomcatContainer() || model.isJBossContainer()) && model.isGlobusDeployed() && model.isConfigureContainerSelected();
+                return (model.isTomcatContainer() || model.isJBossContainer()) && model.isGlobusDeployed()
+                    && model.isConfigureContainerSelected();
             }
 
         });
-
 
         PropertyConfigurationStep getHostnameStep = new PropertyConfigurationStep(this.model
             .getMessage("specify.service.hostname.title"), this.model.getMessage("specify.service.hostname.desc"));
@@ -424,15 +422,15 @@ public class Installer {
                 this.model.getProperty(Constants.SHUTDOWN_PORT, "8005"), false));
         tomcatPortsStep.getOptions().add(
             new TextPropertyConfigurationOption(Constants.HTTP_PORT, this.model.getMessage("http.port"), this.model
-                .getProperty(Constants.HTTP_PORT, "8080"),  model.isTrue(Constants.USE_SECURE_CONTAINER)));
+                .getProperty(Constants.HTTP_PORT, "8080"), model.isTrue(Constants.USE_SECURE_CONTAINER)));
         tomcatPortsStep.getOptions().add(
             new TextPropertyConfigurationOption(Constants.HTTPS_PORT, this.model.getMessage("https.port"), this.model
                 .getProperty(Constants.HTTPS_PORT, "8443"), model.isTrue(Constants.USE_SECURE_CONTAINER)));
-        // TODO: add validation
+
         this.model.add(tomcatPortsStep, new Condition() {
             public boolean evaluate(WizardModel m) {
                 CaGridInstallerModel model = (CaGridInstallerModel) m;
-                return model.isContainerConfigurationRequired() && model.isConfigureContainerSelected();
+                return model.isConfigureContainerSelected();
             }
         });
 

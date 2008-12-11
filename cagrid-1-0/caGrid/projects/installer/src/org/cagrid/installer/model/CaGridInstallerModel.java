@@ -40,10 +40,6 @@ public interface CaGridInstallerModel extends WizardModel {
 
     String getMessage(String key);
 
-
-    boolean isContainerConfigurationRequired();
-
-
     boolean isSecurityConfigurationRequired();
 
 

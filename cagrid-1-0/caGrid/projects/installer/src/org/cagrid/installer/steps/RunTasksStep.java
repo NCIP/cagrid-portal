@@ -171,7 +171,7 @@ public class RunTasksStep extends PanelWizardStep implements PropertyChangeListe
             GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
             gridBagConstraints3.gridx = 0;
             gridBagConstraints3.gridy = 0;
-            busyLabel = new JLabel();
+            busyLabel = new JLabel(" ");
 
             descriptionPanel = new JPanel();
             descriptionPanel.setLayout(new GridBagLayout());

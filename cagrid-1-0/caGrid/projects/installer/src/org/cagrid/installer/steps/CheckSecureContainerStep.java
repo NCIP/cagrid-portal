@@ -43,8 +43,6 @@ public class CheckSecureContainerStep extends PropertyConfigurationStep {
     public void applyState() throws InvalidStateException {
         // TODO Auto-generated method stub
         super.applyState();
-        this.model.setProperty(Constants.INSTALL_SYNC_GTS, "true");
-        
     }
 	
 	

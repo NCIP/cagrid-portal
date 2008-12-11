@@ -165,12 +165,6 @@ CaGridInstallerModel {
             }
         }
     }
-
-
-    public boolean isContainerConfigurationRequired() {
-        return (isJBossContainer() || isTomcatContainer()) && (isTrue(Constants.REDEPLOY_GLOBUS) || !isGlobusDeployed());
-
-    }
     
     public boolean isTrue(String propName) {
         return Constants.TRUE.equals(getProperty(propName));
@@ -391,7 +385,7 @@ CaGridInstallerModel {
                 File wsrfDir = new File((String) getProperty(Constants.TOMCAT_HOME) + "/webapps/wsrf");
                 globusDeployed = wsrfDir.exists();
             } else if(isJBossInstalled()){
-                File wsrfDir = new File((String) getProperty(Constants.JBOSS_HOME) + "/webapps/wsrf");
+                File wsrfDir = new File((String) getProperty(Constants.JBOSS_HOME) + "/server/default/deploy/wsrf.war/");
                 globusDeployed = wsrfDir.exists();
             }
         }
