@@ -21,9 +21,12 @@ import javax.swing.event.DocumentEvent;
 import org.cagrid.data.sdkquery41.style.wizard.config.LoginConfigurationStep;
 import org.cagrid.grape.utils.CompositeErrorDialog;
 
+import com.jgoodies.validation.Severity;
 import com.jgoodies.validation.ValidationResult;
 import com.jgoodies.validation.ValidationResultModel;
+import com.jgoodies.validation.message.SimpleValidationMessage;
 import com.jgoodies.validation.util.DefaultValidationResultModel;
+import com.jgoodies.validation.util.ValidationUtils;
 import com.jgoodies.validation.view.ValidationComponentUtils;
 
 /**
@@ -302,7 +305,26 @@ public class LoginConfigurationPanel extends AbstractWizardPanel {
         
         // only have work to do if the developer wants login
         if (getUseLoginCheckBox().isSelected()) {
-            // TODO: validation
+            if (ValidationUtils.isBlank(getUsernameTextField().getText())) {
+                result.add(new SimpleValidationMessage(
+                    KEY_USERNAME + " cannot be blank", Severity.ERROR, KEY_USERNAME));
+            }
+            String mainPassword = new String(getMainPasswordField().getPassword());
+            String repeatPassword = new String(getRepeatPasswordField().getPassword());
+            if (ValidationUtils.isBlank(mainPassword)) {
+                result.add(new SimpleValidationMessage(
+                    KEY_PASSWORD + " should not be blank, but is allowed", Severity.WARNING, KEY_PASSWORD));
+            }
+            if (ValidationUtils.isBlank(repeatPassword)) {
+                result.add(new SimpleValidationMessage(
+                    KEY_REPEAT_PASSWORD + " should not be blank, but is allowed", Severity.WARNING, KEY_REPEAT_PASSWORD));
+            }
+            if (!ValidationUtils.equals(mainPassword, repeatPassword)) {
+                result.add(new SimpleValidationMessage(
+                    KEY_PASSWORD + " and " + KEY_REPEAT_PASSWORD + " do not match!", Severity.ERROR, KEY_PASSWORD));
+                result.add(new SimpleValidationMessage(
+                    KEY_REPEAT_PASSWORD + " and " + KEY_PASSWORD + " do not match!", Severity.ERROR, KEY_REPEAT_PASSWORD));
+            }
         }
         
         validationModel.setResult(result);
