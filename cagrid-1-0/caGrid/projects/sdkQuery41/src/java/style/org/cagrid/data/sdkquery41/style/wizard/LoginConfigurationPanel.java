@@ -1,11 +1,11 @@
 package org.cagrid.data.sdkquery41.style.wizard;
 
+import gov.nih.nci.cagrid.common.portal.DocumentChangeAdapter;
 import gov.nih.nci.cagrid.common.portal.validation.IconFeedbackPanel;
 import gov.nih.nci.cagrid.data.ui.wizard.AbstractWizardPanel;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 
-import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -16,11 +16,15 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+import javax.swing.event.DocumentEvent;
 
+import org.cagrid.data.sdkquery41.style.wizard.config.LoginConfigurationStep;
 import org.cagrid.grape.utils.CompositeErrorDialog;
 
+import com.jgoodies.validation.ValidationResult;
 import com.jgoodies.validation.ValidationResultModel;
 import com.jgoodies.validation.util.DefaultValidationResultModel;
+import com.jgoodies.validation.view.ValidationComponentUtils;
 
 /**
  * LoginConfigurationPanel
@@ -47,9 +51,18 @@ public class LoginConfigurationPanel extends AbstractWizardPanel {
     private JPasswordField mainPasswordField = null;
     private JPasswordField repeatPasswordField = null;
     
+    private LoginConfigurationStep configuration = null;
+    private DocumentChangeAdapter documentValidationListener = null;
+    
     public LoginConfigurationPanel(ServiceExtensionDescriptionType extensionDescription, ServiceInformation info) {
         super(extensionDescription, info);
         validationModel = new DefaultValidationResultModel();
+        configuration = new LoginConfigurationStep(info);
+        documentValidationListener = new DocumentChangeAdapter() {
+            public void documentEdited(DocumentEvent e) {
+                validateInput();
+            }
+        };
         initialize();
     }
 
@@ -65,13 +78,13 @@ public class LoginConfigurationPanel extends AbstractWizardPanel {
 
 
     public void update() {
-        
+        // TODO: implement me... update GUI from configuration if applicable
     }
     
     
     public void movingNext() {
         try {
-            // configuration.applyConfiguration();
+            configuration.applyConfiguration();
         } catch (Exception ex) {
             ex.printStackTrace();
             CompositeErrorDialog.showErrorDialog("Error applying login configuration", ex.getMessage(), ex);
@@ -80,7 +93,7 @@ public class LoginConfigurationPanel extends AbstractWizardPanel {
     
     
     private void initialize() {
-        // TODO: configure validation
+        configureValidation();
         setLayout(new GridLayout());
         add(getValidationOverlayPanel());
     }
@@ -137,7 +150,6 @@ public class LoginConfigurationPanel extends AbstractWizardPanel {
             gridBagConstraints.gridy = 0;
             mainPanel = new JPanel();
             mainPanel.setLayout(new GridBagLayout());
-            mainPanel.setSize(new Dimension(439, 139));
             mainPanel.add(getUseLoginCheckBox(), gridBagConstraints);
             mainPanel.add(getUsernameLabel(), gridBagConstraints1);
             mainPanel.add(getPasswordLabel(), gridBagConstraints2);
@@ -161,7 +173,8 @@ public class LoginConfigurationPanel extends AbstractWizardPanel {
             useLoginCheckBox.setText("Use Login");
             useLoginCheckBox.addItemListener(new java.awt.event.ItemListener() {
                 public void itemStateChanged(java.awt.event.ItemEvent e) {
-                    System.out.println("itemStateChanged()"); // TODO Auto-generated Event stub itemStateChanged()
+                    configuration.setUseLogin(Boolean.valueOf(getUseLoginCheckBox().isSelected()));
+                    validateInput();
                 }
             });
         }
@@ -219,6 +232,14 @@ public class LoginConfigurationPanel extends AbstractWizardPanel {
     private JTextField getUsernameTextField() {
         if (usernameTextField == null) {
             usernameTextField = new JTextField();
+            usernameTextField.setToolTipText(
+                "Enter the username to use for logging in to the caCORE Application Service");
+            usernameTextField.getDocument().addDocumentListener(documentValidationListener);
+            usernameTextField.getDocument().addDocumentListener(new DocumentChangeAdapter() {
+                public void documentEdited(DocumentEvent e) {
+                    configuration.setUsername(getUsernameTextField().getText());
+                }
+            });
         }
         return usernameTextField;
     }
@@ -232,6 +253,14 @@ public class LoginConfigurationPanel extends AbstractWizardPanel {
     private JPasswordField getMainPasswordField() {
         if (mainPasswordField == null) {
             mainPasswordField = new JPasswordField();
+            mainPasswordField.setToolTipText(
+                "Enter the password to use for logging in to the caCORE Application Service");
+            mainPasswordField.getDocument().addDocumentListener(documentValidationListener);
+            mainPasswordField.getDocument().addDocumentListener(new DocumentChangeAdapter() {
+                public void documentEdited(DocumentEvent e) {
+                    configuration.setPassword(new String(getMainPasswordField().getPassword()));
+                }
+            });
         }
         return mainPasswordField;
     }
@@ -245,7 +274,48 @@ public class LoginConfigurationPanel extends AbstractWizardPanel {
     private JPasswordField getRepeatPasswordField() {
         if (repeatPasswordField == null) {
             repeatPasswordField = new JPasswordField();
+            repeatPasswordField.setToolTipText(
+                "Repeat the password to use for logging in to the caCORE Application Service");
+            repeatPasswordField.getDocument().addDocumentListener(documentValidationListener);
         }
         return repeatPasswordField;
+    }
+    
+    
+    // ----------
+    // validation
+    // ----------
+    
+    
+    private void configureValidation() {
+        ValidationComponentUtils.setMessageKey(getUsernameTextField(), KEY_USERNAME);
+        ValidationComponentUtils.setMessageKey(getMainPasswordField(), KEY_PASSWORD);
+        ValidationComponentUtils.setMessageKey(getRepeatPasswordField(), KEY_REPEAT_PASSWORD);
+        
+        validateInput();
+        updateComponentTreeSeverity();
+    }
+    
+    
+    private void validateInput() {
+        ValidationResult result = new ValidationResult();
+        
+        // only have work to do if the developer wants login
+        if (getUseLoginCheckBox().isSelected()) {
+            // TODO: validation
+        }
+        
+        validationModel.setResult(result);
+        
+        updateComponentTreeSeverity();
+        
+        // update next button enabled
+        setNextEnabled(!validationModel.hasErrors());
+    }
+    
+    
+    private void updateComponentTreeSeverity() {
+        ValidationComponentUtils.updateComponentTreeMandatoryAndBlankBackground(this);
+        ValidationComponentUtils.updateComponentTreeSeverityBackground(this, validationModel.getResult());
     }
 }
