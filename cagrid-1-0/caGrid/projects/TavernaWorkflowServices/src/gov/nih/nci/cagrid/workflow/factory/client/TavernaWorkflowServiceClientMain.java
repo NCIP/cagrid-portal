@@ -13,6 +13,8 @@ import org.apache.axis.types.URI.MalformedURIException;
 import workflowmanagementfactoryservice.WorkflowOutputType;
 import workflowmanagementfactoryservice.WorkflowStatusType;
 
+import gov.nih.nci.cagrid.workflow.factory.client.TavernaWorkflowServiceClient;
+
 public class TavernaWorkflowServiceClientMain {
 	
 	public static void main(String [] args){
