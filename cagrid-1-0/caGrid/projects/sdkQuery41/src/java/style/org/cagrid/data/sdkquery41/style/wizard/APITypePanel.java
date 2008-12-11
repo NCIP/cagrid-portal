@@ -178,6 +178,8 @@ public class APITypePanel extends AbstractWizardPanel {
         if (localApiRadioButton == null) {
             localApiRadioButton = new JRadioButton();
             localApiRadioButton.setText("Local API");
+            localApiRadioButton.setToolTipText(
+                "Use the local API of the Application Service");
         }
         return localApiRadioButton;
     }
@@ -192,6 +194,8 @@ public class APITypePanel extends AbstractWizardPanel {
         if (remoteApiRadioButton == null) {
             remoteApiRadioButton = new JRadioButton();
             remoteApiRadioButton.setText("Remote API");
+            remoteApiRadioButton.setToolTipText(
+                "Use the remote HTTP API of the Application Service");
         }
         return remoteApiRadioButton;
     }
@@ -234,6 +238,9 @@ public class APITypePanel extends AbstractWizardPanel {
         if (useHttpsCheckBox == null) {
             useHttpsCheckBox = new JCheckBox();
             useHttpsCheckBox.setText("Use HTTPS");
+            useHttpsCheckBox.setToolTipText(
+                "Check this box to use the HTTPS protocol when communicating " +
+                "with the caCORE SDK service.");
             useHttpsCheckBox.addChangeListener(new ChangeListener() {
                 public void stateChanged(ChangeEvent e) {
                     configuration.setUseHttps(Boolean.valueOf(getUseHttpsCheckBox().isSelected()));
@@ -252,6 +259,8 @@ public class APITypePanel extends AbstractWizardPanel {
     private JTextField getHostnameTextField() {
         if (hostnameTextField == null) {
             hostnameTextField = new JTextField();
+            hostnameTextField.setToolTipText("Enter the host name of the " +
+                    "caCORE SDK application service (eg. example.com)");
             hostnameTextField.getDocument().addDocumentListener(new DocumentChangeAdapter() {
                 public void documentEdited(DocumentEvent e) {
                     validateInput();
@@ -271,6 +280,8 @@ public class APITypePanel extends AbstractWizardPanel {
     private JTextField getPortNumberTextField() {
         if (portNumberTextField == null) {
             portNumberTextField = new JTextField();
+            portNumberTextField.setToolTipText("Enter the port number on which the " +
+                    "caCORE SDK application service listens for connections");
             portNumberTextField.getDocument().addDocumentListener(new DocumentChangeAdapter() {
                 public void documentEdited(DocumentEvent e) {
                     validateInput();
@@ -278,7 +289,7 @@ public class APITypePanel extends AbstractWizardPanel {
                         Integer port = Integer.valueOf(getPortNumberTextField().getText());
                         configuration.setPortNumber(port);
                     } catch (Exception ex) {
-                        // not an integer!
+                        // not an integer?!
                     }
                 }
             });

@@ -3,6 +3,7 @@ package org.cagrid.data.sdkquery41.style.wizard;
 import gov.nih.nci.cagrid.common.portal.DocumentChangeAdapter;
 import gov.nih.nci.cagrid.common.portal.validation.IconFeedbackPanel;
 import gov.nih.nci.cagrid.data.ui.wizard.AbstractWizardPanel;
+import gov.nih.nci.cagrid.data.ui.wizard.OneTimeInfoDialogUtil;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.common.ResourceManager;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
@@ -223,6 +224,15 @@ public class GeneralConfigurationPanel extends AbstractWizardPanel {
             sdkDirBrowseButton.setText("Browse");
             sdkDirBrowseButton.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
+                    String[] message = {
+                        "Select the directory on your file system where",
+                        "the caCORE SDK has been unpacked and built.",
+                        "This directory will be inspected for the correct",
+                        "structure, including location of various",
+                        "configuration files and build artifacts."
+                    };
+                    OneTimeInfoDialogUtil.showInfoDialog(
+                        GeneralConfigurationPanel.class, KEY_SDK_DIRECTORY, message);
                     String dir = null;
                     try {
                         dir = ResourceManager.promptDir(GeneralConfigurationPanel.this, null);
