@@ -81,7 +81,18 @@ public class LoginConfigurationPanel extends AbstractWizardPanel {
 
 
     public void update() {
-        // TODO: implement me... update GUI from configuration if applicable
+        boolean useLogin = configuration.getUseLogin() != null 
+            && configuration.getUseLogin().booleanValue();
+        getUseLoginCheckBox().setSelected(useLogin);
+        getUsernameTextField().setText(
+            configuration.getUsername() != null ? configuration.getUsername() : "");
+        getUsernameTextField().setEnabled(useLogin);
+        getMainPasswordField().setText(
+            configuration.getPassword() != null ? configuration.getPassword() : "");
+        getMainPasswordField().setEnabled(useLogin);
+        getRepeatPasswordField().setText(
+            configuration.getPassword() != null ? configuration.getPassword() : "");
+        getRepeatPasswordField().setEnabled(useLogin);
     }
     
     
@@ -176,7 +187,11 @@ public class LoginConfigurationPanel extends AbstractWizardPanel {
             useLoginCheckBox.setText("Use Login");
             useLoginCheckBox.addItemListener(new java.awt.event.ItemListener() {
                 public void itemStateChanged(java.awt.event.ItemEvent e) {
-                    configuration.setUseLogin(Boolean.valueOf(getUseLoginCheckBox().isSelected()));
+                    boolean useLogin = getUseLoginCheckBox().isSelected();
+                    configuration.setUseLogin(Boolean.valueOf(useLogin));
+                    getUsernameTextField().setEnabled(useLogin);
+                    getMainPasswordField().setEnabled(useLogin);
+                    getRepeatPasswordField().setEnabled(useLogin);
                     validateInput();
                 }
             });
