@@ -12,7 +12,7 @@ import org.cagrid.installer.steps.RunTasksStep;
 import org.cagrid.installer.steps.options.BooleanPropertyConfigurationOption;
 import org.cagrid.installer.steps.options.FilePropertyConfigurationOption;
 import org.cagrid.installer.tasks.ConditionalTask;
-import org.cagrid.installer.tasks.DeployServiceTask;
+import org.cagrid.installer.tasks.service.DeployServiceTask;
 import org.pietschy.wizard.WizardModel;
 import org.pietschy.wizard.models.Condition;
 

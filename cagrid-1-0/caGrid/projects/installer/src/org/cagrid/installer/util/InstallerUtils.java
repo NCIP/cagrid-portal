@@ -104,11 +104,6 @@ public class InstallerUtils {
     }
 
 
-    public static String getScriptsBuildFilePath() {
-        return new File("scripts/build.xml").getAbsolutePath();
-    }
-
-
     public static String toString(Node node) throws Exception {
         StringWriter w = new StringWriter();
         Source s = new DOMSource(node);
@@ -310,9 +305,9 @@ public class InstallerUtils {
 
     }
     
-    
+    //TODO: implement
     public static boolean checkJBossVersion(String home) {
-        boolean correctVersion = false;
+        boolean correctVersion = true;
         
         return correctVersion;
 

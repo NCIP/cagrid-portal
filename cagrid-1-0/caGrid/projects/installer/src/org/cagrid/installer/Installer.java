@@ -25,7 +25,6 @@ import org.cagrid.installer.component.JBossComponentInstaller;
 import org.cagrid.installer.component.TomcatComponentInstaller;
 import org.cagrid.installer.model.CaGridInstallerModel;
 import org.cagrid.installer.model.CaGridInstallerModelImpl;
-import org.cagrid.installer.myservice.MyServiceComponentInstaller;
 import org.cagrid.installer.steps.CheckSecureContainerStep;
 import org.cagrid.installer.steps.Constants;
 import org.cagrid.installer.steps.InstallationCompleteStep;
@@ -39,10 +38,12 @@ import org.cagrid.installer.steps.options.BooleanPropertyConfigurationOption;
 import org.cagrid.installer.steps.options.ListPropertyConfigurationOption;
 import org.cagrid.installer.steps.options.TextPropertyConfigurationOption;
 import org.cagrid.installer.tasks.ConditionalTask;
-import org.cagrid.installer.tasks.ConfigureTomcatTask;
-import org.cagrid.installer.tasks.CopySelectedServicesToTempDirTask;
-import org.cagrid.installer.tasks.DeployGlobusToTomcatTask;
 import org.cagrid.installer.tasks.SaveSettingsTask;
+import org.cagrid.installer.tasks.installer.ConfigureJBossTask;
+import org.cagrid.installer.tasks.installer.ConfigureTomcatTask;
+import org.cagrid.installer.tasks.installer.CopySelectedServicesToTempDirTask;
+import org.cagrid.installer.tasks.installer.DeployGlobusToJBossTask;
+import org.cagrid.installer.tasks.installer.DeployGlobusToTomcatTask;
 import org.cagrid.installer.util.DownloadPropertiesUtils;
 import org.cagrid.installer.util.InstallerUtils;
 import org.pietschy.wizard.Wizard;
@@ -85,7 +86,6 @@ public class Installer {
         downloadedComponentInstallers.add(new GlobusComponentInstaller());
         downloadedComponentInstallers.add(new CaGridSourceComponentInstaller());
 
-        componentInstallers.add(new MyServiceComponentInstaller());
     }
 
 
@@ -256,8 +256,6 @@ public class Installer {
         SelectComponentStep selectServicesStep = new SelectComponentStep(
             this.model.getMessage("select.services.title"), this.model.getMessage("select.services.desc"));
         selectServicesStep.getOptions().add(
-            new BooleanPropertyConfigurationOption(Constants.INSTALL_MY_SERVICE, "My Introduce Service", false, true));
-        selectServicesStep.getOptions().add(
             new BooleanPropertyConfigurationOption(Constants.INSTALL_SYNC_GTS, "SyncGTS", false, true));
         this.model.add(selectServicesStep, new Condition() {
 
@@ -323,12 +321,12 @@ public class Installer {
             .getMessage("install.desc"));
 
         installStep.getTasks().add(
-            new ConditionalTask(new DeployGlobusToTomcatTask(this.model.getMessage("deploying.globus.title"), ""),
+            new ConditionalTask(new DeployGlobusToTomcatTask(this.model.getMessage("deploying.globus.tomcat.title"), ""),
                 new Condition() {
 
                     public boolean evaluate(WizardModel m) {
                         CaGridInstallerModel model = (CaGridInstallerModel) m;
-                        return model.isDeployGlobusRequired() && model.isConfigureContainerSelected();
+                        return model.isTomcatInstalled() && model.isDeployGlobusRequired() && model.isConfigureContainerSelected();
 
                     }
 
@@ -340,7 +338,30 @@ public class Installer {
 
                     public boolean evaluate(WizardModel m) {
                         CaGridInstallerModel model = (CaGridInstallerModel) m;
-                        return model.isContainerConfigurationRequired() && model.isConfigureContainerSelected();
+                        return model.isTomcatInstalled() && model.isContainerConfigurationRequired() && model.isConfigureContainerSelected();
+                    }
+
+                }));
+        
+        installStep.getTasks().add(
+            new ConditionalTask(new DeployGlobusToJBossTask(this.model.getMessage("deploying.globus.jboss.title"), ""),
+                new Condition() {
+
+                    public boolean evaluate(WizardModel m) {
+                        CaGridInstallerModel model = (CaGridInstallerModel) m;
+                        return model.isJBossInstalled() && model.isDeployGlobusRequired() && model.isConfigureContainerSelected();
+
+                    }
+
+                }));
+
+        installStep.getTasks().add(
+            new ConditionalTask(new ConfigureJBossTask(this.model.getMessage("configuring.jboss.title"), ""),
+                new Condition() {
+
+                    public boolean evaluate(WizardModel m) {
+                        CaGridInstallerModel model = (CaGridInstallerModel) m;
+                        return model.isJBossInstalled() && model.isContainerConfigurationRequired() && model.isConfigureContainerSelected();
                     }
 
                 }));
@@ -446,8 +467,6 @@ public class Installer {
 
     private void clearFlags() {
         this.model.unsetProperty(Constants.CONFIGURE_CONTAINER);
-
-        this.model.unsetProperty(Constants.INSTALL_MY_SERVICE);
 
         this.model.unsetProperty(Constants.INSTALL_SYNC_GTS);
         this.model.unsetProperty(Constants.INSTALL_SERVICES);

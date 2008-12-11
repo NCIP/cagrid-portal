@@ -154,15 +154,8 @@ public abstract class Constants {
 
     public static final String SYNC_GTS_PERFORM_FIRST_SYNC = "sync.gts.perform.first.sync";
 
-    // TODO: This property is no longer set. It needs to be removed from all
-    // conditions.
-    public static final String RECONFIGURE_GLOBUS = "reconfigure.globus";
-
     public static final String RECONFIGURE_CAGRID = "reconfigure.cagrid";
 
-    public static final String INSTALL_MY_SERVICE = "install.my.service";
-
-    public static final String MY_SERVICE_DIR = "my.service.dir";
 
     public static final String CONFIGURE_CONTAINER = "configure.container";
 

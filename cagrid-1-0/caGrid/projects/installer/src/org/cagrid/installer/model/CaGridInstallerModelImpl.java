@@ -168,7 +168,7 @@ CaGridInstallerModel {
 
 
     public boolean isContainerConfigurationRequired() {
-        return isTomcatContainer() && (isTrue(Constants.REDEPLOY_GLOBUS) || !isGlobusDeployed());
+        return (isJBossContainer() || isTomcatContainer()) && (isTrue(Constants.REDEPLOY_GLOBUS) || !isGlobusDeployed());
 
     }
     
@@ -195,11 +195,9 @@ CaGridInstallerModel {
         return (String) this.state.get(propName);
     }
 
-
-    // TODO: remove the RECONFIGURE_GLOBUS condition, it's not used any more
     public boolean isSecurityConfigurationRequired() {
         return isTrue(Constants.USE_SECURE_CONTAINER)
-            && (isTrue(Constants.RECONFIGURE_GLOBUS) || isTrue(Constants.REDEPLOY_GLOBUS) || (isTomcatContainer() || isGlobusContainer())
+            && (isTrue(Constants.REDEPLOY_GLOBUS) || (isTomcatContainer() || isGlobusContainer())
                 && !isGlobusDeployed() || (!isTomcatContainer() || !isGlobusContainer()) && !isGlobusConfigured());
     }
 
@@ -231,7 +229,7 @@ CaGridInstallerModel {
     // TODO: remove the RECONFIGURE_GLOBUS condition, it's not used any more
     public boolean isConfigureGlobusRequired() {
         return !isTomcatContainer() && isTrue(Constants.USE_SECURE_CONTAINER)
-            && (isTrue(Constants.RECONFIGURE_GLOBUS) || !isGlobusConfigured());
+            && (!isGlobusConfigured());
     }
 
 

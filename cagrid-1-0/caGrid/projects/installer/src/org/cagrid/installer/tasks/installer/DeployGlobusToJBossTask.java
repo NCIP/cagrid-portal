@@ -1,16 +1,17 @@
 /**
  * 
  */
-package org.cagrid.installer.tasks;
+package org.cagrid.installer.tasks.installer;
 
 import java.util.Map;
 import java.util.Properties;
 
 import org.cagrid.installer.model.CaGridInstallerModel;
 import org.cagrid.installer.steps.Constants;
+import org.cagrid.installer.tasks.AntExecutionTask;
 
 
-public class DeployGlobusToJBossTask extends CaGridAntTask {
+public class DeployGlobusToJBossTask extends CaGridInstallerAntTask {
 
 	/**
 	 * 
@@ -19,7 +20,7 @@ public class DeployGlobusToJBossTask extends CaGridAntTask {
 		super(name, description, null);
 	}
 
-	protected Object runAntTask(CaGridInstallerModel model, String target, Map<String,String> env,
+	protected Object runAntTask(CaGridInstallerModel model,String buildFile, String target, Map<String,String> env,
 			Properties sysProps) throws Exception {
 
 		boolean secure = model.isTrue(Constants.USE_SECURE_CONTAINER);
@@ -27,10 +28,10 @@ public class DeployGlobusToJBossTask extends CaGridAntTask {
 		
 		setStepCount(1);
 		if (!secure) {
-			new AntTask("", "", model.getProperty(Constants.CAGRID_HOME) + "/share/jboss/jboss.xml", "deployJBoss", env, sysProps)
+			new AntExecutionTask("", "", model.getProperty(Constants.CAGRID_HOME) + "/share/jboss/jboss.xml", "deployJBoss", env, sysProps)
 					.execute(model);
 		} else {
-			new AntTask("", "", model.getProperty(Constants.CAGRID_HOME) + "/share/jboss/jboss.xml", "deploySecureJBoss", env, sysProps)
+			new AntExecutionTask("", "", model.getProperty(Constants.CAGRID_HOME) + "/share/jboss/jboss.xml", "deploySecureJBoss", env, sysProps)
 					.execute(model);
 		}
 		

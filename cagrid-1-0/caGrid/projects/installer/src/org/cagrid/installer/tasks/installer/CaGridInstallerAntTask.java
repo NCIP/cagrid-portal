@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.cagrid.installer.tasks;
+package org.cagrid.installer.tasks.installer;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -9,12 +9,15 @@ import java.util.Properties;
 
 import org.cagrid.installer.model.CaGridInstallerModel;
 import org.cagrid.installer.steps.Constants;
+import org.cagrid.installer.tasks.AntExecutionTask;
+import org.cagrid.installer.tasks.BasicTask;
+import org.cagrid.installer.util.InstallerUtils;
 
 
 /**
- * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
+ * @author <a href="joshua.phillips@semanticbits.com">Joshua Phillips</a>
  */
-public abstract class CaGridAntTask extends BasicTask {
+public class CaGridInstallerAntTask extends BasicTask {
 
     private String targetName;
 
@@ -22,8 +25,9 @@ public abstract class CaGridAntTask extends BasicTask {
     /**
      * @param name
      * @param description
+     * @param targetName
      */
-    public CaGridAntTask(String name, String description, String targetName) {
+    public CaGridInstallerAntTask(String name, String description, String targetName) {
         super(name, description);
         this.targetName = targetName;
     }
@@ -31,7 +35,6 @@ public abstract class CaGridAntTask extends BasicTask {
 
     /*
      * (non-Javadoc)
-     * 
      * @see org.cagrid.installer.tasks.BasicTask#internalExecute(java.util.Map)
      */
     @Override
@@ -44,13 +47,15 @@ public abstract class CaGridAntTask extends BasicTask {
         sysProps.setProperty(Constants.SERVICE_DEST_DIR, model.getServiceDestDir());
         sysProps.setProperty("env.GLOBUS_LOCATION", model.getProperty(Constants.GLOBUS_HOME));
 
-        return runAntTask(model, this.targetName, env, sysProps);
+        return runAntTask(model, "scripts/build.xml", this.targetName, env, sysProps);
 
     }
 
 
-    protected abstract Object runAntTask(CaGridInstallerModel model, String target, Map<String, String> env,
-        Properties sysProps) throws Exception;
+    protected Object runAntTask(CaGridInstallerModel model, String buildFile, String target,  Map<String, String> env,
+        Properties sysProps) throws Exception {
 
+        return new AntExecutionTask("", "", buildFile, target, env, sysProps).execute(model);
 
+    }
 }

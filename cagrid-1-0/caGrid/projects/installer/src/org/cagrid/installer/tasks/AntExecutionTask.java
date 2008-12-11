@@ -25,9 +25,9 @@ import org.cagrid.installer.util.InstallerUtils;
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
  * 
  */
-public class AntTask extends BasicTask {
+public class AntExecutionTask extends BasicTask {
 
-	private static final Log logger = LogFactory.getLog(AntTask.class);
+	private static final Log logger = LogFactory.getLog(AntExecutionTask.class);
 
 	private String target;
 
@@ -37,12 +37,12 @@ public class AntTask extends BasicTask {
 	
 	private String buildFilePath;
 
-	public AntTask(String name, String description, String buildFilePath, String target) {
+	public AntExecutionTask(String name, String description, String buildFilePath, String target) {
 		this(name, description, buildFilePath, target, new HashMap<String, String>(),
 				new Properties());
 	}
 
-	public AntTask(String name, String description, String buildFilePath, String target,
+	public AntExecutionTask(String name, String description, String buildFilePath, String target,
 			Map<String, String> environment, Properties systemProperties) {
 		super(name, description);
 		this.buildFilePath = buildFilePath;

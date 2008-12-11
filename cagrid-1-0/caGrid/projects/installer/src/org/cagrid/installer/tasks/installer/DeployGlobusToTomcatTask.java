@@ -1,13 +1,14 @@
 /**
  * 
  */
-package org.cagrid.installer.tasks;
+package org.cagrid.installer.tasks.installer;
 
 import java.util.Map;
 import java.util.Properties;
 
 import org.cagrid.installer.model.CaGridInstallerModel;
 import org.cagrid.installer.steps.Constants;
+import org.cagrid.installer.tasks.AntExecutionTask;
 
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
@@ -22,17 +23,21 @@ public class DeployGlobusToTomcatTask extends CaGridInstallerAntTask {
 		super(name, description, null);
 	}
 
-	protected Object runAntTask(CaGridInstallerModel model, String target, Map<String,String> env,
+    public String getBuildFilePath(){
+        return "scripts/tomcat/build.xml";
+    }
+    
+	protected Object runAntTask(CaGridInstallerModel model, String buildFile, String target, Map<String,String> env,
 			Properties sysProps) throws Exception {
 
 		boolean secure = model.isTrue(Constants.USE_SECURE_CONTAINER);
 
 		setStepCount(1);
 		if (!secure) {
-			new AntTask("", "", getBuildFilePath(), "globus-deploy-tomcat", env, sysProps)
+			new AntExecutionTask("", "", getBuildFilePath(), "globus-deploy-tomcat", env, sysProps)
 					.execute(model);
 		} else {
-			new AntTask("", "", getBuildFilePath(), "globus-deploy-secure-tomcat", env, sysProps)
+			new AntExecutionTask("", "", getBuildFilePath(), "globus-deploy-secure-tomcat", env, sysProps)
 					.execute(model);
 		}
 		
