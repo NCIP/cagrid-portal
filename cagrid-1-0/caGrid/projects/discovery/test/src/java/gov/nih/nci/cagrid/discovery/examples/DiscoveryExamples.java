@@ -23,13 +23,13 @@ public class DiscoveryExamples {
             System.exit(-1);
         }
 
-        String searchString = "Scott";
+        String searchString = "Production";
         String center = "OSU";
         PointOfContact poc = new PointOfContact();
         poc.setFirstName("Scott");
         poc.setLastName("Oster");
-        String servName = "CaDSRService";
-        String operName = "findAllProjects";
+        String servName = "MetadataModelService";
+        String operName = "generateDomainModelForProject";
         UMLClass umlClass = new UMLClass();
         umlClass.setClassName("Project");
 
