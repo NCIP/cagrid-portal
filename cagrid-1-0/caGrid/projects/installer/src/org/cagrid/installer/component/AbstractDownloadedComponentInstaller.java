@@ -11,74 +11,73 @@ import org.cagrid.installer.steps.RunTasksStep;
 import org.cagrid.installer.tasks.ConditionalTask;
 import org.cagrid.installer.tasks.DownloadFileTask;
 import org.cagrid.installer.tasks.UnzipInstallTask;
+import org.cagrid.installer.tasks.installer.ConfigureTomcatTask;
+import org.cagrid.installer.tasks.installer.DeployGlobusToTomcatTask;
+import org.pietschy.wizard.WizardModel;
 import org.pietschy.wizard.models.Condition;
+
 
 /**
  * @author <a href="joshua.phillips@semanticbits.com">Joshua Phillips</a>
- * 
  */
-public abstract class AbstractDownloadedComponentInstaller implements
-		DownloadedComponentInstaller {
+public abstract class AbstractDownloadedComponentInstaller implements DownloadedComponentInstaller {
 
-	/**
+    /**
 	 * 
 	 */
-	public AbstractDownloadedComponentInstaller() {
+    public AbstractDownloadedComponentInstaller() {
 
-	}
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.cagrid.installer.ExternalComponentInstaller#addCheckInstallSteps(org.cagrid.installer.model.CaGridInstallerModel)
-	 */
-	public void addCheckInstallSteps(CaGridInstallerModel model) {
-		CheckReInstallStep checkInstallStep = new CheckReInstallStep(model
-				.getMessage(getComponentId() + ".check.reinstall.title"), model
-				.getMessage(getComponentId() + ".check.reinstall.desc"),
-				getComponentId() + ".home", "install." + getComponentId());
-		model.add(checkInstallStep, getShouldCheckCondition());
 
-		InstallInfoStep installInfoStep = new InstallInfoStep(model
-				.getMessage(getComponentId() + ".home.title"), model
-				.getMessage(getComponentId() + ".home.desc"), getComponentId()
-				+ ".install.dir.path");
-		model.add(installInfoStep, getShouldInstallCondition());
-	}
+    /*
+     * (non-Javadoc)
+     * @see
+     * org.cagrid.installer.ExternalComponentInstaller#addCheckInstallSteps(
+     * org.cagrid.installer.model.CaGridInstallerModel)
+     */
+    public void addCheckInstallSteps(CaGridInstallerModel model) {
+        CheckReInstallStep checkInstallStep = new CheckReInstallStep(model.getMessage(getComponentId()
+            + ".check.reinstall.title"), model.getMessage(getComponentId() + ".check.reinstall.desc"), getComponentId()
+            + ".home", "install." + getComponentId());
+        model.add(checkInstallStep, getShouldCheckCondition());
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.cagrid.installer.ExternalComponentInstaller#addInstallExternalComponentTasks(org.cagrid.installer.model.CaGridInstallerModel,
-	 *      org.cagrid.installer.steps.RunTasksStep)
-	 */
-	public void addInstallDownloadedComponentTasks(CaGridInstallerModel model,
-			RunTasksStep installStep) {
+        InstallInfoStep installInfoStep = new InstallInfoStep(model.getMessage(getComponentId() + ".home.title"), model
+            .getMessage(getComponentId() + ".home.desc"), getComponentId() + ".install.dir.path");
+        model.add(installInfoStep, getShouldInstallCondition());
+    }
 
-		installStep.getTasks().add(
-				new ConditionalTask(new DownloadFileTask(model
-						.getMessage("downloading." + getComponentId()
-								+ ".title"), "", getComponentId()
-						+ ".download.url",
-						getComponentId() + ".temp.file.name", getComponentId() + ".md5.checksum",
-						Constants.CONNECT_TIMEOUT),
 
-				getShouldInstallCondition()));
+    /*
+     * (non-Javadoc)
+     * @seeorg.cagrid.installer.ExternalComponentInstaller#
+     * addInstallExternalComponentTasks
+     * (org.cagrid.installer.model.CaGridInstallerModel,
+     * org.cagrid.installer.steps.RunTasksStep)
+     */
+    public void addInstallDownloadedComponentTasks(CaGridInstallerModel model, RunTasksStep deployContainer) {
 
-		installStep.getTasks().add(
-				new ConditionalTask(new UnzipInstallTask(
-						model.getMessage("installing." + getComponentId()
-								+ ".title"), "", getComponentId()
-								+ ".temp.file.name", getComponentId()
-								+ ".install.dir.path", getComponentId()
-								+ ".dir.name", getComponentId() + ".home"),
-						getShouldInstallCondition()));
-	}
+        deployContainer.getTasks().add(
+            new ConditionalTask(new DownloadFileTask(model.getMessage("downloading." + getComponentId() + ".title"),
+                "", getComponentId() + ".download.url", getComponentId() + ".temp.file.name", getComponentId()
+                    + ".md5.checksum", Constants.CONNECT_TIMEOUT),
 
-	protected abstract String getComponentId();
+            getShouldInstallCondition()));
 
-	protected abstract Condition getShouldCheckCondition();
+        deployContainer.getTasks().add(
+            new ConditionalTask(new UnzipInstallTask(model.getMessage("installing." + getComponentId() + ".title"), "",
+                getComponentId() + ".temp.file.name", getComponentId() + ".install.dir.path", getComponentId()
+                    + ".dir.name", getComponentId() + ".home"), getShouldInstallCondition()));
 
-	protected abstract Condition getShouldInstallCondition();
+    }
+
+
+    protected abstract String getComponentId();
+
+
+    protected abstract Condition getShouldCheckCondition();
+
+
+    protected abstract Condition getShouldInstallCondition();
 
 }

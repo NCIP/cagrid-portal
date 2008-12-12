@@ -60,10 +60,7 @@ public interface CaGridInstallerModel extends WizardModel {
 
     boolean isEqual(String value, String propName2);
 
-
-    boolean isConfigureGlobusRequired();
-
-
+    
     boolean isDeployGlobusRequired();
 
 

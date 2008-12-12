@@ -225,13 +225,6 @@ CaGridInstallerModel, OverviewProvider {
     }
 
 
-    // TODO: remove the RECONFIGURE_GLOBUS condition, it's not used any more
-    public boolean isConfigureGlobusRequired() {
-        return !isTomcatContainer() && isTrue(Constants.USE_SECURE_CONTAINER)
-            && (!isGlobusConfigured());
-    }
-
-
     public boolean isDeployGlobusRequired() {
         return (isTomcatContainer() || isJBossContainer()) && (isTrue(Constants.REDEPLOY_GLOBUS) || !isGlobusDeployed());
     }

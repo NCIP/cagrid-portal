@@ -11,7 +11,6 @@ import org.cagrid.installer.model.CaGridInstallerModel;
 import org.cagrid.installer.steps.Constants;
 import org.cagrid.installer.tasks.AntExecutionTask;
 import org.cagrid.installer.tasks.BasicTask;
-import org.cagrid.installer.tasks.cagrid.CaGridAntTask;
 
 
 /**
@@ -51,7 +50,7 @@ public class DeployServiceTask extends BasicTask {
 
     protected Object runAntTask(CaGridInstallerModel model, Map<String, String> env, Properties sysProps)
         throws Exception {
-        String antTarget = getDeployGlobusTarget();
+        String antTarget = "";
         if (model.isTomcatContainer()) {
             antTarget = getDeployTomcatTarget();
         } else if (!model.isJBossContainer()) {
@@ -67,19 +66,13 @@ public class DeployServiceTask extends BasicTask {
         return "deployTomcat";
     }
 
-
-    protected String getDeployGlobusTarget() {
-        return "deployGlobus";
-    }
-
-
     protected String getDeployJBossTarget() {
         return "deployJBoss";
     }
 
 
     protected String getBuildFilePath(CaGridInstallerModel model) {
-        return model.getServiceDestDir() + "/" + this.serviceName + "/build.xml";
+        return model.getProperty(Constants.CAGRID_HOME)+ "/projects/" + this.serviceName + "/build.xml";
     }
 
 }

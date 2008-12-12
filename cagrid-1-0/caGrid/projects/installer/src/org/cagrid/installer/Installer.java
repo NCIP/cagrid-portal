@@ -366,6 +366,8 @@ public class Installer {
 
         // need to get credentials here from dorian if secure deployment is
         // required
+        
+        
 
         PropertyConfigurationStep checkDeployGlobusStep = new PropertyConfigurationStep(this.model
             .getMessage("globus.check.redeploy.title"), this.model.getMessage("globus.check.redeploy.desc"));
