@@ -28,10 +28,11 @@
 	<property name="liferay.db.driver" value="com.mysql.jdbc.Driver" />
 	<property name="liferay.db.driver.path" value="${basedir}/${db.jdbc.driver.jar}" />
 	<property name="liferay.downloads.dir" value="${liferay.jboss.dir}"/>
-	<property name="liferay.dependencies.download.url" value="http://downloads.sourceforge.net/lportal/liferay-portal-dependencies-4.3.3.zip"/>
-	<property name="liferay.dependencies.zip" value="liferay-portal-dependencies-4.3.3.zip"/>
-	<property name="liferay.war.download.url" value="http://downloads.sourceforge.net/lportal/liferay-portal-4.3.3.war"/>
-	<property name="liferay.war" value="liferay-portal-4.3.3.war"/>
+	<property name="liferay.dependencies.download.url" value="http://downloads.sourceforge.net/lportal/liferay-portal-dependencies-5.0.1.zip"/>
+	<property name="liferay.dependecies.name" value="liferay-portal-dependencies-5.0.1"/>
+    <property name="liferay.dependencies.zip" value="${liferay.dependecies.name}.zip"/>
+	<property name="liferay.war.download.url" value="http://downloads.sourceforge.net/lportal/liferay-portal-5.0.1.war"/>
+	<property name="liferay.war" value="liferay-portal-5.0.1.war"/>
 	<property name="liferay.mail.username" value="nobody" />
 	<property name="liferay.mail.password" value="password" />
 	<property name="liferay.mail.host" value="localhost" />
@@ -139,14 +140,14 @@
 				<include name="*.xml"/>
 				<include name="*.properties"/>
 			</fileset>
-			
+
 			<filterset>
 				<filter token="LIFERAY_JBOSS_DEPLOY_DEST_DIR" value="${liferay.jboss.deploy.dest.dir}" />
 				<filter token="LIFERAY_AUTODEPLOY_DIR" value="${liferay.autodeploy.dir}" />
 				<filter token="LIFERAY_ADMIN_PASSWORD" value="${liferay.admin.password}" />
 				<filter token="LIFERAY_ADMIN_USERNAME" value="${liferay.admin.username}" />
 			</filterset>
-			
+
 		</copy>
 		
 		<!-- This is need on windows if user.home is used to set up the autodeploy path. -->
@@ -159,7 +160,7 @@
 		<antcall target="create-cagridportal-properties">
 			<param name="target.dir" value="${liferay.root.context.dir}/WEB-INF/classes/cagridportal.properties"/>
 		</antcall>
-		
+
 		<copy todir="${liferay.root.context.dir}/WEB-INF" overwrite="true">
 			<fileset dir="${liferay.src.war.dir}/WEB-INF">
 				<include name="applicationContext-acegi-security.xml"/>
@@ -167,7 +168,7 @@
 				<include name="lib/acegi-security-1.0.3.jar"/>
 			</fileset>
 		</copy>
-		
+
 	</target>
 	
 	<target name="liferay:clean">
@@ -425,8 +426,16 @@
 	
 	<target name="liferay:copy-liferay-ext-jars" depends="liferay:download-dependencies">
 		<mkdir dir="${liferay.jboss.home}/server/${liferay.jboss.server.name}/lib/ext"/>
-		<unzip src="${liferay.downloads.dir}/${liferay.dependencies.zip}" dest="${liferay.jboss.home}/server/${liferay.jboss.server.name}/lib/ext"/>
-		<copy file="${liferay.db.driver.path}" todir="${liferay.jboss.home}/server/${liferay.jboss.server.name}/lib/ext"/>
+        <unzip src="${liferay.downloads.dir}/${liferay.dependencies.zip}" dest="${liferay.downloads.dir}"/>
+
+        <copy todir="${liferay.jboss.home}/server/${liferay.jboss.server.name}/lib/ext" overwrite="true">
+        <fileset dir="${liferay.downloads.dir}/${liferay.dependecies.name}">
+            <include name="**/*.jar"/>
+        </fileset>
+        </copy>
+        
+        <delete dir="${liferay.downloads.dir}/${liferay.dependecies.name}"/>
+        <copy file="${liferay.db.driver.path}" todir="${liferay.jboss.home}/server/${liferay.jboss.server.name}/lib/ext" overwrite="true"/>
 	</target>
 	
 	<target name="liferay:deploy-liferay-portal-war" depends="liferay:download-war">

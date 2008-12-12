@@ -3,7 +3,7 @@
 
 <plugin-package>
 	<name>caGrid Portal Layout Templates</name>
-	<module-id>cagrid/portal/liferay/4.3.3/layout/war</module-id>
+	<module-id>cagrid/portal/liferay/4.4.0/layout/war</module-id>
 	<types>
 		<type>layout-template</type>
 	</types>
@@ -24,6 +24,6 @@
 		<license osi-approved="true">MIT</license>
 	</licenses>
 	<liferay-versions>
-		<liferay-version>4.3.3</liferay-version>
+		<liferay-version>4.4.0</liferay-version>
 	</liferay-versions>
 </plugin-package>

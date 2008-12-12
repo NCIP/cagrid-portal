@@ -3,7 +3,7 @@
 
 <look-and-feel>
 	<compatibility>
-		<version>4.3.3</version>
+		<version>5.0.1</version>
 	</compatibility>
 	<theme id="cagrid-minimal" name="caGrid Portal Minimal" />
 </look-and-feel>
