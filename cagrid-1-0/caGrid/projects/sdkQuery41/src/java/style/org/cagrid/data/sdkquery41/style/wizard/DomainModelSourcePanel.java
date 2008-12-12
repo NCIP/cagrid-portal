@@ -1,6 +1,6 @@
 package org.cagrid.data.sdkquery41.style.wizard;
 
-import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
+import gov.nih.nci.cagrid.data.extension.CadsrInformation;
 
 import javax.swing.JPanel;
 
@@ -22,5 +22,5 @@ public abstract class DomainModelSourcePanel extends JPanel {
     public abstract void populateFromConfiguration();
     
     
-    public abstract DomainModel getDomainModel() throws Exception;
+    public abstract CadsrInformation getCadsrDomainInformation() throws Exception;
 }

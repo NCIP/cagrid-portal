@@ -2,6 +2,12 @@ package org.cagrid.data.sdkquery41.style.wizard.model;
 
 import gov.nih.nci.cagrid.common.portal.DocumentChangeAdapter;
 import gov.nih.nci.cagrid.common.portal.validation.IconFeedbackPanel;
+import gov.nih.nci.cagrid.data.DataServiceConstants;
+import gov.nih.nci.cagrid.data.extension.CadsrInformation;
+import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertyType;
+import gov.nih.nci.cagrid.introduce.common.CommonTools;
+import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
+import gov.nih.nci.cagrid.metadata.MetadataUtils;
 import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
 import gov.nih.nci.cagrid.metadata.xmi.XMIParser;
 import gov.nih.nci.cagrid.metadata.xmi.XmiFileType;
@@ -13,6 +19,7 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
 import java.io.File;
+import java.io.FileWriter;
 import java.util.Properties;
 
 import javax.swing.JButton;
@@ -327,7 +334,58 @@ public class ModelFromConfigPanel extends DomainModelSourcePanel {
     }
     
     
-    public DomainModel getDomainModel() throws Exception {
+    public CadsrInformation getCadsrDomainInformation() throws Exception {
+        // save the domain model to the service's etc dir
+        File etcDir = new File(
+            SharedConfiguration.getInstance().getSdkDirectory(), "etc");
+        String applicationName = SharedConfiguration.getInstance()
+            .getSdkDeployProperties().getProperty(
+                SDK41StyleConstants.DeployProperties.PROJECT_NAME);
+        File domainModelFile = new File(etcDir, applicationName + "_domainModel.xml");
+        FileWriter modelWriter = new FileWriter(domainModelFile);
+        MetadataUtils.serializeDomainModel(getDomainModel(), modelWriter);
+        modelWriter.flush();
+        modelWriter.close();
+        
+        // get / create the domain model resource property
+        ServiceInformation serviceInfo = SharedConfiguration.getInstance().getServiceInfo();
+        ResourcePropertyType domainModelResourceProperty = null;
+        ResourcePropertyType[] domainModelProps = CommonTools.getResourcePropertiesOfType(
+            serviceInfo.getServices().getService(0), DataServiceConstants.DOMAIN_MODEL_QNAME);
+        if (domainModelProps.length != 0) {
+            domainModelResourceProperty = domainModelProps[0];
+            // if old file exists, delete it
+            File oldFile = new File(
+                etcDir, domainModelResourceProperty.getFileLocation());
+            if (oldFile.exists()) {
+                oldFile.delete();
+            }
+        } else {
+            domainModelResourceProperty = new ResourcePropertyType();
+            domainModelResourceProperty.setPopulateFromFile(true);
+            domainModelResourceProperty.setRegister(true);
+            domainModelResourceProperty.setQName(DataServiceConstants.DOMAIN_MODEL_QNAME);
+        }
+        
+        // set value of resource property
+        domainModelResourceProperty.setFileLocation(domainModelFile.getName());
+        
+        // possibly put the resource property in the service for the first time
+        if (domainModelProps.length == 0) {
+            CommonTools.addResourcePropety(
+                serviceInfo.getServices().getService(0), domainModelResourceProperty);
+        }
+        
+        // set the cadsr information to NOT generate a new model
+        CadsrInformation cadsrInfo = new CadsrInformation();
+        cadsrInfo.setNoDomainModel(false);
+        cadsrInfo.setUseSuppliedModel(true);
+        
+        return cadsrInfo;
+    }
+    
+    
+    private DomainModel getDomainModel() {
         if (domainModel == null) {
             if (validationModel.hasErrors()) {
                 StringBuffer errors = new StringBuffer();
@@ -338,6 +396,7 @@ public class ModelFromConfigPanel extends DomainModelSourcePanel {
                 throw new IllegalStateException(errors.toString());
             }
             
+            // create a new domain model            
             String projectName = getProjectNameTextField().getText();
             String projectVersion = getProjectVersionTextField().getText();
             
