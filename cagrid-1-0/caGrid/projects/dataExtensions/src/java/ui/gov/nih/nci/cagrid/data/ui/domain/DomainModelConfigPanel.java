@@ -29,7 +29,6 @@ import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertyType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.ConfigurationUtil;
-import gov.nih.nci.cagrid.introduce.common.ResourceManager;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.metadata.MetadataUtils;
 import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
