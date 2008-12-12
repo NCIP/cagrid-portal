@@ -84,83 +84,18 @@ public class SpecifyPortsStep extends PropertyConfigurationStep {
             httpsPortLabel.setVisible(true);
         }
 
-        // Pull the tomcat ports from server.xml
-        String httpPort = httpPortField.getText();
-        String httpsPort = httpsPortField.getText();
-        String shutdownPort = null;
-        String serverConfigPath = getServerConfigPath();
-
-        try {
-            this.doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(
-                new FileInputStream(serverConfigPath));
-            XPathFactory xpFact = XPathFactory.newInstance();
-            this.serverEl = (Element) xpFact.newXPath().compile("/Server").evaluate(doc, XPathConstants.NODE);
-            shutdownPort = serverEl.getAttribute("port");
-
-            this.httpEl = getConnectorEl(doc, false, model);
-            this.httpsEl = getConnectorEl(doc, true, model);
-
-            if (httpEl != null) {
-                httpPort = httpEl.getAttribute("port");
-                logger.info("Found HTTP port: " + httpPort);
-            } else {
-                logger.info("Did not find HTTP port in " + serverConfigPath);
-            }
-            if (httpsEl != null) {
-                httpsPort = httpsEl.getAttribute("port");
-                logger.info("Found HTTPS port: " + httpsPort);
-            } else {
-                logger.info("Did not find HTTPS port: " + serverConfigPath);
-            }
-
-        } catch (Exception ex) {
-            logger.warn("Error reading " + serverConfigPath + ": " + ex.getMessage(), ex);
-        }
-
-        httpPortField.setText(httpPort);
-        httpsPortField.setText(httpsPort);
+   
+        httpPortField.setText(model.getProperty(Constants.HTTP_PORT));
+        httpsPortField.setText(model.getProperty(Constants.HTTPS_PORT));
 
         JTextField shutdownPortField = (JTextField) getOption(Constants.SHUTDOWN_PORT);
         JLabel shutdownPortLabel = getLabel(Constants.SHUTDOWN_PORT);
-        shutdownPortField.setText(shutdownPort);
+        shutdownPortField.setText(model.getProperty(Constants.SHUTDOWN_PORT));
         if (!model.isTomcatContainer()) {
            shutdownPortField.setVisible(false);
            shutdownPortLabel.setVisible(false);
         }
         
-    }
-
-
-    public static Element getConnectorEl(Document doc, boolean https, CaGridInstallerModel model) {
-        try {
-            XPathFactory xpFact = XPathFactory.newInstance();
-            NodeList connectorEls = null;
-
-            connectorEls = (NodeList) xpFact.newXPath().compile(
-                "/Server/Service[@name='Catalina' or @name='jboss.web']/Connector").evaluate(doc,
-                XPathConstants.NODESET);
-
-            // logger.debug("Found " + connectorEls.getLength() + " connector
-            // elements.");
-            Element connEl = null;
-            for (int i = 0; i < connectorEls.getLength() && connEl == null; i++) {
-                Element connectorEl = (Element) connectorEls.item(i);
-                String scheme = connectorEl.getAttribute("scheme");
-                String protocol = connectorEl.getAttribute("protocol");
-                // logger.debug("scheme = " + scheme + ", protocol = " +
-                // protocol);
-
-                if (!https && (isEmpty(scheme) || "http".equals(scheme))
-                    && (isEmpty(protocol) || "HTTP/1.1".equals(protocol))) {
-                    connEl = connectorEl;
-                } else if (https && "https".equals(scheme)) {
-                    connEl = connectorEl;
-                }
-            }
-            return connEl;
-        } catch (Exception ex) {
-            throw new RuntimeException("Error finding connector element: " + ex.getMessage(), ex);
-        }
     }
 
 
@@ -170,80 +105,80 @@ public class SpecifyPortsStep extends PropertyConfigurationStep {
 
 
     public void applyState() throws InvalidStateException {
-
-        String oldTomcatHttpPort = this.model.getProperty(Constants.HTTP_PORT);
-        if (oldTomcatHttpPort == null) {
-            oldTomcatHttpPort = "8080";
-        }
-        this.model.setProperty(Constants.OLD_HTTP_PORT, oldTomcatHttpPort);
-
-        String oldTomcatHttpsPort = this.model.getProperty(Constants.HTTPS_PORT);
-        if (oldTomcatHttpsPort == null) {
-            oldTomcatHttpsPort = "8443";
-        }
-        this.model.setProperty(Constants.OLD_HTTPS_PORT, oldTomcatHttpsPort);
-
-        if (model.isTomcatContainer()) {
-            JTextField shutdownPortField = (JTextField) getOption(Constants.SHUTDOWN_PORT);
-            assertIsInteger(shutdownPortField.getText(), "Shutdown Port must be an integer.");
-            this.serverEl.setAttribute("port", shutdownPortField.getText().trim());
-
-        }
-
-        JTextField httpPortField = (JTextField) getOption(Constants.HTTP_PORT);
-        JTextField httpsPortField = (JTextField) getOption(Constants.HTTPS_PORT);
-
-        boolean isSecure = this.model.isTrue(Constants.USE_SECURE_CONTAINER);
-        if (isSecure) {
-            assertIsInteger(httpsPortField.getText(), "HTTPS Port must be an integer.");
-        } else {
-            assertIsInteger(httpsPortField.getText(), "HTTP Port must be an integer.");
-        }
-
-        try {
-            if (isSecure) {
-                String httpsPort = httpsPortField.getText().trim();
-                if (this.httpEl != null) {
-                    this.httpEl.getParentNode().removeChild(this.httpEl);
-                }
-                if (this.httpsEl != null) {
-                    this.httpsEl.setAttribute("port", httpsPort);
-                }
-            } else {
-                if (this.httpEl != null) {
-                    this.httpEl.setAttribute("port", httpPortField.getText().trim());
-                } else {
-                    this.httpEl = this.doc.createElement("Connector");
-                    XPathFactory xpFact = XPathFactory.newInstance();
-                    Element serviceEl = null;
-
-                    serviceEl = (Element) xpFact.newXPath().compile(
-                        "/Server/Service@name='Catalina' or @name='jboss.web']")
-                        .evaluate(this.doc, XPathConstants.NODE);
-
-                    serviceEl.appendChild(this.httpEl);
-                    httpEl.setAttribute("acceptCount", "100");
-                    httpEl.setAttribute("connectionTimeout", "20000");
-                    httpEl.setAttribute("debug", "0");
-                    httpEl.setAttribute("disableUploadTimeout", Constants.TRUE);
-                    httpEl.setAttribute("enableLookups", Constants.FALSE);
-                    httpEl.setAttribute("maxSpareThreads", "75");
-                    httpEl.setAttribute("minSpareThreads", "25");
-                    httpEl.setAttribute("port", httpPortField.getText().trim());
-                }
-            }
-
-            String xml = InstallerUtils.toString(this.doc);
-            FileWriter w = new FileWriter(getServerConfigPath());
-            w.write(xml);
-            w.flush();
-            w.close();
-
-        } catch (Exception ex) {
-            String errMsg = "Error modifying " + getServerConfigPath() + ": " + ex.getMessage();
-            logger.error(errMsg, ex);
-            throw new InvalidStateException(errMsg, ex);
-        }
+//
+//        String oldTomcatHttpPort = this.model.getProperty(Constants.HTTP_PORT);
+//        if (oldTomcatHttpPort == null) {
+//            oldTomcatHttpPort = "8080";
+//        }
+//        this.model.setProperty(Constants.OLD_HTTP_PORT, oldTomcatHttpPort);
+//
+//        String oldTomcatHttpsPort = this.model.getProperty(Constants.HTTPS_PORT);
+//        if (oldTomcatHttpsPort == null) {
+//            oldTomcatHttpsPort = "8443";
+//        }
+//        this.model.setProperty(Constants.OLD_HTTPS_PORT, oldTomcatHttpsPort);
+//
+//        if (model.isTomcatContainer()) {
+//            JTextField shutdownPortField = (JTextField) getOption(Constants.SHUTDOWN_PORT);
+//            assertIsInteger(shutdownPortField.getText(), "Shutdown Port must be an integer.");
+//            this.serverEl.setAttribute("port", shutdownPortField.getText().trim());
+//
+//        }
+//
+//        JTextField httpPortField = (JTextField) getOption(Constants.HTTP_PORT);
+//        JTextField httpsPortField = (JTextField) getOption(Constants.HTTPS_PORT);
+//
+//        boolean isSecure = this.model.isTrue(Constants.USE_SECURE_CONTAINER);
+//        if (isSecure) {
+//            assertIsInteger(httpsPortField.getText(), "HTTPS Port must be an integer.");
+//        } else {
+//            assertIsInteger(httpsPortField.getText(), "HTTP Port must be an integer.");
+//        }
+//
+//        try {
+//            if (isSecure) {
+//                String httpsPort = httpsPortField.getText().trim();
+//                if (this.httpEl != null) {
+//                    this.httpEl.getParentNode().removeChild(this.httpEl);
+//                }
+//                if (this.httpsEl != null) {
+//                    this.httpsEl.setAttribute("port", httpsPort);
+//                }
+//            } else {
+//                if (this.httpEl != null) {
+//                    this.httpEl.setAttribute("port", httpPortField.getText().trim());
+//                } else {
+//                    this.httpEl = this.doc.createElement("Connector");
+//                    XPathFactory xpFact = XPathFactory.newInstance();
+//                    Element serviceEl = null;
+//
+//                    serviceEl = (Element) xpFact.newXPath().compile(
+//                        "/Server/Service@name='Catalina' or @name='jboss.web']")
+//                        .evaluate(this.doc, XPathConstants.NODE);
+//
+//                    serviceEl.appendChild(this.httpEl);
+//                    httpEl.setAttribute("acceptCount", "100");
+//                    httpEl.setAttribute("connectionTimeout", "20000");
+//                    httpEl.setAttribute("debug", "0");
+//                    httpEl.setAttribute("disableUploadTimeout", Constants.TRUE);
+//                    httpEl.setAttribute("enableLookups", Constants.FALSE);
+//                    httpEl.setAttribute("maxSpareThreads", "75");
+//                    httpEl.setAttribute("minSpareThreads", "25");
+//                    httpEl.setAttribute("port", httpPortField.getText().trim());
+//                }
+//            }
+//
+//            String xml = InstallerUtils.toString(this.doc);
+//            FileWriter w = new FileWriter(getServerConfigPath());
+//            w.write(xml);
+//            w.flush();
+//            w.close();
+//
+//        } catch (Exception ex) {
+//            String errMsg = "Error modifying " + getServerConfigPath() + ": " + ex.getMessage();
+//            logger.error(errMsg, ex);
+//            throw new InvalidStateException(errMsg, ex);
+//        }
 
         super.applyState();
 

@@ -17,7 +17,6 @@ import javax.swing.ImageIcon;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.cagrid.installer.component.AntComponentInstaller;
-import org.cagrid.installer.component.CaGridComponentInstaller;
 import org.cagrid.installer.component.CaGridSourceComponentInstaller;
 import org.cagrid.installer.component.DownloadedComponentInstaller;
 import org.cagrid.installer.component.GlobusComponentInstaller;
@@ -37,11 +36,8 @@ import org.cagrid.installer.steps.options.ListPropertyConfigurationOption;
 import org.cagrid.installer.steps.options.TextPropertyConfigurationOption;
 import org.cagrid.installer.tasks.ConditionalTask;
 import org.cagrid.installer.tasks.SaveSettingsTask;
-import org.cagrid.installer.tasks.installer.ConfigureJBossTask;
-import org.cagrid.installer.tasks.installer.ConfigureTomcatTask;
 import org.cagrid.installer.tasks.installer.CopySelectedServicesToTempDirTask;
-import org.cagrid.installer.tasks.installer.DeployGlobusToJBossTask;
-import org.cagrid.installer.tasks.installer.DeployGlobusToTomcatTask;
+import org.cagrid.installer.tasks.service.DeployServiceTask;
 import org.cagrid.installer.util.DownloadPropertiesUtils;
 import org.cagrid.installer.util.InstallerUtils;
 import org.pietschy.wizard.Wizard;
@@ -64,9 +60,7 @@ public class Installer {
 
     private int initProgress = 0;
 
-    private List<CaGridComponentInstaller> componentInstallers = new ArrayList<CaGridComponentInstaller>();
-
-    private List<DownloadedComponentInstaller> downloadedComponentInstallers = new ArrayList<DownloadedComponentInstaller>();
+    private List<DownloadedComponentInstaller> dependenciesComponentInstallers = new ArrayList<DownloadedComponentInstaller>();
 
 
     public Installer() {
@@ -78,11 +72,9 @@ public class Installer {
         logger = LogFactory.getLog(Installer.class);
         logger.debug("Logger initialized");
 
-        downloadedComponentInstallers.add(new AntComponentInstaller());
-        downloadedComponentInstallers.add(new TomcatComponentInstaller());
-        downloadedComponentInstallers.add(new JBossComponentInstaller());
-        downloadedComponentInstallers.add(new GlobusComponentInstaller());
-        downloadedComponentInstallers.add(new CaGridSourceComponentInstaller());
+        dependenciesComponentInstallers.add(new AntComponentInstaller());
+        dependenciesComponentInstallers.add(new GlobusComponentInstaller());
+        dependenciesComponentInstallers.add(new CaGridSourceComponentInstaller());
 
     }
 
@@ -246,28 +238,19 @@ public class Installer {
         this.model.add(selectInstallStep);
 
         incrementProgress();
-
-        PropertyConfigurationStep selectContainerStep = new PropertyConfigurationStep(this.model
-            .getMessage("select.container.title"), this.model.getMessage("select.container.desc"));
-        selectContainerStep.getOptions().add(
-            new ListPropertyConfigurationOption(Constants.CONTAINER_TYPE, this.model.getMessage("container.type"),
-                new String[]{this.model.getMessage("container.type.tomcat"),
-                        this.model.getMessage("container.type.jboss")}, true));
-        selectContainerStep.getOptions().add(
-            new BooleanPropertyConfigurationOption(Constants.USE_SECURE_CONTAINER, this.model
-                .getMessage("globus.check.secure.desc"), false, false));
-
-        this.model.add(selectContainerStep, new Condition() {
-            public boolean evaluate(WizardModel m) {
-                CaGridInstallerModel model = (CaGridInstallerModel) m;
-                return model.isConfigureContainerSelected();
-
-            }
-
-        });
-
+        addInstallcaGridSteps();
+        incrementProgress();
+        addConfigureContainerSteps();
+        incrementProgress();
+        addDeployContainerSteps();
         incrementProgress();
 
+        this.model.add(new InstallationCompleteStep(this.model.getMessage("installation.complete.title"), ""));
+
+    }
+
+
+    private void addInstallcaGridSteps() {
         final RunTasksStep installDependenciesStep = new RunTasksStep(this.model
             .getMessage("install.dependencies.title"), this.model.getMessage("install.dependencies.desc"));
         for (DownloadedComponentInstaller installer : getDownloadedComponentInstallers()) {
@@ -293,74 +276,39 @@ public class Installer {
         this.model.add(installDependenciesStep, new Condition() {
             public boolean evaluate(WizardModel m) {
                 CaGridInstallerModel model = (CaGridInstallerModel) m;
-                return installDependenciesStep.getTasksCount(model) > 0;
+                return installDependenciesStep.getTasksCount(model) > 0
+                    || (model.isTrue(Constants.INSTALL_CAGRID) && installDependenciesStep.getTasksCount(model) > 0);
             }
         });
+    }
 
-        addConfigureContainerSteps();
-        incrementProgress();
 
-        final RunTasksStep installStep = new RunTasksStep(this.model.getMessage("install.title"), this.model
+    private void addDeployContainerSteps() {
+        final RunTasksStep deployContainer = new RunTasksStep(this.model.getMessage("install.title"), this.model
             .getMessage("install.desc"));
 
-        installStep.getTasks().add(
-            new ConditionalTask(
-                new DeployGlobusToTomcatTask(this.model.getMessage("deploying.globus.tomcat.title"), ""),
-                new Condition() {
+        // for each container type make sure to add that container installer
+        TomcatComponentInstaller tomcatComponentInstaller = new TomcatComponentInstaller();
+        tomcatComponentInstaller.addCheckInstallSteps(this.model);
+        tomcatComponentInstaller.addInstallDownloadedComponentTasks(this.model, deployContainer);
 
-                    public boolean evaluate(WizardModel m) {
-                        CaGridInstallerModel model = (CaGridInstallerModel) m;
-                        return model.isTomcatInstalled() && model.isDeployGlobusRequired()
-                            && model.isConfigureContainerSelected();
-
-                    }
-
-                }));
-
-        installStep.getTasks().add(
-            new ConditionalTask(new ConfigureTomcatTask(this.model.getMessage("configuring.tomcat.title"), ""),
-                new Condition() {
-
-                    public boolean evaluate(WizardModel m) {
-                        CaGridInstallerModel model = (CaGridInstallerModel) m;
-                        return model.isTomcatInstalled() && model.isConfigureContainerSelected();
-                    }
-
-                }));
-
-        installStep.getTasks().add(
-            new ConditionalTask(new DeployGlobusToJBossTask(this.model.getMessage("deploying.globus.jboss.title"), ""),
-                new Condition() {
-
-                    public boolean evaluate(WizardModel m) {
-                        CaGridInstallerModel model = (CaGridInstallerModel) m;
-                        return model.isJBossInstalled() && model.isDeployGlobusRequired()
-                            && model.isConfigureContainerSelected();
-
-                    }
-
-                }));
-
-        installStep.getTasks().add(
-            new ConditionalTask(new ConfigureJBossTask(this.model.getMessage("configuring.jboss.title"), ""),
-                new Condition() {
-
-                    public boolean evaluate(WizardModel m) {
-                        CaGridInstallerModel model = (CaGridInstallerModel) m;
-                        return model.isJBossInstalled() && model.isConfigureContainerSelected();
-                    }
-
-                }));
+        JBossComponentInstaller jbossComponentInstaller = new JBossComponentInstaller();
+        jbossComponentInstaller.addCheckInstallSteps(this.model);
+        jbossComponentInstaller.addInstallDownloadedComponentTasks(this.model, deployContainer);
 
         incrementProgress();
 
-        for (CaGridComponentInstaller installer : getComponentInstallers()) {
-            installer.addSteps(this.model);
-            installer.addInstallTasks(this.model, installStep);
-            incrementProgress();
-        }
+        // deploy the syngGTS
+        DeployServiceTask deploySyncGTS = new DeployServiceTask("", "", "syncGTS");
+        deployContainer.getTasks().add(new ConditionalTask(deploySyncGTS, new Condition() {
 
-        installStep.getTasks().add(
+            public boolean evaluate(WizardModel model) {
+                return ((CaGridInstallerModel) model).isDeployGlobusRequired()
+                    && ((CaGridInstallerModel) model).isConfigureContainerSelected();
+            }
+        }));
+
+        deployContainer.getTasks().add(
             new ConditionalTask(new SaveSettingsTask(this.model.getMessage("saving.settings.title"), ""),
                 new Condition() {
                     public boolean evaluate(WizardModel m) {
@@ -369,20 +317,55 @@ public class Installer {
                     }
                 }));
 
-        this.model.add(installStep, new Condition() {
+        this.model.add(deployContainer, new Condition() {
             public boolean evaluate(WizardModel m) {
                 CaGridInstallerModel model = (CaGridInstallerModel) m;
-                return installStep.getTasksCount(model) > 0;
+                return deployContainer.getTasksCount(model) > 0;
             }
         });
-        incrementProgress();
-
-        this.model.add(new InstallationCompleteStep(this.model.getMessage("installation.complete.title"), ""));
 
     }
 
 
     private void addConfigureContainerSteps() {
+
+        PropertyConfigurationStep selectContainerStep = new PropertyConfigurationStep(this.model
+            .getMessage("select.container.title"), this.model.getMessage("select.container.desc"));
+        selectContainerStep.getOptions().add(
+            new ListPropertyConfigurationOption(Constants.CONTAINER_TYPE, this.model.getMessage("container.type"),
+                new String[]{this.model.getMessage("container.type.tomcat"),
+                        this.model.getMessage("container.type.jboss")}, true));
+        selectContainerStep.getOptions().add(
+            new BooleanPropertyConfigurationOption(Constants.USE_SECURE_CONTAINER, this.model
+                .getMessage("globus.check.secure.desc"), false, false));
+
+        this.model.add(selectContainerStep, new Condition() {
+            public boolean evaluate(WizardModel m) {
+                CaGridInstallerModel model = (CaGridInstallerModel) m;
+                return model.isConfigureContainerSelected();
+
+            }
+
+        });
+
+        // Allows user to specify ports and hostname
+        SpecifyPortsStep containerConfigureStep = new SpecifyPortsStep(this.model.getMessage("specify.ports.title"),
+            this.model.getMessage("specify.ports.desc"));
+        containerConfigureStep.getOptions().add(
+            new TextPropertyConfigurationOption(Constants.SERVICE_HOSTNAME, this.model.getMessage("service.hostname"),
+                this.model.getProperty(Constants.SERVICE_HOSTNAME, "localhost"), true));
+        containerConfigureStep.getOptions().add(
+            new TextPropertyConfigurationOption(Constants.SHUTDOWN_PORT, this.model.getMessage("shutdown.port"),
+                this.model.getProperty(Constants.SHUTDOWN_PORT, "8005"), false));
+        containerConfigureStep.getOptions().add(
+            new TextPropertyConfigurationOption(Constants.HTTP_PORT, this.model.getMessage("http.port"), this.model
+                .getProperty(Constants.HTTP_PORT, "8080"), model.isTrue(Constants.USE_SECURE_CONTAINER)));
+        containerConfigureStep.getOptions().add(
+            new TextPropertyConfigurationOption(Constants.HTTPS_PORT, this.model.getMessage("https.port"), this.model
+                .getProperty(Constants.HTTPS_PORT, "8443"), model.isTrue(Constants.USE_SECURE_CONTAINER)));
+
+        // need to get credentials here from dorian if secure deployment is
+        // required
 
         PropertyConfigurationStep checkDeployGlobusStep = new PropertyConfigurationStep(this.model
             .getMessage("globus.check.redeploy.title"), this.model.getMessage("globus.check.redeploy.desc"));
@@ -399,35 +382,7 @@ public class Installer {
 
         });
 
-        PropertyConfigurationStep getHostnameStep = new PropertyConfigurationStep(this.model
-            .getMessage("specify.service.hostname.title"), this.model.getMessage("specify.service.hostname.desc"));
-        getHostnameStep.getOptions().add(
-            new TextPropertyConfigurationOption(Constants.SERVICE_HOSTNAME, this.model.getMessage("service.hostname"),
-                this.model.getProperty(Constants.SERVICE_HOSTNAME, "localhost"), true));
-        this.model.add(getHostnameStep, new Condition() {
-
-            public boolean evaluate(WizardModel m) {
-                CaGridInstallerModel model = (CaGridInstallerModel) m;
-                return (model.isDeployGlobusRequired() || model.isConfigureGlobusRequired())
-                    && model.isConfigureContainerSelected();
-            }
-
-        });
-
-        // Allows user to specify ports
-        SpecifyPortsStep tomcatPortsStep = new SpecifyPortsStep(this.model.getMessage("specify.ports.title"),
-            this.model.getMessage("specify.ports.desc"));
-        tomcatPortsStep.getOptions().add(
-            new TextPropertyConfigurationOption(Constants.SHUTDOWN_PORT, this.model.getMessage("shutdown.port"),
-                this.model.getProperty(Constants.SHUTDOWN_PORT, "8005"), false));
-        tomcatPortsStep.getOptions().add(
-            new TextPropertyConfigurationOption(Constants.HTTP_PORT, this.model.getMessage("http.port"), this.model
-                .getProperty(Constants.HTTP_PORT, "8080"), model.isTrue(Constants.USE_SECURE_CONTAINER)));
-        tomcatPortsStep.getOptions().add(
-            new TextPropertyConfigurationOption(Constants.HTTPS_PORT, this.model.getMessage("https.port"), this.model
-                .getProperty(Constants.HTTPS_PORT, "8443"), model.isTrue(Constants.USE_SECURE_CONTAINER)));
-
-        this.model.add(tomcatPortsStep, new Condition() {
+        this.model.add(containerConfigureStep, new Condition() {
             public boolean evaluate(WizardModel m) {
                 CaGridInstallerModel model = (CaGridInstallerModel) m;
                 return model.isConfigureContainerSelected();
@@ -456,23 +411,13 @@ public class Installer {
     }
 
 
-    public List<CaGridComponentInstaller> getComponentInstallers() {
-        return componentInstallers;
-    }
-
-
-    public void setComponentInstallers(List<CaGridComponentInstaller> componentInstallers) {
-        this.componentInstallers = componentInstallers;
-    }
-
-
     public List<DownloadedComponentInstaller> getDownloadedComponentInstallers() {
-        return downloadedComponentInstallers;
+        return dependenciesComponentInstallers;
     }
 
 
     public void setDownloadedComponentInstallers(List<DownloadedComponentInstaller> externalComponentInstallers) {
-        this.downloadedComponentInstallers = externalComponentInstallers;
+        this.dependenciesComponentInstallers = externalComponentInstallers;
     }
 
 }
