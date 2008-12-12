@@ -133,5 +133,6 @@
 	<classpathentry kind="lib" path="build/remote-client/lib/sdk-security.jar"/>
 	<classpathentry kind="lib" path="build/remote-client/lib/cglib-2.1.3.jar"/>
 	<classpathentry kind="lib" path="build/remote-client/lib/asm.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/jars/client.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
