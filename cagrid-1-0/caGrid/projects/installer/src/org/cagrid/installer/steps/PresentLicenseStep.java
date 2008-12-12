@@ -4,6 +4,7 @@
 package org.cagrid.installer.steps;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagLayout;
 import java.awt.event.ItemEvent;
@@ -64,13 +65,14 @@ public class PresentLicenseStep extends PanelWizardStep {
 		this.model = (CaGridInstallerModel) m;
 
 		setLayout(new BorderLayout());
-		setSize(new Dimension(263, 161));
+		setSize(new Dimension(475, 161));
 
 		JPanel licensePanel = new JPanel();
+		licensePanel.setBackground(Color.WHITE);
 		JTextPane textPane = new JTextPane();
 		licensePanel.add(textPane);
 		JScrollPane scrollPane = new JScrollPane(licensePanel);
-		scrollPane.setPreferredSize(new Dimension(200, 150));
+		scrollPane.setPreferredSize(new Dimension(475, 150));
 		add(scrollPane, BorderLayout.CENTER);
 
 		try {
@@ -82,6 +84,7 @@ public class PresentLicenseStep extends PanelWizardStep {
 				sb.append(line).append("\n");
 			}
 			textPane.setText(sb.toString());
+			textPane.setFont(textPane.getFont().deriveFont((float)10));
 		} catch (Exception ex) {
 			String msg = "Error loading license: " + ex.getMessage();
 			logger.error(msg, ex);

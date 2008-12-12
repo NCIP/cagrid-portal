@@ -94,7 +94,7 @@ public class InstallationCompleteStep extends PanelWizardStep {
             sb.append("\t").append("CATALINA_HOME=").append(this.model.getProperty(Constants.TOMCAT_HOME)).append("\n");
         }
         if (this.model.getMessage("container.type.jboss").equals(this.model.getProperty(Constants.CONTAINER_TYPE))) {
-            sb.append("\t").append("JBOSS_HOMEE=").append(this.model.getProperty(Constants.JBOSS_HOME)).append("\n");
+            sb.append("\t").append("JBOSS_HOME=").append(this.model.getProperty(Constants.JBOSS_HOME)).append("\n");
         }
 
         this.textPane.setText(sb.toString());
