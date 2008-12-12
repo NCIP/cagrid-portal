@@ -12,6 +12,10 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+import javax.swing.ImageIcon;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.xpath.XPathConstants;
@@ -22,6 +26,7 @@ import org.apache.commons.logging.LogFactory;
 import org.cagrid.installer.steps.Constants;
 import org.cagrid.installer.steps.RunTasksStep;
 import org.cagrid.installer.util.InstallerUtils;
+import org.pietschy.wizard.OverviewProvider;
 import org.pietschy.wizard.models.DynamicModel;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -31,7 +36,7 @@ import org.w3c.dom.Element;
  */
 public class CaGridInstallerModelImpl extends DynamicModel implements
 
-CaGridInstallerModel {
+CaGridInstallerModel, OverviewProvider {
 
     private static final Log logger = LogFactory.getLog(CaGridInstallerModelImpl.class);
 
@@ -401,5 +406,14 @@ CaGridInstallerModel {
     
     public String getInstallerDir(){
     	return InstallerUtils.buildInstallerDirPath(getProperty(Constants.CAGRID_VERSION));
+    }
+
+
+    public JComponent getOverviewComponent() {
+        JPanel overviewPanel = new JPanel();
+        ImageIcon myImage = new ImageIcon(Thread.currentThread().getContextClassLoader().getResource(
+        "images/cagrid.jpeg"));
+        overviewPanel.add(new JLabel(myImage));
+        return overviewPanel;
     }
 }
