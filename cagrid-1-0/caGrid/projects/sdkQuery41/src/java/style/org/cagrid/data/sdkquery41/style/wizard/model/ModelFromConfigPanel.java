@@ -69,6 +69,11 @@ public class ModelFromConfigPanel extends DomainModelSourcePanel {
     }
     
     
+    public String getName() {
+        return "Default XMI";
+    }
+    
+    
     public void populateFromConfiguration() {
         File sdkDir = SharedConfiguration.getInstance().getSdkDirectory();
         Properties deployProps = SharedConfiguration.getInstance().getSdkDeployProperties();

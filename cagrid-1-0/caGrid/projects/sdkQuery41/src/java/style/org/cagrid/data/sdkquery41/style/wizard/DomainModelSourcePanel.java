@@ -16,6 +16,9 @@ public abstract class DomainModelSourcePanel extends JPanel {
     }
     
     
+    public abstract String getName();
+    
+    
     public abstract void populateFromConfiguration();
     
     
