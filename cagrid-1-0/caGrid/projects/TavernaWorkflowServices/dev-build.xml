@@ -19,6 +19,12 @@
 	<property name="ext.targetgrid.dir" location="${ext.dir}/target_grid" />
 	<property name="ext.lib" location="${ext.dependencies.dir}/service/jars" />
 	<property name="ext.test.lib" value="${ext.dependencies.dir}/test/jars" />
+        <property name="ext.tools.lib.dir" location="${ext.dependencies.dir}/tools/jars" />
+
+
+	<!-- overide the introduce location of this which is suposed to be in tools/lib -->
+        <property name="ant.contrib.location" value="${ext.tools.lib.dir}/ant-contrib-1.0b3.jar" />
+
 
 	<!-- ============================================================== -->
 	<!-- This file is designed to allow the developer to extend the     -->
