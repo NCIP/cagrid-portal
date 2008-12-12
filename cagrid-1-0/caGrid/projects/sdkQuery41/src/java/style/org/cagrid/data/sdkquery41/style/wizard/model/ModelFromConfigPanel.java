@@ -39,6 +39,13 @@ import com.jgoodies.validation.util.DefaultValidationResultModel;
 import com.jgoodies.validation.util.ValidationUtils;
 import com.jgoodies.validation.view.ValidationComponentUtils;
 
+/**
+ * ModelFromConfigPanel
+ * Creates domain models from the XMI file the selected 
+ * caCORE SDK installation has been configured to use
+ * 
+ * @author David
+ */
 public class ModelFromConfigPanel extends DomainModelSourcePanel {
     
     private static Log logger = LogFactory.getLog(ModelFromConfigPanel.class);
