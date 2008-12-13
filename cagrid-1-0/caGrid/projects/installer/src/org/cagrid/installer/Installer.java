@@ -36,7 +36,6 @@ import org.cagrid.installer.steps.options.ListPropertyConfigurationOption;
 import org.cagrid.installer.steps.options.TextPropertyConfigurationOption;
 import org.cagrid.installer.tasks.ConditionalTask;
 import org.cagrid.installer.tasks.SaveSettingsTask;
-import org.cagrid.installer.tasks.installer.CopySelectedServicesToTempDirTask;
 import org.cagrid.installer.tasks.service.DeployServiceTask;
 import org.cagrid.installer.util.DownloadPropertiesUtils;
 import org.cagrid.installer.util.InstallerUtils;
@@ -259,15 +258,6 @@ public class Installer {
             incrementProgress();
         }
 
-        installDependenciesStep.getTasks().add(
-            new ConditionalTask(new CopySelectedServicesToTempDirTask(this.model
-                .getMessage("copying.selected.services"), ""), new Condition() {
-                public boolean evaluate(WizardModel m) {
-                    CaGridInstallerModel model = (CaGridInstallerModel) m;
-                    return model.isTrue(Constants.INSTALL_SERVICES);
-                }
-            }));
-
         installDependenciesStep.getTasks()
             .add(new SaveSettingsTask(this.model.getMessage("saving.settings.title"), ""));
 
@@ -298,7 +288,7 @@ public class Installer {
 
         incrementProgress();
 
-        // deploy the syngGTS
+        // deploy the syngGTS anytime we are deploying to a container
         DeployServiceTask deploySyncGTS = new DeployServiceTask("", "", "syncGTS");
         deployContainer.getTasks().add(new ConditionalTask(deploySyncGTS, new Condition() {
 
@@ -396,10 +386,6 @@ public class Installer {
 
     private void clearFlags() {
         this.model.unsetProperty(Constants.CONFIGURE_CONTAINER);
-
-        this.model.unsetProperty(Constants.INSTALL_SYNC_GTS);
-        this.model.unsetProperty(Constants.INSTALL_SERVICES);
-
         this.model.unsetProperty(Constants.RECONFIGURE_CAGRID);
         this.model.unsetProperty(Constants.USE_SECURE_CONTAINER);
     }

@@ -50,8 +50,6 @@ public abstract class Constants {
 
     public static final String INSTALL_CAGRID = "install.cagrid";
 
-    public static final String INSTALL_SERVICES = "install.services";
-
     public static final String INSTALL_ANT = "install.ant";
 
     public static final String ANT_DOWNLOAD_URL = "ant.download.url";
@@ -116,8 +114,6 @@ public abstract class Constants {
 
     public static final String TARGET_GRID = "target.grid";
 
-    public static final String SERVICE_DEST_DIR = "service.dest.dir";
-
     public static final String SHUTDOWN_PORT = "shutdown.port";
 
     public static final String HTTP_PORT = "http.port";
@@ -128,34 +124,7 @@ public abstract class Constants {
 
     public static final String OLD_HTTPS_PORT = "old.https.port";
 
-
-   
-    public static final String SYNC_GTS_GTS_URI = "sync.gts.gts.uri";
-
-    public static final String SYNC_GTS_EXPIRATION_HOURS = "sync.gts.expiration.hours";
-
-    public static final String SYNC_GTS_EXPIRATION_MINUTES = "sync.gts.expiration.minutes";
-
-    public static final String SYNC_GTS_EXPIRATION_SECONDS = "sync.gts.expiration.seconds";
-
-    public static final String SYNC_GTS_FILTER_LIFETIME = "sync.gts.filter.lifetime";
-
-    public static final String SYNC_GTS_AUTH_FILTER = "sync.gts.auth.filter";
-
-    public static final String SYNC_GTS_PERFORM_AUTHZ = "sync.gts.perform.authz";
-
-    public static final String SYNC_GTS_GTS_IDENT = "sync.gts.gts.ident";
-
-    public static final String SYNC_GTS_DELETE_INVALID = "sync.gts.delete.invalid";
-
-    public static final String SYNC_GTS_NEXT_SYNC = "sync.gts.next.sync";
-
-    public static final String INSTALL_SYNC_GTS = "install.sync.gts";
-
-    public static final String SYNC_GTS_PERFORM_FIRST_SYNC = "sync.gts.perform.first.sync";
-
     public static final String RECONFIGURE_CAGRID = "reconfigure.cagrid";
-
 
     public static final String CONFIGURE_CONTAINER = "configure.container";
 

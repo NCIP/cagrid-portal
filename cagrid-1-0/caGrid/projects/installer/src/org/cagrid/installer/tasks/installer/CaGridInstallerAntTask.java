@@ -44,7 +44,6 @@ public class CaGridInstallerAntTask extends BasicTask {
         env.put("CATALINA_HOME", model.getProperty(Constants.TOMCAT_HOME));
         env.put("JBOSS_HOME", model.getProperty(Constants.JBOSS_HOME));
         Properties sysProps = new Properties();
-        sysProps.setProperty(Constants.SERVICE_DEST_DIR, model.getServiceDestDir());
         sysProps.setProperty("env.GLOBUS_LOCATION", model.getProperty(Constants.GLOBUS_HOME));
 
         return runAntTask(model, "scripts/build.xml", this.targetName, env, sysProps);
