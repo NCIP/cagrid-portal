@@ -6,6 +6,8 @@ package org.cagrid.installer.component;
 import java.util.Map;
 import java.util.MissingResourceException;
 
+import javax.swing.text.LabelView;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.cagrid.installer.model.CaGridInstallerModel;
@@ -150,6 +152,7 @@ public class CaGridSourceComponentInstaller extends AbstractDownloadedComponentI
             }
             targetGridPairs[i] = new LabelValuePair(targetGridLabel, targetGrids[i]);
         }
+        
         selectTargetGridStep.getOptions().add(
             new ListPropertyConfigurationOption(Constants.TARGET_GRID, model.getMessage("target.grid"),
                 targetGridPairs, true));
