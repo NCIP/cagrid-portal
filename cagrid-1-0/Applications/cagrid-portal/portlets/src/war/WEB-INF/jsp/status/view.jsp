@@ -146,14 +146,30 @@
     }
 
     function ${prefix}reloadStatus(){
-        $('${prefix}loadingDiv').innerHTML=_html;
-        ${prefix}loadStatus();
+        setInnerHTML($('${prefix}loadingDiv'),_html);
+        setTimeout("${prefix}loadStatus()", 100);
 
     }
-    function ${prefix}loadStatus(){
-        dwr.engine.beginBatch({timeout:30000});
 
-        StatusService.getLatestServicesLimit(function(limit){$('${prefix}latestServiceCount').innerHTML=limit;});
+    <%--for safari--%>
+    function setInnerHTML( element, html, count ) {
+        element.innerHTML = html;
+
+        if( ! count )
+            count = 1;
+
+        if( html != '' && element.innerHTML == '' && count < 5 ) {
+            ++count;
+            setTimeout( function() {
+                setInnerHTML( element, html, count );
+            }, 50 );
+        }
+    }
+
+    function ${prefix}loadStatus(){
+        dwr.engine.beginBatch({timeout:90000});
+
+        StatusService.getLatestServicesLimit(function(limit){$('${prefix}latestServiceCount').innerHTML=limit + " ";});
         StatusService.latestServices(function(latestServices){$('${prefix}latestServices').innerHTML=latestServices;});
         StatusService.servicesCount(function(count){$('${prefix}servicesCount').innerHTML=count;});
         StatusService.dataServicesCount(function(count){$('${prefix}dataServicesCount').innerHTML=count;});

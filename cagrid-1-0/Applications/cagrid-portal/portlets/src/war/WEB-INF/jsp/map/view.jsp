@@ -1,6 +1,5 @@
 <%@ include file="/WEB-INF/jsp/include/includes.jspf" %>
 
-<script type="text/javascript" src='<c:url value="/dwr/engine.js"/>'></script>
 <script type="text/javascript" src='<c:url value="/dwr/interface/MapService.js"/>'></script>
 <script src="<c:out value="${mapBean.baseUrl}" escapeXml="false"/><c:out value="${mapBean.apiKey}" escapeXml="false"/>"
         type="text/javascript"></script>
@@ -103,10 +102,20 @@ jQuery(document).ready(function() {
             map.clearOverlays();
             document.getElementById('${prefix}loadingDiv').innerHTML='Loading Map...';
 
-            dwr.engine.beginBatch({timeout:30000});
+            dwr.engine.beginBatch({timeout:90000});
             MapService.getMap($('${prefix}directory').value, function(result){
                 document.getElementById('${prefix}loadingDiv').innerHTML='';
-                var myScripts = result.evalScripts();
+                var temp = result;
+
+                while(true) {
+                   var sindex = temp.indexOf("<script"+">");
+                   if(sindex < 0) break;
+                   var eindex = temp.indexOf("</"+"script>",sindex);
+                   var js = temp.substring(sindex+8,eindex);
+                   eval(js);
+                   temp = temp.substring(eindex+9);
+                 }
+
 
             });
 
@@ -160,4 +169,3 @@ jQuery(document).ready(function() {
     }
 
 </script>
-

@@ -9,7 +9,7 @@
 
 <c:set var="mapNodeId">namespace-gmap</c:set>
 
-<script type="text/javascript">
+<script>
 //<![CDATA[
 
 <c:if test="${!empty mapBean.participantNodes}">
@@ -191,6 +191,6 @@ function() {
 map.addOverlay(<c:out value="${markerId}"/>);
 </c:forEach>
 </c:if>
- 
+
 //]]>
 </script>
