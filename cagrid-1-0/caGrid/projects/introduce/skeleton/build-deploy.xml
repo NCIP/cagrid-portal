@@ -137,7 +137,7 @@
 
 
 
-	<target name="deployWebApp" depends="all,setDeploymentProperties">
+	<target name="deployWebApp" depends="setDeploymentProperties">
 
 		<runtarget target="prepareDeploymentTmp" />
 
