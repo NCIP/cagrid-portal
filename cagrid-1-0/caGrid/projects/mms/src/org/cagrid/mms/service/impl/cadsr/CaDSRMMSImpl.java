@@ -13,7 +13,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.cagrid.mms.domain.ModelSourceMetadata;
-import org.cagrid.mms.domain.ModelSourceMetadataSupportedModelSources;
 import org.cagrid.mms.domain.Property;
 import org.cagrid.mms.domain.PropertyDescriptor;
 import org.cagrid.mms.domain.SourceDescriptor;
@@ -31,41 +30,17 @@ public class CaDSRMMSImpl implements MMS {
     public static final String SOURCE_PROPERTY_LONG_NAME = "longName";
     public static final String SOURCE_PROPERTY_GME_NAMESPACE = "gmeNamespace";
 
-    public static final String DEFAULT_SOURCE_IDENTIFIER = "caDSR Production";
-    public static final String DEFAULT_SOURCE_DESCRIPTION = "The production instance of the National Cancer Institutes's Cancer Data Standards Repository (caDSR).";
-
-    private String caDSRApplicationServiceURL;
-
     private ModelSourceMetadata metadata;
+    private final Map<String, String> sourceToURLMap;
 
 
-    public String getCaDSRApplicationServiceURL() {
-        return caDSRApplicationServiceURL;
-    }
-
-
-    public void setCaDSRApplicationServiceURL(String caDSRApplicationServiceURL) {
-        this.caDSRApplicationServiceURL = caDSRApplicationServiceURL;
-    }
-
-
-    public synchronized ModelSourceMetadata getModelSourceMetadata() {
-        if (metadata == null) {
-            // TODO: load this from spring
-            metadata = new ModelSourceMetadata();
-            metadata.setDefaultSourceIdentifier(DEFAULT_SOURCE_IDENTIFIER);
-            ModelSourceMetadataSupportedModelSources supportedModelSources = new ModelSourceMetadataSupportedModelSources();;
-            metadata.setSupportedModelSources(supportedModelSources);
-
-            SourceDescriptor[] sources = new SourceDescriptor[1];
-            supportedModelSources.setSource(sources);
-
-            sources[0] = new SourceDescriptor();
-            sources[0].setIdentifier(DEFAULT_SOURCE_IDENTIFIER);
-            sources[0].setDescription(DEFAULT_SOURCE_DESCRIPTION);
-
+    public CaDSRMMSImpl(ModelSourceMetadata metadata, Map<String, String> sourceToURLMap) {
+        this.sourceToURLMap = sourceToURLMap;
+        this.metadata=metadata;
+        // go through the supplied sources and add the properties we support
+        for (SourceDescriptor source : this.metadata.getSupportedModelSources().getSource()) {
             SourceDescriptorSupportedProjectProperties supportedProjectProperties = new SourceDescriptorSupportedProjectProperties();
-            sources[0].setSupportedProjectProperties(supportedProjectProperties);
+            source.setSupportedProjectProperties(supportedProjectProperties);
 
             PropertyDescriptor[] propertyDescriptors = new PropertyDescriptor[3];
             supportedProjectProperties.setPropertyDescriptor(propertyDescriptors);
@@ -88,7 +63,10 @@ public class CaDSRMMSImpl implements MMS {
                 + " attribute of the caDSR Project.");
             propertyDescriptors[2].setRequired(false);
         }
+    }
 
+
+    public ModelSourceMetadata getModelSourceMetadata() {
         return metadata;
     }
 
@@ -108,13 +86,12 @@ public class CaDSRMMSImpl implements MMS {
         }
 
         ServiceMetadataAnnotator annotator = new ServiceMetadataAnnotator(uriToProjectMap,
-            getApplicationService(DEFAULT_SOURCE_IDENTIFIER));
+            getApplicationService(getModelSourceMetadata().getDefaultSourceIdentifier()));
 
         try {
             annotator.annotateServiceMetadata(serviceMetadata);
         } catch (CaDSRGeneralException e) {
-            throw new MMSGeneralException("Problem from remote caDSR (" + getCaDSRApplicationServiceURL() + "):"
-                + e.getMessage(), e);
+            throw new MMSGeneralException("Problem from remote caDSR:" + e.getMessage(), e);
         }
         return serviceMetadata;
     }
@@ -131,8 +108,7 @@ public class CaDSRMMSImpl implements MMS {
             return builder.createDomainModelForClasses(createProjectPrototypeFromIdentifier(umlProjectIdentifer),
                 fullyQualifiedClassNames.toArray(classes));
         } catch (DomainModelGenerationException e) {
-            throw new MMSGeneralException("Problem from remote caDSR (" + getCaDSRApplicationServiceURL() + "):"
-                + e.getMessage(), e);
+            throw new MMSGeneralException("Problem from remote caDSR:" + e.getMessage(), e);
         }
 
     }
@@ -153,8 +129,7 @@ public class CaDSRMMSImpl implements MMS {
                 createProjectPrototypeFromIdentifier(umlProjectIdentifer), fullyQualifiedClassNames.toArray(classes),
                 umlAssociationExclude.toArray(excludes));
         } catch (DomainModelGenerationException e) {
-            throw new MMSGeneralException("Problem from remote caDSR (" + getCaDSRApplicationServiceURL() + "):"
-                + e.getMessage(), e);
+            throw new MMSGeneralException("Problem from remote caDSR:" + e.getMessage(), e);
         }
     }
 
@@ -169,8 +144,7 @@ public class CaDSRMMSImpl implements MMS {
             return builder.createDomainModelForPackages(createProjectPrototypeFromIdentifier(umlProjectIdentifer),
                 packageNames.toArray(packages));
         } catch (DomainModelGenerationException e) {
-            throw new MMSGeneralException("Problem from remote caDSR (" + getCaDSRApplicationServiceURL() + "):"
-                + e.getMessage(), e);
+            throw new MMSGeneralException("Problem from remote caDSR:" + e.getMessage(), e);
         }
     }
 
@@ -184,8 +158,7 @@ public class CaDSRMMSImpl implements MMS {
         try {
             return builder.createDomainModel(createProjectPrototypeFromIdentifier(umlProjectIdentifer));
         } catch (DomainModelGenerationException e) {
-            throw new MMSGeneralException("Problem from remote caDSR (" + getCaDSRApplicationServiceURL() + "):"
-                + e.getMessage(), e);
+            throw new MMSGeneralException("Problem from remote caDSR:" + e.getMessage(), e);
         }
     }
 
@@ -226,10 +199,14 @@ public class CaDSRMMSImpl implements MMS {
 
     private ApplicationService getApplicationService(String sourceID) throws MMSGeneralException {
         ApplicationService appService = null;
+
+        String url = this.sourceToURLMap.get(sourceID);
+        if (url == null) {
+            throw new MMSGeneralException("Unable to locate appropriate caDSR service for specified source ("
+                + sourceID + ")");
+        }
         try {
-            // TODO: get a different URL depending on the the source ID
-            // spring should pass in a sourceID=>url map
-            appService = ApplicationServiceProvider.getApplicationServiceFromUrl(getCaDSRApplicationServiceURL());
+            appService = ApplicationServiceProvider.getApplicationServiceFromUrl(url);
         } catch (Exception e) {
             throw new MMSGeneralException("Problem loading caDSR ApplicationService", e);
         }

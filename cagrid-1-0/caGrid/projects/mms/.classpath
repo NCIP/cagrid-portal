@@ -57,12 +57,6 @@
 	<classpathentry kind="var" path="GT4_LOCATION/lib/cryptix.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/cryptix32.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/cryptix-asn1.jar"/>
-	<classpathentry kind="var" path="GT4_LOCATION/lib/globus_resolution_service.jar"/>
-	<classpathentry kind="var" path="GT4_LOCATION/lib/globus_resolution_stubs_java.jar"/>
-	<classpathentry kind="var" path="GT4_LOCATION/lib/globus_resolution_test.jar"/>
-	<classpathentry kind="var" path="GT4_LOCATION/lib/globus_transfer_service.jar"/>
-	<classpathentry kind="var" path="GT4_LOCATION/lib/globus_transfer_stubs_java.jar"/>
-	<classpathentry kind="var" path="GT4_LOCATION/lib/globus_transfer_test.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/globus_usage_core.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/globus_usage_packets_common.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/globus_wsrf_tools_test.jar"/>
@@ -103,5 +97,6 @@
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xercesImpl.jar" sourcepath="/GT4_LOCATION/Xerces-J-src.2.6.2.zip"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xml-apis.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xmlsec.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/test/jars/spring-mock.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
