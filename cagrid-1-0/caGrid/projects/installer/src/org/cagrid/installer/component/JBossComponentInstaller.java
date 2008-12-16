@@ -23,7 +23,7 @@ public class JBossComponentInstaller extends AbstractDownloadedComponentInstalle
         super.addInstallDownloadedComponentTasks(model, deployContainer);
 
         deployContainer.getTasks().add(
-            new ConditionalTask(new DeployGlobusToJBossTask(model.getMessage("deploying.globus.jboss.title"), ""),
+            new ConditionalTask(new DeployGlobusToJBossTask(model.getMessage("deploying.globus.jboss.title"), model.getMessage("deploying.globus.jboss.title")),
                 new Condition() {
 
                     public boolean evaluate(WizardModel m) {
@@ -36,7 +36,7 @@ public class JBossComponentInstaller extends AbstractDownloadedComponentInstalle
                 }));
 
         deployContainer.getTasks().add(
-            new ConditionalTask(new ConfigureJBossTask(model.getMessage("configuring.jboss.title"), ""),
+            new ConditionalTask(new ConfigureJBossTask(model.getMessage("configuring.jboss.title"), model.getMessage("configuring.jboss.title")),
                 new Condition() {
 
                     public boolean evaluate(WizardModel m) {

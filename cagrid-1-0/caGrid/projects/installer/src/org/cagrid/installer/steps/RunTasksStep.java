@@ -44,8 +44,6 @@ public class RunTasksStep extends PanelWizardStep implements PropertyChangeListe
 
     private CaGridInstallerModel model;
 
-    private JButton startButton;
-
     private JLabel busyLabel;
 
     private JPanel descriptionPanel;
@@ -151,8 +149,7 @@ public class RunTasksStep extends PanelWizardStep implements PropertyChangeListe
 
 
     public void prepare() {
-        busyLabel.setText(this.model.getMessage("press.start"));
-        getStartButton().setEnabled(true);
+        
         for (Task t : getTasks()) {
             if (t instanceof Condition && !((Condition) t).evaluate(this.model)) {
                 continue;
@@ -162,6 +159,18 @@ public class RunTasksStep extends PanelWizardStep implements PropertyChangeListe
         this.monitor.reset();
         System.setOut(this.out);
         System.setErr(this.out);
+        
+        
+        String workingLabel = "running";
+        RunTasksStep.this.setBusyLabel(workingLabel);
+        Worker w = new Worker(RunTasksStep.this.getTasks(), RunTasksStep.this.model);
+        w.addPropertyChangeListener(RunTasksStep.this);
+        RunTasksStep.this.setDeactivePrevious(true);
+        RunTasksStep.this.model.setDeactivatePrevious(true);
+        RunTasksStep.this.setSummary(workingLabel);
+        w.start();
+        
+        
 
     }
 
@@ -194,9 +203,6 @@ public class RunTasksStep extends PanelWizardStep implements PropertyChangeListe
      */
     private JPanel getBusyPanel() {
         if (busyPanel == null) {
-            GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
-            gridBagConstraints5.gridx = 1;
-            gridBagConstraints5.gridy = 0;
             GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
             gridBagConstraints4.gridx = 0;
             gridBagConstraints4.insets = new Insets(0, 10, 0, 10);
@@ -204,7 +210,6 @@ public class RunTasksStep extends PanelWizardStep implements PropertyChangeListe
             busyPanel = new JPanel();
             busyPanel.setLayout(new GridBagLayout());
             busyPanel.add(getBusyProgressBar(), gridBagConstraints4);
-            busyPanel.add(getStartButton(), gridBagConstraints5);
         }
         return busyPanel;
     }
@@ -228,32 +233,8 @@ public class RunTasksStep extends PanelWizardStep implements PropertyChangeListe
     }
 
 
-    /**
-     * This method initializes startButton
-     * 
-     * @return javax.swing.JButton
-     */
-    private JButton getStartButton() {
-        if (startButton == null) {
-            startButton = new JButton();
-            startButton.setText("Start");
-            startButton.setFont(new Font("Dialog", Font.BOLD, 10));
-            final String workingLabel = this.model.getMessage("working");
-            startButton.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent e) {
-                    RunTasksStep.this.setBusyLabel(workingLabel);
-                    Worker w = new Worker(RunTasksStep.this.getTasks(), RunTasksStep.this.model);
-                    w.addPropertyChangeListener(RunTasksStep.this);
-                    getStartButton().setEnabled(false);
-                    RunTasksStep.this.setDeactivePrevious(true);
-                    RunTasksStep.this.model.setDeactivatePrevious(true);
-                    RunTasksStep.this.setSummary(workingLabel);
-                    w.start();
-                }
-            });
-        }
-        return startButton;
-    }
+                    
+            
 
 
     public void propertyChange(PropertyChangeEvent evt) {
@@ -355,6 +336,8 @@ public class RunTasksStep extends PanelWizardStep implements PropertyChangeListe
                 }
                 setProgress(getProgress() + 1);
             }
+            
+            setComplete(true);
         }
 
 

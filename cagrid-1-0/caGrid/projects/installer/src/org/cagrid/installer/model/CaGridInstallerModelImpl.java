@@ -194,12 +194,6 @@ CaGridInstallerModel, OverviewProvider {
         return (String) this.state.get(propName);
     }
 
-    public boolean isSecurityConfigurationRequired() {
-        return isTrue(Constants.USE_SECURE_CONTAINER)
-            && (isTrue(Constants.REDEPLOY_GLOBUS) || (isTomcatContainer() || isGlobusContainer())
-                && !isGlobusDeployed() || (!isTomcatContainer() || !isGlobusContainer()) && !isGlobusConfigured());
-    }
-
 
     public boolean isSet(String propName) {
         return !isEmpty(getProperty(propName));

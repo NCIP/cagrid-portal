@@ -80,7 +80,7 @@ public abstract class Constants {
 
     public static final String JBOSS_DIR_NAME = "jboss.dir.name";
 
-    public static final String INSTALL_GLOBUS = "jboss.globus";
+    public static final String INSTALL_GLOBUS = "install.globus";
 
     public static final String GLOBUS_INSTALL_DIR_PATH = "globus.install.dir.path";
 

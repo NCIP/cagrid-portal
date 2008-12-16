@@ -70,7 +70,7 @@ public class TomcatComponentInstaller extends AbstractDownloadedComponentInstall
         super.addInstallDownloadedComponentTasks(model, deployContainer);
 
         deployContainer.getTasks().add(
-            new ConditionalTask(new DeployGlobusToTomcatTask(model.getMessage("deploying.globus.tomcat.title"), ""),
+            new ConditionalTask(new DeployGlobusToTomcatTask(model.getMessage("deploying.globus.tomcat.title"), model.getMessage("deploying.globus.tomcat.title")),
                 new Condition() {
 
                     public boolean evaluate(WizardModel m) {
@@ -83,7 +83,7 @@ public class TomcatComponentInstaller extends AbstractDownloadedComponentInstall
                 }));
 
         deployContainer.getTasks().add(
-            new ConditionalTask(new ConfigureTomcatTask(model.getMessage("configuring.tomcat.title"), ""),
+            new ConditionalTask(new ConfigureTomcatTask(model.getMessage("configuring.tomcat.title"), model.getMessage("configuring.tomcat.title")),
                 new Condition() {
 
                     public boolean evaluate(WizardModel m) {

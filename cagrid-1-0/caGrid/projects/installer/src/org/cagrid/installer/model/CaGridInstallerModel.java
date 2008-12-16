@@ -40,8 +40,6 @@ public interface CaGridInstallerModel extends WizardModel {
 
     String getMessage(String key);
 
-    boolean isSecurityConfigurationRequired();
-
 
     boolean isTrue(String propName);
 

@@ -171,7 +171,7 @@ public class CaGridSourceComponentInstaller extends AbstractDownloadedComponentI
         super.addInstallDownloadedComponentTasks(model, installStep);
 
         installStep.getTasks().add(
-            new ConditionalTask(new CompileCaGridTask(model.getMessage("compiling.cagrid.title"), ""), new Condition() {
+            new ConditionalTask(new CompileCaGridTask(model.getMessage("compiling.cagrid.title"), model.getMessage("compiling.cagrid.title")), new Condition() {
 
                 public boolean evaluate(WizardModel m) {
                     CaGridInstallerModel model = (CaGridInstallerModel) m;
@@ -182,7 +182,8 @@ public class CaGridSourceComponentInstaller extends AbstractDownloadedComponentI
 
         // TODO: figure out why this fails on Mac sometimes
         ConfigureTargetGridTask configTargetGridTask = new ConfigureTargetGridTask(model
-            .getMessage("configuring.target.grid"), "");
+            .getMessage("configuring.target.grid"), model
+            .getMessage("configuring.target.grid"));
         configTargetGridTask.setAbortOnError(false);
         installStep.getTasks().add(new ConditionalTask(configTargetGridTask, new Condition() {
             public boolean evaluate(WizardModel m) {

@@ -59,13 +59,13 @@ public abstract class AbstractDownloadedComponentInstaller implements Downloaded
 
         deployContainer.getTasks().add(
             new ConditionalTask(new DownloadFileTask(model.getMessage("downloading." + getComponentId() + ".title"),
-                "", getComponentId() + ".download.url", getComponentId() + ".temp.file.name", getComponentId()
+                model.getMessage("downloading." + getComponentId() + ".title"), getComponentId() + ".download.url", getComponentId() + ".temp.file.name", getComponentId()
                     + ".md5.checksum", Constants.CONNECT_TIMEOUT),
 
             getShouldInstallCondition()));
 
         deployContainer.getTasks().add(
-            new ConditionalTask(new UnzipInstallTask(model.getMessage("installing." + getComponentId() + ".title"), "",
+            new ConditionalTask(new UnzipInstallTask(model.getMessage("installing." + getComponentId() + ".title"), model.getMessage("installing." + getComponentId() + ".title"),
                 getComponentId() + ".temp.file.name", getComponentId() + ".install.dir.path", getComponentId()
                     + ".dir.name", getComponentId() + ".home"), getShouldInstallCondition()));
 

@@ -26,7 +26,9 @@ import org.cagrid.installer.model.CaGridInstallerModel;
 import org.cagrid.installer.model.CaGridInstallerModelImpl;
 import org.cagrid.installer.steps.Constants;
 import org.cagrid.installer.steps.InstallationCompleteStep;
+import org.cagrid.installer.steps.ObtainHostCredentialsStep;
 import org.cagrid.installer.steps.PresentLicenseStep;
+import org.cagrid.installer.steps.PreviewTasksStep;
 import org.cagrid.installer.steps.PropertyConfigurationStep;
 import org.cagrid.installer.steps.RunTasksStep;
 import org.cagrid.installer.steps.SelectInstallationTypeStep;
@@ -35,7 +37,6 @@ import org.cagrid.installer.steps.options.BooleanPropertyConfigurationOption;
 import org.cagrid.installer.steps.options.ListPropertyConfigurationOption;
 import org.cagrid.installer.steps.options.TextPropertyConfigurationOption;
 import org.cagrid.installer.tasks.ConditionalTask;
-import org.cagrid.installer.tasks.SaveSettingsTask;
 import org.cagrid.installer.tasks.service.DeployServiceTask;
 import org.cagrid.installer.util.DownloadPropertiesUtils;
 import org.cagrid.installer.util.InstallerUtils;
@@ -258,18 +259,18 @@ public class Installer {
             incrementProgress();
         }
 
-        installDependenciesStep.getTasks()
-            .add(new SaveSettingsTask(this.model.getMessage("saving.settings.title"), ""));
-
         incrementProgress();
-
-        this.model.add(installDependenciesStep, new Condition() {
+        
+        Condition shouldInstallcaGrid = new Condition() {
             public boolean evaluate(WizardModel m) {
                 CaGridInstallerModel model = (CaGridInstallerModel) m;
                 return installDependenciesStep.getTasksCount(model) > 0
                     || (model.isTrue(Constants.INSTALL_CAGRID) && installDependenciesStep.getTasksCount(model) > 0);
             }
-        });
+        };
+
+        this.model.add(new PreviewTasksStep("caGrid Install","Installing caGrid and dependencies.",installDependenciesStep, model),shouldInstallcaGrid);
+        this.model.add(installDependenciesStep,shouldInstallcaGrid);
     }
 
 
@@ -289,7 +290,7 @@ public class Installer {
         incrementProgress();
 
         // deploy the syngGTS anytime we are deploying to a container
-        DeployServiceTask deploySyncGTS = new DeployServiceTask("", "", "syncGTS");
+        DeployServiceTask deploySyncGTS = new DeployServiceTask("syncGTS", "Deloying syncGTS", "syncGTS");
         deployContainer.getTasks().add(new ConditionalTask(deploySyncGTS, new Condition() {
 
             public boolean evaluate(WizardModel model) {
@@ -298,21 +299,15 @@ public class Installer {
             }
         }));
 
-        deployContainer.getTasks().add(
-            new ConditionalTask(new SaveSettingsTask(this.model.getMessage("saving.settings.title"), ""),
-                new Condition() {
-                    public boolean evaluate(WizardModel m) {
-                        CaGridInstallerModel model = (CaGridInstallerModel) m;
-                        return model.isConfigureContainerSelected();
-                    }
-                }));
-
-        this.model.add(deployContainer, new Condition() {
+        
+        Condition shouldDeployContainer = new Condition() {
             public boolean evaluate(WizardModel m) {
                 CaGridInstallerModel model = (CaGridInstallerModel) m;
                 return deployContainer.getTasksCount(model) > 0;
             }
-        });
+        };
+        this.model.add(new PreviewTasksStep("Grid Service Container Installer","Installing, deploying, and configuring grid service container.",deployContainer,model), shouldDeployContainer);
+        this.model.add(deployContainer, shouldDeployContainer);
 
     }
 
@@ -354,11 +349,25 @@ public class Installer {
             new TextPropertyConfigurationOption(Constants.HTTPS_PORT, this.model.getMessage("https.port"), this.model
                 .getProperty(Constants.HTTPS_PORT, "8443"), model.isTrue(Constants.USE_SECURE_CONTAINER)));
 
+        this.model.add(containerConfigureStep, new Condition() {
+            public boolean evaluate(WizardModel m) {
+                CaGridInstallerModel model = (CaGridInstallerModel) m;
+                return model.isConfigureContainerSelected();
+            }
+        });
+
+        
         // need to get credentials here from dorian if secure deployment is
         // required
-        
-        
+        ObtainHostCredentialsStep hostCredentialsStep = new ObtainHostCredentialsStep();
+        this.model.add(hostCredentialsStep, new Condition() {
+            public boolean evaluate(WizardModel m) {
+                CaGridInstallerModel model = (CaGridInstallerModel) m;
+                return model.isConfigureContainerSelected() && model.isTrue(Constants.USE_SECURE_CONTAINER);
+            }
+        });
 
+        
         PropertyConfigurationStep checkDeployGlobusStep = new PropertyConfigurationStep(this.model
             .getMessage("globus.check.redeploy.title"), this.model.getMessage("globus.check.redeploy.desc"));
         checkDeployGlobusStep.getOptions().add(
@@ -374,13 +383,7 @@ public class Installer {
 
         });
 
-        this.model.add(containerConfigureStep, new Condition() {
-            public boolean evaluate(WizardModel m) {
-                CaGridInstallerModel model = (CaGridInstallerModel) m;
-                return model.isConfigureContainerSelected();
-            }
-        });
-
+ 
     }
 
 
