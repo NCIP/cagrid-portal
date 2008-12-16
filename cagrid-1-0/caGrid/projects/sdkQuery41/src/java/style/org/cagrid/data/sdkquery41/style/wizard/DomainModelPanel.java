@@ -1,5 +1,7 @@
 package org.cagrid.data.sdkquery41.style.wizard;
 
+import gov.nih.nci.cagrid.data.common.ExtensionDataManager;
+import gov.nih.nci.cagrid.data.extension.CadsrInformation;
 import gov.nih.nci.cagrid.data.ui.wizard.AbstractWizardPanel;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
@@ -24,6 +26,7 @@ import javax.swing.border.TitledBorder;
 import org.cagrid.data.sdkquery41.style.wizard.model.ModelFromCaDSRPanel;
 import org.cagrid.data.sdkquery41.style.wizard.model.ModelFromConfigPanel;
 import org.cagrid.data.sdkquery41.style.wizard.model.ModelFromFileSystemPanel;
+import org.cagrid.grape.utils.CompositeErrorDialog;
 
 /**
  * DomainModelPanel
@@ -64,22 +67,41 @@ public class DomainModelPanel extends AbstractWizardPanel {
     
     
     public void movingNext() {
-        // TODO: apply configutation
+        String selectedSourceName = (String) getModelSourceComboBox().getSelectedItem();
+        DomainModelSourcePanel selectedSource = domainModelSources.get(selectedSourceName);
+        try {
+            CadsrInformation cadsrInfo = selectedSource.getCadsrDomainInformation();
+            // set the cadsr info on the extension data model
+            ExtensionDataManager manager = new ExtensionDataManager(getExtensionData());
+            manager.storeCadsrInformation(cadsrInfo);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            CompositeErrorDialog.showErrorDialog("Error obtaining domain model information", ex.getMessage(), ex);
+        }
     }
     
     
     private void initialize() {
         populateModelPanels();
-        // TODO: validation??
         setLayout(new GridLayout());
         add(getMainPanel());
     }
     
     
     private void populateModelPanels() {
-        DomainModelSourcePanel cadsrSourcePanel = new ModelFromCaDSRPanel();
-        DomainModelSourcePanel configSourcePanel = new ModelFromConfigPanel();
-        DomainModelSourcePanel fileSourcePanel = new ModelFromFileSystemPanel();
+        DomainModelSourceValidityListener validityListener = new DomainModelSourceValidityListener() {
+            public void domainModelSourceValid(DomainModelSourcePanel source, boolean valid) {
+                String selectedSourceName = (String) getModelSourceComboBox().getSelectedItem();
+                DomainModelSourcePanel selectedSource = domainModelSources.get(selectedSourceName);
+                if (selectedSource == source) {
+                    setNextEnabled(valid);
+                }
+            }
+        };
+        
+        DomainModelSourcePanel cadsrSourcePanel = new ModelFromCaDSRPanel(validityListener);
+        DomainModelSourcePanel configSourcePanel = new ModelFromConfigPanel(validityListener);
+        DomainModelSourcePanel fileSourcePanel = new ModelFromFileSystemPanel(validityListener);
         domainModelSources.put(cadsrSourcePanel.getName(), cadsrSourcePanel);
         domainModelSources.put(configSourcePanel.getName(), configSourcePanel);
         domainModelSources.put(fileSourcePanel.getName(), fileSourcePanel);
@@ -159,7 +181,6 @@ public class DomainModelPanel extends AbstractWizardPanel {
             modelSourceComboBox.setToolTipText("Select the domain model source");
             modelSourceComboBox.addItemListener(new java.awt.event.ItemListener() {
                 public void itemStateChanged(java.awt.event.ItemEvent e) {
-                    // TODO: implement this to do something with generating models
                     System.out.println("Selected model source " + 
                         getModelSourceComboBox().getSelectedItem().toString());
                     ((CardLayout) getModelSelectionPanel().getLayout()).show(

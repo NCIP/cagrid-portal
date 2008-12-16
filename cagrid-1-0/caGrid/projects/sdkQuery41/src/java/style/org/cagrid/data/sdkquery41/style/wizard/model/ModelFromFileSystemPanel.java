@@ -46,6 +46,7 @@ import javax.swing.border.TitledBorder;
 
 import org.cagrid.data.sdkquery41.style.common.SDK41StyleConstants;
 import org.cagrid.data.sdkquery41.style.wizard.DomainModelSourcePanel;
+import org.cagrid.data.sdkquery41.style.wizard.DomainModelSourceValidityListener;
 import org.cagrid.data.sdkquery41.style.wizard.config.SharedConfiguration;
 import org.cagrid.grape.utils.CompositeErrorDialog;
 
@@ -81,8 +82,8 @@ public class ModelFromFileSystemPanel extends DomainModelSourcePanel {
     private JTextArea descriptionTextArea = null;
     private JScrollPane descriptionScrollPane = null;
 
-    public ModelFromFileSystemPanel() {
-        super();
+    public ModelFromFileSystemPanel(DomainModelSourceValidityListener validityListener) {
+        super(validityListener);
         validationModel = new DefaultValidationResultModel();
         initialize();
     }
@@ -609,6 +610,8 @@ public class ModelFromFileSystemPanel extends DomainModelSourcePanel {
         }
         
         validationModel.setResult(result);
+        
+        setModelValidity(!result.hasErrors());
         
         updateComponentTreeSeverity();
     }

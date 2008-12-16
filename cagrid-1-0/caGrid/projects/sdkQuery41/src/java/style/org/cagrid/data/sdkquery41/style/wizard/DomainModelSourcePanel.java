@@ -11,8 +11,11 @@ import javax.swing.JPanel;
  */
 public abstract class DomainModelSourcePanel extends JPanel {
     
-    public DomainModelSourcePanel() {
+    private DomainModelSourceValidityListener validityListener = null;
+    
+    public DomainModelSourcePanel(DomainModelSourceValidityListener validityListener) {
         super();
+        this.validityListener = validityListener;
     }
     
     
@@ -23,4 +26,9 @@ public abstract class DomainModelSourcePanel extends JPanel {
     
     
     public abstract CadsrInformation getCadsrDomainInformation() throws Exception;
+    
+    
+    protected void setModelValidity(boolean valid) {
+        validityListener.domainModelSourceValid(this, valid);
+    }
 }

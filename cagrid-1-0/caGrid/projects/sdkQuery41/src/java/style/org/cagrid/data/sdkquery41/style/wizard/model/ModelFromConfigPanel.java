@@ -43,6 +43,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.cagrid.data.sdkquery41.style.common.SDK41StyleConstants;
 import org.cagrid.data.sdkquery41.style.wizard.DomainModelSourcePanel;
+import org.cagrid.data.sdkquery41.style.wizard.DomainModelSourceValidityListener;
 import org.cagrid.data.sdkquery41.style.wizard.config.SharedConfiguration;
 import org.cagrid.grape.utils.CompositeErrorDialog;
 
@@ -85,8 +86,8 @@ public class ModelFromConfigPanel extends DomainModelSourcePanel {
     
     private DomainModel domainModel = null;
     
-    public ModelFromConfigPanel() {
-        super();
+    public ModelFromConfigPanel(DomainModelSourceValidityListener validityListener) {
+        super(validityListener);
         validationModel = new DefaultValidationResultModel();
         initialize();
     }
@@ -506,6 +507,8 @@ public class ModelFromConfigPanel extends DomainModelSourcePanel {
         }
         
         validationModel.setResult(result);
+        
+        setModelValidity(!result.hasErrors());
         
         updateComponentTreeSeverity();
     }

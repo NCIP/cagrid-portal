@@ -35,6 +35,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.border.TitledBorder;
 
 import org.cagrid.data.sdkquery41.style.wizard.DomainModelSourcePanel;
+import org.cagrid.data.sdkquery41.style.wizard.DomainModelSourceValidityListener;
 import org.cagrid.grape.utils.CompositeErrorDialog;
 
 import com.jgoodies.validation.Severity;
@@ -62,8 +63,8 @@ public class ModelFromCaDSRPanel extends DomainModelSourcePanel {
     
     private Project selectedProject = null;
 
-    public ModelFromCaDSRPanel() {
-        super();
+    public ModelFromCaDSRPanel(DomainModelSourceValidityListener validityListener) {
+        super(validityListener);
         initialize();
     }
 
@@ -400,6 +401,8 @@ public class ModelFromCaDSRPanel extends DomainModelSourcePanel {
         }
         
         validationModel.setResult(result);
+        
+        setModelValidity(!result.hasErrors());
         
         updateComponentTreeSeverity();
     }
