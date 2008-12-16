@@ -22,7 +22,7 @@ import java.util.List;
  * @author David Ervin
  * 
  * @created Apr 11, 2007 10:04:04 AM
- * @version $Id: ExtensionDataManager.java,v 1.3 2007-12-18 19:10:26 dervin Exp $ 
+ * @version $Id: ExtensionDataManager.java,v 1.4 2008-12-16 20:49:35 dervin Exp $ 
  */
 public class ExtensionDataManager {
     
@@ -557,7 +557,7 @@ public class ExtensionDataManager {
     }
     
     
-    private void storeCadsrInformation(CadsrInformation info) throws Exception {
+    public void storeCadsrInformation(CadsrInformation info) throws Exception {
         Data data = getExtensionData();
         data.setCadsrInformation(info);
         saveExtensionData(data);
