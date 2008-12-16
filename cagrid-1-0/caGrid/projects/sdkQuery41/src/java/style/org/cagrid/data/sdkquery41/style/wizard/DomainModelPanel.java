@@ -10,6 +10,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.Insets;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -22,6 +23,7 @@ import javax.swing.border.TitledBorder;
 
 import org.cagrid.data.sdkquery41.style.wizard.model.ModelFromCaDSRPanel;
 import org.cagrid.data.sdkquery41.style.wizard.model.ModelFromConfigPanel;
+import org.cagrid.data.sdkquery41.style.wizard.model.ModelFromFileSystemPanel;
 
 /**
  * DomainModelPanel
@@ -68,14 +70,19 @@ public class DomainModelPanel extends AbstractWizardPanel {
     
     private void initialize() {
         populateModelPanels();
+        // TODO: validation??
+        setLayout(new GridLayout());
+        add(getMainPanel());
     }
     
     
     private void populateModelPanels() {
         DomainModelSourcePanel cadsrSourcePanel = new ModelFromCaDSRPanel();
         DomainModelSourcePanel configSourcePanel = new ModelFromConfigPanel();
+        DomainModelSourcePanel fileSourcePanel = new ModelFromFileSystemPanel();
         domainModelSources.put(cadsrSourcePanel.getName(), cadsrSourcePanel);
         domainModelSources.put(configSourcePanel.getName(), configSourcePanel);
+        domainModelSources.put(fileSourcePanel.getName(), fileSourcePanel);
         
         // add the model source panels to the combo box and display panel
         for (String name : domainModelSources.keySet()) {
