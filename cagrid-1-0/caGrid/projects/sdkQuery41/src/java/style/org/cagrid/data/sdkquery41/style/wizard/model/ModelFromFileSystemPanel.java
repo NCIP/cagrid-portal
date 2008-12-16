@@ -1,7 +1,20 @@
 package org.cagrid.data.sdkquery41.style.wizard.model;
 
+import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.common.portal.validation.IconFeedbackPanel;
+import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.data.extension.CadsrInformation;
+import gov.nih.nci.cagrid.data.extension.CadsrPackage;
+import gov.nih.nci.cagrid.data.extension.ClassMapping;
+import gov.nih.nci.cagrid.data.ui.wizard.OneTimeInfoDialogUtil;
+import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertyType;
+import gov.nih.nci.cagrid.introduce.common.CommonTools;
+import gov.nih.nci.cagrid.introduce.common.FileFilters;
+import gov.nih.nci.cagrid.introduce.common.ResourceManager;
+import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
+import gov.nih.nci.cagrid.metadata.MetadataUtils;
+import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
+import gov.nih.nci.cagrid.metadata.dataservice.UMLClass;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -9,8 +22,19 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import javax.swing.BorderFactory;
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -20,10 +44,19 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
+import org.cagrid.data.sdkquery41.style.common.SDK41StyleConstants;
 import org.cagrid.data.sdkquery41.style.wizard.DomainModelSourcePanel;
+import org.cagrid.data.sdkquery41.style.wizard.config.SharedConfiguration;
+import org.cagrid.grape.utils.CompositeErrorDialog;
 
+import com.jgoodies.validation.Severity;
+import com.jgoodies.validation.ValidationMessage;
+import com.jgoodies.validation.ValidationResult;
 import com.jgoodies.validation.ValidationResultModel;
+import com.jgoodies.validation.message.SimpleValidationMessage;
 import com.jgoodies.validation.util.DefaultValidationResultModel;
+import com.jgoodies.validation.util.ValidationUtils;
+import com.jgoodies.validation.view.ValidationComponentUtils;
 
 public class ModelFromFileSystemPanel extends DomainModelSourcePanel {
     
@@ -56,8 +89,100 @@ public class ModelFromFileSystemPanel extends DomainModelSourcePanel {
 
 
     public CadsrInformation getCadsrDomainInformation() throws Exception {
-        // TODO Auto-generated method stub
-        return null;
+        if (validationModel.hasErrors()) {
+            StringBuffer errors = new StringBuffer();
+            errors.append("Domain model cannot be generated while in an error state:\n");
+            for (ValidationMessage message : validationModel.getResult().getErrors()) {
+                errors.append(message.formattedText()).append("\n");
+            }
+            throw new IllegalStateException(errors.toString());
+        }
+        
+        // copy the domain model to the service's etc dir
+        File etcDir = new File(
+            SharedConfiguration.getInstance().getSdkDirectory(), "etc");
+        String applicationName = SharedConfiguration.getInstance()
+            .getSdkDeployProperties().getProperty(
+                SDK41StyleConstants.DeployProperties.PROJECT_NAME);
+        File domainModelFile = new File(etcDir, applicationName + "_domainModel.xml");
+        Utils.copyFile(new File(getModelFilenameTextField().getText()), domainModelFile);
+        
+        // get / create the domain model resource property
+        ServiceInformation serviceInfo = SharedConfiguration.getInstance().getServiceInfo();
+        ResourcePropertyType domainModelResourceProperty = null;
+        ResourcePropertyType[] domainModelProps = CommonTools.getResourcePropertiesOfType(
+            serviceInfo.getServices().getService(0), DataServiceConstants.DOMAIN_MODEL_QNAME);
+        if (domainModelProps.length != 0) {
+            domainModelResourceProperty = domainModelProps[0];
+            // if old file exists, delete it
+            File oldFile = new File(
+                etcDir, domainModelResourceProperty.getFileLocation());
+            if (oldFile.exists()) {
+                oldFile.delete();
+            }
+        } else {
+            domainModelResourceProperty = new ResourcePropertyType();
+            domainModelResourceProperty.setPopulateFromFile(true);
+            domainModelResourceProperty.setRegister(true);
+            domainModelResourceProperty.setQName(DataServiceConstants.DOMAIN_MODEL_QNAME);
+        }
+        
+        // set value of resource property
+        domainModelResourceProperty.setFileLocation(domainModelFile.getName());
+        
+        // possibly put the resource property in the service for the first time
+        if (domainModelProps.length == 0) {
+            CommonTools.addResourcePropety(
+                serviceInfo.getServices().getService(0), domainModelResourceProperty);
+        }
+        
+        // deserialize the domain model
+        DomainModel model = null;
+        FileReader reader = new FileReader(domainModelFile);
+        model = MetadataUtils.deserializeDomainModel(reader);
+        reader.close();
+        
+        // set the cadsr information to NOT generate a new model
+        CadsrInformation cadsrInfo = new CadsrInformation();
+        cadsrInfo.setNoDomainModel(false);
+        cadsrInfo.setUseSuppliedModel(true);
+        
+        cadsrInfo.setProjectLongName(model.getProjectLongName());
+        cadsrInfo.setProjectVersion(model.getProjectVersion());
+        
+        // map classes by packages
+        Map<String, List<UMLClass>> classesByPackage = new HashMap<String, List<UMLClass>>();
+        for (UMLClass modelClass : model.getExposedUMLClassCollection().getUMLClass()) {
+            List<UMLClass> packageClasses = classesByPackage.get(modelClass.getPackageName());
+            if (packageClasses == null) {
+                packageClasses = new LinkedList<UMLClass>();
+                classesByPackage.put(modelClass.getPackageName(), packageClasses);
+            }
+            packageClasses.add(modelClass);
+        }
+        
+        List<CadsrPackage> cadsrPackages = new ArrayList<CadsrPackage>();
+        for (String packageName : classesByPackage.keySet()) {
+            List<UMLClass> classes = classesByPackage.get(packageName);
+            CadsrPackage pack = new CadsrPackage();
+            pack.setName(packageName);
+            List<ClassMapping> classMappings = new ArrayList<ClassMapping>();
+            for (UMLClass clazz : classes) {
+                ClassMapping mapping = new ClassMapping();
+                mapping.setClassName(clazz.getClassName());
+                // temporary assumption that class name == element name
+                mapping.setElementName(clazz.getClassName());
+                mapping.setSelected(true);
+                mapping.setTargetable(true);
+                classMappings.add(mapping);
+            }
+            ClassMapping[] mappingArray = (ClassMapping[]) classMappings.toArray();
+            pack.setCadsrClass(mappingArray);
+            cadsrPackages.add(pack);
+        }
+        CadsrPackage[] packageArray = (CadsrPackage[]) cadsrPackages.toArray();
+        cadsrInfo.setPackages(packageArray);
+        return cadsrInfo;
     }
 
 
@@ -72,7 +197,7 @@ public class ModelFromFileSystemPanel extends DomainModelSourcePanel {
     
     
     private void initialize() {
-        // configureValidation();
+        configureValidation();
         setLayout(new GridLayout());
         add(getValidationOverlayPanel());
     }
@@ -218,7 +343,29 @@ public class ModelFromFileSystemPanel extends DomainModelSourcePanel {
             modelBrowseButton.setText("Browse");
             modelBrowseButton.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
-                    System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
+                    String[] message = {
+                        "Select the Domain Model XML document on your",
+                        "file system which represents the data model",
+                        "explosed by the caCORE SDK system."
+                    };
+                    OneTimeInfoDialogUtil.showInfoDialog(
+                        ModelFromFileSystemPanel.class, KEY_MODEL_FILE, message);
+                    String selectedFilename = null;
+                    try {
+                        selectedFilename = ResourceManager.promptFile(null, FileFilters.XML_FILTER);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        CompositeErrorDialog.showErrorDialog(
+                            "Error selecting Domain Model", ex.getMessage(), ex);
+                    }
+                    if (selectedFilename != null) {
+                        getModelFilenameTextField().setText(selectedFilename);
+                        validateInput();
+                        if (!validationModel.hasErrors()) {
+                            // valid domain model, so we can populate the packages
+                            populatePackageList();
+                        }
+                    }
                 }
             });
         }
@@ -233,7 +380,7 @@ public class ModelFromFileSystemPanel extends DomainModelSourcePanel {
      */
     private JList getPackagesList() {
         if (packagesList == null) {
-            packagesList = new JList();
+            packagesList = new JList(new DefaultListModel());
         }
         return packagesList;
     }
@@ -381,5 +528,94 @@ public class ModelFromFileSystemPanel extends DomainModelSourcePanel {
             descriptionScrollPane.setViewportView(getDescriptionTextArea());
         }
         return descriptionScrollPane;
+    }
+    
+    
+    // ----------
+    // helpers
+    // ----------
+    
+    
+    private void populatePackageList() {
+        DomainModel model = null;
+        FileReader reader = null;
+        try {
+            reader = new FileReader(getModelFilenameTextField().getText());
+            model = MetadataUtils.deserializeDomainModel(reader);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            CompositeErrorDialog.showErrorDialog("Error loading domain model", ex.getMessage(), ex);
+        } finally {
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (Exception ex) {
+                    // we tried
+                }
+            }
+        }
+        if (model != null) {
+            SortedSet<String> packages = new TreeSet<String>();
+            for (UMLClass clazz : model.getExposedUMLClassCollection().getUMLClass()) {
+                packages.add(clazz.getPackageName());
+            }
+            DefaultListModel listModel = (DefaultListModel) getPackagesList().getModel();
+            while (listModel.size() != 0) {
+                listModel.removeElementAt(0);
+            }
+            for (String name : packages) {
+                listModel.addElement(name);
+            }
+        }
+    }
+    
+    
+    // ----------
+    // validation
+    // ----------
+    
+    
+    private void configureValidation() {
+        ValidationComponentUtils.setMessageKey(getModelFilenameTextField(), KEY_MODEL_FILE);
+        
+        validateInput();
+        updateComponentTreeSeverity();
+    }
+    
+    
+    private void validateInput() {
+        ValidationResult result = new ValidationResult();
+        
+        if (ValidationUtils.isBlank(getModelFilenameTextField().getText())) {
+            result.add(new SimpleValidationMessage(KEY_MODEL_FILE + " cannot be blank!", Severity.ERROR, KEY_MODEL_FILE));
+        } else {
+            // validate the domain model
+            FileReader reader = null;
+            try {
+                reader = new FileReader(getModelFilenameTextField().getText());
+                MetadataUtils.deserializeDomainModel(reader);
+            } catch (Exception ex) {
+                result.add(new SimpleValidationMessage(getModelFilenameTextField().getText() 
+                    + " does not appear to be a valid domain model.  See console for details", Severity.ERROR, KEY_MODEL_FILE));
+            } finally {
+                if (reader != null) {
+                    try {
+                        reader.close();
+                    } catch (IOException ex) {
+                        // we tried!
+                    }
+                }
+            }
+        }
+        
+        validationModel.setResult(result);
+        
+        updateComponentTreeSeverity();
+    }
+    
+    
+    private void updateComponentTreeSeverity() {
+        ValidationComponentUtils.updateComponentTreeMandatoryAndBlankBackground(this);
+        ValidationComponentUtils.updateComponentTreeSeverityBackground(this, validationModel.getResult());
     }
 }

@@ -4,11 +4,14 @@ import gov.nih.nci.cagrid.common.portal.DocumentChangeAdapter;
 import gov.nih.nci.cagrid.common.portal.validation.IconFeedbackPanel;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.data.extension.CadsrInformation;
+import gov.nih.nci.cagrid.data.extension.CadsrPackage;
+import gov.nih.nci.cagrid.data.extension.ClassMapping;
 import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertyType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.metadata.MetadataUtils;
 import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
+import gov.nih.nci.cagrid.metadata.dataservice.UMLClass;
 import gov.nih.nci.cagrid.metadata.xmi.XMIParser;
 import gov.nih.nci.cagrid.metadata.xmi.XmiFileType;
 
@@ -19,7 +22,13 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import javax.swing.JButton;
@@ -376,10 +385,52 @@ public class ModelFromConfigPanel extends DomainModelSourcePanel {
                 serviceInfo.getServices().getService(0), domainModelResourceProperty);
         }
         
+        // deserialize the domain model
+        DomainModel model = null;
+        FileReader reader = new FileReader(domainModelFile);
+        model = MetadataUtils.deserializeDomainModel(reader);
+        reader.close();
+        
         // set the cadsr information to NOT generate a new model
         CadsrInformation cadsrInfo = new CadsrInformation();
         cadsrInfo.setNoDomainModel(false);
         cadsrInfo.setUseSuppliedModel(true);
+        
+        cadsrInfo.setProjectLongName(model.getProjectLongName());
+        cadsrInfo.setProjectVersion(model.getProjectVersion());
+        
+        // map classes by packages
+        Map<String, List<UMLClass>> classesByPackage = new HashMap<String, List<UMLClass>>();
+        for (UMLClass modelClass : model.getExposedUMLClassCollection().getUMLClass()) {
+            List<UMLClass> packageClasses = classesByPackage.get(modelClass.getPackageName());
+            if (packageClasses == null) {
+                packageClasses = new LinkedList<UMLClass>();
+                classesByPackage.put(modelClass.getPackageName(), packageClasses);
+            }
+            packageClasses.add(modelClass);
+        }
+        
+        List<CadsrPackage> cadsrPackages = new ArrayList<CadsrPackage>();
+        for (String packageName : classesByPackage.keySet()) {
+            List<UMLClass> classes = classesByPackage.get(packageName);
+            CadsrPackage pack = new CadsrPackage();
+            pack.setName(packageName);
+            List<ClassMapping> classMappings = new ArrayList<ClassMapping>();
+            for (UMLClass clazz : classes) {
+                ClassMapping mapping = new ClassMapping();
+                mapping.setClassName(clazz.getClassName());
+                // temporary assumption that class name == element name
+                mapping.setElementName(clazz.getClassName());
+                mapping.setSelected(true);
+                mapping.setTargetable(true);
+                classMappings.add(mapping);
+            }
+            ClassMapping[] mappingArray = (ClassMapping[]) classMappings.toArray();
+            pack.setCadsrClass(mappingArray);
+            cadsrPackages.add(pack);
+        }
+        CadsrPackage[] packageArray = (CadsrPackage[]) cadsrPackages.toArray();
+        cadsrInfo.setPackages(packageArray);
         
         return cadsrInfo;
     }
