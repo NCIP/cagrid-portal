@@ -150,7 +150,9 @@ public class DomainModelPanel extends AbstractWizardPanel {
         if (modelSelectionPanel == null) {
             modelSelectionPanel = new JPanel();
             modelSelectionPanel.setLayout(new CardLayout());
-            modelSelectionPanel.setBorder(BorderFactory.createTitledBorder(null, "Domain Model Source", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51)));
+            modelSelectionPanel.setBorder(BorderFactory.createTitledBorder(
+                null, "Domain Model Source", TitledBorder.DEFAULT_JUSTIFICATION, 
+                TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51)));
         }
         return modelSelectionPanel;
     }
