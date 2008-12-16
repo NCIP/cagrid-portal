@@ -8,6 +8,7 @@
 		<CreationWizardPanel classname="org.cagrid.data.sdkquery41.style.wizard.GeneralConfigurationPanel"/>
 		<CreationWizardPanel classname="org.cagrid.data.sdkquery41.style.wizard.APITypePanel"/>
 		<CreationWizardPanel classname="org.cagrid.data.sdkquery41.style.wizard.LoginConfigurationPanel"/>
+		<CreationWizardPanel classname="org.cagrid.data.sdkquery41.style.wizard.DomainModelPanel"/>
 	</CreationWizardPanels>
 	<!-- change these as they get created
 	<ModificationUiPanel classname="gov.nih.nci.cagrid.sdkquery4.style.modification.SDK4InformationPanel"/>
