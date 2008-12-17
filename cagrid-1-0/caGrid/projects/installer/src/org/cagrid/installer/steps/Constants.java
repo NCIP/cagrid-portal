@@ -113,6 +113,8 @@ public abstract class Constants {
     public static final String AVAILABLE_TARGET_GRIDS = "available.target.grids";
 
     public static final String TARGET_GRID = "target.grid";
+    
+    public static final String NO_TARGET_GRID = "NO_TARGET_GRID";
 
     public static final String SHUTDOWN_PORT = "shutdown.port";
 

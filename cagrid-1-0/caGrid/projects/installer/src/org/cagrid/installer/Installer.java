@@ -26,7 +26,7 @@ import org.cagrid.installer.model.CaGridInstallerModel;
 import org.cagrid.installer.model.CaGridInstallerModelImpl;
 import org.cagrid.installer.steps.Constants;
 import org.cagrid.installer.steps.InstallationCompleteStep;
-import org.cagrid.installer.steps.ObtainHostCredentialsStep;
+import org.cagrid.installer.steps.DorianObtainHostCredentialsStep;
 import org.cagrid.installer.steps.PresentLicenseStep;
 import org.cagrid.installer.steps.PreviewTasksStep;
 import org.cagrid.installer.steps.PropertyConfigurationStep;
@@ -359,7 +359,7 @@ public class Installer {
         
         // need to get credentials here from dorian if secure deployment is
         // required
-        ObtainHostCredentialsStep hostCredentialsStep = new ObtainHostCredentialsStep();
+        DorianObtainHostCredentialsStep hostCredentialsStep = new DorianObtainHostCredentialsStep();
         this.model.add(hostCredentialsStep, new Condition() {
             public boolean evaluate(WizardModel m) {
                 CaGridInstallerModel model = (CaGridInstallerModel) m;

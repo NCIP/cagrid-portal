@@ -11,15 +11,15 @@ import org.pietschy.wizard.PanelWizardStep;
 import org.pietschy.wizard.WizardModel;
 
 
-public class ObtainHostCredentialsStep extends PanelWizardStep {
-
+public class DorianObtainHostCredentialsStep extends PanelWizardStep {
+    private CaGridInstallerModel model  = null;  //  @jve:decl-index=0:
     private JLabel hostLabel = null;
 
 
     /**
      * This method initializes
      */
-    public ObtainHostCredentialsStep() {
+    public DorianObtainHostCredentialsStep() {
         super();
         initialize();
     }
@@ -33,7 +33,7 @@ public class ObtainHostCredentialsStep extends PanelWizardStep {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         hostLabel = new JLabel();
-        hostLabel.setText("Request Host Credentials for");
+        hostLabel.setText("Request host credentials for");
         this.setLayout(new GridBagLayout());
         this.setSize(new Dimension(442, 204));
 
@@ -42,10 +42,27 @@ public class ObtainHostCredentialsStep extends PanelWizardStep {
 
 
     public void init(WizardModel m) {
-        CaGridInstallerModel model = (CaGridInstallerModel) m;
+        model= (CaGridInstallerModel) m;
         super.init(m);
 
-        hostLabel.setText(hostLabel.getText() + model.getProperty(Constants.SERVICE_HOSTNAME));
+        
     }
+
+
+    @Override
+    public void prepare() {
+        super.prepare();
+        
+        hostLabel.setText(hostLabel.getText() + " " + model.getProperty(Constants.SERVICE_HOSTNAME));
+        
+        
+        
+        
+        setComplete(true);
+        
+        
+    }
+    
+    
 
 } // @jve:decl-index=0:visual-constraint="16,21"

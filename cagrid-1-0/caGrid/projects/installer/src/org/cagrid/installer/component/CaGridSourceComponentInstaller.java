@@ -46,8 +46,9 @@ public class CaGridSourceComponentInstaller extends AbstractDownloadedComponentI
 
     /*
      * (non-Javadoc)
-     * 
-     * @see org.cagrid.installer.AbstractDownloadedComponentInstaller#getComponentId()
+     * @see
+     * org.cagrid.installer.AbstractDownloadedComponentInstaller#getComponentId
+     * ()
      */
     @Override
     protected String getComponentId() {
@@ -57,8 +58,8 @@ public class CaGridSourceComponentInstaller extends AbstractDownloadedComponentI
 
     /*
      * (non-Javadoc)
-     * 
-     * @see org.cagrid.installer.AbstractDownloadedComponentInstaller#getShouldCheckCondition()
+     * @seeorg.cagrid.installer.AbstractDownloadedComponentInstaller#
+     * getShouldCheckCondition()
      */
     @Override
     protected Condition getShouldCheckCondition() {
@@ -73,8 +74,8 @@ public class CaGridSourceComponentInstaller extends AbstractDownloadedComponentI
 
     /*
      * (non-Javadoc)
-     * 
-     * @see org.cagrid.installer.AbstractDownloadedComponentInstaller#getShouldInstallCondition()
+     * @seeorg.cagrid.installer.AbstractDownloadedComponentInstaller#
+     * getShouldInstallCondition()
      */
     @Override
     protected Condition getShouldInstallCondition() {
@@ -89,8 +90,9 @@ public class CaGridSourceComponentInstaller extends AbstractDownloadedComponentI
 
     /*
      * (non-Javadoc)
-     * 
-     * @see org.cagrid.installer.ExternalComponentInstaller#addCheckInstallSteps(org.cagrid.installer.model.CaGridInstallerModel)
+     * @see
+     * org.cagrid.installer.ExternalComponentInstaller#addCheckInstallSteps(
+     * org.cagrid.installer.model.CaGridInstallerModel)
      */
     public void addCheckInstallSteps(CaGridInstallerModel model) {
         super.addCheckInstallSteps(model);
@@ -142,7 +144,7 @@ public class CaGridSourceComponentInstaller extends AbstractDownloadedComponentI
         String[] targetGrids = model.getProperty(Constants.AVAILABLE_TARGET_GRIDS).split(",");
         PropertyConfigurationStep selectTargetGridStep = new PropertyConfigurationStep(model
             .getMessage("select.target.grid.title"), model.getMessage("select.target.grid.desc"));
-        LabelValuePair[] targetGridPairs = new LabelValuePair[targetGrids.length];
+        LabelValuePair[] targetGridPairs = new LabelValuePair[targetGrids.length + 1];
         for (int i = 0; i < targetGrids.length; i++) {
             String targetGridLabel = targetGrids[i];
             try {
@@ -151,8 +153,10 @@ public class CaGridSourceComponentInstaller extends AbstractDownloadedComponentI
                 logger.warn("Couldn't find label for target grid '" + targetGrids[i] + "'.");
             }
             targetGridPairs[i] = new LabelValuePair(targetGridLabel, targetGrids[i]);
+
         }
-        
+        targetGridPairs[targetGrids.length] = new LabelValuePair("No Target Grid", Constants.NO_TARGET_GRID);
+
         selectTargetGridStep.getOptions().add(
             new ListPropertyConfigurationOption(Constants.TARGET_GRID, model.getMessage("target.grid"),
                 targetGridPairs, true));
@@ -171,7 +175,8 @@ public class CaGridSourceComponentInstaller extends AbstractDownloadedComponentI
         super.addInstallDownloadedComponentTasks(model, installStep);
 
         installStep.getTasks().add(
-            new ConditionalTask(new CompileCaGridTask(model.getMessage("compiling.cagrid.title"), model.getMessage("compiling.cagrid.title")), new Condition() {
+            new ConditionalTask(new CompileCaGridTask(model.getMessage("compiling.cagrid.title"), model
+                .getMessage("compiling.cagrid.title")), new Condition() {
 
                 public boolean evaluate(WizardModel m) {
                     CaGridInstallerModel model = (CaGridInstallerModel) m;
@@ -182,14 +187,13 @@ public class CaGridSourceComponentInstaller extends AbstractDownloadedComponentI
 
         // TODO: figure out why this fails on Mac sometimes
         ConfigureTargetGridTask configTargetGridTask = new ConfigureTargetGridTask(model
-            .getMessage("configuring.target.grid"), model
-            .getMessage("configuring.target.grid"));
+            .getMessage("configuring.target.grid"), model.getMessage("configuring.target.grid"));
         configTargetGridTask.setAbortOnError(false);
         installStep.getTasks().add(new ConditionalTask(configTargetGridTask, new Condition() {
             public boolean evaluate(WizardModel m) {
                 CaGridInstallerModel model = (CaGridInstallerModel) m;
-                return !model.isSet(Constants.TARGET_GRID) || model.isTrue(Constants.RECONFIGURE_CAGRID)
-                    || model.isTrue(Constants.INSTALL_CAGRID);
+                return (model.isTrue(Constants.RECONFIGURE_CAGRID) || model.isTrue(Constants.INSTALL_CAGRID))
+                    && !model.getProperty(Constants.TARGET_GRID).equals(Constants.NO_TARGET_GRID);
             }
         }));
     }
