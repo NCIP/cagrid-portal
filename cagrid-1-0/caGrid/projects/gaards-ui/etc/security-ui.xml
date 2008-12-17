@@ -166,8 +166,8 @@
 							<showOnToolBar>false</showOnToolBar>
 						</component>
 						<component>
-							<title>Account Administrators</title>
-							<description>Account Administrators</description>
+							<title>Access Control</title>
+							<description>Account Access Control</description>
 							<classname>org.cagrid.gaards.ui.dorian.federation.AdministratorsWindow</classname>
 							<icon>/preferences-desktop-theme.png</icon>
 							<showOnToolBar>false</showOnToolBar>
@@ -195,8 +195,8 @@
 							</dimensions>
 						</component>
 						<component>
-							<title>Delegation Administrators</title>
-							<description>Administrators</description>
+							<title>Access Control</title>
+							<description>Delegation Access Control</description>
 							<classname>org.cagrid.gaards.ui.cds.AdministratorsWindow</classname>
 							<icon>/preferences-desktop-theme.png</icon>
 							<showOnToolBar>false</showOnToolBar>
@@ -271,7 +271,7 @@
 				<component>
 					<title>Levels of Assurance</title>
 					<description>Administer the levels of assurance for the trust fabric.</description>
-					<classname>org.cagrid.gaards.ui.gts.TrustLevelManagerWindow</classname>
+					<classname>org.cagrid.gaards.ui.gts.LevelOfAssuranceManagerWindow</classname>
 					<icon>/trust_level.png</icon>
 					<showOnToolBar>false</showOnToolBar>
 				</component>
@@ -283,7 +283,7 @@
 					<showOnToolBar>false</showOnToolBar>
 				</component>
 				<component>
-					<title>Permissions</title>
+					<title>Access Control</title>
 					<description>Grant and Revoke rights to users for administering the trust fabric.</description>
 					<classname>org.cagrid.gaards.ui.gts.PermissionManagerWindow</classname>
 					<icon>/preferences-desktop-theme.png</icon>
@@ -355,19 +355,24 @@
 					</ConfigurationDescriptor>
 				</ConfigurationDescriptors>
 			</ConfigurationGroup>
+				<ConfigurationGroup>
+				<name>Trust Fabric</name>
+				<ConfigurationDescriptors>
+					<ConfigurationDescriptor>
+						<DisplayName>Grid Trust Service(s)</DisplayName>
+						<SystemName>gts</SystemName>
+			    		<ModelClassname>org.cagrid.grape.configuration.ServiceConfiguration</ModelClassname>
+			    		<qname>
+							<namespace>http://www.cagrid.org/1/grape-service-configuration</namespace>
+							<name>ServiceConfiguration</name>
+						</qname>
+						<ConfigurationPanel>org.cagrid.grape.ServiceConfigurationEditor</ConfigurationPanel>
+						<DefaultFile>ext/target_grid/gts-services-configuration.xml</DefaultFile>
+					</ConfigurationDescriptor>
+				</ConfigurationDescriptors>
+			</ConfigurationGroup>
 		</ConfigurationGroups>
 		<ConfigurationDescriptors>
-			<ConfigurationDescriptor>
-				<DisplayName>Grid Trust Fabric</DisplayName>
-				<SystemName>gts</SystemName>
-				<ModelClassname>org.cagrid.grape.configuration.GeneralConfiguration</ModelClassname>
-				<qname>
-					<namespace>http://www.cagrid.org/1/grape-general-configuration</namespace>
-					<name>GeneralConfiguration</name>
-				</qname>
-				<ConfigurationPanel>org.cagrid.grape.GeneralConfigurationEditor</ConfigurationPanel>
-				<DefaultFile>ext/target_grid/gts-ui-configuration.xml</DefaultFile>
-			</ConfigurationDescriptor>
 			<ConfigurationDescriptor>
 				<DisplayName>Group Management</DisplayName>
 				<SystemName>gridgrouper</SystemName>

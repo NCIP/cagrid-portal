@@ -6,7 +6,8 @@ import gov.nih.nci.cagrid.common.RunnerGroup;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.configuration.ServiceConfiguration;
 import org.cagrid.grape.configuration.ServiceDescriptor;
@@ -17,7 +18,7 @@ public class ServicesManager extends Runner {
 
     private static ServicesManager instance;
 
-    private Logger log;
+    private Log log;
 
     private List<DorianHandle> dorianServices;
 
@@ -26,7 +27,7 @@ public class ServicesManager extends Runner {
 
 
     private ServicesManager() {
-        this.log = Logger.getLogger(getClass());
+        this.log = LogFactory.getLog(getClass());
         this.dorianServices = new ArrayList<DorianHandle>();
         this.mutex = new Object();
         this.firstRun = true;

@@ -3,54 +3,37 @@ package org.cagrid.gaards.ui.gts;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.cagrid.grape.GridApplication;
-import org.cagrid.grape.configuration.GeneralConfiguration;
-import org.cagrid.grape.configuration.Properties;
-import org.cagrid.grape.configuration.Property;
-import org.cagrid.grape.configuration.Values;
+import org.cagrid.grape.configuration.ServiceConfiguration;
+import org.cagrid.grape.configuration.ServiceDescriptor;
+import org.cagrid.grape.configuration.Services;
 
 
 public class GTSUIUtils {
 
-	private static Logger log = Logger.getLogger(GTSUIUtils.class);;
+    private static Log log = LogFactory.getLog(GTSUIUtils.class);
 
+    public static List<GTSHandle> getGTSServices() {
+        List<GTSHandle> services = new ArrayList<GTSHandle>();
+        try {
+            ServiceConfiguration conf = (ServiceConfiguration) GridApplication.getContext().getConfigurationManager()
+                .getConfigurationObject(GTSUIConstants.UI_CONF);
+            Services s = conf.getServices();
+            if (s != null) {
+                ServiceDescriptor[] list = s.getServiceDescriptor();
+                if (list != null) {
+                    for (int i = 0; i < list.length; i++) {
+                        GTSHandle handle = new GTSHandle(list[i]);
+                        services.add(handle);
+                    }
+                }
+            }
 
-	public static List getGTSServices() {
-		return getValues(GTSUIConstants.GTS_SERVICES_CONF);
-	}
-
-
-	public static List getValues(String property) {
-		List values = new ArrayList();
-		try {
-			GeneralConfiguration conf = (GeneralConfiguration) GridApplication.getContext().getConfigurationManager()
-				.getConfigurationObject(GTSUIConstants.UI_CONF);
-
-			Properties props = conf.getProperties();
-			if (props != null) {
-				Property[] prop = props.getProperty();
-				if (prop != null) {
-					for (int i = 0; i < prop.length; i++) {
-						if (prop[i].getName().equals(property)) {
-							Values vals = prop[i].getValues();
-							if (vals != null) {
-								String[] val = vals.getValue();
-								if (val != null) {
-									for (int j = 0; j < val.length; j++) {
-										values.add(val[j]);
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-
-		} catch (Exception e) {
-			log.error("Error loading the property " + property + " from the configuration.");
-			log.error(e);
-		}
-		return values;
-	}
+        } catch (Throwable e) {
+            log.error(e);
+        }
+        return services;
+    }
 }

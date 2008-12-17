@@ -13,6 +13,7 @@ import java.security.cert.X509Certificate;
 
 import org.apache.axis.types.URI.MalformedURIException;
 import org.cagrid.gaards.pki.CertUtil;
+import org.globus.wsrf.impl.security.authorization.Authorization;
 
 
 /**
@@ -31,6 +32,18 @@ public class GTSPublicClient {
 	public GTSPublicClient(String url) throws MalformedURIException, RemoteException {
 		this.client = new GTSClient(url);
 	}
+	
+	/**
+     * This method specifies an authorization policy that the client should use
+     * for authorizing the server that it connects to.
+     * 
+     * @param authorization
+     *            The authorization policy to enforce
+     */
+
+    public void setAuthorization(Authorization authorization) {
+        client.setAuthorization(authorization);
+    }
 
 
 	public TrustedAuthority[] findTrustedAuthorities(TrustedAuthorityFilter f) throws RemoteException, GTSInternalFault {

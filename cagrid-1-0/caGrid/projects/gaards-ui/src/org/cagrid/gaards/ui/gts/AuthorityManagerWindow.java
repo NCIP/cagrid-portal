@@ -9,22 +9,16 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 
-import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
-import javax.swing.SwingUtilities;
-import javax.swing.border.TitledBorder;
 
-import org.cagrid.gaards.ui.common.CredentialComboBox;
+import org.cagrid.gaards.ui.common.ProgressPanel;
+import org.cagrid.gaards.ui.common.TitlePanel;
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.LookAndFeel;
 import org.cagrid.grape.utils.ErrorDialog;
-import org.globus.gsi.GlobusCredential;
 
 
 /**
@@ -52,25 +46,9 @@ public class AuthorityManagerWindow extends ApplicationComponent implements Auth
 
 	private JButton addAuthority = null;
 
-	private JPanel jPanel = null;
-
-	private JPanel jPanel2 = null;
-
-	private JLabel jLabel14 = null;
-
 	private JPanel queryPanel = null;
 
 	private JButton query = null;
-
-	private JComboBox service = null;
-
-	private JLabel proxyLabel = null;
-
-	private JComboBox proxy = null;
-
-	private JPanel progressPanel = null;
-
-	private JProgressBar progress = null;
 
 	private JButton removeAuthority = null;
 
@@ -85,6 +63,12 @@ public class AuthorityManagerWindow extends ApplicationComponent implements Auth
 	private JButton updatePriorities = null;
 
 	private boolean searchDone = false;
+
+    private JPanel titlePanel = null;
+
+    private SessionPanel session = null;
+
+    private ProgressPanel progressPanel = null;
 
 
 	/**
@@ -130,6 +114,22 @@ public class AuthorityManagerWindow extends ApplicationComponent implements Auth
 	 */
 	private JPanel getMainPanel() {
 		if (mainPanel == null) {
+			GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
+			gridBagConstraints8.gridx = 0;
+			gridBagConstraints8.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints8.weightx = 1.0D;
+			gridBagConstraints8.gridy = 5;
+			GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
+			gridBagConstraints3.gridx = 0;
+			gridBagConstraints3.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints3.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints3.gridy = 1;
+			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
+			gridBagConstraints1.gridx = 0;
+			gridBagConstraints1.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints1.weightx = 1.0D;
+			gridBagConstraints1.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints1.gridy = 0;
 			GridBagConstraints gridBagConstraints21 = new GridBagConstraints();
 			gridBagConstraints21.gridx = 0;
 			gridBagConstraints21.fill = java.awt.GridBagConstraints.BOTH;
@@ -137,21 +137,9 @@ public class AuthorityManagerWindow extends ApplicationComponent implements Auth
 			gridBagConstraints21.weighty = 1.0D;
 			gridBagConstraints21.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints21.gridy = 3;
-			GridBagConstraints gridBagConstraints32 = new GridBagConstraints();
-			gridBagConstraints32.gridx = 0;
-			gridBagConstraints32.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints32.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints32.weightx = 1.0D;
-			gridBagConstraints32.gridy = 2;
 			GridBagConstraints gridBagConstraints33 = new GridBagConstraints();
 			gridBagConstraints33.gridx = 0;
-			gridBagConstraints33.gridy = 1;
-			GridBagConstraints gridBagConstraints35 = new GridBagConstraints();
-			gridBagConstraints35.gridx = 0;
-			gridBagConstraints35.weightx = 1.0D;
-			gridBagConstraints35.fill = java.awt.GridBagConstraints.BOTH;
-			gridBagConstraints35.gridy = 0;
-
+			gridBagConstraints33.gridy = 2;
 			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
 			mainPanel = new JPanel();
 			mainPanel.setLayout(new GridBagLayout());
@@ -161,10 +149,11 @@ public class AuthorityManagerWindow extends ApplicationComponent implements Auth
 			gridBagConstraints2.anchor = java.awt.GridBagConstraints.SOUTH;
 			gridBagConstraints2.fill = java.awt.GridBagConstraints.HORIZONTAL;
 			mainPanel.add(getButtonPanel(), gridBagConstraints2);
-			mainPanel.add(getJPanel(), gridBagConstraints35);
 			mainPanel.add(getQueryPanel(), gridBagConstraints33);
-			mainPanel.add(getProgressPanel(), gridBagConstraints32);
 			mainPanel.add(getContentPanel(), gridBagConstraints21);
+			mainPanel.add(getTitlePanel(), gridBagConstraints1);
+			mainPanel.add(getSession(), gridBagConstraints3);
+			mainPanel.add(getProgressPanel(), gridBagConstraints8);
 		}
 		return mainPanel;
 	}
@@ -178,10 +167,10 @@ public class AuthorityManagerWindow extends ApplicationComponent implements Auth
 	private JPanel getContentPanel() {
 		if (contentPanel == null) {
 			GridBagConstraints gridBagConstraints = new GridBagConstraints();
-			gridBagConstraints.gridx = 0;
-			gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+			gridBagConstraints.gridx = 1;
+			gridBagConstraints.fill = GridBagConstraints.NONE;
 			gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints.gridy = 1;
+			gridBagConstraints.gridy = 0;
 			GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
 			contentPanel = new JPanel();
 			contentPanel.setLayout(new GridBagLayout());
@@ -211,7 +200,6 @@ public class AuthorityManagerWindow extends ApplicationComponent implements Auth
 			buttonPanel.add(getAddAuthority(), null);
 			buttonPanel.add(getViewModifyButton(), null);
 			buttonPanel.add(getRemoveAuthority(), null);
-			buttonPanel.add(getUpdatePriorities(), null);
 		}
 		return buttonPanel;
 	}
@@ -252,8 +240,7 @@ public class AuthorityManagerWindow extends ApplicationComponent implements Auth
 	private JButton getAddAuthority() {
 		if (addAuthority == null) {
 			addAuthority = new JButton();
-			addAuthority.setText("Add Authority");
-			addAuthority.setIcon(GTSLookAndFeel.getAddIcon());
+			addAuthority.setText("Add");
 			addAuthority.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					Runner runner = new Runner() {
@@ -279,10 +266,7 @@ public class AuthorityManagerWindow extends ApplicationComponent implements Auth
 
 	public void addAuthority() {
 		try {
-
-			String selectedService = ((GTSServiceListComboBox) getService()).getSelectedService();
-			GlobusCredential selectedProxy = ((CredentialComboBox) getProxy()).getSelectedCredential();
-			GridApplication.getContext().addApplicationComponent(new AuthorityWindow(selectedService, selectedProxy, this), 700, 450);
+			GridApplication.getContext().addApplicationComponent(new AuthorityWindow(getSession().getSession(), this), 700, 375);
 		} catch (Exception e) {
 			ErrorDialog.showError(e);
 		}
@@ -291,83 +275,11 @@ public class AuthorityManagerWindow extends ApplicationComponent implements Auth
 
 	public void viewModifyAuthority() {
 		try {
-			String selectedService = ((GTSServiceListComboBox) getService()).getSelectedService();
-			GlobusCredential selectedProxy = ((CredentialComboBox) getProxy()).getSelectedCredential();
 			GridApplication.getContext().addApplicationComponent(
-				new AuthorityWindow(selectedService, selectedProxy, getAuthorityTable().getSelectedAuthority(), this), 700, 450);
+				new AuthorityWindow(getSession().getSession(), getAuthorityTable().getSelectedAuthority(), this), 700, 375);
 		} catch (Exception e) {
 			ErrorDialog.showError(e);
 		}
-	}
-
-
-	/**
-	 * This method initializes jPanel
-	 * 
-	 * @return javax.swing.JPanel
-	 */
-	private JPanel getJPanel() {
-		if (jPanel == null) {
-			GridBagConstraints gridBagConstraints34 = new GridBagConstraints();
-			gridBagConstraints34.fill = GridBagConstraints.HORIZONTAL;
-			gridBagConstraints34.gridy = 0;
-			gridBagConstraints34.weightx = 1.0D;
-			gridBagConstraints34.gridx = 0;
-			jPanel = new JPanel();
-			jPanel.setLayout(new GridBagLayout());
-			jPanel.add(getJPanel2(), gridBagConstraints34);
-		}
-		return jPanel;
-	}
-
-
-	/**
-	 * This method initializes jPanel2
-	 * 
-	 * @return javax.swing.JPanel
-	 */
-	private JPanel getJPanel2() {
-		if (jPanel2 == null) {
-			GridBagConstraints gridBagConstraints30 = new GridBagConstraints();
-			gridBagConstraints30.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints30.gridx = 1;
-			gridBagConstraints30.gridy = 1;
-			gridBagConstraints30.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints30.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints30.weightx = 1.0;
-			GridBagConstraints gridBagConstraints29 = new GridBagConstraints();
-			gridBagConstraints29.gridx = 0;
-			gridBagConstraints29.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints29.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints29.gridy = 1;
-			proxyLabel = new JLabel();
-			proxyLabel.setText("Proxy");
-			GridBagConstraints gridBagConstraints28 = new GridBagConstraints();
-			gridBagConstraints28.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints28.gridx = 1;
-			gridBagConstraints28.gridy = 0;
-			gridBagConstraints28.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints28.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints28.weightx = 1.0;
-			GridBagConstraints gridBagConstraints31 = new GridBagConstraints();
-			gridBagConstraints31.anchor = GridBagConstraints.WEST;
-			gridBagConstraints31.gridwidth = 1;
-			gridBagConstraints31.gridx = 0;
-			gridBagConstraints31.gridy = 0;
-			gridBagConstraints31.insets = new Insets(2, 2, 2, 2);
-			jLabel14 = new JLabel();
-			jLabel14.setText("Service");
-			jPanel2 = new JPanel();
-			jPanel2.setLayout(new GridBagLayout());
-			jPanel2.setBorder(BorderFactory.createTitledBorder(null, "GTS/Login Information",
-				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, 
-                LookAndFeel.getPanelLabelColor()));
-			jPanel2.add(jLabel14, gridBagConstraints31);
-			jPanel2.add(getService(), gridBagConstraints28);
-			jPanel2.add(proxyLabel, gridBagConstraints29);
-			jPanel2.add(getProxy(), gridBagConstraints30);
-		}
-		return jPanel2;
 	}
 
 
@@ -393,8 +305,8 @@ public class AuthorityManagerWindow extends ApplicationComponent implements Auth
 	private JButton getQuery() {
 		if (query == null) {
 			query = new JButton();
-			query.setText("Find Authorities");
-			query.setIcon(LookAndFeel.getQueryIcon());
+			query.setText("Search");
+			getRootPane().setDefaultButton(query);
 			query.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					disableAllActions();
@@ -417,13 +329,11 @@ public class AuthorityManagerWindow extends ApplicationComponent implements Auth
 
 
 	private void getAuthorities() {
-
+	    getProgressPanel().showProgress("Searching...");
 		this.getAuthorityTable().clearTable();
-		this.updateProgress(true, "Finding Authorities...");
 
 		try {
-			String selectedService = ((GTSServiceListComboBox) getService()).getSelectedService();
-			GTSPublicClient client = new GTSPublicClient(selectedService);
+			GTSPublicClient client = getSession().getSession().getUserClient();
 			AuthorityGTS[] auth = client.getAuthorities();
 			int length = 0;
 			if (auth != null) {
@@ -433,88 +343,14 @@ public class AuthorityManagerWindow extends ApplicationComponent implements Auth
 				}
 			}
 			searchDone = true;
-			this.updateProgress(false, "Completed [Found " + length + " Authority(s)]");
+			getProgressPanel().stopProgress(length+" authority(s) found.");
 
 		} catch (Exception e) {
 			ErrorDialog.showError(e);
-			this.updateProgress(false, "Error");
+			getProgressPanel().stopProgress("Error.");
 		} finally {
 			enableAllActions();
 		}
-
-	}
-
-
-	/**
-	 * This method initializes service
-	 * 
-	 * @return javax.swing.JComboBox
-	 */
-	private JComboBox getService() {
-		if (service == null) {
-			service = new GTSServiceListComboBox();
-		}
-		return service;
-	}
-
-
-	/**
-	 * This method initializes proxy
-	 * 
-	 * @return javax.swing.JComboBox
-	 */
-	private JComboBox getProxy() {
-		if (proxy == null) {
-			proxy = new CredentialComboBox();
-		}
-		return proxy;
-	}
-
-
-	/**
-	 * This method initializes progressPanel
-	 * 
-	 * @return javax.swing.JPanel
-	 */
-	private JPanel getProgressPanel() {
-		if (progressPanel == null) {
-			GridBagConstraints gridBagConstraints36 = new GridBagConstraints();
-			gridBagConstraints36.insets = new java.awt.Insets(2, 20, 2, 20);
-			gridBagConstraints36.gridy = 0;
-			gridBagConstraints36.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints36.weightx = 1.0D;
-			gridBagConstraints36.gridx = 0;
-			progressPanel = new JPanel();
-			progressPanel.setLayout(new GridBagLayout());
-			progressPanel.add(getProgress(), gridBagConstraints36);
-		}
-		return progressPanel;
-	}
-
-
-	/**
-	 * This method initializes progress
-	 * 
-	 * @return javax.swing.JProgressBar
-	 */
-	private JProgressBar getProgress() {
-		if (progress == null) {
-			progress = new JProgressBar();
-			progress.setForeground(LookAndFeel.getPanelLabelColor());
-			progress.setString("");
-			progress.setStringPainted(true);
-		}
-		return progress;
-	}
-
-
-	public void updateProgress(final boolean working, final String s) {
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				getProgress().setString(s);
-				getProgress().setIndeterminate(working);
-			}
-		});
 
 	}
 
@@ -527,7 +363,7 @@ public class AuthorityManagerWindow extends ApplicationComponent implements Auth
 	private JButton getRemoveAuthority() {
 		if (removeAuthority == null) {
 			removeAuthority = new JButton();
-			removeAuthority.setText("Remove Authority");
+			removeAuthority.setText("Remove");
 			removeAuthority.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					disableAllActions();
@@ -544,7 +380,6 @@ public class AuthorityManagerWindow extends ApplicationComponent implements Auth
 					}
 				}
 			});
-			removeAuthority.setIcon(GTSLookAndFeel.getRemoveIcon());
 		}
 		return removeAuthority;
 	}
@@ -552,30 +387,30 @@ public class AuthorityManagerWindow extends ApplicationComponent implements Auth
 
 	private void removeAuthority() {
 		try {
-			String selectedService = ((GTSServiceListComboBox) getService()).getSelectedService();
-			GlobusCredential selectedProxy = ((CredentialComboBox) getProxy()).getSelectedCredential();
-			GTSAdminClient client = new GTSAdminClient(selectedService, selectedProxy);
+		    getProgressPanel().showProgress("Removing authority...");
+			GTSAdminClient client = getSession().getSession().getAdminClient();
 			AuthorityGTS gts = this.getAuthorityTable().getSelectedAuthority();
 			client.removeAuthority(gts.getServiceURI());
 			getAuthorities();
-			GridApplication.getContext().showMessage(
-				"Successfully removed the authority " + gts.getServiceURI() + "!!!");
+			getProgressPanel().stopProgress("Authority successfully removed.");
 		} catch (Exception e) {
 			ErrorDialog.showError(e);
+			getProgressPanel().stopProgress("Error");
 		}
 	}
 
 
 	private void updatePriorities() {
 		try {
+		    
 			disableAllActions();
-			String selectedService = ((GTSServiceListComboBox) getService()).getSelectedService();
-			GlobusCredential selectedProxy = ((CredentialComboBox) getProxy()).getSelectedCredential();
-			GTSAdminClient client = new GTSAdminClient(selectedService, selectedProxy);
+			getProgressPanel().showProgress("Updating priorities...");
+			GTSAdminClient client = getSession().getSession().getAdminClient();
 			client.updateAuthorityPriorities(getAuthorityTable().getPriorityUpdate());
-			GridApplication.getContext().showMessage("Successfully updated the authority priorities!!!");
+			getProgressPanel().stopProgress("Successfully updated the priorities.");
 		} catch (Exception e) {
 			ErrorDialog.showError(e);
+			getProgressPanel().stopProgress("Error");
 		} finally {
 			enableAllActions();
 		}
@@ -612,7 +447,7 @@ public class AuthorityManagerWindow extends ApplicationComponent implements Auth
 	private JButton getViewModifyButton() {
 		if (viewModifyButton == null) {
 			viewModifyButton = new JButton();
-			viewModifyButton.setText("View / Modify Authority");
+			viewModifyButton.setText("View");
 			viewModifyButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					Runner runner = new Runner() {
@@ -634,7 +469,6 @@ public class AuthorityManagerWindow extends ApplicationComponent implements Auth
 
 				}
 			});
-			viewModifyButton.setIcon(GTSLookAndFeel.getQueryIcon());
 		}
 		return viewModifyButton;
 	}
@@ -647,9 +481,25 @@ public class AuthorityManagerWindow extends ApplicationComponent implements Auth
 	 */
 	private JPanel getPriorityPanel() {
 		if (priorityPanel == null) {
+			GridBagConstraints gridBagConstraints7 = new GridBagConstraints();
+			gridBagConstraints7.gridx = 0;
+			gridBagConstraints7.insets = new Insets(0, 0, 0, 0);
+			gridBagConstraints7.gridy = 2;
+			GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
+			gridBagConstraints6.insets = new Insets(0, 0, 0, 0);
+			gridBagConstraints6.gridy = 1;
+			gridBagConstraints6.anchor = GridBagConstraints.CENTER;
+			gridBagConstraints6.gridx = 0;
+			GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
+			gridBagConstraints5.insets = new Insets(0, 0, 0, 0);
+			gridBagConstraints5.gridy = 0;
+			gridBagConstraints5.anchor = GridBagConstraints.CENTER;
+			gridBagConstraints5.gridx = 0;
 			priorityPanel = new JPanel();
-			priorityPanel.add(getIncreasePriority(), null);
-			priorityPanel.add(getDecreasePriority(), null);
+			priorityPanel.setLayout(new GridBagLayout());
+			priorityPanel.add(getIncreasePriority(), gridBagConstraints5);
+			priorityPanel.add(getDecreasePriority(), gridBagConstraints6);
+			priorityPanel.add(getUpdatePriorities(), gridBagConstraints7);
 		}
 		return priorityPanel;
 	}
@@ -664,7 +514,6 @@ public class AuthorityManagerWindow extends ApplicationComponent implements Auth
 		if (increasePriority == null) {
 			increasePriority = new JButton();
 			increasePriority.setText("Increase Priority");
-			increasePriority.setIcon(GTSLookAndFeel.getIncreasePriorityIcon());
 			increasePriority.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					try {
@@ -688,7 +537,6 @@ public class AuthorityManagerWindow extends ApplicationComponent implements Auth
 		if (decreasePriority == null) {
 			decreasePriority = new JButton();
 			decreasePriority.setText("Decrease Priority");
-			decreasePriority.setIcon(GTSLookAndFeel.getDecresePriorityIcon());
 			decreasePriority.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					try {
@@ -711,7 +559,7 @@ public class AuthorityManagerWindow extends ApplicationComponent implements Auth
 	private JButton getUpdatePriorities() {
 		if (updatePriorities == null) {
 			updatePriorities = new JButton();
-			updatePriorities.setText("Update Priorities");
+			updatePriorities.setText("Update Priority(s)");
 			updatePriorities.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					disableAllActions();
@@ -728,7 +576,6 @@ public class AuthorityManagerWindow extends ApplicationComponent implements Auth
 					}
 				}
 			});
-			updatePriorities.setIcon(GTSLookAndFeel.getRefreshIcon());
 		}
 		return updatePriorities;
 	}
@@ -741,5 +588,44 @@ public class AuthorityManagerWindow extends ApplicationComponent implements Auth
 			enableAllActions();
 		}
 	}
+
+
+    /**
+     * This method initializes titlePanel	
+     * 	
+     * @return javax.swing.JPanel	
+     */
+    private JPanel getTitlePanel() {
+        if (titlePanel == null) {
+            titlePanel = new TitlePanel("Trust Fabric Authority(s)","Search for and manage trust fabric authorities.");
+        }
+        return titlePanel;
+    }
+
+
+    /**
+     * This method initializes session	
+     * 	
+     * @return javax.swing.JPanel	
+     */
+    private SessionPanel getSession() {
+        if (session == null) {
+            session = new SessionPanel();
+        }
+        return session;
+    }
+
+
+    /**
+     * This method initializes progressPanel	
+     * 	
+     * @return javax.swing.JPanel	
+     */
+    private ProgressPanel getProgressPanel() {
+        if (progressPanel == null) {
+            progressPanel = new ProgressPanel();
+        }
+        return progressPanel;
+    }
 
 }

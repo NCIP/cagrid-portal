@@ -22,9 +22,9 @@ import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
 import org.cagrid.gaards.dorian.client.GridAdministrationClient;
+import org.cagrid.gaards.dorian.federation.FederationAudit;
 import org.cagrid.gaards.dorian.federation.FederationAuditFilter;
 import org.cagrid.gaards.dorian.federation.FederationAuditRecord;
-import org.cagrid.gaards.dorian.federation.FederationAudit;
 import org.cagrid.gaards.ui.common.ProgressPanel;
 import org.cagrid.gaards.ui.common.SelectDateDialog;
 import org.cagrid.gaards.ui.dorian.DorianSessionProvider;

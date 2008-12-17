@@ -22,6 +22,7 @@ import java.rmi.RemoteException;
 
 import org.apache.axis.types.URI.MalformedURIException;
 import org.globus.gsi.GlobusCredential;
+import org.globus.wsrf.impl.security.authorization.Authorization;
 
 
 /**
@@ -41,6 +42,17 @@ public class GTSAdminClient {
 		this.client = new GTSClient(url, proxy);
 	}
 
+	/**
+     * This method specifies an authorization policy that the client should use
+     * for authorizing the server that it connects to.
+     * 
+     * @param authorization
+     *            The authorization policy to enforce
+     */
+
+    public void setAuthorization(Authorization authorization) {
+        client.setAuthorization(authorization);
+    }
 
 	public TrustedAuthority addTrustedAuthority(TrustedAuthority ta) throws RemoteException, GTSInternalFault,
 		IllegalTrustedAuthorityFault, PermissionDeniedFault {

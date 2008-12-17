@@ -14,7 +14,7 @@ import org.cagrid.grape.table.GrapeBaseTable;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: CertificateTable.java,v 1.2 2008-11-20 15:29:42 langella Exp $
+ * @version $Id: CertificateTable.java,v 1.3 2008-12-17 00:12:30 langella Exp $
  */
 public class CertificateTable extends GrapeBaseTable {
 	
@@ -76,7 +76,7 @@ public class CertificateTable extends GrapeBaseTable {
 		int row = getSelectedRow();
 		if ((row >= 0) && (row < getRowCount())) {
 			GridApplication.getContext().addApplicationComponent(
-				new CertificateInformationComponent(getSelectedCertificate()), 600, 425);
+				new CertificateInformationComponent(getSelectedCertificate()), 750, 550);
 		} else {
 			throw new Exception("No certificate selected, please select a certificate!!!");
 		}

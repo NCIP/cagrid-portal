@@ -17,7 +17,7 @@ import org.cagrid.grape.table.GrapeBaseTable;
  * @version $Id: TrustedAuthorityTable.java,v 1.1 2006/03/27 18:52:57 langella
  *          Exp $
  */
-public class TrustLevelTable extends GrapeBaseTable {
+public class LevelOfAssuranceTable extends GrapeBaseTable {
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -27,10 +27,10 @@ public class TrustLevelTable extends GrapeBaseTable {
 
 	public final static String DESCRIPTION = "Description";
 
-	private TrustLevelManagerWindow window;
+	private LevelOfAssuranceManagerWindow window;
 
 
-	public TrustLevelTable(TrustLevelManagerWindow window) {
+	public LevelOfAssuranceTable(LevelOfAssuranceManagerWindow window) {
 		super(createTableModel());
 		this.window = window;
 		TableColumn c = this.getColumn(TRUST_LEVEL);

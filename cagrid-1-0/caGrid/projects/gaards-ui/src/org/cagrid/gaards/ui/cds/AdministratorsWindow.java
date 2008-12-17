@@ -350,7 +350,7 @@ public class AdministratorsWindow extends ApplicationComponent {
     private JButton getRemoveAdmin() {
         if (removeAdmin == null) {
             removeAdmin = new JButton();
-            removeAdmin.setText("Remove Admin");
+            removeAdmin.setText("Remove");
             removeAdmin.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
                     Runner runner = new Runner() {
@@ -395,7 +395,7 @@ public class AdministratorsWindow extends ApplicationComponent {
     private JButton getAddAdmin() {
         if (addAdmin == null) {
             addAdmin = new JButton();
-            addAdmin.setText("Add Admin");
+            addAdmin.setText("Add");
             addAdmin.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
                     Runner runner = new Runner() {
@@ -423,7 +423,7 @@ public class AdministratorsWindow extends ApplicationComponent {
      */
     private JPanel getTitlePanel() {
         if (titlePanel == null) {
-            titlePanel = new TitlePanel("Delegation Service Administrators", "List and manage administrators of delegation service(s)");
+            titlePanel = new TitlePanel("Delegation Service Access Control", "List and manage administrators of delegation service(s)");
         }
         return titlePanel;
     }

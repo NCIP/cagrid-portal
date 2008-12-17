@@ -25,5 +25,9 @@ public class ServiceHandle {
     public String getServiceURL(){
         return getServiceDescriptor().getServiceURL();
     }
+    
+    public String getDisplayName(){
+        return des.getDisplayName();
+    }
 
 }

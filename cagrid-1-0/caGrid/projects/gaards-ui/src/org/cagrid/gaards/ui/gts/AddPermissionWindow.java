@@ -5,21 +5,16 @@ import gov.nih.nci.cagrid.gts.client.GTSAdminClient;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 
-import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.border.TitledBorder;
 
-import org.cagrid.gaards.ui.common.CredentialCaddy;
-import org.cagrid.gaards.ui.common.CredentialComboBox;
+import org.cagrid.gaards.ui.common.ProgressPanel;
+import org.cagrid.gaards.ui.common.TitlePanel;
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
-import org.cagrid.grape.LookAndFeel;
 import org.cagrid.grape.utils.ErrorDialog;
-import org.globus.gsi.GlobusCredential;
 
 
 /**
@@ -30,289 +25,200 @@ import org.globus.gsi.GlobusCredential;
  *          Exp $
  */
 public class AddPermissionWindow extends ApplicationComponent {
-	
-	private static final long serialVersionUID = 1L;
 
-	private JPanel jContentPane = null;
+    private static final long serialVersionUID = 1L;
 
-	private JPanel topPanel = null;
+    private JPanel jContentPane = null;
 
-	private JLabel jLabel = null;
+    private JPanel buttonPanel = null;
 
-	private JComboBox gts = null;
+    private JButton addButton = null;
 
-	private JLabel jLabel1 = null;
+    private PermissionPanel permissionPanel = null;
 
-	private JComboBox proxy = null;
+    private PermissionRefresher refresher;
 
-	private JPanel buttonPanel = null;
+    private JPanel titlePanel = null;
+    
+    private GTSSession session;
 
-	private JButton addButton = null;
-
-	private JButton cancelButton = null;
-
-	private PermissionPanel permissionPanel = null;
-
-	private PermissionRefresher refresher;
+    private ProgressPanel progressPanel = null;
 
 
-	/**
-	 * This is the default constructor
-	 */
-	public AddPermissionWindow(String service, GlobusCredential cred, PermissionRefresher refresher) {
-		super();
-		this.refresher = refresher;
-		initialize();
-		this.gts.setSelectedItem(service);
-		this.proxy.setSelectedItem(new CredentialCaddy(cred));
-		syncServices();
-	}
+    /**
+     * This is the default constructor
+     */
+    public AddPermissionWindow(GTSSession session, PermissionRefresher refresher) {
+        super();
+        this.session = session;
+        this.refresher = refresher;
+        initialize();
+        syncServices();
+    }
 
 
-	/**
-	 * This method initializes this
-	 * 
-	 */
-	private void initialize() {
-		this.setSize(600, 400);
-		this.setContentPane(getJContentPane());
-		this.setTitle("Add Permission");
-		this.setFrameIcon(GTSLookAndFeel.getAdminIcon());
-	}
+    /**
+     * This method initializes this
+     */
+    private void initialize() {
+        this.setSize(600, 400);
+        this.setContentPane(getJContentPane());
+        this.setTitle("Add Permission");
+        this.setFrameIcon(GTSLookAndFeel.getAdminIcon());
+    }
 
 
-	/**
-	 * This method initializes jContentPane
-	 * 
-	 * @return javax.swing.JPanel
-	 */
-	private JPanel getJContentPane() {
-		if (jContentPane == null) {
-			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
-			gridBagConstraints1.gridx = 0;
-			gridBagConstraints1.fill = java.awt.GridBagConstraints.BOTH;
-			gridBagConstraints1.weightx = 1.0D;
-			gridBagConstraints1.weighty = 1.0D;
-			gridBagConstraints1.insets = new java.awt.Insets(5, 5, 5, 5);
-			gridBagConstraints1.gridy = 1;
-			GridBagConstraints gridBagConstraints12 = new GridBagConstraints();
-			gridBagConstraints12.gridx = 0;
-			gridBagConstraints12.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints12.gridy = 2;
-			GridBagConstraints gridBagConstraints = new GridBagConstraints();
-			gridBagConstraints.gridx = 0;
-			gridBagConstraints.ipadx = 0;
-			gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-			gridBagConstraints.weightx = 1.0D;
-			gridBagConstraints.gridy = 0;
-			jContentPane = new JPanel();
-			jContentPane.setLayout(new GridBagLayout());
-			jContentPane.add(getTopPanel(), gridBagConstraints);
-			jContentPane.add(getButtonPanel(), gridBagConstraints12);
-			jContentPane.add(getPermissionPanel(), gridBagConstraints1);
-		}
-		return jContentPane;
-	}
+    /**
+     * This method initializes jContentPane
+     * 
+     * @return javax.swing.JPanel
+     */
+    private JPanel getJContentPane() {
+        if (jContentPane == null) {
+            GridBagConstraints gridBagConstraints = new GridBagConstraints();
+            gridBagConstraints.gridx = 0;
+            gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+            gridBagConstraints.weightx = 1.0D;
+            gridBagConstraints.gridy = 3;
+            GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
+            gridBagConstraints11.gridx = 0;
+            gridBagConstraints11.insets = new Insets(2, 2, 2, 2);
+            gridBagConstraints11.fill = GridBagConstraints.HORIZONTAL;
+            gridBagConstraints11.weightx = 1.0D;
+            gridBagConstraints11.gridy = 0;
+            GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
+            gridBagConstraints1.gridx = 0;
+            gridBagConstraints1.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints1.weightx = 1.0D;
+            gridBagConstraints1.weighty = 1.0D;
+            gridBagConstraints1.insets = new java.awt.Insets(5, 5, 5, 5);
+            gridBagConstraints1.gridy = 1;
+            GridBagConstraints gridBagConstraints12 = new GridBagConstraints();
+            gridBagConstraints12.gridx = 0;
+            gridBagConstraints12.insets = new java.awt.Insets(2, 2, 2, 2);
+            gridBagConstraints12.gridy = 2;
+            jContentPane = new JPanel();
+            jContentPane.setLayout(new GridBagLayout());
+            jContentPane.add(getButtonPanel(), gridBagConstraints12);
+            jContentPane.add(getPermissionPanel(), gridBagConstraints1);
+            jContentPane.add(getTitlePanel(), gridBagConstraints11);
+            jContentPane.add(getProgressPanel(), gridBagConstraints);
+        }
+        return jContentPane;
+    }
 
 
-	/**
-	 * This method initializes topPanel
-	 * 
-	 * @return javax.swing.JPanel
-	 */
-	private JPanel getTopPanel() {
-		if (topPanel == null) {
-			GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
-			gridBagConstraints5.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints5.gridy = 1;
-			gridBagConstraints5.weightx = 1.0;
-			gridBagConstraints5.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints5.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints5.gridx = 1;
-			GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
-			gridBagConstraints4.gridx = 0;
-			gridBagConstraints4.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints4.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints4.gridy = 1;
-			jLabel1 = new JLabel();
-			jLabel1.setText("Select Proxy");
-			GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
-			gridBagConstraints3.fill = java.awt.GridBagConstraints.HORIZONTAL;
-			gridBagConstraints3.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints3.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints3.gridx = 1;
-			gridBagConstraints3.gridy = 0;
-			gridBagConstraints3.weightx = 1.0;
-			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
-			gridBagConstraints2.gridx = 0;
-			gridBagConstraints2.anchor = java.awt.GridBagConstraints.WEST;
-			gridBagConstraints2.insets = new java.awt.Insets(2, 2, 2, 2);
-			gridBagConstraints2.gridy = 0;
-			jLabel = new JLabel();
-			jLabel.setText("Grid Trust Service (GTS)");
-			topPanel = new JPanel();
-			topPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Service/Login Information",
-				javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION, null, LookAndFeel.getPanelLabelColor()));
-			topPanel.setLayout(new GridBagLayout());
-			topPanel.add(jLabel, gridBagConstraints2);
-			topPanel.add(getGts(), gridBagConstraints3);
-			topPanel.add(jLabel1, gridBagConstraints4);
-			topPanel.add(getProxy(), gridBagConstraints5);
-		}
-		return topPanel;
-	}
+    /**
+     * This method initializes buttonPanel
+     * 
+     * @return javax.swing.JPanel
+     */
+    private JPanel getButtonPanel() {
+        if (buttonPanel == null) {
+            buttonPanel = new JPanel();
+            buttonPanel.add(getAddButton(), null);
+        }
+        return buttonPanel;
+    }
 
 
-	/**
-	 * This method initializes gts
-	 * 
-	 * @return javax.swing.JComboBox
-	 */
-	private JComboBox getGts() {
-		if (gts == null) {
-			gts = new GTSServiceListComboBox();
-			gts.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					Runner runner = new Runner() {
-						public void execute() {
-							syncServices();
-						}
-					};
-					try {
-						GridApplication.getContext().executeInBackground(runner);
-					} catch (Exception t) {
-						t.getMessage();
-					}
-				}
+    /**
+     * This method initializes addButton
+     * 
+     * @return javax.swing.JButton
+     */
+    private JButton getAddButton() {
+        if (addButton == null) {
+            addButton = new JButton();
+            getRootPane().setDefaultButton(addButton);
+            addButton.setText("Add");
+            addButton.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                    Runner runner = new Runner() {
+                        public void execute() {
+                            addPermission();
+                        }
+                    };
+                    try {
+                        GridApplication.getContext().executeInBackground(runner);
+                    } catch (Exception t) {
+                        t.getMessage();
+                    }
+                }
 
-			});
-		}
-		return gts;
-	}
+            });
+        }
 
-
-	/**
-	 * This method initializes proxy
-	 * 
-	 * @return javax.swing.JComboBox
-	 */
-	private JComboBox getProxy() {
-		if (proxy == null) {
-			proxy = new CredentialComboBox();
-		}
-		return proxy;
-	}
+        return addButton;
+    }
 
 
-	/**
-	 * This method initializes buttonPanel
-	 * 
-	 * @return javax.swing.JPanel
-	 */
-	private JPanel getButtonPanel() {
-		if (buttonPanel == null) {
-			buttonPanel = new JPanel();
-			buttonPanel.add(getAddButton(), null);
-			buttonPanel.add(getCancelButton(), null);
-		}
-		return buttonPanel;
-	}
+    private void addPermission() {
+        try {
+            getProgressPanel().showProgress("Add permission...");
+            getAddButton().setEnabled(false);
+            getPermissionPanel().disableAll();
+            GTSAdminClient client = this.session.getAdminClient();
+            client.addPermission(permissionPanel.getPermission());
+            getProgressPanel().stopProgress("Permission successfully added.");
+            dispose();
+            refresher.refreshPermissions();  
+        } catch (Exception e) {
+            getAddButton().setEnabled(true);
+            getPermissionPanel().enableAll();
+            ErrorDialog.showError(e);
+            getProgressPanel().stopProgress("Error");
+        }
+
+    }
 
 
-	/**
-	 * This method initializes addButton
-	 * 
-	 * @return javax.swing.JButton
-	 */
-	private JButton getAddButton() {
-		if (addButton == null) {
-			addButton = new JButton();
-			addButton.setText("Add Permission");
-			addButton.setIcon(GTSLookAndFeel.getAddIcon());
-			addButton.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					Runner runner = new Runner() {
-						public void execute() {
-							addPermission();
-						}
-					};
-					try {
-						GridApplication.getContext().executeInBackground(runner);
-					} catch (Exception t) {
-						t.getMessage();
-					}
-				}
-
-			});
-		}
-
-		return addButton;
-	}
+    /**
+     * This method initializes jPanel
+     * 
+     * @return javax.swing.JPanel
+     */
+    private PermissionPanel getPermissionPanel() {
+        if (permissionPanel == null) {
+            permissionPanel = new PermissionPanel(false);
+        }
+        return permissionPanel;
+    }
 
 
-	/**
-	 * This method initializes cancelButton
-	 * 
-	 * @return javax.swing.JButton
-	 */
-	private JButton getCancelButton() {
-		if (cancelButton == null) {
-			cancelButton = new JButton();
-			cancelButton.setText("Cancel");
-			cancelButton.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					dispose();
-				}
-			});
-			cancelButton.setIcon(LookAndFeel.getCloseIcon());
-		}
-		return cancelButton;
-	}
+    private synchronized void syncServices(){ 
+        try {
+            permissionPanel.syncWithService(this.session);
+        } catch (Exception e) {
+            ErrorDialog.showError(e);
+        }
+    }
 
 
-	private void addPermission() {
-		try {
-			getAddButton().setEnabled(false);
-			GlobusCredential selectedProxy = ((CredentialComboBox) getProxy()).getSelectedCredential();
-			String service = ((GTSServiceListComboBox) getGts()).getSelectedService();
-			GTSAdminClient client = new GTSAdminClient(service, selectedProxy);
-			client.addPermission(permissionPanel.getPermission());
-			refresher.refreshPermissions();
-			dispose();
-			GridApplication.getContext().showMessage("Succesfully add the permission!!!");
-		} catch (Exception e) {
-			getAddButton().setEnabled(true);
-			ErrorDialog.showError(e);
-		}
-
-	}
+    /**
+     * This method initializes titlePanel
+     * 
+     * @return javax.swing.JPanel
+     */
+    private JPanel getTitlePanel() {
+        if (titlePanel == null) {
+            titlePanel = new TitlePanel("Add Permission",
+                "Grant a party administrative privilege(s) to the "+this.session.getHandle().getDisplayName());
+        }
+        return titlePanel;
+    }
 
 
-	/**
-	 * This method initializes jPanel
-	 * 
-	 * @return javax.swing.JPanel
-	 */
-	private PermissionPanel getPermissionPanel() {
-		if (permissionPanel == null) {
-			permissionPanel = new PermissionPanel(false);
-			permissionPanel.setBorder(BorderFactory.createTitledBorder(null, "Permission",
-				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, 
-                LookAndFeel.getPanelLabelColor()));
-		}
-		return permissionPanel;
-	}
-
-
-	private synchronized void syncServices() {
-		String service = ((GTSServiceListComboBox) getGts()).getSelectedService();
-		try {
-			permissionPanel.syncWithService(service);
-		} catch (Exception e) {
-			ErrorDialog.showError(e);
-		}
-	}
+    /**
+     * This method initializes progressPanel	
+     * 	
+     * @return javax.swing.JPanel	
+     */
+    private ProgressPanel getProgressPanel() {
+        if (progressPanel == null) {
+            progressPanel = new ProgressPanel();
+        }
+        return progressPanel;
+    }
 
 }

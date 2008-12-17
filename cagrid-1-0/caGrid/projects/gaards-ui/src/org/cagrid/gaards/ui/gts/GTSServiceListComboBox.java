@@ -13,53 +13,65 @@ import javax.swing.JComboBox;
  *          Exp $
  */
 public class GTSServiceListComboBox extends JComboBox {
-	
-	private static final long serialVersionUID = 1L;
 
-	private static String lastSelectedService;
+    private static final long serialVersionUID = 1L;
 
-	private static final String ANY = "Any";
+    private static GTSHandle lastSelectedService;
 
-
-	public GTSServiceListComboBox() {
-		this(false);
-	}
+    private static final String ANY = "Any";
 
 
-	public GTSServiceListComboBox(boolean any) {
-		if (any) {
-			this.addItem(ANY);
-		}
-		List services = GTSUIUtils.getGTSServices();
-		for (int i = 0; i < services.size(); i++) {
-			this.addItem(services.get(i));
-		}
-		if (!any) {
-			if (lastSelectedService == null) {
-				lastSelectedService = getSelectedService();
-			} else {
-				this.setSelectedItem(lastSelectedService);
-			}
-		}
-		this.setEditable(true);
-
-		this.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent e) {
-				if (getSelectedService() != null) {
-					lastSelectedService = getSelectedService();
-				}
-			}
-		});
-	}
+    public GTSServiceListComboBox() {
+        this(null, false);
+    }
 
 
-	public String getSelectedService() {
-		String s = (String) getSelectedItem();
-		if (s.equals(ANY)) {
-			return null;
-		} else {
-			return s;
-		}
-	}
+    public GTSServiceListComboBox(ServiceSelectionListener listener) {
+        this(listener, false);
+    }
+
+
+    public GTSServiceListComboBox(boolean any) {
+        this(null, any);
+    }
+
+
+    public GTSServiceListComboBox(final ServiceSelectionListener listener, boolean any) {
+        if (any) {
+            this.addItem(ANY);
+        }
+        List<GTSHandle> services = GTSUIUtils.getGTSServices();
+        for (int i = 0; i < services.size(); i++) {
+            this.addItem(services.get(i));
+        }
+        if (lastSelectedService == null) {
+            lastSelectedService = getSelectedService();
+        } else {
+            this.setSelectedItem(lastSelectedService);
+        }
+        this.setEditable(false);
+        if (getSelectedService() != null) {
+            setToolTipText(getSelectedService().getServiceURL());
+        }
+        this.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent e) {
+                lastSelectedService = getSelectedService();
+                setToolTipText(getSelectedService().getServiceURL());
+                if (listener != null) {
+                    listener.handleServiceSelected();
+                }
+            }
+        });
+    }
+
+
+    public GTSHandle getSelectedService() {
+        Object o = getSelectedItem();
+        if (o instanceof GTSHandle) {
+            return (GTSHandle) o;
+        } else {
+            return null;
+        }
+    }
 
 }

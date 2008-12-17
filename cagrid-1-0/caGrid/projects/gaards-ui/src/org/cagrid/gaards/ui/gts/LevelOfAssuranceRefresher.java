@@ -7,6 +7,6 @@ package org.cagrid.gaards.ui.gts;
  * @version $Id: TrustedAuthoritiesWindow.java,v 1.2 2006/03/27 19:05:40
  *          langella Exp $
  */
-public interface TrustLevelRefresher {
+public interface LevelOfAssuranceRefresher {
 	public void refreshTrustLevels();
 }

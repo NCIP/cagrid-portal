@@ -2,6 +2,7 @@ package org.cagrid.gaards.ui.common;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.security.cert.X509Certificate;
 
 import javax.swing.JPanel;
@@ -24,7 +25,9 @@ public class CertificateInformationComponent extends ApplicationComponent {
 	private X509Certificate cert;
 	private JPanel certificatePanel = null;
 
-	public CertificateInformationComponent() {
+    private JPanel titlePanel = null;
+
+    public CertificateInformationComponent() {
 		super();
 		initialize();
 	}
@@ -46,6 +49,7 @@ public class CertificateInformationComponent extends ApplicationComponent {
 		this.setContentPane(getJContentPane());
 		this.setFrameIcon(GAARDSLookAndFeel.getCertificateIcon());
 		this.setTitle("Certificate Viewer");
+		this.setSize(500, 500);
 	}
 
 	/**
@@ -69,16 +73,23 @@ public class CertificateInformationComponent extends ApplicationComponent {
 	 */
 	private JPanel getMainPanel() {
 		if (mainPanel == null) {
+			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
+			gridBagConstraints1.gridx = 0;
+			gridBagConstraints1.gridy = 0;
+			gridBagConstraints1.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints1.weightx = 1.0D;
+			gridBagConstraints1.fill = GridBagConstraints.HORIZONTAL;
 			GridBagConstraints gridBagConstraints = new GridBagConstraints();
 			gridBagConstraints.gridx = 0;
 			gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
 			gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
 			gridBagConstraints.weightx = 1.0D;
 			gridBagConstraints.weighty = 1.0D;
-			gridBagConstraints.gridy = 0;
+			gridBagConstraints.gridy = 1;
 			mainPanel = new JPanel();
 			mainPanel.setLayout(new GridBagLayout());
 			mainPanel.add(getCertificatePanel(), gridBagConstraints);
+			mainPanel.add(getTitlePanel(), gridBagConstraints1);
 		}
 		return mainPanel;
 	}
@@ -94,4 +105,16 @@ public class CertificateInformationComponent extends ApplicationComponent {
 		}
 		return certificatePanel;
 	}
+
+    /**
+     * This method initializes titlePanel	
+     * 	
+     * @return javax.swing.JPanel	
+     */
+    private JPanel getTitlePanel() {
+        if (titlePanel == null) {
+            titlePanel = new TitlePanel("X.509 Certificate", this.cert.getSubjectDN().getName());
+        }
+        return titlePanel;
+    }
 }

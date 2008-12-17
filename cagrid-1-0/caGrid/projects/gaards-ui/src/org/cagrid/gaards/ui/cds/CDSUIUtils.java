@@ -3,7 +3,8 @@ package org.cagrid.gaards.ui.cds;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.cagrid.gaards.cds.common.DelegationPolicy;
 import org.cagrid.gaards.cds.common.GroupDelegationPolicy;
 import org.cagrid.gaards.cds.common.IdentityDelegationPolicy;
@@ -15,7 +16,7 @@ import org.cagrid.grape.configuration.Services;
 
 public class CDSUIUtils {
 
-    private static Logger log = Logger.getLogger(CDSUIUtils.class);
+    private static Log log = LogFactory.getLog(CDSUIUtils.class);
 
 
     public static List<CDSHandle> getCDSServices() {

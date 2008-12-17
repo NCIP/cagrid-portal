@@ -449,8 +449,8 @@ public class AdministratorsWindow extends ApplicationComponent {
 	 */
 	private JPanel getTitlePanel() {
 		if (titlePanel == null) {
-			titlePanel = new TitlePanel("Administrator(s)",
-					"Manage the administrators of the federation.");
+			titlePanel = new TitlePanel("Account Access Control",
+					"Grant and revoke privileges for administrating grid accounts.");
 		}
 		return titlePanel;
 	}
