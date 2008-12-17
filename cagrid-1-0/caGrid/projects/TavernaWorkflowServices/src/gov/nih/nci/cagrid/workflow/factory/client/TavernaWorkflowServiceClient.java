@@ -112,49 +112,6 @@ public class TavernaWorkflowServiceClient extends
 		}
 	}
 
-	public workflowmanagementfactoryservice.WMSOutputType createWorkflow(
-			workflowmanagementfactoryservice.WMSInputType wMSInputElement)
-			throws RemoteException,
-			gov.nih.nci.cagrid.workflow.factory.stubs.types.WorkflowException {
-		synchronized (portTypeMutex) {
-			configureStubSecurity((Stub) portType, "createWorkflow");
-			gov.nih.nci.cagrid.workflow.factory.stubs.CreateWorkflowRequest params = new gov.nih.nci.cagrid.workflow.factory.stubs.CreateWorkflowRequest();
-			gov.nih.nci.cagrid.workflow.factory.stubs.CreateWorkflowRequestWMSInputElement wMSInputElementContainer = new gov.nih.nci.cagrid.workflow.factory.stubs.CreateWorkflowRequestWMSInputElement();
-			wMSInputElementContainer.setWMSInputElement(wMSInputElement);
-			params.setWMSInputElement(wMSInputElementContainer);
-			gov.nih.nci.cagrid.workflow.factory.stubs.CreateWorkflowResponse boxedResult = portType
-					.createWorkflow(params);
-			return boxedResult.getWMSOutputElement();
-		}
-	}
-
-	public org.oasis.wsrf.properties.GetMultipleResourcePropertiesResponse getMultipleResourceProperties(
-			org.oasis.wsrf.properties.GetMultipleResourceProperties_Element params)
-			throws RemoteException {
-		synchronized (portTypeMutex) {
-			configureStubSecurity((Stub) portType,
-					"getMultipleResourceProperties");
-			return portType.getMultipleResourceProperties(params);
-		}
-	}
-
-	public org.oasis.wsrf.properties.GetResourcePropertyResponse getResourceProperty(
-			javax.xml.namespace.QName params) throws RemoteException {
-		synchronized (portTypeMutex) {
-			configureStubSecurity((Stub) portType, "getResourceProperty");
-			return portType.getResourceProperty(params);
-		}
-	}
-
-	public org.oasis.wsrf.properties.QueryResourcePropertiesResponse queryResourceProperties(
-			org.oasis.wsrf.properties.QueryResourceProperties_Element params)
-			throws RemoteException {
-		synchronized (portTypeMutex) {
-			configureStubSecurity((Stub) portType, "queryResourceProperties");
-			return portType.queryResourceProperties(params);
-		}
-	}
-
 	public static EndpointReferenceType setupWorkflow(String url,
 			String scuflDoc, String workflowName) throws MalformedURIException,
 			RemoteException, Exception {
@@ -269,4 +226,37 @@ public class TavernaWorkflowServiceClient extends
 		return input;
 
 	}
+  public workflowmanagementfactoryservice.WMSOutputType createWorkflow(workflowmanagementfactoryservice.WMSInputType wMSInputElement) throws RemoteException, gov.nih.nci.cagrid.workflow.factory.stubs.types.WorkflowException {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"createWorkflow");
+    gov.nih.nci.cagrid.workflow.factory.stubs.CreateWorkflowRequest params = new gov.nih.nci.cagrid.workflow.factory.stubs.CreateWorkflowRequest();
+    gov.nih.nci.cagrid.workflow.factory.stubs.CreateWorkflowRequestWMSInputElement wMSInputElementContainer = new gov.nih.nci.cagrid.workflow.factory.stubs.CreateWorkflowRequestWMSInputElement();
+    wMSInputElementContainer.setWMSInputElement(wMSInputElement);
+    params.setWMSInputElement(wMSInputElementContainer);
+    gov.nih.nci.cagrid.workflow.factory.stubs.CreateWorkflowResponse boxedResult = portType.createWorkflow(params);
+    return boxedResult.getWMSOutputElement();
+    }
+  }
+
+  public org.oasis.wsrf.properties.GetMultipleResourcePropertiesResponse getMultipleResourceProperties(org.oasis.wsrf.properties.GetMultipleResourceProperties_Element params) throws RemoteException {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"getMultipleResourceProperties");
+    return portType.getMultipleResourceProperties(params);
+    }
+  }
+
+  public org.oasis.wsrf.properties.GetResourcePropertyResponse getResourceProperty(javax.xml.namespace.QName params) throws RemoteException {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"getResourceProperty");
+    return portType.getResourceProperty(params);
+    }
+  }
+
+  public org.oasis.wsrf.properties.QueryResourcePropertiesResponse queryResourceProperties(org.oasis.wsrf.properties.QueryResourceProperties_Element params) throws RemoteException {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"queryResourceProperties");
+    return portType.queryResourceProperties(params);
+    }
+  }
+
 }

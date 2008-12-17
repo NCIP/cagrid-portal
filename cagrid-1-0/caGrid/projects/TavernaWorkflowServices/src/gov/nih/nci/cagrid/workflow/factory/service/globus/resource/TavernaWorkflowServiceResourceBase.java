@@ -140,6 +140,19 @@ public abstract class TavernaWorkflowServiceResourceBase extends ReflectionResou
 	
 
 
+	    //Getters/Setters for ResourceProperties
+	
+	
+	public gov.nih.nci.cagrid.metadata.ServiceMetadata getServiceMetadata(){
+		return ((TavernaWorkflowServiceResourceProperties) getResourceBean()).getServiceMetadata();
+	}
+	
+	public void setServiceMetadata(gov.nih.nci.cagrid.metadata.ServiceMetadata serviceMetadata ) throws ResourceException {
+        ResourceProperty prop = getResourcePropertySet().get(TavernaWorkflowServiceConstants.SERVICEMETADATA);
+		prop.set(0, serviceMetadata);
+        //call the first store to persist the resource
+        store();
+	}
 	
 
 
@@ -334,10 +347,26 @@ public abstract class TavernaWorkflowServiceResourceBase extends ReflectionResou
     
     	protected void populateResourceProperties() {
 	
+		loadServiceMetadataFromFile();
+	
 	}
 
 
-			
+		
+	private void loadServiceMetadataFromFile() {
+      if(getServiceMetadata()==null){
+		try {
+			File dataFile = new File(ContainerConfig.getBaseDirectory() + File.separator
+					+ getConfiguration().getServiceMetadataFile());
+			((TavernaWorkflowServiceResourceProperties) this.getResourceBean()).setServiceMetadata((gov.nih.nci.cagrid.metadata.ServiceMetadata) Utils.deserializeDocument(dataFile.getAbsolutePath(),
+				gov.nih.nci.cagrid.metadata.ServiceMetadata.class));
+		} catch (Exception e) {
+			logger.error("ERROR: problem populating metadata from file: " + e.getMessage(), e);
+		}
+	  }
+	}		
+	
+		
 
 
 

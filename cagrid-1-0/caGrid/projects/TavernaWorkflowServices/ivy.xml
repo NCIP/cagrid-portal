@@ -43,24 +43,18 @@
     <dependency rev="latest.integration" org="caGrid" name="service-security-provider"
       conf="client->client;service->service"/>
     <dependency rev="latest.integration" org="caGrid" name="advertisement" conf="service->default"/>
-   <dependency rev="latest.integration" org="caGrid" name="introduce" conf="service->serviceTools;impl-test->test"/> 
-   <dependency rev="latest.integration" org="caGrid" name="introduce-servicetools" conf="service->default"/> 
+    <dependency rev="latest.integration" org="caGrid" name="introduce-servicetools" conf="service->default"/> 
     
     <dependency rev="${target.grid}" org="caGrid" name="target_grid" conf="target_grid->urls"/>
 
     <!-- Specific caGrid Service Dependencies -->
     <dependency rev="latest.integration" org="caGrid" name="grape" conf="client->default"/>
+<!--    <dependency rev="latest.integration" org="caGrid" name="metadatautils" conf="service->default" /> -->
 
     <!-- Extenernal Dependencies -->
     <dependency rev="1.0" org="jdom" name="jdom" conf="service->*"/>
     <dependency rev="4.4" org="junit" name="junit" conf="impl-test->default" />
-
-<!--
-    <dependency rev="3.0" org="apache" name="jarkarta-commons-httpclient" conf="service->*"/>
-    <dependency rev="1.2" org="apache" name="commons-codec" conf="service->*"/>
-    <dependency rev="1.3.2" org="apache" name="commons-io" conf="service->*"/>
-    <dependency rev="1.1" org="apache" name="commons-logging" conf="service->*"/>
--->
+    <dependency rev="4.0" org="cacore" name="cadsr-api" conf="service->*" />
 
     <!-- Build file dependencies -->
     <dependency rev="latest.integration" org="caGrid" name="introduce-buildtools" conf="serviceTools->default" />
@@ -70,14 +64,6 @@
       deploy time validation which uses this uses the service's classpath too.
     -->
     <dependency rev="latest.integration" org="caGrid" name="cabigextensions" conf="serviceTools->validator" transitive="false" />
-
-
-
     
-<!--    <dependency rev="1.3" org="apache" name="commons-codec" conf="client->*"/>
-    <dependency rev="3.0" org="apache" name="jarkarta-commons-httpclient" conf="client->*"/>
-    <dependency rev="1.3.2" org="apache" name="commons-io" conf="client->*"/>
-    <dependency rev="1.1" org="apache" name="commons-logging" conf="client->*"/>
- -->   
   </dependencies>
 </ivy-module>
