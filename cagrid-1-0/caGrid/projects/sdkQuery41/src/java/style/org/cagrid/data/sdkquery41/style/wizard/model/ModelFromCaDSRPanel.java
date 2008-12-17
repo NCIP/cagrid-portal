@@ -99,10 +99,8 @@ public class ModelFromCaDSRPanel extends DomainModelSourcePanel {
             ClassMapping[] mappings = new ClassMapping[classMetadata.length];
             for (int j = 0; j < classMetadata.length; j++) {
                 ClassMapping mapping = new ClassMapping();
-                // temporary assumption that class name == element name
-                // this can be changed
+                // NOT setting element name until schema mapping panel
                 mapping.setClassName(classMetadata[j].getName());
-                mapping.setElementName(classMetadata[j].getName());
                 mapping.setSelected(true);
                 mapping.setTargetable(true);
             }

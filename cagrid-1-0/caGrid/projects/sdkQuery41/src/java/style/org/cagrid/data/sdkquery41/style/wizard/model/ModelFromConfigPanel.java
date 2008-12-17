@@ -420,8 +420,7 @@ public class ModelFromConfigPanel extends DomainModelSourcePanel {
             for (UMLClass clazz : classes) {
                 ClassMapping mapping = new ClassMapping();
                 mapping.setClassName(clazz.getClassName());
-                // temporary assumption that class name == element name
-                mapping.setElementName(clazz.getClassName());
+                // NOT populating element names until Schema Mapping Panel
                 mapping.setSelected(true);
                 mapping.setTargetable(true);
                 classMappings.add(mapping);
