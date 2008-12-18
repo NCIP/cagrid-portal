@@ -200,7 +200,7 @@
         <property name="baseUrl" value="${cagrid.portal.map.google.baseUrl}"/>
         <property name="apiKey" value="${cagrid.portal.map.google.apiKey}"/>
         <property name="centerLatitude" value="35"/>
-        <property name="centerLongitude" value="-99"/>
+        <property name="centerLongitude" value="-111"/>
         <property name="zoomLevel" value="3"/>
 
     </bean>
