@@ -12,6 +12,8 @@
 	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
 	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd">
 
+    <import resource="classpath:applicationContext-aggr.xml"/>
+    
     <bean id="syncGTSInitBean" class="gov.nih.nci.cagrid.portal.util.SyncGTSInitUtility">
         
         <property name="synchronizeEnabled" value="${cagrid.portal.trust.synchronizeEnabled}"/>
