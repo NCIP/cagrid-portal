@@ -75,17 +75,17 @@ public class AjaxStatusService extends AjaxViewGenerator {
     
    @RemoteMethod
     public int servicesCount(){
-        return gridServiceDao.getAll().size();
+        return servicefilter.filter(gridServiceDao.getAll()).size();
     }
 
     @RemoteMethod
     public int dataServicesCount(){
-        return gridServiceDao.getAllDataServices().size();
+        return servicefilter.filter(gridServiceDao.getAllDataServices()).size();
     }
 
     @RemoteMethod
     public int analServicesCount(){
-        return gridServiceDao.getAllAnalyticalServices().size();
+        return servicefilter.filter(gridServiceDao.getAllAnalyticalServices()).size();
     }
 
     @RemoteMethod
