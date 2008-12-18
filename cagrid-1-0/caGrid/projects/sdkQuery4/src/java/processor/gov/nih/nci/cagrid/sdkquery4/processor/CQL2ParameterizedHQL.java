@@ -34,7 +34,7 @@ import org.apache.commons.logging.LogFactory;
  * @author David Ervin
  * 
  * @created Mar 2, 2007 10:26:47 AM
- * @version $Id: CQL2ParameterizedHQL.java,v 1.11 2008-12-09 16:03:44 dervin Exp $ 
+ * @version $Id: CQL2ParameterizedHQL.java,v 1.12 2008-12-18 14:48:11 dervin Exp $ 
  */
 public class CQL2ParameterizedHQL {
     public static final String TARGET_ALIAS = "__TargetAlias__";
@@ -255,21 +255,16 @@ public class CQL2ParameterizedHQL {
 		String predicateAsString = predicateValues.get(attribute.getPredicate());
 		if (!unaryPredicate) {
 			hql.append(predicateAsString).append(' ');
-            // TODO: will lower() work with positional parameters?
-			if (caseInsensitive) {
-				hql.append("lower(");
-			}
-            
+
             // add a placeholder parameter to the HQL query
 			hql.append('?');
-            
-            // add a positional parameter value to the list
-            parameters.add(valueToObject(attributeFieldType, 
-                caseInsensitive ? attribute.getValue().toLowerCase() : attribute.getValue()));
-			
-			if (caseInsensitive) {
-				hql.append(')');
-			}
+
+			// convert the attribtue value to the specific data type of the attribute
+            java.lang.Object value = valueToObject(attributeFieldType, 
+                caseInsensitive ? attribute.getValue().toLowerCase() : attribute.getValue());
+
+            // add a positional parameter value to the list            
+            parameters.add(value);
 		} else {
             // binary predicates just get appended w/o values associated with them
 			hql.append(predicateAsString);
