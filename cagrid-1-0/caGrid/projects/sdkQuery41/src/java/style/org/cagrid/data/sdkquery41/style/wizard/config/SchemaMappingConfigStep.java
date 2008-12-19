@@ -81,12 +81,12 @@ public class SchemaMappingConfigStep extends AbstractStyleConfigurationStep {
                     Utils.copyFile(xsdFile, xsdOut);
                     nsType.setLocation(xsdOut.getName());
                     
-                    // add the namespace to the service definition
-                    CommonTools.addNamespace(getServiceInformation().getServiceDescriptor(), nsType);
-                    
                     // get cadsr package, set namespace, automagic mapping
                     dataManager.setMappedNamespaceForPackage(packageName, nsType.getNamespace());
                     automaticalyMapElementsToClasses(packageName, nsType);
+                    
+                    // add the namespace to the service definition
+                    CommonTools.addNamespace(getServiceInformation().getServiceDescriptor(), nsType);
                     break;
                 }
             }
