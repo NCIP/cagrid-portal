@@ -40,7 +40,7 @@ public abstract class AbstractDownloadedComponentInstaller implements Downloaded
         CheckReInstallStep checkInstallStep = new CheckReInstallStep(model.getMessage(getComponentId()
             + ".check.reinstall.title"), model.getMessage(getComponentId() + ".check.reinstall.desc"), getComponentId()
             + ".home", "install." + getComponentId());
-        model.add(checkInstallStep, getShouldCheckCondition());
+        model.add(checkInstallStep, getShouldCheckReinstallCondition());
 
         InstallInfoStep installInfoStep = new InstallInfoStep(model.getMessage(getComponentId() + ".home.title"), model
             .getMessage(getComponentId() + ".home.desc"), getComponentId() + ".install.dir.path");
@@ -75,7 +75,7 @@ public abstract class AbstractDownloadedComponentInstaller implements Downloaded
     protected abstract String getComponentId();
 
 
-    protected abstract Condition getShouldCheckCondition();
+    protected abstract Condition getShouldCheckReinstallCondition();
 
 
     protected abstract Condition getShouldInstallCondition();

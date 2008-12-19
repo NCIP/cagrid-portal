@@ -71,6 +71,7 @@ public class RunTasksStep extends PanelWizardStep implements PropertyChangeListe
      * 
      */
     public RunTasksStep() {
+        initialize();
     }
 
 
@@ -80,6 +81,7 @@ public class RunTasksStep extends PanelWizardStep implements PropertyChangeListe
      */
     public RunTasksStep(String name, String description) {
         super(name, description);
+        initialize();
     }
 
 
@@ -90,32 +92,33 @@ public class RunTasksStep extends PanelWizardStep implements PropertyChangeListe
      */
     public RunTasksStep(String name, String description, Icon icon) {
         super(name, description, icon);
+        initialize();
     }
 
 
-    public void init(WizardModel m) {
-        if (!(m instanceof CaGridInstallerModel)) {
-            throw new IllegalStateException("This step requires a StatefulWizardModel instance.");
-        }
-        this.model = (CaGridInstallerModel) m;
-
+    /**
+     * This method initializes this
+     */
+    private void initialize() {
         GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
         gridBagConstraints3.fill = GridBagConstraints.BOTH;
         gridBagConstraints3.gridy = 2;
         gridBagConstraints3.weightx = 1.0D;
-        gridBagConstraints3.weighty = 0.2D;
+        gridBagConstraints3.weighty = 1.0D;
         gridBagConstraints3.gridx = 0;
         GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
         gridBagConstraints2.fill = GridBagConstraints.BOTH;
         gridBagConstraints2.gridy = 1;
         gridBagConstraints2.weightx = 1.0D;
-        gridBagConstraints2.weighty = 0.2D;
+        gridBagConstraints2.weighty = 0.0D;
+        gridBagConstraints2.insets = new Insets(10, 2, 10, 2);
         gridBagConstraints2.gridx = 0;
         GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
         gridBagConstraints1.gridx = 0;
         gridBagConstraints1.weightx = 1.0D;
-        gridBagConstraints1.weighty = 1.0D;
+        gridBagConstraints1.weighty = 0.0D;
         gridBagConstraints1.fill = GridBagConstraints.BOTH;
+        gridBagConstraints1.insets = new Insets(10, 0, 0, 0);
         gridBagConstraints1.gridy = 0;
         GridBagConstraints gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -125,17 +128,24 @@ public class RunTasksStep extends PanelWizardStep implements PropertyChangeListe
         gridBagConstraints.gridy = 1;
         this.setLayout(new GridBagLayout());
         this.setSize(new Dimension(263, 161));
-        this.add(getDescriptionPanel(), gridBagConstraints1);
-
-        this.add(getBusyPanel(), gridBagConstraints2);
-
         JTextArea taskOutput = new JTextArea(5, 20);
         // taskOutput.setAutoscrolls(true);
         taskOutput.setMargin(new Insets(5, 5, 5, 5));
         taskOutput.setEditable(false);
+        this.add(getDescriptionPanel(), gridBagConstraints1);
+        this.add(getBusyPanel(), gridBagConstraints2);
+        this.add(new JScrollPane(taskOutput), gridBagConstraints3);
         this.out = new PrintStream(new TextAreaOutputStream(taskOutput));
 
-        add(new JScrollPane(taskOutput), gridBagConstraints3);
+    }
+
+
+    public void init(WizardModel m) {
+        if (!(m instanceof CaGridInstallerModel)) {
+            throw new IllegalStateException("This step requires a StatefulWizardModel instance.");
+        }
+        this.model = (CaGridInstallerModel) m;
+
     }
 
 
@@ -149,7 +159,7 @@ public class RunTasksStep extends PanelWizardStep implements PropertyChangeListe
 
 
     public void prepare() {
-        
+
         for (Task t : getTasks()) {
             if (t instanceof Condition && !((Condition) t).evaluate(this.model)) {
                 continue;
@@ -159,8 +169,7 @@ public class RunTasksStep extends PanelWizardStep implements PropertyChangeListe
         this.monitor.reset();
         System.setOut(this.out);
         System.setErr(this.out);
-        
-        
+
         String workingLabel = "running";
         RunTasksStep.this.setBusyLabel(workingLabel);
         Worker w = new Worker(RunTasksStep.this.getTasks(), RunTasksStep.this.model);
@@ -169,8 +178,6 @@ public class RunTasksStep extends PanelWizardStep implements PropertyChangeListe
         RunTasksStep.this.model.setDeactivatePrevious(true);
         RunTasksStep.this.setSummary(workingLabel);
         w.start();
-        
-        
 
     }
 
@@ -205,7 +212,10 @@ public class RunTasksStep extends PanelWizardStep implements PropertyChangeListe
         if (busyPanel == null) {
             GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
             gridBagConstraints4.gridx = 0;
-            gridBagConstraints4.insets = new Insets(0, 10, 0, 10);
+            gridBagConstraints4.insets = new Insets(0, 0, 0, 0);
+            gridBagConstraints4.fill = GridBagConstraints.HORIZONTAL;
+            gridBagConstraints4.weighty = 1.0D;
+            gridBagConstraints4.weightx = 1.0D;
             gridBagConstraints4.gridy = 0;
             busyPanel = new JPanel();
             busyPanel.setLayout(new GridBagLayout());
@@ -231,10 +241,6 @@ public class RunTasksStep extends PanelWizardStep implements PropertyChangeListe
         }
         return busyProgressBar;
     }
-
-
-                    
-            
 
 
     public void propertyChange(PropertyChangeEvent evt) {
@@ -336,7 +342,7 @@ public class RunTasksStep extends PanelWizardStep implements PropertyChangeListe
                 }
                 setProgress(getProgress() + 1);
             }
-            
+
             setComplete(true);
         }
 
@@ -416,4 +422,4 @@ public class RunTasksStep extends PanelWizardStep implements PropertyChangeListe
         this.deactivePrevious = deactivePrevious;
     }
 
-}
+} // @jve:decl-index=0:visual-constraint="10,10"

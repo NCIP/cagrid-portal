@@ -33,11 +33,11 @@ public class GlobusComponentInstaller extends
 	 * @see org.cagrid.installer.AbstractDownloadedComponentInstaller#getShouldCheckCondition()
 	 */
 	@Override
-	protected Condition getShouldCheckCondition() {
+	protected Condition getShouldCheckReinstallCondition() {
 		return new Condition() {
 			public boolean evaluate(WizardModel m) {
 				CaGridInstallerModel model = (CaGridInstallerModel) m;
-				return model.isGlobusInstalled();
+				return model.isGlobusInstalled() && model.isTrue(Constants.INSTALL_CONFIGURE_CAGRID);
 			}
 		};
 	}

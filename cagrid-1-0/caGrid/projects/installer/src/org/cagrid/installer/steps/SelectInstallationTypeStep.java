@@ -44,7 +44,7 @@ public class SelectInstallationTypeStep extends PropertyConfigurationStep {
 
     protected void checkComplete() {
 
-        if (isSelected(Constants.INSTALL_CAGRID) || isSelected(Constants.CONFIGURE_CONTAINER)) {
+        if (isSelected(Constants.INSTALL_CONFIGURE_CAGRID) || isSelected(Constants.CONFIGURE_CONTAINER)) {
             setComplete(true);
         } else {
             setComplete(false);

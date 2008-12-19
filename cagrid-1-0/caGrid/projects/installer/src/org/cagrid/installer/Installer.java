@@ -33,10 +33,12 @@ import org.cagrid.installer.steps.PropertyConfigurationStep;
 import org.cagrid.installer.steps.RunTasksStep;
 import org.cagrid.installer.steps.SelectInstallationTypeStep;
 import org.cagrid.installer.steps.SpecifyPortsStep;
+import org.cagrid.installer.steps.TargetGridConfigurationStep;
 import org.cagrid.installer.steps.options.BooleanPropertyConfigurationOption;
 import org.cagrid.installer.steps.options.ListPropertyConfigurationOption;
 import org.cagrid.installer.steps.options.TextPropertyConfigurationOption;
 import org.cagrid.installer.tasks.ConditionalTask;
+import org.cagrid.installer.tasks.cagrid.ConfigureTargetGridTask;
 import org.cagrid.installer.tasks.service.DeployServiceTask;
 import org.cagrid.installer.util.DownloadPropertiesUtils;
 import org.cagrid.installer.util.InstallerUtils;
@@ -229,8 +231,8 @@ public class Installer {
         SelectInstallationTypeStep selectInstallStep = new SelectInstallationTypeStep(this.model
             .getMessage("select.install.title"), this.model.getMessage("select.install.desc"));
         selectInstallStep.getOptions().add(
-            new BooleanPropertyConfigurationOption(Constants.INSTALL_CAGRID, this.model
-                .getMessage("select.install.install.cagrid"), true, true));
+            new BooleanPropertyConfigurationOption(Constants.INSTALL_CONFIGURE_CAGRID, this.model
+                .getMessage("select.install.configure.cagrid"), true, true));
         selectInstallStep.getOptions().add(
             new BooleanPropertyConfigurationOption(Constants.CONFIGURE_CONTAINER, this.model
                 .getMessage("select.install.configure.container"), false, true));
@@ -240,6 +242,8 @@ public class Installer {
         incrementProgress();
         addInstallcaGridSteps();
         incrementProgress();
+        addConfigurecaGridSteps();
+        incrementProgress();
         addConfigureContainerSteps();
         incrementProgress();
         addDeployContainerSteps();
@@ -247,6 +251,57 @@ public class Installer {
 
         this.model.add(new InstallationCompleteStep(this.model.getMessage("installation.complete.title"), ""));
 
+    }
+    
+    private void addConfigurecaGridSteps(){
+        
+        // Check if caGrid should be reconfigured
+        PropertyConfigurationStep checkReconfigureCaGridStep = new PropertyConfigurationStep(model
+            .getMessage("check.reconfigure.cagrid.title"), model.getMessage("check.reconfigure.cagrid.desc"));
+        checkReconfigureCaGridStep.getOptions()
+            .add(
+                new BooleanPropertyConfigurationOption(Constants.RECONFIGURE_CAGRID, model.getMessage("yes"), false,
+                    false));
+        this.model.add(checkReconfigureCaGridStep, new Condition() {
+            public boolean evaluate(WizardModel m) {
+                CaGridInstallerModel model = (CaGridInstallerModel) m;
+                return model.isCaGridInstalled() && model.isSet(Constants.TARGET_GRID)
+                    && model.isTrue(Constants.INSTALL_CONFIGURE_CAGRID);
+            }
+        });
+        
+        TargetGridConfigurationStep confStep = new TargetGridConfigurationStep(model
+            .getMessage("select.target.grid.title"), model.getMessage("select.target.grid.desc"));
+        this.model.add(confStep, new Condition() {
+            public boolean evaluate(WizardModel m) {
+                CaGridInstallerModel model = (CaGridInstallerModel) m;
+                return (model.isTrue(Constants.RECONFIGURE_CAGRID) || model.isTrue(Constants.INSTALL_CONFIGURE_CAGRID));
+            }
+        });
+        
+        final RunTasksStep tasksStep = new RunTasksStep();
+        ConfigureTargetGridTask configTargetGridTask = new ConfigureTargetGridTask(model
+            .getMessage("configuring.target.grid"), model.getMessage("configuring.target.grid"));
+        configTargetGridTask.setAbortOnError(false);
+        tasksStep.getTasks().add(new ConditionalTask(configTargetGridTask, new Condition() {
+            public boolean evaluate(WizardModel m) {
+                CaGridInstallerModel model = (CaGridInstallerModel) m;
+                return (model.isTrue(Constants.RECONFIGURE_CAGRID) || model.isTrue(Constants.INSTALL_CONFIGURE_CAGRID))
+                && (model.getProperty(Constants.TARGET_GRID)!=null) && !model.getProperty(Constants.TARGET_GRID).equals(Constants.NO_TARGET_GRID);
+                
+            }
+        }));
+        
+        Condition shouldConfigurecaGrid = new Condition() {
+            public boolean evaluate(WizardModel m) {
+                CaGridInstallerModel model = (CaGridInstallerModel) m;
+                return tasksStep.getTasksCount(model) > 0;
+            }
+        };
+        PreviewTasksStep previewTasks = new PreviewTasksStep("","",tasksStep,model);
+        
+        this.model.add(previewTasks,shouldConfigurecaGrid);
+        this.model.add(tasksStep,shouldConfigurecaGrid);
     }
 
 
@@ -265,7 +320,7 @@ public class Installer {
             public boolean evaluate(WizardModel m) {
                 CaGridInstallerModel model = (CaGridInstallerModel) m;
                 return installDependenciesStep.getTasksCount(model) > 0
-                    || (model.isTrue(Constants.INSTALL_CAGRID) && installDependenciesStep.getTasksCount(model) > 0);
+                    || (model.isTrue(Constants.INSTALL_CONFIGURE_CAGRID) && installDependenciesStep.getTasksCount(model) > 0);
             }
         };
 

@@ -29,7 +29,7 @@ public abstract class Constants {
     public static final String ANT_HOME = "ant.home";
 
     public static final String TOMCAT_HOME = "tomcat.home";
-    
+
     public static final String JBOSS_HOME = "jboss.home";
 
     public static final String GLOBUS_HOME = "globus.home";
@@ -39,7 +39,7 @@ public abstract class Constants {
     public static final String ANT_INSTALLED = "ant.installed";
 
     public static final String TOMCAT_INSTALLED = "tomcat.installed";
-    
+
     public static final String JBOSS_INSTALLED = "jboss.installed";
 
     public static final String GLOBUS_INSTALLED = "globus.installed";
@@ -48,8 +48,10 @@ public abstract class Constants {
 
     public static final String MESSAGES = "CaGridInstallerMessages";
 
-    public static final String INSTALL_CAGRID = "install.cagrid";
+    public static final String INSTALL_CONFIGURE_CAGRID = "install.configure.cagrid";
 
+    public static final String INSTALL_CAGRID = "install.cagrid";
+    
     public static final String INSTALL_ANT = "install.ant";
 
     public static final String ANT_DOWNLOAD_URL = "ant.download.url";
@@ -69,9 +71,9 @@ public abstract class Constants {
     public static final String TOMCAT_TEMP_FILE_NAME = "tomcat.temp.file.name";
 
     public static final String TOMCAT_DIR_NAME = "tomcat.dir.name";
-    
+
     public static final String INSTALL_JBOSS = "install.jboss";
-    
+
     public static final String JBOSS_INSTALL_DIR_PATH = "jboss.install.dir.path";
 
     public static final String JBOSS_DOWNLOAD_URL = "jboss.download.url";
@@ -101,7 +103,7 @@ public abstract class Constants {
     public static final String REDEPLOY_GLOBUS = "redeploy.globus";
 
     public static final String USE_SECURE_CONTAINER = "use.secure.container";
-    
+
     public static final String SERVICE_HOSTNAME = "service.hostname";
 
     public static final String DOWNLOAD_URL = "download.url";
@@ -110,10 +112,8 @@ public abstract class Constants {
 
     public static final String CONTAINER_TYPE = "container.type";
 
-    public static final String AVAILABLE_TARGET_GRIDS = "available.target.grids";
-
     public static final String TARGET_GRID = "target.grid";
-    
+
     public static final String NO_TARGET_GRID = "NO_TARGET_GRID";
 
     public static final String SHUTDOWN_PORT = "shutdown.port";

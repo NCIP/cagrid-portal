@@ -35,11 +35,11 @@ public class AntComponentInstaller extends AbstractDownloadedComponentInstaller 
 		};
 	}
 
-	protected Condition getShouldCheckCondition() {
+	protected Condition getShouldCheckReinstallCondition() {
 		return new Condition() {
 			public boolean evaluate(WizardModel m) {
 				CaGridInstallerModel model = (CaGridInstallerModel) m;
-				return model.isAntInstalled();
+				return model.isAntInstalled() && model.isTrue(Constants.INSTALL_CONFIGURE_CAGRID);
 			}
 		};
 	}
