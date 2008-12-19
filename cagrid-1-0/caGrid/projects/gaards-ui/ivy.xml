@@ -32,7 +32,7 @@
 
   <dependencies>
     <dependency rev="${target.grid}" org="caGrid" name="target_grid"
-      conf="target_grid->authentication-services,dorian-services,gridgrouper-ui,gts-services,cds-services"/>
+      conf="target_grid->authentication-services,dorian-services,gridgrouper-services,gts-services,cds-services"/>
 
     <dependency rev="latest.integration" org="caGrid" name="core" conf="base->default"/>
     <dependency rev="latest.integration" org="caGrid" name="grape" conf="base->default"/>

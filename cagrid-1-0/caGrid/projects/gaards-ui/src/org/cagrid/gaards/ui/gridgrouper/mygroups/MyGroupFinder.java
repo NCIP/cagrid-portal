@@ -4,7 +4,7 @@ import gov.nih.nci.cagrid.common.Runner;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.gridgrouper.client.GridGrouper;
 
-import org.globus.gsi.GlobusCredential;
+import org.cagrid.gaards.ui.gridgrouper.GridGrouperSession;
 
 
 /**
@@ -17,48 +17,46 @@ import org.globus.gsi.GlobusCredential;
  */
 public class MyGroupFinder extends Runner {
 
-	private String gridGrouperURI;
-	private GlobusCredential proxy;
-	private MyGroupsTable groupsTable;
-	private boolean isSuccessful = false;
-	private String error = null;
+    private GridGrouperSession session;
+    private MyGroupsTable groupsTable;
+    private boolean isSuccessful = false;
+    private String error = null;
 
 
-	public MyGroupFinder(String gridGrouperURI, GlobusCredential proxy, MyGroupsTable groupsTable) {
-		this.gridGrouperURI = gridGrouperURI;
-		this.proxy = proxy;
-		this.groupsTable = groupsTable;
+    public MyGroupFinder(GridGrouperSession session, MyGroupsTable groupsTable) {
+        this.session = session;
+        this.groupsTable = groupsTable;
 
-	}
-
-
-	public void execute() {
-		try {
-			String targetIdentity = proxy.getIdentity();
-			GridGrouper gridGrouper = new GridGrouper(gridGrouperURI, proxy);
-			groupsTable.addGroups(gridGrouper.getMembersGroups(targetIdentity));
-			isSuccessful = true;
-		} catch (Exception e) {
-			error = Utils.getExceptionMessage(e);
-			if ((error.indexOf("Operation name could not be determined") >= 0)) {
-				error = "The Grid Grouper service maybe an older version which does not support looking up a member's groups.";
-			}
-		}
-	}
+    }
 
 
-	public String getGridGrouperURI() {
-		return gridGrouperURI;
-	}
+    public void execute() {
+        try {
+            String targetIdentity = session.getIdentity();
+            GridGrouper gridGrouper = session.getClient();
+            groupsTable.addGroups(gridGrouper.getMembersGroups(targetIdentity));
+            isSuccessful = true;
+        } catch (Exception e) {
+            error = Utils.getExceptionMessage(e);
+            if ((error.indexOf("Operation name could not be determined") >= 0)) {
+                error = "The Grid Grouper service maybe an older version which does not support looking up a member's groups.";
+            }
+        }
+    }
 
 
-	public boolean isSuccessful() {
-		return isSuccessful;
-	}
+    public String getGridGrouperURI() {
+        return session.getServiceURL();
+    }
 
 
-	public String getError() {
-		return error;
-	}
+    public boolean isSuccessful() {
+        return isSuccessful;
+    }
+
+
+    public String getError() {
+        return error;
+    }
 
 }

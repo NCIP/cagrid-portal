@@ -14,34 +14,36 @@ import javax.swing.JComboBox;
  *          Exp $
  */
 public class GridGrouperServiceList extends JComboBox {
-	
-	private static final long serialVersionUID = 1L;
 
-	private static String lastSelectedService;
+    private static final long serialVersionUID = 1L;
 
-
-	public GridGrouperServiceList() {
-		List services = GridGrouperUIUtils.getGridGrouperServices();
-		for (int i = 0; i < services.size(); i++) {
-			this.addItem(services.get(i));
-		}
-		if (lastSelectedService == null) {
-			lastSelectedService = getSelectedService();
-		} else {
-			this.setSelectedItem(lastSelectedService);
-		}
-		this.setEditable(true);
-
-		this.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent e) {
-				lastSelectedService = getSelectedService();
-			}
-		});
-	}
+    private static GridGrouperHandle lastSelectedService;
 
 
-	public String getSelectedService() {
-		return (String) getSelectedItem();
-	}
+    public GridGrouperServiceList() {
+        List<GridGrouperHandle> services = GridGrouperUIUtils.getGridGrouperServices();
+        for (int i = 0; i < services.size(); i++) {
+            this.addItem(services.get(i));
+        }
+        if (lastSelectedService == null) {
+            lastSelectedService = getSelectedService();
+        } else {
+            this.setSelectedItem(lastSelectedService);
+        }
+        this.setEditable(false);
+
+        setToolTipText(getSelectedService().getServiceURL());
+        this.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent e) {
+                lastSelectedService = getSelectedService();
+                setToolTipText(getSelectedService().getServiceURL());
+            }
+        });
+    }
+
+
+    public GridGrouperHandle getSelectedService() {
+        return (GridGrouperHandle) getSelectedItem();
+    }
 
 }

@@ -1,7 +1,6 @@
 package org.cagrid.gaards.ui.gridgrouper.selector;
 
 import gov.nih.nci.cagrid.common.Runner;
-import gov.nih.nci.cagrid.gridgrouper.client.GridGrouper;
 import gov.nih.nci.cagrid.gridgrouper.client.Group;
 
 import java.awt.BorderLayout;
@@ -16,6 +15,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import org.cagrid.gaards.ui.common.TitlePanel;
+import org.cagrid.gaards.ui.gridgrouper.GridGrouperHandle;
 import org.cagrid.gaards.ui.gridgrouper.GridGrouperServiceList;
 import org.cagrid.gaards.ui.gridgrouper.tree.GridGrouperTree;
 import org.cagrid.gaards.ui.gridgrouper.tree.GroupTreeNode;
@@ -43,7 +43,7 @@ public class GroupSelector extends JDialog {
 
 	private JPanel groupPanel = null;
 
-	private String currentGridGrouper;
+	private GridGrouperHandle currentGridGrouper;
 
 	private Group selectedGroup;
 
@@ -237,7 +237,7 @@ public class GroupSelector extends JDialog {
 	}
 
 	private void loadSelectedGridGrouper() {
-		final String selected = getGridGrouper().getSelectedService();
+		final GridGrouperHandle selected = getGridGrouper().getSelectedService();
 		if ((currentGridGrouper == null)
 				|| (!currentGridGrouper.equals(selected))) {
 
@@ -245,7 +245,7 @@ public class GroupSelector extends JDialog {
 				public void execute() {
 					getGroupTree().getRootNode().removeAllGridGroupers();
 					getGroupTree().getRootNode().addGridGrouper(
-							new GridGrouper(selected));
+							selected.getClient());
 				}
 			};
 			try {
