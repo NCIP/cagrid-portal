@@ -1,7 +1,5 @@
 package org.cagrid.data.sdkquery41.style.wizard;
 
-import gov.nih.nci.cagrid.data.common.ExtensionDataManager;
-import gov.nih.nci.cagrid.data.extension.CadsrInformation;
 import gov.nih.nci.cagrid.data.ui.wizard.AbstractWizardPanel;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
@@ -35,7 +33,7 @@ import org.cagrid.grape.utils.CompositeErrorDialog;
  */
 public class SchemaMappingPanel extends AbstractWizardPanel {
     
-    private JPanel mainPanel = null;  //  @jve:decl-index=0:visual-constraint="68,24"
+    private JPanel mainPanel = null;
     private SchemaMappingTable schemaMappingTable = null;
     private JScrollPane schemaMappingTableScrollPane = null;
     private JButton autoMapButton = null;
@@ -60,11 +58,8 @@ public class SchemaMappingPanel extends AbstractWizardPanel {
 
 
     public void update() {
-        // get cadsr information from data service extension data
-        ExtensionDataManager manager = new ExtensionDataManager(getExtensionData());
         try {
-            CadsrInformation cadsrInfo = manager.getCadsrInformation();
-            getSchemaMappingTable().loadCadsrInformation(cadsrInfo);
+            getSchemaMappingTable().reloadCadsrInformation();
         } catch (Exception ex) {
             ex.printStackTrace();
             CompositeErrorDialog.showErrorDialog(
@@ -115,7 +110,7 @@ public class SchemaMappingPanel extends AbstractWizardPanel {
     
     private SchemaMappingTable getSchemaMappingTable() {
         if (schemaMappingTable == null) {
-            schemaMappingTable = new SchemaMappingTable(getServiceInformation());
+            schemaMappingTable = new SchemaMappingTable(getServiceInformation(), configuration);
         }
         return schemaMappingTable;
     }
