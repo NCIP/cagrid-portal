@@ -79,7 +79,6 @@ public class SchemaMappingPanel extends AbstractWizardPanel {
     
     
     private void initialize() {
-        // configureValidation();
         setLayout(new GridLayout());
         add(getMainPanel());
     }
