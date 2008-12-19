@@ -111,12 +111,17 @@ public class SchemaMappingConfigStep extends AbstractStyleConfigurationStep {
                     // set the class name and serializers for this element
                     element.setClassName(className);
                     element.setPackageName(packageName);
-                    // TODO: serializer and deserializer
-                    // element.setDeserializer(arg0);
-                    // element.setSerializer(arg0);
+                    setSdkSerialization(element);
                 }
             }
         }
+    }
+    
+    
+    private void setSdkSerialization(SchemaElementType element) {
+        // TODO: serializer and deserializer
+        // element.setDeserializer(arg0);
+        // element.setSerializer(arg0);
     }
     
     

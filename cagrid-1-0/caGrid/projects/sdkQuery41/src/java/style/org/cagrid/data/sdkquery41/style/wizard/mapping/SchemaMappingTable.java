@@ -12,6 +12,8 @@ import java.util.Vector;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
+import org.cagrid.data.sdkquery41.style.wizard.config.SchemaMappingConfigStep;
+
 /**
  * Table which shows the mapping between domain model packages
  * and XML schemas, presenting the user with a means to see
@@ -24,10 +26,12 @@ public class SchemaMappingTable extends JTable {
     private SchemaMappingTableModel tableModel = null;
     
     private ServiceInformation serviceInfo = null;
+    private SchemaMappingConfigStep configuration = null;
 
-    public SchemaMappingTable(ServiceInformation serviceInfo) {
+    public SchemaMappingTable(ServiceInformation serviceInfo, SchemaMappingConfigStep configuration) {
         super();
         this.serviceInfo = serviceInfo;
+        this.configuration = configuration;
         tableModel = new SchemaMappingTableModel();
         setModel(tableModel);
         setDefaultRenderer(Object.class, new ValidatingTableCellRenderer() {
@@ -58,18 +62,20 @@ public class SchemaMappingTable extends JTable {
     }
     
     
-    public void loadCadsrInformation(CadsrInformation cadsrInformation) {
+    public void reloadCadsrInformation() throws Exception {
         // empty the table
         while (tableModel.getRowCount() != 0) {
             tableModel.removeRow(0);
         }
+        
+        CadsrInformation cadsrInformation = configuration.getCurrentCadsrInformation();
         
         for (CadsrPackage pack : cadsrInformation.getPackages()) {
             Vector<Object> row = new Vector<Object>();
             row.add(pack.getName());
             PackageMappingStatus status = determineMappingStatus(pack);
             row.add(status);
-            SchemaResolutionButton resolutionButton = new SchemaResolutionButton(serviceInfo, pack);
+            SchemaResolutionButton resolutionButton = new SchemaResolutionButton(serviceInfo, pack, configuration);
             row.add(resolutionButton);
         }
     }
