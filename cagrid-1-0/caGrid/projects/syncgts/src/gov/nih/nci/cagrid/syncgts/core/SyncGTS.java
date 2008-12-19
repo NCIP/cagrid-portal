@@ -32,7 +32,8 @@ import javax.xml.namespace.QName;
 
 import org.apache.axis.message.addressing.Address;
 import org.apache.axis.message.addressing.EndpointReferenceType;
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.cagrid.gaards.pki.CertUtil;
 import org.globus.common.CoGProperties;
 import org.globus.gsi.TrustedCertificatesLock;
@@ -52,7 +53,7 @@ public class SyncGTS {
 	private final static QName TRUSTED_CA_QN = new QName(SyncGTSDefault.SYNC_GTS_NAMESPACE, "TrustedCA");
 	private Map caListings;
 	private Map listingsById;
-	private Logger logger;
+	 private Log logger;
 	private List messages;
 	private HistoryManager history;
 	private static SyncGTS instance;
@@ -61,7 +62,7 @@ public class SyncGTS {
 
 	private SyncGTS() {
 		this.history = new HistoryManager();
-		logger = Logger.getLogger(this.getClass().getName());
+		logger = LogFactory.getLog(this.getClass().getName());
 	}
 
 
