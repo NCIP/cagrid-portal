@@ -333,6 +333,83 @@ public class TestGTS extends TestCase {
 			}
 		}
 	}
+	
+	
+	public void testRevokePermissionsWhenTrustedAuthorityIsRemoved() {
+        GTS gts = null;
+        try {
+            GTSConfiguration conf = Utils.getGTSConfiguration();
+            String user = "O=Test Organization,OU=Test Unit,CN=User";
+            String user2 = "O=Test Organization,OU=Test Unit,CN=User2";
+            gts = new GTS(conf, GTS_URI);
+            // Make sure we start fresh
+            gts.clearDatabase();
+
+            try {
+                gts.findPermissions(new PermissionFilter(), ADMIN_USER);
+                fail("Should not be able to fine permissions, no admin permission are configured.");
+            } catch (PermissionDeniedFault f) {
+
+            }
+
+            PermissionBootstapper pb = new PermissionBootstapper(conf);
+            pb.addAdminUser(ADMIN_USER);
+            assertEquals(1, gts.findPermissions(new PermissionFilter(), ADMIN_USER).length);
+            addTrustLevels(gts, ADMIN_USER);
+            CA ca = new CA();
+            TrustedAuthority ta = new TrustedAuthority();
+            ta.setName(ca.getCertificate().getSubjectDN().toString());
+            ta.setCertificate(new X509Certificate(CertUtil.writeCertificate(ca.getCertificate())));
+            ta.setStatus(Status.Trusted);
+            ta.setTrustLevels(toTrustLevels(LEVEL_ONE));
+
+            Permission userPerm = new Permission();
+            userPerm.setGridIdentity(user2);
+            userPerm.setRole(Role.TrustAuthorityManager);
+            userPerm.setTrustedAuthorityName(ta.getName());
+
+
+            gts.addTrustedAuthority(ta, ADMIN_USER);
+            assertEquals(1, gts.findTrustAuthorities(new TrustedAuthorityFilter()).length);
+            assertEquals(ta, gts.findTrustAuthorities(new TrustedAuthorityFilter())[0]);
+          
+            
+            // Now give use Admin rights
+            Permission admin = new Permission();
+            admin.setGridIdentity(user);
+            admin.setRole(Role.TrustServiceAdmin);
+
+            gts.addPermission(admin, ADMIN_USER);
+            assertEquals(1, gts.findPermissions(permissionToPermissionFilter(admin), ADMIN_USER).length);
+            assertEquals(admin, gts.findPermissions(permissionToPermissionFilter(admin), ADMIN_USER)[0]);
+
+            // Now that the user is admin try again
+            gts.addPermission(userPerm, user);
+            assertEquals(1, gts.findPermissions(permissionToPermissionFilter(userPerm), user).length);
+            assertEquals(userPerm, gts.findPermissions(permissionToPermissionFilter(userPerm), user)[0]);
+           
+            gts.removeTrustedAuthority(ta.getName(), ADMIN_USER);
+           
+            assertEquals(1, gts.findPermissions(permissionToPermissionFilter(admin), ADMIN_USER).length);
+            assertEquals(admin, gts.findPermissions(permissionToPermissionFilter(admin), ADMIN_USER)[0]);
+
+            assertEquals(0, gts.findPermissions(permissionToPermissionFilter(userPerm), ADMIN_USER).length);
+           
+        } catch (Exception e) {
+            FaultUtil.printFault(e);
+            assertTrue(false);
+        } finally {
+            if (gts != null) {
+                try {
+                    gts.clearDatabase();
+                    assertEquals(0, gts.getDatabase().getUsedConnectionCount());
+                } catch (Exception e) {
+                    FaultUtil.printFault(e);
+                }
+            }
+        }
+    }
+
 
 
 	public void testAddTrustedAuthorityInvalidLevel() {

@@ -16,7 +16,7 @@ public class MySQLTrustedAuthorityTrustLevelsTable extends TrustedAuthorityTrust
 		String sql = "CREATE TABLE " + TrustedAuthorityTrustLevelsTable.TABLE_NAME + " (" + ""
 			+ TrustedAuthorityTrustLevelsTable.NAME + " VARCHAR(255) NOT NULL,"
 			+ TrustedAuthorityTrustLevelsTable.TRUST_LEVEL + " VARCHAR(255) NOT NULL, INDEX document_index ("
-			+ TrustedAuthorityTrustLevelsTable.NAME + "));";
+			+ TrustedAuthorityTrustLevelsTable.NAME + ")) ENGINE=InnoDB;";
 		return sql;
 	}
 }

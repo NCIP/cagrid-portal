@@ -17,7 +17,7 @@ public class MySQLTrustLevelTable extends TrustLevelTable {
 			+ TrustLevelTable.DESCRIPTION + " TEXT, " + TrustLevelTable.IS_AUTHORITY + " VARCHAR(5) NOT NULL,"
 			+ TrustLevelTable.AUTHORITY_GTS + " VARCHAR(255) NOT NULL," + TrustLevelTable.SOURCE_GTS
 			+ " VARCHAR(255) NOT NULL, " + TrustLevelTable.LAST_UPDATED + " BIGINT NOT NULL,"
-			+ "INDEX document_index (" + TrustLevelTable.NAME + "));";
+			+ "INDEX document_index (" + TrustLevelTable.NAME + ")) ENGINE=InnoDB;";
 		return sql;
 	}
 }

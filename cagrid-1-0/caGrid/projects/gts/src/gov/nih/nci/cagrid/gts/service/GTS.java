@@ -140,7 +140,7 @@ public class GTS implements TrustedAuthorityLevelRemover, TrustLevelLookup {
 			throw fault;
 		} else {
 			java.security.cert.X509Certificate[] trustedCerts = new java.security.cert.X509Certificate[list.length];
-			List crlList = new ArrayList();
+			List<java.security.cert.X509CRL> crlList = new ArrayList<java.security.cert.X509CRL>();
 			for (int i = 0; i < list.length; i++) {
 				try {
 					trustedCerts[i] = CertUtil.loadCertificate(list[i].getCertificate().getCertificateEncodedString());
@@ -215,6 +215,7 @@ public class GTS implements TrustedAuthorityLevelRemover, TrustLevelLookup {
 		InvalidTrustedAuthorityFault, PermissionDeniedFault {
 		checkServiceAdministrator(callerGridIdentity);
 		trust.removeTrustedAuthority(name);
+		permissions.revokePermissions(name);
 	}
 
 
@@ -417,7 +418,7 @@ public class GTS implements TrustedAuthorityLevelRemover, TrustLevelLookup {
 		// such that we can remove the ones that are not provided in the
 		// new list
 
-		Map toBeDeleted = new HashMap();
+		Map<String,Boolean> toBeDeleted = new HashMap<String,Boolean>();
 		try {
 			TrustLevel[] existing = this.trustLevelManager.getTrustLevels(authorityServiceURI);
 			for (int i = 0; i < existing.length; i++) {
@@ -503,9 +504,9 @@ public class GTS implements TrustedAuthorityLevelRemover, TrustLevelLookup {
 				}
 			}
 		}
-		Iterator itr = toBeDeleted.keySet().iterator();
+		Iterator<String> itr = toBeDeleted.keySet().iterator();
 		while (itr.hasNext()) {
-			String name = (String) itr.next();
+			String name =  itr.next();
 			try {
 				this.trustLevelManager.removeTrustLevel(name);
 				this.log.debug("The trust level (" + name
@@ -526,7 +527,7 @@ public class GTS implements TrustedAuthorityLevelRemover, TrustLevelLookup {
 			// by the source,
 			// such that we can remove the ones that are not provided in the
 			// new list
-			Map toBeDeleted = new HashMap();
+			Map<String,Boolean> toBeDeleted = new HashMap<String,Boolean>();
 			try {
 				TrustedAuthorityFilter f = new TrustedAuthorityFilter();
 				f.setSourceGTS(authorityServiceURI);
@@ -621,9 +622,9 @@ public class GTS implements TrustedAuthorityLevelRemover, TrustLevelLookup {
 					continue;
 				}
 			}
-			Iterator itr = toBeDeleted.keySet().iterator();
+			Iterator<String> itr = toBeDeleted.keySet().iterator();
 			while (itr.hasNext()) {
-				String name = (String) itr.next();
+				String name = itr.next();
 				try {
 					trust.removeTrustedAuthority(name);
 					this.log

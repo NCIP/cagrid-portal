@@ -16,7 +16,7 @@ public class MySQLAuthorityTable extends AuthorityTable {
 		String trust = "CREATE TABLE " + TABLE_NAME + " (" + GTS_URI + " VARCHAR(255) NOT NULL PRIMARY KEY," + PRIORITY
 			+ " INT NOT NULL, " + SYNC_TRUST_LEVELS + " VARCHAR(5) NOT NULL, " + TTL_HOURS + " INT NOT NULL, "
 			+ TTL_MINUTES + " INT NOT NULL," + TTL_SECONDS + " INT NOT NULL, " + PERFORM_AUTH
-			+ " VARCHAR(5) NOT NULL, " + GTS_IDENTITY + " VARCHAR(255)," + " INDEX document_index (" + GTS_URI + "));";
+			+ " VARCHAR(5) NOT NULL, " + GTS_IDENTITY + " VARCHAR(255)," + " INDEX document_index (" + GTS_URI + ")) ENGINE=InnoDB;";
 		return trust;
 	}
 

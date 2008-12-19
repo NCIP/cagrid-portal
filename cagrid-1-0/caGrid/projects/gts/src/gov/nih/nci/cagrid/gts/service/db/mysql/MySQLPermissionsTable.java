@@ -16,7 +16,7 @@ public class MySQLPermissionsTable extends PermissionsTable {
 		String sql = "CREATE TABLE " + PermissionsTable.TABLE_NAME + " (" + PermissionsTable.GRID_IDENTITY
 			+ " VARCHAR(255) NOT NULL," + PermissionsTable.ROLE + " VARCHAR(50) NOT NULL,"
 			+ PermissionsTable.TRUSTED_AUTHORITY + " VARCHAR(255) NOT NULL," + "INDEX document_index ("
-			+ PermissionsTable.GRID_IDENTITY + "));";
+			+ PermissionsTable.GRID_IDENTITY + ")) ENGINE=InnoDB;";
 		return sql;
 	}
 
