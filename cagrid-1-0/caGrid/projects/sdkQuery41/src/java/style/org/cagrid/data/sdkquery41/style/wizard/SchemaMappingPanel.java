@@ -3,6 +3,7 @@ package org.cagrid.data.sdkquery41.style.wizard;
 import gov.nih.nci.cagrid.data.common.ExtensionDataManager;
 import gov.nih.nci.cagrid.data.extension.CadsrInformation;
 import gov.nih.nci.cagrid.data.ui.wizard.AbstractWizardPanel;
+import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 
@@ -13,6 +14,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
+import java.io.File;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -20,6 +22,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.border.TitledBorder;
 
+import org.cagrid.data.sdkquery41.style.wizard.config.SchemaMappingConfigStep;
 import org.cagrid.data.sdkquery41.style.wizard.mapping.SchemaMappingTable;
 import org.cagrid.grape.utils.CompositeErrorDialog;
 
@@ -37,8 +40,11 @@ public class SchemaMappingPanel extends AbstractWizardPanel {
     private JScrollPane schemaMappingTableScrollPane = null;
     private JButton autoMapButton = null;
     
+    private SchemaMappingConfigStep configuration = null;
+    
     public SchemaMappingPanel(ServiceExtensionDescriptionType extensionDescription, ServiceInformation info) {
         super(extensionDescription, info);
+        configuration = new SchemaMappingConfigStep(info);
         initialize();
     }
 
@@ -68,7 +74,12 @@ public class SchemaMappingPanel extends AbstractWizardPanel {
 
     
     public void movingNext() {
-        // TODO: apply configuration
+        try {
+            configuration.applyConfiguration();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            CompositeErrorDialog.showErrorDialog("Error applying configuration", ex.getMessage(), ex);
+        }
     }
     
     
@@ -138,10 +149,29 @@ public class SchemaMappingPanel extends AbstractWizardPanel {
             autoMapButton.setText("Automatically Map From SDK Generated Schemas");
             autoMapButton.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
-                    System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
+                    try {
+                        configuration.mapFromSdkGeneratedSchemas();
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        CompositeErrorDialog.showErrorDialog(
+                            "Error mapping schemas from SDK", ex.getMessage(), ex);
+                    }
                 }
             });
         }
         return autoMapButton;
+    }
+    
+    
+    // ---------
+    // helpers
+    // --------
+    
+    
+    private File getServiceSchemaDirectory() {
+        File schemaDir = new File(getServiceInformation().getBaseDirectory(),
+            "schema" + File.separator + getServiceInformation().getIntroduceServiceProperties()
+                .getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME));
+        return schemaDir;
     }
 }
