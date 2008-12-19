@@ -22,7 +22,7 @@ import java.util.List;
  * @author David Ervin
  * 
  * @created Apr 11, 2007 10:04:04 AM
- * @version $Id: ExtensionDataManager.java,v 1.4 2008-12-16 20:49:35 dervin Exp $ 
+ * @version $Id: ExtensionDataManager.java,v 1.5 2008-12-19 19:01:38 dervin Exp $ 
  */
 public class ExtensionDataManager {
     
@@ -194,6 +194,26 @@ public class ExtensionDataManager {
             }
         }
         return null;
+    }
+    
+
+    /**
+     * Sets the mapped namespace for a package in the cadsr information
+     * 
+     * @param packageName
+     * @param namespace
+     * @throws Exception
+     */
+    public void setMappedNamespaceForPackage(String packageName, String namespace) throws Exception {
+        CadsrInformation info = getCadsrInformation();
+        if (info.getPackages() != null) {
+            for (CadsrPackage pack : info.getPackages()) {
+                if (pack.getName().equals(packageName)) {
+                    pack.setMappedNamespace(namespace);
+                }
+            }
+        }
+        storeCadsrInformation(info);
     }
     
     
