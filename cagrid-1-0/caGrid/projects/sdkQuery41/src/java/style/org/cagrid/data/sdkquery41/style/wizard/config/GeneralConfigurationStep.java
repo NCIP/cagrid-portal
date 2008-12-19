@@ -67,6 +67,10 @@ public class GeneralConfigurationStep extends AbstractStyleConfigurationStep {
         // TODO: if user wants to use the local API, we have to include the local-client/conf files in the config jar
         
         // TODO: local / remote API detection, lib dir, etc
+
+        // set the config jar in the shared configuration
+        SharedConfiguration.getInstance().setGeneratedConfigJarFile(configJar);
+        
         // copy in libraries from the remote or local lib dir, depending on if user wants local or remote API
         LOG.debug("Copying libraries from remote client directory");
         File[] remoteLibs = new File(remoteClientDir, "lib").listFiles(new FileFilters.JarFileFilter());
