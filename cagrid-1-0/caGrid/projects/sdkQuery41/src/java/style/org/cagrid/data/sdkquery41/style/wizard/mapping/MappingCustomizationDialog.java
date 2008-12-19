@@ -1,26 +1,41 @@
 package org.cagrid.data.sdkquery41.style.wizard.mapping;
 
 import gov.nih.nci.cagrid.data.extension.CadsrPackage;
+import gov.nih.nci.cagrid.data.extension.ClassMapping;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
+import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.LinkedList;
+import java.util.List;
+
+import javax.swing.BorderFactory;
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
-import java.awt.Dimension;
-import javax.swing.BorderFactory;
-import javax.swing.border.TitledBorder;
-import java.awt.Font;
-import java.awt.Color;
-import javax.swing.JPanel;
-import java.awt.GridBagLayout;
-import javax.swing.JLabel;
 import javax.swing.JTextField;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
-import javax.swing.JButton;
+import javax.swing.ListCellRenderer;
+import javax.swing.border.TitledBorder;
+import javax.swing.table.DefaultTableModel;
+
+import org.cagrid.data.sdkquery41.style.wizard.config.SchemaMappingConfigStep;
 
 /**
  * Customizes the class to element mapping
@@ -33,6 +48,7 @@ public class MappingCustomizationDialog extends JDialog {
 
     private NamespaceType nsType = null;
     private CadsrPackage cadsrPackage = null;
+    private SchemaMappingConfigStep configuration = null;
     
     private JTable mappingTable = null;
     private JScrollPane mappingScrollPane = null;
@@ -44,16 +60,21 @@ public class MappingCustomizationDialog extends JDialog {
     private JTextField namespaceTextField = null;
     private JButton doneButton = null;
 
-    private MappingCustomizationDialog(NamespaceType nsType, CadsrPackage cadsrPackage) {
+    private MappingCustomizationDialog(NamespaceType nsType, 
+        CadsrPackage cadsrPackage, SchemaMappingConfigStep configuration) {
         super((JFrame) null, "Element Mapping Customization", true);
         this.nsType = nsType;
         this.cadsrPackage = cadsrPackage;
+        this.configuration = configuration;
         initialize();
     }
     
     
-    public static void customizeElementMapping(NamespaceType nsType, CadsrPackage cadsrPakcage) {
-        MappingCustomizationDialog dialog = new MappingCustomizationDialog(nsType, cadsrPakcage);
+    public static void customizeElementMapping(NamespaceType nsType, 
+        CadsrPackage cadsrPakcage, SchemaMappingConfigStep configuration) {
+        MappingCustomizationDialog dialog = 
+            new MappingCustomizationDialog(nsType, cadsrPakcage, configuration);
+        dialog.populateMappingTable();
         dialog.setVisible(true);
     }
     
@@ -61,7 +82,6 @@ public class MappingCustomizationDialog extends JDialog {
     private void initialize() {
         this.setSize(new Dimension(420, 350));
         this.setContentPane(getMainPanel());
-        
     }
     
     
@@ -79,9 +99,21 @@ public class MappingCustomizationDialog extends JDialog {
                 protected void validateCell(JTable table, Object value,
                     boolean isSelected, boolean hasFocus, int row, int column) {
                     if (row == 1) {
+                        setToolTipText("");
                         JComboBox combo = (JComboBox) value;
-                        // TODO: ensure not NO_ELEMENT_SELECTED
-                        setErrorBackground();
+                        Object selected = combo.getSelectedItem();
+                        if (selected == NO_ELEMENT_SELECTED) {
+                            // it's an error to map a class
+                            setErrorBackground();
+                            setToolTipText("An element must be selected");
+                        } else {
+                            // it's a warning to map multiple classes to the same element
+                            SchemaElementType selectedElement = (SchemaElementType) selected;
+                            if (getClassesMappedToElement(selectedElement).size() > 1) {
+                                setWarningBackground();
+                                setToolTipText("Multiple classes are mapped to this element");
+                            }
+                        }
                     }
                 }
             });
@@ -247,10 +279,92 @@ public class MappingCustomizationDialog extends JDialog {
             doneButton.setText("Done");
             doneButton.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
+                    // TODO: check for errors, show a warning, close anyway
                     System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
                 }
             });
         }
         return doneButton;
     }
-}  //  @jve:decl-index=0:visual-constraint="193,21"
+    
+    
+    // ---------
+    // helpers
+    // ---------
+    
+    
+    private void populateMappingTable() {
+        // a single combo box renderer for a little more memory efficiency
+        ListCellRenderer comboBoxRenderer = new DefaultListCellRenderer() {
+            public Component getListCellRendererComponent(
+                JList list, Object value, int index, 
+                boolean isSelected, boolean cellHasFocus) {
+                // let default impl do its thing
+                super.getListCellRendererComponent(
+                    list, value, index, isSelected, cellHasFocus);
+                // special handling for schema elements
+                if (value instanceof SchemaElementType) {
+                    SchemaElementType element = (SchemaElementType) value;
+                    setText(element.getType());
+                }
+                return this;
+            }
+        };
+        
+        // item listener to set mapping information and 
+        // repaint the table on combo box changes
+        ItemListener comboListener = new ItemListener() {
+            public void itemStateChanged(ItemEvent e) {
+                
+                getMappingTable().repaint();
+            }
+        };
+        
+        // sorted element names
+        SchemaElementType[] elementTypes = new SchemaElementType[nsType.getSchemaElement().length];
+        for (int i = 0; i < nsType.getSchemaElement().length; i++) {
+            elementTypes[i] = nsType.getSchemaElement(i);
+        }
+        Arrays.sort(elementTypes, new Comparator<SchemaElementType>() {
+            public int compare(SchemaElementType o1, SchemaElementType o2) {
+                return o1.getType().compareTo(o2.getType());
+            }
+        });
+        
+        // for each class, create a combo box
+        for (ClassMapping mapping : cadsrPackage.getCadsrClass()) {
+            String className = mapping.getClassName();
+            JComboBox combo = createElementSelectionCombo(comboBoxRenderer, comboListener, elementTypes);
+            // add the row to the table
+            ((DefaultTableModel) getMappingTable().getModel()).addRow(
+                new Object[] {className, combo});
+        }
+    }
+    
+    
+    private JComboBox createElementSelectionCombo(ListCellRenderer renderer, 
+        ItemListener listener, SchemaElementType[] elementTypes) {
+        JComboBox combo = new JComboBox();
+        combo.setRenderer(renderer);
+        combo.addItem(NO_ELEMENT_SELECTED);
+        for (SchemaElementType element : elementTypes) {
+            combo.addItem(element);
+        }
+        combo.addItemListener(listener);
+        return combo;
+    }
+    
+    
+    private List<String> getClassesMappedToElement(SchemaElementType mappedElement) {
+        List<String> classNames = new LinkedList<String>();
+        for (int row = 0; row < getMappingTable().getRowCount(); row++) {
+            JComboBox combo = (JComboBox) getMappingTable().getValueAt(row, 1);
+            Object selection = combo.getSelectedItem();
+            if (selection instanceof SchemaElementType && selection == mappedElement) {
+                String name = (String) getMappingTable().getValueAt(row, 0);
+                classNames.add(name);
+            }
+        }
+        return classNames;
+    }
+}

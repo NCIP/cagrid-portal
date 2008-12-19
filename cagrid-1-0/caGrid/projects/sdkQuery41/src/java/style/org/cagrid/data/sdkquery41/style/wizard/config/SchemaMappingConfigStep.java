@@ -4,6 +4,7 @@ import gov.nih.nci.cagrid.common.JarUtilities;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.data.common.ExtensionDataManager;
 import gov.nih.nci.cagrid.data.extension.CadsrInformation;
+import gov.nih.nci.cagrid.data.extension.CadsrPackage;
 import gov.nih.nci.cagrid.data.extension.ClassMapping;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
@@ -44,6 +45,11 @@ public class SchemaMappingConfigStep extends AbstractStyleConfigurationStep {
     
     public CadsrInformation getCurrentCadsrInformation() throws Exception {
         return dataManager.getCadsrInformation();
+    }
+    
+    
+    public void storeCustomMapping(CadsrPackage pack) throws Exception {
+        dataManager.storeCadsrPackage(pack);
     }
     
     

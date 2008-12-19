@@ -11,6 +11,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 
 import org.cagrid.data.sdkquery41.style.wizard.config.SchemaMappingConfigStep;
+import org.cagrid.grape.utils.CompositeErrorDialog;
 
 public class SchemaResolutionButton extends JButton implements ActionListener {
     
@@ -32,5 +33,15 @@ public class SchemaResolutionButton extends JButton implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         // use the schema resolution dialog to load an XSD
         NamespaceType[] namespaces = SchemaResolutionDialog.resolveSchemas(serviceInfo);
+        if (namespaces != null && namespaces.length != 0) {
+            // only the first namespace is the one selected; the rest are imports
+            MappingCustomizationDialog.customizeElementMapping(namespaces[0], cadsrPack, configuration);
+            try {
+                configuration.storeCustomMapping(cadsrPack);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                CompositeErrorDialog.showErrorDialog("Error storing mapping", ex.getMessage(), ex);
+            }
+        }
     }
 }
