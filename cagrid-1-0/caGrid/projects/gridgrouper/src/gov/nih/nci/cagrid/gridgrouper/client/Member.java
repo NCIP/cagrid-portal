@@ -8,6 +8,7 @@ import edu.internet2.middleware.subject.SubjectNotFoundException;
 import edu.internet2.middleware.subject.SubjectType;
 import gov.nih.nci.cagrid.gridgrouper.bean.MemberDescriptor;
 import gov.nih.nci.cagrid.gridgrouper.common.SubjectUtils;
+import gov.nih.nci.cagrid.gridgrouper.grouper.GroupI;
 import gov.nih.nci.cagrid.gridgrouper.grouper.MemberI;
 
 import java.util.Set;
@@ -23,72 +24,72 @@ import java.util.Set;
  */
 public class Member implements MemberI {
 
-	private MemberDescriptor des;
+    private MemberDescriptor des;
 
-	private Subject subject;
+    private Subject subject;
 
-	private GridGrouper gridGrouper;
-
-
-	public Member(GridGrouper gridGrouper, MemberDescriptor des) throws SubjectNotFoundException {
-		this.gridGrouper = gridGrouper;
-		this.des = des;
-		subject = SubjectUtils.getSubject(des);
-
-	}
+    private GridGrouper gridGrouper;
 
 
-	public String getSubjectId() {
-		return subject.getId();
-	}
+    public Member(GridGrouper gridGrouper, MemberDescriptor des) throws SubjectNotFoundException {
+        this.gridGrouper = gridGrouper;
+        this.des = des;
+        subject = SubjectUtils.getSubject(des);
+
+    }
 
 
-	public Source getSubjectSource() throws GrouperRuntimeException {
-		return subject.getSource();
-	}
+    public String getSubjectId() {
+        return subject.getId();
+    }
 
 
-	public String getSubjectSourceId() {
-		if (subject.getSource() == null) {
-			return null;
-		} else {
-			return subject.getSource().getId();
-		}
-	}
+    public Source getSubjectSource() throws GrouperRuntimeException {
+        return subject.getSource();
+    }
 
 
-	public SubjectType getSubjectType() {
-		return subject.getType();
-	}
+    public String getSubjectSourceId() {
+        if (subject.getSource() == null) {
+            return null;
+        } else {
+            return subject.getSource().getId();
+        }
+    }
 
 
-	public String getSubjectTypeId() {
-		return subject.getType().getName();
-	}
+    public SubjectType getSubjectType() {
+        return subject.getType();
+    }
 
 
-	public String getUuid() {
-		return des.getUUID();
-	}
+    public String getSubjectTypeId() {
+        return subject.getType().getName();
+    }
 
 
-	public Subject getSubject() {
-		return subject;
-	}
+    public String getUuid() {
+        return des.getUUID();
+    }
 
 
-	public Set getEffectiveGroups() throws GrouperRuntimeException, InsufficientPrivilegeException {
-		return this.gridGrouper.getMembersEffectiveGroups(getSubjectId());
-	}
+    public Subject getSubject() {
+        return subject;
+    }
 
 
-	public Set getGroups() throws GrouperRuntimeException, InsufficientPrivilegeException {
-		return this.gridGrouper.getMembersGroups(getSubjectId());
-	}
+    public Set<GroupI> getEffectiveGroups() throws GrouperRuntimeException, InsufficientPrivilegeException {
+        return this.gridGrouper.getMembersEffectiveGroups(getSubjectId());
+    }
 
 
-	public Set getImmediateGroups() throws GrouperRuntimeException, InsufficientPrivilegeException {
-		return this.gridGrouper.getMembersImmediateGroups(getSubjectId());
-	}
+    public Set<GroupI> getGroups() throws GrouperRuntimeException, InsufficientPrivilegeException {
+        return this.gridGrouper.getMembersGroups(getSubjectId());
+    }
+
+
+    public Set<GroupI> getImmediateGroups() throws GrouperRuntimeException, InsufficientPrivilegeException {
+        return this.gridGrouper.getMembersImmediateGroups(getSubjectId());
+    }
 
 }

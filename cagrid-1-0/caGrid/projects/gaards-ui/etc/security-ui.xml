@@ -371,19 +371,25 @@
 					</ConfigurationDescriptor>
 				</ConfigurationDescriptors>
 			</ConfigurationGroup>
+				<ConfigurationGroup>
+				<name>Group Management</name>
+				<ConfigurationDescriptors>
+					<ConfigurationDescriptor>
+						<DisplayName>Grid Grouper Service(s)</DisplayName>
+						<SystemName>gridgrouper</SystemName>
+			    		<ModelClassname>org.cagrid.grape.configuration.ServiceConfiguration</ModelClassname>
+			    		<qname>
+							<namespace>http://www.cagrid.org/1/grape-service-configuration</namespace>
+							<name>ServiceConfiguration</name>
+						</qname>
+						<ConfigurationPanel>org.cagrid.grape.ServiceConfigurationEditor</ConfigurationPanel>
+						<DefaultFile>ext/target_grid/gridgrouper-services-configuration.xml</DefaultFile>
+					</ConfigurationDescriptor>
+				</ConfigurationDescriptors>
+			</ConfigurationGroup>
 		</ConfigurationGroups>
 		<ConfigurationDescriptors>
-			<ConfigurationDescriptor>
-				<DisplayName>Group Management</DisplayName>
-				<SystemName>gridgrouper</SystemName>
-				<ModelClassname>org.cagrid.grape.configuration.GeneralConfiguration</ModelClassname>
-				<qname>
-					<namespace>http://www.cagrid.org/1/grape-general-configuration</namespace>
-					<name>GeneralConfiguration</name>
-				</qname>
-				<ConfigurationPanel>org.cagrid.grape.GeneralConfigurationEditor</ConfigurationPanel>
-				<DefaultFile>ext/target_grid/gridgrouper-ui-configuration.xml</DefaultFile>
-			</ConfigurationDescriptor>
+			
 		</ConfigurationDescriptors>
 	</configuration>
 </application>
