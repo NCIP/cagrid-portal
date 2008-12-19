@@ -1,6 +1,8 @@
 package org.cagrid.data.sdkquery41.style.wizard.mapping;
 
 import gov.nih.nci.cagrid.data.extension.CadsrPackage;
+import gov.nih.nci.cagrid.data.ui.SchemaResolutionDialog;
+import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 
 import java.awt.event.ActionEvent;
@@ -28,7 +30,7 @@ public class SchemaResolutionButton extends JButton implements ActionListener {
     
     
     public void actionPerformed(ActionEvent e) {
-        // TODO: map schema to package
-        System.out.println("Button clicked");
+        // use the schema resolution dialog to load an XSD
+        NamespaceType[] namespaces = SchemaResolutionDialog.resolveSchemas(serviceInfo);
     }
 }
