@@ -275,7 +275,7 @@ public class Installer {
         this.model.add(confStep, new Condition() {
             public boolean evaluate(WizardModel m) {
                 CaGridInstallerModel model = (CaGridInstallerModel) m;
-                return (model.isTrue(Constants.RECONFIGURE_CAGRID) || model.isTrue(Constants.INSTALL_CONFIGURE_CAGRID));
+                return (model.isTrue(Constants.RECONFIGURE_CAGRID) || model.isTrue(Constants.INSTALL_CAGRID));
             }
         });
         
@@ -286,7 +286,7 @@ public class Installer {
         tasksStep.getTasks().add(new ConditionalTask(configTargetGridTask, new Condition() {
             public boolean evaluate(WizardModel m) {
                 CaGridInstallerModel model = (CaGridInstallerModel) m;
-                return (model.isTrue(Constants.RECONFIGURE_CAGRID) || model.isTrue(Constants.INSTALL_CONFIGURE_CAGRID))
+                return (model.isTrue(Constants.RECONFIGURE_CAGRID) || model.isTrue(Constants.INSTALL_CAGRID))
                 && (model.getProperty(Constants.TARGET_GRID)!=null) && !model.getProperty(Constants.TARGET_GRID).equals(Constants.NO_TARGET_GRID);
                 
             }
