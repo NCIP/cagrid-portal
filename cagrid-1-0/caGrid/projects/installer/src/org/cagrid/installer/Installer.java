@@ -234,7 +234,7 @@ public class Installer {
             new BooleanPropertyConfigurationOption(Constants.INSTALL_CONFIGURE_CAGRID, this.model
                 .getMessage("select.install.configure.cagrid"), true, true));
         selectInstallStep.getOptions().add(
-            new BooleanPropertyConfigurationOption(Constants.CONFIGURE_CONTAINER, this.model
+            new BooleanPropertyConfigurationOption(Constants.INSTALL_CONFIGURE_CONTAINER, this.model
                 .getMessage("select.install.configure.container"), false, true));
 
         this.model.add(selectInstallStep);
@@ -443,7 +443,7 @@ public class Installer {
 
 
     private void clearFlags() {
-        this.model.unsetProperty(Constants.CONFIGURE_CONTAINER);
+        this.model.unsetProperty(Constants.INSTALL_CONFIGURE_CONTAINER);
         this.model.unsetProperty(Constants.RECONFIGURE_CAGRID);
         this.model.unsetProperty(Constants.USE_SECURE_CONTAINER);
     }

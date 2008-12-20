@@ -110,7 +110,7 @@ super.addCheckInstallSteps(model);
 
                 public boolean evaluate(WizardModel m) {
                     CaGridInstallerModel model = (CaGridInstallerModel) m;
-                    return model.isTrue(Constants.INSTALL_CONFIGURE_CAGRID);
+                    return model.isTrue(Constants.INSTALL_CONFIGURE_CAGRID) && model.isTrue(Constants.INSTALL_CAGRID);
                 }
 
             }));

@@ -128,7 +128,7 @@ public abstract class Constants {
 
     public static final String RECONFIGURE_CAGRID = "reconfigure.cagrid";
 
-    public static final String CONFIGURE_CONTAINER = "configure.container";
+    public static final String INSTALL_CONFIGURE_CONTAINER = "install.configure.container";
 
     public static final String FALSE = "false";
 

@@ -256,7 +256,7 @@ CaGridInstallerModel, OverviewProvider {
 
 
     public boolean isConfigureContainerSelected() {
-        return isTrue(Constants.CONFIGURE_CONTAINER);
+        return isTrue(Constants.INSTALL_CONFIGURE_CONTAINER);
     }
 
     
