@@ -11,10 +11,9 @@
 		<CreationWizardPanel classname="org.cagrid.data.sdkquery41.style.wizard.DomainModelPanel"/>
 		<CreationWizardPanel classname="org.cagrid.data.sdkquery41.style.wizard.SchemaMappingPanel"/>
 	</CreationWizardPanels>
-	<!-- change these as they get created
+	<!-- change this if it gets created
 	<ModificationUiPanel classname="gov.nih.nci.cagrid.sdkquery4.style.modification.SDK4InformationPanel"/>
-	<CreationHelper postCreationClassname="gov.nih.nci.cagrid.sdkquery4.style.helper.SDK4PostCreationHelper"/>
-	<CodegenHelpers postCodegenClassname="gov.nih.nci.cagrid.sdkquery4.style.helper.SDK4PostCodegenHelper"
-		preCodegenClassname="gov.nih.nci.cagrid.sdkquery4.style.helper.SDK4PreCodegenHelper"/>
 	-->
+	<CreationHelper postCreationClassname="org.cagrid.data.sdkquery41.style.helpers.SDK41PostCreationHelper"/>
+	<CodegenHelpers postCodegenClassname="org.cagrid.data.sdkquery41.style.helpers.SDK41PostCodegenHelper"/>
 </DataServiceStyle>
