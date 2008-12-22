@@ -16,8 +16,10 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListCellRenderer;
@@ -32,10 +34,12 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListCellRenderer;
+import javax.swing.SwingUtilities;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 
 import org.cagrid.data.sdkquery41.style.wizard.config.SchemaMappingConfigStep;
+import org.cagrid.grape.utils.CompositeErrorDialog;
 
 /**
  * Customizes the class to element mapping
@@ -279,8 +283,50 @@ public class MappingCustomizationDialog extends JDialog {
             doneButton.setText("Done");
             doneButton.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
-                    // TODO: check for errors, show a warning, close anyway
-                    System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
+                    // check for errors, show a warning, close anyway
+                    Map<SchemaElementType, List<String>> classesMappedToSameElement =
+                        getClassesMappedToSameElement();
+                    final StringBuffer warning = new StringBuffer();
+                    if (classesMappedToSameElement.size() != 0) {
+                        warning.append("The following classes are mapped to the same element:");
+                        warning.append("\n");
+                        for (SchemaElementType element : classesMappedToSameElement.keySet()) {
+                            List<String> classes = classesMappedToSameElement.get(element);
+                            warning.append("\tElement name: " + element.getType()).append("\n");
+                            for (String className : classes) {
+                                warning.append("\t\t").append(className).append("\n");
+                            }
+                        }
+                    }
+                    final StringBuffer error = new StringBuffer();
+                    List<String> nonMapped = getClassesNotMapped();
+                    if (nonMapped.size() != 0) {
+                        error.append("The following classes are not mapped to any element:");
+                        error.append("\n");
+                        for (String className : nonMapped) {
+                            error.append("\t").append(className).append("\n");
+                        }
+                    }
+                    if (warning.length() != 0) {
+                        Runnable warningRunner = new Runnable() {
+                            public void run() {
+                                CompositeErrorDialog.showErrorDialog(
+                                    "Multiple classes are mapped to the same element", warning.toString().split("\n"));
+                            }
+                        };
+                        SwingUtilities.invokeLater(warningRunner);
+                    }
+                    if (error.length() != 0) {
+                        Runnable errorRunner = new Runnable() {
+                            public void run() {
+                                CompositeErrorDialog.showErrorDialog(
+                                    "Classes have not been mapped to any element", error.toString().split("\n"));
+                            }
+                        };
+                        SwingUtilities.invokeLater(errorRunner);
+                    }
+                    
+                    dispose();
                 }
             });
         }
@@ -291,6 +337,49 @@ public class MappingCustomizationDialog extends JDialog {
     // ---------
     // helpers
     // ---------
+    
+    
+    private Map<SchemaElementType, List<String>> getClassesMappedToSameElement() {
+        Map<SchemaElementType, List<String>> mappings = new HashMap<SchemaElementType, List<String>>();
+        DefaultTableModel tableModel = (DefaultTableModel) getMappingTable().getModel();
+        for (int row = 0; row < tableModel.getRowCount(); row++) {
+            String className = (String) tableModel.getValueAt(row, 0);
+            JComboBox combo = (JComboBox) tableModel.getValueAt(row, 1);
+            Object selection = combo.getSelectedItem();
+            if (selection instanceof SchemaElementType) {
+                SchemaElementType element = (SchemaElementType) selection;
+                List<String> mappedClasses = mappings.get(element);
+                if (mappedClasses == null) {
+                    mappedClasses = new LinkedList<String>();
+                    mappings.put(element, mappedClasses);
+                }
+                mappedClasses.add(className);
+            }
+        }
+        // post process... it's expected that each element will map to 1 and ONLY 1 class
+        Map<SchemaElementType, List<String>> overused = new HashMap<SchemaElementType, List<String>>();
+        for (SchemaElementType element : mappings.keySet()) {
+            if (mappings.get(element).size() > 1) {
+                overused.put(element, mappings.get(element));
+            }
+        }
+        return overused;
+    }
+    
+    
+    private List<String> getClassesNotMapped() {
+        List<String> unmapped = new LinkedList<String>();
+        DefaultTableModel tableModel = (DefaultTableModel) getMappingTable().getModel();
+        for (int row = 0; row < tableModel.getRowCount(); row++) {
+            String className = (String) tableModel.getValueAt(row, 0);
+            JComboBox combo = (JComboBox) tableModel.getValueAt(row, 1);
+            Object selection = combo.getSelectedItem();
+            if (selection == NO_ELEMENT_SELECTED) {
+                unmapped.add(className);
+            }
+        }
+        return unmapped;
+    }
     
     
     private void populateMappingTable() {
@@ -315,7 +404,7 @@ public class MappingCustomizationDialog extends JDialog {
         // repaint the table on combo box changes
         ItemListener comboListener = new ItemListener() {
             public void itemStateChanged(ItemEvent e) {
-                
+                // TODO: set the custom mapping
                 getMappingTable().repaint();
             }
         };

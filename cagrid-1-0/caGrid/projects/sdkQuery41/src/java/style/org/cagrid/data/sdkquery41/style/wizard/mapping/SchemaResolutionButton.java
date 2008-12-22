@@ -34,14 +34,17 @@ public class SchemaResolutionButton extends JButton implements ActionListener {
         // use the schema resolution dialog to load an XSD
         NamespaceType[] namespaces = SchemaResolutionDialog.resolveSchemas(serviceInfo);
         if (namespaces != null && namespaces.length != 0) {
-            // only the first namespace is the one selected; the rest are imports
-            MappingCustomizationDialog.customizeElementMapping(namespaces[0], cadsrPack, configuration);
+            NamespaceType selected = namespaces[0];
+            // set the namespace for the package
             try {
-                configuration.storeCustomMapping(cadsrPack);
+                configuration.setPackageNamespace(cadsrPack.getName(), selected.getNamespace());
             } catch (Exception ex) {
                 ex.printStackTrace();
                 CompositeErrorDialog.showErrorDialog("Error storing mapping", ex.getMessage(), ex);
             }
+            
+            // only the first namespace is the one selected; the rest are imports
+            MappingCustomizationDialog.customizeElementMapping(selected, cadsrPack, configuration);
         }
     }
 }
