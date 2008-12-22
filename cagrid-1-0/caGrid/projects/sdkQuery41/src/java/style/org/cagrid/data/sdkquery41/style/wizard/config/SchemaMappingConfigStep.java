@@ -52,6 +52,18 @@ public class SchemaMappingConfigStep extends AbstractStyleConfigurationStep {
     }
     
     
+    public void setClassMapping(String packageName, String className, SchemaElementType element) throws Exception {
+        dataManager.setClassElementNameInModel(packageName, className, element.getType());
+        element.setClassName(className);
+        setSdkSerialization(element);
+    }
+    
+    
+    public void unsetClassMapping(String packageName, String className) throws Exception {
+        dataManager.setClassElementNameInModel(packageName, className, null);
+    }
+    
+    
     public void mapFromSdkGeneratedSchemas() throws Exception {
         // locate the directory we'll copy schemas in to
         File schemaDir = getServiceSchemaDirectory();
