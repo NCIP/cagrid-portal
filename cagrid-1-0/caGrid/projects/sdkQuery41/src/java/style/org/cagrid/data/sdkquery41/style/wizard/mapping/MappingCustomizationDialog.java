@@ -114,7 +114,7 @@ public class MappingCustomizationDialog extends JDialog {
                             // it's a warning to map multiple classes to the same element
                             SchemaElementType selectedElement = (SchemaElementType) selected;
                             if (getClassesMappedToElement(selectedElement).size() > 1) {
-                                setWarningBackground();
+                                setErrorBackground();
                                 setToolTipText("Multiple classes are mapped to this element");
                             }
                         }
@@ -404,7 +404,22 @@ public class MappingCustomizationDialog extends JDialog {
         // repaint the table on combo box changes
         ItemListener comboListener = new ItemListener() {
             public void itemStateChanged(ItemEvent e) {
-                // TODO: set the custom mapping
+                int row = getMappingTable().getEditingRow();
+                String className = (String) getMappingTable().getValueAt(row, 0);
+                JComboBox combo = (JComboBox) getMappingTable().getValueAt(row, 1);
+                Object selection = combo.getSelectedItem();
+                try {
+                    if (selection == NO_ELEMENT_SELECTED) {
+                        configuration.unsetClassMapping(cadsrPackage.getName(), className);
+                    } else if (selection instanceof SchemaElementType) {
+                        configuration.setClassMapping(
+                            cadsrPackage.getName(), className, (SchemaElementType) selection);
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    CompositeErrorDialog.showErrorDialog(
+                        "Error setting class to element mapping", ex.getMessage(), ex);
+                }
                 getMappingTable().repaint();
             }
         };
