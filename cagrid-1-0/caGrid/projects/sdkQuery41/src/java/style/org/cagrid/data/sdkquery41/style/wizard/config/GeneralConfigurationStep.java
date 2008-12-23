@@ -151,7 +151,7 @@ public class GeneralConfigurationStep extends AbstractStyleConfigurationStep {
             throw new FileNotFoundException("Project output directory (" + projectOutputDirectory.getAbsolutePath() + ") not found");
         }
         // package directory
-        File packageDirectory = new File(projectOutputDirectory, "pacakge");
+        File packageDirectory = new File(projectOutputDirectory, "package");
         if (!packageDirectory.exists() || !packageDirectory.isDirectory()) {
             throw new FileNotFoundException("Project package directory (" + packageDirectory.getAbsolutePath() + ") not found");
         }
