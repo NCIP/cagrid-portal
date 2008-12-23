@@ -105,7 +105,7 @@ public class ModelFromConfigPanel extends DomainModelSourcePanel {
         File sdkDir = SharedConfiguration.getInstance().getSdkDirectory();
         Properties deployProps = SharedConfiguration.getInstance().getSdkDeployProperties();
         String modelFilename = deployProps.getProperty(SDK41StyleConstants.DeployProperties.MODEL_FILE);
-        File modelFile = new File(sdkDir, modelFilename);
+        File modelFile = new File(sdkDir, "models" + File.separator + modelFilename);
         getXmiFileTextField().setText(modelFile.getAbsolutePath());
         String xmiType = deployProps.getProperty(SDK41StyleConstants.DeployProperties.MODEL_TYPE);
         getXmiTypeTextField().setText(xmiType);
