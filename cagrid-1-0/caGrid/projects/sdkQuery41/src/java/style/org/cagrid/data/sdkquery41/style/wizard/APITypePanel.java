@@ -143,6 +143,12 @@ public class APITypePanel extends AbstractWizardPanel {
                 ApiType api = currentSelection == getLocalApiRadioButton().getModel() 
                     ? ApiType.LOCAL_API : ApiType.REMOTE_API;
                 configuration.setApiType(api);
+                boolean remote = ApiType.REMOTE_API == api;
+                getHostnameTextField().setEnabled(remote);
+                getHostnameTextField().setEditable(remote);
+                getPortNumberTextField().setEnabled(remote);
+                getPortNumberTextField().setEditable(remote);
+                getUseHttpsCheckBox().setEnabled(remote);
                 validateInput();
             }
         });
