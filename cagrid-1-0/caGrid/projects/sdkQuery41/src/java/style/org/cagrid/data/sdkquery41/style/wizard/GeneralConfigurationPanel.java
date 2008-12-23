@@ -93,7 +93,7 @@ public class GeneralConfigurationPanel extends AbstractWizardPanel {
         // This method is (mostly) blank, since it's the first panel to run, 
         // and no other panel changes the values used by this panel
         validateInput();
-        populatePropertiesTable();
+        populateDeployProperties();
     }
     
     
@@ -204,7 +204,7 @@ public class GeneralConfigurationPanel extends AbstractWizardPanel {
                 public void documentEdited(DocumentEvent e) {
                     configuration.setSdkDirectory(new File(getSdkDirTextField().getText()));
                     validateInput();
-                    populatePropertiesTable();
+                    populateDeployProperties();
                 }
             });
         }
@@ -285,7 +285,11 @@ public class GeneralConfigurationPanel extends AbstractWizardPanel {
      */
     private JTable getPropertiesTable() {
         if (propertiesTable == null) {
-            DefaultTableModel propertiesTableModel = new DefaultTableModel();
+            DefaultTableModel propertiesTableModel = new DefaultTableModel() {
+                public boolean isCellEditable(int row, int column) {
+                    return false;
+                }
+            };
             propertiesTableModel.addColumn("Property");
             propertiesTableModel.addColumn("Value");
             propertiesTable = new JTable(propertiesTableModel);
@@ -316,15 +320,18 @@ public class GeneralConfigurationPanel extends AbstractWizardPanel {
     // --------
     
     
-    private synchronized void populatePropertiesTable() {
+    private synchronized void populateDeployProperties() {
         // clear the properties table
         DefaultTableModel propertiesModel = (DefaultTableModel) getPropertiesTable().getModel();
         while (propertiesModel.getRowCount() != 0) {
             propertiesModel.removeRow(0);
         }
-        // see if there's anything to add
+        // see if it's ok to populate values
         if (!validationModel.hasErrors()) {
             try {
+                File propertiesFile = configuration.getDeployPropertiesFile();
+                getPropertiesFileTextField().setText(propertiesFile.getCanonicalPath());
+                
                 Properties props = configuration.getDeployPropertiesFromSdkDir();
                 
                 // sort the property keys alphabetically

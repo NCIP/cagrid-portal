@@ -184,16 +184,24 @@ public class GeneralConfigurationStep extends AbstractStyleConfigurationStep {
     }
     
     
-    
     public Properties getDeployPropertiesFromSdkDir() throws IOException {
         if (this.deployProperties == null) {
             LOG.debug("Loading deploy.properties file");
-            File propertiesFile = new File(sdkDirectory, "conf" + File.separator + SDK41StyleConstants.DEPLOY_PROPERTIES_FILENAME);
+            File propertiesFile = getDeployPropertiesFile();
             deployProperties = new Properties();
             FileInputStream fis = new FileInputStream(propertiesFile);
             deployProperties.load(fis);
             fis.close();
         }
         return deployProperties;
+    }
+    
+    
+    public File getDeployPropertiesFile() {
+        if (sdkDirectory != null) {
+            File propertiesFile = new File(sdkDirectory, "conf" + File.separator + SDK41StyleConstants.DEPLOY_PROPERTIES_FILENAME);
+            return propertiesFile;
+        }
+        return null;
     }
 }
