@@ -358,9 +358,9 @@ public class ModelFromCaDSRPanel extends DomainModelSourcePanel {
     
     
     private void removeSelectedPackages() {
-        UMLPackageDisplay[] selection = (UMLPackageDisplay[]) getPackagesList().getSelectedValues();
+        Object[] selection = getPackagesList().getSelectedValues();
         DefaultListModel model = (DefaultListModel) getPackagesList().getModel();
-        for (UMLPackageDisplay removeme : selection) {
+        for (Object removeme : selection) {
             model.removeElement(removeme);
         }
     }
