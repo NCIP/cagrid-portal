@@ -368,8 +368,6 @@ public class GeneralConfigurationPanel extends AbstractWizardPanel {
         if (ValidationUtils.isNotBlank(getSdkDirTextField().getText())) {
             try {
                 configuration.validateSdkDirectory();
-                result.add(new SimpleValidationMessage(KEY_SDK_DIRECTORY + " appears to be valid", 
-                    Severity.OK, KEY_SDK_DIRECTORY));
             } catch (Exception ex) {
                 LOG.debug("Error validating selected SDK directory", ex);
                 result.add(new SimpleValidationMessage(KEY_SDK_DIRECTORY + " is not valid: " + ex.getMessage(), 
