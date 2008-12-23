@@ -475,7 +475,6 @@ public class ModelFromConfigPanel extends DomainModelSourcePanel {
             logger.info("Parsing domain model from XMI...");
             domainModel = parser.parse(xmiFile, xmiType);
             logger.info("Parsing complete");
-
         }
         return domainModel;
     }
