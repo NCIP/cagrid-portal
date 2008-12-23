@@ -62,7 +62,10 @@ public class DomainModelPanel extends AbstractWizardPanel {
 
 
     public void update() {
-        // TODO: update GUI from configuration
+        // update the domain model source panels
+        for (DomainModelSourcePanel panel : domainModelSources.values()) {
+            panel.populateFromConfiguration();
+        }
     }
     
     
@@ -109,7 +112,9 @@ public class DomainModelPanel extends AbstractWizardPanel {
         // add the model source panels to the combo box and display panel
         for (String name : domainModelSources.keySet()) {
             getModelSourceComboBox().addItem(name);
-            getModelSelectionPanel().add(domainModelSources.get(name), name);
+            DomainModelSourcePanel sourcePanel = domainModelSources.get(name);
+            sourcePanel.populateFromConfiguration();
+            getModelSelectionPanel().add(sourcePanel, name);
         }
     }
     
