@@ -24,6 +24,7 @@ import java.awt.Insets;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -38,6 +39,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -46,6 +48,7 @@ import org.cagrid.data.sdkquery41.style.wizard.DomainModelSourcePanel;
 import org.cagrid.data.sdkquery41.style.wizard.DomainModelSourceValidityListener;
 import org.cagrid.data.sdkquery41.style.wizard.config.SharedConfiguration;
 import org.cagrid.grape.utils.CompositeErrorDialog;
+import org.xml.sax.SAXException;
 
 import com.jgoodies.validation.Severity;
 import com.jgoodies.validation.ValidationMessage;
@@ -436,7 +439,8 @@ public class ModelFromConfigPanel extends DomainModelSourcePanel {
     }
     
     
-    private DomainModel getDomainModel() {
+    private DomainModel getDomainModel() throws IllegalStateException, 
+        SAXException, IOException, ParserConfigurationException {
         if (domainModel == null) {
             if (validationModel.hasErrors()) {
                 StringBuffer errors = new StringBuffer();
@@ -461,21 +465,17 @@ public class ModelFromConfigPanel extends DomainModelSourcePanel {
                 xmiType = XmiFileType.SDK_40_EA;
             } else {
                 xmiType = XmiFileType.SDK_40_EA;
-                logger.warn("Unable to determine XMI type for " + xmiTypeString + ", using default of " + xmiType.toString());
+                logger.warn("Unable to determine XMI type for " + xmiTypeString + 
+                    ", using default of " + xmiType.toString());
             }
             logger.debug("XMI Type determined to be " + xmiType.toString());
             
             XMIParser parser = new XMIParser(projectName, projectVersion);
-            
-            try {
-                logger.info("Parsing domain model from XMI...");
-                domainModel = parser.parse(xmiFile, xmiType);
-                logger.info("Parsing complete");
-            } catch (Exception ex) {
-                ex.printStackTrace();
-                CompositeErrorDialog.showErrorDialog(
-                    "Error parsing XMI to domain model", ex.getMessage(), ex);
-            }
+
+            logger.info("Parsing domain model from XMI...");
+            domainModel = parser.parse(xmiFile, xmiType);
+            logger.info("Parsing complete");
+
         }
         return domainModel;
     }
