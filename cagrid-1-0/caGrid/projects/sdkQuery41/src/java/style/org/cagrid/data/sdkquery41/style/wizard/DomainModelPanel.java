@@ -113,7 +113,6 @@ public class DomainModelPanel extends AbstractWizardPanel {
         for (String name : domainModelSources.keySet()) {
             getModelSourceComboBox().addItem(name);
             DomainModelSourcePanel sourcePanel = domainModelSources.get(name);
-            sourcePanel.populateFromConfiguration();
             getModelSelectionPanel().add(sourcePanel, name);
         }
     }
