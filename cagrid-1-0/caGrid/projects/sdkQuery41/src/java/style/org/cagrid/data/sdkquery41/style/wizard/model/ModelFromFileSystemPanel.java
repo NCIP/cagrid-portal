@@ -362,8 +362,8 @@ public class ModelFromFileSystemPanel extends DomainModelSourcePanel {
                         getModelFilenameTextField().setText(selectedFilename);
                         validateInput();
                         if (!validationModel.hasErrors()) {
-                            // valid domain model, so we can populate the packages
-                            populatePackageList();
+                            // valid domain model, so we can populate fields
+                            populateFromSelectedModel();
                         }
                     }
                 }
@@ -536,7 +536,8 @@ public class ModelFromFileSystemPanel extends DomainModelSourcePanel {
     // ----------
     
     
-    private void populatePackageList() {
+    private void populateFromSelectedModel() {
+        // read in the domain model
         DomainModel model = null;
         FileReader reader = null;
         try {
@@ -554,18 +555,31 @@ public class ModelFromFileSystemPanel extends DomainModelSourcePanel {
                 }
             }
         }
+        
         if (model != null) {
+            // sort the package names
             SortedSet<String> packages = new TreeSet<String>();
             for (UMLClass clazz : model.getExposedUMLClassCollection().getUMLClass()) {
                 packages.add(clazz.getPackageName());
             }
+            // clear the package list
             DefaultListModel listModel = (DefaultListModel) getPackagesList().getModel();
             while (listModel.size() != 0) {
                 listModel.removeElementAt(0);
             }
+            // add packages to the list
             for (String name : packages) {
                 listModel.addElement(name);
             }
+            // populate other model information fields
+            String shortName = model.getProjectShortName();
+            String version = model.getProjectVersion();
+            String longName = model.getProjectLongName();
+            String description = model.getProjectDescription();
+            getShortNameTextField().setText(shortName != null ? shortName : "");
+            getVersionTextField().setText(version != null ? version : "");
+            getLongNameTextField().setText(longName != null ? longName : "");
+            getDescriptionTextArea().setText(description != null ? description : "");
         }
     }
     
