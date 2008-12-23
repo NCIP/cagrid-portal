@@ -43,6 +43,7 @@ import com.jgoodies.validation.ValidationMessage;
 import com.jgoodies.validation.ValidationResult;
 import com.jgoodies.validation.ValidationResultModel;
 import com.jgoodies.validation.message.SimpleValidationMessage;
+import com.jgoodies.validation.util.DefaultValidationResultModel;
 import com.jgoodies.validation.view.ValidationComponentUtils;
 
 public class ModelFromCaDSRPanel extends DomainModelSourcePanel {
@@ -65,6 +66,7 @@ public class ModelFromCaDSRPanel extends DomainModelSourcePanel {
 
     public ModelFromCaDSRPanel(DomainModelSourceValidityListener validityListener) {
         super(validityListener);
+        validationModel = new DefaultValidationResultModel();
         initialize();
     }
 
