@@ -80,12 +80,12 @@ public class GeneralConfigurationPanel extends AbstractWizardPanel {
 
 
     public String getPanelShortName() {
-        return "Configuration";
+        return "SDK Directory";
     }
 
 
     public String getPanelTitle() {
-        return "caCORE System Configuration";
+        return "caCORE SDK Directory Selection";
     }
 
 
