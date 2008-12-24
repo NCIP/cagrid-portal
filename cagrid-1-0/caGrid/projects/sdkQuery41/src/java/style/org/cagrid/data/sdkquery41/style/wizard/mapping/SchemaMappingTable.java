@@ -91,7 +91,7 @@ public class SchemaMappingTable extends JTable {
                 PackageMappingStatus status = determineMappingStatus(pack);
                 row.add(status);
                 SchemaResolutionButton resolutionButton = 
-                    new SchemaResolutionButton(serviceInfo, pack, configuration);
+                    new SchemaResolutionButton(serviceInfo, pack, configuration, this);
                 row.add(resolutionButton);
                 tableModel.addRow(row);
             }

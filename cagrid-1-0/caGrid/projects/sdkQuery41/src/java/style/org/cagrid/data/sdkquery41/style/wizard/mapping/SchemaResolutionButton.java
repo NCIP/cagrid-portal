@@ -18,13 +18,15 @@ public class SchemaResolutionButton extends JButton implements ActionListener {
     private ServiceInformation serviceInfo = null;
     private CadsrPackage cadsrPack = null;
     private SchemaMappingConfigStep configuration = null;
+    private SchemaMappingTable mappingTable = null;
     
     public SchemaResolutionButton(ServiceInformation serviceInfo, CadsrPackage cadsrPack, 
-        SchemaMappingConfigStep configuration) {
+        SchemaMappingConfigStep configuration, SchemaMappingTable mappingTable) {
         super();
         this.serviceInfo = serviceInfo;
         this.cadsrPack = cadsrPack;
         this.configuration = configuration;
+        this.mappingTable = mappingTable;
         this.setText("Map Schema");
         addActionListener(this);
     }
@@ -40,11 +42,21 @@ public class SchemaResolutionButton extends JButton implements ActionListener {
                 configuration.setPackageNamespace(cadsrPack.getName(), selected.getNamespace());
             } catch (Exception ex) {
                 ex.printStackTrace();
-                CompositeErrorDialog.showErrorDialog("Error storing mapping", ex.getMessage(), ex);
+                CompositeErrorDialog.showErrorDialog(
+                    "Error storing mapping", ex.getMessage(), ex);
             }
             
             // only the first namespace is the one selected; the rest are imports
             MappingCustomizationDialog.customizeElementMapping(selected, cadsrPack, configuration);
+            
+            // update the rendering of this mapping
+            try {
+                mappingTable.reloadCadsrInformation();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                CompositeErrorDialog.showErrorDialog(
+                    "Error reloading mapping information", ex.getMessage(), ex);
+            }
         }
     }
 }
