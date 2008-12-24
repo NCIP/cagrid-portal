@@ -68,10 +68,10 @@
 	<!-- style related stuff -->
 	<property name="introduce.extensions.dir" location="../introduce/extensions" />
 	<property name="style.document" location="${basedir}/style/style.xml" />
-	<property name="style.dest.dir" location="${introduce.extensions.dir}/data/styles/cacore4" />
+	<property name="style.dest.dir" location="${introduce.extensions.dir}/data/styles/cacore41" />
 	
 	<!-- SDK remote and local libraries needed for builds -->
-	<!-- TODO: evaluate if these are still the same as for SDK 4.0 -->
+	<!-- TODO: evaluate if these are still the same as for SDK 4.1 -->
 	<property name="style.sdk.remote.lib.names" value="asm.jar, castor-1.0.2.jar, hibernate3.jar, spring.jar, cglib-2.1.3.jar, sdk-client-framework.jar, antlr-2.7.6.jar, acegi-security-1.0.4.jar" />
 	<property name="style.sdk.local.lib.names" value="c3p0-0.9.0.jar, csmapi.jar, dom4j-1.4.jar, ehcache-1.2.2.jar, jta.jar, mysql-connector-java-3.1.13-bin.jar, sdk-core.jar"/>
 
@@ -338,6 +338,7 @@
 			</fileset>
 		</copy>
 		<!-- copy sdk jars the style uses -->
+		<!-- 
 		<for list="${style.sdk.remote.lib.names}" parallel="false" param="sdk.lib.name" trim="true">
 			<sequential>
 				<echo message="copying required jar from caCORE SDK 4.1: @{sdk.lib.name}" />
@@ -358,6 +359,7 @@
 				</copy>
 			</sequential>
 		</for>
+		-->
 	</target>
 
 
