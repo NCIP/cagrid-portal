@@ -22,7 +22,7 @@ import java.util.List;
  * @author David Ervin
  * 
  * @created Apr 11, 2007 10:04:04 AM
- * @version $Id: ExtensionDataManager.java,v 1.5 2008-12-19 19:01:38 dervin Exp $ 
+ * @version $Id: ExtensionDataManager.java,v 1.6 2008-12-24 17:27:26 dervin Exp $ 
  */
 public class ExtensionDataManager {
     
@@ -347,7 +347,7 @@ public class ExtensionDataManager {
             for (CadsrPackage pack : info.getPackages()) {
                 if (pack.getName().equals(packageName)) {
                     for (ClassMapping mapping : pack.getCadsrClass()) {
-                        if (mapping.getClassName().endsWith(className)) {
+                        if (mapping.getClassName().equals(className)) {
                             mapping.setElementName(elementName);
                             storeCadsrInformation(info);
                             return true;
