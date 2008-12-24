@@ -136,6 +136,7 @@ public class SchemaMappingConfigStep extends AbstractStyleConfigurationStep {
                     element.setClassName(className);
                     element.setPackageName(packageName);
                     setSdkSerialization(element);
+                    break;
                 }
             }
         }
