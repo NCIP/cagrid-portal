@@ -69,14 +69,15 @@ public class SchemaMappingTable extends JTable {
         }
         
         CadsrInformation cadsrInformation = configuration.getCurrentCadsrInformation();
-        
-        for (CadsrPackage pack : cadsrInformation.getPackages()) {
-            Vector<Object> row = new Vector<Object>();
-            row.add(pack.getName());
-            PackageMappingStatus status = determineMappingStatus(pack);
-            row.add(status);
-            SchemaResolutionButton resolutionButton = new SchemaResolutionButton(serviceInfo, pack, configuration);
-            row.add(resolutionButton);
+        if (cadsrInformation.getPackages() != null) {
+            for (CadsrPackage pack : cadsrInformation.getPackages()) {
+                Vector<Object> row = new Vector<Object>();
+                row.add(pack.getName());
+                PackageMappingStatus status = determineMappingStatus(pack);
+                row.add(status);
+                SchemaResolutionButton resolutionButton = new SchemaResolutionButton(serviceInfo, pack, configuration);
+                row.add(resolutionButton);
+            }
         }
     }
     
