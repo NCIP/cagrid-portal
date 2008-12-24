@@ -75,9 +75,13 @@ public class SchemaMappingTable extends JTable {
                 row.add(pack.getName());
                 PackageMappingStatus status = determineMappingStatus(pack);
                 row.add(status);
-                SchemaResolutionButton resolutionButton = new SchemaResolutionButton(serviceInfo, pack, configuration);
+                SchemaResolutionButton resolutionButton = 
+                    new SchemaResolutionButton(serviceInfo, pack, configuration);
                 row.add(resolutionButton);
+                tableModel.addRow(row);
             }
+        } else {
+            System.out.println("Packages in caDSR information are null!!!!!!!");
         }
     }
     
