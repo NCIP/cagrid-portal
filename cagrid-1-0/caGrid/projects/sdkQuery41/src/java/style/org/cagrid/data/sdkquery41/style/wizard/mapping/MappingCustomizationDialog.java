@@ -78,6 +78,7 @@ public class MappingCustomizationDialog extends JDialog {
         CadsrPackage cadsrPakcage, SchemaMappingConfigStep configuration) {
         MappingCustomizationDialog dialog = 
             new MappingCustomizationDialog(nsType, cadsrPakcage, configuration);
+        dialog.populatePackageInfo();
         dialog.populateMappingTable();
         dialog.setVisible(true);
     }
@@ -379,6 +380,12 @@ public class MappingCustomizationDialog extends JDialog {
             }
         }
         return unmapped;
+    }
+    
+    
+    private void populatePackageInfo() {
+        getPackageNameTextField().setText(cadsrPackage.getName());
+        getNamespaceTextField().setText(nsType.getNamespace());
     }
     
     
