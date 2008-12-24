@@ -118,6 +118,9 @@ public class SchemaMappingConfigStep extends AbstractStyleConfigurationStep {
                 }
             }
         }
+        
+        // throw out the temp XSD directory
+        Utils.deleteDir(tempXsdDir);
     }
     
     
