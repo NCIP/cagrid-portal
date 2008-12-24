@@ -14,7 +14,9 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -442,9 +444,15 @@ public class MappingCustomizationDialog extends JDialog {
             }
         });
         
-        // for each class, create a combo box
+        // sort class names
+        List<String> classNames = new ArrayList<String>(cadsrPackage.getCadsrClass().length);
         for (ClassMapping mapping : cadsrPackage.getCadsrClass()) {
-            String className = mapping.getClassName();
+            classNames.add(mapping.getClassName());
+        }
+        Collections.sort(classNames);
+        
+        // for each class, create a combo box and table row
+        for (String className : classNames) {
             JComboBox combo = createElementSelectionCombo(comboBoxRenderer, comboListener, elementTypes);
             // add the row to the table
             ((DefaultTableModel) getMappingTable().getModel()).addRow(
