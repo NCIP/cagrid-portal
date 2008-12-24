@@ -7,6 +7,8 @@ import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Vector;
 
 import javax.swing.JTable;
@@ -70,7 +72,20 @@ public class SchemaMappingTable extends JTable {
         
         CadsrInformation cadsrInformation = configuration.getCurrentCadsrInformation();
         if (cadsrInformation.getPackages() != null) {
-            for (CadsrPackage pack : cadsrInformation.getPackages()) {
+            // sort packages by name
+            CadsrPackage[] packages = 
+                new CadsrPackage[cadsrInformation.getPackages().length];
+            for (int i = 0; i < cadsrInformation.getPackages().length; i++) {
+                packages[i] = cadsrInformation.getPackages(i);
+            }
+            Arrays.sort(packages, new Comparator<CadsrPackage>() {
+                public int compare(CadsrPackage p1, CadsrPackage p2) {
+                    return p1.getName().compareTo(p2.getName());
+                }
+            });
+            
+            // create rows for the packages
+            for (CadsrPackage pack : packages) {
                 Vector<Object> row = new Vector<Object>();
                 row.add(pack.getName());
                 PackageMappingStatus status = determineMappingStatus(pack);
