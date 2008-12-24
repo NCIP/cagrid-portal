@@ -145,6 +145,7 @@ public class SchemaMappingPanel extends AbstractWizardPanel {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
                     try {
                         configuration.mapFromSdkGeneratedSchemas();
+                        update();
                     } catch (Exception ex) {
                         ex.printStackTrace();
                         CompositeErrorDialog.showErrorDialog(
