@@ -25,7 +25,7 @@ public class SchemaResolutionButton extends JButton implements ActionListener {
         this.serviceInfo = serviceInfo;
         this.cadsrPack = cadsrPack;
         this.configuration = configuration;
-        this.setName("Map Schema");
+        this.setText("Map Schema");
         addActionListener(this);
     }
     
