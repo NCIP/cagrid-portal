@@ -20,7 +20,8 @@ public class ComponentTableCellEditor extends AbstractCellEditor implements Tabl
     }
 
 
-    public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
+    public Component getTableCellEditorComponent(JTable table, Object value, 
+        boolean isSelected, int row, int column) {
         editorValue = value;
         return (Component) value;
     }
