@@ -428,7 +428,8 @@ public class ModelFromConfigPanel extends DomainModelSourcePanel {
                 mapping.setTargetable(true);
                 classMappings.add(mapping);
             }
-            ClassMapping[] mappingArray = (ClassMapping[]) classMappings.toArray();
+            ClassMapping[] mappingArray = new ClassMapping[classMappings.size()];
+            classMappings.toArray(mappingArray);
             pack.setCadsrClass(mappingArray);
             cadsrPackages.add(pack);
         }
