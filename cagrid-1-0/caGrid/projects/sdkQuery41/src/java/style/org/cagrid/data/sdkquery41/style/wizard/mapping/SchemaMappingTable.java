@@ -12,8 +12,11 @@ import java.util.Comparator;
 import java.util.Vector;
 
 import javax.swing.JTable;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 
+import org.cagrid.data.sdkquery41.style.wizard.SchemaMappingValidityListener;
 import org.cagrid.data.sdkquery41.style.wizard.config.SchemaMappingConfigStep;
 
 /**
@@ -29,11 +32,14 @@ public class SchemaMappingTable extends JTable {
     
     private ServiceInformation serviceInfo = null;
     private SchemaMappingConfigStep configuration = null;
+    private SchemaMappingValidityListener validityListener = null;
 
-    public SchemaMappingTable(ServiceInformation serviceInfo, SchemaMappingConfigStep configuration) {
+    public SchemaMappingTable(ServiceInformation serviceInfo, 
+        SchemaMappingConfigStep configuration, SchemaMappingValidityListener validityListener) {
         super();
         this.serviceInfo = serviceInfo;
         this.configuration = configuration;
+        this.validityListener = validityListener;
         tableModel = new SchemaMappingTableModel();
         setModel(tableModel);
         setDefaultRenderer(Object.class, new ValidatingTableCellRenderer() {
@@ -46,6 +52,12 @@ public class SchemaMappingTable extends JTable {
                         setErrorBackground();
                     }
                 }
+            }
+        });
+        tableModel.addTableModelListener(new TableModelListener() {
+            public void tableChanged(TableModelEvent e) {
+                SchemaMappingTable.this.validityListener
+                    .updateSchemaMappingValidity(!hasErrors());
             }
         });
         setDefaultEditor(Object.class, new ComponentTableCellEditor());

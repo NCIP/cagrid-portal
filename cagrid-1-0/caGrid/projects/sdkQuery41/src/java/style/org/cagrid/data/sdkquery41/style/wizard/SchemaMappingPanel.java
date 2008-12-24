@@ -109,7 +109,12 @@ public class SchemaMappingPanel extends AbstractWizardPanel {
     
     private SchemaMappingTable getSchemaMappingTable() {
         if (schemaMappingTable == null) {
-            schemaMappingTable = new SchemaMappingTable(getServiceInformation(), configuration);
+            schemaMappingTable = new SchemaMappingTable(
+                getServiceInformation(), configuration, new SchemaMappingValidityListener() {
+                public void updateSchemaMappingValidity(boolean valid) {
+                    setNextEnabled(valid);
+                }
+            });
         }
         return schemaMappingTable;
     }
