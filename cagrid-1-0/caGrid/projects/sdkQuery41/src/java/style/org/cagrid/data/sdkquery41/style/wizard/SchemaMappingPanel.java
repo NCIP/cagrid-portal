@@ -113,6 +113,7 @@ public class SchemaMappingPanel extends AbstractWizardPanel {
                 getServiceInformation(), configuration, new SchemaMappingValidityListener() {
                 public void updateSchemaMappingValidity(boolean valid) {
                     setNextEnabled(valid);
+                    setWizardComplete(valid);
                 }
             });
         }
