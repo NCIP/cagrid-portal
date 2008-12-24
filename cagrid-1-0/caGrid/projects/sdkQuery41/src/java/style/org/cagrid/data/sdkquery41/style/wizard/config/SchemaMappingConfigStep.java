@@ -18,6 +18,9 @@ import java.util.List;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
+import org.cagrid.data.sdkquery41.encoding.SDK41DeserializerFactory;
+import org.cagrid.data.sdkquery41.encoding.SDK41SerializerFactory;
+
 public class SchemaMappingConfigStep extends AbstractStyleConfigurationStep {
     
     private ExtensionDataManager dataManager = null;
@@ -136,9 +139,8 @@ public class SchemaMappingConfigStep extends AbstractStyleConfigurationStep {
     
     
     private void setSdkSerialization(SchemaElementType element) {
-        // TODO: serializer and deserializer
-        // element.setDeserializer(arg0);
-        // element.setSerializer(arg0);
+        element.setDeserializer(SDK41DeserializerFactory.class.getName());
+        element.setSerializer(SDK41SerializerFactory.class.getName());
     }
     
     
