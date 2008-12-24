@@ -433,7 +433,8 @@ public class ModelFromConfigPanel extends DomainModelSourcePanel {
             pack.setCadsrClass(mappingArray);
             cadsrPackages.add(pack);
         }
-        CadsrPackage[] packageArray = (CadsrPackage[]) cadsrPackages.toArray();
+        CadsrPackage[] packageArray = new CadsrPackage[cadsrPackages.size()];
+        cadsrPackages.toArray(packageArray);
         cadsrInfo.setPackages(packageArray);
         
         return cadsrInfo;
