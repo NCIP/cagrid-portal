@@ -187,11 +187,11 @@ public class DomainModelPanel extends AbstractWizardPanel {
             modelSourceComboBox.setToolTipText("Select the domain model source");
             modelSourceComboBox.addItemListener(new java.awt.event.ItemListener() {
                 public void itemStateChanged(java.awt.event.ItemEvent e) {
-                    System.out.println("Selected model source " + 
-                        getModelSourceComboBox().getSelectedItem().toString());
+                    String sourceName = getModelSourceComboBox().getSelectedItem().toString();
                     ((CardLayout) getModelSelectionPanel().getLayout()).show(
                         getModelSelectionPanel(), 
                         getModelSourceComboBox().getSelectedItem().toString());
+                    domainModelSources.get(sourceName).revalidateModel();
                 }
             });
         }

@@ -196,6 +196,11 @@ public class ModelFromFileSystemPanel extends DomainModelSourcePanel {
     }
     
     
+    public void revalidateModel() {
+        validateInput();
+    }
+    
+    
     private void initialize() {
         configureValidation();
         setLayout(new GridLayout());

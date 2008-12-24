@@ -28,6 +28,9 @@ public abstract class DomainModelSourcePanel extends JPanel {
     public abstract CadsrInformation getCadsrDomainInformation() throws Exception;
     
     
+    public abstract void revalidateModel();
+    
+    
     protected void setModelValidity(boolean valid) {
         validityListener.domainModelSourceValid(this, valid);
     }

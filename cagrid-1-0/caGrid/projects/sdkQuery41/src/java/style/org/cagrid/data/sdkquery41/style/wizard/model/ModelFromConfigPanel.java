@@ -101,6 +101,11 @@ public class ModelFromConfigPanel extends DomainModelSourcePanel {
     }
     
     
+    public void revalidateModel() {
+        validateInput();
+    }
+    
+    
     public void populateFromConfiguration() {
         File sdkDir = SharedConfiguration.getInstance().getSdkDirectory();
         Properties deployProps = SharedConfiguration.getInstance().getSdkDeployProperties();
