@@ -93,7 +93,7 @@ public class MappingCustomizationDialog extends JDialog {
         if (mappingTable == null) {
             DefaultTableModel mappingTableModel = new DefaultTableModel() {
                 public boolean isCellEditable(int row, int column) {
-                    return row == 1;
+                    return column == 1;
                 }
             };
             mappingTableModel.addColumn("Class Name");
@@ -102,7 +102,7 @@ public class MappingCustomizationDialog extends JDialog {
             mappingTable.setDefaultRenderer(Object.class, new ValidatingTableCellRenderer() {
                 protected void validateCell(JTable table, Object value,
                     boolean isSelected, boolean hasFocus, int row, int column) {
-                    if (row == 1) {
+                    if (column == 1) {
                         setToolTipText("");
                         JComboBox combo = (JComboBox) value;
                         Object selected = combo.getSelectedItem();
