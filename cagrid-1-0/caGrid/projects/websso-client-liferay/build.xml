@@ -56,6 +56,7 @@
 			</fileset>
 		</copy>
 		<copy file="${src.resources.dir}/web.xml" tofile="${build.dir}/web-${project.version}.xml" />
+		<copy file="${src.resources.dir}/cas-client.properties" tofile="${build.dir}/cas-client-${project.version}.properties" />
 	</target>
 
 	<target name="build-jar">

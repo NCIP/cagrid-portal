@@ -15,6 +15,7 @@
 	<publications>
 		<artifact name="caGrid-websso-client-liferay" conf="default" type="jar" />
 		<artifact name="web" conf="resources" type="xml" />
+		<artifact name="cas-client" conf="resources" type="properties" />
 	</publications>
 	<dependencies>	
 		<dependency rev="${project.version}" org="caGrid" name="websso-client-acegi" conf="default->default" />
