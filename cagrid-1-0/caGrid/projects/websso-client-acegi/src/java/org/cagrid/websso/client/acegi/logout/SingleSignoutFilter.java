@@ -18,7 +18,7 @@ import org.acegisecurity.ui.logout.LogoutHandler;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.util.Assert;
 
-public class SingleSignoutLogoutFilter implements Filter, InitializingBean {
+public class SingleSignoutFilter implements Filter, InitializingBean {
 	private String filterProcessesUrl;
 	private LogoutHandler[] logoutHandlers;
 	private ExpiredTicketCache expiredTicketCache;
