@@ -7,7 +7,7 @@
   -
   - Only used by "cas" artifact.
   -
-  - $Id: applicationContext.xml,v 1.5 2008-11-13 15:19:10 garmillas Exp $
+  - $Id: applicationContext.xml,v 1.6 2008-12-30 15:10:30 garmillas Exp $
   -->
 
 <beans>
@@ -198,7 +198,7 @@
 			value="/WEB-INF/classes/cas-client.properties" />
 	</bean>
 	
-	<bean id="casLogoutFilter" class="org.cagrid.websso.client.acegi.logout.SingleSignoutLogoutFilter">
+	<bean id="casLogoutFilter" class="org.cagrid.websso.client.acegi.logout.SingleSignoutFilter">
 		<property name="filterProcessesUrl" value="/logout"></property>
 		<property name="logoutHandlers">
 			<list>
