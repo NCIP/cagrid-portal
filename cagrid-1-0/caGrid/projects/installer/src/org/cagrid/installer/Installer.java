@@ -329,44 +329,6 @@ public class Installer {
     }
 
 
-    private void addDeployContainerSteps() {
-        final RunTasksStep deployContainer = new RunTasksStep(this.model.getMessage("install.title"), this.model
-            .getMessage("install.desc"));
-
-        // for each container type make sure to add that container installer
-        TomcatComponentInstaller tomcatComponentInstaller = new TomcatComponentInstaller();
-        tomcatComponentInstaller.addCheckInstallSteps(this.model);
-        tomcatComponentInstaller.addInstallDownloadedComponentTasks(this.model, deployContainer);
-
-        JBossComponentInstaller jbossComponentInstaller = new JBossComponentInstaller();
-        jbossComponentInstaller.addCheckInstallSteps(this.model);
-        jbossComponentInstaller.addInstallDownloadedComponentTasks(this.model, deployContainer);
-
-        incrementProgress();
-
-        // deploy the syngGTS anytime we are deploying to a container
-        DeployServiceTask deploySyncGTS = new DeployServiceTask("syncGTS", "Deloying syncGTS", "syncGTS");
-        deployContainer.getTasks().add(new ConditionalTask(deploySyncGTS, new Condition() {
-
-            public boolean evaluate(WizardModel model) {
-                return ((CaGridInstallerModel) model).isDeployGlobusRequired()
-                    && ((CaGridInstallerModel) model).isConfigureContainerSelected();
-            }
-        }));
-
-        
-        Condition shouldDeployContainer = new Condition() {
-            public boolean evaluate(WizardModel m) {
-                CaGridInstallerModel model = (CaGridInstallerModel) m;
-                return deployContainer.getTasksCount(model) > 0;
-            }
-        };
-        this.model.add(new PreviewTasksStep("Grid Service Container Installer","Installing, deploying, and configuring grid service container.",deployContainer,model), shouldDeployContainer);
-        this.model.add(deployContainer, shouldDeployContainer);
-
-    }
-
-
     private void addConfigureContainerSteps() {
 
         PropertyConfigurationStep selectContainerStep = new PropertyConfigurationStep(this.model
@@ -441,6 +403,43 @@ public class Installer {
  
     }
 
+
+    private void addDeployContainerSteps() {
+        final RunTasksStep deployContainer = new RunTasksStep(this.model.getMessage("install.title"), this.model
+            .getMessage("install.desc"));
+
+        // for each container type make sure to add that container installer
+        TomcatComponentInstaller tomcatComponentInstaller = new TomcatComponentInstaller();
+        tomcatComponentInstaller.addCheckInstallSteps(this.model);
+        tomcatComponentInstaller.addInstallDownloadedComponentTasks(this.model, deployContainer);
+
+        JBossComponentInstaller jbossComponentInstaller = new JBossComponentInstaller();
+        jbossComponentInstaller.addCheckInstallSteps(this.model);
+        jbossComponentInstaller.addInstallDownloadedComponentTasks(this.model, deployContainer);
+
+        incrementProgress();
+
+        // deploy the syngGTS anytime we are deploying to a container
+        DeployServiceTask deploySyncGTS = new DeployServiceTask("syncGTS", "Deloying syncGTS", "syncGTS");
+        deployContainer.getTasks().add(new ConditionalTask(deploySyncGTS, new Condition() {
+
+            public boolean evaluate(WizardModel model) {
+                return ((CaGridInstallerModel) model).isDeployGlobusRequired()
+                    && ((CaGridInstallerModel) model).isConfigureContainerSelected();
+            }
+        }));
+
+        
+        Condition shouldDeployContainer = new Condition() {
+            public boolean evaluate(WizardModel m) {
+                CaGridInstallerModel model = (CaGridInstallerModel) m;
+                return deployContainer.getTasksCount(model) > 0;
+            }
+        };
+        this.model.add(new PreviewTasksStep("Grid Service Container Installer","Installing, deploying, and configuring grid service container.",deployContainer,model), shouldDeployContainer);
+        this.model.add(deployContainer, shouldDeployContainer);
+
+    }
 
     private void clearFlags() {
         this.model.unsetProperty(Constants.INSTALL_CONFIGURE_CONTAINER);

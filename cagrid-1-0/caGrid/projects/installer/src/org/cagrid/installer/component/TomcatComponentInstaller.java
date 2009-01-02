@@ -75,7 +75,7 @@ public class TomcatComponentInstaller extends AbstractDownloadedComponentInstall
 
                     public boolean evaluate(WizardModel m) {
                         CaGridInstallerModel model = (CaGridInstallerModel) m;
-                        return model.isTomcatInstalled() && model.isDeployGlobusRequired()
+                        return model.isTomcatContainer() && model.isDeployGlobusRequired()
                             && model.isConfigureContainerSelected();
 
                     }
@@ -88,7 +88,7 @@ public class TomcatComponentInstaller extends AbstractDownloadedComponentInstall
 
                     public boolean evaluate(WizardModel m) {
                         CaGridInstallerModel model = (CaGridInstallerModel) m;
-                        return model.isTomcatInstalled() && model.isConfigureContainerSelected();
+                        return model.isTomcatContainer() && model.isConfigureContainerSelected();
                     }
 
                 }));
