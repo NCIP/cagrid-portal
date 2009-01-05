@@ -54,7 +54,7 @@ import org.bouncycastle.openssl.PEMReader;
  */
 public class CertUtil {
 
-	public static final String SIGNATURE_ALGORITHM = "MD5WithRSAEncryption";
+	public static final String SIGNATURE_ALGORITHM = "SHA1WithRSAEncryption";
 
 
 	public static String getHashCode(X509Certificate cert) throws Exception {
