@@ -2,21 +2,19 @@ package org.cagrid.gaards.ui.gridgrouper.mygroups;
 
 import gov.nih.nci.cagrid.gridgrouper.client.Group;
 
-import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 
-import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import org.cagrid.gaards.ui.common.TitlePanel;
 import org.cagrid.gaards.ui.gridgrouper.GridGrouperLookAndFeel;
 import org.cagrid.grape.ApplicationComponent;
-import org.cagrid.grape.LookAndFeel;
 
 
 public class MyGroupViewer extends ApplicationComponent {
@@ -28,10 +26,6 @@ public class MyGroupViewer extends ApplicationComponent {
     private Group grp;
 
     private JPanel detailsPanel = null;
-
-    private JPanel buttonPanel = null;
-
-    private JButton cancel = null;
 
     private JLabel jLabel = null;
 
@@ -65,6 +59,8 @@ public class MyGroupViewer extends ApplicationComponent {
 
     private JTextArea description = null;
 
+    private JPanel titlePanel = null;
+
 
     /**
      * This is the default constructor
@@ -95,26 +91,23 @@ public class MyGroupViewer extends ApplicationComponent {
      */
     private JPanel getJContentPane() {
         if (jContentPane == null) {
+            GridBagConstraints gridBagConstraints21 = new GridBagConstraints();
+            gridBagConstraints21.gridx = 0;
+            gridBagConstraints21.insets = new Insets(2, 2, 2, 2);
+            gridBagConstraints21.fill = GridBagConstraints.HORIZONTAL;
+            gridBagConstraints21.weightx = 1.0D;
+            gridBagConstraints21.gridy = 0;
             GridBagConstraints gridBagConstraints14 = new GridBagConstraints();
             gridBagConstraints14.gridx = 0;
             gridBagConstraints14.insets = new Insets(2, 2, 2, 2);
             gridBagConstraints14.fill = GridBagConstraints.BOTH;
             gridBagConstraints14.weightx = 1.0D;
             gridBagConstraints14.weighty = 1.0D;
-            gridBagConstraints14.gridy = 1;
-
-            GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
-            gridBagConstraints1.gridwidth = 0;
-            gridBagConstraints1.gridy = 2;
-            gridBagConstraints1.ipady = 0;
-            gridBagConstraints1.fill = GridBagConstraints.HORIZONTAL;
-            gridBagConstraints1.insets = new Insets(2, 2, 2, 2);
-            gridBagConstraints1.weightx = 1.0D;
-            gridBagConstraints1.gridx = 0;
+            gridBagConstraints14.gridy = 2;
 
             GridBagConstraints gridBagConstraints = new GridBagConstraints();
             gridBagConstraints.gridheight = 1;
-            gridBagConstraints.gridy = 0;
+            gridBagConstraints.gridy = 1;
             gridBagConstraints.ipadx = 0;
             gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
             gridBagConstraints.insets = new Insets(2, 2, 2, 2);
@@ -124,7 +117,7 @@ public class MyGroupViewer extends ApplicationComponent {
             jContentPane.setLayout(new GridBagLayout());
             jContentPane.add(getDetailsPanel(), gridBagConstraints);
             jContentPane.add(getDescriptionPanel(), gridBagConstraints14);
-            jContentPane.add(getButtonPanel(), gridBagConstraints1);
+            jContentPane.add(getTitlePanel(), gridBagConstraints21);
         }
         return jContentPane;
     }
@@ -223,9 +216,6 @@ public class MyGroupViewer extends ApplicationComponent {
             jLabel.setText("Grid Grouper");
             detailsPanel = new JPanel();
             detailsPanel.setLayout(new GridBagLayout());
-            detailsPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(
-                null, "Group Details", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-                javax.swing.border.TitledBorder.DEFAULT_POSITION, null, LookAndFeel.getPanelLabelColor()));
             detailsPanel.add(jLabel, gridBagConstraints3);
             detailsPanel.add(getGridGrouper(), gridBagConstraints2);
             detailsPanel.add(jLabel1, gridBagConstraints4);
@@ -240,41 +230,6 @@ public class MyGroupViewer extends ApplicationComponent {
             detailsPanel.add(getGrpName(), gridBagConstraints13);
         }
         return detailsPanel;
-    }
-
-
-    /**
-     * This method initializes buttonPanel
-     * 
-     * @return javax.swing.JPanel
-     */
-    private JPanel getButtonPanel() {
-        if (buttonPanel == null) {
-            buttonPanel = new JPanel();
-            buttonPanel.setLayout(new FlowLayout());
-            buttonPanel.add(getCancel(), null);
-        }
-        return buttonPanel;
-    }
-
-
-    /**
-     * This method initializes cancel
-     * 
-     * @return javax.swing.JButton
-     */
-    private JButton getCancel() {
-        if (cancel == null) {
-            cancel = new JButton();
-            cancel.setText("Cancel");
-            cancel.setIcon(LookAndFeel.getCloseIcon());
-            cancel.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent e) {
-                    dispose();
-                }
-            });
-        }
-        return cancel;
     }
 
 
@@ -382,7 +337,7 @@ public class MyGroupViewer extends ApplicationComponent {
             gridBagConstraints16.weighty = 1.0;
             gridBagConstraints16.gridx = 0;
             gridBagConstraints16.gridy = 1;
-            gridBagConstraints16.insets = new Insets(2, 2, 2, 2);
+            gridBagConstraints16.insets = new Insets(2, 10, 5, 10);
             gridBagConstraints16.weightx = 1.0;
             GridBagConstraints gridBagConstraints15 = new GridBagConstraints();
             gridBagConstraints15.gridx = 0;
@@ -426,5 +381,18 @@ public class MyGroupViewer extends ApplicationComponent {
             description.setEditable(false);
         }
         return description;
+    }
+
+
+    /**
+     * This method initializes titlePanel	
+     * 	
+     * @return javax.swing.JPanel	
+     */
+    private JPanel getTitlePanel() {
+        if (titlePanel == null) {
+            titlePanel = new TitlePanel(grp.getDisplayExtension(),"Details of the group "+grp.getDisplayExtension()+".");
+        }
+        return titlePanel;
     }
 }

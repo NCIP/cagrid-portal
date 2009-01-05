@@ -16,15 +16,14 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
+import org.cagrid.gaards.ui.common.ProgressPanel;
+import org.cagrid.gaards.ui.common.TitlePanel;
 import org.cagrid.gaards.ui.gridgrouper.GridGrouperHandle;
-import org.cagrid.gaards.ui.gridgrouper.GridGrouperLookAndFeel;
 import org.cagrid.gaards.ui.gridgrouper.GridGrouperSession;
 import org.cagrid.gaards.ui.gridgrouper.GridGrouperUIUtils;
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
-import org.cagrid.grape.LookAndFeel;
 import org.cagrid.grape.utils.ErrorDialog;
-import org.cagrid.grape.utils.MultiEventProgressBar;
 import org.globus.gsi.GlobusCredential;
 
 
@@ -48,11 +47,9 @@ public class MyGroupsWindow extends ApplicationComponent {
 
     private JTextField gridIdentity = null;
 
-    private JPanel progressPanel = null;
+    private ProgressPanel progressPanel = null;
 
     private JPanel groupsPanel = null;
-
-    private MultiEventProgressBar progress = null;
 
     private JScrollPane jScrollPane = null;
 
@@ -64,8 +61,7 @@ public class MyGroupsWindow extends ApplicationComponent {
 
     private JButton refresh = null;
 
-    private JButton close = null;
-
+    private JPanel titlePanel = null;
 
     /**
      * This is the default constructor
@@ -77,7 +73,7 @@ public class MyGroupsWindow extends ApplicationComponent {
 
 
     private void findGroups() {
-        int id = getProgress().startEvent("Discovering Groups.....");
+        getProgressPanel().showProgress("Searching...");
         getGroups().clearTable();
         try {
             GlobusCredential cred = null;
@@ -89,13 +85,13 @@ public class MyGroupsWindow extends ApplicationComponent {
                     .showError(
                         "Credentials required to discover groups",
                         "In order to discover the groups in which you are a member you must have grid credentials.  No grid credentials could be found, please logon and try again!!!");
-                getProgress().stopEvent(id, "");
+                getProgressPanel().stopProgress();
                 return;
             }
 
             if (cred.getTimeLeft() <= 0) {
                 ErrorDialog.showError("Your credentials are expired.");
-                getProgress().stopEvent(id, "");
+                getProgressPanel().stopProgress();
                 return;
             }
 
@@ -114,11 +110,11 @@ public class MyGroupsWindow extends ApplicationComponent {
                         .getError());
                 }
             }
-            getProgress().stopEvent(id, "");
+            getProgressPanel().stopProgress();
 
         } catch (Exception ex) {
             ex.printStackTrace();
-            getProgress().stopEvent(id, "");
+            getProgressPanel().stopProgress();
         }
     }
 
@@ -150,12 +146,18 @@ public class MyGroupsWindow extends ApplicationComponent {
      */
     private JPanel getJContentPane() {
         if (jContentPane == null) {
+            GridBagConstraints gridBagConstraints13 = new GridBagConstraints();
+            gridBagConstraints13.gridx = 0;
+            gridBagConstraints13.insets = new Insets(2, 2, 2, 2);
+            gridBagConstraints13.fill = GridBagConstraints.HORIZONTAL;
+            gridBagConstraints13.weightx = 1.0D;
+            gridBagConstraints13.gridy = 0;
             GridBagConstraints gridBagConstraints12 = new GridBagConstraints();
             gridBagConstraints12.gridx = 0;
             gridBagConstraints12.fill = GridBagConstraints.HORIZONTAL;
             gridBagConstraints12.weightx = 1.0D;
             gridBagConstraints12.insets = new Insets(2, 2, 2, 2);
-            gridBagConstraints12.gridy = 4;
+            gridBagConstraints12.gridy = 3;
             GridBagConstraints gridBagConstraints21 = new GridBagConstraints();
             gridBagConstraints21.gridx = 0;
             gridBagConstraints21.insets = new Insets(2, 2, 2, 2);
@@ -166,12 +168,12 @@ public class MyGroupsWindow extends ApplicationComponent {
             GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
             gridBagConstraints11.gridx = 0;
             gridBagConstraints11.fill = GridBagConstraints.HORIZONTAL;
-            gridBagConstraints11.insets = new Insets(2, 2, 2, 2);
+            gridBagConstraints11.insets = new Insets(0, 0, 0, 0);
             gridBagConstraints11.weightx = 1.0D;
-            gridBagConstraints11.gridy = 1;
+            gridBagConstraints11.gridy = 4;
             GridBagConstraints gridBagConstraints = new GridBagConstraints();
             gridBagConstraints.gridheight = 1;
-            gridBagConstraints.gridy = 0;
+            gridBagConstraints.gridy = 1;
             gridBagConstraints.ipadx = 0;
             gridBagConstraints.insets = new Insets(2, 2, 2, 2);
             gridBagConstraints.weightx = 1.0D;
@@ -183,6 +185,7 @@ public class MyGroupsWindow extends ApplicationComponent {
             jContentPane.add(getProgressPanel(), gridBagConstraints11);
             jContentPane.add(getGroupsPanel(), gridBagConstraints21);
             jContentPane.add(getButtonPanel(), gridBagConstraints12);
+            jContentPane.add(getTitlePanel(), gridBagConstraints13);
         }
         return jContentPane;
     }
@@ -237,17 +240,9 @@ public class MyGroupsWindow extends ApplicationComponent {
      * 
      * @return javax.swing.JPanel
      */
-    private JPanel getProgressPanel() {
+    private ProgressPanel getProgressPanel() {
         if (progressPanel == null) {
-            GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
-            gridBagConstraints4.gridx = 0;
-            gridBagConstraints4.insets = new Insets(0, 50, 0, 50);
-            gridBagConstraints4.fill = GridBagConstraints.HORIZONTAL;
-            gridBagConstraints4.weightx = 1.0D;
-            gridBagConstraints4.gridy = 0;
-            progressPanel = new JPanel();
-            progressPanel.setLayout(new GridBagLayout());
-            progressPanel.add(getProgress(), gridBagConstraints4);
+            progressPanel = new ProgressPanel();
         }
         return progressPanel;
     }
@@ -269,19 +264,6 @@ public class MyGroupsWindow extends ApplicationComponent {
             groupsPanel.add(getJScrollPane(), gridBagConstraints3);
         }
         return groupsPanel;
-    }
-
-
-    /**
-     * This method initializes progress
-     * 
-     * @return javax.swing.JProgressBar
-     */
-    private MultiEventProgressBar getProgress() {
-        if (progress == null) {
-            progress = new MultiEventProgressBar(true);
-        }
-        return progress;
     }
 
 
@@ -323,7 +305,6 @@ public class MyGroupsWindow extends ApplicationComponent {
             buttonPanel.setLayout(new FlowLayout());
             buttonPanel.add(getView(), null);
             buttonPanel.add(getRefresh(), null);
-            buttonPanel.add(getClose(), null);
         }
         return buttonPanel;
     }
@@ -338,7 +319,6 @@ public class MyGroupsWindow extends ApplicationComponent {
         if (view == null) {
             view = new JButton();
             view.setText("View");
-            view.setIcon(LookAndFeel.getQueryIcon());
             view.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
                     getGroups().doubleClick();
@@ -358,7 +338,6 @@ public class MyGroupsWindow extends ApplicationComponent {
         if (refresh == null) {
             refresh = new JButton();
             refresh.setText("Refresh");
-            refresh.setIcon(GridGrouperLookAndFeel.getLoadIcon());
             refresh.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
                     Runner runner = new Runner() {
@@ -379,22 +358,15 @@ public class MyGroupsWindow extends ApplicationComponent {
 
 
     /**
-     * This method initializes close
-     * 
-     * @return javax.swing.JButton
+     * This method initializes titlePanel	
+     * 	
+     * @return javax.swing.JPanel	
      */
-    private JButton getClose() {
-        if (close == null) {
-            close = new JButton();
-            close.setText("Cancel");
-            close.setIcon(LookAndFeel.getCloseIcon());
-            close.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent e) {
-                    dispose();
-                }
-            });
+    private JPanel getTitlePanel() {
+        if (titlePanel == null) {
+            titlePanel = new TitlePanel("My Groups","Browse the groups that you are a member of.");
         }
-        return close;
+        return titlePanel;
     }
 
 }

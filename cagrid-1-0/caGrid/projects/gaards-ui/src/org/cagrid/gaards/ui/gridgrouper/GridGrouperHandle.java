@@ -16,13 +16,18 @@ public class GridGrouperHandle extends ServiceHandle {
     }
 
 
-    public GridGrouper getClient(){
+    public GridGrouper getClient() {
         return getClient(null);
     }
 
 
-    public GridGrouper getClient(GlobusCredential credential){
-        GridGrouper client = new GridGrouper(getServiceDescriptor().getServiceURL(), credential);
+    public GridGrouper getClient(GlobusCredential credential) {
+        GridGrouper client = null;
+        if (credential == null) {
+            client = new GridGrouper(getServiceDescriptor().getServiceURL(), true);
+        } else {
+            client = new GridGrouper(getServiceDescriptor().getServiceURL(), credential);
+        }
         if (Utils.clean(getServiceDescriptor().getServiceIdentity()) != null) {
             IdentityAuthorization auth = new IdentityAuthorization(getServiceDescriptor().getServiceIdentity());
             client.setAuthorization(auth);

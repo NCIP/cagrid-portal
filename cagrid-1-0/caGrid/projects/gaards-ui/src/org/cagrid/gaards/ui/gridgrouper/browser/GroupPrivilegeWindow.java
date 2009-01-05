@@ -8,7 +8,6 @@ import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.gridgrouper.client.Group;
 import gov.nih.nci.cagrid.gridgrouper.common.SubjectUtils;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -23,11 +22,11 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
+import org.cagrid.gaards.ui.common.TitlePanel;
 import org.cagrid.gaards.ui.dorian.federation.UserSearchDialog;
 import org.cagrid.gaards.ui.gridgrouper.GridGrouperLookAndFeel;
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
-import org.cagrid.grape.LookAndFeel;
 import org.cagrid.grape.utils.ErrorDialog;
 
 
@@ -89,6 +88,8 @@ public class GroupPrivilegeWindow extends ApplicationComponent {
 
 	private JButton find = null;
 
+    private JPanel titlePanel = null;
+
 
 	/**
 	 * This is the default constructor
@@ -137,9 +138,25 @@ public class GroupPrivilegeWindow extends ApplicationComponent {
 	 */
 	private JPanel getJContentPane() {
 		if (jContentPane == null) {
+			GridBagConstraints gridBagConstraints18 = new GridBagConstraints();
+			gridBagConstraints18.gridx = 0;
+			gridBagConstraints18.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints18.weightx = 1.0D;
+			gridBagConstraints18.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints18.gridy = 0;
+			GridBagConstraints gridBagConstraints17 = new GridBagConstraints();
+			gridBagConstraints17.gridx = 0;
+			gridBagConstraints17.ipadx = 0;
+			gridBagConstraints17.ipady = 0;
+			gridBagConstraints17.fill = GridBagConstraints.BOTH;
+			gridBagConstraints17.weightx = 1.0D;
+			gridBagConstraints17.weighty = 1.0D;
+			gridBagConstraints17.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints17.gridy = 1;
 			jContentPane = new JPanel();
-			jContentPane.setLayout(new BorderLayout());
-			jContentPane.add(getMainPanel(), BorderLayout.CENTER);
+			jContentPane.setLayout(new GridBagLayout());
+			jContentPane.add(getMainPanel(), gridBagConstraints17);
+			jContentPane.add(getTitlePanel(), gridBagConstraints18);
 		}
 		return jContentPane;
 	}
@@ -193,15 +210,6 @@ public class GroupPrivilegeWindow extends ApplicationComponent {
 			gridBagConstraints.gridx = 0;
 			mainPanel = new JPanel();
 			mainPanel.setLayout(new GridBagLayout());
-			if (isUpdate) {
-				mainPanel.setBorder(BorderFactory.createTitledBorder(null, "Update Privilege(s)",
-					TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION,
-					new Font("Dialog", Font.BOLD, 12), new Color(62, 109, 181)));
-			} else {
-				mainPanel.setBorder(BorderFactory.createTitledBorder(null, "Add Privilege(s)",
-					TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION,
-					new Font("Dialog", Font.BOLD, 12), new Color(62, 109, 181)));
-			}
 			mainPanel.add(jLabel, gridBagConstraints1);
 			mainPanel.add(getIdentity(), gridBagConstraints2);
 			mainPanel.add(getPrivsPanel(), gridBagConstraints5);
@@ -360,9 +368,8 @@ public class GroupPrivilegeWindow extends ApplicationComponent {
 			if (isUpdate) {
 				remove.setText("Update Privilege(s)");
 			} else {
-				remove.setText("Add Privilege(s)");
+				remove.setText("Grant Privilege(s)");
 			}
-			remove.setIcon(GridGrouperLookAndFeel.getPrivilegesIcon());
 			remove.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					Runner runner = new Runner() {
@@ -610,7 +617,6 @@ public class GroupPrivilegeWindow extends ApplicationComponent {
 		if (find == null) {
 			find = new JButton();
 			find.setText("Find...");
-			find.setIcon(LookAndFeel.getQueryIcon());
 			find.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					UserSearchDialog dialog = new UserSearchDialog();
@@ -624,5 +630,29 @@ public class GroupPrivilegeWindow extends ApplicationComponent {
 		}
 		return find;
 	}
+
+
+    /**
+     * This method initializes titlePanel	
+     * 	
+     * @return javax.swing.JPanel	
+     */
+    private JPanel getTitlePanel() {
+        if (titlePanel == null) {
+            String title="";
+            String subTitle = "";
+            
+            if(this.isUpdate){
+             title = "Update Privilege(s)";
+             subTitle = "Update a users privilege(s) on the group "+browser.getGroupNode().getGroup().getDisplayExtension();
+            }else{
+                title = "Grant Privilege(s)";
+                subTitle = "Grant a user privilege(s) on the group "+browser.getGroupNode().getGroup().getDisplayExtension();
+            }
+            
+            titlePanel = new TitlePanel(title,subTitle);
+        }
+        return titlePanel;
+    }
 
 }

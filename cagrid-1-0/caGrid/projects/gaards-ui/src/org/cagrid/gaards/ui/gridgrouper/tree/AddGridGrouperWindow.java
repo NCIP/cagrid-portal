@@ -14,6 +14,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import org.cagrid.gaards.ui.common.CredentialComboBox;
+import org.cagrid.gaards.ui.common.TitlePanel;
 import org.cagrid.gaards.ui.gridgrouper.GridGrouperHandle;
 import org.cagrid.gaards.ui.gridgrouper.GridGrouperLookAndFeel;
 import org.cagrid.gaards.ui.gridgrouper.GridGrouperServiceList;
@@ -52,6 +53,8 @@ public class AddGridGrouperWindow extends ApplicationComponent {
     private JButton load = null;
 
     private GridGroupersTreeNode root;
+
+    private JPanel titlePanel = null;
 
 
     /**
@@ -97,9 +100,15 @@ public class AddGridGrouperWindow extends ApplicationComponent {
      */
     private JPanel getMainPanel() {
         if (mainPanel == null) {
+            GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
+            gridBagConstraints11.gridx = 0;
+            gridBagConstraints11.insets = new Insets(2, 2, 2, 2);
+            gridBagConstraints11.fill = GridBagConstraints.HORIZONTAL;
+            gridBagConstraints11.weightx = 1.0D;
+            gridBagConstraints11.gridy = 0;
             GridBagConstraints gridBagConstraints = new GridBagConstraints();
             gridBagConstraints.anchor = GridBagConstraints.WEST;
-            gridBagConstraints.gridy = 0;
+            gridBagConstraints.gridy = 1;
             gridBagConstraints.insets = new Insets(2, 2, 2, 2);
             gridBagConstraints.fill = GridBagConstraints.BOTH;
             gridBagConstraints.weightx = 1.0D;
@@ -108,6 +117,7 @@ public class AddGridGrouperWindow extends ApplicationComponent {
             mainPanel = new JPanel();
             mainPanel.setLayout(new GridBagLayout());
             mainPanel.add(getTreePanel(), gridBagConstraints);
+            mainPanel.add(getTitlePanel(), gridBagConstraints11);
         }
         return mainPanel;
     }
@@ -202,6 +212,7 @@ public class AddGridGrouperWindow extends ApplicationComponent {
         if (load == null) {
             load = new JButton();
             load.setText("Add");
+            getRootPane().setDefaultButton(load);
             load.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
                     Runner runner = new Runner() {
@@ -217,7 +228,6 @@ public class AddGridGrouperWindow extends ApplicationComponent {
 
                 }
             });
-            load.setIcon(GridGrouperLookAndFeel.getGrouperAddIcon22x22());
         }
         return load;
     }
@@ -234,5 +244,18 @@ public class AddGridGrouperWindow extends ApplicationComponent {
             ErrorDialog.showError(e);
         }
 
+    }
+
+
+    /**
+     * This method initializes titlePanel	
+     * 	
+     * @return javax.swing.JPanel	
+     */
+    private JPanel getTitlePanel() {
+        if (titlePanel == null) {
+            titlePanel = new TitlePanel("Add Grid Grouper","Browse stem(s) and group(s) managed by a Grid Grouper.");
+        }
+        return titlePanel;
     }
 }

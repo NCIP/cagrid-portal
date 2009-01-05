@@ -83,7 +83,7 @@ public class MyGroupsTable extends GrapeBaseTable {
 	public void doubleClick() {
 		try {
 			GridApplication.getContext().addApplicationComponent(
-					new MyGroupViewer(getSelectedGroup()), 500, 400);
+					new MyGroupViewer(getSelectedGroup()), 650, 400);
 		} catch (Exception e) {
 			ErrorDialog.showError(e);
 		}

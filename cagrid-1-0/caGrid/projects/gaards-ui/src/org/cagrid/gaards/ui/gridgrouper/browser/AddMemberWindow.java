@@ -23,12 +23,12 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
+import org.cagrid.gaards.ui.common.TitlePanel;
 import org.cagrid.gaards.ui.dorian.federation.UserSearchDialog;
 import org.cagrid.gaards.ui.gridgrouper.GridGrouperLookAndFeel;
 import org.cagrid.gaards.ui.gridgrouper.tree.GroupTreeNode;
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
-import org.cagrid.grape.LookAndFeel;
 import org.cagrid.grape.utils.ErrorDialog;
 
 
@@ -80,8 +80,6 @@ public class AddMemberWindow extends ApplicationComponent {
 
 	private JButton addMember = null;
 
-	private JButton cancel = null;
-
 	private JPanel addUserPanel = null;
 
 	private CardLayout memberTypeLayout = null;
@@ -113,6 +111,8 @@ public class AddMemberWindow extends ApplicationComponent {
 	private GroupBrowser browser;
 
 	private JButton find = null;
+
+    private JPanel titlePanel = null;
 
 
 	/**
@@ -304,33 +304,37 @@ public class AddMemberWindow extends ApplicationComponent {
 	 */
 	private JPanel getMainPanel() {
 		if (mainPanel == null) {
+			GridBagConstraints gridBagConstraints22 = new GridBagConstraints();
+			gridBagConstraints22.gridx = 0;
+			gridBagConstraints22.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints22.weightx = 1.0D;
+			gridBagConstraints22.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints22.gridy = 0;
 			GridBagConstraints gridBagConstraints9 = new GridBagConstraints();
 			gridBagConstraints9.fill = GridBagConstraints.HORIZONTAL;
-			gridBagConstraints9.gridy = 2;
+			gridBagConstraints9.gridy = 3;
 			gridBagConstraints9.insets = new Insets(2, 2, 2, 2);
 			gridBagConstraints9.gridx = 0;
 			GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
 			gridBagConstraints8.gridx = 0;
 			gridBagConstraints8.weightx = 1.0D;
-			gridBagConstraints8.weighty = 1.0D;
+			gridBagConstraints8.weighty = 2.0D;
 			gridBagConstraints8.insets = new Insets(2, 10, 2, 10);
 			gridBagConstraints8.fill = GridBagConstraints.BOTH;
-			gridBagConstraints8.gridy = 1;
+			gridBagConstraints8.gridy = 2;
 			GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
 			gridBagConstraints4.gridx = 0;
 			gridBagConstraints4.fill = GridBagConstraints.HORIZONTAL;
 			gridBagConstraints4.insets = new Insets(2, 2, 2, 2);
 			gridBagConstraints4.weightx = 1.0D;
-			gridBagConstraints4.gridy = 0;
+			gridBagConstraints4.weighty = 1.0D;
+			gridBagConstraints4.gridy = 1;
 			mainPanel = new JPanel();
 			mainPanel.setLayout(new GridBagLayout());
-
-			mainPanel.setBorder(BorderFactory.createTitledBorder(null, "Add Member",
-				TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12),
-				new Color(62, 109, 181)));
 			mainPanel.add(getMemberPanel(), gridBagConstraints8);
 			mainPanel.add(getDetailsPanel(), gridBagConstraints4);
 			mainPanel.add(getButtonPanel(), gridBagConstraints9);
+			mainPanel.add(getTitlePanel(), gridBagConstraints22);
 		}
 		return mainPanel;
 	}
@@ -364,7 +368,6 @@ public class AddMemberWindow extends ApplicationComponent {
 			buttonPanel = new JPanel();
 			buttonPanel.setLayout(new FlowLayout());
 			buttonPanel.add(getAddMember(), null);
-			buttonPanel.add(getCancel(), null);
 		}
 		return buttonPanel;
 	}
@@ -378,8 +381,8 @@ public class AddMemberWindow extends ApplicationComponent {
 	private JButton getAddMember() {
 		if (addMember == null) {
 			addMember = new JButton();
-			addMember.setText("Add Member");
-			addMember.setIcon(LookAndFeel.getAddIcon());
+			addMember.setText("Add");
+			getRootPane().setDefaultButton(addMember);
 			addMember.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					Runner runner = new Runner() {
@@ -456,26 +459,6 @@ public class AddMemberWindow extends ApplicationComponent {
 
 		}
 
-	}
-
-
-	/**
-	 * This method initializes cancel
-	 * 
-	 * @return javax.swing.JButton
-	 */
-	private JButton getCancel() {
-		if (cancel == null) {
-			cancel = new JButton();
-			cancel.setText("Cancel");
-			cancel.setIcon(LookAndFeel.getCloseIcon());
-			cancel.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					dispose();
-				}
-			});
-		}
-		return cancel;
 	}
 
 
@@ -732,7 +715,6 @@ public class AddMemberWindow extends ApplicationComponent {
 		if (find == null) {
 			find = new JButton();
 			find.setText("Find...");
-			find.setIcon(LookAndFeel.getQueryIcon());
 			find.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					UserSearchDialog dialog = new UserSearchDialog();
@@ -746,5 +728,18 @@ public class AddMemberWindow extends ApplicationComponent {
 		}
 		return find;
 	}
+
+
+    /**
+     * This method initializes titlePanel	
+     * 	
+     * @return javax.swing.JPanel	
+     */
+    private JPanel getTitlePanel() {
+        if (titlePanel == null) {
+            titlePanel = new TitlePanel("Add Member","Add a member to the group "+node.getGroup().getDisplayExtension()+".");
+        }
+        return titlePanel;
+    }
 
 }

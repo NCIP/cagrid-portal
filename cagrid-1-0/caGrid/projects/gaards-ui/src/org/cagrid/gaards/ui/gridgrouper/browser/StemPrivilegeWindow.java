@@ -8,7 +8,6 @@ import gov.nih.nci.cagrid.gridgrouper.client.NamingPrivilege;
 import gov.nih.nci.cagrid.gridgrouper.common.SubjectUtils;
 import gov.nih.nci.cagrid.gridgrouper.grouper.StemI;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -23,11 +22,11 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
+import org.cagrid.gaards.ui.common.TitlePanel;
 import org.cagrid.gaards.ui.dorian.federation.UserSearchDialog;
 import org.cagrid.gaards.ui.gridgrouper.GridGrouperLookAndFeel;
 import org.cagrid.grape.ApplicationComponent;
 import org.cagrid.grape.GridApplication;
-import org.cagrid.grape.LookAndFeel;
 import org.cagrid.grape.utils.ErrorDialog;
 
 
@@ -73,6 +72,8 @@ public class StemPrivilegeWindow extends ApplicationComponent {
 
 	private JButton find = null;
 
+    private JPanel titlePanel = null;
+
 
 	/**
 	 * This is the default constructor
@@ -103,12 +104,12 @@ public class StemPrivilegeWindow extends ApplicationComponent {
 	 * 
 	 */
 	private void initialize() {
-		this.setSize(500, 175);
+		this.setSize(500, 300);
 		this.setContentPane(getJContentPane());
 		if (update) {
 			this.setTitle("Update Stem Privilege(s)");
 		} else {
-			this.setTitle("Add Stem Privilege(s)");
+			this.setTitle("Grant Stem Privilege(s)");
 		}
 		this.setFrameIcon(GridGrouperLookAndFeel.getPrivilegesIcon());
 	}
@@ -121,9 +122,27 @@ public class StemPrivilegeWindow extends ApplicationComponent {
 	 */
 	private JPanel getJContentPane() {
 		if (jContentPane == null) {
+			GridBagConstraints gridBagConstraints9 = new GridBagConstraints();
+			gridBagConstraints9.gridheight = 1;
+			gridBagConstraints9.gridy = 0;
+			gridBagConstraints9.ipadx = 0;
+			gridBagConstraints9.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints9.weightx = 1.0D;
+			gridBagConstraints9.fill = GridBagConstraints.HORIZONTAL;
+			gridBagConstraints9.gridx = 0;
+			GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
+			gridBagConstraints8.gridx = 0;
+			gridBagConstraints8.ipadx = 0;
+			gridBagConstraints8.ipady = 0;
+			gridBagConstraints8.fill = GridBagConstraints.BOTH;
+			gridBagConstraints8.insets = new Insets(2, 2, 2, 2);
+			gridBagConstraints8.weightx = 1.0D;
+			gridBagConstraints8.weighty = 1.0D;
+			gridBagConstraints8.gridy = 1;
 			jContentPane = new JPanel();
-			jContentPane.setLayout(new BorderLayout());
-			jContentPane.add(getMainPanel(), BorderLayout.CENTER);
+			jContentPane.setLayout(new GridBagLayout());
+			jContentPane.add(getMainPanel(), gridBagConstraints8);
+			jContentPane.add(getTitlePanel(), gridBagConstraints9);
 		}
 		return jContentPane;
 	}
@@ -172,15 +191,7 @@ public class StemPrivilegeWindow extends ApplicationComponent {
 			gridBagConstraints.gridx = 0;
 			mainPanel = new JPanel();
 			mainPanel.setLayout(new GridBagLayout());
-			if (update) {
-				mainPanel.setBorder(BorderFactory.createTitledBorder(null, "Update Privilege(s)",
-					TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION,
-					new Font("Dialog", Font.BOLD, 12), new Color(62, 109, 181)));
-			} else {
-				mainPanel.setBorder(BorderFactory.createTitledBorder(null, "Add Privilege(s)",
-					TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION,
-					new Font("Dialog", Font.BOLD, 12), new Color(62, 109, 181)));
-			}
+			
 			mainPanel.add(jLabel, gridBagConstraints1);
 			mainPanel.add(getIdentity(), gridBagConstraints2);
 			mainPanel.add(getPrivsPanel(), gridBagConstraints5);
@@ -294,7 +305,6 @@ public class StemPrivilegeWindow extends ApplicationComponent {
 			} else {
 				remove.setText("Add Privilege(s)");
 			}
-			remove.setIcon(GridGrouperLookAndFeel.getPrivilegesIcon());
 			remove.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					Runner runner = new Runner() {
@@ -416,7 +426,6 @@ public class StemPrivilegeWindow extends ApplicationComponent {
 		if (find == null) {
 			find = new JButton();
 			find.setText("Find...");
-			find.setIcon(LookAndFeel.getQueryIcon());
 			find.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					UserSearchDialog dialog = new UserSearchDialog();
@@ -430,5 +439,29 @@ public class StemPrivilegeWindow extends ApplicationComponent {
 		}
 		return find;
 	}
+
+
+    /**
+     * This method initializes titlePanel	
+     * 	
+     * @return javax.swing.JPanel	
+     */
+    private JPanel getTitlePanel() {
+        if (titlePanel == null) {
+            String title="";
+            String subTitle = "";
+            
+            if(this.update){
+             title = "Update Privilege(s)";
+             subTitle = "Update a users privilege(s) on the stem "+browser.getStem().getDisplayExtension();
+            }else{
+                title = "Grant Privilege(s)";
+                subTitle = "Grant a user privilege(s) on the stem "+browser.getStem().getDisplayExtension();
+            }
+            
+            titlePanel = new TitlePanel(title,subTitle);
+        }
+        return titlePanel;
+    }
 
 }
