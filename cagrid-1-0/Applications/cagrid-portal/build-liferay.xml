@@ -234,6 +234,19 @@
 		<!-- Downloaded DTD to tools/ant/resources/web-app_2_3.dtd -->
 		<property name="config.file" value="${liferay.jboss.home}/server/${liferay.jboss.server.name}/deploy/jbossweb-tomcat55.sar/conf/web.xml"/>
 		<echo>Config File: ${config.file}</echo>
+
+         <xmltask preservetype="true" source="${config.file}" dest="${config.file}" failWithoutMatch="false">
+            <remove path="*[local-name()='web-app']/*[local-name()='servlet']/*[local-name()='init-param'][*[local-name()='param-name']='compilerSourceVM']"/>
+	        <insert path="/*[local-name()='web-app']/*[local-name()='servlet'][2]/*[local-name()='init-param'][1]" position="after">
+			    <![CDATA[
+                <init-param xmlns="http://java.sun.com/xml/ns/j2ee">
+                <param-name>compilerSourceVM</param-name>
+                <param-value>1.5</param-value>
+                </init-param>
+				]]>
+			</insert>
+         </xmltask>
+
 		<xmltask preservetype="true" source="${config.file}" dest="${config.file}" failWithoutMatch="true">
 			<xmlcatalog refid="portal.catalog"/>
 		
