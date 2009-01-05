@@ -424,18 +424,6 @@
 				<include name="extension.xml"/>
 			</fileset>
 		</copy>
-		<!-- sdk31 required libraries -->
-		<property name="sdk31.extension.lib.dir" location="${introduce.extensions.dir}/data/sdk31/lib"/>
-		<delete dir="${sdk31.extension.lib.dir}"/>
-		<mkdir dir="${sdk31.extension.lib.dir}"/>
-		<copy todir="${sdk31.extension.lib.dir}">
-			<fileset dir="${ext.dependencies.dir}/sdk31/jars">
-				<include name="*sdk*.jar"/>
-			</fileset>
-			<fileset dir="${ext.dir}">
-				<include name="sdk31*.properties"/>
-			</fileset>
-		</copy>
 		<!-- sdk32 required libraries -->
 		<property name="sdk32.extension.lib.dir" location="${introduce.extensions.dir}/data/sdk32/lib"/>
 		<delete dir="${sdk32.extension.lib.dir}"/>
