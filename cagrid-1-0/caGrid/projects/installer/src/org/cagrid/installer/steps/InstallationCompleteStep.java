@@ -102,6 +102,11 @@ public class InstallationCompleteStep extends PanelWizardStep {
         if (this.model.getMessage("container.type.jboss").equals(this.model.getProperty(Constants.CONTAINER_TYPE))) {
             sb.append("\t").append("JBOSS_HOME=").append(this.model.getProperty(Constants.JBOSS_HOME)).append("\n");
         }
+        
+        sb.append("\nPlease remember to copy the host certificate and key into the following locations:\n");
+        sb.append("\t" + model.getProperty(Constants.SERVICE_CERT_PATH) + "\n");
+        sb.append("\t" + model.getProperty(Constants.SERVICE_KEY_PATH) + "\n");
+        
 
         this.textPane.setText(sb.toString());
         

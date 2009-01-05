@@ -61,13 +61,15 @@ public class Installer {
     private final int TOTAL_INIT_STEPS = 100;
 
     private int initProgress = 0;
+    
+    private File _basePath = null;
 
     private List<DownloadedComponentInstaller> dependenciesComponentInstallers = new ArrayList<DownloadedComponentInstaller>();
 
 
     public Installer() {
 
-        File _basePath = new File(System.getProperty("user.home") + "/" + Constants.CAGRID_BASE_DIR_NAME);
+        _basePath = new File(System.getProperty("user.home") + "/" + Constants.CAGRID_BASE_DIR_NAME);
         if (!_basePath.exists()) {
             _basePath.mkdir();
         }
@@ -184,6 +186,14 @@ public class Installer {
             } else {
                 logger.info("Did not find '" + cagridInstallerFileName + "'");
             }
+            
+            //set the default location for the server cert and key
+            String serverCert = _basePath.getAbsolutePath() + File.separator + "certs" + File.separator + "servercert.pem";
+            defaultState.put(Constants.SERVICE_CERT_PATH, serverCert);
+            String serverKey = _basePath.getAbsolutePath() + File.separator + "certs" + File.separator + "serverkey.pem";
+            defaultState.put(Constants.SERVICE_KEY_PATH, serverKey);
+            
+            
             incrementProgress();
 
             InstallerUtils.assertCorrectJavaVersion(defaultState);
