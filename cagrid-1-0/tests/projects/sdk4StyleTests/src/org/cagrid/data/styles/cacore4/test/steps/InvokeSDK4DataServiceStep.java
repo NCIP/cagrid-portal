@@ -33,7 +33,7 @@ import org.cagrid.data.test.creation.DataTestCaseInfo;
  * @author David Ervin
  * 
  * @created Feb 1, 2008 9:02:20 AM
- * @version $Id: InvokeSDK4DataServiceStep.java,v 1.4 2008-12-09 16:54:35 dervin Exp $ 
+ * @version $Id: InvokeSDK4DataServiceStep.java,v 1.5 2009-01-05 17:54:41 dervin Exp $ 
  */
 public class InvokeSDK4DataServiceStep extends Step {
     public static final String TEST_RESOURCES_DIR = "/resources/";
@@ -68,6 +68,7 @@ public class InvokeSDK4DataServiceStep extends Step {
         testAssociationWithGroup();
         testNestedGroups();
         testSingleAttributeFromCash();
+        testAllSuperclass();
         
         // invalid queries
         testNonExistantTarget();
@@ -194,6 +195,14 @@ public class InvokeSDK4DataServiceStep extends Step {
         LOG.debug("testSingleAttributeFromCash");
         CQLQuery query = loadQuery("singleAttributeFromCash.xml");
         CQLQueryResults results = loadQueryResults("goldSingleAttributeFromCash.xml");
+        invokeValidQueryValidResults(query, results);
+    }
+    
+    
+    private void testAllSuperclass() {
+        LOG.debug("testAllSuperclass");
+        CQLQuery query = loadQuery("allSuperclass.xml");
+        CQLQueryResults results = loadQueryResults("goldAllSuperclass.xml");
         invokeValidQueryValidResults(query, results);
     }
     
