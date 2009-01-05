@@ -21,6 +21,11 @@
 	<property name="build.dir" location="build" />
 	<property name="build.dest" location="${build.dir}/classes" />
 	<property name="build.jars.dir" location="build/lib" />
+	
+	<!-- style stuff -->
+	<property name="introduce.extensions.dir" location="../introduce/extensions"/>
+	<property name="style.dest.dir" location="${introduce.extensions.dir}/data/styles/cacore31" />
+	<property name="style.document" location="${basedir}/style/style.xml"/>
 
 	<!-- jar names -->
 	<property name="project.jar.name" value="${project.jar.prefix}core-${project.version}.jar" />
@@ -113,7 +118,7 @@
 				<include name="**/*.class" />
 			</fileset>
 			<fileset dir="${src.dir}">
-				<include name="**/*.java" />
+				<include name="**/*" />
 			</fileset>
 		</jar>
 	</target>
@@ -125,6 +130,43 @@
 				<include name="**/*.class" />
 			</fileset>
 		</jar>
+	</target>
+	
+	
+	<!-- installs the service style -->
+	<target name="installServiceStyle" depends="jar">
+		<!-- make requisite directories -->
+		<delete dir="${style.dest.dir}" />
+		<mkdir dir="${style.dest.dir}" />
+		<mkdir dir="${style.dest.dir}/lib" />
+	
+		<!-- set up the extension lib dir -->
+		<property name="sdk31.extension.lib.dir" location="${introduce.extensions.dir}/data/sdk31/lib"/>
+		<delete dir="${sdk31.extension.lib.dir}"/>
+		<mkdir dir="${sdk31.extension.lib.dir}"/>
+		<copy todir="${sdk31.extension.lib.dir}">
+			<!-- sdk31 query processor library -->
+			<fileset dir="${build.jars.dir}">
+				<include name="${project.jar.name}"/>
+			</fileset>
+		</copy>
+		<copy todir="${style.dest.dir}/lib">
+			<!-- sdk31 query processor library -->
+			<fileset dir="${build.jars.dir}">
+				<include name="${project.jar.name}"/>
+			</fileset>
+			<!-- sdkstyle library -->
+			<fileset dir="${ext.lib.dir}">
+				<include name="*sdkstyle*.jar"/>
+			</fileset>
+		</copy>
+	
+		<!-- copy in the style.xml file -->
+		<copy file="${style.document}" todir="${style.dest.dir}" />
+	</target>
+	
+
+	<target name="installIntroduceExtensions" depends="installServiceStyle" description="Builds and installs the SDK 31 data service style into Introduce.">
 	</target>
 
 	<!-- removes all build output -->

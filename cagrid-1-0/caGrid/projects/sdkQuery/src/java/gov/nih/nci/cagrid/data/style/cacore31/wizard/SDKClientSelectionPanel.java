@@ -63,7 +63,7 @@ import com.jgoodies.validation.view.ValidationComponentUtils;
  * @author David Ervin
  * 
  * @created Jun 4, 2007 1:45:08 PM
- * @version $Id: SDKClientSelectionPanel.java,v 1.9 2008-03-02 04:22:45 dervin Exp $ 
+ * @version $Id: SDKClientSelectionPanel.java,v 1.1 2009-01-05 21:31:30 dervin Exp $ 
  */
 public class SDKClientSelectionPanel extends AbstractWizardPanel {
     // keys for validation components
@@ -193,21 +193,19 @@ public class SDKClientSelectionPanel extends AbstractWizardPanel {
     
     
     private File getSdk32QPLib() {
-        File lib = null;
         File libDir = new File(SDK31InitializationPanel.SDK_31_LIB_DIR);
-        Properties ivyProps = new Properties();
-        try {
-            FileInputStream propsInput = new FileInputStream(
-                new File(libDir, SDK31InitializationPanel.IVY_PROPERTIES_FILE));
-            ivyProps.load(propsInput);
-            propsInput.close();
-            lib = new File(libDir, ivyProps.getProperty(SDK31InitializationPanel.SDK_31_QUERY_LIB_PROPERTY));
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            CompositeErrorDialog.showErrorDialog("Error locating SDK 3.1 query processor library", 
-                ex.getMessage(), ex);
+        File[] jars = libDir.listFiles(new FileFilters.JarFileFilter());
+        if (jars.length != 1) {
+            StringBuffer detail = new StringBuffer();
+            detail.append("Expected to find a single jar file in the directory\n");
+            detail.append(libDir.getAbsolutePath()).append("\n");
+            detail.append("Found the following libs instead:\n");
+            for (File f : jars) {
+                detail.append("\t").append(f.getName()).append("\n");
+            }
+            CompositeErrorDialog.showErrorDialog("Error locating SDK Query 3.1 library", detail.toString());
         }
-        return lib;
+        return jars[0];
     }
 
 

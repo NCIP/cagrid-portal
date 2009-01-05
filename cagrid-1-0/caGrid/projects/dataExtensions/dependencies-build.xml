@@ -14,7 +14,7 @@
 		<ivy:retrieve conf="impl" pattern="${ivy.resolved.artifacts.dir}/dependencies/impl/[type]s/[originalname](.[ext])" sync="true" type="jar" />
 		<ivy:retrieve conf="impl-test" pattern="${ivy.resolved.artifacts.dir}/dependencies/test/[type]s/[originalname](.[ext])" sync="true" type="*"/>
 
-		<ivy:retrieve conf="sdk31" pattern="${ivy.resolved.artifacts.dir}/dependencies/sdk31/[type]s/[originalname](.[ext])" sync="true" type="jar" />
+		<!-- remove this when sdk32 knows how to copy itself in to the introuce extensions dir -->
 		<ivy:retrieve conf="sdk32" pattern="${ivy.resolved.artifacts.dir}/dependencies/sdk32/[type]s/[originalname](.[ext])" sync="true" type="jar" />
 
 		<!-- authz for sdk32 data services -->
@@ -24,11 +24,6 @@
 	</target>
 
 	<target name="post.resolve-dependencies" depends="ivy-shared-targets.post.resolve-dependencies">
-		<!-- generate a list of properties detailing what is needed for the sdk31 conf -->
-		<ivy:artifactproperty conf="sdk31" name="sdk31.needs.[module].[artifact]" value="[originalname](.[ext])" />
-		<!-- just write out the ones that specifically come from the sdkQuery module -->
-		<echoproperties prefix="sdk31.needs.sdkQuery" destfile="${ivy.resolved.artifacts.dir}/sdk31-jars.properties" />
-
 		<!-- generate a list of properties detailing what is needed for the sdk32 conf -->
 		<ivy:artifactproperty conf="sdk32" name="sdk32.needs.[module].[artifact]" value="[originalname](.[ext])" />
 		<!-- just write out the ones that specifically come from the sdkQuery32 module -->

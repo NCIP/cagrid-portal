@@ -30,7 +30,7 @@ import javax.swing.border.TitledBorder;
  * @author David Ervin
  * 
  * @created Jul 27, 2007 10:38:51 AM
- * @version $Id: CaCoreVersionPanel.java,v 1.1 2007-08-08 15:08:57 dervin Exp $ 
+ * @version $Id: CaCoreVersionPanel.java,v 1.1 2009-01-05 21:31:30 dervin Exp $ 
  */
 public class CaCoreVersionPanel extends DataServiceModificationSubPanel {
     // from HQLCoreQueryProcessor...

@@ -48,7 +48,7 @@ import com.jgoodies.validation.view.ValidationComponentUtils;
  * @author David Ervin
  * 
  * @created Mar 23, 2007 3:35:47 PM
- * @version $Id: AppserviceConfigPanel.java,v 1.4 2007-11-06 15:53:41 hastings Exp $ 
+ * @version $Id: AppserviceConfigPanel.java,v 1.1 2009-01-05 21:31:30 dervin Exp $ 
  */
 public class AppserviceConfigPanel extends AbstractWizardPanel {
     // keys for validation components
