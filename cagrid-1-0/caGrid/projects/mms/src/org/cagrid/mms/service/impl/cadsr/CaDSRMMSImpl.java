@@ -36,7 +36,7 @@ public class CaDSRMMSImpl implements MMS {
 
     public CaDSRMMSImpl(ModelSourceMetadata metadata, Map<String, String> sourceToURLMap) {
         this.sourceToURLMap = sourceToURLMap;
-        this.metadata=metadata;
+        this.metadata = metadata;
         // go through the supplied sources and add the properties we support
         for (SourceDescriptor source : this.metadata.getSupportedModelSources().getSource()) {
             SourceDescriptorSupportedProjectProperties supportedProjectProperties = new SourceDescriptorSupportedProjectProperties();
@@ -168,6 +168,8 @@ public class CaDSRMMSImpl implements MMS {
         // create the prototype
         Project prototype = new Project();
         prototype.setVersion(umlProjectIdentifer.getVersion());
+        // TODO is this what I want to map identifier too (or could I map it to
+        // either short or long name)
         prototype.setShortName(umlProjectIdentifer.getIdentifier());
 
         // process any additional source properties

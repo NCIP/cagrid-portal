@@ -254,8 +254,8 @@ public abstract class MetadataModelServiceResourceBase extends ReflectionResourc
                     pollType = (GetMultipleResourcePropertiesPollType) ObjectDeserializer.toObject(elements[0],
                         GetMultipleResourcePropertiesPollType.class);
                 } catch (DeserializationException e1) {
-                    // TODO Auto-generated catch block
                     e1.printStackTrace();
+                    logger.error("Unable to deserialize registration file:" + e1.getMessage(),e1);
                 }
 
  
