@@ -36,7 +36,7 @@
 			<!--
 			<test if="testcase" name="${testcase}" fork="yes" todir="${junit.results.dir}" />
 			-->
-			<batchtest fork="yes" todir="${junit.results.dir}">
+			<batchtest fork="yes" todir="${junit.results.dir}" errorproperty="test.failed" failureproperty="test.failed">
 				<fileset dir="${test.src.dir}">
 					<include name="**/*StoryBook.java" />
 				</fileset>
