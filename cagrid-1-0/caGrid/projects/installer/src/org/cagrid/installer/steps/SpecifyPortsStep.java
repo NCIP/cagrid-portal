@@ -3,6 +3,7 @@
  */
 package org.cagrid.installer.steps;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 
@@ -29,14 +30,6 @@ import org.w3c.dom.NodeList;
 public class SpecifyPortsStep extends PropertyConfigurationStep {
 
     private static final Log logger = LogFactory.getLog(SpecifyPortsStep.class);
-
-    private Document doc;
-
-    private Element httpEl;
-
-    private Element httpsEl;
-
-    private Element serverEl;
 
 
     /**
@@ -84,7 +77,6 @@ public class SpecifyPortsStep extends PropertyConfigurationStep {
             httpsPortLabel.setVisible(true);
         }
 
-   
         httpPortField.setText(model.getProperty(Constants.HTTP_PORT));
         httpsPortField.setText(model.getProperty(Constants.HTTPS_PORT));
 
@@ -92,117 +84,25 @@ public class SpecifyPortsStep extends PropertyConfigurationStep {
         JLabel shutdownPortLabel = getLabel(Constants.SHUTDOWN_PORT);
         shutdownPortField.setText(model.getProperty(Constants.SHUTDOWN_PORT));
         if (!model.isTomcatContainer()) {
-           shutdownPortField.setVisible(false);
-           shutdownPortLabel.setVisible(false);
+            shutdownPortField.setVisible(false);
+            shutdownPortLabel.setVisible(false);
         }
-        
-    }
 
-
-    private static boolean isEmpty(String value) {
-        return value == null || value.trim().length() == 0;
     }
 
 
     public void applyState() throws InvalidStateException {
-//
-//        String oldTomcatHttpPort = this.model.getProperty(Constants.HTTP_PORT);
-//        if (oldTomcatHttpPort == null) {
-//            oldTomcatHttpPort = "8080";
-//        }
-//        this.model.setProperty(Constants.OLD_HTTP_PORT, oldTomcatHttpPort);
-//
-//        String oldTomcatHttpsPort = this.model.getProperty(Constants.HTTPS_PORT);
-//        if (oldTomcatHttpsPort == null) {
-//            oldTomcatHttpsPort = "8443";
-//        }
-//        this.model.setProperty(Constants.OLD_HTTPS_PORT, oldTomcatHttpsPort);
-//
-//        if (model.isTomcatContainer()) {
-//            JTextField shutdownPortField = (JTextField) getOption(Constants.SHUTDOWN_PORT);
-//            assertIsInteger(shutdownPortField.getText(), "Shutdown Port must be an integer.");
-//            this.serverEl.setAttribute("port", shutdownPortField.getText().trim());
-//
-//        }
-//
-//        JTextField httpPortField = (JTextField) getOption(Constants.HTTP_PORT);
-//        JTextField httpsPortField = (JTextField) getOption(Constants.HTTPS_PORT);
-//
-//        boolean isSecure = this.model.isTrue(Constants.USE_SECURE_CONTAINER);
-//        if (isSecure) {
-//            assertIsInteger(httpsPortField.getText(), "HTTPS Port must be an integer.");
-//        } else {
-//            assertIsInteger(httpsPortField.getText(), "HTTP Port must be an integer.");
-//        }
-//
-//        try {
-//            if (isSecure) {
-//                String httpsPort = httpsPortField.getText().trim();
-//                if (this.httpEl != null) {
-//                    this.httpEl.getParentNode().removeChild(this.httpEl);
-//                }
-//                if (this.httpsEl != null) {
-//                    this.httpsEl.setAttribute("port", httpsPort);
-//                }
-//            } else {
-//                if (this.httpEl != null) {
-//                    this.httpEl.setAttribute("port", httpPortField.getText().trim());
-//                } else {
-//                    this.httpEl = this.doc.createElement("Connector");
-//                    XPathFactory xpFact = XPathFactory.newInstance();
-//                    Element serviceEl = null;
-//
-//                    serviceEl = (Element) xpFact.newXPath().compile(
-//                        "/Server/Service@name='Catalina' or @name='jboss.web']")
-//                        .evaluate(this.doc, XPathConstants.NODE);
-//
-//                    serviceEl.appendChild(this.httpEl);
-//                    httpEl.setAttribute("acceptCount", "100");
-//                    httpEl.setAttribute("connectionTimeout", "20000");
-//                    httpEl.setAttribute("debug", "0");
-//                    httpEl.setAttribute("disableUploadTimeout", Constants.TRUE);
-//                    httpEl.setAttribute("enableLookups", Constants.FALSE);
-//                    httpEl.setAttribute("maxSpareThreads", "75");
-//                    httpEl.setAttribute("minSpareThreads", "25");
-//                    httpEl.setAttribute("port", httpPortField.getText().trim());
-//                }
-//            }
-//
-//            String xml = InstallerUtils.toString(this.doc);
-//            FileWriter w = new FileWriter(getServerConfigPath());
-//            w.write(xml);
-//            w.flush();
-//            w.close();
-//
-//        } catch (Exception ex) {
-//            String errMsg = "Error modifying " + getServerConfigPath() + ": " + ex.getMessage();
-//            logger.error(errMsg, ex);
-//            throw new InvalidStateException(errMsg, ex);
-//        }
-
         super.applyState();
 
-    }
+        // set the new location for the server certificate and key
+        File _basePath = new File(System.getProperty("user.home") + "/" + Constants.CAGRID_BASE_DIR_NAME);
+        String serverCert = _basePath.getAbsolutePath() + File.separator + "certificates" + File.separator
+            + model.getProperty(Constants.SERVICE_HOSTNAME) + "-cert.pem";
+        model.setProperty(Constants.SERVICE_CERT_PATH, serverCert);
+        String serverKey = _basePath.getAbsolutePath() + File.separator + "certificates" + File.separator
+            + model.getProperty(Constants.SERVICE_HOSTNAME) + "-key.pem";
+        model.setProperty(Constants.SERVICE_KEY_PATH, serverKey);
 
-
-    private void assertIsInteger(String value, String message) throws InvalidStateException {
-        try {
-            Integer.parseInt(value);
-        } catch (Exception ex) {
-            throw new InvalidStateException(message);
-        }
-    }
-
-
-    private String getServerConfigPath() {
-        if (this.model.isTomcatContainer()) {
-            return (String) this.model.getProperty(Constants.TOMCAT_HOME) + "/conf/server.xml";
-        } else if (this.model.isJBossContainer()) {
-            return (String) this.model.getProperty(Constants.JBOSS_HOME)
-                + "/server/default/deploy/jbossweb-tomcat55.sar/server.xml";
-        } else {
-            return null;
-        }
     }
 
 

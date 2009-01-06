@@ -24,9 +24,10 @@ import org.cagrid.installer.component.JBossComponentInstaller;
 import org.cagrid.installer.component.TomcatComponentInstaller;
 import org.cagrid.installer.model.CaGridInstallerModel;
 import org.cagrid.installer.model.CaGridInstallerModelImpl;
+import org.cagrid.installer.steps.BrowseToHostCredentialsStep;
 import org.cagrid.installer.steps.Constants;
 import org.cagrid.installer.steps.InstallationCompleteStep;
-import org.cagrid.installer.steps.DorianObtainHostCredentialsStep;
+import org.cagrid.installer.steps.LaunchGAARDSforHostCredentialsStep;
 import org.cagrid.installer.steps.PresentLicenseStep;
 import org.cagrid.installer.steps.PreviewTasksStep;
 import org.cagrid.installer.steps.PropertyConfigurationStep;
@@ -37,6 +38,7 @@ import org.cagrid.installer.steps.TargetGridConfigurationStep;
 import org.cagrid.installer.steps.options.BooleanPropertyConfigurationOption;
 import org.cagrid.installer.steps.options.ListPropertyConfigurationOption;
 import org.cagrid.installer.steps.options.TextPropertyConfigurationOption;
+import org.cagrid.installer.steps.options.ListPropertyConfigurationOption.LabelValuePair;
 import org.cagrid.installer.tasks.ConditionalTask;
 import org.cagrid.installer.tasks.cagrid.ConfigureTargetGridTask;
 import org.cagrid.installer.tasks.service.DeployServiceTask;
@@ -61,7 +63,7 @@ public class Installer {
     private final int TOTAL_INIT_STEPS = 100;
 
     private int initProgress = 0;
-    
+
     private File _basePath = null;
 
     private List<DownloadedComponentInstaller> dependenciesComponentInstallers = new ArrayList<DownloadedComponentInstaller>();
@@ -186,14 +188,15 @@ public class Installer {
             } else {
                 logger.info("Did not find '" + cagridInstallerFileName + "'");
             }
-            
-            //set the default location for the server cert and key
-            String serverCert = _basePath.getAbsolutePath() + File.separator + "certs" + File.separator + "servercert.pem";
+
+            // set the default location for the server cert and key
+            String serverCert = _basePath.getAbsolutePath() + File.separator + "certs" + File.separator
+                + "servercert.pem";
             defaultState.put(Constants.SERVICE_CERT_PATH, serverCert);
-            String serverKey = _basePath.getAbsolutePath() + File.separator + "certs" + File.separator + "serverkey.pem";
+            String serverKey = _basePath.getAbsolutePath() + File.separator + "certs" + File.separator
+                + "serverkey.pem";
             defaultState.put(Constants.SERVICE_KEY_PATH, serverKey);
-            
-            
+
             incrementProgress();
 
             InstallerUtils.assertCorrectJavaVersion(defaultState);
@@ -262,9 +265,10 @@ public class Installer {
         this.model.add(new InstallationCompleteStep(this.model.getMessage("installation.complete.title"), ""));
 
     }
-    
-    private void addConfigurecaGridSteps(){
-        
+
+
+    private void addConfigurecaGridSteps() {
+
         // Check if caGrid should be reconfigured
         PropertyConfigurationStep checkReconfigureCaGridStep = new PropertyConfigurationStep(model
             .getMessage("check.reconfigure.cagrid.title"), model.getMessage("check.reconfigure.cagrid.desc"));
@@ -279,7 +283,7 @@ public class Installer {
                     && model.isTrue(Constants.INSTALL_CONFIGURE_CAGRID);
             }
         });
-        
+
         TargetGridConfigurationStep confStep = new TargetGridConfigurationStep(model
             .getMessage("select.target.grid.title"), model.getMessage("select.target.grid.desc"));
         this.model.add(confStep, new Condition() {
@@ -288,7 +292,7 @@ public class Installer {
                 return (model.isTrue(Constants.RECONFIGURE_CAGRID) || model.isTrue(Constants.INSTALL_CAGRID));
             }
         });
-        
+
         final RunTasksStep tasksStep = new RunTasksStep();
         ConfigureTargetGridTask configTargetGridTask = new ConfigureTargetGridTask(model
             .getMessage("configuring.target.grid"), model.getMessage("configuring.target.grid"));
@@ -297,21 +301,22 @@ public class Installer {
             public boolean evaluate(WizardModel m) {
                 CaGridInstallerModel model = (CaGridInstallerModel) m;
                 return (model.isTrue(Constants.RECONFIGURE_CAGRID) || model.isTrue(Constants.INSTALL_CAGRID))
-                && (model.getProperty(Constants.TARGET_GRID)!=null) && !model.getProperty(Constants.TARGET_GRID).equals(Constants.NO_TARGET_GRID);
-                
+                    && (model.getProperty(Constants.TARGET_GRID) != null)
+                    && !model.getProperty(Constants.TARGET_GRID).equals(Constants.NO_TARGET_GRID);
+
             }
         }));
-        
+
         Condition shouldConfigurecaGrid = new Condition() {
             public boolean evaluate(WizardModel m) {
                 CaGridInstallerModel model = (CaGridInstallerModel) m;
                 return tasksStep.getTasksCount(model) > 0;
             }
         };
-        PreviewTasksStep previewTasks = new PreviewTasksStep("","",tasksStep,model);
-        
-        this.model.add(previewTasks,shouldConfigurecaGrid);
-        this.model.add(tasksStep,shouldConfigurecaGrid);
+        PreviewTasksStep previewTasks = new PreviewTasksStep("", "", tasksStep, model);
+
+        this.model.add(previewTasks, shouldConfigurecaGrid);
+        this.model.add(tasksStep, shouldConfigurecaGrid);
     }
 
 
@@ -325,17 +330,19 @@ public class Installer {
         }
 
         incrementProgress();
-        
+
         Condition shouldInstallcaGrid = new Condition() {
             public boolean evaluate(WizardModel m) {
                 CaGridInstallerModel model = (CaGridInstallerModel) m;
                 return installDependenciesStep.getTasksCount(model) > 0
-                    || (model.isTrue(Constants.INSTALL_CONFIGURE_CAGRID) && installDependenciesStep.getTasksCount(model) > 0);
+                    || (model.isTrue(Constants.INSTALL_CONFIGURE_CAGRID) && installDependenciesStep
+                        .getTasksCount(model) > 0);
             }
         };
 
-        this.model.add(new PreviewTasksStep("caGrid Install","Installing caGrid and dependencies.",installDependenciesStep, model),shouldInstallcaGrid);
-        this.model.add(installDependenciesStep,shouldInstallcaGrid);
+        this.model.add(new PreviewTasksStep("caGrid Install", "Installing caGrid and dependencies.",
+            installDependenciesStep, model), shouldInstallcaGrid);
+        this.model.add(installDependenciesStep, shouldInstallcaGrid);
     }
 
 
@@ -383,18 +390,43 @@ public class Installer {
             }
         });
 
-        
-        // need to get credentials here from dorian if secure deployment is
-        // required
-        DorianObtainHostCredentialsStep hostCredentialsStep = new DorianObtainHostCredentialsStep();
-        this.model.add(hostCredentialsStep, new Condition() {
+        PropertyConfigurationStep selectHostCertConfigurationStep = new PropertyConfigurationStep(this.model
+            .getMessage("configure.host.creds.title"), this.model.getMessage("configure.host.creds.desc"));
+        LabelValuePair[] values = new LabelValuePair[4];
+        values[0] = new LabelValuePair("Use GAARDS to obtain host credentials", "host.creds.use.gaards");
+        values[1] = new LabelValuePair("Browse to host credentials on the file system.", "host.creds.use.browse");
+        values[2] = new LabelValuePair("Copy in later manually.", "host.creds.copy.later");
+        values[3] = new LabelValuePair("Host credentials are already installed.", "host.creds.already.installed");
+        selectHostCertConfigurationStep.getOptions().add(
+            new ListPropertyConfigurationOption(Constants.HOST_CREDS_SELECTION_TYPE, "Obtain host credentials method", values));
+
+        this.model.add(selectHostCertConfigurationStep, new Condition() {
             public boolean evaluate(WizardModel m) {
                 CaGridInstallerModel model = (CaGridInstallerModel) m;
                 return model.isConfigureContainerSelected() && model.isTrue(Constants.USE_SECURE_CONTAINER);
             }
         });
-
         
+        LaunchGAARDSforHostCredentialsStep gaardsForHostCreds = new LaunchGAARDSforHostCredentialsStep();
+        model.add(gaardsForHostCreds, new Condition() {
+
+            public boolean evaluate(WizardModel arg0) {
+                return model.getProperty(Constants.HOST_CREDS_SELECTION_TYPE) != null
+                    && model.getProperty(Constants.HOST_CREDS_SELECTION_TYPE).equals("host.creds.use.gaards")
+                    && model.isConfigureContainerSelected() && model.isTrue(Constants.USE_SECURE_CONTAINER);
+            }
+        });
+
+        BrowseToHostCredentialsStep browseToHostCreds = new BrowseToHostCredentialsStep();
+        model.add(browseToHostCreds, new Condition() {
+
+            public boolean evaluate(WizardModel arg0) {
+                return model.getProperty(Constants.HOST_CREDS_SELECTION_TYPE) != null
+                    && model.getProperty(Constants.HOST_CREDS_SELECTION_TYPE).equals("host.creds.use.browse")
+                    && model.isConfigureContainerSelected() && model.isTrue(Constants.USE_SECURE_CONTAINER);
+            }
+        });
+
         PropertyConfigurationStep checkDeployGlobusStep = new PropertyConfigurationStep(this.model
             .getMessage("globus.check.redeploy.title"), this.model.getMessage("globus.check.redeploy.desc"));
         checkDeployGlobusStep.getOptions().add(
@@ -410,7 +442,6 @@ public class Installer {
 
         });
 
- 
     }
 
 
@@ -439,17 +470,19 @@ public class Installer {
             }
         }));
 
-        
         Condition shouldDeployContainer = new Condition() {
             public boolean evaluate(WizardModel m) {
                 CaGridInstallerModel model = (CaGridInstallerModel) m;
                 return deployContainer.getTasksCount(model) > 0;
             }
         };
-        this.model.add(new PreviewTasksStep("Grid Service Container Installer","Installing, deploying, and configuring grid service container.",deployContainer,model), shouldDeployContainer);
+        this.model.add(new PreviewTasksStep("Grid Service Container Installer",
+            "Installing, deploying, and configuring grid service container.", deployContainer, model),
+            shouldDeployContainer);
         this.model.add(deployContainer, shouldDeployContainer);
 
     }
+
 
     private void clearFlags() {
         this.model.unsetProperty(Constants.INSTALL_CONFIGURE_CONTAINER);
