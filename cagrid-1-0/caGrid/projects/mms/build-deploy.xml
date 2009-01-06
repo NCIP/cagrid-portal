@@ -29,7 +29,7 @@
 	<target name="deploymentValidator"  unless="no.deployment.validation" depends="defineClasspaths">
 		<taskdef name="deploymentValidatorTask" classname="gov.nih.nci.cagrid.introduce.servicetasks.deployment.validator.DeploymentValidatorTask" classpathref="tasks.run.classpath">
 		</taskdef>
-		<deploymentValidatorTask/>
+		<deploymentValidatorTask />
 	</target>
 	
 	
@@ -181,7 +181,7 @@
 	</target>
 
 	<!-- make deployment configured gar -->
-	<target name="createDeploymentGar" depends="all,setDeploymentProperties" description="creates a gar file that can be deployed or moved around">
+	<target name="createDeploymentGar" depends="setDeploymentProperties" description="creates a gar file that can be deployed or moved around">
 
 		<!-- prepare the server-config file -->
 		<mkdir dir="tmp" />
@@ -208,7 +208,7 @@
 
 
 	<!-- deploy a gar to globus -->
-	<target name="deployGlobus" depends="checkGlobus, deploymentValidator,createDeploymentGar" description="Deploys a gar to GLOBUS_LOCATION (to set the services properties file set the ant command line variable -Dservice.properties.file)">
+	<target name="deployGlobus" depends="all, createDeploymentGar, deploymentValidator" description="Deploys a gar to GLOBUS_LOCATION (to set the services properties file set the ant command line variable -Dservice.properties.file)">
 
 		<echo message="Deploying server to Globus Container" />
 
