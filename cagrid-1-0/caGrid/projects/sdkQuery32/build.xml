@@ -185,7 +185,7 @@
 		</copy>
 		<!-- sdk32 authz required libraries -->
 		<copy todir="${style.dest.dir}/lib">
-			<fileset dir="${ext.lib.dir}/authz/jars">
+			<fileset dir="${ext.authz.lib.dir}">
 				<include name="**/*.jar"/>
 		</fileset>
 		</copy>
