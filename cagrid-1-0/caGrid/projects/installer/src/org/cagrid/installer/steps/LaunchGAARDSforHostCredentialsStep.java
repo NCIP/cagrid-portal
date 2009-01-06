@@ -8,6 +8,8 @@ import org.cagrid.installer.model.CaGridInstallerModel;
 import org.cagrid.installer.tasks.AntExecutionTask;
 import org.pietschy.wizard.PanelWizardStep;
 import org.pietschy.wizard.WizardModel;
+
+import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 import java.awt.GridBagConstraints;
 import javax.swing.JButton;
@@ -63,6 +65,7 @@ public class LaunchGAARDSforHostCredentialsStep extends PanelWizardStep {
                         setComplete(true);
                     } else {
                         getRelaunchButton().setEnabled(true);
+                        JOptionPane.showMessageDialog(LaunchGAARDSforHostCredentialsStep.this, "You have not yet saved the certificates to the correct location.\n  Please either launch gaards again to obtain the host credentials or exit the installer.");
                     }
      
                 } catch (Exception e) {
@@ -108,6 +111,7 @@ public class LaunchGAARDSforHostCredentialsStep extends PanelWizardStep {
         if (descriptionTextArea == null) {
             descriptionTextArea = new JTextArea();
             descriptionTextArea.setWrapStyleWord(true);
+            descriptionTextArea.setLineWrap(true);
         }
         return descriptionTextArea;
     }
