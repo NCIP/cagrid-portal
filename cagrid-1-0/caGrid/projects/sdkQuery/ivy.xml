@@ -26,7 +26,7 @@
     <dependency rev="latest.integration" org="caGrid" name="core"
       conf="default->default;impl-test->test"/>
     <dependency rev="latest.integration" org="caGrid" name="data" conf="default->service;impl-test->cql-examples"/>
-    <dependency rev="latest.integration" org="caGrid" name="dataExtensions" conf="default->default"/>
+    <dependency rev="latest.integration" org="caGrid" name="dataExtensions" conf="default->core,ui,sdkstyle"/>
     <dependency rev="latest.integration" org="caGrid" name="metadata" conf="default->data.jars"/>
     <dependency rev="latest.integration" org="caGrid" name="metadatautils" conf="default->default"/>
 

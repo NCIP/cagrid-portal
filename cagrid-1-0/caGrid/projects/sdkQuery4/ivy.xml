@@ -36,7 +36,7 @@
     <dependency rev="latest.integration" org="caGrid" name="testing" conf="impl-test->system"/>
 
 
-    <dependency rev="latest.integration" org="caGrid" name="dataExtensions" conf="style->default"/>
+    <dependency rev="latest.integration" org="caGrid" name="dataExtensions" conf="style->core,ui,sdkstyle"/>
 
     <dependency rev="latest.integration" org="caGrid" name="introduce" conf="style->core"/>
 

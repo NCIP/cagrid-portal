@@ -36,7 +36,7 @@
     <dependency rev="latest.integration" org="caGrid" name="testing" conf="impl-test->system"/>
 
 	<!-- cagrid data service and extensions -->
-    <dependency rev="latest.integration" org="caGrid" name="dataExtensions" conf="style->default"/>
+    <dependency rev="latest.integration" org="caGrid" name="dataExtensions" conf="style->core,ui,sdkstyle"/>
     <dependency rev="latest.integration" org="caGrid" name="data"
       conf="processor->service;impl-test->cql-examples,test"/>
     

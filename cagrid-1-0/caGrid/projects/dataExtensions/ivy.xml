@@ -18,9 +18,9 @@
     <!-- Public Configurations-->
     <conf name="core" visibility="public"/>
     <conf name="ui" visibility="public"/>
+    <conf name="sdkstyle" visibility="public"/>
+	<conf name="default" visibility="public" extends="core,ui"/>
     
-    <conf name="default" visibility="public" extends="core,ui"/>
-
     <conf name="test" visibility="public" extends="impl-test"/>
   </configurations>
 
@@ -29,7 +29,7 @@
     <artifact name="caGrid-${ivy.module}-core" conf="core" type="jar"/>
     <artifact name="caGrid-${ivy.module}-ui" conf="ui" type="jar"/>
     <artifact name="caGrid-${ivy.module}-upgrades" conf="core" type="jar"/>
-    <artifact name="caGrid-${ivy.module}-sdkstyle" conf="default" type="jar"/>
+    <artifact name="caGrid-${ivy.module}-sdkstyle" conf="sdkstyle" type="jar"/>
     <artifact name="caGrid-${ivy.module}-tests" conf="test" type="jar"/>
   </publications>
 
