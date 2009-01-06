@@ -87,11 +87,11 @@
 	<target name="compile" depends="init">
 		<javac srcdir="${src.dir}" destdir="${build.dest}" debug="${java.debug}" source="${java.source}">
 			<classpath>
-				<fileset dir="${ext.lib.dir}">
-					<include name="*.jar" />
-				</fileset>
 				<fileset dir="${lib.dir}">
 					<include name="**/*.jar" />
+				</fileset>
+				<fileset dir="${ext.lib.dir}">
+					<include name="*.jar" />
 				</fileset>
 				<fileset dir="${ext.authz.lib.dir}">
 					<include name="**/*.jar" />
@@ -110,11 +110,11 @@
 		<javac srcdir="${test.src.dir}" destdir="${test.classes.dir}" debug="${java.debug}" source="${java.source}">
 			<classpath>
 				<pathelement path="${build.dest}" />
-				<fileset dir="${ext.lib.dir}">
-					<include name="*.jar" />
-				</fileset>
 				<fileset dir="${lib.dir}">
 					<include name="**/*.jar" />
+				</fileset>
+				<fileset dir="${ext.lib.dir}">
+					<include name="*.jar" />
 				</fileset>
 				<fileset dir="${ext.test.lib.dir}">
 					<include name="*.jar" />
