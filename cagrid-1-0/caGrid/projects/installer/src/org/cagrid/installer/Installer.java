@@ -393,10 +393,10 @@ public class Installer {
         PropertyConfigurationStep selectHostCertConfigurationStep = new PropertyConfigurationStep(this.model
             .getMessage("configure.host.creds.title"), this.model.getMessage("configure.host.creds.desc"));
         LabelValuePair[] values = new LabelValuePair[4];
-        values[0] = new LabelValuePair("Use GAARDS to obtain host credentials", "host.creds.use.gaards");
-        values[1] = new LabelValuePair("Browse to host credentials on the file system.", "host.creds.use.browse");
-        values[2] = new LabelValuePair("Copy in later manually.", "host.creds.copy.later");
-        values[3] = new LabelValuePair("Host credentials are already installed.", "host.creds.already.installed");
+        values[0] = new LabelValuePair("Use GAARDS to obtain host credentials", Constants.HOST_CREDS_FROM_GAARDS);
+        values[1] = new LabelValuePair("Browse to host credentials on the file system.", Constants.HOST_CREDS_FROM_BROWSE);
+        values[2] = new LabelValuePair("Copy in host credentials manually.", Constants.HOST_CREDS_FROM_MANUAL);
+        values[3] = new LabelValuePair("Host credentials are already installed.", Constants.HOST_CREDS_ALREADY_INSTALLED);
         selectHostCertConfigurationStep.getOptions().add(
             new ListPropertyConfigurationOption(Constants.HOST_CREDS_SELECTION_TYPE, "Obtain host credentials method", values));
 
@@ -412,7 +412,7 @@ public class Installer {
 
             public boolean evaluate(WizardModel arg0) {
                 return model.getProperty(Constants.HOST_CREDS_SELECTION_TYPE) != null
-                    && model.getProperty(Constants.HOST_CREDS_SELECTION_TYPE).equals("host.creds.use.gaards")
+                    && model.getProperty(Constants.HOST_CREDS_SELECTION_TYPE).equals(Constants.HOST_CREDS_FROM_GAARDS)
                     && model.isConfigureContainerSelected() && model.isTrue(Constants.USE_SECURE_CONTAINER);
             }
         });
@@ -422,7 +422,7 @@ public class Installer {
 
             public boolean evaluate(WizardModel arg0) {
                 return model.getProperty(Constants.HOST_CREDS_SELECTION_TYPE) != null
-                    && model.getProperty(Constants.HOST_CREDS_SELECTION_TYPE).equals("host.creds.use.browse")
+                    && model.getProperty(Constants.HOST_CREDS_SELECTION_TYPE).equals(Constants.HOST_CREDS_FROM_BROWSE)
                     && model.isConfigureContainerSelected() && model.isTrue(Constants.USE_SECURE_CONTAINER);
             }
         });

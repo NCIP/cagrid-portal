@@ -7,6 +7,14 @@ package org.cagrid.installer.steps;
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
  */
 public abstract class Constants {
+    
+    public static final String HOST_CREDS_FROM_GAARDS = "host.creds.use.gaards";
+    
+    public static final String HOST_CREDS_FROM_BROWSE = "host.creds.use.browse";
+    
+    public static final String HOST_CREDS_FROM_MANUAL = "host.creds.manually";
+    
+    public static final String HOST_CREDS_ALREADY_INSTALLED = "host.creds.already.installed";
 
     public static final String ANT_DIR_NAME = "ant.dir.name";
 
