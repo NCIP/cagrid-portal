@@ -10,14 +10,13 @@ import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
+import gov.nih.nci.cagrid.introduce.common.FileFilters;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 
 import java.io.File;
 import java.io.FileFilter;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.Properties;
 import java.util.jar.JarFile;
 
 import org.cagrid.data.test.creation.CreationStep;
@@ -30,19 +29,14 @@ import org.cagrid.data.test.creation.DataTestCaseInfo;
  * @author David Ervin
  * 
  * @created Jul 18, 2007 2:53:54 PM
- * @version $Id: CreateSDK32StyleServiceStep.java,v 1.4 2008-11-06 16:32:15 dervin Exp $ 
+ * @version $Id: CreateSDK32StyleServiceStep.java,v 1.5 2009-01-06 20:07:20 dervin Exp $ 
  */
 public class CreateSDK32StyleServiceStep extends CreationStep {
     
     // directory for SDK query processor libraries
     public static final String SDK_32_LIB_DIR = ExtensionsLoader.getInstance().getExtensionsDir().getAbsolutePath() 
         + File.separator + "data" + File.separator + "sdk32" + File.separator + "lib";
-    
-    // make use of the Ivy properties file to find the SDK 32 Query lib
-    public static final String SDK_32_QUERY_LIB_PROPERTY = "sdk32.needs.sdkQuery32.caGrid-sdkQuery32-core";
-    public static final String IVY_PROPERTIES_FILE = "sdk32-jars.properties";
- 
-    
+        
     private File sdkPackageDir = null;
 
     public CreateSDK32StyleServiceStep(DataTestCaseInfo serviceInfo, String introduceDir, File sdkPackageDir) {
@@ -76,21 +70,18 @@ public class CreateSDK32StyleServiceStep extends CreationStep {
     private void addQueryProcessorJar() {
         File processorJar = null;
         File libDir = new File(SDK_32_LIB_DIR);
-        Properties ivyProps = new Properties();
-        try {
-            File propsFile = new File(libDir, IVY_PROPERTIES_FILE);
-            assertTrue("No IVY properties file found (" + propsFile.getAbsolutePath() + ")", propsFile.exists());
-            FileInputStream propsInput = new FileInputStream(propsFile);
-            ivyProps.load(propsInput);
-            propsInput.close();
-            String jarName = ivyProps.getProperty(SDK_32_QUERY_LIB_PROPERTY);
-            assertNotNull("No property " + SDK_32_QUERY_LIB_PROPERTY + " found!", jarName);
-            processorJar = new File(libDir, jarName);
-            assertTrue("SDK query processor jar not found!", processorJar.exists());
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            fail("Error locating SDK 3.2 query processor library" + ex.getMessage());
+        File[] jars = libDir.listFiles(new FileFilters.JarFileFilter());
+        if (jars.length != 1) {
+            StringBuffer detail = new StringBuffer();
+            detail.append("Expected to find a single jar file in the directory\n");
+            detail.append(libDir.getAbsolutePath()).append("\n");
+            detail.append("Found the following libs instead:\n");
+            for (File f : jars) {
+                detail.append("\t").append(f.getName()).append("\n");
+            }
+            fail(detail.toString());
         }
+        processorJar = jars[0];
         
         File jarDestination = new File(serviceInfo.getDir(), "lib" + File.separator + processorJar.getName());
         try {
