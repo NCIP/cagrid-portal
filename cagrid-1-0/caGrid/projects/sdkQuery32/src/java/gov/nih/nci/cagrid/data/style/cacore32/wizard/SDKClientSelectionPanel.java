@@ -26,14 +26,12 @@ import java.awt.GridLayout;
 import java.awt.Insets;
 import java.io.File;
 import java.io.FileFilter;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Properties;
 import java.util.Set;
 import java.util.Vector;
 import java.util.jar.JarEntry;
@@ -69,7 +67,7 @@ import com.jgoodies.validation.view.ValidationComponentUtils;
  * @author David Ervin
  * 
  * @created Jun 4, 2007 1:45:08 PM
- * @version $Id: SDKClientSelectionPanel.java,v 1.1 2009-01-06 17:29:28 dervin Exp $ 
+ * @version $Id: SDKClientSelectionPanel.java,v 1.2 2009-01-06 17:44:51 dervin Exp $ 
  */
 public class SDKClientSelectionPanel extends AbstractWizardPanel {
     // keys for validation components
@@ -241,22 +239,19 @@ public class SDKClientSelectionPanel extends AbstractWizardPanel {
     
     
     private File getSdk32QPLib() {
-        File lib = null;
         File libDir = new File(SDK32InitializationPanel.SDK_32_LIB_DIR);
-        Properties ivyProps = new Properties();
-        try {
-            FileInputStream propsInput = new FileInputStream(
-                new File(libDir, SDK32InitializationPanel.IVY_PROPERTIES_FILE));
-            ivyProps.load(propsInput);
-            propsInput.close();
-            lib = new File(libDir, 
-                ivyProps.getProperty(SDK32InitializationPanel.SDK_32_QUERY_LIB_PROPERTY));
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            CompositeErrorDialog.showErrorDialog("Error locating SDK 3.2 query processor library", 
-                ex.getMessage(), ex);
+        File[] jars = libDir.listFiles(new FileFilters.JarFileFilter());
+        if (jars.length != 1) {
+            StringBuffer detail = new StringBuffer();
+            detail.append("Expected to find a single jar file in the directory\n");
+            detail.append(libDir.getAbsolutePath()).append("\n");
+            detail.append("Found the following libs instead:\n");
+            for (File f : jars) {
+                detail.append("\t").append(f.getName()).append("\n");
+            }
+            CompositeErrorDialog.showErrorDialog("Error locating SDK Query 3.2 library", detail.toString());
         }
-        return lib;
+        return jars[0];
     }
 
 
