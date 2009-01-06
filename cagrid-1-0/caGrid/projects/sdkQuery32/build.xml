@@ -22,6 +22,11 @@
 	<property name="build.dir" location="build" />
 	<property name="build.dest" location="${build.dir}/classes" />
 	<property name="build.jars.dir" location="build/lib" />
+	
+	<!-- style stuff -->
+	<property name="introduce.extensions.dir" location="../introduce/extensions"/>
+	<property name="style.dest.dir" location="${introduce.extensions.dir}/data/styles/cacore32" />
+	<property name="style.document" location="${basedir}/style/style.xml"/>
 
 	<!-- jar names -->
 	<property name="project.jar.name" value="${project.jar.prefix}core-${project.version}.jar" />
@@ -130,7 +135,7 @@
 				<include name="**/*.class" />
 			</fileset>
 			<fileset dir="${src.dir}">
-				<include name="**/*.java" />
+				<include name="**/*" />
 			</fileset>
 		</jar>
 	</target>
@@ -148,6 +153,45 @@
 	<target name="clean">
 		<delete dir="${build.dir}" />
 	</target>
+	
+	<!-- installs the data service style -->
+	<target name="installDataServiceStyle" depends="jar">
+		<!-- sdk32 required libraries -->
+		<property name="sdk32.extension.lib.dir" location="${introduce.extensions.dir}/data/sdk32/lib"/>
+		<delete dir="${sdk32.extension.lib.dir}"/>
+		<mkdir dir="${sdk32.extension.lib.dir}"/>
+		<copy todir="${sdk32.extension.lib.dir}">
+			<fileset dir="${build.jars.dir}">
+				<include name="${project.jar.name}"/>
+			</fileset>
+		</copy>
+		<!-- install the service style -->
+		<echo message="Installing Data Service Style cacore32." />
+		<!-- make requisite directories -->
+		<delete dir="${style.dest.dir}" />
+		<mkdir dir="${style.dest.dir}" />
+		<mkdir dir="${style.dest.dir}/lib" />
+		<!-- copy in the style.xml file -->
+		<copy file="${style.document}" todir="${style.dest.dir}" />
+		<copy todir="${style.dest.dir}/lib">
+			<!-- copy in the style's jar files -->
+			<fileset dir="${build.jars.dir}">
+				<include name="*.jar"/>
+			</fileset>
+			<!-- sdkstyle library -->
+			<fileset dir="${ext.lib.dir}">
+				<include name="*sdkstyle*.jar"/>
+			</fileset>
+		</copy>
+		<!-- sdk32 authz required libraries -->
+		<copy todir="${style.dest.dir}/lib">
+			<fileset dir="${ext.lib.dir}/authz/jars">
+				<include name="**/*.jar"/>
+		</fileset>
+		</copy>
+	</target>
+	
+	<target name="installIntroduceExtensions" depends="installDataServiceStyle"/>
 
 	<!-- build and jar everything -->
 	<target name="all" depends="jar, jarTests" description="Builds and jars all the classes in the project" />

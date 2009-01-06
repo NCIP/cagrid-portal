@@ -209,29 +209,6 @@
 	</target>
 
 
-	<!-- compiles the data service styles -->
-	<target name="compileStyles" depends="compileCore, compileUi, compileSdkStyle">
-		<!-- must not run in parallel due to use of a variable -->
-		<for list="${data.service.styles}" parallel="false" param="style.name" trim="true">
-			<sequential>
-				<echo message="Compiling style @{style.name}" />
-				<!-- CANNOT USE A PROPERTY, since they are immutable once set -->
-				<var name="build.style.dir" value="${build.dir}/@{style.name}/classes" />
-				<mkdir dir="${build.dir}/@{style.name}" />
-				<mkdir dir="${build.style.dir}" />
-				<javac srcdir="${src.dir}/style/@{style.name}" destdir="${build.style.dir}" debug="${java.debug}" source="${java.source}">
-					<classpath>
-						<pathelement location="${build.core.dest}" />
-						<pathelement location="${build.ui.dest}" />
-						<pathelement location="${build.sdkstyle.dest}" />
-						<path refid="base.classpath" />
-					</classpath>
-				</javac>
-			</sequential>
-		</for>
-	</target>
-
-
 	<!-- compiles the test code -->
 	<target name="compileCoreTests" depends="compileCore, compileUi">
 		<javac srcdir="${test.core.src.dir}" destdir="${test.core.classes.dir}" debug="${java.debug}" source="${java.source}">
@@ -293,29 +270,6 @@
 				<include name="**/*" />
 			</fileset>
 		</jar>
-	</target>
-
-	
-	<!-- jars the styles -->
-	<target name="jarStyles" depends="compileStyles" description="Jars the styles">
-		<!-- must not run in parallel due to use of a variable -->
-		<for list="${data.service.styles}" parallel="false" param="style.name" trim="true">
-			<sequential>
-				<echo message="Jaring style @{style.name}" />
-				<!-- CANNOT USE A PROPERTY, since they are immutable once set -->
-				<var name="style.lib.file" value="${build.jars.dir}/${project.jar.prefix}style-@{style.name}${project.jar.suffix}" />
-				<var name="build.style.dir" value="${build.dir}/@{style.name}/classes" />
-				<var name="style.src.dir" value="${src.dir}/style/@{style.name}" />
-				<jar destfile="${style.lib.file}">
-					<fileset dir="${build.style.dir}">
-						<include name="**/*.class" />
-					</fileset>
-					<fileset dir="${style.src.dir}">
-						<include name="**/*" />
-					</fileset>
-				</jar>
-			</sequential>
-		</for>
 	</target>
 
 
@@ -468,5 +422,5 @@
 
 	
 	<!-- build and jar everything -->
-	<target name="all" depends="jarCore, jarUi, jarUpgrades, jarSdkStyle, jarStyles, jarCoreTests" description="Builds and jars all the classes in the project" />
+	<target name="all" depends="jarCore, jarUi, jarUpgrades, jarSdkStyle, jarCoreTests" description="Builds and jars all the classes in the project" />
 </project>

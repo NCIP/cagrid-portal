@@ -29,6 +29,7 @@
     <dependency rev="latest.integration" org="caGrid" name="data"
       conf="default->service;impl-test->cql-examples"/>
     <dependency rev="latest.integration" org="caGrid" name="grape" conf="default->default"/>
+    <dependency rev="latest.integration" org="caGrid" name="dataExtensions" conf="default->default"/>
 
     <!-- TODO: note, these currently aren't being copied into services correctly, but I'm maintaining the current behavior... might want to just change this to conf="default->default" -->
     <dependency rev="latest.integration" org="caGrid" name="authz" conf="authz->default"/>
