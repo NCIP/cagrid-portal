@@ -1,8 +1,5 @@
 package gov.nih.nci.cagrid.data.sdk32query;
 
-import gov.nih.nci.cabio.domain.Gene;
-import gov.nih.nci.cadsr.domain.Address;
-import gov.nih.nci.cadsr.domain.ValueDomain;
 import gov.nih.nci.cagrid.data.QueryProcessingException;
 import gov.nih.nci.common.util.HQLCriteria;
 import gov.nih.nci.system.applicationservice.ApplicationException;
@@ -23,7 +20,7 @@ import org.hibernate.QueryException;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created Sep 19, 2006 
- * @version $Id: SubclassCheckCache.java,v 1.3 2008-11-03 20:45:44 dervin Exp $ 
+ * @version $Id: SubclassCheckCache.java,v 1.4 2009-01-06 19:56:45 dervin Exp $ 
  */
 public class SubclassCheckCache {
 	public static final String CABIO_URL = "http://cabio.nci.nih.gov/cacore32/http/remoteService";
@@ -93,17 +90,5 @@ public class SubclassCheckCache {
 			currentLevel++;
 		}
 		return false;
-	}
-	
-	
-	public static void main(String[] args) {
-		ApplicationService service = ApplicationService.getRemoteInstance(CABIO_URL);
-		try {
-			System.out.println(Gene.class.getName() + ": " + hasClassProperty(Gene.class.getName(), service) + " (should be false)");
-			System.out.println(ValueDomain.class.getName() + ": " + hasClassProperty(ValueDomain.class.getName(), service) + " (should be true)");
-			System.out.println(Address.class.getName() + ": " + hasClassProperty(Address.class.getName(), service) + " (should be false)");
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
 	}
 }
