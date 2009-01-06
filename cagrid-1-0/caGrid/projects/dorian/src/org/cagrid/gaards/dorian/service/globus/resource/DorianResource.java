@@ -45,7 +45,7 @@ public class DorianResource extends DorianResourceBase {
             ResourceProperty prop = set.get(DorianConstants.TRUSTEDIDENTITYPROVIDERS);
             prop.set(0, idps);
         } catch (Exception e) {
-            log.error(e);
+            log.error(e.getMessage(),e);
         }
     }
 

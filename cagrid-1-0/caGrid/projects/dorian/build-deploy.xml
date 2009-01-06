@@ -208,7 +208,7 @@
 
 
 	<!-- deploy a gar to globus -->
-	<target name="deployGlobus" depends="checkGlobus, deploymentValidator,createDeploymentGar" description="Deploys a gar to GLOBUS_LOCATION (to set the services properties file set the ant command line variable -Dservice.properties.file)">
+	<target name="deployGlobus" depends="all,checkGlobus, deploymentValidator,createDeploymentGar" description="Deploys a gar to GLOBUS_LOCATION (to set the services properties file set the ant command line variable -Dservice.properties.file)">
 
 		<echo message="Deploying server to Globus Container" />
 

@@ -59,13 +59,13 @@ public class DorianImpl extends DorianImplBase {
             BeanUtils utils = new BeanUtils(new FileSystemResource(configFile), new FileSystemResource(propertiesFile));
             DorianProperties conf = utils.getDorianProperties();
             this.dorian = new Dorian(conf, type.getAddress().toString());
-
+            getResourceHome().getAddressedResource().setDorian(this.dorian);
             QName[] list = new QName[1];
             list[0] = AuthenticationProfile.BASIC_AUTHENTICATION;
             AuthenticationProfiles profiles = new AuthenticationProfiles();
             profiles.setProfile(list);
             getResourceHome().getAddressedResource().setAuthenticationProfiles(profiles);
-            getResourceHome().getAddressedResource().setDorian(this.dorian);
+            
 
             utils.getEventManager().logEvent(AuditConstants.SYSTEM_ID, AuditConstants.SYSTEM_ID,
                 FederationAudit.SystemStartup.getValue(), "System successfully started!!!");
