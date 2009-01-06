@@ -348,8 +348,6 @@
 			</fileset>
 			<fileset dir="${build.jars.dir}">
 				<include name="**/*.jar" />
-				<!-- keep out the style jars, they live in the style/lib dirs -->
-				<exclude name="**/*-style-*.jar" />
 			</fileset>
 		</copy>
 		<!-- data service schemas -->
@@ -376,46 +374,6 @@
 		<copy todir="${introduce.extensions.dir}/data">
 			<fileset dir="${extension.dir}">
 				<include name="extension.xml"/>
-			</fileset>
-		</copy>
-		<!-- sdk32 required libraries -->
-		<property name="sdk32.extension.lib.dir" location="${introduce.extensions.dir}/data/sdk32/lib"/>
-		<delete dir="${sdk32.extension.lib.dir}"/>
-		<mkdir dir="${sdk32.extension.lib.dir}"/>
-		<copy todir="${sdk32.extension.lib.dir}">
-			<fileset dir="${ext.dependencies.dir}/sdk32/jars">
-				<include name="*sdk*.jar"/>
-			</fileset>
-			<fileset dir="${ext.dir}">
-				<include name="sdk32*.properties"/>
-			</fileset>
-		</copy>
-		<!-- install the service styles -->
-		<!-- must not run in parallel due to use of a variable -->
-		<for list="${data.service.styles}" parallel="false" param="style.name" trim="true">
-			<sequential>
-				<echo message="Installing Data Service Style @{style.name}." />
-				<!-- some properties for the install -->
-				<!-- CANNOT USE A PROPERTY, since they are immutable once set -->
-				<var name="style.dest.dir" value="${introduce.extensions.dir}/data/styles/@{style.name}" />
-				<var name="style.description" value="${basedir}/styles/@{style.name}/style.xml" />
-				<var name="style.lib.file" value="${build.jars.dir}/${project.jar.prefix}style-@{style.name}${project.jar.suffix}" />
-				<!-- make requisite directories -->
-				<delete dir="${style.dest.dir}" />
-				<mkdir dir="${style.dest.dir}" />
-				<mkdir dir="${style.dest.dir}/lib" />
-				<!-- copy in the style.xml file -->
-				<copy file="${style.description}" todir="${style.dest.dir}" />
-				<!-- copy in the style's jar file -->
-				<copy todir="${style.dest.dir}/lib" file="${style.lib.file}" />
-				<!-- copy the SDK common style jar file -->
-				<copy todir="${style.dest.dir}/lib" file="${sdkstyle.jar.file}" />
-			</sequential>
-		</for>
-		<!-- sdk32 authz required libraries -->
-		<copy todir="${introduce.extensions.dir}/data/styles/cacore32/lib">
-			<fileset dir="${ext.dependencies.dir}/authz/jars">
-				<include name="**/*.jar"/>
 			</fileset>
 		</copy>
 	</target>
