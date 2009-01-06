@@ -117,7 +117,7 @@ public class FilesystemCacher extends FilesystemProcessor {
         // while the file exists on the file system, or we already plan to use
         // it, come up with a new name and check again
         while (docFile.exists() || this.fNameMap.containsValue(docFile)) {
-            docFile = new File(this.directory, doc.systemID + "_" + i);
+            docFile = new File(this.directory, doc.systemID + "_" + i++);
         }
         return docFile;
     }
