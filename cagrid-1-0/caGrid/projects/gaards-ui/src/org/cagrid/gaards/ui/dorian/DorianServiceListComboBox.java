@@ -3,6 +3,8 @@ package org.cagrid.gaards.ui.dorian;
 import java.util.List;
 
 import javax.swing.JComboBox;
+
+
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
@@ -11,32 +13,36 @@ import javax.swing.JComboBox;
  *          Exp $
  */
 public class DorianServiceListComboBox extends JComboBox {
-	
-	private static final long serialVersionUID = 1L;
 
-	private static DorianHandle lastSelectedService;
+    private static final long serialVersionUID = 1L;
 
-	public DorianServiceListComboBox() {
-		List<DorianHandle> services = ServicesManager.getInstance().getDorianServices();
-		for (int i = 0; i < services.size(); i++) {
-			this.addItem(services.get(i));
-		}
-		if (lastSelectedService == null) {
-			lastSelectedService = getSelectedService();
-		} else {
-			this.setSelectedItem(lastSelectedService);
-		}
-		setToolTipText(getSelectedService().getServiceURL());
-		this.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent e) {
-				lastSelectedService = getSelectedService();
-				setToolTipText(getSelectedService().getServiceURL());
-			}
-		});
-	}
+    private static DorianHandle lastSelectedService;
 
-	public DorianHandle getSelectedService() {
-		return (DorianHandle) getSelectedItem();
-	}
+
+    public DorianServiceListComboBox() {
+        List<DorianHandle> services = ServicesManager.getInstance().getDorianServices();
+        for (int i = 0; i < services.size(); i++) {
+            this.addItem(services.get(i));
+        }
+        if (lastSelectedService == null) {
+            lastSelectedService = getSelectedService();
+        } else {
+            this.setSelectedItem(lastSelectedService);
+        }
+        if (getSelectedService() != null) {
+            setToolTipText(getSelectedService().getServiceURL());
+        }
+        this.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent e) {
+                lastSelectedService = getSelectedService();
+                setToolTipText(getSelectedService().getServiceURL());
+            }
+        });
+    }
+
+
+    public DorianHandle getSelectedService() {
+        return (DorianHandle) getSelectedItem();
+    }
 
 }
