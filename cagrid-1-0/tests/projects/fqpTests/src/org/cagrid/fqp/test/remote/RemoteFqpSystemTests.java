@@ -24,7 +24,7 @@ import org.junit.Test;
  * @author David Ervin
  * 
  * @created Jul 10, 2008 10:57:40 AM
- * @version $Id: RemoteFqpSystemTests.java,v 1.16 2008-11-14 17:30:33 dervin Exp $ 
+ * @version $Id: RemoteFqpSystemTests.java,v 1.17 2009-01-06 21:33:10 jpermar Exp $ 
  */
 public class RemoteFqpSystemTests {
     
@@ -38,7 +38,7 @@ public class RemoteFqpSystemTests {
     
     
     @Test
-    public void remoteFqpSystemTests() {
+    public void remoteFqpSystemTests() throws Throwable {
         // deploy two example SDK data services which pull from slightly different data
         DataServiceDeploymentStory exampleService1Deployment = 
             new DataServiceDeploymentStory(new File("resources/services/ExampleSdkService1.zip"), false);
@@ -48,8 +48,8 @@ public class RemoteFqpSystemTests {
             exampleService1Deployment, exampleService2Deployment
         };
         
-        exampleService1Deployment.run();
-        exampleService2Deployment.run();
+        exampleService1Deployment.runBare();
+        exampleService2Deployment.runBare();
         
         // sources of data service containers.  This allows stories to grab
         // service containers after they've been created in the order of execution
@@ -60,47 +60,47 @@ public class RemoteFqpSystemTests {
         // deploy the FQP service
         fqpDeployment = new FQPServiceDeploymentStory(getFqpDir(), false);
         
-        fqpDeployment.run();
+        fqpDeployment.runBare();
         
         FederatedQueryProcessorHelper queryHelper = 
             new FederatedQueryProcessorHelper(fqpDeployment);
         
         // initialize ws-notification client side
         NotificationClientSetupStory notificationSetupStory = new NotificationClientSetupStory();
-        notificationSetupStory.run();
+        notificationSetupStory.runBare();
         
         // run standard queries
         QueryStory queryTests = new QueryStory(containerSources, queryHelper);
-        queryTests.run();
+        queryTests.runBare();
         
         // run the aggregation queries
         AggregationStory aggregationTests = new AggregationStory(containerSources, queryHelper);
-        aggregationTests.run();
+        aggregationTests.runBare();
         
         // run asynchronous queries
         AsynchronousExecutionStory asynchronousStory = 
             new AsynchronousExecutionStory(containerSources, fqpDeployment);
-        asynchronousStory.run();
+        asynchronousStory.runBare();
 
         // run enumeration queries
         EnumerationExecutionStory enumerationStory = 
             new EnumerationExecutionStory(containerSources, fqpDeployment);
-        enumerationStory.run();
+        enumerationStory.runBare();
 
         // run partial results queries
         PartialResultsStory partialResultsStory = 
             new PartialResultsStory(containerSources, fqpDeployment);
-        partialResultsStory.run();
+        partialResultsStory.runBare();
         
         // deploy transfer to the FQP container
         TransferServiceDeploymentStory transferDeployStory = 
             new TransferServiceDeploymentStory(getTransferDir(), fqpDeployment);
-        transferDeployStory.run();
+        transferDeployStory.runBare();
         
         // run transfer queries
         TransferExecutionStory transferStory = 
             new TransferExecutionStory(containerSources, fqpDeployment);
-		transferStory.run();
+		transferStory.runBare();
         
     }
     

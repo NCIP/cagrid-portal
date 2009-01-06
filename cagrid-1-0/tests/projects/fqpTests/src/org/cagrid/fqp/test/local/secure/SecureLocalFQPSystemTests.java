@@ -29,7 +29,7 @@ public class SecureLocalFQPSystemTests {
     private DataServiceDeploymentStory[] dataServiceDeployments;
     
     @Test
-    public void secureLocalFQPSystemTests() {
+    public void secureLocalFQPSystemTests() throws Throwable {
         // deploy two example SDK data services with security enabled
         // which pull from slightly different data
         DataServiceDeploymentStory exampleService1Deployment = 
@@ -41,14 +41,14 @@ public class SecureLocalFQPSystemTests {
         dataServiceDeployments = new DataServiceDeploymentStory[] {
             exampleService1Deployment, exampleService2Deployment
         };
-        exampleService1Deployment.run();
-        exampleService2Deployment.run();
+        exampleService1Deployment.runBare();
+        exampleService2Deployment.runBare();
         
         FederatedQueryEngine fqpEngine = new FederatedQueryEngine(null, null);
         FederatedQueryProcessorHelper fqpHelper = new FederatedQueryProcessorHelper(fqpEngine);
         
         QueryStory queryStory = new QueryStory(dataServiceDeployments, fqpHelper);
-        queryStory.run();
+        queryStory.runBare();
     }
     
     

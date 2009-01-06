@@ -33,7 +33,7 @@ public class SecureRemoteFqpSystemTests {
     private CDSDeploymentStory cdsDeployment;
     
     @Test
-    public void testSecureRemoteFqpSystemTests() {
+    public void testSecureRemoteFqpSystemTests() throws Throwable {
         // deploy two example SDK data services with security enabled
         // which pull from slightly different data
         DataServiceDeploymentStory exampleService1Deployment = 
@@ -46,27 +46,27 @@ public class SecureRemoteFqpSystemTests {
             exampleService1Deployment, exampleService2Deployment
         };
         
-        exampleService1Deployment.run();
-        exampleService2Deployment.run();
+        exampleService1Deployment.runBare();
+        exampleService2Deployment.runBare();
         
         // deploy the secure FQP service
         fqpDeployment = new FQPServiceDeploymentStory(getFqpDir(), true);
-        fqpDeployment.run();
+        fqpDeployment.runBare();
         FederatedQueryProcessorHelper queryHelper = 
             new FederatedQueryProcessorHelper(fqpDeployment);
         
         // deploy the CDS service
         cdsDeployment = new CDSDeploymentStory(getCdsDir());
-        cdsDeployment.run();
+        cdsDeployment.runBare();
         
         // run standard queries against the secure FQP and data services
         QueryStory queryStory = new QueryStory(dataServiceDeployments, queryHelper);
-        queryStory.run();
+        queryStory.runBare();
         
         // secure query w/ CDS
         SecureQueryStory secureQueryStory = 
             new SecureQueryStory(dataServiceDeployments, cdsDeployment, fqpDeployment);
-        secureQueryStory.run();
+        secureQueryStory.runBare();
     }
     
     

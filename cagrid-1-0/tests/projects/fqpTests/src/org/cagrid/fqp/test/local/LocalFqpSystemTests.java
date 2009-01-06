@@ -24,7 +24,7 @@ import org.junit.Test;
  * @author David Ervin
  * 
  * @created Jul 10, 2008 10:57:40 AM
- * @version $Id: LocalFqpSystemTests.java,v 1.10 2008-11-14 16:23:24 dervin Exp $ 
+ * @version $Id: LocalFqpSystemTests.java,v 1.11 2009-01-06 21:33:10 jpermar Exp $ 
  */
 public class LocalFqpSystemTests {
     
@@ -33,7 +33,7 @@ public class LocalFqpSystemTests {
     private DataServiceDeploymentStory[] deployments;
 
     @Test
-    public void localFqpSystemTests() {
+    public void localFqpSystemTests() throws Throwable {
         // deploy two example SDK data services which pull from slightly different data
         DataServiceDeploymentStory exampleService1Deployment = 
             new DataServiceDeploymentStory(new File("resources/services/ExampleSdkService1.zip"), false);
@@ -42,8 +42,8 @@ public class LocalFqpSystemTests {
         DataServiceDeploymentStory exampleService2Deployment =
             new DataServiceDeploymentStory(new File("resources/services/ExampleSdkService2.zip"), false);
 
-        exampleService1Deployment.run();
-        exampleService2Deployment.run();
+        exampleService1Deployment.runBare();
+        exampleService2Deployment.runBare();
 
         
         deployments = new DataServiceDeploymentStory[] {
@@ -59,11 +59,11 @@ public class LocalFqpSystemTests {
         
         // run the local aggregation queries
         AggregationStory aggregationTests = new AggregationStory(containerSources, queryHelper);
-        aggregationTests.run();
+        aggregationTests.runBare();
         
         // run local standard queries
         QueryStory queryTests = new QueryStory(containerSources, queryHelper);
-        queryTests.run();
+        queryTests.runBare();
 
     }
 
