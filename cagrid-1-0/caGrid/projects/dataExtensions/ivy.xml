@@ -22,14 +22,16 @@
 	<conf name="default" visibility="public" extends="core,ui"/>
     
     <conf name="test" visibility="public" extends="impl-test"/>
+    
+    <conf name="styleRequirements" visibility="public"/>
   </configurations>
 
 
   <publications>
-    <artifact name="caGrid-${ivy.module}-core" conf="core" type="jar"/>
-    <artifact name="caGrid-${ivy.module}-ui" conf="ui" type="jar"/>
+    <artifact name="caGrid-${ivy.module}-core" conf="core,styleRequirements" type="jar"/>
+    <artifact name="caGrid-${ivy.module}-ui" conf="ui,styleRequirements" type="jar"/>
     <artifact name="caGrid-${ivy.module}-upgrades" conf="core" type="jar"/>
-    <artifact name="caGrid-${ivy.module}-sdkstyle" conf="sdkstyle" type="jar"/>
+    <artifact name="caGrid-${ivy.module}-sdkstyle" conf="sdkstyle,styleRequirements" type="jar"/>
     <artifact name="caGrid-${ivy.module}-tests" conf="test" type="jar"/>
   </publications>
 
