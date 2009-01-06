@@ -113,8 +113,16 @@ public class InstallationCompleteStep extends PanelWizardStep {
             sb.append("\t" + model.getProperty(Constants.SERVICE_KEY_PATH) + "\n");
         }
 
+        if (model.isConfigureContainerSelected() && model.isTrue(Constants.USE_SECURE_CONTAINER)
+            && model.getProperty(Constants.HOST_CREDS_SELECTION_TYPE) != null
+            && model.getProperty(Constants.HOST_CREDS_SELECTION_TYPE).equals(Constants.HOST_CREDS_ALREADY_INSTALLED)) {
+            sb.append("\nPlease remember to validate the host certificate and key are in the following locations:\n");
+            sb.append("\t" + model.getProperty(Constants.SERVICE_CERT_PATH) + "\n");
+            sb.append("\t" + model.getProperty(Constants.SERVICE_KEY_PATH) + "\n");
+        }
+
         this.textPane.setText(sb.toString());
-        
+
         try {
             FileWriter fw = new FileWriter(new File("." + File.separator + "CAGRID_POST_INSTALLATION.txt"));
             fw.write(sb.toString());
@@ -122,7 +130,6 @@ public class InstallationCompleteStep extends PanelWizardStep {
         } catch (IOException e1) {
             e1.printStackTrace();
         }
-        
 
         // Save the setting for this run of the installer
         Properties props = new Properties();
@@ -140,6 +147,7 @@ public class InstallationCompleteStep extends PanelWizardStep {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        
     }
 
 }

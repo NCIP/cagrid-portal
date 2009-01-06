@@ -51,8 +51,7 @@
 				value="${globus.home}/share/globus_wsrf_common/tomcat/web.xml" />
 		</xmltask>
 
-		<ant antfile="${new.tomcat.build.file}" dir="."
-			get="${target.name}">
+		<ant antfile="${new.tomcat.build.file}" dir="." target="${target.name}">
 			<property name="tomcat.dir" value="${tomcat.home}" />
 		</ant>
 	</target>
