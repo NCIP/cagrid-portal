@@ -86,7 +86,6 @@
 	<classpathentry kind="lib" path="ext/dependencies/jars/caGrid-ServiceSecurityProvider-common-1.3-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/jars/caGrid-ServiceSecurityProvider-service-1.3-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/jars/caGrid-ServiceSecurityProvider-stubs-1.3-dev.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/jars/castor-0.9.9.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/jars/codegen.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/jars/commons-codec-1.3.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/jars/jaxen-1.1.jar"/>
@@ -104,16 +103,14 @@
 	<classpathentry kind="lib" path="ext/dependencies/jars/validation-2.0.0.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/jars/wizard-0.1.12.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/jars/xsom14.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/test/jars/caGrid-core-1.3-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/test/jars/caGrid-core-tests-1.3-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/test/jars/caGrid-testing-core-1.3-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/test/jars/caGrid-testing-system-1.3-dev.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/test/jars/castor-0.9.9.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/test/jars/jdepend-2.7.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/test/jars/jdom-1.0.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/test/jars/junit-4.4.jar"/>
 	<classpathentry kind="var" path="ANT_HOME/lib/ant-launcher.jar"/>
 	<classpathentry kind="var" path="ANT_HOME/lib/ant.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/jars/caGrid-Introduce-buildTools-1.3-dev.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/jars/castor-1.0.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

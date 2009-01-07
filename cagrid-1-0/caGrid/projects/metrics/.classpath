@@ -80,7 +80,6 @@
 	<classpathentry kind="lib" path="ext/dependencies/service/jars/caGrid-ServiceSecurityProvider-service-1.3-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/service/jars/caGrid-ServiceSecurityProvider-stubs-1.3-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/service/jars/caGrid-service-tools-db-1.3-dev.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/service/jars/castor-0.9.9.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/service/jars/commons-dbcp-1.2.2.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/service/jars/commons-pool-1.2.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/service/jars/globus_wsrf_mds_aggregator_stubs.jar"/>
@@ -108,7 +107,6 @@
 	<classpathentry kind="lib" path="extension/ext/dependencies/jars/caGrid-ServiceSecurityProvider-service-1.3-dev.jar"/>
 	<classpathentry kind="lib" path="extension/ext/dependencies/jars/caGrid-ServiceSecurityProvider-stubs-1.3-dev.jar"/>
 	<classpathentry kind="lib" path="extension/ext/dependencies/jars/caGrid-service-tools-db-1.3-dev.jar"/>
-	<classpathentry kind="lib" path="extension/ext/dependencies/jars/castor-0.9.9.jar"/>
 	<classpathentry kind="lib" path="extension/ext/dependencies/jars/cglib-2.1_3.jar"/>
 	<classpathentry kind="lib" path="extension/ext/dependencies/jars/commons-dbcp-1.2.2.jar"/>
 	<classpathentry kind="lib" path="extension/ext/dependencies/jars/commons-pool-1.2.jar"/>

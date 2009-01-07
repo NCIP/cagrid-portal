@@ -78,7 +78,6 @@
 	<classpathentry kind="lib" path="ext/dependencies/jars/caGrid-ServiceSecurityProvider-stubs-1.3-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/jars/caGrid-wsEnum-1.3-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/jars/caGrid-wsEnum-stubs-1.3-dev.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/jars/castor-0.9.9.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/jars/gef_modified.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/jars/jasciidammit-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/jars/jaxen-1.1.jar"/>
