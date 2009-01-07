@@ -79,7 +79,8 @@ public class DownloadFileTask extends BasicTask {
         }
 
         String checksum = null;
-        for (int i = 0; i < NUM_ATTEMPTS; i++) {
+        int i = 0;
+        for (i = 0; i < NUM_ATTEMPTS; i++) {
             try {
                 download(url, new File(toFile), this.connectTimeout);
                 if (!enforceChecksum) {
@@ -97,6 +98,11 @@ public class DownloadFileTask extends BasicTask {
                 logger.warn("Failed attempt (" + (i + 1) + ") to download '" + fromUrl + "': " + ex.getMessage(), ex);
             }
         }
+        
+        if(i==NUM_ATTEMPTS){
+            throw new InvalidStateException("Could not download '" + fromUrl + "'. See logs for details.");
+        }
+        
         if (enforceChecksum && !expectedChecksum.equals(checksum)) {
             throw new InvalidStateException("Could not download '" + fromUrl + "'. See logs for details.");
         }
