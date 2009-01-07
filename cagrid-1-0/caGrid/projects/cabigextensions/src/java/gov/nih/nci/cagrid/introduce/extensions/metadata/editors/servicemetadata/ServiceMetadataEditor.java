@@ -1,7 +1,5 @@
 package gov.nih.nci.cagrid.introduce.extensions.metadata.editors.servicemetadata;
 
-import gov.nih.nci.cadsr.domain.Organization;
-import gov.nih.nci.cadsr.domain.Person;
 import gov.nih.nci.cagrid.common.SchemaValidationException;
 import gov.nih.nci.cagrid.common.SchemaValidator;
 import gov.nih.nci.cagrid.common.portal.validation.IconFeedbackPanel;
@@ -18,8 +16,6 @@ import gov.nih.nci.cagrid.metadata.common.ResearchCenterDescription;
 import gov.nih.nci.cagrid.metadata.common.ResearchCenterPointOfContactCollection;
 import gov.nih.nci.cagrid.metadata.service.Service;
 import gov.nih.nci.cagrid.metadata.service.ServicePointOfContactCollection;
-import gov.nih.nci.system.applicationservice.ApplicationException;
-import gov.nih.nci.system.applicationservice.ApplicationService;
 
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
@@ -277,92 +273,92 @@ public class ServiceMetadataEditor extends ResourcePropertyEditorPanel {
             this.centerInfoPanel.add(getCenterDisplayNameTextField(), gridBagConstraints1);
             this.centerInfoPanel.add(this.centerShortNameLabel, gridBagConstraints2);
             this.centerInfoPanel.add(getCenterShortNameTextField(), gridBagConstraints11);
-            this.centerInfoPanel.add(getSearchCenterButton(), gridBagConstraints12);
+            //this.centerInfoPanel.add(getSearchCenterButton(), gridBagConstraints12);
         }
         return this.centerInfoPanel;
     }
 
 
-    private JButton getSearchCenterButton() {
-        if (this.searchCenterButton == null) {
-            this.searchCenterButton = new JButton("Load from caDSR");
-            this.searchCenterButton.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent e) {
-                    searchForCenter();
-                }
-            });
-        }
-        return this.searchCenterButton;
-    }
+//    private JButton getSearchCenterButton() {
+//        if (this.searchCenterButton == null) {
+//            this.searchCenterButton = new JButton("Load from caDSR");
+//            this.searchCenterButton.addActionListener(new java.awt.event.ActionListener() {
+//                public void actionPerformed(java.awt.event.ActionEvent e) {
+//                    searchForCenter();
+//                }
+//            });
+//        }
+//        return this.searchCenterButton;
+//    }
 
 
-    /**
-     * 
-     */
-    protected void searchForCenter() {
-        ApplicationService appService = ApplicationService
-            .getRemoteInstance("http://cabio.nci.nih.gov/cacore31/http/remoteService");
-        Organization org = new Organization();
-        org.setName(getCenterShortNameTextField().getText());
-        try {
-            List<Organization> rList = appService.search(Organization.class, org);
-            if (rList.size() < 1) {
-                return;
-            }
-            Organization foundOrg = rList.get(0);
-            ResearchCenter center = new ResearchCenter();
-            center.setDisplayName(foundOrg.getName());
-            center.setShortName(foundOrg.getName());
-            // don't have this kind of info in caDSR, so clear it out
-            center.setResearchCenterDescription(null);
-
-            // build up the address
-            Address address = new Address();
-            Collection<gov.nih.nci.cadsr.domain.Address> addressCollection = foundOrg.getAddressCollection();
-            if (!addressCollection.isEmpty()) {
-                gov.nih.nci.cadsr.domain.Address add = addressCollection.iterator().next();
-                address.setCountry(add.getCountry());
-                address.setLocality(add.getState());
-                address.setPostalCode(add.getPostalCode());
-                address.setStateProvince(add.getState());
-                address.setStreet1(add.getAddressLine1());
-                address.setStreet2(add.getAddressLine2());
-            }
-            center.setAddress(address);
-
-            // build up the points of contact
-            ResearchCenterPointOfContactCollection pocCollection = new ResearchCenterPointOfContactCollection();
-            Collection<Person> personCollection = foundOrg.getPerson();
-            PointOfContact[] pocs = new PointOfContact[personCollection.size()];
-            pocCollection.setPointOfContact(pocs);
-            int index = 0;
-            for (Person person : personCollection) {
-                PointOfContact poc = new PointOfContact();
-                poc.setAffiliation(foundOrg.getName());
-                poc.setFirstName(person.getFirstName());
-                poc.setLastName(person.getLastName());
-                // 3.1 model seems to have ContactCommunication, but code
-                // doesn't; can't set email and phone for now
-                pocs[index++] = poc;
-                if (index > MAXIMUM_CONTACTS) {
-                    // let's not get out of hand with too many contacts; break
-                    // point in case of data error or too many associated
-                    // contacts (really should only be a couple)
-                    break;
-                }
-            }
-            center.setPointOfContactCollection(pocCollection);
-
-            // update the view with info from caDSR
-            updateCenterView(center);
-            JOptionPane.showMessageDialog(this, "All " + HOSTING_CENTER_TAB_NAME
-                + " information has been replaced; please review.");
-        } catch (ApplicationException e) {
-            e.printStackTrace();
-            return;
-        }
-
-    }
+//    /**
+//     * 
+//     */
+//    protected void searchForCenter() {
+//        ApplicationService appService = ApplicationService
+//            .getRemoteInstance("http://cabio.nci.nih.gov/cacore31/http/remoteService");
+//        Organization org = new Organization();
+//        org.setName(getCenterShortNameTextField().getText());
+//        try {
+//            List<Organization> rList = appService.search(Organization.class, org);
+//            if (rList.size() < 1) {
+//                return;
+//            }
+//            Organization foundOrg = rList.get(0);
+//            ResearchCenter center = new ResearchCenter();
+//            center.setDisplayName(foundOrg.getName());
+//            center.setShortName(foundOrg.getName());
+//            // don't have this kind of info in caDSR, so clear it out
+//            center.setResearchCenterDescription(null);
+//
+//            // build up the address
+//            Address address = new Address();
+//            Collection<gov.nih.nci.cadsr.domain.Address> addressCollection = foundOrg.getAddressCollection();
+//            if (!addressCollection.isEmpty()) {
+//                gov.nih.nci.cadsr.domain.Address add = addressCollection.iterator().next();
+//                address.setCountry(add.getCountry());
+//                address.setLocality(add.getState());
+//                address.setPostalCode(add.getPostalCode());
+//                address.setStateProvince(add.getState());
+//                address.setStreet1(add.getAddressLine1());
+//                address.setStreet2(add.getAddressLine2());
+//            }
+//            center.setAddress(address);
+//
+//            // build up the points of contact
+//            ResearchCenterPointOfContactCollection pocCollection = new ResearchCenterPointOfContactCollection();
+//            Collection<Person> personCollection = foundOrg.getPerson();
+//            PointOfContact[] pocs = new PointOfContact[personCollection.size()];
+//            pocCollection.setPointOfContact(pocs);
+//            int index = 0;
+//            for (Person person : personCollection) {
+//                PointOfContact poc = new PointOfContact();
+//                poc.setAffiliation(foundOrg.getName());
+//                poc.setFirstName(person.getFirstName());
+//                poc.setLastName(person.getLastName());
+//                // 3.1 model seems to have ContactCommunication, but code
+//                // doesn't; can't set email and phone for now
+//                pocs[index++] = poc;
+//                if (index > MAXIMUM_CONTACTS) {
+//                    // let's not get out of hand with too many contacts; break
+//                    // point in case of data error or too many associated
+//                    // contacts (really should only be a couple)
+//                    break;
+//                }
+//            }
+//            center.setPointOfContactCollection(pocCollection);
+//
+//            // update the view with info from caDSR
+//            updateCenterView(center);
+//            JOptionPane.showMessageDialog(this, "All " + HOSTING_CENTER_TAB_NAME
+//                + " information has been replaced; please review.");
+//        } catch (ApplicationException e) {
+//            e.printStackTrace();
+//            return;
+//        }
+//
+//    }
 
 
     /**

@@ -3,8 +3,7 @@ package org.cagrid.data.sdkquery41.style.wizard.model;
 import gov.nih.nci.cadsr.umlproject.domain.Project;
 import gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata;
 import gov.nih.nci.cadsr.umlproject.domain.UMLPackageMetadata;
-import gov.nih.nci.cagrid.cadsr.client.CaDSRServiceClient;
-import gov.nih.nci.cagrid.cadsr.portal.CaDSRBrowserPanel;
+import org.cagrid.cadsr.portal.CaDSRBrowserPanel;
 import gov.nih.nci.cagrid.common.portal.validation.IconFeedbackPanel;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.data.extension.CadsrInformation;
@@ -34,6 +33,8 @@ import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 import javax.swing.border.TitledBorder;
 
+import org.cagrid.cadsr.UMLModelService;
+import org.cagrid.cadsr.client.CaDSRUMLModelService;
 import org.cagrid.data.sdkquery41.style.wizard.DomainModelSourcePanel;
 import org.cagrid.data.sdkquery41.style.wizard.DomainModelSourceValidityListener;
 import org.cagrid.grape.utils.CompositeErrorDialog;
@@ -82,6 +83,7 @@ public class ModelFromCaDSRPanel extends DomainModelSourcePanel {
         }
         
         // basic start of cadsr info
+        //TODO Dave, replace this with whatever your new Extension data is  (storing the shortname/version)
         CadsrInformation cadsrInfo = new CadsrInformation();
         cadsrInfo.setNoDomainModel(false);
         cadsrInfo.setUseSuppliedModel(false);
@@ -89,7 +91,7 @@ public class ModelFromCaDSRPanel extends DomainModelSourcePanel {
         cadsrInfo.setProjectVersion(selectedProject.getVersion());
         
         // packages
-        CaDSRServiceClient cadsrClient = new CaDSRServiceClient(getCadsrBrowser().getCadsr().getText());
+        UMLModelService cadsrClient = new CaDSRUMLModelService(getCadsrBrowser().getCadsr().getText());
         DefaultListModel listModel = (DefaultListModel) getPackagesList().getModel();
         CadsrPackage[] packages = new CadsrPackage[listModel.getSize()];
         for (int i = 0; i < listModel.getSize(); i++) {

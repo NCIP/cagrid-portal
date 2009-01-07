@@ -38,7 +38,6 @@
     <dependency rev="latest.integration" org="caGrid" name="testing" conf="impl-test->system"/>
         
     <dependency rev="latest.integration" org="caGrid" name="dorian" conf="default->client;endorsed->endorsed"/>
-    <dependency rev="latest.integration" org="caGrid" name="cadsr" conf="default->client"/>
     <dependency rev="latest.integration" org="caGrid" name="gridgrouper" conf="impl-test->test"/>
     <dependency rev="latest.integration" org="caGrid" name="cds" conf="impl-test->client"/>
 

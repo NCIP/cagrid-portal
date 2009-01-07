@@ -1,7 +1,5 @@
 package gov.nih.nci.cagrid.data.codegen;
 
-import gov.nih.nci.cadsr.umlproject.domain.Project;
-import gov.nih.nci.cagrid.cadsr.client.CaDSRServiceClient;
 import gov.nih.nci.cagrid.data.extension.CadsrInformation;
 import gov.nih.nci.cagrid.data.extension.CadsrPackage;
 import gov.nih.nci.cagrid.data.extension.ClassMapping;
@@ -14,35 +12,40 @@ import java.util.Set;
 import java.util.logging.Logger;
 
 import org.apache.axis.types.URI.MalformedURIException;
+import org.cagrid.mms.client.MetadataModelServiceClient;
+import org.cagrid.mms.common.MetadataModelServiceI;
+import org.cagrid.mms.domain.UMLProjectIdentifer;
 
-/** 
- *  DomainModelCreationUtil
- *  TODO:DOCUMENT ME
+
+/**
+ * DomainModelCreationUtil TODO:DOCUMENT ME
  * 
  * @author David Ervin
- * 
  * @created Apr 2, 2007 1:35:01 PM
- * @version $Id: DomainModelCreationUtil.java,v 1.3 2007-12-18 19:10:26 dervin Exp $ 
+ * @version $Id: DomainModelCreationUtil.java,v 1.3 2007/12/18 19:10:26 dervin
+ *          Exp $
  */
 public class DomainModelCreationUtil {
-    
+
     private static final Logger LOG = Logger.getLogger(DomainModelCreationUtil.class.getName());
-    
+
+
     private DomainModelCreationUtil() {
         // no instantiation of this class, all methods are static
     }
-    
 
-    public static DomainModel createDomainModel(CadsrInformation cadsrInfo) 
-        throws MalformedURIException, RemoteException {
+
+    public static DomainModel createDomainModel(CadsrInformation cadsrInfo) throws MalformedURIException,
+        RemoteException {
         // init the cadsr service client
+        //TODO Dave, how should I get the new MMS URL here?  Probably need MMS_URL in 
         String cadsrUrl = cadsrInfo.getServiceUrl();
         LOG.info("Initializing caDSR client (URL = " + cadsrUrl + ")");
-        CaDSRServiceClient cadsrClient = new CaDSRServiceClient(cadsrUrl);
+        MetadataModelServiceI mmsClient = new MetadataModelServiceClient(cadsrUrl);
 
         // create the prototype project
-        Project proj = new Project();
-        proj.setLongName(cadsrInfo.getProjectLongName());
+        UMLProjectIdentifer proj = new UMLProjectIdentifer();
+        proj.setIdentifier(cadsrInfo.getProjectLongName());
         proj.setVersion(cadsrInfo.getProjectVersion());
 
         // Set of selected (fully qualified) class names
@@ -73,11 +76,11 @@ public class DomainModelCreationUtil {
         // build the domain model
         LOG.info("Contacting caDSR to build domain model.  This might take a while...");
         System.out.println("Contacting caDSR to build domain model.  This might take a while...");
-        
+
         String classNames[] = new String[selectedClasses.size()];
         selectedClasses.toArray(classNames);
-        DomainModel model = cadsrClient.generateDomainModelForClasses(proj, classNames);
-        
+        DomainModel model = mmsClient.generateDomainModelForClasses(proj, classNames);
+
         LOG.info("Setting targetability in the domain model");
         System.out.println("Setting targetability in the domain model");
         UMLClass[] exposedClasses = model.getExposedUMLClassCollection().getUMLClass();

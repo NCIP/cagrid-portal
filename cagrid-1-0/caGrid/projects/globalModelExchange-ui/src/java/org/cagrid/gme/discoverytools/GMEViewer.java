@@ -323,7 +323,7 @@ public class GMEViewer extends NamespaceTypeToolsComponent
 
                     } catch (Exception e1) {
                         e1.printStackTrace();
-                        CompositeErrorDialog.showErrorDialog("Error contacting GME", e1);
+                        CompositeErrorDialog.showErrorDialog("Error publishing schemas:"+e1.getMessage(), e1);
                     }
                     GMEViewer.this.uploadSchemaTextPane.setText("");
                 }

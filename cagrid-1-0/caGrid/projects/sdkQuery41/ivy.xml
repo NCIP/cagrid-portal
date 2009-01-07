@@ -4,46 +4,48 @@
   xsi:noNamespaceSchemaLocation="http://incubator.apache.org/ivy/schemas/ivy.xsd">
 
   <info organisation="caGrid" module="sdkQuery41" revision="${project.version}">
-    <license name="caGrid" url="http://www.cagrid.org/mwiki/index.php?title=CaGrid:LICENSE-1.1"/>
+    <license name="caGrid" url="http://www.cagrid.org/mwiki/index.php?title=CaGrid:LICENSE-1.1" />
     <description>The caCORE SDK 4_1 Query Processor</description>
   </info>
 
   <configurations>
-    <conf name="impl-test" visibility="private"/>
+    <conf name="impl-test" visibility="private" />
 
     <!-- Public Configurations-->
-    <conf name="stubs" visibility="public"/>
-    <conf name="processor" visibility="public" extends="stubs"/>
-    <conf name="style" visibility="public" extends="processor"/>
-    <conf name="test" visibility="public" extends="style,impl-test"/>
+    <conf name="stubs" visibility="public" />
+    <conf name="processor" visibility="public" extends="stubs" />
+    <conf name="style" visibility="public" extends="processor" />
+    <conf name="test" visibility="public" extends="style,impl-test" />
   </configurations>
 
 
   <publications>
-    <artifact name="caGrid-${ivy.module}-beans" conf="stubs" type="jar"/>
-    <artifact name="caGrid-${ivy.module}-processor" conf="processor" type="jar"/>
-    <artifact name="caGrid-${ivy.module}-style" conf="style" type="jar"/>
-    <artifact name="caGrid-${ivy.module}-tests" conf="test" type="jar"/>
+    <artifact name="caGrid-${ivy.module}-beans" conf="stubs" type="jar" />
+    <artifact name="caGrid-${ivy.module}-processor" conf="processor" type="jar" />
+    <artifact name="caGrid-${ivy.module}-style" conf="style" type="jar" />
+    <artifact name="caGrid-${ivy.module}-tests" conf="test" type="jar" />
   </publications>
-  
+
 
   <dependencies>
     <!-- core tools -->
     <dependency rev="latest.integration" org="caGrid" name="core"
-      conf="processor->default;impl-test->test"/>
-      
-    <!-- basic unit testing -->
-    <dependency rev="latest.integration" org="caGrid" name="testing" conf="impl-test->system"/>
+      conf="processor->default;impl-test->test" />
 
-	<!-- cagrid data service and extensions -->
+    <!-- basic unit testing -->
+    <dependency rev="latest.integration" org="caGrid" name="testing" conf="impl-test->system" />
+
+    <!-- cagrid data service and extensions -->
     <dependency rev="latest.integration" org="caGrid" name="dataExtensions" conf="style->core,ui,sdkstyle"/>
     <dependency rev="latest.integration" org="caGrid" name="data"
       conf="processor->service;impl-test->cql-examples,test"/>
+      
+    <!-- Introduce for extension related stuff -->
+    <dependency rev="latest.integration" org="caGrid" name="introduce" conf="style->core" />
+        <dependency rev="latest.integration" org="caGrid" name="cadsr" conf="style->default" />
     
-	<!-- Introduce for extension related stuff -->
-    <dependency rev="latest.integration" org="caGrid" name="introduce" conf="style->core"/>
 
-	<!-- external dependencies -->
-    <dependency rev="4.4" org="junit" name="junit" conf="impl-test->default"/>
+    <!-- external dependencies -->
+    <dependency rev="4.4" org="junit" name="junit" conf="impl-test->default" />
   </dependencies>
 </ivy-module>

@@ -36,7 +36,6 @@
     <dependency org="caGrid" name="grape" rev="latest.integration" conf="validator->default"/> 
     
     <dependency org="caGrid" name="dorian" rev="latest.integration" conf="validator->client"/>
-    <dependency org="caGrid" name="cadsr" rev="latest.integration" conf="validator->client"/>
     
     <dependency rev="1.0" org="jdom" name="jdom" conf="validator->*"/>
     <dependency rev="4.4" org="junit" name="junit" conf="impl-test->default"/>

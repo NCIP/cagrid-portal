@@ -55,6 +55,13 @@ public class FilesystemCacher extends FilesystemProcessor {
     }
 
 
+    // TODO this needs to take an optional Map<URI, File> which lists URIs which
+    // shouldn't be written to the filesystem, and the existing filename should
+    // be used for imports of that namespace; this will mostly be used by the
+    // introduce type selection component; one should be able to pass the
+    // results of this call back into itself and it should not write any files
+    // to the filesystem
+
     /**
      * Writes the documents from the provided bundle to the file system, in the
      * provided directory. NOTE: repeated calls to this method will write new
@@ -86,6 +93,9 @@ public class FilesystemCacher extends FilesystemProcessor {
             XSDDocument doc = new XSDDocument();
             doc.namespace = s.getTargetNamespace();
             doc.systemID = s.getRootDocument().getSystemID();
+
+            // TODO if we are to ignore this NS, just use the existing file and
+            // put it in the maps; skip the additional documents
 
             // create a unique filename for the schema's root document
             File file = createUniqueFileName(doc);
@@ -125,6 +135,9 @@ public class FilesystemCacher extends FilesystemProcessor {
 
     protected void fixAndWriteDocuments() throws IOException {
         for (XMLSchema s : this.bundle.getXMLSchemas()) {
+
+            // TODO if we are to ignore this NS: continue
+
             XSDDocument doc = new XSDDocument();
             doc.namespace = s.getTargetNamespace();
             doc.systemID = s.getRootDocument().getSystemID();

@@ -2,9 +2,7 @@
 <classpath>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="src" path="Portal/src"/>
 	<classpathentry kind="src" path="test/src"/>
-	<classpathentry kind="src" path="build/stubs-CaDSRService/src"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/addressing-1.0.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/axis.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/axis-url.jar"/>
@@ -50,55 +48,61 @@
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xercesImpl.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xml-apis.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xmlsec.jar"/>
-	<classpathentry kind="lib" path="lib/caGrid-1.1-Introduce-1.1-serviceTools.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/service/jars/antlr-2.7.6rc1.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/service/jars/caGrid-advertisement-1.3-dev.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/service/jars/caGrid-core-1.3-dev.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/service/jars/caGrid-core-resources-1.3-dev.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/service/jars/caGrid-gaards-ui-1.3-dev.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/service/jars/caGrid-GlobalModelExchange-1.3-dev.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/service/jars/caGrid-GlobalModelExchange-stubs-1.3-dev.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/service/jars/caGrid-grape-1.3-dev.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/service/jars/caGrid-grape-resources-1.3-dev.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/service/jars/caGrid-graph-1.3-dev.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/service/jars/caGrid-Introduce-core-1.3-dev.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/service/jars/caGrid-Introduce-portal-1.3-dev.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/service/jars/caGrid-Introduce-updater-1.3-dev.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/service/jars/caGrid-metadata-common-1.3-dev.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/service/jars/caGrid-metadata-data-1.3-dev.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/service/jars/caGrid-metadata-security-1.3-dev.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/service/jars/caGrid-metadatautils-1.3-dev.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/service/jars/caGrid-ServiceSecurityProvider-client-1.3-dev.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/service/jars/caGrid-ServiceSecurityProvider-common-1.3-dev.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/service/jars/caGrid-ServiceSecurityProvider-service-1.3-dev.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/service/jars/caGrid-ServiceSecurityProvider-stubs-1.3-dev.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/service/jars/castor-0.9.9.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/service/jars/cglib-nodep-2.1_3.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/service/jars/client.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/service/jars/concurrent-1.3.4.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/service/jars/gef_modified.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/service/jars/GlobalModelExchange.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/service/jars/globus_wsrf_mds_aggregator_stubs.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/service/jars/globus_wsrf_mds_aggregator.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/service/jars/globus_wsrf_servicegroup_stubs.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/service/jars/globus_wsrf_servicegroup.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/service/jars/hibernate3.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/service/jars/jasciidammit-1.1.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/service/jars/jaxen-1.1.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/service/jars/jaxmejs-0.5.2.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/service/jars/jcalendar.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/service/jars/jdom-1.0.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/service/jars/jhall.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/service/jars/jprov.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/service/jars/mobius_common_client-1.1.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/service/jars/mobius_gme_client-1.1.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/service/jars/relaxngDatatype.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/service/jars/spring.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/service/jars/validation-2.0.0.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/service/jars/wizard-0.1.12.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/service/jars/xsom14.jar"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/3.8.1"/>
+	<classpathentry kind="lib" path="ext/dependencies/jars/acegi-security-1.0.4.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/jars/antlr-2.7.6rc1.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/jars/asm.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/jars/cadsrapi40-beans.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/jars/caGrid-core-1.3-dev.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/jars/caGrid-core-resources-1.3-dev.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/jars/caGrid-CQL-cql.1.0-1.3-dev.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/jars/caGrid-data-common-1.3-dev.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/jars/caGrid-data-stubs-1.3-dev.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/jars/caGrid-gaards-core-1.3-dev.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/jars/caGrid-gaards-ui-1.3-dev.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/jars/caGrid-grape-1.3-dev.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/jars/caGrid-grape-resources-1.3-dev.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/jars/caGrid-graph-1.3-dev.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/jars/caGrid-Introduce-buildTools-1.3-dev.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/jars/caGrid-Introduce-core-1.3-dev.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/jars/caGrid-Introduce-portal-1.3-dev.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/jars/caGrid-Introduce-updater-1.3-dev.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/jars/caGrid-metadata-common-1.3-dev.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/jars/caGrid-metadata-security-1.3-dev.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/jars/caGrid-opensaml-1.3-dev.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/jars/caGrid-ServiceSecurityProvider-client-1.3-dev.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/jars/caGrid-ServiceSecurityProvider-common-1.3-dev.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/jars/caGrid-ServiceSecurityProvider-service-1.3-dev.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/jars/caGrid-ServiceSecurityProvider-stubs-1.3-dev.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/jars/castor-1.0.2.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/jars/cglib-2.1_3.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/jars/commons-codec-1.3.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/jars/commons-io-1.3.2.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/jars/ehcache-1.2.3.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/jars/ejb3-persistence.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/jars/gef_modified.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/jars/hibernate-annotations.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/jars/hibernate-commons-annotations.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/jars/hibernate3.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/jars/jakarta-oro-2.0.8.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/jars/jaxen-1.1.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/jars/jaxmejs-0.5.2.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/jars/jcalendar.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/jars/jdom-1.0.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/jars/jhall.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/jars/jprov.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/jars/jta-1.0.1B.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/jars/log4j-1.2.14.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/jars/relaxngDatatype.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/jars/sdk-client-framework.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/jars/spring.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/jars/validation-2.0.0.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/jars/wizard-0.1.12.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/jars/xsom14.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/test/jars/caGrid-core-tests-1.3-dev.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/test/jars/jdepend-2.7.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="lib" path="ext/dependencies/jars/caGrid-globalModelExchange-ui-1.3-dev.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/jars/caGrid-globalModelExchange-client-1.3-dev.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/jars/caGrid-globalModelExchange-common-1.3-dev.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/jars/caGrid-globalModelExchange-stubs-1.3-dev.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

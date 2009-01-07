@@ -5,25 +5,12 @@ import gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata;
 import gov.nih.nci.cadsr.umlproject.domain.UMLPackageMetadata;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
-import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-
-import javax.swing.JOptionPane;
-
-import org.cagrid.grape.GridApplication;
-import org.projectmobius.client.gme.ImportInfo;
-import org.projectmobius.common.MalformedNamespaceException;
-import org.projectmobius.common.Namespace;
-import org.projectmobius.common.XMLUtilities;
-import org.projectmobius.common.gme.NoSuchSchemaException;
-import org.projectmobius.gme.XMLDataModelService;
-import org.projectmobius.protocol.gme.SchemaNode;
 
 
 /**
@@ -32,7 +19,7 @@ import org.projectmobius.protocol.gme.SchemaNode;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * @created Jul 21, 2006
- * @version $Id: NamespaceUtils.java,v 1.4 2007-12-18 19:11:40 dervin Exp $
+ * @version $Id: NamespaceUtils.java,v 1.5 2009-01-07 04:45:54 oster Exp $
  */
 public class NamespaceUtils {
 
@@ -52,6 +39,7 @@ public class NamespaceUtils {
     }
 
 
+    //TODO: look up in the caDSR or is this used as the "fall back"?
     public static String createNamespaceString(String projectShortName, String projectVersion, String packName) {
         String modVersion = projectVersion;
         if (modVersion.indexOf('.') == -1) {
@@ -61,95 +49,78 @@ public class NamespaceUtils {
     }
 
 
-    public static NamespaceType createNamespaceFromUmlPackage(Project project, UMLPackageMetadata pack,
-        XMLDataModelService gmeHandle, File schemaDir) throws Exception {
-        String namespaceString = null;
-        if (project != null) {
-            namespaceString = createNamespaceString(project, pack);
-            NamespaceType nsType = new NamespaceType();
-            Namespace namespace = null;
-            // get the namespace, either from the generated string,
-            // or let the user clean it up if it won't parse
-            do {
-                try {
-                    namespace = new Namespace(namespaceString);
-                } catch (MalformedNamespaceException ex) {
-                    // show error message
-                    String[] error = {namespaceString, "could not be parsed as a namespace:", ex.getMessage(),
-                            "Specify a corrected namespace."};
-                    JOptionPane.showMessageDialog(GridApplication.getContext().getApplication(), error,
-                        "Malformed Namespace", JOptionPane.ERROR_MESSAGE);
-                    // ask for a correct one
-                    namespaceString = JOptionPane.showInputDialog(GridApplication.getContext().getApplication(),
-                        "Specify Corrected Namespace", namespaceString);
-                    if (namespaceString == null) {
-                        // user canceled correcting namespace
-                        throw new MalformedNamespaceException(ex.getMessage(), ex);
-                    }
-                }
-            } while (namespace == null);
-
-            // get administered namespace domains of the GME
-            List namespaceDomainList = gmeHandle.getNamespaceDomainList();
-            // verify the namespace domain is in the gme's list
-            if (!namespaceDomainList.contains(namespace.getDomain())) {
-                // prompt for alternate
-                String alternativeDomain = (String) JOptionPane.showInputDialog(GridApplication.getContext().getApplication(), "The GME does not appear to contain schemas under the specified domain.\n"
-                    + "Select an alternative domain, or cancel if no viable option is available.\n"
-                    + "\nExpected domain: " + namespace.getDomain(), "Schema Location Error",
-                    JOptionPane.ERROR_MESSAGE, null, namespaceDomainList.toArray(), null);
-
-                if (alternativeDomain != null) {
-                    namespace = new Namespace(namespace.getProtocol() + "://" + alternativeDomain + "/"
-                        + namespace.getName());
-                } else {
-                    return null;
-                }
-            }
-
-            // get the schema contents for the namespace
-            String schemaContents = null;
-            try {
-                schemaContents = getSchema(gmeHandle, namespace);
-            } catch (NoSuchSchemaException e) {
-                // prompt for alternate
-                List schemas = gmeHandle.getSchemaListForNamespaceDomain(namespace.getDomain());
-                Namespace alternativeSchema = (Namespace) JOptionPane.showInputDialog(GridApplication.getContext().getApplication(), "Unable to locate schema for the selected caDSR package.\n"
-                    + "This package may not have a published Schema."
-                    + "\nSelect an alternative Schema, or cancel.\n\nExpected schema: " + namespace.getName(),
-                    "Schema Location Error", JOptionPane.ERROR_MESSAGE, null, schemas.toArray(), null);
-
-                if (alternativeSchema != null) {
-                    namespace = alternativeSchema;
-                } else {
-                    return null;
-                }
-                schemaContents = getSchema(gmeHandle, namespace);
-            }
-
-            // set the package name
-            String packageName = CommonTools.getPackageName(namespace.getRaw());
-            nsType.setPackageName(packageName);
-
-            // set the raw namespace
-            nsType.setNamespace(namespace.getRaw());
-
-            // get the file system name for the namespace
-            ImportInfo ii = new ImportInfo(namespace);
-            nsType.setLocation("./" + ii.getFileName());
-
-            // popualte the schema elements
-            gov.nih.nci.cagrid.introduce.portal.extension.tools.ExtensionTools.setSchemaElements(nsType, XMLUtilities
-                .stringToDocument(schemaContents));
-            // write the schema and its imports to the filesystem
-            gmeHandle.cacheSchema(namespace, schemaDir);
-            // TODO: cacheSchema returns a List of the files it stored.
-            // Those should be cateloged somewhere so they can be cleaned up if
-            // need be
-            return nsType;
-        }
-        return null;
-    }
+//    public static NamespaceType createNamespaceFromUmlPackage(Project project, UMLPackageMetadata pack,
+//        GlobalModelExchangeClient gmeHandle, File schemaDir) throws Exception {
+//        String namespaceString = null;
+//        if (project != null) {
+//            namespaceString = createNamespaceString(project, pack);
+//            NamespaceType nsType = new NamespaceType();
+//            XMLSchemaNamespace namespace=null;
+//            // get the namespace, either from the generated string,
+//            // or let the user clean it up if it won't parse
+//            do {
+//                try {
+//                    namespace = new XMLSchemaNamespace(namespaceString);
+//                } catch (URISyntaxException ex) {
+//                    // show error message
+//                    String[] error = {namespaceString, "could not be parsed as a namespace:", ex.getMessage(),
+//                            "Specify a corrected namespace."};
+//                    JOptionPane.showMessageDialog(GridApplication.getContext().getApplication(), error,
+//                        "Malformed Namespace", JOptionPane.ERROR_MESSAGE);
+//                    // ask for a correct one
+//                    namespaceString = JOptionPane.showInputDialog(GridApplication.getContext().getApplication(),
+//                        "Specify Corrected Namespace", namespaceString);
+//                    if (namespaceString == null) {
+//                        // user canceled correcting namespace
+//                        throw new URISyntaxException(ex.getMessage(),"Namespace Correction Cancelled");
+//                    }
+//                }
+//            } while (namespace == null);
+//
+//         
+//            // get the schema contents for the namespace
+//            String schemaContents = null;
+//            try {
+//                schemaContents = getSchema(gmeHandle, namespace);
+//            } catch (NoSuchSchemaException e) {
+//                // prompt for alternate
+//                XMLSchemaNamespace[] schemas = gmeHandle.getXMLSchemaNamespaces();
+//                XMLSchemaNamespace alternativeSchema = (XMLSchemaNamespace) JOptionPane.showInputDialog(GridApplication.getContext().getApplication(), "Unable to locate schema for the selected caDSR package.\n"
+//                    + "This package may not have a published Schema."
+//                    + "\nSelect an alternative Schema, or cancel.\n\nExpected schema: " + namespace.getURI(),
+//                    "Schema Location Error", JOptionPane.ERROR_MESSAGE, null, schemas, null);
+//
+//                if (alternativeSchema != null) {
+//                    namespace = alternativeSchema;
+//                } else {
+//                    return null;
+//                }
+//                schemaContents = getSchema(gmeHandle, namespace);
+//            }
+//
+//            // set the package name
+//            String packageName = CommonTools.getPackageName(namespace.getURI().toString());
+//            nsType.setPackageName(packageName);
+//
+//            // set the raw namespace
+//            nsType.setNamespace(namespace.getURI().toString());
+//
+//            // get the file system name for the namespace
+//            ImportInfo ii = new ImportInfo(namespace);
+//            nsType.setLocation("./" + ii.getFileName());
+//
+//            // popualte the schema elements
+//            gov.nih.nci.cagrid.introduce.portal.extension.tools.ExtensionTools.setSchemaElements(nsType, XMLUtilities
+//                .stringToDocument(schemaContents));
+//            // write the schema and its imports to the filesystem
+//            gmeHandle.cacheSchemas(namespace, schemaDir);
+//            // TODO: cacheSchema returns a List of the files it stored.
+//            // Those should be cateloged somewhere so they can be cleaned up if
+//            // need be
+//            return nsType;
+//        }
+//        return null;
+//    }
 
 
     /**
@@ -201,8 +172,8 @@ public class NamespaceUtils {
     }
 
 
-    private static String getSchema(XMLDataModelService gmeHandle, Namespace namespace) throws Exception {
-        SchemaNode schema = gmeHandle.getSchema(namespace, false);
-        return schema.getSchemaContents();
-    }
+//    private static String getSchema(XMLDataModelService gmeHandle, Namespace namespace) throws Exception {
+//        SchemaNode schema = gmeHandle.getSchema(namespace, false);
+//        return schema.getSchemaContents();
+//    }
 }

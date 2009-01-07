@@ -1,7 +1,5 @@
 package gov.nih.nci.cagrid.introduce.extensions.metadata.codegen;
 
-import gov.nih.nci.cagrid.cadsr.client.CaDSRServiceClient;
-import gov.nih.nci.cagrid.cadsr.common.CaDSRServiceI;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
@@ -52,6 +50,8 @@ import javax.xml.namespace.QName;
 import org.apache.axis.utils.ClassUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.cagrid.mms.client.MetadataModelServiceClient;
+import org.cagrid.mms.common.MetadataModelServiceI;
 
 
 /**
@@ -88,8 +88,10 @@ public class MetadataCodegenPostProcessor implements CodegenExtensionPostProcess
 
         // try to annotate the metadata with cadsr extract
         try {
-            CaDSRServiceI cadsrService = new CaDSRServiceClient(getCaDSRURL());
-            cadsrService.annotateServiceMetadata(metadata);
+            MetadataModelServiceI mmsService = new MetadataModelServiceClient(getMMSURL());
+            // TODO: extract project mappings from extension data on the
+            // namespaces
+            mmsService.annotateServiceMetadata(metadata, null);
         } catch (Exception e) {
             LOG.error("Problem annotating ServiceMetadata; using unannotated model.", e);
         }
@@ -104,9 +106,9 @@ public class MetadataCodegenPostProcessor implements CodegenExtensionPostProcess
     }
 
 
-    private String getCaDSRURL() {
+    private String getMMSURL() {
         try {
-            return ConfigurationUtil.getGlobalExtensionProperty(MetadataConstants.CADSR_URL_PROPERTY).getValue();
+            return ConfigurationUtil.getGlobalExtensionProperty(MetadataConstants.MMS_URL_PROPERTY).getValue();
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

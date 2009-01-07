@@ -21,9 +21,6 @@ public class DataServiceConstants {
 	
 	// metadata schema constants
 	public static final String METADATA_SCHEMA_LOCATION = "xsd" + FILE_SEPARATOR + "cagrid" + FILE_SEPARATOR + "types";
-	public static final String CADSR_METADATA_SCHEMA_LOCATION = METADATA_SCHEMA_LOCATION + FILE_SEPARATOR + "cadsr";
-	public static final String CADSR_DOMAIN_SCHEMA = CADSR_METADATA_SCHEMA_LOCATION + FILE_SEPARATOR + "3.0_gov.nih.nci.cadsr.domain.xsd";
-	public static final String CADSR_UMLPROJECT_SCHEMA = CADSR_METADATA_SCHEMA_LOCATION + FILE_SEPARATOR + "3.0_gov.nih.nci.cadsr.umlproject.domain.xsd";
 	public static final String DATA_METADATA_SCHEMA = METADATA_SCHEMA_LOCATION + FILE_SEPARATOR + "data" + FILE_SEPARATOR + "data.xsd";
 	public static final String COMMON_METADATA_SCHEMA = METADATA_SCHEMA_LOCATION + FILE_SEPARATOR + "common" + FILE_SEPARATOR + "common.xsd";
 	public static final String CAGRID_METADATA_SCHEMA = METADATA_SCHEMA_LOCATION + FILE_SEPARATOR + "caGridMetadata.xsd";
@@ -109,7 +106,7 @@ public class DataServiceConstants {
 	public static final QName MAPPING_QNAME = new QName("http://gov.nih.nci.cagrid.data", "ClassMappings");
 	
 	// service URL parameter constants
-	public static final String CADSR_SERVICE_URL = "GME_URL";
+	public static final String CADSR_SERVICE_URL = "CADSR_URL";
 	public static final String GME_SERVICE_URL = "GME_URL";
 	
 	// castor mapping constants

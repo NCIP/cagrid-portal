@@ -21,6 +21,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.cagrid.gme.discoverytools.NamespaceTools;
+
 /** 
  *  SchemaMappingConfigurationStep
  *  Configuration for domain model to schema mapping
@@ -28,7 +30,7 @@ import java.util.Map;
  * @author David Ervin
  * 
  * @created Jan 22, 2008 11:25:57 AM
- * @version $Id: SchemaMappingConfigurationStep.java,v 1.3 2008-01-24 15:53:54 dervin Exp $ 
+ * @version $Id: SchemaMappingConfigurationStep.java,v 1.4 2009-01-07 04:46:01 oster Exp $ 
  */
 public class SchemaMappingConfigurationStep extends AbstractStyleConfigurationStep {
     private Map<String, File> packageToSourceSchemaFile;
@@ -71,7 +73,7 @@ public class SchemaMappingConfigurationStep extends AbstractStyleConfigurationSt
     
     public String mapPackageToSchema(String packageName, File sourceSchemaFile) throws Exception {
         packageToSourceSchemaFile.put(packageName, sourceSchemaFile);
-        NamespaceType nsType = CommonTools.createNamespaceType(sourceSchemaFile.getAbsolutePath(), getServiceSchemaDir());
+        NamespaceType nsType = NamespaceTools.createNamespaceTypeForFile(sourceSchemaFile.getAbsolutePath(), getServiceSchemaDir());
         packageToNamespace.put(packageName, nsType);
         return nsType.getNamespace();
     }

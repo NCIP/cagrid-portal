@@ -82,10 +82,6 @@
 	<classpathentry kind="lib" path="ext/dependencies/jars/caGrid-BulkDataHandler-common-1.3-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/jars/caGrid-BulkDataHandler-service-1.3-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/jars/caGrid-BulkDataHandler-stubs-1.3-dev.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/jars/caGrid-caDSR-client-1.3-dev.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/jars/caGrid-caDSR-common-1.3-dev.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/jars/caGrid-caDSR-portal-1.3-dev.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/jars/caGrid-caDSR-stubs-1.3-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/jars/caGrid-core-1.3-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/jars/caGrid-core-resources-1.3-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/jars/caGrid-CQL-cql.1.0-1.3-dev.jar"/>
@@ -101,8 +97,6 @@
 	<classpathentry kind="lib" path="ext/dependencies/jars/caGrid-data-utils-1.3-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/jars/caGrid-data-validation-1.3-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/jars/caGrid-gaards-ui-1.3-dev.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/jars/caGrid-GlobalModelExchange-1.3-dev.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/jars/caGrid-GlobalModelExchange-stubs-1.3-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/jars/caGrid-grape-1.3-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/jars/caGrid-grape-resources-1.3-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/jars/caGrid-graph-1.3-dev.jar"/>
@@ -126,8 +120,9 @@
 	<classpathentry kind="lib" path="ext/dependencies/test/jars/caGrid-Introduce-portal-tests-1.3-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/test/jars/caGrid-testing-core-1.3-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/test/jars/caGrid-testing-system-1.3-dev.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/jars/mobius_common_client-1.1.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/jars/mobius_gme_client-1.1.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/jars/GlobalModelExchange.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/jars/caGrid-globalModelExchange-ui-1.3-dev.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/jars/caGrid-globalModelExchange-client-1.3-dev.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/jars/caGrid-globalModelExchange-common-1.3-dev.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/jars/caGrid-globalModelExchange-stubs-1.3-dev.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -16,13 +16,14 @@ import org.globus.wsrf.Constants;
  * This class holds all service properties which were defined for the service to have
  * access to.
  * 
- * @created by Introduce Toolkit version 1.2
+ * @created by Introduce Toolkit version 1.3
  * 
  */
 public class GlobalModelExchangeConfiguration implements ServiceConfiguration {
 
 	public static GlobalModelExchangeConfiguration  configuration = null;
-
+    public String etcDirectoryPath;
+    	
 	public static GlobalModelExchangeConfiguration getConfiguration() throws Exception {
 		if (GlobalModelExchangeConfiguration.configuration != null) {
 			return GlobalModelExchangeConfiguration.configuration;
@@ -42,21 +43,21 @@ public class GlobalModelExchangeConfiguration implements ServiceConfiguration {
 		return GlobalModelExchangeConfiguration.configuration;
 	}
 	
-	private String etcDirectoryPath;
-	
+
 	
 	private String gmeConfigurationFile;
 	
 	private String gmePropertiesFile;
 	
 	
-	public String getEtcDirectoryPath() {
+    public String getEtcDirectoryPath() {
 		return ContainerConfig.getBaseDirectory() + File.separator + etcDirectoryPath;
 	}
 	
 	public void setEtcDirectoryPath(String etcDirectoryPath) {
 		this.etcDirectoryPath = etcDirectoryPath;
 	}
+
 
 	
 	public String getGmeConfigurationFile() {

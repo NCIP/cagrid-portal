@@ -17,14 +17,12 @@
     <conf name="stubs" visibility="public" />
     <conf name="core" visibility="public" extends="stubs" />
     <conf name="test" visibility="public" extends="core,impl-test" />
-    <conf name="validator" visibility="public" />
 
   </configurations>
   <publications>
     <artifact name="caGrid-${ivy.module}-stubs" conf="stubs" type="jar" />
     <artifact name="caGrid-${ivy.module}-core" conf="core" type="jar" />
     <artifact name="caGrid-${ivy.module}-tests" conf="test" type="jar" />
-    <artifact name="caGrid-${ivy.module}-validator" conf="validator" type="jar" />
 
   </publications>
   <dependencies>
@@ -34,14 +32,13 @@
     <dependency transitive="false" rev="latest.integration" org="caGrid" name="data"
       conf="core->common" />
     <dependency rev="latest.integration" org="caGrid" name="core"
-      conf="core->default;impl-test->test;validator->default" />
-    <dependency rev="latest.integration" org="caGrid" name="cadsr" conf="core->client" />
-    <dependency rev="latest.integration" org="caGrid" name="metadata"
-      conf="core->schemas,jars;validator->common.jars" />
+      conf="core->default;impl-test->test" />
+    <dependency rev="latest.integration" org="caGrid" name="mms" conf="core->client" />
+    <dependency rev="latest.integration" org="caGrid" name="metadata" conf="core->schemas,jars" />
+    <dependency rev="latest.integration" org="caGrid" name="metadata-validator" conf="core->default" />
     <dependency rev="latest.integration" org="caGrid" name="wsEnum" conf="core->default,schemas" />
-    <dependency rev="latest.integration" org="caGrid" name="introduce"
-      conf="core->extension,buildTools;validator->buildTools" />
-    <dependency rev="latest.integration" org="caGrid" name="metadatautils" conf="core,validator->default" />
+    <dependency rev="latest.integration" org="caGrid" name="introduce" conf="core->extension,buildTools" />
+    <dependency rev="latest.integration" org="caGrid" name="metadatautils" conf="core->default" />
     <dependency rev="latest.integration" org="caGrid" name="graph" conf="core->default" />
     <dependency rev="latest.integration" org="caGrid" name="grape" conf="core->default" />
 

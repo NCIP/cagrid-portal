@@ -11,6 +11,8 @@
     <parameter name="loadOnStartup" value="true" />
     <parameter name="securityMetadata" value="ETC-PATH/GlobalModelExchange-security-metadata.xml" />
     <parameter name="castorMapping" value="/org/cagrid/gme/gme-xml-mapping.xml" />
+    <parameter name="globalmodelexchange-etcDirectoryPath" value="ETC-PATH" />
+    <parameter name="globalmodelexchange-serviceName" value="GlobalModelExchange" />
   </service>
   <typeMapping name="AggregatorContent" qname="aggr:AggregatorContent" type="java:org.globus.mds.aggregator.types.AggregatorContent" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="" />
   <!-- START INTRODUCE TYPEMAPPINGS -->

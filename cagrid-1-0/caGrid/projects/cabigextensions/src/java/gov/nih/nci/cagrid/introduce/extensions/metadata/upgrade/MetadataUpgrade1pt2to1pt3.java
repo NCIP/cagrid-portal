@@ -109,6 +109,37 @@ public class MetadataUpgrade1pt2to1pt3 extends ExtensionUpgraderBase {
             outLibs.add(out);
         }
 
+        // copy in the deployment validator stuff
+        File toToolsDir = new File(getServicePath() + File.separator + "tools" + File.separator + "lib");
+        if (!toToolsDir.exists()) {
+            toToolsDir.mkdirs();
+        }
+        // from the extension lib directory to the tools lib directory
+        File toolslibDir = new File(ExtensionsLoader.EXTENSIONS_DIRECTORY + File.separator
+            + MetadataConstants.EXTENSION_NAME + File.separator + "lib");
+        File[] toolslibs = toolslibDir.listFiles(new FileFilter() {
+            public boolean accept(File pathname) {
+                String name = pathname.getName();
+                return (name.endsWith(".jar"));
+            }
+        });
+
+        if (toolslibs != null) {
+            File[] copiedLibs = new File[toolslibs.length];
+            for (int i = 0; i < toolslibs.length; i++) {
+                File outFile = new File(toToolsDir + File.separator + toolslibs[i].getName());
+                copiedLibs[i] = outFile;
+                try {
+                    Utils.copyFile(toolslibs[i], outFile);
+                    getStatus().addDescriptionLine(
+                        "caGrid 1.3 library " + outFile.getName() + " added, for deploytime validation.");
+
+                } catch (IOException e) {
+                    // TODO: change this to use a better exception
+                    throw new RuntimeException("Error adding deployment validator: " + e.getMessage(), e);
+                }
+            }
+        }
         // update the Eclipse .classpath file
         File classpathFile = new File(getServicePath() + File.separator + ".classpath");
         File[] outLibArray = new File[metadataLibs.length];

@@ -46,9 +46,6 @@
     <!-- Core and core test -->
     <dependency rev="latest.integration" org="caGrid" name="core"
       conf="default->default;default->test"/>
-      
-    <!-- caDSR client -->
-    <dependency rev="latest.integration" org="caGrid" name="cadsr" conf="default->client"/>
     
     <!-- WS-Enumeration -->
     <dependency rev="latest.integration" org="caGrid" name="wsEnum" conf="default->default"/>

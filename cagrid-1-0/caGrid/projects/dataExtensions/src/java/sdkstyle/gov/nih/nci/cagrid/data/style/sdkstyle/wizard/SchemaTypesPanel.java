@@ -14,15 +14,15 @@ import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.ConfigurationUtil;
-import gov.nih.nci.cagrid.introduce.common.ResourceManager;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.io.File;
+import java.rmi.RemoteException;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.swing.JButton;
@@ -35,28 +35,26 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 
+import org.apache.axis.types.URI.MalformedURIException;
+import org.cagrid.gme.client.GlobalModelExchangeClient;
+import org.cagrid.gme.discoverytools.NamespaceTools;
+import org.cagrid.gme.domain.XMLSchemaNamespace;
+import org.cagrid.gme.stubs.types.NoSuchNamespaceExistsFault;
 import org.cagrid.grape.utils.CompositeErrorDialog;
-import org.projectmobius.client.gme.ImportInfo;
-import org.projectmobius.common.GridServiceFactory;
-import org.projectmobius.common.GridServiceResolver;
-import org.projectmobius.common.MobiusException;
-import org.projectmobius.common.Namespace;
-import org.projectmobius.gme.XMLDataModelService;
-import org.projectmobius.gme.client.GlobusGMEXMLDataModelServiceFactory;
 
 
 /**
- * SchemaTypesPanel 
- * Panel to match up schema types with exposed packages from a domain model
+ * SchemaTypesPanel Panel to match up schema types with exposed packages from a
+ * domain model
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * @created Sep 26, 2006
- * @version $Id: SchemaTypesPanel.java,v 1.6 2008-06-10 15:30:25 hastings Exp $
+ * @version $Id: SchemaTypesPanel.java,v 1.7 2009-01-07 04:46:00 oster Exp $
  */
 public class SchemaTypesPanel extends AbstractWizardPanel {
-    
+
     public static final String TYPE_SERIALIZER_CLASS_PROPERTY = "serializerClassName";
-    public static final String TYPE_DESERIALIZER_CLASS_PROPERTY = "deserializerClassName"; 
+    public static final String TYPE_DESERIALIZER_CLASS_PROPERTY = "deserializerClassName";
 
     private JLabel gmeUrlLabel = null;
     private JTextField gmeUrlTextField = null;
@@ -162,7 +160,6 @@ public class SchemaTypesPanel extends AbstractWizardPanel {
             try {
                 url = ConfigurationUtil.getGlobalExtensionProperty(DataServiceConstants.GME_SERVICE_URL).getValue();
             } catch (Exception e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
                 return null;
             }
@@ -271,34 +268,32 @@ public class SchemaTypesPanel extends AbstractWizardPanel {
     private void findSchemas() {
         // get the GME handle
         try {
-            XMLDataModelService gmeHandle = getGmeHandle();
-            // get the domains administered by the GME
-            List domains = gmeHandle.getNamespaceDomainList();
+            GlobalModelExchangeClient gmeHandle = getGmeHandle();
+
             // get the selected packages
             Data data = ExtensionDataUtils.getExtensionData(getExtensionData());
             CadsrInformation info = data.getCadsrInformation();
             if (info != null && info.getPackages() != null) {
                 CadsrPackage[] packs = info.getPackages();
                 for (int i = 0; i < packs.length; i++) {
-                    Namespace ns = new Namespace(packs[i].getMappedNamespace());
-                    // see if the GME has the domain in question
-                    if (domains.contains(ns.getDomain())) {
-                        // domain found, get the namespaces within it
-                        List namespaces = gmeHandle.getSchemaListForNamespaceDomain(ns.getDomain());
-                        if (namespaces.contains(ns)) {
-                            // found the namespace as well
-                            // download the schema locally
-                            pullSchemas(ns, gmeHandle);
-                            // change the package namespace table to reflect the
-                            // found schema
-                            int row = 0;
-                            while (!getPackageNamespaceTable().getValueAt(row, 0).equals(packs[i].getName())) {
-                                row++;
-                            }
-                            getPackageNamespaceTable().setValueAt(PackageSchemasTable.STATUS_SCHEMA_FOUND, row, 2);
-                        }
-                        break;
+                    XMLSchemaNamespace ns = new XMLSchemaNamespace(packs[i].getMappedNamespace());
+                    try {
+                        gmeHandle.getXMLSchema(ns);
+                    } catch (NoSuchNamespaceExistsFault e) {
+                        continue;
                     }
+
+                    // found the namespace as well download the schema locally
+                    pullSchemas(ns, gmeHandle);
+                    // change the package namespace table to reflect the found
+                    // schema
+                    for (int row = 0; row < getPackageNamespaceTable().getRowCount(); row++) {
+                        if (getPackageNamespaceTable().getValueAt(row, 0).equals(packs[i].getName())) {
+                            getPackageNamespaceTable().setValueAt(PackageSchemasTable.STATUS_SCHEMA_FOUND, row, 2);
+                            break;
+                        }
+                    }
+
                 }
             } else {
                 JOptionPane.showMessageDialog(SchemaTypesPanel.this, "No packages to find schemas for");
@@ -310,23 +305,12 @@ public class SchemaTypesPanel extends AbstractWizardPanel {
     }
 
 
-    private XMLDataModelService getGmeHandle() throws MobiusException {
-        XMLDataModelService service = null;
-        GridServiceFactory oldFactory = GridServiceResolver.getInstance().getDefaultFactory();
-        GridServiceResolver.getInstance().setDefaultFactory(new GlobusGMEXMLDataModelServiceFactory());
-        try {
-            service = (XMLDataModelService) GridServiceResolver.getInstance().getGridService(
-                getGmeUrlTextField().getText());
-        } catch (MobiusException ex) {
-            throw ex;
-        } finally {
-            GridServiceResolver.getInstance().setDefaultFactory(oldFactory);
-        }
-        return service;
+    private GlobalModelExchangeClient getGmeHandle() throws MalformedURIException, RemoteException {
+        return new GlobalModelExchangeClient(getGmeUrlTextField().getText());
     }
 
 
-    private void pullSchemas(Namespace ns, XMLDataModelService gme) throws Exception {
+    private void pullSchemas(XMLSchemaNamespace ns, GlobalModelExchangeClient gme) throws Exception {
         // get the service's schema dir
         File schemaDir = new File(CacoreWizardUtils.getServiceBaseDir(getServiceInformation())
             + File.separator
@@ -335,8 +319,8 @@ public class SchemaTypesPanel extends AbstractWizardPanel {
             + getServiceInformation().getIntroduceServiceProperties().getProperty(
                 IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME));
         // have the GME cache the schema and its imports locally
-        List cachedNamespaces = gme.cacheSchema(ns, schemaDir);
-        
+        Map<XMLSchemaNamespace, File> cachedNamespaces = gme.cacheSchemas(ns, schemaDir);
+
         // determine the serializer and deserialzier to use for the beans
         String serializerClass = null;
         if (getBitBucket().containsKey(TYPE_SERIALIZER_CLASS_PROPERTY)) {
@@ -351,16 +335,20 @@ public class SchemaTypesPanel extends AbstractWizardPanel {
             deserializerClass = DataServiceConstants.SDK_DESERIALIZER;
         }
         // create namespace types and add them to the service
-        Iterator nsIter = cachedNamespaces.iterator();
+        Iterator nsIter = cachedNamespaces.keySet().iterator();
         while (nsIter.hasNext()) {
-            Namespace storedNs = (Namespace) nsIter.next();
-            ImportInfo storedSchemaInfo = new ImportInfo(storedNs);
-            File location = new File(schemaDir.getAbsolutePath() + File.separator + storedSchemaInfo.getFileName());
-            NamespaceType nsType = CommonTools.createNamespaceType(location.getAbsolutePath(), schemaDir);
+            XMLSchemaNamespace storedNs = (XMLSchemaNamespace) nsIter.next();
+            //NamespaceType nsType = CommonTools.createNamespaceType(cachedNamespaces.get(storedNs).getAbsolutePath(),
+            //    schemaDir);
+            
+            NamespaceType nsType = NamespaceTools.createNamespaceTypeForFile(cachedNamespaces.get(storedNs).getCanonicalPath(),
+                schemaDir);
             // if the namespace already exists in the service, ignore it
             if (CommonTools.getNamespaceType(getServiceInformation().getNamespaces(), nsType.getNamespace()) == null) {
                 // set the package name
-                String packName = CommonTools.getPackageName(storedNs.getRaw());
+                // TODO: this should come from what is provided from the list of
+                // packages, or look it up in the caDSR
+                String packName = CommonTools.getPackageName(storedNs.getURI().toString());
                 nsType.setPackageName(packName);
                 // fix the serialization / deserialization on the namespace
                 // types
@@ -371,6 +359,7 @@ public class SchemaTypesPanel extends AbstractWizardPanel {
                     type.setClassName(type.getType());
                 }
                 nsType.setGenerateStubs(Boolean.FALSE);
+
                 CommonTools.addNamespace(getServiceInformation().getServiceDescriptor(), nsType);
                 // add the namespace to the introduce namespace excludes list so
                 // that beans will not be built for these data types

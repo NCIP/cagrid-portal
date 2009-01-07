@@ -24,7 +24,7 @@
 	<property name="jar.dir" value="${build.dir}/jars" />
 	<property name="project.jarfile" value="${jar.dir}/${project.jar.prefix}core${project.jar.suffix}" />
 	<property name="project.validator.jarfile" value="${jar.dir}/${project.jar.prefix}validator${project.jar.suffix}" />
-    <property name="stubs.jarfile" value="${jar.dir}/${project.jar.prefix}stubs${project.jar.suffix}" />
+	<property name="stubs.jarfile" value="${jar.dir}/${project.jar.prefix}stubs${project.jar.suffix}" />
 	<property name="lib.dir" value="${basedir}/lib" />
 	<property name="ext.lib.dir" value="${basedir}/ext/dependencies/jars" />
 	<property name="ext.targetgrid.dir" value="${basedir}/ext/target_grid" />
@@ -107,7 +107,7 @@
 			</fileset>
 			<fileset dir="${globus.dir}/lib">
 				<include name="**/*.jar" />
-                <exclude name="junit.jar"/>
+				<exclude name="junit.jar" />
 			</fileset>
 		</path>
 
@@ -121,7 +121,7 @@
 			</fileset>
 			<fileset dir="${globus.dir}/lib">
 				<include name="**/*.jar" />
-                <exclude name="junit.jar"/>
+				<exclude name="junit.jar" />
 			</fileset>
 			<pathelement location="${ext.globus.dir}" />
 		</path>
@@ -142,7 +142,7 @@
 			</fileset>
 			<fileset dir="${globus.dir}/lib">
 				<include name="**/*.jar" />
-                <exclude name="junit.jar"/>
+				<exclude name="junit.jar" />
 			</fileset>
 			<pathelement location="${ext.globus.dir}" />
 		</path>
@@ -332,11 +332,12 @@
 				<installExtension extension.name="@{extension.name}" />
 			</sequential>
 		</for>
-		
-		<mkdir dir="${introduce.extensions.dir}/cagrid_metadata/lib"/>
+
+		<!-- These are the jars that the deployment validator will use (beyond what the metadata extension adds to the service)-->
+		<mkdir dir="${introduce.extensions.dir}/cagrid_metadata/lib" />
 		<copy todir="${introduce.extensions.dir}/cagrid_metadata/lib">
-			<fileset dir="${jar.dir}">
-				<include name="**/*validator*.jar" />
+			<fileset dir="${ext.lib.dir}">
+				<include name="**/caGrid-metadata-validator*.jar" />
 			</fileset>
 		</copy>
 	</target>

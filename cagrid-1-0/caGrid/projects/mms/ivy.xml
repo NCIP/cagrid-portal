@@ -45,15 +45,13 @@
       conf="service->default;impl-test->test" />
     <dependency rev="latest.integration" org="caGrid" name="metadata"
       conf="service->schemas;client->common.jars,data.jars" />
+    <dependency rev="latest.integration" org="caGrid" name="metadatautils" conf="service->default" />
     <dependency rev="latest.integration" org="caGrid" name="service-security-provider"
       conf="client->client;service->service" />
     <dependency rev="latest.integration" org="caGrid" name="advertisement" conf="service->default" />
     <dependency rev="latest.integration" org="caGrid" name="introduce-servicetools" conf="service->default" />
 
     <dependency rev="${target.grid}" org="caGrid" name="target_grid" conf="target_grid->urls" />
-
-    <!-- Specific caGrid Service Dependencies -->
-    <dependency rev="latest.integration" org="caGrid" name="metadatautils" conf="service->default" />
 
     <!--  Build file dependencies -->
     <dependency rev="latest.integration" org="caGrid" name="introduce-buildtools" conf="serviceTools->default" />
@@ -62,8 +60,9 @@
       This is non-transitive, because we already have all the extension jars in the service, and the
       deploy time validation which uses this uses the service's classpath too.
     -->
-    <dependency rev="latest.integration" org="caGrid" name="cabigextensions" conf="serviceTools->validator"
+    <dependency rev="latest.integration" org="caGrid" name="metadata-validator" conf="serviceTools->default"
       transitive="false" />
+
 
     <!-- External Dependencies -->
     <dependency rev="1.0" org="jdom" name="jdom" conf="service->*" />

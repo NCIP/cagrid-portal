@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <ivy-module version="2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:noNamespaceSchemaLocation="http://incubator.apache.org/ivy/schemas/ivy.xsd"
->
+  xsi:noNamespaceSchemaLocation="http://incubator.apache.org/ivy/schemas/ivy.xsd">
   <info organisation="caGrid" module="globalModelExchange" revision="${project.version}">
     <license name="caGrid" url="http://www.cagrid.org/mwiki/index.php?title=CaGrid:LICENSE-1.1" />
-    <description>caGrid Global Model Exchange (GME). This project is successor to the gme project
+    <description>caGrid Global Model Exchange (GME). This project is successor to the gme
+      project
       (which will be deprecated), and represents a re-implementation of the same conceptual
       component.</description>
   </info>
@@ -12,8 +12,10 @@
     <!-- Private Configurations-->
     <conf name="target_grid" visibility="private" />
     <conf name="impl" visibility="private" extends="service" />
-    <conf name="impl-test" visibility="private" />    
-    <conf name="annotations" visibility="private"/>
+    <conf name="impl-test" visibility="private" />
+    <conf name="annotations" visibility="private" />
+    <conf name="serviceTools" visibility="private" />
+
 
     <!-- Public Configurations-->
     <conf name="stubs" visibility="public" />
@@ -23,23 +25,36 @@
     <conf name="test" visibility="public" extends="service,impl-test" />
   </configurations>
   <publications>
-    <artifact name="caGrid-GlobalModelExchange2-stubs" conf="stubs" type="jar" />
-    <artifact name="caGrid-GlobalModelExchange2-common" conf="common" type="jar" />
-    <artifact name="caGrid-GlobalModelExchange2-client" conf="client" type="jar" />
-    <artifact name="caGrid-GlobalModelExchange2-service" conf="service" type="jar" />
-    <artifact name="caGrid-GlobalModelExchange2-tests" conf="test" type="jar" />
+    <artifact name="caGrid-globalModelExchange-stubs" conf="stubs" type="jar" />
+    <artifact name="caGrid-globalModelExchange-common" conf="common" type="jar" />
+    <artifact name="caGrid-globalModelExchange-client" conf="client" type="jar" />
+    <artifact name="caGrid-globalModelExchange-service" conf="service" type="jar" />
+    <artifact name="caGrid-globalModelExchange-tests" conf="test" type="jar" />
   </publications>
   <dependencies>
 
     <!-- Standard caGrid Service Dependencies -->
     <dependency rev="latest.integration" org="caGrid" name="core"
-      conf="service->default;impl-test->test" />
+      conf="client->serialization;impl-test->test" />
     <dependency rev="latest.integration" org="caGrid" name="metadata"
       conf="service->schemas;client->common.jars" />
+    <dependency rev="latest.integration" org="caGrid" name="metadatautils" conf="service->default" />
     <dependency rev="latest.integration" org="caGrid" name="service-security-provider"
       conf="client->client;service->service" />
     <dependency rev="latest.integration" org="caGrid" name="advertisement" conf="service->default" />
     <dependency rev="${target.grid}" org="caGrid" name="target_grid" conf="target_grid->urls" />
+
+    <!--  Build file dependencies -->
+    <dependency rev="latest.integration" org="caGrid" name="introduce-servicetools" conf="service->default" />
+
+    <dependency rev="latest.integration" org="caGrid" name="introduce-buildtools" conf="serviceTools->default" />
+    <dependency rev="1.0b3" org="ant-contrib" name="ant-contrib" conf="serviceTools->*" />
+    <!--
+      This is non-transitive, because we already have all the extension jars in the service, and the
+      deploy time validation which uses this uses the service's classpath too.
+    -->
+    <dependency rev="latest.integration" org="caGrid" name="metadata-validator" conf="serviceTools->default"
+      transitive="false" />
 
     <!-- Specific caGrid Service Dependencies -->
 
@@ -50,10 +65,11 @@
     <dependency rev="3.0.+" org="mysql" name="connector-java" conf="service->*" />
     <dependency rev="3.2.6.ga" org="hibernate" name="hibernate" conf="service->default" />
     <!--  The classes linked by annotations only seem to be needed at compile time; not runtime -->
-    <dependency rev="3.3.1.GA" org="hibernate" name="hibernate-annotations" conf="service->default;annotations->minimal" />
+    <dependency rev="3.3.1.GA" org="hibernate" name="hibernate-annotations"
+      conf="service->default;annotations->minimal" />
     <!-- TODO: change to newer version? and don't use full -->
     <dependency rev="2.0.+" org="springframework" name="spring" conf="service->full;impl-test->mock" />
     <dependency rev="1.2.2" org="apache" name="commons-dbcp" conf="service->default" />
-    <dependency rev="4.4" org="junit" name="junit" conf="impl-test->default"/>
+    <dependency rev="4.4" org="junit" name="junit" conf="impl-test->default" />
   </dependencies>
 </ivy-module>

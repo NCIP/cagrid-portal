@@ -3,9 +3,9 @@
 		<ns1:CreationPostProcessor>gov.nih.nci.cagrid.introduce.extensions.metadata.creation.ServiceMetadataCreationPostProcessor</ns1:CreationPostProcessor>
 		<ns1:CodegenPreProcessor>gov.nih.nci.cagrid.introduce.extensions.metadata.codegen.MetadataCodegenPreProcessor</ns1:CodegenPreProcessor>
 		<ns1:CodegenPostProcessor>gov.nih.nci.cagrid.introduce.extensions.metadata.codegen.MetadataCodegenPostProcessor</ns1:CodegenPostProcessor>
-		<ns1:ServiceDeploymentValidator>gov.nih.nci.cagrid.introduce.extensions.metadata.deployment.validator.MetadataDeploymentValidator</ns1:ServiceDeploymentValidator>
+		<ns1:ServiceDeploymentValidator>org.cagrid.introduce.extensions.metadata.deployment.validator.MetadataDeploymentValidator</ns1:ServiceDeploymentValidator>
 		<ns1:Properties>
-   			<ns1:Property makeGlobal="true" key="CADSR_URL" displayName="caDSR URL" description="Cancer Data Standards Repository (caDSR) URL" value="@cagrid.master.cadsr.service.url@"/>
+   			<ns1:Property makeGlobal="true" key="MMS_URL" displayName="MMS URL" description="Metadata Model Service (MMS) URL" value="@cagrid.master.mms.service.url@"/>
 		</ns1:Properties>
 	</ns1:ServiceExtensionDescription>
 	<ns1:UpgradesDescription>

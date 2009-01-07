@@ -3,9 +3,8 @@ package gov.nih.nci.cagrid.data.ui.domain;
 import gov.nih.nci.cadsr.umlproject.domain.Project;
 import gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata;
 import gov.nih.nci.cadsr.umlproject.domain.UMLPackageMetadata;
-import gov.nih.nci.cagrid.cadsr.client.CaDSRServiceClient;
-import gov.nih.nci.cagrid.cadsr.portal.CaDSRBrowserPanel;
-import gov.nih.nci.cagrid.cadsr.portal.discovery.CaDSRDiscoveryConstants;
+import org.cagrid.cadsr.portal.CaDSRBrowserPanel;
+import org.cagrid.cadsr.portal.discovery.CaDSRDiscoveryConstants;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.common.portal.DocumentChangeAdapter;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
@@ -54,6 +53,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.event.DocumentEvent;
 
+import org.cagrid.cadsr.UMLModelService;
+import org.cagrid.cadsr.client.CaDSRUMLModelService;
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.utils.BusyDialogRunnable;
 import org.cagrid.grape.utils.CompositeErrorDialog;
@@ -167,7 +168,7 @@ public class DomainModelConfigPanel extends DataServiceModificationSubPanel {
                 getCadsrBrowserPanel().getCadsr().setText(caDsrUrl);
             }
             // find the requested project in the caDSR
-            CaDSRServiceClient cadsrClient = new CaDSRServiceClient(getCadsrBrowserPanel().getCadsr().getText());
+            UMLModelService cadsrClient = new CaDSRUMLModelService(getCadsrBrowserPanel().getCadsr().getText());
             Project[] allProjects = cadsrClient.findAllProjects();
             for (Project proj : allProjects) {
                 if (proj.getLongName().equals(projectLongName) && proj.getVersion().equals(projectVersion)) {
@@ -318,7 +319,7 @@ public class DomainModelConfigPanel extends DataServiceModificationSubPanel {
                     if (selectedProject != null) {
                         // contact the caDSR for all packages in the project
                         try {
-                            CaDSRServiceClient cadsrClient = new CaDSRServiceClient(getCadsrBrowserPanel().getCadsr()
+                            UMLModelService cadsrClient = new CaDSRUMLModelService(getCadsrBrowserPanel().getCadsr()
                                 .getText());
                             UMLPackageMetadata[] umlPackages = cadsrClient.findPackagesInProject(selectedProject);
                             // only one project validation for all packages
@@ -793,7 +794,7 @@ public class DomainModelConfigPanel extends DataServiceModificationSubPanel {
 
         // get classes out of the package using the cadsr
         try {
-            CaDSRServiceClient cadsrClient = new CaDSRServiceClient(getCadsrBrowserPanel().getCadsr().getText());
+            UMLModelService cadsrClient = new CaDSRUMLModelService(getCadsrBrowserPanel().getCadsr().getText());
             // TODO: potentially slow, use some kind of threading
             UMLClassMetadata[] classes = cadsrClient.findClassesInPackage(project, pack.getName());
             List<String> classNames = new ArrayList<String>(classes.length);

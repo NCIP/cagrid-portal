@@ -12,18 +12,6 @@
        <ns2:Output qName="ns4:ServiceSecurityMetadata" dimensionality="1" isArray="false" xmlns:ns4="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security"/>
        <ns2:faultCollection/>
       </ns2:Operation>
-      <ns2:Operation description="" name="GetMultipleResourceProperties">
-       <ns2:inputParameterCollection/>
-       <ns2:faultCollection/>
-      </ns2:Operation>
-      <ns2:Operation description="" name="GetResourceProperty">
-       <ns2:inputParameterCollection/>
-       <ns2:faultCollection/>
-      </ns2:Operation>
-      <ns2:Operation description="" name="QueryResourceProperties">
-       <ns2:inputParameterCollection/>
-       <ns2:faultCollection/>
-      </ns2:Operation>
       <ns2:Operation description="Publishes the provided schemas, replacing existing versions as necessary." name="publishXMLSchemas">
        <ns2:inputParameterCollection>
         <ns2:InputParameter qName="ns5:XMLSchema" dimensionality="1" index="0" isArray="true" isRequired="false" name="schemas" xmlns:ns5="gme://gme.cagrid.org/2.0/GlobalModelExchange/domain"/>
@@ -81,6 +69,18 @@
        <ns2:faultCollection>
         <ns2:Fault description="" name="NoSuchNamespaceExistsFault"/>
        </ns2:faultCollection>
+      </ns2:Operation>
+      <ns2:Operation description="" name="GetMultipleResourceProperties">
+       <ns2:inputParameterCollection/>
+       <ns2:faultCollection/>
+      </ns2:Operation>
+      <ns2:Operation description="" name="GetResourceProperty">
+       <ns2:inputParameterCollection/>
+       <ns2:faultCollection/>
+      </ns2:Operation>
+      <ns2:Operation description="" name="QueryResourceProperties">
+       <ns2:inputParameterCollection/>
+       <ns2:faultCollection/>
       </ns2:Operation>
      </ns2:operationCollection>
      <ns2:contextPropertyCollection>

@@ -27,10 +27,11 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
 import java.io.File;
+import java.rmi.RemoteException;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
@@ -46,27 +47,22 @@ import javax.swing.border.TitledBorder;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 
+import org.apache.axis.types.URI.MalformedURIException;
+import org.cagrid.gme.client.GlobalModelExchangeClient;
+import org.cagrid.gme.domain.XMLSchemaNamespace;
 import org.cagrid.grape.LookAndFeel;
 import org.cagrid.grape.utils.CompositeErrorDialog;
-import org.projectmobius.client.gme.ImportInfo;
-import org.projectmobius.common.GridServiceFactory;
-import org.projectmobius.common.GridServiceResolver;
-import org.projectmobius.common.MobiusException;
-import org.projectmobius.common.Namespace;
-import org.projectmobius.gme.XMLDataModelService;
-import org.projectmobius.gme.client.GlobusGMEXMLDataModelServiceFactory;
 
-/** 
- *  SchemaMappingPanel
- *  Panel to configure mapping of packages to schemas
+
+/**
+ * SchemaMappingPanel Panel to configure mapping of packages to schemas
  * 
  * @author David Ervin
- * 
  * @created Jan 9, 2008 11:09:22 AM
- * @version $Id: SchemaMappingPanel.java,v 1.5 2008-09-05 15:31:30 dervin Exp $ 
+ * @version $Id: SchemaMappingPanel.java,v 1.6 2009-01-07 04:45:45 oster Exp $
  */
 public class SchemaMappingPanel extends AbstractWizardPanel {
-    
+
     private PackageToNamespaceTable packageNamespaceTable = null;
     private JScrollPane packageNamespaceScrollPane = null;
     private JLabel gmeUrlLabel = null;
@@ -77,8 +73,9 @@ public class SchemaMappingPanel extends AbstractWizardPanel {
     private JButton configMapButton = null;
     private JPanel automapPanel = null;
     private JPanel mappingPanel = null;
-    
+
     private SchemaMappingConfigurationStep configuration = null;
+
 
     public SchemaMappingPanel(ServiceExtensionDescriptionType extensionDescription, ServiceInformation info) {
         super(extensionDescription, info);
@@ -129,8 +126,8 @@ public class SchemaMappingPanel extends AbstractWizardPanel {
             CompositeErrorDialog.showErrorDialog("Error populating the packages table", ex);
         }
     }
-    
-    
+
+
     public void movingNext() {
         try {
             configuration.applyConfiguration();
@@ -139,8 +136,8 @@ public class SchemaMappingPanel extends AbstractWizardPanel {
             CompositeErrorDialog.showErrorDialog("Error applying configuration", ex.getMessage(), ex);
         }
     }
-    
-    
+
+
     private void initialize() {
         this.setLayout(new GridLayout());
         GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
@@ -160,8 +157,8 @@ public class SchemaMappingPanel extends AbstractWizardPanel {
         this.add(getMappingPanel(), gridBagConstraints5);
         this.add(getPackageNamespaceScrollPane(), gridBagConstraints6);
     }
-    
-    
+
+
     private PackageToNamespaceTable getPackageNamespaceTable() {
         if (this.packageNamespaceTable == null) {
             this.packageNamespaceTable = new PackageToNamespaceTable();
@@ -192,30 +189,28 @@ public class SchemaMappingPanel extends AbstractWizardPanel {
 
 
     /**
-     * This method initializes packageNamespaceScrollPane   
-     *  
-     * @return javax.swing.JScrollPane  
+     * This method initializes packageNamespaceScrollPane
+     * 
+     * @return javax.swing.JScrollPane
      */
     private JScrollPane getPackageNamespaceScrollPane() {
         if (packageNamespaceScrollPane == null) {
             packageNamespaceScrollPane = new JScrollPane();
-            packageNamespaceScrollPane.setHorizontalScrollBarPolicy(
-                ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-            packageNamespaceScrollPane.setVerticalScrollBarPolicy(
-                ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+            packageNamespaceScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+            packageNamespaceScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
             packageNamespaceScrollPane.setViewportView(getPackageNamespaceTable());
-            packageNamespaceScrollPane.setBorder(BorderFactory.createTitledBorder(
-                null, "Namespace Mappings", TitledBorder.DEFAULT_JUSTIFICATION, 
-                TitledBorder.DEFAULT_POSITION, null, LookAndFeel.getPanelLabelColor()));
+            packageNamespaceScrollPane.setBorder(BorderFactory.createTitledBorder(null, "Namespace Mappings",
+                TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, LookAndFeel
+                    .getPanelLabelColor()));
         }
         return packageNamespaceScrollPane;
     }
 
 
     /**
-     * This method initializes gmeUrlLabel  
-     *  
-     * @return javax.swing.JLabel   
+     * This method initializes gmeUrlLabel
+     * 
+     * @return javax.swing.JLabel
      */
     private JLabel getGmeUrlLabel() {
         if (gmeUrlLabel == null) {
@@ -227,16 +222,16 @@ public class SchemaMappingPanel extends AbstractWizardPanel {
 
 
     /**
-     * This method initializes gmeUrlTextField  
-     *  
-     * @return javax.swing.JTextField   
+     * This method initializes gmeUrlTextField
+     * 
+     * @return javax.swing.JTextField
      */
     private JTextField getGmeUrlTextField() {
         if (gmeUrlTextField == null) {
             gmeUrlTextField = new JTextField();
             try {
-                String url = ConfigurationUtil.getGlobalExtensionProperty(
-                    DataServiceConstants.GME_SERVICE_URL).getValue();
+                String url = ConfigurationUtil.getGlobalExtensionProperty(DataServiceConstants.GME_SERVICE_URL)
+                    .getValue();
                 gmeUrlTextField.setText(url);
             } catch (Exception e) {
                 // TODO Auto-generated catch block
@@ -249,9 +244,9 @@ public class SchemaMappingPanel extends AbstractWizardPanel {
 
 
     /**
-     * This method initializes configDirLabel   
-     *  
-     * @return javax.swing.JLabel   
+     * This method initializes configDirLabel
+     * 
+     * @return javax.swing.JLabel
      */
     private JLabel getConfigDirLabel() {
         if (configDirLabel == null) {
@@ -263,9 +258,9 @@ public class SchemaMappingPanel extends AbstractWizardPanel {
 
 
     /**
-     * This method initializes configDirTextField   
-     *  
-     * @return javax.swing.JTextField   
+     * This method initializes configDirTextField
+     * 
+     * @return javax.swing.JTextField
      */
     private JTextField getConfigDirTextField() {
         if (configDirTextField == null) {
@@ -277,9 +272,9 @@ public class SchemaMappingPanel extends AbstractWizardPanel {
 
 
     /**
-     * This method initializes gmeMapButton 
-     *  
-     * @return javax.swing.JButton  
+     * This method initializes gmeMapButton
+     * 
+     * @return javax.swing.JButton
      */
     private JButton getGmeMapButton() {
         if (gmeMapButton == null) {
@@ -296,9 +291,9 @@ public class SchemaMappingPanel extends AbstractWizardPanel {
 
 
     /**
-     * This method initializes configMapButton  
-     *  
-     * @return javax.swing.JButton  
+     * This method initializes configMapButton
+     * 
+     * @return javax.swing.JButton
      */
     private JButton getConfigMapButton() {
         if (configMapButton == null) {
@@ -315,9 +310,9 @@ public class SchemaMappingPanel extends AbstractWizardPanel {
 
 
     /**
-     * This method initializes automapPanel 
-     *  
-     * @return javax.swing.JPanel   
+     * This method initializes automapPanel
+     * 
+     * @return javax.swing.JPanel
      */
     private JPanel getAutomapPanel() {
         if (automapPanel == null) {
@@ -327,9 +322,9 @@ public class SchemaMappingPanel extends AbstractWizardPanel {
             gridLayout.setColumns(2);
             automapPanel = new JPanel();
             automapPanel.setLayout(gridLayout);
-            automapPanel.setBorder(BorderFactory.createTitledBorder(
-                null, "Automatic Mapping", TitledBorder.DEFAULT_JUSTIFICATION, 
-                TitledBorder.DEFAULT_POSITION, null, LookAndFeel.getPanelLabelColor()));
+            automapPanel.setBorder(BorderFactory.createTitledBorder(null, "Automatic Mapping",
+                TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, LookAndFeel
+                    .getPanelLabelColor()));
             automapPanel.add(getGmeMapButton(), null);
             automapPanel.add(getConfigMapButton(), null);
         }
@@ -338,9 +333,9 @@ public class SchemaMappingPanel extends AbstractWizardPanel {
 
 
     /**
-     * This method initializes mappingPanel 
-     *  
-     * @return javax.swing.JPanel   
+     * This method initializes mappingPanel
+     * 
+     * @return javax.swing.JPanel
      */
     private JPanel getMappingPanel() {
         if (mappingPanel == null) {
@@ -382,13 +377,12 @@ public class SchemaMappingPanel extends AbstractWizardPanel {
         }
         return mappingPanel;
     }
-    
-    
+
+
     // ---------
     // helpers
     // ---------
-    
-    
+
     private boolean allSchemasResolved() {
         for (int i = 0; i < getPackageNamespaceTable().getRowCount(); i++) {
             SchemaResolutionStatus status = (SchemaResolutionStatus) getPackageNamespaceTable().getValueAt(i, 2);
@@ -398,19 +392,18 @@ public class SchemaMappingPanel extends AbstractWizardPanel {
         }
         return true;
     }
-    
-    
+
+
     private void mapFromConfig() {
         File schemaDir = getServiceSchemaDirectory();
-        
+
         // the config dir jar will have the xsds in it
         try {
             String applicationName = CommonTools.getServicePropertyValue(
-                getServiceInformation().getServiceDescriptor(), 
-                DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX 
+                getServiceInformation().getServiceDescriptor(), DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX
                     + SDK4QueryProcessor.PROPERTY_APPLICATION_NAME);
-            String configJarFilename = getServiceInformation().getBaseDirectory().getAbsolutePath()
-                + File.separator + "lib" + File.separator + applicationName + "-config.jar";
+            String configJarFilename = getServiceInformation().getBaseDirectory().getAbsolutePath() + File.separator
+                + "lib" + File.separator + applicationName + "-config.jar";
             JarFile configJar = new JarFile(configJarFilename);
             Enumeration<JarEntry> entries = configJar.entries();
             while (entries.hasMoreElements()) {
@@ -426,11 +419,11 @@ public class SchemaMappingPanel extends AbstractWizardPanel {
                             StringBuffer schemaText = JarUtilities.getFileContents(configJar, entry.getName());
                             File schemaFile = new File(schemaDir, new File(entry.getName()).getName());
                             Utils.stringBufferToFile(schemaText, schemaFile.getAbsolutePath());
-                            
+
                             // add the namespace to the configuration for later
                             // incorperation in the service
-                            String schemaNamespace = configuration.mapPackageToSchema(packageName, schemaFile);                            
-                            
+                            String schemaNamespace = configuration.mapPackageToSchema(packageName, schemaFile);
+
                             // set the namespace in the table
                             getPackageNamespaceTable().setValueAt(schemaNamespace, i, 1);
                             // set the status to found in the table
@@ -442,79 +435,57 @@ public class SchemaMappingPanel extends AbstractWizardPanel {
             }
         } catch (Exception ex) {
             ex.printStackTrace();
-            CompositeErrorDialog.showErrorDialog(
-                "Error loading application configuration files", ex.getMessage(), ex);
+            CompositeErrorDialog.showErrorDialog("Error loading application configuration files", ex.getMessage(), ex);
         }
     }
-    
-    
+
+
     private void mapFromGme() {
         File schemaDir = getServiceSchemaDirectory();
-        
+
         try {
-            XMLDataModelService gmeHandle = getGmeHandle();
-            // get the domains administered by the GME
-            List domains = gmeHandle.getNamespaceDomainList();
+            GlobalModelExchangeClient gmeHandle = getGmeHandle();
             // get the selected packages from the schema table
             for (int row = 0; row < getPackageNamespaceTable().getRowCount(); row++) {
                 String packageName = (String) getPackageNamespaceTable().getValueAt(row, 0);
                 String proposedNamespace = (String) getPackageNamespaceTable().getValueAt(row, 1);
                 // extract the domain portion of the namespace
-                Namespace gmeNamespace = new Namespace(proposedNamespace);
-                String domain = gmeNamespace.getDomain();
-                // see if the GME contains this domain
-                if (domains.contains(domain)) {
-                    // pull the schema (and it's imports) down for local use
-                    List<Namespace> cachedNamespaces = gmeHandle.cacheSchema(gmeNamespace, schemaDir);
-                    // each namespace corresponds to a schema file stored in the schema directory
-                    boolean namespaceFound = false;
-                    for (Namespace ns : cachedNamespaces) {
-                        ImportInfo info = new ImportInfo(ns);
-                        File schemaFile = new File(schemaDir, info.getFileName());
-                        if (ns.getRaw().equals(proposedNamespace)) {
-                            configuration.mapPackageToSchema(packageName, schemaFile);
-                            namespaceFound = true;
-                            break;
-                        }
+                XMLSchemaNamespace gmeNamespace = new XMLSchemaNamespace(proposedNamespace);
+
+                // pull the schema (and it's imports) down for local use
+                Map<XMLSchemaNamespace, File> cachedNamespaces = gmeHandle.cacheSchemas(gmeNamespace, schemaDir);
+                // each namespace corresponds to a schema file stored in the
+                // schema directory
+                boolean namespaceFound = false;
+                for (XMLSchemaNamespace ns : cachedNamespaces.keySet()) {
+                    if (ns.getURI().toString().equals(proposedNamespace)) {
+                        configuration.mapPackageToSchema(packageName, cachedNamespaces.get(ns));
+                        namespaceFound = true;
+                        break;
                     }
-                    if (namespaceFound) {
-                        // change the status in the table to found
-                        getPackageNamespaceTable().setValueAt(
-                            SchemaResolutionStatus.SCHEMA_FOUND, row, 2);
-                    } else {
-                        // namespace not found, but domain exists
-                        getPackageNamespaceTable().setValueAt(
-                            SchemaResolutionStatus.GME_NAMESPACE_NOT_FOUND, row, 2);
-                    }
-                } else {
-                    // domain not found in the GME
-                    getPackageNamespaceTable().setValueAt(
-                        SchemaResolutionStatus.GME_DOMAIN_NOT_FOUND, row, 2);
                 }
+                if (namespaceFound) {
+                    // change the status in the table to found
+                    getPackageNamespaceTable().setValueAt(SchemaResolutionStatus.SCHEMA_FOUND, row, 2);
+                } else {
+                    // namespace not found, but domain exists
+                    getPackageNamespaceTable().setValueAt(SchemaResolutionStatus.GME_NAMESPACE_NOT_FOUND, row, 2);
+                }
+
             }
         } catch (Exception ex) {
             ex.printStackTrace();
             CompositeErrorDialog.showErrorDialog("Error retrieving schemas from the GME", ex);
         }
     }
-    
-    
-    private XMLDataModelService getGmeHandle() throws MobiusException {
-        XMLDataModelService service = null;
-        GridServiceFactory oldFactory = GridServiceResolver.getInstance().getDefaultFactory();
-        GridServiceResolver.getInstance().setDefaultFactory(new GlobusGMEXMLDataModelServiceFactory());
-        try {
-            service = (XMLDataModelService) GridServiceResolver.getInstance().getGridService(
-                getGmeUrlTextField().getText());
-        } catch (MobiusException ex) {
-            throw ex;
-        } finally {
-            GridServiceResolver.getInstance().setDefaultFactory(oldFactory);
-        }
-        return service;
+
+
+    private GlobalModelExchangeClient getGmeHandle() throws MalformedURIException, RemoteException {
+
+        return new GlobalModelExchangeClient(getGmeUrlTextField().getText());
     }
-    
-    
+
+
     private SchemaResolutionStatus resolveSingleSchema(String packageName) throws Exception {
         // determine the row of this package in the table
         int dataRow = 0;
@@ -526,10 +497,10 @@ public class SchemaMappingPanel extends AbstractWizardPanel {
             CompositeErrorDialog.showErrorDialog("Error locating table row for package " + packageName);
             return SchemaResolutionStatus.MAPPING_ERROR; // bail out
         }
-        
+
         SchemaResolutionStatus status = SchemaResolutionStatus.NEVER_TRIED;
         File schemaDir = getServiceSchemaDirectory();
-        // use the schema resolution dialog to create namespace types 
+        // use the schema resolution dialog to create namespace types
         // and copy schemas to the service's schema directory
         NamespaceType[] resolved = SchemaResolutionDialog.resolveSchemas(getServiceInformation());
         if (resolved != null) {
@@ -537,11 +508,10 @@ public class SchemaMappingPanel extends AbstractWizardPanel {
             if (resolved.length != 0 && packageResolvedByNamespace(pack, resolved[0])) {
                 File primarySchemaFile = new File(schemaDir, resolved[0].getLocation());
                 configuration.mapPackageToSchema(packageName, primarySchemaFile);
-                
+
                 // set the namespace of the resolved schema on the table
-                getPackageNamespaceTable().setValueAt(
-                    pack.getMappedNamespace(), dataRow, 1);
-                
+                getPackageNamespaceTable().setValueAt(pack.getMappedNamespace(), dataRow, 1);
+
                 status = SchemaResolutionStatus.SCHEMA_FOUND;
             } else {
                 // some schema was resolved, but it does not map to the package
@@ -552,8 +522,8 @@ public class SchemaMappingPanel extends AbstractWizardPanel {
         }
         return status;
     }
-    
-    
+
+
     private boolean packageResolvedByNamespace(CadsrPackage pack, NamespaceType namespace) {
         Set<String> classNames = new HashSet<String>();
         for (ClassMapping mapping : pack.getCadsrClass()) {
@@ -563,7 +533,7 @@ public class SchemaMappingPanel extends AbstractWizardPanel {
         for (SchemaElementType element : namespace.getSchemaElement()) {
             elementNames.add(element.getType());
         }
-        
+
         boolean status = elementNames.containsAll(classNames);
         if (!status) {
             // sort out the resolution errors
@@ -574,12 +544,12 @@ public class SchemaMappingPanel extends AbstractWizardPanel {
             // display the errors
             new PackageSchemaMappingErrorDialog(nonResolvedClasses);
         }
-        
+
         // return status
         return status;
     }
-    
-    
+
+
     private CadsrPackage getNamedCadsrPackage(String packageName) throws Exception {
         Data extensionData = ExtensionDataUtils.getExtensionData(getExtensionData());
         CadsrPackage[] cadsrPackages = extensionData.getCadsrInformation().getPackages();
@@ -590,12 +560,13 @@ public class SchemaMappingPanel extends AbstractWizardPanel {
         }
         return null;
     }
-    
-    
+
+
     private File getServiceSchemaDirectory() {
-        File schemaDir = new File(getServiceInformation().getBaseDirectory(),
-            "schema" + File.separator + getServiceInformation().getIntroduceServiceProperties()
-                .getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME));
+        File schemaDir = new File(getServiceInformation().getBaseDirectory(), "schema"
+            + File.separator
+            + getServiceInformation().getIntroduceServiceProperties().getProperty(
+                IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME));
         return schemaDir;
     }
 }

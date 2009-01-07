@@ -11,11 +11,12 @@
   <configurations>
     <!-- Public Configurations-->
     <conf name="default" visibility="public" />
+    <conf name="beans" visibility="public" />
   </configurations>
 
 
   <publications>
-    <artifact name="cadsrapi40-beans" type="jar" />
+    <artifact name="cadsrapi40-beans" type="jar" conf="default,beans"/>
   </publications>
 
   <dependencies>
