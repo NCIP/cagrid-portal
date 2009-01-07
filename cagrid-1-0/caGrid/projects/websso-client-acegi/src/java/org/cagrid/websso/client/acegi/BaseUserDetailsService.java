@@ -17,13 +17,13 @@ public abstract class BaseUserDetailsService implements UserDetailsService {
 	 * @param userName
 	 * @return
 	 */
-	abstract protected WebSSOUser loadUser(String userName);
+	abstract protected WebSSOUser loadUserByGridId(String gridId);
 
 	public UserDetails loadUserByUsername(String casUserId)
 			throws UsernameNotFoundException, DataAccessException {
 		Map<String, String> userAttributesMap = WebSSOClientHelper.getUserAttributes(casUserId);
-		String userName = getUserIdFromGridIdentity(userAttributesMap.get(WebSSOConstants.CAGRID_SSO_GRID_IDENTITY));
-		WebSSOUser user = loadUser(userName);
+		String gridId = getUserIdFromGridIdentity(userAttributesMap.get(WebSSOConstants.CAGRID_SSO_GRID_IDENTITY));
+		WebSSOUser user = loadUserByGridId(gridId);
 		loadSessionAttributes(userAttributesMap, user);
 		return user;
 	}
