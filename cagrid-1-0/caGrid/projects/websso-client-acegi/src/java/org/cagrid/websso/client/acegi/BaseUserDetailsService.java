@@ -33,8 +33,7 @@ public abstract class BaseUserDetailsService implements UserDetailsService {
 		user.setGridId(userAttributesMap.get(WebSSOConstants.CAGRID_SSO_GRID_IDENTITY));
 		user.setLastName(userAttributesMap.get(WebSSOConstants.CAGRID_SSO_LAST_NAME));
 		user.setDelegatedEPR(userAttributesMap.get(WebSSOConstants.CAGRID_SSO_DELEGATION_SERVICE_EPR));
-		user.setEmailId(userAttributesMap.get(WebSSOConstants.CAGRID_SSO_EMAIL_ID));
-		user.setDelegatedEPR(userAttributesMap.get(WebSSOConstants.CAGRID_SSO_DELEGATION_SERVICE_EPR));
+		user.setEmailId(userAttributesMap.get(WebSSOConstants.CAGRID_SSO_EMAIL_ID));		
 	}
 	
 	private String getUserIdFromGridIdentity(String gridIdentity) {
