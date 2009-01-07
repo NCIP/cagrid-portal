@@ -7,13 +7,14 @@ import gov.nih.nci.cagrid.data.common.CastorMappingUtil;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.FileFilters;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
-import gov.nih.nci.cagrid.metadata.xmi.Sdk4ArgoUMLXMIConstants;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.Properties;
+import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -22,6 +23,8 @@ import org.cagrid.data.sdkquery41.style.common.SDK41StyleConstants;
 import org.cagrid.grape.utils.CompositeErrorDialog;
 
 public class GeneralConfigurationStep extends AbstractStyleConfigurationStep {
+    
+    public static final String GLOBUS_LOCATION_ENV = "GLOBUS_LOCATION";
     
     private static final Log LOG = LogFactory.getLog(GeneralConfigurationStep.class);
     
@@ -69,12 +72,28 @@ public class GeneralConfigurationStep extends AbstractStyleConfigurationStep {
         // set the config jar in the shared configuration
         SharedConfiguration.getInstance().setGeneratedConfigJarFile(configJar);
         
-        // copy in libraries from the remote lib dir
+        // get a list of jars found in GLOBUS_LOCATION/lib
+        File globusLocation = new File(System.getenv(GLOBUS_LOCATION_ENV));
+        File globusLib = new File(globusLocation, "lib");
+        File[] globusJars = globusLib.listFiles(new FileFilters.JarFileFilter());
+        Set<String> globusJarNames = new HashSet<String>();
+        for (File jar : globusJars) {
+            globusJarNames.add(jar.getName());
+        }
+        
+        // copy in libraries from the remote lib dir that DON'T collide with Globus's
         LOG.debug("Copying libraries from remote client directory");
         File[] remoteLibs = new File(remoteClientDir, "lib").listFiles(new FileFilters.JarFileFilter());
         for (File lib : remoteLibs) {
-            File libOutput = new File(libOutDir, lib.getName());
-            Utils.copyFile(lib, libOutput);
+            String libName = lib.getName();
+            if (!globusJarNames.contains(libName)) {
+                LOG.debug(libName + " copied to the service");
+                File libOutput = new File(libOutDir, libName);
+                Utils.copyFile(lib, libOutput);
+            } else {
+                LOG.debug(libName + " appears to conflict with a Globus library," +
+                        " and was NOT copied to the service");
+            }
         }
         
         // set the application name service property
