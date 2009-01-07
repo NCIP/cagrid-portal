@@ -305,7 +305,7 @@ public class Installer {
         this.model.add(checkReconfigureCaGridStep, new Condition() {
             public boolean evaluate(WizardModel m) {
                 CaGridInstallerModel model = (CaGridInstallerModel) m;
-                return model.isCaGridInstalled() && model.isSet(Constants.TARGET_GRID)
+                return model.isCaGridInstalled()
                     && model.isTrue(Constants.INSTALL_CONFIGURE_CAGRID);
             }
         });
@@ -315,7 +315,7 @@ public class Installer {
         this.model.add(confStep, new Condition() {
             public boolean evaluate(WizardModel m) {
                 CaGridInstallerModel model = (CaGridInstallerModel) m;
-                return (model.isTrue(Constants.RECONFIGURE_CAGRID) || model.isTrue(Constants.REINSTALL_CAGRID));
+                return (model.isTrue(Constants.RECONFIGURE_CAGRID) || !model.isCaGridInstalled());
             }
         });
 
