@@ -34,7 +34,6 @@
 	<classpathentry kind="lib" path="ext/dependencies/jars/caGrid-testing-core-1.3-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/jars/caGrid-testing-system-1.3-dev.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/jars/caGrid-testUtils-1.3-dev.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/jars/castor-0.9.9.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/jars/commons-codec-1.3.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/jars/commons-dbcp-1.2.2.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/jars/commons-httpclient-3.0.jar"/>
@@ -128,5 +127,6 @@
 	<classpathentry kind="lib" path="ext/dependencies/endorsed/jars/xercesImpl.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/endorsed/jars/xml-apis.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/jars/junit-4.4.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/jars/castor-1.0.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
