@@ -36,16 +36,17 @@
     <dependency rev="latest.integration" org="caGrid" name="testing" conf="impl-test->system" />
 
     <!-- cagrid data service and extensions -->
-    <dependency rev="latest.integration" org="caGrid" name="dataExtensions" conf="style->core,ui,sdkstyle"/>
+    <dependency rev="latest.integration" org="caGrid" name="dataExtensions" conf="style->styleRequirements"/>
     <dependency rev="latest.integration" org="caGrid" name="data"
       conf="processor->service;impl-test->cql-examples,test"/>
       
     <!-- Introduce for extension related stuff -->
     <dependency rev="latest.integration" org="caGrid" name="introduce" conf="style->core" />
-        <dependency rev="latest.integration" org="caGrid" name="cadsr" conf="style->default" />
+	<dependency rev="latest.integration" org="caGrid" name="cadsr" conf="style->default" />
     
 
     <!-- external dependencies -->
     <dependency rev="4.4" org="junit" name="junit" conf="impl-test->default" />
+    <dependency rev="2.0.0" org="jgoodies" name="validation" conf="style->default"/>
   </dependencies>
 </ivy-module>
