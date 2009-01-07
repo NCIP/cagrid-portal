@@ -3,6 +3,7 @@ package org.cagrid.data.sdkquery41.style.wizard.config;
 import gov.nih.nci.cagrid.common.JarUtilities;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.data.common.CastorMappingUtil;
+import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.FileFilters;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 
@@ -14,6 +15,7 @@ import java.util.Properties;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.cagrid.data.sdkquery41.processor.SDK41QueryProcessor;
 import org.cagrid.data.sdkquery41.style.common.SDK41StyleConstants;
 import org.cagrid.grape.utils.CompositeErrorDialog;
 
@@ -54,30 +56,28 @@ public class GeneralConfigurationStep extends AbstractStyleConfigurationStep {
         File remoteClientDir = new File(sdkDirectory, 
             "output" + File.separator + projectName + File.separator + 
             "package" + File.separator + "remote-client");
-        File localClientDir = new File(sdkDirectory, 
-            "output" + File.separator + projectName + File.separator + 
-            "package" + File.separator + "local-client");
-        
         // wrap up the remote-client config files as a jar file so it'll be on the classpath
+        // local client stuff might be added by the API Type configuration step
         LOG.debug("Creating a jar to contain the remote configuration of the caCORE SDK system");
         File remoteConfigDir = new File(remoteClientDir, "conf");
         String configJarName = projectName + "-config.jar";
         File configJar = new File(libOutDir, configJarName);
         JarUtilities.jarDirectory(remoteConfigDir, configJar);
-        // TODO: if user wants to use the local API, we have to include the local-client/conf files in the config jar
         
-        // TODO: local / remote API detection, lib dir, etc
-
         // set the config jar in the shared configuration
         SharedConfiguration.getInstance().setGeneratedConfigJarFile(configJar);
         
-        // copy in libraries from the remote or local lib dir, depending on if user wants local or remote API
+        // copy in libraries from the remote lib dir
         LOG.debug("Copying libraries from remote client directory");
         File[] remoteLibs = new File(remoteClientDir, "lib").listFiles(new FileFilters.JarFileFilter());
         for (File lib : remoteLibs) {
             File libOutput = new File(libOutDir, lib.getName());
             Utils.copyFile(lib, libOutput);
         }
+        
+        // set the application name service property
+        CommonTools.setServiceProperty(getServiceInformation().getServiceDescriptor(), 
+            SDK41QueryProcessor.PROPERTY_APPLICATION_NAME, "", false);
         
         // grab the castor marshalling and unmarshalling xml mapping files
         // from the config dir and copy them into the service's package structure
