@@ -50,7 +50,7 @@
 					</fileset>
 				</copy>
 				<copy todir="${build.lib.dir}" overwrite="true">
-					<fileset dir="${ext.lib}">
+					<fileset dir="${ext.lib.dir}">
 						<include name="*.jar" />
 					</fileset>
 				</copy>

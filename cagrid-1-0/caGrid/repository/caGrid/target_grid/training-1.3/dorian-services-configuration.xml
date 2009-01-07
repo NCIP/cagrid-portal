@@ -8,9 +8,5 @@
             <ServiceURL>https://dorian.training.cagrid.org:8443/wsrf/services/cagrid/Dorian</ServiceURL>
             <ServiceIdentity>/O=caBIG/OU=caGrid/OU=Training/OU=Services/CN=host/dorian.training.cagrid.org</ServiceIdentity>
         </ServiceDescriptor>
-        <ServiceDescriptor>
-            <DisplayName>Localhost</DisplayName>
-            <ServiceURL>https://localhost:8443/wsrf/services/cagrid/Dorian</ServiceURL>
-        </ServiceDescriptor>
     </Services>
 </ServiceConfiguration>
