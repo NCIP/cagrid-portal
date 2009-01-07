@@ -99,9 +99,9 @@
 		<xmltask source="${jboss.home}/server/default/deploy/jbossweb-tomcat55.sar/server.xml"
 			dest="${jboss.home}/server/default/deploy/jbossweb-tomcat55.sar/server.xml">
 			<remove
-				path="/Server/Service[@name='Catalina']/Engine[@name='Catalina' or @name='jboss.web']/Valve[@className='org.globus.tomcat.coyote.valves.HTTPSValve55']" />
+				path="/Server/Service[@name='Catalina' or @name='jboss.web']/Engine[@name='Catalina' or @name='jboss.web']/Valve[@className='org.globus.tomcat.coyote.valves.HTTPSValve55']" />
 			<insert
-				path="/Server/Service[@name='Catalina']/Engine[@name='Catalina' or @name='jboss.web']">
+				path="/Server/Service[@name='Catalina' or @name='jboss.web']/Engine[@name='Catalina' or @name='jboss.web']">
 				<![CDATA[
 						<Valve className="org.globus.tomcat.coyote.valves.HTTPSValve55"/>
 						]]>
