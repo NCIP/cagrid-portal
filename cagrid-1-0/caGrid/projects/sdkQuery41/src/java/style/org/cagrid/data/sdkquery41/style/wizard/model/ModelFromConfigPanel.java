@@ -355,7 +355,7 @@ public class ModelFromConfigPanel extends DomainModelSourcePanel {
     public CadsrInformation getCadsrDomainInformation() throws Exception {
         // save the domain model to the service's etc dir
         File etcDir = new File(
-            SharedConfiguration.getInstance().getSdkDirectory(), "etc");
+            SharedConfiguration.getInstance().getServiceInfo().getBaseDirectory(), "etc");
         String applicationName = SharedConfiguration.getInstance()
             .getSdkDeployProperties().getProperty(
                 SDK41StyleConstants.DeployProperties.PROJECT_NAME);
