@@ -65,9 +65,6 @@ public interface CaGridInstallerModel extends WizardModel {
     void setDeactivatePrevious(boolean b);
 
 
-    String getServiceDestDir();
-
-
     boolean isConfigureContainerSelected();
 
 

@@ -28,7 +28,7 @@ public class SelectInstallationTypeStep extends PropertyConfigurationStep {
      */
     public SelectInstallationTypeStep(String name, String description) {
         super(name, description);
-        
+
     }
 
 
@@ -45,7 +45,15 @@ public class SelectInstallationTypeStep extends PropertyConfigurationStep {
     protected void checkComplete() {
 
         if (isSelected(Constants.INSTALL_CONFIGURE_CAGRID) || isSelected(Constants.INSTALL_CONFIGURE_CONTAINER)) {
-            setComplete(true);
+            if (!model.isCaGridInstalled()) {
+                if (isSelected(Constants.INSTALL_CONFIGURE_CAGRID)) {
+                    setComplete(true);
+                } else {
+                    setComplete(false);
+                }
+            } else {
+                setComplete(true);
+            }
         } else {
             setComplete(false);
         }

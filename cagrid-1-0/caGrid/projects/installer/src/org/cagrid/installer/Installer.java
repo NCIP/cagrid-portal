@@ -265,6 +265,32 @@ public class Installer {
         this.model.add(new InstallationCompleteStep(this.model.getMessage("installation.complete.title"), ""));
 
     }
+    
+
+    private void addInstallcaGridSteps() {
+        final RunTasksStep installDependenciesStep = new RunTasksStep(this.model
+            .getMessage("install.dependencies.title"), this.model.getMessage("install.dependencies.desc"));
+        for (DownloadedComponentInstaller installer : getDownloadedComponentInstallers()) {
+            installer.addCheckInstallSteps(this.model);
+            installer.addInstallDownloadedComponentTasks(this.model, installDependenciesStep);
+            incrementProgress();
+        }
+
+        incrementProgress();
+
+        Condition shouldInstallcaGrid = new Condition() {
+            public boolean evaluate(WizardModel m) {
+                CaGridInstallerModel model = (CaGridInstallerModel) m;
+                return installDependenciesStep.getTasksCount(model) > 0
+                    || (model.isTrue(Constants.INSTALL_CONFIGURE_CAGRID) && installDependenciesStep
+                        .getTasksCount(model) > 0);
+            }
+        };
+
+        this.model.add(new PreviewTasksStep("caGrid Install", "Installing caGrid and dependencies.",
+            installDependenciesStep, model), shouldInstallcaGrid);
+        this.model.add(installDependenciesStep, shouldInstallcaGrid);
+    }
 
 
     private void addConfigurecaGridSteps() {
@@ -317,32 +343,6 @@ public class Installer {
 
         this.model.add(previewTasks, shouldConfigurecaGrid);
         this.model.add(tasksStep, shouldConfigurecaGrid);
-    }
-
-
-    private void addInstallcaGridSteps() {
-        final RunTasksStep installDependenciesStep = new RunTasksStep(this.model
-            .getMessage("install.dependencies.title"), this.model.getMessage("install.dependencies.desc"));
-        for (DownloadedComponentInstaller installer : getDownloadedComponentInstallers()) {
-            installer.addCheckInstallSteps(this.model);
-            installer.addInstallDownloadedComponentTasks(this.model, installDependenciesStep);
-            incrementProgress();
-        }
-
-        incrementProgress();
-
-        Condition shouldInstallcaGrid = new Condition() {
-            public boolean evaluate(WizardModel m) {
-                CaGridInstallerModel model = (CaGridInstallerModel) m;
-                return installDependenciesStep.getTasksCount(model) > 0
-                    || (model.isTrue(Constants.INSTALL_CONFIGURE_CAGRID) && installDependenciesStep
-                        .getTasksCount(model) > 0);
-            }
-        };
-
-        this.model.add(new PreviewTasksStep("caGrid Install", "Installing caGrid and dependencies.",
-            installDependenciesStep, model), shouldInstallcaGrid);
-        this.model.add(installDependenciesStep, shouldInstallcaGrid);
     }
 
 

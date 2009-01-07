@@ -31,6 +31,7 @@ import org.pietschy.wizard.models.DynamicModel;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
  */
@@ -45,7 +46,7 @@ CaGridInstallerModel, OverviewProvider {
     private ResourceBundle messages;
 
     private Boolean tomcatInstalled = null;
-    
+
     private Boolean jbossInstalled = null;
 
     private Boolean globusInstalled = null;
@@ -103,7 +104,7 @@ CaGridInstallerModel, OverviewProvider {
         if (isTomcatInstalled()) {
             setProperty(Constants.TOMCAT_HOME, getHomeDir(Constants.TOMCAT_HOME, "CATALINA_HOME"));
         }
-        
+
         // Look for jboss
         if (isTomcatInstalled()) {
             setProperty(Constants.JBOSS_HOME, getHomeDir(Constants.JBOSS_HOME, "JBOSS_HOME"));
@@ -116,7 +117,7 @@ CaGridInstallerModel, OverviewProvider {
 
         // Look for cagrid
         if (isCaGridInstalled()) {
-            setProperty(Constants.CAGRID_HOME, getHomeDir(Constants.CAGRID_HOME, null));
+            setProperty(Constants.CAGRID_HOME, getHomeDir(Constants.CAGRID_HOME, "CAGRID_HOME"));
         }
 
     }
@@ -170,7 +171,8 @@ CaGridInstallerModel, OverviewProvider {
             }
         }
     }
-    
+
+
     public boolean isTrue(String propName) {
         return Constants.TRUE.equals(getProperty(propName));
     }
@@ -179,11 +181,12 @@ CaGridInstallerModel, OverviewProvider {
     public boolean isTomcatContainer() {
         return getMessage("container.type.tomcat").equals(getProperty(Constants.CONTAINER_TYPE));
     }
-    
-    
+
+
     public boolean isJBossContainer() {
         return getMessage("container.type.jboss").equals(getProperty(Constants.CONTAINER_TYPE));
     }
+
 
     public boolean isGlobusContainer() {
         return getMessage("container.type.globus").equals(getProperty(Constants.CONTAINER_TYPE));
@@ -220,7 +223,8 @@ CaGridInstallerModel, OverviewProvider {
 
 
     public boolean isDeployGlobusRequired() {
-        return (isTomcatContainer() || isJBossContainer()) && (isTrue(Constants.REDEPLOY_GLOBUS) || !isGlobusDeployed());
+        return (isTomcatContainer() || isJBossContainer())
+            && (isTrue(Constants.REDEPLOY_GLOBUS) || !isGlobusDeployed());
     }
 
 
@@ -245,11 +249,6 @@ CaGridInstallerModel, OverviewProvider {
     }
 
 
-    public String getServiceDestDir() {
-        return getProperty(Constants.TEMP_DIR_PATH) + "/services";
-    }
-
-
     public Map<String, String> getStateMap() {
         return new HashMap<String, String>(this.state);
     }
@@ -259,7 +258,6 @@ CaGridInstallerModel, OverviewProvider {
         return isTrue(Constants.INSTALL_CONFIGURE_CONTAINER);
     }
 
-    
 
     public boolean isAntInstalled() {
         if (antInstalled == null) {
@@ -300,7 +298,7 @@ CaGridInstallerModel, OverviewProvider {
         return tomcatInstalled;
     }
 
-    
+
     public boolean isJBossInstalled() {
         if (jbossInstalled == null) {
             String homeDir = getHomeDir(Constants.JBOSS_HOME, "JBOSS_HOME");
@@ -308,6 +306,7 @@ CaGridInstallerModel, OverviewProvider {
         }
         return jbossInstalled;
     }
+
 
     public boolean isGlobusInstalled() {
         if (globusInstalled == null) {
@@ -325,7 +324,6 @@ CaGridInstallerModel, OverviewProvider {
         }
         return cagridInstalled;
     }
-
 
 
     public boolean isGlobusConfigured() {
@@ -376,7 +374,7 @@ CaGridInstallerModel, OverviewProvider {
             if (isTomcatInstalled()) {
                 File wsrfDir = new File((String) getProperty(Constants.TOMCAT_HOME) + "/webapps/wsrf");
                 globusDeployed = wsrfDir.exists();
-            } else if(isJBossInstalled()){
+            } else if (isJBossInstalled()) {
                 File wsrfDir = new File((String) getProperty(Constants.JBOSS_HOME) + "/server/default/deploy/wsrf.war/");
                 globusDeployed = wsrfDir.exists();
             }
@@ -390,16 +388,16 @@ CaGridInstallerModel, OverviewProvider {
         return globusDeployed;
     }
 
-    
-    public String getInstallerDir(){
-    	return InstallerUtils.buildInstallerDirPath(getProperty(Constants.CAGRID_VERSION));
+
+    public String getInstallerDir() {
+        return InstallerUtils.buildInstallerDirPath(getProperty(Constants.CAGRID_VERSION));
     }
 
 
     public JComponent getOverviewComponent() {
         JPanel overviewPanel = new JPanel();
         ImageIcon myImage = new ImageIcon(Thread.currentThread().getContextClassLoader().getResource(
-        "images/cagrid.jpeg"));
+            "images/cagrid.jpeg"));
         overviewPanel.add(new JLabel(myImage));
         return overviewPanel;
     }
