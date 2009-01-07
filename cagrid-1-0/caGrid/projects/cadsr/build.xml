@@ -33,6 +33,7 @@
 	<property name="test.lib.dir" location="${test.dir}/lib" />
 	<property name="test.logs.dir" location="${test.dir}/logs" />
 	<property name="test.project.jar" location="${jar.dir}/${project.name}-tests-${project.version}.jar" />
+	<property name="junit.results.dir" location="${test.dir}/logs" />
 
 	<!-- =============================================================== -->
 	<!-- The Build Classpath                                             -->
@@ -64,6 +65,10 @@
 		<fileset dir="${ext.test.lib.dir}">
 			<include name="**/*.jar" />
 		</fileset>
+	</path>
+	<path id="test.run.classpath">
+		<pathelement path="${test.classes.dir}" />
+		<path refid="test.classpath" />
 	</path>
 
 
@@ -215,9 +220,9 @@
 		<mkdir dir="${junit.results.dir}" />
 		<junit dir="${basedir}" printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" showoutput="true" forkmode="once">
 			<classpath refid="test.run.classpath" />
-			<sysproperty key="build.dir" value="${build.dest}" />
+			<sysproperty key="build.dir" value="${classes.dir}" />
 			<jvmarg value="-Xmx512M" />
-			<jvmarg value="-Dbuild.dir=${build.dest}" />
+			<jvmarg value="-Dbuild.dir=${classes.dir}" />
 			<formatter type="xml" />
 			<batchtest fork="yes" todir="${junit.results.dir}">
 				<fileset dir="${test.src.dir}">
