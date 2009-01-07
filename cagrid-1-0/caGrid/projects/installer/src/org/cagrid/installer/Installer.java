@@ -488,6 +488,11 @@ public class Installer {
         this.model.unsetProperty(Constants.INSTALL_CONFIGURE_CONTAINER);
         this.model.unsetProperty(Constants.RECONFIGURE_CAGRID);
         this.model.unsetProperty(Constants.USE_SECURE_CONTAINER);
+        this.model.unsetProperty(Constants.INSTALL_ANT);
+        this.model.unsetProperty(Constants.INSTALL_GLOBUS);
+        this.model.unsetProperty(Constants.INSTALL_CAGRID);
+        this.model.unsetProperty(Constants.INSTALL_JBOSS);
+        this.model.unsetProperty(Constants.INSTALL_TOMCAT);
     }
 
 

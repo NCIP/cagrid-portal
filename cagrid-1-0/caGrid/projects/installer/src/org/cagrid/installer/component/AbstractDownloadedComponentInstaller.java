@@ -11,9 +11,6 @@ import org.cagrid.installer.steps.RunTasksStep;
 import org.cagrid.installer.tasks.ConditionalTask;
 import org.cagrid.installer.tasks.DownloadFileTask;
 import org.cagrid.installer.tasks.UnzipInstallTask;
-import org.cagrid.installer.tasks.installer.ConfigureTomcatTask;
-import org.cagrid.installer.tasks.installer.DeployGlobusToTomcatTask;
-import org.pietschy.wizard.WizardModel;
 import org.pietschy.wizard.models.Condition;
 
 

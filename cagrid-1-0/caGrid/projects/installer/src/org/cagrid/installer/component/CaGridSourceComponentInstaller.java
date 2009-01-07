@@ -27,6 +27,8 @@ import org.pietschy.wizard.InvalidStateException;
 import org.pietschy.wizard.WizardModel;
 import org.pietschy.wizard.models.Condition;
 
+import sun.text.Normalizer.Mode;
+
 
 /**
  * @author <a href="joshua.phillips@semanticbits.com">Joshua Phillips</a>
@@ -82,7 +84,7 @@ public class CaGridSourceComponentInstaller extends AbstractDownloadedComponentI
         return new Condition() {
             public boolean evaluate(WizardModel m) {
                 CaGridInstallerModel model = (CaGridInstallerModel) m;
-                return model.isTrue(Constants.INSTALL_CONFIGURE_CAGRID) && !model.isCaGridInstalled();
+                return model.isTrue(Constants.INSTALL_CONFIGURE_CAGRID) && (!model.isCaGridInstalled() || model.isTrue(Constants.INSTALL_CAGRID));
             }
         };
     }
@@ -110,7 +112,7 @@ super.addCheckInstallSteps(model);
 
                 public boolean evaluate(WizardModel m) {
                     CaGridInstallerModel model = (CaGridInstallerModel) m;
-                    return model.isTrue(Constants.INSTALL_CONFIGURE_CAGRID) && model.isTrue(Constants.INSTALL_CAGRID);
+                    return model.isTrue(Constants.INSTALL_CONFIGURE_CAGRID) && (!model.isCaGridInstalled() || model.isTrue(Constants.INSTALL_CAGRID));
                 }
 
             }));

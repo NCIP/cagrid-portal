@@ -46,8 +46,8 @@ public class GlobusComponentInstaller extends
 		return new Condition() {
 			public boolean evaluate(WizardModel m) {
 				CaGridInstallerModel model = (CaGridInstallerModel) m;
-				return !model.isGlobusInstalled()
-						|| model.isTrue(Constants.INSTALL_GLOBUS);
+				return model.isTrue(Constants.INSTALL_CONFIGURE_CAGRID) && (!model.isGlobusInstalled()
+						|| model.isTrue(Constants.INSTALL_GLOBUS));
 			}
 		};
 	}
