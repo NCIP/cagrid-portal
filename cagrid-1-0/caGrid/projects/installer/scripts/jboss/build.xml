@@ -83,6 +83,8 @@
 				  className="org.globus.tomcat.coyote.net.HTTPSConnector"
 				  port="${https.port}" maxThreads="150" minSpareThreads="25" maxSpareThreads="75" 
 				  autoFlush="true"
+				  protocolHandlerClassName="org.apache.coyote.http11.Http11Protocol"
+				  socketFactory="org.globus.tomcat.catalina.net.BaseHTTPSServerSocketFactory"
 				  disableUploadTimeout="true" scheme="https"
 				  enableLookups="true" acceptCount="10" debug="0" 
 				   cert="${service.cert.path}"
@@ -97,11 +99,11 @@
 		<xmltask source="${jboss.home}/server/default/deploy/jbossweb-tomcat55.sar/server.xml"
 			dest="${jboss.home}/server/default/deploy/jbossweb-tomcat55.sar/server.xml">
 			<remove
-				path="/Server/Service[@name='Catalina']/Engine[@name='Catalina' or @name='jboss.web']/Valve[@className='org.globus.tomcat.coyote.valves.HTTPSValve']" />
+				path="/Server/Service[@name='Catalina']/Engine[@name='Catalina' or @name='jboss.web']/Valve[@className='org.globus.tomcat.coyote.valves.HTTPSValve55']" />
 			<insert
 				path="/Server/Service[@name='Catalina']/Engine[@name='Catalina' or @name='jboss.web']">
 				<![CDATA[
-						<Valve className="org.globus.tomcat.coyote.valves.HTTPSValve"/>
+						<Valve className="org.globus.tomcat.coyote.valves.HTTPSValve55"/>
 						]]>
 			</insert>
 		</xmltask>
