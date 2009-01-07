@@ -2,10 +2,12 @@ package org.cagrid.data.sdkquery41.style.wizard.config;
 
 import gov.nih.nci.cagrid.common.JarUtilities;
 import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.data.common.CastorMappingUtil;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.FileFilters;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
+import gov.nih.nci.cagrid.metadata.xmi.Sdk4ArgoUMLXMIConstants;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -76,8 +78,12 @@ public class GeneralConfigurationStep extends AbstractStyleConfigurationStep {
         }
         
         // set the application name service property
+        String applicationName = getDeployPropertiesFromSdkDir().getProperty(
+            SDK41StyleConstants.DeployProperties.PROJECT_NAME);
         CommonTools.setServiceProperty(getServiceInformation().getServiceDescriptor(), 
-            SDK41QueryProcessor.PROPERTY_APPLICATION_NAME, "", false);
+            DataServiceConstants.QUERY_PROCESSOR_CONFIG_PREFIX 
+            + SDK41QueryProcessor.PROPERTY_APPLICATION_NAME,
+            applicationName, false);
         
         // grab the castor marshalling and unmarshalling xml mapping files
         // from the config dir and copy them into the service's package structure
