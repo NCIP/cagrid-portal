@@ -44,6 +44,16 @@
 	<!-- Pre Deploy JBOSS                                               -->
 	<!-- ============================================================== -->
 	<target name="preDeployJBoss">
+		<copy todir="${jboss.dir}/lib/endorsed" overwrite="true">
+					<fileset dir="${ext.endorsed.dir}">
+						<include name="*.jar" />
+					</fileset>
+				</copy>
+				<copy todir="${build.lib.dir}" overwrite="true">
+					<fileset dir="${ext.lib}">
+						<include name="*.jar" />
+					</fileset>
+				</copy>
 
 	</target>
 	

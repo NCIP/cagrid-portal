@@ -35,6 +35,6 @@ public class AutoApprovalPolicy extends AccountPolicy {
 
 
     public String getDisplayName() {
-        return "Auto Approval / Manual Renewal";
+        return "Auto Approval";
     }
 }

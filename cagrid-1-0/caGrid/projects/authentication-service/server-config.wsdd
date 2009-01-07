@@ -11,6 +11,8 @@
     <parameter name="loadOnStartup" value="true" />
     <parameter name="securityMetadata" value="ETC-PATH/AuthenticationService-security-metadata.xml" />
     <parameter name="castorMapping" value="/org/cagrid/gaards/core/gaards-core-xml-mapping.xml" />
+    <parameter name="authenticationservice-etcDirectoryPath" value="ETC-PATH" />
+    <parameter name="authenticationservice-serviceName" value="AuthenticationService" />
   </service>
   <typeMapping name="AggregatorContent" qname="aggr:AggregatorContent" type="java:org.globus.mds.aggregator.types.AggregatorContent" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="" />
   <ns3:typeMapping xmlns:ns3="http://xml.apache.org/axis/wsdd/" xmlns:ns1="http://xml.apache.org/axis/wsdd/providers/java" xmlns:ns2="http://gaards.cagrid.org/authentication" encodingStyle="" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" type="ns1:org.cagrid.gaards.authentication.BasicAuthentication" qname="ns2:BasicAuthentication" />

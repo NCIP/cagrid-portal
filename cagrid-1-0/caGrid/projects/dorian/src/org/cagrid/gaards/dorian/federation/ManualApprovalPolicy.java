@@ -19,6 +19,6 @@ public class ManualApprovalPolicy extends AccountPolicy {
 
 
     public String getDisplayName() {
-        return "Manual Approval / Manual Renewal";
+        return "Manual Approval";
     }
 }
