@@ -12,8 +12,8 @@ import org.springframework.dao.DataAccessException;
 public abstract class BaseUserDetailsService implements UserDetailsService {
 
 	/**
-	 * implement by application specific UserDetailsServices to load from user
-	 * details from CSM.
+	 * Defines an interface for implementations that wish to retrieve user information from
+	 * database using CSM or Data Access Service
 	 * @param userName
 	 * @return
 	 */
