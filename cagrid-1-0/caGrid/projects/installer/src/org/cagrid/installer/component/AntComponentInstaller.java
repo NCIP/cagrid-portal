@@ -30,7 +30,7 @@ public class AntComponentInstaller extends AbstractDownloadedComponentInstaller 
 			public boolean evaluate(WizardModel m) {
 				CaGridInstallerModel model = (CaGridInstallerModel) m;
 				return  model.isTrue(Constants.INSTALL_CONFIGURE_CAGRID) && (!model.isAntInstalled()
-						|| model.isTrue(Constants.INSTALL_ANT));
+						|| model.isTrue(Constants.REINSTALL_ANT));
 			}
 		};
 	}

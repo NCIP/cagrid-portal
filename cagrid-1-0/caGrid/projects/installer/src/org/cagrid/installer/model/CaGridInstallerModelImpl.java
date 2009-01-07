@@ -361,7 +361,7 @@ CaGridInstallerModel, OverviewProvider {
             }
         }
 
-        if (isTrue(Constants.INSTALL_TOMCAT)) {
+        if (isTrue(Constants.REINSTALL_TOMCAT)) {
             globusConfigured = false;
         }
         return globusConfigured;
@@ -379,10 +379,10 @@ CaGridInstallerModel, OverviewProvider {
                 globusDeployed = wsrfDir.exists();
             }
         }
-        if (isTrue(Constants.INSTALL_TOMCAT)) {
+        if (isTrue(Constants.REINSTALL_TOMCAT)) {
             globusDeployed = false;
         }
-        if (isTrue(Constants.INSTALL_JBOSS)) {
+        if (isTrue(Constants.REINSTALL_JBOSS)) {
             globusDeployed = false;
         }
         return globusDeployed;

@@ -36,7 +36,7 @@ public abstract class AbstractDownloadedComponentInstaller implements Downloaded
     public void addCheckInstallSteps(CaGridInstallerModel model) {
         CheckReInstallStep checkInstallStep = new CheckReInstallStep(model.getMessage(getComponentId()
             + ".check.reinstall.title"), model.getMessage(getComponentId() + ".check.reinstall.desc"), getComponentId()
-            + ".home", "install." + getComponentId());
+            + ".home", "reinstall." + getComponentId());
         model.add(checkInstallStep, getShouldCheckReinstallCondition());
 
         InstallInfoStep installInfoStep = new InstallInfoStep(model.getMessage(getComponentId() + ".home.title"), model

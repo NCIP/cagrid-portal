@@ -76,19 +76,19 @@ public abstract class Constants {
 
     public static final String HTTPS_PORT = "https.port";
 
-    public static final String INSTALL_ANT = "install.ant";
+    public static final String REINSTALL_ANT = "reinstall.ant";
 
-    public static final String INSTALL_CAGRID = "install.cagrid";
+    public static final String REINSTALL_CAGRID = "reinstall.cagrid";
 
     public static final String INSTALL_CONFIGURE_CAGRID = "install.configure.cagrid";
 
     public static final String INSTALL_CONFIGURE_CONTAINER = "install.configure.container";
 
-    public static final String INSTALL_GLOBUS = "install.globus";
+    public static final String REINSTALL_GLOBUS = "reinstall.globus";
 
-    public static final String INSTALL_JBOSS = "install.jboss";
+    public static final String REINSTALL_JBOSS = "reinstall.jboss";
 
-    public static final String INSTALL_TOMCAT = "install.tomcat";
+    public static final String REINSTALL_TOMCAT = "reinstall.tomcat";
 
     public static final Object JAVA_VERSION_PATTERN = "java.version.pattern";
 

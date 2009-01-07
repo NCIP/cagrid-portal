@@ -84,7 +84,7 @@ public class CaGridSourceComponentInstaller extends AbstractDownloadedComponentI
         return new Condition() {
             public boolean evaluate(WizardModel m) {
                 CaGridInstallerModel model = (CaGridInstallerModel) m;
-                return model.isTrue(Constants.INSTALL_CONFIGURE_CAGRID) && (!model.isCaGridInstalled() || model.isTrue(Constants.INSTALL_CAGRID));
+                return model.isTrue(Constants.INSTALL_CONFIGURE_CAGRID) && (!model.isCaGridInstalled() || model.isTrue(Constants.REINSTALL_CAGRID));
             }
         };
     }
@@ -112,7 +112,7 @@ super.addCheckInstallSteps(model);
 
                 public boolean evaluate(WizardModel m) {
                     CaGridInstallerModel model = (CaGridInstallerModel) m;
-                    return model.isTrue(Constants.INSTALL_CONFIGURE_CAGRID) && (!model.isCaGridInstalled() || model.isTrue(Constants.INSTALL_CAGRID));
+                    return model.isTrue(Constants.INSTALL_CONFIGURE_CAGRID) && (!model.isCaGridInstalled() || model.isTrue(Constants.REINSTALL_CAGRID));
                 }
 
             }));

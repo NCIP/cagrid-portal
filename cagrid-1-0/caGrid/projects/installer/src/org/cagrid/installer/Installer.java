@@ -315,7 +315,7 @@ public class Installer {
         this.model.add(confStep, new Condition() {
             public boolean evaluate(WizardModel m) {
                 CaGridInstallerModel model = (CaGridInstallerModel) m;
-                return (model.isTrue(Constants.RECONFIGURE_CAGRID) || model.isTrue(Constants.INSTALL_CAGRID));
+                return (model.isTrue(Constants.RECONFIGURE_CAGRID) || model.isTrue(Constants.REINSTALL_CAGRID));
             }
         });
 
@@ -326,7 +326,7 @@ public class Installer {
         tasksStep.getTasks().add(new ConditionalTask(configTargetGridTask, new Condition() {
             public boolean evaluate(WizardModel m) {
                 CaGridInstallerModel model = (CaGridInstallerModel) m;
-                return (model.isTrue(Constants.RECONFIGURE_CAGRID) || model.isTrue(Constants.INSTALL_CAGRID))
+                return (model.isTrue(Constants.RECONFIGURE_CAGRID) || model.isTrue(Constants.REINSTALL_CAGRID))
                     && (model.getProperty(Constants.TARGET_GRID) != null)
                     && !model.getProperty(Constants.TARGET_GRID).equals(Constants.NO_TARGET_GRID);
 
@@ -488,11 +488,11 @@ public class Installer {
         this.model.unsetProperty(Constants.INSTALL_CONFIGURE_CONTAINER);
         this.model.unsetProperty(Constants.RECONFIGURE_CAGRID);
         this.model.unsetProperty(Constants.USE_SECURE_CONTAINER);
-        this.model.unsetProperty(Constants.INSTALL_ANT);
-        this.model.unsetProperty(Constants.INSTALL_GLOBUS);
-        this.model.unsetProperty(Constants.INSTALL_CAGRID);
-        this.model.unsetProperty(Constants.INSTALL_JBOSS);
-        this.model.unsetProperty(Constants.INSTALL_TOMCAT);
+        this.model.unsetProperty(Constants.REINSTALL_ANT);
+        this.model.unsetProperty(Constants.REINSTALL_GLOBUS);
+        this.model.unsetProperty(Constants.REINSTALL_CAGRID);
+        this.model.unsetProperty(Constants.REINSTALL_JBOSS);
+        this.model.unsetProperty(Constants.REINSTALL_TOMCAT);
     }
 
 
