@@ -1,6 +1,8 @@
 <?xml version="1.0"?>
 <project name="Introduce Developer Modified Build File" basedir=".">
 
+  <import file="taverna-build.xml"/>
+
 	<property environment="env" />
 	<property file="${basedir}/project.properties" />
 	<property file="${basedir}/build.properties" />
@@ -270,6 +272,7 @@
 			</batchtest>
 		</junit>
 	</target>
+
 
 
 </project>
