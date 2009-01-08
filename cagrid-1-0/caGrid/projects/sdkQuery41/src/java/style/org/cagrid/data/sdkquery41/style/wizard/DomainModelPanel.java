@@ -1,7 +1,5 @@
 package org.cagrid.data.sdkquery41.style.wizard;
 
-import gov.nih.nci.cagrid.data.common.ExtensionDataManager;
-import gov.nih.nci.cagrid.data.extension.CadsrInformation;
 import gov.nih.nci.cagrid.data.ui.wizard.AbstractWizardPanel;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
@@ -23,6 +21,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
 
+import org.cagrid.data.sdkquery41.style.wizard.config.DomainModelConfigurationStep;
+import org.cagrid.data.sdkquery41.style.wizard.config.DomainModelConfigurationStep.DomainModelConfigurationSource;
 import org.cagrid.data.sdkquery41.style.wizard.model.ModelFromCaDSRPanel;
 import org.cagrid.data.sdkquery41.style.wizard.model.ModelFromConfigPanel;
 import org.cagrid.data.sdkquery41.style.wizard.model.ModelFromFileSystemPanel;
@@ -43,10 +43,13 @@ public class DomainModelPanel extends AbstractWizardPanel {
     private JComboBox modelSourceComboBox = null;
     
     private SortedMap<String, DomainModelSourcePanel> domainModelSources = null;
+    
+    private DomainModelConfigurationStep configuration = null;
 
     public DomainModelPanel(ServiceExtensionDescriptionType extensionDescription, ServiceInformation info) {
         super(extensionDescription, info);
         domainModelSources = new TreeMap<String, DomainModelSourcePanel>();
+        configuration = new DomainModelConfigurationStep(info);
         initialize();
     }
 
@@ -72,11 +75,10 @@ public class DomainModelPanel extends AbstractWizardPanel {
     public void movingNext() {
         String selectedSourceName = (String) getModelSourceComboBox().getSelectedItem();
         DomainModelSourcePanel selectedSource = domainModelSources.get(selectedSourceName);
+        DomainModelConfigurationSource sourceType = selectedSource.getSourceType();
+        configuration.setModelSource(sourceType);
         try {
-            CadsrInformation cadsrInfo = selectedSource.getCadsrDomainInformation();
-            // set the cadsr info on the extension data model
-            ExtensionDataManager manager = new ExtensionDataManager(getExtensionData());
-            manager.storeCadsrInformation(cadsrInfo);
+            configuration.applyConfiguration();
         } catch (Exception ex) {
             ex.printStackTrace();
             CompositeErrorDialog.showErrorDialog("Error obtaining domain model information", ex.getMessage(), ex);
@@ -102,9 +104,9 @@ public class DomainModelPanel extends AbstractWizardPanel {
             }
         };
         
-        DomainModelSourcePanel cadsrSourcePanel = new ModelFromCaDSRPanel(validityListener);
-        DomainModelSourcePanel configSourcePanel = new ModelFromConfigPanel(validityListener);
-        DomainModelSourcePanel fileSourcePanel = new ModelFromFileSystemPanel(validityListener);
+        DomainModelSourcePanel cadsrSourcePanel = new ModelFromCaDSRPanel(validityListener, configuration);
+        DomainModelSourcePanel configSourcePanel = new ModelFromConfigPanel(validityListener, configuration);
+        DomainModelSourcePanel fileSourcePanel = new ModelFromFileSystemPanel(validityListener, configuration);
         domainModelSources.put(cadsrSourcePanel.getName(), cadsrSourcePanel);
         domainModelSources.put(configSourcePanel.getName(), configSourcePanel);
         domainModelSources.put(fileSourcePanel.getName(), fileSourcePanel);

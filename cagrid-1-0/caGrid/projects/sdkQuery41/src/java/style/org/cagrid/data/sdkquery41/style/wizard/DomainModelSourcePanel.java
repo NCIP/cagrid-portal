@@ -1,8 +1,9 @@
 package org.cagrid.data.sdkquery41.style.wizard;
 
-import gov.nih.nci.cagrid.data.extension.CadsrInformation;
-
 import javax.swing.JPanel;
+
+import org.cagrid.data.sdkquery41.style.wizard.config.DomainModelConfigurationStep;
+import org.cagrid.data.sdkquery41.style.wizard.config.DomainModelConfigurationStep.DomainModelConfigurationSource;
 
 /**
  * JPanel which is required to produce a caGrid Domain Model
@@ -12,11 +13,18 @@ import javax.swing.JPanel;
 public abstract class DomainModelSourcePanel extends JPanel {
     
     private DomainModelSourceValidityListener validityListener = null;
+    private DomainModelConfigurationStep configuration = null;
     
-    public DomainModelSourcePanel(DomainModelSourceValidityListener validityListener) {
+    public DomainModelSourcePanel(
+        DomainModelSourceValidityListener validityListener, 
+        DomainModelConfigurationStep configuration) {
         super();
         this.validityListener = validityListener;
+        this.configuration = configuration;
     }
+    
+    
+    public abstract DomainModelConfigurationSource getSourceType();
     
     
     public abstract String getName();
@@ -25,10 +33,12 @@ public abstract class DomainModelSourcePanel extends JPanel {
     public abstract void populateFromConfiguration();
     
     
-    public abstract CadsrInformation getCadsrDomainInformation() throws Exception;
-    
-    
     public abstract void revalidateModel();
+    
+    
+    protected DomainModelConfigurationStep getConfiguration() {
+        return this.configuration;
+    }
     
     
     protected void setModelValidity(boolean valid) {

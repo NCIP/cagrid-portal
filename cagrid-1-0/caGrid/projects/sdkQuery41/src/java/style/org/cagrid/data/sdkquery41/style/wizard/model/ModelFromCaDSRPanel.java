@@ -1,14 +1,10 @@
 package org.cagrid.data.sdkquery41.style.wizard.model;
 
 import gov.nih.nci.cadsr.umlproject.domain.Project;
-import gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata;
 import gov.nih.nci.cadsr.umlproject.domain.UMLPackageMetadata;
-import org.cagrid.cadsr.portal.CaDSRBrowserPanel;
+import gov.nih.nci.cagrid.common.portal.DocumentChangeAdapter;
 import gov.nih.nci.cagrid.common.portal.validation.IconFeedbackPanel;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
-import gov.nih.nci.cagrid.data.extension.CadsrInformation;
-import gov.nih.nci.cagrid.data.extension.CadsrPackage;
-import gov.nih.nci.cagrid.data.extension.ClassMapping;
 import gov.nih.nci.cagrid.introduce.common.ConfigurationUtil;
 
 import java.awt.Color;
@@ -32,15 +28,16 @@ import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 import javax.swing.border.TitledBorder;
+import javax.swing.event.DocumentEvent;
 
-import org.cagrid.cadsr.UMLModelService;
-import org.cagrid.cadsr.client.CaDSRUMLModelService;
+import org.cagrid.cadsr.portal.CaDSRBrowserPanel;
 import org.cagrid.data.sdkquery41.style.wizard.DomainModelSourcePanel;
 import org.cagrid.data.sdkquery41.style.wizard.DomainModelSourceValidityListener;
+import org.cagrid.data.sdkquery41.style.wizard.config.DomainModelConfigurationStep;
+import org.cagrid.data.sdkquery41.style.wizard.config.DomainModelConfigurationStep.DomainModelConfigurationSource;
 import org.cagrid.grape.utils.CompositeErrorDialog;
 
 import com.jgoodies.validation.Severity;
-import com.jgoodies.validation.ValidationMessage;
 import com.jgoodies.validation.ValidationResult;
 import com.jgoodies.validation.ValidationResultModel;
 import com.jgoodies.validation.message.SimpleValidationMessage;
@@ -65,53 +62,17 @@ public class ModelFromCaDSRPanel extends DomainModelSourcePanel {
     
     private Project selectedProject = null;
 
-    public ModelFromCaDSRPanel(DomainModelSourceValidityListener validityListener) {
-        super(validityListener);
+    public ModelFromCaDSRPanel(
+        DomainModelSourceValidityListener validityListener, 
+        DomainModelConfigurationStep configuration) {
+        super(validityListener, configuration);
         validationModel = new DefaultValidationResultModel();
         initialize();
     }
-
-
-    public CadsrInformation getCadsrDomainInformation() throws Exception {
-        if (validationModel.hasErrors()) {
-            StringBuffer errors = new StringBuffer();
-            errors.append("Domain model cannot be generated while in an error state:\n");
-            for (ValidationMessage message : validationModel.getResult().getErrors()) {
-                errors.append(message.formattedText()).append("\n");
-            }
-            throw new IllegalStateException(errors.toString());
-        }
-        
-        // basic start of cadsr info
-        //TODO Dave, replace this with whatever your new Extension data is  (storing the shortname/version)
-        CadsrInformation cadsrInfo = new CadsrInformation();
-        cadsrInfo.setNoDomainModel(false);
-        cadsrInfo.setUseSuppliedModel(false);
-        cadsrInfo.setProjectLongName(selectedProject.getLongName());
-        cadsrInfo.setProjectVersion(selectedProject.getVersion());
-        
-        // packages
-        UMLModelService cadsrClient = new CaDSRUMLModelService(getCadsrBrowser().getCadsr().getText());
-        DefaultListModel listModel = (DefaultListModel) getPackagesList().getModel();
-        CadsrPackage[] packages = new CadsrPackage[listModel.getSize()];
-        for (int i = 0; i < listModel.getSize(); i++) {
-            UMLPackageDisplay packageDisplay = (UMLPackageDisplay) listModel.getElementAt(i);
-            CadsrPackage cadsrPack = new CadsrPackage();
-            cadsrPack.setName(packageDisplay.getPackage().getName());
-            UMLClassMetadata[] classMetadata = cadsrClient.findClassesInPackage(
-                selectedProject, packageDisplay.getPackage().getName());
-            ClassMapping[] mappings = new ClassMapping[classMetadata.length];
-            for (int j = 0; j < classMetadata.length; j++) {
-                ClassMapping mapping = new ClassMapping();
-                // NOT setting element name until schema mapping panel
-                mapping.setClassName(classMetadata[j].getName());
-                mapping.setSelected(true);
-                mapping.setTargetable(true);
-            }
-            cadsrPack.setCadsrClass(mappings);
-            packages[i] = cadsrPack;
-        }
-        return cadsrInfo;
+    
+    
+    public DomainModelConfigurationSource getSourceType() {
+        return DomainModelConfigurationSource.CADSR;
     }
 
 
@@ -194,6 +155,12 @@ public class ModelFromCaDSRPanel extends DomainModelSourcePanel {
             }
             cadsrBrowser.setDefaultCaDSRURL(url);
             cadsrBrowser.getCadsr().setText(url);
+            getConfiguration().setCadsrUrl(url);
+            cadsrBrowser.getCadsr().getDocument().addDocumentListener(new DocumentChangeAdapter() {
+                public void documentEdited(DocumentEvent e) {
+                    getConfiguration().setCadsrUrl(getCadsrBrowser().getCadsr().getText());
+                }
+            });
         }
         return cadsrBrowser;
     }
@@ -324,13 +291,19 @@ public class ModelFromCaDSRPanel extends DomainModelSourcePanel {
         // clear the packages list
         DefaultListModel model = (DefaultListModel) getPackagesList().getModel();
         while (model.getSize() != 0) {
+            Object element = model.getElementAt(0);
+            if (element instanceof UMLPackageDisplay) {
+                UMLPackageDisplay packageDisplay = (UMLPackageDisplay) element;
+                getConfiguration().removeCadsrPackage(packageDisplay.getPackage().getName());
+            }
             model.removeElementAt(0);
         }
-        
+                
         // get the selected project
         Project project = getCadsrBrowser().getSelectedProject();
         // set it as the current project
         this.selectedProject = project;
+        getConfiguration().setCadsrProject(this.selectedProject);
         if (project != null) {
             UMLPackageMetadata[] packages = getCadsrBrowser().getAvailablePackages();
             if (packages != null) {
@@ -360,6 +333,7 @@ public class ModelFromCaDSRPanel extends DomainModelSourcePanel {
         } else {
             // all is well... add the package to the list
             model.addElement(new UMLPackageDisplay(pack));
+            getConfiguration().addCadsrPackage(pack);
         }
     }
     
@@ -369,6 +343,10 @@ public class ModelFromCaDSRPanel extends DomainModelSourcePanel {
         DefaultListModel model = (DefaultListModel) getPackagesList().getModel();
         for (Object removeme : selection) {
             model.removeElement(removeme);
+            if (removeme instanceof UMLPackageDisplay) {
+                UMLPackageDisplay display = (UMLPackageDisplay) removeme;
+                getConfiguration().removeCadsrPackage(display.getPackage().getName());
+            }
         }
     }
     

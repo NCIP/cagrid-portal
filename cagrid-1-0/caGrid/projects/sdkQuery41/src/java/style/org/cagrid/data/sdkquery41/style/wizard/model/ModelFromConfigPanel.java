@@ -46,7 +46,9 @@ import org.apache.commons.logging.LogFactory;
 import org.cagrid.data.sdkquery41.style.common.SDK41StyleConstants;
 import org.cagrid.data.sdkquery41.style.wizard.DomainModelSourcePanel;
 import org.cagrid.data.sdkquery41.style.wizard.DomainModelSourceValidityListener;
+import org.cagrid.data.sdkquery41.style.wizard.config.DomainModelConfigurationStep;
 import org.cagrid.data.sdkquery41.style.wizard.config.SharedConfiguration;
+import org.cagrid.data.sdkquery41.style.wizard.config.DomainModelConfigurationStep.DomainModelConfigurationSource;
 import org.cagrid.grape.utils.CompositeErrorDialog;
 import org.xml.sax.SAXException;
 
@@ -89,10 +91,17 @@ public class ModelFromConfigPanel extends DomainModelSourcePanel {
     
     private DomainModel domainModel = null;
     
-    public ModelFromConfigPanel(DomainModelSourceValidityListener validityListener) {
-        super(validityListener);
+    public ModelFromConfigPanel(
+        DomainModelSourceValidityListener validityListener, 
+        DomainModelConfigurationStep configuration) {
+        super(validityListener, configuration);
         validationModel = new DefaultValidationResultModel();
         initialize();
+    }
+    
+    
+    public DomainModelConfigurationSource getSourceType() {
+        return DomainModelConfigurationSource.SDK_CONFIG_XMI;
     }
     
     
@@ -352,100 +361,6 @@ public class ModelFromConfigPanel extends DomainModelSourcePanel {
     }
     
     
-    public CadsrInformation getCadsrDomainInformation() throws Exception {
-        // save the domain model to the service's etc dir
-        File etcDir = new File(
-            SharedConfiguration.getInstance().getServiceInfo().getBaseDirectory(), "etc");
-        String applicationName = SharedConfiguration.getInstance()
-            .getSdkDeployProperties().getProperty(
-                SDK41StyleConstants.DeployProperties.PROJECT_NAME);
-        File domainModelFile = new File(etcDir, applicationName + "_domainModel.xml");
-        FileWriter modelWriter = new FileWriter(domainModelFile);
-        MetadataUtils.serializeDomainModel(getDomainModel(), modelWriter);
-        modelWriter.flush();
-        modelWriter.close();
-        
-        // get / create the domain model resource property
-        ServiceInformation serviceInfo = SharedConfiguration.getInstance().getServiceInfo();
-        ResourcePropertyType domainModelResourceProperty = null;
-        ResourcePropertyType[] domainModelProps = CommonTools.getResourcePropertiesOfType(
-            serviceInfo.getServices().getService(0), DataServiceConstants.DOMAIN_MODEL_QNAME);
-        if (domainModelProps.length != 0) {
-            domainModelResourceProperty = domainModelProps[0];
-            // if old file exists, delete it
-            File oldFile = new File(
-                etcDir, domainModelResourceProperty.getFileLocation());
-            if (oldFile.exists()) {
-                oldFile.delete();
-            }
-        } else {
-            domainModelResourceProperty = new ResourcePropertyType();
-            domainModelResourceProperty.setPopulateFromFile(true);
-            domainModelResourceProperty.setRegister(true);
-            domainModelResourceProperty.setQName(DataServiceConstants.DOMAIN_MODEL_QNAME);
-        }
-        
-        // set value of resource property
-        domainModelResourceProperty.setFileLocation(domainModelFile.getName());
-        
-        // possibly put the resource property in the service for the first time
-        if (domainModelProps.length == 0) {
-            CommonTools.addResourcePropety(
-                serviceInfo.getServices().getService(0), domainModelResourceProperty);
-        }
-        
-        // deserialize the domain model
-        DomainModel model = null;
-        FileReader reader = new FileReader(domainModelFile);
-        model = MetadataUtils.deserializeDomainModel(reader);
-        reader.close();
-        
-        // set the cadsr information to NOT generate a new model
-        CadsrInformation cadsrInfo = new CadsrInformation();
-        cadsrInfo.setNoDomainModel(false);
-        cadsrInfo.setUseSuppliedModel(true);
-        
-        cadsrInfo.setProjectLongName(model.getProjectLongName());
-        cadsrInfo.setProjectVersion(model.getProjectVersion());
-        
-        // map classes by packages
-        Map<String, List<UMLClass>> classesByPackage = new HashMap<String, List<UMLClass>>();
-        for (UMLClass modelClass : model.getExposedUMLClassCollection().getUMLClass()) {
-            List<UMLClass> packageClasses = classesByPackage.get(modelClass.getPackageName());
-            if (packageClasses == null) {
-                packageClasses = new LinkedList<UMLClass>();
-                classesByPackage.put(modelClass.getPackageName(), packageClasses);
-            }
-            packageClasses.add(modelClass);
-        }
-        
-        List<CadsrPackage> cadsrPackages = new ArrayList<CadsrPackage>();
-        for (String packageName : classesByPackage.keySet()) {
-            List<UMLClass> classes = classesByPackage.get(packageName);
-            CadsrPackage pack = new CadsrPackage();
-            pack.setName(packageName);
-            List<ClassMapping> classMappings = new ArrayList<ClassMapping>();
-            for (UMLClass clazz : classes) {
-                ClassMapping mapping = new ClassMapping();
-                mapping.setClassName(clazz.getClassName());
-                // NOT populating element names until Schema Mapping Panel
-                mapping.setSelected(true);
-                mapping.setTargetable(true);
-                classMappings.add(mapping);
-            }
-            ClassMapping[] mappingArray = new ClassMapping[classMappings.size()];
-            classMappings.toArray(mappingArray);
-            pack.setCadsrClass(mappingArray);
-            cadsrPackages.add(pack);
-        }
-        CadsrPackage[] packageArray = new CadsrPackage[cadsrPackages.size()];
-        cadsrPackages.toArray(packageArray);
-        cadsrInfo.setPackages(packageArray);
-        
-        return cadsrInfo;
-    }
-    
-    
     private DomainModel getDomainModel() throws IllegalStateException, 
         SAXException, IOException, ParserConfigurationException {
         if (domainModel == null) {
@@ -462,26 +377,7 @@ public class ModelFromConfigPanel extends DomainModelSourcePanel {
             String projectName = getProjectNameTextField().getText();
             String projectVersion = getProjectVersionTextField().getText();
             
-            File xmiFile = new File(getXmiFileTextField().getText());
-            
-            XmiFileType xmiType = null;
-            String xmiTypeString = getXmiTypeTextField().getText();
-            if (SDK41StyleConstants.DeployProperties.MODEL_TYPE_ARGO.equals(xmiTypeString)) {
-                xmiType = XmiFileType.SDK_40_ARGO;
-            } else if (SDK41StyleConstants.DeployProperties.MODEL_TYPE_EA.equals(xmiTypeString)) {
-                xmiType = XmiFileType.SDK_40_EA;
-            } else {
-                xmiType = XmiFileType.SDK_40_EA;
-                logger.warn("Unable to determine XMI type for " + xmiTypeString + 
-                    ", using default of " + xmiType.toString());
-            }
-            logger.debug("XMI Type determined to be " + xmiType.toString());
-            
-            XMIParser parser = new XMIParser(projectName, projectVersion);
 
-            logger.info("Parsing domain model from XMI...");
-            domainModel = parser.parse(xmiFile, xmiType);
-            logger.info("Parsing complete");
         }
         return domainModel;
     }
