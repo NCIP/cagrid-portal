@@ -30,7 +30,7 @@ import org.cagrid.data.sdkquery41.style.wizard.config.DomainModelConfigurationSt
  * @author David Ervin
  * 
  * @created Jan 28, 2008 11:24:21 AM
- * @version $Id: SDK41StyleConfigurationStep.java,v 1.1 2009-01-08 21:31:20 dervin Exp $ 
+ * @version $Id: SDK41StyleConfigurationStep.java,v 1.2 2009-01-08 22:11:19 dervin Exp $ 
  */
 public class SDK41StyleConfigurationStep extends Step {
     public static final String SDK_41_TESTS_BASE_DIR_PROPERTY = "sdk41.tests.base.dir";    
@@ -129,7 +129,7 @@ public class SDK41StyleConfigurationStep extends Step {
             new DomainModelConfigurationStep(getServiceInformation());
         configuration.setDomainModelLocalFile(getDomainModelFile());
         configuration.setModelSource(DomainModelConfigurationSource.FILE_SYSTEM);
-        return null;
+        return configuration;
     }
     
     
