@@ -80,9 +80,7 @@
 	</target>
 
 
-	<target name="checkValidate" unless="perform.deployment.validation">
-		<property name="no.deployment.validation" value="true" />
-	</target>
+
 
 
 
@@ -91,6 +89,10 @@
 	<!-- ============================================================== -->
 	<target name="preInit" depends="checkValidate">
 		<runtarget target="configure" />
+	</target>
+
+	<target name="checkValidate" unless="perform.deployment.validation">
+		<property name="no.deployment.validation" value="true" />
 	</target>
 
 
