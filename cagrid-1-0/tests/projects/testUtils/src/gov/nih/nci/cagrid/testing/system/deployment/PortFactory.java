@@ -14,7 +14,7 @@ import java.util.List;
  * 
  * @author David Ervin
  * @created Nov 5, 2007 10:13:07 AM
- * @version $Id: PortFactory.java,v 1.4 2008-11-07 17:59:14 dervin Exp $
+ * @version $Id: PortFactory.java,v 1.5 2009-01-08 19:16:46 dervin Exp $
  */
 public class PortFactory {
     private static List<Integer> assignedPortNumbers = null;
@@ -75,6 +75,7 @@ public class PortFactory {
                 try {
                     sock.close();
                 } catch (Throwable t) {
+                    available = false;
                 }
             }
         }
@@ -86,13 +87,16 @@ public class PortFactory {
         int range = TestingConstants.TEST_PORT_UPPER_BOUND.intValue()
             - TestingConstants.TEST_PORT_LOWER_BOUND.intValue();
         boolean used = true;
-        int count = 0;
         Integer testPort = null;
-        while (used && count < range) {
-            int offset = (int) (System.currentTimeMillis() % range);
+        int offset = (int) (System.currentTimeMillis() % range);
+        for (int count = 0; count < range; count++) {
+            offset = (offset + count) % range;
             testPort = Integer.valueOf(TestingConstants.TEST_PORT_LOWER_BOUND.intValue() + offset);
-            used = assignedPortNumbers.contains(testPort) && isPortAvailable(testPort.intValue());
-            count++;
+            used = assignedPortNumbers.contains(testPort) || !isPortAvailable(testPort.intValue());
+            if (!used) {
+                // found an unused port
+                break;
+            }
         }
         if (used) {
             throw new NoAvailablePortException("Could not obtain a network port in the range [" 
