@@ -67,6 +67,8 @@ Build Instructions:
 	<property name="oldXmlApiJar" value="xmlParserAPIs.jar" />
 
 	<property name="endorsed.dir" value="${jboss.dir}/lib/endorsed" />
+	
+	<property name="log4j" value="${jboss.dir}/server/default/conf/log4j.xml" />
 
 
 
@@ -126,6 +128,11 @@ Build Instructions:
 
 		<available file="${webapp.dir}/share/schema/resolutionService/resolution_port_type.wsdl" property="resolutionService.exists" />
 		<antcall target="fixResourceServicePortType" />
+	    <antcall target="fixLog4jConf" />
+	</target>
+	
+	<target name="fixLog4jConf" >
+		<copy file="${basedir}/log4j.xml" toFile="${log4j}" />
 	</target>
 
 	<target name="fixResourceServicePortType" if="resolutionService.exists">
