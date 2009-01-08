@@ -1,7 +1,7 @@
 <!-- ======================================================================= -->
-<!-- caGrid Data Services test build file                                    -->
+<!-- caGrid SDK 4.1 Data Services test build file                            -->
 <!-- ======================================================================= -->
-<project name="caGrid-data_tests_harness" basedir=".">
+<project name="caGrid-sdk41_data_tests_harness" basedir=".">
 	
 	<!-- should all testing stop on the first error or failure encountered? -->
 	<property name="halt.on.error" value="false" />
@@ -12,14 +12,13 @@
 	<!-- tells data tests the base directory in which to create data services -->
 	<property name="temp.test.service.dir" value="${basedir}/test_services"/>
 	<!-- tells the creation tests where libraries and resources live -->
-	<property name="sdk4.tests.base.dir" value="${basedir}"/>
+	<property name="sdk41.tests.base.dir" value="${basedir}"/>
 	<!-- tells the test containers where to find their zip files -->
 	<property name="testing.containers.dir" value="${basedir}/../testUtils/containers"/>
 
 	<!-- properties for caCORE SDK application's location -->
-	<!-- TODO: These will point to the SDK example VM -->
 	<property name="remote.sdk.host.name" value="http://sdkexamples.bmi.ohio-state.edu" />
-	<property name="remote.sdk.host.port" value="8040" />
+	<property name="remote.sdk.host.port" value="8041" />
 
 	
 	<target name="prepareClasspaths">
@@ -28,9 +27,6 @@
 			<pathelement path="${stubs.dest}" />
 			<path refid="test.run.classpath" />
 			<fileset dir="${jar.dir}">
-				<include name="**/*.jar"/>
-			</fileset>
-			<fileset dir="${ext.remote-client.lib.dir}">
 				<include name="**/*.jar"/>
 			</fileset>
 		</path>
@@ -49,7 +45,7 @@
 			<sysproperty key="introduce.base.dir" value="${introduce.dir}" />
 			<sysproperty key="remote.sdk.host.name" value="${remote.sdk.host.name}" />
 			<sysproperty key="remote.sdk.host.port" value="${remote.sdk.host.port}" />
-			<sysproperty key="sdk4.tests.base.dir" value="${sdk4.tests.base.dir}"/>
+			<sysproperty key="sdk41.tests.base.dir" value="${sdk41.tests.base.dir}"/>
 			<classpath refid="all.test.classpath" />
 			<classpath>
 				<pathelement path="${classes.dir}" />
@@ -73,7 +69,7 @@
 			<sysproperty key="introduce.base.dir" value="${introduce.dir}" />
 			<sysproperty key="remote.sdk.host.name" value="${remote.sdk.host.name}" />
 			<sysproperty key="remote.sdk.host.port" value="${remote.sdk.host.port}" />
-			<sysproperty key="sdk4.tests.base.dir" value="${sdk4.tests.base.dir}"/>
+			<sysproperty key="sdk41.tests.base.dir" value="${sdk41.tests.base.dir}"/>
 			<sysproperty key="testing.containers.dir" value="${testing.containers.dir}"/>
 			<classpath refid="all.test.classpath" />
 			<classpath>
