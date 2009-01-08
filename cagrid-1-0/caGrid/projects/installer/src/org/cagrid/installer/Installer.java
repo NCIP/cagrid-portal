@@ -102,7 +102,7 @@ public class Installer {
 
     private void splashScreenInit() {
         ImageIcon myImage = new ImageIcon(Thread.currentThread().getContextClassLoader().getResource(
-            "images/installer.gif"));
+            "images/installer.1.3.gif"));
         screen = new SplashScreen(myImage);
         screen.setLocationRelativeTo(null);
         screen.setProgressMax(TOTAL_INIT_STEPS);
