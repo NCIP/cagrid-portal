@@ -1,12 +1,21 @@
 package gov.nih.nci.cagrid.gts.service;
 
+import gov.nih.nci.cagrid.gts.service.globus.resource.GTSResource;
+import  gov.nih.nci.cagrid.gts.service.GTSConfiguration;
+
 import java.rmi.RemoteException;
 
 import javax.naming.InitialContext;
+import javax.xml.namespace.QName;
 
 import org.apache.axis.MessageContext;
 import org.globus.wsrf.Constants;
+import org.globus.wsrf.ResourceContext;
+import org.globus.wsrf.ResourceContextException;
+import org.globus.wsrf.ResourceException;
 import org.globus.wsrf.ResourceHome;
+import org.globus.wsrf.ResourceProperty;
+import org.globus.wsrf.ResourcePropertySet;
 
 
 /** 
