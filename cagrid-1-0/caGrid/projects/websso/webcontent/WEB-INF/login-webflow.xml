@@ -44,13 +44,34 @@
 	</action-state>
 	 -->
 	<view-state id="viewLoginForm" view="casLoginView">
-			<render-actions>
+		<render-actions>
 			<action bean="authenticationViaFormAction" method="setupForm"/>
 			<action bean="authenticationViaFormAction" method="referenceData"/>
 		</render-actions>
 		<transition on="submit" to="bindAndValidate" />
+		<transition on="selectDorian" to="viewAuthenticationServicesDropDown" />
+		<transition on="selectAuthenticationService" to="viewAuthenticationServiceProfilesDropDown" />
 	</view-state>
 	
+	<view-state id="viewAuthenticationServicesDropDown" view="casLoginView">
+		<render-actions>
+			<action bean="authenticationViaFormAction" method="authenticationServicesInformation"/>
+		</render-actions>
+		<transition on="submit" to="bindAndValidate"/>
+		<transition on="selectDorian" to="viewAuthenticationServicesDropDown" />
+		<transition on="selectAuthenticationService" to="viewAuthenticationServiceProfilesDropDown" />
+	</view-state>
+	
+	<view-state id="viewAuthenticationServiceProfilesDropDown" view="casLoginView">
+		<render-actions>
+			<action bean="authenticationViaFormAction" method="authenticationServiceProfilesInformation" />
+		</render-actions>
+		<transition on="submit" to="bindAndValidate" />
+		<transition on="selectDorian" to="viewAuthenticationServicesDropDown" />
+		<transition on="selectAuthenticationService" to="viewAuthenticationServiceProfilesDropDown" />
+	</view-state>
+	
+	<!-- bind and validate is last step to call -->	
 	<action-state id="bindAndValidate">
 		<action bean="authenticationViaFormAction" />
 		<transition on="success" to="submit" />

@@ -196,7 +196,14 @@
 	
 	<bean id="authenticationViaFormAction" class="org.cagrid.gaards.websso.authentication.CaGridWebSSOAuthenticationViaFormAction"
 		p:centralAuthenticationService-ref="centralAuthenticationService"
-		p:warnCookieGenerator-ref="warnCookieGenerator" />
+		p:warnCookieGenerator-ref="warnCookieGenerator" 
+		p:formObjectClass="org.cagrid.gaards.websso.authentication.UsernamePasswordAuthenticationServiceURLCredentials"
+		p:formObjectName="credentials"
+		p:formObjectScope="FLOW"
+		p:validator-ref="usernamePasswordAuthenticationServiceURLCredentialsValidator"		
+		/>
+	
+	<bean id="usernamePasswordAuthenticationServiceURLCredentialsValidator"  class="org.cagrid.gaards.websso.authentication.UsernamePasswordAuthenticationServiceURLCredentialsValidator"/>
 	
 	<bean id="generateServiceTicketAction" class="org.jasig.cas.web.flow.GenerateServiceTicketAction"
 		p:centralAuthenticationService-ref="centralAuthenticationService" />

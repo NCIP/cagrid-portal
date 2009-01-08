@@ -156,6 +156,7 @@ public class WebSSOProperties {
 			Element dorianInformationElement) {
 	 	DorianInformation dorianInformation = new DorianInformation();
 	 	dorianInformation.setDorianServiceURL(this.getDorianServiceURL(dorianInformationElement));
+	 	dorianInformation.setDisplayName(this.getDorianDisplayName(dorianInformationElement));
 	 	dorianInformation.setProxyLifetimeHours(Integer.parseInt(this.getProxyLifeTimeHours(dorianInformationElement)));
 	 	dorianInformation.setProxyLifetimeMinutes(Integer.parseInt(this.getProxyLifeTimeMinutes(dorianInformationElement)));
 	 	dorianInformation.setProxyLifetimeSeconds(Integer.parseInt(this.getProxyLifeTimeSeconds(dorianInformationElement)));
@@ -183,6 +184,11 @@ public class WebSSOProperties {
 		return serviceURL.getText().trim();
 	}
 
+	private String getDorianDisplayName(Element dorianInformationElement) {
+		Element serviceURL = dorianInformationElement.getChild("display-name");
+		return serviceURL.getText().trim();
+	}
+	
 	private String getProxyLifeTimeHours(Element dorianInformationElement) {
 		Element proxyLifetimeHours = dorianInformationElement
 				.getChild("proxy-lifetime-hours");

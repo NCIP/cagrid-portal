@@ -1,8 +1,5 @@
 package org.cagrid.gaards.websso.authentication.helper.impl;
 
-import gov.nih.nci.cagrid.authentication.bean.BasicAuthenticationCredential;
-import gov.nih.nci.cagrid.authentication.bean.Credential;
-import gov.nih.nci.cagrid.authentication.client.AuthenticationClient;
 import gov.nih.nci.cagrid.authentication.stubs.types.AuthenticationProviderFault;
 import gov.nih.nci.cagrid.authentication.stubs.types.InsufficientAttributeFault;
 import gov.nih.nci.cagrid.authentication.stubs.types.InvalidCredentialFault;
@@ -12,6 +9,8 @@ import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
 import java.rmi.RemoteException;
 
 import org.apache.axis.types.URI.MalformedURIException;
+import org.cagrid.gaards.authentication.Credential;
+import org.cagrid.gaards.authentication.client.AuthenticationClient;
 import org.cagrid.gaards.websso.authentication.helper.AuthenticationServiceHelper;
 import org.cagrid.gaards.websso.exception.AuthenticationErrorException;
 import org.cagrid.gaards.websso.exception.AuthenticationConfigurationException;
@@ -24,21 +23,14 @@ public class AuthenticationServiceHelperImpl implements
 	}
 
 	public SAMLAssertion authenticate(String authenticationServiceURL,
-			String userName, String password)
+			Credential credential)
 			throws AuthenticationErrorException,
 			AuthenticationConfigurationException {
 		SAMLAssertion samlAssertion = null;
-		BasicAuthenticationCredential basicAuthenticationCredential = new BasicAuthenticationCredential();
-		basicAuthenticationCredential.setUserId(userName);
-		basicAuthenticationCredential.setPassword(password);
-		Credential credential = new Credential();
-		credential
-				.setBasicAuthenticationCredential(basicAuthenticationCredential);
 
 		AuthenticationClient authenticationClient;
 		try {
-			authenticationClient = new AuthenticationClient(
-					authenticationServiceURL, credential);
+			authenticationClient = new AuthenticationClient(authenticationServiceURL);
 		} catch (MalformedURIException e) {
 			throw new AuthenticationConfigurationException(
 					"Invalid Authentication Service URL : " + e.getMessage());
@@ -47,7 +39,7 @@ public class AuthenticationServiceHelperImpl implements
 					"Error accessing the Authentication Service : "+ e.getMessage());
 		}
 		try {
-			samlAssertion = authenticationClient.authenticate();
+			samlAssertion = authenticationClient.authenticate(credential);
 		} catch (InvalidCredentialFault e) {
 			throw new AuthenticationErrorException("Invalid Credentials : "
 					+ FaultUtil.printFaultToString(e));

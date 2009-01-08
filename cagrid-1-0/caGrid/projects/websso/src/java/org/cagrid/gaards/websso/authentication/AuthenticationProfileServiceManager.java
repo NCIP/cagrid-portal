@@ -7,7 +7,11 @@ import gov.nih.nci.cagrid.metadata.exceptions.ResourcePropertyRetrievalException
 import java.net.MalformedURLException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
+import javax.xml.namespace.QName;
 
 import org.apache.log4j.Logger;
 
@@ -132,19 +136,43 @@ public class AuthenticationProfileServiceManager extends Runner implements Initi
         handle.setAuthenticationServices(authenticationServices);
 	}
 	
-	public List<AuthenticationServiceInformation> getAuthenticationServiceInformationList(){
+	public List<DorianInformation> getDorianInformationList() {
+		return webSSOProperties.getDoriansInformation();
+	}
+
+	public List<AuthenticationServiceInformation> getAuthenticationServiceInformationList(String dorianDisplayName){
 		List<AuthenticationServiceInformation> authenticationServices=new ArrayList<AuthenticationServiceInformation>();
 		List<DorianServiceHandle> dorians  =this.getDorianServices();
 		for (DorianServiceHandle dorianHandle : dorians) {
-			List<AuthenticationServiceHandle> authenticationHandles=dorianHandle.getAuthenticationServices();
-			for (AuthenticationServiceHandle authenticationServiceHandle : authenticationHandles){
-				AuthenticationServiceInformation serviceInformation=authenticationServiceHandle.getAuthenticationServiceInformation();
-				authenticationServices.add(serviceInformation);
+			if (dorianHandle.getDorianInformation().getDisplayName().equals(
+					dorianDisplayName)) {
+				List<AuthenticationServiceHandle> authenticationHandles = dorianHandle.getAuthenticationServices();
+				for (AuthenticationServiceHandle authenticationServiceHandle : authenticationHandles) {
+					AuthenticationServiceInformation serviceInformation = authenticationServiceHandle
+							.getAuthenticationServiceInformation();
+					authenticationServices.add(serviceInformation);
+				}				
 			}
+			break;
 		}
 		return authenticationServices;
 	}
-
+	
+	public Set<QName> getAuthenticationProfilesList(
+			List<AuthenticationServiceInformation> authenticationServices,
+			String authenticationServiceURL) {
+		Set<QName> authenticationServiceProfiles = new HashSet<QName>();
+		for (AuthenticationServiceInformation authenticationServiceInformation : authenticationServices) {
+			if (authenticationServiceInformation.getAuthenticationServiceURL()
+					.equals(authenticationServiceURL)) {
+				authenticationServiceProfiles
+						.addAll(authenticationServiceInformation.getAuthenticationServiceProfiles());
+			}
+			break;
+		}
+		return authenticationServiceProfiles;
+	}
+	
 	private void handleException(Exception e) throws InvalidResourceException,GenericException{
 		if (e instanceof MalformedURLException) {
 			throw new InvalidResourceException("malformed URL has occurred", e);

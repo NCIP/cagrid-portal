@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
+import org.cagrid.gaards.authentication.Credential;
 import org.cagrid.gaards.websso.authentication.helper.AuthenticationServiceHelper;
 import org.cagrid.gaards.websso.authentication.helper.DorianHelper;
 import org.cagrid.gaards.websso.authentication.helper.GridCredentialDelegator;
@@ -87,8 +88,7 @@ public class CaGridAuthenticationManager implements AuthenticationManager {
 		}
 		UsernamePasswordAuthenticationServiceURLCredentials userNameCredentials=(UsernamePasswordAuthenticationServiceURLCredentials)credentials;
 		SAMLAssertion samlAssertion = authenticationServiceHelper.authenticate(
-				userNameCredentials.getAuthenticationServiceURL(),
-				userNameCredentials.getUsername(), userNameCredentials.getPassword());
+				userNameCredentials.getAuthenticationServiceURL(),userNameCredentials.getCredential());
 
 		DorianInformation dorianInformation = this.getDorianInformation(userNameCredentials.getAuthenticationServiceURL());
 		GlobusCredential globusCredential = dorianHelper.obtainProxy(samlAssertion, dorianInformation);

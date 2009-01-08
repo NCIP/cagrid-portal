@@ -27,6 +27,10 @@ public class DorianServiceHandle{
 		return authenticationServices;
 	}
 	
+	public DorianInformation getDorianInformation() {
+		return dorianInformation;
+	}
+	
     public GridUserClient getUserClient() throws MalformedURIException, RemoteException{
 		GridUserClient client = new GridUserClient(dorianInformation.getDorianServiceURL());
 		if (Utils.clean(dorianInformation.getServiceIdentity()) != null) {

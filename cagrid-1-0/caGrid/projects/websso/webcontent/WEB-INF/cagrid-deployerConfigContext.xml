@@ -17,4 +17,14 @@
   <bean id="authenticationManager"
     class="org.cagrid.gaards.websso.authentication.CaGridAuthenticationManager">
   </bean>
+  
+  	<!-- Performs "form backing object" data binding and validation on input submit -->
+	<bean id="formAction" class="org.springframework.webflow.action.FormAction">
+		<property name="formObjectName" value="rateCriteria" />
+		<property name="formObjectClass" value="org.springframework.webflow.samples.shippingrate.domain.RateCriteria" />
+		<property name="formObjectScope" value="FLOW" />
+		<property name="validator">
+			<bean class="org.springframework.webflow.samples.shippingrate.domain.RateCriteriaValidator" />
+		</property>
+	</bean>
 </beans>
