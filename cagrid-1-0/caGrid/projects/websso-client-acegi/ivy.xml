@@ -28,7 +28,7 @@
 	<dependencies>	
 		<dependency rev="latest.integration" org="caGrid" name="cds" conf="default->client" />
 		<dependency rev="latest.integration" org="caGrid" name="syncgts" conf="default->client" />
-		<dependency rev="latest.integration" org="caGrid" name="websso-common" conf="default" />
+		<dependency rev="latest.integration" org="caGrid" name="websso-client-common" conf="default" />
 
     	<!-- External Dependencies -->
 		<dependency rev="2.1.1" org="jasig" name="casclient" conf="default->default" />	
