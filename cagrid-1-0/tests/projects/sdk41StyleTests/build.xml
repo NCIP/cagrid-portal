@@ -18,7 +18,7 @@
 	<property name="ext.lib.dir" value="${basedir}/ext/dependencies/jars" />
 	
 	<!-- dependencies on SDK -->
-	<property name="sdk.package" value="${basedir}/sdk/sdk41.zip"/>
+	<property name="sdk.package" value="${basedir}/sdk/sdk41-trimmed.zip"/>
 	<property name="sdk.application.name" value="example41"/>
 	<property name="sdk.unpack.dir" location="${build.dir}/cacore"/>
 	
