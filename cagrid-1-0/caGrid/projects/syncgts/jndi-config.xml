@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jndiConfig xmlns="http://wsrf.globus.org/jndi/config">
   <service name="SERVICE-INSTANCE-PREFIX/SyncGTS">
-    <resource name="serviceconfiguration" type="gov.nih.nci.cagrid.syncgts.service.ServiceConfiguration">
+    <resource name="serviceconfiguration" type="gov.nih.nci.cagrid.syncgts.service.SyncGTSConfiguration">
       <resourceParams>
         <parameter>
           <name>factory</name>
           <value>org.globus.wsrf.jndi.BeanFactory</value>
+        </parameter>
+        <parameter>
+          <name>etcDirectoryPath</name>
+          <value>ETC-PATH</value>
         </parameter>
         <parameter>
           <name>performFirstSync</name>
@@ -13,7 +17,7 @@
         </parameter>
       </resourceParams>
     </resource>
-    <resource name="configuration" type="gov.nih.nci.cagrid.syncgts.service.globus.resource.ResourceConfiguration">
+    <resource name="configuration" type="gov.nih.nci.cagrid.syncgts.service.globus.resource.SyncGTSResourceConfiguration">
       <resourceParams>
         <parameter>
           <name>factory</name>
@@ -31,7 +35,7 @@
         </parameter>
       </resourceParams>
     </resource>
-    <resource name="home" type="gov.nih.nci.cagrid.syncgts.service.globus.resource.BaseResourceHome">
+    <resource name="home" type="gov.nih.nci.cagrid.syncgts.service.globus.resource.SyncGTSResourceHome">
       <resourceParams>
         <parameter>
           <name>factory</name>

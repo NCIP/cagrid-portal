@@ -1,11 +1,14 @@
 package gov.nih.nci.cagrid.syncgts.service;
 
-import org.globus.wsrf.config.ContainerConfig;
+import gov.nih.nci.cagrid.introduce.servicetools.ServiceConfiguration;
+
 import java.io.File;
+
 import javax.naming.InitialContext;
 
 import org.apache.axis.MessageContext;
 import org.globus.wsrf.Constants;
+import org.globus.wsrf.config.ContainerConfig;
 
 
 /** 
@@ -14,16 +17,17 @@ import org.globus.wsrf.Constants;
  * This class holds all service properties which were defined for the service to have
  * access to.
  * 
- * @created by Introduce Toolkit version 1.1
+ * @created by Introduce Toolkit version 1.3
  * 
  */
-public class ServiceConfiguration {
+public class SyncGTSConfiguration implements ServiceConfiguration {
 
-	public static ServiceConfiguration  configuration = null;
-
-	public static ServiceConfiguration getConfiguration() throws Exception {
-		if (ServiceConfiguration.configuration != null) {
-			return ServiceConfiguration.configuration;
+	public static SyncGTSConfiguration  configuration = null;
+    public String etcDirectoryPath;
+    	
+	public static SyncGTSConfiguration getConfiguration() throws Exception {
+		if (SyncGTSConfiguration.configuration != null) {
+			return SyncGTSConfiguration.configuration;
 		}
 		MessageContext ctx = MessageContext.getCurrentContext();
 
@@ -32,17 +36,27 @@ public class ServiceConfiguration {
 		String jndiName = Constants.JNDI_SERVICES_BASE_NAME + servicePath + "/serviceconfiguration";
 		try {
 			javax.naming.Context initialContext = new InitialContext();
-			ServiceConfiguration.configuration = (ServiceConfiguration) initialContext.lookup(jndiName);
+			SyncGTSConfiguration.configuration = (SyncGTSConfiguration) initialContext.lookup(jndiName);
 		} catch (Exception e) {
 			throw new Exception("Unable to instantiate service configuration.", e);
 		}
 
-		return ServiceConfiguration.configuration;
+		return SyncGTSConfiguration.configuration;
 	}
 	
+
 	
 	private String performFirstSync;
 	
+	
+    public String getEtcDirectoryPath() {
+		return ContainerConfig.getBaseDirectory() + File.separator + etcDirectoryPath;
+	}
+	
+	public void setEtcDirectoryPath(String etcDirectoryPath) {
+		this.etcDirectoryPath = etcDirectoryPath;
+	}
+
 
 	
 	public String getPerformFirstSync() {

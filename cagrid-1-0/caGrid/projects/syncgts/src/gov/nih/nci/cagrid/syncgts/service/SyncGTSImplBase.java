@@ -1,21 +1,12 @@
 package gov.nih.nci.cagrid.syncgts.service;
 
-import gov.nih.nci.cagrid.syncgts.service.globus.resource.SyncGTSResource;
-import gov.nih.nci.cagrid.syncgts.service.ServiceConfiguration;
-
 import java.rmi.RemoteException;
 
 import javax.naming.InitialContext;
-import javax.xml.namespace.QName;
 
 import org.apache.axis.MessageContext;
 import org.globus.wsrf.Constants;
-import org.globus.wsrf.ResourceContext;
-import org.globus.wsrf.ResourceContextException;
-import org.globus.wsrf.ResourceException;
 import org.globus.wsrf.ResourceHome;
-import org.globus.wsrf.ResourceProperty;
-import org.globus.wsrf.ResourcePropertySet;
 
 
 /** 
@@ -23,7 +14,7 @@ import org.globus.wsrf.ResourcePropertySet;
  *
  * Provides some simple accessors for the Impl.
  * 
- * @created by Introduce Toolkit version 1.1
+ * @created by Introduce Toolkit version 1.3
  * 
  */
 public abstract class SyncGTSImplBase {
@@ -32,14 +23,14 @@ public abstract class SyncGTSImplBase {
 	
 	}
 	
-	public ServiceConfiguration getConfiguration() throws Exception {
-		return ServiceConfiguration.getConfiguration();
+	public SyncGTSConfiguration getConfiguration() throws Exception {
+		return SyncGTSConfiguration.getConfiguration();
 	}
 	
 	
-	public gov.nih.nci.cagrid.syncgts.service.globus.resource.BaseResourceHome getResourceHome() throws Exception {
+	public gov.nih.nci.cagrid.syncgts.service.globus.resource.SyncGTSResourceHome getResourceHome() throws Exception {
 		ResourceHome resource = getResourceHome("home");
-		return (gov.nih.nci.cagrid.syncgts.service.globus.resource.BaseResourceHome)resource;
+		return (gov.nih.nci.cagrid.syncgts.service.globus.resource.SyncGTSResourceHome)resource;
 	}
 
 	
@@ -63,30 +54,6 @@ public abstract class SyncGTSImplBase {
 
 		return resourceHome;
 	}
-	
-		
-	
-	
-	protected Object getMetadata(QName metadataQName) {
-		SyncGTSResource serviceBaseResource = null;
-		try {
-			serviceBaseResource = (SyncGTSResource) ResourceContext.getResourceContext().getResource();
-		} catch (ResourceContextException e) {
-			return null;
-		} catch (ResourceException e) {
-			return null;
-		}
-		ResourcePropertySet resourcePropertySet = serviceBaseResource.getResourcePropertySet();
-		if (resourcePropertySet != null) {
-			ResourceProperty property = resourcePropertySet.get(metadataQName);
-			if (property != null) {
-				return property.get(0);
-			}
-
-		}
-		return null;
-	}
-	
 
 
 }

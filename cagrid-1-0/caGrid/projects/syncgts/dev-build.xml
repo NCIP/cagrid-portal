@@ -28,7 +28,7 @@
 	<property name="ext.targetgrid.dir" location="${ext.dir}/target_grid" />
 	<property name="ext.lib.dir" location="${ext.dependencies.dir}/service/jars" />
 	<property name="ext.test.lib" value="${ext.dependencies.dir}/test/jars" />
-
+	<property name="ext.tools.lib.dir" location="${ext.dependencies.dir}/tools/jars" />
 	<property name="ext.patched.jars.dir" location="${ext.dependencies.dir}/globus-patches/jars" />
 
 	<property name="sync.description.file" value="${ext.targetgrid.dir}/sync-description.xml" />
@@ -36,8 +36,11 @@
 	<property name="globus.user.home.dir" value="${user.home}/.globus/" />
 	<property name="globus.trusted.ca.dir" value="${globus.user.home.dir}/certificates/" />
 
+	<!-- overide the introduce location of this which is suposed to be in tools/lib -->
+	<property name="ant.contrib.location" value="${ext.tools.lib.dir}/ant-contrib-1.0b3.jar" />
 
 	<target name="defineClasspaths" depends="checkGlobus">
+		<path id="tasks.run.extended.classpath"/>
 		<runtarget target="defineExtendedClasspaths" />
 		<path id="base.classpath">
 			<fileset dir="${lib.dir}">
@@ -85,11 +88,17 @@
 			<path refid="service.build.classpath" />
 			<pathelement location="${ext.globus.dir}" />
 		</path>
-		<path id="processor.run.classpath">
+		<path id="tasks.run.classpath">
+			<path refid="tasks.run.extended.classpath" />
 			<fileset dir="${tools.lib.dir}">
 				<include name="*.jar" />
 			</fileset>
-			<path refid="run.classpath" />
+			<fileset dir="${lib.dir}">
+				<include name="*.jar" />
+			</fileset>
+			<fileset dir="${ext.globus.dir}/lib">
+				<include name="*.jar" />
+			</fileset>
 		</path>
 	</target>
 
@@ -115,6 +124,15 @@
 		<path id="test.run.extended.classpath">
 		</path>
 		<path id="run.extended.classpath">
+		</path>
+		<path id="tasks.run.extended.classpath">
+			<fileset dir="${ext.lib.dir}">
+				<include name="*.jar" />
+			</fileset>
+			<fileset dir="${ext.tools.lib.dir}">
+				<include name="*.jar" />
+			</fileset>
+
 		</path>
 	</target>
 

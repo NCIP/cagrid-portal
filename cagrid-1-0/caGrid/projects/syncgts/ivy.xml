@@ -15,6 +15,7 @@
     <conf name="impl" visibility="private" extends="service"/>
     <conf name="globus-patches" visibility="private"/>
     <conf name="impl-test" visibility="private"/>
+     <conf name="serviceTools" visibility="private" />
 
     <!-- Public Configurations-->
     <conf name="stubs" visibility="public"/>
@@ -45,9 +46,22 @@
     <dependency rev="latest.integration" org="caGrid" name="service-security-provider"
       conf="client->client;service->service"/>
     <dependency rev="latest.integration" org="caGrid" name="advertisement" conf="service->default"/>
+    
+    <dependency rev="latest.integration" org="caGrid" name="introduce-servicetools" conf="service->default" />
 
     <dependency rev="${target.grid}" org="caGrid" name="target_grid"
       conf="target_grid->urls,certs,syncdesc"/>
+      
+    <!--  Build file dependencies -->
+    <dependency rev="latest.integration" org="caGrid" name="introduce-buildtools" conf="serviceTools->default" />
+    <dependency rev="1.0b3" org="ant-contrib" name="ant-contrib" conf="serviceTools->*" />
+    <!--
+      This is non-transitive, because we already have all the extension jars in the service, and the
+      deploy time validation which uses this uses the service's classpath too.
+    -->
+    <dependency rev="latest.integration" org="caGrid" name="metadata-validator" conf="serviceTools->default"
+      transitive="false" />
+      
 
     <!-- Specific caGrid Service Dependencies -->
     <dependency rev="latest.integration" org="caGrid" name="gaards-core" conf="client,service->default"/>
