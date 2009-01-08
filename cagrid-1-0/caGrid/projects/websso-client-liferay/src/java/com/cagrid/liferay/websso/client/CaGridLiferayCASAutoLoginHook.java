@@ -71,7 +71,7 @@ public class CaGridLiferayCASAutoLoginHook implements AutoLogin {
 	 * Assumptions creating Grid User:
 	 * GridId is always unique, Create UserIdMapper 
 	 * Always screen name generator must be Auto generated.
-	 * Allow Duplicate email Ids can be present for a particular company Id for a particular user
+	 * Duplicate email Ids can be present for a particular company Id for a particular user
 	 */
 	protected User addUser(long paramCompanyId, WebSSOUser webssoUser)
 		throws PortalException, SystemException {
