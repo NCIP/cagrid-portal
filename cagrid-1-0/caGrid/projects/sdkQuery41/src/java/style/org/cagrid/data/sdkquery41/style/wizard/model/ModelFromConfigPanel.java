@@ -2,58 +2,29 @@ package org.cagrid.data.sdkquery41.style.wizard.model;
 
 import gov.nih.nci.cagrid.common.portal.DocumentChangeAdapter;
 import gov.nih.nci.cagrid.common.portal.validation.IconFeedbackPanel;
-import gov.nih.nci.cagrid.data.DataServiceConstants;
-import gov.nih.nci.cagrid.data.extension.CadsrInformation;
-import gov.nih.nci.cagrid.data.extension.CadsrPackage;
-import gov.nih.nci.cagrid.data.extension.ClassMapping;
-import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertyType;
-import gov.nih.nci.cagrid.introduce.common.CommonTools;
-import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
-import gov.nih.nci.cagrid.metadata.MetadataUtils;
-import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
-import gov.nih.nci.cagrid.metadata.dataservice.UMLClass;
-import gov.nih.nci.cagrid.metadata.xmi.XMIParser;
 import gov.nih.nci.cagrid.metadata.xmi.XmiFileType;
 
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
 import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
 import java.util.Properties;
 
-import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
-import javax.xml.parsers.ParserConfigurationException;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.cagrid.data.sdkquery41.style.common.SDK41StyleConstants;
 import org.cagrid.data.sdkquery41.style.wizard.DomainModelSourcePanel;
 import org.cagrid.data.sdkquery41.style.wizard.DomainModelSourceValidityListener;
 import org.cagrid.data.sdkquery41.style.wizard.config.DomainModelConfigurationStep;
 import org.cagrid.data.sdkquery41.style.wizard.config.SharedConfiguration;
 import org.cagrid.data.sdkquery41.style.wizard.config.DomainModelConfigurationStep.DomainModelConfigurationSource;
-import org.cagrid.grape.utils.CompositeErrorDialog;
-import org.xml.sax.SAXException;
 
 import com.jgoodies.validation.Severity;
-import com.jgoodies.validation.ValidationMessage;
 import com.jgoodies.validation.ValidationResult;
 import com.jgoodies.validation.ValidationResultModel;
 import com.jgoodies.validation.message.SimpleValidationMessage;
@@ -70,8 +41,6 @@ import com.jgoodies.validation.view.ValidationComponentUtils;
  */
 public class ModelFromConfigPanel extends DomainModelSourcePanel {
     
-    private static Log logger = LogFactory.getLog(ModelFromConfigPanel.class);
-    
     public static final String KEY_PROJECT_NAME = "Project name";
     public static final String KEY_PROJECT_VERSION = "Project version";
     
@@ -83,13 +52,10 @@ public class ModelFromConfigPanel extends DomainModelSourcePanel {
     private JTextField xmiFileTextField = null;
     private JLabel xmiTypeLabel = null;
     private JTextField xmiTypeTextField = null;
-    private JButton testButton = null;
     private JLabel projectNameLabel = null;
     private JLabel projectVersionLabel = null;
     private JTextField projectNameTextField = null;
     private JTextField projectVersionTextField = null;
-    
-    private DomainModel domainModel = null;
     
     public ModelFromConfigPanel(
         DomainModelSourceValidityListener validityListener, 
@@ -121,10 +87,15 @@ public class ModelFromConfigPanel extends DomainModelSourcePanel {
         String modelFilename = deployProps.getProperty(SDK41StyleConstants.DeployProperties.MODEL_FILE);
         File modelFile = new File(sdkDir, "models" + File.separator + modelFilename);
         getXmiFileTextField().setText(modelFile.getAbsolutePath());
-        String xmiType = deployProps.getProperty(SDK41StyleConstants.DeployProperties.MODEL_TYPE);
-        getXmiTypeTextField().setText(xmiType);
+        getConfiguration().setXmiFile(modelFile);
+        String xmiTypeProperty = deployProps.getProperty(SDK41StyleConstants.DeployProperties.MODEL_TYPE);
+        getXmiTypeTextField().setText(xmiTypeProperty);
+        XmiFileType xmiType = SDK41StyleConstants.DeployProperties.MODEL_TYPE_EA.equals(xmiTypeProperty) 
+            ? XmiFileType.SDK_40_EA : XmiFileType.SDK_40_ARGO;
+        getConfiguration().setXmiType(xmiType);
         String projectName = deployProps.getProperty(SDK41StyleConstants.DeployProperties.PROJECT_NAME);
         getProjectNameTextField().setText(projectName);
+        getConfiguration().setProjectShortName(projectName);
         validateInput();
     }
     
@@ -208,7 +179,6 @@ public class ModelFromConfigPanel extends DomainModelSourcePanel {
             mainPanel.add(getProjectVersionLabel(), gridBagConstraints21);
             mainPanel.add(getProjectNameTextField(), gridBagConstraints31);
             mainPanel.add(getProjectVersionTextField(), gridBagConstraints4);
-            mainPanel.add(getTestButton(), gridBagConstraints5);
         }
         return mainPanel;
     }
@@ -267,33 +237,6 @@ public class ModelFromConfigPanel extends DomainModelSourcePanel {
             xmiTypeTextField.setEditable(false);
         }
         return xmiTypeTextField;
-    }
-
-
-    /**
-     * This method initializes testButton	
-     * 	
-     * @return javax.swing.JButton	
-     */
-    private JButton getTestButton() {
-        if (testButton == null) {
-            testButton = new JButton();
-            testButton.setText("Test Model Generation");
-            testButton.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent e) {
-                    try {
-                        getDomainModel();
-                        Component root = SwingUtilities.getRoot(ModelFromConfigPanel.this);
-                        String message = "Model generated without errors";
-                        JOptionPane.showMessageDialog(root, message);
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                        CompositeErrorDialog.showErrorDialog("Error generating domain model", ex.getMessage(), ex);
-                    }
-                }
-            });
-        }
-        return testButton;
     }
     
     
@@ -358,28 +301,6 @@ public class ModelFromConfigPanel extends DomainModelSourcePanel {
             });
         }
         return projectVersionTextField;
-    }
-    
-    
-    private DomainModel getDomainModel() throws IllegalStateException, 
-        SAXException, IOException, ParserConfigurationException {
-        if (domainModel == null) {
-            if (validationModel.hasErrors()) {
-                StringBuffer errors = new StringBuffer();
-                errors.append("Domain model cannot be generated while in an error state:\n");
-                for (ValidationMessage message : validationModel.getResult().getErrors()) {
-                    errors.append(message.formattedText()).append("\n");
-                }
-                throw new IllegalStateException(errors.toString());
-            }
-            
-            // create a new domain model            
-            String projectName = getProjectNameTextField().getText();
-            String projectVersion = getProjectVersionTextField().getText();
-            
-
-        }
-        return domainModel;
     }
     
     
