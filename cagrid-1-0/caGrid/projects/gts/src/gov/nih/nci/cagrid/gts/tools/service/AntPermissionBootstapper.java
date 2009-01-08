@@ -4,7 +4,7 @@ import gov.nih.nci.cagrid.common.FaultUtil;
 import gov.nih.nci.cagrid.gts.bean.Permission;
 import gov.nih.nci.cagrid.gts.bean.Role;
 import gov.nih.nci.cagrid.gts.common.MySQLDatabase;
-import gov.nih.nci.cagrid.gts.service.GTSConfiguration;
+import gov.nih.nci.cagrid.gts.service.Configuration;
 import gov.nih.nci.cagrid.gts.service.PermissionManager;
 import gov.nih.nci.cagrid.gts.service.SimpleResourceManager;
 import gov.nih.nci.cagrid.gts.service.db.mysql.MySQLManager;
@@ -25,7 +25,7 @@ public class AntPermissionBootstapper {
 	private PermissionManager pm;
 
 
-	public AntPermissionBootstapper(GTSConfiguration conf) {
+	public AntPermissionBootstapper(Configuration conf) {
 		pm = new PermissionManager(new MySQLManager(new MySQLDatabase(conf.getConnectionManager(), conf
 			.getGTSInternalId())));
 	}
@@ -51,10 +51,10 @@ public class AntPermissionBootstapper {
 			usage();
 			System.exit(1);
 		}
-		GTSConfiguration conf = null;
+		Configuration conf = null;
 		try {
 			SimpleResourceManager srm = new SimpleResourceManager(args[0]);
-			conf = (GTSConfiguration) srm.getResource(GTSConfiguration.RESOURCE);
+			conf = (Configuration) srm.getResource(Configuration.RESOURCE);
 		} catch (Exception e) {
 			System.out.println("Error loading the GTS config file, " + args[0]);
 			e.printStackTrace();

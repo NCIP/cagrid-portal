@@ -27,7 +27,6 @@
 	<import file="dev-build.xml" />
 
 	<!-- Jars -->
-	<!-- Jars -->
 	<property name="jar.prefix" value="${service.name}" />
 	<property name="common.jar.name" value="${jar.prefix}-common.jar" />
 	<property name="client.jar.name" value="${jar.prefix}-client.jar" />
@@ -77,10 +76,11 @@
 	<import file="dev-build-deploy.xml" />
 
 
+	<property name="ant.contrib.location" value="${tools.lib.dir}/ant-contrib-1.0b3.jar"/>
 	<!-- using ant contrib for contidionals, looping , and runtarget -->
 	<taskdef resource="net/sf/antcontrib/antlib.xml">
 		<classpath>
-			<pathelement location="${tools.lib.dir}/ant-contrib.jar" />
+			<pathelement location="${ant.contrib.location}" />
 		</classpath>
 	</taskdef>
 
@@ -103,7 +103,7 @@
 	<target name="setGlobus" if="env.GLOBUS_LOCATION">
 		<!-- GT4 build files and directories-->
 		<property name="ext.globus.dir" value="${env.GLOBUS_LOCATION}" />
-		<property name="build.stubs" location="${ext.globus.dir}/share/globus_wsrf_tools/build-stubs.xml" />
+		<property name="build.stubs" location="build-stubs.xml" />
 		<property name="schema.src" location="${ext.globus.dir}/share/schema" />
 		<property name="build.packages" location="${ext.globus.dir}/share/globus_wsrf_common/build-packages.xml" />
 		<!-- Copied from build.stubs file, as there is no way to "append" to the value in the remote file -->
@@ -140,7 +140,64 @@
 		<runtarget target="postInit" />
 	</target>
 
-	
+<target name="defineClasspaths" depends="checkGlobus">
+		<path id="tasks.run.extended.classpath"/>
+		<runtarget target="defineExtendedClasspaths" />
+		<path id="base.classpath">
+			<fileset dir="${lib.dir}">
+				<include name="*.jar" />
+			</fileset>
+			<fileset dir="${ext.globus.dir}/lib">
+				<include name="*.jar" />
+				<exclude name="${stubs.jar.name}" />
+				<exclude name="${common.jar.name}" />
+				<exclude name="${client.jar.name}" />
+				<exclude name="${service.jar.name}" />
+			</fileset>
+			<path refid="base.extended.classpath" />
+		</path>
+		<path id="service.build.classpath">
+			<pathelement location="${stubs.dest}" />
+			<path refid="service.build.extended.classpath" />
+			<path refid="base.classpath" />
+		</path>
+		<path id="service.run.classpath">
+			<pathelement location="${build.dest}" />
+			<path refid="service.run.extended.classpath" />
+			<path refid="service.build.classpath" />
+		</path>
+		<path id="test.build.classpath">
+			<fileset dir="${test.lib.dir}">
+				<include name="*.jar" />
+			</fileset>
+			<pathelement location="${build.dest}" />
+			<path refid="test.build.extended.classpath" />
+			<path refid="service.build.classpath" />
+		</path>
+		<path id="test.run.classpath">
+			<pathelement location="${test.build.dest}" />
+			<path refid="test.run.extended.classpath" />
+			<path refid="test.build.classpath" />
+		</path>
+		<path id="run.classpath">
+			<pathelement location="${build.dest}" />
+			<path refid="run.extended.classpath" />
+			<path refid="service.build.classpath" />
+			<pathelement location="${ext.globus.dir}" />
+		</path>
+		<path id="tasks.run.classpath">
+			<path refid="tasks.run.extended.classpath" />
+			<fileset dir="${tools.lib.dir}">
+				<include name="*.jar" />
+			</fileset>
+			<fileset dir="${lib.dir}">
+				<include name="*.jar" />
+			</fileset>
+			<fileset dir="${ext.globus.dir}/lib">
+				<include name="*.jar" />
+			</fileset>
+		</path>
+	</target>
 
 	<!-- Generate bindings for our WSDL file -->
 	<!-- This is done with a GT4 tool -->
@@ -191,9 +248,9 @@
 	</target>
 
 	<target name="stubGenerationPostProcessor">
-		<java classname="gov.nih.nci.cagrid.introduce.axis.FixSoapBindingStub" classpathref="processor.run.classpath" fork="no">
-			<arg value="${basedir}" />
-		</java>
+		<taskdef name="fixSoapBindingStubs" classname="gov.nih.nci.cagrid.introduce.servicetasks.axis.FixSoapBindingStub" classpathref="tasks.run.classpath">
+		</taskdef>
+		<fixSoapBindingStubs />
 	</target>
 
 
@@ -226,8 +283,9 @@
 	<target name="compileTests" depends="compile">
 		<runtarget target="preCompileTests" />
 		<javac srcdir="${test.src.dir}" classpathref="test.build.classpath" destdir="${test.build.dest}" debug="${java.debug}" deprecation="${deprecation}" />
-		<runtarget target="postCompileStubs" />
+		<runtarget target="postCompileTests" />
 	</target>
+
 
 
 

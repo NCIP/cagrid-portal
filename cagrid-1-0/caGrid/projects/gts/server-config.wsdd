@@ -11,6 +11,8 @@
     <parameter name="loadOnStartup" value="true" />
     <parameter name="gtsConfig" value="ETC-PATH/gts-conf.xml" />
     <parameter name="securityMetadata" value="ETC-PATH/GTS-security-metadata.xml" />
+    <parameter name="gts-etcDirectoryPath" value="ETC-PATH" />
+    <parameter name="gts-serviceName" value="GTS" />
   </service>
   <typeMapping name="AggregatorContent" qname="aggr:AggregatorContent" type="java:org.globus.mds.aggregator.types.AggregatorContent" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="" />
 </deployment>

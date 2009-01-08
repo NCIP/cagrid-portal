@@ -7,12 +7,13 @@ package gov.nih.nci.cagrid.gts.service.globus.resource;
  * This class is used by the resource to get configuration information about the 
  * resource.
  * 
- * @created by Introduce Toolkit version 1.1
+ * @created by Introduce Toolkit version 1.3
  * 
  */
-public class ResourceConfiguration {
+public class GTSResourceConfiguration {
 	private String registrationTemplateFile;
 	private boolean performRegistration;
+
 	private String serviceMetadataFile;
 
 
@@ -30,6 +31,7 @@ public class ResourceConfiguration {
 	public String getRegistrationTemplateFile() {
 		return registrationTemplateFile;
 	}
+	
 
 
 	public void setRegistrationTemplateFile(String registrationTemplateFile) {

@@ -2,7 +2,7 @@ package gov.nih.nci.cagrid.gts.test;
 
 import gov.nih.nci.cagrid.common.XMLUtilities;
 import gov.nih.nci.cagrid.gts.common.MySQLDatabase;
-import gov.nih.nci.cagrid.gts.service.GTSConfiguration;
+import gov.nih.nci.cagrid.gts.service.Configuration;
 import gov.nih.nci.cagrid.gts.service.SimpleResourceManager;
 import gov.nih.nci.cagrid.gts.service.db.DBManager;
 import gov.nih.nci.cagrid.gts.service.db.mysql.MySQLManager;
@@ -19,7 +19,7 @@ import org.projectmobius.db.ConnectionManager;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: Utils.java,v 1.12 2008-04-30 01:50:28 langella Exp $
+ * @version $Id: Utils.java,v 1.13 2009-01-08 20:23:10 langella Exp $
  */
 public class Utils {
 
@@ -47,9 +47,9 @@ public class Utils {
 	}
 
 
-	public static GTSConfiguration getGTSConfiguration() throws Exception {
+	public static Configuration getGTSConfiguration() throws Exception {
 		InputStream in = TestCase.class.getResourceAsStream(GTSConstants.GTS_CONFIG);
 		SimpleResourceManager srm = new SimpleResourceManager(in);
-		return (GTSConfiguration) srm.getResource(GTSConfiguration.RESOURCE);
+		return (Configuration) srm.getResource(Configuration.RESOURCE);
 	}
 }

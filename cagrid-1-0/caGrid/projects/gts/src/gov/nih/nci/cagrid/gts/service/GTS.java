@@ -57,7 +57,7 @@ public class GTS implements TrustedAuthorityLevelRemover, TrustLevelLookup {
 
 	public static boolean SYNC_WITH_AUTHORITIES = true;
 
-	private GTSConfiguration conf;
+	private Configuration conf;
 
 	private String gtsURI;
 
@@ -74,7 +74,7 @@ public class GTS implements TrustedAuthorityLevelRemover, TrustLevelLookup {
 	private Database db;
 
 
-	public GTS(GTSConfiguration conf, String gtsURI) {
+	public GTS(Configuration conf, String gtsURI) {
 		this.conf = conf;
 		this.gtsURI = gtsURI;
 		log = LogFactory.getLog(this.getClass().getName());

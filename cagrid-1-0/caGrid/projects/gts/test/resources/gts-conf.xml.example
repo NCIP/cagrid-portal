@@ -1,6 +1,6 @@
 <gts>
 	<resource name="GTSConfiguration"
-		class="gov.nih.nci.cagrid.gts.service.GTSConfiguration">
+		class="gov.nih.nci.cagrid.gts.service.Configuration">
 		<gts-config>
 			<gts-internal-id>test_gts</gts-internal-id>
 			<sync-authorities hours="0" minutes="0" seconds="1"/>

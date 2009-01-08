@@ -69,7 +69,7 @@ public class TestGTS extends TestCase {
 	public void testAddUpdateRemoveAuthorities() {
 		GTS gts = null;
 		try {
-			GTSConfiguration conf = Utils.getGTSConfiguration();
+			Configuration conf = Utils.getGTSConfiguration();
 			gts = new GTS(conf, GTS_URI);
 			// Make sure we start fresh
 			gts.clearDatabase();
@@ -145,7 +145,7 @@ public class TestGTS extends TestCase {
 	public void testAddFindRevokePermission() {
 		GTS gts = null;
 		try {
-			GTSConfiguration conf = Utils.getGTSConfiguration();
+			Configuration conf = Utils.getGTSConfiguration();
 			String user = "O=Test Organization,OU=Test Unit,CN=User";
 			String user2 = "O=Test Organization,OU=Test Unit,CN=User2";
 			gts = new GTS(conf, GTS_URI);
@@ -338,7 +338,7 @@ public class TestGTS extends TestCase {
 	public void testRevokePermissionsWhenTrustedAuthorityIsRemoved() {
         GTS gts = null;
         try {
-            GTSConfiguration conf = Utils.getGTSConfiguration();
+            Configuration conf = Utils.getGTSConfiguration();
             String user = "O=Test Organization,OU=Test Unit,CN=User";
             String user2 = "O=Test Organization,OU=Test Unit,CN=User2";
             gts = new GTS(conf, GTS_URI);
@@ -415,7 +415,7 @@ public class TestGTS extends TestCase {
 	public void testAddTrustedAuthorityInvalidLevel() {
 		GTS gts = null;
 		try {
-			GTSConfiguration conf = Utils.getGTSConfiguration();
+			Configuration conf = Utils.getGTSConfiguration();
 
 			gts = new GTS(conf, GTS_URI);
 			// Make sure we start fresh
@@ -463,7 +463,7 @@ public class TestGTS extends TestCase {
 	public void testAddTrustedAuthority() {
 		GTS gts = null;
 		try {
-			GTSConfiguration conf = Utils.getGTSConfiguration();
+			Configuration conf = Utils.getGTSConfiguration();
 
 			gts = new GTS(conf, GTS_URI);
 			// Make sure we start fresh
@@ -583,7 +583,7 @@ public class TestGTS extends TestCase {
 	public void testRemoveReferencedTrustLevels() {
 		GTS gts = null;
 		try {
-			GTSConfiguration conf = Utils.getGTSConfiguration();
+			Configuration conf = Utils.getGTSConfiguration();
 
 			gts = new GTS(conf, GTS_URI);
 			// Make sure we start fresh
@@ -651,7 +651,7 @@ public class TestGTS extends TestCase {
 	public void testAddGetUpdateRemoveTrustLevels() {
 		GTS gts = null;
 		try {
-			GTSConfiguration conf = Utils.getGTSConfiguration();
+			Configuration conf = Utils.getGTSConfiguration();
 			PermissionBootstapper pb = new PermissionBootstapper(conf);
 			pb.addAdminUser(ADMIN_USER);
 			String user = "O=Test Organization,OU=Test Unit,CN=User";
@@ -759,7 +759,7 @@ public class TestGTS extends TestCase {
 	public void testUpdateTrustedAuthority() {
 		GTS gts = null;
 		try {
-			GTSConfiguration conf = Utils.getGTSConfiguration();
+			Configuration conf = Utils.getGTSConfiguration();
 
 			gts = new GTS(conf, GTS_URI);
 			// Make sure we start fresh
@@ -905,7 +905,7 @@ public class TestGTS extends TestCase {
 	public void testRemoveTrustedAuthority() {
 		GTS gts = null;
 		try {
-			GTSConfiguration conf = Utils.getGTSConfiguration();
+			Configuration conf = Utils.getGTSConfiguration();
 
 			gts = new GTS(conf, GTS_URI);
 			// Make sure we start fresh
@@ -1023,7 +1023,7 @@ public class TestGTS extends TestCase {
 	public void testSyncTrustedAuthoritiesWithSingleAuthorityGTS() {
 		GTS gts = null;
 		try {
-			GTSConfiguration conf = Utils.getGTSConfiguration();
+			Configuration conf = Utils.getGTSConfiguration();
 			gts = new GTS(conf, GTS_URI);
 			// Make sure we start fresh
 			gts.clearDatabase();
@@ -1137,7 +1137,7 @@ public class TestGTS extends TestCase {
 	public void testSyncTrustedAuthoritiesOverlappingGTSAuthorities() {
 		GTS gts = null;
 		try {
-			GTSConfiguration conf = Utils.getGTSConfiguration();
+			Configuration conf = Utils.getGTSConfiguration();
 			gts = new GTS(conf, GTS_URI);
 			// Make sure we start fresh
 			gts.clearDatabase();
@@ -1307,7 +1307,7 @@ public class TestGTS extends TestCase {
 	public void testSyncTrusLevelsOverlappingGTSAuthorities() {
 		GTS gts = null;
 		try {
-			GTSConfiguration conf = Utils.getGTSConfiguration();
+			Configuration conf = Utils.getGTSConfiguration();
 			gts = new GTS(conf, GTS_URI);
 			// Make sure we start fresh
 			gts.clearDatabase();

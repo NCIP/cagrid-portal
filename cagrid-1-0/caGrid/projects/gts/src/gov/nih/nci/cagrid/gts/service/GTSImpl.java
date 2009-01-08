@@ -33,7 +33,7 @@ public class GTSImpl {
 			String configFileEnd = (String) MessageContext.getCurrentContext().getProperty(GTS_CONFIG);
 			String configFile = ContainerConfig.getBaseDirectory() + File.separator + configFileEnd;
 			SimpleResourceManager srm = new SimpleResourceManager(configFile);
-			GTSConfiguration conf = (GTSConfiguration) srm.getResource(GTSConfiguration.RESOURCE);
+			Configuration conf = (Configuration) srm.getResource(Configuration.RESOURCE);
 			this.gts = new GTS(conf, type.getAddress().toString());
 		} catch (Exception e) {
 			FaultHelper.printStackTrace(e);
