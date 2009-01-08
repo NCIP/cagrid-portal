@@ -218,6 +218,31 @@
 			<classpath refid="run.classpath" />
 		</java>
 	</target>
+	
+	<target name="signCertificateRequest" description="Signs a certificate request." depends="init">
+		<input message="Please enter the location of the CA's private key:" addproperty="key.input" />
+		<input message="Please enter the CA's password:" addproperty="password.input" />
+		<input message="Please enter the location of the CA's certificate:" addproperty="ca.input" />
+		<input message="Please enter the number of days the certificate will be valid for:" addproperty="days.input" />
+		<input message="Please enter a location of the certificate request file:" addproperty="certrequest.input" />
+		<input message="Please enter a location to write the certificate:" addproperty="cert.input" />
+		<java classname="org.cagrid.gaards.pki.tools.SignCertificateRequest" fork="true" newenvironment="true" failonerror="true">
+			<arg value="-cakey" />
+			<arg value="${key.input}" />
+			<arg value="-password" />
+			<arg value="${password.input}" />
+			<arg value="-cacert" />
+			<arg value="${ca.input}" />
+			<arg value="-lifetime" />
+			<arg value="${days.input}" />
+			<arg value="-request" />
+			<arg value="${certrequest.input}" />
+			<arg value="-cert" />
+			<arg value="${cert.input}" />
+			<classpath refid="run.classpath" />
+		</java>
+	</target>
+
 
 
 	<target name="generateTrustReport" description="Generates a Grid Trust Report." depends="init">
