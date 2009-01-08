@@ -18,13 +18,9 @@
 	<property name="ext.lib.dir" value="${basedir}/ext/dependencies/jars" />
 	
 	<!-- dependencies on SDK -->
-	<property name="sdk.package" value="${basedir}/sdk/sdk411.zip"/>
+	<property name="sdk.package" value="${basedir}/sdk/sdk41.zip"/>
 	<property name="sdk.application.name" value="example41"/>
-	<!-- TODO: fix these locations -->
-	<property name="sdk.remote-client.dir" location="${build.dir}/remote-client" />
-	<property name="sdk.local-client.dir" location="${build.dir}/local-client" />
-	<property name="sdk.remote-client.lib.dir" location="${sdk.remote-client.dir}/lib" />
-	<property name="sdk.local-client.lib.dir" location="${sdk.local-client.dir}/lib" />
+	<property name="sdk.unpack.dir" location="${build.dir}/cacore"/>
 	
 	<!-- depends on Introduce toolkit -->
 	<property name="introduce.dir" value="../../../caGrid/projects/introduce" />
@@ -99,15 +95,14 @@
 		<mkdir dir="${build.dir}"/>
 		<mkdir dir="${classes.dir}"/>
 		<mkdir dir="${jar.dir}"/>
+		<mkdir dir="${sdk.unpack.dir}"/>
 		<antcall target="unpackSdk"/>
 	</target>
 	
 	
 	<!-- unpacks the caCORE SDK -->
 	<target name="unpackSdk">
-		<!--
-		<unzip src="${sdk.package}" dest="${build.dir}"/>
-		-->
+		<unzip src="${sdk.package}" dest="${sdk.unpack.dir}"/>
 	</target>
 	
 
@@ -118,7 +113,6 @@
 		<!-- test source -->
 		<javac srcdir="${src.dir}" destdir="${classes.dir}" source="${java.source}" target="${java.source}" debug="${java.debug}" deprecation="off" optimize="off">
 			<classpath refid="build.classpath" />
-			<exclude name="**/HQLRunner.java"/>
 		</javac>
 	</target>
 
