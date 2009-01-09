@@ -66,7 +66,7 @@ public class WindowMenu extends JMenu {
                 try {
                     ConfigurationWindow window = new ConfigurationWindow(app);
                     window.setModal(false);
-                    window.setSize(700, 400);
+                    window.setSize(800, 500);
                     window.setVisible(true);
                     GridApplication.getContext().centerWindow(window);
                 } catch (Exception ex) {
