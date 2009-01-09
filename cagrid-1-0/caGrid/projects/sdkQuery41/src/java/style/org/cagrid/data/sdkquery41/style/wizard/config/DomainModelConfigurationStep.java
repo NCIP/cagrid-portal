@@ -299,11 +299,13 @@ public class DomainModelConfigurationStep extends AbstractStyleConfigurationStep
                 mapping.setTargetable(true);
                 classMappings.add(mapping);
             }
-            ClassMapping[] mappingArray = (ClassMapping[]) classMappings.toArray();
+            ClassMapping[] mappingArray = new ClassMapping[classMappings.size()];
+            classMappings.toArray(mappingArray);
             pack.setCadsrClass(mappingArray);
             cadsrPackages.add(pack);
         }
-        CadsrPackage[] packageArray = (CadsrPackage[]) cadsrPackages.toArray();
+        CadsrPackage[] packageArray = new CadsrPackage[cadsrPackages.size()];
+        cadsrPackages.toArray(packageArray);
         cadsrInfo.setPackages(packageArray);
         storeCadsrInformation(cadsrInfo);
     }
