@@ -46,7 +46,7 @@
     <!-- Core and core test -->
     <dependency rev="latest.integration" org="caGrid" name="core"
       conf="default->default;default->test"/>
-    
+      
     <!-- WS-Enumeration -->
     <dependency rev="latest.integration" org="caGrid" name="wsEnum" conf="default->default"/>
     
@@ -58,10 +58,6 @@
     <!-- metadata -->
     <dependency rev="latest.integration" org="caGrid" name="metadata" conf="default->data.jars,schemas"/>
     <dependency rev="latest.integration" org="caGrid" name="metadatautils" conf="default->default"/>
-
-	<!-- SDK query projects -->
-    <dependency rev="latest.integration" org="caGrid" name="sdkQuery" conf="default->default"/>
-    <dependency rev="latest.integration" org="caGrid" name="sdkQuery32" conf="default->default"/>
     
     <!-- SDK Query 4 -->
     <dependency rev="latest.integration" org="caGrid" name="sdkQuery4" conf="default->style;default->processor"/>
