@@ -1,6 +1,5 @@
 package org.cagrid.gaards.cds.common;
 
-import javax.xml.namespace.QName;
 
 
 /**
