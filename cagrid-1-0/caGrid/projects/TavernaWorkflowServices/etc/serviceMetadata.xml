@@ -2,7 +2,7 @@
  <ns1:serviceDescription>
   <ns2:Service description="" name="TavernaWorkflowService" version="1.3" xmlns:ns2="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.service">
    <ns2:pointOfContactCollection>
-    <ns3:PointOfContact affiliation="" email="" firstName="" lastName="" phoneNumber="" role="" xmlns:ns3="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
+    <ns3:PointOfContact affiliation="ANL" email="sulakhe@mcs.anl.gov" firstName="Dinanath" lastName="Sulakhe" phoneNumber="630-252-7856" role="Developer" xmlns:ns3="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
    </ns2:pointOfContactCollection>
    <ns2:serviceContextCollection>
     <ns2:ServiceContext description="" name="TavernaWorkflowService">
@@ -117,6 +117,10 @@
        <ns2:inputParameterCollection/>
        <ns2:faultCollection/>
       </ns2:Operation>
+      <ns2:Operation description="" name="Subscribe">
+       <ns2:inputParameterCollection/>
+       <ns2:faultCollection/>
+      </ns2:Operation>
      </ns2:operationCollection>
      <ns2:contextPropertyCollection>
       <ns2:ContextProperty description="" name="{http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.xsd}CurrentTime"/>
@@ -130,10 +134,10 @@
   </ns2:Service>
  </ns1:serviceDescription>
  <ns1:hostingResearchCenter>
-  <ns17:ResearchCenter displayName="" shortName="" xmlns:ns17="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
-   <ns17:Address country="" locality="" postalCode="" stateProvince="" street1="" street2=""/>
+  <ns17:ResearchCenter displayName="ANL" shortName="Argonne" xmlns:ns17="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+   <ns17:Address country="US" locality="Chicago" postalCode="60435" stateProvince="IL" street1="9700 S Cass" street2="Argonne"/>
    <ns17:pointOfContactCollection>
-    <ns17:PointOfContact affiliation="" email="" firstName="" lastName="" phoneNumber="" role=""/>
+    <ns17:PointOfContact affiliation="Developer" email="sulakhe@mcs.anl.gov" firstName="Dinanath" lastName="Sulakhe" phoneNumber="630-252-7856" role="Developer"/>
    </ns17:pointOfContactCollection>
   </ns17:ResearchCenter>
  </ns1:hostingResearchCenter>

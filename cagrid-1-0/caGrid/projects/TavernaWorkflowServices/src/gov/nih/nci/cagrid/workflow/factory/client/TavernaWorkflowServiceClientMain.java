@@ -9,11 +9,16 @@ import java.util.Map;
 
 import org.apache.axis.message.addressing.EndpointReferenceType;
 import org.apache.axis.types.URI.MalformedURIException;
+import org.globus.wsrf.NotifyCallback;
+import org.oasis.wsn.SubscribeResponse;
+import org.oasis.wsrf.properties.ResourcePropertyValueChangeNotificationType;
 
 import workflowmanagementfactoryservice.WorkflowOutputType;
 import workflowmanagementfactoryservice.WorkflowStatusType;
 
 import gov.nih.nci.cagrid.workflow.factory.client.TavernaWorkflowServiceClient;
+import gov.nih.nci.cagrid.workflow.service.impl.client.TavernaWorkflowServiceImplClient;
+import gov.nih.nci.cagrid.workflow.service.impl.common.TavernaWorkflowServiceImplConstantsBase;
 
 public class TavernaWorkflowServiceClientMain {
 	
@@ -21,6 +26,8 @@ public class TavernaWorkflowServiceClientMain {
 		
 		System.out.println("Running the Grid Service Client");		
 		System.out.println("OS: " + System.getProperty("user.home"));
+		System.out.println(System.getProperty("user.dir"));
+		
 
 		Map map = new HashMap();
 		for (int i = 0; i< args.length; i++)
@@ -47,7 +54,6 @@ public class TavernaWorkflowServiceClientMain {
 					}
 					String url = (String) map.get("-url");
 					String scuflDoc = (String) map.get("-scuflDoc");
-					TavernaWorkflowServiceClient client = new TavernaWorkflowServiceClient(url);
 
 					String workflowName = "Test";
 
@@ -65,7 +71,8 @@ public class TavernaWorkflowServiceClientMain {
 
 					// 2. Start Workflow Operations Invoked.
 
-					String[] inputArgs = {"Taverna", " and caGrid"}; 
+					//String[] inputArgs = {"caCore", " and caBig4"}; 
+					String[] inputArgs = {"caCore"};
 					
 					System.out.println("\n2. Now starting the workflow ..");
 					System.out.println("Reading EPR from file ..");
@@ -86,7 +93,11 @@ public class TavernaWorkflowServiceClientMain {
 					{
 						System.out.println("Workflow successfully executed..");
 					}
-					else
+					else if(workflowStatusElement.equals(WorkflowStatusType.Active))
+					{
+						System.out.println("Workflow Active, still running.");
+					}
+					else if(workflowStatusElement.equals(WorkflowStatusType.Failed))
 					{
 						throw new Exception("Failed to execute the workflow! Please try again.");
 					}
@@ -104,20 +115,35 @@ public class TavernaWorkflowServiceClientMain {
 					{
 						System.out.println("Workflow failed to execute.");
 					}
-					else if (workflowStatus.equals(WorkflowStatusType.Pending))
+					else
 					{
-						System.out.println("Workflow execution is pending.");
+						System.out.println("Workflow execution is either pending or active.");
 					}
+					
+					//Subscribe to the Resource property:
+					TavernaWorkflowServiceImplClient serviceClient = new TavernaWorkflowServiceImplClient(readEPR);
+					NotifyCallback call = null;
+					SubscribeResponse response = serviceClient.subscribe(TavernaWorkflowServiceImplConstantsBase.WORKFLOWSTATUSELEMENT, call);
+					Thread.currentThread().sleep(20000);
+
+					while(! workflowStatus.equals(WorkflowStatusType.Done))
+					{
+						System.out.println("Sleeping for 3secs..");
+						Thread.currentThread().sleep(3000);
+						workflowStatus = TavernaWorkflowServiceClient.getStatus(readEPR);
+					}
+					
 
 					//4. Get output of workflow.
-
+					
+					
 					System.out.println("\n4. Getting back the output file..");
 					WorkflowOutputType workflowOutput = TavernaWorkflowServiceClient.getOutput(readEPR);
 					
 					String[] outputs = workflowOutput.getOutputFile();
 					for (int i=0; i < outputs.length; i++)
 					{
-						String outputFile = System.getProperty("user.dir") + "/Test1-output-" + i + ".xml";
+						String outputFile = System.getProperty("user.dir") + "/" + workflowName +"-output-" + i + ".xml";
 						Utils.stringBufferToFile(new StringBuffer(outputs[i]), outputFile);
 						System.out.println("Output file " + i + " : " + outputFile);
 					}

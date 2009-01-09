@@ -41,7 +41,7 @@ import gov.nih.nci.cagrid.introduce.security.client.ServiceSecurityClient;
  * 
  * @created by Introduce Toolkit version 1.3
  */
-public abstract class TavernaWorkflowServiceImplClientBase extends ServiceSecurityClient {	
+public abstract class TavernaWorkflowServiceImplClientBase extends ServiceSecurityClient implements NotifyCallback {	
 	protected TavernaWorkflowServiceImplPortType portType;
 	protected Object portTypeMutex;
     protected NotificationConsumerManager consumer = null;
@@ -103,5 +103,56 @@ public abstract class TavernaWorkflowServiceImplClientBase extends ServiceSecuri
         }
     }
     
+    public void unSubscribe(EndpointReferenceType subscriptionEPR) throws Exception {
+        WSResourceLifetimeServiceAddressingLocator locator = new WSResourceLifetimeServiceAddressingLocator();
+        ImmediateResourceTermination port = locator.getImmediateResourceTerminationPort(subscriptionEPR);
+        port.destroy(new org.oasis.wsrf.lifetime.Destroy());
+    }
+
+
+    /**
+    * Call this method if you want to subscribe and have the callbacks come back to the 
+    * client class.  You will want to overload the deliver method if this is the case.
+    */
+    public org.oasis.wsn.SubscribeResponse subscribe(QName qname) throws RemoteException, ContainerException, MalformedURIException {
+        return subscribe(qname,this);
+    }
+    
+    
+    /**
+    * Call this method if you want to subscribe and provide a NotifyCallback to handle the
+    * messages
+    */
+    public org.oasis.wsn.SubscribeResponse subscribe(QName qname, NotifyCallback callback) throws RemoteException, ContainerException, MalformedURIException {
+        synchronized (portTypeMutex) {
+            configureStubSecurity((Stub) portType, "subscribe");
+
+            if (consumer == null) {
+                // Create client side notification consumer
+                consumer = org.globus.wsrf.NotificationConsumerManager.getInstance();
+                consumer.startListening();
+                consumerEPR = consumer.createNotificationConsumer(callback);
+            }
+
+            org.oasis.wsn.Subscribe params = new org.oasis.wsn.Subscribe();
+            params.setUseNotify(Boolean.TRUE);
+            params.setConsumerReference(consumerEPR);
+            org.oasis.wsn.TopicExpressionType topicExpression = new org.oasis.wsn.TopicExpressionType();
+            topicExpression.setDialect(org.globus.wsrf.WSNConstants.SIMPLE_TOPIC_DIALECT);
+            topicExpression.setValue(qname);
+            params.setTopicExpression(topicExpression);
+            return portType.subscribe(params);
+       }
+    }
+
+
+    public void deliver(List topicPath, EndpointReferenceType producer, Object message) {
+        org.oasis.wsrf.properties.ResourcePropertyValueChangeNotificationType changeMessage = ((org.globus.wsrf.core.notification.ResourcePropertyValueChangeNotificationElementType) message)
+            .getResourcePropertyValueChangeNotification();
+
+        if (changeMessage != null) {
+            System.out.println("Got notification");
+        }
+    }
 
 }

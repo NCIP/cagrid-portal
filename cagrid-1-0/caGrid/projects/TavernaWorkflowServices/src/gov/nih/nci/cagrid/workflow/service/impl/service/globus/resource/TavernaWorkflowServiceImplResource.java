@@ -16,13 +16,18 @@ import java.util.Map;
 import java.util.Vector;
 
 import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.workflow.factory.common.TavernaWorkflowServiceConstants;
 import gov.nih.nci.cagrid.workflow.factory.service.TavernaWorkflowServiceConfiguration;
+import gov.nih.nci.cagrid.workflow.service.impl.common.TavernaWorkflowServiceImplConstantsBase;
 
 import org.apache.axis.message.addressing.EndpointReferenceType;
 import org.globus.wsrf.InvalidResourceKeyException;
 import org.globus.wsrf.NoSuchResourceException;
 import org.globus.wsrf.ResourceException;
 import org.globus.wsrf.ResourceKey;
+import org.globus.wsrf.ResourceProperty;
+import org.globus.wsrf.ResourcePropertySet;
+import org.globus.wsrf.impl.SimpleResourcePropertySet;
 
 import workflowmanagementfactoryservice.StartInputType;
 import workflowmanagementfactoryservice.WMSInputType;
@@ -51,17 +56,23 @@ public class TavernaWorkflowServiceImplResource extends TavernaWorkflowServiceIm
 
 	private static WorkflowStatusType workflowStatus = WorkflowStatusType.Pending;
 	private static TavernaWorkflowServiceConfiguration config = null;
-
+		
+	
 	private class WorkflowExecutionThread extends Thread {
 		
 		private String[] args = null;
-		public WorkflowExecutionThread (String[] args)
+		private ResourcePropertySet propSet;
+		private ResourceProperty statusRP;
+
+		public WorkflowExecutionThread (String[] args,ResourcePropertySet propSet )
 		{
 			this.args = args;
+			this.propSet  = propSet;
+			statusRP = this.propSet.get(TavernaWorkflowServiceImplConstantsBase.WORKFLOWSTATUSELEMENT);
+			//statusRP.set(0, workflowStatus);
 		}
 		public void run()
 		{	
-			
 			String tavernaDir = config.getTavernaDir();
 			String repository = config.getBaseRepositoryDir();
 			ProcessBuilder builder = new ProcessBuilder(this.args);
@@ -75,12 +86,12 @@ public class TavernaWorkflowServiceImplResource extends TavernaWorkflowServiceIm
 		    classpath = classpath + listOfJars(repository);
 		    environment.put("CLASSPATH", classpath);
 			
-			Iterator it = environment.entrySet().iterator();
-			while(it.hasNext())
-			{
-				Map.Entry pairs = (Map.Entry) it.next();
-				System.out.println(pairs.getKey() + " = " + pairs.getValue());
-			}			
+		//	Iterator it = environment.entrySet().iterator();
+		//	while(it.hasNext())
+		//	{
+		//		Map.Entry pairs = (Map.Entry) it.next();
+		//		System.out.println(pairs.getKey() + " = " + pairs.getValue());
+		//	}			
 			try {
 				Process process;
 				process = builder.start();
@@ -101,12 +112,13 @@ public class TavernaWorkflowServiceImplResource extends TavernaWorkflowServiceIm
 						//this.setOutputDoc(new String[] {line});
 						output = output + line;
 						workflowStatus = WorkflowStatusType.Done;
+						this.statusRP.set(0, workflowStatus);
 					}
 					if(line.equals("Finished!"))		
 						finished = true;
 				}
 				String[] temp = output.split(":::");
-					System.out.println("\nOUTPUT:\n" + temp[1]);
+				System.out.println("\nOUTPUT:\n" + temp[1]);
 				setOutputDoc(new String[] {temp[1]});
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -118,6 +130,7 @@ public class TavernaWorkflowServiceImplResource extends TavernaWorkflowServiceIm
 	}
 
 	public TavernaWorkflowServiceImplResource() {
+		
 		try {
 			config = TavernaWorkflowServiceConfiguration.getConfiguration();
 			this.setBaseDir(config.getBaseRepositoryDir());
@@ -141,13 +154,6 @@ public class TavernaWorkflowServiceImplResource extends TavernaWorkflowServiceIm
 					this.setBaseDir(System.getProperty("user.home")+ "\\Application Data" + "\\Taverna-1.7.1\\");
 				}
 			}
-
-			//			if (this.getBaseDir().equals("$home/Library/Application Support/Taverna-1.7.1/repository/"))
-			//			{
-			//				this.setBaseDir(this.getBaseDir().replaceAll("\\$home", System.getenv("HOME")));
-			//				//baseDir = baseDir.replaceAll("\\$home", System.getenv("HOME"));
-			//			}
-			//System.out.println("New Resource Created: " + this.getResourceKey().toString());
 
 			System.out.println("\n\nThe Taverna Basedir is set to: " + baseDir);
 			System.out.println("NOTE: Please set the Taverna base directly correctly. This can be set in the service.properties file of service code.\n\n");
@@ -212,6 +218,7 @@ public class TavernaWorkflowServiceImplResource extends TavernaWorkflowServiceIm
 
 	public void createWorkflow(WMSInputType wMSInputElement)
 	{
+		
 		try {
 
 			String [] keys = this.getResourceKey().toString().trim().split("TavernaWorkflowServiceImplResultsKey=");
@@ -267,7 +274,6 @@ public class TavernaWorkflowServiceImplResource extends TavernaWorkflowServiceIm
 			String [] args = new String[inputPorts + 3];
 
 			args[0] = "java";
-//			args[1] = "net.sf.taverna.t2.examples.execution.ExecuteWorkflow";
 			args[1] = "gov.nih.nci.cagrid.workflow.factory.taverna.ExecuteWorkflow";
 			args[2] = this.getScuflDoc();
 			for(int i = 0; i < inputPorts; i++)
@@ -276,19 +282,13 @@ public class TavernaWorkflowServiceImplResource extends TavernaWorkflowServiceIm
 			}
 
 			workflowStatus = WorkflowStatusType.Active;
-			WorkflowExecutionThread executor = new WorkflowExecutionThread(args);
+			WorkflowExecutionThread executor = new WorkflowExecutionThread(args,this.getResourcePropertySet());
 			executor.start();
 
-			/*	
-			System.out.println("In Service resource: \n");
-			System.out.println("Launching WorkflowLauncher: \n");
-
-			String [] results = new ExecuteWorkflow().run(args);
-			this.setOutputDoc(results);
-
-			// Need to return the WorkflowStatusType with status as "Done" */
-
-			//this.workflowStatus = WorkflowStatusType.Done;
+			//ResourceProperty testRp = this.getResourcePropertySet().get(TavernaWorkflowServiceImplConstantsBase.WORKFLOWSTATUSELEMENT);			
+			//WorkflowStatusType testStatus = (WorkflowStatusType) testRp.get(0);
+			//System.out.println("4. After Sleep Call:" + testStatus.getValue() + "\n\n");
+			
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -349,12 +349,12 @@ public class TavernaWorkflowServiceImplResource extends TavernaWorkflowServiceIm
 	            String filename = fileArray[i].toString();
 	            if(filename.endsWith(".jar"))
 	            {
-	            	System.out.println(i+1 + " : " + filename);
+	            	//System.out.println(i+1 + " : " + filename);
 	            	classpath = classpath + ":" + filename;
 	            }
 	        }
 	    }
-    	System.out.println(classpath);
+    	//System.out.println(classpath);
 	    return classpath;
 	}
 

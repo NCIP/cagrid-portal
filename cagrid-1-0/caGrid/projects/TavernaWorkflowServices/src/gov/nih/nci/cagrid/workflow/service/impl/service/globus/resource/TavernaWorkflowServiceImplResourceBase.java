@@ -90,6 +90,7 @@ import org.oasis.wsrf.lifetime.TerminationNotification;
  */
 public abstract class TavernaWorkflowServiceImplResourceBase extends ReflectionResource implements Resource
                                                   ,PersistenceCallback
+                                                  ,TopicListAccessor
                                                   ,RemoveCallback
                                                   {
 
@@ -106,6 +107,7 @@ public abstract class TavernaWorkflowServiceImplResourceBase extends ReflectionR
     private PersistenceHelper resourcePropertyPersistenceHelper = null;
     //used to persist notifications
     private FilePersistenceHelper resourcePersistenceHelper = null;
+    private TopicList topicList;
     private boolean beingLoaded = false;
     
     public TavernaWorkflowServiceImplResourceBase() {
@@ -127,6 +129,26 @@ public abstract class TavernaWorkflowServiceImplResourceBase extends ReflectionR
                            
         // Call the super initialize on the ReflectionResource                  
 	    super.initialize(resourceBean,resourceElementQName,id);
+		this.topicList = new SimpleTopicList(this);
+
+        // create the topics for each resource property
+        Iterator it = getResourcePropertySet().iterator();
+        List newTopicProps = new ArrayList();
+        while(it.hasNext()){
+            ResourceProperty prop = (ResourceProperty)it.next();
+            prop.getMetaData().getName();
+            prop = new ResourcePropertyTopic(prop);
+            this.topicList.addTopic((Topic)prop);
+            newTopicProps.add(prop);
+        }
+        // replace the non topic properties with the topic properties
+        Iterator newTopicIt = newTopicProps.iterator();
+        while(newTopicIt.hasNext()){
+            ResourceProperty prop = (ResourceProperty)newTopicIt.next();
+            getResourcePropertySet().remove(prop.getMetaData().getName());
+            getResourcePropertySet().add(prop);
+        }
+        
 
 
 		// register the service to the index service
@@ -144,6 +166,17 @@ public abstract class TavernaWorkflowServiceImplResourceBase extends ReflectionR
 	 */
 	public void setTerminationTime(Calendar time) {
 	    super.setTerminationTime(time);	
+		Topic terminationTopic = ((Topic)getResourcePropertySet().get(TavernaWorkflowServiceImplConstants.TERMINATIONTIME));
+        if (terminationTopic != null) {
+            TerminationNotification terminationNotification =
+                new TerminationNotification();
+            terminationNotification.setTerminationTime(time);
+            try {
+                terminationTopic.notify(terminationNotification);
+            } catch(Exception e) {
+                logger.error("Unable to send terminationTime notification", e);
+            }
+        }	
 
         //call the first store to persist the resource
         try {
@@ -369,6 +402,9 @@ public abstract class TavernaWorkflowServiceImplResourceBase extends ReflectionR
 	}
 	
 
+    public TopicList getTopicList() {
+        return this.topicList;
+    }
 
     public void remove() throws ResourceException {     
 		resourcePropertyPersistenceHelper.remove(this);
@@ -408,6 +444,8 @@ public abstract class TavernaWorkflowServiceImplResourceBase extends ReflectionR
         try {
             fis = new FileInputStream(file);
             ObjectInputStream ois = new ObjectInputStream(fis);
+            SubscriptionPersistenceUtils.loadSubscriptionListeners(
+                this.getTopicList(), ois);
 			loadResource(resourceKey,ois);
         } catch (Exception e) {
             beingLoaded = false;
@@ -452,6 +490,8 @@ public abstract class TavernaWorkflowServiceImplResourceBase extends ReflectionR
                 resourcePersistenceHelper.getStorageDirectory());
             fos = new FileOutputStream(tmpFile);
             ObjectOutputStream oos = new ObjectOutputStream(fos);
+            SubscriptionPersistenceUtils.storeSubscriptionListeners(
+                this.getTopicList(), oos);
 			storeResource(oos);
         } catch (Exception e) {
             if (tmpFile != null) {
