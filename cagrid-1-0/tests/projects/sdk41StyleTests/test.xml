@@ -17,7 +17,7 @@
 	<property name="testing.containers.dir" value="${basedir}/../testUtils/containers"/>
 
 	<!-- properties for caCORE SDK application's location -->
-	<property name="remote.sdk.host.name" value="http://sdkexamples.bmi.ohio-state.edu" />
+	<property name="remote.sdk.host.name" value="sdkexamples.bmi.ohio-state.edu" />
 	<property name="remote.sdk.host.port" value="8041" />
 	
 	<!-- sdk libraries needed at test runtime are in the remote-lib directory -->
