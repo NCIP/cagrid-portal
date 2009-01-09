@@ -17,7 +17,7 @@
 				<include name="*.jar" />
 			</fileset>
 		</copy>
-		<delete file="${tomcat.deploy.lib.dir}/commons-collections-3.0.jar"/>
+		<delete file="${webapp.deploy.lib.dir}/commons-collections-3.0.jar" />
 	</target>
 
 
@@ -30,7 +30,39 @@
 				<include name="*.jar" />
 			</fileset>
 		</copy>
-		<delete file="${ext.globus.dir}/lib/commons-collections-3.0.jar"/>
+		<delete file="${ext.globus.dir}/lib/commons-collections-3.0.jar" />
+	</target>
+
+	<!-- ============================================================== -->
+	<!-- Pre Deploy JBOSS                                               -->
+	<!-- ============================================================== -->
+	<target name="preDeployJBoss">
+		<copy todir="${build.lib.dir}" overwrite="true">
+			<fileset dir="${ext.lib}">
+				<include name="*.jar" />
+			</fileset>
+		</copy>
+		<delete file="${webapp.deploy.lib.dir}/commons-collections-3.0.jar" />
+	</target>
+
+
+
+	<!-- ============================================================== -->
+	<!-- Post Undeploy Tomcat                                           -->
+	<!-- ============================================================== -->
+	<target name="postUndeployTomcat">
+	</target>
+
+	<!-- ============================================================== -->
+	<!-- Post Undeploy Globus                                           -->
+	<!-- ============================================================== -->
+	<target name="postUndeployGlobus">
+	</target>
+
+	<!-- ============================================================== -->
+	<!-- Post Undeploy JBOSS                                            -->
+	<!-- ============================================================== -->
+	<target name="postUndeployJBoss">
 	</target>
 
 </project>

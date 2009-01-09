@@ -1,6 +1,5 @@
 <?xml version="1.0"?>
 <project name="Developer Modified Build File" basedir=".">
-	<!-- ============================================================== -->
 	<!-- This file is designed to allow the developer to extend the     -->
 	<!-- build process without having to edit the master build.xml      -->
 	<!-- file. DO NOT REMOVE ANY TARGETS                                -->
@@ -29,6 +28,7 @@
 	<property name="ext.targetgrid.dir" location="${ext.dir}/target_grid" />
 	<property name="ext.lib" location="${ext.dependencies.dir}/service/jars" />
 	<property name="ext.test.lib" value="${ext.dependencies.dir}/test/jars" />
+	<property name="ext.tools.lib.dir" location="${ext.dependencies.dir}/tools/jars" />
 
 	<property name="build.dir" location="build" />
 	<property name="build.dest" location="${build.dir}/classes" />
@@ -44,62 +44,69 @@
 	<property name="hibernate.props" value="${conf.dir}/grouper.hibernate.properties" />
 	<property name="build.sql" location="${build.dir}/sql" />
 
+	<!-- overide the introduce location of this which is suposed to be in tools/lib -->
+	<property name="ant.contrib.location" value="${ext.tools.lib.dir}/ant-contrib-1.0b3.jar" />
+	
 	<target name="defineClasspaths" depends="checkGlobus">
-		<runtarget target="defineExtendedClasspaths" />
-		<path id="base.classpath">
-			<fileset dir="${lib.dir}">
-				<include name="*.jar" />
-			</fileset>
-			<fileset dir="${ext.globus.dir}/lib">
-				<include name="*.jar" />
-				<exclude name="${stubs.jar.name}" />
-				<exclude name="${common.jar.name}" />
-				<exclude name="${client.jar.name}" />
-				<exclude name="${service.jar.name}" />
-				<exclude name="${resources.jar.name}" />
-				<exclude name="commons-collections-3.0.jar" />
-			</fileset>
-			<path refid="base.extended.classpath" />
-		</path>
-		<path id="service.build.classpath">
-			<pathelement location="${stubs.dest}" />
-			<path refid="service.build.extended.classpath" />
-			<path refid="base.classpath" />
-		</path>
-		<path id="service.run.classpath">
-			<pathelement location="${build.dest}" />
-			<pathelement location="${conf.dir}" />
-			<path refid="service.run.extended.classpath" />
-			<path refid="service.build.classpath" />
-		</path>
-		<path id="test.build.classpath">
-			<fileset dir="${test.lib.dir}">
-				<include name="*.jar" />
-			</fileset>
-			<pathelement location="${build.dest}" />
-			<path refid="test.build.extended.classpath" />
-			<path refid="service.build.classpath" />
-		</path>
-		<path id="test.run.classpath">
-			<pathelement location="${test.build.dest}" />
-			<pathelement location="${test.resources.dir}" />
-			<path refid="test.run.extended.classpath" />
-			<path refid="test.build.classpath" />
-		</path>
-		<path id="run.classpath">
-			<pathelement location="${build.dest}" />
-			<pathelement location="resources/conf" />
-			<path refid="run.extended.classpath" />
-			<path refid="service.build.classpath" />
-			<pathelement location="${ext.globus.dir}" />
-		</path>
-		<path id="processor.run.classpath">
-			<fileset dir="${tools.lib.dir}">
-				<include name="*.jar" />
-			</fileset>
-			<path refid="run.classpath" />
-		</path>
-	</target>
+			<path id="tasks.run.extended.classpath"/>
+			<runtarget target="defineExtendedClasspaths" />
+			<path id="base.classpath">
+				<fileset dir="${lib.dir}">
+					<include name="*.jar" />
+				</fileset>
+				<fileset dir="${ext.globus.dir}/lib">
+					<include name="*.jar" />
+					<exclude name="${stubs.jar.name}" />
+					<exclude name="${common.jar.name}" />
+					<exclude name="${client.jar.name}" />
+					<exclude name="${service.jar.name}" />
+					<exclude name="commons-collections-3.0.jar" />
+				</fileset>
+				<path refid="base.extended.classpath" />
+			</path>
+			<path id="service.build.classpath">
+				<pathelement location="${stubs.dest}" />
+				<path refid="service.build.extended.classpath" />
+				<path refid="base.classpath" />
+			</path>
+			<path id="service.run.classpath">
+				<pathelement location="${build.dest}" />
+				<path refid="service.run.extended.classpath" />
+				<path refid="service.build.classpath" />
+			</path>
+			<path id="test.build.classpath">
+				<fileset dir="${test.lib.dir}">
+					<include name="*.jar" />
+				</fileset>
+				<pathelement location="${build.dest}" />
+				<path refid="test.build.extended.classpath" />
+				<path refid="service.build.classpath" />
+			</path>
+			<path id="test.run.classpath">
+				<pathelement location="${test.build.dest}" />
+				<path refid="test.run.extended.classpath" />
+				<path refid="test.build.classpath" />
+			</path>
+			<path id="run.classpath">
+				<pathelement location="${build.dest}" />
+				<path refid="run.extended.classpath" />
+				<path refid="service.build.classpath" />
+				<pathelement location="${ext.globus.dir}" />
+			</path>
+			<path id="tasks.run.classpath">
+				<path refid="tasks.run.extended.classpath" />
+				<fileset dir="${tools.lib.dir}">
+					<include name="*.jar" />
+				</fileset>
+				<fileset dir="${lib.dir}">
+					<include name="*.jar" />
+				</fileset>
+				<fileset dir="${ext.globus.dir}/lib">
+					<include name="*.jar" />
+				</fileset>
+			</path>
+		</target>
+
 
 	<!-- ============================================================== -->
 	<!-- Create any extended Classpaths here                            -->
@@ -113,6 +120,7 @@
 		<path id="service.build.extended.classpath">
 		</path>
 		<path id="service.run.extended.classpath">
+			<pathelement location="resources/conf" />
 		</path>
 		<path id="test.build.extended.classpath">
 			<fileset dir="${ext.test.lib}">
@@ -123,6 +131,16 @@
 			<pathelement location="${test.dir}/resources" />
 		</path>
 		<path id="run.extended.classpath">
+		<pathelement location="resources/conf" />
+		</path>
+		<path id="tasks.run.extended.classpath">
+			<fileset dir="${ext.lib}">
+				<include name="*.jar" />
+			</fileset>
+			<fileset dir="${ext.tools.lib.dir}">
+				<include name="*.jar" />
+			</fileset>
+
 		</path>
 	</target>
 
@@ -130,8 +148,12 @@
 	<!-- ============================================================== -->
 	<!-- Pre Init Target                                                -->
 	<!-- ============================================================== -->
-	<target name="preInit">
+	<target name="preInit" depends="checkValidate">
 		<runtarget target="configure" />
+	</target>
+
+	<target name="checkValidate" unless="perform.deployment.validation">
+		<property name="no.deployment.validation" value="true" />
 	</target>
 
 	<!-- ============================================================== -->
@@ -423,42 +445,6 @@
 		</java>
 	</target>
 
-	<target name="generateCA" description="Generates a certificate authority." depends="checkGlobus">
-		<input message="Please enter the DN for the new CA (ex. O=xyz,OU=abc,CN=My CA):" addproperty="dn.input" />
-		<input message="Please enter the number of days the new CA will be valid for:" addproperty="days.input" />
-		<input message="Please enter a password for the new CA:" addproperty="password.input" />
-		<input message="Please enter a location to write the new CA's private key:" addproperty="key.input" />
-		<input message="Please enter a location to write the new CA's certificate:" addproperty="cert.input" />
-		<java classname="gov.nih.nci.cagrid.gridca.commandline.AntGenerateCA" fork="true" newenvironment="true" failonerror="true">
-			<arg value="${dn.input}" />
-			<arg value="${days.input}" />
-			<arg value="${password.input}" />
-			<arg value="${key.input}" />
-			<arg value="${cert.input}" />
-			<classpath refid="service.run.classpath" />
-		</java>
-	</target>
-
-	<target name="createAndSignHostCertificate" description="Create and signs a host certificate." depends="checkGlobus">
-		<input message="Please enter the location of the CA's private key:" addproperty="key.input" />
-		<input message="Please enter the CA's password:" addproperty="password.input" />
-		<input message="Please enter the location of the CA's certificate:" addproperty="ca.input" />
-		<input message="Please enter the Hostname [${env.HOST}]:" addproperty="hostname.input" defaultvalue="${env.HOST}" />
-		<input message="Please enter the number of days the host certificate will be valid for:" addproperty="days.input" />
-		<input message="Please enter a location to write the host key:" addproperty="hostkey.input" />
-
-		<input message="Please enter a location to write the host certificate:" addproperty="cert.input" />
-		<java classname="gov.nih.nci.cagrid.gridca.commandline.AntCreateHostCertificate" fork="true" newenvironment="true" failonerror="true">
-			<arg value="${key.input}" />
-			<arg value="${password.input}" />
-			<arg value="${ca.input}" />
-			<arg value="${hostname.input}" />
-			<arg value="${days.input}" />
-			<arg value="${hostkey.input}" />
-			<arg value="${cert.input}" />
-			<classpath refid="service.run.classpath" />
-		</java>
-	</target>
 
 	<target name="generateTrustReport" description="Generates a Grid Trust Report." depends="init">
 		<input message="Please enter a file location to write the report to [grid-trust-report.txt]:" addproperty="out.input" defaultvalue="grid-trust-report.txt" />

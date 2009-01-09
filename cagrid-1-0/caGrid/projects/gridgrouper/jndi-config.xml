@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jndiConfig xmlns="http://wsrf.globus.org/jndi/config">
   <service name="SERVICE-INSTANCE-PREFIX/GridGrouper">
-    <resource name="configuration" type="gov.nih.nci.cagrid.gridgrouper.service.globus.resource.ResourceConfiguration">
+    <resource name="configuration" type="gov.nih.nci.cagrid.gridgrouper.service.globus.resource.GridGrouperResourceConfiguration">
       <resourceParams>
         <parameter>
           <name>factory</name>
@@ -24,15 +24,19 @@
         </parameter>
       </resourceParams>
     </resource>
-    <resource name="serviceconfiguration" type="gov.nih.nci.cagrid.gridgrouper.service.ServiceConfiguration">
+    <resource name="serviceconfiguration" type="gov.nih.nci.cagrid.gridgrouper.service.GridGrouperConfiguration">
       <resourceParams>
         <parameter>
           <name>factory</name>
           <value>org.globus.wsrf.jndi.BeanFactory</value>
         </parameter>
+        <parameter>
+          <name>etcDirectoryPath</name>
+          <value>ETC-PATH</value>
+        </parameter>
       </resourceParams>
     </resource>
-    <resource name="home" type="gov.nih.nci.cagrid.gridgrouper.service.globus.resource.BaseResourceHome">
+    <resource name="home" type="gov.nih.nci.cagrid.gridgrouper.service.globus.resource.GridGrouperResourceHome">
       <resourceParams>
         <parameter>
           <name>factory</name>
