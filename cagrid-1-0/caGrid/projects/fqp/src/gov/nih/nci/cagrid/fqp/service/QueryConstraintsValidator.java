@@ -25,13 +25,15 @@ public class QueryConstraintsValidator {
             throw new FederatedQueryProcessingException(
                 "Query specifies more target data services than allowed by this service");
         }
-        if (!validMaximumTimeout(parameters)) {
-            throw new FederatedQueryProcessingException(
+        if (parameters != null) {
+            if (!validMaximumTimeout(parameters)) {
+                throw new FederatedQueryProcessingException(
                 "Query specifies a retry timeout greater than is allowed by this serice");
-        }
-        if (!validMaximumRetries(parameters)) {
-            throw new FederatedQueryProcessingException(
+            }
+            if (!validMaximumRetries(parameters)) {
+                throw new FederatedQueryProcessingException(
                 "Query specifies a greater number of retries than is allowed by this service");
+            }
         }
     }
     
