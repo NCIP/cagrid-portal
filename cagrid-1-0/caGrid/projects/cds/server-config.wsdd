@@ -10,6 +10,8 @@
     <parameter name="providers" value="GetRPProvider GetMRPProvider QueryRPProvider gov.nih.nci.cagrid.introduce.security.service.globus.ServiceSecurityProviderImpl DestroyProvider" />
     <parameter name="loadOnStartup" value="true" />
     <parameter name="securityMetadata" value="ETC-PATH/DelegatedCredential-security-metadata.xml" />
+    <parameter name="delegatedcredential-etcDirectoryPath" value="ETC-PATH" />
+    <parameter name="delegatedcredential-serviceName" value="DelegatedCredential" />
   </service>
   <service name="SERVICE-INSTANCE-PREFIX/CredentialDelegationService" provider="Handler" use="literal" style="document">
     <parameter name="className" value="org.cagrid.gaards.cds.service.globus.CredentialDelegationServiceProviderImpl" />
@@ -21,6 +23,8 @@
     <parameter name="providers" value="GetRPProvider GetMRPProvider QueryRPProvider gov.nih.nci.cagrid.introduce.security.service.globus.ServiceSecurityProviderImpl" />
     <parameter name="loadOnStartup" value="true" />
     <parameter name="securityMetadata" value="ETC-PATH/CredentialDelegationService-security-metadata.xml" />
+    <parameter name="credentialdelegationservice-etcDirectoryPath" value="ETC-PATH" />
+    <parameter name="credentialdelegationservice-serviceName" value="CredentialDelegationService" />
   </service>
   <typeMapping name="AggregatorContent" qname="aggr:AggregatorContent" type="java:org.globus.mds.aggregator.types.AggregatorContent" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="" />
   <typeMapping xmlns:ns="http://gaards.cagrid.org/cds" qname="ns:IdentityDelegationPolicy" type="java:org.cagrid.gaards.cds.common.IdentityDelegationPolicy" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="" />

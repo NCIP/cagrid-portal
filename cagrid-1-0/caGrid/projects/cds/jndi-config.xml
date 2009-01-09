@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jndiConfig xmlns="http://wsrf.globus.org/jndi/config">
   <service name="SERVICE-INSTANCE-PREFIX/DelegatedCredential">
-    <resource name="configuration" type="org.cagrid.gaards.cds.delegated.service.globus.resource.ResourceConfiguration">
+    <resource name="configuration" type="org.cagrid.gaards.cds.delegated.service.globus.resource.DelegatedCredentialResourceConfiguration">
       <resourceParams>
         <parameter>
           <name>factory</name>
@@ -31,7 +31,7 @@
     <resourceLink name="credentialDelegationServiceHome" target="java:comp/env/services/SERVICE-INSTANCE-PREFIX/CredentialDelegationService/home" />
   </service>
   <service name="SERVICE-INSTANCE-PREFIX/CredentialDelegationService">
-    <resource name="configuration" type="org.cagrid.gaards.cds.service.globus.resource.ResourceConfiguration">
+    <resource name="configuration" type="org.cagrid.gaards.cds.service.globus.resource.CredentialDelegationServiceResourceConfiguration">
       <resourceParams>
         <parameter>
           <name>factory</name>
@@ -54,11 +54,15 @@
         </parameter>
       </resourceParams>
     </resource>
-    <resource name="serviceconfiguration" type="org.cagrid.gaards.cds.service.ServiceConfiguration">
+    <resource name="serviceconfiguration" type="org.cagrid.gaards.cds.service.CredentialDelegationServiceConfiguration">
       <resourceParams>
         <parameter>
           <name>factory</name>
           <value>org.globus.wsrf.jndi.BeanFactory</value>
+        </parameter>
+        <parameter>
+          <name>etcDirectoryPath</name>
+          <value>ETC-PATH</value>
         </parameter>
         <parameter>
           <name>cdsConfiguration</name>
@@ -70,7 +74,7 @@
         </parameter>
       </resourceParams>
     </resource>
-    <resource name="home" type="org.cagrid.gaards.cds.service.globus.resource.BaseResourceHome">
+    <resource name="home" type="org.cagrid.gaards.cds.service.globus.resource.CredentialDelegationServiceResourceHome">
       <resourceParams>
         <parameter>
           <name>factory</name>

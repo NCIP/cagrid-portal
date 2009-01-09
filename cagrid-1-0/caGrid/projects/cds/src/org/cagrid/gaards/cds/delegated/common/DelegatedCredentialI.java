@@ -18,8 +18,6 @@ import org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault;
  */
 public interface DelegatedCredentialI {
 
-  public org.oasis.wsrf.lifetime.DestroyResponse destroy(org.oasis.wsrf.lifetime.Destroy params) throws RemoteException ;
-
   /**
    * This method allows an authorized user to get a delegated credential.
    *
@@ -32,6 +30,8 @@ public interface DelegatedCredentialI {
    *	
    */
   public org.cagrid.gaards.cds.common.CertificateChain getDelegatedCredential(org.cagrid.gaards.cds.common.PublicKey publicKey) throws RemoteException, org.cagrid.gaards.cds.stubs.types.CDSInternalFault, org.cagrid.gaards.cds.stubs.types.DelegationFault, org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault ;
+
+  public org.oasis.wsrf.lifetime.DestroyResponse destroy(org.oasis.wsrf.lifetime.Destroy params) throws RemoteException ;
 
 }
 

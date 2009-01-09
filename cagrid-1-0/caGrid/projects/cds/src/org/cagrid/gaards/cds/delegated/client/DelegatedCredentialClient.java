@@ -30,11 +30,9 @@ import gov.nih.nci.cagrid.introduce.security.client.ServiceSecurityClient;
  * On construction the class instance will contact the remote service and retrieve it's security
  * metadata description which it will use to configure the Stub specifically for each method call.
  * 
- * @created by Introduce Toolkit version 1.1
+ * @created by Introduce Toolkit version 1.3
  */
-public class DelegatedCredentialClient extends ServiceSecurityClient implements DelegatedCredentialI {	
-	protected DelegatedCredentialPortType portType;
-	private Object portTypeMutex;
+public class DelegatedCredentialClient extends DelegatedCredentialClientBase implements DelegatedCredentialI {	
 
 	public DelegatedCredentialClient(String url) throws MalformedURIException, RemoteException {
 		this(url,null);	
@@ -42,7 +40,6 @@ public class DelegatedCredentialClient extends ServiceSecurityClient implements 
 
 	public DelegatedCredentialClient(String url, GlobusCredential proxy) throws MalformedURIException, RemoteException {
 	   	super(url,proxy);
-	   	initialize();
 	}
 	
 	public DelegatedCredentialClient(EndpointReferenceType epr) throws MalformedURIException, RemoteException {
@@ -51,37 +48,6 @@ public class DelegatedCredentialClient extends ServiceSecurityClient implements 
 	
 	public DelegatedCredentialClient(EndpointReferenceType epr, GlobusCredential proxy) throws MalformedURIException, RemoteException {
 	   	super(epr,proxy);
-		initialize();
-	}
-	
-	private void initialize() throws RemoteException {
-	    this.portTypeMutex = new Object();
-		this.portType = createPortType();
-	}
-
-	private DelegatedCredentialPortType createPortType() throws RemoteException {
-
-		DelegatedCredentialServiceAddressingLocator locator = new DelegatedCredentialServiceAddressingLocator();
-		// attempt to load our context sensitive wsdd file
-		InputStream resourceAsStream = getClass().getResourceAsStream("client-config.wsdd");
-		if (resourceAsStream != null) {
-			// we found it, so tell axis to configure an engine to use it
-			EngineConfiguration engineConfig = new FileProvider(resourceAsStream);
-			// set the engine of the locator
-			locator.setEngine(new AxisClient(engineConfig));
-		}
-		DelegatedCredentialPortType port = null;
-		try {
-			port = locator.getDelegatedCredentialPortTypePort(getEndpointReference());
-		} catch (Exception e) {
-			throw new RemoteException("Unable to locate portType:" + e.getMessage(), e);
-		}
-
-		return port;
-	}
-	
-	public GetResourcePropertyResponse getResourceProperty(QName resourcePropertyQName) throws RemoteException {
-		return portType.getResourceProperty(resourcePropertyQName);
 	}
 
 	public static void usage(){
@@ -110,13 +76,6 @@ public class DelegatedCredentialClient extends ServiceSecurityClient implements 
 		}
 	}
 
-  public org.oasis.wsrf.lifetime.DestroyResponse destroy(org.oasis.wsrf.lifetime.Destroy params) throws RemoteException {
-    synchronized(portTypeMutex){
-      configureStubSecurity((Stub)portType,"destroy");
-    return portType.destroy(params);
-    }
-  }
-
   public org.cagrid.gaards.cds.common.CertificateChain getDelegatedCredential(org.cagrid.gaards.cds.common.PublicKey publicKey) throws RemoteException, org.cagrid.gaards.cds.stubs.types.CDSInternalFault, org.cagrid.gaards.cds.stubs.types.DelegationFault, org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault {
     synchronized(portTypeMutex){
       configureStubSecurity((Stub)portType,"getDelegatedCredential");
@@ -126,6 +85,13 @@ public class DelegatedCredentialClient extends ServiceSecurityClient implements 
     params.setPublicKey(publicKeyContainer);
     org.cagrid.gaards.cds.delegated.stubs.GetDelegatedCredentialResponse boxedResult = portType.getDelegatedCredential(params);
     return boxedResult.getCertificateChain();
+    }
+  }
+
+  public org.oasis.wsrf.lifetime.DestroyResponse destroy(org.oasis.wsrf.lifetime.Destroy params) throws RemoteException {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"destroy");
+    return portType.destroy(params);
     }
   }
 

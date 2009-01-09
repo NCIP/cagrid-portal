@@ -1,5 +1,7 @@
 package org.cagrid.gaards.cds.service;
 
+import gov.nih.nci.cagrid.introduce.servicetools.ServiceConfiguration;
+
 import org.globus.wsrf.config.ContainerConfig;
 import java.io.File;
 import javax.naming.InitialContext;
@@ -14,16 +16,17 @@ import org.globus.wsrf.Constants;
  * This class holds all service properties which were defined for the service to have
  * access to.
  * 
- * @created by Introduce Toolkit version 1.1
+ * @created by Introduce Toolkit version 1.3
  * 
  */
-public class ServiceConfiguration {
+public class CredentialDelegationServiceConfiguration implements ServiceConfiguration {
 
-	public static ServiceConfiguration  configuration = null;
-
-	public static ServiceConfiguration getConfiguration() throws Exception {
-		if (ServiceConfiguration.configuration != null) {
-			return ServiceConfiguration.configuration;
+	public static CredentialDelegationServiceConfiguration  configuration = null;
+    public String etcDirectoryPath;
+    	
+	public static CredentialDelegationServiceConfiguration getConfiguration() throws Exception {
+		if (CredentialDelegationServiceConfiguration.configuration != null) {
+			return CredentialDelegationServiceConfiguration.configuration;
 		}
 		MessageContext ctx = MessageContext.getCurrentContext();
 
@@ -32,19 +35,29 @@ public class ServiceConfiguration {
 		String jndiName = Constants.JNDI_SERVICES_BASE_NAME + servicePath + "/serviceconfiguration";
 		try {
 			javax.naming.Context initialContext = new InitialContext();
-			ServiceConfiguration.configuration = (ServiceConfiguration) initialContext.lookup(jndiName);
+			CredentialDelegationServiceConfiguration.configuration = (CredentialDelegationServiceConfiguration) initialContext.lookup(jndiName);
 		} catch (Exception e) {
 			throw new Exception("Unable to instantiate service configuration.", e);
 		}
 
-		return ServiceConfiguration.configuration;
+		return CredentialDelegationServiceConfiguration.configuration;
 	}
 	
+
 	
 	private String cdsConfiguration;
 	
 	private String cdsProperties;
 	
+	
+    public String getEtcDirectoryPath() {
+		return ContainerConfig.getBaseDirectory() + File.separator + etcDirectoryPath;
+	}
+	
+	public void setEtcDirectoryPath(String etcDirectoryPath) {
+		this.etcDirectoryPath = etcDirectoryPath;
+	}
+
 
 	
 	public String getCdsConfiguration() {

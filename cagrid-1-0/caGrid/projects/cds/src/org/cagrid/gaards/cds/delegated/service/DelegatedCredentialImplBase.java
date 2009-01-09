@@ -1,6 +1,6 @@
 package org.cagrid.gaards.cds.delegated.service;
 
-import org.cagrid.gaards.cds.service.ServiceConfiguration;
+import  org.cagrid.gaards.cds.service.CredentialDelegationServiceConfiguration;
 
 import java.rmi.RemoteException;
 
@@ -22,7 +22,7 @@ import org.globus.wsrf.ResourcePropertySet;
  *
  * Provides some simple accessors for the Impl.
  * 
- * @created by Introduce Toolkit version 1.1
+ * @created by Introduce Toolkit version 1.3
  * 
  */
 public abstract class DelegatedCredentialImplBase {
@@ -31,16 +31,16 @@ public abstract class DelegatedCredentialImplBase {
 	
 	}
 	
-	public ServiceConfiguration getConfiguration() throws Exception {
-		return ServiceConfiguration.getConfiguration();
+	public CredentialDelegationServiceConfiguration getConfiguration() throws Exception {
+		return CredentialDelegationServiceConfiguration.getConfiguration();
 	}
 	
 	
 	
 	
-	public org.cagrid.gaards.cds.service.globus.resource.BaseResourceHome getCredentialDelegationServiceResourceHome() throws Exception {
+	public org.cagrid.gaards.cds.service.globus.resource.CredentialDelegationServiceResourceHome getCredentialDelegationServiceResourceHome() throws Exception {
 		ResourceHome resource = getResourceHome("credentialDelegationServiceHome");
-		return (org.cagrid.gaards.cds.service.globus.resource.BaseResourceHome)resource;
+		return (org.cagrid.gaards.cds.service.globus.resource.CredentialDelegationServiceResourceHome)resource;
 	}
 	
 	
@@ -61,10 +61,6 @@ public abstract class DelegatedCredentialImplBase {
 
 		return resourceHome;
 	}
-	
-		
-	
-	
 
 
 }

@@ -23,10 +23,8 @@
 	<property name="schema.dir" value="schema" />
 	<property name="mappings.file" value="${basedir}/namespace2package.mappings" />
 
-	
-    <!--import developers targets and properties (which can be overridden)-->
-    <import file="dev-build.xml" />
-
+	<!--import developers targets and properties (which can be overridden)-->
+	<import file="dev-build.xml" />
 
 	<!-- Jars -->
 	<property name="jar.prefix" value="${service.name}" />
@@ -45,10 +43,9 @@
 
 
 	<!-- Basic Build directories -->
+
 	<!-- Auxiliary directory where all the intermediate files will be placed -->
 	<property name="build.dir" location="build" />
-	
-
 	<!-- Directory for compiled service classes -->
 	<property name="build.dest" location="${build.dir}/classes" />
 	<property name="test.build.dest" value="${build.dir}/test/classes" />
@@ -79,10 +76,11 @@
 	<import file="dev-build-deploy.xml" />
 
 
+	<property name="ant.contrib.location" value="${tools.lib.dir}/ant-contrib-1.0b3.jar"/>
 	<!-- using ant contrib for contidionals, looping , and runtarget -->
 	<taskdef resource="net/sf/antcontrib/antlib.xml">
 		<classpath>
-			<pathelement location="${tools.lib.dir}/ant-contrib.jar" />
+			<pathelement location="${ant.contrib.location}" />
 		</classpath>
 	</taskdef>
 
@@ -105,7 +103,7 @@
 	<target name="setGlobus" if="env.GLOBUS_LOCATION">
 		<!-- GT4 build files and directories-->
 		<property name="ext.globus.dir" value="${env.GLOBUS_LOCATION}" />
-		<property name="build.stubs" location="${ext.globus.dir}/share/globus_wsrf_tools/build-stubs.xml" />
+		<property name="build.stubs" location="build-stubs.xml" />
 		<property name="schema.src" location="${ext.globus.dir}/share/schema" />
 		<property name="build.packages" location="${ext.globus.dir}/share/globus_wsrf_common/build-packages.xml" />
 		<!-- Copied from build.stubs file, as there is no way to "append" to the value in the remote file -->
@@ -143,6 +141,7 @@
 	</target>
 
 	<target name="defineClasspaths" depends="checkGlobus">
+		<path id="tasks.run.extended.classpath"/>
 		<runtarget target="defineExtendedClasspaths" />
 		<path id="base.classpath">
 			<fileset dir="${lib.dir}">
@@ -150,7 +149,6 @@
 			</fileset>
 			<fileset dir="${ext.globus.dir}/lib">
 				<include name="*.jar" />
-                <exclude name="junit.jar"/>
 				<exclude name="${stubs.jar.name}" />
 				<exclude name="${common.jar.name}" />
 				<exclude name="${client.jar.name}" />
@@ -187,11 +185,17 @@
 			<path refid="service.build.classpath" />
 			<pathelement location="${ext.globus.dir}" />
 		</path>
-		<path id="processor.run.classpath">
+		<path id="tasks.run.classpath">
+			<path refid="tasks.run.extended.classpath" />
 			<fileset dir="${tools.lib.dir}">
 				<include name="*.jar" />
 			</fileset>
-			<path refid="run.classpath" />
+			<fileset dir="${lib.dir}">
+				<include name="*.jar" />
+			</fileset>
+			<fileset dir="${ext.globus.dir}/lib">
+				<include name="*.jar" />
+			</fileset>
 		</path>
 	</target>
 
@@ -244,9 +248,9 @@
 	</target>
 
 	<target name="stubGenerationPostProcessor">
-		<java classname="gov.nih.nci.cagrid.introduce.axis.FixSoapBindingStub" classpathref="processor.run.classpath" fork="no">
-			<arg value="${basedir}" />
-		</java>
+		<taskdef name="fixSoapBindingStubs" classname="gov.nih.nci.cagrid.introduce.servicetasks.axis.FixSoapBindingStub" classpathref="tasks.run.classpath">
+		</taskdef>
+		<fixSoapBindingStubs />
 	</target>
 
 
