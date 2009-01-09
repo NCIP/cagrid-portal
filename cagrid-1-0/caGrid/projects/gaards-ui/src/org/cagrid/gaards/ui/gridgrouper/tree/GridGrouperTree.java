@@ -107,12 +107,7 @@ public class GridGrouperTree extends JTree {
 		Runner runner = new Runner() {
 			public void execute() {
 				try {
-					GridGrouper grouper = null;
-					if (cred != null) {
-						grouper = new GridGrouper(uri, cred);
-					} else {
-						grouper = new GridGrouper(uri, true);
-					}
+					GridGrouper grouper = new GridGrouper(uri, cred);
 					rootNode.addGridGrouper(grouper);
 				} catch (Exception e) {
 					ErrorDialog.showError(e);

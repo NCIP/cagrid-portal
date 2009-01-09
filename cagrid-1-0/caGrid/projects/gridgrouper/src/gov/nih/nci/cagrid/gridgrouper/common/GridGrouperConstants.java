@@ -1,6 +1,5 @@
 package gov.nih.nci.cagrid.gridgrouper.common;
 
-import javax.xml.namespace.QName;
 
 
 /**

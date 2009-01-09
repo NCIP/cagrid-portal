@@ -24,7 +24,7 @@ public class GridGrouperHandle extends ServiceHandle {
     public GridGrouper getClient(GlobusCredential credential) {
         GridGrouper client = null;
         if (credential == null) {
-            client = new GridGrouper(getServiceDescriptor().getServiceURL(), true);
+            client = new GridGrouper(getServiceDescriptor().getServiceURL());
         } else {
             client = new GridGrouper(getServiceDescriptor().getServiceURL(), credential);
         }

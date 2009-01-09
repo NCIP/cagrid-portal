@@ -1,5 +1,21 @@
 package gov.nih.nci.cagrid.gridgrouper.common;
 
+import gov.nih.nci.cagrid.gridgrouper.stubs.types.GrantPrivilegeFault;
+import gov.nih.nci.cagrid.gridgrouper.stubs.types.GridGrouperRuntimeFault;
+import gov.nih.nci.cagrid.gridgrouper.stubs.types.GroupAddFault;
+import gov.nih.nci.cagrid.gridgrouper.stubs.types.GroupDeleteFault;
+import gov.nih.nci.cagrid.gridgrouper.stubs.types.GroupModifyFault;
+import gov.nih.nci.cagrid.gridgrouper.stubs.types.GroupNotFoundFault;
+import gov.nih.nci.cagrid.gridgrouper.stubs.types.InsufficientPrivilegeFault;
+import gov.nih.nci.cagrid.gridgrouper.stubs.types.MemberAddFault;
+import gov.nih.nci.cagrid.gridgrouper.stubs.types.MemberDeleteFault;
+import gov.nih.nci.cagrid.gridgrouper.stubs.types.RevokePrivilegeFault;
+import gov.nih.nci.cagrid.gridgrouper.stubs.types.SchemaFault;
+import gov.nih.nci.cagrid.gridgrouper.stubs.types.StemAddFault;
+import gov.nih.nci.cagrid.gridgrouper.stubs.types.StemDeleteFault;
+import gov.nih.nci.cagrid.gridgrouper.stubs.types.StemModifyFault;
+import gov.nih.nci.cagrid.gridgrouper.stubs.types.StemNotFoundFault;
+
 import java.rmi.RemoteException;
 
 /**

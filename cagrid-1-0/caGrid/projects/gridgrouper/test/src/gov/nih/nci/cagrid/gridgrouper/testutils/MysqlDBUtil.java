@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.gridgrouper.testutils;
 
 import gov.nih.nci.cagrid.common.FaultHelper;
+import gov.nih.nci.cagrid.common.XMLUtilities;
 import gov.nih.nci.cagrid.gridgrouper.stubs.types.GridGrouperRuntimeFault;
 
 import java.io.InputStream;
@@ -11,7 +12,6 @@ import java.sql.ResultSet;
 import junit.framework.TestCase;
 
 import org.jdom.Document;
-import gov.nih.nci.cagrid.common.XMLUtilities;
 import org.projectmobius.db.ConnectionManager;
 import org.projectmobius.db.DatabaseException;
 import org.projectmobius.db.Query;
@@ -21,7 +21,7 @@ import org.projectmobius.db.Query;
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
  * @author <A HREF="MAILTO:oster@bmi.osu.edu">Scott Oster </A>
  * @author <A HREF="MAILTO:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: MysqlDBUtil.java,v 1.7 2008-02-18 17:18:21 oster Exp $
+ * @version $Id: MysqlDBUtil.java,v 1.8 2009-01-09 21:21:27 langella Exp $
  */
 public class MysqlDBUtil {
 

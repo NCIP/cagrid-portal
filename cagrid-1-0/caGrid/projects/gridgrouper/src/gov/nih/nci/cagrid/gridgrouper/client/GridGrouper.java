@@ -57,16 +57,6 @@ public class GridGrouper extends GridGrouperObject implements GrouperI {
     }
 
 
-    public GridGrouper(String serviceURI, boolean preferAnonymous) {
-        try {
-            this.setClient(new GridGrouperClient(serviceURI, preferAnonymous));
-        } catch (Exception e) {
-            getLog().error(e.getMessage(), e);
-            throw new GrouperRuntimeException(Utils.getExceptionMessage(e));
-        }
-    }
-
-
     /**
      * Used to Construct a Grid Grouper object corresponding to a Grid Grouper
      * Service.
@@ -79,7 +69,13 @@ public class GridGrouper extends GridGrouperObject implements GrouperI {
      */
     public GridGrouper(String serviceURI, GlobusCredential cred) {
         try {
-            this.setClient(new GridGrouperClient(serviceURI, cred));
+            GridGrouperClient c = new GridGrouperClient(serviceURI,cred);
+            if(cred==null){
+                c.setAnonymousPrefered(true);
+            }else{
+                c.setAnonymousPrefered(false);
+            }    
+            this.setClient(c);
         } catch (Exception e) {
             getLog().error(e.getMessage(), e);
             throw new GrouperRuntimeException(Utils.getExceptionMessage(e));

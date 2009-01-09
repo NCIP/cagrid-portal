@@ -2,20 +2,13 @@ package gov.nih.nci.cagrid.gridgrouper.client;
 
 import gov.nih.nci.cagrid.common.security.ProxyUtil;
 import gov.nih.nci.cagrid.gridgrouper.common.GridGrouperI;
-import gov.nih.nci.cagrid.introduce.security.stubs.ServiceSecurityPortType;
-import gov.nih.nci.cagrid.metadata.security.CommunicationMechanism;
-import gov.nih.nci.cagrid.metadata.security.Operation;
-import gov.nih.nci.cagrid.metadata.security.ProtectionLevelType;
-import gov.nih.nci.cagrid.metadata.security.ServiceSecurityMetadataOperations;
 
 import java.rmi.RemoteException;
-import java.util.HashMap;
 
 import org.apache.axis.client.Stub;
 import org.apache.axis.message.addressing.EndpointReferenceType;
 import org.apache.axis.types.URI.MalformedURIException;
 import org.globus.gsi.GlobusCredential;
-import org.globus.wsrf.impl.security.authorization.NoAuthorization;
 
 
 /**
@@ -29,23 +22,13 @@ import org.globus.wsrf.impl.security.authorization.NoAuthorization;
  */
 public class GridGrouperClient extends GridGrouperClientBase implements GridGrouperI {
 
-    private boolean preferAnonymous;
-
-
     public GridGrouperClient(String url) throws MalformedURIException, RemoteException {
         this(url, null);
     }
 
 
-    public GridGrouperClient(String url, boolean preferAnonymous) throws MalformedURIException, RemoteException {
-        super(url, null);
-        this.preferAnonymous = preferAnonymous;
-    }
-
-
     public GridGrouperClient(String url, GlobusCredential proxy) throws MalformedURIException, RemoteException {
         super(url, proxy);
-        this.preferAnonymous = false;
     }
 
 
@@ -54,17 +37,9 @@ public class GridGrouperClient extends GridGrouperClientBase implements GridGrou
     }
 
 
-    public GridGrouperClient(EndpointReferenceType epr, boolean preferAnonymous) throws MalformedURIException,
-        RemoteException {
-        super(epr, null);
-        this.preferAnonymous = preferAnonymous;
-    }
-
-
     public GridGrouperClient(EndpointReferenceType epr, GlobusCredential proxy) throws MalformedURIException,
         RemoteException {
         super(epr, proxy);
-        this.preferAnonymous = false;
     }
 
 
@@ -755,150 +730,10 @@ public class GridGrouperClient extends GridGrouperClientBase implements GridGrou
     }
 
 
-    protected void configureStubSecurity(Stub stub, String method) throws RemoteException {
-
-        boolean https = false;
-        if (epr.getAddress().getScheme().equals("https")) {
-            https = true;
-        }
-
-        if (method.equals("getServiceSecurityMetadata")) {
-            if (https) {
-                resetStub(stub);
-                stub._setProperty(org.globus.wsrf.security.Constants.GSI_TRANSPORT,
-                    org.globus.wsrf.security.Constants.SIGNATURE);
-                stub._setProperty(org.globus.wsrf.security.Constants.GSI_ANONYMOUS, Boolean.TRUE);
-                stub._setProperty(org.globus.wsrf.security.Constants.AUTHORIZATION,
-                    org.globus.wsrf.impl.security.authorization.NoAuthorization.getInstance());
-            }
-            return;
-        }
-
-        if (securityMetadata == null) {
-            operations = new HashMap();
-            securityMetadata = getServiceSecurityMetadata();
-            ServiceSecurityMetadataOperations ssmo = securityMetadata.getOperations();
-            if (ssmo != null) {
-                Operation[] ops = ssmo.getOperation();
-                if (ops != null) {
-                    for (int i = 0; i < ops.length; i++) {
-                        String lowerMethodName = ops[i].getName().substring(0, 1).toLowerCase()
-                            + ops[i].getName().substring(1);
-                        operations.put(lowerMethodName, ops[i]);
-                    }
-                }
-            }
-
-        }
-        resetStub(stub);
-
-        CommunicationMechanism serviceDefault = securityMetadata.getDefaultCommunicationMechanism();
-
-        CommunicationMechanism mechanism = null;
-        if (operations.containsKey(method)) {
-            Operation o = (Operation) operations.get(method);
-            mechanism = o.getCommunicationMechanism();
-        } else {
-            mechanism = serviceDefault;
-        }
-        boolean anonymousAllowed = true;
-        boolean authorizationAllowed = true;
-        boolean delegationAllowed = true;
-        boolean credentialsAllowed = true;
-
-        if ((https) && (mechanism.getGSITransport() != null)) {
-            ProtectionLevelType level = mechanism.getGSITransport().getProtectionLevel();
-            if (level != null) {
-                if ((level.equals(ProtectionLevelType.privacy)) || (level.equals(ProtectionLevelType.either))) {
-                    stub._setProperty(org.globus.wsrf.security.Constants.GSI_TRANSPORT,
-                        org.globus.wsrf.security.Constants.ENCRYPTION);
-                } else {
-                    stub._setProperty(org.globus.wsrf.security.Constants.GSI_TRANSPORT,
-                        org.globus.wsrf.security.Constants.SIGNATURE);
-                }
-
-            } else {
-                stub._setProperty(org.globus.wsrf.security.Constants.GSI_TRANSPORT,
-                    org.globus.wsrf.security.Constants.SIGNATURE);
-            }
-            delegationAllowed = false;
-
-        } else if (https) {
-            stub._setProperty(org.globus.wsrf.security.Constants.GSI_TRANSPORT,
-                org.globus.wsrf.security.Constants.SIGNATURE);
-            delegationAllowed = false;
-        } else if (mechanism.getGSISecureConversation() != null) {
-            ProtectionLevelType level = mechanism.getGSISecureConversation().getProtectionLevel();
-            if (level != null) {
-                if ((level.equals(ProtectionLevelType.privacy)) || (level.equals(ProtectionLevelType.either))) {
-                    stub._setProperty(org.globus.wsrf.security.Constants.GSI_SEC_CONV,
-                        org.globus.wsrf.security.Constants.ENCRYPTION);
-
-                } else {
-                    stub._setProperty(org.globus.wsrf.security.Constants.GSI_SEC_CONV,
-                        org.globus.wsrf.security.Constants.SIGNATURE);
-                }
-
-            } else {
-                stub._setProperty(org.globus.wsrf.security.Constants.GSI_SEC_CONV,
-                    org.globus.wsrf.security.Constants.ENCRYPTION);
-            }
-
-        } else if (mechanism.getGSISecureMessage() != null) {
-            ProtectionLevelType level = mechanism.getGSISecureMessage().getProtectionLevel();
-            if (level != null) {
-                if ((level.equals(ProtectionLevelType.privacy)) || (level.equals(ProtectionLevelType.either))) {
-                    stub._setProperty(org.globus.wsrf.security.Constants.GSI_SEC_MSG,
-                        org.globus.wsrf.security.Constants.ENCRYPTION);
-                } else {
-                    stub._setProperty(org.globus.wsrf.security.Constants.GSI_SEC_MSG,
-                        org.globus.wsrf.security.Constants.SIGNATURE);
-                }
-
-            } else {
-                stub._setProperty(org.globus.wsrf.security.Constants.GSI_SEC_MSG,
-                    org.globus.wsrf.security.Constants.ENCRYPTION);
-            }
-            delegationAllowed = false;
-            anonymousAllowed = false;
-        } else {
-            anonymousAllowed = false;
-            authorizationAllowed = false;
-            delegationAllowed = false;
-            credentialsAllowed = false;
-        }
-
-        if ((anonymousAllowed) && (preferAnonymous)) {
-            stub._setProperty(org.globus.wsrf.security.Constants.GSI_ANONYMOUS, Boolean.TRUE);
-        } else if ((credentialsAllowed) && (proxy != null)) {
-            try {
-                org.ietf.jgss.GSSCredential gss = new org.globus.gsi.gssapi.GlobusGSSCredentialImpl(proxy,
-                    org.ietf.jgss.GSSCredential.INITIATE_AND_ACCEPT);
-                stub._setProperty(org.globus.axis.gsi.GSIConstants.GSI_CREDENTIALS, gss);
-            } catch (org.ietf.jgss.GSSException ex) {
-                throw new RemoteException(ex.getMessage());
-            }
-        }
-
-        if (authorizationAllowed) {
-            if (getAuthorization() == null) {
-                stub._setProperty(org.globus.wsrf.security.Constants.AUTHORIZATION, NoAuthorization.getInstance());
-            } else {
-                stub._setProperty(org.globus.wsrf.security.Constants.AUTHORIZATION, getAuthorization());
-            }
-        }
-        if (delegationAllowed) {
-            if (getDelegationMode() != null) {
-                stub._setProperty(org.globus.axis.gsi.GSIConstants.GSI_MODE, getDelegationMode());
-            }
-        }
-    }
-
-
     public String getProxyIdentity() {
         if (getProxy() != null) {
             return getProxy().getIdentity();
-        } else if (!this.preferAnonymous) {
+        } else if (!isAnonymousPrefered()) {
             try {
                 GlobusCredential cred = ProxyUtil.getDefaultProxy();
                 if (cred.getTimeLeft() > 0) {
