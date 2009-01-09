@@ -13,16 +13,16 @@ public class TransferServiceTestsStoryBook {
 
 
     @Test
-    public void systemTestTransferService() throws IOException {
+    public void systemTestTransferService() throws Throwable {
     	Story s1 = new TransferServiceTest(ServiceContainerFactory
             .createContainer(ServiceContainerType.TOMCAT_CONTAINER));
     	
-    	s1.run();
+    	s1.runBare();
 
     	Story s2 = new TransferServiceTest(ServiceContainerFactory
             .createContainer(ServiceContainerType.SECURE_TOMCAT_CONTAINER));
 
-    	s2.run();
+    	s2.runBare();
     }
 
 }
