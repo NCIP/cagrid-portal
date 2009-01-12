@@ -46,10 +46,7 @@ public class BasicAnalyticalServiceWithMetadataTest extends AbstractServiceTest 
         Vector steps = new Vector();
         steps.add(getCreateServiceStep());
         steps.add(new GlobusCreateStep(getGlobus()));
-        List args = new ArrayList();
-        args.add("-Dno.deployment.validation=true");
         GlobusDeployServiceStep deployStep = new GlobusDeployServiceStep(getGlobus(),getCreateServiceStep().getServiceDir());
-        deployStep.setArgs(args);
         steps.add(deployStep);
         steps.add(new GlobusStartStep(getGlobus()));
         try {
