@@ -265,7 +265,7 @@ public class Installer {
         this.model.add(new InstallationCompleteStep(this.model.getMessage("installation.complete.title"), ""));
 
     }
-    
+
 
     private void addInstallcaGridSteps() {
         final RunTasksStep installDependenciesStep = new RunTasksStep(this.model
@@ -305,8 +305,7 @@ public class Installer {
         this.model.add(checkReconfigureCaGridStep, new Condition() {
             public boolean evaluate(WizardModel m) {
                 CaGridInstallerModel model = (CaGridInstallerModel) m;
-                return model.isCaGridInstalled()
-                    && model.isTrue(Constants.INSTALL_CONFIGURE_CAGRID);
+                return model.isCaGridInstalled() && model.isTrue(Constants.INSTALL_CONFIGURE_CAGRID);
             }
         });
 
@@ -326,7 +325,8 @@ public class Installer {
         tasksStep.getTasks().add(new ConditionalTask(configTargetGridTask, new Condition() {
             public boolean evaluate(WizardModel m) {
                 CaGridInstallerModel model = (CaGridInstallerModel) m;
-                return (model.isTrue(Constants.RECONFIGURE_CAGRID) || model.isTrue(Constants.REINSTALL_CAGRID))
+                return (model.isTrue(Constants.RECONFIGURE_CAGRID) || model.isTrue(Constants.REINSTALL_CAGRID) || !model
+                    .isCaGridInstalled())
                     && (model.getProperty(Constants.TARGET_GRID) != null)
                     && !model.getProperty(Constants.TARGET_GRID).equals(Constants.NO_TARGET_GRID);
 
@@ -394,11 +394,14 @@ public class Installer {
             .getMessage("configure.host.creds.title"), this.model.getMessage("configure.host.creds.desc"));
         LabelValuePair[] values = new LabelValuePair[4];
         values[0] = new LabelValuePair("Use GAARDS to obtain host credentials", Constants.HOST_CREDS_FROM_GAARDS);
-        values[1] = new LabelValuePair("Browse to host credentials on the file system.", Constants.HOST_CREDS_FROM_BROWSE);
+        values[1] = new LabelValuePair("Browse to host credentials on the file system.",
+            Constants.HOST_CREDS_FROM_BROWSE);
         values[2] = new LabelValuePair("Copy in host credentials manually.", Constants.HOST_CREDS_FROM_MANUAL);
-        values[3] = new LabelValuePair("Host credentials are already installed.", Constants.HOST_CREDS_ALREADY_INSTALLED);
+        values[3] = new LabelValuePair("Host credentials are already installed.",
+            Constants.HOST_CREDS_ALREADY_INSTALLED);
         selectHostCertConfigurationStep.getOptions().add(
-            new ListPropertyConfigurationOption(Constants.HOST_CREDS_SELECTION_TYPE, "Obtain host credentials method", values));
+            new ListPropertyConfigurationOption(Constants.HOST_CREDS_SELECTION_TYPE, "Obtain host credentials method",
+                values));
 
         this.model.add(selectHostCertConfigurationStep, new Condition() {
             public boolean evaluate(WizardModel m) {
@@ -406,7 +409,7 @@ public class Installer {
                 return model.isConfigureContainerSelected() && model.isTrue(Constants.USE_SECURE_CONTAINER);
             }
         });
-        
+
         LaunchGAARDSforHostCredentialsStep gaardsForHostCreds = new LaunchGAARDSforHostCredentialsStep();
         model.add(gaardsForHostCreds, new Condition() {
 
