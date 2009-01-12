@@ -14,7 +14,9 @@ import gov.nih.nci.cagrid.testing.system.haste.Step;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.Vector;
 
 import org.apache.axis.message.addressing.EndpointReferenceType;
@@ -92,8 +94,9 @@ public class GlobalModelExchangeStory extends ServiceStoryBase {
         steps.add(new SetDatabasePropertiesStep(tempGMEServiceDir));
         steps.add(new CreateDatabaseStep(tempGMEServiceDir));
 
-        // STARTUP
-        steps.add(new DeployServiceStep(getContainer(), tempGMEServiceDir.getAbsolutePath()));
+        DeployServiceStep deployStep = new DeployServiceStep(getContainer(), tempGMEServiceDir.getAbsolutePath(),
+            Arrays.asList(new String[]{"-Dno.deployment.validation=true"}));
+        steps.add(deployStep);
         steps.add(new StartContainerStep(getContainer()));
 
         EndpointReferenceType epr = null;
