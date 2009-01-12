@@ -129,8 +129,6 @@ public class CaDSRTypeDiscoveryComponent extends NamespaceTypeToolsComponent
                     final int progressEventID = getCaDSRPanel().getMultiEventProgressBar().startEvent(
                         "Processing Package " + pkg.getName());
 
-                    // TODO: replace with DomainModel viewer
-
                     MetadataModelServiceClient mms = null;
                     try {
                         mms = new MetadataModelServiceClient(getMMSURL());
