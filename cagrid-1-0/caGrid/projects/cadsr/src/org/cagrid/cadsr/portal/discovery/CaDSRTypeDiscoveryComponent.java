@@ -116,12 +116,10 @@ public class CaDSRTypeDiscoveryComponent extends NamespaceTypeToolsComponent
 
 
     public void handleProjectSelection(Project project) {
-        this.getCaDSRPanel().getCadsr().setText(getCaDSRURL());
     }
 
 
     public void handlePackageSelection(final UMLPackageMetadata pkg) {
-        this.getCaDSRPanel().getCadsr().setText(getCaDSRURL());
         // update the graph for the given package
         Thread t = new Thread() {
             @Override

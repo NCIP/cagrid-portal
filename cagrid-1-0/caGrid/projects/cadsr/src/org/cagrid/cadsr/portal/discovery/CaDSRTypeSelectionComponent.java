@@ -143,7 +143,6 @@ public class CaDSRTypeSelectionComponent extends GMETypeSelectionComponentBase
 
     public void handleProjectSelection(Project project) {
         try {
-            this.getCaDSRPanel().getCadsr().setText(getCaDSRURL());
         } catch (Exception e) {
             LOG.error("Problem getting caDSR URL.", e);
         }
@@ -152,7 +151,6 @@ public class CaDSRTypeSelectionComponent extends GMETypeSelectionComponentBase
 
     public void handlePackageSelection(UMLPackageMetadata pkg) {
         try {
-            this.getCaDSRPanel().getCadsr().setText(getCaDSRURL());
         } catch (Exception e) {
             LOG.error("Problem getting caDSR URL.", e);
         }
