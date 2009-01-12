@@ -235,6 +235,7 @@
 	</target>
 
 
+	<property name="introduce.extensions.dir" location="../introduce/extensions" />
 	<target name="installIntroduceExtensions" description="Installs the caDSR extensions into Introduce (you must build first).">
 		<delete dir="${introduce.extensions.dir}/caDSR-discovery" />
 		<mkdir dir="${introduce.extensions.dir}/caDSR-discovery" />

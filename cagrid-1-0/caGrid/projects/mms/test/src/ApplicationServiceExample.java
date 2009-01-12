@@ -11,7 +11,7 @@ public class ApplicationServiceExample {
     public static void main(String[] args) {
         try {
             ApplicationService appService = ApplicationServiceProvider
-                .getApplicationServiceFromUrl("http://cadsrapi-prod2.nci.nih.gov/cadsrapi40/");
+                .getApplicationServiceFromUrl("http://cadsrapi.nci.nih.gov/cadsrapi40/");
 
             List rList = appService.search(Project.class, new Project());
             for (Iterator resultsIterator = rList.iterator(); resultsIterator.hasNext();) {

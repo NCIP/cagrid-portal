@@ -42,7 +42,7 @@ import org.tigris.gef.event.GraphSelectionListener;
  * @author David Ervin
  * 
  * @created Mar 30, 2007 10:23:05 AM
- * @version $Id: DomainModelVisualizationPanel.java,v 1.5 2007-12-14 17:10:46 dervin Exp $ 
+ * @version $Id: DomainModelVisualizationPanel.java,v 1.6 2009-01-12 16:52:39 oster Exp $ 
  */
 public class DomainModelVisualizationPanel extends JPanel {
 
@@ -144,6 +144,10 @@ public class DomainModelVisualizationPanel extends JPanel {
         
         graphClassToUML.clear();
         getUmlDiagram().clear();
+        
+        if(model==null){
+            return;
+        }
         
         // verify the model contains classes
         DomainModelExposedUMLClassCollection exposedClassCollection = 

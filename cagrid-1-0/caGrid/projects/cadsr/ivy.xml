@@ -44,8 +44,8 @@
     <dependency rev="latest.integration" org="caGrid" name="graph" conf="default->default" />
     <dependency rev="latest.integration" org="caGrid" name="globalModelExchange" conf="default->client" />
     <dependency rev="latest.integration" org="caGrid" name="globalModelExchange-ui" conf="default->default" />
-
-    <dependency rev="latest.integration" org="caGrid" name="data" conf="default->common" />
+    <dependency rev="latest.integration" org="caGrid" name="mms" conf="default->client" />
+    <dependency rev="latest.integration" org="caGrid" name="data" conf="default->tools" />
 
     <!-- Extenernal Dependencies -->
     <dependency rev="4.0" org="cacore" name="cadsr-api" conf="default->beans;cacore->default" />

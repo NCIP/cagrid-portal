@@ -3,23 +3,30 @@ package org.cagrid.cadsr.portal.discovery;
 import gov.nih.nci.cadsr.umlproject.domain.Project;
 import gov.nih.nci.cadsr.umlproject.domain.UMLPackageMetadata;
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.graph.uml.UMLDiagram;
+import gov.nih.nci.cagrid.data.utilities.dmviz.DomainModelVisualizationPanel;
 import gov.nih.nci.cagrid.introduce.beans.extension.DiscoveryExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionDescription;
 import gov.nih.nci.cagrid.introduce.common.ConfigurationUtil;
 import gov.nih.nci.cagrid.introduce.portal.discoverytools.NamespaceTypeToolsComponent;
+import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
 
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.rmi.RemoteException;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import org.apache.axis.types.URI.MalformedURIException;
 import org.cagrid.cadsr.portal.CaDSRBrowserPanel;
 import org.cagrid.cadsr.portal.PackageSelectedListener;
 import org.cagrid.cadsr.portal.ProjectSelectedListener;
+import org.cagrid.grape.utils.CompositeErrorDialog;
+import org.cagrid.mms.client.MetadataModelServiceClient;
+import org.cagrid.mms.domain.UMLProjectIdentifer;
+import org.cagrid.mms.stubs.types.InvalidUMLProjectIndentifier;
 
 
 /**
@@ -32,7 +39,7 @@ public class CaDSRTypeDiscoveryComponent extends NamespaceTypeToolsComponent
         ProjectSelectedListener {
     private CaDSRBrowserPanel caDSRPanel = null;
     private JPanel graphPanel = null;
-    private UMLDiagram umlDiagram;
+    private DomainModelVisualizationPanel umlDiagram;
     private JPanel refreshPanel = null;
     private JButton refreshButton = null;
 
@@ -50,7 +57,18 @@ public class CaDSRTypeDiscoveryComponent extends NamespaceTypeToolsComponent
 
     private String getCaDSRURL() {
         try {
-            return ConfigurationUtil.getGlobalExtensionProperty(CaDSRDiscoveryConstants.CADSR_URL_PROPERTY).getValue();
+            return ConfigurationUtil
+                .getGlobalExtensionProperty(CaDSRDiscoveryConstants.CADSR_DATA_SERVICE_URL_PROPERTY).getValue();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
+    private String getMMSURL() {
+        try {
+            return ConfigurationUtil.getGlobalExtensionProperty(CaDSRDiscoveryConstants.MMS_URL_PROPERTY).getValue();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -115,113 +133,53 @@ public class CaDSRTypeDiscoveryComponent extends NamespaceTypeToolsComponent
 
                     // TODO: replace with DomainModel viewer
 
-                    // UMLModelService cadsrService = new
-                    // CaDSRUMLModelService(getCaDSRPanel().getCadsr().getText());
-                    //
-                    // getUMLDiagram().clear();
-                    // UMLClassMetadata[] classes =
-                    // cadsrService.findClassesInPackage(
-                    // getCaDSRPanel().getSelectedProject(), pkg.getName());
-                    //
-                    // Map classMap = new HashMap();
-                    //
-                    // if (classes != null) {
-                    // for (int i = 0; i < classes.length; i++) {
-                    // UMLClassMetadata clazz = classes[i];
-                    // UMLClass c = new UMLClass(clazz.getName());
-                    // getCaDSRPanel().getMultiEventProgressBar().updateProgress(
-                    // "Processing Class " + clazz.getName() + " ( " + i +
-                    // " of " + classes.length + ")", 0,
-                    // classes.length, i);
-                    //
-                    // UMLAttributeMetadata[] atts =
-                    // cadsrService.findAttributesInClass(getCaDSRPanel()
-                    // .getSelectedProject(), clazz);
-                    // if (atts != null) {
-                    // for (UMLAttributeMetadata att : atts) {
-                    // ValueDomain domain =
-                    // cadsrService.findValueDomainForAttribute(getCaDSRPanel()
-                    // .getSelectedProject(), att);
-                    // c.addAttribute(domain.getDatatypeName(), att.getName());
-                    //
-                    // }
-                    // }
-                    // classMap.put(clazz.getId(), c);
-                    // getUMLDiagram().addClass(c);
-                    // }
-                    // }
-                    //
-                    // final int assocProgressEventID =
-                    // getCaDSRPanel().getMultiEventProgressBar().startEvent(
-                    // "Processing Associations...");
-                    // UMLAssociation[] assocs =
-                    // cadsrService.findAssociationsInPackage(getCaDSRPanel()
-                    // .getSelectedProject(), pkg.getName());
-                    // if (assocs != null) {
-                    // for (int i = 0; i < assocs.length; i++) {
-                    // UMLAssociation assoc = assocs[i];
-                    // getCaDSRPanel().getMultiEventProgressBar().updateProgress(
-                    // "Processing Association " + " ( " + i + " of " +
-                    // assocs.length + ")", 0, assocs.length,
-                    // i);
-                    // UMLClassMetadata source =
-                    // assoc.getSourceUMLClassMetadata().getUMLClassMetadata();
-                    // UMLClassMetadata target =
-                    // assoc.getTargetUMLClassMetadata().getUMLClassMetadata();
-                    //
-                    // UMLClass sourceGraph = (UMLClass)
-                    // classMap.get(source.getId());
-                    // UMLClass targetGraph = (UMLClass)
-                    // classMap.get(target.getId());
-                    //
-                    // if (sourceGraph == null || targetGraph == null) {
-                    // System.out
-                    // .println("Skipping association, as both source and target are not in this package.");
-                    // System.out.println("Source:" +
-                    // source.getFullyQualifiedName());
-                    // System.out.println("Target:" +
-                    // target.getFullyQualifiedName());
-                    // } else {
-                    // getUMLDiagram().addAssociation(
-                    // sourceGraph,
-                    // targetGraph,
-                    // assoc.getSourceRoleName(),
-                    // assoc.getSourceMinCardinality()
-                    // + ".."
-                    // + (assoc.getSourceMaxCardinality() == -1 ? "*" :
-                    // String.valueOf(assoc
-                    // .getSourceMaxCardinality())),
-                    // assoc.getTargetRoleName(),
-                    // assoc.getTargetMinCardinality()
-                    // + ".."
-                    // + (assoc.getTargetMaxCardinality() == -1 ? "*" :
-                    // String.valueOf(assoc
-                    // .getTargetMaxCardinality())));
-                    // }
-                    // }
-                    // }
-                    //
-                    // getCaDSRPanel().getMultiEventProgressBar().stopEvent(assocProgressEventID,
-                    // "Done with Associations.");
+                    MetadataModelServiceClient mms = null;
+                    try {
+                        mms = new MetadataModelServiceClient(getMMSURL());
+                    } catch (MalformedURIException e) {
+                        e.printStackTrace();
+                        CompositeErrorDialog.showErrorDialog("Invalid MMS URL (" + getMMSURL()
+                            + "); please check the MMS URL in the preferences!", e);
+                        return;
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                        CompositeErrorDialog.showErrorDialog("Error communicating with MMS (" + getMMSURL()
+                            + "); please check the MMS URL!", e);
+                        getCaDSRPanel().getMultiEventProgressBar().stopAll(
+                            "Error communicating with MMS (" + getMMSURL() + "); please check the MMS URL!");
+                        // getUMLDiagram().clear();
+                        return;
+                    }
+
+                    UMLProjectIdentifer umlProjectIdentifer = new UMLProjectIdentifer();
+                    umlProjectIdentifer.setIdentifier(getCaDSRPanel().getSelectedProject().getShortName());
+                    umlProjectIdentifer.setVersion(getCaDSRPanel().getSelectedProject().getVersion());
+
+                    String[] packageNames = new String[]{getCaDSRPanel().getSelectedPackage().getName()};
+
+                    final int genProgressEventID = getCaDSRPanel().getMultiEventProgressBar().startEvent(
+                        "Generating Model...");
+                    DomainModel domainModel = mms.generateDomainModelForPackages(umlProjectIdentifer, packageNames);
+                    getCaDSRPanel().getMultiEventProgressBar().stopEvent(genProgressEventID, "Done with model.");
 
                     final int renderProgressEventID = getCaDSRPanel().getMultiEventProgressBar().startEvent(
                         "Rendering...");
-                    getUMLDiagram().refresh();
+                    getUMLDiagram().setDomainModel(domainModel);
                     getCaDSRPanel().getMultiEventProgressBar().stopEvent(renderProgressEventID, "Done with Rendering.");
                     getCaDSRPanel().getMultiEventProgressBar().stopEvent(progressEventID, "Done with Package.");
 
-//                } catch (RemoteException e) {
-//                    e.printStackTrace();
-//                    CompositeErrorDialog.showErrorDialog("Error communicating with caDSR; please check the caDSR URL!",
-//                        e);
-//                    getCaDSRPanel().getMultiEventProgressBar().stopAll(
-//                        "Error communicating with caDSR; please check the caDSR URL!");
-//                    getUMLDiagram().clear();
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                    CompositeErrorDialog.showErrorDialog("Error processing model!", e);
-//                    getCaDSRPanel().getMultiEventProgressBar().stopAll("Error processing model!");
-//                    getUMLDiagram().clear();
+                } catch (InvalidUMLProjectIndentifier e) {
+                    e.printStackTrace();
+                    CompositeErrorDialog.showErrorDialog("Invalid project specified:" + e.getMessage(), e);
+                    getCaDSRPanel().getMultiEventProgressBar().stopAll("Error processing model!");
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                    CompositeErrorDialog.showErrorDialog("Error processing model!", e);
+                    getCaDSRPanel().getMultiEventProgressBar().stopAll("Error processing model!");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    CompositeErrorDialog.showErrorDialog("Error processing model!", e);
+                    getCaDSRPanel().getMultiEventProgressBar().stopAll("Error processing model!");
                 } finally {
                     getRefreshButton().setEnabled(true);
                 }
@@ -253,9 +211,9 @@ public class CaDSRTypeDiscoveryComponent extends NamespaceTypeToolsComponent
     }
 
 
-    private UMLDiagram getUMLDiagram() {
+    private DomainModelVisualizationPanel getUMLDiagram() {
         if (this.umlDiagram == null) {
-            this.umlDiagram = new UMLDiagram();
+            this.umlDiagram = new DomainModelVisualizationPanel();
 
         }
         return this.umlDiagram;
@@ -287,7 +245,7 @@ public class CaDSRTypeDiscoveryComponent extends NamespaceTypeToolsComponent
             this.refreshButton.setText("Refresh");
             this.refreshButton.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
-                    getUMLDiagram().clear();
+                    getUMLDiagram().setDomainModel(null);
                     getCaDSRPanel().getCadsr().setText(getCaDSRURL());
                     getCaDSRPanel().discoverFromCaDSR();
                 }

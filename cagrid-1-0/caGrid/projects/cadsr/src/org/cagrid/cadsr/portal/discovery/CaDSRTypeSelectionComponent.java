@@ -50,7 +50,7 @@ public class CaDSRTypeSelectionComponent extends GMETypeSelectionComponentBase
 
 
     private String getCaDSRURL() throws Exception {
-        return ConfigurationUtil.getGlobalExtensionProperty(CaDSRDiscoveryConstants.CADSR_URL_PROPERTY).getValue();
+        return ConfigurationUtil.getGlobalExtensionProperty(CaDSRDiscoveryConstants.CADSR_DATA_SERVICE_URL_PROPERTY).getValue();
     }
 
 

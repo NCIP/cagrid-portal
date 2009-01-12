@@ -259,7 +259,7 @@ public class DomainModelConfigPanel extends DataServiceModificationSubPanel {
             if (cadsrUrl == null || cadsrUrl.length() == 0) {
                 // grab the default URL and store it in the extension data
                 try {
-                    cadsrUrl = ConfigurationUtil.getGlobalExtensionProperty(CaDSRDiscoveryConstants.CADSR_URL_PROPERTY)
+                    cadsrUrl = ConfigurationUtil.getGlobalExtensionProperty(CaDSRDiscoveryConstants.CADSR_DATA_SERVICE_URL_PROPERTY)
                         .getValue();
                     getExtensionDataManager().storeCadsrServiceUrl(cadsrUrl);
                 } catch (Exception ex) {
