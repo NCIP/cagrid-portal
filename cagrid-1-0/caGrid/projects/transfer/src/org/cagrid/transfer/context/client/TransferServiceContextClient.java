@@ -114,7 +114,6 @@ public class TransferServiceContextClient extends TransferServiceContextClientBa
         TransferClientHelper.putData(is, contentLength, getDataTransferDescriptor(), getProxy());
     }
 
-
   public org.oasis.wsrf.lifetime.DestroyResponse destroy(org.oasis.wsrf.lifetime.Destroy params) throws RemoteException {
     synchronized(portTypeMutex){
       configureStubSecurity((Stub)portType,"destroy");

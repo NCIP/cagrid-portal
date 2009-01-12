@@ -15,6 +15,8 @@ import gov.nih.nci.cagrid.testing.system.deployment.steps.UnpackContainerStep;
 import gov.nih.nci.cagrid.testing.system.deployment.story.ServiceStoryBase;
 
 import java.io.File;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Vector;
 
 import org.apache.log4j.PropertyConfigurator;
@@ -66,7 +68,9 @@ public class TransferServiceTest extends ServiceStoryBase {
         Vector steps = new Vector();
         try {
             steps.add(new UnpackContainerStep(getContainer()));
-            steps.add(new DeployServiceStep(getContainer(), "../transfer"));
+            List<String> deploymentArgs = 
+                Arrays.asList(new String[] {"-Dno.deployment.validation=true"});
+            steps.add(new DeployServiceStep(getContainer(), "../transfer", deploymentArgs));
 
             steps.add(new CreateSkeletonStep(tci, false));
             steps.add(new AddCreateTransferMethodStep(tci,getContainer(), false));

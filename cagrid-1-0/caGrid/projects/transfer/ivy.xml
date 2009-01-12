@@ -49,6 +49,7 @@
       conf="service->default;impl-test->test"/>
     <dependency rev="latest.integration" org="caGrid" name="metadata"
       conf="service->schemas;client->common.jars"/>
+    <dependency rev="latest.integration" org="caGrid" name="metadatautils" conf="service->default" />
     <dependency rev="latest.integration" org="caGrid" name="service-security-provider"
       conf="client->client;service->service"/>
     <dependency rev="latest.integration" org="caGrid" name="advertisement" conf="service->default"/>
@@ -60,6 +61,8 @@
     <dependency rev="latest.integration" org="caGrid" name="testing" conf="impl-test->system"/>
     <dependency rev="latest.integration" org="caGrid" name="introduce-buildtools" conf="serviceTools->default"/>
     <dependency rev="1.0b3" org="ant-contrib" name="ant-contrib" conf="serviceTools->*"/>
+    <dependency rev="latest.integration" org="caGrid" name="metadata-validator" conf="serviceTools->default"
+      transitive="false" />
     
     <!-- External Dependencies -->
     <dependency rev="1.0" org="jdom" name="jdom" conf="service->*"/>
