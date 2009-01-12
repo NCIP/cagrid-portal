@@ -3,6 +3,7 @@
  */
 package gov.nci.nih.cagrid.tests.core.steps;
 
+import gov.nih.nci.cagrid.common.security.ProxyUtil;
 import gov.nih.nci.cagrid.gridgrouper.bean.GroupIdentifier;
 import gov.nih.nci.cagrid.gridgrouper.client.GridGrouperClient;
 import gov.nih.nci.cagrid.testing.system.haste.Step;
@@ -33,7 +34,7 @@ public class GrouperRemoveMemberStep extends Step {
     @Override
     public void runStep() throws Exception {
         GridGrouperClient grouper = new GridGrouperClient(this.endpoint);
-
+        grouper.setAnonymousPrefered(false);
         // add member
         try {
             grouper.deleteMember(new GroupIdentifier(null, this.group), this.subject);

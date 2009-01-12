@@ -3,6 +3,7 @@
  */
 package gov.nci.nih.cagrid.tests.core.steps;
 
+import gov.nih.nci.cagrid.common.security.ProxyUtil;
 import gov.nih.nci.cagrid.gridgrouper.bean.StemIdentifier;
 import gov.nih.nci.cagrid.gridgrouper.client.GridGrouperClient;
 import gov.nih.nci.cagrid.gridgrouper.stubs.types.GridGrouperRuntimeFault;
@@ -29,9 +30,9 @@ public class GrouperCreateGroupStep extends Step {
 
 
     @Override
-    public void runStep() throws GridGrouperRuntimeFault, StemNotFoundFault, RemoteException, MalformedURIException {
+    public void runStep() throws Exception {
         GridGrouperClient grouper = new GridGrouperClient(this.endpoint);
-
+        grouper.setAnonymousPrefered(false);
         // get paths
         int index = this.path.lastIndexOf(':');
         StemIdentifier stem = Utils.getRootStemIdentifier();

@@ -3,6 +3,7 @@
  */
 package gov.nci.nih.cagrid.tests.core.steps;
 
+import gov.nih.nci.cagrid.common.security.ProxyUtil;
 import gov.nih.nci.cagrid.gridgrouper.bean.GroupIdentifier;
 import gov.nih.nci.cagrid.gridgrouper.bean.GroupPrivilegeType;
 import gov.nih.nci.cagrid.gridgrouper.bean.StemIdentifier;
@@ -35,9 +36,9 @@ public class GrouperRevokePrivilegeStep extends Step {
 
 
     @Override
-    public void runStep() throws GridGrouperRuntimeFault, StemNotFoundFault, RemoteException, MalformedURIException {
+    public void runStep() throws Exception {
         GridGrouperClient grouper = new GridGrouperClient(this.endpoint);
-
+        grouper.setAnonymousPrefered(false);
         // group or stem?
         boolean isGroup = false;
         try {
