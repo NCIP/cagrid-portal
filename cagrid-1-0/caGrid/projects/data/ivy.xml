@@ -122,6 +122,7 @@
     <dependency rev="latest.integration" org="caGrid" name="graph" conf="tools->default"/>
     <dependency rev="latest.integration" org="caGrid" name="grape" conf="tools->default"/>
     <dependency rev="latest.integration" org="caGrid" name="bulkDataTransfer" conf="utils->client"/>
+    <dependency rev="latest.integration" org="caGrid" name="mms" conf="impl->schemas" />
     <dependency rev="latest.integration" org="caGrid" name="cql" conf="common->cql;service->cql,cql-schemas;service-schemas->cql-schemas;extension-schemas->cql-schemas"/>
     
     <!-- Extenernal Dependencies -->
