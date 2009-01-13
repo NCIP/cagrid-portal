@@ -11,7 +11,7 @@
   <configurations>
     <!-- Private Configurations-->
     <conf name="target_grid" visibility="private"/>
-
+	<conf name="serviceTools" visibility="private"/>
     <conf name="impl" visibility="private" extends="service"/>
     <conf name="impl-test" visibility="private"/>
 
@@ -48,7 +48,18 @@
     <dependency rev="latest.integration" org="caGrid" name="introduce-clienttools" 
     	conf="impl->default"/>
 
+	<!-- target grid -->
     <dependency rev="${target.grid}" org="caGrid" name="target_grid" conf="target_grid->urls"/>
+    
+    <!--  Build file dependencies -->
+    <dependency rev="latest.integration" org="caGrid" name="introduce-buildtools" conf="serviceTools->default" />
+    <dependency rev="1.0b3" org="ant-contrib" name="ant-contrib" conf="serviceTools->*" />
+    <!--
+      This is non-transitive, because we already have all the extension jars in the service, and the
+      deploy time validation which uses this uses the service's classpath too.
+    -->
+    <dependency rev="latest.integration" org="caGrid" name="metadata-validator" conf="serviceTools->default"
+      transitive="false" />
 
     <!-- Specific caGrid Service Dependencies -->
     <dependency rev="latest.integration" org="caGrid" name="data" conf="service->utils"/>
