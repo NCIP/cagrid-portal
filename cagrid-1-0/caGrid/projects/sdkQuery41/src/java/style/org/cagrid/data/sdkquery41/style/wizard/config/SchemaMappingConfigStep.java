@@ -106,6 +106,9 @@ public class SchemaMappingConfigStep extends AbstractStyleConfigurationStep {
                     // create the namespace type of the XSD
                     NamespaceType nsType = CommonTools.createNamespaceType(xsdFile.getAbsolutePath(), schemaDir);
                     
+                    // add the namespace to the service definition
+                    CommonTools.addNamespace(getServiceInformation().getServiceDescriptor(), nsType);
+                    
                     // copy the XSD in to the service's schema dir
                     File xsdOut = new File(schemaDir, xsdFile.getName());
                     Utils.copyFile(xsdFile, xsdOut);
@@ -114,9 +117,6 @@ public class SchemaMappingConfigStep extends AbstractStyleConfigurationStep {
                     // get cadsr package, set namespace, automagic mapping
                     modelInfoUtil.setMappedNamespace(packageName, nsType.getNamespace());
                     automaticalyMapElementsToClasses(packageName, nsType);
-                    
-                    // add the namespace to the service definition
-                    CommonTools.addNamespace(getServiceInformation().getServiceDescriptor(), nsType);
                     break;
                 }
             }
