@@ -43,6 +43,16 @@ public class CDSDeploymentStory extends Story implements ServiceContainerSource 
     }
     
     
+    /**
+     * Overridden to run tests, and on successful completion set 
+     * the 'complete' flag to true so the service container can be returned
+     */
+    protected void runTest() throws Throwable {
+        super.runTest();
+        complete = true;
+    }
+    
+    
     public boolean storySetUp() {
         try {
             // must be tomcat container for transfer to work
