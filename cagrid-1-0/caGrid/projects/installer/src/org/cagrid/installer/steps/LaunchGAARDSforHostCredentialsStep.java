@@ -25,9 +25,7 @@ public class LaunchGAARDSforHostCredentialsStep extends PanelWizardStep {
      * This method initializes
      */
     public LaunchGAARDSforHostCredentialsStep() {
-        super("Host Credentials",
-            "Use GAARDS to obtain the host credential and key that you wish to secure the container with.");
-        initialize();
+        super("","");
     }
 
 
@@ -98,7 +96,9 @@ public class LaunchGAARDSforHostCredentialsStep extends PanelWizardStep {
     public void init(WizardModel m) {
         model = (CaGridInstallerModel) m;
         super.init(m);
-
+        setName(model.getMessage("gaards.host.creds.title"));
+        setSummary(model.getMessage("gaards.host.creds.desc"));
+        initialize();
     }
 
 
@@ -125,7 +125,7 @@ public class LaunchGAARDSforHostCredentialsStep extends PanelWizardStep {
     private JButton getRelaunchButton() {
         if (relaunchButton == null) {
             relaunchButton = new JButton();
-            relaunchButton.setText("Relaunch GAARDS");
+            relaunchButton.setText(model.getMessage("gaards.host.creds.relaunch"));
             relaunchButton.setEnabled(false);
             relaunchButton.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {

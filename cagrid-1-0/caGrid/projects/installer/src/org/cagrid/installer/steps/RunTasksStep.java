@@ -243,7 +243,7 @@ public class RunTasksStep extends PanelWizardStep implements PropertyChangeListe
             }
         } else if ("currentTask" == evt.getPropertyName()) {
             Task currentTask = (Task) evt.getNewValue();
-            setBusyLabel("Processing:  " + currentTask.getDescription());
+            setBusyLabel(model.getMessage("processing") + " "  + currentTask.getDescription());
         } else if ("exception" == evt.getPropertyName()) {
             this.exception = (Exception) evt.getNewValue();
             setSummary(this.model.getMessage("error"));

@@ -32,8 +32,7 @@ public class BrowseToHostCredentialsStep extends PanelWizardStep {
      * This method initializes
      */
     public BrowseToHostCredentialsStep() {
-        super("Host Credentials", "Select the host credential and key that you wish to secure the container with.");
-        initialize();
+        super("", "");
     }
 
 
@@ -94,6 +93,9 @@ public class BrowseToHostCredentialsStep extends PanelWizardStep {
     public void init(WizardModel m) {
         model = (CaGridInstallerModel) m;
         super.init(m);
+        setName(model.getMessage("browse.host.creds.title"));
+        setSummary(model.getMessage("browse.host.creds.desc"));
+        initialize();
 
     }
 
@@ -105,7 +107,7 @@ public class BrowseToHostCredentialsStep extends PanelWizardStep {
             InstallerUtils.copyFile(getKeyTextField().getText(), model.getProperty(Constants.SERVICE_KEY_PATH));
         } catch (IOException e) {
             e.printStackTrace();
-            throw new InvalidStateException("Error copying host certificate and key.", e);
+            throw new InvalidStateException(model.getMessage("browse.host.error.copy"), e);
         }
         super.applyState();
     }
@@ -155,12 +157,12 @@ public class BrowseToHostCredentialsStep extends PanelWizardStep {
     private JButton getCertBrowseButton() {
         if (certBrowseButton == null) {
             certBrowseButton = new JButton();
-            certBrowseButton.setText("Browse");
+            certBrowseButton.setText(model.getMessage("browse"));
             certBrowseButton.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
                     JFileChooser chooser = new JFileChooser();
-                    chooser.setDialogTitle("Select the host certificate file.");
-                    int returnVal = chooser.showDialog(BrowseToHostCredentialsStep.this, "Select");
+                    chooser.setDialogTitle(model.getMessage("browse.host.creds.cert"));
+                    int returnVal = chooser.showDialog(BrowseToHostCredentialsStep.this, model.getMessage("select"));
                     if (returnVal == JFileChooser.APPROVE_OPTION) {
                         certTextField.setText(chooser.getSelectedFile().getAbsolutePath());
                         checkComplete();
@@ -180,11 +182,11 @@ public class BrowseToHostCredentialsStep extends PanelWizardStep {
     private JButton getKeyBrowseButton() {
         if (keyBrowseButton == null) {
             keyBrowseButton = new JButton();
-            keyBrowseButton.setText("Browse");
+            keyBrowseButton.setText(model.getMessage("browse"));
             keyBrowseButton.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
                     JFileChooser chooser = new JFileChooser();
-                    chooser.setDialogTitle("Select the host key file.");
+                    chooser.setDialogTitle(model.getMessage("browse.host.creds.key"));
                     int returnVal = chooser.showDialog(BrowseToHostCredentialsStep.this, "Select");
                     if (returnVal == JFileChooser.APPROVE_OPTION) {
                         keyTextField.setText(chooser.getSelectedFile().getAbsolutePath());

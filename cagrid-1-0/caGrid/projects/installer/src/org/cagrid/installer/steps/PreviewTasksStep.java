@@ -58,7 +58,7 @@ public class PreviewTasksStep extends PanelWizardStep {
         //need to view the tasks and load a panel with a description of what is going
         //to be ran
         StringBuffer sb = new StringBuffer();
-        sb.append("Prepared to run the following install tasks:\n");
+        sb.append(model.getMessage("run.tasks.preview.prepared") + "\n");
         for (Task t : step.getTasks()) {
             if (t instanceof Condition) {
                 if (((Condition) t).evaluate(model)) {
