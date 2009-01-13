@@ -23,6 +23,8 @@
     <conf name="stubs" visibility="public" />
     <conf name="common" extends="stubs" visibility="public" />
     <conf name="client" extends="common" visibility="public" />
+    
+    <conf name="schemas" visibility="public" />
 
     <conf name="service" visibility="public" extends="client" />
     <conf name="test" visibility="public" extends="service,impl-test" />
@@ -36,6 +38,7 @@
     <artifact name="caGrid-${ivy.module}-client" conf="client" type="jar" />
     <artifact name="caGrid-${ivy.module}-service" conf="service" type="jar" />
     <artifact name="caGrid-${ivy.module}-tests" conf="test" type="jar" />
+    <artifact name="org.cagrid.mms" conf="schemas" type="xsd" />
   </publications>
 
   <dependencies>

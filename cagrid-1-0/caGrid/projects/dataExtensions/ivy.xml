@@ -46,7 +46,7 @@
       conf="core->full,service-schemas;impl-test->test" />
     <dependency rev="latest.integration" org="caGrid" name="globalModelExchange" conf="ui->client" />
     <dependency rev="latest.integration" org="caGrid" name="cadsr" conf="core,ui->default" />
-    <dependency rev="latest.integration" org="caGrid" name="mms" conf="core->client" />
+    <dependency rev="latest.integration" org="caGrid" name="mms" conf="core->client,schemas" />
     <dependency rev="latest.integration" org="caGrid" name="wsEnum" conf="core->default" />
     <!-- NOTE: just needs this for a constant, so not using transitive dependency-->
     <dependency transitive="false" rev="latest.integration" org="caGrid" name="bulkDataTransfer"
