@@ -106,8 +106,9 @@ public class DataServiceConstants {
 	public static final QName MAPPING_QNAME = new QName("http://gov.nih.nci.cagrid.data", "ClassMappings");
 	
 	// service URL parameter constants
-	public static final String CADSR_SERVICE_URL = "CADSR_URL";
+	public static final String CADSR_SERVICE_URL = "CADSR_DATA_URL";
 	public static final String GME_SERVICE_URL = "GME_URL";
+    public static final String MMS_URL = "MMS_URL";
 	
 	// castor mapping constants
 	public static final String CACORE_CASTOR_MAPPING_FILE = "xml-mapping.xml";

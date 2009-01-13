@@ -3,9 +3,11 @@ package org.cagrid.data.sdkquery41.style.wizard.model;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.common.portal.validation.IconFeedbackPanel;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
-import gov.nih.nci.cagrid.data.extension.CadsrInformation;
-import gov.nih.nci.cagrid.data.extension.CadsrPackage;
-import gov.nih.nci.cagrid.data.extension.ClassMapping;
+import gov.nih.nci.cagrid.data.extension.ModelClass;
+import gov.nih.nci.cagrid.data.extension.ModelInformation;
+import gov.nih.nci.cagrid.data.extension.ModelPackage;
+import gov.nih.nci.cagrid.data.extension.ModelProject;
+import gov.nih.nci.cagrid.data.extension.ModelSourceType;
 import gov.nih.nci.cagrid.data.ui.wizard.OneTimeInfoDialogUtil;
 import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertyType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
@@ -98,7 +100,7 @@ public class ModelFromFileSystemPanel extends DomainModelSourcePanel {
     }
 
 
-    public CadsrInformation getCadsrDomainInformation() throws Exception {
+    public ModelInformation getModelInformation() throws Exception {
         if (validationModel.hasErrors()) {
             StringBuffer errors = new StringBuffer();
             errors.append("Domain model cannot be generated while in an error state:\n");
@@ -153,12 +155,10 @@ public class ModelFromFileSystemPanel extends DomainModelSourcePanel {
         reader.close();
         
         // set the cadsr information to NOT generate a new model
-        CadsrInformation cadsrInfo = new CadsrInformation();
-        cadsrInfo.setNoDomainModel(false);
-        cadsrInfo.setUseSuppliedModel(true);
-        
-        cadsrInfo.setProjectLongName(model.getProjectLongName());
-        cadsrInfo.setProjectVersion(model.getProjectVersion());
+        ModelInformation modelInfo = new ModelInformation();
+        modelInfo.setSource(ModelSourceType.preBuilt);
+        modelInfo.setModelProject(
+            new ModelProject(model.getProjectShortName(), model.getProjectVersion()));
         
         // map classes by packages
         Map<String, List<UMLClass>> classesByPackage = new HashMap<String, List<UMLClass>>();
@@ -171,27 +171,27 @@ public class ModelFromFileSystemPanel extends DomainModelSourcePanel {
             packageClasses.add(modelClass);
         }
         
-        List<CadsrPackage> cadsrPackages = new ArrayList<CadsrPackage>();
+        List<ModelPackage> modelPackages = new ArrayList<ModelPackage>();
         for (String packageName : classesByPackage.keySet()) {
             List<UMLClass> classes = classesByPackage.get(packageName);
-            CadsrPackage pack = new CadsrPackage();
-            pack.setName(packageName);
-            List<ClassMapping> classMappings = new ArrayList<ClassMapping>();
+            ModelPackage pack = new ModelPackage();
+            pack.setPackageName(packageName);
+            List<ModelClass> modelClasses = new ArrayList<ModelClass>();
             for (UMLClass clazz : classes) {
-                ClassMapping mapping = new ClassMapping();
-                mapping.setClassName(clazz.getClassName());
+                ModelClass modelClass = new ModelClass();
+                modelClass.setShortClassName(clazz.getClassName());
                 // NOT populating element names until Schema Mapping Panel
-                mapping.setSelected(true);
-                mapping.setTargetable(true);
-                classMappings.add(mapping);
+                modelClass.setSelected(true);
+                modelClass.setTargetable(true);
+                modelClasses.add(modelClass);
             }
-            ClassMapping[] mappingArray = (ClassMapping[]) classMappings.toArray();
-            pack.setCadsrClass(mappingArray);
-            cadsrPackages.add(pack);
+            ModelClass[] mappingArray = (ModelClass[]) modelClasses.toArray();
+            pack.setModelClass(mappingArray);
+            modelPackages.add(pack);
         }
-        CadsrPackage[] packageArray = (CadsrPackage[]) cadsrPackages.toArray();
-        cadsrInfo.setPackages(packageArray);
-        return cadsrInfo;
+        ModelPackage[] packageArray = (ModelPackage[]) modelPackages.toArray();
+        modelInfo.setModelPackage(packageArray);
+        return modelInfo;
     }
 
 

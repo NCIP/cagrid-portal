@@ -4,14 +4,16 @@ import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.data.ExtensionDataUtils;
 import gov.nih.nci.cagrid.data.common.CastorMappingUtil;
-import gov.nih.nci.cagrid.data.extension.CadsrInformation;
-import gov.nih.nci.cagrid.data.extension.CadsrPackage;
+import gov.nih.nci.cagrid.data.common.ModelInformationUtil;
 import gov.nih.nci.cagrid.data.extension.Data;
+import gov.nih.nci.cagrid.data.extension.ModelInformation;
+import gov.nih.nci.cagrid.data.extension.ModelPackage;
 import gov.nih.nci.cagrid.data.style.StyleCodegenPostProcessor;
 import gov.nih.nci.cagrid.data.utilities.WsddUtil;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
+import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
@@ -28,7 +30,7 @@ import java.io.File;
  * @author David Ervin
  * 
  * @created Jul 10, 2007 2:24:14 PM
- * @version $Id: PostCodegenHelper.java,v 1.3 2007-08-31 15:48:14 dervin Exp $
+ * @version $Id: PostCodegenHelper.java,v 1.4 2009-01-13 15:55:19 dervin Exp $
  */
 public class PostCodegenHelper implements StyleCodegenPostProcessor {
 
@@ -52,6 +54,7 @@ public class PostCodegenHelper implements StyleCodegenPostProcessor {
 
 
     private void rebuildCastorMappings(Data extensionData, ServiceInformation info) throws CodegenExtensionException {
+        ModelInformationUtil modelInfoUtil = new ModelInformationUtil(info.getServiceDescriptor());
         // ensure the original castor mapping file from the client.jar
         // has been extracted to the service's base directory
         File mappingFile = new File(CastorMappingUtil.getCustomCastorMappingFileName(info));
@@ -66,13 +69,16 @@ public class PostCodegenHelper implements StyleCodegenPostProcessor {
             throw new CodegenExtensionException("Error reading castor mapping file: " + ex.getMessage(), ex);
         }
         // for each package in the extension data, fix the namespace mapping
-        CadsrInformation cadsrInfo = extensionData.getCadsrInformation();
-        if (cadsrInfo != null) {
-            CadsrPackage[] packages = cadsrInfo.getPackages();
+        ModelInformation modelInfo = extensionData.getModelInformation();
+        if (modelInfo != null) {
+            ModelPackage[] packages = modelInfo.getModelPackage();
             try {
                 for (int i = 0; packages != null && i < packages.length; i++) {
-                    mappingText = CastorMappingUtil.changeNamespaceOfPackage(mappingText, packages[i].getName(),
-                        packages[i].getMappedNamespace());
+                    String packName = packages[i].getPackageName();
+                    NamespaceType mappedNamespace = modelInfoUtil.getMappedNamespace(packName);
+                    mappingText = CastorMappingUtil.changeNamespaceOfPackage(
+                        mappingText, packages[i].getPackageName(),
+                        mappedNamespace.getNamespace());
                 }
             } catch (Exception ex) {
                 throw new CodegenExtensionException("Error changing namespaces in castor mapping: " 

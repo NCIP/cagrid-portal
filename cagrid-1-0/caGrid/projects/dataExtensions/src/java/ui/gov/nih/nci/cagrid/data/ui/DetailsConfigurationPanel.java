@@ -3,7 +3,7 @@ package gov.nih.nci.cagrid.data.ui;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.data.common.ExtensionDataManager;
-import gov.nih.nci.cagrid.data.extension.ClassMapping;
+import gov.nih.nci.cagrid.data.common.ModelInformationUtil;
 import gov.nih.nci.cagrid.data.ui.table.ClassChangeEvent;
 import gov.nih.nci.cagrid.data.ui.table.ClassElementSerializationTable;
 import gov.nih.nci.cagrid.data.ui.table.ClassInformatonChangeListener;
@@ -31,7 +31,7 @@ import org.cagrid.grape.utils.CompositeErrorDialog;
  * @author David Ervin
  * 
  * @created Jun 27, 2007 11:05:29 AM
- * @version $Id: DetailsConfigurationPanel.java,v 1.3 2007-11-06 15:53:41 hastings Exp $ 
+ * @version $Id: DetailsConfigurationPanel.java,v 1.4 2009-01-13 15:55:19 dervin Exp $ 
  */
 public class DetailsConfigurationPanel extends DataServiceModificationSubPanel {
     
@@ -41,9 +41,12 @@ public class DetailsConfigurationPanel extends DataServiceModificationSubPanel {
     private JCheckBox cqlSyntaxValidationCheckBox = null;
     private JCheckBox domainModelValidationCheckBox = null;
     
+    private ModelInformationUtil modelInfoUtil = null;
+    
     
     public DetailsConfigurationPanel(ServiceInformation serviceInfo, ExtensionDataManager dataManager) {
         super(serviceInfo, dataManager);
+        modelInfoUtil = new ModelInformationUtil(serviceInfo.getServiceDescriptor());
         initialize();
     }
     
@@ -91,37 +94,14 @@ public class DetailsConfigurationPanel extends DataServiceModificationSubPanel {
     
     public ClassElementSerializationTable getClassConfigTable() {
         if (classConfigTable == null) {
-            classConfigTable = new ClassElementSerializationTable();
+            classConfigTable = new ClassElementSerializationTable(getExtensionDataManager(), modelInfoUtil);
             classConfigTable.addClassInformatonChangeListener(new ClassInformatonChangeListener() {
                 public void elementNameChanged(ClassChangeEvent e) {
-                    // get the old element name the class is mapped to
-                    String oldElementName = null;
-                    try {
-                        ClassMapping currentMapping = getExtensionDataManager()
-                            .getClassMapping(e.getPackageName(), e.getClassName());
-                        oldElementName = currentMapping.getElementName();
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                        CompositeErrorDialog.showErrorDialog("Error loading old class mapping", ex.getMessage(), ex);
-                    }
-
-                    // get the namespace type for the class
-                    NamespaceType nsType = CommonTools.getNamespaceType(
-                        getServiceInfo().getNamespaces(), e.getNamespace());
-                    // find the schema element type
-                    SchemaElementType schemaType = NamespaceUtils.getElementByName(
-                        nsType, e.getElementName());
-                    if (schemaType == null && oldElementName != null && oldElementName.length() != 0) {
-                        // WARNING: You've selected a non-existant element name,
-                        // AND the old element name was NOT non existant as well
-                        CompositeErrorDialog.showErrorDialog(
-                            "No element named " + e.getElementName() 
-                            + " in namespace " + e.getNamespace());
-                    }
-                    
                     // save the mapping info
                     try {
-                        getExtensionDataManager().setClassElementNameInModel(
+                        modelInfoUtil.setMappedNamespace(
+                            e.getPackageName(), e.getNamespace());
+                        modelInfoUtil.setMappedElementName(
                             e.getPackageName(), e.getClassName(), e.getElementName());
                     } catch (Exception ex) {
                         ex.printStackTrace();

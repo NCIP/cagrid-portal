@@ -12,9 +12,9 @@
 	<xsd:complexType name="Data">
 		<xsd:sequence>
 			<xsd:element name="AdditionalLibraries" type="ext:AdditionalLibraries" nillable="false" minOccurs="0"/>
-			<xsd:element name="CadsrInformation" type="ext:CadsrInformation" nillable="false" minOccurs="0"/>
 			<xsd:element name="ServiceFeatures" type="ext:ServiceFeatures" nillable="false" minOccurs="0"/>
-			<xsd:element ref="aud:DataServiceAuditors" minOccurs="0" maxOccurs="1"/>
+			<xsd:element ref="aud:DataServiceAuditors" minOccurs="0"/>
+			<xsd:element name="ModelInformation" type="ext:ModelInformation"/>
 		</xsd:sequence>
 	</xsd:complexType>
 	<xsd:complexType name="AdditionalLibraries">
@@ -25,29 +25,6 @@
 			<xsd:element name="JarName" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
 		</xsd:sequence>
 	</xsd:complexType>
-	<xsd:complexType name="CadsrInformation">
-		<xsd:annotation>
-			<xsd:documentation>Information regarding the caDSR configured by the user</xsd:documentation>
-		</xsd:annotation>
-		<xsd:sequence>
-			<xsd:element name="Packages" type="ext:CadsrPackage" minOccurs="0" maxOccurs="unbounded"/>
-		</xsd:sequence>
-		<xsd:attribute name="projectLongName" type="xsd:string" use="required"/>
-		<xsd:attribute name="projectVersion" type="xsd:string" use="required"/>
-		<xsd:attribute name="serviceUrl" type="xsd:string" use="required"/>
-		<xsd:attribute name="noDomainModel" type="xsd:boolean" use="required"/>
-		<xsd:attribute name="useSuppliedModel" type="xsd:boolean" use="required"/>
-	</xsd:complexType>
-	<xsd:complexType name="CadsrPackage">
-		<xsd:annotation>
-			<xsd:documentation>Package selected from the caDSR</xsd:documentation>
-		</xsd:annotation>
-		<xsd:sequence>
-			<xsd:element name="CadsrClass" type="ext:ClassMapping" minOccurs="0" maxOccurs="unbounded"/>
-		</xsd:sequence>
-		<xsd:attribute name="name" type="xsd:string" use="required"/>
-		<xsd:attribute name="mappedNamespace" type="xsd:string" use="required"/>
-	</xsd:complexType>
 	<xsd:complexType name="ServiceFeatures">
 		<xsd:annotation>
 			<xsd:documentation>Features of data services which can be enabled / disabled</xsd:documentation>
@@ -57,13 +34,33 @@
 		<xsd:attribute name="useBdt" type="xsd:boolean" use="required"/>
 		<xsd:attribute name="serviceStyle" type="xsd:string" use="optional"/>
 	</xsd:complexType>
-	<xsd:complexType name="ClassMapping">
-		<xsd:annotation>
-			<xsd:documentation>Mapping between exposed caDSR class and schema element name</xsd:documentation>
-		</xsd:annotation>
-		<xsd:attribute name="className" type="xsd:string" use="required"/>
-		<xsd:attribute name="elementName" type="xsd:string" use="required"/>
-		<xsd:attribute name="selected" type="xsd:boolean" use="required"/>
+	<xsd:complexType name="ModelInformation">
+		<xsd:sequence>
+			<xsd:element name="ModelProject" type="ext:ModelProject" minOccurs="0"/>
+			<xsd:element name="ModelPackage" type="ext:ModelPackage" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+		<xsd:attribute name="source" type="ext:ModelSourceType" use="required"/>
+	</xsd:complexType>
+	<xsd:simpleType name="ModelSourceType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="mms"/>
+			<xsd:enumeration value="preBuilt"/>
+			<xsd:enumeration value="none"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:complexType name="ModelProject">
+		<xsd:attribute name="shortName" type="xsd:string" use="required"/>
+		<xsd:attribute name="version" type="xsd:string" use="required"/>
+	</xsd:complexType>
+	<xsd:complexType name="ModelPackage">
+		<xsd:sequence>
+			<xsd:element name="ModelClass" type="ext:ModelClass" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+		<xsd:attribute name="packageName" type="xsd:string" use="required"/>
+	</xsd:complexType>
+	<xsd:complexType name="ModelClass">
+		<xsd:attribute name="shortClassName" type="xsd:string" use="required"/>
 		<xsd:attribute name="targetable" type="xsd:boolean" use="required"/>
+		<xsd:attribute name="selected" type="xsd:boolean" use="required"/>
 	</xsd:complexType>
 </xsd:schema>

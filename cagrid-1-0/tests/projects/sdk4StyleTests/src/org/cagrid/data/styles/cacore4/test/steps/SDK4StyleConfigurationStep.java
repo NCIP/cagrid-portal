@@ -4,10 +4,13 @@ import gov.nih.nci.cagrid.common.JarUtilities;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.data.ExtensionDataUtils;
-import gov.nih.nci.cagrid.data.extension.CadsrInformation;
-import gov.nih.nci.cagrid.data.extension.CadsrPackage;
-import gov.nih.nci.cagrid.data.extension.ClassMapping;
+import gov.nih.nci.cagrid.data.common.ModelInformationUtil;
 import gov.nih.nci.cagrid.data.extension.Data;
+import gov.nih.nci.cagrid.data.extension.ModelClass;
+import gov.nih.nci.cagrid.data.extension.ModelInformation;
+import gov.nih.nci.cagrid.data.extension.ModelPackage;
+import gov.nih.nci.cagrid.data.extension.ModelProject;
+import gov.nih.nci.cagrid.data.extension.ModelSourceType;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
@@ -52,7 +55,7 @@ import org.apache.commons.logging.LogFactory;
  * @author David Ervin
  * 
  * @created Jan 28, 2008 11:24:21 AM
- * @version $Id: SDK4StyleConfigurationStep.java,v 1.2 2008-06-05 19:09:08 dervin Exp $ 
+ * @version $Id: SDK4StyleConfigurationStep.java,v 1.3 2009-01-13 15:55:12 dervin Exp $ 
  */
 public class SDK4StyleConfigurationStep extends Step {
     public static final String SDK_4_TESTS_BASE_DIR_PROPERTY = "sdk4.tests.base.dir";    
@@ -68,6 +71,7 @@ public class SDK4StyleConfigurationStep extends Step {
     
     private File serviceBaseDirectory = null;
     private ServiceInformation serviceInformation = null;
+    private ModelInformationUtil modelInfoUtil = null;
 
     public SDK4StyleConfigurationStep(File serviceBaseDirectory) {
         this.serviceBaseDirectory = serviceBaseDirectory;
@@ -199,25 +203,33 @@ public class SDK4StyleConfigurationStep extends Step {
     }
     
     
+    private ModelInformationUtil getModelInfoUtil() throws Exception {
+        if (modelInfoUtil == null) {
+            modelInfoUtil = new ModelInformationUtil(getServiceInformation().getServiceDescriptor());
+        }
+        return modelInfoUtil;
+    }
+    
+    
     private void setSelectedDomainModelFilename(File domainModelFile) throws Exception {
         // set the selected file on the data extension's info
         Data extensionData = getExtensionData();
-        CadsrInformation info = extensionData.getCadsrInformation();
+        ModelInformation info = extensionData.getModelInformation();
         if (info == null) {
-            info = new CadsrInformation();
+            info = new ModelInformation();
         }
 
         ResourcePropertyType dmResourceProp = getDomainModelResourceProperty();
 
-        File localDomainFile = new File(getServiceInformation().getBaseDirectory().getAbsolutePath() 
-            + File.separator + "etc" + File.separator + domainModelFile.getName());
+        File localDomainFile = new File(getServiceInformation().getBaseDirectory(), 
+            "etc" + File.separator + domainModelFile.getName());
         Utils.copyFile(domainModelFile, localDomainFile);
 
         dmResourceProp.setPopulateFromFile(true);
         dmResourceProp.setFileLocation(localDomainFile.getName());
-        info.setUseSuppliedModel(true);
+        info.setSource(ModelSourceType.preBuilt);
 
-        extensionData.setCadsrInformation(info);
+        extensionData.setModelInformation(info);
         storeExtensionData(extensionData);
 
         loadDomainModelFile(domainModelFile);
@@ -231,10 +243,10 @@ public class SDK4StyleConfigurationStep extends Step {
         modelReader.close();
         // get extension data
         Data extensionData = getExtensionData();
-        CadsrInformation info = extensionData.getCadsrInformation();
+        ModelInformation info = extensionData.getModelInformation();
         // set cadsr project information
-        info.setProjectLongName(model.getProjectLongName());
-        info.setProjectVersion(model.getProjectVersion());
+        info.setModelProject(
+            new ModelProject(model.getProjectShortName(), model.getProjectVersion()));
         // walk classes, creating package groupings as needed
         Map<String, List<String>> packageClasses = new HashMap<String, List<String>>();
         UMLClass[] modelClasses = model.getExposedUMLClassCollection().getUMLClass(); 
@@ -250,7 +262,7 @@ public class SDK4StyleConfigurationStep extends Step {
             classList.add(modelClasses[i].getClassName());
         }
         // create cadsr packages
-        CadsrPackage[] packages = new CadsrPackage[packageClasses.keySet().size()];
+        ModelPackage[] packages = new ModelPackage[packageClasses.keySet().size()];
         String[] packageNames = new String[packages.length];
         int packIndex = 0;
         Iterator packageNameIter = packageClasses.keySet().iterator();
@@ -258,28 +270,28 @@ public class SDK4StyleConfigurationStep extends Step {
             String packName = (String) packageNameIter.next();
             String mappedNamespace = suggestNamespaceString(
                 model.getProjectShortName(), model.getProjectVersion(), packName);
-            CadsrPackage pack = new CadsrPackage();
-            pack.setName(packName);
-            pack.setMappedNamespace(mappedNamespace);
+            ModelPackage pack = new ModelPackage();
+            pack.setPackageName(packName);
+            getModelInfoUtil().setMappedNamespace(packName, mappedNamespace);
             // create ClassMappings for the package's classes
             List<String> classNameList = packageClasses.get(packName);
-            ClassMapping[] mappings = new ClassMapping[classNameList.size()];
+            ModelClass[] classes = new ModelClass[classNameList.size()];
             for (int i = 0; i < classNameList.size(); i++) {
-                ClassMapping mapping = new ClassMapping();
+                ModelClass clazz = new ModelClass();
                 String className = classNameList.get(i);
-                mapping.setClassName(className);
-                mapping.setElementName(className);
-                mapping.setSelected(true);
-                mapping.setTargetable(true);
-                mappings[i] = mapping;
+                clazz.setShortClassName(className);
+                modelInfoUtil.setMappedElementName(packName, className, className);
+                clazz.setSelected(true);
+                clazz.setTargetable(true);
+                classes[i] = clazz;
             }
-            pack.setCadsrClass(mappings);
+            pack.setModelClass(classes);
             packages[packIndex] = pack;
-            packageNames[packIndex] = pack.getName();
+            packageNames[packIndex] = pack.getPackageName();
             packIndex++;
         }
-        info.setPackages(packages);
-        extensionData.setCadsrInformation(info);
+        info.setModelPackage(packages);
+        extensionData.setModelInformation(info);
         storeExtensionData(extensionData);
     }
     

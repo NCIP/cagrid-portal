@@ -19,7 +19,7 @@ import java.util.Map;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * @created Jul 21, 2006
- * @version $Id: NamespaceUtils.java,v 1.5 2009-01-07 04:45:54 oster Exp $
+ * @version $Id: NamespaceUtils.java,v 1.6 2009-01-13 15:55:19 dervin Exp $
  */
 public class NamespaceUtils {
 
@@ -39,7 +39,7 @@ public class NamespaceUtils {
     }
 
 
-    //TODO: look up in the caDSR or is this used as the "fall back"?
+    // TODO: look up in the caDSR or is this used as the "fall back"?
     public static String createNamespaceString(String projectShortName, String projectVersion, String packName) {
         String modVersion = projectVersion;
         if (modVersion.indexOf('.') == -1) {

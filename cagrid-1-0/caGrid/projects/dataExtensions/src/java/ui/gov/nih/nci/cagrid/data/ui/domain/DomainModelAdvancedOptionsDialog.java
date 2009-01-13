@@ -5,6 +5,7 @@ import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.data.common.ExtensionDataManager;
+import gov.nih.nci.cagrid.data.extension.ModelSourceType;
 import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertyType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.FileFilters;
@@ -45,7 +46,7 @@ import org.cagrid.grape.utils.CompositeErrorDialog;
  * @author David Ervin
  * 
  * @created Jun 14, 2007 10:14:20 AM
- * @version $Id: DomainModelAdvancedOptionsDialog.java,v 1.3 2007-11-06 15:53:41 hastings Exp $
+ * @version $Id: DomainModelAdvancedOptionsDialog.java,v 1.4 2009-01-13 15:55:19 dervin Exp $
  */
 public class DomainModelAdvancedOptionsDialog extends JDialog {
     public static final String INFORMATION = 
@@ -113,7 +114,7 @@ public class DomainModelAdvancedOptionsDialog extends JDialog {
         try {
             if (dataManager.isNoDomainModel()) {
                 getNoDomainModelCheckBox().setSelected(true);
-            } else if (dataManager.isSuppliedDomainModel()) {
+            } else if (dataManager.isPreBuiltModel()) {
                 getFromFileCheckBox().setSelected(true);
                 ResourcePropertyType[] resourceProps = serviceInfo.getServices().getService(0)
                     .getResourcePropertiesList().getResourceProperty();
@@ -155,8 +156,14 @@ public class DomainModelAdvancedOptionsDialog extends JDialog {
                     getBrowseButton().setEnabled(getFromFileCheckBox().isSelected());
                     // store the domain model source state
                     try {
-                        dataManager.storeDomainModelSource(
-                            noDomainSelected, getFromFileCheckBox().isSelected());
+                        ModelSourceType source = ModelSourceType.mms;
+                        if (noDomainSelected) {
+                            source = ModelSourceType.none;
+                        }
+                        if (getFromFileCheckBox().isSelected()) {
+                            source = ModelSourceType.preBuilt;
+                        }
+                        dataManager.storeDomainModelSource(source);
                     } catch (Exception ex) {
                         ex.printStackTrace();
                         CompositeErrorDialog.showErrorDialog("Error storing domain model source", 
@@ -190,8 +197,11 @@ public class DomainModelAdvancedOptionsDialog extends JDialog {
                     }
                     // store the domain model source state
                     try {
-                        dataManager.storeDomainModelSource(
-                            getNoDomainModelCheckBox().isSelected(), fromFileSelected);
+                        ModelSourceType source = ModelSourceType.mms;
+                        if (getFromFileCheckBox().isSelected()) {
+                            source = ModelSourceType.preBuilt;
+                        }
+                        dataManager.storeDomainModelSource(source);
                     } catch (Exception ex) {
                         ex.printStackTrace();
                         CompositeErrorDialog.showErrorDialog("Error storing domain model source", 

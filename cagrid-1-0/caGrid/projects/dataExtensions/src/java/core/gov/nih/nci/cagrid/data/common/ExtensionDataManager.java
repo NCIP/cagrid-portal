@@ -1,18 +1,19 @@
 package gov.nih.nci.cagrid.data.common;
 
-import gov.nih.nci.cadsr.umlproject.domain.Project;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.data.ExtensionDataUtils;
 import gov.nih.nci.cagrid.data.auditing.DataServiceAuditors;
 import gov.nih.nci.cagrid.data.extension.AdditionalLibraries;
-import gov.nih.nci.cagrid.data.extension.CadsrInformation;
-import gov.nih.nci.cagrid.data.extension.CadsrPackage;
-import gov.nih.nci.cagrid.data.extension.ClassMapping;
 import gov.nih.nci.cagrid.data.extension.Data;
+import gov.nih.nci.cagrid.data.extension.ModelClass;
+import gov.nih.nci.cagrid.data.extension.ModelInformation;
+import gov.nih.nci.cagrid.data.extension.ModelPackage;
+import gov.nih.nci.cagrid.data.extension.ModelProject;
+import gov.nih.nci.cagrid.data.extension.ModelSourceType;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 /** 
@@ -22,7 +23,7 @@ import java.util.List;
  * @author David Ervin
  * 
  * @created Apr 11, 2007 10:04:04 AM
- * @version $Id: ExtensionDataManager.java,v 1.6 2008-12-24 17:27:26 dervin Exp $ 
+ * @version $Id: ExtensionDataManager.java,v 1.7 2009-01-13 15:55:19 dervin Exp $ 
  */
 public class ExtensionDataManager {
     
@@ -93,208 +94,95 @@ public class ExtensionDataManager {
     /**
      * Stores a domain model's source
      * 
-     * @param noDomainModel
-     * @param supplied
-     * @throws Exception
-     */
-    public void storeDomainModelSource(
-        boolean noDomainModel, boolean supplied) throws Exception {
-        CadsrInformation info = getCadsrInformation();
-        info.setNoDomainModel(noDomainModel);
-        info.setUseSuppliedModel(supplied);
-        storeCadsrInformation(info);
-    }
-    
-    
-    /**
-     * Stores the cadsr grid service URL
      * 
-     * @param url
      * @throws Exception
      */
-    public void storeCadsrServiceUrl(String url) throws Exception {
-        CadsrInformation info = getCadsrInformation();
-        info.setServiceUrl(url);
-        storeCadsrInformation(info);
+    public void storeDomainModelSource(ModelSourceType source) throws Exception {
+        ModelInformation info = getModelInformation();
+        info.setSource(source);
+        storeModelInformation(info);
     }
     
     
     /**
-     * Stores the project long name and version
+     * Stores the project short name and version
      * 
-     * @param project
      * @throws Exception
      */
-    public void storeCadsrProjectInformation(Project project) throws Exception {
-        CadsrInformation info = getCadsrInformation();
-        info.setProjectLongName(project.getLongName());
-        info.setProjectVersion(project.getVersion());
-        storeCadsrInformation(info);
+    public void storeModelProjectInformation(String shortName, String version) throws Exception {
+        ModelInformation info = getModelInformation();
+        ModelProject project = new ModelProject(shortName, version);
+        info.setModelProject(project);
+        storeModelInformation(info);
     }
     
     
     /**
-     * Replaces the cadsr package information in the extension data
+     * Replaces the model package information in the extension data
      * 
      * @param packages
      * @throws Exception
      */
-    public void storeCadsrPackages(CadsrPackage[] packages) throws Exception {
-        CadsrInformation info = getCadsrInformation();
-        info.setPackages(packages);
-        storeCadsrInformation(info);
+    public void storeModelPackages(ModelPackage[] packages) throws Exception {
+        ModelInformation info = getModelInformation();
+        info.setModelPackage(packages);
+        storeModelInformation(info);
     }
     
     
     /**
-     * Stores a Cadsr Package.  If an existing package has the same name,
+     * Stores a Model Package.  If an existing package has the same name,
      * the existing package will be replaced
      * 
      * @param pack
      * @throws Exception
      */
-    public void storeCadsrPackage(CadsrPackage pack) throws Exception {
-        CadsrInformation info = getCadsrInformation();
-        CadsrPackage[] currentPackages = info.getPackages();
+    public void storeModelPackage(ModelPackage pack) throws Exception {
+        ModelInformation info = getModelInformation();
+        ModelPackage[] currentPackages = info.getModelPackage();
         if (currentPackages == null) {
-            currentPackages = new CadsrPackage[] {pack};
+            currentPackages = new ModelPackage[] {pack};
         } else {
             boolean replaced = false;
             for (int i = 0; i < currentPackages.length; i++) {
-                if (currentPackages[i].getName().equals(pack.getName())) {
+                if (currentPackages[i].getPackageName().equals(pack.getPackageName())) {
                     currentPackages[i] = pack;
                     replaced = true;
                     break;
                 }
             }
             if (!replaced) {
-                currentPackages = (CadsrPackage[]) Utils.appendToArray(currentPackages, pack);
+                currentPackages = (ModelPackage[]) Utils.appendToArray(currentPackages, pack);
             }
         }
-        info.setPackages(currentPackages);
-        storeCadsrInformation(info);
+        info.setModelPackage(currentPackages);
+        storeModelInformation(info);
     }
     
     
     /**
-     * Gets the mapped namespace for a package in the cadsr information
+     * Removes a package from the model
      * 
      * @param packageName
+     *      The name of the package to remove
      * @return
-     *      The mapped namespace or NULL if no package was found
+     *      True if the package was found and removed     
      * @throws Exception
      */
-    public String getMappedNamespaceForPackage(String packageName) throws Exception {
-        CadsrInformation info = getCadsrInformation();
-        if (info.getPackages() != null) {
-            for (CadsrPackage pack : info.getPackages()) {
-                if (pack.getName().equals(packageName)) {
-                    return pack.getMappedNamespace();
-                }
-            }
-        }
-        return null;
-    }
-    
-
-    /**
-     * Sets the mapped namespace for a package in the cadsr information
-     * 
-     * @param packageName
-     * @param namespace
-     * @throws Exception
-     */
-    public void setMappedNamespaceForPackage(String packageName, String namespace) throws Exception {
-        CadsrInformation info = getCadsrInformation();
-        if (info.getPackages() != null) {
-            for (CadsrPackage pack : info.getPackages()) {
-                if (pack.getName().equals(packageName)) {
-                    pack.setMappedNamespace(namespace);
-                }
-            }
-        }
-        storeCadsrInformation(info);
-    }
-    
-    
-    /**
-     * Removes a cadsr package from the service extension data
-     * 
-     * @param packageName
-     * @throws Exception
-     */
-    public void removeCadsrPackage(String packageName) throws Exception {
-        CadsrInformation info = getCadsrInformation();
-        CadsrPackage[] packs = info.getPackages();
-        for (CadsrPackage currentPackage : packs) {
-            if (currentPackage.getName().equals(packageName)) {
-                packs = (CadsrPackage[]) Utils.removeFromArray(packs, currentPackage);
+    public boolean removeCadsrPackage(String packageName) throws Exception {
+        ModelInformation info = new ModelInformation();
+        ModelPackage[] packs = info.getModelPackage();
+        boolean found = false;
+        for (ModelPackage currentPackage : packs) {
+            if (currentPackage.getPackageName().equals(packageName)) {
+                packs = (ModelPackage[]) Utils.removeFromArray(packs, currentPackage);
+                found = true;
                 break;
             }
         }
-        info.setPackages(packs);
-        storeCadsrInformation(info);
-    }
-    
-    
-    /**
-     * Gets a class mapping
-     * 
-     * @param packageName
-     * 
-     *      The name of the package in which the class resides
-     * @param className
-     *      The name of the class
-     * @return
-     *      The class mapping, or null if none is found
-     * @throws Exception
-     */
-    public ClassMapping getClassMapping(String packageName, String className) throws Exception {
-        CadsrInformation info = getCadsrInformation();
-        if (info.getPackages() != null) {
-            for (CadsrPackage pack : info.getPackages()) {
-                if (pack.getName().equals(packageName)) {
-                    for (ClassMapping mapping : pack.getCadsrClass()) {
-                        if (mapping.getClassName().equals(className)) {
-                            return mapping;
-                        }
-                    }
-                }
-            }
-        }
-        return null;
-    }
-    
-    
-    /**
-     * Sets that a class is selected as part of the exposed model
-     * 
-     * @param packageName
-     *      The package name
-     * @param className
-     *      The class name
-     * @param selected
-     *      The selection state
-     * @return
-     *      True if the class was found in the model, false otherwise
-     * @throws Exception
-     */
-    public boolean setClassSelectedInModel(String packageName, String className, boolean selected) throws Exception {
-        CadsrInformation info = getCadsrInformation();
-        if (info.getPackages() != null) {
-            for (CadsrPackage pack : info.getPackages()) {
-                if (pack.getName().equals(packageName)) {
-                    for (ClassMapping mapping : pack.getCadsrClass()) {
-                        if (mapping.getClassName().equals(className)) {
-                            mapping.setSelected(selected);
-                            storeCadsrInformation(info);
-                            return true;
-                        }
-                    }
-                }
-            }
-        }
-        return false;
+        info.setModelPackage(packs);
+        storeModelInformation(info);
+        return found;
     }
     
     
@@ -303,23 +191,23 @@ public class ExtensionDataManager {
      * 
      * @param packageName
      *      The package name
-     * @param className
-     *      The class name
+     * @param shortClassName
+     *      The short class name
      * @param targetable
      *      The targetability state
      * @return
-     *      True if the class was found in the model, false otherwise
+     *      True if the class was found and updated in the model, false otherwise
      * @throws Exception
      */
-    public boolean setClassTargetableInModel(String packageName, String className, boolean targetable) throws Exception {
-        CadsrInformation info = getCadsrInformation();
-        if (info.getPackages() != null) {
-            for (CadsrPackage pack : info.getPackages()) {
-                if (pack.getName().equals(packageName)) {
-                    for (ClassMapping mapping : pack.getCadsrClass()) {
-                        if (mapping.getClassName().endsWith(className)) {
-                            mapping.setTargetable(targetable);
-                            storeCadsrInformation(info);
+    public boolean setClassTargetableInModel(String packageName, String shortClassName, boolean targetable) throws Exception {
+        ModelInformation info = getModelInformation();
+        if (info.getModelPackage() != null) {
+            for (ModelPackage pack : info.getModelPackage()) {
+                if (pack.getPackageName().equals(packageName)) {
+                    for (ModelClass clazz : pack.getModelClass()) {
+                        if (clazz.getShortClassName().equals(shortClassName)) {
+                            clazz.setTargetable(targetable);
+                            storeModelInformation(info);
                             return true;
                         }
                     }
@@ -330,26 +218,45 @@ public class ExtensionDataManager {
     }
     
     
+    public boolean getClassTargetableInModel(String packageName, String className) throws Exception {
+        ModelInformation info = getModelInformation();
+        if (info.getModelPackage() != null) {
+            for (ModelPackage pack : info.getModelPackage()) {
+                if (pack.getPackageName().equals(packageName)) {
+                    for (ModelClass clazz : pack.getModelClass()) {
+                        if (clazz.getShortClassName().equals(className)) {
+                            return clazz.isTargetable();
+                        }
+                    }
+                }
+            }
+        }
+        throw new Exception("Class " + packageName + "." + className + " not found in the model information");
+    }
+    
     
     /**
-     * Sets the element name a class is mapped to in the exposed domain model
+     * Sets that a class is selected in the exposed domain model
      * 
      * @param packageName
-     * @param className
-     * @param elementName
+     *      The package name
+     * @param shortClassName
+     *      The short class name
+     * @param selected
+     *      The selected state
      * @return
-     *      True if the class was found in the model, false otherwise
+     *      True if the class was found and updated in the model, false otherwise
      * @throws Exception
      */
-    public boolean setClassElementNameInModel(String packageName, String className, String elementName) throws Exception {
-        CadsrInformation info = getCadsrInformation();
-        if (info.getPackages() != null) {
-            for (CadsrPackage pack : info.getPackages()) {
-                if (pack.getName().equals(packageName)) {
-                    for (ClassMapping mapping : pack.getCadsrClass()) {
-                        if (mapping.getClassName().equals(className)) {
-                            mapping.setElementName(elementName);
-                            storeCadsrInformation(info);
+    public boolean setClassSelectedInModel(String packageName, String shortClassName, boolean selected) throws Exception {
+        ModelInformation info = getModelInformation();
+        if (info.getModelPackage() != null) {
+            for (ModelPackage pack : info.getModelPackage()) {
+                if (pack.getPackageName().equals(packageName)) {
+                    for (ModelClass clazz : pack.getModelClass()) {
+                        if (clazz.getShortClassName().equals(shortClassName)) {
+                            clazz.setSelected(selected);
+                            storeModelInformation(info);
                             return true;
                         }
                     }
@@ -360,20 +267,38 @@ public class ExtensionDataManager {
     }
     
     
+    public boolean getClassSelectedInModel(String packageName, String className) throws Exception {
+        ModelInformation info = getModelInformation();
+        if (info.getModelPackage() != null) {
+            for (ModelPackage pack : info.getModelPackage()) {
+                if (pack.getPackageName().equals(packageName)) {
+                    for (ModelClass clazz : pack.getModelClass()) {
+                        if (clazz.getShortClassName().equals(className)) {
+                            return clazz.isSelected();
+                        }
+                    }
+                }
+            }
+        }
+        throw new Exception("Class " + packageName + "." + className + " not found in the model information");
+    }
+    
+    
     /**
-     * Gets all class mappings in a package
+     * Gets all model class information in a package
      * 
      * @param packName
+     *      The name of the package
      * @return
-     *      A list of class mappings, or null if none are found
+     *      A list of model classes, or null if none are found
      * @throws Exception
      */
-    public List<ClassMapping> getClassMappingsInPackage(String packName) throws Exception {
-        CadsrInformation info = getCadsrInformation();
-        if (info.getPackages() != null) {
-            for (CadsrPackage pack : info.getPackages()) {
-                if (pack.getName().equals(packName) && pack.getCadsrClass() != null) {
-                    List<ClassMapping> mappings = Arrays.asList(pack.getCadsrClass());
+    public List<ModelClass> getClassMappingsInPackage(String packName) throws Exception {
+        ModelInformation info = getModelInformation();
+        if (info.getModelPackage() != null) {
+            for (ModelPackage pack : info.getModelPackage()) {
+                if (pack.getPackageName().equals(packName) && pack.getModelClass() != null) {
+                    List<ModelClass> mappings = Arrays.asList(pack.getModelClass());
                     return mappings;
                 }
             }
@@ -383,31 +308,18 @@ public class ExtensionDataManager {
     
     
     /**
-     * Gets the configured caDSR url
-     * 
-     * @return
-     *      The caDSR url, or null if none is found
-     * @throws Exception
-     */
-    public String getCadsrUrl() throws Exception {
-        CadsrInformation info = getCadsrInformation();
-        return info.getServiceUrl();
-    }
-    
-    
-    /**
-     * Gets the names of all cadsr packages stored in the extension data
+     * Gets the package names used in the metadata model
      * 
      * @return
      *      A list of package names, or null if none are stored
      * @throws Exception
      */
     public List<String> getCadsrPackageNames() throws Exception {
-        CadsrInformation info = getCadsrInformation();
-        if (info.getPackages() != null) {
-            List<String> names = new ArrayList<String>(info.getPackages().length);
-            for (CadsrPackage pack : info.getPackages()) {
-                names.add(pack.getName());
+        ModelInformation info = getModelInformation();
+        if (info.getModelPackage() != null && info.getModelPackage().length != 0) {
+            List<String> names = new LinkedList<String>();
+            for (ModelPackage pack : info.getModelPackage()) {
+                names.add(pack.getPackageName());
             }
             return names;
         }
@@ -416,14 +328,17 @@ public class ExtensionDataManager {
     
     
     /**
-     * Gets the stored long name of the caDSR project used in the domain model
+     * Gets the stored short name of the caDSR project used in the domain model
      * @return
-     *      The project long name, or null if not found
+     *      The project short name, or null if not found
      * @throws Exception
      */
-    public String getCadsrProjectLongName() throws Exception {
-        CadsrInformation info = getCadsrInformation();
-        return info.getProjectLongName();
+    public String getModelProjectShortName() throws Exception {
+        ModelInformation info = getModelInformation();
+        if (info.getModelProject() != null) {
+            return info.getModelProject().getShortName();
+        }
+        return null;
     }
     
     
@@ -433,35 +348,38 @@ public class ExtensionDataManager {
      *      The project's version, or null if not found
      * @throws Exception
      */
-    public String getCadsrProjectVersion() throws Exception {
-        CadsrInformation info = getCadsrInformation();
-        return info.getProjectVersion();
+    public String getModelProjectVersion() throws Exception {
+        ModelInformation info = getModelInformation();
+        if (info.getModelProject() != null) {
+            return info.getModelProject().getVersion();
+        }
+        return null;
     }
     
     
     /**
-     * Gets the flag indicating if no domain model is to be used
+     * Determines if no domain model is to be used
      * 
      * @return
-     *      The no domain model flag
+     *      True if the model information specifies no domain model
      * @throws Exception
      */
     public boolean isNoDomainModel() throws Exception {
-        CadsrInformation info = getCadsrInformation();
-        return info.isNoDomainModel();
+        ModelInformation info = getModelInformation();
+        return ModelSourceType.none.equals(info.getSource());
     }
     
     
     /**
-     * Gets the flag indicating a supplied domain model is to be used
+     * Determines if a pre-built domain model is to be used
      * 
      * @return
-     *      The supplied domain model flag
+     *      True if the model information specifies a pre-built domain model
      * @throws Exception
      */
-    public boolean isSuppliedDomainModel() throws Exception {
-        CadsrInformation info = getCadsrInformation();
-        return info.isUseSuppliedModel();
+    public boolean isPreBuiltModel() throws Exception {
+        ModelInformation info = getModelInformation();
+        return ModelSourceType.preBuilt.equals(info.getSource());
     }
     
     
@@ -561,25 +479,19 @@ public class ExtensionDataManager {
     }
     
     
-    /**
-     * Gets the full caDSR information stored with this service extension data
-     * @return
-     *      The caDSR information of the extension data
-     * @throws Exception
-     */
-    public CadsrInformation getCadsrInformation() throws Exception {
+    public ModelInformation getModelInformation() throws Exception {
         Data data = getExtensionData();
-        CadsrInformation info = data.getCadsrInformation();
+        ModelInformation info = data.getModelInformation();
         if (info == null) {
-            return new CadsrInformation();
+            info = new ModelInformation();
         }
         return info;
     }
     
     
-    public void storeCadsrInformation(CadsrInformation info) throws Exception {
+    public void storeModelInformation(ModelInformation info) throws Exception {
         Data data = getExtensionData();
-        data.setCadsrInformation(info);
+        data.setModelInformation(info);
         saveExtensionData(data);
     }
 }

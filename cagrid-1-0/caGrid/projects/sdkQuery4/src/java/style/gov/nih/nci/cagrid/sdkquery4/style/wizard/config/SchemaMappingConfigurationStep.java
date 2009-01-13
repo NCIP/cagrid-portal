@@ -1,9 +1,10 @@
 package gov.nih.nci.cagrid.sdkquery4.style.wizard.config;
 
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.data.extension.CadsrInformation;
-import gov.nih.nci.cagrid.data.extension.CadsrPackage;
+import gov.nih.nci.cagrid.data.common.ModelInformationUtil;
 import gov.nih.nci.cagrid.data.extension.Data;
+import gov.nih.nci.cagrid.data.extension.ModelInformation;
+import gov.nih.nci.cagrid.data.extension.ModelPackage;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespacesType;
@@ -30,29 +31,31 @@ import org.cagrid.gme.discoverytools.NamespaceTools;
  * @author David Ervin
  * 
  * @created Jan 22, 2008 11:25:57 AM
- * @version $Id: SchemaMappingConfigurationStep.java,v 1.4 2009-01-07 04:46:01 oster Exp $ 
+ * @version $Id: SchemaMappingConfigurationStep.java,v 1.5 2009-01-13 15:55:14 dervin Exp $ 
  */
 public class SchemaMappingConfigurationStep extends AbstractStyleConfigurationStep {
-    private Map<String, File> packageToSourceSchemaFile;
-    private Map<String, NamespaceType> packageToNamespace;
+    private Map<String, File> packageToSourceSchemaFile = null;
+    private Map<String, NamespaceType> packageToNamespace = null;
+    private ModelInformationUtil modelInfoUtil = null;
 
     public SchemaMappingConfigurationStep(ServiceInformation serviceInfo) {
         super(serviceInfo);
         this.packageToSourceSchemaFile = new HashMap<String, File>();
         this.packageToNamespace = new HashMap<String, NamespaceType>();
+        this.modelInfoUtil = new ModelInformationUtil(serviceInfo.getServiceDescriptor());
     }
 
 
     public void applyConfiguration() throws Exception {
         // set the mapped namespace information for each package in the extension data
         Data extensionData = getExtensionData();
-        CadsrInformation cadsrInfo = extensionData.getCadsrInformation();
-        if (cadsrInfo != null && cadsrInfo.getPackages() != null) {
-            CadsrPackage[] domainPackages = cadsrInfo.getPackages();
-            for (CadsrPackage pack : domainPackages) {
-                String packageName = pack.getName();
+        ModelInformation modelInfo = extensionData.getModelInformation();
+        if (modelInfo != null && modelInfo.getModelPackage() != null) {
+            ModelPackage[] domainPackages = modelInfo.getModelPackage();
+            for (ModelPackage pack : domainPackages) {
+                String packageName = pack.getPackageName();
                 NamespaceType namespace = packageToNamespace.get(packageName);
-                pack.setMappedNamespace(namespace.getNamespace());
+                modelInfoUtil.setMappedNamespace(packageName, namespace.getNamespace());
                 namespace.setPackageName(packageName);
             }
         }
@@ -73,7 +76,8 @@ public class SchemaMappingConfigurationStep extends AbstractStyleConfigurationSt
     
     public String mapPackageToSchema(String packageName, File sourceSchemaFile) throws Exception {
         packageToSourceSchemaFile.put(packageName, sourceSchemaFile);
-        NamespaceType nsType = NamespaceTools.createNamespaceTypeForFile(sourceSchemaFile.getAbsolutePath(), getServiceSchemaDir());
+        NamespaceType nsType = NamespaceTools.createNamespaceTypeForFile(
+            sourceSchemaFile.getAbsolutePath(), getServiceSchemaDir());
         packageToNamespace.put(packageName, nsType);
         return nsType.getNamespace();
     }

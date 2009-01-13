@@ -4,10 +4,11 @@ import gov.nih.nci.cagrid.common.JarUtilities;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.data.ExtensionDataUtils;
-import gov.nih.nci.cagrid.data.extension.CadsrInformation;
-import gov.nih.nci.cagrid.data.extension.CadsrPackage;
-import gov.nih.nci.cagrid.data.extension.ClassMapping;
+import gov.nih.nci.cagrid.data.common.ModelInformationUtil;
 import gov.nih.nci.cagrid.data.extension.Data;
+import gov.nih.nci.cagrid.data.extension.ModelClass;
+import gov.nih.nci.cagrid.data.extension.ModelInformation;
+import gov.nih.nci.cagrid.data.extension.ModelPackage;
 import gov.nih.nci.cagrid.data.style.sdkstyle.wizard.PackageSchemaMappingErrorDialog;
 import gov.nih.nci.cagrid.data.ui.SchemaResolutionDialog;
 import gov.nih.nci.cagrid.data.ui.wizard.AbstractWizardPanel;
@@ -59,7 +60,7 @@ import org.cagrid.grape.utils.CompositeErrorDialog;
  * 
  * @author David Ervin
  * @created Jan 9, 2008 11:09:22 AM
- * @version $Id: SchemaMappingPanel.java,v 1.6 2009-01-07 04:45:45 oster Exp $
+ * @version $Id: SchemaMappingPanel.java,v 1.7 2009-01-13 15:55:14 dervin Exp $
  */
 public class SchemaMappingPanel extends AbstractWizardPanel {
 
@@ -75,11 +76,12 @@ public class SchemaMappingPanel extends AbstractWizardPanel {
     private JPanel mappingPanel = null;
 
     private SchemaMappingConfigurationStep configuration = null;
-
+    private ModelInformationUtil modelInfoUtil = null;
 
     public SchemaMappingPanel(ServiceExtensionDescriptionType extensionDescription, ServiceInformation info) {
         super(extensionDescription, info);
         configuration = new SchemaMappingConfigurationStep(info);
+        modelInfoUtil = new ModelInformationUtil(info.getServiceDescriptor());
         initialize();
     }
 
@@ -98,20 +100,20 @@ public class SchemaMappingPanel extends AbstractWizardPanel {
         // populate the package to namespace table from the extension data
         try {
             Data data = ExtensionDataUtils.getExtensionData(getExtensionData());
-            CadsrInformation info = data.getCadsrInformation();
+            ModelInformation info = data.getModelInformation();
             Set<String> currentPackageNames = new HashSet<String>();
             for (int i = 0; i < getPackageNamespaceTable().getRowCount(); i++) {
                 currentPackageNames.add((String) getPackageNamespaceTable().getValueAt(i, 0));
             }
-            if (info != null && info.getPackages() != null) {
-                CadsrPackage[] packs = info.getPackages();
+            if (info != null && info.getModelPackage() != null) {
+                ModelPackage[] packs = info.getModelPackage();
                 if (packs != null && packs.length != 0) {
                     // add any new packages to the table
                     for (int i = 0; i < packs.length; i++) {
                         if (!getPackageNamespaceTable().isPackageInTable(packs[i])) {
-                            getPackageNamespaceTable().addNewCadsrPackage(getServiceInformation(), packs[i]);
+                            getPackageNamespaceTable().addNewModelPackage(getServiceInformation(), packs[i]);
                         }
-                        currentPackageNames.remove(packs[i].getName());
+                        currentPackageNames.remove(packs[i].getPackageName());
                     }
                 }
             }
@@ -161,7 +163,7 @@ public class SchemaMappingPanel extends AbstractWizardPanel {
 
     private PackageToNamespaceTable getPackageNamespaceTable() {
         if (this.packageNamespaceTable == null) {
-            this.packageNamespaceTable = new PackageToNamespaceTable();
+            this.packageNamespaceTable = new PackageToNamespaceTable(modelInfoUtil);
             this.packageNamespaceTable.getModel().addTableModelListener(new TableModelListener() {
                 public void tableChanged(TableModelEvent e) {
                     if (e.getType() == TableModelEvent.UPDATE) {
@@ -481,7 +483,6 @@ public class SchemaMappingPanel extends AbstractWizardPanel {
 
 
     private GlobalModelExchangeClient getGmeHandle() throws MalformedURIException, RemoteException {
-
         return new GlobalModelExchangeClient(getGmeUrlTextField().getText());
     }
 
@@ -504,13 +505,18 @@ public class SchemaMappingPanel extends AbstractWizardPanel {
         // and copy schemas to the service's schema directory
         NamespaceType[] resolved = SchemaResolutionDialog.resolveSchemas(getServiceInformation());
         if (resolved != null) {
-            CadsrPackage pack = getNamedCadsrPackage(packageName);
+            ModelPackage pack = getNamedCadsrPackage(packageName);
             if (resolved.length != 0 && packageResolvedByNamespace(pack, resolved[0])) {
                 File primarySchemaFile = new File(schemaDir, resolved[0].getLocation());
                 configuration.mapPackageToSchema(packageName, primarySchemaFile);
 
                 // set the namespace of the resolved schema on the table
-                getPackageNamespaceTable().setValueAt(pack.getMappedNamespace(), dataRow, 1);
+                NamespaceType nsType = modelInfoUtil.getMappedNamespace(pack.getPackageName());
+                String namespace = null;
+                if (nsType != null) {
+                    namespace = nsType.getNamespace();
+                }
+                getPackageNamespaceTable().setValueAt(namespace, dataRow, 1);
 
                 status = SchemaResolutionStatus.SCHEMA_FOUND;
             } else {
@@ -524,10 +530,10 @@ public class SchemaMappingPanel extends AbstractWizardPanel {
     }
 
 
-    private boolean packageResolvedByNamespace(CadsrPackage pack, NamespaceType namespace) {
+    private boolean packageResolvedByNamespace(ModelPackage pack, NamespaceType namespace) {
         Set<String> classNames = new HashSet<String>();
-        for (ClassMapping mapping : pack.getCadsrClass()) {
-            classNames.add(mapping.getClassName());
+        for (ModelClass clazz : pack.getModelClass()) {
+            classNames.add(clazz.getShortClassName());
         }
         Set<String> elementNames = new HashSet<String>();
         for (SchemaElementType element : namespace.getSchemaElement()) {
@@ -545,17 +551,18 @@ public class SchemaMappingPanel extends AbstractWizardPanel {
             new PackageSchemaMappingErrorDialog(nonResolvedClasses);
         }
 
-        // return status
         return status;
     }
 
 
-    private CadsrPackage getNamedCadsrPackage(String packageName) throws Exception {
+    private ModelPackage getNamedCadsrPackage(String packageName) throws Exception {
         Data extensionData = ExtensionDataUtils.getExtensionData(getExtensionData());
-        CadsrPackage[] cadsrPackages = extensionData.getCadsrInformation().getPackages();
-        for (CadsrPackage pack : cadsrPackages) {
-            if (pack.getName().equals(packageName)) {
-                return pack;
+        ModelPackage[] modelPackages = extensionData.getModelInformation().getModelPackage();
+        if (modelPackages != null) {
+            for (ModelPackage pack : modelPackages) {
+                if (pack.getPackageName().equals(packageName)) {
+                    return pack;
+                }
             }
         }
         return null;

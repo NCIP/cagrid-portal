@@ -3,16 +3,18 @@ package gov.nih.nci.cagrid.data.style.sdkstyle.wizard;
 import gov.nih.nci.cadsr.umlproject.domain.Project;
 import gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata;
 import gov.nih.nci.cadsr.umlproject.domain.UMLPackageMetadata;
-import org.cagrid.cadsr.portal.CaDSRBrowserPanel;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.data.ExtensionDataUtils;
-import gov.nih.nci.cagrid.data.extension.CadsrInformation;
-import gov.nih.nci.cagrid.data.extension.CadsrPackage;
-import gov.nih.nci.cagrid.data.extension.ClassMapping;
+import gov.nih.nci.cagrid.data.common.ModelInformationUtil;
 import gov.nih.nci.cagrid.data.extension.Data;
+import gov.nih.nci.cagrid.data.extension.ModelClass;
+import gov.nih.nci.cagrid.data.extension.ModelInformation;
+import gov.nih.nci.cagrid.data.extension.ModelPackage;
+import gov.nih.nci.cagrid.data.extension.ModelProject;
+import gov.nih.nci.cagrid.data.extension.ModelSourceType;
 import gov.nih.nci.cagrid.data.ui.NamespaceUtils;
 import gov.nih.nci.cagrid.data.ui.domain.DomainModelFromXmiDialog;
 import gov.nih.nci.cagrid.data.ui.wizard.AbstractWizardPanel;
@@ -62,6 +64,7 @@ import javax.swing.ListSelectionModel;
 
 import org.cagrid.cadsr.UMLModelService;
 import org.cagrid.cadsr.client.CaDSRUMLModelService;
+import org.cagrid.cadsr.portal.CaDSRBrowserPanel;
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.utils.BusyDialogRunnable;
 import org.cagrid.grape.utils.CompositeErrorDialog;
@@ -73,7 +76,7 @@ import org.cagrid.grape.utils.CompositeErrorDialog;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * @created Sep 25, 2006
- * @version $Id: DomainModelPanel.java,v 1.9 2009-01-07 04:46:00 oster Exp $
+ * @version $Id: DomainModelPanel.java,v 1.10 2009-01-13 15:55:19 dervin Exp $
  */
 public class DomainModelPanel extends AbstractWizardPanel {
 
@@ -94,27 +97,25 @@ public class DomainModelPanel extends AbstractWizardPanel {
     private JButton removePackageButton = null;
     private JPanel packageButtonsPanel = null;
     private JPanel caDsrPanel = null;
-
     private JButton addProjectButton = null;
+    
+    private ModelInformationUtil modelInfoUtil = null;
 
 
     public DomainModelPanel(ServiceExtensionDescriptionType extensionDescription, ServiceInformation info) {
         super(extensionDescription, info);
+        this.modelInfoUtil = new ModelInformationUtil(info.getServiceDescriptor());
         initialize();
     }
 
 
     public void update() {
         try {
-            CadsrInformation info = getCadsrInformation();
-            if (info.isNoDomainModel()) {
+            ModelInformation info = getModelInformation();
+            if (ModelSourceType.none.equals(info.getSource())) {
                 getNoDomainModelRadioButton().setSelected(true);
             }
-            if (info.getServiceUrl() != null) {
-                getCaDsrBrowser().setDefaultCaDSRURL(info.getServiceUrl());
-                getCaDsrBrowser().getCadsr().setText(info.getServiceUrl());
-            }
-            if (info.isUseSuppliedModel()) {
+            if (ModelSourceType.preBuilt.equals(info.getSource())) {
                 ResourcePropertyType dmResourceProperty = CommonTools.getResourcePropertiesOfType(
                     getServiceInformation().getServices().getService(0), DataServiceConstants.DOMAIN_MODEL_QNAME)[0];
                 String filename = getServiceInformation().getBaseDirectory().getAbsolutePath() + File.separator + "etc"
@@ -122,19 +123,20 @@ public class DomainModelPanel extends AbstractWizardPanel {
                 getFileTextField().setText(filename);
                 getFromFileRadioButton().setSelected(true);
             }
-            if (info.getProjectLongName() != null && info.getProjectVersion() != null) {
+            ModelProject proj = info.getModelProject();
+            if (proj != null && proj.getShortName() != null && proj.getVersion() != null) {
                 lastSelectedProject = new Project();
-                lastSelectedProject.setLongName(info.getProjectLongName());
-                lastSelectedProject.setVersion(info.getProjectVersion());
+                lastSelectedProject.setShortName(proj.getShortName());
+                lastSelectedProject.setVersion(proj.getVersion());
             }
-            if (info.getPackages() != null) {
-                String[] names = new String[info.getPackages().length];
-                for (int i = 0; i < info.getPackages().length; i++) {
-                    names[i] = info.getPackages(i).getName();
+            if (info.getModelPackage() != null) {
+                String[] names = new String[info.getModelPackage().length];
+                for (int i = 0; i < info.getModelPackage().length; i++) {
+                    names[i] = info.getModelPackage(i).getPackageName();
                 }
                 getSelectedPackagesList().setListData(names);
             }
-            storeCadsrInformation(info);
+            storeModelInformation(info);
         } catch (Exception ex) {
             ex.printStackTrace();
             CompositeErrorDialog.showErrorDialog("Error loading extension data", ex);
@@ -408,7 +410,7 @@ public class DomainModelPanel extends AbstractWizardPanel {
     private void setSelectedDomainModelFilename(String filename) {
         // set the selected file on the data extension's info
         try {
-            CadsrInformation info = getCadsrInformation();
+            ModelInformation info = getModelInformation();
 
             ResourcePropertyType dmResourceProp = getDomainModelResourceProperty();
 
@@ -420,13 +422,12 @@ public class DomainModelPanel extends AbstractWizardPanel {
 
                 dmResourceProp.setPopulateFromFile(true);
                 dmResourceProp.setFileLocation(localDomainFile.getName());
-                info.setUseSuppliedModel(true);
+                info.setSource(ModelSourceType.preBuilt);
 
-                storeCadsrInformation(info);
+                storeModelInformation(info);
 
                 loadDomainModelFile();
             } else {
-                info.setUseSuppliedModel(false);
                 dmResourceProp.setPopulateFromFile(false);
                 dmResourceProp.setFileLocation("");
             }
@@ -713,23 +714,23 @@ public class DomainModelPanel extends AbstractWizardPanel {
             getSelectedPackagesList().setListData(names);
             // add the package to the cadsr information in extension data
             try {
-                CadsrInformation info = getCadsrInformation();
+                ModelInformation info = getModelInformation();
                 // create cadsr package for the new metadata package
-                CadsrPackage newPackage = new CadsrPackage();
-                newPackage.setName(pack.getName());
-                newPackage.setCadsrClass(getClassMappings(lastSelectedProject, pack));
-                newPackage.setMappedNamespace(NamespaceUtils.createNamespaceString(lastSelectedProject, pack));
-                CadsrPackage[] packages = info.getPackages();
+                ModelPackage newPackage = new ModelPackage();
+                newPackage.setPackageName(pack.getName());
+                ModelClass[] modelClasses = getClassMappings(lastSelectedProject, pack);
+                newPackage.setModelClass(modelClasses);
+                String mappedNamespace = NamespaceUtils.createNamespaceString(lastSelectedProject, pack);
+                modelInfoUtil.setMappedNamespace(pack.getName(), mappedNamespace);
+                ModelPackage[] packages = info.getModelPackage();
                 if (packages == null) {
-                    packages = new CadsrPackage[]{newPackage};
+                    packages = new ModelPackage[]{newPackage};
                 } else {
-                    packages = (CadsrPackage[]) Utils.appendToArray(packages, newPackage);
+                    packages = (ModelPackage[]) Utils.appendToArray(packages, newPackage);
                 }
-                info.setPackages(packages);
-                info.setServiceUrl(getCaDsrBrowser().getCadsr().getText());
-                info.setProjectLongName(lastSelectedProject.getLongName());
-                info.setProjectVersion(lastSelectedProject.getVersion());
-                storeCadsrInformation(info);
+                info.setModelPackage(packages);
+                info.setModelProject(new ModelProject(lastSelectedProject.getShortName(), lastSelectedProject.getVersion()));
+                storeModelInformation(info);
             } catch (Exception ex) {
                 ex.printStackTrace();
                 CompositeErrorDialog.showErrorDialog("Error storing the new package information", ex);
@@ -738,22 +739,23 @@ public class DomainModelPanel extends AbstractWizardPanel {
     }
 
 
-    private ClassMapping[] getClassMappings(Project proj, UMLPackageMetadata pack) throws Exception {
+    private ModelClass[] getClassMappings(Project proj, UMLPackageMetadata pack) throws Exception {
         UMLModelService client = new CaDSRUMLModelService(getCaDsrBrowser().getCadsr().getText());
         UMLClassMetadata[] classMdArray = client.findClassesInPackage(proj, pack.getName());
-        ClassMapping[] mappings = new ClassMapping[]{};
+        ModelClass[] classes = new ModelClass[]{};
         if (classMdArray != null) {
-            mappings = new ClassMapping[classMdArray.length];
+            classes = new ModelClass[classMdArray.length];
             for (int i = 0; i < classMdArray.length; i++) {
-                ClassMapping map = new ClassMapping();
-                map.setClassName(classMdArray[i].getName());
-                map.setElementName(classMdArray[i].getName());
-                map.setSelected(true);
-                map.setTargetable(true);
-                mappings[i] = map;
+                ModelClass clazz = new ModelClass();
+                clazz.setShortClassName(classMdArray[i].getName());
+                modelInfoUtil.setMappedElementName(pack.getName(), 
+                    clazz.getShortClassName(), classMdArray[i].getName());
+                clazz.setSelected(true);
+                clazz.setTargetable(true);
+                classes[i] = clazz;
             }
         }
-        return mappings;
+        return classes;
     }
 
 
@@ -775,18 +777,18 @@ public class DomainModelPanel extends AbstractWizardPanel {
         }
         // change the data model
         try {
-            CadsrInformation information = getCadsrInformation();
-            CadsrPackage[] packages = information.getPackages();
-            List<CadsrPackage> remainingPackages = new ArrayList<CadsrPackage>();
+            ModelInformation information = getModelInformation();
+            ModelPackage[] packages = information.getModelPackage();
+            List<ModelPackage> remainingPackages = new ArrayList<ModelPackage>();
             for (int i = 0; i < packages.length; i++) {
-                if (!selected.contains(packages[i].getName())) {
+                if (!selected.contains(packages[i].getPackageName())) {
                     remainingPackages.add(packages[i]);
                 }
             }
-            CadsrPackage[] remainingPackagesArray = new CadsrPackage[remainingPackages.size()];
+            ModelPackage[] remainingPackagesArray = new ModelPackage[remainingPackages.size()];
             remainingPackages.toArray(remainingPackagesArray);
-            information.setPackages(remainingPackagesArray);
-            storeCadsrInformation(information);
+            information.setModelPackage(remainingPackagesArray);
+            storeModelInformation(information);
         } catch (Exception ex) {
             ex.printStackTrace();
             CompositeErrorDialog.showErrorDialog("Error removing the selected packages from the model", ex);
@@ -796,12 +798,14 @@ public class DomainModelPanel extends AbstractWizardPanel {
 
     private void storeNoDomainModelState() {
         try {
-            CadsrInformation info = getCadsrInformation();
-            info.setNoDomainModel(getNoDomainModelRadioButton().isSelected());
-            storeCadsrInformation(info);
+            if (getNoDomainModelRadioButton().isSelected()) {
+                ModelInformation info = getModelInformation();
+                info.setSource(ModelSourceType.none);
+                storeModelInformation(info);
+            }
         } catch (Exception ex) {
             ex.printStackTrace();
-            CompositeErrorDialog.showErrorDialog("Error storing 'no domain model' flag state", ex);
+            CompositeErrorDialog.showErrorDialog("Error storing 'no domain model' state", ex);
         }
     }
 
@@ -813,7 +817,7 @@ public class DomainModelPanel extends AbstractWizardPanel {
                 // get the domain model
                 DomainModel model = MetadataUtils.deserializeDomainModel(new FileReader(domainModelFile));
                 // get extension data
-                CadsrInformation info = getCadsrInformation();
+                ModelInformation info = getModelInformation();
                 // set the most recent project information
                 Project proj = new Project();
                 proj.setDescription(model.getProjectDescription());
@@ -821,9 +825,8 @@ public class DomainModelPanel extends AbstractWizardPanel {
                 proj.setShortName(model.getProjectShortName());
                 proj.setVersion(model.getProjectVersion());
                 lastSelectedProject = proj;
-                // set cadsr project information
-                info.setProjectLongName(model.getProjectLongName());
-                info.setProjectVersion(model.getProjectVersion());
+                // set model project information
+                info.setModelProject(new ModelProject(model.getProjectShortName(), model.getProjectVersion()));
                 // walk classes, creating package groupings as needed
                 Map<String, List<String>> packageClasses = new HashMap<String, List<String>>();
                 UMLClass[] modelClasses = model.getExposedUMLClassCollection().getUMLClass();
@@ -839,7 +842,7 @@ public class DomainModelPanel extends AbstractWizardPanel {
                     classList.add(modelClasses[i].getClassName());
                 }
                 // create cadsr packages
-                CadsrPackage[] packages = new CadsrPackage[packageClasses.keySet().size()];
+                ModelPackage[] packages = new ModelPackage[packageClasses.keySet().size()];
                 String[] packageNames = new String[packages.length];
                 int packIndex = 0;
                 Iterator packageNameIter = packageClasses.keySet().iterator();
@@ -847,29 +850,29 @@ public class DomainModelPanel extends AbstractWizardPanel {
                     String packName = (String) packageNameIter.next();
                     String mappedNamespace = NamespaceUtils.createNamespaceString(model.getProjectShortName(), model
                         .getProjectVersion(), packName);
-                    CadsrPackage pack = new CadsrPackage();
-                    pack.setName(packName);
-                    pack.setMappedNamespace(mappedNamespace);
+                    ModelPackage pack = new ModelPackage();
+                    pack.setPackageName(packName);
+                    modelInfoUtil.setMappedNamespace(packName, mappedNamespace);
                     // create ClassMappings for the package's classes
                     List<String> classNameList = packageClasses.get(packName);
-                    ClassMapping[] mappings = new ClassMapping[classNameList.size()];
+                    ModelClass[] classes = new ModelClass[classNameList.size()];
                     for (int i = 0; i < classNameList.size(); i++) {
-                        ClassMapping mapping = new ClassMapping();
+                        ModelClass clazz = new ModelClass();
                         String className = classNameList.get(i);
-                        mapping.setClassName(className);
-                        mapping.setElementName(className);
-                        mapping.setSelected(true);
-                        mapping.setTargetable(true);
-                        mappings[i] = mapping;
+                        clazz.setShortClassName(className);
+                        modelInfoUtil.setMappedElementName(packName, className, className);
+                        clazz.setSelected(true);
+                        clazz.setTargetable(true);
+                        classes[i] = clazz;
                     }
-                    pack.setCadsrClass(mappings);
+                    pack.setModelClass(classes);
                     packages[packIndex] = pack;
-                    packageNames[packIndex] = pack.getName();
+                    packageNames[packIndex] = pack.getPackageName();
                     packIndex++;
                 }
-                info.setPackages(packages);
+                info.setModelPackage(packages);
                 getSelectedPackagesList().setListData(packageNames);
-                storeCadsrInformation(info);
+                storeModelInformation(info);
             } catch (Exception ex) {
                 ex.printStackTrace();
                 CompositeErrorDialog.showErrorDialog("Error loading domain model information", ex);
@@ -895,23 +898,29 @@ public class DomainModelPanel extends AbstractWizardPanel {
     }
 
 
-    private CadsrInformation getCadsrInformation() throws Exception {
+    private ModelInformation getModelInformation() throws Exception {
         Data data = ExtensionDataUtils.getExtensionData(getExtensionData());
-        CadsrInformation info = data.getCadsrInformation();
+        ModelInformation info = data.getModelInformation();
         if (info == null) {
-            info = new CadsrInformation();
-            info.setNoDomainModel(getNoDomainModelRadioButton().isSelected());
-            info.setUseSuppliedModel(getFromFileRadioButton().isSelected());
-            data.setCadsrInformation(info);
+            info = new ModelInformation();
+            ModelSourceType source = ModelSourceType.mms;
+            if (getNoDomainModelRadioButton().isSelected()) {
+                source = ModelSourceType.none;
+            }
+            if (getFromFileRadioButton().isSelected()) {
+                source = ModelSourceType.preBuilt;
+            }
+            info.setSource(source);
+            data.setModelInformation(info);
             ExtensionDataUtils.storeExtensionData(getExtensionData(), data);
         }
         return info;
     }
 
 
-    private void storeCadsrInformation(CadsrInformation info) throws Exception {
+    private void storeModelInformation(ModelInformation info) throws Exception {
         Data data = ExtensionDataUtils.getExtensionData(getExtensionData());
-        data.setCadsrInformation(info);
+        data.setModelInformation(info);
         ExtensionDataUtils.storeExtensionData(getExtensionData(), data);
     }
 

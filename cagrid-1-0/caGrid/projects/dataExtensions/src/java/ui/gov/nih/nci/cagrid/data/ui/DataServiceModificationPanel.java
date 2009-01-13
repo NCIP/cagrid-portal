@@ -1,7 +1,8 @@
 package gov.nih.nci.cagrid.data.ui;
 
 import gov.nih.nci.cagrid.data.common.ExtensionDataManager;
-import gov.nih.nci.cagrid.data.extension.ClassMapping;
+import gov.nih.nci.cagrid.data.extension.ModelClass;
+import gov.nih.nci.cagrid.data.extension.ModelPackage;
 import gov.nih.nci.cagrid.data.style.ServiceStyleContainer;
 import gov.nih.nci.cagrid.data.style.ServiceStyleLoader;
 import gov.nih.nci.cagrid.data.ui.auditors.AuditorsConfigurationPanel;
@@ -30,7 +31,7 @@ import org.cagrid.grape.utils.CompositeErrorDialog;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * @created Oct 10, 2006
- * @version $Id: DataServiceModificationPanel.java,v 1.8 2008-12-01 19:11:59 dervin Exp $
+ * @version $Id: DataServiceModificationPanel.java,v 1.9 2009-01-13 15:55:19 dervin Exp $
  */
 public class DataServiceModificationPanel extends ServiceModificationUIPanel {
     
@@ -91,15 +92,8 @@ public class DataServiceModificationPanel extends ServiceModificationUIPanel {
 		if (domainConfigPanel == null) {
             domainConfigPanel = new DomainModelConfigPanel(getServiceInfo(), dataManager);
             domainConfigPanel.addClassSelectionListener(new gov.nih.nci.cagrid.data.ui.domain.DomainModelClassSelectionListener() {
-                public void classSelected(String packageName, ClassMapping mapping, NamespaceType packageNamespace) {
-                    getDetailConfigPanel().getClassConfigTable().addClass(packageName, mapping, packageNamespace);
-                    try {
-                        dataManager.setClassSelectedInModel(packageName, mapping.getClassName(), true);
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                        CompositeErrorDialog.showErrorDialog("Error setting class selection state in model",
-                            ex.getMessage(), ex);
-                    }
+                public void classSelected(String packName, String className, NamespaceType packageNamespace) {
+                    getDetailConfigPanel().getClassConfigTable().addClass(packName, className, packageNamespace);
                 }
                 
                 

@@ -1,7 +1,7 @@
 package org.cagrid.data.sdkquery41.style.wizard.mapping;
 
-import gov.nih.nci.cagrid.data.extension.CadsrPackage;
-import gov.nih.nci.cagrid.data.extension.ClassMapping;
+import gov.nih.nci.cagrid.data.extension.ModelClass;
+import gov.nih.nci.cagrid.data.extension.ModelPackage;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 
@@ -53,7 +53,7 @@ public class MappingCustomizationDialog extends JDialog {
     private static final String NO_ELEMENT_SELECTED = "-- Select Element --";
 
     private NamespaceType nsType = null;
-    private CadsrPackage cadsrPackage = null;
+    private ModelPackage modelPackage = null;
     private SchemaMappingConfigStep configuration = null;
     
     private JTable mappingTable = null;
@@ -67,19 +67,19 @@ public class MappingCustomizationDialog extends JDialog {
     private JButton doneButton = null;
 
     private MappingCustomizationDialog(NamespaceType nsType, 
-        CadsrPackage cadsrPackage, SchemaMappingConfigStep configuration) {
+        ModelPackage modelPackage, SchemaMappingConfigStep configuration) {
         super((JFrame) null, "Element Mapping Customization", true);
         this.nsType = nsType;
-        this.cadsrPackage = cadsrPackage;
+        this.modelPackage = modelPackage;
         this.configuration = configuration;
         initialize();
     }
     
     
     public static void customizeElementMapping(NamespaceType nsType, 
-        CadsrPackage cadsrPakcage, SchemaMappingConfigStep configuration) {
+        ModelPackage modelPackage, SchemaMappingConfigStep configuration) {
         MappingCustomizationDialog dialog = 
-            new MappingCustomizationDialog(nsType, cadsrPakcage, configuration);
+            new MappingCustomizationDialog(nsType, modelPackage, configuration);
         dialog.populatePackageInfo();
         dialog.populateMappingTable();
         dialog.setVisible(true);
@@ -386,7 +386,7 @@ public class MappingCustomizationDialog extends JDialog {
     
     
     private void populatePackageInfo() {
-        getPackageNameTextField().setText(cadsrPackage.getName());
+        getPackageNameTextField().setText(modelPackage.getPackageName());
         getNamespaceTextField().setText(nsType.getNamespace());
     }
     
@@ -419,10 +419,11 @@ public class MappingCustomizationDialog extends JDialog {
                 Object selection = combo.getSelectedItem();
                 try {
                     if (selection == NO_ELEMENT_SELECTED) {
-                        configuration.unsetClassMapping(cadsrPackage.getName(), className);
+                        configuration.unsetClassMapping(
+                            modelPackage.getPackageName(), className);
                     } else if (selection instanceof SchemaElementType) {
                         configuration.setClassMapping(
-                            cadsrPackage.getName(), className, (SchemaElementType) selection);
+                            modelPackage.getPackageName(), className, (SchemaElementType) selection);
                     }
                 } catch (Exception ex) {
                     ex.printStackTrace();
@@ -445,9 +446,9 @@ public class MappingCustomizationDialog extends JDialog {
         });
         
         // sort class names
-        List<String> classNames = new ArrayList<String>(cadsrPackage.getCadsrClass().length);
-        for (ClassMapping mapping : cadsrPackage.getCadsrClass()) {
-            classNames.add(mapping.getClassName());
+        List<String> classNames = new ArrayList<String>(modelPackage.getModelClass().length);
+        for (ModelClass mapping : modelPackage.getModelClass()) {
+            classNames.add(mapping.getShortClassName());
         }
         Collections.sort(classNames);
         

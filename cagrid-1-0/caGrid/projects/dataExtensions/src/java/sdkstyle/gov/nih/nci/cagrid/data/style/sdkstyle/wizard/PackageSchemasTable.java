@@ -1,9 +1,9 @@
 package gov.nih.nci.cagrid.data.style.sdkstyle.wizard;
 
-import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
-import gov.nih.nci.cagrid.data.extension.CadsrPackage;
-import gov.nih.nci.cagrid.data.extension.ClassMapping;
+import gov.nih.nci.cagrid.data.common.ModelInformationUtil;
+import gov.nih.nci.cagrid.data.extension.ModelClass;
+import gov.nih.nci.cagrid.data.extension.ModelPackage;
 import gov.nih.nci.cagrid.data.ui.SchemaResolutionDialog;
 import gov.nih.nci.cagrid.data.ui.wizard.CacoreWizardUtils;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
@@ -38,7 +38,7 @@ import org.cagrid.grape.utils.CompositeErrorDialog;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created Sep 26, 2006 
- * @version $Id: PackageSchemasTable.java,v 1.5 2007-12-18 21:57:41 dervin Exp $ 
+ * @version $Id: PackageSchemasTable.java,v 1.6 2009-01-13 15:55:19 dervin Exp $ 
  */
 public class PackageSchemasTable extends JTable {
 
@@ -51,20 +51,24 @@ public class PackageSchemasTable extends JTable {
     public static final String STATUS_GME_NAMESPACE_NOT_FOUND = "No Namespace";
     public static final String STATUS_NEVER_TRIED = "Unknown";
     
+    private ModelInformationUtil modelInfoUtil = null;
     private Map wizardProperties = null;
 
-    public PackageSchemasTable(Map wizardProperties) {
+    public PackageSchemasTable(ModelInformationUtil modelInfoUtil, Map wizardProperties) {
         setModel(new PackageSchemasTableModel());
         setDefaultRenderer(Object.class, new PackageSchemasTableRenderer());
         setDefaultEditor(Object.class, new PackageSchemasTableEditor());
+        this.modelInfoUtil = modelInfoUtil;
         this.wizardProperties = wizardProperties;
     }
 
 
-    public boolean isPackageInTable(CadsrPackage info) {
+    public boolean isPackageInTable(ModelPackage pack) {
+        String packageName = pack.getPackageName();
+        String namespace = modelInfoUtil.getMappedNamespace(packageName).getNamespace();
         for (int i = 0; i < getRowCount(); i++) {
-            if (info.getName().equals(getValueAt(i, 0)) 
-                && info.getMappedNamespace().equals(getValueAt(i, 1))) {
+            if (packageName.equals(getValueAt(i, 0)) 
+                && namespace.equals(getValueAt(i, 1))) {
                 return true;
             }
         }
@@ -72,10 +76,12 @@ public class PackageSchemasTable extends JTable {
     }
 
 
-    public void addNewCadsrPackage(ServiceInformation serviceInfo, CadsrPackage pack) {
+    public void addNewCadsrPackage(ServiceInformation serviceInfo, ModelPackage pack) {
+        String packageName = pack.getPackageName();
+        String namespace = modelInfoUtil.getMappedNamespace(packageName).getNamespace();
         Vector<Object> row = new Vector<Object>(4);
-        row.add(pack.getName());
-        row.add(pack.getMappedNamespace());
+        row.add(packageName);
+        row.add(namespace);
         row.add(STATUS_NEVER_TRIED);
         row.add(getResolveButton(serviceInfo, pack));
 
@@ -100,7 +106,7 @@ public class PackageSchemasTable extends JTable {
      * 		A JButton to resolve schemas
      */
     private JButton getResolveButton(
-        final ServiceInformation serviceInfo, final CadsrPackage pack) {
+        final ServiceInformation serviceInfo, final ModelPackage pack) {
         JButton resolveButton = new JButton("Resolve");
         resolveButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -133,18 +139,24 @@ public class PackageSchemasTable extends JTable {
     }
 
 
-    private void resolveSchema(ServiceInformation info, CadsrPackage pack, int dataRow) {
+    private void resolveSchema(ServiceInformation info, ModelPackage pack, int dataRow) {
         // resolve the schemas manually
         NamespaceType[] resolved = SchemaResolutionDialog.resolveSchemas(info);
         if (resolved != null) {
             if (resolved.length != 0 && packageResolvedByNamespace(pack, resolved[0])) {
-                // set the mapped namespace for the package
-                pack.setMappedNamespace(resolved[0].getNamespace());
+                try {
+                    // set the mapped namespace for the package
+                    modelInfoUtil.setMappedNamespace(pack.getPackageName(), resolved[0].getNamespace());
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    CompositeErrorDialog.showErrorDialog(
+                        "Error setting namespace for package " + pack.getPackageName(), ex.getMessage(), ex);
+                }
                 // set the resolution status on the table
-                setValueAt(pack.getMappedNamespace(), dataRow, 1);
+                setValueAt(resolved[0].getNamespace(), dataRow, 1);
                 setValueAt(STATUS_SCHEMA_FOUND, dataRow, 2);
                 // set the package name
-                resolved[0].setPackageName(pack.getName());
+                resolved[0].setPackageName(pack.getPackageName());
                 // determine the serializer and deserialzier to use for the beans
                 String serializerClass = null;
                 if (wizardProperties.containsKey(SchemaTypesPanel.TYPE_SERIALIZER_CLASS_PROPERTY)) {
@@ -188,10 +200,10 @@ public class PackageSchemasTable extends JTable {
     }
     
     
-    private boolean packageResolvedByNamespace(CadsrPackage pkg, NamespaceType namespace) {
+    private boolean packageResolvedByNamespace(ModelPackage pkg, NamespaceType namespace) {
         Set<String> classNames = new HashSet<String>();
-        for (ClassMapping mapping : pkg.getCadsrClass()) {
-            classNames.add(mapping.getClassName());
+        for (ModelClass clazz : pkg.getModelClass()) {
+            classNames.add(clazz.getShortClassName());
         }
         Set<String> elementNames = new HashSet<String>();
         for (SchemaElementType element : namespace.getSchemaElement()) {
@@ -214,22 +226,15 @@ public class PackageSchemasTable extends JTable {
     }
 
 
-    private void removeAssociatedSchema(ServiceInformation info, CadsrPackage pack) {
+    private void removeAssociatedSchema(ServiceInformation info, ModelPackage pack) {
         // get the schema directory for the service
         String serviceName = info.getIntroduceServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME);
-        String schemaDir = CacoreWizardUtils.getServiceBaseDir(info) + File.separator + "schema" + File.separator + serviceName;
+        File schemaDir = new File(CacoreWizardUtils.getServiceBaseDir(info), "schema" + File.separator + serviceName);
         // get the namespace type from the service information
-        NamespaceType[] namespaces = info.getNamespaces().getNamespace();
-        for (int i = 0; i < namespaces.length; i++) {
-            if (namespaces[i].getNamespace().equals(pack.getMappedNamespace())) {
-                NamespaceType delme = namespaces[i];
-                File schemaFile = new File(schemaDir + File.separator + delme.getLocation());
-                schemaFile.delete();
-                namespaces = (NamespaceType[]) Utils.removeFromArray(namespaces, delme);
-                break;
-            }
-        }
-        info.getNamespaces().setNamespace(namespaces);
+        NamespaceType mappedNamespace = modelInfoUtil.getMappedNamespace(pack.getPackageName());
+        File schemaFile = new File(schemaDir, mappedNamespace.getLocation());
+        schemaFile.delete();
+        CommonTools.removeNamespace(info.getServiceDescriptor(), mappedNamespace.getNamespace());
     }
 
 

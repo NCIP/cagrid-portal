@@ -3,9 +3,11 @@ package gov.nih.nci.cagrid.data.style.sdkstyle.wizard;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.data.ExtensionDataUtils;
-import gov.nih.nci.cagrid.data.extension.CadsrInformation;
-import gov.nih.nci.cagrid.data.extension.CadsrPackage;
+import gov.nih.nci.cagrid.data.common.ModelInformationUtil;
 import gov.nih.nci.cagrid.data.extension.Data;
+import gov.nih.nci.cagrid.data.extension.ModelInformation;
+import gov.nih.nci.cagrid.data.extension.ModelPackage;
+import gov.nih.nci.cagrid.data.extension.ModelSourceType;
 import gov.nih.nci.cagrid.data.ui.wizard.AbstractWizardPanel;
 import gov.nih.nci.cagrid.data.ui.wizard.CacoreWizardUtils;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
@@ -49,7 +51,7 @@ import org.cagrid.grape.utils.CompositeErrorDialog;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * @created Sep 26, 2006
- * @version $Id: SchemaTypesPanel.java,v 1.7 2009-01-07 04:46:00 oster Exp $
+ * @version $Id: SchemaTypesPanel.java,v 1.8 2009-01-13 15:55:19 dervin Exp $
  */
 public class SchemaTypesPanel extends AbstractWizardPanel {
 
@@ -62,10 +64,13 @@ public class SchemaTypesPanel extends AbstractWizardPanel {
     private JPanel gmePanel = null;
     private JScrollPane packageNamespaceScrollPane = null;
     private PackageSchemasTable packageNamespaceTable = null;
+    
+    private ModelInformationUtil modelInfoUtil = null;
 
 
     public SchemaTypesPanel(ServiceExtensionDescriptionType extensionDescription, ServiceInformation info) {
         super(extensionDescription, info);
+        this.modelInfoUtil = new ModelInformationUtil(info.getServiceDescriptor());
         initialize();
     }
 
@@ -74,20 +79,20 @@ public class SchemaTypesPanel extends AbstractWizardPanel {
     public void update() {
         try {
             Data data = ExtensionDataUtils.getExtensionData(getExtensionData());
-            CadsrInformation info = data.getCadsrInformation();
+            ModelInformation info = data.getModelInformation();
             Set<String> currentPackageNames = new HashSet<String>();
             for (int i = 0; i < getPackageNamespaceTable().getRowCount(); i++) {
                 currentPackageNames.add((String) getPackageNamespaceTable().getValueAt(i, 0));
             }
-            if (info != null && info.getPackages() != null) {
-                CadsrPackage[] packs = info.getPackages();
+            if (info != null && info.getModelPackage() != null) {
+                ModelPackage[] packs = info.getModelPackage();
                 if (packs != null && packs.length != 0) {
                     // add any new packages to the table
                     for (int i = 0; i < packs.length; i++) {
                         if (!getPackageNamespaceTable().isPackageInTable(packs[i])) {
                             getPackageNamespaceTable().addNewCadsrPackage(getServiceInformation(), packs[i]);
                         }
-                        currentPackageNames.remove(packs[i].getName());
+                        currentPackageNames.remove(packs[i].getPackageName());
                     }
                 }
             }
@@ -246,7 +251,7 @@ public class SchemaTypesPanel extends AbstractWizardPanel {
      */
     private PackageSchemasTable getPackageNamespaceTable() {
         if (this.packageNamespaceTable == null) {
-            this.packageNamespaceTable = new PackageSchemasTable(getBitBucket());
+            this.packageNamespaceTable = new PackageSchemasTable(modelInfoUtil, getBitBucket());
             this.packageNamespaceTable.getModel().addTableModelListener(new TableModelListener() {
                 public void tableChanged(TableModelEvent e) {
                     if (e.getType() == TableModelEvent.UPDATE) {
@@ -272,11 +277,12 @@ public class SchemaTypesPanel extends AbstractWizardPanel {
 
             // get the selected packages
             Data data = ExtensionDataUtils.getExtensionData(getExtensionData());
-            CadsrInformation info = data.getCadsrInformation();
-            if (info != null && info.getPackages() != null) {
-                CadsrPackage[] packs = info.getPackages();
+            ModelInformation info = data.getModelInformation();
+            if (info != null && info.getModelPackage() != null) {
+                ModelPackage[] packs = info.getModelPackage();
                 for (int i = 0; i < packs.length; i++) {
-                    XMLSchemaNamespace ns = new XMLSchemaNamespace(packs[i].getMappedNamespace());
+                    NamespaceType nsType = modelInfoUtil.getMappedNamespace(packs[i].getPackageName());
+                    XMLSchemaNamespace ns = new XMLSchemaNamespace(nsType.getNamespace());
                     try {
                         gmeHandle.getXMLSchema(ns);
                     } catch (NoSuchNamespaceExistsFault e) {
@@ -288,7 +294,7 @@ public class SchemaTypesPanel extends AbstractWizardPanel {
                     // change the package namespace table to reflect the found
                     // schema
                     for (int row = 0; row < getPackageNamespaceTable().getRowCount(); row++) {
-                        if (getPackageNamespaceTable().getValueAt(row, 0).equals(packs[i].getName())) {
+                        if (getPackageNamespaceTable().getValueAt(row, 0).equals(packs[i].getPackageName())) {
                             getPackageNamespaceTable().setValueAt(PackageSchemasTable.STATUS_SCHEMA_FOUND, row, 2);
                             break;
                         }
@@ -386,19 +392,20 @@ public class SchemaTypesPanel extends AbstractWizardPanel {
 
     private void storePackageMappings() throws Exception {
         Data data = ExtensionDataUtils.getExtensionData(getExtensionData());
-        CadsrInformation info = data.getCadsrInformation();
+        ModelInformation info = data.getModelInformation();
         if (info == null) {
-            info = new CadsrInformation();
-            info.setNoDomainModel(true);
-            data.setCadsrInformation(info);
+            info = new ModelInformation();
+            info.setSource(ModelSourceType.mms);
+            data.setModelInformation(info);
         }
-        for (int i = 0; info.getPackages() != null && i < info.getPackages().length; i++) {
-            CadsrPackage currentPackage = info.getPackages(i);
+        for (int i = 0; info.getModelPackage() != null && i < info.getModelPackage().length; i++) {
+            ModelPackage currentPackage = info.getModelPackage(i);
             // find the package's row in the table
             for (int row = 0; row < getPackageNamespaceTable().getRowCount(); row++) {
-                if (currentPackage.getName().equals(getPackageNamespaceTable().getValueAt(row, 0))) {
+                if (currentPackage.getPackageName().equals(getPackageNamespaceTable().getValueAt(row, 0))) {
                     // set the mapped namespace
-                    currentPackage.setMappedNamespace((String) getPackageNamespaceTable().getValueAt(row, 1));
+                    String namespace = (String) getPackageNamespaceTable().getValueAt(row, 1);
+                    modelInfoUtil.setMappedNamespace(currentPackage.getPackageName(), namespace);
                     break;
                 }
             }

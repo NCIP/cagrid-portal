@@ -4,10 +4,11 @@ import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.data.ExtensionDataUtils;
 import gov.nih.nci.cagrid.data.extension.AdditionalLibraries;
-import gov.nih.nci.cagrid.data.extension.CadsrInformation;
-import gov.nih.nci.cagrid.data.extension.CadsrPackage;
-import gov.nih.nci.cagrid.data.extension.ClassMapping;
 import gov.nih.nci.cagrid.data.extension.Data;
+import gov.nih.nci.cagrid.data.extension.ModelClass;
+import gov.nih.nci.cagrid.data.extension.ModelInformation;
+import gov.nih.nci.cagrid.data.extension.ModelPackage;
+import gov.nih.nci.cagrid.data.extension.ModelSourceType;
 import gov.nih.nci.cagrid.data.mapping.ClassToQname;
 import gov.nih.nci.cagrid.data.mapping.Mappings;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
@@ -42,7 +43,7 @@ import org.apache.commons.logging.LogFactory;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created Jun 16, 2006 
- * @version $Id: BaseCodegenPostProcessorExtension.java,v 1.4 2008-04-17 15:15:56 dervin Exp $ 
+ * @version $Id: BaseCodegenPostProcessorExtension.java,v 1.5 2009-01-13 15:55:19 dervin Exp $ 
  */
 public abstract class BaseCodegenPostProcessorExtension implements CodegenExtensionPostProcessor {
 	private static final Log logger = LogFactory.getLog(DataServiceOperationProviderCodegenPostProcessor.class);
@@ -60,9 +61,8 @@ public abstract class BaseCodegenPostProcessorExtension implements CodegenExtens
     
 
 	protected void modifyEclipseClasspath(ServiceExtensionDescriptionType desc, ServiceInformation info) throws CodegenExtensionException {
-		String serviceDir = info.getBaseDirectory().getAbsolutePath();
 		// get the eclipse classpath document
-		File classpathFile = new File(serviceDir + File.separator + ".classpath");
+		File classpathFile = new File(info.getBaseDirectory(), ".classpath");
 		if (classpathFile.exists()) {
 			logger.info("Modifying eclipse .classpath file");
 			Set<File> libs = new HashSet<File>();
@@ -76,7 +76,7 @@ public abstract class BaseCodegenPostProcessorExtension implements CodegenExtens
 			if (additionalLibs != null && additionalLibs.getJarName() != null) {
 				for (int i = 0; i < additionalLibs.getJarName().length; i++) {
 					String jarFilename = additionalLibs.getJarName(i);
-					libs.add(new File(serviceDir + File.separator + "lib" + File.separator + jarFilename));
+					libs.add(new File(info.getBaseDirectory(), "lib" + File.separator + jarFilename));
 				}
 			}
 			File[] libFiles = new File[libs.size()];
@@ -101,36 +101,51 @@ public abstract class BaseCodegenPostProcessorExtension implements CodegenExtens
 		try {
             Mappings mappings = new Mappings();
             List<ClassToQname> classMappings = new LinkedList<ClassToQname>();
-            // the first placeto look for mappings is in the caDSR information, which 
+            // the first placeto look for mappings is in the model information, which 
             // is derived from the data service Domain Model.  If no domain model is to be used,
             // the mappings are still required to do anything with caCORE SDK beans, or BDT in general
-            CadsrInformation cadsrInfo = extData.getCadsrInformation();
-            if (cadsrInfo != null && !cadsrInfo.isNoDomainModel()
-                && cadsrInfo.getPackages() != null) {
-                logger.debug("caDSR information / domain model found in service model.");
+            ModelInformation modelInfo = extData.getModelInformation();
+            if (modelInfo != null && !ModelSourceType.none.equals(modelInfo.getSource())
+                && modelInfo.getModelPackage() != null) {
+                logger.debug("Model information / domain model found in service model.");
                 logger.debug("Generating class to qname mapping from the information");
                 logger.debug("stored in the service model");
-                // load the caDSR package to namespace mapping information
-                for (int pack = 0; pack < cadsrInfo.getPackages().length; pack++) {
-                    CadsrPackage currentPackage = cadsrInfo.getPackages(pack);
-                    for (int clazz = 0; currentPackage.getCadsrClass() != null 
-                        && clazz < currentPackage.getCadsrClass().length; clazz++) {
-                        ClassMapping map = currentPackage.getCadsrClass(clazz);
-                        if (map.getElementName() != null) {
-                            String classname = currentPackage.getName() + "." + map.getClassName();
-                            QName qname = new QName(currentPackage.getMappedNamespace(), map.getElementName());
-                            ClassToQname toQname = new ClassToQname();
-                            toQname.setClassName(classname);
-                            toQname.setQname(qname.toString());
-                            classMappings.add(toQname);
+                // walk packages in the model
+                for (ModelPackage pack : modelInfo.getModelPackage()) {
+                    // locate a NamsepaceType in the service model mapped to this package
+                    NamespaceType mappedNamespace = null;
+                    for (NamespaceType nsType : info.getServiceDescriptor().getNamespaces().getNamespace()) {
+                        if (pack.getPackageName().equals(nsType.getPackageName())) {
+                            mappedNamespace = nsType;
+                            break;
                         }
+                    }
+                    if (mappedNamespace != null) {
+                        // walk classes in this package
+                        for (ModelClass clazz : pack.getModelClass()) {
+                            if (clazz.isTargetable()) {
+                                // find a schema element type mapped to this class
+                                for (SchemaElementType element : mappedNamespace.getSchemaElement()) {
+                                    if (clazz.getShortClassName().equals(element.getClassName())) {
+                                        // found it!  Create a mapping
+                                        QName qname = new QName(mappedNamespace.getNamespace(), element.getType());
+                                        String fullClassname = pack.getPackageName() + "." + clazz.getShortClassName();
+                                        ClassToQname map = new ClassToQname(fullClassname, qname.toString());
+                                        classMappings.add(map);
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    } else {
+                        logger.warn("Model package " + pack.getPackageName() + " is not mapped to any namespace!");
                     }
                 }
                 ClassToQname[] mapArray = new ClassToQname[classMappings.size()];
                 classMappings.toArray(mapArray);
                 mappings.setMapping(mapArray);
             } else {
-                logger.warn("No caDSR information / domain model found in service model.");
+                logger.warn("No model information / domain model found in service model.");
                 logger.warn("Falling back to schema information for class to qname mapping.");
                 NamespaceType[] namespaces = info.getNamespaces().getNamespace();
                 // a set of namespaces to ignore
@@ -169,8 +184,8 @@ public abstract class BaseCodegenPostProcessorExtension implements CodegenExtens
             classMappings.toArray(mapArray);
             mappings.setMapping(mapArray);
             // create the filename where the mapping will be stored
-            String mappingFilename = info.getBaseDirectory().getAbsolutePath() + File.separator + "etc" 
-                + File.separator + DataServiceConstants.CLASS_TO_QNAME_XML;
+            String mappingFilename = new File(info.getBaseDirectory(), 
+                "etc" + File.separator + DataServiceConstants.CLASS_TO_QNAME_XML).getAbsolutePath();
             // serialize the mapping to that file
             Utils.serializeDocument(mappingFilename, mappings, DataServiceConstants.MAPPING_QNAME);
 		} catch (Exception ex) {

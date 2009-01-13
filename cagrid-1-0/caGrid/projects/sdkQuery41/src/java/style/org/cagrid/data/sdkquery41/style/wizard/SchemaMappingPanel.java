@@ -1,7 +1,6 @@
 package org.cagrid.data.sdkquery41.style.wizard;
 
 import gov.nih.nci.cagrid.data.ui.wizard.AbstractWizardPanel;
-import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 
@@ -12,7 +11,6 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
-import java.io.File;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -161,18 +159,5 @@ public class SchemaMappingPanel extends AbstractWizardPanel {
             });
         }
         return autoMapButton;
-    }
-    
-    
-    // ---------
-    // helpers
-    // --------
-    
-    
-    private File getServiceSchemaDirectory() {
-        File schemaDir = new File(getServiceInformation().getBaseDirectory(),
-            "schema" + File.separator + getServiceInformation().getIntroduceServiceProperties()
-                .getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME));
-        return schemaDir;
     }
 }

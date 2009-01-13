@@ -3,9 +3,9 @@ package gov.nih.nci.cagrid.data.codegen;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.data.ExtensionDataUtils;
 import gov.nih.nci.cagrid.data.codegen.templates.StubCQLQueryProcessorTemplate;
-import gov.nih.nci.cagrid.data.extension.CadsrInformation;
-import gov.nih.nci.cagrid.data.extension.CadsrPackage;
 import gov.nih.nci.cagrid.data.extension.Data;
+import gov.nih.nci.cagrid.data.extension.ModelInformation;
+import gov.nih.nci.cagrid.data.extension.ModelSourceType;
 import gov.nih.nci.cagrid.data.extension.ServiceFeatures;
 import gov.nih.nci.cagrid.data.style.ServiceStyleContainer;
 import gov.nih.nci.cagrid.data.style.ServiceStyleLoader;
@@ -33,12 +33,13 @@ import org.apache.commons.logging.LogFactory;
 
 
 /**
- * DataServiceCodegenPreProcessor Preprocessor for data service codegen
+ * DataServiceCodegenPreProcessor 
+ * Preprocessor for data service codegen
  * operations.
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * @created May 11, 2006
- * @version $Id: DataServiceCodegenPreProcessor.java,v 1.5 2008-12-01 19:11:59 dervin Exp $
+ * @version $Id: DataServiceCodegenPreProcessor.java,v 1.6 2009-01-13 15:55:19 dervin Exp $
  */
 public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProcessor {
 
@@ -69,7 +70,8 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
             try {
                 ServiceStyleContainer container = ServiceStyleLoader.getStyle(features.getServiceStyle());
                 if (container == null) {
-                    throw new CodegenExtensionException("Could not load service style " + features.getServiceStyle());
+                    throw new CodegenExtensionException(
+                        "Could not load service style " + features.getServiceStyle());
                 }
                 StyleCodegenPreProcessor preProcessor = container.loadCodegenPreProcessor();
                 if (preProcessor != null) {
@@ -111,18 +113,19 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
     }
 	
 	
-	private CadsrInformation getCadsrInformation(ServiceExtensionDescriptionType desc, ServiceInformation info) throws Exception {
+	private ModelInformation getModelInformation(
+        ServiceExtensionDescriptionType desc, ServiceInformation info) throws Exception {
 		ExtensionTypeExtensionData extData = ExtensionTools.getExtensionData(desc, info);
 		Data data = ExtensionDataUtils.getExtensionData(extData);
-		CadsrInformation cadsrInfo = data.getCadsrInformation();
-		if (cadsrInfo == null) {
-			System.out.println("NO CADSR INFORMATION FOUND, USING DEFAULTS");
-			cadsrInfo = new CadsrInformation();
-			cadsrInfo.setNoDomainModel(true);
-			data.setCadsrInformation(cadsrInfo);
+		ModelInformation modelInfo = data.getModelInformation();
+		if (modelInfo == null) {
+            LOG.warn("NO MODEL INFORMATION FOUND, USING DEFAULTS");
+			modelInfo = new ModelInformation();
+            modelInfo.setSource(ModelSourceType.none);
+			data.setModelInformation(modelInfo);
 			ExtensionDataUtils.storeExtensionData(extData, data);
 		}
-		return cadsrInfo;
+		return modelInfo;
 	}
 
 
@@ -131,29 +134,29 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 		String localDomainModelFilename = getDestinationDomainModelFilename(info);
 
 		// find the service's etc directory, where the domain model goes
-		String domainModelFile = info.getBaseDirectory().getAbsolutePath()
-			+ File.separator + "etc" + File.separator + localDomainModelFilename;
+		String domainModelFile = new File(info.getBaseDirectory(), 
+            "etc" + File.separator + localDomainModelFilename).getAbsolutePath();
 
-		// get the caDSR information
-		CadsrInformation cadsrInfo = null;
+		// get the model information
+		ModelInformation modelInfo = null;
 		try {
-			cadsrInfo = getCadsrInformation(desc, info);
+			modelInfo = getModelInformation(desc, info);
 		} catch (Exception ex) {
-			throw new CodegenExtensionException("Error loading Cadsr Information from extension data", ex);
+			throw new CodegenExtensionException("Error loading Model Information from extension data", ex);
 		}
 		
 		// get the resource property for the domain model
 		ResourcePropertyType dmResourceProp = getDomainModelResourceProp(info);
 		
-		if (cadsrInfo.isUseSuppliedModel()) {
+        if (ModelSourceType.preBuilt.equals(modelInfo.getSource())) {
 			// the model is already in the service's etc dir with the name specified
 			// in the resource property.  Make sure the resource property has
 			// the populate from file flag set, and we're done
 			dmResourceProp.setPopulateFromFile(true);
-		} else if (!isNoDomainModel(cadsrInfo)) {
-			// the domain model is to be generated from the caDSR
-			LOG.info("No domain model supplied, generating from caDSR");
-			generateDomainModel(cadsrInfo, info, domainModelFile);
+		} else if (ModelSourceType.mms.equals(modelInfo.getSource())) {
+			// the domain model is to be generated from the MMS
+			LOG.info("No domain model supplied, generating from MMS");
+			generateDomainModel(modelInfo, info, domainModelFile);
 			// set the domain model file name
 			dmResourceProp.setFileLocation(localDomainModelFilename);
 		}
@@ -163,29 +166,6 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 		File dmFile = new File(domainModelFile);
 		dmResourceProp.setPopulateFromFile(dmFile.exists());
 	}
-    
-    
-    private boolean isNoDomainModel(CadsrInformation cadsrInfo) {
-        if (cadsrInfo.isNoDomainModel()) {
-            return true;
-        }
-        // states where the no domain model flag has NOT been set, but
-        // the caDSR information doesn't contain a project / package / classes
-        // are also treated as no domain model
-        if (cadsrInfo.getProjectLongName() == null ||
-            cadsrInfo.getProjectVersion() == null ||
-            cadsrInfo.getPackages() == null ||
-            cadsrInfo.getPackages().length == 0) {
-            LOG.warn("No domain model was specified, falling back to no model state");
-            return true;
-        }
-        for (CadsrPackage pkg : cadsrInfo.getPackages()) {
-            if (pkg.getCadsrClass() != null && pkg.getCadsrClass().length != 0) {
-                return false;
-            }
-        }
-        return true;
-    }
 
 
 	/**
@@ -220,11 +200,12 @@ public class DataServiceCodegenPreProcessor implements CodegenExtensionPreProces
 	}
 
 
-	private void generateDomainModel(CadsrInformation cadsrInfo, ServiceInformation info, String domainModelFile) throws CodegenExtensionException {		
-		if (cadsrInfo != null) {
+	private void generateDomainModel(ModelInformation modelInfo, 
+        ServiceInformation info, String domainModelFile) throws CodegenExtensionException {		
+		if (modelInfo != null) {
 			DomainModel model = null;
             try {
-                model = DomainModelCreationUtil.createDomainModel(cadsrInfo);
+                model = DomainModelCreationUtil.createDomainModel(modelInfo);
             } catch (Exception ex) {
                 throw new CodegenExtensionException("Error creating domain model: " + ex.getMessage(), ex);
             }

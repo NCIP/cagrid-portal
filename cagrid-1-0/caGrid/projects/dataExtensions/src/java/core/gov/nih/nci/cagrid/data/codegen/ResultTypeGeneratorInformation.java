@@ -1,16 +1,17 @@
 package gov.nih.nci.cagrid.data.codegen;
 
-import gov.nih.nci.cagrid.data.extension.CadsrInformation;
+import gov.nih.nci.cagrid.data.extension.ModelInformation;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 
 
 /**
  * @author oster
+ * @author dervin
  * 
  */
 public class ResultTypeGeneratorInformation {
 	private ServiceInformation serviceInfo;
-	private CadsrInformation cadsrInfo;
+	private ModelInformation modelInfo;
 
 
 	public ResultTypeGeneratorInformation() {
@@ -18,19 +19,19 @@ public class ResultTypeGeneratorInformation {
 	}
 
 
-	public ResultTypeGeneratorInformation(ServiceInformation serviceInfo, CadsrInformation cadsrInfo) {
+	public ResultTypeGeneratorInformation(ServiceInformation serviceInfo, ModelInformation modelInfo) {
 		this.serviceInfo = serviceInfo;
-		this.cadsrInfo = cadsrInfo;
+		this.modelInfo = modelInfo;
 	}
 
 
-	public CadsrInformation getCadsrInfo() {
-		return this.cadsrInfo;
+	public ModelInformation getModelInformation() {
+		return this.modelInfo;
 	}
 
 
-	public void setCadsrInfo(CadsrInformation cadsrInfo) {
-		this.cadsrInfo = cadsrInfo;
+	public void setModelInformation(ModelInformation modelInfo) {
+		this.modelInfo = modelInfo;
 	}
 
 

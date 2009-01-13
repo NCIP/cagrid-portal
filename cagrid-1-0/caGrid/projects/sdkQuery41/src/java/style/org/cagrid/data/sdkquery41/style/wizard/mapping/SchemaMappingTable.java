@@ -1,8 +1,9 @@
 package org.cagrid.data.sdkquery41.style.wizard.mapping;
 
-import gov.nih.nci.cagrid.data.extension.CadsrInformation;
-import gov.nih.nci.cagrid.data.extension.CadsrPackage;
-import gov.nih.nci.cagrid.data.extension.ClassMapping;
+import gov.nih.nci.cagrid.data.common.ModelInformationUtil;
+import gov.nih.nci.cagrid.data.extension.ModelClass;
+import gov.nih.nci.cagrid.data.extension.ModelInformation;
+import gov.nih.nci.cagrid.data.extension.ModelPackage;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
@@ -33,6 +34,8 @@ public class SchemaMappingTable extends JTable {
     private ServiceInformation serviceInfo = null;
     private SchemaMappingConfigStep configuration = null;
     private SchemaMappingValidityListener validityListener = null;
+    
+    private ModelInformationUtil modelInfoUtil = null;
 
     public SchemaMappingTable(ServiceInformation serviceInfo, 
         SchemaMappingConfigStep configuration, SchemaMappingValidityListener validityListener) {
@@ -40,6 +43,7 @@ public class SchemaMappingTable extends JTable {
         this.serviceInfo = serviceInfo;
         this.configuration = configuration;
         this.validityListener = validityListener;
+        this.modelInfoUtil = new ModelInformationUtil(serviceInfo.getServiceDescriptor());
         tableModel = new SchemaMappingTableModel();
         setModel(tableModel);
         setDefaultRenderer(Object.class, new ValidatingTableCellRenderer() {
@@ -82,24 +86,24 @@ public class SchemaMappingTable extends JTable {
             tableModel.removeRow(0);
         }
         
-        CadsrInformation cadsrInformation = configuration.getCurrentCadsrInformation();
-        if (cadsrInformation.getPackages() != null) {
+        ModelInformation modelInformation = configuration.getCurrentModelInformation();
+        if (modelInformation.getModelPackage() != null) {
             // sort packages by name
-            CadsrPackage[] packages = 
-                new CadsrPackage[cadsrInformation.getPackages().length];
-            for (int i = 0; i < cadsrInformation.getPackages().length; i++) {
-                packages[i] = cadsrInformation.getPackages(i);
+            ModelPackage[] packages = 
+                new ModelPackage[modelInformation.getModelPackage().length];
+            for (int i = 0; i < modelInformation.getModelPackage().length; i++) {
+                packages[i] = modelInformation.getModelPackage(i);
             }
-            Arrays.sort(packages, new Comparator<CadsrPackage>() {
-                public int compare(CadsrPackage p1, CadsrPackage p2) {
-                    return p1.getName().compareTo(p2.getName());
+            Arrays.sort(packages, new Comparator<ModelPackage>() {
+                public int compare(ModelPackage p1, ModelPackage p2) {
+                    return p1.getPackageName().compareTo(p2.getPackageName());
                 }
             });
             
             // create rows for the packages
-            for (CadsrPackage pack : packages) {
+            for (ModelPackage pack : packages) {
                 Vector<Object> row = new Vector<Object>();
-                row.add(pack.getName());
+                row.add(pack.getPackageName());
                 PackageMappingStatus status = determineMappingStatus(pack);
                 row.add(status);
                 SchemaResolutionButton resolutionButton = 
@@ -113,40 +117,31 @@ public class SchemaMappingTable extends JTable {
     }
     
     
-    private PackageMappingStatus determineMappingStatus(CadsrPackage pack) {
+    private PackageMappingStatus determineMappingStatus(ModelPackage pack) {
         // see if there's even a schema associated witht the package
-        if (pack.getMappedNamespace() == null || pack.getMappedNamespace().length() == 0) {
+        NamespaceType mappedNamespace = modelInfoUtil.getMappedNamespace(pack.getPackageName());
+        if (mappedNamespace == null) {
             return PackageMappingStatus.NO_SCHEMA;
         }
         
         // see if the schema associated with this package exists in the service description
         NamespaceType[] serviceNamespaces = serviceInfo.getServiceDescriptor().getNamespaces().getNamespace();
-        NamespaceType mappedSchema = null;
-        for (NamespaceType namespace : serviceNamespaces) {
-            if (namespace.getNamespace().equals(pack.getMappedNamespace())) {
-                mappedSchema = namespace;
+        boolean exists = false;
+        for (NamespaceType nsType : serviceNamespaces) {
+            if (nsType.getNamespace().equals(mappedNamespace.getNamespace())) {
+                exists = true;
                 break;
             }
         }
-        if (mappedSchema == null) {
+        if (!exists) {
             return PackageMappingStatus.SCHEMA_NOT_FOUND;
         }
         
         // verify each class has a mapped element which exists in the schema
-        for (ClassMapping mapping : pack.getCadsrClass()) {
-            String elementName = mapping.getElementName();
-            if (elementName == null || elementName.length() == 0) {
-                return PackageMappingStatus.MISSING_ELEMENTS;
-            }
-            // try to find the element name
-            boolean found = false;
-            for (SchemaElementType type : mappedSchema.getSchemaElement()) {
-                if (type.getType().equals(elementName)) {
-                    found = true;
-                    break;
-                }
-            }
-            if (!found) {
+        for (ModelClass clazz : pack.getModelClass()) {
+            SchemaElementType mappedElement = modelInfoUtil.getMappedElement(
+                pack.getPackageName(), clazz.getShortClassName());
+            if (mappedElement == null) {
                 return PackageMappingStatus.MISSING_ELEMENTS;
             }
         }

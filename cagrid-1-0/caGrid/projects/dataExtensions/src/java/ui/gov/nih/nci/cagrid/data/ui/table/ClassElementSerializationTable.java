@@ -1,7 +1,7 @@
 package gov.nih.nci.cagrid.data.ui.table;
 
-import gov.nih.nci.cagrid.data.extension.ClassMapping;
-import gov.nih.nci.cagrid.data.ui.NamespaceUtils;
+import gov.nih.nci.cagrid.data.common.ExtensionDataManager;
+import gov.nih.nci.cagrid.data.common.ModelInformationUtil;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 
@@ -27,6 +27,9 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 /** 
  *  ClassElementSerializationTable
  *  Table for showing and configuring class, namespace, element, and serialization
@@ -34,14 +37,23 @@ import javax.swing.table.TableCellEditor;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created Oct 6, 2006 
- * @version $Id: ClassElementSerializationTable.java,v 1.2 2008-01-02 19:32:08 dervin Exp $ 
+ * @version $Id: ClassElementSerializationTable.java,v 1.3 2009-01-13 15:55:19 dervin Exp $ 
  */
 public class ClassElementSerializationTable extends JTable {
+    
+    private static final Log LOG = LogFactory.getLog(ClassElementSerializationTable.class);
+    
 	private List<ClassInformatonChangeListener> classInformationChangeListeners = null;
 	private SerializationPopupMenu popup = null;
+    
+    private ExtensionDataManager dataManager = null;
+    private ModelInformationUtil modelInfoUtil = null;
 
-	public ClassElementSerializationTable() {
+	public ClassElementSerializationTable(
+        ExtensionDataManager dataManager, ModelInformationUtil modelInfoUtil) {
 		super(createTableModel());
+        this.dataManager = dataManager;
+        this.modelInfoUtil = modelInfoUtil;
 		setDefaultRenderer(Object.class, new ComponentCellRenderer());
 		setDefaultEditor(Component.class, new ComponentCellEditor());
 		DefaultListSelectionModel listSelection = new DefaultListSelectionModel();
@@ -91,21 +103,28 @@ public class ClassElementSerializationTable extends JTable {
 	}
 	
 	
-	public void addClass(String pack, ClassMapping mapping, NamespaceType nsType) {
+	public void addClass(String packName, String className, NamespaceType nsType) {
 		Vector<Object> row = new Vector<Object>(7);
-		row.add(pack);
-		row.add(mapping.getClassName());
+		row.add(packName);
+		row.add(className);
 		row.add(nsType.getNamespace());
 		// create a JComboBox for all element names in the namespace
 		JComboBox elementNameCombo = getElementNameCombo(nsType);
+        // get the element mapped to this class
+        SchemaElementType schemaType = modelInfoUtil.getMappedElement(packName, className);
 		// set the combo's selection
-		elementNameCombo.setSelectedItem(mapping.getElementName());
+        elementNameCombo.setSelectedItem(schemaType == null ? null : schemaType.getType());
 		row.add(elementNameCombo);
-		SchemaElementType schemaType = NamespaceUtils.getElementByName(nsType, mapping.getElementName());
 		row.add(schemaType == null ? null : schemaType.getSerializer());
 		row.add(schemaType == null ? null : schemaType.getDeserializer());
 		JCheckBox check = new JCheckBox();
-		check.setSelected(mapping.isTargetable());
+        boolean selected = false;
+        try {
+            selected = dataManager.getClassSelectedInModel(packName, className);
+        } catch (Exception ex) {
+            LOG.warn("Error obtaining selection info for class " + packName + "." + className);
+        }
+		check.setSelected(selected);
 		row.add(check);
 		((DefaultTableModel) getModel()).addRow(row);
 	}

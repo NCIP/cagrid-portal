@@ -3,8 +3,9 @@ package org.cagrid.data.sdkquery41.style.wizard.config;
 import gov.nih.nci.cagrid.common.JarUtilities;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.data.common.ExtensionDataManager;
-import gov.nih.nci.cagrid.data.extension.CadsrInformation;
-import gov.nih.nci.cagrid.data.extension.ClassMapping;
+import gov.nih.nci.cagrid.data.common.ModelInformationUtil;
+import gov.nih.nci.cagrid.data.extension.ModelClass;
+import gov.nih.nci.cagrid.data.extension.ModelInformation;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
@@ -24,9 +25,11 @@ import org.cagrid.data.sdkquery41.encoding.SDK41SerializerFactory;
 public class SchemaMappingConfigStep extends AbstractStyleConfigurationStep {
     
     private ExtensionDataManager dataManager = null;
+    private ModelInformationUtil modelInfoUtil = null;
     
     public SchemaMappingConfigStep(ServiceInformation serviceInfo) {
         super(serviceInfo);
+        
         for (ExtensionType extension : serviceInfo.getExtensions().getExtension()) {
             if (extension.getName().equals("data")) {
                 dataManager = new ExtensionDataManager(extension.getExtensionData());
@@ -45,25 +48,25 @@ public class SchemaMappingConfigStep extends AbstractStyleConfigurationStep {
     }
     
     
-    public CadsrInformation getCurrentCadsrInformation() throws Exception {
-        return dataManager.getCadsrInformation();
+    public ModelInformation getCurrentModelInformation() throws Exception {
+        return dataManager.getModelInformation();
     }
     
     
     public void setPackageNamespace(String packageName, String namespace) throws Exception {
-        dataManager.setMappedNamespaceForPackage(packageName, namespace);
+        modelInfoUtil.setMappedNamespace(packageName, namespace);
     }
     
     
     public void setClassMapping(String packageName, String className, SchemaElementType element) throws Exception {
-        dataManager.setClassElementNameInModel(packageName, className, element.getType());
+        modelInfoUtil.setMappedElementName(packageName, className, element.getType());
         element.setClassName(className);
         setSdkSerialization(element);
     }
     
     
     public void unsetClassMapping(String packageName, String className) throws Exception {
-        dataManager.setClassElementNameInModel(packageName, className, null);
+        modelInfoUtil.setMappedElementName(packageName, className, null);
     }
     
     
@@ -109,7 +112,7 @@ public class SchemaMappingConfigStep extends AbstractStyleConfigurationStep {
                     nsType.setLocation(xsdOut.getName());
                     
                     // get cadsr package, set namespace, automagic mapping
-                    dataManager.setMappedNamespaceForPackage(packageName, nsType.getNamespace());
+                    modelInfoUtil.setMappedNamespace(packageName, nsType.getNamespace());
                     automaticalyMapElementsToClasses(packageName, nsType);
                     
                     // add the namespace to the service definition
@@ -125,13 +128,13 @@ public class SchemaMappingConfigStep extends AbstractStyleConfigurationStep {
     
     
     private void automaticalyMapElementsToClasses(String packageName, NamespaceType nsType) throws Exception {
-        List<ClassMapping> mappings = dataManager.getClassMappingsInPackage(packageName);
-        for (ClassMapping mapping : mappings) {
-            String className = mapping.getClassName();
-            mapping.setElementName(null);
+        List<ModelClass> mappings = dataManager.getClassMappingsInPackage(packageName);
+        for (ModelClass clazz : mappings) {
+            String className = clazz.getShortClassName();
+            unsetClassMapping(packageName, className);
             for (SchemaElementType element : nsType.getSchemaElement()) {
                 if (element.getType().equals(className)) {
-                    dataManager.setClassElementNameInModel(packageName, className, element.getType());
+                    setClassMapping(packageName, className, element);
                     // set the class name and serializers for this element
                     element.setClassName(className);
                     element.setPackageName(packageName);

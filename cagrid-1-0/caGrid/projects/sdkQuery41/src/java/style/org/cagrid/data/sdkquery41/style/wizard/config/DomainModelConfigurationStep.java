@@ -5,10 +5,12 @@ import gov.nih.nci.cadsr.umlproject.domain.UMLClassMetadata;
 import gov.nih.nci.cadsr.umlproject.domain.UMLPackageMetadata;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
-import gov.nih.nci.cagrid.data.extension.CadsrInformation;
-import gov.nih.nci.cagrid.data.extension.CadsrPackage;
-import gov.nih.nci.cagrid.data.extension.ClassMapping;
 import gov.nih.nci.cagrid.data.extension.Data;
+import gov.nih.nci.cagrid.data.extension.ModelClass;
+import gov.nih.nci.cagrid.data.extension.ModelInformation;
+import gov.nih.nci.cagrid.data.extension.ModelPackage;
+import gov.nih.nci.cagrid.data.extension.ModelProject;
+import gov.nih.nci.cagrid.data.extension.ModelSourceType;
 import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertyType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
@@ -89,36 +91,35 @@ public class DomainModelConfigurationStep extends AbstractStyleConfigurationStep
     
     
     private void applyCadsrModelConfiguration() throws Exception {
-        // TODO: replace this with whatever your new Extension data is  (storing the shortname/version)
-        CadsrInformation cadsrInfo = new CadsrInformation();
-        cadsrInfo.setNoDomainModel(false);
-        cadsrInfo.setUseSuppliedModel(false);
-        cadsrInfo.setProjectLongName(selectedProject.getLongName());
-        cadsrInfo.setProjectVersion(selectedProject.getVersion());
+        ModelInformation modelInfo = new ModelInformation();
+        // default to model from mms
+        modelInfo.setSource(ModelSourceType.mms);
+        modelInfo.setModelProject(
+            new ModelProject(selectedProject.getShortName(), selectedProject.getVersion()));
         
         // packages
         UMLModelService cadsrClient = new CaDSRUMLModelService(cadsrUrl);
-        CadsrPackage[] packages = new CadsrPackage[selectedPackages.size()];
+        ModelPackage[] packages = new ModelPackage[selectedPackages.size()];
         int index = 0;
         for (UMLPackageMetadata umlPackage : selectedPackages) {
-            CadsrPackage cadsrPack = new CadsrPackage();
-            cadsrPack.setName(umlPackage.getName());
+            ModelPackage pack = new ModelPackage();
+            pack.setPackageName(umlPackage.getName());
             UMLClassMetadata[] classMetadata = cadsrClient.findClassesInPackage(
                 selectedProject, umlPackage.getName());
-            ClassMapping[] mappings = new ClassMapping[classMetadata.length];
+            ModelClass[] classes = new ModelClass[classMetadata.length];
             for (int j = 0; j < classMetadata.length; j++) {
-                ClassMapping mapping = new ClassMapping();
+                ModelClass clazz = new ModelClass();
                 // NOT setting element name until schema mapping panel
-                mapping.setClassName(classMetadata[j].getName());
-                mapping.setSelected(true);
-                mapping.setTargetable(true);
+                clazz.setShortClassName(classMetadata[j].getName());
+                clazz.setSelected(true);
+                clazz.setTargetable(true);
             }
-            cadsrPack.setCadsrClass(mappings);
-            packages[index] = cadsrPack;
+            pack.setModelClass(classes);
+            packages[index] = pack;
             index++;
         }
-        cadsrInfo.setPackages(packages);
-        storeCadsrInformation(cadsrInfo);
+        modelInfo.setModelPackage(packages);
+        storeModelInformation(modelInfo);
     }
     
     
@@ -173,14 +174,12 @@ public class DomainModelConfigurationStep extends AbstractStyleConfigurationStep
         model = MetadataUtils.deserializeDomainModel(reader);
         reader.close();
         
-        // set the cadsr information to NOT generate a new model
-        CadsrInformation cadsrInfo = new CadsrInformation();
-        cadsrInfo.setNoDomainModel(false);
-        cadsrInfo.setUseSuppliedModel(true);
-        
-        // TODO: change this to the short name + version in the new extension data
-        cadsrInfo.setProjectLongName(model.getProjectLongName());
-        cadsrInfo.setProjectVersion(model.getProjectVersion());
+        // set the model information to NOT generate a new model
+        ModelInformation modelInfo = new ModelInformation();
+        // use provided model
+        modelInfo.setSource(ModelSourceType.preBuilt);
+        modelInfo.setModelProject(
+            new ModelProject(model.getProjectShortName(), model.getProjectVersion()));
         
         // map classes by packages
         Map<String, List<UMLClass>> classesByPackage = new HashMap<String, List<UMLClass>>();
@@ -193,30 +192,30 @@ public class DomainModelConfigurationStep extends AbstractStyleConfigurationStep
             packageClasses.add(modelClass);
         }
         
-        List<CadsrPackage> cadsrPackages = new ArrayList<CadsrPackage>();
+        List<ModelPackage> modelPackages = new ArrayList<ModelPackage>();
         for (String packageName : classesByPackage.keySet()) {
             List<UMLClass> classes = classesByPackage.get(packageName);
-            CadsrPackage pack = new CadsrPackage();
-            pack.setName(packageName);
-            List<ClassMapping> classMappings = new ArrayList<ClassMapping>();
+            ModelPackage pack = new ModelPackage();
+            pack.setPackageName(packageName);
+            List<ModelClass> modelClasses = new ArrayList<ModelClass>();
             for (UMLClass clazz : classes) {
-                ClassMapping mapping = new ClassMapping();
-                mapping.setClassName(clazz.getClassName());
+                ModelClass modelClass = new ModelClass();
+                modelClass.setShortClassName(clazz.getClassName());
                 // NOT populating element names until Schema Mapping Panel
-                mapping.setSelected(true);
-                mapping.setTargetable(true);
-                classMappings.add(mapping);
+                modelClass.setSelected(true);
+                modelClass.setTargetable(true);
+                modelClasses.add(modelClass);
             }
-            ClassMapping[] mappingArray = new ClassMapping[classMappings.size()];
-            classMappings.toArray(mappingArray);
-            pack.setCadsrClass(mappingArray);
-            cadsrPackages.add(pack);
+            ModelClass[] classArray = new ModelClass[modelClasses.size()];
+            modelClasses.toArray(classArray);
+            pack.setModelClass(classArray);
+            modelPackages.add(pack);
         }
-        CadsrPackage[] packageArray = new CadsrPackage[cadsrPackages.size()];
-        cadsrPackages.toArray(packageArray);
-        cadsrInfo.setPackages(packageArray);
+        ModelPackage[] packageArray = new ModelPackage[modelPackages.size()];
+        modelPackages.toArray(packageArray);
+        modelInfo.setModelPackage(packageArray);
         
-        storeCadsrInformation(cadsrInfo);
+        storeModelInformation(modelInfo);
     }
     
     
@@ -266,13 +265,11 @@ public class DomainModelConfigurationStep extends AbstractStyleConfigurationStep
         reader.close();
         
         // set the cadsr information to NOT generate a new model
-        CadsrInformation cadsrInfo = new CadsrInformation();
-        cadsrInfo.setNoDomainModel(false);
-        cadsrInfo.setUseSuppliedModel(true);
-        
-        // TODO: shortname + version!
-        cadsrInfo.setProjectLongName(model.getProjectLongName());
-        cadsrInfo.setProjectVersion(model.getProjectVersion());
+        ModelInformation modelInfo = new ModelInformation();
+        // model from filesystem
+        modelInfo.setSource(ModelSourceType.preBuilt);
+        modelInfo.setModelProject(
+            new ModelProject(model.getProjectShortName(), model.getProjectVersion()));
         
         // map classes by packages
         Map<String, List<UMLClass>> classesByPackage = new HashMap<String, List<UMLClass>>();
@@ -285,36 +282,36 @@ public class DomainModelConfigurationStep extends AbstractStyleConfigurationStep
             packageClasses.add(modelClass);
         }
         
-        List<CadsrPackage> cadsrPackages = new ArrayList<CadsrPackage>();
+        List<ModelPackage> modelPackages = new ArrayList<ModelPackage>();
         for (String packageName : classesByPackage.keySet()) {
             List<UMLClass> classes = classesByPackage.get(packageName);
-            CadsrPackage pack = new CadsrPackage();
-            pack.setName(packageName);
-            List<ClassMapping> classMappings = new ArrayList<ClassMapping>();
+            ModelPackage pack = new ModelPackage();
+            pack.setPackageName(packageName);
+            List<ModelClass> modelClasses = new ArrayList<ModelClass>();
             for (UMLClass clazz : classes) {
-                ClassMapping mapping = new ClassMapping();
-                mapping.setClassName(clazz.getClassName());
+                ModelClass modelClass = new ModelClass();
+                modelClass.setShortClassName(clazz.getClassName());
                 // NOT populating element names until Schema Mapping Panel
-                mapping.setSelected(true);
-                mapping.setTargetable(true);
-                classMappings.add(mapping);
+                modelClass.setSelected(true);
+                modelClass.setTargetable(true);
+                modelClasses.add(modelClass);
             }
-            ClassMapping[] mappingArray = new ClassMapping[classMappings.size()];
-            classMappings.toArray(mappingArray);
-            pack.setCadsrClass(mappingArray);
-            cadsrPackages.add(pack);
+            ModelClass[] mappingArray = new ModelClass[modelClasses.size()];
+            modelClasses.toArray(mappingArray);
+            pack.setModelClass(mappingArray);
+            modelPackages.add(pack);
         }
-        CadsrPackage[] packageArray = new CadsrPackage[cadsrPackages.size()];
-        cadsrPackages.toArray(packageArray);
-        cadsrInfo.setPackages(packageArray);
-        storeCadsrInformation(cadsrInfo);
+        ModelPackage[] packageArray = new ModelPackage[modelPackages.size()];
+        modelPackages.toArray(packageArray);
+        modelInfo.setModelPackage(packageArray);
+        storeModelInformation(modelInfo);
     }
     
     
-    private void storeCadsrInformation(CadsrInformation cadsrInfo) throws Exception {
+    private void storeModelInformation(ModelInformation modelInfo) throws Exception {
         // set the cadsr info on the extension data model
         Data data = getExtensionData();
-        data.setCadsrInformation(cadsrInfo);
+        data.setModelInformation(modelInfo);
         storeExtensionData(data);
     }
     

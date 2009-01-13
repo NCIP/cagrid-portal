@@ -1,7 +1,8 @@
 package gov.nih.nci.cagrid.sdkquery4.style.wizard;
 
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.data.extension.CadsrPackage;
+import gov.nih.nci.cagrid.data.common.ModelInformationUtil;
+import gov.nih.nci.cagrid.data.extension.ModelPackage;
 import gov.nih.nci.cagrid.data.ui.wizard.CacoreWizardUtils;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
@@ -31,14 +32,16 @@ import com.jgoodies.validation.view.ValidationComponentUtils;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created Sep 26, 2006 
- * @version $Id: PackageToNamespaceTable.java,v 1.1 2008-01-23 19:59:19 dervin Exp $ 
+ * @version $Id: PackageToNamespaceTable.java,v 1.2 2009-01-13 15:55:14 dervin Exp $ 
  */
 public class PackageToNamespaceTable extends JTable {
     
     private SchemaResolutionHandler resolutionHandler = null;
+    private ModelInformationUtil modelInfoUtil = null;
     
-    public PackageToNamespaceTable() {
-        setModel(new PackageToNamespaceTableModel());
+    public PackageToNamespaceTable(ModelInformationUtil modelInfoUtil) {
+        super(new PackageToNamespaceTableModel());
+        this.modelInfoUtil = modelInfoUtil;
         setDefaultRenderer(Object.class, new PackageToNamespaceTableRenderer());
         setDefaultEditor(Object.class, new PackageToNamespaceTableEditor());
     }
@@ -54,10 +57,16 @@ public class PackageToNamespaceTable extends JTable {
     }
 
 
-    public boolean isPackageInTable(CadsrPackage info) {
+    public boolean isPackageInTable(ModelPackage pack) {
+        String packName = pack.getPackageName();
+        String mappedNamespace = null;
+        NamespaceType nsType = modelInfoUtil.getMappedNamespace(packName);
+        if (nsType != null) {
+            mappedNamespace = nsType.getNamespace();
+        }
         for (int i = 0; i < getRowCount(); i++) {
-            if (info.getName().equals(getValueAt(i, 0)) 
-                && info.getMappedNamespace().equals(getValueAt(i, 1))) {
+            if (packName.equals(getValueAt(i, 0)) 
+                && Utils.equals(mappedNamespace, getValueAt(i, 1))) {
                 return true;
             }
         }
@@ -65,10 +74,15 @@ public class PackageToNamespaceTable extends JTable {
     }
 
 
-    public void addNewCadsrPackage(ServiceInformation serviceInfo, CadsrPackage pack) {
+    public void addNewModelPackage(ServiceInformation serviceInfo, ModelPackage pack) {
         Vector<Object> row = new Vector<Object>(4);
-        row.add(pack.getName());
-        row.add(pack.getMappedNamespace());
+        row.add(pack.getPackageName());
+        String mappedNamespace = null;
+        NamespaceType nsType = modelInfoUtil.getMappedNamespace(pack.getPackageName());
+        if (nsType != null) {
+            mappedNamespace = nsType.getNamespace();
+        }
+        row.add(mappedNamespace);
         row.add(SchemaResolutionStatus.NEVER_TRIED);
         row.add(getResolveButton(serviceInfo, pack));
 
@@ -93,7 +107,7 @@ public class PackageToNamespaceTable extends JTable {
      *      A JButton to resolve schemas
      */
     private JButton getResolveButton(
-        final ServiceInformation serviceInfo, final CadsrPackage pack) {
+        final ServiceInformation serviceInfo, final ModelPackage pack) {
         JButton resolveButton = new JButton("Resolve");
         resolveButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -124,7 +138,7 @@ public class PackageToNamespaceTable extends JTable {
 
                     // invoke the resolution handler
                     SchemaResolutionStatus resolutionStatus = 
-                        resolutionHandler.resolveSchemaForPackage(serviceInfo, pack.getName());
+                        resolutionHandler.resolveSchemaForPackage(serviceInfo, pack.getPackageName());
                     
                     // change status
                     setValueAt(resolutionStatus, row, 2);
@@ -137,22 +151,27 @@ public class PackageToNamespaceTable extends JTable {
     }
 
 
-    private void removeAssociatedSchema(ServiceInformation info, CadsrPackage pack) {
-        // get the schema directory for the service
-        String serviceName = info.getIntroduceServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME);
-        String schemaDir = CacoreWizardUtils.getServiceBaseDir(info) + File.separator + "schema" + File.separator + serviceName;
-        // get the namespace type from the service information
-        NamespaceType[] namespaces = info.getNamespaces().getNamespace();
-        for (int i = 0; i < namespaces.length; i++) {
-            if (namespaces[i].getNamespace().equals(pack.getMappedNamespace())) {
-                NamespaceType delme = namespaces[i];
-                File schemaFile = new File(schemaDir + File.separator + delme.getLocation());
-                schemaFile.delete();
-                namespaces = (NamespaceType[]) Utils.removeFromArray(namespaces, delme);
-                break;
+    private void removeAssociatedSchema(ServiceInformation info, ModelPackage pack) {
+        // get the mapped namespace for the package
+        NamespaceType mappedNamespace = modelInfoUtil.getMappedNamespace(pack.getPackageName());
+        if (mappedNamespace != null) {
+            // only need to do this if there is a namespace mapped to the package
+            // get the schema directory for the service
+            String serviceName = info.getIntroduceServiceProperties().getProperty(IntroduceConstants.INTRODUCE_SKELETON_SERVICE_NAME);
+            String schemaDir = CacoreWizardUtils.getServiceBaseDir(info) + File.separator + "schema" + File.separator + serviceName;
+            // get the namespace type from the service information
+            NamespaceType[] namespaces = info.getNamespaces().getNamespace();
+            for (int i = 0; i < namespaces.length; i++) {
+                if (namespaces[i].getNamespace().equals(mappedNamespace.getNamespace())) {
+                    NamespaceType delme = namespaces[i];
+                    File schemaFile = new File(schemaDir + File.separator + delme.getLocation());
+                    schemaFile.delete();
+                    namespaces = (NamespaceType[]) Utils.removeFromArray(namespaces, delme);
+                    break;
+                }
             }
+            info.getNamespaces().setNamespace(namespaces);
         }
-        info.getNamespaces().setNamespace(namespaces);
     }
 
 

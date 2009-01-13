@@ -16,7 +16,7 @@ import gov.nih.nci.cagrid.introduce.extension.CreationExtensionException;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * @created Mar 29, 2006
- * @version $Id: DataServiceOperationProviderCodegenPostProcessor.java,v 1.3 2008-12-01 19:11:59 dervin Exp $
+ * @version $Id: DataServiceOperationProviderCodegenPostProcessor.java,v 1.4 2009-01-13 15:55:19 dervin Exp $
  */
 public class DataServiceOperationProviderCodegenPostProcessor extends BaseCodegenPostProcessorExtension {
 
@@ -31,7 +31,7 @@ public class DataServiceOperationProviderCodegenPostProcessor extends BaseCodege
 		// create the XSD with the group of allowable return types for the service
 		ResultTypeGeneratorInformation typeInfo = new ResultTypeGeneratorInformation();
 		typeInfo.setServiceInfo(info);
-		typeInfo.setCadsrInfo(extensionData.getCadsrInformation());
+		typeInfo.setModelInformation(extensionData.getModelInformation());
 		CQLResultTypesGenerator.generateCQLResultTypesXSD(typeInfo);
 		
 		// create the class to QName mapping
