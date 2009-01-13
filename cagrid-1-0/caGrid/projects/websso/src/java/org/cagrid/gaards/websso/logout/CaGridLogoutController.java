@@ -51,8 +51,7 @@ public class CaGridLogoutController extends AbstractController {
 						webSSOServerInformation.getHostCredentialKeyFilePath());
 			} catch (GlobusCredentialException e) {
 				throw new Exception(
-						"Unable to create Host Credentials from the Certificate and Key File : "
-								+ e.getMessage(), e);
+						"Invalid Certificate and Key File in web-properties.xml. Error creating WebSSOServerHostCredential",e);
 			}
 			DelegatedCredentialReference delegatedCredentialReference = null;
 			try {

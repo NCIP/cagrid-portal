@@ -110,7 +110,7 @@ public class WebSSOClientHelper {
 		try {
 			hostCredential = new GlobusCredential(certificateFilePath,keyFilePath);
 		} catch (GlobusCredentialException e) {
-			throw new WebSSOClientException("Unable to create Host Credentials from the Certificate and Key File",e);
+			throw new WebSSOClientException("Invalid Certificate and Key File in web.xml. Error creating Globus Credential",e);
 		}
 		return hostCredential;
 	}
