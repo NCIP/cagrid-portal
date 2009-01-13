@@ -189,14 +189,6 @@ public class Installer {
                 logger.info("Did not find '" + cagridInstallerFileName + "'");
             }
 
-            // set the default location for the server cert and key
-            String serverCert = _basePath.getAbsolutePath() + File.separator + "certs" + File.separator
-                + "servercert.pem";
-            defaultState.put(Constants.SERVICE_CERT_PATH, serverCert);
-            String serverKey = _basePath.getAbsolutePath() + File.separator + "certs" + File.separator
-                + "serverkey.pem";
-            defaultState.put(Constants.SERVICE_KEY_PATH, serverKey);
-
             incrementProgress();
 
             InstallerUtils.assertCorrectJavaVersion(defaultState);
@@ -230,7 +222,7 @@ public class Installer {
         // TODO: provide some factory method here
         this.model = new CaGridInstallerModelImpl(defaultState);
 
-        clearFlags();
+        
 
         // Initialize steps
         PresentLicenseStep licenseStep = new PresentLicenseStep(this.model.getMessage("accept.license.title"),
@@ -318,7 +310,8 @@ public class Installer {
             }
         });
 
-        final RunTasksStep tasksStep = new RunTasksStep();
+        final RunTasksStep tasksStep = new RunTasksStep(model.getMessage("configuring.target.grid"), model
+            .getMessage("configuring.target.grid"));
         ConfigureTargetGridTask configTargetGridTask = new ConfigureTargetGridTask(model
             .getMessage("configuring.target.grid"), model.getMessage("configuring.target.grid"));
         configTargetGridTask.setAbortOnError(false);
@@ -339,7 +332,8 @@ public class Installer {
                 return tasksStep.getTasksCount(model) > 0;
             }
         };
-        PreviewTasksStep previewTasks = new PreviewTasksStep("", "", tasksStep, model);
+        PreviewTasksStep previewTasks = new PreviewTasksStep(model.getMessage("configuring.target.grid"), model
+            .getMessage("configuring.target.grid"), tasksStep, model);
 
         this.model.add(previewTasks, shouldConfigurecaGrid);
         this.model.add(tasksStep, shouldConfigurecaGrid);
@@ -372,16 +366,16 @@ public class Installer {
             this.model.getMessage("specify.ports.desc"));
         containerConfigureStep.getOptions().add(
             new TextPropertyConfigurationOption(Constants.SERVICE_HOSTNAME, this.model.getMessage("service.hostname"),
-                this.model.getProperty(Constants.SERVICE_HOSTNAME, "localhost"), true));
+                this.model.getProperty(Constants.SERVICE_HOSTNAME), true));
         containerConfigureStep.getOptions().add(
             new TextPropertyConfigurationOption(Constants.SHUTDOWN_PORT, this.model.getMessage("shutdown.port"),
-                this.model.getProperty(Constants.SHUTDOWN_PORT, "8005"), false));
+                this.model.getProperty(Constants.SHUTDOWN_PORT), false));
         containerConfigureStep.getOptions().add(
             new TextPropertyConfigurationOption(Constants.HTTP_PORT, this.model.getMessage("http.port"), this.model
-                .getProperty(Constants.HTTP_PORT, "8080"), model.isTrue(Constants.USE_SECURE_CONTAINER)));
+                .getProperty(Constants.HTTP_PORT), model.isTrue(Constants.USE_SECURE_CONTAINER)));
         containerConfigureStep.getOptions().add(
             new TextPropertyConfigurationOption(Constants.HTTPS_PORT, this.model.getMessage("https.port"), this.model
-                .getProperty(Constants.HTTPS_PORT, "8443"), model.isTrue(Constants.USE_SECURE_CONTAINER)));
+                .getProperty(Constants.HTTPS_PORT), model.isTrue(Constants.USE_SECURE_CONTAINER)));
 
         this.model.add(containerConfigureStep, new Condition() {
             public boolean evaluate(WizardModel m) {
@@ -486,17 +480,6 @@ public class Installer {
 
     }
 
-
-    private void clearFlags() {
-        this.model.unsetProperty(Constants.INSTALL_CONFIGURE_CONTAINER);
-        this.model.unsetProperty(Constants.RECONFIGURE_CAGRID);
-        this.model.unsetProperty(Constants.USE_SECURE_CONTAINER);
-        this.model.unsetProperty(Constants.REINSTALL_ANT);
-        this.model.unsetProperty(Constants.REINSTALL_GLOBUS);
-        this.model.unsetProperty(Constants.REINSTALL_CAGRID);
-        this.model.unsetProperty(Constants.REINSTALL_JBOSS);
-        this.model.unsetProperty(Constants.REINSTALL_TOMCAT);
-    }
 
 
     public void run() {

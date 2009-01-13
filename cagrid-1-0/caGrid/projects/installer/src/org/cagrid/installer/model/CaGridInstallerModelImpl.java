@@ -24,12 +24,15 @@ import javax.xml.xpath.XPathFactory;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.cagrid.installer.steps.Constants;
+import org.cagrid.installer.steps.InstallationCompleteStep;
 import org.cagrid.installer.steps.RunTasksStep;
 import org.cagrid.installer.util.InstallerUtils;
 import org.pietschy.wizard.OverviewProvider;
 import org.pietschy.wizard.models.DynamicModel;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+
+import sun.security.action.GetLongAction;
 
 
 /**
@@ -91,6 +94,8 @@ CaGridInstallerModel, OverviewProvider {
             }
         }
         checkEnvironment();
+
+        clearFlags();
     }
 
 
@@ -120,6 +125,18 @@ CaGridInstallerModel, OverviewProvider {
             setProperty(Constants.CAGRID_HOME, getHomeDir(Constants.CAGRID_HOME, "CAGRID_HOME"));
         }
 
+    }
+
+
+    private void clearFlags() {
+        this.unsetProperty(Constants.INSTALL_CONFIGURE_CONTAINER);
+        this.unsetProperty(Constants.RECONFIGURE_CAGRID);
+        this.unsetProperty(Constants.USE_SECURE_CONTAINER);
+        this.unsetProperty(Constants.REINSTALL_ANT);
+        this.unsetProperty(Constants.REINSTALL_GLOBUS);
+        this.unsetProperty(Constants.REINSTALL_CAGRID);
+        this.unsetProperty(Constants.REINSTALL_JBOSS);
+        this.unsetProperty(Constants.REINSTALL_TOMCAT);
     }
 
 
@@ -218,6 +235,8 @@ CaGridInstallerModel, OverviewProvider {
         if (getActiveStep() instanceof RunTasksStep) {
             RunTasksStep rts = (RunTasksStep) getActiveStep();
             setPreviousAvailable(!(rts.isBusy() || rts.isExecuted()));
+        } else if (getActiveStep() instanceof InstallationCompleteStep) {
+            setPreviousAvailable(false);
         }
     }
 
@@ -226,6 +245,7 @@ CaGridInstallerModel, OverviewProvider {
         return (isTomcatContainer() || isJBossContainer())
             && (isTrue(Constants.REDEPLOY_GLOBUS) || !isGlobusDeployed());
     }
+
 
     public void unsetProperty(String propName) {
         this.state.remove(propName);
