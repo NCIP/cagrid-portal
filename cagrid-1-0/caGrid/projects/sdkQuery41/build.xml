@@ -44,9 +44,14 @@
 	<property name="lib.dir" location="${basedir}/lib" />
 	<property name="ext.lib.dir" location="${basedir}/ext/dependencies/jars" />
 	<property name="ext.test.lib.dir" location="${basedir}/ext/dependencies/test/jars" />
-
-	<property name="ext.remote-client.dir" location="${build.dir}/remote-client" />
-	<property name="ext.local-client.dir" location="${build.dir}/local-client" />
+	<property name="ext.zip.dir" location="${basedir}/ext/dependencies/zips"/>
+	
+	<!-- sdk artifacts -->
+	<property name="sdk.zip.file" location="${ext.zip.dir}/sdk411-trimmed.zip"/>
+	<property name="sdk.unpack.dir" location="${build.dir}/sdk"/>
+	<property name="sdk.output.package.dir" location="${sdk.unpack.dir}/SDK4/output/example41/package"/>
+	<property name="ext.remote-client.dir" location="${sdk.output.package.dir}/remote-client" />
+	<property name="ext.local-client.dir" location="${sdk.output.package.dir}/local-client" />
 	<property name="ext.remote-client.lib.dir" location="${ext.remote-client.dir}/lib" />
 	<property name="ext.local-client.lib.dir" location="${ext.local-client.dir}/lib" />
 
@@ -145,14 +150,14 @@
 
 
 	<!-- unpacks the caCORE SDK client zip files -->
-	<target name="unpackSdkClients">
-		<unzip src="${lib.dir}/RemoteClient.zip" dest="${ext.remote-client.dir}" />
-		<unzip src="${lib.dir}/LocalClient.zip" dest="${ext.local-client.dir}" />
+	<target name="unpackSdk">
+		<mkdir dir="${sdk.unpack.dir}"/>
+		<unzip src="${sdk.zip.file}" dest="${sdk.unpack.dir}"/>
 	</target>
 	
 
 	<!-- creates output directories -->
-	<target name="init" depends="defineContribTasks, unpackSdkClients">
+	<target name="init" depends="defineContribTasks, unpackSdk">
 		<mkdir dir="${build.dir}" />
 		<mkdir dir="${build.jars.dir}" />
 		<mkdir dir="${build.style.dest}" />

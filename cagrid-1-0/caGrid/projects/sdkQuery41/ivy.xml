@@ -9,9 +9,10 @@
   </info>
 
   <configurations>
+  	<!-- Private Configurations -->
     <conf name="impl-test" visibility="private" />
 
-    <!-- Public Configurations-->
+    <!-- Public Configurations -->
     <conf name="stubs" visibility="public" />
     <conf name="processor" visibility="public" extends="stubs" />
     <conf name="style" visibility="public" extends="processor" />
@@ -48,5 +49,8 @@
     <!-- external dependencies -->
     <dependency rev="4.4" org="junit" name="junit" conf="impl-test->default" />
     <dependency rev="2.0.0" org="jgoodies" name="validation" conf="style->default"/>
+    
+    <!-- caCORE SDK 4.1 example zip -->
+    <dependency rev="4.1" org="cacore" name="sdk" conf="style->example-trimmed"/>
   </dependencies>
 </ivy-module>
