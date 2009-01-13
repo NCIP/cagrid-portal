@@ -16,13 +16,14 @@ import org.globus.wsrf.Constants;
  * This class holds all service properties which were defined for the service to have
  * access to.
  * 
- * @created by Introduce Toolkit version 1.2
+ * @created by Introduce Toolkit version 1.3
  * 
  */
 public class FederatedQueryProcessorConfiguration implements ServiceConfiguration {
 
 	public static FederatedQueryProcessorConfiguration  configuration = null;
-
+    public String etcDirectoryPath;
+    	
 	public static FederatedQueryProcessorConfiguration getConfiguration() throws Exception {
 		if (FederatedQueryProcessorConfiguration.configuration != null) {
 			return FederatedQueryProcessorConfiguration.configuration;
@@ -42,8 +43,7 @@ public class FederatedQueryProcessorConfiguration implements ServiceConfiguratio
 		return FederatedQueryProcessorConfiguration.configuration;
 	}
 	
-	private String etcDirectoryPath;
-	
+
 	
 	private String initialResultLeaseInMinutes;
 	
@@ -55,14 +55,17 @@ public class FederatedQueryProcessorConfiguration implements ServiceConfiguratio
 	
 	private String maxTargetServicesPerQuery;
 	
+	private String caGridWsEnumeration_iterImplType;
 	
-	public String getEtcDirectoryPath() {
+	
+    public String getEtcDirectoryPath() {
 		return ContainerConfig.getBaseDirectory() + File.separator + etcDirectoryPath;
 	}
 	
 	public void setEtcDirectoryPath(String etcDirectoryPath) {
 		this.etcDirectoryPath = etcDirectoryPath;
 	}
+
 
 	
 	public String getInitialResultLeaseInMinutes() {
@@ -112,6 +115,16 @@ public class FederatedQueryProcessorConfiguration implements ServiceConfiguratio
 	
 	public void setMaxTargetServicesPerQuery(String maxTargetServicesPerQuery) {
 		this.maxTargetServicesPerQuery = maxTargetServicesPerQuery;
+	}
+
+	
+	public String getCaGridWsEnumeration_iterImplType() {
+		return caGridWsEnumeration_iterImplType;
+	}
+	
+	
+	public void setCaGridWsEnumeration_iterImplType(String caGridWsEnumeration_iterImplType) {
+		this.caGridWsEnumeration_iterImplType = caGridWsEnumeration_iterImplType;
 	}
 
 	

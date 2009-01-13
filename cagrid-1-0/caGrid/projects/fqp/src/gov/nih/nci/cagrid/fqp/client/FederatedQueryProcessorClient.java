@@ -30,7 +30,7 @@ import gov.nih.nci.cagrid.introduce.security.client.ServiceSecurityClient;
  * On construction the class instance will contact the remote service and retrieve it's security
  * metadata description which it will use to configure the Stub specifically for each method call.
  * 
- * @created by Introduce Toolkit version 1.2
+ * @created by Introduce Toolkit version 1.3
  */
 public class FederatedQueryProcessorClient extends FederatedQueryProcessorClientBase implements FederatedQueryProcessorI {	
 
@@ -76,27 +76,6 @@ public class FederatedQueryProcessorClient extends FederatedQueryProcessorClient
 		}
 	}
 
-  public org.oasis.wsrf.properties.GetMultipleResourcePropertiesResponse getMultipleResourceProperties(org.oasis.wsrf.properties.GetMultipleResourceProperties_Element params) throws RemoteException {
-    synchronized(portTypeMutex){
-      configureStubSecurity((Stub)portType,"getMultipleResourceProperties");
-    return portType.getMultipleResourceProperties(params);
-    }
-  }
-
-  public org.oasis.wsrf.properties.GetResourcePropertyResponse getResourceProperty(javax.xml.namespace.QName params) throws RemoteException {
-    synchronized(portTypeMutex){
-      configureStubSecurity((Stub)portType,"getResourceProperty");
-    return portType.getResourceProperty(params);
-    }
-  }
-
-  public org.oasis.wsrf.properties.QueryResourcePropertiesResponse queryResourceProperties(org.oasis.wsrf.properties.QueryResourceProperties_Element params) throws RemoteException {
-    synchronized(portTypeMutex){
-      configureStubSecurity((Stub)portType,"queryResourceProperties");
-    return portType.queryResourceProperties(params);
-    }
-  }
-
   public gov.nih.nci.cagrid.dcqlresult.DCQLQueryResultsCollection execute(gov.nih.nci.cagrid.dcql.DCQLQuery query) throws RemoteException, gov.nih.nci.cagrid.fqp.stubs.types.FederatedQueryProcessingFault {
     synchronized(portTypeMutex){
       configureStubSecurity((Stub)portType,"execute");
@@ -130,7 +109,7 @@ public class FederatedQueryProcessorClient extends FederatedQueryProcessorClient
     params.setQuery(queryContainer);
     gov.nih.nci.cagrid.fqp.stubs.ExecuteAsynchronouslyResponse boxedResult = portType.executeAsynchronously(params);
     EndpointReferenceType ref = boxedResult.getFederatedQueryResultsReference().getEndpointReference();
-    return new gov.nih.nci.cagrid.fqp.results.client.FederatedQueryResultsClient(ref);
+    return new gov.nih.nci.cagrid.fqp.results.client.FederatedQueryResultsClient(ref,getProxy());
     }
   }
 
@@ -149,7 +128,28 @@ public class FederatedQueryProcessorClient extends FederatedQueryProcessorClient
     params.setQueryExecutionParameters(queryExecutionParametersContainer);
     gov.nih.nci.cagrid.fqp.stubs.QueryResponse boxedResult = portType.query(params);
     EndpointReferenceType ref = boxedResult.getFederatedQueryResultsReference().getEndpointReference();
-    return new gov.nih.nci.cagrid.fqp.results.client.FederatedQueryResultsClient(ref);
+    return new gov.nih.nci.cagrid.fqp.results.client.FederatedQueryResultsClient(ref,getProxy());
+    }
+  }
+
+  public org.oasis.wsrf.properties.GetMultipleResourcePropertiesResponse getMultipleResourceProperties(org.oasis.wsrf.properties.GetMultipleResourceProperties_Element params) throws RemoteException {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"getMultipleResourceProperties");
+    return portType.getMultipleResourceProperties(params);
+    }
+  }
+
+  public org.oasis.wsrf.properties.GetResourcePropertyResponse getResourceProperty(javax.xml.namespace.QName params) throws RemoteException {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"getResourceProperty");
+    return portType.getResourceProperty(params);
+    }
+  }
+
+  public org.oasis.wsrf.properties.QueryResourcePropertiesResponse queryResourceProperties(org.oasis.wsrf.properties.QueryResourceProperties_Element params) throws RemoteException {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"queryResourceProperties");
+    return portType.queryResourceProperties(params);
     }
   }
 

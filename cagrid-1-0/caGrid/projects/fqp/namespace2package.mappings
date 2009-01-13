@@ -1,10 +1,10 @@
 http\://fqp.cagrid.nci.nih.gov/FederatedQueryProcessor=gov.nih.nci.cagrid.fqp.stubs
 http\://fqp.cagrid.nci.nih.gov/FederatedQueryProcessor/bindings=gov.nih.nci.cagrid.fqp.stubs.bindings
 http\://fqp.cagrid.nci.nih.gov/FederatedQueryProcessor/service=gov.nih.nci.cagrid.fqp.stubs.service
-http\://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl=org.oasis.wsrf.properties
-http\://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl=org.oasis.wsrf.properties
-http\://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl=org.oasis.wsrf.properties
 http\://security.introduce.cagrid.nci.nih.gov/ServiceSecurity=gov.nih.nci.cagrid.introduce.security.stubs
+http\://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl=org.oasis.wsrf.properties
+http\://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl=org.oasis.wsrf.properties
+http\://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl=org.oasis.wsrf.properties
 http\://gov.nih.nci.cagrid.enumeration/CaGridEnumeration=gov.nih.nci.cagrid.enumeration.stubs
 http\://gov.nih.nci.cagrid.enumeration/CaGridEnumeration/bindings=gov.nih.nci.cagrid.enumeration.stubs.bindings
 http\://gov.nih.nci.cagrid.enumeration/CaGridEnumeration/service=gov.nih.nci.cagrid.enumeration.stubs.service

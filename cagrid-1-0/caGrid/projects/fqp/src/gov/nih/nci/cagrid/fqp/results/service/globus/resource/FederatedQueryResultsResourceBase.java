@@ -85,7 +85,7 @@ import org.oasis.wsrf.lifetime.TerminationNotification;
  * of these resource as well as code for registering any properties selected
  * to the index service.
  * 
- * @created by Introduce Toolkit version 1.2
+ * @created by Introduce Toolkit version 1.3
  * 
  */
 public abstract class FederatedQueryResultsResourceBase extends ReflectionResource implements Resource
@@ -167,7 +167,8 @@ public abstract class FederatedQueryResultsResourceBase extends ReflectionResour
 	 * 
 	 * @see org.globus.wsrf.ResourceLifetime#setTerminationTime(java.util.Calendar)
 	 */
-	public void setTerminationTime(Calendar time) {	
+	public void setTerminationTime(Calendar time) {
+	    super.setTerminationTime(time);	
 		Topic terminationTopic = ((Topic)getResourcePropertySet().get(FederatedQueryResultsConstants.TERMINATIONTIME));
         if (terminationTopic != null) {
             TerminationNotification terminationNotification =
@@ -179,8 +180,7 @@ public abstract class FederatedQueryResultsResourceBase extends ReflectionResour
                 logger.error("Unable to send terminationTime notification", e);
             }
         }	
-        
-		super.setTerminationTime(time);
+
         //call the first store to persist the resource
         try {
             store();
@@ -429,6 +429,22 @@ public abstract class FederatedQueryResultsResourceBase extends ReflectionResour
     }
 
 
+
+    /**
+     * Should be overloaded by developer in order to recover the objects they
+     * they wrote the persistence file when storeResource was called. Remember
+     * that the objects must be read in the same order they were written.
+     * 
+     * @param resourceKey
+     * @param ois
+     * @throws Exception
+     */
+    public void loadResource(ResourceKey resourceKey, ObjectInputStream ois) throws Exception {
+
+    }
+
+
+
     public void load(ResourceKey resourceKey) throws ResourceException, NoSuchResourceException, InvalidResourceKeyException {
 	  beingLoaded = true;
        //first we will recover the resource properties and initialize the resource
@@ -448,6 +464,7 @@ public abstract class FederatedQueryResultsResourceBase extends ReflectionResour
             ObjectInputStream ois = new ObjectInputStream(fis);
             SubscriptionPersistenceUtils.loadSubscriptionListeners(
                 this.getTopicList(), ois);
+			loadResource(resourceKey,ois);
         } catch (Exception e) {
             beingLoaded = false;
             throw new ResourceException("Failed to load resource", e);
@@ -458,6 +475,22 @@ public abstract class FederatedQueryResultsResourceBase extends ReflectionResour
         } 
        
        beingLoaded = false;
+    }
+
+
+
+    /**
+     * This method should be overloaded by the developer in the Resource class
+     * if they want to persist extra information from there implementation in
+     * the persistence file that the base resource is using to persist itself.
+     * 
+     * @param oos
+     *            Object output stream that can be written to. Make sure to read
+     *            back in the same order
+     * @throws ResourceException
+     */
+    public void storeResource(ObjectOutputStream oos) throws ResourceException {
+
     }
 
 
@@ -477,6 +510,7 @@ public abstract class FederatedQueryResultsResourceBase extends ReflectionResour
             ObjectOutputStream oos = new ObjectOutputStream(fos);
             SubscriptionPersistenceUtils.storeSubscriptionListeners(
                 this.getTopicList(), oos);
+			storeResource(oos);
         } catch (Exception e) {
             if (tmpFile != null) {
                 tmpFile.delete();

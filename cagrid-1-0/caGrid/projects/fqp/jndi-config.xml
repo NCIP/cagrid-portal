@@ -123,6 +123,10 @@
           <name>maxTargetServicesPerQuery</name>
           <value>@maxTargetServicesPerQuery@</value>
         </parameter>
+        <parameter>
+          <name>caGridWsEnumeration_iterImplType</name>
+          <value>@caGridWsEnumeration_iterImplType@</value>
+        </parameter>
       </resourceParams>
     </resource>
     <resource name="home" type="gov.nih.nci.cagrid.fqp.service.globus.resource.FederatedQueryProcessorResourceHome">

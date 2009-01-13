@@ -39,7 +39,7 @@ import gov.nih.nci.cagrid.introduce.security.client.ServiceSecurityClient;
  * On construction the class instance will contact the remote service and retrieve it's security
  * metadata description which it will use to configure the Stub specifically for each method call.
  * 
- * @created by Introduce Toolkit version 1.2
+ * @created by Introduce Toolkit version 1.3
  */
 public abstract class FederatedQueryProcessorClientBase extends ServiceSecurityClient {	
 	protected FederatedQueryProcessorPortType portType;
@@ -57,12 +57,12 @@ public abstract class FederatedQueryProcessorClientBase extends ServiceSecurityC
 		initialize();
 	}
 	
-	private void initialize() throws RemoteException {
+	protected void initialize() throws RemoteException {
 	    this.portTypeMutex = new Object();
 		this.portType = createPortType();
 	}
 
-	private FederatedQueryProcessorPortType createPortType() throws RemoteException {
+	protected FederatedQueryProcessorPortType createPortType() throws RemoteException {
 
 		FederatedQueryProcessorServiceAddressingLocator locator = new FederatedQueryProcessorServiceAddressingLocator();
 		// attempt to load our context sensitive wsdd file

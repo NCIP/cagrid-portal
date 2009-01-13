@@ -1,4 +1,4 @@
-<ns1:ServiceDescription introduceVersion="1.2" xmlns:ns1="gme://gov.nih.nci.cagrid/1/Introduce">
+<ns1:ServiceDescription introduceVersion="1.3" xmlns:ns1="gme://gov.nih.nci.cagrid/1/Introduce">
  <ns2:Namespaces xsi:type="ns2:NamespacesType" xmlns:ns2="gme://gov.nih.nci.cagrid.introduce/1/Namespace" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <ns2:Namespace location="./FQPResultsMetadata.xsd" namespace="http://fqp.cagrid.nci.nih.gov/FederatedQueryResultsMetadata" packageName="org.cagrid.fqp.results.metadata" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="FederatedQueryExecutionStatus" xsi:type="ns2:SchemaElementType"/>
@@ -140,73 +140,82 @@
  <ns3:Services xsi:type="ns3:ServicesType" xmlns:ns3="gme://gov.nih.nci.cagrid.introduce/1/Services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <ns3:Service name="FederatedQueryProcessor" namespace="http://fqp.cagrid.nci.nih.gov/FederatedQueryProcessor" packageName="gov.nih.nci.cagrid.fqp" xsi:type="ns3:ServiceType">
    <ns4:Methods xsi:type="ns4:MethodsType" xmlns:ns4="gme://gov.nih.nci.cagrid.introduce/1/Methods">
-    <ns4:Method isImported="true" isProvided="true" name="GetMultipleResourceProperties" xsi:type="ns4:MethodType">
-     <ns4:Output qName="void" isArray="false"/>
-     <ns4:ImportInformation fromIntroduce="false" inputMessage="ns5:GetMultipleResourcePropertiesRequest" namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" outputMessage="ns5:GetMultipleResourcePropertiesResponse" packageName="org.oasis.wsrf.properties" portTypeName="GetMultipleResourceProperties" wsdlFile="../wsrf/properties/WS-ResourceProperties.wsdl" xmlns:ns5="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl"/>
-     <ns4:ProviderInformation providerClass="GetMRPProvider"/>
-    </ns4:Method>
-    <ns4:Method isImported="true" isProvided="true" name="GetResourceProperty" xsi:type="ns4:MethodType">
-     <ns4:Output qName="void" isArray="false"/>
-     <ns4:ImportInformation fromIntroduce="false" inputMessage="ns6:GetResourcePropertyRequest" namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" outputMessage="ns6:GetResourcePropertyResponse" packageName="org.oasis.wsrf.properties" portTypeName="GetResourceProperty" wsdlFile="../wsrf/properties/WS-ResourceProperties.wsdl" xmlns:ns6="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl"/>
-     <ns4:ProviderInformation providerClass="GetRPProvider"/>
-    </ns4:Method>
-    <ns4:Method isImported="true" isProvided="true" name="QueryResourceProperties" xsi:type="ns4:MethodType">
-     <ns4:Output qName="void" isArray="false"/>
-     <ns4:ImportInformation fromIntroduce="false" inputMessage="ns7:QueryResourcePropertiesRequest" namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" outputMessage="ns7:QueryResourcePropertiesResponse" packageName="org.oasis.wsrf.properties" portTypeName="QueryResourceProperties" wsdlFile="../wsrf/properties/WS-ResourceProperties.wsdl" xmlns:ns7="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl"/>
-     <ns4:ProviderInformation providerClass="QueryRPProvider"/>
-    </ns4:Method>
     <ns4:Method isImported="true" isProvided="true" name="getServiceSecurityMetadata" xsi:type="ns4:MethodType">
-     <ns4:Output qName="ns8:ServiceSecurityMetadata" isArray="false" isClientHandle="false" xmlns:ns8="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security"/>
-     <ns9:MethodSecurity xsi:type="ns9:MethodSecurity" xmlns:ns9="gme://gov.nih.nci.cagrid.introduce/1/Security">
-      <ns9:SecuritySetting xsi:type="ns9:SecuritySetting">None</ns9:SecuritySetting>
-      <ns9:MethodAuthorization xsi:type="ns9:MethodAuthorization">
-       <ns9:NoAuthorization xsi:type="ns9:NoAuthorization"/>
-      </ns9:MethodAuthorization>
-     </ns9:MethodSecurity>
+     <ns4:Output qName="ns5:ServiceSecurityMetadata" isArray="false" isClientHandle="false" xmlns:ns5="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security"/>
+     <ns6:MethodSecurity xsi:type="ns6:MethodSecurity" xmlns:ns6="gme://gov.nih.nci.cagrid.introduce/1/Security">
+      <ns6:SecuritySetting xsi:type="ns6:SecuritySetting">None</ns6:SecuritySetting>
+      <ns6:MethodAuthorization xsi:type="ns6:MethodAuthorization">
+       <ns6:NoAuthorization xsi:type="ns6:NoAuthorization"/>
+      </ns6:MethodAuthorization>
+     </ns6:MethodSecurity>
      <ns4:ImportInformation namespace="http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity" packageName="gov.nih.nci.cagrid.introduce.security.stubs" portTypeName="ServiceSecurityPortType" wsdlFile="ServiceSecurity.wsdl"/>
      <ns4:ProviderInformation providerClass="gov.nih.nci.cagrid.introduce.security.service.globus.ServiceSecurityProviderImpl"/>
     </ns4:Method>
     <ns4:Method description="Executes the specified DCQL query, blocking until completion." isImported="false" isProvided="false" name="execute" xsi:type="ns4:MethodType">
      <ns4:Inputs>
-      <ns4:Input qName="ns10:DCQLQuery" description="" isArray="false" name="query" xmlns:ns10="http://caGrid.caBIG/1.0/gov.nih.nci.cagrid.dcql"/>
+      <ns4:Input qName="ns7:DCQLQuery" description="" isArray="false" name="query" xmlns:ns7="http://caGrid.caBIG/1.0/gov.nih.nci.cagrid.dcql"/>
      </ns4:Inputs>
-     <ns4:Output qName="ns11:DCQLQueryResultsCollection" description="" isArray="false" xmlns:ns11="http://caGrid.caBIG/1.0/gov.nih.nci.cagrid.dcqlresult"/>
+     <ns4:Output qName="ns8:DCQLQueryResultsCollection" description="" isArray="false" xmlns:ns8="http://caGrid.caBIG/1.0/gov.nih.nci.cagrid.dcqlresult"/>
      <ns4:Exceptions>
-      <ns4:Exception description="Indicates an error occured processing the query." name="FederatedQueryProcessingFault" qname="ns12:FederatedQueryProcessingFault" xmlns:ns12="http://fqp.cagrid.nci.nih.gov/FederatedQueryProcessor/types"/>
+      <ns4:Exception description="Indicates an error occured processing the query." name="FederatedQueryProcessingFault" qname="ns9:FederatedQueryProcessingFault" xmlns:ns9="http://fqp.cagrid.nci.nih.gov/FederatedQueryProcessor/types"/>
      </ns4:Exceptions>
     </ns4:Method>
     <ns4:Method description="Executes the given DCQL query and returns the results as standard data service results." isImported="false" isProvided="false" name="executeAndAggregateResults" xsi:type="ns4:MethodType">
      <ns4:Inputs>
-      <ns4:Input qName="ns13:DCQLQuery" description="" isArray="false" name="query" xmlns:ns13="http://caGrid.caBIG/1.0/gov.nih.nci.cagrid.dcql"/>
+      <ns4:Input qName="ns10:DCQLQuery" description="" isArray="false" name="query" xmlns:ns10="http://caGrid.caBIG/1.0/gov.nih.nci.cagrid.dcql"/>
      </ns4:Inputs>
-     <ns4:Output qName="ns14:CQLQueryResultCollection" description="" isArray="false" xmlns:ns14="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLResultSet"/>
+     <ns4:Output qName="ns11:CQLQueryResultCollection" description="" isArray="false" xmlns:ns11="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLResultSet"/>
      <ns4:Exceptions>
-      <ns4:Exception description="Indicates an error occured processing the query." name="FederatedQueryProcessingFault" qname="ns15:FederatedQueryProcessingFault" xmlns:ns15="http://fqp.cagrid.nci.nih.gov/FederatedQueryProcessor/types"/>
+      <ns4:Exception description="Indicates an error occured processing the query." name="FederatedQueryProcessingFault" qname="ns12:FederatedQueryProcessingFault" xmlns:ns12="http://fqp.cagrid.nci.nih.gov/FederatedQueryProcessor/types"/>
      </ns4:Exceptions>
     </ns4:Method>
     <ns4:Method description="Executes the specified DCQL query, and returns a reference to the query result resource." isImported="false" isProvided="false" name="executeAsynchronously" xsi:type="ns4:MethodType">
      <ns4:Inputs>
-      <ns4:Input qName="ns16:DCQLQuery" description="" isArray="false" name="query" xmlns:ns16="http://caGrid.caBIG/1.0/gov.nih.nci.cagrid.dcql"/>
+      <ns4:Input qName="ns13:DCQLQuery" description="" isArray="false" name="query" xmlns:ns13="http://caGrid.caBIG/1.0/gov.nih.nci.cagrid.dcql"/>
      </ns4:Inputs>
-     <ns4:Output qName="ns17:FederatedQueryResultsReference" clientHandleClass="gov.nih.nci.cagrid.fqp.results.client.FederatedQueryResultsClient" description="" isArray="false" isClientHandle="true" isCreatingResourceForClientHandle="true" resourceClientIntroduceServiceName="FederatedQueryResults" xmlns:ns17="http://fqp.cagrid.nci.nih.gov/FederatedResults/types"/>
+     <ns4:Output qName="ns14:FederatedQueryResultsReference" clientHandleClass="gov.nih.nci.cagrid.fqp.results.client.FederatedQueryResultsClient" description="" isArray="false" isClientHandle="true" isCreatingResourceForClientHandle="true" resourceClientIntroduceServiceName="FederatedQueryResults" xmlns:ns14="http://fqp.cagrid.nci.nih.gov/FederatedResults/types"/>
      <ns4:Exceptions/>
     </ns4:Method>
     <ns4:Method description="Performs the DCQL Query and created a FederatedQueryResults resource using the specified parameters." isImported="false" isProvided="false" name="query" xsi:type="ns4:MethodType">
      <ns4:Inputs>
-      <ns4:Input qName="ns18:DCQLQuery" description="" isArray="false" name="query" xmlns:ns18="http://caGrid.caBIG/1.0/gov.nih.nci.cagrid.dcql"/>
-      <ns4:Input qName="ns19:DelegatedCredentialReference" description="" isArray="false" name="delegatedCredentialReference" xmlns:ns19="http://cds.gaards.cagrid.org/CredentialDelegationService/DelegatedCredential/types"/>
-      <ns4:Input qName="ns20:QueryExecutionParameters" description="" isArray="false" name="queryExecutionParameters" xmlns:ns20="http://fqp.cagrid.nci.nih.gov/QueryExecutionParameters"/>
+      <ns4:Input qName="ns15:DCQLQuery" description="" isArray="false" name="query" xmlns:ns15="http://caGrid.caBIG/1.0/gov.nih.nci.cagrid.dcql"/>
+      <ns4:Input qName="ns16:DelegatedCredentialReference" description="" isArray="false" name="delegatedCredentialReference" xmlns:ns16="http://cds.gaards.cagrid.org/CredentialDelegationService/DelegatedCredential/types"/>
+      <ns4:Input qName="ns17:QueryExecutionParameters" description="" isArray="false" name="queryExecutionParameters" xmlns:ns17="http://fqp.cagrid.nci.nih.gov/QueryExecutionParameters"/>
      </ns4:Inputs>
-     <ns4:Output qName="ns21:FederatedQueryResultsReference" clientHandleClass="gov.nih.nci.cagrid.fqp.results.client.FederatedQueryResultsClient" description="" isArray="false" isClientHandle="true" isCreatingResourceForClientHandle="true" resourceClientIntroduceServiceName="FederatedQueryResults" xmlns:ns21="http://fqp.cagrid.nci.nih.gov/FederatedResults/types"/>
+     <ns4:Output qName="ns18:FederatedQueryResultsReference" clientHandleClass="gov.nih.nci.cagrid.fqp.results.client.FederatedQueryResultsClient" description="" isArray="false" isClientHandle="true" isCreatingResourceForClientHandle="true" resourceClientIntroduceServiceName="FederatedQueryResults" xmlns:ns18="http://fqp.cagrid.nci.nih.gov/FederatedResults/types"/>
      <ns4:Exceptions>
-      <ns4:Exception description="" name="FederatedQueryProcessingFault" qname="ns22:FederatedQueryProcessingFault" xmlns:ns22="http://fqp.cagrid.nci.nih.gov/FederatedQueryProcessor/types"/>
-      <ns4:Exception description="" name="InternalErrorFault" qname="ns23:InternalErrorFault" xmlns:ns23="http://fqp.cagrid.nci.nih.gov/FederatedResults/types"/>
+      <ns4:Exception description="" name="FederatedQueryProcessingFault" qname="ns19:FederatedQueryProcessingFault" xmlns:ns19="http://fqp.cagrid.nci.nih.gov/FederatedQueryProcessor/types"/>
+      <ns4:Exception description="" name="InternalErrorFault" qname="ns20:InternalErrorFault" xmlns:ns20="http://fqp.cagrid.nci.nih.gov/FederatedResults/types"/>
      </ns4:Exceptions>
     </ns4:Method>
+    <ns4:Method isImported="true" isProvided="true" name="GetMultipleResourceProperties" xsi:type="ns4:MethodType">
+     <ns4:Output qName="void" isArray="false"/>
+     <ns21:MethodSecurity xsi:type="ns21:MethodSecurity" xmlns:ns21="gme://gov.nih.nci.cagrid.introduce/1/Security">
+      <ns21:SecuritySetting xsi:type="ns21:SecuritySetting">None</ns21:SecuritySetting>
+     </ns21:MethodSecurity>
+     <ns4:ImportInformation fromIntroduce="false" inputMessage="ns22:GetMultipleResourcePropertiesRequest" namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" outputMessage="ns22:GetMultipleResourcePropertiesResponse" packageName="org.oasis.wsrf.properties" portTypeName="GetMultipleResourceProperties" wsdlFile="../wsrf/properties/WS-ResourceProperties.wsdl" xmlns:ns22="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl"/>
+     <ns4:ProviderInformation providerClass="GetMRPProvider"/>
+    </ns4:Method>
+    <ns4:Method isImported="true" isProvided="true" name="GetResourceProperty" xsi:type="ns4:MethodType">
+     <ns4:Output qName="void" isArray="false"/>
+     <ns23:MethodSecurity xsi:type="ns23:MethodSecurity" xmlns:ns23="gme://gov.nih.nci.cagrid.introduce/1/Security">
+      <ns23:SecuritySetting xsi:type="ns23:SecuritySetting">None</ns23:SecuritySetting>
+     </ns23:MethodSecurity>
+     <ns4:ImportInformation fromIntroduce="false" inputMessage="ns24:GetResourcePropertyRequest" namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" outputMessage="ns24:GetResourcePropertyResponse" packageName="org.oasis.wsrf.properties" portTypeName="GetResourceProperty" wsdlFile="../wsrf/properties/WS-ResourceProperties.wsdl" xmlns:ns24="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl"/>
+     <ns4:ProviderInformation providerClass="GetRPProvider"/>
+    </ns4:Method>
+    <ns4:Method isImported="true" isProvided="true" name="QueryResourceProperties" xsi:type="ns4:MethodType">
+     <ns4:Output qName="void" isArray="false"/>
+     <ns25:MethodSecurity xsi:type="ns25:MethodSecurity" xmlns:ns25="gme://gov.nih.nci.cagrid.introduce/1/Security">
+      <ns25:SecuritySetting xsi:type="ns25:SecuritySetting">None</ns25:SecuritySetting>
+     </ns25:MethodSecurity>
+     <ns4:ImportInformation fromIntroduce="false" inputMessage="ns26:QueryResourcePropertiesRequest" namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" outputMessage="ns26:QueryResourcePropertiesResponse" packageName="org.oasis.wsrf.properties" portTypeName="QueryResourceProperties" wsdlFile="../wsrf/properties/WS-ResourceProperties.wsdl" xmlns:ns26="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl"/>
+     <ns4:ProviderInformation providerClass="QueryRPProvider"/>
+    </ns4:Method>
    </ns4:Methods>
-   <ns24:ResourcePropertiesList xsi:type="ns24:ResourcePropertiesListType" xmlns:ns24="gme://gov.nih.nci.cagrid.introduce/1/Resources">
-    <ns24:ResourceProperty qName="ns25:ServiceMetadata" description="caGrid standard service metadata" fileLocation="serviceMetadata.xml" populateFromFile="true" register="true" xsi:type="ns24:ResourcePropertyType" xmlns:ns25="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"/>
-   </ns24:ResourcePropertiesList>
+   <ns27:ResourcePropertiesList xsi:type="ns27:ResourcePropertiesListType" xmlns:ns27="gme://gov.nih.nci.cagrid.introduce/1/Resources">
+    <ns27:ResourceProperty qName="ns28:ServiceMetadata" description="caGrid standard service metadata" fileLocation="serviceMetadata.xml" populateFromFile="true" register="true" xsi:type="ns27:ResourcePropertyType" xmlns:ns28="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"/>
+   </ns27:ResourcePropertiesList>
    <ns3:ResourceFrameworkOptions xsi:type="ns3:ResourceFrameworkOptions">
     <ns3:Main xsi:type="ns3:Main"/>
     <ns3:Singleton xsi:type="ns3:Singleton"/>
@@ -215,145 +224,154 @@
    </ns3:ResourceFrameworkOptions>
   </ns3:Service>
   <ns3:Service name="CaGridEnumeration" namespace="http://gov.nih.nci.cagrid.enumeration/CaGridEnumeration" packageName="gov.nih.nci.cagrid.enumeration" xsi:type="ns3:ServiceType">
-   <ns26:Methods xsi:type="ns26:MethodsType" xmlns:ns26="gme://gov.nih.nci.cagrid.introduce/1/Methods">
-    <ns26:Method isImported="true" isProvided="true" name="PullOp" xsi:type="ns26:MethodType">
-     <ns26:Inputs>
-      <ns26:Input qName="ns27:Pull" isArray="false" name="pull" xmlns:ns27="http://schemas.xmlsoap.org/ws/2004/09/enumeration"/>
-     </ns26:Inputs>
-     <ns26:Output qName="ns28:PullResponse" isArray="false" xmlns:ns28="http://schemas.xmlsoap.org/ws/2004/09/enumeration"/>
-     <ns26:ImportInformation fromIntroduce="false" inputMessage="ns29:PullMessage" namespace="http://schemas.xmlsoap.org/ws/2004/09/enumeration" outputMessage="ns29:PullResponseMessage" packageName="org.globus.ws.enumeration" portTypeName="DataSource" wsdlFile="enumeration.wsdl" xmlns:ns29="http://schemas.xmlsoap.org/ws/2004/09/enumeration"/>
-     <ns26:ProviderInformation providerClass="org.globus.ws.enumeration.EnumProvider"/>
-    </ns26:Method>
-    <ns26:Method isImported="true" isProvided="true" name="RenewOp" xsi:type="ns26:MethodType">
-     <ns26:Inputs>
-      <ns26:Input qName="ns30:Renew" isArray="false" name="renew" xmlns:ns30="http://schemas.xmlsoap.org/ws/2004/09/enumeration"/>
-     </ns26:Inputs>
-     <ns26:Output qName="ns31:RenewResponse" isArray="false" xmlns:ns31="http://schemas.xmlsoap.org/ws/2004/09/enumeration"/>
-     <ns26:ImportInformation fromIntroduce="false" inputMessage="ns32:RenewMessage" namespace="http://schemas.xmlsoap.org/ws/2004/09/enumeration" outputMessage="ns32:RenewResponseMessage" packageName="org.globus.ws.enumeration" portTypeName="DataSource" wsdlFile="enumeration.wsdl" xmlns:ns32="http://schemas.xmlsoap.org/ws/2004/09/enumeration"/>
-     <ns26:ProviderInformation providerClass="org.globus.ws.enumeration.EnumProvider"/>
-    </ns26:Method>
-    <ns26:Method isImported="true" isProvided="true" name="GetStatusOp" xsi:type="ns26:MethodType">
-     <ns26:Inputs>
-      <ns26:Input qName="ns33:GetStatus" isArray="false" name="status" xmlns:ns33="http://schemas.xmlsoap.org/ws/2004/09/enumeration"/>
-     </ns26:Inputs>
-     <ns26:Output qName="ns34:GetStatusResponse" isArray="false" xmlns:ns34="http://schemas.xmlsoap.org/ws/2004/09/enumeration"/>
-     <ns26:ImportInformation fromIntroduce="false" inputMessage="ns35:GetStatusMessage" namespace="http://schemas.xmlsoap.org/ws/2004/09/enumeration" outputMessage="ns35:GetStatusResponseMessage" packageName="org.globus.ws.enumeration" portTypeName="DataSource" wsdlFile="enumeration.wsdl" xmlns:ns35="http://schemas.xmlsoap.org/ws/2004/09/enumeration"/>
-     <ns26:ProviderInformation providerClass="org.globus.ws.enumeration.EnumProvider"/>
-    </ns26:Method>
-    <ns26:Method isImported="true" isProvided="true" name="ReleaseOp" xsi:type="ns26:MethodType">
-     <ns26:Inputs>
-      <ns26:Input qName="ns36:Release" isArray="false" name="release" xmlns:ns36="http://schemas.xmlsoap.org/ws/2004/09/enumeration"/>
-     </ns26:Inputs>
-     <ns26:Output qName="void" isArray="false"/>
-     <ns26:ImportInformation fromIntroduce="false" inputMessage="ns37:ReleaseMessage" namespace="http://schemas.xmlsoap.org/ws/2004/09/enumeration" outputMessage="ns37:ReleaseResponseMessage" packageName="org.globus.ws.enumeration" portTypeName="DataSource" wsdlFile="enumeration.wsdl" xmlns:ns37="http://schemas.xmlsoap.org/ws/2004/09/enumeration"/>
-     <ns26:ProviderInformation providerClass="org.globus.ws.enumeration.EnumProvider"/>
-    </ns26:Method>
-    <ns26:Method isImported="true" isProvided="true" name="getServiceSecurityMetadata" xsi:type="ns26:MethodType">
-     <ns26:Output qName="ns38:ServiceSecurityMetadata" isArray="false" isClientHandle="false" xmlns:ns38="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security"/>
-     <ns39:MethodSecurity xsi:type="ns39:MethodSecurity" xmlns:ns39="gme://gov.nih.nci.cagrid.introduce/1/Security">
-      <ns39:SecuritySetting xsi:type="ns39:SecuritySetting">None</ns39:SecuritySetting>
-      <ns39:MethodAuthorization xsi:type="ns39:MethodAuthorization">
-       <ns39:NoAuthorization xsi:type="ns39:NoAuthorization"/>
-      </ns39:MethodAuthorization>
-     </ns39:MethodSecurity>
-     <ns26:ImportInformation namespace="http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity" packageName="gov.nih.nci.cagrid.introduce.security.stubs" portTypeName="ServiceSecurityPortType" wsdlFile="ServiceSecurity.wsdl"/>
-     <ns26:ProviderInformation providerClass="gov.nih.nci.cagrid.introduce.security.service.globus.ServiceSecurityProviderImpl"/>
-    </ns26:Method>
-   </ns26:Methods>
-   <ns3:ResourceFrameworkOptions xsi:type="ns3:ResourceFrameworkOptions">
-    <ns3:Custom xsi:type="ns3:Custom"/>
-   </ns3:ResourceFrameworkOptions>
-  </ns3:Service>
-  <ns3:Service name="FederatedQueryResults" namespace="http://fqp.cagrid.nci.nih.gov/FederatedResults" packageName="gov.nih.nci.cagrid.fqp.results" xsi:type="ns3:ServiceType">
-   <ns40:Methods xsi:type="ns40:MethodsType" xmlns:ns40="gme://gov.nih.nci.cagrid.introduce/1/Methods">
-    <ns40:Method isImported="true" isProvided="true" name="getServiceSecurityMetadata" xsi:type="ns40:MethodType">
-     <ns40:Output qName="ns41:ServiceSecurityMetadata" isArray="false" isClientHandle="false" xmlns:ns41="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security"/>
+   <ns29:Methods xsi:type="ns29:MethodsType" xmlns:ns29="gme://gov.nih.nci.cagrid.introduce/1/Methods">
+    <ns29:Method isImported="true" isProvided="true" name="PullOp" xsi:type="ns29:MethodType">
+     <ns29:Inputs>
+      <ns29:Input qName="ns30:Pull" isArray="false" name="pull" xmlns:ns30="http://schemas.xmlsoap.org/ws/2004/09/enumeration"/>
+     </ns29:Inputs>
+     <ns29:Output qName="ns31:PullResponse" isArray="false" xmlns:ns31="http://schemas.xmlsoap.org/ws/2004/09/enumeration"/>
+     <ns29:ImportInformation fromIntroduce="false" inputMessage="ns32:PullMessage" namespace="http://schemas.xmlsoap.org/ws/2004/09/enumeration" outputMessage="ns32:PullResponseMessage" packageName="org.globus.ws.enumeration" portTypeName="DataSource" wsdlFile="enumeration.wsdl" xmlns:ns32="http://schemas.xmlsoap.org/ws/2004/09/enumeration"/>
+     <ns29:ProviderInformation providerClass="org.globus.ws.enumeration.EnumProvider"/>
+    </ns29:Method>
+    <ns29:Method isImported="true" isProvided="true" name="RenewOp" xsi:type="ns29:MethodType">
+     <ns29:Inputs>
+      <ns29:Input qName="ns33:Renew" isArray="false" name="renew" xmlns:ns33="http://schemas.xmlsoap.org/ws/2004/09/enumeration"/>
+     </ns29:Inputs>
+     <ns29:Output qName="ns34:RenewResponse" isArray="false" xmlns:ns34="http://schemas.xmlsoap.org/ws/2004/09/enumeration"/>
+     <ns29:ImportInformation fromIntroduce="false" inputMessage="ns35:RenewMessage" namespace="http://schemas.xmlsoap.org/ws/2004/09/enumeration" outputMessage="ns35:RenewResponseMessage" packageName="org.globus.ws.enumeration" portTypeName="DataSource" wsdlFile="enumeration.wsdl" xmlns:ns35="http://schemas.xmlsoap.org/ws/2004/09/enumeration"/>
+     <ns29:ProviderInformation providerClass="org.globus.ws.enumeration.EnumProvider"/>
+    </ns29:Method>
+    <ns29:Method isImported="true" isProvided="true" name="GetStatusOp" xsi:type="ns29:MethodType">
+     <ns29:Inputs>
+      <ns29:Input qName="ns36:GetStatus" isArray="false" name="status" xmlns:ns36="http://schemas.xmlsoap.org/ws/2004/09/enumeration"/>
+     </ns29:Inputs>
+     <ns29:Output qName="ns37:GetStatusResponse" isArray="false" xmlns:ns37="http://schemas.xmlsoap.org/ws/2004/09/enumeration"/>
+     <ns29:ImportInformation fromIntroduce="false" inputMessage="ns38:GetStatusMessage" namespace="http://schemas.xmlsoap.org/ws/2004/09/enumeration" outputMessage="ns38:GetStatusResponseMessage" packageName="org.globus.ws.enumeration" portTypeName="DataSource" wsdlFile="enumeration.wsdl" xmlns:ns38="http://schemas.xmlsoap.org/ws/2004/09/enumeration"/>
+     <ns29:ProviderInformation providerClass="org.globus.ws.enumeration.EnumProvider"/>
+    </ns29:Method>
+    <ns29:Method isImported="true" isProvided="true" name="ReleaseOp" xsi:type="ns29:MethodType">
+     <ns29:Inputs>
+      <ns29:Input qName="ns39:Release" isArray="false" name="release" xmlns:ns39="http://schemas.xmlsoap.org/ws/2004/09/enumeration"/>
+     </ns29:Inputs>
+     <ns29:Output qName="void" isArray="false"/>
+     <ns29:ImportInformation fromIntroduce="false" inputMessage="ns40:ReleaseMessage" namespace="http://schemas.xmlsoap.org/ws/2004/09/enumeration" outputMessage="ns40:ReleaseResponseMessage" packageName="org.globus.ws.enumeration" portTypeName="DataSource" wsdlFile="enumeration.wsdl" xmlns:ns40="http://schemas.xmlsoap.org/ws/2004/09/enumeration"/>
+     <ns29:ProviderInformation providerClass="org.globus.ws.enumeration.EnumProvider"/>
+    </ns29:Method>
+    <ns29:Method isImported="true" isProvided="true" name="getServiceSecurityMetadata" xsi:type="ns29:MethodType">
+     <ns29:Output qName="ns41:ServiceSecurityMetadata" isArray="false" isClientHandle="false" xmlns:ns41="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security"/>
      <ns42:MethodSecurity xsi:type="ns42:MethodSecurity" xmlns:ns42="gme://gov.nih.nci.cagrid.introduce/1/Security">
       <ns42:SecuritySetting xsi:type="ns42:SecuritySetting">None</ns42:SecuritySetting>
       <ns42:MethodAuthorization xsi:type="ns42:MethodAuthorization">
        <ns42:NoAuthorization xsi:type="ns42:NoAuthorization"/>
       </ns42:MethodAuthorization>
      </ns42:MethodSecurity>
-     <ns40:ImportInformation namespace="http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity" packageName="gov.nih.nci.cagrid.introduce.security.stubs" portTypeName="ServiceSecurityPortType" wsdlFile="ServiceSecurity.wsdl"/>
-     <ns40:ProviderInformation providerClass="gov.nih.nci.cagrid.introduce.security.service.globus.ServiceSecurityProviderImpl"/>
-    </ns40:Method>
-    <ns40:Method isImported="true" isProvided="true" name="Destroy" xsi:type="ns40:MethodType">
-     <ns40:Output qName="void" isArray="false"/>
-     <ns40:ImportInformation fromIntroduce="false" inputMessage="ns43:DestroyRequest" namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl" outputMessage="ns43:DestroyResponse" packageName="org.oasis.wsrf.lifetime" portTypeName="ImmediateResourceTermination" wsdlFile="../wsrf/lifetime/WS-ResourceLifetime.wsdl" xmlns:ns43="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl"/>
-     <ns40:ProviderInformation providerClass="DestroyProvider"/>
-    </ns40:Method>
-    <ns40:Method isImported="true" isProvided="true" name="SetTerminationTime" xsi:type="ns40:MethodType">
-     <ns40:Output qName="void" isArray="false"/>
-     <ns40:ImportInformation fromIntroduce="false" inputMessage="ns44:SetTerminationTimeRequest" namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl" outputMessage="ns44:SetTerminationTimeResponse" packageName="org.oasis.wsrf.lifetime" portTypeName="ScheduledResourceTermination" wsdlFile="../wsrf/lifetime/WS-ResourceLifetime.wsdl" xmlns:ns44="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl"/>
-     <ns40:ProviderInformation providerClass="SetTerminationTimeProvider"/>
-    </ns40:Method>
-    <ns40:Method isImported="true" isProvided="true" name="Subscribe" xsi:type="ns40:MethodType">
-     <ns40:Output qName="void" isArray="false"/>
-     <ns40:ImportInformation fromIntroduce="false" inputMessage="ns45:SubscribeRequest" namespace="http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.wsdl" outputMessage="ns45:SubscribeResponse" packageName="org.oasis.wsn" portTypeName="NotificationProducer" wsdlFile="../wsrf/notification/WS-BaseN.wsdl" xmlns:ns45="http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.wsdl"/>
-     <ns40:ProviderInformation providerClass="SubscribeProvider"/>
-    </ns40:Method>
-    <ns40:Method isImported="true" isProvided="true" name="GetMultipleResourceProperties" xsi:type="ns40:MethodType">
-     <ns40:Output qName="void" isArray="false"/>
-     <ns40:ImportInformation fromIntroduce="false" inputMessage="ns46:GetMultipleResourcePropertiesRequest" namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" outputMessage="ns46:GetMultipleResourcePropertiesResponse" packageName="org.oasis.wsrf.properties" portTypeName="GetMultipleResourceProperties" wsdlFile="../wsrf/properties/WS-ResourceProperties.wsdl" xmlns:ns46="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl"/>
-     <ns40:ProviderInformation providerClass="GetMRPProvider"/>
-    </ns40:Method>
-    <ns40:Method isImported="true" isProvided="true" name="GetResourceProperty" xsi:type="ns40:MethodType">
-     <ns40:Output qName="void" isArray="false"/>
-     <ns40:ImportInformation fromIntroduce="false" inputMessage="ns47:GetResourcePropertyRequest" namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" outputMessage="ns47:GetResourcePropertyResponse" packageName="org.oasis.wsrf.properties" portTypeName="GetResourceProperty" wsdlFile="../wsrf/properties/WS-ResourceProperties.wsdl" xmlns:ns47="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl"/>
-     <ns40:ProviderInformation providerClass="GetRPProvider"/>
-    </ns40:Method>
-    <ns40:Method isImported="true" isProvided="true" name="QueryResourceProperties" xsi:type="ns40:MethodType">
-     <ns40:Output qName="void" isArray="false"/>
-     <ns40:ImportInformation fromIntroduce="false" inputMessage="ns48:QueryResourcePropertiesRequest" namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" outputMessage="ns48:QueryResourcePropertiesResponse" packageName="org.oasis.wsrf.properties" portTypeName="QueryResourceProperties" wsdlFile="../wsrf/properties/WS-ResourceProperties.wsdl" xmlns:ns48="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl"/>
-     <ns40:ProviderInformation providerClass="QueryRPProvider"/>
-    </ns40:Method>
-    <ns40:Method description="Returns the results of the query managed by this resource" isImported="false" isProvided="false" name="getResults" xsi:type="ns40:MethodType">
-     <ns40:Inputs/>
-     <ns40:Output qName="ns49:DCQLQueryResultsCollection" description="" isArray="false" xmlns:ns49="http://caGrid.caBIG/1.0/gov.nih.nci.cagrid.dcqlresult"/>
-     <ns40:Exceptions>
-      <ns40:Exception description="Indicates the query has not yet completed." name="ProcessingNotCompleteFault" qname="ns50:ProcessingNotCompleteFault" xmlns:ns50="http://fqp.cagrid.nci.nih.gov/FederatedResults/types"/>
-      <ns40:Exception description="Indicates an error occured processing the query." name="FederatedQueryProcessingFault" qname="ns51:FederatedQueryProcessingFault" xmlns:ns51="http://fqp.cagrid.nci.nih.gov/FederatedQueryProcessor/types"/>
-      <ns40:Exception description="Indicates an unrecoverable internal error." name="InternalErrorFault" qname="ns52:InternalErrorFault" xmlns:ns52="http://fqp.cagrid.nci.nih.gov/FederatedResults/types"/>
-     </ns40:Exceptions>
-    </ns40:Method>
-    <ns40:Method description="Indicates whether or not the query processing is complete; until this is true, getResults cannot be excecuted." isImported="false" isProvided="false" name="isProcessingComplete" xsi:type="ns40:MethodType">
-     <ns40:Inputs/>
-     <ns40:Output qName="xsd:boolean" description="" isArray="false" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
-     <ns40:Exceptions/>
-    </ns40:Method>
-    <ns40:Method description="Gets the results of the DCQL query aggregated as a single CQL query result." isImported="false" isProvided="false" name="getAggregateResults" xsi:type="ns40:MethodType">
-     <ns40:Inputs/>
-     <ns40:Output qName="ns53:CQLQueryResultCollection" description="" isArray="false" xmlns:ns53="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLResultSet"/>
-     <ns40:Exceptions>
-      <ns40:Exception description="Indicates an error occured processing the query." name="FederatedQueryProcessingFault" qname="ns54:FederatedQueryProcessingFault" xmlns:ns54="http://fqp.cagrid.nci.nih.gov/FederatedQueryProcessor/types"/>
-      <ns40:Exception description="Indicates the query has not yet completed." name="ProcessingNotCompleteFault" qname="ns55:ProcessingNotCompleteFault" xmlns:ns55="http://fqp.cagrid.nci.nih.gov/FederatedResults/types"/>
-      <ns40:Exception description="Indicates an unrecoverable internal error." name="InternalErrorFault" qname="ns56:InternalErrorFault" xmlns:ns56="http://fqp.cagrid.nci.nih.gov/FederatedResults/types"/>
-     </ns40:Exceptions>
-    </ns40:Method>
-    <ns40:Method description="Creates a WS-Enumeration resource for retrieving the query results and returns a reference to them." isImported="false" isProvided="false" name="enumerate" xsi:type="ns40:MethodType">
-     <ns40:Inputs/>
-     <ns40:Output qName="ns57:EnumerationResponseContainer" description="" isArray="false" xmlns:ns57="http://gov.nih.nci.cagrid.enumeration/EnumerationResponseContainer"/>
-     <ns40:Exceptions>
-      <ns40:Exception description="Indicates an error occured processing the query." name="FederatedQueryProcessingFault" qname="ns58:FederatedQueryProcessingFault" xmlns:ns58="http://fqp.cagrid.nci.nih.gov/FederatedQueryProcessor/types"/>
-      <ns40:Exception description="Indicates the query has not yet completed." name="ProcessingNotCompleteFault" qname="ns59:ProcessingNotCompleteFault" xmlns:ns59="http://fqp.cagrid.nci.nih.gov/FederatedResults/types"/>
-      <ns40:Exception description="Indicates an unrecoverable internal error." name="InternalErrorFault" qname="ns60:InternalErrorFault" xmlns:ns60="http://fqp.cagrid.nci.nih.gov/FederatedResults/types"/>
-     </ns40:Exceptions>
-    </ns40:Method>
-    <ns40:Method description="Creates a caGrid Transfer resource for retrieving the results and returns a reference to them." isImported="false" isProvided="false" name="transfer" xsi:type="ns40:MethodType">
-     <ns40:Inputs/>
-     <ns40:Output qName="ns61:TransferServiceContextReference" description="" isArray="false" xmlns:ns61="http://transfer.cagrid.org/TransferService/Context/types"/>
-     <ns40:Exceptions>
-      <ns40:Exception description="Indicates an error occured processing the query." name="FederatedQueryProcessingFault" qname="ns62:FederatedQueryProcessingFault" xmlns:ns62="http://fqp.cagrid.nci.nih.gov/FederatedQueryProcessor/types"/>
-      <ns40:Exception description="Indicates the query has not yet completed." name="ProcessingNotCompleteFault" qname="ns63:ProcessingNotCompleteFault" xmlns:ns63="http://fqp.cagrid.nci.nih.gov/FederatedResults/types"/>
-      <ns40:Exception description="Indicates an unrecoverable internal error." name="InternalErrorFault" qname="ns64:InternalErrorFault" xmlns:ns64="http://fqp.cagrid.nci.nih.gov/FederatedResults/types"/>
-     </ns40:Exceptions>
-    </ns40:Method>
-   </ns40:Methods>
-   <ns65:ResourcePropertiesList xsi:type="ns65:ResourcePropertiesListType" xmlns:ns65="gme://gov.nih.nci.cagrid.introduce/1/Resources">
-    <ns65:ResourceProperty qName="ns66:CurrentTime" description="The current time as believed by this service; should be consulted before setting a termnination time (standard ws-lifetime property)." populateFromFile="false" register="false" xsi:type="ns65:ResourcePropertyType" xmlns:ns66="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.xsd"/>
-    <ns65:ResourceProperty qName="ns67:TerminationTime" description="The scheduled termination time of this resource (standard ws-lifetime property)" populateFromFile="false" register="false" xsi:type="ns65:ResourcePropertyType" xmlns:ns67="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.xsd"/>
-    <ns65:ResourceProperty qName="ns68:FederatedQueryExecutionStatus" description="The current status of Federated Query execution.  May be subscribed to via ws-notification for updates." fileLocation="FederatedQueryResults_federatedQueryExecutionStatus.xml" populateFromFile="false" register="false" xsi:type="ns65:ResourcePropertyType" xmlns:ns68="http://fqp.cagrid.nci.nih.gov/FederatedQueryResultsMetadata"/>
-   </ns65:ResourcePropertiesList>
+     <ns29:ImportInformation namespace="http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity" packageName="gov.nih.nci.cagrid.introduce.security.stubs" portTypeName="ServiceSecurityPortType" wsdlFile="ServiceSecurity.wsdl"/>
+     <ns29:ProviderInformation providerClass="gov.nih.nci.cagrid.introduce.security.service.globus.ServiceSecurityProviderImpl"/>
+    </ns29:Method>
+   </ns29:Methods>
+   <ns3:ResourceFrameworkOptions xsi:type="ns3:ResourceFrameworkOptions">
+    <ns3:Custom xsi:type="ns3:Custom"/>
+   </ns3:ResourceFrameworkOptions>
+  </ns3:Service>
+  <ns3:Service name="FederatedQueryResults" namespace="http://fqp.cagrid.nci.nih.gov/FederatedResults" packageName="gov.nih.nci.cagrid.fqp.results" xsi:type="ns3:ServiceType">
+   <ns43:Methods xsi:type="ns43:MethodsType" xmlns:ns43="gme://gov.nih.nci.cagrid.introduce/1/Methods">
+    <ns43:Method isImported="true" isProvided="true" name="getServiceSecurityMetadata" xsi:type="ns43:MethodType">
+     <ns43:Output qName="ns44:ServiceSecurityMetadata" isArray="false" isClientHandle="false" xmlns:ns44="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security"/>
+     <ns45:MethodSecurity xsi:type="ns45:MethodSecurity" xmlns:ns45="gme://gov.nih.nci.cagrid.introduce/1/Security">
+      <ns45:SecuritySetting xsi:type="ns45:SecuritySetting">None</ns45:SecuritySetting>
+      <ns45:MethodAuthorization xsi:type="ns45:MethodAuthorization">
+       <ns45:NoAuthorization xsi:type="ns45:NoAuthorization"/>
+      </ns45:MethodAuthorization>
+     </ns45:MethodSecurity>
+     <ns43:ImportInformation namespace="http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity" packageName="gov.nih.nci.cagrid.introduce.security.stubs" portTypeName="ServiceSecurityPortType" wsdlFile="ServiceSecurity.wsdl"/>
+     <ns43:ProviderInformation providerClass="gov.nih.nci.cagrid.introduce.security.service.globus.ServiceSecurityProviderImpl"/>
+    </ns43:Method>
+    <ns43:Method isImported="true" isProvided="true" name="Destroy" xsi:type="ns43:MethodType">
+     <ns43:Output qName="void" isArray="false"/>
+     <ns43:ImportInformation fromIntroduce="false" inputMessage="ns46:DestroyRequest" namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl" outputMessage="ns46:DestroyResponse" packageName="org.oasis.wsrf.lifetime" portTypeName="ImmediateResourceTermination" wsdlFile="../wsrf/lifetime/WS-ResourceLifetime.wsdl" xmlns:ns46="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl"/>
+     <ns43:ProviderInformation providerClass="DestroyProvider"/>
+    </ns43:Method>
+    <ns43:Method isImported="true" isProvided="true" name="SetTerminationTime" xsi:type="ns43:MethodType">
+     <ns43:Output qName="void" isArray="false"/>
+     <ns43:ImportInformation fromIntroduce="false" inputMessage="ns47:SetTerminationTimeRequest" namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl" outputMessage="ns47:SetTerminationTimeResponse" packageName="org.oasis.wsrf.lifetime" portTypeName="ScheduledResourceTermination" wsdlFile="../wsrf/lifetime/WS-ResourceLifetime.wsdl" xmlns:ns47="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl"/>
+     <ns43:ProviderInformation providerClass="SetTerminationTimeProvider"/>
+    </ns43:Method>
+    <ns43:Method isImported="true" isProvided="true" name="Subscribe" xsi:type="ns43:MethodType">
+     <ns43:Output qName="void" isArray="false"/>
+     <ns43:ImportInformation fromIntroduce="false" inputMessage="ns48:SubscribeRequest" namespace="http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.wsdl" outputMessage="ns48:SubscribeResponse" packageName="org.oasis.wsn" portTypeName="NotificationProducer" wsdlFile="../wsrf/notification/WS-BaseN.wsdl" xmlns:ns48="http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.wsdl"/>
+     <ns43:ProviderInformation providerClass="SubscribeProvider"/>
+    </ns43:Method>
+    <ns43:Method description="Returns the results of the query managed by this resource" isImported="false" isProvided="false" name="getResults" xsi:type="ns43:MethodType">
+     <ns43:Inputs/>
+     <ns43:Output qName="ns49:DCQLQueryResultsCollection" description="" isArray="false" xmlns:ns49="http://caGrid.caBIG/1.0/gov.nih.nci.cagrid.dcqlresult"/>
+     <ns43:Exceptions>
+      <ns43:Exception description="Indicates the query has not yet completed." name="ProcessingNotCompleteFault" qname="ns50:ProcessingNotCompleteFault" xmlns:ns50="http://fqp.cagrid.nci.nih.gov/FederatedResults/types"/>
+      <ns43:Exception description="Indicates an error occured processing the query." name="FederatedQueryProcessingFault" qname="ns51:FederatedQueryProcessingFault" xmlns:ns51="http://fqp.cagrid.nci.nih.gov/FederatedQueryProcessor/types"/>
+      <ns43:Exception description="Indicates an unrecoverable internal error." name="InternalErrorFault" qname="ns52:InternalErrorFault" xmlns:ns52="http://fqp.cagrid.nci.nih.gov/FederatedResults/types"/>
+     </ns43:Exceptions>
+    </ns43:Method>
+    <ns43:Method description="Indicates whether or not the query processing is complete; until this is true, getResults cannot be excecuted." isImported="false" isProvided="false" name="isProcessingComplete" xsi:type="ns43:MethodType">
+     <ns43:Inputs/>
+     <ns43:Output qName="xsd:boolean" description="" isArray="false" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+     <ns43:Exceptions/>
+    </ns43:Method>
+    <ns43:Method description="Gets the results of the DCQL query aggregated as a single CQL query result." isImported="false" isProvided="false" name="getAggregateResults" xsi:type="ns43:MethodType">
+     <ns43:Inputs/>
+     <ns43:Output qName="ns53:CQLQueryResultCollection" description="" isArray="false" xmlns:ns53="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLResultSet"/>
+     <ns43:Exceptions>
+      <ns43:Exception description="Indicates an error occured processing the query." name="FederatedQueryProcessingFault" qname="ns54:FederatedQueryProcessingFault" xmlns:ns54="http://fqp.cagrid.nci.nih.gov/FederatedQueryProcessor/types"/>
+      <ns43:Exception description="Indicates the query has not yet completed." name="ProcessingNotCompleteFault" qname="ns55:ProcessingNotCompleteFault" xmlns:ns55="http://fqp.cagrid.nci.nih.gov/FederatedResults/types"/>
+      <ns43:Exception description="Indicates an unrecoverable internal error." name="InternalErrorFault" qname="ns56:InternalErrorFault" xmlns:ns56="http://fqp.cagrid.nci.nih.gov/FederatedResults/types"/>
+     </ns43:Exceptions>
+    </ns43:Method>
+    <ns43:Method description="Creates a WS-Enumeration resource for retrieving the query results and returns a reference to them." isImported="false" isProvided="false" name="enumerate" xsi:type="ns43:MethodType">
+     <ns43:Inputs/>
+     <ns43:Output qName="ns57:EnumerationResponseContainer" description="" isArray="false" xmlns:ns57="http://gov.nih.nci.cagrid.enumeration/EnumerationResponseContainer"/>
+     <ns43:Exceptions>
+      <ns43:Exception description="Indicates an error occured processing the query." name="FederatedQueryProcessingFault" qname="ns58:FederatedQueryProcessingFault" xmlns:ns58="http://fqp.cagrid.nci.nih.gov/FederatedQueryProcessor/types"/>
+      <ns43:Exception description="Indicates the query has not yet completed." name="ProcessingNotCompleteFault" qname="ns59:ProcessingNotCompleteFault" xmlns:ns59="http://fqp.cagrid.nci.nih.gov/FederatedResults/types"/>
+      <ns43:Exception description="Indicates an unrecoverable internal error." name="InternalErrorFault" qname="ns60:InternalErrorFault" xmlns:ns60="http://fqp.cagrid.nci.nih.gov/FederatedResults/types"/>
+     </ns43:Exceptions>
+    </ns43:Method>
+    <ns43:Method description="Creates a caGrid Transfer resource for retrieving the results and returns a reference to them." isImported="false" isProvided="false" name="transfer" xsi:type="ns43:MethodType">
+     <ns43:Inputs/>
+     <ns43:Output qName="ns61:TransferServiceContextReference" description="" isArray="false" xmlns:ns61="http://transfer.cagrid.org/TransferService/Context/types"/>
+     <ns43:Exceptions>
+      <ns43:Exception description="Indicates an error occured processing the query." name="FederatedQueryProcessingFault" qname="ns62:FederatedQueryProcessingFault" xmlns:ns62="http://fqp.cagrid.nci.nih.gov/FederatedQueryProcessor/types"/>
+      <ns43:Exception description="Indicates the query has not yet completed." name="ProcessingNotCompleteFault" qname="ns63:ProcessingNotCompleteFault" xmlns:ns63="http://fqp.cagrid.nci.nih.gov/FederatedResults/types"/>
+      <ns43:Exception description="Indicates an unrecoverable internal error." name="InternalErrorFault" qname="ns64:InternalErrorFault" xmlns:ns64="http://fqp.cagrid.nci.nih.gov/FederatedResults/types"/>
+     </ns43:Exceptions>
+    </ns43:Method>
+    <ns43:Method isImported="true" isProvided="true" name="GetMultipleResourceProperties" xsi:type="ns43:MethodType">
+     <ns43:Output qName="void" isArray="false"/>
+     <ns65:MethodSecurity xsi:type="ns65:MethodSecurity" xmlns:ns65="gme://gov.nih.nci.cagrid.introduce/1/Security">
+      <ns65:SecuritySetting xsi:type="ns65:SecuritySetting">None</ns65:SecuritySetting>
+     </ns65:MethodSecurity>
+     <ns43:ImportInformation fromIntroduce="false" inputMessage="ns66:GetMultipleResourcePropertiesRequest" namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" outputMessage="ns66:GetMultipleResourcePropertiesResponse" packageName="org.oasis.wsrf.properties" portTypeName="GetMultipleResourceProperties" wsdlFile="../wsrf/properties/WS-ResourceProperties.wsdl" xmlns:ns66="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl"/>
+     <ns43:ProviderInformation providerClass="GetMRPProvider"/>
+    </ns43:Method>
+    <ns43:Method isImported="true" isProvided="true" name="GetResourceProperty" xsi:type="ns43:MethodType">
+     <ns43:Output qName="void" isArray="false"/>
+     <ns67:MethodSecurity xsi:type="ns67:MethodSecurity" xmlns:ns67="gme://gov.nih.nci.cagrid.introduce/1/Security">
+      <ns67:SecuritySetting xsi:type="ns67:SecuritySetting">None</ns67:SecuritySetting>
+     </ns67:MethodSecurity>
+     <ns43:ImportInformation fromIntroduce="false" inputMessage="ns68:GetResourcePropertyRequest" namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" outputMessage="ns68:GetResourcePropertyResponse" packageName="org.oasis.wsrf.properties" portTypeName="GetResourceProperty" wsdlFile="../wsrf/properties/WS-ResourceProperties.wsdl" xmlns:ns68="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl"/>
+     <ns43:ProviderInformation providerClass="GetRPProvider"/>
+    </ns43:Method>
+    <ns43:Method isImported="true" isProvided="true" name="QueryResourceProperties" xsi:type="ns43:MethodType">
+     <ns43:Output qName="void" isArray="false"/>
+     <ns69:MethodSecurity xsi:type="ns69:MethodSecurity" xmlns:ns69="gme://gov.nih.nci.cagrid.introduce/1/Security">
+      <ns69:SecuritySetting xsi:type="ns69:SecuritySetting">None</ns69:SecuritySetting>
+     </ns69:MethodSecurity>
+     <ns43:ImportInformation fromIntroduce="false" inputMessage="ns70:QueryResourcePropertiesRequest" namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" outputMessage="ns70:QueryResourcePropertiesResponse" packageName="org.oasis.wsrf.properties" portTypeName="QueryResourceProperties" wsdlFile="../wsrf/properties/WS-ResourceProperties.wsdl" xmlns:ns70="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl"/>
+     <ns43:ProviderInformation providerClass="QueryRPProvider"/>
+    </ns43:Method>
+   </ns43:Methods>
+   <ns71:ResourcePropertiesList xsi:type="ns71:ResourcePropertiesListType" xmlns:ns71="gme://gov.nih.nci.cagrid.introduce/1/Resources">
+    <ns71:ResourceProperty qName="ns72:CurrentTime" description="The current time as believed by this service; should be consulted before setting a termnination time (standard ws-lifetime property)." populateFromFile="false" register="false" xsi:type="ns71:ResourcePropertyType" xmlns:ns72="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.xsd"/>
+    <ns71:ResourceProperty qName="ns73:TerminationTime" description="The scheduled termination time of this resource (standard ws-lifetime property)" populateFromFile="false" register="false" xsi:type="ns71:ResourcePropertyType" xmlns:ns73="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.xsd"/>
+    <ns71:ResourceProperty qName="ns74:FederatedQueryExecutionStatus" description="The current status of Federated Query execution.  May be subscribed to via ws-notification for updates." fileLocation="FederatedQueryResults_federatedQueryExecutionStatus.xml" populateFromFile="false" register="false" xsi:type="ns71:ResourcePropertyType" xmlns:ns74="http://fqp.cagrid.nci.nih.gov/FederatedQueryResultsMetadata"/>
+   </ns71:ResourcePropertiesList>
    <ns3:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">The resource-qualified results service</ns3:description>
    <ns3:ResourceFrameworkOptions xsi:type="ns3:ResourceFrameworkOptions">
     <ns3:Lifetime xsi:type="ns3:Lifetime"/>
@@ -365,16 +383,17 @@
    </ns3:ResourceFrameworkOptions>
   </ns3:Service>
  </ns3:Services>
- <ns69:Extensions xsi:type="ns69:ExtensionsType" xmlns:ns69="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <ns69:Extension name="cagrid_metadata" version="1.2" xsi:type="ns69:ExtensionType"/>
-  <ns69:Extension name="caGrid_Transfer" version="1.2" xsi:type="ns69:ExtensionType"/>
-  <ns69:Extension name="cagrid_wsEnum" version="1.2" xsi:type="ns69:ExtensionType"/>
- </ns69:Extensions>
- <ns70:ServiceProperties xmlns:ns70="gme://gov.nih.nci.cagrid.introduce/1/Property">
-  <ns70:Property description="Length of time in minutes a Federated Query Results Resource will live" isFromETC="false" key="initialResultLeaseInMinutes" value="30"/>
-  <ns70:Property description="Number of worker threads for federated query processing execution" isFromETC="false" key="threadPoolSize" value="10"/>
-  <ns70:Property description="Maximum number of retries a client may request the FQP service perform when querying failing target data services" isFromETC="false" key="maxRetries" value="4"/>
-  <ns70:Property description="Maximum number of seconds a client can request for a timeout between retries when FQP queries a target data service and fails." isFromETC="false" key="maxRetryTimeout" value="300"/>
-  <ns70:Property description="Maximum number of data services which can be targeted by a single DCQL query" isFromETC="false" key="maxTargetServicesPerQuery" value="12"/>
- </ns70:ServiceProperties>
+ <ns75:Extensions xsi:type="ns75:ExtensionsType" xmlns:ns75="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ns75:Extension name="cagrid_metadata" version="1.3" xsi:type="ns75:ExtensionType"/>
+  <ns75:Extension name="caGrid_Transfer" version="1.3" xsi:type="ns75:ExtensionType"/>
+  <ns75:Extension name="cagrid_wsEnum" version="1.3-dev" xsi:type="ns75:ExtensionType"/>
+ </ns75:Extensions>
+ <ns76:ServiceProperties xmlns:ns76="gme://gov.nih.nci.cagrid.introduce/1/Property">
+  <ns76:Property description="Length of time in minutes a Federated Query Results Resource will live" isFromETC="false" key="initialResultLeaseInMinutes" value="30"/>
+  <ns76:Property description="Number of worker threads for federated query processing execution" isFromETC="false" key="threadPoolSize" value="10"/>
+  <ns76:Property description="Maximum number of retries a client may request the FQP service perform when querying failing target data services" isFromETC="false" key="maxRetries" value="4"/>
+  <ns76:Property description="Maximum number of seconds a client can request for a timeout between retries when FQP queries a target data service and fails." isFromETC="false" key="maxRetryTimeout" value="300"/>
+  <ns76:Property description="Maximum number of data services which can be targeted by a single DCQL query" isFromETC="false" key="maxTargetServicesPerQuery" value="12"/>
+  <ns76:Property description="" isFromETC="false" key="caGridWsEnumeration_iterImplType" value="CAGRID_CONCURRENT_COMPLETE"/>
+ </ns76:ServiceProperties>
 </ns1:ServiceDescription>

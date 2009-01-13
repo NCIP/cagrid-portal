@@ -12,12 +12,6 @@ import java.rmi.RemoteException;
  */
 public interface FederatedQueryProcessorI {
 
-  public org.oasis.wsrf.properties.GetMultipleResourcePropertiesResponse getMultipleResourceProperties(org.oasis.wsrf.properties.GetMultipleResourceProperties_Element params) throws RemoteException ;
-
-  public org.oasis.wsrf.properties.GetResourcePropertyResponse getResourceProperty(javax.xml.namespace.QName params) throws RemoteException ;
-
-  public org.oasis.wsrf.properties.QueryResourcePropertiesResponse queryResourceProperties(org.oasis.wsrf.properties.QueryResourceProperties_Element params) throws RemoteException ;
-
   /**
    * Executes the specified DCQL query, blocking until completion.
    *
@@ -55,6 +49,12 @@ public interface FederatedQueryProcessorI {
    *	
    */
   public gov.nih.nci.cagrid.fqp.results.client.FederatedQueryResultsClient query(gov.nih.nci.cagrid.dcql.DCQLQuery query,org.cagrid.gaards.cds.delegated.stubs.types.DelegatedCredentialReference delegatedCredentialReference,org.cagrid.fqp.execution.QueryExecutionParameters queryExecutionParameters) throws RemoteException, org.apache.axis.types.URI.MalformedURIException, gov.nih.nci.cagrid.fqp.stubs.types.FederatedQueryProcessingFault, gov.nih.nci.cagrid.fqp.results.stubs.types.InternalErrorFault ;
+
+  public org.oasis.wsrf.properties.GetMultipleResourcePropertiesResponse getMultipleResourceProperties(org.oasis.wsrf.properties.GetMultipleResourceProperties_Element params) throws RemoteException ;
+
+  public org.oasis.wsrf.properties.GetResourcePropertyResponse getResourceProperty(javax.xml.namespace.QName params) throws RemoteException ;
+
+  public org.oasis.wsrf.properties.QueryResourcePropertiesResponse queryResourceProperties(org.oasis.wsrf.properties.QueryResourceProperties_Element params) throws RemoteException ;
 
 }
 

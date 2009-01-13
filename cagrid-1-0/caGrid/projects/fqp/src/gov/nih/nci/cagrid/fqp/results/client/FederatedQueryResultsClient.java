@@ -30,7 +30,7 @@ import gov.nih.nci.cagrid.introduce.security.client.ServiceSecurityClient;
  * On construction the class instance will contact the remote service and retrieve it's security
  * metadata description which it will use to configure the Stub specifically for each method call.
  * 
- * @created by Introduce Toolkit version 1.2
+ * @created by Introduce Toolkit version 1.3
  */
 public class FederatedQueryResultsClient extends FederatedQueryResultsClientBase implements FederatedQueryResultsI {	
 
@@ -97,27 +97,6 @@ public class FederatedQueryResultsClient extends FederatedQueryResultsClientBase
     }
   }
 
-  public org.oasis.wsrf.properties.GetMultipleResourcePropertiesResponse getMultipleResourceProperties(org.oasis.wsrf.properties.GetMultipleResourceProperties_Element params) throws RemoteException {
-    synchronized(portTypeMutex){
-      configureStubSecurity((Stub)portType,"getMultipleResourceProperties");
-    return portType.getMultipleResourceProperties(params);
-    }
-  }
-
-  public org.oasis.wsrf.properties.GetResourcePropertyResponse getResourceProperty(javax.xml.namespace.QName params) throws RemoteException {
-    synchronized(portTypeMutex){
-      configureStubSecurity((Stub)portType,"getResourceProperty");
-    return portType.getResourceProperty(params);
-    }
-  }
-
-  public org.oasis.wsrf.properties.QueryResourcePropertiesResponse queryResourceProperties(org.oasis.wsrf.properties.QueryResourceProperties_Element params) throws RemoteException {
-    synchronized(portTypeMutex){
-      configureStubSecurity((Stub)portType,"queryResourceProperties");
-    return portType.queryResourceProperties(params);
-    }
-  }
-
   public gov.nih.nci.cagrid.dcqlresult.DCQLQueryResultsCollection getResults() throws RemoteException, gov.nih.nci.cagrid.fqp.results.stubs.types.ProcessingNotCompleteFault, gov.nih.nci.cagrid.fqp.stubs.types.FederatedQueryProcessingFault, gov.nih.nci.cagrid.fqp.results.stubs.types.InternalErrorFault {
     synchronized(portTypeMutex){
       configureStubSecurity((Stub)portType,"getResults");
@@ -160,6 +139,27 @@ public class FederatedQueryResultsClient extends FederatedQueryResultsClientBase
     gov.nih.nci.cagrid.fqp.results.stubs.TransferRequest params = new gov.nih.nci.cagrid.fqp.results.stubs.TransferRequest();
     gov.nih.nci.cagrid.fqp.results.stubs.TransferResponse boxedResult = portType.transfer(params);
     return boxedResult.getTransferServiceContextReference();
+    }
+  }
+
+  public org.oasis.wsrf.properties.GetMultipleResourcePropertiesResponse getMultipleResourceProperties(org.oasis.wsrf.properties.GetMultipleResourceProperties_Element params) throws RemoteException {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"getMultipleResourceProperties");
+    return portType.getMultipleResourceProperties(params);
+    }
+  }
+
+  public org.oasis.wsrf.properties.GetResourcePropertyResponse getResourceProperty(javax.xml.namespace.QName params) throws RemoteException {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"getResourceProperty");
+    return portType.getResourceProperty(params);
+    }
+  }
+
+  public org.oasis.wsrf.properties.QueryResourcePropertiesResponse queryResourceProperties(org.oasis.wsrf.properties.QueryResourceProperties_Element params) throws RemoteException {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"queryResourceProperties");
+    return portType.queryResourceProperties(params);
     }
   }
 

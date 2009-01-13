@@ -124,7 +124,7 @@ public class FederatedQueryResultsImpl extends FederatedQueryResultsImplBase {
         // get the resource and its results
         FederatedQueryResultsResource resource = getResource();
         DCQLQueryResultsCollection dcqlResults = resource.getResults();
-        
+
         // serialize the results
         StringWriter writer = new StringWriter();
         try {
@@ -136,16 +136,17 @@ public class FederatedQueryResultsImpl extends FederatedQueryResultsImplBase {
             helper.addDescription(ex.getMessage());
             throw (InternalErrorFault) helper.getFault();
         }
-        
+
         // convert the results to a byte stream for transfer
-        // TODO: implement InputStream subclass to queue up bytes as they're available from the
+        // TODO: implement InputStream subclass to queue up bytes as they're
+        // available from the
         // serialization process without storing large XML document in memory
         ByteArrayInputStream byteInput = new ByteArrayInputStream(writer.getBuffer().toString().getBytes());
-        
+
         // create a data descriptor for the results
         DataDescriptor descriptor = new DataDescriptor();
         descriptor.setName(DCQLConstants.DCQL_RESULTS_QNAME.toString());
-        // This causes no deserializer found exception on the client?!?! 
+        // This causes no deserializer found exception on the client?!?!
         // descriptor.setMetadata(getResource().getFederatedQueryExecutionStatus());
         /* and THIS causes no deserializer found for anyType
         try {
@@ -158,11 +159,11 @@ public class FederatedQueryResultsImpl extends FederatedQueryResultsImplBase {
             helper.addDescription(ex.getMessage());
             throw (InternalErrorFault) helper.getFault();
         }
-        */
-        
+         */
+
         TransferServiceContextReference transferReference = null;
         try {
-            transferReference = TransferServiceHelper.createTransferContext(byteInput, descriptor);            
+            transferReference = TransferServiceHelper.createTransferContext(byteInput, descriptor);
         } catch (RemoteException ex) {
             FaultHelper helper = new FaultHelper(new InternalErrorFault());
             helper.addDescription("Unable to create transfer contex");
@@ -170,18 +171,18 @@ public class FederatedQueryResultsImpl extends FederatedQueryResultsImplBase {
             helper.addFaultCause(ex);
             throw (InternalErrorFault) helper.getFault();
         }
-        
+
         return transferReference;
     }
 
-    
+
     private static FederatedQueryResultsResource getResource() throws ResourceException, ResourceContextException {
         FederatedQueryResultsResource resource = 
             (FederatedQueryResultsResource) ResourceContext.getResourceContext().getResource();
         return resource;
     }
-    
-    
+
+
     private MessageElement getMetadataAsElement() throws Exception {
         FederatedQueryExecutionStatus status = getResource().getFederatedQueryExecutionStatus();
         StringWriter writer = new StringWriter();

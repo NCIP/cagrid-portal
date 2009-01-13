@@ -10,6 +10,8 @@
     <parameter name="providers" value=" gov.nih.nci.cagrid.introduce.security.service.globus.ServiceSecurityProviderImpl DestroyProvider SetTerminationTimeProvider SubscribeProvider GetMRPProvider GetRPProvider QueryRPProvider" />
     <parameter name="loadOnStartup" value="true" />
     <parameter name="securityMetadata" value="ETC-PATH/FederatedQueryResults-security-metadata.xml" />
+    <parameter name="federatedqueryresults-etcDirectoryPath" value="ETC-PATH" />
+    <parameter name="federatedqueryresults-serviceName" value="FederatedQueryResults" />
   </service>
   <service name="SERVICE-INSTANCE-PREFIX/CaGridEnumeration" provider="Handler" use="literal" style="document">
     <parameter name="className" value="gov.nih.nci.cagrid.enumeration.service.globus.CaGridEnumerationProviderImpl" />
@@ -21,6 +23,8 @@
     <parameter name="providers" value=" org.globus.ws.enumeration.EnumProvider gov.nih.nci.cagrid.introduce.security.service.globus.ServiceSecurityProviderImpl" />
     <parameter name="loadOnStartup" value="true" />
     <parameter name="securityMetadata" value="ETC-PATH/CaGridEnumeration-security-metadata.xml" />
+    <parameter name="cagridenumeration-etcDirectoryPath" value="ETC-PATH" />
+    <parameter name="cagridenumeration-serviceName" value="CaGridEnumeration" />
   </service>
   <service name="SERVICE-INSTANCE-PREFIX/FederatedQueryProcessor" provider="Handler" use="literal" style="document">
     <parameter name="className" value="gov.nih.nci.cagrid.fqp.service.globus.FederatedQueryProcessorProviderImpl" />
@@ -32,6 +36,8 @@
     <parameter name="providers" value=" GetMRPProvider GetRPProvider QueryRPProvider gov.nih.nci.cagrid.introduce.security.service.globus.ServiceSecurityProviderImpl" />
     <parameter name="loadOnStartup" value="true" />
     <parameter name="securityMetadata" value="ETC-PATH/FederatedQueryProcessor-security-metadata.xml" />
+    <parameter name="federatedqueryprocessor-etcDirectoryPath" value="ETC-PATH" />
+    <parameter name="federatedqueryprocessor-serviceName" value="FederatedQueryProcessor" />
   </service>
   <typeMapping name="AggregatorContent" qname="aggr:AggregatorContent" type="java:org.globus.mds.aggregator.types.AggregatorContent" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="" />
 </deployment>

@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.fqp.common;
+package gov.nih.nci.cagrid.enumeration.common;
 
 import javax.xml.namespace.QName;
 
@@ -8,6 +8,6 @@ import javax.xml.namespace.QName;
  *
  * @created by Introduce Toolkit version 1.3
  */
-public interface FederatedQueryProcessorConstants extends FederatedQueryProcessorConstantsBase {
+public interface CaGridEnumerationConstants extends CaGridEnumerationConstantsBase {
 	
 }
