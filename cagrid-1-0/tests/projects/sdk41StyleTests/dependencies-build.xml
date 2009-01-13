@@ -13,7 +13,8 @@
 	<target name="do.resolve-dependencies" depends="pre.resolve-dependencies">
 
 		<ivy:retrieve conf="default" pattern="${ivy.resolved.artifacts.dir}/dependencies/[type]s/[originalname](.[ext])" sync="true" type="jar" />
-		<ivy:retrieve conf="default" pattern="${ivy.resolved.artifacts.dir}/dependencies/resources/containers/[artifact](.[ext])" sync="true" type="zip" />
+		<ivy:retrieve conf="containers" pattern="${ivy.resolved.artifacts.dir}/dependencies/resources/containers/[artifact](.[ext])" sync="true" type="zip" />
+		<ivy:retrieve conf="sdk" pattern="${ivy.resolved.artifacts.dir}/dependencies/resources/sdk/[artifact](.[ext])" sync="true" type="zip" />
 
 	</target>
 </project>

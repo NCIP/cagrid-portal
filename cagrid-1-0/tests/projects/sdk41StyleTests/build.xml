@@ -16,9 +16,10 @@
 	<property name="resources.jarfile" value="${jar.dir}/${project.name}-resources-${project.version}.jar" />
 	<property name="lib.dir" value="${basedir}/lib"/>
 	<property name="ext.lib.dir" value="${basedir}/ext/dependencies/jars" />
+	<property name="ext.resources.dir" value="${basedir}/ext/dependencies/resources"/>
 	
 	<!-- dependencies on SDK -->
-	<property name="sdk.package" value="${basedir}/sdk/sdk41-trimmed.zip"/>
+	<property name="sdk.package" value="${ext.resources.dir}/sdk/sdk411-trimmed.zip"/>
 	<property name="sdk.application.name" value="example41"/>
 	<property name="sdk.unpack.dir" location="${build.dir}/cacore"/>
 	

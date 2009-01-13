@@ -9,9 +9,11 @@
   </info>
 
   <configurations>
-    <!-- Private Configurations-->
-    <conf name="default" visibility="public"/>
-
+    <!-- Private Configurations -->
+    <conf name="containers" visibility="private"/>
+    <conf name="sdk" visibility="private"/>
+    <!-- Public Configurations -->
+    <conf name="default" visibility="public" extends="containers,sdk"/>
   </configurations>
 
 
@@ -22,7 +24,7 @@
   <dependencies>
     <!-- Basic Testing stuff and containers -->
     <dependency rev="latest.integration" org="caGrid" name="testing" conf="default->system"/>
-    <dependency rev="latest.integration" org="caGrid" name="testUtils" conf="default->impl;default->containers"/>
+    <dependency rev="latest.integration" org="caGrid" name="testUtils" conf="default->impl;containers->containers"/>
     
     <!-- Introduce testing -->
     <dependency rev="latest.integration" org="caGrid" name="introduce" conf="default->extension-test"/>
@@ -64,5 +66,8 @@
     
     <!-- authz -->
     <dependency rev="latest.integration" org="caGrid" name="authz" conf="default->default"/>
+    
+    <!-- caCORE SDK 4.1 example zip -->
+    <dependency rev="4.1" org="cacore" name="sdk" conf="sdk->example-trimmed"/>
   </dependencies>
 </ivy-module>

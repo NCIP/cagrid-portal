@@ -1,3 +1,2 @@
-This folder contains a zip file of a fully configured and built caCORE SDK 4.1 distribution using the provided example domain model.
-
-This version is the 4.1.1 CACORE_SDK_411_QA_10292008 tag from CVS.
+This project depends on a a zip file of a fully configured and built caCORE SDK 4.1 distribution using the provided example domain model.
+This zip file comes from the caGrid Ivy repository.  Currently, the version found there is the 4.1.1 CACORE_SDK_411_RC1_01092009 tag from CVS.
