@@ -29,7 +29,7 @@ public class SchemaMappingConfigStep extends AbstractStyleConfigurationStep {
     
     public SchemaMappingConfigStep(ServiceInformation serviceInfo) {
         super(serviceInfo);
-        
+        modelInfoUtil = new ModelInformationUtil(serviceInfo.getServiceDescriptor());
         for (ExtensionType extension : serviceInfo.getExtensions().getExtension()) {
             if (extension.getName().equals("data")) {
                 dataManager = new ExtensionDataManager(extension.getExtensionData());
