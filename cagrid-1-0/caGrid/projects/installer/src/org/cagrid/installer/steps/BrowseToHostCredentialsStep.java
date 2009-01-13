@@ -3,20 +3,19 @@ package org.cagrid.installer.steps;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.io.IOException;
 
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
+import javax.swing.JTextField;
 
 import org.cagrid.installer.model.CaGridInstallerModel;
 import org.cagrid.installer.util.InstallerUtils;
 import org.pietschy.wizard.InvalidStateException;
 import org.pietschy.wizard.PanelWizardStep;
 import org.pietschy.wizard.WizardModel;
-import java.awt.Insets;
-import java.io.IOException;
-
-import javax.swing.JFileChooser;
-import javax.swing.JTextField;
-import javax.swing.JButton;
 
 
 public class BrowseToHostCredentialsStep extends PanelWizardStep {

@@ -3,10 +3,9 @@
  */
 package org.cagrid.installer.steps;
 
-import org.cagrid.installer.steps.options.BooleanPropertyConfigurationOption;
-import org.pietschy.wizard.InvalidStateException;
+import javax.swing.Icon;
 
-import javax.swing.*;
+import org.pietschy.wizard.InvalidStateException;
 
 
 /**

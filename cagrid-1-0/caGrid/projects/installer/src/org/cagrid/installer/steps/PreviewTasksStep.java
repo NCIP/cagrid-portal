@@ -3,16 +3,17 @@
  */
 package org.cagrid.installer.steps;
 
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+
+import javax.swing.JTextArea;
+
 import org.cagrid.installer.model.CaGridInstallerModel;
 import org.cagrid.installer.tasks.Task;
 import org.pietschy.wizard.PanelWizardStep;
 import org.pietschy.wizard.models.Condition;
-
-import java.awt.Dimension;
-import javax.swing.JTextArea;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
 
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>

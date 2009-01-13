@@ -34,8 +34,6 @@ import org.pietschy.wizard.PanelWizardStep;
 import org.pietschy.wizard.WizardModel;
 import org.pietschy.wizard.models.Condition;
 
-import com.sun.corba.se.spi.legacy.connection.GetEndPointInfoAgainException;
-
 
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>

@@ -32,8 +32,6 @@ import org.pietschy.wizard.models.DynamicModel;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import sun.security.action.GetLongAction;
-
 
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>

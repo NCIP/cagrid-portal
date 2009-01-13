@@ -3,31 +3,15 @@
  */
 package org.cagrid.installer.component;
 
-import java.util.Map;
-import java.util.MissingResourceException;
-
-import javax.swing.text.LabelView;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.cagrid.installer.model.CaGridInstallerModel;
 import org.cagrid.installer.steps.Constants;
-import org.cagrid.installer.steps.PropertyConfigurationStep;
 import org.cagrid.installer.steps.RunTasksStep;
-import org.cagrid.installer.steps.options.BooleanPropertyConfigurationOption;
-import org.cagrid.installer.steps.options.FilePropertyConfigurationOption;
-import org.cagrid.installer.steps.options.ListPropertyConfigurationOption;
-import org.cagrid.installer.steps.options.ListPropertyConfigurationOption.LabelValuePair;
 import org.cagrid.installer.tasks.ConditionalTask;
 import org.cagrid.installer.tasks.cagrid.CompileCaGridTask;
-import org.cagrid.installer.tasks.cagrid.ConfigureTargetGridTask;
-import org.cagrid.installer.util.InstallerUtils;
-import org.cagrid.installer.validator.Validator;
-import org.pietschy.wizard.InvalidStateException;
 import org.pietschy.wizard.WizardModel;
 import org.pietschy.wizard.models.Condition;
-
-import sun.text.Normalizer.Mode;
 
 
 /**

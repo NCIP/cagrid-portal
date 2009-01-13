@@ -1,18 +1,18 @@
 package org.cagrid.installer.steps;
 
 import java.awt.Dimension;
+import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.io.File;
+
+import javax.swing.JButton;
+import javax.swing.JOptionPane;
+import javax.swing.JTextArea;
 
 import org.cagrid.installer.model.CaGridInstallerModel;
 import org.cagrid.installer.tasks.AntExecutionTask;
 import org.pietschy.wizard.PanelWizardStep;
 import org.pietschy.wizard.WizardModel;
-
-import javax.swing.JOptionPane;
-import javax.swing.JTextArea;
-import java.awt.GridBagConstraints;
-import javax.swing.JButton;
 
 
 public class LaunchGAARDSforHostCredentialsStep extends PanelWizardStep {

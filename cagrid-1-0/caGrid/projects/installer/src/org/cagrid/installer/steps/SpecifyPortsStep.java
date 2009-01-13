@@ -4,24 +4,14 @@
 package org.cagrid.installer.steps;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileWriter;
 
 import javax.swing.Icon;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathFactory;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.cagrid.installer.model.CaGridInstallerModel;
-import org.cagrid.installer.util.InstallerUtils;
 import org.pietschy.wizard.InvalidStateException;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
 
 
 /**

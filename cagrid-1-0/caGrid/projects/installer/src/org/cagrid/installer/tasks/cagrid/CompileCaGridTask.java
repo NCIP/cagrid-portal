@@ -3,11 +3,6 @@
  */
 package org.cagrid.installer.tasks.cagrid;
 
-import java.util.Map;
-import java.util.Properties;
-
-import org.cagrid.installer.model.CaGridInstallerModel;
-import org.cagrid.installer.steps.Constants;
 
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
