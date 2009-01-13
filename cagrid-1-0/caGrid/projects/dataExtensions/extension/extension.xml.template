@@ -9,7 +9,7 @@
 		<ns1:Properties>
 			<ns1:Property makeGlobal="true" key="GME_URL" displayName="GME Service URL" description="Global Model Exchange URL" value="@cagrid.master.gme.service.url@"/>
    			<ns1:Property makeGlobal="true" key="CADSR_DATA_URL" displayName="caDSR Data Service URL" description="Cancer Data Standards Repository (caDSR) Data Service URL" value="@cagrid.master.cadsr.data.service.url@"/>
-   			<ns1:Property makeGlobal="true" key="MMS_URL" displayName="MMS URL" description="Metadata Model Service (MMS) URL" value="@cagrid.master.mms.service.url@"/>
+            <ns1:Property makeGlobal="true" key="MMS_URL" displayName="MMS Service URL" description="Metadata Model Service (MMS) URL" value="@cagrid.master.mms.service.url@"/>
 		</ns1:Properties>
 	</ns1:ServiceExtensionDescription>
 	<ns1:UpgradesDescription>
