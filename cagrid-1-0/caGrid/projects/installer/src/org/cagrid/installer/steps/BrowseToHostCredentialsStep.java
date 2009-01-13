@@ -42,14 +42,14 @@ public class BrowseToHostCredentialsStep extends PanelWizardStep {
      */
     private void initialize() {
         GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
-        gridBagConstraints6.gridx = 1;
+        gridBagConstraints6.gridx = 2;
         gridBagConstraints6.insets = new Insets(10, 0, 0, 0);
         gridBagConstraints6.anchor = GridBagConstraints.EAST;
-        gridBagConstraints6.gridy = 2;
+        gridBagConstraints6.gridy = 3;
         GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
-        gridBagConstraints5.gridx = 1;
+        gridBagConstraints5.gridx = 2;
         gridBagConstraints5.anchor = GridBagConstraints.EAST;
-        gridBagConstraints5.gridy = 0;
+        gridBagConstraints5.gridy = 1;
         GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
         gridBagConstraints4.fill = GridBagConstraints.BOTH;
         gridBagConstraints4.gridy = 3;
