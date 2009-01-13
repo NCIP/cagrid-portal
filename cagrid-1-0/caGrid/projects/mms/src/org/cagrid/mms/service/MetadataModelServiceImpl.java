@@ -113,7 +113,7 @@ public class MetadataModelServiceImpl extends MetadataModelServiceImplBase {
 
         Collection<String> packages = new ArrayList<String>();
         if (packageNames != null) {
-            for (String pkg : packages) {
+            for (String pkg : packageNames) {
                 packages.add(pkg);
             }
         }
