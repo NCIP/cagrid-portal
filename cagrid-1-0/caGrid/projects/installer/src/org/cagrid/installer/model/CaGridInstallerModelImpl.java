@@ -94,8 +94,6 @@ CaGridInstallerModel, OverviewProvider {
             }
         }
         checkEnvironment();
-
-        clearFlags();
     }
 
 
@@ -125,18 +123,6 @@ CaGridInstallerModel, OverviewProvider {
             setProperty(Constants.CAGRID_HOME, getHomeDir(Constants.CAGRID_HOME, "CAGRID_HOME"));
         }
 
-    }
-
-
-    private void clearFlags() {
-        this.unsetProperty(Constants.INSTALL_CONFIGURE_CONTAINER);
-        this.unsetProperty(Constants.RECONFIGURE_CAGRID);
-        this.unsetProperty(Constants.USE_SECURE_CONTAINER);
-        this.unsetProperty(Constants.REINSTALL_ANT);
-        this.unsetProperty(Constants.REINSTALL_GLOBUS);
-        this.unsetProperty(Constants.REINSTALL_CAGRID);
-        this.unsetProperty(Constants.REINSTALL_JBOSS);
-        this.unsetProperty(Constants.REINSTALL_TOMCAT);
     }
 
 

@@ -222,7 +222,7 @@ public class Installer {
         // TODO: provide some factory method here
         this.model = new CaGridInstallerModelImpl(defaultState);
 
-        
+        clearFlags();
 
         // Initialize steps
         PresentLicenseStep licenseStep = new PresentLicenseStep(this.model.getMessage("accept.license.title"),
@@ -480,6 +480,17 @@ public class Installer {
 
     }
 
+
+    private void clearFlags() {
+        this.model.unsetProperty(Constants.INSTALL_CONFIGURE_CONTAINER);
+        this.model.unsetProperty(Constants.RECONFIGURE_CAGRID);
+        this.model.unsetProperty(Constants.USE_SECURE_CONTAINER);
+        this.model.unsetProperty(Constants.REINSTALL_ANT);
+        this.model.unsetProperty(Constants.REINSTALL_GLOBUS);
+        this.model.unsetProperty(Constants.REINSTALL_CAGRID);
+        this.model.unsetProperty(Constants.REINSTALL_JBOSS);
+        this.model.unsetProperty(Constants.REINSTALL_TOMCAT);
+    }
 
 
     public void run() {

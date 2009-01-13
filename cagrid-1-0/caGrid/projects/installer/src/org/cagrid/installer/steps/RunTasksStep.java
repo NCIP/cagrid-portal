@@ -18,7 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.Icon;
-import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -29,12 +28,13 @@ import javax.swing.JTextArea;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.cagrid.installer.model.CaGridInstallerModel;
-import org.cagrid.installer.tasks.ProgressBarTaskMonitor;
 import org.cagrid.installer.tasks.Task;
 import org.pietschy.wizard.InvalidStateException;
 import org.pietschy.wizard.PanelWizardStep;
 import org.pietschy.wizard.WizardModel;
 import org.pietschy.wizard.models.Condition;
+
+import com.sun.corba.se.spi.legacy.connection.GetEndPointInfoAgainException;
 
 
 /**
@@ -42,7 +42,7 @@ import org.pietschy.wizard.models.Condition;
  */
 public class RunTasksStep extends PanelWizardStep implements PropertyChangeListener {
 
-    private CaGridInstallerModel model;  //  @jve:decl-index=0:
+    private CaGridInstallerModel model; // @jve:decl-index=0:
 
     private JLabel busyLabel;
 
@@ -56,11 +56,9 @@ public class RunTasksStep extends PanelWizardStep implements PropertyChangeListe
 
     private Exception exception;
 
-    private static final Log logger = LogFactory.getLog(RunTasksStep.class);
+    private static final Log logger = LogFactory.getLog(RunTasksStep.class); // @jve:decl-index=0:
 
     private static final int PROGRESS_SCALE = 100;
-
-    private ProgressBarTaskMonitor monitor;
 
     private PrintStream out;
 
@@ -73,7 +71,6 @@ public class RunTasksStep extends PanelWizardStep implements PropertyChangeListe
     public RunTasksStep() {
         initialize();
     }
-
 
 
     /**
@@ -160,23 +157,15 @@ public class RunTasksStep extends PanelWizardStep implements PropertyChangeListe
 
 
     public void prepare() {
+        if (!isExecuted()) {
+            getBusyProgressBar().setMaximum(getTasksCount(model));
+            System.setOut(this.out);
+            System.setErr(this.out);
 
-        for (Task t : getTasks()) {
-            if (t instanceof Condition && !((Condition) t).evaluate(this.model)) {
-                continue;
-            }
-            this.monitor.addTask(t);
+            Worker w = new Worker(RunTasksStep.this.getTasks(), RunTasksStep.this.model);
+            w.addPropertyChangeListener(RunTasksStep.this);
+            w.start();
         }
-        this.monitor.reset();
-        System.setOut(this.out);
-        System.setErr(this.out);
-
-        String workingLabel = "running";
-        RunTasksStep.this.setBusyLabel(workingLabel);
-        Worker w = new Worker(RunTasksStep.this.getTasks(), RunTasksStep.this.model);
-        w.addPropertyChangeListener(RunTasksStep.this);
-        RunTasksStep.this.setSummary(workingLabel);
-        w.start();
 
     }
 
@@ -236,7 +225,6 @@ public class RunTasksStep extends PanelWizardStep implements PropertyChangeListe
             busyProgressBar.setStringPainted(true);
             busyProgressBar.setValue(0);
             busyProgressBar.setPreferredSize(new Dimension(148, 16));
-            monitor = new ProgressBarTaskMonitor(busyProgressBar, PROGRESS_SCALE);
         }
         return busyProgressBar;
     }
@@ -247,7 +235,8 @@ public class RunTasksStep extends PanelWizardStep implements PropertyChangeListe
         if ("progress" == evt.getPropertyName()) {
 
             int progress = (Integer) evt.getNewValue();
-            if (progress == getTasks().size()) {
+            getBusyProgressBar().setValue(progress);
+            if (progress == getTasksCount(model)) {
                 getBusyProgressBar().setValue(getBusyProgressBar().getMaximum());
                 setBusyLabel(this.model.getMessage("finished"));
                 setSummary(this.model.getMessage("finished"));
@@ -256,7 +245,7 @@ public class RunTasksStep extends PanelWizardStep implements PropertyChangeListe
             }
         } else if ("currentTask" == evt.getPropertyName()) {
             Task currentTask = (Task) evt.getNewValue();
-            setBusyLabel(currentTask.getName());
+            setBusyLabel("Processing:  " + currentTask.getDescription());
         } else if ("exception" == evt.getPropertyName()) {
             this.exception = (Exception) evt.getNewValue();
             setSummary(this.model.getMessage("error"));
@@ -332,6 +321,7 @@ public class RunTasksStep extends PanelWizardStep implements PropertyChangeListe
                     setCurrentTask(task);
                     try {
                         task.execute(this.model);
+                        setProgress(getProgress() + 1);
                     } catch (Exception ex) {
                         if (task.isAbortOnError()) {
                             setException(ex);
@@ -341,10 +331,10 @@ public class RunTasksStep extends PanelWizardStep implements PropertyChangeListe
                 } else {
                     logger.info("Skipping task " + task.getName());
                 }
-                setProgress(getProgress() + 1);
+
             }
 
-            setExecuted(false);
+            setExecuted(true);
             setComplete(true);
             setBusy(false);
         }
@@ -414,7 +404,7 @@ public class RunTasksStep extends PanelWizardStep implements PropertyChangeListe
             }
         }
     }
-    
+
 
     public boolean isExecuted() {
         return executed;
@@ -424,6 +414,5 @@ public class RunTasksStep extends PanelWizardStep implements PropertyChangeListe
     public void setExecuted(boolean executed) {
         this.executed = executed;
     }
-
 
 } // @jve:decl-index=0:visual-constraint="10,10"
