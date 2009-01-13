@@ -42,7 +42,7 @@ import org.pietschy.wizard.models.Condition;
  */
 public class RunTasksStep extends PanelWizardStep implements PropertyChangeListener {
 
-    private CaGridInstallerModel model;
+    private CaGridInstallerModel model;  //  @jve:decl-index=0:
 
     private JLabel busyLabel;
 
@@ -64,7 +64,7 @@ public class RunTasksStep extends PanelWizardStep implements PropertyChangeListe
 
     private PrintStream out;
 
-    private boolean deactivePrevious = false;
+    private boolean executed = false;
 
 
     /**
@@ -73,6 +73,7 @@ public class RunTasksStep extends PanelWizardStep implements PropertyChangeListe
     public RunTasksStep() {
         initialize();
     }
+
 
 
     /**
@@ -174,8 +175,6 @@ public class RunTasksStep extends PanelWizardStep implements PropertyChangeListe
         RunTasksStep.this.setBusyLabel(workingLabel);
         Worker w = new Worker(RunTasksStep.this.getTasks(), RunTasksStep.this.model);
         w.addPropertyChangeListener(RunTasksStep.this);
-        RunTasksStep.this.setDeactivePrevious(true);
-        RunTasksStep.this.model.setDeactivatePrevious(true);
         RunTasksStep.this.setSummary(workingLabel);
         w.start();
 
@@ -253,6 +252,7 @@ public class RunTasksStep extends PanelWizardStep implements PropertyChangeListe
                 setBusyLabel(this.model.getMessage("finished"));
                 setSummary(this.model.getMessage("finished"));
                 setComplete(true);
+                setExecuted(true);
             }
         } else if ("currentTask" == evt.getPropertyName()) {
             Task currentTask = (Task) evt.getNewValue();
@@ -320,6 +320,7 @@ public class RunTasksStep extends PanelWizardStep implements PropertyChangeListe
         public void run() {
 
             setProgress(0);
+            setBusy(true);
             for (int i = 0; i < tasks.size(); i++) {
                 Task task = this.tasks.get(i);
                 boolean runTask = true;
@@ -343,7 +344,9 @@ public class RunTasksStep extends PanelWizardStep implements PropertyChangeListe
                 setProgress(getProgress() + 1);
             }
 
+            setExecuted(false);
             setComplete(true);
+            setBusy(false);
         }
 
 
@@ -411,15 +414,16 @@ public class RunTasksStep extends PanelWizardStep implements PropertyChangeListe
             }
         }
     }
+    
 
-
-    public boolean isDeactivePrevious() {
-        return deactivePrevious;
+    public boolean isExecuted() {
+        return executed;
     }
 
 
-    public void setDeactivePrevious(boolean deactivePrevious) {
-        this.deactivePrevious = deactivePrevious;
+    public void setExecuted(boolean executed) {
+        this.executed = executed;
     }
+
 
 } // @jve:decl-index=0:visual-constraint="10,10"

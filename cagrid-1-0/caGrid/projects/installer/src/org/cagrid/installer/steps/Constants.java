@@ -118,8 +118,6 @@ public abstract class Constants {
 
     public static final String REDEPLOY_GLOBUS = "redeploy.globus";
 
-    public static final Object SECURE_PORT = "secure.port";
-
     public static final String SERVICE_CERT_PATH = "service.cert.path";
 
     public static final String SERVICE_HOSTNAME = "service.hostname";

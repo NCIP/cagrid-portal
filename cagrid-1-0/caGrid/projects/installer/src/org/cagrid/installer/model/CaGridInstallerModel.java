@@ -62,9 +62,6 @@ public interface CaGridInstallerModel extends WizardModel {
     boolean isDeployGlobusRequired();
 
 
-    void setDeactivatePrevious(boolean b);
-
-
     boolean isConfigureContainerSelected();
 
 

@@ -217,7 +217,7 @@ CaGridInstallerModel, OverviewProvider {
         super.refreshModelState();
         if (getActiveStep() instanceof RunTasksStep) {
             RunTasksStep rts = (RunTasksStep) getActiveStep();
-            setPreviousAvailable(!rts.isDeactivePrevious());
+            setPreviousAvailable(!(rts.isBusy() || rts.isExecuted()));
         }
     }
 
@@ -226,12 +226,6 @@ CaGridInstallerModel, OverviewProvider {
         return (isTomcatContainer() || isJBossContainer())
             && (isTrue(Constants.REDEPLOY_GLOBUS) || !isGlobusDeployed());
     }
-
-
-    public void setDeactivatePrevious(boolean b) {
-        setPreviousAvailable(!b);
-    }
-
 
     public void unsetProperty(String propName) {
         this.state.remove(propName);
@@ -319,7 +313,7 @@ CaGridInstallerModel, OverviewProvider {
 
     public boolean isCaGridInstalled() {
         if (cagridInstalled == null) {
-            String homeDir = getHomeDir(Constants.CAGRID_HOME, null);
+            String homeDir = getHomeDir(Constants.CAGRID_HOME, "CAGRID_HOME");
             cagridInstalled = homeDir != null && InstallerUtils.checkCaGridIsValid(homeDir);
         }
         return cagridInstalled;
