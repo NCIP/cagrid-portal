@@ -11,7 +11,4 @@
  <ns1:ObjectResult>
   <ns5:Child name="Child_Name4" id="4" xmlns:ns5="gme://caCORE.caCORE/4.0/gov.nih.nci.cacoresdk.domain.onetoone.multipleassociation"/>
  </ns1:ObjectResult>
- <ns1:ObjectResult>
-  <ns6:Child name="Child_Name5" id="5" xmlns:ns6="gme://caCORE.caCORE/4.0/gov.nih.nci.cacoresdk.domain.onetoone.multipleassociation"/>
- </ns1:ObjectResult>
 </ns1:CQLQueryResultCollection>
