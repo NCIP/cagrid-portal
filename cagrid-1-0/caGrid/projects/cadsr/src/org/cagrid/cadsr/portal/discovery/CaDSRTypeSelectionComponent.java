@@ -6,6 +6,7 @@ import gov.nih.nci.cagrid.introduce.beans.extension.DiscoveryExtensionDescriptio
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespacesType;
 import gov.nih.nci.cagrid.introduce.common.ConfigurationUtil;
 
+import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.net.URISyntaxException;
@@ -50,7 +51,8 @@ public class CaDSRTypeSelectionComponent extends GMETypeSelectionComponentBase
 
 
     private String getCaDSRURL() throws Exception {
-        return ConfigurationUtil.getGlobalExtensionProperty(CaDSRDiscoveryConstants.CADSR_DATA_SERVICE_URL_PROPERTY).getValue();
+        return ConfigurationUtil.getGlobalExtensionProperty(CaDSRDiscoveryConstants.CADSR_DATA_SERVICE_URL_PROPERTY)
+            .getValue();
     }
 
 
@@ -136,49 +138,40 @@ public class CaDSRTypeSelectionComponent extends GMETypeSelectionComponentBase
             this.nsTextField = new JTextField();
             this.nsTextField.setEditable(false);
             this.nsTextField.setText(UNAVAILABLE);
+            this.nsTextField.setForeground(Color.RED);
         }
         return this.nsTextField;
     }
 
 
     public void handleProjectSelection(Project project) {
-        try {
-        } catch (Exception e) {
-            LOG.error("Problem getting caDSR URL.", e);
-        }
+        getNsTextField().setText(UNAVAILABLE);
+        getNsTextField().setForeground(Color.RED);
     }
 
 
     public void handlePackageSelection(UMLPackageMetadata pkg) {
-        try {
-        } catch (Exception e) {
-            LOG.error("Problem getting caDSR URL.", e);
-        }
-        
-        
-        // TODO: look up the schema from the caDSR mappings here
-
-        Project proj = getCaDSRPanel().getSelectedProject();
-        if (proj != null) {
-            // get the Context
-            String context = "caBIG";
-            // try {
-            // CaDSRServiceI cadsrService = new
-            // CaDSRServiceClient(getCaDSRURL());
-            // Context ctx = cadsrService.findContextForProject(proj);
-            // context = ctx.getName();
-            // } catch (Exception e) {
-            // // just use the default, and don't bother the user.
-            // e.printStackTrace();
-            // }
-            String version = proj.getVersion();
-            if (version.indexOf(".") < 0) {
-                version += ".0";
-            }
-            getNsTextField().setText(
-                "gme://" + proj.getShortName() + "." + context + "/" + version + "/" + pkg.getName());
+        // use the mappings
+        if (pkg.getGmeNamespace() != null && !pkg.getGmeNamespace().trim().equals("")) {
+            getNsTextField().setText(pkg.getGmeNamespace());
+            getNsTextField().setForeground(Color.BLACK);
         } else {
-            getNsTextField().setText(UNAVAILABLE);
+            // no mappings so use the old convention
+            Project proj = getCaDSRPanel().getSelectedProject();
+            if (proj != null) {
+                // get the Context
+                String context = "caBIG";
+                String version = proj.getVersion();
+                if (version.indexOf(".") < 0) {
+                    version += ".0";
+                }
+                getNsTextField().setForeground(Color.BLUE);
+                getNsTextField().setText(
+                    "gme://" + proj.getShortName() + "." + context + "/" + version + "/" + pkg.getName());
+            } else {
+                getNsTextField().setText(UNAVAILABLE);
+                getNsTextField().setForeground(Color.RED);
+            }
         }
     }
 
