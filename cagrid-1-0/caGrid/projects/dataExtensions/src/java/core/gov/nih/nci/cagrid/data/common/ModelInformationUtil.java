@@ -101,4 +101,37 @@ public class ModelInformationUtil {
         }
         element.setClassName(className);
     }
+    
+    
+    /**
+     * Removes an element to class mapping from the service's namespace information
+     * 
+     * @param packageName
+     *      The class's package name
+     * @param className
+     *      The short class name
+     * @return
+     *      True if an element was found and updated, false otherwise
+     * @throws Exception
+     */
+    public boolean unsetMappedElementName(String packageName, String className) throws Exception {
+        NamespaceType mappedNamespace = getMappedNamespace(packageName);
+        if (mappedNamespace == null) {
+            throw new Exception("No namespace was mapped to the package " + packageName);
+        }
+        boolean found = false;
+        // walk the elements and if one os mapped to the class name, null out the class name
+        if (mappedNamespace.getSchemaElement() != null) {
+            for (SchemaElementType element : mappedNamespace.getSchemaElement()) {
+                if (className.equals(element.getClassName())) {
+                    element.setClassName(null);
+                    element.setSerializer(null);
+                    element.setDeserializer(null);
+                    found = true;
+                    break;
+                }
+            }
+        }
+        return found;
+    }
 }

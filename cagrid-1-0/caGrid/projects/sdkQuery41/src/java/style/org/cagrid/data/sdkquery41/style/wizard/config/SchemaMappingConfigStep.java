@@ -66,7 +66,7 @@ public class SchemaMappingConfigStep extends AbstractStyleConfigurationStep {
     
     
     public void unsetClassMapping(String packageName, String className) throws Exception {
-        modelInfoUtil.setMappedElementName(packageName, className, null);
+        modelInfoUtil.unsetMappedElementName(packageName, className);
     }
     
     
