@@ -14,7 +14,9 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.axis.message.MessageElement;
 import org.jdom.Element;
@@ -45,6 +47,8 @@ public class DataServiceUpgradeFrom1pt2 extends ExtensionUpgraderBase {
 			validateUpgrade();
 			
 			updateLibraries();
+            
+            upgradeWsdls();
             
             upgradeModelInformation();
 			
@@ -289,6 +293,46 @@ public class DataServiceUpgradeFrom1pt2 extends ExtensionUpgraderBase {
                 + ex.getMessage(), ex);
         }
         getStatus().addDescriptionLine("-- caCORE SDK Support upgraded");
+    }
+    
+    
+    private void upgradeWsdls() throws UpgradeException {
+        // get the service's schema dir where the wsdl files live
+        String serviceName = getServiceInformation().getServiceDescriptor()
+            .getServices().getService(0).getName();
+        File serviceSchemasDir = new File(getServicePath(), "schema" + File.separator + serviceName);
+        
+        // get the data service schemas dir
+        File dataSchemasDir = new File(".." + File.separator + "data" + File.separator + "schema" + File.separator + "Data");
+        
+        // find data wsdls
+        Map<String, File> dataWsdlsByName = new HashMap<String, File>();
+        for (File file : dataSchemasDir.listFiles()) {
+            String name = file.getName();
+            if (name.endsWith(".wsdl")) {
+                dataWsdlsByName.put(name, file);
+            }
+        }
+        
+        // list wsdls in service schemas dir.  If any match one from data, replace it with the new version
+        File[] serviceWsdls = serviceSchemasDir.listFiles(new FileFilter() {
+            public boolean accept(File path) {
+                return path.getName().endsWith(".wsdl");
+            }
+        });
+        
+        for (File serviceWsdl : serviceWsdls) {
+            if (dataWsdlsByName.containsKey(serviceWsdl.getName())) {
+                // overwrite the service wsdl with the new one
+                try {
+                    Utils.copyFile(dataWsdlsByName.get(serviceWsdl.getName()), serviceWsdl);
+                    getStatus().addDescriptionLine("Replaced WSDL " + serviceWsdl.getName() 
+                        + " with new version " + UpgraderConstants.DATA_CURRENT_VERSION);
+                } catch (Exception ex) {
+                    throw new UpgradeException("Error replacing wsdl: " + ex.getMessage(), ex);
+                }
+            }
+        }
     }
     
     
