@@ -363,7 +363,7 @@ public class TomcatServiceContainer extends ServiceContainer {
 				running = isGlobusRunningCounter();
 			} catch (Exception ex) {
 				testException = ex;
-				ex.printStackTrace();
+				//ex.printStackTrace();
 			}
 			sleep(5000);
             attempt++;
