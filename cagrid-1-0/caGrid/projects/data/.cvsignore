@@ -6,3 +6,4 @@ log4j.properties
 .fbwarnings
 tmp
 .fbprefs
+cqlQuery.xml
