@@ -191,12 +191,14 @@
             <entry key="cagrid.portal.trust.synchronizeEnabled" value="${cagrid.portal.trust.synchronizeEnabled}"/>
             <entry key="cabig.tools.remoteView" value="${cabig.tools.remoteView}"/>
             <entry key="fqp.service.url" value="${fqp.service.url}"/>
+            <entry key="evs.remoteAPI.url" value="${evs.remoteAPI.url}"/>
             <entry key="strict.index.verification" value="${strict.index.verification}"/>
             <entry key="cagrid.portal.aggr.defaultTimeout" value="${cagrid.portal.aggr.defaultTimeout}"/>
             <entry key="cagrid.portal.aggr.long.defaultTimeout" value="${cagrid.portal.aggr.long.defaultTimeout}"/>
             <entry key="cagrid.portal.aggr.defaultPeriod" value="${cagrid.portal.aggr.defaultPeriod}"/>
             <entry key="cagrid.portal.slow.aggr.defaultPeriod" value="${cagrid.portal.slow.aggr.defaultPeriod}"/>
             <entry key="cagrid.portal.fast.aggr.defaultPeriod" value="${cagrid.portal.fast.aggr.defaultPeriod}"/>
+            <entry key="cagrid.portal.maxDowntimeHours" value="${cagrid.portal.maxDowntimeHours}"/>
             <entry key="cagrid.portal.build.stamp" value="${cagrid.portal.build.stamp}"/>
         </propertyfile>
     </target>
@@ -256,41 +258,6 @@
 
         </javadoc>
     </target>
-
-    <target name="update_from_2_0_2_to_2_1" description="Will update the database from 2.0.2 release to the 2.1 release">
-		<sql driver="${cagrid.portal.db.driver}"
-             url="${cagrid.portal.db.url}"
-             userid="${cagrid.portal.db.username}"
-             password="${cagrid.portal.db.password}"
-             src="tools/migration/2-0-2_to_2-1/clean_orphan_concepts.sql">
-            <classpath>
-                <pathelement location="${db.jdbc.driver.jar}"/>
-            </classpath>
-        </sql>
-	</target>
-
-
-    <target name="insert-news" description="Will add news items for 2.1">
-            <input message="Host and port:" defaultvalue="localhost:8080" addproperty="host"/>
-            <copy file="tools/migration/2-0-2_to_2-1/news.sql.template"
-                tofile="tools/migration/2-0-2_to_2-1/news.sql"
-                overwrite="true">
-                <filterset>
-                    <filter token="HOST_AND_PORT"
-                            value="${host}"/>
-                </filterset>
-            </copy>
-            <sql driver="${cagrid.portal.db.driver}"
-                 url="${cagrid.portal.db.url}"
-                 userid="${cagrid.portal.db.username}"
-                 password="${cagrid.portal.db.password}"
-                 src="tools/migration/2-0-2_to_2-1/news.sql">
-                <classpath>
-                    <pathelement location="${db.jdbc.driver.jar}"/>
-                </classpath>
-            </sql>
-        <delete file="tools/migration/2-0-2_to_2-1/news.sql" failonerror="false"/>
-        </target>
 
 
 </project>
