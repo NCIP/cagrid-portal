@@ -9,11 +9,12 @@
 
   <configurations>
     <!-- Public Configurations-->
-    <conf name="zip" visibility="public" />
-    <conf name="example-trimmed" visibility="public" extends="zip"/>
+    <conf name="sdk-src" visibility="public" />
+    <conf name="example-trimmed" visibility="public"/>
   </configurations>
 
   <publications>
+    <artifact name="caCORE_SDK_411-src" type="zip" conf="sdk-src"/>
     <artifact name="sdk411-trimmed" type="zip" conf="example-trimmed" />
   </publications>
 
