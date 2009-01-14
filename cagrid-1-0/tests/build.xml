@@ -11,6 +11,9 @@
 	<property file="build.properties" />
 	<property file="tests.properties" />
 
+	<!-- Don't run the system tests in parallel until we stop having port problems for test containers -->
+	<property name="run.tests.in.parallel" value="false" />
+	
 	<!-- Layout info -->
 	<property name="tests.projects.dir" location="${caGrid-tests.basedir}/projects" />
 	<property name="tests.test.dir" location="${caGrid-tests.basedir}/test" />

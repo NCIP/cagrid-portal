@@ -20,7 +20,7 @@
 
 	<property name="test.logs.dir" value="${test.dir}/logs" />
 	<property name="junit.results.dir" value="${test.logs.dir}/junit" />
-
+	<property name="run.tests.in.parallel" value="true" />
 
 	<target name="set-test-defaults">
 		<property name="run.unit.tests" value="true" />
@@ -99,7 +99,7 @@
 
 	<!-- not to be called directly -->
 	<target name="unit-test">
-		<for list="${unit.testable.projects.list}" parallel="true" param="project.name" trim="true">
+		<for list="${unit.testable.projects.list}" parallel="${run.tests.in.parallel}" param="project.name" trim="true">
 			<sequential>
 				<stopwatch name="@{project.name}" />
 				<echo message="Unit testing project @{project.name}." />
