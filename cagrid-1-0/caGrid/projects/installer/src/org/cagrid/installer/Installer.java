@@ -424,21 +424,6 @@ public class Installer {
             }
         });
 
-        PropertyConfigurationStep checkDeployGlobusStep = new PropertyConfigurationStep(this.model
-            .getMessage("globus.check.redeploy.title"), this.model.getMessage("globus.check.redeploy.desc"));
-        checkDeployGlobusStep.getOptions().add(
-            new BooleanPropertyConfigurationOption(Constants.REDEPLOY_GLOBUS, this.model.getMessage("yes"), false,
-                false));
-        this.model.add(checkDeployGlobusStep, new Condition() {
-
-            public boolean evaluate(WizardModel m) {
-                CaGridInstallerModel model = (CaGridInstallerModel) m;
-                return (model.isTomcatContainer() || model.isJBossContainer()) && model.isGlobusDeployed()
-                    && model.isConfigureContainerSelected();
-            }
-
-        });
-
     }
 
 
@@ -456,6 +441,7 @@ public class Installer {
         jbossComponentInstaller.addInstallDownloadedComponentTasks(this.model, deployContainer);
 
         incrementProgress();
+    
 
         // deploy the syngGTS anytime we are deploying to a container
         DeployServiceTask deploySyncGTS = new DeployServiceTask("syncGTS", "Deloying syncGTS", "syncGTS");

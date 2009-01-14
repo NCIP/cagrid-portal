@@ -24,7 +24,7 @@
 		<path location="${build}/cagrid.installer.properties" />
 	</pathconvert>
 	<!-- NOTE: these are expected to be changed/overridden when releases are created -->
-	<property name="cagrid.version" value="${project.version}"/>
+	<property name="cagrid.version" value="${project.version}" />
 	<property name="download.properties.url" value="file:/${download.properties.path}" />
 	<property name="cagrid.download.url" value="http://localhost:8080/downloads/caGrid-${project.version}.zip" />
 	<property name="portal.download.url" value="http://gforge.nci.nih.gov/frs/download.php/3672/cagrid-portal-2.0.1.zip" />
@@ -137,7 +137,13 @@
 			</fileset>
 		</copy>
 
-		<copy file="scripts/build.xml" todir="build/installer/scripts" />
+		
+		<copy todir="build/installer/scripts">
+			<fileset dir="scripts">
+				<include name="**" />
+			</fileset>
+		</copy>
+		
 		<copy todir="build/installer/scripts/resources">
 			<fileset dir="src/resources">
 				<include name="**" />
@@ -157,7 +163,7 @@
 	<target name="run-installer" depends="dist-installer">
 		<mkdir dir="${build}/temp" />
 		<unzip src="build/${project.zip.name}" dest="${build}/temp" />
-		<java jar="${build}/temp/${project.jar.name}" fork="true" dir="${build}/temp" failonerror="true"/>
+		<java jar="${build}/temp/${project.jar.name}" fork="true" dir="${build}/temp" failonerror="true" />
 	</target>
 
 </project>

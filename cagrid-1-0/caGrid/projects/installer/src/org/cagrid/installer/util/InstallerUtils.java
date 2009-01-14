@@ -288,7 +288,7 @@ public class InstallerUtils {
             new IOThread(p.getErrorStream(), System.err, stderr).start();
             int code = p.waitFor();
 
-            correctVersion = stdout.toString().indexOf("Apache Tomcat/5.0.28") != -1;
+            correctVersion = stdout.toString().indexOf("Apache Tomcat/5.5.20") != -1;
             if (!correctVersion) {
 
                 logger.warn("The Tomcat version utility indicates " + "that the correct tomcat version is not "

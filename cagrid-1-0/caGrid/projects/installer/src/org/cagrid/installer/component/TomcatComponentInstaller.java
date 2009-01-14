@@ -5,7 +5,9 @@ package org.cagrid.installer.component;
 
 import org.cagrid.installer.model.CaGridInstallerModel;
 import org.cagrid.installer.steps.Constants;
+import org.cagrid.installer.steps.PropertyConfigurationStep;
 import org.cagrid.installer.steps.RunTasksStep;
+import org.cagrid.installer.steps.options.BooleanPropertyConfigurationOption;
 import org.cagrid.installer.tasks.ConditionalTask;
 import org.cagrid.installer.tasks.installer.ConfigureTomcatTask;
 import org.cagrid.installer.tasks.installer.DeployGlobusToTomcatTask;
@@ -34,6 +36,26 @@ public class TomcatComponentInstaller extends AbstractDownloadedComponentInstall
     @Override
     protected String getComponentId() {
         return "tomcat";
+    }
+
+
+    @Override
+    public void addCheckInstallSteps(CaGridInstallerModel model) {
+        // TODO Auto-generated method stub
+        super.addCheckInstallSteps(model);
+
+        PropertyConfigurationStep checkDeployGlobusStep = new PropertyConfigurationStep(model
+            .getMessage("globus.check.redeploy.title"), model.getMessage("globus.check.redeploy.desc"));
+        checkDeployGlobusStep.getOptions().add(
+            new BooleanPropertyConfigurationOption(Constants.REDEPLOY_GLOBUS, model.getMessage("yes"), false, false));
+        model.add(checkDeployGlobusStep, new Condition() {
+
+            public boolean evaluate(WizardModel m) {
+                CaGridInstallerModel model = (CaGridInstallerModel) m;
+                return model.isTomcatContainer() && model.isGlobusDeployed() && model.isConfigureContainerSelected();
+            }
+
+        });
     }
 
 
@@ -70,28 +92,27 @@ public class TomcatComponentInstaller extends AbstractDownloadedComponentInstall
         super.addInstallDownloadedComponentTasks(model, deployContainer);
 
         deployContainer.getTasks().add(
-            new ConditionalTask(new DeployGlobusToTomcatTask(model.getMessage("deploying.globus.tomcat.title"), model.getMessage("deploying.globus.tomcat.title")),
-                new Condition() {
+            new ConditionalTask(new DeployGlobusToTomcatTask(model.getMessage("deploying.globus.tomcat.title"), model
+                .getMessage("deploying.globus.tomcat.title")), new Condition() {
 
-                    public boolean evaluate(WizardModel m) {
-                        CaGridInstallerModel model = (CaGridInstallerModel) m;
-                        return model.isTomcatContainer() && model.isDeployGlobusRequired()
-                            && model.isConfigureContainerSelected();
+                public boolean evaluate(WizardModel m) {
+                    CaGridInstallerModel model = (CaGridInstallerModel) m;
+                    return model.isTomcatContainer() && model.isDeployGlobusRequired()
+                        && model.isConfigureContainerSelected();
+                }
 
-                    }
-
-                }));
+            }));
 
         deployContainer.getTasks().add(
-            new ConditionalTask(new ConfigureTomcatTask(model.getMessage("configuring.tomcat.title"), model.getMessage("configuring.tomcat.title")),
-                new Condition() {
+            new ConditionalTask(new ConfigureTomcatTask(model.getMessage("configuring.tomcat.title"), model
+                .getMessage("configuring.tomcat.title")), new Condition() {
 
-                    public boolean evaluate(WizardModel m) {
-                        CaGridInstallerModel model = (CaGridInstallerModel) m;
-                        return model.isTomcatContainer() && model.isConfigureContainerSelected();
-                    }
+                public boolean evaluate(WizardModel m) {
+                    CaGridInstallerModel model = (CaGridInstallerModel) m;
+                    return model.isTomcatContainer() && model.isConfigureContainerSelected();
+                }
 
-                }));
+            }));
     }
 
 }
