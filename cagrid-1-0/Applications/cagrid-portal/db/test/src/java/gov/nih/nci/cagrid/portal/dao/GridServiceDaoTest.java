@@ -4,15 +4,23 @@
 package gov.nih.nci.cagrid.portal.dao;
 
 
-import gov.nih.nci.cagrid.portal.DBTestBase;
 import gov.nih.nci.cagrid.portal.domain.GridService;
 import gov.nih.nci.cagrid.portal.domain.IndexService;
 import gov.nih.nci.cagrid.portal.domain.ServiceStatus;
 import gov.nih.nci.cagrid.portal.domain.StatusChange;
+import gov.nih.nci.cagrid.portal.DBTestBase;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.springframework.orm.hibernate3.HibernateCallback;
+import org.springframework.orm.hibernate3.HibernateTransactionManager;
+import org.springframework.orm.hibernate3.SessionFactoryUtils;
+import org.springframework.orm.hibernate3.SessionHolder;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.context.ApplicationContext;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
+import org.springframework.beans.BeansException;
 
 import java.sql.SQLException;
 import java.util.*;
@@ -135,5 +143,119 @@ public class GridServiceDaoTest extends DBTestBase<GridServiceDao> {
 
 
     }
+
+    public void testCachePerformance(){
+        GridService newService  = new GridService();
+
+        for(int i=0;i<10000;i++){
+            StatusChange sc = new StatusChange();
+            sc.setService(newService);
+            sc.setStatus(ServiceStatus.ACTIVE);
+            newService.getStatusHistory().add(sc);
+        }
+        getDao().save(newService);
+
+        for(int i=0;i<10;i++){
+            interruptSession();
+            long init = System.currentTimeMillis();
+            GridService service = getDao().getById(1);
+            assertEquals(ServiceStatus.ACTIVE,service.getCurrentStatus());
+            System.out.println("Time taken for 10000 Status changes " + (System.currentTimeMillis() - init) + " miliseconds");
+        }
+
+    }
+
+
+    public void testPerformance(){
+        long init = System.currentTimeMillis();
+        GridService service = (GridService)getDao().getById(-1);
+        service.getCurrentStatus();
+        System.out.println("Time taken for 0 status changes " + (System.currentTimeMillis() - init) + " miliseconds");
+
+        GridService newService  = new GridService();
+        newService.setUrl("http://new1");
+        for(int i=0;i<100;i++){
+            StatusChange sc = new StatusChange();
+            sc.setService(newService);
+            sc.setStatus(ServiceStatus.DORMANT);
+            newService.getStatusHistory().add(sc);
+        }
+
+        getDao().save(newService);
+        interruptSession();
+        init = System.currentTimeMillis();
+        service = (GridService)getDao().getByUrl("http://new1");
+        assertEquals(ServiceStatus.DORMANT,service.getCurrentStatus());
+        System.out.println("Time taken for 100 status changes " + (System.currentTimeMillis()- init) + " miliseconds");
+
+        GridService newService2 = new GridService();
+        newService2.setUrl("http://new2");
+        for(int i=0;i<10000;i++){
+            StatusChange sc = new StatusChange();
+            sc.setService(newService2);
+            sc.setStatus(ServiceStatus.ACTIVE);
+            newService2.getStatusHistory().add(sc);
+        }
+        getDao().save(newService2);
+        interruptSession();
+        init = System.currentTimeMillis();
+        service = (GridService)getDao().getByUrl("http://new2");
+        assertEquals(ServiceStatus.ACTIVE,service.getCurrentStatus());
+        System.out.println("Time taken for 10000 Status changes " + (System.currentTimeMillis() - init) + " miliseconds");
+
+
+    }
+
+    public void testFilterPerformance(){
+
+        GridService newService3  = new GridService();
+        newService3.setUrl("http://new3");
+        for(int i=0;i<10000;i++){
+            StatusChange sc = new StatusChange();
+            sc.setArchived(true);
+            sc.setService(newService3);
+            sc.setStatus(ServiceStatus.ACTIVE);
+
+            newService3.getStatusHistory().add(sc);
+        }
+
+        StatusChange sc = new StatusChange();
+        sc.setService(newService3);
+        sc.setStatus(ServiceStatus.INACTIVE);
+        newService3.getStatusHistory().add(sc);
+
+        getDao().save(newService3);
+        interruptSession();
+
+        GridService loadedService =  getDao().getByUrl("http://new3");
+        assertNotSame("Filter should not have applied",loadedService.getStatusHistory().size(),1);
+
+        ApplicationContext applicationContext = new ClassPathXmlApplicationContext(
+                new String[]{"classpath:applicationContext-db-aspects.xml"});
+
+        SessionFactory sessionFactory = (SessionFactory) applicationContext
+                .getBean("sessionFactory");
+
+        Session session = SessionFactoryUtils.getSession(sessionFactory, true);
+        TransactionSynchronizationManager.bindResource(sessionFactory, new SessionHolder(session));
+
+
+        try {
+            GridServiceDao aspectDao = (GridServiceDao)applicationContext.getBean("gridServiceDao");
+            long init = System.currentTimeMillis();
+            loadedService =  aspectDao.getByUrl("http://new3");
+            assertSame("Filter should have been applied",loadedService.getStatusHistory().size(),1);
+            assertEquals(ServiceStatus.INACTIVE,loadedService.getStatusHistory().get(0).getStatus());
+            System.out.println("Time taken for 10000 Status changes with filter " + (System.currentTimeMillis() - init) + " miliseconds");
+        } catch (BeansException e) {
+            fail("Transaction failed" + e);
+        }
+        finally {
+            TransactionSynchronizationManager.unbindResource(sessionFactory);
+            SessionFactoryUtils.closeSession(session);
+        }
+    }
+
+
 
 }
