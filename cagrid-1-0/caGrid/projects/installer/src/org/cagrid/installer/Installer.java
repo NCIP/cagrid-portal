@@ -483,7 +483,7 @@ public class Installer {
         ImageIcon myImage = new ImageIcon(Thread.currentThread().getContextClassLoader().getResource(
             "images/caGrid_small.png"));
         Wizard wizard = new Wizard(this.model);
-        wizard.showInFrame("caGrid Installation Wizard", myImage.getImage());
+        wizard.showInFrame("caGrid " + model.getProperty("cagrid.version") + " Installation Wizard", myImage.getImage());
     }
 
 
