@@ -18,6 +18,7 @@ import java.util.List;
 
 import org.apache.axis.message.MessageElement;
 import org.jdom.Element;
+import org.jdom.JDOMException;
 
 /**
  * DataServiceUpgradeFrom1pt2
@@ -44,6 +45,8 @@ public class DataServiceUpgradeFrom1pt2 extends ExtensionUpgraderBase {
 			validateUpgrade();
 			
 			updateLibraries();
+            
+            upgradeModelInformation();
 			
 			setCurrentExtensionVersion();
 			
@@ -90,6 +93,28 @@ public class DataServiceUpgradeFrom1pt2 extends ExtensionUpgraderBase {
         }
         Element extensionDataElement = AxisJdomUtils.fromMessageElement(rawDataElement);
         return extensionDataElement;
+    }
+    
+    
+    private void storeExtensionDataElement(Element elem) throws UpgradeException {
+        MessageElement[] anys = getExtensionType().getExtensionData().get_any();
+        for (int i = 0; (anys != null) && (i < anys.length); i++) {
+            if (anys[i].getQName().equals(Data.getTypeDesc().getXmlType())) {
+                // remove the old extension data
+                anys = (MessageElement[]) Utils.removeFromArray(anys, anys[i]);
+                break;
+            }
+        }
+        // create a message element from the JDom element
+        MessageElement data = null;
+        try {
+            data = AxisJdomUtils.fromElement(elem);
+        } catch (JDOMException ex) {
+            throw new UpgradeException(
+                "Error converting extension data to Axis message element: " + ex.getMessage(), ex);
+        }
+        anys = (MessageElement[]) Utils.appendToArray(anys, data);
+        getExtensionType().getExtensionData().set_any(anys);
     }
 	
 	
@@ -264,5 +289,17 @@ public class DataServiceUpgradeFrom1pt2 extends ExtensionUpgraderBase {
                 + ex.getMessage(), ex);
         }
         getStatus().addDescriptionLine("-- caCORE SDK Support upgraded");
+    }
+    
+    
+    private void upgradeModelInformation() throws UpgradeException {
+        Element extensionDataElement = getExtensionDataElement();
+        Element cadsrInfoElement = extensionDataElement.getChild(
+            "CadsrInformation", extensionDataElement.getNamespace());
+        Element modelInformationElement = ModelInformationConverter.convertModelInformation(
+            getServiceInformation(), getStatus(), cadsrInfoElement);
+        extensionDataElement.removeContent(cadsrInfoElement);
+        extensionDataElement.addContent(modelInformationElement.detach());
+        storeExtensionDataElement(extensionDataElement);
     }
 }
