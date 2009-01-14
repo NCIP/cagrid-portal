@@ -17,6 +17,7 @@ import gov.nih.nci.cagrid.data.extension.ModelSourceType;
 import gov.nih.nci.cagrid.data.ui.NamespaceUtils;
 import gov.nih.nci.cagrid.data.ui.domain.DomainModelFromXmiDialog;
 import gov.nih.nci.cagrid.data.ui.wizard.AbstractWizardPanel;
+import gov.nih.nci.cagrid.introduce.beans.extension.PropertiesProperty;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertyType;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
@@ -76,7 +77,7 @@ import org.cagrid.mms.domain.UMLProjectIdentifer;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * @created Sep 25, 2006
- * @version $Id: DomainModelPanel.java,v 1.11 2009-01-14 15:28:44 dervin Exp $
+ * @version $Id: DomainModelPanel.java,v 1.12 2009-01-14 21:01:04 dervin Exp $
  */
 public class DomainModelPanel extends AbstractWizardPanel {
 
@@ -474,16 +475,19 @@ public class DomainModelPanel extends AbstractWizardPanel {
     private InternalCaDSRBrowserPanel getCaDsrBrowser() {
         if (caDsrBrowser == null) {
             caDsrBrowser = new InternalCaDSRBrowserPanel(true, false);
-            String url;
+            PropertiesProperty urlProperty = null;
             try {
-                url = ConfigurationUtil.getGlobalExtensionProperty(DataServiceConstants.CADSR_SERVICE_URL).getValue();
-            } catch (Exception e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-                return null;
+                urlProperty = ConfigurationUtil.getGlobalExtensionProperty(DataServiceConstants.CADSR_SERVICE_URL);
+            } catch (Exception ex) {
+                CompositeErrorDialog.showErrorDialog(
+                    "Error obtaining extension property " + DataServiceConstants.CADSR_SERVICE_URL,
+                    ex.getMessage(), ex);
             }
-            caDsrBrowser.setDefaultCaDSRURL(url);
-            caDsrBrowser.getCadsr().setText(url);
+            if (urlProperty != null && urlProperty.getValue() != null) {
+                String url = urlProperty.getValue();
+                caDsrBrowser.setDefaultCaDSRURL(url);
+                caDsrBrowser.getCadsr().setText(url);
+            }
         }
         return caDsrBrowser;
     }
