@@ -5,6 +5,8 @@ package gov.nih.nci.cagrid.data.upgrades;
  * Constants for the data service upgraders.  Provides a single point for
  * setting things like the current version, jar names, etc.
  * 
+ * FIXME: change this to 1.3 with the release!!!
+ * 
  * @author ervin
  */
 public interface UpgraderConstants {
