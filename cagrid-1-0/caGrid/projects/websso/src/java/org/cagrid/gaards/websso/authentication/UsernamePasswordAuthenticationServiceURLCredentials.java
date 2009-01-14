@@ -70,6 +70,8 @@ public class UsernamePasswordAuthenticationServiceURLCredentials extends Usernam
 			credential = getBasicCredential(getUsername(), getPassword());
 		} else if (ONE_TIME_PASSWORD.equals(serviceProfileType)) {
 			credential = getOnetimePasswordCredential(getUsername(), getOnetimepassword());
+		}else{
+			throw new RuntimeException("Authentication Service profile "+serviceProfileType +" is not supported");
 		}
 		return credential;
 	}
