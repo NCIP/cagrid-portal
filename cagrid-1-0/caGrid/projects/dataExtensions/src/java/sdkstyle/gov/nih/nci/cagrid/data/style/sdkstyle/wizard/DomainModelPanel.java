@@ -13,7 +13,6 @@ import gov.nih.nci.cagrid.data.extension.Data;
 import gov.nih.nci.cagrid.data.extension.ModelClass;
 import gov.nih.nci.cagrid.data.extension.ModelInformation;
 import gov.nih.nci.cagrid.data.extension.ModelPackage;
-import gov.nih.nci.cagrid.data.extension.ModelProject;
 import gov.nih.nci.cagrid.data.extension.ModelSourceType;
 import gov.nih.nci.cagrid.data.ui.NamespaceUtils;
 import gov.nih.nci.cagrid.data.ui.domain.DomainModelFromXmiDialog;
@@ -68,6 +67,7 @@ import org.cagrid.cadsr.portal.CaDSRBrowserPanel;
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.utils.BusyDialogRunnable;
 import org.cagrid.grape.utils.CompositeErrorDialog;
+import org.cagrid.mms.domain.UMLProjectIdentifer;
 
 
 /**
@@ -76,7 +76,7 @@ import org.cagrid.grape.utils.CompositeErrorDialog;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * @created Sep 25, 2006
- * @version $Id: DomainModelPanel.java,v 1.10 2009-01-13 15:55:19 dervin Exp $
+ * @version $Id: DomainModelPanel.java,v 1.11 2009-01-14 15:28:44 dervin Exp $
  */
 public class DomainModelPanel extends AbstractWizardPanel {
 
@@ -123,10 +123,11 @@ public class DomainModelPanel extends AbstractWizardPanel {
                 getFileTextField().setText(filename);
                 getFromFileRadioButton().setSelected(true);
             }
-            ModelProject proj = info.getModelProject();
-            if (proj != null && proj.getShortName() != null && proj.getVersion() != null) {
+            // TODO: assumes caDSR short name, should be more generic MMS identifier
+            UMLProjectIdentifer proj = info.getUMLProjectIdentifer();
+            if (proj != null && proj.getIdentifier() != null && proj.getVersion() != null) {
                 lastSelectedProject = new Project();
-                lastSelectedProject.setShortName(proj.getShortName());
+                lastSelectedProject.setShortName(proj.getIdentifier());
                 lastSelectedProject.setVersion(proj.getVersion());
             }
             if (info.getModelPackage() != null) {
@@ -729,7 +730,10 @@ public class DomainModelPanel extends AbstractWizardPanel {
                     packages = (ModelPackage[]) Utils.appendToArray(packages, newPackage);
                 }
                 info.setModelPackage(packages);
-                info.setModelProject(new ModelProject(lastSelectedProject.getShortName(), lastSelectedProject.getVersion()));
+                UMLProjectIdentifer id = new UMLProjectIdentifer();
+                id.setIdentifier(lastSelectedProject.getShortName());
+                id.setVersion(lastSelectedProject.getVersion());
+                info.setUMLProjectIdentifer(id);
                 storeModelInformation(info);
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -826,7 +830,10 @@ public class DomainModelPanel extends AbstractWizardPanel {
                 proj.setVersion(model.getProjectVersion());
                 lastSelectedProject = proj;
                 // set model project information
-                info.setModelProject(new ModelProject(model.getProjectShortName(), model.getProjectVersion()));
+                UMLProjectIdentifer id = new UMLProjectIdentifer();
+                id.setIdentifier(model.getProjectShortName());
+                id.setVersion(model.getProjectVersion());
+                info.setUMLProjectIdentifer(id);
                 // walk classes, creating package groupings as needed
                 Map<String, List<String>> packageClasses = new HashMap<String, List<String>>();
                 UMLClass[] modelClasses = model.getExposedUMLClassCollection().getUMLClass();

@@ -8,13 +8,14 @@ import gov.nih.nci.cagrid.data.extension.Data;
 import gov.nih.nci.cagrid.data.extension.ModelClass;
 import gov.nih.nci.cagrid.data.extension.ModelInformation;
 import gov.nih.nci.cagrid.data.extension.ModelPackage;
-import gov.nih.nci.cagrid.data.extension.ModelProject;
 import gov.nih.nci.cagrid.data.extension.ModelSourceType;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
 
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+
+import org.cagrid.mms.domain.UMLProjectIdentifer;
 
 /** 
  *  ExtensionDataManager
@@ -23,7 +24,7 @@ import java.util.List;
  * @author David Ervin
  * 
  * @created Apr 11, 2007 10:04:04 AM
- * @version $Id: ExtensionDataManager.java,v 1.7 2009-01-13 15:55:19 dervin Exp $ 
+ * @version $Id: ExtensionDataManager.java,v 1.8 2009-01-14 15:28:44 dervin Exp $ 
  */
 public class ExtensionDataManager {
     
@@ -111,8 +112,10 @@ public class ExtensionDataManager {
      */
     public void storeModelProjectInformation(String shortName, String version) throws Exception {
         ModelInformation info = getModelInformation();
-        ModelProject project = new ModelProject(shortName, version);
-        info.setModelProject(project);
+        UMLProjectIdentifer id = new UMLProjectIdentifer();
+        id.setIdentifier(shortName);
+        id.setVersion(version);
+        info.setUMLProjectIdentifer(id);
         storeModelInformation(info);
     }
     
@@ -335,8 +338,8 @@ public class ExtensionDataManager {
      */
     public String getModelProjectShortName() throws Exception {
         ModelInformation info = getModelInformation();
-        if (info.getModelProject() != null) {
-            return info.getModelProject().getShortName();
+        if (info.getUMLProjectIdentifer() != null) {
+            return info.getUMLProjectIdentifer().getIdentifier();
         }
         return null;
     }
@@ -350,8 +353,8 @@ public class ExtensionDataManager {
      */
     public String getModelProjectVersion() throws Exception {
         ModelInformation info = getModelInformation();
-        if (info.getModelProject() != null) {
-            return info.getModelProject().getVersion();
+        if (info.getUMLProjectIdentifer() != null) {
+            return info.getUMLProjectIdentifer().getVersion();
         }
         return null;
     }

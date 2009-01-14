@@ -9,12 +9,12 @@ import gov.nih.nci.cagrid.data.extension.Data;
 import gov.nih.nci.cagrid.data.extension.ModelClass;
 import gov.nih.nci.cagrid.data.extension.ModelInformation;
 import gov.nih.nci.cagrid.data.extension.ModelPackage;
-import gov.nih.nci.cagrid.data.extension.ModelProject;
 import gov.nih.nci.cagrid.data.extension.ModelSourceType;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.beans.ServiceDescription;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
+import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertyType;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
@@ -46,6 +46,7 @@ import java.util.jar.JarFile;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.cagrid.mms.domain.UMLProjectIdentifer;
 
 /** 
  *  SDK4StyleConfigurationStep
@@ -55,7 +56,7 @@ import org.apache.commons.logging.LogFactory;
  * @author David Ervin
  * 
  * @created Jan 28, 2008 11:24:21 AM
- * @version $Id: SDK4StyleConfigurationStep.java,v 1.3 2009-01-13 15:55:12 dervin Exp $ 
+ * @version $Id: SDK4StyleConfigurationStep.java,v 1.4 2009-01-14 15:28:43 dervin Exp $ 
  */
 public class SDK4StyleConfigurationStep extends Step {
     public static final String SDK_4_TESTS_BASE_DIR_PROPERTY = "sdk4.tests.base.dir";    
@@ -84,6 +85,7 @@ public class SDK4StyleConfigurationStep extends Step {
         getQueryProcessorSecurityConfiguration().applyConfiguration();
         applyDomainModelConfiguration();
         getSchemaMappingConfiguration().applyConfiguration();
+        mapModelToSchemas();
         // persist the changes made by the configuration steps
         File serviceModelFile = new File(getServiceInformation().getBaseDirectory(), IntroduceConstants.INTRODUCE_XML_FILE);
         LOG.debug("Persisting changes to service model (" + serviceModelFile.getAbsolutePath() + ")");
@@ -195,6 +197,23 @@ public class SDK4StyleConfigurationStep extends Step {
     }
     
     
+    private void mapModelToSchemas() throws Exception {
+        ModelInformation modelInfo = getExtensionData().getModelInformation();
+        for (ModelPackage pack : modelInfo.getModelPackage()) {
+            // locate a namespace type mapped to this package
+            for (NamespaceType nsType : getServiceInformation().getServiceDescriptor().getNamespaces().getNamespace()) {
+                if (pack.getPackageName().equals(nsType.getPackageName())) {
+                    for (ModelClass clazz : pack.getModelClass()) {
+                        getModelInfoUtil().setMappedElementName(
+                            pack.getPackageName(), clazz.getShortClassName(), clazz.getShortClassName());
+                    }
+                    break;
+                }
+            }
+        }
+    }
+    
+    
     private ServiceInformation getServiceInformation() throws Exception {
         if (serviceInformation == null) {
             serviceInformation = new ServiceInformation(serviceBaseDirectory);
@@ -245,8 +264,10 @@ public class SDK4StyleConfigurationStep extends Step {
         Data extensionData = getExtensionData();
         ModelInformation info = extensionData.getModelInformation();
         // set cadsr project information
-        info.setModelProject(
-            new ModelProject(model.getProjectShortName(), model.getProjectVersion()));
+        UMLProjectIdentifer id = new UMLProjectIdentifer();
+        id.setIdentifier(model.getProjectShortName());
+        id.setVersion(model.getProjectVersion());
+        info.setUMLProjectIdentifer(id);
         // walk classes, creating package groupings as needed
         Map<String, List<String>> packageClasses = new HashMap<String, List<String>>();
         UMLClass[] modelClasses = model.getExposedUMLClassCollection().getUMLClass(); 
@@ -261,7 +282,7 @@ public class SDK4StyleConfigurationStep extends Step {
             }
             classList.add(modelClasses[i].getClassName());
         }
-        // create cadsr packages
+        // create model packages
         ModelPackage[] packages = new ModelPackage[packageClasses.keySet().size()];
         String[] packageNames = new String[packages.length];
         int packIndex = 0;
@@ -272,15 +293,14 @@ public class SDK4StyleConfigurationStep extends Step {
                 model.getProjectShortName(), model.getProjectVersion(), packName);
             ModelPackage pack = new ModelPackage();
             pack.setPackageName(packName);
-            getModelInfoUtil().setMappedNamespace(packName, mappedNamespace);
-            // create ClassMappings for the package's classes
+            // getModelInfoUtil().setMappedNamespace(packName, mappedNamespace);
+            // create model classes for the package's classes
             List<String> classNameList = packageClasses.get(packName);
             ModelClass[] classes = new ModelClass[classNameList.size()];
             for (int i = 0; i < classNameList.size(); i++) {
                 ModelClass clazz = new ModelClass();
                 String className = classNameList.get(i);
                 clazz.setShortClassName(className);
-                modelInfoUtil.setMappedElementName(packName, className, className);
                 clazz.setSelected(true);
                 clazz.setTargetable(true);
                 classes[i] = clazz;
@@ -357,14 +377,14 @@ public class SDK4StyleConfigurationStep extends Step {
     }
     
     
-    private static String getSdkRemoteClientDir() {
+    private String getSdkRemoteClientDir() {
         String basedir = System.getProperty(SDK_4_TESTS_BASE_DIR_PROPERTY);
         assertNotNull("System property " + SDK_4_TESTS_BASE_DIR_PROPERTY + " was not defined!", basedir);
         return basedir + EXT_SDK_DIR;
     }
     
     
-    private static String getDomainModelFilename() {
+    private String getDomainModelFilename() {
         String basedir = System.getProperty(SDK_4_TESTS_BASE_DIR_PROPERTY);
         assertNotNull("System property " + SDK_4_TESTS_BASE_DIR_PROPERTY + " was not defined!", basedir);
         return basedir + DOMAIN_MODEL_FILE;

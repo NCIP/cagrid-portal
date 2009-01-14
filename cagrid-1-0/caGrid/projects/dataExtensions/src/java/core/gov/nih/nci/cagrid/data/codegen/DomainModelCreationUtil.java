@@ -55,10 +55,8 @@ public class DomainModelCreationUtil {
         LOG.info("Initializing MMS client (URL = " + mmsUrl + ")");
         MetadataModelServiceI mmsClient = new MetadataModelServiceClient(mmsUrl);
 
-        // create the prototype project
-        UMLProjectIdentifer proj = new UMLProjectIdentifer();
-        proj.setIdentifier(modelInfo.getModelProject().getShortName());
-        proj.setVersion(modelInfo.getModelProject().getVersion());
+        // grab the prototype project
+        UMLProjectIdentifer proj = modelInfo.getUMLProjectIdentifer();
 
         // Set of fully qualified class names
         Set<String> selectedClasses = new HashSet<String>();

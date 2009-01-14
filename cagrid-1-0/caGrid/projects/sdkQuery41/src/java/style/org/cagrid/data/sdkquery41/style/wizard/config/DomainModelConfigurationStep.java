@@ -9,7 +9,6 @@ import gov.nih.nci.cagrid.data.extension.Data;
 import gov.nih.nci.cagrid.data.extension.ModelClass;
 import gov.nih.nci.cagrid.data.extension.ModelInformation;
 import gov.nih.nci.cagrid.data.extension.ModelPackage;
-import gov.nih.nci.cagrid.data.extension.ModelProject;
 import gov.nih.nci.cagrid.data.extension.ModelSourceType;
 import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertyType;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
@@ -33,6 +32,7 @@ import java.util.Map;
 import org.cagrid.cadsr.UMLModelService;
 import org.cagrid.cadsr.client.CaDSRUMLModelService;
 import org.cagrid.data.sdkquery41.style.common.SDK41StyleConstants;
+import org.cagrid.mms.domain.UMLProjectIdentifer;
 
 /**
  * DomainModelConfigurationStep
@@ -94,8 +94,10 @@ public class DomainModelConfigurationStep extends AbstractStyleConfigurationStep
         ModelInformation modelInfo = new ModelInformation();
         // default to model from mms
         modelInfo.setSource(ModelSourceType.mms);
-        modelInfo.setModelProject(
-            new ModelProject(selectedProject.getShortName(), selectedProject.getVersion()));
+        UMLProjectIdentifer id = new UMLProjectIdentifer();
+        id.setIdentifier(selectedProject.getShortName());
+        id.setVersion(selectedProject.getVersion());
+        modelInfo.setUMLProjectIdentifer(id);
         
         // packages
         UMLModelService cadsrClient = new CaDSRUMLModelService(cadsrUrl);
@@ -178,8 +180,11 @@ public class DomainModelConfigurationStep extends AbstractStyleConfigurationStep
         ModelInformation modelInfo = new ModelInformation();
         // use provided model
         modelInfo.setSource(ModelSourceType.preBuilt);
-        modelInfo.setModelProject(
-            new ModelProject(model.getProjectShortName(), model.getProjectVersion()));
+        // TODO: this is a caDSR style identifier, make it MMS-like
+        UMLProjectIdentifer id = new UMLProjectIdentifer();
+        id.setIdentifier(model.getProjectShortName());
+        id.setVersion(model.getProjectVersion());
+        modelInfo.setUMLProjectIdentifer(id);
         
         // map classes by packages
         Map<String, List<UMLClass>> classesByPackage = new HashMap<String, List<UMLClass>>();
@@ -268,8 +273,11 @@ public class DomainModelConfigurationStep extends AbstractStyleConfigurationStep
         ModelInformation modelInfo = new ModelInformation();
         // model from filesystem
         modelInfo.setSource(ModelSourceType.preBuilt);
-        modelInfo.setModelProject(
-            new ModelProject(model.getProjectShortName(), model.getProjectVersion()));
+        // TODO: mms identifier
+        UMLProjectIdentifer id = new UMLProjectIdentifer();
+        id.setIdentifier(model.getProjectShortName());
+        id.setVersion(model.getProjectVersion());
+        modelInfo.setUMLProjectIdentifer(id);
         
         // map classes by packages
         Map<String, List<UMLClass>> classesByPackage = new HashMap<String, List<UMLClass>>();

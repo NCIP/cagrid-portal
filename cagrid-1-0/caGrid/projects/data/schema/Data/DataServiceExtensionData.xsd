@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- edited with XMLSpy v2005 rel. 3 U (http://www.altova.com) by David W. Ervin (The Ohio State University / Department of Biomedical Informatics) -->
-<xsd:schema xmlns:ext="http://CQL.caBIG/1/gov.nih.nci.cagrid.data.extension" xmlns:aud="http://gov.nih.nci.cagrid.data/Auditing" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://CQL.caBIG/1/gov.nih.nci.cagrid.data.extension" elementFormDefault="qualified" attributeFormDefault="unqualified">
-	<!--
+<xsd:schema xmlns:ext="http://CQL.caBIG/1/gov.nih.nci.cagrid.data.extension" xmlns:aud="http://gov.nih.nci.cagrid.data/Auditing" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:mms="gme://caGrid.caBIG/1.0/org.cagrid.mms.domain" targetNamespace="http://CQL.caBIG/1/gov.nih.nci.cagrid.data.extension" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<xsd:import namespace="http://gov.nih.nci.cagrid.data/Auditing" schemaLocation="DataServiceAuditorConfiguration.xsd"/>
-	-->
+	<xsd:import namesapce="gme://caGrid.caBIG/1.0/org.cagrid.mms.domain" schemaLocation="org.cagrid.mms.xsd"/>
 	<xsd:element name="DataServiceExtensionData">
 		<xsd:annotation>
 			<xsd:documentation>Data the data service introduce extension needs to know about</xsd:documentation>
@@ -36,7 +35,7 @@
 	</xsd:complexType>
 	<xsd:complexType name="ModelInformation">
 		<xsd:sequence>
-			<xsd:element name="ModelProject" type="ext:ModelProject" minOccurs="0"/>
+			<xsd:element ref="mms:UMLProjectIdentifer" minOccurs="0" maxOccurs="1"/>
 			<xsd:element name="ModelPackage" type="ext:ModelPackage" minOccurs="0" maxOccurs="unbounded"/>
 		</xsd:sequence>
 		<xsd:attribute name="source" type="ext:ModelSourceType" use="required"/>
@@ -48,10 +47,6 @@
 			<xsd:enumeration value="none"/>
 		</xsd:restriction>
 	</xsd:simpleType>
-	<xsd:complexType name="ModelProject">
-		<xsd:attribute name="shortName" type="xsd:string" use="required"/>
-		<xsd:attribute name="version" type="xsd:string" use="required"/>
-	</xsd:complexType>
 	<xsd:complexType name="ModelPackage">
 		<xsd:sequence>
 			<xsd:element name="ModelClass" type="ext:ModelClass" minOccurs="0" maxOccurs="unbounded"/>

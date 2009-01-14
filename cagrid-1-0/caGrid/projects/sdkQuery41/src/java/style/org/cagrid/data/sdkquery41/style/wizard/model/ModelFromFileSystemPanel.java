@@ -6,7 +6,6 @@ import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.data.extension.ModelClass;
 import gov.nih.nci.cagrid.data.extension.ModelInformation;
 import gov.nih.nci.cagrid.data.extension.ModelPackage;
-import gov.nih.nci.cagrid.data.extension.ModelProject;
 import gov.nih.nci.cagrid.data.extension.ModelSourceType;
 import gov.nih.nci.cagrid.data.ui.wizard.OneTimeInfoDialogUtil;
 import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertyType;
@@ -53,6 +52,7 @@ import org.cagrid.data.sdkquery41.style.wizard.config.DomainModelConfigurationSt
 import org.cagrid.data.sdkquery41.style.wizard.config.SharedConfiguration;
 import org.cagrid.data.sdkquery41.style.wizard.config.DomainModelConfigurationStep.DomainModelConfigurationSource;
 import org.cagrid.grape.utils.CompositeErrorDialog;
+import org.cagrid.mms.domain.UMLProjectIdentifer;
 
 import com.jgoodies.validation.Severity;
 import com.jgoodies.validation.ValidationMessage;
@@ -157,8 +157,11 @@ public class ModelFromFileSystemPanel extends DomainModelSourcePanel {
         // set the cadsr information to NOT generate a new model
         ModelInformation modelInfo = new ModelInformation();
         modelInfo.setSource(ModelSourceType.preBuilt);
-        modelInfo.setModelProject(
-            new ModelProject(model.getProjectShortName(), model.getProjectVersion()));
+        // TODO: mms identifier for local file system projects
+        UMLProjectIdentifer id = new UMLProjectIdentifer();
+        id.setIdentifier(model.getProjectShortName());
+        id.setVersion(model.getProjectVersion());
+        modelInfo.setUMLProjectIdentifer(id);
         
         // map classes by packages
         Map<String, List<UMLClass>> classesByPackage = new HashMap<String, List<UMLClass>>();
