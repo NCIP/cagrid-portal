@@ -8,37 +8,44 @@
 <script type="text/javascript" src='<c:url value="/js/scriptaculous/effects.js"/>'></script>
 <script type="text/javascript" src='<c:url value="/dwr/interface/ServiceStatusManager.js"/>'></script>
 
+<c:set var="prefix"><portlet:namespace/></c:set>
+<c:set var="sd" value="${gridService.serviceMetadata.serviceDescription}"/>
 
 <script type="text/javascript">
-    function <portlet:namespace/>submitBanUnbanRequest(serviceId){
-    ServiceStatusManager.banUnbanService(serviceId, function(status){
-    $("serviceStatusSpan").innerHTML=status;
-    new Effect.Highlight('serviceStatusSpan');
+    function ${prefix}submitBanUnbanRequest(serviceId){
+        ServiceStatusManager.banUnbanService(serviceId, function(status){
+            $("serviceStatusSpan").innerHTML=status;
+            new Effect.Highlight('serviceStatusSpan');
 
-    var btnValue = $("banUnbanBtn").value;
-    if(btnValue=="Ban Service"){
-    $("banUnbanBtn").value="Unban Service";
-    }
-    else{
-    $("banUnbanBtn").value="Ban Service";
-    }
-    });
+            var btnValue = $("banUnbanBtn").value;
+            if(btnValue=="Ban Service"){
+                $("banUnbanBtn").value="Unban Service";
+            }
+            else{
+                $("banUnbanBtn").value="Ban Service";
+            }
+        });
     }
 
+    function ${prefix}reloadMetadata(serviceId){
+        ServiceStatusManager.reloadMetadata(serviceId, function(sucess){
+             $("${prefix}metaReload").innerHTML =  "Reloading Metadata....";
+        });
+
+    }
 
 </script>
 
-<c:set var="sd" value="${gridService.serviceMetadata.serviceDescription}"/>
 <b><c:out value="${sd.name}"/></b>
 <table class="detailstable" style="margin-left:5px;">
     <tbody>
-        <tr>
-            <td class="detailslabelcell">URL:</td>
-            <td><c:out value="${gridService.url}"/></td>
-        </tr>
-        <tr>
-            <td class="detailslabelcell">Status:</td>
-            <td>
+    <tr>
+        <td class="detailslabelcell">URL:</td>
+        <td><c:out value="${gridService.url}"/></td>
+    </tr>
+    <tr>
+        <td class="detailslabelcell">Status:</td>
+        <td>
                 <span id="serviceStatusSpan"
                         <c:choose>
                             <c:when test="${gridService.currentStatus != 'ACTIVE'}">
@@ -51,48 +58,67 @@
                         </c:choose>
                 </span>
 
-                <c:if test="${gridService.currentStatus != 'ACTIVE'}">
-                    <input type="button"
-                           onclick="<portlet:namespace/>diagnoseService('<c:out value="${gridService.url}"/>')"
-                           value="Diagnose"
-                            />
-                </c:if>
+            <c:if test="${gridService.currentStatus != 'ACTIVE'}">
+                <input type="button"
+                       onclick="${prefix}diagnoseService('<c:out value="${gridService.url}"/>')"
+                       value="Diagnose"
+                        />
+            </c:if>
 
-                <c:if test="${liferayUser.admin}">
-                    <input id="banUnbanBtn" type="button"
-                            <c:choose>
-                                <c:when test="${gridService.currentStatus == 'BANNED'}">
-                                    value="Unban Service"
-                                </c:when>
-                                <c:otherwise>
-                                    value="Ban Service"
-                                </c:otherwise>
-                            </c:choose>
-                           onclick="<portlet:namespace/>submitBanUnbanRequest('<c:out value="${gridService.id}"/>')"
-                            />
-                </c:if>
-            </td>
-        </tr>
+            <c:if test="${liferayUser.admin}">
+                <input id="banUnbanBtn" type="button"
+                        <c:choose>
+                            <c:when test="${gridService.currentStatus == 'BANNED'}">
+                                value="Unban Service"
+                            </c:when>
+                            <c:otherwise>
+                                value="Ban Service"
+                            </c:otherwise>
+                        </c:choose>
+                       onclick="${prefix}submitBanUnbanRequest('<c:out value="${gridService.id}"/>')"
+                        />
+
+                <span id="${prefix}metaReload">
+                <c:choose>
+                    <c:when test="${gridService.metadataHash != null}">
+                        <input id="reloadMetadataBtn" type="button"
+                               value="Reload Metadata" alt="Will reload the metadata for this service. Can take upt 30 minutes for the metadata to reload"
+                               onclick="${prefix}reloadMetadata('<c:out value="${gridService.id}"/>')"
+                                />
+                    </c:when>
+                    <c:otherwise>
+                        <span id="${prefix}reloadMsg">
+                        <tags:infoPopup popup_text="Metadata will be reloaded for this service"
+                                        popup_name="Reloading Metadata"
+                                        id="${prefix}metaReloadScheduled"/>
+                            </span>
+                    </c:otherwise>
+                </c:choose>
+                    </span>
+
+            </c:if>
+        </td>
+    </tr>
+    <tr>
+        <td class="detailslabelcell">Description:</td>
+        <td><c:out value="${sd.description}"/></td>
+    </tr>
+    <tr>
+        <td class="detailslabelcell">Version:</td>
+        <td><c:out value="${sd.version}"/></td>
+    </tr>
+    <c:if test="${!empty sd.caDSRRegistration.registrationStatus}">
         <tr>
-            <td class="detailslabelcell">Description:</td>
-            <td><c:out value="${sd.description}"/></td>
+            <td class="detailslabelcell">caDSR Registration Status:</td>
+            <td><c:out value="${sd.caDSRRegistration.registrationStatus}"/></td>
         </tr>
+    </c:if>
+    <c:if test="${!empty sd.caDSRRegistration.workflowStatus}">
         <tr>
-            <td class="detailslabelcell">Version:</td>
-            <td><c:out value="${sd.version}"/></td>
+            <td class="detailslabelcell">caDSR Workflow Status:</td>
+            <td><c:out value="${sd.caDSRRegistration.workflowStatus}"/></td>
         </tr>
-        <c:if test="${!empty sd.caDSRRegistration.registrationStatus}">
-            <tr>
-                <td class="detailslabelcell">caDSR Registration Status:</td>
-                <td><c:out value="${sd.caDSRRegistration.registrationStatus}"/></td>
-            </tr>
-        </c:if>
-        <c:if test="${!empty sd.caDSRRegistration.workflowStatus}">
-            <tr>
-                <td class="detailslabelcell">caDSR Workflow Status:</td>
-                <td><c:out value="${sd.caDSRRegistration.workflowStatus}"/></td>
-            </tr>
-        </c:if>
+    </c:if>
     </tbody>
 </table>
 

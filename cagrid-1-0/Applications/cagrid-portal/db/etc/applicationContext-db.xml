@@ -10,13 +10,18 @@
 	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
 	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd">
 
+    <bean id="archivedStatus" class="java.lang.String">
+        <constructor-arg value="archivedStatus"/>
+    </bean>
+
+    <aop:aspectj-autoproxy proxy-target-class="true"/>
 
     <bean id="propertyConfigurer"
           class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
         <property name="location"
                   value="classpath:cagridportal.properties"/>
     </bean>
-    
+
     <bean id="dataSource"
           class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close"
           p:driverClassName="${cagrid.portal.db.driver}"
@@ -39,6 +44,19 @@
                 hibernate.dialect=${cagrid.portal.db.dialect}
                 hibernate.show_sql=${cagrid.portal.db.show_sql}
             </value>
+        </property>
+
+        <property name="filterDefinitions">
+            <list>
+                <bean class="org.springframework.orm.hibernate3.FilterDefinitionFactoryBean">
+                    <property name="filterName" ref="archivedStatus"/>
+                    <property name="parameterTypes">
+                        <props>
+                            <prop key="archivedFlag">boolean</prop>
+                        </props>
+                    </property>
+                </bean>
+            </list>
         </property>
 
         <property name="annotatedClasses">

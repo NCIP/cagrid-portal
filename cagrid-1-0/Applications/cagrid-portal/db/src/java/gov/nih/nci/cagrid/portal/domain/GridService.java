@@ -4,28 +4,14 @@
 package gov.nih.nci.cagrid.portal.domain;
 
 import gov.nih.nci.cagrid.portal.domain.metadata.ServiceMetadata;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.persistence.CascadeType;
-import javax.persistence.DiscriminatorColumn;
-import javax.persistence.DiscriminatorType;
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.OrderBy;
-import javax.persistence.Table;
-import javax.persistence.Transient;
-
+import org.hibernate.annotations.Filter;
 import org.hibernate.annotations.ForceDiscriminator;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
-import org.hibernate.annotations.LazyCollection;
+
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author <a href="joshua.phillips@semanticbits.com">Joshua Phillips</a>
@@ -43,7 +29,6 @@ import org.hibernate.annotations.LazyCollection;
 @DiscriminatorColumn(name = "service_type", discriminatorType = DiscriminatorType.STRING)
 @DiscriminatorValue("GridService")
 @ForceDiscriminator
-
 public class GridService extends AbstractDomainObject {
 
     private List<IndexService> indexServices = new ArrayList<IndexService>();
@@ -97,9 +82,7 @@ public class GridService extends AbstractDomainObject {
     }
 
     @OneToMany(mappedBy="service", cascade = CascadeType.ALL)
-    @LazyCollection(
-            org.hibernate.annotations.LazyCollectionOption.EXTRA
-    )
+    @Filter(name = "archivedStatus", condition = "archived = :archivedFlag")
     @OrderBy("time")
     public List<StatusChange> getStatusHistory() {
         return statusHistory;

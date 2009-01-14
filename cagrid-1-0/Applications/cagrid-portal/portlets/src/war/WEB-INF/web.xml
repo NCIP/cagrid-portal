@@ -116,7 +116,9 @@
                 gov.nih.nci.cagrid.portal.portlet.diagnostics.IdxDiagnosticService,
                 gov.nih.nci.cagrid.portal.portlet.diagnostics.MetadataDiagnosticService,
                 gov.nih.nci.cagrid.portal.portlet.status.AjaxStatusService,
-                gov.nih.nci.cagrid.portal.portlet.map.AjaxMapService
+                gov.nih.nci.cagrid.portal.portlet.map.AjaxMapService,
+                gov.nih.nci.cagrid.portal.portlet.discovery.evs.DefaultConceptAutocompleterService,
+                gov.nih.nci.cagrid.portal.portlet.status.EditServiceStatusManager
             </param-value>
         </init-param>
     </servlet>
