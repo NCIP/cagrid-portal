@@ -12,7 +12,6 @@
 	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
 	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd">
 
-
     <bean id="propertyConfigurer"
           class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
         <property name="location"
@@ -61,5 +60,13 @@
           class="gov.nih.nci.cagrid.portal.aggr.regsvc.DomainModelBuilder" >
         <property name="hibernateTemplate" ref="hibernateTemplate"/>
     </bean>
+
+    <bean id="metadataChangeListener"
+		parent="metadataListenerTemplate"
+		class="gov.nih.nci.cagrid.portal.aggr.metachange.MetadataChangeListener">
+		<property name="gridServiceDao" ref="gridServiceDao" />
+		<property name="sharedCqlQueryDao" ref="sharedCqlQueryDao" />
+		<property name="cqlQueryInstanceDao" ref="cqlQueryInstanceDao" />
+	</bean>
 
 </beans>

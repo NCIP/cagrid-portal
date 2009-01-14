@@ -15,38 +15,50 @@
     <import resource="classpath:applicationContext-aggr-status-beans.xml"/>
     <import resource="classpath:applicationContext-aggr-regsvc.xml"/>
 
-    <bean id="checkForServiceStatusChanges"
-          class="org.springframework.scheduling.timer.MethodInvokingTimerTaskFactoryBean">
-        <property name="targetObject" ref="serviceStatusChangeMonitor"/>
-        <property name="targetMethod" value="checkForServiceStatusChanges"/>
+    <bean id="statusChangeArchiverTask"
+          class="org.springframework.scheduling.timer.ScheduledTimerTask">
+        <property name="delay" value="1000"/>
+        <property name="period" ref="slowDefaultPeriod"/>
+        <property name="timerTask">
+            <bean id="statusChangeArchiverTaskBean"
+                  class="org.springframework.scheduling.timer.MethodInvokingTimerTaskFactoryBean">
+                <property name="targetObject" ref="statusChangeArchiver"/>
+                <property name="targetMethod" value="doArchive"/>
+            </bean>
+        </property>
     </bean>
 
     <bean id="checkForServiceStatusChangesTask"
           class="org.springframework.scheduling.timer.ScheduledTimerTask">
         <property name="delay" value="60000"/>
         <property name="period" ref="defaultPeriod"/>
-        <property name="timerTask" ref="checkForServiceStatusChanges"/>
-    </bean>
-
-
-    <bean id="checkServiceStatus"
-          class="org.springframework.scheduling.timer.MethodInvokingTimerTaskFactoryBean">
-        <property name="targetObject" ref="serviceStatusMonitor"/>
-        <property name="targetMethod" value="checkServiceStatus"/>
+        <property name="timerTask">
+            <bean id="checkForServiceStatusChanges"
+                  class="org.springframework.scheduling.timer.MethodInvokingTimerTaskFactoryBean">
+                <property name="targetObject" ref="serviceStatusChangeMonitor"/>
+                <property name="targetMethod" value="checkForServiceStatusChanges"/>
+            </bean>
+        </property>
     </bean>
 
     <bean id="checkServiceStatusTask"
           class="org.springframework.scheduling.timer.ScheduledTimerTask">
         <property name="delay" value="90000"/>
         <property name="period" ref="defaultPeriod"/>
-        <property name="timerTask" ref="checkServiceStatus"/>
+        <property name="timerTask">
+            <bean id="checkServiceStatus"
+                  class="org.springframework.scheduling.timer.MethodInvokingTimerTaskFactoryBean">
+                <property name="targetObject" ref="serviceStatusMonitor"/>
+                <property name="targetMethod" value="checkServiceStatus"/>
+            </bean>
+        </property>
     </bean>
 
     <bean id="statusTimerFactory"
           class="org.springframework.scheduling.timer.TimerFactoryBean">
-
         <property name="scheduledTimerTasks">
             <list>
+                <ref bean="statusChangeArchiverTask"/>
                 <ref bean="checkForServiceStatusChangesTask"/>
                 <ref bean="checkServiceStatusTask"/>
             </list>

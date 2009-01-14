@@ -1,0 +1,53 @@
+<ns1:DomainModel projectDescription="caCORE 3.1 models" projectLongName="caCORE" projectShortName="caCORE" projectVersion="3.1" xmlns:ns1="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice">
+    <ns1:exposedUMLClassCollection>
+        <ns1:UMLClass allowableAsTarget="true" className="Agent" description="A therapeutic agent (drug, intervention therapy) used in a clinical trail protocol." id="23403F84-74DA-0187-E044-0003BA3F9857" packageName="gov.nih.nci.cabio.domain" projectName="caCORE 3.1" projectVersion="3.1">
+            <ns84:umlAttributeCollection xmlns:ns84="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+                <ns84:UMLAttribute dataTypeName="java.lang.String" description="The name of the agent object." name="name" publicID="2529591" version="1.0">
+                    <ns84:SemanticMetadata conceptCode="C42614" conceptDefinition="The words or language units by which a thing is known." conceptName="Name" order="0"/>
+                    <ns84:ValueDomain longName="java.lang.String">
+                        <ns84:enumerationCollection/>
+                    </ns84:ValueDomain>
+                </ns84:UMLAttribute>
+                <ns84:UMLAttribute dataTypeName="java.lang.Long" description="The NCI's internal identification number for the object." name="NSCNumber" publicID="2529586" version="1.0">
+                    <ns84:SemanticMetadata conceptCode="C41243" conceptDefinition="A unique drug identifier issued by the Nomenclature Standards Committee of the U.S. Food and Drug Administration." conceptName="NSC Code" order="0"/>
+                    <ns84:ValueDomain longName="java.lang.Long">
+                        <ns84:enumerationCollection/>
+                    </ns84:ValueDomain>
+                </ns84:UMLAttribute>
+                <ns84:UMLAttribute dataTypeName="java.lang.String" description="The NCI's Enterprise Vocabulary Services (EVS) identification number." name="EVSId" publicID="2529588" version="1.0">
+                    <ns84:SemanticMetadata conceptCode="C43516" conceptDefinition="A concept unique identifier within the NCI Enterprise Vocabulary Service's NCI Thesaurus." conceptName="NCI Concept Code" order="0"/>
+                    <ns84:ValueDomain longName="java.lang.String">
+                        <ns84:enumerationCollection/>
+                    </ns84:ValueDomain>
+                </ns84:UMLAttribute>
+                <ns84:UMLAttribute dataTypeName="java.lang.String" description="The comment for the agent object." name="comment" publicID="2529589" version="1.0">
+                    <ns84:SemanticMetadata conceptCode="C25393" conceptDefinition="Comments; a written explanation or criticism or illustration that is added to a book or other textual material." conceptName="Comments" order="0"/>
+                    <ns84:ValueDomain longName="java.lang.String">
+                        <ns84:enumerationCollection/>
+                    </ns84:ValueDomain>
+                </ns84:UMLAttribute>
+                <ns84:UMLAttribute dataTypeName="java.lang.Boolean" description="If the object is CMAP agent." name="isCMAPAgent" publicID="2529587" version="1.0">
+                    <ns84:SemanticMetadata conceptCode="C41161" conceptDefinition="A therapeutic agent (drug, intervention therapy) used in a clinical trial protocol." conceptName="Protocol Agent" order="1"/>
+                    <ns84:SemanticMetadata conceptCode="C43578" conceptDefinition="An indicator that can be set or unset in order to signal whether a particular condition is true. The indicator usually takes the form of a single binary digit, or bit (either 0 or 1). (from Dictionary of Computers)" conceptName="Flag" order="0"/>
+                    <ns84:SemanticMetadata conceptCode="C48274" conceptDefinition="Through the Cancer Molecular Analysis Project (CMAP), NCI facilitates the identification and evaluation of molecular targets by integrating comprehensive molecular characterizations of cancer and making the data and infrastructure publicly accessible. CMAP permits investigators to 1) Discover molecular targets, 2) Assess their validity and interaction with other targets, 3) Determine if there are therapeutic agents that can act on specific targets, 4) Screen for possible toxicity, and 5) Determine whether there are clinical trials evaluating these agents. (http://plan2005.cancer.gov/bioinformatics.html)" conceptName="Cancer Molecular Analysis Project" order="2"/>
+                    <ns84:ValueDomain longName="java.lang.Boolean">
+                        <ns84:enumerationCollection/>
+                    </ns84:ValueDomain>
+                </ns84:UMLAttribute>
+                <ns84:UMLAttribute dataTypeName="java.lang.Long" description="The identifier attached to this record in the caBIO database" name="id" publicID="2529585" version="1.0">
+                    <ns84:SemanticMetadata conceptCode="C25364" conceptDefinition="One or more characters used to identify, name, or characterize the nature, properties, or contents of a thing." conceptName="Identifier" order="0"/>
+                    <ns84:ValueDomain longName="java.lang.Long">
+                        <ns84:enumerationCollection/>
+                    </ns84:ValueDomain>
+                </ns84:UMLAttribute>
+                <ns84:UMLAttribute dataTypeName="java.lang.String" description="The source for the agent." name="source" publicID="2529590" version="1.0">
+                    <ns84:SemanticMetadata conceptCode="C25683" conceptDefinition="Source; where something is available." conceptName="Source" order="0"/>
+                    <ns84:ValueDomain longName="java.lang.String">
+                        <ns84:enumerationCollection/>
+                    </ns84:ValueDomain>
+                </ns84:UMLAttribute>
+            </ns84:umlAttributeCollection>
+            <ns85:SemanticMetadata conceptCode="C41161" conceptDefinition="A therapeutic agent (drug, intervention therapy) used in a clinical trial protocol." conceptName="Protocol Agent" order="0" xmlns:ns85="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
+        </ns1:UMLClass>
+    </ns1:exposedUMLClassCollection>
+</ns1:DomainModel>

@@ -15,6 +15,15 @@
     <!-- config file contains all non task beans -->
     <import resource="classpath:applicationContext-aggr-regsvc-beans.xml"/>
 
+    <bean id="maxDowntimeHours" class="java.lang.Integer">
+        <constructor-arg value="${cagrid.portal.maxDowntimeHours}"/>
+    </bean>
+
+    <bean id="statusChangeArchiver" class="gov.nih.nci.cagrid.portal.aggr.status.StatusChangeArchiver">
+        <property name="maxDowntimeHours" ref="maxDowntimeHours"/>
+        <property name="gridServiceDao" ref="gridServiceDao"/>
+    </bean>
+
     <bean id="dynamicServiceStatusProvider"
           class="gov.nih.nci.cagrid.portal.aggr.status.DelegatingDynamicServiceStatusProvider">
         <property name="providers">
@@ -75,7 +84,7 @@
         <property name="gridServiceDao" ref="gridServiceDao"/>
         <property name="serviceStatusPolicy">
             <bean class="gov.nih.nci.cagrid.portal.aggr.status.SimpleServiceStatusPolicy">
-                <property name="maxDowntimeHours" value="96"/>
+                <property name="maxDowntimeHours" ref="maxDowntimeHours"/>
             </bean>
         </property>
     </bean>

@@ -50,14 +50,6 @@
 		<property name="timerTask" ref="checkForMetadataChanges" />
 	</bean>
 
-	<bean id="metadataChangeListener"
-		parent="metadataListenerTemplate"
-		class="gov.nih.nci.cagrid.portal.aggr.metachange.MetadataChangeListener">
-		<property name="gridServiceDao" ref="gridServiceDao" />
-		<property name="sharedCqlQueryDao" ref="sharedCqlQueryDao" />
-		<property name="cqlQueryInstanceDao" ref="cqlQueryInstanceDao" />
-	</bean>
-	
     
 	<bean id="metachangeTimerFactory"
           class="org.springframework.scheduling.timer.TimerFactoryBean">
