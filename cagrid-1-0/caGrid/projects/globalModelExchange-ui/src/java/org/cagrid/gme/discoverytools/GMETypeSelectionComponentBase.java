@@ -9,12 +9,15 @@ import gov.nih.nci.cagrid.introduce.beans.namespace.NamespacesType;
 import gov.nih.nci.cagrid.introduce.portal.modification.discovery.NamespaceTypeDiscoveryComponent;
 
 import java.io.File;
+import java.io.IOException;
+import java.rmi.RemoteException;
 import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.cagrid.gme.client.GlobalModelExchangeClient;
 import org.cagrid.gme.domain.XMLSchemaNamespace;
+import org.cagrid.gme.stubs.types.NoSuchNamespaceExistsFault;
 
 
 public abstract class GMETypeSelectionComponentBase extends NamespaceTypeDiscoveryComponent {
@@ -22,8 +25,11 @@ public abstract class GMETypeSelectionComponentBase extends NamespaceTypeDiscove
     private static final Log logger = LogFactory.getLog(GMETypeSelectionComponentBase.class);
 
 
-    private Map<XMLSchemaNamespace, File> cacheSchemas(File dir, XMLSchemaNamespace namespace) throws Exception {
-        GlobalModelExchangeClient client = new GlobalModelExchangeClient(getGMEURL());
+    private Map<XMLSchemaNamespace, File> cacheSchemas(File dir, XMLSchemaNamespace namespace)
+        throws NoSuchNamespaceExistsFault, RemoteException, IOException, Exception {
+        GlobalModelExchangeClient client;
+        client = new GlobalModelExchangeClient(getGMEURL());
+
         return client.cacheSchemas(namespace, dir);
     }
 
@@ -54,7 +60,17 @@ public abstract class GMETypeSelectionComponentBase extends NamespaceTypeDiscove
                 // namespaces if the replacement policy is IGNORE (such that
                 // those schemas can be reused)
 
-                Map<XMLSchemaNamespace, File> cachedSchemas = cacheSchemas(schemaDestinationDir, selectedNS);
+                Map<XMLSchemaNamespace, File> cachedSchemas = null;
+
+                try {
+                    cachedSchemas = cacheSchemas(schemaDestinationDir, selectedNS);
+                } catch (NoSuchNamespaceExistsFault e) {
+                    String error = "Namespace (" + selectedNS + ") does not exist in the GME.";
+                    logger.error(error, e);
+                    addError(error);
+                    return null;
+                }
+
                 progress.stopEvent(startEventID, "Successfully retrieved " + cachedSchemas.size() + " schemas.");
 
                 NamespaceType[] types = null;
@@ -101,7 +117,9 @@ public abstract class GMETypeSelectionComponentBase extends NamespaceTypeDiscove
 
                 return types;
             } catch (Exception e) {
+                e.printStackTrace();
                 logger.error(e);
+                addError(e.getMessage());
                 return null;
             } finally {
                 progress.stopAll("");
@@ -110,9 +128,6 @@ public abstract class GMETypeSelectionComponentBase extends NamespaceTypeDiscove
             return new NamespaceType[0];
         }
     }
-
-
-   
 
 
     public GMETypeSelectionComponentBase(DiscoveryExtensionDescriptionType descriptor, NamespacesType currentNamespaces) {

@@ -139,6 +139,7 @@ public class CaDSRTypeSelectionComponent extends GMETypeSelectionComponentBase
             this.nsTextField.setEditable(false);
             this.nsTextField.setText(UNAVAILABLE);
             this.nsTextField.setForeground(Color.RED);
+            this.nsTextField.setToolTipText("Namespaces in Black have been looked up from the mapping, Blue have been 'guessed', and Red are erroneous.");
         }
         return this.nsTextField;
     }
