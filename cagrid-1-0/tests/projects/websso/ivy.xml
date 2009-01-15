@@ -16,6 +16,5 @@
 	<dependencies>
     	<!-- Standard caGrid Service Dependencies -->
 		<dependency rev="latest.integration" org="caGrid"
-			name="DorianSystemTests" conf="default->impl;default->default;default->endorsed" />
-	</dependencies>
+			name="DorianSystemTests" conf="default->impl;default->default;endorsed->endorsed" />	</dependencies>
 </ivy-module>
