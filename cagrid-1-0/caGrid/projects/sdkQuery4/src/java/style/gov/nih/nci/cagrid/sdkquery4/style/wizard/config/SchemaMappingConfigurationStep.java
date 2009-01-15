@@ -31,7 +31,7 @@ import org.cagrid.gme.discoverytools.NamespaceTools;
  * @author David Ervin
  * 
  * @created Jan 22, 2008 11:25:57 AM
- * @version $Id: SchemaMappingConfigurationStep.java,v 1.5 2009-01-13 15:55:14 dervin Exp $ 
+ * @version $Id: SchemaMappingConfigurationStep.java,v 1.6 2009-01-15 00:25:24 dervin Exp $ 
  */
 public class SchemaMappingConfigurationStep extends AbstractStyleConfigurationStep {
     private Map<String, File> packageToSourceSchemaFile = null;
@@ -47,6 +47,17 @@ public class SchemaMappingConfigurationStep extends AbstractStyleConfigurationSt
 
 
     public void applyConfiguration() throws Exception {
+        // copy all source schemas in to the service, adding namespace types as well
+        for (String packageName : packageToSourceSchemaFile.keySet()) {
+            File sourceSchema = packageToSourceSchemaFile.get(packageName);
+            NamespaceType nsType = packageToNamespace.get(packageName);
+            File destinationSchema = new File(getServiceSchemaDir(), sourceSchema.getName());
+            Utils.copyFile(sourceSchema, destinationSchema);
+            nsType.setLocation(destinationSchema.getName());
+            System.out.println("Adding namespace type " + nsType.getNamespace());
+            addNamespaceToService(nsType);
+        }
+        
         // set the mapped namespace information for each package in the extension data
         Data extensionData = getExtensionData();
         ModelInformation modelInfo = extensionData.getModelInformation();
@@ -60,17 +71,6 @@ public class SchemaMappingConfigurationStep extends AbstractStyleConfigurationSt
             }
         }
         storeExtensionData(extensionData);
-        
-        // copy all source schemas in to the service, adding namespace types as well
-        for (String packageName : packageToSourceSchemaFile.keySet()) {
-            File sourceSchema = packageToSourceSchemaFile.get(packageName);
-            NamespaceType nsType = packageToNamespace.get(packageName);
-            File destinationSchema = new File(getServiceSchemaDir(), sourceSchema.getName());
-            Utils.copyFile(sourceSchema, destinationSchema);
-            nsType.setLocation(destinationSchema.getName());
-            System.out.println("Adding namespace type " + nsType.getNamespace());
-            addNamespaceToService(nsType);
-        }
     }
     
     

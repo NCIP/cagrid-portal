@@ -77,7 +77,7 @@ import org.cagrid.mms.domain.UMLProjectIdentifer;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * @created Sep 25, 2006
- * @version $Id: DomainModelPanel.java,v 1.12 2009-01-14 21:01:04 dervin Exp $
+ * @version $Id: DomainModelPanel.java,v 1.13 2009-01-15 00:25:23 dervin Exp $
  */
 public class DomainModelPanel extends AbstractWizardPanel {
 
@@ -859,19 +859,18 @@ public class DomainModelPanel extends AbstractWizardPanel {
                 Iterator packageNameIter = packageClasses.keySet().iterator();
                 while (packageNameIter.hasNext()) {
                     String packName = (String) packageNameIter.next();
-                    String mappedNamespace = NamespaceUtils.createNamespaceString(model.getProjectShortName(), model
-                        .getProjectVersion(), packName);
+                    // leave the package unmapped to any particular namespace until the
+                    // user explicitly does this on the schema mapping panel
                     ModelPackage pack = new ModelPackage();
                     pack.setPackageName(packName);
-                    modelInfoUtil.setMappedNamespace(packName, mappedNamespace);
-                    // create ClassMappings for the package's classes
+                    // create ModelClasses for the package's classes
                     List<String> classNameList = packageClasses.get(packName);
                     ModelClass[] classes = new ModelClass[classNameList.size()];
                     for (int i = 0; i < classNameList.size(); i++) {
                         ModelClass clazz = new ModelClass();
                         String className = classNameList.get(i);
                         clazz.setShortClassName(className);
-                        modelInfoUtil.setMappedElementName(packName, className, className);
+                        // don't map classes either until the user does it!
                         clazz.setSelected(true);
                         clazz.setTargetable(true);
                         classes[i] = clazz;

@@ -60,7 +60,7 @@ import org.cagrid.grape.utils.CompositeErrorDialog;
  * 
  * @author David Ervin
  * @created Jan 9, 2008 11:09:22 AM
- * @version $Id: SchemaMappingPanel.java,v 1.7 2009-01-13 15:55:14 dervin Exp $
+ * @version $Id: SchemaMappingPanel.java,v 1.8 2009-01-15 00:25:24 dervin Exp $
  */
 public class SchemaMappingPanel extends AbstractWizardPanel {
 
@@ -417,11 +417,11 @@ public class SchemaMappingPanel extends AbstractWizardPanel {
                     for (int i = 0; i < getPackageNamespaceTable().getRowCount(); i++) {
                         String packageName = (String) getPackageNamespaceTable().getValueAt(i, 0);
                         if (packageName.equals(schemaPackageName)) {
-                            // create a schema file and namespace type
+                            // extract the schema contents and create the XSD
                             StringBuffer schemaText = JarUtilities.getFileContents(configJar, entry.getName());
                             File schemaFile = new File(schemaDir, new File(entry.getName()).getName());
                             Utils.stringBufferToFile(schemaText, schemaFile.getAbsolutePath());
-
+                            
                             // add the namespace to the configuration for later
                             // incorperation in the service
                             String schemaNamespace = configuration.mapPackageToSchema(packageName, schemaFile);
@@ -461,6 +461,7 @@ public class SchemaMappingPanel extends AbstractWizardPanel {
                 boolean namespaceFound = false;
                 for (XMLSchemaNamespace ns : cachedNamespaces.keySet()) {
                     if (ns.getURI().toString().equals(proposedNamespace)) {
+                        // map the package to that namespace in the configuration
                         configuration.mapPackageToSchema(packageName, cachedNamespaces.get(ns));
                         namespaceFound = true;
                         break;
@@ -509,14 +510,10 @@ public class SchemaMappingPanel extends AbstractWizardPanel {
             if (resolved.length != 0 && packageResolvedByNamespace(pack, resolved[0])) {
                 File primarySchemaFile = new File(schemaDir, resolved[0].getLocation());
                 configuration.mapPackageToSchema(packageName, primarySchemaFile);
-
+                
                 // set the namespace of the resolved schema on the table
-                NamespaceType nsType = modelInfoUtil.getMappedNamespace(pack.getPackageName());
-                String namespace = null;
-                if (nsType != null) {
-                    namespace = nsType.getNamespace();
-                }
-                getPackageNamespaceTable().setValueAt(namespace, dataRow, 1);
+                String schemaNamespace = CommonTools.getTargetNamespace(primarySchemaFile);
+                getPackageNamespaceTable().setValueAt(schemaNamespace, dataRow, 1);
 
                 status = SchemaResolutionStatus.SCHEMA_FOUND;
             } else {
