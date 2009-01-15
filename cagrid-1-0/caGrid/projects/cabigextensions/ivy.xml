@@ -45,7 +45,10 @@
     <!-- External Dependencies -->
     <dependency rev="2.0.0" org="jgoodies" name="validation" conf="core->default" />
     <dependency rev="1.3.2" org="apache" name="commons-io" conf="core->default" />
-    <dependency rev="4.0" org="cacore" name="sdk" conf="sdk->default" />
+    <dependency rev="4.1" org="cacore" name="sdk" conf="sdk->sdk-src" />
     <dependency rev="4.4" org="junit" name="junit" conf="impl-test->default" />
+    <!--  for SDK validation -->
+    <dependency rev="2.0.8" org="apache" name="jakarta-oro" conf="core->default" />
+
   </dependencies>
 </ivy-module>

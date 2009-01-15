@@ -43,6 +43,10 @@ import com.jgoodies.validation.util.ValidationUtils;
 import com.jgoodies.validation.view.ValidationComponentUtils;
 import com.jgoodies.validation.view.ValidationResultViewFactory;
 
+import org.apache.oro.text.regex.MalformedPatternException;
+import org.apache.oro.text.regex.PatternCompiler;
+import org.apache.oro.text.regex.Perl5Compiler;
+
 
 public class SDKTypeSelectionComponent extends NamespaceTypeDiscoveryComponent {
 
@@ -55,7 +59,7 @@ public class SDKTypeSelectionComponent extends NamespaceTypeDiscoveryComponent {
     private static final String PACKAGE_INCLUDES = "Package Includes";
     private static final String PACKAGE_EXCLUDES = "Package Excludes";
 
-    private static final String CACORE_SDK_ZIPFILE_NAME = "caCORE_SDK_40.zip";
+    private static final String CACORE_SDK_ZIPFILE_NAME = "caCORE_SDK_411-src.zip";
 
     private JTextField modelTextField = null;
     private JButton modelBrowseButton = null;
@@ -79,7 +83,9 @@ public class SDKTypeSelectionComponent extends NamespaceTypeDiscoveryComponent {
 
     protected static Log LOG = LogFactory.getLog(SDKTypeSelectionComponent.class.getName());
 
+    private PatternCompiler compiler = new Perl5Compiler();
 
+    
     public SDKTypeSelectionComponent(DiscoveryExtensionDescriptionType desc, NamespacesType currentNamespaces) {
         super(desc, currentNamespaces);
         extensionDir = new File(ExtensionsLoader.EXTENSIONS_DIRECTORY + File.separator + desc.getName());
@@ -112,7 +118,7 @@ public class SDKTypeSelectionComponent extends NamespaceTypeDiscoveryComponent {
         gridBagConstraints1.gridy = 0;
         setLayout(new GridBagLayout());
         setBorder(javax.swing.BorderFactory.createTitledBorder(null,
-            "Create XML Schemas from an XMI Model File (caCORE SDK 4 Compliant)",
+            "Create XML Schemas from an XMI Model File (caCORE SDK 4.1.1 Compliant)",
             javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION,
             null, null));
 
@@ -203,9 +209,26 @@ public class SDKTypeSelectionComponent extends NamespaceTypeDiscoveryComponent {
                 Severity.WARNING, NAMESPACE_PREFIX));
         }
 
-        if (ValidationUtils.isBlank(genInfo.getPackageIncludes())) {
+        
+        if (ValidationUtils.isBlank(this.genInfo.getPackageIncludes())) {
             result.add(new SimpleValidationMessage(PACKAGE_INCLUDES
                 + " should not be blank, as nothing will be included.", Severity.WARNING, PACKAGE_INCLUDES));
+        } else {
+            try {
+                this.compiler.compile(this.genInfo.getPackageIncludes());
+            } catch (MalformedPatternException e) {
+                result.add(new SimpleValidationMessage(PACKAGE_INCLUDES + " must be a valid regex:" + e.getMessage(),
+                    Severity.ERROR, PACKAGE_INCLUDES));
+            }
+        }
+
+        if (!ValidationUtils.isBlank(this.genInfo.getPackageExcludes())) {
+            try {
+                this.compiler.compile(this.genInfo.getPackageExcludes());
+            } catch (MalformedPatternException e) {
+                result.add(new SimpleValidationMessage(PACKAGE_EXCLUDES + " must be empty, or a valid regex:"
+                    + e.getMessage(), Severity.ERROR, PACKAGE_EXCLUDES));
+            }
         }
 
         validationModel.setResult(result);
@@ -292,6 +315,7 @@ public class SDKTypeSelectionComponent extends NamespaceTypeDiscoveryComponent {
             try {
                 // progress.getProgress().setString("Adding results to
                 // service...");
+                //TODO: add UMLProjectIdenifier's to the namespaces
                 results = createNamespaceTypes(schemaDestinationDir, copiedXSDs);
             } catch (Exception e) {
                 addError("Problem processing schemas created by SDK: " + e.getMessage());
@@ -472,7 +496,7 @@ public class SDKTypeSelectionComponent extends NamespaceTypeDiscoveryComponent {
     private JTextField getPackageIncludeTextField() {
         if (packageIncludeTextField == null) {
             packageIncludeTextField = new JTextField();
-            packageIncludeTextField.setText("domain");
+            packageIncludeTextField.setText(".*?domain.*");
             packageIncludeTextField.setColumns(20);
             packageIncludeTextField.addFocusListener(new FocusChangeHandler());
         }
