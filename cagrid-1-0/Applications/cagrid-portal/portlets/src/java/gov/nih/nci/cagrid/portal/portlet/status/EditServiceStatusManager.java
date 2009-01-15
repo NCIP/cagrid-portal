@@ -6,6 +6,11 @@ import gov.nih.nci.cagrid.portal.domain.ServiceStatus;
 import gov.nih.nci.cagrid.portal.portlet.discovery.DiscoveryModel;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.directwebremoting.annotations.Param;
+import org.directwebremoting.annotations.RemoteMethod;
+import org.directwebremoting.annotations.RemoteProxy;
+import org.directwebremoting.spring.SpringCreator;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Service that will manipulate service status(s)
@@ -13,6 +18,10 @@ import org.apache.commons.logging.LogFactory;
  *
  * @author kherm manav.kher@semanticbits.com
  */
+@RemoteProxy(name = "ServiceStatusManager",
+        creator = SpringCreator.class,
+        creatorParams = @Param(name = "beanName",
+                value = "serviceStatusManager"))
 public class EditServiceStatusManager {
 
     private static final Log logger = LogFactory.getLog(EditServiceStatusManager.class);
@@ -26,6 +35,7 @@ public class EditServiceStatusManager {
      * @param serviceId
      * @return
      */
+    @RemoteMethod
     public ServiceStatus banUnbanService(int serviceId) {
         GridService service = gridServiceDao.getById(serviceId);
 
@@ -42,6 +52,20 @@ public class EditServiceStatusManager {
         }
         return service.getCurrentStatus();
     }
+
+    @RemoteMethod
+    @Transactional
+    public boolean reloadMetadata(int serviceId){
+        GridService service = gridServiceDao.getById(serviceId);
+        //Should be an aspect
+        if(discoveryModel.getLiferayUser()!=null){
+            logger.debug("Found admin user. Will schedule a metadata reload");
+            service.setMetadataHash(null);
+            gridServiceDao.save(service);
+        }
+        return true;
+    }
+
 
     public GridServiceDao getGridServiceDao() {
         return gridServiceDao;
