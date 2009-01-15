@@ -11,6 +11,8 @@ import gov.nih.nci.cagrid.testing.system.haste.Step;
 import gov.nih.nci.cagrid.testing.system.haste.Story;
 
 import java.io.File;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Vector;
 
 import org.cagrid.fqp.test.common.ServiceContainerSource;
@@ -71,7 +73,8 @@ public class CDSDeploymentStory extends Story implements ServiceContainerSource 
         File tempCdsDir = new File("tmp/TempCDS");
         steps.add(new UnpackContainerStep(serviceContainer));
         steps.add(new CopyServiceStep(cdsDir, tempCdsDir));
-        steps.add(new DeployServiceStep(serviceContainer, tempCdsDir.getAbsolutePath()));
+        List<String> args = Arrays.asList(new String[] {"-Dno.deployment.validation=true"});
+        steps.add(new DeployServiceStep(serviceContainer, tempCdsDir.getAbsolutePath(), args));
         steps.add(new StartContainerStep(serviceContainer));
         return steps;
     }

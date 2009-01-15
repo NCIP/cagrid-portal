@@ -11,6 +11,8 @@ import gov.nih.nci.cagrid.testing.system.haste.Step;
 import gov.nih.nci.cagrid.testing.system.haste.Story;
 
 import java.io.File;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Vector;
 
 import org.cagrid.fqp.test.common.ServiceContainerSource;
@@ -24,7 +26,7 @@ import org.cagrid.fqp.test.remote.steps.ChangeJndiSweeperDelayStep;
  * @author David Ervin
  * 
  * @created Jul 15, 2008 12:46:02 PM
- * @version $Id: FQPServiceDeploymentStory.java,v 1.6 2008-11-10 21:00:13 dervin Exp $ 
+ * @version $Id: FQPServiceDeploymentStory.java,v 1.7 2009-01-15 18:33:40 dervin Exp $ 
  */
 public class FQPServiceDeploymentStory extends Story implements ServiceContainerSource {
     
@@ -79,11 +81,18 @@ public class FQPServiceDeploymentStory extends Story implements ServiceContainer
     protected Vector steps() {
         Vector<Step> steps = new Vector<Step>();
         File tempFqpServiceDir = new File("tmp/Temp" + (secureDeployment ? "Secure" : "") + "FQP");
+        System.out.println("Copying FQP for pre-deployment to " + tempFqpServiceDir.getAbsolutePath());
         steps.add(new UnpackContainerStep(fqpServiceContainer));
         steps.add(new CopyServiceStep(fqpServiceDirectory, tempFqpServiceDir));
         steps.add(new ChangeJndiSweeperDelayStep(tempFqpServiceDir, 2000));
-        steps.add(new DeployServiceStep(fqpServiceContainer, tempFqpServiceDir.getAbsolutePath()));
+        List<String> args = Arrays.asList(new String[] {"-Dno.deployment.validation=true"});
+        steps.add(new DeployServiceStep(fqpServiceContainer, tempFqpServiceDir.getAbsolutePath(), args));
         steps.add(new StartContainerStep(fqpServiceContainer));
+        steps.add(new Step() {
+            public void runStep() throws Throwable {
+                System.out.println("FQP SERVICE URL SHOULD BE " + fqpServiceContainer.getServiceEPR("cagrid/FederatedQueryProcessor").getAddress().toString());
+            }
+        });
         return steps;
     }
     

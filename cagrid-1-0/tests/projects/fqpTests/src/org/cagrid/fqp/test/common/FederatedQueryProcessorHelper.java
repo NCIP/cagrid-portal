@@ -13,6 +13,7 @@ import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainer;
 import java.io.File;
 import java.rmi.RemoteException;
 
+import org.apache.axis.message.addressing.EndpointReferenceType;
 import org.apache.axis.types.URI.MalformedURIException;
 
 /** 
@@ -22,7 +23,7 @@ import org.apache.axis.types.URI.MalformedURIException;
  * @author David Ervin
  * 
  * @created Jul 10, 2008 1:33:38 PM
- * @version $Id: FederatedQueryProcessorHelper.java,v 1.3 2008-11-07 20:34:56 dervin Exp $ 
+ * @version $Id: FederatedQueryProcessorHelper.java,v 1.4 2009-01-15 18:33:40 dervin Exp $ 
  */
 public class FederatedQueryProcessorHelper {
 
@@ -57,6 +58,8 @@ public class FederatedQueryProcessorHelper {
         
         DCQLQueryResultsCollection results = null;
         if (fqpClient != null) {
+            System.out.println("Connecting to FQP service at "
+                + fqpClient.getEndpointReference().getAddress().toString());
             results = fqpClient.execute(query);
         } else if (fqpEngine != null) {
             results = fqpEngine.execute(query);
@@ -93,10 +96,10 @@ public class FederatedQueryProcessorHelper {
     
     private void createClientFromContainer() throws RemoteException {
         ServiceContainer container = fqpContainerSource.getServiceContainer();
-        String url = null;
+        EndpointReferenceType epr = null;
         try {
-            url = container.getContainerBaseURI().toString() + "cagrid/FederatedQueryProcessor";
-            fqpClient = new FederatedQueryProcessorClient(url);
+            epr = container.getServiceEPR("cagrid/FederatedQueryProcessor");
+            fqpClient = new FederatedQueryProcessorClient(epr);
         } catch (MalformedURIException ex) {
             throw new RemoteException("Error creating FQP client URL: " + ex.getMessage(), ex);
         }

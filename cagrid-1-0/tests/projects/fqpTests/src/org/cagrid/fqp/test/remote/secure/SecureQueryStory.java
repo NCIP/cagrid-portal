@@ -33,6 +33,7 @@ public class SecureQueryStory extends Story {
     public static final int PROXY_DELEGATION_LIFETIME = 10; // minutes
     public static final String USER_PROXY_FILENAME = "user.proxy";
     public static final String HOST_CERT_FILENAME = "localhost_cert.pem";
+    public static final String HOST_KEY_FILENAME = "localhost_key.pem";
     public static final String DATA_SERVICE_NAME_BASE = "cagrid/ExampleSdkService";
 
     private ServiceContainerSource[] dataContainerSources = null;
@@ -113,6 +114,7 @@ public class SecureQueryStory extends Story {
         GlobusCredential proxyCredential = null;
         try {
             File proxyCertFile = new File(((SecureContainer) fqpContainer).getCertificatesDirectory(), USER_PROXY_FILENAME);
+            System.out.println("Loading user proxy from " + proxyCertFile.getAbsolutePath());
             FileInputStream proxyInput = new FileInputStream(proxyCertFile);
             proxyCredential = new GlobusCredential(proxyInput);
             proxyInput.close();
@@ -146,9 +148,10 @@ public class SecureQueryStory extends Story {
         GlobusCredential fqpHostCert = null;
         try {
             File fqpHostCertFile = new File(((SecureContainer) fqpContainer).getCertificatesDirectory(), HOST_CERT_FILENAME);
-            FileInputStream fqpCertInput = new FileInputStream(fqpHostCertFile);
-            fqpHostCert = new GlobusCredential(fqpCertInput);
-            fqpCertInput.close();
+            File fqpHostKeyFile = new File(((SecureContainer) fqpContainer).getCertificatesDirectory(), HOST_KEY_FILENAME);
+            System.out.println("Loading fqp host cert from " + fqpHostCertFile.getAbsolutePath());
+            System.out.println("Loading fqp host key from " + fqpHostKeyFile.getAbsolutePath());
+            fqpHostCert = new GlobusCredential(fqpHostCertFile.getAbsolutePath(), fqpHostKeyFile.getAbsolutePath());
         } catch (Exception ex) {
             ex.printStackTrace();
             fail("Error obtaining FQP's host credential: " + ex.getMessage());
