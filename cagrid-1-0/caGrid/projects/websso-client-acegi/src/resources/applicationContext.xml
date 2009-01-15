@@ -7,7 +7,7 @@
   -
   - Only used by "cas" artifact.
   -
-  - $Id: applicationContext.xml,v 1.6 2008-12-30 15:10:30 garmillas Exp $
+  - $Id: applicationContext.xml,v 1.7 2009-01-15 05:16:43 garmillas Exp $
   -->
 
 <beans>
@@ -90,8 +90,8 @@
 	
 	<bean id="casAuthoritiesPopulator" class="org.cagrid.websso.client.acegi.WebSSOAuthoritiesPopulator">
 		<property name="userDetailsService" ref="defaultUserDetailsService"></property>
-		<property name="hostCertificate" value="C:/Documents and Settings/Garmillas/.cagrid/certificates/NCI-GARMILLAS-1-cert.pem"></property>
-		<property name="hostKey" value="C:/Documents and Settings/Garmillas/.cagrid/certificates/NCI-GARMILLAS-1-key.pem"></property>
+		<property name="hostCertificate" value="${host.credential.certificate}"></property>
+		<property name="hostKey" value="${host.credential.key}"></property>
 	</bean>
 	
 	<bean id="casProxyDecider" class="org.acegisecurity.providers.cas.proxy.RejectProxyTickets"/>
@@ -127,7 +127,7 @@
 	<bean id="portResolverImpl" class="org.acegisecurity.util.PortResolverImpl">
 		<property name="portMapper" ref="portMapperImpl" />
 	</bean>
-	<bean id="portMapperImpl" class="org.acegisecurity.util.PortMapperImpl">
+	<bean id="portMapperImpl" class="org.acegisecurity.util.PortMapperImpl" singleton="true">
 		<property name="portMappings">
 			<map>
 				<entry key="80">
@@ -136,8 +136,7 @@
 				<entry key="8080">
 					<value>8443</value>
 				</entry>
-				<entry key="28080">
-					<value>28443</value>
+				<entry key="${http.port.number}" value="${https.port.number}">
 				</entry>
 			</map>
 		</property>
