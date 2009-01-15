@@ -51,7 +51,7 @@ import org.cagrid.grape.utils.CompositeErrorDialog;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * @created Sep 26, 2006
- * @version $Id: SchemaTypesPanel.java,v 1.9 2009-01-15 16:23:06 dervin Exp $
+ * @version $Id: SchemaTypesPanel.java,v 1.10 2009-01-15 17:02:36 dervin Exp $
  */
 public class SchemaTypesPanel extends AbstractWizardPanel {
 
@@ -411,7 +411,11 @@ public class SchemaTypesPanel extends AbstractWizardPanel {
                 if (currentPackage.getPackageName().equals(getPackageNamespaceTable().getValueAt(row, 0))) {
                     // set the mapped namespace
                     String namespace = (String) getPackageNamespaceTable().getValueAt(row, 1);
-                    modelInfoUtil.setMappedNamespace(currentPackage.getPackageName(), namespace);
+                    if (namespace != null && namespace.length() != 0) {
+                        modelInfoUtil.setMappedNamespace(currentPackage.getPackageName(), namespace);
+                    } else {
+                        modelInfoUtil.unsetMappedNamespace(currentPackage.getPackageName());
+                    }
                     break;
                 }
             }

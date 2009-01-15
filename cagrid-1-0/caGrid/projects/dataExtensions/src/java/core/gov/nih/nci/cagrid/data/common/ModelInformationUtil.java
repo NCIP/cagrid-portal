@@ -103,6 +103,25 @@ public class ModelInformationUtil {
     }
     
     
+    public boolean unsetMappedNamespace(String packageName) throws Exception {
+        boolean found = false;
+        for (NamespaceType nsType : serviceDesc.getNamespaces().getNamespace()) {
+            if (packageName.equals(nsType.getPackageName())) {
+                nsType.setPackageName(null);
+                // unset all schema elements too
+                for (SchemaElementType element : nsType.getSchemaElement()) {
+                    element.setClassName(null);
+                    element.setSerializer(null);
+                    element.setDeserializer(null);
+                }
+                found = true;
+                break;
+            }
+        }
+        return found;
+    }
+    
+    
     /**
      * Removes an element to class mapping from the service's namespace information
      * 
