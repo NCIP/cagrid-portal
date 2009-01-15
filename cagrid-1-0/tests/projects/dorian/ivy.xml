@@ -9,14 +9,16 @@
   </info>
 
   <configurations>
+   <!-- Public Configurations-->
+   <conf name="impl" visibility="public" extends="default"/>
+   
     <!-- Private Configurations-->
     <conf name="default" visibility="public"/>
     <conf name="endorsed" visibility="public" />
   </configurations>
 
-
   <publications>
-    
+    	<artifact name="caGrid-${ivy.module}" conf="impl" type="jar"/>
   </publications>
 
   <dependencies>
