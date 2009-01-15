@@ -403,6 +403,17 @@ public final class CommonTools {
             
         }
         
+        List redefineTypes = schemaDoc.getRootElement()
+        .getChildren("redefine", schemaDoc.getRootElement().getNamespace());
+        for(int i = 0; i < redefineTypes.size(); i++){
+            Element element = (Element) redefineTypes.get(i);
+            File xsdFile = new File(dir.getAbsolutePath() + File.separator + element.getAttributeValue("schemaLocation"));
+            Document redefineSchemaDoc = XMLUtilities.fileNameToDocument(xsdFile.getAbsolutePath());
+     
+            processSchema(namespaceType, redefineSchemaDoc, xsdFile.getParentFile());
+            
+        }
+        
        
     }
 
