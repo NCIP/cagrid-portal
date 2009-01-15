@@ -5,12 +5,11 @@
 	<property file="${basedir}/build.properties" />
 
 	<property name="ext.dir" location="ext" />
-
 	<property name="lib.dir" location="lib" />
 	<property name="ext.lib.dir" location="${ext.dir}/dependencies/default/jars" />
-
+	<property name="tools.lib.dir" location="tools/lib" />
+	
 	<property name="jar.name" value="${ant.project.name}-${project.version}.jar" />
-
 	<property name="src.java.dir" location="src/java" />
 	<property name="src.resources.dir" location="src/resources" />
 	<property name="test.src.dir" location="test/src/java" />
@@ -27,6 +26,18 @@
 			<exclude name="junit.jar"/>
 		</fileset>
 	</path>
+	
+	<path id="taskdef.cp">
+		<fileset dir="${tools.lib.dir}">
+			<include name="xmltask-v1.14.jar" />
+			<include name="ant-contrib*.jar" />
+		</fileset>
+	</path>
+
+	<target name="defineAntTask">
+		<taskdef name="xmltask" classname="com.oopsconsultancy.xmltask.ant.XmlTask" classpathref="taskdef.cp" />
+		<taskdef resource="net/sf/antcontrib/antlib.xml" classpathref="taskdef.cp" />
+	</target>
 
 	<target name="dist">
 		<copy todir="${build.dir}" flatten="true" overwrite="true">
@@ -76,7 +87,7 @@
 	<target name="jar" depends="compile,build-jar,dist">
 	</target>
 
-	<target name="copy-configuration-files">
+	<target name="copy-configuration-files" depends="replace-token-contents">
 		<copy file="${src.resources.dir}/applicationContext.xml" tofile="${build.dir}/applicationContext-acegi-${project.version}.xml" />
 		<copy file="${src.resources.dir}/web.xml" tofile="${build.dir}/web-acegi-${project.version}.xml" />
 		<copy file="${src.resources.dir}/cas-client.properties" tofile="${build.dir}/cas-client-acegi-${project.version}.properties" />
@@ -92,6 +103,37 @@
 		</java>
 	</target>
 
+	<target name="resolve-template-tokens" depends="defineAntTask">
+		<property name="env.COMPUTERNAME" value="${env.HOSTNAME}" />
+		<filterset id="WEBSSO_CLIENT_PROPERTIES" begintoken="@" endtoken="@">
+			<filter token="WEBSSO.SERVER" value="${env.COMPUTERNAME}" />
+			<filter token="USER.HOME" value="${user.home}" />
+		</filterset>
+	</target>
+
+	<target name="replace-token-contents" depends="resolve-template-tokens">
+		<copy todir="${src.resources.dir}" filtering="true" overwrite="true">
+			<fileset dir="${src.resources.dir}" />
+			<globmapper from="*-template.properties" to="*.properties" />
+			<filterset refid="WEBSSO_CLIENT_PROPERTIES" />
+		</copy>
+		<outofdate>
+			<sourcefiles>
+				<fileset dir="${src.resources.dir}" includes="**/*-template.properties" />
+			</sourcefiles>
+			<targetfiles>
+				<fileset dir="${src.resources.dir}" includes="**/*.properties" />
+			</targetfiles>
+			<sequential>
+				<copy todir="${src.resources.dir}" overwrite="true">
+					<fileset dir="${src.resources.dir}" />
+					<globmapper from="*-template.properties" to="*.properties" />
+					<filterset refid="WEBSSO_CLIENT_PROPERTIES" />
+				</copy>
+			</sequential>
+		</outofdate>
+	</target>
+	
 	<target name="all">
 		<antcall target="clean" />
 		<antcall target="jar" />
