@@ -22,7 +22,7 @@ public class StartSyncGTSServlet extends HttpServlet {
 	public void init(ServletConfig config) throws ServletException{
 		try{
 			WebApplicationContext ctx =
-				WebApplicationContextUtils.getRequiredWebApplicationContext(this.getServletContext());
+				WebApplicationContextUtils.getRequiredWebApplicationContext(config.getServletContext());
 			WebSSOProperties webSSOProperties = (WebSSOProperties)ctx.getBean(WebSSOConstants.WEBSSO_PROPERTIES);
 			WebSSOServerInformation webSSOServerInformation = webSSOProperties.getWebSSOServerInformation();
 
