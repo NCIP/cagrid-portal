@@ -545,11 +545,11 @@ public class WebSSOSystemTest extends Story {
 	}
 
 	public void storyTearDown() throws Throwable {
-		tearDownServer(webSSOServiceContainer,tempWebSSOService);
 		tearDownServer(dorianServiceContainer,tempDorianService);
 		tearDownServer(cdsServiceContainer,tempcdsService);
 		tearDownServer(webSSOJasigClientServiceContainer,tempwebssoJasigClientService);
 		tearDownServer(webSSOAcegiClientServiceContainer,tempwebssoAcegiClientService);
+		tearDownServer(webSSOServiceContainer,tempWebSSOService);
 	}
 
 	private void tearDownServer(ServiceContainer serviceContainer,File service) throws Throwable {
