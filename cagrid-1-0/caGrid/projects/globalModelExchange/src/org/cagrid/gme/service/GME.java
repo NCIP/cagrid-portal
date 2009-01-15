@@ -440,7 +440,7 @@ public class GME {
                 XMLSchemaInformation importedInfo = persistedInfos.get(importedURI);
                 if (importedInfo == null) {
                     // --- getReference to PersistableXMLSchema, put in hash
-                    importedInfo = this.schemaDao.getByTargetNamespace(s.getTargetNamespace());
+                    importedInfo = this.schemaDao.getByTargetNamespace(importedURI);
                     // this must either be new and already in the hash (the
                     // containing if), or existing and therefore in the db
                     // already
