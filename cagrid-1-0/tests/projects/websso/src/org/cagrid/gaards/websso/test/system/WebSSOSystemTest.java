@@ -1,4 +1,4 @@
-package org.cagrid.gaards.dorian.test.system;
+package org.cagrid.gaards.websso.test.system;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -27,26 +27,26 @@ import org.cagrid.gaards.dorian.idp.CountryCode;
 import org.cagrid.gaards.dorian.idp.LocalUserRole;
 import org.cagrid.gaards.dorian.idp.LocalUserStatus;
 import org.cagrid.gaards.dorian.idp.StateCode;
-import org.cagrid.gaards.dorian.test.system.steps.AssertWebSSOApplicationStep;
-import org.cagrid.gaards.dorian.test.system.steps.ChangeAcegiCASClientPropertiesStep;
-import org.cagrid.gaards.dorian.test.system.steps.ChangeJasigCASClientPropertiesStep;
-import org.cagrid.gaards.dorian.test.system.steps.ChangeCASPropertiesStep;
-import org.cagrid.gaards.dorian.test.system.steps.ChangeTomcatServerConfigurationStep;
-import org.cagrid.gaards.dorian.test.system.steps.ChangeWebSSOPropertiesStep;
 import org.cagrid.gaards.dorian.test.system.steps.ConfigureGlobusToTrustDorianStep;
-import org.cagrid.gaards.dorian.test.system.steps.CopyCAStep;
 import org.cagrid.gaards.dorian.test.system.steps.CopyConfigurationStep;
 import org.cagrid.gaards.dorian.test.system.steps.FindGridUserStep;
 import org.cagrid.gaards.dorian.test.system.steps.FindLocalUserStep;
 import org.cagrid.gaards.dorian.test.system.steps.GetAsserionSigningCertificateStep;
 import org.cagrid.gaards.dorian.test.system.steps.GridCredentialRequestStep;
-import org.cagrid.gaards.dorian.test.system.steps.InstallCertStep;
 import org.cagrid.gaards.dorian.test.system.steps.RegisterUserWithDorianIdentityProviderStep;
-import org.cagrid.gaards.dorian.test.system.steps.HostCertificatesStep;
 import org.cagrid.gaards.dorian.test.system.steps.SuccessfullGridCredentialRequest;
 import org.cagrid.gaards.dorian.test.system.steps.UpdateLocalUserStatusStep;
 import org.cagrid.gaards.dorian.test.system.steps.VerifyTrustedIdPStep;
-import org.cagrid.gaards.dorian.test.system.steps.WebSSOClientCertificatesStep;
+import org.cagrid.gaards.websso.test.system.steps.AssertWebSSOApplicationStep;
+import org.cagrid.gaards.websso.test.system.steps.ChangeAcegiCASClientPropertiesStep;
+import org.cagrid.gaards.websso.test.system.steps.ChangeCASPropertiesStep;
+import org.cagrid.gaards.websso.test.system.steps.ChangeJasigCASClientPropertiesStep;
+import org.cagrid.gaards.websso.test.system.steps.ChangeTomcatServerConfigurationStep;
+import org.cagrid.gaards.websso.test.system.steps.ChangeWebSSOPropertiesStep;
+import org.cagrid.gaards.websso.test.system.steps.CopyCAStep;
+import org.cagrid.gaards.websso.test.system.steps.HostCertificatesStep;
+import org.cagrid.gaards.websso.test.system.steps.InstallCertStep;
+import org.cagrid.gaards.websso.test.system.steps.WebSSOClientCertificatesStep;
 
 import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainer;
 import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainerFactory;
@@ -545,11 +545,11 @@ public class WebSSOSystemTest extends Story {
 	}
 
 	public void storyTearDown() throws Throwable {
+		tearDownServer(webSSOServiceContainer,tempWebSSOService);
 		tearDownServer(dorianServiceContainer,tempDorianService);
 		tearDownServer(cdsServiceContainer,tempcdsService);
 		tearDownServer(webSSOJasigClientServiceContainer,tempwebssoJasigClientService);
 		tearDownServer(webSSOAcegiClientServiceContainer,tempwebssoAcegiClientService);
-		tearDownServer(webSSOServiceContainer,tempWebSSOService);
 	}
 
 	private void tearDownServer(ServiceContainer serviceContainer,File service) throws Throwable {

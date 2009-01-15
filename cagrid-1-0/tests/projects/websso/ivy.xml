@@ -4,7 +4,7 @@
 	xsi:noNamespaceSchemaLocation="http://incubator.apache.org/ivy/schemas/ivy.xsd">
 	<info organisation="caGrid" module="WebSSOSystemTests" revision="${project.version}">
 		<license name="caGrid" url="http://www.cagrid.org/wiki/CaGrid:LICENSE-1.2" />
-		<description>caGrid Dorian System Tests</description>
+		<description>caGrid WebSSO System Tests</description>
 	</info>
 	<configurations>
    		<!-- Private Configurations-->
@@ -16,5 +16,10 @@
 	<dependencies>
     	<!-- Standard caGrid Service Dependencies -->
 		<dependency rev="latest.integration" org="caGrid"
-			name="DorianSystemTests" conf="default->default;endorsed->endorsed" />	</dependencies>
+			name="DorianSystemTests" conf="default->impl;default->default;endorsed->endorsed" />
+			
+		<dependency rev="1.7" org="httpunit" name="httpunit" conf="default"/>
+		<dependency rev="0.9.5" org="nekohtml" name="nekohtml" conf="default"/>
+		<dependency rev="1.6R5" org="rhino" name="js" conf="default"/>
+		<dependency rev="1.1" org="codehaus" name="jaxen" conf="default"/>	</dependencies>
 </ivy-module>

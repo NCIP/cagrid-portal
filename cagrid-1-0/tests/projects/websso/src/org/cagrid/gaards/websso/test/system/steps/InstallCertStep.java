@@ -1,4 +1,4 @@
-package org.cagrid.gaards.dorian.test.system.steps;
+package org.cagrid.gaards.websso.test.system.steps;
 /*
  * Copyright 2006 Sun Microsystems, Inc.  All Rights Reserved.
  *
