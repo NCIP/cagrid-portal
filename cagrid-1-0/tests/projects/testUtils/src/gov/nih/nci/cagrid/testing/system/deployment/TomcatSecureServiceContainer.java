@@ -56,8 +56,8 @@ public class TomcatSecureServiceContainer extends TomcatServiceContainer impleme
         Element keyFileElement = credentialElement.getChild("key-file", credentialElement.getNamespace());
         Element certFileElement = credentialElement.getChild("cert-file", credentialElement.getNamespace());
         try {
-            keyFileElement.setAttribute("value", hostKey.getCanonicalPath());
-            certFileElement.setAttribute("value", hostCert.getCanonicalPath());
+            keyFileElement.setAttribute("value", hostKey.getCanonicalPath().replace(File.separatorChar, '/'));
+            certFileElement.setAttribute("value", hostCert.getCanonicalPath().replace(File.separatorChar, '/'));
         } catch (IOException ex) {
             throw new ContainerException("Error setting host key and cert paths: " + ex.getMessage(), ex);
         }
@@ -75,7 +75,7 @@ public class TomcatSecureServiceContainer extends TomcatServiceContainer impleme
         try {
             wsddContents = Utils.fileToStringBuffer(serverWsdd);
             String parameter = SECURITY_DESCRIPTOR_PARAMETER_TEMPLATE.replace(
-                DESCRIPTOR_FILE_PLACEHOLDER, globalSecurityDescriptorFile.getCanonicalPath());
+                DESCRIPTOR_FILE_PLACEHOLDER, globalSecurityDescriptorFile.getCanonicalPath().replace(File.separatorChar, '/'));
             int placeholderIndex = wsddContents.indexOf(SECURITY_DESCRIPTOR_PLACEHOLDER);
             wsddContents.replace(placeholderIndex, placeholderIndex + SECURITY_DESCRIPTOR_PLACEHOLDER.length(), parameter);
             Utils.stringBufferToFile(wsddContents, serverWsdd.getCanonicalPath());
@@ -118,9 +118,9 @@ public class TomcatSecureServiceContainer extends TomcatServiceContainer impleme
         }
         // set up cert, key, cacertdir paths
         try {
-            connector.setAttribute("cert", hostCert.getCanonicalPath());
-            connector.setAttribute("key", hostKey.getCanonicalPath());
-            connector.setAttribute("cacertdir", caCertDir.getCanonicalPath());
+            connector.setAttribute("cert", hostCert.getCanonicalPath().replace(File.separatorChar, '/'));
+            connector.setAttribute("key", hostKey.getCanonicalPath().replace(File.separatorChar, '/'));
+            connector.setAttribute("cacertdir", caCertDir.getCanonicalPath().replace(File.separatorChar, '/'));
         } catch (IOException ex) {
             throw new ContainerException("Error configuring HTTPS connector: " + ex.getMessage(), ex);
         }
