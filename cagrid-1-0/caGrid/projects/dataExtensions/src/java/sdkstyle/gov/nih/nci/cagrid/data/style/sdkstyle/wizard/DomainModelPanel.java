@@ -8,13 +8,11 @@ import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 import gov.nih.nci.cagrid.common.portal.PortalUtils;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.data.ExtensionDataUtils;
-import gov.nih.nci.cagrid.data.common.ModelInformationUtil;
 import gov.nih.nci.cagrid.data.extension.Data;
 import gov.nih.nci.cagrid.data.extension.ModelClass;
 import gov.nih.nci.cagrid.data.extension.ModelInformation;
 import gov.nih.nci.cagrid.data.extension.ModelPackage;
 import gov.nih.nci.cagrid.data.extension.ModelSourceType;
-import gov.nih.nci.cagrid.data.ui.NamespaceUtils;
 import gov.nih.nci.cagrid.data.ui.domain.DomainModelFromXmiDialog;
 import gov.nih.nci.cagrid.data.ui.wizard.AbstractWizardPanel;
 import gov.nih.nci.cagrid.introduce.beans.extension.PropertiesProperty;
@@ -77,7 +75,7 @@ import org.cagrid.mms.domain.UMLProjectIdentifer;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * @created Sep 25, 2006
- * @version $Id: DomainModelPanel.java,v 1.13 2009-01-15 00:25:23 dervin Exp $
+ * @version $Id: DomainModelPanel.java,v 1.14 2009-01-15 15:54:20 dervin Exp $
  */
 public class DomainModelPanel extends AbstractWizardPanel {
 
@@ -99,13 +97,9 @@ public class DomainModelPanel extends AbstractWizardPanel {
     private JPanel packageButtonsPanel = null;
     private JPanel caDsrPanel = null;
     private JButton addProjectButton = null;
-    
-    private ModelInformationUtil modelInfoUtil = null;
-
 
     public DomainModelPanel(ServiceExtensionDescriptionType extensionDescription, ServiceInformation info) {
         super(extensionDescription, info);
-        this.modelInfoUtil = new ModelInformationUtil(info.getServiceDescriptor());
         initialize();
     }
 
@@ -723,10 +717,8 @@ public class DomainModelPanel extends AbstractWizardPanel {
                 // create cadsr package for the new metadata package
                 ModelPackage newPackage = new ModelPackage();
                 newPackage.setPackageName(pack.getName());
-                ModelClass[] modelClasses = getClassMappings(lastSelectedProject, pack);
+                ModelClass[] modelClasses = createModelClasses(lastSelectedProject, pack);
                 newPackage.setModelClass(modelClasses);
-                String mappedNamespace = NamespaceUtils.createNamespaceString(lastSelectedProject, pack);
-                modelInfoUtil.setMappedNamespace(pack.getName(), mappedNamespace);
                 ModelPackage[] packages = info.getModelPackage();
                 if (packages == null) {
                     packages = new ModelPackage[]{newPackage};
@@ -747,7 +739,7 @@ public class DomainModelPanel extends AbstractWizardPanel {
     }
 
 
-    private ModelClass[] getClassMappings(Project proj, UMLPackageMetadata pack) throws Exception {
+    private ModelClass[] createModelClasses(Project proj, UMLPackageMetadata pack) throws Exception {
         UMLModelService client = new CaDSRUMLModelService(getCaDsrBrowser().getCadsr().getText());
         UMLClassMetadata[] classMdArray = client.findClassesInPackage(proj, pack.getName());
         ModelClass[] classes = new ModelClass[]{};
@@ -756,8 +748,6 @@ public class DomainModelPanel extends AbstractWizardPanel {
             for (int i = 0; i < classMdArray.length; i++) {
                 ModelClass clazz = new ModelClass();
                 clazz.setShortClassName(classMdArray[i].getName());
-                modelInfoUtil.setMappedElementName(pack.getName(), 
-                    clazz.getShortClassName(), classMdArray[i].getName());
                 clazz.setSelected(true);
                 clazz.setTargetable(true);
                 classes[i] = clazz;
