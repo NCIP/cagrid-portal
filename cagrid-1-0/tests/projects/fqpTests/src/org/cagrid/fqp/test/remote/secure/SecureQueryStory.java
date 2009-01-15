@@ -88,7 +88,7 @@ public class SecureQueryStory extends Story {
         
         steps.add(new DelegatedCredentialQueryStep(FQPTestingConstants.QUERIES_LOCATION + "exampleDistributedJoin1.xml",
             FQPTestingConstants.GOLD_LOCATION + "exampleDistributedJoin1_gold.xml",
-            fqpEPR, credentialRef, serviceUrls));
+            fqpEPR, credentialRef, serviceUrls, (SecureContainer) fqpContainer));
 
         return steps;
     }
