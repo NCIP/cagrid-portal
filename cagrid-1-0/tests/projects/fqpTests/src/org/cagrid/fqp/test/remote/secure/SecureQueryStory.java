@@ -6,7 +6,6 @@ import gov.nih.nci.cagrid.testing.system.haste.Step;
 import gov.nih.nci.cagrid.testing.system.haste.Story;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.util.Collections;
 import java.util.Vector;
 
@@ -31,7 +30,8 @@ import org.globus.gsi.GlobusCredential;
  */
 public class SecureQueryStory extends Story {
     public static final int PROXY_DELEGATION_LIFETIME = 10; // minutes
-    public static final String USER_PROXY_FILENAME = "user.proxy";
+    public static final String USER_CERT_FILENAME = "user_cert.pem";
+    public static final String USER_KEY_FILENAME = "user_key.pem";
     public static final String HOST_CERT_FILENAME = "localhost_cert.pem";
     public static final String HOST_KEY_FILENAME = "localhost_key.pem";
     public static final String DATA_SERVICE_NAME_BASE = "cagrid/ExampleSdkService";
@@ -113,11 +113,11 @@ public class SecureQueryStory extends Story {
         // Load the testing proxy cert
         GlobusCredential proxyCredential = null;
         try {
-            File proxyCertFile = new File(((SecureContainer) fqpContainer).getCertificatesDirectory(), USER_PROXY_FILENAME);
-            System.out.println("Loading user proxy from " + proxyCertFile.getAbsolutePath());
-            FileInputStream proxyInput = new FileInputStream(proxyCertFile);
-            proxyCredential = new GlobusCredential(proxyInput);
-            proxyInput.close();
+            File userCertFile = new File(((SecureContainer) fqpContainer).getCertificatesDirectory(), USER_CERT_FILENAME);
+            File userKeyFile = new File(((SecureContainer) fqpContainer).getCertificatesDirectory(), USER_KEY_FILENAME);
+            System.out.println("Loading user cert from " + userCertFile.getAbsolutePath());
+            System.out.println("Loading user key from " + userKeyFile.getAbsolutePath());
+            proxyCredential = new GlobusCredential(userCertFile.getAbsolutePath(), userKeyFile.getAbsolutePath());
         } catch (Exception ex) {
             ex.printStackTrace();
             fail("Error obtaining client proxy: " + ex.getMessage());
