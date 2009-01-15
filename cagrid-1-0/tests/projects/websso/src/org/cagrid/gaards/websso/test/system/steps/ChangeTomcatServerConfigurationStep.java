@@ -79,7 +79,7 @@ public class ChangeTomcatServerConfigurationStep extends Step{
         Element coyoteJk2Element=(Element)service.getChildren("Connector").get(1);
         coyoteJk2Element.removeAttribute("port");
         coyoteJk2Element.removeAttribute("redirectPort");
-        coyoteJk2Element.setAttribute(new Attribute("port",""+(containerProperties.getPortPreference().getPort()+2)));
+        coyoteJk2Element.setAttribute(new Attribute("port",""+(containerProperties.getPortPreference().getPort()+102)));
         coyoteJk2Element.setAttribute(new Attribute("redirectPort",""+httpsPortNumber));
 	}
 	
