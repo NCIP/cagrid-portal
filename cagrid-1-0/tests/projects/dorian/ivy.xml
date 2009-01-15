@@ -10,21 +10,18 @@
 
   <configurations>
    <!-- Public Configurations-->
-   <conf name="impl" visibility="public" extends="default"/>
-   
-    <!-- Private Configurations-->
     <conf name="default" visibility="public"/>
     <conf name="endorsed" visibility="public" />
   </configurations>
 
   <publications>
-    	<artifact name="caGrid-${ivy.module}" conf="impl" type="jar"/>
+    	<artifact name="caGrid-${ivy.module}" conf="default" type="jar"/>
   </publications>
 
   <dependencies>
     <!-- Standard caGrid Service Dependencies -->
-    <dependency rev="latest.integration" org="caGrid" name="AuthenticationServiceSystemTests" conf="default->impl"/>
-    <dependency rev="latest.integration" org="caGrid" name="testUtils" conf="default->impl,containers"/>
+    <dependency rev="latest.integration" org="caGrid" name="AuthenticationServiceSystemTests" conf="default->default"/>
+    <dependency rev="latest.integration" org="caGrid" name="testUtils" conf="default->default,containers"/>
     <dependency rev="latest.integration" org="caGrid" name="dorian" conf="default->test;endorsed->endorsed"/>
   </dependencies>
 </ivy-module>

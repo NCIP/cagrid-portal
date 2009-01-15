@@ -9,10 +9,6 @@
   </info>
 
   <configurations>
-  
-   <!-- Public Configurations-->
-   <conf name="impl" visibility="public" extends="default"/>
-   
     <!-- Private Configurations-->
     <conf name="default" visibility="public"/>
     <conf name="endorsed" visibility="public" />
@@ -20,12 +16,12 @@
 
 
   <publications>
-    <artifact name="caGrid-${ivy.module}" conf="impl" type="jar"/>
+    <artifact name="caGrid-${ivy.module}" conf="default" type="jar"/>
   </publications>
 
   <dependencies>
     <!-- Standard caGrid Service Dependencies -->
-    <dependency rev="latest.integration" org="caGrid" name="testUtils" conf="default->impl,containers"/>
+    <dependency rev="latest.integration" org="caGrid" name="testUtils" conf="default->default,containers"/>
     <dependency rev="latest.integration" org="caGrid" name="authentication-service" conf="default->test;endorsed->endorsed"/>
   </dependencies>
 </ivy-module>
