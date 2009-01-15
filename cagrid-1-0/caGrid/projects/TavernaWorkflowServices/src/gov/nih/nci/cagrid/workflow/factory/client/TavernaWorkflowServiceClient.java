@@ -9,6 +9,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.rmi.RemoteException;
+import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 import javax.xml.namespace.QName;
 
@@ -44,7 +47,7 @@ import workflowmanagementfactoryservice.WorkflowStatusType;
  * @created by Introduce Toolkit version 1.3
  */
 public class TavernaWorkflowServiceClient extends
-		TavernaWorkflowServiceClientBase implements TavernaWorkflowServiceI {
+TavernaWorkflowServiceClientBase implements TavernaWorkflowServiceI {
 
 	private EndpointReferenceType workflowEPR = null;
 
@@ -57,17 +60,17 @@ public class TavernaWorkflowServiceClient extends
 	}
 
 	public TavernaWorkflowServiceClient(String url)
-			throws MalformedURIException, RemoteException {
+	throws MalformedURIException, RemoteException {
 		this(url, null);
 	}
 
 	public TavernaWorkflowServiceClient(String url, GlobusCredential proxy)
-			throws MalformedURIException, RemoteException {
+	throws MalformedURIException, RemoteException {
 		super(url, proxy);
 	}
 
 	public TavernaWorkflowServiceClient(EndpointReferenceType epr)
-			throws MalformedURIException, RemoteException {
+	throws MalformedURIException, RemoteException {
 		this(epr, null);
 	}
 
@@ -108,13 +111,13 @@ public class TavernaWorkflowServiceClient extends
 		}
 		//startInputElement.setInputArgs(inputString);
 		WorkflowStatusType workflowStatusElement =  serviceClient.start(startInputElement);
-		
+
 		return workflowStatusElement;
 
 	}
 
 	public static WorkflowStatusType getStatus(EndpointReferenceType epr)
-			throws MalformedURIException, RemoteException {
+	throws MalformedURIException, RemoteException {
 		TavernaWorkflowServiceImplClient serviceClient = new TavernaWorkflowServiceImplClient(epr);
 		WorkflowStatusType workflowStatusElement = serviceClient.getStatus();
 		return workflowStatusElement;
@@ -122,19 +125,23 @@ public class TavernaWorkflowServiceClient extends
 	}
 
 	public static WorkflowOutputType getOutput(EndpointReferenceType epr)
-			throws MalformedURIException, RemoteException {
+	throws MalformedURIException, RemoteException {
 		TavernaWorkflowServiceImplClient serviceClient = new TavernaWorkflowServiceImplClient(epr);
 		WorkflowOutputType workflowOutputElement = serviceClient.getWorkflowOutput();
 		return workflowOutputElement;
 
 	}
-	
-	public static void subscribeRP(EndpointReferenceType epr) throws MalformedURIException, RemoteException, ContainerException
+
+	public static void subscribeRP(EndpointReferenceType epr, int TimeInSeconds) throws MalformedURIException, 
+		RemoteException, ContainerException, InterruptedException
 	{
-		TavernaWorkflowServiceImplClient serviceClient = new TavernaWorkflowServiceImplClient(epr);
+		CountDownLatch doneSignal = new CountDownLatch(1);
+		TavernaWorkflowServiceImplClient serviceClient = new TavernaWorkflowServiceImplClient(epr, doneSignal, null);
 		serviceClient.subscribe(TavernaWorkflowServiceImplConstantsBase.WORKFLOWSTATUSELEMENT);
-		
+        doneSignal.await(60, TimeUnit.SECONDS);
 	}
+
+
 
 	public static void writeEprToFile(EndpointReferenceType epr,
 			String workflowName) throws Exception {
@@ -156,7 +163,7 @@ public class TavernaWorkflowServiceClient extends
 	}
 
 	public static EndpointReferenceType readEprFromFile(String fileName)
-			throws Exception {
+	throws Exception {
 		FileInputStream in = null;
 		EndpointReferenceType ref = new EndpointReferenceType();
 		try {
@@ -195,37 +202,37 @@ public class TavernaWorkflowServiceClient extends
 
 	}
 
-  public workflowmanagementfactoryservice.WMSOutputType createWorkflow(workflowmanagementfactoryservice.WMSInputType wMSInputElement) throws RemoteException, gov.nih.nci.cagrid.workflow.factory.stubs.types.WorkflowException {
-    synchronized(portTypeMutex){
-      configureStubSecurity((Stub)portType,"createWorkflow");
-    gov.nih.nci.cagrid.workflow.factory.stubs.CreateWorkflowRequest params = new gov.nih.nci.cagrid.workflow.factory.stubs.CreateWorkflowRequest();
-    gov.nih.nci.cagrid.workflow.factory.stubs.CreateWorkflowRequestWMSInputElement wMSInputElementContainer = new gov.nih.nci.cagrid.workflow.factory.stubs.CreateWorkflowRequestWMSInputElement();
-    wMSInputElementContainer.setWMSInputElement(wMSInputElement);
-    params.setWMSInputElement(wMSInputElementContainer);
-    gov.nih.nci.cagrid.workflow.factory.stubs.CreateWorkflowResponse boxedResult = portType.createWorkflow(params);
-    return boxedResult.getWMSOutputElement();
-    }
-  }
+	public workflowmanagementfactoryservice.WMSOutputType createWorkflow(workflowmanagementfactoryservice.WMSInputType wMSInputElement) throws RemoteException, gov.nih.nci.cagrid.workflow.factory.stubs.types.WorkflowException {
+		synchronized(portTypeMutex){
+			configureStubSecurity((Stub)portType,"createWorkflow");
+			gov.nih.nci.cagrid.workflow.factory.stubs.CreateWorkflowRequest params = new gov.nih.nci.cagrid.workflow.factory.stubs.CreateWorkflowRequest();
+			gov.nih.nci.cagrid.workflow.factory.stubs.CreateWorkflowRequestWMSInputElement wMSInputElementContainer = new gov.nih.nci.cagrid.workflow.factory.stubs.CreateWorkflowRequestWMSInputElement();
+			wMSInputElementContainer.setWMSInputElement(wMSInputElement);
+			params.setWMSInputElement(wMSInputElementContainer);
+			gov.nih.nci.cagrid.workflow.factory.stubs.CreateWorkflowResponse boxedResult = portType.createWorkflow(params);
+			return boxedResult.getWMSOutputElement();
+		}
+	}
 
-  public org.oasis.wsrf.properties.GetMultipleResourcePropertiesResponse getMultipleResourceProperties(org.oasis.wsrf.properties.GetMultipleResourceProperties_Element params) throws RemoteException {
-    synchronized(portTypeMutex){
-      configureStubSecurity((Stub)portType,"getMultipleResourceProperties");
-    return portType.getMultipleResourceProperties(params);
-    }
-  }
+	public org.oasis.wsrf.properties.GetMultipleResourcePropertiesResponse getMultipleResourceProperties(org.oasis.wsrf.properties.GetMultipleResourceProperties_Element params) throws RemoteException {
+		synchronized(portTypeMutex){
+			configureStubSecurity((Stub)portType,"getMultipleResourceProperties");
+			return portType.getMultipleResourceProperties(params);
+		}
+	}
 
-  public org.oasis.wsrf.properties.GetResourcePropertyResponse getResourceProperty(javax.xml.namespace.QName params) throws RemoteException {
-    synchronized(portTypeMutex){
-      configureStubSecurity((Stub)portType,"getResourceProperty");
-    return portType.getResourceProperty(params);
-    }
-  }
+	public org.oasis.wsrf.properties.GetResourcePropertyResponse getResourceProperty(javax.xml.namespace.QName params) throws RemoteException {
+		synchronized(portTypeMutex){
+			configureStubSecurity((Stub)portType,"getResourceProperty");
+			return portType.getResourceProperty(params);
+		}
+	}
 
-  public org.oasis.wsrf.properties.QueryResourcePropertiesResponse queryResourceProperties(org.oasis.wsrf.properties.QueryResourceProperties_Element params) throws RemoteException {
-    synchronized(portTypeMutex){
-      configureStubSecurity((Stub)portType,"queryResourceProperties");
-    return portType.queryResourceProperties(params);
-    }
-  }
+	public org.oasis.wsrf.properties.QueryResourcePropertiesResponse queryResourceProperties(org.oasis.wsrf.properties.QueryResourceProperties_Element params) throws RemoteException {
+		synchronized(portTypeMutex){
+			configureStubSecurity((Stub)portType,"queryResourceProperties");
+			return portType.queryResourceProperties(params);
+		}
+	}
 
 }

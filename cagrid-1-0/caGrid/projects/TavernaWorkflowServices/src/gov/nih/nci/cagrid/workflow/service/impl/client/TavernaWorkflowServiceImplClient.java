@@ -2,6 +2,8 @@ package gov.nih.nci.cagrid.workflow.service.impl.client;
 
 import java.io.InputStream;
 import java.rmi.RemoteException;
+import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 import javax.xml.namespace.QName;
 
@@ -32,8 +34,11 @@ import gov.nih.nci.cagrid.introduce.security.client.ServiceSecurityClient;
  * 
  * @created by Introduce Toolkit version 1.3
  */
-public class TavernaWorkflowServiceImplClient extends TavernaWorkflowServiceImplClientBase implements TavernaWorkflowServiceImplI {	
+public class TavernaWorkflowServiceImplClient extends TavernaWorkflowServiceImplClientBase implements TavernaWorkflowServiceImplI{	
 
+		private CountDownLatch doneSignal =null;
+
+	
 	public TavernaWorkflowServiceImplClient(String url) throws MalformedURIException, RemoteException {
 		this(url,null);	
 	}
@@ -48,6 +53,11 @@ public class TavernaWorkflowServiceImplClient extends TavernaWorkflowServiceImpl
 	
 	public TavernaWorkflowServiceImplClient(EndpointReferenceType epr, GlobusCredential proxy) throws MalformedURIException, RemoteException {
 	   	super(epr,proxy);
+	}
+	
+	public TavernaWorkflowServiceImplClient(EndpointReferenceType epr, CountDownLatch doneSignal, String dummyArg) throws MalformedURIException, RemoteException {
+		this(epr,null);
+		this.doneSignal = doneSignal;
 	}
 
 	public static void usage(){
@@ -74,6 +84,18 @@ public class TavernaWorkflowServiceImplClient extends TavernaWorkflowServiceImpl
 			e.printStackTrace();
 			System.exit(1);
 		}
+	}
+	
+	public void deliver(List topicPath, EndpointReferenceType producer, Object message) {
+		org.oasis.wsrf.properties.ResourcePropertyValueChangeNotificationType changeMessage = ((org.globus.wsrf.core.notification.ResourcePropertyValueChangeNotificationElementType) message)
+		.getResourcePropertyValueChangeNotification();
+
+		if (changeMessage != null) {
+			
+			System.out.println("Got notification2");
+			doneSignal.countDown();
+		}
+
 	}
 
   public org.oasis.wsrf.lifetime.DestroyResponse destroy(org.oasis.wsrf.lifetime.Destroy params) throws RemoteException {

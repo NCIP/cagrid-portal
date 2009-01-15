@@ -47,14 +47,14 @@ import workflowmanagementfactoryservice.WorkflowStatusType;
 public class TavernaWorkflowServiceImplResource extends TavernaWorkflowServiceImplResourceBase {
 
 	private String scuflDoc = null;
-	private static String[] outputDoc = null;
+	private String[] outputDoc = null;
 	private String[] inputDoc = null;
 	private String baseDir = null;
 
 	private String tempDir = null;
 	private String workflowName = null;
 
-	private static WorkflowStatusType workflowStatus = WorkflowStatusType.Pending;
+	private WorkflowStatusType workflowStatus = WorkflowStatusType.Pending;
 	private static TavernaWorkflowServiceConfiguration config = null;
 		
 	
@@ -76,11 +76,11 @@ public class TavernaWorkflowServiceImplResource extends TavernaWorkflowServiceIm
 			String tavernaDir = config.getTavernaDir();
 			String repository = config.getBaseRepositoryDir();
 			ProcessBuilder builder = new ProcessBuilder(this.args);
-			builder.directory(new File(tavernaDir + "/target/classes"));
+			builder.directory(new File(tavernaDir + File.separator + "target" + File.separator + "classes"));
 
 			Map<String, String> environment = builder.environment();
 			
-		    String classpath = tavernaDir + "/target/classes";
+		    String classpath = tavernaDir + File.separator + "target" + File.separator + "classes";
 		    
 		    // lisfOfJars is a method that returns all the jars from Taverna repository in CLASSPATH format (: seperated). 
 		    classpath = classpath + listOfJars(repository);
@@ -106,9 +106,9 @@ public class TavernaWorkflowServiceImplResource extends TavernaWorkflowServiceIm
 				boolean finished = false;
 				String output = "";
 				while ((line = br.readLine()) != null) {
+					System.out.println(line);
 					if(finished == true)
 					{
-						System.out.println(line);
 						//this.setOutputDoc(new String[] {line});
 						output = output + line;
 						workflowStatus = WorkflowStatusType.Done;
@@ -135,30 +135,29 @@ public class TavernaWorkflowServiceImplResource extends TavernaWorkflowServiceIm
 			config = TavernaWorkflowServiceConfiguration.getConfiguration();
 			this.setBaseDir(config.getBaseRepositoryDir());
 
-			if(config.getTavernaDir() == null)
+			if((config.getTavernaDir().equals(null)) || config.getBaseRepositoryDir().equals(null))
 			{
 				throw new RemoteException("tavernaDir is not set the services.properties file"); 
 			}
 
+			System.out.println("\nTaverna Repository:" + this.getBaseDir());
 
-			System.out.println("basedir:" + baseDir);
-
-			if (this.getBaseDir().equals("null"))
+		/*	if (this.getBaseDir().equals("null"))
 			{
 				if(System.getProperty("os.type").startsWith("Windows"))
 				{
 					this.setBaseDir(System.getProperty("user.home")+ "\\Application Data" + "\\Taverna-1.7.1\\");
 				}
 				else
-				{
+				{	
 					this.setBaseDir(System.getProperty("user.home")+ "\\Application Data" + "\\Taverna-1.7.1\\");
 				}
-			}
+			}*/
 
-			System.out.println("\n\nThe Taverna Basedir is set to: " + baseDir);
+			System.out.println("\nTaverna Basedir: " + config.getTavernaDir());
 			System.out.println("NOTE: Please set the Taverna base directly correctly. This can be set in the service.properties file of service code.\n\n");
 
-			tempDir = System.getProperty("java.io.tmpdir");
+			this.setTempDir(System.getProperty("java.io.tmpdir"));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -198,11 +197,11 @@ public class TavernaWorkflowServiceImplResource extends TavernaWorkflowServiceIm
 		this.inputDoc = inputDoc;
 	}
 
-	public static String[] getOutputDoc() {
+	public String[] getOutputDoc() {
 		return outputDoc;
 	}
 
-	public static void setOutputDoc(String[] workflowOuput) {
+	public void setOutputDoc(String[] workflowOuput) {
 		outputDoc = workflowOuput;
 	}
 
@@ -222,17 +221,15 @@ public class TavernaWorkflowServiceImplResource extends TavernaWorkflowServiceIm
 		try {
 
 			String [] keys = this.getResourceKey().toString().trim().split("TavernaWorkflowServiceImplResultsKey=");
-			System.out.println("Workflow NAME :" + wMSInputElement.getWorkflowName());
+			System.out.println("\nWorkflow NAME :" + wMSInputElement.getWorkflowName());
 			this.setWorkflowName(wMSInputElement.getWorkflowName());
 
-			String scuflDocTemp = this.getTempDir() + "/" + keys[1] + "--workflow.xml";
+			String scuflDocTemp = this.getTempDir() + File.separator + keys[1] + "--workflow.xml";
 			Utils.stringBufferToFile(new StringBuffer(wMSInputElement.getScuflDoc()), scuflDocTemp);
 			this.setScuflDoc(scuflDocTemp);
 
 			//String output = this.getTempDir() + keys[1] + "--output.xml";
 			//this.setOutputDoc(output);
-
-
 
 		} catch (Exception e){
 			this.workflowStatus = WorkflowStatusType.Failed;
@@ -255,7 +252,7 @@ public class TavernaWorkflowServiceImplResource extends TavernaWorkflowServiceIm
 				String[] inputs = startInput.getInputArgs();
 				for (int i=0; i < inputs.length; i++)
 				{
-					String inputFile = this.getTempDir() + "/" + keys[1] + "-input-" + i + ".xml";					
+					String inputFile = this.getTempDir() + File.separator + keys[1] + "-input-" + i + ".xml";					
 					Utils.stringBufferToFile(new StringBuffer(inputs[i]), inputFile);
 					System.out.println("Input file " + i + " : " + inputFile);
 				}
@@ -263,7 +260,7 @@ public class TavernaWorkflowServiceImplResource extends TavernaWorkflowServiceIm
 				inputPorts = this.getInputDoc().length;
 			}
 
-			/*			String [] args = { "-workflow", this.getScuflDoc(), 
+			/*		String [] args = { "-workflow", this.getScuflDoc(), 
 					"-outputdoc", this.getOutputDoc(),
 					"-basedir", this.getBaseDir(),
 					"-inputdoc", this.getInputDoc()	};*/
@@ -307,7 +304,7 @@ public class TavernaWorkflowServiceImplResource extends TavernaWorkflowServiceIm
 				//workflowOuputElement.setOutputFile(Utils.fileToStringBuffer( new File(this.getOutputDoc())).toString());
 				// Currently, the results are stored as array of string holding the outputs.
 				// Ideally, the output files should be created for each output in the "start" operation,
-				//	 and then access those files here, converte them into string buffers and then store them below.
+				//	 and then access those files here, convert them into string buffers and then store them below.
 
 				workflowOuputElement.setOutputFile(this.getOutputDoc());
 			}

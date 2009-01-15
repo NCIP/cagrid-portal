@@ -2,23 +2,14 @@ package gov.nih.nci.cagrid.workflow.factory.client;
 
 import gov.nih.nci.cagrid.common.Utils;
 
-import java.io.File;
-import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.axis.message.addressing.EndpointReferenceType;
-import org.apache.axis.types.URI.MalformedURIException;
-import org.globus.wsrf.NotifyCallback;
-import org.oasis.wsn.SubscribeResponse;
-import org.oasis.wsrf.properties.ResourcePropertyValueChangeNotificationType;
 
 import workflowmanagementfactoryservice.WorkflowOutputType;
 import workflowmanagementfactoryservice.WorkflowStatusType;
 
-import gov.nih.nci.cagrid.workflow.factory.client.TavernaWorkflowServiceClient;
-import gov.nih.nci.cagrid.workflow.service.impl.client.TavernaWorkflowServiceImplClient;
-import gov.nih.nci.cagrid.workflow.service.impl.common.TavernaWorkflowServiceImplConstantsBase;
 
 public class TavernaWorkflowServiceClientMain {
 	
@@ -121,18 +112,9 @@ public class TavernaWorkflowServiceClientMain {
 					}
 					
 					//Subscribe to the Resource property:
-					TavernaWorkflowServiceImplClient serviceClient = new TavernaWorkflowServiceImplClient(readEPR);
-					NotifyCallback call = null;
-					SubscribeResponse response = serviceClient.subscribe(TavernaWorkflowServiceImplConstantsBase.WORKFLOWSTATUSELEMENT, call);
-					Thread.currentThread().sleep(20000);
+					TavernaWorkflowServiceClient.subscribeRP(readEPR, 20);
+					workflowStatus = TavernaWorkflowServiceClient.getStatus(readEPR);
 
-					while(! workflowStatus.equals(WorkflowStatusType.Done))
-					{
-						System.out.println("Sleeping for 3secs..");
-						Thread.currentThread().sleep(3000);
-						workflowStatus = TavernaWorkflowServiceClient.getStatus(readEPR);
-					}
-					
 
 					//4. Get output of workflow.
 					

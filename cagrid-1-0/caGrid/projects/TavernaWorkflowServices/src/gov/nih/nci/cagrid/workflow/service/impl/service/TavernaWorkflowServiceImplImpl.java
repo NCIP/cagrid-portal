@@ -4,6 +4,10 @@ import gov.nih.nci.cagrid.workflow.service.impl.service.globus.resource.TavernaW
 
 import java.rmi.RemoteException;
 
+import org.globus.wsrf.InvalidResourceKeyException;
+import org.globus.wsrf.NoResourceHomeException;
+import org.globus.wsrf.NoSuchResourceException;
+import org.globus.wsrf.RemoveNotSupportedException;
 import org.globus.wsrf.ResourceContext;
 import org.globus.wsrf.ResourceHome;
 import org.globus.wsrf.ResourceKey;
@@ -72,6 +76,44 @@ public class TavernaWorkflowServiceImplImpl extends TavernaWorkflowServiceImplIm
 	  return this.getWorkflowResource().start(startInputElement);
 
   }
+  
+  // remove can be used along with Cancel operation (once implemented). The remove operations destroys a resource.
+  // Currently, setTerminationTime can be used to destroy it.
+  public boolean remove() {
+	  try {
+		  
+		ResourceContext.getResourceContext().getResourceHome().remove( ResourceContext.getResourceContext().getResourceKey());
+		
+	} catch (NoSuchResourceException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+		return false;
+	} catch (InvalidResourceKeyException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+		return false;
+	} catch (RemoveNotSupportedException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+		return false;
+	} catch (NoResourceHomeException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+		return false;
+	} catch (ResourceException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+		return false;
+	} catch (ResourceContextException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+		return false;
+	}
+	
+	return true;	
+
+  }
+  
 
 }
 
