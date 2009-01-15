@@ -135,7 +135,7 @@ public class FQPAsynchronousExecutionUtil {
         if (callerID == null) {
             // no null IDs with delegated credentials!
             FaultHelper helper = new FaultHelper(new InternalErrorFault());
-            helper.setDescription("Caller Identity found to be null while using a delegated credential!");
+            helper.setDescription("Caller identity found to be null while using a delegated credential!");
             throw (InternalErrorFault) helper.getFault();
         }
         GlobusCredential clientCredential = getDelegatedCredential(reference);
