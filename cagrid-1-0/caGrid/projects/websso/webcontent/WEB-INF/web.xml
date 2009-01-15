@@ -123,7 +123,7 @@
 	<servlet>
 		<servlet-name>Start Auto Sync GTS </servlet-name>
 		<servlet-class>
-			org.cagrid.websso.common.StartSyncGTSServlet
+			org.cagrid.gaards.websso.utils.StartSyncGTSServlet
 		</servlet-class>
 		<load-on-startup>2</load-on-startup>
 	</servlet>
