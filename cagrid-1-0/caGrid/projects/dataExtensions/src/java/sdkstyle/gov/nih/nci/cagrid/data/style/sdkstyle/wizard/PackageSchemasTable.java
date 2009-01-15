@@ -38,7 +38,7 @@ import org.cagrid.grape.utils.CompositeErrorDialog;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created Sep 26, 2006 
- * @version $Id: PackageSchemasTable.java,v 1.6 2009-01-13 15:55:19 dervin Exp $ 
+ * @version $Id: PackageSchemasTable.java,v 1.7 2009-01-15 15:57:56 dervin Exp $ 
  */
 public class PackageSchemasTable extends JTable {
 
@@ -65,7 +65,7 @@ public class PackageSchemasTable extends JTable {
 
     public boolean isPackageInTable(ModelPackage pack) {
         String packageName = pack.getPackageName();
-        String namespace = modelInfoUtil.getMappedNamespace(packageName).getNamespace();
+        String namespace = getMappedNamespace(packageName);
         for (int i = 0; i < getRowCount(); i++) {
             if (packageName.equals(getValueAt(i, 0)) 
                 && namespace.equals(getValueAt(i, 1))) {
@@ -78,7 +78,7 @@ public class PackageSchemasTable extends JTable {
 
     public void addNewCadsrPackage(ServiceInformation serviceInfo, ModelPackage pack) {
         String packageName = pack.getPackageName();
-        String namespace = modelInfoUtil.getMappedNamespace(packageName).getNamespace();
+        String namespace = getMappedNamespace(packageName);
         Vector<Object> row = new Vector<Object>(4);
         row.add(packageName);
         row.add(namespace);
@@ -96,6 +96,16 @@ public class PackageSchemasTable extends JTable {
                 break;
             }
         }
+    }
+    
+    
+    private String getMappedNamespace(String packageName) {
+        String namespace = null;
+        NamespaceType nsType = modelInfoUtil.getMappedNamespace(packageName);
+        if (nsType != null) {
+            namespace = nsType.getNamespace();
+        }
+        return namespace;
     }
 
 
@@ -232,9 +242,11 @@ public class PackageSchemasTable extends JTable {
         File schemaDir = new File(CacoreWizardUtils.getServiceBaseDir(info), "schema" + File.separator + serviceName);
         // get the namespace type from the service information
         NamespaceType mappedNamespace = modelInfoUtil.getMappedNamespace(pack.getPackageName());
-        File schemaFile = new File(schemaDir, mappedNamespace.getLocation());
-        schemaFile.delete();
-        CommonTools.removeNamespace(info.getServiceDescriptor(), mappedNamespace.getNamespace());
+        if (mappedNamespace != null) {
+            File schemaFile = new File(schemaDir, mappedNamespace.getLocation());
+            schemaFile.delete();
+            CommonTools.removeNamespace(info.getServiceDescriptor(), mappedNamespace.getNamespace());
+        }
     }
 
 
