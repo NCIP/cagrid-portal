@@ -51,7 +51,7 @@ import org.cagrid.grape.utils.CompositeErrorDialog;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * @created Sep 26, 2006
- * @version $Id: SchemaTypesPanel.java,v 1.8 2009-01-13 15:55:19 dervin Exp $
+ * @version $Id: SchemaTypesPanel.java,v 1.9 2009-01-15 16:23:06 dervin Exp $
  */
 public class SchemaTypesPanel extends AbstractWizardPanel {
 
@@ -282,24 +282,30 @@ public class SchemaTypesPanel extends AbstractWizardPanel {
                 ModelPackage[] packs = info.getModelPackage();
                 for (int i = 0; i < packs.length; i++) {
                     NamespaceType nsType = modelInfoUtil.getMappedNamespace(packs[i].getPackageName());
-                    XMLSchemaNamespace ns = new XMLSchemaNamespace(nsType.getNamespace());
-                    try {
-                        gmeHandle.getXMLSchema(ns);
-                    } catch (NoSuchNamespaceExistsFault e) {
-                        continue;
-                    }
-
-                    // found the namespace as well download the schema locally
-                    pullSchemas(ns, gmeHandle);
-                    // change the package namespace table to reflect the found
-                    // schema
-                    for (int row = 0; row < getPackageNamespaceTable().getRowCount(); row++) {
-                        if (getPackageNamespaceTable().getValueAt(row, 0).equals(packs[i].getPackageName())) {
-                            getPackageNamespaceTable().setValueAt(PackageSchemasTable.STATUS_SCHEMA_FOUND, row, 2);
-                            break;
+                    if (nsType != null) {
+                        XMLSchemaNamespace ns = new XMLSchemaNamespace(nsType.getNamespace());
+                        try {
+                            gmeHandle.getXMLSchema(ns);
+                        } catch (NoSuchNamespaceExistsFault e) {
+                            continue;
                         }
-                    }
 
+                        // found the namespace as well download the schema locally
+                        pullSchemas(ns, gmeHandle);
+                        // change the package namespace table to reflect the found
+                        // schema
+                        for (int row = 0; row < getPackageNamespaceTable().getRowCount(); row++) {
+                            if (getPackageNamespaceTable().getValueAt(row, 0).equals(packs[i].getPackageName())) {
+                                getPackageNamespaceTable().setValueAt(PackageSchemasTable.STATUS_SCHEMA_FOUND, row, 2);
+                                break;
+                            }
+                        }
+                    } else {
+                        // package isn't yet mapped to any namespace
+                        CompositeErrorDialog.showErrorDialog("Package " 
+                            + packs[i].getPackageName() 
+                            + " is not yet mapped to a namespace which can be retrieved from the GME");
+                    }
                 }
             } else {
                 JOptionPane.showMessageDialog(SchemaTypesPanel.this, "No packages to find schemas for");
