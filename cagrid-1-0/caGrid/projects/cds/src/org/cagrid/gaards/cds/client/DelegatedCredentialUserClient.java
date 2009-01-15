@@ -1,7 +1,6 @@
 package org.cagrid.gaards.cds.client;
 
 import gov.nih.nci.cagrid.common.FaultHelper;
-import gov.nih.nci.cagrid.common.security.ProxyUtil;
 
 import java.rmi.RemoteException;
 import java.security.KeyPair;
@@ -26,12 +25,12 @@ public class DelegatedCredentialUserClient {
 
 	public DelegatedCredentialUserClient(EndpointReferenceType ref)
 			throws Exception {
-		this(ref, ProxyUtil.getDefaultProxy());
+		this(ref, null);
 	}
 
 	public DelegatedCredentialUserClient(DelegatedCredentialReference ref)
 			throws Exception {
-		this(ref.getEndpointReference(), ProxyUtil.getDefaultProxy());
+		this(ref.getEndpointReference(), null);
 	}
 
 	public DelegatedCredentialUserClient(DelegatedCredentialReference ref,

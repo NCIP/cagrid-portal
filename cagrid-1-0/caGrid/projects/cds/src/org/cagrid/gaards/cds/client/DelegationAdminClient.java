@@ -1,7 +1,5 @@
 package org.cagrid.gaards.cds.client;
 
-import gov.nih.nci.cagrid.common.security.ProxyUtil;
-
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,7 +24,7 @@ public class DelegationAdminClient {
 
 
     public DelegationAdminClient(String url) throws Exception {
-        this(url, ProxyUtil.getDefaultProxy());
+        this(url, null);
     }
 
 
