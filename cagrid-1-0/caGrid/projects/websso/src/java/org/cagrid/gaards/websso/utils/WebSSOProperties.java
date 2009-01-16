@@ -160,7 +160,6 @@ public class WebSSOProperties {
 	 	dorianInformation.setProxyLifetimeHours(Integer.parseInt(this.getProxyLifeTimeHours(dorianInformationElement)));
 	 	dorianInformation.setProxyLifetimeMinutes(Integer.parseInt(this.getProxyLifeTimeMinutes(dorianInformationElement)));
 	 	dorianInformation.setProxyLifetimeSeconds(Integer.parseInt(this.getProxyLifeTimeSeconds(dorianInformationElement)));
-	 	dorianInformation.setDelegationPathLength(Integer.parseInt(this.getProxyDelegationPathLength(dorianInformationElement)));
 	 	return dorianInformation;
 	}
 
@@ -205,12 +204,6 @@ public class WebSSOProperties {
 		Element proxyLifetimeSeconds = dorianInformationElement
 				.getChild("proxy-lifetime-seconds");
 		return proxyLifetimeSeconds.getText().trim();
-	}
-
-	private String getProxyDelegationPathLength(Element dorianInformationElement) {
-		Element proxyDelegationPathLength = dorianInformationElement
-				.getChild("proxy-delegation-path-length");
-		return proxyDelegationPathLength.getText().trim();
 	}
 
 	private String getStartAutoSyncGTS(Element webSSOServerInformationElement) {

@@ -9,7 +9,6 @@ public class DorianInformation implements Serializable {
 	private int proxyLifetimeHours = 12;
 	private int proxyLifetimeMinutes = 0;
 	private int proxyLifetimeSeconds = 0;
-	private int delegationPathLength = 0;
 	private String displayName;
 	private String dorianServiceURL;
 	private java.lang.String serviceIdentity;
@@ -37,14 +36,6 @@ public class DorianInformation implements Serializable {
 
 	public void setProxyLifetimeSeconds(int proxyLifetimeSeconds) {
 		this.proxyLifetimeSeconds = proxyLifetimeSeconds;
-	}
-
-	public int getDelegationPathLength() {
-		return delegationPathLength;
-	}
-
-	public void setDelegationPathLength(int delegationPathLength) {
-		this.delegationPathLength = delegationPathLength;
 	}
 
 	public static long getSerialVersionUID() {
