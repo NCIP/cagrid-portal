@@ -74,27 +74,33 @@ public class SecureRemoteFqpSystemTests {
     public void cleanUp() {
         logger.debug("Cleaning Up Secure Remote FQP Tests");
         for (DataServiceDeploymentStory deployment : dataServiceDeployments) {
-            ServiceContainer container = deployment.getServiceContainer();
-            try {
-                new StopContainerStep(container).runStep();
-                new DestroyContainerStep(container).runStep();
-            } catch (Throwable ex) {
-                logger.error("Error cleaning up data service container: " + ex.getMessage(), ex);
-                ex.printStackTrace();
+            if (deployment != null && deployment.getServiceContainer() != null) {
+                ServiceContainer container = deployment.getServiceContainer();
+                try {
+                    new StopContainerStep(container).runStep();
+                    new DestroyContainerStep(container).runStep();
+                } catch (Throwable ex) {
+                    logger.error("Error cleaning up data service container: " + ex.getMessage(), ex);
+                    ex.printStackTrace();
+                }
             }
         }
         try {
-            ServiceContainer fqpContainer = fqpDeployment.getServiceContainer();
-            new StopContainerStep(fqpContainer).runStep();
-            new DestroyContainerStep(fqpContainer).runStep();
+            if (fqpDeployment != null && fqpDeployment.getServiceContainer() != null) {
+                ServiceContainer fqpContainer = fqpDeployment.getServiceContainer();
+                new StopContainerStep(fqpContainer).runStep();
+                new DestroyContainerStep(fqpContainer).runStep();
+            }
         } catch (Throwable ex) {
             logger.error("Error cleaning up FQP service container: " + ex.getMessage(), ex);
             ex.printStackTrace();
         }
         try {
-            ServiceContainer cdsContainer = cdsDeployment.getServiceContainer();
-            new StopContainerStep(cdsContainer).runStep();
-            new DestroyContainerStep(cdsContainer).runStep();
+            if (cdsDeployment != null && cdsDeployment.getServiceContainer() != null) {
+                ServiceContainer cdsContainer = cdsDeployment.getServiceContainer();
+                new StopContainerStep(cdsContainer).runStep();
+                new DestroyContainerStep(cdsContainer).runStep();
+            }
         } catch (Throwable ex) {
             logger.error("Error cleaning up CDS service container: " + ex.getMessage(), ex);
             ex.printStackTrace();

@@ -24,7 +24,7 @@ import org.junit.Test;
  * @author David Ervin
  * 
  * @created Jul 10, 2008 10:57:40 AM
- * @version $Id: LocalFqpSystemTests.java,v 1.11 2009-01-06 21:33:10 jpermar Exp $ 
+ * @version $Id: LocalFqpSystemTests.java,v 1.12 2009-01-16 17:26:11 dervin Exp $ 
  */
 public class LocalFqpSystemTests {
     
@@ -72,12 +72,14 @@ public class LocalFqpSystemTests {
     public void cleanUp() {
         logger.debug("Cleaning Up Local FQP Tests");
         for (DataServiceDeploymentStory deployment : deployments) {
-            ServiceContainer container = deployment.getServiceContainer();
-            try {
-                new StopContainerStep(container).runStep();
-                new DestroyContainerStep(container).runStep();
-            } catch (Throwable ex) {
-                ex.printStackTrace();
+            if (deployment != null && deployment.getServiceContainer() != null) {
+                ServiceContainer container = deployment.getServiceContainer();
+                try {
+                    new StopContainerStep(container).runStep();
+                    new DestroyContainerStep(container).runStep();
+                } catch (Throwable ex) {
+                    ex.printStackTrace();
+                }
             }
         }
     }

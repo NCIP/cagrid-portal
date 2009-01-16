@@ -24,7 +24,7 @@ import org.junit.Test;
  * @author David Ervin
  * 
  * @created Jul 10, 2008 10:57:40 AM
- * @version $Id: RemoteFqpSystemTests.java,v 1.17 2009-01-06 21:33:10 jpermar Exp $ 
+ * @version $Id: RemoteFqpSystemTests.java,v 1.18 2009-01-16 17:26:11 dervin Exp $ 
  */
 public class RemoteFqpSystemTests {
     
@@ -125,18 +125,22 @@ public class RemoteFqpSystemTests {
     public void cleanUp() {
         logger.debug("Cleaning Up Remote FQP Tests");
         for (DataServiceDeploymentStory deployment : dataServiceDeployments) {
-            ServiceContainer container = deployment.getServiceContainer();
-            try {
-                new StopContainerStep(container).runStep();
-                new DestroyContainerStep(container).runStep();
-            } catch (Throwable ex) {
-                ex.printStackTrace();
+            if (deployment != null && deployment.getServiceContainer() != null) {
+                ServiceContainer container = deployment.getServiceContainer();
+                try {
+                    new StopContainerStep(container).runStep();
+                    new DestroyContainerStep(container).runStep();
+                } catch (Throwable ex) {
+                    ex.printStackTrace();
+                }
             }
         }
         try {
-            ServiceContainer fqpContainer = fqpDeployment.getServiceContainer();
-            new StopContainerStep(fqpContainer).runStep();
-            new DestroyContainerStep(fqpContainer).runStep();
+            if (fqpDeployment != null && fqpDeployment.getServiceContainer() != null) {
+                ServiceContainer fqpContainer = fqpDeployment.getServiceContainer();
+                new StopContainerStep(fqpContainer).runStep();
+                new DestroyContainerStep(fqpContainer).runStep();
+            }
         } catch (Throwable ex) {
             ex.printStackTrace();
         }
