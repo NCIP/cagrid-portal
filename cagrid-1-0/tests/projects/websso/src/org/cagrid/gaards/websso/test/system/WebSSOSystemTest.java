@@ -1,6 +1,8 @@
 package org.cagrid.gaards.websso.test.system;
 
 import java.io.File;
+import java.io.PrintWriter;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -549,6 +551,8 @@ public class WebSSOSystemTest extends Story {
 		tearDownServer(cdsServiceContainer,tempcdsService);
 		tearDownServer(webSSOJasigClientServiceContainer,tempwebssoJasigClientService);
 		tearDownServer(webSSOAcegiClientServiceContainer,tempwebssoAcegiClientService);
+		
+		webSSOServiceContainer.getProperties().setMaxShutdownWaitTime(200);
 		tearDownServer(webSSOServiceContainer,tempWebSSOService);
 	}
 
