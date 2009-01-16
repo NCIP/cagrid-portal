@@ -145,7 +145,7 @@ public class MetadataCodegenPostProcessor implements CodegenExtensionPostProcess
 
             // if we found mappings, pass the mappings to the
             NamespaceToProjectMapping[] mappingArr = new NamespaceToProjectMapping[mappings.size()];
-            mmsService.annotateServiceMetadata(metadata, mappings.toArray(mappingArr));
+            metadata=mmsService.annotateServiceMetadata(metadata, mappings.toArray(mappingArr));
         } catch (Exception e) {
             LOG.error("Problem annotating ServiceMetadata; using unannotated model.", e);
         }
