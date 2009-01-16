@@ -10,12 +10,16 @@ import gov.nih.nci.cagrid.introduce.portal.modification.discovery.NamespaceTypeD
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 import java.rmi.RemoteException;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.cagrid.gme.client.GlobalModelExchangeClient;
+import org.cagrid.gme.common.FilesystemCacher;
+import org.cagrid.gme.domain.XMLSchemaBundle;
 import org.cagrid.gme.domain.XMLSchemaNamespace;
 import org.cagrid.gme.stubs.types.NoSuchNamespaceExistsFault;
 
@@ -25,12 +29,37 @@ public abstract class GMETypeSelectionComponentBase extends NamespaceTypeDiscove
     private static final Log logger = LogFactory.getLog(GMETypeSelectionComponentBase.class);
 
 
-    private Map<XMLSchemaNamespace, File> cacheSchemas(File dir, XMLSchemaNamespace namespace)
-        throws NoSuchNamespaceExistsFault, RemoteException, IOException, Exception {
-        GlobalModelExchangeClient client;
-        client = new GlobalModelExchangeClient(getGMEURL());
+    /**
+     * Uses the SchemaCacher but only returns the "new" schemas
+     * 
+     * @param dir
+     * @param namespace
+     * @param exisingSchemasToIgnore
+     * @return
+     * @throws NoSuchNamespaceExistsFault
+     * @throws RemoteException
+     * @throws IOException
+     * @throws Exception
+     */
+    private Map<XMLSchemaNamespace, File> cacheSchemas(File dir, XMLSchemaNamespace namespace,
+        Map<URI, File> exisingSchemasToIgnore) throws NoSuchNamespaceExistsFault, RemoteException, IOException,
+        Exception {
+        GlobalModelExchangeClient client = new GlobalModelExchangeClient(getGMEURL());
 
-        return client.cacheSchemas(namespace, dir);
+        XMLSchemaBundle bundle = client.getXMLSchemaAndDependencies(namespace);
+        FilesystemCacher cacher = new FilesystemCacher(bundle, dir);
+        Map<URI, File> cachedSchemas = cacher.cacheSchemas(exisingSchemasToIgnore);
+
+        Map<XMLSchemaNamespace, File> result = new HashMap<XMLSchemaNamespace, File>();
+        for (URI uri : cachedSchemas.keySet()) {
+            if (!exisingSchemasToIgnore.containsKey(uri)) {
+                result.put(new XMLSchemaNamespace(uri), cachedSchemas.get(uri));
+            } else {
+                logger.info("Skipping creation of pre-existing schema:" + uri);
+            }
+        }
+
+        return result;
     }
 
 
@@ -56,14 +85,34 @@ public abstract class GMETypeSelectionComponentBase extends NamespaceTypeDiscove
             try {
 
                 int startEventID = progress.startEvent("Contacting GME for schemas...");
-                // TODO change this to pass a Map<URI, File> of the existing
-                // namespaces if the replacement policy is IGNORE (such that
-                // those schemas can be reused)
+
+                Map<URI, File> existingSchemas = new HashMap<URI, File>();
+
+                if (replacementPolicy.equals(NamespaceReplacementPolicy.IGNORE)) {
+                    // pass a Map<URI, File> of the existing
+                    // namespaces if the replacement policy is IGNORE (such that
+                    // those schemas can be reused)
+                    if (getCurrentNamespaces() != null && getCurrentNamespaces().getNamespace() != null) {
+                        for (NamespaceType ns : getCurrentNamespaces().getNamespace()) {
+                            String namespace = ns.getNamespace();
+                            if (!namespace.equals(IntroduceConstants.W3CNAMESPACE)) {
+                                String fileLocation = ns.getLocation();
+                                if (fileLocation != null) {
+                                    existingSchemas.put(new URI(namespace),
+                                        new File(schemaDestinationDir, fileLocation));
+                                } else {
+                                    logger.error("Found an existing namespace (" + namespace
+                                        + ") that didn't have a file location; can't ignore it.");
+                                }
+                            }
+                        }
+                    }
+                }
 
                 Map<XMLSchemaNamespace, File> cachedSchemas = null;
 
                 try {
-                    cachedSchemas = cacheSchemas(schemaDestinationDir, selectedNS);
+                    cachedSchemas = cacheSchemas(schemaDestinationDir, selectedNS, existingSchemas);
                 } catch (NoSuchNamespaceExistsFault e) {
                     String error = "Namespace (" + selectedNS + ") does not exist in the GME.";
                     logger.error(error, e);
@@ -71,39 +120,35 @@ public abstract class GMETypeSelectionComponentBase extends NamespaceTypeDiscove
                     return null;
                 }
 
-                progress.stopEvent(startEventID, "Successfully retrieved " + cachedSchemas.size() + " schemas.");
+                progress.stopEvent(startEventID, "Successfully retrieved " + cachedSchemas.size() + " new schemas.");
 
                 NamespaceType[] types = null;
 
                 // check that it is ok to apply the changes
+                boolean shouldFail = false;
                 for (XMLSchemaNamespace ns : cachedSchemas.keySet()) {
                     if (namespaceAlreadyExists(ns.toString())) {
-                        if (replacementPolicy.equals(NamespaceReplacementPolicy.IGNORE)) {
+                        if (replacementPolicy.equals(NamespaceReplacementPolicy.ERROR)) {
+                            shouldFail = true;
 
                             String error = "Namespace ("
                                 + ns
-                                + ") already exists, and policy was to ingore, but this is not supported by this type selection component.  Change the setting to REPLACE to avoid this error.";
+                                + ") already exists, and policy was to error. Change the setting in the Preferences to REPLACE or IGNORE to avoid this error.";
                             logger.error(error);
                             addError(error);
-                            // TODO: should probably roll back all the files
-                            // that where written, but that would leave included
-                            // schemas behind if I just looped those found in
-                            // the map
-
-                            return null;
-                        } else if (replacementPolicy.equals(NamespaceReplacementPolicy.ERROR)) {
-                            String error = "Namespace ("
-                                + ns
-                                + ") already exists, and policy was to error.  Change the setting to REPLACE to avoid this error.";
-                            logger.error(error);
-                            addError(error);
-                            // TODO: should probably roll back all the files
-                            // that where written, but that would leave included
-                            // schemas behind if I just looped those found in
-                            // the map
-                            return null;
                         }
                     }
+                }
+
+                // if we copied in schemas we aren't going to use, clean them up
+                // and return
+                if (shouldFail) {
+                    for (XMLSchemaNamespace ns : cachedSchemas.keySet()) {
+                        logger.debug("Removing schema (" + cachedSchemas.get(ns)
+                            + ") we aren't keeping because policy was to ERROR.");
+                        cachedSchemas.get(ns).delete();
+                    }
+                    return null;
                 }
 
                 types = new NamespaceType[cachedSchemas.size()];
