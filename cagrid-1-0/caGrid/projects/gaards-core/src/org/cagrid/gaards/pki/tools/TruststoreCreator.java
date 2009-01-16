@@ -1,15 +1,12 @@
 package org.cagrid.gaards.pki.tools;
 
 import gov.nih.nci.cagrid.common.IOUtils;
-import gov.nih.nci.cagrid.common.Utils;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.security.KeyStore;
-import java.security.PrivateKey;
 
 import org.cagrid.gaards.pki.CertUtil;
-import org.cagrid.gaards.pki.KeyUtil;
 
 public class TruststoreCreator {
 
