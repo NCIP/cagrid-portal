@@ -73,6 +73,9 @@ public class EnumerationQueryExecutionStep extends BaseQueryExecutionStep {
         
         LOG.debug("Begining non-blocking query");
         final FederatedQueryResultsClient resultsClient = fqpClient.query(query, null, null);
+        
+        /*
+         * TODO: Turn this back on when I can get my data services to sleep long enough to actually get notifications
         final InfoHolder info = new InfoHolder();
         
         Thread worker = new Thread() {
@@ -93,13 +96,28 @@ public class EnumerationQueryExecutionStep extends BaseQueryExecutionStep {
         // wait for notification that the data is ready
         LOG.debug("Waiting for success notification...");
         Thread.sleep(WAIT_TIME * 1000);
+        */
+        
+        // wait for results
+        long start = System.currentTimeMillis();
+        while (!resultsClient.isProcessingComplete() && ((System.currentTimeMillis() - start) < (WAIT_TIME * 1000))) {
+            try {
+                Thread.sleep(500);
+            } catch (Exception ex) {
+                // ?
+            }
+        }
+        
+        enumerateAndVerify(resultsClient);
         
         // release the results resource
         resultsClient.destroy();
         
         // check for success...
+        /*
         assertTrue("Federated Query Processing status is unknown", info.success != null);
         assertTrue("Federated Query Processing was not successful", info.success.booleanValue());
+        */
     }
     
     
