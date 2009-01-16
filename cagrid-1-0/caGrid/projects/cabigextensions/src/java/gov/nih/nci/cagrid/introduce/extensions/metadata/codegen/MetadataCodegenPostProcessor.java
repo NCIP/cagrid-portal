@@ -1,6 +1,8 @@
 package gov.nih.nci.cagrid.introduce.extensions.metadata.codegen;
 
+import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
+import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
 import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodType;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeExceptionsException;
@@ -8,6 +10,8 @@ import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputs;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeInputsInput;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodTypeOutput;
 import gov.nih.nci.cagrid.introduce.beans.method.MethodsType;
+import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
+import gov.nih.nci.cagrid.introduce.beans.namespace.NamespacesType;
 import gov.nih.nci.cagrid.introduce.beans.resource.ResourcePropertyType;
 import gov.nih.nci.cagrid.introduce.beans.service.ServiceType;
 import gov.nih.nci.cagrid.introduce.beans.service.ServicesType;
@@ -42,7 +46,10 @@ import gov.nih.nci.cagrid.metadata.service.ServiceServiceContextCollection;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.StringReader;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.xml.namespace.QName;
@@ -51,7 +58,10 @@ import org.apache.axis.utils.ClassUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.cagrid.mms.client.MetadataModelServiceClient;
+import org.cagrid.mms.common.MetadataModelServiceConstants;
 import org.cagrid.mms.common.MetadataModelServiceI;
+import org.cagrid.mms.domain.NamespaceToProjectMapping;
+import org.cagrid.mms.domain.UMLProjectIdentifer;
 
 
 /**
@@ -89,9 +99,53 @@ public class MetadataCodegenPostProcessor implements CodegenExtensionPostProcess
         // try to annotate the metadata with cadsr extract
         try {
             MetadataModelServiceI mmsService = new MetadataModelServiceClient(getMMSURL());
-            // TODO: extract project mappings from extension data on the
-            // namespaces
-            mmsService.annotateServiceMetadata(metadata, null);
+
+            // extract project mappings from extension data on the
+            // namespaces if they exist
+            List<NamespaceToProjectMapping> mappings = new ArrayList<NamespaceToProjectMapping>();
+            NamespacesType namespaces = info.getNamespaces();
+            if (namespaces != null && namespaces.getNamespace() != null) {
+                // walk the service's namespaces and extract any extension data
+                for (NamespaceType ns : namespaces.getNamespace()) {
+                    // if there are extensions
+                    if (ns.getExtensions() != null && ns.getExtensions().getExtension() != null) {
+                        // walk them and look for a UMLProjectIdentifier
+                        for (ExtensionType ext : ns.getExtensions().getExtension()) {
+                            if (ext.getName().equals(
+                                MetadataModelServiceConstants.UML_PROJECT_IDENTIFIER_EXTENSION_NAME)
+                                && ext.getVersion().equals(
+                                    MetadataModelServiceConstants.UML_PROJECT_IDENTIFIER_EXTENSION_VERSION)) {
+
+                                try {
+                                    // if we find one, load it
+                                    StringReader reader = new StringReader(ext.getExtensionData().get_any()[0]
+                                        .getAsString());
+                                    UMLProjectIdentifer projID = (UMLProjectIdentifer) Utils.deserializeObject(reader,
+                                        UMLProjectIdentifer.class);
+
+                                    // create a mapping from the current
+                                    // namespace
+                                    // to it
+                                    NamespaceToProjectMapping nsMap = new NamespaceToProjectMapping();
+                                    nsMap.setNamespaceURI(new org.apache.axis.types.URI(ns.getNamespace()));
+                                    nsMap.setUMLProjectIdentifer(projID);
+
+                                    // add it to a list of mappings
+                                    mappings.add(nsMap);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                    LOG.error("Problem using uml project annotation of namespace (" + ns.getNamespace()
+                                        + "); ignoring the annotation.", e);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            // if we found mappings, pass the mappings to the
+            NamespaceToProjectMapping[] mappingArr = new NamespaceToProjectMapping[mappings.size()];
+            mmsService.annotateServiceMetadata(metadata, mappings.toArray(mappingArr));
         } catch (Exception e) {
             LOG.error("Problem annotating ServiceMetadata; using unannotated model.", e);
         }
@@ -110,8 +164,8 @@ public class MetadataCodegenPostProcessor implements CodegenExtensionPostProcess
         try {
             return ConfigurationUtil.getGlobalExtensionProperty(MetadataConstants.MMS_URL_PROPERTY).getValue();
         } catch (Exception e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
+            LOG.error("Problem loading MMS URL from preerences:" + e.getMessage(), e);
         }
         return null;
     }

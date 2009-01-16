@@ -2,19 +2,28 @@ package org.cagrid.cadsr.portal.discovery;
 
 import gov.nih.nci.cadsr.umlproject.domain.Project;
 import gov.nih.nci.cadsr.umlproject.domain.UMLPackageMetadata;
+import gov.nih.nci.cagrid.common.portal.MultiEventProgressBar;
+import gov.nih.nci.cagrid.introduce.beans.configuration.NamespaceReplacementPolicy;
 import gov.nih.nci.cagrid.introduce.beans.extension.DiscoveryExtensionDescriptionType;
+import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionType;
+import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionTypeExtensionData;
+import gov.nih.nci.cagrid.introduce.beans.extension.ExtensionsType;
+import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespacesType;
 import gov.nih.nci.cagrid.introduce.common.ConfigurationUtil;
+import gov.nih.nci.cagrid.introduce.extension.ExtensionsLoader;
 
 import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.io.File;
 import java.net.URISyntaxException;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import org.apache.axis.message.MessageElement;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.cagrid.cadsr.portal.CaDSRBrowserPanel;
@@ -22,6 +31,8 @@ import org.cagrid.cadsr.portal.PackageSelectedListener;
 import org.cagrid.cadsr.portal.ProjectSelectedListener;
 import org.cagrid.gme.discoverytools.GMETypeSelectionComponentBase;
 import org.cagrid.gme.domain.XMLSchemaNamespace;
+import org.cagrid.mms.common.MetadataModelServiceConstants;
+import org.cagrid.mms.domain.UMLProjectIdentifer;
 
 
 public class CaDSRTypeSelectionComponent extends GMETypeSelectionComponentBase
@@ -139,7 +150,8 @@ public class CaDSRTypeSelectionComponent extends GMETypeSelectionComponentBase
             this.nsTextField.setEditable(false);
             this.nsTextField.setText(UNAVAILABLE);
             this.nsTextField.setForeground(Color.RED);
-            this.nsTextField.setToolTipText("Namespaces in Black have been looked up from the mapping, Blue have been 'guessed', and Red are erroneous.");
+            this.nsTextField
+                .setToolTipText("Namespaces in Black have been looked up from the mapping, Blue have been 'guessed', and Red are erroneous.");
         }
         return this.nsTextField;
     }
@@ -194,4 +206,45 @@ public class CaDSRTypeSelectionComponent extends GMETypeSelectionComponentBase
         }
     }
 
+
+    @Override
+    public NamespaceType[] createNamespaceType(File schemaDestinationDir, NamespaceReplacementPolicy replacementPolicy,
+        MultiEventProgressBar progress) {
+        NamespaceType[] types = super.createNamespaceType(schemaDestinationDir, replacementPolicy, progress);
+        if (types == null) {
+            return null;
+        }
+
+        // get the current project and make an MMS identifier for it
+        Project project = getCaDSRPanel().getSelectedProject();
+        UMLProjectIdentifer projID = new UMLProjectIdentifer();
+        projID.setIdentifier(project.getShortName());
+        projID.setVersion(project.getVersion());
+
+        // add UMLProjectIdentifier extension data to each created type
+        for (NamespaceType type : types) {
+
+            // add extensions
+            ExtensionsType exts = new ExtensionsType();
+            type.setExtensions(exts);
+
+            // add a single extension
+            ExtensionType ext = new ExtensionType();
+            ext.setExtensionType(ExtensionsLoader.DISCOVERY_EXTENSION);
+            ext.setName(MetadataModelServiceConstants.UML_PROJECT_IDENTIFIER_EXTENSION_NAME);
+            ext.setVersion(MetadataModelServiceConstants.UML_PROJECT_IDENTIFIER_EXTENSION_VERSION);
+            exts.setExtension(new ExtensionType[]{ext});
+
+            // give it extension data
+            ExtensionTypeExtensionData extensionData = new ExtensionTypeExtensionData();
+            ext.setExtensionData(extensionData);
+
+            // store our project identifier in the extension data
+            MessageElement element = new MessageElement(UMLProjectIdentifer.getTypeDesc().getXmlType(), projID);
+            extensionData.set_any(new MessageElement[]{element});
+
+        }
+
+        return types;
+    }
 }

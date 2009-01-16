@@ -187,7 +187,7 @@ public class ServiceMetadataAnnotator {
             // the user supplied a project to be used for this namespace, so get
             // the appserv from it, as well as the project prototype
             if (proj != null) {
-                LOG.debug("Using supplied Project (" + proj.getProjectPrototype().getLongName() + ") version ("
+                LOG.debug("Using supplied Project (" + proj.getProjectPrototype().getShortName() + ") version ("
                     + proj.getProjectPrototype().getVersion() + ") for Qname (" + qname + ").");
                 cadsr = proj.getSourceAppServ();
                 projPrototype = proj.getProjectPrototype();
