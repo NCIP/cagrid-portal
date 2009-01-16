@@ -3,6 +3,7 @@
  */
 package gov.nci.nih.cagrid.tests.core;
 
+import gov.nci.nih.cagrid.tests.core.steps.AddBasicServiceMetadata;
 import gov.nci.nih.cagrid.tests.core.steps.GlobusCleanupStep;
 import gov.nci.nih.cagrid.tests.core.steps.GlobusCreateStep;
 import gov.nci.nih.cagrid.tests.core.steps.GlobusDeployServiceStep;
@@ -46,6 +47,7 @@ public class BasicAnalyticalServiceWithMetadataTest extends AbstractServiceTest 
         Vector steps = new Vector();
         steps.add(getCreateServiceStep());
         steps.add(new GlobusCreateStep(getGlobus()));
+        steps.add(new AddBasicServiceMetadata(getCreateServiceStep().getServiceDir(),getMetadataFile()));
         GlobusDeployServiceStep deployStep = new GlobusDeployServiceStep(getGlobus(),getCreateServiceStep().getServiceDir());
         steps.add(deployStep);
         steps.add(new GlobusStartStep(getGlobus()));

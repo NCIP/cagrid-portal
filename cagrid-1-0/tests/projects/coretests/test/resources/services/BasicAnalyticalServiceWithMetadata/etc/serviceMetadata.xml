@@ -5,8 +5,8 @@
       name="BasicAnalyticalServiceWithMetadata" version=".9999"
       xmlns:ns2="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.service">
       <ns2:pointOfContactCollection>
-        <ns2:PointOfContact affiliation="Duke Comprehensive Cancer Center" email="patrick.mcconnell@duke.edu"
-          firstName="Patrick" lastName="McConnell" role="developer" />
+        <ns3:PointOfContact affiliation="Duke Comprehensive Cancer Center" email="patrick.mcconnell@duke.edu"
+          firstName="Patrick" lastName="McConnell" role="developer" xmlns:ns3="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common" />
       </ns2:pointOfContactCollection>
       <ns2:serviceContextCollection>
         <ns2:ServiceContext description="" name="BasicAnalyticalServiceWithMetadata">
@@ -60,8 +60,8 @@
       <ns6:Address country="US" locality="Duram" postalCode="27705" stateProvince="NC"
         street1="2424 Erwin Rd" />
       <ns6:pointOfContactCollection>
-        <ns6:PointOfContact affiliation="Duke Comprehensive Cancer Center" email="patrick.mcconnell@duke.edu"
-          firstName="Patrick" lastName="McConnell" role="developer" />
+        <ns3:PointOfContact affiliation="Duke Comprehensive Cancer Center" email="patrick.mcconnell@duke.edu"
+          firstName="Patrick" lastName="McConnell" role="developer" xmlns:ns3="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common" />
       </ns6:pointOfContactCollection>
     </ns6:ResearchCenter>
   </ns1:hostingResearchCenter>
