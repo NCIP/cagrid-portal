@@ -1,8 +1,6 @@
 package org.cagrid.gaards.websso.test.system;
 
 import java.io.File;
-import java.io.PrintWriter;
-import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -29,6 +27,7 @@ import org.cagrid.gaards.dorian.idp.CountryCode;
 import org.cagrid.gaards.dorian.idp.LocalUserRole;
 import org.cagrid.gaards.dorian.idp.LocalUserStatus;
 import org.cagrid.gaards.dorian.idp.StateCode;
+import org.cagrid.gaards.dorian.test.system.steps.CleanupDorianStep;
 import org.cagrid.gaards.dorian.test.system.steps.ConfigureGlobusToTrustDorianStep;
 import org.cagrid.gaards.dorian.test.system.steps.CopyConfigurationStep;
 import org.cagrid.gaards.dorian.test.system.steps.FindGridUserStep;
@@ -231,6 +230,8 @@ public class WebSSOSystemTest extends Story {
 		steps.add(new InstallCertStep("localhost",httpJasigPortNumber,3));
 		steps.add(new InstallCertStep("localhost",httpAcegiPortNumber,4));
 		steps.add(new AssertWebSSOApplicationStep(webSSOClientJasigURL,webSSOClientAcegiURL+"/protected"));
+		
+		steps.add(new CleanupDorianStep(dorianServiceContainer,trust));
 		return steps;
 	}
 	
