@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
-import org.cagrid.gaards.authentication.Credential;
 import org.cagrid.gaards.websso.authentication.helper.AuthenticationServiceHelper;
 import org.cagrid.gaards.websso.authentication.helper.DorianHelper;
 import org.cagrid.gaards.websso.authentication.helper.GridCredentialDelegator;
