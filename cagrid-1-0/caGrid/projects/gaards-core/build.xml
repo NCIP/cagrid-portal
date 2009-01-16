@@ -254,9 +254,15 @@
 		</java>
 	</target>
 
-	<target name="createTomcatKeystore" description="Generates a Grid Trust Report." depends="init">
+	<target name="createTomcatKeystore" description="Create a keystore." depends="init">
 		<java classname="org.cagrid.gaards.pki.tools.TomcatKeystoreCreator" fork="false" newenvironment="true" failonerror="true">
 				<classpath refid="run.classpath" />
 		</java>
 	</target>
+	
+	<target name="createTruststore" description="Create a truststore." depends="init">
+			<java classname="org.cagrid.gaards.pki.tools.TruststoreCreator" fork="false" newenvironment="true" failonerror="true">
+					<classpath refid="run.classpath" />
+			</java>
+		</target>
 </project>
