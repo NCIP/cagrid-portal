@@ -3,17 +3,6 @@
 <web-app xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd" version="2.4">
 
-	<servlet>
-		<servlet-name>Start Auto Sync GTS</servlet-name>
-		<servlet-class>org.cagrid.websso.common.StartSyncGTSServlet</servlet-class>
-		<init-param>
-			<description></description>
-			<param-name>start-auto-syncgts</param-name>
-			<param-value>no</param-value>			
-		</init-param>
-		<load-on-startup>1</load-on-startup>		
-	</servlet>
-
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
 		<param-value>/WEB-INF/applicationContext.xml</param-value>
@@ -139,4 +128,41 @@
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>
+	
+	<servlet>
+		<servlet-name>Start Auto Sync GTS</servlet-name>
+		<servlet-class>org.cagrid.websso.common.StartSyncGTSServlet</servlet-class>
+		<init-param>
+			<description></description>
+			<param-name>start-auto-syncgts</param-name>
+			<param-value>no</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	
+	<servlet>
+		<servlet-name>jsp</servlet-name>
+		<servlet-class>org.apache.jasper.servlet.JspServlet</servlet-class>
+		<init-param>
+			<param-name>fork</param-name>
+			<param-value>false</param-value>
+		</init-param>
+		<init-param>
+			<param-name>xpoweredBy</param-name>
+			<param-value>false</param-value>
+		</init-param>
+		<init-param>
+			<param-name>mappedfile</param-name>
+			<param-value>true</param-value>
+		</init-param>
+		<init-param>
+			<param-name>compilerTargetVM</param-name>
+			<param-value>1.5</param-value>
+		</init-param>
+		<init-param>
+			<param-name>compilerSourceVM</param-name>
+			<param-value>1.4</param-value>
+		</init-param>
+		<load-on-startup>2</load-on-startup>
+	</servlet>
 </web-app>
