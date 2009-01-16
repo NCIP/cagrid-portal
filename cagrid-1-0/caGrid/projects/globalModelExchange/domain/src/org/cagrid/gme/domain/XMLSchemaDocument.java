@@ -12,6 +12,7 @@ public class XMLSchemaDocument {
     // it a primary key, which doesn't work when it is an unbounded size CLOB
     // @Column(nullable = false)
     @Lob
+    @Column(length=16777215)
     private java.lang.String schemaText;
     // TODO: is there a way to check unique=true within the containing schema?
     // right now if you pass the same system id into the set, one will replace
