@@ -364,9 +364,27 @@ public class Installer {
         // Allows user to specify ports and hostname
         SpecifyPortsStep containerConfigureStep = new SpecifyPortsStep(this.model.getMessage("specify.ports.title"),
             this.model.getMessage("specify.ports.desc"));
+
+        // if the hostname has not been set or is set to localhost then look for
+        // the real hostname
+        // as known buy this machine the installer is running on.
+        String hostname = this.model.getProperty(Constants.SERVICE_HOSTNAME);
+        if (hostname == null) {
+            hostname = "localhost";
+        }
+        if (hostname.equals("localhost")) {
+            try {
+                String temphostname = java.net.InetAddress.getLocalHost().getHostName();
+                if (temphostname != null && temphostname.length() > 0) {
+                    hostname = temphostname;
+                }
+            } catch (java.net.UnknownHostException uhe) {
+            }
+        }
+
         containerConfigureStep.getOptions().add(
             new TextPropertyConfigurationOption(Constants.SERVICE_HOSTNAME, this.model.getMessage("service.hostname"),
-                this.model.getProperty(Constants.SERVICE_HOSTNAME), true));
+                hostname, true));
         containerConfigureStep.getOptions().add(
             new TextPropertyConfigurationOption(Constants.SHUTDOWN_PORT, this.model.getMessage("shutdown.port"),
                 this.model.getProperty(Constants.SHUTDOWN_PORT), false));
@@ -441,7 +459,6 @@ public class Installer {
         jbossComponentInstaller.addInstallDownloadedComponentTasks(this.model, deployContainer);
 
         incrementProgress();
-    
 
         // deploy the syngGTS anytime we are deploying to a container
         DeployServiceTask deploySyncGTS = new DeployServiceTask("syncGTS", "Deloying syncGTS", "syncGTS");
@@ -483,7 +500,8 @@ public class Installer {
         ImageIcon myImage = new ImageIcon(Thread.currentThread().getContextClassLoader().getResource(
             "images/caGrid_small.png"));
         Wizard wizard = new Wizard(this.model);
-        wizard.showInFrame("caGrid " + model.getProperty("cagrid.version") + " Installation Wizard", myImage.getImage());
+        wizard
+            .showInFrame("caGrid " + model.getProperty("cagrid.version") + " Installation Wizard", myImage.getImage());
     }
 
 
