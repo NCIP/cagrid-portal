@@ -17,8 +17,9 @@
 	<property name="ext.dir" location="${basedir}/ext" />
 	<property name="ext.dependencies.dir" location="${ext.dir}/dependencies" />
 	<property name="ext.targetgrid.dir" location="${ext.dir}/target_grid" />
-	<property name="ext.lib" location="${ext.dependencies.dir}/service/jars" />
+	<property name="ext.lib.dir" location="${ext.dependencies.dir}/service/jars" />
 	<property name="ext.test.lib" value="${ext.dependencies.dir}/test/jars" />
+    <property name="ext.tools.lib.dir" location="${ext.dependencies.dir}/tools/jars" />
 
 	<!-- ============================================================== -->
 	<!-- This file is designed to allow the developer to extend the     -->
@@ -88,7 +89,7 @@
 	<!-- ============================================================== -->
 	<target name="defineExtendedClasspaths">
 		<path id="base.extended.classpath">
-			<fileset dir="${ext.lib}">
+			<fileset dir="${ext.lib.dir}">
 				<include name="*.jar" />
 			</fileset>
 		</path>
@@ -105,6 +106,20 @@
 		</path>
 		<path id="run.extended.classpath">
 		</path>
+		<path id="tasks.run.extended.classpath">
+                  <!--      <fileset dir="${ext.lib.dir}">
+                                <include name="caGrid-core*.jar" />
+                                <include name="jdom*.jar" />
+                        </fileset>
+		  -->
+                        <fileset dir="${ext.lib.dir}">
+                                <include name="**/*.jar" />
+                        </fileset>
+                        <fileset dir="${ext.tools.lib.dir}">
+                                <include name="*.jar" />
+                        </fileset>
+
+                </path>
 	</target>
 
 

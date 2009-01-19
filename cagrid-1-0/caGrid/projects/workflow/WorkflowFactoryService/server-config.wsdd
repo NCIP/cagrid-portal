@@ -10,6 +10,8 @@
     <parameter name="providers" value=" gov.nih.nci.cagrid.introduce.security.service.globus.ServiceSecurityProviderImpl DestroyProvider SetTerminationTimeProvider GetMRPProvider GetRPProvider QueryRPProvider" />
     <parameter name="loadOnStartup" value="true" />
     <parameter name="securityMetadata" value="ETC-PATH/WorkflowServiceImpl-security-metadata.xml" />
+    <parameter name="workflowserviceimpl-etcDirectoryPath" value="ETC-PATH" />
+    <parameter name="workflowserviceimpl-serviceName" value="WorkflowServiceImpl" />
   </service>
   <service name="SERVICE-INSTANCE-PREFIX/WorkflowFactoryService" provider="Handler" use="literal" style="document">
     <parameter name="className" value="gov.nih.nci.cagrid.workflow.service.globus.WorkflowFactoryServiceProviderImpl" />
@@ -21,6 +23,8 @@
     <parameter name="providers" value=" GetMRPProvider GetRPProvider QueryRPProvider gov.nih.nci.cagrid.introduce.security.service.globus.ServiceSecurityProviderImpl" />
     <parameter name="loadOnStartup" value="true" />
     <parameter name="securityMetadata" value="ETC-PATH/WorkflowFactoryService-security-metadata.xml" />
+    <parameter name="workflowfactoryservice-etcDirectoryPath" value="ETC-PATH" />
+    <parameter name="workflowfactoryservice-serviceName" value="WorkflowFactoryService" />
   </service>
   <typeMapping name="AggregatorContent" qname="aggr:AggregatorContent" type="java:org.globus.mds.aggregator.types.AggregatorContent" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="" />
 </deployment>

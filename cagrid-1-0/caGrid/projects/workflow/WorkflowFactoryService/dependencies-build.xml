@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 
 <project name="dependencies" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant">
+
 	<property file="project.properties" />
 
 	<!-- OVERLOADED-->
@@ -18,7 +19,7 @@
 		<ivy:retrieve conf="service" pattern="${ivy.resolved.artifacts.dir}/dependencies/service/[type]s/[originalname](.[ext])" sync="true" type="jar" />
 		
 		<ivy:retrieve conf="${ivy.resolve.configurations}" pattern="${basedir}/schema/WorkflowFactoryService/xsd/[artifact](.[ext])" sync="true" type="xsd" />
-
+		<ivy:retrieve conf="serviceTools" pattern="${ivy.resolved.artifacts.dir}/dependencies/tools/[type]s/[originalname](.[ext])" type="jar" />
 	</target>
 </project>
 

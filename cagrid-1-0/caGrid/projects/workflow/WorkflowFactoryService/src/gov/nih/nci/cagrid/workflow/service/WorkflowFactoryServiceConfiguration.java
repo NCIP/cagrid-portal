@@ -16,13 +16,14 @@ import org.globus.wsrf.Constants;
  * This class holds all service properties which were defined for the service to have
  * access to.
  * 
- * @created by Introduce Toolkit version 1.2
+ * @created by Introduce Toolkit version 1.3
  * 
  */
 public class WorkflowFactoryServiceConfiguration implements ServiceConfiguration {
 
 	public static WorkflowFactoryServiceConfiguration  configuration = null;
-
+    public String etcDirectoryPath;
+    	
 	public static WorkflowFactoryServiceConfiguration getConfiguration() throws Exception {
 		if (WorkflowFactoryServiceConfiguration.configuration != null) {
 			return WorkflowFactoryServiceConfiguration.configuration;
@@ -42,19 +43,19 @@ public class WorkflowFactoryServiceConfiguration implements ServiceConfiguration
 		return WorkflowFactoryServiceConfiguration.configuration;
 	}
 	
-	private String etcDirectoryPath;
-	
+
 	
 	private String abEndpoint;
 	
 	
-	public String getEtcDirectoryPath() {
+    public String getEtcDirectoryPath() {
 		return ContainerConfig.getBaseDirectory() + File.separator + etcDirectoryPath;
 	}
 	
 	public void setEtcDirectoryPath(String etcDirectoryPath) {
 		this.etcDirectoryPath = etcDirectoryPath;
 	}
+
 
 	
 	public String getAbEndpoint() {

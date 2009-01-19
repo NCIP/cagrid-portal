@@ -1,6 +1,6 @@
 package gov.nih.nci.cagrid.workflow.context.service;
 
-import gov.nih.nci.cagrid.workflow.context.service.globus.resource.WorkflowResource;
+import gov.nih.nci.cagrid.workflow.context.service.globus.resource.WorkflowServiceImplResource;
 import gov.nih.nci.cagrid.workflow.context.stubs.types.CannotCancelWorkflowFault;
 import gov.nih.nci.cagrid.workflow.stubs.types.WorkflowException;
 
@@ -23,7 +23,7 @@ public class WorkflowServiceImplImpl extends WorkflowServiceImplImplBase {
 
   public gov.nih.nci.cagrid.workflow.stubs.types.WorkflowStatusType start(gov.nih.nci.cagrid.workflow.stubs.types.StartInputType startInputElement) throws RemoteException, gov.nih.nci.cagrid.workflow.stubs.types.WorkflowException, gov.nih.nci.cagrid.workflow.context.stubs.types.StartCalledOnStartedWorkflow {
 		gov.nih.nci.cagrid.workflow.stubs.types.WorkflowStatusType status = null;
-		WorkflowResource resource = null;
+		WorkflowServiceImplResource resource = null;
 		try {
 			resource = getWorkflowResource();
 			status = resource.start(startInputElement);
@@ -33,11 +33,11 @@ public class WorkflowServiceImplImpl extends WorkflowServiceImplImplBase {
 		return status;
 	}
 
-	private WorkflowResource getWorkflowResource() throws ResourceException, ResourceContextException {
+	private WorkflowServiceImplResource getWorkflowResource() throws ResourceException, ResourceContextException {
 		ResourceContext resourceContext = ResourceContext.getResourceContext();
 		ResourceHome resourceHome = resourceContext.getResourceHome();
 		ResourceKey resourceKey = resourceContext.getResourceKey();
-		WorkflowResource resource = (WorkflowResource) resourceHome.find(resourceKey);
+		WorkflowServiceImplResource resource = (WorkflowServiceImplResource) resourceHome.find(resourceKey);
 		return resource;
 	}
 

@@ -307,7 +307,7 @@ public class WorkflowSubmissionGUI extends ApplicationComponent {
 					} else {
 						System.err
 								.println("No configuration file passed in or selected... exiting.");
-						System.exit(1);
+						//System.exit(1);
 					}
 					// destroy the temp frame
 					tempFrame.dispose();
