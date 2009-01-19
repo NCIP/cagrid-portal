@@ -52,18 +52,19 @@
 	</path>
 
 	<!-- ant configure must be executed before ant all target -->
-	<target name="websso-config-jar" depends="replace-token-contents">
+	<target name="websso-config-jar">
 		<jar destfile="${build.war.dir}/WEB-INF/lib/${ant.project.name}-conf-${project.version}.jar">
 			<fileset dir="${ext.targetgrid.dir}">
 				<include name="sync-description.xml" />
 			</fileset>
 			<fileset dir="${src.resources.dir}">
 				<include name="**/*.*" />
+				<exclude name="*-template.*" />
 			</fileset>
 		</jar>
 	</target>
 
-	<target name="build-war" depends="websso-config-jar">
+	<target name="build-war">
 		<copy todir="${build.war.dir}/WEB-INF/lib" overwrite="true">
 			<fileset dir="${lib.dir}">
 				<include name="*.jar" />
@@ -103,7 +104,7 @@
 		<copy tofile="${build.war.dir}/WEB-INF/lib/${ant.project.name}-core-${project.version}.jar" file="${build.dir}/${ant.project.name}-core.jar" />
 	</target>
 
-	<target name="war" depends="compile,build-war">
+	<target name="war" depends="compile,websso-config-jar,build-war">
 		<war destfile="${build.dir}/${webapp.name}.war" webxml="${webcontent.dir}/WEB-INF/web.xml">
 			<fileset dir="${webcontent.dir}" />
 			<lib dir="${build.war.dir}/WEB-INF/lib" />
@@ -114,32 +115,32 @@
 		<delete dir="${build.dir}" />
 	</target>
 
-	<target name="deployTomcat" depends="configure-tomcat-endorsedjars,war">
+	<target name="create-tomcat-https-keystore" description="Generates a Grid Trust Report.">
+		<java classname="org.cagrid.gaards.pki.tools.TomcatKeystoreCreator" fork="false" newenvironment="true" failonerror="true">
+			<classpath refid="build.classpath" />
+		</java>
+	</target>
+
+	<target name="configure-websso" description="replace tokens in websso-properties-template.xml and cas-template.properties">
+		<input message="Enter the location of the host certificate (PEM format):" addproperty="host.certificate"/>
+		<input message="Enter the location of the host key (PEM format):" addproperty="host.key" />
+		<input message="Enter websso server host name:" addproperty="host.name" />
+		<input message="Enter websso server https port (int value):" addproperty="host.https.port" />
+		<input message="Enter start auto sync gts (yes or no) :" addproperty="start.auto.sync.gts" defaultvalue="no" description="state whether to start auto sync gts or not"/>
+		<antcall target="-replace-token-contents"></antcall>
+	</target>
+
+	<target name="deployTomcat" depends="configure-tomcat-endorsedjars,war" description="deploy websso server in %CATALINA_HOME%">
 		<property name="tomcat.local" value="${tomcat.home}" />
 		<copy todir="${tomcat.local}/webapps/">
 			<fileset file="${build.dir}/${webapp.name}.war" />
 		</copy>
 	</target>
-	
 
-	<target name="tomcat-start">
-		<java jar="${tomcat.home}/bin/bootstrap.jar" fork="true">
-			<jvmarg value="-Dcatalina.home=${tomcat.home}"/>
-		</java>
-	</target>
-
-	<target name="tomcat-stop">
-		<java jar="${tomcat.home}/bin/bootstrap.jar" fork="true">
-			<jvmarg value="-Dcatalina.home=${tomcat.home}"/>
-			<arg line="stop"/>
-		</java>
-	</target>
-
-	<target name="deletewsrf">
-		<delete dir="${tomcat.home}/webapps/wsrf" includeemptydirs="true" quiet="true" />
-	</target>
-
-	<target name="insert-tomcat-secure-connector" depends="defineAntTask">
+	<target name="insert-tomcat-secure-connector" depends="defineAntTask" description="target to modify server.xml add https connector">
+		<input message="Enter the location of the keystore:" addproperty="service.keystore.file"/>
+		<input message="Enter store password:" addproperty="service.key.pass" />
+		<input message="Enter tomcat https port number:" addproperty="tomcat.https.port" />
 		<echo message="modifying server.xml in tomcat home dir ${tomcat.home}">
 		</echo>
 		<xmltask source="${tomcat.home}/conf/server.xml" dest="${tomcat.home}/conf/server.xml">
@@ -158,12 +159,6 @@
 		</xmltask>
 	</target>
 
-	<target name="create-tomcat-keystore" description="Generates a Grid Trust Report.">
-		<java classname="gov.nih.nci.cagrid.gridca.commandline.TomcatKeystoreCreator" fork="false" newenvironment="true" failonerror="true">
-			<classpath refid="build.classpath" />
-		</java>
-	</target>
-
 	<target name="configure-tomcat-endorsedjars" description="Delete jars in tomcat endorsed directory,adds xercesimpl.jar">
 		<delete includeEmptyDirs="true">
 			<fileset dir="${tomcat.home}/common/endorsed" includes="**/*" />
@@ -175,68 +170,29 @@
 			</fileset>
 		</copy>
 	</target>
-
+	
+	<!-- copy websso-properties.xml to ${src.resources} as websso-properties-template.xml -->
 	<target name="configure" description="Configures the project based on settings." depends="defineAntTask">
-		<!-- These are the template files we are copying from -->
-		<fileset id="templates.fileset" dir="${basedir}">
-			<include name="*.template" />
-		</fileset>
-		<!-- We need to basically reverse the mapper used in the copy to 
-	                     identify the target files -->
-		<fileset id="template.results.fileset" dir="${basedir}">
-			<include name="*" />
-			<present targetdir="${basedir}">
-				<mapper type="glob" from="*" to="*.template" />
-			</present>
-		</fileset>
-
-		<!-- First, create any target file that doesn't exist; outofdate doesn't handle this case -->
-		<copy todir="${basedir}">
-			<fileset dir="${basedir}">
-				<include name="*.template" />
-				<not>
-					<present targetdir="${basedir}">
-						<mapper type="glob" from="*.template" to="*" />
-					</present>
-				</not>
-			</fileset>
-			<mapper type="glob" from="*.template" to="*" />
-			<filterset filtersfile="${ext.targetgrid.dir}/service_urls.properties" />
-		</copy>
-
-		<!-- Next, re-template all the files, if either the filter value files or the template files 
-	                     are newer than the their targets -->
-		<outofdate verbose="true">
-			<sourcefiles>
-				<pathelement path="${ext.targetgrid.dir}/service_urls.properties" />
-				<fileset refid="templates.fileset" />
-			</sourcefiles>
-			<targetfiles>
-				<fileset refid="template.results.fileset" />
-			</targetfiles>
-			<sequential>
-				<copy todir="${basedir}" overwrite="true">
-					<fileset refid="templates.fileset" />
-					<mapper type="glob" from="*.template" to="*" />
-					<filterset filtersfile="${ext.targetgrid.dir}/service_urls.properties" />
-				</copy>
-			</sequential>
-		</outofdate>
+		<copyfile dest="${src.resources.dir}/websso-properties-template.xml" src="${ext.targetgrid.dir}/websso-properties.xml"/>
 	</target>
 
-	<target name="resolve-template-tokens" depends="defineAntTask">
-		<property name="env.COMPUTERNAME" value="${env.HOSTNAME}" />
+	<target name="-resolve-template-tokens" depends="defineAntTask">
 		<filterset id="WEBSSO_PROPERTIES" begintoken="@" endtoken="@">
-			<filter token="WEBSSO.SERVER" value="${env.COMPUTERNAME}" />
-			<filter token="USER.HOME" value="${user.home}" />
+			<filter token="WEBSSO.SERVER.HOST.CERTIFICATE" value="${host.certificate}" />
+			<filter token="WEBSSO.SERVER.HOST.KEY" value="${host.key}" />
+			<filter token="START.AUTO.SYNC.GTS" value="${start.auto.sync.gts}" />
+		</filterset>
+		<filterset id="CAS_PROPERTIES" begintoken="@" endtoken="@">
+			<filter token="WEBSSO.SERVER" value="${host.name}" />
+			<filter token="WEBSSO.SERVER.HTTPS.PORT" value="${host.https.port}" />
 		</filterset>
 	</target>
 
-	<target name="replace-token-contents" depends="resolve-template-tokens">
+	<target name="-replace-token-contents" depends="-resolve-template-tokens">
 		<copy todir="${webcontent.dir}" filtering="true">
 			<fileset dir="${webcontent.dir}" />
 			<globmapper from="*-template.properties" to="*.properties" />
-			<filterset refid="WEBSSO_PROPERTIES" />
+			<filterset refid="CAS_PROPERTIES" />
 		</copy>
 		<copy todir="${src.resources.dir}" filtering="true">
 			<fileset dir="${src.resources.dir}" />
@@ -257,11 +213,13 @@
 					<fileset dir="${webcontent.dir}" />
 					<globmapper from="*-template.properties" to="*.properties" />
 					<filterset refid="WEBSSO_PROPERTIES" />
+					<filterset refid="CAS_PROPERTIES" />
 				</copy>
 				<copy todir="${src.resources.dir}" overwrite="true">
 					<fileset dir="${src.resources.dir}" />
 					<globmapper from="*-template.xml" to="*.xml" />
 					<filterset refid="WEBSSO_PROPERTIES" />
+					<filterset refid="CAS_PROPERTIES" />
 				</copy>
 			</sequential>
 		</outofdate>
@@ -272,4 +230,16 @@
 		<antcall target="war" />
 	</target>
 
+	<target name="tomcat-start">
+		<java jar="${tomcat.home}/bin/bootstrap.jar" fork="true">
+			<jvmarg value="-Dcatalina.home=${tomcat.home}"/>
+		</java>
+	</target>
+
+	<target name="tomcat-stop">
+		<java jar="${tomcat.home}/bin/bootstrap.jar" fork="true">
+			<jvmarg value="-Dcatalina.home=${tomcat.home}"/>
+			<arg line="stop"/>
+		</java>
+	</target>
 </project>
