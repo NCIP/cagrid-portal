@@ -25,8 +25,8 @@
 		</div>
 	
 		<div class="row"><label for="dorianName"><spring:message
-			code="screen.welcome.label.dorian.service" /></label> <spring:message
-			code="screen.welcome.label.dorian.service.accesskey"
+			code="screen.welcome.label.credential.provider" /></label> <spring:message
+			code="screen.welcome.label.credential.provider.accesskey"
 			var="dorianNameAccessKey" />
 	
 			<input type="hidden" name="lt" value="${flowExecutionKey}" /> 
@@ -48,8 +48,8 @@
 		</div>
 	
 		<div class="row"><label for="authenticationServiceURL"><spring:message
-			code="screen.welcome.label.authentication.service" /></label> <spring:message
-			code="screen.welcome.label.authentication.service.accesskey"
+			code="screen.welcome.label.organization" /></label> <spring:message
+			code="screen.welcome.label.organization.accesskey"
 			var="authenticationServiceAccessKey" /> 
 	
 			<input type="hidden" name="lt" value="${flowExecutionKey}" /> 
@@ -72,8 +72,8 @@
 			</SCRIPT>
 		</div>
 		<div class="row"><label for="authenticationServiceProfile"><spring:message
-			code="screen.welcome.label.authentication.profile" /></label> <spring:message
-			code="screen.welcome.label.authentication.profile.accesskey"
+			code="screen.welcome.label.credential.type" /></label> <spring:message
+			code="screen.welcome.label.credential.type.accesskey"
 			var="authenticationServiceAccessKey" />
 			<input type="hidden" name="lt" value="${flowExecutionKey}" />  
 			<form:select
