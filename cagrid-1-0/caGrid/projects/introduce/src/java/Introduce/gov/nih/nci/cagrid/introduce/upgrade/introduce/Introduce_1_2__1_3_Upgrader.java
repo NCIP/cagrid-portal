@@ -86,11 +86,28 @@ public class Introduce_1_2__1_3_Upgrader extends IntroduceUpgraderBase {
         getStatus().addDescriptionLine("replaced build.xml and build-deploy.xml with new version");
 
         upgradeJars();
+        fixDevBuildDeploy();
         fixSource();
         fixWSDD();
         fixSecurityOnMetadataAccessProviders();
 
         getStatus().setStatus(StatusBase.UPGRADE_OK);
+    }
+    
+    protected void fixDevBuildDeploy() throws Exception{
+        //if this service was upgraded from 1.1 to 1.2 the dev build deploy will have a bug
+        //preventing the undeployTomcat target to work
+        
+        StringBuffer devsb = Utils.fileToStringBuffer(new File(getServicePath() + File.separator
+            + "dev-build-deploy.xml"));
+        String newFileString = devsb.toString();
+        newFileString = newFileString.replace("postUndeployyTomcat", "postUndeployTomcat");
+        FileWriter fw = new FileWriter(new File(getServicePath() + File.separator + "dev-build-deploy.xml"));
+        fw.write(newFileString);
+        fw.close();
+        
+        getStatus().addDescriptionLine("fixed typo error created during upgrade from 1.1 to 1.2 with target undeployTomcat");
+
     }
 
 
