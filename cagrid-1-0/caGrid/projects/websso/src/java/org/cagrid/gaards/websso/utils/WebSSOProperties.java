@@ -141,8 +141,6 @@ public class WebSSOProperties {
 		WebSSOServerInformation webSSOServerInformation = new WebSSOServerInformation();
 		webSSOServerInformation.setStartAutoSyncGTS(this
 				.getStartAutoSyncGTS(webSSOServerInformationElement));
-		webSSOServerInformation.setTrustStorePath(this
-				.getTrustStorePath(webSSOServerInformationElement));
 		webSSOServerInformation
 				.setHostCredentialCertificateFilePath(this
 						.getHostCredentialCertificateFilePath(webSSOServerInformationElement));
@@ -209,12 +207,6 @@ public class WebSSOProperties {
 	private String getStartAutoSyncGTS(Element webSSOServerInformationElement) {
 		Element trustStorePath = webSSOServerInformationElement
 				.getChild("start-auto-syncgts");
-		return trustStorePath.getText().trim();
-	}
-
-	private String getTrustStorePath(Element webSSOServerInformationElement) {
-		Element trustStorePath = webSSOServerInformationElement
-				.getChild("trust-store-path");
 		return trustStorePath.getText().trim();
 	}
 

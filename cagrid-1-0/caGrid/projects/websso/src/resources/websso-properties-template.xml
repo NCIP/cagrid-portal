@@ -1,12 +1,11 @@
 <websso-properties xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="C:\caGrid\cagrid-1-0\caGrid\projects\websso\src\resources\websso-properties.xsd">
 	<websso-server-information>
-		<start-auto-syncgts>no</start-auto-syncgts>
-		<trust-store-path>String</trust-store-path>
-		<host-credential-certificate-file-path>@USER.HOME@/.cagrid/certificates/NCI-GARMILLAS-1-cert.pem</host-credential-certificate-file-path>
-		<host-credential-key-file-path>@USER.HOME@/.cagrid/certificates/NCI-GARMILLAS-1-key.pem</host-credential-key-file-path>
+		<start-auto-syncgts>@START.AUTO.SYNC.GTS@</start-auto-syncgts>
+		<host-credential-certificate-file-path>@WEBSSO.SERVER.HOST.CERTIFICATE@</host-credential-certificate-file-path>
+		<host-credential-key-file-path>@WEBSSO.SERVER.HOST.KEY@</host-credential-key-file-path>
 	</websso-server-information>
 	<credential-delegation-service-information>
-		<service-url>https://NCI-GARMILLAS-1:38443/wsrf/services/cagrid/CredentialDelegationService</service-url>
+		<service-url>https://cds.training.cagrid.org:8443/wsrf/services/cagrid/CredentialDelegationService</service-url>
 		<delegation-lifetime-hours>8</delegation-lifetime-hours>
 		<delegation-lifetime-minutes>0</delegation-lifetime-minutes>
 		<delegation-lifetime-seconds>0</delegation-lifetime-seconds>
@@ -24,7 +23,7 @@
 			</dorian-service-descriptor>-->
 			<dorian-service-descriptor>
 				<display-name>MLB</display-name>
-				<service-url>https://165.112.133.48:8443/wsrf/services/cagrid/Dorian</service-url>
+				<service-url>https://dorian.training.cagrid.org:8443/wsrf/services/cagrid/Dorian</service-url>
 				<proxy-lifetime-hours>12</proxy-lifetime-hours>
 				<proxy-lifetime-minutes>0</proxy-lifetime-minutes>
 				<proxy-lifetime-seconds>0</proxy-lifetime-seconds>		
