@@ -43,8 +43,11 @@ public class ChangeWebSSOPropertiesStep extends Step {
 
 	    // edit the src/resources/websso-properties-template.xml to set the key, cert, and CA dirs for the https connector
 		File webssopropertiesfile = new File(tempWebSSOService
+				.getCanonicalPath(), "ext" + File.separator + "target_grid"
+				+ File.separator + "websso-properties.xml");
+		File targetWebSSOPropertiesfile = new File(tempWebSSOService
 				.getCanonicalPath(), "src" + File.separator + "resources"
-				+ File.separator + "websso-properties-template.xml");
+				+ File.separator + "websso-properties.xml");
 		
 	    Document confDocument = null;
 	    try {
@@ -60,11 +63,11 @@ public class ChangeWebSSOPropertiesStep extends Step {
 	    // write the webssoproperties.xml back to disk
 	    String confXml = XMLUtilities.documentToString(confDocument);
 	    try {
-	        Utils.stringBufferToFile(new StringBuffer(confXml), webssopropertiesfile.getCanonicalPath());
+	    	Utils.copyFile(webssopropertiesfile, targetWebSSOPropertiesfile);
+	        Utils.stringBufferToFile(new StringBuffer(confXml),targetWebSSOPropertiesfile.getAbsolutePath());
 	    } catch (Exception ex) {
 	        throw new ContainerException("Error writing server configuration file back to disk: " + ex.getMessage(), ex);
 	    }
-	
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -115,7 +118,7 @@ public class ChangeWebSSOPropertiesStep extends Step {
 
 	public static void main(String[] args) throws Throwable {
 
-		File tempWebSSOService = new File("C:/devroot/caGrid/cagrid-1-0/caGrid/projects/websso");
+		File tempWebSSOService = new File("C:/devroot/caGrid/cagrid-1-0/tests/projects/websso/tmp/websso");
 		ChangeWebSSOPropertiesStep step = new ChangeWebSSOPropertiesStep(
 				tempWebSSOService, null, null, null, null, "/C=US/O=abc/OU=xyz/OU=caGrid/OU=Services/CN=webssoclient");
 		step.runStep();

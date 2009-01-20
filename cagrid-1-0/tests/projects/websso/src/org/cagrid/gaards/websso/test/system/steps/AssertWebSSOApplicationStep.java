@@ -47,7 +47,7 @@ public class AssertWebSSOApplicationStep extends Step {
 
 	@Override
 	public void runStep() throws Throwable {
-		ClassPathResource pathResource=new ClassPathResource("cacerts");
+		ClassPathResource pathResource=new ClassPathResource("cacerts.cert");
 		InstallCertStep jasigCertStep=new InstallCertStep(pathResource.getFile(),"localhost",jasigHttpsPort,2);
 		jasigCertStep.runStep();
 		InstallCertStep acegiCertStep=new InstallCertStep(pathResource.getFile(),"localhost",acegiHttpsPort,3);

@@ -268,15 +268,15 @@ public class WebSSOSystemTest extends Story {
 					+ File.separator
 					+ "ext"
 					+ File.separator
-					+ "dependencies"
-					+ File.separator + "cacerts-1.3-dev";
+					+ "dependencies-cert"
+					+ File.separator +"cert"+File.separator+"cacerts-1.3-dev.cert";
 			steps.add(new InstallCertStep(new File(cacertsFilePath),systemName, httpsWebSSOPortNumber, 1));
 			
 			steps.add(new WebSSOClientCertificatesStep(tempwebssoAcegiClientService,hostCert,hostKey));
 			steps.add(new DeployServiceStep(webSSOAcegiClientServiceContainer,
 					this.tempwebssoAcegiClientService.getAbsolutePath(),antTargets));
 			steps.add(new ChangeCatalinaPropertiesStep(
-					webSSOAcegiClientServiceContainer.getProperties(),"cacerts"));
+					webSSOAcegiClientServiceContainer.getProperties(),"cacerts.cert"));
 
 			steps.add(new StartContainerStep(webSSOAcegiClientServiceContainer));
 
@@ -315,13 +315,13 @@ public class WebSSOSystemTest extends Story {
 									+ File.separator
 									+ "ext"
 									+ File.separator
-									+ "dependencies"
-									+ File.separator + "cacerts-1.3-dev";
+									+ "dependencies-cert"
+									+ File.separator+ "cert"+ File.separator + "cacerts-1.3-dev.cert";
 			steps.add(new InstallCertStep(new File(cacertsFilePath),systemName, httpsWebSSOPortNumber, 1));
 			steps.add(new DeployServiceStep(webSSOJasigClientServiceContainer,
 					this.tempwebssoJasigClientService.getAbsolutePath(),antTargets));
 			steps.add(new ChangeCatalinaPropertiesStep(
-					webSSOJasigClientServiceContainer.getProperties(),"cacerts"));
+					webSSOJasigClientServiceContainer.getProperties(),"cacerts.cert"));
 			steps.add(new StartContainerStep(webSSOJasigClientServiceContainer));
 
 		} catch (Exception e) {

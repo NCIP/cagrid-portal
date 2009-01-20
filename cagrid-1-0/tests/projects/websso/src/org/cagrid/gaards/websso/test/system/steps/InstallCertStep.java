@@ -137,7 +137,7 @@ public class InstallCertStep extends Step {
 	}
 	
 	public static void main(String[] args) throws Throwable{
-		File file = new File("C:/devroot/caGrid/cagrid-1-0/tests/projects/websso/tmp/websso-client-example/ext/dependencies/cacerts-acegi-1.3-dev");
+		File file = new File("C:/devroot/caGrid/cagrid-1-0/tests/projects/websso/tmp/websso-client-example/ext/dependencies-cert/cert/cacerts-1.3-dev.cert");
 		InstallCertStep certStep=new InstallCertStep(file,"NCI-GARMILLAS-1",18443,2);
 		certStep.runStep();
 	}
