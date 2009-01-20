@@ -5,6 +5,7 @@ import javax.net.ssl.SSLSession;
 
 import gov.nih.nci.cagrid.testing.system.haste.Step;
 
+import org.springframework.core.io.ClassPathResource;
 import org.xml.sax.SAXException;
 import sun.net.www.protocol.https.HttpsURLConnectionImpl;
 
@@ -22,14 +23,20 @@ import com.meterware.httpunit.controls.SelectionFormControl;
 
 public class AssertWebSSOApplicationStep extends Step {
 
-	String webssoClient1URL = null;
-	String webssoClient2URL = null;
+	private String webssoClient1URL = null;
+	private String webssoClient2URL = null;
+	private int webssoHttpsPort;
+	private int jasigHttpsPort;
+	private int acegiHttpsPort;
 
 	public AssertWebSSOApplicationStep(String webssoClient1URL,
-			String webssoClient2URL) {
+			String webssoClient2URL,int webssoHttpsPort,int jasigHttpsPort,int acegiHttpsPort) {
 		this.webssoClient1URL = webssoClient1URL;
 		this.webssoClient2URL = webssoClient2URL;
-
+		this.jasigHttpsPort=jasigHttpsPort;
+		this.acegiHttpsPort=acegiHttpsPort;
+		this.webssoHttpsPort=webssoHttpsPort;
+		
 		HostnameVerifier hostnameVerifier = new HostnameVerifier() {
 			public boolean verify(String hostname, SSLSession session) {
 				return true;
@@ -40,13 +47,24 @@ public class AssertWebSSOApplicationStep extends Step {
 
 	@Override
 	public void runStep() throws Throwable {
+		ClassPathResource pathResource=new ClassPathResource("cacerts");
+		InstallCertStep jasigCertStep=new InstallCertStep(pathResource.getFile(),"localhost",jasigHttpsPort,2);
+		jasigCertStep.runStep();
+		InstallCertStep acegiCertStep=new InstallCertStep(pathResource.getFile(),"localhost",acegiHttpsPort,3);
+		acegiCertStep.runStep();
+		InstallCertStep webssoCertStep=new InstallCertStep(pathResource.getFile(),"localhost",webssoHttpsPort,4);
+		webssoCertStep.runStep();
+		
+		System.setProperty("javax.net.ssl.trustStore", pathResource.getFile().getAbsolutePath());
+		System.setProperty("javax.net.ssl.trustStorePassword", "changeit");
+
 		multipleApplicationsLoginAndLogout();
 	}
 
 	private void multipleApplicationsLoginAndLogout() throws Exception {
 		// login 1
 		WebConversation conversation = new WebConversation();
-		WebRequest request = new GetMethodWebRequest(webssoClient1URL);
+		WebRequest request = new GetMethodWebRequest(webssoClient2URL);
 		WebResponse response = tryGetResponse(conversation, request);
 		request = applicationLogin(conversation, response);
 		response = tryGetResponse(conversation, request);
@@ -136,5 +154,12 @@ public class AssertWebSSOApplicationStep extends Step {
 			throw nfe;
 		}
 		return response;
+	}
+	
+	public static void main(String[] args) throws Throwable{
+		String jasigURL="http://localhost:45400/webssoclientjasigexample-1.3-dev/protected";
+		String acegiURL="http://localhost:45403/webssoclientacegiexample-1.3-dev/protected";
+		AssertWebSSOApplicationStep applicationStep=new AssertWebSSOApplicationStep(jasigURL,acegiURL,18443,28443,38443);
+		applicationStep.runStep();
 	}
 }

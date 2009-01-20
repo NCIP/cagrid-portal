@@ -41,9 +41,11 @@ import org.cagrid.gaards.dorian.test.system.steps.VerifyTrustedIdPStep;
 import org.cagrid.gaards.websso.test.system.steps.AssertWebSSOApplicationStep;
 import org.cagrid.gaards.websso.test.system.steps.ChangeAcegiCASClientPropertiesStep;
 import org.cagrid.gaards.websso.test.system.steps.ChangeCASPropertiesStep;
+import org.cagrid.gaards.websso.test.system.steps.ChangeCatalinaPropertiesStep;
 import org.cagrid.gaards.websso.test.system.steps.ChangeJasigCASClientPropertiesStep;
 import org.cagrid.gaards.websso.test.system.steps.ChangeTomcatServerConfigurationStep;
 import org.cagrid.gaards.websso.test.system.steps.ChangeWebSSOPropertiesStep;
+import org.cagrid.gaards.websso.test.system.steps.CleanupGlobusCertificates;
 import org.cagrid.gaards.websso.test.system.steps.CopyCAStep;
 import org.cagrid.gaards.websso.test.system.steps.HostCertificatesStep;
 import org.cagrid.gaards.websso.test.system.steps.InstallCertStep;
@@ -78,11 +80,13 @@ public class WebSSOSystemTest extends Story {
 	private File tempwebssoJasigClientService;
 	private File tempwebssoAcegiClientService;
 	private File configuration;
+	private String systemName="localhost";
 	private String webSSOClientAcegiURL = null;
 	private String webSSOClientJasigURL = null;
-	private int httpAcegiPortNumber = 38443;
-	private int httpJasigPortNumber = 28443;
-	private int httpWebSSOPortNumber = 18443;
+	private int httpsAcegiPortNumber = 38443;
+	private int httpsJasigPortNumber = 28443;
+	private int httpsWebSSOPortNumber = 18443;
+	
 	@Override
 	public String getDescription() {
 		return "WebSSO System Test";
@@ -223,15 +227,14 @@ public class WebSSOSystemTest extends Story {
 		List<Application> users = configureDorianSteps(steps);
 		configureCDSSteps(steps);
 		configureWebSSOServerSteps(steps, users);
-		steps.add(new InstallCertStep("localhost",httpWebSSOPortNumber,2));
 		configureWebSSOJasigClientServerSteps(steps,users);
 		configureWebSSOAcegiClientServerSteps(steps,users);
-		//install certificates from websso server,webssoacegi and websso jasig
-		steps.add(new InstallCertStep("localhost",httpJasigPortNumber,3));
-		steps.add(new InstallCertStep("localhost",httpAcegiPortNumber,4));
-		steps.add(new AssertWebSSOApplicationStep(webSSOClientJasigURL,webSSOClientAcegiURL+"/protected"));
+		steps.add(new AssertWebSSOApplicationStep(webSSOClientJasigURL,
+				webSSOClientAcegiURL + "/protected", httpsWebSSOPortNumber,
+				httpsJasigPortNumber, httpsAcegiPortNumber));
 		
 		steps.add(new CleanupDorianStep(dorianServiceContainer,trust));
+		steps.add(new CleanupGlobusCertificates());		
 		return steps;
 	}
 	
@@ -239,7 +242,7 @@ public class WebSSOSystemTest extends Story {
 		try {
 			String webssoClientHostname="webssoclient2";			
 			File webssoClientServiceDir=webSSOAcegiClientServiceContainer.getProperties().getContainerDirectory();
-			configureWebSSOTomcatContainer(steps, users,webSSOAcegiClientServiceContainer,webssoClientHostname,httpAcegiPortNumber,webssoClientServiceDir);
+			configureWebSSOTomcatContainer(steps, users,webSSOAcegiClientServiceContainer,webssoClientHostname,httpsAcegiPortNumber,webssoClientServiceDir);
 			
 			String globusDirPath=System.getProperty("user.home")+File.separator+".globus"+File.separator+"certificates";
 			File globusDir = new File(globusDirPath);
@@ -247,7 +250,7 @@ public class WebSSOSystemTest extends Story {
 			steps.add(new CopyCAStep(dorianServiceContainer, globusDir));
 
 			List<String> antTargets=new ArrayList<String>();
-			antTargets.add("deployTomcatAcegiClient");
+			antTargets.add("deploySystemTestingTomcatAcegiClient");
 			
 			Integer httpPort=webSSOAcegiClientServiceContainer.getProperties().getPortPreference().getPort();
 			String webSSOServerURL="https://localhost:18443/webssoserver";
@@ -258,12 +261,23 @@ public class WebSSOSystemTest extends Story {
 			String hostCert = new File(tomcatCertsDir, webssoClientHostname + "-cert.pem").getAbsolutePath();
 						
 			steps.add(new ChangeAcegiCASClientPropertiesStep(
-					tempwebssoAcegiClientService, webSSOServerURL,webSSOClientAcegiURL,hostCert,hostKey,httpPort,httpAcegiPortNumber));			
+					tempwebssoAcegiClientService, webSSOServerURL,webSSOClientAcegiURL,hostCert,hostKey,httpPort,httpsAcegiPortNumber));			
 			
-			steps.add(new WebSSOClientCertificatesStep(tempwebssoAcegiClientService,hostCert,hostKey));			
+			String cacertsFilePath = tempwebssoAcegiClientService
+					.getAbsolutePath()
+					+ File.separator
+					+ "ext"
+					+ File.separator
+					+ "dependencies"
+					+ File.separator + "cacerts-1.3-dev";
+			steps.add(new InstallCertStep(new File(cacertsFilePath),systemName, httpsWebSSOPortNumber, 1));
+			
+			steps.add(new WebSSOClientCertificatesStep(tempwebssoAcegiClientService,hostCert,hostKey));
 			steps.add(new DeployServiceStep(webSSOAcegiClientServiceContainer,
 					this.tempwebssoAcegiClientService.getAbsolutePath(),antTargets));
-			
+			steps.add(new ChangeCatalinaPropertiesStep(
+					webSSOAcegiClientServiceContainer.getProperties(),"cacerts"));
+
 			steps.add(new StartContainerStep(webSSOAcegiClientServiceContainer));
 
 		} catch (Exception e) {
@@ -275,7 +289,7 @@ public class WebSSOSystemTest extends Story {
 		try {
 			String webssoClientHostname="webssoclient1";
 			File webssoClientServiceDir=webSSOJasigClientServiceContainer.getProperties().getContainerDirectory();			
-			configureWebSSOTomcatContainer(steps, users,webSSOJasigClientServiceContainer,webssoClientHostname,httpJasigPortNumber,webssoClientServiceDir);
+			configureWebSSOTomcatContainer(steps, users,webSSOJasigClientServiceContainer,webssoClientHostname,httpsJasigPortNumber,webssoClientServiceDir);
 			
 			String globusDirPath=System.getProperty("user.home")+File.separator+".globus"+File.separator+"certificates";
 			File globusDir = new File(globusDirPath);
@@ -283,7 +297,7 @@ public class WebSSOSystemTest extends Story {
 			steps.add(new CopyCAStep(dorianServiceContainer, globusDir));
 			
 			List<String> antTargets=new ArrayList<String>();
-			antTargets.add("deployTomcatJasigClient");
+			antTargets.add("deploySystemTestingTomcatJasigClient");
 			Integer httpPort=webSSOJasigClientServiceContainer.getProperties().getPortPreference().getPort();
 			String webSSOServerURL="https://localhost:18443/webssoserver";
 			webSSOClientJasigURL="http://localhost:"+httpPort+"/webssoclientjasigexample-1.3-dev/protected/";
@@ -295,10 +309,19 @@ public class WebSSOSystemTest extends Story {
 			steps.add(new ChangeJasigCASClientPropertiesStep(
 					tempwebssoJasigClientService, webSSOServerURL,webSSOClientJasigURL));			
 			
-			steps.add(new WebSSOClientCertificatesStep(tempwebssoJasigClientService,hostCert,hostKey));			
+			steps.add(new WebSSOClientCertificatesStep(tempwebssoJasigClientService,hostCert,hostKey));
+			String cacertsFilePath = tempwebssoJasigClientService
+									.getAbsolutePath()
+									+ File.separator
+									+ "ext"
+									+ File.separator
+									+ "dependencies"
+									+ File.separator + "cacerts-1.3-dev";
+			steps.add(new InstallCertStep(new File(cacertsFilePath),systemName, httpsWebSSOPortNumber, 1));
 			steps.add(new DeployServiceStep(webSSOJasigClientServiceContainer,
 					this.tempwebssoJasigClientService.getAbsolutePath(),antTargets));
-			
+			steps.add(new ChangeCatalinaPropertiesStep(
+					webSSOJasigClientServiceContainer.getProperties(),"cacerts"));
 			steps.add(new StartContainerStep(webSSOJasigClientServiceContainer));
 
 		} catch (Exception e) {
@@ -326,7 +349,7 @@ public class WebSSOSystemTest extends Story {
 		try {
 			String webssoServerHostname="webssoserver";
 			File webssoServiceDir=webSSOServiceContainer.getProperties().getContainerDirectory();
-			configureWebSSOTomcatContainer(steps, users,webSSOServiceContainer,webssoServerHostname,httpWebSSOPortNumber,webssoServiceDir);
+			configureWebSSOTomcatContainer(steps, users,webSSOServiceContainer,webssoServerHostname,httpsWebSSOPortNumber,webssoServiceDir);
 			configureWebSSO(steps,webssoServerHostname);
 			
 			steps.add(new DeployServiceStep(webSSOServiceContainer,

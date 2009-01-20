@@ -55,7 +55,7 @@ public class WebSSOClientCertificatesStep extends Step {
 		File webssopropertiesfile = new File(tempWebSSOClientService
 				.getCanonicalPath(), "ext" + File.separator
 				+ "dependencies-xml-resources" + File.separator + "xmls"
-				+ File.separator + "web-jasig-1.3-dev.xml");
+				+ File.separator + "web-template-jasig-1.3-dev.xml");
 		
 	    Document confDocument = null;
 	    try {

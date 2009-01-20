@@ -1,34 +1,7 @@
 package org.cagrid.gaards.websso.test.system.steps;
-/*
- * Copyright 2006 Sun Microsystems, Inc.  All Rights Reserved.
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- *
- *   - Redistributions of source code must retain the above copyright
- *     notice, this list of conditions and the following disclaimer.
- *
- *   - Redistributions in binary form must reproduce the above copyright
- *     notice, this list of conditions and the following disclaimer in the
- *     documentation and/or other materials provided with the distribution.
- *
- *   - Neither the name of Sun Microsystems nor the names of its
- *     contributors may be used to endorse or promote products derived
- *     from this software without specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
- * IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
- * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
- * PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR
- * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
- * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
- * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
- * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
- * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
- * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
+
+import gov.nih.nci.cagrid.testing.system.haste.Step;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -46,41 +19,32 @@ import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
-
-import gov.nih.nci.cagrid.testing.system.haste.Step;
+import org.apache.log4j.Logger;
 
 //install certs into websso-client jdk cacerts file
 public class InstallCertStep extends Step {
+	private File cacertsFile;
 	private String webSSOServerHostName;
 	private int portNumber;
-    private int aliasID;
-    
-	public InstallCertStep(String webSSOServerHostName, int portNumber,int aliasID) {
+	private int aliasID;
+	private String passphrase = "changeit";
+	private static Logger log = Logger.getLogger(InstallCertStep.class);
+	
+	public InstallCertStep(File cacertsFile,String webSSOServerHostName, int portNumber,int aliasID) {
+		this.cacertsFile=cacertsFile;
 		this.webSSOServerHostName = webSSOServerHostName;
 		this.portNumber = portNumber;
-		this.aliasID = aliasID;
+		this.aliasID=aliasID;
 	}
 
 	public void runStep() throws Throwable {
-		File file = new File("jssecacerts");
-		if (file.isFile() == false) {
-			char SEP = File.separatorChar;
-			File dir = new File(System.getProperty("java.home") + SEP + "lib"
-					+ SEP + "security");
-			file = new File(dir, "jssecacerts");
-			if (file.isFile() == false) {
-				file = new File(dir, "cacerts");
-			}
-		}
-		installCert(file,"changeit",portNumber,aliasID);
+		installWebSSOCertificates();
 	}
 
-	private void installCert(File file, String passPhrase,int portNumber,int aliasID)
-			throws Exception {
-
-		InputStream in = new FileInputStream(file);
+	private void installWebSSOCertificates()throws Exception{
+		InputStream in = new FileInputStream(cacertsFile);
 		KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
-		ks.load(in, passPhrase.toCharArray());
+		ks.load(in, passphrase.toCharArray());
 		in.close();
 
 		SSLContext context = SSLContext.getInstance("TLS");
@@ -93,19 +57,16 @@ public class InstallCertStep extends Step {
 		context.init(null, new TrustManager[] { tm }, null);
 		SSLSocketFactory factory = context.getSocketFactory();
 
-		System.out
-				.println("Opening connection to " + webSSOServerHostName + ":" + portNumber + "...");
+		System.out.println("Opening connection to " + webSSOServerHostName + ":" + portNumber + "...");
 		SSLSocket socket = (SSLSocket) factory.createSocket(webSSOServerHostName, portNumber);
 		socket.setSoTimeout(10000);
 		try {
 			System.out.println("Starting SSL handshake...");
 			socket.startHandshake();
 			socket.close();
-			System.out.println();
 			System.out.println("No errors, certificate is already trusted");
 		} catch (SSLException e) {
-			System.out.println();
-			e.printStackTrace(System.out);
+			e.printStackTrace();
 		}
 
 		X509Certificate[] chain = tm.chain;
@@ -113,38 +74,29 @@ public class InstallCertStep extends Step {
 			System.out.println("Could not obtain server certificate chain");
 			return;
 		}
-
-		System.out.println();
 		System.out.println("Server sent " + chain.length + " certificate(s):");
-		System.out.println();
 		MessageDigest sha1 = MessageDigest.getInstance("SHA1");
 		MessageDigest md5 = MessageDigest.getInstance("MD5");
 		for (int i = 0; i < chain.length; i++) {
 			X509Certificate cert = chain[i];
-			System.out.println(" " + (i + 1) + " Subject "
-					+ cert.getSubjectDN());
+			System.out.println(" " + (i + 1) + " Subject "+ cert.getSubjectDN());
 			System.out.println("   Issuer  " + cert.getIssuerDN());
 			sha1.update(cert.getEncoded());
 			System.out.println("   sha1    " + toHexString(sha1.digest()));
 			md5.update(cert.getEncoded());
 			System.out.println("   md5     " + toHexString(md5.digest()));
-			System.out.println();
 		}
-
-		X509Certificate cert = chain[0];
-		String alias = webSSOServerHostName + "-" + (0 + aliasID);
+		
+		int k=0;
+		X509Certificate cert = chain[k];
+		String alias = webSSOServerHostName + "-" + (k + 1+aliasID);
 		ks.setCertificateEntry(alias, cert);
 
-		OutputStream out = new FileOutputStream(file);
-		ks.store(out, passPhrase.toCharArray());
+		OutputStream out = new FileOutputStream(cacertsFile);
+		ks.store(out, passphrase.toCharArray());
 		out.close();
-
-		System.out.println();
 		System.out.println(cert);
-		System.out.println();
-		System.out
-				.println("Added certificate to keystore 'cacerts' using alias '"
-						+ alias + "'");
+		System.out.println("Added certificate to keystore 'cacerts' using alias '"+ alias + "'");
 	}
 
 	private static final char[] HEXDIGITS = "0123456789abcdef".toCharArray();
@@ -161,7 +113,6 @@ public class InstallCertStep extends Step {
 	}
 
 	private static class SavingTrustManager implements X509TrustManager {
-
 		private final X509TrustManager tm;
 		private X509Certificate[] chain;
 
@@ -183,5 +134,11 @@ public class InstallCertStep extends Step {
 			this.chain = chain;
 			tm.checkServerTrusted(chain, authType);
 		}
+	}
+	
+	public static void main(String[] args) throws Throwable{
+		File file = new File("C:/devroot/caGrid/cagrid-1-0/tests/projects/websso/tmp/websso-client-example/ext/dependencies/cacerts-acegi-1.3-dev");
+		InstallCertStep certStep=new InstallCertStep(file,"NCI-GARMILLAS-1",18443,2);
+		certStep.runStep();
 	}
 }

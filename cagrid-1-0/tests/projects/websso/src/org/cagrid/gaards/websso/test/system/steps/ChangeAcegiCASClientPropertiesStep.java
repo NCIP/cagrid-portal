@@ -49,7 +49,7 @@ public class ChangeAcegiCASClientPropertiesStep extends Step {
 				+ "dependencies-properties"
 				+ File.separator
 				+ "properties"
-				+ File.separator + "cas-client-acegi-1.3-dev.properties";
+				+ File.separator + "cas-client-template-acegi-1.3-dev.properties";
 
 		Properties casClientProperties = new Properties();
 		casClientProperties
