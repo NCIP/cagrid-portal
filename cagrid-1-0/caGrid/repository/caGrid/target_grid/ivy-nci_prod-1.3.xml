@@ -28,6 +28,9 @@
     <conf name="gridgrouper-services" visibility="public" extends="default"/>
     <conf name="gts-services" visibility="public" extends="default"/>
     <conf name="workflow-ui" visibility="public" extends="default"/>
+	
+	<!--  websso configurations-->
+	<conf name="websso" visibility="public" extends="default"/>
   </configurations>
 
 
@@ -50,6 +53,9 @@
 
     <!--  syncgts configurations-->
     <artifact name="sync-description" type="xml" conf="syncdesc"/>
+		
+	<!-- websso configurations -->
+	<artifact name="websso-properties" type="xml" conf="websso"/>
   </publications>
 
 
