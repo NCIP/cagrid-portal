@@ -39,7 +39,6 @@
 		<delete dir="${build.classes.dir}" />
 	</target>
 
-
 	<target name="compile">
 		<mkdir dir="${build.dir}" />
 		<mkdir dir="${build.classes.dir}" />
@@ -56,8 +55,8 @@
 
 	<target name="copy-configuration-files">
 		<copy file="${src.resources.dir}/applicationContext.xml" tofile="${build.dir}/applicationContext-jasig-${project.version}.xml" />
-		<copy file="${src.resources.dir}/web.xml" tofile="${build.dir}/web-jasig-${project.version}.xml" />
-		<copy file="${src.resources.dir}/cas-client.properties" tofile="${build.dir}/cas-client-jasig-${project.version}.properties" />
+		<copy file="${src.resources.dir}/web-template.xml" tofile="${build.dir}/web-template-jasig-${project.version}.xml" />
+		<copy file="${src.resources.dir}/cas-client-template.properties" tofile="${build.dir}/cas-client-template-jasig-${project.version}.properties" />		
 	</target>
 
 	<target name="clean">

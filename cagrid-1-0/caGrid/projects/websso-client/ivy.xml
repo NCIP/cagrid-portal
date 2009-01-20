@@ -23,8 +23,8 @@
   <publications>
     <artifact name="caGrid-websso-client" conf="default" type="jar"/>
     <artifact name="applicationContext-jasig" conf="resources" type="xml"/>
-    <artifact name="cas-client-jasig" conf="resources" type="properties"/>
-    <artifact name="web-jasig" conf="resources" type="xml"/>
+    <artifact name="cas-client-template-jasig" conf="resources" type="properties"/>
+    <artifact name="web-template-jasig" conf="resources" type="xml"/>
   </publications>
 
   <dependencies>
