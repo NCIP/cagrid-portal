@@ -23,7 +23,7 @@
   <publications>
 	<artifact name="caGrid-websso-client-common" conf="default" type="jar" />
 	<artifact name="caGrid-websso-client-common-conf" conf="default" type="jar" />
-	<artifact name="cacerts" conf="default" type="" />
+	<artifact name="cacerts" conf="default" type="cert" />
   </publications>
 
   <dependencies>

@@ -120,7 +120,7 @@
 	</target>
 	
 	<target name="copy-configuration-files">
-		<copy file="${src.resources.dir}/cacerts" tofile="${build.dir}/cacerts-${project.version}" />
+		<copy file="${src.resources.dir}/cacerts.cert" tofile="${build.dir}/cacerts-${project.version}.cert" />
 	</target>
 
 
