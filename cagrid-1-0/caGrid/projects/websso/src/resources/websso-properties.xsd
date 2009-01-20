@@ -14,7 +14,6 @@
 				<xs:element ref="proxy-lifetime-hours" />
 				<xs:element ref="proxy-lifetime-minutes"/>
 				<xs:element ref="proxy-lifetime-seconds"/>
-				<xs:element ref="proxy-delegation-path-length"/>
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
@@ -71,7 +70,6 @@
 		<xs:complexType>
 			<xs:sequence>
 				<xs:element ref="start-auto-syncgts" />
-				<xs:element ref="trust-store-path" />
 				<xs:element ref="host-credential-certificate-file-path" />
 				<xs:element ref="host-credential-key-file-path" />
 			</xs:sequence>

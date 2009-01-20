@@ -1,4 +1,4 @@
-<websso-properties xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="C:\caGrid\cagrid-1-0\caGrid\projects\websso\src\resources\websso-properties.xsd">
+<websso-properties xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="websso-properties.xsd">
 	<websso-server-information>
 		<start-auto-syncgts>@START.AUTO.SYNC.GTS@</start-auto-syncgts>
 		<host-credential-certificate-file-path>@WEBSSO.SERVER.HOST.CERTIFICATE@</host-credential-certificate-file-path>
@@ -12,22 +12,13 @@
 		<issued-credential-path-length>0</issued-credential-path-length>
 	</credential-delegation-service-information>
 	<dorian-services-information>
-			<!--<dorian-service-descriptor>
-				<display-name>Training</display-name>
-				<service-url>
-					https://dorian.training.cagrid.org:8443/wsrf/services/cagrid/Dorian</service-url>
-				<proxy-lifetime-hours>12</proxy-lifetime-hours>
-				<proxy-lifetime-minutes>0</proxy-lifetime-minutes>
-				<proxy-lifetime-seconds>0</proxy-lifetime-seconds>
-				<proxy-delegation-path-length>3</proxy-delegation-path-length>
-			</dorian-service-descriptor>-->
-			<dorian-service-descriptor>
-				<display-name>MLB</display-name>
-				<service-url>https://dorian.training.cagrid.org:8443/wsrf/services/cagrid/Dorian</service-url>
-				<proxy-lifetime-hours>12</proxy-lifetime-hours>
-				<proxy-lifetime-minutes>0</proxy-lifetime-minutes>
-				<proxy-lifetime-seconds>0</proxy-lifetime-seconds>		
-			</dorian-service-descriptor>		
+		<dorian-service-descriptor>
+			<display-name>>Training</display-name>
+			<service-url>https://dorian.training.cagrid.org:8443/wsrf/services/cagrid/Dorian</service-url>
+			<proxy-lifetime-hours>12</proxy-lifetime-hours>
+			<proxy-lifetime-minutes>0</proxy-lifetime-minutes>
+			<proxy-lifetime-seconds>0</proxy-lifetime-seconds>		
+		</dorian-service-descriptor>		
 	</dorian-services-information>
 	<delegated-applications-group>
 		<group-name>String</group-name>
