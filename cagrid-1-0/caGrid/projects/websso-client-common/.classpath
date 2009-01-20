@@ -41,14 +41,13 @@
 	<classpathentry kind="lib" path="ext/dependencies/default/jars/cog-jglobus.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/default/jars/commons-codec-1.3.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/default/jars/concurrent-1.3.4.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/default/jars/inspektr-0.7.0.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/default/jars/jdom-1.0.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/default/jars/jprov.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/default/jars/mobius_common_client-1.1.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/default/jars/spring.jar"/>
-	<classpathentry kind="lib" path="ext/dependencies/default/jars/cas-server-core-3.2.2.jar"/>
 	<classpathentry kind="lib" path="ext/dependencies/default/jars/spring-test.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/3"/>
 	<classpathentry kind="lib" path="ext/dependencies/default/jars/castor-1.0.2.jar"/>
+	<classpathentry kind="lib" path="ext/dependencies/default/jars/log4j-1.2.14.jar"/>
 	<classpathentry kind="output" path="build"/>
 </classpath>
