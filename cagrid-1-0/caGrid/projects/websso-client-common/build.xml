@@ -118,6 +118,10 @@
 			</fileset>
 		</jar>
 	</target>
+	
+	<target name="copy-configuration-files">
+		<copy file="${src.resources.dir}/cacerts" tofile="${build.dir}/cacerts-${project.version}" />
+	</target>
 
 
 	<target name="deployTrustedCerts" depends="checkGlobus,defineClasspaths">
@@ -182,5 +186,6 @@
 		<antcall target="clean" />
 		<antcall target="jar" />
 		<antcall target="websso-client-config-jar" />
+		<antcall target="copy-configuration-files" />		
 	</target>
 </project>

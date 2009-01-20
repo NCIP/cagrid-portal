@@ -23,6 +23,7 @@
   <publications>
 	<artifact name="caGrid-websso-client-common" conf="default" type="jar" />
 	<artifact name="caGrid-websso-client-common-conf" conf="default" type="jar" />
+	<artifact name="cacerts" conf="default" type="" />
   </publications>
 
   <dependencies>
@@ -31,9 +32,8 @@
 	<dependency rev="${target.grid}" org="caGrid" name="target_grid" conf="target_grid->urls,trust,syncdesc" />
 
     <!-- External Dependencies -->
-    <dependency rev="3.2.2" org="jasig" name="cas-server" conf="default->default"/>
-    <dependency rev="0.7.0" org="inspektr" name="inspektr" conf="default->default"/>
     <dependency rev="2.5.5" org="springframework" name="spring" conf="default->full"/>
+    <dependency rev="1.2.14" org="apache" name="log4j"/>
     <dependency rev="syncgts-patched-4.0.3" org="globus" name="jcog" conf="default->default"/>
     <dependency rev="4.4" org="junit" name="junit" conf="impl-test->default"/>
   </dependencies>
