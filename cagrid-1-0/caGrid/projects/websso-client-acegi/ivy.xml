@@ -22,7 +22,7 @@
 	<publications>
 		<artifact name="caGrid-websso-client-acegi" conf="default" type="jar" />
 		<artifact name="applicationContext-acegi" conf="resources" type="xml" />
-		<artifact name="cas-client-acegi" conf="resources" type="properties" />
+		<artifact name="cas-client-template-acegi" conf="resources" type="properties" />
 		<artifact name="web-acegi" conf="resources" type="xml" />
 	</publications>
 	<dependencies>	
