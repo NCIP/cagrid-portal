@@ -44,7 +44,7 @@ public class ChangeWebSSOPropertiesStep extends Step {
 	    // edit the src/resources/websso-properties-template.xml to set the key, cert, and CA dirs for the https connector
 		File webssopropertiesfile = new File(tempWebSSOService
 				.getCanonicalPath(), "src" + File.separator + "resources"
-				+ File.separator + "websso-properties.xml");
+				+ File.separator + "websso-properties-template.xml");
 		
 	    Document confDocument = null;
 	    try {
