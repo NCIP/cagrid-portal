@@ -11,7 +11,7 @@
 		<ivy:retrieve conf="default" pattern="${ivy.resolved.artifacts.dir}/dependencies/[type]s/[originalname](.[ext])"  type="jar" />
 		<ivy:retrieve conf="default" pattern="${ivy.resolved.artifacts.dir}/dependencies-xml-resources/[type]s/[originalname](.[ext])"  type="xml" />
 		<ivy:retrieve conf="default" pattern="${ivy.resolved.artifacts.dir}/dependencies-properties/[type]/[originalname](.[ext])"  type="properties" />
-		<ivy:retrieve conf="default" pattern="${ivy.resolved.artifacts.dir}/dependencies/[type]/[originalname]"  type="" />		
+		<ivy:retrieve conf="default" pattern="${ivy.resolved.artifacts.dir}/dependencies-cert/[type]/[originalname](.[ext])"  type="cert" />	
 	</target>
 	
 </project>
