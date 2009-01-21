@@ -4,6 +4,7 @@ import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.test.TestCaseInfo;
 import gov.nih.nci.cagrid.introduce.test.steps.CreateSkeletonStep;
+import gov.nih.nci.cagrid.introduce.test.steps.RemoveSkeletonStep;
 import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainer;
 import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainerFactory;
 import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainerType;
@@ -201,10 +202,10 @@ public class IndexServiceSystemTest extends Story {
             if (indexServiceContainer.isStarted()) {
                 new StopContainerStep(indexServiceContainer).runStep();
             }
-            // new DestroyContainerStep(indexServiceContainer).runStep();
-            System.out.println("Index service container dir: " + indexServiceContainer.getProperties().getContainerDirectory().getAbsolutePath());
+            new DestroyContainerStep(indexServiceContainer).runStep();
+            // System.out.println("Index service container dir: " + indexServiceContainer.getProperties().getContainerDirectory().getAbsolutePath());
         }
-        // new RemoveSkeletonStep(helloWorldServiceInfo);
+        new RemoveSkeletonStep(testServiceInfo);
     }
     
     
