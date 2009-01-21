@@ -27,7 +27,6 @@
 	<property name="cagrid.version" value="${project.version}" />
 	<property name="download.properties.url" value="file:/${download.properties.path}" />
 	<property name="cagrid.download.url" value="http://localhost:8080/downloads/caGrid-${project.version}.zip" />
-	<property name="portal.download.url" value="http://gforge.nci.nih.gov/frs/download.php/3672/cagrid-portal-2.0.1.zip" />
 
 	<fileset id="globus.jars" dir="${globus.dir}/lib">
 		<include name="commons-logging*.jar" />
