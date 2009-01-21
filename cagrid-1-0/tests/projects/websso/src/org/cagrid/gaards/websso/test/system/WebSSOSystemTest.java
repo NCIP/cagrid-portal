@@ -45,7 +45,7 @@ import org.cagrid.gaards.websso.test.system.steps.ChangeCatalinaPropertiesStep;
 import org.cagrid.gaards.websso.test.system.steps.ChangeJasigCASClientPropertiesStep;
 import org.cagrid.gaards.websso.test.system.steps.ChangeTomcatServerConfigurationStep;
 import org.cagrid.gaards.websso.test.system.steps.ChangeWebSSOPropertiesStep;
-import org.cagrid.gaards.websso.test.system.steps.CleanupGlobusCertificates;
+import org.cagrid.gaards.websso.test.system.steps.CleanupGlobusCertificatesStep;
 import org.cagrid.gaards.websso.test.system.steps.CopyCAStep;
 import org.cagrid.gaards.websso.test.system.steps.HostCertificatesStep;
 import org.cagrid.gaards.websso.test.system.steps.InstallCertStep;
@@ -234,7 +234,6 @@ public class WebSSOSystemTest extends Story {
 				httpsJasigPortNumber, httpsAcegiPortNumber));
 		
 		steps.add(new CleanupDorianStep(dorianServiceContainer,trust));
-		steps.add(new CleanupGlobusCertificates());		
 		return steps;
 	}
 	
@@ -573,11 +572,12 @@ public class WebSSOSystemTest extends Story {
 	public void storyTearDown() throws Throwable {
 		tearDownServer(dorianServiceContainer,tempDorianService);
 		tearDownServer(cdsServiceContainer,tempcdsService);
+		new CleanupGlobusCertificatesStep().runStep();
 		tearDownServer(webSSOJasigClientServiceContainer,tempwebssoJasigClientService);
 		tearDownServer(webSSOAcegiClientServiceContainer,tempwebssoAcegiClientService);
-		
 		webSSOServiceContainer.getProperties().setMaxShutdownWaitTime(200);
 		tearDownServer(webSSOServiceContainer,tempWebSSOService);
+		
 	}
 
 	private void tearDownServer(ServiceContainer serviceContainer,File service) throws Throwable {

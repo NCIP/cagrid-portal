@@ -4,9 +4,9 @@ import java.io.File;
 
 import gov.nih.nci.cagrid.testing.system.haste.Step;
 
-public class CleanupGlobusCertificates extends Step {
+public class CleanupGlobusCertificatesStep extends Step {
 
-	public CleanupGlobusCertificates() {
+	public CleanupGlobusCertificatesStep() {
 	}
 
 	public void runStep() throws Throwable {
@@ -24,7 +24,7 @@ public class CleanupGlobusCertificates extends Step {
 	}
 	
 	public static void main(String[] args) throws Throwable {
-		CleanupGlobusCertificates certificates=new CleanupGlobusCertificates();
+		CleanupGlobusCertificatesStep certificates=new CleanupGlobusCertificatesStep();
 		certificates.runStep();
 	}
 }
