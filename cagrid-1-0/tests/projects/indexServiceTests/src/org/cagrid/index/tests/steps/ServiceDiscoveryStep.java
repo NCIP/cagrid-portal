@@ -21,7 +21,7 @@ import org.apache.axis.message.addressing.EndpointReferenceType;
  * upon a locally cached metadata XML file.
  * 
  * @author Patrick McConnell
- * @author David
+ * @author David Ervin
  */
 public class ServiceDiscoveryStep extends Step {
     
@@ -57,7 +57,7 @@ public class ServiceDiscoveryStep extends Step {
 
         // service
         assertEquals(this.shouldBeFound, foundService(client.discoverServicesByName(
-            expectedMetadata .getServiceDescription().getService().getName())));
+            expectedMetadata.getServiceDescription().getService().getName())));
         for (ServiceContext context : expectedMetadata.getServiceDescription().getService()
             .getServiceContextCollection().getServiceContext()) {
             for (Operation operation : context.getOperationCollection().getOperation()) {
@@ -68,7 +68,7 @@ public class ServiceDiscoveryStep extends Step {
 
         // center
         assertEquals(this.shouldBeFound, foundService(client.discoverServicesByResearchCenter(
-            expectedMetadata .getHostingResearchCenter().getResearchCenter().getShortName())));
+            expectedMetadata.getHostingResearchCenter().getResearchCenter().getShortName())));
         assertEquals(this.shouldBeFound, foundService(client.discoverServicesByResearchCenter(
             expectedMetadata.getHostingResearchCenter().getResearchCenter().getDisplayName())));
         for (PointOfContact poc : expectedMetadata.getHostingResearchCenter().getResearchCenter()
@@ -76,8 +76,8 @@ public class ServiceDiscoveryStep extends Step {
             assertEquals(this.shouldBeFound, foundService(client.discoverServicesByPointOfContact(poc)));
         }
 
-        // model
-        if (shouldBeFound) {
+        // domain model
+        if (MetadataUtils.isDataService(domainServiceEndpoint) && shouldBeFound) {
             DomainModel model = MetadataUtils.getDomainModel(this.domainServiceEndpoint);
             assertEquals(this.shouldBeFound, foundService(client.discoverDataServicesByModelConceptCode(
                 model.getExposedUMLClassCollection().getUMLClass()[0].getUmlAttributeCollection().

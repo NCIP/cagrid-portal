@@ -4,7 +4,6 @@ import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
 import gov.nih.nci.cagrid.introduce.test.TestCaseInfo;
 import gov.nih.nci.cagrid.introduce.test.steps.CreateSkeletonStep;
-import gov.nih.nci.cagrid.introduce.test.steps.RemoveSkeletonStep;
 import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainer;
 import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainerFactory;
 import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainerType;
@@ -27,6 +26,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.cagrid.index.tests.steps.ChangeIndexSweeperDelayStep;
 import org.cagrid.index.tests.steps.DeployIndexServiceStep;
+import org.cagrid.index.tests.steps.FillInMetadataStep;
 import org.cagrid.index.tests.steps.ServiceDiscoveryStep;
 import org.cagrid.index.tests.steps.SetAdvertisementUrlStep;
 import org.cagrid.index.tests.steps.SetMetadataHostingResearchCenterStep;
@@ -44,8 +44,8 @@ public class IndexServiceSystemTest extends Story {
     public static final String SERVICE_NAMESPACE = "http://" + PACKAGE_NAME + "/" + SERVICE_NAME;
     
     private ServiceContainer indexServiceContainer = null;
-    private ServiceContainer helloWorldServiceContainer = null;
-    private TestCaseInfo helloWorldServiceInfo = null;
+    private ServiceContainer testServiceContainer = null;
+    private TestCaseInfo testServiceInfo = null;
     
     
     public String getName() {
@@ -59,7 +59,7 @@ public class IndexServiceSystemTest extends Story {
     
     
     public boolean storySetUp() {
-        helloWorldServiceInfo = new TestHelloWorldServiceInfo();
+        testServiceInfo = new TestHelloWorldServiceInfo();
         
         // set up the index service container
         try {
@@ -72,13 +72,13 @@ public class IndexServiceSystemTest extends Story {
             fail(message);
         }
         
-        // set up a data service container
+        // set up a testing service container
         try {
-            log.debug("Creating container for Hello World service");
-            helloWorldServiceContainer = ServiceContainerFactory.createContainer(ServiceContainerType.TOMCAT_CONTAINER);
-            new UnpackContainerStep(helloWorldServiceContainer).runStep();
+            log.debug("Creating container for testing service");
+            testServiceContainer = ServiceContainerFactory.createContainer(ServiceContainerType.TOMCAT_CONTAINER);
+            new UnpackContainerStep(testServiceContainer).runStep();
         } catch (Throwable ex) {
-            String message = "Error creating container for data service: " + ex.getMessage();
+            String message = "Error creating container for testing service: " + ex.getMessage();
             log.error(message, ex);
             fail(message);
         }
@@ -88,9 +88,17 @@ public class IndexServiceSystemTest extends Story {
 
     protected Vector steps() {
         Vector<Step> steps = new Vector<Step>();
-        
         // the directory of the testing data service
-        File testServiceDir = new File(helloWorldServiceInfo.getDir());
+        File testServiceDir = new File(testServiceInfo.getDir());
+        if (testServiceDir.exists()) {
+            try {
+                log.info("Deleting old test service directory: " + testServiceDir.getAbsolutePath());
+                Utils.deleteDir(testServiceDir);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                fail("Error deleting old test service directory: " + ex.getMessage());
+            }
+        }
         
         // get the EPR of the Index service
         EndpointReferenceType indexEPR = null;
@@ -102,9 +110,9 @@ public class IndexServiceSystemTest extends Story {
             fail(message);
         }
         
-        // create a hello world grid service
+        // create a test grid service
         try {
-            steps.add(new CreateSkeletonStep(helloWorldServiceInfo, true));
+            steps.add(new CreateSkeletonStep(testServiceInfo, true));
         } catch (Exception ex) {
             String message = "Error setting up service creation step: " + ex.getMessage();
             log.error(message, ex);
@@ -113,62 +121,69 @@ public class IndexServiceSystemTest extends Story {
         // set the service's expected metadata
         StringBuffer testMetadata = getTestingResearchCenterInfo();
         steps.add(new SetMetadataHostingResearchCenterStep(testServiceDir, testMetadata));
+        steps.add(new FillInMetadataStep(testServiceDir));
         // make that service register to our testing index service
         steps.add(new SetAdvertisementUrlStep(testServiceDir, indexEPR));
         
         // deploy the index service
         String indexServiceLocation = System.getProperty(INDEX_SERVICE_DIR_PROPERTY, DEFAULT_INDEX_SERVICE_DIR);
-        log.debug("Index service dir: " + indexServiceLocation);
+        log.info("Index service dir: " + indexServiceLocation);
         steps.add(new DeployIndexServiceStep(indexServiceContainer, new File(indexServiceLocation)));
         // change the sweeper delay of the index service
         steps.add(new ChangeIndexSweeperDelayStep(indexServiceContainer));
         // start the index service
         steps.add(new StartContainerStep(indexServiceContainer));
         
-        // deploy the hello world service
-        steps.add(new DeployServiceStep(helloWorldServiceContainer, testServiceDir.getAbsolutePath()));
-        // start the hello worldservice
-        steps.add(new StartContainerStep(helloWorldServiceContainer));
+        // deploy the test service
+        steps.add(new DeployServiceStep(testServiceContainer, testServiceDir.getAbsolutePath()));
+        // start the test service
+        steps.add(new StartContainerStep(testServiceContainer));
         
-        // sleep long enough to allow the hello world service to register itself
+        // sleep long enough to allow the test service to register itself
         steps.add(new SleepStep(ChangeIndexSweeperDelayStep.DEFAULT_SWEEPER_DELAY * 5));
         
-        // get the EPR of the hello world service
-        EndpointReferenceType helloEPR = null;
+        // get the EPR of the test service
+        EndpointReferenceType testEPR = null;
         try {
-            helloEPR = helloWorldServiceContainer.getServiceEPR("cagrid/" + helloWorldServiceInfo.getName());
+            testEPR = testServiceContainer.getServiceEPR("cagrid/" + testServiceInfo.getName());
         } catch (MalformedURIException ex) {
-            String message = "Error obtaining EPR of hello world service: " + ex.getMessage();
+            String message = "Error obtaining EPR of test service: " + ex.getMessage();
             log.error(message, ex);
             fail(message);
         }
         
-        // find the data service in the index service
-        steps.add(new ServiceDiscoveryStep(indexEPR, helloEPR, testServiceDir, true));
+        // find the test service in the index service
+        steps.add(new ServiceDiscoveryStep(indexEPR, testEPR, testServiceDir, true));
         
-        // make sure the sweeper has run and its still there
+        // make sure the sweeper has run and the test service is still there
         steps.add(new SleepStep(ChangeIndexSweeperDelayStep.DEFAULT_SWEEPER_DELAY * 2));
-        steps.add(new ServiceDiscoveryStep(indexEPR, helloEPR, testServiceDir, true));
+        steps.add(new ServiceDiscoveryStep(indexEPR, testEPR, testServiceDir, true));
         
-        // shut down the data service
-        steps.add(new StopContainerStep(helloWorldServiceContainer));
+        // shut down the test service
+        steps.add(new StopContainerStep(testServiceContainer));
         
         // make sure the sweeper has run and the service is gone
         steps.add(new SleepStep(ChangeIndexSweeperDelayStep.DEFAULT_SWEEPER_DELAY * 2));
-        steps.add(new ServiceDiscoveryStep(indexEPR, helloEPR, testServiceDir, false));
+        steps.add(new ServiceDiscoveryStep(indexEPR, testEPR, testServiceDir, false));
         
         return steps;
     }
     
     
     public void storyTearDown() throws Throwable {
-        if (helloWorldServiceContainer.isStarted()) {
-            new StopContainerStep(helloWorldServiceContainer).runStep();
+        if (testServiceContainer != null) {
+            if (testServiceContainer.isStarted()) {
+                new StopContainerStep(testServiceContainer).runStep();
+            }
+            new DestroyContainerStep(testServiceContainer).runStep();
         }
-        new DestroyContainerStep(helloWorldServiceContainer).runStep();
-        new StopContainerStep(indexServiceContainer).runStep();
-        new DestroyContainerStep(indexServiceContainer).runStep();
-        new RemoveSkeletonStep(helloWorldServiceInfo);
+        if (indexServiceContainer != null) {
+            if (indexServiceContainer.isStarted()) {
+                new StopContainerStep(indexServiceContainer).runStep();
+            }
+            new DestroyContainerStep(indexServiceContainer).runStep();
+        }
+        // new RemoveSkeletonStep(helloWorldServiceInfo);
     }
     
     
@@ -204,7 +219,10 @@ public class IndexServiceSystemTest extends Story {
         
 
         public String getResourceFrameworkType() {
-            return IntroduceConstants.INTRODUCE_MAIN_RESOURCE + "," + IntroduceConstants.INTRODUCE_SINGLETON_RESOURCE + "," + IntroduceConstants.INTRODUCE_IDENTIFIABLE_RESOURCE;
+            return IntroduceConstants.INTRODUCE_MAIN_RESOURCE + "," 
+                + IntroduceConstants.INTRODUCE_SINGLETON_RESOURCE + "," 
+                + IntroduceConstants.INTRODUCE_IDENTIFIABLE_RESOURCE + ","
+                + IntroduceConstants.INTRODUCE_RESOURCEPROPETIES_RESOURCE;
         }
 
 
