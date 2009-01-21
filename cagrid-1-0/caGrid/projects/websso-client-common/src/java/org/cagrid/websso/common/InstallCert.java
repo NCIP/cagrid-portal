@@ -83,7 +83,8 @@ public class InstallCert {
 			socket.close();
 			System.out.println("No errors, certificate is already trusted");
 		} catch (SSLException e) {
-			throw new WebSSOClientException("error starting SSL handshake",e);
+			System.out.println("Certificate is not present in the trust store.Writing to the trust store");
+			//throw new WebSSOClientException("error starting SSL handshake",e);
 		}
 
 		X509Certificate[] chain = tm.chain;
