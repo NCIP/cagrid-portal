@@ -104,7 +104,7 @@ public class PortletUtilsTest extends TestCase {
 
         Service desc = new Service();
         mData.setServiceDescription(desc);
-        assertTrue(BaseServiceFilter.filterServicesByInvalidMetadata(svcs).size() == 0);
+        assertTrue(BaseServiceFilter.filterServicesByInvalidMetadata(svcs).size() == 1);
 
         desc.setName("dummyService");
         assertTrue(BaseServiceFilter.filterServicesByInvalidMetadata(svcs).size() == 1);
