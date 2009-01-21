@@ -92,6 +92,11 @@ public class WebSSOSystemTest extends Story {
 		return "WebSSO System Test";
 	}
 
+   @Override
+    public String getName() {
+        return getDescription();
+    }
+	
 	@Override
 	protected boolean storySetUp() {
 		// set up the dorian service container
