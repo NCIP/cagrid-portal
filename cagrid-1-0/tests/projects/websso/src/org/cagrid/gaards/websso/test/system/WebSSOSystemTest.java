@@ -232,8 +232,7 @@ public class WebSSOSystemTest extends Story {
 		steps.add(new AssertWebSSOApplicationStep(webSSOClientJasigURL,
 				webSSOClientAcegiURL + "/protected", httpsWebSSOPortNumber,
 				httpsJasigPortNumber, httpsAcegiPortNumber));
-		
-		steps.add(new CleanupDorianStep(dorianServiceContainer,trust));
+
 		return steps;
 	}
 	
@@ -573,6 +572,7 @@ public class WebSSOSystemTest extends Story {
 		tearDownServer(dorianServiceContainer,tempDorianService);
 		tearDownServer(cdsServiceContainer,tempcdsService);
 		new CleanupGlobusCertificatesStep().runStep();
+		new CleanupDorianStep(dorianServiceContainer,trust).runStep();
 		tearDownServer(webSSOJasigClientServiceContainer,tempwebssoJasigClientService);
 		tearDownServer(webSSOAcegiClientServiceContainer,tempwebssoAcegiClientService);
 		webSSOServiceContainer.getProperties().setMaxShutdownWaitTime(200);
