@@ -25,6 +25,8 @@ import org.apache.axis.types.URI.MalformedURIException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.cagrid.index.tests.steps.ChangeIndexSweeperDelayStep;
+import org.cagrid.index.tests.steps.ChangePollIntervalStep;
+import org.cagrid.index.tests.steps.ChangeRefreshIntervalStep;
 import org.cagrid.index.tests.steps.DeployIndexServiceStep;
 import org.cagrid.index.tests.steps.FillInMetadataStep;
 import org.cagrid.index.tests.steps.ServiceDiscoveryStep;
@@ -131,6 +133,10 @@ public class IndexServiceSystemTest extends Story {
         steps.add(new DeployIndexServiceStep(indexServiceContainer, new File(indexServiceLocation)));
         // change the sweeper delay of the index service
         steps.add(new ChangeIndexSweeperDelayStep(indexServiceContainer));
+        // change the refresh interval
+        steps.add(new ChangeRefreshIntervalStep(indexServiceContainer, 1000));
+        // change the poll interval
+        steps.add(new ChangePollIntervalStep(indexServiceContainer, 1000));
         // start the index service
         steps.add(new StartContainerStep(indexServiceContainer));
         
@@ -163,7 +169,7 @@ public class IndexServiceSystemTest extends Story {
         steps.add(new StopContainerStep(testServiceContainer));
         
         // make sure the sweeper has run and the service is gone
-        steps.add(new SleepStep(ChangeIndexSweeperDelayStep.DEFAULT_SWEEPER_DELAY * 2));
+        steps.add(new SleepStep(ChangeIndexSweeperDelayStep.DEFAULT_SWEEPER_DELAY * 5));
         steps.add(new ServiceDiscoveryStep(indexEPR, testEPR, testServiceDir, false));
         
         return steps;

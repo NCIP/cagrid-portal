@@ -27,9 +27,10 @@ public class ChangeIndexSweeperDelayStep extends Step {
     public static final long DEFAULT_SWEEPER_DELAY = 5000; // 5 seconds
 
     private static final String SWEEPER_DELAY = "entrySweeperInterval";
+    
     private ServiceContainer indexServiceContainer;
     
-    // default to 10 seconds
+    // default to 5 seconds
     private long sweeperDelay;
 
     public ChangeIndexSweeperDelayStep(ServiceContainer indexServiceContainer) {
