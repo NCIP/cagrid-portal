@@ -569,10 +569,10 @@ public class WebSSOSystemTest extends Story {
 	}
 
 	public void storyTearDown() throws Throwable {
+		new CleanupDorianStep(dorianServiceContainer,trust).runStep();
 		tearDownServer(dorianServiceContainer,tempDorianService);
 		tearDownServer(cdsServiceContainer,tempcdsService);
-		new CleanupGlobusCertificatesStep().runStep();
-		new CleanupDorianStep(dorianServiceContainer,trust).runStep();
+		new CleanupGlobusCertificatesStep().runStep();		
 		tearDownServer(webSSOJasigClientServiceContainer,tempwebssoJasigClientService);
 		tearDownServer(webSSOAcegiClientServiceContainer,tempwebssoAcegiClientService);
 		webSSOServiceContainer.getProperties().setMaxShutdownWaitTime(200);
