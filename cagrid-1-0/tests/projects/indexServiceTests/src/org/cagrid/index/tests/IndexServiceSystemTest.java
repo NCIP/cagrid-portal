@@ -8,7 +8,6 @@ import gov.nih.nci.cagrid.introduce.test.steps.RemoveSkeletonStep;
 import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainer;
 import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainerFactory;
 import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainerType;
-import gov.nih.nci.cagrid.testing.system.deployment.TomcatServiceContainer;
 import gov.nih.nci.cagrid.testing.system.deployment.steps.DeployServiceStep;
 import gov.nih.nci.cagrid.testing.system.deployment.steps.DestroyContainerStep;
 import gov.nih.nci.cagrid.testing.system.deployment.steps.StartContainerStep;
@@ -30,7 +29,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.cagrid.index.tests.steps.ChangeIndexSweeperDelayStep;
 import org.cagrid.index.tests.steps.DeployIndexServiceStep;
-import org.cagrid.index.tests.steps.EnableDebugOutputStep;
 import org.cagrid.index.tests.steps.FillInMetadataStep;
 import org.cagrid.index.tests.steps.ServiceDiscoveryStep;
 import org.cagrid.index.tests.steps.SetAdvertisementUrlStep;
@@ -71,8 +69,6 @@ public class IndexServiceSystemTest extends Story {
             log.debug("Creating container for index service");
             indexServiceContainer = ServiceContainerFactory.createContainer(ServiceContainerType.TOMCAT_CONTAINER);
             new UnpackContainerStep(indexServiceContainer).runStep();
-            // turn on debugging on index container
-            new EnableDebugOutputStep((TomcatServiceContainer) indexServiceContainer).runStep();
         } catch (Throwable ex) {
             String message = "Error creating container for index service: " + ex.getMessage();
             log.error(message, ex);
@@ -84,7 +80,6 @@ public class IndexServiceSystemTest extends Story {
             log.debug("Creating container for testing service");
             testServiceContainer = ServiceContainerFactory.createContainer(ServiceContainerType.TOMCAT_CONTAINER);
             new UnpackContainerStep(testServiceContainer).runStep();
-            new EnableDebugOutputStep((TomcatServiceContainer) testServiceContainer).runStep();
         } catch (Throwable ex) {
             String message = "Error creating container for testing service: " + ex.getMessage();
             log.error(message, ex);

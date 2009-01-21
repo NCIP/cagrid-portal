@@ -11,6 +11,10 @@
 	<property name="testing.port.assignment.mode" value="true" />
 	<!-- tells the test containers where to find their zip files -->
 	<property name="testing.containers.dir" value="${basedir}/../testUtils/containers"/>
+	<!-- a list of packages which will get debugged in any containers run by this test -->
+	<property name="service.debug.packages" value="gov.nih.nci.cagrid.advertisement,org.globus.wsrf.servicegroup"/>
+	<!-- soap debugging option -->
+	<property name="service.debug.soap" value="true"/>
 	
 	<target name="prepareClasspaths">
 		<path id="all.test.classpath">
@@ -33,6 +37,8 @@
 			<sysproperty key="introduce.base.dir" value="${introduce.dir}" />
 			<sysproperty key="testing.port.assignment.mode" value="${testing.port.assignment.mode}"/>
 			<sysproperty key="testing.containers.dir" value="${testing.containers.dir}"/>
+			<sysproperty key="testing.container.debug.packages" value="${service.debug.packages}"/>
+			<sysproperty key="testing.container.debug.soap" value="${service.debug.soap}"/>
 			<classpath refid="all.test.classpath" />
 			<classpath>
 				<pathelement path="${classes.dir}" />
