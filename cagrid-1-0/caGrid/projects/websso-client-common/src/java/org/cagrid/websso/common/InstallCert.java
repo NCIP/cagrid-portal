@@ -39,7 +39,6 @@ import javax.net.ssl.*;
 
 import org.apache.log4j.Logger;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
 
 public class InstallCert {
 	
@@ -58,7 +57,7 @@ public class InstallCert {
 			System.out.println("Usage: java InstallCert <WebSSO Server><port>");
 			return;
 		}
-		ClassPathResource resource=new ClassPathResource("cacerts");
+		ClassPathResource resource=new ClassPathResource("cacerts.cert");
 		File file = new File(resource.getFile().getAbsolutePath());
 		InputStream in = new FileInputStream(file);
 		KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
