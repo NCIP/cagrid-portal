@@ -77,7 +77,7 @@ public class ServiceDiscoveryStep extends Step {
         }
 
         // domain model
-        if (MetadataUtils.isDataService(domainServiceEndpoint) && shouldBeFound) {
+        if (shouldBeFound && MetadataUtils.isDataService(domainServiceEndpoint)) {
             DomainModel model = MetadataUtils.getDomainModel(this.domainServiceEndpoint);
             assertEquals(this.shouldBeFound, foundService(client.discoverDataServicesByModelConceptCode(
                 model.getExposedUMLClassCollection().getUMLClass()[0].getUmlAttributeCollection().

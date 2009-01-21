@@ -7,6 +7,7 @@ import gov.nih.nci.cagrid.introduce.test.steps.CreateSkeletonStep;
 import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainer;
 import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainerFactory;
 import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainerType;
+import gov.nih.nci.cagrid.testing.system.deployment.TomcatServiceContainer;
 import gov.nih.nci.cagrid.testing.system.deployment.steps.DeployServiceStep;
 import gov.nih.nci.cagrid.testing.system.deployment.steps.DestroyContainerStep;
 import gov.nih.nci.cagrid.testing.system.deployment.steps.StartContainerStep;
@@ -18,6 +19,8 @@ import gov.nih.nci.cagrid.testing.system.haste.Story;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Vector;
 
 import org.apache.axis.message.addressing.EndpointReferenceType;
@@ -25,13 +28,11 @@ import org.apache.axis.types.URI.MalformedURIException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.cagrid.index.tests.steps.ChangeIndexSweeperDelayStep;
-import org.cagrid.index.tests.steps.ChangePollIntervalStep;
-import org.cagrid.index.tests.steps.ChangeRefreshIntervalStep;
 import org.cagrid.index.tests.steps.DeployIndexServiceStep;
+import org.cagrid.index.tests.steps.EnableDebugOutputStep;
 import org.cagrid.index.tests.steps.FillInMetadataStep;
 import org.cagrid.index.tests.steps.ServiceDiscoveryStep;
 import org.cagrid.index.tests.steps.SetAdvertisementUrlStep;
-import org.cagrid.index.tests.steps.ChangeInitialTerminationTimeStep;
 import org.cagrid.index.tests.steps.SetMetadataHostingResearchCenterStep;
 
 public class IndexServiceSystemTest extends Story {
@@ -69,6 +70,8 @@ public class IndexServiceSystemTest extends Story {
             log.debug("Creating container for index service");
             indexServiceContainer = ServiceContainerFactory.createContainer(ServiceContainerType.TOMCAT_CONTAINER);
             new UnpackContainerStep(indexServiceContainer).runStep();
+            // turn on debugging on index container
+            new EnableDebugOutputStep((TomcatServiceContainer) indexServiceContainer).runStep();
         } catch (Throwable ex) {
             String message = "Error creating container for index service: " + ex.getMessage();
             log.error(message, ex);
@@ -80,6 +83,7 @@ public class IndexServiceSystemTest extends Story {
             log.debug("Creating container for testing service");
             testServiceContainer = ServiceContainerFactory.createContainer(ServiceContainerType.TOMCAT_CONTAINER);
             new UnpackContainerStep(testServiceContainer).runStep();
+            new EnableDebugOutputStep((TomcatServiceContainer) testServiceContainer).runStep();
         } catch (Throwable ex) {
             String message = "Error creating container for testing service: " + ex.getMessage();
             log.error(message, ex);
@@ -134,22 +138,29 @@ public class IndexServiceSystemTest extends Story {
         steps.add(new DeployIndexServiceStep(indexServiceContainer, new File(indexServiceLocation)));
         // change the sweeper delay of the index service
         steps.add(new ChangeIndexSweeperDelayStep(indexServiceContainer));
-        // change the refresh interval
-        steps.add(new ChangeRefreshIntervalStep(indexServiceContainer, 1000));
-        // change the initial termination time
-        steps.add(new ChangeInitialTerminationTimeStep(indexServiceContainer, 1000));
-        // change the poll interval
-        steps.add(new ChangePollIntervalStep(indexServiceContainer, 1000));
         // start the index service
         steps.add(new StartContainerStep(indexServiceContainer));
         
         // deploy the test service
-        steps.add(new DeployServiceStep(testServiceContainer, testServiceDir.getAbsolutePath()));
+        // FIXME: this SHOULD work without doing this, but Tomcat apparently 
+        // kills the advertisement client's JVM shutdown hook before it gets 
+        // a chance to complete, which would unregister the test service.
+        // The option passed to this deploy step overrides the interval
+        // in the test service which tells the index service how often to
+        // refresh its registration
+        long refreshInterval = ChangeIndexSweeperDelayStep.DEFAULT_SWEEPER_DELAY; // milliseconds
+        List<String> args = Arrays.asList(
+            new String[] {
+                "-Dindex.service.index.refresh_milliseconds=" + refreshInterval,
+                "-Dindex.service.registration.refresh_seconds=" + refreshInterval / 1000
+            }
+        );
+        steps.add(new DeployServiceStep(testServiceContainer, testServiceDir.getAbsolutePath(), args));
         // start the test service
         steps.add(new StartContainerStep(testServiceContainer));
         
         // sleep long enough to allow the test service to register itself
-        steps.add(new SleepStep(ChangeIndexSweeperDelayStep.DEFAULT_SWEEPER_DELAY * 5));
+        steps.add(new SleepStep(ChangeIndexSweeperDelayStep.DEFAULT_SWEEPER_DELAY * 3));
         
         // get the EPR of the test service
         EndpointReferenceType testEPR = null;
@@ -165,14 +176,14 @@ public class IndexServiceSystemTest extends Story {
         steps.add(new ServiceDiscoveryStep(indexEPR, testEPR, testServiceDir, true));
         
         // make sure the sweeper has run and the test service is still there
-        steps.add(new SleepStep(ChangeIndexSweeperDelayStep.DEFAULT_SWEEPER_DELAY * 2));
+        steps.add(new SleepStep(ChangeIndexSweeperDelayStep.DEFAULT_SWEEPER_DELAY * 3));
         steps.add(new ServiceDiscoveryStep(indexEPR, testEPR, testServiceDir, true));
         
-        // shut down the test service
+        // shut down the test service... see note above!
         steps.add(new StopContainerStep(testServiceContainer));
         
         // make sure the sweeper has run and the service is gone
-        steps.add(new SleepStep(ChangeIndexSweeperDelayStep.DEFAULT_SWEEPER_DELAY * 5));
+        steps.add(new SleepStep(ChangeIndexSweeperDelayStep.DEFAULT_SWEEPER_DELAY * 3));
         steps.add(new ServiceDiscoveryStep(indexEPR, testEPR, testServiceDir, false));
         
         return steps;
@@ -190,7 +201,8 @@ public class IndexServiceSystemTest extends Story {
             if (indexServiceContainer.isStarted()) {
                 new StopContainerStep(indexServiceContainer).runStep();
             }
-            new DestroyContainerStep(indexServiceContainer).runStep();
+            // new DestroyContainerStep(indexServiceContainer).runStep();
+            System.out.println("Index service container dir: " + indexServiceContainer.getProperties().getContainerDirectory().getAbsolutePath());
         }
         // new RemoveSkeletonStep(helloWorldServiceInfo);
     }
