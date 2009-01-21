@@ -31,6 +31,7 @@ import org.cagrid.index.tests.steps.DeployIndexServiceStep;
 import org.cagrid.index.tests.steps.FillInMetadataStep;
 import org.cagrid.index.tests.steps.ServiceDiscoveryStep;
 import org.cagrid.index.tests.steps.SetAdvertisementUrlStep;
+import org.cagrid.index.tests.steps.ChangeInitialTerminationTimeStep;
 import org.cagrid.index.tests.steps.SetMetadataHostingResearchCenterStep;
 
 public class IndexServiceSystemTest extends Story {
@@ -135,6 +136,8 @@ public class IndexServiceSystemTest extends Story {
         steps.add(new ChangeIndexSweeperDelayStep(indexServiceContainer));
         // change the refresh interval
         steps.add(new ChangeRefreshIntervalStep(indexServiceContainer, 1000));
+        // change the initial termination time
+        steps.add(new ChangeInitialTerminationTimeStep(indexServiceContainer, 1000));
         // change the poll interval
         steps.add(new ChangePollIntervalStep(indexServiceContainer, 1000));
         // start the index service
