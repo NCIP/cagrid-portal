@@ -8,6 +8,8 @@
 	</target>
 	<target name="update-tests" depends="prepare">
 		<cvs failonerror="true" quiet="true" command="-d:ext:oster@cbiocvs2.nci.nih.gov:/share/content/gforge/cagrid-1-0 up -Pd tests" />
+		<!-- websso system test currently depends on this -->
+		<cvs failonerror="true" quiet="true" command="-d:ext:anonymous@cbiocvs2.nci.nih.gov:/share/content/gforge/cagrid-1-0 up -Pd SampleApplications"  />
 	</target>
 	<target name="update" depends="update-cagrid,update-tests" />
 
@@ -15,6 +17,8 @@
 	<target name="build" depends="update">
 		<ant antfile="build.xml" dir="tests" target="configure-clean" />
 		<ant antfile="build.xml" dir="tests" target="all" />
+		<!-- websso system test currently depends on this -->
+		<ant antfile="build.xml" dir="SampleApplications" target="all" />
 	</target>
 
 
