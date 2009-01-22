@@ -333,6 +333,7 @@
 
 			<sourcepath>
 				<pathelement path="${src.dir}" />
+				<pathelement path="${stubs.src}" />
 			</sourcepath>
 
 			<classpath>
@@ -344,6 +345,7 @@
 
 		</javadoc>
 	</target>
+
 
 	<target name="help" description="Prints usage information.">
 		<echo message="================================================================================" />

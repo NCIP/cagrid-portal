@@ -342,6 +342,7 @@
 
 			<sourcepath>
 				<pathelement path="${src.dir}" />
+				<pathelement path="${stubs.src}" />
 			</sourcepath>
 
 			<classpath>

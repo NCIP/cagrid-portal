@@ -147,7 +147,7 @@
 			</fileset>
 			<fileset dir="${ext.globus.dir}/lib">
 				<include name="*.jar" />
-                <exclude name="junit.jar"/>
+				<exclude name="junit.jar" />
 				<exclude name="${stubs.jar.name}" />
 				<exclude name="${common.jar.name}" />
 				<exclude name="${client.jar.name}" />
@@ -335,6 +335,7 @@
 
 			<sourcepath>
 				<pathelement path="${src.dir}" />
+				<pathelement path="${stubs.src}" />
 			</sourcepath>
 
 			<classpath>
@@ -346,6 +347,7 @@
 
 		</javadoc>
 	</target>
+
 
 	<target name="help" description="Prints usage information.">
 		<echo message="================================================================================" />

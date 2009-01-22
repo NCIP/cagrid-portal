@@ -269,6 +269,7 @@
 
 			<sourcepath>
 				<pathelement path="${src.dir}" />
+				<pathelement path="${stubs.src}" />
 			</sourcepath>
 
 			<classpath>
@@ -280,6 +281,7 @@
 
 		</javadoc>
 	</target>
+
 
 	<!-- Default target "all" builds and jars everything, including test....does not make a GAR-->
 	<target name="all" depends="jars" description="Builds the entire service." />
