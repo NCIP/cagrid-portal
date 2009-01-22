@@ -33,7 +33,7 @@
 	<property name="ext.test.lib" value="${ext.dependencies.dir}/test/jars" />
 	<property name="ext.endorsed.dir" value="${ext.dependencies.dir}/endorsed/jars" />
 	<property name="ext.tools.lib.dir" location="${ext.dependencies.dir}/tools/jars" />
-	
+
 	<!-- overide the introduce location of this which is suposed to be in tools/lib -->
 	<property name="ant.contrib.location" value="${ext.tools.lib.dir}/ant-contrib-1.0b3.jar" />
 
@@ -70,12 +70,12 @@
 		</path>
 		<path id="tasks.run.extended.classpath">
 			<fileset dir="${ext.lib}">
-							<include name="*.jar" />
-						</fileset>
+				<include name="*.jar" />
+			</fileset>
 			<fileset dir="${ext.tools.lib.dir}">
-							<include name="*.jar" />
-						</fileset>
-				</path>
+				<include name="*.jar" />
+			</fileset>
+		</path>
 	</target>
 
 
@@ -113,7 +113,7 @@
 		<runtarget target="postJar" />
 	</target>
 
-	
+
 	<target name="checkValidate" unless="perform.deployment.validation">
 		<property name="no.deployment.validation" value="true" />
 	</target>
@@ -253,166 +253,132 @@
 		<fileset id="templates.fileset" dir="${basedir}">
 			<include name="*.template" />
 		</fileset>
-		<!-- We need to basically reverse the mapper used in the copy to 
-	                 identify the target files -->
-		<fileset id="template.results.fileset" dir="${basedir}">
-			<include name="*" />
-			<present targetdir="${basedir}">
-				<mapper type="glob" from="*" to="*.template" />
-			</present>
-		</fileset>
 
-		<!-- First, create any target file that doesn't exist; outofdate doesn't handle this case -->
-		<copy todir="${basedir}">
-			<fileset dir="${basedir}">
-				<include name="*.template" />
-				<not>
-					<present targetdir="${basedir}">
-						<mapper type="glob" from="*.template" to="*" />
-					</present>
-				</not>
-			</fileset>
+		<copy todir="${basedir}" overwrite="true">
+			<fileset refid="templates.fileset" />
 			<mapper type="glob" from="*.template" to="*" />
 			<filterset filtersfile="${ext.targetgrid.dir}/service_urls.properties" />
 		</copy>
 
-		<!-- Next, re-template all the files, if either the filter value files or the template files 
-	                 are newer than the their targets -->
-		<outofdate verbose="true">
-			<sourcefiles>
-				<pathelement path="${ext.targetgrid.dir}/service_urls.properties" />
-				<fileset refid="templates.fileset" />
-			</sourcefiles>
-			<targetfiles>
-				<fileset refid="template.results.fileset" />
-			</targetfiles>
-			<sequential>
-				<copy todir="${basedir}" overwrite="true">
-					<fileset refid="templates.fileset" />
-					<mapper type="glob" from="*.template" to="*" />
-					<filterset filtersfile="${ext.targetgrid.dir}/service_urls.properties" />
-				</copy>
-			</sequential>
-		</outofdate>
 	</target>
 
 	<target name="requestCredential" description="Create a Grid User Credential." depends="init">
 
-			<input message="Please enter the Authentication Service URL [${cagrid.master.dorian.service.url}]:" addproperty="auth.input" defaultvalue="${cagrid.master.dorian.service.url}" />
-			<input message="Please enter the Dorian Service URL [${cagrid.master.dorian.service.url}]:" addproperty="dorian.input" defaultvalue="${cagrid.master.dorian.service.url}" />
+		<input message="Please enter the Authentication Service URL [${cagrid.master.dorian.service.url}]:" addproperty="auth.input" defaultvalue="${cagrid.master.dorian.service.url}" />
+		<input message="Please enter the Dorian Service URL [${cagrid.master.dorian.service.url}]:" addproperty="dorian.input" defaultvalue="${cagrid.master.dorian.service.url}" />
 
-			<input message="Please enter your username:" addproperty="username.input" />
-			<input message="Please enter your password:" addproperty="password.input" />
-			<input message="Please enter the number of hours the proxy should be valid for [12]:" addproperty="hours.input" defaultvalue="12" />
-			<java classname="org.cagrid.gaards.dorian.tools.GridProxyInit" fork="yes" newenvironment="true" failonerror="true">
-				<jvmarg value="-Djava.endorsed.dirs=ext/dependencies/endorsed/jars" />
-				<arg value="-a" />
-				<arg value="${auth.input}" />
-				<arg value="-d" />
-				<arg value="${dorian.input}" />
-				<arg value="-u" />
-				<arg value="${username.input}" />
-				<arg value="-p" />
-				<arg value="${password.input}" />
-				<arg value="-h" />
-				<arg value="${hours.input}" />
-				<classpath refid="service.run.classpath" />
-			</java>
-		</target>
+		<input message="Please enter your username:" addproperty="username.input" />
+		<input message="Please enter your password:" addproperty="password.input" />
+		<input message="Please enter the number of hours the proxy should be valid for [12]:" addproperty="hours.input" defaultvalue="12" />
+		<java classname="org.cagrid.gaards.dorian.tools.GridProxyInit" fork="yes" newenvironment="true" failonerror="true">
+			<jvmarg value="-Djava.endorsed.dirs=ext/dependencies/endorsed/jars" />
+			<arg value="-a" />
+			<arg value="${auth.input}" />
+			<arg value="-d" />
+			<arg value="${dorian.input}" />
+			<arg value="-u" />
+			<arg value="${username.input}" />
+			<arg value="-p" />
+			<arg value="${password.input}" />
+			<arg value="-h" />
+			<arg value="${hours.input}" />
+			<classpath refid="service.run.classpath" />
+		</java>
+	</target>
 
-		<target name="importCA" description="Imports an external CA, for Dorian to use as its CA." depends="init">
-			<input message="Please enter the location to the CA's certificate (PEM Format):" addproperty="cacert.input" />
-			<input message="Please enter the location to the CA's private key (PEM Format):" addproperty="cakey.input" />
-			<input message="Please enter the password to the CA's private key (Enter if None):" addproperty="password.input" />
-			<java classname="org.cagrid.gaards.dorian.service.tools.ImportCA" fork="yes" newenvironment="true" failonerror="true">
-				<arg value="-conf" />
-				<arg value="etc/dorian-configuration.xml" />
-				<arg value="-properties" />
-				<arg value="etc/dorian.properties" />
-				<arg value="-cert" />
-				<arg value="${cacert.input}" />
-				<arg value="-key" />
-				<arg value="${cakey.input}" />
-				<arg value="-password" />
-				<arg value="${password.input}" />
-				<classpath refid="service.run.classpath" />
-			</java>
-		</target>
+	<target name="importCA" description="Imports an external CA, for Dorian to use as its CA." depends="init">
+		<input message="Please enter the location to the CA's certificate (PEM Format):" addproperty="cacert.input" />
+		<input message="Please enter the location to the CA's private key (PEM Format):" addproperty="cakey.input" />
+		<input message="Please enter the password to the CA's private key (Enter if None):" addproperty="password.input" />
+		<java classname="org.cagrid.gaards.dorian.service.tools.ImportCA" fork="yes" newenvironment="true" failonerror="true">
+			<arg value="-conf" />
+			<arg value="etc/dorian-configuration.xml" />
+			<arg value="-properties" />
+			<arg value="etc/dorian.properties" />
+			<arg value="-cert" />
+			<arg value="${cacert.input}" />
+			<arg value="-key" />
+			<arg value="${cakey.input}" />
+			<arg value="-password" />
+			<arg value="${password.input}" />
+			<classpath refid="service.run.classpath" />
+		</java>
+	</target>
 
 
-		<target name="configureGlobusToTrustDorian" description="Configures Globus to trust the Dorian CA." depends="init">
-			<java classname="org.cagrid.gaards.dorian.service.tools.ConfigureGlobusToTrustDorian" fork="yes" newenvironment="true" failonerror="true">
-				<arg value="-conf" />
-				<arg value="etc/dorian-configuration.xml" />
-				<arg value="-properties" />
-				<arg value="etc/dorian.properties" />
-				<classpath refid="service.run.classpath" />
-			</java>
-		</target>
+	<target name="configureGlobusToTrustDorian" description="Configures Globus to trust the Dorian CA." depends="init">
+		<java classname="org.cagrid.gaards.dorian.service.tools.ConfigureGlobusToTrustDorian" fork="yes" newenvironment="true" failonerror="true">
+			<arg value="-conf" />
+			<arg value="etc/dorian-configuration.xml" />
+			<arg value="-properties" />
+			<arg value="etc/dorian.properties" />
+			<classpath refid="service.run.classpath" />
+		</java>
+	</target>
 
-		<target name="createDorianHostCredentials" description="Creates host credentials for the Dorian Service." depends="init">
-			<input message="Please enter the host:" addproperty="host.input" />
-			<input message="Please enter the directory to write out the host credentials:" addproperty="dir.input" />
-			<java classname="org.cagrid.gaards.dorian.service.tools.CreateHostCertificate" fork="yes" newenvironment="true" failonerror="true">
-				<arg value="-conf" />
-				<arg value="etc/dorian-configuration.xml" />
-				<arg value="-properties" />
-				<arg value="etc/dorian.properties" />
-				<arg value="-host" />
-				<arg value="${host.input}" />
-				<arg value="-directory" />
-				<arg value="${dir.input}" />
-				<classpath refid="service.run.classpath" />
-			</java>
-		</target>
+	<target name="createDorianHostCredentials" description="Creates host credentials for the Dorian Service." depends="init">
+		<input message="Please enter the host:" addproperty="host.input" />
+		<input message="Please enter the directory to write out the host credentials:" addproperty="dir.input" />
+		<java classname="org.cagrid.gaards.dorian.service.tools.CreateHostCertificate" fork="yes" newenvironment="true" failonerror="true">
+			<arg value="-conf" />
+			<arg value="etc/dorian-configuration.xml" />
+			<arg value="-properties" />
+			<arg value="etc/dorian.properties" />
+			<arg value="-host" />
+			<arg value="${host.input}" />
+			<arg value="-directory" />
+			<arg value="${dir.input}" />
+			<classpath refid="service.run.classpath" />
+		</java>
+	</target>
 
-		<target name="upgrade" description="Upgrades old versions of the Dorian database to the latest version." depends="init">
-			<java classname="org.cagrid.gaards.dorian.service.upgrader.Upgrader" fork="yes" newenvironment="true" failonerror="true">
-				<jvmarg value="-Dlog4j.configuration=file:upgrader-log4j.properties" />
-				<arg value="-conf" />
-				<arg value="etc/dorian-configuration.xml" />
-				<arg value="-properties" />
-				<arg value="etc/dorian.properties" />
-				<arg value="-uconf" />
-				<arg value="etc/dorian-upgrader-configuration.xml" />
-				<classpath refid="service.run.classpath" />
-			</java>
-		</target>
+	<target name="upgrade" description="Upgrades old versions of the Dorian database to the latest version." depends="init">
+		<java classname="org.cagrid.gaards.dorian.service.upgrader.Upgrader" fork="yes" newenvironment="true" failonerror="true">
+			<jvmarg value="-Dlog4j.configuration=file:upgrader-log4j.properties" />
+			<arg value="-conf" />
+			<arg value="etc/dorian-configuration.xml" />
+			<arg value="-properties" />
+			<arg value="etc/dorian.properties" />
+			<arg value="-uconf" />
+			<arg value="etc/dorian-upgrader-configuration.xml" />
+			<classpath refid="service.run.classpath" />
+		</java>
+	</target>
 
-		<target name="testUpgrade" description="Tests upgrading old versions of the Dorian database to the latest version." depends="init">
-			<java classname="org.cagrid.gaards.dorian.service.upgrader.Upgrader" fork="yes" newenvironment="true" failonerror="true">
-				<jvmarg value="-Dlog4j.configuration=file:upgrader-log4j.properties" />
-				<arg value="-conf" />
-				<arg value="etc/dorian-configuration.xml" />
-				<arg value="-properties" />
-				<arg value="etc/dorian.properties" />
-				<arg value="-uconf" />
-				<arg value="etc/dorian-upgrader-configuration.xml" />
-				<arg value="-trial" />
-				<classpath refid="service.run.classpath" />
-			</java>
-		</target>
+	<target name="testUpgrade" description="Tests upgrading old versions of the Dorian database to the latest version." depends="init">
+		<java classname="org.cagrid.gaards.dorian.service.upgrader.Upgrader" fork="yes" newenvironment="true" failonerror="true">
+			<jvmarg value="-Dlog4j.configuration=file:upgrader-log4j.properties" />
+			<arg value="-conf" />
+			<arg value="etc/dorian-configuration.xml" />
+			<arg value="-properties" />
+			<arg value="etc/dorian.properties" />
+			<arg value="-uconf" />
+			<arg value="etc/dorian-upgrader-configuration.xml" />
+			<arg value="-trial" />
+			<classpath refid="service.run.classpath" />
+		</java>
+	</target>
 
-		<target name="generateTrustReport" description="Generates a Grid Trust Report." depends="init">
-			<input message="Please enter a file location to write the report to [grid-trust-report.txt]:" addproperty="out.input" defaultvalue="grid-trust-report.txt" />
-			<java classname="org.cagrid.gaards.pki.tools.GenerateTrustReport" fork="true" newenvironment="true" failonerror="true">
-				<arg value="-o" />
-				<arg value="${out.input}" />
-				<classpath refid="run.classpath" />
-			</java>
-		</target>
+	<target name="generateTrustReport" description="Generates a Grid Trust Report." depends="init">
+		<input message="Please enter a file location to write the report to [grid-trust-report.txt]:" addproperty="out.input" defaultvalue="grid-trust-report.txt" />
+		<java classname="org.cagrid.gaards.pki.tools.GenerateTrustReport" fork="true" newenvironment="true" failonerror="true">
+			<arg value="-o" />
+			<arg value="${out.input}" />
+			<classpath refid="run.classpath" />
+		</java>
+	</target>
 
-		<target name="adminEracomHSM" description="Brings up the Eracom Admin tool." depends="init">
-			<java classname="jprov.tools.admin.CtAdmin" fork="true" newenvironment="true" failonerror="true">
-				<classpath refid="service.run.classpath" />
-			</java>
-		</target>
+	<target name="adminEracomHSM" description="Brings up the Eracom Admin tool." depends="init">
+		<java classname="jprov.tools.admin.CtAdmin" fork="true" newenvironment="true" failonerror="true">
+			<classpath refid="service.run.classpath" />
+		</java>
+	</target>
 
-		<target name="manageEracomKeys" description="Brings up the Eracom Admin tool." depends="init">
-			<java classname="jprov.tools.kmu.KMU" fork="true" newenvironment="true" failonerror="true">
-				<classpath refid="service.run.classpath" />
-			</java>
-		</target>
+	<target name="manageEracomKeys" description="Brings up the Eracom Admin tool." depends="init">
+		<java classname="jprov.tools.kmu.KMU" fork="true" newenvironment="true" failonerror="true">
+			<classpath refid="service.run.classpath" />
+		</java>
+	</target>
 
 
 </project>

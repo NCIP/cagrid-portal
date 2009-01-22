@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <project name="Introduce Developer Modified Build File" basedir=".">
 
-  <import file="taverna-build.xml"/>
+	<import file="taverna-build.xml" />
 
 	<property environment="env" />
 	<property file="${basedir}/project.properties" />
@@ -21,11 +21,11 @@
 	<property name="ext.targetgrid.dir" location="${ext.dir}/target_grid" />
 	<property name="ext.lib.dir" location="${ext.dependencies.dir}/service/jars" />
 	<property name="ext.test.lib" value="${ext.dependencies.dir}/test/jars" />
-        <property name="ext.tools.lib.dir" location="${ext.dependencies.dir}/tools/jars" />
+	<property name="ext.tools.lib.dir" location="${ext.dependencies.dir}/tools/jars" />
 
 
 	<!-- overide the introduce location of this which is suposed to be in tools/lib -->
-        <property name="ant.contrib.location" value="${ext.tools.lib.dir}/ant-contrib-1.0b3.jar" />
+	<property name="ant.contrib.location" value="${ext.tools.lib.dir}/ant-contrib-1.0b3.jar" />
 
 
 	<!-- ============================================================== -->
@@ -43,47 +43,13 @@
 		<fileset id="templates.fileset" dir="${basedir}">
 			<include name="*.template" />
 		</fileset>
-		<!-- We need to basically reverse the mapper used in the copy to 
-	                 identify the target files -->
-		<fileset id="template.results.fileset" dir="${basedir}">
-			<include name="*" />
-			<present targetdir="${basedir}">
-				<mapper type="glob" from="*" to="*.template" />
-			</present>
-		</fileset>
 
-		<!-- First, create any target file that doesn't exist; outofdate doesn't handle this case -->
-		<copy todir="${basedir}">
-			<fileset dir="${basedir}">
-				<include name="*.template" />
-				<not>
-					<present targetdir="${basedir}">
-						<mapper type="glob" from="*.template" to="*" />
-					</present>
-				</not>
-			</fileset>
+		<copy todir="${basedir}" overwrite="true">
+			<fileset refid="templates.fileset" />
 			<mapper type="glob" from="*.template" to="*" />
 			<filterset filtersfile="${ext.targetgrid.dir}/service_urls.properties" />
 		</copy>
 
-		<!-- Next, re-template all the files, if either the filter value files or the template files 
-	                 are newer than the their targets -->
-		<outofdate verbose="true">
-			<sourcefiles>
-				<pathelement path="${ext.targetgrid.dir}/service_urls.properties" />
-				<fileset refid="templates.fileset" />
-			</sourcefiles>
-			<targetfiles>
-				<fileset refid="template.results.fileset" />
-			</targetfiles>
-			<sequential>
-				<copy todir="${basedir}" overwrite="true">
-					<fileset refid="templates.fileset" />
-					<mapper type="glob" from="*.template" to="*" />
-					<filterset filtersfile="${ext.targetgrid.dir}/service_urls.properties" />
-				</copy>
-			</sequential>
-		</outofdate>
 	</target>
 
 
@@ -113,21 +79,21 @@
 		</path>
 		<path id="run.extended.classpath">
 		</path>
-		
+
 		<path id="tasks.run.extended.classpath">
-                  <!--      <fileset dir="${ext.lib.dir}">
+			<!--      <fileset dir="${ext.lib.dir}">
                                 <include name="caGrid-core*.jar" />
                                 <include name="jdom*.jar" />
                         </fileset>
 		  -->
-                        <fileset dir="${ext.lib.dir}">
-                                <include name="**/*.jar" />
-                        </fileset>
-                        <fileset dir="${ext.tools.lib.dir}">
-                                <include name="*.jar" />
-                        </fileset>
+			<fileset dir="${ext.lib.dir}">
+				<include name="**/*.jar" />
+			</fileset>
+			<fileset dir="${ext.tools.lib.dir}">
+				<include name="*.jar" />
+			</fileset>
 
-                </path>
+		</path>
 
 	</target>
 
@@ -266,9 +232,9 @@
 			<formatter type="xml" />
 			<batchtest fork="yes" todir="${junit.results.dir}">
 				<fileset dir="${test.src.dir}">
-					<include name="**/Basic*.java"/>
-                                        <include name="**/Test*.java" />
-                                        <include name="**/*TestCase.java" />
+					<include name="**/Basic*.java" />
+					<include name="**/Test*.java" />
+					<include name="**/*TestCase.java" />
 				</fileset>
 			</batchtest>
 		</junit>
