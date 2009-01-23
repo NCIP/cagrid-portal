@@ -26,7 +26,7 @@ import org.cagrid.mms.test.system.steps.CheckMetadataStep;
 
 public class MetadataModelServiceStory extends ServiceStoryBase {
 
-    private static final String SERVICE_TEMP_PATH = "tmp/TempGME";
+    private static final String SERVICE_TEMP_PATH = "tmp/TempMMS";
     private static final String RESULTS_TEMP_PATH = "tmp/results";
     private static final String MMS_URL_PATH = "cagrid/MetadataModelService";
     private static final String PATH_TO_MMS_PROJECT = "../../../caGrid/projects/mms";
@@ -73,17 +73,17 @@ public class MetadataModelServiceStory extends ServiceStoryBase {
     @Override
     protected Vector<Step> steps() {
         Vector<Step> steps = new Vector<Step>();
-        File tempGMEServiceDir = new File(SERVICE_TEMP_PATH);
+        File tempMMSServiceDir = new File(SERVICE_TEMP_PATH);
 
         // SETUP
         steps.add(new UnpackContainerStep(getContainer()));
-        steps.add(new CopyServiceStep(getMMSDir(), tempGMEServiceDir));
+        steps.add(new CopyServiceStep(getMMSDir(), tempMMSServiceDir));
 
         // CONFIGURE
-        // steps.add(new SetDatabasePropertiesStep(tempGMEServiceDir));
-        // steps.add(new CreateDatabaseStep(tempGMEServiceDir));
+        // steps.add(new SetDatabasePropertiesStep(tempMMSServiceDir));
+        // steps.add(new CreateDatabaseStep(tempMMSServiceDir));
 
-        DeployServiceStep deployStep = new DeployServiceStep(getContainer(), tempGMEServiceDir.getAbsolutePath(),
+        DeployServiceStep deployStep = new DeployServiceStep(getContainer(), tempMMSServiceDir.getAbsolutePath(),
             Arrays.asList(new String[]{"-Dno.deployment.validation=true"}));
         steps.add(deployStep);
         steps.add(new StartContainerStep(getContainer()));
