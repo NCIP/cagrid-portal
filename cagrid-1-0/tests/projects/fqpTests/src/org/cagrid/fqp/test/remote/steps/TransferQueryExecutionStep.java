@@ -236,7 +236,7 @@ public class TransferQueryExecutionStep extends BaseQueryExecutionStep {
             LOG.debug("RELEASING TRANSFER CONTEXT");
             transferClient.destroy();
         } catch (RemoteException ex) {
-            LOG.warn("Error destroying transfer context: " + ex.getMessage(), ex);
+            LOG.error("Error destroying transfer context: " + ex.getMessage(), ex);
         }
         LOG.debug("TRANSFER AND VALIDATE COMPLETE");
     }
