@@ -10,7 +10,7 @@ import gov.nih.nci.cagrid.testing.system.haste.Step;
 import gov.nih.nci.cagrid.testing.system.haste.Story;
 
 import java.io.File;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Vector;
 
@@ -24,7 +24,7 @@ import org.cagrid.fqp.test.common.steps.UnzipServiceStep;
  * @author David Ervin
  * 
  * @created Jul 9, 2008 11:46:02 AM
- * @version $Id: DataServiceDeploymentStory.java,v 1.6 2008-11-16 02:06:01 hastings Exp $ 
+ * @version $Id: DataServiceDeploymentStory.java,v 1.7 2009-01-23 16:34:31 dervin Exp $ 
  */
 public class DataServiceDeploymentStory extends Story implements ServiceContainerSource {
     
@@ -54,13 +54,15 @@ public class DataServiceDeploymentStory extends Story implements ServiceContaine
     
 
     public String getDescription() {
-        return "Deploys a " + (secureDeployment ? "secure " : "") + "data service to a local service container and starts it up";
+        return "Deploys a " + (secureDeployment ? "secure " : "") 
+            + "data service to a local service container and starts it up";
     }
     
     
     public boolean storySetUp() {
         try {
-            ServiceContainerType containerType = secureDeployment ? ServiceContainerType.SECURE_TOMCAT_CONTAINER : ServiceContainerType.TOMCAT_CONTAINER;
+            ServiceContainerType containerType = secureDeployment ?
+                ServiceContainerType.SECURE_TOMCAT_CONTAINER : ServiceContainerType.TOMCAT_CONTAINER;
             dataServiceContainer = ServiceContainerFactory.createContainer(containerType);
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -97,9 +99,10 @@ public class DataServiceDeploymentStory extends Story implements ServiceContaine
         Vector<Step> steps = new Vector<Step>();
         steps.add(new UnpackContainerStep(dataServiceContainer));
         steps.add(new UnzipServiceStep(dataServiceZip, temp));
-        List args = new ArrayList();
-        args.add("-Dno.deployment.validation=true");
-        steps.add(new DeployServiceStep(dataServiceContainer, temp.getAbsolutePath(),args));
+        List<String> args = Arrays.asList(new String[] {
+            "-Dno.deployment.validation=true"
+        });
+        steps.add(new DeployServiceStep(dataServiceContainer, temp.getAbsolutePath(), args));
         steps.add(new DeleteDirectoryStep(temp));
         steps.add(new StartContainerStep(dataServiceContainer));
         return steps;
