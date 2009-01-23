@@ -14,6 +14,7 @@ import java.rmi.RemoteException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -153,8 +154,24 @@ public class FederatedQueryProcessorImpl extends FederatedQueryProcessorImplBase
             Runtime.getRuntime().addShutdownHook(new Thread() {
                 public void run() {
                     LOG.info("Running FQP execution shutdown hook.");
-                    workManager.shutdownNow();
-                    LOG.error("FQP execution pool has been shut down.");
+                    workManager.shutdown();
+                    LOG.info("FQP work manager has been shut down, awaiting termination.");
+                    try {
+                        workManager.awaitTermination(15, TimeUnit.SECONDS);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        LOG.error("Execption caught while waiting for FQP execution shutdown", ex);
+                    }
+                    if (workManager.isShutdown()) {
+                        LOG.info("FQP execution pool has been shut down.");
+                    } else {
+                        LOG.error("FQP execution pool was NOT shut down.");
+                    }
+                    if (workManager.isTerminated()) {
+                        LOG.info("FQP execution pool has been terminated.");
+                    } else {
+                        LOG.error("FQP execution pool was NOT terminated.");
+                    }
                 }
             });
         }
