@@ -18,7 +18,9 @@ import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainerFactory;
 import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainerType;
 import gov.nih.nci.cagrid.testing.system.deployment.steps.CopyServiceStep;
 import gov.nih.nci.cagrid.testing.system.deployment.steps.DeployServiceStep;
+import gov.nih.nci.cagrid.testing.system.deployment.steps.DestroyContainerStep;
 import gov.nih.nci.cagrid.testing.system.deployment.steps.StartContainerStep;
+import gov.nih.nci.cagrid.testing.system.deployment.steps.StopContainerStep;
 import gov.nih.nci.cagrid.testing.system.deployment.steps.UnpackContainerStep;
 import gov.nih.nci.cagrid.testing.system.deployment.story.ServiceStoryBase;
 import gov.nih.nci.cagrid.testing.system.haste.Step;
@@ -27,10 +29,10 @@ import gov.nih.nci.cagrid.workflow.test.system.steps.CheckTavernaWorkflowService
 
 public class TavernaWorkflowServiceStory extends ServiceStoryBase {
 
-	private static final String SERVICE_TEMP_PATH = "tmp/TempGME";
+	private static final String SERVICE_TEMP_PATH = "tmp/TempTWS";
 	private static final String RESULTS_TEMP_PATH = "tmp/results";
 	private static final String TWS_URL_PATH = "cagrid/TavernaWorkflowService";
-	private static final String PATH_TO_MMS_PROJECT = "../../../caGrid/projects/TavernaWorkflowServices";
+	private static final String PATH_TO_TWS_PROJECT = "../../../caGrid/projects/TavernaWorkflowServices";
 	public static final String TWS_DIR_PROPERTY = "tws.service.dir";
 
 
@@ -63,14 +65,29 @@ public class TavernaWorkflowServiceStory extends ServiceStoryBase {
 
 
 	protected File getTWSDir() {
-		String value = System.getProperty(TWS_DIR_PROPERTY, PATH_TO_MMS_PROJECT);
+		String value = System.getProperty(TWS_DIR_PROPERTY, PATH_TO_TWS_PROJECT);
 		assertNotNull("System property " + TWS_DIR_PROPERTY + " was not set!", value);
 		File dir = new File(value);
 		return dir;
 	}
 
 
+	 @Override
+	    protected void storyTearDown() throws Throwable {
 
+	        StopContainerStep step2 = new StopContainerStep(getContainer());
+	        try {
+	            step2.runStep();
+	        } catch (Throwable e) {
+	            e.printStackTrace();
+	        }
+	        DestroyContainerStep step3 = new DestroyContainerStep(getContainer());
+	        try {
+	            step3.runStep();
+	        } catch (Throwable e) {
+	            e.printStackTrace();
+	        }
+	    }
 
 	@Override
 	protected Vector steps() {
