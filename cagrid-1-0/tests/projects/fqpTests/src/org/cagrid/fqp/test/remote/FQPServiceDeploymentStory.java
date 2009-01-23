@@ -26,31 +26,39 @@ import org.cagrid.fqp.test.remote.steps.ChangeJndiSweeperDelayStep;
  * @author David Ervin
  * 
  * @created Jul 15, 2008 12:46:02 PM
- * @version $Id: FQPServiceDeploymentStory.java,v 1.7 2009-01-15 18:33:40 dervin Exp $ 
+ * @version $Id: FQPServiceDeploymentStory.java,v 1.8 2009-01-23 16:36:24 dervin Exp $ 
  */
 public class FQPServiceDeploymentStory extends Story implements ServiceContainerSource {
     
     private File fqpServiceDirectory;
+    private File transferServiceDirectory;
     
     private ServiceContainer fqpServiceContainer;
     private boolean secureDeployment;
     private boolean complete;
     
     public FQPServiceDeploymentStory(File fqpDir, boolean secureDeployment) {
+        this(fqpDir, null, secureDeployment);
+    }
+    
+    
+    public FQPServiceDeploymentStory(File fqpDir, File transferDir, boolean secureDeployment) {
         this.fqpServiceDirectory = fqpDir;
+        this.transferServiceDirectory = transferDir;
         this.secureDeployment = secureDeployment;
         this.complete = false;
     }
     
     
     public String getName() {
-        return (secureDeployment ? "Secure " : "") + "FQP Service Deployment";
+        return (secureDeployment ? "Secure " : "") + "FQP Service Deployment" 
+            + (transferServiceDirectory != null ? " With Transfer" : "");
     }
     
 
     public String getDescription() {
-        return "Deploys the FQP service to a " + (secureDeployment ? "secure " : "") +
-                "local service container and starts it";
+        return "Deploys the FQP service " + (transferServiceDirectory != null ? "with transfer" : "") 
+            + " to a " + (secureDeployment ? "secure " : "") + "local service container and starts it";
     }
     
     
@@ -80,17 +88,37 @@ public class FQPServiceDeploymentStory extends Story implements ServiceContainer
 
     protected Vector steps() {
         Vector<Step> steps = new Vector<Step>();
+        // unpack the container
+        steps.add(new UnpackContainerStep(fqpServiceContainer));
+        
+        // copy FQP to a temp dir
         File tempFqpServiceDir = new File("tmp/Temp" + (secureDeployment ? "Secure" : "") + "FQP");
         System.out.println("Copying FQP for pre-deployment to " + tempFqpServiceDir.getAbsolutePath());
-        steps.add(new UnpackContainerStep(fqpServiceContainer));
         steps.add(new CopyServiceStep(fqpServiceDirectory, tempFqpServiceDir));
+        // configure the resource sweeper delay
         steps.add(new ChangeJndiSweeperDelayStep(tempFqpServiceDir, 2000));
+        // deploy FQP
         List<String> args = Arrays.asList(new String[] {"-Dno.deployment.validation=true"});
         steps.add(new DeployServiceStep(fqpServiceContainer, tempFqpServiceDir.getAbsolutePath(), args));
+        
+        // transfer?
+        if (transferServiceDirectory != null) {
+            // copy Transfer to a temp dir
+            File tempTransferServiceDir = new File("tmp/TempTransferService");
+            System.out.println("Copying Transfer for pre-deployment to " + tempFqpServiceDir.getAbsolutePath());
+            steps.add(new CopyServiceStep(transferServiceDirectory, tempTransferServiceDir));
+            // deploy transfer
+            steps.add(new DeployServiceStep(fqpServiceContainer, tempTransferServiceDir.getAbsolutePath(), args));
+        }        
+        
+        // start the container
         steps.add(new StartContainerStep(fqpServiceContainer));
+        
+        // url information step
         steps.add(new Step() {
             public void runStep() throws Throwable {
-                System.out.println("FQP SERVICE URL SHOULD BE " + fqpServiceContainer.getServiceEPR("cagrid/FederatedQueryProcessor").getAddress().toString());
+                System.out.println("FQP SERVICE URL SHOULD BE " 
+                    + fqpServiceContainer.getServiceEPR("cagrid/FederatedQueryProcessor").getAddress().toString());
             }
         });
         return steps;

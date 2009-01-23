@@ -24,7 +24,7 @@ import org.junit.Test;
  * @author David Ervin
  * 
  * @created Jul 10, 2008 10:57:40 AM
- * @version $Id: RemoteFqpSystemTests.java,v 1.18 2009-01-16 17:26:11 dervin Exp $ 
+ * @version $Id: RemoteFqpSystemTests.java,v 1.19 2009-01-23 16:36:24 dervin Exp $ 
  */
 public class RemoteFqpSystemTests {
     
@@ -34,7 +34,8 @@ public class RemoteFqpSystemTests {
     public static final String TRANSFER_SERVICE_DIR_PROPERTY = "transfer.service.dir";
     
     private DataServiceDeploymentStory[] dataServiceDeployments;
-    private FQPServiceDeploymentStory fqpDeployment;
+    private FQPServiceDeploymentStory standardFqpDeployment;
+    private FQPServiceDeploymentStory transferFqpDeployment;
     
     
     @Test
@@ -57,51 +58,49 @@ public class RemoteFqpSystemTests {
             exampleService1Deployment, exampleService2Deployment
         };
         
-        // deploy the FQP service
-        fqpDeployment = new FQPServiceDeploymentStory(getFqpDir(), false);
+        // deploy the plain FQP service
+        standardFqpDeployment = new FQPServiceDeploymentStory(getFqpDir(), false);
+        standardFqpDeployment.runBare();
         
-        fqpDeployment.runBare();
+        // deploy the FQP with transfer service
+        transferFqpDeployment = new FQPServiceDeploymentStory(getFqpDir(), getTransferDir(), false);
+        transferFqpDeployment.runBare();
         
-        FederatedQueryProcessorHelper queryHelper = 
-            new FederatedQueryProcessorHelper(fqpDeployment);
+        // query helpers
+        FederatedQueryProcessorHelper standardQueryHelper = 
+            new FederatedQueryProcessorHelper(standardFqpDeployment);
         
         // initialize ws-notification client side
         NotificationClientSetupStory notificationSetupStory = new NotificationClientSetupStory();
         notificationSetupStory.runBare();
         
         // run standard queries
-        QueryStory queryTests = new QueryStory(containerSources, queryHelper);
+        QueryStory queryTests = new QueryStory(containerSources, standardQueryHelper);
         queryTests.runBare();
         
         // run the aggregation queries
-        AggregationStory aggregationTests = new AggregationStory(containerSources, queryHelper);
+        AggregationStory aggregationTests = new AggregationStory(containerSources, standardQueryHelper);
         aggregationTests.runBare();
         
         // run asynchronous queries
         AsynchronousExecutionStory asynchronousStory = 
-            new AsynchronousExecutionStory(containerSources, fqpDeployment);
+            new AsynchronousExecutionStory(containerSources, standardFqpDeployment);
         asynchronousStory.runBare();
 
         // run enumeration queries
         EnumerationExecutionStory enumerationStory = 
-            new EnumerationExecutionStory(containerSources, fqpDeployment);
+            new EnumerationExecutionStory(containerSources, standardFqpDeployment);
         enumerationStory.runBare();
 
         // run partial results queries
         PartialResultsStory partialResultsStory = 
-            new PartialResultsStory(containerSources, fqpDeployment);
+            new PartialResultsStory(containerSources, standardFqpDeployment);
         partialResultsStory.runBare();
-        
-        // deploy transfer to the FQP container
-        TransferServiceDeploymentStory transferDeployStory = 
-            new TransferServiceDeploymentStory(getTransferDir(), fqpDeployment);
-        transferDeployStory.runBare();
         
         // run transfer queries
         TransferExecutionStory transferStory = 
-            new TransferExecutionStory(containerSources, fqpDeployment);
+            new TransferExecutionStory(containerSources, transferFqpDeployment);
 		transferStory.runBare();
-        
     }
     
     
@@ -136,8 +135,21 @@ public class RemoteFqpSystemTests {
             }
         }
         try {
-            if (fqpDeployment != null && fqpDeployment.getServiceContainer() != null) {
-                ServiceContainer fqpContainer = fqpDeployment.getServiceContainer();
+            if (standardFqpDeployment != null && standardFqpDeployment.getServiceContainer() != null) {
+                ServiceContainer fqpContainer = standardFqpDeployment.getServiceContainer();
+                // give FQP container 2 minutes to shut down
+                fqpContainer.getProperties().setMaxShutdownWaitTime(Integer.valueOf(120));
+                new StopContainerStep(fqpContainer).runStep();
+                new DestroyContainerStep(fqpContainer).runStep();
+            }
+        } catch (Throwable ex) {
+            ex.printStackTrace();
+        }
+        try {
+            if (transferFqpDeployment != null && transferFqpDeployment.getServiceContainer() != null) {
+                ServiceContainer fqpContainer = transferFqpDeployment.getServiceContainer();
+                // give FQP container 2 minutes to shut down
+                fqpContainer.getProperties().setMaxShutdownWaitTime(Integer.valueOf(120));
                 new StopContainerStep(fqpContainer).runStep();
                 new DestroyContainerStep(fqpContainer).runStep();
             }
