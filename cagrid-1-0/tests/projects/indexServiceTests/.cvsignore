@@ -4,3 +4,4 @@ logs
 log
 tmp
 junit*.properties
+bin
