@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.workflow.test.system;
+package gov.nih.nci.cagrid.workflow.test.system.steps;
 
 import java.io.BufferedWriter;
 import java.io.File;
