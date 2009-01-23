@@ -97,5 +97,6 @@
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xercesImpl.jar" sourcepath="/GT4_LOCATION/Xerces-J-src.2.6.2.zip"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xml-apis.jar"/>
 	<classpathentry kind="var" path="GT4_LOCATION/lib/xmlsec.jar"/>
+	<classpathentry kind="lib" path="lib/ant.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
