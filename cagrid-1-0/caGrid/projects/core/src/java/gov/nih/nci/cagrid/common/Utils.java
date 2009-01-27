@@ -58,6 +58,7 @@ public class Utils {
 		}
 	}
 
+    
 	public static File getCaGridUserHome() {
 		String userHome = System.getProperty("user.home");
 		File userHomeF = new File(userHome);
@@ -69,6 +70,7 @@ public class Utils {
 		return caGridCache;
 	}
 
+    
 	public static File getTrustedCerificatesDirectory() {
 		String caDir = CoGProperties.getDefault().getCaCertLocations();
 		if (caDir != null) {
@@ -85,10 +87,12 @@ public class Utils {
 		}
 	}
 
+    
 	public static void validateGlobusCredential(GlobusCredential cred)
 			throws ProxyPathValidatorException {
 		validateCertificateChain(cred.getCertificateChain());
 	}
+    
 
 	public static void validateCertificateChain(X509Certificate[] chain)
 			throws ProxyPathValidatorException {
@@ -99,6 +103,7 @@ public class Utils {
 						.getDefaultCertificateRevocationLists());
 
 	}
+    
 
 	public static String getExceptionMessage(Throwable e) {
 		String mess = e.getMessage();
@@ -136,6 +141,7 @@ public class Utils {
 		return simplifyErrorMessage(mess);
 	}
 
+    
 	public static String simplifyErrorMessage(String m) {
 		if ((m == null) || (m.equalsIgnoreCase("null"))) {
 			m = "Unknown Error";
@@ -146,6 +152,7 @@ public class Utils {
 		}
 		return m;
 	}
+    
 
 	public static Object deserializeDocument(String fileName, Class objectType)
 			throws Exception {
@@ -158,6 +165,7 @@ public class Utils {
 		inputStream.close();
 		return obj;
 	}
+    
 
 	public static void copyFile(File in, File out) throws IOException {
         File inCannon = in.getCanonicalFile();
@@ -187,6 +195,7 @@ public class Utils {
 		fos.flush();
 		fos.close();
 	}
+    
 
 	// Copies all files under srcDir to dstDir.
 	// If dstDir does not exist, it will be created.
@@ -206,6 +215,7 @@ public class Utils {
 			copyFile(srcDir, dstDir);
 		}
 	}
+    
 
 	public static boolean deleteDir(File dir) {
 		if (dir.isDirectory()) {
@@ -221,6 +231,7 @@ public class Utils {
 		}
 		return dir.delete();
 	}
+    
 
 	/**
 	 * Merges the two arrays (not necessarily creating a new array). If both are
@@ -246,6 +257,7 @@ public class Utils {
 
 		return newArray;
 	}
+    
 
 	/**
 	 * Appends to an array
@@ -265,6 +277,7 @@ public class Utils {
 		Array.set(newArray, Array.getLength(newArray) - 1, appendix);
 		return newArray;
 	}
+    
 
 	/**
 	 * Removed an object from an array.
@@ -288,6 +301,7 @@ public class Utils {
 		System.arraycopy(temp.toArray(), 0, newArray, 0, temp.size());
 		return newArray;
 	}
+    
 
 	public static StringBuffer fileToStringBuffer(File file) throws IOException {
 		BufferedReader br = new BufferedReader(new FileReader(file));
@@ -303,6 +317,7 @@ public class Utils {
 
 		return sb;
 	}
+    
 
 	public static StringBuffer inputStreamToStringBuffer(InputStream stream)
 			throws IOException {
@@ -316,6 +331,7 @@ public class Utils {
 		reader.close();
 		return str;
 	}
+    
 
 	/**
 	 * Serialize an Object to XML
@@ -359,6 +375,7 @@ public class Utils {
 		// writer.close();
 		writer.flush();
 	}
+    
 
 	public static void serializeObject(Object obj, QName qname, Writer writer)
 			throws Exception {
@@ -386,6 +403,7 @@ public class Utils {
 		// writer.close();
 		writer.flush();
 	}
+    
 
 	/**
 	 * Deserializes XML into an object
@@ -408,6 +426,7 @@ public class Utils {
 		return ConfigurableObjectDeserializer.toObject(xmlSource, clazz, wsdd);
 	}
 
+    
 	public static Object deserializeObject(Reader xmlReader, Class clazz)
 			throws Exception {
 		org.w3c.dom.Document doc = XMLUtils.newDocument(new InputSource(
@@ -417,6 +436,7 @@ public class Utils {
 		return obj;
 	}
 
+    
 	public static void serializeDocument(String fileName, Object object,
 			QName qname) throws Exception {
 		FileWriter fw = null;
@@ -424,6 +444,7 @@ public class Utils {
 		ObjectSerializer.serialize(fw, object, qname);
 		fw.close();
 	}
+    
 
 	public static String clean(String s) {
 		if ((s == null) || (s.trim().length() == 0)) {
@@ -433,6 +454,7 @@ public class Utils {
 		}
 	}
 
+    
 	public static void stringBufferToFile(StringBuffer string, String fileName)
 			throws IOException {
 		FileWriter fw = new FileWriter(new File(fileName));
@@ -440,12 +462,14 @@ public class Utils {
 		fw.close();
 	}
 
+    
 	public static boolean equals(Object o1, Object o2) {
 		if (o1 == null) {
 			return o2 == null;
 		}
 		return o1.equals(o2);
 	}
+    
 
 	/**
 	 * Gets the QName that Axis has registered for the given java class
@@ -458,6 +482,7 @@ public class Utils {
 		return MessageContext.getCurrentContext().getTypeMapping()
 				.getTypeQName(clazz);
 	}
+    
 
 	/**
 	 * Gets the Class that Axis has registerd for the given QName
@@ -470,6 +495,7 @@ public class Utils {
 		return MessageContext.getCurrentContext().getTypeMapping()
 				.getClassForQName(qname);
 	}
+    
 
 	public static List<File> recursiveListFiles(File baseDir,
 			final FileFilter filter) {
@@ -489,6 +515,7 @@ public class Utils {
 		}
 		return files;
 	}
+    
 
 	/**
 	 * Gets a relative path from the source file to the destination
@@ -517,9 +544,14 @@ public class Utils {
 
 		// find the overlap in the source and dest paths
 		String overlap = findOverlap(sourceDir, destDir);
-		if (overlap.endsWith(File.separator)) {
-			overlap = overlap.substring(0, overlap.length()
-					- File.separator.length() - 1);
+        // strip off a training File.separator
+        if (overlap.endsWith(File.separator)) {
+            if (overlap.equals(File.separator)) {
+                overlap = "";
+            } else {
+                overlap = overlap.substring(0, overlap.length()
+                    - File.separator.length() - 1);
+            }
 		}
 		int overlapDirs = countChars(overlap, File.separatorChar);
 		if (overlapDirs == 0) {
@@ -554,6 +586,7 @@ public class Utils {
 		}
 		return relPath.toString();
 	}
+    
 
 	private static String findOverlap(String s1, String s2) {
 		// TODO: More efficient would be some kind of binary search, divide and
@@ -571,6 +604,7 @@ public class Utils {
 		}
 		return overlap.toString();
 	}
+    
 
 	private static int countChars(String s, char c) {
 		int count = 0;
@@ -580,12 +614,13 @@ public class Utils {
 		}
 		return count;
 	}
+    
 
 	public static Object cloneBean(Object bean, QName qname) throws Exception {
 		StringWriter writer = new StringWriter();
 		serializeObject(bean, qname, writer);
 		return deserializeObject(
-				new StringReader(writer.getBuffer().toString()), bean
-						.getClass());
+				new StringReader(writer.getBuffer().toString()),
+                    bean.getClass());
 	}
 }
