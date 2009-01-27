@@ -132,7 +132,7 @@ Build Instructions:
 	</target>
 	
 	<target name="fixLog4jConf" >
-		<copy file="${basedir}/log4j.xml" toFile="${log4j}" />
+		<copy overwrite="true" file="${basedir}/log4j.xml" toFile="${log4j}" />
 	</target>
 
 	<target name="fixResourceServicePortType" if="resolutionService.exists">

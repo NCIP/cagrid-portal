@@ -53,7 +53,7 @@ public class DeployServiceTask extends BasicTask {
         String antTarget = "";
         if (model.isTomcatContainer()) {
             antTarget = getDeployTomcatTarget();
-        } else if (!model.isJBossContainer()) {
+        } else if (model.isJBossContainer()) {
             antTarget = getDeployJBossTarget();
         }
         new AntExecutionTask("", "", getBuildFilePath(model), antTarget, env, sysProps).execute(model);
