@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package gov.nih.nci.cagrid.portal.portlet.news;
 
@@ -13,65 +13,74 @@ import gov.nih.nci.cagrid.portal.domain.news.NewsItem;
 
 import org.springframework.web.portlet.ModelAndView;
 import org.springframework.web.portlet.mvc.AbstractController;
+import org.apache.commons.logging.LogFactory;
+import org.apache.commons.logging.Log;
 
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
  *
  */
 public class ViewNewsSummaryController extends AbstractController {
-	
-	private String successView;
-	private NewsItemDao newsItemDao;
-	private int newsItemsLimit = 10;
-	private String rssUrl;
 
-	/**
-	 * 
-	 */
-	public ViewNewsSummaryController() {
+    private String successView;
+    private NewsItemDao newsItemDao;
+    private int newsItemsLimit = 10;
+    private String rssUrl;
 
-	}
-	
-	protected ModelAndView handleRenderRequestInternal(RenderRequest request,
-            RenderResponse response)
-     throws Exception{
-		ModelAndView mav = new ModelAndView(getSuccessView());
-		List<NewsItem> items = getNewsItemDao().getLatestNewsItems(getNewsItemsLimit());
-		mav.addObject("items", items);
-		mav.addObject("rssUrl", getRssUrl());
-		return mav;
-	}
+    private static final Log logger = LogFactory.getLog(ViewNewsSummaryController.class);
+    /**
+     *
+     */
+    public ViewNewsSummaryController() {
 
-	public String getSuccessView() {
-		return successView;
-	}
+    }
 
-	public void setSuccessView(String successView) {
-		this.successView = successView;
-	}
+    protected ModelAndView handleRenderRequestInternal(RenderRequest request,
+                                                       RenderResponse response)
+            throws Exception{
+        ModelAndView mav = new ModelAndView(getSuccessView());
+        try {
 
-	public NewsItemDao getNewsItemDao() {
-		return newsItemDao;
-	}
+            List<NewsItem> items = getNewsItemDao().getLatestNewsItems(getNewsItemsLimit());
+            mav.addObject("items", items);
+        } catch (Exception e) {
+            logger.error(e);
+        }
 
-	public void setNewsItemDao(NewsItemDao newsItemDao) {
-		this.newsItemDao = newsItemDao;
-	}
+        mav.addObject("rssUrl", getRssUrl());
+        return mav;
+    }
 
-	public int getNewsItemsLimit() {
-		return newsItemsLimit;
-	}
+    public String getSuccessView() {
+        return successView;
+    }
 
-	public void setNewsItemsLimit(int newsItemsLimit) {
-		this.newsItemsLimit = newsItemsLimit;
-	}
+    public void setSuccessView(String successView) {
+        this.successView = successView;
+    }
 
-	public String getRssUrl() {
-		return rssUrl;
-	}
+    public NewsItemDao getNewsItemDao() {
+        return newsItemDao;
+    }
 
-	public void setRssUrl(String rssUrl) {
-		this.rssUrl = rssUrl;
-	}
+    public void setNewsItemDao(NewsItemDao newsItemDao) {
+        this.newsItemDao = newsItemDao;
+    }
+
+    public int getNewsItemsLimit() {
+        return newsItemsLimit;
+    }
+
+    public void setNewsItemsLimit(int newsItemsLimit) {
+        this.newsItemsLimit = newsItemsLimit;
+    }
+
+    public String getRssUrl() {
+        return rssUrl;
+    }
+
+    public void setRssUrl(String rssUrl) {
+        this.rssUrl = rssUrl;
+    }
 
 }
