@@ -24,7 +24,7 @@ import org.junit.Test;
  * @author David Ervin
  * 
  * @created Jul 10, 2008 10:57:40 AM
- * @version $Id: RemoteFqpSystemTests.java,v 1.19 2009-01-23 16:36:24 dervin Exp $ 
+ * @version $Id: RemoteFqpSystemTests.java,v 1.20 2009-01-27 17:56:47 dervin Exp $ 
  */
 public class RemoteFqpSystemTests {
     
@@ -65,6 +65,12 @@ public class RemoteFqpSystemTests {
         // deploy the FQP with transfer service
         transferFqpDeployment = new FQPServiceDeploymentStory(getFqpDir(), getTransferDir(), false);
         transferFqpDeployment.runBare();
+        
+        // run query constraint checking stories
+        QueryConstraintsStory constraintsStory =
+            new QueryConstraintsStory(containerSources, standardFqpDeployment, 
+                standardFqpDeployment.getTempFqpServiceDir());
+        constraintsStory.runBare();
         
         // query helpers
         FederatedQueryProcessorHelper standardQueryHelper = 

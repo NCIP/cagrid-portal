@@ -11,9 +11,12 @@ import gov.nih.nci.cagrid.fqp.results.stubs.types.InternalErrorFault;
 import gov.nih.nci.cagrid.fqp.stubs.types.FederatedQueryProcessingFault;
 
 import java.rmi.RemoteException;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.logging.Log;
@@ -32,7 +35,7 @@ public class FederatedQueryProcessorImpl extends FederatedQueryProcessorImplBase
     protected static Log LOG = LogFactory.getLog(FederatedQueryProcessorImpl.class.getName());
 
     private FQPAsynchronousExecutionUtil asynchronousExecutor = null;
-    private ExecutorService workManager = null;
+    private ThreadPoolExecutor workManager = null;
     private QueryConstraintsValidator queryConstraintsValidator = null;
 
 
@@ -51,6 +54,16 @@ public class FederatedQueryProcessorImpl extends FederatedQueryProcessorImplBase
 
     public gov.nih.nci.cagrid.dcqlresult.DCQLQueryResultsCollection execute(gov.nih.nci.cagrid.dcql.DCQLQuery query)
         throws RemoteException, gov.nih.nci.cagrid.fqp.stubs.types.FederatedQueryProcessingFault {
+        // validate the query constraints before trying to do anything else
+        try {
+            queryConstraintsValidator.validateAgainstConstraints(query, null);
+        } catch (FederatedQueryProcessingException ex) {
+            FaultHelper helper = new FaultHelper(new FederatedQueryProcessingFault());
+            helper.addDescription("Query or query execution parameters violate this service's query constraints");
+            helper.addDescription(ex.getMessage());
+            helper.addFaultCause(ex);
+            throw (FederatedQueryProcessingFault) helper.getFault();
+        }
         FederatedQueryEngine engine = new FederatedQueryEngine(null, null);
         DCQLQueryResultsCollection results = null;
         try {
@@ -70,6 +83,16 @@ public class FederatedQueryProcessorImpl extends FederatedQueryProcessorImplBase
     public gov.nih.nci.cagrid.cqlresultset.CQLQueryResults executeAndAggregateResults(
         gov.nih.nci.cagrid.dcql.DCQLQuery query) throws RemoteException,
         gov.nih.nci.cagrid.fqp.stubs.types.FederatedQueryProcessingFault {
+        // validate the query constraints before trying to do anything else
+        try {
+            queryConstraintsValidator.validateAgainstConstraints(query, null);
+        } catch (FederatedQueryProcessingException ex) {
+            FaultHelper helper = new FaultHelper(new FederatedQueryProcessingFault());
+            helper.addDescription("Query or query execution parameters violate this service's query constraints");
+            helper.addDescription(ex.getMessage());
+            helper.addFaultCause(ex);
+            throw (FederatedQueryProcessingFault) helper.getFault();
+        }
         FederatedQueryEngine engine = new FederatedQueryEngine(null, null);
         CQLQueryResults results = null;
         try {
@@ -88,6 +111,16 @@ public class FederatedQueryProcessorImpl extends FederatedQueryProcessorImplBase
 
     public gov.nih.nci.cagrid.fqp.results.stubs.types.FederatedQueryResultsReference executeAsynchronously(
         gov.nih.nci.cagrid.dcql.DCQLQuery query) throws RemoteException {
+        // validate the query constraints before trying to do anything else
+        try {
+            queryConstraintsValidator.validateAgainstConstraints(query, null);
+        } catch (FederatedQueryProcessingException ex) {
+            FaultHelper helper = new FaultHelper(new FederatedQueryProcessingFault());
+            helper.addDescription("Query or query execution parameters violate this service's query constraints");
+            helper.addDescription(ex.getMessage());
+            helper.addFaultCause(ex);
+            throw (FederatedQueryProcessingFault) helper.getFault();
+        }
         FederatedQueryResultsReference ref = null;
         try {
             ref = getAsynchronousExecutor().executeAsynchronousQuery(query, null, null);
@@ -140,21 +173,25 @@ public class FederatedQueryProcessorImpl extends FederatedQueryProcessorImplBase
             // with the JVM
             ThreadFactory threadFactory = new ThreadFactory() {
                 ThreadFactory base = Executors.defaultThreadFactory();
-
+                private int numThreads = 0;
 
                 public Thread newThread(Runnable runnable) {
+                    LOG.debug("CREATING THREAD #" + numThreads + " FOR THE POOL");
                     Thread t = base.newThread(runnable);
                     t.setDaemon(true);
+                    numThreads++;
                     return t;
                 }
             };
-            this.workManager = Executors.newFixedThreadPool(poolSize, threadFactory);
+            this.workManager = (ThreadPoolExecutor) Executors.newFixedThreadPool(poolSize, threadFactory);
             // adds shutdown hook to the JVM to force work manager shutdown
             LOG.debug("Adding JVM shutdown hook to terminate federated query execution thread pool");
             Runtime.getRuntime().addShutdownHook(new Thread() {
                 public void run() {
                     LOG.info("Running FQP execution shutdown hook.");
-                    workManager.shutdown();
+                    workManager.setKeepAliveTime(0, TimeUnit.SECONDS);
+                    List<Runnable> remainingTasks = workManager.shutdownNow();
+                    LOG.info("There were " + remainingTasks.size() + " tasks left in the worker queue at shutdown.");
                     LOG.info("FQP work manager has been shut down, awaiting termination.");
                     try {
                         workManager.awaitTermination(15, TimeUnit.SECONDS);
@@ -162,6 +199,7 @@ public class FederatedQueryProcessorImpl extends FederatedQueryProcessorImplBase
                         ex.printStackTrace();
                         LOG.error("Execption caught while waiting for FQP execution shutdown", ex);
                     }
+                    LOG.info("Done waiting for FQP work manager to terminate.");
                     if (workManager.isShutdown()) {
                         LOG.info("FQP execution pool has been shut down.");
                     } else {

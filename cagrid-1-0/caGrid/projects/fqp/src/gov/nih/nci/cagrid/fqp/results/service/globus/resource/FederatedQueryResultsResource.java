@@ -6,6 +6,7 @@ import gov.nih.nci.cagrid.fqp.processor.exceptions.FederatedQueryProcessingExcep
 import gov.nih.nci.cagrid.fqp.results.stubs.types.InternalErrorFault;
 
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
 import java.util.concurrent.RejectedExecutionException;
 
 import javax.xml.namespace.QName;
@@ -39,6 +40,9 @@ public class FederatedQueryResultsResource extends FederatedQueryResultsResource
     private ExecutorService workExecutor;
     private GlobusCredential delegatedCredential;
     private QueryExecutionParameters executionParameters;
+    
+    // pending query execution
+    private Future queryFuture = null;
 
     // result values of this resource
     private String statusMessage = null;
@@ -128,13 +132,27 @@ public class FederatedQueryResultsResource extends FederatedQueryResultsResource
             new QueryExecutionTask(query, delegatedCredential, executionParameters, workExecutor, listener);
         try {
             listener.processingStatusChanged(ProcessingStatus.Waiting_To_Begin, "Scheduling query for execution");
-            workExecutor.execute(queryWork);
+            this.queryFuture = workExecutor.submit(queryWork);
         } catch (RejectedExecutionException ex) {
             String message = "Error scheduling query: " + ex.getMessage();
             listener.processingStatusChanged(ProcessingStatus.Complete_With_Error, message);
             FederatedQueryProcessingException fqpException = new FederatedQueryProcessingException(message, ex);
             setProcessingException(fqpException);
             throw fqpException;
+        }
+    }
+    
+    
+    /**
+     * Additional implementation cancels the query execution task if it hasn't
+     * already begun executing
+     */
+    public void remove() throws ResourceException {
+        LOG.debug("Removing resource");
+        super.remove();
+        if (queryFuture != null) {
+            LOG.debug("Canceling query execution work");
+            queryFuture.cancel(true);
         }
     }
     

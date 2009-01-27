@@ -1,5 +1,6 @@
 package org.cagrid.fqp.test.remote;
 
+import gov.nih.nci.cagrid.fqp.common.FQPConstants;
 import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainer;
 import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainerFactory;
 import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainerType;
@@ -15,7 +16,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Vector;
 
+import org.cagrid.fqp.execution.TargetDataServiceQueryBehavior;
 import org.cagrid.fqp.test.common.ServiceContainerSource;
+import org.cagrid.fqp.test.remote.steps.ChangeFqpServiceProperties;
 import org.cagrid.fqp.test.remote.steps.ChangeJndiSweeperDelayStep;
 
 /** 
@@ -26,7 +29,7 @@ import org.cagrid.fqp.test.remote.steps.ChangeJndiSweeperDelayStep;
  * @author David Ervin
  * 
  * @created Jul 15, 2008 12:46:02 PM
- * @version $Id: FQPServiceDeploymentStory.java,v 1.8 2009-01-23 16:36:24 dervin Exp $ 
+ * @version $Id: FQPServiceDeploymentStory.java,v 1.9 2009-01-27 17:56:48 dervin Exp $ 
  */
 public class FQPServiceDeploymentStory extends Story implements ServiceContainerSource {
     
@@ -36,6 +39,7 @@ public class FQPServiceDeploymentStory extends Story implements ServiceContainer
     private ServiceContainer fqpServiceContainer;
     private boolean secureDeployment;
     private boolean complete;
+    private File tempFqpServiceDir;
     
     public FQPServiceDeploymentStory(File fqpDir, boolean secureDeployment) {
         this(fqpDir, null, secureDeployment);
@@ -92,11 +96,15 @@ public class FQPServiceDeploymentStory extends Story implements ServiceContainer
         steps.add(new UnpackContainerStep(fqpServiceContainer));
         
         // copy FQP to a temp dir
-        File tempFqpServiceDir = new File("tmp/Temp" + (secureDeployment ? "Secure" : "") + "FQP");
+        this.tempFqpServiceDir = new File("tmp/Temp" + (secureDeployment ? "Secure" : "") + "FQP");
         System.out.println("Copying FQP for pre-deployment to " + tempFqpServiceDir.getAbsolutePath());
         steps.add(new CopyServiceStep(fqpServiceDirectory, tempFqpServiceDir));
         // configure the resource sweeper delay
         steps.add(new ChangeJndiSweeperDelayStep(tempFqpServiceDir, 2000));
+        // change the deployment properties
+        TargetDataServiceQueryBehavior defaultBehavior = FQPConstants.DEFAULT_TARGET_QUERY_BEHAVIOR;
+        steps.add(new ChangeFqpServiceProperties(tempFqpServiceDir, 
+            1, defaultBehavior.getTimeoutPerRetry().intValue(), 12, 5));
         // deploy FQP
         List<String> args = Arrays.asList(new String[] {"-Dno.deployment.validation=true"});
         steps.add(new DeployServiceStep(fqpServiceContainer, tempFqpServiceDir.getAbsolutePath(), args));
@@ -131,5 +139,10 @@ public class FQPServiceDeploymentStory extends Story implements ServiceContainer
                 "Deployment Story has not completed to create a working service container!");
         }
         return fqpServiceContainer;
+    }
+    
+    
+    public File getTempFqpServiceDir() {
+        return tempFqpServiceDir;
     }
 }
