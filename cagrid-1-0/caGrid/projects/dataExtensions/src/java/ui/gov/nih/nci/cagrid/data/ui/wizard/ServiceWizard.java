@@ -3,6 +3,7 @@ package gov.nih.nci.cagrid.data.ui.wizard;
 import gov.nih.nci.cagrid.common.portal.PortalLookAndFeel;
 
 import java.awt.CardLayout;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Frame;
 import java.awt.GridBagConstraints;
@@ -23,6 +24,9 @@ import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 import javax.swing.border.TitledBorder;
 
+import org.cagrid.grape.ApplicationContext;
+import org.cagrid.grape.GridApplication;
+
 /** 
  *  ServiceWizard
  *  A wizard to simplify creation of a grid service model, which
@@ -31,16 +35,20 @@ import javax.swing.border.TitledBorder;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created Sep 25, 2006 
- * @version $Id: ServiceWizard.java,v 1.3 2008-01-23 19:56:37 dervin Exp $ 
+ * @version $Id: ServiceWizard.java,v 1.4 2009-01-27 18:17:31 dervin Exp $ 
  */
 public class ServiceWizard extends JDialog {
 
 	public static final String DONE_BUTTON_TEXT = "Done";
+    
+    public static final Dimension STANDARD_SIZE = new java.awt.Dimension(640, 325);
+    public static final Dimension MAX_SIZE = new java.awt.Dimension(STANDARD_SIZE.width * 2, STANDARD_SIZE.height * 2);
 	
 	private List<AbstractWizardPanel> panelSequence;
 	private int currentPanelIndex;
 	private String baseTitle;
 	private boolean wizardDone;
+    private boolean alreadyShown;
 	
 	private Font stepFont = null;
 	private JLabel stepLabel = null;
@@ -64,6 +72,7 @@ public class ServiceWizard extends JDialog {
 		this.panelSequence = new ArrayList<AbstractWizardPanel>();
 		this.currentPanelIndex = 0;
 		this.baseTitle = baseTitle;
+        this.alreadyShown = false;
 		this.wizardDone = false;
 		this.stepFont = new Font("Dialog", java.awt.Font.ITALIC, 10);
 		initialize();
@@ -104,14 +113,6 @@ public class ServiceWizard extends JDialog {
 	}
 	
 	
-	public boolean removePanel(AbstractWizardPanel panel) {
-		if (isVisible()) {
-			throw new IllegalStateException("Cannot remove panels while showing wizard!");
-		}
-		return panelSequence.remove(panel);
-	}
-	
-	
 	public AbstractWizardPanel getPanelAt(int index) {
 		return panelSequence.get(index);
 	}
@@ -124,12 +125,25 @@ public class ServiceWizard extends JDialog {
 	}
 	
 	
-	public void showAt(int x, int y) {
-		setLocation(x, y);
-		// get labels and buttons set up
-		initPanelLayout();
-		loadWizardPanel(panelSequence.get(0));
-		setVisible(true);
+	public void setVisible(boolean visible) {
+	    if (visible && !alreadyShown) {
+	        // load panels into the UI
+	        initPanelLayout();
+	        // load the first panel
+	        loadWizardPanel(panelSequence.get(0));
+	        // adjust size of the wizard dialog
+	        Dimension preferred = getPreferredSize();
+	        int width = Math.min(MAX_SIZE.width, Math.max(STANDARD_SIZE.width, preferred.width));
+	        int height = Math.min(MAX_SIZE.height, Math.max(STANDARD_SIZE.height, preferred.height));
+            System.out.println("Setting wizard size to " + width + ", " + height);
+	        setSize(width, height);
+            ApplicationContext appContext = GridApplication.getContext();
+            if (appContext != null) {
+                appContext.centerDialog(this);
+            }
+            alreadyShown = true;
+        }
+        super.setVisible(visible);
 	}
 	
 	
@@ -158,7 +172,9 @@ public class ServiceWizard extends JDialog {
 	
 	
 	private void initialize() {
-        this.setSize(new java.awt.Dimension(640, 325));
+        // start with the standard wizard size.
+        // This can grow up to MAXIMUM_SIZE based on what panels are added to it
+        this.setSize(STANDARD_SIZE);
         this.setContentPane(getMainPanel());
         this.setTitle(baseTitle);
         this.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);

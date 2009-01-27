@@ -25,6 +25,8 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -52,7 +54,7 @@ import org.cagrid.grape.utils.CompositeErrorDialog;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * @created Aug 1, 2006
- * @version $Id: DataServiceCreationDialog.java,v 1.5 2007-11-15 01:28:39 dervin Exp $
+ * @version $Id: DataServiceCreationDialog.java,v 1.6 2009-01-27 18:17:31 dervin Exp $
  */
 public class DataServiceCreationDialog extends CreationExtensionUIDialog {
     // default service style is "None / Custom Data Source"
@@ -187,8 +189,7 @@ public class DataServiceCreationDialog extends CreationExtensionUIDialog {
                                 System.out.println("Adding panel " + panel.getPanelShortName());
                                 wiz.addWizardPanel(panel);
                             }
-                            GridApplication.getContext().centerDialog(wiz);
-                            wiz.showAt(wiz.getX(), wiz.getY());
+                            wiz.setVisible(true);
                         }
                     }
                     dispose();
@@ -400,6 +401,14 @@ public class DataServiceCreationDialog extends CreationExtensionUIDialog {
             try {
                 styleComboBox.addItem(DEFAULT_SERVICE_STYLE);
                 List<ServiceStyleContainer> styles = ServiceStyleLoader.getAvailableStyles();
+                // sort styles by name
+                Collections.sort(styles, new Comparator<ServiceStyleContainer>() {
+                    public int compare(ServiceStyleContainer o1, ServiceStyleContainer o2) {
+                        String name1 = o1.getServiceStyle().getName().toLowerCase();
+                        String name2 = o2.getServiceStyle().getName().toLowerCase();
+                        return name1.compareTo(name2);
+                    }
+                });
                 for (ServiceStyleContainer container : styles) {
                     styleComboBox.addItem(container);
                 }
