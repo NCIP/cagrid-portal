@@ -10,7 +10,6 @@
 
   <configurations>
     <!-- Public Configurations-->
-    <conf name="impl-test" visibility="private"/>
     <conf name="impl" visibility="private"/>
     <conf name="default" visibility="public"/>
   </configurations>
@@ -25,7 +24,6 @@
 
     <!-- External Dependencies -->
     <dependency rev="1.14" org="oopsconsultancy" name="xmltask"/>
-    <dependency rev="4.4" org="junit" name="junit" conf="impl-test->default"/>
     <dependency rev="2.0.0" org="jgoodies" name="validation" conf="impl->default"/>
 
   </dependencies>

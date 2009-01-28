@@ -6,10 +6,5 @@
 	<property name="ivy-shared-targets.file" location="${basedir}/../../antfiles/ivy/ivy-shared-targets.xml" />
 	<import file="${ivy-shared-targets.file}" />
 
-	<target name="do.resolve-dependencies" depends="pre.resolve-dependencies">
-		<ivy:retrieve conf="${ivy.resolve.configurations}" pattern="${ivy.resolved.artifacts.pattern}" sync="true" />
-		<ivy:retrieve conf="impl-test" pattern="${ivy.resolved.artifacts.dir}/dependencies/test/[type]s/[originalname](.[ext])" sync="true" type="*"/>
-	</target>
-
 </project>
 
