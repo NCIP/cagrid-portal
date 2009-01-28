@@ -17,6 +17,6 @@
   <publications/>
 
   <dependencies>
-    <dependency rev="4.0.+" org="globus" name="mds" conf="*->gars"/>
+    <dependency rev="4.0.3-bigindex" org="globus" name="mds" conf="*->gars"/>
   </dependencies>  
 </ivy-module>

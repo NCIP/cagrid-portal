@@ -14,7 +14,7 @@
 	<!-- a list of packages which will get debugged in any containers run by this test -->
 	<property name="service.debug.packages" value="gov.nih.nci.cagrid.advertisement,org.globus.wsrf.servicegroup"/>
 	<!-- soap debugging option -->
-	<property name="service.debug.soap" value="true"/>
+	<property name="service.debug.soap" value="false"/>
 	
 	<target name="prepareClasspaths">
 		<path id="all.test.classpath">

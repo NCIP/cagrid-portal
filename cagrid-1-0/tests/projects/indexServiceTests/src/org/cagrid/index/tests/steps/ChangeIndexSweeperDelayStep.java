@@ -49,7 +49,7 @@ public class ChangeIndexSweeperDelayStep extends Step {
     public void runStep() throws IOException {
         editConfig(new File(indexServiceContainer.getProperties().getContainerDirectory(), 
             "webapps" + File.separator + "wsrf" + File.separator + "WEB-INF" + File.separator
-            + "etc" + File.separator + "globus_wsrf_mds_index"
+            + "etc" + File.separator + "globus_wsrf_mds_bigindex"
             + File.separator + "jndi-config.xml"), this.sweeperDelay);
     }
 
@@ -63,11 +63,12 @@ public class ChangeIndexSweeperDelayStep extends Step {
             fail("Problem loading Index Service config (" + indexConfigFile.getAbsolutePath() + "):" + e.getMessage());
         }
 
+        boolean found=false;
         List serviceEls = jndiDoc.getRootElement().getChildren("service", jndiDoc.getRootElement().getNamespace());
         for (int serviceI = 0; serviceI < serviceEls.size(); serviceI++) {
             Element serviceEl = (Element) serviceEls.get(serviceI);
             String serviceName = serviceEl.getAttributeValue("name");
-            if (serviceName.equals("IndexService")) {
+            if (serviceName.equals("DefaultIndexService")) {
                 List resourceEls = serviceEl.getChildren("resource", serviceEl.getNamespace());
                 for (int resourceI = 0; resourceI < resourceEls.size(); resourceI++) {
                     Element resourceEl = (Element) resourceEls.get(resourceI);
@@ -97,9 +98,15 @@ public class ChangeIndexSweeperDelayStep extends Step {
                         param.addContent(paramValue);
                         // add the param to the params
                         params.addContent(param);
+                        
+                        found=true;
                     }
                 }
             }
+        }
+        
+        if(!found){
+            fail("Unable to locate service in JNDI, so couldn't change sweeper delay!");
         }
 
         try {
