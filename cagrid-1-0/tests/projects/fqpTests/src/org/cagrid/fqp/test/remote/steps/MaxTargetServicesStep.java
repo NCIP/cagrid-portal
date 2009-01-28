@@ -14,6 +14,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.cagrid.fqp.test.common.UrlReplacer;
 import org.cagrid.fqp.test.common.steps.BaseQueryExecutionStep;
+import org.oasis.wsrf.faults.BaseFaultType;
 
 public class MaxTargetServicesStep extends BaseQueryExecutionStep {
     
@@ -54,11 +55,24 @@ public class MaxTargetServicesStep extends BaseQueryExecutionStep {
             fail("Query accepted, despite " + query.getTargetServiceURL().length 
                 + " target service URLs");
         } catch (Exception ex) {
-            // TODO: axis fault wraps this...
             // query processing exception expected, others not so much
-            assertTrue("Unexpected exception type caught: " + ex.getClass().getSimpleName(), 
-                ex instanceof FederatedQueryProcessingFault);
+            if (!(ex instanceof BaseFaultType && isFqpException((BaseFaultType) ex))) {
+                fail("Unexpected exception type caught: " + ex.getClass().getSimpleName());
+            }
         }
+    }
+    
+    
+    private boolean isFqpException(BaseFaultType fault) {
+        if (fault instanceof FederatedQueryProcessingFault) {
+            return true;
+        }
+        for (BaseFaultType cause : fault.getFaultCause()) {
+            if (isFqpException(cause)) {
+                return true;
+            }
+        }
+        return false;
     }
     
     
@@ -69,8 +83,9 @@ public class MaxTargetServicesStep extends BaseQueryExecutionStep {
                 + " target service URLs");
         } catch (Exception ex) {
             // query processing exception expected, others not so much
-            assertTrue("Unexpected exception type caught: " + ex.getClass().getSimpleName(), 
-                ex instanceof FederatedQueryProcessingFault);
+            if (!(ex instanceof BaseFaultType && isFqpException((BaseFaultType) ex))) {
+                fail("Unexpected exception type caught: " + ex.getClass().getSimpleName());
+            }
         }
     }
     
@@ -82,8 +97,9 @@ public class MaxTargetServicesStep extends BaseQueryExecutionStep {
                 + " target service URLs");
         } catch (Exception ex) {
             // query processing exception expected, others not so much
-            assertTrue("Unexpected exception type caught: " + ex.getClass().getSimpleName(), 
-                ex instanceof FederatedQueryProcessingFault);
+            if (!(ex instanceof BaseFaultType && isFqpException((BaseFaultType) ex))) {
+                fail("Unexpected exception type caught: " + ex.getClass().getSimpleName());
+            }
         }
     }
     
@@ -95,8 +111,9 @@ public class MaxTargetServicesStep extends BaseQueryExecutionStep {
                 + " target service URLs");
         } catch (Exception ex) {
             // query processing exception expected, others not so much
-            assertTrue("Unexpected exception type caught: " + ex.getClass().getSimpleName(), 
-                ex instanceof FederatedQueryProcessingFault);
+            if (!(ex instanceof BaseFaultType && isFqpException((BaseFaultType) ex))) {
+                fail("Unexpected exception type caught: " + ex.getClass().getSimpleName());
+            }
         }
     }
     

@@ -14,6 +14,7 @@ import org.cagrid.fqp.execution.QueryExecutionParameters;
 import org.cagrid.fqp.execution.TargetDataServiceQueryBehavior;
 import org.cagrid.fqp.test.common.UrlReplacer;
 import org.cagrid.fqp.test.common.steps.BaseQueryExecutionStep;
+import org.oasis.wsrf.faults.BaseFaultType;
 
 public class MaxRetriesStep extends BaseQueryExecutionStep {
     
@@ -59,9 +60,23 @@ public class MaxRetriesStep extends BaseQueryExecutionStep {
                 + " retries setting");
         } catch (Exception ex) {
             // query processing exception expected, others not so much
-            assertTrue("Unexpected exception type caught: " + ex.getClass().getSimpleName(), 
-                ex instanceof FederatedQueryProcessingFault);
+            if (!(ex instanceof BaseFaultType && isFqpException((BaseFaultType) ex))) {
+                fail("Unexpected exception type caught: " + ex.getClass().getSimpleName());
+            }
         }
+    }
+    
+    
+    private boolean isFqpException(BaseFaultType fault) {
+        if (fault instanceof FederatedQueryProcessingFault) {
+            return true;
+        }
+        for (BaseFaultType cause : fault.getFaultCause()) {
+            if (isFqpException(cause)) {
+                return true;
+            }
+        }
+        return false;
     }
     
     
