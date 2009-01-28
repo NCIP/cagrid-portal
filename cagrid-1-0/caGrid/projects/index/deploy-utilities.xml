@@ -17,7 +17,7 @@
 	<property name="jboss.deploy.lib.dir" value="${jboss.deploy.dir}/WEB-INF/lib" />
 	<property name="jboss.deploy.etc.dir" value="${jboss.deploy.dir}/WEB-INF/etc" />
 
-	<property name="jboss.wsrf.schema.dir" value="${jboss.dir}/webapps/${globus.webapp}/share/schema" />
+	<property name="jboss.wsrf.schema.dir" value="${jboss.deploy.dir}/share/schema" />
 
 	<!-- Tomcat Properties -->
 	<property name="tomcat.dir" value="${env.CATALINA_HOME}" />
