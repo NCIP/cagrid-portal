@@ -50,9 +50,10 @@ public class MaxRetriesStep extends BaseQueryExecutionStep {
         // construct parameters
         QueryExecutionParameters params = new QueryExecutionParameters();
         TargetDataServiceQueryBehavior targetBehavior = new TargetDataServiceQueryBehavior();
-        targetBehavior.setFailOnFirstError(FQPConstants.DEFAULT_TARGET_QUERY_BEHAVIOR.getFailOnFirstError());
+        targetBehavior.setFailOnFirstError(Boolean.FALSE);
         targetBehavior.setRetries(Integer.valueOf(maxRetries));
         targetBehavior.setTimeoutPerRetry(FQPConstants.DEFAULT_TARGET_QUERY_BEHAVIOR.getTimeoutPerRetry());
+        params.setTargetDataServiceQueryBehavior(targetBehavior);
         try {
             fqpClient.query(query, null, params);
             fail("Query accepted, despite " 
@@ -61,6 +62,7 @@ public class MaxRetriesStep extends BaseQueryExecutionStep {
         } catch (Exception ex) {
             // query processing exception expected, others not so much
             if (!(ex instanceof BaseFaultType && isFqpException((BaseFaultType) ex))) {
+                ex.printStackTrace();
                 fail("Unexpected exception type caught: " + ex.getClass().getSimpleName());
             }
         }

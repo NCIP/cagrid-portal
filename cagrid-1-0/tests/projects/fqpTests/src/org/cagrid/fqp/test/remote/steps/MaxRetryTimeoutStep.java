@@ -50,7 +50,7 @@ public class MaxRetryTimeoutStep extends BaseQueryExecutionStep {
         // construct parameters
         QueryExecutionParameters params = new QueryExecutionParameters();
         TargetDataServiceQueryBehavior targetBehavior = new TargetDataServiceQueryBehavior();
-        targetBehavior.setFailOnFirstError(FQPConstants.DEFAULT_TARGET_QUERY_BEHAVIOR.getFailOnFirstError());
+        targetBehavior.setFailOnFirstError(Boolean.FALSE);
         targetBehavior.setRetries(FQPConstants.DEFAULT_TARGET_QUERY_BEHAVIOR.getRetries());
         targetBehavior.setTimeoutPerRetry(Integer.valueOf(maxTimeout));
         params.setTargetDataServiceQueryBehavior(targetBehavior);
