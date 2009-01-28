@@ -22,6 +22,6 @@
     <dependency rev="latest.integration" org="caGrid" name="advertisement" conf="default->default" />
     <dependency rev="latest.integration" org="caGrid" name="discovery" conf="default->default" />
     <dependency rev="latest.integration" org="caGrid" name="metadata" conf="default->jars" />
-    <dependency rev="latest.integration" org="caGrid" name="metadataUtils" conf="default->default" />
+    <dependency rev="latest.integration" org="caGrid" name="metadatautils" conf="default->default" />
   </dependencies>
 </ivy-module>
