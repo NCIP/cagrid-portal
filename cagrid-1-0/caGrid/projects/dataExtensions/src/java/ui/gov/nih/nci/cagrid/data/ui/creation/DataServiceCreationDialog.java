@@ -54,7 +54,7 @@ import org.cagrid.grape.utils.CompositeErrorDialog;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * @created Aug 1, 2006
- * @version $Id: DataServiceCreationDialog.java,v 1.6 2009-01-27 18:17:31 dervin Exp $
+ * @version $Id: DataServiceCreationDialog.java,v 1.7 2009-01-29 19:23:56 dervin Exp $
  */
 public class DataServiceCreationDialog extends CreationExtensionUIDialog {
     // default service style is "None / Custom Data Source"
@@ -95,7 +95,7 @@ public class DataServiceCreationDialog extends CreationExtensionUIDialog {
         this.setTitle("Data Service Configuration");
         this.setContentPane(getMainPanel());
         pack();
-        this.setSize(new Dimension(345, 290));
+        this.setSize(new Dimension(500, 300));
     }
 
 
@@ -109,6 +109,7 @@ public class DataServiceCreationDialog extends CreationExtensionUIDialog {
             GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
             gridBagConstraints4.gridx = 0;
             gridBagConstraints4.gridy = 1;
+            gridBagConstraints4.fill = GridBagConstraints.HORIZONTAL;
             GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
             gridBagConstraints1.gridx = 0;
             gridBagConstraints1.fill = GridBagConstraints.BOTH;

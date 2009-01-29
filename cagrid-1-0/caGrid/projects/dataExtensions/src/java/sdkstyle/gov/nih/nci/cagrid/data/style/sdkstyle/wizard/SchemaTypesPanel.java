@@ -51,7 +51,7 @@ import org.cagrid.grape.utils.CompositeErrorDialog;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * @created Sep 26, 2006
- * @version $Id: SchemaTypesPanel.java,v 1.10 2009-01-15 17:02:36 dervin Exp $
+ * @version $Id: SchemaTypesPanel.java,v 1.11 2009-01-29 19:23:56 dervin Exp $
  */
 public class SchemaTypesPanel extends AbstractWizardPanel {
 
@@ -133,7 +133,6 @@ public class SchemaTypesPanel extends AbstractWizardPanel {
         gridBagConstraints3.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints3.gridy = 0;
         this.setLayout(new GridBagLayout());
-        this.setSize(new java.awt.Dimension(505, 209));
         this.add(getGmePanel(), gridBagConstraints3);
         this.add(getPackageNamespaceScrollPane(), gridBagConstraints4);
     }

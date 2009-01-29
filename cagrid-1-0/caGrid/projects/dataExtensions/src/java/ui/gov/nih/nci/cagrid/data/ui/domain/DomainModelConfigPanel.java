@@ -209,7 +209,6 @@ public class DomainModelConfigPanel extends DataServiceModificationSubPanel {
         gridBagConstraints2.gridy = 1;
         gridBagConstraints2.fill = GridBagConstraints.HORIZONTAL;
         this.setLayout(new GridBagLayout());
-        this.setSize(new Dimension(501, 570));
         this.add(getCadsrDomainModelPanel(), gridBagConstraints1);
         this.add(getSpecialtyButtonsPanel(), gridBagConstraints2);
     }

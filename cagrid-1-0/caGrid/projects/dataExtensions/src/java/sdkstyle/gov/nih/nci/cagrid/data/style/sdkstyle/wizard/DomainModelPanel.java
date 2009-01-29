@@ -75,7 +75,7 @@ import org.cagrid.mms.domain.UMLProjectIdentifer;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * @created Sep 25, 2006
- * @version $Id: DomainModelPanel.java,v 1.14 2009-01-15 15:54:20 dervin Exp $
+ * @version $Id: DomainModelPanel.java,v 1.15 2009-01-29 19:23:56 dervin Exp $
  */
 public class DomainModelPanel extends AbstractWizardPanel {
 
@@ -166,7 +166,6 @@ public class DomainModelPanel extends AbstractWizardPanel {
         gridBagConstraints11.gridx = 0;
         gridBagConstraints11.gridy = 0;
         this.setLayout(new GridBagLayout());
-        this.setSize(new java.awt.Dimension(623, 298));
         this.add(getDmSourcePanel(), gridBagConstraints11);
         this.add(getDmFilePanel(), gridBagConstraints12);
         this.add(getCaDsrPanel(), gridBagConstraints13);

@@ -26,7 +26,7 @@ import javax.swing.border.BevelBorder;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * @created Sep 25, 2006
- * @version $Id: CoreDsIntroPanel.java,v 1.3 2007-07-13 15:23:46 dervin Exp $
+ * @version $Id: CoreDsIntroPanel.java,v 1.4 2009-01-29 19:23:56 dervin Exp $
  */
 public abstract class CoreDsIntroPanel extends AbstractWizardPanel {
 
@@ -72,7 +72,6 @@ public abstract class CoreDsIntroPanel extends AbstractWizardPanel {
         gridBagConstraints.insets = new Insets(10, 10, 5, 10);
         gridBagConstraints.gridy = 0;
         this.setLayout(new GridBagLayout());
-        this.setSize(new Dimension(608, 301));
         this.add(getWizardLabel(), gridBagConstraints);
         this.add(getInfoTextScrollPane(), gridBagConstraints1);
     }

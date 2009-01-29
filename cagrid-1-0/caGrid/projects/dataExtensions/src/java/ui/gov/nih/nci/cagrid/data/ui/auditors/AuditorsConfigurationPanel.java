@@ -34,7 +34,7 @@ import org.cagrid.grape.utils.ErrorDialog;
  * @author David Ervin
  * 
  * @created May 21, 2007 10:40:27 AM
- * @version $Id: AuditorsConfigurationPanel.java,v 1.5 2007-12-18 19:11:40 dervin Exp $ 
+ * @version $Id: AuditorsConfigurationPanel.java,v 1.6 2009-01-29 19:23:56 dervin Exp $ 
  */
 public class AuditorsConfigurationPanel extends DataServiceModificationSubPanel {
     
@@ -75,7 +75,6 @@ public class AuditorsConfigurationPanel extends DataServiceModificationSubPanel 
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
         gridBagConstraints.gridy = 0;
         this.setLayout(new GridBagLayout());
-        this.setSize(new Dimension(570, 460));
         this.add(getAuditorSelectionPanel(), gridBagConstraints);
         this.add(getAuditorsTableScrollPane(), gridBagConstraints1);
     }

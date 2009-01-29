@@ -46,7 +46,7 @@ import org.cagrid.grape.utils.CompositeErrorDialog;
  * @author David Ervin
  * 
  * @created Jun 14, 2007 10:14:20 AM
- * @version $Id: DomainModelAdvancedOptionsDialog.java,v 1.4 2009-01-13 15:55:19 dervin Exp $
+ * @version $Id: DomainModelAdvancedOptionsDialog.java,v 1.5 2009-01-29 19:23:56 dervin Exp $
  */
 public class DomainModelAdvancedOptionsDialog extends JDialog {
     public static final String INFORMATION = 
@@ -103,7 +103,7 @@ public class DomainModelAdvancedOptionsDialog extends JDialog {
      */
     private void initialize() {
         loadFromExtensionData();
-        this.setSize(new Dimension(450, 280));
+        this.setSize(new Dimension(550, 350));
         this.setContentPane(getMainPanel());
         GridApplication.getContext().centerDialog(this);
     }

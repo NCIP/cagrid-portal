@@ -32,7 +32,7 @@ import org.cagrid.grape.utils.CompositeErrorDialog;
  * @author David Ervin
  * 
  * @created May 21, 2007 11:38:54 AM
- * @version $Id: AuditorSelectionPanel.java,v 1.5 2007-12-18 19:11:40 dervin Exp $ 
+ * @version $Id: AuditorSelectionPanel.java,v 1.6 2009-01-29 19:23:56 dervin Exp $ 
  */
 public class AuditorSelectionPanel extends JPanel {
 
@@ -119,7 +119,6 @@ public class AuditorSelectionPanel extends JPanel {
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
         this.setLayout(new GridBagLayout());
-        this.setSize(new Dimension(526, 116));
         this.add(getAuditorClassLabel(), gridBagConstraints);
         this.add(getInstanceNameLabel(), gridBagConstraints1);
         this.add(getAuditorClassComboBox(), gridBagConstraints2);

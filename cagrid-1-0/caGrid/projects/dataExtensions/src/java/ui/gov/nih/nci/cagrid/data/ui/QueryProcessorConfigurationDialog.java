@@ -24,7 +24,7 @@ import org.cagrid.grape.GridApplication;
  * @author David Ervin
  * 
  * @created Apr 6, 2007 1:25:32 PM
- * @version $Id: QueryProcessorConfigurationDialog.java,v 1.2 2007-11-06 15:53:41 hastings Exp $ 
+ * @version $Id: QueryProcessorConfigurationDialog.java,v 1.3 2009-01-29 19:23:56 dervin Exp $ 
  */
 public class QueryProcessorConfigurationDialog extends JDialog {
     private CQLQueryProcessorConfigUI configUi = null;
@@ -74,11 +74,6 @@ public class QueryProcessorConfigurationDialog extends JDialog {
         QueryProcessorConfigurationDialog dialog = new QueryProcessorConfigurationDialog(
             configUi, serviceDir, configProperties);
         dialog.pack();
-        /*
-        if (configUi.getPreferredDimension() != null) {
-            dialog.setSize(configUi.getPreferredDimension());
-        }
-        */
         dialog.setVisible(true);
         
         if (dialog.canceled) {
@@ -149,7 +144,6 @@ public class QueryProcessorConfigurationDialog extends JDialog {
             gridBagConstraints.gridx = 0;
             mainPanel = new JPanel();
             mainPanel.setLayout(new GridBagLayout());
-            mainPanel.setSize(new Dimension(221, 176));
             mainPanel.add(configUi, gridBagConstraints);
             mainPanel.add(getButtonPanel(), gridBagConstraints1);
         }

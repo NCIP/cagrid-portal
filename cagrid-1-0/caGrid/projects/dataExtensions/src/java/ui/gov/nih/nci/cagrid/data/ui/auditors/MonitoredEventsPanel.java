@@ -19,7 +19,7 @@ import javax.swing.JPanel;
  * @author David Ervin
  * 
  * @created May 21, 2007 10:50:26 AM
- * @version $Id: MonitoredEventsPanel.java,v 1.2 2007-12-18 19:11:40 dervin Exp $ 
+ * @version $Id: MonitoredEventsPanel.java,v 1.3 2009-01-29 19:23:56 dervin Exp $ 
  */
 public class MonitoredEventsPanel extends JPanel {
 
@@ -65,7 +65,6 @@ public class MonitoredEventsPanel extends JPanel {
         gridLayout.setVgap(2);
         gridLayout.setColumns(2);
         this.setLayout(gridLayout);
-        this.setSize(new Dimension(572, 55));
         this.add(getQueryBeginsCheckBox(), null);
         this.add(getValidationFailureCheckBox(), null);
         this.add(getQueryProcessingFailureCheckBox(), null);
