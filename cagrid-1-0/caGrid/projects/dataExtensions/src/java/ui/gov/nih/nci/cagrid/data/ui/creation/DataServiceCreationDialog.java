@@ -45,6 +45,8 @@ import javax.swing.border.TitledBorder;
 
 import org.cagrid.grape.GridApplication;
 import org.cagrid.grape.utils.CompositeErrorDialog;
+import java.awt.GridLayout;
+import javax.swing.SwingConstants;
 
 
 /**
@@ -54,7 +56,7 @@ import org.cagrid.grape.utils.CompositeErrorDialog;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * @created Aug 1, 2006
- * @version $Id: DataServiceCreationDialog.java,v 1.7 2009-01-29 19:23:56 dervin Exp $
+ * @version $Id: DataServiceCreationDialog.java,v 1.8 2009-01-29 21:35:57 dervin Exp $
  */
 public class DataServiceCreationDialog extends CreationExtensionUIDialog {
     // default service style is "None / Custom Data Source"
@@ -145,6 +147,7 @@ public class DataServiceCreationDialog extends CreationExtensionUIDialog {
             // can only use ws-enumeration if the extension has been installed
             boolean wsEnumInstalled = wsEnumExtensionInstalled();
             this.wsEnumCheckBox.setEnabled(wsEnumInstalled);
+            wsEnumCheckBox.setHorizontalAlignment(SwingConstants.CENTER);
             if (!wsEnumInstalled) {
                 wsEnumCheckBox.setToolTipText(
                     "The caGrid WS-Enumeration service extension is not installed");
@@ -208,31 +211,17 @@ public class DataServiceCreationDialog extends CreationExtensionUIDialog {
      */
     private JPanel getFeaturesPanel() {
         if (this.featuresPanel == null) {
-            GridBagConstraints gridBagConstraints12 = new GridBagConstraints();
-            gridBagConstraints12.gridx = 1;
-            gridBagConstraints12.insets = new Insets(2, 2, 2, 2);
-            gridBagConstraints12.fill = GridBagConstraints.HORIZONTAL;
-            gridBagConstraints12.gridy = 0;
-            GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
-            gridBagConstraints11.gridx = 2;
-            gridBagConstraints11.weightx = 1.0D;
-            gridBagConstraints11.insets = new java.awt.Insets(2, 2, 2, 2);
-            gridBagConstraints11.fill = java.awt.GridBagConstraints.HORIZONTAL;
-            gridBagConstraints11.gridy = 0;
-            GridBagConstraints gridBagConstraints = new GridBagConstraints();
-            gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
-            gridBagConstraints.gridx = 0;
-            gridBagConstraints.gridy = 0;
-            gridBagConstraints.weightx = 1.0D;
-            gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+            GridLayout gridLayout = new GridLayout();
+            gridLayout.setRows(1);
+            gridLayout.setColumns(3);
             this.featuresPanel = new JPanel();
-            this.featuresPanel.setLayout(new GridBagLayout());
-            this.featuresPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Optional Features",
-                javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+            featuresPanel.setLayout(gridLayout);
+            this.featuresPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(
+                null, "Optional Features",javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
                 javax.swing.border.TitledBorder.DEFAULT_POSITION, null, PortalLookAndFeel.getPanelLabelColor()));
-            this.featuresPanel.add(getWsEnumCheckBox(), gridBagConstraints);
-            featuresPanel.add(getGridIdentCheckBox(), gridBagConstraints11);
-            featuresPanel.add(getBdtCheckBox(), gridBagConstraints12);
+            featuresPanel.add(getWsEnumCheckBox());
+            featuresPanel.add(getBdtCheckBox());
+            featuresPanel.add(getGridIdentCheckBox());
         }
         return this.featuresPanel;
     }
@@ -247,6 +236,7 @@ public class DataServiceCreationDialog extends CreationExtensionUIDialog {
         if (this.gridIdentCheckBox == null) {
             this.gridIdentCheckBox = new JCheckBox();
             this.gridIdentCheckBox.setEnabled(false);
+            gridIdentCheckBox.setHorizontalAlignment(SwingConstants.CENTER);
             this.gridIdentCheckBox.setText("Grid Identifier");
         }
         return this.gridIdentCheckBox;
@@ -317,6 +307,7 @@ public class DataServiceCreationDialog extends CreationExtensionUIDialog {
             // can only enable BDT if it has been installed
             boolean bdtInstalled = bdtExtensionInstalled();
             this.bdtCheckBox.setEnabled(bdtInstalled);
+            bdtCheckBox.setHorizontalAlignment(SwingConstants.CENTER);
             if (!bdtInstalled) {
                 bdtCheckBox.setToolTipText("The BDT service extension is not installed");
             }

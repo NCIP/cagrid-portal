@@ -35,14 +35,16 @@ import org.cagrid.grape.GridApplication;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created Sep 25, 2006 
- * @version $Id: ServiceWizard.java,v 1.4 2009-01-27 18:17:31 dervin Exp $ 
+ * @version $Id: ServiceWizard.java,v 1.5 2009-01-29 21:37:12 dervin Exp $ 
  */
 public class ServiceWizard extends JDialog {
 
 	public static final String DONE_BUTTON_TEXT = "Done";
     
     public static final Dimension STANDARD_SIZE = new java.awt.Dimension(640, 325);
-    public static final Dimension MAX_SIZE = new java.awt.Dimension(STANDARD_SIZE.width * 2, STANDARD_SIZE.height * 2);
+    public static final Dimension MAX_SIZE = new java.awt.Dimension(
+        (int) Math.floor(STANDARD_SIZE.width * 1.5D),
+        (int) Math.floor(STANDARD_SIZE.height * 1.5D));
 	
 	private List<AbstractWizardPanel> panelSequence;
 	private int currentPanelIndex;
