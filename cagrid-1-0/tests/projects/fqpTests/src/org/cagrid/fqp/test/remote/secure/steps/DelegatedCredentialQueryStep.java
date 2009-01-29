@@ -16,6 +16,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
+import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.axis.message.addressing.EndpointReferenceType;
@@ -150,7 +151,16 @@ public class DelegatedCredentialQueryStep extends BaseQueryExecutionStep {
     private DCQLQueryResultsCollection queryAndWait(DCQLQuery query, FederatedQueryProcessorClient fqpClient)
         throws FederatedQueryProcessingException, InternalErrorFault, MalformedURIException, RemoteException {
         LOG.debug("Starting work executor service");
-        Executor exec = Executors.newSingleThreadExecutor();
+        ThreadFactory deamonThreadFactory = new ThreadFactory() {
+            private ThreadFactory base = Executors.defaultThreadFactory();
+            
+            public Thread newThread(Runnable run) {
+                Thread t = base.newThread(run);
+                t.setDaemon(true);
+                return t;
+            }
+        };
+        Executor exec = Executors.newSingleThreadExecutor(deamonThreadFactory);
         
         LOG.debug("Awaiting results");
         final FederatedQueryResultsClient resultsClient = fqpClient.query(query, delegationRef, null);
