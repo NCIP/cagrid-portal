@@ -461,7 +461,7 @@ public class Installer {
         incrementProgress();
 
         // deploy the syngGTS anytime we are deploying to a container
-        DeployServiceTask deploySyncGTS = new DeployServiceTask("syncGTS", "Deloying syncGTS", "syncGTS");
+        DeployServiceTask deploySyncGTS = new DeployServiceTask("syncGTS", "Deploying syncGTS", "syncGTS");
         deployContainer.getTasks().add(new ConditionalTask(deploySyncGTS, new Condition() {
 
             public boolean evaluate(WizardModel model) {
