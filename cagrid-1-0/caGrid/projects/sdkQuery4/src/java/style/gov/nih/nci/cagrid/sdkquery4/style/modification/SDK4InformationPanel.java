@@ -10,7 +10,6 @@ import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.sdkquery4.processor.SDK4QueryProcessor;
 
-import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -31,7 +30,7 @@ import javax.swing.border.TitledBorder;
  * @author David Ervin
  * 
  * @created Jul 27, 2007 10:38:51 AM
- * @version $Id: SDK4InformationPanel.java,v 1.2 2008-01-18 21:13:57 dervin Exp $ 
+ * @version $Id: SDK4InformationPanel.java,v 1.3 2009-01-29 20:14:18 dervin Exp $ 
  */
 public class SDK4InformationPanel extends DataServiceModificationSubPanel {
     
@@ -70,7 +69,6 @@ public class SDK4InformationPanel extends DataServiceModificationSubPanel {
         gridBagConstraints2.insets = new Insets(2, 2, 2, 2);
         gridBagConstraints2.gridy = 0;
         this.setLayout(new GridBagLayout());
-        this.setSize(new Dimension(433, 191));
         this.add(getSdkLogoLabel(), gridBagConstraints2);
         this.add(getVersionLabel(), gridBagConstraints4);
         this.add(getStatusPanel(), gridBagConstraints12);

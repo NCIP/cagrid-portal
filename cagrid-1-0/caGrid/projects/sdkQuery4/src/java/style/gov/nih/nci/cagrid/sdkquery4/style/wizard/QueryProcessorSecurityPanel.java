@@ -14,7 +14,6 @@ import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.sdkquery4.processor.SDK4QueryProcessor;
 import gov.nih.nci.cagrid.sdkquery4.style.wizard.config.QueryProcessorSecurityConfigurationStep;
 
-import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -45,7 +44,7 @@ import com.jgoodies.validation.view.ValidationComponentUtils;
  * @author David Ervin
  * 
  * @created Dec 11, 2007 9:56:51 AM
- * @version $Id: QueryProcessorSecurityPanel.java,v 1.4 2008-01-22 14:44:39 dervin Exp $ 
+ * @version $Id: QueryProcessorSecurityPanel.java,v 1.5 2009-01-29 20:14:18 dervin Exp $ 
  */
 public class QueryProcessorSecurityPanel extends AbstractWizardPanel {
     // validation keys
@@ -173,7 +172,6 @@ public class QueryProcessorSecurityPanel extends AbstractWizardPanel {
             gridBagConstraints.gridy = 0;
             mainPanel = new JPanel();
             mainPanel.setLayout(new GridBagLayout());
-            mainPanel.setSize(new Dimension(338, 165));
             mainPanel.add(getUseSecurityCheckBox(), gridBagConstraints);
             mainPanel.add(getSecurityOptionsPanel(), gridBagConstraints11);
         }

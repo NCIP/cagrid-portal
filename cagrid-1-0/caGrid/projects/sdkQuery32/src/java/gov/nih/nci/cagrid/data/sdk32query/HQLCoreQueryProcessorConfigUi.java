@@ -31,7 +31,7 @@ import org.cagrid.grape.utils.CompositeErrorDialog;
  * @author David Ervin
  * 
  * @created Apr 24, 2007 12:06:11 PM
- * @version $Id: HQLCoreQueryProcessorConfigUi.java,v 1.2 2007-11-06 15:53:42 hastings Exp $ 
+ * @version $Id: HQLCoreQueryProcessorConfigUi.java,v 1.3 2009-01-29 20:14:19 dervin Exp $ 
  */
 public class HQLCoreQueryProcessorConfigUi extends CQLQueryProcessorConfigUI {
     
@@ -109,7 +109,7 @@ public class HQLCoreQueryProcessorConfigUi extends CQLQueryProcessorConfigUI {
     
     
     public Dimension getPreferredSize() {
-        return new Dimension(500, 120);
+        return new Dimension(500, 150);
     }
     
     
@@ -126,7 +126,6 @@ public class HQLCoreQueryProcessorConfigUi extends CQLQueryProcessorConfigUI {
         gridBagConstraints8.fill = GridBagConstraints.HORIZONTAL;
         gridBagConstraints8.gridy = 0;
         this.setLayout(new GridBagLayout());
-        this.setSize(new Dimension(556, 164));
         this.add(getCheckBoxPanel(), gridBagConstraints8);
         this.add(getInputPanel(), gridBagConstraints9);
     }

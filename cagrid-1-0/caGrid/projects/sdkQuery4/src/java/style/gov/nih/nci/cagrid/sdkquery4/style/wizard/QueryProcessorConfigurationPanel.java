@@ -13,7 +13,6 @@ import gov.nih.nci.cagrid.introduce.common.ResourceManager;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.sdkquery4.style.wizard.config.QueryProcessorBaseConfigurationStep;
 
-import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -51,7 +50,7 @@ import com.jgoodies.validation.view.ValidationComponentUtils;
  * @author David Ervin
  * 
  * @created Nov 27, 2007 4:50:32 PM
- * @version $Id: QueryProcessorConfigurationPanel.java,v 1.18 2009-01-14 21:16:40 dervin Exp $ 
+ * @version $Id: QueryProcessorConfigurationPanel.java,v 1.19 2009-01-29 20:14:18 dervin Exp $ 
  */
 public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
     // keys for validation
@@ -798,7 +797,6 @@ public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
             gridBagConstraints19.gridy = 1;
             mainPanel = new JPanel();
             mainPanel.setLayout(new GridBagLayout());
-            mainPanel.setSize(new Dimension(626, 305));
             mainPanel.add(getBasicConfigPanel(), gridBagConstraints19);
             mainPanel.add(getApiConfigPanel(), gridBagConstraints20);
             mainPanel.add(getConfigTypePanel(), gridBagConstraints21);

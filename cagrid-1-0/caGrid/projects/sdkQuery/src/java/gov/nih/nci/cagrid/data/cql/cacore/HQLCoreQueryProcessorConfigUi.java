@@ -25,7 +25,7 @@ import javax.swing.JTextField;
  * @author David Ervin
  * 
  * @created Apr 23, 2007 3:49:15 PM
- * @version $Id: HQLCoreQueryProcessorConfigUi.java,v 1.3 2007-04-25 14:29:41 dervin Exp $ 
+ * @version $Id: HQLCoreQueryProcessorConfigUi.java,v 1.4 2009-01-29 20:14:17 dervin Exp $ 
  */
 public class HQLCoreQueryProcessorConfigUi extends CQLQueryProcessorConfigUI {
     
@@ -85,7 +85,7 @@ public class HQLCoreQueryProcessorConfigUi extends CQLQueryProcessorConfigUI {
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
         gridBagConstraints.gridy = 1;
         this.setLayout(new GridBagLayout());
-        this.setSize(new Dimension(399, 95));
+        this.setSize(new Dimension(400, 100));
         this.add(getUrlLabel(), gridBagConstraints);
         this.add(getUrlTextField(), gridBagConstraints1);
         this.add(getCsmContextLabel(), gridBagConstraints2);
@@ -102,7 +102,6 @@ public class HQLCoreQueryProcessorConfigUi extends CQLQueryProcessorConfigUI {
         if (urlLabel == null) {
             urlLabel = new JLabel();
             urlLabel.setText("Remote Service URL:");
-            urlLabel.setSize(new Dimension(85, 27));
         }
         return urlLabel;
     }

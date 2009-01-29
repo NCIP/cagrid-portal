@@ -10,7 +10,6 @@ import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionT
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 
-import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -48,7 +47,7 @@ import com.jgoodies.validation.view.ValidationComponentUtils;
  * @author David Ervin
  * 
  * @created Mar 23, 2007 3:35:47 PM
- * @version $Id: AppserviceConfigPanel.java,v 1.1 2009-01-05 21:31:30 dervin Exp $ 
+ * @version $Id: AppserviceConfigPanel.java,v 1.2 2009-01-29 20:14:17 dervin Exp $ 
  */
 public class AppserviceConfigPanel extends AbstractWizardPanel {
     // keys for validation components
@@ -208,7 +207,6 @@ public class AppserviceConfigPanel extends AbstractWizardPanel {
         if (urlLabel == null) {
             urlLabel = new JLabel();
             urlLabel.setText("Remote Service URL:");
-            urlLabel.setSize(new Dimension(85, 27));
         }
         return urlLabel;
     }

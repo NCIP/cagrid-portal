@@ -15,21 +15,18 @@ import gov.nih.nci.cagrid.introduce.common.FileFilters;
 import gov.nih.nci.cagrid.introduce.common.ResourceManager;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 
-import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
 import java.io.File;
 import java.io.FileFilter;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Properties;
 import java.util.Set;
 import java.util.Vector;
 import java.util.jar.JarEntry;
@@ -63,7 +60,7 @@ import com.jgoodies.validation.view.ValidationComponentUtils;
  * @author David Ervin
  * 
  * @created Jun 4, 2007 1:45:08 PM
- * @version $Id: SDKClientSelectionPanel.java,v 1.1 2009-01-05 21:31:30 dervin Exp $ 
+ * @version $Id: SDKClientSelectionPanel.java,v 1.2 2009-01-29 20:14:17 dervin Exp $ 
  */
 public class SDKClientSelectionPanel extends AbstractWizardPanel {
     // keys for validation components
@@ -166,7 +163,6 @@ public class SDKClientSelectionPanel extends AbstractWizardPanel {
             gridBagConstraints.insets = new Insets(2, 2, 2, 2);
             gridBagConstraints.gridy = 0;
             holder.setLayout(new GridBagLayout());
-            holder.setSize(new Dimension(465, 258));
             holder.add(getQpJarLabel(), gridBagConstraints);
             holder.add(getClientLibDirLabel(), gridBagConstraints1);
             holder.add(getDependsLabel(), gridBagConstraints2);

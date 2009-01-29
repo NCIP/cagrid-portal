@@ -22,7 +22,6 @@ import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 import gov.nih.nci.cagrid.sdkquery4.processor.SDK4QueryProcessor;
 import gov.nih.nci.cagrid.sdkquery4.style.wizard.config.SchemaMappingConfigurationStep;
 
-import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -60,7 +59,7 @@ import org.cagrid.grape.utils.CompositeErrorDialog;
  * 
  * @author David Ervin
  * @created Jan 9, 2008 11:09:22 AM
- * @version $Id: SchemaMappingPanel.java,v 1.8 2009-01-15 00:25:24 dervin Exp $
+ * @version $Id: SchemaMappingPanel.java,v 1.9 2009-01-29 20:14:18 dervin Exp $
  */
 public class SchemaMappingPanel extends AbstractWizardPanel {
 
@@ -155,7 +154,6 @@ public class SchemaMappingPanel extends AbstractWizardPanel {
         gridBagConstraints5.fill = GridBagConstraints.BOTH;
         gridBagConstraints5.gridy = 0;
         this.setLayout(new GridBagLayout());
-        this.setSize(new Dimension(385, 200));
         this.add(getMappingPanel(), gridBagConstraints5);
         this.add(getPackageNamespaceScrollPane(), gridBagConstraints6);
     }

@@ -13,7 +13,6 @@ import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.ResourceManager;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 
-import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -116,7 +115,6 @@ public class AppserviceConfigPanel extends AbstractWizardPanel {
             gridBagConstraints8.gridx = 0;
             gridBagConstraints8.gridy = 0;
             holder.setLayout(new GridBagLayout());
-            holder.setSize(new Dimension(503, 108));
             holder.add(getCheckBoxPanel(), gridBagConstraints8);
             holder.add(getInputPanel(), gridBagConstraints9);
             validationPanel = new IconFeedbackPanel(validationModel, holder);
