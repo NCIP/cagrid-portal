@@ -1,8 +1,6 @@
 package gov.nih.nci.cagrid.data.ui;
 
 import gov.nih.nci.cagrid.data.common.ExtensionDataManager;
-import gov.nih.nci.cagrid.data.extension.ModelClass;
-import gov.nih.nci.cagrid.data.extension.ModelPackage;
 import gov.nih.nci.cagrid.data.style.ServiceStyleContainer;
 import gov.nih.nci.cagrid.data.style.ServiceStyleLoader;
 import gov.nih.nci.cagrid.data.ui.auditors.AuditorsConfigurationPanel;
@@ -31,7 +29,7 @@ import org.cagrid.grape.utils.CompositeErrorDialog;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * @created Oct 10, 2006
- * @version $Id: DataServiceModificationPanel.java,v 1.9 2009-01-13 15:55:19 dervin Exp $
+ * @version $Id: DataServiceModificationPanel.java,v 1.10 2009-01-29 18:52:47 dervin Exp $
  */
 public class DataServiceModificationPanel extends ServiceModificationUIPanel {
     
