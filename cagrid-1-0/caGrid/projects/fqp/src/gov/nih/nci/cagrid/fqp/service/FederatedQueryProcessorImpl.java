@@ -63,7 +63,7 @@ public class FederatedQueryProcessorImpl extends FederatedQueryProcessorImplBase
             helper.addFaultCause(ex);
             throw (FederatedQueryProcessingFault) helper.getFault();
         }
-        FederatedQueryEngine engine = new FederatedQueryEngine(null, null);
+        FederatedQueryEngine engine = new FederatedQueryEngine(null, null, getWorkExecutorService());
         DCQLQueryResultsCollection results = null;
         try {
             results = engine.execute(query);
@@ -92,7 +92,7 @@ public class FederatedQueryProcessorImpl extends FederatedQueryProcessorImplBase
             helper.addFaultCause(ex);
             throw (FederatedQueryProcessingFault) helper.getFault();
         }
-        FederatedQueryEngine engine = new FederatedQueryEngine(null, null);
+        FederatedQueryEngine engine = new FederatedQueryEngine(null, null, getWorkExecutorService());
         CQLQueryResults results = null;
         try {
             results = engine.executeAndAggregateResults(query);

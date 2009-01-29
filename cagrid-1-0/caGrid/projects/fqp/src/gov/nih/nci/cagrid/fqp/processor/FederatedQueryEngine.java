@@ -48,8 +48,10 @@ public class FederatedQueryEngine {
     private List<FQPProcessingStatusListener> statusListeners = null;
 
     /**
-     * Creates a new federated query engine instance.  Either or both parameters
-     * may be null.
+     * Creates a new federated query engine instance.  A default thread pool 
+     * will be used for query execution tasks. Either or both parameters of 
+     * this constructor may be null.
+     * 
      * @param credential
      *      The globus credential to be used when making queries against data services (may be null)
      * @param executionParameters
@@ -62,6 +64,7 @@ public class FederatedQueryEngine {
     
     /**
      * Creates a new federated query engine instance.
+     * 
      * @param credential
      *      The globus credential to be used when making queries against data services (may be null)
      * @param executionParameters
