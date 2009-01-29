@@ -37,7 +37,7 @@ import org.cagrid.grape.utils.CompositeErrorDialog;
  * 
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * @created Sep 27, 2006
- * @version $Id: SchemaResolutionDialog.java,v 1.8 2008-06-05 14:18:13 hastings Exp $
+ * @version $Id: SchemaResolutionDialog.java,v 1.9 2009-01-29 18:52:30 dervin Exp $
  */
 public class SchemaResolutionDialog extends JDialog {
 
@@ -78,7 +78,7 @@ public class SchemaResolutionDialog extends JDialog {
 
     private void initialize() {
         setModal(true);
-        this.setSize(new java.awt.Dimension(400, 330));
+        this.setSize(new java.awt.Dimension(600, 500));
         this.setContentPane(getMainPanel());
         GridApplication.getContext().centerDialog(this);
         this.setVisible(true);
@@ -97,8 +97,6 @@ public class SchemaResolutionDialog extends JDialog {
             this.loadSchemasButton.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
                     SchemaResolutionDialog.this.resolvedSchemas = loadSchemas();
-                    // set the new namespace mapping of the cadsr package
-                    // cadsrPackage.setMappedNamespace(resolvedSchemas[0].getNamespace());
                     dispose();
                 }
             });
