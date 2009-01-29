@@ -87,7 +87,7 @@ public class MappingCustomizationDialog extends JDialog {
     
     
     private void initialize() {
-        this.setSize(new Dimension(420, 350));
+        this.setSize(new Dimension(500, 400));
         this.setContentPane(getMainPanel());
     }
     

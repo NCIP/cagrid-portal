@@ -4,7 +4,6 @@ import gov.nih.nci.cagrid.common.portal.DocumentChangeAdapter;
 import gov.nih.nci.cagrid.common.portal.validation.IconFeedbackPanel;
 import gov.nih.nci.cagrid.metadata.xmi.XmiFileType;
 
-import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -170,7 +169,6 @@ public class ModelFromConfigPanel extends DomainModelSourcePanel {
             gridBagConstraints.insets = new Insets(2, 2, 2, 2);
             gridBagConstraints.gridy = 0;
             mainPanel.setLayout(new GridBagLayout());
-            mainPanel.setSize(new Dimension(332, 126));
             mainPanel.add(getXmiFileLabel(), gridBagConstraints);
             mainPanel.add(getXmiFileTextField(), gridBagConstraints1);
             mainPanel.add(getXmiTypeLabel(), gridBagConstraints2);

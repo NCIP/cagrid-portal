@@ -5,7 +5,6 @@ import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionT
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -97,7 +96,6 @@ public class SchemaMappingPanel extends AbstractWizardPanel {
             gridBagConstraints.gridx = 0;
             mainPanel = new JPanel();
             mainPanel.setLayout(new GridBagLayout());
-            mainPanel.setSize(new Dimension(463, 99));
             mainPanel.add(getSchemaMappingTableScrollPane(), gridBagConstraints);
             mainPanel.add(getAutoMapButton(), gridBagConstraints1);
         }

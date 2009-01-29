@@ -9,7 +9,6 @@ import gov.nih.nci.cagrid.introduce.common.ConfigurationUtil;
 
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -130,7 +129,6 @@ public class ModelFromCaDSRPanel extends DomainModelSourcePanel {
             gridBagConstraints.gridy = 0;
             mainPanel = new JPanel();
             mainPanel.setLayout(new GridBagLayout());
-            mainPanel.setSize(new Dimension(511, 247));
             mainPanel.add(getCadsrBrowser(), gridBagConstraints);
             mainPanel.add(getButtonPanel(), gridBagConstraints1);
             mainPanel.add(getPackagesScrollPane(), gridBagConstraints2);

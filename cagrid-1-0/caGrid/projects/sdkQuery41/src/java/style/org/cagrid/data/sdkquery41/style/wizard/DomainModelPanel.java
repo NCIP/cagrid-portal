@@ -6,7 +6,6 @@ import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 
 import java.awt.CardLayout;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -143,7 +142,6 @@ public class DomainModelPanel extends AbstractWizardPanel {
             gridBagConstraints.gridy = 0;
             mainPanel = new JPanel();
             mainPanel.setLayout(new GridBagLayout());
-            mainPanel.setSize(new Dimension(414, 145));
             mainPanel.add(getModelSourceLabel(), gridBagConstraints);
             mainPanel.add(getModelSourceComboBox(), gridBagConstraints1);
             mainPanel.add(getModelSelectionPanel(), gridBagConstraints2);

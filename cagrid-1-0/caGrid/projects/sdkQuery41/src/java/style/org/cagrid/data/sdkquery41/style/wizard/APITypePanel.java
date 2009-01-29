@@ -9,7 +9,6 @@ import gov.nih.nci.cagrid.introduce.beans.extension.ServiceExtensionDescriptionT
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -178,7 +177,6 @@ public class APITypePanel extends AbstractWizardPanel {
             gridBagConstraints5.gridy = 0;
             mainPanel = new JPanel();
             mainPanel.setLayout(new GridBagLayout());
-            mainPanel.setSize(new Dimension(391, 179));
             mainPanel.add(getApiTypePanel(), gridBagConstraints5);
             mainPanel.add(getRemoteInfoPanel(), gridBagConstraints6);
         }
