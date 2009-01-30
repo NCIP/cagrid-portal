@@ -38,7 +38,7 @@ import org.cagrid.grape.utils.CompositeErrorDialog;
  * @author <A HREF="MAILTO:ervin@bmi.osu.edu">David W. Ervin</A>
  * 
  * @created Sep 26, 2006 
- * @version $Id: PackageSchemasTable.java,v 1.7 2009-01-15 15:57:56 dervin Exp $ 
+ * @version $Id: PackageSchemasTable.java,v 1.8 2009-01-30 17:32:54 dervin Exp $ 
  */
 public class PackageSchemasTable extends JTable {
 
@@ -154,6 +154,16 @@ public class PackageSchemasTable extends JTable {
         NamespaceType[] resolved = SchemaResolutionDialog.resolveSchemas(info);
         if (resolved != null) {
             if (resolved.length != 0 && packageResolvedByNamespace(pack, resolved[0])) {
+                // don't generate stubs, use the ones from the SDK
+                resolved[0].setGenerateStubs(Boolean.FALSE);
+                // add all the resolved namespace types to the service
+                for (int i = 0; i < resolved.length; i++) {
+                    // see if we should actually add the package
+                    if (CommonTools.getNamespaceType(
+                        info.getNamespaces(), resolved[0].getNamespace()) == null) {
+                        CommonTools.addNamespace(info.getServiceDescriptor(), resolved[i]);
+                    }
+                } 
                 try {
                     // set the mapped namespace for the package
                     modelInfoUtil.setMappedNamespace(pack.getPackageName(), resolved[0].getNamespace());
@@ -162,11 +172,6 @@ public class PackageSchemasTable extends JTable {
                     CompositeErrorDialog.showErrorDialog(
                         "Error setting namespace for package " + pack.getPackageName(), ex.getMessage(), ex);
                 }
-                // set the resolution status on the table
-                setValueAt(resolved[0].getNamespace(), dataRow, 1);
-                setValueAt(STATUS_SCHEMA_FOUND, dataRow, 2);
-                // set the package name
-                resolved[0].setPackageName(pack.getPackageName());
                 // determine the serializer and deserialzier to use for the beans
                 String serializerClass = null;
                 if (wizardProperties.containsKey(SchemaTypesPanel.TYPE_SERIALIZER_CLASS_PROPERTY)) {
@@ -182,25 +187,22 @@ public class PackageSchemasTable extends JTable {
                 }
                 // set the serializers / deserializers for the FIRST namespace type's schema elements
                 SchemaElementType[] types = resolved[0].getSchemaElement();
-                for (int i = 0; types != null && i < types.length; i++) {
-                    types[i].setClassName(types[i].getType());
-                    types[i].setSerializer(serializerClass);
-                    types[i].setDeserializer(deserializerClass);
-                }
-                // add all the resolved namespace types to the service
-                for (int i = 0; i < resolved.length; i++) {
-                    // see if we should actually add the package
-                    if (CommonTools.getNamespaceType(
-                        info.getNamespaces(), resolved[0].getNamespace()) == null) {
-                        CommonTools.addNamespace(info.getServiceDescriptor(), resolved[i]);
-                        // namespace excludes
-                        String excludes = info.getIntroduceServiceProperties()
-                            .getProperty(IntroduceConstants.INTRODUCE_NS_EXCLUDES);
-                        excludes += " -x " + resolved[i].getNamespace();
-                        info.getIntroduceServiceProperties().setProperty(
-                            IntroduceConstants.INTRODUCE_NS_EXCLUDES, excludes);
+                try {
+                    if (types != null) {
+                        for (SchemaElementType element : types) {
+                            modelInfoUtil.setMappedElementName(pack.getPackageName(), element.getType(), element.getType());
+                            element.setSerializer(serializerClass);
+                            element.setDeserializer(deserializerClass);
+                        }
                     }
-                } 
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    CompositeErrorDialog.showErrorDialog(
+                        "Error mapping elements to classes in package " + pack.getPackageName(), ex.getMessage(), ex);
+                }
+                // set the resolution status on the table
+                setValueAt(resolved[0].getNamespace(), dataRow, 1);
+                setValueAt(STATUS_SCHEMA_FOUND, dataRow, 2);
             } else {
                 setValueAt(STATUS_MAPPING_ERROR, dataRow, 2);
             }
