@@ -122,10 +122,10 @@ public class InstallationCompleteStep extends PanelWizardStep {
         }
         
         if (this.model.getMessage("container.type.tomcat").equals(this.model.getProperty(Constants.CONTAINER_TYPE))) {
-            sb.append("\t").append("If this was a linux/unix/Mac installation be sure to change the file permisions on the files in the bin directory of Tomcat by executing chmod 770 *.sh  in the CATALINA_HOME/bin directory files so that you can properly execute the startup and shutdown scripts.").append("\n");
+            sb.append("\n").append("If this was a linux/unix/Mac installation be sure to change the file permisions on the files in the bin directory of Tomcat by executing chmod 770 *.sh  in the CATALINA_HOME/bin directory files so that you can properly execute the startup and shutdown scripts.").append("\n");
         }
         if (this.model.getMessage("container.type.jboss").equals(this.model.getProperty(Constants.CONTAINER_TYPE))) {
-            sb.append("\t").append("If this was a linux/unix/Mac installation be sure to change the file permisions on the files in the bin directory of JBoss by executing chmod 770 *.sh in the JBOSS_HOME/bin directory files so that you can properly execute the run scripts").append("\n");
+            sb.append("\n").append("If this was a linux/unix/Mac installation be sure to change the file permisions on the files in the bin directory of JBoss by executing chmod 770 *.sh in the JBOSS_HOME/bin directory files so that you can properly execute the run scripts").append("\n");
         }
  
         this.textPane.setText(sb.toString());
