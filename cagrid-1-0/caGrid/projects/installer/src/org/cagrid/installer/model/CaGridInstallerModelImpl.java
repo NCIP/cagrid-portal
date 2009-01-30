@@ -107,7 +107,7 @@ CaGridInstallerModel, OverviewProvider {
         }
 
         // Look for jboss
-        if (isTomcatInstalled()) {
+        if (isJBossInstalled()) {
             setProperty(Constants.JBOSS_HOME, getHomeDir(Constants.JBOSS_HOME, "JBOSS_HOME"));
         }
 
