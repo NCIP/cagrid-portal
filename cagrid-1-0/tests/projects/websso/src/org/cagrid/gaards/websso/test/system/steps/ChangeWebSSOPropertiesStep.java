@@ -24,18 +24,22 @@ public class ChangeWebSSOPropertiesStep extends Step {
 	private String hostCertificateKey;
 	private String dorianServiceURL;
 	private String cdsServiceURL;
+	private String cdsServiceIdentity;
+	private String dorianServiceIdentity;
 	private String delegatedApplicationHostIdentity;
 	private File tempWebSSOService;
 
 	public ChangeWebSSOPropertiesStep(File tempWebSSOService,
 			String hostCertificate,String hostCertificateKey, String dorianServiceURL, String cdsServiceURL,
-			String delegatedApplicationHostIdentity) {
+			String delegatedApplicationHostIdentity,String cdsServiceIdentity,String dorianServiceIdentity) {
 		this.hostCertificate = hostCertificate;
 		this.hostCertificateKey = hostCertificateKey;
 		this.dorianServiceURL = dorianServiceURL;
 		this.cdsServiceURL = cdsServiceURL;
 		this.delegatedApplicationHostIdentity = delegatedApplicationHostIdentity;
 		this.tempWebSSOService=tempWebSSOService;
+		this.cdsServiceIdentity=cdsServiceIdentity;
+		this.dorianServiceIdentity=dorianServiceIdentity;
 	}
 
 	@Override
@@ -94,6 +98,11 @@ public class ChangeWebSSOPropertiesStep extends Step {
 					.selectSingleNode(webSSOPropertiesElement);
 			cdsServiceURL.removeContent();
 			cdsServiceURL.addContent(this.cdsServiceURL);
+			
+			XPath cdsServiceIdentityPath = XPath.newInstance("/websso-properties/credential-delegation-service-information/service-identity");
+			Element cdsServiceIdentity = (Element) cdsServiceIdentityPath.selectSingleNode(webSSOPropertiesElement);
+			cdsServiceIdentity.removeContent();
+			cdsServiceIdentity.addContent(this.cdsServiceIdentity);
 
 			XPath dorianServiceURLPath = XPath
 					.newInstance("/websso-properties/dorian-services-information/dorian-service-descriptor/service-url");
@@ -102,6 +111,11 @@ public class ChangeWebSSOPropertiesStep extends Step {
 			dorianServiceURL.removeContent();
 			dorianServiceURL.addContent(this.dorianServiceURL);
 
+			XPath dorianServiceIdentityPath = XPath.newInstance("/websso-properties/dorian-services-information/dorian-service-descriptor/service-identity");
+			Element dorianServiceIdentity = (Element) dorianServiceIdentityPath.selectSingleNode(webSSOPropertiesElement);
+			dorianServiceIdentity.removeContent();
+			dorianServiceIdentity.addContent(this.dorianServiceIdentity);
+			
 			XPath hostIdentityPath = XPath
 					.newInstance("/websso-properties/delegated-applications-group/delegated-application-list/delegated-application/host-identity");
 			List<Element> hostIdentities = (List<Element>)hostIdentityPath.selectNodes(webSSOPropertiesElement);
@@ -120,7 +134,7 @@ public class ChangeWebSSOPropertiesStep extends Step {
 
 		File tempWebSSOService = new File("C:/devroot/caGrid/cagrid-1-0/tests/projects/websso/tmp/websso");
 		ChangeWebSSOPropertiesStep step = new ChangeWebSSOPropertiesStep(
-				tempWebSSOService, null, null, null, null, "/C=US/O=abc/OU=xyz/OU=caGrid/OU=Services/CN=webssoclient");
+				tempWebSSOService, null, null, null, null, "/C=US/O=abc/OU=xyz/OU=caGrid/OU=Services/CN=webssoclient",null,null);
 		step.runStep();
 	}
 }

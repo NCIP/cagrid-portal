@@ -5,6 +5,8 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.Properties;
 
+import org.cagrid.gaards.websso.test.system.WebSSOSystemTest;
+
 import gov.nih.nci.cagrid.testing.system.haste.Step;
 
 /**
@@ -29,7 +31,7 @@ public class ChangeJasigCASClientPropertiesStep extends Step {
 	public void runStep() throws Throwable {
 		String casTemplatePropertiesFile = tempWebSSOClientService.getCanonicalPath()
 				+ File.separator + "ext" + File.separator + "dependencies-properties"
-				+ File.separator + "properties"+File.separator+"cas-client-template-jasig-1.3-dev.properties";
+				+ File.separator + "properties"+File.separator+"cas-client-template-jasig-"+WebSSOSystemTest.getProjectVersion()+".properties";
 
 		Properties casClientProperties = new Properties();
 		casClientProperties

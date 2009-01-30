@@ -20,6 +20,7 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
 import org.apache.log4j.Logger;
+import org.cagrid.gaards.websso.test.system.WebSSOSystemTest;
 
 //install certs into websso-client jdk cacerts file
 public class InstallCertStep extends Step {
@@ -57,34 +58,34 @@ public class InstallCertStep extends Step {
 		context.init(null, new TrustManager[] { tm }, null);
 		SSLSocketFactory factory = context.getSocketFactory();
 
-		System.out.println("Opening connection to " + webSSOServerHostName + ":" + portNumber + "...");
+		log.debug("Opening connection to " + webSSOServerHostName + ":" + portNumber + "...");
 		SSLSocket socket = (SSLSocket) factory.createSocket(webSSOServerHostName, portNumber);
 		socket.setSoTimeout(10000);
 		try {
-			System.out.println("Starting SSL handshake...");
+			log.debug("Starting SSL handshake...");
 			socket.startHandshake();
 			socket.close();
-			System.out.println("No errors, certificate is already trusted");
+			log.debug("No errors, certificate is already trusted");
 		} catch (SSLException e) {
-			e.printStackTrace();
+			log.debug("certificates not found in truststore. Adding certificates to trust store.");
 		}
 
 		X509Certificate[] chain = tm.chain;
 		if (chain == null) {
-			System.out.println("Could not obtain server certificate chain");
+			log.debug("Could not obtain server certificate chain");
 			return;
 		}
-		System.out.println("Server sent " + chain.length + " certificate(s):");
+		log.debug("Server sent " + chain.length + " certificate(s):");
 		MessageDigest sha1 = MessageDigest.getInstance("SHA1");
 		MessageDigest md5 = MessageDigest.getInstance("MD5");
 		for (int i = 0; i < chain.length; i++) {
 			X509Certificate cert = chain[i];
-			System.out.println(" " + (i + 1) + " Subject "+ cert.getSubjectDN());
-			System.out.println("   Issuer  " + cert.getIssuerDN());
+			log.debug(" " + (i + 1) + " Subject "+ cert.getSubjectDN());
+			log.debug("   Issuer  " + cert.getIssuerDN());
 			sha1.update(cert.getEncoded());
-			System.out.println("   sha1    " + toHexString(sha1.digest()));
+			log.debug("   sha1    " + toHexString(sha1.digest()));
 			md5.update(cert.getEncoded());
-			System.out.println("   md5     " + toHexString(md5.digest()));
+			log.debug("   md5     " + toHexString(md5.digest()));
 		}
 		
 		int k=0;
@@ -95,8 +96,8 @@ public class InstallCertStep extends Step {
 		OutputStream out = new FileOutputStream(cacertsFile);
 		ks.store(out, passphrase.toCharArray());
 		out.close();
-		System.out.println(cert);
-		System.out.println("Added certificate to keystore 'cacerts' using alias '"+ alias + "'");
+		log.debug(cert);
+		log.debug("Added certificate to keystore 'cacerts' using alias '"+ alias + "'");
 	}
 
 	private static final char[] HEXDIGITS = "0123456789abcdef".toCharArray();
@@ -137,7 +138,7 @@ public class InstallCertStep extends Step {
 	}
 	
 	public static void main(String[] args) throws Throwable{
-		File file = new File("C:/devroot/caGrid/cagrid-1-0/tests/projects/websso/tmp/websso-client-example/ext/dependencies-cert/cert/cacerts-1.3-dev.cert");
+		File file = new File("C:/devroot/caGrid/cagrid-1-0/tests/projects/websso/tmp/websso-client-example/ext/dependencies-cert/cert/cacerts-"+WebSSOSystemTest.getProjectVersion()+".cert");
 		InstallCertStep certStep=new InstallCertStep(file,"NCI-GARMILLAS-1",18443,2);
 		certStep.runStep();
 	}

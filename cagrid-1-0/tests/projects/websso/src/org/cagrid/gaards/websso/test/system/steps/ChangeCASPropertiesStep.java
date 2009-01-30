@@ -28,6 +28,10 @@ public class ChangeCASPropertiesStep extends Step {
 		String casTemplatePropertiesFile = tempWebSSOService.getCanonicalPath()
 				+ File.separator + "webcontent" + File.separator + "WEB-INF"
 				+ File.separator + "cas-template.properties";
+		
+		String casPropertiesFile = tempWebSSOService.getCanonicalPath()
+		+ File.separator + "webcontent" + File.separator + "WEB-INF"
+		+ File.separator + "cas.properties";
 
 		Properties casClientProperties = new Properties();
 			casClientProperties.load(new FileInputStream(
@@ -38,7 +42,7 @@ public class ChangeCASPropertiesStep extends Step {
 		casClientProperties.setProperty("cas.securityContext.ticketValidator.casServerUrlPrefix", webSSOURL);
 		
 		casClientProperties.store(new FileOutputStream(
-				casTemplatePropertiesFile), null);
+				casPropertiesFile), null);
 	}
 
 	public static void main(String[] args) throws Throwable {

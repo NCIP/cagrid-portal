@@ -2,10 +2,10 @@ package org.cagrid.gaards.websso.test.system.steps;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.Properties;
+
+import org.cagrid.gaards.websso.test.system.WebSSOSystemTest;
 
 
 
@@ -49,7 +49,7 @@ public class ChangeAcegiCASClientPropertiesStep extends Step {
 				+ "dependencies-properties"
 				+ File.separator
 				+ "properties"
-				+ File.separator + "cas-client-template-acegi-1.3-dev.properties";
+				+ File.separator + "cas-client-template-acegi-"+WebSSOSystemTest.getProjectVersion()+".properties";
 
 		Properties casClientProperties = new Properties();
 		casClientProperties

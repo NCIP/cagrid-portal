@@ -1,9 +1,11 @@
 package org.cagrid.gaards.websso.test.system;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Properties;
 import java.util.Set;
 import java.util.Vector;
 
@@ -50,6 +52,8 @@ import org.cagrid.gaards.websso.test.system.steps.CopyCAStep;
 import org.cagrid.gaards.websso.test.system.steps.HostCertificatesStep;
 import org.cagrid.gaards.websso.test.system.steps.InstallCertStep;
 import org.cagrid.gaards.websso.test.system.steps.WebSSOClientCertificatesStep;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
 
 import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainer;
 import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainerFactory;
@@ -86,6 +90,7 @@ public class WebSSOSystemTest extends Story {
 	private int httpsAcegiPortNumber = 38443;
 	private int httpsJasigPortNumber = 28443;
 	private int httpsWebSSOPortNumber = 18443;
+	private static String projectVersion=null;
 	
 	@Override
 	public String getDescription() {
@@ -96,9 +101,32 @@ public class WebSSOSystemTest extends Story {
     public String getName() {
         return getDescription();
     }
+   
+   private static void loadProjectVersion() {
+		File asLocation = new File("project.properties");
+		Resource resource = new FileSystemResource(asLocation);
+		Properties properties = new Properties();
+		try {
+			properties.load(resource.getInputStream());
+		} catch (IOException ex) {
+			String message = "Error loading project.properties to get project version"+ ex.getMessage();
+			log.error(message, ex);
+			fail(message);
+		}
+		projectVersion = (String) properties.get("project.version");
+	}
+
+	public static String getProjectVersion(){
+		if (projectVersion == null) {
+			loadProjectVersion();
+		}
+		return projectVersion;
+	}
 	
 	@Override
 	protected boolean storySetUp() {
+		//api call to load project version
+		WebSSOSystemTest.loadProjectVersion();
 		// set up the dorian service container
 		try {
 			log.debug("Creating container for dorian service");
@@ -257,7 +285,7 @@ public class WebSSOSystemTest extends Story {
 			
 			Integer httpPort=webSSOAcegiClientServiceContainer.getProperties().getPortPreference().getPort();
 			String webSSOServerURL="https://localhost:18443/webssoserver";
-			webSSOClientAcegiURL="http://localhost:"+httpPort+"/webssoclientacegiexample-1.3-dev";
+			webSSOClientAcegiURL="http://localhost:"+httpPort+"/webssoclientacegiexample-"+WebSSOSystemTest.getProjectVersion();
 			
 			String	tomcatCertsDir =webSSOAcegiClientServiceContainer.getProperties().getContainerDirectory()+ File.separator + "certificates";
 			String hostKey = new File(tomcatCertsDir, webssoClientHostname + "-key.pem").getAbsolutePath();
@@ -272,7 +300,7 @@ public class WebSSOSystemTest extends Story {
 					+ "ext"
 					+ File.separator
 					+ "dependencies-cert"
-					+ File.separator +"cert"+File.separator+"cacerts-1.3-dev.cert";
+					+ File.separator +"cert"+File.separator+"cacerts-"+WebSSOSystemTest.getProjectVersion()+".cert";
 			steps.add(new InstallCertStep(new File(cacertsFilePath),systemName, httpsWebSSOPortNumber, 1));
 			
 			steps.add(new WebSSOClientCertificatesStep(tempwebssoAcegiClientService,hostCert,hostKey));
@@ -303,7 +331,7 @@ public class WebSSOSystemTest extends Story {
 			antTargets.add("deploySystemTestingTomcatJasigClient");
 			Integer httpPort=webSSOJasigClientServiceContainer.getProperties().getPortPreference().getPort();
 			String webSSOServerURL="https://localhost:18443/webssoserver";
-			webSSOClientJasigURL="http://localhost:"+httpPort+"/webssoclientjasigexample-1.3-dev/protected/";
+			webSSOClientJasigURL="http://localhost:"+httpPort+"/webssoclientjasigexample-"+WebSSOSystemTest.getProjectVersion()+"/protected/";
 			
 			String	tomcatCertsDir =webSSOJasigClientServiceContainer.getProperties().getContainerDirectory()+ File.separator + "certificates";
 			String hostKey = new File(tomcatCertsDir, webssoClientHostname + "-key.pem").getAbsolutePath();
@@ -319,7 +347,7 @@ public class WebSSOSystemTest extends Story {
 									+ "ext"
 									+ File.separator
 									+ "dependencies-cert"
-									+ File.separator+ "cert"+ File.separator + "cacerts-1.3-dev.cert";
+									+ File.separator+ "cert"+ File.separator + "cacerts-"+WebSSOSystemTest.getProjectVersion()+".cert";
 			steps.add(new InstallCertStep(new File(cacertsFilePath),systemName, httpsWebSSOPortNumber, 1));
 			steps.add(new DeployServiceStep(webSSOJasigClientServiceContainer,
 					this.tempwebssoJasigClientService.getAbsolutePath(),antTargets));
@@ -386,8 +414,10 @@ public class WebSSOSystemTest extends Story {
 		}
 		
 		String delegatedApplicationHostIdentity = "/C=US/O=abc/OU=xyz/OU=caGrid/OU=Services/CN=webssoclient";
+		String dorianHostIdentity="/O=osu/CN=host/localhost";
+		String cdsHostIdentity="/O=osu/CN=host/localhost";
 		steps.add(new ChangeWebSSOPropertiesStep(tempWebSSOService, certPath,
-				keyPath, dorianServiceURL, cdsServiceURL, delegatedApplicationHostIdentity));
+				keyPath, dorianServiceURL, cdsServiceURL, delegatedApplicationHostIdentity,cdsHostIdentity,dorianHostIdentity));
 
 		steps.add(new ChangeCASPropertiesStep(tempWebSSOService, webSSOServiceURL));
 	}
@@ -594,4 +624,8 @@ public class WebSSOSystemTest extends Story {
 			new DeleteServiceStep(service).runStep();
 		}
 	}
+	
+	public static void main(String[] args) {
+		System.out.println(WebSSOSystemTest.getProjectVersion());
+	}	
 }

@@ -5,6 +5,7 @@ import javax.net.ssl.SSLSession;
 
 import gov.nih.nci.cagrid.testing.system.haste.Step;
 
+import org.cagrid.gaards.websso.test.system.WebSSOSystemTest;
 import org.springframework.core.io.ClassPathResource;
 import org.xml.sax.SAXException;
 import sun.net.www.protocol.https.HttpsURLConnectionImpl;
@@ -105,23 +106,13 @@ public class AssertWebSSOApplicationStep extends Step {
 				.getElementWithID("authenticationServiceURL");
 		String[] urls = asUrlOptions.getOptionValues();
 		request.setParameter("authenticationServiceURL", urls[1]);
-
+				
 		response = tryGetResponse(conversation, request);
 		loginForm = response.getForms()[0];
 		request = loginForm.getRequest();
 
-		SelectionFormControl asProfileOptions = (SelectionFormControl) response
-				.getElementWithID("authenticationServiceProfile");
-		HttpUnitOptions.setScriptingEnabled(false);
-		String[] profiles = asProfileOptions.getOptionValues();
-		request.setParameter("authenticationServiceProfile", profiles[1]);
-
-		HTMLElement serviceProfileType = response
-				.getElementWithID("serviceProfileType");
-		serviceProfileType.setAttribute("value", profiles[1]);
-
-		request.setParameter("username", "jdoe1");
-		request.setParameter("password", "K00lM0N$$1");
+		request.setParameter("username", "jdoe2");
+		request.setParameter("password", "K00lM0N$$2");
 		return request;
 	}
 
@@ -133,12 +124,12 @@ public class AssertWebSSOApplicationStep extends Step {
 		String userGridInformation = tableRows[1][0];
 
 		assertTrue(userGridInformation
-				.contains("/C=US/O=abc/OU=xyz/OU=caGrid/OU=Dorian/CN=jdoe1"));
-		assertTrue(userGridInformation.contains("John1"));
-		assertTrue(userGridInformation.contains("Doe1"));
+				.contains("/C=US/O=abc/OU=xyz/OU=caGrid/OU=Dorian/CN=jdoe2"));
+		assertTrue(userGridInformation.contains("John2"));
+		assertTrue(userGridInformation.contains("Doe2"));
 		assertTrue(userGridInformation
 				.contains("/wsrf/services/cagrid/DelegatedCredential"));
-		assertTrue(userGridInformation.contains("jdoe1@cagrid.org"));
+		assertTrue(userGridInformation.contains("jdoe2@cagrid.org"));
 	}
 
 	/**
@@ -157,8 +148,8 @@ public class AssertWebSSOApplicationStep extends Step {
 	}
 	
 	public static void main(String[] args) throws Throwable{
-		String jasigURL="http://localhost:45400/webssoclientjasigexample-1.3-dev/protected";
-		String acegiURL="http://localhost:45403/webssoclientacegiexample-1.3-dev/protected";
+		String jasigURL="http://localhost:44698/webssoclientjasigexample-"+WebSSOSystemTest.getProjectVersion()+"/protected";
+		String acegiURL="http://localhost:44902/webssoclientacegiexample-"+WebSSOSystemTest.getProjectVersion()+"/protected";
 		AssertWebSSOApplicationStep applicationStep=new AssertWebSSOApplicationStep(jasigURL,acegiURL,18443,28443,38443);
 		applicationStep.runStep();
 	}
