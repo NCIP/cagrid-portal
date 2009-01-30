@@ -17,7 +17,7 @@ import junit.textui.TestRunner;
  * @author David Ervin
  * 
  * @created Oct 24, 2007 11:48:02 AM
- * @version $Id: Sdk4XmiToDomainModelStory.java,v 1.2 2008-04-28 18:10:22 dervin Exp $ 
+ * @version $Id: Sdk4XmiToDomainModelStory.java,v 1.3 2009-01-30 21:31:56 dervin Exp $ 
  */
 public class Sdk4XmiToDomainModelStory extends Story {
     public static final String XMI_ZIP_FILE = "test/resources/sdk4/sdk4exampleXMI.zip";
@@ -34,12 +34,12 @@ public class Sdk4XmiToDomainModelStory extends Story {
 
 
     public String getDescription() {
-        return "Tests converting SDK 4.0 XMI models to a domain model";
+        return "Tests converting SDK 4_0 XMI models to a domain model";
     }
     
     
     public String getName() {
-        return "SDK 4.0 XMI to Domain Model Story";
+        return "SDK 4_0 XMI to Domain Model Story";
     }
 
 
