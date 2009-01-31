@@ -36,10 +36,10 @@ public class DorianHelperImpl implements DorianHelper {
 					.getDorianServiceURL());
 		} catch (MalformedURIException e) {
 			throw new AuthenticationConfigurationException(
-					"Invalid Dorian Service URL : " + e.getMessage());
+					"Invalid Dorian Service URL : " + FaultUtil.printFaultToString(e));
 		} catch (RemoteException e) {
 			throw new AuthenticationConfigurationException(
-					"Error accessing the Dorian Service : " + e.getMessage());
+					"Error accessing the Dorian Service : "+ FaultUtil.printFaultToString(e));
 		}
 		try {
 			globusCredential = ifsUserClient.requestUserCertificate(

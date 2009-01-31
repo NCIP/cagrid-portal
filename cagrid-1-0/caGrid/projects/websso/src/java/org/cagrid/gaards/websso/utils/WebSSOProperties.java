@@ -81,6 +81,9 @@ public class WebSSOProperties {
 		credentialDelegationServiceInformation
 				.setServiceURL(this
 						.getDelegationServiceURL(credentialDelegationServiceInformationElement));
+		credentialDelegationServiceInformation.setServiceIdentity(this
+				.getDelegationServiceIdentity(credentialDelegationServiceInformationElement));
+
 		credentialDelegationServiceInformation
 				.setDelegationLifetimeHours(Integer
 						.parseInt(this
@@ -104,6 +107,12 @@ public class WebSSOProperties {
 		Element serviceURL = credentialDelegationServiceInformationElement
 				.getChild("service-url");
 		return serviceURL.getText().trim();
+	}
+
+	private String getDelegationServiceIdentity(
+			Element credentialDelegationServiceInformationElement) {
+		Element serviceURL = credentialDelegationServiceInformationElement.getChild("service-identity");
+		return serviceURL!=null?serviceURL.getText().trim():null;
 	}
 
 	private String getDelegationLifeTimeHours(
@@ -154,6 +163,7 @@ public class WebSSOProperties {
 			Element dorianInformationElement) {
 	 	DorianInformation dorianInformation = new DorianInformation();
 	 	dorianInformation.setDorianServiceURL(this.getDorianServiceURL(dorianInformationElement));
+	 	dorianInformation.setServiceIdentity(this.getDorianServiceIdentity(dorianInformationElement));
 	 	dorianInformation.setDisplayName(this.getDorianDisplayName(dorianInformationElement));
 	 	dorianInformation.setProxyLifetimeHours(Integer.parseInt(this.getProxyLifeTimeHours(dorianInformationElement)));
 	 	dorianInformation.setProxyLifetimeMinutes(Integer.parseInt(this.getProxyLifeTimeMinutes(dorianInformationElement)));
@@ -179,6 +189,11 @@ public class WebSSOProperties {
 	private String getDorianServiceURL(Element dorianInformationElement) {
 		Element serviceURL = dorianInformationElement.getChild("service-url");
 		return serviceURL.getText().trim();
+	}
+	
+	private String getDorianServiceIdentity(Element dorianInformationElement) {
+		Element serviceIdentity = dorianInformationElement.getChild("service-identity");
+		return serviceIdentity!= null?serviceIdentity.getText().trim():null;
 	}
 
 	private String getDorianDisplayName(Element dorianInformationElement) {

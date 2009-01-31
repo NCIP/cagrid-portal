@@ -23,6 +23,7 @@ import org.cagrid.gaards.websso.authentication.helper.GridCredentialDelegator;
 import org.cagrid.gaards.websso.beans.CredentialDelegationServiceInformation;
 import org.cagrid.gaards.websso.exception.AuthenticationConfigurationException;
 import org.globus.gsi.GlobusCredential;
+import org.globus.wsrf.impl.security.authorization.IdentityAuthorization;
 
 public class GridCredentialDelegatorImpl implements GridCredentialDelegator {
 
@@ -61,11 +62,15 @@ public class GridCredentialDelegatorImpl implements GridCredentialDelegator {
 		DelegationUserClient client = null;
 		try {
 			client = new DelegationUserClient(
-					this.credentialDelegationServiceInformation.getServiceURL(),globusCredential);
+					this.credentialDelegationServiceInformation.getServiceURL(),globusCredential);			
+
+			if (Utils.clean(credentialDelegationServiceInformation.getServiceIdentity()) != null) {
+				IdentityAuthorization auth = new IdentityAuthorization(credentialDelegationServiceInformation.getServiceIdentity());
+				client.setAuthorization(auth);
+			}			
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new AuthenticationConfigurationException(
-					"Error accessing the Delegation Service : "+ e.getMessage(), e);
+			throw new AuthenticationConfigurationException("Error accessing the Delegation Service : "+ e.getMessage(), e);
 		}
 
 		DelegatedCredentialReference delegatedCredentialReference = null;
@@ -107,8 +112,7 @@ public class GridCredentialDelegatorImpl implements GridCredentialDelegator {
 							new QName(
 									"http://cds.gaards.cagrid.org/CredentialDelegationService/DelegatedCredential/types",
 									"DelegatedCredentialReference"),
-							stringWriter, DelegationUserClient.class
-									.getResourceAsStream("client-config.wsdd"));
+							stringWriter, DelegationUserClient.class.getResourceAsStream("client-config.wsdd"));
 			serializedDelegatedCredentialReference = stringWriter.toString();
 		} catch (Exception e) {
 			throw new AuthenticationConfigurationException(
