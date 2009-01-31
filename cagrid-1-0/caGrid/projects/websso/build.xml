@@ -106,7 +106,9 @@
 
 	<target name="war" depends="compile,websso-config-jar,build-war">
 		<war destfile="${build.dir}/${webapp.name}.war" webxml="${webcontent.dir}/WEB-INF/web.xml">
-			<fileset dir="${webcontent.dir}" />
+			<fileset dir="${webcontent.dir}">
+				<exclude name="**/*-template.*"/>
+			</fileset>
 			<lib dir="${build.war.dir}/WEB-INF/lib" />
 		</war>
 	</target>
@@ -211,7 +213,7 @@
 			<sequential>
 				<copy todir="${webcontent.dir}" overwrite="true">
 					<fileset dir="${webcontent.dir}" />
-					<globmapper from="*-template.properties" to="*.properties" />
+					<globmapper from="**/*-template.properties" to="**/*.properties" />
 					<filterset refid="WEBSSO_PROPERTIES" />
 					<filterset refid="CAS_PROPERTIES" />
 				</copy>
