@@ -5,16 +5,10 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
-<%@page import="org.cagrid.gaards.websso.authentication.UsernamePasswordAuthenticationServiceURLCredentials"%><html>
-	<head>
-	  <script language=javascript>
-		 function setStyle(){
-			divpassword.style.visibility="hidden";
-			divonetimepassword.style.visibility="hidden";			
-		 }
-	  </script>
-	</head>
-<body onload=setStyle();submitAuthenticationProfile()>
+
+<html>
+
+<body>
 	<form:form name="fm1" method="post" id="fm1" cssClass="sidebarSection"
 		commandName="${commandName}" htmlEscape="true">
 	<form:errors path="*" cssClass="errors" id="status" element="div" />
@@ -28,7 +22,7 @@
 			code="screen.welcome.label.credential.provider" /></label> <spring:message
 			code="screen.welcome.label.credential.provider.accesskey"
 			var="dorianNameAccessKey" />
-	
+			</br>
 			<input type="hidden" name="lt" value="${flowExecutionKey}" /> 
 			
 			<form:select cssClass="required"
@@ -51,7 +45,7 @@
 			code="screen.welcome.label.organization" /></label> <spring:message
 			code="screen.welcome.label.organization.accesskey"
 			var="authenticationServiceAccessKey" /> 
-	
+			</br>
 			<input type="hidden" name="lt" value="${flowExecutionKey}" /> 
 			<form:select
 				cssClass="required" cssErrorClass="error"
@@ -71,77 +65,120 @@
 					}
 			</SCRIPT>
 		</div>
-		<div class="row"><label for="authenticationServiceProfile"><spring:message
-			code="screen.welcome.label.credential.type" /></label> <spring:message
-			code="screen.welcome.label.credential.type.accesskey"
-			var="authenticationServiceAccessKey" />
-			<input type="hidden" name="lt" value="${flowExecutionKey}" />  
-			<form:select
-				cssClass="required" cssErrorClass="error"
-				id="authenticationServiceProfile" tabindex="3"
-				path="authenticationServiceProfile"
-				accesskey="${authenticationServiceProfileAccessKey}" htmlEscape="true" onchange="submitAuthenticationProfile();">
-			<form:option value="-" label="-- Please Select" />
-			<form:options items="${authenticationServiceProfileInformationList}"
-				itemValue="localPart" itemLabel="localPart" />
-			</form:select>
-			<form:hidden path="serviceProfileType" id="serviceProfileType"/>
-			<SCRIPT type="text/javascript">
-				 function submitAuthenticationProfile() {
-					if(document.fm1.authenticationServiceProfile.value=="<%=UsernamePasswordAuthenticationServiceURLCredentials.BASIC_AUTHENTICATION%>"){
-						divpassword.style.visibility="visible";
-						divonetimepassword.style.visibility="hidden";
-						document.fm1.serviceProfileType.value="<%=UsernamePasswordAuthenticationServiceURLCredentials.BASIC_AUTHENTICATION%>";
-					}else if((document.fm1.authenticationServiceProfile.value=="-")){
-						divpassword.style.visibility="hidden";
-						divonetimepassword.style.visibility="hidden";						
-					}else {
-						divpassword.style.visibility="hidden";
-						divonetimepassword.style.visibility="visible";
-						document.fm1.serviceProfileType.value="<%=UsernamePasswordAuthenticationServiceURLCredentials.ONE_TIME_PASSWORD%>";
-					}		
-				 }				
-			</SCRIPT>
+		<input type="hidden" name="lt" value="${flowExecutionKey}" />  
+		<c:choose>			
+			<c:when test="${fn:length(authenticationServiceProfileInformationList)==1}">
+				<div class="row"><label for="authenticationServiceProfile"><spring:message
+					code="screen.welcome.label.credential.type" /></label> <spring:message
+					code="screen.welcome.label.credential.type.accesskey"
+					var="authenticationServiceAccessKey" />
+				</br>
+				<form:input path="authenticationServiceProfile" disabled="true"/>
+			</c:when>
+			<c:when test="${fn:length(authenticationServiceProfileInformationList)==0}">
+					<tr>
+						<br></br>
+					</tr>
+			</c:when>	
+			<c:otherwise>
+				<div class="row"><label for="authenticationServiceProfile"><spring:message
+					code="screen.welcome.label.credential.type" /></label> <spring:message
+					code="screen.welcome.label.credential.type.accesskey"
+					var="authenticationServiceAccessKey" />
+					</br>
+					<form:select
+						cssClass="required" cssErrorClass="error"
+						id="authenticationServiceProfile" tabindex="3"
+						path="authenticationServiceProfile"
+						accesskey="${authenticationServiceProfileAccessKey}" htmlEscape="true" onchange="submitAuthenticationProfile();">				
+					<form:option value="-" label="-- Please Select" />
+					<form:options items="${authenticationServiceProfileInformationList}"
+						itemValue="localPart" itemLabel="localPart" />
+					</form:select>
+					<SCRIPT type="text/javascript">
+						 function submitAuthenticationProfile() {
+							document.getElementById("_eventId").value="selectAuthenticationProfile";
+							document.fm1.submit();		
+						 }
+					</SCRIPT>
+				</c:otherwise>
+			</c:choose>
 		</div>
-	    
- 		<div class="row"><label for="username"><spring:message
-				code="screen.welcome.label.netid" /></label> 
-				<c:if test="${not empty sessionScope.openIdLocalId}">
+		<c:choose>
+			<c:when test="${basicAuthentication==authenticationServiceProfile}">
+				<div class="row"><label for="username"><spring:message
+					code="screen.welcome.label.netid" /></label> <c:if
+					test="${not empty sessionScope.openIdLocalId}">
 					<strong>${sessionScope.openIdLocalId}</strong>
-					<input type="hidden" id="username" name="username" value="${sessionScope.openIdLocalId}" />
-				</c:if> 
-				<c:if test="${empty sessionScope.openIdLocalId}">
-				  <spring:message code="screen.welcome.label.netid.accesskey"
+					<input type="hidden" id="username" name="username"
+						value="${sessionScope.openIdLocalId}" />
+				</c:if> <c:if test="${empty sessionScope.openIdLocalId}">
+					<spring:message code="screen.welcome.label.netid.accesskey"
 						var="userNameAccessKey" />
-				  <form:input cssClass="required" cssErrorClass="error" id="username"
+					</br>
+					<form:input cssClass="required" cssErrorClass="error" id="username"
 						size="25" tabindex="4" accesskey="${userNameAccessKey}"
 						path="username" autocomplete="false" htmlEscape="true" />
-				</c:if>
-		</div>
-		<div class="row" id="divpassword"><label for="password"><spring:message
-			code="screen.welcome.label.password" /></label> 
-			<%--
-				NOTE: Certain browsers will offer the option of caching passwords for a user.  There is a non-standard attribute,
-				"autocomplete" that when set to "off" will tell certain browsers not to prompt to cache credentials.  For more
-				information, see the following web page:
-				http://www.geocities.com/technofundo/tech/web/ie_autocomplete.html
-			--%> <spring:message
-			code="screen.welcome.label.password.accesskey" var="passwordAccessKey" />
-			<form:password cssClass="required" cssErrorClass="error" id="password"
-				size="25" tabindex="5" path="password"
-				accesskey="${passwordAccessKey}" htmlEscape="true" autocomplete="off" />
-		</div>
+				</c:if></div>
 	
-		<div class="row" id="divonetimepassword"><label for="onetimepassword">
-			<spring:message code="screen.welcome.label.onetimepassword" /></label> 
-		  	<spring:message   code="screen.welcome.label.onetimepassword.accesskey" var="onetimepasswordAccessKey" />
-			<form:password cssClass="required" cssErrorClass="error" id="onetimepassword"
-				size="25" tabindex="6" path="onetimepassword"
-				accesskey="${onetimepasswordAccessKey}" htmlEscape="true" autocomplete="off" />
-		</div>
+				<div class="row"><label for="password"><spring:message
+					code="screen.welcome.label.password" /></label> <%--
+							NOTE: Certain browsers will offer the option of caching passwords for a user.  There is a non-standard attribute,
+							"autocomplete" that when set to "off" will tell certain browsers not to prompt to cache credentials.  For more
+							information, see the following web page:
+							http://www.geocities.com/technofundo/tech/web/ie_autocomplete.html
+						--%> <spring:message code="screen.welcome.label.password.accesskey"
+					var="passwordAccessKey" /> 
+					</br>
+					<form:password cssClass="required"
+					cssErrorClass="error" id="password" size="25" tabindex="5"
+					path="password" accesskey="${passwordAccessKey}" htmlEscape="true"
+					autocomplete="off" /></div>
+			</c:when>
+			<c:when test="${oneTimePassword == authenticationServiceProfile}">
+				<div class="row"><label for="username"> <spring:message
+					code="screen.welcome.label.netid" /></label> <c:if
+					test="${not empty sessionScope.openIdLocalId}">
+					<strong>${sessionScope.openIdLocalId}</strong>
+					<input type="hidden" id="username" name="username"
+						value="${sessionScope.openIdLocalId}" />
+				</c:if> <c:if test="${empty sessionScope.openIdLocalId}">
+					<spring:message code="screen.welcome.label.netid.accesskey"
+						var="userNameAccessKey" />
+					</br>
+					<form:input cssClass="required" cssErrorClass="error" id="username"
+						size="25" tabindex="4" accesskey="${userNameAccessKey}"
+						path="username" autocomplete="false" htmlEscape="true" />
+				</c:if></div>
 	
+				<div class="row"><label for="onetimepassword"> <spring:message
+					code="screen.welcome.label.onetimepassword" /></label> <spring:message
+					code="screen.welcome.label.onetimepassword.accesskey"
+					var="onetimepasswordAccessKey" /> 
+					</br>
+					<form:password
+					cssClass="required" cssErrorClass="error" id="onetimepassword"
+					size="25" tabindex="5" path="onetimepassword"
+					accesskey="${onetimepasswordAccessKey}" htmlEscape="true"
+					autocomplete="off" /></div>
+			</c:when>
+			<c:otherwise>
+				<tr>
+					<br><br>
+				</tr>
+				<tr>
+					<br><br>
+				</tr>
+				<tr>
+					<br><br>
+				</tr>
+				<tr>
+					<br><br>
+				</tr>
+			</c:otherwise>
+		</c:choose>
 		<div class="row check"><input id="warn" name="warn" value="true"
-			tabindex="7"
+			tabindex="6"
 			accesskey="<spring:message code="screen.welcome.label.warn.accesskey" />"
 			type="checkbox" /> <label for="warn"><spring:message
 			code="screen.welcome.label.warn" /></label>
@@ -153,13 +190,12 @@
 			<input class="sidebarLogin" name="submitButton"
 				accesskey="l"
 				value="<spring:message code="screen.welcome.button.login" />"
-				tabindex="8" type="submit" /> 
+				tabindex="7" type="submit" /> 
 			
 			<input class="sidebarLogin" name="reset" accesskey="c"
 				value="<spring:message code="screen.welcome.button.clear" />"
-			    tabindex="9" type="reset" />
-	   </div>
+			    tabindex="8" type="reset" />
+	   	</div>
 	   </div>
 	</form:form>
  </body>
-<html>

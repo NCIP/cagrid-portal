@@ -5,7 +5,7 @@
 
 	<table summary="" cellpadding="0" cellspacing="0" border="0" height="100%">
 		<tr>
-			<td width="70%"><!-- welcome begins -->
+			<td width="65%"><!-- welcome begins -->
 			<table summary="" cellpadding="0" cellspacing="0" border="0" height="100%">
 				<tr>
 					<td class="welcomeTitle" height="20">WELCOME TO SITE NAME</td>
@@ -21,7 +21,7 @@
 				</tr>
 			</table>
 			<!-- welcome ends --></td>
-			<td valign="top" width="30%"><!-- sidebar begins -->
+			<td valign="top" width="35%"><!-- sidebar begins -->
 			<table summary="" cellpadding="0" cellspacing="0" border="0" height="100%">
 
 				<!-- login begins -->
@@ -80,7 +80,8 @@
 			</table>
 			<!-- sidebar ends --></td>
 		</tr>
-	</table></td>
+	  </table>
+	</td>
 </tr>
 </table>
 </td>

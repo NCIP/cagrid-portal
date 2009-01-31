@@ -51,6 +51,7 @@
 		<transition on="submit" to="bindAndValidate" />
 		<transition on="selectDorian" to="viewAuthenticationServicesDropDown" />
 		<transition on="selectAuthenticationService" to="viewAuthenticationServiceProfilesDropDown" />
+		<transition on="selectAuthenticationProfile" to="viewLoginAuthenticationInputFields" />
 	</view-state>
 	
 	<view-state id="viewAuthenticationServicesDropDown" view="casLoginView">
@@ -60,6 +61,7 @@
 		<transition on="submit" to="bindAndValidate"/>
 		<transition on="selectDorian" to="viewAuthenticationServicesDropDown" />
 		<transition on="selectAuthenticationService" to="viewAuthenticationServiceProfilesDropDown" />
+		<transition on="selectAuthenticationProfile" to="viewLoginAuthenticationInputFields" />
 	</view-state>
 	
 	<view-state id="viewAuthenticationServiceProfilesDropDown" view="casLoginView">
@@ -69,6 +71,17 @@
 		<transition on="submit" to="bindAndValidate" />
 		<transition on="selectDorian" to="viewAuthenticationServicesDropDown" />
 		<transition on="selectAuthenticationService" to="viewAuthenticationServiceProfilesDropDown" />
+		<transition on="selectAuthenticationProfile" to="viewLoginAuthenticationInputFields" />
+	</view-state>
+	
+	<view-state id="viewLoginAuthenticationInputFields" view="casLoginView">
+		<render-actions>
+			<action bean="authenticationViaFormAction" method="authenticationLoginInputFieldsInformation" />
+		</render-actions>
+		<transition on="submit" to="bindAndValidate" />
+		<transition on="selectDorian" to="viewAuthenticationServicesDropDown" />
+		<transition on="selectAuthenticationService" to="viewAuthenticationServiceProfilesDropDown" />
+		<transition on="selectAuthenticationProfile" to="viewLoginAuthenticationInputFields" />
 	</view-state>
 	
 	<!-- bind and validate is last step to call -->	
