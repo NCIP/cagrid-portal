@@ -11,10 +11,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+
 import javax.xml.namespace.QName;
 
-import org.apache.log4j.Logger;
-
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.cagrid.gaards.authentication.client.AuthenticationClient;
 import org.cagrid.gaards.dorian.client.GridUserClient;
 import org.cagrid.gaards.dorian.federation.TrustedIdentityProvider;
@@ -30,7 +31,7 @@ import org.springframework.beans.factory.InitializingBean;
 public class AuthenticationProfileServiceManager extends Runner implements InitializingBean{
 
 	private static AuthenticationProfileServiceManager instance;
-	private Logger log;
+	private final Log log = LogFactory.getLog(getClass());
 	private ThreadManager threadManager;
 	private WebSSOProperties webSSOProperties;
 	private List<DorianServiceHandle> dorianServices;
@@ -39,7 +40,6 @@ public class AuthenticationProfileServiceManager extends Runner implements Initi
 	private boolean firstRun;
 
 	private AuthenticationProfileServiceManager() {
-		this.log = Logger.getLogger(getClass());
 		this.mutex = new Object();
 		this.firstRun = true;
 	}
@@ -119,6 +119,8 @@ public class AuthenticationProfileServiceManager extends Runner implements Initi
             for (int i = 0; i < idps.size(); i++) {
             	String displayName = idps.get(i).getDisplayName();
 				String authenticationServiceURL = idps.get(i).getAuthenticationServiceURL();
+				log.debug("Authenticated Service display Name "+displayName);
+				log.debug("Authenticated Service authenticationServiceURL "+authenticationServiceURL);
 				String authenticationServiceIdentity = idps.get(i).getAuthenticationServiceIdentity();
 				AuthenticationServiceInformation information=new AuthenticationServiceInformation(displayName,authenticationServiceURL,authenticationServiceIdentity);
             	
@@ -163,8 +165,7 @@ public class AuthenticationProfileServiceManager extends Runner implements Initi
 			String authenticationServiceURL) {
 		Set<QName> authenticationServiceProfiles = new HashSet<QName>();
 		for (AuthenticationServiceInformation authenticationServiceInformation : authenticationServices) {
-			if (authenticationServiceInformation.getAuthenticationServiceURL()
-					.equals(authenticationServiceURL)) {
+			if (authenticationServiceInformation.getAuthenticationServiceURL().equals(authenticationServiceURL)) {
 				authenticationServiceProfiles
 						.addAll(authenticationServiceInformation.getAuthenticationServiceProfiles());
 			}
