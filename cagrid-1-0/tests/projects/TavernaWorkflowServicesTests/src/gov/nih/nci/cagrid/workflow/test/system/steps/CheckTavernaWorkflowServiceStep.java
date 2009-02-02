@@ -21,7 +21,8 @@ public class CheckTavernaWorkflowServiceStep extends Step {
 	private static final String SCUFL_FILE = "resources/input/input.t2flow";
 	private static final String OUTPUT_FILE = "resources/output/output.xml";
 	private static final String[] INPUTS = {"TavernaWorkflowService", " Test Successful"};
-
+	
+	
 	public CheckTavernaWorkflowServiceStep(EndpointReferenceType twsEPR) {
 		this.twsEPR = twsEPR;
 	}

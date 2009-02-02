@@ -1,18 +1,23 @@
 package gov.nih.nci.cagrid.workflow.test.system;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Properties;
 import java.util.Vector;
-import org.apache.tools.ant.*;
 import org.apache.axis.message.addressing.EndpointReferenceType;
 import org.apache.axis.types.URI.MalformedURIException;
 
+import gov.nih.nci.cagrid.testing.system.deployment.ContainerException;
 import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainer;
 import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainerFactory;
 import gov.nih.nci.cagrid.testing.system.deployment.ServiceContainerType;
@@ -72,22 +77,23 @@ public class TavernaWorkflowServiceStory extends ServiceStoryBase {
 	}
 
 
-	 @Override
-	    protected void storyTearDown() throws Throwable {
+	@Override
+	protected void storyTearDown() throws Throwable {
 
-	        StopContainerStep step2 = new StopContainerStep(getContainer());
-	        try {
-	            step2.runStep();
-	        } catch (Throwable e) {
-	            e.printStackTrace();
-	        }
-	        DestroyContainerStep step3 = new DestroyContainerStep(getContainer());
-	        try {
-	            step3.runStep();
-	        } catch (Throwable e) {
-	            e.printStackTrace();
-	        }
-	    }
+		Thread.sleep(5000);
+		StopContainerStep step2 = new StopContainerStep(getContainer());
+		try {
+			step2.runStep();
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}
+		DestroyContainerStep step3 = new DestroyContainerStep(getContainer());
+		try {
+			step3.runStep();
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}
+	}
 
 	@Override
 	protected Vector steps() {
@@ -101,10 +107,8 @@ public class TavernaWorkflowServiceStory extends ServiceStoryBase {
 
 
 		// CONFIGURE
-		// steps.add(new SetDatabasePropertiesStep(tempGMEServiceDir));
-		// steps.add(new CreateDatabaseStep(tempGMEServiceDir));
 		steps.add (new ChangeServicePropertyFile());
-		steps.add(new BuildTaverna());
+		steps.add(new BuildTaverna2());
 
 
 		DeployServiceStep deployStep = new DeployServiceStep(getContainer(), tempGMEServiceDir.getAbsolutePath(),
@@ -138,9 +142,10 @@ public class TavernaWorkflowServiceStory extends ServiceStoryBase {
 		public void runStep() throws Throwable {
 
 			Properties props = new Properties();
+			File path = new File (SERVICE_TEMP_PATH);
+			String absPath = path.getAbsolutePath();
+
 			try {
-				File path = new File (SERVICE_TEMP_PATH);
-				String absPath = path.getAbsolutePath();
 				props.load(new FileInputStream(absPath + "/service.properties"));
 				System.out.println(" >> Service Properites File : \n >> " + absPath + "/service.properties");
 				props.setProperty("tavernaDir", absPath + "/taverna");
@@ -151,42 +156,74 @@ public class TavernaWorkflowServiceStory extends ServiceStoryBase {
 				System.out.println(" >> " + props.getProperty("tavernaDir"));
 				System.out.println(" >> " + props.getProperty("baseRepositoryDir"));
 
-				Thread.sleep(5000);
 			} catch (FileNotFoundException e1) {
-				// TODO Auto-generated catch block
+				System.err.println("File " + absPath + "/service.properties NOT found.");
 				e1.printStackTrace();
 			} catch (IOException e1) {
-				// TODO Auto-generated catch block
+				System.err.println("Unable to open file : " + absPath + "/service.properties");
 				e1.printStackTrace();
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			} 
 
 		}
 
 	}
 
-	private class BuildTaverna extends Step
+
+	private class BuildTaverna2 extends Step
 	{
-		public BuildTaverna(){
+		public BuildTaverna2(){
 		}
 		@Override
 		public void runStep() throws Throwable {
-			Project project = new Project();
-			project.init();
-			DefaultLogger logger = new DefaultLogger();
-			logger.setMessageOutputLevel(Project.MSG_INFO);
-			logger.setErrorPrintStream(System.err);
-			logger.setOutputPrintStream(System.out);
-			project.addBuildListener(logger);
-
-			File buildFile = new File(SERVICE_TEMP_PATH + "/taverna-build.xml");
-			ProjectHelper.configureProject(project, buildFile);
-
+			String output="";
 			try {
-				project.executeTarget("taverna-package");
-			} catch(Exception e) {System.err.println(e.getMessage());}
+				String antHome = System.getenv("ANT_HOME");
+				if (antHome == null || antHome.equals("")) {
+					throw new ContainerException("ANT_HOME not set");
+				}
+				File ant = new File(antHome, "bin" + File.separator + "ant");
+
+				List<String> command = new ArrayList<String>();
+
+				// Using ant executable.
+				if (System.getProperty("os.name").toLowerCase().contains("win")) {
+					command.add("cmd");
+					command.add("/c");
+					command.add(ant + ".bat");
+				} else {
+					command.add(ant.toString());
+				}
+
+				command.add("taverna-package");
+				ProcessBuilder builder = new ProcessBuilder(command);
+				builder.redirectErrorStream(true);
+				File buildFile = new File(SERVICE_TEMP_PATH);
+				builder.directory(buildFile);
+
+				Process process;
+				process = builder.start();
+				
+				System.out.println(" >> Downloading Taverna jars from repository, please wait..");
+				InputStream is = process.getInputStream();
+				InputStreamReader isr = new InputStreamReader(is);
+				BufferedReader br = new BufferedReader(isr);
+				
+				String line;
+				while ((line = br.readLine()) != null) {
+					//System.out.println(line);
+					output = output + line;
+				}
+				process.waitFor();
+
+			} catch (IOException e) {
+				System.err.println("\nErorr in running Ant Task");
+				System.out.println(output);
+				e.printStackTrace();
+			} catch (InterruptedException e) {
+				System.err.println("Process Interrupted");
+				e.printStackTrace();
+			}
+
 
 
 		}
