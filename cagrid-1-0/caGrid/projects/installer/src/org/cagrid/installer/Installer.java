@@ -465,8 +465,11 @@ public class Installer {
         deployContainer.getTasks().add(new ConditionalTask(deploySyncGTS, new Condition() {
 
             public boolean evaluate(WizardModel model) {
+                CaGridInstallerModel cagridmodel = (CaGridInstallerModel) model;
                 return ((CaGridInstallerModel) model).isDeployGlobusRequired()
-                    && ((CaGridInstallerModel) model).isConfigureContainerSelected();
+                    && ((CaGridInstallerModel) model).isConfigureContainerSelected()
+                    && (cagridmodel.getProperty(Constants.TARGET_GRID) != null)
+                    && !cagridmodel.getProperty(Constants.TARGET_GRID).equals(Constants.NO_TARGET_GRID);
             }
         }));
 

@@ -69,6 +69,7 @@ public class TargetGridConfigurationStep extends PropertyConfigurationStep {
                     targetGridPairs[i] = new LabelValuePair(targetDescription, targetGrid);
 
                 }
+                
                 targetGridPairs[files.length] = new LabelValuePair("No Target Grid", Constants.NO_TARGET_GRID);
                 addListOption(new ListPropertyConfigurationOption(Constants.TARGET_GRID, model
                     .getMessage("target.grid"), targetGridPairs, true));
