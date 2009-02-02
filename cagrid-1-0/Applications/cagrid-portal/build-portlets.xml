@@ -129,7 +129,6 @@
                 <include name="*.xml"/>
             </fileset>
             <fileset dir="${aggr.dir}/etc">
-                <include name="*.properties"/>
                 <include name="*.xml"/>
                 <exclude name="applicationContext-workspaces.xml"/>
                 <include name="*.wsdd"/>

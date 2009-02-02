@@ -43,6 +43,7 @@
     <patternset id="db.run.jars">
 
         <include name="hibernate/core/*.jar"/>
+        <include name="liquibase/*.jar"/>
         <include name="jakarta-commons/commons-dbcp.jar"/>
         <include name="jakarta-commons/commons-pool.jar"/>
 

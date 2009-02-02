@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog/1.9"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog/1.9 http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-1.9.xsd">
+
+
+    <changeSet id="1" author="kherm">
+        <tagDatabase tag="version_2.1"/>
+    </changeSet>
+
+    <changeSet id="2" author="kherm">
+        <preConditions onFail="MARK_RAN">
+            <not>
+            <columnExists tableName="status_change" columnName="archived"/>
+            </not>
+        </preConditions>
+        <addColumn tableName="status_change">
+            <column name="archived" type="bit">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="3" author="kherm">
+        <tagDatabase tag="version_2.2"/>
+    </changeSet>
+
+
+</databaseChangeLog>

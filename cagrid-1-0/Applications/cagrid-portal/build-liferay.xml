@@ -81,7 +81,7 @@
 		<copy todir="${liferay.build.dir}/resources">
 			<fileset dir="${db.dir}/etc">
 				<include name="*.properties" />
-				<include name="*.xml" />
+				<include name="applicationContext-db.xml" />
 			</fileset>
 			<fileset dir="${security.dir}/etc">
 				<include name="*.xml" />
@@ -116,6 +116,7 @@
 			<fileset dir="${db.lib.dir}">
 				<include name="hibernate/annotations/*.jar"/>
 				<include name="spring/spring-aspects.jar"/>
+                <include name="aspectj/*.jar"/>
 			</fileset>
 
 		</copy>

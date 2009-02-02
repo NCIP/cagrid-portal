@@ -22,6 +22,7 @@
 
     <!-- Should the generated DDL include table DROP statements? -->
     <property name="db.drop.tables" value="false"/>
+    <property name="db.changelog.file" value="cagrid_portal-db-changelog.xml"/>
 
     <!-- Should db layer be compiled with debug on? -->
     <property name="db.debug" value="true"/>
@@ -29,7 +30,7 @@
     <property file="${hibernate.properties}"/>
 
     <property name="db.jdbc.driver.jar"
-              value="${db.lib.dir}/mysql/mysql-connector-java-3.1.11.jar"/>
+              value="${db.lib.dir}/mysql/mysql-connector-java-5.1.7-bin.jar"/>
 
     <path id="hibernatetoolslib">
         <fileset dir="${db.dir}/tools/hibernatetools/lib">
@@ -49,6 +50,10 @@
     <taskdef name="hibernatetool"
              classname="org.hibernate.tool.ant.HibernateToolTask"
              classpathref="hibernatetoolslib"/>
+
+        <taskdef resource="liquibasetasks.properties">
+                <classpath refid="db.run.cp"/>
+            </taskdef>
 
     <target name="db:configure-hibernate-tools">
 
@@ -209,31 +214,6 @@
 
     </target>
 
-    <!--
-    <target name="db:prepare-run-cp" depends="db:compile">
-        <copy todir="${db.classes.dir}" overwrite="true">
-            <fileset dir="${db.dir}/etc">
-                <include name="*.properties" />
-                <include name="*.xml" />
-                <exclude name="*.hibernate.properties" />
-            </fileset>
-        </copy>
-        <copy file="${db.dir}/etc/default.hibernate.properties"
-            tofile="${db.classes.dir}/hibernate.properties"
-            overwrite="true" />
-    </target>
-
-    <target name="db:run" depends="db:prepare-run-cp">
-        <java classname="test.TestSearch">
-            <classpath refid="db.run.cp"/>
-            <classpath>
-                <pathelement location="${db.classes.dir}"/>
-                <pathelement location="${db.test.dir}"/>
-            </classpath>
-        </java>
-    </target>
-    -->
-
     <target name="db:run" depends="db:prepare-test-cp">
         <java classname="gov.nih.nci.cagrid.portal.TestDB">
             <classpath refid="db.test.run.cp"/>
@@ -243,6 +223,19 @@
     <target name="db:clean">
         <delete dir="${db.build.dir}"/>
         <delete dir="${db.test.build.dir}"/>
+    </target>
+
+    <target name="db:updateDB" >
+        <updateDatabase
+                changeLogFile="${db.dir}/etc/${db.changelog.file}"
+                driver="${cagrid.portal.db.driver}"
+                url="${cagrid.portal.db.url}"
+                username="${cagrid.portal.db.username}"
+                password="${cagrid.portal.db.password}"
+                promptOnNonLocalDatabase="true"
+                dropFirst="false"
+                classpathref="db.run.cp"
+        />
     </target>
 
 </project>
