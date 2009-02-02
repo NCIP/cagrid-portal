@@ -77,8 +77,8 @@ public class ExtensionTools {
         gov.nih.nci.cagrid.introduce.common.ServiceInformation info) throws Exception {
         ServiceExtensionDescriptionType extensionDesc = ExtensionsLoader.getInstance().getServiceExtension(
             extensionName);
-        if ((extensionDesc != null) && (extensionDesc.getServiceModificationUIPanel() != null)
-            && !extensionDesc.getServiceModificationUIPanel().equals("")) {
+        if ((extensionDesc != null) && (extensionDesc.getServiceDeploymentUIPanel() != null)
+            && !extensionDesc.getServiceDeploymentUIPanel().equals("")) {
             Class c = Class.forName(extensionDesc.getServiceDeploymentUIPanel());
             Constructor con = c.getConstructor(new Class[]{ServiceExtensionDescriptionType.class,
                     ServiceInformation.class});
