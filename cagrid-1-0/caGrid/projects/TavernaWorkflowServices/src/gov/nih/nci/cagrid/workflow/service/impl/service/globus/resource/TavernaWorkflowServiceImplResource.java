@@ -2,6 +2,7 @@ package gov.nih.nci.cagrid.workflow.service.impl.service.globus.resource;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -56,16 +57,18 @@ public class TavernaWorkflowServiceImplResource extends TavernaWorkflowServiceIm
 
 	private WorkflowStatusType workflowStatus = WorkflowStatusType.Pending;
 	private static TavernaWorkflowServiceConfiguration config = null;
-		
+
 	
 	private class WorkflowExecutionThread extends Thread {
 		
 		private String[] args = null;
 		private ResourcePropertySet propSet;
 		private ResourceProperty statusRP;
-
-		public WorkflowExecutionThread (String[] args,ResourcePropertySet propSet )
+	   // private File tmpFile;
+	    //private FileOutputStream outtemp;
+	    public WorkflowExecutionThread (String[] args,ResourcePropertySet propSet )
 		{
+		    
 			this.args = args;
 			this.propSet  = propSet;
 			statusRP = this.propSet.get(TavernaWorkflowServiceImplConstantsBase.WORKFLOWSTATUSELEMENT);
@@ -73,57 +76,71 @@ public class TavernaWorkflowServiceImplResource extends TavernaWorkflowServiceIm
 		}
 		public void run()
 		{	
+			
 			String tavernaDir = config.getTavernaDir();
 			String repository = config.getBaseRepositoryDir();
 			ProcessBuilder builder = new ProcessBuilder(this.args);
+			builder.redirectErrorStream(true);
+			
 			builder.directory(new File(tavernaDir + File.separator + "target" + File.separator + "classes"));
-
-			Map<String, String> environment = builder.environment();
-			
-		    String classpath = tavernaDir + File.separator + "target" + File.separator + "classes";
-		    
-		    // lisfOfJars is a method that returns all the jars from Taverna repository in CLASSPATH format (: seperated). 
-		    classpath = classpath + listOfJars(repository);
-		    environment.put("CLASSPATH", classpath);
-			
-		//	Iterator it = environment.entrySet().iterator();
-		//	while(it.hasNext())
-		//	{
-		//		Map.Entry pairs = (Map.Entry) it.next();
-		//		System.out.println(pairs.getKey() + " = " + pairs.getValue());
-		//	}			
 			try {
-				Process process;
-				process = builder.start();
-				InputStream is = process.getInputStream();
-
-				InputStreamReader isr = new InputStreamReader(is);
-
-				BufferedReader br = new BufferedReader(isr);
-				String line;
-				System.out.printf("Output of running %s is: ", 
-						Arrays.toString(args));
-				boolean finished = false;
-				String output = "";
-				while ((line = br.readLine()) != null) {
-					System.out.println(line);
-					if(finished == true)
-					{
-						//this.setOutputDoc(new String[] {line});
-						output = output + line;
-						workflowStatus = WorkflowStatusType.Done;
-						this.statusRP.set(0, workflowStatus);
-					}
-					if(line.equals("Finished!"))		
-						finished = true;
+				
+				Map<String, String> environment = builder.environment();
+				String classpath = tavernaDir + File.separator + "target" + File.separator + "classes";
+		    
+			    // lisfOfJars is a method that returns all the jars from Taverna repository in CLASSPATH format (: seperated). 
+			    classpath = classpath + listOfJars(repository);
+			    environment.put("CLASSPATH", classpath);
+				
+/*				Iterator it = environment.entrySet().iterator();
+				while(it.hasNext())
+				{
+					Map.Entry pairs = (Map.Entry) it.next();
+					String envpairs = pairs.getKey() + " = " + pairs.getValue() + "\n";
 				}
-				String[] temp = output.split(":::");
-				System.out.println("\nOUTPUT:\n" + temp[1]);
-				setOutputDoc(new String[] {temp[1]});
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+*/					
+					Process process;
+					process = builder.start();
+					
+					InputStream is = process.getInputStream();
+					InputStreamReader isr = new InputStreamReader(is);
+					BufferedReader br = new BufferedReader(isr);
+					String line;
+					System.out.printf("Output of running %s is: ", 
+							Arrays.toString(args));
+					boolean finished = false;
+					String output = "";
+					while ((line = br.readLine()) != null) {
+						System.out.println(line);
+						if(finished == true)
+						{
+							//this.setOutputDoc(new String[] {line});
+							output = output + line;
+							workflowStatus = WorkflowStatusType.Done;
+							this.statusRP.set(0, workflowStatus);
+						}
+						if(line.equals("Finished!"))		
+							finished = true;
+					}
+					int status = process.waitFor();
+					if (status != 0)
+						throw new Exception();
+					String[] temp = output.split(":::");
+					System.out.println("\nOUTPUT:\n" + temp[1]);
+					setOutputDoc(new String[] {temp[1]});
+				} catch (IOException e) {
+					System.err.println("Erorr in running the Workflow");
+					workflowStatus = WorkflowStatusType.Failed;
+					e.printStackTrace();
+				} catch (InterruptedException e) {
+					workflowStatus = WorkflowStatusType.Failed;
+					System.err.println("Process Interrupted");
+					e.printStackTrace();
+				} catch (Exception e) {
+					workflowStatus = WorkflowStatusType.Failed;
+					System.err.println("Erorr in running the Workflow");
+					e.printStackTrace();
+				} 
 
 
 		}
@@ -228,9 +245,6 @@ public class TavernaWorkflowServiceImplResource extends TavernaWorkflowServiceIm
 			Utils.stringBufferToFile(new StringBuffer(wMSInputElement.getScuflDoc()), scuflDocTemp);
 			this.setScuflDoc(scuflDocTemp);
 
-			//String output = this.getTempDir() + keys[1] + "--output.xml";
-			//this.setOutputDoc(output);
-
 		} catch (Exception e){
 			this.workflowStatus = WorkflowStatusType.Failed;
 			e.printStackTrace();
@@ -288,8 +302,8 @@ public class TavernaWorkflowServiceImplResource extends TavernaWorkflowServiceIm
 			
 
 		} catch (Exception e) {
-			e.printStackTrace();
 			this.workflowStatus = WorkflowStatusType.Failed;
+			e.printStackTrace();
 		}
 		return this.workflowStatus;
 	}
@@ -305,6 +319,7 @@ public class TavernaWorkflowServiceImplResource extends TavernaWorkflowServiceIm
 				// Currently, the results are stored as array of string holding the outputs.
 				// Ideally, the output files should be created for each output in the "start" operation,
 				//	 and then access those files here, convert them into string buffers and then store them below.
+				// Will add it once we have some examples of multiple outout workflows.
 
 				workflowOuputElement.setOutputFile(this.getOutputDoc());
 			}
