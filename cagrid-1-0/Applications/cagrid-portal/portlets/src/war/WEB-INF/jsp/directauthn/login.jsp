@@ -1,4 +1,7 @@
 <%@ include file="/WEB-INF/jsp/include/includes.jspf"%>
+
+<c:set var="prefix"><portlet:namespace/></c:set>
+
 <c:choose>
 	<c:when test="${empty portalUser}">
 	
@@ -15,7 +18,7 @@
 		<portlet:actionURL var="action">
 			<portlet:param name="operation" value="login"/>
 		</portlet:actionURL>
-		<form:form action="${action}" commandName="directLoginCommand" method="POST">
+		<form:form id="${prefix}Login" action="${action}" commandName="directLoginCommand" method="POST">
 			<c:if test="${!empty authnErrorMessage}">
 				<span style="color:red"><c:out value="${authnErrorMessage}"/></span>
 			</c:if>
@@ -30,7 +33,7 @@
 				<tr>
 					<td style="padding-right:5px; text-align:right;">Identity Provider:</td>
 					<td>
-						<form:select path="idpUrl">
+						<form:select path="idpUrl" id="${prefix}idpSelect">
 							<form:options items="${idpUrls}" itemValue="url" itemLabel="label"/>
 						</form:select>
 					</td>
@@ -38,7 +41,7 @@
 				<tr>
 					<td></td>
 					<td style="padding-top:10px;">
-						<input type="submit" value="Log In"/>
+						<input alt="Log In" type="submit" value="Log In"/>
 					</td>
 				</tr>
 			</table>

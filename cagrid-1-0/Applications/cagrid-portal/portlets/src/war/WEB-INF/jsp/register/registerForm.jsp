@@ -140,9 +140,10 @@ case letter, at least one number, and at least one symbol
 
 <br/>
 
+<c:set var="prefix"><portlet:namespace/></c:set>
 <c:set var="formName"><portlet:namespace/>registerForm</c:set>
 <portlet:actionURL var="action"/>
-<form:form name="${formName}" action="${action}" commandName="application">
+<form:form id="${formName}" name="${formName}" action="${action}" commandName="application">
 	<span style="color:red">
 		<form:errors path="*"/>
 	</span>
@@ -152,7 +153,7 @@ case letter, at least one number, and at least one symbol
 				First Name:
 			</td>
 			<td>
-				<form:input path="firstName" size="50"/>&nbsp;<span style="color:red">*</span><br/>
+				<form:input id="${prefix}firstName" alt="First Name" path="firstName" size="50"/>&nbsp;<span style="color:red">*</span><br/>
 				<span style="color:red"><form:errors path="firstName"/></span>
 			</td>
 		</tr>
@@ -161,7 +162,7 @@ case letter, at least one number, and at least one symbol
 				Last Name:
 			</td>
 			<td>
-				<form:input path="lastName" size="50"/>&nbsp;<span style="color:red">*</span><br/>
+				<form:input id="${prefix}lastName" alt="Last Name" path="lastName" size="50"/>&nbsp;<span style="color:red">*</span><br/>
 				<span style="color:red"><form:errors path="lastName"/></span>
 			</td>
 		</tr>
@@ -170,7 +171,7 @@ case letter, at least one number, and at least one symbol
 				Username:
 			</td>
 			<td>
-				<form:input path="userId" size="50"/>&nbsp;<span style="color:red">*</span><br/>
+				<form:input id="${prefix}userId" path="userId" alt="User Id" size="50"/>&nbsp;<span style="color:red">*</span><br/>
 				<span style="color:red"><form:errors path="userId"/></span>
 			</td>
 		</tr>
@@ -179,7 +180,7 @@ case letter, at least one number, and at least one symbol
 				Password:
 			</td>
 			<td>
-				<form:password path="password" size="50"/>&nbsp;<span style="color:red">*</span><br/>
+				<form:password id="${prefix}password" alt="Password" path="password" size="50"/>&nbsp;<span style="color:red">*</span><br/>
 				<span style="color:red"><form:errors path="password"/></span>
 			</td>
 		</tr>
@@ -188,7 +189,7 @@ case letter, at least one number, and at least one symbol
 				Email:
 			</td>
 			<td>
-				<form:input path="email" size="50"/>&nbsp;<span style="color:red">*</span><br/>
+				<form:input id="${prefix}email" alt="Email" path="email" size="50"/>&nbsp;<span style="color:red">*</span><br/>
 				<span style="color:red"><form:errors path="email"/></span>
 			</td>
 		</tr>
@@ -197,7 +198,7 @@ case letter, at least one number, and at least one symbol
 				Phone:
 			</td>
 			<td>
-				<form:input path="phoneNumber" size="50"/>&nbsp;<span style="color:red">*</span><br/>
+				<form:input id="${prefix}phoneNumber" alt="Phone Number" path="phoneNumber" size="50"/>&nbsp;<span style="color:red">*</span><br/>
 				<span style="color:red"><form:errors path="phoneNumber"/></span>
 			</td>
 		</tr>
@@ -206,7 +207,7 @@ case letter, at least one number, and at least one symbol
 				Organization:
 			</td>
 			<td>
-				<form:input path="organization" size="50"/>&nbsp;<span style="color:red">*</span><br/>
+				<form:input id="${prefix}organization" alt="Organization" path="organization" size="50"/>&nbsp;<span style="color:red">*</span><br/>
 				<span style="color:red"><form:errors path="organization"/></span>
 			</td>
 		</tr>
@@ -215,7 +216,7 @@ case letter, at least one number, and at least one symbol
 				Street Address 1:
 			</td>
 			<td>
-				<form:input path="address" size="50"/>&nbsp;<span style="color:red">*</span><br/>
+				<form:input id="${prefix}address" alt="Address" path="address" size="50"/>&nbsp;<span style="color:red">*</span><br/>
 				<span style="color:red"><form:errors path="address"/></span>
 			</td>
 		</tr>
@@ -224,7 +225,7 @@ case letter, at least one number, and at least one symbol
 				Street Address 2:
 			</td>
 			<td>
-				<form:input path="address2" size="50"/><br/>
+				<form:input id="${prefix}address2" alt="Address 2" path="address2" size="50"/><br/>
 				<span style="color:red"><form:errors path="address2"/></span>
 			</td>
 		</tr>
@@ -233,7 +234,7 @@ case letter, at least one number, and at least one symbol
 				City:
 			</td>
 			<td>
-				<form:input path="city" size="50"/>&nbsp;<span style="color:red">*</span><br/>
+				<form:input id="${prefix}city" alt="City" path="city" size="50"/>&nbsp;<span style="color:red">*</span><br/>
 				<span style="color:red"><form:errors path="city"/></span>
 			</td>
 		</tr>
@@ -242,7 +243,7 @@ case letter, at least one number, and at least one symbol
 				State:
 			</td>
 			<td>
-				<form:select path="state" items="${stateCodes}"/><br/>
+				<form:select id="${prefix}state" path="state" items="${stateCodes}"/><br/>
 				<span style="color:red"><form:errors path="state"/></span>
 			</td>
 		</tr>
@@ -251,7 +252,7 @@ case letter, at least one number, and at least one symbol
 				Postal Code:
 			</td>
 			<td>
-				<form:input path="zipcode" size="50"/>&nbsp;<span style="color:red">*</span><br/>
+				<form:input id="${prefix}zipCode" alt="Zip Code" path="zipcode" size="50"/>&nbsp;<span style="color:red">*</span><br/>
 				<span style="color:red"><form:errors path="zipcode"/></span>
 			</td>
 		</tr>
@@ -260,14 +261,14 @@ case letter, at least one number, and at least one symbol
 				Country:
 			</td>
 			<td>
-				<form:select path="country" items="${countryCodes}"/>&nbsp;<span style="color:red">*</span><br/>
+				<form:select id="${prefix}country" path="country" items="${countryCodes}"/>&nbsp;<span style="color:red">*</span><br/>
 				<span style="color:red"><form:errors path="country"/></span>
 			</td>
 		</tr>
 		<tr>
 			<td></td>
 			<td style="padding-top:5px;">
-				<input type="submit" value="Submit"/>
+				<input id="${prefix}submit" alt="Submit" type="submit" value="Submit"/>
 			</td>
 		</tr>
 	</table>

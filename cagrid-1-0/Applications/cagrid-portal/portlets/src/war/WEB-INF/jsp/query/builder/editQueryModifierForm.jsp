@@ -91,7 +91,8 @@
 
 <portlet:actionURL var="editQueryModifierFormAction"/>
 <c:set var="editQueryModifierFormName"><portlet:namespace/>editQueryModifierForm</c:set>
-<form:form commandName="editQueryModifierCommand" name="${editQueryModifierFormName}" action="${editQueryModifierFormAction}">
+<form:form commandName="editQueryModifierCommand" id="${editQueryModifierFormName}"
+           name="${editQueryModifierFormName}" action="${editQueryModifierFormAction}">
 
 <br/>
 <form:radiobutton id="${objectInputId}" value="OBJECT" path="modifierType"/>Object&nbsp;&nbsp;
@@ -101,8 +102,8 @@
 <br/>
 <br/>
 
-<input type="button" value="Update" onclick="<portlet:namespace/>doQueryModifierOp('update')"/>
-<input type="button" value="Cancel" onclick="<portlet:namespace/>doQueryModifierOp('cancel')"/>
+<input type="button" id="${editQueryModifierFormName}Update" alt="Update" value="Update" onclick="<portlet:namespace/>doQueryModifierOp('update')"/>
+<input type="button" id="${editQueryModifierFormName}Cancel" alt="Cancel" value="Cancel" onclick="<portlet:namespace/>doQueryModifierOp('cancel')"/>
 <input type="hidden" name="operation" value="updateQueryModifier"/>
 <input type="hidden" name="editOperation" value=""/>
 <br/>

@@ -17,7 +17,7 @@
 <%@ include file="/WEB-INF/jsp/include/resizable_div.jspf" %>
 
 <portlet:actionURL var="action"/>
-<form:form name="${formName}" action="${action}" commandName="cqlQueryCommand">
+<form:form id="${formName}" name="${formName}" action="${action}" commandName="cqlQueryCommand">
     <input type="hidden" name="operation" value="submitQuery"/>
     <span style="color:red"><form:errors path="*"/></span>
     <table>
@@ -25,7 +25,7 @@
         <c:if test="${cqlQueryCommand.dcql == 'false'}">
             <tr>
                 <td style="padding-right:5px"><b>URL:</b></td>
-                <td><form:input path="dataServiceUrl" size="100"/><br/>
+                <td><form:input id="${formName}Url" path="dataServiceUrl" size="100"/><br/>
                     <span style="color:red"><form:errors path="dataServiceUrl"/></span></td>
             </tr>
         </c:if>
@@ -39,12 +39,12 @@
         </tr>
         <tr>
             <td colspan="2">
-                <input type="submit" value="Submit Query"/>
+                <input type="submit" id="${formName}Submit" alt="Submit Query" value="Submit Query"/>
 
                 <!--no sharing if query is dcql-->
                 <c:if test="${cqlQueryCommand.dcql == 'false'}">
                     <c:if test="${!empty portalUser}">
-                        <input type="button" value="Share Query" onclick="<portlet:namespace/>shareQuery()"/>
+                        <input type="button" id="${formName}query" alt="Share Query" value="Share Query" onclick="<portlet:namespace/>shareQuery()"/>
                     </c:if>
                 </c:if>
 

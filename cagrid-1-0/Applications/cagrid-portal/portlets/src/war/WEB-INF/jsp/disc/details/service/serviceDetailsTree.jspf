@@ -114,7 +114,7 @@
 <p/>
 <portlet:actionURL var="action"/>
 <c:set var="selectUMLClassFormName"><portlet:namespace/>selectUMLClassForm</c:set>
-<form:form name="${selectUMLClassFormName}" action="${action}">
+<form:form id="${selectUMLClassFormName}" name="${selectUMLClassFormName}" action="${action}">
     <input type="hidden" name="selectedId" value=""/>
     <input type="hidden" name="url" value=""/>
     <input type="hidden" name="operation" value="selectUmlClassForQuery"/>

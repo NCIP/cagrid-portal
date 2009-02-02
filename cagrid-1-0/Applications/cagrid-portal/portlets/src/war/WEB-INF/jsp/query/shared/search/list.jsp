@@ -15,7 +15,7 @@
     //]]>
 </script>
 <portlet:actionURL var="action" />
-<form:form action="${action}" name="${formName}">
+<form:form action="${action}" id="${formName}" name="${formName}">
 <input type="hidden" name="operation" value=""/>
 <input type="hidden" name="queryId" value=""/>
 </form:form>
@@ -69,14 +69,14 @@
 			
 			<tr class="<c:out value="${rowClass}"/>">
 				<td class="dataCellText">
-					<select name="operation"
+					<select id="${formName}Operation" name="operation"
 						onchange="<portlet:namespace/>doSharedQueryOp('<c:out value="${sharedQuery.id}"/>', this.options[this.selectedIndex].value)">
-						<option value="---" selected>---</option>
+						<option id="${formName}Selected" value="---" selected>---</option>
 						<c:if test="${!empty portalUser and portalUser.id eq sharedQuery.owner.id}">
-							<option value="selectSharedQuery">Edit</option>
+							<option id="${formName}Edit" value="selectSharedQuery">Edit</option>
 						</c:if>
-						<option value="loadSharedQuery">Load</option>
-						<option value="selectSharedQueryToView">View</option>
+						<option id="${formName}Load" value="loadSharedQuery">Load</option>
+						<option id="${formName}View" value="selectSharedQueryToView">View</option>
 					</select>
 				</td>
 				<td class="dataCellText">

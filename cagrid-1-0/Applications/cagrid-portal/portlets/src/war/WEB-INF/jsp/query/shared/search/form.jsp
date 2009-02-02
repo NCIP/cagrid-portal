@@ -32,34 +32,34 @@
 
 <c:set var="formName"><portlet:namespace/>searchSharedQueriesForm</c:set>
 <c:set var="onSubmitAction"><portlet:namespace/>doSharedQuerySearch('<c:out value="${formName}"/>')</c:set>
-<form:form action="${formAction}" name="${formName}" 
+<form:form action="${formAction}" id="${formName}" name="${formName}"
 	onsubmit="return ${onSubmitAction}"
 >
 <table>
 	<tr>
 		<td style="padding-right:5px;"><b>Keyword:</b></td>
 		<td>
-			<input type="text" name="keywords"/>
+			<input type="text" id="${formName}Keywords" name="keywords"/>
 		</td>
 	</tr>
 	<tr>
 		<td style="padding-right:5px;" valign="top"><b>Search Fields:</b></td>
 		<td>
 			<select name="searchFields" multiple size="8">
-				<option value="name">Query Name</option>
-				<option value="description">Query Description</option>
-				<option value="targetService.url">Target Service URL</option>
-				<option value="targetService.serviceMetadata.serviceDescription.name">Target Service Name</option>
-				<option value="targetClass.className">Target UML Class Name</option>
-				<option value="owner.person.firstName">Query Creator First Name</option>
-				<option value="owner.person.lastName">Query Creator Last Name</option>
-				<option value="owner.person.emailAddress">Query Creator Email</option>
+				<option id="${formName}Name" value="name">Query Name</option>
+				<option id="${formName}Desc" value="description">Query Description</option>
+				<option id="${formName}Url" value="targetService.url">Target Service URL</option>
+				<option id="${formName}Name" value="targetService.serviceMetadata.serviceDescription.name">Target Service Name</option>
+				<option id="${formName}TName" value="targetClass.className">Target UML Class Name</option>
+				<option id="${formName}FName" value="owner.person.firstName">Query Creator First Name</option>
+				<option id="${formName}LName" value="owner.person.lastName">Query Creator Last Name</option>
+				<option id="${formName}Email" value="owner.person.emailAddress">Query Creator Email</option>
 			</select>
 		</td>
 	</tr>
 	<tr>
 		<td colspan="2">
-			<input type="submit" value="Search"/>
+			<input type="submit" id="${formName}Search" alt="Search value="Search"/>
 		</td>
 	</tr>
 </table>

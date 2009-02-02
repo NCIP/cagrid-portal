@@ -1,11 +1,12 @@
 <%@ include file="/WEB-INF/jsp/include/includes.jspf" %>
 <%@ include file="/WEB-INF/jsp/query/tabs.jspf" %>
 
+<c:set var="prefix"><portlet:namespace/>selectServiceForm</c:set>
 <c:set var="resizablePrefix"><portlet:namespace/>umlClassList</c:set>
 <%@ include file="/WEB-INF/jsp/include/resizable_div.jspf" %>
 
 <portlet:actionURL var="selectServiceAction"/>
-<form:form action="${selectServiceAction}" commandName="selectServiceCommand">
+<form:form id="${prefix}" action="${selectServiceAction}" commandName="selectServiceCommand">
 <input type="hidden" name="operation" value="selectService"/>
 <table>
 	<tr>
@@ -13,11 +14,11 @@
 			<b>Service URL:</b>
 		</td>
 		<td style="padding-right:5px;  text-align:right" valign="top">
-			<form:input path="dataServiceUrl" size="50" maxlength="1000"/><br/>
+			<form:input id="${prefix}url" alt="Data Service Url" path="dataServiceUrl" size="50" maxlength="1000"/><br/>
 			<span style="color:red"><form:errors path="dataServiceUrl"/></span>
 		</td>
 		<td valign="top">
-			<input type="submit" value="Select"/>
+			<input type="submit" id="${prefix}Select" alt="Select" value="Select"/>
 		</td>
 	</tr>
 </table>

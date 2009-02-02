@@ -21,7 +21,8 @@
 
 <portlet:actionURL var="criterionBeanFormAction"/>
 <c:set var="criterionBeanFormName"><portlet:namespace/>criterionBeanForm</c:set>
-<form:form commandName="criterionBean" name="${criterionBeanFormName}" action="${criterionBeanFormAction}">
+<form:form commandName="criterionBean" id="${criterionBeanFormName}"
+           name="${criterionBeanFormName}" action="${criterionBeanFormAction}">
 
 <table>
 	<thead>
@@ -33,23 +34,23 @@
 		<tr>
 			<td style="padding:5px"><c:out value="${criterionBean.umlAttribute.name}"/></td>
 			<td style="padding:5px">
-				<form:select path="predicate">
+				<form:select id="${criterionBeanFormName}Predicate" path="predicate">
 					<c:forEach var="pred" items="${predicates}">
 						<form:option value="${pred}"/>
 					</c:forEach>
 				</form:select>
 			</td>
 			<td style="padding:5px">
-				<form:input path="value"/>
+				<form:input id="${criterionBeanFormName}Value"  alt="Value" path="value"/>
 			</td>
 		</tr>
 	</tbody>
 </table>
 <br/>
 <br/>
-<input type="button" value="Update" onclick="<portlet:namespace/>doCriterionBeanOp('update')"/>
-<input type="button" value="Delete" onclick="<portlet:namespace/>doCriterionBeanOp('delete')"/>
-<input type="button" value="Cancel" onclick="<portlet:namespace/>doCriterionBeanOp('cancel')"/>
+<input type="button" id="${criterionBeanFormName}Update" alt="Update" value="Update" onclick="<portlet:namespace/>doCriterionBeanOp('update')"/>
+<input type="button" id="${criterionBeanFormName}Delete" alt="Delete" value="Delete" onclick="<portlet:namespace/>doCriterionBeanOp('delete')"/>
+<input type="button" id="${criterionBeanFormName}Cancel" alt="Cancel"  value="Cancel" onclick="<portlet:namespace/>doCriterionBeanOp('cancel')"/>
 <input type="hidden" name="operation" value="updateCriterion"/>
 <input type="hidden" name="path" value="<c:out value="${path}"/>"/>
 <input type="hidden" name="editOperation" value=""/>

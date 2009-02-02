@@ -1,4 +1,4 @@
-	<form:select onchange="submit()" path="selectedResults">
+	<form:select id="selectedResults" onchange="submit()" path="selectedResults">
 		<c:choose>
 		<c:when test="${empty results}">
 			<form:option value="----">No results available</form:option>

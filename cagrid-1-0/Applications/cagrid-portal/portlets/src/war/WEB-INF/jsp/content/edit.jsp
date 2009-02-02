@@ -6,10 +6,14 @@
 Current view is: <c:out value="${viewName}"/>
 </p>
 
-<form method="post" action="<portlet:actionURL/>">
-	<input type="text" name="viewName" value="<c:out value="${viewName} }"/>"/>
+<c:set var="prefix"><portlet:namespace/></c:set>
+
+<form id="${prefix}editForm" method="post" action="${prefix}editForm">
+	<input id="${prefix}viewName"
+           alt="View Name"
+           type="text" name="viewName" value="<c:out value="${viewName} }"/>"/>
 	<br/>
-	<button type="submit">Modify</button>
+	<button id="${prefix}ModifyBtn" type="submit">Modify</button>
 </form>
 
 <br/>

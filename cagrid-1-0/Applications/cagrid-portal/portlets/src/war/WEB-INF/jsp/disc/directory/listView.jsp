@@ -8,19 +8,21 @@
 <%@ include file="/WEB-INF/jsp/include/table_styles.jspf" %>
 
 <portlet:actionURL var="action"/>
+<c:set var="prefix"><portlet:namespace/></c:set>
+
 
 <table>
 <tr>
 <td style="padding-right: 5px;">
 <b>Directories:</b>
-<form:form action="${action}" commandName="listCommand">
+<form:form id="${prefix}listDirectories" action="${action}" commandName="listCommand">
 <%@ include file="/WEB-INF/jsp/disc/directory/directoriesSelect.jspf" %>
 	<input type="hidden" name="operation" value="selectDirectoryList"/>
 </form:form>
 </td>
 <td style="padding-right: 5px;">
 <b>Search Results:</b>
-<form:form action="${action}" commandName="listCommand">
+<form:form id="${prefix}listResults" action="${action}" commandName="listCommand">
 <%@ include file="/WEB-INF/jsp/disc/directory/searchResultsSelect.jspf" %>
 	<input type="hidden" name="operation" value="selectResultsList"/>
 </form:form>

@@ -11,7 +11,7 @@
 
 <portlet:actionURL var="aggregateTargetsFormAction"/>
 <c:set var="aggregateTargetsFormName"><portlet:namespace/>aggregateTargetsFormName</c:set>
-<form:form commandName="aggregateTargetsCmd" name="${aggregateTargetsFormName}"
+<form:form commandName="aggregateTargetsCmd" id="${aggregateTargetsFormName}" name="${aggregateTargetsFormName}"
            action="${aggregateTargetsFormAction}">
 
     <c:choose>
@@ -34,7 +34,7 @@
 
             <div class="row">
                 <div class="label">
-                    <input type="checkbox" checked="true" value="${primary.model.service.url}" DISABLED/>
+                    <input type="checkbox" id="${aggregateTargetsFormName}PUrl" alt="Primary Service Url" checked="true" value="${primary.model.service.url}" DISABLED/>
                     &nbsp;
                 </div>
                 <div>
@@ -45,7 +45,7 @@
             <c:forEach var="aggregateTarget" items="${aggregateTargetsCmd.available}">
                 <div class="row">
                     <div class="label">
-                        <form:checkbox path="selected" value="${aggregateTarget.model.service.url}"/>
+                        <form:checkbox path="selected" id="${aggregateTargetsFormName}AggTargets" value="${aggregateTarget.model.service.url}"/>
                         &nbsp;
                     </div>
                     <div>
@@ -58,7 +58,7 @@
             <div class="row">
                 <div class="label">
                     <input type="hidden" name="operation" value="selectAggregateTargets"/>
-                    <input type="submit" value="Add Targets"/>
+                    <input type="submit" id="${aggregateTargetsFormName}Add" alt="Add Targets" value="Add Targets"/>
                 </div>
             </div>
 

@@ -38,13 +38,13 @@
 <br/>
 <c:if test="${!empty sharedQueryBean}">
 <portlet:actionURL var="action"/>
-<form:form name="${formName}" action="${action}" commandName="sharedQueryBean">
+<form:form id="${formName}" name="${formName}" action="${action}" commandName="sharedQueryBean">
 <span style="color:red"><form:errors path="*"/></span><br/>
 <table>
 	<tr>
 		<td style="padding-right:5px"><b>Name:</b></td>
 		<td>
-			<form:input path="query.name" size="100"/><br/>
+			<form:input id="${formName}QueryName" alt="Query Name" path="query.name" size="100"/><br/>
 			<span style="color:red"><form:errors path="query.name"/></span>
 		</td>
 	</tr>
@@ -61,9 +61,9 @@
 <input type="hidden" name="operation" value="updateSharedQuery"/>
 <input type="hidden" name="selectedTabPath" value=""/>
 <c:if test="${!empty sharedQueryBean.query.id}">
-	<input type="button" value="Delete" onclick="<portlet:namespace/>doEditSharedQueryOp('delete')"/>
+	<input type="button" id="${formName}Delete" alt="Delete" value="Delete" onclick="<portlet:namespace/>doEditSharedQueryOp('delete')"/>
 </c:if>
-<input type="button" value="Save" onclick="<portlet:namespace/>doEditSharedQueryOp('save')"/>
-<input type="button" value="Cancel" onclick="<portlet:namespace/>doEditSharedQueryOp('cancel')"/>
+<input type="button" id="${formName}Save" alt="Save" value="Save" onclick="<portlet:namespace/>doEditSharedQueryOp('save')"/>
+<input type="button" id="${formName}Cancel" alt="Cancel" value="Cancel" onclick="<portlet:namespace/>doEditSharedQueryOp('cancel')"/>
 </form:form>
 </c:if>

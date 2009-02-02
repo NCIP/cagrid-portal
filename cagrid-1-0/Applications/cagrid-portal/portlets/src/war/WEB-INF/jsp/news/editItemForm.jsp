@@ -45,40 +45,40 @@
 		<span style="color:green"><c:out value="${confirmMessage}"/></span>
 		<br/>
 		<portlet:actionURL var="action"/>
-		<form:form name="${formName}" action="${action}" commandName="item">
+		<form:form id="${formName}" name="${formName}" action="${action}" commandName="item">
 			<table>
 				<tr>
 					<td style="padding-right:5px; text-align:right" valign="top">Title:</td>
 					<td>
-						<form:input path="title" size="100"/><br/>
+						<form:input id="${formName}Title" alt="Title" path="title" size="100"/><br/>
 						<span style="color:red"><form:errors path="title"/></span>
 					</td>
 				</tr>
 				<tr>
 					<td style="padding-right:5px; text-align:right" valign="top">Link:</td>
 					<td>
-						<form:input path="link" size="100"/><br/>
+						<form:input id="${formName}Link" alt="Link" path="link" size="100"/><br/>
 						<span style="color:red"><form:errors path="link"/></span>
 					</td>
 				</tr>
 				<tr>
 					<td style="padding-right:5px; text-align:right" valign="top">Width:</td>
 					<td>
-						<form:input path="width" size="10"/><br/>
+						<form:input id="${formName}Width" alt="Width" path="width" size="10"/><br/>
 						<span style="color:red"><form:errors path="width"/></span>
 					</td>
 				</tr>
 				<tr>
 					<td style="padding-right:5px; text-align:right" valign="top">Height:</td>
 					<td>
-						<form:input path="height" size="10"/><br/>
+						<form:input id="${formName}Height" alt="Height" path="height" size="10"/><br/>
 						<span style="color:red"><form:errors path="height"/></span>
 					</td>
 				</tr>
 				<tr>
 					<td style="padding-right:5px; text-align:right" valign="top">Description:</td>
 					<td>
-						<form:textarea path="description" cols="97"/><br/>
+						<form:textarea id="${formName}Desc"  path="description" cols="97"/><br/>
 						<span style="color:red"><form:errors path="description"/></span>
 					</td>
 				</tr>
@@ -86,9 +86,9 @@
 					<td></td>
 					<td style="padding-top:5px;">
 						<c:if test="${!empty item.id}">
-							<input type="button" value="Delete" onclick="<portlet:namespace/>doEditItemOp('delete')"/>
+							<input type="button" id="${formName}Delete" alt="Delete" value="Delete" onclick="<portlet:namespace/>doEditItemOp('delete')"/>
 						</c:if>
-						<input type="button" value="Save" onclick="<portlet:namespace/>doEditItemOp('save')"/>
+						<input type="button" id="${formName}Save" alt="Save" value="Save" onclick="<portlet:namespace/>doEditItemOp('save')"/>
 					</td>
 				</tr>
 			</table>

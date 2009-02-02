@@ -28,7 +28,7 @@
         <tr>
             <td valign="top" style="padding-right:5px; text-align:right"><b>Keyword:</b></td>
                          <td valign="top">
-                <input id="evsConcept" type="text" class="searchField auto_complete"/>
+                <input id="evsConcept" type="text" alt="Search Keyword" class="searchField auto_complete"/>
 
                 <tags:infoPopup id="evs"
                                 popup_text="NCI Thesaurus based service discovery.Enter concept name in the auto-completer text field. The auto-completer will load relevant concepts first."/>

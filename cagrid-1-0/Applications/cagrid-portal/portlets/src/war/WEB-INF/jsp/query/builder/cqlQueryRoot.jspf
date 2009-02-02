@@ -39,18 +39,23 @@
     //]]>
 </script>
 <c:set var="criteriaBeanFormName"><portlet:namespace/>criteriaBeanForm</c:set>
-<form:form name="${criteriaBeanFormName}">
+<form:form id="${criteriaBeanFormName}" name="${criteriaBeanFormName}">
     <c:if test="${cqlQueryBean.DCQLQuery == 'false'}">
-        <input type="button" value="Edit Query Modifiers"
+        <input type="button" id="${criteriaBeanFormName}EQuery" value="Edit Query Modifiers"
                onclick="<portlet:namespace/>goToPath('/query/builder/editQueryModifierForm')"/>
     </c:if>
-    <input type="button" value="Aggregate Query" onclick="<portlet:namespace/>aggregateQuery()"/>
-    <input type="button" value="Add Criterion" onclick="<portlet:namespace/>goToPath('/query/builder/umlClass')"/>
-    <input type="button" value="Export To XML" onclick="<portlet:namespace/>exportToXml()"/>
-    <input type="button" value="Submit Query" onclick="<portlet:namespace/>submitBuilderQuery()"/>
+    <input type="button" id="${criteriaBeanFormName}AQuery" alt="Aggregate Query"
+           value="Aggregate Query" onclick="<portlet:namespace/>aggregateQuery()"/>
+    <input type="button" id="${criteriaBeanFormName}ACrit" alt="Add Criterion"
+           value="Add Criterion" onclick="<portlet:namespace/>goToPath('/query/builder/umlClass')"/>
+    <input type="button" id="${criteriaBeanFormName}EXML" alt="Export To XML"
+           value="Export To XML" onclick="<portlet:namespace/>exportToXml()"/>
+    <input type="button" id="${criteriaBeanFormName}SQuery" alt="Submit Query"
+           value="Submit Query" onclick="<portlet:namespace/>submitBuilderQuery()"/>
     <c:if  test="${cqlQueryBean.DCQLQuery == 'false'}">
         <c:if test="${!empty portalUser}">
-            <input type="button" value="Share Query" onclick="<portlet:namespace/>shareBuilderQuery()"/>
+            <input type="button" id="${criteriaBeanFormName}ShareQuery" alt="Share Query"
+                   value="Share Query" onclick="<portlet:namespace/>shareBuilderQuery()"/>
         </c:if>
     </c:if>
     <input type="hidden" name="selectedTabPath" value=""/>
