@@ -8,7 +8,7 @@ repository      The dependency repository (used by the Ivy-based build process)
 
 FILES
 ========================================
-build.xml		This is the main build process that manages all of the project to project dependancies, and has a call-thru ability to build any subproject
+build.xml		This is the main build process that manages all of the project to project dependencies, and has a call-thru ability to build any subproject
 
 
 For more information, refer to the Documentation module of the repository.  Specifically the Documentation/docs/BuildProcess directory.
@@ -23,3 +23,4 @@ caGrid-1_0_release_final = Code released for 1.0
 caGrid-1_0_release_pointrelease_portal_r1 = First point release of 1.0 branch for portal updates
 caGrid-1_1_release_final = Code released for 1.1
 caGrid-1_2_release_final = Code released for 1.2
+caGrid-1_3_release_final = Code released for 1.3
