@@ -145,8 +145,7 @@ public class DummyAutoLogin2 implements AutoLogin {
 		int birthdayDay = 1;
 		int birthdayYear = 1;
 		String jobTitle = null;
-		long organizationId = -1;
-		long locationId = -1;
+	    long[] organizationId = new long[0];
 		boolean sendEmail = false;
 
 		Company company = CompanyLocalServiceUtil
@@ -167,7 +166,7 @@ public class DummyAutoLogin2 implements AutoLogin {
 				autoPassword, password1, password2, autoScreenName, screenName,
 				emailAddress, locale, firstName, middleName, lastName,
 				prefixId, suffixId, male, birthdayMonth, birthdayDay,
-				birthdayYear, jobTitle, organizationId, locationId, sendEmail);
+				birthdayYear, jobTitle, organizationId,sendEmail);
 
 		return user;
 	}

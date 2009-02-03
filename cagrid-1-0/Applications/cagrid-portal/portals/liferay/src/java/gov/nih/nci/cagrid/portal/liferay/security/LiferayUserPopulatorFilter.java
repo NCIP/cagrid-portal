@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.portal.liferay.security;
 
 import com.liferay.portal.model.impl.RoleImpl;
+import com.liferay.portal.model.Role;
 import com.liferay.portal.service.RoleServiceUtil;
 import gov.nih.nci.cagrid.portal.domain.LiferayUser;
 import org.apache.commons.logging.Log;
@@ -51,8 +52,8 @@ public class LiferayUserPopulatorFilter implements Filter {
     }
 
     private boolean isAdmin(long userId) throws Exception {
-        List<RoleImpl> roles = RoleServiceUtil.getUserRoles(userId);
-        for (RoleImpl role : roles) {
+        List<Role> roles = RoleServiceUtil.getUserRoles(userId);
+        for (Role role : roles) {
             if (role.getName().equals(RoleImpl.ADMINISTRATOR))
                 return true;
         }
