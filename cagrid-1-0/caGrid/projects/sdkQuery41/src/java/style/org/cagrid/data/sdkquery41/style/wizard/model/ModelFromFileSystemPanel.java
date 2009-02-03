@@ -377,6 +377,7 @@ public class ModelFromFileSystemPanel extends DomainModelSourcePanel {
                     }
                     if (selectedFilename != null) {
                         getModelFilenameTextField().setText(selectedFilename);
+                        getConfiguration().setDomainModelLocalFile(new File(selectedFilename));
                         validateInput();
                         if (!validationModel.hasErrors()) {
                             // valid domain model, so we can populate fields

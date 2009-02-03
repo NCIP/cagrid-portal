@@ -276,6 +276,7 @@ public class ModelFromConfigPanel extends DomainModelSourcePanel {
             projectNameTextField = new JTextField();
             projectNameTextField.getDocument().addDocumentListener(new DocumentChangeAdapter() {
                 public void documentEdited(DocumentEvent e) {
+                    getConfiguration().setProjectShortName(getProjectNameTextField().getText());
                     validateInput();
                 }
             });
@@ -294,6 +295,7 @@ public class ModelFromConfigPanel extends DomainModelSourcePanel {
             projectVersionTextField = new JTextField();
             projectVersionTextField.getDocument().addDocumentListener(new DocumentChangeAdapter() {
                 public void documentEdited(DocumentEvent e) {
+                    getConfiguration().setProjectVersion(getProjectVersionTextField().getText());
                     validateInput();
                 }
             });
