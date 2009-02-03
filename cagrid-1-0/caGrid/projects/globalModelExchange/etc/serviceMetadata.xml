@@ -1,8 +1,8 @@
 <ns1:ServiceMetadata xmlns:ns1="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata">
  <ns1:serviceDescription>
-  <ns2:Service description="" name="GlobalModelExchange" version="1.1" xmlns:ns2="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.service">
+  <ns2:Service description="The Global Model Exchange (GME) service provides registry of XML Schemas which define the syntax of data exchanged on the grid." name="GlobalModelExchange" version="1.3" xmlns:ns2="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.service">
    <ns2:pointOfContactCollection>
-    <ns3:PointOfContact affiliation="" email="" firstName="" lastName="" phoneNumber="" role="" xmlns:ns3="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
+    <ns3:PointOfContact affiliation="Ohio State University" email="knowledge@cagrid.org" firstName="Scott" lastName="Oster" role="Architect" xmlns:ns3="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
    </ns2:pointOfContactCollection>
    <ns2:serviceContextCollection>
     <ns2:ServiceContext description="" name="GlobalModelExchange">
