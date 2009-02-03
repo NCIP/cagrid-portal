@@ -3,6 +3,7 @@ package org.cagrid.data.sdkquery41.style.wizard.mapping;
 import gov.nih.nci.cagrid.data.extension.ModelPackage;
 import gov.nih.nci.cagrid.data.ui.SchemaResolutionDialog;
 import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
+import gov.nih.nci.cagrid.introduce.common.CommonTools;
 import gov.nih.nci.cagrid.introduce.common.ServiceInformation;
 
 import java.awt.event.ActionEvent;
@@ -37,6 +38,11 @@ public class SchemaResolutionButton extends JButton implements ActionListener {
         NamespaceType[] namespaces = SchemaResolutionDialog.resolveSchemas(serviceInfo);
         if (namespaces != null && namespaces.length != 0) {
             NamespaceType selected = namespaces[0];
+            // add the namespaces to the service
+            for (NamespaceType ns : namespaces) {
+                CommonTools.addNamespace(serviceInfo.getServiceDescriptor(), ns);
+            }
+            
             // set the namespace for the package
             try {
                 configuration.setPackageNamespace(

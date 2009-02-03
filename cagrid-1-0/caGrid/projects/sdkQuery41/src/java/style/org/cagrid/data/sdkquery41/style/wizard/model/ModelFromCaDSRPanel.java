@@ -316,8 +316,8 @@ public class ModelFromCaDSRPanel extends DomainModelSourcePanel {
     private void addPackageToModel(UMLPackageMetadata pack) {
         Project project = getCadsrBrowser().getSelectedProject();
         DefaultListModel model = (DefaultListModel) getPackagesList().getModel();
-        if (!projectsEqual(project, selectedProject) && 
-            selectedProject != null && model.getSize() != 0) {
+        if (!projectsEqual(project, this.selectedProject) && 
+            this.selectedProject != null && model.getSize() != 0) {
             // projects don't match, and there's already packages in the list
             String[] error = {
                 "Selected project " + project.getShortName(),
@@ -330,7 +330,9 @@ public class ModelFromCaDSRPanel extends DomainModelSourcePanel {
             JOptionPane.showMessageDialog(root, error, "Error", JOptionPane.ERROR_MESSAGE);
         } else {
             // all is well... add the package to the list
+            this.selectedProject = project;
             model.addElement(new UMLPackageDisplay(pack));
+            getConfiguration().setCadsrProject(this.selectedProject);
             getConfiguration().addCadsrPackage(pack);
         }
     }

@@ -115,6 +115,7 @@ public class DomainModelConfigurationStep extends AbstractStyleConfigurationStep
                 clazz.setShortClassName(classMetadata[j].getName());
                 clazz.setSelected(true);
                 clazz.setTargetable(true);
+                classes[j] = clazz;
             }
             pack.setModelClass(classes);
             packages[index] = pack;
