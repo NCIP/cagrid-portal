@@ -28,7 +28,7 @@ import org.xml.sax.helpers.DefaultHandler;
  * @author David Ervin
  * 
  * @created Apr 22, 2008 3:44:03 PM
- * @version $Id: BaseXMIHandler.java,v 1.4 2008-04-28 19:30:50 dervin Exp $ 
+ * @version $Id: BaseXMIHandler.java,v 1.5 2009-02-04 14:55:45 dervin Exp $ 
  */
 public abstract class BaseXMIHandler extends DefaultHandler {
     
@@ -297,28 +297,23 @@ public abstract class BaseXMIHandler extends DefaultHandler {
 
 
     private void applyFilters() {
-        // build set of class IDs to filter out
-        // using IDs rather than names directory so they can then be used 
-        // to remove associations involving the filtered classes
-        HashSet<String> filterSet = new HashSet<String>();
+        // build a set of class IDs which are valid to keep references to
+        // from oteher components of the model
+        HashSet<String> validClassIds = new HashSet<String>();
         
         for (UMLClass clazz : classList) {
             String pack = clazz.getPackageName();
-            if (this.parser.filterPrimitiveClasses && pack.startsWith("java")) {
-                // filter primtives
-                filterSet.add(clazz.getId());
-            } else if (pack.startsWith("ValueDomain")) {
-                // filter ValueDomain package
-                filterSet.add(clazz.getId());
-            } else if (pack.equals("")) {
-                filterSet.add(clazz.getId());
+            if ((this.parser.filterPrimitiveClasses && !pack.startsWith("java")) && 
+                !pack.startsWith("ValueDomain") && 
+                !pack.equals("")) {
+                validClassIds.add(clazz.getId());
             }
         }
-
+        
         // filter class list
         List<UMLClass> filteredClasses = new ArrayList<UMLClass>(this.classList.size());
         for (UMLClass cl : this.classList) {
-            if (!filterSet.contains(cl.getId())) {
+            if (validClassIds.contains(cl.getId())) {
                 filteredClasses.add(cl);
             }
         }
@@ -328,9 +323,9 @@ public abstract class BaseXMIHandler extends DefaultHandler {
         List<UMLAssociation> filteredAssociations = 
             new ArrayList<UMLAssociation>(this.assocList.size());
         for (UMLAssociation assoc : this.assocList) {
-            if (!filterSet.contains(assoc.getSourceUMLAssociationEdge()
+            if (validClassIds.contains(assoc.getSourceUMLAssociationEdge()
                 .getUMLAssociationEdge().getUMLClassReference().getRefid())
-                && !filterSet.contains(assoc.getTargetUMLAssociationEdge()
+                && validClassIds.contains(assoc.getTargetUMLAssociationEdge()
                     .getUMLAssociationEdge().getUMLClassReference().getRefid())) {
                 filteredAssociations.add(assoc);
             }
@@ -341,8 +336,8 @@ public abstract class BaseXMIHandler extends DefaultHandler {
         List<UMLGeneralization> filteredGeneralizations = 
             new ArrayList<UMLGeneralization>(this.generalizationList.size());
         for (UMLGeneralization gen : this.generalizationList) {
-            if (!filterSet.contains(gen.getSubClassReference().getRefid())
-                && !filterSet.contains(gen.getSuperClassReference().getRefid())) {
+            if (validClassIds.contains(gen.getSubClassReference().getRefid())
+                && validClassIds.contains(gen.getSuperClassReference().getRefid())) {
                 filteredGeneralizations.add(gen);
             }
         }
