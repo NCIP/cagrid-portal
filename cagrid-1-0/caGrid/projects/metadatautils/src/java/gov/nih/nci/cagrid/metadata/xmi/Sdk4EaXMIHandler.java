@@ -27,7 +27,7 @@ import org.xml.sax.SAXException;
   * @author David Ervin
   * 
   * @created Oct 22, 2007 10:26:25 AM
-  * @version $Id: Sdk4EaXMIHandler.java,v 1.5 2008-04-28 19:30:50 dervin Exp $
+  * @version $Id: Sdk4EaXMIHandler.java,v 1.6 2009-02-05 19:01:40 dervin Exp $
  */
 class Sdk4EaXMIHandler extends BaseXMIHandler {
     private static final Log LOG = LogFactory.getLog(Sdk4EaXMIHandler.class);   
@@ -208,49 +208,66 @@ class Sdk4EaXMIHandler extends BaseXMIHandler {
     }
     
     
+    private void handleAttributeTag(String tag, String value) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Handling tag for attribute");
+            LOG.debug("\ttag=" + tag);
+            LOG.debug("\tvalue=" + value);
+        }
+        if (handlingAttribute && "ea_guid".equals(tag)) {
+            currentAttribute.setPublicID(value.hashCode());
+        } else if (tag.equals(XMIConstants.XMI_TAG_DESCRIPTION)) {
+            // set the attribute's description
+            LOG.debug("Setting attribute's description: " + value);
+            currentAttribute.setDescription(value);
+        } else if (tag.startsWith(XMIConstants.XMI_TAG_PROPERTY_CONCEPT_CODE)
+            || tag.startsWith(XMIConstants.XMI_TAG_PROPERTY_QUALIFIER_CONCEPT_CODE)
+            || tag.startsWith(XMIConstants.XMI_TAG_PROPERTY_CONCEPT_PREFERRED_NAME)
+            || tag.startsWith(XMIConstants.XMI_TAG_PROPERTY_QUALIFIER_CONCEPT_PREFERRED_NAME)
+            || (tag.startsWith(XMIConstants.XMI_TAG_PROPERTY_CONCEPT_DEFINITION) 
+                && !tag.startsWith(XMIConstants.XMI_TAG_PROPERTY_CONCEPT_DEFINITION_SOURCE))
+            || (tag.startsWith(XMIConstants.XMI_TAG_PROPERTY_QUALIFIER_CONCEPT_DEFINITION) 
+                && !tag.startsWith(XMIConstants.XMI_TAG_PROPERTY_QUALIFIER_CONCEPT_DEFINITION_SOURCE))) {
+            addSemanticMetadata(tag, String.valueOf(currentAttribute.getPublicID()), value);
+        }
+    }
+    
+    
+    private void handleClassTag(String tag, String value, String modelElement) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Handling tag for class");
+            LOG.debug("\ttag=" + tag);
+            LOG.debug("\tvalue=" + value);
+            LOG.debug("\tmodelElement=" + modelElement);
+        }
+        if (tag.equals(XMIConstants.XMI_TAG_DESCRIPTION)) {
+            // class description
+            UMLClass refedClass = getClassById(modelElement);
+            if (refedClass != null) {
+                refedClass.setDescription(value);
+            }
+        } else if (tag.startsWith(XMIConstants.XMI_TAG_OBJECT_CLASS_CONCEPT_CODE)
+            || tag.startsWith(XMIConstants.XMI_TAG_OBJECT_CLASS_QUALIFIER_CONCEPT_CODE)
+            || tag.startsWith(XMIConstants.XMI_TAG_OBJECT_CLASS_CONCEPT_PREFERRED_NAME)
+            || tag.startsWith(XMIConstants.XMI_TAG_OBJECT_CLASS_QUALIFIER_CONCEPT_PREFERRED_NAME)
+            || (tag.startsWith(XMIConstants.XMI_TAG_OBJECT_CLASS_CONCEPT_DEFINITION) 
+                && !tag.startsWith(XMIConstants.XMI_TAG_OBJECT_CLASS_CONCEPT_DEFINITION_SOURCE))
+            || (tag.startsWith(XMIConstants.XMI_TAG_OBJECT_CLASS_QUALIFIER_CONCEPT_DEFINITION) 
+                && !tag.startsWith(XMIConstants.XMI_TAG_OBJECT_CLASS_QUALIFIER_CONCEPT_DEFINITION_SOURCE))) {
+            addSemanticMetadata(tag, modelElement, value);
+        }
+    }
+    
+    
     private void handleTag(Attributes atts) {
         String tag = atts.getValue(XMIConstants.XMI_UML_TAGGED_VALUE_TAG);
         String modelElement = atts.getValue(XMIConstants.XMI_UML_TAGGED_VALUE_MODEL_ELEMENT);
         String value = atts.getValue(XMIConstants.XMI_UML_TAGGED_VALUE_VALUE);
         
-        if (handlingAttribute && "ea_guid".equals(tag)) {
-            currentAttribute.setPublicID(value.hashCode());
-        }
-        
-        LOG.debug(tag + " on " + modelElement);            
-        if (tag.startsWith(XMIConstants.XMI_TAG_PROPERTY)) {
-            modelElement = String.valueOf(modelElement.hashCode());
-            LOG.debug(" (" + modelElement + ")");
-        }
-        LOG.debug(" = " + value);
-
-        if (tag.equals(XMIConstants.XMI_TAG_DESCRIPTION)) {
-            UMLClass refedClass = getClassById(modelElement);
-            UMLAttribute refedAttribute = getAttributeById(modelElement);
-            if (refedClass != null) {
-                refedClass.setDescription(value);
-            } else if (refedAttribute != null) {
-                refedAttribute.setDescription(value);
-            }
-        } else if (tag.startsWith(XMIConstants.XMI_TAG_OBJECT_CLASS_CONCEPT_CODE)
-            || tag.startsWith(XMIConstants.XMI_TAG_OBJECT_CLASS_QUALIFIER_CONCEPT_CODE) 
-            || tag.startsWith(XMIConstants.XMI_TAG_PROPERTY_CONCEPT_CODE)
-            || tag.startsWith(XMIConstants.XMI_TAG_PROPERTY_QUALIFIER_CONCEPT_CODE)) {
-            addSemanticMetadata(tag, modelElement, value);
-        } else if (tag.startsWith(XMIConstants.XMI_TAG_OBJECT_CLASS_CONCEPT_PREFERRED_NAME)
-            || tag.startsWith(XMIConstants.XMI_TAG_OBJECT_CLASS_QUALIFIER_CONCEPT_PREFERRED_NAME)
-            || tag.startsWith(XMIConstants.XMI_TAG_PROPERTY_CONCEPT_PREFERRED_NAME)
-            || tag.startsWith(XMIConstants.XMI_TAG_PROPERTY_QUALIFIER_CONCEPT_PREFERRED_NAME)) {
-            addSemanticMetadata(tag, modelElement, value);
-        } else if ((tag.startsWith(XMIConstants.XMI_TAG_OBJECT_CLASS_CONCEPT_DEFINITION) 
-                && !tag.startsWith(XMIConstants.XMI_TAG_OBJECT_CLASS_CONCEPT_DEFINITION_SOURCE))
-            || (tag.startsWith(XMIConstants.XMI_TAG_OBJECT_CLASS_QUALIFIER_CONCEPT_DEFINITION) 
-                && !tag.startsWith(XMIConstants.XMI_TAG_OBJECT_CLASS_QUALIFIER_CONCEPT_DEFINITION_SOURCE))
-            || (tag.startsWith(XMIConstants.XMI_TAG_PROPERTY_CONCEPT_DEFINITION) 
-                && !tag.startsWith(XMIConstants.XMI_TAG_PROPERTY_CONCEPT_DEFINITION_SOURCE))
-            || (tag.startsWith(XMIConstants.XMI_TAG_PROPERTY_QUALIFIER_CONCEPT_DEFINITION) 
-                && !tag.startsWith(XMIConstants.XMI_TAG_PROPERTY_QUALIFIER_CONCEPT_DEFINITION_SOURCE))) {
-            addSemanticMetadata(tag, modelElement, value);
+        if (handlingAttribute) {
+            handleAttributeTag(tag, value);
+        } else {
+            handleClassTag(tag, value, modelElement);
         }
     }
     
@@ -269,12 +286,25 @@ class Sdk4EaXMIHandler extends BaseXMIHandler {
     }
 
 
-    private void addSemanticMetadata(String tag, String modelElement, String value) {
+    private void addSemanticMetadata(String tag, String elementId, String value) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Adding semantic metadata");
+            UMLClass clazz = getClassById(elementId);
+            UMLAttribute attr = getAttributeById(elementId);
+            if (clazz != null) {
+                LOG.debug("\tReferenced Class: " + clazz.getPackageName() 
+                    + "." + clazz.getClassName());
+            } else if (attr != null) {
+                LOG.debug("\tReferenced Attribute: " + attr.getName() + " : " 
+                    + attr.getPublicID() + " : " + attr.getDataTypeName());
+            }
+        }
         int order = getSemanticMetadataOrder(tag);
 
-        List<SemanticMetadata> smList = getSemanticMetadataTable().get(modelElement);
+        List<SemanticMetadata> smList = getSemanticMetadataTable().get(elementId);
         if (smList == null) {
-            getSemanticMetadataTable().put(modelElement, smList = new ArrayList<SemanticMetadata>(9));
+            getSemanticMetadataTable().put(elementId, 
+                smList = new ArrayList<SemanticMetadata>(2));
         }
 
         int size = smList.size();
