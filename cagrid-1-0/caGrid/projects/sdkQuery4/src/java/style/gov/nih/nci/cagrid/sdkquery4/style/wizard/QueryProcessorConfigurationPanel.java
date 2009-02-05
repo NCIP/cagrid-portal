@@ -20,6 +20,7 @@ import java.awt.Insets;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.File;
+import java.io.FileFilter;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
@@ -50,7 +51,7 @@ import com.jgoodies.validation.view.ValidationComponentUtils;
  * @author David Ervin
  * 
  * @created Nov 27, 2007 4:50:32 PM
- * @version $Id: QueryProcessorConfigurationPanel.java,v 1.19 2009-01-29 20:14:18 dervin Exp $ 
+ * @version $Id: QueryProcessorConfigurationPanel.java,v 1.20 2009-02-05 20:33:36 dervin Exp $ 
  */
 public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
     // keys for validation
@@ -1177,9 +1178,17 @@ public class QueryProcessorConfigurationPanel extends AbstractWizardPanel {
             // selection made
             File selectedDir = new File(selection);
             getOutputDirTextField().setText(selectedDir.getAbsolutePath());
-            File[] outputContents = selectedDir.listFiles();
+            File[] outputContents = selectedDir.listFiles(new FileFilter() {
+                public boolean accept(File path) {
+                    return path.isDirectory() && !path.getName().startsWith(".");
+                }
+            });
             if (outputContents.length != 1) {
-                throw new Exception("Unable to locate application directory");
+                StringBuffer err = new StringBuffer();
+                err.append("Unable to locate application directory:\n");
+                err.append("Expected to find one directory, but found ");
+                err.append(outputContents.length);
+                throw new Exception(err.toString());
             }
             File applicationOutDir = outputContents[0];
             throwExceptionIfNotDirectory(applicationOutDir);
