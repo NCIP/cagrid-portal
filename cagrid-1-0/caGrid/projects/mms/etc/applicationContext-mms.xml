@@ -54,6 +54,6 @@
   <bean id="caDSRProductionSource" class="org.cagrid.mms.domain.SourceDescriptor">
     <property name="identifier" value="caDSR Production" />
     <property name="description"
-      value="The production instance of the National Cancer Institutes's Cancer Data Standards Repository (caDSR)." />
+      value="The production instance of the National Cancer Institute's Cancer Data Standards Repository (caDSR)." />
   </bean>
 </beans>
