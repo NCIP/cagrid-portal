@@ -7,11 +7,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Default filter of services that
+ * is not dependent on the web users
+ * privileges. Will filter invalid, banned and dormant services
+ * <p/>
  * User: kherm
  *
  * @author kherm manav.kher@semanticbits.com
  */
-public class BaseServiceFilter {
+public class BaseServiceFilter implements ServiceFilter {
 
     public static List<GridService> filterBannedServices(List<GridService> in) {
         return filterServicesByStatus(in, ServiceStatus.BANNED);
@@ -36,7 +40,7 @@ public class BaseServiceFilter {
         }
         return out;
     }
-    
+
     public static List<GridService> filterServicesByStatus(
             List<GridService> in, ServiceStatus... statuses) {
         List<GridService> out = new ArrayList<GridService>();
@@ -53,5 +57,13 @@ public class BaseServiceFilter {
             }
         }
         return out;
+    }
+
+    public List<GridService> filter(List<GridService> services) {
+        return filterServicesByStatus(filterServicesByInvalidMetadata((services)), ServiceStatus.BANNED, ServiceStatus.DORMANT);
+    }
+
+    public boolean willBeFiltered(GridService service) {
+        return false;
     }
 }

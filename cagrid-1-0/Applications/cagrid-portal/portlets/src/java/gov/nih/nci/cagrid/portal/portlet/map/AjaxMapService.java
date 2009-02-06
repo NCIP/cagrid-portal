@@ -6,7 +6,6 @@ import gov.nih.nci.cagrid.portal.portlet.discovery.DiscoveryModel;
 import gov.nih.nci.cagrid.portal.portlet.discovery.DiscoveryType;
 import gov.nih.nci.cagrid.portal.portlet.discovery.dir.DiscoveryDirectory;
 import gov.nih.nci.cagrid.portal.portlet.discovery.dir.ParticipantDirectory;
-import gov.nih.nci.cagrid.portal.portlet.discovery.dir.PointOfContactDirectory;
 import gov.nih.nci.cagrid.portal.portlet.discovery.dir.ServiceDirectory;
 import gov.nih.nci.cagrid.portal.portlet.discovery.map.MapBean;
 import org.directwebremoting.annotations.Param;
@@ -30,32 +29,46 @@ public class AjaxMapService extends AjaxViewGenerator {
     private ServiceDirectory allServicesDirectory;
     private ParticipantDirectory allParticipantsDirectory;
     private DiscoveryModel discoveryModel;
+    private CachedMap cachedMap;
 
     @RemoteMethod
-    public String getMap(String directoryId) throws Exception{
-        if(directoryId!=null)
+    public String getMap(String directoryId) throws Exception {
+        if (directoryId != null)
             getDiscoveryModel().selectDirectory(directoryId);
 
-    final MapBean mapBean = (MapBean) getApplicationContext().getBean("mapBeanPrototype");
-    DiscoveryDirectory selectedDirectory = getDiscoveryModel().getSelectedDirectory();
-    if(selectedDirectory != null){
-        mapBean.setSelectedDirectory(selectedDirectory.getId());
-        if(selectedDirectory.getType().equals(DiscoveryType.SERVICE)){
-            mapBean.addServices((ServiceDirectory)selectedDirectory);
-        }else if(selectedDirectory.getType().equals(DiscoveryType.PARTICIPANT)){
-            mapBean.addParticipants((ParticipantDirectory)selectedDirectory);
-        }else if(selectedDirectory.getType().equals(DiscoveryType.POC)){
-            mapBean.addPointOfContacts((PointOfContactDirectory)selectedDirectory);
-        }else{
-            throw new CaGridPortletApplicationException("Unsupported directory type: " + selectedDirectory.getType());
+        final MapBean mapBean;
+        DiscoveryDirectory selectedDirectory = getDiscoveryModel().getSelectedDirectory();
+
+        if (selectedDirectory != null) {
+            if (selectedDirectory.getType().equals(DiscoveryType.SERVICE)) {
+                ServiceDirectory serviceDir = (ServiceDirectory) selectedDirectory;
+                mapBean = getCachedMap().get(serviceDir.getServiceDirectoryType());
+            } else if (selectedDirectory.getType().equals(DiscoveryType.PARTICIPANT)) {
+                mapBean = (MapBean) getApplicationContext().getBean("mapBeanPrototype");
+                mapBean.addParticipants((ParticipantDirectory) selectedDirectory);
+            } else {
+                throw new CaGridPortletApplicationException("Unsupported directory type: " + selectedDirectory.getType());
+            }
+            mapBean.setSelectedDirectory(selectedDirectory.getId());
+        } else {
+            return super.getView(getView(), new HashMap<String, Object>() {{
+                put("mapBean", getCachedMap().get(null));
+            }});
         }
-    }else{
-        mapBean.addServices(getAllServicesDirectory());
-        mapBean.addParticipants(getAllParticipantsDirectory());
+
+        return super.getView(getView(), new HashMap<String, Object>() {{
+            put("mapBean", mapBean);
+        }});
     }
 
-    return super.getView("/WEB-INF/jsp/map/ajaxMap.jsp",new HashMap<String,Object>(){{put("mapBean", mapBean);}});
-}
+
+    public CachedMap getCachedMap() {
+        return cachedMap;
+    }
+
+    public void setCachedMap(CachedMap cachedMap) {
+        this.cachedMap = cachedMap;
+    }
 
     public DiscoveryModel getDiscoveryModel() {
         return discoveryModel;
@@ -80,6 +93,5 @@ public class AjaxMapService extends AjaxViewGenerator {
     public void setAllParticipantsDirectory(ParticipantDirectory allParticipantsDirectory) {
         this.allParticipantsDirectory = allParticipantsDirectory;
     }
-
 
 }
