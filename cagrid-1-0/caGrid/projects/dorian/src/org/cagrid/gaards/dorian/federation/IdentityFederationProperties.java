@@ -11,9 +11,9 @@ import org.cagrid.gaards.dorian.stubs.types.DorianInternalFault;
 public class IdentityFederationProperties {
 
     public static int MIN_IDP_NAME_LENGTH = 3;
-    public static int MAX_IDP_NAME_LENGTH = 50;
+    public static int MAX_IDP_NAME_LENGTH = 60;
     public static int DEFAULT_MIN_IDP_DISPLAY_NAME_LENGTH = 3;
-    public static int DEFAULT_MAX_IDP_DISPLAY_NAME_LENGTH = 50;
+    public static int DEFAULT_MAX_IDP_DISPLAY_NAME_LENGTH = 60;
     public static int DEFAULT_MIN_IDP_NAME_LENGTH = 3;
     public static int DEFAULT_MAX_IDP_NAME_LENGTH = 25;
 
