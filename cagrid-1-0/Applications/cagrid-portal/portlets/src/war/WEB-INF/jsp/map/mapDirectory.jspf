@@ -2,7 +2,7 @@
     <b>Categories:</b>&nbsp;
     <form:select id="${prefix}directory" onchange="loadMap();" path="selectedDirectory">
         <form:option value="">----</form:option>
-        <%@ include file="/WEB-INF/jsp/disc/directory/directories.jspf" %>
+        <%@ include file="/WEB-INF/jsp/map/directories.jspf" %>
     </form:select>
 </form:form>
 
@@ -15,8 +15,6 @@
                     <td width="30%" style="padding:2px" nowrap="nowrap">Data Service </td>
                     <td width="5%" style="padding:2px"><img src="<c:url value="/images/participant_institute.gif"/>" height="20" /></td>
                     <td width="35%" nowrap="nowrap">Participant Institute </td>
-                    <td width="5%" style="padding:2px"><img src="<c:url value="/images/participant_POC.gif"/>" height="20" /></td>
-                    <td width="20%" style="padding:2px" nowrap="nowrap">Point of Contact</td>
                 </tr>
                 <tr>
                     <td style="padding:2px"><img src="<c:url value="/images/analytical_services.gif"/>" height="20" /></td>

@@ -145,52 +145,6 @@ map.addOverlay(<c:out value="${markerId}"/>);
 </c:if>
 
 
- <c:if test="${!empty mapBean.pointOfContactNodes}">
-<c:forEach
-items="${mapBean.pointOfContactNodes}"
-var="pocNode"
-varStatus="pocNodeStatus">
-
-<c:set var="markerId">pMarker<c:out value="${pocNodeStatus.index}"/></c:set>
-
-var <c:out value="${markerId}"/> =
-new GMarker(
-new GLatLng(
-<c:out value="${pocNode.latitude}"/>,
-<c:out value="${pocNode.longitude}"/>),
-{icon:partPoc}
-);
-GEvent.addListener(
-<c:out value="${markerId}"/>,
-"click",
-function() {
-<c:out value="${markerId}"/>
-.openInfoWindowHtml(
-"<div class=\"mapInfoPopup\">" +
-
-<c:choose>
-<c:when test="${fn:length(pocNode.pointOfContacts) eq 1}">
-<c:set var="poc" value="${pocNode.pointOfContacts[0]}"/>
-"<a href=\"javascript:selectItemForDiscovery('${poc.id}','POC');\" " +
-"><c:out value="${poc.firstName}"/><c:out value="${poc.lastName}"/></a><br/>" +
-"<b>Email:</b> <a target=\"_blank\" href=\"mailto:<c:out value="${poc.emailAddress}"/>\"><c:out value="${poc.emailAddress}"/></a><br/>" +
-"<b>Phone:</b><c:out value="${poc.phoneNumber}"/><br/>" +
-</c:when>
-<c:otherwise>
-<c:set var="numPocs" value="${fn:length(pocNode.pointOfContacts)}"/>
-<c:set var="pocIds"><c:forEach var="poc" items="${pocNode.pointOfContacts}" varStatus="status"><c:out value="${poc.id}"/><c:if test="${status.count lt numPocs}">,</c:if></c:forEach></c:set>
-"There are <b>" + "<c:out value="${numPocs}"/></b> Points of Contact at this location. " +
-"<a href=\"javascript:selectItemsForDiscovery('${pocIds}','POC');\" " +
-">View...</a><br/>" +
-</c:otherwise>
-</c:choose>
-
-"</div>");
-}
-);
-map.addOverlay(<c:out value="${markerId}"/>);
-</c:forEach>
-</c:if>
-
+ 
 //]]>
 </script>

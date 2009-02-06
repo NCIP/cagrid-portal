@@ -62,9 +62,6 @@
     var partCtr = new GIcon(baseIcon);
     partCtr.image = "<c:url value="/images/participant_institute.gif"/>";
 
-    var partPoc = new GIcon(baseIcon);
-    partPoc.image = "<c:url value="/images/participant_POC.gif"/>";
-
 
 jQuery(document).ready(function() {
 
