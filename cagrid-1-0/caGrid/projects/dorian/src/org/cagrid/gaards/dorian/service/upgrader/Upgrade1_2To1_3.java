@@ -43,7 +43,7 @@ public class Upgrade1_2To1_3 extends Upgrade {
                 System.out.print("Updating the Certificate Blacklist field " + CertificateBlacklistManager.SUBJECT
                     + " from VARCHAR to TEXT....");
                 c = db.getConnection();
-                PreparedStatement s = c.prepareStatement("ALTER TABLE " + CertificateBlacklistManager.SUBJECT
+                PreparedStatement s = c.prepareStatement("ALTER TABLE " + CertificateBlacklistManager.TABLE
                     + " MODIFY " + CertificateBlacklistManager.SUBJECT + " TEXT NOT NULL");
                 s.execute();
                 s.close();
