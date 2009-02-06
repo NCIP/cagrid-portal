@@ -95,15 +95,61 @@
         <property name="serviceStatusProvider" ref="pingServiceStatusProvider"/>
     </bean>
 
-    <bean id="ajaxStatusService"
+    <bean id="filteredContentGenerator" class="gov.nih.nci.cagrid.portal.portlet.FilteredContentGenerator"
+          abstract="true" autowire="byName">
+        <property name="filter">
+            <bean class="gov.nih.nci.cagrid.portal.portlet.discovery.filter.BaseServiceFilter"/>
+        </property>
+    </bean>
+
+    <bean id="ajaxStatusService" parent="filteredContentGenerator"
           class="gov.nih.nci.cagrid.portal.portlet.status.AjaxStatusService"
-          p:latestServicesLimit="5" autowire="byName">
-        <property name="monitor" ref="registeredServiceMonitor"/>
+          p:latestServicesLimit="5"
+          p:view="/WEB-INF/jsp/status/latestServices.jsp"
+          p:monitor-ref="registeredServiceMonitor"
+          autowire="byName">
     </bean>
 
     <bean id="ajaxMapService"
           class="gov.nih.nci.cagrid.portal.portlet.map.AjaxMapService"
+          p:view="/WEB-INF/jsp/map/ajaxMap.jsp"
           autowire="byName">
     </bean>
+
+    <bean id="cachedMap"
+          class="gov.nih.nci.cagrid.portal.portlet.map.CachedMap" scope="singleton"
+          autowire="byName" parent="filteredContentGenerator">
+    </bean>
+
+
+    <!--Timers to update caches-->
+    <bean id="ajaxstatusTimerFactory"
+          class="org.springframework.scheduling.timer.TimerFactoryBean">
+        <property name="scheduledTimerTasks">
+            <list>
+                <bean
+                        class="org.springframework.scheduling.timer.ScheduledTimerTask">
+                    <property name="period" ref="fastDefaultPeriod"/>
+                    <property name="timerTask">
+                        <bean class="org.springframework.scheduling.timer.MethodInvokingTimerTaskFactoryBean">
+                            <property name="targetObject" ref="ajaxStatusService"/>
+                            <property name="targetMethod" value="refreshCache"/>
+                        </bean>
+                    </property>
+                </bean>
+                <bean
+                        class="org.springframework.scheduling.timer.ScheduledTimerTask">
+                    <property name="period" ref="fastDefaultPeriod"/>
+                    <property name="timerTask">
+                        <bean class="org.springframework.scheduling.timer.MethodInvokingTimerTaskFactoryBean">
+                            <property name="targetObject" ref="cachedMap"/>
+                            <property name="targetMethod" value="refreshCache"/>
+                        </bean>
+                    </property>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
 
 </beans>

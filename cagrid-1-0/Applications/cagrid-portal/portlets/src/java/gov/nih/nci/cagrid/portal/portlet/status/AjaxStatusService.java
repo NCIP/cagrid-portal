@@ -1,28 +1,26 @@
 package gov.nih.nci.cagrid.portal.portlet.status;
 
-import gov.nih.nci.cagrid.portal.domain.ServiceInfo;
-import gov.nih.nci.cagrid.portal.domain.GridService;
+import gov.nih.nci.cagrid.portal.aggr.TrackableMonitor;
 import gov.nih.nci.cagrid.portal.dao.GridServiceDao;
 import gov.nih.nci.cagrid.portal.dao.ParticipantDao;
-import gov.nih.nci.cagrid.portal.portlet.discovery.filter.ServiceFilter;
+import gov.nih.nci.cagrid.portal.domain.GridService;
+import gov.nih.nci.cagrid.portal.domain.ServiceInfo;
 import gov.nih.nci.cagrid.portal.portlet.AjaxViewGenerator;
-import gov.nih.nci.cagrid.portal.aggr.TrackableMonitor;
-
-import java.util.*;
-import java.text.SimpleDateFormat;
-
+import org.directwebremoting.annotations.Param;
 import org.directwebremoting.annotations.RemoteMethod;
 import org.directwebremoting.annotations.RemoteProxy;
-import org.directwebremoting.annotations.Param;
 import org.directwebremoting.spring.SpringCreator;
-import org.apache.commons.logging.LogFactory;
-import org.apache.commons.logging.Log;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * User: kherm
  *
  * @author kherm manav.kher@semanticbits.com
  */
+
 @RemoteProxy(name = "StatusService",
         creator = SpringCreator.class,
         creatorParams = @Param(name = "beanName",
@@ -31,36 +29,18 @@ public class AjaxStatusService extends AjaxViewGenerator {
 
     private GridServiceDao gridServiceDao;
     private ParticipantDao participantDao;
-    private ServiceFilter servicefilter;
+
     private int latestServicesLimit;
     private TrackableMonitor monitor;
-
-    private Log logger = LogFactory.getLog(AjaxStatusService.class);
+    private static int servicesCount, analServicesCount, dataServicesCount, participantCount;
+    final static List<ServiceInfo> serviceInfos = Collections.synchronizedList(new ArrayList<ServiceInfo>());
 
 
     @RemoteMethod
     public String latestServices() throws Exception {
-       final List<ServiceInfo> serviceInfos = new ArrayList<ServiceInfo>();
-
-        List<GridService> services;
-        // start with 1 extra
-        int serviceLookupIncrement = 1;
-        int totalServicesAvailable = gridServiceDao.getAll().size();
-        do {
-            List<GridService> latest = gridServiceDao.getLatestServices(latestServicesLimit + serviceLookupIncrement++);
-            services = servicefilter.filter(latest);
-        }
-        //run this loop till we find <latestServicesLimit> number of valid  services
-        //But at the same time don't get more than available services
-        while (services.size() < latestServicesLimit && (latestServicesLimit + serviceLookupIncrement) <= totalServicesAvailable);
-
-        for (GridService service : services) {
-            serviceInfos.add(service.getServiceInfo());
-            if(serviceInfos.size()>=latestServicesLimit)
-                break;
-        }
-        return super.getView("/WEB-INF/jsp/status/latestServices.jsp",new HashMap<String,Object>(){{put("latestServices", serviceInfos);}});
-
+        return super.getView(getView(), new HashMap<String, Object>() {{
+            put("latestServices", serviceInfos);
+        }});
     }
 
     @RemoteMethod
@@ -72,29 +52,29 @@ public class AjaxStatusService extends AjaxViewGenerator {
         this.latestServicesLimit = latestServicesLimit;
     }
 
-    
-   @RemoteMethod
-    public int servicesCount(){
-        return servicefilter.filter(gridServiceDao.getAll()).size();
+    @RemoteMethod
+    public int servicesCount() {
+        return servicesCount;
+    }
+
+
+    @RemoteMethod
+    public int dataServicesCount() {
+        return dataServicesCount;
     }
 
     @RemoteMethod
-    public int dataServicesCount(){
-        return servicefilter.filter(gridServiceDao.getAllDataServices()).size();
+    public int analServicesCount() {
+        return analServicesCount;
     }
 
     @RemoteMethod
-    public int analServicesCount(){
-        return servicefilter.filter(gridServiceDao.getAllAnalyticalServices()).size();
+    public int participantCount() {
+        return participantCount;
     }
 
     @RemoteMethod
-    public int participantCount(){
-        return participantDao.getAll().size();
-    }
-
-    @RemoteMethod
-    public String lastUpdated(){
+    public String lastUpdated() {
         try {
             long _elapsedTime = new Date().getTime() - monitor.getLastExecutedOn().getTime();
             SimpleDateFormat formatter = new SimpleDateFormat("mm");
@@ -119,22 +99,44 @@ public class AjaxStatusService extends AjaxViewGenerator {
         }
     }
 
+    @Transactional
+    public void refreshCache() {
+        logger.debug("Will refresh Cache");
 
-    // spring getters and setters
+        servicesCount = getFilter().filter(getGridServiceDao().getAll()).size();
+        dataServicesCount = getFilter().filter(getGridServiceDao().getAllDataServices()).size();
+        analServicesCount = getFilter().filter(getGridServiceDao().getAllAnalyticalServices()).size();
+        participantCount = getParticipantDao().getAll().size();
+
+        List<GridService> services;
+        // start with 1 extra
+        int serviceLookupIncrement = 1;
+        int totalServicesAvailable = getGridServiceDao().getAll().size();
+        do {
+            List<GridService> latest = getGridServiceDao().getLatestServices(latestServicesLimit + serviceLookupIncrement++);
+            services = getFilter().filter(latest);
+        }
+        //run this loop till we find <latestServicesLimit> number of valid  services
+        //But at the same time don't get more than available services
+        while (services.size() < latestServicesLimit && (latestServicesLimit + serviceLookupIncrement) <= totalServicesAvailable);
+
+        // wrap the pair in sync block because its a transaction
+        synchronized (serviceInfos) {
+            serviceInfos.clear();
+
+            for (GridService service : services) {
+                serviceInfos.add(service.getServiceInfo());
+            }
+        }
+        logger.debug("Finished refreshing Cache");
+    }
+
     public GridServiceDao getGridServiceDao() {
         return gridServiceDao;
     }
 
     public void setGridServiceDao(GridServiceDao gridServiceDao) {
         this.gridServiceDao = gridServiceDao;
-    }
-
-    public ServiceFilter getServicefilter() {
-        return servicefilter;
-    }
-
-    public void setServicefilter(ServiceFilter servicefilter) {
-        this.servicefilter = servicefilter;
     }
 
     public ParticipantDao getParticipantDao() {
@@ -152,4 +154,6 @@ public class AjaxStatusService extends AjaxViewGenerator {
     public void setMonitor(TrackableMonitor monitor) {
         this.monitor = monitor;
     }
+
+
 }
