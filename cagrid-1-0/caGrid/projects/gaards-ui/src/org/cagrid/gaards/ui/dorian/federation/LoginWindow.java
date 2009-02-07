@@ -200,7 +200,7 @@ public class LoginWindow extends ApplicationComponent {
             gridBagConstraints5.insets = new java.awt.Insets(2, 2, 2, 2);
             gridBagConstraints5.gridx = 0;
             ifsLabel = new JLabel();
-            ifsLabel.setText("Authority");
+            ifsLabel.setText("Credential Provider");
             GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
             gridBagConstraints4.gridx = 0;
             gridBagConstraints4.gridwidth = 2;
