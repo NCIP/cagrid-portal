@@ -221,7 +221,9 @@
     <target name="install">
         <antcall target="config-trust"/>
         <antcall target="db:load-schema"/>
-        <antcall target="aggr:load-workspaces"/>
+        <antcall target="aggr:load-workspaces">
+            <param name="aggr:participant-list" value="${aggr.dir}/etc/caBIG_Workspaces_participants.xls"/>
+        </antcall>
         <antcall target="liferay:install-liferay"/>
         <antcall target="liferay:deploy-all"/>
 
