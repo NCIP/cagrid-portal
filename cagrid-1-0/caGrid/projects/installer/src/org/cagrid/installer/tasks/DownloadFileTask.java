@@ -78,33 +78,51 @@ public class DownloadFileTask extends BasicTask {
             logger.warn("No checksum specified for '" + fromUrl + "'");
         }
 
+        File toFileFile = new File(toFile);
+
         String checksum = null;
-        int i = 0;
-        for (i = 0; i < NUM_ATTEMPTS; i++) {
-            try {
-                download(url, new File(toFile), this.connectTimeout);
-                if (!enforceChecksum) {
-                    break;
+        boolean alreadyDownloaded = false;
+        if (toFileFile.exists()) {
+            if (enforceChecksum) {
+                checksum = MD5Checksum.getChecksum(toFile);
+                if (enforceChecksum && !expectedChecksum.equals(checksum)) {
+                    logger.warn("Cached file does not match checksum, will not attept to download");
                 } else {
-                    checksum = MD5Checksum.getChecksum(toFile);
-                    if (expectedChecksum.equals(checksum)) {
+                    alreadyDownloaded = true;
+                }
+            }
+        } 
+
+        if(!alreadyDownloaded){
+
+            int i = 0;
+            for (i = 0; i < NUM_ATTEMPTS; i++) {
+                try {
+                    download(url, new File(toFile), this.connectTimeout);
+                    if (!enforceChecksum) {
                         break;
                     } else {
-                        logger.warn("Downloaded file '" + toFile + "' is corrupted.  Expected checksum ("
-                            + expectedChecksum + ") but recieved (" + checksum + ").");
+                        checksum = MD5Checksum.getChecksum(toFile);
+                        if (expectedChecksum.equals(checksum)) {
+                            break;
+                        } else {
+                            logger.warn("Downloaded file '" + toFile + "' is corrupted.  Expected checksum ("
+                                + expectedChecksum + ") but recieved (" + checksum + ").");
+                        }
                     }
+                } catch (Exception ex) {
+                    logger.warn("Failed attempt (" + (i + 1) + ") to download '" + fromUrl + "': " + ex.getMessage(),
+                        ex);
                 }
-            } catch (Exception ex) {
-                logger.warn("Failed attempt (" + (i + 1) + ") to download '" + fromUrl + "': " + ex.getMessage(), ex);
             }
-        }
-        
-        if(i==NUM_ATTEMPTS){
-            throw new InvalidStateException("Could not download '" + fromUrl + "'. See logs for details.");
-        }
-        
-        if (enforceChecksum && !expectedChecksum.equals(checksum)) {
-            throw new InvalidStateException("Could not download '" + fromUrl + "'. See logs for details.");
+
+            if (i == NUM_ATTEMPTS) {
+                throw new InvalidStateException("Could not download '" + fromUrl + "'. See logs for details.");
+            }
+
+            if (enforceChecksum && !expectedChecksum.equals(checksum)) {
+                throw new InvalidStateException("Could not download '" + fromUrl + "'. See logs for details.");
+            }
         }
 
         return null;

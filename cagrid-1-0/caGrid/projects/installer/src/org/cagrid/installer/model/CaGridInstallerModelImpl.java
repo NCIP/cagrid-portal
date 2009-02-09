@@ -369,10 +369,10 @@ CaGridInstallerModel, OverviewProvider {
     public boolean isGlobusDeployed() {
         if (globusDeployed == null) {
             globusDeployed = false;
-            if (isTomcatInstalled()) {
+            if (isTomcatContainer() && isTomcatInstalled()) {
                 File wsrfDir = new File((String) getProperty(Constants.TOMCAT_HOME) + "/webapps/wsrf");
                 globusDeployed = wsrfDir.exists();
-            } else if (isJBossInstalled()) {
+            } else if (isJBossContainer() && isJBossInstalled()) {
                 File wsrfDir = new File((String) getProperty(Constants.JBOSS_HOME) + "/server/default/deploy/wsrf.war/");
                 globusDeployed = wsrfDir.exists();
             }
