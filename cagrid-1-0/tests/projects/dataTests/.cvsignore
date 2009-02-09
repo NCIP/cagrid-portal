@@ -1,6 +1,0 @@
-build
-ext
-log
-test_services
-tmp
-junit*.properties

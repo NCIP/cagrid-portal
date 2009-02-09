@@ -1,7 +1,0 @@
-build
-ext
-bin
-deploy.properties
-*.gar
-tmp
-*_DomainModel.xml

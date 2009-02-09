@@ -1,1 +1,0 @@
-Dependencies are resolved by Ivy to ext/dependencies
