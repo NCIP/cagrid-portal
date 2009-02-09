@@ -86,7 +86,7 @@ public class DownloadFileTask extends BasicTask {
             if (enforceChecksum) {
                 checksum = MD5Checksum.getChecksum(toFile);
                 if (enforceChecksum && !expectedChecksum.equals(checksum)) {
-                    logger.warn("Cached file does not match checksum, will not attept to download");
+                    logger.warn("Cached file does not match checksum, will attept to download");
                 } else {
                     alreadyDownloaded = true;
                 }
