@@ -31,7 +31,11 @@ public class BaseServiceFilter implements ServiceFilter {
         List<GridService> out = new ArrayList<GridService>();
         for (GridService svc : in) {
             boolean filter = false;
-            if (svc.getServiceMetadata() == null) {
+            try {
+                if (svc.getServiceMetadata() == null || svc.getServiceMetadata().getServiceDescription() == null) {
+                    filter = true;
+                }
+            } catch (Exception e) {
                 filter = true;
             }
             if (!filter) {

@@ -119,6 +119,11 @@
                 <include name="aspectj/*.jar"/>
 			</fileset>
 
+            <!--copy patched file-->
+            <fileset dir="${liferay.lib.dir}">
+                <include name="portal-impl.jar"/>
+            </fileset>
+
 		</copy>
 		
 		<copy todir="${liferay.jboss.home}/server/${liferay.jboss.server.name}/lib/ext" overwrite="true" flatten="true">
