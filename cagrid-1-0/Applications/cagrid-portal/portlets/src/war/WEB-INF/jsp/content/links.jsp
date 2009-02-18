@@ -11,7 +11,7 @@
 
     <div class="row">
     <span class="link-extenal pdf">
-            <a href="<c:url value="/resources/caGrid-Portal_2.1_UsersGuide.pdf"/>">
+            <a href="<c:url value="/resources/caGrid-Portal_UsersGuide.pdf"/>">
                 caGrid Portal Users Guide</a>
         </span>
     </div>
