@@ -13,7 +13,7 @@
 		#else
 		## is Portal guest user
 		<li class="home">
-			<a href="$home_url/web/guest/home">$home_text</a>
+			<a href="/web/guest/home">$home_text</a>
 		</li>
 		#end
 		#end
@@ -27,10 +27,10 @@
         ## ---- Only for not logged in Portal guest user --------
 		#if ($show_sign_in)
 		<li class="my-places">
-			<a href="$home_url/web/guest/login">$sign_in_text</a>
+			<a href="/web/guest/login">$sign_in_text</a>
 		</li>
         <li class="page-settings">
-            <a href="$home_url/web/guest/register">$register_text</a>
+            <a href="/web/guest/register">$register_text</a>
         </li>
         #end
 
