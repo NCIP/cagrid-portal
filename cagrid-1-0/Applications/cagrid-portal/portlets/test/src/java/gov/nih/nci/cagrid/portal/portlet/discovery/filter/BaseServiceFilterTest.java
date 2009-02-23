@@ -73,7 +73,7 @@ public class BaseServiceFilterTest extends TestCase {
         mData.setServiceDescription(null);
         svc1.setServiceMetadata(mData);
 
-        assertEquals(1, BaseServiceFilter.filterServicesByInvalidMetadata(svcs).size());
+        assertEquals(0, BaseServiceFilter.filterServicesByInvalidMetadata(svcs).size());
 
         Service desc = new Service();
         mData.setServiceDescription(desc);
