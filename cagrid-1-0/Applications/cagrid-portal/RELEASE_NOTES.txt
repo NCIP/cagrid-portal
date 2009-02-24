@@ -1,132 +1,126 @@
-    
+
                          caGrid Portal
                           Version 2.2
-                       Feb 10, 2009
-
-
-================================================================
-                            Contents
-================================================================
-    
-1.0 caGrid Portal Introduction
-2.0 Release History
-3.0 New Features and Updates
-4.0 Bug fixes since last release
-5.0 Known Issues/Defects
-6.0 Bug Reports and Support
-7.0 Documentation
-8.0 References
+                       February 24, 2009
 
 ================================================================
-                  1.0 caGrid Portal Introduction
+		Contents
 ================================================================
 
-    This document contains the release notes for the caGrid 
-    Portal 2.2 release.
-
-    This release of caGrid Portal consolidates and extends the
-    feature sets of earlier release of the caGrid Portal
-
-
-================================================================
-                      2.0 Release History
-================================================================
-
-    caGrid Portal 2.0 was released on 28th December 2008
-    caGrid Portal 2.0.1 was released on 22nd February 2008
-    caGrid Portal 2.0.2 was released on 18th June 2008
-    caGrid Portal 2.1 was released on 15th September 2008
+   1.0 caGrid Portal Introduction
+   2.0 Release History
+   3.0 Enhancements Since Last Release
+   4.0 Bugs Fixed Since Last Release
+   5.0 Known Issues
+   6.0 Bug Reports and Support
+   7.0 Documentation
+   8.0 Resources
 
 ================================================================
-                      3.0 New Features and Updates
+		1.0 caGrid Portal Introduction
 ================================================================
 
-Specific highlighted improvements of caGrid Portal 2.2 include:
+   This document contains the release notes for the caGrid
+   Portal 2.2 release.
 
- *Improved performance by tuning the database and enable aggressive
-  caching of information
- *Liferay Portal upgraded to 5.0.1
- *Add a "Sign in" and "Register" link to top level navigation so
-  that its available on all pages.
- *Implement 508 complaince recommendations
-
+   This release of caGrid Portal consolidates and extends the
+   feature sets of earlier release of the caGrid Portal.
 
 ================================================================
-                      4.0 Bug fixes Since Last Release
+		2.0 Release History
 ================================================================
 
-Bug		Description
-------------------------------------------------------------   
-17126 News portlet shows runtime exceptions
-17628 training grid syncgts URLs need to be updated
-19104 Portal drop down menu has invalid links
-
-The complete fixed bug list and additional details can be found on the project Gforge Tracker:
-  http://gforge.nci.nih.gov/tracker/index.php?group_id=25&atid=174
+    caGrid Portal 1.1   was released on 17 December 2007
+    caGrid Portal 2.0   was released on 28 December 2008
+    caGrid Portal 2.0.1 was released on 22 February 2008
+    caGrid Portal 2.0.2 was released on 18 June 2008
+    caGrid Portal 2.1   was released on 2nd October 2008
 
 ================================================================
-                     5.0 Known Issues Not Yet Fixed
+		3.0 Enhancements Since Last Release
 ================================================================
 
-16914 Portal does not notice when credentials are required by a serivce
-17268 Portal does not delete local user account when deleting liferay user account
+   Specific highlighted improvements of caGrid Portal 2.2 include:
 
-Update to date bug reports and feature requests can be found on the tracker section
-of the project's gforge site:
-http://gforge.nci.nih.gov/tracker/?group_id=25
-
-At the time of release, there are no known issues.
-
+   * Improved performance: enabled aggressive caching of
+     information and tuned database.
+   * Upgraded Liferay Portal to 5.0.1
+   * Add a "Sign in" and "Register" link to all pages.
+   * Implemented Section 508 Compliance recommendations.
 
 ================================================================
-                	6.0 Bug Reports and Support
+		4.0 Bugs Fixed Since Last Release
 ================================================================
 
-	The preferred approach is to first search the user's email
-	archives for your problem, then email your question to the
-	list.  Bugs can also be entered on the gforge project page.
-	
-	User's listserv archive:
-	https://list.nih.gov/archives/cagrid_users-l.html
-	
-	Join listserv:
-	https://list.nih.gov/cgi-bin/wa?SUBED1=cagrid_users-l&A=1
-
-	GForge Project Page:
-	http://gforge.nci.nih.gov/projects/cagrid-1-0/
-	
-	Submit Bug:
-	http://gforge.nci.nih.gov/tracker/?func=add&group_id=25&atid=174
-	
-================================================================
-                     	7.0 Documentation
-================================================================
-
-	The release documentation can be found along with the downloads on the 
-	caGrid project's gforge file section:
-	   http://gforge.nci.nih.gov/frs/?group_id=25
-
-	The latest documentation, including individual project design documents,
-	can be found on the caGrid wiki:
-	   http://www.cagrid.org/mwiki/index.php?title=Portal:Portal
-	
+   Bug      Description
+   ------------------------------------------------------------
+   17126    News portlet shows runtime exceptions
+   17628    training grid syncgts URLs need to be updated
+   19104    Portal drop down menu has invalid links
 
 ================================================================
-                    	8.0 References
+		5.0 Known Issues Not Yet Fixed
 ================================================================
-    
-The following urls access web pages relevant to caGrid.
 
-    caBIG Home Page
-    --  http://cabig.nci.nih.gov/
-    
-    NCICB Download Center
-    --  http://ncicb.nci.nih.gov/download/
+   Bug      Description
+   ------------------------------------------------------------
+   16914    Portal does not notice when credentials are required
+            by a service
+   17268    Portal does not delete local user account not deleted
+            when deleting liferay user account
+
+   At the time of release, there are no other known issues.
+
+================================================================
+		6.0 Bug Reports and Support
+================================================================
+
+   The preferred approach is to first search the user's email
+   archives for your problem before posting your question to
+   the Knowledge Center forums. Bugs can also be entered on
+   the gforge project page.
+
+   caGrid Knowledge Center Forums:
+      https://cabig-kc.nci.nih.gov/CaGrid/forums/
+
+   gforge Project Page:
+      http://gforge.nci.nih.gov/projects/cagrid-1-0/
+
+   Submit an Enhancement Request or Report a Bug:
+      http://gforge.nci.nih.gov/tracker/?group_id=25
+
+================================================================
+		7.0 Documentation
+================================================================
+
+    The latest documentation on the caGrid Portal can be found
+    on the caGrid Wiki:
+       http://www.cagrid.org/wiki/Portal:Portal
+
+    The release documentation can be found along with the
+    downloads on the caGrid project's gforge file section:
+       http://gforge.nci.nih.gov/frs/?group_id=25
+
+    The latest documentation, including individual project
+    design documents, can be found on the caGrid wiki:
+       http://www.cagrid.org/mwiki/index.php?title=Portal:Portal
+
+================================================================
+		8.0 References
+================================================================
+
+    The following URLs access web pages relevant to caGrid:
+
+    caBIG(r) Home Page
+       https://cabig.nci.nih.gov/
 
     caGrid
-    -- http://cagrid.org
-    -- https://cabig.nci.nih.gov/workspaces/Architecture/caGrid1-0/
-    -- http://gforge.nci.nih.gov/projects/cagrid-1-0/
+       http://www.cagrid.org
+       http://gforge.nci.nih.gov/projects/cagrid-1-0/
+       https://cabig.nci.nih.gov/workspaces/Architecture/caGrid1-0/
 
-    caGrid Portal Wiki
-    -- http://www.cagrid.org/wiki/Portal:Portal
+    caGrid Knowledge Center
+       https://cabig-kc.nci.nih.gov/CaGrid/KC/
+
+    NCI CBIIT Download Center
+       http://ncicb.nci.nih.gov/download/
