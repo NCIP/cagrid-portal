@@ -25,8 +25,8 @@
         <tagDatabase tag="version_2.2"/>
     </changeSet>
 
-<!--bug fix-->
-     <changeSet id="4" author="kherm">
+    <!--bug fix-->
+     <changeSet id="3b" author="kherm">
         <preConditions onFail="CONTINUE">
             <sqlCheck expectedResult="1">SELECT COUNT(1) FROM grid_services WHERE url = 'http://huggins.med.virginia.EDU:18080/wsrf/services/cagrid/CaArraySvc'</sqlCheck>
         </preConditions>
