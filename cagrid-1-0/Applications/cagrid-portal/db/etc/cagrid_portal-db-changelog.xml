@@ -25,5 +25,14 @@
         <tagDatabase tag="version_2.2"/>
     </changeSet>
 
+<!--bug fix-->
+     <changeSet id="4" author="kherm">
+        <preConditions onFail="CONTINUE">
+            <sqlCheck expectedResult="1">SELECT COUNT(1) FROM grid_services WHERE url = 'http://huggins.med.virginia.EDU:18080/wsrf/services/cagrid/CaArraySvc'</sqlCheck>
+        </preConditions>
+        <sql>update grid_services set url='http://huggins.med.virginia.edu:18080/wsrf/services/cagrid/CaArraySvc' where url='http://huggins.med.virginia.EDU:18080/wsrf/services/cagrid/CaArraySvc'</sql>
+    </changeSet>
+
+
 
 </databaseChangeLog>
