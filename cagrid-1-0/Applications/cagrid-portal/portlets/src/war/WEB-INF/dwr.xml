@@ -16,6 +16,12 @@
             <param name="beanName" value="cqlQueryTreeFacade"/>
         </create>
 
+        <create creator="spring" javascript="EVSAutomcompleter">
+            <param name="beanName" value="evsAutoCompleter"/>
+            <include method="autoCompleteConcept"/>
+            <include method="resultCount"/>
+        </create>
+
         <create creator="spring" javascript="QueryHistoryFacade">
             <param name="beanName" value="cqlQueryHistoryFacade"/>
         </create>
