@@ -1,7 +1,7 @@
 
                          caGrid Portal
-                          Version 2.2
-                       February 24, 2009
+                          Version 2.2.1
+                       April 29, 2009
 
 ================================================================
 		Contents
@@ -21,10 +21,10 @@
 ================================================================
 
    This document contains the release notes for the caGrid
-   Portal 2.2 release.
+   Portal 2.2.1 release.
 
-   This release of caGrid Portal consolidates and extends the
-   feature sets of earlier release of the caGrid Portal.
+   This release of caGrid Portal fixes small bugs in the 2.2
+   release.
 
 ================================================================
 		2.0 Release History
@@ -40,13 +40,7 @@
 		3.0 Enhancements Since Last Release
 ================================================================
 
-   Specific highlighted improvements of caGrid Portal 2.2 include:
-
-   * Improved performance: enabled aggressive caching of
-     information and tuned database.
-   * Upgraded Liferay Portal to 5.0.1
-   * Add a "Sign in" and "Register" link to all pages.
-   * Implemented Section 508 Compliance recommendations.
+  #20564 Diagnostics portlet should link to new cagrid wiki 
 
 ================================================================
 		4.0 Bugs Fixed Since Last Release
@@ -54,9 +48,8 @@
 
    Bug      Description
    ------------------------------------------------------------
-   17126    News portlet shows runtime exceptions
-   17628    training grid syncgts URLs need to be updated
-   19104    Portal drop down menu has invalid links
+  #20613 Portal installation by default points to QA EVS service
+  
 
 ================================================================
 		5.0 Known Issues Not Yet Fixed
