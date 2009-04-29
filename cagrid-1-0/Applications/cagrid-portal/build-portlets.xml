@@ -192,6 +192,8 @@
             <batchtest todir="${portlets.test.build.dir}/junit-reports">
                 <fileset dir="${portlets.test.src.java.dir}">
                     <include name="**/*Test.java"/>
+                    <exclude name="**/*SystemTest.java"/>
+                    <exclude name="**/*IntegrationTest.java"/>
                 </fileset>
             </batchtest>
         </junit>
