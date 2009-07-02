@@ -14,6 +14,8 @@
     <property name="aggr.test.src.java.dir"
               value="${aggr.test.dir}/src/java"/>
 
+    <property name="aggr.build.reports.dir" value="${aggr.build.dir}/reports"/>
+
     <property name="aggr.debug" value="true"/>
 
     <path id="aggr.compile.cp">
@@ -27,6 +29,9 @@
             <include name="**/*.jar"/>
         </fileset>
         <fileset dir="${aggr.lib.dir}/globus">
+            <include name="*.jar"/>
+        </fileset>
+         <fileset dir="${aggr.lib.dir}/mail">
             <include name="*.jar"/>
         </fileset>
     </path>
@@ -212,7 +217,26 @@
                <arg value="${status}"/>
            </java>
        </target>
-    
+
+
+    <target name="report:dormant-inactive-svcs" depends="aggr:prepare-run-cp"
+            description="Will generate an excel report in the build/reports directory for all services with DORMANT and INACTIVE status">
+        <mkdir dir="${aggr.build.reports.dir}"/>
+
+        <property name="report.service.statuses" value="DORMANT,INACTIVE"/>
+        <property name="report.filename" value="Portal_Servcie_Status_Report.xls"/>
+        <property name="report.emails" value=""/>
+
+        <java fork="true" dir="${aggr.build.reports.dir}"
+              classname="gov.nih.nci.cagrid.portal.util.ServiceStatusReportGenerator" classpathref="aggr.run.cp">
+            <arg value="-status"/>
+            <arg value="${report.service.statuses}"/>
+            <arg value="-filename"/>
+            <arg value="${report.filename}"/>
+            <arg value="-email"/>
+            <arg value="${report.emails}"/>
+        </java>
+    </target>
 
     <target name="aggr:ban-mgr" depends="aggr:prepare-run-cp">
         <input message="Enter operation:" validargs="ban,unban" addproperty="aggr:banOp"/>
