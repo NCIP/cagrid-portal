@@ -201,6 +201,8 @@
             <entry key="cagrid.portal.fast.aggr.defaultPeriod" value="${cagrid.portal.fast.aggr.defaultPeriod}"/>
             <entry key="cagrid.portal.maxDowntimeHours" value="${cagrid.portal.maxDowntimeHours}"/>
             <entry key="cagrid.portal.build.stamp" value="${cagrid.portal.build.stamp}"/>
+            <entry key="cagrid.portal.notifications.mail.server" value="${cagrid.portal.notifications.mail.server}"/>
+            <entry key="cagrid.portal.notifications.mail.address" value="${cagrid.portal.notifications.mail.address}"/>
         </propertyfile>
     </target>
 

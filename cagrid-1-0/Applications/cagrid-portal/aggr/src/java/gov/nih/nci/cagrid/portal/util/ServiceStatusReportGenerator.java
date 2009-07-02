@@ -182,6 +182,7 @@ public class ServiceStatusReportGenerator {
                         if (status.equals(svc.getCurrentStatus())) {
                             HSSFRow row = sheet.createRow((short) counter++);
                             addCell(row, 0, svc.getUrl());
+                            if(svc!=null && svc.getServiceMetadata()!=null){
                             ResearchCenter rc = svc.getServiceMetadata().getHostingResearchCenter();
                             if (rc != null) {
                                 addCell(row, 1, rc.getShortName());
@@ -192,6 +193,7 @@ public class ServiceStatusReportGenerator {
                                     addCell(row, 3, p.getEmailAddress());
                                     addCell(row, 4, p.getPhoneNumber());
                                 }
+                            }
                             }
                             addCell(row, 5, svc.getCurrentStatus().toString());
                             List<StatusChange> history = svc.getStatusHistory();

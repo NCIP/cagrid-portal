@@ -69,4 +69,11 @@
 		<property name="cqlQueryInstanceDao" ref="cqlQueryInstanceDao" />
 	</bean>
 
+    <bean id="portalAdminMailAddress" class="java.lang.String">
+        <constructor-arg value="${cagrid.portal.notifications.mail.address}"/>
+    </bean>
+
+    <bean id="portalMailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl"
+          p:host="${cagrid.portal.notifications.mail.server}"/>
+
 </beans>
