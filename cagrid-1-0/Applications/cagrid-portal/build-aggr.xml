@@ -205,6 +205,15 @@
         </java>
     </target>
 
+    <target name="aggr:report:svcs-with-status" depends="aggr:prepare-run-cp" description="Will report all services with the given status">
+           <input message="Enter Service Status to report on:" validargs="DORMANT,BANNED,ACTIVE,INACTIVE"
+                  defaultvalue="DORMANT" addproperty="status"/>
+           <java classname="gov.nih.nci.cagrid.portal.util.ReportServicesWithStatus" classpathref="aggr.run.cp">
+               <arg value="${status}"/>
+           </java>
+       </target>
+    
+
     <target name="aggr:ban-mgr" depends="aggr:prepare-run-cp">
         <input message="Enter operation:" validargs="ban,unban" addproperty="aggr:banOp"/>
         <input message="Enter service URL:" addproperty="aggr:banOpUrl"/>
