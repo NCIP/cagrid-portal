@@ -53,10 +53,10 @@
     </path>
 
     <path id="aggr.test.run.cp">
+        <pathelement location="${aggr.test.classes.dir}"/>
         <path refid="db.test.run.cp"/>
         <path refid="aggr.run.cp"/>
         <path refid="aggr.test.compile.cp"/>
-        <pathelement location="${aggr.test.classes.dir}"/>
         <pathelement location="${aggr.test.dir}"/>
     </path>
 
