@@ -1,0 +1,9 @@
+<input type="hidden" name="id" value="${catalogEntry.id}"/>
+</form>
+<div class="flow-buttons">
+	<span id="${ns}cancelButtonContainer" class="button-red"></span>
+	<span id="${ns}saveButtonContainer"></span>
+</div>
+</div>
+		
+<%@ include file="/WEB-INF/jsp/browse/common/edit/bottom_script.jspf" %>

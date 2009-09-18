@@ -1,0 +1,62 @@
+<div style="display:none;">
+	<form:form commandName="mapBean">
+	    Categories:
+	    <form:select id="${prefix}directory" onchange="loadMap();" path="selectedDirectory">
+	        <form:option value="all"></form:option>
+	        <%@ include file="/WEB-INF/jsp/map/directories.jspf" %>
+	    </form:select>
+	</form:form>
+</div>
+<div id="mapLegend">
+    <span mapType="dataServices">
+	<img src="<c:url value="/images/data-services.png"/>"/>Data Service<span class="summary" id="${ns}dCount"></span>
+        </span>
+
+    <span  mapType="analyticalServices">
+	<img src="<c:url value="/images/analytical_services.png"/>"/>Analytical Service<span class="summary"
+                                                                                         id="${ns}aCount"></span>
+        </span>
+
+    <span mapType="participants">
+	<img src="<c:url value="/images/participant_institute.png"/>"/>Participant Institute<span class="summary"
+                                                                                              id="${ns}pCount"></span>
+        </span>
+
+    <img src="<c:url value="/images/hosting-research-center.png"/>"/>Hosting Research Center
+
+</div>
+
+<script>
+    jQuery(document).ready(function() {
+        dwr.engine.beginBatch({timeout:30000});
+
+        MapService.getSummary(function(summary) {
+            $('${ns}dCount').innerHTML = "(" + summary.dataServices + ")";
+            $('${ns}aCount').innerHTML = "(" + summary.analyticalServices + ")";
+            $('${ns}pCount').innerHTML = "(" + summary.participants + ")";
+        });
+
+        dwr.engine.endBatch({
+            async:true
+        });
+
+        var subMaps = $('mapLegend').childElements();
+
+        for (var i = 0; i < subMaps.length; i++) {
+            $(subMaps[i]).addClassName("subMapIcon");
+            $(subMaps[i]).observe('click', function(event) {
+                var subMap = Event.element(event);
+                if ($(subMap).readAttribute("mapType")){
+                    $("${ns}directory").value = $(subMap).readAttribute("mapType");
+                loadMap();
+                }
+                <%--reset it after loading the map--%>
+                 $("${ns}directory").value="all";
+
+            });
+        }
+
+
+
+    });
+</script>

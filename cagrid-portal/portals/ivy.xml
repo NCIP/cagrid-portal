@@ -1,0 +1,61 @@
+<ivy-module version="2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:noNamespaceSchemaLocation="http://incubator.apache.org/ivy/schemas/ivy.xsd">
+
+    <info organisation="caGrid" module="portal-portals" revision="${project.version}">
+        <license name="caGrid" url="http://www.cagrid.org/mwiki/index.php?title=CaGrid:LICENSE-1.1"/>
+        <description>caGrid Portal</description>
+    </info>
+
+    <configurations>
+        <!-- Public Configurations-->
+        <conf name="authn" visibility="public"/>
+        <conf name="ext" visibility="public"/>
+        <conf name="ext-tomcat" extends="ext" visibility="public"/>
+
+        <conf name="default" extends="authn,ext" visibility="public"/>
+        <conf name="test" extends="default" visibility="public"/>
+        <conf name="search" visibility="public"/>
+
+    </configurations>
+
+
+    <publications>
+        <artifact name="cagrid-portal-liferay" type="jar"/>
+        <artifact name="cagrid-portal-liferay-resources" type="jar"/>
+    </publications>
+
+    <dependencies>
+        <dependency rev="latest.integration" org="caGrid" name="portal-security" conf="authn->runtime"/>
+        <dependency rev="latest.integration" org="caGrid" name="portal-db" conf="ext->domain;authn->dao;default;test"/>
+        <dependency rev="latest.integration" org="caGrid" name="portal-portal-search" conf="search->*"/>
+
+        <dependency rev="${target.grid}" org="caGrid" name="target_grid" conf="default->trust"/>
+        <dependency rev="${cagrid.integration.version}" org="caGrid" name="websso-client-acegi" conf="authn->default"
+                    transitive="false"/>
+        <dependency rev="${cagrid.integration.version}" org="caGrid" name="websso-client-common" conf="authn->default"
+                    transitive="false"/>
+
+        <dependency rev="1.0.4" org="acegisecurity" name="acegisecurity" conf="authn->*"/>
+        <dependency rev="4.0.3" org="globus" name="globus" conf="ext->crypto"/>
+        <dependency rev="1.5.3" org="aspectj" name="aspectjrt" conf="authn->default"/>
+        <dependency rev="1.5.3" org="aspectj" name="aspectjweaver" conf="authn->default"/>
+        <dependency rev="3.3.0" org="hibernate" name="annotations" conf="authn->*"/>
+        <dependency rev="${liferay.portal.version}" org="liferay" name="portal"
+                    conf="default->portal;ext->portal-ext"/>
+        <dependency rev="5.1.6+" org="mysql" name="mysql-connector-java" conf="ext->*"/>
+        <dependency rev="2.3+" org="sun" name="servlet" conf="default"/>
+        <dependency rev="2.5.5" org="springframework" name="spring" conf="authn->full"/>
+
+        <dependency rev="3.4.GA" org="javassist" name="javassist" conf="ext-tomcat->*"/>
+        <dependency rev="1.0.1B" org="sun" name="jta" conf="ext-tomcat->*"/>
+        <dependency rev="1.4.1" org="javax.mail" name="mail" conf="ext-tomcat->*"/>
+        <dependency rev="1.1" org="javax.activation" name="activation" conf="ext-tomcat->*"/>
+
+        <!--test dependencies-->
+        <dependency rev="1.3+" org="apache" name="commons-io" conf="test->*"/>
+
+        <!--global exclude-->
+        <exclude artifact="jprov" type="jar"/>
+    </dependencies>
+
+</ivy-module>

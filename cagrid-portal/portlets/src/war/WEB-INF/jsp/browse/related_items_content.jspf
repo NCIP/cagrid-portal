@@ -1,0 +1,85 @@
+
+
+			<div id="${ns}relatedItemsDiv">
+		
+	        	<div id="${ns}newRelatedItemDiv">
+	        
+		        </div>
+		        
+		        <c:if test="${empty catalogEntryViewBean.relatedPersons and empty catalogEntryViewBean.relatedInstitutions and empty catalogEntryViewBean.relatedCommunities and empty catalogEntryViewBean.relatedDataSets and empty catalogEntryViewBean.relatedTools and empty catalogEntryViewBean.relatedToolDeployments}">
+					<div>
+			        	<h3>No Related Items</h3>
+						There are no related items. Click the Add Related Items button above to add something.
+		        	</div>        
+		        </c:if>
+	        
+	        	<!-- Related People -->
+	        	<c:if test="${!empty catalogEntryViewBean.relatedPersons}">
+		        	<div>
+			        	<h3>Related People</h3>
+			        	
+			        	<c:set var="entryTypeLabel" value="Person"/>
+			        	<c:set var="relatedEntries" value="${catalogEntryViewBean.relatedPersons}"/>
+			        	<%@ include file="/WEB-INF/jsp/browse/relatedItems.jspf" %>
+		        	</div>
+	        	</c:if>
+	        	
+	        	
+	        	<!-- Related Institutions -->
+	        	<c:if test="${!empty catalogEntryViewBean.relatedInstitutions}">
+		        	<div>
+			        	<h3>Related Institutions</h3>
+			        	
+			        	<c:set var="entryTypeLabel" value="Institution"/>
+			        	<c:set var="relatedEntries" value="${catalogEntryViewBean.relatedInstitutions}"/>
+			        	<%@ include file="/WEB-INF/jsp/browse/relatedItems.jspf" %>
+		        	</div>
+	        	</c:if>
+	        	
+	        	<!-- Related Communities -->
+	        	<c:if test="${!empty catalogEntryViewBean.relatedCommunities}">
+		        	<div>
+			        	<h3>Related Communities</h3>
+			        	
+			        	<c:set var="entryTypeLabel" value="Community"/>
+			        	<c:set var="relatedEntries" value="${catalogEntryViewBean.relatedCommunities}"/>
+			        	<%@ include file="/WEB-INF/jsp/browse/relatedItems.jspf" %>
+		        	</div>
+	        	</c:if>
+	        	
+	        	<!-- Related Datasets -->
+	        	<c:if test="${!empty catalogEntryViewBean.relatedDataSets}">
+		        	<div>
+			        	<h3>Related Datasets</h3>
+			        	
+			        	<c:set var="entryTypeLabel" value="Dataset"/>
+			        	<c:set var="relatedEntries" value="${catalogEntryViewBean.relatedDataSets}"/>
+			        	<%@ include file="/WEB-INF/jsp/browse/relatedItems.jspf" %>
+		        	</div>
+	        	</c:if>
+	        	
+	        	<!-- Related Tools -->
+	        	<c:if test="${!empty catalogEntryViewBean.relatedTools}">
+		        	<div>
+			        	<h3>Related Tools</h3>
+			        	
+			        	<c:set var="entryTypeLabel" value="Tool"/>
+			        	<c:set var="relatedEntries" value="${catalogEntryViewBean.relatedTools}"/>
+			        	<%@ include file="/WEB-INF/jsp/browse/relatedItems.jspf" %>
+		        	</div>
+	        	</c:if>
+	        	
+	        	<!-- Related Tool Deployments -->
+	        	<c:if test="${!empty catalogEntryViewBean.relatedToolDeployments}">
+		        	<div>
+			        	<h3>Related Tool Deployments</h3>
+			        	
+			        	<c:set var="entryTypeLabel" value="Tool Deployment"/>
+			        	<c:set var="relatedEntries" value="${catalogEntryViewBean.relatedToolDeployments}"/>
+			        	<%@ include file="/WEB-INF/jsp/browse/relatedItems.jspf" %>
+		        	</div>
+	        	</c:if>
+	        	
+	        	
+        	
+        	</div>

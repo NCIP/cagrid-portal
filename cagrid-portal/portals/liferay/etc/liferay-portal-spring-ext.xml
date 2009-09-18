@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+    <!--to override liferay restriction of unique email ID's-->
+    <bean id="com.liferay.portal.service.UserLocalService.impl"
+          class="gov.nih.nci.cagrid.portal.liferay.websso.CaGridUserLocalServiceImpl"
+          lazy-init="true"/>
+
+</beans>

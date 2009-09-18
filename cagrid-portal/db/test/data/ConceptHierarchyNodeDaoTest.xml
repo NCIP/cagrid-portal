@@ -1,0 +1,74 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+
+    <C_HIER ID="-1" URI="http://some.hierarchy.uri" NAME="some hierarchy"/>
+
+    <C_HIER_NODE ID="-1" NAME="root" CODE="root_code" DESCRIPTION="root_desc" HIERARCHY_ID="-1" PARENT_ID="-1"
+                 LEVEL="0"/>
+
+    <C_HIER_NODE ID="-2" NAME="node1" CODE="node1_code1" DESCRIPTION="node1_desc" HIERARCHY_ID="-1" PARENT_ID="-1"
+                 LEVEL="1"/>
+    <C_HIER_NODE ID="-3" NAME="node2" CODE="node2_code" DESCRIPTION="node2_desc" HIERARCHY_ID="-1" PARENT_ID="-1"
+                 LEVEL="1"/>
+    <C_HIER_NODE ID="-4" NAME="node3" CODE="node3_code" DESCRIPTION="node3_desc" HIERARCHY_ID="-1" PARENT_ID="-1"
+                 LEVEL="1"/>
+
+    <C_HIER_NODE ID="-5" NAME="node2-1" CODE="node2-1_code" DESCRIPTION="node2-1_desc" HIERARCHY_ID="-1" PARENT_ID="-3"
+                 LEVEL="2"/>
+    <C_HIER_NODE ID="-6" NAME="node2-2" CODE="node2-2_code" DESCRIPTION="node2-2_desc" HIERARCHY_ID="-1" PARENT_ID="-3"
+                 LEVEL="2"/>
+    <C_HIER_NODE ID="-7" NAME="node2-3" CODE="node2-3_code" DESCRIPTION="node2-3_desc" HIERARCHY_ID="-1" PARENT_ID="-3"
+                 LEVEL="2"/>
+
+    <!-- Descendants of root -->
+    <C_HIER_DESC ANCESTOR_ID="-1" DESCENDANT_ID="-2"/>
+    <C_HIER_DESC ANCESTOR_ID="-1" DESCENDANT_ID="-3"/>
+    <C_HIER_DESC ANCESTOR_ID="-1" DESCENDANT_ID="-4"/>
+    <C_HIER_DESC ANCESTOR_ID="-1" DESCENDANT_ID="-5"/>
+    <C_HIER_DESC ANCESTOR_ID="-1" DESCENDANT_ID="-6"/>
+    <C_HIER_DESC ANCESTOR_ID="-1" DESCENDANT_ID="-7"/>
+
+    <!-- Descedants of node2 -->
+    <C_HIER_DESC ANCESTOR_ID="-3" DESCENDANT_ID="-5"/>
+    <C_HIER_DESC ANCESTOR_ID="-3" DESCENDANT_ID="-6"/>
+    <C_HIER_DESC ANCESTOR_ID="-3" DESCENDANT_ID="-7"/>
+
+
+    <C_HIER ID="-2" URI="http://some.other.hierarchy.uri" NAME="some other hierarchy"/>
+
+    <C_HIER_NODE ID="-8" NAME="root" CODE="root_code" DESCRIPTION="root_desc" HIERARCHY_ID="-2" PARENT_ID="-8"
+                 LEVEL="0"/>
+
+    <C_HIER_NODE ID="-9" NAME="node1" CODE="node1_code" DESCRIPTION="node1_desc" HIERARCHY_ID="-2" PARENT_ID="-8"
+                 LEVEL="1"/>
+    <C_HIER_NODE ID="-10" NAME="node2" CODE="node2_code" DESCRIPTION="node2_desc" HIERARCHY_ID="-2" PARENT_ID="-8"
+                 LEVEL="1"/>
+    <C_HIER_NODE ID="-11" NAME="node3" CODE="node3_code" DESCRIPTION="node3_desc" HIERARCHY_ID="-2" PARENT_ID="-8"
+                 LEVEL="1"/>
+
+    <C_HIER_NODE ID="-12" NAME="node2-1" CODE="node2-1_code" DESCRIPTION="node2-1_desc" HIERARCHY_ID="-2"
+                 PARENT_ID="-10" LEVEL="2"/>
+    <C_HIER_NODE ID="-13" NAME="node2-2" CODE="node2-2_code" DESCRIPTION="node2-2_desc" HIERARCHY_ID="-2"
+                 PARENT_ID="-10" LEVEL="2"/>
+    <C_HIER_NODE ID="-14" NAME="node2-3" CODE="node2-3_code" DESCRIPTION="node2-3_desc" HIERARCHY_ID="-2"
+                 PARENT_ID="-10" LEVEL="2"/>
+
+    <!-- Descendants of root -->
+    <C_HIER_DESC ANCESTOR_ID="-8" DESCENDANT_ID="-9"/>
+    <C_HIER_DESC ANCESTOR_ID="-8" DESCENDANT_ID="-10"/>
+    <C_HIER_DESC ANCESTOR_ID="-8" DESCENDANT_ID="-11"/>
+    <C_HIER_DESC ANCESTOR_ID="-8" DESCENDANT_ID="-12"/>
+    <C_HIER_DESC ANCESTOR_ID="-8" DESCENDANT_ID="-13"/>
+    <C_HIER_DESC ANCESTOR_ID="-8" DESCENDANT_ID="-14"/>
+
+    <!-- Descedants of node2 -->
+    <C_HIER_DESC ANCESTOR_ID="-10" DESCENDANT_ID="-12"/>
+    <C_HIER_DESC ANCESTOR_ID="-10" DESCENDANT_ID="-13"/>
+    <C_HIER_DESC ANCESTOR_ID="-10" DESCENDANT_ID="-14"/>
+
+    <!--Grid Services-->
+    <GRID_SERVICES ID="-1" URL="http://service1" SERVICE_TYPE='GridService'/>
+    <SEM_META_MAP SERVICE_ID="-1" C_HIER_NODE_ID="-2"/>
+
+
+</dataset>

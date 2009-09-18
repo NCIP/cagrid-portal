@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<project name="dependencies" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant">
+
+    <property file="${basedir}/../antfiles/project.properties"/>
+
+    <import file="${basedir}/../ivy/common.xml"/>
+
+</project>

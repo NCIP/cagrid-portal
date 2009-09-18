@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+
+<project name="cagrid-portal-test" basedir=".">
+
+    <dirname property="cagrid-portal-test.basedir" file="${ant.file.cagrid-portal-test}"/>
+
+    <property name="test.junit.dir" value="${basedir}/junit"/>
+    <property name="test.junit.reports.dir" value="${test.junit.dir}/reports"/>
+
+
+    <target name="test:prepare" depends="prepare"/>
+
+    <target name="test:clean">
+        <delete dir="${test.junit.dir}"/>
+    </target>
+
+    <target name="test:test" depends="test:prepare">
+        <antcall target="test-base">
+            <param name="project.list" value="${unit.testable.projects}"/>
+            <param name="test.target" value="test"/>
+        </antcall>
+    </target>
+
+    <target name="test:system" depends="test:prepare">
+        <antcall target="test-base">
+            <param name="project.list" value="${system.testable.projects}"/>
+            <param name="test.target" value="test-system"/>
+        </antcall>
+    </target>
+
+    <target name="test-base">
+
+        <delete dir="${test.junit.reports.dir}" failonerror="false"/>
+        <mkdir dir="${test.junit.reports.dir}"/>
+
+        <for list="${project.list}" parallel="false" param="project.name" trim="true">
+
+            <sequential>
+                <stopwatch name="@{project.name}"/>
+                <trycatch property="@{project.name}.unit.test.failed.message">
+                    <try>
+                        <ant inheritAll="false" dir="${projects.dir}/@{project.name}"
+                             target="${test.target}" inheritrefs="false">
+                            <property name="junit.reports.dir" value="${test.junit.reports.dir}"/>
+                        </ant>
+                    </try>
+                    <catch>
+                        <fail message="@{project.name} Unit tests failed (${@{project.name}.unit.test.failed.message})"
+                              if="test.failfast"/>
+                        <echo message="@{project.name} Unit tests failed (${@{project.name}.unit.test.failed.message}), proceeding with other tests, but build will fail at completion."/>
+                        <property name="unit.test.failed" value="true"/>
+                    </catch>
+                </trycatch>
+                <stopwatch name="@{project.name}" action="total"/>
+            </sequential>
+        </for>
+        <fail message="Unit Tests failed! Consult the logs for details." if="unit.test.failed"/>
+    </target>
+
+
+</project>

@@ -1,0 +1,359 @@
+<?xml version="1.0"?>
+
+<project name="liferay-portal-jboss" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant">
+    <import file="${basedir}/build.xml"/>
+
+    <property name="liferay.jboss.download.url"
+              value="http://switch.dl.sourceforge.net/sourceforge/jboss/${jboss.server.name}.zip"/>
+    <property name="liferay.jboss.dir.name" value="${jboss.server.name}"/>
+    <property name="liferay.jboss.zip" value="${liferay.install.dir}/${jboss.server.name}.zip"/>
+    <property name="liferay.jboss.home" value="${liferay.install.dir}/${liferay.jboss.dir.name}"/>
+    <property name="liferay.auto.deploy.dest.dir"
+              value="${liferay.jboss.home}/server/${liferay.jboss.server.name}/deploy"/>
+    <property name="liferay.root.context.dir"
+              value="${liferay.auto.deploy.dest.dir}/liferay-portal.war"/>
+
+    <property name="portal.search.war.dest" value="${liferay.auto.deploy.dest.dir}/${portal.search.war.name}.war"/>     
+
+    <import file="${basedir}/build-liferay-common.xml"/>
+    
+    <property name="liferay.portal.war.dir"
+              value="${liferay.root.context.dir}"/>
+
+    <property name="liferay.autodeploy.dir" value="${liferay.install.dir}/deploy"/>
+
+
+    <target name="test-jboss-zip">
+        <condition property="liferay.jboss.zip.available">
+            <available file="${liferay.jboss.zip}" type="file"/>
+        </condition>
+    </target>
+
+    <target name="download-jboss" unless="liferay.jboss.zip.available"
+            depends="test-jboss-zip">
+        <mkdir dir="${liferay.install.dir}"/>
+        <get src="${liferay.jboss.download.url}" dest="${liferay.jboss.zip}" verbose="on"/>
+    </target>
+
+    <target name="test-jboss">
+        <condition property="liferay.jboss.available">
+            <available file="${liferay.jboss.home}" type="dir"/>
+        </condition>
+    </target>
+
+    <target name="unzip-jboss" unless="liferay.jboss.available" depends="test-jboss">
+        <mkdir dir="${liferay.install.dir}"/>
+        <unzip src="${liferay.jboss.zip}" dest="${liferay.install.dir}"/>
+    </target>
+
+    <target name="install-jboss" depends="test-jboss">
+        <if>
+            <not>
+                <isset property="liferay.jboss.available"/>
+            </not>
+            <then>
+                <echo>Installing JBoss</echo>
+
+                <antcall target="download-jboss"/>
+                <antcall target="unzip-jboss"/>
+
+            </then>
+        </if>
+    </target>
+
+    <target name="configure-jboss-classpath" depends="prepare">
+        <!-- No DTD or Schema needed. -->
+        <property name="config.file"
+                  value="${liferay.jboss.home}/server/${liferay.jboss.server.name}/conf/jboss-service.xml"/>
+        <xmltask source="${config.file}" dest="${config.file}">
+            <remove path="/server/classpath"/>
+            <insert path="/server/mbean[1]" position="before">
+                <![CDATA[
+	                <classpath archives="*" codebase="${jboss.server.lib.url:lib}/ext"/>
+	                <classpath archives="*" codebase="${jboss.server.lib.url:lib}"/>
+				]]>
+            </insert>
+        </xmltask>
+
+    </target>
+
+    <target name="configure-jboss-root" depends="prepare">
+
+        <delete
+                file="${liferay.jboss.home}/server/${liferay.jboss.server.name}/deploy/jbossweb-tomcat55.sar/ROOT.war"/>
+
+        <!-- Downloaded DTD to tools/ant/resources/web-app_2_3.dtd -->
+        <property name="config.file"
+                  value="${liferay.jboss.home}/server/${liferay.jboss.server.name}/deploy/jbossweb-tomcat55.sar/conf/web.xml"/>
+        <echo>Config File: ${config.file}</echo>
+
+        <xmltask preservetype="true" source="${config.file}" dest="${config.file}"
+                 failWithoutMatch="false">
+            <remove
+                    path="*[local-name()='web-app']/*[local-name()='servlet']/*[local-name()='init-param'][*[local-name()='param-name']='compilerSourceVM']"/>
+            <insert
+                    path="/*[local-name()='web-app']/*[local-name()='servlet'][2]/*[local-name()='init-param'][1]"
+                    position="after">
+                <![CDATA[
+                <init-param xmlns="http://java.sun.com/xml/ns/j2ee">
+                <param-name>compilerSourceVM</param-name>
+                <param-value>1.5</param-value>
+                </init-param>
+				]]>
+            </insert>
+        </xmltask>
+
+        <xmltask preservetype="true" source="${config.file}" dest="${config.file}"
+                 failWithoutMatch="true">
+            <xmlcatalog refid="portal.catalog"/>
+
+            <replace
+                    path="/*[local-name()='web-app']/*[local-name()='servlet' and ./*[local-name()='servlet-name' and text()='default']]">
+                <![CDATA[
+                    <servlet xmlns="http://java.sun.com/xml/ns/j2ee">
+                    <servlet-name>default</servlet-name>
+                    <servlet-class>org.apache.catalina.servlets.DefaultServlet</servlet-class>
+                    <init-param>
+                        <param-name>debug</param-name>
+                        <param-value>0</param-value>
+                    </init-param>
+                    <init-param>
+                        <param-name>listings</param-name>
+                        <param-value>false</param-value>
+                    </init-param>
+                    <init-param>
+                        <param-name>input</param-name>
+                        <param-value>4096</param-value>
+                    </init-param>
+                    <init-param>
+                        <param-name>output</param-name>
+                        <param-value>4096</param-value>
+                    </init-param>
+                    <load-on-startup>1</load-on-startup>
+                    </servlet>
+				]]>
+            </replace>
+        </xmltask>
+    </target>
+
+    <target name="create-liferay-datasource" depends="prepare">
+        <concat
+                destfile="${liferay.jboss.home}/server/${liferay.jboss.server.name}/deploy/liferay-ds.xml"
+                append="false"><![CDATA[<datasources>
+               <local-tx-datasource>
+                <jndi-name>jdbc/LiferayPool</jndi-name>
+                <connection-url>
+                    ${liferay.db.url}?useUnicode=true&amp;characterEncoding=UTF-8
+                </connection-url>
+                <driver-class>${liferay.db.driver}</driver-class>
+                <user-name>${liferay.db.username}</user-name>
+                <password>${liferay.db.password}</password>
+                <min-pool-size>0</min-pool-size>
+               </local-tx-datasource>
+              </datasources>
+			]]>
+        </concat>
+    </target>
+
+    <target name="configure-jboss-mail-service">
+        <concat
+                destfile="${liferay.jboss.home}/server/${liferay.jboss.server.name}/deploy/mail-service.xml"
+                append="false"><![CDATA[<server>
+	<mbean code="org.jboss.mail.MailService" name="jboss:service=MailSession">
+		<attribute name="JNDIName">mail/MailSession</attribute>
+		<attribute name="User">${liferay.mail.username}</attribute>
+		<attribute name="Password">${liferay.mail.password}</attribute>
+		<attribute name="Configuration">
+			<configuration>
+				<property name="mail.store.protocol" value="imap" />
+				<property name="mail.transport.protocol" value="smtp" />
+				<property name="mail.imap.host" value="${liferay.mail.host}" />
+				<property name="mail.pop3.host" value="${liferay.mail.host}" />
+				<property name="mail.smtp.host" value="${liferay.mail.host}" />
+			</configuration>
+		</attribute>
+	</mbean>
+</server>
+			]]>
+        </concat>
+    </target>
+
+    <target name="configure-jboss-jaas" depends="prepare">
+        <!-- Downloaded DTD to tools/ant/resources/security_config.dtd -->
+        <!--<property name="config.file"-->
+        <!--value="${liferay.jboss.home}/server/${liferay.jboss.server.name}/conf/login-config.xml"/>-->
+        <!--<xmltask preservetype="true" source="${config.file}" dest="${config.file}">-->
+        <!--<xmlcatalog refid="portal.catalog"/>-->
+        <!--<remove path="/policy/application-policy[@name='other']"/>-->
+        <!--</xmltask>-->
+    </target>
+
+
+    <target name="configure-jboss-jca-service" depends="prepare">
+        <!-- No DTD or Schema needed. -->
+        <property name="config.file"
+                  value="${liferay.jboss.home}/server/${liferay.jboss.server.name}/deploy/jbossjca-service.xml"/>
+        <xmltask source="${config.file}" dest="${config.file}">
+            <replace
+                    path="/server/mbean[@name='jboss.jca:service=CachedConnectionManager']/attribute[@name='Debug']/text()"
+                    withText="false"/>
+        </xmltask>
+    </target>
+
+    <target name="configure-jboss-jms-service">
+        <concat
+                destfile="${liferay.jboss.home}/server/${liferay.jboss.server.name}/deploy/jms/jbossmq-destinations-service.xml"
+                append="false"><![CDATA[<?xml version="1.0"?>
+<server></server>]]></concat>
+    </target>
+
+    <target name="configure-jboss-log4j-service" depends="prepare">
+        <!--needed to enable log4j logging based on log4j.properties in individual webapps
+        See this for more info http://docs.jboss.org/process-guide/en/html/logging.html
+        -->
+        <property name="config.file"
+                  value="${liferay.jboss.home}/server/${liferay.jboss.server.name}/conf/jboss-service.xml"/>
+        <xmltask source="${config.file}" dest="${config.file}">
+            <replace path="/server/mbean[@code='org.jboss.logging.Log4jService']/attribute[1]/text()"
+                     withText="resource:jboss-log4j.xml"/>
+        </xmltask>
+        <move file="${liferay.jboss.home}/server/${liferay.jboss.server.name}/conf/log4j.xml"
+              tofile="${liferay.jboss.home}/server/${liferay.jboss.server.name}/conf/jboss-log4j.xml"
+              failonerror="false"/>
+    </target>
+
+
+    <target name="configure-jboss-tomcat" depends="prepare">
+        <if>
+            <istrue value="${liferay.jboss.configure.connectors}"/>
+            <then>
+                <!-- No DTD or Schema needed. -->
+                <property name="config.file"
+                          value="${liferay.jboss.home}/server/${liferay.jboss.server.name}/deploy/jbossweb-tomcat55.sar/server.xml"/>
+                <xmltask source="${config.file}" dest="${config.file}">
+
+                    <!-- Remove all the Connector elements except AJP/1.3  -->
+                    <remove
+                            path="/Server/Service[@name='jboss.web']/Connector[not(@protocol='AJP/1.3')]"/>
+
+                    <insert path="/Server/Service[@name='jboss.web']/Engine[@name='jboss.web']"
+                            position="before">
+                        <![CDATA[
+		      <Connector acceptCount="100" address="$${jboss.bind.address}" connectionTimeout="20000"
+		      		disableUploadTimeout="true" emptySessionPath="true" enableLookups="false"
+		      		maxHttpHeaderSize="8192" maxThreads="250" port="${liferay.http.port}"
+		      		redirectPort="${liferay.https.port}" strategy="ms"/>
+					]]>
+                    </insert>
+
+                    <insert path="/Server/Service[@name='jboss.web']/Engine[@name='jboss.web']"
+                            position="before">
+                        <![CDATA[
+		      <Connector port="${liferay.https.port}" address="$${jboss.bind.address}"
+		           maxThreads="100" strategy="ms" maxHttpHeaderSize="8192"
+		           emptySessionPath="true"
+		           scheme="https" secure="true" clientAuth="false"
+		           keystoreFile="${liferay.https.keystore.path}"
+		           keystorePass="${liferay.https.keystore.password}" sslProtocol="TLS" />
+					]]>
+                    </insert>
+
+                </xmltask>
+            </then>
+        </if>
+    </target>
+
+    <target name="jboss:copy-startup-scripts">
+        <if>
+            <istrue value="${liferay.jboss.deploy.scripts}"/>
+            <then>
+                <copy todir="${liferay.jboss.home}/bin" overwrite="true">
+                    <fileset dir="${src.scripts.dir}">
+                        <include name="run.sh"/>
+                        <include name="run.bat"/>
+                    </fileset>
+                </copy>
+            </then>
+        </if>
+    </target>
+
+    <target name="jboss:configure-startup-scripts">
+        <if>
+            <istrue value="${liferay.jboss.deploy.scripts}"/>
+            <then>
+                <chmod dir="${liferay.jboss.home}/bin" perm="u+x" includes="*.sh"></chmod>
+            </then>
+        </if>
+    </target>
+
+    <target name="configure-jboss" depends="prepare">
+        <antcall target="configure-jboss-classpath"/>
+        <antcall target="configure-jboss-root"/>
+        <antcall target="configure-jboss-mail-service"/>
+        <antcall target="configure-jboss-jaas"/>
+        <antcall target="configure-jboss-jca-service"/>
+        <antcall target="configure-jboss-jms-service"/>
+        <antcall target="configure-jboss-log4j-service"/>
+        <antcall target="create-liferay-datasource"/>
+        <antcall target="jboss:copy-liferay-ext-jars"/>
+        <antcall target="configure-jboss-tomcat"/>
+        <antcall target="jboss:copy-startup-scripts"/>
+        <antcall target="jboss:configure-startup-scripts"/>
+    </target>
+
+
+    <target name="jboss:copy-liferay-ext-jars">
+        <mkdir dir="${liferay.jboss.home}/server/${liferay.jboss.server.name}/lib/ext"/>
+
+        <copy todir="${liferay.jboss.home}/server/${liferay.jboss.server.name}/lib/ext"
+              overwrite="true">
+            <fileset dir="${ext.ext.lib.dir}">
+                <include name="**/*.jar"/>
+            </fileset>
+        </copy>
+
+    </target>
+
+    <target name="jboss:deploy-liferay-portal-war" depends="download-war">
+
+        <mkdir dir="${liferay.portal.war.dir}"/>
+        <unzip src="${liferay.downloads.dir}/${liferay.war}" dest="${liferay.portal.war.dir}"/>
+
+        <!-- Why? -->
+        <move todir="${liferay.jboss.home}/lib">
+            <fileset dir="${liferay.portal.war.dir}/WEB-INF/lib">
+                <include name="dom4j.jar"/>
+                <include name="jaxen.jar"/>
+            </fileset>
+        </move>
+
+        <move file="${liferay.portal.war.dir}/WEB-INF/lib/commons-collections.jar"
+              todir="${liferay.jboss.home}/server/${liferay.jboss.server.name}/lib"/>
+
+        <delete>
+            <fileset dir="${liferay.jboss.home}/server/${liferay.jboss.server.name}/lib">
+                <include name="hibernate3.jar"/>
+                <include name="jboss-hibernate.jar"/>
+            </fileset>
+        </delete>
+
+        <copy todir="${liferay.root.context.dir}/WEB-INF" overwrite="true">
+            <fileset dir="${ext.ext.xml.dir}">
+                <include name="web.xml"/>
+            </fileset>
+        </copy>
+
+    </target>
+
+
+    <target name="jboss:install-liferay" depends="prepare" description="Install and configure Liferay Portal">
+        <antcall target="install-jboss"/>
+        <antcall target="configure-jboss"/>
+        <antcall target="jboss:deploy-liferay-portal-war"/>
+        <antcall target="deploy-all"/>
+        <!--<antcall target="add-cagrid-category"/>-->
+        <!--<antcall target="configure-liferay-messages"/>-->
+    </target>
+
+
+</project>

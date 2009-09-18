@@ -1,0 +1,120 @@
+<?xml version="1.0"?>
+
+<!--test targets-->
+<project name="cagrid-portal-tests" basedir=".">
+
+    <import file="build-common.xml"/>
+
+    <property name="test.dir" value="${basedir}/test"/>
+    <property name="test.etc.dir" value="${test.dir}/etc"/>
+    <property name="test.lib.dir" value="${test.dir}/lib"/>
+    <property name="test.build.dir" value="${test.dir}/build"/>
+    <property name="test.build.classes.dir" value="${test.build.dir}/classes"/>
+    <property name="test.src.java.dir" value="${test.dir}/src/java"/>
+    <property name="junit.reports.dir" value="${test.build.dir}/junit-reports"/>
+    <property name="cobertura.datafile" value="${test.build.dir}/build/cobertura.datafile"/>
+
+    <property name="test.target.property.file" value="${antfiles.dir}/build-test.properties"/>
+
+    <patternset id="unit.test.pattern">
+        <include name="**/*Test.java"/>
+        <exclude name="**/Abstract*.java"/>
+        <exclude name="**/*TestBase.java"/>
+        <exclude name="**/*System*.java"/>
+    </patternset>
+
+    <patternset id="system.test.pattern">
+        <include name="**/*System*.java"/>
+        <exclude name="**/*SecureSystem*.java"/>
+        <exclude name="**/Abstract*.java"/>
+        <exclude name="**/*TestBase.java"/>
+    </patternset>
+
+
+    <target name="prepare-test" depends="compile-test"
+            description="Prepare tests so that they can be executed">
+        <antcall target="create-cagridportal-properties" inheritall="false">
+            <param name="target.property.file" value="${test.target.property.file}"/>
+            <param name="target.dir" value="${test.build.classes.dir}"/>
+        </antcall>
+    </target>
+
+    <target name="compile-test" depends="compile">
+        <mkdir dir="${test.build.classes.dir}"/>
+        <javac srcdir="${test.src.java.dir}" destdir="${test.build.classes.dir}" debug="true">
+            <classpath refid="test.compile.cp"/>
+        </javac>
+    </target>
+
+    <target name="test" depends="prepare-test" description="Execute all tests">
+        <antcall target="test-base">
+            <param name="test.pattern" value="unit.test.pattern"/>
+        </antcall>
+    </target>
+
+    <target name="test-system" depends="prepare-test"
+            description="Run all the System tests for this porject.">
+        <antcall target="test-base">
+            <param name="test.pattern" value="system.test.pattern"/>
+        </antcall>
+    </target>
+
+    <target name="test-base">
+        <mkdir dir="${junit.reports.dir}"/>
+
+        <junit dir="${basedir}" printsummary="yes" showoutput="true" fork="true">
+
+            <!--needed to hook into main reporting task-->
+            <sysproperty key="net.sourceforge.cobertura.datafile"
+                         file="${cobertura.datafile}"/>
+
+            <classpath refid="test.run.cp"/>
+            <formatter type="xml"/>
+
+            <batchtest todir="${junit.reports.dir}">
+                <fileset dir="${test.src.java.dir}">
+                    <patternset refid="${test.pattern}"/>
+                </fileset>
+            </batchtest>
+
+        </junit>
+
+    </target>
+
+
+    <target name="test-integration" depends="prepare-test" description="Execute all Integration tests">
+        <mkdir dir="${junit.reports.dir}"/>
+
+        <junit dir="${basedir}" printsummary="yes" showoutput="true" fork="true">
+            <sysproperty key="basedir" value="${basedir}"/>
+
+            <formatter type="xml"/>
+            <classpath refid="integration.test.run.cp"/>
+
+            <batchtest todir="${junit.reports.dir}">
+                <fileset dir="${test.src.java.dir}">
+                    <include name="**/*IntegrationTest.java"/>
+                </fileset>
+            </batchtest>
+
+        </junit>
+    </target>
+
+    <target name="test-single" depends="prepare-test">
+        <mkdir dir="${junit.reports.dir}"/>
+        <junit dir="${basedir}" printsummary="yes" showoutput="yes" fork="true" haltonfailure="yes">
+            <sysproperty key="basedir" value="${basedir}"/>
+
+            <formatter type="xml"/>
+            <classpath>
+                <path refid="test.run.cp"/>
+            </classpath>
+
+            <test name="gov.nih.nci.cagrid.portal.notification.UserNotificationFilterTest"
+                  todir="${junit.reports.dir}"/>
+
+        </junit>
+    </target>
+
+
+</project>

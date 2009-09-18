@@ -1,0 +1,8 @@
+<table class="detailstable">
+	<tbody>
+		<tr class="detailslabelcell">
+			<td>Description:</td>
+			<td style="white-space:normal;text-align:left"><c:out value="${operation.description}"/></td>
+		</tr>
+	</tbody>
+</table>

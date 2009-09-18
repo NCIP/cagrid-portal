@@ -1,0 +1,22 @@
+<ivy-module version="2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:noNamespaceSchemaLocation="http://incubator.apache.org/ivy/schemas/ivy.xsd">
+
+
+   <info organisation="purplecloud" module="messaging" revision="2.4" status="release">
+        <license name="Apache" url="http://www.apache.org/licenses/LICENSE-2.0"/>
+        <ivyauthor name="Michelle Osmond" url="http://mus.purplecloud.net/"/>
+
+        <description homepage="http://mus.purplecloud.net/">
+            Portlet messaging library
+        </description>
+    </info>
+
+    <configurations>
+        <conf name="default" description="for main use, without util"/>
+    </configurations>
+
+    <publications>
+        <artifact name="portlet-messaging-2.4" type="jar" conf="default"/>
+    </publications>
+
+</ivy-module>

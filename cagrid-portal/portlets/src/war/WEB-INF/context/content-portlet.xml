@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" "http://www.springframework.org/dtd/spring-beans-2.0.dtd">
+<beans>
+
+	<bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="location"
+			value="classpath:cagridportal.properties" />
+	</bean>
+	
+	<bean class="org.springframework.beans.factory.annotation.RequiredAnnotationBeanPostProcessor"/>
+
+	<bean id="viewNameParam" class="java.lang.String">
+		<constructor-arg value="jsp"/>
+	</bean>
+	<bean id="viewNameDefault" class="java.lang.String">
+		<constructor-arg value="no-content"/>
+	</bean>
+
+	<bean id="contentHelpController"
+		class="org.springframework.web.portlet.mvc.ParameterizableViewController">
+		<property name="viewName" value="/WEB-INF/jsp/content/help.jsp" />
+	</bean>
+	
+	<bean id="contentControllerTemplate" abstract="true">
+		<property name="viewNameParam" ref="viewNameParam"/>
+		<property name="viewNameDefault" ref="viewNameDefault"/>
+	</bean>
+
+	<bean id="contentEditController" parent="contentControllerTemplate"
+		class="gov.nih.nci.cagrid.portal.portlet.content.ContentEditController"/>
+
+	<bean id="contentViewController" parent="contentControllerTemplate"
+		class="gov.nih.nci.cagrid.portal.portlet.content.ContentViewController"/>
+
+<!-- 
+    <bean id="catalogSearchController" class="gov.nih.nci.cagrid.portal.portlet.content.BrowseSearchController">
+          <property name="redirectUrlPreferenceName" value="catalogSearchUrl"/>
+          <property name="commandClass" value="gov.nih.nci.cagrid.portal.portlet.content.BrowseSearchCommand"/>
+          <property name="interPortletMessageSender">
+              <bean class="gov.nih.nci.cagrid.portal.portlet.InterPortletMessageAdapter" autowire="byName">
+                  <property name="modePreferenceName" value="catalogSearchMode"/>
+                  <property name="outputQueuePreferenceName" value="catalogSearchOutputQueue"/>
+              </bean>
+          </property>
+      </bean>
+
+    <bean
+            id="portletModeParameterHandlerMapping"
+            class="org.springframework.web.portlet.handler.PortletModeParameterHandlerMapping">
+        <property name="order" value="1"/>
+        <property name="parameterName" value="operation"/>
+
+        <property name="interceptors">
+            <list>
+                <ref bean="parameterMappingInterceptor"/>
+            </list>
+        </property>
+
+        <property name="portletModeParameterMap">
+            <map>
+                <entry key="view">
+                    <map>
+                        <entry key="catalogSearch" value-ref="catalogSearchController"/>
+                    </map>
+                </entry>
+            </map>
+        </property>
+    </bean>
+    -->
+	<bean id="portletModeHandlerMapping"
+		class="org.springframework.web.portlet.handler.PortletModeHandlerMapping">
+		<property name="portletModeMap">
+			<map>
+				<entry key="view">
+					<ref bean="contentViewController" />
+				</entry>
+				<entry key="edit">
+					<ref bean="contentEditController" />
+				</entry>
+				<entry key="help">
+					<ref bean="contentHelpController" />
+				</entry>
+			</map>
+		</property>
+	</bean>
+	
+	<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+		<property name="prefix" value="/WEB-INF/jsp/content/"/>
+		<property name="suffix" value=".jsp"/>
+	</bean>		
+
+	<bean id="defaultExceptionHandler"
+		parent="defaultExceptionHandlerTemplate" />
+
+</beans>

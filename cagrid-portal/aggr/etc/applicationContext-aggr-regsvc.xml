@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd">
+
+    <import resource="classpath:applicationContext-aggr-regsvc-beans.xml"/>
+
+
+    <bean id="checkForNewServices"
+          class="org.springframework.scheduling.timer.MethodInvokingTimerTaskFactoryBean">
+        <property name="targetObject" ref="registeredServiceMonitor"/>
+        <property name="targetMethod" value="checkForNewServices"/>
+    </bean>
+
+    <bean id="checkForNewServicesTask"
+          class="org.springframework.scheduling.timer.ScheduledTimerTask">
+        <property name="delay" ref="defaultDelay"/>
+        <property name="period" ref="defaultPeriod"/>
+        <property name="timerTask" ref="checkForNewServices"/>
+    </bean>
+
+
+    <!--Will update the Cache of services from Index-->
+    <bean id="updateServiceCacheTask"
+          class="org.springframework.scheduling.timer.ScheduledTimerTask">
+        <property name="delay" ref="fastDefaultDelay"/>
+        <property name="period" ref="fastDefaultPeriod"/>
+        <property name="timerTask">
+            <bean id="updateServicCache"
+                  class="org.springframework.scheduling.timer.MethodInvokingTimerTaskFactoryBean">
+                <property name="targetObject" ref="cacheFirstDynamicServiceStatusProvider"/>
+                <property name="targetMethod" value="monitorIndex"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="regsvcTimerFactory"
+          class="org.springframework.scheduling.timer.TimerFactoryBean">
+        <property name="scheduledTimerTasks">
+            <list>
+                <ref bean="checkForNewServicesTask"/>
+                <ref bean="updateServiceCacheTask"/>
+            </list>
+        </property>
+    </bean>
+
+</beans>

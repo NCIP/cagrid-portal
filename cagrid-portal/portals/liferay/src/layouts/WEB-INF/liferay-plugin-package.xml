@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE plugin-package PUBLIC "-//Liferay//DTD Plugin Package 5.2.0//EN"
+        "http://www.liferay.com/dtd/liferay-plugin-package_5_2_0.dtd">
+
+<plugin-package>
+    <name>caGrid Portal Layout Templates</name>
+    <module-id>cagrid/portal/liferay/5.2.0.1/layout/war</module-id>
+    <types>
+        <type>layout-template</type>
+    </types>
+    <tags>
+        <tag>cagrid</tag>
+        <tag>portal</tag>
+        <tag>layout</tag>
+    </tags>
+    <short-description>
+        Layout templates for caGrid Portal.
+    </short-description>
+    <change-log>
+        Newly created.
+    </change-log>
+    <page-url>https://gforge.nci.nih.gov/frs/?group_id=25</page-url>
+    <author>Joshua Phillips (joshua.a.phillips@semanticbits.com)</author>
+    <licenses>
+        <license osi-approved="true">MIT</license>
+    </licenses>
+    <liferay-versions>
+        <liferay-version>5.2.2+</liferay-version>
+    </liferay-versions>
+</plugin-package>

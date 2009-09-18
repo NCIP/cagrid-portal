@@ -1,0 +1,297 @@
+<?xml version="1.0"?>
+
+<project name="cagrid-portal-aggr" basedir="." default="all">
+
+    <import file="${basedir}/../antfiles/build-common-test.xml"/>
+
+
+    <property name="etc.dir" value="${basedir}/etc"/>
+    <property name="lib.dir" value="${basedir}/lib"/>
+    <property name="build.dir" value="${basedir}/build"/>
+    <property name="build.reports.dir" value="${build.dir}/reports"/>
+    <property name="build.jar.dir" value="${build.dir}/jars"/>
+    <property name="build.xmls.dir" value="${build.dir}/xmls"/>
+    <property name="javadocs.dest.dir" value="${build.dir}/javadocs"/>
+
+    <property name="classes.dir" value="${build.dir}/classes"/>
+    <property name="src.java.dir" value="${basedir}/src/java"/>
+    <property name="src.resources.dir" value="${basedir}/src/resources"/>
+
+    <property name="ext.dir" value="${basedir}/ext"/>
+    <property name="ext.compile.jar.dir" value="${ext.dir}/compile/jars"/>
+    <property name="ext.default.jar.dir" value="${ext.dir}/default/jars"/>
+    <property name="ext.default.xml.dir" value="${ext.dir}/default/xmls"/>
+    <property name="ext.test.jar.dir" value="${ext.dir}/test/jars"/>
+    <property name="ext.test.xml.dir" value="${ext.dir}/test/xmls"/>
+
+    <property name="target.grid.dir" value="${ext.dir}/target_grid"/>
+    <property name="target.grid.certs.dir" value="${target.grid.dir}/certificates"/>
+    <property name="target.grid.xmls.dir" value="${target.grid.dir}/xmls"/>
+
+    <property name="aggr.debug" value="${javac.debug.flag}"/>
+
+    <path id="compile.cp">
+        <fileset dir="${ext.compile.jar.dir}">
+            <include name="*.jar"/>
+        </fileset>
+    </path>
+
+    <path id="run.cp">
+        <pathelement location="${classes.dir}"/>
+        <path refid="compile.cp"/>
+        <pathelement location="${build.xmls.dir}"/>
+        <pathelement location="${ext.default.xml.dir}"/>
+    </path>
+
+    <path id="test.compile.cp">
+        <fileset dir="${ext.test.jar.dir}">
+            <include name="*.jar"/>
+        </fileset>
+         <pathelement location="${classes.dir}"/>
+    </path>
+
+    <path id="test.run.cp">
+        <!--using jar dir so that properties are not loaded-->
+        <fileset dir="${build.jar.dir}">
+            <include name="*.jar"/>
+        </fileset>
+        <pathelement location="${build.xmls.dir}"/>
+        <pathelement location="${ext.test.xml.dir}"/>
+        <pathelement location="${test.build.classes.dir}"/>
+        <fileset dir="${ext.test.jar.dir}">
+            <include name="*.jar"/>
+        </fileset>
+    </path>
+
+    <path id="integration.test.run.cp">
+        <path refid="test.compile.cp"/>
+        <path refid="run.cp"/>
+        <fileset dir="${build.jar.dir}">
+            <include name="*.jar"/>
+        </fileset>
+        <pathelement location="${test.build.classes.dir}"/>
+    </path>
+
+    <target name="compile">
+        <mkdir dir="${classes.dir}"/>
+        <javac srcdir="${src.java.dir}" destdir="${classes.dir}" debug="${aggr.debug}">
+            <classpath refid="compile.cp"/>
+        </javac>
+
+        <copy todir="${classes.dir}" overwrite="true">
+            <fileset dir="${etc.dir}">
+                <include name="*.properties"/>
+                <include name="*.wsdd"/>
+            </fileset>
+            <fileset dir="${src.resources.dir}"/>
+
+        </copy>
+
+        <!--spring configs-->
+        <copy todir="${build.xmls.dir}" overwrite="true">
+            <fileset dir="${etc.dir}">
+                <include name="applicationContext*.xml"/>
+            </fileset>
+            <fileset dir="${target.grid.xmls.dir}">
+                <include name="*.xml"/>
+            </fileset>
+        </copy>
+
+        <!--Copy properties-->
+        <antcall target="create-cagridportal-properties" inheritall="false">
+            <param name="target.dir" value="${classes.dir}"/>
+        </antcall>
+
+    </target>
+
+
+    <target name="jar" depends="compile-test">
+        <echo message="${build.jar.dir}"/>
+        <mkdir dir="${build.jar.dir}"/>
+        <jar basedir="${classes.dir}" excludes="*.properties"
+             destfile="${build.jar.dir}/caGrid-portal-aggr.jar"/>
+          <jar basedir="${test.build.classes.dir}"
+             destfile="${build.jar.dir}/caGrid-portal-aggr-test.jar"
+             includes="**/*.class"/>
+    </target>
+
+    <target name="javadoc"
+            description="Generate javadocs for this project. To be called from main build.">
+
+        <javadoc packagenames="*" destdir="${javadocs.dest.dir}" author="true" version="true"
+                 use="true" windowtitle="caGrid Portal API">
+            <sourcepath>
+                <pathelement location="${src.java.dir}"/>
+            </sourcepath>
+
+            <classpath>
+                <pathelement location="${classes.dir}"/>
+                <path refid="compile.cp"/>
+            </classpath>
+
+            <tag name="todo" scope="all" description="To do:"/>
+            <tag name="created" scope="all" description="Created On:"/>
+
+        </javadoc>
+    </target>
+
+
+    <target name="clean">
+        <delete dir="${build.dir}"/>
+        <delete dir="${test.build.dir}"/>
+        <delete dir="${test.build.dir}"/>
+    </target>
+
+    <target name="config-trust"
+            description="Will sync the local globus trust store with the target grid">
+
+        <mkdir dir="${user.home}/.globus/certificates"/>
+        <copy todir="${user.home}/.globus/certificates" overwrite="true">
+            <fileset dir="${target.grid.certs.dir}">
+                <include name="*"/>
+            </fileset>
+        </copy>
+    </target>
+
+    <target name="run-regsvc" depends="jar" description="Register services from the Index(s)">
+        <java classname="gov.nih.nci.cagrid.portal.util.RunRegSvc"
+              classpathref="run.cp" fork="true"/>
+    </target>
+
+    <target name="run-regsvcman" depends="jar" description="Manually register a service">
+        <input message="Index Service URL: " addproperty="manual.index.url" defaultvalue="${cagrid.portal.indexServiceUrls}"/>
+        <input message="Service URL: " addproperty="manual.service.url"/>
+        <java classname="gov.nih.nci.cagrid.portal.util.RegisterService"
+              classpathref="run.cp" fork="true">
+            <arg value="${manual.index.url}"/>
+            <arg value="${manual.service.url}"/>
+        </java>
+    </target>
+
+    <target name="run-loadmeta" depends="jar">
+        <property name="idx.url" value="http://index.training.cagrid.org:8080/wsrf/services/DefaultIndexService"/>
+        <java classname="gov.nih.nci.cagrid.portal.util.LoadDynamicMetadata" classpathref="run.cp"
+              maxmemory="2048M"
+              fork="true">
+            <arg value="${idx.url}"/>
+        </java>
+    </target>
+
+    <target name="run-staticloadmeta" depends="jar">
+        <java classname="gov.nih.nci.cagrid.portal.util.LoadStaticMetadata" classpathref="run.cp"
+              maxmemory="2048M"
+              fork="true">
+        </java>
+    </target>
+
+    <target name="run-metachange" depends="jar">
+        <java classname="gov.nih.nci.cagrid.portal.util.RunMetaChange" classpathref="run.cp"
+              fork="true"/>
+    </target>
+
+    <target name="run-status" depends="jar">
+        <java classname="gov.nih.nci.cagrid.portal.util.RunStatusChange" classpathref="run.cp"
+              fork="true"/>
+    </target>
+
+    <target name="run-trust" depends="jar">
+        <java classname="gov.nih.nci.cagrid.portal.util.RunTrust" classpathref="run.cp" fork="true"
+                />
+    </target>
+
+    <target name="run-geocode" depends="jar">
+        <java classname="gov.nih.nci.cagrid.portal.util.RunGeocode" classpathref="run.cp"
+              fork="true"/>
+    </target>
+
+    <target name="run-xmlschemas" depends="jar">
+        <java classname="gov.nih.nci.cagrid.portal.util.RunXmlSchemas" classpathref="run.cp"
+              fork="true"/>
+    </target>
+
+    <target name="run-kill-svc-meta" depends="jar">
+        <java classname="gov.nih.nci.cagrid.portal.util.KillServiceMetadata" classpathref="run.cp"/>
+    </target>
+
+    <target name="run-kill-grid-svcs" depends="jar">
+        <java classname="gov.nih.nci.cagrid.portal.util.KillGridServices" classpathref="run.cp" maxmemory="2048M"
+              fork="true"/>
+    </target>
+
+    <target name="run-deletequeries" depends="jar">
+        <java classname="gov.nih.nci.cagrid.portal.util.DeleteQueries" classpathref="run.cp" maxmemory="2048M"
+              fork="true"/>
+    </target>
+
+    <target name="run-createuser" depends="jar">
+        <input message="First Name: " addproperty="user.first.name" defaultvalue="Portal"/>
+        <input message="Last Name: " addproperty="user.last.name" defaultvalue="Admin"/>
+        <input message="Email: " addproperty="user.email" defaultvalue="portaladmin@cabig.nci.nih.gov"/>
+        <input message="Portal ID: " addproperty="user.portal.id"/>
+        <java classname="gov.nih.nci.cagrid.portal.util.CreateUser" classpathref="run.cp">
+            <arg value="${user.first.name}"/>
+            <arg value="${user.last.name}"/>
+            <arg value="${user.email}"/>
+            <arg value="${user.portal.id}"/>
+        </java>
+    </target>
+
+    <target name="report:svcs-with-status" depends="jar" description="Will report all services with the given status">
+        <input message="Enter Service Status to report on:" validargs="DORMANT,BANNED,ACTIVE,INACTIVE"
+               defaultvalue="DORMANT" addproperty="status"/>
+        <java classname="gov.nih.nci.cagrid.portal.util.ReportServicesWithStatus" classpathref="run.cp">
+            <arg value="${status}"/>
+        </java>
+    </target>
+
+    <target name="report:dormant-inactive-svcs" depends="jar"
+            description="Will generate an excel report in the build/reports directory for all services with DORMANT and INACTIVE status">
+        <mkdir dir="${build.reports.dir}"/>
+
+        <property name="report.service.statuses" value="DORMANT,INACTIVE"/>
+        <property name="report.filename" value="Portal_Servcie_Status_Report.xls"/>
+        <property name="report.emails" value=""/>
+
+        <java fork="true" dir="${build.reports.dir}"
+              classname="gov.nih.nci.cagrid.portal.util.ServiceStatusReportGenerator" classpathref="run.cp">
+            <arg value="-status"/>
+            <arg value="${report.service.statuses}"/>
+            <arg value="-filename"/>
+            <arg value="${report.filename}"/>
+            <arg value="-email"/>
+            <arg value="${report.emails}"/>
+        </java>
+    </target>
+
+    <target name="run-load-workspaces" depends="jar">
+        <java classname="gov.nih.nci.cagrid.portal.util.WorkspacesLoader" classpathref="run.cp"
+              fork="true">
+            <arg value="${basedir}/etc/caBIG_Workspaces_participants.xls"/>
+        </java>
+        <antcall target="create-catalogs"/>
+    </target>
+
+    <target name="create-catalogs" depends="jar" description="Will create catalog items">
+        <java classname="gov.nih.nci.cagrid.portal.util.CreateCatalogs" classpathref="run.cp"
+              fork="true"/>
+    </target>
+
+    <target name="delete-catalogs" depends="jar" description="Will delete all catalog items">
+        <java classname="gov.nih.nci.cagrid.portal.util.DeleteCatalogs" classpathref="run.cp"
+              maxmemory="2048M"
+              fork="true"/>
+    </target>
+
+    <target name="run-ban-mgr" depends="jar">
+        <input message="Enter operation:" validargs="ban,unban" addproperty="banOp"/>
+        <input message="Enter service URL:" addproperty="banOpUrl"/>
+        <java classname="gov.nih.nci.cagrid.portal.util.ServiceBanManager" classpathref="run.cp">
+            <arg value="${banOp}"/>
+            <arg value="${banOpUrl}"/>
+        </java>
+    </target>
+
+    <target name="all" depends="jar"/>
+
+
+</project>

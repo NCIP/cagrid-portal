@@ -1,0 +1,21 @@
+<portlet:renderURL var="viewUrl">
+	<portlet:param name="operation" value="view"/>
+    <portlet:param name="query" value="${query}"/>
+</portlet:renderURL>
+<div class="row">
+    <div style="float:left;">
+<a href="<c:out value="${viewUrl}"/>">Back to search results</a>
+        </div>
+    <div style="float:right;">
+
+
+
+            <!-- AddThis Button BEGIN -->
+            <a class="addthis_button" href="http://www.addthis.com/bookmark.php?v=250&amp;pub=xa-4a9587a21a6fbe5e"><img src="http://s7.addthis.com/static/btn/sm-bookmark-en.gif" width="83" height="16" alt="Bookmark and Share" style="border:0"/></a><script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js?pub=xa-4a9587a21a6fbe5e"></script>
+            <!-- AddThis Button END -->
+
+
+       
+
+    </div>
+    </div>

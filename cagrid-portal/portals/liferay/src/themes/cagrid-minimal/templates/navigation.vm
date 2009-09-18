@@ -1,0 +1,29 @@
+<div     id="navigation-menu"
+        style="background-color:#5C5C5C; border-top:1px; border-top-style:solid; border-top-color:#000000; width:100%">
+    <table width="100%" border="0" cellpadding="0" cellspacing="0">
+    <tr>
+    <td>
+	<table width="363" height="25px" border="0" cellpadding="0" cellspacing="0">
+		<tr>
+			#foreach ($nav_item in $nav_items)
+				#if ($nav_item.isSelected())
+					<td width="85" align="center" valign="middle" class="selected_tab">
+						<a style="text-decoration:none; text-transform:uppercase;" 
+						   href="$nav_item.getURL()" $nav_item.getTarget()>$nav_item.getName()</a>
+					</td>
+				#else
+					<td width="85" align="center" valign="middle" class="normal_tab border_dash">
+						<a style="text-decoration:none; text-transform:uppercase; color:#FFFFFF;" 
+						   href="$nav_item.getURL()" $nav_item.getTarget()>$nav_item.getName()</a>
+					</td>
+				#end
+			#end
+		</tr>
+	</table>
+	</td>
+	<td align="right">
+		<img src="$images_folder/CaBig_logo.gif" height="25px" alt="caBIG Logo"/>
+	</td>
+	</tr>
+	</table>
+</div>

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd">
+
+    <bean id="propertyConfigurer"
+          class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="location"
+                  value="classpath:cagridportal.properties"/>
+    </bean>
+
+    <bean class="org.springframework.beans.factory.annotation.RequiredAnnotationBeanPostProcessor"/>
+
+    <bean id="defaultDelay" class="java.lang.Long">
+        <constructor-arg value="${cagrid.portal.aggr.defaultDelay}"/>
+    </bean>
+
+    <bean id="slowDefaultDelay" class="java.lang.Long">
+        <constructor-arg value="${cagrid.portal.slow.aggr.defaultDelay}"/>
+    </bean>
+
+    <bean id="fastDefaultDelay" class="java.lang.Long">
+        <constructor-arg value="${cagrid.portal.fast.aggr.defaultDelay}"/>
+    </bean>
+
+    <bean id="defaultTimeout" class="java.lang.Long">
+        <constructor-arg value="${cagrid.portal.aggr.defaultTimeout}"/>
+    </bean>
+
+    <bean id="defaultLongTimeout" class="java.lang.Long">
+        <constructor-arg value="${cagrid.portal.aggr.long.defaultTimeout}"/>
+    </bean>
+
+    <bean id="defaultPeriod" class="java.lang.Long">
+        <constructor-arg value="${cagrid.portal.aggr.defaultPeriod}"/>
+    </bean>
+
+    <bean id="slowDefaultPeriod" class="java.lang.Long">
+        <constructor-arg value="${cagrid.portal.slow.aggr.defaultPeriod}"/>
+    </bean>
+
+    <bean id="fastDefaultPeriod" class="java.lang.Long">
+        <constructor-arg value="${cagrid.portal.fast.aggr.defaultPeriod}"/>
+    </bean>
+
+    <bean id="gmeUrl" class="java.lang.String">
+        <constructor-arg value="${cagrid.portal.gmeUrl}"/>
+    </bean>
+
+    <bean id="cadsrUrl" class="java.lang.String">
+        <constructor-arg value="${cagrid.portal.cadsrUrl}"/>
+    </bean>
+
+    <bean id="metadataListenerTemplate" abstract="true">
+        <property name="metadataTimeout" ref="defaultTimeout"/>
+    </bean>
+
+    <bean id="serviceMetadataBuilderPrototype" scope="prototype"
+          class="gov.nih.nci.cagrid.portal.aggr.regsvc.ServiceMetadataBuilder">
+        <property name="hibernateTemplate" ref="hibernateTemplate"/>
+    </bean>
+    <bean id="domainModelBuilderPrototype" scope="prototype"
+          class="gov.nih.nci.cagrid.portal.aggr.regsvc.DomainModelBuilder">
+        <property name="hibernateTemplate" ref="hibernateTemplate"/>
+    </bean>
+
+    <bean id="metadataChangeListener"
+          parent="metadataListenerTemplate"
+          class="gov.nih.nci.cagrid.portal.aggr.metachange.MetadataChangeListener"
+          p:metadataUtils-ref="metadataUtils" p:cqlQueryInstanceDao-ref="cqlQueryInstanceDao"
+          p:sharedCqlQueryDao-ref="sharedCqlQueryDao" p:gridServiceDao-ref="gridServiceDao"/>
+
+    <bean id="xmlSchemaUtils" class="gov.nih.nci.cagrid.portal.util.XMLSchemaUtils"
+          p:gmeUrl-ref="gmeUrl" p:caDSRClient-ref="caDSRClient">
+    </bean>
+
+    <bean id="caDSRClient" class="gov.nih.nci.cagrid.portal.util.StaticCaDSRClient">
+        <property name="context" value="caBIG"/>
+    </bean>
+
+    <bean id="metadataUtils" class="gov.nih.nci.cagrid.portal.util.MetadataUtils"/>
+
+    <bean id="portalAdminMailAddress" class="java.lang.String">
+        <constructor-arg value="${cagrid.portal.notifications.mail.address}"/>
+    </bean>
+
+    <bean id="portalMailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl"
+          p:host="${cagrid.portal.notifications.mail.server}"/>
+
+</beans>

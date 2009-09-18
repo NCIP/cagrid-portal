@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+
+<ivy-module version="2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="http://incubator.apache.org/ivy/schemas/ivy.xsd">
+
+	<info organisation="aspectj" module="aspectjrt" revision="1.5.3" status="release">
+		<description>Aspect-oriented Java extension, seamless, from Xerox PARC.</description>
+	</info>
+
+</ivy-module>

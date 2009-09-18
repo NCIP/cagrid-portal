@@ -1,0 +1,38 @@
+<script src="<c:url value="/js/browse-catalog.js"/>"></script>
+
+
+<div class="sortSearchResults">
+    Sort By:
+    <select id="${ns}sortList" title="Sort By" onchange="${ns}sortResults();">
+        <option value="catalogName">Name</option>
+        <option value="updatedAt">Update Date</option>
+    </select>
+    <span>
+        <tags:image id="${ns}sortOrderImg" cssClass="sortOrder" name="sort_asc.png" alt="Sort Order"/>
+    </span>
+</div>
+
+<script type="text/javascript">
+
+    jQuery(document).ready(function() {
+        ${ns}sortOrder();
+
+        jQuery("#${ns}sortOrderImg").click(function() {
+            sortOrder = sortOrder == "desc" ? "asc" : "desc";
+            ${ns}sortOrder();
+            ${ns}sortResults();
+        });
+    });
+
+    function ${ns}sortOrder() {
+        jQuery("#${ns}sortOrderImg").attr({
+            src:"<c:url value='/images/sort_" + sortOrder + ".png'/>"
+        });
+    }
+
+    function ${ns}sortResults() {
+        sortEvent.fire($("${ns}sortList"));
+    }
+
+
+</script>

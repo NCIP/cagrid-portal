@@ -1,0 +1,66 @@
+<project name="gen" default="compile">
+
+	<property name="src.dir" value="src/java"/>
+	<property name="build.dest" value="build/classes"/>
+	<property environment="env"/>
+	
+	
+	<path id="build.classpath">
+		<fileset dir="lib">
+			<include name="*.jar"/>
+		</fileset>
+		<fileset dir="${env.GLOBUS_LOCATION}/lib">
+			<include name="*.jar"/>
+		</fileset>
+	</path>
+	<target name="compile">
+		<mkdir dir="${build.dest}"/>
+		<javac srcdir="${src.dir}" 
+				classpathref="build.classpath" 
+				includes="**" destdir="${build.dest}" 
+				debug="true"/>
+	</target>
+			
+	<target name="jar" depends="compile">
+		<jar destfile="build/cagrid-gen.jar" basedir="${build.dest}"/>
+	</target>
+	
+	<target name="gen-domainModel" depends="jar">
+			<java classname="gov.nih.nci.cagrid.tools.GenDomainModel">
+				<classpath>
+					<path refid="build.classpath"/>
+					<pathelement location="build/cagrid-gen.jar"/>
+					<fileset dir="${env.GLOBUS_LOCATION}/lib">
+						<include name="*.jar"/>
+					</fileset>
+				</classpath>
+				<arg value="-model"/>
+				<arg value="build/domainModel.xml"/>
+				<arg value="-projectDescription"/>
+				<arg value="proj"/>
+				<arg value="-projectLongName"/>
+				<arg value="proj"/>
+				<arg value="-projectShortName"/>
+				<arg value="proj"/>
+				<arg value="-projectVersion"/>
+				<arg value="1.0"/>
+				<arg value="-xmi"/>
+				<arg value="../model2/model/model2-domain.xmi"/>
+			</java>
+	</target>
+		
+	<target name="gen-domainTypesInfo" depends="jar">
+			<java classname="gov.nih.nci.cagrid.tools.GenBeanTypes">
+				<classpath>
+					<path refid="build.classpath"/>
+					<pathelement location="build/cagrid-gen.jar"/>
+					<fileset dir="${env.GLOBUS_LOCATION}/lib">
+						<include name="*.jar"/>
+					</fileset>
+				</classpath>
+				<arg value="../model2/build/model2-domain.jar"/>
+				<arg value="build/domainModel.xml"/>
+				<arg value="build/domainTypesInfo.xml"/>
+			</java>
+		</target>
+</project>

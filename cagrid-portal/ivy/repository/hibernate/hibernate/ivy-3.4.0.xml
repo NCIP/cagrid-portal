@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+
+<ivy-module version="2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:noNamespaceSchemaLocation="http://incubator.apache.org/ivy/schemas/ivy.xsd">
+
+    <info organisation="hibernate" module="hibernate" revision="3.4.0">
+        <license name="LGPL" url="http://www.gnu.org/copyleft/lesser.html"/>
+
+        <description>
+            Hibernate is a powerful, high performance object/relational persistence and
+            query service. Hibernate lets you develop persistent classes following object-oriented
+            idiom - including association, inheritance, polymorphism, composition, and collections.
+            Hibernate allows you to express queries in its own portable SQL extension (HQL), as well
+            as in native SQL, or with an object-oriented Criteria and Example API.
+            (http://www.hibernate.org/)
+        </description>
+    </info>
+
+    <configurations>
+        <!-- Public Configurations-->
+        <conf name="minimal" visibility="public"/>
+        <conf name="full" extends="minimal" visibility="public"/>
+        <conf name="cglib" extends="full" visibility="public"/>
+        <conf name="c3p0" extends="full" visibility="public"/>
+    </configurations>
+
+    <publications>
+        <artifact name="hibernate3-patch" type="jar" conf="minimal"/>
+    </publications>
+
+
+    <dependencies>
+        <dependency org="apache" name="commons-collections" rev="2.1.1" conf="full->*"/>
+        <dependency org="apache" name="commons-discovery" rev="0.2" conf="full->*"/>
+        <dependency org="apache" name="commons-dbcp" rev="1.2.2" conf="full->*"/>
+        <dependency org="apache" name="commons-lang" rev="2.2" conf="full->*"/>
+        <dependency org="apache" name="commons-logging" rev="1.0.4" conf="full->*"/>
+        <dependency org="apache" name="xerces2-j" rev="2.7.1" conf="full->default"/>
+        <dependency org="antlr" name="antlr" rev="2.7.5" conf="full->default"/>
+        <dependency org="cglib" name="cglib" rev="2.1_3" conf="full->full"/>
+        <dependency org="c3p0" name="c3p0" rev="0.8.5.2" conf="full->default"/>
+        <dependency org="codehaus" name="jaxen" rev="1.1" conf="full->default"/>
+        <dependency org="dom4j" name="dom4j" rev="1.6.1" conf="full->default"/>
+        <dependency org="douglea" name="concurrent" rev="1.3.4" conf="full->default"/>
+        <dependency org="ehcache" name="ehcache" rev="1.2.3" conf="full->default"/>
+        <dependency org="hibernate" name="annotations" rev="3.3.0" conf="full->default"/>
+        <dependency org="hibernate" name="search" rev="3.3.0" conf="full->default"/>
+        <dependency org="sun" name="connector" rev="1.3.0" conf="full->default"/>
+        <dependency org="sun" name="jta" rev="1.0.1B" conf="full->default"/>
+    </dependencies>
+
+</ivy-module>

@@ -1,0 +1,118 @@
+
+<%--<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.7.0/build/container/assets/skins/sam/container.css">--%>
+<%--<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.7.0/build/button/assets/skins/sam/button.css">--%>
+
+<link type="text/css" rel="stylesheet" href="<c:url value="/js/yui/container/assets/skins/sam/container.css"/>"/>
+<link type="text/css" rel="stylesheet" href="<c:url value="/js/yui/button/assets/skins/sam/button.css"/>"/>
+
+<script type="text/javascript" src="<c:url value="/js/yui/container/container-min.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/js/yui/button/button-min.js"/>"></script>
+
+<portlet:defineObjects/>
+<liferay-theme:defineObjects/>
+
+<%
+    String actionId = "ADD_CATALOG_ENTRY";
+%>
+<c:set var="canCreate" value="<%= permissionChecker.hasPermission(scopeGroupId, portletDisplay.getRootPortletId(), portletDisplay.getResourcePK(), actionId) %>"/>
+<c:if test="${canCreate}">
+<portlet:actionURL var="addCatalogEntryUrl">
+    <portlet:param name="operation" value="createCatalogEntry"/>
+</portlet:actionURL>
+    <div class="yui-skin-sam">
+          <div id="${ns}addButtonContainer" class="createCatalogEntryButton"></div>
+          <div id="${ns}createDialog" style="display: none">
+              <div class="hd">Please select the type of entry to create.</div>
+              <div class="bd">
+                  <form name="${ns}addCatalogEntryForm" method="POST" action="<c:out value="${addCatalogEntryUrl}"/>">
+                      <label for="entryType" value="Type"/>
+                      <select name="entryType" size="5">
+                          <option value="COMMUNITY"><spring:message code="gov.nih.nci.cagrid.portal.domain.catalog.CommunityCatalogEntry"/></option>
+                          <option value="DATASET"><spring:message code="gov.nih.nci.cagrid.portal.domain.catalog.DataSetCatalogEntry"/></option>
+                          <option value="DESKTOPTOOL"><spring:message code="gov.nih.nci.cagrid.portal.domain.catalog.DesktopToolCatalogEntry"/></option>
+                          <option value="GRIDSERVICEENDPOINT"><spring:message code="gov.nih.nci.cagrid.portal.domain.catalog.GridServiceEndPointCatalogEntry"/></option>
+                          <option value="GRIDSERVICEINTERFACE"><spring:message code="gov.nih.nci.cagrid.portal.domain.catalog.GridServiceInterfaceCatalogEntry"/></option>
+                          <option value="INFORMATIONMODEL"><spring:message code="gov.nih.nci.cagrid.portal.domain.catalog.InformationModelCatalogEntry"/></option>
+                          <option value="INSTITUTION"><spring:message code="gov.nih.nci.cagrid.portal.domain.catalog.InstitutionCatalogEntry"/></option>
+                          <option value="KNOWLEDGECENTER"><spring:message code="gov.nih.nci.cagrid.portal.domain.catalog.KnowledgeCenterCatalogEntry"/></option>
+                          <option value="PERSON"><spring:message code="gov.nih.nci.cagrid.portal.domain.catalog.PersonCatalogEntry"/></option>
+                          <option value="PORTLET"><spring:message code="gov.nih.nci.cagrid.portal.domain.catalog.PortletCatalogEntry"/></option>
+                          <option value="PROJECT"><spring:message code="gov.nih.nci.cagrid.portal.domain.catalog.ProjectCatalogEntry"/></option>
+                          <option value="SHAREDQUERY"><spring:message code="gov.nih.nci.cagrid.portal.domain.catalog.SharedQueryCatalogEntry"/></option>
+                          <option value="TERMINOLOGY"><spring:message code="gov.nih.nci.cagrid.portal.domain.catalog.TerminologyCatalogEntry"/></option>
+                          <option value="TOOL"><spring:message code="gov.nih.nci.cagrid.portal.domain.catalog.ToolCatalogEntry"/></option>
+                          <option value="TOOLDEPLOYMENT"><spring:message code="gov.nih.nci.cagrid.portal.domain.catalog.ToolDeploymentCatalogEntry"/></option>
+                          <option value="WORKFLOW"><spring:message code="gov.nih.nci.cagrid.portal.domain.catalog.WorkflowCatalogEntry"/></option>
+                          <option value="WORKSPACE"><spring:message code="gov.nih.nci.cagrid.portal.domain.catalog.WorkspaceCatalogEntry"/></option>
+                      </select>
+                  </form>
+              </div>
+          </div>
+      </div>
+
+<script type="text/javascript">
+
+    var ${ns}createDialog = null;
+    var ${ns}addButton = null;
+
+    function ${ns}createCatalogEntry() {
+        if (${ns}createDialog.validate()) {
+            ${ns}createDialog.form.submit();
+        }
+    }
+
+    function ${ns}cancelCreateCatalogEntry() {
+        ${ns}createDialog.cancel();
+    }
+
+    jQuery(document).ready(function() {
+
+        ${ns}createDialog =
+        new YAHOO.widget.Dialog("${ns}createDialog",
+        { width : "300px",
+//            fixedcenter : true,
+            visible : false,
+            constraintoviewport : true,
+            modal : true,
+            buttons : [
+                {
+					text:"Cancel",
+                    handler:${ns}cancelCreateCatalogEntry
+                },
+                {
+                    text:"Create",
+                    handler:${ns}createCatalogEntry,
+                    isDefault:true
+                }
+            ]
+        });
+
+        ${ns}createDialog.validate = function() {
+            var data = this.getData();
+            if (data.entryType == "") {
+                alert("Please select an entry type to create.");
+                return false;
+            } else {
+                return true;
+            }
+        };
+
+        ${ns}createDialog.render();
+        document.getElementById('${ns}createDialog').style.display = 'block';
+
+        ${ns}addButton = new YAHOO.widget.Button({
+            label: "Add New Catalog Entry",
+            id: "${ns}addButton",
+            container: "${ns}addButtonContainer"
+        });
+
+        ${ns}addButton.on("click", function(evt) {
+            ${ns}createDialog.show();
+        });
+
+
+    });
+</script>
+
+</c:if>
+

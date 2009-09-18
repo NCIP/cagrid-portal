@@ -1,0 +1,37 @@
+<ivy-module version="2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:noNamespaceSchemaLocation="http://incubator.apache.org/ivy/schemas/ivy.xsd">
+
+    <info organisation="caGrid" module="portal-security" revision="${project.version}">
+        <license name="caGrid" url="http://www.cagrid.org/mwiki/index.php?title=CaGrid:LICENSE-1.1"/>
+        <description>caGrid Portal Security Module</description>
+    </info>
+
+    <configurations>
+        <!-- Public Configurations-->
+        <conf name="runtime" visibility="public"/>
+        <conf name="default" extends="runtime" visibility="public"/>
+        <conf name="test" extends="default" visibility="public"/>
+
+    </configurations>
+
+
+    <publications>
+        <artifact name="caGrid-${ivy.module}" conf="runtime" type="jar"/>
+        <artifact name="applicationContext-security" conf="runtime" type="xml"/>
+    </publications>
+
+
+    <dependencies>
+        <dependency rev="${cagrid.integration.version}" org="caGrid" name="cds" conf="default->client"/>
+        <dependency rev="${cagrid.integration.version}" org="caGrid" name="websso-client-common" transitive="false">
+            <exclude name="caGrid-websso-client-common-conf" type="jar"/>
+        </dependency>
+
+
+        <dependency rev="latest.integration" org="caGrid" name="portal-aggr" conf="default;test"/>
+
+        <!--global exclude-->
+        <exclude artifact="jprov" type="jar"/>
+    </dependencies>
+
+</ivy-module>

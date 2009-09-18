@@ -1,0 +1,16 @@
+<%@ include file="/WEB-INF/jsp/browse/common/edit/top.jspf" %>
+
+<%@ include file="/WEB-INF/jsp/browse/common/edit/photo_row.jspf" %>
+
+<!-- Portal URL Field -->
+<div class="row">
+    <label for="portalUrl">Portal URL</label>
+    <input type="text" name="communityUrl" class="autoSet" size="100"
+           value="<c:out value="${catalogEntry.communityUrl}"/>"/><span style="color: red"></span>
+</div>
+
+<%@ include file="/WEB-INF/jsp/browse/common/edit/terms.jspf" %>
+
+<%-- TODO: add POCs --%>
+
+<%@ include file="/WEB-INF/jsp/browse/common/edit/bottom.jspf" %>

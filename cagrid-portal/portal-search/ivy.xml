@@ -1,0 +1,32 @@
+<ivy-module version="2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:noNamespaceSchemaLocation="http://incubator.apache.org/ivy/schemas/ivy.xsd">
+
+    <info organisation="caGrid" module="portal-portal-search" revision="${project.version}">
+        <license name="caGrid" url="http://www.cagrid.org/mwiki/index.php?title=CaGrid:LICENSE-1.1"/>
+        <description>caGrid Portal Search</description>
+    </info>
+
+    <configurations>
+        <conf name="default" visibility="public"/>
+        <conf name="test" extends="default" visibility="public"/>
+        <conf name="solr"  visibility="public"/>
+
+    </configurations>
+
+
+    <publications>
+        <artifact name="${portal.search.war.name}" type="war" conf="default"/>
+        <artifact name="caGrid-portal-search" type="jar" conf="default"/>
+        <artifact name="applicationContext-portal-search" conf="default" type="xml"/>
+    </publications>
+
+    <dependencies>
+
+        <dependency rev="latest.integration" org="caGrid" name="portal-aggr" conf="default;test"/>
+
+        <dependency org="commons-httpclient" name="commons-httpclient" rev="3.1" conf="default;solr->*"/>
+        <dependency org="apache" name="solr" rev="1.3" conf="solr->*"/>
+        
+    </dependencies>
+
+</ivy-module>

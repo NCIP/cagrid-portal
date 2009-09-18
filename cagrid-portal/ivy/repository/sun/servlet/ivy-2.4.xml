@@ -1,0 +1,24 @@
+<ivy-module version="2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:noNamespaceSchemaLocation="http://incubator.apache.org/ivy/schemas/ivy.xsd">
+
+
+    <info organisation="sun" module="servlet" revision="2.4" status="release">
+        <license name="Berkley" url="http://developers.sun.com/global/berkeley_license.html"/>
+
+        <description>
+                Java API for Servlets
+        </description>
+    </info>
+
+     <configurations>
+        <!-- Public Configurations-->
+        <conf name="api" visibility="public"/>
+    </configurations>
+
+    <publications>
+        <artifact name="servlet-api" conf="api" type="jar"/>
+    </publications>
+
+    <dependencies/>
+
+</ivy-module>

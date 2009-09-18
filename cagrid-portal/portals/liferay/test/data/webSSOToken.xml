@@ -1,0 +1,15 @@
+CAGRID_SSO_GRID_IDENTITY^/O=organization/OU=org/OU=DEV LOA1/OU=Dorian/CN=user^M$CAGRID_SSO_LAST_NAME^name$CAGRID_SSO_DELEGATION_SERVICE_EPR^
+<ns1:DelegatedCredentialReference
+        xmlns:ns1="http://cds.gaards.cagrid.org/CredentialDelegationService/DelegatedCredential/types">
+    <ns2:EndpointReference xmlns:ns2="http://schemas.xmlsoap.org/ws/2004/03/addressing">
+        <ns2:Address>https://localhost/wsrf/services/cagrid/DelegatedCredential</ns2:Address>
+        <ns2:ReferenceProperties>
+            <ns2:DelegatedCredentialKey
+                    xmlns:ns2="http://cds.gaards.cagrid.org/CredentialDelegationService/DelegatedCredential">
+                <ns3:delegationId xmlns:ns3="http://gaards.cagrid.org/cds">32</ns3:delegationId>
+            </ns2:DelegatedCredentialKey>
+        </ns2:ReferenceProperties>
+        <ns2:ReferenceParameters/>
+    </ns2:EndpointReference>
+</ns1:DelegatedCredentialReference>
+        $CAGRID_SSO_EMAIL_ID^user.name@business.com

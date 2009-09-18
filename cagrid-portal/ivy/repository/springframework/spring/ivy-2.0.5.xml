@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+
+<ivy-module version="2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:noNamespaceSchemaLocation="http://incubator.apache.org/ivy/schemas/ivy.xsd">
+
+    <info organisation="springframework" module="spring" revision="2.0.5">
+
+        <description>
+            Spring is a layered Java/J2EE application framework
+            (http://www.springframework.org/).
+        </description>
+
+    </info>
+
+    <configurations>
+        <!-- Public Configurations-->
+        <conf name="default" visibility="public"/>
+        <conf name="full" extends="default" visibility="public"/>
+        <conf name="test" extends="default" visibility="public"/>
+    </configurations>
+
+    <publications>
+        <artifact name="spring" conf="default" type="jar"/>
+        <artifact name="spring-portlet" conf="full" type="jar"/>
+        <artifact name="spring-mock" conf="test" type="jar"/>
+    </publications>
+    <dependencies/>
+
+</ivy-module>

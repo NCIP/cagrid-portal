@@ -1,0 +1,322 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<script type="text/javascript" src="/html/js/jquery/ui.accordion.js"></script>
+
+
+<link type="text/css" rel="stylesheet" href="<c:url value="/js/yui/resize/assets/skins/sam/resize.css"/>">
+<link type="text/css" rel="stylesheet" href="<c:url value="/js/yui/paginator/assets/skins/sam/paginator.css"/>">
+<link type="text/css" rel="stylesheet" href="<c:url value="/js/yui/datatable/assets/skins/sam/datatable.css"/>">
+
+<script type="text/javascript" src="<c:url value="/js/yui/utilities/utilities.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/js/yui/resize/resize-min.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/js/yui/yahoo-dom-event/yahoo-dom-event.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/js/yui/connection/connection-min.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/js/yui/json/json-min.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/js/yui/element/element-min.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/js/yui/paginator/paginator-min.js"/>"></script> 
+<script type="text/javascript" src="<c:url value="/js/yui/datasource/datasource-min.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/js/yui/datatable/datatable-min.js"/>"></script>
+
+
+<style>
+    span.resultStatus {
+        padding-left: 50px;
+    }
+
+    div.results {
+        width: 100%;
+    }
+</style>
+
+<div>
+    <div class="row">
+        <label>
+            Query Results
+        </label>
+        <div class="value">
+            <span id="${ns}queryResultsCount">
+				<img src='<c:url value="/images/indicator.gif"/>'/>
+            </span>
+        </div>
+    </div>
+</div>
+<div id="${ns}resultsTab" class="yui-navset" style="margin-top:10px;margin-bottom:10px;display:none;">
+    <ul class="yui-nav">
+        <li class="selected"><a href="#tab1"><em>Queries</em></a></li>
+    </ul>
+    <div class="yui-content">
+        <div id="${ns}resultsDiv">
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+
+function deleteQueryInstance(instanceId){
+	if(!confirm("Are you sure you want to delete this query?")){
+		return;
+	}
+	QueryExecutionManager.deleteQueryInstance(instanceId,
+	{
+		callback:function(){
+			//jQuery("#${ns}resultDiv" + instanceId).remove();
+			${ns}loadResults(false);
+		},
+		errorHandler: function(errorString, exception) {
+        	alert("Error deleting query " + errorString + "\n" + exception.message);
+        }
+	});
+}
+
+function ${ns}showResultsTab(){
+	jQuery("#${ns}toggleResults").html("Hide.");
+	document.getElementById("${ns}resultsTab").style.display="block";
+}
+function ${ns}hideResultsTab(){
+	jQuery("#${ns}toggleResults").html("View.");
+	document.getElementById("${ns}resultsTab").style.display="none";
+}
+function ${ns}toggleResultsTab(){
+	var text = jQuery("#${ns}toggleResults").text();
+	if("View." == text){
+		${ns}showResultsTab();
+   	}else{
+   		${ns}hideResultsTab();
+   	}
+}
+
+function ${ns}showError(instanceId){
+	jQuery("#toggleError" + instanceId).html("Hide Error");
+	document.getElementById("stackTrace" + instanceId).style.display="block";
+}
+function ${ns}hideError(instanceId){
+	jQuery("#toggleError" + instanceId).html("View Error");
+	document.getElementById("stackTrace" + instanceId).style.display="none";
+}
+function cgp_toggleError(instanceId){
+	var text = jQuery("#toggleError" + instanceId).text();
+	if("View Error" == text){
+		${ns}showError(instanceId);
+   	}else{
+   		${ns}hideError(instanceId);
+   	}
+   	return false;
+}
+
+
+    function ${ns}loadResults(firstTime) {
+        QueryExecutionManager.getQueryInstances($("input-query").value, {
+            callback:function(qInstList) {
+                if (qInstList.length < 1) {
+                    jQuery("#${ns}queryResultsCount").html("No queries submitted.");
+                    jQuery("#${ns}resultsDiv").html("");
+                    ${ns}hideResultsTab();
+                }
+                else {
+                	jQuery("#${ns}queryResultsCount").html("You have submitted " + qInstList.length + " queries.&nbsp;" +
+                		"<a id='${ns}toggleResults'>Hide.</a>"
+                	);
+                	if(firstTime){
+                		${ns}hideResultsTab();
+                	}
+                	jQuery("#${ns}toggleResults").bind("click", function(evt){
+                		${ns}toggleResultsTab();
+                	});
+					jQuery("#${ns}resultsDiv").html("");
+                    for (var i = 0; i < qInstList.length; i++) {
+                        var qInst = qInstList[i];
+                        var dateStr = YAHOO.util.Date.format(qInst.startTime, {format: "%Y-%m-%d %T"});
+                        var html =
+                        	"<div id='${ns}resultDiv" + qInst.id + "'>" +
+                        	"<div class='results'>" +
+                        	"<h3><a id='${ns}resultHref" + qInst.id + "' href='javascript:return false;'>Query (" + dateStr + 
+                        	")<span class='resultStatus' id='${ns}resultStatus" + qInst.id + "'></span></a>" +
+                        	"</h3>" +
+                        	"<span id='${ns}resultContainer" + qInst.id + "'></span>" +
+                        	"</div>" +
+                        	"</div>"; 
+                        
+                        jQuery("#${ns}resultsDiv").append(html);
+
+                        YAHOO.util.Event.addListener("${ns}resultHref" + qInst.id, "click", ${ns}fnCallback, qInst);
+
+                        var statusDiv = "#${ns}resultStatus" + qInst.id;
+                        jQuery(statusDiv).html("<img src='<c:url value="/images/indicator.gif"/>'/>");
+                        ${ns}queryExecutionListener(qInst, statusDiv);
+                    }
+                    
+                    jQuery("#${ns}resultsDiv").accordion({header:'h3',collapsible: true,active:false });
+
+
+                }
+            },
+            errorHandler:function(errorString, exception) {
+                alert("Error getting query history " + errorString);
+            },
+            async: true
+        });
+    }
+
+    <%--track running queries here--%>
+    function ${ns}queryExecutionListener(qInst, statusDiv) {
+
+        QueryExecutionManager.loadInstance(qInst.id, {
+            callback:function(qInstInner) {
+                if (qInstInner.state == 'RUNNING') {
+                    setTimeout(${ns}queryExecutionListener, 2000, qInstInner, statusDiv);
+                }
+                else if (qInstInner.state == 'COMPLETE') {
+                    jQuery(statusDiv).html("<img src='<c:url value="/images/diagnostic_passed_icon.jpg"/>'/>");
+                }
+                else {
+                    jQuery(statusDiv).html("<img src='<c:url value="/images/diagnostic_failed_icon.png"/>'/>");
+                }
+
+            },
+            errorHandler:function(errorString, exception) {
+                alert("Error getting query status " + errorString);
+            },
+            async: true
+        });
+
+    }
+
+    <%--load query results/error--%>
+    function ${ns}fnCallback(e, qInst) {
+        var resultsContainer = "#${ns}resultContainer" + qInst.id;
+        var html = jQuery.trim(jQuery(resultsContainer).html());
+        if(html==''){
+        	QueryExecutionManager.loadInstance(qInst.id, {
+				callback:function(inst){
+					if (inst.state == 'COMPLETE') {
+	            		QueryExecutionManager.getResults(qInst.id, new ${ns}renderResult(qInst,resultsContainer, false));
+    	    		} else if (inst.state != 'RUNNING') {
+    	        		QueryExecutionManager.getError(qInst.id, new ${ns}renderResult(qInst,resultsContainer, true));
+	        		}
+				},
+				errorHandler:function(errorString, exception){
+					alert("Error getting query status " + errorString);				
+				}
+        	});
+        }
+        QueryExecutionManager.navigateToInstance(qInst.id);
+    }
+
+
+    function ${ns}renderResult(qInst, resultsContainer, isError){
+
+        this.callback = function(result) {
+            jQuery(resultsContainer).replaceWith("<div id='" + resultsContainer +"'>" + result + "</div>");
+			if(!isError){
+            	var rt = new ${ns}ResultTable(
+            		qInst.id,
+					"<c:url value="/export/query_results_meta.json"/>", 
+					"<c:url value="/export/query_results.json"/>?"); 
+            	rt.render();
+            }
+
+        };
+        this.errorHandler =function(errorString, exception) {
+            alert("Error getting query result " + errorString + "\n" + exception);
+        };
+        this.async = true;
+    }
+
+   Array.prototype.findByKey = function(keyValue) {
+        var idx=0;
+        for (i = 0; i < this.length; i++) {
+                if (this[i].key==keyValue) {
+                   idx=i;
+                    break;
+                }
+        }
+        return idx;
+    };
+
+function ${ns}ResultTable(instanceId, metadataUrl, dataUrl){
+	this.instanceId = instanceId;
+	this.metadataUrl = metadataUrl;
+	this.dataUrl = dataUrl;
+	this.containerId = instanceId + "resultTable";
+	
+	this.handleMetadataSuccess = function(o){
+		this.processMetadata(o);
+	};
+	this.handleMetadataFailure = function(o){
+		alert("Metadata request failed.");
+	};
+	this.processMetadata = function(o){
+		try { 
+	    	this.meta = YAHOO.lang.JSON.parse(o.responseText); 
+		} catch (e) { 
+	    	alert("Couldn't parse metadata: " + e);
+	    	return; 
+		}
+		this.dataSource = new YAHOO.util.DataSource(this.dataUrl);
+		this.dataSource.responseType = YAHOO.util.DataSource.TYPE_JSON;
+		this.dataSource.responseSchema = this.meta.responseSchema;
+
+
+        <%--if no ID column, we will pick a different one for sorting--%>
+        var  columnName=this.meta.columnDefs[this.meta.columnDefs.findByKey("id")].key;
+
+
+		this.dataTable =
+			new YAHOO.widget.DataTable(
+				this.containerId, this.meta.columnDefs, this.dataSource,
+				{
+					paginator: new YAHOO.widget.Paginator({
+        				rowsPerPage: 25,
+        				containers: [this.instanceId + "pageCtrlTop", this.instanceId + "pageCtrlBottom"]
+    				}),
+    				sortedBy: {
+        				key: columnName,
+        				dir: YAHOO.widget.DataTable.CLASS_ASC
+    				},
+    				dynamicData: true,
+    				generateRequest: function(oState, oSelf) { 
+	    				oState = oState || {pagination:null, sortedBy:null}; 
+	    				var sort = (oState.sortedBy) ? oState.sortedBy.key : columnName;
+					    var dir = (oState.sortedBy && oState.sortedBy.dir === YAHOO.widget.DataTable.CLASS_DESC) ? "desc" : "asc";
+					    var startIndex = (oState.pagination) ? oState.pagination.recordOffset : 0;
+					    var results = (oState.pagination) ? oState.pagination.rowsPerPage : 25;
+					    var instanceIdParam = null;
+					    try{
+					    	instanceIdParam = oSelf.configs.initialRequest.split("&")[0];
+					    }catch(e){
+					    	alert("Error getting instance ID: " + e.message);
+					    }
+					    return  instanceIdParam +
+					    		"&sort=" + sort +
+			            		"&dir=" + dir +
+					            "&startIndex=" + startIndex +
+					            "&results=" + results;
+					},
+					initialRequest: "instanceId=" + this.instanceId + "&sort="+columnName+"&dir=asc&startIndex=0&results=25"
+				}
+			);
+		this.dataTable.handleDataReturnPayload = function(oRequest, oResponse, oPayload) {
+    		oPayload.totalRecords = oResponse.meta.totalRecords;
+    		return oPayload;
+		};
+	};
+	this.render = function(){
+		YAHOO.util.Connect.asyncRequest('POST', this.metadataUrl, {
+			success:this.handleMetadataSuccess,
+			failure:this.handleMetadataFailure,
+			scope:this,
+			cache:false
+		});
+	};
+}
+
+    jQuery(document).ready(function() {
+
+           var myTabs = new YAHOO.widget.TabView("${ns}resultsTab");
+           ${ns}loadResults(true);
+
+       });
+
+
+
+</script>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" "http://www.springframework.org/dtd/spring-beans-2.0.dtd">
+<beans>
+
+    <bean id="propertyConfigurer"
+          class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="location"
+                  value="classpath:cagridportlets.properties" />
+    </bean>
+
+
+    <bean id="portletModeHandlerMapping"
+          class="org.springframework.web.portlet.handler.PortletModeHandlerMapping">
+        <property name="order" value="2" />
+        <property name="portletModeMap">
+            <map>
+                <entry key="view" value-ref="viewToolsController"/>
+            </map>
+        </property>
+    </bean>
+
+    <bean id="viewToolsController" class="gov.nih.nci.cagrid.portal.portlet.tools.ViewToolsController">
+        <property name="viewName" value="tools"/>
+        <property name="remoteViewName" value="${cabig.tools.remoteView}"/>
+    </bean>
+
+    <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+        <property name="prefix" value="/WEB-INF/jsp/tools/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
+
+</beans>

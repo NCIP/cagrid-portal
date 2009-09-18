@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+
+<ivy-module version="2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="http://incubator.apache.org/ivy/schemas/ivy.xsd">
+
+	<info organisation="slf4j" module="slf4j" revision="1.5.6"/>
+
+
+	<configurations>
+		<!-- Public Configurations-->
+		<conf name="core" visibility="public"/>
+		<conf name="default" visibility="public" extends="core"/>
+	</configurations>
+
+
+	<publications>
+		<artifact name="slf4j-api-1.5.6" type="jar" conf="default"/>
+		<artifact name="slf4j-log4j12-1.5.6" type="jar" conf="default"/>
+		
+	</publications>
+
+	<dependencies>
+
+	</dependencies>
+	
+</ivy-module>

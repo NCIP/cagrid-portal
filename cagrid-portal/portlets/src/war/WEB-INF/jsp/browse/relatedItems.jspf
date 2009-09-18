@@ -1,0 +1,92 @@
+<script type="text/javascript">
+var state = 'open';
+jQuery(document).ready(function(){
+    jQuery('#comments-toggle').click(function(){
+        switch (state) {
+            case 'closed':
+                jQuery('#comments').show();
+				jQuery('#comments-toggle').html('Hide Comments');
+                state = 'open';
+                break;
+            case 'open':
+                jQuery('#comments').hide();
+				jQuery('#comments-toggle').html('Show Comments');
+                state = 'closed';
+                break;
+        }
+    });
+});
+</script>
+
+
+<c:forEach var="relatedEntry" items="${relatedEntries}">
+
+	<portlet:renderURL var="viewRelatedItemUrl">
+    	<portlet:param name="operation" value="viewDetails"/>
+		<portlet:param name="entryId" value="${relatedEntry.catalogEntry.id}"/>
+    </portlet:renderURL>
+    
+	<div class="oneRelatedItem" id="${ns}_rel_${role.roleInstance.relationship.id}">
+		<a href="<c:out value="${viewRelatedItemUrl}"/>"><tags:catalogEntryImage entry="${relatedEntry.catalogEntry}" thumbnail="true" cssClass="oneRelatedItemIcon"/></a>
+		<div class="oneRelatedItemContent">
+			<div><a class="oneRelatedItemLink" href="<c:out value="${viewRelatedItemUrl}"/>"><c:out value="${relatedEntry.catalogEntry.name}"/></a></div>
+
+			<c:forEach var="roleType" items="${relatedEntry.orderedRoleTypes}">
+			    <c:forEach var="role" items="${roleType.orderedRoleInstances}">
+
+					<div class="oneRoleInstance" id="${ns}_rel_${role.roleInstance.relationship.id}">
+					
+					<c:out value="${role.roleInstance.description}"/><br/>
+					
+<%-- TODO: this doesn't work in AJAX servlet request
+<%
+String deleteRelatedItemActionId = "DELETE";
+gov.nih.nci.cagrid.portal.portlet.browse.CatalogEntryRoleInstanceViewBean role = (gov.nih.nci.cagrid.portal.portlet.browse.CatalogEntryRoleInstanceViewBean)pageContext.getAttribute("role");
+String resourcePk = String.valueOf(role.getRoleInstance().getRelationship().getId());
+if(permissionChecker.hasPermission(scopeGroupId, portletDisplay.getRootPortletId(), resourcePk, deleteRelatedItemActionId)){ %>
+					<input type="button" value="Delete" onclick="${ns}deleteRelatedItem('${role.roleInstance.relationship.id}')"/>
+<% } %>
+--%>
+					<c:if test="${!empty portalUser and portalUser.id eq role.roleInstance.relationship.author.id}">
+						<input type="button" value="Delete" onclick="${ns}deleteRelatedItem('${role.roleInstance.relationship.id}')"/>
+					</c:if>
+					<br/>
+			        </div>
+			        	
+						<span class="commentAuthor">
+						Asserted by
+						<c:choose>
+						<c:when test="${!empty role.roleInstance.relationship.author}"> 
+						<portlet:renderURL var="viewAuthorUrl">
+							<portlet:param name="operation" value="viewDetails"/>
+							<portlet:param name="entryId" value="${role.roleInstance.relationship.author.catalog.id}"/>
+						</portlet:renderURL>
+						<a href="<c:out value="${viewAuthorUrl}"/>">
+							<c:out value="${role.roleInstance.relationship.author.catalog.firstName}"/> <c:out value="${role.roleInstance.relationship.author.catalog.lastName}"/>
+						</a>
+						</c:when>
+						<c:otherwise>caGrid Portal</c:otherwise>
+						</c:choose>
+						on <fmt:formatDate value="${role.roleInstance.relationship.createdAt}" type="both"/></span>
+							        
+						<c:if test="${!empty role.orderedComments}">
+							<p>
+				            <a style="cursor:pointer" id="comments-toggle">Hide Comments</a>
+							<div id="comments">
+					            <c:set var="comments" value="${role.orderedComments}"/>
+					            <%@ include file="/WEB-INF/jsp/browse/comments.jspf" %>
+							</div>
+							</p>
+				        </c:if>
+			        
+					<hr/>
+					
+    			</c:forEach>
+			</c:forEach>
+
+		</div>
+		<!-- The following line is for formatting purposes -->
+		<hr style="clear:both; visibility:hidden;"/>
+	</div>
+
+</c:forEach>

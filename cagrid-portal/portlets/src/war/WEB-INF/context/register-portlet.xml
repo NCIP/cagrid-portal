@@ -1,0 +1,368 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd">
+
+	<bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="location"
+			value="classpath:cagridportal.properties" />
+	</bean>
+	
+	<bean class="org.springframework.beans.factory.annotation.RequiredAnnotationBeanPostProcessor"/>
+
+	<bean 
+		id="registerController"
+		class="gov.nih.nci.cagrid.portal.portlet.register.RegisterController"
+		autowire="byName">
+		
+		<property name="validators">
+			<list>
+				<bean class="gov.nih.nci.cagrid.portal.portlet.register.ApplicationValidator"/>
+			</list>
+		</property>
+		
+		<property name="commandName" value="application"/>
+		<property name="commandClass" value="gov.nih.nci.cagrid.dorian.idp.bean.Application"/>
+		<property name="sessionForm" value="true"/>
+		<property name="formView" value="registerForm"/>
+		<property name="successView" value="registerForm"/>
+		<property name="ifsUrl" value="${cagrid.portal.ifsUrl}"/>
+	</bean>
+	
+	<bean id="portletModeHandlerMapping"
+		class="org.springframework.web.portlet.handler.PortletModeHandlerMapping">
+		<property name="portletModeMap">
+			<map>
+				<entry key="view">
+					<ref bean="registerController" />
+				</entry>
+			</map>
+		</property>
+	</bean>
+
+	<bean id="viewResolver"
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="viewClass"
+			value="org.springframework.web.servlet.view.JstlView" />
+		<property name="prefix" value="/WEB-INF/jsp/register/" />
+		<property name="suffix" value=".jsp" />
+	</bean>
+
+	<bean id="defaultExceptionHandler"
+		parent="defaultExceptionHandlerTemplate" />
+
+	<util:list id="stateCodes">
+		<value>Outside_US</value>
+		<value>AL</value>
+		<value>AK</value>
+		<value>AS</value>
+		<value>AZ</value>
+		<value>AR</value>
+		<value>CA</value>
+		<value>CO</value>
+		<value>CT</value>
+		<value>DE</value>
+		<value>DC</value>
+		<value>FM</value>
+		<value>FL</value>
+		<value>GA</value>
+		<value>GU</value>
+		<value>HI</value>
+		<value>ID</value>
+		<value>IL</value>
+		<value>IN</value>
+		<value>IA</value>
+		<value>KS</value>
+		<value>KY</value>
+		<value>LA</value>
+		<value>ME</value>
+		<value>MH</value>
+		<value>MD</value>
+		<value>MA</value>
+		<value>MI</value>
+		<value>MN</value>
+		<value>MS</value>
+		<value>MO</value>
+		<value>MT</value>
+		<value>NE</value>
+		<value>NV</value>
+		<value>NH</value>
+		<value>NJ</value>
+		<value>NM</value>
+		<value>NY</value>
+		<value>NC</value>
+		<value>ND</value>
+		<value>MP</value>
+		<value>OH</value>
+		<value>OK</value>
+		<value>OR</value>
+		<value>PA</value>
+		<value>PR</value>
+		<value>RI</value>
+		<value>SC</value>
+		<value>SD</value>
+		<value>TN</value>
+		<value>TX</value>
+		<value>UT</value>
+		<value>VT</value>
+		<value>VA</value>
+		<value>VI</value>
+		<value>WA</value>
+		<value>WV</value>
+		<value>WI</value>
+		<value>WY</value>
+	</util:list>
+	
+	<util:list id="countryCodes">
+		<value>AF</value> 
+		  <value>AL</value> 
+		  <value>DZ</value> 
+		  <value>AS</value> 
+		  <value>AD</value> 
+		  <value>AO</value> 
+		  <value>AI</value> 
+		  <value>AQ</value> 
+		  <value>AG</value> 
+		  <value>AR</value> 
+		  <value>AM</value> 
+		  <value>AW</value> 
+		  <value>AU</value> 
+		  <value>AT</value> 
+		  <value>AZ</value> 
+		  <value>BS</value> 
+		  <value>BH</value> 
+		  <value>BD</value> 
+		  <value>BB</value> 
+		  <value>BY</value> 
+		  <value>BE</value> 
+		  <value>BZ</value> 
+		  <value>BJ</value> 
+		  <value>BM</value> 
+		  <value>BT</value> 
+		  <value>BO</value> 
+		  <value>BA</value> 
+		  <value>BW</value> 
+		  <value>BV</value> 
+		  <value>BR</value> 
+		  <value>IO</value> 
+		  <value>BN</value> 
+		  <value>BG</value> 
+		  <value>BF</value> 
+		  <value>BI</value> 
+		  <value>KH</value> 
+		  <value>CM</value> 
+		  <value>CA</value> 
+		  <value>CV</value> 
+		  <value>KY</value> 
+		  <value>CF</value> 
+		  <value>TD</value> 
+		  <value>CL</value> 
+		  <value>CN</value> 
+		  <value>CX</value> 
+		  <value>CC</value> 
+		  <value>CO</value> 
+		  <value>KM</value> 
+		  <value>CG</value> 
+		  <value>CD</value> 
+		  <value>CK</value> 
+		  <value>CR</value> 
+		  <value>CI</value> 
+		  <value>HR</value> 
+		  <value>CU</value> 
+		  <value>CY</value> 
+		  <value>CZ</value> 
+		  <value>DK</value> 
+		  <value>DJ</value> 
+		  <value>DM</value> 
+		  <value>DO</value> 
+		  <value>TP</value> 
+		  <value>EC</value> 
+		  <value>EG</value> 
+		  <value>SV</value> 
+		  <value>GQ</value> 
+		  <value>ER</value> 
+		  <value>EE</value> 
+		  <value>ET</value> 
+		  <value>FK</value> 
+		  <value>FO</value> 
+		  <value>FJ</value> 
+		  <value>FI</value> 
+		  <value>FR</value> 
+		  <value>GF</value> 
+		  <value>PF</value> 
+		  <value>TF</value> 
+		  <value>GA</value> 
+		  <value>GM</value> 
+		  <value>GE</value> 
+		  <value>DE</value> 
+		  <value>GH</value> 
+		  <value>GI</value> 
+		  <value>GR</value> 
+		  <value>GL</value> 
+		  <value>GD</value> 
+		  <value>GP</value> 
+		  <value>GU</value> 
+		  <value>GT</value> 
+		  <value>GN</value> 
+		  <value>GW</value> 
+		  <value>GY</value> 
+		  <value>HT</value> 
+		  <value>HM</value> 
+		  <value>VA</value> 
+		  <value>HN</value> 
+		  <value>HK</value> 
+		  <value>HU</value> 
+		  <value>IS</value> 
+		  <value>IN</value> 
+		  <value>ID</value> 
+		  <value>IR</value> 
+		  <value>IQ</value> 
+		  <value>IE</value> 
+		  <value>IL</value> 
+		  <value>IT</value> 
+		  <value>JM</value> 
+		  <value>JP</value> 
+		  <value>JO</value> 
+		  <value>KZ</value> 
+		  <value>KE</value> 
+		  <value>KI</value> 
+		  <value>KP</value> 
+		  <value>KR</value> 
+		  <value>KW</value> 
+		  <value>KG</value> 
+		  <value>LA</value> 
+		  <value>LV</value> 
+		  <value>LB</value> 
+		  <value>LS</value> 
+		  <value>LR</value> 
+		  <value>LY</value> 
+		  <value>LI</value> 
+		  <value>LT</value> 
+		  <value>LU</value> 
+		  <value>MO</value> 
+		  <value>MK</value> 
+		  <value>MG</value> 
+		  <value>MW</value> 
+		  <value>MY</value> 
+		  <value>MV</value> 
+		  <value>ML</value> 
+		  <value>MT</value> 
+		  <value>MH</value> 
+		  <value>MQ</value> 
+		  <value>MR</value> 
+		  <value>MU</value> 
+		  <value>YT</value> 
+		  <value>MX</value> 
+		  <value>FM</value> 
+		  <value>MD</value> 
+		  <value>MC</value> 
+		  <value>MN</value> 
+		  <value>MS</value> 
+		  <value>MA</value> 
+		  <value>MZ</value> 
+		  <value>MM</value> 
+		  <value>NA</value> 
+		  <value>NR</value> 
+		  <value>NP</value> 
+		  <value>NL</value> 
+		  <value>AN</value> 
+		  <value>NC</value> 
+		  <value>NZ</value> 
+		  <value>NI</value> 
+		  <value>NE</value> 
+		  <value>NG</value> 
+		  <value>NU</value> 
+		  <value>NF</value> 
+		  <value>MP</value> 
+		  <value>NO</value> 
+		  <value>OM</value> 
+		  <value>PK</value> 
+		  <value>PW</value> 
+		  <value>PS</value> 
+		  <value>PA</value> 
+		  <value>PG</value> 
+		  <value>PY</value> 
+		  <value>PE</value> 
+		  <value>PH</value> 
+		  <value>PN</value> 
+		  <value>PL</value> 
+		  <value>PT</value> 
+		  <value>PR</value> 
+		  <value>QA</value> 
+		  <value>RE</value> 
+		  <value>RO</value> 
+		  <value>RU</value> 
+		  <value>RW</value> 
+		  <value>SH</value> 
+		  <value>KN</value> 
+		  <value>LC</value> 
+		  <value>PM</value> 
+		  <value>VC</value> 
+		  <value>WS</value> 
+		  <value>SM</value> 
+		  <value>ST</value> 
+		  <value>SA</value> 
+		  <value>SN</value> 
+		  <value>SC</value> 
+		  <value>SL</value> 
+		  <value>SG</value> 
+		  <value>SK</value> 
+		  <value>SI</value> 
+		  <value>SB</value> 
+		  <value>SO</value> 
+		  <value>ZA</value> 
+		  <value>GS</value> 
+		  <value>ES</value> 
+		  <value>LK</value> 
+		  <value>SD</value> 
+		  <value>SR</value> 
+		  <value>SJ</value> 
+		  <value>SZ</value> 
+		  <value>SE</value> 
+		  <value>CH</value> 
+		  <value>SY</value> 
+		  <value>TW</value> 
+		  <value>TJ</value> 
+		  <value>TZ</value> 
+		  <value>TH</value> 
+		  <value>TG</value> 
+		  <value>TK</value> 
+		  <value>TO</value> 
+		  <value>TT</value> 
+		  <value>TN</value> 
+		  <value>TR</value> 
+		  <value>TM</value> 
+		  <value>TC</value> 
+		  <value>TV</value> 
+		  <value>UG</value> 
+		  <value>UA</value> 
+		  <value>AE</value> 
+		  <value>GB</value> 
+		  <value>US</value> 
+		  <value>UM</value> 
+		  <value>UY</value> 
+		  <value>UZ</value> 
+		  <value>VU</value> 
+		  <value>VE</value> 
+		  <value>VN</value> 
+		  <value>VG</value> 
+		  <value>VI</value> 
+		  <value>WF</value> 
+		  <value>EH</value> 
+		  <value>YE</value> 
+		  <value>YU</value> 
+		  <value>ZM</value> 
+		  <value>ZW</value>
+	</util:list>
+
+</beans>

@@ -1,0 +1,51 @@
+<c:if test="${!empty sd.pointOfContactCollection}">
+
+    <div class="row">
+        <label>
+            POC
+        </label>
+
+        <div class="value">
+
+        <c:forEach var="poc" items="${sd.pointOfContactCollection}">
+            <c:set var="currID" value="${ns}${poc.id}"/>
+
+            <a id="${currID}-lnk" href="javascript:void(0)">${poc.person.firstName} ${poc.person.lastName}</a>
+
+            <div class="yui-skin-sam">
+                <div id="${currID}-Panel" style="visibility:collapse;">
+                    <div class="hd">
+                        Point of Contact
+                    </div>
+                    <div class="bd">
+                        <tags:notEmptyRow rowValue="${poc.person.firstName}" rowLabel="First Name:"/>
+                        <tags:notEmptyRow rowValue="${poc.person.lastName}" rowLabel="Last Name:"/>
+                        <tags:notEmptyRow rowValue="${poc.role}" rowLabel="Role:"/>
+                        <tags:notEmptyRow rowValue="${poc.affiliation}" rowLabel="Affiliation:"/>
+                        <tags:notEmptyRow rowValue="${poc.person.phoneNumber}" rowLabel="Phone:"/>
+                        <tags:notEmptyRow rowValue="${poc.person.emailAddress}" rowLabel="Email:"/>
+                    </div>
+                </div>
+            </div>
+
+            <script type="text/javascript">
+                function init() {
+                    myPanel = new YAHOO.widget.Panel("${currID}-Panel", { underlay:"none", visible:false, constraintoviewport:true });
+                    myPanel.render();
+                    myPanel.show;
+                    YAHOO.util.Event.addListener("${currID}-lnk", "click", myPanel.show, myPanel, true);
+                }
+
+                YAHOO.util.Event.addListener(window, "load", init);
+
+            </script>
+
+        </c:forEach>
+
+    </div>
+    </div>
+
+
+</c:if>
+
+

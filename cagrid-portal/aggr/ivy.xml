@@ -1,0 +1,84 @@
+<ivy-module version="2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:noNamespaceSchemaLocation="http://incubator.apache.org/ivy/schemas/ivy.xsd">
+
+    <info organisation="caGrid" module="portal-aggr" revision="${project.version}">
+        <license name="caGrid" url="http://www.cagrid.org/mwiki/index.php?title=CaGrid:LICENSE-1.1"/>
+        <description>caGrid Portal</description>
+    </info>
+
+    <configurations>
+        <conf name="target_grid" visibility="public"/>
+
+        <!--Public configurations-->
+        <conf name="default" visibility="public"/>
+        <conf name="compile" extends="default" visibility="public"/>
+        <conf name="test" extends="compile" visibility="public"/>
+
+    </configurations>
+
+
+    <publications>
+        <artifact name="caGrid-${ivy.module}" conf="default" type="jar"/>
+        <artifact name="caGrid-${ivy.module}-test" conf="test" type="jar"/>
+         
+        <!--spring configs-->
+        <artifact name="applicationContext-aggr-concepts" type="xml"/>
+        <artifact name="applicationContext-aggr-geocode" type="xml"/>
+        <artifact name="applicationContext-aggr-metachange" type="xml"/>
+        <artifact name="applicationContext-aggr-regsvc-beans" type="xml"/>
+        <artifact name="applicationContext-aggr-regsvcman" type="xml"/>
+        <artifact name="applicationContext-aggr-status-beans" type="xml"/>
+        <artifact name="applicationContext-aggr-status" type="xml"/>
+        <artifact name="applicationContext-aggr-xmlschemas" type="xml"/>
+        <artifact name="applicationContext-aggr" type="xml"/>
+        <artifact name="applicationContext-notification" type="xml"/>
+        <artifact name="applicationContext-notification-aspects" type="xml"/>
+        <artifact name="applicationContext-trust" type="xml"/>
+        <artifact name="sync-description" type="xml"/>
+
+    </publications>
+
+    <dependencies>
+        <dependency rev="2.7.1" org="apache" name="xerces2-j" conf="default"/>
+        <dependency rev="3.1" org="apache" name="commons-collections" />
+        <dependency rev="1.0" org="commons-cli" name="commons-cli" />
+
+        <dependency rev="1.5" org="org.apache.velocity" name="engine" conf="default"/>
+        <dependency rev="1.4" org="javax.mail" name="mail" conf="default"/>
+
+        <dependency rev="4.4" org="checkstyle" name="checkstyle" conf="compile"/>
+
+        <dependency rev="latest.integration" org="caGrid" name="portal-db" conf="default;test"/>
+
+        <dependency rev="${cagrid.integration.version}" org="caGrid" name="advertisement" conf="default"/>
+        <dependency rev="${cagrid.integration.version}" org="caGrid" name="authentication-service"
+                    conf="default->client"/>
+        <dependency rev="${cagrid.integration.version}" transitive="false" org="caGrid" name="cql" conf="default->cql"/>
+        <dependency rev="${cagrid.integration.version}" transitive="false" org="caGrid" name="data"
+                    conf="default->utils"/>
+        <dependency rev="${cagrid.integration.version}" org="caGrid" name="discovery" conf="default"/>
+        <dependency rev="${cagrid.integration.version}" org="caGrid" name="dorian" conf="default->client"/>
+        <dependency rev="${cagrid.integration.version}" transitive="false" org="caGrid" name="fqp"
+                    conf="default->client"/>
+        <dependency rev="${cagrid.integration.version}" org="caGrid" name="gts" conf="default->client"/>
+        <dependency rev="${cagrid.integration.version}" org="caGrid" name="globalModelExchange" conf="default->client"/>
+        <dependency rev="${cagrid.integration.version}" org="caGrid" name="syncgts" conf="default->client"/>
+        <dependency rev="${cagrid.integration.version}" org="caGrid" name="wsEnum" conf="default->stubs"/>
+        <dependency rev="${target.grid}" org="caGrid" name="target_grid" conf="target_grid->trust"/>
+        <!--<dependency rev="1.2" org="caGrid" name="cadsr" conf="default->client" transitive="false"/>-->
+
+        <dependency rev="4.0" org="cacore" name="cadsr-api" />
+        <dependency rev="4.0" org="cacore" name="evs" conf="default->client"/>
+        <dependency rev="4.0.3-bigindex" org="globus" name="mds" conf="default->jars"/>
+        <dependency rev="4.0.3" org="globus" name="globus" conf="default;compile->crypto"/>
+
+        <dependency rev="3.2" org="poi" name="poi" conf="compile->default"/>
+        <dependency rev="3.2" org="poi" name="poi-contrib" conf="compile->default"/>
+        <dependency rev="3.2" org="poi" name="poi-scratchpad" conf="compile->default"/>
+
+        <!--global exclude-->
+        <exclude artifact="jprov" type="jar"/>
+
+    </dependencies>
+
+</ivy-module>

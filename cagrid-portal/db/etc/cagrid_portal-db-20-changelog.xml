@@ -1,0 +1,1794 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--will create Portal DB that is at version 2.0-->
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog/1.9"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog/1.9 http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-1.9.xsd">
+
+    <changeSet author="kherm (generated)" id="20-1">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="addresses"/>
+            </not>
+        </preConditions>
+        <createTable tableName="addresses">
+            <column autoIncrement="true" name="id" type="INT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="country" type="VARCHAR(255)"/>
+            <column name="latitude" type="FLOAT(12,0)"/>
+            <column name="locality" type="VARCHAR(255)"/>
+            <column name="longitude" type="FLOAT(12,0)"/>
+            <column name="postalCode" type="VARCHAR(255)"/>
+            <column name="stateProvince" type="VARCHAR(255)"/>
+            <column name="street1" type="VARCHAR(255)"/>
+            <column name="street2" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-2">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="authn_tickets"/>
+            </not>
+        </preConditions>
+        <createTable tableName="authn_tickets">
+            <column autoIncrement="true" name="id" type="INT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="notAfter" type="DATETIME"/>
+            <column name="ticket" type="VARCHAR(255)"/>
+            <column name="user_id" type="INT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-3">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="c_hier"/>
+            </not>
+        </preConditions>
+        <createTable tableName="c_hier">
+            <column autoIncrement="true" name="id" type="INT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="name" type="VARCHAR(255)"/>
+            <column name="uri" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-4">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="c_hier_desc"/>
+            </not>
+        </preConditions>
+        <createTable tableName="c_hier_desc">
+            <column name="descendant_id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ancestor_id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-5">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="c_hier_node"/>
+            </not>
+        </preConditions>
+        <createTable tableName="c_hier_node">
+            <column autoIncrement="true" name="id" type="INT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="code" type="VARCHAR(255)"/>
+            <column name="description" type="TEXT"/>
+            <column name="level" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)"/>
+            <column name="hierarchy_id" type="INT"/>
+            <column name="parent_id" type="INT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-6">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="cadsr_reg"/>
+            </not>
+        </preConditions>
+        <createTable tableName="cadsr_reg">
+            <column autoIncrement="true" name="id" type="INT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="registrationStatus" type="VARCHAR(255)"/>
+            <column name="workflowStatus" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-7">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="ctx_prop"/>
+            </not>
+        </preConditions>
+        <createTable tableName="ctx_prop">
+            <column autoIncrement="true" name="id" type="INT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="description" type="TEXT"/>
+            <column name="name" type="VARCHAR(255)"/>
+            <column name="schema_id" type="INT"/>
+            <column name="serviceContext_id" type="INT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-8">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="dcql_svcs"/>
+            </not>
+        </preConditions>
+        <createTable tableName="dcql_svcs">
+            <column name="query_id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="svc_id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-9">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="domain_models"/>
+            </not>
+        </preConditions>
+        <createTable tableName="domain_models">
+            <column autoIncrement="true" name="id" type="INT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="projectDescription" type="TEXT"/>
+            <column name="projectLongName" type="VARCHAR(255)"/>
+            <column name="projectShortName" type="VARCHAR(255)"/>
+            <column name="projectVersion" type="VARCHAR(255)"/>
+            <column name="service_id" type="INT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-10">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="enumer"/>
+            </not>
+        </preConditions>
+        <createTable tableName="enumer">
+            <column autoIncrement="true" name="id" type="INT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="permissibleValue" type="VARCHAR(255)"/>
+            <column name="valueMeaning" type="VARCHAR(255)"/>
+            <column name="valueDomain_id" type="INT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-11">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="enumer_sem_meta"/>
+            </not>
+        </preConditions>
+        <createTable tableName="enumer_sem_meta">
+            <column name="enumer_id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="sem_meta_id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-12">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="fault"/>
+            </not>
+        </preConditions>
+        <createTable tableName="fault">
+            <column autoIncrement="true" name="id" type="INT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="description" type="TEXT"/>
+            <column name="name" type="VARCHAR(255)"/>
+            <column name="operation_id" type="INT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-13">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="grid_services"/>
+            </not>
+        </preConditions>
+        <createTable tableName="grid_services">
+            <column defaultValue="" name="service_type" type="VARCHAR(31)">
+                <constraints nullable="false"/>
+            </column>
+            <column autoIncrement="true" name="id" type="INT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="conceptIndexHash" type="VARCHAR(255)"/>
+            <column name="metadataHash" type="VARCHAR(255)"/>
+            <column name="url" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-14">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="index_services"/>
+            </not>
+        </preConditions>
+        <createTable tableName="index_services">
+            <column autoIncrement="true" name="id" type="INT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="url" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-15">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="index_svc_grid_svc"/>
+            </not>
+        </preConditions>
+        <createTable tableName="index_svc_grid_svc">
+            <column name="index_svc_id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="grid_svc_id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-16">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="models_schemas"/>
+            </not>
+        </preConditions>
+        <createTable tableName="models_schemas">
+            <column name="model_id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="schema_id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-17">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="newschannels"/>
+            </not>
+        </preConditions>
+        <createTable tableName="newschannels">
+            <column autoIncrement="true" name="id" type="INT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="description" type="TEXT"/>
+            <column name="lastBuildDate" type="DATETIME"/>
+            <column name="link" type="VARCHAR(255)"/>
+            <column name="pubDate" type="DATETIME"/>
+            <column name="title" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-18">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="newsitems"/>
+            </not>
+        </preConditions>
+        <createTable tableName="newsitems">
+            <column autoIncrement="true" name="id" type="INT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="description" type="TEXT"/>
+            <column name="height" type="VARCHAR(255)"/>
+            <column name="link" type="VARCHAR(255)"/>
+            <column name="pubDate" type="DATETIME"/>
+            <column name="title" type="VARCHAR(255)"/>
+            <column name="width" type="VARCHAR(255)"/>
+            <column name="channel_id" type="INT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-19">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="oper"/>
+            </not>
+        </preConditions>
+        <createTable tableName="oper">
+            <column autoIncrement="true" name="id" type="INT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="description" type="TEXT"/>
+            <column name="name" type="VARCHAR(255)"/>
+            <column name="serviceContext_id" type="INT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-20">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="oper_sem_meta"/>
+            </not>
+        </preConditions>
+        <createTable tableName="oper_sem_meta">
+            <column name="oper_id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="sem_meta_id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-21">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="params"/>
+            </not>
+        </preConditions>
+        <createTable tableName="params">
+            <column defaultValue="" name="param_type" type="VARCHAR(31)">
+                <constraints nullable="false"/>
+            </column>
+            <column autoIncrement="true" name="id" type="INT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="QName" type="VARCHAR(255)"/>
+            <column name="array_flag" type="BIT"/>
+            <column name="dimensionality" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="idx" type="INT"/>
+            <column name="name" type="VARCHAR(255)"/>
+            <column name="required_flag" type="BIT"/>
+            <column name="operation_id" type="INT"/>
+            <column name="schema_id" type="INT"/>
+            <column name="uml_class_id" type="INT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-22">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="participants"/>
+            </not>
+        </preConditions>
+        <createTable tableName="participants">
+            <column autoIncrement="true" name="id" type="INT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="emailAddress" type="VARCHAR(255)"/>
+            <column name="homepageUrl" type="VARCHAR(255)"/>
+            <column name="institution" type="VARCHAR(255)"/>
+            <column name="name" type="VARCHAR(255)"/>
+            <column name="phone" type="VARCHAR(255)"/>
+            <column name="address_id" type="INT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-23">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="participation"/>
+            </not>
+        </preConditions>
+        <createTable tableName="participation">
+            <column autoIncrement="true" name="id" type="INT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="status" type="VARCHAR(255)"/>
+            <column name="participant_id" type="INT"/>
+            <column name="workspace_id" type="INT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-24">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="person_addresses"/>
+            </not>
+        </preConditions>
+        <createTable tableName="person_addresses">
+            <column name="person_id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="address_id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-25">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="persons"/>
+            </not>
+        </preConditions>
+        <createTable tableName="persons">
+            <column autoIncrement="true" name="id" type="INT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="emailAddress" type="VARCHAR(255)"/>
+            <column name="firstName" type="VARCHAR(255)"/>
+            <column name="lastName" type="VARCHAR(255)"/>
+            <column name="phoneNumber" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-26">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="pocs"/>
+            </not>
+        </preConditions>
+        <createTable tableName="pocs">
+            <column defaultValue="" name="poc_type" type="VARCHAR(31)">
+                <constraints nullable="false"/>
+            </column>
+            <column autoIncrement="true" name="id" type="INT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="affiliation" type="VARCHAR(255)"/>
+            <column name="role" type="VARCHAR(255)"/>
+            <column name="person_id" type="INT"/>
+            <column name="center_id" type="INT"/>
+            <column name="service_desc_id" type="INT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-27">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="portal_users"/>
+            </not>
+        </preConditions>
+        <createTable tableName="portal_users">
+            <column autoIncrement="true" name="id" type="INT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="gridCredential" type="TEXT"/>
+            <column name="gridIdentity" type="VARCHAR(255)"/>
+            <column name="portalId" type="VARCHAR(255)"/>
+            <column name="person_id" type="INT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-28">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="queries"/>
+            </not>
+        </preConditions>
+        <createTable tableName="queries">
+            <column defaultValue="" name="query_type" type="VARCHAR(31)">
+                <constraints nullable="false"/>
+            </column>
+            <column autoIncrement="true" name="id" type="INT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="hash" type="VARCHAR(255)"/>
+            <column name="xml" type="TEXT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-29">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="query_instances"/>
+            </not>
+        </preConditions>
+        <createTable tableName="query_instances">
+            <column defaultValue="" name="query_inst_type" type="VARCHAR(31)">
+                <constraints nullable="false"/>
+            </column>
+            <column autoIncrement="true" name="id" type="INT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="createTime" type="DATETIME"/>
+            <column name="error" type="VARCHAR(255)"/>
+            <column name="finishTime" type="DATETIME"/>
+            <column name="startTime" type="DATETIME"/>
+            <column name="state" type="VARCHAR(255)"/>
+            <column name="portal_user_id" type="INT"/>
+            <column name="data_service_id" type="INT"/>
+            <column name="fqp_service_id" type="INT"/>
+            <column name="query_id" type="INT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-30">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="res_ctr"/>
+            </not>
+        </preConditions>
+        <createTable tableName="res_ctr">
+            <column autoIncrement="true" name="id" type="INT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="description" type="TEXT"/>
+            <column name="displayName" type="VARCHAR(255)"/>
+            <column name="homepageUrl" type="VARCHAR(255)"/>
+            <column name="imageUrl" type="VARCHAR(255)"/>
+            <column name="rssNewsUrl" type="VARCHAR(255)"/>
+            <column name="shortName" type="VARCHAR(255)"/>
+            <column name="addr_id" type="INT"/>
+            <column name="serviceMetadata_id" type="INT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-31">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="roles"/>
+            </not>
+        </preConditions>
+        <createTable tableName="roles">
+            <column autoIncrement="true" name="id" type="INT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="name" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-32">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="sem_meta"/>
+            </not>
+        </preConditions>
+        <createTable tableName="sem_meta">
+            <column autoIncrement="true" name="id" type="INT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="sm_ccode" type="VARCHAR(255)"/>
+            <column name="sm_cdef" type="TEXT"/>
+            <column name="sm_cname" type="VARCHAR(255)"/>
+            <column name="sm_order" type="INT"/>
+            <column name="sm_order_level" type="INT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-33">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="sem_meta_map"/>
+            </not>
+        </preConditions>
+        <createTable tableName="sem_meta_map">
+            <column autoIncrement="true" name="id" type="INT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="objectIdentifier" type="VARCHAR(255)"/>
+            <column name="objectPath" type="TEXT"/>
+            <column name="sem_meta_id" type="INT"/>
+            <column name="service_id" type="INT"/>
+            <column name="c_hier_node_id" type="INT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-34">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="service_annotations"/>
+            </not>
+        </preConditions>
+        <createTable tableName="service_annotations">
+            <column autoIncrement="true" name="id" type="INT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="type" type="VARCHAR(255)"/>
+            <column name="value" type="VARCHAR(255)"/>
+            <column name="service_id" type="INT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-35">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="shared_cql"/>
+            </not>
+        </preConditions>
+        <createTable tableName="shared_cql">
+            <column autoIncrement="true" name="id" type="INT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="description" type="TEXT"/>
+            <column name="name" type="VARCHAR(255)"/>
+            <column name="shareDate" type="DATETIME"/>
+            <column name="class_id" type="INT"/>
+            <column name="service_id" type="INT"/>
+            <column name="owner_id" type="INT"/>
+            <column name="query_id" type="INT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-36">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="status_change"/>
+            </not>
+        </preConditions>
+        <createTable tableName="status_change">
+            <column autoIncrement="true" name="id" type="INT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="status" type="VARCHAR(255)"/>
+            <column name="time" type="DATETIME"/>
+            <column name="service_id" type="INT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-37">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="svc"/>
+            </not>
+        </preConditions>
+        <createTable tableName="svc">
+            <column autoIncrement="true" name="id" type="INT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="description" type="TEXT"/>
+            <column name="name" type="VARCHAR(255)"/>
+            <column name="version" type="VARCHAR(255)"/>
+            <column name="cadsr_reg_id" type="INT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-38">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="svc_ctx"/>
+            </not>
+        </preConditions>
+        <createTable tableName="svc_ctx">
+            <column autoIncrement="true" name="id" type="INT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="description" type="TEXT"/>
+            <column name="name" type="VARCHAR(255)"/>
+            <column name="service_id" type="INT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-39">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="svc_meta"/>
+            </not>
+        </preConditions>
+        <createTable tableName="svc_meta">
+            <column autoIncrement="true" name="id" type="INT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="service_id" type="INT"/>
+            <column name="host_res_ctr_id" type="INT"/>
+            <column name="service_desc_id" type="INT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-40">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="svc_sem_meta"/>
+            </not>
+        </preConditions>
+        <createTable tableName="svc_sem_meta">
+            <column name="svc_id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="sem_meta_id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-41">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="uml_assoc_edges"/>
+            </not>
+        </preConditions>
+        <createTable tableName="uml_assoc_edges">
+            <column defaultValue="" name="edge_type" type="VARCHAR(31)">
+                <constraints nullable="false"/>
+            </column>
+            <column autoIncrement="true" name="id" type="INT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="maxCardinality" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="minCardinality" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="role" type="VARCHAR(255)"/>
+            <column name="uml_class_id" type="INT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-42">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="uml_assocs"/>
+            </not>
+        </preConditions>
+        <createTable tableName="uml_assocs">
+            <column autoIncrement="true" name="id" type="INT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="bidirectional" type="BIT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="source_id" type="INT"/>
+            <column name="target_id" type="INT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-43">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="uml_attr"/>
+            </not>
+        </preConditions>
+        <createTable tableName="uml_attr">
+            <column autoIncrement="true" name="id" type="INT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="dataTypeName" type="VARCHAR(255)"/>
+            <column name="description" type="TEXT"/>
+            <column name="name" type="VARCHAR(255)"/>
+            <column name="publicID" type="BIGINT"/>
+            <column name="version" type="FLOAT(12,0)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="umlClass_id" type="INT"/>
+            <column name="val_dom_id" type="INT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-44">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="uml_attr_sem_meta"/>
+            </not>
+        </preConditions>
+        <createTable tableName="uml_attr_sem_meta">
+            <column name="uml_attr_id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="sem_meta_id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-45">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="uml_class"/>
+            </not>
+        </preConditions>
+        <createTable tableName="uml_class">
+            <column defaultValue="" name="uml_class_type" type="VARCHAR(31)">
+                <constraints nullable="false"/>
+            </column>
+            <column autoIncrement="true" name="id" type="INT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="cadsrId" type="VARCHAR(255)"/>
+            <column name="className" type="VARCHAR(255)"/>
+            <column name="description" type="TEXT"/>
+            <column name="packageName" type="VARCHAR(255)"/>
+            <column name="projectName" type="VARCHAR(255)"/>
+            <column name="projectVersion" type="VARCHAR(255)"/>
+            <column name="allowableAsTarget" type="BIT"/>
+            <column name="model_id" type="INT"/>
+            <column name="super_id" type="INT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-46">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="uml_class_sem_meta"/>
+            </not>
+        </preConditions>
+        <createTable tableName="uml_class_sem_meta">
+            <column name="uml_class_id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="sem_meta_id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-47">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="val_dom"/>
+            </not>
+        </preConditions>
+        <createTable tableName="val_dom">
+            <column autoIncrement="true" name="id" type="INT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="longName" type="VARCHAR(255)"/>
+            <column name="unitOfMeasure" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-48">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="val_dom_sem_meta"/>
+            </not>
+        </preConditions>
+        <createTable tableName="val_dom_sem_meta">
+            <column name="val_dom_id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="sem_meta_id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-49">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="workspaces"/>
+            </not>
+        </preConditions>
+        <createTable tableName="workspaces">
+            <column autoIncrement="true" name="id" type="INT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="abbreviation" type="VARCHAR(255)"/>
+            <column name="description" type="TEXT"/>
+            <column name="homepageUrl" type="VARCHAR(255)"/>
+            <column name="logoUrl" type="VARCHAR(255)"/>
+            <column name="name" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-50">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="xmlschemas"/>
+            </not>
+        </preConditions>
+        <createTable tableName="xmlschemas">
+            <column defaultValue="" name="schema_type" type="VARCHAR(31)">
+                <constraints nullable="false"/>
+            </column>
+            <column autoIncrement="true" name="id" type="INT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="namespace" type="TEXT"/>
+            <column name="schemaContent" type="TEXT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-51">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="FK8C694F6E9B17579D"/>
+            </not>
+        </preConditions>
+        <createIndex indexName="FK8C694F6E9B17579D" tableName="authn_tickets" unique="false">
+            <column name="user_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-52">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="FKB9A229E62564E1CD"/>
+            </not>
+        </preConditions>
+        <createIndex indexName="FKB9A229E62564E1CD" tableName="c_hier_desc" unique="false">
+            <column name="ancestor_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-53">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="FKB9A229E6E8131663"/>
+            </not>
+        </preConditions>
+        <createIndex indexName="FKB9A229E6E8131663" tableName="c_hier_desc" unique="false">
+            <column name="descendant_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-54">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="ancestor_id"/>
+            </not>
+        </preConditions>
+        <createIndex indexName="ancestor_id" tableName="c_hier_desc" unique="true">
+            <column name="ancestor_id"/>
+            <column name="descendant_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-55">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="FKB9A6D9574D193609"/>
+            </not>
+        </preConditions>
+        <createIndex indexName="FKB9A6D9574D193609" tableName="c_hier_node" unique="false">
+            <column name="hierarchy_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-56">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="FKB9A6D9575C975F96"/>
+            </not>
+        </preConditions>
+        <createIndex indexName="FKB9A6D9575C975F96" tableName="c_hier_node" unique="false">
+            <column name="parent_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-57">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="FKF69C1A7BACBFF2A6"/>
+            </not>
+        </preConditions>
+        <createIndex indexName="FKF69C1A7BACBFF2A6" tableName="ctx_prop" unique="false">
+            <column name="schema_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-58">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="FKF69C1A7BB20962BB"/>
+            </not>
+        </preConditions>
+        <createIndex indexName="FKF69C1A7BB20962BB" tableName="ctx_prop" unique="false">
+            <column name="serviceContext_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-59">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="FK2E2C08587067BB08"/>
+            </not>
+        </preConditions>
+        <createIndex indexName="FK2E2C08587067BB08" tableName="dcql_svcs" unique="false">
+            <column name="svc_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-60">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="FK2E2C0858DFDD0C26"/>
+            </not>
+        </preConditions>
+        <createIndex indexName="FK2E2C0858DFDD0C26" tableName="dcql_svcs" unique="false">
+            <column name="query_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-61">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="query_id"/>
+            </not>
+        </preConditions>
+        <createIndex indexName="query_id" tableName="dcql_svcs" unique="true">
+            <column name="query_id"/>
+            <column name="svc_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-62">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="FK4AF76E453EAF5693"/>
+            </not>
+        </preConditions>
+        <createIndex indexName="FK4AF76E453EAF5693" tableName="domain_models" unique="false">
+            <column name="service_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-63">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="FKB29E656EA67DF4FF"/>
+            </not>
+        </preConditions>
+        <createIndex indexName="FKB29E656EA67DF4FF" tableName="enumer" unique="false">
+            <column name="valueDomain_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-64">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="FK9E219B1A2FAB7F18"/>
+            </not>
+        </preConditions>
+        <createIndex indexName="FK9E219B1A2FAB7F18" tableName="enumer_sem_meta" unique="false">
+            <column name="enumer_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-65">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="FK9E219B1AE5A31CA1"/>
+            </not>
+        </preConditions>
+        <createIndex indexName="FK9E219B1AE5A31CA1" tableName="enumer_sem_meta" unique="false">
+            <column name="sem_meta_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-66">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="enumer_id"/>
+            </not>
+        </preConditions>
+        <createIndex indexName="enumer_id" tableName="enumer_sem_meta" unique="true">
+            <column name="enumer_id"/>
+            <column name="sem_meta_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-67">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="FK5CB3A2266B33C59"/>
+            </not>
+        </preConditions>
+        <createIndex indexName="FK5CB3A2266B33C59" tableName="fault" unique="false">
+            <column name="operation_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-68">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="FKE2F2AB335632F6AB"/>
+            </not>
+        </preConditions>
+        <createIndex indexName="FKE2F2AB335632F6AB" tableName="index_svc_grid_svc" unique="false">
+            <column name="grid_svc_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-69">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="FKE2F2AB33B960E661"/>
+            </not>
+        </preConditions>
+        <createIndex indexName="FKE2F2AB33B960E661" tableName="index_svc_grid_svc" unique="false">
+            <column name="index_svc_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-70">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="index_svc_id"/>
+            </not>
+        </preConditions>
+        <createIndex indexName="index_svc_id" tableName="index_svc_grid_svc" unique="true">
+            <column name="index_svc_id"/>
+            <column name="grid_svc_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-71">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="FKFE6C861D753F1F0B"/>
+            </not>
+        </preConditions>
+        <createIndex indexName="FKFE6C861D753F1F0B" tableName="models_schemas" unique="false">
+            <column name="model_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-72">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="FKFE6C861DACBFF2A6"/>
+            </not>
+        </preConditions>
+        <createIndex indexName="FKFE6C861DACBFF2A6" tableName="models_schemas" unique="false">
+            <column name="schema_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-73">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="model_id"/>
+            </not>
+        </preConditions>
+        <createIndex indexName="model_id" tableName="models_schemas" unique="true">
+            <column name="model_id"/>
+            <column name="schema_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-74">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="FK127F28CD52A68BA3"/>
+            </not>
+        </preConditions>
+        <createIndex indexName="FK127F28CD52A68BA3" tableName="newsitems" unique="false">
+            <column name="channel_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-75">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="FK34264EB20962BB"/>
+            </not>
+        </preConditions>
+        <createIndex indexName="FK34264EB20962BB" tableName="oper" unique="false">
+            <column name="serviceContext_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-76">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="FK9D46D63A2BC0EE12"/>
+            </not>
+        </preConditions>
+        <createIndex indexName="FK9D46D63A2BC0EE12" tableName="oper_sem_meta" unique="false">
+            <column name="oper_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-77">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="FK9D46D63AE5A31CA1"/>
+            </not>
+        </preConditions>
+        <createIndex indexName="FK9D46D63AE5A31CA1" tableName="oper_sem_meta" unique="false">
+            <column name="sem_meta_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-78">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="oper_id"/>
+            </not>
+        </preConditions>
+        <createIndex indexName="oper_id" tableName="oper_sem_meta" unique="true">
+            <column name="oper_id"/>
+            <column name="sem_meta_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-79">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="FKC4AAF98666B33C59"/>
+            </not>
+        </preConditions>
+        <createIndex indexName="FKC4AAF98666B33C59" tableName="params" unique="false">
+            <column name="operation_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-80">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="FKC4AAF9869797F42C"/>
+            </not>
+        </preConditions>
+        <createIndex indexName="FKC4AAF9869797F42C" tableName="params" unique="false">
+            <column name="uml_class_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-81">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="FKC4AAF986ACBFF2A6"/>
+            </not>
+        </preConditions>
+        <createIndex indexName="FKC4AAF986ACBFF2A6" tableName="params" unique="false">
+            <column name="schema_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-82">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="FK89FFF7A043C80963"/>
+            </not>
+        </preConditions>
+        <createIndex indexName="FK89FFF7A043C80963" tableName="participants" unique="false">
+            <column name="address_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-83">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="FKB6018D411E7B9083"/>
+            </not>
+        </preConditions>
+        <createIndex indexName="FKB6018D411E7B9083" tableName="participation" unique="false">
+            <column name="participant_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-84">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="FKB6018D41CE3CD383"/>
+            </not>
+        </preConditions>
+        <createIndex indexName="FKB6018D41CE3CD383" tableName="participation" unique="false">
+            <column name="workspace_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-85">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="FK8AEAB3843C80963"/>
+            </not>
+        </preConditions>
+        <createIndex indexName="FK8AEAB3843C80963" tableName="person_addresses" unique="false">
+            <column name="address_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-86">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="FK8AEAB3896760051"/>
+            </not>
+        </preConditions>
+        <createIndex indexName="FK8AEAB3896760051" tableName="person_addresses" unique="false">
+            <column name="person_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-87">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="person_id"/>
+            </not>
+        </preConditions>
+        <createIndex indexName="person_id" tableName="person_addresses" unique="true">
+            <column name="person_id"/>
+            <column name="address_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-88">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="FK3496AF96760051"/>
+            </not>
+        </preConditions>
+        <createIndex indexName="FK3496AF96760051" tableName="pocs" unique="false">
+            <column name="person_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-89">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="FK3496AFCDA25873"/>
+            </not>
+        </preConditions>
+        <createIndex indexName="FK3496AFCDA25873" tableName="pocs" unique="false">
+            <column name="service_desc_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-90">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="FK3496AFE43CD9B0"/>
+            </not>
+        </preConditions>
+        <createIndex indexName="FK3496AFE43CD9B0" tableName="pocs" unique="false">
+            <column name="center_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-91">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="FK3ACE787596760051"/>
+            </not>
+        </preConditions>
+        <createIndex indexName="FK3ACE787596760051" tableName="portal_users" unique="false">
+            <column name="person_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-92">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="FK7419B7C72BFB2E48"/>
+            </not>
+        </preConditions>
+        <createIndex indexName="FK7419B7C72BFB2E48" tableName="query_instances" unique="false">
+            <column name="data_service_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-93">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="FK7419B7C753161E97"/>
+            </not>
+        </preConditions>
+        <createIndex indexName="FK7419B7C753161E97" tableName="query_instances" unique="false">
+            <column name="fqp_service_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-94">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="FK7419B7C764EE5ACA"/>
+            </not>
+        </preConditions>
+        <createIndex indexName="FK7419B7C764EE5ACA" tableName="query_instances" unique="false">
+            <column name="portal_user_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-95">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="FK7419B7C7DFF4C5C0"/>
+            </not>
+        </preConditions>
+        <createIndex indexName="FK7419B7C7DFF4C5C0" tableName="query_instances" unique="false">
+            <column name="query_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-96">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="FK41611A025880D552"/>
+            </not>
+        </preConditions>
+        <createIndex indexName="FK41611A025880D552" tableName="res_ctr" unique="false">
+            <column name="serviceMetadata_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-97">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="FK41611A02AF70AC46"/>
+            </not>
+        </preConditions>
+        <createIndex indexName="FK41611A02AF70AC46" tableName="res_ctr" unique="false">
+            <column name="addr_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-98">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="FK20DD8B86609833C9"/>
+            </not>
+        </preConditions>
+        <createIndex indexName="FK20DD8B86609833C9" tableName="sem_meta_map" unique="false">
+            <column name="c_hier_node_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-99">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="FK20DD8B866E4B3B1D"/>
+            </not>
+        </preConditions>
+        <createIndex indexName="FK20DD8B866E4B3B1D" tableName="sem_meta_map" unique="false">
+            <column name="service_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-100">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="FK20DD8B86E5A31CA1"/>
+            </not>
+        </preConditions>
+        <createIndex indexName="FK20DD8B86E5A31CA1" tableName="sem_meta_map" unique="false">
+            <column name="sem_meta_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-101">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="FKC508389A6E4B3B1D"/>
+            </not>
+        </preConditions>
+        <createIndex indexName="FKC508389A6E4B3B1D" tableName="service_annotations" unique="false">
+            <column name="service_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-102">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="FK95AAA2E43EAF5693"/>
+            </not>
+        </preConditions>
+        <createIndex indexName="FK95AAA2E43EAF5693" tableName="shared_cql" unique="false">
+            <column name="service_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-103">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="FK95AAA2E46FE07B5"/>
+            </not>
+        </preConditions>
+        <createIndex indexName="FK95AAA2E46FE07B5" tableName="shared_cql" unique="false">
+            <column name="owner_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-104">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="FK95AAA2E4AC0E86D6"/>
+            </not>
+        </preConditions>
+        <createIndex indexName="FK95AAA2E4AC0E86D6" tableName="shared_cql" unique="false">
+            <column name="query_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-105">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="FK95AAA2E4BCD42611"/>
+            </not>
+        </preConditions>
+        <createIndex indexName="FK95AAA2E4BCD42611" tableName="shared_cql" unique="false">
+            <column name="class_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-106">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="FK7AFECC9D6E4B3B1D"/>
+            </not>
+        </preConditions>
+        <createIndex indexName="FK7AFECC9D6E4B3B1D" tableName="status_change" unique="false">
+            <column name="service_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-107">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="FK1BE608547345D"/>
+            </not>
+        </preConditions>
+        <createIndex indexName="FK1BE608547345D" tableName="svc" unique="false">
+            <column name="cadsr_reg_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-108">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="FK92683FC837F90559"/>
+            </not>
+        </preConditions>
+        <createIndex indexName="FK92683FC837F90559" tableName="svc_ctx" unique="false">
+            <column name="service_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-109">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="FKBAA40C846E4B3B1D"/>
+            </not>
+        </preConditions>
+        <createIndex indexName="FKBAA40C846E4B3B1D" tableName="svc_meta" unique="false">
+            <column name="service_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-110">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="FKBAA40C84A0A4D7DA"/>
+            </not>
+        </preConditions>
+        <createIndex indexName="FKBAA40C84A0A4D7DA" tableName="svc_meta" unique="false">
+            <column name="host_res_ctr_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-111">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="FKBAA40C84CDA25873"/>
+            </not>
+        </preConditions>
+        <createIndex indexName="FKBAA40C84CDA25873" tableName="svc_meta" unique="false">
+            <column name="service_desc_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-112">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="FKDC6E326869B169CE"/>
+            </not>
+        </preConditions>
+        <createIndex indexName="FKDC6E326869B169CE" tableName="svc_sem_meta" unique="false">
+            <column name="svc_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-113">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="FKDC6E3268E5A31CA1"/>
+            </not>
+        </preConditions>
+        <createIndex indexName="FKDC6E3268E5A31CA1" tableName="svc_sem_meta" unique="false">
+            <column name="sem_meta_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-114">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="svc_id"/>
+            </not>
+        </preConditions>
+        <createIndex indexName="svc_id" tableName="svc_sem_meta" unique="true">
+            <column name="svc_id"/>
+            <column name="sem_meta_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-115">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="FKA0D2FAC1BAC5C11C"/>
+            </not>
+        </preConditions>
+        <createIndex indexName="FKA0D2FAC1BAC5C11C" tableName="uml_assoc_edges" unique="false">
+            <column name="uml_class_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-116">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="FKE73378C9C0A5FE2F"/>
+            </not>
+        </preConditions>
+        <createIndex indexName="FKE73378C9C0A5FE2F" tableName="uml_assocs" unique="false">
+            <column name="target_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-117">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="FKE73378C9E0A02B6F"/>
+            </not>
+        </preConditions>
+        <createIndex indexName="FKE73378C9E0A02B6F" tableName="uml_assocs" unique="false">
+            <column name="source_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-118">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="FKBDA4B27C365009F5"/>
+            </not>
+        </preConditions>
+        <createIndex indexName="FKBDA4B27C365009F5" tableName="uml_attr" unique="false">
+            <column name="umlClass_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-119">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="FKBDA4B27C44712CF0"/>
+            </not>
+        </preConditions>
+        <createIndex indexName="FKBDA4B27C44712CF0" tableName="uml_attr" unique="false">
+            <column name="val_dom_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-120">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="FKCE61DCC4820F741"/>
+            </not>
+        </preConditions>
+        <createIndex indexName="FKCE61DCC4820F741" tableName="uml_attr_sem_meta" unique="false">
+            <column name="uml_attr_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-121">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="FKCE61DCCE5A31CA1"/>
+            </not>
+        </preConditions>
+        <createIndex indexName="FKCE61DCCE5A31CA1" tableName="uml_attr_sem_meta" unique="false">
+            <column name="sem_meta_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-122">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="uml_attr_id"/>
+            </not>
+        </preConditions>
+        <createIndex indexName="uml_attr_id" tableName="uml_attr_sem_meta" unique="true">
+            <column name="uml_attr_id"/>
+            <column name="sem_meta_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-123">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="FKF709E24D2FD1FD2E"/>
+            </not>
+        </preConditions>
+        <createIndex indexName="FKF709E24D2FD1FD2E" tableName="uml_class" unique="false">
+            <column name="super_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-124">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="FKF709E24D753F1F0B"/>
+            </not>
+        </preConditions>
+        <createIndex indexName="FKF709E24D753F1F0B" tableName="uml_class" unique="false">
+            <column name="model_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-125">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="FK80DB291B9797F42C"/>
+            </not>
+        </preConditions>
+        <createIndex indexName="FK80DB291B9797F42C" tableName="uml_class_sem_meta" unique="false">
+            <column name="uml_class_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-126">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="FK80DB291BE5A31CA1"/>
+            </not>
+        </preConditions>
+        <createIndex indexName="FK80DB291BE5A31CA1" tableName="uml_class_sem_meta" unique="false">
+            <column name="sem_meta_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-127">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="uml_class_id"/>
+            </not>
+        </preConditions>
+        <createIndex indexName="uml_class_id" tableName="uml_class_sem_meta" unique="true">
+            <column name="uml_class_id"/>
+            <column name="sem_meta_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-128">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="FKB3330A2444712CF0"/>
+            </not>
+        </preConditions>
+        <createIndex indexName="FKB3330A2444712CF0" tableName="val_dom_sem_meta" unique="false">
+            <column name="val_dom_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-129">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="FKB3330A24E5A31CA1"/>
+            </not>
+        </preConditions>
+        <createIndex indexName="FKB3330A24E5A31CA1" tableName="val_dom_sem_meta" unique="false">
+            <column name="sem_meta_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="20-130">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="val_dom_id"/>
+            </not>
+        </preConditions>
+        <createIndex indexName="val_dom_id" tableName="val_dom_sem_meta" unique="true">
+            <column name="val_dom_id"/>
+            <column name="sem_meta_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="20-final" author="kherm">
+        <tagDatabase tag="version_2.0"/>
+    </changeSet>
+
+
+</databaseChangeLog>

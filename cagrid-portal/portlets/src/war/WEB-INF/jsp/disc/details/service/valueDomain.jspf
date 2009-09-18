@@ -1,0 +1,12 @@
+<table class="detailstable">
+	<tbody>
+		<tr>
+			<td class="detailslabelcell">Long Name:</td>
+			<td><c:out value="${valueDomain.longName}"/></td>
+		</tr>
+		<tr>
+			<td class="detailslabelcell">Unit of Measure:</td>
+			<td><c:out value="${valueDomain.unitOfMeasure}"/></td>
+		</tr>
+	</tbody>
+</table>

@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+
+    <PARTICIPANTS ID="-2" EMAILADDRESS="email@email" NAME="participant1" />
+    <PARTICIPANTS ID="-1" />
+
+     <WORKSPACES ID="-1" ABBREVIATION="ws1" />
+    <WORKSPACES ID="-2" ABBREVIATION="ws2" />
+    <WORKSPACES ID="-3" ABBREVIATION="ws3" />
+
+    <PARTICIPATION ID="-1" PARTICIPANT_ID="-1" WORKSPACE_ID="-1" />
+    <PARTICIPATION ID="-2" PARTICIPANT_ID="-1" WORKSPACE_ID="-2" />
+    <PARTICIPATION ID="-3" PARTICIPANT_ID="-1" WORKSPACE_ID="-3" />
+    <PARTICIPATION ID="-4" PARTICIPANT_ID="-2" WORKSPACE_ID="-3" />
+
+
+
+
+
+</dataset>

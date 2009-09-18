@@ -1,0 +1,29 @@
+<project name="hibernate" default="compile">
+	
+	<property name="src.dir" value="src/java"/>
+	<property name="build.dest" value="build/classes"/>
+	<property environment="env"/>
+	
+	<path id="build.classpath">
+			<pathelement location="ext/lib/cagrid-xml.jar"/>
+			<fileset dir="lib">
+				<include name="*.jar"/>
+			</fileset>
+			<fileset dir="${env.GLOBUS_LOCATION}/lib">
+				<include name="*.jar"/>
+			</fileset>
+		</path>
+	
+	<target name="jar" depends="compile">
+		<jar destfile="build/cagrid-hibernate.jar" basedir="${build.dest}"/>
+	</target>
+		
+	<target name="compile">
+		<mkdir dir="${build.dest}"/>
+		<javac srcdir="${src.dir}" 
+			classpathref="build.classpath" 
+			includes="**" destdir="${build.dest}" 
+			debug="true" />
+	</target>
+	
+</project>
