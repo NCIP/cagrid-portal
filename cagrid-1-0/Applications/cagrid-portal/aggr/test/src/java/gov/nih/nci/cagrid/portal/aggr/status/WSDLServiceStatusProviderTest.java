@@ -10,7 +10,7 @@ import junit.framework.TestCase;
  */
 public class WSDLServiceStatusProviderTest extends TestCase {
 
-    private String _cagridservice = "http://cagrid-service.nci.nih.gov:8080/wsrf/services/cagrid/GlobalModelExchange";
+    private String _cagridservice = "http://cadsr-dataservice.nci.nih.gov:80/wsrf/services/cagrid/CaDSRDataService";
     private String _nonCagridService = "http://www.google.com";
 
 
