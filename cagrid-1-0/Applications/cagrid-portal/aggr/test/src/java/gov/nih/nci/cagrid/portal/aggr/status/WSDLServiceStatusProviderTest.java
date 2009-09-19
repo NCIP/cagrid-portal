@@ -21,6 +21,8 @@ public class WSDLServiceStatusProviderTest extends TestCase {
         assertEquals("Should not get wsdl from this url", ServiceStatus.INACTIVE, _provider.getStatus(_nonCagridService));
         assertEquals("Should get wsdl from URL", ServiceStatus.ACTIVE, _provider.getStatus(_cagridservice));
 
+        _provider.setTimeout(100000);
+
         assertEquals(ServiceStatus.INACTIVE, _provider.getStatus("http://wsdl"));
         assertEquals(ServiceStatus.INACTIVE, _provider.getStatus("http://"));
     }
