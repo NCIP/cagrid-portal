@@ -26,6 +26,7 @@
         <artifact name="applicationContext-db-aspects" conf="default" type="xml"/>
         <artifact name="applicationContext-db-run" conf="default" type="xml"/>
         <artifact name="applicationContext-db" conf="dao,default" type="xml"/>
+        <artifact name="applicationContext-service" conf="dao,default" type="xml"/>
         <artifact name="cagrid_portal-db-changelog" conf="default" type="xml"/>
         <artifact name="cagrid_portal-db-20-changelog" conf="default" type="xml"/>
     </publications>
