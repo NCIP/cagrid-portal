@@ -74,7 +74,8 @@
     	</copy>
     	<copy todir="${liferay.root.context.dir}/WEB-INF/classes/META-INF">
     		<fileset dir="${ext.authn.xml.dir}">
-    		      <include name="applicationContext-db.xml"/>
+    			<include name="applicationContext-db.xml"/>
+    			<include name="applicationContext-service.xml"/>
     		</fileset>    	
     	</copy>
 

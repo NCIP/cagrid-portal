@@ -3,10 +3,18 @@
 
 <beans>
 	
+	<bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="location"
+			value="classpath:cagridportal.properties" />
+	</bean>	
+	
 	<bean id="caGridPortalContext" class="gov.nih.nci.cagrid.portal.liferay.CaGridPortalContext">
 		<property name="configLocations">
 			<list>
 				<value>classpath:META-INF/applicationContext-db.xml</value>
+				<value>classpath:META-INF/applicationContext-service.xml</value>
+				<value>classpath:META-INF/applicationContext-security.xml</value>
 			</list>
 		</property>
 	</bean>
@@ -14,6 +22,9 @@
 	<bean id="com.liferay.portal.service.UserLocalService.impl"
           class="gov.nih.nci.cagrid.portal.liferay.CaGridPortalUserLocalServiceImpl">
 		<property name="caGridPortalContext" ref="caGridPortalContext"/>
+		<property name="ifsUrl" value="${cagrid.portal.ifsUrl}"/>
+        <property name="companyWebId" value="${cagrid.portal.liferay.companyWebId}"/>
+        <property name="omniUserEmail" value="${cagrid.portal.liferay.omniUserEmail}"/>
     </bean>
 	
 </beans>

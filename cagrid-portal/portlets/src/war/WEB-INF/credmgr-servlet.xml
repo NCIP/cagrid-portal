@@ -16,14 +16,16 @@ http://www.springframework.org/schema/util http://www.springframework.org/schema
     		</list>
     	</property>    
         <property name="mappings">
-            <value>
-                /credentials.html=credmgrController
-            </value>
+            <props>
+                <prop key="/credentials.html">credmgrController</prop>
+            </props>            
         </property>
+        
     </bean>
 
     <bean id="credmgrController"
           class="org.springframework.web.servlet.mvc.UrlFilenameViewController"/>
+
           
 	<bean id="viewResolver"
       class="org.springframework.web.servlet.view.UrlBasedViewResolver">

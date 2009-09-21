@@ -46,343 +46,359 @@ import java.util.UUID;
  */
 public class AuthnService {
 
-    private static final String EMAIL_EXP = "/*[local-name()='Assertion']/*[local-name()='AttributeStatement']/*[local-name()='Attribute' and @AttributeName='urn:mace:dir:attribute-def:mail']/*[local-name()='AttributeValue']/text()";
-    private static final String FIRST_NAME_EXP = "/*[local-name()='Assertion']/*[local-name()='AttributeStatement']/*[local-name()='Attribute' and @AttributeName='urn:mace:dir:attribute-def:givenName']/*[local-name()='AttributeValue']/text()";
-    private static final String LAST_NAME_EXP = "/*[local-name()='Assertion']/*[local-name()='AttributeStatement']/*[local-name()='Attribute' and @AttributeName='urn:mace:dir:attribute-def:sn']/*[local-name()='AttributeValue']/text()";
+	private static final String EMAIL_EXP = "/*[local-name()='Assertion']/*[local-name()='AttributeStatement']/*[local-name()='Attribute' and @AttributeName='urn:mace:dir:attribute-def:mail']/*[local-name()='AttributeValue']/text()";
+	private static final String FIRST_NAME_EXP = "/*[local-name()='Assertion']/*[local-name()='AttributeStatement']/*[local-name()='Attribute' and @AttributeName='urn:mace:dir:attribute-def:givenName']/*[local-name()='AttributeValue']/text()";
+	private static final String LAST_NAME_EXP = "/*[local-name()='Assertion']/*[local-name()='AttributeStatement']/*[local-name()='Attribute' and @AttributeName='urn:mace:dir:attribute-def:sn']/*[local-name()='AttributeValue']/text()";
 
-    private EncryptionService encryptionService;
-    private AuthnTicketDao authnTicketDao;
-    private PortalUserDao portalUserDao;
-    private PersonDao personDao;
-    private int proxyLifetimeHours = 12;
-    private int proxyLifetimeMinutes = 0;
-    private int proxyLifetimeSeconds = 0;
-    private int delegationPathLength = 0;
-    private long timeout = 10000L;
-    private long ticketLifetime = 10000L;
+	private EncryptionService encryptionService;
+	private AuthnTicketDao authnTicketDao;
+	private PortalUserDao portalUserDao;
+	private PersonDao personDao;
+	private int proxyLifetimeHours = 12;
+	private int proxyLifetimeMinutes = 0;
+	private int proxyLifetimeSeconds = 0;
+	private int delegationPathLength = 0;
+	private long timeout = 10000L;
+	private long ticketLifetime = 10000L;
 
-    /**
+	/**
      *
      */
-    public AuthnService() {
+	public AuthnService() {
 
-    }
+	}
 
-    public AuthnTicket authenticate(String username, String password,
-                                    String idpUrl, String ifsUrl) throws AuthnServiceException,
-            InvalidCredentialFault, AuthnTimeoutException {
+	public IdPAuthnInfo authenticateToIdP(String username, String password,
+			String idpUrl) throws AuthnServiceException,
+			InvalidCredentialFault, AuthnTimeoutException {
 
-        BasicAuthenticationCredential bac = new BasicAuthenticationCredential();
-        bac.setUserId(username);
-        bac.setPassword(password);
-        Credential credential = new Credential();
-        credential.setBasicAuthenticationCredential(bac);
-        AuthenticationServiceClient idpClient;
-        try {
-            idpClient = new AuthenticationServiceClient(idpUrl);
-        } catch (Exception ex) {
-            throw new AuthnServiceException(
-                    "Error instantiating AuthenticationServiceClient: "
-                            + ex.getMessage(), ex);
-        }
+		BasicAuthenticationCredential bac = new BasicAuthenticationCredential();
+		bac.setUserId(username);
+		bac.setPassword(password);
+		Credential credential = new Credential();
+		credential.setBasicAuthenticationCredential(bac);
+		AuthenticationServiceClient idpClient;
+		try {
+			idpClient = new AuthenticationServiceClient(idpUrl);
+		} catch (Exception ex) {
+			throw new AuthnServiceException(
+					"Error instantiating AuthenticationServiceClient: "
+							+ ex.getMessage(), ex);
+		}
 
-        GetSAMLThread getSaml = new GetSAMLThread(idpClient, credential);
-        getSaml.start();
-        try {
-            getSaml.join(getTimeout());
-        } catch (Exception ex) {
+		GetSAMLThread getSaml = new GetSAMLThread(idpClient, credential);
+		getSaml.start();
+		try {
+			getSaml.join(getTimeout());
+		} catch (Exception ex) {
 
-        }
-        if (getSaml.ex != null) {
-            if (getSaml.ex instanceof InvalidCredentialFault) {
-                throw (InvalidCredentialFault) getSaml.ex;
-            } else if (getSaml.ex instanceof InsufficientAttributeFault) {
-                throw new AuthnServiceException(
-                        ((InsufficientAttributeFault) getSaml.ex)
-                                .getFaultString(), getSaml.ex);
-            } else if (getSaml.ex instanceof AuthenticationProviderFault) {
-                throw new AuthnServiceException(
-                        ((AuthenticationProviderFault) getSaml.ex)
-                                .getFaultString(), getSaml.ex);
-            } else {
-                throw new AuthnServiceException("Error getting SAML: "
-                        + getSaml.ex.getMessage(), getSaml.ex);
-            }
-        }
-        if (!getSaml.finished) {
-            throw new AuthnTimeoutException(
-                    "Authentication with IDP timed out.");
-        }
+		}
+		if (getSaml.ex != null) {
+			if (getSaml.ex instanceof InvalidCredentialFault) {
+				throw (InvalidCredentialFault) getSaml.ex;
+			} else if (getSaml.ex instanceof InsufficientAttributeFault) {
+				throw new AuthnServiceException(
+						((InsufficientAttributeFault) getSaml.ex)
+								.getFaultString(), getSaml.ex);
+			} else if (getSaml.ex instanceof AuthenticationProviderFault) {
+				throw new AuthnServiceException(
+						((AuthenticationProviderFault) getSaml.ex)
+								.getFaultString(), getSaml.ex);
+			} else {
+				throw new AuthnServiceException("Error getting SAML: "
+						+ getSaml.ex.getMessage(), getSaml.ex);
+			}
+		}
+		if (!getSaml.finished) {
+			throw new AuthnTimeoutException(
+					"Authentication with IDP timed out.");
+		}
 
-        String email = null;
-        String firstName = null;
-        String lastName = null;
-        try {
-            DocumentBuilder builder = DocumentBuilderFactory.newInstance()
-                    .newDocumentBuilder();
-            Document doc = builder.parse(new ByteArrayInputStream(getSaml.saml
-                    .getXml().getBytes()));
-            XPath xpathEngine = XPathFactory.newInstance().newXPath();
-            email = (String) xpathEngine.evaluate(EMAIL_EXP, doc,
-                    XPathConstants.STRING);
-            firstName = (String) xpathEngine.evaluate(FIRST_NAME_EXP, doc,
-                    XPathConstants.STRING);
-            lastName = (String) xpathEngine.evaluate(LAST_NAME_EXP, doc,
-                    XPathConstants.STRING);
-        } catch (Exception ex) {
-            throw new AuthnServiceException(
-                    "Error getting user information from SAML: "
-                            + ex.getMessage(), ex);
-        }
+		String email = null;
+		String firstName = null;
+		String lastName = null;
+		try {
+			DocumentBuilder builder = DocumentBuilderFactory.newInstance()
+					.newDocumentBuilder();
+			Document doc = builder.parse(new ByteArrayInputStream(getSaml.saml
+					.getXml().getBytes()));
+			XPath xpathEngine = XPathFactory.newInstance().newXPath();
+			email = (String) xpathEngine.evaluate(EMAIL_EXP, doc,
+					XPathConstants.STRING);
+			firstName = (String) xpathEngine.evaluate(FIRST_NAME_EXP, doc,
+					XPathConstants.STRING);
+			lastName = (String) xpathEngine.evaluate(LAST_NAME_EXP, doc,
+					XPathConstants.STRING);
+		} catch (Exception ex) {
+			throw new AuthnServiceException(
+					"Error getting user information from SAML: "
+							+ ex.getMessage(), ex);
+		}
 
-        GlobusCredential cred = null;
+		return new IdPAuthnInfo(username, email, firstName, lastName,
+				getSaml.saml.getXml());
+	}
 
-        ProxyLifetime lifetime = new ProxyLifetime();
-        lifetime.setHours(getProxyLifetimeHours());
-        lifetime.setMinutes(getProxyLifetimeMinutes());
-        lifetime.setSeconds(getProxyLifetimeSeconds());
+	public GlobusCredential authenticateToIFS(String ifsUrl, String saml)
+			throws AuthnServiceException, AuthnTimeoutException {
+		GlobusCredential cred = null;
 
-        DorianClient ifsClient = null;
-        try {
-            ifsClient = new DorianClient(ifsUrl);
-        } catch (Exception ex) {
-            throw new AuthnServiceException(
-                    "Error instantiating DorianClient: " + ex.getMessage(), ex);
-        }
-        KeyPair pair = null;
-        PublicKey key = null;
-        try {
-            pair = KeyUtil.generateRSAKeyPair512();
-            key = new PublicKey(KeyUtil.writePublicKey(pair.getPublic()));
-        } catch (Exception ex) {
-            throw new AuthnServiceException("Error generating key pair: "
-                    + ex.getMessage(), ex);
-        }
+		ProxyLifetime lifetime = new ProxyLifetime();
+		lifetime.setHours(getProxyLifetimeHours());
+		lifetime.setMinutes(getProxyLifetimeMinutes());
+		lifetime.setSeconds(getProxyLifetimeSeconds());
 
-        gov.nih.nci.cagrid.dorian.bean.SAMLAssertion saml2 = null;
-        try {
-            saml2 = new gov.nih.nci.cagrid.dorian.bean.SAMLAssertion(
-                    getSaml.saml.getXml());
-        } catch (Exception ex) {
-            throw new AuthnServiceException("Error parsing SAMLAssertion: "
-                    + ex.getMessage(), ex);
-        }
+		DorianClient ifsClient = null;
+		try {
+			ifsClient = new DorianClient(ifsUrl);
+		} catch (Exception ex) {
+			throw new AuthnServiceException(
+					"Error instantiating DorianClient: " + ex.getMessage(), ex);
+		}
+		KeyPair pair = null;
+		PublicKey key = null;
+		try {
+			pair = KeyUtil.generateRSAKeyPair512();
+			key = new PublicKey(KeyUtil.writePublicKey(pair.getPublic()));
+		} catch (Exception ex) {
+			throw new AuthnServiceException("Error generating key pair: "
+					+ ex.getMessage(), ex);
+		}
 
-        GetCertsThread getCerts = new GetCertsThread(ifsClient, saml2, key,
-                lifetime, new DelegationPathLength(getDelegationPathLength()));
-        getCerts.start();
-        try {
-            getCerts.join(getTimeout());
-        } catch (Exception ex) {
+		gov.nih.nci.cagrid.dorian.bean.SAMLAssertion saml2 = null;
+		try {
+			saml2 = new gov.nih.nci.cagrid.dorian.bean.SAMLAssertion(saml);
+		} catch (Exception ex) {
+			throw new AuthnServiceException("Error parsing SAMLAssertion: "
+					+ ex.getMessage(), ex);
+		}
 
-        }
+		GetCertsThread getCerts = new GetCertsThread(ifsClient, saml2, key,
+				lifetime, new DelegationPathLength(getDelegationPathLength()));
+		getCerts.start();
+		try {
+			getCerts.join(getTimeout());
+		} catch (Exception ex) {
 
-        if (getCerts.ex != null) {
-            String msg = null;
-            if (getCerts.ex instanceof InvalidAssertionFault) {
-                msg = ((InvalidAssertionFault) getCerts.ex).getFaultString();
-            } else if (getCerts.ex instanceof InvalidProxyFault) {
-                msg = ((InvalidProxyFault) getCerts.ex).getFaultString();
-            } else if (getCerts.ex instanceof UserPolicyFault) {
-                msg = ((UserPolicyFault) getCerts.ex).getFaultString();
-            } else if (getCerts.ex instanceof PermissionDeniedFault) {
-                msg = ((PermissionDeniedFault) getCerts.ex).getFaultString();
-            } else {
-                msg = getCerts.ex.getMessage();
-            }
-            throw new AuthnServiceException("Error authenticating to IFS: "
-                    + msg, getCerts.ex);
-        }
+		}
 
-        if (!getCerts.finished) {
-            throw new AuthnTimeoutException(
-                    "Authentication with IFS timed out.");
-        }
+		if (getCerts.ex != null) {
+			String msg = null;
+			if (getCerts.ex instanceof InvalidAssertionFault) {
+				msg = ((InvalidAssertionFault) getCerts.ex).getFaultString();
+			} else if (getCerts.ex instanceof InvalidProxyFault) {
+				msg = ((InvalidProxyFault) getCerts.ex).getFaultString();
+			} else if (getCerts.ex instanceof UserPolicyFault) {
+				msg = ((UserPolicyFault) getCerts.ex).getFaultString();
+			} else if (getCerts.ex instanceof PermissionDeniedFault) {
+				msg = ((PermissionDeniedFault) getCerts.ex).getFaultString();
+			} else {
+				msg = getCerts.ex.getMessage();
+			}
+			throw new AuthnServiceException("Error authenticating to IFS: "
+					+ msg, getCerts.ex);
+		}
 
-        X509Certificate[] certs = new X509Certificate[getCerts.certs.length];
-        for (int i = 0; i < getCerts.certs.length; i++) {
-            try {
-                certs[i] = CertUtil.loadCertificate(getCerts.certs[i]
-                        .getCertificateAsString());
-            } catch (Exception ex) {
-                throw new AuthnServiceException("Error loading certificate: "
-                        + ex.getMessage(), ex);
-            }
-        }
+		if (!getCerts.finished) {
+			throw new AuthnTimeoutException(
+					"Authentication with IFS timed out.");
+		}
 
-        try {
-            cred = new GlobusCredential(pair.getPrivate(), certs);
-        } catch (Exception ex) {
-            throw new AuthnServiceException(
-                    "Error instantiating GlobusCredential: " + ex.getMessage(),
-                    ex);
-        }
+		X509Certificate[] certs = new X509Certificate[getCerts.certs.length];
+		for (int i = 0; i < getCerts.certs.length; i++) {
+			try {
+				certs[i] = CertUtil.loadCertificate(getCerts.certs[i]
+						.getCertificateAsString());
+			} catch (Exception ex) {
+				throw new AuthnServiceException("Error loading certificate: "
+						+ ex.getMessage(), ex);
+			}
+		}
 
-        PortalUser user = getPortalUser(cred.getIdentity(), email, firstName,
-                lastName, ProxyUtil.getProxyString(cred));
+		try {
+			cred = new GlobusCredential(pair.getPrivate(), certs);
+		} catch (Exception ex) {
+			throw new AuthnServiceException(
+					"Error instantiating GlobusCredential: " + ex.getMessage(),
+					ex);
+		}
+		return cred;
+	}
 
-        AuthnTicket ticket = new AuthnTicket();
-        ticket.setPortalUser(user);
-        ticket.setNotAfter(new Date((new Date()).getTime()
-                + getTicketLifetime()));
-        ticket.setTicket(UUID.randomUUID().toString());
-        getAuthnTicketDao().save(ticket);
+	public AuthnTicket authenticate(String username, String password,
+			String idpUrl, String ifsUrl) throws AuthnServiceException,
+			InvalidCredentialFault, AuthnTimeoutException {
 
-        return ticket;
-    }
+		IdPAuthnInfo authnInfo = authenticateToIdP(username, password, idpUrl);
 
-    protected PortalUser getPortalUser(String gridIdentity, String email,
-                                       String firstName, String lastName, String proxyStr) {
-        PortalUser portalUser = new PortalUser();
-        portalUser.setGridIdentity(gridIdentity);
-        portalUser = getPortalUserDao().getByExample(portalUser);
-        if (portalUser == null) {
-            portalUser = new PortalUser();
-            portalUser.setGridIdentity(gridIdentity);
-            Person person = new Person();
-            person.setEmailAddress(email);
-            person.setFirstName(firstName);
-            person.setLastName(lastName);
-            getPersonDao().save(person);
-            portalUser.setPerson(person);
-        }
-        portalUser.setGridCredential(getEncryptionService().encrypt(proxyStr));
-        getPortalUserDao().save(portalUser);
-        return portalUser;
-    }
+		GlobusCredential cred = authenticateToIFS(ifsUrl, authnInfo.getSaml());
 
-    private static class GetSAMLThread extends Thread {
-        private AuthenticationServiceClient client;
-        private Credential credential;
-        SAMLAssertion saml;
-        Exception ex;
-        boolean finished;
+		PortalUser user = getPortalUser(cred.getIdentity(), authnInfo
+				.getEmail(), authnInfo.getFirstName(), authnInfo.getLastName(),
+				ProxyUtil.getProxyString(cred));
 
-        GetSAMLThread(AuthenticationServiceClient client, Credential credential) {
-            this.client = client;
-            this.credential = credential;
-        }
+		AuthnTicket ticket = new AuthnTicket();
+		ticket.setPortalUser(user);
+		ticket.setNotAfter(new Date((new Date()).getTime()
+				+ getTicketLifetime()));
+		ticket.setTicket(UUID.randomUUID().toString());
+		getAuthnTicketDao().save(ticket);
 
-        public void run() {
-            try {
-                this.saml = this.client.authenticate(this.credential);
-                this.finished = true;
-            } catch (Exception ex) {
-                this.ex = ex;
-            }
-        }
-    }
+		return ticket;
+	}
 
-    private static class GetCertsThread extends Thread {
-        private DorianClient client;
-        private gov.nih.nci.cagrid.dorian.bean.SAMLAssertion saml;
-        private PublicKey key;
-        private ProxyLifetime lifetime;
-        private DelegationPathLength delegationPathLength;
-        Exception ex;
-        gov.nih.nci.cagrid.dorian.bean.X509Certificate[] certs;
-        boolean finished;
+	protected PortalUser getPortalUser(String gridIdentity, String email,
+			String firstName, String lastName, String proxyStr) {
+		PortalUser portalUser = new PortalUser();
+		portalUser.setGridIdentity(gridIdentity);
+		portalUser = getPortalUserDao().getByExample(portalUser);
+		if (portalUser == null) {
+			portalUser = new PortalUser();
+			portalUser.setGridIdentity(gridIdentity);
+			Person person = new Person();
+			person.setEmailAddress(email);
+			person.setFirstName(firstName);
+			person.setLastName(lastName);
+			getPersonDao().save(person);
+			portalUser.setPerson(person);
+		}
+		portalUser.setGridCredential(getEncryptionService().encrypt(proxyStr));
+		getPortalUserDao().save(portalUser);
+		return portalUser;
+	}
 
-        GetCertsThread(DorianClient client,
-                       gov.nih.nci.cagrid.dorian.bean.SAMLAssertion saml,
-                       PublicKey key, ProxyLifetime lifetime,
-                       DelegationPathLength delegationPathLength) {
-            this.client = client;
-            this.saml = saml;
-            this.key = key;
-            this.lifetime = lifetime;
-            this.delegationPathLength = delegationPathLength;
-        }
+	private static class GetSAMLThread extends Thread {
+		private AuthenticationServiceClient client;
+		private Credential credential;
+		SAMLAssertion saml;
+		Exception ex;
+		boolean finished;
 
-        public void run() {
-            try {
-                this.certs = this.client.createProxy(this.saml, this.key,
-                        this.lifetime, this.delegationPathLength);
-                this.finished = true;
-            } catch (Exception ex) {
-                this.ex = ex;
-            }
-        }
-    }
+		GetSAMLThread(AuthenticationServiceClient client, Credential credential) {
+			this.client = client;
+			this.credential = credential;
+		}
 
-    public AuthnTicketDao getAuthnTicketDao() {
-        return authnTicketDao;
-    }
+		public void run() {
+			try {
+				this.saml = this.client.authenticate(this.credential);
+				this.finished = true;
+			} catch (Exception ex) {
+				this.ex = ex;
+			}
+		}
+	}
 
-    public void setAuthnTicketDao(AuthnTicketDao authnTicketDao) {
-        this.authnTicketDao = authnTicketDao;
-    }
+	private static class GetCertsThread extends Thread {
+		private DorianClient client;
+		private gov.nih.nci.cagrid.dorian.bean.SAMLAssertion saml;
+		private PublicKey key;
+		private ProxyLifetime lifetime;
+		private DelegationPathLength delegationPathLength;
+		Exception ex;
+		gov.nih.nci.cagrid.dorian.bean.X509Certificate[] certs;
+		boolean finished;
 
-    public PortalUserDao getPortalUserDao() {
-        return portalUserDao;
-    }
+		GetCertsThread(DorianClient client,
+				gov.nih.nci.cagrid.dorian.bean.SAMLAssertion saml,
+				PublicKey key, ProxyLifetime lifetime,
+				DelegationPathLength delegationPathLength) {
+			this.client = client;
+			this.saml = saml;
+			this.key = key;
+			this.lifetime = lifetime;
+			this.delegationPathLength = delegationPathLength;
+		}
 
-    public void setPortalUserDao(PortalUserDao portalUserDao) {
-        this.portalUserDao = portalUserDao;
-    }
+		public void run() {
+			try {
+				this.certs = this.client.createProxy(this.saml, this.key,
+						this.lifetime, this.delegationPathLength);
+				this.finished = true;
+			} catch (Exception ex) {
+				this.ex = ex;
+			}
+		}
+	}
 
-    public PersonDao getPersonDao() {
-        return personDao;
-    }
+	public AuthnTicketDao getAuthnTicketDao() {
+		return authnTicketDao;
+	}
 
-    public void setPersonDao(PersonDao personDao) {
-        this.personDao = personDao;
-    }
+	public void setAuthnTicketDao(AuthnTicketDao authnTicketDao) {
+		this.authnTicketDao = authnTicketDao;
+	}
 
-    public int getProxyLifetimeHours() {
-        return proxyLifetimeHours;
-    }
+	public PortalUserDao getPortalUserDao() {
+		return portalUserDao;
+	}
 
-    public void setProxyLifetimeHours(int proxyLifetimeHours) {
-        this.proxyLifetimeHours = proxyLifetimeHours;
-    }
+	public void setPortalUserDao(PortalUserDao portalUserDao) {
+		this.portalUserDao = portalUserDao;
+	}
 
-    public int getProxyLifetimeMinutes() {
-        return proxyLifetimeMinutes;
-    }
+	public PersonDao getPersonDao() {
+		return personDao;
+	}
 
-    public void setProxyLifetimeMinutes(int proxyLifetimeMinutes) {
-        this.proxyLifetimeMinutes = proxyLifetimeMinutes;
-    }
+	public void setPersonDao(PersonDao personDao) {
+		this.personDao = personDao;
+	}
 
-    public int getProxyLifetimeSeconds() {
-        return proxyLifetimeSeconds;
-    }
+	public int getProxyLifetimeHours() {
+		return proxyLifetimeHours;
+	}
 
-    public void setProxyLifetimeSeconds(int proxyLifetimeSeconds) {
-        this.proxyLifetimeSeconds = proxyLifetimeSeconds;
-    }
+	public void setProxyLifetimeHours(int proxyLifetimeHours) {
+		this.proxyLifetimeHours = proxyLifetimeHours;
+	}
 
-    public int getDelegationPathLength() {
-        return delegationPathLength;
-    }
+	public int getProxyLifetimeMinutes() {
+		return proxyLifetimeMinutes;
+	}
 
-    public void setDelegationPathLength(int delegationPathLength) {
-        this.delegationPathLength = delegationPathLength;
-    }
+	public void setProxyLifetimeMinutes(int proxyLifetimeMinutes) {
+		this.proxyLifetimeMinutes = proxyLifetimeMinutes;
+	}
 
-    public long getTimeout() {
-        return timeout;
-    }
+	public int getProxyLifetimeSeconds() {
+		return proxyLifetimeSeconds;
+	}
 
-    public void setTimeout(long timeout) {
-        this.timeout = timeout;
-    }
+	public void setProxyLifetimeSeconds(int proxyLifetimeSeconds) {
+		this.proxyLifetimeSeconds = proxyLifetimeSeconds;
+	}
 
-    public long getTicketLifetime() {
-        return ticketLifetime;
-    }
+	public int getDelegationPathLength() {
+		return delegationPathLength;
+	}
 
-    public void setTicketLifetime(long ticketLifetime) {
-        this.ticketLifetime = ticketLifetime;
-    }
+	public void setDelegationPathLength(int delegationPathLength) {
+		this.delegationPathLength = delegationPathLength;
+	}
 
-    public EncryptionService getEncryptionService() {
-        return encryptionService;
-    }
+	public long getTimeout() {
+		return timeout;
+	}
 
-    public void setEncryptionService(EncryptionService encryptionService) {
-        this.encryptionService = encryptionService;
-    }
+	public void setTimeout(long timeout) {
+		this.timeout = timeout;
+	}
+
+	public long getTicketLifetime() {
+		return ticketLifetime;
+	}
+
+	public void setTicketLifetime(long ticketLifetime) {
+		this.ticketLifetime = ticketLifetime;
+	}
+
+	public EncryptionService getEncryptionService() {
+		return encryptionService;
+	}
+
+	public void setEncryptionService(EncryptionService encryptionService) {
+		this.encryptionService = encryptionService;
+	}
 
 }

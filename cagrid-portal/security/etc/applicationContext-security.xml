@@ -19,7 +19,7 @@
 	</bean>
 	
 	<bean id="encryptionServicePrototype" class="gov.nih.nci.cagrid.portal.security.EncryptionService" scope="prototype">
-		<constructor-arg value="${cagrid.portal.security.encryption.key}"/>
+		<constructor-arg value="${cagrid.portal.security.encryption.key}"/> 
 	</bean>
 	
 </beans>

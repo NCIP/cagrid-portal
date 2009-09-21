@@ -34,6 +34,10 @@
                     transitive="false"/>
         <dependency rev="${cagrid.integration.version}" org="caGrid" name="websso-client-common" conf="authn->default"
                     transitive="false"/>
+    	<dependency rev="${cagrid.integration.version}" org="caGrid" name="authentication-service" conf="authn->client"/>
+    	<dependency rev="${cagrid.integration.version}" org="caGrid" name="dorian" conf="authn->client"/>
+    	<dependency rev="4.0.3" org="globus" name="globus" conf="authn->default"/>
+    	
 
         <dependency rev="1.0.4" org="acegisecurity" name="acegisecurity" conf="authn->*"/>
         <dependency rev="4.0.3" org="globus" name="globus" conf="ext->crypto"/>

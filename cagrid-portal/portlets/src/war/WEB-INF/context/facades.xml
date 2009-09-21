@@ -91,8 +91,8 @@
     </bean>
     
     <bean id="credentialManagerFacade" class="gov.nih.nci.cagrid.portal.portlet.credmgr.CredentialManagerFacade">
-        <property name="authenticationHelper">
-        	<bean class="gov.nih.nci.cagrid.portal.security.AuthenticationHelper"/>
+        <property name="authnService">
+        	<bean class="gov.nih.nci.cagrid.portal.security.AuthnService"/>
         </property>
         <property name="ifsUrl" value="${cagrid.portal.ifsUrl}"/>
 		<property name="encryptionService" ref="encryptionServicePrototype"/>

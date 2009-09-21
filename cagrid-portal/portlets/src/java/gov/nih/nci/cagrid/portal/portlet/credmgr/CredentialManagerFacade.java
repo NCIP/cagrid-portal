@@ -4,13 +4,15 @@
 package gov.nih.nci.cagrid.portal.portlet.credmgr;
 
 import gov.nih.nci.cagrid.authentication.stubs.types.InvalidCredentialFault;
+import gov.nih.nci.cagrid.portal.dao.PortalUserDao;
 import gov.nih.nci.cagrid.portal.domain.IdPAuthentication;
 import gov.nih.nci.cagrid.portal.domain.IdentityProvider;
 import gov.nih.nci.cagrid.portal.domain.PortalUser;
-import gov.nih.nci.cagrid.portal.security.AuthenticationHelper;
+import gov.nih.nci.cagrid.portal.security.AuthnService;
 import gov.nih.nci.cagrid.portal.security.AuthnServiceException;
 import gov.nih.nci.cagrid.portal.security.AuthnTimeoutException;
 import gov.nih.nci.cagrid.portal.security.EncryptionService;
+import gov.nih.nci.cagrid.portal.security.IdPAuthnInfo;
 import gov.nih.nci.cagrid.portal.security.ProxyUtil;
 
 import java.io.ByteArrayInputStream;
@@ -20,9 +22,15 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.xml.namespace.QName;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.cagrid.gaards.authentication.client.AuthenticationClient;
+import org.cagrid.gaards.dorian.client.GridUserClient;
+import org.cagrid.gaards.dorian.federation.TrustedIdentityProvider;
 import org.globus.gsi.GlobusCredential;
+import org.globus.wsrf.impl.security.authorization.IdentityAuthorization;
 import org.springframework.orm.hibernate3.HibernateTemplate;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,10 +44,13 @@ public class CredentialManagerFacade {
 	private static final Log logger = LogFactory
 			.getLog(CredentialManagerFacade.class);
 
+	private static final String BASIC_AUTH_PROFILE = "{http://gaards.cagrid.org/authentication}BasicAuthentication";
+
 	private HibernateTemplate hibernateTemplate;
 	private String ifsUrl;
-	private AuthenticationHelper authenticationHelper;
+	private AuthnService authnService;
 	private EncryptionService encryptionService;
+	private PortalUserDao portalUserDao;
 
 	/**
 	 * 
@@ -62,10 +73,10 @@ public class CredentialManagerFacade {
 						new ByteArrayInputStream(credStr.getBytes()));
 				Date validUntil = new Date(System.currentTimeMillis()
 						+ globusCred.getTimeLeft());
-				CredentialBean credBean = new CredentialBean(idpAuth.getIdentity(),
-						validUntil, new IdPBean(idpAuth.getIdentityProvider()
-								.getLabel(), idpAuth.getIdentityProvider()
-								.getUrl()));
+				CredentialBean credBean = new CredentialBean(idpAuth
+						.getIdentity(), validUntil, new IdPBean(idpAuth
+						.getIdentityProvider().getLabel(), idpAuth
+						.getIdentityProvider().getUrl()));
 				credBean.setDefaultCredential(idpAuth.isDefault());
 				credentials.add(credBean);
 			}
@@ -110,6 +121,55 @@ public class CredentialManagerFacade {
 			logger.error(msg, ex);
 			throw new RuntimeException(msg, ex);
 		}
+		return idpBeans;
+	}
+
+	public List<IdPBean> listIdPsFromDorian() {
+
+		List<IdPBean> idpBeans = new ArrayList<IdPBean>();
+
+		try {
+			GridUserClient guc = new GridUserClient(getIfsUrl());
+			List<TrustedIdentityProvider> idps = guc
+					.getTrustedIdentityProviders();
+			for (TrustedIdentityProvider idp : idps) {
+				String idpUrl = idp.getAuthenticationServiceURL();
+
+				try {
+					AuthenticationClient ac = new AuthenticationClient(idpUrl);
+					String idpIdent = idp.getAuthenticationServiceIdentity();
+					if (idpIdent != null && idpIdent.trim().length() > 0) {
+						ac
+								.setAuthorization(new IdentityAuthorization(
+										idpIdent));
+					}
+					try {
+						for (QName profileQName : ac
+								.getSupportedAuthenticationProfiles()) {
+							if (profileQName.equals(BASIC_AUTH_PROFILE)) {
+								IdPBean bean = new IdPBean(
+										idp.getDisplayName(), idpUrl);
+								idpBeans.add(bean);
+							}
+						}
+					} catch (Exception ex) {
+						String msg = "Couldn't get profiles for: " + idpUrl
+								+ "\n" + ex.getMessage();
+						logger.warn(msg, ex);
+					}
+				} catch (Exception ex) {
+					String msg = "Error connecting to " + idpUrl + ": "
+							+ ex.getMessage();
+					logger.warn(msg, ex);
+				}
+			}
+		} catch (Exception ex) {
+			logger.error("Error getting identity provider list: "
+					+ ex.getMessage(), ex);
+			throw new RuntimeException("Error getting identity provider list.",
+					ex);
+		}
+
 		return idpBeans;
 	}
 
@@ -224,9 +284,15 @@ public class CredentialManagerFacade {
 
 				GlobusCredential globusCred = null;
 				try {
-					globusCred = getAuthenticationHelper().authenticate(
-							username, password, url, getIfsUrl(),
-							proxyLifetimeHours, delegationPathLength);
+					// globusCred = getAuthenticationHelper().authenticate(
+					// username, password, url, getIfsUrl(),
+					// proxyLifetimeHours, delegationPathLength);
+
+					IdPAuthnInfo authnInfo = getAuthnService()
+							.authenticateToIdP(username, password, url);
+					globusCred = getAuthnService().authenticateToIFS(
+							getIfsUrl(), authnInfo.getSaml());
+
 				} catch (InvalidCredentialFault e) {
 					throw new RuntimeException("Invalid credentials: "
 							+ e.getMessage());
@@ -304,6 +370,7 @@ public class CredentialManagerFacade {
 		return message;
 	}
 
+	//TODO: replace with call to UserService
 	public String setDefaultCredential(String userId, String identity) {
 		String message = "Successfully set " + identity + " to default.";
 		logger.debug("Setting default credential for user: " + userId);
@@ -359,6 +426,14 @@ public class CredentialManagerFacade {
 		}
 		return message;
 	}
+	
+	public String getGridIdentity(String portalUserId){
+		PortalUser portalUser = getPortalUserDao().getByPortalId(portalUserId);
+		if(portalUser == null){
+			throw new RuntimeException("No portal user found for " + portalUserId);
+		}
+		return portalUser.getGridIdentity();
+	}
 
 	public HibernateTemplate getHibernateTemplate() {
 		return hibernateTemplate;
@@ -376,21 +451,28 @@ public class CredentialManagerFacade {
 		this.ifsUrl = ifsUrl;
 	}
 
-	public AuthenticationHelper getAuthenticationHelper() {
-		return authenticationHelper;
-	}
-
-	public void setAuthenticationHelper(
-			AuthenticationHelper authenticationHelper) {
-		this.authenticationHelper = authenticationHelper;
-	}
-
 	public EncryptionService getEncryptionService() {
 		return encryptionService;
 	}
 
 	public void setEncryptionService(EncryptionService encryptionService) {
 		this.encryptionService = encryptionService;
+	}
+
+	public AuthnService getAuthnService() {
+		return authnService;
+	}
+
+	public void setAuthnService(AuthnService authnService) {
+		this.authnService = authnService;
+	}
+
+	public PortalUserDao getPortalUserDao() {
+		return portalUserDao;
+	}
+
+	public void setPortalUserDao(PortalUserDao portalUserDao) {
+		this.portalUserDao = portalUserDao;
 	}
 
 }
