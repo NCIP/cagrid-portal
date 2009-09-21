@@ -158,7 +158,7 @@
         <mkdir dir="${build.jar.dir}"/>
         <jar basedir="${build.classes.dir}"
              destfile="${build.jar.dir}/caGrid-portal-db-dao.jar"
-             includes="**/dao/**/*.class"/>
+             includes="**/dao/**/*.class **/portal/service/**/*.class"/>
         <jar destfile="${build.jar.dir}/caGrid-portal-db-domain.jar">
             <fileset dir="${build.classes.dir}">
                 <include name="*.properties"/>
