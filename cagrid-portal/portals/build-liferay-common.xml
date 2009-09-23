@@ -72,12 +72,6 @@
     	        <include name="**/*"/>
     	    </fileset>
     	</copy>
-    	<copy todir="${liferay.root.context.dir}/WEB-INF/classes/META-INF">
-    		<fileset dir="${ext.authn.xml.dir}">
-    			<include name="applicationContext-db.xml"/>
-    			<include name="applicationContext-service.xml"/>
-    		</fileset>    	
-    	</copy>
 
         <antcall target="copy-properties">
             <param name="target.dir" value="${liferay.root.context.dir}/WEB-INF/classes"/>

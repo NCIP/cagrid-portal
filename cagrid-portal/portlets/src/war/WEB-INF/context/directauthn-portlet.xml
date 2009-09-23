@@ -20,10 +20,6 @@
 	
 	<bean class="org.springframework.beans.factory.annotation.RequiredAnnotationBeanPostProcessor"/>
 
-	<bean id="authnService" class="gov.nih.nci.cagrid.portal.security.AuthnService" autowire="byName">
-		<property name="encryptionService" ref="encryptionServicePrototype"/>
-	</bean>
-	
 	<bean 
 		id="viewLoginController"
 		class="gov.nih.nci.cagrid.portal.portlet.authn.ViewDirectLoginController"

@@ -18,7 +18,7 @@
     <bean id="liquibase" class="gov.nih.nci.cagrid.portal.util.DBUpdater">
         <property name="enable" value="${cagrid.portal.autorun.db.updater}"/>
         <property name="dataSource" ref="dataSource"/>
-        <property name="changeLog" value="cagrid_portal-db-changelog.xml"/>
+        <property name="changeLog" value="classpath:cagrid_portal-db-changelog.xml"/>
         <property name="contexts" value="production"/>
     </bean>
 

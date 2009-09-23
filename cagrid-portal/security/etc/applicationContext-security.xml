@@ -17,7 +17,12 @@
 		<property name="location"
 			value="classpath:cagridportal.properties" />
 	</bean>
-	
+
+
+    <bean id="authnService" class="gov.nih.nci.cagrid.portal.security.AuthnService" autowire="byName">
+        <property name="encryptionService" ref="encryptionServicePrototype"/>
+    </bean>
+	    
 	<bean id="encryptionServicePrototype" class="gov.nih.nci.cagrid.portal.security.EncryptionService" scope="prototype">
 		<constructor-arg value="${cagrid.portal.security.encryption.key}"/> 
 	</bean>

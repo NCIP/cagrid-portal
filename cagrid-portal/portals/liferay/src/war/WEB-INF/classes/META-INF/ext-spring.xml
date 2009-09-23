@@ -12,9 +12,9 @@
 	<bean id="caGridPortalContext" class="gov.nih.nci.cagrid.portal.liferay.CaGridPortalContext">
 		<property name="configLocations">
 			<list>
-				<value>classpath:META-INF/applicationContext-db.xml</value>
-				<value>classpath:META-INF/applicationContext-service.xml</value>
-				<value>classpath:META-INF/applicationContext-security.xml</value>
+				<value>classpath:applicationContext-db.xml</value>
+				<value>classpath:applicationContext-service.xml</value>
+				<value>classpath:applicationContext-security.xml</value>
 			</list>
 		</property>
 	</bean>

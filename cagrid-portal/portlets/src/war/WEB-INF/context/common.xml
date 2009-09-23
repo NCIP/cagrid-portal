@@ -72,14 +72,8 @@
     </bean>
 
 
-    <bean id="executorService" class="gov.nih.nci.cagrid.portal.portlet.util.DelegatingExecutorService">
-
-        <property name="executorService">
-            <bean class="java.util.concurrent.Executors" factory-method="newFixedThreadPool">
-                <constructor-arg value="20"/>
-            </bean>
-        </property>
-
+    <bean id="executorService" class="java.util.concurrent.ScheduledThreadPoolExecutor">
+        <constructor-arg value="20"/>
     </bean>
 
     <bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
@@ -114,7 +108,7 @@
           p:certificateFilePath="${cagrid.portal.host.cert}" p:keyFilePath="${cagrid.portal.host.key}"
           p:encryptionService-ref="encryptionServicePrototype"/>
 
-	<!-- TODO: this should be removed -->
+    <!-- TODO: this should be removed -->
     <bean id="portalUserInterceptor" class="gov.nih.nci.cagrid.portal.portlet.PortalUserInterceptor" autowire="byName">
         <property name="portalUserAttributeName" ref="portalUserAttributeName"/>
         <property name="userIdAttributeName" value="CAGRIDPORTAL_ATTS_userId"/>

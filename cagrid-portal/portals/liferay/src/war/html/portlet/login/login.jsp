@@ -20,7 +20,7 @@
 
 
 		<%
-		String cgpPortalUserId = user.getComanyId() + ":" + user.getUserId();
+		String cgpPortalUserId = user.getCompanyId() + ":" + user.getUserId();
 		%>
 				
 		<script type="text/javascript">

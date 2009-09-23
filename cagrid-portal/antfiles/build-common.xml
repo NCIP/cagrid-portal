@@ -94,6 +94,8 @@
             <entry key="cagrid.portal.fast.aggr.defaultDelay" value="${cagrid.portal.fast.aggr.defaultDelay}"/>
             <entry key="cagrid.portal.slow.aggr.defaultDelay" value="${cagrid.portal.slow.aggr.defaultDelay}"/>
             <entry key="cagrid.portal.aggr.defaultDelay" value="${cagrid.portal.aggr.defaultDelay}"/>
+            <entry key="cagrid.portal.liferay.companyWebId" value="${cagrid.portal.liferay.companyWebId}"/>
+            <entry key="cagrid.portal.liferay.omniUserEmail" value="${cagrid.portal.liferay.omniUserEmail}"/>
         </propertyfile>
     </target>
 
