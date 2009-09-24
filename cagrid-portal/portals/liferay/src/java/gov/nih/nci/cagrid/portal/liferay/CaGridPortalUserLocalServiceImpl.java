@@ -24,6 +24,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.globus.gsi.GlobusCredential;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.liferay.portal.ContactFirstNameException;
 import com.liferay.portal.ContactLastNameException;
@@ -57,6 +58,7 @@ import com.liferay.portal.util.PropsValues;
  * @author <a href="mailto:joshua.phillips@semanticbits.com>Joshua Phillips</a>
  * 
  */
+@Transactional(readOnly = false)
 public class CaGridPortalUserLocalServiceImpl extends UserLocalServiceImpl
 		implements InitializingBean {
 
@@ -97,8 +99,8 @@ public class CaGridPortalUserLocalServiceImpl extends UserLocalServiceImpl
 		IdPAuthnInfo authnInfo = null;
 		GlobusCredential globusCred = null;
 		try {
-			authnInfo = getAuthnService().authenticateToIdP(getIfsUrl(), login,
-					password);
+			authnInfo = getAuthnService().authenticateToIdP(login,
+					password,getIfsUrl());
 			globusCred = getAuthnService().authenticateToIFS(idpUrl,
 					authnInfo.getSaml());
 		} catch (InvalidCredentialFault ex) {
@@ -111,7 +113,7 @@ public class CaGridPortalUserLocalServiceImpl extends UserLocalServiceImpl
 		// Get user
 		User user = null;
 		try {
-			user = userPersistence.findByC_EA(companyId, login);
+			user = userPersistence.findByC_EA(companyId, authnInfo.getEmail());
 		} catch (NoSuchUserException nsue) {
 			// Then we need to create the user.
 		}
@@ -347,6 +349,8 @@ public class CaGridPortalUserLocalServiceImpl extends UserLocalServiceImpl
 				.getApplicationContext().getBean("personCatalogEntryDao"));
 		setAuthnService((AuthnService) getCaGridPortalContext()
 				.getApplicationContext().getBean("authnService"));
+        setIdentityProviderDao((IdentityProviderDao)getCaGridPortalContext()
+                .getApplicationContext().getBean("identityProviderDao"));
 
 		// Conflicts with Liferay
 		// setUserService((UserService) getCaGridPortalContext()
