@@ -36,7 +36,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com>Joshua Phillips</a>
- * 
+ * @author kherm manav.kher@semanticbits.com
+ *
  */
 @Transactional
 public class CredentialManagerFacade {
@@ -146,7 +147,7 @@ public class CredentialManagerFacade {
 					try {
 						for (QName profileQName : ac
 								.getSupportedAuthenticationProfiles()) {
-							if (profileQName.equals(BASIC_AUTH_PROFILE)) {
+							if (profileQName.toString().trim().equals(BASIC_AUTH_PROFILE)) {
 								IdPBean bean = new IdPBean(
 										idp.getDisplayName(), idpUrl);
 								idpBeans.add(bean);
