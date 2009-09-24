@@ -121,6 +121,7 @@
 			</div>
 			
 			<div class="ctrl-holder">
+                <input type="hidden" id="identityProviderLabel" name="identityProviderLabel"/>
 				<label for="identityProvider">Identity Provider</label>
 				<select name="identityProvider" id="<portlet:namespace/>identityProvider">
 					<option>Loading...</option>
@@ -136,7 +137,7 @@
 			</c:if>
 --%>
 			<div class="button-holder">
-				<input type="submit" value="<liferay-ui:message key="sign-in" />" />
+				<input id="<portlet:namespace />submitBtn" type="submit" value="<liferay-ui:message key="sign-in" />" />
 			</div>
 		</fieldset>
 		</form>
@@ -163,11 +164,17 @@
 							jQuery('#<portlet:namespace />rememberMe').val(checked);
 						}
 					);
+
+					jQuery('#<portlet:namespace />submitBtn').click(
+						function() {
+							  jQuery("#identityProviderLabel").val(jQuery("#<portlet:namespace/>identityProvider :selected").text());
+						}
+					);
 				}
 			);
 			
 			function <portlet:namespace/>listIdPs(){
-				CredentialManagerFacade.listIdPsFromDorian()(
+				CredentialManagerFacade.listIdPsFromDorian(
 				{
 					callback: function(idps){
 						var idpOpts = "";
@@ -175,17 +182,18 @@
 							var idpBean = idps[i];
 							idpOpts += "<option value='" + idpBean.url + "'" + (i == 0 ? " selected" : "") + ">" + idpBean.label + "</option>";
 						}
-						jQuery("#<portlet:namespace/>identityProvider").html(idpOpts);						
+						jQuery("#<portlet:namespace/>identityProvider").html(idpOpts);
+
 					},
 					errorHandler: function(errorString, exception){
 						alert("Error listing identity providers: " + errorString);
 					}
-				});				
+				});
 			}
 			
-			jQuery(document).ready(
+
 				<portlet:namespace/>listIdPs();
-			);
+
 
 			<c:if test="<%= windowState.equals(WindowState.MAXIMIZED) %>">
 				Liferay.Util.focusFormField(document.<portlet:namespace />fm.<portlet:namespace />login);
