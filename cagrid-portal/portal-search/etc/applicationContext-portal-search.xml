@@ -10,6 +10,7 @@
 	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
 	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd">
 
+
     <bean id="defaultDelay" class="java.lang.Long">
         <constructor-arg value="${cagrid.portal.aggr.defaultDelay}"/>
     </bean>
@@ -17,7 +18,7 @@
     <bean id="abstractSolrCommandExecutor" class="gov.nih.nci.cagrid.portal.search.AbstractSolrCommandExecutor"
           abstract="true" p:httpClient-ref="defaultHttpClient"
           p:baseSolrURL="${cagrid.portal.solr.http.url}"
-          p:localhostURL="http://localhost:8080"/>
+          p:localhostURL="http://localhost:${cagrid.portal.httpRedirect.port}"/>
 
     <!--will initialize on container startup-->
     <bean id="solrCommandExecutor" class="gov.nih.nci.cagrid.portal.search.SolrCommandExecutor"
