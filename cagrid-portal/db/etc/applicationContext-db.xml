@@ -369,6 +369,9 @@
     <bean id="identityProviderDao"  parent="daoTemplate"
           class="gov.nih.nci.cagrid.portal.dao.IdentityProviderDao"/>
 
+    <bean id="idpAuthenticationDao"  parent="daoTemplate"
+          class="gov.nih.nci.cagrid.portal.dao.IdPAuthenticationDao"/>
+
     <bean id="timestampProvider" class="gov.nih.nci.cagrid.portal.util.StaticTimestampProvider"/>
 
 
