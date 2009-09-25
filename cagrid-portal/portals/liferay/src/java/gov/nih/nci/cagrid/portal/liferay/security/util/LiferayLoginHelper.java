@@ -29,8 +29,8 @@ public class LiferayLoginHelper {
         boolean autoPassword = true;
         String password1 = "";
         String password2 = "";
-        boolean autoScreenName = false;
-        String screenName = authnInfo.getUsername();
+        boolean autoScreenName = true;
+        String screenName = "";
         String emailAddress = authnInfo.getEmail();
         Locale locale = Locale.US;
         String firstName = authnInfo.getFirstName();

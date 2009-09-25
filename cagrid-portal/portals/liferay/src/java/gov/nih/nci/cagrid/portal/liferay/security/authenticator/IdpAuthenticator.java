@@ -105,11 +105,22 @@ public class IdpAuthenticator implements Authenticator {
         }
         User user = null;
 
-        try {
-            user = UserLocalServiceUtil.getUserByScreenName(companyId, authnInfo.getUsername());
-        } catch (Exception e) {
-            //will create a new user
+
+        PortalUser sampleUser = new PortalUser();
+        sampleUser.setGridIdentity(globusCred.getIdentity());
+        PortalUser pUser = getPortalUserDao().getByExample(sampleUser);
+
+        if (pUser != null) {
+            String[] portalId = pUser.getPortalId().split(":");
+            try {
+                user = UserLocalServiceUtil.getUserById(Integer
+                        .parseInt(portalId[0]), Integer
+                        .parseInt(portalId[1]));
+            } catch (Exception e) {
+                throw new AuthException("Portal user not found in Liferay DB", e);
+            }
         }
+
 
         if (user == null) {
             try {
