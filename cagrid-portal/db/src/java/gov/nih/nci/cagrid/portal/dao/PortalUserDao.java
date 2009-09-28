@@ -37,9 +37,17 @@ public class PortalUserDao extends AbstractDao<PortalUser> {
 		} catch (Exception ex) {
 			throw new RuntimeException("Invalid portal ID: " + userId);
 		}
+		
+//		String portalUserId = userId.replace(":", "%");
+		System.out.println("#####################################");
+		System.out.println("userId: '" + userId + "'");
+		System.out.println("#####################################");
+		
 		PortalUser user = null;
+		
 		List l = getHibernateTemplate().find(
 				"from PortalUser where portalId = ?", userId);
+		
 		if (l.size() > 1) {
 			throw new NonUniqueResultException(
 					"More than one PortalUser found for portalId = " + userId);

@@ -6,11 +6,13 @@ import com.liferay.portal.model.User;
 import com.liferay.portal.security.auth.AutoLogin;
 import com.liferay.portal.security.auth.AutoLoginException;
 import com.liferay.portal.service.CompanyLocalServiceUtil;
+import com.liferay.portal.service.ResourceLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import gov.nih.nci.cagrid.portal.dao.PersonDao;
 import gov.nih.nci.cagrid.portal.dao.PortalUserDao;
 import gov.nih.nci.cagrid.portal.domain.PortalUser;
+import gov.nih.nci.cagrid.portal.domain.catalog.CatalogEntry;
 import gov.nih.nci.cagrid.portal.liferay.websso.WebSSOAutoLogin;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -83,6 +85,10 @@ public abstract class AbstractAutoLogin implements AutoLogin {
                 prefixId, suffixId, male, birthdayMonth, birthdayDay,
                 birthdayYear, jobTitle, groupIds, organizationIds,
                 roleIds, userGroupIds, sendEmail, serviceContext);
+        
+        ResourceLocalServiceUtil.addResources(user.getCompanyId(), 0, user
+				.getUserId(), CatalogEntry.class.getName(), String
+				.valueOf(portalUser.getCatalog().getId()), false, false, false);
 
         return user;
     }

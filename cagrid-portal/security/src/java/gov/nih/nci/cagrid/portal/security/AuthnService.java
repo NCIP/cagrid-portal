@@ -23,27 +23,31 @@ import gov.nih.nci.cagrid.portal.dao.PortalUserDao;
 import gov.nih.nci.cagrid.portal.domain.AuthnTicket;
 import gov.nih.nci.cagrid.portal.domain.Person;
 import gov.nih.nci.cagrid.portal.domain.PortalUser;
-import org.cagrid.gaards.authentication.client.AuthenticationServiceClient;
-import org.cagrid.gaards.pki.CertUtil;
-import org.cagrid.gaards.pki.KeyUtil;
-import org.globus.gsi.GlobusCredential;
-import org.w3c.dom.Document;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathFactory;
 import java.io.ByteArrayInputStream;
 import java.security.KeyPair;
 import java.security.cert.X509Certificate;
 import java.util.Date;
 import java.util.UUID;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathFactory;
+
+import org.cagrid.gaards.authentication.client.AuthenticationServiceClient;
+import org.cagrid.gaards.pki.CertUtil;
+import org.cagrid.gaards.pki.KeyUtil;
+import org.globus.gsi.GlobusCredential;
+import org.springframework.transaction.annotation.Transactional;
+import org.w3c.dom.Document;
+
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
  * @author <a href="mailto:manav.kher@semanticbits.com">Manav Kher</a>
  */
+@Transactional
 public class AuthnService {
 
 	private static final String EMAIL_EXP = "/*[local-name()='Assertion']/*[local-name()='AttributeStatement']/*[local-name()='Attribute' and @AttributeName='urn:mace:dir:attribute-def:mail']/*[local-name()='AttributeValue']/text()";
@@ -224,48 +228,17 @@ public class AuthnService {
 		}
 		return cred;
 	}
-
-	public AuthnTicket authenticate(String username, String password,
-			String idpUrl, String ifsUrl) throws AuthnServiceException,
-			InvalidCredentialFault, AuthnTimeoutException {
-
-		IdPAuthnInfo authnInfo = authenticateToIdP(username, password, idpUrl);
-
-		GlobusCredential cred = authenticateToIFS(ifsUrl, authnInfo.getSaml());
-
-		PortalUser user = getPortalUser(cred.getIdentity(), authnInfo
-				.getEmail(), authnInfo.getFirstName(), authnInfo.getLastName(),
-				ProxyUtil.getProxyString(cred));
-
+	
+	public AuthnTicket createAuthnTicket(PortalUser user){
 		AuthnTicket ticket = new AuthnTicket();
 		ticket.setPortalUser(user);
 		ticket.setNotAfter(new Date((new Date()).getTime()
 				+ getTicketLifetime()));
 		ticket.setTicket(UUID.randomUUID().toString());
 		getAuthnTicketDao().save(ticket);
-
 		return ticket;
 	}
 
-	protected PortalUser getPortalUser(String gridIdentity, String email,
-			String firstName, String lastName, String proxyStr) {
-		PortalUser portalUser = new PortalUser();
-		portalUser.setGridIdentity(gridIdentity);
-		portalUser = getPortalUserDao().getByExample(portalUser);
-		if (portalUser == null) {
-			portalUser = new PortalUser();
-			portalUser.setGridIdentity(gridIdentity);
-			Person person = new Person();
-			person.setEmailAddress(email);
-			person.setFirstName(firstName);
-			person.setLastName(lastName);
-			getPersonDao().save(person);
-			portalUser.setPerson(person);
-		}
-		portalUser.setGridCredential(getEncryptionService().encrypt(proxyStr));
-		getPortalUserDao().save(portalUser);
-		return portalUser;
-	}
 
 	private static class GetSAMLThread extends Thread {
 		private AuthenticationServiceClient client;

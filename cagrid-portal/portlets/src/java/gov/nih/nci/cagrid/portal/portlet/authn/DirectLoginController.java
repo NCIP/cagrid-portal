@@ -5,8 +5,15 @@ package gov.nih.nci.cagrid.portal.portlet.authn;
 
 import gov.nih.nci.cagrid.authentication.stubs.types.InvalidCredentialFault;
 import gov.nih.nci.cagrid.portal.domain.AuthnTicket;
+import gov.nih.nci.cagrid.portal.domain.Person;
+import gov.nih.nci.cagrid.portal.domain.PortalUser;
 import gov.nih.nci.cagrid.portal.security.AuthnService;
 import gov.nih.nci.cagrid.portal.security.EncryptionService;
+import gov.nih.nci.cagrid.portal.security.IdPAuthnInfo;
+import gov.nih.nci.cagrid.portal.security.ProxyUtil;
+import gov.nih.nci.cagrid.portal.service.UserService;
+
+import org.globus.gsi.GlobusCredential;
 import org.springframework.validation.BindException;
 import org.springframework.web.portlet.ModelAndView;
 import org.springframework.web.portlet.mvc.AbstractCommandController;
@@ -31,8 +38,17 @@ public class DirectLoginController extends AbstractCommandController {
     private String errorOperationName;
     private String viewOperationName;
     private String portalUserAttributeName;
+    private UserService userService;
 
-    /**
+    public UserService getUserService() {
+		return userService;
+	}
+
+	public void setUserService(UserService userService) {
+		this.userService = userService;
+	}
+
+	/**
      *
      */
     public DirectLoginController() {
@@ -68,6 +84,7 @@ public class DirectLoginController extends AbstractCommandController {
                                 Object obj, BindException errors) throws Exception {
 
         if (errors.hasErrors()) {
+        	logger.debug("Has errors, setting error attribute and returning.");
             request.setAttribute(getErrorsAttributeName(), errors);
             response.setRenderParameter("operation", getErrorOperationName());
             return;
@@ -76,9 +93,15 @@ public class DirectLoginController extends AbstractCommandController {
         DirectLoginCommand command = (DirectLoginCommand) obj;
         AuthnTicket ticket = null;
         try {
-            ticket = getAuthnService().authenticate(command.getUsername(),
-                    command.getPassword(), command.getIdpUrl(), getIfsUrl());
+        	IdPAuthnInfo authnInfo = getAuthnService().authenticateToIdP(command.getUsername(), command.getPassword(), command.getIdpUrl());
+    		GlobusCredential cred = getAuthnService().authenticateToIFS(getIfsUrl(), authnInfo.getSaml());
+    		String encryptedProxyStr = getEncryptionService().encrypt(ProxyUtil.getProxyString(cred));
+    		PortalUser user = getUserService().getOrCreatePortalUser(cred.getIdentity(), authnInfo
+    				.getEmail(), authnInfo.getFirstName(), authnInfo.getLastName(),
+    				encryptedProxyStr);
+    		ticket = getAuthnService().createAuthnTicket(user);
         } catch (InvalidCredentialFault ex) {
+        	logger.debug("Login failed, setting error attribute and returning.");
             errors.reject("authn.badCredentials",
                     "Invalid username and/or password.");
             request.setAttribute(getErrorsAttributeName(), errors);
@@ -86,6 +109,7 @@ public class DirectLoginController extends AbstractCommandController {
             return;
         }
 
+        logger.debug("Login successful.");
         String ticketEncrypted = getEncryptionService().encrypt(
                 ticket.getTicket());
         String redirectUrl = request.getPreferences().getValue(
@@ -121,6 +145,8 @@ public class DirectLoginController extends AbstractCommandController {
         throw new IllegalStateException(getClass().getName()
                 + " does not handle render requests.");
     }
+    
+
 
     public AuthnService getAuthnService() {
         return authnService;

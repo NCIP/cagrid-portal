@@ -38,13 +38,18 @@ public class PersonCatalogEntryDao extends
 		} else
 			logger
 					.debug("Catalog entry already exists. Will update the existing entry");
+		
 		if (!entry.isPublished()) {
 			logger
 					.debug("Catalog entry has not been published. Will sync with domain object");
+			
+			
 			entry.setEmailAddress(BeanUtils.traverse(user,
 					"person.emailAddress"));
 			entry.setLastName(BeanUtils.traverse(user, "person.lastName"));
 			entry.setFirstName(BeanUtils.traverse(user, "person.firstName"));
+			entry.setName(entry.getFirstName() + " " + entry.getLastName());
+			
 			Person p = user.getPerson();
 			if (p != null) {
 				if (p.getAddresses() != null && p.getAddresses().size() > 0) {

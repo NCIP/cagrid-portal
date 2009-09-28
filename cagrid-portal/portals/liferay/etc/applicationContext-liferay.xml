@@ -20,8 +20,8 @@
     </bean>
 
     <bean id="autoLoginTemplate" abstract="true">
-        <property name="companyWebId" value="cabig.nci.nih.gov"/>
-        <property name="omniUserEmail" value="portaladmin@cabig.nci.nih.gov"/>
+        <property name="companyWebId" value="${cagrid.portal.liferay.companyWebId}"/>
+        <property name="omniUserEmail" value="${cagrid.portal.liferay.omniUserEmail}"/>
         <property name="userIdAttributeName" value="CAGRIDPORTAL_ATTS_userId"/>
         <property name="portalAdminEmailAddress" value="${cagrid.portal.admin.email}"/>
         <property name="authnErrorMessageAttributeName" value="CAGRIDPORTAL_ATTS_authnError"/>
@@ -40,12 +40,13 @@
 
     <alias name="${cagrid.portal.authenticationMode}AutoLogin" alias="autoLogin"/>
 
-
+<!-- 
     <bean id="liferayLoginHelper" class="gov.nih.nci.cagrid.portal.liferay.security.util.LiferayLoginHelper"
           autowire="byName">
         <property name="companyWebId" value="${cagrid.portal.liferay.companyWebId}"/>
         <property name="omniUserEmail" value="${cagrid.portal.liferay.omniUserEmail}"/>
     </bean>
+
 
     <bean id="authenticator" class="gov.nih.nci.cagrid.portal.liferay.security.authenticator.DelegatingAuthenticator"
           autowire="byName">
@@ -62,5 +63,5 @@
             </util:list>
         </property>
     </bean>
-
+    -->
 </beans>

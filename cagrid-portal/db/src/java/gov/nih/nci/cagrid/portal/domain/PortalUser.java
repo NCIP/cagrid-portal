@@ -41,16 +41,27 @@ public class PortalUser extends AbstractDomainObject implements Commentable {
     private NotificationSubscriber subscriber;
 
 
-    public PersonCatalogEntry catalog;
+    private PersonCatalogEntry catalog;
 
-    public List<Comment> comments = new ArrayList<Comment>();
+    private List<Comment> comments = new ArrayList<Comment>();
 
-    public List<CatalogEntry> catalogEntries = new ArrayList<CatalogEntry>();
+    private List<CatalogEntry> catalogEntries = new ArrayList<CatalogEntry>();
 
-    public List<IdPAuthentication> authentications = new ArrayList<IdPAuthentication>();
+    private List<IdPAuthentication> authentications = new ArrayList<IdPAuthentication>();
+    
+    private AuthnTicket authnTicket;
 
 
-    @ManyToOne
+    @OneToOne(mappedBy = "portalUser", cascade = CascadeType.ALL)
+    public AuthnTicket getAuthnTicket() {
+		return authnTicket;
+	}
+
+	public void setAuthnTicket(AuthnTicket authnTicket) {
+		this.authnTicket = authnTicket;
+	}
+
+	@ManyToOne
     @JoinColumn(name = "person_id")
     public Person getPerson() {
         return person;

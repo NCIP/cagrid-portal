@@ -8,6 +8,7 @@ import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
@@ -49,7 +50,7 @@ public class AuthnTicket extends AbstractDomainObject {
 		this.notAfter = notAfter;
 	}
 
-	@ManyToOne
+	@OneToOne
 	@JoinColumn(name = "user_id")
 	public PortalUser getPortalUser() {
 		return portalUser;
