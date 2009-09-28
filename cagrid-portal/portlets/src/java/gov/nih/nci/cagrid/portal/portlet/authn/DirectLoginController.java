@@ -100,6 +100,9 @@ public class DirectLoginController extends AbstractCommandController {
     				.getEmail(), authnInfo.getFirstName(), authnInfo.getLastName(),
     				encryptedProxyStr);
     		ticket = getAuthnService().createAuthnTicket(user);
+    		
+    		//TODO: set IdPAuthentication and default credential
+    		
         } catch (InvalidCredentialFault ex) {
         	logger.debug("Login failed, setting error attribute and returning.");
             errors.reject("authn.badCredentials",
