@@ -2,7 +2,7 @@
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog/1.9"
                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog/1.9 http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-1.9.xsd"
-         logicalFilePath="classpath:cagrid_portal-db-changelog.xml">
+                   logicalFilePath="classpath:cagrid_portal-db-changelog.xml">
 
     <!--all pre version 2.0 DB changes-->
     <include file="cagrid_portal-db-20-changelog.xml"/>
@@ -95,14 +95,23 @@
         <dropColumn tableName="notification_subscriptions" columnName="statusesContainer"/>
     </changeSet>
 
-    <changeSet id="10" author="kherm">
+
+    <!--delete if previously created (was wrongly created)-->
+    <changeSet id="10-pre" author="kherm">
+        <preConditions onFail="MARK_RAN">
+            <columnExists tableName="notification_subscriber" columnName="haltSubscriptions"/>
+        </preConditions>
+        <dropColumn tableName="notification_subscriber" columnName="haltSubscriptions"/>
+    </changeSet>
+    <!--or else create it-->
+    <changeSet id="10" author="kherm" runOnChange="true">
         <preConditions onFail="MARK_RAN">
             <not>
                 <columnExists tableName="notification_subscriber" columnName="haltSubscriptions"/>
             </not>
         </preConditions>
         <addColumn tableName="notification_subscriber">
-            <column name="haltSubscriptions" type="bit" defaultValueBoolean="false">
+            <column name="haltSubscriptions" type="bit">
                 <constraints nullable="false"/>
             </column>
         </addColumn>

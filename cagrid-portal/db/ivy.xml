@@ -24,17 +24,17 @@
         <!--spring configs-->
         <artifact name="applicationContext-db-relationships" conf="default" type="xml"/>
         <artifact name="applicationContext-db-aspects" conf="default" type="xml"/>
-        <artifact name="applicationContext-db-run" conf="default" type="xml"/>
+        <artifact name="applicationContext-db-run" conf="dao,default" type="xml"/>
         <artifact name="applicationContext-db" conf="dao,default" type="xml"/>
         <artifact name="applicationContext-service" conf="dao,default" type="xml"/>
-        <artifact name="cagrid_portal-db-changelog" conf="default" type="xml"/>
-        <artifact name="cagrid_portal-db-20-changelog" conf="default" type="xml"/>
+        <artifact name="cagrid_portal-db-changelog" conf="dao,default" type="xml"/>
+        <artifact name="cagrid_portal-db-20-changelog" conf="dao,default" type="xml"/>
     </publications>
 
     <dependencies>
         <dependency rev="1.5.3" org="aspectj" name="aspectjrt" conf="default"/>
         <dependency rev="1.5.3" org="aspectj" name="aspectjweaver" conf="default"/>
-        <dependency rev="latest.integration" org="apache" name="log4j" conf="default->*"/>
+        <dependency rev="1.2.14" org="apache" name="log4j" conf="default->*"/>
         <dependency rev="3.4.0" org="hibernate" name="hibernate" conf="default->full"/>
         <dependency rev="1.4.2_08-b03" org="hibernate" name="tools" conf="schema->default"/>
         <dependency rev="1.9.1" org="org.liquibase" name="liquibase-core" conf="default"/>
