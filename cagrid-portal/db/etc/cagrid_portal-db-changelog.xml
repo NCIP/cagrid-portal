@@ -118,7 +118,7 @@
     </changeSet>
 
 
-    <changeSet id="11" author="kherm">
+    <changeSet id="11" author="kherm" runOnChange="true">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="notification_log"/>
@@ -132,7 +132,7 @@
             <column name="sendSuccessful" type="bit"/>
             <column name="timestamp" type="datetime"/>
             <column name="subscriber_id" type="integer">
-                <constraints references="notification_subscriber(id)" foreignKeyName="FKDA99AEA26E4B3B1D"/>
+                <constraints references="notification_subscriber(id)" foreignKeyName="FKDA99AEA26E4B3B1D2"/>
             </column>
         </createTable>
     </changeSet>
