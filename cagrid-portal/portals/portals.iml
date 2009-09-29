@@ -19,6 +19,7 @@
     <orderEntry type="module" module-name="db" />
     <orderEntry type="library" name="acegi" level="project" />
     <orderEntry type="library" name="cagrid" level="project" />
+    <orderEntry type="module" module-name="security" />
   </component>
 </module>
 
