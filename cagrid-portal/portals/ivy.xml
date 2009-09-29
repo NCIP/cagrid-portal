@@ -21,7 +21,6 @@
 
     <publications>
         <artifact name="cagrid-portal-liferay" type="jar"/>
-        <artifact name="cagrid-portal-liferay-resources" type="jar"/>
     </publications>
 
     <dependencies>

@@ -66,20 +66,6 @@
         <jar basedir="${classes.dir}"
              destfile="${build.jar.dir}/cagrid-portal-liferay.jar"/>
 
-        <mkdir dir="${build.dir}/resources"/>
-
-        <copy todir="${build.dir}/resources">
-            <fileset dir="${liferay.dir}/etc">
-                <include name="*.xml"/>
-            </fileset>
-            <fileset dir="${ext.authn.xml.dir}">
-                <include name="*.xml"/>
-            </fileset>
-        </copy>
-
-        <jar basedir="${build.dir}/resources"
-             destfile="${build.jar.dir}/cagrid-portal-liferay-resources.jar"/>
-
     </target>
 
     <target name="javadoc"
