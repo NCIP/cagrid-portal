@@ -69,6 +69,26 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="liquibase" level="project" />
+    <orderEntry type="module-library" exported="">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/../ivy/repository/slf4j/slf4j/1.5.6/slf4j-api-1.5.6.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library" exported="">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/../ivy/repository/slf4j/slf4j/1.5.6/slf4j-log4j12-1.5.6.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="library" exported="" name="mysql" level="project" />
   </component>
 </module>
 
