@@ -2,7 +2,7 @@
 CatalogEntryViewBean catalogEntryViewBean = (CatalogEntryViewBean)request.getAttribute("catalogEntryViewBean");
 String updateActionId = "UPDATE";
 String deleteActionId = "DELETE";
-String resourceName = "gov.nih.nci.cagrid.portal.portlet.domain.catalog.CatalogEntry";
+String resourceName = "gov.nih.nci.cagrid.portal.domain.catalog.CatalogEntry";
 String resourceId = String.valueOf(catalogEntryViewBean.getCatalogEntry().getId());
 %>
 		<c:set var="canUpdate" value="<%= permissionChecker.hasPermission(0, resourceName, resourceId, updateActionId) %>"/>

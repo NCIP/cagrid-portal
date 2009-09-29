@@ -4,6 +4,7 @@
 package gov.nih.nci.cagrid.portal.portlet.authn;
 
 import gov.nih.nci.cagrid.portal.domain.PortalUser;
+import gov.nih.nci.cagrid.portal.service.UserService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,17 +21,18 @@ import org.springframework.web.portlet.mvc.AbstractController;
 
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
+ * @author kherm manav.kher@semanticbits.com
  * 
  */
-public class ViewDirectLoginController extends AbstractController implements InitializingBean {
+public class ViewDirectLoginController extends AbstractController  {
 
 	private String portalUserAttributeName;
 	private String viewName;
 	private String errorsAttributeName;
 	private String commandName;
 	private String authnErrorMessageAttributeName;
-	private String[] idpInfo;
-	private List<IdPUrl> urls = new ArrayList<IdPUrl>();
+
+
 
 	/**
 	 * 
@@ -61,10 +63,9 @@ public class ViewDirectLoginController extends AbstractController implements Ini
 			mav.addObject("portalUser", user);
 		} else {
 			
-			
 			mav.addObject("registerUrl", request.getPreferences().getValue("registerUrl", ""));
 			mav.addObject(getCommandName(), new DirectLoginCommand());
-			mav.addObject("idpUrls", urls);
+
 		}
 		String authnErrorMsg = (String) request.getAttribute(getAuthnErrorMessageAttributeName());
 		if(authnErrorMsg != null){
@@ -120,23 +121,8 @@ public class ViewDirectLoginController extends AbstractController implements Ini
 		this.authnErrorMessageAttributeName = authnErrorMessageAttributeName;
 	}
 
-	@Required
-	public String[] getIdpInfo() {
-		return idpInfo;
-	}
 
-	public void setIdpInfo(String[] idpUrls) {
-		this.idpInfo = idpUrls;
-	}
 
-	public void afterPropertiesSet() throws Exception {
-		logger.debug("idpInfo.length = " + idpInfo.length);
-		for(String info : getIdpInfo()){
-			logger.debug("info: " + info);
-			String[] pair = info.split("\\|");
-			logger.debug("Adding IdP: " + pair[0] + ":  " + pair[1]);
-			urls.add(new IdPUrl(pair[0], pair[1]));
-		}		
-	}
+
 
 }

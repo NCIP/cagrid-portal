@@ -28,7 +28,6 @@
 		<property name="portalUserAttributeName" ref="portalUserAttributeName"/>
 		<property name="errorsAttributeName" value="loginErrors"/>
 		<property name="commandName" value="directLoginCommand"/>
-		<property name="idpInfo" value="${cagrid.portal.idpInfo}"/>
 		<property name="authnErrorMessageAttributeName" value="CAGRIDPORTAL_ATTS_authnError"/>
 	</bean>
 	
