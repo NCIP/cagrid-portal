@@ -234,6 +234,7 @@
 			<action-key>DELETE</action-key>
 			<action-key>UPDATE_WORKFLOW</action-key>
             <action-key>CREATE</action-key>
+            <action-key>ADD_RELATEED_ITEM</action-key>
 		</supports>
 		<community-defaults>
 			<action-key>VIEW</action-key>
