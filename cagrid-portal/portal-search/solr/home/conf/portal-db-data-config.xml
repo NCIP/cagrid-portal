@@ -4,13 +4,13 @@
 
     <document name="CatalogEntry">
 
-
         <entity name="AllCatalogs"
                 query="select * from cat_entry"
                 pk="id"
                 deltaImportQuery="select * from cat_entry where id=='${dataimporter.delta.id}'"
                 deltaQuery="select id from cat_entry where updatedAt > '${dataimporter.last_index_time}'">
             <field column="id" name="id"/>
+            <field column="author_id" name="id"/>
             <field column="catalog_type" name="catalog_type"/>
             <field column="name" name="catalogName"/>
             <field column="firstName" name="firstName"/>
@@ -61,13 +61,13 @@
                                     <field name="oper_description" column="description"/>
                                     <field name="oper_name" column="name"/>
                                     <!--<entity name="OperSemanticMetadataMapping"-->
-                                            <!--query="select sem_meta_id from oper_sem_meta where oper_id='${Operation.id}'">-->
-                                        <!--<entity name="SemanticMetadata"-->
-                                                <!--query="select * from sem_meta where id='${OperSemanticMetadataMapping.sem_meta_id}'">-->
-                                            <!--<field name="name" column="sm_cname"/>-->
-                                            <!--<field name="description" column="sm_cdef"/>-->
-                                            <!--<field name="conceptCode" column="sm_ccode"/>-->
-                                        <!--</entity>-->
+                                    <!--query="select sem_meta_id from oper_sem_meta where oper_id='${Operation.id}'">-->
+                                    <!--<entity name="SemanticMetadata"-->
+                                    <!--query="select * from sem_meta where id='${OperSemanticMetadataMapping.sem_meta_id}'">-->
+                                    <!--<field name="name" column="sm_cname"/>-->
+                                    <!--<field name="description" column="sm_cdef"/>-->
+                                    <!--<field name="conceptCode" column="sm_ccode"/>-->
+                                    <!--</entity>-->
                                     <!--</entity>-->
                                 </entity>
                             </entity>
@@ -88,9 +88,16 @@
                     query="select * from cat_ratings where catalog_id='${AllCatalogs.id}'">
                 <field name="rating" column="rating"/>
             </entity>
+
+            <!--author-->
+            <entity name="AuthorID"
+                    query="select person_id from portal_users where id='${AllCatalogs.author_id}'">
+                <entity name="Author" query="select * from persons where id='${AuthorID.person_id}'"
+                        pk="id">
+                    <field name="author" column="id"/>
+                </entity>
+            </entity>
         </entity>
-
-
-    </document>
+ </document>
 
 </dataConfig>
