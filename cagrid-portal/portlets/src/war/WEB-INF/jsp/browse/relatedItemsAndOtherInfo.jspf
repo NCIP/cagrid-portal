@@ -13,12 +13,11 @@
     <div class="yui-content"> 
         <div>
         
-        
 <%
-String addRelatedItemActionId = "ADD_RELATED_ITEM";
+    String actionId = "ADD_RELATEED_ITEM";
 %>
+<c:if test="<%= permissionChecker.hasPermission(scopeGroupId, resourceName,0, actionId) %>">
 
-<c:if test="<%= permissionChecker.hasPermission(scopeGroupId, portletDisplay.getRootPortletId(), portletDisplay.getResourcePK(), addRelatedItemActionId) %>">
 
 <div id="${ns}editRelatedItemsDiv">
 <p>
