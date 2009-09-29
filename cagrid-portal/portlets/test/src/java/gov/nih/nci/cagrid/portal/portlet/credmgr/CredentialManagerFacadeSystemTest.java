@@ -7,11 +7,12 @@ import gov.nih.nci.cagrid.portal.portlet.PortalPortletIntegrationTestBase;
  *
  * @author kherm manav.kher@semanticbits.com
  */
-public class CredentialManagerFacadeSystemTest   extends PortalPortletIntegrationTestBase {
+public class CredentialManagerFacadeSystemTest extends PortalPortletIntegrationTestBase {
 
     public CredentialManagerFacade credentialManagerFacade;
-    public void testCreds(){
-        assertNotNull(credentialManagerFacade.listIdPsFromDorian());
+
+    public void testCreds() {
+        assertNotNull(credentialManagerFacade.listIdPs());
     }
 
     public CredentialManagerFacade getCredentialManagerFacade() {
