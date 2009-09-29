@@ -151,6 +151,8 @@ public class CredentialManagerFacade {
 								IdPBean bean = new IdPBean(
 										idp.getDisplayName(), idpUrl);
 								idpBeans.add(bean);
+                                if(getIdentityProvider(idpUrl)==null)
+                                    addIdP(idp.getDisplayName(), idpUrl);
 							}
 						}
 					} catch (Exception ex) {
