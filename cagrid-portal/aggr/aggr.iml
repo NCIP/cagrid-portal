@@ -35,6 +35,8 @@
     <orderEntry type="library" exported="" name="poi" level="project" />
     <orderEntry type="library" exported="" name="cagrid" level="project" />
     <orderEntry type="library" name="mail" level="project" />
+    <orderEntry type="library" name="velocity" level="project" />
+    <orderEntry type="module" module-name="security" />
   </component>
 </module>
 

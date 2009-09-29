@@ -481,18 +481,18 @@
   </component>
   <component name="ProjectFileVersion" converted="true" />
   <component name="ProjectKey">
-    <option name="state" value="https://ncisvn.nci.nih.gov/svn/cagrid/trunk/cagrid/Applications/cagrid-portal/cagrid-portal.ipr" />
+    <option name="state" value="https://ncisvn.nci.nih.gov/svn/cagrid/trunk/cagrid/Software/portal/cagrid-portal/cagrid-portal.ipr" />
   </component>
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/aggr/aggr.iml" filepath="$PROJECT_DIR$/aggr/aggr.iml" />
       <module fileurl="file://$PROJECT_DIR$/cagrid-portal.iml" filepath="$PROJECT_DIR$/cagrid-portal.iml" />
       <module fileurl="file://$PROJECT_DIR$/db/db.iml" filepath="$PROJECT_DIR$/db/db.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../../../liquibase/trunk/liquibase.iml" filepath="$PROJECT_DIR$/../../../../liquibase/trunk/liquibase.iml" />
       <module fileurl="file://$PROJECT_DIR$/portal-search/portal-search.iml" filepath="$PROJECT_DIR$/portal-search/portal-search.iml" />
       <module fileurl="file://$PROJECT_DIR$/portals/portals.iml" filepath="$PROJECT_DIR$/portals/portals.iml" />
       <module fileurl="file://$PROJECT_DIR$/portlets/portlets.iml" filepath="$PROJECT_DIR$/portlets/portlets.iml" />
       <module fileurl="file://$PROJECT_DIR$/security/security.iml" filepath="$PROJECT_DIR$/security/security.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../../../solr/solr.iml" filepath="$PROJECT_DIR$/../../../solr/solr.iml" />
     </modules>
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_1_5" assert-keyword="true" jdk-15="true" project-jdk-name="1.5" project-jdk-type="JavaSDK">
@@ -518,6 +518,44 @@
                 </list>
               </option>
               <option name="trunkUrl" value="https://ncisvn.nci.nih.gov/svn/cagrid/trunk" />
+            </SvnBranchConfiguration>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../../../../liquibase/trunk/core">
+          <value>
+            <SvnBranchConfiguration>
+              <option name="branchMap">
+                <map>
+                  <entry key="https://liquibase.svn.sourceforge.net/svnroot/liquibase/branches">
+                    <value>
+                      <list>
+                        <SvnBranchItem>
+                          <option name="creationDateMillis" value="1189208936020" />
+                          <option name="revision" value="317" />
+                          <option name="url" value="https://liquibase.svn.sourceforge.net/svnroot/liquibase/branches/refactor_migrator" />
+                        </SvnBranchItem>
+                        <SvnBranchItem>
+                          <option name="creationDateMillis" value="1186595381180" />
+                          <option name="revision" value="247" />
+                          <option name="url" value="https://liquibase.svn.sourceforge.net/svnroot/liquibase/branches/TRY-M2" />
+                        </SvnBranchItem>
+                        <SvnBranchItem>
+                          <option name="creationDateMillis" value="1186509751360" />
+                          <option name="revision" value="239" />
+                          <option name="url" value="https://liquibase.svn.sourceforge.net/svnroot/liquibase/branches/eclipse_ide" />
+                        </SvnBranchItem>
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+              <option name="branchUrls">
+                <list>
+                  <option value="https://liquibase.svn.sourceforge.net/svnroot/liquibase/branches" />
+                  <option value="https://liquibase.svn.sourceforge.net/svnroot/liquibase/tags" />
+                </list>
+              </option>
+              <option name="trunkUrl" value="https://liquibase.svn.sourceforge.net/svnroot/liquibase/trunk" />
             </SvnBranchConfiguration>
           </value>
         </entry>
@@ -577,7 +615,11 @@
         <root url="jar://$PROJECT_DIR$/ivy/repository/liferay/portal/5.2.3/portal-impl.jar!/" />
       </CLASSES>
       <JAVADOC />
-      <SOURCES />
+      <SOURCES>
+        <root url="file://$PROJECT_DIR$/../../../../../utils/liferay-portal-src-5.2.3/portal-service/src" />
+        <root url="file://$PROJECT_DIR$/../../../../../utils/liferay-portal-src-5.2.3/portal-impl/src" />
+        <root url="file://$PROJECT_DIR$/../../../../../utils/liferay-portal-src-5.2.3/portal-kernel/src" />
+      </SOURCES>
     </library>
     <library name="log4j">
       <CLASSES>
@@ -647,11 +689,11 @@
     </library>
     <library name="cagrid">
       <CLASSES>
-        <root url="file://$PROJECT_DIR$/../../../../tomcat-wsrf/webapps/dev-repository/caGrid" />
+        <root url="file://$PROJECT_DIR$/../../../../../tomcat-wsrf/webapps/dev-repository/caGrid" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
-      <jarDirectory url="file://$PROJECT_DIR$/../../../../tomcat-wsrf/webapps/dev-repository/caGrid" recursive="false" />
+      <jarDirectory url="file://$PROJECT_DIR$/../../../../../tomcat-wsrf/webapps/dev-repository/caGrid" recursive="false" />
     </library>
     <library name="velocity">
       <CLASSES>
@@ -699,7 +741,7 @@
       </CLASSES>
       <JAVADOC />
       <SOURCES>
-        <root url="file://$PROJECT_DIR$/../../../solr/release_13/src/java" />
+        <root url="file://$PROJECT_DIR$/../../../../solr/release_13/src/java" />
       </SOURCES>
     </library>
     <library name="poi">
@@ -724,87 +766,21 @@
       <jarDirectory url="file://$PROJECT_DIR$/ivy/repository/javax.activation/activation/1.1" recursive="false" />
       <jarDirectory url="file://$PROJECT_DIR$/ivy/repository/javax.mail/mail/1.4" recursive="false" />
     </library>
-    <library name="Maven: junit:junit:3.8.1">
+    <library name="liquibase">
       <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/junit/junit/3.8.1/junit-3.8.1.jar!/" />
+        <root url="file://$PROJECT_DIR$/ivy/repository/org.liquibase/liquibase-core/1.9.1" />
       </CLASSES>
-      <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/junit/junit/3.8.1/junit-3.8.1-javadoc.jar!/" />
-      </JAVADOC>
-      <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/junit/junit/3.8.1/junit-3.8.1-sources.jar!/" />
-      </SOURCES>
+      <JAVADOC />
+      <SOURCES />
+      <jarDirectory url="file://$PROJECT_DIR$/ivy/repository/org.liquibase/liquibase-core/1.9.1" recursive="false" />
     </library>
-    <library name="Maven: net.sf.opencsv:opencsv:1.8">
+    <library name="mysql">
       <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/net/sf/opencsv/opencsv/1.8/opencsv-1.8.jar!/" />
+        <root url="jar://$PROJECT_DIR$/ivy/repository/mysql/mysql-connector-java/5.1.6/mysql-connector-java-5.1.6.jar!/" />
       </CLASSES>
-      <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/net/sf/opencsv/opencsv/1.8/opencsv-1.8-javadoc.jar!/" />
-      </JAVADOC>
-      <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/net/sf/opencsv/opencsv/1.8/opencsv-1.8-sources.jar!/" />
-      </SOURCES>
-    </library>
-    <library name="Maven: org.springframework:spring-beans:2.5.6">
-      <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/springframework/spring-beans/2.5.6/spring-beans-2.5.6.jar!/" />
-      </CLASSES>
-      <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/org/springframework/spring-beans/2.5.6/spring-beans-2.5.6-javadoc.jar!/" />
-      </JAVADOC>
-      <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/springframework/spring-beans/2.5.6/spring-beans-2.5.6-sources.jar!/" />
-      </SOURCES>
-    </library>
-    <library name="Maven: org.springframework:spring-core:2.5.6">
-      <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/springframework/spring-core/2.5.6/spring-core-2.5.6.jar!/" />
-      </CLASSES>
-      <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/org/springframework/spring-core/2.5.6/spring-core-2.5.6-javadoc.jar!/" />
-      </JAVADOC>
-      <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/springframework/spring-core/2.5.6/spring-core-2.5.6-sources.jar!/" />
-      </SOURCES>
-    </library>
-    <library name="Maven: org.apache.lucene:lucene-core:2.4.1">
-      <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/apache/lucene/lucene-core/2.4.1/lucene-core-2.4.1.jar!/" />
-      </CLASSES>
-      <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/org/apache/lucene/lucene-core/2.4.1/lucene-core-2.4.1-javadoc.jar!/" />
-      </JAVADOC>
-      <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/apache/lucene/lucene-core/2.4.1/lucene-core-2.4.1-sources.jar!/" />
-      </SOURCES>
-    </library>
-    <library name="Maven: org.easymock:easymock:2.4">
-      <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/easymock/easymock/2.4/easymock-2.4.jar!/" />
-      </CLASSES>
-      <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/org/easymock/easymock/2.4/easymock-2.4-javadoc.jar!/" />
-      </JAVADOC>
-      <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/easymock/easymock/2.4/easymock-2.4-sources.jar!/" />
-      </SOURCES>
-    </library>
-    <library name="Maven: commons-logging:commons-logging:1.1.1">
-      <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/commons-logging/commons-logging/1.1.1/commons-logging-1.1.1.jar!/" />
-      </CLASSES>
-      <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/commons-logging/commons-logging/1.1.1/commons-logging-1.1.1-javadoc.jar!/" />
-      </JAVADOC>
-      <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/commons-logging/commons-logging/1.1.1/commons-logging-1.1.1-sources.jar!/" />
-      </SOURCES>
+      <JAVADOC />
+      <SOURCES />
     </library>
   </component>
-  <UsedPathMacros>
-    <macro name="GLOBUS_LOCATION" />
-    <macro name="MAVEN_REPOSITORY" description="Maven Local Repostiry" />
-  </UsedPathMacros>
 </project>
 

@@ -37,7 +37,7 @@
         <dependency rev="1.2.14" org="apache" name="log4j" conf="default->*"/>
         <dependency rev="3.4.0" org="hibernate" name="hibernate" conf="default->full"/>
         <dependency rev="1.4.2_08-b03" org="hibernate" name="tools" conf="schema->default"/>
-        <dependency rev="1.9.1" org="org.liquibase" name="liquibase-core" conf="default"/>
+        <dependency rev="1.9.1" org="org.liquibase" name="liquibase-core" conf="dao->default;default"/>
         <dependency rev="5.1.6" org="mysql" name="mysql-connector-java" conf="default->*"/>
         <dependency rev="1.14" org="oopsconsultancy" name="xmltask" conf="schema->default"/>
         <dependency rev="2.5.5" org="springframework" name="spring" conf="default->full;test->test"/>

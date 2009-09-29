@@ -139,7 +139,8 @@
         <trycatch property="errorMsg">
             <try>
                 <ant target="deploy-authn"
-                     dir="${projects.dir}/portals" antfile="build-liferay-${liferay.server.type}.xml"/>
+                     dir="${projects.dir}/portals"  inheritall="false"
+                     antfile="build-liferay-${liferay.server.type}.xml"/>
             </try>
             <catch>
                 <fail message="Please build the project first or run 'ant all': ${errorMsg}"/>
@@ -183,7 +184,6 @@
         <trycatch property="errorMsg">
             <try>
                 <antcall target="config-trust"/>
-                <antcall target="load-schema"/>
                 <antcall target="load-workspaces"/>
                 <antcall target="install-liferay"/>
                 <antcall target="liferay:deploy-portlets"/>
