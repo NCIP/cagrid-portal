@@ -4,8 +4,9 @@
 
 <script type="text/javascript" src="<c:url value="/js/yui/button/button-min.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/js/yui/container/container-min.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/js/scriptaculous/prototype.js"/>"></script>
 
-
+<script type="text/javascript" src="<c:url value="/js/state_country_lists.js"/>"></script>
 
 <c:set var="ns"><portlet:namespace/></c:set>
 
@@ -86,16 +87,6 @@ jQuery(document).ready(function(){
 		${ns}showRegisterDialog();
 	});
 
-
-	var credForm =
-		new CGP_CredentialsForm(
-			"${ns}",
-			"CredentialManagerFacade",
-			"<c:out value="${portalUser.portalId}"/>",
-			"<c:url value="/images/indicator.gif"/>"
-		);
-	credForm.canceButtonContainerId = "${ns}cancelButtonContainer2";
-	credForm.render();
 });
 
 
