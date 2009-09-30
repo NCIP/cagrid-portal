@@ -1,5 +1,4 @@
 <%@ include file="/WEB-INF/jsp/include/includes.jspf" %>
-
 <script type='text/javascript'
         src='/cagridportlets/dwr/interface/CredentialManagerFacade.js'></script>
 <script type='text/javascript' src='/cagridportlets/dwr/engine.js'></script>
@@ -130,16 +129,6 @@
             ${ns}showRegisterDialog();
         });
 
-
-        var credForm =
-                new CGP_CredentialsForm(
-                        "${ns}",
-                        "CredentialManagerFacade",
-                        "<c:out value="${portalUser.portalId}"/>",
-                        "<c:url value="/images/indicator.gif"/>"
-                        );
-        credForm.canceButtonContainerId = "${ns}cancelButtonContainer2";
-        credForm.render();
     });
 
 
