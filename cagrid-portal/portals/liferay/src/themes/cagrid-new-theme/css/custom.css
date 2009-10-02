@@ -63,69 +63,24 @@ body {
 }#navigation ul {
     margin: 0;
     height: 40px;
-}#navigation ul li a {
+}
+#navigation ul li a {
     background-image: url(../images/foop/nav-sprite.png);
-    height: 40px;
+    height: 32px;
     display: block;
-    text-indent: -9999px;
-    font-size: 0;
     margin-right: 1px;
-}#navigation ul li a#Home {
-    background-position: 0 0;
-    width: 88px;
-}#navigation ul li a#Home:hover {
-    background-position: 0 -40px;
-}#navigation ul li.selected a#Home, #navigation ul li a#Home:active {
-    background-position: 0 -80px;
-    width: 88px;
-}#navigation ul li a#Data_Sets {
-    background-position: -89px 0;
-    width: 107px;
-}#navigation ul li a#Data_Sets:hover {
-    background-position: -89px -40px;
-}#navigation ul li.selected a#Data_Sets, #navigation ul li a#Data_Sets:active {
-    background-position: -89px -80px;
-    width: 107px;
-}#navigation ul li a#Tools {
-    background-position: -197px 0;
-    width: 83px;
-}#navigation ul li a#Tools:hover {
-    background-position: -197px -40px;
-}#navigation ul li.selected a#Tools, #navigation ul li a#Tools:active {
-    background-position: -197px -80px;
-    width: 83px;
-}#navigation ul li a#People {
-    background-position: -281px 0;
-    width: 89px;
-}#navigation ul li a#People:hover {
-    background-position: -281px -40px;
-}#navigation ul li.selected a#People, #navigation ul li a#People:active {
-    background-position: -281px -80px;
-    width: 89px;
-}#navigation ul li a#Institutions {
-    background-position: -371px 0;
-    width: 122px;
-}#navigation ul li a#Institutions:hover {
-    background-position: -371px -40px;
-}#navigation ul li.selected a#Institutions, #navigation ul li a#Institutions:active {
-    background-position: -371px -80px;
-    width: 122px;
-}#navigation ul li a#Communities {
-    background-position: -494px 0;
-    width: 134px;
-}#navigation ul li a#Communities:hover {
-    background-position: -494px -40px;
-}#navigation ul li.selected a#Communities, #navigation ul li a#Communities:active {
-    background-position: -494px -80px;
-    width: 134px;
-}#navigation ul li a#Catalog {
-    background-position: -629px 0;
-    width: 96px;
-}#navigation ul li a#Catalog:hover {
-    background-position: -629px -40px;
-}#navigation ul li.selected a#Catalog, #navigation ul li a#Catalog:active {
-    background-position: -629px -80px;
-    width: 96px;
+	font-size:19px;
+	text-decoration:none;
+	padding:8px 8px 0 8px;
+	color:#5A5B5C;
+}
+#navigation ul li a:hover {
+	background-position:0 -40px;
+	color:#424243;
+}
+#navigation ul li.selected a, #navigation ul li a:active {
+	background-position:0 -80px;
+	color:#ffffff;
 }
 #navigation ul.signIn li a {
 	font-size:10pt;
