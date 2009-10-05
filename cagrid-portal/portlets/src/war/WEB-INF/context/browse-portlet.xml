@@ -106,6 +106,11 @@
           class="gov.nih.nci.cagrid.portal.portlet.browse.CreateRelationshipTypeController"
           autowire="byName"/>
 
+    <bean id="createPortalCommunity" class="gov.nih.nci.cagrid.portal.portlet.browse.community.CreatePortalCommunityController"
+            autowire="byName">
+        <property name="objectName" value="catalogEntryViewBean"/>
+        </bean>
+
     <bean id="editRelationshipTypeController"
           class="gov.nih.nci.cagrid.portal.portlet.browse.EditRelationshipTypeController"
           autowire="byName"/>
@@ -188,7 +193,7 @@
                         <entry key="view" value-ref="browseViewController"/>
                         <entry key="viewDetails" value-ref="browseViewDetailsController"/>
                         <entry key="viewProfile" value-ref="browseViewProfileController"/>
-                        <entry key="viewRelatedItems" value-ref="browseViewRelatedItemsController"/>
+                        <entry key="createPortalCommunity" value-ref="createPortalCommunity"/>
                         <entry key="createCatalogEntry" value-ref="createCatalogEntryController"/>
                         <entry key="editCatalogEntry" value-ref="editCatalogEntryController"/>
                         <entry key="deleteCatalogEntry" value-ref="deleteCatalogEntryController"/>

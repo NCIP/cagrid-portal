@@ -349,7 +349,7 @@
         <property name="pocRelationshipTypeName" value="PointOfContact"/>
     </bean>
 
-    <bean id="communityViewBean" class="gov.nih.nci.cagrid.portal.portlet.browse.CommunityCatalogEntryViewBean"
+    <bean id="communityViewBean" class="gov.nih.nci.cagrid.portal.portlet.browse.community.CommunityCatalogEntryViewBean"
           scope="prototype">
         <property name="memberRelationshipTypeName" value="CommunityPersonMember"/>
     </bean>

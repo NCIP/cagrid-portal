@@ -134,7 +134,11 @@
     	class="gov.nih.nci.cagrid.portal.portlet.browse.ajax.CommunityCatalogEntryManagerFacade"
     	autowire="byName"/>
     	
-    <bean id="institutionCatalogEntryManagerFacade" 
+    <bean id="commentsManagerFacade"
+    	class="gov.nih.nci.cagrid.portal.portlet.browse.ajax.CommentsManagerFacade"
+    	autowire="byName"/>
+
+    <bean id="institutionCatalogEntryManagerFacade"
     	class="gov.nih.nci.cagrid.portal.portlet.browse.ajax.InstitutionCatalogEntryManagerFacade"
     	autowire="byName"/>
     	
@@ -203,7 +207,7 @@
 						</bean>
 					</key>
 					<bean class="gov.nih.nci.cagrid.portal.portlet.terms.JenaFileModelFactoryBean">
-						<property name="modelFile" value="/terms/area_of_focus_1_0.owl"/>
+						<property name="modelFile" value="classpath:terms/area_of_focus_1_0.owl"/>
 						<property name="modelSpec">
 							<util:constant static-field="com.hp.hpl.jena.ontology.OntModelSpec.OWL_MEM"/>
 						</property>
