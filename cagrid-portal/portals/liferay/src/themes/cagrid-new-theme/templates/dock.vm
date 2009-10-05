@@ -33,6 +33,12 @@
 			</li>
 		#end
 
+        #if ($show_control_panel)
+        <li class="control-panel">
+            <a href="$control_panel_url">$control_panel_text</a>
+        </li>
+        #end
+        
 		#if ($show_my_places)
 			<li class="my-places">
 				<a>$my_places_text</a>
