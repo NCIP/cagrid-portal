@@ -80,7 +80,7 @@
             </fileset>
         </copy>
 
-        <copy todir="${build.war.build.classes.dir}">
+        <copy todir="${build.war.build.classes.dir}"  overwrite="true">
             <fileset dir="${build.classes.dir}">
                 <include name="**/*"/>
             </fileset>
@@ -102,7 +102,7 @@
 
     <target name="compile">
         <mkdir dir="${build.classes.dir}"/>
-        <javac srcdir="${src.java.dir}" destdir="${build.classes.dir}" source="1.5"
+        <javac srcdir="${src.java.dir}" destdir="${build.classes.dir}"  source="1.5"
                debug="${portlets.debug}">
             <classpath refid="compile.cp"/>
         </javac>

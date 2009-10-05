@@ -12,7 +12,8 @@
         <conf name="ext" visibility="public"/>
         <conf name="ext-tomcat" extends="ext" visibility="public"/>
 
-        <conf name="default" extends="authn,ext" visibility="public"/>
+        <conf name="utils"  visibility="public"/>
+        <conf name="default" extends="authn,ext,utils" visibility="public"/>
         <conf name="test" extends="default" visibility="public"/>
         <conf name="search" visibility="public"/>
 
@@ -20,7 +21,11 @@
 
 
     <publications>
-        <artifact name="cagrid-portal-liferay" type="jar"/>
+        <artifact name="cagrid-portal-liferay" conf="default" type="jar"/>
+        <artifact name="cagrid-portal-liferay-utils" conf="utils" type="jar"/>
+
+        <artifact name="applicationContext-liferay-utils" conf="utils" type="xml"/>
+
     </publications>
 
     <dependencies>

@@ -66,12 +66,8 @@
 
     </target>
 
-    <target name="clean" depends="build-projects-list,test:clean,reports:clean"
-            description="Clean dependency management">
-        <delete dir="${build.dir}" failonerror="false"/>
-        <delete dir="${ivy.integration.repository.dir}"/>
-        <ivy:cleancache/>
-
+    <target name="clean-projects" depends="build-projects-list,test:clean,reports:clean"
+            description="Will only clean the projects. Will NOT clean the ivy cache">
         <for parallel="false" param="project.buildfile" trim="true">
             <path refid="ivy.projects.list"/>
             <sequential>
@@ -81,6 +77,12 @@
                 </ant>
             </sequential>
         </for>
+    </target>
+
+    <target name="clean" depends="clean-projects"
+            description="Clean dependency management">
+        <delete dir="${ivy.integration.repository.dir}"/>
+        <ivy:cleancache/>
     </target>
 
 
@@ -139,7 +141,7 @@
         <trycatch property="errorMsg">
             <try>
                 <ant target="deploy-authn"
-                     dir="${projects.dir}/portals"  inheritall="false"
+                     dir="${projects.dir}/portals" inheritall="false"
                      antfile="build-liferay-${liferay.server.type}.xml"/>
             </try>
             <catch>

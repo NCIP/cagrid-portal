@@ -2291,4 +2291,14 @@
         </createIndex>
     </changeSet>
 
+
+    <changeSet id="68" author="kherm">
+        <preConditions onFail="MARK_RAN">
+            <columnExists tableName="cat_entry" columnName="communityUrl"/>
+        </preConditions>
+        <modifyColumn tableName="cat_entry">
+            <column name="communityUrl" type="text"/>
+        </modifyColumn>
+    </changeSet>
+
 </databaseChangeLog>

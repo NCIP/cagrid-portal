@@ -306,6 +306,9 @@
     <bean id="commentDao" parent="daoTemplate"
           class="gov.nih.nci.cagrid.portal.dao.catalog.CommentDao"/>
 
+    <bean id="communityCatalogEntryDao" parent="daoTemplate"
+          class="gov.nih.nci.cagrid.portal.dao.catalog.CommunityCatalogEntryDao"/>
+     
     <bean id="favoriteOfRoleDao" parent="daoTemplate"
           class="gov.nih.nci.cagrid.portal.dao.catalog.FavoriteOfRoleDao"/>
 

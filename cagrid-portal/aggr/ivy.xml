@@ -22,6 +22,7 @@
         <artifact name="caGrid-${ivy.module}-test" conf="test" type="jar"/>
          
         <!--spring configs-->
+        <artifact name="applicationContext-aggr-catalog" type="xml"/>
         <artifact name="applicationContext-aggr-concepts" type="xml"/>
         <artifact name="applicationContext-aggr-geocode" type="xml"/>
         <artifact name="applicationContext-aggr-metachange" type="xml"/>

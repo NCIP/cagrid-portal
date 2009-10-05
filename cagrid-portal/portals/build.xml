@@ -8,10 +8,15 @@
 
     <property name="build.dir" value="${basedir}/build"/>
     <property name="build.jar.dir" value="${build.dir}/jars"/>
+    <property name="build.xml.dir" value="${build.dir}/xmls"/>
+
     <property name="test.build.dir" value="${build.dir}/test"/>
 
     <property name="classes.dir" value="${build.dir}/classes"/>
+
     <property name="src.java.dir" value="${liferay.dir}/src/java"/>
+    <property name="etc.dir" value="${liferay.dir}/etc"/>
+
     <property name="src.war.dir" value="${liferay.dir}/src/war"/>
     <property name="src.layouts.dir" value="${liferay.dir}/src/layouts"/>
     <property name="src.themes.dir" value="${liferay.dir}/src/themes"/>
@@ -30,7 +35,7 @@
     <property name="ext.search.wars.dir" value="${ext.search.dir}/wars"/>
 
     <property name="portal.search.war" value="${ext.search.wars.dir}/${portal.search.war.name}.war"/>
-    
+
     <path id="compile.cp">
         <fileset dir="${ext.default.lib.dir}">
             <include name="*.jar"/>
@@ -60,11 +65,33 @@
         </javac>
     </target>
 
-    <target name="jar" depends="compile">
+    <target name="build-resources" depends="prepare">
+
+        <mkdir dir="${build.xml.dir}"/>
+        <copy todir="${build.xml.dir}">
+            <fileset dir="${etc.dir}">
+                <filename name="applicationContext-liferay-utils.xml"/>
+            </fileset>
+        </copy>
+    </target>
+
+    <target name="jar" depends="compile,build-resources">
         <mkdir dir="${build.jar.dir}"/>
 
-        <jar basedir="${classes.dir}"
-             destfile="${build.jar.dir}/cagrid-portal-liferay.jar"/>
+        <jar
+             destfile="${build.jar.dir}/cagrid-portal-liferay.jar">
+            <fileset dir="${classes.dir}">
+            <exclude name="**/utils/*.class"/>
+                <include name="**"/>
+            </fileset>
+            </jar>
+
+        <jar
+             destfile="${build.jar.dir}/cagrid-portal-liferay-utils.jar">
+            <fileset dir="${classes.dir}">
+            <include name="**/utils/*.class"/>
+            </fileset>
+            </jar>
 
     </target>
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module relativePaths="true" type="JAVA_MODULE" version="4">
   <component name="NewModuleRootManager" inherit-compiler-output="false">
-    <output url="file://$MODULE_DIR$/../out/production/portals" />
+    <output url="file://$MODULE_DIR$/build/classes" />
     <output-test url="file://$MODULE_DIR$/../out/test/portals" />
     <exclude-output />
     <content url="file://$MODULE_DIR$">
@@ -14,12 +14,12 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="liferay 5.2.3" level="project" />
     <orderEntry type="module" module-name="aggr" />
     <orderEntry type="module" module-name="db" />
     <orderEntry type="library" name="acegi" level="project" />
     <orderEntry type="library" name="cagrid" level="project" />
     <orderEntry type="module" module-name="security" />
+    <orderEntry type="library" name="liferay 5.2.3" level="project" />
   </component>
 </module>
 

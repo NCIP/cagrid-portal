@@ -2,7 +2,6 @@
 <tags:yui-minimum/>
 <link rel="stylesheet" type="text/css" href="<c:url value="/js/yui/container/assets/skins/sam/container.css"/>" />
 
-<script type="text/javascript" src="<c:url value="/js/yui/button/button-min.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/js/yui/container/container-min.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/js/scriptaculous/prototype.js"/>"></script>
 
@@ -77,16 +76,7 @@ jQuery(document).ready(function(){
 	var myStates = new CGP_StateCountryLists("${ns}stateProvince", "${ns}countryCode");
 	myStates.render();
 
-	${ns}registerButton = new YAHOO.widget.Button({
-		label: "Register",
-		id: "${ns}registerButton",
-		container: "${ns}registerButtonContainer"
-	});
-
-	${ns}registerButton.on("click", function(evt){
-		${ns}showRegisterDialog();
-	});
-
+	 
 });
 
 

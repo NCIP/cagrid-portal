@@ -21,6 +21,8 @@
 
     <bean id="authnService" class="gov.nih.nci.cagrid.portal.security.AuthnService" autowire="byName">
         <property name="encryptionService" ref="encryptionServicePrototype"/>
+        <!--60 seconds lifetime-->
+        <property name="ticketLifetime" value="60000"/>
     </bean>
 	    
 	<bean id="encryptionServicePrototype" class="gov.nih.nci.cagrid.portal.security.EncryptionService" scope="prototype">
