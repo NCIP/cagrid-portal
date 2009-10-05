@@ -8,7 +8,7 @@
 
 <div class="searchBox">
     <div class="L-endcap"></div>
-    <input id="<c:out value="${id}"/>" class="search" type="text" size="20"
+    <input id="<c:out value="${id}"/>" class="search" type="text" size="19"
            value="Search" style="color:#afafaf;"
            onkeypress="return <c:out value="${searchCallback}(event,this.value);"/>
     "/>
