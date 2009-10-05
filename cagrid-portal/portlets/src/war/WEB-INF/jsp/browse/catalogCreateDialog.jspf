@@ -7,13 +7,14 @@
 
 <portlet:defineObjects/>
 <liferay-theme:defineObjects/>
-
+<%--
 <%
     String actionId = "CREATE";
     String resourceName = "gov.nih.nci.cagrid.portal.domain.catalog.CatalogEntry";
 %>
 <c:set var="canCreate" value="<%= permissionChecker.hasPermission(scopeGroupId, resourceName,0, actionId) %>"/>
-
+--%>
+<c:set var="canCreate" value='<%=request.isUserInRole("catalog-user")%>'/>
 
 <c:if test="${canCreate}">
     <portlet:actionURL var="addCatalogEntryUrl">

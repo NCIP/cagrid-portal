@@ -158,12 +158,12 @@ public class CredentialManagerFacade {
 					} catch (Exception ex) {
 						String msg = "Couldn't get profiles for: " + idpUrl
 								+ "\n" + ex.getMessage();
-						logger.warn(msg, ex);
+						logger.info(msg, ex);
 					}
 				} catch (Exception ex) {
 					String msg = "Error connecting to " + idpUrl + ": "
 							+ ex.getMessage();
-					logger.warn(msg, ex);
+					logger.info(msg, ex);
 				}
 			}
 		} catch (Exception ex) {

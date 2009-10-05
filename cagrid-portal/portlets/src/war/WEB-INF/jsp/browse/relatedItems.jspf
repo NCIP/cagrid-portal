@@ -37,19 +37,40 @@ jQuery(document).ready(function(){
 					<div class="oneRoleInstance" id="${ns}_rel_${role.roleInstance.relationship.id}">
 					
 					<c:out value="${role.roleInstance.description}"/><br/>
-					
-<%-- TODO: this doesn't work in AJAX servlet request
+
+
+<c:set var="theRole" value="${role}" scope="page"/>
+<%--					
 <%
-String deleteRelatedItemActionId = "DELETE";
-gov.nih.nci.cagrid.portal.portlet.browse.CatalogEntryRoleInstanceViewBean role = (gov.nih.nci.cagrid.portal.portlet.browse.CatalogEntryRoleInstanceViewBean)pageContext.getAttribute("role");
-String resourcePk = String.valueOf(role.getRoleInstance().getRelationship().getId());
-if(permissionChecker.hasPermission(scopeGroupId, portletDisplay.getRootPortletId(), resourcePk, deleteRelatedItemActionId)){ %>
+theRole = (CatalogEntryRoleInstanceViewBean)pageContext.getAttribute("role");
+if(permissionChecker
+		.hasPermission(
+			scopeGroupId, 
+			portletDisplay.getRootPortletId(), 
+			String.valueOf(theRole.getRoleInstance().getRelationship().getId()), 
+			"DELETE"
+			)){ %>
 					<input type="button" value="Delete" onclick="${ns}deleteRelatedItem('${role.roleInstance.relationship.id}')"/>
-<% } %>
+<% } 
+%>
 --%>
-					<c:if test="${!empty portalUser and portalUser.id eq role.roleInstance.relationship.author.id}">
-						<input type="button" value="Delete" onclick="${ns}deleteRelatedItem('${role.roleInstance.relationship.id}')"/>
-					</c:if>
+<%
+userIsOwnerUser = false;
+theRole = (CatalogEntryRoleInstanceViewBean)pageContext.getAttribute("role");
+if(request.isUserInRole("catalog-user")){
+	PortalUser portalUser = (PortalUser)request.getAttribute("portalUser");
+	PortalUser author = theRole.getRoleInstance().getRelationship().getAuthor(); 
+	if(author != null && author.getId().equals(portalUser.getId())){
+		userIsOwnerUser = true;
+	}
+}
+%>
+				<c:set var="canDelete" value="<%=userIsOwnerUser || userIsAdmin%>"/>
+				<c:if test="${canDelete}">
+					<input type="button" value="Delete" onclick="${ns}deleteRelatedItem('${role.roleInstance.relationship.id}')"/>
+				</c:if>
+
+
 					<br/>
 			        </div>
 			        	

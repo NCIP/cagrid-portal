@@ -2,6 +2,8 @@
 <script type="text/javascript" src="<c:url value="/js/yui/datasource/datasource-min.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/js/yui/autocomplete/autocomplete-min.js"/>"></script>
 
+<%@ page import="com.liferay.portal.kernel.portlet.LiferayWindowState" %>
+
 <br/>
 <br/>
 <div class="yui-skin-sam">
@@ -12,12 +14,14 @@
     </ul>             
     <div class="yui-content"> 
         <div>
-        
+
+<%--        
 <%
     String actionId = "ADD_RELATEED_ITEM";
 %>
 <c:if test="<%= permissionChecker.hasPermission(scopeGroupId, resourceName,0, actionId) %>">
-
+--%>
+<c:if test='<%=request.isUserInRole("catalog-user")%>'>
 
 <div id="${ns}editRelatedItemsDiv">
 <p>
@@ -144,7 +148,27 @@ function ${ns}saveNewRelatedItem(){
 function ${ns}renderUpdatedRelatedItemsView(){
 	jQuery("#${ns}relatedItemsDiv").html("Rendering related items <img src='<c:url value="/images/indicator.gif"/>'/>");
 	
+	var callback = {
+		success: function(o){
+			var html = o.responseText;
+			jQuery("#${ns}relatedItemsDiv").html(html);
+			jQuery("#${ns}addRelatedItemButtonContainer").show();		
+		},
+		failure: function(o){
+			alert("Error rendering related items: " + errorString);		
+		},
+		cache: false
+	}
 	
+	<portlet:renderURL var="renderUpdatedRelatedItemsUrl"
+		windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>"
+	>
+		<portlet:param name="operation" value="viewRelatedItems"/>
+		<portlet:param name="entryId" value="${catalogEntry.id}"/>
+	</portlet:renderURL>	
+	YAHOO.util.Connect.asyncRequest("GET", "${renderUpdatedRelatedItemsUrl}", callback, null);
+	
+	/*
 	CatalogEntryManagerFacade.renderRelatedItems("${ns}",
 	{
 		callback:function(html){
@@ -155,6 +179,7 @@ function ${ns}renderUpdatedRelatedItemsView(){
 			alert("Error rendering related items: " + errorString);
 		}
 	});
+	*/
 
 }
 function ${ns}cancelNewRelatedItem(){

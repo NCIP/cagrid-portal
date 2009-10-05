@@ -142,6 +142,13 @@
             autowire="byName">
         <property name="commandClass" value="gov.nih.nci.cagrid.portal.portlet.browse.BrowseCommand"/>
     </bean>
+    
+    <bean
+            id="browseViewRelatedItemsController"
+            class="gov.nih.nci.cagrid.portal.portlet.browse.ViewRelatedItemsController"
+            autowire="byName">
+        <property name="viewName" value="related_items_content"/>
+    </bean>
 
     <!--
      <bean
@@ -181,6 +188,7 @@
                         <entry key="view" value-ref="browseViewController"/>
                         <entry key="viewDetails" value-ref="browseViewDetailsController"/>
                         <entry key="viewProfile" value-ref="browseViewProfileController"/>
+                        <entry key="viewRelatedItems" value-ref="browseViewRelatedItemsController"/>
                         <entry key="createCatalogEntry" value-ref="createCatalogEntryController"/>
                         <entry key="editCatalogEntry" value-ref="editCatalogEntryController"/>
                         <entry key="deleteCatalogEntry" value-ref="deleteCatalogEntryController"/>

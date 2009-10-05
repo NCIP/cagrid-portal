@@ -86,9 +86,11 @@ public abstract class AbstractAutoLogin implements AutoLogin {
                 birthdayYear, jobTitle, groupIds, organizationIds,
                 roleIds, userGroupIds, sendEmail, serviceContext);
         
-        ResourceLocalServiceUtil.addResources(user.getCompanyId(), 0, user
-				.getUserId(), CatalogEntry.class.getName(), String
-				.valueOf(portalUser.getCatalog().getId()), false, false, false);
+//        ResourceLocalServiceUtil.addResources(user.getCompanyId(), 0, user
+//				.getUserId(), CatalogEntry.class.getName(), String
+//				.valueOf(portalUser.getCatalog().getId()), false, false, false);
+        
+        //TODO: Set up default privileges: 
 
         return user;
     }

@@ -701,6 +701,14 @@
                 <value>browse:searchKeyword</value>
             </preference>
         </portlet-preferences>
+        
+		<security-role-ref>
+			<role-name>catalog-user</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>catalog-admin</role-name>
+		</security-role-ref>
+		
     </portlet>
     
 <!-- 

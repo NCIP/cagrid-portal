@@ -1,5 +1,8 @@
+<%@ page import="gov.nih.nci.cagrid.portal.domain.PortalUser" %>
 <%@ page import="gov.nih.nci.cagrid.portal.domain.catalog.CatalogEntry" %>
 <%@ page import="gov.nih.nci.cagrid.portal.portlet.browse.CatalogEntryViewBean" %>
+<%@ page import="gov.nih.nci.cagrid.portal.portlet.browse.CatalogEntryRoleInstanceViewBean" %>
+
 <%@ taglib uri="http://liferay.com/tld/theme" prefix="liferay-theme" %>
 <portlet:defineObjects />
 <liferay-theme:defineObjects />

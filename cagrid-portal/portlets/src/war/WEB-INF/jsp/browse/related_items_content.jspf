@@ -1,5 +1,9 @@
 
-
+<%
+CatalogEntryRoleInstanceViewBean theRole = null;
+userIsAdmin = request.isUserInRole("catalog-admin");
+userIsOwnerUser = false;
+%>
 			<div id="${ns}relatedItemsDiv">
 		
 	        	<div id="${ns}newRelatedItemDiv">

@@ -26,7 +26,14 @@
 		<private-session-attributes>true</private-session-attributes>
 	</portlet>
 
-
+	<role-mapper>
+		<role-name>catalog-user</role-name>
+		<role-link>Catalog User</role-link>
+	</role-mapper>
+	<role-mapper>
+		<role-name>catalog-admin</role-name>
+		<role-link>Catalog Admin</role-link>
+	</role-mapper>
 	
 
 </liferay-portlet-app>

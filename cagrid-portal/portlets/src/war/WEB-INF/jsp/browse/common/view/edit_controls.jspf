@@ -1,3 +1,4 @@
+<%--
 <%
 CatalogEntryViewBean catalogEntryViewBean = (CatalogEntryViewBean)request.getAttribute("catalogEntryViewBean");
 String updateActionId = "UPDATE";
@@ -7,6 +8,24 @@ String resourceId = String.valueOf(catalogEntryViewBean.getCatalogEntry().getId(
 %>
 		<c:set var="canUpdate" value="<%= permissionChecker.hasPermission(0, resourceName, resourceId, updateActionId) %>"/>
 		<c:set var="canDelete" value="<%= permissionChecker.hasPermission(0, resourceName, resourceId, deleteActionId) %>"/>
+--%>
+<%
+boolean userIsAdmin = request.isUserInRole("catalog-admin");
+boolean userIsOwnerUser = false;
+boolean entryIsPerson = false;
+CatalogEntry catalogEntry = ((CatalogEntryViewBean)request.getAttribute("catalogEntryViewBean")).getCatalogEntry();
+entryIsPerson = catalogEntry.getClass().getSimpleName().equals("PersonCatalogEntry");
+if(request.isUserInRole("catalog-user")){
+	PortalUser portalUser = (PortalUser)request.getAttribute("portalUser");
+	PortalUser author = catalogEntry.getAuthor();
+	if(author != null && author.getId().equals(portalUser.getId())){
+		userIsOwnerUser = true;
+	}
+}
+%>
+
+<c:set var="canUpdate" value="<%=userIsOwnerUser%>"/>
+<c:set var="canDelete" value="<%=userIsOwnerUser && !entryIsPerson || userIsAdmin%>"/>
 
 		<portlet:actionURL var="updateUrl">
 			<portlet:param name="operation" value="editCatalogEntry"/>

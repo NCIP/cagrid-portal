@@ -63,8 +63,8 @@ public class CatalogEntryManagerFacade extends AjaxViewGenerator {
             CatalogEntry ce = getUserModel().getCurrentCatalogEntry();
             ce.setAuthor(portalUser);
             if (ce.getId() == null) {
-                PortletUtils.addResource(getUserModel().getPortalUser(),
-                        CatalogEntry.class, ce.getId());
+//                PortletUtils.addResource(getUserModel().getPortalUser(),
+//                        CatalogEntry.class, ce.getId());
             }
             getCatalogEntryDao().save(ce);
             saveAreasOfFocus();
@@ -156,6 +156,9 @@ public class CatalogEntryManagerFacade extends AjaxViewGenerator {
             }
             types.addAll(sourceTypes);
             types.addAll(targetTypes);
+            
+            logger.debug("sourceTypes: " + sourceTypes);
+            logger.debug("targetTypes: " + targetTypes);
 
             StringBuilder sb = new StringBuilder();
             for (Iterator<String> i = types.iterator(); i.hasNext();) {
@@ -172,6 +175,9 @@ public class CatalogEntryManagerFacade extends AjaxViewGenerator {
             List l = getHibernateTemplate().find(query);
 
             List<CatalogEntryRoleType> roleTypes = new ArrayList<CatalogEntryRoleType>();
+            
+            logger.debug("Fetched " + l.size() + " role types.");
+            
             for (Iterator<CatalogEntryRoleType> i = l.iterator(); i.hasNext();) {
                 CatalogEntryRoleType targetTypeObj = i.next();
                 if (targetTypes.contains(targetTypeObj.getType())) {
@@ -186,6 +192,8 @@ public class CatalogEntryManagerFacade extends AjaxViewGenerator {
                     }
                 }
             }
+            
+            logger.debug("roleTypes.size: " + roleTypes.size());
 
             Map<String, Object> attrMap = new HashMap<String, Object>();
             attrMap.put("roleTypes", roleTypes);
@@ -370,8 +378,8 @@ public class CatalogEntryManagerFacade extends AjaxViewGenerator {
 
             getHibernateTemplate().flush();
 
-            PortletUtils.addResource(getUserModel().getPortalUser(),
-                    CatalogEntryRelationshipInstance.class, relInst.getId());
+//            PortletUtils.addResource(getUserModel().getPortalUser(),
+//                    CatalogEntryRelationshipInstance.class, relInst.getId());
 
         } catch (Exception ex) {
             String msg = "Error saving relationship: " + ex.getMessage();
@@ -389,8 +397,8 @@ public class CatalogEntryManagerFacade extends AjaxViewGenerator {
                     .find("from CatalogEntryRelationshipInstance where id = ?",
                             relationshipId).iterator().next();
 
-            PortletUtils.deleteResource(getUserModel().getPortalUser(),
-                    CatalogEntryRelationshipInstance.class, relInst.getId());
+//            PortletUtils.deleteResource(getUserModel().getPortalUser(),
+//                    CatalogEntryRelationshipInstance.class, relInst.getId());
 
             CatalogEntryRoleInstance roleAInst = relInst.getRoleA();
             CatalogEntryRoleInstance roleBInst = relInst.getRoleB();
