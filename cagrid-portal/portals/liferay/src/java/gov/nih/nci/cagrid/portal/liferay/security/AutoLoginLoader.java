@@ -24,9 +24,9 @@ public class AutoLoginLoader implements AutoLogin {
     public AutoLoginLoader() {
         try {
             ApplicationContext ctx = new ClassPathXmlApplicationContext(
-                    new String[]{"classpath:applicationContext-db.xml",
+                    new String[]{
                             "classpath:applicationContext-liferay.xml",
-                            "classpath:applicationContext-security.xml"});
+                    });
 
             this.instance = (AbstractAutoLogin) ctx.getBean("autoLogin");
         } catch (Exception ex) {

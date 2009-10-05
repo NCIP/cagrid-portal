@@ -3,6 +3,7 @@
  */
 package gov.nih.nci.cagrid.portal.portlet.browse.ajax;
 
+import gov.nih.nci.cagrid.portal.PortalSystemException;
 import gov.nih.nci.cagrid.portal.dao.catalog.CatalogEntryDao;
 import gov.nih.nci.cagrid.portal.dao.catalog.TermDao;
 import gov.nih.nci.cagrid.portal.dao.catalog.TerminologyDao;
@@ -25,6 +26,7 @@ import java.util.*;
 
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com>Joshua Phillips</a>
+ * @author kherm manav.kher@semanticbits.com
  */
 @Transactional
 public class CatalogEntryManagerFacade extends AjaxViewGenerator {
@@ -54,6 +56,21 @@ public class CatalogEntryManagerFacade extends AjaxViewGenerator {
      */
     public CatalogEntryManagerFacade() {
 
+    }
+
+    /**
+     * WIll load the current CE and attach it an open Session
+     *
+     * @return
+     * @throws PortalSystemException
+     */
+    public CatalogEntry loadCurrentCE() throws PortalSystemException {
+        CatalogEntry entry = getCatalogEntryDao().getById(
+                getUserModel().getCurrentCatalogEntry().getId());
+        if (entry == null) {
+            throw new PortalSystemException("No current catalog entry");
+        }
+        return entry;
     }
 
     public Integer save() {
@@ -156,7 +173,7 @@ public class CatalogEntryManagerFacade extends AjaxViewGenerator {
             }
             types.addAll(sourceTypes);
             types.addAll(targetTypes);
-            
+
             logger.debug("sourceTypes: " + sourceTypes);
             logger.debug("targetTypes: " + targetTypes);
 
@@ -175,9 +192,9 @@ public class CatalogEntryManagerFacade extends AjaxViewGenerator {
             List l = getHibernateTemplate().find(query);
 
             List<CatalogEntryRoleType> roleTypes = new ArrayList<CatalogEntryRoleType>();
-            
+
             logger.debug("Fetched " + l.size() + " role types.");
-            
+
             for (Iterator<CatalogEntryRoleType> i = l.iterator(); i.hasNext();) {
                 CatalogEntryRoleType targetTypeObj = i.next();
                 if (targetTypes.contains(targetTypeObj.getType())) {
@@ -192,7 +209,7 @@ public class CatalogEntryManagerFacade extends AjaxViewGenerator {
                     }
                 }
             }
-            
+
             logger.debug("roleTypes.size: " + roleTypes.size());
 
             Map<String, Object> attrMap = new HashMap<String, Object>();

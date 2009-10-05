@@ -10,6 +10,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.web.portlet.ModelAndView;
 
+import javax.portlet.PortletRequest;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
@@ -61,7 +62,7 @@ public class CopySharedQueryCatalogEntryController extends BrowseViewDetailsCont
      * Overriden method. Will load from session instead of the DB.
      * Since this is a copy of the CE and not yet persisted in the DB
      */
-    protected CatalogEntry getCatalogEntry(RenderRequest request) {
+    protected CatalogEntry getCatalogEntry(PortletRequest request) {
         return getUserModel().getCurrentCatalogEntry();
     }
 

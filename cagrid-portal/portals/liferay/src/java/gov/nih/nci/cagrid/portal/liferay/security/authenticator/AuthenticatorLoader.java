@@ -22,10 +22,8 @@ public class AuthenticatorLoader extends LiferayLoginHelper implements Authentic
     public AuthenticatorLoader() {
         try {
             ApplicationContext ctx = new ClassPathXmlApplicationContext(
-                    new String[]{"classpath:applicationContext-db.xml",
-                            "classpath:applicationContext-service.xml",
-                            "classpath:applicationContext-liferay.xml",
-                            "classpath:applicationContext-security.xml"});
+                    new String[]{
+                            "classpath:applicationContext-liferay.xml"});
 
             this.instance = (Authenticator) ctx.getBean("authenticator");
         } catch (Exception ex) {

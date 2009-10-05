@@ -20,6 +20,10 @@ public class PortalPortletIntegrationTestBase extends AbstractDependencyInjectio
         setPopulateProtectedVariables(true);
     }
 
+    protected Object getBean(String beanName) {
+        return getApplicationContext().getBean(beanName);
+    }
+
     @Override
     protected String[] getConfigLocations() {
         return new String[]{
