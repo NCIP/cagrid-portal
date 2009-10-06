@@ -26,20 +26,25 @@
     </div>
     <!-- The following line is for formatting purposes -->
     <hr style="clear:both; visibility:hidden;"/>
+
+    <c:if test='<%=request.isUserInRole("catalog-admin")%>'>
+        <%-- Render field... --%>
         <div class="row">
             <label>Featured Item?</label>
-             Yes: <input type="radio" name="featured" class="autoSet" value="true"
-            <c:if test="${catalogEntry.featured}">
-                checked
-            </c:if>
-            />
+            Yes: <input type="radio" name="featured" class="autoSet" value="true"
+                <c:if test="${catalogEntry.featured}">
+                    checked
+                </c:if>
+                />
             No:
             <input type="radio" name="featured" class="autoSet" value="false"
-            <c:if test="${!catalogEntry.featured}">
-                checked
-            </c:if>
-            />
+                    <c:if test="${!catalogEntry.featured}">
+                        checked
+                    </c:if>
+                    />
         </div>
+    </c:if>
+
 </div>
 
 <script type="text/javascript">
