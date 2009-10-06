@@ -18,7 +18,7 @@
     <bean id="abstractSolrCommandExecutor" class="gov.nih.nci.cagrid.portal.search.AbstractSolrCommandExecutor"
           abstract="true" p:httpClient-ref="defaultHttpClient"
           p:baseSolrURL="${cagrid.portal.solr.http.url}"
-          p:localhostURL="http://localhost:${cagrid.portal.httpRedirect.port}"/>
+          p:localhostURL="http://localhost:${cagrid.portal.http.port}"/>
 
     <!--will initialize on container startup-->
     <bean id="solrCommandExecutor" class="gov.nih.nci.cagrid.portal.search.SolrCommandExecutor"
