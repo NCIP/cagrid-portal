@@ -42,7 +42,9 @@ public class CommunityCatalogEntryManagerFacade extends
         }
 
         for (char c : name.toCharArray()) {
-            if ((!Validator.isChar(c)) && (!Validator.isDigit(c)) &&
+            if (c == CharPool.SPACE)
+                c = CharPool.DASH;
+            if ((c != CharPool.SPACE) && (!Validator.isChar(c)) && (!Validator.isDigit(c)) && (c == CharPool.SPACE) &&
                     (c != CharPool.DASH) && (c != CharPool.PERCENT) &&
                     (c != CharPool.PERIOD) && (c != CharPool.SLASH) &&
                     (c != CharPool.UNDERLINE)) {
