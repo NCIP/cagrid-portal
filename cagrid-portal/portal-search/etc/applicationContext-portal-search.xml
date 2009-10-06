@@ -15,29 +15,20 @@
         <constructor-arg value="${cagrid.portal.aggr.defaultDelay}"/>
     </bean>
 
-    <bean id="baseSolrURL" class="java.lang.String">
-        <constructor-arg value="${cagrid.portal.solr.http.url}"/>
-    </bean>
-
-    <bean id="localhostURL" class="java.lang.String">
-        <constructor-arg value="http://localhost:${cagrid.portal.http.port}"/>
-    </bean>
-
-    <bean id="abstractSolrCommandExecutor" class="gov.nih.nci.cagrid.portal.search.AbstractSolrCommandExecutor"
+     <bean id="abstractSolrCommandExecutor" class="gov.nih.nci.cagrid.portal.search.AbstractSolrCommandExecutor"
           abstract="true" p:httpClient-ref="defaultHttpClient"
-          p:baseSolrURL-ref="localhostURL" p:localhostURL-ref="localhostURL"/>
-
+          p:baseSolrURL="${cagrid.portal.solr.http.url}"
+          p:localhostURL="http://localhost:${cagrid.portal.http.port}"/>
 
     <!--will initialize on container startup-->
     <bean id="solrCommandExecutor" class="gov.nih.nci.cagrid.portal.search.SolrCommandExecutor"
-          p:httpClient-ref="defaultHttpClient"
-          p:baseSolrURL-ref="localhostURL" p:localhostURL-ref="localhostURL">
+            parent="abstractSolrCommandExecutor">
+
         <constructor-arg value="/dataimport?command=full-import"/>
     </bean>
 
     <bean class="gov.nih.nci.cagrid.portal.search.PortalDaoAspect" lazy-init="true"
-          p:httpClient-ref="defaultHttpClient"
-          p:baseSolrURL-ref="localhostURL" p:localhostURL-ref="localhostURL">
+             parent="abstractSolrCommandExecutor">
         <constructor-arg value="/dataimport/command=delta-import"/>
     </bean>
 
