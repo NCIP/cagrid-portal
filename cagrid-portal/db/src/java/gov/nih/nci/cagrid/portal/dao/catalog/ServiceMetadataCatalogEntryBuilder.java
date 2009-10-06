@@ -73,7 +73,8 @@ public class ServiceMetadataCatalogEntryBuilder {
             }
         }
         if (StringUtils.isEmpty(serviceName)) {
-            throw new PortalDBRuntimeException("Service has no name. Will not create a CE for service no name");
+           logger.warn("Service has no name. Will not create a CE for service no name" + service.getUrl());
+            return null;
         }
 
         GridServiceEndPointCatalogEntry endpointCe = getGridServiceEndPointCatalogEntryDao()

@@ -44,7 +44,7 @@ function ${ns}cancelEdit(id){
 <c:if test="${empty viewDetailsUrl}">
 	<portlet:renderURL var="viewDetailsUrl">
 		<portlet:param name="operation" value="viewDetails"/>
-		<portlet:param name="entryId" value="CPREPLACE"/>
+		<portlet:param name="id" value="CPREPLACE"/>
 	</portlet:renderURL>		
 </c:if>
 	var viewDetailsUrl = "${viewDetailsUrl}".replace("CPREPLACE", id);

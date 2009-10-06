@@ -47,7 +47,11 @@
         <create creator="spring" javascript="CommunityCatalogEntryManagerFacade">
             <param name="beanName" value="communityCatalogEntryManagerFacade"/>
         </create>
-        
+
+        <create creator="spring" javascript="CommentsManagerFacade">
+            <param name="beanName" value="commentsManagerFacade"/>
+        </create>
+
         <create creator="spring" javascript="InstitutionCatalogEntryManagerFacade">
             <param name="beanName" value="institutionCatalogEntryManagerFacade"/>
         </create>

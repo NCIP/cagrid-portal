@@ -2,10 +2,12 @@ package gov.nih.nci.cagrid.portal.search;
 
 import gov.nih.nci.cagrid.portal.DBIntegrationTestBase;
 import gov.nih.nci.cagrid.portal.dao.PortalUserDao;
+import gov.nih.nci.cagrid.portal.dao.PersonDao;
 import gov.nih.nci.cagrid.portal.dao.catalog.*;
 import gov.nih.nci.cagrid.portal.domain.catalog.*;
 import gov.nih.nci.cagrid.portal.domain.DomainObject;
 import gov.nih.nci.cagrid.portal.domain.AbstractDomainObject;
+import gov.nih.nci.cagrid.portal.domain.Person;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.HttpMethod;
@@ -44,6 +46,15 @@ public class PortalDaoAspectTest extends DBIntegrationTestBase {
     }
 
 
+    public void testDelete(){
+        PersonCatalogEntry pCE = new PersonCatalogEntry();
+        PersonCatalogEntryDao pCEDao = (PersonCatalogEntryDao) getApplicationContext().getBean("personCatalogEntryDao");
+        pCEDao.save(pCE);
+         MockHttpClient.assertJustRan();
+        
+        pCEDao.delete(pCE);
+    }
+
     public void testPersonCEAspect() {
         PersonCatalogEntry pCE = new PersonCatalogEntry();
         PersonCatalogEntryDao pCEDao = (PersonCatalogEntryDao) getApplicationContext().getBean("personCatalogEntryDao");
@@ -51,15 +62,15 @@ public class PortalDaoAspectTest extends DBIntegrationTestBase {
 
     }
 
-    public void testNonCatalog() throws Exception{
-        AbstractDomainObject obj = new Term();
-        AbstractCatalogEntryDao cEDao = (CatalogEntryDao) getApplicationContext().getBean("catalogEntryDao");
-        cEDao.save(obj);
-        assertFalse("Solr HTTP interface should not be called for non CatalogEntry", MockHttpClient.assertJustRan());
+    public void testNonCEDao() throws Exception{
+          Person p = new Person();
+        PersonDao cEDao = (PersonDao) getApplicationContext().getBean("personDao");
+        cEDao.save(p);
+        assertFalse("Solr HTTP interface should not be called for non CatalogEntry DAO", MockHttpClient.assertJustRan());
         MockHttpClient httpClient = (MockHttpClient) getApplicationContext().getBean("defaultHttpClient");
          httpClient.executeMethod(null);
-        
     }
+    
     public void testCEAspect() {
         CatalogEntry ce = new CatalogEntry();
         CatalogEntryDao cEDao = (CatalogEntryDao) getApplicationContext().getBean("catalogEntryDao");

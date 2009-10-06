@@ -166,8 +166,8 @@
 
         <property name="order" value="1"/>
         <property name="parameterName" value="operation"/>
-        <property name="applyWebRequestInterceptorsToRenderPhaseOnly" value="false"/>
-
+        <!--<property name="applyWebRequestInterceptorsToRenderPhaseOnly" value="false"/>-->
+    
         <property name="interceptors">
             <list>
                 <ref bean="parameterMappingInterceptor"/>

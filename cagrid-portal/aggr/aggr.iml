@@ -23,15 +23,6 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="module-library" exported="">
-      <library>
-        <CLASSES>
-          <root url="file://$MODULE_DIR$/test/build/classes" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
     <orderEntry type="library" exported="" name="poi" level="project" />
     <orderEntry type="library" exported="" name="cagrid" level="project" />
     <orderEntry type="library" name="mail" level="project" />

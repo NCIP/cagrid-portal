@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.portal.dao.catalog;
 
 import gov.nih.nci.cagrid.portal.domain.catalog.CatalogEntry;
+import gov.nih.nci.cagrid.portal.annotation.UpdatesCatalogs;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -14,6 +15,12 @@ import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.orm.hibernate3.HibernateTemplate;
+
+/**
+ * User: kherm
+ *
+ * @author kherm manav.kher@semanticbits.com
+ */
 
 public class CatalogEntryDao extends AbstractCatalogEntryDao<CatalogEntry> {
 	public CatalogEntryDao() {
@@ -83,6 +90,7 @@ public class CatalogEntryDao extends AbstractCatalogEntryDao<CatalogEntry> {
 	}
 
 	@Override
+    @UpdatesCatalogs
 	public void delete(final CatalogEntry ce) {
 
 		HibernateTemplate templ = getHibernateTemplate();

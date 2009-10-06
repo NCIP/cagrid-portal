@@ -17,13 +17,12 @@ import javax.portlet.ActionResponse;
  *
  * @author kherm manav.kher@semanticbits.com
  */
-@Transactional
 public class CreatePortalCommunityController extends BaseCatalogEntryAbstractController {
 
     private CommunityCatalogEntryDao communityCatalogEntryDao;
 
     @Override
-    public void handleActionRequest(ActionRequest req, ActionResponse res) throws Exception {
+    protected void handleActionRequestInternal(ActionRequest req, ActionResponse res) throws Exception {
         CommunityCatalogEntry ce = (CommunityCatalogEntry) getCatalogEntry(req);
 
         logger.debug("Will try and create new Portal Community");
@@ -40,8 +39,10 @@ public class CreatePortalCommunityController extends BaseCatalogEntryAbstractCon
             getCommunityCatalogEntryDao().save(ce);
             getUserModel().setCurrentCatalogEntry(ce);
         } catch (Exception e) {
-            logger.warn("Could not create Portal Community", e);
-            throw new PortalException("Could not create Portal Community.", e);
+            logger.warn("Could not create Portal Community. Will rollback", e);
+            getCommunityCatalogEntryDao().delete(ce);
+            getUserModel().setCurrentCatalogEntry(null);
+            throw new PortalException("Could not create Portal Community", e);
         }
         logger.info("Created new Portal community with name " + ce.getName());
 

@@ -60,15 +60,6 @@
       </library>
     </orderEntry>
     <orderEntry type="library" exported="" name="sun" level="project" />
-    <orderEntry type="module-library" exported="">
-      <library>
-        <CLASSES>
-          <root url="file://$MODULE_DIR$/test/build/classes" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
     <orderEntry type="library" name="liquibase" level="project" />
     <orderEntry type="module-library" exported="">
       <library>
@@ -88,7 +79,6 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="library" exported="" name="mysql" level="project" />
   </component>
 </module>
 
