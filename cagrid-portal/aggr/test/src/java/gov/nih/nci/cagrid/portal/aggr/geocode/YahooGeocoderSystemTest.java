@@ -2,14 +2,13 @@ package gov.nih.nci.cagrid.portal.aggr.geocode;
 
 import gov.nih.nci.cagrid.portal.domain.Address;
 import gov.nih.nci.cagrid.portal.domain.Geocode;
-import gov.nih.nci.cagrid.portal.util.PortalAggrIntegrationTestBase;
 
 /**
  * User: kherm
  *
  * @author kherm manav.kher@semanticbits.com
  */
-public class YahooGeocoderSystemTest extends PortalAggrIntegrationTestBase {
+public class YahooGeocoderSystemTest extends AbstractGeocodeTest {
 
     YahooGeocoder defaultGeocoder;
 
@@ -20,14 +19,6 @@ public class YahooGeocoderSystemTest extends PortalAggrIntegrationTestBase {
 
         Geocode geoCode = defaultGeocoder.getGeocode(address);
         assertNotNull(geoCode);
-    }
-
-    @Override
-    protected String[] getConfigLocations() {
-        return new String[]{
-                "classpath*:applicationContext-aggr-geocode.xml",
-                "applicationContext-db.xml"
-        };
     }
 
     public YahooGeocoder getDefaultGeocoder() {
