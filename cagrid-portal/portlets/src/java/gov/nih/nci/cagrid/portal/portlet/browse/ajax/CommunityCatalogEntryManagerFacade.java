@@ -3,6 +3,9 @@
  */
 package gov.nih.nci.cagrid.portal.portlet.browse.ajax;
 
+import com.liferay.portal.kernel.util.CharPool;
+import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.Validator;
 import gov.nih.nci.cagrid.portal.dao.catalog.CommunityCatalogEntryDao;
 import gov.nih.nci.cagrid.portal.domain.catalog.CatalogEntry;
 import gov.nih.nci.cagrid.portal.domain.catalog.CommunityCatalogEntry;
@@ -26,9 +29,30 @@ public class CommunityCatalogEntryManagerFacade extends
 
     @Override
     public String setName(String name) {
-        if (getCommunityCatalogEntryDao().isUnique(name))
-            return super.setName(name);    //To change body of overridden methods use File | Settings | File Templates.
-        return "Community with the same name exists!";
+        if (name.length() < 2) {
+            return "Name is two short";
+        }
+
+        if (name.endsWith(StringPool.SLASH)) {
+            return "Invalid name. Ends with a slash";
+        }
+
+        if (name.indexOf(StringPool.DOUBLE_SLASH) != -1) {
+            return "Invalid name. Contains two slashes";
+        }
+
+        for (char c : name.toCharArray()) {
+            if ((!Validator.isChar(c)) && (!Validator.isDigit(c)) &&
+                    (c != CharPool.DASH) && (c != CharPool.PERCENT) &&
+                    (c != CharPool.PERIOD) && (c != CharPool.SLASH) &&
+                    (c != CharPool.UNDERLINE)) {
+                return "Name has invalid characters";
+            }
+        }
+        if (!getCommunityCatalogEntryDao().isUnique(name))
+            return "Community with the same name exists";
+
+        return super.setName(name);
     }
 
     @Override
