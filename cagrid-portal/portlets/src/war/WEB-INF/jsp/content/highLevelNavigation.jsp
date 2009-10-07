@@ -2,7 +2,7 @@
 <%@ include file="/WEB-INF/jsp/include/liferay-includes.jspf" %>
 
 <c:set var="ns"><portlet:namespace/></c:set>
-
+<%--
 <style type="text/css">
 <!--
 .portlet-content {
@@ -121,7 +121,7 @@ col.text {
                 </tbody>
             </table>
         </div>
-        
+--%>
 <script type="text/javascript">
 
 <liferay-portlet:renderURL
