@@ -17,10 +17,15 @@
 </div>
 
 <script>
-    document.getElementById("<c:out value="${id}"/>").onclick = function() {
-        this.value = "";
+    document.getElementById("<c:out value="${id}"/>").onfocus = function() {
+		this.value = "";
+		this.style.color="#000000";
         return false;
-    };
+    }
+	document.getElementById("<c:out value="${id}"/>").onblur = function() {
+		this.style.color="#AFAFAF";
+		this.value = "Search";
+	}
 
 </script>
 
