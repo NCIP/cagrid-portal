@@ -44,7 +44,7 @@ public class ServiceMetadataCatalogEntryBuilderTest extends
         b.init();
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     public void testBuild() throws Exception {
         String serviceUrl = "http://service.url";
         GridDataService dataService = new GridDataService();
