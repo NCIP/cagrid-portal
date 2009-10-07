@@ -18,6 +18,7 @@
         <artifact name="${portal.search.war.name}" type="war" conf="default"/>
         <artifact name="caGrid-portal-search" type="jar" conf="default"/>
         <artifact name="applicationContext-portal-search" conf="default" type="xml"/>
+        <artifact name="applicationContext-portal-search-aspects" conf="default" type="xml"/>
     </publications>
 
     <dependencies>

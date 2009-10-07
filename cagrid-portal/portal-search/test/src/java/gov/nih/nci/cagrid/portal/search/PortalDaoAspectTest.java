@@ -36,7 +36,7 @@ public class PortalDaoAspectTest extends DBIntegrationTestBase {
 
         XmlBeanDefinitionReader xmlReader = new XmlBeanDefinitionReader(ctx);
         xmlReader.loadBeanDefinitions(new ClassPathResource("applicationContext-db.xml"));
-        xmlReader.loadBeanDefinitions(new ClassPathResource("applicationContext-portal-search.xml"));
+        xmlReader.loadBeanDefinitions(new ClassPathResource("applicationContext-portal-search-aspects.xml"));
 
         ctx.registerBeanDefinition("defaultHttpClient", new RootBeanDefinition(MockHttpClient.class));
         ctx.refresh();
