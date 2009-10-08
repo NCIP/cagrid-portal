@@ -20,11 +20,11 @@
 <script type="text/javascript">
 
     // Get Area of Focus tree for Data Set catalog type
-    var solrDatasource = new YAHOO.util.XHRDataSource("<c:out value="${solrServiceUrl}"/>/select?", {responseType:YAHOO.util.XHRDataSource.JSON});
-    var wildcard = "*:*";
-    var query = new solrQuery(wildcard);
-    query.setTree(true);
-    query.addFacet("catalog_type", "dataset");
+    var ${ns}solrDatasource = new YAHOO.util.XHRDataSource("<c:out value="${solrServiceUrl}"/>/select?", {responseType:YAHOO.util.XHRDataSource.JSON});
+    var  ${ns}wildcard = "*:*";
+    var  ${ns}query = new solrQuery(${ns}wildcard);
+     ${ns}query.setTree(true);
+     ${ns}query.addFacet("catalog_type", "dataset");
 
 
     function ${ns}navigateToDataSet(aof) {
@@ -36,7 +36,7 @@
     }
 
     jQuery(document).ready(function() {
-        solrDatasource.sendRequest(query.getQuery(), {
+         ${ns}solrDatasource.sendRequest(${ns}query.getQuery(), {
             success : ${ns}updateCategories,
             cache:false,
             failure : ${ns}handlefailure,

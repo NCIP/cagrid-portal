@@ -24,6 +24,7 @@
 		id="viewMapController"
 		class="gov.nih.nci.cagrid.portal.portlet.map.ViewMapController"
 		autowire="byName">
+        <property name="solrServiceUrl" value="${cagrid.portal.solr.http.url}"/>
 		<property name="objectName" value="mapBean"/>
 		<property name="successViewName" value="view"/>
 	</bean>

@@ -10,6 +10,8 @@ import gov.nih.nci.cagrid.portal.portlet.discovery.map.MapBean;
 
 import javax.portlet.RenderRequest;
 
+import org.springframework.web.portlet.ModelAndView;
+
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
  * @author <a href="mailto:manav.kher@semanticbits.com">Manav Kher</a>
@@ -18,6 +20,7 @@ import javax.portlet.RenderRequest;
 public class ViewMapController extends AbstractViewObjectController {
 
     private DiscoveryModel discoveryModel;
+    private String solrServiceUrl;
 
     /**
      *
@@ -40,6 +43,20 @@ public class ViewMapController extends AbstractViewObjectController {
         return mapBean;
     }
 
+
+    @Override
+    protected void addData(RenderRequest request, ModelAndView mav) {
+        super.addData(request, mav);    //To change body of overridden methods use File | Settings | File Templates.
+        mav.addObject("solrServiceUrl",getSolrServiceUrl());
+    }
+
+    public String getSolrServiceUrl() {
+        return solrServiceUrl;
+    }
+
+    public void setSolrServiceUrl(String solrServiceUrl) {
+        this.solrServiceUrl = solrServiceUrl;
+    }
 
     public DiscoveryModel getDiscoveryModel() {
         return discoveryModel;
