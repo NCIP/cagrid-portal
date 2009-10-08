@@ -8,7 +8,6 @@ import gov.nih.nci.cagrid.portal.portlet.discovery.dir.DiscoveryDirectory;
 import gov.nih.nci.cagrid.portal.portlet.discovery.dir.ParticipantDirectory;
 import gov.nih.nci.cagrid.portal.portlet.discovery.dir.ServiceDirectory;
 import gov.nih.nci.cagrid.portal.portlet.discovery.map.MapBean;
-import gov.nih.nci.cagrid.portal.portlet.map.ajax.CachedMap;
 import org.directwebremoting.annotations.Param;
 import org.directwebremoting.annotations.RemoteMethod;
 import org.directwebremoting.annotations.RemoteProxy;
@@ -45,8 +44,8 @@ public class AjaxMapService extends AjaxViewGenerator {
                 ServiceDirectory serviceDir = (ServiceDirectory) selectedDirectory;
                 mapBean = getCachedMap().get(serviceDir.getServiceDirectoryType());
             } else if (selectedDirectory.getType().equals(DiscoveryType.PARTICIPANT)) {
-                mapBean = (MapBean) getApplicationContext().getBean("mapBeanPrototype");
-                mapBean.addParticipants((ParticipantDirectory) selectedDirectory);
+                ParticipantDirectory participantDir = (ParticipantDirectory) selectedDirectory;
+                mapBean = getCachedMap().get(participantDir.getParticipantDirectoryType());
             } else {
                 throw new CaGridPortletApplicationException("Unsupported directory type: " + selectedDirectory.getType());
             }
@@ -64,7 +63,7 @@ public class AjaxMapService extends AjaxViewGenerator {
 
 
     @RemoteMethod
-    public SummaryBean getSummary(){
+    public SummaryBean getSummary() {
         return cachedMap.getSummary();
     }
 
