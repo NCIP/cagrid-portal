@@ -55,6 +55,7 @@ public class BrowseViewController implements InitializingBean, Controller {
       *
       * @see org.springframework.web.portlet.mvc.Controller#handleRenderRequest(javax.portlet.RenderRequest,
       *      javax.portlet.RenderResponse)
+      * ToDo use properties not strings
       */
     public ModelAndView handleRenderRequest(RenderRequest request,
                                             RenderResponse response) throws Exception {
@@ -65,10 +66,17 @@ public class BrowseViewController implements InitializingBean, Controller {
         mav.addObject("browseType", browseType.toString());
         mav.addObject("solrServiceUrl", getSolrServiceUrl());
 
-
-        // wildcard by default
+        // search keyword (wildcard by default)
         String searchKeyword = request.getParameter(searchRequestParam) != null ? request.getParameter(searchRequestParam) : "*:*";
         mav.addObject("searchKeyword", searchKeyword);
+
+        //if particular catalogs need to be displayed
+        if(request.getParameterMap().containsKey("selectedIds"))
+        mav.addObject("selectedIds", request.getParameter("selectedIds"));
+
+        //area of focus (All by default)
+        if (request.getParameterMap().containsKey("aof"))
+            mav.addObject("aof", request.getParameter("aof"));
 
         String entryTypeName = null;
         if (browseType.equals(BrowseTypeEnum.DATASET)) {

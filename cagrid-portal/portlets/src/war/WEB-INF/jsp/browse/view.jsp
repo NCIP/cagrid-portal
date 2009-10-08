@@ -22,47 +22,26 @@
 
 <script language="JavaScript">
 
-  
+
     function ${ns}viewDetails(id) {
          var theLink = "${catalogLink}";
            var newLink = theLink.replace("ENTRYIDTOREPLACE", id);
           window.location = newLink;
     }
 
-    function ${ns}viewDetailsPopup(id,name,desc) {
+    function ${ns}resetPage(){
+        $("featuredDiv").setStyle({display: 'none'});
+               $("jsFillerFeaturedResults").innerHTML="";
+               $("regularResults").setStyle({display: 'none'});
+               $("jsFillerRegularResults").innerHTML="";
+
+    }
 
 
-        <%--// Instantiate a Panel from script--%>
-        <%--YAHOO.panel2 = new YAHOO.widget.Panel("panel2", { width:"320px", visible:true, draggable:false, close:true } );--%>
-        <%--YAHOO.panel2.setHeader(name);--%>
-        <%--YAHOO.panel2.setBody("Loading");--%>
-        <%--YAHOO.panel2.render("${ns}catalogPopupDiv"+id);--%>
-
-
-        <%--CatalogEntryManagerFacade.getCatalogEntry(sQuery, targetRoleType,--%>
-        <%--{--%>
-            <%--callback:function(entryView){--%>
-                   <%--YAHOO.panel2.setBody(entryView);--%>
-
-            <%--},--%>
-              <%--errorHandler:function(errorString, exception){--%>
-                  <%--YAHOO.panel2.setBody("error loading catalog");--%>
-              <%--},--%>
-              <%--async: false--%>
-        <%--});--%>
-
-     }
-    
-    
     function ${ns}pageCallback(type, args) {
 
         var resultList = args[0];
-
-
-        $("featuredDiv").setStyle({display: 'none'});
-        $("jsFillerFeaturedResults").innerHTML="";
-        $("regularResults").setStyle({display: 'none'});
-        $("jsFillerRegularResults").innerHTML="";
+        ${ns}resetPage();
 
          if(resultList!=null){
           YAHOO.log("Received results of size:" + resultList.length);
@@ -75,7 +54,6 @@
             resultDiv.className = "oneResultDiv";
             var detailsLnk = document.createElement('a');
             detailsLnk.setAttribute('id','${ns}cat_name' + result.id)
-            detailsLnk.setAttribute('onmouseover', 'javascript:${ns}viewDetailsPopup("' + result.id +'","'+ result.name +'","'+result.description+'")');
             detailsLnk.setAttribute('href', 'javascript:${ns}viewDetails(' + result.id + ')');
             detailsLnk.setAttribute('name', 'Details');
             detailsLnk.innerHTML = result.name;
@@ -154,7 +132,7 @@
                     </div>
                 </div>
                 </div>
-                
+
                 <div class="yui-skin-sam">
                     <div id="${ns}paginatorDiv" class="pagination">
                         <!-- pagination controls will go here -->
@@ -168,15 +146,13 @@
 
 <script type="text/javascript">
 
-   
+
     var wildcard = "${searchKeyword}";
     if (wildcard != "*:*") {
         $("${ns}keyword").value = wildcard;
     }
 
-  
 
-    
     function checkEnter(e, keyword) { //e is event object passed from function invocation
         var characterCode //literal character code will be stored in this variable
         if (e && e.which) { //if which property of event object is supported (NN4)
@@ -210,8 +186,16 @@
             paginatorDiv: "${ns}paginatorDiv",
             searchBar:"${ns}searchBar",
             treeDiv: "${ns}tree",
+            <c:if test="${selectedIds!=null}">
+                ids:'<c:out value="${selectedIds}"/>',
+            </c:if>
+            <c:if test="${aof !=null}">
+                aof:'<c:out value="${aof}"/>',
+            </c:if>
             sortField:$("${ns}sortList").value
+
         });
+        //subscribe to results so that this page can self update (see pageCallback())
         resultEvent.subscribe(${ns}pageCallback);
     }
 </script>

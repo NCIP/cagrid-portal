@@ -92,144 +92,7 @@
             <keywords>cagrid,registration</keywords>
         </portlet-info>
     </portlet>
-<!-- 
-    <portlet>
-        <description>News Summary</description>
-        <portlet-name>cagridnewssummary</portlet-name>
-        <display-name>caGrid News Summary Portlet</display-name>
-        <portlet-class>
-            org.springframework.web.portlet.DispatcherPortlet
-        </portlet-class>
-        <init-param>
-            <name>contextConfigLocation</name>
-            <value>/WEB-INF/context/newssummary-portlet.xml</value>
-        </init-param>
-        <supports>
-            <mime-type>text/html</mime-type>
-            <portlet-mode>view</portlet-mode>
-        </supports>
-        <portlet-info>
-            <title>News</title>
-            <short-title>News</short-title>
-            <keywords>cagrid,news</keywords>
-        </portlet-info>
 
-        <portlet-preferences>
-            <preference>
-                <name>selectItemForNewsRedirectUrl</name>
-                <value>/web/guest/news</value>
-            </preference>
-            <preference>
-                <name>newsItemSelectMode</name>
-                <value>INTERPORTLET</value>
-            </preference>
-            <preference>
-                <name>selectedNewsItemOutputQueueName</name>
-                <value>newssummary:selectedNewsItem</value>
-            </preference>
-            <preference>
-                <name>newssummary:selectedNewsItem</name>
-                <value>news:selectedNewsItem</value>
-            </preference>
-        </portlet-preferences>
-
-    </portlet>
-
-    <portlet>
-        <description>News</description>
-        <portlet-name>cagridnews</portlet-name>
-        <display-name>News</display-name>
-        <portlet-class>
-            org.springframework.web.portlet.DispatcherPortlet
-        </portlet-class>
-        <init-param>
-            <name>contextConfigLocation</name>
-            <value>/WEB-INF/context/news-portlet.xml</value>
-        </init-param>
-        <supports>
-            <mime-type>text/html</mime-type>
-            <portlet-mode>view</portlet-mode>
-            <portlet-mode>edit</portlet-mode>
-        </supports>
-        <portlet-info>
-            <title>News</title>
-            <short-title>News</short-title>
-            <keywords>cagrid,news</keywords>
-        </portlet-info>
-
-        <portlet-preferences>
-            <preference>
-                <name>newsItemSelectMode</name>
-                <value>INTERPORTLET</value>
-            </preference>
-            <preference>
-                <name>selectedNewsItemInputQueueName</name>
-                <value>news:selectedNewsItem</value>
-            </preference>
-        </portlet-preferences>
-
-    </portlet>
- 
-    <portlet>
-        <description>caGrid Status</description>
-        <portlet-name>cagridstatus</portlet-name>
-        <display-name>caGrid Status</display-name>
-        <portlet-class>
-            org.springframework.web.portlet.DispatcherPortlet
-        </portlet-class>
-        <init-param>
-            <name>contextConfigLocation</name>
-            <value>/WEB-INF/context/status-portlet.xml</value>
-        </init-param>
-        <supports>
-            <mime-type>text/html</mime-type>
-            <portlet-mode>view</portlet-mode>
-        </supports>
-        <portlet-info>
-            <title>caGrid Status</title>
-            <short-title>caGrid Status</short-title>
-            <keywords>cagrid,status</keywords>
-        </portlet-info>
-
-        <portlet-preferences>
-            <preference>
-                <name>selectItemForDiscoveryRedirectUrl</name>
-                <value>/web/guest/discovery</value>
-            </preference>
-            <preference>
-                <name>selectDirectoryForDiscoveryRedirectUrl</name>
-                <value>/web/guest/discovery</value>
-            </preference>
-            <preference>
-                <name>discoveryDirectorySelectMode</name>
-                <value>INTERPORTLET</value>
-            </preference>
-            <preference>
-                <name>selectedDiscoveryDirectoryOutputQueueName</name>
-                <value>status:selectedDirectory</value>
-            </preference>
-            <preference>
-                <name>status:selectedDirectory</name>
-                <value>disc:selectedDirectory</value>
-            </preference>
-
-            <preference>
-                <name>discoveryItemSelectMode</name>
-                <value>INTERPORTLET</value>
-            </preference>
-            <preference>
-                <name>selectedDiscoveryItemOutputQueueName</name>
-                <value>status:selectedItem</value>
-            </preference>
-            <preference>
-                <name>status:selectedItem</name>
-                <value>disc:selectedItem</value>
-            </preference>
-
-        </portlet-preferences>
-    </portlet>
-
--->
     <portlet>
         <description>caGrid Map Portlet</description>
         <portlet-name>cagridmap</portlet-name>
@@ -461,95 +324,6 @@
         </portlet-preferences>
     </portlet>
 
-<!-- 
-    <portlet>
-        <description>Content introducing the caGrid Portal</description>
-        <portlet-name>WelcomeToCaGridPortal</portlet-name>
-        <display-name>Welcome to caGrid Portal</display-name>
-        <portlet-class>
-            org.springframework.web.portlet.DispatcherPortlet
-        </portlet-class>
-        <init-param>
-            <name>contextConfigLocation</name>
-            <value>/WEB-INF/context/content-portlet.xml</value>
-        </init-param>
-        <supports>
-            <mime-type>text/html</mime-type>
-            <portlet-mode>view</portlet-mode>
-            <portlet-mode>edit</portlet-mode>
-        </supports>
-        <portlet-info>
-            <title>Welcome to caGrid Portal</title>
-            <short-title>Welcome</short-title>
-            <keywords>welcome</keywords>
-        </portlet-info>
-        <portlet-preferences>
-            <preference>
-                <name>jsp</name>
-                <value>welcomeToCaGridPortal</value>
-            </preference>
-        </portlet-preferences>
-    </portlet>
-
-    <portlet>
-        <description>Interesting Links</description>
-        <portlet-name>cagridinterestinglinks</portlet-name>
-        <display-name>Interesting Links</display-name>
-        <portlet-class>
-            org.springframework.web.portlet.DispatcherPortlet
-        </portlet-class>
-        <init-param>
-            <name>contextConfigLocation</name>
-            <value>/WEB-INF/context/content-portlet.xml</value>
-        </init-param>
-        <supports>
-            <mime-type>text/html</mime-type>
-            <portlet-mode>view</portlet-mode>
-            <portlet-mode>edit</portlet-mode>
-        </supports>
-        <portlet-info>
-            <title>Interesting Links</title>
-            <short-title>Links</short-title>
-            <keywords>cagrid,links</keywords>
-        </portlet-info>
-        <portlet-preferences>
-            <preference>
-                <name>jsp</name>
-                <value>links</value>
-            </preference>
-        </portlet-preferences>
-    </portlet>
-
-
-    <portlet>
-        <description>caBIG Tools</description>
-        <portlet-name>cabigtools</portlet-name>
-        <display-name>caBIG Tools</display-name>
-        <portlet-class>
-            org.springframework.web.portlet.DispatcherPortlet
-        </portlet-class>
-        <init-param>
-            <name>contextConfigLocation</name>
-            <value>/WEB-INF/context/tools-portlet.xml</value>
-        </init-param>
-        <supports>
-            <mime-type>text/html</mime-type>
-            <portlet-mode>view</portlet-mode>
-            <portlet-mode>edit</portlet-mode>
-        </supports>
-        <portlet-info>
-            <title>Tools</title>
-            <short-title>Tools</short-title>
-            <keywords>cagrid,cabig,tools</keywords>
-        </portlet-info>
-        <portlet-preferences>
-            <preference>
-                <name>jsp</name>
-                <value>tools</value>
-            </preference>
-        </portlet-preferences>
-    </portlet>
- -->
     <portlet>
         <description>High-level Navigation Portlet</description>
         <portlet-name>HighLevelNavigationPortlet</portlet-name>
@@ -578,7 +352,52 @@
             </preference>
         </portlet-preferences>
     </portlet>
-    
+
+     <portlet>
+        <description>Latest Content Portlet</description>
+        <portlet-name>latestContentPortlet</portlet-name>
+        <display-name>Latest Content Portlet</display-name>
+        <portlet-class>
+            org.springframework.web.portlet.DispatcherPortlet
+        </portlet-class>
+         <init-param>
+            <name>contextConfigLocation</name>
+            <value>/WEB-INF/context/latestContent-portlet.xml</value>
+        </init-param>
+        <supports>
+            <mime-type>text/html</mime-type>
+            <portlet-mode>view</portlet-mode>
+             <portlet-mode>edit</portlet-mode>
+        </supports>
+        <portlet-info>
+            <title>Latest Content Portlet</title>
+            <short-title>Latest Content Portlet</short-title>
+            <keywords>latest,content,services</keywords>
+        </portlet-info>
+    </portlet>
+
+     <portlet>
+        <description>Data Sets Summary Portlet</description>
+        <portlet-name>datasetSummaryPortlet</portlet-name>
+        <display-name>Data Sets Summary Portlet</display-name>
+        <portlet-class>
+            org.springframework.web.portlet.DispatcherPortlet
+        </portlet-class>
+         <init-param>
+            <name>contextConfigLocation</name>
+            <value>/WEB-INF/context/summary-portlet.xml</value>
+        </init-param>
+        <supports>
+            <mime-type>text/html</mime-type>
+            <portlet-mode>view</portlet-mode>
+        </supports>
+        <portlet-info>
+            <title>Data Sets Summary Portlet</title>
+            <short-title>Data Sets Summary Portlet</short-title>
+            <keywords>datasets,data,sets,summary,tags</keywords>
+        </portlet-info>
+    </portlet>
+
     <portlet>
         <description>Top Contributors Portlet</description>
         <portlet-name>TopContributorsPortlet</portlet-name>

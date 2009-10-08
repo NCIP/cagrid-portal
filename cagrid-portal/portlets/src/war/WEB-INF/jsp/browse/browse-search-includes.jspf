@@ -151,6 +151,10 @@ var Catalogs = Class.create({
         this.config = {keyword:config.keyword,treeDiv:config.treeDiv,rowsPerPage:config.rowsPerPage,paginatorDiv:config.paginatorDiv,searchBar:config.searchBar,
             sortField:config.sortField};
 
+        /// if area of focus has been specified.
+        if (config.aof)
+            this.config.filter = new Filter(config.aof, "term_label", config.aof);
+
         if (this.config.rowsPerPage)
             this.rowsPerPage = this.config.rowsPerPage;
 
@@ -158,8 +162,8 @@ var Catalogs = Class.create({
             rowsPerPage  : this.rowsPerPage,
             alwaysVisible: false,
             containers   : [this.config.paginatorDiv],
-            template : "{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} <div>{CurrentPageReport}</div>", 
-             rowsPerPageOptions : [10, 20, 30, 5]
+            template : "{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} <div>{CurrentPageReport}</div>",
+            rowsPerPageOptions : [10, 20, 30, 5]
         });
 
         this.paginator.subscribe('changeRequest', this.handlePagination, this);
@@ -171,6 +175,10 @@ var Catalogs = Class.create({
                 this.config.catalog = new CatalogType(config.catalogType, config.keyword);
             else
                 this.config.catalog = new CatalogType(config.catalogType, "All");
+        }
+
+        if (config.ids) {
+            query.addFacet("ids", config.ids);
         }
 
     <%--set the search summary bar--%>
@@ -278,7 +286,7 @@ var Catalogs = Class.create({
     handlePagination: function(newState, cat) {
         cat.paginator.setState(newState);
         cat.query.setStartValue(newState.recordOffset);
-        cat.rowsPerPage=newState.rowsPerPage;
+        cat.rowsPerPage = newState.rowsPerPage;
         cat.runQuery(true);
     }
 });

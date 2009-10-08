@@ -45,7 +45,7 @@
 <div id="${prefix}mapDiv">
     <%----%>
 </div>
-<%@ include file="/WEB-INF/jsp/map/latestContent-view.jspf" %>
+<%@ include file="/WEB-INF/jsp/summary/view.jsp" %>
 <%@ include file="/WEB-INF/jsp/map/mapDirectory.jspf" %>
 <script type="text/javascript">
 
@@ -168,11 +168,12 @@
 
 <script type="text/javascript">
     function selectItemForDiscovery(id, type) {
-        $('${prefix}mapNodeForm').entryId.value = id;
-        var viewDetailsLink = "${viewDetailsLink}";
-        viewDetailsLink = viewDetailsLink.replace("/guest/home", "/guest/catalog/all");
-        $("${prefix}mapNodeForm").action = viewDetailsLink;
-        $('${prefix}mapNodeForm').submit();
+        selectItemsForDiscovery("1,2,3",type);
+        <%--$('${prefix}mapNodeForm').entryId.value = id;--%>
+        <%--var viewDetailsLink = "${viewDetailsLink}";--%>
+        <%--viewDetailsLink = viewDetailsLink.replace("/guest/home", "/guest/catalog/all");--%>
+        <%--$("${prefix}mapNodeForm").action = viewDetailsLink;--%>
+        <%--$('${prefix}mapNodeForm').submit();--%>
     }
 
     function selectItemsForDiscovery(ids, type) {
