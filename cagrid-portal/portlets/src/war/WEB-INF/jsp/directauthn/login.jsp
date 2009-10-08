@@ -22,7 +22,7 @@
             In button. If you do not have an NIH username and password, but you
             have already registered through the portal (or through the GAARDS UI), then select the
             Dorian Identity Provider. If you have not yet registered, you may do so by
-            clicking <a href="${ns}showRegisterDialog();">here</a>.
+            clicking <a href="javascript:${ns}showRegisterDialog();">here</a>.
             <br/>
             <br/>
 
@@ -69,7 +69,7 @@
 
         </c:when>
         <c:otherwise>
-            <a href="/web/guest/home" style="text-decoration:none;">&lt;&lt; To Full Page</a><br/><br/>
+            <a href="/web/guest/home" style="text-decoration:none;">&lt;&lt; To Home Page</a><br/><br/>
             <%@ include file="/WEB-INF/jsp/directauthn/greeting.jspf" %>
         </c:otherwise>
     </c:choose>
@@ -79,7 +79,7 @@
 <script language="JavaScript">
 
     ${ns}loginButton = null;
-    
+
     function ${ns}listIdPs() {
 
         CredentialManagerFacade.listIdPsFromDorian(
@@ -92,7 +92,7 @@
                     idpOpts += "<option value='" + idpBean.url + "'" + (i == 0 ? " selected" : "") + ">" + idpBean.label + "</option>";
                 }
                 jQuery("#${ns}idpSelect").html(idpOpts);
-              	${ns}loginButton.set("disabled", false);
+                ${ns}loginButton.set("disabled", false);
 
 
             },
@@ -101,6 +101,17 @@
             }
         });
     }
+
+    var ${ns}registerDialog;
+
+    function ${ns}showRegisterDialog() {
+        ${ns}registerDialog =
+        new Liferay.Popup({title: "Register", modal:true, width:500 , height:600});
+        jQuery(
+                ${ns}registerDialog
+                ).load('<c:url value="/browse/personView/register.html"><c:param name="ns" value="${ns}"/></c:url>', {});
+    }
+
 
     jQuery(document).ready(function() {
 

@@ -47,7 +47,7 @@
 
     var ${ns}updateCategories = function (oRequest, oParsedResponse, oPayload) {
         try {
-
+             jQuery("#${ns}categories").html("");    
             var solrJSON = YAHOO.lang.JSON.parse(oParsedResponse.results.responseText);
             var aofTree = solrJSON.tree;
             if (aofTree.length > 1) {
@@ -76,15 +76,12 @@
 
 </script>
 
-<div>
-    <div>
-        <h2>Data Set Categories</h2>
-    </div>
+<div id="latestContent">
+        <h3>Data Set Categories</h3>
 
     <div id="${ns}categories" class="row">
-        <%--ajax--%>
+        <tags:image name="loading_animation.gif" cssStyle="padding:40px;"/>
     </div>
-
 </div>
 
 

@@ -26,8 +26,8 @@
     </div>
 
     <div id="${ns}loadingDiv">
-        <div id="${ns}loadingDivInner" style="height:100%;">
-            <%--<tags:image name="loading_animation.gif" cssStyle="align:center;"/>--%>
+        <div id="${ns}loadingDivInner">
+            <tags:image name="loading_animation.gif" cssStyle="padding:40px;"/>
         </div>
     </div>
 
