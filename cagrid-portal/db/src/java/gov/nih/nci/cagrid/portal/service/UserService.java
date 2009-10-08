@@ -74,19 +74,20 @@ public class UserService {
         }
     }
 
-    public void setDefaultCredential(PortalUser user, String identity) {
+    public void setDefaultCredential(PortalUser user, String identity, String gridCredential) {
         user = getPortalUserDao().getByExample(user);
         List<IdPAuthentication> idpAuthns = new ArrayList<IdPAuthentication>();
         IdPAuthentication idpAuthn = null;
-        for (IdPAuthentication ia : user.getAuthentications()) {
-            if (ia.getIdentity().equals(identity)) {
-                idpAuthn = ia;
-                ia.setDefault(true);
+        for (IdPAuthentication idpa : user.getAuthentications()) {
+            idpAuthn = idpa;
+            if (idpAuthn.getIdentity().equals(identity)) {
+                idpAuthn.setGridCredential(gridCredential);
+                idpAuthn.setDefault(true);
             } else {
-                ia.setDefault(false);
+                idpAuthn.setDefault(false);
             }
-            idpAuthns.add(ia);
-            getIdpAuthenticationDao().save(ia);
+            idpAuthns.add(idpAuthn);
+            getIdpAuthenticationDao().save(idpAuthn);
         }
         if (idpAuthn == null) {
             throw new RuntimeException(
@@ -96,10 +97,6 @@ public class UserService {
         user.setAuthentications(idpAuthns);
         user.setGridIdentity(identity);
         getPortalUserDao().save(user);
-    }
-
-    public void setDefaultCredential(Integer userId, String identity) {
-        setDefaultCredential(getPortalUserDao().getById(userId), identity);
     }
 
 

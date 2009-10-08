@@ -14,8 +14,7 @@ import gov.nih.nci.cagrid.portal.dao.catalog.PersonCatalogEntryDao;
 import gov.nih.nci.cagrid.portal.domain.IdentityProvider;
 import gov.nih.nci.cagrid.portal.domain.PortalUser;
 import gov.nih.nci.cagrid.portal.liferay.security.util.LiferayLoginHelper;
-import gov.nih.nci.cagrid.portal.security.AuthnService;
-import gov.nih.nci.cagrid.portal.security.IdPAuthnInfo;
+import gov.nih.nci.cagrid.portal.security.*;
 import gov.nih.nci.cagrid.portal.service.UserService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -42,6 +41,7 @@ public class IdpAuthenticator implements Authenticator {
     private String ifsUrl;
     private String companyWebId;
     private String omniUserEmail;
+    private EncryptionService encryptionService;
 
     private LiferayLoginHelper liferayLoginHelper;
     private Log log = LogFactory.getLog(getClass());
@@ -143,9 +143,14 @@ public class IdpAuthenticator implements Authenticator {
 
         getUserService().addCredential(portalUser, idpUrl, globusCred
                 .getIdentity());
-        getUserService().setDefaultCredential(portalUser, globusCred
-                .getIdentity());
+        try {
+            String cred = getEncryptionService().encrypt(ProxyUtil.getProxyString(globusCred));
+            getUserService().setDefaultCredential(portalUser, globusCred
+                    .getIdentity(), cred);
 
+        } catch (AuthnServiceException e) {
+            throw new AuthException("Could not encrypt proxy ", e);
+        }
         return authResult;
     }
 
@@ -228,6 +233,14 @@ public class IdpAuthenticator implements Authenticator {
 
     public void setLiferayLoginHelper(LiferayLoginHelper liferayLoginHelper) {
         this.liferayLoginHelper = liferayLoginHelper;
+    }
+
+    public EncryptionService getEncryptionService() {
+        return encryptionService;
+    }
+
+    public void setEncryptionService(EncryptionService encryptionService) {
+        this.encryptionService = encryptionService;
     }
 }
 

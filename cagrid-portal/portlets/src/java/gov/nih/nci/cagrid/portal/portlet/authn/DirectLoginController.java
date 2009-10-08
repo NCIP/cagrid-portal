@@ -4,21 +4,16 @@
 package gov.nih.nci.cagrid.portal.portlet.authn;
 
 import gov.nih.nci.cagrid.authentication.stubs.types.InvalidCredentialFault;
-import gov.nih.nci.cagrid.portal.domain.AuthnTicket;
-import gov.nih.nci.cagrid.portal.domain.Person;
-import gov.nih.nci.cagrid.portal.domain.PortalUser;
-import gov.nih.nci.cagrid.portal.security.AuthnService;
-import gov.nih.nci.cagrid.portal.security.EncryptionService;
-import gov.nih.nci.cagrid.portal.security.IdPAuthnInfo;
-import gov.nih.nci.cagrid.portal.security.ProxyUtil;
-import gov.nih.nci.cagrid.portal.service.UserService;
 import gov.nih.nci.cagrid.portal.dao.PortalUserDao;
-
+import gov.nih.nci.cagrid.portal.domain.AuthnTicket;
+import gov.nih.nci.cagrid.portal.domain.PortalUser;
+import gov.nih.nci.cagrid.portal.security.*;
+import gov.nih.nci.cagrid.portal.service.UserService;
 import org.globus.gsi.GlobusCredential;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindException;
 import org.springframework.web.portlet.ModelAndView;
 import org.springframework.web.portlet.mvc.AbstractCommandController;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
@@ -46,14 +41,14 @@ public class DirectLoginController extends AbstractCommandController {
     private PortalUserDao portalUserDao;
 
     public UserService getUserService() {
-		return userService;
-	}
+        return userService;
+    }
 
-	public void setUserService(UserService userService) {
-		this.userService = userService;
-	}
+    public void setUserService(UserService userService) {
+        this.userService = userService;
+    }
 
-	/**
+    /**
      *
      */
     public DirectLoginController() {
@@ -89,7 +84,7 @@ public class DirectLoginController extends AbstractCommandController {
                                 Object obj, BindException errors) throws Exception {
 
         if (errors.hasErrors()) {
-        	logger.debug("Has errors, setting error attribute and returning.");
+            logger.debug("Has errors, setting error attribute and returning.");
             request.setAttribute(getErrorsAttributeName(), errors);
             response.setRenderParameter("operation", getErrorOperationName());
             return;
@@ -99,21 +94,28 @@ public class DirectLoginController extends AbstractCommandController {
         AuthnTicket ticket = null;
         try {
             String idpUrl = command.getIdpUrl();
-        	IdPAuthnInfo authnInfo = getAuthnService().authenticateToIdP(command.getUsername(), command.getPassword(), idpUrl);
-    		GlobusCredential cred = getAuthnService().authenticateToIFS(getIfsUrl(), authnInfo.getSaml());
-    		String encryptedProxyStr = getEncryptionService().encrypt(ProxyUtil.getProxyString(cred));
-    		PortalUser user = getUserService().getOrCreatePortalUser(cred.getIdentity(), authnInfo
-    				.getEmail(), authnInfo.getFirstName(), authnInfo.getLastName(),
-    				encryptedProxyStr);
-    		ticket = getAuthnService().createAuthnTicket(user);
+            IdPAuthnInfo authnInfo = getAuthnService().authenticateToIdP(command.getUsername(), command.getPassword(), idpUrl);
+            GlobusCredential cred = getAuthnService().authenticateToIFS(getIfsUrl(), authnInfo.getSaml());
+            String encryptedProxyStr = getEncryptionService().encrypt(ProxyUtil.getProxyString(cred));
+            PortalUser user = getUserService().getOrCreatePortalUser(cred.getIdentity(), authnInfo
+                    .getEmail(), authnInfo.getFirstName(), authnInfo.getLastName(),
+                    encryptedProxyStr);
+            ticket = getAuthnService().createAuthnTicket(user);
 
             logger.debug("Setting default credential for user  " + cred.getIdentity());
 
-            userService.addCredential(user,idpUrl,cred.getIdentity());
-            userService.setDefaultCredential(user,cred.getIdentity());
-    		
+
+            try {
+                String credStr = getEncryptionService().encrypt(ProxyUtil.getProxyString(cred));
+                userService.addCredential(user, idpUrl, cred.getIdentity());
+                userService.setDefaultCredential(user, cred.getIdentity(), credStr);
+            } catch (AuthnServiceException e) {
+                logger.warn("Could not encrypt proxy", e);
+                throw new InvalidCredentialFault();
+            }
+
         } catch (InvalidCredentialFault ex) {
-        	logger.debug("Login failed, setting error attribute and returning.");
+            logger.debug("Login failed, setting error attribute and returning.");
             errors.reject("authn.badCredentials",
                     "Invalid username and/or password.");
             request.setAttribute(getErrorsAttributeName(), errors);

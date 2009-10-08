@@ -32,6 +32,9 @@
     </publications>
 
     <dependencies>
+        <dependency rev="4.0.3" org="globus" name="globus" conf="default"/>
+
+
         <dependency rev="1.5.3" org="aspectj" name="aspectjrt" conf="default"/>
         <dependency rev="1.5.3" org="aspectj" name="aspectjweaver" conf="default"/>
         <dependency rev="1.2.14" org="apache" name="log4j" conf="default->*"/>

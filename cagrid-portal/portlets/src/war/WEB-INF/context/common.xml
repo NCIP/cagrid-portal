@@ -109,12 +109,14 @@
           p:encryptionService-ref="encryptionServicePrototype"/>
 
     <!-- TODO: this should be removed -->
-    <bean id="portalUserInterceptor" class="gov.nih.nci.cagrid.portal.portlet.PortalUserInterceptor" autowire="byName">
+    <bean id="portalUserInterceptor" class="gov.nih.nci.cagrid.portal.portlet.security.PortalUserInterceptor"
+          autowire="byName">
         <property name="portalUserAttributeName" ref="portalUserAttributeName"/>
         <property name="userIdAttributeName" value="CAGRIDPORTAL_ATTS_userId"/>
     </bean>
 
-    <bean id="portalUserRequestInterceptor" class="gov.nih.nci.cagrid.portal.portlet.PortalUserRequestInterceptor"
+    <bean id="portalUserRequestInterceptor"
+          class="gov.nih.nci.cagrid.portal.portlet.security.PortalUserRequestInterceptor"
           autowire="byName">
         <property name="portalUserSessionAttributeName" ref="portalUserAttributeName"/>
         <property name="portalUserRequestAttributeName" value="portalUser"/>
@@ -128,7 +130,7 @@
             </bean>
         </property>
     </bean>
-    <bean id="portalUserInterceptor2" class="gov.nih.nci.cagrid.portal.portlet.PortalUserInterceptor2"
+    <bean id="portalUserInterceptor2" class="gov.nih.nci.cagrid.portal.portlet.security.PortalUserInterceptor2"
           autowire="byName">
         <property name="portalUserIdSessionAttributeName" value="CAGRIDPORTAL_ATTS_liferayUserId"/>
         <property name="portalUserSessionAttributeName" ref="portalUserAttributeName"/>
@@ -349,7 +351,8 @@
         <property name="pocRelationshipTypeName" value="PointOfContact"/>
     </bean>
 
-    <bean id="communityViewBean" class="gov.nih.nci.cagrid.portal.portlet.browse.community.CommunityCatalogEntryViewBean"
+    <bean id="communityViewBean"
+          class="gov.nih.nci.cagrid.portal.portlet.browse.community.CommunityCatalogEntryViewBean"
           scope="prototype">
         <property name="memberRelationshipTypeName" value="CommunityPersonMember"/>
     </bean>
