@@ -25,7 +25,7 @@ public class AutoLoginLoader implements AutoLogin {
         try {
             ApplicationContext ctx = new ClassPathXmlApplicationContext(
                     new String[]{
-                            "classpath:applicationContext-liferay.xml",
+                            "classpath:applicationContext-liferay.xml"
                     });
 
             this.instance = (AbstractAutoLogin) ctx.getBean("autoLogin");
