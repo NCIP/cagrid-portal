@@ -23,163 +23,168 @@ import javax.portlet.PortletSession;
  */
 public class PortalUserInterceptor2 implements WebRequestInterceptor {
 
-	private static final Log logger = LogFactory
-			.getLog(PortalUserInterceptor2.class);
-	private UserModel userModel;
-	private QueryModel queryModel;
+    private static final Log logger = LogFactory
+            .getLog(PortalUserInterceptor2.class);
+    private UserModel userModel;
+    private QueryModel queryModel;
 
-	private String portalUserSessionAttributeName;
-	private String portalUserIdSessionAttributeName;
-	private PortalUserDao portalUserDao;
-	private CDSCredentialRetriever cdsCredentialRetriever;
+    private String portalUserSessionAttributeName;
+    private String portalUserIdSessionAttributeName;
+    private PortalUserDao portalUserDao;
+    private CDSCredentialRetriever cdsCredentialRetriever;
 
-	/**
+    /**
      *
      */
-	public PortalUserInterceptor2() {
-		// TODO Auto-generated constructor stub
-	}
+    public PortalUserInterceptor2() {
+        // TODO Auto-generated constructor stub
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.springframework.web.context.request.WebRequestInterceptor#afterCompletion
-	 * (org.springframework.web.context.request.WebRequest, java.lang.Exception)
-	 */
-	public void afterCompletion(WebRequest arg0, Exception arg1)
-			throws Exception {
-		// TODO Auto-generated method stub
+    /*
+      * (non-Javadoc)
+      *
+      * @see
+      * org.springframework.web.context.request.WebRequestInterceptor#afterCompletion
+      * (org.springframework.web.context.request.WebRequest, java.lang.Exception)
+      */
+    public void afterCompletion(WebRequest arg0, Exception arg1)
+            throws Exception {
+        // TODO Auto-generated method stub
 
-	}
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.springframework.web.context.request.WebRequestInterceptor#postHandle
-	 * (org.springframework.web.context.request.WebRequest,
-	 * org.springframework.ui.ModelMap)
-	 */
-	public void postHandle(WebRequest arg0, ModelMap arg1) throws Exception {
-		// TODO Auto-generated method stub
+    /*
+      * (non-Javadoc)
+      *
+      * @see
+      * org.springframework.web.context.request.WebRequestInterceptor#postHandle
+      * (org.springframework.web.context.request.WebRequest,
+      * org.springframework.ui.ModelMap)
+      */
+    public void postHandle(WebRequest arg0, ModelMap arg1) throws Exception {
+        // TODO Auto-generated method stub
 
-	}
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.springframework.web.context.request.WebRequestInterceptor#preHandle
-	 * (org.springframework.web.context.request.WebRequest)
-	 */
-	public void preHandle(WebRequest webRequest) throws Exception {
+    /*
+      * (non-Javadoc)
+      *
+      * @see
+      * org.springframework.web.context.request.WebRequestInterceptor#preHandle
+      * (org.springframework.web.context.request.WebRequest)
+      */
+    public void preHandle(WebRequest webRequest) throws Exception {
 
-		PortletWebRequest portletWebRequest = (PortletWebRequest) webRequest;
+        PortletWebRequest portletWebRequest = (PortletWebRequest) webRequest;
 
-		logger.debug("Fetching portalUserId from session.");
-		PortletSession session = portletWebRequest.getRequest()
-				.getPortletSession();
-		String portalUserId = (String) session.getAttribute(
-				getPortalUserIdSessionAttributeName(),
-				PortletSession.APPLICATION_SCOPE);
-		logger.debug("portalUserId = " + portalUserId);
-		if (portalUserId != null) {
 
-			// See if the same user is in the session
-			PortalUser portalUser = (PortalUser) session.getAttribute(
-					getPortalUserSessionAttributeName(),
-					PortletSession.APPLICATION_SCOPE);
-			if (portalUser != null) {
-				logger.debug("Portal user found in session under: "
-						+ getPortalUserSessionAttributeName());
-				if (!portalUser.getPortalId().equals(portalUserId)) {
-					throw new Exception(
-							"A portal user is in the session with a different ID.");
-				}
-			} else {
-				logger
-						.debug("No portal user in session. Fetching from database and putting in session and models.");
-				portalUser = getPortalUserDao().getByPortalId(portalUserId);
-				if (portalUser == null) {
-					logger.warn("No user found for portal ID: " + portalUserId);
-				} else {
-					try {
-						if (portalUser.getGridCredential() == null
-								&& portalUser.getDelegatedEPR() != null) {
-							logger
-									.info("User logged in with webSSO. Will try to get delegated credential");
-							portalUser
-									.setGridCredential(cdsCredentialRetriever
-											.getCredential(portalUser
-													.getDelegatedEPR()));
-						}
-					} catch (AuthnServiceException e) {
-						throw new AuthnServiceException(
-								"Could not retreive credentials from CDS service. You will not be able to invoke secure services",
-								e);
-					}
-					getUserModel().setPortalUser(portalUser);
-					getQueryModel().setPortalUser(portalUser);
-					logger.debug("Putting portal user in session under: "
-							+ getPortalUserSessionAttributeName());
-					session.setAttribute(getPortalUserSessionAttributeName(),
-							portalUser, PortletSession.APPLICATION_SCOPE);
-				}
-			}
+        PortletSession session = portletWebRequest.getRequest()
+                .getPortletSession();
+        String portalUserId = (String) session.getAttribute(
+                getPortalUserIdSessionAttributeName(),
+                PortletSession.APPLICATION_SCOPE);
 
-		}
-	}
+        if (portalUserId != null) {
+            logger.debug("portalUserId = " + portalUserId);
 
-	public CDSCredentialRetriever getCdsCredentialRetriever() {
-		return cdsCredentialRetriever;
-	}
+            // See if the same user is in the session
+            PortalUser portalUser = (PortalUser) session.getAttribute(
+                    getPortalUserSessionAttributeName(),
+                    PortletSession.APPLICATION_SCOPE);
+            if (portalUser != null) {
+                logger.debug("Portal user found in session under: "
+                        + getPortalUserSessionAttributeName());
+                if (!portalUser.getPortalId().equals(portalUserId)) {
+                    throw new Exception(
+                            "A portal user is in the session with a different ID.");
+                }
+            } else {
+                logger
+                        .debug("No portal user in session. Fetching from database and putting in session and models.");
+                portalUser = getPortalUserDao().getByPortalId(portalUserId);
 
-	public void setCdsCredentialRetriever(
-			CDSCredentialRetriever cdsCredentialRetriever) {
-		this.cdsCredentialRetriever = cdsCredentialRetriever;
-	}
+                if (portalUser == null) {
+                    logger.warn("No user found for portal ID: " + portalUserId);
+                }
+                /** lets check if logged in with webSSO **/
+                else {
+                    try {
+                        if (portalUser.getGridCredential() == null
+                                && portalUser.getDelegatedEPR() != null) {
+                            logger
+                                    .info("User logged in with webSSO. Will try to get delegated credential");
+                            portalUser
+                                    .setGridCredential(cdsCredentialRetriever
+                                            .getCredential(portalUser
+                                            .getDelegatedEPR()));
+                        }
+                    } catch (AuthnServiceException e) {
+                        throw new AuthnServiceException(
+                                "Could not retreive credentials from CDS service. You will not be able to invoke secure services",
+                                e);
+                    }
+                }
+                /** set in session **/
+                getUserModel().setPortalUser(portalUser);
+                getQueryModel().setPortalUser(portalUser);
+                logger.debug("Putting portal user in session under: "
+                        + getPortalUserSessionAttributeName());
+                session.setAttribute(getPortalUserSessionAttributeName(),
+                        portalUser, PortletSession.APPLICATION_SCOPE);
+            }
 
-	public UserModel getUserModel() {
-		return userModel;
-	}
+        }
+    }
 
-	public void setUserModel(UserModel userModel) {
-		this.userModel = userModel;
-	}
+    public CDSCredentialRetriever getCdsCredentialRetriever() {
+        return cdsCredentialRetriever;
+    }
 
-	public String getPortalUserSessionAttributeName() {
-		return portalUserSessionAttributeName;
-	}
+    public void setCdsCredentialRetriever(
+            CDSCredentialRetriever cdsCredentialRetriever) {
+        this.cdsCredentialRetriever = cdsCredentialRetriever;
+    }
 
-	public void setPortalUserSessionAttributeName(
-			String portalUserSessionAttributeName) {
-		this.portalUserSessionAttributeName = portalUserSessionAttributeName;
-	}
+    public UserModel getUserModel() {
+        return userModel;
+    }
 
-	public PortalUserDao getPortalUserDao() {
-		return portalUserDao;
-	}
+    public void setUserModel(UserModel userModel) {
+        this.userModel = userModel;
+    }
 
-	public void setPortalUserDao(PortalUserDao portalUserDao) {
-		this.portalUserDao = portalUserDao;
-	}
+    public String getPortalUserSessionAttributeName() {
+        return portalUserSessionAttributeName;
+    }
 
-	public QueryModel getQueryModel() {
-		return queryModel;
-	}
+    public void setPortalUserSessionAttributeName(
+            String portalUserSessionAttributeName) {
+        this.portalUserSessionAttributeName = portalUserSessionAttributeName;
+    }
 
-	public void setQueryModel(QueryModel queryModel) {
-		this.queryModel = queryModel;
-	}
+    public PortalUserDao getPortalUserDao() {
+        return portalUserDao;
+    }
 
-	public String getPortalUserIdSessionAttributeName() {
-		return portalUserIdSessionAttributeName;
-	}
+    public void setPortalUserDao(PortalUserDao portalUserDao) {
+        this.portalUserDao = portalUserDao;
+    }
 
-	public void setPortalUserIdSessionAttributeName(
-			String portalUserIdSessionAttributeName) {
-		this.portalUserIdSessionAttributeName = portalUserIdSessionAttributeName;
-	}
+    public QueryModel getQueryModel() {
+        return queryModel;
+    }
+
+    public void setQueryModel(QueryModel queryModel) {
+        this.queryModel = queryModel;
+    }
+
+    public String getPortalUserIdSessionAttributeName() {
+        return portalUserIdSessionAttributeName;
+    }
+
+    public void setPortalUserIdSessionAttributeName(
+            String portalUserIdSessionAttributeName) {
+        this.portalUserIdSessionAttributeName = portalUserIdSessionAttributeName;
+    }
 
 }
