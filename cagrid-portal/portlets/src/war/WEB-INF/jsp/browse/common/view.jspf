@@ -6,4 +6,6 @@
 
 <%@ include file="/WEB-INF/jsp/browse/pocs.jspf" %>
 
+<%@ include file="/WEB-INF/jsp/browse/comments/commentLink.jspf" %>
+
 <%@ include file="/WEB-INF/jsp/browse/relatedItemsAndOtherInfo.jspf" %>
