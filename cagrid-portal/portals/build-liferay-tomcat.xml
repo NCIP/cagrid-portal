@@ -73,9 +73,9 @@
             <fileset dir="${liferay.tomcat.home}/webapps/ROOT/WEB-INF/lib">
                 <include name="xercesImpl.jar"/>
             </fileset>
-        </move>		
+        </move>
 	</target>
-	
+
 	<!-- Configure Context -->
 	<target name="configure-context">
 		<echo file="${liferay.tomcat.home}/conf/${liferay.tomcat.enginename}/${liferay.tomcat.hostname}/ROOT.xml" append="false">
@@ -139,6 +139,13 @@ com.liferay.portal.kernel.security.jaas.PortalLoginModule  required;
                 <exclude name="caGrid-portal-db-domain.jar"/>
             </fileset>
         </copy>
+
+        <!--http://issues.liferay.com/browse/LEP-6701-->
+        <move todir="${liferay.tomcat.home}/common/lib/ext">
+            <fileset dir="${liferay.tomcat.home}/webapps/ROOT/WEB-INF/lib">
+                <include name="stax.jar"/>
+            </fileset>
+        </move>
 
     </target>	
 	

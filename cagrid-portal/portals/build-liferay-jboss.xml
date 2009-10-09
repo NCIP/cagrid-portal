@@ -12,15 +12,16 @@
               value="${liferay.jboss.home}/server/${liferay.jboss.server.name}/deploy"/>
     <property name="liferay.root.context.dir"
               value="${liferay.auto.deploy.dest.dir}/liferay-portal.war"/>
+    <property name="jboss.lib.ext.dir" value="${liferay.jboss.home}/server/${liferay.jboss.server.name}/lib/ext"/>
 
-    <property name="portal.search.war.dest" value="${liferay.auto.deploy.dest.dir}/${portal.search.war.name}.war"/>     
+    <property name="portal.search.war.dest" value="${liferay.auto.deploy.dest.dir}/${portal.search.war.name}.war"/>
 
     <import file="${basedir}/build-liferay-common.xml"/>
     
     <property name="liferay.portal.war.dir"
               value="${liferay.root.context.dir}"/>
-
     <property name="liferay.autodeploy.dir" value="${liferay.install.dir}/deploy"/>
+
 
 
     <target name="test-jboss-zip">
@@ -303,9 +304,10 @@
 
 
     <target name="jboss:copy-liferay-ext-jars">
-        <mkdir dir="${liferay.jboss.home}/server/${liferay.jboss.server.name}/lib/ext"/>
 
-        <copy todir="${liferay.jboss.home}/server/${liferay.jboss.server.name}/lib/ext"
+        <mkdir dir="${jboss.lib.ext.dir}"/>
+
+        <copy todir="${jboss.lib.ext.dir}"
               overwrite="true">
             <fileset dir="${ext.ext.lib.dir}">
                 <include name="**/*.jar"/>
@@ -342,6 +344,13 @@
                 <include name="web.xml"/>
             </fileset>
         </copy>
+
+        <!--http://issues.liferay.com/browse/LEP-6701-->
+        <move todir="${jboss.lib.ext.dir}">
+            <fileset dir="${liferay.portal.war.dir}/WEB-INF/lib">
+                <include name="stax.jar"/>
+            </fileset>
+        </move>
 
     </target>
 
