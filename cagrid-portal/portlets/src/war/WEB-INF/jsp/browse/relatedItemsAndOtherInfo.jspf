@@ -10,7 +10,9 @@
 <div id="<portlet:namespace/>tabs" class="yui-navset"> 
     <ul class="yui-nav"> 
         <li class="selected"><a href="#<portlet:namespace/>tab1"><em>Related Entries</em></a></li> 
-        <li><a href="#<portlet:namespace/>tab2"><em>Other Info</em></a></li> 
+        <li><a href="#<portlet:namespace/>tab2"><em>Other Info</em></a></li>
+        <li><a href="#<portlet:namespace/>tab3"><em>Comments</em></a></li>
+
     </ul>             
     <div class="yui-content"> 
         <div>
@@ -19,7 +21,7 @@
 <%
     String actionId = "ADD_RELATEED_ITEM";
 %>
-<c:if test="<%= permissionChecker.hasPermission(scopeGroupId, resourceName,0, actionId) %>">
+<c:if test="<%= permissionChecker.hasPermission(0, resourceName,0, actionId) %>">
 --%>
 <c:if test='<%=request.isUserInRole("catalog-user")%>'>
 
@@ -339,7 +341,11 @@ function ${ns}deleteRelatedItem(relationshipId){
         </div> 
         <div>
         	<%@ include file="/WEB-INF/jsp/browse/otherInfo.jspf" %>
-        </div> 
+        </div>
+        <div>
+        	<%@ include file="/WEB-INF/jsp/browse/comments/view.jspf" %>
+        </div>
+
     </div> 
 </div>
 </div>
@@ -357,12 +363,10 @@ function ${ns}deleteRelatedItem(relationshipId){
 
 <script type="text/javascript">
 
-
-
-
 var ${ns}newCitationButton = null;
 var ${ns}newHyperlinksButton = null;
 var ${ns}newFileButton = null;
+
 
 function ${ns}newButton(label, baseName){
 	var b = new YAHOO.widget.Button({
@@ -373,7 +377,11 @@ function ${ns}newButton(label, baseName){
 }
 
 jQuery(document).ready(function() {
-	var myTabs = new YAHOO.widget.TabView("<portlet:namespace/>tabs");
+    var myTabs = new YAHOO.widget.TabView("<portlet:namespace/>tabs");
+    commentsTab = myTabs.getTab(2);
+    commentsTab.addListener('click', ${ns}loadComments);
+
+
 	${ns}newCitationButton = ${ns}newButton("New Citation", "${ns}newCitation");
 	${ns}newHyperlinkButton = ${ns}newButton("New Hyperlink", "${ns}newHyperlink");
 	${ns}newFileButton = ${ns}newButton("New File", "${ns}newFile");

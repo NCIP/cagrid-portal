@@ -1,0 +1,45 @@
+<script type='text/javascript'  src="<c:url value="/dwr/interface/CommentsManagerFacade.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/dwr/engine.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/dwr/util.js"/>"></script>
+
+<div>
+<div class="row">
+    <div id="${ns}commentsHeader">
+        <h3>Comments</h3>
+    </div>
+    </div>
+<div class="row">
+    <div id="${ns}commentsList">
+        </div>
+</div>
+    </div>
+
+
+<script type="text/javascript">
+
+    function ${ns}loadComments(){
+
+        CommentsManagerFacade.getAll(
+        {
+            callback:function(comments){
+                <%--lets clear the list  first--%>
+                jQuery("#{ns}commentsList").val = "";
+
+                for(var i=0;i<comments;i++){
+                    var comment = comments[i];
+                    var commentDiv = document.createElement('div');
+                    commentDiv.setAttribute('id','${ns}comment' + i)
+                    commentDiv.innerHTML=comment.commentText;
+                    commentDiv.innerHTML = result.name;
+
+                    jQuery("#${ns}commentsList").append(commentDiv);
+                }
+              },
+              errorHandler:function(errorString, exception){
+                  alert("Error rendering role types: " + errorString);
+              }
+        });
+
+    }
+    
+</script>
