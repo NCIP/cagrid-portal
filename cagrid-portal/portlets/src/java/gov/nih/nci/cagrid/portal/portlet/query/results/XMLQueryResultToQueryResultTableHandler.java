@@ -5,6 +5,7 @@ package gov.nih.nci.cagrid.portal.portlet.query.results;
 
 import gov.nih.nci.cagrid.portal.dao.QueryResultTableDao;
 import gov.nih.nci.cagrid.portal.domain.table.*;
+import gov.nih.nci.cagrid.portal.service.PortalFileService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.xml.sax.Attributes;
@@ -12,12 +13,11 @@ import org.xml.sax.SAXException;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
-import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.zip.GZIPOutputStream;
 
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
@@ -37,6 +37,8 @@ public class XMLQueryResultToQueryResultTableHandler extends
     private int maxValueLength = 256;
     private String dataServiceUrl;
     private boolean persist = true;
+
+    private PortalFileService portalFileService;
 
     /**
      *
@@ -258,14 +260,10 @@ public class XMLQueryResultToQueryResultTableHandler extends
         }
         try {
 
-            ByteArrayOutputStream out = new ByteArrayOutputStream();
-            GZIPOutputStream gOut = new GZIPOutputStream(out);
-            gOut.write(table.getQueryInstance().getResult().getBytes());
-            gOut.close();
+            File file = getPortalFileService().write(table.getQueryInstance().getResult().getBytes());
             table.getQueryInstance().setResult(null);
-
             QueryResultData data = new QueryResultData();
-            data.setData(out.toByteArray());
+            data.setFileName(file.getName());
             if (persist) {
                 getQueryResultTableDao().getHibernateTemplate().save(data);
             }
@@ -342,5 +340,13 @@ public class XMLQueryResultToQueryResultTableHandler extends
 
     public void setPersist(boolean persist) {
         this.persist = persist;
+    }
+
+    public PortalFileService getPortalFileService() {
+        return portalFileService;
+    }
+
+    public void setPortalFileService(PortalFileService portalFileService) {
+        this.portalFileService = portalFileService;
     }
 }

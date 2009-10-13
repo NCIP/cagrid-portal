@@ -14,6 +14,7 @@ import gov.nih.nci.cagrid.portal.domain.table.QueryResultTable;
 import gov.nih.nci.cagrid.portal.portlet.UserModel;
 import gov.nih.nci.cagrid.portal.portlet.browse.ajax.CatalogEntryManagerFacade;
 import gov.nih.nci.cagrid.portal.portlet.query.QueryService;
+import gov.nih.nci.cagrid.portal.service.PortalFileService;
 import org.springframework.orm.hibernate3.HibernateTemplate;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,6 +40,7 @@ public class QueryExecutionManager extends CatalogEntryManagerFacade {
     private String errorView;
     private QueryInstanceDao queryInstanceDao;
     private QueryResultTableDao queryResultTableDao;
+    private PortalFileService portalFileService;
 
     @Override
     public String validate() {
@@ -224,6 +226,13 @@ public class QueryExecutionManager extends CatalogEntryManagerFacade {
             QueryInstance inst = getQueryInstanceDao().getById(instanceId);
             QueryResultTable table = inst.getQueryResultTable();
             if (table != null) {
+
+                if (table.getData().getFileName() != null) {
+                    logger.debug("Will delete query results file");
+                    boolean deleted = getPortalFileService().delete(table.getData().getFileName());
+                    if (!deleted)
+                        logger.warn("Could not delete file on disk. Filename " + table.getData().getFileName());
+                }
                 templ.delete(table.getData());
                 templ.delete(table);
             }
@@ -297,5 +306,13 @@ public class QueryExecutionManager extends CatalogEntryManagerFacade {
 
     public void setQueryResultTableDao(QueryResultTableDao queryResultTableDao) {
         this.queryResultTableDao = queryResultTableDao;
+    }
+
+    public PortalFileService getPortalFileService() {
+        return portalFileService;
+    }
+
+    public void setPortalFileService(PortalFileService portalFileService) {
+        this.portalFileService = portalFileService;
     }
 }
