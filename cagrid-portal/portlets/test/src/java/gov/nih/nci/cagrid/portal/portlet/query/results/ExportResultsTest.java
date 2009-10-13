@@ -4,20 +4,13 @@
 package gov.nih.nci.cagrid.portal.portlet.query.results;
 
 import gov.nih.nci.cagrid.portal.portlet.util.PortletUtils;
-import gov.nih.nci.cagrid.portal.portlet.util.Table;
+import junit.framework.TestCase;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.FileReader;
-import java.util.List;
-import java.util.Map;
-
-import junit.framework.TestCase;
-
-import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>

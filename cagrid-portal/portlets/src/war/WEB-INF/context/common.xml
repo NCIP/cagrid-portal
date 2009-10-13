@@ -372,7 +372,9 @@
 
     <bean id="xmlQueryResultToQueryResultTableHandlerPrototype"
           class="gov.nih.nci.cagrid.portal.portlet.query.results.XMLQueryResultToQueryResultTableHandler"
-          autowire="byName" scope="prototype"/>
+          autowire="byName" scope="prototype">
+        <property name="portalFileService" ref="securePortalFileService"/>
+    </bean>
 
     <bean id="queryResultTableToJSONObjectBuilder"
           class="gov.nih.nci.cagrid.portal.portlet.query.results.QueryResultTableToJSONObjectBuilder"

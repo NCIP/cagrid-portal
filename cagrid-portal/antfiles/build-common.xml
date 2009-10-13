@@ -64,7 +64,6 @@
             <entry key="cagrid.portal.cadsrUrl" value="${cagrid.portal.cadsrUrl}"/>
             <entry key="cagrid.portal.security.encryption.key" value="${cagrid.portal.security.encryption.key}"/>
             <entry key="cagrid.portal.admin.email" value="${cagrid.portal.admin.email}"/>
-            <entry key="cagrid.portal.idpInfo" value="${cagrid.portal.idpInfo}"/>
             <entry key="cagrid.portal.ifsUrl" value="${cagrid.portal.ifsUrl}"/>
             <entry key="cagrid.portal.http.port" value="${liferay.http.port}"/>
             <entry key="cagrid.portal.https.port" value="${liferay.https.port}"/>
@@ -96,6 +95,7 @@
             <entry key="cagrid.portal.aggr.defaultDelay" value="${cagrid.portal.aggr.defaultDelay}"/>
             <entry key="cagrid.portal.liferay.companyWebId" value="${cagrid.portal.liferay.companyWebId}"/>
             <entry key="cagrid.portal.liferay.omniUserEmail" value="${cagrid.portal.liferay.omniUserEmail}"/>
+            <entry key="cagrid.portal.filestore.path" value="${cagrid.portal.filestore.path}"/>
         </propertyfile>
     </target>
 

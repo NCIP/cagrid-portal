@@ -2301,4 +2301,16 @@
         </modifyColumn>
     </changeSet>
 
+    <changeSet id="69" author="kherm">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="query_result_data"/>
+            <not>
+                <columnExists tableName="query_result_data" columnName="fileName"/>
+            </not>
+        </preConditions>
+        <addColumn tableName="query_result_data">
+            <column name="fileName" type="text"/>
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>

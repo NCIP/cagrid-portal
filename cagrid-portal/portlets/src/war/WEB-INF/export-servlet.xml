@@ -27,7 +27,10 @@ http://www.springframework.org/schema/util http://www.springframework.org/schema
     	autowire="byName"/>
     	
     <bean name="/query_results_table.xml" class="gov.nih.nci.cagrid.portal.portlet.query.results.ExportQueryResultTableToXMLController"
-    	autowire="byName"/>
+    	autowire="byName">
+        <property name="portalFileService" ref="securePortalFileService"/>
+    	</bean>
+
     	
     <bean name="/query_results.json" class="gov.nih.nci.cagrid.portal.portlet.query.results.ExportJSONResultsController"
     	autowire="byName"/>

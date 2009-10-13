@@ -18,6 +18,10 @@
 			value="classpath:cagridportal.properties" />
 	</bean>
 
+      <bean id="securePortalFileService" class="gov.nih.nci.cagrid.portal.security.service.EncryptedZippedFileService" 
+            parent="portalFileService">
+        <property name="encryptionService" ref="encryptionServicePrototype"/>
+    </bean>
 
     <bean id="authnService" class="gov.nih.nci.cagrid.portal.security.AuthnService" autowire="byName">
         <property name="encryptionService" ref="encryptionServicePrototype"/>

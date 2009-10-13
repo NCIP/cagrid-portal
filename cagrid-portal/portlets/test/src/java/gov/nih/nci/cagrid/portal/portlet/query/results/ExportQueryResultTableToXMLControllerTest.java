@@ -7,11 +7,15 @@ import gov.nih.nci.cagrid.portal.dao.QueryResultTableDao;
 import gov.nih.nci.cagrid.portal.domain.table.QueryResultData;
 import gov.nih.nci.cagrid.portal.domain.table.QueryResultTable;
 import gov.nih.nci.cagrid.portal.portlet.query.shared.XMLSchemaValidatorFactory;
+import gov.nih.nci.cagrid.portal.service.PortalFileService;
 import gov.nih.nci.cagrid.portal.util.PortalAggrIntegrationTestBase;
 import static org.mockito.Mockito.*;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.ByteArrayInputStream;
 import java.util.zip.GZIPOutputStream;
+import java.util.zip.GZIPInputStream;
 
 /**
  * User: kherm
@@ -37,14 +41,22 @@ public class ExportQueryResultTableToXMLControllerTest extends PortalAggrIntegra
         bufos.write(cqlResult.getBytes());
         bufos.close();
 
-
         QueryResultTableDao mockDao = mock(QueryResultTableDao.class);
         QueryResultTable mockTable = mock(QueryResultTable.class);
         QueryResultData mockData = mock(QueryResultData.class);
 
         when(mockDao.getByQueryInstanceId(anyInt())).thenReturn(mockTable);
         when(mockTable.getData()).thenReturn(mockData);
-        when(mockData.getData()).thenReturn(bos.toByteArray());
+
+        PortalFileService mockFileService = mock(PortalFileService.class);
+        File mockFile = mock(File.class);
+        when(mockFile.getName()).thenReturn(anyString());
+        when(mockFileService.write(new byte[]{})).thenReturn(mockFile);
+
+
+
+        when(mockFileService.read(anyString())).thenReturn(cqlResult.getBytes());
+        controller.setPortalFileService(mockFileService);
 
         controller.setQueryResultTableDao(mockDao);
 

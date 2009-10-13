@@ -3,14 +3,10 @@
  */
 package gov.nih.nci.cagrid.portal.portlet.query.results;
 
-import gov.nih.nci.cagrid.portal.portlet.query.results.FQPServiceErrorInterpretor;
-import gov.nih.nci.cagrid.portal.portlet.query.results.ServiceErrorInterpretor;
-import gov.nih.nci.cagrid.portal.portlet.query.results.StringMatchServiceErrorInterpretor;
+import junit.framework.TestCase;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import junit.framework.TestCase;
 
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>

@@ -26,8 +26,6 @@ public class LatestContentContextInitTest extends SpringPortletContextTestBase<L
      */
     @Test
     public void testView() throws Exception {
-        MockRenderRequest request = new MockRenderRequest();
-        MockRenderResponse response = new MockRenderResponse();
 
         request.setPortletMode(PortletMode.VIEW);
         doRender(request, response);
