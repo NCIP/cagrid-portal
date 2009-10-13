@@ -50,13 +50,12 @@ public class XMLToQueryResultTableTest {
             handler.setColumnNames(colNames);
             handler.getTable().setQueryInstance(queryInstance);
 
-
             PortalFileService mockFileService = mock(PortalFileService.class);
             File mockFile = mock(File.class);
             when(mockFile.getName()).thenReturn(anyString());
             when(mockFileService.write(new byte[]{})).thenReturn(mockFile);
-
             when(mockFileService.read(anyString())).thenReturn(("some data".getBytes()));
+            handler.setPortalFileService(mockFileService);
 
             SAXParserFactory fact = SAXParserFactory.newInstance();
             fact.setNamespaceAware(true);
@@ -85,6 +84,13 @@ public class XMLToQueryResultTableTest {
             handler.setPersist(false);
             handler.setDataServiceUrl("http://service");
             handler.getTable().setQueryInstance(queryInstance);
+            PortalFileService mockFileService = mock(PortalFileService.class);
+            File mockFile = mock(File.class);
+            when(mockFile.getName()).thenReturn(anyString());
+            when(mockFileService.write(new byte[]{})).thenReturn(mockFile);
+            when(mockFileService.read(anyString())).thenReturn(("some data".getBytes()));
+            handler.setPortalFileService(mockFileService);
+
             SAXParserFactory fact = SAXParserFactory.newInstance();
             fact.setNamespaceAware(true);
             SAXParser parser = fact.newSAXParser();
@@ -114,6 +120,13 @@ public class XMLToQueryResultTableTest {
             handler.setPersist(false);
             handler.setDataServiceUrl("http://service");
             handler.getTable().setQueryInstance(queryInstance);
+            PortalFileService mockFileService = mock(PortalFileService.class);
+            File mockFile = mock(File.class);
+            when(mockFile.getName()).thenReturn(anyString());
+            when(mockFileService.write(new byte[]{})).thenReturn(mockFile);
+            when(mockFileService.read(anyString())).thenReturn(("some data".getBytes()));
+            handler.setPortalFileService(mockFileService);
+
             SAXParserFactory fact = SAXParserFactory.newInstance();
             fact.setNamespaceAware(true);
             SAXParser parser = fact.newSAXParser();
