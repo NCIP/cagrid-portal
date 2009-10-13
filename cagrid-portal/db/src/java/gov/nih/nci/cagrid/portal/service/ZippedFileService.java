@@ -1,6 +1,5 @@
 package gov.nih.nci.cagrid.portal.service;
 
-import gov.nih.nci.cagrid.portal.util.PortalDBRuntimeException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -97,18 +96,16 @@ public class ZippedFileService implements InitializingBean, PortalFileService {
     }
 
     public void afterPropertiesSet() throws Exception {
+        File file = new File(getFileStorePath());
+        file.mkdir();
 
-        if (getFileStorePath() == null) {
-
+        if (!file.isDirectory() && !file.canWrite()) {
             String property = "java.io.tmpdir";
             String tmpPath = System.getProperty(property);
             logger.warn("File store path not set. Will use temp directory " + tmpPath);
             setFileStorePath(tmpPath);
         }
-        File file = new File(getFileStorePath());
-        file.mkdir();
-        if (!file.isDirectory() && file.canWrite())
-            throw new PortalDBRuntimeException("File store path is not a valid directory or not writable. Please check system property filestore.path");
+
     }
 
     public String getFileStorePath() {
