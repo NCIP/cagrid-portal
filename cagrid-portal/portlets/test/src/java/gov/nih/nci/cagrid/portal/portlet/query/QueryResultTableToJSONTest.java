@@ -11,6 +11,7 @@ import gov.nih.nci.cagrid.portal.portlet.query.results.QueryResultTableToDataTab
 import gov.nih.nci.cagrid.portal.portlet.query.results.QueryResultTableToJSONObjectBuilder;
 import gov.nih.nci.cagrid.portal.portlet.query.results.XMLQueryResultToQueryResultTableHandler;
 import gov.nih.nci.cagrid.portal.portlet.util.PortletUtils;
+import gov.nih.nci.cagrid.portal.service.PortalFileService;
 import org.json.JSONObject;
 import static org.junit.Assert.*;
 import org.junit.Before;
@@ -20,6 +21,7 @@ import static org.mockito.Mockito.*;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileReader;
 
@@ -74,6 +76,15 @@ public class QueryResultTableToJSONTest {
             handler.setPersist(false);
             handler.setDataServiceUrl("http://service");
             handler.getTable().setQueryInstance(queryInstance);
+
+            PortalFileService mockFileService = mock(PortalFileService.class);
+            File mockFile = mock(File.class);
+            when(mockFile.getName()).thenReturn(anyString());
+            when(mockFileService.write(new byte[]{})).thenReturn(mockFile);
+
+            when(mockFileService.read(anyString())).thenReturn(sb.toString().getBytes());
+            handler.setPortalFileService(mockFileService);
+
             SAXParserFactory fact = SAXParserFactory.newInstance();
             fact.setNamespaceAware(true);
             SAXParser parser = fact.newSAXParser();
@@ -113,6 +124,15 @@ public class QueryResultTableToJSONTest {
             handler.setDataServiceUrl("http://service");
             handler.setPersist(false);
             handler.getTable().setQueryInstance(queryInstance);
+
+            PortalFileService mockFileService = mock(PortalFileService.class);
+            File mockFile = mock(File.class);
+            when(mockFile.getName()).thenReturn(anyString());
+            when(mockFileService.write(new byte[]{})).thenReturn(mockFile);
+
+            when(mockFileService.read(anyString())).thenReturn(sb.toString().getBytes());
+            handler.setPortalFileService(mockFileService);
+
             SAXParserFactory fact = SAXParserFactory.newInstance();
             fact.setNamespaceAware(true);
             SAXParser parser = fact.newSAXParser();
@@ -152,6 +172,16 @@ public class QueryResultTableToJSONTest {
             handler.setPersist(false);
             handler.setDataServiceUrl("http://service");
             handler.getTable().setQueryInstance(queryInstance);
+
+            PortalFileService mockFileService = mock(PortalFileService.class);
+            File mockFile = mock(File.class);
+            when(mockFile.getName()).thenReturn(anyString());
+            when(mockFileService.write(new byte[]{})).thenReturn(mockFile);
+
+            when(mockFileService.read(anyString())).thenReturn(sb.toString().getBytes());
+            handler.setPortalFileService(mockFileService);
+
+
             SAXParserFactory fact = SAXParserFactory.newInstance();
             fact.setNamespaceAware(true);
             SAXParser parser = fact.newSAXParser();
@@ -191,6 +221,14 @@ public class QueryResultTableToJSONTest {
             handler.setPersist(false);
             handler.setDataServiceUrl("http://service");
             handler.getTable().setQueryInstance(queryInstance);
+            PortalFileService mockFileService = mock(PortalFileService.class);
+            File mockFile = mock(File.class);
+            when(mockFile.getName()).thenReturn(anyString());
+            when(mockFileService.write(new byte[]{})).thenReturn(mockFile);
+
+            when(mockFileService.read(anyString())).thenReturn(sb.toString().getBytes());
+            handler.setPortalFileService(mockFileService);
+
             SAXParserFactory fact = SAXParserFactory.newInstance();
             fact.setNamespaceAware(true);
             SAXParser parser = fact.newSAXParser();
