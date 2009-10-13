@@ -28,13 +28,14 @@ public class PortalPortletIntegrationTestBase extends AbstractDependencyInjectio
     protected String[] getConfigLocations() {
         return new String[]{
                 "classpath*:applicationContext-aggr.xml",
+                "applicationContext-db.xml",
+                "applicationContext-service.xml",
                 "common.xml",
                 "applicationContext-security.xml",
                 "browse-portlet.xml",
                 "facades.xml",
                 "greeting-portlet.xml",
-                "applicationContext-portal-search.xml",
-                "applicationContext-db.xml"
+                "applicationContext-portal-search.xml"
         };
     }
 
