@@ -10,7 +10,8 @@ import gov.nih.nci.cagrid.portal.portlet.TestPortletContextClassBase;
 public class LatestContextContext extends TestPortletContextClassBase {
     public String[] getConfigLocations() {
         return new String[]{"classpath*:latestContent-portlet.xml", "classpath*:common.xml",
-                "classpath*:applicationContext-db.xml", "classpath*:applicationContext-security.xml"};
+                "classpath*:applicationContext-db.xml", "classpath*:applicationContext-service.xml",
+                "classpath*:applicationContext-security.xml"};
     }
 
 }
