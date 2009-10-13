@@ -80,7 +80,7 @@ public class RolePopulator implements InitializingBean, PortalInitable {
 
             Role role = RoleServiceUtil.addRole(roleName, roleDesc, RoleConstants.TYPE_REGULAR);
 
-            ResourceActionsUtil.getResourceActions(null, resource);
+            ResourceActionsUtil.getModelResourceActions(resource);
 
             for (String action : actions) {
                 PermissionServiceUtil.setRolePermission(
