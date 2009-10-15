@@ -2,31 +2,31 @@
 .ygtvtn { background: transparent; width:1em; height:20px; }
 
 /* first or middle sibling, collapsable */
-.ygtvtm { background: url(../../img/menu/collapse.gif) 0 6px no-repeat; width:1em; height:22px; cursor:pointer }
+.ygtvtm { background: url(../../img/menu/collapse.gif) 0 4px no-repeat; width:16px; height:22px; cursor:pointer }
 
 /* first or middle sibling, collapsable, hover */
-.ygtvtmh { background: url(../../img/menu/collapseh.gif) 0 6px no-repeat; width:1em; height:22px; cursor:pointer }
+.ygtvtmh { background: url(../../img/menu/collapseh.gif) 0 4px no-repeat; width:16px; height:22px; cursor:pointer }
 
 /* first or middle sibling, expandable */
-.ygtvtp { background: url(../../img/menu/expand.gif) 0 6px no-repeat; width:1em; height:22px; cursor:pointer }
+.ygtvtp { background: url(../../img/menu/expand.gif) 0 4px no-repeat; width:16px; height:22px; cursor:pointer }
 
 /* first or middle sibling, expandable, hover */
-.ygtvtph { background: url(../../img/menu/expandh.gif) 0 6px no-repeat; width:1em; height:22px; cursor:pointer }
+.ygtvtph { background: url(../../img/menu/expandh.gif) 0 4px no-repeat; width:16px; height:22px; cursor:pointer }
 
 /* last sibling, no children */
 .ygtvln { background: transparent; width:1em; height:20px; }
 
 /* Last sibling, collapsable */
-.ygtvlm { background: url(../../img/menu/collapse.gif) 0 6px no-repeat; width:1em; height:22px; cursor:pointer }
+.ygtvlm { background: url(../../img/menu/collapse.gif) 0 4px no-repeat; width:16px; height:22px; cursor:pointer }
 
 /* Last sibling, collapsable, hover */
-.ygtvlmh { background: url(../../img/menu/collapseh.gif) 0 6px no-repeat; width:1em; height:22px; cursor:pointer }
+.ygtvlmh { background: url(../../img/menu/collapseh.gif) 0 4px no-repeat; width:16px; height:22px; cursor:pointer }
 
 /* Last sibling, expandable */
-.ygtvlp { background: url(../../img/menu/expand.gif) 0 6px no-repeat; width:1em; height:22px; cursor:pointer }
+.ygtvlp { background: url(../../img/menu/expand.gif) 0 4px no-repeat; width:16px; height:22px; cursor:pointer }
 
 /* Last sibling, expandable, hover */
-.ygtvlph { background: url(../../img/menu/expandh.gif) 0 6px no-repeat; width:1em; height:22px; cursor:pointer }
+.ygtvlph { background: url(../../img/menu/expandh.gif) 0 4px no-repeat; width:16px; height:22px; cursor:pointer }
 
 /* Loading icon */
 .ygtvloading { background: url(../../img/menu/loading.gif) 0 6px no-repeat; width:1em; height:22px; }
@@ -54,8 +54,11 @@
     cursor:pointer;
 }
 
-.ygtvspacer{
-    
+.ygtvspacer {
+    display:none;
 }
-
+.ygtvdepth1 .ygtvlabel {
+	font-size:14px;
+	font-weight:bold;
+}
 

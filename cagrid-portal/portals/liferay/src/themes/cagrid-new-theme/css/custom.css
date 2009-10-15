@@ -404,6 +404,7 @@ background:none;
 	-webkit-border-radius:10px;
 	border-radius:10px;
 	padding:10px;
+	color:#033364;
 }
 .searchResults {
     width: 69%;
@@ -421,6 +422,7 @@ background:none;
 }
 body .ygtvfocus {
 	background-color:transparent;
+	font-weight:bold;
 }
 /*additions for caGrid Portal*/
 link-extenal {
