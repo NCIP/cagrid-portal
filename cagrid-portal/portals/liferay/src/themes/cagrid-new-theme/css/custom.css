@@ -254,7 +254,7 @@ div.photoRightContent {
 }
 .entryName {
 	font-size:23pt;
-	margin-bottom:10px;
+	margin-bottom:5px;
 	margin-top:0;
 	line-height:24pt;
 	width:740px;
@@ -262,6 +262,7 @@ div.photoRightContent {
 .entryDescription {
 	width:700px;
 	line-height:17px;
+	margin-bottom:10px;
 }
 h3 {
 	border-bottom: 2px solid #A3B9E2;
@@ -487,10 +488,12 @@ div.row div.twoCols{
  * Star Ratings
  */
 #rateStatus {
-    color: green;
+    color:#5F5F5F;
 } 
 #rateMe {
     padding: 2px;
+	width:82px;
+	float:left;
 }
 #rateMe li {
     float: left;
