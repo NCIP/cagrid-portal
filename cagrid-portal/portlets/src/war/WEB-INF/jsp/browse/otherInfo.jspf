@@ -2,8 +2,6 @@
 
 <div>
 	<h3>Citations</h3>
-	<div id="${ns}newCitationButtonContainer"></div>
-	<div id="${ns}newCitationFormContainer"></div>
 	<c:choose>
 	<c:when test="${!empty catalogEntryViewBean.orderedCitations}">		
 		<ul>
@@ -16,18 +14,19 @@
 		</ul>
 	</c:when>
 	<c:otherwise>
-		No citations have been provided.
+		<span class="no-info">No citations have been provided.</span>
 	</c:otherwise>
 	</c:choose>
+	<div id="${ns}newCitationButtonContainer"></div>
+	<div id="${ns}newCitationFormContainer"></div>
+	<br>
 </div>
-
 
 <!-- Links -->
 
 <div>
 	<h3>Hyperlinks</h3>
-	<div id="${ns}newHyperlinkButtonContainer"></div>
-	<div id="${ns}newHyperlinkFormContainer"></div>
+	
 	<c:choose>	
 	<c:when test="${!empty catalogEntryViewBean.orderedHyperlinks}">
 		<ul>
@@ -44,9 +43,12 @@
 		</ul>
 	</c:when>
 	<c:otherwise>
-		No hyperlinks have been provided.
+		<span class="no-info">No hyperlinks have been provided.</span>
 	</c:otherwise>
 	</c:choose>
+	<div id="${ns}newHyperlinkButtonContainer"></div>
+	<div id="${ns}newHyperlinkFormContainer"></div>
+	<br>
 </div>
 
 
@@ -54,8 +56,6 @@
 
 <div>
 	<h3>Uploaded Files</h3>
-	<div id="${ns}newFileButtonContainer"></div>
-	<div id="${ns}newFileFormContainer"></div>	
 	<c:choose>
 	<c:when test="${!empty catalogEntryViewBean.orderedFiles}">		
 		<ul>
@@ -73,9 +73,12 @@
 		</ul>
 	</c:when>
 	<c:otherwise>
-		No files have been provided.
+		<span class="no-info">No files have been provided.</span>
 	</c:otherwise>
 	</c:choose>
+	<div id="${ns}newFileButtonContainer"></div>
+	<div id="${ns}newFileFormContainer"></div>
+	<br>
 </div>
 
 

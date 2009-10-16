@@ -264,6 +264,12 @@ div.photoRightContent {
 	line-height:17px;
 	margin-bottom:10px;
 }
+.no-info {
+	display:block;
+	color:#929292;
+	font-style:italic;
+	margin-bottom:5px;
+}
 h3 {
 	border-bottom: 2px solid #A3B9E2;
 	font-size:15pt;
@@ -390,7 +396,7 @@ body .yui-skin-sam .yui-navset .yui-nav,
 body .yui-skin-sam .yui-navset .yui-content, 
 body .yui-skin-sam .yui-navset .yui-navset-top .yui-content {
 border:2px solid #D0D0D0;
-padding:0 0.5em;
+padding: 0.5em;
 background:none;
 }
 .yui-skin-sam .button-red .yui-button {
