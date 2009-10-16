@@ -168,15 +168,15 @@
 
 <script type="text/javascript">
     function selectItemForDiscovery(id, type) {
-        selectItemsForDiscovery("1,2,3",type);
-        <%--$('${prefix}mapNodeForm').entryId.value = id;--%>
-        <%--var viewDetailsLink = "${viewDetailsLink}";--%>
-        <%--viewDetailsLink = viewDetailsLink.replace("/guest/home", "/guest/catalog/all");--%>
-        <%--$("${prefix}mapNodeForm").action = viewDetailsLink;--%>
-        <%--$('${prefix}mapNodeForm').submit();--%>
+        $('${prefix}mapNodeForm').entryId.value = id;
+        var viewDetailsLink = "${viewDetailsLink}";
+        viewDetailsLink = viewDetailsLink.replace("/guest/home", "/guest/catalog/all");
+        $("${prefix}mapNodeForm").action = viewDetailsLink;
+        $('${prefix}mapNodeForm').submit();
     }
 
     function selectItemsForDiscovery(ids, type) {
+        ids = ids.replace(/,/g, " ");
         $('${prefix}mapNodeForm').selectedIds.value = ids;
         var viewCatalogsLink = "${viewCatalogs}";
         viewCatalogsLink = viewCatalogsLink.replace("/guest/home", "/guest/catalog/all");

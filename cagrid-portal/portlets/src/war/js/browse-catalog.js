@@ -79,6 +79,10 @@ this.params.splice(index,1);
 }
 },
 
+removeFacet: function(arg){
+this.removeParam("\^fq="+arg);
+},
+
 addFacet: function(arg, value) {
 this.removeParam("\^fq="+arg);
 this.addParam("fq=" + arg + ":(" + value + ")");

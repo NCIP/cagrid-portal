@@ -70,7 +70,7 @@
           autowire="byName">
         <property name="objectName" value="catalogEntryViewBean"/>
     </bean>
-    
+
     <bean id="browseViewProfileController"
           class="gov.nih.nci.cagrid.portal.portlet.browse.BrowseViewProfileController"
           autowire="byName">
@@ -106,10 +106,11 @@
           class="gov.nih.nci.cagrid.portal.portlet.browse.CreateRelationshipTypeController"
           autowire="byName"/>
 
-    <bean id="createPortalCommunity" class="gov.nih.nci.cagrid.portal.portlet.browse.community.CreatePortalCommunityController"
-            autowire="byName">
+    <bean id="createPortalCommunity"
+          class="gov.nih.nci.cagrid.portal.portlet.browse.community.CreatePortalCommunityController"
+          autowire="byName">
         <property name="objectName" value="catalogEntryViewBean"/>
-        </bean>
+    </bean>
 
     <bean id="editRelationshipTypeController"
           class="gov.nih.nci.cagrid.portal.portlet.browse.EditRelationshipTypeController"
@@ -131,7 +132,6 @@
           autowire="byName">
         <property name="successViewName" value="view"/>
         <property name="solrServiceUrl" value="${cagrid.portal.solr.http.url}"/>
-        <property name="searchRequestParam" value="searchKeyword"/>
     </bean>
 
     <bean id="browseEditController"
@@ -147,7 +147,7 @@
             autowire="byName">
         <property name="commandClass" value="gov.nih.nci.cagrid.portal.portlet.browse.BrowseCommand"/>
     </bean>
-    
+
     <bean
             id="browseViewRelatedItemsController"
             class="gov.nih.nci.cagrid.portal.portlet.browse.ViewRelatedItemsController"
@@ -167,7 +167,7 @@
         <property name="order" value="1"/>
         <property name="parameterName" value="operation"/>
         <!--<property name="applyWebRequestInterceptorsToRenderPhaseOnly" value="false"/>-->
-    
+
         <property name="interceptors">
             <list>
                 <ref bean="parameterMappingInterceptor"/>
@@ -198,6 +198,7 @@
                         <entry key="editCatalogEntry" value-ref="editCatalogEntryController"/>
                         <entry key="deleteCatalogEntry" value-ref="deleteCatalogEntryController"/>
                         <entry key="copySharedQueryCatalog" value-ref="copySharedQueryCatalog"/>
+                        <entry key="viewRelatedItems" value-ref="browseViewRelatedItemsController"/>
                     </map>
                 </entry>
             </map>
