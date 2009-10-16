@@ -9,7 +9,6 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.orm.hibernate3.HibernateTemplate;
 import org.springframework.web.portlet.ModelAndView;
-import org.springframework.web.portlet.mvc.Controller;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
@@ -20,13 +19,12 @@ import javax.portlet.RenderResponse;
  * @author <a href="mailto:joshua.phillips@semanticbits.com>Joshua Phillips</a>
  * @author kherm manav.kher@semanticbits.com
  */
-public class BrowseViewController implements InitializingBean, Controller {
+public class BrowseViewController extends BaseSearchSupportingController implements InitializingBean {
 
     private HibernateTemplate hibernateTemplate;
     private String successViewName;
-    private String solrServiceUrl;
+
     private UserModel userModel;
-    private String searchRequestParam;
 
     private static final Log logger = LogFactory.getLog(BrowseViewController.class);
 
@@ -47,7 +45,7 @@ public class BrowseViewController implements InitializingBean, Controller {
       */
     public void handleActionRequest(ActionRequest req, ActionResponse res)
             throws Exception {
-        res.setRenderParameter(searchRequestParam, req.getParameter(searchRequestParam));
+        res.setRenderParameter(BrowseParams.SEARCH_KEYWORD, req.getParameter(BrowseParams.SEARCH_KEYWORD));
     }
 
     /*
@@ -60,65 +58,36 @@ public class BrowseViewController implements InitializingBean, Controller {
     public ModelAndView handleRenderRequest(RenderRequest request,
                                             RenderResponse response) throws Exception {
         ModelAndView mav = new ModelAndView(getSuccessViewName());
-        BrowseTypeEnum browseType = BrowseTypeEnum.valueOf(request
-                .getPreferences().getValue("browseType",
-                BrowseTypeEnum.DATASET.toString()));
-        mav.addObject("browseType", browseType.toString());
-        mav.addObject("solrServiceUrl", getSolrServiceUrl());
+        BrowseTypeEnum browseType = getBrowseType(request);
 
-        // search keyword (wildcard by default)
-        String searchKeyword = request.getParameter(searchRequestParam) != null ? request.getParameter(searchRequestParam) : "*:*";
-        mav.addObject("searchKeyword", searchKeyword);
-
-        //if particular catalogs need to be displayed
-        if(request.getParameterMap().containsKey("selectedIds"))
-        mav.addObject("selectedIds", request.getParameter("selectedIds"));
-
-        //area of focus (All by default)
-        if (request.getParameterMap().containsKey("aof"))
-            mav.addObject("aof", request.getParameter("aof"));
-
+        mav.addObject(BrowseParams.BROWSE_TYPE, browseType.toString());
         String entryTypeName = null;
         if (browseType.equals(BrowseTypeEnum.DATASET)) {
             entryTypeName = "DataSetCatalogEntry";
             //both data sets and information models
-            mav.addObject("catalogType", "dataset information_model terminology");
+            mav.addObject(BrowseParams.CATALOG_TYPE, "dataset information_model terminology");
         } else if (browseType.equals(BrowseTypeEnum.COMMUNITY)) {
             entryTypeName = "CommunityCatalogEntry";
-            mav.addObject("catalogType", "community");
+            mav.addObject(BrowseParams.CATALOG_TYPE, "community");
         } else if (browseType.equals(BrowseTypeEnum.INSTITUTION)) {
             entryTypeName = "InstitutionCatalogEntry";
-            mav.addObject("catalogType", "institution");
+            mav.addObject(BrowseParams.CATALOG_TYPE, "institution");
         } else if (browseType.equals(BrowseTypeEnum.PERSON)) {
             entryTypeName = "PersonCatalogEntry";
-            mav.addObject("catalogType", "person");
+            mav.addObject(BrowseParams.CATALOG_TYPE, "person");
         } else if (browseType.equals(BrowseTypeEnum.TOOL)) {
             entryTypeName = "ToolCatalogEntry";
-            mav.addObject("catalogType", "tool_* tools");
+            mav.addObject(BrowseParams.CATALOG_TYPE, "tool_* tools");
         } else if (browseType.equals(BrowseTypeEnum.ALL)) {
             entryTypeName = "CatalogEntry";
         } else {
             throw new RuntimeException("Unknown browse type: " + browseType);
         }
 
-//        List entries = getHibernateTemplate().find("from " + entryTypeName);
-//        mav.addObject("entries", entries);
-
-        if (getUserModel().getPortalUser() != null) {
-            mav.addObject("portalUser", getUserModel().getPortalUser());
-        }
-
-
+        encodeWithSearchParams(mav, request);
         return mav;
     }
 
-    public String getSolrServiceUrl() {
-        return solrServiceUrl;
-    }
-
-    public void setSolrServiceUrl(String solrServiceUrl) {
-        this.solrServiceUrl = solrServiceUrl;
-    }
 
     public String getSuccessViewName() {
         return successViewName;
@@ -144,11 +113,5 @@ public class BrowseViewController implements InitializingBean, Controller {
         this.userModel = userModel;
     }
 
-    public String getSearchRequestParam() {
-        return searchRequestParam;
-    }
 
-    public void setSearchRequestParam(String searchRequestParam) {
-        this.searchRequestParam = searchRequestParam;
-    }
 }

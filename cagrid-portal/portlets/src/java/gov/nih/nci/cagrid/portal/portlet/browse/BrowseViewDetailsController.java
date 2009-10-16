@@ -18,7 +18,7 @@ import java.util.Map;
  * @author <a href="mailto:joshua.phillips@semanticbits.com>Joshua Phillips</a>
  * @author <a href="mailto:manav.kher@semanticbits.com>Manav Kher</a>
  */
-public class BrowseViewDetailsController extends BaseCatalogEntryAbstractController {
+public class BrowseViewDetailsController extends BaseSearchSupportingController {
 
     private static final Log logger = LogFactory
             .getLog(BrowseViewDetailsController.class);
@@ -47,6 +47,9 @@ public class BrowseViewDetailsController extends BaseCatalogEntryAbstractControl
         }
         ModelAndView mav = null;
         mav = new ModelAndView(viewName);
+
+        encodeWithSearchParams(mav, request);
+
         mav.addObject(getObjectName(), getCatalogEntryViewBeanFactory()
                 .newCatalogEntryViewBean(entry));
         if (request.getParameter("viewMode") != null) {
