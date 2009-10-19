@@ -84,9 +84,10 @@
                     <field name="term_label" column="label"/>
                 </entity>
             </entity>
+            <!--compute average rating-->
             <entity name="ratings"
-                    query="select * from cat_ratings where catalog_id='${AllCatalogs.id}'">
-                <field name="rating" column="rating"/>
+                    query="select avg(rating) as avg_rating from cat_ratings where catalog_id='${AllCatalogs.id}'">
+                <field name="rating" column="avg_rating"/>
             </entity>
 
             <!--author-->
