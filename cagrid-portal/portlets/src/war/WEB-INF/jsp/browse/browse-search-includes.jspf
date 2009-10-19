@@ -315,6 +315,10 @@ var Catalogs = Class.create({
             this.query.removeFacet(this.config.filter.type);
             this.config.filter = null;
         }
+         if (this.config.catalog) {
+            YAHOO.log("Adding catalog_type facet:" + this.config.catalog.type);
+            this.query.addFacet("catalog_type", this.config.catalog.type);
+        }
     },
 
     setupPaginator: function(result) {
