@@ -22,11 +22,11 @@
     var ${ns}solrDatasource = new YAHOO.util.XHRDataSource("<c:out value="${solrServiceUrl}"/>/select?facet=true&facet.field=author&", {responseType:YAHOO.util.XHRDataSource.JSON});
     var ${ns}wildcard = "*:*";
     var ${ns}query = new solrQuery(${ns}wildcard);
-    ${ns}query.setRows(20);
+    ${ns}query.setRows(10);
     ${ns}query.addFacet("catalog_type", "person");
 
 
-    function ${ns}navigateToDataSet(id) {
+    function ${ns}navigateToPeople(id) {
         var searchLink = "${dataSetLnk}";
         searchLink = searchLink.replace("/guest/home", "/guest/catalog/people");
         searchLink = searchLink.replace("PERSONID", id);
@@ -55,7 +55,7 @@
                 var lastName = person.lastName;
                 var resultDiv = document.createElement('div');
                 var personLnk = document.createElement('a');
-                personLnk.setAttribute('href', 'javascript:${ns}navigateToDataSet("' + person.id + '")');
+                personLnk.setAttribute('href', 'javascript:${ns}navigateToPeople("' + person.id + '")');
                 personLnk.innerHTML = firstName + ' ' + lastName;
                 resultDiv.appendChild(personLnk);
                 jQuery("#${ns}categories").append(resultDiv);
@@ -80,7 +80,7 @@
         <tags:image name="loading_animation.gif" cssStyle="padding:40px;"/>
     </div>
     <br/>
-    <a href="/guest/catalog/people">More...</a>
+    <a href="/web/guest/catalog/people">More...</a>
 </div>
 
 
