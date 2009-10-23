@@ -1883,10 +1883,10 @@
         </createIndex>
     </changeSet>
 
-    <changeSet author="kherm (generated)" id="61-24">
+    <changeSet author="kherm (generated)" id="61-24" runOnChange="true">
         <preConditions onFail="MARK_RAN">
             <not>
-                <indexExists schemaName="cat_entry_tocterms" indexName="entry_id-2"/>
+                <indexExists indexName="entry_id-2"/>
             </not>
         </preConditions>
         <createIndex indexName="entry_id-2" tableName="cat_entry_tocterms" unique="true">
@@ -1895,10 +1895,10 @@
         </createIndex>
     </changeSet>
 
-    <changeSet author="kherm (generated)" id="61-25">
+    <changeSet author="kherm (generated)" id="61-25"  runOnChange="true">
         <preConditions onFail="MARK_RAN">
             <not>
-                <indexExists schemaName="cat_relationship_instance_cat_comments" indexName="comments_id-1"/>
+                <indexExists indexName="comments_id-1"/>
             </not>
         </preConditions>
         <createIndex indexName="comments_id-1" tableName="cat_relationship_instance_cat_comments" unique="true">
@@ -1906,10 +1906,10 @@
         </createIndex>
     </changeSet>
 
-    <changeSet author="kherm (generated)" id="61-26">
+    <changeSet author="kherm (generated)" id="61-26"  runOnChange="true">
         <preConditions onFail="MARK_RAN">
             <not>
-                <indexExists schemaName="cat_role_instance_cat_comments" indexName="comments_id-2"/>
+                <indexExists indexName="comments_id-2"/>
             </not>
         </preConditions>
         <createIndex indexName="comments_id-2" tableName="cat_role_instance_cat_comments" unique="true">
@@ -2167,11 +2167,11 @@
         </addColumn>
     </changeSet>
 
-    <changeSet author="kherm (generated)" id="67-11">
+    <changeSet author="kherm (generated)" id="67-11"  runOnChange="true">
         <preConditions onFail="MARK_RAN">
             <columnExists tableName="cat_entry" columnName="query_id"/>
             <not>
-                <indexExists indexName="cat_entry_querid_idx" schemaName="cat_entry"/>
+                <indexExists indexName="cat_entry_querid_idx"/>
             </not>
         </preConditions>
         <createIndex indexName="cat_entry_querid_idx" tableName="cat_entry" unique="false">
@@ -2179,12 +2179,12 @@
         </createIndex>
     </changeSet>
 
-    <changeSet author="kherm (generated)" id="67-12">
+    <changeSet author="kherm (generated)" id="67-12"  runOnChange="true">
         <preConditions onFail="MARK_RAN">
             <columnExists tableName="cat_relationship_instance_cat_comments" columnName="comments_id"/>
             <not>
                 <indexExists indexName="cat_relationship_instance_cat_comments_id_idx"
-                             schemaName="cat_relationship_instance_cat_comments"/>
+                             />
             </not>
         </preConditions>
         <createIndex indexName="cat_relationship_instance_cat_comments_id_idx"
@@ -2193,11 +2193,11 @@
         </createIndex>
     </changeSet>
 
-    <changeSet author="kherm (generated)" id="67-13">
+    <changeSet author="kherm (generated)" id="67-13"  runOnChange="true">
         <preConditions onFail="MARK_RAN">
             <columnExists tableName="cat_relationship_type" columnName="name"/>
             <not>
-                <indexExists indexName="cat_relationship_type_name" schemaName="cat_relationship_type"/>
+                <indexExists indexName="cat_relationship_type_name"/>
             </not>
         </preConditions>
         <createIndex indexName="cat_relationship_type_name" tableName="cat_relationship_type" unique="true">
@@ -2205,11 +2205,11 @@
         </createIndex>
     </changeSet>
 
-    <changeSet author="kherm (generated)" id="67-14">
+    <changeSet author="kherm (generated)" id="67-14"  runOnChange="true">
         <preConditions onFail="MARK_RAN">
             <columnExists tableName="cat_role_type_cat_comments" columnName="comments_id"/>
             <not>
-                <indexExists indexName="cat_role_type_cat_comments_id_idx" schemaName="cat_role_type_cat_comments"/>
+                <indexExists indexName="cat_role_type_cat_comments_id_idx"/>
             </not>
         </preConditions>
         <createIndex indexName="cat_role_type_cat_comments_id_idx" tableName="cat_role_type_cat_comments"
@@ -2218,11 +2218,11 @@
         </createIndex>
     </changeSet>
 
-    <changeSet author="kherm (generated)" id="67-15">
+    <changeSet author="kherm (generated)" id="67-15"  runOnChange="true">
         <preConditions onFail="MARK_RAN">
             <columnExists tableName="query_result_cell" columnName="column_id"/>
             <not>
-                <indexExists indexName="query_result_cell_comments_id_idx" schemaName="query_result_cell"/>
+                <indexExists indexName="query_result_cell_comments_id_idx"/>
             </not>
         </preConditions>
         <createIndex indexName="query_result_cell_comments_id_idx" tableName="query_result_cell" unique="false">
@@ -2230,11 +2230,11 @@
         </createIndex>
     </changeSet>
 
-    <changeSet author="kherm (generated)" id="67-16">
+    <changeSet author="kherm (generated)" id="67-16"  runOnChange="true">
         <preConditions onFail="MARK_RAN">
             <columnExists tableName="query_result_cell" columnName="row_id"/>
             <not>
-                <indexExists indexName="query_result_cell_row_id_idx" schemaName="query_result_cell"/>
+                <indexExists indexName="query_result_cell_row_id_idx"/>
             </not>
         </preConditions>
         <createIndex indexName="query_result_cell_row_id_idx" tableName="query_result_cell" unique="false">
@@ -2242,11 +2242,11 @@
         </createIndex>
     </changeSet>
 
-    <changeSet author="kherm (generated)" id="67-17">
+    <changeSet author="kherm (generated)" id="67-17"  runOnChange="true">
         <preConditions onFail="MARK_RAN">
             <columnExists tableName="query_result_col" columnName="table_id"/>
             <not>
-                <indexExists indexName="query_result_cell_table_id_idx" schemaName="query_result_col"/>
+                <indexExists indexName="query_result_cell_table_id_idx"/>
             </not>
         </preConditions>
         <createIndex indexName="query_result_cell_table_id_idx" tableName="query_result_col" unique="false">
@@ -2254,11 +2254,11 @@
         </createIndex>
     </changeSet>
 
-    <changeSet author="kherm (generated)" id="67-18">
+    <changeSet author="kherm (generated)" id="67-18" runOnChange="true">
         <preConditions onFail="MARK_RAN">
             <columnExists tableName="query_result_row" columnName="table_id"/>
             <not>
-                <indexExists indexName="query_result_row_tabl_id_idx" schemaName="query_result_row"/>
+                <indexExists indexName="query_result_row_tabl_id_idx"/>
             </not>
         </preConditions>
         <createIndex indexName="query_result_row_tabl_id_idx" tableName="query_result_row" unique="false">
@@ -2267,11 +2267,11 @@
     </changeSet>
 
 
-    <changeSet author="kherm (generated)" id="67-19">
+    <changeSet author="kherm (generated)" id="67-19" runOnChange="true">
         <preConditions onFail="MARK_RAN">
             <columnExists tableName="query_result_table" columnName="instance_id"/>
             <not>
-                <indexExists indexName="query_result_table_instance_id_idx" schemaName="query_result_table"/>
+                <indexExists indexName="query_result_table_instance_id_idx"/>
             </not>
         </preConditions>
         <createIndex indexName="query_result_table_instance_id_idx" tableName="query_result_table" unique="false">
@@ -2279,11 +2279,11 @@
         </createIndex>
     </changeSet>
 
-    <changeSet author="kherm (generated)" id="67-20">
+    <changeSet author="kherm (generated)" id="67-20" runOnChange="true">
         <preConditions onFail="MARK_RAN">
             <columnExists tableName="query_result_table" columnName="data_id"/>
             <not>
-                <indexExists indexName="query_result_table_data_id_idx" schemaName="query_result_table"/>
+                <indexExists indexName="query_result_table_data_id_idx"/>
             </not>
         </preConditions>
         <createIndex indexName="query_result_table_data_id_idx" tableName="query_result_table" unique="false">
