@@ -24,7 +24,7 @@ if(request.isUserInRole("catalog-user")){
 }
 %>
 
-<c:set var="canUpdate" value="<%=userIsOwnerUser%>"/>
+<c:set var="canUpdate" value="<%=userIsOwnerUser || userIsAdmin%>"/>
 <c:set var="canDelete" value="<%=userIsOwnerUser && !entryIsPerson || userIsAdmin%>"/>
 
 		<portlet:actionURL var="updateUrl">
