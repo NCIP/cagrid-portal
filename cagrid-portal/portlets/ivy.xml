@@ -26,6 +26,7 @@
 
         <dependency rev="latest.integration" org="caGrid" name="portal-security" conf="default;test"/>
         <dependency rev="latest.integration" org="caGrid" name="portal-portal-search" conf="default"/>
+        <dependency rev="latest.integration" org="caGrid" name="portal-service" conf="default"/>
 
         <dependency rev="${cagrid.integration.version}" org="caGrid" name="introduce-clienttools"
                     conf="default->default"/>

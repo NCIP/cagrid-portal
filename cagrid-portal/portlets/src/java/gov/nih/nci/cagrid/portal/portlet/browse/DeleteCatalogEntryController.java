@@ -6,19 +6,20 @@ package gov.nih.nci.cagrid.portal.portlet.browse;
 import gov.nih.nci.cagrid.portal.dao.PortalUserDao;
 import gov.nih.nci.cagrid.portal.dao.catalog.CatalogEntryDao;
 import gov.nih.nci.cagrid.portal.dao.catalog.CatalogEntryRelationshipInstanceDao;
-import gov.nih.nci.cagrid.portal.domain.PortalUser;
 import gov.nih.nci.cagrid.portal.domain.catalog.CatalogEntry;
 import gov.nih.nci.cagrid.portal.domain.catalog.CatalogEntryRelationshipInstance;
 import gov.nih.nci.cagrid.portal.domain.catalog.CatalogEntryRoleInstance;
+import gov.nih.nci.cagrid.portal.domain.catalog.CommunityCatalogEntry;
 import gov.nih.nci.cagrid.portal.domain.catalog.PersonCatalogEntry;
 import gov.nih.nci.cagrid.portal.portlet.UserModel;
+import gov.nih.nci.cagrid.portal.service.CatalogEntryService;
+import gov.nih.nci.cagrid.portal.service.CommunityService;
+import gov.nih.nci.cagrid.portal.service.PersonService;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 
 import org.springframework.web.portlet.mvc.AbstractController;
-
-import com.liferay.portal.service.UserServiceUtil;
 
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com>Joshua Phillips</a>
@@ -30,6 +31,10 @@ public class DeleteCatalogEntryController extends AbstractController {
 	private CatalogEntryDao catalogEntryDao;
 	private PortalUserDao portalUserDao;
 	private CatalogEntryRelationshipInstanceDao catalogEntryRelationshipInstanceDao;
+	
+	private CommunityService communityService;
+	private PersonService personService;
+	private CatalogEntryService catalogEntryService;
 
 	public PortalUserDao getPortalUserDao() {
 		return portalUserDao;
@@ -62,17 +67,25 @@ public class DeleteCatalogEntryController extends AbstractController {
 					+ entryId);
 		}
 
-		deleteRelationships(catalogEntry);
-		if (catalogEntry instanceof PersonCatalogEntry) {
-			PersonCatalogEntry personCatalogEntry = (PersonCatalogEntry) catalogEntry;
-			PortalUser portalUser = personCatalogEntry.getAbout();
-			String portalId = portalUser.getPortalId();
-			int idx = portalId.indexOf(":");
-			long liferayUserId = Long.parseLong(portalId.substring(idx + 1));
-			getPortalUserDao().delete(portalUser);
-			UserServiceUtil.deleteUser(liferayUserId);
+		if(catalogEntry instanceof CommunityCatalogEntry){
+			getCommunityService().deleteCommunity(getUserModel().getPortalUser(), (CommunityCatalogEntry)catalogEntry);
+		}else if(catalogEntry instanceof PersonCatalogEntry){
+			getPersonService().deletePerson(getUserModel().getPortalUser(), (PersonCatalogEntry)catalogEntry);
+		}else{
+			getCatalogEntryService().deleteCatalogEntry(getUserModel().getPortalUser(), catalogEntry);
 		}
-		getCatalogEntryDao().delete(catalogEntry);
+		
+//		deleteRelationships(catalogEntry);
+//		if (catalogEntry instanceof PersonCatalogEntry) {
+//			PersonCatalogEntry personCatalogEntry = (PersonCatalogEntry) catalogEntry;
+//			PortalUser portalUser = personCatalogEntry.getAbout();
+//			String portalId = portalUser.getPortalId();
+//			int idx = portalId.indexOf(":");
+//			long liferayUserId = Long.parseLong(portalId.substring(idx + 1));
+//			getPortalUserDao().delete(portalUser);
+//			UserServiceUtil.deleteUser(liferayUserId);
+//		}
+//		getCatalogEntryDao().delete(catalogEntry);
 
 		getUserModel().setCurrentCatalogEntry(null);
 
@@ -110,6 +123,30 @@ public class DeleteCatalogEntryController extends AbstractController {
 	public void setCatalogEntryRelationshipInstanceDao(
 			CatalogEntryRelationshipInstanceDao catalogEntryRelationshipInstanceDao) {
 		this.catalogEntryRelationshipInstanceDao = catalogEntryRelationshipInstanceDao;
+	}
+
+	public CommunityService getCommunityService() {
+		return communityService;
+	}
+
+	public void setCommunityService(CommunityService communityService) {
+		this.communityService = communityService;
+	}
+
+	public PersonService getPersonService() {
+		return personService;
+	}
+
+	public void setPersonService(PersonService personService) {
+		this.personService = personService;
+	}
+
+	public CatalogEntryService getCatalogEntryService() {
+		return catalogEntryService;
+	}
+
+	public void setCatalogEntryService(CatalogEntryService catalogEntryService) {
+		this.catalogEntryService = catalogEntryService;
 	}
 
 }

@@ -436,7 +436,7 @@ public class CatalogEntryManagerFacade extends AjaxViewGenerator {
         return message;
     }
 
-    protected Integer saveInternal(CatalogEntry catalogEntry) {
+    protected Integer saveInternal(CatalogEntry catalogEntry) throws Exception {
         return catalogEntry.getId();
     }
 
