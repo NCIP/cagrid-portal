@@ -32,6 +32,8 @@
         <dependency rev="latest.integration" org="caGrid" name="portal-security" conf="authn->runtime"/>
         <dependency rev="latest.integration" org="caGrid" name="portal-db" conf="ext->domain;authn->dao;default;test"/>
         <dependency rev="latest.integration" org="caGrid" name="portal-portal-search" conf="search->*"/>
+        <dependency rev="latest.integration" org="caGrid" name="portal-service"/>
+        
 
         <dependency rev="${target.grid}" org="caGrid" name="target_grid" conf="default->trust"/>
         <dependency rev="${cagrid.integration.version}" org="caGrid" name="websso-client-acegi" conf="authn->default"

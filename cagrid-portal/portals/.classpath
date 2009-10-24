@@ -68,5 +68,6 @@
 	<classpathentry kind="lib" path="ext/default/jars/portal-service.jar"/>
 	<classpathentry kind="lib" path="ext/default/jars/portlet-container.jar"/>
 	<classpathentry kind="lib" path="ext/default/jars/portlet.jar"/>
+	<classpathentry kind="lib" path="ext/default/jars/caGrid-portal-service.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
