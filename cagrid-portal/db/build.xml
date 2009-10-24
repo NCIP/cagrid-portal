@@ -160,7 +160,6 @@
         <jar destfile="${build.jar.dir}/caGrid-portal-db-dao.jar">
             <fileset dir="${build.classes.dir}">
                 <include name="**/dao/**/*.class"/>
-                <include name="**/portal/service/**/*.class"/>
                 <include name="**/portal/annotation/*.class"/>
             </fileset>
 

@@ -2312,5 +2312,11 @@
             <column name="fileName" type="text"/>
         </addColumn>
     </changeSet>
+    
+	<changeSet author="joshua" id="70">
+        <addColumn tableName="cat_entry">
+            <column name="communityId" type="BIGINT"/>
+        </addColumn>
+    </changeSet>       
 
 </databaseChangeLog>
