@@ -1,0 +1,43 @@
+<ivy-module version="2.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="http://incubator.apache.org/ivy/schemas/ivy.xsd">
+
+	<info organisation="caGrid" module="portal-service" revision="${project.version}">
+		<license name="caGrid"
+			url="http://www.cagrid.org/mwiki/index.php?title=CaGrid:LICENSE-1.1" />
+		<description>caGrid Portal</description>
+	</info>
+
+	<configurations>
+
+		<!--Public configurations-->
+		<conf name="default" visibility="public" />
+		<conf name="compile" extends="default" visibility="public" />
+		<conf name="test" extends="compile" visibility="public" />
+
+	</configurations>
+
+
+	<publications>
+		<artifact name="caGrid-${ivy.module}" conf="default" type="jar" />
+		<artifact name="caGrid-${ivy.module}-test" conf="test" type="jar" />
+		<artifact name="applicationContext-service" conf="default" type="xml"/>
+	</publications>
+
+	<dependencies>
+		<dependency rev="latest.integration" org="caGrid" name="portal-db"
+			conf="default;test" />
+		<dependency rev="${liferay.portal.version}" org="liferay"
+			name="portal" conf="default->portlet;compile->portal-ext;test->*" />
+			
+			
+        <dependency rev="3.4.GA" org="javassist" name="javassist"/>
+        <dependency rev="1.0.1" org="jaas" name="jaas"/>
+        <dependency rev="4.0.2" org="jboss" name="jboss-system"/>
+        <dependency rev="4.0.2" org="jboss" name="jboss-jmx"/>
+        <dependency rev="4.0.2" org="jboss" name="jboss-common"/>
+        <dependency rev="1.4.1.GA" org="jboss" name="jboss-cache"/>
+        			
+	</dependencies>
+
+</ivy-module>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans
+	default-init-method="afterPropertiesSet"
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd"
+>
+	<bean id="com.liferay.counter.service.CounterLocalService.impl" class="com.liferay.counter.service.impl.CounterLocalServiceImpl" />
+	<bean id="com.liferay.counter.service.CounterLocalServiceFactory" class="com.liferay.counter.service.CounterLocalServiceFactory">
+		<property name="service" ref="com.liferay.counter.service.CounterLocalService.impl" />
+	</bean>
+	<bean id="com.liferay.counter.service.CounterLocalServiceUtil" class="com.liferay.counter.service.CounterLocalServiceUtil">
+		<property name="service" ref="com.liferay.counter.service.CounterLocalService.impl" />
+	</bean>
+	<bean id="com.liferay.counter.service.CounterService.impl" class="com.liferay.counter.service.impl.CounterServiceImpl" />
+	<bean id="com.liferay.counter.service.CounterServiceFactory" class="com.liferay.counter.service.CounterServiceFactory">
+		<property name="service" ref="com.liferay.counter.service.CounterService.impl" />
+	</bean>
+	<bean id="com.liferay.counter.service.CounterServiceUtil" class="com.liferay.counter.service.CounterServiceUtil">
+		<property name="service" ref="com.liferay.counter.service.CounterService.impl" />
+	</bean>
+	<bean id="com.liferay.counter.service.persistence.CounterPersistence" class="com.liferay.counter.service.persistence.CounterPersistence" parent="basePersistence" destroy-method="destroy">
+		<property name="connectionHeartbeatJob">
+			<bean class="com.liferay.counter.service.persistence.ConnectionHeartbeatJob" />
+		</property>
+		<property name="sessionFactory" ref="liferayHibernateSessionFactory" />
+	</bean>
+	<bean id="com.liferay.counter.service.persistence.CounterUtil" class="com.liferay.counter.service.persistence.CounterUtil">
+		<property name="persistence" ref="com.liferay.counter.service.persistence.CounterPersistence" />
+	</bean>
+</beans>
