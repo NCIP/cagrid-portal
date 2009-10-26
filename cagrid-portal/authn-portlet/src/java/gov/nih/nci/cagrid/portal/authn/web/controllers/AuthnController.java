@@ -20,6 +20,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.liferay.portal.util.PortalUtil;
+
 /**
  * User: kherm
  *
@@ -101,7 +103,7 @@ public class AuthnController extends SimpleFormController {
         }
 
         logger.debug("Adding authentication info to session");
-        request.getPortletSession().setAttribute(getSharedSessionAttribute(), authnInfo);
+        PortalUtil.getHttpServletRequest(request).getSession().setAttribute(getSharedSessionAttribute(), authnInfo);
 
         StringBuilder portalAuthnUrl = new StringBuilder(command.getPortalAuthnUrl());
         logger.debug("portalAuthnUrl = " + portalAuthnUrl);

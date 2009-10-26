@@ -35,6 +35,7 @@
         <dependency rev="${cagrid.integration.version}" org="caGrid" name="authentication-service"
                     conf="default->client"/>
 
+        <dependency rev="${liferay.portal.version}" org="liferay" name="portal" conf="compile->portal-ext"/>
         <dependency rev="2.3" org="sun" name="servlet" conf="compile->default"/>
         <dependency rev="1.0" org="sun" name="portlet" conf="compile->default"/>
         <dependency rev="1.1" org="sun" name="jstl"/>
