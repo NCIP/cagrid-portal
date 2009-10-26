@@ -4,10 +4,14 @@
 package gov.nih.nci.cagrid.portal.portlet.authn;
 
 import gov.nih.nci.cagrid.authentication.stubs.types.InvalidCredentialFault;
+import gov.nih.nci.cagrid.portal.authn.AuthnServiceException;
+import gov.nih.nci.cagrid.portal.authn.EncryptionService;
+import gov.nih.nci.cagrid.portal.authn.ProxyUtil;
+import gov.nih.nci.cagrid.portal.authn.domain.IdPAuthnInfo;
 import gov.nih.nci.cagrid.portal.dao.PortalUserDao;
 import gov.nih.nci.cagrid.portal.domain.AuthnTicket;
 import gov.nih.nci.cagrid.portal.domain.PortalUser;
-import gov.nih.nci.cagrid.portal.security.*;
+import gov.nih.nci.cagrid.portal.security.AuthnService;
 import gov.nih.nci.cagrid.portal.service.UserService;
 import org.globus.gsi.GlobusCredential;
 import org.springframework.transaction.annotation.Transactional;

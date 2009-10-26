@@ -1,17 +1,16 @@
 package gov.nih.nci.cagrid.portal.portlet.query.dcql;
 
+import gov.nih.nci.cagrid.portal.authn.EncryptionService;
 import gov.nih.nci.cagrid.portal.domain.dataservice.DCQLQueryInstance;
-import gov.nih.nci.cagrid.portal.security.EncryptionService;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.globus.gsi.GlobusCredential;
+import org.springframework.beans.factory.InitializingBean;
 
 import java.io.ByteArrayInputStream;
 import java.util.Date;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.globus.gsi.GlobusCredential;
-import org.springframework.beans.factory.InitializingBean;
 
 /**
  * User: kherm

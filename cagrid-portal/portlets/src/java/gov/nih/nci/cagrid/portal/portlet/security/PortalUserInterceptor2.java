@@ -3,11 +3,11 @@
  */
 package gov.nih.nci.cagrid.portal.portlet.security;
 
+import gov.nih.nci.cagrid.portal.authn.AuthnServiceException;
 import gov.nih.nci.cagrid.portal.dao.PortalUserDao;
 import gov.nih.nci.cagrid.portal.domain.PortalUser;
 import gov.nih.nci.cagrid.portal.portlet.UserModel;
 import gov.nih.nci.cagrid.portal.portlet.query.QueryModel;
-import gov.nih.nci.cagrid.portal.security.AuthnServiceException;
 import gov.nih.nci.cagrid.portal.security.CDSCredentialRetriever;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

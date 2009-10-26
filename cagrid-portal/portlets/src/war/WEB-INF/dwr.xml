@@ -142,7 +142,7 @@
         <convert converter="bean" match="gov.nih.nci.cagrid.portal.domain.ServiceInfo"/>
         <convert converter="enum" match="gov.nih.nci.cagrid.portal.domain.ServiceType"/>
         
-        <convert converter="bean" match="gov.nih.nci.cagrid.portal.portlet.credmgr.IdPBean"/>
+        <convert converter="bean" match="gov.nih.nci.cagrid.portal.authn.domain.IdPBean"/>
         <convert converter="bean" match="gov.nih.nci.cagrid.portal.portlet.credmgr.CredentialBean"/>
         <convert converter="bean" match="gov.nih.nci.cagrid.portal.portlet.browse.LabelDescriptionBean"/>
         <convert converter="bean" match="gov.nih.nci.cagrid.portal.portlet.browse.GridServiceEndpointDescriptorBean"/>

@@ -27,8 +27,6 @@
     <property name="ext.test.xsd.dir" value="${ext.dir}/test/xsd"/>
 
     <property name="portlets.debug" value="${javac.debug.flag}"/>
-    <property name="target.deploy.dir" value="${liferay.install.dir}/deploy"/>
-
 
     <path id="compile.cp">
         <pathelement location="${basedir}../build"/>
@@ -102,14 +100,14 @@
 
     <target name="compile">
         <mkdir dir="${build.classes.dir}"/>
-        <javac srcdir="${src.java.dir}" destdir="${build.classes.dir}"  source="1.5"
+        <javac srcdir="${src.java.dir}" destdir="${build.classes.dir}" 
                debug="${portlets.debug}">
             <classpath refid="compile.cp"/>
         </javac>
     </target>
 
 
-    <target name="deploy-portlets" depends="war" description="Will deploy pre-built caGrid Portlets war">
+    <target name="deploy-portlets" description="Will deploy pre-built caGrid Portlets war">
         <copy file="${cagrid.portlets.war.file}" tofile="${target.deploy.dir}/cagridportlets.war"
               overwrite="true"/>
     </target>

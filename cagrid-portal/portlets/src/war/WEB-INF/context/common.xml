@@ -108,13 +108,6 @@
           p:certificateFilePath="${cagrid.portal.host.cert}" p:keyFilePath="${cagrid.portal.host.key}"
           p:encryptionService-ref="encryptionServicePrototype"/>
 
-    <!-- TODO: this should be removed -->
-    <bean id="portalUserInterceptor" class="gov.nih.nci.cagrid.portal.portlet.security.PortalUserInterceptor"
-          autowire="byName">
-        <property name="portalUserAttributeName" ref="portalUserAttributeName"/>
-        <property name="userIdAttributeName" value="CAGRIDPORTAL_ATTS_userId"/>
-    </bean>
-
     <bean id="portalUserRequestInterceptor"
           class="gov.nih.nci.cagrid.portal.portlet.security.PortalUserRequestInterceptor"
           autowire="byName">

@@ -3,6 +3,8 @@
  */
 package gov.nih.nci.cagrid.portal.portlet.credmgr;
 
+import gov.nih.nci.cagrid.portal.authn.domain.IdPBean;
+
 import java.util.Date;
 
 /**

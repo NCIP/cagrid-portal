@@ -3,22 +3,17 @@
  */
 package gov.nih.nci.cagrid.portal.portlet.query.cql;
 
-import gov.nih.nci.cagrid.portal.dao.UMLClassDao;
-import gov.nih.nci.cagrid.portal.domain.dataservice.CQLQuery;
+import gov.nih.nci.cagrid.portal.authn.EncryptionService;
 import gov.nih.nci.cagrid.portal.domain.dataservice.CQLQueryInstance;
-import gov.nih.nci.cagrid.portal.domain.metadata.dataservice.UMLClass;
-import gov.nih.nci.cagrid.portal.portlet.util.PortletUtils;
-import gov.nih.nci.cagrid.portal.security.EncryptionService;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.globus.gsi.GlobusCredential;
+import org.springframework.beans.factory.InitializingBean;
 
 import java.io.ByteArrayInputStream;
 import java.util.Date;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.globus.gsi.GlobusCredential;
-import org.springframework.beans.factory.InitializingBean;
 
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
