@@ -30,7 +30,7 @@
         </dependency>
 
 
-		<dependency rev="latest.integration" org="caGrid" name="portal-service" conf="runtime->default"/>
+		<dependency rev="latest.integration" org="caGrid" name="portal-service" conf="default"/>
         <dependency rev="latest.integration" org="caGrid" name="portal-aggr" conf="default;test"/>
         <dependency rev="latest.integration" org="caGrid" name="portal-authn-portlet" conf="default;runtime->service;ext->domain" />
 

@@ -11,7 +11,9 @@
 	<configurations>
 
 		<!--Public configurations-->
-		<conf name="default" visibility="public" />
+        <!--runtime is the minimum needed at runtime-->
+        <conf name="runtime" visibility="public"/>
+		<conf name="default" extends="runtime" visibility="public" />
 		<conf name="compile" extends="default" visibility="public" />
 		<conf name="test" extends="compile" visibility="public" />
 
@@ -19,9 +21,9 @@
 
 
 	<publications>
-		<artifact name="caGrid-${ivy.module}" conf="default" type="jar" />
+		<artifact name="caGrid-${ivy.module}" conf="runtime" type="jar" />
 		<artifact name="caGrid-${ivy.module}-test" conf="test" type="jar" />
-		<artifact name="applicationContext-service" conf="default" type="xml"/>
+		<artifact name="applicationContext-service" conf="runtime" type="xml"/>
 	</publications>
 
 	<dependencies>
@@ -34,7 +36,7 @@
 		<dependency rev="10.1.3.1" org="org.apache.derby" name="derby" conf="test->*"/>
         <dependency rev="${liferay.portal.version}" org="liferay" name="portal" conf="compile->portal-ext"/>
 
-        <dependency rev="1.0" org="javax.jcr" name="jcr"/>	
+        <dependency rev="1.0" org="javax.jcr" name="jcr" conf="test->*"/>	
         <dependency rev="3.4.GA" org="javassist" name="javassist"/>
         <dependency rev="1.0.1" org="jaas" name="jaas"/>
         <dependency rev="4.0.2" org="jboss" name="jboss-system"/>
