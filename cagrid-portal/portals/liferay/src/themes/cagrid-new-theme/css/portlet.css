@@ -19,7 +19,7 @@ body.portlet {
 }
 
 .portlet-title {
-	display: none;
+	display: block;
 	font-weight: bold;
 	min-width: 50%;
 }
@@ -56,23 +56,33 @@ body.portlet {
 	padding: 3px 0 3px 18px;
 }
 
-/* ---------- Panel Page ---------- */
+/* ---------- Drag and drop ---------- */
 
-.lfr-panel-page {
-	width: 100%;
+.portlet-dragging {
+	background: #FFFFE3 !important;
+	border: 3px solid #666;
+	padding: 10px;
 }
 
-.lfr-panel-page .portlet-title {
-	font-size: 13px;
+.portlet-hover {
+	background: #ddd;
+	padding: 10px;
 }
 
-.lfr-panel-page #content-wrapper {
-	margin: 0;
-	width: auto;
+.portlet-placeholder {
+	background: url(../images/portlet/placeholder_bg.png);
+	border: 1px dashed #508FB4;
+	width: 100% !important;
 }
 
-.lfr-panel-page .lfr-add-content h2 span {
-	background-color: #D3DADD;
+.portlet-resize-handle {
+	background: url(../images/arrows/resize.png) scroll no-repeat;
+	bottom: 12px;
+	cursor: se-resize;
+	height: 10px;
+	position: absolute;
+	right: 2px;
+	width: 10px;
 }
 
 /* ---------- Standard styles defined in the JSR 168 ---------- */

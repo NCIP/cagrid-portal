@@ -9,26 +9,11 @@
 
 		#end
 
-		#if ($show_my_account)
-			<!--
-			<li class="my-account">
-				<a href="$my_account_url">$my_account_text</a>
-			</li>
-			-->
-
-			<!-- Provide a link to the user's profile (catalog entry) page. -->
-			#* Unfortunately, this doesn't work.
-			#set ($cgp_profile_url = $taglibLiferay.actionURL("MyPortlet", "param1=one&param2=two"))
-			*#
-			<li>
-				<a href="http://localhost:8080/web/guest/catalog/people?p_p_id=BrowsePortlet_WAR_cagridportlets&p_p_lifecycle=0&p_p_state=normal&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&_BrowsePortlet_WAR_cagridportlets_operation=viewProfile">My Profile</a>
-			</li>
-			<li>
-				|
-			</li>
-
-
-		#end
+        #if ($show_my_account)
+                    <li class="my-account">
+                        <a href="$my_account_url">$my_account_text</a>
+                    </li>
+                #end
 
 		#if ($show_sign_out)
 			<li class="sign-out">
@@ -36,6 +21,7 @@
 			</li>
 		#end
        #end
+
     </ul>
 
     <ul>
