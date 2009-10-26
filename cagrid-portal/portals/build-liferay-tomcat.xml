@@ -129,14 +129,13 @@ com.liferay.portal.kernel.security.jaas.PortalLoginModule  required;
 		</propertyfile>
 	</target>
 	
-    <target name="tomcat:copy-liferay-ext-jars">
+    <target name="copy-ext-jars">
         <mkdir dir="${liferay.tomcat.home}/common/lib/ext"/>
 
         <copy todir="${liferay.tomcat.home}/common/lib/ext"
               overwrite="true">
             <fileset dir="${ext.ext.lib.dir}">
                 <include name="**/*.jar"/>
-                <exclude name="caGrid-portal-db-domain.jar"/>
             </fileset>
         </copy>
 
@@ -206,13 +205,13 @@ com.liferay.portal.kernel.security.jaas.PortalLoginModule  required;
             </then>
         </if>
     </target>
-    
+
     <target name="configure-tomcat">
     	
     	<antcall target="configure-context"/>
     	<antcall target="configure-jaas"/>
     	<antcall target="configure-catalina-properties"/>
-    	<antcall target="tomcat:copy-liferay-ext-jars"/>
+    	<antcall target="copy-ext-jars"/>
     	<antcall target="tomcat:copy-startup-scripts"/>
     	<antcall target="configure-connectors"/>
     </target>
@@ -233,8 +232,8 @@ com.liferay.portal.kernel.security.jaas.PortalLoginModule  required;
     
     <target name="tomcat:install-liferay" depends="prepare" description="Install and configure Liferay Portal">
         <antcall target="install-tomcat"/>
-        <antcall target="configure-tomcat"/>
         <antcall target="tomcat:deploy-liferay-portal-war"/>
+        <antcall target="configure-tomcat"/>
         <antcall target="move-endorsed-jars"/>
         <antcall target="deploy-all"/>
         <!-- antcall target="add-cagrid-category"/ -->

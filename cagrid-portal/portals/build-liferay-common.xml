@@ -73,7 +73,7 @@
         <delete  file="${liferay.root.context.dir}/WEB-INF/lib/cagrid-portal-liferay-resources.jar" failonerror="false"/>
     </target>
 
-    <target name="deploy-authn" depends="jar,prepare-liferay-classpath" description="Will deploy caGrid Authentication Portlet">
+    <target name="deploy-authn" depends="jar,prepare-liferay-classpath,copy-ext-jars" description="Will deploy caGrid Authentication Portlet">
 
         <copy todir="${liferay.root.context.dir}/WEB-INF/classes" overwrite="true">
             <fileset dir="${src.war.dir}/WEB-INF/classes">
@@ -116,7 +116,7 @@
         </antcall>
 
         <!--copy properties-->
-        <copy todir="${liferay.root.context.dir}/WEB-INF/classes">
+        <copy todir="${liferay.root.context.dir}/WEB-INF/classes" overwrite="true">
             <fileset dir="${liferay.dir}/etc">
                 <include name="*.xml"/>
             </fileset>

@@ -296,14 +296,14 @@
         <antcall target="configure-jboss-jms-service"/>
         <antcall target="configure-jboss-log4j-service"/>
         <antcall target="create-liferay-datasource"/>
-        <antcall target="jboss:copy-liferay-ext-jars"/>
+        <antcall target="copy-ext-jars"/>
         <antcall target="configure-jboss-tomcat"/>
         <antcall target="jboss:copy-startup-scripts"/>
         <antcall target="jboss:configure-startup-scripts"/>
     </target>
 
 
-    <target name="jboss:copy-liferay-ext-jars">
+    <target name="copy-ext-jars">
 
         <mkdir dir="${jboss.lib.ext.dir}"/>
 
