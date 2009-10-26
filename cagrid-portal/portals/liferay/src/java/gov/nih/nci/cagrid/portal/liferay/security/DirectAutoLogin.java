@@ -4,23 +4,24 @@
 package gov.nih.nci.cagrid.portal.liferay.security;
 
 import com.liferay.portal.DuplicateUserEmailAddressException;
- import com.liferay.portal.ReservedUserEmailAddressException;
- import com.liferay.portal.UserEmailAddressException;
- import com.liferay.portal.model.User;
- import com.liferay.portal.security.auth.AutoLoginException;
- import com.liferay.portal.service.UserLocalServiceUtil;
- import gov.nih.nci.cagrid.portal.dao.AuthnTicketDao;
- import gov.nih.nci.cagrid.portal.dao.PortalUserDao;
- import gov.nih.nci.cagrid.portal.domain.AuthnTicket;
- import gov.nih.nci.cagrid.portal.domain.PortalUser;
- import gov.nih.nci.cagrid.portal.security.EncryptionService;
- import org.apache.commons.logging.Log;
- import org.apache.commons.logging.LogFactory;
- import org.springframework.beans.factory.annotation.Required;
+import com.liferay.portal.ReservedUserEmailAddressException;
+import com.liferay.portal.UserEmailAddressException;
+import com.liferay.portal.model.User;
+import com.liferay.portal.security.auth.AutoLoginException;
+import com.liferay.portal.service.UserLocalServiceUtil;
+import gov.nih.nci.cagrid.portal.authn.EncryptionService;
+import gov.nih.nci.cagrid.portal.dao.AuthnTicketDao;
+import gov.nih.nci.cagrid.portal.dao.PortalUserDao;
+import gov.nih.nci.cagrid.portal.domain.AuthnTicket;
+import gov.nih.nci.cagrid.portal.domain.PortalUser;
 
- import javax.servlet.http.HttpServletRequest;
- import javax.servlet.http.HttpServletResponse;
- import java.util.Date;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Required;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.Date;
 
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>

@@ -14,12 +14,13 @@ import com.liferay.portal.security.permission.PermissionThreadLocal;
 import com.liferay.portal.service.CompanyLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.UserLocalServiceUtil;
-import gov.nih.nci.cagrid.portal.security.IdPAuthnInfo;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Required;
 
 import java.util.Locale;
+
+import gov.nih.nci.cagrid.portal.authn.domain.IdPAuthnInfo;
 
 /**
  * User: kherm

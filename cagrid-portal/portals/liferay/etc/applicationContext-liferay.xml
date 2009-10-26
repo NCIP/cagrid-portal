@@ -12,6 +12,7 @@
 
     <import resource="applicationContext-db.xml"/>
     <import resource="applicationContext-security.xml"/>
+    <import resource="applicationContext-service.xml"/>
 
     <bean class="org.springframework.beans.factory.annotation.RequiredAnnotationBeanPostProcessor"/>
 
@@ -23,11 +24,15 @@
         <property name="authnErrorMessageAttributeName" value="CAGRIDPORTAL_ATTS_authnError"/>
     </bean>
 
-    <bean id="localAutoLogin" parent="autoLoginTemplate"
+    <bean id="directAutoLogin" parent="autoLoginTemplate"
           class="gov.nih.nci.cagrid.portal.liferay.security.DirectAutoLogin" autowire="byName">
-        <property name="ticketParameterName" value="prng2"/>
-        <property name="encryptionService" ref="encryptionServicePrototype"/>
     </bean>
+
+    <bean id="sharedSessionAutoLogin" parent="autoLoginTemplate"
+          class="gov.nih.nci.cagrid.portal.liferay.security.SharedSessionAutoLogin" autowire="byName"
+          p:sharedSessionAuthnAttribute="javax.portlet.p.caGridAuthenticationPortlet_WAR_cagridauthnportlet_LAYOUT_10139?CAGRIDPORTAL_ATTS_idp_authn_info"
+          p:gridUserType="GRID_USER"
+          p:portalSessionAuthnAttribute="CAGRIDPORTAL_ATTS_liferayUser_IdPAuthnInfo"/>
 
     <bean id="portalUserLoader" class="gov.nih.nci.cagrid.portal.liferay.security.PortalUserLoader" autowire="byName"/>
 
@@ -37,6 +42,5 @@
 
     <alias name="${cagrid.portal.authenticationMode}AutoLogin" alias="autoLogin"/>
 
-   
 
 </beans>
