@@ -11,7 +11,7 @@
 	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
 	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
 	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd">
-	
+
 	<bean id="propertyConfigurer"
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="location"
@@ -29,7 +29,7 @@
         <property name="ticketLifetime" value="60000"/>
     </bean>
 	    
-	<bean id="encryptionServicePrototype" class="gov.nih.nci.cagrid.portal.security.EncryptionService" scope="prototype">
+	<bean id="encryptionServicePrototype" class="gov.nih.nci.cagrid.portal.authn.EncryptionService" scope="prototype">
 		<constructor-arg value="${cagrid.portal.security.encryption.key}"/> 
 	</bean>
 	

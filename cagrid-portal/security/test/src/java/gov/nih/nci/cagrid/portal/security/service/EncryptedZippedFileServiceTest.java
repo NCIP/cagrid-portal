@@ -1,6 +1,6 @@
 package gov.nih.nci.cagrid.portal.security.service;
 
-import gov.nih.nci.cagrid.portal.security.EncryptionService;
+import gov.nih.nci.cagrid.portal.authn.EncryptionService;
 import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;

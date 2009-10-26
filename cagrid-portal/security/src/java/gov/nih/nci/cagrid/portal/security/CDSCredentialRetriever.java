@@ -1,5 +1,8 @@
 package gov.nih.nci.cagrid.portal.security;
 
+import gov.nih.nci.cagrid.portal.authn.AuthnServiceException;
+import gov.nih.nci.cagrid.portal.authn.EncryptionService;
+import gov.nih.nci.cagrid.portal.authn.ProxyUtil;
 import org.cagrid.websso.common.WebSSOClientException;
 import org.cagrid.websso.common.WebSSOClientHelper;
 import org.globus.gsi.GlobusCredential;
@@ -21,7 +24,7 @@ public class CDSCredentialRetriever {
      *
      * @param delegatedEPR
      * @return Proxy serialized as a String
-     * @throws AuthnServiceException
+     * @throws gov.nih.nci.cagrid.portal.authn.AuthnServiceException
      */
     public String getCredential(String delegatedEPR) throws AuthnServiceException {
         String proxy = null;
