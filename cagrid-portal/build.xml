@@ -186,7 +186,7 @@
         <trycatch property="errorMsg">
             <try>
                 <antcall target="config-trust"/>
-                <antcall target="load-schema"/>
+                <antcall target="update-schema"/>
                 <antcall target="load-workspaces"/>
                 <antcall target="install-liferay"/>
                 <antcall target="liferay:deploy-portlets"/>

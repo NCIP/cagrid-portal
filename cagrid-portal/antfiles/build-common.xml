@@ -13,6 +13,7 @@
     <property file="${projects.dir}/build.properties"/>
     <property file="${antfiles.dir}/project.properties"/>
 
+    <property name="target.deploy.dir" value="${liferay.install.dir}/deploy"/>
 
     <target name="prepare-ant-tasks" unless="defined.anttaskes">
         <path id="xmltaskdef.cp">
