@@ -16,7 +16,7 @@
     <sync:ExcludedCAs>
         <sync:CASubject>O=caBIG,OU=caGrid,OU=NCICB DEV Trust Fabric,CN=caGrid Trust Fabric Certificate Authority</sync:CASubject>
     </sync:ExcludedCAs>
-    <sync:DeleteInvalidFiles>true</sync:DeleteInvalidFiles>
+    <sync:DeleteInvalidFiles>false</sync:DeleteInvalidFiles>
     <sync:CacheSize>
         <sync:year>0</sync:year>
         <sync:month>1</sync:month>

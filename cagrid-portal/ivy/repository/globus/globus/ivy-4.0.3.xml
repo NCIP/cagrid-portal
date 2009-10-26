@@ -19,26 +19,26 @@
     </configurations>
 
     <publications>
-        <artifact name="addressing-1.0"   type="jar" conf="default"/>
-        <artifact name="axis"   type="jar" conf="default"/>
-        <artifact name="bootstrap"   type="jar" conf="default"/>
-        <artifact name="cog-axis"   type="jar" conf="default"/>
-        <artifact name="commonj"   type="jar" conf="default"/>
-        <artifact name="concurrent"   type="jar" conf="default"/>
-        <artifact name="jaxrpc"   type="jar" conf="default"/>
-        <artifact name="resolver"   type="jar" conf="default"/>
-        <artifact name="saaj"   type="jar" conf="default"/>
-        <artifact name="wsdl4j"   type="jar" conf="default"/>
-        <artifact name="wsrf_common"   type="jar" conf="default"/>
-        <artifact name="wsrf_core"   type="jar" conf="default"/>
-        <artifact name="wsrf_core_enum"   type="jar" conf="default"/>
-        <artifact name="wsrf_core_stubs"   type="jar" conf="default"/>
-        <artifact name="wsrf_core_stubs_enum"   type="jar" conf="default"/>
-        <artifact name="wss4j"   type="jar"  conf="default"/>
+        <artifact name="addressing-1.0" type="jar" conf="default"/>
+        <artifact name="axis" type="jar" conf="default"/>
+        <artifact name="bootstrap" type="jar" conf="default"/>
+        <artifact name="cog-axis" type="jar" conf="default"/>
+        <artifact name="commonj" type="jar" conf="default"/>
+        <artifact name="concurrent" type="jar" conf="default"/>
+        <artifact name="jaxrpc" type="jar" conf="default"/>
+        <artifact name="resolver" type="jar" conf="default"/>
+        <artifact name="saaj" type="jar" conf="default"/>
+        <artifact name="wsdl4j" type="jar" conf="default"/>
+        <artifact name="wsrf_common" type="jar" conf="default"/>
+        <artifact name="wsrf_core" type="jar" conf="default"/>
+        <artifact name="wsrf_core_enum" type="jar" conf="default"/>
+        <artifact name="wsrf_core_stubs" type="jar" conf="default"/>
+        <artifact name="wsrf_core_stubs_enum" type="jar" conf="default"/>
+        <artifact name="wss4j" type="jar" conf="default"/>
         <artifact name="jgss" type="jar" conf="default"/>
 
-        <artifact name="cog-jglobus"   type="jar" conf="default,crypto"/>
-        
+        <artifact name="cog-jglobus" type="jar" conf="default,crypto"/>
+
         <artifact name="cryptix-asn1" type="jar" conf="crypto"/>
         <artifact name="cryptix" type="jar" conf="crypto"/>
         <artifact name="cryptix32" type="jar" conf="crypto"/>
@@ -48,6 +48,9 @@
 
     </publications>
 
+    <dependencies>
+        <dependency org="apache" name="commons-discovery" rev="latest.integration"/>
+    </dependencies>
 
 
 </ivy-module>
