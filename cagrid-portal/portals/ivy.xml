@@ -33,8 +33,8 @@
         <dependency rev="latest.integration" org="caGrid" name="portal-authn-portlet" conf="ext->domain" />
                 <dependency rev="latest.integration" org="caGrid" name="portal-db" conf="authn->dao,domain;default;test"/>
         <dependency rev="latest.integration" org="caGrid" name="portal-portal-search" conf="search->*"/>
-        <dependency rev="latest.integration" org="caGrid" name="portal-service"/>
-        
+        <dependency rev="latest.integration" org="caGrid" name="portal-service" conf="authn->runtime"/>
+
 
         <dependency rev="${target.grid}" org="caGrid" name="target_grid" conf="default->trust"/>
         <dependency rev="${cagrid.integration.version}" org="caGrid" name="websso-client-acegi" conf="authn->default"
@@ -44,7 +44,7 @@
     	<dependency rev="${cagrid.integration.version}" org="caGrid" name="authentication-service" conf="authn->client"/>
     	<dependency rev="${cagrid.integration.version}" org="caGrid" name="dorian" conf="authn->client"/>
     	<dependency rev="4.0.3" org="globus" name="globus" conf="authn->default"/>
-    	
+
 
         <dependency rev="1.0.4" org="acegisecurity" name="acegisecurity" conf="authn->*"/>
         <dependency rev="4.0.3" org="globus" name="globus" conf="ext->crypto"/>

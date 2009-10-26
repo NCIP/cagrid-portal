@@ -30,7 +30,7 @@
 
     <bean id="sharedSessionAutoLogin" parent="autoLoginTemplate"
           class="gov.nih.nci.cagrid.portal.liferay.security.SharedSessionAutoLogin" autowire="byName"
-          p:sharedSessionAuthnAttribute="javax.portlet.p.caGridAuthenticationPortlet_WAR_cagridauthnportlet_LAYOUT_10139?CAGRIDPORTAL_ATTS_idp_authn_info"
+          p:sharedSessionAuthnAttribute="CAGRIDPORTAL_ATTS_idp_authn_info"
           p:gridUserType="GRID_USER"
           p:portalSessionAuthnAttribute="CAGRIDPORTAL_ATTS_liferayUser_IdPAuthnInfo"/>
 

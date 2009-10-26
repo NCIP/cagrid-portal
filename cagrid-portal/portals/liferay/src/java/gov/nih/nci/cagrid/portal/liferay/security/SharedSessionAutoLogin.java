@@ -20,9 +20,9 @@ import java.util.Locale;
  */
 public class SharedSessionAutoLogin extends AbstractAutoLogin {
 
-    private String sharedSessionAuthnAttribute;
-    private String gridUserType;
-    private String portalSessionAuthnAttribute;
+    private String sharedSessionAuthnAttribute = "CAGRIDPORTAL_ATTS_idp_authn_info";
+    private String gridUserType = "GRID_USER";
+    private String portalSessionAuthnAttribute = "CAGRIDPORTAL_ATTS_liferayUser_IdPAuthnInfo";
 
     /**
      * Logs in users based on IdPAuthnInfo object in session.
