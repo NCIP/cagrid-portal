@@ -27,6 +27,7 @@
         <artifact name="applicationContext-aggr-geocode" type="xml"/>
         <artifact name="applicationContext-aggr-metachange" type="xml"/>
         <artifact name="applicationContext-aggr-regsvc-beans" type="xml"/>
+        <artifact name="applicationContext-aggr-regsvc" type="xml"/>
         <artifact name="applicationContext-aggr-regsvcman" type="xml"/>
         <artifact name="applicationContext-aggr-status-beans" type="xml"/>
         <artifact name="applicationContext-aggr-status" type="xml"/>
