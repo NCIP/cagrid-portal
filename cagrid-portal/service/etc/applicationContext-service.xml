@@ -17,6 +17,8 @@
 		<property name="location"
 			value="classpath:cagridportal.properties" />
 	</bean>
+
+    <bean class="org.springframework.beans.factory.annotation.RequiredAnnotationBeanPostProcessor"/>
 	
 	<bean id="catalogEntryService" class="gov.nih.nci.cagrid.portal.service.CatalogEntryService" autowire="byName"/>
 	    
@@ -25,7 +27,9 @@
 	<bean id="personService" class="gov.nih.nci.cagrid.portal.service.PersonService" autowire="byName"/>
 	
 	<bean id="userService" class="gov.nih.nci.cagrid.portal.service.UserService" autowire="byName"/>
-	
+
+    <bean id="pointOfContactCatalogService" class="gov.nih.nci.cagrid.portal.service.PointOfContactCatalogService" autowire="byName"/>
+
     <bean id="portalFileService" class="gov.nih.nci.cagrid.portal.service.ZippedFileService"
             p:fileStorePath="${cagrid.portal.filestore.path}" p:extension="zip">
         </bean>	

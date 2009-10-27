@@ -23,6 +23,7 @@
          
         <!--spring configs-->
         <artifact name="applicationContext-aggr-catalog" type="xml"/>
+        <artifact name="applicationContext-aggr-catalog-aspects" type="xml"/>
         <artifact name="applicationContext-aggr-concepts" type="xml"/>
         <artifact name="applicationContext-aggr-geocode" type="xml"/>
         <artifact name="applicationContext-aggr-metachange" type="xml"/>
@@ -50,7 +51,7 @@
 
         <dependency rev="4.4" org="checkstyle" name="checkstyle" conf="compile"/>
 
-        <dependency rev="latest.integration" org="caGrid" name="portal-db" conf="default;test"/>
+        <dependency rev="latest.integration" org="caGrid" name="portal-service" conf="default;test"/>
 
         <dependency rev="${cagrid.integration.version}" org="caGrid" name="advertisement" conf="default"/>
         <dependency rev="${cagrid.integration.version}" org="caGrid" name="authentication-service"

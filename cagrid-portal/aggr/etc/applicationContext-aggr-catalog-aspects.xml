@@ -11,20 +11,22 @@
 	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
 	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd">
 
-    <import resource="applicationContext-db.xml"/>
-
-    <!--will filter out archived Statues-->
-
-    <bean id="filterActivator" class="gov.nih.nci.cagrid.portal.dao.aspects.ActivateFilterAspect"
-          parent="daoTemplate">
-        <property name="filterName" ref="archivedStatus"/>
-        <property name="parameterName" value="archivedFlag"/>
-        <property name="parameterValue">
-            <bean class="java.lang.Boolean">
-                <constructor-arg value="java.lang.Boolean.FALSE"/>
-            </bean>
-        </property>
-    </bean>
- 
    
+    <bean id="institutionCatalogAspect"
+          class="gov.nih.nci.cagrid.portal.aggr.catalog.aspects.InstitutionCatalogAspect"
+          autowire="byName"/>
+
+
+    <bean id="personCatalogAspect"
+          class="gov.nih.nci.cagrid.portal.aggr.catalog.aspects.PersonCatalogAspect"
+          autowire="byName"/>
+
+    <bean id="pointOfContactCatalogAspect"
+              class="gov.nih.nci.cagrid.portal.aggr.catalog.aspects.PointOfContactCatalogAspect"
+              autowire="byName"/>
+
+ 	<bean id="serviceMetadataCatalogEntryBuilderAspect"
+ 		class="gov.nih.nci.cagrid.portal.aggr.catalog.aspects.ServiceMetadataCatalogEntryBuilderAspect"
+ 		autowire="byName"/>
+
 </beans>

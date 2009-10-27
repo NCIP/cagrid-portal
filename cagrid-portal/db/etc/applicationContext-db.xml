@@ -166,6 +166,7 @@
                 <value>gov.nih.nci.cagrid.portal.domain.catalog.PersonCatalogEntry</value>
                 <value>gov.nih.nci.cagrid.portal.domain.catalog.PortletCatalogEntry</value>
                 <value>gov.nih.nci.cagrid.portal.domain.catalog.PersonCatalogEntry</value>
+                <value>gov.nih.nci.cagrid.portal.domain.catalog.PointOfContactCatalogEntry</value>
                 <value>gov.nih.nci.cagrid.portal.domain.catalog.ProjectCatalogEntry</value>
                 <value>gov.nih.nci.cagrid.portal.domain.catalog.QueryResultColumnDescriptor</value>
                 <value>gov.nih.nci.cagrid.portal.domain.catalog.Rating</value>
@@ -377,6 +378,8 @@
 
     <bean id="timestampProvider" class="gov.nih.nci.cagrid.portal.util.StaticTimestampProvider"/>
 
+    <bean id="pointOfContactCatalogEntryDao"  parent="baseCatalogEntryDao"
+          class="gov.nih.nci.cagrid.portal.dao.catalog.PointOfContactCatalogEntryDao"/>
 
     <bean id="openSessionInViewForTesting"
           class="org.springframework.orm.hibernate3.support.OpenSessionInViewInterceptor"
@@ -391,7 +394,7 @@
 
     <bean
             id="serviceMetadataCatalogEntryBuilder"
-            class="gov.nih.nci.cagrid.portal.dao.catalog.ServiceMetadataCatalogEntryBuilder"
+            class="gov.nih.nci.cagrid.portal.aggr.catalog.ServiceMetadataCatalogEntryBuilder"
             autowire="byName"/>
 
 

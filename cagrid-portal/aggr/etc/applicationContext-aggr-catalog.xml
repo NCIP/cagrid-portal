@@ -27,7 +27,9 @@
           p:portalUserDao-ref="portalUserDao"
           autowire="byName"/>
 
-           
-    
+     <bean id="pocCatalogCreator" parent="abstractCatalogCreator"
+          class="gov.nih.nci.cagrid.portal.aggr.catalog.POCCatalogCreator"
+          autowire="byName"/>
+ 
 
 </beans>
