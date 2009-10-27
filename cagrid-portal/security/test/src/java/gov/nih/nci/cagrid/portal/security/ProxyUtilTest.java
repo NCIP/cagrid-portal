@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.portal.security;
 
 import gov.nih.nci.cagrid.portal.authn.ProxyUtil;
+import gov.nih.nci.cagrid.portal.authn.AuthnServiceException;
 import org.globus.gsi.GlobusCredential;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
