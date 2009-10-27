@@ -1,40 +1,27 @@
 /**
  *
  */
-package gov.nih.nci.cagrid.portal.dao.catalog;
+package gov.nih.nci.cagrid.portal.aggr.catalog;
 
 import gov.nih.nci.cagrid.portal.dao.PortalUserDao;
+import gov.nih.nci.cagrid.portal.dao.catalog.*;
 import gov.nih.nci.cagrid.portal.domain.Address;
 import gov.nih.nci.cagrid.portal.domain.GridDataService;
 import gov.nih.nci.cagrid.portal.domain.GridService;
-import gov.nih.nci.cagrid.portal.domain.Person;
-import gov.nih.nci.cagrid.portal.domain.PortalUser;
-import gov.nih.nci.cagrid.portal.domain.catalog.CatalogEntry;
-import gov.nih.nci.cagrid.portal.domain.catalog.CatalogEntryRelationshipInstance;
-import gov.nih.nci.cagrid.portal.domain.catalog.CatalogEntryRelationshipType;
-import gov.nih.nci.cagrid.portal.domain.catalog.CatalogEntryRoleInstance;
-import gov.nih.nci.cagrid.portal.domain.catalog.GridServiceEndPointCatalogEntry;
-import gov.nih.nci.cagrid.portal.domain.catalog.GridServiceInterfaceCatalogEntry;
-import gov.nih.nci.cagrid.portal.domain.catalog.InformationModelCatalogEntry;
-import gov.nih.nci.cagrid.portal.domain.catalog.InstitutionCatalogEntry;
-import gov.nih.nci.cagrid.portal.domain.catalog.PersonCatalogEntry;
-import gov.nih.nci.cagrid.portal.domain.catalog.RelationshipTypeConstants;
+import gov.nih.nci.cagrid.portal.domain.catalog.*;
 import gov.nih.nci.cagrid.portal.domain.metadata.common.PointOfContact;
 import gov.nih.nci.cagrid.portal.domain.metadata.common.ResearchCenter;
-import gov.nih.nci.cagrid.portal.domain.metadata.common.ResearchCenterPointOfContact;
 import gov.nih.nci.cagrid.portal.domain.metadata.dataservice.DomainModel;
 import gov.nih.nci.cagrid.portal.util.BeanUtils;
-import gov.nih.nci.cagrid.portal.util.StringUtils;
 import gov.nih.nci.cagrid.portal.util.PortalDBRuntimeException;
-
-import java.net.MalformedURLException;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-
+import gov.nih.nci.cagrid.portal.util.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.net.MalformedURLException;
+import java.util.Date;
+import java.util.List;
 
 /**
  * @author <a href="mailto:joshua.phillips@semanticbits.com">Joshua Phillips</a>
@@ -53,6 +40,7 @@ public class ServiceMetadataCatalogEntryBuilder {
     private InstitutionCatalogEntryDao institutionCatalogEntryDao;
     private PersonCatalogEntryDao personCatalogEntryDao;
     private PortalUserDao portalUserDao;
+
 
     /**
      * @param service
@@ -73,7 +61,7 @@ public class ServiceMetadataCatalogEntryBuilder {
             }
         }
         if (StringUtils.isEmpty(serviceName)) {
-           logger.warn("Service has no name. Will not create a CE for service no name" + service.getUrl());
+            logger.warn("Service has no name. Will not create a CE for service no name" + service.getUrl());
             return null;
         }
 
@@ -207,8 +195,8 @@ public class ServiceMetadataCatalogEntryBuilder {
 //
 //		if (pocs != null) {
 //			for (Iterator i = pocs.iterator(); i.hasNext();) {
-//				PointOfContact poc = (PointOfContact) i.next();
-//				Person person = poc.getPerson();
+//				PointOfContact about = (PointOfContact) i.next();
+//				Person person = about.getPerson();
 //				if (person != null
 //						&& !StringUtils.isEmpty(person.getEmailAddress())
 //						&& !StringUtils.isEmpty(person.getFirstName())
@@ -222,7 +210,7 @@ public class ServiceMetadataCatalogEntryBuilder {
 //						personCes.add(createPersonCatalogEntry(person));
 //					}
 //
-//					handlePOCRelationship(personCes, ce, relTypeName, poc);
+//					handlePOCRelationship(personCes, ce, relTypeName, about);
 //
 //				}
 //			}

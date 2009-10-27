@@ -1,10 +1,8 @@
-package gov.nih.nci.cagrid.portal.dao.aspects;
+package gov.nih.nci.cagrid.portal.aggr.catalog.aspects;
 
 import gov.nih.nci.cagrid.portal.dao.PortalUserDao;
 import gov.nih.nci.cagrid.portal.dao.catalog.PersonCatalogEntryDao;
 import gov.nih.nci.cagrid.portal.domain.PortalUser;
-import gov.nih.nci.cagrid.portal.domain.catalog.PersonCatalogEntry;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.aspectj.lang.annotation.AfterReturning;
@@ -16,7 +14,7 @@ import org.aspectj.lang.annotation.Aspect;
  * @author kherm manav.kher@semanticbits.com
  */
 @Aspect
-public class PersonCatalogCreator {
+public class PersonCatalogAspect {
 
     Log logger = LogFactory.getLog(getClass());
     PortalUserDao portalUserDao;

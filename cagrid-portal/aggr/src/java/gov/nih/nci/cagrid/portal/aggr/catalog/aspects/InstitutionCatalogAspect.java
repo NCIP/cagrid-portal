@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.portal.dao.aspects;
+package gov.nih.nci.cagrid.portal.aggr.catalog.aspects;
 
 import gov.nih.nci.cagrid.portal.dao.ParticipantDao;
 import gov.nih.nci.cagrid.portal.dao.catalog.InstitutionCatalogEntryDao;
@@ -14,7 +14,7 @@ import org.aspectj.lang.annotation.Aspect;
  * @author kherm manav.kher@semanticbits.com
  */
 @Aspect
-public class InstitutionCatalogCreator {
+public class InstitutionCatalogAspect {
 
     Log logger = LogFactory.getLog(getClass());
     ParticipantDao participantDao;
@@ -28,7 +28,6 @@ public class InstitutionCatalogCreator {
      */
     @AfterReturning("execution(* gov.nih.nci.cagrid.portal.dao.ParticipantDao.save*(gov.nih.nci.cagrid.portal.domain.Participant)) && args(participant)")
     public void onSave(Participant participant) {
-
         logger.debug("A Pariticpant is being saved. Will create catalog");
         institutionCatalogEntryDao.createCatalogAbout(participant);
     }

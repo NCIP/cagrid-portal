@@ -1,13 +1,10 @@
 package gov.nih.nci.cagrid.portal.dao.catalog;
 
-import gov.nih.nci.cagrid.portal.DaoTestBase;
-import gov.nih.nci.cagrid.portal.dao.PortalUserDao;
 import gov.nih.nci.cagrid.portal.domain.Address;
 import gov.nih.nci.cagrid.portal.domain.Person;
 import gov.nih.nci.cagrid.portal.domain.PortalUser;
 import gov.nih.nci.cagrid.portal.domain.catalog.PersonCatalogEntry;
 import static org.junit.Assert.*;
-import org.junit.Before;
 import org.junit.Test;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -21,24 +18,8 @@ import java.util.List;
  *
  * @author kherm manav.kher@semanticbits.com
  */
-public class PersonCatalogEntryDaoTest extends DaoTestBase<PersonCatalogEntryDao> {
+public class PersonCatalogEntryDaoTest extends BaseCatalogEntryDaoTest<PersonCatalogEntryDao> {
 
-    PortalUserDao pDao;
-    PortalUser p;
-
-    @Before
-    public void setup() {
-        pDao = (PortalUserDao) getApplicationContext().getBean("portalUserDao");
-        p = new PortalUser();
-
-        Person person = new Person();
-        person.setFirstName("first");
-        person.setLastName("last");
-        person.setEmailAddress("email");
-
-        p.setPerson(person);
-        pDao.save(p);
-    }
 
     @Test
     public void createWithNoAbout() {

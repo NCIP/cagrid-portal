@@ -5,11 +5,11 @@ package gov.nih.nci.cagrid.portal.catalog;
 
 import gov.nih.nci.cagrid.metadata.MetadataUtils;
 import gov.nih.nci.cagrid.portal.TestDB;
+import gov.nih.nci.cagrid.portal.aggr.catalog.ServiceMetadataCatalogEntryBuilder;
 import gov.nih.nci.cagrid.portal.aggr.metachange.AbstractMetadataChangeTestBase;
 import gov.nih.nci.cagrid.portal.dao.catalog.CatalogEntryRelationshipInstanceDao;
 import gov.nih.nci.cagrid.portal.dao.catalog.CatalogEntryRoleInstanceDao;
 import gov.nih.nci.cagrid.portal.dao.catalog.GridServiceEndPointCatalogEntryDao;
-import gov.nih.nci.cagrid.portal.dao.catalog.ServiceMetadataCatalogEntryBuilder;
 import gov.nih.nci.cagrid.portal.domain.GridDataService;
 import gov.nih.nci.cagrid.portal.domain.catalog.CatalogEntryRelationshipInstance;
 import gov.nih.nci.cagrid.portal.domain.catalog.CatalogEntryRoleInstance;
