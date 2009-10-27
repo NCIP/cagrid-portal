@@ -11,6 +11,7 @@
     <configurations>
         <conf name="compile" extends="default" visibility="public"/>
         <conf name="default" extends="service" visibility="public"/>
+        <conf name="ext" visibility="public"/>
         <conf name="test" extends="default" visibility="public" description="Test configuration"/>
 
         <!--domain is a seperate config, so that other projects can use it as a runtime library (not copied to App Server)-->
@@ -46,6 +47,8 @@
         <dependency rev="latest.integration" org="apache" name="commons-discovery"/>
         <dependency rev="latest.integration" org="apache" name="log4j" conf="default->*"/>
 
+        <!--globus ext dependencies-->
+        <dependency rev="4.0.3" org="globus" name="globus" conf="ext->crypto"/>
 
         <!--test dependencies-->
         <dependency rev="4.4" org="junit" name="junit" conf="test->*"/>
