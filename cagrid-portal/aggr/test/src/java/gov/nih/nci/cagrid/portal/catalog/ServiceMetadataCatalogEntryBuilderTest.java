@@ -19,6 +19,8 @@ import gov.nih.nci.cagrid.portal.util.Metadata;
 import static junit.framework.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.io.FileReader;
 import java.util.List;
@@ -30,11 +32,20 @@ import java.util.List;
 public class ServiceMetadataCatalogEntryBuilderTest extends
         AbstractMetadataChangeTestBase {
 
+    @Override
     protected String[] getConfigLocations() {
         return new String[]{"applicationContext-db.xml",
                 "applicationContext-db-relationships.xml",
+                "applicationContext-service.xml",
+                "applicationContext-aggr-catalog.xml",
                 "applicationContext-aggr.xml"};
     }
+
+
+
+		public ApplicationContext getApplicationContext() {
+			return new ClassPathXmlApplicationContext(getConfigLocations());
+		}
 
     @Before
     public void initRelationships() {
@@ -69,8 +80,8 @@ public class ServiceMetadataCatalogEntryBuilderTest extends
             ex.printStackTrace();
         }
 
-        ServiceMetadataCatalogEntryBuilder b = (ServiceMetadataCatalogEntryBuilder) TestDB
-                .getApplicationContext().getBean(
+        ServiceMetadataCatalogEntryBuilder b = (ServiceMetadataCatalogEntryBuilder)
+                getApplicationContext().getBean(
                         "serviceMetadataCatalogEntryBuilder");
 
         final GridServiceEndPointCatalogEntry endpointCe = b.build(dataService);

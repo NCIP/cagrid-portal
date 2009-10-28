@@ -30,6 +30,10 @@
      <bean id="pocCatalogCreator" parent="abstractCatalogCreator"
           class="gov.nih.nci.cagrid.portal.aggr.catalog.POCCatalogCreator"
           autowire="byName"/>
- 
+
+    <bean
+            id="serviceMetadataCatalogEntryBuilder"
+            class="gov.nih.nci.cagrid.portal.aggr.catalog.ServiceMetadataCatalogEntryBuilder"
+            autowire="byName"/>
 
 </beans>
