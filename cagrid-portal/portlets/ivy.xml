@@ -24,6 +24,7 @@
     <dependencies>
         <dependency rev="1.0.4" org="acegisecurity" name="acegisecurity"/>
 
+        <dependency rev="latest.integration" org="caGrid" name="portal-db" conf="default;test"/>
         <dependency rev="latest.integration" org="caGrid" name="portal-security" conf="default;test"/>
         <dependency rev="latest.integration" org="caGrid" name="portal-portal-search" conf="default"/>
         <dependency rev="latest.integration" org="caGrid" name="portal-authn-portlet" conf="compile->domain" />
