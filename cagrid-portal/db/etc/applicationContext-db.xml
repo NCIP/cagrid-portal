@@ -392,10 +392,5 @@
         </property>
     </bean>
 
-    <bean
-            id="serviceMetadataCatalogEntryBuilder"
-            class="gov.nih.nci.cagrid.portal.aggr.catalog.ServiceMetadataCatalogEntryBuilder"
-            autowire="byName"/>
-
 
 </beans>
