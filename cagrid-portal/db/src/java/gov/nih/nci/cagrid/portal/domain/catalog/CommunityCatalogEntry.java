@@ -7,7 +7,7 @@ import javax.persistence.Entity;
 @DiscriminatorValue("community")
 public class CommunityCatalogEntry extends CatalogEntry {
     private String communityUrl;
-    private long communityId;
+    private Long communityId;
 
     public String getCommunityUrl() {
         return communityUrl;
@@ -17,11 +17,11 @@ public class CommunityCatalogEntry extends CatalogEntry {
         this.communityUrl = communityUrl;
     }
 
-	public long getCommunityId() {
+	public Long getCommunityId() {
 		return communityId;
 	}
 
-	public void setCommunityId(long communityId) {
+	public void setCommunityId(Long communityId) {
 		this.communityId = communityId;
 	}
 }
