@@ -95,4 +95,9 @@
     <bean id="portalMailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl"
           p:host="${cagrid.portal.notifications.mail.server}"/>
 
+    <bean
+            id="serviceMetadataCatalogEntryBuilder"
+            class="gov.nih.nci.cagrid.portal.aggr.catalog.ServiceMetadataCatalogEntryBuilder"
+            autowire="byName"/>
+
 </beans>

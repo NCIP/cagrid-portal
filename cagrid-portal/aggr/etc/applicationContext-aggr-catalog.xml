@@ -14,7 +14,7 @@
     <bean id="abstractCatalogCreator"
           abstract="true" class="gov.nih.nci.cagrid.portal.aggr.catalog.AbstractCatalogCreator"
           autowire="byName"/>
- 
+
     <bean id="institutionCatalogCreator" parent="abstractCatalogCreator"
           class="gov.nih.nci.cagrid.portal.aggr.catalog.InstitutionCatalogCreator"
           p:institutionCatalogEntryDao-ref="institutionCatalogEntryDao"
@@ -30,10 +30,5 @@
      <bean id="pocCatalogCreator" parent="abstractCatalogCreator"
           class="gov.nih.nci.cagrid.portal.aggr.catalog.POCCatalogCreator"
           autowire="byName"/>
-
-    <bean
-            id="serviceMetadataCatalogEntryBuilder"
-            class="gov.nih.nci.cagrid.portal.aggr.catalog.ServiceMetadataCatalogEntryBuilder"
-            autowire="byName"/>
 
 </beans>
