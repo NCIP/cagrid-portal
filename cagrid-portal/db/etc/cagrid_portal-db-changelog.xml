@@ -1895,7 +1895,7 @@
         </createIndex>
     </changeSet>
 
-    <changeSet author="kherm (generated)" id="61-25"  runOnChange="true">
+    <changeSet author="kherm (generated)" id="61-25" runOnChange="true">
         <preConditions onFail="MARK_RAN">
             <not>
                 <indexExists indexName="comments_id-1"/>
@@ -1906,7 +1906,7 @@
         </createIndex>
     </changeSet>
 
-    <changeSet author="kherm (generated)" id="61-26"  runOnChange="true">
+    <changeSet author="kherm (generated)" id="61-26" runOnChange="true">
         <preConditions onFail="MARK_RAN">
             <not>
                 <indexExists indexName="comments_id-2"/>
@@ -2167,7 +2167,7 @@
         </addColumn>
     </changeSet>
 
-    <changeSet author="kherm (generated)" id="67-11"  runOnChange="true">
+    <changeSet author="kherm (generated)" id="67-11" runOnChange="true">
         <preConditions onFail="MARK_RAN">
             <columnExists tableName="cat_entry" columnName="query_id"/>
             <not>
@@ -2179,12 +2179,12 @@
         </createIndex>
     </changeSet>
 
-    <changeSet author="kherm (generated)" id="67-12"  runOnChange="true">
+    <changeSet author="kherm (generated)" id="67-12" runOnChange="true">
         <preConditions onFail="MARK_RAN">
             <columnExists tableName="cat_relationship_instance_cat_comments" columnName="comments_id"/>
             <not>
                 <indexExists indexName="cat_relationship_instance_cat_comments_id_idx"
-                             />
+                        />
             </not>
         </preConditions>
         <createIndex indexName="cat_relationship_instance_cat_comments_id_idx"
@@ -2193,7 +2193,7 @@
         </createIndex>
     </changeSet>
 
-    <changeSet author="kherm (generated)" id="67-13"  runOnChange="true">
+    <changeSet author="kherm (generated)" id="67-13" runOnChange="true">
         <preConditions onFail="MARK_RAN">
             <columnExists tableName="cat_relationship_type" columnName="name"/>
             <not>
@@ -2205,7 +2205,7 @@
         </createIndex>
     </changeSet>
 
-    <changeSet author="kherm (generated)" id="67-14"  runOnChange="true">
+    <changeSet author="kherm (generated)" id="67-14" runOnChange="true">
         <preConditions onFail="MARK_RAN">
             <columnExists tableName="cat_role_type_cat_comments" columnName="comments_id"/>
             <not>
@@ -2218,7 +2218,7 @@
         </createIndex>
     </changeSet>
 
-    <changeSet author="kherm (generated)" id="67-15"  runOnChange="true">
+    <changeSet author="kherm (generated)" id="67-15" runOnChange="true">
         <preConditions onFail="MARK_RAN">
             <columnExists tableName="query_result_cell" columnName="column_id"/>
             <not>
@@ -2230,7 +2230,7 @@
         </createIndex>
     </changeSet>
 
-    <changeSet author="kherm (generated)" id="67-16"  runOnChange="true">
+    <changeSet author="kherm (generated)" id="67-16" runOnChange="true">
         <preConditions onFail="MARK_RAN">
             <columnExists tableName="query_result_cell" columnName="row_id"/>
             <not>
@@ -2242,7 +2242,7 @@
         </createIndex>
     </changeSet>
 
-    <changeSet author="kherm (generated)" id="67-17"  runOnChange="true">
+    <changeSet author="kherm (generated)" id="67-17" runOnChange="true">
         <preConditions onFail="MARK_RAN">
             <columnExists tableName="query_result_col" columnName="table_id"/>
             <not>
@@ -2312,11 +2312,48 @@
             <column name="fileName" type="text"/>
         </addColumn>
     </changeSet>
-    
-	<changeSet author="joshua" id="70">
+
+    <changeSet author="kherm (generated)" id="71">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="cat_entry" columnName="communityId"/>
+            </not>
+        </preConditions>
         <addColumn tableName="cat_entry">
             <column name="communityId" type="BIGINT"/>
         </addColumn>
-    </changeSet>       
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="71">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="cat_entry" columnName="poc_id"/>
+            </not>
+        </preConditions>
+        <addColumn tableName="cat_entry">
+            <column name="poc_id" type="INT"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="72">
+        <preConditions onFail="MARK_RAN">
+            <columnExists tableName="cat_entry" columnName="communityUrl"/>
+        </preConditions>
+        <modifyColumn tableName="cat_entry">
+            <column name="communityUrl" type="VARCHAR(255)"/>
+        </modifyColumn>
+    </changeSet>
+
+    <changeSet author="kherm (generated)" id="73">
+        <preConditions onFail="MARK_RAN">
+            <columnExists tableName="cat_entry" columnName="poc_id"/>
+            <not>
+                <indexExists indexName="FK52FB32C973CAA2A"/>
+            </not>
+        </preConditions>
+        <createIndex indexName="FK52FB32C973CAA2A" tableName="cat_entry" unique="false">
+            <column name="poc_id"/>
+        </createIndex>
+    </changeSet>
 
 </databaseChangeLog>
