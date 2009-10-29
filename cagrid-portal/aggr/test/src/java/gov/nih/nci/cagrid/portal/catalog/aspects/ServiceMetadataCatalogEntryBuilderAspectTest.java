@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.portal.catalog;
+package gov.nih.nci.cagrid.portal.catalog.aspects;
 
 import gov.nih.nci.cagrid.portal.TestDB;
 import gov.nih.nci.cagrid.portal.aggr.regsvc.RegisteredServiceEvent;
@@ -67,10 +67,13 @@ public class ServiceMetadataCatalogEntryBuilderAspectTest extends
 
 	@Override
 	protected String[] getConfigLocations() {
-		return new String[] { "classpath*:applicationContext-aggr-catalog.xml",
+		return new String[] { "classpath*:applicationContext-aggr.xml",
+                "applicationContext-aggr-catalog-aspects.xml",
+                "applicationContext-service.xml",
 				"applicationContext-aggr-regsvc-beans.xml",
-				"applicationContext-db-relationships.xml",
-				"applicationContext-db-aspects.xml" };
+                "applicationContext-db.xml",
+                "applicationContext-db-relationships.xml"
+		};
 	}
 
 	protected String getDataSet() throws Exception {

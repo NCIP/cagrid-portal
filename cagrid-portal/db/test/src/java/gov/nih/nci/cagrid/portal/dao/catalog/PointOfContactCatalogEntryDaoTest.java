@@ -15,7 +15,7 @@ import org.junit.Test;
  *
  * @author kherm manav.kher@semanticbits.com
  */
-public class PointOfContactCatalogEntryDaoTest extends BaseCatalogEntryDaoTest<PointOfContactCatalogEntryDao> {
+public class PointOfContactCatalogEntryDaoTest extends CatalogEntryDaoTestBase<PointOfContactCatalogEntryDao> {
     PointOfContactDao pocDao;
 
     @Before

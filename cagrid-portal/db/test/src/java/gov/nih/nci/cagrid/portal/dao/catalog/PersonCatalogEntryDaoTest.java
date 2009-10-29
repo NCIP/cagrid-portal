@@ -18,7 +18,7 @@ import java.util.List;
  *
  * @author kherm manav.kher@semanticbits.com
  */
-public class PersonCatalogEntryDaoTest extends BaseCatalogEntryDaoTest<PersonCatalogEntryDao> {
+public class PersonCatalogEntryDaoTest extends CatalogEntryDaoTestBase<PersonCatalogEntryDao> {
 
 
     @Test

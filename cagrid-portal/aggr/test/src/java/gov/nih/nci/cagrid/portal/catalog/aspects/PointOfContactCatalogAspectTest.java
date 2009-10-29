@@ -1,4 +1,4 @@
-package gov.nih.nci.cagrid.portal.catalog;
+package gov.nih.nci.cagrid.portal.catalog.aspects;
 
 import gov.nih.nci.cagrid.portal.dao.GridServiceDao;
 import gov.nih.nci.cagrid.portal.dao.PersonDao;

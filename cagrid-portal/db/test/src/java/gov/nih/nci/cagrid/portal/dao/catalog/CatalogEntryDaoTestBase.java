@@ -13,7 +13,7 @@ import org.junit.Before;
  *
  * @author kherm manav.kher@semanticbits.com
  */
-public class BaseCatalogEntryDaoTest<T extends AboutCatalogEntryDao> extends DaoTestBase<T> {
+public class CatalogEntryDaoTestBase<T extends AboutCatalogEntryDao> extends DaoTestBase<T> {
     PortalUserDao pDao;
     PersonDao personDao;
     PortalUser p;
