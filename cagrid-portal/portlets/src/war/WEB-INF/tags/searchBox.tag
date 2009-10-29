@@ -6,7 +6,7 @@
 <%@attribute name="searchCallback" required="true" description="Callback function to run the search" %>
 <%@attribute name="id" required="true" %>
 
-<div class="searchBox">
+<div style="margin-right:350px;" class="searchBox">
     <div class="L-endcap"></div>
     <input id="<c:out value="${id}"/>" class="search" type="text" size="19"
            value="Search" style="color:#afafaf;"
