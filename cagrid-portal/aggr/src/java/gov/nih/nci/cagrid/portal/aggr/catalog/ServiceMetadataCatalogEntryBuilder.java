@@ -154,14 +154,12 @@ public class ServiceMetadataCatalogEntryBuilder {
 
                     // See if information model already exists
                     InformationModelCatalogEntry infoCe = getInformationModelCatalogEntryDao()
-                            .getDynamicModelByProjectLongName(
-                                    domainModel.getProjectLongName());
+                            .getDynamicModelByProjectLongName(projectLongName);
                     if (infoCe == null) {
                         infoCe = new InformationModelCatalogEntry();
 
-                        infoCe.setProjectLongName(domainModel
-                                .getProjectLongName());
-                        infoCe.setName(domainModel.getProjectLongName());
+                        infoCe.setProjectLongName(projectLongName);
+                        infoCe.setName(projectLongName);
                         infoCe.setDescription(domainModel
                                 .getProjectDescription());
                         infoCe.setCreatedAt(new Date());
