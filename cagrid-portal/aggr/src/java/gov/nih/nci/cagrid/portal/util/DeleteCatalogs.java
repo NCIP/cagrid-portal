@@ -19,6 +19,7 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
+ * Utility class. Will delete all null Information Models
  * User: kherm
  *
  * @author kherm manav.kher@semanticbits.com
@@ -30,8 +31,8 @@ public class DeleteCatalogs {
     public static void main(String[] args) {
 
         ApplicationContext ctx = new ClassPathXmlApplicationContext(
-                new String[]{"classpath:applicationContext-db.xml",
-                        "classpath:applicationContext-aggr-catalog.xml"});
+                new String[]{"classpath:applicationContext-db.xml"
+                       });
 
         logger.debug("Will delete all null InformationModel catalog entries");
 
