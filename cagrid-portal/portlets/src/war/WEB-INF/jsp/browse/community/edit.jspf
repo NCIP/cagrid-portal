@@ -3,13 +3,14 @@
 <%@ include file="/WEB-INF/jsp/browse/common/edit/photo_row.jspf" %>
 
 <%--overload this IF new community is being created--%>
+<%--
 <c:if test="${catalogEntry.id ==null}">
     <portlet:actionURL var="viewDetailsUrl">
         <portlet:param name="operation" value="createPortalCommunity"/>
         <portlet:param name="id" value="CPREPLACE"/>
     </portlet:actionURL>
 </c:if>
-
+--%>
 
 <%@ include file="/WEB-INF/jsp/browse/common/edit/terms.jspf" %>
 
