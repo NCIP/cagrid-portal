@@ -15,7 +15,7 @@ import javax.persistence.OneToOne;
 
 @Entity
 @DiscriminatorValue("poc")
-public class PointOfContactCatalogEntry extends CatalogEntry {
+public class PointOfContactCatalogEntry extends BasePersonCatalogEntry {
     public PointOfContact about;
 
 

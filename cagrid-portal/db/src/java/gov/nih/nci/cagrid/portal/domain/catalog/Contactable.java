@@ -8,11 +8,11 @@ public interface Contactable extends Geolocatable {
 
     public URL getWebSite();
 
-    public boolean isEmailAddressPublic();
+    public Boolean isEmailAddressPublic();
 
     public String getPhoneNumber();
 
-    public boolean isPhoneNumberPublic();
+    public Boolean isPhoneNumberPublic();
 
-    public boolean isAddressPublic();
+    public Boolean isAddressPublic();
 }

@@ -2,6 +2,10 @@ package gov.nih.nci.cagrid.portal.dao.catalog;
 
 import gov.nih.nci.cagrid.portal.domain.catalog.PointOfContactCatalogEntry;
 import gov.nih.nci.cagrid.portal.domain.metadata.common.PointOfContact;
+import gov.nih.nci.cagrid.portal.domain.metadata.common.ResearchCenterPointOfContact;
+import gov.nih.nci.cagrid.portal.domain.Person;
+import gov.nih.nci.cagrid.portal.domain.Address;
+import gov.nih.nci.cagrid.portal.util.BeanUtils;
 
 import javax.persistence.NonUniqueResultException;
 import java.util.List;
@@ -50,17 +54,50 @@ public class PointOfContactCatalogEntryDao extends
 
 
     public PointOfContactCatalogEntry createCatalogAbout(PointOfContact poc) {
-        PointOfContactCatalogEntry catalog = isAbout(poc);
-        if (catalog == null) {
+        poc = (PointOfContact) getSession().load(PointOfContact.class, new Integer(poc.getId()));
+
+        PointOfContactCatalogEntry entry = isAbout(poc);
+        if (entry == null) {
             logger.debug("Will create a new Catalog for POC");
-            catalog = new PointOfContactCatalogEntry();
-            catalog.setAbout(poc);
-            poc.setCatalog(catalog);
+            entry = new PointOfContactCatalogEntry();
+            entry.setAbout(poc);
+            poc.setCatalog(entry);
+
+            entry.setDescription("Grid Service Point of Contact");
+            if (poc instanceof ResearchCenterPointOfContact)
+                entry.setDescription("Research Center Point of Contact");
+            entry.setCreatedAt(getTimestampProvider().getTimestamp());
         } else
             logger
                     .debug("Catalog entry already exists for POC.");
 
-        super.save(catalog);
-        return catalog;
+        if (!entry.isPublished()) {
+            logger
+                    .debug("Catalog entry has not been published. Will sync with domain object");
+
+            entry.setEmailAddress(BeanUtils.traverse(poc,
+                    "person.emailAddress"));
+            entry.setLastName(BeanUtils.traverse(poc, "person.lastName"));
+            entry.setFirstName(BeanUtils.traverse(poc, "person.firstName"));
+            entry.setName(entry.getFirstName() + " " + entry.getLastName());
+            entry.setPhoneNumber(BeanUtils.traverse(poc, "person.phoneNumber"));
+
+            Person p = poc.getPerson();
+            if (p != null) {
+                if (p.getAddresses() != null && p.getAddresses().size() > 0) {
+                    Address address = poc.getPerson().getAddresses().get(0);
+                    entry.setCountryCode(address.getCountry());
+                    entry.setPostalCode(address.getPostalCode());
+                    entry.setStreet1(address.getStreet1());
+                    entry.setStreet2(address.getStreet2());
+                    entry.setLatitude(address.getLatitude());
+                    entry.setLongitude(address.getLongitude());
+                    entry.setStateProvince(address.getStateProvince());
+                }
+
+            }
+        }
+        super.save(entry);
+        return entry;
     }
 }

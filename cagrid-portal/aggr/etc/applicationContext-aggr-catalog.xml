@@ -11,6 +11,8 @@
 	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd">
 
 
+    <import resource="classpath:applicationContext-aggr.xml"/>
+
     <bean id="abstractCatalogCreator"
           abstract="true" class="gov.nih.nci.cagrid.portal.aggr.catalog.AbstractCatalogCreator"
           autowire="byName"/>
