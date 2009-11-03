@@ -32,6 +32,7 @@
         <entry key="INSTITUTION" value="gov.nih.nci.cagrid.portal.domain.catalog.InstitutionCatalogEntry"/>
         <entry key="KNOWLEDGECENTER" value="gov.nih.nci.cagrid.portal.domain.catalog.KnowledgeCenterCatalogEntry"/>
         <entry key="PERSON" value="gov.nih.nci.cagrid.portal.domain.catalog.PersonCatalogEntry"/>
+        <entry key="POC" value="gov.nih.nci.cagrid.portal.domain.catalog.PointOfContactCatalogEntry"/>
         <entry key="PORTLET" value="gov.nih.nci.cagrid.portal.domain.catalog.PortletCatalogEntry"/>
         <entry key="PROJECT" value="gov.nih.nci.cagrid.portal.domain.catalog.ProjectCatalogEntry"/>
         <entry key="SHAREDQUERY" value="gov.nih.nci.cagrid.portal.domain.catalog.SharedQueryCatalogEntry"/>
@@ -54,6 +55,7 @@
         <entry key="gov.nih.nci.cagrid.portal.domain.catalog.InstitutionCatalogEntry" value="institutionView"/>
         <entry key="gov.nih.nci.cagrid.portal.domain.catalog.KnowledgeCenterCatalogEntry" value="catalogEntryView"/>
         <entry key="gov.nih.nci.cagrid.portal.domain.catalog.PersonCatalogEntry" value="personView"/>
+        <entry key="gov.nih.nci.cagrid.portal.domain.catalog.PointOfContactCatalogEntry" value="personView"/>
         <entry key="gov.nih.nci.cagrid.portal.domain.catalog.PortletCatalogEntry" value="portletView"/>
         <entry key="gov.nih.nci.cagrid.portal.domain.catalog.SharedQueryCatalogEntry" value="sharedQueryView"/>
         <entry key="gov.nih.nci.cagrid.portal.domain.catalog.TerminologyCatalogEntry" value="catalogEntryView"/>
