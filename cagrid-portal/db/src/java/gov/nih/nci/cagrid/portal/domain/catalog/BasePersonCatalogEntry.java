@@ -23,15 +23,15 @@ public class BasePersonCatalogEntry extends CatalogEntry implements Contactable 
     public String countryCode;
     public Float latitude;
     public Float longitude;
-    public Boolean emailAddressPublic;
-    public Boolean phoneNumberPublic;
-    public Boolean addressPublic;
+    public boolean emailAddressPublic;
+    public boolean phoneNumberPublic;
+    public boolean addressPublic;
     public String phoneNumber;
     public String emailAddress;
     public URL webSite;
 
 
-      public String getSalutation() {
+    public String getSalutation() {
         return salutation;
     }
 
@@ -127,27 +127,27 @@ public class BasePersonCatalogEntry extends CatalogEntry implements Contactable 
         this.longitude = longitude;
     }
 
-    public Boolean isEmailAddressPublic() {
+    public boolean isEmailAddressPublic() {
         return emailAddressPublic;
     }
 
-    public void setEmailAddressPublic(Boolean emailAddressPublic) {
+    public void setEmailAddressPublic(boolean emailAddressPublic) {
         this.emailAddressPublic = emailAddressPublic;
     }
 
-    public Boolean isPhoneNumberPublic() {
+    public boolean isPhoneNumberPublic() {
         return phoneNumberPublic;
     }
 
-    public void setPhoneNumberPublic(Boolean phoneNumberPublic) {
+    public void setPhoneNumberPublic(boolean phoneNumberPublic) {
         this.phoneNumberPublic = phoneNumberPublic;
     }
 
-    public Boolean isAddressPublic() {
+    public boolean isAddressPublic() {
         return addressPublic;
     }
 
-    public void setAddressPublic(Boolean addressPublic) {
+    public void setAddressPublic(boolean addressPublic) {
         this.addressPublic = addressPublic;
     }
 

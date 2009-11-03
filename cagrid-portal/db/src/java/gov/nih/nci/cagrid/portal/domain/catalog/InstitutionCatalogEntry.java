@@ -35,11 +35,11 @@ public class InstitutionCatalogEntry extends CommunityCatalogEntry implements Co
 
     public String phoneNumber;
 
-    public Boolean emailAddressPublic;
+    public boolean emailAddressPublic;
 
-    public Boolean phoneNumberPublic;
+    public boolean phoneNumberPublic;
 
-    public Boolean addressPublic;
+    public boolean addressPublic;
 
     public Participant about;
 
@@ -139,27 +139,27 @@ public class InstitutionCatalogEntry extends CommunityCatalogEntry implements Co
         this.phoneNumber = phoneNumber;
     }
 
-    public Boolean isEmailAddressPublic() {
+    public boolean isEmailAddressPublic() {
         return emailAddressPublic;
     }
 
-    public void setEmailAddressPublic(Boolean emailAddressPublic) {
+    public void setEmailAddressPublic(boolean emailAddressPublic) {
         this.emailAddressPublic = emailAddressPublic;
     }
 
-    public Boolean isPhoneNumberPublic() {
+    public boolean isPhoneNumberPublic() {
         return phoneNumberPublic;
     }
 
-    public void setPhoneNumberPublic(Boolean phoneNumberPublic) {
+    public void setPhoneNumberPublic(boolean phoneNumberPublic) {
         this.phoneNumberPublic = phoneNumberPublic;
     }
 
-    public Boolean isAddressPublic() {
+    public boolean isAddressPublic() {
         return addressPublic;
     }
 
-    public void setAddressPublic(Boolean addressPublic) {
+    public void setAddressPublic(boolean addressPublic) {
         this.addressPublic = addressPublic;
     }
 
