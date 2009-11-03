@@ -74,7 +74,7 @@ public class BrowseViewController extends BaseSearchSupportingController impleme
             mav.addObject(BrowseParams.CATALOG_TYPE, "institution");
         } else if (browseType.equals(BrowseTypeEnum.PERSON)) {
             entryTypeName = "PersonCatalogEntry";
-            mav.addObject(BrowseParams.CATALOG_TYPE, "person");
+            mav.addObject(BrowseParams.CATALOG_TYPE, "person poc");
         } else if (browseType.equals(BrowseTypeEnum.TOOL)) {
             entryTypeName = "ToolCatalogEntry";
             mav.addObject(BrowseParams.CATALOG_TYPE, "tool_* tools");

@@ -531,6 +531,7 @@ concurrently.  An error is returned if this limit is exceeded. Recommend
         <lst name="catalog_type">
           <str name="tool_grid_service_endpoint">Grid Service Endpoint</str>
             <str name="person">People</str>
+            <str name="poc">Point Of Contact</str>
             <str name="institution">Institution</str>
             <str name="tool_shared_query">Shared Query</str>
             <str name="tools">Tool</str>
