@@ -1,3 +1,5 @@
+<%@ page import="com.liferay.portal.kernel.portlet.LiferayWindowState" %>
+
 <script type="text/javascript">
 var state = 'open';
 jQuery(document).ready(function(){
@@ -21,7 +23,9 @@ jQuery(document).ready(function(){
 
 <c:forEach var="relatedEntry" items="${relatedEntries}">
 
-	<portlet:renderURL var="viewRelatedItemUrl">
+	<portlet:renderURL var="viewRelatedItemUrl" 
+		windowState="<%= LiferayWindowState.NORMAL.toString() %>"
+	>
     	<portlet:param name="operation" value="viewDetails"/>
 		<portlet:param name="entryId" value="${relatedEntry.catalogEntry.id}"/>
     </portlet:renderURL>
