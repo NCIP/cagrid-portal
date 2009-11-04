@@ -16,7 +16,7 @@
     
     <bean class="gov.nih.nci.cagrid.portal.search.PortalDaoAspect" lazy-init="true"
           parent="abstractSolrCommandExecutor">
-        <constructor-arg value="/dataimport/command=delta-import"/>
+        <constructor-arg value="/dataimport?command=delta-import"/>
     </bean>
 
 </beans>
