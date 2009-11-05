@@ -12,7 +12,8 @@
     <property name="liferay.mail.password" value="password"/>
     <property name="liferay.mail.host" value="localhost"/>
 
-    <property name="liferay.theme.name" value="cagrid-new-theme"/>
+    <property name="liferay.cagrid.portal.theme.name" value="cagrid-new-theme"/>
+     <property name="liferay.cagrid.portal.community.theme.name" value="cagrid-community-theme"/>
 
 
     <xmlcatalog id="portal.catalog">
@@ -191,19 +192,24 @@
     <target name="war-theme">
         <property name="liferay.build.themes.dir" value="${build.dir}"/>
         <property name="liferay.build.themes.lib.dir"
-                  value="${liferay.build.themes.dir}/${liferay.theme.name}/WEB-INF/lib"/>
+                  value="${liferay.build.themes.dir}/${liferay.cagrid.portal.theme.name}/WEB-INF/lib"/>
 
         <copy todir="${liferay.build.themes.dir}">
             <fileset dir="${src.themes.dir}"/>
         </copy>
 
-        <jar destfile="${build.dir}/${liferay.theme.name}.war"
-             basedir="${liferay.build.themes.dir}/${liferay.theme.name}"/>
+        <jar destfile="${build.dir}/${liferay.cagrid.portal.theme.name}.war"
+             basedir="${liferay.build.themes.dir}/${liferay.cagrid.portal.theme.name}"/>
 
+        <jar destfile="${build.dir}/${liferay.cagrid.portal.community.theme.name}.war"
+                   basedir="${liferay.build.themes.dir}/${liferay.cagrid.portal.community.theme.name}"/>
+        
     </target>
 
     <target name="deploy-theme" depends="war-theme" description="Deploy the caGrid Portal theme to Liferay">
-        <copy file="${build.dir}/${liferay.theme.name}.war"
+        <copy file="${build.dir}/${liferay.cagrid.portal.theme.name}.war"
+              todir="${liferay.autodeploy.dir}" overwrite="true"/>
+         <copy file="${build.dir}/${liferay.cagrid.portal.community.theme.name}.war"
               todir="${liferay.autodeploy.dir}" overwrite="true"/>
     </target>
 
