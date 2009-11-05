@@ -19,7 +19,7 @@ body.portlet {
 }
 
 .portlet-title {
-	display: block;
+	display: none;
 	font-weight: bold;
 	min-width: 50%;
 }
@@ -54,6 +54,25 @@ body.portlet {
 	background: url(../images/arrows/01_left.png) no-repeat 0 50%;
 	font-weight: bold;
 	padding: 3px 0 3px 18px;
+}
+
+/* ---------- Panel Page ---------- */
+
+.lfr-panel-page {
+	width: 100%;
+}
+
+.lfr-panel-page .portlet-title {
+	font-size: 13px;
+}
+
+.lfr-panel-page #content-wrapper {
+	margin: 0;
+	width: auto;
+}
+
+.lfr-panel-page .lfr-add-content h2 span {
+	background-color: #D3DADD;
 }
 
 /* ---------- Drag and drop ---------- */
