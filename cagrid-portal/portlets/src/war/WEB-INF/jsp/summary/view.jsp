@@ -24,7 +24,7 @@
     var  ${ns}wildcard = "*:*";
     var  ${ns}query = new solrQuery(${ns}wildcard);
      ${ns}query.setTree(true);
-     ${ns}query.addFacet("catalog_type", "dataset");
+     ${ns}query.addFacet("catalog_type", "information_model");
 
 
     function ${ns}navigateToDataSet(aof) {
@@ -71,13 +71,20 @@
     };
 
     var ${ns}handlefailure = function (oRequest, oParsedResponse, oPayload) {
-        alert("failed");
+     jQuery("#${ns}categories").append("Failed to get results");
     };
 
 </script>
 
-<div id="latestContent">
-        <h3>Data Set Categories</h3>
+<div id="summaryContent">
+    <div id="summaryTitle">
+             Data Set Categories
+        <span id="summaryHelpLink">
+            <a href="${userGuideUrl}-DataSetCategories" target="_blank">
+                <tags:image name="help.gif"/>
+            </a>
+           </span>
+    </div>
 
     <div id="${ns}categories" class="row">
         <tags:image name="loading_animation.gif" cssStyle="padding:40px;"/>
