@@ -21,22 +21,22 @@
 
     // Get Area of Focus tree for Data Set catalog type
     var ${ns}solrDatasource = new YAHOO.util.XHRDataSource("<c:out value="${solrServiceUrl}"/>/select?", {responseType:YAHOO.util.XHRDataSource.JSON});
-    var  ${ns}wildcard = "*:*";
-    var  ${ns}query = new solrQuery(${ns}wildcard);
-     ${ns}query.setTree(true);
-     ${ns}query.addFacet("catalog_type", "information_model");
-
+    var ${ns}wildcard = "*:*";
+    var ${ns}query = new solrQuery(${ns}wildcard);
+    ${ns}query.setTree(true);
+    ${ns}query.addFacet("catalog_type", "information_model");
+    ${ns}query.setRows(7);
 
     function ${ns}navigateToDataSet(aof) {
         var searchLink = "${dataSetLnk}";
         searchLink = searchLink.replace("/guest/home", "/guest/catalog/datasets");
-        searchLink = searchLink.replace("AOFVALUE",aof);
+        searchLink = searchLink.replace("AOFVALUE", aof);
 
         window.location = searchLink;
     }
 
     jQuery(document).ready(function() {
-         ${ns}solrDatasource.sendRequest(${ns}query.getQuery(), {
+        ${ns}solrDatasource.sendRequest(${ns}query.getQuery(), {
             success : ${ns}updateCategories,
             cache:false,
             failure : ${ns}handlefailure,
@@ -47,7 +47,7 @@
 
     var ${ns}updateCategories = function (oRequest, oParsedResponse, oPayload) {
         try {
-             jQuery("#${ns}categories").html("");    
+            jQuery("#${ns}categories").html("");
             var solrJSON = YAHOO.lang.JSON.parse(oParsedResponse.results.responseText);
             var aofTree = solrJSON.tree;
             if (aofTree.length > 1) {
@@ -71,16 +71,17 @@
     };
 
     var ${ns}handlefailure = function (oRequest, oParsedResponse, oPayload) {
-     jQuery("#${ns}categories").append("Failed to get results");
+        jQuery("#${ns}categories").append("Failed to get results");
     };
 
 </script>
 
 <div id="summaryContent">
     <div id="summaryTitle">
-             Data Set Categories
+        Data Set Categories
         <span id="summaryHelpLink">
-            <a href="${userGuideUrl}-DataSetCategories" target="_blank">
+            <a href="http://cagrid.org/display/portal30/caGrid+Portal+3.0+User%27s+Guide#caGridPortal3.0User%27sGuide
+-DataSetCategories" target="_blank">
                 <tags:image name="help.gif"/>
             </a>
            </span>
