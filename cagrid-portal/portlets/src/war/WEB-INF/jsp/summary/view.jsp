@@ -90,6 +90,8 @@
     <div id="${ns}categories" class="row">
         <tags:image name="loading_animation.gif" cssStyle="padding:40px;"/>
     </div>
+    <br/>
+    <a href="/web/guest/catalog/datasets">More...</a>
 </div>
 
 
