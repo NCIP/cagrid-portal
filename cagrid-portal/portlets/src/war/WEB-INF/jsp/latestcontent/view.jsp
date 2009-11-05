@@ -1,101 +1,103 @@
 <%@ include file="/WEB-INF/jsp/include/includes.jspf" %>
 <%@ include file="/WEB-INF/jsp/include/liferay-includes.jspf" %>
 
-<link type="text/css" rel="stylesheet"
-      href="<c:url value="/css/latest-content.css"/>"/>
-<script type="text/javascript" src='<c:url value="/dwr/interface/LatestContentService.js"/>'></script>
-
-
-<portlet:defineObjects/>
-<liferay-theme:defineObjects/>
 <c:set var="ns"><portlet:namespace/></c:set>
+<link rel="stylesheet" type="text/css" href="<c:url value="/css/catalog.css"/>"/>
+<script type="text/javascript" src="<c:url value="/js/yui/yahoo-dom-event/yahoo-dom-event.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/js/yui/element/element-min.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/js/yui/datasource/datasource-min.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/js/yui/json/json-min.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/js/yui/connection/connection-min.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/js/yui/get/get-min.js"/>"></script>
+<script src="<c:url value="/js/browse-catalog.js"/>"></script>
 
-<liferay-portlet:renderURL var="catalogLink" portletName="BrowsePortlet_WAR_cagridportlets"
+<liferay-portlet:renderURL var="dataSetLnk" portletName="BrowsePortlet_WAR_cagridportlets"
                            portletMode="view">
     <liferay-portlet:param name="operation" value="viewDetails"/>
-    <liferay-portlet:param name="entryId" value="ENTRYIDTOREPLACE"/>
+    <portlet:param name="entryId" value="CATALOGID"/>
 </liferay-portlet:renderURL>
-
-<div id="latestContent">
-    <h3 id="latestContentTitle">Latest Content</h3>
-
-    <div id="${ns}errorDiv" style="display:none">
-        <span class="errorMsg">
-            Error communicating with Server. Please refresh the webpage.
-        </span>
-    </div>
-
-    <div id="${ns}loadingDiv">
-        <div id="${ns}loadingDivInner">
-            <tags:image name="loading_animation.gif" cssStyle="padding:40px;"/>
-        </div>
-    </div>
-
-    <div id="${ns}statusDiv">
-        <c:set var="formName">${ns}serviceDetailsForm</c:set>
-
-        <form:form id="${formName}" action="${action}">
-            <input type="hidden" name="selectedId"/>
-
-            <div id="${ns}latestContent"><%----%></div>
-        </form:form>
-    </div>
-
-</div>
 
 
 <script type="text/javascript">
-    var _html = $('${ns}loadingDivInner').innerHTML;
+    var ${ns}solrDatasource = new YAHOO.util.XHRDataSource("<c:out value="${solrServiceUrl}"/>/select?&version=2.2&sort=createdAt+desc&", {responseType:YAHOO.util.XHRDataSource.JSON});
+    var ${ns}wildcard = "*:*";
+    var ${ns}query = new solrQuery(${ns}wildcard);
+    ${ns}query.setRows(7);
 
-       var theLink = "${catalogLink}";
-    
-    function viewDetails(id) {
-        var newLink = theLink.replace("guest/home", "guest/catalog/all").replace("ENTRYIDTOREPLACE", id);
-        window.location = newLink;
-    }
-
-    function ${ns}reloadStatus() {
-        ${ns}setInnerHTML($('${ns}loadingDiv'), _html);
-        setTimeout("${ns}loadStatus()", 100);
-
-    }
-
-    <%--for safari--%>
-    function ${ns}setInnerHTML(element, html, count) {
-        element.innerHTML = html;
-
-        if (! count)
-            count = 1;
-
-        if (html != '' && element.innerHTML == '' && count < 5) {
-            ++count;
-            setTimeout(function() {
-                ${ns}setInnerHTML(element, html, count);
-            }, 50);
-        }
-    }
-
-    function ${ns}loadStatus() {
-        dwr.engine.beginBatch({timeout:90000});
-
-        LatestContentService.getContent(function(latestContent) {
-            $('${ns}latestContent').innerHTML = latestContent;
-        });
-
-        dwr.engine.endBatch({
-            async:true,
-            errorHandler:function(errorString, exception) {
-                $('${ns}loadingDiv').innerHTML = $('${ns}errorDiv').innerHTML
-            }
-        });
-
-        $('${ns}loadingDiv').innerHTML = $('${ns}statusDiv').innerHTML;
+    function ${ns}navigateToCatalog(id) {
+        var searchLink = "${dataSetLnk}";
+        searchLink = searchLink.replace("/guest/home", "/guest/catalog/all");
+        searchLink = searchLink.replace("CATALOGID", id);
+        window.location = searchLink;
     }
 
     jQuery(document).ready(function() {
+        ${ns}solrDatasource.sendRequest(${ns}query.getQuery(), {
+            success : ${ns}updateCategories,
+            cache:false,
+            failure : ${ns}handlefailure,
+            scope : this
+        });
 
-        ${ns}loadStatus();
     });
 
+    var ${ns}updateCategories = function (oRequest, oParsedResponse, oPayload) {
+        try {
+            jQuery("#${ns}categories").html("");
+            var solrJSON = YAHOO.lang.JSON.parse(oParsedResponse.results.responseText);
+            var catalogs = solrJSON.response.docs;
+
+            for (var i = 0; i < catalogs.length; i++) {
+                var catalog = catalogs[i];
+                var name = catalog.name;
+                if (name.length > 30) {
+                    name = name.substring(0, 30);
+                }
+
+                var resultDiv = document.createElement('div');
+
+                var thumbImgDiv = document.createElement('span');
+                thumbImgDiv.setAttribute('style','padding-right:5px');
+                     var thumbImg = document.createElement('img');
+                thumbImg.setAttribute('src', '/cagridportlets/images/catalog_icons/'+catalog.catalog_type+'.png');
+                thumbImg.setAttribute('align','middle');
+                thumbImgDiv.appendChild(thumbImg);
+                resultDiv.appendChild(thumbImgDiv);
+
+                var link = document.createElement('a');
+                link.setAttribute('href', 'javascript:${ns}navigateToCatalog("' + catalog.id + '")');
+                link.innerHTML = name;
+                resultDiv.appendChild(link);
+                jQuery("#${ns}categories").append(resultDiv);
+            }
+        }
+        catch (x) {
+        <%--do nothing--%>
+
+        }
+    };
+
+    var ${ns}handlefailure = function (oRequest, oParsedResponse, oPayload) {
+        jQuery("#${ns}categories").append("Failed to get results");
+    };
+
 </script>
+
+<div id="summaryContent">
+    <div id="summaryTitle">
+             Latest Content
+        <span id="summaryHelpLink">
+            <a href="${userGuideUrl}-LatestEntries" target="_blank">
+                <tags:image name="help.gif"/>
+            </a>
+           </span>
+    </div>
+
+    <div id="${ns}categories" class="row">
+        <tags:image name="loading_animation.gif" cssStyle="padding:40px;"/>
+    </div>
+    <br/>
+    <a href="/web/guest/catalog/all">More...</a>
+</div>
+
 

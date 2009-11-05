@@ -24,6 +24,7 @@
             <field column="phoneNumber" name="phoneNumber"/>
             <field column="updatedAt" name="updatedAt"/>
             <field column="featured" name="featured"/>
+            <field column="createdAt" name="createdAt"/>
             <entity name="GridService"
                     pk="id"
                     query="select * from grid_services where id='${AllCatalogs.grid_service_id}'">

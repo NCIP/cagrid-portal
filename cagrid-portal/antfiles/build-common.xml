@@ -97,6 +97,7 @@
             <entry key="cagrid.portal.liferay.companyWebId" value="${cagrid.portal.liferay.companyWebId}"/>
             <entry key="cagrid.portal.liferay.omniUserEmail" value="${cagrid.portal.liferay.omniUserEmail}"/>
             <entry key="cagrid.portal.filestore.path" value="${cagrid.portal.filestore.path}"/>
+            <entry key="cagrid.portal.user.guide.wikiURL" value="${cagrid.portal.user.guide.wikiURL}"/>
         </propertyfile>
     </target>
 

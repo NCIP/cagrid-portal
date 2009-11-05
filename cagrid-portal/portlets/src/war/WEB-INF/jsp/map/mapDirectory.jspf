@@ -8,16 +8,16 @@
 	</form:form>
 </div>
 <div id="mapLegend">
-    <span mapType="dataServices">
+    <span class="mapLink" mapType="dataServices">
 	<img src="<c:url value="/images/data-services.png"/>"/>Data Service<span class="summary" id="${ns}dCount"></span>
         </span>
 
-    <span  mapType="analyticalServices">
+    <span class="mapLink" mapType="analyticalServices">
 	<img src="<c:url value="/images/analytical_services.png"/>"/>Analytical Service<span class="summary"
                                                                                          id="${ns}aCount"></span>
         </span>
 
-    <span mapType="participants">
+    <span class="mapLink" mapType="participants">
 	<img src="<c:url value="/images/participant_institute.png"/>"/>Participant Institute<span class="summary"
                                                                                               id="${ns}pCount"></span>
         </span>

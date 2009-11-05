@@ -22,7 +22,7 @@
     var ${ns}solrDatasource = new YAHOO.util.XHRDataSource("<c:out value="${solrServiceUrl}"/>/select?facet=true&facet.field=author&", {responseType:YAHOO.util.XHRDataSource.JSON});
     var ${ns}wildcard = "*:*";
     var ${ns}query = new solrQuery(${ns}wildcard);
-    ${ns}query.setRows(10);
+    ${ns}query.setRows(7);
     ${ns}query.addFacet("catalog_type", "person");
 
 
@@ -68,13 +68,20 @@
     };
 
     var ${ns}handlefailure = function (oRequest, oParsedResponse, oPayload) {
-        alert("failed");
+        jQuery("#${ns}categories").append("Failed to get results");
     };
 
 </script>
 
-<div id="latestContent">
-    <h3>Top Contributors</h3>
+<div id="summaryContent">
+    <div id="summaryTitle">
+             Top Contributors
+        <span id="summaryHelpLink">
+            <a href="${userGuideUrl}-TopContributors" target="_blank">
+                <tags:image name="help.gif"/>
+            </a>
+           </span>
+    </div>
 
     <div id="${ns}categories" class="row">
         <tags:image name="loading_animation.gif" cssStyle="padding:40px;"/>

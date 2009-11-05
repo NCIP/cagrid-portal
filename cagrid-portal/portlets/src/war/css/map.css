@@ -39,3 +39,8 @@ span.summary{
 span.subMapIcon{
    cursor:pointer;
 }
+
+span.mapLink{
+    color:#032C5A;
+    font-weight:bold;
+}

@@ -384,23 +384,14 @@
           class="gov.nih.nci.cagrid.portal.portlet.query.results.QueryResultTableToHSSFWorkbookBuilder"
           autowire="byName"/>
 
-    <!--
-     <util:list id="catlogEntryAnnotationTypes">
-         <bean class="gov.nih.nci.cagrid.portal.portlet.terms.CatalogEntryAnnotationType">
-             <property name="name" value="annotType1"/>
-             <property name="label" value="Annotation Type 1"/>
-             <property name="description" value="Annotations Type 1"/>
-             <property name="terminologyUri" value="uri:annotation_type_1.owl"/>
-             <property name="catalogEntryType" value="gov.nih.nci.cagrid.portal.domain.catalog.ToolDeploymentCatalogEntry"/>
-         </bean>
-         <bean class="gov.nih.nci.cagrid.portal.portlet.terms.CatalogEntryAnnotationType">
-             <property name="name" value="annotType2"/>
-             <property name="label" value="Annotation Type 2"/>
-             <property name="description" value="Annotations Type 2"/>
-             <property name="terminologyUri" value="uri:annotation_type_2.owl"/>
-             <property name="catalogEntryType" value="gov.nih.nci.cagrid.portal.domain.catalog.GridServiceEndPointCatalogEntry"/>
-         </bean>
-     </util:list>
-      -->
+    <bean
+              id="summaryContentViewController"
+              class="gov.nih.nci.cagrid.portal.portlet.SummaryContentViewController"
+              autowire="byName">
+          <property name="successViewName" value="view"/>
+          <property name="solrServiceUrl" value="${cagrid.portal.solr.http.url}"/>
+          <property name="userGuideUrl" value="${cagrid.portal.user.guide.wikiURL}"/>
+      </bean>
+
 
 </beans>

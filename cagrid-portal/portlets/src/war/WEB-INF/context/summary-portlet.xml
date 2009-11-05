@@ -12,22 +12,6 @@
 	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
 	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd">
 
-    <bean id="propertyConfigurer"
-          class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-        <property name="location"
-                  value="classpath:cagridportal.properties"/>
-    </bean>
-
-
-    <bean
-            id="viewController"
-            class="gov.nih.nci.cagrid.portal.portlet.summary.SummaryViewController"
-            autowire="byName">
-        <property name="successViewName" value="view"/>
-        <property name="solrServiceUrl" value="${cagrid.portal.solr.http.url}"/>
-    </bean>
-
-
     <bean id="portletModeHandlerMapping"
           class="org.springframework.web.portlet.handler.PortletModeHandlerMapping">
 
@@ -43,7 +27,7 @@
         <property name="portletModeMap">
             <map>
                 <entry key="view">
-                    <ref bean="viewController"/>
+                    <ref bean="summaryContentViewController"/>
                 </entry>
             </map>
         </property>

@@ -1,23 +1,44 @@
-
-#service-url{
-    width:100px;
-    font-size:15px;
+#service-url {
+    width: 100px;
+    font-size: 15px;
 }
 
-.searchBar{
-    background-color:#E5E8EF;
-    width:100%;
-    float:inherit;
-    margin-bottom:10px;
+.searchBar {
+    background-color: #E5E8EF;
+    width: 100%;
+    float: inherit;
+    margin-bottom: 10px;
 }
-#browsingSummaryDiv{
-    float:left;
+
+#browsingSummaryDiv {
+    float: left;
 }
-#paginatorSummaryDiv{
-    float:right;
+
+#paginatorSummaryDiv {
+    float: right;
+}
+
+.sortOrder {
+    cursor: pointer;
+}
+
+.catalogIcon {
+    float: left;
+}
+
+#summaryHelpLink {
+    float: right;
+}
+
+#summaryTitle {
+    font-size: 15pt;
+    border-bottom: 2px solid #A3B9E2;
+    font-weight: bold;
+    margin: 0 0 0.5em;
+}
+
+#summaryContent{
+    overflow:auto;
 }
 
 
-.sortOrder{
-         cursor:pointer;
-}

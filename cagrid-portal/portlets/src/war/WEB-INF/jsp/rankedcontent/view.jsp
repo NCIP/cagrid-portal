@@ -22,7 +22,7 @@
     var ${ns}solrDatasource = new YAHOO.util.XHRDataSource("<c:out value="${solrServiceUrl}"/>/select?&version=2.2&sort=rating+desc&", {responseType:YAHOO.util.XHRDataSource.JSON});
     var ${ns}wildcard = "*:*";
     var ${ns}query = new solrQuery(${ns}wildcard);
-    ${ns}query.setRows(10);
+    ${ns}query.setRows(7);
 
 
     function ${ns}navigateToCatalog(id) {
@@ -50,7 +50,21 @@
             for (var i = 0; i < institutions.length; i++) {
                 var institution = institutions[i];
                 var name = institution.name;
+
+                if (name.length > 30) {
+                    name = name.substring(0, 30) + "..";
+                }
+
                 var resultDiv = document.createElement('div');
+
+                var thumbImgDiv = document.createElement('span');
+                thumbImgDiv.setAttribute('style','padding-right:5px');
+                var thumbImg = document.createElement('img');
+                thumbImg.setAttribute('src', '/cagridportlets/images/catalog_icons/'+institution.catalog_type+'.png');
+                thumbImg.setAttribute('align','middle');
+                thumbImgDiv.appendChild(thumbImg);
+                resultDiv.appendChild(thumbImgDiv);
+                
                 var link = document.createElement('a');
                 link.setAttribute('href', 'javascript:${ns}navigateToCatalog("' + institution.id + '")');
                 link.innerHTML = name;
@@ -65,15 +79,22 @@
     };
 
     var ${ns}handlefailure = function (oRequest, oParsedResponse, oPayload) {
-        alert("failed");
+        jQuery("#${ns}categories").append("Failed to get results");
     };
 
 </script>
 
-<div id="latestContent">
-    <h3>Top Ranked Content</h3>
+<div id="summaryContent">
+    <div id="summaryTitle">
+    Top Ranked Content
+           <span id="summaryHelpLink">
+            <a href="${userGuideUrl}-TopRankedEntries" target="_blank">
+                <tags:image name="help.gif"/>
+            </a>
+           </span>
+        </div>
 
-    <div id="${ns}categories" class="row">
+    <div id="${ns}categories" class="row" style="vertical-align:middle;">
         <tags:image name="loading_animation.gif" cssStyle="padding:40px;"/>
     </div>
     <br/>
