@@ -10,6 +10,16 @@
 
 
 <script type="text/javascript">
+
+	function replacePart(inStr, beginPatt, endPatt, newPart){
+		var idx1 = inStr.indexOf(beginPatt);
+		var idx2 = inStr.indexOf(endPatt);
+		var beginStr = inStr.substring(0, idx1 + beginPatt.length);
+		var endStr = inStr.substring(idx2, inStr.length);
+		var outStr = beginStr + newPart + endStr; 
+		return outStr;
+	}
+
     jQuery(document).ready(function() {
 
 
@@ -20,10 +30,8 @@
         });
 
         ${ns}queryButton.on("click", function(evt) {
-
             var queryLink = "${queryLink}";
-            queryLink = queryLink.replace("guest/catalog/tools", "guest/tools/query-builder");
-            queryLink = queryLink.replace("guest/catalog/all", "guest/tools/query-builder");
+            queryLink = replacePart(queryLink, "web/guest/", "?", "tools/query-builder");
             window.location = queryLink;
         });
 
