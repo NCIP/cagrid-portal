@@ -3,6 +3,7 @@ package gov.nih.nci.cagrid.portal.util;
 import gov.nih.nci.cagrid.portal.dao.catalog.CatalogEntryRelationshipInstanceDao;
 import gov.nih.nci.cagrid.portal.domain.catalog.CatalogEntry;
 import gov.nih.nci.cagrid.portal.domain.catalog.CatalogEntryRelationshipInstance;
+import gov.nih.nci.cagrid.portal.domain.catalog.InformationModelCatalogEntry;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.HibernateException;
@@ -27,13 +28,57 @@ import java.util.List;
 public class DeleteCatalogs {
 
     static Log logger = LogFactory.getLog(DeleteCatalogs.class);
+      private ApplicationContext ctx;
 
-    public static void main(String[] args) {
-
-        ApplicationContext ctx = new ClassPathXmlApplicationContext(
+    public DeleteCatalogs() {
+        ctx = new ClassPathXmlApplicationContext(
                 new String[]{"classpath:applicationContext-db.xml"
                        });
+    }
 
+    public static void main(String[] args) {
+      DeleteCatalogs util = new DeleteCatalogs();
+        util.deleteNullInfoModels();
+        util.deleteDuplicateInfoModels();
+
+    }
+
+    /**
+     * Will delete duplicate Information Models. Will delete the one
+     * created by the Portal and not by a user.
+     */
+    public void deleteDuplicateInfoModels(){
+
+
+           logger.debug("Will delete all duplicate InformationModel catalog entries");
+
+           HibernateTemplate templ = (HibernateTemplate) ctx
+                   .getBean("hibernateTemplate");
+
+           CatalogEntryRelationshipInstanceDao relInstDao = (CatalogEntryRelationshipInstanceDao) ctx
+                   .getBean("catalogEntryRelationshipInstanceDao");
+
+        List<InformationModelCatalogEntry> allNullAuthorEntries = templ
+                .find("from CatalogEntry ce where ce.class = InformationModelCatalogEntry and ce.author = null");
+
+        for (InformationModelCatalogEntry infoCatalog : (Iterable<InformationModelCatalogEntry>) allNullAuthorEntries) {
+            List entries1 = templ
+                    .find("from CatalogEntry ce where ce.class = InformationModelCatalogEntry and ce.name = ? and ce.author is not null",
+                                infoCatalog.getName());
+
+            if (entries1.size() > 0) {
+                logger.debug("Found duplicate Information Model with the same name and description" + infoCatalog.getName() + "Will delete the one created by Portal");
+                deleteRelationships(templ, relInstDao, infoCatalog);
+                templ.delete(infoCatalog);
+            }
+        }
+
+
+       }
+
+
+
+    public void deleteNullInfoModels(){
         logger.debug("Will delete all null InformationModel catalog entries");
 
         HibernateTemplate templ = (HibernateTemplate) ctx
@@ -53,7 +98,7 @@ public class DeleteCatalogs {
 
     }
 
-    private static void deleteRelationships(HibernateTemplate templ,
+    private  void deleteRelationships(HibernateTemplate templ,
                                             CatalogEntryRelationshipInstanceDao relInstDao, CatalogEntry ce) {
 
         List<CatalogEntryRelationshipInstance> relInsts = relInstDao

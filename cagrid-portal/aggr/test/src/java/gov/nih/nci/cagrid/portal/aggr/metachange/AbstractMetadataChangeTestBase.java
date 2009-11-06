@@ -3,11 +3,9 @@ package gov.nih.nci.cagrid.portal.aggr.metachange;
 import gov.nih.nci.cagrid.portal.TestDB;
 import gov.nih.nci.cagrid.portal.aggr.regsvc.DomainModelBuilder;
 import gov.nih.nci.cagrid.portal.aggr.regsvc.ServiceMetadataBuilder;
-import gov.nih.nci.cagrid.portal.dao.CQLQueryDao;
-import gov.nih.nci.cagrid.portal.dao.CQLQueryInstanceDao;
-import gov.nih.nci.cagrid.portal.dao.GridServiceDao;
-import gov.nih.nci.cagrid.portal.dao.SharedCQLQueryDao;
+import gov.nih.nci.cagrid.portal.dao.*;
 import gov.nih.nci.cagrid.portal.domain.GridDataService;
+import gov.nih.nci.cagrid.portal.domain.PortalUser;
 import gov.nih.nci.cagrid.portal.domain.dataservice.CQLQueryInstance;
 import gov.nih.nci.cagrid.portal.domain.dataservice.SharedCQLQuery;
 import gov.nih.nci.cagrid.portal.util.Metadata;
@@ -30,6 +28,7 @@ public abstract class AbstractMetadataChangeTestBase {
 	private CQLQueryDao cqlQueryDao;
 	private CQLQueryInstanceDao cqlQueryInstanceDao;
 	private SharedCQLQueryDao sharedCqlQueryDao;
+    public PortalUser pUser;
 
 	public AbstractMetadataChangeTestBase() {
 	}
@@ -64,6 +63,12 @@ public abstract class AbstractMetadataChangeTestBase {
 				.getApplicationContext().getBean("cqlQueryInstanceDao");
 		sharedCqlQueryDao = (SharedCQLQueryDao) TestDB.getApplicationContext()
 				.getBean("sharedCqlQueryDao");
+
+        PortalUserDao portalUserDao = (PortalUserDao) TestDB.getApplicationContext()
+                    .getBean("portalUserDao");
+        pUser = new PortalUser();
+        portalUserDao.save(pUser);
+
 
 		changeListener = new TestMetadataListener(getConfigLocations());
 		changeListener.setCqlQueryInstanceDao(cqlQueryInstanceDao);

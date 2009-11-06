@@ -22,7 +22,7 @@ public class InformationModelCatalogEntryDao extends AbstractCatalogEntryDao<Inf
     public InformationModelCatalogEntry getDynamicModelByProjectLongName(String projectLongName) {
         InformationModelCatalogEntry infoCe = null;
         List l = getHibernateTemplate().find(
-                "from InformationModelCatalogEntry where author is null and projectLongName = ?", projectLongName);
+                "from InformationModelCatalogEntry where projectLongName = ?", projectLongName);
         if (l.size() > 1) {
             throw new NonUniqueResultException(
                     "More than one InformationModel found for projectLongName = "
