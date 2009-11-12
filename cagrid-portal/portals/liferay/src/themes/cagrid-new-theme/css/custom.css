@@ -309,12 +309,12 @@ h3 {
 	font-weight:bold;
 }
 .oneResultDescription{
-	padding-left:55px;
+	padding-left:35px;
 }
 .oneResultNoDescription{
 	color:#666666;
 	font-style:italic;
-	padding-left:55px;
+	padding-left:35px;
 }
 .pagination {
 	text-align:center;
@@ -323,7 +323,11 @@ h3 {
 	float:left;
 	margin-right:10px;
 }
-
+#dataSetsContent {
+	float:right;
+	margin-top:-308px;
+	width:290px;
+}
 
 /*******************************************
  *****      YUI Customization       ********
@@ -340,6 +344,7 @@ body .yui-skin-sam .yui-navset .yui-nav .selected a em,
 	-webkit-border-radius: 5px;
 	border-radius: 5px;
 	font-weight:normal;
+	color:#fff;
 }
 #cabio .tabs li.current a {color:#ffffff;}
 body .yui-skin-sam .yui-navset .yui-nav .selected a em,
@@ -369,7 +374,7 @@ body .yui-skin-sam .yui-navset .yui-nav a em,
 	-moz-border-radius: 5px;
 	-webkit-border-radius: 5px;
 	border-radius: 5px;
-	color:#000000;
+	color:#000;
 }
 #cabio .tabs li a {
 	padding:4px 10px;

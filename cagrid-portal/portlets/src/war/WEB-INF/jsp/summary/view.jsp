@@ -76,15 +76,16 @@
 
 </script>
 
-<div id="summaryContent">
+<div id="dataSetsContent">
     <div id="summaryTitle">
-        Data Set Categories
+        <h3>Data Set Categories
         <span id="summaryHelpLink">
             <a href="http://cagrid.org/display/portal30/caGrid+Portal+3.0+User%27s+Guide#caGridPortal3.0User%27sGuide
 -DataSetCategories" target="_blank">
                 <tags:image name="help.gif"/>
             </a>
            </span>
+		</h3>
     </div>
 
     <div id="${ns}categories" class="row">

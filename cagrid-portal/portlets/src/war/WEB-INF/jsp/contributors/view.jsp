@@ -74,14 +74,15 @@
 </script>
 
 <div id="summaryContent">
-    <div id="summaryTitle">
-             Top Contributors
-        <span id="summaryHelpLink">
-            <a href="${userGuideUrl}-TopContributors" target="_blank">
-                <tags:image name="help.gif"/>
-            </a>
-           </span>
-    </div>
+<div id="summaryTitle">
+    <h3>Top Contributors
+		<span id="summaryHelpLink">
+			<a href="${userGuideUrl}-TopContributors" target="_blank">
+				<tags:image name="help.gif"/>
+			</a>
+		</span>
+	</h3>
+</div>
 
     <div id="${ns}categories" class="row">
         <tags:image name="loading_animation.gif" cssStyle="padding:40px;"/>

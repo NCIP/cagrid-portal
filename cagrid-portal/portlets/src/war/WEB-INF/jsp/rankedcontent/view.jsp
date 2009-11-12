@@ -86,14 +86,14 @@
 
 <div id="summaryContent">
     <div id="summaryTitle">
-    Top Ranked Content
+    <h3>Top Ranked Content
            <span id="summaryHelpLink">
             <a href="${userGuideUrl}-TopRankedEntries" target="_blank">
                 <tags:image name="help.gif"/>
             </a>
            </span>
         </div>
-
+	</h3>
     <div id="${ns}categories" class="row" style="vertical-align:middle;">
         <tags:image name="loading_animation.gif" cssStyle="padding:40px;"/>
     </div>
