@@ -13,7 +13,7 @@
 <span id="${ns}loginTipContainer" class="yui-skin-sam"></span>
 <span id="${ns}logoutTipContainer" class="yui-skin-sam"></span>
 <span id="${ns}registerTipContainer" class="yui-skin-sam"></span>
-
+<div id="logIn">
 <c:choose>
 	<c:when test="${empty portalUser}">
 		<a href="<c:out value="${loginUrl}"/>" id="${ns}loginLink" style="text-decoration:none"><b>Log In</b></a>&nbsp;&nbsp;|&nbsp;
@@ -30,6 +30,8 @@
 		<a href="<c:out value="${logoutActionUrl}"/>" id="${ns}logoutLink" style="text-decoration:none"><b>Log Out</b></a>
 	</c:otherwise>
 </c:choose>
+</div>
+
 
 
 <script type="text/javascript">
@@ -39,7 +41,7 @@ var ${ns}registerDialog;
 
 function ${ns}showRegisterDialog(){
 	${ns}registerDialog =
-			new Liferay.Popup({title: "Register", modal:true, width:500 , height:600});
+			new Liferay.Popup({title: "Register", modal:true, width:800 , height:400});
 	jQuery(
 		${ns}registerDialog
 	).load('<c:url value="/browse/personView/register.html"><c:param name="ns" value="${ns}"/></c:url>', {});

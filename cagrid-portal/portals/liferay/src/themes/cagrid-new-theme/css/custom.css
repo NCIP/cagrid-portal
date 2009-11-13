@@ -176,7 +176,7 @@ body {
 	right:0;
 	top:69px;
 	position:absolute;
-	z-index:21;
+
 }
 .searchBox input.search {
 	font-size:9pt;
@@ -202,6 +202,12 @@ body {
 	width:12px;
 	background-image:url(../images/foop/searchbox_endcaps.png);
 	background-position:-25px 0;
+}
+/*
+#logIn {
+	position:absolute;
+	top:-60px;
+	left:600px;
 }
 
 /*******************************************

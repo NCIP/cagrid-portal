@@ -41,11 +41,23 @@ div.row label {
 div.row label:after {
 	margin-left: 100px;
 }
+.rightpanel {
+		float:left;
+	}
+.instructions {
+	margin:20px;
+}
 </style>
-<div align="left" style="overflow:auto; height:800px;padding-bottom:10px;" class="yui-skin-sam">
 
+<div align="left" style="overflow:auto; height:800px;padding-bottom:10px;" class="yui-skin-sam">
+<div class="instructions">
+	Please fill out your information in the fields below. Passwords must be between 10 and 20 characters, 
+	and must include an uppercase letter, a lowercase letter, a number, and a special character.
+</div>
 	<form name="editForm">
 		<div class="row">
+			<div class="leftpanel">
+				<div class="row">
 			<div class="label">First Name</div>
 			<div class="value"><input type="text" name="firstName" class="autoSet required"/></div>
 		</div>
@@ -62,7 +74,7 @@ div.row label:after {
 			<input type="password" name="password" class="autoSet required"/>
 		</div>
 		<div class="row">
-			<label for="email">email</label>
+			<label for="email">e-mail</label>
 			<input type="text" name="email" class="autoSet required"/>
 		</div>
 		<div class="row">
@@ -73,7 +85,9 @@ div.row label:after {
 			<label for="organization">Organization</label>
 			<input type="text" name="organization" class="autoSet required"/>
 		</div>
-		<div class="row">
+			</div>
+			<div class="rightpanel">
+				<div class="row">
 			<label for="street1">Street 1</label>
 			<input type="text" name="street1" class="autoSet required"/>
 		</div>
@@ -99,6 +113,8 @@ div.row label:after {
 			<label for="country">Country</label>
 			<div class="value">
 				<select name="country" id="country" class="autoSet required"></select>
+			</div>
+		</div>
 			</div>
 		</div>
 	</form>

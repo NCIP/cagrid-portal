@@ -13,7 +13,7 @@
 
 <c:set var="ns"><portlet:namespace/></c:set>
 
-<div align="left" class="yui-skin-sam">
+<div class="yui-skin-sam">
     <c:choose>
         <c:when test="${empty portalUser}">
 
@@ -106,7 +106,7 @@
 
     function ${ns}showRegisterDialog() {
         ${ns}registerDialog =
-        new Liferay.Popup({title: "Register", modal:true, width:500 , height:600});
+        new Liferay.Popup({title: "Register", modal:true, width:800 , height:400});
         jQuery(
                 ${ns}registerDialog
                 ).load('<c:url value="/browse/personView/register.html"><c:param name="ns" value="${ns}"/></c:url>', {});
