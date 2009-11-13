@@ -13,6 +13,20 @@
     <import file="${antfiles.dir}/build-test.xml"/>
     <import file="${antfiles.dir}/build-report.xml"/>
 
+    <patternset id="webcontent.pattern">
+        <include name="**/*.css"/>
+        <include name="**/*.dtd"/>
+        <include name="**/*.gif"/>
+        <include name="**/*.jpg"/>
+        <include name="**/*.js"/>
+        <include name="**/*.jsp"/>
+        <include name="**/*.jspf"/>
+        <include name="**/*.png"/>
+        <include name="**/*.tld"/>
+        <include name="**/*.vm"/>
+        <include name="**/*.tag"/>
+    </patternset>
+
     <target name="prepare" depends="prepare-ant-tasks, ivy:load">
         <tstamp/>
     </target>
@@ -301,19 +315,24 @@
                 <tstamp/>
                 <copy todir="${portlets.temp.dir}" overwrite="${do.overwrite}">
                     <fileset dir="portlets/src/war">
-                        <include name="**/*.css"/>
-                        <include name="**/*.dtd"/>
-                        <include name="**/*.gif"/>
-                        <include name="**/*.jpg"/>
-                        <include name="**/*.js"/>
-                        <include name="**/*.jsp"/>
-                        <include name="**/*.jspf"/>
-                        <include name="**/*.png"/>
-                        <include name="**/*.tld"/>
-                        <include name="**/*.vm"/>
-                        <include name="**/*.tag"/>
+                        <patternset refid="webcontent.pattern"/>
                     </fileset>
                 </copy>
+
+                <if>
+                    <not>
+                        <equals arg1="${portlets.temp.dir}"
+                                arg2="${liferay.install.dir}/${tomcat.server.name}/webapps/cagridportlets"/>
+                    </not>
+                    <then>
+                        <copy todir="${liferay.install.dir}/${tomcat.server.name}/webapps/cagridportlets"
+                              overwrite="${do.overwrite}">
+                            <fileset dir="portlets/src/war">
+                                <patternset refid="webcontent.pattern"/>
+                            </fileset>
+                        </copy>
+                    </then>
+                </if>
 
             </then>
         </if>
