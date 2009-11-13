@@ -93,7 +93,7 @@ div.row label:after {
 		</div>
 		<div class="row">
 			<label for="street2">Street 2</label>
-			<input type="text" name="street2" class="autoSet required"/>
+			<input type="text" name="street2" class="autoSet"/>
 		</div>
 		<div class="row">
 			<label for="locality">City/Locality</label>
@@ -133,6 +133,13 @@ var RegisterForm = Class.create(CGP_BaseAjaxForm, {
 		alert(response);
 		Liferay.Popup.close(${ns}registerDialog);
 	},
+
+    submit: function(){
+    <%--set the country and state to defaults--%>
+        this.setField("stateProvince",jQuery("#stateProvince option:selected").val());
+        this.setField("country",jQuery("#country option:selected").val());
+        this.validateThenSubmit(false);
+     },
 
 	handleSubmitError: function(errorString, exception){
 		if(errorString == null){
