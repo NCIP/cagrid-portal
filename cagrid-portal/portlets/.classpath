@@ -177,5 +177,7 @@
 	<classpathentry kind="lib" path="ext/default/jars/commons-httpclient-3.1.jar"/>
 	<classpathentry kind="lib" path="ext/test/jars/caGrid-portal-aggr-test.jar"/>
 	<classpathentry kind="lib" path="ext/default/jars/caGrid-portal-service.jar"/>
+	<classpathentry kind="lib" path="ext/default/jars/caGrid-portal-authn-portlet-domain.jar"/>
+	<classpathentry kind="lib" path="ext/default/jars/caGrid-portal-authn-portlet-service.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

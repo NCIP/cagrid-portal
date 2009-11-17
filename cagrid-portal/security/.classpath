@@ -137,5 +137,7 @@
 	<classpathentry kind="lib" path="ext/test/jars/spring-test-2.5.5.jar"/>
 	<classpathentry kind="lib" path="ext/default/jars/hibernate3-patch.jar"/>
 	<classpathentry kind="lib" path="ext/default/jars/caGrid-portal-service.jar"/>
+	<classpathentry kind="lib" path="ext/default/jars/caGrid-portal-authn-portlet-domain.jar"/>
+	<classpathentry kind="lib" path="ext/default/jars/caGrid-portal-authn-portlet-service.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
