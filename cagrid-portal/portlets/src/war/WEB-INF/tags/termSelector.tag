@@ -9,14 +9,18 @@
 <%@attribute name="id_prefix" required="false" %>
 
 <c:set var="rtsId">${id_prefix}${term.uri}</c:set>
-<input type="checkbox" name="${input_name}" value="${term.uri}"/>
-
-<a id="${rtsId}-infoPopup-control"
+<div class="row">
+	<div class="label">
+<input id="${rtsId}" type="checkbox" name="${input_name}" value="${term.uri}"/>
+</div>
+<div class="value">
+<label id="${rtsId}-infoPopup-control"
+   for="${rtsId}"
    class="infoPopupLink"
    onmouseover="$('${rtsId}-infoPopup-content').style.display='inline'"
    onmouseout="$('${rtsId}-infoPopup-content').style.display='none'">
    <c:out value="${term.label}"/>
-</a>&nbsp;
+</label>&nbsp;
 
         <span id="${rtsId}-infoPopup-content" class="infoPopup">
         <c:out value="${term.comment}"/>
@@ -25,3 +29,5 @@
 <span class="infoPopup-pointer">&nbsp;</span></span>
 
 <div id="${rtsId}_subTermsContainer"></div>
+</div>
+</div>

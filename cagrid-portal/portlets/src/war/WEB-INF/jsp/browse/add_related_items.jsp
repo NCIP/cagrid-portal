@@ -16,14 +16,14 @@
 <script type="text/javascript" src="<c:url value="/dwr/engine.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/dwr/util.js"/>"></script>
 
-<div align="left" style="overflow:auto; height:500px" class="yui-skin-sam">
+<div style="text-align:left;" class="yui-skin-sam">
 
 <h3>
-Adding a Related Item
+Add a Related Item
 </h3>
 <p>
 First, choose the kind of catalog entry for which you would like to describe a relationship.
-Then, select the kind relationship that you would like to describe.
+Then, select the kind of relationship that you would like to describe.
 </p>
 <p>
 <div id="${ns}addRelationshipButtonContainer"></div>

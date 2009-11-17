@@ -20,7 +20,7 @@ var ${ns}areaOfFocusPopupDialog = null;
 var ${ns}areaOfFocusDialogOpen = false;
 function ${ns}showAreaOfFocusDialog(){
 	${ns}areaOfFocusDialogOpen = true;
-	${ns}areaOfFocusPopupDialog = new Liferay.Popup({title: "Area of Focus", modal:true, width:500 , height:600}); 
+	${ns}areaOfFocusPopupDialog = new Liferay.Popup({title: "Area of Focus", modal:true, width:750 , height:500}); 
 	jQuery(
 		${ns}areaOfFocusPopupDialog
 	).load(

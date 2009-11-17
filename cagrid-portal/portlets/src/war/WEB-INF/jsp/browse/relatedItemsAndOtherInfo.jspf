@@ -39,7 +39,7 @@
 <script type="text/javascript">
 var ${ns}popupDialog = null;
 function ${ns}showEditDialog(){
-	${ns}popupDialog = new Liferay.Popup({title: "Add Related Item", modal:true, width:500 , height:600}); 
+	${ns}popupDialog = new Liferay.Popup({title: "Add Related Item", modal:true, width:800 , height:500}); 
 	jQuery(
 		${ns}popupDialog
 	).load(

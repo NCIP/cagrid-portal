@@ -16,7 +16,7 @@
 <script type="text/javascript" src="<c:url value="/dwr/engine.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/dwr/util.js"/>"></script>
 
-<div align="left" style="overflow:auto; height:500px" class="yui-skin-sam">
+<div style="text-align:left;" class="yui-skin-sam">
 
 <h3>
 Areas of Focus
@@ -25,13 +25,12 @@ Areas of Focus
 Select all terms that apply.
 </p>
 <p>
-<div id="${ns}addTermsButtonContainer"></div>
+<div style="text-align:right;" id="${ns}addTermsButtonContainer"></div>
 </p>
 <br/>
 <form name="${ns}addTermsForm">
 
 </form>
-
 </div>
 
 <script type="text/javascript">
