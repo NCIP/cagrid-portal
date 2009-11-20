@@ -154,7 +154,7 @@
         </createTable>
     </changeSet>
 
-    <changeSet id="13" author="kherm">
+    <changeSet id="13" author="kherm" runOnChange="true">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="cat_comments"/>
@@ -165,9 +165,7 @@
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="commentText" type="varchar(255)"/>
-            <column name="commnentor_id" type="integer">
-                <constraints foreignKeyName="FKF71F003DF810F8C8" references="cat_entry(id)"/>
-            </column>
+            <column name="commnentor_id" type="integer"/>
             <column name="author_id" type="integer">
                 <constraints foreignKeyName="FKF71F003DFBD049DD" references="portal_users(id)"/>
             </column>
@@ -207,7 +205,7 @@
         <dropIndex indexName="FKF71F003DF810F8C8" tableName="cat_comments"/>
     </changeSet>
 
-    <changeSet id="14" author="kherm">
+    <changeSet id="14" author="kherm" runOnChange="true">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="cat_entry"/>
@@ -259,12 +257,8 @@
             <column name="author_id" type="integer">
                 <constraints foreignKeyName="FK52FB32C9FBD049DD" references="portal_users(id)"/>
             </column>
-            <column name="terminology_id" type="integer">
-                <constraints foreignKeyName="FK52FB32C9E573C12E" references="cat_terminology(id)"/>
-            </column>
-            <column name="provenance_id" type="integer">
-                <constraints foreignKeyName="FK52FB32C9F60411FA" references="cat_provenance_graph(id)"/>
-            </column>
+            <column name="terminology_id" type="integer"/>
+            <column name="provenance_id" type="integer"/>
             <column name="grid_service_id" type="integer">
                 <constraints foreignKeyName="FK52FB32C940575DB6" references="grid_services(id)"/>
             </column>
@@ -506,7 +500,7 @@
         </createTable>
     </changeSet>
 
-    <changeSet id="24" author="kherm">
+    <changeSet id="24" author="kherm" runOnChange="true">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="cat_hyperlinks_cat_comments"/>
@@ -514,10 +508,10 @@
         </preConditions>
         <createTable tableName="cat_hyperlinks_cat_comments">
             <column name="cat_hyperlinks_id" type="integer">
-                <constraints nullable="false" foreignKeyName="FKE1FAE8D6A9952906" references="cat_hyperlinks(id)"/>
+                <constraints nullable="false" foreignKeyName="FKE1FAE8D6A9952906b" references="cat_hyperlinks(id)"/>
             </column>
             <column name="comments_id" type="integer">
-                <constraints unique="true" nullable="false" foreignKeyName="FKEC230D06488AC7F9"
+                <constraints unique="true" nullable="false" foreignKeyName="FKEC230D06488AC7F9a"
                              references="cat_comments(id)"/>
             </column>
         </createTable>
@@ -975,7 +969,7 @@
         </createTable>
     </changeSet>
 
-    <changeSet id="40" author="kherm">
+    <changeSet id="40" author="kherm" runOnChange="true">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="cat_relations_temporal_cat_comments"/>
@@ -987,7 +981,7 @@
                              references="cat_relations_temporal(id)"/>
             </column>
             <column name="comments_id" type="integer">
-                <constraints unique="true" nullable="false" foreignKeyName="FK392F2989488AC7F9"
+                <constraints unique="true" nullable="false" foreignKeyName="FK392F2989488AC7F9A"
                              references="cat_comments(id)"/>
             </column>
         </createTable>
@@ -1003,7 +997,7 @@
         </createIndex>
     </changeSet>
 
-    <changeSet id="41" author="kherm">
+    <changeSet id="41" author="kherm" runOnChange="true">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="cat_relationship_instance"/>
@@ -1017,15 +1011,9 @@
             <column name="since" type="datetime"/>
             <column name="until" type="datetime"/>
             <column name="updatedAt" type="datetime"/>
-            <column name="catalog_relationship_type_id" type="integer">
-                <constraints foreignKeyName="FKD62B6B131C882B56" references="cat_relationship_type(id)"/>
-            </column>
-            <column name="catalog_instance_roleA" type="integer">
-                <constraints foreignKeyName="FKD62B6B1374778D37" references="cat_role_instance(id)"/>
-            </column>
-            <column name="catalog_instance_roleB" type="integer">
-                <constraints foreignKeyName="FKD62B6B1374778D38" references="cat_role_instance(id)"/>
-            </column>
+            <column name="catalog_relationship_type_id" type="integer"/>
+            <column name="catalog_instance_roleA" type="integer"/>
+            <column name="catalog_instance_roleB" type="integer"/>
         </createTable>
     </changeSet>
     <changeSet author="kherm (generated)" id="41-a">
@@ -1066,7 +1054,7 @@
         </createTable>
     </changeSet>
 
-    <changeSet id="43" author="kherm">
+    <changeSet id="43" author="kherm" runOnChange="true">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="cat_relationship_type"/>
@@ -1082,12 +1070,8 @@
             <column name="temporal" type="bit">
                 <constraints nullable="false"/>
             </column>
-            <column name="catalog_role_typeA" type="integer">
-                <constraints foreignKeyName="FK35C654B8F7FF4939" references="cat_role_type(id)"/>
-            </column>
-            <column name="catalog_role_typeB" type="integer">
-                <constraints foreignKeyName="FK35C654B8F7FF493A" references="cat_role_type(id)"/>
-            </column>
+            <column name="catalog_role_typeA" type="integer"/>
+            <column name="catalog_role_typeB" type="integer"/>
         </createTable>
     </changeSet>
     <changeSet author="kherm (generated)" id="43-b">
@@ -1140,7 +1124,7 @@
     </changeSet>
 
 
-    <changeSet id="45" author="kherm">
+    <changeSet id="45" author="kherm" runOnChange="true">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="cat_role_instance"/>
@@ -1159,9 +1143,7 @@
             <column name="target_id" type="integer">
                 <constraints foreignKeyName="FK17004D95F6C7048E" references="cat_entry(id)"/>
             </column>
-            <column name="role_type" type="integer">
-                <constraints foreignKeyName="FK17004D95BA5E4358" references="cat_role_type(id)"/>
-            </column>
+            <column name="role_type" type="integer"/>
             <column name="relationship_fk" type="integer">
                 <constraints foreignKeyName="FK17004D952B5720BE" references="cat_relationship_instance(id)"/>
             </column>
@@ -1256,7 +1238,7 @@
     </changeSet>
 
 
-    <changeSet id="48" author="kherm">
+    <changeSet id="48" author="kherm" runOnChange="true">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="cat_role_type_cat_comments"/>
@@ -1267,18 +1249,18 @@
                 <constraints nullable="false" foreignKeyName="FKC41E5022488AC7F9" references="cat_role_type(id)"/>
             </column>
             <column name="comments_id" type="integer">
-                <constraints unique="true" nullable="false" foreignKeyName="FKC41E5022488AC7F9"
+                <constraints unique="true" nullable="false" foreignKeyName="FKC41E5022488AC7F9b"
                              references="cat_comments(id)"/>
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="kherm (generated)" id="50-a">
+    <changeSet author="kherm (generated)" id="50-a" runOnChange="true">
         <preConditions onFail="MARK_RAN">
             <not>
-                <indexExists indexName="FKC41E5022488AC7F9"/>
+                <indexExists indexName="FKC41E5022488AC7F91"/>
             </not>
         </preConditions>
-        <createIndex indexName="FKC41E5022488AC7F9" tableName="cat_role_type_cat_comments" unique="false">
+        <createIndex indexName="FKC41E5022488AC7F91" tableName="cat_role_type_cat_comments" unique="false">
             <column name="comments_id"/>
         </createIndex>
     </changeSet>
@@ -1475,11 +1457,30 @@
             <column name="comments_id"/>
         </createIndex>
     </changeSet>
+
+    <changeSet id="56-pre-a" author="kherm" runOnChange="true">
+        <preConditions>
+            <not>
+            <foreignKeyConstraintExists foreignKeyName="FK17004D95C22809C4A"/>
+            </not>
+        </preConditions>
+        <dropForeignKeyConstraint baseTableName="cat_role_instance" constraintName="FK17004D95C22809C4A"/>
+    </changeSet>
     <changeSet author="kherm (generated)" id="56-b">
         <preConditions onFail="MARK_RAN">
             <columnExists tableName="cat_role_instance" columnName="source_id"/>
         </preConditions>
         <dropColumn columnName="source_id" tableName="cat_role_instance"/>
+    </changeSet>
+
+
+    <changeSet id="56-pre-c" author="kherm">
+        <preConditions>
+            <not>
+            <foreignKeyConstraintExists foreignKeyName="FK17004D95F6C7048E"/>
+            </not>
+        </preConditions>
+        <dropForeignKeyConstraint baseTableName="cat_role_instance" constraintName="FK17004D95F6C7048E"/>
     </changeSet>
     <changeSet author="kherm (generated)" id="56-c">
         <preConditions onFail="MARK_RAN">
@@ -1487,6 +1488,7 @@
         </preConditions>
         <dropColumn columnName="target_id" tableName="cat_role_instance"/>
     </changeSet>
+    
     <changeSet author="kherm (generated)" id="56-d">
         <preConditions onFail="MARK_RAN">
             <not>
@@ -1917,13 +1919,13 @@
         </createIndex>
     </changeSet>
 
-    <changeSet author="kherm (generated)" id="61-27">
+    <changeSet author="kherm (generated)" id="61-27" runOnChange="true">
         <preConditions onFail="MARK_RAN">
             <not>
-                <indexExists indexName="FKC41E5022488AC7F9"/>
+                <indexExists indexName="FKC41E5022488AC7F9b"/>
             </not>
         </preConditions>
-        <createIndex indexName="FKC41E5022488AC7F9" tableName="cat_role_type_cat_comments" unique="false">
+        <createIndex indexName="FKC41E5022488AC7F9b" tableName="cat_role_type_cat_comments" unique="false">
             <column name="comments_id"/>
         </createIndex>
     </changeSet>
@@ -1984,6 +1986,14 @@
         <dropColumn columnName="identifer" tableName="cat_terms"/>
     </changeSet>
 
+    <changeSet id="61-36-pre-a" author="kherm">
+        <preConditions>
+            <not>
+            <foreignKeyConstraintExists foreignKeyName="FK53CA73DEE5AF2F22"/>
+            </not>
+        </preConditions>
+        <dropForeignKeyConstraint baseTableName="cat_terms" constraintName="FK53CA73DEE5AF2F22"/>
+    </changeSet>
     <changeSet author="kherm (generated)" id="61-36">
         <preConditions onFail="MARK_RAN">
             <columnExists columnName="terms_fk" tableName="cat_terms"/>
@@ -2356,4 +2366,126 @@
         </createIndex>
     </changeSet>
 
+    <!--constraints-->
+    <changeSet id="75" author="kherm">
+        <preConditions>
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="FK52FB32C9E573C12E"/>
+            </not>
+        </preConditions>
+        <addForeignKeyConstraint baseTableName="cat_entry" baseColumnNames="terminology_id" referencedTableName="cat_terminology"
+                                 referencedColumnNames="id"
+                                 constraintName="FK52FB32C9E573C12E"/>
+    </changeSet>
+    <changeSet id="76" author="kherm">
+        <preConditions>
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="FK52FB32C9E573C12EF"/>
+            </not>
+        </preConditions>
+        <addForeignKeyConstraint baseTableName="cat_entry" baseColumnNames="terminology_id" referencedTableName="cat_terminology"
+                                 referencedColumnNames="id"
+                                 constraintName="FK52FB32C9E573C12EF"/>
+    </changeSet>
+
+    <changeSet id="77" author="kherm">
+          <preConditions>
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="FK52FB32C9F60411FA"/>
+            </not>
+        </preConditions>
+        <addForeignKeyConstraint baseTableName="cat_entry" baseColumnNames="provenance_id" referencedTableName="cat_provenance_graph"
+                                 referencedColumnNames="id"
+                                 constraintName="FK52FB32C9F60411FA"/>
+    </changeSet>
+
+    <changeSet id="78" author="kherm">
+            <preConditions>
+              <not>
+                  <foreignKeyConstraintExists foreignKeyName="FK392F298955A0A20DA"/>
+              </not>
+          </preConditions>
+          <addForeignKeyConstraint baseTableName="cat_entry" baseColumnNames="provenance_id" referencedTableName="cat_relations_temporal"
+                                   referencedColumnNames="id"
+                                   constraintName="FK392F298955A0A20DA"/>
+      </changeSet>
+
+    <changeSet id="79" author="kherm">
+              <preConditions>
+                <not>
+                    <foreignKeyConstraintExists foreignKeyName="FKD62B6B131C882B56"/>
+                </not>
+            </preConditions>
+            <addForeignKeyConstraint baseTableName="cat_relationship_instance" baseColumnNames="catalog_relationship_type_id"
+                                     referencedTableName="cat_relationship_type"
+                                     referencedColumnNames="id"
+                                     constraintName="FKD62B6B131C882B56"/>
+        </changeSet>
+
+       <changeSet id="80" author="kherm">
+              <preConditions>
+                <not>
+                    <foreignKeyConstraintExists foreignKeyName="FKD62B6B1374778D37"/>
+                </not>
+            </preConditions>
+            <addForeignKeyConstraint baseTableName="cat_relationship_instance"
+                                     baseColumnNames="catalog_instance_roleA"
+                                     referencedTableName="cat_role_instance"
+                                     referencedColumnNames="id"
+                                     constraintName="FKD62B6B1374778D37"/>
+        </changeSet>
+
+       <changeSet id="81" author="kherm">
+              <preConditions>
+                <not>
+                    <foreignKeyConstraintExists foreignKeyName="FKD62B6B1374778D38"/>
+                </not>
+            </preConditions>
+            <addForeignKeyConstraint baseTableName="cat_relationship_instance"
+                                     baseColumnNames="catalog_instance_roleB"
+                                     referencedTableName="cat_role_instance"
+                                     referencedColumnNames="id"
+                                     constraintName="FKD62B6B1374778D38"/>
+        </changeSet>
+
+       <changeSet id="82" author="kherm">
+              <preConditions>
+                <not>
+                    <foreignKeyConstraintExists foreignKeyName="FK35C654B8F7FF4939"/>
+                </not>
+            </preConditions>
+            <addForeignKeyConstraint baseTableName="cat_relationship_type"
+                                     baseColumnNames="catalog_role_typeA"
+                                     referencedTableName="cat_role_type"
+                                     referencedColumnNames="id"
+                                     constraintName="FK35C654B8F7FF4939"/>
+        </changeSet>
+
+      <changeSet id="83" author="kherm">
+              <preConditions>
+                <not>
+                    <foreignKeyConstraintExists foreignKeyName="FK35C654B8F7FF493A"/>
+                </not>
+            </preConditions>
+            <addForeignKeyConstraint baseTableName="cat_relationship_type"
+                                     baseColumnNames="catalog_role_typeB"
+                                     referencedTableName="cat_role_type"
+                                     referencedColumnNames="id"
+                                     constraintName="FK35C654B8F7FF493A"/>
+        </changeSet>
+
+       <changeSet id="84" author="kherm">
+              <preConditions>
+                <not>
+                    <foreignKeyConstraintExists foreignKeyName="FK17004D95BA5E4358"/>
+                </not>
+            </preConditions>
+            <addForeignKeyConstraint baseTableName="cat_role_instance"
+                                     baseColumnNames="role_type"
+                                     referencedTableName="cat_role_type"
+                                     referencedColumnNames="id"
+                                     constraintName="FK17004D95BA5E4358"/>
+        </changeSet>
+
+    
 </databaseChangeLog>
