@@ -20,6 +20,7 @@ public class ViewGreetingController extends AbstractController {
 
 	private String viewName;
 	private String portalUserAttributeName;
+    private String userGuideUrl;
 
 	/**
 	 * 
@@ -41,6 +42,7 @@ public class ViewGreetingController extends AbstractController {
 					"registerUrl", ""));
 			mav.addObject("loginUrl", request.getPreferences().getValue(
 					"loginUrl", ""));
+            mav.addObject("userGuideUrl",getUserGuideUrl());
 		}
 		return mav;
 	}
@@ -60,4 +62,12 @@ public class ViewGreetingController extends AbstractController {
 	public void setPortalUserAttributeName(String portalUserAttributeName) {
 		this.portalUserAttributeName = portalUserAttributeName;
 	}
+
+    public String getUserGuideUrl() {
+        return userGuideUrl;
+    }
+
+    public void setUserGuideUrl(String userGuideUrl) {
+        this.userGuideUrl = userGuideUrl;
+    }
 }
